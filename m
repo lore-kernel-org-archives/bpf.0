@@ -2,38 +2,42 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B0B5C678D4
-	for <bpf@archiver.kernel.org>; Thu,  2 Mar 2023 23:50:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36623C678D4
+	for <bpf@archiver.kernel.org>; Thu,  2 Mar 2023 23:50:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjCBXut convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 2 Mar 2023 18:50:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36490 "EHLO
+        id S230000AbjCBXuw convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 2 Mar 2023 18:50:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbjCBXus (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Mar 2023 18:50:48 -0500
+        with ESMTP id S229586AbjCBXuv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Mar 2023 18:50:51 -0500
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C14A31E1A
-        for <bpf@vger.kernel.org>; Thu,  2 Mar 2023 15:50:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106F4367C5
+        for <bpf@vger.kernel.org>; Thu,  2 Mar 2023 15:50:50 -0800 (PST)
 Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 322KUvsn032521
-        for <bpf@vger.kernel.org>; Thu, 2 Mar 2023 15:50:48 -0800
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 322KUvsq032521
+        for <bpf@vger.kernel.org>; Thu, 2 Mar 2023 15:50:49 -0800
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3p2y1mkc91-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3p2y1mkc91-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 02 Mar 2023 15:50:47 -0800
+        for <bpf@vger.kernel.org>; Thu, 02 Mar 2023 15:50:49 -0800
+Received: from ash-exhub204.TheFacebook.com (2620:10d:c0a8:83::4) by
+ ash-exhub202.TheFacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Thu, 2 Mar 2023 15:50:45 -0800
 Received: from twshared18553.27.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.17; Thu, 2 Mar 2023 15:50:45 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id BD9E4291B7EDF; Thu,  2 Mar 2023 15:50:32 -0800 (PST)
+        id 0507F291B7F0B; Thu,  2 Mar 2023 15:50:40 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
         Tejun Heo <tj@kernel.org>
-Subject: [PATCH bpf-next 07/17] bpf: fix visit_insn()'s detection of BPF_FUNC_timer_set_callback helper
-Date:   Thu, 2 Mar 2023 15:50:05 -0800
-Message-ID: <20230302235015.2044271-8-andrii@kernel.org>
+Subject: [PATCH bpf-next 11/17] bpf: generalize dynptr_get_spi to be usable for iters
+Date:   Thu, 2 Mar 2023 15:50:09 -0800
+Message-ID: <20230302235015.2044271-12-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230302235015.2044271-1-andrii@kernel.org>
 References: <20230302235015.2044271-1-andrii@kernel.org>
@@ -41,8 +45,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: lduPUZep_xm9zCxPk8I0i31nWlJ7d4WI
-X-Proofpoint-ORIG-GUID: lduPUZep_xm9zCxPk8I0i31nWlJ7d4WI
+X-Proofpoint-GUID: HGpv602lNWjIUx_CXv5xKyaI9bi3CB39
+X-Proofpoint-ORIG-GUID: HGpv602lNWjIUx_CXv5xKyaI9bi3CB39
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-02_15,2023-03-02_02,2023-02-09_01
@@ -50,29 +54,63 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-It's not correct to assume that any BPF_CALL instruction is a helper
-call. Fix visit_insn()'s detection of bpf_timer_set_callback() helper by
-also checking insn->code == 0. For kfuncs insn->code would be set to
-BPF_PSEUDO_KFUNC_CALL, and for subprog calls it will be BPF_PSEUDO_CALL.
+Generalize the logic of fetching special stack slot object state using
+spi (stack slot index). This will be used by STACK_ITER logic next.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/verifier.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/bpf/verifier.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index f8055f3d9b47..666e416dc8a2 100644
+index 4ed53280ce95..641a36204493 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -13405,7 +13405,7 @@ static int visit_insn(int t, struct bpf_verifier_env *env)
- 		return DONE_EXPLORING;
+@@ -710,32 +710,38 @@ static bool is_spi_bounds_valid(struct bpf_func_state *state, int spi, int nr_sl
+        return spi - nr_slots + 1 >= 0 && spi < allocated_slots;
+ }
  
- 	case BPF_CALL:
--		if (insn->imm == BPF_FUNC_timer_set_callback)
-+		if (insn->src_reg == 0 && insn->imm == BPF_FUNC_timer_set_callback)
- 			/* Mark this call insn as a prune point to trigger
- 			 * is_state_visited() check before call itself is
- 			 * processed by __check_func_call(). Otherwise new
+-static int dynptr_get_spi(struct bpf_verifier_env *env, struct bpf_reg_state *reg)
++static int stack_slot_obj_get_spi(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
++			          const char *obj_kind, int nr_slots)
+ {
+ 	int off, spi;
+ 
+ 	if (!tnum_is_const(reg->var_off)) {
+-		verbose(env, "dynptr has to be at a constant offset\n");
++		verbose(env, "%s has to be at a constant offset\n", obj_kind);
+ 		return -EINVAL;
+ 	}
+ 
+ 	off = reg->off + reg->var_off.value;
+ 	if (off % BPF_REG_SIZE) {
+-		verbose(env, "cannot pass in dynptr at an offset=%d\n", off);
++		verbose(env, "cannot pass in %s at an offset=%d\n", obj_kind, off);
+ 		return -EINVAL;
+ 	}
+ 
+ 	spi = __get_spi(off);
+-	if (spi < 1) {
+-		verbose(env, "cannot pass in dynptr at an offset=%d\n", off);
++	if (spi + 1 < nr_slots) {
++		verbose(env, "cannot pass in %s at an offset=%d\n", obj_kind, off);
+ 		return -EINVAL;
+ 	}
+ 
+-	if (!is_spi_bounds_valid(func(env, reg), spi, BPF_DYNPTR_NR_SLOTS))
++	if (!is_spi_bounds_valid(func(env, reg), spi, nr_slots))
+ 		return -ERANGE;
+ 	return spi;
+ }
+ 
++static int dynptr_get_spi(struct bpf_verifier_env *env, struct bpf_reg_state *reg)
++{
++	return stack_slot_obj_get_spi(env, reg, "dynptr", BPF_DYNPTR_NR_SLOTS);
++}
++
+ static const char *kernel_type_name(const struct btf* btf, u32 id)
+ {
+ 	return btf_name_by_offset(btf, btf_type_by_id(btf, id)->name_off);
 -- 
 2.30.2
 
