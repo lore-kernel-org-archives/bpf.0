@@ -2,37 +2,37 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE76DC678D4
-	for <bpf@archiver.kernel.org>; Thu,  2 Mar 2023 05:32:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E8BBC6FA8E
+	for <bpf@archiver.kernel.org>; Thu,  2 Mar 2023 05:32:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbjCBFcl convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 2 Mar 2023 00:32:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33970 "EHLO
+        id S229455AbjCBFcm convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 2 Mar 2023 00:32:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjCBFck (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Mar 2023 00:32:40 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7254AFFC
-        for <bpf@vger.kernel.org>; Wed,  1 Mar 2023 21:32:39 -0800 (PST)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3224TcwY026802
-        for <bpf@vger.kernel.org>; Wed, 1 Mar 2023 21:32:38 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3p28n8waxx-1
+        with ESMTP id S229653AbjCBFcl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Mar 2023 00:32:41 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232EF4BE89
+        for <bpf@vger.kernel.org>; Wed,  1 Mar 2023 21:32:40 -0800 (PST)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32235MhV027503
+        for <bpf@vger.kernel.org>; Wed, 1 Mar 2023 21:32:40 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3p2hrvh92d-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 01 Mar 2023 21:32:38 -0800
-Received: from twshared52565.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 01 Mar 2023 21:32:39 -0800
+Received: from twshared33736.38.frc1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Wed, 1 Mar 2023 21:32:37 -0800
+ 15.1.2507.17; Wed, 1 Mar 2023 21:32:30 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 13F9F290D0FC7; Wed,  1 Mar 2023 21:32:32 -0800 (PST)
+        id D2BCE290D0EF6; Wed,  1 Mar 2023 21:32:25 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 6/8] bpf: clean up visit_insn()'s instruction processing
-Date:   Wed, 1 Mar 2023 21:32:14 -0800
-Message-ID: <20230302053216.1426015-7-andrii@kernel.org>
+Subject: [PATCH bpf-next 3/8] selftests/bpf: enhance align selftest's expected log matching
+Date:   Wed, 1 Mar 2023 21:32:11 -0800
+Message-ID: <20230302053216.1426015-4-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230302053216.1426015-1-andrii@kernel.org>
 References: <20230302053216.1426015-1-andrii@kernel.org>
@@ -40,8 +40,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: BB0TjnBbD2IM2cdxm8fyZkbYYthI4U9A
-X-Proofpoint-ORIG-GUID: BB0TjnBbD2IM2cdxm8fyZkbYYthI4U9A
+X-Proofpoint-ORIG-GUID: 0fYr2-eBCfjdh5AMf_2ExALG3pZAW_ej
+X-Proofpoint-GUID: 0fYr2-eBCfjdh5AMf_2ExALG3pZAW_ej
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-02_02,2023-03-01_03,2023-02-09_01
@@ -49,86 +49,51 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Instead of referencing processed instruction repeatedly as insns[t]
-throughout entire visit_insn() function, take a local insn pointer and
-work with it in a cleaner way.
+Allow to search for expected register state in all the verifier log
+output that's related to specified instruction number.
 
-It makes enhancing this function further a bit easier as well.
+See added comment for an example of possible situation that is happening
+due to a simple enhancement done in the next patch, which fixes handling
+of env->test_state_freq flag in state checkpointing logic.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/verifier.c | 25 ++++++++++++-------------
- 1 file changed, 12 insertions(+), 13 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/align.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 154f5d251ecb..f8055f3d9b47 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -13389,44 +13389,43 @@ static int visit_func_call_insn(int t, struct bpf_insn *insns,
-  */
- static int visit_insn(int t, struct bpf_verifier_env *env)
- {
--	struct bpf_insn *insns = env->prog->insnsi;
-+	struct bpf_insn *insns = env->prog->insnsi, *insn = &insns[t];
- 	int ret;
- 
--	if (bpf_pseudo_func(insns + t))
-+	if (bpf_pseudo_func(insn))
- 		return visit_func_call_insn(t, insns, env, true);
- 
- 	/* All non-branch instructions have a single fall-through edge. */
--	if (BPF_CLASS(insns[t].code) != BPF_JMP &&
--	    BPF_CLASS(insns[t].code) != BPF_JMP32)
-+	if (BPF_CLASS(insn->code) != BPF_JMP &&
-+	    BPF_CLASS(insn->code) != BPF_JMP32)
- 		return push_insn(t, t + 1, FALLTHROUGH, env, false);
- 
--	switch (BPF_OP(insns[t].code)) {
-+	switch (BPF_OP(insn->code)) {
- 	case BPF_EXIT:
- 		return DONE_EXPLORING;
- 
- 	case BPF_CALL:
--		if (insns[t].imm == BPF_FUNC_timer_set_callback)
-+		if (insn->imm == BPF_FUNC_timer_set_callback)
- 			/* Mark this call insn as a prune point to trigger
- 			 * is_state_visited() check before call itself is
- 			 * processed by __check_func_call(). Otherwise new
- 			 * async state will be pushed for further exploration.
+diff --git a/tools/testing/selftests/bpf/prog_tests/align.c b/tools/testing/selftests/bpf/prog_tests/align.c
+index 4666f88f2bb4..c94fa8d6c4f6 100644
+--- a/tools/testing/selftests/bpf/prog_tests/align.c
++++ b/tools/testing/selftests/bpf/prog_tests/align.c
+@@ -660,16 +660,22 @@ static int do_test_single(struct bpf_align_test *test)
+ 			 * func#0 @0
+ 			 * 0: R1=ctx(off=0,imm=0) R10=fp0
+ 			 * 0: (b7) r3 = 2                 ; R3_w=2
++			 *
++			 * Sometimes it's actually two lines below, e.g. when
++			 * searching for "6: R3_w=scalar(umax=255,var_off=(0x0; 0xff))":
++			 *   from 4 to 6: R0_w=pkt(off=8,r=8,imm=0) R1=ctx(off=0,imm=0) R2_w=pkt(off=0,r=8,imm=0) R3_w=pkt_end(off=0,imm=0) R10=fp0
++			 *   6: R0_w=pkt(off=8,r=8,imm=0) R1=ctx(off=0,imm=0) R2_w=pkt(off=0,r=8,imm=0) R3_w=pkt_end(off=0,imm=0) R10=fp0
++			 *   6: (71) r3 = *(u8 *)(r2 +0)           ; R2_w=pkt(off=0,r=8,imm=0) R3_w=scalar(umax=255,var_off=(0x0; 0xff))
  			 */
- 			mark_prune_point(env, t);
--		return visit_func_call_insn(t, insns, env,
--					    insns[t].src_reg == BPF_PSEUDO_CALL);
-+		return visit_func_call_insn(t, insns, env, insn->src_reg == BPF_PSEUDO_CALL);
- 
- 	case BPF_JA:
--		if (BPF_SRC(insns[t].code) != BPF_K)
-+		if (BPF_SRC(insn->code) != BPF_K)
- 			return -EINVAL;
- 
- 		/* unconditional jump with single edge */
--		ret = push_insn(t, t + insns[t].off + 1, FALLTHROUGH, env,
-+		ret = push_insn(t, t + insn->off + 1, FALLTHROUGH, env,
- 				true);
- 		if (ret)
- 			return ret;
- 
--		mark_prune_point(env, t + insns[t].off + 1);
--		mark_jmp_point(env, t + insns[t].off + 1);
-+		mark_prune_point(env, t + insn->off + 1);
-+		mark_jmp_point(env, t + insn->off + 1);
- 
- 		return ret;
- 
-@@ -13438,7 +13437,7 @@ static int visit_insn(int t, struct bpf_verifier_env *env)
- 		if (ret)
- 			return ret;
- 
--		return push_insn(t, t + insns[t].off + 1, BRANCH, env, true);
-+		return push_insn(t, t + insn->off + 1, BRANCH, env, true);
- 	}
- }
- 
+-			if (!strstr(line_ptr, m.match)) {
++			while (!strstr(line_ptr, m.match)) {
+ 				cur_line = -1;
+ 				line_ptr = strtok(NULL, "\n");
+-				sscanf(line_ptr, "%u: ", &cur_line);
++				sscanf(line_ptr ?: "", "%u: ", &cur_line);
++				if (!line_ptr || cur_line != m.line)
++					break;
+ 			}
+-			if (cur_line != m.line || !line_ptr ||
+-			    !strstr(line_ptr, m.match)) {
+-				printf("Failed to find match %u: %s\n",
+-				       m.line, m.match);
++			if (cur_line != m.line || !line_ptr || !strstr(line_ptr, m.match)) {
++				printf("Failed to find match %u: %s\n", m.line, m.match);
+ 				ret = 1;
+ 				printf("%s", bpf_vlog);
+ 				break;
 -- 
 2.30.2
 
