@@ -2,45 +2,45 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F13EAC678D4
-	for <bpf@archiver.kernel.org>; Fri,  3 Mar 2023 13:33:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 265D4C7EE2F
+	for <bpf@archiver.kernel.org>; Fri,  3 Mar 2023 13:33:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbjCCNdn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 3 Mar 2023 08:33:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41104 "EHLO
+        id S230484AbjCCNdo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 3 Mar 2023 08:33:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbjCCNdk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 3 Mar 2023 08:33:40 -0500
+        with ESMTP id S230157AbjCCNdm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 3 Mar 2023 08:33:42 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7C411173;
-        Fri,  3 Mar 2023 05:33:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72904125B9;
+        Fri,  3 Mar 2023 05:33:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677850419; x=1709386419;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=DL/6eDQ7YyAxU1AXYV7e9LB+t2Wuqp5AFFnDG4qMMS8=;
-  b=NyU6Lr+PuAOJ3vYBcNv6/id9VDdbec4gCCKNmd6VNKZAdShvKkgC1+uR
-   uoy/rIByBCQofyd1yyDHrOVyouqDX7N2v9VLglN+eB242gJXLY28DRsAn
-   rOnkXCpgjQTHASO88QRSuRpo4W1OJzcQRBrXlpGI+VJ0KLHi5XAtW6ztY
-   YHEHbAzNty8M1+Tt8TtF3RCQOQBcNgMbHeVlsykKsVAJF9xlGwHYgUZmg
-   cl8AZgf9z2U2wuwZEa9VaCu1meCB403vglsbNrrLmAaLle5If39ElDAAI
-   D2RE9sQ6WDo69KavyfX7Hbd7D1qrZm4z1un2AuRn9YS5pYw4IqWiR2SR8
+  t=1677850421; x=1709386421;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=WV2QgxuHT3p8j+KGI77slUqYCqNGD1cnP+Xz71qqoTc=;
+  b=AKpmQbjXCc8Rar4jKAXmEZimQ+DCo29uvDBo9gbeQdFr+v9QZLeQYUvq
+   P5/M4wUxJlC7uRDaTSNjXQA+7EWPZJhK32EWTspcyUGtKCty8gCQbVoHg
+   LIpInb8p8zRXQsI6g85IqE7puRgRNdiyrM9bEppBDcYbzuhksT8lTnZnL
+   ysafeQd0o3hpvOeur+E4z+3v9PG60a93kD1z7vrILxEw5SPVV9J+7LY4j
+   i9KL74Ca4qYp0cROGa33SiNO05X1A2wZlAGI8Ch3VC8BunVFl5FgE6YId
+   UDr6v2EQvmV6jjHHxdSS4d4m28U1rwsv+eq+zwL0PlJTk/LYWBNXt16h3
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="421314253"
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="421314280"
 X-IronPort-AV: E=Sophos;i="5.98,230,1673942400"; 
-   d="scan'208";a="421314253"
+   d="scan'208";a="421314280"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 05:33:38 -0800
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 05:33:40 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="625347416"
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="625347429"
 X-IronPort-AV: E=Sophos;i="5.98,230,1673942400"; 
-   d="scan'208";a="625347416"
+   d="scan'208";a="625347429"
 Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by orsmga003.jf.intel.com with ESMTP; 03 Mar 2023 05:33:35 -0800
+  by orsmga003.jf.intel.com with ESMTP; 03 Mar 2023 05:33:36 -0800
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail002.ir.intel.com (Postfix) with ESMTP id 7690B3557F;
-        Fri,  3 Mar 2023 13:33:33 +0000 (GMT)
+        by irvmail002.ir.intel.com (Postfix) with ESMTP id 6E9E4365A0;
+        Fri,  3 Mar 2023 13:33:35 +0000 (GMT)
 From:   Alexander Lobakin <aleksander.lobakin@intel.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -56,68 +56,53 @@ Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Eric Dumazet <edumazet@google.com>, bpf@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 0/3] xdp: recycle Page Pool backed skbs built from XDP frames
-Date:   Fri,  3 Mar 2023 14:32:29 +0100
-Message-Id: <20230303133232.2546004-1-aleksander.lobakin@intel.com>
+Subject: [PATCH bpf-next v2 2/3] xdp: recycle Page Pool backed skbs built from XDP frames
+Date:   Fri,  3 Mar 2023 14:32:31 +0100
+Message-Id: <20230303133232.2546004-3-aleksander.lobakin@intel.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230303133232.2546004-1-aleksander.lobakin@intel.com>
+References: <20230303133232.2546004-1-aleksander.lobakin@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Yeah, I still remember that "Who needs cpumap nowadays" (c), but anyway.
+__xdp_build_skb_from_frame() state(d):
 
-__xdp_build_skb_from_frame() missed the moment when the networking stack
-became able to recycle skb pages backed by a page_pool. This was making
-e.g. cpumap redirect even less effective than simple %XDP_PASS. veth was
-also affected in some scenarios.
-A lot of drivers use skb_mark_for_recycle() already, it's been almost
-two years and seems like there are no issues in using it in the generic
-code too. {__,}xdp_release_frame() can be then removed as it losts its
-last user.
-Page Pool becomes then zero-alloc (or almost) in the abovementioned
-cases, too. Other memory type models (who needs them at this point)
-have no changes.
+/* Until page_pool get SKB return path, release DMA here */
 
-Some numbers on 1 Xeon Platinum core bombed with 27 Mpps of 64-byte
-IPv6 UDP, iavf w/XDP[0] (CONFIG_PAGE_POOL_STATS is enabled):
+Page Pool got skb pages recycling in April 2021, but missed this
+function.
 
-Plain %XDP_PASS on baseline, Page Pool driver:
+xdp_release_frame() is relevant only for Page Pool backed frames and it
+detaches the page from the corresponding page_pool in order to make it
+freeable via page_frag_free(). It can instead just mark the output skb
+as eligible for recycling if the frame is backed by a pp. No change for
+other memory model types (the same condition check as before).
+cpumap redirect and veth on Page Pool drivers now become zero-alloc (or
+almost).
 
-src cpu Rx     drops  dst cpu Rx
-  2.1 Mpps       N/A    2.1 Mpps
-
-cpumap redirect (w/o leaving its node) on baseline:
-
-  6.8 Mpps  5.0 Mpps    1.8 Mpps
-
-cpumap redirect with skb PP recycling:
-
-  7.9 Mpps  5.7 Mpps    2.2 Mpps
-                       +22% (from cpumap redir on baseline)
-
-[0] https://github.com/alobakin/linux/commits/iavf-xdp
-
-Alexander Lobakin (3):
-  net: page_pool, skbuff: make skb_mark_for_recycle() always available
-  xdp: recycle Page Pool backed skbs built from XDP frames
-  xdp: remove unused {__,}xdp_release_frame()
-
- include/linux/skbuff.h |  4 ++--
- include/net/xdp.h      | 29 -----------------------------
- net/core/xdp.c         | 19 ++-----------------
- 3 files changed, 4 insertions(+), 48 deletions(-)
-
+Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
 ---
-From v1[1]:
-* make skb_mark_for_recycle() always available, otherwise there are build
-  failures on non-PP systems (kbuild bot);
-* 'Page Pool' -> 'page_pool' when it's about a page_pool instance, not
-  API (Jesper);
-* expanded test system info a bit in the cover letter (Jesper).
+ net/core/xdp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-[1] https://lore.kernel.org/bpf/20230301160315.1022488-1-aleksander.lobakin@intel.com
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index 8c92fc553317..a2237cfca8e9 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -658,8 +658,8 @@ struct sk_buff *__xdp_build_skb_from_frame(struct xdp_frame *xdpf,
+ 	 * - RX ring dev queue index	(skb_record_rx_queue)
+ 	 */
+ 
+-	/* Until page_pool get SKB return path, release DMA here */
+-	xdp_release_frame(xdpf);
++	if (xdpf->mem.type == MEM_TYPE_PAGE_POOL)
++		skb_mark_for_recycle(skb);
+ 
+ 	/* Allow SKB to reuse area used by xdp_frame */
+ 	xdp_scrub_frame(xdpf);
 -- 
 2.39.2
 
