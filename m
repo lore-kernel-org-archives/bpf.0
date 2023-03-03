@@ -2,267 +2,226 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDD6FC6FA8E
-	for <bpf@archiver.kernel.org>; Fri,  3 Mar 2023 00:55:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57509C6FA8E
+	for <bpf@archiver.kernel.org>; Fri,  3 Mar 2023 01:21:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjCCAzL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Mar 2023 19:55:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41698 "EHLO
+        id S229468AbjCCBVo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Mar 2023 20:21:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbjCCAzL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Mar 2023 19:55:11 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA72497E6
-        for <bpf@vger.kernel.org>; Thu,  2 Mar 2023 16:55:08 -0800 (PST)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 322N70U4011473
-        for <bpf@vger.kernel.org>; Thu, 2 Mar 2023 16:55:08 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=facebook; bh=E2/UShjTMig235F+o9lE6guOaShB9ByTKDoWokNaa1w=;
- b=kKRVwJd9CWSBUoUXA49L3DivMMuk+BHYf/oEtnRVnouERRB1j9wE+0ZH9/w5y/7Hrra0
- 8SO4DMYccySJhNYbxS1W1a5SmnlTNM95OqbvN0kLpwPjrGQ5lZHwCzrqtSwkjt4Q2JJS
- x84C/6W6F2xzk0Fs3x4fALtAbEpTr7L4t3o= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3p2hrvr4u9-1
+        with ESMTP id S229453AbjCCBVn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Mar 2023 20:21:43 -0500
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E0A515E5
+        for <bpf@vger.kernel.org>; Thu,  2 Mar 2023 17:21:41 -0800 (PST)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 322KTZ76030242
+        for <bpf@vger.kernel.org>; Thu, 2 Mar 2023 17:21:40 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=s2048-2021-q4;
+ bh=TXcdZq3SnlcQtElGGECZN35GOT7c1vWCllC+RhcoVWc=;
+ b=UB3CG4l66KcJ4biBxKIhXUtV3KJDW98xifcjcA1WnlipwRF7VynnvXZpVSr7wJI5FzKA
+ F+fH5OkRWEFJPTeiJA6oYGfr/NLptNKxFMmtOnOah/Eb0hIAq/1QOU0vwl8f9m3vxwlJ
+ A7L6L+p/Qx7JCDuYn+qDTDtO/P44CPJykaceMn463KqPICoI1+m1TqwsTknYcmV7YOm/
+ 1l/EHc9VF2a1m+VGWK0022kNpdrkAHE9PtyeBG7J1eyedFYsfqStu703HV6+p9rvHhII
+ xeClLJczKTzajp+MbbxK6mPYSCAw2a2oH/HgFDwbgP8zj7VhKsZRYibjZPLNjMcosIFE 2A== 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3p30k9jpd3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 02 Mar 2023 16:55:08 -0800
-Received: from twshared6493.05.ash7.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 02 Mar 2023 17:21:40 -0800
+Received: from twshared52565.14.frc2.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 2 Mar 2023 16:55:07 -0800
-Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-        id 16AE21859850F; Thu,  2 Mar 2023 16:55:01 -0800 (PST)
-From:   Dave Marchevsky <davemarchevsky@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Kernel Team <kernel-team@fb.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        David Vernet <void@manifault.com>, Tejun Heo <tj@kernel.org>
-Subject: [PATCH v3 bpf-next] selftests/bpf: Add -Wuninitialized flag to bpf prog flags
-Date:   Thu, 2 Mar 2023 16:55:00 -0800
-Message-ID: <20230303005500.1614874-1-davemarchevsky@fb.com>
+ 15.1.2507.17; Thu, 2 Mar 2023 17:21:39 -0800
+Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
+        id C4F716644D88; Thu,  2 Mar 2023 17:21:30 -0800 (PST)
+From:   Kui-Feng Lee <kuifeng@meta.com>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <martin.lau@linux.dev>,
+        <song@kernel.org>, <kernel-team@meta.com>, <andrii@kernel.org>,
+        <sdf@google.com>
+CC:     Kui-Feng Lee <kuifeng@meta.com>
+Subject: [PATCH bpf-next v3 4/8] libbpf: Create a bpf_link in bpf_map__attach_struct_ops().
+Date:   Thu, 2 Mar 2023 17:21:18 -0800
+Message-ID: <20230303012122.852654-5-kuifeng@meta.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230303012122.852654-1-kuifeng@meta.com>
+References: <20230303012122.852654-1-kuifeng@meta.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: rtzBUC7MrcumN0qJND95qTxLTSO0bTf5
-X-Proofpoint-GUID: rtzBUC7MrcumN0qJND95qTxLTSO0bTf5
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-GUID: Zl73M5uuobczmQyYo40OuO15o0LN5n5b
+X-Proofpoint-ORIG-GUID: Zl73M5uuobczmQyYo40OuO15o0LN5n5b
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-02_16,2023-03-02_02,2023-02-09_01
+ definitions=2023-03-03_01,2023-03-02_02,2023-02-09_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Per C99 standard [0], Section 6.7.8, Paragraph 10:
+bpf_map__attach_struct_ops() was creating a dummy bpf_link as a
+placeholder, but now it is constructing an authentic one by calling
+bpf_link_create() if the map has the BPF_F_LINK flag.
 
-  If an object that has automatic storage duration is not initialized
-  explicitly, its value is indeterminate.
+You can flag a struct_ops map with BPF_F_LINK by calling
+bpf_map__set_map_flags().
 
-And in the same document, in appendix "J.2 Undefined behavior":
-
-  The behavior is undefined in the following circumstances:
-  [...]
-  The value of an object with automatic storage duration is used while
-  it is indeterminate (6.2.4, 6.7.8, 6.8).
-
-This means that use of an uninitialized stack variable is undefined
-behavior, and therefore that clang can choose to do a variety of scary
-things, such as not generating bytecode for "bunch of useful code" in
-the below example:
-
-  void some_func()
-  {
-    int i;
-    if (!i)
-      return;
-    // bunch of useful code
-  }
-
-To add insult to injury, if some_func above is a helper function for
-some BPF program, clang can choose to not generate an "exit" insn,
-causing verifier to fail with "last insn is not an exit or jmp". Going
-from that verification failure to the root cause of uninitialized use
-is certain to be frustrating.
-
-This patch adds -Wuninitialized to the cflags for selftest BPF progs and
-fixes up existing instances of uninitialized use.
-
-  [0]: https://www.open-std.org/jtc1/sc22/WG14/www/docs/n1256.pdf
-
-Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
-Cc: David Vernet <void@manifault.com>
-Cc: Tejun Heo <tj@kernel.org>
-Acked-by: David Vernet <void@manifault.com>
+Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
 ---
-Changelog:
+ tools/lib/bpf/libbpf.c | 84 +++++++++++++++++++++++++++++++-----------
+ 1 file changed, 62 insertions(+), 22 deletions(-)
 
-v2 -> v3: https://lore.kernel.org/bpf/20230302233528.532299-1-davemarchevsk=
-y@fb.com/
-  * bpf_spin_unlock before returning (Alexei)
-
-v1 -> v2: https://lore.kernel.org/bpf/20230302231924.344383-1-davemarchevsk=
-y@fb.com/
-  * Return 1 instead of -1 from tc prog (Alexei)
-  * Add David Vernet ack
-
- tools/testing/selftests/bpf/Makefile                   |  2 +-
- tools/testing/selftests/bpf/progs/rbtree.c             |  2 +-
- tools/testing/selftests/bpf/progs/rbtree_fail.c        |  7 +++++--
- .../selftests/bpf/progs/test_kfunc_dynptr_param.c      |  2 +-
- .../testing/selftests/bpf/progs/test_sk_lookup_kern.c  |  2 +-
- tools/testing/selftests/bpf/progs/test_tunnel_kern.c   | 10 +++++-----
- 6 files changed, 14 insertions(+), 11 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests=
-/bpf/Makefile
-index f40606a85a0f..eab3cf5399f5 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -357,7 +357,7 @@ BPF_CFLAGS =3D -g -Werror -D__TARGET_ARCH_$(SRCARCH) $(=
-MENDIAN) 		\
- 	     -I$(abspath $(OUTPUT)/../usr/include)
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 35a698eb825d..a67efc3b3763 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -115,6 +115,7 @@ static const char * const attach_type_name[] =3D {
+ 	[BPF_SK_REUSEPORT_SELECT_OR_MIGRATE]	=3D "sk_reuseport_select_or_migrat=
+e",
+ 	[BPF_PERF_EVENT]		=3D "perf_event",
+ 	[BPF_TRACE_KPROBE_MULTI]	=3D "trace_kprobe_multi",
++	[BPF_STRUCT_OPS]		=3D "struct_ops",
+ };
 =20
- CLANG_CFLAGS =3D $(CLANG_SYS_INCLUDES) \
--	       -Wno-compare-distinct-pointer-types
-+	       -Wno-compare-distinct-pointer-types -Wuninitialized
+ static const char * const link_type_name[] =3D {
+@@ -7677,6 +7678,26 @@ static int bpf_object__resolve_externs(struct bpf_=
+object *obj,
+ 	return 0;
+ }
 =20
- $(OUTPUT)/test_l4lb_noinline.o: BPF_CFLAGS +=3D -fno-inline
- $(OUTPUT)/test_xdp_noinline.o: BPF_CFLAGS +=3D -fno-inline
-diff --git a/tools/testing/selftests/bpf/progs/rbtree.c b/tools/testing/sel=
-ftests/bpf/progs/rbtree.c
-index e5db1a4287e5..4c90aa6abddd 100644
---- a/tools/testing/selftests/bpf/progs/rbtree.c
-+++ b/tools/testing/selftests/bpf/progs/rbtree.c
-@@ -75,7 +75,7 @@ SEC("tc")
- long rbtree_add_and_remove(void *ctx)
- {
- 	struct bpf_rb_node *res =3D NULL;
--	struct node_data *n, *m;
-+	struct node_data *n, *m =3D NULL;
-=20
- 	n =3D bpf_obj_new(typeof(*n));
- 	if (!n)
-diff --git a/tools/testing/selftests/bpf/progs/rbtree_fail.c b/tools/testin=
-g/selftests/bpf/progs/rbtree_fail.c
-index bf3cba115897..1ced900f3fce 100644
---- a/tools/testing/selftests/bpf/progs/rbtree_fail.c
-+++ b/tools/testing/selftests/bpf/progs/rbtree_fail.c
-@@ -232,8 +232,11 @@ long rbtree_api_first_release_unlock_escape(void *ctx)
-=20
- 	bpf_spin_lock(&glock);
- 	res =3D bpf_rbtree_first(&groot);
--	if (res)
--		n =3D container_of(res, struct node_data, node);
-+	if (!res) {
-+		bpf_spin_unlock(&glock);
-+		return 1;
++static void bpf_map_prepare_vdata(const struct bpf_map *map)
++{
++	struct bpf_struct_ops *st_ops;
++	__u32 i;
++
++	st_ops =3D map->st_ops;
++	for (i =3D 0; i < btf_vlen(st_ops->type); i++) {
++		struct bpf_program *prog =3D st_ops->progs[i];
++		void *kern_data;
++		int prog_fd;
++
++		if (!prog)
++			continue;
++
++		prog_fd =3D bpf_program__fd(prog);
++		kern_data =3D st_ops->kern_vdata + st_ops->kern_func_off[i];
++		*(unsigned long *)kern_data =3D prog_fd;
 +	}
-+	n =3D container_of(res, struct node_data, node);
- 	bpf_spin_unlock(&glock);
-=20
- 	bpf_spin_lock(&glock);
-diff --git a/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c b/=
-tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
-index 2fbef3cc7ad8..2dde8e3fe4c9 100644
---- a/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
-+++ b/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
-@@ -48,7 +48,7 @@ SEC("?lsm.s/bpf")
- __failure __msg("arg#0 expected pointer to stack or dynptr_ptr")
- int BPF_PROG(not_ptr_to_stack, int cmd, union bpf_attr *attr, unsigned int=
- size)
++}
++
+ static int bpf_object_load(struct bpf_object *obj, int extra_log_level, =
+const char *target_btf_path)
  {
--	unsigned long val;
-+	unsigned long val =3D 0;
+ 	int err, i;
+@@ -7728,6 +7749,10 @@ static int bpf_object_load(struct bpf_object *obj,=
+ int extra_log_level, const ch
+ 	btf__free(obj->btf_vmlinux);
+ 	obj->btf_vmlinux =3D NULL;
 =20
- 	return bpf_verify_pkcs7_signature((struct bpf_dynptr *)val,
- 					  (struct bpf_dynptr *)val, NULL);
-diff --git a/tools/testing/selftests/bpf/progs/test_sk_lookup_kern.c b/tool=
-s/testing/selftests/bpf/progs/test_sk_lookup_kern.c
-index b502e5c92e33..6ccf6d546074 100644
---- a/tools/testing/selftests/bpf/progs/test_sk_lookup_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_sk_lookup_kern.c
-@@ -23,8 +23,8 @@ static struct bpf_sock_tuple *get_tuple(void *data, __u64=
- nh_off,
- 					bool *ipv4)
++	for (i =3D 0; i < obj->nr_maps; i++)
++		if (bpf_map__is_struct_ops(&obj->maps[i]))
++			bpf_map_prepare_vdata(&obj->maps[i]);
++
+ 	obj->loaded =3D true; /* doesn't matter if successfully or not */
+=20
+ 	if (err)
+@@ -11429,22 +11454,34 @@ struct bpf_link *bpf_program__attach(const stru=
+ct bpf_program *prog)
+ 	return link;
+ }
+=20
++struct bpf_link_struct_ops {
++	struct bpf_link link;
++	int map_fd;
++};
++
+ static int bpf_link__detach_struct_ops(struct bpf_link *link)
  {
- 	struct bpf_sock_tuple *result;
-+	__u64 ihl_len =3D 0;
- 	__u8 proto =3D 0;
--	__u64 ihl_len;
++	struct bpf_link_struct_ops *st_link;
+ 	__u32 zero =3D 0;
 =20
- 	if (eth_proto =3D=3D bpf_htons(ETH_P_IP)) {
- 		struct iphdr *iph =3D (struct iphdr *)(data + nh_off);
-diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c b/tools/t=
-esting/selftests/bpf/progs/test_tunnel_kern.c
-index 508da4a23c4f..95b4aa0928ba 100644
---- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-@@ -324,11 +324,11 @@ int ip4ip6erspan_get_tunnel(struct __sk_buff *skb)
- SEC("tc")
- int vxlan_set_tunnel_dst(struct __sk_buff *skb)
+-	if (bpf_map_delete_elem(link->fd, &zero))
+-		return -errno;
++	st_link =3D container_of(link, struct bpf_link_struct_ops, link);
+=20
+-	return 0;
++	if (st_link->map_fd < 0) {
++		/* Fake bpf_link */
++		if (bpf_map_delete_elem(link->fd, &zero))
++			return -errno;
++		return 0;
++	}
++
++	/* Doesn't support detaching. */
++	return -EOPNOTSUPP;
+ }
+=20
+ struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map)
  {
--	int ret;
- 	struct bpf_tunnel_key key;
- 	struct vxlan_metadata md;
- 	__u32 index =3D 0;
- 	__u32 *local_ip =3D NULL;
-+	int ret =3D 0;
+-	struct bpf_struct_ops *st_ops;
+-	struct bpf_link *link;
+-	__u32 i, zero =3D 0;
+-	int err;
++	struct bpf_link_struct_ops *link;
++	__u32 zero =3D 0;
++	int err, fd;
 =20
- 	local_ip =3D bpf_map_lookup_elem(&local_ip_map, &index);
- 	if (!local_ip) {
-@@ -363,11 +363,11 @@ int vxlan_set_tunnel_dst(struct __sk_buff *skb)
- SEC("tc")
- int vxlan_set_tunnel_src(struct __sk_buff *skb)
- {
--	int ret;
- 	struct bpf_tunnel_key key;
- 	struct vxlan_metadata md;
- 	__u32 index =3D 0;
- 	__u32 *local_ip =3D NULL;
-+	int ret =3D 0;
+ 	if (!bpf_map__is_struct_ops(map) || map->fd =3D=3D -1)
+ 		return libbpf_err_ptr(-EINVAL);
+@@ -11453,31 +11490,34 @@ struct bpf_link *bpf_map__attach_struct_ops(con=
+st struct bpf_map *map)
+ 	if (!link)
+ 		return libbpf_err_ptr(-EINVAL);
 =20
- 	local_ip =3D bpf_map_lookup_elem(&local_ip_map, &index);
- 	if (!local_ip) {
-@@ -494,9 +494,9 @@ SEC("tc")
- int ip6vxlan_set_tunnel_dst(struct __sk_buff *skb)
- {
- 	struct bpf_tunnel_key key;
--	int ret;
- 	__u32 index =3D 0;
- 	__u32 *local_ip;
-+	int ret =3D 0;
+-	st_ops =3D map->st_ops;
+-	for (i =3D 0; i < btf_vlen(st_ops->type); i++) {
+-		struct bpf_program *prog =3D st_ops->progs[i];
+-		void *kern_data;
+-		int prog_fd;
++	/* kern_vdata should be prepared during the loading phase. */
++	err =3D bpf_map_update_elem(map->fd, &zero, map->st_ops->kern_vdata, 0)=
+;
++	if (err) {
++		err =3D -errno;
++		free(link);
++		return libbpf_err_ptr(err);
++	}
 =20
- 	local_ip =3D bpf_map_lookup_elem(&local_ip_map, &index);
- 	if (!local_ip) {
-@@ -525,9 +525,9 @@ SEC("tc")
- int ip6vxlan_set_tunnel_src(struct __sk_buff *skb)
- {
- 	struct bpf_tunnel_key key;
--	int ret;
- 	__u32 index =3D 0;
- 	__u32 *local_ip;
-+	int ret =3D 0;
+-		if (!prog)
+-			continue;
 =20
- 	local_ip =3D bpf_map_lookup_elem(&local_ip_map, &index);
- 	if (!local_ip) {
-@@ -556,9 +556,9 @@ SEC("tc")
- int ip6vxlan_get_tunnel_src(struct __sk_buff *skb)
- {
- 	struct bpf_tunnel_key key;
--	int ret;
- 	__u32 index =3D 0;
- 	__u32 *local_ip;
-+	int ret =3D 0;
+-		prog_fd =3D bpf_program__fd(prog);
+-		kern_data =3D st_ops->kern_vdata + st_ops->kern_func_off[i];
+-		*(unsigned long *)kern_data =3D prog_fd;
++	if (!(map->def.map_flags & BPF_F_LINK)) {
++		/* Fake bpf_link */
++		link->link.fd =3D map->fd;
++		link->map_fd =3D -1;
++		link->link.detach =3D bpf_link__detach_struct_ops;
++		return &link->link;
+ 	}
 =20
- 	local_ip =3D bpf_map_lookup_elem(&local_ip_map, &index);
- 	if (!local_ip) {
+-	err =3D bpf_map_update_elem(map->fd, &zero, st_ops->kern_vdata, 0);
+-	if (err) {
++	fd =3D bpf_link_create(map->fd, -1, BPF_STRUCT_OPS, NULL);
++	if (fd < 0) {
+ 		err =3D -errno;
+ 		free(link);
+ 		return libbpf_err_ptr(err);
+ 	}
+=20
+-	link->detach =3D bpf_link__detach_struct_ops;
+-	link->fd =3D map->fd;
++	link->link.fd =3D fd;
++	link->map_fd =3D map->fd;
+=20
+-	return link;
++	return &link->link;
+ }
+=20
+ typedef enum bpf_perf_event_ret (*bpf_perf_event_print_t)(struct perf_ev=
+ent_header *hdr,
 --=20
 2.30.2
 
