@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F90BC61DA4
-	for <bpf@archiver.kernel.org>; Mon,  6 Mar 2023 04:16:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2792C6FD1C
+	for <bpf@archiver.kernel.org>; Mon,  6 Mar 2023 04:16:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbjCFEQh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S229743AbjCFEQh (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Sun, 5 Mar 2023 23:16:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51066 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjCFEQe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S229665AbjCFEQe (ORCPT <rfc822;bpf@vger.kernel.org>);
         Sun, 5 Mar 2023 23:16:34 -0500
-Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7941A1BAD7;
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173FF1ABC2;
         Sun,  5 Mar 2023 20:16:06 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0Vd8WMOf_1678076138;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vd8WMOf_1678076138)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0Vd8Os24_1678076137;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vd8Os24_1678076137)
           by smtp.aliyun-inc.com;
-          Mon, 06 Mar 2023 12:15:38 +0800
+          Mon, 06 Mar 2023 12:15:37 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     netdev@vger.kernel.org
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
@@ -30,11 +30,10 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org,
-        Yichun Zhang <yichun@openresty.com>
-Subject: [PATCH net 2/2] virtio_net: add checking sq is full inside xdp xmit
-Date:   Mon,  6 Mar 2023 12:15:35 +0800
-Message-Id: <20230306041535.73319-3-xuanzhuo@linux.alibaba.com>
+        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
+Subject: [PATCH net 1/2] virtio_net: separate the logic of checking whether sq is full
+Date:   Mon,  6 Mar 2023 12:15:34 +0800
+Message-Id: <20230306041535.73319-2-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20230306041535.73319-1-xuanzhuo@linux.alibaba.com>
 References: <20230306041535.73319-1-xuanzhuo@linux.alibaba.com>
@@ -45,77 +44,91 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-If the queue of xdp xmit is not an independent queue, then when the xdp
-xmit used all the desc, the xmit from the __dev_queue_xmit() may encounter
-the following error.
+Separate the logic of checking whether sq is full. The subsequent patch
+will reuse this func.
 
-net ens4: Unexpected TXQ (0) queue failure: -28
-
-This patch adds a check whether sq is full in XDP Xmit.
-
-Reported-by: Yichun Zhang <yichun@openresty.com>
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- drivers/net/virtio_net.c | 25 +++++++++++++++----------
- 1 file changed, 15 insertions(+), 10 deletions(-)
+ drivers/net/virtio_net.c | 59 ++++++++++++++++++++++++----------------
+ 1 file changed, 35 insertions(+), 24 deletions(-)
 
 diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 777de0ec0b1b..3001b9a548e5 100644
+index fb5e68ed3ec2..777de0ec0b1b 100644
 --- a/drivers/net/virtio_net.c
 +++ b/drivers/net/virtio_net.c
-@@ -302,6 +302,8 @@ struct padded_vnet_hdr {
- 
- static void virtnet_rq_free_unused_buf(struct virtqueue *vq, void *buf);
- static void virtnet_sq_free_unused_buf(struct virtqueue *vq, void *buf);
-+static void check_sq_full(struct virtnet_info *vi, struct net_device *dev,
-+			  struct send_queue *sq);
- 
- static bool is_xdp_frame(void *ptr)
- {
-@@ -341,6 +343,16 @@ static int rxq2vq(int rxq)
- 	return rxq * 2;
+@@ -1750,6 +1750,40 @@ static void free_old_xmit_skbs(struct send_queue *sq, bool in_napi)
+ 	u64_stats_update_end(&sq->stats.syncp);
  }
  
-+static bool is_xdp_raw_buffer_queue(struct virtnet_info *vi, int q)
++static void check_sq_full(struct virtnet_info *vi, struct net_device *dev,
++			  struct send_queue *sq)
 +{
-+	if (q < (vi->curr_queue_pairs - vi->xdp_queue_pairs))
-+		return false;
-+	else if (q < vi->curr_queue_pairs)
-+		return true;
-+	else
-+		return false;
++	bool use_napi = sq->napi.weight;
++	int qnum;
++
++	qnum = sq - vi->sq;
++
++	/* If running out of space, stop queue to avoid getting packets that we
++	 * are then unable to transmit.
++	 * An alternative would be to force queuing layer to requeue the skb by
++	 * returning NETDEV_TX_BUSY. However, NETDEV_TX_BUSY should not be
++	 * returned in a normal path of operation: it means that driver is not
++	 * maintaining the TX queue stop/start state properly, and causes
++	 * the stack to do a non-trivial amount of useless work.
++	 * Since most packets only take 1 or 2 ring slots, stopping the queue
++	 * early means 16 slots are typically wasted.
++	 */
++	if (sq->vq->num_free < 2+MAX_SKB_FRAGS) {
++		netif_stop_subqueue(dev, qnum);
++		if (use_napi) {
++			if (unlikely(!virtqueue_enable_cb_delayed(sq->vq)))
++				virtqueue_napi_schedule(&sq->napi, sq->vq);
++		} else if (unlikely(!virtqueue_enable_cb_delayed(sq->vq))) {
++			/* More just got used, free them then recheck. */
++			free_old_xmit_skbs(sq, false);
++			if (sq->vq->num_free >= 2+MAX_SKB_FRAGS) {
++				netif_start_subqueue(dev, qnum);
++				virtqueue_disable_cb(sq->vq);
++			}
++		}
++	}
 +}
 +
- static inline struct virtio_net_hdr_mrg_rxbuf *skb_vnet_hdr(struct sk_buff *skb)
+ static bool is_xdp_raw_buffer_queue(struct virtnet_info *vi, int q)
  {
- 	return (struct virtio_net_hdr_mrg_rxbuf *)skb->cb;
-@@ -686,6 +698,9 @@ static int virtnet_xdp_xmit(struct net_device *dev,
+ 	if (q < (vi->curr_queue_pairs - vi->xdp_queue_pairs))
+@@ -1989,30 +2023,7 @@ static netdev_tx_t start_xmit(struct sk_buff *skb, struct net_device *dev)
+ 		nf_reset_ct(skb);
  	}
- 	ret = nxmit;
  
-+	if (!is_xdp_raw_buffer_queue(vi, sq - vi->sq))
-+		check_sq_full(vi, dev, sq);
-+
- 	if (flags & XDP_XMIT_FLUSH) {
- 		if (virtqueue_kick_prepare(sq->vq) && virtqueue_notify(sq->vq))
- 			kicks = 1;
-@@ -1784,16 +1799,6 @@ static void check_sq_full(struct virtnet_info *vi, struct net_device *dev,
- 	}
- }
+-	/* If running out of space, stop queue to avoid getting packets that we
+-	 * are then unable to transmit.
+-	 * An alternative would be to force queuing layer to requeue the skb by
+-	 * returning NETDEV_TX_BUSY. However, NETDEV_TX_BUSY should not be
+-	 * returned in a normal path of operation: it means that driver is not
+-	 * maintaining the TX queue stop/start state properly, and causes
+-	 * the stack to do a non-trivial amount of useless work.
+-	 * Since most packets only take 1 or 2 ring slots, stopping the queue
+-	 * early means 16 slots are typically wasted.
+-	 */
+-	if (sq->vq->num_free < 2+MAX_SKB_FRAGS) {
+-		netif_stop_subqueue(dev, qnum);
+-		if (use_napi) {
+-			if (unlikely(!virtqueue_enable_cb_delayed(sq->vq)))
+-				virtqueue_napi_schedule(&sq->napi, sq->vq);
+-		} else if (unlikely(!virtqueue_enable_cb_delayed(sq->vq))) {
+-			/* More just got used, free them then recheck. */
+-			free_old_xmit_skbs(sq, false);
+-			if (sq->vq->num_free >= 2+MAX_SKB_FRAGS) {
+-				netif_start_subqueue(dev, qnum);
+-				virtqueue_disable_cb(sq->vq);
+-			}
+-		}
+-	}
++	check_sq_full(vi, dev, sq);
  
--static bool is_xdp_raw_buffer_queue(struct virtnet_info *vi, int q)
--{
--	if (q < (vi->curr_queue_pairs - vi->xdp_queue_pairs))
--		return false;
--	else if (q < vi->curr_queue_pairs)
--		return true;
--	else
--		return false;
--}
--
- static void virtnet_poll_cleantx(struct receive_queue *rq)
- {
- 	struct virtnet_info *vi = rq->vq->vdev->priv;
+ 	if (kick || netif_xmit_stopped(txq)) {
+ 		if (virtqueue_kick_prepare(sq->vq) && virtqueue_notify(sq->vq)) {
 -- 
 2.32.0.3.g01195cf9f
 
