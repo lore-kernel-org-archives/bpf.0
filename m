@@ -2,37 +2,37 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EAC18C6FD19
-	for <bpf@archiver.kernel.org>; Mon,  6 Mar 2023 08:42:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2C0DC678D4
+	for <bpf@archiver.kernel.org>; Mon,  6 Mar 2023 08:42:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbjCFImj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 6 Mar 2023 03:42:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44442 "EHLO
+        id S230047AbjCFImo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 6 Mar 2023 03:42:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbjCFImh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 6 Mar 2023 03:42:37 -0500
-Received: from out-20.mta1.migadu.com (out-20.mta1.migadu.com [95.215.58.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC0321299
-        for <bpf@vger.kernel.org>; Mon,  6 Mar 2023 00:42:36 -0800 (PST)
+        with ESMTP id S230034AbjCFImm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 6 Mar 2023 03:42:42 -0500
+Received: from out-63.mta1.migadu.com (out-63.mta1.migadu.com [95.215.58.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BED32197A
+        for <bpf@vger.kernel.org>; Mon,  6 Mar 2023 00:42:40 -0800 (PST)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1678092154;
+        t=1678092158;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jFyAArbNVcnMNQbb+W1aPE9Iuq3XKYyouulyG+SmakQ=;
-        b=aSFlOQRGDVuUbFfM9Otwxnr7XbbgRjbUW7Th8MGkPNpBk1MLVn+UBmwQVgvFIcYGf+EK4l
-        /x1zpGqfOHc1VdKgpSPRddeZH1UB1R9dTAG4Hf6v/X7H/uX+1FKNQEzLHv6OQ/Tj1Ibf1A
-        RPYu+qOR8VRhytvHpmzh1WBCRJgXxWs=
+        bh=Jtss5LJMscJIu0BKahkxUY02PtUx65WAWlv0onfntHg=;
+        b=OZGTUlsrIP17meJbt1OowJxt1Xj3koVBs7ZRQRLg+0xukVnH/YHYAcp40PkjHc8fGmRjeO
+        1Qkep/hYwloLVrVnnr1P/vWnjykOyDYe2zSxLK4sUNoo04sxNQxSQ1sUOj4NRb/X4O31iT
+        nh3VWkGhjhDmPLHguJJ58HmQGvmB0go=
 From:   Martin KaFai Lau <martin.lau@linux.dev>
 To:     bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, kernel-team@meta.com
-Subject: [PATCH bpf-next 01/16] bpf: Move a few bpf_local_storage functions to static scope
-Date:   Mon,  6 Mar 2023 00:42:01 -0800
-Message-Id: <20230306084216.3186830-2-martin.lau@linux.dev>
+Subject: [PATCH bpf-next 03/16] bpf: Remove __bpf_local_storage_map_alloc
+Date:   Mon,  6 Mar 2023 00:42:03 -0800
+Message-Id: <20230306084216.3186830-4-martin.lau@linux.dev>
 In-Reply-To: <20230306084216.3186830-1-martin.lau@linux.dev>
 References: <20230306084216.3186830-1-martin.lau@linux.dev>
 MIME-Version: 1.0
@@ -44,58 +44,100 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Martin KaFai Lau <martin.lau@kernel.org>
 
-This patch moves the bpf_local_storage_free_rcu() and
-bpf_selem_unlink_map() to static because they are
-not used outside of bpf_local_storage.c.
+bpf_local_storage_map_alloc() is the only caller of
+__bpf_local_storage_map_alloc().  The remaining logic in
+bpf_local_storage_map_alloc() is only a one liner setting
+the smap->cache_idx.
+
+Remove __bpf_local_storage_map_alloc() to simplify code.
 
 Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
 ---
- include/linux/bpf_local_storage.h | 4 ----
- kernel/bpf/bpf_local_storage.c    | 4 ++--
- 2 files changed, 2 insertions(+), 6 deletions(-)
+ kernel/bpf/bpf_local_storage.c | 63 ++++++++++++++--------------------
+ 1 file changed, 26 insertions(+), 37 deletions(-)
 
-diff --git a/include/linux/bpf_local_storage.h b/include/linux/bpf_local_storage.h
-index 6d37a40cd90e..6917c9a408a1 100644
---- a/include/linux/bpf_local_storage.h
-+++ b/include/linux/bpf_local_storage.h
-@@ -147,8 +147,6 @@ void bpf_selem_unlink(struct bpf_local_storage_elem *selem, bool use_trace_rcu);
- void bpf_selem_link_map(struct bpf_local_storage_map *smap,
- 			struct bpf_local_storage_elem *selem);
- 
--void bpf_selem_unlink_map(struct bpf_local_storage_elem *selem);
--
- struct bpf_local_storage_elem *
- bpf_selem_alloc(struct bpf_local_storage_map *smap, void *owner, void *value,
- 		bool charge_mem, gfp_t gfp_flags);
-@@ -163,6 +161,4 @@ struct bpf_local_storage_data *
- bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
- 			 void *value, u64 map_flags, gfp_t gfp_flags);
- 
--void bpf_local_storage_free_rcu(struct rcu_head *rcu);
--
- #endif /* _BPF_LOCAL_STORAGE_H */
 diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-index 3d320393a12c..0510f50bd3ea 100644
+index 4d2bc7c97f7d..acedf6b07c54 100644
 --- a/kernel/bpf/bpf_local_storage.c
 +++ b/kernel/bpf/bpf_local_storage.c
-@@ -95,7 +95,7 @@ bpf_selem_alloc(struct bpf_local_storage_map *smap, void *owner,
- 	return NULL;
+@@ -601,40 +601,6 @@ int bpf_local_storage_map_alloc_check(union bpf_attr *attr)
+ 	return 0;
  }
  
--void bpf_local_storage_free_rcu(struct rcu_head *rcu)
-+static void bpf_local_storage_free_rcu(struct rcu_head *rcu)
- {
- 	struct bpf_local_storage *local_storage;
- 
-@@ -251,7 +251,7 @@ void bpf_selem_link_storage_nolock(struct bpf_local_storage *local_storage,
- 	hlist_add_head_rcu(&selem->snode, &local_storage->list);
- }
- 
--void bpf_selem_unlink_map(struct bpf_local_storage_elem *selem)
-+static void bpf_selem_unlink_map(struct bpf_local_storage_elem *selem)
+-static struct bpf_local_storage_map *__bpf_local_storage_map_alloc(union bpf_attr *attr)
+-{
+-	struct bpf_local_storage_map *smap;
+-	unsigned int i;
+-	u32 nbuckets;
+-
+-	smap = bpf_map_area_alloc(sizeof(*smap), NUMA_NO_NODE);
+-	if (!smap)
+-		return ERR_PTR(-ENOMEM);
+-	bpf_map_init_from_attr(&smap->map, attr);
+-
+-	nbuckets = roundup_pow_of_two(num_possible_cpus());
+-	/* Use at least 2 buckets, select_bucket() is undefined behavior with 1 bucket */
+-	nbuckets = max_t(u32, 2, nbuckets);
+-	smap->bucket_log = ilog2(nbuckets);
+-
+-	smap->buckets = bpf_map_kvcalloc(&smap->map, sizeof(*smap->buckets),
+-					 nbuckets, GFP_USER | __GFP_NOWARN);
+-	if (!smap->buckets) {
+-		bpf_map_area_free(smap);
+-		return ERR_PTR(-ENOMEM);
+-	}
+-
+-	for (i = 0; i < nbuckets; i++) {
+-		INIT_HLIST_HEAD(&smap->buckets[i].list);
+-		raw_spin_lock_init(&smap->buckets[i].lock);
+-	}
+-
+-	smap->elem_size = offsetof(struct bpf_local_storage_elem,
+-				   sdata.data[attr->value_size]);
+-
+-	return smap;
+-}
+-
+ int bpf_local_storage_map_check_btf(const struct bpf_map *map,
+ 				    const struct btf *btf,
+ 				    const struct btf_type *key_type,
+@@ -694,10 +660,33 @@ bpf_local_storage_map_alloc(union bpf_attr *attr,
+ 			    struct bpf_local_storage_cache *cache)
  {
  	struct bpf_local_storage_map *smap;
- 	struct bpf_local_storage_map_bucket *b;
++	unsigned int i;
++	u32 nbuckets;
++
++	smap = bpf_map_area_alloc(sizeof(*smap), NUMA_NO_NODE);
++	if (!smap)
++		return ERR_PTR(-ENOMEM);
++	bpf_map_init_from_attr(&smap->map, attr);
++
++	nbuckets = roundup_pow_of_two(num_possible_cpus());
++	/* Use at least 2 buckets, select_bucket() is undefined behavior with 1 bucket */
++	nbuckets = max_t(u32, 2, nbuckets);
++	smap->bucket_log = ilog2(nbuckets);
+ 
+-	smap = __bpf_local_storage_map_alloc(attr);
+-	if (IS_ERR(smap))
+-		return ERR_CAST(smap);
++	smap->buckets = bpf_map_kvcalloc(&smap->map, sizeof(*smap->buckets),
++					 nbuckets, GFP_USER | __GFP_NOWARN);
++	if (!smap->buckets) {
++		bpf_map_area_free(smap);
++		return ERR_PTR(-ENOMEM);
++	}
++
++	for (i = 0; i < nbuckets; i++) {
++		INIT_HLIST_HEAD(&smap->buckets[i].list);
++		raw_spin_lock_init(&smap->buckets[i].lock);
++	}
++
++	smap->elem_size = offsetof(struct bpf_local_storage_elem,
++				   sdata.data[attr->value_size]);
+ 
+ 	smap->cache_idx = bpf_local_storage_cache_idx_get(cache);
+ 	return &smap->map;
 -- 
 2.30.2
 
