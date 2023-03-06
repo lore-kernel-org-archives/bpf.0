@@ -2,161 +2,85 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15D3FC61DA4
-	for <bpf@archiver.kernel.org>; Mon,  6 Mar 2023 18:00:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CB63C61DA4
+	for <bpf@archiver.kernel.org>; Mon,  6 Mar 2023 18:01:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjCFSAz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 6 Mar 2023 13:00:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58786 "EHLO
+        id S229838AbjCFSBk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 6 Mar 2023 13:01:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230227AbjCFSAv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 6 Mar 2023 13:00:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49053D93D
-        for <bpf@vger.kernel.org>; Mon,  6 Mar 2023 09:59:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678125463;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=I738/18sbvHmC2+417kvwhaipDQYnMqOKuRA/kftVmQ=;
-        b=eZedemGiOo93yExjWAsgTGoPeo9GxDZmPVtB/6vbWUCMo1Yzrocw9xT4ZXArFD6Qnhx54m
-        MqktMZe/RkxJdKpUpOhCnVAzgeb1SMtwVykZlCL/GFhXRxLeYuKXBbh58yj+2++v+zCZUD
-        bbgjdiwrxvRYXSjouAJfwO6VY1GtCXE=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-124-xQeWKPgcOVOVZlwxMrk0nA-1; Mon, 06 Mar 2023 12:57:40 -0500
-X-MC-Unique: xQeWKPgcOVOVZlwxMrk0nA-1
-Received: by mail-wm1-f70.google.com with SMTP id c7-20020a7bc847000000b003e00be23a70so7073915wml.2
-        for <bpf@vger.kernel.org>; Mon, 06 Mar 2023 09:57:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678125459;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I738/18sbvHmC2+417kvwhaipDQYnMqOKuRA/kftVmQ=;
-        b=fZ0C4ZpToV5D3Q5Hjcy2AT4MNloWGunc2+1SofeNLKGl9NezqmwyBmTLmc2v8GEAnX
-         DDwONE+9wIxyS52IlCivXaVxrymm3up4+dNCahqeeRYU4dN6qA7ADgM87BT+8adumBip
-         ox25Grn+QOIISu+bzqFDbEO0P7TQxXJlWi57AwcU9DX3dOP+F0QuN0uovg1e8DS6BcKb
-         ohdMLSUC2GnlBohcOxwHth5LqXllU9IeyRkWv9vA2++kPTmhkPvXscQfKndfcdDGfq+R
-         VPdp/2IunAXsrJQOs7bi/MR4ZKVix37CtfMLbgSOrlHOs+ohsVxrChPkqrSsKHYaLAVl
-         2zSw==
-X-Gm-Message-State: AO0yUKU6YWz9GS4DVfIzU0qYqbSREQU5I30QY5Cjv6nKbNjR8lw10acI
-        RMsYG9mbfWKi3bGUTf9pb7PJpGGkn3fTTSDQV6Y2eW6YZ5KDkFATX46/apKPMc4pZUaCTkcxn8n
-        zd+F+E4UNpn4Z
-X-Received: by 2002:a05:600c:4f53:b0:3ea:dbdd:b59c with SMTP id m19-20020a05600c4f5300b003eadbddb59cmr10192595wmq.15.1678125458889;
-        Mon, 06 Mar 2023 09:57:38 -0800 (PST)
-X-Google-Smtp-Source: AK7set/7vZlQ5uxUx+GGtLM0+if0KbUiPqDYTkq6I2qARMVnh5tT0y/ZRu7nd7JUJRS0jmoNHNwt9Q==
-X-Received: by 2002:a05:600c:4f53:b0:3ea:dbdd:b59c with SMTP id m19-20020a05600c4f5300b003eadbddb59cmr10192578wmq.15.1678125458554;
-        Mon, 06 Mar 2023 09:57:38 -0800 (PST)
-Received: from redhat.com ([2.52.23.160])
-        by smtp.gmail.com with ESMTPSA id l5-20020a05600c16c500b003e20fa01a86sm10602188wmn.13.2023.03.06.09.57.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 09:57:38 -0800 (PST)
-Date:   Mon, 6 Mar 2023 12:57:34 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     netdev@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org,
-        Yichun Zhang <yichun@openresty.com>
-Subject: Re: [PATCH net 2/2] virtio_net: add checking sq is full inside xdp
- xmit
-Message-ID: <20230306125344-mutt-send-email-mst@kernel.org>
-References: <20230306041535.73319-1-xuanzhuo@linux.alibaba.com>
- <20230306041535.73319-3-xuanzhuo@linux.alibaba.com>
+        with ESMTP id S230397AbjCFSBe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 6 Mar 2023 13:01:34 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F302F17174;
+        Mon,  6 Mar 2023 10:00:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 70FDBCE16B8;
+        Mon,  6 Mar 2023 18:00:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B6D46C4339C;
+        Mon,  6 Mar 2023 18:00:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678125622;
+        bh=fqBnESJ+U0wdQYyNdNTmXbaJrU3rlF+cSmCnh+G12fE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=OCDizL1hp5ZYLxE6DCu2yjKSR6nrMO9SpXF49RsCQTAeG/Uu6OIcJk7/y1VFcTFDF
+         Xcnw1VbBzEDzGlsYmBGmIklNOpukbGf1dQb53K1hut8WJ4Rtk4eeoGTM+tJOeovhY3
+         /ZyNwfrNaZyT23A0y51ni51R/xcCJbRYusDLI/wwqqfE1xc82RzkuvrQLSwPjL90Xd
+         9yFivT6S6yukK9n9Auefea/9DwxQa54LRYv+ka6NYkHv6paiKOdhexxZJjwhgnMYXd
+         XPgNx4TnZlcnf+ihvax+SYHWbj8Qrr7qLUMb6n0fTErbbxrqjoq17D1OpX/R6LPzTB
+         hM+TEv1jxIGTg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 95414E55B24;
+        Mon,  6 Mar 2023 18:00:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230306041535.73319-3-xuanzhuo@linux.alibaba.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v4 0/3] libbpf: allow users to set kprobe/uprobe
+ attach mode
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167812562260.4797.2027035240861869547.git-patchwork-notify@kernel.org>
+Date:   Mon, 06 Mar 2023 18:00:22 +0000
+References: <20230306064833.7932-1-imagedong@tencent.com>
+In-Reply-To: <20230306064833.7932-1-imagedong@tencent.com>
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     andrii.nakryiko@gmail.com, alan.maguire@oracle.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, benbjiang@tencent.com, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, imagedong@tencent.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 12:15:35PM +0800, Xuan Zhuo wrote:
-> If the queue of xdp xmit is not an independent queue, then when the xdp
-> xmit used all the desc, the xmit from the __dev_queue_xmit() may encounter
-> the following error.
-> 
-> net ens4: Unexpected TXQ (0) queue failure: -28
-> 
-> This patch adds a check whether sq is full in XDP Xmit.
-> 
-> Reported-by: Yichun Zhang <yichun@openresty.com>
-> Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> ---
->  drivers/net/virtio_net.c | 25 +++++++++++++++----------
->  1 file changed, 15 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index 777de0ec0b1b..3001b9a548e5 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -302,6 +302,8 @@ struct padded_vnet_hdr {
->  
->  static void virtnet_rq_free_unused_buf(struct virtqueue *vq, void *buf);
->  static void virtnet_sq_free_unused_buf(struct virtqueue *vq, void *buf);
-> +static void check_sq_full(struct virtnet_info *vi, struct net_device *dev,
-> +			  struct send_queue *sq);
->  
->  static bool is_xdp_frame(void *ptr)
->  {
-> @@ -341,6 +343,16 @@ static int rxq2vq(int rxq)
->  	return rxq * 2;
->  }
->  
+Hello:
 
-I'd really rather we ordered functions reasonably so declarations
-are not needed.
+This series was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-> +static bool is_xdp_raw_buffer_queue(struct virtnet_info *vi, int q)
-> +{
-> +	if (q < (vi->curr_queue_pairs - vi->xdp_queue_pairs))
-> +		return false;
-> +	else if (q < vi->curr_queue_pairs)
-> +		return true;
-> +	else
-> +		return false;
-> +}
-> +
->  static inline struct virtio_net_hdr_mrg_rxbuf *skb_vnet_hdr(struct sk_buff *skb)
->  {
->  	return (struct virtio_net_hdr_mrg_rxbuf *)skb->cb;
-> @@ -686,6 +698,9 @@ static int virtnet_xdp_xmit(struct net_device *dev,
->  	}
->  	ret = nxmit;
->  
-> +	if (!is_xdp_raw_buffer_queue(vi, sq - vi->sq))
-> +		check_sq_full(vi, dev, sq);
-> +
->  	if (flags & XDP_XMIT_FLUSH) {
->  		if (virtqueue_kick_prepare(sq->vq) && virtqueue_notify(sq->vq))
->  			kicks = 1;
-> @@ -1784,16 +1799,6 @@ static void check_sq_full(struct virtnet_info *vi, struct net_device *dev,
->  	}
->  }
->  
-> -static bool is_xdp_raw_buffer_queue(struct virtnet_info *vi, int q)
-> -{
-> -	if (q < (vi->curr_queue_pairs - vi->xdp_queue_pairs))
-> -		return false;
-> -	else if (q < vi->curr_queue_pairs)
-> -		return true;
-> -	else
-> -		return false;
-> -}
-> -
->  static void virtnet_poll_cleantx(struct receive_queue *rq)
->  {
->  	struct virtnet_info *vi = rq->vq->vdev->priv;
-> -- 
-> 2.32.0.3.g01195cf9f
+On Mon,  6 Mar 2023 14:48:30 +0800 you wrote:
+> From: Menglong Dong <imagedong@tencent.com>
+> 
+> By default, libbpf will attach the kprobe/uprobe BPF program in the
+> latest mode that supported by kernel. In this series, we add the support
+> to let users manually attach kprobe/uprobe in legacy/perf/link mode in
+> the 1th patch.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v4,1/3] libbpf: add support to set kprobe/uprobe attach mode
+    (no matching commit)
+  - [bpf-next,v4,2/3] selftests/bpf: split test_attach_probe into multi subtests
+    https://git.kernel.org/bpf/bpf-next/c/7391ec6391e2
+  - [bpf-next,v4,3/3] selftests/bpf: add test for legacy/perf kprobe/uprobe attach mode
+    https://git.kernel.org/bpf/bpf-next/c/c7aec81b31e4
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
