@@ -2,90 +2,130 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B831C678D5
-	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 23:33:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84D2DC6FD1E
+	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 23:33:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjCGXdm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Mar 2023 18:33:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44014 "EHLO
+        id S229994AbjCGXdp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Mar 2023 18:33:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbjCGXdY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Mar 2023 18:33:24 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4F37C3D9
-        for <bpf@vger.kernel.org>; Tue,  7 Mar 2023 15:33:22 -0800 (PST)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 327MC21K017984
-        for <bpf@vger.kernel.org>; Tue, 7 Mar 2023 15:33:21 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=/uTYSplSXCjXotfkzKZLj02SzJ7+QIAxw/a1bKfpHOk=;
- b=g4eo9etn34zif/lssMDaQDUFqS3mruekU9yLnwIA5U2fKHbrJKJ44dcdlrRwLVtCJygu
- /1rnYogZ6zv35w/lrFqISlZ1BIx+CuEgG2cjjKucqMCjyDRA5wSaHN5SfQlYKpug+A3s
- 8MW6DQqQKxP9Rq6LroVRUbgOocTKRLbnAYCFrZJR6HO38Edcc5GgoyeAuvicdNo9V1hw
- q/szoSh/wfKiTv5FJw0PK5HehLT2D1yHV6Omuzi+6qrw/u+C6BvGAhOnqrZj02Lx8rki
- vZEp21H4myFC/N40Xr8GWO7pAobN+WN2j/cgRm7thGEKxlQgp49FrP0h4Zn3hG9r6s4o jA== 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3p6cp38y6m-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 07 Mar 2023 15:33:21 -0800
-Received: from twshared52565.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 7 Mar 2023 15:33:20 -0800
-Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
-        id 38EF26C7C9BB; Tue,  7 Mar 2023 15:33:13 -0800 (PST)
-From:   Kui-Feng Lee <kuifeng@meta.com>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <martin.lau@linux.dev>,
-        <song@kernel.org>, <kernel-team@meta.com>, <andrii@kernel.org>,
-        <sdf@google.com>
-CC:     Kui-Feng Lee <kuifeng@meta.com>
-Subject: [PATCH bpf-next v4 4/9] bpf: Validate kdata of a struct_ops before transiting to READY.
-Date:   Tue, 7 Mar 2023 15:33:02 -0800
-Message-ID: <20230307233307.3626875-5-kuifeng@meta.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230307233307.3626875-1-kuifeng@meta.com>
-References: <20230307233307.3626875-1-kuifeng@meta.com>
+        with ESMTP id S229995AbjCGXdZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Mar 2023 18:33:25 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CB37BA2A;
+        Tue,  7 Mar 2023 15:33:23 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id m8-20020a17090a4d8800b002377bced051so470788pjh.0;
+        Tue, 07 Mar 2023 15:33:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678232003;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=x3XJiLzYWTl1qdcO6Aoy/MeuV984OrXXQga9tTJym9M=;
+        b=k/ZMLtxDsB+YHPhfeOKHYIWLbC8qdI6ZoY7C2sPPUkIl3TUW1OeJkzWUQdTijzRFDO
+         GhExusyellPgYMqpl4alfdYq9NFrrgu6GUlAOKd03NJOY9x11JoBc9pGxQznHCfw+Vkc
+         5FT8HDnVzrVhFAB9g2h7otDaInhTm5KRBrOQkLlR31DNoBrNv+QLLhAX/AXG3Kb86Uqq
+         feJZ1nEjMTimEuVqxg6Wlf2+R8vVyi8QN3pnFuFxH4nvbVY5ZQAo6O0qPJI9NbJFrpOa
+         EEFJ5uMniBL+MR72jGxlelEI4gxgxwG6vJP/JH9qp/FTHWGGxuInYjcxa0xACDmz5/i6
+         eopw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678232003;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=x3XJiLzYWTl1qdcO6Aoy/MeuV984OrXXQga9tTJym9M=;
+        b=18D/Bj9CzvvvpAdwDlQKfNVt/jG7IUH4BiaBzkPD12yGE8hzcMDSRQurqwXQHDU3Db
+         DUbC9HWtHObWcUdWgdnd4vCVFtvFMk64EWWUFf5iEmK1zc7YML1zCv7ZJyGjWbN6veHc
+         x6PLbgQN/IlqlRHbX46ENacUaCwdA7mLv+0szG6aQ/VRjQf9s9dnzYf0N+/OT9xo263m
+         IJHZQenmpamRGhVsd2JDXFYdt+FM1tEj5yo0Jxa5vbu3vgXcAVbzwUEZ9pKlQEIZOldH
+         Ipfqm5l6+WXyDbcqWw2QfcyK2Nux9qpnfSZm3UjlT1rKVGNpsotzttCl3qj+HPUHHeHb
+         Jscw==
+X-Gm-Message-State: AO0yUKXH5cr7r2ceIhbaDTlXxczc1Hz03vPTUun6/HH3vy4lmskMj9L3
+        653dtmzXzj8184774o6vEbw=
+X-Google-Smtp-Source: AK7set//M15swegfo840vAPhluG6X15dTHI61Dzkynwcp3PxVLv8165+EUMgSytQouKSSp4bTw+byA==
+X-Received: by 2002:a05:6a20:a01a:b0:cc:7967:8a75 with SMTP id p26-20020a056a20a01a00b000cc79678a75mr15029486pzj.46.1678232003035;
+        Tue, 07 Mar 2023 15:33:23 -0800 (PST)
+Received: from moohyul.svl.corp.google.com ([2620:15c:2d4:203:15e8:b801:cd55:a496])
+        by smtp.gmail.com with ESMTPSA id l11-20020a62be0b000000b005da23d8cbffsm8342217pff.158.2023.03.07.15.33.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 15:33:22 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Song Liu <song@kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH 6/9] perf bpf filter: Add more weight sample data support
+Date:   Tue,  7 Mar 2023 15:33:06 -0800
+Message-Id: <20230307233309.3546160-7-namhyung@kernel.org>
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+In-Reply-To: <20230307233309.3546160-1-namhyung@kernel.org>
+References: <20230307233309.3546160-1-namhyung@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: Yj1Ah0WH8nXFjLWkWvFt5NsZhIqT5aUu
-X-Proofpoint-GUID: Yj1Ah0WH8nXFjLWkWvFt5NsZhIqT5aUu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-07_16,2023-03-07_01,2023-02-09_01
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-By utilizing this check, we can avoid creating a struct_ops that
-cannot be registered afterward. This way, future complications can be
-avoided with ease.
+The weight data consists of a couple of fields with the
+PERF_SAMPLE_WEIGHT_STRUCT.  Add weight{1,2,3} term to select them
+separately.  Also add their aliases like 'ins_lat', 'p_stage_cyc'
+and 'retire_lat'.
 
-Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- kernel/bpf/bpf_struct_ops.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ tools/perf/util/bpf-filter.l                 | 6 ++++++
+ tools/perf/util/bpf_skel/sample_filter.bpf.c | 8 ++++++++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-index dcb7a408d4e9..c71c8d73c7ad 100644
---- a/kernel/bpf/bpf_struct_ops.c
-+++ b/kernel/bpf/bpf_struct_ops.c
-@@ -504,6 +504,11 @@ static int bpf_struct_ops_map_update_elem(struct bpf=
-_map *map, void *key,
-=20
- 	set_memory_rox((long)st_map->image, 1);
- 	if (st_map->map.map_flags & BPF_F_LINK) {
-+		if (st_ops->validate) {
-+			err =3D st_ops->validate(kdata);
-+			if (err)
-+				goto unlock;
-+		}
- 		/* Let bpf_link handle registration & unregistration.
- 		 *
- 		 * Pair with smp_load_acquire() during lookup_elem().
---=20
-2.34.1
+diff --git a/tools/perf/util/bpf-filter.l b/tools/perf/util/bpf-filter.l
+index ec12fc4d2ab8..419f923b35c0 100644
+--- a/tools/perf/util/bpf-filter.l
++++ b/tools/perf/util/bpf-filter.l
+@@ -71,6 +71,12 @@ addr		{ return sample(PERF_SAMPLE_ADDR); }
+ period		{ return sample(PERF_SAMPLE_PERIOD); }
+ txn		{ return sample(PERF_SAMPLE_TRANSACTION); }
+ weight		{ return sample(PERF_SAMPLE_WEIGHT); }
++weight1		{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 1); }
++weight2		{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 2); }
++weight3		{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 3); }
++ins_lat		{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 2); } /* alias for weight2 */
++p_stage_cyc	{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 3); } /* alias for weight3 */
++retire_lat	{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 3); } /* alias for weight3 */
+ phys_addr	{ return sample(PERF_SAMPLE_PHYS_ADDR); }
+ code_pgsz	{ return sample(PERF_SAMPLE_CODE_PAGE_SIZE); }
+ data_pgsz	{ return sample(PERF_SAMPLE_DATA_PAGE_SIZE); }
+diff --git a/tools/perf/util/bpf_skel/sample_filter.bpf.c b/tools/perf/util/bpf_skel/sample_filter.bpf.c
+index dddf38c27bb7..d930401c5bfc 100644
+--- a/tools/perf/util/bpf_skel/sample_filter.bpf.c
++++ b/tools/perf/util/bpf_skel/sample_filter.bpf.c
+@@ -54,6 +54,14 @@ static inline __u64 perf_get_sample(struct bpf_perf_event_data_kern *kctx,
+ 		return kctx->data->period;
+ 	case PERF_SAMPLE_TRANSACTION:
+ 		return kctx->data->txn;
++	case PERF_SAMPLE_WEIGHT_STRUCT:
++		if (entry->part == 1)
++			return kctx->data->weight.var1_dw;
++		if (entry->part == 2)
++			return kctx->data->weight.var2_w;
++		if (entry->part == 3)
++			return kctx->data->weight.var3_w;
++		/* fall through */
+ 	case PERF_SAMPLE_WEIGHT:
+ 		return kctx->data->weight.full;
+ 	case PERF_SAMPLE_PHYS_ADDR:
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
 
