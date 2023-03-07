@@ -2,260 +2,192 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 661E3C742A7
-	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 23:34:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56E9CC74A44
+	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 23:34:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbjCGXe1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Mar 2023 18:34:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
+        id S230260AbjCGXe2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Mar 2023 18:34:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbjCGXd6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Mar 2023 18:33:58 -0500
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9864287348
-        for <bpf@vger.kernel.org>; Tue,  7 Mar 2023 15:33:28 -0800 (PST)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 327M6ssQ025984
-        for <bpf@vger.kernel.org>; Tue, 7 Mar 2023 15:33:28 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=0R/KLU7YDhSms14wWqw7E5qE/bEIiAE9gNt/pDEDVvU=;
- b=WUFo0EHYzxIhVMrMD5uVq+eSXTa2+M3FKc2CO9DlZMmmruaq2EC9rp/1QBv62vp2GB4h
- 2ZTtLBEPkXTuF0jLjIUOjCkC63k3yKVz3jZSkGT1CW3YlI8lDYYvPAFCsK0GO8J/H1Wx
- xcPMX2au9Z0SN7PoGGC7RV5CvTJ1U9/UvPzrJ/Bt6qPFUYhRfGBDCiVj1dHrP7dEbo7g
- b1w6E0QsMTbEK1q/o/90xp2/wOyMYoK0L8amZhVrHdoVSIiqDjj7LQTpHq6vCo2WXyEo
- ErIYdMhN1kIt8eP1UXslHQ83Khb/btzi0wputL/u3vjGIa+d3/ufUz7zdQEcrQP4iG7O jQ== 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3p4px6tnhx-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 07 Mar 2023 15:33:28 -0800
-Received: from twshared21709.17.frc2.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 7 Mar 2023 15:33:25 -0800
-Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
-        id 32D066C7C9B9; Tue,  7 Mar 2023 15:33:13 -0800 (PST)
-From:   Kui-Feng Lee <kuifeng@meta.com>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <martin.lau@linux.dev>,
-        <song@kernel.org>, <kernel-team@meta.com>, <andrii@kernel.org>,
-        <sdf@google.com>
-CC:     Kui-Feng Lee <kuifeng@meta.com>
-Subject: [PATCH bpf-next v4 3/9] net: Update an existing TCP congestion control algorithm.
-Date:   Tue, 7 Mar 2023 15:33:01 -0800
-Message-ID: <20230307233307.3626875-4-kuifeng@meta.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230307233307.3626875-1-kuifeng@meta.com>
-References: <20230307233307.3626875-1-kuifeng@meta.com>
+        with ESMTP id S230054AbjCGXeC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Mar 2023 18:34:02 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F99CA8381;
+        Tue,  7 Mar 2023 15:33:30 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id me6-20020a17090b17c600b0023816b0c7ceso434320pjb.2;
+        Tue, 07 Mar 2023 15:33:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678232010;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lePgVC2revAs5MYaikVkrYflEU1JfVf67vE9njBHVCY=;
+        b=YKJzHaZC0+j+fRV6Dq3o4NrGvaF6eJ8VEHoBAEU03F/LYyBfvqhG242DSDsJSJxTwV
+         t0g4cylrUpfpDiK/lI8TAUmIcAsdjeIhcH0E1DpLonCjsmv2Yxivn9x+3ZSG03sJZ77m
+         tSnYXNmAEGmbUUiBwpWEBlRDcR/MF6rCJyVZbrZKtybYxzBYPXtFs7u1KzlIXolngX8q
+         jr6Ksd8fMGKjSt2EIjoFKu4FEK+jmu4/W1Gpb+LOLXcx1FUswdtVvs3pRypd9x3/x4Px
+         si6UYhkg8jB77c67stPfzp5SElP//raDwAtGd2IV1p6dw5RUaCm/kGMD72rpE4fe2//e
+         9D3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678232010;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=lePgVC2revAs5MYaikVkrYflEU1JfVf67vE9njBHVCY=;
+        b=bzLl3NkGmIZzKrxRMuzxNe6Z8Vsd4pwOH2LthGnlp5J/esNn+H5aXnNtoGes8RSRcR
+         R6W+R9UAecC/h1dYhINaoDngqwJjoCtPrEY3Wnw5hjWB6OfsTTJGqVxi0LC7Yb7+/QeO
+         vUs9e8UTagzoeG6jC0aanzG2Er1HOJLLevtAAr4VXKHJaTEBEiDe4NrHp/lsnWB7KOPa
+         vThf6T44+uNJTPuZ3P6e/ICxFMTvDJEFGPS/PRKHO3vSbZ+PK04TFH53JXGpXIlvNwu1
+         nvPcGvJ6PhqFMNm2+9VnIV8F7Dv5M77wvOVLjDB5rCoPUaH3pAW2pqzxHpBkFKvSJ9Oj
+         sgTA==
+X-Gm-Message-State: AO0yUKVMDZ21VtlDa0WVIGRJ96AZDdKoPVQ+hnazr3WKok+4qwde0svv
+        ovKhEh0zJpAghwcJN63DIg0=
+X-Google-Smtp-Source: AK7set/ig4stm/MxQBlUPJEKcu27Wz6zyalcG+mesMYOnoRYgwbxIEy7S3/CPVUHtJJcQSCJ8i2++g==
+X-Received: by 2002:a05:6a20:918a:b0:cd:9664:3d5a with SMTP id v10-20020a056a20918a00b000cd96643d5amr18405629pzd.22.1678232009821;
+        Tue, 07 Mar 2023 15:33:29 -0800 (PST)
+Received: from moohyul.svl.corp.google.com ([2620:15c:2d4:203:15e8:b801:cd55:a496])
+        by smtp.gmail.com with ESMTPSA id l11-20020a62be0b000000b005da23d8cbffsm8342217pff.158.2023.03.07.15.33.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 15:33:29 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Song Liu <song@kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH 9/9] perf bpf filter: Show warning for missing sample flags
+Date:   Tue,  7 Mar 2023 15:33:09 -0800
+Message-Id: <20230307233309.3546160-10-namhyung@kernel.org>
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+In-Reply-To: <20230307233309.3546160-1-namhyung@kernel.org>
+References: <20230307233309.3546160-1-namhyung@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: _KrfoLA6iw4GiJW0kX2pruG_HV8s91Dg
-X-Proofpoint-GUID: _KrfoLA6iw4GiJW0kX2pruG_HV8s91Dg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-07_16,2023-03-07_01,2023-02-09_01
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This feature lets you immediately transition to another congestion
-control algorithm or implementation with the same name.  Once a name
-is updated, new connections will apply this new algorithm.
+For a BPF filter to work properly, users need to provide appropriate
+options to enable the sample types.  Otherwise the BPF program would
+see an invalid value (i.e. always 0) and filter won't work well.
 
-The 'validate' function pointer has been added to bpf_struct_ops as
-well, allowing us to validate a struct_ops without having to go
-through the registration process.
+Show a warning message if sample types are missing like below.
 
-Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
+  $ sudo ./perf record -e cycles --filter 'addr < 100' true
+  Error: cycles event does not have PERF_SAMPLE_ADDR
+   Hint: please add -d option to perf record.
+  failed to set filter "BPF" on event cycles with 22 (Invalid argument)
+
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- include/linux/bpf.h            |  2 ++
- include/net/tcp.h              |  3 ++
- net/bpf/bpf_dummy_struct_ops.c |  6 ++++
- net/ipv4/bpf_tcp_ca.c          | 14 +++++++--
- net/ipv4/tcp_cong.c            | 57 +++++++++++++++++++++++++++++-----
- 5 files changed, 73 insertions(+), 9 deletions(-)
+ tools/perf/builtin-record.c  |  2 +-
+ tools/perf/util/bpf-filter.c | 62 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 63 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 855b27f847eb..047d2c6aba88 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1447,6 +1447,8 @@ struct bpf_struct_ops {
- 			   void *kdata, const void *udata);
- 	int (*reg)(void *kdata);
- 	void (*unreg)(void *kdata);
-+	int (*update)(void *kdata, void *old_kdata);
-+	int (*validate)(void *kdata);
- 	const struct btf_type *type;
- 	const struct btf_type *value_type;
- 	const char *name;
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index db9f828e9d1e..2abb755e6a3a 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -1117,6 +1117,9 @@ struct tcp_congestion_ops {
-=20
- int tcp_register_congestion_control(struct tcp_congestion_ops *type);
- void tcp_unregister_congestion_control(struct tcp_congestion_ops *type);
-+int tcp_update_congestion_control(struct tcp_congestion_ops *type,
-+				  struct tcp_congestion_ops *old_type);
-+int tcp_validate_congestion_control(struct tcp_congestion_ops *ca);
-=20
- void tcp_assign_congestion_control(struct sock *sk);
- void tcp_init_congestion_control(struct sock *sk);
-diff --git a/net/bpf/bpf_dummy_struct_ops.c b/net/bpf/bpf_dummy_struct_op=
-s.c
-index ff4f89a2b02a..158f14e240d0 100644
---- a/net/bpf/bpf_dummy_struct_ops.c
-+++ b/net/bpf/bpf_dummy_struct_ops.c
-@@ -222,12 +222,18 @@ static void bpf_dummy_unreg(void *kdata)
- {
- }
-=20
-+static int bpf_dummy_update(void *kdata, void *old_kdata)
+diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+index 197e802a150b..3e9de6ad64fd 100644
+--- a/tools/perf/builtin-record.c
++++ b/tools/perf/builtin-record.c
+@@ -1353,7 +1353,7 @@ static int record__open(struct record *rec)
+ 
+ 	if (evlist__apply_filters(evlist, &pos)) {
+ 		pr_err("failed to set filter \"%s\" on event %s with %d (%s)\n",
+-			pos->filter, evsel__name(pos), errno,
++			pos->filter ?: "BPF", evsel__name(pos), errno,
+ 			str_error_r(errno, msg, sizeof(msg)));
+ 		rc = -1;
+ 		goto out;
+diff --git a/tools/perf/util/bpf-filter.c b/tools/perf/util/bpf-filter.c
+index bd638737e12f..0b30688d78a7 100644
+--- a/tools/perf/util/bpf-filter.c
++++ b/tools/perf/util/bpf-filter.c
+@@ -17,6 +17,64 @@
+ 
+ #define FD(e, x, y) (*(int *)xyarray__entry(e->core.fd, x, y))
+ 
++#define __PERF_SAMPLE_TYPE(st, opt)	{ st, #st, opt }
++#define PERF_SAMPLE_TYPE(_st, opt)	__PERF_SAMPLE_TYPE(PERF_SAMPLE_##_st, opt)
++
++static const struct perf_sample_info {
++	u64 type;
++	const char *name;
++	const char *option;
++} sample_table[] = {
++	/* default sample flags */
++	PERF_SAMPLE_TYPE(IP, NULL),
++	PERF_SAMPLE_TYPE(TID, NULL),
++	PERF_SAMPLE_TYPE(PERIOD, NULL),
++	/* flags mostly set by default, but still have options */
++	PERF_SAMPLE_TYPE(ID, "--sample-identifier"),
++	PERF_SAMPLE_TYPE(CPU, "--sample-cpu"),
++	PERF_SAMPLE_TYPE(TIME, "-T"),
++	/* optional sample flags */
++	PERF_SAMPLE_TYPE(ADDR, "-d"),
++	PERF_SAMPLE_TYPE(DATA_SRC, "-d"),
++	PERF_SAMPLE_TYPE(PHYS_ADDR, "--phys-data"),
++	PERF_SAMPLE_TYPE(WEIGHT, "-W"),
++	PERF_SAMPLE_TYPE(WEIGHT_STRUCT, "-W"),
++	PERF_SAMPLE_TYPE(TRANSACTION, "--transaction"),
++	PERF_SAMPLE_TYPE(CODE_PAGE_SIZE, "--code-page-size"),
++	PERF_SAMPLE_TYPE(DATA_PAGE_SIZE, "--data-page-size"),
++};
++
++static const struct perf_sample_info *get_sample_info(u64 flags)
 +{
-+	return -EOPNOTSUPP;
-+}
++	size_t i;
 +
- struct bpf_struct_ops bpf_bpf_dummy_ops =3D {
- 	.verifier_ops =3D &bpf_dummy_verifier_ops,
- 	.init =3D bpf_dummy_init,
- 	.check_member =3D bpf_dummy_ops_check_member,
- 	.init_member =3D bpf_dummy_init_member,
- 	.reg =3D bpf_dummy_reg,
-+	.update =3D bpf_dummy_update,
- 	.unreg =3D bpf_dummy_unreg,
- 	.name =3D "bpf_dummy_ops",
- };
-diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
-index 13fc0c185cd9..e8b27826283e 100644
---- a/net/ipv4/bpf_tcp_ca.c
-+++ b/net/ipv4/bpf_tcp_ca.c
-@@ -239,8 +239,6 @@ static int bpf_tcp_ca_init_member(const struct btf_ty=
-pe *t,
- 		if (bpf_obj_name_cpy(tcp_ca->name, utcp_ca->name,
- 				     sizeof(tcp_ca->name)) <=3D 0)
- 			return -EINVAL;
--		if (tcp_ca_find(utcp_ca->name))
--			return -EEXIST;
- 		return 1;
- 	}
-=20
-@@ -266,13 +264,25 @@ static void bpf_tcp_ca_unreg(void *kdata)
- 	tcp_unregister_congestion_control(kdata);
- }
-=20
-+static int bpf_tcp_ca_update(void *kdata, void *old_kdata)
-+{
-+	return tcp_update_congestion_control(kdata, old_kdata);
-+}
-+
-+static int bpf_tcp_ca_validate(void *kdata)
-+{
-+	return tcp_validate_congestion_control(kdata);
-+}
-+
- struct bpf_struct_ops bpf_tcp_congestion_ops =3D {
- 	.verifier_ops =3D &bpf_tcp_ca_verifier_ops,
- 	.reg =3D bpf_tcp_ca_reg,
- 	.unreg =3D bpf_tcp_ca_unreg,
-+	.update =3D bpf_tcp_ca_update,
- 	.check_member =3D bpf_tcp_ca_check_member,
- 	.init_member =3D bpf_tcp_ca_init_member,
- 	.init =3D bpf_tcp_ca_init,
-+	.validate =3D bpf_tcp_ca_validate,
- 	.name =3D "tcp_congestion_ops",
- };
-=20
-diff --git a/net/ipv4/tcp_cong.c b/net/ipv4/tcp_cong.c
-index db8b4b488c31..24829390e495 100644
---- a/net/ipv4/tcp_cong.c
-+++ b/net/ipv4/tcp_cong.c
-@@ -75,14 +75,8 @@ struct tcp_congestion_ops *tcp_ca_find_key(u32 key)
- 	return NULL;
- }
-=20
--/*
-- * Attach new congestion control algorithm to the list
-- * of available options.
-- */
--int tcp_register_congestion_control(struct tcp_congestion_ops *ca)
-+int tcp_validate_congestion_control(struct tcp_congestion_ops *ca)
- {
--	int ret =3D 0;
--
- 	/* all algorithms must implement these */
- 	if (!ca->ssthresh || !ca->undo_cwnd ||
- 	    !(ca->cong_avoid || ca->cong_control)) {
-@@ -90,6 +84,20 @@ int tcp_register_congestion_control(struct tcp_congest=
-ion_ops *ca)
- 		return -EINVAL;
- 	}
-=20
-+	return 0;
-+}
-+
-+/* Attach new congestion control algorithm to the list
-+ * of available options.
-+ */
-+int tcp_register_congestion_control(struct tcp_congestion_ops *ca)
-+{
-+	int ret;
-+
-+	ret =3D tcp_validate_congestion_control(ca);
-+	if (ret)
-+		return ret;
-+
- 	ca->key =3D jhash(ca->name, sizeof(ca->name), strlen(ca->name));
-=20
- 	spin_lock(&tcp_cong_list_lock);
-@@ -130,6 +138,41 @@ void tcp_unregister_congestion_control(struct tcp_co=
-ngestion_ops *ca)
- }
- EXPORT_SYMBOL_GPL(tcp_unregister_congestion_control);
-=20
-+/* Replace a registered old ca with a new one.
-+ *
-+ * The new ca must have the same name as the old one, that has been
-+ * registered.
-+ */
-+int tcp_update_congestion_control(struct tcp_congestion_ops *ca, struct =
-tcp_congestion_ops *old_ca)
-+{
-+	struct tcp_congestion_ops *existing;
-+	int ret;
-+
-+	ret =3D tcp_validate_congestion_control(ca);
-+	if (ret)
-+		return ret;
-+
-+	ca->key =3D jhash(ca->name, sizeof(ca->name), strlen(ca->name));
-+
-+	spin_lock(&tcp_cong_list_lock);
-+	existing =3D tcp_ca_find_key(old_ca->key);
-+	if (ca->key =3D=3D TCP_CA_UNSPEC || !existing || strcmp(existing->name,=
- ca->name)) {
-+		pr_notice("%s not registered or non-unique key\n",
-+			  ca->name);
-+		ret =3D -EINVAL;
-+	} else if (existing !=3D old_ca) {
-+		pr_notice("invalid old congestion control algorithm to replace\n");
-+		ret =3D -EINVAL;
-+	} else {
-+		list_add_tail_rcu(&ca->list, &tcp_cong_list);
-+		list_del_rcu(&existing->list);
-+		pr_debug("%s updated\n", ca->name);
++	for (i = 0; i < ARRAY_SIZE(sample_table); i++) {
++		if (sample_table[i].type == flags)
++			return &sample_table[i];
 +	}
-+	spin_unlock(&tcp_cong_list_lock);
-+
-+	return ret;
++	return NULL;
 +}
 +
- u32 tcp_ca_get_key_by_name(struct net *net, const char *name, bool *ecn_=
-ca)
++static int check_sample_flags(struct evsel *evsel, struct perf_bpf_filter_expr *expr)
++{
++	const struct perf_sample_info *info;
++
++	if (evsel->core.attr.sample_type & expr->sample_flags)
++		return 0;
++
++	info = get_sample_info(expr->sample_flags);
++	if (info == NULL) {
++		pr_err("Error: %s event does not have sample flags %lx\n",
++		       evsel__name(evsel), expr->sample_flags);
++		return -1;
++	}
++
++	pr_err("Error: %s event does not have %s\n", evsel__name(evsel), info->name);
++	if (info->option)
++		pr_err(" Hint: please add %s option to perf record\n", info->option);
++	return -1;
++}
++
+ int perf_bpf_filter__prepare(struct evsel *evsel)
  {
- 	const struct tcp_congestion_ops *ca;
---=20
-2.34.1
+ 	int i, x, y, fd;
+@@ -40,6 +98,10 @@ int perf_bpf_filter__prepare(struct evsel *evsel)
+ 			.flags = expr->sample_flags,
+ 			.value = expr->val,
+ 		};
++
++		if (check_sample_flags(evsel, expr) < 0)
++			return -1;
++
+ 		bpf_map_update_elem(fd, &i, &entry, BPF_ANY);
+ 		i++;
+ 
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
 
