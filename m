@@ -2,257 +2,241 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FBD7C678D5
-	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 23:33:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61F77C6FA99
+	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 23:34:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbjCGXdq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Mar 2023 18:33:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44208 "EHLO
+        id S230126AbjCGXeK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Mar 2023 18:34:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbjCGXd1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Mar 2023 18:33:27 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB0259408
-        for <bpf@vger.kernel.org>; Tue,  7 Mar 2023 15:33:24 -0800 (PST)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 327KgQQS009449
-        for <bpf@vger.kernel.org>; Tue, 7 Mar 2023 15:33:23 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=omxQ7LnVOy8lsagfDf9t3UorjGLx1/CluUBe3tZ56ZA=;
- b=I38h/zpbKKcWWM2nznB1tPg+kvRaNJglUPRBofOvCU9rEMqmRV6MPxMUAz+p4LeMiUyk
- h20zFuhCeR3C/AufGS/beW8ioJIdamEw45hs6Vji8gXXuK0oZh9i88w1dNMcaUc/RuWa
- 7Yzqo18cA+r26kIuFUunGdljOrWzY/567FdgQ3ZcHFFq5DXe75Eust8K1Pa+OVmTWtQP
- jYGjkykwTCiasB5VvthwpCr+ZXZxKba1heQwCfKMQEjDm11erDNM9B2hqkctSqQ4LQ9R
- iozOQ+1WBssTUg0JTwTHub27tJYvVUXzTApi+Te/lhVCT0r1j2uuF1TuweLoA3dpNSRE 0g== 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3p5vdpqhh6-6
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 07 Mar 2023 15:33:23 -0800
-Received: from twshared21760.39.frc1.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 7 Mar 2023 15:33:20 -0800
-Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
-        id 1A7A36C7C9B5; Tue,  7 Mar 2023 15:33:13 -0800 (PST)
-From:   Kui-Feng Lee <kuifeng@meta.com>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <martin.lau@linux.dev>,
-        <song@kernel.org>, <kernel-team@meta.com>, <andrii@kernel.org>,
-        <sdf@google.com>
-CC:     Kui-Feng Lee <kuifeng@meta.com>
-Subject: [PATCH bpf-next v4 1/9] bpf: Retire the struct_ops map kvalue->refcnt.
-Date:   Tue, 7 Mar 2023 15:32:59 -0800
-Message-ID: <20230307233307.3626875-2-kuifeng@meta.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230307233307.3626875-1-kuifeng@meta.com>
-References: <20230307233307.3626875-1-kuifeng@meta.com>
+        with ESMTP id S229989AbjCGXdn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Mar 2023 18:33:43 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100E78F719;
+        Tue,  7 Mar 2023 15:33:26 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id c4so9203310pfl.0;
+        Tue, 07 Mar 2023 15:33:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678232005;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AUz9t3miV/6g18NoyX2KHMC0EiLYl+hvlFPuzWmCtsU=;
+        b=QDQgd8BXom7RVfHsgPHJlBb0eK5ZRzbHLqr7ARFKkWJFG+Es9/7qTcJCV0Cw11/UkE
+         6ueMj2FkyDMDQDNJTpf6bb+0RRC6eyabWmtxfTU6xUbRK7qq5+QZwk/Yjl6r3S2YQE0I
+         PRZU+mA2ztQn+hsjSxeoQT4nh4sXMJXW7udAW4+xpV35f4XbkcLTvq1jXnjewbNgyuSQ
+         Kb0NjU0u/F8hCcuQscxxKORkI7zgMq0XEQWHUb6Pys3UI/zzJSS2ZRVa/xeKrbEMBOEF
+         BSMM4IripbuhX3CMrwE4GdOf7kd4mdWYfCJWGiLKQsY1YhtfHYL91Nn+mD7xxDItEo8b
+         GLLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678232005;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=AUz9t3miV/6g18NoyX2KHMC0EiLYl+hvlFPuzWmCtsU=;
+        b=zvDzFPg8vHGqINMo6EEMIe2Ya2sOCspGjOJOFOcGqUrMF4wyxN7zUo5nbndxk1NkHc
+         kGIL0dtiePpA5S5FrXSfPZpvQLPNdJGiWuj8831Dm4SM1wn+WWDWp+nsj/3zJ/rZqrxM
+         1e/VicGH9Z90DsFaDfEcVnLkZzHX31RblnJ1tUoxm33o15jz9V5U2tDXejUCYyx3mAPN
+         xBImTDsLbErDNGg/XJPIG7hfhbyqIK9tdrZBPZVwI/hMGNtJWcKiVW6kv5bqOlAmqMxB
+         tEVQWaT6C0BKf1o7F0ePtJmmIQhfg1SSvr9BKYVCjtKDbPWwkJo4zh8/mlVFK5d69Khe
+         kLcg==
+X-Gm-Message-State: AO0yUKXCS6ledxpDErEDeCBNlvlqrfrkxMmpC7qY7Ra9FC0wftfwP4O/
+        q5dtjlIFNR52dTh+MFo2fJk=
+X-Google-Smtp-Source: AK7set8I740AwmmPZ55XZZrZRiOhoTgJIyrL0e/Js2b6mpEUTfIvuC2eI/4E1YJQ8xsXM+TrRoYRyg==
+X-Received: by 2002:a62:5210:0:b0:5d9:f3a6:a925 with SMTP id g16-20020a625210000000b005d9f3a6a925mr12317983pfb.24.1678232005281;
+        Tue, 07 Mar 2023 15:33:25 -0800 (PST)
+Received: from moohyul.svl.corp.google.com ([2620:15c:2d4:203:15e8:b801:cd55:a496])
+        by smtp.gmail.com with ESMTPSA id l11-20020a62be0b000000b005da23d8cbffsm8342217pff.158.2023.03.07.15.33.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 15:33:24 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Song Liu <song@kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH 7/9] perf bpf filter: Add data_src sample data support
+Date:   Tue,  7 Mar 2023 15:33:07 -0800
+Message-Id: <20230307233309.3546160-8-namhyung@kernel.org>
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+In-Reply-To: <20230307233309.3546160-1-namhyung@kernel.org>
+References: <20230307233309.3546160-1-namhyung@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: L44etay9ylZZkA1T36Wg_IuzADfk2j1x
-X-Proofpoint-ORIG-GUID: L44etay9ylZZkA1T36Wg_IuzADfk2j1x
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-07_16,2023-03-07_01,2023-02-09_01
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We have replaced kvalue-refcnt with synchronize_rcu() to wait for an
-RCU grace period.
+The data_src has many entries to express memory behaviors.  Add each
+term separately so that users can combine them for their purpose.
 
-Maintenance of kvalue->refcnt was a complicated task, as we had to
-simultaneously keep track of two reference counts: one for the
-reference count of bpf_map. When the kvalue->refcnt reaches zero, we
-also have to reduce the reference count on bpf_map - yet these steps
-are not performed in an atomic manner and require us to be vigilant
-when managing them. By eliminating kvalue->refcnt, we can make our
-maintenance more straightforward as the refcount of bpf_map is now
-solely managed!
+I didn't add prefix for the constants for simplicity as they are mostly
+distinguishable but I had to use l1_miss and l2_hit for mem_dtlb since
+mem_lvl has different values for the same names.  Note that I decided
+mem_lvl to be used as an alias of mem_lvlnum as it's deprecated now.
+According to the comment in the UAPI header, users should use the mix
+of mem_lvlnum, mem_remote and mem_snoop.  Also the SNOOPX bits are
+concatenated to mem_snoop for simplicity.
 
-To prevent the trampoline image of a struct_ops from being released
-while it is still in use, we wait for an RCU grace period. The
-setsockopt(TCP_CONGESTION, "...") command allows you to change your
-socket's congestion control algorithm and can result in releasing the
-old struct_ops implementation. Moreover, since this function is
-exposed through bpf_setsockopt(), it may be accessed by BPF programs
-as well. To ensure that the trampoline image belonging to struct_op
-can be safely called while its method is in use, struct_ops is
-safeguarded with rcu_read_lock(). Doing so prevents any destruction of
-the associated images before returning from a trampoline and requires
-us to wait for an RCU grace period.
+The following terms are used for data_src and the corresponding perf
+sample data fields:
 
-Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
+ * mem_op : { load, store, pfetch, exec }
+ * mem_lvl: { l1, l2, l3, l4, cxl, io, any_cache, lfb, ram, pmem }
+ * mem_snoop: { none, hit, miss, hitm, fwd, peer }
+ * mem_remote: { remote }
+ * mem_lock: { locked }
+ * mem_dtlb { l1_hit, l1_miss, l2_hit, l2_miss, any_hit, any_miss, walk, fault }
+ * mem_blk { by_data, by_addr }
+ * mem_hops { hops0, hops1, hops2, hops3 }
+
+We can now use a filter expression like below:
+
+  'mem_op == load, mem_lvl <= l2, mem_dtlb == l1_hit'
+  'mem_dtlb == l2_miss, mem_hops > hops1'
+  'mem_lvl == ram, mem_remote == 1'
+
+Note that 'na' is shared among the terms as it has the same value except
+for mem_lvl.  I don't have a good idea to handle that for now.
+
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- include/linux/bpf.h         |  2 ++
- kernel/bpf/bpf_struct_ops.c | 60 ++++++++++++++++++-------------------
- kernel/bpf/syscall.c        |  2 +-
- 3 files changed, 32 insertions(+), 32 deletions(-)
+ tools/perf/util/bpf-filter.l                 | 61 ++++++++++++++++++++
+ tools/perf/util/bpf_skel/sample_filter.bpf.c | 23 ++++++++
+ 2 files changed, 84 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 8b5d0b4c4ada..fc47c756455e 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -78,6 +78,7 @@ struct bpf_map_ops {
- 	struct bpf_map *(*map_alloc)(union bpf_attr *attr);
- 	void (*map_release)(struct bpf_map *map, struct file *map_file);
- 	void (*map_free)(struct bpf_map *map);
-+	void (*map_free_rcu)(struct bpf_map *map);
- 	int (*map_get_next_key)(struct bpf_map *map, void *key, void *next_key)=
-;
- 	void (*map_release_uref)(struct bpf_map *map);
- 	void *(*map_lookup_elem_sys_only)(struct bpf_map *map, void *key);
-@@ -1869,6 +1870,7 @@ struct bpf_map *bpf_map_get_with_uref(u32 ufd);
- struct bpf_map *__bpf_map_get(struct fd f);
- void bpf_map_inc(struct bpf_map *map);
- void bpf_map_inc_with_uref(struct bpf_map *map);
-+struct bpf_map *__bpf_map_inc_not_zero(struct bpf_map *map, bool uref);
- struct bpf_map * __must_check bpf_map_inc_not_zero(struct bpf_map *map);
- void bpf_map_put_with_uref(struct bpf_map *map);
- void bpf_map_put(struct bpf_map *map);
-diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-index ece9870cab68..815b5e1cf325 100644
---- a/kernel/bpf/bpf_struct_ops.c
-+++ b/kernel/bpf/bpf_struct_ops.c
-@@ -58,6 +58,8 @@ struct bpf_struct_ops_map {
- 	struct bpf_struct_ops_value kvalue;
- };
-=20
-+static DEFINE_MUTEX(update_mutex);
-+
- #define VALUE_PREFIX "bpf_struct_ops_"
- #define VALUE_PREFIX_LEN (sizeof(VALUE_PREFIX) - 1)
-=20
-@@ -249,6 +251,7 @@ int bpf_struct_ops_map_sys_lookup_elem(struct bpf_map=
- *map, void *key,
- 	struct bpf_struct_ops_map *st_map =3D (struct bpf_struct_ops_map *)map;
- 	struct bpf_struct_ops_value *uvalue, *kvalue;
- 	enum bpf_struct_ops_state state;
-+	s64 refcnt;
-=20
- 	if (unlikely(*(u32 *)key !=3D 0))
- 		return -ENOENT;
-@@ -267,7 +270,9 @@ int bpf_struct_ops_map_sys_lookup_elem(struct bpf_map=
- *map, void *key,
- 	uvalue =3D value;
- 	memcpy(uvalue, st_map->uvalue, map->value_size);
- 	uvalue->state =3D state;
--	refcount_set(&uvalue->refcnt, refcount_read(&kvalue->refcnt));
-+
-+	refcnt =3D atomic64_read(&map->refcnt) - atomic64_read(&map->usercnt);
-+	refcount_set(&uvalue->refcnt, max_t(s64, refcnt, 0));
-=20
- 	return 0;
+diff --git a/tools/perf/util/bpf-filter.l b/tools/perf/util/bpf-filter.l
+index 419f923b35c0..3e66b7a0215e 100644
+--- a/tools/perf/util/bpf-filter.l
++++ b/tools/perf/util/bpf-filter.l
+@@ -42,6 +42,12 @@ static int value(int base)
+ 	return BFT_NUM;
  }
-@@ -491,7 +496,6 @@ static int bpf_struct_ops_map_update_elem(struct bpf_=
-map *map, void *key,
- 		*(unsigned long *)(udata + moff) =3D prog->aux->id;
+ 
++static int constant(int val)
++{
++	perf_bpf_filter_lval.num = val;
++	return BFT_NUM;
++}
++
+ static int error(const char *str)
+ {
+ 	printf("perf_bpf_filter: Unexpected filter %s: %s\n", str, perf_bpf_filter_text);
+@@ -80,6 +86,15 @@ retire_lat	{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 3); } /* alias for we
+ phys_addr	{ return sample(PERF_SAMPLE_PHYS_ADDR); }
+ code_pgsz	{ return sample(PERF_SAMPLE_CODE_PAGE_SIZE); }
+ data_pgsz	{ return sample(PERF_SAMPLE_DATA_PAGE_SIZE); }
++mem_op		{ return sample_part(PERF_SAMPLE_DATA_SRC, 1); }
++mem_lvlnum	{ return sample_part(PERF_SAMPLE_DATA_SRC, 2); }
++mem_lvl		{ return sample_part(PERF_SAMPLE_DATA_SRC, 2); } /* alias for mem_lvlnum */
++mem_snoop	{ return sample_part(PERF_SAMPLE_DATA_SRC, 3); } /* include snoopx */
++mem_remote	{ return sample_part(PERF_SAMPLE_DATA_SRC, 4); }
++mem_lock	{ return sample_part(PERF_SAMPLE_DATA_SRC, 5); }
++mem_dtlb	{ return sample_part(PERF_SAMPLE_DATA_SRC, 6); }
++mem_blk		{ return sample_part(PERF_SAMPLE_DATA_SRC, 7); }
++mem_hops	{ return sample_part(PERF_SAMPLE_DATA_SRC, 8); }
+ 
+ "=="		{ return operator(PBF_OP_EQ); }
+ "!="		{ return operator(PBF_OP_NEQ); }
+@@ -89,6 +104,52 @@ data_pgsz	{ return sample(PERF_SAMPLE_DATA_PAGE_SIZE); }
+ "<="		{ return operator(PBF_OP_LE); }
+ "&"		{ return operator(PBF_OP_AND); }
+ 
++na		{ return constant(PERF_MEM_OP_NA); }
++load		{ return constant(PERF_MEM_OP_LOAD); }
++store		{ return constant(PERF_MEM_OP_STORE); }
++pfetch		{ return constant(PERF_MEM_OP_PFETCH); }
++exec		{ return constant(PERF_MEM_OP_EXEC); }
++
++l1		{ return constant(PERF_MEM_LVLNUM_L1); }
++l2		{ return constant(PERF_MEM_LVLNUM_L2); }
++l3		{ return constant(PERF_MEM_LVLNUM_L3); }
++l4		{ return constant(PERF_MEM_LVLNUM_L4); }
++cxl		{ return constant(PERF_MEM_LVLNUM_CXL); }
++io		{ return constant(PERF_MEM_LVLNUM_IO); }
++any_cache	{ return constant(PERF_MEM_LVLNUM_ANY_CACHE); }
++lfb		{ return constant(PERF_MEM_LVLNUM_LFB); }
++ram		{ return constant(PERF_MEM_LVLNUM_RAM); }
++pmem		{ return constant(PERF_MEM_LVLNUM_PMEM); }
++
++none		{ return constant(PERF_MEM_SNOOP_NONE); }
++hit		{ return constant(PERF_MEM_SNOOP_HIT); }
++miss		{ return constant(PERF_MEM_SNOOP_MISS); }
++hitm		{ return constant(PERF_MEM_SNOOP_HITM); }
++fwd		{ return constant(PERF_MEM_SNOOPX_FWD); }
++peer		{ return constant(PERF_MEM_SNOOPX_PEER); }
++
++remote		{ return constant(PERF_MEM_REMOTE_REMOTE); }
++
++locked		{ return constant(PERF_MEM_LOCK_LOCKED); }
++
++l1_hit		{ return constant(PERF_MEM_TLB_L1 | PERF_MEM_TLB_HIT); }
++l1_miss		{ return constant(PERF_MEM_TLB_L1 | PERF_MEM_TLB_MISS); }
++l2_hit		{ return constant(PERF_MEM_TLB_L2 | PERF_MEM_TLB_HIT); }
++l2_miss		{ return constant(PERF_MEM_TLB_L2 | PERF_MEM_TLB_MISS); }
++any_hit		{ return constant(PERF_MEM_TLB_HIT); }
++any_miss	{ return constant(PERF_MEM_TLB_MISS); }
++walk		{ return constant(PERF_MEM_TLB_WK); }
++os		{ return constant(PERF_MEM_TLB_OS); }
++fault		{ return constant(PERF_MEM_TLB_OS); } /* alias for os */
++
++by_data		{ return constant(PERF_MEM_BLK_DATA); }
++by_addr		{ return constant(PERF_MEM_BLK_ADDR); }
++
++hops0		{ return constant(PERF_MEM_HOPS_0); }
++hops1		{ return constant(PERF_MEM_HOPS_1); }
++hops2		{ return constant(PERF_MEM_HOPS_2); }
++hops3		{ return constant(PERF_MEM_HOPS_3); }
++
+ ","		{ return ','; }
+ 
+ {ident}		{ return error("ident"); }
+diff --git a/tools/perf/util/bpf_skel/sample_filter.bpf.c b/tools/perf/util/bpf_skel/sample_filter.bpf.c
+index d930401c5bfc..88dbc788d257 100644
+--- a/tools/perf/util/bpf_skel/sample_filter.bpf.c
++++ b/tools/perf/util/bpf_skel/sample_filter.bpf.c
+@@ -70,6 +70,29 @@ static inline __u64 perf_get_sample(struct bpf_perf_event_data_kern *kctx,
+ 		return kctx->data->code_page_size;
+ 	case PERF_SAMPLE_DATA_PAGE_SIZE:
+ 		return kctx->data->data_page_size;
++	case PERF_SAMPLE_DATA_SRC:
++		if (entry->part == 1)
++			return kctx->data->data_src.mem_op;
++		if (entry->part == 2)
++			return kctx->data->data_src.mem_lvl_num;
++		if (entry->part == 3) {
++			__u32 snoop = kctx->data->data_src.mem_snoop;
++			__u32 snoopx = kctx->data->data_src.mem_snoopx;
++
++			return (snoopx << 5) | snoop;
++		}
++		if (entry->part == 4)
++			return kctx->data->data_src.mem_remote;
++		if (entry->part == 5)
++			return kctx->data->data_src.mem_lock;
++		if (entry->part == 6)
++			return kctx->data->data_src.mem_dtlb;
++		if (entry->part == 7)
++			return kctx->data->data_src.mem_blk;
++		if (entry->part == 8)
++			return kctx->data->data_src.mem_hops;
++		/* return the whole word */
++		return kctx->data->data_src.val;
+ 	default:
+ 		break;
  	}
-=20
--	refcount_set(&kvalue->refcnt, 1);
- 	bpf_map_inc(map);
-=20
- 	set_memory_rox((long)st_map->image, 1);
-@@ -536,8 +540,7 @@ static int bpf_struct_ops_map_delete_elem(struct bpf_=
-map *map, void *key)
- 	switch (prev_state) {
- 	case BPF_STRUCT_OPS_STATE_INUSE:
- 		st_map->st_ops->unreg(&st_map->kvalue.data);
--		if (refcount_dec_and_test(&st_map->kvalue.refcnt))
--			bpf_map_put(map);
-+		bpf_map_put(map);
- 		return 0;
- 	case BPF_STRUCT_OPS_STATE_TOBEFREE:
- 		return -EINPROGRESS;
-@@ -574,6 +577,19 @@ static void bpf_struct_ops_map_free(struct bpf_map *=
-map)
- {
- 	struct bpf_struct_ops_map *st_map =3D (struct bpf_struct_ops_map *)map;
-=20
-+	/* The struct_ops's function may switch to another struct_ops.
-+	 *
-+	 * For example, bpf_tcp_cc_x->init() may switch to
-+	 * another tcp_cc_y by calling
-+	 * setsockopt(TCP_CONGESTION, "tcp_cc_y").
-+	 * During the switch,  bpf_struct_ops_put(tcp_cc_x) is called
-+	 * and its refcount may reach 0 which then free its
-+	 * trampoline image while tcp_cc_x is still running.
-+	 *
-+	 * Thus, a rcu grace period is needed here.
-+	 */
-+	synchronize_rcu();
-+
- 	if (st_map->links)
- 		bpf_struct_ops_map_put_progs(st_map);
- 	bpf_map_area_free(st_map->links);
-@@ -660,41 +676,23 @@ const struct bpf_map_ops bpf_struct_ops_map_ops =3D=
- {
- bool bpf_struct_ops_get(const void *kdata)
- {
- 	struct bpf_struct_ops_value *kvalue;
-+	struct bpf_struct_ops_map *st_map;
-+	struct bpf_map *map;
-=20
- 	kvalue =3D container_of(kdata, struct bpf_struct_ops_value, data);
-+	st_map =3D container_of(kvalue, struct bpf_struct_ops_map, kvalue);
-=20
--	return refcount_inc_not_zero(&kvalue->refcnt);
--}
--
--static void bpf_struct_ops_put_rcu(struct rcu_head *head)
--{
--	struct bpf_struct_ops_map *st_map;
--
--	st_map =3D container_of(head, struct bpf_struct_ops_map, rcu);
--	bpf_map_put(&st_map->map);
-+	map =3D __bpf_map_inc_not_zero(&st_map->map, false);
-+	return !IS_ERR(map);
- }
-=20
- void bpf_struct_ops_put(const void *kdata)
- {
- 	struct bpf_struct_ops_value *kvalue;
-+	struct bpf_struct_ops_map *st_map;
-=20
- 	kvalue =3D container_of(kdata, struct bpf_struct_ops_value, data);
--	if (refcount_dec_and_test(&kvalue->refcnt)) {
--		struct bpf_struct_ops_map *st_map;
--
--		st_map =3D container_of(kvalue, struct bpf_struct_ops_map,
--				      kvalue);
--		/* The struct_ops's function may switch to another struct_ops.
--		 *
--		 * For example, bpf_tcp_cc_x->init() may switch to
--		 * another tcp_cc_y by calling
--		 * setsockopt(TCP_CONGESTION, "tcp_cc_y").
--		 * During the switch,  bpf_struct_ops_put(tcp_cc_x) is called
--		 * and its map->refcnt may reach 0 which then free its
--		 * trampoline image while tcp_cc_x is still running.
--		 *
--		 * Thus, a rcu grace period is needed here.
--		 */
--		call_rcu(&st_map->rcu, bpf_struct_ops_put_rcu);
--	}
-+	st_map =3D container_of(kvalue, struct bpf_struct_ops_map, kvalue);
-+
-+	bpf_map_put(&st_map->map);
- }
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index cda8d00f3762..6351d50e3d8b 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1276,7 +1276,7 @@ struct bpf_map *bpf_map_get_with_uref(u32 ufd)
- }
-=20
- /* map_idr_lock should have been held */
--static struct bpf_map *__bpf_map_inc_not_zero(struct bpf_map *map, bool =
-uref)
-+struct bpf_map *__bpf_map_inc_not_zero(struct bpf_map *map, bool uref)
- {
- 	int refold;
-=20
---=20
-2.34.1
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
 
