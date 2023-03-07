@@ -2,123 +2,146 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA709C6FD1B
-	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 17:28:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D15EAC678D5
+	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 17:35:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbjCGR2i (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Mar 2023 12:28:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51068 "EHLO
+        id S231698AbjCGRff (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Mar 2023 12:35:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231616AbjCGR2W (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Mar 2023 12:28:22 -0500
-Received: from mail-ed1-x562.google.com (mail-ed1-x562.google.com [IPv6:2a00:1450:4864:20::562])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70AF8F719
-        for <bpf@vger.kernel.org>; Tue,  7 Mar 2023 09:23:25 -0800 (PST)
-Received: by mail-ed1-x562.google.com with SMTP id j11so35815420edq.4
-        for <bpf@vger.kernel.org>; Tue, 07 Mar 2023 09:23:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1678209804;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=v0WrihSvBZy5nZ9MfM7JnuWMa4vHo4ZuK5g7GbSWl8w=;
-        b=QyFVmVNWgQEDjQOwJ5z2t57JuZSPwGXQwbbHhXq+E7dtKGjZB1wcmBE0w2p+E5eWLZ
-         uVEpNcY22q6qjkxnzFM+T8TSlS2JRJyhLZvsJ/Y2PcHLBoinWWWhi16WXg386q2vCxlM
-         Z2RDB3wdh3XY7m5yCehb6D5kPsH+9fQbFoyrs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678209804;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=v0WrihSvBZy5nZ9MfM7JnuWMa4vHo4ZuK5g7GbSWl8w=;
-        b=3afBOZv7T4FAVcyRXVPr7NgSMrNOJlQSiu09Hhe/hpOU8uE47uQhlefBYeswFYBpH/
-         x1aF8vfO1w/31xzCMBW4OUbIjTQP8AOkbneA63ftH1vdkX7wu1ZBgJdilMa1MoHUOMpg
-         vqI/qdvDLOxGtuJ9/icyfPbnJRewnBUDTTuKqpEV7BIIoZvaIZtbqIFcIPxv/i2QydAY
-         B2tXDkr/4I87vr7qEq0XFdiqPr9AaFwTMj4UYnuL4H3Tc73E0ceAjzyCr1P+T7F8FIX0
-         Frr6Z+uRPRuOJTX4xXLetAwgzmNRg21XYi1DlAxsDgx7CXBkgLDZf+l0u8anOp2VEIFw
-         2/eQ==
-X-Gm-Message-State: AO0yUKX0n1f+X5+0PvIqeGd0SpmSRQjYKjAmuqzSgEgjpAB9GMYHviV3
-        +Q6ecyOqU9+Lp8JLnNLx/7wmKMflSVcP10UIZkmgMiwXbisU
-X-Google-Smtp-Source: AK7set9dCAkVNVTJDe9iqtEHgWr837pBL4Nir8S+55ZCqRaNxELi0AqPVIEshb54d5MzztjqM16qns0BAAm5
-X-Received: by 2002:a17:906:af18:b0:8aa:c155:9233 with SMTP id lx24-20020a170906af1800b008aac1559233mr14825247ejb.26.1678209804282;
-        Tue, 07 Mar 2023 09:23:24 -0800 (PST)
-Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id ho36-20020a1709070ea400b008e061d46f76sm3197935ejc.134.2023.03.07.09.23.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 09:23:24 -0800 (PST)
-X-Relaying-Domain: dectris.com
-From:   Kal Conley <kal.conley@dectris.com>
-To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] xsk: Add missing overflow check in xdp_umem_reg
-Date:   Tue,  7 Mar 2023 18:23:06 +0100
-Message-Id: <20230307172306.786657-1-kal.conley@dectris.com>
+        with ESMTP id S231702AbjCGRfN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Mar 2023 12:35:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3A4A6757;
+        Tue,  7 Mar 2023 09:31:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D57DC61514;
+        Tue,  7 Mar 2023 17:31:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCC21C4339B;
+        Tue,  7 Mar 2023 17:31:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678210279;
+        bh=seGOF3Ey4jyxVPGFZ7ajxxS3qtAbvi5Bg4U9MGA+pLc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Z+zRHx8QXzP9Q43K2BIE6RCja1ShsawgWmO4Hcju4yZocYajKihZfiADwwbBsp8mX
+         QKgfBwLsRvLA4IRp1yb+EZ1XYWBuFDIQGGKgpe6Pjx4d5Po6BNu4SsaXUaD/zY6bBb
+         Dhb2s7VreSl6euyUsRet60rKStpYa7YmEVT2Rj7E=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, Ian Rogers <irogers@google.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        llvm@lists.linux.dev, Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tom Rix <trix@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 6.2 0461/1001] perf llvm: Fix inadvertent file creation
+Date:   Tue,  7 Mar 2023 17:53:53 +0100
+Message-Id: <20230307170041.392707183@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230307170022.094103862@linuxfoundation.org>
+References: <20230307170022.094103862@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The number of chunks can overflow u32. Make sure to return -EINVAL on
-overflow.
+From: Ian Rogers <irogers@google.com>
 
-Fixes: bbff2f321a86 ("xsk: new descriptor addressing scheme")
-Signed-off-by: Kal Conley <kal.conley@dectris.com>
+[ Upstream commit 9f19aab47ced012eddef1e2bc96007efc7713b61 ]
+
+The LLVM template is first echo-ed into command_out and then
+command_out executed. The echo surrounds the template with double
+quotes, however, the template itself may contain quotes. This is
+generally innocuous but in tools/perf/tests/bpf-script-test-prologue.c
+we see:
+...
+SEC("func=null_lseek file->f_mode offset orig")
+...
+where the first double quote ends the double quote of the echo, then
+the > redirects output into a file called f_mode.
+
+To avoid this inadvertent behavior substitute redirects and similar
+characters to be ASCII control codes, then substitute the output in
+the echo back again.
+
+Fixes: 5eab5a7ee032acaa ("perf llvm: Display eBPF compiling command in debug output")
+Signed-off-by: Ian Rogers <irogers@google.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: llvm@lists.linux.dev
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Tom Rix <trix@redhat.com>
+Link: https://lore.kernel.org/r/20230105082609.344538-1-irogers@google.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/xdp/xdp_umem.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ tools/perf/util/llvm-utils.c | 25 ++++++++++++++++++++++++-
+ 1 file changed, 24 insertions(+), 1 deletion(-)
 
-diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
-index 4681e8e8ad94..f1aa79018ce8 100644
---- a/net/xdp/xdp_umem.c
-+++ b/net/xdp/xdp_umem.c
-@@ -150,10 +150,11 @@ static int xdp_umem_account_pages(struct xdp_umem *umem)
+diff --git a/tools/perf/util/llvm-utils.c b/tools/perf/util/llvm-utils.c
+index 650ffe336f3aa..4e8e243a6e4bd 100644
+--- a/tools/perf/util/llvm-utils.c
++++ b/tools/perf/util/llvm-utils.c
+@@ -531,14 +531,37 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
  
- static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
- {
--	u32 npgs_rem, chunk_size = mr->chunk_size, headroom = mr->headroom;
-+	u32 chunk_size = mr->chunk_size, headroom = mr->headroom;
- 	bool unaligned_chunks = mr->flags & XDP_UMEM_UNALIGNED_CHUNK_FLAG;
--	u64 npgs, addr = mr->addr, size = mr->len;
--	unsigned int chunks, chunks_rem;
-+	u64 addr = mr->addr, size = mr->len;
-+	u64 chunks, npgs;
-+	u32 chunks_rem, npgs_rem;
- 	int err;
+ 	pr_debug("llvm compiling command template: %s\n", template);
  
- 	if (chunk_size < XDP_UMEM_MIN_CHUNK_SIZE || chunk_size > PAGE_SIZE) {
-@@ -188,8 +189,8 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
- 	if (npgs > U32_MAX)
- 		return -EINVAL;
++	/*
++	 * Below, substitute control characters for values that can cause the
++	 * echo to misbehave, then substitute the values back.
++	 */
+ 	err = -ENOMEM;
+-	if (asprintf(&command_echo, "echo -n \"%s\"", template) < 0)
++	if (asprintf(&command_echo, "echo -n \a%s\a", template) < 0)
+ 		goto errout;
  
--	chunks = (unsigned int)div_u64_rem(size, chunk_size, &chunks_rem);
--	if (chunks == 0)
-+	chunks = div_u64_rem(size, chunk_size, &chunks_rem);
-+	if (chunks == 0 || chunks > U32_MAX)
- 		return -EINVAL;
++#define SWAP_CHAR(a, b) do { if (*p == a) *p = b; } while (0)
++	for (char *p = command_echo; *p; p++) {
++		SWAP_CHAR('<', '\001');
++		SWAP_CHAR('>', '\002');
++		SWAP_CHAR('"', '\003');
++		SWAP_CHAR('\'', '\004');
++		SWAP_CHAR('|', '\005');
++		SWAP_CHAR('&', '\006');
++		SWAP_CHAR('\a', '"');
++	}
+ 	err = read_from_pipe(command_echo, (void **) &command_out, NULL);
+ 	if (err)
+ 		goto errout;
  
- 	if (!unaligned_chunks && chunks_rem)
-@@ -201,7 +202,7 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
- 	umem->size = size;
- 	umem->headroom = headroom;
- 	umem->chunk_size = chunk_size;
--	umem->chunks = chunks;
-+	umem->chunks = (u32)chunks;
- 	umem->npgs = (u32)npgs;
- 	umem->pgs = NULL;
- 	umem->user = NULL;
++	for (char *p = command_out; *p; p++) {
++		SWAP_CHAR('\001', '<');
++		SWAP_CHAR('\002', '>');
++		SWAP_CHAR('\003', '"');
++		SWAP_CHAR('\004', '\'');
++		SWAP_CHAR('\005', '|');
++		SWAP_CHAR('\006', '&');
++	}
++#undef SWAP_CHAR
+ 	pr_debug("llvm compiling command : %s\n", command_out);
+ 
+ 	err = read_from_pipe(template, &obj_buf, &obj_buf_sz);
 -- 
 2.39.2
+
+
 
