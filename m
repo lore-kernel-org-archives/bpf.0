@@ -2,130 +2,464 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84D2DC6FD1E
-	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 23:33:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16AE8C742A7
+	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 23:33:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjCGXdp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Mar 2023 18:33:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44128 "EHLO
+        id S229974AbjCGXdn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Mar 2023 18:33:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbjCGXdZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S229994AbjCGXdZ (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 7 Mar 2023 18:33:25 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CB37BA2A;
-        Tue,  7 Mar 2023 15:33:23 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id m8-20020a17090a4d8800b002377bced051so470788pjh.0;
-        Tue, 07 Mar 2023 15:33:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678232003;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x3XJiLzYWTl1qdcO6Aoy/MeuV984OrXXQga9tTJym9M=;
-        b=k/ZMLtxDsB+YHPhfeOKHYIWLbC8qdI6ZoY7C2sPPUkIl3TUW1OeJkzWUQdTijzRFDO
-         GhExusyellPgYMqpl4alfdYq9NFrrgu6GUlAOKd03NJOY9x11JoBc9pGxQznHCfw+Vkc
-         5FT8HDnVzrVhFAB9g2h7otDaInhTm5KRBrOQkLlR31DNoBrNv+QLLhAX/AXG3Kb86Uqq
-         feJZ1nEjMTimEuVqxg6Wlf2+R8vVyi8QN3pnFuFxH4nvbVY5ZQAo6O0qPJI9NbJFrpOa
-         EEFJ5uMniBL+MR72jGxlelEI4gxgxwG6vJP/JH9qp/FTHWGGxuInYjcxa0xACDmz5/i6
-         eopw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678232003;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=x3XJiLzYWTl1qdcO6Aoy/MeuV984OrXXQga9tTJym9M=;
-        b=18D/Bj9CzvvvpAdwDlQKfNVt/jG7IUH4BiaBzkPD12yGE8hzcMDSRQurqwXQHDU3Db
-         DUbC9HWtHObWcUdWgdnd4vCVFtvFMk64EWWUFf5iEmK1zc7YML1zCv7ZJyGjWbN6veHc
-         x6PLbgQN/IlqlRHbX46ENacUaCwdA7mLv+0szG6aQ/VRjQf9s9dnzYf0N+/OT9xo263m
-         IJHZQenmpamRGhVsd2JDXFYdt+FM1tEj5yo0Jxa5vbu3vgXcAVbzwUEZ9pKlQEIZOldH
-         Ipfqm5l6+WXyDbcqWw2QfcyK2Nux9qpnfSZm3UjlT1rKVGNpsotzttCl3qj+HPUHHeHb
-         Jscw==
-X-Gm-Message-State: AO0yUKXH5cr7r2ceIhbaDTlXxczc1Hz03vPTUun6/HH3vy4lmskMj9L3
-        653dtmzXzj8184774o6vEbw=
-X-Google-Smtp-Source: AK7set//M15swegfo840vAPhluG6X15dTHI61Dzkynwcp3PxVLv8165+EUMgSytQouKSSp4bTw+byA==
-X-Received: by 2002:a05:6a20:a01a:b0:cc:7967:8a75 with SMTP id p26-20020a056a20a01a00b000cc79678a75mr15029486pzj.46.1678232003035;
-        Tue, 07 Mar 2023 15:33:23 -0800 (PST)
-Received: from moohyul.svl.corp.google.com ([2620:15c:2d4:203:15e8:b801:cd55:a496])
-        by smtp.gmail.com with ESMTPSA id l11-20020a62be0b000000b005da23d8cbffsm8342217pff.158.2023.03.07.15.33.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 15:33:22 -0800 (PST)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Song Liu <song@kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH 6/9] perf bpf filter: Add more weight sample data support
-Date:   Tue,  7 Mar 2023 15:33:06 -0800
-Message-Id: <20230307233309.3546160-7-namhyung@kernel.org>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-In-Reply-To: <20230307233309.3546160-1-namhyung@kernel.org>
-References: <20230307233309.3546160-1-namhyung@kernel.org>
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7307F03D
+        for <bpf@vger.kernel.org>; Tue,  7 Mar 2023 15:33:22 -0800 (PST)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 327M8uVK021671
+        for <bpf@vger.kernel.org>; Tue, 7 Mar 2023 15:33:22 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=s2048-2021-q4;
+ bh=cHJQZnWk1Gp3IYNHNtTKThrokRK8XA4GHIAvPEQpFmk=;
+ b=mPERZRl+vzJPL2OP7c7PstO2dhtePo5oBDhZ/IcwPlNwzwiCz1sDygjEhZQaa5JrBKKO
+ lAJ4Ry52m7khZVcSfpuA9Tt5v5b5TmF4F5CI3hOk+z3Dte3La+YS62+Yv2RwNgoSUncF
+ OCHsH2id5fkPbGNxc8QO6x67xxVCwFKe8rNbbfkvCohngb0OHHt4lvJREkvIb0AoPTaB
+ 5PUwTanRKveQxBg8h2gq3fxfdCHLmLF+er0dfn6K/l+femzYe/4UzXX9NTvD3wXT2YpP
+ Q5aqSp7s3TweXL6MAlG+apVMi3IOeviG13G6ATVFniyTNhkhGfV1Dxpx0KcdY/X/pn1P tw== 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3p6bu8sckh-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 07 Mar 2023 15:33:21 -0800
+Received: from twshared19568.39.frc1.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Tue, 7 Mar 2023 15:33:20 -0800
+Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
+        id 28A126C7C9B7; Tue,  7 Mar 2023 15:33:13 -0800 (PST)
+From:   Kui-Feng Lee <kuifeng@meta.com>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <martin.lau@linux.dev>,
+        <song@kernel.org>, <kernel-team@meta.com>, <andrii@kernel.org>,
+        <sdf@google.com>
+CC:     Kui-Feng Lee <kuifeng@meta.com>
+Subject: [PATCH bpf-next v4 2/9] bpf: Create links for BPF struct_ops maps.
+Date:   Tue, 7 Mar 2023 15:33:00 -0800
+Message-ID: <20230307233307.3626875-3-kuifeng@meta.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230307233307.3626875-1-kuifeng@meta.com>
+References: <20230307233307.3626875-1-kuifeng@meta.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: PgwT6xB0rzDpi2tTgzUeFkHg6zsoJOQD
+X-Proofpoint-ORIG-GUID: PgwT6xB0rzDpi2tTgzUeFkHg6zsoJOQD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-07_16,2023-03-07_01,2023-02-09_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The weight data consists of a couple of fields with the
-PERF_SAMPLE_WEIGHT_STRUCT.  Add weight{1,2,3} term to select them
-separately.  Also add their aliases like 'ins_lat', 'p_stage_cyc'
-and 'retire_lat'.
+BPF struct_ops maps are employed directly to register TCP Congestion
+Control algorithms. Unlike other BPF programs that terminate when
+their links gone. The link of a BPF struct_ops map provides a uniform
+experience akin to other types of BPF programs.
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+bpf_links are responsible for registering their associated
+struct_ops. You can only use a struct_ops that has the BPF_F_LINK flag
+set to create a bpf_link, while a structs without this flag behaves in
+the same manner as before and is registered upon updating its value.
+
+The BPF_LINK_TYPE_STRUCT_OPS serves a dual purpose. Not only is it
+used to craft the links for BPF struct_ops programs, but also to
+create links for BPF struct_ops them-self.  Since the links of BPF
+struct_ops programs are only used to create trampolines internally,
+they are never seen in other contexts. Thus, they can be reused for
+struct_ops themself.
+
+To maintain a reference to the map supporting this link, we add
+bpf_struct_ops_link as an additional type. The pointer of the map is
+RCU and won't be necessary until later in the patchset.
+
+Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
 ---
- tools/perf/util/bpf-filter.l                 | 6 ++++++
- tools/perf/util/bpf_skel/sample_filter.bpf.c | 8 ++++++++
- 2 files changed, 14 insertions(+)
+ include/linux/bpf.h            |  11 +++
+ include/uapi/linux/bpf.h       |  12 +++-
+ kernel/bpf/bpf_struct_ops.c    | 119 +++++++++++++++++++++++++++++++--
+ kernel/bpf/syscall.c           |  23 ++++---
+ tools/include/uapi/linux/bpf.h |  12 +++-
+ 5 files changed, 163 insertions(+), 14 deletions(-)
 
-diff --git a/tools/perf/util/bpf-filter.l b/tools/perf/util/bpf-filter.l
-index ec12fc4d2ab8..419f923b35c0 100644
---- a/tools/perf/util/bpf-filter.l
-+++ b/tools/perf/util/bpf-filter.l
-@@ -71,6 +71,12 @@ addr		{ return sample(PERF_SAMPLE_ADDR); }
- period		{ return sample(PERF_SAMPLE_PERIOD); }
- txn		{ return sample(PERF_SAMPLE_TRANSACTION); }
- weight		{ return sample(PERF_SAMPLE_WEIGHT); }
-+weight1		{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 1); }
-+weight2		{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 2); }
-+weight3		{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 3); }
-+ins_lat		{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 2); } /* alias for weight2 */
-+p_stage_cyc	{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 3); } /* alias for weight3 */
-+retire_lat	{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 3); } /* alias for weight3 */
- phys_addr	{ return sample(PERF_SAMPLE_PHYS_ADDR); }
- code_pgsz	{ return sample(PERF_SAMPLE_CODE_PAGE_SIZE); }
- data_pgsz	{ return sample(PERF_SAMPLE_DATA_PAGE_SIZE); }
-diff --git a/tools/perf/util/bpf_skel/sample_filter.bpf.c b/tools/perf/util/bpf_skel/sample_filter.bpf.c
-index dddf38c27bb7..d930401c5bfc 100644
---- a/tools/perf/util/bpf_skel/sample_filter.bpf.c
-+++ b/tools/perf/util/bpf_skel/sample_filter.bpf.c
-@@ -54,6 +54,14 @@ static inline __u64 perf_get_sample(struct bpf_perf_event_data_kern *kctx,
- 		return kctx->data->period;
- 	case PERF_SAMPLE_TRANSACTION:
- 		return kctx->data->txn;
-+	case PERF_SAMPLE_WEIGHT_STRUCT:
-+		if (entry->part == 1)
-+			return kctx->data->weight.var1_dw;
-+		if (entry->part == 2)
-+			return kctx->data->weight.var2_w;
-+		if (entry->part == 3)
-+			return kctx->data->weight.var3_w;
-+		/* fall through */
- 	case PERF_SAMPLE_WEIGHT:
- 		return kctx->data->weight.full;
- 	case PERF_SAMPLE_PHYS_ADDR:
--- 
-2.40.0.rc1.284.g88254d51c5-goog
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index fc47c756455e..855b27f847eb 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1481,6 +1481,7 @@ static inline void bpf_module_put(const void *data,=
+ struct module *owner)
+ 	else
+ 		module_put(owner);
+ }
++int bpf_struct_ops_link_create(union bpf_attr *attr);
+=20
+ #ifdef CONFIG_NET
+ /* Define it here to avoid the use of forward declaration */
+@@ -1521,6 +1522,11 @@ static inline int bpf_struct_ops_map_sys_lookup_el=
+em(struct bpf_map *map,
+ {
+ 	return -EINVAL;
+ }
++static inline int bpf_struct_ops_link_create(union bpf_attr *attr)
++{
++	return -EOPNOTSUPP;
++}
++
+ #endif
+=20
+ #if defined(CONFIG_CGROUP_BPF) && defined(CONFIG_BPF_LSM)
+@@ -2307,6 +2313,11 @@ static inline void bpf_link_put(struct bpf_link *l=
+ink)
+ {
+ }
+=20
++static inline int bpf_struct_ops_link_create(union bpf_attr *attr)
++{
++	return -EOPNOTSUPP;
++}
++
+ static inline int bpf_obj_get_user(const char __user *pathname, int flag=
+s)
+ {
+ 	return -EOPNOTSUPP;
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 17afd2b35ee5..eb3e435c5303 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1033,6 +1033,7 @@ enum bpf_attach_type {
+ 	BPF_PERF_EVENT,
+ 	BPF_TRACE_KPROBE_MULTI,
+ 	BPF_LSM_CGROUP,
++	BPF_STRUCT_OPS,
+ 	__MAX_BPF_ATTACH_TYPE
+ };
+=20
+@@ -1266,6 +1267,9 @@ enum {
+=20
+ /* Create a map that is suitable to be an inner map with dynamic max ent=
+ries */
+ 	BPF_F_INNER_MAP		=3D (1U << 12),
++
++/* Create a map that will be registered/unregesitered by the backed bpf_=
+link */
++	BPF_F_LINK		=3D (1U << 13),
+ };
+=20
+ /* Flags for BPF_PROG_QUERY. */
+@@ -1507,7 +1511,10 @@ union bpf_attr {
+ 	} task_fd_query;
+=20
+ 	struct { /* struct used by BPF_LINK_CREATE command */
+-		__u32		prog_fd;	/* eBPF program to attach */
++		union {
++			__u32		prog_fd;	/* eBPF program to attach */
++			__u32		map_fd;		/* struct_ops to attach */
++		};
+ 		union {
+ 			__u32		target_fd;	/* object to attach to */
+ 			__u32		target_ifindex; /* target ifindex */
+@@ -6354,6 +6361,9 @@ struct bpf_link_info {
+ 		struct {
+ 			__u32 ifindex;
+ 		} xdp;
++		struct {
++			__u32 map_id;
++		} struct_ops;
+ 	};
+ } __attribute__((aligned(8)));
+=20
+diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+index 815b5e1cf325..dcb7a408d4e9 100644
+--- a/kernel/bpf/bpf_struct_ops.c
++++ b/kernel/bpf/bpf_struct_ops.c
+@@ -16,6 +16,7 @@ enum bpf_struct_ops_state {
+ 	BPF_STRUCT_OPS_STATE_INIT,
+ 	BPF_STRUCT_OPS_STATE_INUSE,
+ 	BPF_STRUCT_OPS_STATE_TOBEFREE,
++	BPF_STRUCT_OPS_STATE_READY,
+ };
+=20
+ #define BPF_STRUCT_OPS_COMMON_VALUE			\
+@@ -58,6 +59,11 @@ struct bpf_struct_ops_map {
+ 	struct bpf_struct_ops_value kvalue;
+ };
+=20
++struct bpf_struct_ops_link {
++	struct bpf_link link;
++	struct bpf_map __rcu *map;
++};
++
+ static DEFINE_MUTEX(update_mutex);
+=20
+ #define VALUE_PREFIX "bpf_struct_ops_"
+@@ -496,11 +502,19 @@ static int bpf_struct_ops_map_update_elem(struct bp=
+f_map *map, void *key,
+ 		*(unsigned long *)(udata + moff) =3D prog->aux->id;
+ 	}
+=20
+-	bpf_map_inc(map);
+-
+ 	set_memory_rox((long)st_map->image, 1);
++	if (st_map->map.map_flags & BPF_F_LINK) {
++		/* Let bpf_link handle registration & unregistration.
++		 *
++		 * Pair with smp_load_acquire() during lookup_elem().
++		 */
++		smp_store_release(&kvalue->state, BPF_STRUCT_OPS_STATE_READY);
++		goto unlock;
++	}
++
+ 	err =3D st_ops->reg(kdata);
+ 	if (likely(!err)) {
++		bpf_map_inc(map);
+ 		/* Pair with smp_load_acquire() during lookup_elem().
+ 		 * It ensures the above udata updates (e.g. prog->aux->id)
+ 		 * can be seen once BPF_STRUCT_OPS_STATE_INUSE is set.
+@@ -516,7 +530,6 @@ static int bpf_struct_ops_map_update_elem(struct bpf_=
+map *map, void *key,
+ 	 */
+ 	set_memory_nx((long)st_map->image, 1);
+ 	set_memory_rw((long)st_map->image, 1);
+-	bpf_map_put(map);
+=20
+ reset_unlock:
+ 	bpf_struct_ops_map_put_progs(st_map);
+@@ -534,6 +547,9 @@ static int bpf_struct_ops_map_delete_elem(struct bpf_=
+map *map, void *key)
+ 	struct bpf_struct_ops_map *st_map;
+=20
+ 	st_map =3D (struct bpf_struct_ops_map *)map;
++	if (st_map->map.map_flags & BPF_F_LINK)
++		return -EOPNOTSUPP;
++
+ 	prev_state =3D cmpxchg(&st_map->kvalue.state,
+ 			     BPF_STRUCT_OPS_STATE_INUSE,
+ 			     BPF_STRUCT_OPS_STATE_TOBEFREE);
+@@ -601,7 +617,7 @@ static void bpf_struct_ops_map_free(struct bpf_map *m=
+ap)
+ static int bpf_struct_ops_map_alloc_check(union bpf_attr *attr)
+ {
+ 	if (attr->key_size !=3D sizeof(unsigned int) || attr->max_entries !=3D =
+1 ||
+-	    attr->map_flags || !attr->btf_vmlinux_value_type_id)
++	    (attr->map_flags & ~BPF_F_LINK) || !attr->btf_vmlinux_value_type_id=
+)
+ 		return -EINVAL;
+ 	return 0;
+ }
+@@ -696,3 +712,98 @@ void bpf_struct_ops_put(const void *kdata)
+=20
+ 	bpf_map_put(&st_map->map);
+ }
++
++static void bpf_struct_ops_map_link_dealloc(struct bpf_link *link)
++{
++	struct bpf_struct_ops_link *st_link;
++	struct bpf_struct_ops_map *st_map;
++
++	st_link =3D container_of(link, struct bpf_struct_ops_link, link);
++	st_map =3D (struct bpf_struct_ops_map *)st_link->map;
++	st_map->st_ops->unreg(&st_map->kvalue.data);
++	bpf_map_put(st_link->map);
++	kfree(st_link);
++}
++
++static void bpf_struct_ops_map_link_show_fdinfo(const struct bpf_link *l=
+ink,
++					    struct seq_file *seq)
++{
++	struct bpf_struct_ops_link *st_link;
++	struct bpf_map *map;
++
++	st_link =3D container_of(link, struct bpf_struct_ops_link, link);
++	rcu_read_lock();
++	map =3D rcu_dereference(st_link->map);
++	if (map)
++		seq_printf(seq, "map_id:\t%d\n", map->id);
++	rcu_read_unlock();
++}
++
++static int bpf_struct_ops_map_link_fill_link_info(const struct bpf_link =
+*link,
++					       struct bpf_link_info *info)
++{
++	struct bpf_struct_ops_link *st_link;
++	struct bpf_map *map;
++
++	st_link =3D container_of(link, struct bpf_struct_ops_link, link);
++	rcu_read_lock();
++	map =3D rcu_dereference(st_link->map);
++	if (map)
++		info->struct_ops.map_id =3D map->id;
++	rcu_read_unlock();
++	return 0;
++}
++
++static const struct bpf_link_ops bpf_struct_ops_map_lops =3D {
++	.dealloc =3D bpf_struct_ops_map_link_dealloc,
++	.show_fdinfo =3D bpf_struct_ops_map_link_show_fdinfo,
++	.fill_link_info =3D bpf_struct_ops_map_link_fill_link_info,
++};
++
++int bpf_struct_ops_link_create(union bpf_attr *attr)
++{
++	struct bpf_struct_ops_link *link =3D NULL;
++	struct bpf_link_primer link_primer;
++	struct bpf_struct_ops_map *st_map;
++	struct bpf_map *map;
++	int err;
++
++	map =3D bpf_map_get(attr->link_create.map_fd);
++	if (!map)
++		return -EINVAL;
++
++	st_map =3D (struct bpf_struct_ops_map *)map;
++
++	if (map->map_type !=3D BPF_MAP_TYPE_STRUCT_OPS || !(map->map_flags & BP=
+F_F_LINK) ||
++	    /* Pair with smp_store_release() during map_update */
++	    smp_load_acquire(&st_map->kvalue.state) !=3D BPF_STRUCT_OPS_STATE_R=
+EADY) {
++		err =3D -EINVAL;
++		goto err_out;
++	}
++
++	link =3D kzalloc(sizeof(*link), GFP_USER);
++	if (!link) {
++		err =3D -ENOMEM;
++		goto err_out;
++	}
++	bpf_link_init(&link->link, BPF_LINK_TYPE_STRUCT_OPS, &bpf_struct_ops_ma=
+p_lops, NULL);
++	RCU_INIT_POINTER(link->map, map);
++
++	err =3D bpf_link_prime(&link->link, &link_primer);
++	if (err)
++		goto err_out;
++
++	err =3D st_map->st_ops->reg(st_map->kvalue.data);
++	if (err) {
++		bpf_link_cleanup(&link_primer);
++		goto err_out;
++	}
++
++	return bpf_link_settle(&link_primer);
++
++err_out:
++	bpf_map_put(map);
++	kfree(link);
++	return err;
++}
++
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 6351d50e3d8b..25b044fdd82b 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2794,16 +2794,19 @@ static void bpf_link_show_fdinfo(struct seq_file =
+*m, struct file *filp)
+ 	const struct bpf_prog *prog =3D link->prog;
+ 	char prog_tag[sizeof(prog->tag) * 2 + 1] =3D { };
+=20
+-	bin2hex(prog_tag, prog->tag, sizeof(prog->tag));
+ 	seq_printf(m,
+ 		   "link_type:\t%s\n"
+-		   "link_id:\t%u\n"
+-		   "prog_tag:\t%s\n"
+-		   "prog_id:\t%u\n",
++		   "link_id:\t%u\n",
+ 		   bpf_link_type_strs[link->type],
+-		   link->id,
+-		   prog_tag,
+-		   prog->aux->id);
++		   link->id);
++	if (prog) {
++		bin2hex(prog_tag, prog->tag, sizeof(prog->tag));
++		seq_printf(m,
++			   "prog_tag:\t%s\n"
++			   "prog_id:\t%u\n",
++			   prog_tag,
++			   prog->aux->id);
++	}
+ 	if (link->ops->show_fdinfo)
+ 		link->ops->show_fdinfo(link, m);
+ }
+@@ -4278,7 +4281,8 @@ static int bpf_link_get_info_by_fd(struct file *fil=
+e,
+=20
+ 	info.type =3D link->type;
+ 	info.id =3D link->id;
+-	info.prog_id =3D link->prog->aux->id;
++	if (link->prog)
++		info.prog_id =3D link->prog->aux->id;
+=20
+ 	if (link->ops->fill_link_info) {
+ 		err =3D link->ops->fill_link_info(link, &info);
+@@ -4541,6 +4545,9 @@ static int link_create(union bpf_attr *attr, bpfptr=
+_t uattr)
+ 	if (CHECK_ATTR(BPF_LINK_CREATE))
+ 		return -EINVAL;
+=20
++	if (attr->link_create.attach_type =3D=3D BPF_STRUCT_OPS)
++		return bpf_struct_ops_link_create(attr);
++
+ 	prog =3D bpf_prog_get(attr->link_create.prog_fd);
+ 	if (IS_ERR(prog))
+ 		return PTR_ERR(prog);
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+index 17afd2b35ee5..cd0ff39981e8 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1033,6 +1033,7 @@ enum bpf_attach_type {
+ 	BPF_PERF_EVENT,
+ 	BPF_TRACE_KPROBE_MULTI,
+ 	BPF_LSM_CGROUP,
++	BPF_STRUCT_OPS,
+ 	__MAX_BPF_ATTACH_TYPE
+ };
+=20
+@@ -1266,6 +1267,9 @@ enum {
+=20
+ /* Create a map that is suitable to be an inner map with dynamic max ent=
+ries */
+ 	BPF_F_INNER_MAP		=3D (1U << 12),
++
++/* Create a map that will be registered/unregesitered by the backed bpf_=
+link */
++	BPF_F_LINK		=3D (1U << 13),
+ };
+=20
+ /* Flags for BPF_PROG_QUERY. */
+@@ -1507,7 +1511,10 @@ union bpf_attr {
+ 	} task_fd_query;
+=20
+ 	struct { /* struct used by BPF_LINK_CREATE command */
+-		__u32		prog_fd;	/* eBPF program to attach */
++		union {
++			__u32		prog_fd;	/* eBPF program to attach */
++			__u32		map_fd;		/* eBPF struct_ops to attach */
++		};
+ 		union {
+ 			__u32		target_fd;	/* object to attach to */
+ 			__u32		target_ifindex; /* target ifindex */
+@@ -6354,6 +6361,9 @@ struct bpf_link_info {
+ 		struct {
+ 			__u32 ifindex;
+ 		} xdp;
++		struct {
++			__u32 map_id;
++		} struct_ops;
+ 	};
+ } __attribute__((aligned(8)));
+=20
+--=20
+2.34.1
 
