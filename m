@@ -2,411 +2,233 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DF9CC6FD1B
-	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 18:10:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 972F1C6FD1B
+	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 18:22:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232402AbjCGSK1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Mar 2023 13:10:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47016 "EHLO
+        id S232607AbjCGSWW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Mar 2023 13:22:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232408AbjCGSKG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Mar 2023 13:10:06 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2937EA4029
-        for <bpf@vger.kernel.org>; Tue,  7 Mar 2023 10:04:38 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id d10so8105404pgt.12
-        for <bpf@vger.kernel.org>; Tue, 07 Mar 2023 10:04:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678212277;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uMUoIkXZYgDNlxpNSwc33IZRA6X8AmU7uKXZjCE8Yww=;
-        b=Y3pxJy8YdHvInbURX08mTGg7i2slrmaxQnrzWXc4qDsC/Kxke9P7YnuxghX8xBTVu5
-         7an9k0haafez3MG4eeBBaEPg9Qw9YT9Gi1b6MGEQI1OqXabDof/ExPBA/zHPOlv2OKVO
-         aDzgd4vF07gKFstbO4vi/HwQwrz0Re62AYs3JLlHRKukpA/qOe9V2NAZuGmjCjDdnEzi
-         dyvi0MVlRE+o7OsIzd2uM8tgjBAI/GYAvEjkjsSZRp+NuxU9ZgLphKU/nx+Ybom04ZEW
-         +v45Ld6SwdURv9oFSJcXj1LACjQJXrloTw1QrOVGn8cZpMZwyS63UmzrKI3Ur84nXyyb
-         gW/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678212277;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uMUoIkXZYgDNlxpNSwc33IZRA6X8AmU7uKXZjCE8Yww=;
-        b=oq9Nh6M8319ByQf3C/KuqbYR76fK+JugJK+qyCy8yS5em3Z4k5TZymVGbIkoM1hCL+
-         QLV+YSpDu9T1ikb2NqZi7kK+QEFZAKhC1r3ZBsHmBf2QRgYNbngjYLJ5X/pJL7Iucnwa
-         yfIvGg7xtihC5R4VZ8sKgwwt8kJNqkh6/7e+SSrStIhcUDxJ0xhcdYSWasQ2alENDxRg
-         kT/oz5nslBy1cc6Gwxd/XYmvcif+Bldgf45ZBvz06ChHZ5gn1N8smWqQ5a2JuOyFGOIS
-         zmUic8G429t5h74EaYIIEAJOtMOUQO/zoKUGdeh75KXs+eSXebxdtKilvHJA1JnWKGyV
-         q5Wg==
-X-Gm-Message-State: AO0yUKUQGmK8FV3jcjuCAjFJKOgr8Xr9GjyA4hBGBlOGFruru3vxauYX
-        UPsN9p66kznbVcAbvmUDbpw=
-X-Google-Smtp-Source: AK7set99Hfa1Aijo0cgYMise8q6iBALj9NuRE51bMCzwikFk6e0z2KUCi7DHyHkxOmg3eemI/nMi0A==
-X-Received: by 2002:aa7:98de:0:b0:5df:3aa1:10c5 with SMTP id e30-20020aa798de000000b005df3aa110c5mr13021068pfm.14.1678212277457;
-        Tue, 07 Mar 2023 10:04:37 -0800 (PST)
-Received: from ?IPV6:2620:10d:c085:21cf::1402? ([2620:10d:c090:400::5:173])
-        by smtp.gmail.com with ESMTPSA id f6-20020aa782c6000000b0059416691b64sm8479044pfn.19.2023.03.07.10.04.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 10:04:37 -0800 (PST)
-Message-ID: <854d0d60-d637-f892-dd93-227f1cafbfd0@gmail.com>
-Date:   Tue, 7 Mar 2023 10:04:33 -0800
+        with ESMTP id S232698AbjCGSV5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Mar 2023 13:21:57 -0500
+Received: from BN3PR00CU001.outbound.protection.outlook.com (mail-eastus2azlp170100001.outbound.protection.outlook.com [IPv6:2a01:111:f403:c110::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3C6A403D
+        for <bpf@vger.kernel.org>; Tue,  7 Mar 2023 10:15:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oZj8s7Wlk790FwiHAGvxfxVgyMQnxzAsmYtStCgwIEiaoqLWGTfa/WzvOrzNrcoVbTnPh9jekDHxORPkJ1Dk0/KcUAz6KnyHTwBHbaCeojT3rsHj+0Tnq+2ZJ+3+K+aK/3LOAlPtko/cS+GAYETte0lhvCOGzhYk5YT/g8Gi8GoD11s+JJPGCMXGUpC0rdIPhBCAHisprWSHefWwhSzCKPjW7xIl70PIZ0IBe8gCujKzcRGJdWnM9Af6b6g2mbYIAA8UuTIaPVWXoU4U9hYa4Ox37ZvcNqxsXPQES+Ez5CRWqew0/Gezm26E5msVVqYWnJolcXi6LfhtE9dR1moHSA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1BmvB3azXFHneP1wVdQHrvu0gjZ8408ZgQMYcBJXD1s=;
+ b=AB+lMjAMI1I6Xuu8dr/2EWvn4YRDtg9vQ/26DtpWbw3HDM3W84HkK0ht7Fe3BaijbzXj+OjoIwk5aA9epGXfLHF9+GWIRwnoEYBVP23SL4gfCxsICaAKQVqAeHgkPXUoyLJTPsJ+Mp5KzxsLlCrbaAcEM2fTKqk4xIcih6a+1jwDPhGHvgQSAK5umBsVD95IRYcSuuYMJqEDp5Jnq4rkBZD+EseLqIslwW1AWuT25uS/yB1thSpc1jgch1/e0rw5aF+AuSb6v1EVSxHVqwJ1eKz1+TODgG3IisZVr7hnMMf5iQPH8pM/9gGPmVOrAC6DURtEVWt/FhE7yQ61bOFG/w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1BmvB3azXFHneP1wVdQHrvu0gjZ8408ZgQMYcBJXD1s=;
+ b=KFk+VKzayRIIuaee7Zc3/UzNaW/oZCgpsJ10bM9IINNYyGGK6dSIVRkKpBXIKv72vrH/F/g4LyLvuT2xiitEDelAB0IP5i6r3drQuZmJOC6OcyScklL8nq2bHue2E35jFOMJKN/VP/oLKVDWOh2+8a/sbkfIM8UEQ6pG2yBdq1Y=
+Received: from SJ0PR00MB1007.namprd00.prod.outlook.com (2603:10b6:a03:2ad::8)
+ by BY3PR00MB1390.namprd00.prod.outlook.com (2603:10b6:a03:3b3::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6216.0; Tue, 7 Mar
+ 2023 18:15:48 +0000
+Received: from SJ0PR00MB1007.namprd00.prod.outlook.com
+ ([fe80::945:20f6:a7d8:2684]) by SJ0PR00MB1007.namprd00.prod.outlook.com
+ ([fe80::945:20f6:a7d8:2684%4]) with mapi id 15.20.6215.000; Tue, 7 Mar 2023
+ 18:15:48 +0000
+From:   Rae Marks <Raeanne.Marks@microsoft.com>
+To:     quentin <quentin@isovalent.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+CC:     Leonid Liansky <lliansky@microsoft.com>
+Subject: Re: [EXTERNAL] Re: Suggested patch for bpftool
+Thread-Topic: [EXTERNAL] Re: Suggested patch for bpftool
+Thread-Index: AQHZUHOBrQIAckd6vU2Kp/uenfwQn67vESOAgACJl28=
+Date:   Tue, 7 Mar 2023 18:15:47 +0000
+Message-ID: <SJ0PR00MB10072E7C794A3E2D8C1E86FDFBB79@SJ0PR00MB1007.namprd00.prod.outlook.com>
+References: <SJ0PR00MB10058537EA379C1260C3C8A9FBB69@SJ0PR00MB1005.namprd00.prod.outlook.com>
+ <b32ecbd4-4ac8-d925-18fb-735bf7d30ad4@isovalent.com>
+In-Reply-To: <b32ecbd4-4ac8-d925-18fb-735bf7d30ad4@isovalent.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ0PR00MB1007:EE_|BY3PR00MB1390:EE_
+x-ms-office365-filtering-correlation-id: 7937d30f-2ccc-4a1c-1b53-08db1f37f9e6
+x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Wf+LZ6eHi+3i4Eap7qSa5Do/lpZ4uDOXSzr3r4OM43O14sq0AzRij1DtdLeDIhguLLO97PYtUq85/zMASv2+SIxabkSSl55+lPczl8bX1KW1WVJfpXJ0A4PDSysZynyjaQrowmDIhX6c8/KBrsVXJwFuIBNyu31zIs3H0BMsG4sxq6On5r5WEiblnwFHxcmVopx+1oUPp7ObqARcPVhDk5F82FtzcZPdnMwPIgH98taqh8iYXRcQ+EtLOM/KcQw9hZuMx2wBm5kpmB9Vj8fP58NGBNFv8wYnZMN10oM6EsR5TrKJNPmL2gK6i3o+yZD4hgWpCicMXvaPomKu/SIsE41YzxFxysllWrvShghYw1IG0otKgIqG6zNtrko7JqEqgy1Z9wWTHQ+5Hin+YV9RBwXjekGtKlZN0ivRXiIzc7AIw1YSLuZ9/d7PqpCREAxqSOEefS4arEwLoIpgN9tYjEQ9k/5VdOYhX7YFy5AWn6HEF/0rk7A0aogZspwJGA8YoWu/aPn1Y8+MkhdB79wJXR6wycr2C9X8jQQkWn7kFqoWMLvmAPYFxXhGoeGw8qLo0Ld+ghAKCPyCeO480prQmQGVpqG24mNnSQ7ILnfUfdYe0xH7B7Zt0MsLrYmh5QV7IgKbTlIkR/qK6Rxbfj0V3Ap14+kDVeQ8HEgITA8HWanSJvPYDrExXO64c8E/1/GYtGn5MmS+L4l+EBFvQxfTi3n86c0rHUyo43Yzxr715Lg=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR00MB1007.namprd00.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(376002)(136003)(346002)(39860400002)(396003)(451199018)(66556008)(66476007)(478600001)(8990500004)(6506007)(26005)(66946007)(76116006)(66446008)(64756008)(8676002)(4326008)(53546011)(107886003)(83380400001)(66899018)(82950400001)(82960400001)(38070700005)(86362001)(41300700001)(10290500003)(122000001)(33656002)(2906002)(966005)(186003)(55016003)(110136005)(38100700002)(52536014)(7696005)(5660300002)(71200400001)(8936002)(9686003)(316002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?3OO+FM0r2mtyNYyMi3irQ1vR3ilDmnIg1B68mFDmqWg/DWoO3h6CAhcf?=
+ =?Windows-1252?Q?pQMIRBelb5vLnikZPTshVoIQtOgRlhRele5he2WH+1IucEWI95KZH3ib?=
+ =?Windows-1252?Q?Yu2Oikq6PVYIfvn3ru32kJQ0vODaIulw0DxXEEiE0lX9wDutQPSQb2wE?=
+ =?Windows-1252?Q?vvYt1/247Bx4m+jxCtjmz0ye/qdY/vprYPUPzYLG7eWg4j5i4qSEkt8U?=
+ =?Windows-1252?Q?fmA6+gB19yqHF8DgkK+7puQBFVAN3ySu2AoSvxgF5bJZloieIRVw4F0W?=
+ =?Windows-1252?Q?uGc7pGc0pC2t3YCO9mayf4wb5D+xFaWFZQqqgsf8t64xhXUYkfS65cQ/?=
+ =?Windows-1252?Q?rdUylviJwApPBTdw/dsC4gH/JiRuqt3YWlymzluf7etwglNiRMoGh/OS?=
+ =?Windows-1252?Q?MaUTU5tbHNd+vqWVHEkZ7NuJWG4/tjIjq6trKzsxY/99Cz/wB4aveMxh?=
+ =?Windows-1252?Q?nYFzUkxX8GaMRCzoc1oUPZWdCi4xHkXphDSlBAIb2UzKAogVjq0rPgxf?=
+ =?Windows-1252?Q?Y3W9CuZaA4VUqvM3GspYoYIaHg8jjLs6LzECbV2NWO0nWkcbM2M6EFlo?=
+ =?Windows-1252?Q?yhQXeJ+JMpL5zxpjWtVsrPzk+LKUCcATBcSFeI/HYcdFNBcl+hSW8qO0?=
+ =?Windows-1252?Q?hfjEZGYfm6CCJ4/2Fsys5zdjC8f7JBmfuUS2K9KcfjBnmocqiag2+1yj?=
+ =?Windows-1252?Q?+2sVKuzk7d+LCewzGcs1iwGZSH9Mu00Eq97naEbPYVlXqmFjqGDa+Asg?=
+ =?Windows-1252?Q?GQ8WL1NxvQ/MB2JxlDPYjh/ZIGmlURi1/fe6lPT2tT+t3etTmA0bLluq?=
+ =?Windows-1252?Q?/TpyaBaS7bLh/SAb5d250gtbaJ7S8VwdVDt2QlYYZpYEXSl0TsaENVTA?=
+ =?Windows-1252?Q?f7rgstZ0RMrrkN/hJoHlCOHdek6ECtuC1L+YyhAjGtvRfX41ULPBlKJx?=
+ =?Windows-1252?Q?+7rktWnywXAu0gjjrvgtNhSyVcX8vcji9mwHUTko6LdQGxW5HkdT8Fy0?=
+ =?Windows-1252?Q?SldlTnngZJSeLEpy/k5Uy6yUadW9xP1o0keS53csu3Nut8saXNw9yZ5F?=
+ =?Windows-1252?Q?2+0lLxQuZdHFutrKcvuYGfkzBrG3zFnUHj2Ikby5Fo7TEO9miKGJovYu?=
+ =?Windows-1252?Q?5n0pkDlRWND0/wzLd1OO08S/VhFqaZtESzqD8/X7JZTs1nLCO/KNzFul?=
+ =?Windows-1252?Q?QcG1hQcwSfof6JBj1YHfxsN/TCXHbs2YTOxxhHrbaiX20aV4GwOWP/LQ?=
+ =?Windows-1252?Q?wXt6Cia6Voxes8+gmuPbewE7iy1BU9OpDUzCkolXnrlruf7MT1EJUhku?=
+ =?Windows-1252?Q?S8ddscwALXoMtKVOlI0wV/FNxUDw/PAFOCuDbsrQy8zf8LTpkRdROpuh?=
+ =?Windows-1252?Q?qPdCFLM6Yjp/FHXkb49WtRVh79F+Vk8Of8GGU5yLksJMmQpghmB0ypMB?=
+ =?Windows-1252?Q?HIpIOyTvRvLDwV1m/22c3yotJSbECL0ZsPmjSBMC82YY8mHI3iw3Il1R?=
+ =?Windows-1252?Q?v5zP86dmG7Npyca44XydZec4Ttjb+Y+XC01oNb3qhivRl8lGTdSQeOjj?=
+ =?Windows-1252?Q?Olonxp3WK6FJP+ajy+12NbF5omkNFRWjK8TYd/ejqVXvSWe4JNPsUIXi?=
+ =?Windows-1252?Q?FWD3ualv/bF1Wv4A8kvNwe64bfr1aTb257yKCLtbfGtoCGaO7KQiayxM?=
+ =?Windows-1252?Q?AYAWNXI2r7DjXT9oxy9JqRgurFbhbS1t?=
+Content-Type: text/plain; charset="Windows-1252"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH bpf-next v3 2/8] bpf: Create links for BPF struct_ops
- maps.
-Content-Language: en-US, en-ZW
-To:     Martin KaFai Lau <martin.lau@linux.dev>,
-        Kui-Feng Lee <kuifeng@meta.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, song@kernel.org,
-        kernel-team@meta.com, andrii@kernel.org, sdf@google.com
-References: <20230303012122.852654-1-kuifeng@meta.com>
- <20230303012122.852654-3-kuifeng@meta.com>
- <1e7a3b7b-7693-14d9-9eb4-7a516badba95@linux.dev>
-From:   Kui-Feng Lee <sinquersw@gmail.com>
-In-Reply-To: <1e7a3b7b-7693-14d9-9eb4-7a516badba95@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR00MB1007.namprd00.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7937d30f-2ccc-4a1c-1b53-08db1f37f9e6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Mar 2023 18:15:47.9014
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: GgiV2Y0rNs2hBhul4DXPMe71R/onp4Okus81KNyGUWwcjhshAGwQCHtgZ/o5lLQNkLDn398D+2hFEGNJLt7G1A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY3PR00MB1390
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-
-
-On 3/6/23 18:11, Martin KaFai Lau wrote:
-> On 3/2/23 5:21 PM, Kui-Feng Lee wrote:
->> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
->> index cb837f42b99d..b845be719422 100644
->> --- a/include/linux/bpf.h
->> +++ b/include/linux/bpf.h
->> @@ -1396,6 +1396,11 @@ struct bpf_link {
->>       struct work_struct work;
->>   };
->> +struct bpf_struct_ops_link {
->> +    struct bpf_link link;
->> +    struct bpf_map __rcu *map;
-> 
-> __rcu is only needed after the link_update change in patch 5?
-> It is fine to keep it in this patch but please leave a comment in the 
-> commit message.
-> 
-> Does 'struct bpf_struct_ops_link' have to be in bpf.h?
-> 
->> +};
->> +
->>   struct bpf_link_ops {
->>       void (*release)(struct bpf_link *link);
->>       void (*dealloc)(struct bpf_link *link);
->> @@ -1964,6 +1969,7 @@ int bpf_link_new_fd(struct bpf_link *link);
->>   struct file *bpf_link_new_file(struct bpf_link *link, int 
->> *reserved_fd);
->>   struct bpf_link *bpf_link_get_from_fd(u32 ufd);
->>   struct bpf_link *bpf_link_get_curr_or_next(u32 *id);
->> +int bpf_struct_ops_link_create(union bpf_attr *attr);
->>   int bpf_obj_pin_user(u32 ufd, const char __user *pathname);
->>   int bpf_obj_get_user(const char __user *pathname, int flags);
->> @@ -2308,6 +2314,11 @@ static inline void bpf_link_put(struct bpf_link 
->> *link)
->>   {
->>   }
->> +static inline int bpf_struct_ops_link_create(union bpf_attr *attr)
->> +{
->> +    return -EOPNOTSUPP;
->> +}
-> 
-> Is this currently under '#ifdef CONFIG_BPF_SYSCALL' alone?
-> 
-> Not sure if it is correct. Please double check.
-> 
-> ifeq ($(CONFIG_BPF_JIT),y)
-> obj-$(CONFIG_BPF_SYSCALL) += bpf_struct_ops.o
-> obj-$(CONFIG_BPF_SYSCALL) += cpumask.o
-> obj-${CONFIG_BPF_LSM} += bpf_lsm.o
-> endif
-> 
-> obj-$(CONFIG_BPF_SYSCALL) += syscall.o ...
-
-You are right! Should be under CONFIG_BPF_JIT.
-
-> 
->> +
->>   static inline int bpf_obj_get_user(const char __user *pathname, int 
->> flags)
->>   {
->>       return -EOPNOTSUPP;
->> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
->> index 17afd2b35ee5..cd0ff39981e8 100644
->> --- a/include/uapi/linux/bpf.h
->> +++ b/include/uapi/linux/bpf.h
->> @@ -1033,6 +1033,7 @@ enum bpf_attach_type {
->>       BPF_PERF_EVENT,
->>       BPF_TRACE_KPROBE_MULTI,
->>       BPF_LSM_CGROUP,
->> +    BPF_STRUCT_OPS,
->>       __MAX_BPF_ATTACH_TYPE
->>   };
->> @@ -1266,6 +1267,9 @@ enum {
->>   /* Create a map that is suitable to be an inner map with dynamic max 
->> entries */
->>       BPF_F_INNER_MAP        = (1U << 12),
->> +
->> +/* Create a map that will be registered/unregesitered by the backed 
->> bpf_link */
->> +    BPF_F_LINK        = (1U << 13),
->>   };
->>   /* Flags for BPF_PROG_QUERY. */
->> @@ -1507,7 +1511,10 @@ union bpf_attr {
->>       } task_fd_query;
->>       struct { /* struct used by BPF_LINK_CREATE command */
->> -        __u32        prog_fd;    /* eBPF program to attach */
->> +        union {
->> +            __u32        prog_fd;    /* eBPF program to attach */
->> +            __u32        map_fd;        /* eBPF struct_ops to attach */
-> 
-> nit. Remove eBPF. "struct_ops to attach"
-> 
->> +        };
->>           union {
->>               __u32        target_fd;    /* object to attach to */
->>               __u32        target_ifindex; /* target ifindex */
->> @@ -6354,6 +6361,9 @@ struct bpf_link_info {
->>           struct {
->>               __u32 ifindex;
->>           } xdp;
->> +        struct {
->> +            __u32 map_id;
->> +        } struct_ops;
->>       };
->>   } __attribute__((aligned(8)));
->> diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
->> index bba03b6b010b..9ec675576d97 100644
->> --- a/kernel/bpf/bpf_struct_ops.c
->> +++ b/kernel/bpf/bpf_struct_ops.c
->> @@ -14,6 +14,7 @@
->>   enum bpf_struct_ops_state {
->>       BPF_STRUCT_OPS_STATE_INIT,
->> +    BPF_STRUCT_OPS_STATE_READY,
-> 
-> Please add it to the end. Although it is not in uapi, try not to disrupt 
-> the userspace introspection tool if it does not have to.
-> 
-
-Got it!
-
->>       BPF_STRUCT_OPS_STATE_INUSE,
->>       BPF_STRUCT_OPS_STATE_TOBEFREE,
->>   };
->> @@ -494,11 +495,19 @@ static int bpf_struct_ops_map_update_elem(struct 
->> bpf_map *map, void *key,
->>           *(unsigned long *)(udata + moff) = prog->aux->id;
->>       }
->> -    bpf_map_inc(map);
->> -
->>       set_memory_rox((long)st_map->image, 1);
->> +    if (st_map->map.map_flags & BPF_F_LINK) {
->> +        /* Let bpf_link handle registration & unregistration.
->> +         *
->> +         * Pair with smp_load_acquire() during lookup_elem().
->> +         */
->> +        smp_store_release(&kvalue->state, BPF_STRUCT_OPS_STATE_READY);
->> +        goto unlock;
->> +    }
->> +
->>       err = st_ops->reg(kdata);
->>       if (likely(!err)) {
->> +        bpf_map_inc(map);
->>           /* Pair with smp_load_acquire() during lookup_elem().
->>            * It ensures the above udata updates (e.g. prog->aux->id)
->>            * can be seen once BPF_STRUCT_OPS_STATE_INUSE is set.
->> @@ -514,7 +523,6 @@ static int bpf_struct_ops_map_update_elem(struct 
->> bpf_map *map, void *key,
->>        */
->>       set_memory_nx((long)st_map->image, 1);
->>       set_memory_rw((long)st_map->image, 1);
->> -    bpf_map_put(map);
->>   reset_unlock:
->>       bpf_struct_ops_map_put_progs(st_map);
->> @@ -532,10 +540,15 @@ static int bpf_struct_ops_map_delete_elem(struct 
->> bpf_map *map, void *key)
->>       struct bpf_struct_ops_map *st_map;
->>       st_map = (struct bpf_struct_ops_map *)map;
->> +    if (st_map->map.map_flags & BPF_F_LINK)
->> +        return -EOPNOTSUPP;
->> +
->>       prev_state = cmpxchg(&st_map->kvalue.state,
->>                    BPF_STRUCT_OPS_STATE_INUSE,
->>                    BPF_STRUCT_OPS_STATE_TOBEFREE);
->>       switch (prev_state) {
->> +    case BPF_STRUCT_OPS_STATE_READY:
->> +        return -EOPNOTSUPP;
-> 
-> If this case never happens, this case should be removed. The WARN in the 
-> default case at the end is a better handling
-
-No, it never happens.  I will remove it.
-
-> 
->>       case BPF_STRUCT_OPS_STATE_INUSE:
->>           st_map->st_ops->unreg(&st_map->kvalue.data);
->>           bpf_map_put(map);
->> @@ -618,7 +631,7 @@ static void bpf_struct_ops_map_free_rcu(struct 
->> bpf_map *map)
->>   static int bpf_struct_ops_map_alloc_check(union bpf_attr *attr)
->>   {
->>       if (attr->key_size != sizeof(unsigned int) || attr->max_entries 
->> != 1 ||
->> -        attr->map_flags || !attr->btf_vmlinux_value_type_id)
->> +        (attr->map_flags & ~BPF_F_LINK) || 
->> !attr->btf_vmlinux_value_type_id)
->>           return -EINVAL;
->>       return 0;
->>   }
->> @@ -714,3 +727,100 @@ void bpf_struct_ops_put(const void *kdata)
->>       bpf_map_put(&st_map->map);
->>   }
->> +
->> +static void bpf_struct_ops_map_link_dealloc(struct bpf_link *link)
->> +{
->> +    struct bpf_struct_ops_link *st_link;
->> +    struct bpf_struct_ops_map *st_map;
->> +
->> +    st_link = container_of(link, struct bpf_struct_ops_link, link);
->> +    if (st_link->map) {
-> 
-> Will map ever be NULL
-
-No, it is never NULL after removing the detach feature.
-
-> 
->> +        st_map = (struct bpf_struct_ops_map *)st_link->map;
->> +        st_map->st_ops->unreg(&st_map->kvalue.data);
->> +        bpf_map_put(st_link->map);
->> +    }
->> +    kfree(st_link);
->> +}
->> +
->> +static void bpf_struct_ops_map_link_show_fdinfo(const struct bpf_link 
->> *link,
->> +                        struct seq_file *seq)
->> +{
->> +    struct bpf_struct_ops_link *st_link;
->> +    struct bpf_map *map;
->> +
->> +    st_link = container_of(link, struct bpf_struct_ops_link, link);
->> +    rcu_read_lock_trace();
-> 
-> Should it be rcu_read_lock()?
-
-Got it!
-
-> 
->> +    map = rcu_dereference(st_link->map);
->> +    if (map)
->> +        seq_printf(seq, "map_id:\t%d\n", map->id);
->> +    rcu_read_unlock_trace();
->> +}
->> +
->> +static int bpf_struct_ops_map_link_fill_link_info(const struct 
->> bpf_link *link,
->> +                           struct bpf_link_info *info)
->> +{
->> +    struct bpf_struct_ops_link *st_link;
->> +    struct bpf_map *map;
->> +
->> +    st_link = container_of(link, struct bpf_struct_ops_link, link);
->> +    rcu_read_lock_trace();
->> +    map = rcu_dereference(st_link->map);
->> +    if (map)
->> +        info->struct_ops.map_id = map->id;
->> +    rcu_read_unlock_trace();
->> +    return 0;
->> +}
->> +
->> +static const struct bpf_link_ops bpf_struct_ops_map_lops = {
->> +    .dealloc = bpf_struct_ops_map_link_dealloc,
->> +    .show_fdinfo = bpf_struct_ops_map_link_show_fdinfo,
->> +    .fill_link_info = bpf_struct_ops_map_link_fill_link_info,
->> +};
->> +
->> +int bpf_struct_ops_link_create(union bpf_attr *attr)
->> +{
->> +    struct bpf_struct_ops_link *link = NULL;
->> +    struct bpf_link_primer link_primer;
->> +    struct bpf_struct_ops_map *st_map;
->> +    struct bpf_map *map;
->> +    int err;
->> +
->> +    map = bpf_map_get(attr->link_create.map_fd);
->> +    if (!map)
->> +        return -EINVAL;
->> +
->> +    st_map = (struct bpf_struct_ops_map *)map;
->> +
->> +    if (map->map_type != BPF_MAP_TYPE_STRUCT_OPS || !(map->map_flags 
->> & BPF_F_LINK) ||
->> +        /* Pair with smp_store_release() during map_update */
->> +        smp_load_acquire(&st_map->kvalue.state) != 
->> BPF_STRUCT_OPS_STATE_READY) {
->> +        err = -EINVAL;
->> +        goto err_out;
->> +    }
->> +
->> +    link = kzalloc(sizeof(*link), GFP_USER);
->> +    if (!link) {
->> +        err = -ENOMEM;
->> +        goto err_out;
->> +    }
->> +    bpf_link_init(&link->link, BPF_LINK_TYPE_STRUCT_OPS, 
->> &bpf_struct_ops_map_lops, NULL);
->> +    link->map = map;
-> 
-> RCU_INIT_POINTER().
-
-Got it!
-
-> 
->> +
->> +    err = bpf_link_prime(&link->link, &link_primer);
->> +    if (err)
->> +        goto err_out;
->> +
->> +    err = st_map->st_ops->reg(st_map->kvalue.data);
->> +    if (err) {
->> +        bpf_link_cleanup(&link_primer);
->> +        goto err_out;
->> +    }
->> +
->> +    return bpf_link_settle(&link_primer);
->> +
->> +err_out:
->> +    bpf_map_put(map);
->> +    kfree(link);
->> +    return err;
->> +}
->> +
->> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
->> index 358a0e40555e..3db4938212d6 100644
->> --- a/kernel/bpf/syscall.c
->> +++ b/kernel/bpf/syscall.c
->> @@ -2743,10 +2743,11 @@ void bpf_link_inc(struct bpf_link *link)
->>   static void bpf_link_free(struct bpf_link *link)
->>   {
->>       bpf_link_free_id(link->id);
->> +    /* detach BPF program, clean up used resources */
->>       if (link->prog) {
->> -        /* detach BPF program, clean up used resources */
-> 
-> This comment move seems unnecessary.
-> 
->>           link->ops->release(link);
->>           bpf_prog_put(link->prog);
->> +        /* The struct_ops links clean up map by them-selves. */
-> 
-> This also seems unnecessary to only spell out for struct_ops link. Each 
-> specific link type does its cleanup in ->dealloc.
-> 
-
-Got it!
-
-> 
+Hi Quentin,=0A=
+=A0=0A=
+My apologies, I linked to the incorrect line. In particular, I want to cont=
+inue iterating if the call to bpf_map_get_fd_by_id fails. I cannot disclose=
+ at this time our use case due to confidentiality, but I can imagine a scen=
+ario for example if a kernel module wants to override the return value for =
+some reason (not our use case, but a legitimate one). Below is my patch.=0A=
+=0A=
+From 7f3eb5c045ec0169435c18af448ebe5eeb642cc6 Mon Sep 17 00:00:00 2001=0A=
+From: Rae Marks ramark@microsoft.com=0A=
+Date: Tue, 7 Mar 2023 10:06:34 -0800=0A=
+Subject: [PATCH] bpftool: Continue iterating if individual map operations f=
+ail=0A=
+=0A=
+If a call to bpf_map_get_fd_by_id or bpf_map_get_info_by_fd fails,=0A=
+the current behavior is to bail out of the loop, which means no=0A=
+other maps can be displayed or modified. With this change, the loop=0A=
+will continue, so an error with one map will not affect the others.=0A=
+---=0A=
+ src/map.c | 4 ++--=0A=
+ 1 file changed, 2 insertions(+), 2 deletions(-)=0A=
+=0A=
+diff --git a/src/map.c b/src/map.c=0A=
+index aaeb893..17074c1 100644=0A=
+--- a/src/map.c=0A=
++++ b/src/map.c=0A=
+@@ -705,14 +705,14 @@ static int do_show(int argc, char **argv)=0A=
+ 				continue;=0A=
+ 			p_err("can't get map by id (%u): %s",=0A=
+ 			      id, strerror(errno));=0A=
+-			break;=0A=
++			continue;=0A=
+ 		}=0A=
+ =0A=
+ 		err =3D bpf_map_get_info_by_fd(fd, &info, &len);=0A=
+ 		if (err) {=0A=
+ 			p_err("can't get map info: %s", strerror(errno));=0A=
+ 			close(fd);=0A=
+-			break;=0A=
++			continue;=0A=
+ 		}=0A=
+ =0A=
+ 		if (json_output)=0A=
+-- =0A=
+2.34.1=0A=
+=0A=
+=0A=
+Thank you,=0A=
+Rae=0A=
+=0A=
+=A0=0A=
+From: Quentin Monnet <quentin@isovalent.com>=0A=
+Date: Tuesday, March 7, 2023 at 1:41 AM=0A=
+To: Rae Marks <Raeanne.Marks@microsoft.com>, bpf@vger.kernel.org <bpf@vger.=
+kernel.org>=0A=
+Cc: Leonid Liansky <lliansky@microsoft.com>=0A=
+Subject: [EXTERNAL] Re: Suggested patch for bpftool=0A=
+[You don't often get email from quentin@isovalent.com. Learn why this is im=
+portant at https://aka.ms/LearnAboutSenderIdentification ]=0A=
+=0A=
+2023-03-06 21:46 UTC+0000 ~ Rae Marks <Raeanne.Marks@microsoft.com>=0A=
+> Hello,=0A=
+>=0A=
+> Thank you for your work on bpftool, a great resource.=0A=
+>=0A=
+> I have a legitimate reason why bpftool might fail to open an individual m=
+ap to dump its information. I would like to submit a patch so that it does =
+not bail from the loop iterating over all maps on the first map error. With=
+ this change, one map failing to open would not affect showing information =
+about other maps. Specifically, I=92d like to change this line (https://nam=
+06.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgithub.com%2Flibbp=
+f%2Fbpftool%2Fblob%2Fmaster%2Fsrc%2Fmap.c%23L699&data=3D05%7C01%7CRaeanne.M=
+arks%40microsoft.com%7C851d494f2eb6471a13d408db1ef029a3%7C72f988bf86f141af9=
+1ab2d7cd011db47%7C1%7C0%7C638137789073658744%7CUnknown%7CTWFpbGZsb3d8eyJWIj=
+oiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7=
+C&sdata=3DeFnU5gwT%2Fc5Zbk7mYd5cbUnTeMYz2ee6Y%2B8mXjzofJo%3D&reserved=3D0) =
+to be a continue rather than a break.=0A=
+>=0A=
+> How can I submit a patch if you approve of this suggestion? I see that th=
+e GitHub mirror of libbpf/bpftool is not the appropriate place, according t=
+o the README.=0A=
+>=0A=
+> Thank you!=0A=
+>=0A=
+> Rae Marks=0A=
+> Senior Software Engineer | Microsoft=0A=
+>=0A=
+=0A=
+Hi Rae,=0A=
+=0A=
+Thanks for reaching out.=0A=
+=0A=
+Let me start with how to submit. The GitHub repository is just a mirror=0A=
+indeed, the sources of bpftool are maintained as part of the Linux=0A=
+kernel repository. This means that patches should be sent to this=0A=
+mailing list, please refer to [0] for more details.=0A=
+=0A=
+Regarding the patch that you propose, I'd welcome a way to keep=0A=
+iterating if we fail to retrieve the id for the following map, but we=0A=
+can't just "continue" in the loop if we don't have the id from=0A=
+bpf_map_get_next_id(): If we don't get a valid id, we can't reuse it on=0A=
+the following loop iteration to fetch the id of the following map. We=0A=
+would have to start again with a null id and to loop over all maps again.=
+=0A=
+=0A=
+Can I ask in what context you saw bpftool stop before printing all the maps=
+?=0A=
+=0A=
+[0] https://nam06.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fdoc=
+s.kernel.org%2Fbpf%2Fbpf_devel_QA.html%23submitting-patches&data=3D05%7C01%=
+7CRaeanne.Marks%40microsoft.com%7C851d494f2eb6471a13d408db1ef029a3%7C72f988=
+bf86f141af91ab2d7cd011db47%7C1%7C0%7C638137789073658744%7CUnknown%7CTWFpbGZ=
+sb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3=
+000%7C%7C%7C&sdata=3DLVZMI%2Be4och7tG%2BG7JuW6xuWwgoXNHgZjkiT%2B57rGNk%3D&r=
+eserved=3D0=0A=
+=0A=
+Thanks,=0A=
+Quentin=
