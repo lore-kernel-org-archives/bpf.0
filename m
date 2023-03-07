@@ -2,110 +2,239 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30E05C6FD1E
-	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 21:18:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 967E1C6FA99
+	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 21:53:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbjCGVSk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Mar 2023 16:18:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54100 "EHLO
+        id S229823AbjCGVxq convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 7 Mar 2023 16:53:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231370AbjCGVSi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Mar 2023 16:18:38 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F23099D65;
-        Tue,  7 Mar 2023 13:18:37 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id ec29so27021601edb.6;
-        Tue, 07 Mar 2023 13:18:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678223915;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bT9FiASK1DB4QbD0wXIRsqFb1t5m7/WMXyE4zipQBgs=;
-        b=XZRUHZNlOVWWar8OmQxc4l18Ns4Ay3zk1r5/iP0nGgvrTarrD1WtX4t7ZDUeAU+Kmn
-         y3gux0xqokeG1SF1sfRK8kH6Fs4eK/RB3DJDFJateRr3aPzJO/rdAB33D1DxBCmMvug1
-         2+t/rOZmMi9aCK9I8RXUjUslBeJtPNIejQlHCpUdxA/6eyfbUFM9w37VUA1uKho+LTWc
-         CC6uwViT8Xbi5YfZ5sxgklTr+38MZrlyneYHCqEEFrcAi/gzGISimm7UQJKVDiZYkpcn
-         8L4DjJ3sPxFDMWliMIZaLeEF/uitLcKCkMjVzBypmiqjyFBvfKhUi2jAGDUpLX9HbWYf
-         1h1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678223915;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bT9FiASK1DB4QbD0wXIRsqFb1t5m7/WMXyE4zipQBgs=;
-        b=F+lbrUxRtBxt4NZRLnH5iJsbhQQBfN120YX2ExOnMQXLymfoPa7sOm+LT2CmedHG+l
-         2PfaUHUrLPiGnuTB9ThcFu0I3miBbQGE1bNVF4rHCoLetN+l7XAU2ALTF/M97CGmaWJ5
-         ODN3XT9sD+5KIQEvdcAN2PB+iMeUxPsTshxQcQCFPADOIfjljIjRZ94AmXIwPAUcVWo3
-         yBgLJTpqxJk8m1/Zp7I23tDtWKjqxBYcbu7b4YQbngqY6JpZi019ORtphKV6dZM4BoZq
-         VeJSMpNfOWq785+ONJNGp/tk3sRyYJ2oVfDQoeOJr1cqaJA0qlFkZTfwnmFsajPdhTdJ
-         hFSg==
-X-Gm-Message-State: AO0yUKUj72GNPDC19RdZn+Cx8brRvDRrelUQpdn4jn/hZEBuAADeH/V8
-        FGYZ86zONEsMpSxhf30FhSm7zOgkVHudPLvKshqeQ1r2HzY=
-X-Google-Smtp-Source: AK7set+Se0iunflJpZCYnoGyjZ2gQplgrdTsGwS0vBTFJC6JhbRPQsBREQBt88sd9cj+dWd/Nc5Ban1xnd1TF7pS/ps=
-X-Received: by 2002:a17:906:948:b0:8b1:2898:2138 with SMTP id
- j8-20020a170906094800b008b128982138mr7898708ejd.3.1678223915375; Tue, 07 Mar
- 2023 13:18:35 -0800 (PST)
+        with ESMTP id S231570AbjCGVxo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Mar 2023 16:53:44 -0500
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2407B94A6C
+        for <bpf@vger.kernel.org>; Tue,  7 Mar 2023 13:53:42 -0800 (PST)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 327Kg6KJ003418
+        for <bpf@vger.kernel.org>; Tue, 7 Mar 2023 13:53:42 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0001303.ppops.net (PPS) with ESMTPS id 3p4px6t347-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 07 Mar 2023 13:53:41 -0800
+Received: from twshared32017.39.prn1.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Tue, 7 Mar 2023 13:53:40 -0800
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id 1A63429835355; Tue,  7 Mar 2023 13:53:33 -0800 (PST)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
+        Tejun Heo <tj@kernel.org>
+Subject: [PATCH v2 bpf-next 1/8] bpf: factor out fetching basic kfunc metadata
+Date:   Tue, 7 Mar 2023 13:53:22 -0800
+Message-ID: <20230307215329.3895377-2-andrii@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230307215329.3895377-1-andrii@kernel.org>
+References: <20230307215329.3895377-1-andrii@kernel.org>
 MIME-Version: 1.0
-References: <cover.1677526810.git.dxu@dxuuu.xyz> <20230227230338.awdzw57e4uzh4u7n@MacBook-Pro-6.local>
- <20230228015712.clq6kyrsd7rrklbz@kashmir.localdomain> <CAADnVQ+a633QyZgkbXfRiT_WRbPgr5n8RN0w=ntEkBHUeqRcbw@mail.gmail.com>
- <20230228231716.a5uwc4tdo3kjlkg7@aviatrix-fedora.tail1b9c7.ts.net>
- <CAADnVQKK+a_0effQW5qBSq1AXoQOJg5-79q3d1NWJ2Vv8SHvOw@mail.gmail.com>
- <20230307194801.mopwvidrkrybm7h5@kashmir.localdomain> <20230307201156.GF13059@breakpoint.cc>
-In-Reply-To: <20230307201156.GF13059@breakpoint.cc>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 7 Mar 2023 13:18:23 -0800
-Message-ID: <CAADnVQJXpkzic+v-TTn2o8hAu94S2ARq86DUamKiMEqmJ1zy+g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/8] Support defragmenting IPv(4|6) packets in BPF
-To:     Florian Westphal <fw@strlen.de>
-Cc:     Daniel Xu <dxu@dxuuu.xyz>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: CveZPqSoMapYxyQs6wQu5nQFMr0pHEtp
+X-Proofpoint-GUID: CveZPqSoMapYxyQs6wQu5nQFMr0pHEtp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-07_16,2023-03-07_01,2023-02-09_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 12:11=E2=80=AFPM Florian Westphal <fw@strlen.de> wro=
-te:
->
-> Daniel Xu <dxu@dxuuu.xyz> wrote:
-> > From my reading (I'll run some tests later) it looks like netfilter
-> > will defrag all ipv4/ipv6 packets in any netns with conntrack enabled.
-> > It appears to do so in NF_INET_PRE_ROUTING.
->
-> Yes, and output.
->
-> > One thing we would need though are (probably kfunc) wrappers around
-> > nf_defrag_ipv4_enable() and nf_defrag_ipv6_enable() to ensure BPF progs
-> > are not transitively depending on defrag support from other netfilter
-> > modules.
-> >
-> > The exact mechanism would probably need some thinking, as the above
-> > functions kinda rely on module_init() and module_exit() semantics. We
-> > cannot make the prog bump the refcnt every time it runs -- it would
-> > overflow.  And it would be nice to automatically free the refcnt when
-> > prog is unloaded.
->
-> Probably add a flag attribute that is evaluated at BPF_LINK time, so
-> progs can say they need defrag enabled.  Same could be used to request
-> conntrack enablement.
->
-> Will need some glue on netfilter side to handle DEFRAG=3Dm, but we alread=
-y
-> have plenty of those.
+Factor out logic to fetch basic kfunc metadata based on struct bpf_insn.
+This is not exactly short or trivial code to just copy/paste, and this
+information is sometimes necessary in other parts of verifier logic.
+Subsequent patches will rely on this to determine if an instruction is
+a kfunc call to iterator next method.
 
-All makes perfect sense to me.
-It's cleaner than a special netdevice.
-ipv4_conntrack_defrag() is pretty neat. I didn't know about it.
-If we can reuse it as-is that would be ideal.
-Conceptually it fits perfectly.
-If we cannot reuse it (for whatever unlikely reason) I would
-argue that TC hook should gain similar functionality.
+No functional changes intended, including that verbose() warning
+behavior when kfunc is not allowed for a particular program type.
+
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ kernel/bpf/verifier.c | 92 +++++++++++++++++++++++++++----------------
+ 1 file changed, 59 insertions(+), 33 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index b2116ca78d9a..8d40fba6a1c0 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -10079,24 +10079,21 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+ 	return 0;
+ }
+ 
+-static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+-			    int *insn_idx_p)
++static int fetch_kfunc_meta(struct bpf_verifier_env *env,
++			    struct bpf_insn *insn,
++			    struct bpf_kfunc_call_arg_meta *meta,
++			    const char **kfunc_name)
+ {
+-	const struct btf_type *t, *func, *func_proto, *ptr_type;
+-	u32 i, nargs, func_id, ptr_type_id, release_ref_obj_id;
+-	struct bpf_reg_state *regs = cur_regs(env);
+-	const char *func_name, *ptr_type_name;
+-	bool sleepable, rcu_lock, rcu_unlock;
+-	struct bpf_kfunc_call_arg_meta meta;
+-	int err, insn_idx = *insn_idx_p;
+-	const struct btf_param *args;
+-	const struct btf_type *ret_t;
++	const struct btf_type *func, *func_proto;
++	u32 func_id, *kfunc_flags;
++	const char *func_name;
+ 	struct btf *desc_btf;
+-	u32 *kfunc_flags;
+ 
+-	/* skip for now, but return error when we find this in fixup_kfunc_call */
++	if (kfunc_name)
++		*kfunc_name = NULL;
++
+ 	if (!insn->imm)
+-		return 0;
++		return -EINVAL;
+ 
+ 	desc_btf = find_kfunc_desc_btf(env, insn->off);
+ 	if (IS_ERR(desc_btf))
+@@ -10105,22 +10102,51 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	func_id = insn->imm;
+ 	func = btf_type_by_id(desc_btf, func_id);
+ 	func_name = btf_name_by_offset(desc_btf, func->name_off);
++	if (kfunc_name)
++		*kfunc_name = func_name;
+ 	func_proto = btf_type_by_id(desc_btf, func->type);
+ 
+ 	kfunc_flags = btf_kfunc_id_set_contains(desc_btf, resolve_prog_type(env->prog), func_id);
+ 	if (!kfunc_flags) {
+-		verbose(env, "calling kernel function %s is not allowed\n",
+-			func_name);
+ 		return -EACCES;
+ 	}
+ 
+-	/* Prepare kfunc call metadata */
+-	memset(&meta, 0, sizeof(meta));
+-	meta.btf = desc_btf;
+-	meta.func_id = func_id;
+-	meta.kfunc_flags = *kfunc_flags;
+-	meta.func_proto = func_proto;
+-	meta.func_name = func_name;
++	memset(meta, 0, sizeof(*meta));
++	meta->btf = desc_btf;
++	meta->func_id = func_id;
++	meta->kfunc_flags = *kfunc_flags;
++	meta->func_proto = func_proto;
++	meta->func_name = func_name;
++
++	return 0;
++}
++
++static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
++			    int *insn_idx_p)
++{
++	const struct btf_type *t, *ptr_type;
++	u32 i, nargs, ptr_type_id, release_ref_obj_id;
++	struct bpf_reg_state *regs = cur_regs(env);
++	const char *func_name, *ptr_type_name;
++	bool sleepable, rcu_lock, rcu_unlock;
++	struct bpf_kfunc_call_arg_meta meta;
++	struct bpf_insn_aux_data *insn_aux;
++	int err, insn_idx = *insn_idx_p;
++	const struct btf_param *args;
++	const struct btf_type *ret_t;
++	struct btf *desc_btf;
++
++	/* skip for now, but return error when we find this in fixup_kfunc_call */
++	if (!insn->imm)
++		return 0;
++
++	err = fetch_kfunc_meta(env, insn, &meta, &func_name);
++	if (err == -EACCES && func_name)
++		verbose(env, "calling kernel function %s is not allowed\n", func_name);
++	if (err)
++		return err;
++	desc_btf = meta.btf;
++	insn_aux = &env->insn_aux_data[insn_idx];
+ 
+ 	if (is_kfunc_destructive(&meta) && !capable(CAP_SYS_BOOT)) {
+ 		verbose(env, "destructive kfunc calls require CAP_SYS_BOOT capability\n");
+@@ -10173,7 +10199,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		err = release_reference(env, regs[meta.release_regno].ref_obj_id);
+ 		if (err) {
+ 			verbose(env, "kfunc %s#%d reference has not been acquired before\n",
+-				func_name, func_id);
++				func_name, meta.func_id);
+ 			return err;
+ 		}
+ 	}
+@@ -10185,14 +10211,14 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		err = ref_convert_owning_non_owning(env, release_ref_obj_id);
+ 		if (err) {
+ 			verbose(env, "kfunc %s#%d conversion of owning ref to non-owning failed\n",
+-				func_name, func_id);
++				func_name, meta.func_id);
+ 			return err;
+ 		}
+ 
+ 		err = release_reference(env, release_ref_obj_id);
+ 		if (err) {
+ 			verbose(env, "kfunc %s#%d reference has not been acquired before\n",
+-				func_name, func_id);
++				func_name, meta.func_id);
+ 			return err;
+ 		}
+ 	}
+@@ -10202,7 +10228,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 					set_rbtree_add_callback_state);
+ 		if (err) {
+ 			verbose(env, "kfunc %s#%d failed callback verification\n",
+-				func_name, func_id);
++				func_name, meta.func_id);
+ 			return err;
+ 		}
+ 	}
+@@ -10211,7 +10237,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		mark_reg_not_init(env, regs, caller_saved[i]);
+ 
+ 	/* Check return type */
+-	t = btf_type_skip_modifiers(desc_btf, func_proto->type, NULL);
++	t = btf_type_skip_modifiers(desc_btf, meta.func_proto->type, NULL);
+ 
+ 	if (is_kfunc_acquire(&meta) && !btf_type_is_struct_ptr(meta.btf, t)) {
+ 		/* Only exception is bpf_obj_new_impl */
+@@ -10260,11 +10286,11 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 				regs[BPF_REG_0].btf = ret_btf;
+ 				regs[BPF_REG_0].btf_id = ret_btf_id;
+ 
+-				env->insn_aux_data[insn_idx].obj_new_size = ret_t->size;
+-				env->insn_aux_data[insn_idx].kptr_struct_meta =
++				insn_aux->obj_new_size = ret_t->size;
++				insn_aux->kptr_struct_meta =
+ 					btf_find_struct_meta(ret_btf, ret_btf_id);
+ 			} else if (meta.func_id == special_kfunc_list[KF_bpf_obj_drop_impl]) {
+-				env->insn_aux_data[insn_idx].kptr_struct_meta =
++				insn_aux->kptr_struct_meta =
+ 					btf_find_struct_meta(meta.arg_obj_drop.btf,
+ 							     meta.arg_obj_drop.btf_id);
+ 			} else if (meta.func_id == special_kfunc_list[KF_bpf_list_pop_front] ||
+@@ -10397,8 +10423,8 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			regs[BPF_REG_0].id = ++env->id_gen;
+ 	} /* else { add_kfunc_call() ensures it is btf_type_is_void(t) } */
+ 
+-	nargs = btf_type_vlen(func_proto);
+-	args = (const struct btf_param *)(func_proto + 1);
++	nargs = btf_type_vlen(meta.func_proto);
++	args = (const struct btf_param *)(meta.func_proto + 1);
+ 	for (i = 0; i < nargs; i++) {
+ 		u32 regno = i + 1;
+ 
+-- 
+2.34.1
+
