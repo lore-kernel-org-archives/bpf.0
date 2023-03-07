@@ -2,89 +2,126 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 720B4C6FD1E
-	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 15:03:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BAF7DC678D5
+	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 15:04:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjCGPDu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Mar 2023 10:03:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46154 "EHLO
+        id S230333AbjCGPEk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Mar 2023 10:04:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbjCGPDO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Mar 2023 10:03:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC557F018;
-        Tue,  7 Mar 2023 06:54:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B04A66137B;
-        Tue,  7 Mar 2023 14:54:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92BB3C433D2;
-        Tue,  7 Mar 2023 14:54:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678200865;
-        bh=Q6sMvWfanLjsj3MsW3n6C9waf2QnfrdIvx9x5kj820c=;
-        h=From:To:Cc:Subject:Date:From;
-        b=pj0Eof2NYyZxloRdV7Iw6Zg2iaZzPFEklsVu1VI20QJBkM0ZjXyTlFzX4pYagk1A6
-         d+KaWnDXvahYTdf3TnKcWrr/IDy3UcS+s5WQcE5/40cOvuVNV885JUGA6eDgKlZNAV
-         nknEwidVM5My42xpOLHSL6nAFaPWZLbDrfLLqyjtReOGe/yXkpk91XcqJn/5vX8KzA
-         Cx6oj9qrsdRD0SOTdORo7XRXA7uqKCMVgyM9yl+dVAfKG2hAdmfToyJvN3tL9HL20S
-         uxcfkug+clSN6f70y4vdx59XvDFay8e1tLZh5Uzrhs1AVuaUPOMEr7hGHRnS1V+W25
-         OZ0174X0shA+w==
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     netdev@vger.kernel.org
-Cc:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        saeedm@nvidia.com, tariqt@nvidia.com, leon@kernel.org,
-        shayagr@amazon.com, akiyano@amazon.com, darinzon@amazon.com,
-        sgoutham@marvell.com, lorenzo.bianconi@redhat.com, toke@redhat.com,
-        teknoraver@meta.com
-Subject: [PATCH net-next 0/8] update xdp_features flag according to NIC re-configuration
-Date:   Tue,  7 Mar 2023 15:53:57 +0100
-Message-Id: <cover.1678200041.git.lorenzo@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        with ESMTP id S229925AbjCGPEN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Mar 2023 10:04:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C086189
+        for <bpf@vger.kernel.org>; Tue,  7 Mar 2023 06:55:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678200925;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4ElbU57L/U3PTF5WXOvXc6DY97zGTuf4IheYllUu9cI=;
+        b=CwRNtEd++bpDzq+wxUzfwOmbiDaHq/55anO5zl58zf+tuEkW+9n1EZjHBMefjeNSGO96DM
+        1govn7K6xQSGo+IGp0cux0MnqokC1u1z74xSrX2f37a55Jy/wHyP1eopfB3F9n8ivrBQO/
+        5l854bRtHzF+iTfSh94rtoRUVhIxy3E=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-115-aVY36gw_MoKVh0TBtqWHhA-1; Tue, 07 Mar 2023 09:55:24 -0500
+X-MC-Unique: aVY36gw_MoKVh0TBtqWHhA-1
+Received: by mail-wr1-f70.google.com with SMTP id l14-20020a5d526e000000b002cd851d79b2so2238517wrc.5
+        for <bpf@vger.kernel.org>; Tue, 07 Mar 2023 06:55:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678200923;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4ElbU57L/U3PTF5WXOvXc6DY97zGTuf4IheYllUu9cI=;
+        b=W/lmA5W0NOw8JVtQDLD3hn7cvBWwh2e0Bz6SA7ac42RFxyNak1NNAbS3Nimstahhae
+         CEMT0ZjBweZgj6602p6QdKpU6OyKhrdGcn2OyvhgpOuLzaHx5SzV+Wt6Rw+1OQUaCaVi
+         1p7Mh0QSsQmCth7C8vU+VlV6ux0o1gAc4cmo6w4DGQMbLzE/CzPiOIJvOc2UdqxSmmpL
+         IAvr+CB3A3PT5+s85yh0wRJAFYVlX+M+RoKswpodx9evXtUjReWWtIToGfM8UQiFdyQR
+         rOHHE5wk8k6YDARQi3bVP0NdgkbW3z78+rbrcqP/HfXaukIy05il2I3PucKlnVxU/NMP
+         mHKw==
+X-Gm-Message-State: AO0yUKX0d5AAZpq/gP2DG3scrs/GSX4yUz+rj3tnIxB+7J0hcGXQvtYt
+        H8PzXRx2pDXHH926+PbDbLJ9qXaV7HS5fCdQcyx3a7aAKFbtF+qyvh3L7SkHt1OJwraH7civ7je
+        i9mA1IKeY8WVz
+X-Received: by 2002:adf:ef45:0:b0:2c7:155c:7dc6 with SMTP id c5-20020adfef45000000b002c7155c7dc6mr9340229wrp.6.1678200923439;
+        Tue, 07 Mar 2023 06:55:23 -0800 (PST)
+X-Google-Smtp-Source: AK7set8VKxGhgV3M7NpJltZYr2QnvRf/SH346H4TD+CQnL+LgDMcTeGrwFNM91dAuPVzhbzBAypRdQ==
+X-Received: by 2002:adf:ef45:0:b0:2c7:155c:7dc6 with SMTP id c5-20020adfef45000000b002c7155c7dc6mr9340217wrp.6.1678200923178;
+        Tue, 07 Mar 2023 06:55:23 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-121-28.dyn.eolo.it. [146.241.121.28])
+        by smtp.gmail.com with ESMTPSA id d18-20020a5d6452000000b002c71dd1109fsm12567568wrw.47.2023.03.07.06.55.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 06:55:22 -0800 (PST)
+Message-ID: <2ad119bd1f24f408921b16eb0ebdf67935d1d880.camel@redhat.com>
+Subject: Re: [PATCH v3 net-next] udp: introduce __sk_mem_schedule() usage
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Jason Xing <kerneljasonxing@gmail.com>, simon.horman@corigine.com,
+        willemdebruijn.kernel@gmail.com, davem@davemloft.net,
+        dsahern@kernel.org, edumazet@google.com, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
+Date:   Tue, 07 Mar 2023 15:55:20 +0100
+In-Reply-To: <20230307015620.18301-1-kerneljasonxing@gmail.com>
+References: <20230307015620.18301-1-kerneljasonxing@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Take into account possible NIC configuration changes (e.g. LRO or tx/rx queues
-reconfiguration) setting device xdp_features flag.
-Introduce xdp_set_features_flag utility routine.
+On Tue, 2023-03-07 at 09:56 +0800, Jason Xing wrote:
+> From: Jason Xing <kernelxing@tencent.com>
+>=20
+> Keep the accounting schema consistent across different protocols
+> with __sk_mem_schedule(). Besides, it adjusts a little bit on how
+> to calculate forward allocated memory compared to before. After
+> applied this patch, we could avoid receive path scheduling extra
+> amount of memory.
+>=20
+> Link: https://lore.kernel.org/lkml/20230221110344.82818-1-kerneljasonxing=
+@gmail.com/
+> Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> ---
+> v3:
+> 1) get rid of inline suggested by Simon Horman
+>=20
+> v2:
+> 1) change the title and body message
+> 2) use __sk_mem_schedule() instead suggested by Paolo Abeni
+> ---
+>  net/ipv4/udp.c | 31 ++++++++++++++++++-------------
+>  1 file changed, 18 insertions(+), 13 deletions(-)
+>=20
+> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+> index c605d171eb2d..60473781933c 100644
+> --- a/net/ipv4/udp.c
+> +++ b/net/ipv4/udp.c
+> @@ -1531,10 +1531,23 @@ static void busylock_release(spinlock_t *busy)
+>  		spin_unlock(busy);
+>  }
+> =20
+> +static int udp_rmem_schedule(struct sock *sk, int size)
+> +{
+> +	int delta;
+> +
+> +	delta =3D size - sk->sk_forward_alloc;
+> +	if (delta > 0 && !__sk_mem_schedule(sk, delta, SK_MEM_RECV))
+> +		return -ENOBUFS;
+> +
+> +	sk->sk_forward_alloc -=3D size;
 
-Lorenzo Bianconi (7):
-  tools: ynl: fix render-max for flags definition
-  tools: ynl: fix get_mask utility routine
-  xdp: add xdp_set_features_flag utility routine
-  net: thunderx: take into account xdp_features setting tx/rx queues
-  net: ena: take into account xdp_features setting tx/rx queues
-  veth: take into account device reconfiguration for xdp_features flag
-  net/mlx5e: take into account device reconfiguration for xdp_features
-    flag
+I think it's better if you maintain the above statement outside of this
+helper: it's a bit confusing that rmem_schedule() actually consumes fwd
+memory.
 
-Matteo Croce (1):
-  mvpp2: take care of xdp_features when reconfiguring queues
+Side note
 
- Documentation/netlink/specs/netdev.yaml       |  1 +
- drivers/net/ethernet/amazon/ena/ena_ethtool.c | 15 +++++--
- drivers/net/ethernet/amazon/ena/ena_netdev.c  |  6 ++-
- .../ethernet/cavium/thunder/nicvf_ethtool.c   | 17 ++++---
- .../net/ethernet/cavium/thunder/nicvf_main.c  |  4 +-
- .../net/ethernet/marvell/mvpp2/mvpp2_main.c   | 15 +++++--
- drivers/net/ethernet/mellanox/mlx5/core/en.h  |  1 +
- .../ethernet/mellanox/mlx5/core/en_ethtool.c  | 10 ++++-
- .../net/ethernet/mellanox/mlx5/core/en_main.c | 45 ++++++++++++++++---
- .../net/ethernet/mellanox/mlx5/core/en_rep.c  |  3 ++
- drivers/net/veth.c                            | 42 +++++++++++++++--
- include/net/xdp.h                             | 11 +++++
- include/uapi/linux/netdev.h                   |  2 +
- net/core/xdp.c                                | 26 ++++++++---
- tools/include/uapi/linux/netdev.h             |  2 +
- tools/net/ynl/ynl-gen-c.py                    | 17 ++++---
- 16 files changed, 176 insertions(+), 41 deletions(-)
+Cheers,
 
--- 
-2.39.2
+Paolo
 
