@@ -2,35 +2,35 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DAA63C6FD1F
-	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 15:03:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C125C74A4B
+	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 15:03:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbjCGPDr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Mar 2023 10:03:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42514 "EHLO
+        id S229764AbjCGPDt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Mar 2023 10:03:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjCGPDQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Mar 2023 10:03:16 -0500
+        with ESMTP id S230078AbjCGPDP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Mar 2023 10:03:15 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5348A81CF2;
-        Tue,  7 Mar 2023 06:54:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7508091F;
+        Tue,  7 Mar 2023 06:54:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E303361265;
-        Tue,  7 Mar 2023 14:54:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0293CC433EF;
-        Tue,  7 Mar 2023 14:54:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 792E16137A;
+        Tue,  7 Mar 2023 14:54:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8556EC433EF;
+        Tue,  7 Mar 2023 14:54:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678200896;
-        bh=o5gPeq4QDA4D5M45DH1MR6vMlCRXmlPsUa7kM4g6OJ8=;
+        s=k20201202; t=1678200880;
+        bh=5jq7kB4k8YgnHr9b0rlhDtuZTGAsKEW/bGb6FgDJIx0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OoM8vRUHXVTWreqQt3f3H9K2DxMq566IsWxmlqbXPpgMKlXWAMhQgqDPIu8+DBAYG
-         vzdB0jMSMC1p6lYA+CQ/S+UyCdHW/R+7FaBH/GAu0JNUliUwKg7lckbfztSTR39lNC
-         piBZjS1YDpglIQpEWrj/1ZkJiYIL99gOO6Iawhx88iIrf7dOix8OMzB77Q4EIlEAln
-         6oY3GNTvr2//QyYMDxRve7HRj813DgTZuLUPehUTDfUhIZQYCKUwTSJfuOqKsxF5Db
-         Qv/89KLCM9ss2/2VtGFYBSF1P9+lzxMt0UrnFxuxBSuuE8Yo2HJfSPPZCtCoi/E0hR
-         oh0wEMXXDls6g==
+        b=uP/JE0trie4l9UAzuITD5IJNr/lcOU3CoU2bJCytzBLFuZ/Nsx8cSta3tFcrrGreo
+         lvgikDDI5Ia313Pme26aj6RCeIFV/8IxQ4yub3hITaSCsIOv9/Kx6HX+Ju+HG6A/3p
+         3Y61b5UJQ8lCT0hRqgy29hYHx0h43nN7LyXh5iBXEXOFPrr9kbbkuSw3jIJ3l+Po3u
+         L+Cjp4NjR5c+J94zW7mzqBlDQU8Syi9B+0fdxGceZgOeSiBWwEXgNOew1Rbt8SCyJf
+         9ESaD0OX6nhmYKCAAGFYMRObnhjv3P7o/8sxyd+1ryBSj/DRTdIjipbDtOU48AS7V2
+         roWKC50eFuh7w==
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
@@ -40,9 +40,9 @@ Cc:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
         shayagr@amazon.com, akiyano@amazon.com, darinzon@amazon.com,
         sgoutham@marvell.com, lorenzo.bianconi@redhat.com, toke@redhat.com,
         teknoraver@meta.com
-Subject: [PATCH net-next 8/8] mvpp2: take care of xdp_features when reconfiguring queues
-Date:   Tue,  7 Mar 2023 15:54:05 +0100
-Message-Id: <fe34ea957afb95ce255a17ec79df08d9647b72c7.1678200041.git.lorenzo@kernel.org>
+Subject: [PATCH net-next 4/8] net: thunderx: take into account xdp_features setting tx/rx queues
+Date:   Tue,  7 Mar 2023 15:54:01 +0100
+Message-Id: <997efc0a28df32326474c3dfa339dc291a998741.1678200041.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <cover.1678200041.git.lorenzo@kernel.org>
 References: <cover.1678200041.git.lorenzo@kernel.org>
@@ -52,56 +52,59 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Matteo Croce <teknoraver@meta.com>
-
-XDP is supported only if enough queues are present, so when reconfiguring
-the queues set xdp_features accordingly.
+thunderx nic allows xdp just if enough hw queues are available for XDP.
+Take into account queues configuration setting xdp_features.
 
 Fixes: 66c0e13ad236 ("drivers: net: turn on XDP features")
-Suggested-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Signed-off-by: Matteo Croce <teknoraver@meta.com>
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ .../net/ethernet/cavium/thunder/nicvf_ethtool.c | 17 +++++++++++------
+ .../net/ethernet/cavium/thunder/nicvf_main.c    |  4 +++-
+ 2 files changed, 14 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-index 9b4ecbe4f36d..3ea00bc9b91c 100644
---- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-+++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-@@ -4996,6 +4996,14 @@ static int mvpp2_bm_switch_buffers(struct mvpp2 *priv, bool percpu)
+diff --git a/drivers/net/ethernet/cavium/thunder/nicvf_ethtool.c b/drivers/net/ethernet/cavium/thunder/nicvf_ethtool.c
+index e5c71f907852..d8d71bf97983 100644
+--- a/drivers/net/ethernet/cavium/thunder/nicvf_ethtool.c
++++ b/drivers/net/ethernet/cavium/thunder/nicvf_ethtool.c
+@@ -735,12 +735,17 @@ static int nicvf_set_channels(struct net_device *dev,
+ 	if (channel->tx_count > nic->max_queues)
+ 		return -EINVAL;
  
- 	for (i = 0; i < priv->port_count; i++) {
- 		port = priv->port_list[i];
-+		if (percpu && port->ntxqs >= num_possible_cpus() * 2)
-+			xdp_set_features_flag(port->dev,
-+					      NETDEV_XDP_ACT_BASIC |
-+					      NETDEV_XDP_ACT_REDIRECT |
-+					      NETDEV_XDP_ACT_NDO_XMIT);
-+		else
-+			xdp_clear_features_flag(port->dev);
+-	if (nic->xdp_prog &&
+-	    ((channel->tx_count + channel->rx_count) > nic->max_queues)) {
+-		netdev_err(nic->netdev,
+-			   "XDP mode, RXQs + TXQs > Max %d\n",
+-			   nic->max_queues);
+-		return -EINVAL;
++	if (channel->tx_count + channel->rx_count > nic->max_queues) {
++		if (nic->xdp_prog) {
++			netdev_err(nic->netdev,
++				   "XDP mode, RXQs + TXQs > Max %d\n",
++				   nic->max_queues);
++			return -EINVAL;
++		}
 +
- 		mvpp2_swf_bm_pool_init(port);
- 		if (status[i])
- 			mvpp2_open(port->dev);
-@@ -6863,13 +6871,14 @@ static int mvpp2_port_probe(struct platform_device *pdev,
++		xdp_clear_features_flag(nic->netdev);
++	} else if (!pass1_silicon(nic->pdev)) {
++		xdp_set_features_flag(dev, NETDEV_XDP_ACT_BASIC);
+ 	}
  
- 	if (!port->priv->percpu_pools)
- 		mvpp2_set_hw_csum(port, port->pool_long->id);
-+	else if (port->ntxqs >= num_possible_cpus() * 2)
-+		dev->xdp_features = NETDEV_XDP_ACT_BASIC |
-+				    NETDEV_XDP_ACT_REDIRECT |
-+				    NETDEV_XDP_ACT_NDO_XMIT;
+ 	if (if_up)
+diff --git a/drivers/net/ethernet/cavium/thunder/nicvf_main.c b/drivers/net/ethernet/cavium/thunder/nicvf_main.c
+index 8b25313c7f6b..eff350e0bc2a 100644
+--- a/drivers/net/ethernet/cavium/thunder/nicvf_main.c
++++ b/drivers/net/ethernet/cavium/thunder/nicvf_main.c
+@@ -2218,7 +2218,9 @@ static int nicvf_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	netdev->netdev_ops = &nicvf_netdev_ops;
+ 	netdev->watchdog_timeo = NICVF_TX_TIMEOUT;
  
- 	dev->vlan_features |= features;
- 	netif_set_tso_max_segs(dev, MVPP2_MAX_TSO_SEGS);
+-	netdev->xdp_features = NETDEV_XDP_ACT_BASIC;
++	if (!pass1_silicon(nic->pdev) &&
++	    nic->rx_queues + nic->tx_queues <= nic->max_queues)
++		netdev->xdp_features = NETDEV_XDP_ACT_BASIC;
  
--	dev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT |
--			    NETDEV_XDP_ACT_NDO_XMIT;
--
- 	dev->priv_flags |= IFF_UNICAST_FLT;
- 
- 	/* MTU range: 68 - 9704 */
+ 	/* MTU range: 64 - 9200 */
+ 	netdev->min_mtu = NIC_HW_MIN_FRS;
 -- 
 2.39.2
 
