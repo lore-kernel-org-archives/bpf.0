@@ -2,146 +2,102 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46E30C678D5
-	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 19:14:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DA94C678D4
+	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 19:32:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233735AbjCGTOw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Mar 2023 14:14:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
+        id S232193AbjCGTcL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Mar 2023 14:32:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233830AbjCGTOa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Mar 2023 14:14:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB884DBDF;
-        Tue,  7 Mar 2023 10:58:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9B51BB819D5;
-        Tue,  7 Mar 2023 18:58:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC910C433D2;
-        Tue,  7 Mar 2023 18:58:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678215484;
-        bh=JN+PH1NmuC42Ae/UZeVPJKaF8s2n1S6+4ls8J7Zf/iY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KC4FzVnwY3avFldOLdHjvL3pZL/CtHxnL+nFiGBRW3DrhxtiF0lWNO6o8fbblLj/I
-         3jPFTDvrC73hYg4sQTB+0tCW8Ne35ZKHs1wP+Oc07/x1+6F2HEQBs2nF0ZSr6WxoHY
-         iVUwR3BWel/v7h6deNvpsphaEKcn1a4sn0qkVnX8=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, Ian Rogers <irogers@google.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
-        llvm@lists.linux.dev, Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tom Rix <trix@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 259/567] perf llvm: Fix inadvertent file creation
-Date:   Tue,  7 Mar 2023 17:59:55 +0100
-Message-Id: <20230307165917.149823095@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230307165905.838066027@linuxfoundation.org>
-References: <20230307165905.838066027@linuxfoundation.org>
-User-Agent: quilt/0.67
+        with ESMTP id S231620AbjCGTb5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Mar 2023 14:31:57 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919142CC7E
+        for <bpf@vger.kernel.org>; Tue,  7 Mar 2023 11:17:40 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id x34so14299606pjj.0
+        for <bpf@vger.kernel.org>; Tue, 07 Mar 2023 11:17:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678216660;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/tiQhcJCkvDNHsXF/xDzB6T+ywkwA2v7Yfl1KHP9gvs=;
+        b=HbFVgeB5aNaK9tzswjqb3t5LUmwausTv3sF6JqtrQT+76jHVihrrGaKtN/nYjvHvzo
+         F+jfCtcKxfMDV6hjDujOF6m1iHjGw4gq4799GTAQ1o3QQ3be6nVNJvZ2oHdg5KcO7QsJ
+         c5w8XtbRiOVF+dP0GRvbDEt48/dhR0I66j6xLBodMXDnrrynr3xyrBf1wL3m65jFVaYD
+         ilgeRtTOreDsd8dT6DKOBZIAS5s/2KXxCPr+1ieafi2CAAOYh09pYxqtSCC9L0nw5Uu0
+         TN7w9mFMPqsVe66W4yjZJuKTv6x82miWqQQq4fGnzfgpTmb9OxlOfF2mSwTWi4EOMYgk
+         KLWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678216660;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/tiQhcJCkvDNHsXF/xDzB6T+ywkwA2v7Yfl1KHP9gvs=;
+        b=c9NyswxENV70wHtM5QmA1Rq4UHCm0cEYNlNbsLnNBDPEgJ6TzFJcI3aZy/7y16oiWn
+         v0saqj+zu2FlaOXKcS0nxNlq1UONBQzHAK6vYP5T0kzjozSSLZOng2iuvj27SSTpG6Sp
+         JEFbqdDlFxOiCqexWrOv2+NrdFm5qa7Eqltkqw/qkN4E+C0KgYcHu76jj5x15SGgrnxP
+         kp3IOf9RsTE4ya7xPXL7+bQ1NVtonyAswyvZ+zWsOwUnDt7xFyUGZpMma48n3wNxBaHK
+         eVFrQW41PeOLq+soGaZwF4g5JZ8itBwhHK2oOQ1COSl/DVk7WKTY12qDn58EfWTdrmNM
+         xQ2g==
+X-Gm-Message-State: AO0yUKVcL7EnhjW8KK5WI9JPkqA8nb0m3DesYFrY5rxDJVtHAMYdGRFA
+        b+8YnfSknE7/b7bOHcCKFnI=
+X-Google-Smtp-Source: AK7set+Os6ga8dUjlWeKTjSue2oOq1Ej6+o5cjYWjSS2l/1vXpdqO9GE5LpOQ3Ejzmc31lQja8tIsQ==
+X-Received: by 2002:a17:903:2290:b0:19c:dbce:dce8 with SMTP id b16-20020a170903229000b0019cdbcedce8mr19584496plh.15.1678216660115;
+        Tue, 07 Mar 2023 11:17:40 -0800 (PST)
+Received: from ?IPV6:2620:10d:c085:21cf::1402? ([2620:10d:c090:400::5:173])
+        by smtp.gmail.com with ESMTPSA id w4-20020a17090a6b8400b00227223c58ecsm7665496pjj.42.2023.03.07.11.17.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Mar 2023 11:17:39 -0800 (PST)
+Message-ID: <c870e6b2-059a-052a-70d7-d62dd15319af@gmail.com>
+Date:   Tue, 7 Mar 2023 11:17:34 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH bpf-next v3 3/8] net: Update an existing TCP congestion
+ control algorithm.
+Content-Language: en-US, en-ZW
+To:     Martin KaFai Lau <martin.lau@linux.dev>,
+        Kui-Feng Lee <kuifeng@meta.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, song@kernel.org,
+        kernel-team@meta.com, andrii@kernel.org, sdf@google.com
+References: <20230303012122.852654-1-kuifeng@meta.com>
+ <20230303012122.852654-4-kuifeng@meta.com>
+ <e80abe7f-40d5-b35f-1fdc-f82a2ebaf937@linux.dev>
+From:   Kui-Feng Lee <sinquersw@gmail.com>
+In-Reply-To: <e80abe7f-40d5-b35f-1fdc-f82a2ebaf937@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Ian Rogers <irogers@google.com>
-
-[ Upstream commit 9f19aab47ced012eddef1e2bc96007efc7713b61 ]
-
-The LLVM template is first echo-ed into command_out and then
-command_out executed. The echo surrounds the template with double
-quotes, however, the template itself may contain quotes. This is
-generally innocuous but in tools/perf/tests/bpf-script-test-prologue.c
-we see:
-...
-SEC("func=null_lseek file->f_mode offset orig")
-...
-where the first double quote ends the double quote of the echo, then
-the > redirects output into a file called f_mode.
-
-To avoid this inadvertent behavior substitute redirects and similar
-characters to be ASCII control codes, then substitute the output in
-the echo back again.
-
-Fixes: 5eab5a7ee032acaa ("perf llvm: Display eBPF compiling command in debug output")
-Signed-off-by: Ian Rogers <irogers@google.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: llvm@lists.linux.dev
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Tom Rix <trix@redhat.com>
-Link: https://lore.kernel.org/r/20230105082609.344538-1-irogers@google.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/perf/util/llvm-utils.c | 25 ++++++++++++++++++++++++-
- 1 file changed, 24 insertions(+), 1 deletion(-)
-
-diff --git a/tools/perf/util/llvm-utils.c b/tools/perf/util/llvm-utils.c
-index 96c8ef60f4f84..8ee3a947b1599 100644
---- a/tools/perf/util/llvm-utils.c
-+++ b/tools/perf/util/llvm-utils.c
-@@ -531,14 +531,37 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
- 
- 	pr_debug("llvm compiling command template: %s\n", template);
- 
-+	/*
-+	 * Below, substitute control characters for values that can cause the
-+	 * echo to misbehave, then substitute the values back.
-+	 */
- 	err = -ENOMEM;
--	if (asprintf(&command_echo, "echo -n \"%s\"", template) < 0)
-+	if (asprintf(&command_echo, "echo -n \a%s\a", template) < 0)
- 		goto errout;
- 
-+#define SWAP_CHAR(a, b) do { if (*p == a) *p = b; } while (0)
-+	for (char *p = command_echo; *p; p++) {
-+		SWAP_CHAR('<', '\001');
-+		SWAP_CHAR('>', '\002');
-+		SWAP_CHAR('"', '\003');
-+		SWAP_CHAR('\'', '\004');
-+		SWAP_CHAR('|', '\005');
-+		SWAP_CHAR('&', '\006');
-+		SWAP_CHAR('\a', '"');
-+	}
- 	err = read_from_pipe(command_echo, (void **) &command_out, NULL);
- 	if (err)
- 		goto errout;
- 
-+	for (char *p = command_out; *p; p++) {
-+		SWAP_CHAR('\001', '<');
-+		SWAP_CHAR('\002', '>');
-+		SWAP_CHAR('\003', '"');
-+		SWAP_CHAR('\004', '\'');
-+		SWAP_CHAR('\005', '|');
-+		SWAP_CHAR('\006', '&');
-+	}
-+#undef SWAP_CHAR
- 	pr_debug("llvm compiling command : %s\n", command_out);
- 
- 	err = read_from_pipe(template, &obj_buf, &obj_buf_sz);
--- 
-2.39.2
 
 
+On 3/6/23 18:17, Martin KaFai Lau wrote:
+> On 3/2/23 5:21 PM, Kui-Feng Lee wrote:
+>> diff --git a/net/ipv4/tcp_cong.c b/net/ipv4/tcp_cong.c
+>> index db8b4b488c31..981501871609 100644
+>> --- a/net/ipv4/tcp_cong.c
+>> +++ b/net/ipv4/tcp_cong.c
+>> @@ -75,14 +75,8 @@ struct tcp_congestion_ops *tcp_ca_find_key(u32 key)
+>>       return NULL;
+>>   }
+>> -/*
+>> - * Attach new congestion control algorithm to the list
+>> - * of available options.
+>> - */
+>> -int tcp_register_congestion_control(struct tcp_congestion_ops *ca)
+>> +static int tcp_ca_validate(struct tcp_congestion_ops *ca)
+> 
+> It is useful to call tcp_ca_validate() before update_elem transiting a 
+> struct_ops to BPF_STRUCT_OPS_STATE_READY. Otherwise, the user space will 
+> end up having a struct_ops that can never be used to create a link.
 
+I will add a function pointer in struct bpf_struct_ops to expose this 
+check function.  At the struct_ops side, it will call the function to 
+check kdata before transiting to READY if the function pointer is set.
+
+> 
+> 
+> 
