@@ -2,98 +2,227 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BC32C6FD1B
-	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 16:57:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB46DC6FD1A
+	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 17:27:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbjCGQ5M convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 7 Mar 2023 11:57:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49536 "EHLO
+        id S231598AbjCGR1x (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Mar 2023 12:27:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230246AbjCGQ45 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Mar 2023 11:56:57 -0500
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F795615B;
-        Tue,  7 Mar 2023 08:53:09 -0800 (PST)
-Received: by mail-yb1-f169.google.com with SMTP id v101so12069489ybi.2;
-        Tue, 07 Mar 2023 08:53:09 -0800 (PST)
+        with ESMTP id S231615AbjCGR1X (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Mar 2023 12:27:23 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEE598E9B;
+        Tue,  7 Mar 2023 09:22:41 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id i34so55323266eda.7;
+        Tue, 07 Mar 2023 09:22:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678209760;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QX9d0kgXQURozDFuIvakR/LVRy3evUuOWuMgoK4cT+g=;
+        b=KYbuBGMTm/O97tpiJqbC3UA2u2PmSRLd3BXaSJSzbOKrcpnC1hbia9Ulnm//kf17Ft
+         s2KgO/waG1KDDBCkfLL/wrk8Uh0HdZFjBRXin7uAB/V4FIyBmtsray2lwwUC17Ky8ROC
+         Ep8xBqg6KMq3//jUGyV2An9/LR3ZnM/cQCZR/nNQVIE/SfJ1nQfiG5Srbg/oxKZu1JjS
+         km655NJCbEEkyuwRIxRu7TohWZlQld2XN9Y42LRyFIBhgGKxlQf/5LEs1OpgjiZbruJI
+         kVQkLrQqZpo8j138Gde8dioPweszb88XCgR1gVeGr9bTd815i8FqfOeNubW4VJkLXn2D
+         BBQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678207988;
+        d=1e100.net; s=20210112; t=1678209760;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7/gBRXb85me+1FkZga1hHDiW80ClQBScKHoPc4rOx7U=;
-        b=QFW4hRUoZL8060muDNaB9ki4SvmVpZe77FKBLsjxJp2lZJVko8Y6pQu2h91eRPaQJg
-         kbjOaomx15eHuYpghlokmPbrhaONQvbjvjuHIA8AYoUJOt1oQ5XC67qb8KLCu/7kHGuV
-         D2S/a4ECdOhzwPkllKvNfVojozs982xNKFi1X6RlsSSlt6nHmo6M+BA9vsAWaa/yaUcC
-         tcVP/tMAM59X9zRMu43b2/FRmt/AIqajiH1UdP9VyKX+9b3CxKeJ9KQWlZA5RUR4cyjz
-         fcNiWxodUNHXF6iCmQYrEC+FoGMHVbA3oP+YDLu8zSQ4UAo4QuOffQdpmVCymrB+SNRF
-         cJ0g==
-X-Gm-Message-State: AO0yUKVuBaZ5gVxykzg7zAhKAIkNgMgNO5JtX/kM9qdMl1mlOmM4B9/2
-        cV4wfJeVTld2lDiNfzREPf6b/cfgBfx4teeSOQM=
-X-Google-Smtp-Source: AK7set8tfjwpzQZQScNYBcN4iSNxac+Y9AyRsU8j+6uBk2WxKvaFCooRfM+pMbzRDq0D2AUizmGWvySr43aDph3iyXM=
-X-Received: by 2002:a5b:384:0:b0:a65:8cd3:fc4 with SMTP id k4-20020a5b0384000000b00a658cd30fc4mr8914549ybp.5.1678207988110;
- Tue, 07 Mar 2023 08:53:08 -0800 (PST)
+        bh=QX9d0kgXQURozDFuIvakR/LVRy3evUuOWuMgoK4cT+g=;
+        b=DHGEi6hgY2yKeOGa49RFxkJewvsr5rmgLxj3SxkGYOdQovtxQ/aLHGkVB8Y8PLjTlD
+         mK6rFALQL0MG5DB9So0VJ7Yx9/tKUbh5PRPy9+H+oHaaO4kR93/HvhoKcTRzHt/HFURc
+         GIvST1g+3Knl3SD1cnJHfn3Z0ciWwx290ORI7xswgX4tYfYdtxbY2hQSRitC/vHW1l2d
+         IuIZFgY94prPFqvBPSi7+dhRqIJCG/TMuQyNnOwH8cqZJZXnvsu0u8kURE2KP5WSqfXM
+         a0PtOaW4zM5vuRXPagJQOU2aFhoMe6pI3mChoPbWv7lANUoNdDy1Md7BpIbPPe3mWeax
+         Semw==
+X-Gm-Message-State: AO0yUKX35BhOBb/MJkty4NCutm4GtatLAv/N4ORxIwgshK94ZmNiNAex
+        Qi3JtuB7UX8IS53SatP9j+ECZDLvvtyu6LPIOQk=
+X-Google-Smtp-Source: AK7set9LgTZn0HgFblAoXaH39W4h78GaBj+CHvntuYnzSuYHhLZ8me8dMoTLncFVsvKsy8oNT+TV7qReuhARn94FJOE=
+X-Received: by 2002:a17:906:747:b0:87b:dce7:c245 with SMTP id
+ z7-20020a170906074700b0087bdce7c245mr6851404ejb.3.1678209760095; Tue, 07 Mar
+ 2023 09:22:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20230307032117.3461008-1-irogers@google.com> <CAM9d7ci6FWx2oYAbqhVW2-tjB4p8ji3w87n-ndwxidMov+kVZw@mail.gmail.com>
- <CAP-5=fUQNimNSKjwZaCASyikjXJXBZdw7Z=APYEB4RyX-dXMfQ@mail.gmail.com>
-In-Reply-To: <CAP-5=fUQNimNSKjwZaCASyikjXJXBZdw7Z=APYEB4RyX-dXMfQ@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 7 Mar 2023 08:52:57 -0800
-Message-ID: <CAM9d7ciO8EYQ_5GoNzRiR=-HWK6K0ihceL+pA4En1N0bhL3TVA@mail.gmail.com>
-Subject: Re: [PATCH] perf lock contention: Fix builtin detection
-To:     Ian Rogers <irogers@google.com>
-Cc:     bpf@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230307220449.2933650-1-xukuohai@huaweicloud.com> <20230307220449.2933650-2-xukuohai@huaweicloud.com>
+In-Reply-To: <20230307220449.2933650-2-xukuohai@huaweicloud.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 7 Mar 2023 09:22:08 -0800
+Message-ID: <CAADnVQLDmP0A7Pr7628nH8YSo3-xTjzAr5-x-0YCZvuS8xu09A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: update 32-bit bounds when the lower
+ 32-bit value is not wrapping
+To:     Xu Kuohai <xukuohai@huaweicloud.com>
+Cc:     bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 9:56 PM Ian Rogers <irogers@google.com> wrote:
+On Tue, Mar 7, 2023 at 1:05=E2=80=AFAM Xu Kuohai <xukuohai@huaweicloud.com>=
+ wrote:
 >
-> On Mon, Mar 6, 2023 at 8:43 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > Hi Ian,
-> >
-> > On Mon, Mar 6, 2023 at 7:21 PM Ian Rogers <irogers@google.com> wrote:
-> > >
-> > > __has_builtin was passed the macro rather than the actual builtin
-> > > feature.
-> >
-> > Oh, I missed it's a macro define in tools/lib/bpf/bpf_core_read.h file.
-> >
-> > Looking at some BPF test codes, it seems you also need to check the
-> > clang compiler version.  Please take a look at the file below:
-> >
-> >   tools/testing/selftests/bpf/progs/test_core_reloc_type_base.c
-> >
-> > Thanks,
-> > Namhyung
+> The following XDP prog is accepted by verifier.
 >
-> Hmm..
+> 0: (61) r2 =3D *(u32 *)(r1 +0)          ; R2_w=3Dpkt(off=3D0,r=3D0,imm=3D=
+0)
+> 1: (61) r3 =3D *(u32 *)(r1 +4)          ; R3_w=3Dpkt_end(off=3D0,imm=3D0)
+> 2: (bf) r1 =3D r2
+> 3: (07) r1 +=3D 1
+> 4: (2d) if r1 > r3 goto pc+6
+> 5: (71) r1 =3D *(u8 *)(r2 +0)           ; R1_w=3Dscalar(umax=3D255,var_of=
+f=3D(0x0; 0xff))
+> 6: (b4) w0 =3D 0x7fffff10
+> 7: (0c) w1 +=3D w0                      ; R1_w=3Dscalar(umin=3D0x7fffff10=
+,umax=3D0x8000000f,var_off=3D(0x0; 0xffffffff))
+> 8: (b4) w0 =3D 0x80000000
+> 9: (04) w0 +=3D 1
+> 10: (ae) if w0 < w1 goto pc-2
+> 11: (b7) r0 =3D 0
+> 12: (95) exit
 >
-> tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c:
-> ...
->        /* Support for the BPF_TYPE_MATCHES argument to the
->         * __builtin_preserve_type_info builtin was added at some point during
->         * development of clang 15 and it's what we require for this test.
->         */
-> #if __has_builtin(__builtin_preserve_type_info) && __clang_major__ >= 15
-> ...
+> while the following 64-bit version is rejected.
 >
-> I'm not sure we need to worry about development clang builds and just
-> the __has_builtin is cleaner. Perhaps the BPF folks can chime in.
+> 0: (61) r2 =3D *(u32 *)(r1 +0)          ; R2_w=3Dpkt(off=3D0,r=3D0,imm=3D=
+0)
+> 1: (61) r3 =3D *(u32 *)(r1 +4)          ; R3_w=3Dpkt_end(off=3D0,imm=3D0)
+> 2: (bf) r1 =3D r2
+> 3: (07) r1 +=3D 1
+> 4: (2d) if r1 > r3 goto pc+8
+> 5: (71) r1 =3D *(u8 *)(r2 +0)           ; R1_w=3Dscalar(umax=3D255,var_of=
+f=3D(0x0; 0xff))
+> 6: (18) r0 =3D 0x7fffffffffffff10
+> 8: (0f) r1 +=3D r0                      ; R1_w=3Dscalar(umin=3D0x7fffffff=
+ffffff10,umax=3D0x800000000000000f)
+> 9: (18) r0 =3D 0x8000000000000000
+> 11: (07) r0 +=3D 1
+> 12: (ad) if r0 < r1 goto pc-2
+> 13: (b7) r0 =3D 0
+> 14: (95) exit
 
-My understanding is that __builtin_preserve_type_info is supported
-before.  But clang 15 added BPF_TYPE_MATCHES which is used for
-bpf_core_type_matches().  So just checking the builtin would not work.
+These two programs are not equivalent.
+Not clear how apples to oranges comparison explains anything.
 
-Thanks,
-Namhyung
+> The verifier log says:
+>
+> [...]
+>
+> from 12 to 11: R0_w=3D-9223372036854775794 R1=3Dscalar(umin=3D92233720368=
+54775823,umax=3D9223372036854775823,var_off=3D(0x8000000000000000; 0xffffff=
+ff))
+> 11: (07) r0 +=3D 1                      ; R0_w=3D-9223372036854775793
+> 12: (ad) if r0 < r1 goto pc-2         ; R0_w=3D-9223372036854775793 R1=3D=
+scalar(umin=3D9223372036854775823,umax=3D9223372036854775823,var_off=3D(0x8=
+000000000000000; 0xffffffff))
+> 13: safe
+>
+> from 12 to 11: R0_w=3D-9223372036854775793 R1=3Dscalar(umin=3D92233720368=
+54775824,umax=3D9223372036854775823,var_off=3D(0x8000000000000000; 0xffffff=
+ff))
+
+First thing to debug is why umin is higher than umax.
+
+> 11: (07) r0 +=3D 1                      ; R0_w=3D-9223372036854775792
+> 12: (ad) if r0 < r1 goto pc-2         ; R0_w=3D-9223372036854775792 R1=3D=
+scalar(umin=3D9223372036854775824,umax=3D9223372036854775823,var_off=3D(0x8=
+000000000000000; 0xffffffff))
+> 13: safe
+>
+> [...]
+>
+> The loop crosses termination condition r0 =3D=3D r1.umax, and does not st=
+op.
+>
+> The reason is that when the verifier enumerates to r1.umin =3D=3D r1.umax=
+, the value
+> 0x800000000000000f of r1.umin is greater than U32_MAX, so __reg_combine_6=
+4_into_32
+> sets the u32 range of r1 to [0, U32_MAX] instead of marking r1 as a const=
+ant,
+> making is_branch_taken() in check_cond_jmp_op() be skipped.
+
+And it's fine. The verifier is conservative.
+
+>
+> To fix it, update 32-bit bounds when the lower 32-bit value is not wrappi=
+ng,
+> even if the 64-bit value is beyond the range of [0, U32_MAX] or [S32_MIN,=
+ S32_MAX].
+
+That's not safe in general.
+
+>
+> Signed-off-by: Xu Kuohai <xukuohai@huaweicloud.com>
+> ---
+>  kernel/bpf/verifier.c | 27 +++++++++++----------------
+>  1 file changed, 11 insertions(+), 16 deletions(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index b2116ca78d9a..64c9ee3857ec 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -2013,26 +2013,21 @@ static void __reg_combine_32_into_64(struct bpf_r=
+eg_state *reg)
+>         reg_bounds_sync(reg);
+>  }
+>
+> -static bool __reg64_bound_s32(s64 a)
+> -{
+> -       return a >=3D S32_MIN && a <=3D S32_MAX;
+> -}
+> -
+> -static bool __reg64_bound_u32(u64 a)
+> -{
+> -       return a >=3D U32_MIN && a <=3D U32_MAX;
+> -}
+> -
+>  static void __reg_combine_64_into_32(struct bpf_reg_state *reg)
+>  {
+> +       s64 smin =3D reg->smin_value;
+> +       s64 smax =3D reg->smax_value;
+> +       u64 umin =3D reg->umin_value;
+> +       u64 umax =3D reg->umax_value;
+> +
+>         __mark_reg32_unbounded(reg);
+> -       if (__reg64_bound_s32(reg->smin_value) && __reg64_bound_s32(reg->=
+smax_value)) {
+> -               reg->s32_min_value =3D (s32)reg->smin_value;
+> -               reg->s32_max_value =3D (s32)reg->smax_value;
+> +       if ((u64)(smax - smin) <=3D (u64)U32_MAX && (s32)smin <=3D (s32)s=
+max) {
+> +               reg->s32_min_value =3D (s32)smin;
+> +               reg->s32_max_value =3D (s32)smax;
+>         }
+> -       if (__reg64_bound_u32(reg->umin_value) && __reg64_bound_u32(reg->=
+umax_value)) {
+> -               reg->u32_min_value =3D (u32)reg->umin_value;
+> -               reg->u32_max_value =3D (u32)reg->umax_value;
+> +       if (umax - umin <=3D U32_MAX && (u32)umin <=3D (u32)umax) {
+> +               reg->u32_min_value =3D (u32)umin;
+> +               reg->u32_max_value =3D (u32)umax;
+
+This looks like a workaround for umin > umax issue.
+Please debug that instead.
+
+>         }
+>         reg_bounds_sync(reg);
+>  }
+> --
+> 2.30.2
+>
