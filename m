@@ -2,35 +2,35 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFA28C678D5
-	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 15:03:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D39BC678D4
+	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 15:03:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbjCGPDk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Mar 2023 10:03:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42490 "EHLO
+        id S230260AbjCGPDm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Mar 2023 10:03:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbjCGPDP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S230156AbjCGPDP (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 7 Mar 2023 10:03:15 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB43D8091A;
-        Tue,  7 Mar 2023 06:54:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEEC81CE5;
+        Tue,  7 Mar 2023 06:54:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A02EBB818EB;
-        Tue,  7 Mar 2023 14:54:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCFBEC433D2;
-        Tue,  7 Mar 2023 14:54:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24F1DB818F9;
+        Tue,  7 Mar 2023 14:54:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 883BEC433D2;
+        Tue,  7 Mar 2023 14:54:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678200873;
-        bh=ZUx6s1eJcolQfbulbwPNkhGN+26Dh4joSnuTvg9/z0o=;
+        s=k20201202; t=1678200884;
+        bh=Do1b6VEDlF3FwvuQltNgKtcVxwcVdnurXzhNLXjAh98=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fEOAgvlrQsR3cvVSqTz18bvMsEZ1mXD/h536kr1Q50A1uRKGgEAvWawykBcvhrfjq
-         7GTvDzoC3V4VOqJwa9dERS8qW+1CioAT6p+xZcKp03PFgdu9KvRjcZIQzmKVq2Ji5G
-         C9BrIaJGdys4g2SkNmj4nWYiuM6HOaZNe2blNhmrNBFYAiY4+Mf2EVvFXIVbBhxH4s
-         wU81mZTDzSjbqlka7nRnyZMR0Tx+jK08SCieIqeg2Oxq5NjLrFZz0/DMJM6csMTaMl
-         i99SCWiL2LwWn1iM0UHVR/BfD0iWffnlqgkoPC+JYM5hQBVs9ncudnpA9k5JECrNVP
-         FulL3JxQXbdLA==
+        b=ueUgtckauPCCuoqk4dpmUQ3qJXDLXoEiq4aodmdchtp3nBCsppvCZU11saMDai9lg
+         WwZtoNraajOT+XG3IOApoTKUahyPIGcDjJSZnQk4SlWRW+w9E7FIdXtMwffEgm1mrH
+         h5kzL8u0Tbe/XplFhuvm/X7xJBVhdIx70IUT44b1KgCoquTCvB9ILrmpHnyELNcrFs
+         Mdf0VRwwYcf5vfKLdyGvDzUQ1oSEXdOjqpX/Gb3L/OSBtsXgZPtUh9AIowWcQvxiW2
+         VVLZd0XrdRwbGqJWeMRO3KUbvzE4zNQQcrDWCCOqjDl+i5eBNeNUXBdyx+5j8sLOa7
+         4bkXYfm9vZ34w==
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
@@ -40,9 +40,9 @@ Cc:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
         shayagr@amazon.com, akiyano@amazon.com, darinzon@amazon.com,
         sgoutham@marvell.com, lorenzo.bianconi@redhat.com, toke@redhat.com,
         teknoraver@meta.com
-Subject: [PATCH net-next 2/8] tools: ynl: fix get_mask utility routine
-Date:   Tue,  7 Mar 2023 15:53:59 +0100
-Message-Id: <12a91d4e401c5390a34a3074fe9d8dfa41d43f35.1678200041.git.lorenzo@kernel.org>
+Subject: [PATCH net-next 5/8] net: ena: take into account xdp_features setting tx/rx queues
+Date:   Tue,  7 Mar 2023 15:54:02 +0100
+Message-Id: <dfa9327874de41c5efa44001518d4432f9afe304.1678200041.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <cover.1678200041.git.lorenzo@kernel.org>
 References: <cover.1678200041.git.lorenzo@kernel.org>
@@ -52,32 +52,68 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix get_mask utility routine in order to take into account possible gaps
-in the elements list.
+ena nic allows xdp just if enough hw queues are available for XDP.
+Take into account queues configuration setting xdp_features.
 
-Fixes: be5bea1cc0bf ("net: add basic C code generators for Netlink")
+Fixes: 66c0e13ad236 ("drivers: net: turn on XDP features")
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- tools/net/ynl/ynl-gen-c.py | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/amazon/ena/ena_ethtool.c | 15 ++++++++++++---
+ drivers/net/ethernet/amazon/ena/ena_netdev.c  |  6 ++++--
+ 2 files changed, 16 insertions(+), 5 deletions(-)
 
-diff --git a/tools/net/ynl/ynl-gen-c.py b/tools/net/ynl/ynl-gen-c.py
-index f2e41dd962d4..0d6df9414aa9 100755
---- a/tools/net/ynl/ynl-gen-c.py
-+++ b/tools/net/ynl/ynl-gen-c.py
-@@ -652,10 +652,8 @@ class EnumSet:
+diff --git a/drivers/net/ethernet/amazon/ena/ena_ethtool.c b/drivers/net/ethernet/amazon/ena/ena_ethtool.c
+index 8da79eedc057..1d4f2f4d10f2 100644
+--- a/drivers/net/ethernet/amazon/ena/ena_ethtool.c
++++ b/drivers/net/ethernet/amazon/ena/ena_ethtool.c
+@@ -850,11 +850,20 @@ static int ena_set_channels(struct net_device *netdev,
+ 	struct ena_adapter *adapter = netdev_priv(netdev);
+ 	u32 count = channels->combined_count;
+ 	/* The check for max value is already done in ethtool */
+-	if (count < ENA_MIN_NUM_IO_QUEUES ||
+-	    (ena_xdp_present(adapter) &&
+-	    !ena_xdp_legal_queue_count(adapter, count)))
++	if (count < ENA_MIN_NUM_IO_QUEUES)
+ 		return -EINVAL;
  
-     def get_mask(self):
-         mask = 0
--        idx = self.yaml.get('value-start', 0)
--        for _ in self.entry_list:
--            mask |= 1 << idx
--            idx += 1
-+        for e in self.entry_list:
-+            mask += e.user_value()
-         return mask
++	if (!ena_xdp_legal_queue_count(adapter, count)) {
++		if (ena_xdp_present(adapter))
++			return -EINVAL;
++
++		xdp_clear_features_flag(netdev);
++	} else {
++		xdp_set_features_flag(netdev,
++				      NETDEV_XDP_ACT_BASIC |
++				      NETDEV_XDP_ACT_REDIRECT);
++	}
++
+ 	return ena_update_queue_count(adapter, count);
+ }
  
+diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+index d3999db7c6a2..cbfe7f977270 100644
+--- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
++++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+@@ -4105,8 +4105,6 @@ static void ena_set_conf_feat_params(struct ena_adapter *adapter,
+ 	/* Set offload features */
+ 	ena_set_dev_offloads(feat, netdev);
  
+-	netdev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT;
+-
+ 	adapter->max_mtu = feat->dev_attr.max_mtu;
+ 	netdev->max_mtu = adapter->max_mtu;
+ 	netdev->min_mtu = ENA_MIN_MTU;
+@@ -4393,6 +4391,10 @@ static int ena_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 
+ 	ena_config_debug_area(adapter);
+ 
++	if (ena_xdp_legal_queue_count(adapter, adapter->num_io_queues))
++		netdev->xdp_features = NETDEV_XDP_ACT_BASIC |
++				       NETDEV_XDP_ACT_REDIRECT;
++
+ 	memcpy(adapter->netdev->perm_addr, adapter->mac_addr, netdev->addr_len);
+ 
+ 	netif_carrier_off(netdev);
 -- 
 2.39.2
 
