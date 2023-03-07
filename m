@@ -2,166 +2,392 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E61A1C74A4B
-	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 23:33:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8468EC6FD1E
+	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 23:33:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbjCGXdV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Mar 2023 18:33:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43640 "EHLO
+        id S229937AbjCGXdT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Mar 2023 18:33:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbjCGXdS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Mar 2023 18:33:18 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430044ECCA
-        for <bpf@vger.kernel.org>; Tue,  7 Mar 2023 15:33:17 -0800 (PST)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 327KgDoX031247
-        for <bpf@vger.kernel.org>; Tue, 7 Mar 2023 15:33:16 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=s2048-2021-q4;
- bh=JuUsaGjz0FOzsIY+YADBE00fZV81KJ1CbSmQq3049vc=;
- b=fDInSrXAg3loyphXJ26q5CoSYEpYs01ZzK7mVUB51QmO9s4/m3Loh+rAkJwXDcEiawQv
- fi2KbWNuDiCVv5UjW0XbrLXAZio8mP6YFL5oCDZTaFac4WCZ3TlwTP5QKvY0A9Rwgaa6
- 4vajzZyEuIsodK6HcqDPT2oNA4YhSMrWvzaaBmT2dYp0pNPLz4Y4bV7wyh3FOewAaZXW
- Ax++N8h9SZ1PYFbKA22+rPxw+yYjljQ6vts+sgJaBNwh5RQxJJigM/94eqOPI9QU8L4z
- iwcAHLkkTB7z3zHbCIyllJGZTmjOefd32eRQeGRRO6r6rwZdBy4daS1ky+MuUzJq4kjU MQ== 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3p63bvdb47-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 07 Mar 2023 15:33:16 -0800
-Received: from twshared21760.39.frc1.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 7 Mar 2023 15:33:15 -0800
-Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
-        id 128B86C7C9B3; Tue,  7 Mar 2023 15:33:12 -0800 (PST)
-From:   Kui-Feng Lee <kuifeng@meta.com>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <martin.lau@linux.dev>,
-        <song@kernel.org>, <kernel-team@meta.com>, <andrii@kernel.org>,
-        <sdf@google.com>
-CC:     Kui-Feng Lee <kuifeng@meta.com>
-Subject: [PATCH bpf-next v4 0/9] Transit between BPF TCP congestion controls.
-Date:   Tue, 7 Mar 2023 15:32:58 -0800
-Message-ID: <20230307233307.3626875-1-kuifeng@meta.com>
-X-Mailer: git-send-email 2.34.1
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: LNFs4XxkTcqF_nTrc4tjQKU_LXzYUsl-
-X-Proofpoint-ORIG-GUID: LNFs4XxkTcqF_nTrc4tjQKU_LXzYUsl-
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S229812AbjCGXdR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Mar 2023 18:33:17 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394314E5EE;
+        Tue,  7 Mar 2023 15:33:15 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id b20so9164255pfo.6;
+        Tue, 07 Mar 2023 15:33:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678231994;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lC+wocJs40E6XIA7vWZUphTNK2raAPi9HIYmbOkjK4k=;
+        b=R+KyO2PJigqcm5w7QTb5A5c8+WJiekkU4DmwBvywIzcUxw9+WDv13aGwDBwwTqmZdq
+         ZDbbwlqCX4Wy44qDuk3KLT4nUV7Kf64lNozZ0ZXrjgNGY42vaMVqFlnP3ZSGAuTnCCSZ
+         SVbtnv4yGfdR/4CWoRhvKPPo9YIg/YuQnWeiWyVSNwM3m1v3+h60GUO31nKTL2aDgvZ5
+         hbuWW+90atfM8wwXsbX1bUwfjJsAe1x6xNpqSgZqG7V9LUjMTx2DQQ5wsGc71c2LaHEn
+         AcOzseZtDGIXYI/MJg38vM8kjAR5c52N11Rkc6oxd6Y27SINniMODxb/8CdvchfpmhvO
+         XGKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678231994;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=lC+wocJs40E6XIA7vWZUphTNK2raAPi9HIYmbOkjK4k=;
+        b=RS8vHS2TLP5f4uyTYUnMqTNxYQcDhXBg7DWOqZFJs51Y4CMEGO1jkb/l5qoRrCz2fG
+         FRrnz7INYoZZPHk/PuT9VVzpFackn4w1TOpQjRawA33CSXJDOQ8cO290nBRNp90QcbqZ
+         1lPRYBxE8BtjD39jFMqBQ6U3VXYd14bjhgXlQrcqhdofrmX0WbgYZnP2zg7NJPxbpVIv
+         7cz8XYctVjXzym8IQ0AkBT0cAWjHgUBgafNQzNcwCGQnJdFfMi4tmYgTeA8UvwmkiQdY
+         EDuy/th45qKifwW6Ikor9XN78byaGSYpU6rRHzf/mn+Ca7kczD0oZ+LYoud1N1XFroa4
+         2y0Q==
+X-Gm-Message-State: AO0yUKWhEc4X5ghiYjUX69+ZQhdj5CDd7f6Hm9P4fTtJEo++mN+DUljQ
+        ZN7Un362c1hlQhIvRGbeD0mdmfHLjnE=
+X-Google-Smtp-Source: AK7set+XPdFvftPziC6pCgxOEdNhRl3FdASXTGbqsYIvV0I5cc/zuKtOQC4UldjEukzNcfVSmE5FOQ==
+X-Received: by 2002:a62:5e43:0:b0:5de:3c49:b06 with SMTP id s64-20020a625e43000000b005de3c490b06mr11608493pfb.3.1678231994556;
+        Tue, 07 Mar 2023 15:33:14 -0800 (PST)
+Received: from moohyul.svl.corp.google.com ([2620:15c:2d4:203:15e8:b801:cd55:a496])
+        by smtp.gmail.com with ESMTPSA id l11-20020a62be0b000000b005da23d8cbffsm8342217pff.158.2023.03.07.15.33.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 15:33:14 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Song Liu <song@kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH 1/9] perf bpf filter: Introduce basic BPF filter expression
+Date:   Tue,  7 Mar 2023 15:33:01 -0800
+Message-Id: <20230307233309.3546160-2-namhyung@kernel.org>
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+In-Reply-To: <20230307233309.3546160-1-namhyung@kernel.org>
+References: <20230307233309.3546160-1-namhyung@kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-07_16,2023-03-07_01,2023-02-09_01
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Major changes:
+This implements a tiny parser for the filter expressions used for BPF.
+Each expression will be converted to struct perf_bpf_filter_expr and
+be passed to a BPF map.
 
- - Create bpf_links in the kernel for BPF struct_ops to register and
-   unregister it.
+For now, I'd like to start with the very basic comparisons like EQ or
+GT.  The LHS should be a term for sample data and the RHS is a number.
+The expressions are connected by a comma.  For example,
 
- - Enables switching between implementations of bpf-tcp-cc under a
-   name instantly by replacing the backing struct_ops map of a
-   bpf_link.
+    period > 10000
+    ip < 0x1000000000000, cpu == 3
 
-Previously, BPF struct_ops didn't go off, as even when the user
-program creating it was terminated, none of these ever were pinned.
-For instance, the TCP congestion control subsystem indirectly
-maintains a reference count on the struct_ops of any registered BPF
-implemented algorithm. Thus, the algorithm won't be deactivated until
-someone deliberately unregisters it.  For compatibility with other BPF
-programs, bpf_links have been created to work in coordination with
-struct_ops maps. This ensures that the registration and unregistration
-of these respective maps is carried out at the start and end of the
-bpf_link.
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/util/Build        | 16 +++++++
+ tools/perf/util/bpf-filter.c | 37 ++++++++++++++++
+ tools/perf/util/bpf-filter.h | 36 ++++++++++++++++
+ tools/perf/util/bpf-filter.l | 82 ++++++++++++++++++++++++++++++++++++
+ tools/perf/util/bpf-filter.y | 54 ++++++++++++++++++++++++
+ 5 files changed, 225 insertions(+)
+ create mode 100644 tools/perf/util/bpf-filter.c
+ create mode 100644 tools/perf/util/bpf-filter.h
+ create mode 100644 tools/perf/util/bpf-filter.l
+ create mode 100644 tools/perf/util/bpf-filter.y
 
-We also faced complications when attempting to replace an existing TCP
-congestion control algorithm with a new implementation on the fly. A
-struct_ops map was used to register a TCP congestion control algorithm
-with a unique name.  We had to either register the alternative
-implementation with a new name and move over or unregister the current
-one before being able to reregistration with the same name.  To fix
-this problem, we can an option to migrate the registration of the
-algorithm from struct_ops maps to bpf_links. By modifying the backing
-map of a bpf_link, it suddenly becomes possible to replace an existing
-TCP congestion control algorithm with ease.
-
-The major differences from v3:
-
- - Remove bpf_struct_ops_map_free_rcu(), and use synchronize_rcu().
-
- - Improve the commit log of the part 1.
-
- - Before transitioning to the READY state, we conduct a value check
-   to ensure that struct_ops can be successfully utilized and links
-   created later.
-
-The major differences from v2:
-
- - Simplify states
-
-   - Remove TOBEUNREG.
-
-   - Rename UNREG to READY.
-
- - Stop using the refcnt of the kvalue of a struct_ops. Explicitly
-   increase and decrease the refcount of struct_ops.
-
- - Prepare kernel vdata during the load phase of libbpf.
-
-The major differences from v1:
-
- - Added bpf_struct_ops_link to replace the previous union-based
-   approach.
-
- - Added UNREG and TOBEUNREG to the state of bpf_struct_ops_map.
-
-   - bpf_struct_ops_transit_state() maintains state transitions.
-
- - Fixed synchronization issue.
-
- - Prepare kernel vdata of struct_ops during the loading phase of
-   bpf_object.
-
- - Merged previous patch 3 to patch 1.
-
-v3: https://lore.kernel.org/all/20230303012122.852654-1-kuifeng@meta.com/
-v2: https://lore.kernel.org/bpf/20230223011238.12313-1-kuifeng@meta.com/
-v1: https://lore.kernel.org/bpf/20230214221718.503964-1-kuifeng@meta.com/
-
-Kui-Feng Lee (9):
-  bpf: Retire the struct_ops map kvalue->refcnt.
-  bpf: Create links for BPF struct_ops maps.
-  net: Update an existing TCP congestion control algorithm.
-  bpf: Validate kdata of a struct_ops before transiting to READY.
-  libbpf: Create a bpf_link in bpf_map__attach_struct_ops().
-  bpf: Update the struct_ops of a bpf_link.
-  libbpf: Update a bpf_link with another struct_ops.
-  libbpf: Use .struct_ops.link section to indicate a struct_ops with a
-    link.
-  selftests/bpf: Test switching TCP Congestion Control algorithms.
-
- include/linux/bpf.h                           |  16 ++
- include/net/tcp.h                             |   3 +
- include/uapi/linux/bpf.h                      |  20 +-
- kernel/bpf/bpf_struct_ops.c                   | 218 +++++++++++++++---
- kernel/bpf/syscall.c                          |  68 ++++--
- net/bpf/bpf_dummy_struct_ops.c                |   6 +
- net/ipv4/bpf_tcp_ca.c                         |  14 +-
- net/ipv4/tcp_cong.c                           |  57 ++++-
- tools/include/uapi/linux/bpf.h                |  19 +-
- tools/lib/bpf/libbpf.c                        | 184 ++++++++++++---
- tools/lib/bpf/libbpf.h                        |   1 +
- tools/lib/bpf/libbpf.map                      |   2 +
- .../selftests/bpf/prog_tests/bpf_tcp_ca.c     |  38 +++
- .../selftests/bpf/progs/tcp_ca_update.c       |  62 +++++
- 14 files changed, 616 insertions(+), 92 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/tcp_ca_update.c
-
---=20
-2.34.1
+diff --git a/tools/perf/util/Build b/tools/perf/util/Build
+index 918b501f9bd8..6af73fb5c797 100644
+--- a/tools/perf/util/Build
++++ b/tools/perf/util/Build
+@@ -154,6 +154,9 @@ perf-$(CONFIG_PERF_BPF_SKEL) += bpf_counter.o
+ perf-$(CONFIG_PERF_BPF_SKEL) += bpf_counter_cgroup.o
+ perf-$(CONFIG_PERF_BPF_SKEL) += bpf_ftrace.o
+ perf-$(CONFIG_PERF_BPF_SKEL) += bpf_off_cpu.o
++perf-$(CONFIG_PERF_BPF_SKEL) += bpf-filter.o
++perf-$(CONFIG_PERF_BPF_SKEL) += bpf-filter-flex.o
++perf-$(CONFIG_PERF_BPF_SKEL) += bpf-filter-bison.o
+ 
+ ifeq ($(CONFIG_LIBTRACEEVENT),y)
+   perf-$(CONFIG_PERF_BPF_SKEL) += bpf_lock_contention.o
+@@ -266,6 +269,16 @@ $(OUTPUT)util/pmu-bison.c $(OUTPUT)util/pmu-bison.h: util/pmu.y
+ 	$(Q)$(call echo-cmd,bison)$(BISON) -v $< -d $(PARSER_DEBUG_BISON) $(BISON_FILE_PREFIX_MAP) \
+ 		-o $(OUTPUT)util/pmu-bison.c -p perf_pmu_
+ 
++$(OUTPUT)util/bpf-filter-flex.c $(OUTPUT)util/bpf-filter-flex.h: util/bpf-filter.l $(OUTPUT)util/bpf-filter-bison.c
++	$(call rule_mkdir)
++	$(Q)$(call echo-cmd,flex)$(FLEX) -o $(OUTPUT)util/bpf-filter-flex.c \
++		--header-file=$(OUTPUT)util/bpf-filter-flex.h $(PARSER_DEBUG_FLEX) $<
++
++$(OUTPUT)util/bpf-filter-bison.c $(OUTPUT)util/bpf-filter-bison.h: util/bpf-filter.y
++	$(call rule_mkdir)
++	$(Q)$(call echo-cmd,bison)$(BISON) -v $< -d $(PARSER_DEBUG_BISON) $(BISON_FILE_PREFIX_MAP) \
++		-o $(OUTPUT)util/bpf-filter-bison.c -p perf_bpf_filter_
++
+ FLEX_GE_26 := $(shell expr $(shell $(FLEX) --version | sed -e  's/flex \([0-9]\+\).\([0-9]\+\)/\1\2/g') \>\= 26)
+ ifeq ($(FLEX_GE_26),1)
+   flex_flags := -Wno-switch-enum -Wno-switch-default -Wno-unused-function -Wno-redundant-decls -Wno-sign-compare -Wno-unused-parameter -Wno-missing-prototypes -Wno-missing-declarations
+@@ -279,6 +292,7 @@ endif
+ CFLAGS_parse-events-flex.o  += $(flex_flags)
+ CFLAGS_pmu-flex.o           += $(flex_flags)
+ CFLAGS_expr-flex.o          += $(flex_flags)
++CFLAGS_bpf-filter-flex.o    += $(flex_flags)
+ 
+ bison_flags := -DYYENABLE_NLS=0
+ BISON_GE_35 := $(shell expr $(shell $(BISON) --version | grep bison | sed -e 's/.\+ \([0-9]\+\).\([0-9]\+\)/\1\2/g') \>\= 35)
+@@ -290,10 +304,12 @@ endif
+ CFLAGS_parse-events-bison.o += $(bison_flags)
+ CFLAGS_pmu-bison.o          += -DYYLTYPE_IS_TRIVIAL=0 $(bison_flags)
+ CFLAGS_expr-bison.o         += -DYYLTYPE_IS_TRIVIAL=0 $(bison_flags)
++CFLAGS_bpf-filter-bison.o   += -DYYLTYPE_IS_TRIVIAL=0 $(bison_flags)
+ 
+ $(OUTPUT)util/parse-events.o: $(OUTPUT)util/parse-events-flex.c $(OUTPUT)util/parse-events-bison.c
+ $(OUTPUT)util/pmu.o: $(OUTPUT)util/pmu-flex.c $(OUTPUT)util/pmu-bison.c
+ $(OUTPUT)util/expr.o: $(OUTPUT)util/expr-flex.c $(OUTPUT)util/expr-bison.c
++$(OUTPUT)util/bpf-filter.o: $(OUTPUT)util/bpf-filter-flex.c $(OUTPUT)util/bpf-filter-bison.c
+ 
+ CFLAGS_bitmap.o        += -Wno-unused-parameter -DETC_PERFCONFIG="BUILD_STR($(ETC_PERFCONFIG_SQ))"
+ CFLAGS_find_bit.o      += -Wno-unused-parameter -DETC_PERFCONFIG="BUILD_STR($(ETC_PERFCONFIG_SQ))"
+diff --git a/tools/perf/util/bpf-filter.c b/tools/perf/util/bpf-filter.c
+new file mode 100644
+index 000000000000..c72e35d51240
+--- /dev/null
++++ b/tools/perf/util/bpf-filter.c
+@@ -0,0 +1,37 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#include <stdlib.h>
++
++#include "util/bpf-filter.h"
++#include "util/bpf-filter-flex.h"
++#include "util/bpf-filter-bison.h"
++
++struct perf_bpf_filter_expr *perf_bpf_filter_expr__new(unsigned long sample_flags,
++						       enum perf_bpf_filter_op op,
++						       unsigned long val)
++{
++	struct perf_bpf_filter_expr *expr;
++
++	expr = malloc(sizeof(*expr));
++	if (expr != NULL) {
++		expr->sample_flags = sample_flags;
++		expr->op = op;
++		expr->val = val;
++	}
++	return expr;
++}
++
++int perf_bpf_filter__parse(struct list_head *expr_head, const char *str)
++{
++	YY_BUFFER_STATE buffer;
++	int ret;
++
++	buffer = perf_bpf_filter__scan_string(str);
++
++	ret = perf_bpf_filter_parse(expr_head);
++
++	perf_bpf_filter__flush_buffer(buffer);
++	perf_bpf_filter__delete_buffer(buffer);
++	perf_bpf_filter_lex_destroy();
++
++	return ret;
++}
+diff --git a/tools/perf/util/bpf-filter.h b/tools/perf/util/bpf-filter.h
+new file mode 100644
+index 000000000000..93a0d3de038c
+--- /dev/null
++++ b/tools/perf/util/bpf-filter.h
+@@ -0,0 +1,36 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef PERF_UTIL_BPF_FILTER_H
++#define PERF_UTIL_BPF_FILTER_H
++
++#include <linux/list.h>
++
++enum perf_bpf_filter_op {
++	PBF_OP_EQ,
++	PBF_OP_NEQ,
++	PBF_OP_GT,
++	PBF_OP_GE,
++	PBF_OP_LT,
++	PBF_OP_LE,
++	PBF_OP_AND,
++};
++
++struct perf_bpf_filter_expr {
++	struct list_head list;
++	enum perf_bpf_filter_op op;
++	unsigned long sample_flags;
++	unsigned long val;
++};
++
++#ifdef HAVE_BPF_SKEL
++struct perf_bpf_filter_expr *perf_bpf_filter_expr__new(unsigned long sample_flags,
++						       enum perf_bpf_filter_op op,
++						       unsigned long val);
++int perf_bpf_filter__parse(struct list_head *expr_head, const char *str);
++#else /* !HAVE_BPF_SKEL */
++static inline int perf_bpf_filter__parse(struct list_head *expr_head __maybe_unused,
++					 const char *str __maybe_unused)
++{
++	return -ENOSYS;
++}
++#endif /* HAVE_BPF_SKEL*/
++#endif /* PERF_UTIL_BPF_FILTER_H */
+diff --git a/tools/perf/util/bpf-filter.l b/tools/perf/util/bpf-filter.l
+new file mode 100644
+index 000000000000..f6c0b74ea285
+--- /dev/null
++++ b/tools/perf/util/bpf-filter.l
+@@ -0,0 +1,82 @@
++%option prefix="perf_bpf_filter_"
++%option noyywrap
++
++%{
++#include <stdio.h>
++#include <stdlib.h>
++#include <linux/perf_event.h>
++
++#include "bpf-filter.h"
++#include "bpf-filter-bison.h"
++
++static int sample(unsigned long sample_flag)
++{
++	perf_bpf_filter_lval.sample = sample_flag;
++	return BFT_SAMPLE;
++}
++
++static int operator(enum perf_bpf_filter_op op)
++{
++	perf_bpf_filter_lval.op = op;
++	return BFT_OP;
++}
++
++static int value(int base)
++{
++	long num;
++
++	errno = 0;
++	num = strtoul(perf_bpf_filter_text, NULL, base);
++	if (errno)
++		return BFT_ERROR;
++
++	perf_bpf_filter_lval.num = num;
++	return BFT_NUM;
++}
++
++static int error(const char *str)
++{
++	printf("perf_bpf_filter: Unexpected filter %s: %s\n", str, perf_bpf_filter_text);
++	return BFT_ERROR;
++}
++
++%}
++
++num_dec		[0-9]+
++num_hex		0[Xx][0-9a-fA-F]+
++space		[ \t]+
++ident		[_a-zA-Z][_a-zA-Z0-9]+
++
++%%
++
++{num_dec}	{ return value(10); }
++{num_hex}	{ return value(16); }
++{space}		{ }
++
++ip		{ return sample(PERF_SAMPLE_IP); }
++id		{ return sample(PERF_SAMPLE_ID); }
++tid		{ return sample(PERF_SAMPLE_TID); }
++cpu		{ return sample(PERF_SAMPLE_CPU); }
++time		{ return sample(PERF_SAMPLE_TIME); }
++addr		{ return sample(PERF_SAMPLE_ADDR); }
++period		{ return sample(PERF_SAMPLE_PERIOD); }
++txn		{ return sample(PERF_SAMPLE_TRANSACTION); }
++weight		{ return sample(PERF_SAMPLE_WEIGHT); }
++phys_addr	{ return sample(PERF_SAMPLE_PHYS_ADDR); }
++code_pgsz	{ return sample(PERF_SAMPLE_CODE_PAGE_SIZE); }
++data_pgsz	{ return sample(PERF_SAMPLE_DATA_PAGE_SIZE); }
++
++"=="		{ return operator(PBF_OP_EQ); }
++"!="		{ return operator(PBF_OP_NEQ); }
++">"		{ return operator(PBF_OP_GT); }
++"<"		{ return operator(PBF_OP_LT); }
++">="		{ return operator(PBF_OP_GE); }
++"<="		{ return operator(PBF_OP_LE); }
++"&"		{ return operator(PBF_OP_AND); }
++
++","		{ return ','; }
++
++{ident}		{ return error("ident"); }
++.		{ return error("input"); }
++
++%%
+diff --git a/tools/perf/util/bpf-filter.y b/tools/perf/util/bpf-filter.y
+new file mode 100644
+index 000000000000..13eca612ecca
+--- /dev/null
++++ b/tools/perf/util/bpf-filter.y
+@@ -0,0 +1,54 @@
++%parse-param {struct list_head *expr_head}
++%define parse.error verbose
++
++%{
++
++#include <stdio.h>
++#include <string.h>
++#include <linux/compiler.h>
++#include <linux/list.h>
++#include "bpf-filter.h"
++
++static void perf_bpf_filter_error(struct list_head *expr __maybe_unused,
++				  char const *msg)
++{
++	printf("perf_bpf_filter: %s\n", msg);
++}
++
++%}
++
++%union
++{
++	unsigned long num;
++	unsigned long sample;
++	enum perf_bpf_filter_op op;
++	struct perf_bpf_filter_expr *expr;
++}
++
++%token BFT_SAMPLE BFT_OP BFT_ERROR BFT_NUM
++%type <expr> filter_term
++%destructor { free ($$); } <expr>
++%type <sample> BFT_SAMPLE
++%type <op> BFT_OP
++%type <num> BFT_NUM
++
++%%
++
++filter:
++filter ',' filter_term
++{
++	list_add_tail(&$3->list, expr_head);
++}
++|
++filter_term
++{
++	list_add_tail(&$1->list, expr_head);
++}
++
++filter_term:
++BFT_SAMPLE BFT_OP BFT_NUM
++{
++	$$ = perf_bpf_filter_expr__new($1, $2, $3);
++}
++
++%%
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
 
