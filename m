@@ -2,118 +2,67 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A469BC6FD1B
-	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 16:04:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DEAAC6FD1D
+	for <bpf@archiver.kernel.org>; Tue,  7 Mar 2023 16:48:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbjCGQEJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Mar 2023 11:04:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51238 "EHLO
+        id S231241AbjCGQsI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Mar 2023 11:48:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231594AbjCGQDu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Mar 2023 11:03:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0E99B2E7
-        for <bpf@vger.kernel.org>; Tue,  7 Mar 2023 08:00:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678204796;
+        with ESMTP id S229976AbjCGQrU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Mar 2023 11:47:20 -0500
+Received: from out-56.mta0.migadu.com (out-56.mta0.migadu.com [IPv6:2001:41d0:1004:224b::38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7EC10246
+        for <bpf@vger.kernel.org>; Tue,  7 Mar 2023 08:44:17 -0800 (PST)
+Message-ID: <f1e87004-4654-8204-2771-32ed13467202@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1678207455;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=I0FHpHDfgMNKIF0PugEg3oYZEslsm/Wba3C2OVAQmj8=;
-        b=FMPY491LINJnLCwbzZoBO1VXKcbaV/sFyqobeFvZEuqaDgY5N5Ug5Oafga/fpZQaXapDRN
-        3nBqLFzeTi2eU5b7+V+OdsTOnjiYO3Hxwr3ob/h2n64K2mcI3UF3X+dZpHbtT52n3Rrh7g
-        8HXhswlD/HUuLRHt/sv9pRdshEChfFE=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-66-8y4V3GTUPLOAIpglGlIY0Q-1; Tue, 07 Mar 2023 10:59:54 -0500
-X-MC-Unique: 8y4V3GTUPLOAIpglGlIY0Q-1
-Received: by mail-wr1-f70.google.com with SMTP id t19-20020a0560001a5300b002ce013276b8so2314286wry.1
-        for <bpf@vger.kernel.org>; Tue, 07 Mar 2023 07:59:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678204792;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I0FHpHDfgMNKIF0PugEg3oYZEslsm/Wba3C2OVAQmj8=;
-        b=BpojqDtdoHY6xnEv0SPRicwC6tDenAYMJky7Vp5HmMABS8XIrrxFEN3YWlM5UqzRyV
-         /hD2Qf1ie04896Y8YpvbbHlS+/7zJh4XVXUu3KEbNyV68Jh9nRac4fIGRcRKUU2LftM8
-         F9gwfb9XHAiwvQ/GdnkbJZEB7qYjCgcp8gAm/jbEmAVMC2F+GcxzXfFrZyVhGuC7TYm1
-         YCOrveecd/Gx6PB9TQztMV0gi8LtBeNG65Zq0PooCruno0ZhxaQmPwgR8YfLVdGeUgNO
-         YM8o8ur668ieMNKm4stodfs8OyNWYJ0veuCu6siHsbkzm9DReV5NcCYb/+W3Dxl69gUx
-         d4qw==
-X-Gm-Message-State: AO0yUKXlHjeU6S9jCvoxvCoMF6V60k7S1m6MsSD8CoE9gTxWoygl75iS
-        lH0UloSdTwyTkqQP/PUD3olPuW7T+McOYHYY81MafEMTfZBzteO/E/nai4BQC0DkQzXjtyWY5Oo
-        2HN0aBaIxPcsp
-X-Received: by 2002:a05:600c:4708:b0:3ea:e7e7:95d9 with SMTP id v8-20020a05600c470800b003eae7e795d9mr13611732wmo.32.1678204792805;
-        Tue, 07 Mar 2023 07:59:52 -0800 (PST)
-X-Google-Smtp-Source: AK7set9ob27rJ5Fb3HgQd1GlfrWD/oV9eHzxuYT1BLvurc5s6TprDFYyhGudmqSQfuT1fPyQzYHBIQ==
-X-Received: by 2002:a05:600c:4708:b0:3ea:e7e7:95d9 with SMTP id v8-20020a05600c470800b003eae7e795d9mr13611707wmo.32.1678204792450;
-        Tue, 07 Mar 2023 07:59:52 -0800 (PST)
-Received: from redhat.com ([2.52.138.216])
-        by smtp.gmail.com with ESMTPSA id n37-20020a05600c3ba500b003e2052bad94sm19010162wms.33.2023.03.07.07.59.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 07:59:51 -0800 (PST)
-Date:   Tue, 7 Mar 2023 10:59:47 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>, netdev@vger.kernel.org,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net 0/2] add checking sq is full inside xdp xmit
-Message-ID: <20230307105848-mutt-send-email-mst@kernel.org>
-References: <20230306041535.73319-1-xuanzhuo@linux.alibaba.com>
- <20230306125742-mutt-send-email-mst@kernel.org>
- <1678153770.8281553-2-xuanzhuo@linux.alibaba.com>
- <27a06a7d79fef3446ae1167612808a2af09922be.camel@redhat.com>
+        bh=VLmMu45eHTgRA2yeO3gHfTmY8V1bfviU/uVTqAvNcUA=;
+        b=GvyfmtZQWNSCthxrhD63hW+gV7A3MNUcBly5koI+MEKf8juOsdCwio2QhImfOFKQzzRSMF
+        t8u2xqktnvhOXcXK8J+iVAyB1O28oeQ6SrmXXoqHhhp8g2JYuA5l+M7oJUUmhMQdZP/hPE
+        2ahlq6bjc4FG4nUhUYfXRrLhUCKV7IA=
+Date:   Tue, 7 Mar 2023 08:44:10 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <27a06a7d79fef3446ae1167612808a2af09922be.camel@redhat.com>
+Subject: Re: [PATCH bpf-next v4 0/4] net/smc: Introduce BPF injection
+ capability
+Content-Language: en-US
+To:     "D. Wythe" <alibuda@linux.alibaba.com>
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
+        bpf@vger.kernel.org, kgraul@linux.ibm.com, wenjia@linux.ibm.com,
+        jaka@linux.ibm.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org
+References: <1677602291-1666-1-git-send-email-alibuda@linux.alibaba.com>
+ <25cee0eb-a1f9-9f0b-9987-ca6e79e6b752@linux.alibaba.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <25cee0eb-a1f9-9f0b-9987-ca6e79e6b752@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 10:53:41AM +0100, Paolo Abeni wrote:
-> Hi,
-> On Tue, 2023-03-07 at 09:49 +0800, Xuan Zhuo wrote:
-> > On Mon, 6 Mar 2023 12:58:22 -0500, "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> > > On Mon, Mar 06, 2023 at 12:15:33PM +0800, Xuan Zhuo wrote:
-> > > > If the queue of xdp xmit is not an independent queue, then when the xdp
-> > > > xmit used all the desc, the xmit from the __dev_queue_xmit() may encounter
-> > > > the following error.
-> > > > 
-> > > > net ens4: Unexpected TXQ (0) queue failure: -28
-> > > > 
-> > > > This patch adds a check whether sq is full in XDP Xmit.
-> > > > 
-> > > > Thanks.
-> > > 
-> > > Acked-by: Michael S. Tsirkin <mst@redhat.com>
-> > > 
-> > > needed for stable?
-> > 
-> > Yes i think.
-> 
-> Could you please re-post including a suitable 'Fixes' tag? That would
-> address stable, too. Additionally you could rename check_sq_full() in
-> patch 1, perhaps 'check_disable_sq_full()' would do.
+On 3/6/23 7:05 PM, D. Wythe wrote:
+> I wondering if there are any more questions about this PATCH, This patch seems 
+May be start with the questions on v2 first.
 
-Not that's even more confusing it sounds like it's checking that
-it's checking that sq is disabled unless one looks closely.
-
-I think check_sq_full_and_disable() is better.
-
-> You can retain the already collected tags.
+> to have been hanging for some time.
 > 
-> Thanks!
+> If you have any questions, please let me know.
 > 
-> Paolo
+> 
+> Thanks,
+> 
+> D. Wythe
+> 
+> 
+> Do you have any questions about this PATCH?  If you have any other questions, 
+> please let me know.
+> 
 
