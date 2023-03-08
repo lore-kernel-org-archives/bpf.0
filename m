@@ -2,141 +2,149 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47AE0C6FA99
-	for <bpf@archiver.kernel.org>; Wed,  8 Mar 2023 00:31:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B42F0C6FA99
+	for <bpf@archiver.kernel.org>; Wed,  8 Mar 2023 00:32:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjCHAbs (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Mar 2023 19:31:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54360 "EHLO
+        id S229819AbjCHAcT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Mar 2023 19:32:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbjCHAbr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Mar 2023 19:31:47 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC68CB04BC;
-        Tue,  7 Mar 2023 16:31:41 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id ec29so28612874edb.6;
-        Tue, 07 Mar 2023 16:31:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678235500;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P8DWyxZLwz0osrzYUjjj+Q0PWcCb5xGom73+y4XCUag=;
-        b=CMl2Qemmziw/e5oRKfvTMmICqZiTcuts6A0+1gO6EtGLAZSyeG6hC1F2jpmgqnuHCi
-         9R44T4/cTr5QflfIkBYXsV36jE3BdPM+vDyT2DgE5Qku5adiF+9H3TFAGBnWCup3nwFy
-         ZkauYEsWDQ4MHj+vY2fBRcHHYxoKQoDpiXpPjWSNcU840D++A2lmTEOFuf4WMloYRaHg
-         Ak/Ge3lPxtKqkuiDdeAg8oLtNF4gr1SUImSCLPedwUfEZg4D0Jn4aR9xNzkqOiqQ8er6
-         GSj3zqjtYKQuLi8w37fcToRPRNLYiXGnbiBH2MSRvCUwvaqwtUOQteCifiPUVsr2ouKR
-         /a4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678235500;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P8DWyxZLwz0osrzYUjjj+Q0PWcCb5xGom73+y4XCUag=;
-        b=GyQGrJBMZnho5+6jmG5YBU4A9jXfjC1ZgbXKyv9sxgrJmlYl0LklZfH2ANsL6gF4T1
-         hIIwUNgs24/IEj71Yz30Q9reu5+KdZzRzDJXZ3bmkK3ypspEPgzoAwDi3TCF5B/s7qtB
-         fVXFq5E+gb1Wn86AAjrAHNjoyy1OIQg3lFs1Q4xvv24nOBSBOR4+3C7kCZNgFDWVDp8z
-         Ff/4XsJB16UfYpRSsiqcA3INx3oNJcCbjOeFhsfMRDRIFpNmRRFzNHyAQU7lNOWp868R
-         Ijd1oycFfKEoA3wZgl+M1vmFtbMOLi1qQeNmmjxhYdcAa9oQYhT1K3FEjlTSe662HDNh
-         g79w==
-X-Gm-Message-State: AO0yUKWTqYBajJFUGP/zRj4SmxSfNwggY2arHZDp1GlWjWB9shqECekL
-        OoohvWs2l8QI9rAtn4ohkaTj7kHwYmae4OU846Y=
-X-Google-Smtp-Source: AK7set/isvjfpk9L7++ojTmD2MedPIioIjEyje2YVbRt5Mxdd1x/zVxoo60oOmS54QWAPrLb5Sb1UfW0CrYyYe7Md8A=
-X-Received: by 2002:a17:906:24da:b0:8a5:c8bd:4ac4 with SMTP id
- f26-20020a17090624da00b008a5c8bd4ac4mr7515351ejb.15.1678235500017; Tue, 07
- Mar 2023 16:31:40 -0800 (PST)
+        with ESMTP id S229662AbjCHAcS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Mar 2023 19:32:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD9812598;
+        Tue,  7 Mar 2023 16:32:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A25EC615EB;
+        Wed,  8 Mar 2023 00:32:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9AA7C4339C;
+        Wed,  8 Mar 2023 00:32:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678235532;
+        bh=ljo0gmnlIw1PE1/EfaI3BbP3uBM2FAAFMt5dEjzRlzY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=EzVZBg7SIbW+8adr96mVrxmE4DxZx8Pa/Uyi7LCALp3Ejtmrjai63dnihTRHuhZMK
+         zXapFYQkFfTOY+DdP/UB6DzdByHHOuSzGX+FEjm+47nOo/6TP0D4kXavorpRbM8A6O
+         Q+q/pECnmLc7DOl7KIjpVKvnU9bjEDGBJPIXb/93wuBDbRN9LLuT/tFnNbO6v0/bdM
+         hvKqrGv5g/+yuk9KNYlWZjDviJNR5DiRg3pCFxJaVByp5XSuZeB+JIK9rbGsp9PBPM
+         0QyH//MHPWRwPMHbAp84U5pYu1XVqaPMoe69oMPP+k1RnK5aGQwIRtJGVutfCaoeeg
+         RFGTElG2863fg==
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     bpf@vger.kernel.org
+Cc:     davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+        pabeni@redhat.com, Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH bpf-next 1/3] net: skbuff: rename __pkt_vlan_present_offset to __mono_tc_offset
+Date:   Tue,  7 Mar 2023 16:31:57 -0800
+Message-Id: <20230308003159.441580-2-kuba@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230308003159.441580-1-kuba@kernel.org>
+References: <20230308003159.441580-1-kuba@kernel.org>
 MIME-Version: 1.0
-References: <0a6f0513-b4b3-9349-cee5-b0ad38c81d2e@huaweicloud.com>
-In-Reply-To: <0a6f0513-b4b3-9349-cee5-b0ad38c81d2e@huaweicloud.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 7 Mar 2023 16:31:28 -0800
-Message-ID: <CAEf4Bza98fCnVRhxfxBOgqLuvB3c7Zh7A9yO8gtgVaNxGmZ4Pg@mail.gmail.com>
-Subject: Re: [LSF/MM/BPF TOPIC] bpf iterator for file-system
-To:     Hou Tao <houtao@huaweicloud.com>
-Cc:     lsf-pc@lists.linux-foundation.org, bpf <bpf@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Miklos Szeredi <miklos@szeredi.hu>,
-        Nhat Pham <nphamcs@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 7:42=E2=80=AFPM Hou Tao <houtao@huaweicloud.com> wr=
-ote:
->
-> From time to time, new syscalls have been proposed to gain more observabi=
-lity
-> for file-system:
->
-> (1) getvalues() [0]. It uses a hierarchical namespace API to gather and r=
-eturn
-> multiple values in single syscall.
-> (2) cachestat() [1].  It returns the cache status (e.g., number of dirty =
-pages)
-> of a given file in a scalable way.
->
-> All these proposals requires adding a new syscall. Here I would like to p=
-ropose
-> another solution for file system observability: bpf iterator for file sys=
-tem
-> object. The initial idea came when I was trying to implement a filefrag-l=
-ike
-> page cache tool with support for multi-order folio, so that we can know t=
-he
-> number of multi-order folios and the orders of those folios in page cache=
-. After
-> developing a demo for it, I realized that we could use it to provide more
-> observability for file system objects. e.g., dumping the per-cpu iostat f=
-or a
-> super block [2],  iterating all inodes in a super-block to dump info for
-> specific inodes (e.g., unlinked but pinned inode), or displaying the flag=
-s of a
-> specific mount.
->
-> The BPF iterator was introduced in v5.8 [3] to support flexible content d=
-umping
-> for kernel objects. It works by creating bpf iterator file [4], which is =
-a
-> seq-like read-only file, and the content of the bpf iterator file is dete=
-rmined
-> by a previously loaded bpf program, so userspace can read the bpf iterato=
-r file
-> to get the information it needs. However there are some unresolved issues=
-:
-> (1) The privilege.
-> Loading the bpf program requires CAP_ADMIN or CAP_BPF. This means that th=
-e
-> observability will be available to the privileged process. Maybe we can l=
-oad the
-> bpf program through a privileged process and make the bpf iterator file b=
-eing
-> readable for normal users.
+vlan_present is gone since
+commit 354259fa73e2 ("net: remove skb->vlan_present")
+rename the offset field to what BPF is currently looking
+for in this byte - mono_delivery_time and tc_at_ingress.
 
-That's possible today. Once you load BPF iter program and pin it in
-BPF FS, you can chown/chmod pinned file to give access to it to
-unprivileged processes.
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+ include/linux/skbuff.h                               | 4 ++--
+ net/core/filter.c                                    | 8 ++++----
+ tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c | 6 +++---
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-> (2) Prevent pinning the super-block
-> In the current naive implementation, the bpf iterator simply pins the
-> super-block of the passed fd and prevents the super-block from being dest=
-royed.
-> Perhaps fs-pin is a better choice, so the bpf iterator can be deactivated=
- after
-> the filesystem is umounted.
->
-> I hope to send out an RFC soon before LSF/MM/BPF for further discussion.
->
-> [0]:
-> https://lore.kernel.org/linux-fsdevel/YnEeuw6fd1A8usjj@miu.piliscsaba.red=
-hat.com/
-> [1]: https://lore.kernel.org/linux-mm/20230219073318.366189-1-nphamcs@gma=
-il.com/
-> [2]:
-> https://lore.kernel.org/linux-fsdevel/CAJfpegsCKEx41KA1S2QJ9gX9BEBG4_d8ig=
-A0DT66GFH2ZanspA@mail.gmail.com/
-> [3]: https://lore.kernel.org/bpf/20200509175859.2474608-1-yhs@fb.com/
-> [4]: https://docs.kernel.org/bpf/bpf_iterators.html
->
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index ff7ad331fb82..004009b3930f 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -956,7 +956,7 @@ struct sk_buff {
+ 	__u8			csum_valid:1;
+ 
+ 	/* private: */
+-	__u8			__pkt_vlan_present_offset[0];
++	__u8			__mono_tc_offset[0];
+ 	/* public: */
+ 	__u8			remcsum_offload:1;
+ 	__u8			csum_complete_sw:1;
+@@ -1080,7 +1080,7 @@ struct sk_buff {
+ #define TC_AT_INGRESS_MASK		(1 << 7)
+ #define SKB_MONO_DELIVERY_TIME_MASK	(1 << 5)
+ #endif
+-#define PKT_VLAN_PRESENT_OFFSET	offsetof(struct sk_buff, __pkt_vlan_present_offset)
++#define SKB_BF_MONO_TC_OFFSET		offsetof(struct sk_buff, __mono_tc_offset)
+ 
+ #ifdef __KERNEL__
+ /*
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 50f649f1b4a9..3370efad1dda 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -9185,7 +9185,7 @@ static struct bpf_insn *bpf_convert_tstamp_type_read(const struct bpf_insn *si,
+ 	__u8 tmp_reg = BPF_REG_AX;
+ 
+ 	*insn++ = BPF_LDX_MEM(BPF_B, tmp_reg, skb_reg,
+-			      PKT_VLAN_PRESENT_OFFSET);
++			      SKB_BF_MONO_TC_OFFSET);
+ 	*insn++ = BPF_JMP32_IMM(BPF_JSET, tmp_reg,
+ 				SKB_MONO_DELIVERY_TIME_MASK, 2);
+ 	*insn++ = BPF_MOV32_IMM(value_reg, BPF_SKB_TSTAMP_UNSPEC);
+@@ -9232,7 +9232,7 @@ static struct bpf_insn *bpf_convert_tstamp_read(const struct bpf_prog *prog,
+ 		/* AX is needed because src_reg and dst_reg could be the same */
+ 		__u8 tmp_reg = BPF_REG_AX;
+ 
+-		*insn++ = BPF_LDX_MEM(BPF_B, tmp_reg, skb_reg, PKT_VLAN_PRESENT_OFFSET);
++		*insn++ = BPF_LDX_MEM(BPF_B, tmp_reg, skb_reg, SKB_BF_MONO_TC_OFFSET);
+ 		*insn++ = BPF_ALU32_IMM(BPF_AND, tmp_reg,
+ 					TC_AT_INGRESS_MASK | SKB_MONO_DELIVERY_TIME_MASK);
+ 		*insn++ = BPF_JMP32_IMM(BPF_JNE, tmp_reg,
+@@ -9267,14 +9267,14 @@ static struct bpf_insn *bpf_convert_tstamp_write(const struct bpf_prog *prog,
+ 	if (!prog->tstamp_type_access) {
+ 		__u8 tmp_reg = BPF_REG_AX;
+ 
+-		*insn++ = BPF_LDX_MEM(BPF_B, tmp_reg, skb_reg, PKT_VLAN_PRESENT_OFFSET);
++		*insn++ = BPF_LDX_MEM(BPF_B, tmp_reg, skb_reg, SKB_BF_MONO_TC_OFFSET);
+ 		/* Writing __sk_buff->tstamp as ingress, goto <clear> */
+ 		*insn++ = BPF_JMP32_IMM(BPF_JSET, tmp_reg, TC_AT_INGRESS_MASK, 1);
+ 		/* goto <store> */
+ 		*insn++ = BPF_JMP_A(2);
+ 		/* <clear>: mono_delivery_time */
+ 		*insn++ = BPF_ALU32_IMM(BPF_AND, tmp_reg, ~SKB_MONO_DELIVERY_TIME_MASK);
+-		*insn++ = BPF_STX_MEM(BPF_B, skb_reg, tmp_reg, PKT_VLAN_PRESENT_OFFSET);
++		*insn++ = BPF_STX_MEM(BPF_B, skb_reg, tmp_reg, SKB_BF_MONO_TC_OFFSET);
+ 	}
+ #endif
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c b/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
+index d5fe3d4b936c..ae7b6e50e405 100644
+--- a/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
++++ b/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
+@@ -68,17 +68,17 @@ static struct test_case test_cases[] = {
+ #if defined(__x86_64__) || defined(__aarch64__)
+ 	{
+ 		N(SCHED_CLS, struct __sk_buff, tstamp),
+-		.read  = "r11 = *(u8 *)($ctx + sk_buff::__pkt_vlan_present_offset);"
++		.read  = "r11 = *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
+ 			 "w11 &= 160;"
+ 			 "if w11 != 0xa0 goto pc+2;"
+ 			 "$dst = 0;"
+ 			 "goto pc+1;"
+ 			 "$dst = *(u64 *)($ctx + sk_buff::tstamp);",
+-		.write = "r11 = *(u8 *)($ctx + sk_buff::__pkt_vlan_present_offset);"
++		.write = "r11 = *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
+ 			 "if w11 & 0x80 goto pc+1;"
+ 			 "goto pc+2;"
+ 			 "w11 &= -33;"
+-			 "*(u8 *)($ctx + sk_buff::__pkt_vlan_present_offset) = r11;"
++			 "*(u8 *)($ctx + sk_buff::__mono_tc_offset) = r11;"
+ 			 "*(u64 *)($ctx + sk_buff::tstamp) = $src;",
+ 	},
+ #endif
+-- 
+2.39.2
+
