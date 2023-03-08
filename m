@@ -2,138 +2,126 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4ADCC64EC4
-	for <bpf@archiver.kernel.org>; Wed,  8 Mar 2023 10:53:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B85BC678D5
+	for <bpf@archiver.kernel.org>; Wed,  8 Mar 2023 10:53:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230435AbjCHKxI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 8 Mar 2023 05:53:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50508 "EHLO
+        id S230450AbjCHKxV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Mar 2023 05:53:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbjCHKxG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 8 Mar 2023 05:53:06 -0500
-X-Greylist: delayed 632 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Mar 2023 02:53:03 PST
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB814690;
-        Wed,  8 Mar 2023 02:53:02 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PWpSr1tlTz9xqnw;
-        Wed,  8 Mar 2023 18:29:00 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwAX4lhfZQhkYmZ9AQ--.21667S2;
-        Wed, 08 Mar 2023 11:37:30 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     andrii@kernel.org, mykolal@fb.com, ast@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mattbobrowski@google.com, zohar@linux.ibm.com,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH] bpf: Fix IMA test
-Date:   Wed,  8 Mar 2023 11:37:13 +0100
-Message-Id: <20230308103713.1681200-1-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S231127AbjCHKxR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 8 Mar 2023 05:53:17 -0500
+Received: from mail-wm1-x361.google.com (mail-wm1-x361.google.com [IPv6:2a00:1450:4864:20::361])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E6B60A82
+        for <bpf@vger.kernel.org>; Wed,  8 Mar 2023 02:53:14 -0800 (PST)
+Received: by mail-wm1-x361.google.com with SMTP id o11-20020a05600c4fcb00b003eb33ea29a8so865815wmq.1
+        for <bpf@vger.kernel.org>; Wed, 08 Mar 2023 02:53:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dectris.com; s=google; t=1678272793;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MFnIaNLO1jYcGQ/rd76lvHww9TyGOc8wkDjH2xbQ2vY=;
+        b=cnhxBf5cTTpw1N9mDdNPt84ISNLvvjn801q368baQ2Qu3+yzPGVdIGdEPXvepil4V8
+         UHmhsTR1+SAVaXMEjPHENYMCPKGgm8U19Uj/ohgFmguOdJWr+KlHZu7MpVigjCy2tAjN
+         iDY7ixtO0z104mcy60yjjfoALQqgr5suSr338=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678272793;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MFnIaNLO1jYcGQ/rd76lvHww9TyGOc8wkDjH2xbQ2vY=;
+        b=LKgEXDAMEZSyOKRqvjMjNYvnXy2Km3QjYVj7iy2VzPrKr5DUocxIq5Bmd8fqds5gaX
+         smbSkjL9BYSBwnFhZrwmVK+Cj+fzQgBt5/oNZZaZMGyPyJIqZh1/1yBvpf/xbLCA/yA9
+         6E/E/eUj6gTVF2R0tjPkh0Kyrj23tP+lFpmyta/A/yrpQq/eHaHX6cx+vpHp7QLW5GeM
+         VG1yr8ZeZCY8bfX9p8oiKY2eSolx+uNFthhE/2tr1v06fyY0tggq9lyLovUHLiirHOBj
+         4VV8m7dQr9xJTFnblnJBhZaWzyMrzuPa+/2Qb1cFi3JOxQ9m0Fi8EdBElTwxU9Dk3jyy
+         wpWA==
+X-Gm-Message-State: AO0yUKXRlB0r22Qkyb4Bzrvsy72ymWXPZ2059XMazZMH4XgUUFMRU/a0
+        mr6+FEGmavtiihXzbJQBcpbxVRN1lT9uJPKyYzaelBWpW8sw
+X-Google-Smtp-Source: AK7set/Kr0OA0KJtw2a+BX2EdMHPKeyQkkYCTFTEZBgEbbs/r0pMvzWLlEx+48YsTajHW/JgospqlxFfBIdq
+X-Received: by 2002:a05:600c:450f:b0:3e2:19b0:887d with SMTP id t15-20020a05600c450f00b003e219b0887dmr15666002wmo.25.1678272793197;
+        Wed, 08 Mar 2023 02:53:13 -0800 (PST)
+Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
+        by smtp-relay.gmail.com with ESMTPS id f11-20020adff8cb000000b002c5a302d158sm2125188wrq.51.2023.03.08.02.53.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 02:53:13 -0800 (PST)
+X-Relaying-Domain: dectris.com
+From:   Kal Conley <kal.conley@dectris.com>
+To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>
+Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] xsk: Add missing overflow check in xdp_umem_reg
+Date:   Wed,  8 Mar 2023 11:51:30 +0100
+Message-Id: <20230308105130.1113833-1-kal.conley@dectris.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230307172306.786657-1-kal.conley@dectris.com>
+References: <20230307172306.786657-1-kal.conley@dectris.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwAX4lhfZQhkYmZ9AQ--.21667S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWrW8GrW3ZFWfZF1fury3Jwb_yoW5AFy5pa
-        93Ww1jyw1rtF1ftrsrCFy7WFZavF9rXay5Grn5A3y5Aw4UWryIga4SyF10qFs8JrWIqa1f
-        ua4fKrZrWw48Aa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvSb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0E
-        n4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
-        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8
-        ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
-        CY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280
-        aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43
-        ZEXa7IU0bAw3UUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAKBF1jj4ZUvAAAsT
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+The number of chunks can overflow u32. Make sure to return -EINVAL on
+overflow.
 
-Commit 62622dab0a28 ("ima: return IMA digest value only when IMA_COLLECTED
-flag is set") caused bpf_ima_inode_hash() to refuse to give non-fresh
-digests. IMA test #3 assumed the old behavior, that bpf_ima_inode_hash()
-still returned also non-fresh digests.
-
-Correct the test by accepting both cases. If the samples returned are 1,
-assume that the commit above is applied and that the returned digest is
-fresh. If the samples returned are 2, assume that the commit above is not
-applied, and check both the non-fresh and fresh digest.
-
-Fixes: 62622dab0a28 ("ima: return IMA digest value only when IMA_COLLECTED flag is set")
-Reported by: David Vernet <void@manifault.com>
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Fixes: bbff2f321a86 ("xsk: new descriptor addressing scheme")
+Signed-off-by: Kal Conley <kal.conley@dectris.com>
 ---
- .../selftests/bpf/prog_tests/test_ima.c       | 29 ++++++++++++++-----
- 1 file changed, 21 insertions(+), 8 deletions(-)
+ net/xdp/xdp_umem.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_ima.c b/tools/testing/selftests/bpf/prog_tests/test_ima.c
-index b13feceb38f..810b14981c2 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_ima.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_ima.c
-@@ -70,7 +70,7 @@ void test_test_ima(void)
- 	u64 bin_true_sample;
- 	char cmd[256];
+diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
+index 4681e8e8ad94..02207e852d79 100644
+--- a/net/xdp/xdp_umem.c
++++ b/net/xdp/xdp_umem.c
+@@ -150,10 +150,11 @@ static int xdp_umem_account_pages(struct xdp_umem *umem)
  
--	int err, duration = 0;
-+	int err, duration = 0, fresh_digest_idx = 0;
- 	struct ima *skel = NULL;
+ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
+ {
+-	u32 npgs_rem, chunk_size = mr->chunk_size, headroom = mr->headroom;
+ 	bool unaligned_chunks = mr->flags & XDP_UMEM_UNALIGNED_CHUNK_FLAG;
+-	u64 npgs, addr = mr->addr, size = mr->len;
+-	unsigned int chunks, chunks_rem;
++	u32 chunk_size = mr->chunk_size, headroom = mr->headroom;
++	u64 addr = mr->addr, size = mr->len;
++	u32 chunks_rem, npgs_rem;
++	u64 chunks, npgs;
+ 	int err;
  
- 	skel = ima__open_and_load();
-@@ -129,7 +129,15 @@ void test_test_ima(void)
- 	/*
- 	 * Test #3
- 	 * - Goal: confirm that bpf_ima_inode_hash() returns a non-fresh digest
--	 * - Expected result: 2 samples (/bin/true: non-fresh, fresh)
-+	 * - Expected result:
-+	 *   1 sample (/bin/true: fresh) if commit 62622dab0a28 applied
-+	 *   2 samples (/bin/true: non-fresh, fresh) if commit 62622dab0a28 is
-+	 *     not applied
-+	 *
-+	 * If commit 62622dab0a28 ("ima: return IMA digest value only when
-+	 * IMA_COLLECTED flag is set") is applied, bpf_ima_inode_hash() refuses
-+	 * to give a non-fresh digest, hence the correct result is 1 instead of
-+	 * 2.
- 	 */
- 	test_init(skel->bss);
+ 	if (chunk_size < XDP_UMEM_MIN_CHUNK_SIZE || chunk_size > PAGE_SIZE) {
+@@ -188,8 +189,8 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
+ 	if (npgs > U32_MAX)
+ 		return -EINVAL;
  
-@@ -144,13 +152,18 @@ void test_test_ima(void)
- 		goto close_clean;
+-	chunks = (unsigned int)div_u64_rem(size, chunk_size, &chunks_rem);
+-	if (chunks == 0)
++	chunks = div_u64_rem(size, chunk_size, &chunks_rem);
++	if (!chunks || chunks > U32_MAX)
+ 		return -EINVAL;
  
- 	err = ring_buffer__consume(ringbuf);
--	ASSERT_EQ(err, 2, "num_samples_or_err");
--	ASSERT_NEQ(ima_hash_from_bpf[0], 0, "ima_hash");
--	ASSERT_NEQ(ima_hash_from_bpf[1], 0, "ima_hash");
--	ASSERT_EQ(ima_hash_from_bpf[0], bin_true_sample, "sample_equal_or_err");
-+	ASSERT_GE(err, 1, "num_samples_or_err");
-+	if (err == 2) {
-+		ASSERT_NEQ(ima_hash_from_bpf[0], 0, "ima_hash");
-+		ASSERT_EQ(ima_hash_from_bpf[0], bin_true_sample,
-+			  "sample_equal_or_err");
-+		fresh_digest_idx = 1;
-+	}
-+
-+	ASSERT_NEQ(ima_hash_from_bpf[fresh_digest_idx], 0, "ima_hash");
- 	/* IMA refreshed the digest. */
--	ASSERT_NEQ(ima_hash_from_bpf[1], bin_true_sample,
--		   "sample_different_or_err");
-+	ASSERT_NEQ(ima_hash_from_bpf[fresh_digest_idx], bin_true_sample,
-+		   "sample_equal_or_err");
- 
- 	/*
- 	 * Test #4
+ 	if (!unaligned_chunks && chunks_rem)
+@@ -202,7 +203,7 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
+ 	umem->headroom = headroom;
+ 	umem->chunk_size = chunk_size;
+ 	umem->chunks = chunks;
+-	umem->npgs = (u32)npgs;
++	umem->npgs = npgs;
+ 	umem->pgs = NULL;
+ 	umem->user = NULL;
+ 	umem->flags = mr->flags;
 -- 
-2.25.1
+2.39.2
 
