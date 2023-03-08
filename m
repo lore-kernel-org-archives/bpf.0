@@ -2,334 +2,287 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7197C678D5
-	for <bpf@archiver.kernel.org>; Wed,  8 Mar 2023 18:41:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01F2AC64EC4
+	for <bpf@archiver.kernel.org>; Wed,  8 Mar 2023 18:43:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjCHSlt convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 8 Mar 2023 13:41:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38912 "EHLO
+        id S229685AbjCHSn0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Mar 2023 13:43:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbjCHSlr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 8 Mar 2023 13:41:47 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1FBAF69E
-        for <bpf@vger.kernel.org>; Wed,  8 Mar 2023 10:41:45 -0800 (PST)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 328I0EVU008189
-        for <bpf@vger.kernel.org>; Wed, 8 Mar 2023 10:41:45 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3p6feu63fj-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 08 Mar 2023 10:41:45 -0800
-Received: from twshared16996.15.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Wed, 8 Mar 2023 10:41:43 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id A2E4C299B75C5; Wed,  8 Mar 2023 10:41:32 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@meta.com>,
-        Tejun Heo <tj@kernel.org>
-Subject: [PATCH v5 bpf-next 5/8] selftests/bpf: add bpf_for_each(), bpf_for(), and bpf_repeat() macros
-Date:   Wed, 8 Mar 2023 10:41:18 -0800
-Message-ID: <20230308184121.1165081-6-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230308184121.1165081-1-andrii@kernel.org>
-References: <20230308184121.1165081-1-andrii@kernel.org>
+        with ESMTP id S229546AbjCHSn0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 8 Mar 2023 13:43:26 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECDE61328
+        for <bpf@vger.kernel.org>; Wed,  8 Mar 2023 10:43:24 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id x3so69462216edb.10
+        for <bpf@vger.kernel.org>; Wed, 08 Mar 2023 10:43:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678301003;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PHKEkKo2f+bJa/v4EILQnxriheiTilRQhx4AsC8l8Ws=;
+        b=NoPAC6bOfsa8mD7qYXm+I28yznZUnknI6yiKpEHG2eN/uF8ijha/HhEc4d9yN7AxCw
+         1zZght1MvoONkva4JcHmNF1VIDzxNPaZU6rzUpSCkwbQJLqoZUyZBzDTljgVmN5Pn+3O
+         PQXCT2Qo3HYgHICsqx3t5HIIGU7ARboiLgJ6W7RcS1AI9tY8voF+jPHAfIdWNxJ62E+4
+         Kr54Hkhr+pbcrdYk/4W+uJGpR/c7D2TL+nch+7pC0ecrfyX9yFJBahVy2rsov+G6WAg6
+         ldPA7OdeHoL6LyiticsuqcgkEgOcyxzbdR8+HKCgx3w5cCS6xC0KDRmg/RIOeJAGz5sP
+         1ZrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678301003;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PHKEkKo2f+bJa/v4EILQnxriheiTilRQhx4AsC8l8Ws=;
+        b=1zC1e1epZAnZ4/43Xxm3pP6XrzThxGUELhNEElM89857K0cyxK8bCzBFyq7v3GvCas
+         ZLV+4ermQiKKMOIjYynnlm3smOZcOGdrznVzSVh+ebuu4QJOoIcOTgH1TMjlSFJ2damS
+         0PmCJY+Eyj767H5LKvwPgqXW27nOGcGvZTyX5Tozb45/Ep1B3OPSv/QAjcdVstNbFWKr
+         6wsPULipBrvvuaQvn3+O9MmAf6SF2Rt6Ah1ATiCwsNtEQfdmizrE1MQpNDkUQzVsdW6L
+         sqVzZPJRYj+TSqVG/802xia9by2jzWW4yOTuwCvpSNQc2UBVE2LsI6685HVHI/eiJocM
+         pjKQ==
+X-Gm-Message-State: AO0yUKXgcjUrO84vIBmCERiJUxvceySiwCynQrcjC7ex5CU6ZnLJmGTE
+        kcyYc+jpJXbtF99UmQK6yB0zegrrVsQDCLSufcc=
+X-Google-Smtp-Source: AK7set/110iruZFsekFxAqoaG3KWXgZi8oMbG8aeXN3bB+zw5Ghnu7ixK0mNNfThrG8aoFV66MS/QfynY1Rs1ksyHLA=
+X-Received: by 2002:a50:9f8b:0:b0:4ad:7265:82db with SMTP id
+ c11-20020a509f8b000000b004ad726582dbmr10608426edf.1.1678301002643; Wed, 08
+ Mar 2023 10:43:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: inZPlKUiAygShEPsT2BriBOHIkKpcfzp
-X-Proofpoint-ORIG-GUID: inZPlKUiAygShEPsT2BriBOHIkKpcfzp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-08_12,2023-03-08_03,2023-02-09_01
+References: <20230307233307.3626875-1-kuifeng@meta.com> <20230307233307.3626875-10-kuifeng@meta.com>
+ <CAEf4BzauUuFYfUVFSRY6u=NmVUfbmY1pH-p7yXMEWFN1SDjejA@mail.gmail.com>
+ <8678e7e0-ae7a-3230-89d8-af071f800b04@gmail.com> <CAEf4BzYMxyrcbRg+BN2xCM8a5g3E5eCxrJWC22fAWFg4YNWw5w@mail.gmail.com>
+ <b3867a6b-12fc-2eee-83eb-09d520058620@gmail.com>
+In-Reply-To: <b3867a6b-12fc-2eee-83eb-09d520058620@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 8 Mar 2023 10:43:09 -0800
+Message-ID: <CAEf4BzYS1MTuHP2=ijGiF7MBBOEJTxZfMNCcFz1RUx7my87efQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 9/9] selftests/bpf: Test switching TCP
+ Congestion Control algorithms.
+To:     Kui-Feng Lee <sinquersw@gmail.com>
+Cc:     Kui-Feng Lee <kuifeng@meta.com>, bpf@vger.kernel.org,
+        ast@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        kernel-team@meta.com, andrii@kernel.org, sdf@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add bpf_for_each(), bpf_for(), and bpf_repeat() macros that make writing
-open-coded iterator-based loops much more convenient and natural. These
-macros utilize cleanup attribute to ensure proper destruction of the
-iterator and thanks to that manage to provide the ergonomics that is
-very close to C language's for() construct. Typical loop would look like:
+On Wed, Mar 8, 2023 at 10:10=E2=80=AFAM Kui-Feng Lee <sinquersw@gmail.com> =
+wrote:
+>
+>
+>
+> On 3/8/23 09:18, Andrii Nakryiko wrote:
+> > On Wed, Mar 8, 2023 at 7:58=E2=80=AFAM Kui-Feng Lee <sinquersw@gmail.co=
+m> wrote:
+> >>
+> >>
+> >>
+> >> On 3/7/23 17:10, Andrii Nakryiko wrote:
+> >>> On Tue, Mar 7, 2023 at 3:34=E2=80=AFPM Kui-Feng Lee <kuifeng@meta.com=
+> wrote:
+> >>>>
+> >>>> Create a pair of sockets that utilize the congestion control algorit=
+hm
+> >>>> under a particular name. Then switch up this congestion control
+> >>>> algorithm to another implementation and check whether newly created
+> >>>> connections using the same cc name now run the new implementation.
+> >>>>
+> >>>> Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
+> >>>> ---
+> >>>>    .../selftests/bpf/prog_tests/bpf_tcp_ca.c     | 38 ++++++++++++
+> >>>>    .../selftests/bpf/progs/tcp_ca_update.c       | 62 ++++++++++++++=
++++++
+> >>>>    2 files changed, 100 insertions(+)
+> >>>>    create mode 100644 tools/testing/selftests/bpf/progs/tcp_ca_updat=
+e.c
+> >>>>
+> >>>> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/t=
+ools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
+> >>>> index e980188d4124..caaa9175ee36 100644
+> >>>> --- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
+> >>>> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
+> >>>> @@ -8,6 +8,7 @@
+> >>>>    #include "bpf_dctcp.skel.h"
+> >>>>    #include "bpf_cubic.skel.h"
+> >>>>    #include "bpf_tcp_nogpl.skel.h"
+> >>>> +#include "tcp_ca_update.skel.h"
+> >>>>    #include "bpf_dctcp_release.skel.h"
+> >>>>    #include "tcp_ca_write_sk_pacing.skel.h"
+> >>>>    #include "tcp_ca_incompl_cong_ops.skel.h"
+> >>>> @@ -381,6 +382,41 @@ static void test_unsupp_cong_op(void)
+> >>>>           libbpf_set_print(old_print_fn);
+> >>>>    }
+> >>>>
+> >>>> +static void test_update_ca(void)
+> >>>> +{
+> >>>> +       struct tcp_ca_update *skel;
+> >>>> +       struct bpf_link *link;
+> >>>> +       int saved_ca1_cnt;
+> >>>> +       int err;
+> >>>> +
+> >>>> +       skel =3D tcp_ca_update__open();
+> >>>> +       if (!ASSERT_OK_PTR(skel, "open"))
+> >>>> +               return;
+> >>>> +
+> >>>> +       err =3D tcp_ca_update__load(skel);
+> >>>
+> >>> tcp_ca_update__open_and_load()
+> >>>
+> >>>> +       if (!ASSERT_OK(err, "load")) {
+> >>>> +               tcp_ca_update__destroy(skel);
+> >>>> +               return;
+> >>>> +       }
+> >>>> +
+> >>>> +       link =3D bpf_map__attach_struct_ops(skel->maps.ca_update_1);
+> >>>
+> >>> I think it's time to generate link holder for each struct_ops map to
+> >>> the BPF skeleton, and support auto-attach of struct_ops skeleton.
+> >>> Please do that as a follow up, once this patch set lands.
+> >>
+> >> Got it.
+> >>
+> >>>
+> >>>> +       ASSERT_OK_PTR(link, "attach_struct_ops");
+> >>>> +
+> >>>> +       do_test("tcp_ca_update", NULL);
+> >>>> +       saved_ca1_cnt =3D skel->bss->ca1_cnt;
+> >>>> +       ASSERT_GT(saved_ca1_cnt, 0, "ca1_ca1_cnt");
+> >>>> +
+> >>>> +       err =3D bpf_link__update_map(link, skel->maps.ca_update_2);
+> >>>> +       ASSERT_OK(err, "update_struct_ops");
+> >>>> +
+> >>>> +       do_test("tcp_ca_update", NULL);
+> >>>> +       ASSERT_EQ(skel->bss->ca1_cnt, saved_ca1_cnt, "ca2_ca1_cnt");
+> >>>> +       ASSERT_GT(skel->bss->ca2_cnt, 0, "ca2_ca2_cnt");
+> >>>
+> >>> how do we know that struct_ops programs were triggered? what
+> >>> guarantees that? if nothing, we are just adding another flaky
+> >>> networking test
+> >>
+> >> When an ack is received, cong_control of ca_update_1 and ca_update_2
+> >> will be called if they are activated.  By checking ca1_cnt & ca2_cnt, =
+we
+> >> know which one is activated.  Here, we check if the ca1_cnt keeps the
+> >> same and ca2_cnt increase to make that ca_update_2 have replaced
+> >> ca_update_1.
+> >
+> > I just don't see anything in the test ensuring that ack is
+> > sent/received, so it seems like we are relying on some background
+> > system activity and proper timing (unless I miss something, which is
+> > why I'm asking), so this is fragile, as in CI environment timings and
+> > background activity would be very different and unpredictable, causing
+> > flakiness of the test
+>
+>
+> The do_test() function creates two sockets to form a direct connection
+> that must receive at least one acknowledgment packet for the sockets to
+> progress into an ESTABLISHED state.  If they don't, that means it fails
+> to establish a connection.
 
-  int i;
-  int arr[N];
+yeah, my bad, I *completely* missed `do_test("tcp_ca_update", NULL)`
+(even though I went specifically looking for something like that).
+It's all good here.
 
-  bpf_for(i, 0, N) {
-      /* verifier will know that i >= 0 && i < N, so could be used to
-       * directly access array elements with no extra checks
-       */
-       arr[i] = i;
-  }
 
-bpf_repeat() is very similar, but it doesn't expose iteration number and
-is meant as a simple "repeat action N times" loop:
-
-  bpf_repeat(N) { /* whatever, N times */ }
-
-Note that `break` and `continue` statements inside the {} block work as
-expected.
-
-bpf_for_each() is a generalization over any kind of BPF open-coded
-iterator allowing to use for-each-like approach instead of calling
-low-level bpf_iter_<type>_{new,next,destroy}() APIs explicitly. E.g.:
-
-  struct cgroup *cg;
-
-  bpf_for_each(cgroup, cg, some, input, args) {
-      /* do something with each cg */
-  }
-
-would call (not-yet-implemented) bpf_iter_cgroup_{new,next,destroy}()
-functions to form a loop over cgroups, where `some, input, args` are
-passed verbatim into constructor as
-
-  bpf_iter_cgroup_new(&it, some, input, args).
-
-As a first demonstration, add pyperf variant based on the bpf_for() loop.
-
-Also clean up a few tests that either included bpf_misc.h header
-unnecessarily from the user-space, which is unsupported, or included it
-before any common types are defined (and thus leading to unnecessary
-compilation warnings, potentially).
-
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- .../bpf/prog_tests/bpf_verif_scale.c          |  6 ++
- .../bpf/prog_tests/uprobe_autoattach.c        |  1 -
- tools/testing/selftests/bpf/progs/bpf_misc.h  | 99 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/lsm.c       |  4 +-
- tools/testing/selftests/bpf/progs/pyperf.h    | 14 ++-
- .../selftests/bpf/progs/pyperf600_iter.c      |  7 ++
- .../selftests/bpf/progs/pyperf600_nounroll.c  |  3 -
- 7 files changed, 124 insertions(+), 10 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/pyperf600_iter.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
-index 5ca252823294..731c343897d8 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
-@@ -144,6 +144,12 @@ void test_verif_scale_pyperf600_nounroll()
- 	scale_test("pyperf600_nounroll.bpf.o", BPF_PROG_TYPE_RAW_TRACEPOINT, false);
- }
- 
-+void test_verif_scale_pyperf600_iter()
-+{
-+	/* open-coded BPF iterator version */
-+	scale_test("pyperf600_iter.bpf.o", BPF_PROG_TYPE_RAW_TRACEPOINT, false);
-+}
-+
- void test_verif_scale_loop1()
- {
- 	scale_test("loop1.bpf.o", BPF_PROG_TYPE_RAW_TRACEPOINT, false);
-diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c b/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c
-index 6558c857e620..d5b3377aa33c 100644
---- a/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c
-+++ b/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c
-@@ -3,7 +3,6 @@
- 
- #include <test_progs.h>
- #include "test_uprobe_autoattach.skel.h"
--#include "progs/bpf_misc.h"
- 
- /* uprobe attach point */
- static noinline int autoattach_trigger_func(int arg1, int arg2, int arg3,
-diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
-index f704885aa534..597688a188ae 100644
---- a/tools/testing/selftests/bpf/progs/bpf_misc.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
-@@ -75,5 +75,104 @@
- #define FUNC_REG_ARG_CNT 5
- #endif
- 
-+struct bpf_iter_num;
-+
-+extern int bpf_iter_num_new(struct bpf_iter_num *it, int start, int end) __ksym;
-+extern int *bpf_iter_num_next(struct bpf_iter_num *it) __ksym;
-+extern void bpf_iter_num_destroy(struct bpf_iter_num *it) __ksym;
-+
-+#ifndef bpf_for_each
-+/* bpf_for_each(iter_type, cur_elem, args...) provides generic construct for
-+ * using BPF open-coded iterators without having to write mundane explicit
-+ * low-level loop logic. Instead, it provides for()-like generic construct
-+ * that can be used pretty naturally. E.g., for some hypothetical cgroup
-+ * iterator, you'd write:
-+ *
-+ * struct cgroup *cg, *parent_cg = <...>;
-+ *
-+ * bpf_for_each(cgroup, cg, parent_cg, CG_ITER_CHILDREN) {
-+ *     bpf_printk("Child cgroup id = %d", cg->cgroup_id);
-+ *     if (cg->cgroup_id == 123)
-+ *         break;
-+ * }
-+ *
-+ * I.e., it looks almost like high-level for each loop in other languages,
-+ * supports continue/break, and is verifiable by BPF verifier.
-+ *
-+ * For iterating integers, the difference betwen bpf_for_each(num, i, N, M)
-+ * and bpf_for(i, N, M) is in that bpf_for() provides additional proof to
-+ * verifier that i is in [N, M) range, and in bpf_for_each() case i is `int
-+ * *`, not just `int`. So for integers bpf_for() is more convenient.
-+ *
-+ * Note: this macro relies on C99 feature of allowing to declare variables
-+ * inside for() loop, bound to for() loop lifetime. It also utilizes GCC
-+ * extension: __attribute__((cleanup(<func>))), supported by both GCC and
-+ * Clang.
-+ */
-+#define bpf_for_each(type, cur, args...) for (							\
-+	/* initialize and define destructor */							\
-+	struct bpf_iter_##type ___it __attribute__((aligned(8), /* enforce, just in case */,	\
-+						    cleanup(bpf_iter_##type##_destroy))),	\
-+	/* ___p pointer is just to call bpf_iter_##type##_new() *once* to init ___it */		\
-+			       *___p = (bpf_iter_##type##_new(&___it, ##args),			\
-+	/* this is a workaround for Clang bug: it currently doesn't emit BTF */			\
-+	/* for bpf_iter_##type##_destroy() when used from cleanup() attribute */		\
-+					(void)bpf_iter_##type##_destroy, (void *)0);		\
-+	/* iteration and termination check */							\
-+	(((cur) = bpf_iter_##type##_next(&___it)));						\
-+)
-+#endif /* bpf_for_each */
-+
-+#ifndef bpf_for
-+/* bpf_for(i, start, end) implements a for()-like looping construct that sets
-+ * provided integer variable *i* to values starting from *start* through,
-+ * but not including, *end*. It also proves to BPF verifier that *i* belongs
-+ * to range [start, end), so this can be used for accessing arrays without
-+ * extra checks.
-+ *
-+ * Note: *start* and *end* are assumed to be expressions with no side effects
-+ * and whose values do not change throughout bpf_for() loop execution. They do
-+ * not have to be statically known or constant, though.
-+ *
-+ * Note: similarly to bpf_for_each(), it relies on C99 feature of declaring for()
-+ * loop bound variables and cleanup attribute, supported by GCC and Clang.
-+ */
-+#define bpf_for(i, start, end) for (								\
-+	/* initialize and define destructor */							\
-+	struct bpf_iter_num ___it __attribute__((aligned(8), /* enforce, just in case */	\
-+						 cleanup(bpf_iter_num_destroy))),		\
-+	/* ___p pointer is necessary to call bpf_iter_num_new() *once* to init ___it */		\
-+			    *___p = (bpf_iter_num_new(&___it, (start), (end)),			\
-+	/* this is a workaround for Clang bug: it currently doesn't emit BTF */			\
-+	/* for bpf_iter_num_destroy() when used from cleanup() attribute */			\
-+				(void)bpf_iter_num_destroy, (void *)0);				\
-+	({											\
-+		/* iteration step */								\
-+		int *___t = bpf_iter_num_next(&___it);						\
-+		/* termination and bounds check */						\
-+		(___t && ((i) = *___t, (i) >= (start) && (i) < (end)));				\
-+	});											\
-+)
-+#endif /* bpf_for */
-+
-+#ifndef bpf_repeat
-+/* bpf_repeat(N) performs N iterations without exposing iteration number
-+ *
-+ * Note: similarly to bpf_for_each(), it relies on C99 feature of declaring for()
-+ * loop bound variables and cleanup attribute, supported by GCC and Clang.
-+ */
-+#define bpf_repeat(N) for (									\
-+	/* initialize and define destructor */							\
-+	struct bpf_iter_num ___it __attribute__((aligned(8), /* enforce, just in case */	\
-+						 cleanup(bpf_iter_num_destroy))),		\
-+	/* ___p pointer is necessary to call bpf_iter_num_new() *once* to init ___it */		\
-+			    *___p = (bpf_iter_num_new(&___it, 0, (N)),				\
-+	/* this is a workaround for Clang bug: it currently doesn't emit BTF */			\
-+	/* for bpf_iter_num_destroy() when used from cleanup() attribute */			\
-+				(void)bpf_iter_num_destroy, (void *)0);				\
-+	bpf_iter_num_next(&___it);								\
-+	/* nothing here  */									\
-+)
-+#endif /* bpf_repeat */
- 
- #endif
-diff --git a/tools/testing/selftests/bpf/progs/lsm.c b/tools/testing/selftests/bpf/progs/lsm.c
-index dc93887ed34c..fadfdd98707c 100644
---- a/tools/testing/selftests/bpf/progs/lsm.c
-+++ b/tools/testing/selftests/bpf/progs/lsm.c
-@@ -4,12 +4,12 @@
-  * Copyright 2020 Google LLC.
-  */
- 
--#include "bpf_misc.h"
- #include "vmlinux.h"
-+#include <errno.h>
- #include <bpf/bpf_core_read.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
--#include <errno.h>
-+#include "bpf_misc.h"
- 
- struct {
- 	__uint(type, BPF_MAP_TYPE_ARRAY);
-diff --git a/tools/testing/selftests/bpf/progs/pyperf.h b/tools/testing/selftests/bpf/progs/pyperf.h
-index 6c7b1fb268d6..f2e7a31c8d75 100644
---- a/tools/testing/selftests/bpf/progs/pyperf.h
-+++ b/tools/testing/selftests/bpf/progs/pyperf.h
-@@ -7,6 +7,7 @@
- #include <stdbool.h>
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
- 
- #define FUNCTION_NAME_LEN 64
- #define FILE_NAME_LEN 128
-@@ -294,17 +295,22 @@ int __on_event(struct bpf_raw_tracepoint_args *ctx)
- 	if (ctx.done)
- 		return 0;
- #else
--#ifdef NO_UNROLL
-+#if defined(USE_ITER)
-+/* no for loop, no unrolling */
-+#elif defined(NO_UNROLL)
- #pragma clang loop unroll(disable)
--#else
--#ifdef UNROLL_COUNT
-+#elif defined(UNROLL_COUNT)
- #pragma clang loop unroll_count(UNROLL_COUNT)
- #else
- #pragma clang loop unroll(full)
--#endif
- #endif /* NO_UNROLL */
- 		/* Unwind python stack */
-+#ifdef USE_ITER
-+		int i;
-+		bpf_for(i, 0, STACK_MAX_LEN) {
-+#else /* !USE_ITER */
- 		for (int i = 0; i < STACK_MAX_LEN; ++i) {
-+#endif
- 			if (frame_ptr && get_frame_data(frame_ptr, pidData, &frame, &sym)) {
- 				int32_t new_symbol_id = *symbol_counter * 64 + cur_cpu;
- 				int32_t *symbol_id = bpf_map_lookup_elem(&symbolmap, &sym);
-diff --git a/tools/testing/selftests/bpf/progs/pyperf600_iter.c b/tools/testing/selftests/bpf/progs/pyperf600_iter.c
-new file mode 100644
-index 000000000000..d62e1b200c30
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/pyperf600_iter.c
-@@ -0,0 +1,7 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2023 Meta Platforms, Inc. and affiliates.
-+#define STACK_MAX_LEN 600
-+#define SUBPROGS
-+#define NO_UNROLL
-+#define USE_ITER
-+#include "pyperf.h"
-diff --git a/tools/testing/selftests/bpf/progs/pyperf600_nounroll.c b/tools/testing/selftests/bpf/progs/pyperf600_nounroll.c
-index 6beff7502f4d..520b58c4f8db 100644
---- a/tools/testing/selftests/bpf/progs/pyperf600_nounroll.c
-+++ b/tools/testing/selftests/bpf/progs/pyperf600_nounroll.c
-@@ -2,7 +2,4 @@
- // Copyright (c) 2019 Facebook
- #define STACK_MAX_LEN 600
- #define NO_UNROLL
--/* clang will not unroll at all.
-- * Total program size is around 2k insns
-- */
- #include "pyperf.h"
--- 
-2.34.1
-
+>
+> >
+> >>
+> >>>
+> >>>> +
+> >>>> +       bpf_link__destroy(link);
+> >>>> +       tcp_ca_update__destroy(skel);
+> >>>> +}
+> >>>> +
+> >>>>    void test_bpf_tcp_ca(void)
+> >>>>    {
+> >>>>           if (test__start_subtest("dctcp"))
+> >>>> @@ -399,4 +435,6 @@ void test_bpf_tcp_ca(void)
+> >>>>                   test_incompl_cong_ops();
+> >>>>           if (test__start_subtest("unsupp_cong_op"))
+> >>>>                   test_unsupp_cong_op();
+> >>>> +       if (test__start_subtest("update_ca"))
+> >>>> +               test_update_ca();
+> >>>>    }
+> >>>> diff --git a/tools/testing/selftests/bpf/progs/tcp_ca_update.c b/too=
+ls/testing/selftests/bpf/progs/tcp_ca_update.c
+> >>>> new file mode 100644
+> >>>> index 000000000000..36a04be95df5
+> >>>> --- /dev/null
+> >>>> +++ b/tools/testing/selftests/bpf/progs/tcp_ca_update.c
+> >>>> @@ -0,0 +1,62 @@
+> >>>> +// SPDX-License-Identifier: GPL-2.0
+> >>>> +
+> >>>> +#include "vmlinux.h"
+> >>>> +
+> >>>> +#include <bpf/bpf_helpers.h>
+> >>>> +#include <bpf/bpf_tracing.h>
+> >>>> +
+> >>>> +char _license[] SEC("license") =3D "GPL";
+> >>>> +
+> >>>> +int ca1_cnt =3D 0;
+> >>>> +int ca2_cnt =3D 0;
+> >>>> +
+> >>>> +#define USEC_PER_SEC 1000000UL
+> >>>> +
+> >>>> +#define min(a, b) ((a) < (b) ? (a) : (b))
+> >>>> +
+> >>>> +static inline struct tcp_sock *tcp_sk(const struct sock *sk)
+> >>>> +{
+> >>>> +       return (struct tcp_sock *)sk;
+> >>>> +}
+> >>>> +
+> >>>> +SEC("struct_ops/ca_update_1_cong_control")
+> >>>> +void BPF_PROG(ca_update_1_cong_control, struct sock *sk,
+> >>>> +             const struct rate_sample *rs)
+> >>>> +{
+> >>>> +       ca1_cnt++;
+> >>>> +}
+> >>>> +
+> >>>> +SEC("struct_ops/ca_update_2_cong_control")
+> >>>> +void BPF_PROG(ca_update_2_cong_control, struct sock *sk,
+> >>>> +             const struct rate_sample *rs)
+> >>>> +{
+> >>>> +       ca2_cnt++;
+> >>>> +}
+> >>>> +
+> >>>> +SEC("struct_ops/ca_update_ssthresh")
+> >>>> +__u32 BPF_PROG(ca_update_ssthresh, struct sock *sk)
+> >>>> +{
+> >>>> +       return tcp_sk(sk)->snd_ssthresh;
+> >>>> +}
+> >>>> +
+> >>>> +SEC("struct_ops/ca_update_undo_cwnd")
+> >>>> +__u32 BPF_PROG(ca_update_undo_cwnd, struct sock *sk)
+> >>>> +{
+> >>>> +       return tcp_sk(sk)->snd_cwnd;
+> >>>> +}
+> >>>> +
+> >>>> +SEC(".struct_ops.link")
+> >>>> +struct tcp_congestion_ops ca_update_1 =3D {
+> >>>> +       .cong_control =3D (void *)ca_update_1_cong_control,
+> >>>> +       .ssthresh =3D (void *)ca_update_ssthresh,
+> >>>> +       .undo_cwnd =3D (void *)ca_update_undo_cwnd,
+> >>>> +       .name =3D "tcp_ca_update",
+> >>>> +};
+> >>>> +
+> >>>> +SEC(".struct_ops.link")
+> >>>> +struct tcp_congestion_ops ca_update_2 =3D {
+> >>>> +       .cong_control =3D (void *)ca_update_2_cong_control,
+> >>>> +       .ssthresh =3D (void *)ca_update_ssthresh,
+> >>>> +       .undo_cwnd =3D (void *)ca_update_undo_cwnd,
+> >>>> +       .name =3D "tcp_ca_update",
+> >>>> +};
+> >>>
+> >>> please add a test where you combine both .struct_ops and
+> >>> .struct_ops.link, it's an obvious potentially problematic combination
+> >>>
+> >>> as I mentioned in previous patches, let's also have a negative test
+> >>> where bpf_link__update_map() fails
+> >>
+> >> Sure
+> >>
+> >>>
+> >>>> --
+> >>>> 2.34.1
+> >>>>
