@@ -2,74 +2,84 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 912DBC742A7
-	for <bpf@archiver.kernel.org>; Wed,  8 Mar 2023 11:03:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E52BCC6FD1F
+	for <bpf@archiver.kernel.org>; Wed,  8 Mar 2023 11:05:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231391AbjCHLDJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 8 Mar 2023 06:03:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37938 "EHLO
+        id S231320AbjCHLFI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Mar 2023 06:05:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbjCHLCs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 8 Mar 2023 06:02:48 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F3DBBB39;
-        Wed,  8 Mar 2023 03:02:31 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4PWpY95Ntwz9xs6D;
-        Wed,  8 Mar 2023 18:32:45 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwAn8lg9Zghkeml9AQ--.21953S2;
-        Wed, 08 Mar 2023 11:41:13 +0100 (CET)
-Message-ID: <efd569cdf6bba1ee80686f73a64bc636975dd899.camel@huaweicloud.com>
-Subject: Re: [PATCH] bpf: Fix IMA test
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     andrii@kernel.org, mykolal@fb.com, ast@kernel.org,
+        with ESMTP id S231318AbjCHLEk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 8 Mar 2023 06:04:40 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4849AFE1
+        for <bpf@vger.kernel.org>; Wed,  8 Mar 2023 03:03:58 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id a25so64329392edb.0
+        for <bpf@vger.kernel.org>; Wed, 08 Mar 2023 03:03:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678273437;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2mOeVIjm8xAMi1XdiTZIXvjNCduRkLKc7AUq9KH5xfM=;
+        b=iAx8gn/CiR1bBZDJ6o8a1ljzFGvp8YzI2fVG2BsIA7s7BDe+pizvRqtU9sz2Gd8JSu
+         g85rYIghkuxknjrQyKvOgZopVJiMFsL+TqjWhDVYEl9dejVBaPksboBOb6MliPvsLK8i
+         zca9g8lyM8r1QiH3FlrGH7captEnW7SaHw8N28jJSN/2h1+Ndl+0GFQQsMiw+vOjOqHi
+         xW340FhEZGlOhqKDPyeHH0i/+1asGoelt5aolUVU6L9hLRbJq+n9GC8Jx15D5j0gdD1k
+         +i7N57OLo3kTSTgw7MEaF4dSrNEzOC3C96XeILtqxP4s2X1EQYdSGoeIPEU28zpj21y1
+         95UA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678273437;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2mOeVIjm8xAMi1XdiTZIXvjNCduRkLKc7AUq9KH5xfM=;
+        b=kWDtDuSlQZoEYkZj/GTxVti819DlSWPJyKRNPSluvTOD9N+CM+mpOIRQBNxtbhAn+A
+         V/aOZ6Llzy9W7PPXzcM97XnCNR5snw0SX8FdXgzo+2Zv4czJNEOw/ehtSErwkz9INoi0
+         5r7b8UFmw9oXms3TxbpthiiQ/7THUg2ZIpVyWnEFPtjFZuIb/6Z+SqKsN1GBEB6zLeAN
+         xbMWSjor/NRDFeYl3AMEDmwr4clINE2OSXhgToxuE16EtWAk7cKVKi2MRcRxioCVrVxD
+         ky1XlTgkKgnkyX87oU693aa6CgrkjYSsQ+Tz/US0EEWNSMZvsbkeudrq/SG77WpwLW4M
+         RMkw==
+X-Gm-Message-State: AO0yUKXJ8gzKmTe9opKvRajS7m+TqH0W+Nct2NgLapJP1fl5GlmQLoCX
+        z70BIJKFK7d5fG1TPu2ZSYuPAw==
+X-Google-Smtp-Source: AK7set+uYd9BWN+DxCTsFT3RC2Npkxt1wr2xAp2qBurGjWBjqeX355SU3BlD4wSUfJ0rgZioGEugQQ==
+X-Received: by 2002:aa7:c0da:0:b0:4c0:9bd7:54cc with SMTP id j26-20020aa7c0da000000b004c09bd754ccmr13681933edp.11.1678273436865;
+        Wed, 08 Mar 2023 03:03:56 -0800 (PST)
+Received: from google.com (94.189.141.34.bc.googleusercontent.com. [34.141.189.94])
+        by smtp.gmail.com with ESMTPSA id d6-20020a1709064c4600b008eb5b085075sm7233492ejw.122.2023.03.08.03.03.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 03:03:56 -0800 (PST)
+Date:   Wed, 8 Mar 2023 11:03:51 +0000
+From:   Matt Bobrowski <mattbobrowski@google.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     andrii@kernel.org, mykolal@fb.com, ast@kernel.org,
         daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
         yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
         sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mattbobrowski@google.com, zohar@linux.ibm.com,
+        shuah@kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
         Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 08 Mar 2023 11:40:58 +0100
-In-Reply-To: <20230308103713.1681200-1-roberto.sassu@huaweicloud.com>
+Subject: Re: [PATCH] bpf: Fix IMA test
+Message-ID: <ZAhrl0rK9Yume1Ed@google.com>
 References: <20230308103713.1681200-1-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwAn8lg9Zghkeml9AQ--.21953S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWFyUAr45Kw1kKryfWr18Grg_yoW5ZFy8p3
-        93Wr1Yyw1ktFyftrsrAayUWFZ3ZFnrXa1UWrn5J345Aw1UWryIgryIvFy0qa1DJrZ2qa1f
-        Za1fWrZrWw48Aa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
-        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
-        IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY
-        0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0x
-        vE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
-        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1rMa5UUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAKBF1jj4pS5wAAsB
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230308103713.1681200-1-roberto.sassu@huaweicloud.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 2023-03-08 at 11:37 +0100, Roberto Sassu wrote:
+Ha! I was literally in the midst of sending through a patch for
+this. Thanks for also taking a look and beating me to it!
+
+This LGTM, feel free to add:
+
+Reviewed-by: Matt Bobrowski <mattbobrowski@google.com>
+
+On Wed, Mar 08, 2023 at 11:37:13AM +0100, Roberto Sassu wrote:
 > From: Roberto Sassu <roberto.sassu@huawei.com>
-
-The title should have been selftests/bpf: ...
-
-Will send a new version once I get the test result.
-
-Roberto
-
+> 
 > Commit 62622dab0a28 ("ima: return IMA digest value only when IMA_COLLECTED
 > flag is set") caused bpf_ima_inode_hash() to refuse to give non-fresh
 > digests. IMA test #3 assumed the old behavior, that bpf_ima_inode_hash()
@@ -142,4 +152,7 @@ Roberto
 >  
 >  	/*
 >  	 * Test #4
-
+> -- 
+> 2.25.1
+> 
+/M
