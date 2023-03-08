@@ -2,106 +2,156 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00A14C74A4B
-	for <bpf@archiver.kernel.org>; Wed,  8 Mar 2023 00:32:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FE22C678D5
+	for <bpf@archiver.kernel.org>; Wed,  8 Mar 2023 00:38:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjCHAcY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Mar 2023 19:32:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54922 "EHLO
+        id S230088AbjCHAio (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Mar 2023 19:38:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbjCHAcU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Mar 2023 19:32:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00415A2C2B;
-        Tue,  7 Mar 2023 16:32:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B175FB81B2E;
-        Wed,  8 Mar 2023 00:32:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A5BCC433A0;
-        Wed,  8 Mar 2023 00:32:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678235532;
-        bh=HGrQV3iWHk640Kwljal+Hx0tJUKqtywL687InMRuoOA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ie2CK0UHChxVHNaV6xeaZba/kog/lEuwdb9/N0Oai/kQBADXFd6P8BTdVuJ3RCRsn
-         5u4y3O+IZxgPEjcf+7m4gLnh1/am/Vkb/1RT/mg9zHeaLQ1gzMKM5nb3ZUv8r0rqQF
-         7SxKKwE+wthj2T2b9Zz+ZeNYrv7mdpNwVnxtopNqQZWdKCbCy2Pp8L35pYiTo1OIHv
-         NWDHRSwB5o4nNKmgoLBa3pinNGecrYFGdes243jNSUkOTkrwNS1QiT9QWshMm03oMS
-         G+BWUD22wqn7o7D/pFpelInIT5xyBeZhQSUc8+/RyZbX11cJIIe1iu97Y599O5+UKD
-         mR7Slc2e/h/qg==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     bpf@vger.kernel.org
-Cc:     davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-        pabeni@redhat.com, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH bpf-next 2/3] net: skbuff: reorder bytes 2 and 3 of the bitfield
-Date:   Tue,  7 Mar 2023 16:31:58 -0800
-Message-Id: <20230308003159.441580-3-kuba@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230308003159.441580-1-kuba@kernel.org>
-References: <20230308003159.441580-1-kuba@kernel.org>
+        with ESMTP id S229932AbjCHAi3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Mar 2023 19:38:29 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A464736FC9
+        for <bpf@vger.kernel.org>; Tue,  7 Mar 2023 16:38:04 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id o12so59450597edb.9
+        for <bpf@vger.kernel.org>; Tue, 07 Mar 2023 16:38:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678235878;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l3+VblRywuGZsjC1LadZnlc8a5f4Usj/aNIuBo2a93c=;
+        b=WIYoxLs7W186b8PJUwSKBgAm0Ya7BtDULjoxw3qDcCHYCOchX5B0f2wfRnOKst7oBy
+         SI2B9zD+kGzfKR9uPKnbFS/+6zUlhQwV0DoHcsfv26lEDu5j65WtxI29rUON8RilmXpR
+         R6FtJh4kvpCl1lJ+4AXzWJEEk/hadIy6ikiUVgqrwWp+OflUNHqMFOmCsGMYF9/G8X23
+         JsJVGm3ejyhAG8Zh0BxrR8UmxqDBXYAlEBYTmpM+34ZU8p8SElVVX3bMhwiHlE8CWwFN
+         qN5FMJRzAw0MsJHSk70kAjzOb1nOhaV/mg7ZXC8m2azqIMjj1McPUrLysVKsYul4SLiN
+         oE0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678235878;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l3+VblRywuGZsjC1LadZnlc8a5f4Usj/aNIuBo2a93c=;
+        b=Ttcb7fKdsSr+/8ApVFLuL36cpeEK1QotUFaHRUAcrjxu1uHtyXIApcPedIwG6v5kb/
+         YnUEcXF+UxwYYR3UMkoGZhFKjcteBo6/IHTIDC8f+73MJWm7DEpPiVmQoeubY34Cn52/
+         crNfG25nDgVAraS+BVEVfb47OjtLSaPwAv7OB9Sex7e0pGBkcKLhPhhfQWe63FGgrrO0
+         nE2pSoV1dakNrWS0/5rDu5Xg3eh1qy2/b9VWyXqmyppHxk0zQtGy+xV0QLOUOhSk3DVm
+         yT7gVA5ezdRXz0Wxh2U9BJdQabloSYUTsho4N09oIKOpl2a//lvMUi6Hf5cnnJ/aYcdY
+         rEXg==
+X-Gm-Message-State: AO0yUKVUpRK8kLgNZOPll5ZTk+rLopY4kvY+bmS7LMO811rLiYI6h3Dr
+        RRhFFrdtHvRqc44PVB8oTVjh6Aff1RCElF6BUSOiCq6I5u0=
+X-Google-Smtp-Source: AK7set8TSjO2z19JLbXW7d4ctt0TlcVp8RTsQvv0crOO+hqyy1h2H/qmtgdLxEuS9EZDQ5uugv1U/F15k6GVr5O4XPg=
+X-Received: by 2002:a17:906:3141:b0:8e5:411d:4d09 with SMTP id
+ e1-20020a170906314100b008e5411d4d09mr8201290eje.15.1678235878701; Tue, 07 Mar
+ 2023 16:37:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230307233307.3626875-1-kuifeng@meta.com> <20230307233307.3626875-3-kuifeng@meta.com>
+In-Reply-To: <20230307233307.3626875-3-kuifeng@meta.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 7 Mar 2023 16:37:46 -0800
+Message-ID: <CAEf4BzYKrO3VZ=s5JA+TyC1iMEQnWm=RJutsEVV08bM9br-new@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 2/9] bpf: Create links for BPF struct_ops maps.
+To:     Kui-Feng Lee <kuifeng@meta.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, kernel-team@meta.com, andrii@kernel.org,
+        sdf@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-BPF needs to know the offsets of fields it tries to access.
-Zero-length fields are added to make offsetof() work.
-This unfortunately partitions the bitfield (fields across
-the zero-length members can't be coalesced).
+On Tue, Mar 7, 2023 at 3:33=E2=80=AFPM Kui-Feng Lee <kuifeng@meta.com> wrot=
+e:
+>
+> BPF struct_ops maps are employed directly to register TCP Congestion
+> Control algorithms. Unlike other BPF programs that terminate when
+> their links gone. The link of a BPF struct_ops map provides a uniform
+> experience akin to other types of BPF programs.
+>
+> bpf_links are responsible for registering their associated
+> struct_ops. You can only use a struct_ops that has the BPF_F_LINK flag
+> set to create a bpf_link, while a structs without this flag behaves in
+> the same manner as before and is registered upon updating its value.
+>
+> The BPF_LINK_TYPE_STRUCT_OPS serves a dual purpose. Not only is it
+> used to craft the links for BPF struct_ops programs, but also to
+> create links for BPF struct_ops them-self.  Since the links of BPF
+> struct_ops programs are only used to create trampolines internally,
+> they are never seen in other contexts. Thus, they can be reused for
+> struct_ops themself.
+>
+> To maintain a reference to the map supporting this link, we add
+> bpf_struct_ops_link as an additional type. The pointer of the map is
+> RCU and won't be necessary until later in the patchset.
+>
+> Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
+> ---
+>  include/linux/bpf.h            |  11 +++
+>  include/uapi/linux/bpf.h       |  12 +++-
+>  kernel/bpf/bpf_struct_ops.c    | 119 +++++++++++++++++++++++++++++++--
+>  kernel/bpf/syscall.c           |  23 ++++---
+>  tools/include/uapi/linux/bpf.h |  12 +++-
+>  5 files changed, 163 insertions(+), 14 deletions(-)
+>
 
-Reorder bytes 2 and 3, BPF needs to know the offset of fields
-previously in byte 3 and some fields in byte 2 should really
-be optional.
+[...]
 
-The two bytes are always in the same cacheline so it should
-not matter.
+> +int bpf_struct_ops_link_create(union bpf_attr *attr)
+> +{
+> +       struct bpf_struct_ops_link *link =3D NULL;
+> +       struct bpf_link_primer link_primer;
+> +       struct bpf_struct_ops_map *st_map;
+> +       struct bpf_map *map;
+> +       int err;
+> +
+> +       map =3D bpf_map_get(attr->link_create.map_fd);
+> +       if (!map)
+> +               return -EINVAL;
+> +
+> +       st_map =3D (struct bpf_struct_ops_map *)map;
+> +
+> +       if (map->map_type !=3D BPF_MAP_TYPE_STRUCT_OPS || !(map->map_flag=
+s & BPF_F_LINK) ||
+> +           /* Pair with smp_store_release() during map_update */
+> +           smp_load_acquire(&st_map->kvalue.state) !=3D BPF_STRUCT_OPS_S=
+TATE_READY) {
+> +               err =3D -EINVAL;
+> +               goto err_out;
+> +       }
+> +
+> +       link =3D kzalloc(sizeof(*link), GFP_USER);
+> +       if (!link) {
+> +               err =3D -ENOMEM;
+> +               goto err_out;
+> +       }
+> +       bpf_link_init(&link->link, BPF_LINK_TYPE_STRUCT_OPS, &bpf_struct_=
+ops_map_lops, NULL);
+> +       RCU_INIT_POINTER(link->map, map);
+> +
+> +       err =3D bpf_link_prime(&link->link, &link_primer);
+> +       if (err)
+> +               goto err_out;
+> +
+> +       err =3D st_map->st_ops->reg(st_map->kvalue.data);
+> +       if (err) {
+> +               bpf_link_cleanup(&link_primer);
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- include/linux/skbuff.h | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+link =3D NULL to avoid kfree()-ing it, see bpf_tracing_prog_attach() for
+similar approach
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 004009b3930f..c4122797d465 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -945,16 +945,6 @@ struct sk_buff {
- 	__u8			ip_summed:2;
- 	__u8			ooo_okay:1;
- 
--	__u8			l4_hash:1;
--	__u8			sw_hash:1;
--	__u8			wifi_acked_valid:1;
--	__u8			wifi_acked:1;
--	__u8			no_fcs:1;
--	/* Indicates the inner headers are valid in the skbuff. */
--	__u8			encapsulation:1;
--	__u8			encap_hdr_csum:1;
--	__u8			csum_valid:1;
--
- 	/* private: */
- 	__u8			__mono_tc_offset[0];
- 	/* public: */
-@@ -967,6 +957,16 @@ struct sk_buff {
- 	__u8			tc_skip_classify:1;
- 	__u8			tc_at_ingress:1;	/* See TC_AT_INGRESS_MASK */
- #endif
-+
-+	__u8			l4_hash:1;
-+	__u8			sw_hash:1;
-+	__u8			wifi_acked_valid:1;
-+	__u8			wifi_acked:1;
-+	__u8			no_fcs:1;
-+	/* Indicates the inner headers are valid in the skbuff. */
-+	__u8			encapsulation:1;
-+	__u8			encap_hdr_csum:1;
-+	__u8			csum_valid:1;
- #ifdef CONFIG_IPV6_NDISC_NODETYPE
- 	__u8			ndisc_nodetype:2;
- #endif
--- 
-2.39.2
+> +               goto err_out;
+> +       }
+> +
+> +       return bpf_link_settle(&link_primer);
+> +
+> +err_out:
+> +       bpf_map_put(map);
+> +       kfree(link);
+> +       return err;
+> +}
+> +
 
+[...]
