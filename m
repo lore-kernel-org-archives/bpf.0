@@ -2,48 +2,48 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B90AAC6FA99
-	for <bpf@archiver.kernel.org>; Wed,  8 Mar 2023 00:51:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04C45C678D5
+	for <bpf@archiver.kernel.org>; Wed,  8 Mar 2023 00:51:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbjCHAvL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Mar 2023 19:51:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54250 "EHLO
+        id S229695AbjCHAvM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Mar 2023 19:51:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjCHAvK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Mar 2023 19:51:10 -0500
+        with ESMTP id S229692AbjCHAvL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Mar 2023 19:51:11 -0500
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315D8A9DEE
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83DAA9DE2
         for <bpf@vger.kernel.org>; Tue,  7 Mar 2023 16:51:08 -0800 (PST)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32805C3V001603
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32803NAP010424
         for <bpf@vger.kernel.org>; Tue, 7 Mar 2023 16:51:08 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=Vmh4sckhr1JnJXdL7JYiz7yy6wpia1wiGhnKjRG31ng=;
- b=WutrvywNHIZhmGl30vih/2O41EIDYxjArhehVUTXSS/lChYtcK+12EyCCUyJRMu2lF1o
- oDbC6OQxqebs7lXZRxnJjwbT6Ing3RQC6jXspVGOme8JbQG29HGj9Nu/foxHU0hmcWkr
- vlew+Ac1Emy4RQvvgRtbhnh0K+Rdmdz2ZXCg82ffLnSwQZ0f90lEhNLxE3AokfGuZyCK
- 1ZPTYxMJl6pJcomc8I06i33EpfTI31vnk3lLcw7cQPeBDXHwz+R3dbCqOpPtDRQdXUXD
- rYCR7E6+zw1Mu0nS84hPhwtmBoohz2bHltHZ3gYda/fi3qwfo3Oe7xe1OGLhlqeDmF0N GA== 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3p6fgp071f-2
+ bh=2o78ghm+GH4bSaX4Kxbpkr3zLnMk9Bs2vlvkmd5ifDw=;
+ b=DdqLBrakxAdr2GXTXOHgK3pSqo4X9qAkJ2hYeFkMiQq2/vVMn57piPvMP1tnCzdNCrVf
+ mVXkzF/QY/YeqGCW6tN8n/UOp7rMj4zwiKK1nNezhP8c2/ZOkhrYN3cqwFKWppMwfeUo
+ 3Yl+kueNWvqMUlOdz5LNLRbwBrf6l+EO6qXy0i6Fq3DNmCPJoBe/1cNe1EgkOaTkQF/e
+ pepqLr7HCGh7IJ8PQvbVl+EdQNH0Oc2LEoq141Ld3CBxnmIda6j+pZ11oVlTOLOueL7K
+ a1fIdpPLRuQQUoyj9isgxDfBAyRlqikEc0I+Wx+sEf8gzOHtGuvyPlSG6ljuNm22jJE3 fA== 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3p6ffpr7hm-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 07 Mar 2023 16:51:07 -0800
-Received: from twshared52565.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 07 Mar 2023 16:51:08 -0800
+Received: from twshared21709.17.frc2.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 7 Mar 2023 16:51:05 -0800
+ 15.1.2507.17; Tue, 7 Mar 2023 16:51:06 -0800
 Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
-        id 9066B6C92E1A; Tue,  7 Mar 2023 16:50:54 -0800 (PST)
+        id 71DF76C92E14; Tue,  7 Mar 2023 16:50:54 -0800 (PST)
 From:   Kui-Feng Lee <kuifeng@meta.com>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <martin.lau@linux.dev>,
         <song@kernel.org>, <kernel-team@meta.com>, <andrii@kernel.org>,
         <sdf@google.com>
 CC:     Kui-Feng Lee <kuifeng@meta.com>
-Subject: [PATCH bpf-next v5 4/8] libbpf: Create a bpf_link in bpf_map__attach_struct_ops().
-Date:   Tue, 7 Mar 2023 16:50:46 -0800
-Message-ID: <20230308005050.255859-5-kuifeng@meta.com>
+Subject: [PATCH bpf-next v5 1/8] bpf: Retire the struct_ops map kvalue->refcnt.
+Date:   Tue, 7 Mar 2023 16:50:43 -0800
+Message-ID: <20230308005050.255859-2-kuifeng@meta.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230308005050.255859-1-kuifeng@meta.com>
 References: <20230308005050.255859-1-kuifeng@meta.com>
@@ -51,8 +51,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: iTaxcSRCIo8CzB8KpkU-LXJ_VmZTBjoG
-X-Proofpoint-ORIG-GUID: iTaxcSRCIo8CzB8KpkU-LXJ_VmZTBjoG
+X-Proofpoint-ORIG-GUID: aC24bi73h7ecqDdORDIerxL0XPUrzhi1
+X-Proofpoint-GUID: aC24bi73h7ecqDdORDIerxL0XPUrzhi1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-07_18,2023-03-07_01,2023-02-09_01
@@ -60,168 +60,199 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-bpf_map__attach_struct_ops() was creating a dummy bpf_link as a
-placeholder, but now it is constructing an authentic one by calling
-bpf_link_create() if the map has the BPF_F_LINK flag.
+We have replaced kvalue-refcnt with synchronize_rcu() to wait for an
+RCU grace period.
 
-You can flag a struct_ops map with BPF_F_LINK by calling
-bpf_map__set_map_flags().
+Maintenance of kvalue->refcnt was a complicated task, as we had to
+simultaneously keep track of two reference counts: one for the
+reference count of bpf_map. When the kvalue->refcnt reaches zero, we
+also have to reduce the reference count on bpf_map - yet these steps
+are not performed in an atomic manner and require us to be vigilant
+when managing them. By eliminating kvalue->refcnt, we can make our
+maintenance more straightforward as the refcount of bpf_map is now
+solely managed!
+
+To prevent the trampoline image of a struct_ops from being released
+while it is still in use, we wait for an RCU grace period. The
+setsockopt(TCP_CONGESTION, "...") command allows you to change your
+socket's congestion control algorithm and can result in releasing the
+old struct_ops implementation. Moreover, since this function is
+exposed through bpf_setsockopt(), it may be accessed by BPF programs
+as well. To ensure that the trampoline image belonging to struct_op
+can be safely called while its method is in use, struct_ops is
+safeguarded with rcu_read_lock(). Doing so prevents any destruction of
+the associated images before returning from a trampoline and requires
+us to wait for an RCU grace period.
 
 Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
 ---
- tools/lib/bpf/libbpf.c | 84 +++++++++++++++++++++++++++++++-----------
- 1 file changed, 62 insertions(+), 22 deletions(-)
+ include/linux/bpf.h         |  2 ++
+ kernel/bpf/bpf_struct_ops.c | 60 ++++++++++++++++++-------------------
+ kernel/bpf/syscall.c        |  2 +-
+ 3 files changed, 32 insertions(+), 32 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index a557718401e4..f70b55c0f40e 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -116,6 +116,7 @@ static const char * const attach_type_name[] =3D {
- 	[BPF_SK_REUSEPORT_SELECT_OR_MIGRATE]	=3D "sk_reuseport_select_or_migrat=
-e",
- 	[BPF_PERF_EVENT]		=3D "perf_event",
- 	[BPF_TRACE_KPROBE_MULTI]	=3D "trace_kprobe_multi",
-+	[BPF_STRUCT_OPS]		=3D "struct_ops",
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 6792a7940e1e..50cfc2388cbc 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -78,6 +78,7 @@ struct bpf_map_ops {
+ 	struct bpf_map *(*map_alloc)(union bpf_attr *attr);
+ 	void (*map_release)(struct bpf_map *map, struct file *map_file);
+ 	void (*map_free)(struct bpf_map *map);
++	void (*map_free_rcu)(struct bpf_map *map);
+ 	int (*map_get_next_key)(struct bpf_map *map, void *key, void *next_key)=
+;
+ 	void (*map_release_uref)(struct bpf_map *map);
+ 	void *(*map_lookup_elem_sys_only)(struct bpf_map *map, void *key);
+@@ -1934,6 +1935,7 @@ struct bpf_map *bpf_map_get_with_uref(u32 ufd);
+ struct bpf_map *__bpf_map_get(struct fd f);
+ void bpf_map_inc(struct bpf_map *map);
+ void bpf_map_inc_with_uref(struct bpf_map *map);
++struct bpf_map *__bpf_map_inc_not_zero(struct bpf_map *map, bool uref);
+ struct bpf_map * __must_check bpf_map_inc_not_zero(struct bpf_map *map);
+ void bpf_map_put_with_uref(struct bpf_map *map);
+ void bpf_map_put(struct bpf_map *map);
+diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+index 38903fb52f98..9e097fcc9cf4 100644
+--- a/kernel/bpf/bpf_struct_ops.c
++++ b/kernel/bpf/bpf_struct_ops.c
+@@ -58,6 +58,8 @@ struct bpf_struct_ops_map {
+ 	struct bpf_struct_ops_value kvalue;
  };
 =20
- static const char * const link_type_name[] =3D {
-@@ -7677,6 +7678,26 @@ static int bpf_object__resolve_externs(struct bpf_=
-object *obj,
++static DEFINE_MUTEX(update_mutex);
++
+ #define VALUE_PREFIX "bpf_struct_ops_"
+ #define VALUE_PREFIX_LEN (sizeof(VALUE_PREFIX) - 1)
+=20
+@@ -249,6 +251,7 @@ int bpf_struct_ops_map_sys_lookup_elem(struct bpf_map=
+ *map, void *key,
+ 	struct bpf_struct_ops_map *st_map =3D (struct bpf_struct_ops_map *)map;
+ 	struct bpf_struct_ops_value *uvalue, *kvalue;
+ 	enum bpf_struct_ops_state state;
++	s64 refcnt;
+=20
+ 	if (unlikely(*(u32 *)key !=3D 0))
+ 		return -ENOENT;
+@@ -267,7 +270,9 @@ int bpf_struct_ops_map_sys_lookup_elem(struct bpf_map=
+ *map, void *key,
+ 	uvalue =3D value;
+ 	memcpy(uvalue, st_map->uvalue, map->value_size);
+ 	uvalue->state =3D state;
+-	refcount_set(&uvalue->refcnt, refcount_read(&kvalue->refcnt));
++
++	refcnt =3D atomic64_read(&map->refcnt) - atomic64_read(&map->usercnt);
++	refcount_set(&uvalue->refcnt, max_t(s64, refcnt, 0));
+=20
  	return 0;
  }
-=20
-+static void bpf_map_prepare_vdata(const struct bpf_map *map)
-+{
-+	struct bpf_struct_ops *st_ops;
-+	__u32 i;
-+
-+	st_ops =3D map->st_ops;
-+	for (i =3D 0; i < btf_vlen(st_ops->type); i++) {
-+		struct bpf_program *prog =3D st_ops->progs[i];
-+		void *kern_data;
-+		int prog_fd;
-+
-+		if (!prog)
-+			continue;
-+
-+		prog_fd =3D bpf_program__fd(prog);
-+		kern_data =3D st_ops->kern_vdata + st_ops->kern_func_off[i];
-+		*(unsigned long *)kern_data =3D prog_fd;
-+	}
-+}
-+
- static int bpf_object_load(struct bpf_object *obj, int extra_log_level, =
-const char *target_btf_path)
- {
- 	int err, i;
-@@ -7728,6 +7749,10 @@ static int bpf_object_load(struct bpf_object *obj,=
- int extra_log_level, const ch
- 	btf__free(obj->btf_vmlinux);
- 	obj->btf_vmlinux =3D NULL;
-=20
-+	for (i =3D 0; i < obj->nr_maps; i++)
-+		if (bpf_map__is_struct_ops(&obj->maps[i]))
-+			bpf_map_prepare_vdata(&obj->maps[i]);
-+
- 	obj->loaded =3D true; /* doesn't matter if successfully or not */
-=20
- 	if (err)
-@@ -11566,22 +11591,34 @@ struct bpf_link *bpf_program__attach(const stru=
-ct bpf_program *prog)
- 	return link;
- }
-=20
-+struct bpf_link_struct_ops {
-+	struct bpf_link link;
-+	int map_fd;
-+};
-+
- static int bpf_link__detach_struct_ops(struct bpf_link *link)
- {
-+	struct bpf_link_struct_ops *st_link;
- 	__u32 zero =3D 0;
-=20
--	if (bpf_map_delete_elem(link->fd, &zero))
--		return -errno;
-+	st_link =3D container_of(link, struct bpf_link_struct_ops, link);
-=20
--	return 0;
-+	if (st_link->map_fd < 0) {
-+		/* Fake bpf_link */
-+		if (bpf_map_delete_elem(link->fd, &zero))
-+			return -errno;
-+		return 0;
-+	}
-+
-+	/* Doesn't support detaching. */
-+	return -EOPNOTSUPP;
- }
-=20
- struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map)
- {
--	struct bpf_struct_ops *st_ops;
--	struct bpf_link *link;
--	__u32 i, zero =3D 0;
--	int err;
-+	struct bpf_link_struct_ops *link;
-+	__u32 zero =3D 0;
-+	int err, fd;
-=20
- 	if (!bpf_map__is_struct_ops(map) || map->fd =3D=3D -1)
- 		return libbpf_err_ptr(-EINVAL);
-@@ -11590,31 +11627,34 @@ struct bpf_link *bpf_map__attach_struct_ops(con=
-st struct bpf_map *map)
- 	if (!link)
- 		return libbpf_err_ptr(-EINVAL);
-=20
--	st_ops =3D map->st_ops;
--	for (i =3D 0; i < btf_vlen(st_ops->type); i++) {
--		struct bpf_program *prog =3D st_ops->progs[i];
--		void *kern_data;
--		int prog_fd;
-+	/* kern_vdata should be prepared during the loading phase. */
-+	err =3D bpf_map_update_elem(map->fd, &zero, map->st_ops->kern_vdata, 0)=
-;
-+	if (err) {
-+		err =3D -errno;
-+		free(link);
-+		return libbpf_err_ptr(err);
-+	}
-=20
--		if (!prog)
--			continue;
-=20
--		prog_fd =3D bpf_program__fd(prog);
--		kern_data =3D st_ops->kern_vdata + st_ops->kern_func_off[i];
--		*(unsigned long *)kern_data =3D prog_fd;
-+	if (!(map->def.map_flags & BPF_F_LINK)) {
-+		/* Fake bpf_link */
-+		link->link.fd =3D map->fd;
-+		link->map_fd =3D -1;
-+		link->link.detach =3D bpf_link__detach_struct_ops;
-+		return &link->link;
+@@ -491,7 +496,6 @@ static int bpf_struct_ops_map_update_elem(struct bpf_=
+map *map, void *key,
+ 		*(unsigned long *)(udata + moff) =3D prog->aux->id;
  	}
 =20
--	err =3D bpf_map_update_elem(map->fd, &zero, st_ops->kern_vdata, 0);
--	if (err) {
-+	fd =3D bpf_link_create(map->fd, -1, BPF_STRUCT_OPS, NULL);
-+	if (fd < 0) {
- 		err =3D -errno;
- 		free(link);
- 		return libbpf_err_ptr(err);
- 	}
+-	refcount_set(&kvalue->refcnt, 1);
+ 	bpf_map_inc(map);
 =20
--	link->detach =3D bpf_link__detach_struct_ops;
--	link->fd =3D map->fd;
-+	link->link.fd =3D fd;
-+	link->map_fd =3D map->fd;
+ 	set_memory_rox((long)st_map->image, 1);
+@@ -536,8 +540,7 @@ static int bpf_struct_ops_map_delete_elem(struct bpf_=
+map *map, void *key)
+ 	switch (prev_state) {
+ 	case BPF_STRUCT_OPS_STATE_INUSE:
+ 		st_map->st_ops->unreg(&st_map->kvalue.data);
+-		if (refcount_dec_and_test(&st_map->kvalue.refcnt))
+-			bpf_map_put(map);
++		bpf_map_put(map);
+ 		return 0;
+ 	case BPF_STRUCT_OPS_STATE_TOBEFREE:
+ 		return -EINPROGRESS;
+@@ -574,6 +577,19 @@ static void bpf_struct_ops_map_free(struct bpf_map *=
+map)
+ {
+ 	struct bpf_struct_ops_map *st_map =3D (struct bpf_struct_ops_map *)map;
 =20
--	return link;
-+	return &link->link;
++	/* The struct_ops's function may switch to another struct_ops.
++	 *
++	 * For example, bpf_tcp_cc_x->init() may switch to
++	 * another tcp_cc_y by calling
++	 * setsockopt(TCP_CONGESTION, "tcp_cc_y").
++	 * During the switch,  bpf_struct_ops_put(tcp_cc_x) is called
++	 * and its refcount may reach 0 which then free its
++	 * trampoline image while tcp_cc_x is still running.
++	 *
++	 * Thus, a rcu grace period is needed here.
++	 */
++	synchronize_rcu();
++
+ 	if (st_map->links)
+ 		bpf_struct_ops_map_put_progs(st_map);
+ 	bpf_map_area_free(st_map->links);
+@@ -676,41 +692,23 @@ const struct bpf_map_ops bpf_struct_ops_map_ops =3D=
+ {
+ bool bpf_struct_ops_get(const void *kdata)
+ {
+ 	struct bpf_struct_ops_value *kvalue;
++	struct bpf_struct_ops_map *st_map;
++	struct bpf_map *map;
+=20
+ 	kvalue =3D container_of(kdata, struct bpf_struct_ops_value, data);
++	st_map =3D container_of(kvalue, struct bpf_struct_ops_map, kvalue);
+=20
+-	return refcount_inc_not_zero(&kvalue->refcnt);
+-}
+-
+-static void bpf_struct_ops_put_rcu(struct rcu_head *head)
+-{
+-	struct bpf_struct_ops_map *st_map;
+-
+-	st_map =3D container_of(head, struct bpf_struct_ops_map, rcu);
+-	bpf_map_put(&st_map->map);
++	map =3D __bpf_map_inc_not_zero(&st_map->map, false);
++	return !IS_ERR(map);
  }
 =20
- typedef enum bpf_perf_event_ret (*bpf_perf_event_print_t)(struct perf_ev=
-ent_header *hdr,
+ void bpf_struct_ops_put(const void *kdata)
+ {
+ 	struct bpf_struct_ops_value *kvalue;
++	struct bpf_struct_ops_map *st_map;
+=20
+ 	kvalue =3D container_of(kdata, struct bpf_struct_ops_value, data);
+-	if (refcount_dec_and_test(&kvalue->refcnt)) {
+-		struct bpf_struct_ops_map *st_map;
+-
+-		st_map =3D container_of(kvalue, struct bpf_struct_ops_map,
+-				      kvalue);
+-		/* The struct_ops's function may switch to another struct_ops.
+-		 *
+-		 * For example, bpf_tcp_cc_x->init() may switch to
+-		 * another tcp_cc_y by calling
+-		 * setsockopt(TCP_CONGESTION, "tcp_cc_y").
+-		 * During the switch,  bpf_struct_ops_put(tcp_cc_x) is called
+-		 * and its map->refcnt may reach 0 which then free its
+-		 * trampoline image while tcp_cc_x is still running.
+-		 *
+-		 * Thus, a rcu grace period is needed here.
+-		 */
+-		call_rcu(&st_map->rcu, bpf_struct_ops_put_rcu);
+-	}
++	st_map =3D container_of(kvalue, struct bpf_struct_ops_map, kvalue);
++
++	bpf_map_put(&st_map->map);
+ }
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index f406dfa13792..03273cddd6bd 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1288,7 +1288,7 @@ struct bpf_map *bpf_map_get_with_uref(u32 ufd)
+ }
+=20
+ /* map_idr_lock should have been held */
+-static struct bpf_map *__bpf_map_inc_not_zero(struct bpf_map *map, bool =
+uref)
++struct bpf_map *__bpf_map_inc_not_zero(struct bpf_map *map, bool uref)
+ {
+ 	int refold;
+=20
 --=20
 2.34.1
 
