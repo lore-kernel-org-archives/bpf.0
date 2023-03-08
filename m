@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DFAAC678D5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95896C742A7
 	for <bpf@archiver.kernel.org>; Wed,  8 Mar 2023 03:54:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbjCHDyk convert rfc822-to-8bit (ORCPT
+        id S229901AbjCHDyk convert rfc822-to-8bit (ORCPT
         <rfc822;bpf@archiver.kernel.org>); Tue, 7 Mar 2023 22:54:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbjCHDyi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Mar 2023 22:54:38 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73D097FFC
+        with ESMTP id S229879AbjCHDyj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Mar 2023 22:54:39 -0500
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C150C984C0
         for <bpf@vger.kernel.org>; Tue,  7 Mar 2023 19:54:36 -0800 (PST)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3281EJhT021623
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 3281EKFR022301
         for <bpf@vger.kernel.org>; Tue, 7 Mar 2023 19:54:36 -0800
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3p6ffb9477-5
+        by m0001303.ppops.net (PPS) with ESMTPS id 3p6fh0h3wb-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Tue, 07 Mar 2023 19:54:35 -0800
-Received: from twshared38955.16.prn3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+Received: from twshared16996.15.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 7 Mar 2023 19:54:29 -0800
+ 15.1.2507.17; Tue, 7 Mar 2023 19:54:34 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id D7E66298A5518; Tue,  7 Mar 2023 19:54:21 -0800 (PST)
+        id 13004298A558D; Tue,  7 Mar 2023 19:54:28 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@meta.com>,
         Tejun Heo <tj@kernel.org>
-Subject: [PATCH v4 bpf-next 2/8] bpf: add iterator kfuncs registration and validation logic
-Date:   Tue, 7 Mar 2023 19:54:10 -0800
-Message-ID: <20230308035416.2591326-3-andrii@kernel.org>
+Subject: [PATCH v4 bpf-next 5/8] selftests/bpf: add bpf_for_each(), bpf_for(), and bpf_repeat() macros
+Date:   Tue, 7 Mar 2023 19:54:13 -0800
+Message-ID: <20230308035416.2591326-6-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230308035416.2591326-1-andrii@kernel.org>
 References: <20230308035416.2591326-1-andrii@kernel.org>
@@ -41,8 +41,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: WIRv0NtZrSltUnvAB2gq2NbSFIyx5wpQ
-X-Proofpoint-ORIG-GUID: WIRv0NtZrSltUnvAB2gq2NbSFIyx5wpQ
+X-Proofpoint-ORIG-GUID: Iu6e5ps48Oh4dCFAiz3A8kLVloeNW2Tz
+X-Proofpoint-GUID: Iu6e5ps48Oh4dCFAiz3A8kLVloeNW2Tz
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-07_18,2023-03-07_01,2023-02-09_01
@@ -50,217 +50,285 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add ability to register kfuncs that implement BPF open-coded iterator
-contract and enforce naming and function proto convention. Enforcement
-is happing at the time of kfunc registration and is significantly
-simplifies the rest of iterators logic in verifier.
+Add bpf_for_each(), bpf_for() and bpf_repeat() macros that make writing
+open-coded iterator-based loops much more convenient and natural. These
+macro utilize cleanup attribute to ensure proper destruction of the
+iterator and thanks to that manage to provide an ergonomics very close to
+C language's for() construct. Typical integer loop would look like:
 
-More details follow in subsequent patches, but we recognize and enforce
-the following conditions.
+  int i;
+  int arr[N];
 
-All kfuncs (constructor, next, destructor) have to be named consistenly
-as bpf_iter_<type>_{new,next,destroy(), respectively. <type> represents
-iterator type, and iterator's state should be represented as matching
-`struct bpf_iter_<type>` state type. Also, all iter kfuncs should have
-a pointer to this `struct bpf_iter_<type>` as a very first argument.
+  bpf_for(i, 0, N) {
+      /* verifier will know that i >= 0 && i < N, so could be used to
+       * directly access array elements with no extra checks
+       */
+       arr[i] = i;
+  }
 
-Additionally:
-  - Constructor, i.e., bpf_iter_<type>_new(), can have arbitrary extra
-  number of arguments. Return type not enforced either.
-  - Next method, i.e., bpf_iter_<type>_next(), has to return a pointer
-  type and should have exactly one argument: `struct bpf_iter_<type> *`
-  (const/volatile/restrict and typedefs are ignored).
-  - Destructor, i.e., bpf_iter_<type>_destroy(), should return void and
-  should have exactly one argument, similar to next method.
-  - struct bpf_iter_<type> size is enforced to be positive and
-  a multiple of 8 bytes (to fit stack slots correctly).
+bpf_repeat() is very similar, but it doesn't expose iteration number and
+is meant as a simple "repeat action N times" loop:
 
-Such strictness and consistency allows to build generic helpers
-abstracting important, but boilerplate, details to be able to use
-open-coded iterators effectively and ergonomically. It also simplifies
-verifier logic in some places.  At the same time, this doesn't hurt
-generality of possible iterator implementations. Win-win.
+  bpf_repeat(N) { /* whatever, N times */ }
 
-Constructor kfunc is marked with a new KF_ITER_NEW flags, next method is marked
-with KF_ITER_NEXT (and should also have KF_RET_NULL, of course), while
-destructor kfunc is marked as KF_ITER_DESTROY.
+Note that `break` and `continue` statements inside the {} block work as
+expected.
 
-Additionally, we add a trivial kfunc name validation, it should be
-a valid non-NULL and non-empty string.
+bpf_for_each() is a generalization over any kind of BPF open-coded
+iterator allowing to use for-each-like approach instead of calling
+low-level bpf_iter_<type>_{new,next,destroy}() APIs explicitly. E.g.:
+
+  struct cgroup *cg;
+
+  bpf_for_each(cgroup, cg, some, input, args) {
+      /* do something with each cg */
+  }
+
+would call (right now hypothetical) bpf_iter_cgroup_{new,next,destroy}()
+functions to form a loop over cgroups, where `some, input, args` are
+passed verbatim into constructor as
+
+  bpf_iter_cgroup_new(&it, some, input, args).
+
+As a demonstration, add pyperf variant based on bpf_for() loop.
+
+Also clean up a few tests that either included bpf_misc.h header
+unnecessarily from user-space or included it before any common types are
+defined.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- include/linux/bpf_verifier.h |   2 +
- include/linux/btf.h          |   4 ++
- kernel/bpf/btf.c             | 112 ++++++++++++++++++++++++++++++++++-
- 3 files changed, 117 insertions(+), 1 deletion(-)
+ .../bpf/prog_tests/bpf_verif_scale.c          |  6 ++
+ .../bpf/prog_tests/uprobe_autoattach.c        |  1 -
+ tools/testing/selftests/bpf/progs/bpf_misc.h  | 99 +++++++++++++++++++
+ tools/testing/selftests/bpf/progs/lsm.c       |  4 +-
+ tools/testing/selftests/bpf/progs/pyperf.h    | 14 ++-
+ .../selftests/bpf/progs/pyperf600_iter.c      |  7 ++
+ .../selftests/bpf/progs/pyperf600_nounroll.c  |  3 -
+ 7 files changed, 124 insertions(+), 10 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/pyperf600_iter.c
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 18538bad2b8c..e2dc7f064449 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -59,6 +59,8 @@ struct bpf_active_lock {
- 	u32 id;
- };
- 
-+#define ITER_PREFIX "bpf_iter_"
-+
- struct bpf_reg_state {
- 	/* Ordering of fields matters.  See states_equal() */
- 	enum bpf_reg_type type;
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index 556b3e2e7471..1bba0827e8c4 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -71,6 +71,10 @@
- #define KF_SLEEPABLE    (1 << 5) /* kfunc may sleep */
- #define KF_DESTRUCTIVE  (1 << 6) /* kfunc performs destructive actions */
- #define KF_RCU          (1 << 7) /* kfunc takes either rcu or trusted pointer arguments */
-+/* only one of KF_ITER_{NEW,NEXT,DESTROY} could be specified per kfunc */
-+#define KF_ITER_NEW     (1 << 8) /* kfunc implements BPF iter constructor */
-+#define KF_ITER_NEXT    (1 << 9) /* kfunc implements BPF iter next method */
-+#define KF_ITER_DESTROY (1 << 10) /* kfunc implements BPF iter destructor */
- 
- /*
-  * Tag marking a kernel function as a kfunc. This is meant to minimize the
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index a8cb09e5973b..71758cd15b07 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -7596,6 +7596,108 @@ BTF_ID_LIST_GLOBAL(btf_tracing_ids, MAX_BTF_TRACING_TYPE)
- BTF_TRACING_TYPE_xxx
- #undef BTF_TRACING_TYPE
- 
-+static int btf_check_iter_kfuncs(struct btf *btf, const char *func_name,
-+				 const struct btf_type *func, u32 func_flags)
-+{
-+	u32 flags = func_flags & (KF_ITER_NEW | KF_ITER_NEXT | KF_ITER_DESTROY);
-+	const char *name, *sfx, *iter_name;
-+	const struct btf_param *arg;
-+	const struct btf_type *t;
-+	char exp_name[128];
-+	u32 nr_args;
-+
-+	/* exactly one of KF_ITER_{NEW,NEXT,DESTROY} can be set */
-+	if (!flags || (flags & (flags - 1)))
-+		return -EINVAL;
-+
-+	/* any BPF iter kfunc should have `struct bpf_iter_<type> *` first arg */
-+	nr_args = btf_type_vlen(func);
-+	if (nr_args < 1)
-+		return -EINVAL;
-+
-+	arg = &btf_params(func)[0];
-+	t = btf_type_skip_modifiers(btf, arg->type, NULL);
-+	if (!t || !btf_type_is_ptr(t))
-+		return -EINVAL;
-+	t = btf_type_skip_modifiers(btf, t->type, NULL);
-+	if (!t || !__btf_type_is_struct(t))
-+		return -EINVAL;
-+
-+	name = btf_name_by_offset(btf, t->name_off);
-+	if (!name || strncmp(name, ITER_PREFIX, sizeof(ITER_PREFIX) - 1))
-+		return -EINVAL;
-+
-+	/* sizeof(struct bpf_iter_<type>) should be a multiple of 8 to
-+	 * fit nicely in stack slots
-+	 */
-+	if (t->size == 0 || (t->size % 8))
-+		return -EINVAL;
-+
-+	/* validate bpf_iter_<type>_{new,next,destroy}(struct bpf_iter_<type> *)
-+	 * naming pattern
-+	 */
-+	iter_name = name + sizeof(ITER_PREFIX) - 1;
-+	if (flags & KF_ITER_NEW)
-+		sfx = "new";
-+	else if (flags & KF_ITER_NEXT)
-+		sfx = "next";
-+	else /* (flags & KF_ITER_DESTROY) */
-+		sfx = "destroy";
-+
-+	snprintf(exp_name, sizeof(exp_name), "bpf_iter_%s_%s", iter_name, sfx);
-+	if (strcmp(func_name, exp_name))
-+		return -EINVAL;
-+
-+	/* only iter constructor should have extra arguments */
-+	if (!(flags & KF_ITER_NEW) && nr_args != 1)
-+		return -EINVAL;
-+
-+	if (flags & KF_ITER_NEXT) {
-+		/* bpf_iter_<type>_next() should return pointer */
-+		t = btf_type_skip_modifiers(btf, func->type, NULL);
-+		if (!t || !btf_type_is_ptr(t))
-+			return -EINVAL;
-+	}
-+
-+	if (flags & KF_ITER_DESTROY) {
-+		/* bpf_iter_<type>_destroy() should return void */
-+		t = btf_type_by_id(btf, func->type);
-+		if (!t || !btf_type_is_void(t))
-+			return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int btf_check_kfunc_protos(struct btf *btf, u32 func_id, u32 func_flags)
-+{
-+	const struct btf_type *func;
-+	const char *func_name;
-+	int err;
-+
-+	/* any kfunc should be FUNC -> FUNC_PROTO */
-+	func = btf_type_by_id(btf, func_id);
-+	if (!func || !btf_type_is_func(func))
-+		return -EINVAL;
-+
-+	/* sanity check kfunc name */
-+	func_name = btf_name_by_offset(btf, func->name_off);
-+	if (!func_name || !func_name[0])
-+		return -EINVAL;
-+
-+	func = btf_type_by_id(btf, func->type);
-+	if (!func || !btf_type_is_func_proto(func))
-+		return -EINVAL;
-+
-+	if (func_flags & (KF_ITER_NEW | KF_ITER_NEXT | KF_ITER_DESTROY)) {
-+		err = btf_check_iter_kfuncs(btf, func_name, func, func_flags);
-+		if (err)
-+			return err;
-+	}
-+
-+	return 0;
-+}
-+
- /* Kernel Function (kfunc) BTF ID set registration API */
- 
- static int btf_populate_kfunc_set(struct btf *btf, enum btf_kfunc_hook hook,
-@@ -7772,7 +7874,7 @@ static int __register_btf_kfunc_id_set(enum btf_kfunc_hook hook,
- 				       const struct btf_kfunc_id_set *kset)
- {
- 	struct btf *btf;
--	int ret;
-+	int ret, i;
- 
- 	btf = btf_get_module_btf(kset->owner);
- 	if (!btf) {
-@@ -7789,7 +7891,15 @@ static int __register_btf_kfunc_id_set(enum btf_kfunc_hook hook,
- 	if (IS_ERR(btf))
- 		return PTR_ERR(btf);
- 
-+	for (i = 0; i < kset->set->cnt; i++) {
-+		ret = btf_check_kfunc_protos(btf, kset->set->pairs[i].id,
-+					     kset->set->pairs[i].flags);
-+		if (ret)
-+			goto err_out;
-+	}
-+
- 	ret = btf_populate_kfunc_set(btf, hook, kset->set);
-+err_out:
- 	btf_put(btf);
- 	return ret;
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
+index 5ca252823294..731c343897d8 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
+@@ -144,6 +144,12 @@ void test_verif_scale_pyperf600_nounroll()
+ 	scale_test("pyperf600_nounroll.bpf.o", BPF_PROG_TYPE_RAW_TRACEPOINT, false);
  }
+ 
++void test_verif_scale_pyperf600_iter()
++{
++	/* open-coded BPF iterator version */
++	scale_test("pyperf600_iter.bpf.o", BPF_PROG_TYPE_RAW_TRACEPOINT, false);
++}
++
+ void test_verif_scale_loop1()
+ {
+ 	scale_test("loop1.bpf.o", BPF_PROG_TYPE_RAW_TRACEPOINT, false);
+diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c b/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c
+index 6558c857e620..d5b3377aa33c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c
++++ b/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c
+@@ -3,7 +3,6 @@
+ 
+ #include <test_progs.h>
+ #include "test_uprobe_autoattach.skel.h"
+-#include "progs/bpf_misc.h"
+ 
+ /* uprobe attach point */
+ static noinline int autoattach_trigger_func(int arg1, int arg2, int arg3,
+diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
+index f704885aa534..597688a188ae 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_misc.h
++++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+@@ -75,5 +75,104 @@
+ #define FUNC_REG_ARG_CNT 5
+ #endif
+ 
++struct bpf_iter_num;
++
++extern int bpf_iter_num_new(struct bpf_iter_num *it, int start, int end) __ksym;
++extern int *bpf_iter_num_next(struct bpf_iter_num *it) __ksym;
++extern void bpf_iter_num_destroy(struct bpf_iter_num *it) __ksym;
++
++#ifndef bpf_for_each
++/* bpf_for_each(iter_type, cur_elem, args...) provides generic construct for
++ * using BPF open-coded iterators without having to write mundane explicit
++ * low-level loop logic. Instead, it provides for()-like generic construct
++ * that can be used pretty naturally. E.g., for some hypothetical cgroup
++ * iterator, you'd write:
++ *
++ * struct cgroup *cg, *parent_cg = <...>;
++ *
++ * bpf_for_each(cgroup, cg, parent_cg, CG_ITER_CHILDREN) {
++ *     bpf_printk("Child cgroup id = %d", cg->cgroup_id);
++ *     if (cg->cgroup_id == 123)
++ *         break;
++ * }
++ *
++ * I.e., it looks almost like high-level for each loop in other languages,
++ * supports continue/break, and is verifiable by BPF verifier.
++ *
++ * For iterating integers, the difference betwen bpf_for_each(num, i, N, M)
++ * and bpf_for(i, N, M) is in that bpf_for() provides additional proof to
++ * verifier that i is in [N, M) range, and in bpf_for_each() case i is `int
++ * *`, not just `int`. So for integers bpf_for() is more convenient.
++ *
++ * Note: this macro relies on C99 feature of allowing to declare variables
++ * inside for() loop, bound to for() loop lifetime. It also utilizes GCC
++ * extension: __attribute__((cleanup(<func>))), supported by both GCC and
++ * Clang.
++ */
++#define bpf_for_each(type, cur, args...) for (							\
++	/* initialize and define destructor */							\
++	struct bpf_iter_##type ___it __attribute__((aligned(8), /* enforce, just in case */,	\
++						    cleanup(bpf_iter_##type##_destroy))),	\
++	/* ___p pointer is just to call bpf_iter_##type##_new() *once* to init ___it */		\
++			       *___p = (bpf_iter_##type##_new(&___it, ##args),			\
++	/* this is a workaround for Clang bug: it currently doesn't emit BTF */			\
++	/* for bpf_iter_##type##_destroy() when used from cleanup() attribute */		\
++					(void)bpf_iter_##type##_destroy, (void *)0);		\
++	/* iteration and termination check */							\
++	(((cur) = bpf_iter_##type##_next(&___it)));						\
++)
++#endif /* bpf_for_each */
++
++#ifndef bpf_for
++/* bpf_for(i, start, end) implements a for()-like looping construct that sets
++ * provided integer variable *i* to values starting from *start* through,
++ * but not including, *end*. It also proves to BPF verifier that *i* belongs
++ * to range [start, end), so this can be used for accessing arrays without
++ * extra checks.
++ *
++ * Note: *start* and *end* are assumed to be expressions with no side effects
++ * and whose values do not change throughout bpf_for() loop execution. They do
++ * not have to be statically known or constant, though.
++ *
++ * Note: similarly to bpf_for_each(), it relies on C99 feature of declaring for()
++ * loop bound variables and cleanup attribute, supported by GCC and Clang.
++ */
++#define bpf_for(i, start, end) for (								\
++	/* initialize and define destructor */							\
++	struct bpf_iter_num ___it __attribute__((aligned(8), /* enforce, just in case */	\
++						 cleanup(bpf_iter_num_destroy))),		\
++	/* ___p pointer is necessary to call bpf_iter_num_new() *once* to init ___it */		\
++			    *___p = (bpf_iter_num_new(&___it, (start), (end)),			\
++	/* this is a workaround for Clang bug: it currently doesn't emit BTF */			\
++	/* for bpf_iter_num_destroy() when used from cleanup() attribute */			\
++				(void)bpf_iter_num_destroy, (void *)0);				\
++	({											\
++		/* iteration step */								\
++		int *___t = bpf_iter_num_next(&___it);						\
++		/* termination and bounds check */						\
++		(___t && ((i) = *___t, (i) >= (start) && (i) < (end)));				\
++	});											\
++)
++#endif /* bpf_for */
++
++#ifndef bpf_repeat
++/* bpf_repeat(N) performs N iterations without exposing iteration number
++ *
++ * Note: similarly to bpf_for_each(), it relies on C99 feature of declaring for()
++ * loop bound variables and cleanup attribute, supported by GCC and Clang.
++ */
++#define bpf_repeat(N) for (									\
++	/* initialize and define destructor */							\
++	struct bpf_iter_num ___it __attribute__((aligned(8), /* enforce, just in case */	\
++						 cleanup(bpf_iter_num_destroy))),		\
++	/* ___p pointer is necessary to call bpf_iter_num_new() *once* to init ___it */		\
++			    *___p = (bpf_iter_num_new(&___it, 0, (N)),				\
++	/* this is a workaround for Clang bug: it currently doesn't emit BTF */			\
++	/* for bpf_iter_num_destroy() when used from cleanup() attribute */			\
++				(void)bpf_iter_num_destroy, (void *)0);				\
++	bpf_iter_num_next(&___it);								\
++	/* nothing here  */									\
++)
++#endif /* bpf_repeat */
+ 
+ #endif
+diff --git a/tools/testing/selftests/bpf/progs/lsm.c b/tools/testing/selftests/bpf/progs/lsm.c
+index dc93887ed34c..fadfdd98707c 100644
+--- a/tools/testing/selftests/bpf/progs/lsm.c
++++ b/tools/testing/selftests/bpf/progs/lsm.c
+@@ -4,12 +4,12 @@
+  * Copyright 2020 Google LLC.
+  */
+ 
+-#include "bpf_misc.h"
+ #include "vmlinux.h"
++#include <errno.h>
+ #include <bpf/bpf_core_read.h>
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+-#include <errno.h>
++#include "bpf_misc.h"
+ 
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_ARRAY);
+diff --git a/tools/testing/selftests/bpf/progs/pyperf.h b/tools/testing/selftests/bpf/progs/pyperf.h
+index 6c7b1fb268d6..f2e7a31c8d75 100644
+--- a/tools/testing/selftests/bpf/progs/pyperf.h
++++ b/tools/testing/selftests/bpf/progs/pyperf.h
+@@ -7,6 +7,7 @@
+ #include <stdbool.h>
+ #include <linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
+ 
+ #define FUNCTION_NAME_LEN 64
+ #define FILE_NAME_LEN 128
+@@ -294,17 +295,22 @@ int __on_event(struct bpf_raw_tracepoint_args *ctx)
+ 	if (ctx.done)
+ 		return 0;
+ #else
+-#ifdef NO_UNROLL
++#if defined(USE_ITER)
++/* no for loop, no unrolling */
++#elif defined(NO_UNROLL)
+ #pragma clang loop unroll(disable)
+-#else
+-#ifdef UNROLL_COUNT
++#elif defined(UNROLL_COUNT)
+ #pragma clang loop unroll_count(UNROLL_COUNT)
+ #else
+ #pragma clang loop unroll(full)
+-#endif
+ #endif /* NO_UNROLL */
+ 		/* Unwind python stack */
++#ifdef USE_ITER
++		int i;
++		bpf_for(i, 0, STACK_MAX_LEN) {
++#else /* !USE_ITER */
+ 		for (int i = 0; i < STACK_MAX_LEN; ++i) {
++#endif
+ 			if (frame_ptr && get_frame_data(frame_ptr, pidData, &frame, &sym)) {
+ 				int32_t new_symbol_id = *symbol_counter * 64 + cur_cpu;
+ 				int32_t *symbol_id = bpf_map_lookup_elem(&symbolmap, &sym);
+diff --git a/tools/testing/selftests/bpf/progs/pyperf600_iter.c b/tools/testing/selftests/bpf/progs/pyperf600_iter.c
+new file mode 100644
+index 000000000000..d62e1b200c30
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/pyperf600_iter.c
+@@ -0,0 +1,7 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2023 Meta Platforms, Inc. and affiliates.
++#define STACK_MAX_LEN 600
++#define SUBPROGS
++#define NO_UNROLL
++#define USE_ITER
++#include "pyperf.h"
+diff --git a/tools/testing/selftests/bpf/progs/pyperf600_nounroll.c b/tools/testing/selftests/bpf/progs/pyperf600_nounroll.c
+index 6beff7502f4d..520b58c4f8db 100644
+--- a/tools/testing/selftests/bpf/progs/pyperf600_nounroll.c
++++ b/tools/testing/selftests/bpf/progs/pyperf600_nounroll.c
+@@ -2,7 +2,4 @@
+ // Copyright (c) 2019 Facebook
+ #define STACK_MAX_LEN 600
+ #define NO_UNROLL
+-/* clang will not unroll at all.
+- * Total program size is around 2k insns
+- */
+ #include "pyperf.h"
 -- 
 2.34.1
 
