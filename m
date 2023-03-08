@@ -2,23 +2,23 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42466C64EC4
-	for <bpf@archiver.kernel.org>; Wed,  8 Mar 2023 03:54:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DFAAC678D5
+	for <bpf@archiver.kernel.org>; Wed,  8 Mar 2023 03:54:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbjCHDyj convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 7 Mar 2023 22:54:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34064 "EHLO
+        id S229850AbjCHDyk convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 7 Mar 2023 22:54:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjCHDyi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S229830AbjCHDyi (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 7 Mar 2023 22:54:38 -0500
 Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 687C897FC4
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73D097FFC
         for <bpf@vger.kernel.org>; Tue,  7 Mar 2023 19:54:36 -0800 (PST)
 Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3281EJhS021623
-        for <bpf@vger.kernel.org>; Tue, 7 Mar 2023 19:54:35 -0800
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3281EJhT021623
+        for <bpf@vger.kernel.org>; Tue, 7 Mar 2023 19:54:36 -0800
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3p6ffb9477-4
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3p6ffb9477-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Tue, 07 Mar 2023 19:54:35 -0800
 Received: from twshared38955.16.prn3.facebook.com (2620:10d:c0a8:1b::d) by
@@ -26,21 +26,23 @@ Received: from twshared38955.16.prn3.facebook.com (2620:10d:c0a8:1b::d) by
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.17; Tue, 7 Mar 2023 19:54:29 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id BEC83298A54B6; Tue,  7 Mar 2023 19:54:17 -0800 (PST)
+        id D7E66298A5518; Tue,  7 Mar 2023 19:54:21 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@meta.com>,
         Tejun Heo <tj@kernel.org>
-Subject: [PATCH v4 bpf-next 0/8] BPF open-coded iterators
-Date:   Tue, 7 Mar 2023 19:54:08 -0800
-Message-ID: <20230308035416.2591326-1-andrii@kernel.org>
+Subject: [PATCH v4 bpf-next 2/8] bpf: add iterator kfuncs registration and validation logic
+Date:   Tue, 7 Mar 2023 19:54:10 -0800
+Message-ID: <20230308035416.2591326-3-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230308035416.2591326-1-andrii@kernel.org>
+References: <20230308035416.2591326-1-andrii@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: 8S7_sycdaMk7bMjHlMYQys2hfvlg1MbO
-X-Proofpoint-ORIG-GUID: 8S7_sycdaMk7bMjHlMYQys2hfvlg1MbO
+X-Proofpoint-GUID: WIRv0NtZrSltUnvAB2gq2NbSFIyx5wpQ
+X-Proofpoint-ORIG-GUID: WIRv0NtZrSltUnvAB2gq2NbSFIyx5wpQ
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-07_18,2023-03-07_01,2023-02-09_01
@@ -48,102 +50,217 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add support for open-coded (aka inline) iterators in BPF world. This is a next
-evolution of gradually allowing more powerful and less restrictive looping and
-iteration capabilities to BPF programs.
+Add ability to register kfuncs that implement BPF open-coded iterator
+contract and enforce naming and function proto convention. Enforcement
+is happing at the time of kfunc registration and is significantly
+simplifies the rest of iterators logic in verifier.
 
-We set up a framework for implementing all kinds of iterators (e.g., cgroup,
-task, file, etc, iterators), but this patch set only implements numbers
-iterator, which is used to implement ergonomic bpf_for() for-like construct
-(see patches #4-#5). We also add bpf_for_each(), which is a generic
-foreach-like construct that will work with any kind of open-coded iterator
-implementation, as long as we stick with bpf_iter_<type>_{new,next,destroy}()
-naming pattern (which we now enforce on the kernel side).
+More details follow in subsequent patches, but we recognize and enforce
+the following conditions.
 
-Patch #1 is preparatory refactoring for easier way to check for special kfunc
-calls. Patch #2 is adding iterator kfunc registration and validation logic,
-which is mostly independent from the rest of open-coded iterator logic, so is
-separated out for easier reviewing.
+All kfuncs (constructor, next, destructor) have to be named consistenly
+as bpf_iter_<type>_{new,next,destroy(), respectively. <type> represents
+iterator type, and iterator's state should be represented as matching
+`struct bpf_iter_<type>` state type. Also, all iter kfuncs should have
+a pointer to this `struct bpf_iter_<type>` as a very first argument.
 
-The meat of verifier-side logic is in patch #3. Patch #4 implements numbers
-iterator. I kept them separate to have clean reference for how to integrate
-new iterator types (now even simpler to do than in v1 of this patch set).
-Patch #5 adds bpf_for(), bpf_for_each(), and bpf_repeat() macros to
-bpf_misc.h, and also adds yet another pyperf test variant, now with bpf_for()
-loop. Patch #6 is verification tests, based on numbers iterator (as the only
-available right now). Patch #7 actually tests runtime behavior of numbers
-iterator.
+Additionally:
+  - Constructor, i.e., bpf_iter_<type>_new(), can have arbitrary extra
+  number of arguments. Return type not enforced either.
+  - Next method, i.e., bpf_iter_<type>_next(), has to return a pointer
+  type and should have exactly one argument: `struct bpf_iter_<type> *`
+  (const/volatile/restrict and typedefs are ignored).
+  - Destructor, i.e., bpf_iter_<type>_destroy(), should return void and
+  should have exactly one argument, similar to next method.
+  - struct bpf_iter_<type> size is enforced to be positive and
+  a multiple of 8 bytes (to fit stack slots correctly).
 
-Finally, with changes in v2, it's possible and trivial to implement custom
-iterators completely in kernel modules, which we showcase and test by adding
-a simple iterator returning same number a given number of times to
-bpf_testmod. Patch #8 is where all this happens and is tested.
+Such strictness and consistency allows to build generic helpers
+abstracting important, but boilerplate, details to be able to use
+open-coded iterators effectively and ergonomically. It also simplifies
+verifier logic in some places.  At the same time, this doesn't hurt
+generality of possible iterator implementations. Win-win.
 
-Most of the relevant details are in corresponding commit messages or code
-comments.
+Constructor kfunc is marked with a new KF_ITER_NEW flags, next method is marked
+with KF_ITER_NEXT (and should also have KF_RET_NULL, of course), while
+destructor kfunc is marked as KF_ITER_DESTROY.
 
-v3->v4:
-  - remove unused variable from is_iter_reg_valid_init (kernel test robot);
-v2->v3:
-  - remove special kfunc leftovers for bpf_iter_num_{new,next,destroy};
-  - add iters/testmod_seq* to DENYLIST.s390x, it doesn't support kfuncs in
-    modules yet (CI);
-v1->v2:
-  - rebased on latest, dropping previously landed preparatory patches;
-  - each iterator type now have its own `struct bpf_iter_<type>` which allows
-    each iterator implementation to use exactly as much stack space as
-    necessary, allowing to avoid runtime allocations (Alexei);
-  - reworked how iterator kfuncs are defined, no verifier changes are required
-    when adding new iterator type;
-  - added bpf_testmod-based iterator implementation;
-  - address the rest of feedback, comments, commit message adjustment, etc.
+Additionally, we add a trivial kfunc name validation, it should be
+a valid non-NULL and non-empty string.
 
-Cc: Tejun Heo <tj@kernel.org>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ include/linux/bpf_verifier.h |   2 +
+ include/linux/btf.h          |   4 ++
+ kernel/bpf/btf.c             | 112 ++++++++++++++++++++++++++++++++++-
+ 3 files changed, 117 insertions(+), 1 deletion(-)
 
-Andrii Nakryiko (8):
-  bpf: factor out fetching basic kfunc metadata
-  bpf: add iterator kfuncs registration and validation logic
-  bpf: add support for open-coded iterator loops
-  bpf: implement number iterator
-  selftests/bpf: add bpf_for_each(), bpf_for(), and bpf_repeat() macros
-  selftests/bpf: add iterators tests
-  selftests/bpf: add number iterator tests
-  selftests/bpf: implement and test custom testmod_seq iterator
-
- include/linux/bpf.h                           |   8 +-
- include/linux/bpf_verifier.h                  |  27 +-
- include/linux/btf.h                           |   4 +
- include/uapi/linux/bpf.h                      |   8 +
- kernel/bpf/bpf_iter.c                         |  70 ++
- kernel/bpf/btf.c                              | 112 ++-
- kernel/bpf/helpers.c                          |   3 +
- kernel/bpf/verifier.c                         | 684 ++++++++++++++++-
- tools/include/uapi/linux/bpf.h                |   8 +
- tools/testing/selftests/bpf/DENYLIST.s390x    |   1 +
- .../selftests/bpf/bpf_testmod/bpf_testmod.c   |  42 +-
- .../selftests/bpf/bpf_testmod/bpf_testmod.h   |   6 +
- .../bpf/prog_tests/bpf_verif_scale.c          |   6 +
- .../testing/selftests/bpf/prog_tests/iters.c  | 106 +++
- .../bpf/prog_tests/uprobe_autoattach.c        |   1 -
- tools/testing/selftests/bpf/progs/bpf_misc.h  | 100 +++
- tools/testing/selftests/bpf/progs/iters.c     | 720 ++++++++++++++++++
- .../selftests/bpf/progs/iters_looping.c       | 163 ++++
- tools/testing/selftests/bpf/progs/iters_num.c | 242 ++++++
- .../selftests/bpf/progs/iters_state_safety.c  | 426 +++++++++++
- .../selftests/bpf/progs/iters_testmod_seq.c   |  79 ++
- tools/testing/selftests/bpf/progs/lsm.c       |   4 +-
- tools/testing/selftests/bpf/progs/pyperf.h    |  14 +-
- .../selftests/bpf/progs/pyperf600_iter.c      |   7 +
- .../selftests/bpf/progs/pyperf600_nounroll.c  |   3 -
- 25 files changed, 2788 insertions(+), 56 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/iters.c
- create mode 100644 tools/testing/selftests/bpf/progs/iters.c
- create mode 100644 tools/testing/selftests/bpf/progs/iters_looping.c
- create mode 100644 tools/testing/selftests/bpf/progs/iters_num.c
- create mode 100644 tools/testing/selftests/bpf/progs/iters_state_safety.c
- create mode 100644 tools/testing/selftests/bpf/progs/iters_testmod_seq.c
- create mode 100644 tools/testing/selftests/bpf/progs/pyperf600_iter.c
-
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 18538bad2b8c..e2dc7f064449 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -59,6 +59,8 @@ struct bpf_active_lock {
+ 	u32 id;
+ };
+ 
++#define ITER_PREFIX "bpf_iter_"
++
+ struct bpf_reg_state {
+ 	/* Ordering of fields matters.  See states_equal() */
+ 	enum bpf_reg_type type;
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index 556b3e2e7471..1bba0827e8c4 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -71,6 +71,10 @@
+ #define KF_SLEEPABLE    (1 << 5) /* kfunc may sleep */
+ #define KF_DESTRUCTIVE  (1 << 6) /* kfunc performs destructive actions */
+ #define KF_RCU          (1 << 7) /* kfunc takes either rcu or trusted pointer arguments */
++/* only one of KF_ITER_{NEW,NEXT,DESTROY} could be specified per kfunc */
++#define KF_ITER_NEW     (1 << 8) /* kfunc implements BPF iter constructor */
++#define KF_ITER_NEXT    (1 << 9) /* kfunc implements BPF iter next method */
++#define KF_ITER_DESTROY (1 << 10) /* kfunc implements BPF iter destructor */
+ 
+ /*
+  * Tag marking a kernel function as a kfunc. This is meant to minimize the
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index a8cb09e5973b..71758cd15b07 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -7596,6 +7596,108 @@ BTF_ID_LIST_GLOBAL(btf_tracing_ids, MAX_BTF_TRACING_TYPE)
+ BTF_TRACING_TYPE_xxx
+ #undef BTF_TRACING_TYPE
+ 
++static int btf_check_iter_kfuncs(struct btf *btf, const char *func_name,
++				 const struct btf_type *func, u32 func_flags)
++{
++	u32 flags = func_flags & (KF_ITER_NEW | KF_ITER_NEXT | KF_ITER_DESTROY);
++	const char *name, *sfx, *iter_name;
++	const struct btf_param *arg;
++	const struct btf_type *t;
++	char exp_name[128];
++	u32 nr_args;
++
++	/* exactly one of KF_ITER_{NEW,NEXT,DESTROY} can be set */
++	if (!flags || (flags & (flags - 1)))
++		return -EINVAL;
++
++	/* any BPF iter kfunc should have `struct bpf_iter_<type> *` first arg */
++	nr_args = btf_type_vlen(func);
++	if (nr_args < 1)
++		return -EINVAL;
++
++	arg = &btf_params(func)[0];
++	t = btf_type_skip_modifiers(btf, arg->type, NULL);
++	if (!t || !btf_type_is_ptr(t))
++		return -EINVAL;
++	t = btf_type_skip_modifiers(btf, t->type, NULL);
++	if (!t || !__btf_type_is_struct(t))
++		return -EINVAL;
++
++	name = btf_name_by_offset(btf, t->name_off);
++	if (!name || strncmp(name, ITER_PREFIX, sizeof(ITER_PREFIX) - 1))
++		return -EINVAL;
++
++	/* sizeof(struct bpf_iter_<type>) should be a multiple of 8 to
++	 * fit nicely in stack slots
++	 */
++	if (t->size == 0 || (t->size % 8))
++		return -EINVAL;
++
++	/* validate bpf_iter_<type>_{new,next,destroy}(struct bpf_iter_<type> *)
++	 * naming pattern
++	 */
++	iter_name = name + sizeof(ITER_PREFIX) - 1;
++	if (flags & KF_ITER_NEW)
++		sfx = "new";
++	else if (flags & KF_ITER_NEXT)
++		sfx = "next";
++	else /* (flags & KF_ITER_DESTROY) */
++		sfx = "destroy";
++
++	snprintf(exp_name, sizeof(exp_name), "bpf_iter_%s_%s", iter_name, sfx);
++	if (strcmp(func_name, exp_name))
++		return -EINVAL;
++
++	/* only iter constructor should have extra arguments */
++	if (!(flags & KF_ITER_NEW) && nr_args != 1)
++		return -EINVAL;
++
++	if (flags & KF_ITER_NEXT) {
++		/* bpf_iter_<type>_next() should return pointer */
++		t = btf_type_skip_modifiers(btf, func->type, NULL);
++		if (!t || !btf_type_is_ptr(t))
++			return -EINVAL;
++	}
++
++	if (flags & KF_ITER_DESTROY) {
++		/* bpf_iter_<type>_destroy() should return void */
++		t = btf_type_by_id(btf, func->type);
++		if (!t || !btf_type_is_void(t))
++			return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int btf_check_kfunc_protos(struct btf *btf, u32 func_id, u32 func_flags)
++{
++	const struct btf_type *func;
++	const char *func_name;
++	int err;
++
++	/* any kfunc should be FUNC -> FUNC_PROTO */
++	func = btf_type_by_id(btf, func_id);
++	if (!func || !btf_type_is_func(func))
++		return -EINVAL;
++
++	/* sanity check kfunc name */
++	func_name = btf_name_by_offset(btf, func->name_off);
++	if (!func_name || !func_name[0])
++		return -EINVAL;
++
++	func = btf_type_by_id(btf, func->type);
++	if (!func || !btf_type_is_func_proto(func))
++		return -EINVAL;
++
++	if (func_flags & (KF_ITER_NEW | KF_ITER_NEXT | KF_ITER_DESTROY)) {
++		err = btf_check_iter_kfuncs(btf, func_name, func, func_flags);
++		if (err)
++			return err;
++	}
++
++	return 0;
++}
++
+ /* Kernel Function (kfunc) BTF ID set registration API */
+ 
+ static int btf_populate_kfunc_set(struct btf *btf, enum btf_kfunc_hook hook,
+@@ -7772,7 +7874,7 @@ static int __register_btf_kfunc_id_set(enum btf_kfunc_hook hook,
+ 				       const struct btf_kfunc_id_set *kset)
+ {
+ 	struct btf *btf;
+-	int ret;
++	int ret, i;
+ 
+ 	btf = btf_get_module_btf(kset->owner);
+ 	if (!btf) {
+@@ -7789,7 +7891,15 @@ static int __register_btf_kfunc_id_set(enum btf_kfunc_hook hook,
+ 	if (IS_ERR(btf))
+ 		return PTR_ERR(btf);
+ 
++	for (i = 0; i < kset->set->cnt; i++) {
++		ret = btf_check_kfunc_protos(btf, kset->set->pairs[i].id,
++					     kset->set->pairs[i].flags);
++		if (ret)
++			goto err_out;
++	}
++
+ 	ret = btf_populate_kfunc_set(btf, hook, kset->set);
++err_out:
+ 	btf_put(btf);
+ 	return ret;
+ }
 -- 
 2.34.1
 
