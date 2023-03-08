@@ -2,278 +2,260 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59EF6C6FA99
-	for <bpf@archiver.kernel.org>; Wed,  8 Mar 2023 00:49:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 016DDC678D5
+	for <bpf@archiver.kernel.org>; Wed,  8 Mar 2023 00:51:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbjCHAte (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Mar 2023 19:49:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52278 "EHLO
+        id S229529AbjCHAvI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Mar 2023 19:51:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjCHAtd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Mar 2023 19:49:33 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64EAA7686
-        for <bpf@vger.kernel.org>; Tue,  7 Mar 2023 16:49:26 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id ay14so55859696edb.11
-        for <bpf@vger.kernel.org>; Tue, 07 Mar 2023 16:49:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678236565;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rY972GGaxqy9iSN3aMUUodzrhxB+7t7W1nwMAN3AgTE=;
-        b=pFmhcFdTq7a+7zS+Q3CvDarw/G1Mtc9zCjQCBXi1ge0+3W+bzn8/tnw6XGeqC4Iivn
-         EV6yoMeBDDB1iAvUpMxrZVgZ8Bqf72FQSN/WPuNh7P63A70Q6IFYNNCeTD6FlDVURvnX
-         fRzggYFE73WLCPqzBjDwTz9KeivPnxpgn1uA0FXwNGwF9HDxzNpsCMnEPeU48dQyYap9
-         WR2yn2d6NU6ykCRM9L495aHCe7LyU8l5wuJqe09IkYY09Z/J7dNHBxCGwY7KFg2xOKFk
-         c6yh6vo51t9T6/gt+eSZ5cl/c2sSFmioaR6CSZ4tEyaoxqktmKvIWYblIaonh4MUnfFT
-         ioNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678236565;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rY972GGaxqy9iSN3aMUUodzrhxB+7t7W1nwMAN3AgTE=;
-        b=LGGCLfVKfv8G88XnTzeZWP8l+/Ilw+BTX+Y6MMJlBAg6Uwno/2DpZX0ldXe8/a3GJw
-         EKIIlFpNibWE+Pw8r16ypFU/B/fMA7diDPNzDDmDVvX+n708BVRdodJwHraKO19MpWUn
-         HT5GeBtYoKdfxWeuKhYULU0HojC1SBTcWwuzxEOd1n3e37ifq4SegiIROz6JTNwLRQqg
-         Zmba76jZMq884mhbLXARJ7sSQTPg5pDWTHA3fKdVNRi2sUzegN845JFIZtWDOlwuz7WA
-         hBM21v/3FRzXiqvllp9Om/IkMIFaTLN3tn0Ax2sLYkoKNBJf/+cyAsyOLxxizAf7pT8s
-         b7Fg==
-X-Gm-Message-State: AO0yUKXzVGeNESOgMkcbeFuQ+po+4eO7RI1sybqUkIion7ZNhF/prVTe
-        uRJGtMXA7FXlf4z/30STdZv2/YrK4JempzXL51OKHz04
-X-Google-Smtp-Source: AK7set+nm8ClsW+5/NlCVlvcuaJlbuckf1yOa3knen1gqgvQKxrkgbzGfzSBgUS4aOW/QmIODqZ5xCg2A8gwOdmvd9o=
-X-Received: by 2002:a17:906:3141:b0:8e5:411d:4d09 with SMTP id
- e1-20020a170906314100b008e5411d4d09mr8214953eje.15.1678236565180; Tue, 07 Mar
- 2023 16:49:25 -0800 (PST)
+        with ESMTP id S229477AbjCHAvI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Mar 2023 19:51:08 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A735ADD2
+        for <bpf@vger.kernel.org>; Tue,  7 Mar 2023 16:51:03 -0800 (PST)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32803ImT010351
+        for <bpf@vger.kernel.org>; Tue, 7 Mar 2023 16:51:03 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=s2048-2021-q4;
+ bh=SLft0s/6wnnZRzpYBgm1TmBZ2QcvTaBoPyzfcaVJIbI=;
+ b=RPfqIHjAplrUIXyN5PPivnfV7gmSZTTj5EEOgzXUp0Fzqr72RKWXvOHyc2kA8i9zX0iF
+ fcbH7C4HegEraXHg+hBOcQwmZQMWI/PvEMLcAvoBj6ZMMWUtTinDy7lNBSJwzW+eOUzW
+ 8xYxLq1hRaUoQ3I/KCdHAgfNOnfRdeeDvxGKY1ztibv0fSSvam7z6nQ4JTWi1knufVnD
+ NS8Mu8leD/WOxnWJLU8XWbqdV8/kmw7b6i3z2pa9Q6CtrW9ZkU6OElwgnDDM+cQy21j7
+ qLyXWtCfi9nDUdR3vGkdsaGaRE449Y7JTZ1pQ6+x7/r7D6w8eU3/5tfLdnr6+p1hVXqk 8g== 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3p6ffpr7gv-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 07 Mar 2023 16:51:03 -0800
+Received: from twshared33736.38.frc1.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Tue, 7 Mar 2023 16:51:02 -0800
+Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
+        id 801B16C92E16; Tue,  7 Mar 2023 16:50:54 -0800 (PST)
+From:   Kui-Feng Lee <kuifeng@meta.com>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <martin.lau@linux.dev>,
+        <song@kernel.org>, <kernel-team@meta.com>, <andrii@kernel.org>,
+        <sdf@google.com>
+CC:     Kui-Feng Lee <kuifeng@meta.com>
+Subject: [PATCH bpf-next v5 2/8] net: Update an existing TCP congestion control algorithm.
+Date:   Tue, 7 Mar 2023 16:50:44 -0800
+Message-ID: <20230308005050.255859-3-kuifeng@meta.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230308005050.255859-1-kuifeng@meta.com>
+References: <20230308005050.255859-1-kuifeng@meta.com>
 MIME-Version: 1.0
-References: <20230307233307.3626875-1-kuifeng@meta.com> <20230307233307.3626875-7-kuifeng@meta.com>
-In-Reply-To: <20230307233307.3626875-7-kuifeng@meta.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 7 Mar 2023 16:49:12 -0800
-Message-ID: <CAEf4BzbK8s+VFG5HefydD7CRLzkRFKg-Er0PKV_-C2-yttfXzA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 6/9] bpf: Update the struct_ops of a bpf_link.
-To:     Kui-Feng Lee <kuifeng@meta.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, kernel-team@meta.com, andrii@kernel.org,
-        sdf@google.com
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: rAp-kyGPWfhfQYTnMDbpfB5tOyRyZGyQ
+X-Proofpoint-GUID: rAp-kyGPWfhfQYTnMDbpfB5tOyRyZGyQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-07_18,2023-03-07_01,2023-02-09_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 3:33=E2=80=AFPM Kui-Feng Lee <kuifeng@meta.com> wrot=
-e:
->
-> By improving the BPF_LINK_UPDATE command of bpf(), it should allow you
-> to conveniently switch between different struct_ops on a single
-> bpf_link. This would enable smoother transitions from one struct_ops
-> to another.
->
-> The struct_ops maps passing along with BPF_LINK_UPDATE should have the
-> BPF_F_LINK flag.
->
-> Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
-> ---
->  include/linux/bpf.h            |  1 +
->  include/uapi/linux/bpf.h       |  8 ++++--
->  kernel/bpf/bpf_struct_ops.c    | 46 ++++++++++++++++++++++++++++++++++
->  kernel/bpf/syscall.c           | 43 ++++++++++++++++++++++++++++---
->  tools/include/uapi/linux/bpf.h |  7 +++++-
->  5 files changed, 98 insertions(+), 7 deletions(-)
->
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 047d2c6aba88..2b5f150e370e 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1405,6 +1405,7 @@ struct bpf_link_ops {
->         void (*show_fdinfo)(const struct bpf_link *link, struct seq_file =
-*seq);
->         int (*fill_link_info)(const struct bpf_link *link,
->                               struct bpf_link_info *info);
-> +       int (*update_map)(struct bpf_link *link, struct bpf_map *new_map)=
-;
->  };
->
->  struct bpf_tramp_link {
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index eb3e435c5303..999e199ebe06 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -1555,8 +1555,12 @@ union bpf_attr {
->
->         struct { /* struct used by BPF_LINK_UPDATE command */
->                 __u32           link_fd;        /* link fd */
-> -               /* new program fd to update link with */
-> -               __u32           new_prog_fd;
-> +               union {
-> +                       /* new program fd to update link with */
-> +                       __u32           new_prog_fd;
-> +                       /* new struct_ops map fd to update link with */
-> +                       __u32           new_map_fd;
-> +               };
->                 __u32           flags;          /* extra flags */
->                 /* expected link's program fd; is specified only if
->                  * BPF_F_REPLACE flag is set in flags */
-> diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-> index c71c8d73c7ad..2b850ce11617 100644
-> --- a/kernel/bpf/bpf_struct_ops.c
-> +++ b/kernel/bpf/bpf_struct_ops.c
-> @@ -759,10 +759,56 @@ static int bpf_struct_ops_map_link_fill_link_info(c=
-onst struct bpf_link *link,
->         return 0;
->  }
->
-> +static int bpf_struct_ops_map_link_update(struct bpf_link *link, struct =
-bpf_map *new_map)
-> +{
-> +       struct bpf_struct_ops_value *kvalue;
-> +       struct bpf_struct_ops_map *st_map, *old_st_map;
-> +       struct bpf_struct_ops_link *st_link;
-> +       struct bpf_map *old_map;
-> +       int err =3D 0;
-> +
-> +       if (new_map->map_type !=3D BPF_MAP_TYPE_STRUCT_OPS ||
-> +           !(new_map->map_flags & BPF_F_LINK))
-> +               return -EINVAL;
-> +
-> +       mutex_lock(&update_mutex);
-> +
-> +       st_link =3D container_of(link, struct bpf_struct_ops_link, link);
-> +
-> +       /* The new and old struct_ops must be the same type. */
-> +       st_map =3D container_of(new_map, struct bpf_struct_ops_map, map);
-> +
-> +       old_map =3D st_link->map;
-> +       old_st_map =3D container_of(old_map, struct bpf_struct_ops_map, m=
-ap);
-> +       if (st_map->st_ops !=3D old_st_map->st_ops ||
-> +           /* Pair with smp_store_release() during map_update */
-> +           smp_load_acquire(&st_map->kvalue.state) !=3D BPF_STRUCT_OPS_S=
-TATE_READY) {
-> +               err =3D -EINVAL;
-> +               goto err_out;
-> +       }
-> +
-> +       kvalue =3D &st_map->kvalue;
-> +
-> +       err =3D st_map->st_ops->update(kvalue->data, old_st_map->kvalue.d=
-ata);
-> +       if (err)
-> +               goto err_out;
-> +
-> +       bpf_map_inc(new_map);
-> +       rcu_assign_pointer(st_link->map, new_map);
-> +
-> +       bpf_map_put(old_map);
-> +
-> +err_out:
-> +       mutex_unlock(&update_mutex);
-> +
-> +       return err;
-> +}
-> +
->  static const struct bpf_link_ops bpf_struct_ops_map_lops =3D {
->         .dealloc =3D bpf_struct_ops_map_link_dealloc,
->         .show_fdinfo =3D bpf_struct_ops_map_link_show_fdinfo,
->         .fill_link_info =3D bpf_struct_ops_map_link_fill_link_info,
-> +       .update_map =3D bpf_struct_ops_map_link_update,
->  };
->
->  int bpf_struct_ops_link_create(union bpf_attr *attr)
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 25b044fdd82b..94ab1336ff41 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -4646,6 +4646,30 @@ static int link_create(union bpf_attr *attr, bpfpt=
-r_t uattr)
->         return ret;
->  }
->
-> +static int link_update_map(struct bpf_link *link, union bpf_attr *attr)
-> +{
-> +       struct bpf_map *new_map;
-> +       int ret =3D 0;
-> +
-> +       new_map =3D bpf_map_get(attr->link_update.new_map_fd);
-> +       if (IS_ERR(new_map))
-> +               return -EINVAL;
-> +
-> +       if (new_map->map_type !=3D BPF_MAP_TYPE_STRUCT_OPS) {
-> +               ret =3D -EINVAL;
-> +               goto out_put_map;
-> +       }
-> +
-> +       if (link->ops->update_map)
-> +               ret =3D link->ops->update_map(link, new_map);
-> +       else
-> +               ret =3D -EINVAL;
-> +
-> +out_put_map:
-> +       bpf_map_put(new_map);
-> +       return ret;
-> +}
-> +
->  #define BPF_LINK_UPDATE_LAST_FIELD link_update.old_prog_fd
->
->  static int link_update(union bpf_attr *attr)
-> @@ -4658,14 +4682,25 @@ static int link_update(union bpf_attr *attr)
->         if (CHECK_ATTR(BPF_LINK_UPDATE))
->                 return -EINVAL;
->
-> -       flags =3D attr->link_update.flags;
-> -       if (flags & ~BPF_F_REPLACE)
-> -               return -EINVAL;
-> -
->         link =3D bpf_link_get_from_fd(attr->link_update.link_fd);
->         if (IS_ERR(link))
->                 return PTR_ERR(link);
->
-> +       flags =3D attr->link_update.flags;
-> +
-> +       if (link->ops->update_map) {
-> +               if (flags)      /* always replace the existing one */
-> +                       ret =3D -EINVAL;
-> +               else
-> +                       ret =3D link_update_map(link, attr);
-> +               goto out_put_link;
+This feature lets you immediately transition to another congestion
+control algorithm or implementation with the same name.  Once a name
+is updated, new connections will apply this new algorithm.
 
-umm... BPF_F_REPLACE for link_update is specifying "update only if
-current prog fd matches what I specify", let's not ignore it for
-struct_ops. This will create a deviation in behavior unnecessarily.
-Please keep it consistent.
+The 'validate' function pointer has been added to bpf_struct_ops as
+well, allowing us to validate a struct_ops without having to go
+through the registration process.
 
+Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
+---
+ include/linux/bpf.h            |  2 ++
+ include/net/tcp.h              |  3 ++
+ net/bpf/bpf_dummy_struct_ops.c |  6 ++++
+ net/ipv4/bpf_tcp_ca.c          | 14 +++++++--
+ net/ipv4/tcp_cong.c            | 57 +++++++++++++++++++++++++++++-----
+ 5 files changed, 73 insertions(+), 9 deletions(-)
 
-> +       }
-> +
-> +       if (flags & ~BPF_F_REPLACE) {
-> +               ret =3D -EINVAL;
-> +               goto out_put_link;
-> +       }
-> +
->         new_prog =3D bpf_prog_get(attr->link_update.new_prog_fd);
->         if (IS_ERR(new_prog)) {
->                 ret =3D PTR_ERR(new_prog);
-> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-> index cd0ff39981e8..259b8ab4f54e 100644
-> --- a/tools/include/uapi/linux/bpf.h
-> +++ b/tools/include/uapi/linux/bpf.h
-> @@ -1556,7 +1556,12 @@ union bpf_attr {
->         struct { /* struct used by BPF_LINK_UPDATE command */
->                 __u32           link_fd;        /* link fd */
->                 /* new program fd to update link with */
-> -               __u32           new_prog_fd;
-> +               union {
-> +                       /* new program fd to update link with */
-> +                       __u32           new_prog_fd;
-> +                       /* new struct_ops map fd to update link with */
-> +                       __u32           new_map_fd;
-> +               };
->                 __u32           flags;          /* extra flags */
->                 /* expected link's program fd; is specified only if
->                  * BPF_F_REPLACE flag is set in flags */
-> --
-> 2.34.1
->
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 50cfc2388cbc..00b6e1a2edaf 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1512,6 +1512,8 @@ struct bpf_struct_ops {
+ 			   void *kdata, const void *udata);
+ 	int (*reg)(void *kdata);
+ 	void (*unreg)(void *kdata);
++	int (*update)(void *kdata, void *old_kdata);
++	int (*validate)(void *kdata);
+ 	const struct btf_type *type;
+ 	const struct btf_type *value_type;
+ 	const char *name;
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index db9f828e9d1e..2abb755e6a3a 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -1117,6 +1117,9 @@ struct tcp_congestion_ops {
+=20
+ int tcp_register_congestion_control(struct tcp_congestion_ops *type);
+ void tcp_unregister_congestion_control(struct tcp_congestion_ops *type);
++int tcp_update_congestion_control(struct tcp_congestion_ops *type,
++				  struct tcp_congestion_ops *old_type);
++int tcp_validate_congestion_control(struct tcp_congestion_ops *ca);
+=20
+ void tcp_assign_congestion_control(struct sock *sk);
+ void tcp_init_congestion_control(struct sock *sk);
+diff --git a/net/bpf/bpf_dummy_struct_ops.c b/net/bpf/bpf_dummy_struct_op=
+s.c
+index ff4f89a2b02a..158f14e240d0 100644
+--- a/net/bpf/bpf_dummy_struct_ops.c
++++ b/net/bpf/bpf_dummy_struct_ops.c
+@@ -222,12 +222,18 @@ static void bpf_dummy_unreg(void *kdata)
+ {
+ }
+=20
++static int bpf_dummy_update(void *kdata, void *old_kdata)
++{
++	return -EOPNOTSUPP;
++}
++
+ struct bpf_struct_ops bpf_bpf_dummy_ops =3D {
+ 	.verifier_ops =3D &bpf_dummy_verifier_ops,
+ 	.init =3D bpf_dummy_init,
+ 	.check_member =3D bpf_dummy_ops_check_member,
+ 	.init_member =3D bpf_dummy_init_member,
+ 	.reg =3D bpf_dummy_reg,
++	.update =3D bpf_dummy_update,
+ 	.unreg =3D bpf_dummy_unreg,
+ 	.name =3D "bpf_dummy_ops",
+ };
+diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
+index 13fc0c185cd9..e8b27826283e 100644
+--- a/net/ipv4/bpf_tcp_ca.c
++++ b/net/ipv4/bpf_tcp_ca.c
+@@ -239,8 +239,6 @@ static int bpf_tcp_ca_init_member(const struct btf_ty=
+pe *t,
+ 		if (bpf_obj_name_cpy(tcp_ca->name, utcp_ca->name,
+ 				     sizeof(tcp_ca->name)) <=3D 0)
+ 			return -EINVAL;
+-		if (tcp_ca_find(utcp_ca->name))
+-			return -EEXIST;
+ 		return 1;
+ 	}
+=20
+@@ -266,13 +264,25 @@ static void bpf_tcp_ca_unreg(void *kdata)
+ 	tcp_unregister_congestion_control(kdata);
+ }
+=20
++static int bpf_tcp_ca_update(void *kdata, void *old_kdata)
++{
++	return tcp_update_congestion_control(kdata, old_kdata);
++}
++
++static int bpf_tcp_ca_validate(void *kdata)
++{
++	return tcp_validate_congestion_control(kdata);
++}
++
+ struct bpf_struct_ops bpf_tcp_congestion_ops =3D {
+ 	.verifier_ops =3D &bpf_tcp_ca_verifier_ops,
+ 	.reg =3D bpf_tcp_ca_reg,
+ 	.unreg =3D bpf_tcp_ca_unreg,
++	.update =3D bpf_tcp_ca_update,
+ 	.check_member =3D bpf_tcp_ca_check_member,
+ 	.init_member =3D bpf_tcp_ca_init_member,
+ 	.init =3D bpf_tcp_ca_init,
++	.validate =3D bpf_tcp_ca_validate,
+ 	.name =3D "tcp_congestion_ops",
+ };
+=20
+diff --git a/net/ipv4/tcp_cong.c b/net/ipv4/tcp_cong.c
+index db8b4b488c31..24829390e495 100644
+--- a/net/ipv4/tcp_cong.c
++++ b/net/ipv4/tcp_cong.c
+@@ -75,14 +75,8 @@ struct tcp_congestion_ops *tcp_ca_find_key(u32 key)
+ 	return NULL;
+ }
+=20
+-/*
+- * Attach new congestion control algorithm to the list
+- * of available options.
+- */
+-int tcp_register_congestion_control(struct tcp_congestion_ops *ca)
++int tcp_validate_congestion_control(struct tcp_congestion_ops *ca)
+ {
+-	int ret =3D 0;
+-
+ 	/* all algorithms must implement these */
+ 	if (!ca->ssthresh || !ca->undo_cwnd ||
+ 	    !(ca->cong_avoid || ca->cong_control)) {
+@@ -90,6 +84,20 @@ int tcp_register_congestion_control(struct tcp_congest=
+ion_ops *ca)
+ 		return -EINVAL;
+ 	}
+=20
++	return 0;
++}
++
++/* Attach new congestion control algorithm to the list
++ * of available options.
++ */
++int tcp_register_congestion_control(struct tcp_congestion_ops *ca)
++{
++	int ret;
++
++	ret =3D tcp_validate_congestion_control(ca);
++	if (ret)
++		return ret;
++
+ 	ca->key =3D jhash(ca->name, sizeof(ca->name), strlen(ca->name));
+=20
+ 	spin_lock(&tcp_cong_list_lock);
+@@ -130,6 +138,41 @@ void tcp_unregister_congestion_control(struct tcp_co=
+ngestion_ops *ca)
+ }
+ EXPORT_SYMBOL_GPL(tcp_unregister_congestion_control);
+=20
++/* Replace a registered old ca with a new one.
++ *
++ * The new ca must have the same name as the old one, that has been
++ * registered.
++ */
++int tcp_update_congestion_control(struct tcp_congestion_ops *ca, struct =
+tcp_congestion_ops *old_ca)
++{
++	struct tcp_congestion_ops *existing;
++	int ret;
++
++	ret =3D tcp_validate_congestion_control(ca);
++	if (ret)
++		return ret;
++
++	ca->key =3D jhash(ca->name, sizeof(ca->name), strlen(ca->name));
++
++	spin_lock(&tcp_cong_list_lock);
++	existing =3D tcp_ca_find_key(old_ca->key);
++	if (ca->key =3D=3D TCP_CA_UNSPEC || !existing || strcmp(existing->name,=
+ ca->name)) {
++		pr_notice("%s not registered or non-unique key\n",
++			  ca->name);
++		ret =3D -EINVAL;
++	} else if (existing !=3D old_ca) {
++		pr_notice("invalid old congestion control algorithm to replace\n");
++		ret =3D -EINVAL;
++	} else {
++		list_add_tail_rcu(&ca->list, &tcp_cong_list);
++		list_del_rcu(&existing->list);
++		pr_debug("%s updated\n", ca->name);
++	}
++	spin_unlock(&tcp_cong_list_lock);
++
++	return ret;
++}
++
+ u32 tcp_ca_get_key_by_name(struct net *net, const char *name, bool *ecn_=
+ca)
+ {
+ 	const struct tcp_congestion_ops *ca;
+--=20
+2.34.1
+
