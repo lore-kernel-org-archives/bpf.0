@@ -2,170 +2,263 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CD94C64EC4
-	for <bpf@archiver.kernel.org>; Wed,  8 Mar 2023 12:26:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 780ABC678D5
+	for <bpf@archiver.kernel.org>; Wed,  8 Mar 2023 13:36:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbjCHM0K (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 8 Mar 2023 07:26:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46350 "EHLO
+        id S231332AbjCHNg1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Mar 2023 08:36:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231432AbjCHMZz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 8 Mar 2023 07:25:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BEE72A153
-        for <bpf@vger.kernel.org>; Wed,  8 Mar 2023 04:24:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678278264;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FYUSGl+c2i/XrGfwxUOIC1FfAmTL8/NIk2jsBnOFyek=;
-        b=DYmBqlA+MfI/0sgPORtQrug+y1RYJhofnApD8S/BSUm3Ws2HhrrHv1ekJq2apbke56ZaW/
-        NYusKPg86IYP2yY4d94tyLCnI4XrNj1lRn/3ZUV0Zt6bwBXMBqNx2aSBFbBt4F5mkB1xyI
-        rgZQK2QpUA8Ho61+/BuF0LeHuip1ZVQ=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-582-SSKe2_VJNKq2rwJnxNiOHw-1; Wed, 08 Mar 2023 07:21:13 -0500
-X-MC-Unique: SSKe2_VJNKq2rwJnxNiOHw-1
-Received: by mail-ed1-f69.google.com with SMTP id da22-20020a056402177600b004c60694083eso23419530edb.5
-        for <bpf@vger.kernel.org>; Wed, 08 Mar 2023 04:21:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678278072;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FYUSGl+c2i/XrGfwxUOIC1FfAmTL8/NIk2jsBnOFyek=;
-        b=hWBPPvqqgUbQY230R3+Qi0NXl8hZ0daxOJ1hntkgS9UI6MEhqpIV66znoviVBqLPMr
-         9jAzUQl7VdYJMLSuolUv+WZy+6m+9Wka91kjE/zs1qBkMwJWQAVX0fFedGYOtyCsP63K
-         STy65TCfGbnT+WKRegaZuzHzlKiQRAmQHvBp8EnHdtzFYq+WL2xsyEzmbKu201ZtAhsK
-         A1WmiDbIFNjFutbFHUg9MkazzEIrkG2u2gs50BrNm4mwadp7AedDAbV5Lk3E7f4TuHDf
-         1yGjw7ESl9u8oS4VSjXbXkfF0//FjFH6eaxSUxAHdkAFE4PZcYMtl+El6A1SNoSRu1JV
-         jpLQ==
-X-Gm-Message-State: AO0yUKW+HQJAxvQ2gGVWbTKskyEI0HTM5xHoyEfDxm3uUU23Diwo5zTN
-        8FcehrNdCdtHrfbiv363tu8hrUwSo1GF9nymEo/9fYIa32CZ98l3945mH39Z02n11QP8qdihJv3
-        7q+aDzLiejCEM
-X-Received: by 2002:aa7:d856:0:b0:4af:6e95:861b with SMTP id f22-20020aa7d856000000b004af6e95861bmr23390134eds.2.1678278072618;
-        Wed, 08 Mar 2023 04:21:12 -0800 (PST)
-X-Google-Smtp-Source: AK7set+6tZBfhWzjylNGTyxDwu7Yy+PpamZXGOVNIhYLZOhQ3DZ5QD/rfxx44WLOJiGYe6hsxp2zJQ==
-X-Received: by 2002:aa7:d856:0:b0:4af:6e95:861b with SMTP id f22-20020aa7d856000000b004af6e95861bmr23390108eds.2.1678278072292;
-        Wed, 08 Mar 2023 04:21:12 -0800 (PST)
-Received: from redhat.com ([2.52.138.216])
-        by smtp.gmail.com with ESMTPSA id r15-20020a50c00f000000b004bbc90e1fa3sm8087835edb.93.2023.03.08.04.21.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 04:21:11 -0800 (PST)
-Date:   Wed, 8 Mar 2023 07:21:07 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Yunsheng Lin <linyunsheng@huawei.com>
-Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Jason Wang <jasowang@redhat.com>,
+        with ESMTP id S231518AbjCHNf5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 8 Mar 2023 08:35:57 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A7E22033;
+        Wed,  8 Mar 2023 05:34:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678282465; x=1709818465;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=HatTWrrHt3K/oWCByU3gjtazbJHVWQK712JIU9vPotg=;
+  b=hLtf3ZZ37GE3YdYMXbORm6Mc67mc1YWVKvYCwAxsEVX6TL+kpKeBFGQ4
+   rjU/k2HpkEZSFNWdA+KuCZDVca7ArdheJQV6UebJL4QigGvvDzfqFk8tt
+   KK9hbeGZidiRVSwnfd1+0m+gsqnTC9pFPKyb5W99sdVwbK21ZfmCVIry0
+   H150Nv858vVAl3ndXaT4ge8N4eT6BlfCkMoMx+jjs8YLYq/uc8+k5H/X7
+   uZqj/060EJta/vTCR7ianmTTz44BJFSYTTRp+3ey2MmiJWzI7w3zS6Zxf
+   UMVNnOQikhyXblflQsB1/pa0QhnImyjfAcBmbJzBnspBeRAouZT7B2y5p
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="334863385"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="334863385"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 05:33:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="676971421"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="676971421"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga002.jf.intel.com with ESMTP; 08 Mar 2023 05:33:44 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 8 Mar 2023 05:33:43 -0800
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 8 Mar 2023 05:33:43 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Wed, 8 Mar 2023 05:33:43 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.175)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Wed, 8 Mar 2023 05:33:40 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nATo8OwRlz2gLZIQxRTdcmq22OnnGrQTmXjTYtMnT7MTK7t7xglkL5k/txETm9UzltAnJH9dIm1CODQG0FXc0wrD7CXLlY9n321aW+muVImL52QPucZvQw4YqcC8iX2QL+FUJSLdpu88nzjchtn+W7hPyulSu34972TiHHrmKRWGqsE5YnYMYr/4ebiHjoOAmdbJxdDVxA4Eju3faZ+EbE8FZucJ7TCNZ4/uQtkqoxrO2Ade3Nti5AUeXTaJiKTq2ypDg/SHYQSe40fpo3rr07pEFZ1YLICmVsJcwrPmPdRomJLwCgIResoBEYgP38Pmxa4VcmqqK6b4IsFctxXW5w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=950xfyB59QUFi32n+3+j9Mv4VADM6c8fCe8ujO7TTtk=;
+ b=S5kbtjUTYvnxhakHHtTjdC4jUYDlI1v52OjBA5a0TuAhl0rzzBe3JBFvx+pa80GT5HL+jtEWbHusTswhuZ8TRPcGf4CituKyCyyxVhNO0xUVDNus0U9H2YDgPqZnlk6NcZVxpQBKdCoEKAjYNWeHh/jQ1bBtEQZ7veGvVyymOGuC6jVvCEOcqUgXK47DO2ZSs9og6fQuGn5RBbOarjGmmBJJ4Zf6fKETIaP3khXVaKf5h56IF2hnN2Xn1XicVlIJ4zhR4YaS0/Vv7PGv2E1Vlxv+hRXb2cB5wp5ZG1pqKIm5Wa/1bDbs+9irrR3Z3WF/IrIpzJ4cNVg1fYupRV0uBA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
+ by PH7PR11MB7097.namprd11.prod.outlook.com (2603:10b6:510:20c::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17; Wed, 8 Mar
+ 2023 13:33:38 +0000
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::7911:de29:ded:224]) by DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::7911:de29:ded:224%5]) with mapi id 15.20.6178.017; Wed, 8 Mar 2023
+ 13:33:38 +0000
+Message-ID: <968526f7-d262-b69e-ca72-f56078158000@intel.com>
+Date:   Wed, 8 Mar 2023 14:32:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] xsk: Add missing overflow check in xdp_umem_reg
+To:     Kal Cutter Conley <kal.conley@dectris.com>
+CC:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        "Alexei Starovoitov" <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org,
-        Yichun Zhang <yichun@openresty.com>,
-        Alexander Duyck <alexanderduyck@fb.com>, netdev@vger.kernel.org
-Subject: Re: [PATCH net, stable v1 3/3] virtio_net: add checking sq is full
- inside xdp xmit
-Message-ID: <20230308071921-mutt-send-email-mst@kernel.org>
-References: <20230308024935.91686-1-xuanzhuo@linux.alibaba.com>
- <20230308024935.91686-4-xuanzhuo@linux.alibaba.com>
- <7eea924e-5cc3-8584-af95-04587f303f8f@huawei.com>
- <1678259647.118581-1-xuanzhuo@linux.alibaba.com>
- <5a4564dc-af93-4305-49a4-5ca16d737bc3@huawei.com>
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230307172306.786657-1-kal.conley@dectris.com>
+ <ee0aa756-4a9c-1d7a-4179-78024e41d37e@intel.com>
+ <CAHApi-kcvc2qB0D6dV7OG99FsnzAEa-rchOMfySkZ-E=EOh_4w@mail.gmail.com>
+Content-Language: en-US
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+In-Reply-To: <CAHApi-kcvc2qB0D6dV7OG99FsnzAEa-rchOMfySkZ-E=EOh_4w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0061.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:4b::9) To DM6PR11MB3625.namprd11.prod.outlook.com
+ (2603:10b6:5:13a::21)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5a4564dc-af93-4305-49a4-5ca16d737bc3@huawei.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|PH7PR11MB7097:EE_
+X-MS-Office365-Filtering-Correlation-Id: 46e36df1-a0b4-46d2-bd63-08db1fd9b96f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xyNAhr5uj2nPgpjkRLLqBalz/2eqM4gu+0UhPCBCXZYHJ/rFe/WST+E/Tul4rv6vwJlSOM9kZ8OubehsfKnDSnT+NT42n8UBqeoM4drNhCu3EhV7BdxGagEE7bMlcwne2NAXefkquTKLe80lNdIpEtlDtR67AcQipdDtLLKCC8XOJkD6HHPWX/ZlklHg11sC8GPBjjQujQ0ZC5nYYs6osWHP/rLjpJCOEE3YuJpphyYZUKaBqY3pqKksBmGzSe+qLUPYNAyVROI5iq7gqfN3GpR852104b8JbCiDz4/YL3CL15rw/HUCC4Vp5HLKQgbnCxNlRC5CJGeo2pOpUrGDt1M/jpo4+nBEGXEcE49+E9dbrGVaZft4wfHd2W2d2IEGAANAhg0IAeJjevkGaKo7/yzt9mFeP3CrtLqyz5uA4NGlVGHumlvX5OW/7TI+3EPzLG3eapBHutGwoOXK5g+sD2Mulf/Pr6YcjnuYgkUM3+FnGdbPvdWd0hfldCunZ+D+oq3h0w+9A9fuYONQlFLlVPLMI25dNlneJcNAfVkKvrlDqoGeTVA2RXPU0rbGkE28rDkjOt0ZZZHOJVViD+QijudgLEdAQkbhZmj7lvldyJVRogBG6rcZapntS4vWtuBV7EWcb4l/z6Vk3pafZ6SwoZjDnTwD+jFCA6gwHrCFLi/tuCsinSZmyNrNrMm2JmEczbcR5ROAfnVmi2LmQo44RF54qswwWvkTWlF76INi6Hw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(346002)(366004)(396003)(136003)(39860400002)(451199018)(36756003)(6666004)(6486002)(38100700002)(82960400001)(26005)(2616005)(6506007)(83380400001)(186003)(41300700001)(66556008)(8676002)(4326008)(66476007)(6916009)(2906002)(66946007)(8936002)(5660300002)(7416002)(54906003)(316002)(478600001)(86362001)(31696002)(6512007)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WE9mYUJrZFE0bm9Fd0NRSU42Sm1mcXBSRHYyUzBNL0RZL2J6VTRxQ281RVBh?=
+ =?utf-8?B?aEdpQUhzWkNnZ2ppeDZ4OUwxc05URm1ibk5LNUYvZ2c1QkFDRkFGNDMzNzFq?=
+ =?utf-8?B?eU9LYVJYS2N5ODNKZ2FGd3VJeHQ4dXpOMllrOXo2VHZJcE11WFB5ZitQbFZG?=
+ =?utf-8?B?OEFFWWRaNFZVS3RVdTFyZCtVbkpXQjU4ckx0YWF0TjlkQXZvOWl0WjR4K25v?=
+ =?utf-8?B?T3BidnNkcTJUSVdZZ3pJWXJmQjFlaDNJQjhaZG9Va0o2YTN0SWs1cmpLcWtk?=
+ =?utf-8?B?ZnlDWVVpNWgwakFOUW1ENVhUM3RVaTdOUHNiM3RhekIxZ3hKdlBzNGJtdjcz?=
+ =?utf-8?B?UHVvRm5mRW5yaW5kY2lyTEZmMVVxNGp5L1BBZDNYTXJZNmkwUmpoeVBMNE9p?=
+ =?utf-8?B?N2dmMWF4aThyelBhQTdhd0ZpTEtsR2QxL1BnQndqaEhDZTNoRDRWYlRqNDhr?=
+ =?utf-8?B?TUhLU1R1NWdFcjFiQWxsTkdxcHJFZUN6T2hBb1JSenVQaC9TbmpCdFNVMW82?=
+ =?utf-8?B?VHJya2ZtVVBTZ3ZKb1BxeU4vNUxWSmtHdlpkS3Z1Smo3SHlYWmZZQkdhSW44?=
+ =?utf-8?B?VnM4SWtuSUY2OWxzd1k0c2wxYWJxUmFYUldNMnlVRlFRdnJ6TWpzejJoOWpJ?=
+ =?utf-8?B?bmhubC93bjZOQjVBQlZVaXlmUHJuak5KTTBXQURaMUU1Qk9iYktqcys5MVlV?=
+ =?utf-8?B?Z3dOaGlzcEVyYVlXVVpDdFVYM0FFZ3B1M0p5a2tCbUszK2RLTGdHY0VQV251?=
+ =?utf-8?B?aGp6eUgyNDhGNDJBZUp1bGNORXFkdGFiQ25UK3d6K3JUelJvVDBhZ3NoYkpw?=
+ =?utf-8?B?cDRQZjNCanBPTjJ4TzZhb0MzK1dqQmk1SlBiZmt6aEU5aGsvVGd6cUNrTW5m?=
+ =?utf-8?B?TThSbkZra0JmTDlsOU53aWJDMmExWWlYNlZRenM0K1R2NldWaXFySEhPa1Fa?=
+ =?utf-8?B?cUZHek45TStBaDdLMFpRclJDSlE1MHpJTkdzWDVtby8wRndIeEtia2tIeTlO?=
+ =?utf-8?B?dElvdUI0bytnWXpRZDFZMXE5VTBJZU5MdFZMRTJNekJhaVIwcm9sWllvcVB5?=
+ =?utf-8?B?RW9TNU5GaWRzNW85QWZYeU90dWJIZTlLNGRaUUlIWGtsZnY2S3FkbEhuNzkw?=
+ =?utf-8?B?TENzb3B5QjY5ZTFEa2VJVG9pTG5zNnl3V1ZVYnE0NVBTb3l4aE9EcmlTNTFh?=
+ =?utf-8?B?Y3NVNkFkanRkb2Ewek91cnN5S2x3M2txS293U2hqckZ2M2U4VXA1YzNJWllQ?=
+ =?utf-8?B?NXJDUk1SRDA4VUZEbE1SeWdmZkd2c09YNWJKSnM5TENaUEZwR3kxNUt6UUlD?=
+ =?utf-8?B?YzZ4UmlJdlJEa0FseWZlSmRQNnU2ZDlnNjNmRmNJL2I5OXJQYm96UXFxUCtV?=
+ =?utf-8?B?R0ZBcmU3TElWQnhkM2dLenA4aFdNM1Vwc2JYcUZKTGtEUzRjOWhZRWR6RDhD?=
+ =?utf-8?B?VUJZZHVxNzlaYzJwSkpmbGFUdlFucFFxWm5xbWRLRWRMS1FxVEFWVUdCbTQz?=
+ =?utf-8?B?MEo2UGVaZ0plUnpub0FtME9JUUdkOHN2ajJnZVFBSnZlUUZtOWhuSkZ4TmQ5?=
+ =?utf-8?B?Ui9TNlBJaDNYV215UEEwUVFoeS8rbjk3TXJCYkN2Uk5yMFdReWZxQ2ZMSkxV?=
+ =?utf-8?B?dDFkZ0o4M3ZmQUkwS2dHTTVnQ1JkaTJqZERmWlVFSElKd3NCZ0lRMWY3dUxC?=
+ =?utf-8?B?ek5aYThidmRTYXBtUDE2bW5RdzVZM3NOdUZlaEVNVXpkNmI2NGNlR3pSclA1?=
+ =?utf-8?B?R3hHaTNJSEJraFlONW1VN3VKSi95ZmxDQWJCQ1hpK0YvS29pdjQ4dVh0QnFh?=
+ =?utf-8?B?WGdzZXFlZ0dieThYYXYrb1VXRk1DMnFZaGh6N0VxK1ZXNzJML3pjdlJlUXU0?=
+ =?utf-8?B?WWErQUNpK2tXOFlyNnpPVFk3VU9VV1lrTUpJaUkwZXVSNUtNdjRaVU8rV0pJ?=
+ =?utf-8?B?a3VNZGZEYU42ZXFuTW9kM3NwS1NNNE9rRDdHZnBGZ3hDZlVodGs4ZkpWRjNu?=
+ =?utf-8?B?b3EyUDJkS3M5TVpNTEFuNm44bC81b3RybmNUZW5pWHdLcXFVZElQaEpBRHBk?=
+ =?utf-8?B?b2xUL3cwa3dnSWNKQjdlT1EzMUdFK2hwQ3I5STVmSHVPSllKQi9CUzZ1WERt?=
+ =?utf-8?B?T3JwemlaajNaSkZKaDYrQzBGbTBrYlVRU2dSV25RZHRIaHlSWUNYMWZYTkRD?=
+ =?utf-8?Q?ecjINnwdjNLMd918/q6FQt0=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 46e36df1-a0b4-46d2-bd63-08db1fd9b96f
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2023 13:33:38.5341
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0E+35uxSa1X0R+Cl1dtSfy73kPURFihWc2GhZ5BT77OIg4nPcgXzc8BbokwaHrHhnMIGIfmlGljK/b6YthEETSEB7+MQh0fSG6LYo7i8DCA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB7097
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 04:13:12PM +0800, Yunsheng Lin wrote:
-> On 2023/3/8 15:14, Xuan Zhuo wrote:
-> > On Wed, 8 Mar 2023 14:59:36 +0800, Yunsheng Lin <linyunsheng@huawei.com> wrote:
-> >> On 2023/3/8 10:49, Xuan Zhuo wrote:
-> >>> If the queue of xdp xmit is not an independent queue, then when the xdp
-> >>> xmit used all the desc, the xmit from the __dev_queue_xmit() may encounter
-> >>> the following error.
-> >>>
-> >>> net ens4: Unexpected TXQ (0) queue failure: -28
-> >>>
-> >>> This patch adds a check whether sq is full in xdp xmit.
-> >>>
-> >>> Fixes: 56434a01b12e ("virtio_net: add XDP_TX support")
-> >>> Reported-by: Yichun Zhang <yichun@openresty.com>
-> >>> Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> >>> Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
-> >>> Acked-by: Michael S. Tsirkin <mst@redhat.com>
-> >>> ---
-> >>>  drivers/net/virtio_net.c | 3 +++
-> >>>  1 file changed, 3 insertions(+)
-> >>>
-> >>> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> >>> index 46bbddaadb0d..1a309cfb4976 100644
-> >>> --- a/drivers/net/virtio_net.c
-> >>> +++ b/drivers/net/virtio_net.c
-> >>> @@ -767,6 +767,9 @@ static int virtnet_xdp_xmit(struct net_device *dev,
-> >>>  	}
-> >>>  	ret = nxmit;
-> >>>
-> >>> +	if (!is_xdp_raw_buffer_queue(vi, sq - vi->sq))
-> >>> +		check_sq_full_and_disable(vi, dev, sq);
-> >>> +
-> >>
-> >> Sorry if I missed something obvious here.
-> >>
-> >> As the comment in start_xmit(), the current skb is added to the sq->vq, so
-> >> NETDEV_TX_BUSY can not be returned.
-> >>
-> >> 	/* If running out of space, stop queue to avoid getting packets that we
-> >> 	 * are then unable to transmit.
-> >> 	 * An alternative would be to force queuing layer to requeue the skb by
-> >> 	 * returning NETDEV_TX_BUSY. However, NETDEV_TX_BUSY should not be
-> >> 	 * returned in a normal path of operation: it means that driver is not
-> >> 	 * maintaining the TX queue stop/start state properly, and causes
-> >> 	 * the stack to do a non-trivial amount of useless work.
-> >> 	 * Since most packets only take 1 or 2 ring slots, stopping the queue
-> >> 	 * early means 16 slots are typically wasted.
-> >> 	 */
-> >>
-> >> It there any reason not to check the sq->vq->num_free at the begin of start_xmit(),
-> >> if the space is not enough for the current skb, TX queue is stopped and NETDEV_TX_BUSY
-> >> is return to the stack to requeue the current skb.
-> >>
-> >> It seems it is the pattern that most network driver follow, and it seems we can avoid
-> >> calling check_sq_full_and_disable() in this patch and not wasting 16 slots as mentioned
-> >> in the comment above.
-> >>
-> > 
-> > 
-> > 
-> >  * netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb,
-> >  *                               struct net_device *dev);
-> >  *	Called when a packet needs to be transmitted.
-> >  *	Returns NETDEV_TX_OK.  Can return NETDEV_TX_BUSY, but you should stop
-> >  *	the queue before that can happen; it's for obsolete devices and weird
-> >  *	corner cases, but the stack really does a non-trivial amount
-> >  *	of useless work if you return NETDEV_TX_BUSY.
-> >  *	Required; cannot be NULL.
+From: Kal Conley <kal.conley@dectris.com>
+Date: Tue, 7 Mar 2023 19:58:51 +0100
+
+>> The RCT declaration style is messed up in the whole block. Please move
+>> lines around, there's nothing wrong in that.
 > 
-> Thanks for the pointer. It is intersting, it seems most driver is not flollowing
-> the suggestion.
+> I think I figured out what this is. Is this preference documented
+> somewhere? I will fix it.
 
-Yes - I don't know why.
+It's when you sort the declarations by the line length. I.e.
 
-> I found out why the above comment was added, but I am not sure I understand
-> what does "non-trivial amount of useless work" means yet.
-> https://lists.linuxfoundation.org/pipermail/virtualization/2015-April/029718.html
+short var a;
+longest var b;
+medium var c;
 
-dev_requeue_skb 
+=>
 
--- 
-MST
+longest var b;
+medium var c;
+short var a;
 
+I think it's documented somewhere in the kernel. You can try grepping by
+"Reverse Christmas Tree".
+
+> 
+>>
+>>>       int err;
+>>>
+>>>       if (chunk_size < XDP_UMEM_MIN_CHUNK_SIZE || chunk_size > PAGE_SIZE) {
+>>> @@ -188,8 +189,8 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
+>>>       if (npgs > U32_MAX)
+>>>               return -EINVAL;
+>>>
+>>> -     chunks = (unsigned int)div_u64_rem(size, chunk_size, &chunks_rem);
+>>> -     if (chunks == 0)
+>>> +     chunks = div_u64_rem(size, chunk_size, &chunks_rem);
+>>> +     if (chunks == 0 || chunks > U32_MAX)
+>>
+>> You can change the first cond to `!chunks` while at it, it's more
+>> preferred than `== 0`.
+> 
+> If you want, I can change it. I generally like to keep unrelated
+> changes to a minimum.
+
+You modify the line either way, so I don't see any reasons to keep the
+code as-is. It's clear that replacing `== 0` to `!chunks` won't change
+the logic anyhow.
+
+> 
+>>
+>>>               return -EINVAL;
+>>
+>> Do you have any particular bugs that the current code leads to? Or it's
+>> just something that might hypothetically happen?
+> 
+> If the UMEM is large enough, the code is broke. Maybe it can be
+> exploited somehow? It should be checked for exactly the same reasons
+> as `npgs` right above it.
+> 
+>>
+>>>
+>>>       if (!unaligned_chunks && chunks_rem)
+>>> @@ -201,7 +202,7 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
+>>>       umem->size = size;
+>>>       umem->headroom = headroom;
+>>>       umem->chunk_size = chunk_size;
+>>> -     umem->chunks = chunks;
+>>> +     umem->chunks = (u32)chunks;
+>>
+>> You already checked @chunks fits into 32 bits, so the cast can be
+>> omitted here, it's redundant.
+> 
+> I made it consistent with the line right below it. It seems like the
+> cast may improve readability since it makes it known the truncation is
+> on purpose. I don't see how that is redundant with the safety check.
+> Should I change both lines?
+
+I'd prefer to change both lines. You already check both @npgs and
+@chunks for being <= %U32_MAX and anyone can see it from the code, so
+the casts don't make anything more readable.
+
+> 
+>>
+>>>       umem->npgs = (u32)npgs;
+>>>       umem->pgs = NULL;
+>>>       umem->user = NULL;
+>>
+>> Thanks,
+>> Olek
+> 
+> Kal
+
+Thanks,
+Olek
