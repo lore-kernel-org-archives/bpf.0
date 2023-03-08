@@ -2,239 +2,161 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45D15C6FD20
-	for <bpf@archiver.kernel.org>; Wed,  8 Mar 2023 03:55:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69DDDC64EC4
+	for <bpf@archiver.kernel.org>; Wed,  8 Mar 2023 03:58:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjCHDzE convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 7 Mar 2023 22:55:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34526 "EHLO
+        id S229907AbjCHD6S (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Mar 2023 22:58:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbjCHDzD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Mar 2023 22:55:03 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5B9984C0
-        for <bpf@vger.kernel.org>; Tue,  7 Mar 2023 19:55:01 -0800 (PST)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3281EJ7v019149
-        for <bpf@vger.kernel.org>; Tue, 7 Mar 2023 19:55:00 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3p6ffw14p1-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 07 Mar 2023 19:55:00 -0800
-Received: from twshared38955.16.prn3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 7 Mar 2023 19:54:29 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id CB854298A54CC; Tue,  7 Mar 2023 19:54:19 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@meta.com>,
-        Tejun Heo <tj@kernel.org>
-Subject: [PATCH v4 bpf-next 1/8] bpf: factor out fetching basic kfunc metadata
-Date:   Tue, 7 Mar 2023 19:54:09 -0800
-Message-ID: <20230308035416.2591326-2-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230308035416.2591326-1-andrii@kernel.org>
-References: <20230308035416.2591326-1-andrii@kernel.org>
+        with ESMTP id S229917AbjCHD6Q (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Mar 2023 22:58:16 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879ED43910
+        for <bpf@vger.kernel.org>; Tue,  7 Mar 2023 19:58:14 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id i34so60707878eda.7
+        for <bpf@vger.kernel.org>; Tue, 07 Mar 2023 19:58:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678247893;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0Tlzmmymv6b69PVxJ1Sm9cagL1grmfqzVtN4rp8n3VM=;
+        b=izjOKz6RIwfLULeu44jvcjz9qq4SI4PK6MIEK6Bk519R/i5XOU6hhrNe5Q0OP47C9f
+         G5g2duLJN9MGSneletJYEWIXGXTj50M4gQKYQHIuGybJWqLhBe/Ffrj0qdQS0XUjSu1+
+         xiUnHCIKPU+KelrmLX/X+nBGgAxPK5IepwiLb0d86/NYvo/t2Wt6lhKPOdJQ4QpK+ncS
+         2/gJm6oGr/42W3Hd3OWBFjPzq2nW8bJR3gzbSYRA0vHW5JsK+et2ZPOaH/hROujP0AEu
+         SLt8s74/ehF2BPlpyP5cuzybEGiTctvCUH39mgNQeM+0QZwG4L7UsszWKWjdVMUkuSIY
+         IIoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678247893;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0Tlzmmymv6b69PVxJ1Sm9cagL1grmfqzVtN4rp8n3VM=;
+        b=7XnuPfGk5tQVPRNO1ZblR4ETcebXCbmInnDxaJ7qte4H8Xs0yUavK+ZFFBj++uaquA
+         uuLN75EMoM7ZI4lkDqtpUCBHc4o3UN02tTbiiqVl6r7/dB+aaiIoYm4o5bDlc7ElqPyE
+         17luod37gJwc/UmAQDTCC9iMiiHH7eTJ3WmU3sI+7egaTF0XKJXxyZpY2P+oe26jvEwq
+         MvilsjsprNWdctdChH8Y0109vj+y2xoRaslI4Z7TzMoZJLn+pNtVQGRW37y3n++Scila
+         LEtIhZwcRDHiKZ+SLlp+Wlm0qhV/tpM+p8cFPjtPrFUDZDX2wJrNKXuXdYgCi/gYd5tT
+         wcRA==
+X-Gm-Message-State: AO0yUKWwzOedm5nDZ/KO6DPDnOggX86fywj86wseg0l8E4Rwl1/4ZrZj
+        x1ECIqexYJlYSIovx++s7afDuaIKj42z2W3JXQn/Y/wfX7k=
+X-Google-Smtp-Source: AK7set8OhPx0vZTyAfagJr5/C0CDaWNO9Vr7WWCf7yEMUg4+/IKA+SpJncsH32r6y9uAllcejjamHsMACFxA7j7xEkI=
+X-Received: by 2002:a17:906:4bcb:b0:8b1:28f6:8ab3 with SMTP id
+ x11-20020a1709064bcb00b008b128f68ab3mr8447062ejv.15.1678247892869; Tue, 07
+ Mar 2023 19:58:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: F-jByo7Q2svmc1SnvE9WvBDsS5aw0ddm
-X-Proofpoint-ORIG-GUID: F-jByo7Q2svmc1SnvE9WvBDsS5aw0ddm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-07_18,2023-03-07_01,2023-02-09_01
+References: <cover.1677583941.git.vmalik@redhat.com>
+In-Reply-To: <cover.1677583941.git.vmalik@redhat.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 7 Mar 2023 19:58:01 -0800
+Message-ID: <CAEf4BzY9h+ywcxo5=6WZbJzN=9_9UJ_fwKVEBDHWn=4PDPf33Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v9 0/2] Fix attaching fentry/fexit/fmod_ret/lsm
+ to modules
+To:     Viktor Malik <vmalik@redhat.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Factor out logic to fetch basic kfunc metadata based on struct bpf_insn.
-This is not exactly short or trivial code to just copy/paste, and this
-information is sometimes necessary in other parts of verifier logic.
-Subsequent patches will rely on this to determine if an instruction is
-a kfunc call to iterator next method.
+On Tue, Feb 28, 2023 at 4:27=E2=80=AFAM Viktor Malik <vmalik@redhat.com> wr=
+ote:
+>
+> I noticed that the verifier behaves incorrectly when attaching to fentry
+> of multiple functions of the same name located in different modules (or
+> in vmlinux). The reason for this is that if the target program is not
+> specified, the verifier will search kallsyms for the trampoline address
+> to attach to. The entire kallsyms is always searched, not respecting the
+> module in which the function to attach to is located.
+>
+> As Yonghong correctly pointed out, there is yet another issue - the
+> trampoline acquires the module reference in register_fentry which means
+> that if the module is unloaded between the place where the address is
+> found in the verifier and register_fentry, it is possible that another
+> module is loaded to the same address in the meantime, which may lead to
+> errors.
+>
+> This patch fixes the above issues by extracting the module name from the
+> BTF of the attachment target (which must be specified) and by doing the
+> search in kallsyms of the correct module. At the same time, the module
+> reference is acquired right after the address is found and only released
+> right before the program itself is unloaded.
+>
 
-No functional changes intended, including that verbose() warning
-behavior when kfunc is not allowed for a particular program type.
+is it expected that your newly added test fails on arm64? See [0]
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- kernel/bpf/verifier.c | 92 +++++++++++++++++++++++++++----------------
- 1 file changed, 59 insertions(+), 33 deletions(-)
+  [0] https://github.com/kernel-patches/bpf/actions/runs/4359596129/jobs/76=
+21687719
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index b2116ca78d9a..8d40fba6a1c0 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -10079,24 +10079,21 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 	return 0;
- }
- 
--static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
--			    int *insn_idx_p)
-+static int fetch_kfunc_meta(struct bpf_verifier_env *env,
-+			    struct bpf_insn *insn,
-+			    struct bpf_kfunc_call_arg_meta *meta,
-+			    const char **kfunc_name)
- {
--	const struct btf_type *t, *func, *func_proto, *ptr_type;
--	u32 i, nargs, func_id, ptr_type_id, release_ref_obj_id;
--	struct bpf_reg_state *regs = cur_regs(env);
--	const char *func_name, *ptr_type_name;
--	bool sleepable, rcu_lock, rcu_unlock;
--	struct bpf_kfunc_call_arg_meta meta;
--	int err, insn_idx = *insn_idx_p;
--	const struct btf_param *args;
--	const struct btf_type *ret_t;
-+	const struct btf_type *func, *func_proto;
-+	u32 func_id, *kfunc_flags;
-+	const char *func_name;
- 	struct btf *desc_btf;
--	u32 *kfunc_flags;
- 
--	/* skip for now, but return error when we find this in fixup_kfunc_call */
-+	if (kfunc_name)
-+		*kfunc_name = NULL;
-+
- 	if (!insn->imm)
--		return 0;
-+		return -EINVAL;
- 
- 	desc_btf = find_kfunc_desc_btf(env, insn->off);
- 	if (IS_ERR(desc_btf))
-@@ -10105,22 +10102,51 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	func_id = insn->imm;
- 	func = btf_type_by_id(desc_btf, func_id);
- 	func_name = btf_name_by_offset(desc_btf, func->name_off);
-+	if (kfunc_name)
-+		*kfunc_name = func_name;
- 	func_proto = btf_type_by_id(desc_btf, func->type);
- 
- 	kfunc_flags = btf_kfunc_id_set_contains(desc_btf, resolve_prog_type(env->prog), func_id);
- 	if (!kfunc_flags) {
--		verbose(env, "calling kernel function %s is not allowed\n",
--			func_name);
- 		return -EACCES;
- 	}
- 
--	/* Prepare kfunc call metadata */
--	memset(&meta, 0, sizeof(meta));
--	meta.btf = desc_btf;
--	meta.func_id = func_id;
--	meta.kfunc_flags = *kfunc_flags;
--	meta.func_proto = func_proto;
--	meta.func_name = func_name;
-+	memset(meta, 0, sizeof(*meta));
-+	meta->btf = desc_btf;
-+	meta->func_id = func_id;
-+	meta->kfunc_flags = *kfunc_flags;
-+	meta->func_proto = func_proto;
-+	meta->func_name = func_name;
-+
-+	return 0;
-+}
-+
-+static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
-+			    int *insn_idx_p)
-+{
-+	const struct btf_type *t, *ptr_type;
-+	u32 i, nargs, ptr_type_id, release_ref_obj_id;
-+	struct bpf_reg_state *regs = cur_regs(env);
-+	const char *func_name, *ptr_type_name;
-+	bool sleepable, rcu_lock, rcu_unlock;
-+	struct bpf_kfunc_call_arg_meta meta;
-+	struct bpf_insn_aux_data *insn_aux;
-+	int err, insn_idx = *insn_idx_p;
-+	const struct btf_param *args;
-+	const struct btf_type *ret_t;
-+	struct btf *desc_btf;
-+
-+	/* skip for now, but return error when we find this in fixup_kfunc_call */
-+	if (!insn->imm)
-+		return 0;
-+
-+	err = fetch_kfunc_meta(env, insn, &meta, &func_name);
-+	if (err == -EACCES && func_name)
-+		verbose(env, "calling kernel function %s is not allowed\n", func_name);
-+	if (err)
-+		return err;
-+	desc_btf = meta.btf;
-+	insn_aux = &env->insn_aux_data[insn_idx];
- 
- 	if (is_kfunc_destructive(&meta) && !capable(CAP_SYS_BOOT)) {
- 		verbose(env, "destructive kfunc calls require CAP_SYS_BOOT capability\n");
-@@ -10173,7 +10199,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		err = release_reference(env, regs[meta.release_regno].ref_obj_id);
- 		if (err) {
- 			verbose(env, "kfunc %s#%d reference has not been acquired before\n",
--				func_name, func_id);
-+				func_name, meta.func_id);
- 			return err;
- 		}
- 	}
-@@ -10185,14 +10211,14 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		err = ref_convert_owning_non_owning(env, release_ref_obj_id);
- 		if (err) {
- 			verbose(env, "kfunc %s#%d conversion of owning ref to non-owning failed\n",
--				func_name, func_id);
-+				func_name, meta.func_id);
- 			return err;
- 		}
- 
- 		err = release_reference(env, release_ref_obj_id);
- 		if (err) {
- 			verbose(env, "kfunc %s#%d reference has not been acquired before\n",
--				func_name, func_id);
-+				func_name, meta.func_id);
- 			return err;
- 		}
- 	}
-@@ -10202,7 +10228,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 					set_rbtree_add_callback_state);
- 		if (err) {
- 			verbose(env, "kfunc %s#%d failed callback verification\n",
--				func_name, func_id);
-+				func_name, meta.func_id);
- 			return err;
- 		}
- 	}
-@@ -10211,7 +10237,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		mark_reg_not_init(env, regs, caller_saved[i]);
- 
- 	/* Check return type */
--	t = btf_type_skip_modifiers(desc_btf, func_proto->type, NULL);
-+	t = btf_type_skip_modifiers(desc_btf, meta.func_proto->type, NULL);
- 
- 	if (is_kfunc_acquire(&meta) && !btf_type_is_struct_ptr(meta.btf, t)) {
- 		/* Only exception is bpf_obj_new_impl */
-@@ -10260,11 +10286,11 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 				regs[BPF_REG_0].btf = ret_btf;
- 				regs[BPF_REG_0].btf_id = ret_btf_id;
- 
--				env->insn_aux_data[insn_idx].obj_new_size = ret_t->size;
--				env->insn_aux_data[insn_idx].kptr_struct_meta =
-+				insn_aux->obj_new_size = ret_t->size;
-+				insn_aux->kptr_struct_meta =
- 					btf_find_struct_meta(ret_btf, ret_btf_id);
- 			} else if (meta.func_id == special_kfunc_list[KF_bpf_obj_drop_impl]) {
--				env->insn_aux_data[insn_idx].kptr_struct_meta =
-+				insn_aux->kptr_struct_meta =
- 					btf_find_struct_meta(meta.arg_obj_drop.btf,
- 							     meta.arg_obj_drop.btf_id);
- 			} else if (meta.func_id == special_kfunc_list[KF_bpf_list_pop_front] ||
-@@ -10397,8 +10423,8 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 			regs[BPF_REG_0].id = ++env->id_gen;
- 	} /* else { add_kfunc_call() ensures it is btf_type_is_void(t) } */
- 
--	nargs = btf_type_vlen(func_proto);
--	args = (const struct btf_param *)(func_proto + 1);
-+	nargs = btf_type_vlen(meta.func_proto);
-+	args = (const struct btf_param *)(meta.func_proto + 1);
- 	for (i = 0; i < nargs; i++) {
- 		u32 regno = i + 1;
- 
--- 
-2.34.1
-
+> ---
+> Changes in v9:
+> - two small changes suggested by Jiri Olsa and Jiri's ack
+>
+> Changes in v8:
+> - added module_put to error paths in bpf_check_attach_target after the
+>   module reference is acquired
+>
+> Changes in v7:
+> - refactored the module reference manipulation (comments by Jiri Olsa)
+> - cleaned up the test (comments by Andrii Nakryiko)
+>
+> Changes in v6:
+> - storing the module reference inside bpf_prog_aux instead of
+>   bpf_trampoline and releasing it when the program is unloaded
+>   (suggested by Jiri Olsa)
+>
+> Changes in v5:
+> - fixed acquiring and releasing of module references by trampolines to
+>   prevent modules being unloaded between address lookup and trampoline
+>   allocation
+>
+> Changes in v4:
+> - reworked module kallsyms lookup approach using existing functions,
+>   verifier now calls btf_try_get_module to retrieve the module and
+>   find_kallsyms_symbol_value to get the symbol address (suggested by
+>   Alexei)
+> - included Jiri Olsa's comments
+> - improved description of the new test and added it as a comment into
+>   the test source
+>
+> Changes in v3:
+> - added trivial implementation for kallsyms_lookup_name_in_module() for
+>   !CONFIG_MODULES (noticed by test robot, fix suggested by Hao Luo)
+>
+> Changes in v2:
+> - introduced and used more space-efficient kallsyms lookup function,
+>   suggested by Jiri Olsa
+> - included Hao Luo's comments
+>
+>
+> Viktor Malik (2):
+>   bpf: Fix attaching fentry/fexit/fmod_ret/lsm to modules
+>   bpf/selftests: Test fentry attachment to shadowed functions
+>
+>  include/linux/bpf.h                           |   2 +
+>  kernel/bpf/syscall.c                          |   6 +
+>  kernel/bpf/trampoline.c                       |  28 ----
+>  kernel/bpf/verifier.c                         |  18 ++-
+>  kernel/module/internal.h                      |   5 +
+>  net/bpf/test_run.c                            |   5 +
+>  .../selftests/bpf/bpf_testmod/bpf_testmod.c   |   6 +
+>  .../bpf/prog_tests/module_attach_shadow.c     | 128 ++++++++++++++++++
+>  8 files changed, 169 insertions(+), 29 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/module_attach_=
+shadow.c
+>
+> --
+> 2.39.1
+>
