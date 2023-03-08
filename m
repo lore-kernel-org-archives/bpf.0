@@ -2,173 +2,170 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88011C64EC4
-	for <bpf@archiver.kernel.org>; Wed,  8 Mar 2023 12:25:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CD94C64EC4
+	for <bpf@archiver.kernel.org>; Wed,  8 Mar 2023 12:26:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbjCHMZP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 8 Mar 2023 07:25:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45676 "EHLO
+        id S231433AbjCHM0K (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Mar 2023 07:26:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231362AbjCHMZH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 8 Mar 2023 07:25:07 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009F7B53D2
-        for <bpf@vger.kernel.org>; Wed,  8 Mar 2023 04:24:32 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id j11so45456835edq.4
-        for <bpf@vger.kernel.org>; Wed, 08 Mar 2023 04:24:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678278271;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/79u3NievU114h75XyEizn8Kbhu2zyr9KGTl1BwcSZI=;
-        b=V1hHxBqOPE2qUn8zBqILiGuhZWnPmGbCFd1gy6IE4x3MkHDPpDoqHsirtxgb/bM2ne
-         36VfGCEPAso7RN2p2wmmEsfIDnY7ccH+sTsPFY1O1w3C+XJkRv+ARxlmaV0O9XgITgsk
-         j4Ul2ZTdFF2HnldDczEwZkPNbkiUfdhJYPqMFE83b0AklieQskPuPNoFQsYdL0cu6eLD
-         6K6nWt+/rxaCTFD0ZJlGHa3TRbARUKl71DfdpFzgXLuKyTBCXXaCdxPjCs1A3NrCxiOw
-         POKb+4TRrgUv8oDu0ay7NxPQIpBljeNMWEPii+nxm8odpHxh4ezH4bdsRQGBX9ZCmWvj
-         ygWw==
+        with ESMTP id S231432AbjCHMZz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 8 Mar 2023 07:25:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BEE72A153
+        for <bpf@vger.kernel.org>; Wed,  8 Mar 2023 04:24:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678278264;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FYUSGl+c2i/XrGfwxUOIC1FfAmTL8/NIk2jsBnOFyek=;
+        b=DYmBqlA+MfI/0sgPORtQrug+y1RYJhofnApD8S/BSUm3Ws2HhrrHv1ekJq2apbke56ZaW/
+        NYusKPg86IYP2yY4d94tyLCnI4XrNj1lRn/3ZUV0Zt6bwBXMBqNx2aSBFbBt4F5mkB1xyI
+        rgZQK2QpUA8Ho61+/BuF0LeHuip1ZVQ=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-582-SSKe2_VJNKq2rwJnxNiOHw-1; Wed, 08 Mar 2023 07:21:13 -0500
+X-MC-Unique: SSKe2_VJNKq2rwJnxNiOHw-1
+Received: by mail-ed1-f69.google.com with SMTP id da22-20020a056402177600b004c60694083eso23419530edb.5
+        for <bpf@vger.kernel.org>; Wed, 08 Mar 2023 04:21:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678278271;
+        d=1e100.net; s=20210112; t=1678278072;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/79u3NievU114h75XyEizn8Kbhu2zyr9KGTl1BwcSZI=;
-        b=35CWpv20CJ0zM/szEki0WJM7mGLdwigkSZFfawfuOEkWsQbIJmCMHLxLqzirl1D5gD
-         qMXJS/eOBuoufbvfc1oQHEvltxKkVN1s5BUN1X/iaEmOw/KCT14ZF99EOJ3QhoYjGLZE
-         l3HdFid/7to//CPiDSyzv/becIh4W3sxOZ7x7Y1gVztgfhA4LrtHhvXfILFsyvJ8BY7N
-         Wwk9oXzLCFdU6/WgWisY9h+pw7Rknf1nLs0tgn2bJEtd4yZXcAr8oMLgbAypYvtkFwhe
-         a8oDSkJA56ErFN7kh1jDfSPgZ79XZ4PFHqh1yk2LQXXy2QiJidXypYS81RV8UYa+0FT4
-         v+lA==
-X-Gm-Message-State: AO0yUKUkKtMqWlbd+aYAaclNXfMLoeuVk68VlkcW1NjlLzcovOmNVyhu
-        jqyLIsx88u6iuGmsEkylCu8Yfg==
-X-Google-Smtp-Source: AK7set8HnTZCwP54a0MYhGz5sDoile+Y21+dgjFbbDezeItGGAVrJHJI16y6Q3L7KtIiJQpZawFodQ==
-X-Received: by 2002:a17:907:9703:b0:8af:514f:1078 with SMTP id jg3-20020a170907970300b008af514f1078mr21599887ejc.31.1678278270907;
-        Wed, 08 Mar 2023 04:24:30 -0800 (PST)
-Received: from google.com (94.189.141.34.bc.googleusercontent.com. [34.141.189.94])
-        by smtp.gmail.com with ESMTPSA id z30-20020a509e21000000b004bef1187754sm8127244ede.95.2023.03.08.04.24.30
+        bh=FYUSGl+c2i/XrGfwxUOIC1FfAmTL8/NIk2jsBnOFyek=;
+        b=hWBPPvqqgUbQY230R3+Qi0NXl8hZ0daxOJ1hntkgS9UI6MEhqpIV66znoviVBqLPMr
+         9jAzUQl7VdYJMLSuolUv+WZy+6m+9Wka91kjE/zs1qBkMwJWQAVX0fFedGYOtyCsP63K
+         STy65TCfGbnT+WKRegaZuzHzlKiQRAmQHvBp8EnHdtzFYq+WL2xsyEzmbKu201ZtAhsK
+         A1WmiDbIFNjFutbFHUg9MkazzEIrkG2u2gs50BrNm4mwadp7AedDAbV5Lk3E7f4TuHDf
+         1yGjw7ESl9u8oS4VSjXbXkfF0//FjFH6eaxSUxAHdkAFE4PZcYMtl+El6A1SNoSRu1JV
+         jpLQ==
+X-Gm-Message-State: AO0yUKW+HQJAxvQ2gGVWbTKskyEI0HTM5xHoyEfDxm3uUU23Diwo5zTN
+        8FcehrNdCdtHrfbiv363tu8hrUwSo1GF9nymEo/9fYIa32CZ98l3945mH39Z02n11QP8qdihJv3
+        7q+aDzLiejCEM
+X-Received: by 2002:aa7:d856:0:b0:4af:6e95:861b with SMTP id f22-20020aa7d856000000b004af6e95861bmr23390134eds.2.1678278072618;
+        Wed, 08 Mar 2023 04:21:12 -0800 (PST)
+X-Google-Smtp-Source: AK7set+6tZBfhWzjylNGTyxDwu7Yy+PpamZXGOVNIhYLZOhQ3DZ5QD/rfxx44WLOJiGYe6hsxp2zJQ==
+X-Received: by 2002:aa7:d856:0:b0:4af:6e95:861b with SMTP id f22-20020aa7d856000000b004af6e95861bmr23390108eds.2.1678278072292;
+        Wed, 08 Mar 2023 04:21:12 -0800 (PST)
+Received: from redhat.com ([2.52.138.216])
+        by smtp.gmail.com with ESMTPSA id r15-20020a50c00f000000b004bbc90e1fa3sm8087835edb.93.2023.03.08.04.21.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 04:24:30 -0800 (PST)
-Date:   Wed, 8 Mar 2023 12:24:26 +0000
-From:   Matt Bobrowski <mattbobrowski@google.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     andrii@kernel.org, mykolal@fb.com, ast@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        shuah@kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH] bpf: Fix IMA test
-Message-ID: <ZAh+eqa4bcFfizwe@google.com>
-References: <20230308103713.1681200-1-roberto.sassu@huaweicloud.com>
- <ZAhrl0rK9Yume1Ed@google.com>
- <9f19f0ff41114f7c90cca681f438388a64807e92.camel@huaweicloud.com>
+        Wed, 08 Mar 2023 04:21:11 -0800 (PST)
+Date:   Wed, 8 Mar 2023 07:21:07 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org,
+        Yichun Zhang <yichun@openresty.com>,
+        Alexander Duyck <alexanderduyck@fb.com>, netdev@vger.kernel.org
+Subject: Re: [PATCH net, stable v1 3/3] virtio_net: add checking sq is full
+ inside xdp xmit
+Message-ID: <20230308071921-mutt-send-email-mst@kernel.org>
+References: <20230308024935.91686-1-xuanzhuo@linux.alibaba.com>
+ <20230308024935.91686-4-xuanzhuo@linux.alibaba.com>
+ <7eea924e-5cc3-8584-af95-04587f303f8f@huawei.com>
+ <1678259647.118581-1-xuanzhuo@linux.alibaba.com>
+ <5a4564dc-af93-4305-49a4-5ca16d737bc3@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9f19f0ff41114f7c90cca681f438388a64807e92.camel@huaweicloud.com>
+In-Reply-To: <5a4564dc-af93-4305-49a4-5ca16d737bc3@huawei.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 01:05:45PM +0100, Roberto Sassu wrote:
-> On Wed, 2023-03-08 at 11:03 +0000, Matt Bobrowski wrote:
-> > Ha! I was literally in the midst of sending through a patch for
-> > this. Thanks for also taking a look and beating me to it!
+On Wed, Mar 08, 2023 at 04:13:12PM +0800, Yunsheng Lin wrote:
+> On 2023/3/8 15:14, Xuan Zhuo wrote:
+> > On Wed, 8 Mar 2023 14:59:36 +0800, Yunsheng Lin <linyunsheng@huawei.com> wrote:
+> >> On 2023/3/8 10:49, Xuan Zhuo wrote:
+> >>> If the queue of xdp xmit is not an independent queue, then when the xdp
+> >>> xmit used all the desc, the xmit from the __dev_queue_xmit() may encounter
+> >>> the following error.
+> >>>
+> >>> net ens4: Unexpected TXQ (0) queue failure: -28
+> >>>
+> >>> This patch adds a check whether sq is full in xdp xmit.
+> >>>
+> >>> Fixes: 56434a01b12e ("virtio_net: add XDP_TX support")
+> >>> Reported-by: Yichun Zhang <yichun@openresty.com>
+> >>> Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+> >>> Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
+> >>> Acked-by: Michael S. Tsirkin <mst@redhat.com>
+> >>> ---
+> >>>  drivers/net/virtio_net.c | 3 +++
+> >>>  1 file changed, 3 insertions(+)
+> >>>
+> >>> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> >>> index 46bbddaadb0d..1a309cfb4976 100644
+> >>> --- a/drivers/net/virtio_net.c
+> >>> +++ b/drivers/net/virtio_net.c
+> >>> @@ -767,6 +767,9 @@ static int virtnet_xdp_xmit(struct net_device *dev,
+> >>>  	}
+> >>>  	ret = nxmit;
+> >>>
+> >>> +	if (!is_xdp_raw_buffer_queue(vi, sq - vi->sq))
+> >>> +		check_sq_full_and_disable(vi, dev, sq);
+> >>> +
+> >>
+> >> Sorry if I missed something obvious here.
+> >>
+> >> As the comment in start_xmit(), the current skb is added to the sq->vq, so
+> >> NETDEV_TX_BUSY can not be returned.
+> >>
+> >> 	/* If running out of space, stop queue to avoid getting packets that we
+> >> 	 * are then unable to transmit.
+> >> 	 * An alternative would be to force queuing layer to requeue the skb by
+> >> 	 * returning NETDEV_TX_BUSY. However, NETDEV_TX_BUSY should not be
+> >> 	 * returned in a normal path of operation: it means that driver is not
+> >> 	 * maintaining the TX queue stop/start state properly, and causes
+> >> 	 * the stack to do a non-trivial amount of useless work.
+> >> 	 * Since most packets only take 1 or 2 ring slots, stopping the queue
+> >> 	 * early means 16 slots are typically wasted.
+> >> 	 */
+> >>
+> >> It there any reason not to check the sq->vq->num_free at the begin of start_xmit(),
+> >> if the space is not enough for the current skb, TX queue is stopped and NETDEV_TX_BUSY
+> >> is return to the stack to requeue the current skb.
+> >>
+> >> It seems it is the pattern that most network driver follow, and it seems we can avoid
+> >> calling check_sq_full_and_disable() in this patch and not wasting 16 slots as mentioned
+> >> in the comment above.
+> >>
 > > 
-> > This LGTM, feel free to add:
 > > 
-> > Reviewed-by: Matt Bobrowski <mattbobrowski@google.com>
+> > 
+> >  * netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb,
+> >  *                               struct net_device *dev);
+> >  *	Called when a packet needs to be transmitted.
+> >  *	Returns NETDEV_TX_OK.  Can return NETDEV_TX_BUSY, but you should stop
+> >  *	the queue before that can happen; it's for obsolete devices and weird
+> >  *	corner cases, but the stack really does a non-trivial amount
+> >  *	of useless work if you return NETDEV_TX_BUSY.
+> >  *	Required; cannot be NULL.
 > 
-> Thanks.
-> 
-> I have only one remain question. Should we accept the old behavior, or
-> simply reject it?
+> Thanks for the pointer. It is intersting, it seems most driver is not flollowing
+> the suggestion.
 
-I assume you mean whether we should continue supporting the old,
-arguably incorrect, behavior in this test? I'm of the opinion that it
-is OK, given that this is how the API behaved prior to commit
-62622dab0a28.
+Yes - I don't know why.
 
-I'll let others also chime in and share their .02 though...
+> I found out why the above comment was added, but I am not sure I understand
+> what does "non-trivial amount of useless work" means yet.
+> https://lists.linuxfoundation.org/pipermail/virtualization/2015-April/029718.html
 
-> > On Wed, Mar 08, 2023 at 11:37:13AM +0100, Roberto Sassu wrote:
-> > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > 
-> > > Commit 62622dab0a28 ("ima: return IMA digest value only when IMA_COLLECTED
-> > > flag is set") caused bpf_ima_inode_hash() to refuse to give non-fresh
-> > > digests. IMA test #3 assumed the old behavior, that bpf_ima_inode_hash()
-> > > still returned also non-fresh digests.
-> > > 
-> > > Correct the test by accepting both cases. If the samples returned are 1,
-> > > assume that the commit above is applied and that the returned digest is
-> > > fresh. If the samples returned are 2, assume that the commit above is not
-> > > applied, and check both the non-fresh and fresh digest.
-> > > 
-> > > Fixes: 62622dab0a28 ("ima: return IMA digest value only when IMA_COLLECTED flag is set")
-> > > Reported by: David Vernet <void@manifault.com>
-> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > ---
-> > >  .../selftests/bpf/prog_tests/test_ima.c       | 29 ++++++++++++++-----
-> > >  1 file changed, 21 insertions(+), 8 deletions(-)
-> > > 
-> > > diff --git a/tools/testing/selftests/bpf/prog_tests/test_ima.c b/tools/testing/selftests/bpf/prog_tests/test_ima.c
-> > > index b13feceb38f..810b14981c2 100644
-> > > --- a/tools/testing/selftests/bpf/prog_tests/test_ima.c
-> > > +++ b/tools/testing/selftests/bpf/prog_tests/test_ima.c
-> > > @@ -70,7 +70,7 @@ void test_test_ima(void)
-> > >  	u64 bin_true_sample;
-> > >  	char cmd[256];
-> > >  
-> > > -	int err, duration = 0;
-> > > +	int err, duration = 0, fresh_digest_idx = 0;
-> > >  	struct ima *skel = NULL;
-> > >  
-> > >  	skel = ima__open_and_load();
-> > > @@ -129,7 +129,15 @@ void test_test_ima(void)
-> > >  	/*
-> > >  	 * Test #3
-> > >  	 * - Goal: confirm that bpf_ima_inode_hash() returns a non-fresh digest
-> > > -	 * - Expected result: 2 samples (/bin/true: non-fresh, fresh)
-> > > +	 * - Expected result:
-> > > +	 *   1 sample (/bin/true: fresh) if commit 62622dab0a28 applied
-> > > +	 *   2 samples (/bin/true: non-fresh, fresh) if commit 62622dab0a28 is
-> > > +	 *     not applied
-> > > +	 *
-> > > +	 * If commit 62622dab0a28 ("ima: return IMA digest value only when
-> > > +	 * IMA_COLLECTED flag is set") is applied, bpf_ima_inode_hash() refuses
-> > > +	 * to give a non-fresh digest, hence the correct result is 1 instead of
-> > > +	 * 2.
-> > >  	 */
-> > >  	test_init(skel->bss);
-> > >  
-> > > @@ -144,13 +152,18 @@ void test_test_ima(void)
-> > >  		goto close_clean;
-> > >  
-> > >  	err = ring_buffer__consume(ringbuf);
-> > > -	ASSERT_EQ(err, 2, "num_samples_or_err");
-> > > -	ASSERT_NEQ(ima_hash_from_bpf[0], 0, "ima_hash");
-> > > -	ASSERT_NEQ(ima_hash_from_bpf[1], 0, "ima_hash");
-> > > -	ASSERT_EQ(ima_hash_from_bpf[0], bin_true_sample, "sample_equal_or_err");
-> > > +	ASSERT_GE(err, 1, "num_samples_or_err");
-> > > +	if (err == 2) {
-> > > +		ASSERT_NEQ(ima_hash_from_bpf[0], 0, "ima_hash");
-> > > +		ASSERT_EQ(ima_hash_from_bpf[0], bin_true_sample,
-> > > +			  "sample_equal_or_err");
-> > > +		fresh_digest_idx = 1;
-> > > +	}
-> > > +
-> > > +	ASSERT_NEQ(ima_hash_from_bpf[fresh_digest_idx], 0, "ima_hash");
-> > >  	/* IMA refreshed the digest. */
-> > > -	ASSERT_NEQ(ima_hash_from_bpf[1], bin_true_sample,
-> > > -		   "sample_different_or_err");
-> > > +	ASSERT_NEQ(ima_hash_from_bpf[fresh_digest_idx], bin_true_sample,
-> > > +		   "sample_equal_or_err");
-> > >  
-> > >  	/*
-> > >  	 * Test #4
-> > > -- 
-> > > 2.25.1
+dev_requeue_skb 
 
-/M
+-- 
+MST
+
