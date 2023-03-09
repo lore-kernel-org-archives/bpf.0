@@ -2,287 +2,91 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDEA4C6FD1C
-	for <bpf@archiver.kernel.org>; Thu,  9 Mar 2023 11:59:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 439F0C64EC4
+	for <bpf@archiver.kernel.org>; Thu,  9 Mar 2023 12:26:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbjCIL7D (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Mar 2023 06:59:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60526 "EHLO
+        id S229965AbjCIM0A (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Mar 2023 07:26:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231659AbjCIL7B (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Mar 2023 06:59:01 -0500
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9837F011;
-        Thu,  9 Mar 2023 03:58:58 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=alibuda@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VdTbXRD_1678363135;
-Received: from 30.221.149.231(mailfrom:alibuda@linux.alibaba.com fp:SMTPD_---0VdTbXRD_1678363135)
-          by smtp.aliyun-inc.com;
-          Thu, 09 Mar 2023 19:58:56 +0800
-Message-ID: <b8480883-eceb-f488-fdaa-2eb6647844a8@linux.alibaba.com>
-Date:   Thu, 9 Mar 2023 19:58:54 +0800
+        with ESMTP id S229577AbjCIM0A (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Mar 2023 07:26:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4232FEA01F;
+        Thu,  9 Mar 2023 04:25:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5764761B46;
+        Thu,  9 Mar 2023 12:25:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B3CAC433D2;
+        Thu,  9 Mar 2023 12:25:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678364757;
+        bh=xC8SC6d1T+CjsNceu22LyGhdP405Ui+rHSffChfjnmQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CPlzMiH2TgHscQHnOm0iKcGieIn6md8G9rQaJLuK6njJMlN2J8jLI1v9e/FOnMfeC
+         vstdzcPh4fxnQ+D1rwmyUD6rEduUMjw92Ik5RK6RbvEWM/x5U2QAfEcADBenMiDsUM
+         0z7nYLpJZEChdadYVcJIbp6PVvdZDrzokzNLPl2dqZ0Y01HrMexUaV2SluCohzd9wL
+         A1v5qb0v94agpWNjKvDiNwcreUdWsOLNLOUytxa6h5x5yKeteMasbvGvojt1tSNrpt
+         Q3R28S2X2aDd0RhJQoR3+CTJm8Bp5zqldo5EUiAb5Jv7nJuFINYZnk9UEgLQUr3xq8
+         ferLYYH5uDXDw==
+From:   Lorenzo Bianconi <lorenzo@kernel.org>
+To:     netdev@vger.kernel.org
+Cc:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+        saeedm@nvidia.com, leon@kernel.org, shayagr@amazon.com,
+        akiyano@amazon.com, darinzon@amazon.com, sgoutham@marvell.com,
+        lorenzo.bianconi@redhat.com, toke@redhat.com, teknoraver@meta.com,
+        ttoukan.linux@gmail.com
+Subject: [PATCH net v2 0/8] update xdp_features flag according to NIC re-configuration
+Date:   Thu,  9 Mar 2023 13:25:24 +0100
+Message-Id: <cover.1678364612.git.lorenzo@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH bpf-next v2 2/2] bpf/selftests: add selftest for SMC bpf
- capability
-Content-Language: en-US
-To:     Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
-        bpf@vger.kernel.org, kgraul@linux.ibm.com, wenjia@linux.ibm.com,
-        jaka@linux.ibm.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org
-References: <1676981919-64884-1-git-send-email-alibuda@linux.alibaba.com>
- <1676981919-64884-3-git-send-email-alibuda@linux.alibaba.com>
- <60991e56-dad5-c310-86bb-102ebf756b6b@linux.dev>
-From:   "D. Wythe" <alibuda@linux.alibaba.com>
-In-Reply-To: <60991e56-dad5-c310-86bb-102ebf756b6b@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Changes since v1:
+- rebase on top of net tree
+- remove NETDEV_XDP_ACT_NDO_XMIT_SG support in mlx5e driver
+- always enable NETDEV_XDP_ACT_NDO_XMIT support in mlx5e driver
 
-On 2/23/23 6:35 AM, Martin KaFai Lau wrote:
-> On 2/21/23 4:18 AM, D. Wythe wrote:
->> From: "D. Wythe" <alibuda@linux.alibaba.com>
->>
->> This PATCH adds a tiny selftest for SMC bpf capability,
->> making decisions on whether to use SMC by collecting
->> certain information from kernel smc sock.
->>
->> Follow the steps below to run this test.
->>
->> make -C tools/testing/selftests/bpf
->> cd tools/testing/selftests/bpf
->> sudo ./test_progs -t bpf_smc
->>
->> Results shows:
->> 18      bpf_smc:OK
->> Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
->>
->> Signed-off-by: D. Wythe <alibuda@linux.alibaba.com>
->> ---
->>   tools/testing/selftests/bpf/prog_tests/bpf_smc.c |  39 +++
->>   tools/testing/selftests/bpf/progs/bpf_smc.c      | 315 
->> +++++++++++++++++++++++
->>   2 files changed, 354 insertions(+)
->>   create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_smc.c
->>   create mode 100644 tools/testing/selftests/bpf/progs/bpf_smc.c
->>
->> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_smc.c 
->> b/tools/testing/selftests/bpf/prog_tests/bpf_smc.c
->> new file mode 100644
->> index 0000000..b143932
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_smc.c
->> @@ -0,0 +1,39 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/* Copyright (c) 2019 Facebook */
->
-> copy-and-paste left-over...
+Lorenzo Bianconi (7):
+  tools: ynl: fix render-max for flags definition
+  tools: ynl: fix get_mask utility routine
+  xdp: add xdp_set_features_flag utility routine
+  net: thunderx: take into account xdp_features setting tx/rx queues
+  net: ena: take into account xdp_features setting tx/rx queues
+  veth: take into account device reconfiguration for xdp_features flag
+  net/mlx5e: take into account device reconfiguration for xdp_features
+    flag
 
-Sorry for that, but it might be more appropriate to delete it here... 😂
+Matteo Croce (1):
+  mvpp2: take care of xdp_features when reconfiguring queues
 
->
->> diff --git a/tools/testing/selftests/bpf/progs/bpf_smc.c 
->> b/tools/testing/selftests/bpf/progs/bpf_smc.c
->> new file mode 100644
->> index 0000000..78c7976
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/bpf_smc.c
->> @@ -0,0 +1,315 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +
->> +#include <linux/bpf.h>
->> +#include <linux/stddef.h>
->> +#include <linux/smc.h>
->> +#include <stdbool.h>
->> +#include <linux/types.h>
->> +#include <bpf/bpf_helpers.h>
->> +#include <bpf/bpf_core_read.h>
->> +#include <bpf/bpf_tracing.h>
->> +
->> +#define BPF_STRUCT_OPS(name, args...) \
->> +    SEC("struct_ops/"#name) \
->> +    BPF_PROG(name, args)
->> +
->> +#define SMC_LISTEN        (10)
->> +#define SMC_SOCK_CLOSED_TIMING    (0)
->> +extern unsigned long CONFIG_HZ __kconfig;
->> +#define HZ CONFIG_HZ
->> +
->> +char _license[] SEC("license") = "GPL";
->> +#define max(a, b) ((a) > (b) ? (a) : (b))
->> +
->> +struct sock_common {
->> +    unsigned char    skc_state;
->> +    __u16    skc_num;
->> +} __attribute__((preserve_access_index));
->> +
->> +struct sock {
->> +    struct sock_common    __sk_common;
->> +    int    sk_sndbuf;
->> +} __attribute__((preserve_access_index));
->> +
->> +struct inet_sock {
->> +    struct sock    sk;
->> +} __attribute__((preserve_access_index));
->> +
->> +struct inet_connection_sock {
->> +    struct inet_sock    icsk_inet;
->> +} __attribute__((preserve_access_index));
->> +
->> +struct tcp_sock {
->> +    struct inet_connection_sock    inet_conn;
->> +    __u32    rcv_nxt;
->> +    __u32    snd_nxt;
->> +    __u32    snd_una;
->> +    __u32    delivered;
->> +    __u8    syn_data:1,    /* SYN includes data */
->> +        syn_fastopen:1,    /* SYN includes Fast Open option */
->> +        syn_fastopen_exp:1,/* SYN includes Fast Open exp. option */
->> +        syn_fastopen_ch:1, /* Active TFO re-enabling probe */
->> +        syn_data_acked:1,/* data in SYN is acked by SYN-ACK */
->> +        save_syn:1,    /* Save headers of SYN packet */
->> +        is_cwnd_limited:1,/* forward progress limited by snd_cwnd? */
->> +        syn_smc:1;    /* SYN includes SMC */
->> +} __attribute__((preserve_access_index));
->> +
->> +struct socket {
->> +    struct sock *sk;
->> +} __attribute__((preserve_access_index));
->
-> All these tcp_sock, socket, inet_sock definitions can go away if it 
-> includes "vmlinux.h". tcp_ca_write_sk_pacing.c is a better example to 
-> follow. Try to define the "common" (eg. tcp, tc...etc) missing macros 
-> in bpf_tracing_net.h. The smc specific macros can stay in this file.
+ Documentation/netlink/specs/netdev.yaml       |  1 +
+ drivers/net/ethernet/amazon/ena/ena_ethtool.c | 15 +++++--
+ drivers/net/ethernet/amazon/ena/ena_netdev.c  |  6 ++-
+ .../ethernet/cavium/thunder/nicvf_ethtool.c   | 17 +++++---
+ .../net/ethernet/cavium/thunder/nicvf_main.c  |  4 +-
+ .../net/ethernet/marvell/mvpp2/mvpp2_main.c   | 15 +++++--
+ drivers/net/ethernet/mellanox/mlx5/core/en.h  |  1 +
+ .../ethernet/mellanox/mlx5/core/en_ethtool.c  | 10 ++++-
+ .../net/ethernet/mellanox/mlx5/core/en_main.c | 37 +++++++++++-----
+ .../net/ethernet/mellanox/mlx5/core/en_rep.c  |  3 ++
+ drivers/net/veth.c                            | 42 +++++++++++++++++--
+ include/net/xdp.h                             | 11 +++++
+ include/uapi/linux/netdev.h                   |  2 +
+ net/core/xdp.c                                | 26 ++++++++----
+ tools/include/uapi/linux/netdev.h             |  2 +
+ tools/net/ynl/lib/nlspec.py                   |  6 +--
+ tools/net/ynl/ynl-gen-c.py                    | 11 +++--
+ 17 files changed, 164 insertions(+), 45 deletions(-)
 
-Got it, i'll fix this.
-
->> +static inline struct smc_prediction *smc_prediction_get(const struct 
->> smc_sock *smc,
->> +                            const struct tcp_sock *tp, __u64 tstamp)
->> +{
->> +    struct smc_prediction zero = {}, *smc_predictor;
->> +    __u16 key;
->> +    __u32 gap;
->> +    int err;
->> +
->> +    err = bpf_core_read(&key, sizeof(__u16), 
->> &tp->inet_conn.icsk_inet.sk.__sk_common.skc_num);
->> +    if (err)
->> +        return NULL;
->> +
->> +    /* BAD key */
->> +    if (key == 0)
->> +        return NULL;
->> +
->> +    smc_predictor = bpf_map_lookup_elem(&negotiator_map, &key);
->> +    if (!smc_predictor) {
->> +        zero.start_tstamp = bpf_jiffies64();
->> +        zero.pacing_delta = SMC_PREDICTION_MIN_PACING_DELTA;
->> +        bpf_map_update_elem(&negotiator_map, &key, &zero, 0);
->> +        smc_predictor = bpf_map_lookup_elem(&negotiator_map, &key);
->> +        if (!smc_predictor)
->> +            return NULL;
->> +    }
->> +
->> +    if (tstamp) {
->> +        bpf_spin_lock(&smc_predictor->lock);
->> +        gap = (tstamp - smc_predictor->start_tstamp) / 
->> smc_predictor->pacing_delta;
->> +        /* new splice */
->> +        if (gap > 0) {
->> +            smc_predictor->start_tstamp = tstamp;
->> +            smc_predictor->last_rate_of_lcc =
->> +                (smc_prediction_calt_rate(smc_predictor) * 7) >> (2 
->> + gap);
->> +            smc_predictor->closed_long_cc = 0;
->> +            smc_predictor->closed_total_cc = 0;
->> +            smc_predictor->incoming_long_cc = 0;
->> +        }
->> +        bpf_spin_unlock(&smc_predictor->lock);
->> +    }
->> +    return smc_predictor;
->> +}
->> +
->> +/* BPF struct ops for smc protocol negotiator */
->> +struct smc_sock_negotiator_ops {
->> +    /* ret for negotiate */
->> +    int (*negotiate)(struct smc_sock *smc);
->> +
->> +    /* info gathering timing */
->> +    void (*collect_info)(struct smc_sock *smc, int timing);
->> +};
->> +
->> +int BPF_STRUCT_OPS(bpf_smc_negotiate, struct smc_sock *smc)
->> +{
->> +    struct smc_prediction *smc_predictor;
->> +    struct tcp_sock *tp;
->> +    struct sock *clcsk;
->> +    int ret = SK_DROP;
->> +    __u32 rate = 0;
->> +
->> +    /* Only make decison during listen */
->> +    if (smc->sk.__sk_common.skc_state != SMC_LISTEN)
->> +        return SK_PASS;
->> +
->> +    clcsk = BPF_CORE_READ(smc, clcsock, sk);
->
-> Instead of using bpf_core_read here, why not directly gets the clcsk 
-> like the 'smc->sk.__sk_common.skc_state' above.
->
->> +    if (!clcsk)
->> +        goto error;
->> +
->> +    tp = tcp_sk(clcsk);
->
-> There is a bpf_skc_to_tcp_sock(). Give it a try after changing the 
-> above BPF_CORE_READ.
-
-Copy that!  thanks.
-
->
->> +    if (!tp)
->> +        goto error;
->> +
->> +    smc_predictor = smc_prediction_get(smc, tp, bpf_jiffies64());
->> +    if (!smc_predictor)
->> +        return SK_PASS;
->> +
->> +    bpf_spin_lock(&smc_predictor->lock);
->> +
->> +    if (smc_predictor->incoming_long_cc == 0)
->> +        goto out_locked_pass;
->> +
->> +    if (smc_predictor->incoming_long_cc > 
->> SMC_PREDICTION_MAX_LONGCC_PER_SPLICE) {
->> +        ret = 100;
->> +        goto out_locked_drop;
->> +    }
->> +
->> +    rate = smc_prediction_calt_rate(smc_predictor);
->> +    if (rate < SMC_PREDICTION_LONGCC_RATE_THRESHOLD) {
->> +        ret = 200;
->> +        goto out_locked_drop;
->> +    }
->> +out_locked_pass:
->> +    smc_predictor->incoming_long_cc++;
->> +    bpf_spin_unlock(&smc_predictor->lock);
->> +    return SK_PASS;
->> +out_locked_drop:
->> +    bpf_spin_unlock(&smc_predictor->lock);
->> +error:
->> +    return SK_DROP;
->> +}
->> +
->> +void BPF_STRUCT_OPS(bpf_smc_collect_info, struct smc_sock *smc, int 
->> timing)
->
-> Try to stay with SEC("struct_ops/...") void BPF_PROG(....)
-
-Got it.  I have finished this modification in v4.
-
+-- 
+2.39.2
 
