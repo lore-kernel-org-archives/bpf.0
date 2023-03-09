@@ -2,145 +2,98 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21C71C64EC4
-	for <bpf@archiver.kernel.org>; Thu,  9 Mar 2023 05:19:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0587C61DA4
+	for <bpf@archiver.kernel.org>; Thu,  9 Mar 2023 05:40:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbjCIFTv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Mar 2023 00:19:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51376 "EHLO
+        id S229621AbjCIFk2 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 9 Mar 2023 00:40:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjCIFTv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Mar 2023 00:19:51 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4677CE958
-        for <bpf@vger.kernel.org>; Wed,  8 Mar 2023 21:19:49 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id s11so2393069edy.8
-        for <bpf@vger.kernel.org>; Wed, 08 Mar 2023 21:19:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678339188;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XA9Ua6B6An6RP3rVZJ6ZH88clwhca28y6cgL9YikeQc=;
-        b=P7gljFgRoN0FfATXgsTakXNbMVB+8MVmeIhCZS0lWnErCEEggI/jbT6JnluvbD0/3C
-         bEXhQW4V96J2rXI4J45+0IJP3gFOflJRB6AHFLuZrviUk8isGWl9LXYZLWCZ/64lcipB
-         4HuzOy3B6cy4D64xphkx91/Jevl7ikHIRsI1QwIsrx5LRJBbuiAcKpuktQpJiPvN4DYU
-         dIRv7x/u50m1w+rngTsCSw5me7Axco5oWMk3L+clbC8ekrA/ewupCe7lqlFx9/Ozaayu
-         dvkXgsKPatmdaozq1mA1dPhxfIiWK71TuY/61FEn9QRoBWMLZtw3FkkS/CFgtGb3Jp7k
-         X3YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678339188;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XA9Ua6B6An6RP3rVZJ6ZH88clwhca28y6cgL9YikeQc=;
-        b=GQ6OHS/LmOEZFSGhwturMgChL7+8HVlYHTL3EAkQynECnMpTEKFthe8Rb98EX+Oi7J
-         8q2j8MoSlHGKGDt/gEUZuCRZqDNjRqlMzMublfsW+TY4N4PiomrC6tM09IoF2/zS7+4F
-         PMgF4CAWlORgxrBkztp77Qa+4twgzlQtgtw6tC0cdXXyXOLTzEWgXmf8K4qY4TaC1cuJ
-         ZTlPkXt/PtCpDE4zHnpcRU/VLvBAmos0ANjspnt5icNsGf6Fex81o7zDPSo5v1swY4lX
-         GEvB3/pW3tUwvxdio65p9bP+Psck+741+UAAJm8PCMc+jwuo7Qhuaa1oPC5cM3/QmDZF
-         nCjQ==
-X-Gm-Message-State: AO0yUKWNdAgmyzSYZZMU8amDaEvwcc7vKkFXFDhu84ggSYrHcQLRfcWZ
-        iw/+YlP/Ro2y6sLmiUxJTNB6TjZohI+93RhTiQ7/yy4K
-X-Google-Smtp-Source: AK7set+IydFkLYBqKZo5hwECOIoDIqKc9MbHNPs/CFSLMiIXPh25DogGB5WIwBlgpXsfxdM4f5MUHf3oNNCmXn1mgrA=
-X-Received: by 2002:a17:906:4094:b0:8b1:28e5:a1bc with SMTP id
- u20-20020a170906409400b008b128e5a1bcmr9555160ejj.5.1678339188070; Wed, 08 Mar
- 2023 21:19:48 -0800 (PST)
-MIME-Version: 1.0
-References: <20230308035416.2591326-4-andrii@kernel.org> <1399021d-b06a-447c-94ca-6cc657c9c0b2@kili.mountain>
-In-Reply-To: <1399021d-b06a-447c-94ca-6cc657c9c0b2@kili.mountain>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 8 Mar 2023 21:19:36 -0800
-Message-ID: <CAEf4BzYzUmoeNPGbb+up8jRa1Q_BsQr4Sh+pb-X-SnswNW8hGA@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf-next 3/8] bpf: add support for open-coded iterator loops
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     oe-kbuild@lists.linux.dev, Andrii Nakryiko <andrii@kernel.org>,
-        bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        lkp@intel.com, oe-kbuild-all@lists.linux.dev, kernel-team@meta.com,
+        with ESMTP id S229580AbjCIFk1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Mar 2023 00:40:27 -0500
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8BA82367
+        for <bpf@vger.kernel.org>; Wed,  8 Mar 2023 21:40:25 -0800 (PST)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 3291KvUB010680
+        for <bpf@vger.kernel.org>; Wed, 8 Mar 2023 21:40:25 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3p6ffuhh01-6
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 08 Mar 2023 21:40:24 -0800
+Received: from twshared21709.17.frc2.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Wed, 8 Mar 2023 21:40:22 -0800
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id 80D6029AA204C; Wed,  8 Mar 2023 21:40:18 -0800 (PST)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@meta.com>,
         Tejun Heo <tj@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: [PATCH bpf-next 1/4] selftests/bpf: prevent unused variable warning in bpf_for()
+Date:   Wed, 8 Mar 2023 21:40:12 -0800
+Message-ID: <20230309054015.4068562-2-andrii@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230309054015.4068562-1-andrii@kernel.org>
+References: <20230309054015.4068562-1-andrii@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: halxKY6qNMVFj1pVDCNvnnpO_Y0AQLyz
+X-Proofpoint-ORIG-GUID: halxKY6qNMVFj1pVDCNvnnpO_Y0AQLyz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-09_02,2023-03-08_03,2023-02-09_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 8:35=E2=80=AFPM Dan Carpenter <error27@gmail.com> wr=
-ote:
->
-> Hi Andrii,
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Andrii-Nakryiko/bp=
-f-factor-out-fetching-basic-kfunc-metadata/20230308-115539
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git =
-master
-> patch link:    https://lore.kernel.org/r/20230308035416.2591326-4-andrii%=
-40kernel.org
-> patch subject: [PATCH v4 bpf-next 3/8] bpf: add support for open-coded it=
-erator loops
-> config: loongarch-randconfig-m041-20230305 (https://download.01.org/0day-=
-ci/archive/20230309/202303090153.YeswNcW4-lkp@intel.com/config)
-> compiler: loongarch64-linux-gcc (GCC) 12.1.0
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Reported-by: Dan Carpenter <error27@gmail.com>
-> | Link: https://lore.kernel.org/r/202303090153.YeswNcW4-lkp@intel.com/
->
-> smatch warnings:
-> kernel/bpf/verifier.c:1244 is_iter_reg_valid_uninit() error: uninitialize=
-d symbol 'j'.
->
-> vim +/j +1244 kernel/bpf/verifier.c
->
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07  1225  static bool is_iter_reg_=
-valid_uninit(struct bpf_verifier_env *env,
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07  1226                          =
-            struct bpf_reg_state *reg, int nr_slots)
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07  1227  {
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07  1228         struct bpf_func_s=
-tate *state =3D func(env, reg);
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07  1229         int spi, i, j;
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07  1230
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07  1231         /* For -ERANGE (i=
-.e. spi not falling into allocated stack slots), we
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07  1232          * will do check_=
-mem_access to check and update stack bounds later, so
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07  1233          * return true fo=
-r that case.
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07  1234          */
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07  1235         spi =3D iter_get_=
-spi(env, reg, nr_slots);
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07  1236         if (spi =3D=3D -E=
-RANGE)
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07  1237                 return tr=
-ue;
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07  1238         if (spi < 0)
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07  1239                 return sp=
-i;
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07  1240
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07  1241         for (i =3D 0; i <=
- nr_slots; i++) {
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07  1242                 struct bp=
-f_stack_state *slot =3D &state->stack[spi - i];
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07  1243
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07 @1244                 if (slot-=
->slot_type[j] =3D=3D STACK_ITER)
->                                                                          =
-           ^
-> s/j/i/?
->
+Add __attribute__((unused)) to inner __p variable inside bpf_for(),
+bpf_for_each(), and bpf_repeat() macros to avoid compiler warnings about
+unused variable.
 
-nope, I accidentally removed the inner for loop. I fixed all that in
-v5, which was applied today. But thanks for the notification!
+Reported-by: Tejun Heo <tj@kernel.org>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/testing/selftests/bpf/progs/bpf_misc.h | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07  1245                         r=
-eturn false;
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07  1246         }
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07  1247
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07  1248         return true;
-> 8f263e1296a91f Andrii Nakryiko 2023-03-07  1249  }
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests
->
+diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
+index 43b154a639e7..c95eb603403c 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_misc.h
++++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+@@ -115,7 +115,8 @@ extern void bpf_iter_num_destroy(struct bpf_iter_num *it) __ksym;
+ 	struct bpf_iter_##type ___it __attribute__((aligned(8), /* enforce, just in case */,	\
+ 						    cleanup(bpf_iter_##type##_destroy))),	\
+ 	/* ___p pointer is just to call bpf_iter_##type##_new() *once* to init ___it */		\
+-			       *___p = (bpf_iter_##type##_new(&___it, ##args),			\
++			       *___p __attribute__((unused)) = (				\
++					bpf_iter_##type##_new(&___it, ##args),			\
+ 	/* this is a workaround for Clang bug: it currently doesn't emit BTF */			\
+ 	/* for bpf_iter_##type##_destroy() when used from cleanup() attribute */		\
+ 					(void)bpf_iter_##type##_destroy, (void *)0);		\
+@@ -143,7 +144,8 @@ extern void bpf_iter_num_destroy(struct bpf_iter_num *it) __ksym;
+ 	struct bpf_iter_num ___it __attribute__((aligned(8), /* enforce, just in case */	\
+ 						 cleanup(bpf_iter_num_destroy))),		\
+ 	/* ___p pointer is necessary to call bpf_iter_num_new() *once* to init ___it */		\
+-			    *___p = (bpf_iter_num_new(&___it, (start), (end)),			\
++			    *___p __attribute__((unused)) = (					\
++				bpf_iter_num_new(&___it, (start), (end)),			\
+ 	/* this is a workaround for Clang bug: it currently doesn't emit BTF */			\
+ 	/* for bpf_iter_num_destroy() when used from cleanup() attribute */			\
+ 				(void)bpf_iter_num_destroy, (void *)0);				\
+@@ -167,7 +169,8 @@ extern void bpf_iter_num_destroy(struct bpf_iter_num *it) __ksym;
+ 	struct bpf_iter_num ___it __attribute__((aligned(8), /* enforce, just in case */	\
+ 						 cleanup(bpf_iter_num_destroy))),		\
+ 	/* ___p pointer is necessary to call bpf_iter_num_new() *once* to init ___it */		\
+-			    *___p = (bpf_iter_num_new(&___it, 0, (N)),				\
++			    *___p __attribute__((unused)) = (					\
++				bpf_iter_num_new(&___it, 0, (N)),				\
+ 	/* this is a workaround for Clang bug: it currently doesn't emit BTF */			\
+ 	/* for bpf_iter_num_destroy() when used from cleanup() attribute */			\
+ 				(void)bpf_iter_num_destroy, (void *)0);				\
+-- 
+2.34.1
+
