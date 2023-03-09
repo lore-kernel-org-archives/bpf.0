@@ -2,186 +2,97 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC29AC6FD1F
-	for <bpf@archiver.kernel.org>; Thu,  9 Mar 2023 12:26:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61500C64EC4
+	for <bpf@archiver.kernel.org>; Thu,  9 Mar 2023 12:26:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbjCIM0U (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Mar 2023 07:26:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43640 "EHLO
+        id S230427AbjCIM0d (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Mar 2023 07:26:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230246AbjCIM0R (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Mar 2023 07:26:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8664AEBAC8;
-        Thu,  9 Mar 2023 04:26:10 -0800 (PST)
+        with ESMTP id S230369AbjCIM0V (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Mar 2023 07:26:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C2DEAB97
+        for <bpf@vger.kernel.org>; Thu,  9 Mar 2023 04:26:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1382161AF9;
-        Thu,  9 Mar 2023 12:26:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27EACC4339B;
-        Thu,  9 Mar 2023 12:26:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE7F3B81EDF
+        for <bpf@vger.kernel.org>; Thu,  9 Mar 2023 12:26:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53A43C433D2;
+        Thu,  9 Mar 2023 12:26:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678364769;
-        bh=+hMJKeIw91xCf4gCpoyS0rksbBEIqk6Mi9zC5eJzwEw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZzZmRrYrI61AmgJDwnM3v+DQt2rhC4SLCyojUc6qXD4bk0o1m6UVz2IXDS5Nz/Lst
-         NZzOfhfIi/aCC4TxyWXkjRZvLmqHIXmmARPvzND65wlP9PfgCKBqPqxG98EOfD6Zk5
-         MqH12GGNk3tmHJWakfOZQM+9RGW59YElWBAR2RaJUFq3eb0/Bfg/kQOzvG0ABBD4K3
-         cZaZyfzFr3O7gVhRKRZ+zdQmzZZbyslp/elvQLCbgtJkX3E8u44oYYZbv4/O5YB5Pw
-         tXbwIsnr6h+r5l+bCy7QPIobWXNf+VN1V1n5Ev5q1o9YaYH1+ieforc+ZVEM3q5Qlh
-         4m4SfIBcU8s/A==
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     netdev@vger.kernel.org
-Cc:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        saeedm@nvidia.com, leon@kernel.org, shayagr@amazon.com,
-        akiyano@amazon.com, darinzon@amazon.com, sgoutham@marvell.com,
-        lorenzo.bianconi@redhat.com, toke@redhat.com, teknoraver@meta.com,
-        ttoukan.linux@gmail.com
-Subject: [PATCH net v2 3/8] xdp: add xdp_set_features_flag utility routine
-Date:   Thu,  9 Mar 2023 13:25:27 +0100
-Message-Id: <a20c35249681a801cf7f69b0305b7090848daa11.1678364613.git.lorenzo@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <cover.1678364612.git.lorenzo@kernel.org>
-References: <cover.1678364612.git.lorenzo@kernel.org>
+        s=k20201202; t=1678364772;
+        bh=Oqk8Azjmvp35zHKdzJouSQ2y+xrmTqcAHDuoRkWN5dY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eBasOg153uzh6coWSIWDUf8LwkFfXtA6+08YNy5xchsytYiFHODzFpaN0VEsxu8IP
+         Y5KTPpP5+eRWlktgf/r2dqD1HcsUNsFncGIjvES6hxJdzgu2mAx1X8/BmUFz/2nLbD
+         vKhkxMbqZqglNDAARf7l9wPETUwuvTN66UuA+mP70eC6abGiK9XqeC6yB0Sb0TII7Y
+         Ga8rhvWBWS3lKUeSLTqHmx1XtZQf+39BiX4TJ+6D8w3v3uydPJz5/JSbJZsOc7I6Zd
+         0N517PW6MNdeer94E6KPANTqXWEULltyfwkRyGMRH/6bTJ9S91Sd2gSrzUYP8u3578
+         lmDFd0ae3PhgQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id AC24A4049F; Thu,  9 Mar 2023 09:26:09 -0300 (-03)
+Date:   Thu, 9 Mar 2023 09:26:09 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <martin.lau@kernel.org>
+Subject: Re: [PATCH bpf-next] bpf: add
+ --skip_encoding_btf_inconsistent_proto, --btf_gen_optimized to pahole flags
+ for v1.25
+Message-ID: <ZAnQYUPkUg0HBrlh@kernel.org>
+References: <1675949331-27935-1-git-send-email-alan.maguire@oracle.com>
+ <CAADnVQ+hfQ9LEmEFXneB7hm17NvRniXSShrHLaM-1BrguLjLQw@mail.gmail.com>
+ <CAADnVQJe6dRnhbSk92g5Np0tXyMxWLD+8LqUxYfYPr7dWkxzSw@mail.gmail.com>
+ <ZAk8L17/EfR8siaz@kernel.org>
+ <ZAmV8luLw+umNGqd@krava>
+ <ZAmwzzrBfmp2GQzr@krava>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAmwzzrBfmp2GQzr@krava>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce xdp_set_features_flag utility routine in order to update
-dynamically xdp_features according to the dynamic hw configuration via
-ethtool (e.g. changing number of hw rx/tx queues).
-Add xdp_clear_features_flag() in order to clear all xdp_feature flag.
+Em Thu, Mar 09, 2023 at 11:11:27AM +0100, Jiri Olsa escreveu:
+> On Thu, Mar 09, 2023 at 09:16:53AM +0100, Jiri Olsa wrote:
+> > On Wed, Mar 08, 2023 at 10:53:51PM -0300, Arnaldo Carvalho de Melo wrote:
+> > > Em Mon, Feb 13, 2023 at 10:09:21PM -0800, Alexei Starovoitov escreveu:
+> > > > On Mon, Feb 13, 2023 at 7:12 PM Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> > > > > Maybe we should make scripts/pahole-flags.sh selective
+> > > > > and don't apply skip_encoding_btf_inconsiste to bpf_testmod ?
 
-Reviewed-by: Shay Agroskin <shayagr@amazon.com>
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
----
- Documentation/netlink/specs/netdev.yaml |  1 +
- include/net/xdp.h                       | 11 +++++++++++
- include/uapi/linux/netdev.h             |  2 ++
- net/core/xdp.c                          | 26 ++++++++++++++++++-------
- tools/include/uapi/linux/netdev.h       |  2 ++
- 5 files changed, 35 insertions(+), 7 deletions(-)
+> > > > > Thoughts?
 
-diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
-index 24de747b5344..753e5914a8b7 100644
---- a/Documentation/netlink/specs/netdev.yaml
-+++ b/Documentation/netlink/specs/netdev.yaml
-@@ -9,6 +9,7 @@ definitions:
-   -
-     type: flags
-     name: xdp-act
-+    render-max: true
-     entries:
-       -
-         name: basic
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index d517bfac937b..41c57b8b1671 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -428,12 +428,18 @@ MAX_XDP_METADATA_KFUNC,
- #ifdef CONFIG_NET
- u32 bpf_xdp_metadata_kfunc_id(int id);
- bool bpf_dev_bound_kfunc_id(u32 btf_id);
-+void xdp_set_features_flag(struct net_device *dev, xdp_features_t val);
- void xdp_features_set_redirect_target(struct net_device *dev, bool support_sg);
- void xdp_features_clear_redirect_target(struct net_device *dev);
- #else
- static inline u32 bpf_xdp_metadata_kfunc_id(int id) { return 0; }
- static inline bool bpf_dev_bound_kfunc_id(u32 btf_id) { return false; }
- 
-+static inline void
-+xdp_set_features_flag(struct net_device *dev, xdp_features_t val)
-+{
-+}
-+
- static inline void
- xdp_features_set_redirect_target(struct net_device *dev, bool support_sg)
- {
-@@ -445,4 +451,9 @@ xdp_features_clear_redirect_target(struct net_device *dev)
- }
- #endif
- 
-+static inline void xdp_clear_features_flag(struct net_device *dev)
-+{
-+	xdp_set_features_flag(dev, 0);
-+}
-+
- #endif /* __LINUX_NET_XDP_H__ */
-diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
-index 8c4e3e536c04..ed134fbdfd32 100644
---- a/include/uapi/linux/netdev.h
-+++ b/include/uapi/linux/netdev.h
-@@ -33,6 +33,8 @@ enum netdev_xdp_act {
- 	NETDEV_XDP_ACT_HW_OFFLOAD = 16,
- 	NETDEV_XDP_ACT_RX_SG = 32,
- 	NETDEV_XDP_ACT_NDO_XMIT_SG = 64,
-+
-+	NETDEV_XDP_ACT_MASK = 127,
- };
- 
- enum {
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 8c92fc553317..87e654b7d06c 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -774,20 +774,32 @@ static int __init xdp_metadata_init(void)
- }
- late_initcall(xdp_metadata_init);
- 
--void xdp_features_set_redirect_target(struct net_device *dev, bool support_sg)
-+void xdp_set_features_flag(struct net_device *dev, xdp_features_t val)
- {
--	dev->xdp_features |= NETDEV_XDP_ACT_NDO_XMIT;
--	if (support_sg)
--		dev->xdp_features |= NETDEV_XDP_ACT_NDO_XMIT_SG;
-+	val &= NETDEV_XDP_ACT_MASK;
-+	if (dev->xdp_features == val)
-+		return;
- 
-+	dev->xdp_features = val;
- 	call_netdevice_notifiers(NETDEV_XDP_FEAT_CHANGE, dev);
- }
-+EXPORT_SYMBOL_GPL(xdp_set_features_flag);
-+
-+void xdp_features_set_redirect_target(struct net_device *dev, bool support_sg)
-+{
-+	xdp_features_t val = (dev->xdp_features | NETDEV_XDP_ACT_NDO_XMIT);
-+
-+	if (support_sg)
-+		val |= NETDEV_XDP_ACT_NDO_XMIT_SG;
-+	xdp_set_features_flag(dev, val);
-+}
- EXPORT_SYMBOL_GPL(xdp_features_set_redirect_target);
- 
- void xdp_features_clear_redirect_target(struct net_device *dev)
- {
--	dev->xdp_features &= ~(NETDEV_XDP_ACT_NDO_XMIT |
--			       NETDEV_XDP_ACT_NDO_XMIT_SG);
--	call_netdevice_notifiers(NETDEV_XDP_FEAT_CHANGE, dev);
-+	xdp_features_t val = dev->xdp_features;
-+
-+	val &= ~(NETDEV_XDP_ACT_NDO_XMIT | NETDEV_XDP_ACT_NDO_XMIT_SG);
-+	xdp_set_features_flag(dev, val);
- }
- EXPORT_SYMBOL_GPL(xdp_features_clear_redirect_target);
-diff --git a/tools/include/uapi/linux/netdev.h b/tools/include/uapi/linux/netdev.h
-index 8c4e3e536c04..ed134fbdfd32 100644
---- a/tools/include/uapi/linux/netdev.h
-+++ b/tools/include/uapi/linux/netdev.h
-@@ -33,6 +33,8 @@ enum netdev_xdp_act {
- 	NETDEV_XDP_ACT_HW_OFFLOAD = 16,
- 	NETDEV_XDP_ACT_RX_SG = 32,
- 	NETDEV_XDP_ACT_NDO_XMIT_SG = 64,
-+
-+	NETDEV_XDP_ACT_MASK = 127,
- };
- 
- enum {
--- 
-2.39.2
+> > > > It's even worse with clang compiled kernel:
 
+> > > I tested what is now in the master branch with both gcc and clang, on
+> > > fedora:37, Alan also tested it, Jiri, it would be great if you could
+> > > check if reverting the revert works for you as well.
+
+> > ok, will check your master branch
+
+> looks good.. got no duplicates and passing bpf tests for both
+> gcc and clang setups
+
+Thanks for testing!
+
+Alexei, since you hit those problems, please consider redoing those
+tests in your environment so that we triple check all this.
+
+Thanks,
+
+- Arnaldo
