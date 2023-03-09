@@ -2,97 +2,106 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A619C64EC4
-	for <bpf@archiver.kernel.org>; Thu,  9 Mar 2023 22:54:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD4AAC61DA4
+	for <bpf@archiver.kernel.org>; Thu,  9 Mar 2023 23:44:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230407AbjCIWyj convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 9 Mar 2023 17:54:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35980 "EHLO
+        id S230422AbjCIXop (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Mar 2023 18:44:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbjCIWyc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Mar 2023 17:54:32 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CEA95F514
-        for <bpf@vger.kernel.org>; Thu,  9 Mar 2023 14:54:16 -0800 (PST)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 329MK5ud002187
-        for <bpf@vger.kernel.org>; Thu, 9 Mar 2023 14:41:49 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3p746p7eab-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 09 Mar 2023 14:41:48 -0800
-Received: from twshared29091.48.prn1.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 9 Mar 2023 14:41:47 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id B88B229C0F063; Thu,  9 Mar 2023 14:41:32 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH bpf] bpf: take into account liveness when propagating precision
-Date:   Thu, 9 Mar 2023 14:41:31 -0800
-Message-ID: <20230309224131.57449-1-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S231151AbjCIXoo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Mar 2023 18:44:44 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24432FAECA
+        for <bpf@vger.kernel.org>; Thu,  9 Mar 2023 15:44:42 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id ce7so2582087pfb.9
+        for <bpf@vger.kernel.org>; Thu, 09 Mar 2023 15:44:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1678405481;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CrNSaYamQnIMzMjL3om7b+i4Qx2zDlX6VDGkZ+puoGo=;
+        b=JLMRPN8SMReI/aLN8kuDM3HcfCcm0p3UcCdfR79QSOXtTWGJOju99YadxuDMnF8iQH
+         D4Ya3e5WDQM0DJrbJkjRMSDt/lke2/0SxEzg8sv29Wfeunpu+TnDsgE7tSwImPbCjbyx
+         My319TZxJmvj6Vcbx37J28jOi5FsfRGn4aMknL4IAf3NaNc03H7pKNztF41dRXPwninq
+         +qVllkPnkMugYflJbOiv8sssZLqEstamUFDbs1T9CKXeYA4EelsUzrud6AO+flYObslT
+         EM0utm7f9ClVuKVUOe3g9NEtm+PBicTWhktKuCk4DF4N6wGzuG7uDQBcuWY5PtaUjdhd
+         jrFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678405481;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CrNSaYamQnIMzMjL3om7b+i4Qx2zDlX6VDGkZ+puoGo=;
+        b=bTiIuQWu3IsYRsSa3sfSH4luDQf4FPmf+iIpttrI4py6giKlwJuFemIn1iS0IA6KT7
+         UylEHCqz+jWc6gWg5swjO+tezpNSlKjLkf7TOZncAEYPcwydW0791wb4LDfFlJbLFRSi
+         enK1ltnoaYg6b9+RZBWAQ+VHzcO4/2o6aBSVIDsTy3oJ08BIiv/2f0Kmazu1tf7phn4A
+         JUMn/q+6r8N3p5RlwDLn2hPYQTAyJ8WgM1wk0SvSmZiyf7tiYYEQgw5eyT52FGUJABd+
+         sHFxUgQsG+qD1T+C4v7TRkBnbNfw+QklHtawHUxRfbE+t4UhigV0ZHtPn34lt+8X7q6o
+         QaHA==
+X-Gm-Message-State: AO0yUKW+buXgqNn/ArCD0fb7B0rgTlhCEy9zThP1q2uiExIdluRTY46S
+        CKuMU21vA2oHnC19IBwsSRlpqPqrlt6KFyqvB/M1
+X-Google-Smtp-Source: AK7set+BMvFWwBxakNhkWQwRzL4c9oiBvrgSJisCe+ag6p1mDE7MrQ54FtmUTCgXSzR5PCdVV0/3CCTEiEwp6YOudjQ=
+X-Received: by 2002:a62:834a:0:b0:596:78f:1532 with SMTP id
+ h71-20020a62834a000000b00596078f1532mr9486868pfe.2.1678405481553; Thu, 09 Mar
+ 2023 15:44:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: TucmAqmBXp68cJnBSQZjkYaKw4263Y_9
-X-Proofpoint-GUID: TucmAqmBXp68cJnBSQZjkYaKw4263Y_9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-09_12,2023-03-09_01,2023-02-09_01
+References: <20230309085433.1810314-1-roberto.sassu@huaweicloud.com> <20230309085433.1810314-2-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20230309085433.1810314-2-roberto.sassu@huaweicloud.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 9 Mar 2023 18:44:30 -0500
+Message-ID: <CAHC9VhRBxPnQeQ4SPHKXP_k1epoaZRGNUzCa+QJR9se_t+4+-Q@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] security: Introduce LSM_ORDER_LAST and set it for
+ the integrity LSM
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, mic@digikod.net, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When doing state comparison, if old state has register that is not
-marked as REG_LIVE_READ, then we just skip comparison, regardless what's
-the state of corresponing register in current state. This is because not
-REG_LIVE_READ register is irrelevant for further program execution and
-correctness. All good here.
+On Thu, Mar 9, 2023 at 3:55=E2=80=AFAM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> Introduce LSM_ORDER_LAST, to satisfy the requirement of LSMs needing to b=
+e
+> last, e.g. the 'integrity' LSM, without changing the kernel command line =
+or
+> configuration.
+>
+> Also, set this order for the 'integrity' LSM. While not enforced, this is
+> the only LSM expected to use it.
+>
+> Similarly to LSM_ORDER_FIRST, LSMs with LSM_ORDER_LAST are always enabled
+> and put at the end of the LSM list.
 
-But when we get to precision propagation, after two states were declared
-equivalent, we don't take into account old register's liveness, and thus
-attempt to propagate precision for register in current state even if
-that register in old state was not REG_LIVE_READ anymore. This is bad,
-because register in current state could be anything at all and this
-could cause -EFAULT due to internal logic bugs.
+Since you are respinning this patchset anyway, I might make it clear
+that the LSM_ORDER_LAST LSMs are always enabled only when they are
+enabled at kernel configure/build time.  Simply marking a LSM as
+LSM_ORDER_LAST does not mean you don't have to explicitly select the
+LSM in the rest of the Kconfig.
 
-Fix by taking into account REG_LIVE_READ liveness mark to keep the logic
-in state comparison in sync with precision propagation.
+> Finally, for LSM_ORDER_MUTABLE LSMs, set the found variable to true if an
+> LSM is found, regardless of its order. In this way, the kernel would not
+> wrongly report that the LSM is not built-in in the kernel if its order is
+> LSM_ORDER_LAST.
+>
+> Fixes: 79f7865d844c ("LSM: Introduce "lsm=3D" for boottime LSM selection"=
+)
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  include/linux/lsm_hooks.h |  1 +
+>  security/integrity/iint.c |  1 +
+>  security/security.c       | 12 +++++++++---
+>  3 files changed, 11 insertions(+), 3 deletions(-)
 
-Fixes: a3ce685dd01a ("bpf: fix precision tracking")
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- kernel/bpf/verifier.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 272563a0b770..c847266d523b 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -14201,7 +14201,8 @@ static int propagate_precision(struct bpf_verifier_env *env,
- 		state_reg = state->regs;
- 		for (i = 0; i < BPF_REG_FP; i++, state_reg++) {
- 			if (state_reg->type != SCALAR_VALUE ||
--			    !state_reg->precise)
-+			    !state_reg->precise ||
-+			    !(state_reg->live & REG_LIVE_READ))
- 				continue;
- 			if (env->log.level & BPF_LOG_LEVEL2)
- 				verbose(env, "frame %d: propagating r%d\n", i, fr);
-@@ -14215,7 +14216,8 @@ static int propagate_precision(struct bpf_verifier_env *env,
- 				continue;
- 			state_reg = &state->stack[i].spilled_ptr;
- 			if (state_reg->type != SCALAR_VALUE ||
--			    !state_reg->precise)
-+			    !state_reg->precise ||
-+			    !(state_reg->live & REG_LIVE_READ))
- 				continue;
- 			if (env->log.level & BPF_LOG_LEVEL2)
- 				verbose(env, "frame %d: propagating fp%d\n",
--- 
-2.34.1
-
+--=20
+paul-moore.com
