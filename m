@@ -2,42 +2,42 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D620C61DA4
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51FB0C74A5B
 	for <bpf@archiver.kernel.org>; Thu,  9 Mar 2023 21:30:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231293AbjCIV3z (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Mar 2023 16:29:55 -0500
+        id S231332AbjCIV35 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Mar 2023 16:29:57 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231350AbjCIV3v (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Mar 2023 16:29:51 -0500
+        with ESMTP id S231362AbjCIV3w (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Mar 2023 16:29:52 -0500
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285ACD49FF;
-        Thu,  9 Mar 2023 13:29:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3C1E1939;
+        Thu,  9 Mar 2023 13:29:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678397390; x=1709933390;
+  t=1678397391; x=1709933391;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=EZsGGiTMAlPMxStW5jAtm2kaBHL8GfwxMtZMlRlwVVY=;
-  b=WCX/qH1lTJwnLAkckoRITHvgqnOFeNxmYHxXhXEQxA2gVNHQv8LCUTqW
-   Am6Q3JOMa+ydA8lYv2AlQhxeJHpJaNJTO817LHwkm8+XYiPlcU/SjSHFV
-   Lc1oYizZ9pKrqpuGsJbcdlL/4w5VjR9m7SIlFFt4SxEyE/uOY+97KotAQ
-   0+SiGVYJ7W8kD7JIH+1nn7OqS3fk8hMXvi0G2TxoeFcU3MO07XQ2js2nK
-   neT3QjlqXTRUUTXpsJgE5f1So0Juj1zj3n+eOSpg05RQWwEpDELKyMFoj
-   qt+ruj6BJ5JdR7ln57EYbo1R+F7e2DE0EbBTUk1SV6+k/H3IPCUmae39a
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="338126140"
+  bh=clNquW0R/qxySvFeKYbF82GzRSqZaBQkUWMw8oEqUb0=;
+  b=Cfe9yZ6Ip6zQ0K/ECk4MMcbOZOczVKrVEej7Wt5Gu5XgoRTvNvBcRZn0
+   UOXV8LG1C8Q0HzRZ7JSZBSNilJlFexF52nN3GJDQN2Jv0Vp8zxjh1qNAK
+   aubPv/FkozcEZ3X7efQuBNseHQ16oZ5IX48AjdSJNhomYSpD7iV84BvHA
+   Ev8o8kjyfmUkqhuePevw6tB3+8bR5WS7/Gp+qRIhSRQ1zBCG8E+ZfsUu7
+   fXdMZgsKfPyY/R7jEwWv+KyqGqopmhujPb3ZR6SiAquoGaNWpowpFyWoB
+   8p/mXZ9RcBj2q2t1bUC5cyiZXeZAEVAAssRD42p4USF2kPrrYTdO5K6P/
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="338126159"
 X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
-   d="scan'208";a="338126140"
+   d="scan'208";a="338126159"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 13:29:49 -0800
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 13:29:51 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="710011454"
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="710011475"
 X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
-   d="scan'208";a="710011454"
+   d="scan'208";a="710011475"
 Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
-  by orsmga001.jf.intel.com with ESMTP; 09 Mar 2023 13:29:48 -0800
+  by orsmga001.jf.intel.com with ESMTP; 09 Mar 2023 13:29:51 -0800
 From:   Tony Nguyen <anthony.l.nguyen@intel.com>
 To:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
         edumazet@google.com, netdev@vger.kernel.org
@@ -46,9 +46,9 @@ Cc:     Tirthendu Sarkar <tirthendu.sarkar@intel.com>,
         magnus.karlsson@intel.com, ast@kernel.org, daniel@iogearbox.net,
         hawk@kernel.org, john.fastabend@gmail.com, bpf@vger.kernel.org,
         Chandan Kumar Rout <chandanx.rout@intel.com>
-Subject: [PATCH net-next v2 4/8] i40e: Change size to truesize when using i40e_rx_buffer_flip()
-Date:   Thu,  9 Mar 2023 13:28:15 -0800
-Message-Id: <20230309212819.1198218-5-anthony.l.nguyen@intel.com>
+Subject: [PATCH net-next v2 6/8] i40e: introduce next_to_process to i40e_ring
+Date:   Thu,  9 Mar 2023 13:28:17 -0800
+Message-Id: <20230309212819.1198218-7-anthony.l.nguyen@intel.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230309212819.1198218-1-anthony.l.nguyen@intel.com>
 References: <20230309212819.1198218-1-anthony.l.nguyen@intel.com>
@@ -60,121 +60,127 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Tirthendu Sarkar <tirthendu.sarkar@intel.com>
 
-Truesize is now passed directly to i40e_rx_buffer_flip() instead of size
-so that it does not need to recalculate truesize from size using
-i40e_rx_frame_truesize() before adjusting page offset.
+Add a new field called next_to_process in the i40e_ring that is
+advanced for every buffer and change the semantics of next_to_clean to
+point to the first buffer of a packet. Driver will use next_to_process
+in the same way next_to_clean was used previously.
 
-With these change the function can now be used during skb building and
-adding frags. In later patches it will also be easier for adjusting
-page offsets for multi-buffers.
+For the non multi-buffer case, next_to_process and next_to_clean will
+always be the same since each packet consists of a single buffer.
 
 Signed-off-by: Tirthendu Sarkar <tirthendu.sarkar@intel.com>
 Tested-by: Chandan Kumar Rout <chandanx.rout@intel.com> (A Contingent Worker at Intel)
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 ---
- drivers/net/ethernet/intel/i40e/i40e_txrx.c | 54 ++++++++-------------
- 1 file changed, 19 insertions(+), 35 deletions(-)
+ drivers/net/ethernet/intel/i40e/i40e_txrx.c | 26 ++++++++++++---------
+ drivers/net/ethernet/intel/i40e/i40e_txrx.h |  4 ++++
+ 2 files changed, 19 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.c b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-index a7fba294a8f4..fa44a2c353b2 100644
+index e34595ca4fbe..7fa35ff52689 100644
 --- a/drivers/net/ethernet/intel/i40e/i40e_txrx.c
 +++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-@@ -2018,6 +2018,21 @@ static bool i40e_can_reuse_rx_page(struct i40e_rx_buffer *rx_buffer,
- 	return true;
+@@ -1524,6 +1524,7 @@ void i40e_clean_rx_ring(struct i40e_ring *rx_ring)
+ 
+ 	rx_ring->next_to_alloc = 0;
+ 	rx_ring->next_to_clean = 0;
++	rx_ring->next_to_process = 0;
+ 	rx_ring->next_to_use = 0;
  }
  
-+/**
-+ * i40e_rx_buffer_flip - adjusted rx_buffer to point to an unused region
-+ * @rx_buffer: Rx buffer to adjust
-+ * @truesize: Size of adjustment
-+ **/
-+static void i40e_rx_buffer_flip(struct i40e_rx_buffer *rx_buffer,
-+				unsigned int truesize)
-+{
-+#if (PAGE_SIZE < 8192)
-+	rx_buffer->page_offset ^= truesize;
-+#else
-+	rx_buffer->page_offset += truesize;
-+#endif
-+}
-+
- /**
-  * i40e_add_rx_frag - Add contents of Rx buffer to sk_buff
-  * @rx_ring: rx descriptor ring to transact packets on
-@@ -2045,11 +2060,7 @@ static void i40e_add_rx_frag(struct i40e_ring *rx_ring,
- 			rx_buffer->page_offset, size, truesize);
+@@ -1576,6 +1577,7 @@ int i40e_setup_rx_descriptors(struct i40e_ring *rx_ring)
  
- 	/* page is being used so we must update the page offset */
--#if (PAGE_SIZE < 8192)
--	rx_buffer->page_offset ^= truesize;
--#else
--	rx_buffer->page_offset += truesize;
--#endif
-+	i40e_rx_buffer_flip(rx_buffer, truesize);
+ 	rx_ring->next_to_alloc = 0;
+ 	rx_ring->next_to_clean = 0;
++	rx_ring->next_to_process = 0;
+ 	rx_ring->next_to_use = 0;
+ 
+ 	/* XDP RX-queue info only needed for RX rings exposed to XDP */
+@@ -2076,7 +2078,7 @@ static struct i40e_rx_buffer *i40e_get_rx_buffer(struct i40e_ring *rx_ring,
+ {
+ 	struct i40e_rx_buffer *rx_buffer;
+ 
+-	rx_buffer = i40e_rx_bi(rx_ring, rx_ring->next_to_clean);
++	rx_buffer = i40e_rx_bi(rx_ring, rx_ring->next_to_process);
+ 	rx_buffer->page_count =
+ #if (PAGE_SIZE < 8192)
+ 		page_count(rx_buffer->page);
+@@ -2375,16 +2377,16 @@ void i40e_finalize_xdp_rx(struct i40e_ring *rx_ring, unsigned int xdp_res)
  }
  
  /**
-@@ -2154,11 +2165,7 @@ static struct sk_buff *i40e_construct_skb(struct i40e_ring *rx_ring,
- 				size, truesize);
+- * i40e_inc_ntc: Advance the next_to_clean index
++ * i40e_inc_ntp: Advance the next_to_process index
+  * @rx_ring: Rx ring
+  **/
+-static void i40e_inc_ntc(struct i40e_ring *rx_ring)
++static void i40e_inc_ntp(struct i40e_ring *rx_ring)
+ {
+-	u32 ntc = rx_ring->next_to_clean + 1;
++	u32 ntp = rx_ring->next_to_process + 1;
  
- 		/* buffer is used by skb, update page_offset */
--#if (PAGE_SIZE < 8192)
--		rx_buffer->page_offset ^= truesize;
--#else
--		rx_buffer->page_offset += truesize;
--#endif
-+		i40e_rx_buffer_flip(rx_buffer, truesize);
- 	} else {
- 		/* buffer is unused, reset bias back to rx_buffer */
- 		rx_buffer->pagecnt_bias++;
-@@ -2209,11 +2216,7 @@ static struct sk_buff *i40e_build_skb(struct i40e_ring *rx_ring,
- 		skb_metadata_set(skb, metasize);
- 
- 	/* buffer is used by skb, update page_offset */
--#if (PAGE_SIZE < 8192)
--	rx_buffer->page_offset ^= truesize;
--#else
--	rx_buffer->page_offset += truesize;
--#endif
-+	i40e_rx_buffer_flip(rx_buffer, truesize);
- 
- 	return skb;
- }
-@@ -2326,25 +2329,6 @@ static int i40e_run_xdp(struct i40e_ring *rx_ring, struct xdp_buff *xdp, struct
- 	return result;
+-	ntc = (ntc < rx_ring->count) ? ntc : 0;
+-	rx_ring->next_to_clean = ntc;
+-	prefetch(I40E_RX_DESC(rx_ring, ntc));
++	ntp = (ntp < rx_ring->count) ? ntp : 0;
++	rx_ring->next_to_process = ntp;
++	prefetch(I40E_RX_DESC(rx_ring, ntp));
  }
  
--/**
-- * i40e_rx_buffer_flip - adjusted rx_buffer to point to an unused region
-- * @rx_ring: Rx ring
-- * @rx_buffer: Rx buffer to adjust
-- * @size: Size of adjustment
-- **/
--static void i40e_rx_buffer_flip(struct i40e_ring *rx_ring,
--				struct i40e_rx_buffer *rx_buffer,
--				unsigned int size)
--{
--	unsigned int truesize = i40e_rx_frame_truesize(rx_ring, size);
--
--#if (PAGE_SIZE < 8192)
--	rx_buffer->page_offset ^= truesize;
--#else
--	rx_buffer->page_offset += truesize;
--#endif
--}
--
  /**
-  * i40e_xdp_ring_update_tail - Updates the XDP Tx ring tail register
-  * @xdp_ring: XDP Tx ring
-@@ -2513,7 +2497,7 @@ static int i40e_clean_rx_irq(struct i40e_ring *rx_ring, int budget,
- 		if (xdp_res) {
- 			if (xdp_res & (I40E_XDP_TX | I40E_XDP_REDIR)) {
- 				xdp_xmit |= xdp_res;
--				i40e_rx_buffer_flip(rx_ring, rx_buffer, size);
-+				i40e_rx_buffer_flip(rx_buffer, xdp.frame_sz);
- 			} else {
- 				rx_buffer->pagecnt_bias++;
- 			}
+@@ -2421,6 +2423,7 @@ static int i40e_clean_rx_irq(struct i40e_ring *rx_ring, int budget,
+ 	xdp_prog = READ_ONCE(rx_ring->xdp_prog);
+ 
+ 	while (likely(total_rx_packets < (unsigned int)budget)) {
++		u16 ntp = rx_ring->next_to_process;
+ 		struct i40e_rx_buffer *rx_buffer;
+ 		union i40e_rx_desc *rx_desc;
+ 		unsigned int size;
+@@ -2433,7 +2436,7 @@ static int i40e_clean_rx_irq(struct i40e_ring *rx_ring, int budget,
+ 			cleaned_count = 0;
+ 		}
+ 
+-		rx_desc = I40E_RX_DESC(rx_ring, rx_ring->next_to_clean);
++		rx_desc = I40E_RX_DESC(rx_ring, ntp);
+ 
+ 		/* status_error_len will always be zero for unused descriptors
+ 		 * because it's cleared in cleanup, and overlaps with hdr_addr
+@@ -2452,8 +2455,8 @@ static int i40e_clean_rx_irq(struct i40e_ring *rx_ring, int budget,
+ 			i40e_clean_programming_status(rx_ring,
+ 						      rx_desc->raw.qword[0],
+ 						      qword);
+-			rx_buffer = i40e_rx_bi(rx_ring, rx_ring->next_to_clean);
+-			i40e_inc_ntc(rx_ring);
++			rx_buffer = i40e_rx_bi(rx_ring, ntp);
++			i40e_inc_ntp(rx_ring);
+ 			i40e_reuse_rx_page(rx_ring, rx_buffer);
+ 			cleaned_count++;
+ 			continue;
+@@ -2509,7 +2512,8 @@ static int i40e_clean_rx_irq(struct i40e_ring *rx_ring, int budget,
+ 		i40e_put_rx_buffer(rx_ring, rx_buffer);
+ 		cleaned_count++;
+ 
+-		i40e_inc_ntc(rx_ring);
++		i40e_inc_ntp(rx_ring);
++		rx_ring->next_to_clean = rx_ring->next_to_process;
+ 		if (i40e_is_non_eop(rx_ring, rx_desc))
+ 			continue;
+ 
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.h b/drivers/net/ethernet/intel/i40e/i40e_txrx.h
+index eec4a4a99b9c..75888a9ab06d 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_txrx.h
++++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.h
+@@ -337,6 +337,10 @@ struct i40e_ring {
+ 	u8 dcb_tc;			/* Traffic class of ring */
+ 	u8 __iomem *tail;
+ 
++	/* Next descriptor to be processed; next_to_clean is updated only on
++	 * processing EOP descriptor
++	 */
++	u16 next_to_process;
+ 	/* high bit set means dynamic, use accessor routines to read/write.
+ 	 * hardware only supports 2us resolution for the ITR registers.
+ 	 * these values always store the USER setting, and must be converted
 -- 
 2.38.1
 
