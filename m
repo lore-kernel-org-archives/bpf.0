@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B638C61DA4
-	for <bpf@archiver.kernel.org>; Thu,  9 Mar 2023 18:02:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 829AFC64EC4
+	for <bpf@archiver.kernel.org>; Thu,  9 Mar 2023 18:02:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbjCISBx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Mar 2023 13:01:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
+        id S229672AbjCISCL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Mar 2023 13:02:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbjCISBv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Mar 2023 13:01:51 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B09DFCBC8
-        for <bpf@vger.kernel.org>; Thu,  9 Mar 2023 10:01:49 -0800 (PST)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 329AI6DG003675
-        for <bpf@vger.kernel.org>; Thu, 9 Mar 2023 10:01:49 -0800
+        with ESMTP id S229806AbjCISCK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Mar 2023 13:02:10 -0500
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012A1FCBC1
+        for <bpf@vger.kernel.org>; Thu,  9 Mar 2023 10:02:08 -0800 (PST)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 329GhDWA010037
+        for <bpf@vger.kernel.org>; Thu, 9 Mar 2023 10:02:08 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=Wocf/ddMSeC7bjEDEZyxcoYcYp1k6/cLijfFqUabgGU=;
- b=IF9Tf/ZKoeAKPlpTy8ABtgZbAalRo3yFYkf5NoIZuWG0EOGCrMh4wPKOJM7ueChxpCuG
- m21hg1UWCdzjXYx8kE66wrPzbXBRTBO1Fa7aYSHmiQLqzAQS9zv2hVws7gqn834c4tl3
- 2rybiCRIBpqLeQ9Fq0CLYf8Y+t/40VjFfRw= 
+ bh=uAD05I1+g4vcyw75ThogQlWbuhkfV6ceJsU89ok0syQ=;
+ b=EKNdmVtex+HA/zmERCJmnWZ45/cbgYjirLSts7cDUHzlTOkgOC49nZFrYbM29M8GNhcX
+ zNHHqGJdxTFF+IvI7cKp3NotoBz6Yw+2nEm+XT6Q3+3eMW/c8KRJWTRYJ9Cr4hn5q6Mx
+ yC5qv4sYZADmy0pRCtmpzsmwZZJlqavR6hs= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3p746p5p36-3
+        by m0001303.ppops.net (PPS) with ESMTPS id 3p7k7k8h5g-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 09 Mar 2023 10:01:46 -0800
-Received: from twshared1938.08.ash9.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 09 Mar 2023 10:02:07 -0800
+Received: from twshared1938.08.ash9.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.17; Thu, 9 Mar 2023 10:01:31 -0800
 Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-        id 71BCB18E84D49; Thu,  9 Mar 2023 10:01:16 -0800 (PST)
+        id 77DD518E84D5F; Thu,  9 Mar 2023 10:01:17 -0800 (PST)
 From:   Dave Marchevsky <davemarchevsky@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -41,9 +41,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Kernel Team <kernel-team@fb.com>, <tj@kernel.org>,
         Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH v1 bpf-next 4/6] bpf: Support __kptr to local kptrs
-Date:   Thu, 9 Mar 2023 10:01:09 -0800
-Message-ID: <20230309180111.1618459-5-davemarchevsky@fb.com>
+Subject: [PATCH v1 bpf-next 6/6] selftests/bpf: Add local kptr stashing test
+Date:   Thu, 9 Mar 2023 10:01:11 -0800
+Message-ID: <20230309180111.1618459-7-davemarchevsky@fb.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230309180111.1618459-1-davemarchevsky@fb.com>
 References: <20230309180111.1618459-1-davemarchevsky@fb.com>
@@ -51,8 +51,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: b5FyMzN3eE_-zXazjC9t94egbcG2_Gf7
-X-Proofpoint-GUID: b5FyMzN3eE_-zXazjC9t94egbcG2_Gf7
+X-Proofpoint-GUID: qXs69gm8qyQ9MOyZDlvnn1t4sKu4pEMq
+X-Proofpoint-ORIG-GUID: qXs69gm8qyQ9MOyZDlvnn1t4sKu4pEMq
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-09_09,2023-03-09_01,2023-02-09_01
@@ -60,279 +60,154 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-If a PTR_TO_BTF_ID type comes from program BTF - not vmlinux or module
-BTF - it must have been allocated by bpf_obj_new and therefore must be
-free'd with bpf_obj_drop. Such a PTR_TO_BTF_ID is considered a "local
-kptr" and is tagged with MEM_ALLOC type tag by bpf_obj_new.
-
-This patch adds support for treating __kptr-tagged pointers to "local
-kptrs" as having an implicit bpf_obj_drop destructor for referenced kptr
-acquire / release semantics. Consider the following example:
-
-  struct node_data {
-          long key;
-          long data;
-          struct bpf_rb_node node;
-  };
-
-  struct map_value {
-          struct node_data __kptr *node;
-  };
-
-  struct {
-          __uint(type, BPF_MAP_TYPE_ARRAY);
-          __type(key, int);
-          __type(value, struct map_value);
-          __uint(max_entries, 1);
-  } some_nodes SEC(".maps");
-
-If struct node_data had a matching definition in kernel BTF, the verifier=
- would
-expect a destructor for the type to be registered. Since struct node_data=
- does
-not match any type in kernel BTF, the verifier knows that there is no kfu=
-nc
-that provides a PTR_TO_BTF_ID to this type, and that such a PTR_TO_BTF_ID=
- can
-only come from bpf_obj_new. So instead of searching for a registered dtor=
-,
-a bpf_obj_drop dtor can be assumed.
-
-This allows the runtime to properly destruct such kptrs in
-bpf_obj_free_fields, which enables maps to clean up map_vals w/ such
-kptrs when going away.
-
-Implementation notes:
-  * "kernel_btf" variable is renamed to "kptr_btf" in btf_parse_kptr.
-    Before this patch, the variable would only ever point to vmlinux or
-    module BTFs, but now it can point to some program BTF for local kptr
-    type. It's later used to populate the (btf, btf_id) pair in kptr btf
-    field.
-  * It's necessary to btf_get the program BTF when populating btf_field
-    for local kptr. btf_record_free later does a btf_put.
-  * Behavior for non-local referenced kptrs is not modified, as
-    bpf_find_btf_id helper only searches vmlinux and module BTFs for
-    matching BTF type. If such a type is found, btf_field_kptr's btf will
-    pass btf_is_kernel check, and the associated release function is
-    some one-argument dtor. If btf_is_kernel check fails, associated
-    release function is two-arg bpf_obj_drop_impl. Before this patch
-    only btf_field_kptr's w/ kernel or module BTFs were created.
+Add a new selftest, local_kptr_stash, which uses bpf_kptr_xchg to stash
+a bpf_obj_new-allocated object in a map.
 
 Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
 ---
- include/linux/bpf.h  | 11 ++++++++++-
- include/linux/btf.h  |  2 --
- kernel/bpf/btf.c     | 34 +++++++++++++++++++++++++---------
- kernel/bpf/helpers.c | 11 ++++++++---
- kernel/bpf/syscall.c | 14 +++++++++++++-
- 5 files changed, 56 insertions(+), 16 deletions(-)
+ .../bpf/prog_tests/local_kptr_stash.c         | 33 +++++++
+ .../selftests/bpf/progs/local_kptr_stash.c    | 85 +++++++++++++++++++
+ 2 files changed, 118 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/local_kptr_sta=
+sh.c
+ create mode 100644 tools/testing/selftests/bpf/progs/local_kptr_stash.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 3a38db315f7f..756b85f0d0d3 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -189,10 +189,19 @@ enum btf_field_type {
- 				 BPF_RB_NODE | BPF_RB_ROOT,
- };
-=20
-+typedef void (*btf_dtor_kfunc_t)(void *);
-+typedef void (*btf_dtor_obj_drop)(void *, const struct btf_record *);
+diff --git a/tools/testing/selftests/bpf/prog_tests/local_kptr_stash.c b/=
+tools/testing/selftests/bpf/prog_tests/local_kptr_stash.c
+new file mode 100644
+index 000000000000..98353e602741
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/local_kptr_stash.c
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2023 Meta Platforms, Inc. and affiliates. */
 +
- struct btf_field_kptr {
- 	struct btf *btf;
- 	struct module *module;
--	btf_dtor_kfunc_t dtor;
-+	union {
-+		/* dtor used if btf_is_kernel(btf), otherwise the type
-+		 * is program-allocated and obj_drop is used
-+		 */
-+		btf_dtor_kfunc_t dtor;
-+		btf_dtor_obj_drop obj_drop;
-+	};
- 	u32 btf_id;
- };
-=20
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index 1bba0827e8c4..d53b10cc55f2 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -121,8 +121,6 @@ struct btf_struct_metas {
- 	struct btf_struct_meta types[];
- };
-=20
--typedef void (*btf_dtor_kfunc_t)(void *);
--
- extern const struct file_operations btf_fops;
-=20
- void btf_get(struct btf *btf);
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 37779ceefd09..165a8ef038f5 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -3551,12 +3551,17 @@ static int btf_find_field(const struct btf *btf, =
-const struct btf_type *t,
- 	return -EINVAL;
- }
-=20
-+extern void __bpf_obj_drop_impl(void *p, const struct btf_record *rec);
++#include <test_progs.h>
++#include <network_helpers.h>
 +
- static int btf_parse_kptr(const struct btf *btf, struct btf_field *field=
-,
- 			  struct btf_field_info *info)
- {
- 	struct module *mod =3D NULL;
- 	const struct btf_type *t;
--	struct btf *kernel_btf;
-+	/* If a matching btf type is found in kernel or module BTFs, kptr_ref
-+	 * is that BTF, otherwise it's program BTF
-+	 */
-+	struct btf *kptr_btf;
- 	int ret;
- 	s32 id;
-=20
-@@ -3565,7 +3570,17 @@ static int btf_parse_kptr(const struct btf *btf, s=
-truct btf_field *field,
- 	 */
- 	t =3D btf_type_by_id(btf, info->kptr.type_id);
- 	id =3D bpf_find_btf_id(__btf_name_by_offset(btf, t->name_off), BTF_INFO=
-_KIND(t->info),
--			     &kernel_btf);
-+			     &kptr_btf);
-+	if (id =3D=3D -ENOENT && !btf_is_kernel(btf)) {
-+		/* Type exists only in program BTF. Assume that it's a MEM_ALLOC
-+		 * kptr allocated via bpf_obj_new
-+		 */
-+		field->kptr.dtor =3D (void *)&__bpf_obj_drop_impl;
-+		id =3D info->kptr.type_id;
-+		kptr_btf =3D (struct btf *)btf;
-+		btf_get(kptr_btf);
-+		goto found_dtor;
-+	}
- 	if (id < 0)
- 		return id;
-=20
-@@ -3582,20 +3597,20 @@ static int btf_parse_kptr(const struct btf *btf, =
-struct btf_field *field,
- 		 * can be used as a referenced pointer and be stored in a map at
- 		 * the same time.
- 		 */
--		dtor_btf_id =3D btf_find_dtor_kfunc(kernel_btf, id);
-+		dtor_btf_id =3D btf_find_dtor_kfunc(kptr_btf, id);
- 		if (dtor_btf_id < 0) {
- 			ret =3D dtor_btf_id;
- 			goto end_btf;
- 		}
-=20
--		dtor_func =3D btf_type_by_id(kernel_btf, dtor_btf_id);
-+		dtor_func =3D btf_type_by_id(kptr_btf, dtor_btf_id);
- 		if (!dtor_func) {
- 			ret =3D -ENOENT;
- 			goto end_btf;
- 		}
-=20
--		if (btf_is_module(kernel_btf)) {
--			mod =3D btf_try_get_module(kernel_btf);
-+		if (btf_is_module(kptr_btf)) {
-+			mod =3D btf_try_get_module(kptr_btf);
- 			if (!mod) {
- 				ret =3D -ENXIO;
- 				goto end_btf;
-@@ -3605,7 +3620,7 @@ static int btf_parse_kptr(const struct btf *btf, st=
-ruct btf_field *field,
- 		/* We already verified dtor_func to be btf_type_is_func
- 		 * in register_btf_id_dtor_kfuncs.
- 		 */
--		dtor_func_name =3D __btf_name_by_offset(kernel_btf, dtor_func->name_of=
-f);
-+		dtor_func_name =3D __btf_name_by_offset(kptr_btf, dtor_func->name_off)=
-;
- 		addr =3D kallsyms_lookup_name(dtor_func_name);
- 		if (!addr) {
- 			ret =3D -EINVAL;
-@@ -3614,14 +3629,15 @@ static int btf_parse_kptr(const struct btf *btf, =
-struct btf_field *field,
- 		field->kptr.dtor =3D (void *)addr;
- 	}
-=20
-+found_dtor:
- 	field->kptr.btf_id =3D id;
--	field->kptr.btf =3D kernel_btf;
-+	field->kptr.btf =3D kptr_btf;
- 	field->kptr.module =3D mod;
- 	return 0;
- end_mod:
- 	module_put(mod);
- end_btf:
--	btf_put(kernel_btf);
-+	btf_put(kptr_btf);
- 	return ret;
- }
-=20
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index f9b7eeedce08..77d64b6951b9 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1896,14 +1896,19 @@ __bpf_kfunc void *bpf_obj_new_impl(u64 local_type=
-_id__k, void *meta__ign)
- 	return p;
- }
-=20
-+void __bpf_obj_drop_impl(void *p, const struct btf_record *rec)
++#include "local_kptr_stash.skel.h"
++static void test_local_kptr_stash_simple(void)
 +{
-+	if (rec)
-+		bpf_obj_free_fields(rec, p);
-+	bpf_mem_free(&bpf_global_ma, p);
++	LIBBPF_OPTS(bpf_test_run_opts, opts,
++		    .data_in =3D &pkt_v4,
++		    .data_size_in =3D sizeof(pkt_v4),
++		    .repeat =3D 1,
++	);
++	struct local_kptr_stash *skel;
++	int ret;
++
++	skel =3D local_kptr_stash__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "local_kptr_stash__open_and_load"))
++		return;
++
++	ret =3D bpf_prog_test_run_opts(bpf_program__fd(skel->progs.stash_rb_nod=
+e), &opts);
++	ASSERT_OK(ret, "local_kptr_stash_add_nodes run");
++	ASSERT_OK(opts.retval, "local_kptr_stash_add_nodes retval");
++
++	local_kptr_stash__destroy(skel);
 +}
 +
- __bpf_kfunc void bpf_obj_drop_impl(void *p__alloc, void *meta__ign)
- {
- 	struct btf_struct_meta *meta =3D meta__ign;
- 	void *p =3D p__alloc;
-=20
--	if (meta)
--		bpf_obj_free_fields(meta->record, p);
--	bpf_mem_free(&bpf_global_ma, p);
-+	__bpf_obj_drop_impl(p, meta ? meta->record : NULL);
- }
-=20
- static void __bpf_list_add(struct bpf_list_node *node, struct bpf_list_h=
-ead *head, bool tail)
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index cc4b7684910c..0684febc447a 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -659,8 +659,10 @@ void bpf_obj_free_fields(const struct btf_record *re=
-c, void *obj)
- 		return;
- 	fields =3D rec->fields;
- 	for (i =3D 0; i < rec->cnt; i++) {
-+		struct btf_struct_meta *pointee_struct_meta;
- 		const struct btf_field *field =3D &fields[i];
- 		void *field_ptr =3D obj + field->offset;
-+		void *xchgd_field;
-=20
- 		switch (fields[i].type) {
- 		case BPF_SPIN_LOCK:
-@@ -672,7 +674,17 @@ void bpf_obj_free_fields(const struct btf_record *re=
-c, void *obj)
- 			WRITE_ONCE(*(u64 *)field_ptr, 0);
- 			break;
- 		case BPF_KPTR_REF:
--			field->kptr.dtor((void *)xchg((unsigned long *)field_ptr, 0));
-+			xchgd_field =3D (void *)xchg((unsigned long *)field_ptr, 0);
-+			if (!btf_is_kernel(field->kptr.btf)) {
-+				pointee_struct_meta =3D btf_find_struct_meta(field->kptr.btf,
-+									   field->kptr.btf_id);
-+				WARN_ON_ONCE(!pointee_struct_meta);
-+				field->kptr.obj_drop(xchgd_field, pointee_struct_meta ?
-+								  pointee_struct_meta->record :
-+								  NULL);
-+			} else {
-+				field->kptr.dtor(xchgd_field);
-+			}
- 			break;
- 		case BPF_LIST_HEAD:
- 			if (WARN_ON_ONCE(rec->spin_lock_off < 0))
++void test_local_kptr_stash_success(void)
++{
++	if (test__start_subtest("rbtree_add_nodes"))
++		test_local_kptr_stash_simple();
++}
+diff --git a/tools/testing/selftests/bpf/progs/local_kptr_stash.c b/tools=
+/testing/selftests/bpf/progs/local_kptr_stash.c
+new file mode 100644
+index 000000000000..df7b419f3dc3
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/local_kptr_stash.c
+@@ -0,0 +1,85 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2023 Meta Platforms, Inc. and affiliates. */
++
++#include <vmlinux.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_core_read.h>
++#include "bpf_experimental.h"
++
++struct node_data {
++	long key;
++	long data;
++	struct bpf_rb_node node;
++};
++
++struct map_value {
++	struct prog_test_ref_kfunc *not_kptr;
++	struct prog_test_ref_kfunc __kptr *val;
++	struct node_data __kptr *node;
++};
++
++/* This is necessary so that LLVM generates BTF for node_data struct
++ * If it's not included, a fwd reference for node_data will be generated=
+ but
++ * no struct. Example BTF of "node" field in map_value when not included=
+:
++ *
++ * [10] PTR '(anon)' type_id=3D35
++ * [34] FWD 'node_data' fwd_kind=3Dstruct
++ * [35] TYPE_TAG 'kptr_ref' type_id=3D34
++ *
++ * (with no node_data struct defined)
++ * Had to do the same w/ bpf_kfunc_call_test_release below
++ */
++struct node_data *just_here_because_btf_bug;
++
++extern void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p) _=
+_ksym;
++
++struct {
++        __uint(type, BPF_MAP_TYPE_ARRAY);
++        __type(key, int);
++        __type(value, struct map_value);
++        __uint(max_entries, 1);
++} some_nodes SEC(".maps");
++
++SEC("tc")
++long stash_rb_node(void *ctx)
++{
++	struct map_value *mapval;
++	struct node_data *res;
++	int key =3D 0;
++
++	res =3D bpf_obj_new(typeof(*res));
++	if (!res)
++		return 1;
++	res->key =3D 42;
++
++	mapval =3D bpf_map_lookup_elem(&some_nodes, &key);
++	if (!mapval) {
++		bpf_obj_drop(res);
++		return 1;
++	}
++
++	res =3D bpf_kptr_xchg(&mapval->node, res);
++	if (res)
++		bpf_obj_drop(res);
++	return 0;
++}
++
++SEC("tc")
++long stash_test_ref_kfunc(void *ctx)
++{
++	struct prog_test_ref_kfunc *res;
++	struct map_value *mapval;
++	int key =3D 0;
++
++	mapval =3D bpf_map_lookup_elem(&some_nodes, &key);
++	if (!mapval)
++		return 1;
++
++	res =3D bpf_kptr_xchg(&mapval->val, NULL);
++	if (res)
++		bpf_kfunc_call_test_release(res);
++	return 0;
++}
++
++char _license[] SEC("license") =3D "GPL";
 --=20
 2.34.1
 
