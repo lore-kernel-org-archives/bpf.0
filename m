@@ -2,97 +2,109 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61500C64EC4
-	for <bpf@archiver.kernel.org>; Thu,  9 Mar 2023 12:26:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2863CC6FD1C
+	for <bpf@archiver.kernel.org>; Thu,  9 Mar 2023 12:26:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbjCIM0d (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Mar 2023 07:26:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
+        id S230380AbjCIM0e (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Mar 2023 07:26:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbjCIM0V (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S230268AbjCIM0V (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 9 Mar 2023 07:26:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C2DEAB97
-        for <bpf@vger.kernel.org>; Thu,  9 Mar 2023 04:26:15 -0800 (PST)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DADEB885;
+        Thu,  9 Mar 2023 04:26:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BE7F3B81EDF
-        for <bpf@vger.kernel.org>; Thu,  9 Mar 2023 12:26:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53A43C433D2;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F3ADB81EEB;
+        Thu,  9 Mar 2023 12:26:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFFE2C4339B;
         Thu,  9 Mar 2023 12:26:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678364772;
-        bh=Oqk8Azjmvp35zHKdzJouSQ2y+xrmTqcAHDuoRkWN5dY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eBasOg153uzh6coWSIWDUf8LwkFfXtA6+08YNy5xchsytYiFHODzFpaN0VEsxu8IP
-         Y5KTPpP5+eRWlktgf/r2dqD1HcsUNsFncGIjvES6hxJdzgu2mAx1X8/BmUFz/2nLbD
-         vKhkxMbqZqglNDAARf7l9wPETUwuvTN66UuA+mP70eC6abGiK9XqeC6yB0Sb0TII7Y
-         Ga8rhvWBWS3lKUeSLTqHmx1XtZQf+39BiX4TJ+6D8w3v3uydPJz5/JSbJZsOc7I6Zd
-         0N517PW6MNdeer94E6KPANTqXWEULltyfwkRyGMRH/6bTJ9S91Sd2gSrzUYP8u3578
-         lmDFd0ae3PhgQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id AC24A4049F; Thu,  9 Mar 2023 09:26:09 -0300 (-03)
-Date:   Thu, 9 Mar 2023 09:26:09 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <martin.lau@kernel.org>
-Subject: Re: [PATCH bpf-next] bpf: add
- --skip_encoding_btf_inconsistent_proto, --btf_gen_optimized to pahole flags
- for v1.25
-Message-ID: <ZAnQYUPkUg0HBrlh@kernel.org>
-References: <1675949331-27935-1-git-send-email-alan.maguire@oracle.com>
- <CAADnVQ+hfQ9LEmEFXneB7hm17NvRniXSShrHLaM-1BrguLjLQw@mail.gmail.com>
- <CAADnVQJe6dRnhbSk92g5Np0tXyMxWLD+8LqUxYfYPr7dWkxzSw@mail.gmail.com>
- <ZAk8L17/EfR8siaz@kernel.org>
- <ZAmV8luLw+umNGqd@krava>
- <ZAmwzzrBfmp2GQzr@krava>
+        s=k20201202; t=1678364773;
+        bh=5jq7kB4k8YgnHr9b0rlhDtuZTGAsKEW/bGb6FgDJIx0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=VHK4rHuZjCyqqAXQzKZrezyWC9qOZZ+EHaU0dFoK+MYhpB8y7yj0KNOPDzT644f52
+         1h427IR+dGujhLJ+jDNC0Ajsi3fakH9UEEBWizgUBLwfWvtaoxOUbffRL06ooJVSET
+         w08BjMSk1PSRsokjoxAxoMh0n3wAugJNqgx7fzq+zCG6ILIjVUpo/T9MYCfD7PuWzL
+         9Hh1vqBXVMgL0rJxvcehjjFZOu2pYtW8CTWT4uHJuDZ5pJS9Qw6k2a/zCE10MtIfiy
+         7FkQRbusKbWyCRLH8cSY+tKeqAWWeQdDdSm9a/FedeUuhcJMYdKVJ4EnJsF7aS8gjv
+         ZtFrJLBvpEQ5g==
+From:   Lorenzo Bianconi <lorenzo@kernel.org>
+To:     netdev@vger.kernel.org
+Cc:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+        saeedm@nvidia.com, leon@kernel.org, shayagr@amazon.com,
+        akiyano@amazon.com, darinzon@amazon.com, sgoutham@marvell.com,
+        lorenzo.bianconi@redhat.com, toke@redhat.com, teknoraver@meta.com,
+        ttoukan.linux@gmail.com
+Subject: [PATCH net v2 4/8] net: thunderx: take into account xdp_features setting tx/rx queues
+Date:   Thu,  9 Mar 2023 13:25:28 +0100
+Message-Id: <9d4e37bf8009f69a1906acbdffed0bc90bcbbc37.1678364613.git.lorenzo@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <cover.1678364612.git.lorenzo@kernel.org>
+References: <cover.1678364612.git.lorenzo@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAmwzzrBfmp2GQzr@krava>
-X-Url:  http://acmel.wordpress.com
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em Thu, Mar 09, 2023 at 11:11:27AM +0100, Jiri Olsa escreveu:
-> On Thu, Mar 09, 2023 at 09:16:53AM +0100, Jiri Olsa wrote:
-> > On Wed, Mar 08, 2023 at 10:53:51PM -0300, Arnaldo Carvalho de Melo wrote:
-> > > Em Mon, Feb 13, 2023 at 10:09:21PM -0800, Alexei Starovoitov escreveu:
-> > > > On Mon, Feb 13, 2023 at 7:12 PM Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-> > > > > Maybe we should make scripts/pahole-flags.sh selective
-> > > > > and don't apply skip_encoding_btf_inconsiste to bpf_testmod ?
+thunderx nic allows xdp just if enough hw queues are available for XDP.
+Take into account queues configuration setting xdp_features.
 
-> > > > > Thoughts?
+Fixes: 66c0e13ad236 ("drivers: net: turn on XDP features")
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+---
+ .../net/ethernet/cavium/thunder/nicvf_ethtool.c | 17 +++++++++++------
+ .../net/ethernet/cavium/thunder/nicvf_main.c    |  4 +++-
+ 2 files changed, 14 insertions(+), 7 deletions(-)
 
-> > > > It's even worse with clang compiled kernel:
+diff --git a/drivers/net/ethernet/cavium/thunder/nicvf_ethtool.c b/drivers/net/ethernet/cavium/thunder/nicvf_ethtool.c
+index e5c71f907852..d8d71bf97983 100644
+--- a/drivers/net/ethernet/cavium/thunder/nicvf_ethtool.c
++++ b/drivers/net/ethernet/cavium/thunder/nicvf_ethtool.c
+@@ -735,12 +735,17 @@ static int nicvf_set_channels(struct net_device *dev,
+ 	if (channel->tx_count > nic->max_queues)
+ 		return -EINVAL;
+ 
+-	if (nic->xdp_prog &&
+-	    ((channel->tx_count + channel->rx_count) > nic->max_queues)) {
+-		netdev_err(nic->netdev,
+-			   "XDP mode, RXQs + TXQs > Max %d\n",
+-			   nic->max_queues);
+-		return -EINVAL;
++	if (channel->tx_count + channel->rx_count > nic->max_queues) {
++		if (nic->xdp_prog) {
++			netdev_err(nic->netdev,
++				   "XDP mode, RXQs + TXQs > Max %d\n",
++				   nic->max_queues);
++			return -EINVAL;
++		}
++
++		xdp_clear_features_flag(nic->netdev);
++	} else if (!pass1_silicon(nic->pdev)) {
++		xdp_set_features_flag(dev, NETDEV_XDP_ACT_BASIC);
+ 	}
+ 
+ 	if (if_up)
+diff --git a/drivers/net/ethernet/cavium/thunder/nicvf_main.c b/drivers/net/ethernet/cavium/thunder/nicvf_main.c
+index 8b25313c7f6b..eff350e0bc2a 100644
+--- a/drivers/net/ethernet/cavium/thunder/nicvf_main.c
++++ b/drivers/net/ethernet/cavium/thunder/nicvf_main.c
+@@ -2218,7 +2218,9 @@ static int nicvf_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	netdev->netdev_ops = &nicvf_netdev_ops;
+ 	netdev->watchdog_timeo = NICVF_TX_TIMEOUT;
+ 
+-	netdev->xdp_features = NETDEV_XDP_ACT_BASIC;
++	if (!pass1_silicon(nic->pdev) &&
++	    nic->rx_queues + nic->tx_queues <= nic->max_queues)
++		netdev->xdp_features = NETDEV_XDP_ACT_BASIC;
+ 
+ 	/* MTU range: 64 - 9200 */
+ 	netdev->min_mtu = NIC_HW_MIN_FRS;
+-- 
+2.39.2
 
-> > > I tested what is now in the master branch with both gcc and clang, on
-> > > fedora:37, Alan also tested it, Jiri, it would be great if you could
-> > > check if reverting the revert works for you as well.
-
-> > ok, will check your master branch
-
-> looks good.. got no duplicates and passing bpf tests for both
-> gcc and clang setups
-
-Thanks for testing!
-
-Alexei, since you hit those problems, please consider redoing those
-tests in your environment so that we triple check all this.
-
-Thanks,
-
-- Arnaldo
