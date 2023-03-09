@@ -2,106 +2,115 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FBB1C64EC4
-	for <bpf@archiver.kernel.org>; Thu,  9 Mar 2023 12:27:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B43CC6FD1F
+	for <bpf@archiver.kernel.org>; Thu,  9 Mar 2023 13:21:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbjCIM1N (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Mar 2023 07:27:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
+        id S230113AbjCINVK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Mar 2023 08:21:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230510AbjCIM0u (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Mar 2023 07:26:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED90EBAC8;
-        Thu,  9 Mar 2023 04:26:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A0685B81ED7;
-        Thu,  9 Mar 2023 12:26:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDF7EC433EF;
-        Thu,  9 Mar 2023 12:26:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678364788;
-        bh=o5gPeq4QDA4D5M45DH1MR6vMlCRXmlPsUa7kM4g6OJ8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LNwADOzQxAcRxcbTpRkLPVOaZJx9MjkFV6oJPdzatauYHGg9O0fiXegEqakM9M8xR
-         uk6Mjr4X7UmnvfUQZboavUaSSOgQFGQJ6ADkdgN7WMLpgu+JmJux7PCKRbbnsLBw1O
-         M55JRIhYUoaoSeQigevK1X1cqDs7druoZRkSdu79+3BwzEP/R3eAdhYKpmw3e4z6eH
-         fm3Z8EMsSB7td1qQxQCXCoLp4cIiwJi4iwFtVYIap5yGb7zsA+1LxBF7HRpNVwUfnd
-         fMuhvp9Pq9icZNHwyzVVkz7XHia6NMDRLsERLS/4LKm6uDRpIDSOeLAWRSJucP3dDw
-         qetTpJXcqms1Q==
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     netdev@vger.kernel.org
-Cc:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        saeedm@nvidia.com, leon@kernel.org, shayagr@amazon.com,
-        akiyano@amazon.com, darinzon@amazon.com, sgoutham@marvell.com,
-        lorenzo.bianconi@redhat.com, toke@redhat.com, teknoraver@meta.com,
-        ttoukan.linux@gmail.com
-Subject: [PATCH net v2 8/8] mvpp2: take care of xdp_features when reconfiguring queues
-Date:   Thu,  9 Mar 2023 13:25:32 +0100
-Message-Id: <fbee6a38c35e801036210ec27dd629d6a17030c6.1678364613.git.lorenzo@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <cover.1678364612.git.lorenzo@kernel.org>
-References: <cover.1678364612.git.lorenzo@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S229825AbjCINVJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Mar 2023 08:21:09 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A2AE6FFE;
+        Thu,  9 Mar 2023 05:21:06 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 329D4eCA029648;
+        Thu, 9 Mar 2023 13:20:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=pNHCbqRQafX/ACjbDKS29OWZUQTgc8vIxhSBvT7xme0=;
+ b=O8GRs4Es2Mmgk28NSbkjteFHV5l4cwoUOZselt2XH4yHzePswClyXxp3ncTvedAd6Nak
+ 0+HSYUmdGPzqBYUrouOE7ASckr6rQliLQDObM7uyd2fiwf3M1UVPlbM7Noa9YZPdKTHS
+ Ivtf1mBSI5O+db7EU08zvZAE3Z3+eagkFASETr6m/MnNmfG6X6ZZYiYjYQFDsm1ixVIf
+ SnuCZjDWbQj9E1/BW3Hb1YnHj3naHSA2IM6U/HcKHzXR3ME6gdLZq95g1sh0p2WHM9uV
+ 5mMHEPKhNsstpkkbGrpcN6W2m+bJUlMkAPL+qBKL3FZd/sJ6xUVJTJS+Re0MOXZKClk9 hg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6t3bsxyj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 13:20:38 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 329D5bNm012989;
+        Thu, 9 Mar 2023 13:20:38 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6t3bsxy4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 13:20:38 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 329CU4u4023573;
+        Thu, 9 Mar 2023 13:20:37 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
+        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3p6fnwkpg5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Mar 2023 13:20:37 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 329DKZGS19268266
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Mar 2023 13:20:36 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B82CF58061;
+        Thu,  9 Mar 2023 13:20:35 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EB4DA5805D;
+        Thu,  9 Mar 2023 13:20:34 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.90.179])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Mar 2023 13:20:34 +0000 (GMT)
+Message-ID: <397cb437bbd41e7eb223a07bc92a10bb57df696e.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 1/3] security: Introduce LSM_ORDER_LAST and set it
+ for the integrity LSM
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, mic@digikod.net
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Thu, 09 Mar 2023 08:20:34 -0500
+In-Reply-To: <20230309085433.1810314-2-roberto.sassu@huaweicloud.com>
+References: <20230309085433.1810314-1-roberto.sassu@huaweicloud.com>
+         <20230309085433.1810314-2-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: klGFtrN_aONy7MWhWwYH4GEQF-YdaOII
+X-Proofpoint-ORIG-GUID: Tf2q3-RDKlL0JJXY9cIGOIypQYWVQ3r8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-09_06,2023-03-08_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ malwarescore=0 bulkscore=0 mlxlogscore=767 spamscore=0 priorityscore=1501
+ lowpriorityscore=0 clxscore=1011 impostorscore=0 phishscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303090105
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Matteo Croce <teknoraver@meta.com>
+On Thu, 2023-03-09 at 09:54 +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> Introduce LSM_ORDER_LAST, to satisfy the requirement of LSMs needing to be
+> last, e.g. the 'integrity' LSM, without changing the kernel command line or
+> configuration.
+> 
+> Also, set this order for the 'integrity' LSM. While not enforced, this is
+> the only LSM expected to use it.
+> 
+> Similarly to LSM_ORDER_FIRST, LSMs with LSM_ORDER_LAST are always enabled
+> and put at the end of the LSM list.
+> 
+> Finally, for LSM_ORDER_MUTABLE LSMs, set the found variable to true if an
+> LSM is found, regardless of its order. In this way, the kernel would not
+> wrongly report that the LSM is not built-in in the kernel if its order is
+> LSM_ORDER_LAST.
+> 
+> Fixes: 79f7865d844c ("LSM: Introduce "lsm=" for boottime LSM selection")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-XDP is supported only if enough queues are present, so when reconfiguring
-the queues set xdp_features accordingly.
-
-Fixes: 66c0e13ad236 ("drivers: net: turn on XDP features")
-Suggested-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Signed-off-by: Matteo Croce <teknoraver@meta.com>
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
----
- drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-index 9b4ecbe4f36d..3ea00bc9b91c 100644
---- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-+++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-@@ -4996,6 +4996,14 @@ static int mvpp2_bm_switch_buffers(struct mvpp2 *priv, bool percpu)
- 
- 	for (i = 0; i < priv->port_count; i++) {
- 		port = priv->port_list[i];
-+		if (percpu && port->ntxqs >= num_possible_cpus() * 2)
-+			xdp_set_features_flag(port->dev,
-+					      NETDEV_XDP_ACT_BASIC |
-+					      NETDEV_XDP_ACT_REDIRECT |
-+					      NETDEV_XDP_ACT_NDO_XMIT);
-+		else
-+			xdp_clear_features_flag(port->dev);
-+
- 		mvpp2_swf_bm_pool_init(port);
- 		if (status[i])
- 			mvpp2_open(port->dev);
-@@ -6863,13 +6871,14 @@ static int mvpp2_port_probe(struct platform_device *pdev,
- 
- 	if (!port->priv->percpu_pools)
- 		mvpp2_set_hw_csum(port, port->pool_long->id);
-+	else if (port->ntxqs >= num_possible_cpus() * 2)
-+		dev->xdp_features = NETDEV_XDP_ACT_BASIC |
-+				    NETDEV_XDP_ACT_REDIRECT |
-+				    NETDEV_XDP_ACT_NDO_XMIT;
- 
- 	dev->vlan_features |= features;
- 	netif_set_tso_max_segs(dev, MVPP2_MAX_TSO_SEGS);
- 
--	dev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT |
--			    NETDEV_XDP_ACT_NDO_XMIT;
--
- 	dev->priv_flags |= IFF_UNICAST_FLT;
- 
- 	/* MTU range: 68 - 9704 */
--- 
-2.39.2
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 
