@@ -2,151 +2,146 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68CAFC64EC4
-	for <bpf@archiver.kernel.org>; Fri, 10 Mar 2023 14:58:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 662BBC64EC4
+	for <bpf@archiver.kernel.org>; Fri, 10 Mar 2023 15:02:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233513AbjCJO6y (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Mar 2023 09:58:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43858 "EHLO
+        id S233764AbjCJPC4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Mar 2023 10:02:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233525AbjCJO63 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:58:29 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0E31B543
-        for <bpf@vger.kernel.org>; Fri, 10 Mar 2023 06:53:08 -0800 (PST)
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32AAmAW1026414;
-        Fri, 10 Mar 2023 14:50:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2022-7-12;
- bh=NKYzB1fXBT6kd3GjEcb3Yosl5mmtOzFl2r0oPTbs7iA=;
- b=tgjbwjx3y/hUsaOfLzmx1dh6Mz7iGnLlpz59o4xDlLPX9B2wLzDtjMlaLMAPUiWP/pD/
- o77jEZysFbW095JaHyoH/zsOHKChFBsCPWE+Li+tmCw9Z560ok6/RhZIjWm5StPJBfrM
- IyHGyK49dftXKn5/ADk9nWLmRHxQjtSrsHz6m+u15gDnAWxDb/pv8VdHyUJl517xcqp0
- KRIwXcAcCb2bMASut0leFYVOA+dL5fm1m4zYxMA8LcVeGfqwPf7a4o6YZhy5ODc4s2OZ
- DgreQfP1sV3NFES7dhK1e4CC6mcc0TAfAM49oMYPN5bKtha6DUv4sqVQ2ZOh9lQyRtne XA== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3p415j5g9q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Mar 2023 14:50:59 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32ADuVdV020762;
-        Fri, 10 Mar 2023 14:50:58 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3p6fub0du7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Mar 2023 14:50:58 +0000
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32AEosCN013152;
-        Fri, 10 Mar 2023 14:50:57 GMT
-Received: from myrouter.uk.oracle.com (dhcp-10-175-184-199.vpn.oracle.com [10.175.184.199])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3p6fub0dkf-2;
-        Fri, 10 Mar 2023 14:50:57 +0000
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     acme@kernel.org
-Cc:     ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-        eddyz87@gmail.com, haoluo@google.com, jolsa@kernel.org,
-        john.fastabend@gmail.com, kpsingh@chromium.org,
-        sinquersw@gmail.com, martin.lau@kernel.org, songliubraving@fb.com,
-        sdf@google.com, timo@incline.eu, yhs@fb.com, bpf@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH dwarves 1/3] dwarves_fprintf: generalize function prototype print to support passing conf
-Date:   Fri, 10 Mar 2023 14:50:48 +0000
-Message-Id: <1678459850-16140-2-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1678459850-16140-1-git-send-email-alan.maguire@oracle.com>
-References: <1678459850-16140-1-git-send-email-alan.maguire@oracle.com>
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-10_06,2023-03-10_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
- phishscore=0 suspectscore=0 malwarescore=0 spamscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303100121
-X-Proofpoint-GUID: PfHB2J8n_8wVyDs_ljZxTAv4dM6nkVa3
-X-Proofpoint-ORIG-GUID: PfHB2J8n_8wVyDs_ljZxTAv4dM6nkVa3
+        with ESMTP id S233532AbjCJPCf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 10 Mar 2023 10:02:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B02712E150;
+        Fri, 10 Mar 2023 06:55:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DB1561A47;
+        Fri, 10 Mar 2023 14:54:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30F27C433EF;
+        Fri, 10 Mar 2023 14:54:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678460098;
+        bh=y8vhD0H4l+A/BrdyMJv0lkuYKZVA9CPQalpg7zyF57E=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=QK/mY8LFTwjsjEldIiVP3FFDfPpzSiOaZrf1lGXJ8RtuUb4FiFVJqlUIKVq/d8Rhz
+         1b8SbXCXaYzCu8QVKsnugpE7OZAn9K9KY8lmaIZ449+ZM8N2LkfGMfA15dDKMzfQLZ
+         XQEzfbTS4OssCaZ1O9rI7owCBA9T1pefukxvJwgo=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, Ian Rogers <irogers@google.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        llvm@lists.linux.dev, Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tom Rix <trix@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 223/529] perf llvm: Fix inadvertent file creation
+Date:   Fri, 10 Mar 2023 14:36:06 +0100
+Message-Id: <20230310133815.336510503@linuxfoundation.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230310133804.978589368@linuxfoundation.org>
+References: <20230310133804.978589368@linuxfoundation.org>
+User-Agent: quilt/0.67
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-function__prototype() writes the function prototype to the passed-in
-buffer, but uses the default conf_fprint structure which prints
-parameter names.  Generalize into function__prototype_conf() so that
-callers can pass in their own conf_fprintf; this will be useful
-for generating prototype strings for type matching.
+From: Ian Rogers <irogers@google.com>
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+[ Upstream commit 9f19aab47ced012eddef1e2bc96007efc7713b61 ]
+
+The LLVM template is first echo-ed into command_out and then
+command_out executed. The echo surrounds the template with double
+quotes, however, the template itself may contain quotes. This is
+generally innocuous but in tools/perf/tests/bpf-script-test-prologue.c
+we see:
+...
+SEC("func=null_lseek file->f_mode offset orig")
+...
+where the first double quote ends the double quote of the echo, then
+the > redirects output into a file called f_mode.
+
+To avoid this inadvertent behavior substitute redirects and similar
+characters to be ASCII control codes, then substitute the output in
+the echo back again.
+
+Fixes: 5eab5a7ee032acaa ("perf llvm: Display eBPF compiling command in debug output")
+Signed-off-by: Ian Rogers <irogers@google.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: llvm@lists.linux.dev
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Tom Rix <trix@redhat.com>
+Link: https://lore.kernel.org/r/20230105082609.344538-1-irogers@google.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- dwarves.h         |  5 +++++
- dwarves_fprintf.c | 22 +++++++++++++++++-----
- 2 files changed, 22 insertions(+), 5 deletions(-)
+ tools/perf/util/llvm-utils.c | 25 ++++++++++++++++++++++++-
+ 1 file changed, 24 insertions(+), 1 deletion(-)
 
-diff --git a/dwarves.h b/dwarves.h
-index e92b2fd..d04a36d 100644
---- a/dwarves.h
-+++ b/dwarves.h
-@@ -133,6 +133,7 @@ struct conf_fprintf {
- 	uint8_t	   hex_fmt:1;
- 	uint8_t	   strip_inline:1;
- 	uint8_t	   skip_emitting_atomic_typedefs:1;
-+	uint8_t	   skip_emitting_errors:1;
- };
+diff --git a/tools/perf/util/llvm-utils.c b/tools/perf/util/llvm-utils.c
+index 0bf6b4d4c90a7..570cde4640d05 100644
+--- a/tools/perf/util/llvm-utils.c
++++ b/tools/perf/util/llvm-utils.c
+@@ -525,14 +525,37 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
  
- struct cus;
-@@ -944,6 +945,10 @@ size_t function__fprintf_stats(const struct tag *tag_func,
- 			       FILE *fp);
- const char *function__prototype(const struct function *func,
- 				const struct cu *cu, char *bf, size_t len);
-+const char *function__prototype_conf(const struct function *func,
-+				     const struct cu *cu,
-+				     const struct conf_fprintf *conf,
-+				     char *bf, size_t len);
+ 	pr_debug("llvm compiling command template: %s\n", template);
  
- static __pure inline uint64_t function__addr(const struct function *func)
- {
-diff --git a/dwarves_fprintf.c b/dwarves_fprintf.c
-index 30355b4..5c6bf9c 100644
---- a/dwarves_fprintf.c
-+++ b/dwarves_fprintf.c
-@@ -1102,21 +1102,33 @@ static size_t union__fprintf(struct type *type, const struct cu *cu,
- 				 conf->suffix ? " " : "", conf->suffix ?: "");
- }
++	/*
++	 * Below, substitute control characters for values that can cause the
++	 * echo to misbehave, then substitute the values back.
++	 */
+ 	err = -ENOMEM;
+-	if (asprintf(&command_echo, "echo -n \"%s\"", template) < 0)
++	if (asprintf(&command_echo, "echo -n \a%s\a", template) < 0)
+ 		goto errout;
  
--const char *function__prototype(const struct function *func,
--				const struct cu *cu, char *bf, size_t len)
-+const char *function__prototype_conf(const struct function *func,
-+				     const struct cu *cu,
-+				     const struct conf_fprintf *conf,
-+				     char *bf, size_t len)
- {
- 	FILE *bfp = fmemopen(bf, len, "w");
- 
- 	if (bfp != NULL) {
--		ftype__fprintf(&func->proto, cu, NULL, 0, 0, 0, true,
--			       &conf_fprintf__defaults, bfp);
-+		ftype__fprintf(&func->proto, cu, NULL, 0, 0, 0, true, conf,
-+			       bfp);
- 		fclose(bfp);
--	} else
-+	} else {
-+		if (conf->skip_emitting_errors)
-+			return NULL;
- 		snprintf(bf, len, "<ERROR(%s): fmemopen failed!>", __func__);
++#define SWAP_CHAR(a, b) do { if (*p == a) *p = b; } while (0)
++	for (char *p = command_echo; *p; p++) {
++		SWAP_CHAR('<', '\001');
++		SWAP_CHAR('>', '\002');
++		SWAP_CHAR('"', '\003');
++		SWAP_CHAR('\'', '\004');
++		SWAP_CHAR('|', '\005');
++		SWAP_CHAR('&', '\006');
++		SWAP_CHAR('\a', '"');
 +	}
+ 	err = read_from_pipe(command_echo, (void **) &command_out, NULL);
+ 	if (err)
+ 		goto errout;
  
- 	return bf;
- }
++	for (char *p = command_out; *p; p++) {
++		SWAP_CHAR('\001', '<');
++		SWAP_CHAR('\002', '>');
++		SWAP_CHAR('\003', '"');
++		SWAP_CHAR('\004', '\'');
++		SWAP_CHAR('\005', '|');
++		SWAP_CHAR('\006', '&');
++	}
++#undef SWAP_CHAR
+ 	pr_debug("llvm compiling command : %s\n", command_out);
  
-+const char *function__prototype(const struct function *func,
-+				const struct cu *cu, char *bf, size_t len)
-+{
-+	return function__prototype_conf(func, cu, &conf_fprintf__defaults,
-+					bf, len);
-+}
-+
- size_t ftype__fprintf_parms(const struct ftype *ftype,
- 			    const struct cu *cu, int indent,
- 			    const struct conf_fprintf *conf, FILE *fp)
+ 	err = read_from_pipe(template, &obj_buf, &obj_buf_sz);
 -- 
-1.8.3.1
+2.39.2
+
+
 
