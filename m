@@ -2,326 +2,300 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23FECC6FD19
-	for <bpf@archiver.kernel.org>; Fri, 10 Mar 2023 04:39:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41C9CC6FA99
+	for <bpf@archiver.kernel.org>; Fri, 10 Mar 2023 05:12:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjCJEju (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Mar 2023 23:39:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47472 "EHLO
+        id S229917AbjCJFMx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Mar 2023 00:12:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjCJEjr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Mar 2023 23:39:47 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C072A101120
-        for <bpf@vger.kernel.org>; Thu,  9 Mar 2023 20:39:45 -0800 (PST)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 329MBLkX011804
-        for <bpf@vger.kernel.org>; Thu, 9 Mar 2023 20:39:45 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=DRpUtyNvLsWhn35GQ+HsDxcO2L/OEn6q1UEctgnOlMc=;
- b=X01/D3/hnSMRmfAV8LGYd3xtHJf5mwX8IjfVmoWF8AMTThCGUcEnrrIrpPZn7cbGOaaq
- ZOdpmvue+Wjh6vKend0P8PFNbZbg7IjR57a5qU4th8rQ1nyCwCswU+lINPmq2mX2CD0H
- aQCAYB7C2jP9NeV5QsHAvPA1OTP4xiK5kOLOBKrASjXMaBAkDIZw9WYbKskXscw63OZI
- jwar+kkw6jDaJQa6+bLt5mzkVBG6icrS3lOn4VMm0/HQeonuMUmwtwITnugp5bJR0F8J
- YwtZBCwVjD16NOlQlRyHXxRQdNAZFuYm7/IWBD79AB05XojqY3xMCeJmEa8sxFbV8lq1 2g== 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3p7r1dhx9r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 09 Mar 2023 20:39:45 -0800
-Received: from twshared16996.15.frc2.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 9 Mar 2023 20:39:44 -0800
-Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
-        id 002506F6C2D2; Thu,  9 Mar 2023 20:39:26 -0800 (PST)
-From:   Kui-Feng Lee <kuifeng@meta.com>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <martin.lau@linux.dev>,
-        <song@kernel.org>, <kernel-team@meta.com>, <andrii@kernel.org>,
-        <sdf@google.com>
-CC:     Kui-Feng Lee <kuifeng@meta.com>
-Subject: [PATCH bpf-next v6 7/8] libbpf: Use .struct_ops.link section to indicate a struct_ops with a link.
-Date:   Thu, 9 Mar 2023 20:38:12 -0800
-Message-ID: <20230310043812.3087672-8-kuifeng@meta.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230310043812.3087672-1-kuifeng@meta.com>
-References: <20230310043812.3087672-1-kuifeng@meta.com>
+        with ESMTP id S229827AbjCJFMw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 10 Mar 2023 00:12:52 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92CCAE20F1
+        for <bpf@vger.kernel.org>; Thu,  9 Mar 2023 21:12:34 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id ce7so2907235pfb.9
+        for <bpf@vger.kernel.org>; Thu, 09 Mar 2023 21:12:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678425154;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SITOzkH6L88pZqDAhqMy9DEvC8US1EB8vqjavUCwyfs=;
+        b=VHV67Ol5jS9AgyWnrNQmDPR/QJW/YpWWQOGgW6HuuVzGlym55tGN14z6r3JRpNizAA
+         POJ0mH7HqHCHQd8RX89MLvD7YZQSVsKJN5u4ozcGXPOCYmA52JvTrIIjzOcSZrhby1zA
+         Y8iTe5W5POxWJz0SxQIRcO4qn8ut/PN5KhorbO7419OfWzj22zk94+/ll4EY2Eaydec4
+         y89LH/qstI8XZURakDaz4a6VYk81IYMM/OayjLvQmMTXUCQflxIN7Uhi8BgWcacL4L2l
+         fipT2RHZvW2RZc03p8a2poyf+MqSt2QwqpiucL5Tz/44vPFq7KQ3n8dTwyYwill2CzUr
+         17AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678425154;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SITOzkH6L88pZqDAhqMy9DEvC8US1EB8vqjavUCwyfs=;
+        b=DT8MAqjCPR+ay2GqOD2xzTv54rcvaBifhQ/70Lra8LlP8OKeubleW54UZ+3xreXN5A
+         0/DcVi3zx+4zCt2Dzdwp9n5MqNWz9ohKQymgPTqbhgWfEZaJxRsJ27NTxwmR+K5f0j4v
+         xK8KB0S1i1Xzk88nn9IiwfKudZG6BnhN7RZfdpA3rfnQEhS0TpuoJpugHwkCz3zjRWWq
+         kaorK4iWbxhtznzaxWCZ7VTEODZcAmam7RAKjJHTM7mkEcKL6qCi4WUjgbRD674SOb1h
+         EceunuI3yKwiFfKUn5rnBy9H61r4/+zoH/KK7mEsVpYiWVzdzcSasZzTAIdNfzX8MUVJ
+         uIhQ==
+X-Gm-Message-State: AO0yUKV087k4fDafn1Cuprdv28CYgQd0wmSCfXCToiQzAayxizgb89qb
+        DzCBPqBKzk/oaAxhJF8rI8hgJ3DKs1KFXFHg5TOTyw==
+X-Google-Smtp-Source: AK7set9+GxoPfXeWOCYjdjvMXg/Tdn8ugqQpGUobbka5pP7uhm5ExBPVHL2WuazMI5FHI61aqdpnQzWpCKu+/LztVm8=
+X-Received: by 2002:a63:7242:0:b0:507:3e33:43e3 with SMTP id
+ c2-20020a637242000000b005073e3343e3mr5964544pgn.7.1678425153735; Thu, 09 Mar
+ 2023 21:12:33 -0800 (PST)
 MIME-Version: 1.0
+References: <20230301154953.641654-1-joannelkoong@gmail.com>
+ <20230301154953.641654-11-joannelkoong@gmail.com> <CAADnVQJCYcPnutRvjJgShAEokfrXfC4DToPOTJRuyzA1R64mBg@mail.gmail.com>
+ <CAJnrk1YNMoTEaWA6=wDS3iV4sV0A-5Afnn+p50hEvX8jR6GLHw@mail.gmail.com>
+ <20230308015500.6pycr5i4nynyu22n@heavy> <CAJnrk1Y1ONmEJpwDqGzCUmyrkDf9s_HpDhR5mW=6fNKM6PiXew@mail.gmail.com>
+ <c27727cfabced2b9207eabbba71bed158ca35eec.camel@linux.ibm.com>
+ <CAJnrk1Za8KaAq4=v7X=YEHRu5jc3upR059AcY9eanr-v_9VSqg@mail.gmail.com> <67a28d535a91396a20e7fb5ff4c322395c947eb8.camel@linux.ibm.com>
+In-Reply-To: <67a28d535a91396a20e7fb5ff4c322395c947eb8.camel@linux.ibm.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Thu, 9 Mar 2023 21:12:22 -0800
+Message-ID: <CAKH8qBvv5EkKvMuZV_k9GWA+rAgx=M4ndiQDn5Jg8h0Qtc5SLg@mail.gmail.com>
+Subject: Re: [PATCH v13 bpf-next 10/10] selftests/bpf: tests for using dynptrs
+ to parse skb and xdp buffers
+To:     Ilya Leoshkevich <iii@linux.ibm.com>
+Cc:     Joanne Koong <joannelkoong@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Network Development <netdev@vger.kernel.org>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: oxi-CaYZcQEhdDPhYiqri0QDaAXPYDx3
-X-Proofpoint-ORIG-GUID: oxi-CaYZcQEhdDPhYiqri0QDaAXPYDx3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-10_02,2023-03-09_01,2023-02-09_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Flags a struct_ops is to back a bpf_link by putting it to the
-".struct_ops.link" section.  Once it is flagged, the created
-struct_ops can be used to create a bpf_link or update a bpf_link that
-has been backed by another struct_ops.
+On Thu, Mar 9, 2023 at 7:40=E2=80=AFPM Ilya Leoshkevich <iii@linux.ibm.com>=
+ wrote:
+>
+> On Thu, 2023-03-09 at 00:13 -0800, Joanne Koong wrote:
+> > On Wed, Mar 8, 2023 at 6:24=E2=80=AFAM Ilya Leoshkevich <iii@linux.ibm.=
+com>
+> > wrote:
+> > >
+> > > On Tue, 2023-03-07 at 23:22 -0800, Joanne Koong wrote:
+> > > > On Tue, Mar 7, 2023 at 5:55=E2=80=AFPM Ilya Leoshkevich
+> > > > <iii@linux.ibm.com>
+> > > > wrote:
+> > > > >
+> > > > > On Wed, Mar 01, 2023 at 08:28:40PM -0800, Joanne Koong wrote:
+> > > > > > On Wed, Mar 1, 2023 at 10:08=E2=80=AFAM Alexei Starovoitov
+> > > > > > <alexei.starovoitov@gmail.com> wrote:
+> > > > > > >
+> > > > > > > On Wed, Mar 1, 2023 at 7:51=E2=80=AFAM Joanne Koong
+> > > > > > > <joannelkoong@gmail.com> wrote:
+> > > > > > > >
+> > > > > > > > 5) progs/dynptr_success.c
+> > > > > > > >    * Add test case "test_skb_readonly" for testing
+> > > > > > > > attempts
+> > > > > > > > at writes
+> > > > > > > >      on a prog type with read-only skb ctx.
+> > > > > > > >    * Add "test_dynptr_skb_data" for testing that
+> > > > > > > > bpf_dynptr_data isn't
+> > > > > > > >      supported for skb progs.
+> > > > > > >
+> > > > > > > I added
+> > > > > > > +dynptr/test_dynptr_skb_data
+> > > > > > > +dynptr/test_skb_readonly
+> > > > > > > to DENYLIST.s390x and applied.
+> > > > > >
+> > > > > > Thanks, I'm still not sure why s390x cannot load these
+> > > > > > programs.
+> > > > > > It is
+> > > > > > being loaded in the same way as other tests like
+> > > > > > test_parse_tcp_hdr_opt() are loading programs. I will keep
+> > > > > > looking
+> > > > > > some more into this
+> > > > >
+> > > > > Hi,
+> > > > >
+> > > > > I believe the culprit is:
+> > > > >
+> > > > >     insn->imm =3D BPF_CALL_IMM(bpf_dynptr_from_skb_rdonly);
+> > > > >
+> > > > > s390x needs to know the kfunc model in order to emit the call
+> > > > > (like
+> > > > > i386), but after this assignment it's no longer possible to
+> > > > > look it
+> > > > > up in kfunc_tab by insn->imm. x86_64 does not need this,
+> > > > > because
+> > > > > its
+> > > > > ABI is exactly the same as BPF ABI.
+> > > > >
+> > > > > The simplest solution seems to be adding an artificial
+> > > > > kfunc_desc
+> > > > > like this:
+> > > > >
+> > > > >     {
+> > > > >         .func_model =3D desc->func_model,  /* model must be
+> > > > > compatible */
+> > > > >         .func_id =3D 0,                    /* unused at this
+> > > > > point */
+> > > > >         .imm =3D insn->imm,                /* new target */
+> > > > >         .offset =3D 0,                     /* unused at this
+> > > > > point */
+> > > > >     }
+> > > > >
+> > > > > here and also after this assignment:
+> > > > >
+> > > > >     insn->imm =3D BPF_CALL_IMM(xdp_kfunc);
+> > > > >
+> > > > > What do you think?
+> > > >
+> > > > Ohh interesting! This makes sense to me. In particular, you're
+> > > > referring to the bpf_jit_find_kfunc_model() call in
+> > > > bpf_jit_insn()
+> > > > (in
+> > > > arch/s390/net/bpf_jit_comp.c) as the one that fails out whenever
+> > > > insn->imm gets set, correct?
+> > >
+> > > Precisely.
+> > >
+> > > > I like your proposed solution, I agree that this looks like the
+> > > > simplest, though maybe we should replace the existing kfunc_desc
+> > > > instead of adding it so we don't have to deal with the edge case
+> > > > of
+> > > > reaching MAX_KFUNC_DESCS? To get the func model of the new insn-
+> > > > >imm,
+> > >
+> > > I wonder whether replacement is safe? This would depend on the
+> > > following functions returning the same value for the same inputs:
+> > >
+> > > - may_access_direct_pkt_data() - this looks ok;
+> > > - bpf_dev_bound_resolve_kfunc() - I'm not so sure, any insights?
+> >
+> > For the bpf_dev_bound_resolve_kfunc() case (in fixup_kfunc_call()), I
+> > think directly replacing the kfunc_desc here is okay because
+> > bpf_dev_bound_resolve_kfunc() is findingthe target device-specific
+> > version of the kfunc (if it exists) to replace the generic version of
+> > the kfunc with, and we're using that target device-specific version
+> > of
+> > the kfunc as the new updated insn->imm to call
+>
+> I'm worried that its return value is going to change while we are
+> doing the rewriting. It looks as if
+> __bpf_offload_dev_netdev_unregister() can cause this. So if we have
+> two instructions that use the same generic kfunc, they may end up
+> pointing to two different device-specific kfuncs, and the kfunc_tab
+> will contain only one of the two.
+>
+> This sounds dangerous, but maybe I don't see some safeguard that
+> already prevents or mitigates the effects of this?
+>
+> Stanislav, could you as the bpf_dev_bound_resolve_kfunc() author
+> give your opinion please? I've seen your comment:
+>
+> +       /* We don't hold bpf_devs_lock while resolving several
+> +        * kfuncs and can race with the unregister_netdevice().
+> +        * We rely on bpf_dev_bound_match() check at attach
+> +        * to render this program unusable.
+> +        */
+>
+> and I'm wondering whether you meant bpf_prog_dev_bound_match(), and
+> whether it protects against the ABA problem, i.e., if
+> __bpf_offload_dev_netdev_unregister() is called twice, and we get
+> aux->offload and aux->offload->netdev at the same addresses?
 
-Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
----
- tools/lib/bpf/libbpf.c | 60 +++++++++++++++++++++++++++++++-----------
- 1 file changed, 44 insertions(+), 16 deletions(-)
+Yes, the comment is talking about bpf_prog_dev_bound_match during attach ti=
+me.
+When __bpf_offload_dev_netdev_unregister races with our prog load
+(which is being loaded for some specific netdev),
+bpf_prog_dev_bound_match check during attach time should render this
+program un-attach-able / unusable (since the original netdev, for
+which this prog has been loaded, is gone).
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 63ec1f8fe8a0..e16b5714f998 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -468,6 +468,7 @@ struct bpf_struct_ops {
- #define KCONFIG_SEC ".kconfig"
- #define KSYMS_SEC ".ksyms"
- #define STRUCT_OPS_SEC ".struct_ops"
-+#define STRUCT_OPS_LINK_SEC ".struct_ops.link"
-=20
- enum libbpf_map_type {
- 	LIBBPF_MAP_UNSPEC,
-@@ -597,6 +598,7 @@ struct elf_state {
- 	Elf64_Ehdr *ehdr;
- 	Elf_Data *symbols;
- 	Elf_Data *st_ops_data;
-+	Elf_Data *st_ops_link_data;
- 	size_t shstrndx; /* section index for section name strings */
- 	size_t strtabidx;
- 	struct elf_sec_desc *secs;
-@@ -606,6 +608,7 @@ struct elf_state {
- 	int text_shndx;
- 	int symbols_shndx;
- 	int st_ops_shndx;
-+	int st_ops_link_shndx;
- };
-=20
- struct usdt_manager;
-@@ -1119,7 +1122,8 @@ static int bpf_object__init_kern_struct_ops_maps(st=
-ruct bpf_object *obj)
- 	return 0;
- }
-=20
--static int bpf_object__init_struct_ops_maps(struct bpf_object *obj)
-+static int init_struct_ops_maps(struct bpf_object *obj, const char *sec_=
-name,
-+				int shndx, Elf_Data *data, __u32 map_flags)
- {
- 	const struct btf_type *type, *datasec;
- 	const struct btf_var_secinfo *vsi;
-@@ -1130,15 +1134,15 @@ static int bpf_object__init_struct_ops_maps(struc=
-t bpf_object *obj)
- 	struct bpf_map *map;
- 	__u32 i;
-=20
--	if (obj->efile.st_ops_shndx =3D=3D -1)
-+	if (shndx =3D=3D -1)
- 		return 0;
-=20
- 	btf =3D obj->btf;
--	datasec_id =3D btf__find_by_name_kind(btf, STRUCT_OPS_SEC,
-+	datasec_id =3D btf__find_by_name_kind(btf, sec_name,
- 					    BTF_KIND_DATASEC);
- 	if (datasec_id < 0) {
- 		pr_warn("struct_ops init: DATASEC %s not found\n",
--			STRUCT_OPS_SEC);
-+			sec_name);
- 		return -EINVAL;
- 	}
-=20
-@@ -1151,7 +1155,7 @@ static int bpf_object__init_struct_ops_maps(struct =
-bpf_object *obj)
- 		type_id =3D btf__resolve_type(obj->btf, vsi->type);
- 		if (type_id < 0) {
- 			pr_warn("struct_ops init: Cannot resolve var type_id %u in DATASEC %s=
-\n",
--				vsi->type, STRUCT_OPS_SEC);
-+				vsi->type, sec_name);
- 			return -EINVAL;
- 		}
-=20
-@@ -1170,7 +1174,7 @@ static int bpf_object__init_struct_ops_maps(struct =
-bpf_object *obj)
- 		if (IS_ERR(map))
- 			return PTR_ERR(map);
-=20
--		map->sec_idx =3D obj->efile.st_ops_shndx;
-+		map->sec_idx =3D shndx;
- 		map->sec_offset =3D vsi->offset;
- 		map->name =3D strdup(var_name);
- 		if (!map->name)
-@@ -1180,6 +1184,7 @@ static int bpf_object__init_struct_ops_maps(struct =
-bpf_object *obj)
- 		map->def.key_size =3D sizeof(int);
- 		map->def.value_size =3D type->size;
- 		map->def.max_entries =3D 1;
-+		map->def.map_flags =3D map_flags;
-=20
- 		map->st_ops =3D calloc(1, sizeof(*map->st_ops));
- 		if (!map->st_ops)
-@@ -1192,14 +1197,14 @@ static int bpf_object__init_struct_ops_maps(struc=
-t bpf_object *obj)
- 		if (!st_ops->data || !st_ops->progs || !st_ops->kern_func_off)
- 			return -ENOMEM;
-=20
--		if (vsi->offset + type->size > obj->efile.st_ops_data->d_size) {
-+		if (vsi->offset + type->size > data->d_size) {
- 			pr_warn("struct_ops init: var %s is beyond the end of DATASEC %s\n",
--				var_name, STRUCT_OPS_SEC);
-+				var_name, sec_name);
- 			return -EINVAL;
- 		}
-=20
- 		memcpy(st_ops->data,
--		       obj->efile.st_ops_data->d_buf + vsi->offset,
-+		       data->d_buf + vsi->offset,
- 		       type->size);
- 		st_ops->tname =3D tname;
- 		st_ops->type =3D type;
-@@ -1212,6 +1217,19 @@ static int bpf_object__init_struct_ops_maps(struct=
- bpf_object *obj)
- 	return 0;
- }
-=20
-+static int bpf_object_init_struct_ops(struct bpf_object *obj)
-+{
-+	int err;
-+
-+	err =3D init_struct_ops_maps(obj, STRUCT_OPS_SEC, obj->efile.st_ops_shn=
-dx,
-+				   obj->efile.st_ops_data, 0);
-+	err =3D err ?: init_struct_ops_maps(obj, STRUCT_OPS_LINK_SEC,
-+					  obj->efile.st_ops_link_shndx,
-+					  obj->efile.st_ops_link_data,
-+					  BPF_F_LINK);
-+	return err;
-+}
-+
- static struct bpf_object *bpf_object__new(const char *path,
- 					  const void *obj_buf,
- 					  size_t obj_buf_sz,
-@@ -1248,6 +1266,7 @@ static struct bpf_object *bpf_object__new(const cha=
-r *path,
- 	obj->efile.obj_buf_sz =3D obj_buf_sz;
- 	obj->efile.btf_maps_shndx =3D -1;
- 	obj->efile.st_ops_shndx =3D -1;
-+	obj->efile.st_ops_link_shndx =3D -1;
- 	obj->kconfig_map_idx =3D -1;
-=20
- 	obj->kern_version =3D get_kernel_version();
-@@ -1265,6 +1284,7 @@ static void bpf_object__elf_finish(struct bpf_objec=
-t *obj)
- 	obj->efile.elf =3D NULL;
- 	obj->efile.symbols =3D NULL;
- 	obj->efile.st_ops_data =3D NULL;
-+	obj->efile.st_ops_link_data =3D NULL;
-=20
- 	zfree(&obj->efile.secs);
- 	obj->efile.sec_cnt =3D 0;
-@@ -2619,7 +2639,7 @@ static int bpf_object__init_maps(struct bpf_object =
-*obj,
- 	err =3D bpf_object__init_user_btf_maps(obj, strict, pin_root_path);
- 	err =3D err ?: bpf_object__init_global_data_maps(obj);
- 	err =3D err ?: bpf_object__init_kconfig_map(obj);
--	err =3D err ?: bpf_object__init_struct_ops_maps(obj);
-+	err =3D err ?: bpf_object_init_struct_ops(obj);
-=20
- 	return err;
- }
-@@ -2753,12 +2773,13 @@ static bool libbpf_needs_btf(const struct bpf_obj=
-ect *obj)
- {
- 	return obj->efile.btf_maps_shndx >=3D 0 ||
- 	       obj->efile.st_ops_shndx >=3D 0 ||
-+	       obj->efile.st_ops_link_shndx >=3D 0 ||
- 	       obj->nr_extern > 0;
- }
-=20
- static bool kernel_needs_btf(const struct bpf_object *obj)
- {
--	return obj->efile.st_ops_shndx >=3D 0;
-+	return obj->efile.st_ops_shndx >=3D 0 || obj->efile.st_ops_link_shndx >=
-=3D 0;
- }
-=20
- static int bpf_object__init_btf(struct bpf_object *obj,
-@@ -3451,6 +3472,9 @@ static int bpf_object__elf_collect(struct bpf_objec=
-t *obj)
- 			} else if (strcmp(name, STRUCT_OPS_SEC) =3D=3D 0) {
- 				obj->efile.st_ops_data =3D data;
- 				obj->efile.st_ops_shndx =3D idx;
-+			} else if (strcmp(name, STRUCT_OPS_LINK_SEC) =3D=3D 0) {
-+				obj->efile.st_ops_link_data =3D data;
-+				obj->efile.st_ops_link_shndx =3D idx;
- 			} else {
- 				pr_info("elf: skipping unrecognized data section(%d) %s\n",
- 					idx, name);
-@@ -3465,6 +3489,7 @@ static int bpf_object__elf_collect(struct bpf_objec=
-t *obj)
- 			/* Only do relo for section with exec instructions */
- 			if (!section_have_execinstr(obj, targ_sec_idx) &&
- 			    strcmp(name, ".rel" STRUCT_OPS_SEC) &&
-+			    strcmp(name, ".rel" STRUCT_OPS_LINK_SEC) &&
- 			    strcmp(name, ".rel" MAPS_ELF_SEC)) {
- 				pr_info("elf: skipping relo section(%d) %s for section(%d) %s\n",
- 					idx, name, targ_sec_idx,
-@@ -6611,7 +6636,7 @@ static int bpf_object__collect_relos(struct bpf_obj=
-ect *obj)
- 			return -LIBBPF_ERRNO__INTERNAL;
- 		}
-=20
--		if (idx =3D=3D obj->efile.st_ops_shndx)
-+		if (idx =3D=3D obj->efile.st_ops_shndx || idx =3D=3D obj->efile.st_ops=
-_link_shndx)
- 			err =3D bpf_object__collect_st_ops_relos(obj, shdr, data);
- 		else if (idx =3D=3D obj->efile.btf_maps_shndx)
- 			err =3D bpf_object__collect_map_relos(obj, shdr, data);
-@@ -8844,6 +8869,7 @@ const char *libbpf_bpf_prog_type_str(enum bpf_prog_=
-type t)
- }
-=20
- static struct bpf_map *find_struct_ops_map_by_offset(struct bpf_object *=
-obj,
-+						     int sec_idx,
- 						     size_t offset)
- {
- 	struct bpf_map *map;
-@@ -8853,7 +8879,8 @@ static struct bpf_map *find_struct_ops_map_by_offse=
-t(struct bpf_object *obj,
- 		map =3D &obj->maps[i];
- 		if (!bpf_map__is_struct_ops(map))
- 			continue;
--		if (map->sec_offset <=3D offset &&
-+		if (map->sec_idx =3D=3D sec_idx &&
-+		    map->sec_offset <=3D offset &&
- 		    offset - map->sec_offset < map->def.value_size)
- 			return map;
- 	}
-@@ -8895,7 +8922,7 @@ static int bpf_object__collect_st_ops_relos(struct =
-bpf_object *obj,
- 		}
-=20
- 		name =3D elf_sym_str(obj, sym->st_name) ?: "<?>";
--		map =3D find_struct_ops_map_by_offset(obj, rel->r_offset);
-+		map =3D find_struct_ops_map_by_offset(obj, shdr->sh_info, rel->r_offse=
-t);
- 		if (!map) {
- 			pr_warn("struct_ops reloc: cannot find map at rel->r_offset %zu\n",
- 				(size_t)rel->r_offset);
-@@ -8962,8 +8989,9 @@ static int bpf_object__collect_st_ops_relos(struct =
-bpf_object *obj,
- 		}
-=20
- 		/* struct_ops BPF prog can be re-used between multiple
--		 * .struct_ops as long as it's the same struct_ops struct
--		 * definition and the same function pointer field
-+		 * .struct_ops & .struct_ops.link as long as it's the
-+		 * same struct_ops struct definition and the same
-+		 * function pointer field
- 		 */
- 		if (prog->attach_btf_id !=3D st_ops->type_id ||
- 		    prog->expected_attach_type !=3D member_idx) {
---=20
-2.34.1
+But going back to s390 issue: so basically, rewriting imm for kfuncs
+early in the verifier prevents jit from being able to call
+bpf_jit_find_kfunc_model? Did I get that correctly?
+Adding kfunc_desc seems like a nice hack, but I liked your previous
+series which pushed that imm resolution down to the jits better :-(
+For the xdp_kfunc case though, if you were to go the extra kfunc_desc
+route, adding the one that it's been resolved to is fine. If we race
+with __bpf_offload_dev_netdev_unregister, the prog will be unusable
+anyway (due to that dev_bound_match check); so if it fails ealer
+somewhere in the jit - doesn't seem like a big deal to me. Hope that
+helps.
 
+> > > If it's not, then MAX_KFUNC_DESCS indeed becomes a concern.
+> > >
+> > > > it seems pretty straightforward, it looks like we can just use
+> > > > btf_distill_func_proto(). or call add_kfunc_call() directly,
+> > > > which
+> > > > would do everything needed, but adds an additional unnecessary
+> > > > sort
+> > > > and more overhead for replacing (eg we'd need to first swap the
+> > > > old
+> > > > kfunc_desc with the last tab->descs[tab->nr_descs] entry and then
+> > > > delete the old kfunc_desc before adding the new one). What are
+> > > > your
+> > > > thoughts?
+> > >
+> > > Is there a way to find BTF by function pointer?
+> > > IIUC bpf_dev_bound_resolve_kfunc() can return many different
+> > > things,
+> > > and btf_distill_func_proto() and add_kfunc_call() need BTF.
+> > > A straightforward way that immediately comes to mind is to do
+> > > kallsyms
+> > > lookup and then resolve by name, but this sounds clumsy.
+> > >
+> >
+> > I'm not sure whether there's a way to find the function's BTF by its
+> > pointer, but I think maybe we can use the vmlinux btf (which we can
+> > get through the bpf_get_btf_vmlinux() api) to get the func proto?
+>
+> The device-specific function may come from a kernel module (e.g.,
+> veth). But on second thought we don't need this at all; we should
+> really just take func_model of the generic function, that we already
+> have. If it is not the same as the model of the device-specific
+> function, it must be a bug.
+>
+> > > I've been looking into this in context of fixing (kfunc
+> > > __bpf_call_base) not fitting into 32 bits on s390x. A solution that
+> >
+> > Sorry, I'm not fully understanding - can you elaborate a little on
+> > what the issue is? why doesn't the __bpf_call_base address fit on
+> > s390x? my understanding is that s390x is a 64-bit architecture?
+>
+> On s390x modules and kernel are far away from each other, so
+> BPF_CALL_IMM() may return ~40 significant bits. This makes the
+> insn->imm rewriting trick unusable, because insn->imm is just 32 bits
+> and cannot be extended. There is even a safeguard against this in
+> add_kfunc_call() ("address of kernel function %s is out of range"
+> check).
+>
+> I had a patch that kept BTF ID in insn->imm, but it was decided that
+> since it required adjusting several JITs, we should not be doing it.
+>
+> When the s390x JIT sees a kfunc call, it needs to find the respective
+> kfunc's address and model. Normally this is done using kfunc_tab
+> lookup. kfunc_tab is indexed by insn->imm values, which we cannot use
+> for reasons outlined above. Hence the idea below: create another
+> (unfortunately much less memory-efficient) kfunc_tab indexed by insn
+> numbers.
+>
+> Conveniently, this would also solve the problem that we are seeing
+> here.
+>
+> > > would solve both problems that I'm currently thinking about is to
+> > > associate
+> > >
+> > > struct {
+> > >     struct btf_func_model *m;
+> > >     unsigned long addr;
+> > > } kfunc_callee;
+> > >
+> > > with every insn - during verification it could live in
+> > > bpf_insn_aux_data, during jiting in bpf_prog, and afterwards it can
+> > > be freed. Any thoughts about this?
+>
