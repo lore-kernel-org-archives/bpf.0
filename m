@@ -2,146 +2,126 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2FCEC6FA99
-	for <bpf@archiver.kernel.org>; Fri, 10 Mar 2023 14:33:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22D81C6FA99
+	for <bpf@archiver.kernel.org>; Fri, 10 Mar 2023 14:58:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232609AbjCJOdj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Mar 2023 09:33:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55776 "EHLO
+        id S233655AbjCJO6R (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Mar 2023 09:58:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232560AbjCJOdS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:33:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC2523848;
-        Fri, 10 Mar 2023 06:33:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 597BA6191D;
-        Fri, 10 Mar 2023 14:33:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33FD7C433EF;
-        Fri, 10 Mar 2023 14:33:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678458783;
-        bh=yQJSZcfYXWTDUyGGmtHOLv8S1mP2iPgVwEZ5UYp+008=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s/kcfRgzt/O/ESEOhBn13h287+KB9MMp1z9OmuZOjteSq4JQnA8zE+FwxpMfDWXsY
-         h5YAfhDXgzzlqGb+W376pZ+PnVTpRFlZpXLGDfLHUvn8KEZRi/IGyKLzqzo02aF1Lf
-         QltaId+S7W1VSpArMtHIVdhGY5WVsHppUgcsN5Dc=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, Ian Rogers <irogers@google.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
-        llvm@lists.linux.dev, Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tom Rix <trix@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 143/357] perf llvm: Fix inadvertent file creation
-Date:   Fri, 10 Mar 2023 14:37:12 +0100
-Message-Id: <20230310133741.006036179@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230310133733.973883071@linuxfoundation.org>
-References: <20230310133733.973883071@linuxfoundation.org>
-User-Agent: quilt/0.67
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S233669AbjCJO5t (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 10 Mar 2023 09:57:49 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A4C12871
+        for <bpf@vger.kernel.org>; Fri, 10 Mar 2023 06:52:38 -0800 (PST)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32AAlRBu008506;
+        Fri, 10 Mar 2023 14:50:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2022-7-12;
+ bh=PeLY+a/4QwWZ+hC7+Qzptq8rBDZJ/BkNNzhiMLF2pXI=;
+ b=P8KpNYH/3tNhAifqexNGDpjMWaCFJMkib5eA3oizb88anVWLn95RsbA3G4pOAWcB/tY4
+ vadbY8W/8pgA0ZDzLzfNmFcZo8/HS8+JZKXyLyzW1KKg/8xDzCBJr/OQEmUz3uG6qC2+
+ SNt4dh+eclDIG2SEn577/UwcpiNRnQn9gvlYJg9Nigpf2qAUqSScNT9QPREupMbhX3he
+ 5t18j0kYz++ZAFBQuTC2N1qN/AcrluLQ8n6Sx+H5Q/+Abdb/lkcsrigu7NGF65YjHvXS
+ +e38KBaAOWcrJLZc+SxZEBFRHdo3RDJKWeoWj98i/zK8WFD3rPPOwbgr1O5H4FxVnDs7 yQ== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3p417cnc4h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Mar 2023 14:50:55 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32AECkWH020848;
+        Fri, 10 Mar 2023 14:50:55 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3p6fub0dqe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Mar 2023 14:50:54 +0000
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32AEosCL013152;
+        Fri, 10 Mar 2023 14:50:54 GMT
+Received: from myrouter.uk.oracle.com (dhcp-10-175-184-199.vpn.oracle.com [10.175.184.199])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3p6fub0dkf-1;
+        Fri, 10 Mar 2023 14:50:54 +0000
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     acme@kernel.org
+Cc:     ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+        eddyz87@gmail.com, haoluo@google.com, jolsa@kernel.org,
+        john.fastabend@gmail.com, kpsingh@chromium.org,
+        sinquersw@gmail.com, martin.lau@kernel.org, songliubraving@fb.com,
+        sdf@google.com, timo@incline.eu, yhs@fb.com, bpf@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH dwarves 0/3] dwarves: improve BTF encoder comparison method
+Date:   Fri, 10 Mar 2023 14:50:47 +0000
+Message-Id: <1678459850-16140-1-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-10_06,2023-03-10_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=748 adultscore=0
+ phishscore=0 suspectscore=0 malwarescore=0 spamscore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303100121
+X-Proofpoint-GUID: BSLKCBT2kzzZ7vOJ48vP0ol_HuSAxl1b
+X-Proofpoint-ORIG-GUID: BSLKCBT2kzzZ7vOJ48vP0ol_HuSAxl1b
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Ian Rogers <irogers@google.com>
+Currently when looking for function prototype mismatches with a view
+to excluding inconsistent functions, we fall back to a comparison
+between parameter names when the name and number of parameters match.
+This is brittle, as it is sometimes the case that a function has
+multiple type-identical definitions which use different parameters.
 
-[ Upstream commit 9f19aab47ced012eddef1e2bc96007efc7713b61 ]
+Here the existing dwarves_fprintf functionality is re-used to instead
+create a string representation of the function prototype - minus the
+parameter names - to support a less brittle comparison method.
 
-The LLVM template is first echo-ed into command_out and then
-command_out executed. The echo surrounds the template with double
-quotes, however, the template itself may contain quotes. This is
-generally innocuous but in tools/perf/tests/bpf-script-test-prologue.c
-we see:
-...
-SEC("func=null_lseek file->f_mode offset orig")
-...
-where the first double quote ends the double quote of the echo, then
-the > redirects output into a file called f_mode.
+To support this, patch 1 generalizes function prototype print to
+take a conf_fprintf parameter; this allows us to customize the
+parameters we use in prototype string generation.
 
-To avoid this inadvertent behavior substitute redirects and similar
-characters to be ASCII control codes, then substitute the output in
-the echo back again.
+Patch 2 supports generating prototypes without modifiers such
+as const as they can lead to false positive prototype mismatches;
+see the patch for details.
 
-Fixes: 5eab5a7ee032acaa ("perf llvm: Display eBPF compiling command in debug output")
-Signed-off-by: Ian Rogers <irogers@google.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: llvm@lists.linux.dev
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Tom Rix <trix@redhat.com>
-Link: https://lore.kernel.org/r/20230105082609.344538-1-irogers@google.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/perf/util/llvm-utils.c | 25 ++++++++++++++++++++++++-
- 1 file changed, 24 insertions(+), 1 deletion(-)
+Finally patch 3 replaces the logic used to compare parameter
+names with the prototype string comparison instead.
 
-diff --git a/tools/perf/util/llvm-utils.c b/tools/perf/util/llvm-utils.c
-index e7c7e3232fc5a..b275a1b297c30 100644
---- a/tools/perf/util/llvm-utils.c
-+++ b/tools/perf/util/llvm-utils.c
-@@ -523,14 +523,37 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
- 
- 	pr_debug("llvm compiling command template: %s\n", template);
- 
-+	/*
-+	 * Below, substitute control characters for values that can cause the
-+	 * echo to misbehave, then substitute the values back.
-+	 */
- 	err = -ENOMEM;
--	if (asprintf(&command_echo, "echo -n \"%s\"", template) < 0)
-+	if (asprintf(&command_echo, "echo -n \a%s\a", template) < 0)
- 		goto errout;
- 
-+#define SWAP_CHAR(a, b) do { if (*p == a) *p = b; } while (0)
-+	for (char *p = command_echo; *p; p++) {
-+		SWAP_CHAR('<', '\001');
-+		SWAP_CHAR('>', '\002');
-+		SWAP_CHAR('"', '\003');
-+		SWAP_CHAR('\'', '\004');
-+		SWAP_CHAR('|', '\005');
-+		SWAP_CHAR('&', '\006');
-+		SWAP_CHAR('\a', '"');
-+	}
- 	err = read_from_pipe(command_echo, (void **) &command_out, NULL);
- 	if (err)
- 		goto errout;
- 
-+	for (char *p = command_out; *p; p++) {
-+		SWAP_CHAR('\001', '<');
-+		SWAP_CHAR('\002', '>');
-+		SWAP_CHAR('\003', '"');
-+		SWAP_CHAR('\004', '\'');
-+		SWAP_CHAR('\005', '|');
-+		SWAP_CHAR('\006', '&');
-+	}
-+#undef SWAP_CHAR
- 	pr_debug("llvm compiling command : %s\n", command_out);
- 
- 	err = read_from_pipe(template, &obj_buf, &obj_buf_sz);
+Using verbose pahole output we can see some of the rejected
+comparisons.  73 comparisons are rejected via prototype
+comparison, 63 of which are non "."-suffixed functions.  For
+example:
+
+function mismatch for 'name_show'('name_show'): 'ssize_t ()(struct kobject *, struct kobj_attribute *, char *)' != 'ssize_t ()(struct device *, struct device_attribute *, char *)'
+
+With these changes, the syscalls defined in sys_ni.c
+that Jiri mentioned were missing [1] are present in BTF:
+
+[43071] FUNC '__ia32_compat_sys_io_setup' type_id=42335 linkage=static
+[43295] FUNC '__ia32_sys_io_setup' type_id=42335 linkage=static
+[47536] FUNC '__x64_sys_io_setup' type_id=42335 linkage=static
+
+[43290] FUNC '__ia32_sys_io_destroy' type_id=42335 linkage=static
+[47531] FUNC '__x64_sys_io_destroy' type_id=42335 linkage=static
+
+[43072] FUNC '__ia32_compat_sys_io_submit' type_id=42335 linkage=static
+[43296] FUNC '__ia32_sys_io_submit' type_id=42335 linkage=static
+[47537] FUNC '__x64_sys_io_submit' type_id=42335 linkage=static
+
+[1] https://lore.kernel.org/bpf/ZAsBYpsBV0wvkhh0@krava/
+
+Alan Maguire (3):
+  dwarves_fprintf: generalize function prototype print to support
+    passing conf
+  dwarves_fprintf: support skipping modifier
+  btf_encoder: compare functions via prototypes not parameter names
+
+ btf_encoder.c     | 67 +++++++++++++++++++++++++------------------------------
+ dwarves.h         |  6 +++++
+ dwarves_fprintf.c | 48 ++++++++++++++++++++++++++-------------
+ 3 files changed, 70 insertions(+), 51 deletions(-)
+
 -- 
-2.39.2
-
-
+1.8.3.1
 
