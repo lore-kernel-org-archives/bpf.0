@@ -2,199 +2,158 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70962C64EC4
-	for <bpf@archiver.kernel.org>; Fri, 10 Mar 2023 16:32:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12C77C64EC4
+	for <bpf@archiver.kernel.org>; Fri, 10 Mar 2023 16:35:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230383AbjCJQcN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Mar 2023 11:32:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
+        id S229844AbjCJQfp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Mar 2023 11:35:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230407AbjCJQbx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 10 Mar 2023 11:31:53 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA8912141C
-        for <bpf@vger.kernel.org>; Fri, 10 Mar 2023 08:29:06 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id d7so6236781qtr.12
-        for <bpf@vger.kernel.org>; Fri, 10 Mar 2023 08:29:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678465742;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6LzT9Cf5YgFy/KZdFtzqSQG4A/sPbLMjZqOTBFT8aqo=;
-        b=oX22w9AfXUnuKmpWxpTaJgMtrEhDpMwl9mtDBM0fv1AiAkZXytAtadvLcitvr7+nZ1
-         MBu4d3uJ2fp+HglRmeltaeDVEv3n8RGHrgCwJCXXE+8qezDdNNGwoYm4XkBUyCi1GCOu
-         pShvvyS9HD94MAb2Dcsh9AFMpgl6iqD0lS358luMoCkNaO8eQSbaRP4kUG3U17MTy51B
-         Wgt4ToFl9G7lRQr2PoawjUO5LwckhPWVQ5lHI/zrgnxvoy+n1GsZ9zioIoNzqDIv3e/d
-         cuU57NiGr5S4QMulZ1+ANLT9TP5MMUClt8jNNRdRSyowMikkv3MOSoRjHzw50v1yrTsa
-         s2ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678465742;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6LzT9Cf5YgFy/KZdFtzqSQG4A/sPbLMjZqOTBFT8aqo=;
-        b=ZpfdbPFZw7rXZOb0NKKppDWabgQWfimLJahYoL/jlNO/W1jn2jHOa4FKCcxl7NyW01
-         fajrhicxRvH5riwK49Ckt+e/uz6tPa7ZrWCIhHqBQMD6zPMt0A1VMbiuuP9vAs6uRXgs
-         C7n/AuMdjRJ9hcOwUTxANZgxPKR+wYZmzX+Udn08RnnE//TX44dbSNLjUH/wSQyGQUUw
-         8yzzTmikNQh9dXDdlAY+Gq4lnypWx5YFiGkhyasUddXhW0oup0oAtQAzRrnii/ZeGpIK
-         AFKKMqLASjdWuYpTui54ScLxrU1HuCEfV0XUsZTM3Gf2LeJXKqMiVUdwdC5NrT60RCRp
-         c4Uw==
-X-Gm-Message-State: AO0yUKUcE/JH4Dbtrk739sMLtHhTT+gRRhg46emwP5nSLhQhG1OygB5s
-        VNbBThNIw9DA8QwrVjn+isdraBDhTds=
-X-Google-Smtp-Source: AK7set/ZSsUqYAGl52X5bcYrnz7YjijX6DyJXDk2hGczh0LB6RNX1W5QQPqAtC2fBslVDxM21jVgNg==
-X-Received: by 2002:ac8:5c4a:0:b0:3bf:b950:f684 with SMTP id j10-20020ac85c4a000000b003bfb950f684mr13010350qtj.53.1678465742123;
-        Fri, 10 Mar 2023 08:29:02 -0800 (PST)
-Received: from ?IPV6:2600:1700:6cf8:1240::3b? ([2600:1700:6cf8:1240::3b])
-        by smtp.gmail.com with ESMTPSA id ef14-20020a05620a808e00b0074357a6529asm35215qkb.105.2023.03.10.08.29.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 08:29:01 -0800 (PST)
-Message-ID: <7e0b5974-0518-fe8d-0485-a8b2b73059cb@gmail.com>
-Date:   Fri, 10 Mar 2023 08:28:59 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH bpf-next v6 0/8] Transit between BPF TCP congestion
- controls.
-Content-Language: en-US, en-ZW
-To:     Kui-Feng Lee <kuifeng@meta.com>, bpf@vger.kernel.org,
-        ast@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        kernel-team@meta.com, andrii@kernel.org, sdf@google.com
-References: <20230310043812.3087672-1-kuifeng@meta.com>
-From:   Kui-Feng Lee <sinquersw@gmail.com>
-In-Reply-To: <20230310043812.3087672-1-kuifeng@meta.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        with ESMTP id S229580AbjCJQe0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 10 Mar 2023 11:34:26 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A459F0FFF
+        for <bpf@vger.kernel.org>; Fri, 10 Mar 2023 08:31:54 -0800 (PST)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32AAUZnd026354;
+        Fri, 10 Mar 2023 14:51:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=corp-2022-7-12;
+ bh=lXjADzX0pkKJ77jDK0QzWuYsZ1iNQwL3vdiKcdaQxBU=;
+ b=08fvTak57n6xVRY0hLOrhF638wUbmZhKRAgrmFfZLsRp47nYIPlRbh5n4ipE7hkVQd77
+ O/Yv5+3eBX6Xpgz14d2cNq3moG7EKVGtvcjZMxo7+CewYBTGHoMZK/QwYDNzL8B729Bh
+ 6d0NdoUAsF8jfGzIdry5Hpkan4XoCFGgDI/1WEpSVSsoG6TiAirvOSvz3id14x5B95z0
+ tElov+ilAiUWRuDk+W4LLcLf7ujThO64HzTkmL+BSnALaBNqPbvFxR926ckTZPyhitm5
+ hHsZMWKGSnYt6BOIZrnJAVTmDrC5fkcVfPX2uX4t2iXO4K9rLdhHlO/e5sDdpiyTbw5b 6w== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3p415j5g9w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Mar 2023 14:51:03 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32AEMSss021509;
+        Fri, 10 Mar 2023 14:51:02 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3p6fub0dxd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Mar 2023 14:51:02 +0000
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32AEosCP013152;
+        Fri, 10 Mar 2023 14:51:01 GMT
+Received: from myrouter.uk.oracle.com (dhcp-10-175-184-199.vpn.oracle.com [10.175.184.199])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3p6fub0dkf-3;
+        Fri, 10 Mar 2023 14:51:01 +0000
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     acme@kernel.org
+Cc:     ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+        eddyz87@gmail.com, haoluo@google.com, jolsa@kernel.org,
+        john.fastabend@gmail.com, kpsingh@chromium.org,
+        sinquersw@gmail.com, martin.lau@kernel.org, songliubraving@fb.com,
+        sdf@google.com, timo@incline.eu, yhs@fb.com, bpf@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH dwarves 2/3] dwarves_fprintf: support skipping modifier
+Date:   Fri, 10 Mar 2023 14:50:49 +0000
+Message-Id: <1678459850-16140-3-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1678459850-16140-1-git-send-email-alan.maguire@oracle.com>
+References: <1678459850-16140-1-git-send-email-alan.maguire@oracle.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-10_06,2023-03-10_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
+ phishscore=0 suspectscore=0 malwarescore=0 spamscore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303100121
+X-Proofpoint-GUID: LbenSbZLSmk0PcaoFKeq7OSfynuWJWlD
+X-Proofpoint-ORIG-GUID: LbenSbZLSmk0PcaoFKeq7OSfynuWJWlD
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+When doing BTF comparisons between functions defined in multiple
+CUs, it was noticed a few critical functions failed prototype
+comparisons due to multiple "const" modifiers; for example:
 
+function mismatch for 'memchr_inv'('memchr_inv'): 'void * ()(const const void  * , int, size_t)' != 'void * ()(const void  *, int, size_t)'
 
-On 3/9/23 20:38, Kui-Feng Lee wrote:
-> Major changes:
-> 
->   - Create bpf_links in the kernel for BPF struct_ops to register and
->     unregister it.
-> 
->   - Enables switching between implementations of bpf-tcp-cc under a
->     name instantly by replacing the backing struct_ops map of a
->     bpf_link.
-> 
-> Previously, BPF struct_ops didn't go off, as even when the user
-> program creating it was terminated, none of these ever were pinned.
-> For instance, the TCP congestion control subsystem indirectly
-> maintains a reference count on the struct_ops of any registered BPF
-> implemented algorithm. Thus, the algorithm won't be deactivated until
-> someone deliberately unregisters it.  For compatibility with other BPF
-> programs, bpf_links have been created to work in coordination with
-> struct_ops maps. This ensures that the registration and unregistration
-> of these respective maps is carried out at the start and end of the
-> bpf_link.
-> 
-> We also faced complications when attempting to replace an existing TCP
-> congestion control algorithm with a new implementation on the fly. A
-> struct_ops map was used to register a TCP congestion control algorithm
-> with a unique name.  We had to either register the alternative
-> implementation with a new name and move over or unregister the current
-> one before being able to reregistration with the same name.  To fix
-> this problem, we can an option to migrate the registration of the
-> algorithm from struct_ops maps to bpf_links. By modifying the backing
-> map of a bpf_link, it suddenly becomes possible to replace an existing
-> TCP congestion control algorithm with ease.
+function mismatch for 'strnlen'('strnlen'): '__kernel_size_t ()(const const char  * , __kernel_size_t)' != '__kernel_size_t ()(const char  *, size_t)'
 
-The major differences from v5:
+(note the "const const" in the first parameter.)
 
-  - Add a new step to bpf_object__load() to prepare vdata.
+As such it would be useful to omit modifiers for comparison
+purposes.  Also noted was the fact that for the "no_parm_names"
+case, an extra space was being emitted in some cases, also
+throwing off string comparisons of prototypes.
 
-  - Accept BPF_F_REPLACE.
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ dwarves.h         |  1 +
+ dwarves_fprintf.c | 26 ++++++++++++++++----------
+ 2 files changed, 17 insertions(+), 10 deletions(-)
 
-  - Check section IDs in find_struct_ops_map_by_offset()
+diff --git a/dwarves.h b/dwarves.h
+index d04a36d..7a319d1 100644
+--- a/dwarves.h
++++ b/dwarves.h
+@@ -134,6 +134,7 @@ struct conf_fprintf {
+ 	uint8_t	   strip_inline:1;
+ 	uint8_t	   skip_emitting_atomic_typedefs:1;
+ 	uint8_t	   skip_emitting_errors:1;
++	uint8_t    skip_emitting_modifier:1;
+ };
+ 
+ struct cus;
+diff --git a/dwarves_fprintf.c b/dwarves_fprintf.c
+index 5c6bf9c..b20a473 100644
+--- a/dwarves_fprintf.c
++++ b/dwarves_fprintf.c
+@@ -506,7 +506,8 @@ static const char *tag__ptr_name(const struct tag *tag, const struct cu *cu,
+ 				struct tag *next_type = cu__type(cu, type->type);
+ 
+ 				if (next_type && tag__is_pointer(next_type)) {
+-					const_pointer = "const ";
++					if (!conf->skip_emitting_modifier)
++						const_pointer = "const ";
+ 					type = next_type;
+ 				}
+ 			}
+@@ -580,13 +581,16 @@ static const char *__tag__name(const struct tag *tag, const struct cu *cu,
+ 				   *type_str = __tag__name(type, cu, tmpbf,
+ 							   sizeof(tmpbf),
+ 							   pconf);
+-			switch (tag->tag) {
+-			case DW_TAG_volatile_type: prefix = "volatile "; break;
+-			case DW_TAG_const_type:    prefix = "const ";	 break;
+-			case DW_TAG_restrict_type: suffix = " restrict"; break;
+-			case DW_TAG_atomic_type:   prefix = "_Atomic ";  break;
++			if (!conf->skip_emitting_modifier) {
++				switch (tag->tag) {
++				case DW_TAG_volatile_type: prefix = "volatile "; break;
++				case DW_TAG_const_type: prefix = "const"; break;
++				case DW_TAG_restrict_type: suffix = " restrict"; break;
++				case DW_TAG_atomic_type:   prefix = "_Atomic ";  break;
++				}
+ 			}
+-			snprintf(bf, len, "%s%s%s ", prefix, type_str, suffix);
++			snprintf(bf, len, "%s%s%s%s", prefix, type_str, suffix,
++				 conf->no_parm_names ? "" : " ");
+ 		}
+ 		break;
+ 	case DW_TAG_array_type:
+@@ -818,9 +822,11 @@ print_default:
+ 	case DW_TAG_const_type:
+ 		modifier = "const";
+ print_modifier: {
+-		size_t modifier_printed = fprintf(fp, "%s ", modifier);
+-		tconf.type_spacing -= modifier_printed;
+-		printed		   += modifier_printed;
++		if (!conf->skip_emitting_modifier) {
++			size_t modifier_printed = fprintf(fp, "%s ", modifier);
++			tconf.type_spacing -= modifier_printed;
++			printed		   += modifier_printed;
++		}
+ 
+ 		struct tag *ttype = cu__type(cu, type->type);
+ 		if (ttype) {
+-- 
+1.8.3.1
 
-  - Add a test case to check mixing w/ & w/o link struct_ops.
-
-  - Add a test case of using struct_ops w/o link to update a link.
-
-  - Improve bpf_link__detach_struct_ops() to handle the w/ link case.
-
-
-> 
-> The major differences from v4:
-> 
->   - Rebase.
-> 
->   - Reorder patches and merge part 4 to part 2 of the v4.
-> 
-> The major differences from v3:
-> 
->   - Remove bpf_struct_ops_map_free_rcu(), and use synchronize_rcu().
-> 
->   - Improve the commit log of the part 1.
-> 
->   - Before transitioning to the READY state, we conduct a value check
->     to ensure that struct_ops can be successfully utilized and links
->     created later.
-> 
-> The major differences from v2:
-> 
->   - Simplify states
-> 
->     - Remove TOBEUNREG.
-> 
->     - Rename UNREG to READY.
-> 
->   - Stop using the refcnt of the kvalue of a struct_ops. Explicitly
->     increase and decrease the refcount of struct_ops.
-> 
->   - Prepare kernel vdata during the load phase of libbpf.
-> 
-> The major differences from v1:
-> 
->   - Added bpf_struct_ops_link to replace the previous union-based
->     approach.
-> 
->   - Added UNREG and TOBEUNREG to the state of bpf_struct_ops_map.
-> 
->     - bpf_struct_ops_transit_state() maintains state transitions.
-> 
->   - Fixed synchronization issue.
-> 
->   - Prepare kernel vdata of struct_ops during the loading phase of
->     bpf_object.
-> 
->   - Merged previous patch 3 to patch 1.
-> 
-v5: https://lore.kernel.org/all/20230308005050.255859-1-kuifeng@meta.com/
-> v4: https://lore.kernel.org/all/20230307232913.576893-1-andrii@kernel.org/
-> v3: https://lore.kernel.org/all/20230303012122.852654-1-kuifeng@meta.com/
-> v2: https://lore.kernel.org/bpf/20230223011238.12313-1-kuifeng@meta.com/
-> v1: https://lore.kernel.org/bpf/20230214221718.503964-1-kuifeng@meta.com/
-> 
-> Kui-Feng Lee (8):
->    bpf: Retire the struct_ops map kvalue->refcnt.
->    net: Update an existing TCP congestion control algorithm.
->    bpf: Create links for BPF struct_ops maps.
->    libbpf: Create a bpf_link in bpf_map__attach_struct_ops().
->    bpf: Update the struct_ops of a bpf_link.
->    libbpf: Update a bpf_link with another struct_ops.
->    libbpf: Use .struct_ops.link section to indicate a struct_ops with a
->      link.
->    selftests/bpf: Test switching TCP Congestion Control algorithms.
-> 
->   include/linux/bpf.h                           |  10 +
->   include/net/tcp.h                             |   3 +
->   include/uapi/linux/bpf.h                      |  20 +-
->   kernel/bpf/bpf_struct_ops.c                   | 229 +++++++++++++++---
->   kernel/bpf/syscall.c                          |  49 +++-
->   net/bpf/bpf_dummy_struct_ops.c                |   6 +
->   net/ipv4/bpf_tcp_ca.c                         |  14 +-
->   net/ipv4/tcp_cong.c                           |  60 ++++-
->   tools/include/uapi/linux/bpf.h                |  20 +-
->   tools/lib/bpf/libbpf.c                        | 180 +++++++++++---
->   tools/lib/bpf/libbpf.h                        |   1 +
->   tools/lib/bpf/libbpf.map                      |   1 +
->   .../selftests/bpf/prog_tests/bpf_tcp_ca.c     |  91 +++++++
->   .../selftests/bpf/progs/tcp_ca_update.c       |  80 ++++++
->   14 files changed, 671 insertions(+), 93 deletions(-)
->   create mode 100644 tools/testing/selftests/bpf/progs/tcp_ca_update.c
-> 
