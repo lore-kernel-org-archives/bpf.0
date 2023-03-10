@@ -2,147 +2,205 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1664C6FA99
-	for <bpf@archiver.kernel.org>; Fri, 10 Mar 2023 15:31:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C9DAC6FD1F
+	for <bpf@archiver.kernel.org>; Fri, 10 Mar 2023 15:43:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234349AbjCJPba (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Mar 2023 10:31:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42144 "EHLO
+        id S231211AbjCJPnE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Mar 2023 10:43:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233082AbjCJPbL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 10 Mar 2023 10:31:11 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648FA144BC8
-        for <bpf@vger.kernel.org>; Fri, 10 Mar 2023 07:19:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 10AC0CE2946
-        for <bpf@vger.kernel.org>; Fri, 10 Mar 2023 15:19:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15763C433D2;
-        Fri, 10 Mar 2023 15:18:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678461538;
-        bh=sFhhpJtFUKqp8QWpoGWJ5AsjPE7DwQ3TyV3bWeQWKIA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E6syCki4hwdYxNVPlWJPit9te7ZIM35qSVSrgCUNpu8F6wpwlPRu5RcuMOWRhFrxe
-         wkXzYRHjioFUMjrTPBcJk204HjsL9QQpzDT+PINBI2p5KVL98ysUTdb3tovvKdT58i
-         hqeTFdInrlM5W9+/c2ZOcmPL+23zS00pD11cuf9f6uJz1eI+qCMrp1sfCppVgMlmtr
-         dZBl1+E0p/8ia462Noi1/7my6U7Qac9GTvRKCX4OVyo7U2XMzZLv/FGlQKp9EgCka7
-         4S0a3AA4FXELaLB3VTrKLErElbQTACUT6oMbKTtO+0eV8O9DjdPUEEbMqDz/C8p2xj
-         MlBYDmWgOzBaQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 990BB4049F; Fri, 10 Mar 2023 12:18:55 -0300 (-03)
-Date:   Fri, 10 Mar 2023 12:18:55 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Alan Maguire <alan.maguire@oracle.com>
+        with ESMTP id S234246AbjCJPmf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 10 Mar 2023 10:42:35 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C639B14DA0B
+        for <bpf@vger.kernel.org>; Fri, 10 Mar 2023 07:29:26 -0800 (PST)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32AAsR5J008483;
+        Fri, 10 Mar 2023 14:51:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=corp-2022-7-12;
+ bh=CGvSUrhfZOFum3e8EAeCRT1YAnPgrEAcp0iauA/dqWc=;
+ b=VPrO/IRnqmhnjq3oqnPc0a/Mo6aMtsmmsuS38ERJFPOdAztX7JdpT1/rqSC5OGRUF7og
+ FQzD11qoM3UJ7XKTVpTg1BvbFBS+M1Wy2QXRowA7bkBO6Z5bTKsjcPMojU0h7LY1PFFE
+ CkpUwZyVbky5UXhul9OVrJKIQQFf/EHZn5utcpUJUbyam42FtE846lBmcvtvYyYl7908
+ CmhnzQjcKSOsEL+8I+NygvSEsrmwclO3Acsc398IQXgUiBKkhVXyD+yQDCqoSyW07bqG
+ I/Cd+0u/mLPzBuR8KkLi7Otr5XP+zE14QcpTD+vMmCBhn0FwbLK2+euoywRSE7LqbA6l NQ== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3p417cnc50-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Mar 2023 14:51:06 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32AEMSsu021509;
+        Fri, 10 Mar 2023 14:51:05 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3p6fub0e15-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Mar 2023 14:51:05 +0000
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32AEosCR013152;
+        Fri, 10 Mar 2023 14:51:05 GMT
+Received: from myrouter.uk.oracle.com (dhcp-10-175-184-199.vpn.oracle.com [10.175.184.199])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3p6fub0dkf-4;
+        Fri, 10 Mar 2023 14:51:04 +0000
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     acme@kernel.org
 Cc:     ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
         eddyz87@gmail.com, haoluo@google.com, jolsa@kernel.org,
         john.fastabend@gmail.com, kpsingh@chromium.org,
         sinquersw@gmail.com, martin.lau@kernel.org, songliubraving@fb.com,
-        sdf@google.com, timo@incline.eu, yhs@fb.com, bpf@vger.kernel.org
-Subject: Re: [PATCH dwarves 0/3] dwarves: improve BTF encoder comparison
- method
-Message-ID: <ZAtKX6+KU8g7Tet5@kernel.org>
-References: <1678459850-16140-1-git-send-email-alan.maguire@oracle.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+        sdf@google.com, timo@incline.eu, yhs@fb.com, bpf@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH dwarves 3/3] btf_encoder: compare functions via prototypes not parameter names
+Date:   Fri, 10 Mar 2023 14:50:50 +0000
+Message-Id: <1678459850-16140-4-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1678459850-16140-1-git-send-email-alan.maguire@oracle.com>
-X-Url:  http://acmel.wordpress.com
+References: <1678459850-16140-1-git-send-email-alan.maguire@oracle.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-10_06,2023-03-10_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
+ phishscore=0 suspectscore=0 malwarescore=0 spamscore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303100121
+X-Proofpoint-GUID: wGzOI2I6NUKSm_FFU-H0SFlMV9xtgHd1
+X-Proofpoint-ORIG-GUID: wGzOI2I6NUKSm_FFU-H0SFlMV9xtgHd1
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em Fri, Mar 10, 2023 at 02:50:47PM +0000, Alan Maguire escreveu:
-> Currently when looking for function prototype mismatches with a view
-> to excluding inconsistent functions, we fall back to a comparison
-> between parameter names when the name and number of parameters match.
-> This is brittle, as it is sometimes the case that a function has
-> multiple type-identical definitions which use different parameters.
-> 
-> Here the existing dwarves_fprintf functionality is re-used to instead
-> create a string representation of the function prototype - minus the
-> parameter names - to support a less brittle comparison method.
-> 
-> To support this, patch 1 generalizes function prototype print to
-> take a conf_fprintf parameter; this allows us to customize the
-> parameters we use in prototype string generation.
-> 
-> Patch 2 supports generating prototypes without modifiers such
-> as const as they can lead to false positive prototype mismatches;
-> see the patch for details.
-> 
-> Finally patch 3 replaces the logic used to compare parameter
-> names with the prototype string comparison instead.
-> 
-> Using verbose pahole output we can see some of the rejected
-> comparisons.  73 comparisons are rejected via prototype
-> comparison, 63 of which are non "."-suffixed functions.  For
-> example:
-> 
-> function mismatch for 'name_show'('name_show'): 'ssize_t ()(struct kobject *, struct kobj_attribute *, char *)' != 'ssize_t ()(struct device *, struct device_attribute *, char *)'
-> 
-> With these changes, the syscalls defined in sys_ni.c
-> that Jiri mentioned were missing [1] are present in BTF:
-> 
-> [43071] FUNC '__ia32_compat_sys_io_setup' type_id=42335 linkage=static
-> [43295] FUNC '__ia32_sys_io_setup' type_id=42335 linkage=static
-> [47536] FUNC '__x64_sys_io_setup' type_id=42335 linkage=static
-> 
-> [43290] FUNC '__ia32_sys_io_destroy' type_id=42335 linkage=static
-> [47531] FUNC '__x64_sys_io_destroy' type_id=42335 linkage=static
-> 
-> [43072] FUNC '__ia32_compat_sys_io_submit' type_id=42335 linkage=static
-> [43296] FUNC '__ia32_sys_io_submit' type_id=42335 linkage=static
-> [47537] FUNC '__x64_sys_io_submit' type_id=42335 linkage=static
-> 
-> [1] https://lore.kernel.org/bpf/ZAsBYpsBV0wvkhh0@krava/
+Parameter names are a brittle choice for comparing function prototypes.
+As noted by Jiri [1], a function can have a weak definition in one
+CU with differing names from another definition, and because we require
+name-based matches, we can omit functions unnecessarily.  Using a
+conf_fprintf that omits parameter names, generate function prototypes
+for string comparison instead.
 
-I'll test this now, but b4 isn't liking the way you sent it:
+[1] https://lore.kernel.org/bpf/ZAsBYpsBV0wvkhh0@krava/
 
-⬢[acme@toolbox pahole]$ b4 am -ctsl --cc-trailers 1678459850-16140-2-git-send-email-alan.maguire@oracle.com
-Grabbing thread from lore.kernel.org/all/1678459850-16140-2-git-send-email-alan.maguire%40oracle.com/t.mbox.gz
-Checking for newer revisions
-Grabbing search results from lore.kernel.org
-Analyzing 2 messages in the thread
-Checking attestation on all messages, may take a moment...
+Reported-by: Jira Olsa <olsajiri@gmail.com>
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
-  ✓ [PATCH 1/3] dwarves_fprintf: generalize function prototype print to support passing conf
-    ✓ Signed: DKIM/oracle.com
-    + Link: https://lore.kernel.org/r/1678459850-16140-2-git-send-email-alan.maguire@oracle.com
-    + Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-  ERROR: missing [2/3]!
-  ERROR: missing [3/3]!
----
-Total patches: 1
----
-WARNING: Thread incomplete!
-Cover: ./20230310_alan_maguire_dwarves_improve_btf_encoder_comparison_method.cover
- Link: https://lore.kernel.org/r/1678459850-16140-1-git-send-email-alan.maguire@oracle.com
- Base: applies clean to current tree
-       git checkout -b 20230310_alan_maguire_oracle_com HEAD
-       git am ./20230310_alan_maguire_dwarves_improve_btf_encoder_comparison_method.mbx
-⬢[acme@toolbox pahole]$
+ btf_encoder.c | 67 +++++++++++++++++++++++++++--------------------------------
+ 1 file changed, 31 insertions(+), 36 deletions(-)
 
-I'll apply one by one
+diff --git a/btf_encoder.c b/btf_encoder.c
+index 07a9dc5..65f6e71 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -33,13 +33,13 @@
+ #include <search.h> /* for tsearch(), tfind() and tdestroy() */
+ #include <pthread.h>
  
-> Alan Maguire (3):
->   dwarves_fprintf: generalize function prototype print to support
->     passing conf
->   dwarves_fprintf: support skipping modifier
->   btf_encoder: compare functions via prototypes not parameter names
-> 
->  btf_encoder.c     | 67 +++++++++++++++++++++++++------------------------------
->  dwarves.h         |  6 +++++
->  dwarves_fprintf.c | 48 ++++++++++++++++++++++++++-------------
->  3 files changed, 70 insertions(+), 51 deletions(-)
-> 
-> -- 
-> 1.8.3.1
-> 
-
+-#define BTF_ENCODER_MAX_PARAMETERS	12
++#define BTF_ENCODER_MAX_PROTO	512
+ 
+ /* state used to do later encoding of saved functions */
+ struct btf_encoder_state {
+ 	uint32_t type_id_off;
+-	bool got_parameter_names;
+-	const char *parameter_names[BTF_ENCODER_MAX_PARAMETERS];
++	bool got_proto;
++	char proto[BTF_ENCODER_MAX_PROTO];
+ };
+ 
+ struct elf_function {
+@@ -798,25 +798,25 @@ static int32_t btf_encoder__add_decl_tag(struct btf_encoder *encoder, const char
+ 	return id;
+ }
+ 
+-static void parameter_names__get(struct ftype *ftype, size_t nr_parameters,
+-				 const char **parameter_names)
++static bool proto__get(struct function *func, char *proto, size_t len)
+ {
+-	struct parameter *parameter;
+-	int i = 0;
+-
+-	ftype__for_each_parameter(ftype, parameter) {
+-		if (i >= nr_parameters)
+-			return;
+-		parameter_names[i++] = parameter__name(parameter);
+-	}
++	const struct conf_fprintf conf = {
++						.name_spacing = 23,
++						.type_spacing = 26,
++						.emit_stats = 0,
++						.no_parm_names = 1,
++						.skip_emitting_errors = 1,
++						.skip_emitting_modifier = 1,
++					};
++
++	return function__prototype_conf(func, func->priv, &conf, proto, len) != NULL;
+ }
+ 
+ static bool funcs__match(struct btf_encoder *encoder, struct elf_function *func, struct function *f2)
+ {
+-	const char *parameter_names[BTF_ENCODER_MAX_PARAMETERS];
++	char proto[BTF_ENCODER_MAX_PROTO];
+ 	struct function *f1 = func->function;
+ 	const char *name;
+-	int i;
+ 
+ 	if (!f1)
+ 		return false;
+@@ -833,33 +833,27 @@ static bool funcs__match(struct btf_encoder *encoder, struct elf_function *func,
+ 	if (f1->proto.nr_parms == 0)
+ 		return true;
+ 
+-	if (!func->state.got_parameter_names) {
+-		parameter_names__get(&f1->proto, BTF_ENCODER_MAX_PARAMETERS,
+-				     func->state.parameter_names);
+-		func->state.got_parameter_names = true;
+-	}
+-	parameter_names__get(&f2->proto, BTF_ENCODER_MAX_PARAMETERS, parameter_names);
+-	for (i = 0; i < f1->proto.nr_parms && i < BTF_ENCODER_MAX_PARAMETERS; i++) {
+-		if (!func->state.parameter_names[i]) {
+-			if (!parameter_names[i])
+-				continue;
+-		} else if (parameter_names[i]) {
+-			if (strcmp(func->state.parameter_names[i], parameter_names[i]) == 0)
+-				continue;
+-		}
+-		if (encoder->verbose) {
+-			printf("function mismatch for '%s'(%s): parameter #%d '%s' != '%s'\n",
+-			       name, f1->alias ?: name, i,
+-			       func->state.parameter_names[i] ?: "<null>",
+-			       parameter_names[i] ?: "<null>");
++	if (f1->proto.tag.type == f2->proto.tag.type)
++		return true;
++
++	if (!func->state.got_proto)
++		func->state.got_proto = proto__get(f1, func->state.proto, sizeof(func->state.proto));
++
++	if (proto__get(f2, proto, sizeof(proto))) {
++		if (strcmp(func->state.proto, proto) != 0) {
++			if (encoder->verbose)
++				printf("function mismatch for '%s'('%s'): '%s' != '%s'\n",
++				       name, f1->alias ?: name,
++				       func->state.proto, proto);
++			return false;
+ 		}
+-		return false;
+ 	}
+ 	return true;
+ }
+ 
+ static int32_t btf_encoder__save_func(struct btf_encoder *encoder, struct function *fn, struct elf_function *func)
+ {
++	fn->priv = encoder->cu;
+ 	if (func->function) {
+ 		struct function *existing = func->function;
+ 
+@@ -1022,7 +1016,8 @@ static int btf_encoder__collect_function(struct btf_encoder *encoder, GElf_Sym *
+ 	}
+ 	encoder->functions.entries[encoder->functions.cnt].generated = false;
+ 	encoder->functions.entries[encoder->functions.cnt].function = NULL;
+-	encoder->functions.entries[encoder->functions.cnt].state.got_parameter_names = false;
++	encoder->functions.entries[encoder->functions.cnt].state.got_proto = false;
++	encoder->functions.entries[encoder->functions.cnt].state.proto[0] = '\0';
+ 	encoder->functions.entries[encoder->functions.cnt].state.type_id_off = 0;
+ 	encoder->functions.cnt++;
+ 	return 0;
 -- 
+1.8.3.1
 
-- Arnaldo
