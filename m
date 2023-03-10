@@ -2,158 +2,166 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12C77C64EC4
-	for <bpf@archiver.kernel.org>; Fri, 10 Mar 2023 16:35:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B54BC64EC4
+	for <bpf@archiver.kernel.org>; Fri, 10 Mar 2023 16:36:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjCJQfp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Mar 2023 11:35:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33200 "EHLO
+        id S231796AbjCJQgf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Mar 2023 11:36:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjCJQe0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 10 Mar 2023 11:34:26 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A459F0FFF
-        for <bpf@vger.kernel.org>; Fri, 10 Mar 2023 08:31:54 -0800 (PST)
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32AAUZnd026354;
-        Fri, 10 Mar 2023 14:51:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2022-7-12;
- bh=lXjADzX0pkKJ77jDK0QzWuYsZ1iNQwL3vdiKcdaQxBU=;
- b=08fvTak57n6xVRY0hLOrhF638wUbmZhKRAgrmFfZLsRp47nYIPlRbh5n4ipE7hkVQd77
- O/Yv5+3eBX6Xpgz14d2cNq3moG7EKVGtvcjZMxo7+CewYBTGHoMZK/QwYDNzL8B729Bh
- 6d0NdoUAsF8jfGzIdry5Hpkan4XoCFGgDI/1WEpSVSsoG6TiAirvOSvz3id14x5B95z0
- tElov+ilAiUWRuDk+W4LLcLf7ujThO64HzTkmL+BSnALaBNqPbvFxR926ckTZPyhitm5
- hHsZMWKGSnYt6BOIZrnJAVTmDrC5fkcVfPX2uX4t2iXO4K9rLdhHlO/e5sDdpiyTbw5b 6w== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3p415j5g9w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Mar 2023 14:51:03 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32AEMSss021509;
-        Fri, 10 Mar 2023 14:51:02 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3p6fub0dxd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Mar 2023 14:51:02 +0000
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32AEosCP013152;
-        Fri, 10 Mar 2023 14:51:01 GMT
-Received: from myrouter.uk.oracle.com (dhcp-10-175-184-199.vpn.oracle.com [10.175.184.199])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3p6fub0dkf-3;
-        Fri, 10 Mar 2023 14:51:01 +0000
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     acme@kernel.org
-Cc:     ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-        eddyz87@gmail.com, haoluo@google.com, jolsa@kernel.org,
-        john.fastabend@gmail.com, kpsingh@chromium.org,
-        sinquersw@gmail.com, martin.lau@kernel.org, songliubraving@fb.com,
-        sdf@google.com, timo@incline.eu, yhs@fb.com, bpf@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH dwarves 2/3] dwarves_fprintf: support skipping modifier
-Date:   Fri, 10 Mar 2023 14:50:49 +0000
-Message-Id: <1678459850-16140-3-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1678459850-16140-1-git-send-email-alan.maguire@oracle.com>
-References: <1678459850-16140-1-git-send-email-alan.maguire@oracle.com>
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-10_06,2023-03-10_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
- phishscore=0 suspectscore=0 malwarescore=0 spamscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303100121
-X-Proofpoint-GUID: LbenSbZLSmk0PcaoFKeq7OSfynuWJWlD
-X-Proofpoint-ORIG-GUID: LbenSbZLSmk0PcaoFKeq7OSfynuWJWlD
+        with ESMTP id S231478AbjCJQgG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 10 Mar 2023 11:36:06 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9D711758E;
+        Fri, 10 Mar 2023 08:34:09 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PYBH22czzz9xqxf;
+        Sat, 11 Mar 2023 00:25:18 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwCHCgbhWwtkQ6aJAQ--.27488S2;
+        Fri, 10 Mar 2023 17:33:47 +0100 (CET)
+Message-ID: <66e9fefe918463e8fbe2e8d8ca46a76f4428a944.camel@huaweicloud.com>
+Subject: Re: [PATCH v3 1/3] security: Introduce LSM_ORDER_LAST and set it
+ for the integrity LSM
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Paul Moore <paul@paul-moore.com>, Mimi Zohar <zohar@linux.ibm.com>
+Cc:     dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        mic@digikod.net, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Fri, 10 Mar 2023 17:33:35 +0100
+In-Reply-To: <CAHC9VhQ80t8z79iYaY8xpoiQ5fTURoesaau+5r0bCXZrsO5GUQ@mail.gmail.com>
+References: <20230309085433.1810314-1-roberto.sassu@huaweicloud.com>
+         <20230309085433.1810314-2-roberto.sassu@huaweicloud.com>
+         <397cb437bbd41e7eb223a07bc92a10bb57df696e.camel@linux.ibm.com>
+         <CAHC9VhTt7xZqkfZQsWVLRHzza_9idzxkY7bXxzBMq=Xxfc6+Cg@mail.gmail.com>
+         <3c2ad86758d13939afa9dceaab87fee2ded8201f.camel@linux.ibm.com>
+         <CAHC9VhQ80t8z79iYaY8xpoiQ5fTURoesaau+5r0bCXZrsO5GUQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LxC2BwCHCgbhWwtkQ6aJAQ--.27488S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGrW3ArWkXr1UCF47WrykZrb_yoW7Jr4DpF
+        W7Ga1Ykr4kJr45C3s2kw1a93y0y39xJFnxW3s8Xw1UZwn0yFyxtF1Ik3yfuFyDWwsagF1Y
+        vr15tFZxCF1DAFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
+        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+        AIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAMBF1jj4pwWAAAsa
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When doing BTF comparisons between functions defined in multiple
-CUs, it was noticed a few critical functions failed prototype
-comparisons due to multiple "const" modifiers; for example:
+On Fri, 2023-03-10 at 11:22 -0500, Paul Moore wrote:
+> On Fri, Mar 10, 2023 at 8:39 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > On Thu, 2023-03-09 at 17:04 -0500, Paul Moore wrote:
+> > > On Thu, Mar 9, 2023 at 8:21 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > > > On Thu, 2023-03-09 at 09:54 +0100, Roberto Sassu wrote:
+> > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > 
+> > > > > Introduce LSM_ORDER_LAST, to satisfy the requirement of LSMs needing to be
+> > > > > last, e.g. the 'integrity' LSM, without changing the kernel command line or
+> > > > > configuration.
+> > > > > 
+> > > > > Also, set this order for the 'integrity' LSM. While not enforced, this is
+> > > > > the only LSM expected to use it.
+> > > > > 
+> > > > > Similarly to LSM_ORDER_FIRST, LSMs with LSM_ORDER_LAST are always enabled
+> > > > > and put at the end of the LSM list.
+> > > > > 
+> > > > > Finally, for LSM_ORDER_MUTABLE LSMs, set the found variable to true if an
+> > > > > LSM is found, regardless of its order. In this way, the kernel would not
+> > > > > wrongly report that the LSM is not built-in in the kernel if its order is
+> > > > > LSM_ORDER_LAST.
+> > > > > 
+> > > > > Fixes: 79f7865d844c ("LSM: Introduce "lsm=" for boottime LSM selection")
+> > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > 
+> > > > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> > > 
+> > > Warning: procedural nitpicking ahead ...
+> > > 
+> > > The 'Signed-off-by' tag is in reference to the DCO, which makes sense
+> > > to add if you are a patch author or are merging a patch into a tree,
+> > > but it doesn't make much sense as a ACK/thumbs-up; this is why we have
+> > > the 'Acked-by' and 'Reviewed-by' tags.  I generally read the
+> > > 'Acked-by' tag as "I'm the one responsible for a chunk of code
+> > > affected by this patch and I'm okay with this change" and the
+> > > 'Reviewed-by' tag as "I looked at this patch and it looks like a good
+> > > change to me".  Perhaps surprisingly to some, while an 'Acked-by' is a
+> > > requirement for merging in a lot of cases, I appreciate 'Reviewed-by'
+> > > tags much more as it indicates the patch is getting some third-part
+> > > eyeballs on it ... so all you lurkers on this list, if you're
+> > > reviewing patches as they hit your inbox, don't be shy about posting
+> > > your 'Reviewed-by' tag if your comfortable doing so, we all welcome
+> > > the help :)
+> > > 
+> > > https://www.kernel.org/doc/html/latest/process/submitting-patches.html#sign-your-work-the-developer-s-certificate-of-origin
+> > 
+> > In this case, it was a bit unclear who actually was going to upstream
+> > this patch set.
+> 
+> FWIW, I wasn't expecting to see your sign-off without a note that you
+> had merged it.  Normally I would have expected either an acked-by or a
+> note that you had merged it, a sign-off without a merge notice seemed
+> a little odd to me so I thought I would mention the above :)  No harm
+> either way, I just figured a little discussion on process might not be
+> a terrible idea to make sure we are all on the same page.
+> 
+> > It's better that you upstream it,  but since this
+> > affects subsequent IMA and EVM patches, please create a topic branch.
+> 
+> I generally don't do topic branches for work that has been merged into
+> a -next or -stable branch. I prefer to limit topic branches to
+> special-cases where there is some value in keeping a central branch
+> for multiple people to coordinate while the patchset is still in
+> development; once a patchset has progressed far enough to be merged
+> into a -stable or -next branch I stop maintaining the topic branch.
+> 
+> In this particular case the changes to the IMA/EVM code looked very
+> minor, so I doubt there would be a significant merge conflict with the
+> IMA/EVM tree during this development cycle, but if you would prefer to
+> take this patchset via the IMA/EVM tree that is okay with me; just let
+> me know so I can ACK the two LSM-related patches (I'm going to review
+> the latest posting today).
 
-function mismatch for 'memchr_inv'('memchr_inv'): 'void * ()(const const void  * , int, size_t)' != 'void * ()(const void  *, int, size_t)'
+Probably it would be beneficial if you carry this patch set, so that
+the next 'evm: Do HMAC of multiple per LSM xattrs for new inodes', and
+'security: Move IMA and EVM to the LSM infrastructure' could be applied
+on top (assuming that we are able to finish within this cycle).
 
-function mismatch for 'strnlen'('strnlen'): '__kernel_size_t ()(const const char  * , __kernel_size_t)' != '__kernel_size_t ()(const char  *, size_t)'
+Thanks
 
-(note the "const const" in the first parameter.)
+Roberto
 
-As such it would be useful to omit modifiers for comparison
-purposes.  Also noted was the fact that for the "no_parm_names"
-case, an extra space was being emitted in some cases, also
-throwing off string comparisons of prototypes.
-
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- dwarves.h         |  1 +
- dwarves_fprintf.c | 26 ++++++++++++++++----------
- 2 files changed, 17 insertions(+), 10 deletions(-)
-
-diff --git a/dwarves.h b/dwarves.h
-index d04a36d..7a319d1 100644
---- a/dwarves.h
-+++ b/dwarves.h
-@@ -134,6 +134,7 @@ struct conf_fprintf {
- 	uint8_t	   strip_inline:1;
- 	uint8_t	   skip_emitting_atomic_typedefs:1;
- 	uint8_t	   skip_emitting_errors:1;
-+	uint8_t    skip_emitting_modifier:1;
- };
- 
- struct cus;
-diff --git a/dwarves_fprintf.c b/dwarves_fprintf.c
-index 5c6bf9c..b20a473 100644
---- a/dwarves_fprintf.c
-+++ b/dwarves_fprintf.c
-@@ -506,7 +506,8 @@ static const char *tag__ptr_name(const struct tag *tag, const struct cu *cu,
- 				struct tag *next_type = cu__type(cu, type->type);
- 
- 				if (next_type && tag__is_pointer(next_type)) {
--					const_pointer = "const ";
-+					if (!conf->skip_emitting_modifier)
-+						const_pointer = "const ";
- 					type = next_type;
- 				}
- 			}
-@@ -580,13 +581,16 @@ static const char *__tag__name(const struct tag *tag, const struct cu *cu,
- 				   *type_str = __tag__name(type, cu, tmpbf,
- 							   sizeof(tmpbf),
- 							   pconf);
--			switch (tag->tag) {
--			case DW_TAG_volatile_type: prefix = "volatile "; break;
--			case DW_TAG_const_type:    prefix = "const ";	 break;
--			case DW_TAG_restrict_type: suffix = " restrict"; break;
--			case DW_TAG_atomic_type:   prefix = "_Atomic ";  break;
-+			if (!conf->skip_emitting_modifier) {
-+				switch (tag->tag) {
-+				case DW_TAG_volatile_type: prefix = "volatile "; break;
-+				case DW_TAG_const_type: prefix = "const"; break;
-+				case DW_TAG_restrict_type: suffix = " restrict"; break;
-+				case DW_TAG_atomic_type:   prefix = "_Atomic ";  break;
-+				}
- 			}
--			snprintf(bf, len, "%s%s%s ", prefix, type_str, suffix);
-+			snprintf(bf, len, "%s%s%s%s", prefix, type_str, suffix,
-+				 conf->no_parm_names ? "" : " ");
- 		}
- 		break;
- 	case DW_TAG_array_type:
-@@ -818,9 +822,11 @@ print_default:
- 	case DW_TAG_const_type:
- 		modifier = "const";
- print_modifier: {
--		size_t modifier_printed = fprintf(fp, "%s ", modifier);
--		tconf.type_spacing -= modifier_printed;
--		printed		   += modifier_printed;
-+		if (!conf->skip_emitting_modifier) {
-+			size_t modifier_printed = fprintf(fp, "%s ", modifier);
-+			tconf.type_spacing -= modifier_printed;
-+			printed		   += modifier_printed;
-+		}
- 
- 		struct tag *ttype = cu__type(cu, type->type);
- 		if (ttype) {
--- 
-1.8.3.1
+> As a bit of an aside, while this doesn't cover topic branches (once
+> again, I consider those special cases), when managing the LSM tree I
+> follow the process that is documented here:
+> 
+> https://github.com/LinuxSecurityModule/kernel/blob/main/README.md
+> 
+> [NOTE: the above GH repo is a read-only mirror of the canonical LSM
+> kernel.org repo, it just happens that GH does a better job rendering
+> txt]
+> 
+> The main LSM repo process "docs" / pointers can be found in the main
+> README or "about" page:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git/about
+> 
+> If people have suggestions for a different approach to managing the
+> LSM tree I'm always open to discussion.
+> 
 
