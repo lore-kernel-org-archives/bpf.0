@@ -2,110 +2,88 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABC8BC6FD1F
-	for <bpf@archiver.kernel.org>; Sat, 11 Mar 2023 22:18:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83776C74A44
+	for <bpf@archiver.kernel.org>; Sun, 12 Mar 2023 00:05:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjCKWSz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 11 Mar 2023 17:18:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51638 "EHLO
+        id S229494AbjCLAFD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 11 Mar 2023 19:05:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjCKWSx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 11 Mar 2023 17:18:53 -0500
-X-Greylist: delayed 2487 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 11 Mar 2023 14:18:51 PST
-Received: from mx23lb.world4you.com (mx23lb.world4you.com [81.19.149.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5D730288;
-        Sat, 11 Mar 2023 14:18:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=tTU8edbQ8WhDCPaKCQrG3SKzi8q7/ZcWvfsOl5UYY7E=; b=OpfregP54/us2Paze67Z1R8u/L
-        83k8qLcAuOeWv9SXkEyswUPj4ZXl3NvAMJdOzGlNumsvzgfiNpawGMI7xBRKpADTYmWMpHzOYmyZQ
-        3FYzNtFLBFGQvNd8psaD9nXxonEZEcbvkgmINCRukVcVTAoJftf9uzZ15LYSYeULYU4Q=;
-Received: from [88.117.63.48] (helo=hornet.engleder.at)
-        by mx23lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <gerhard@engleder-embedded.com>)
-        id 1pb6u0-0005IZ-2S; Sat, 11 Mar 2023 22:37:20 +0100
-From:   Gerhard Engleder <gerhard@engleder-embedded.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
-        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
-        song@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
-        toke@redhat.com, Gerhard Engleder <gerhard@engleder-embedded.com>
-Subject: [RFC PATCH net] bpf: Fix unregister memory model in BPF_PROG_RUN in test runner
-Date:   Sat, 11 Mar 2023 22:37:09 +0100
-Message-Id: <20230311213709.42625-1-gerhard@engleder-embedded.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S229450AbjCLAFC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 11 Mar 2023 19:05:02 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03AF56168;
+        Sat, 11 Mar 2023 16:05:01 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id cy23so35003005edb.12;
+        Sat, 11 Mar 2023 16:05:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678579500;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l7P7zwDp7HMR5PUtcSmRw8AB12ZCYbb55I22hOywNM8=;
+        b=PMGn8TBesyfVr05fRjGiiu2D7RcLQmHfhpkhB8aym8raTft6/nrPUtO/h0mroIp121
+         sspWKjqoMhCbQPTIqj07R+80yOAbh4AiL37rYvUxErS/PcSDseh88gtL1SPUiM6CXp3T
+         yIwbYNJ/CJYHWYcbX1MLR75UjCdfCg0FfctPyMHWF2HyRdC6cAu+e/kooFZMUX3MVQJz
+         /QrJaw4jg3aqnz9MnakRSIbQd0rki0gDKRV6ev2roEuamBZhD9DrgS8Uxgm8ochb4AJh
+         sSrchTy7yCePBDohiKLeVgbLei9p6gIed4e8sBdb8l7N4GhOTR7Ic2YxlqxQazdcButU
+         iCxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678579500;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l7P7zwDp7HMR5PUtcSmRw8AB12ZCYbb55I22hOywNM8=;
+        b=mm5S4mLcVVRoXziQXBy14+XJLzabb/wBptC48f5SaDRQW3fD+/d91HvCu1Cojpt0GJ
+         wZ780kvTpy/hCALDF8IQYPjAzNW1sd/BbOun44eiiD5t5c7cwQVnLNG91ssoBDCos80x
+         N7wFRFfOSLGrNNEzuAXx5Adh1bhrpn/yEGuxmgPTX2LLrsZ/1JcmTaqzigvVDNmyzxHQ
+         xrmWK/5MqLglPRiigYLa9L4Cj9llOR4iFcb1y5lMUyL1Eki133jcbwS/j6A2DB9ff9A4
+         XHR/r5W2blLqQ/1m5DcXprFOaF8oTIhR18+s6BFSqWUQsIncPOc/3eB7/RbxYSkTPvXj
+         WcWQ==
+X-Gm-Message-State: AO0yUKWYJ4ruReo6A5lx3OAUsf+E3zyMoGiuTJDsqKMs4o6/ZhekMpLx
+        4iY8fjpzACaXmszdNK2HHZBHqUk3rZwfQL6JdHY=
+X-Google-Smtp-Source: AK7set8BvyM+5fym01sUZFlbeND2YFgWPbx1VKzjrL69YplPXzzK2ysFFnGVALKXB8ad0X1vLINYmqWPImrmjvCgxNI=
+X-Received: by 2002:a17:907:7d8c:b0:8f5:2e0e:6def with SMTP id
+ oz12-20020a1709077d8c00b008f52e0e6defmr4348283ejc.0.1678579500114; Sat, 11
+ Mar 2023 16:05:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AV-Do-Run: Yes
-X-ACL-Warn: X-W4Y-Internal
+References: <20230311163614.92296-1-kerneljasonxing@gmail.com> <20230311091409.4f125e53@hermes.local>
+In-Reply-To: <20230311091409.4f125e53@hermes.local>
+From:   Jason Xing <kerneljasonxing@gmail.com>
+Date:   Sun, 12 Mar 2023 08:04:23 +0800
+Message-ID: <CAL+tcoAUGyDS=khx7W8V79wck2HAFa2JFsY4-182ASy5m9w+Pw@mail.gmail.com>
+Subject: Re: [PATCH net-next] net: introduce budget_squeeze to help us tune rx behavior
+To:     stephen@networkplumber.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com, kuniyu@amazon.com,
+        liuhangbin@gmail.com, xiangxia.m.yue@gmail.com, jiri@nvidia.com,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-After executing xdp-trafficgen the following kernel output appeared:
-[  214.564375] page_pool_release_retry() stalled pool shutdown 64 inflight 60 sec
+On Sun, Mar 12, 2023 at 1:14=E2=80=AFAM Stephen Hemminger
+<stephen@networkplumber.org> wrote:
+>
+> On Sun, 12 Mar 2023 00:36:14 +0800
+> Jason Xing <kerneljasonxing@gmail.com> wrote:
+>
+> > -     for (;;) {
+> > +     for (; is_continue;) {
+>
+>
+> Easier to read this as a
+>         while (is_continue) {
+>
+> but what is wrong with using break; instead?
 
-xdp_test_run_batch() in combination with xdp-trafficgen uses a batch
-size of 64. So it seems that a single batch does find its way back to
-the page pool. I checked my tsnep driver, but the page pool entries were
-not lost in the driver according to my analysis.
+If we hit the budget limit and 'break;' immediately, we may miss the
+collection when we also hit the time limit. That's why I would like to
+know if we hit both of them.
 
-Executing xdp-trafficgen with n=1000 resulted in this output:
-[  251.652376] page_pool_release_retry() stalled pool shutdown 40 inflight 60 sec
-
-Executing xdp-trafficgen with n=10000 resulted in this output:
-[  267.332374] page_pool_release_retry() stalled pool shutdown 16 inflight 60 sec
-
-So interestingly in both cases the last batch with a size lower than 64
-does not find its way back to the page pool. So what's the problem with
-the last batch?
-
-After xdp_test_run_batch() clean up is done in xdp_test_run_teardown()
-no matter if page pool entries are still in flight. No problem for
-page_pool_destroy() as the page pool is released later when no entries
-are in flight.
-
-With commit 425d239379db0 unregistering memory model has been added to
-xdp_test_run_teardown(). Otherwise the page pool would not be released.
-But xdp_unreg_mem_model() resets the memory model type immediately to 0
-(which is actually MEM_TYPE_PAGE_SHARED). So the memory model type
-MEM_TYPE_PAGE_POOL is lost and any inflight page pool entries have no
-chance to find its way back to the page pool. I assume that's the reason
-why the last batch does not find its way back to the page pool.
-
-A simple sleep before xdp_unreg_mem_model() solved this problem, but
-this is no valid fix of course. It needs to be ensured that the memory
-model is not in use anymore. This is the case when the page pool has no
-entries in flight.
-
-How could it be ensured that a call to xdp_unreg_mem_model() is safe?
-In my opinion drivers suffer the same problem. Is there a pattern how
-this can be solved? Or did I misinterprete something?
-
-Fixes: 425d239379db0 ("bpf: Fix release of page_pool in BPF_PROG_RUN in test runner")
-Signed-off-by: Gerhard Engleder <gerhard@engleder-embedded.com>
----
- net/bpf/test_run.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index b766a84c8536..eaccfdab0be3 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -202,6 +202,8 @@ static int xdp_test_run_setup(struct xdp_test_data *xdp, struct xdp_buff *orig_c
- 
- static void xdp_test_run_teardown(struct xdp_test_data *xdp)
- {
-+	usleep_range(10000, 11000);
-+
- 	xdp_unreg_mem_model(&xdp->mem);
- 	page_pool_destroy(xdp->pp);
- 	kfree(xdp->frames);
--- 
-2.30.2
-
+Thank,
+Jason
