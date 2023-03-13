@@ -2,45 +2,45 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F16A3C7618A
-	for <bpf@archiver.kernel.org>; Thu, 16 Mar 2023 08:25:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65F8DC6FD19
+	for <bpf@archiver.kernel.org>; Thu, 16 Mar 2023 08:25:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbjCPIZB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Mar 2023 04:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
+        id S230471AbjCPIZY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Mar 2023 04:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbjCPIYx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Mar 2023 04:24:53 -0400
+        with ESMTP id S230474AbjCPIZG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Mar 2023 04:25:06 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A81AFB84;
-        Thu, 16 Mar 2023 01:24:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A79A8E99;
+        Thu, 16 Mar 2023 01:24:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678955088; x=1710491088;
+  t=1678955099; x=1710491099;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=g5nPL1hfwFccNcFtYw7ZevITqww5GF47MwYYKvo0Lf4=;
-  b=Zf0dDpdL0my5r1ooZvYtyqyy5XD6YM9N8t5sj9tcMpyFJAC6iDOT6jrV
-   WjeElW7kV/UPrm+InyhI8jHBmhKnOXdfv+JG3IheSiIU4gXogu+sPyyWs
-   MGGh7hIf3G+I27ISi9pblSXbIgREO4f80HpelGhEOEQlQdK788gbdfvOt
-   YJfv+cxS6TiiSBfK0HIiB+9b7IbRhk9VeeopRtZfxNC3Xq5iKXI9RSRY1
-   sDWWfbHCoK5BGCs3nY9P6zTlKTqB6xIXrAsGN4HsYa1GeM+qQNiKIVeIr
-   G42weI41acF6BiVSZp4L859J5JEzCEZJLlpQdegH2hVyRN4GJeCylnMfv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="402794233"
+  bh=ZFpBMYKp7Vej9uaBP1GUTHm12MmkAD4Atk8fjSWwcN0=;
+  b=NVvqJtzJkKwUgIkC7eYwNLxFhvW4vYOBotUIUUOnuomYpciB4izNJzOB
+   BdFICYhdQgYogYzAh3YICtsVlSf10Kklh6SuWH0ppNZQgYL317nKE4phu
+   FPJkcfkLfQ98r4OhKmQE6ttrWG6s5yykrHoQm383p7VtaG5+uNVw5R4Lt
+   AL0s0ObCG+V/tyjDShVfsATmTzGHdRTPqi8Tp2ix6ZdZ+mFELo9YV92HF
+   IUxVACiVfI75u/O1WGlNrePJOMtmysNy8WGrBKywD8fNhEDHTyIDuglSL
+   z0KwSOH4gZZRKtK772V6NlIpcAgbRFO41XfG3HM+3nf8Ivv3rS7cIR6Jj
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="402794273"
 X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="402794233"
+   d="scan'208";a="402794273"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 01:24:47 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 01:24:56 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="823141552"
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="823141562"
 X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="823141552"
+   d="scan'208";a="823141562"
 Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Mar 2023 01:24:43 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 16 Mar 2023 01:24:52 -0700
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail002.ir.intel.com (Postfix) with ESMTP id 5A0F275261;
-        Mon, 13 Mar 2023 19:09:42 +0000 (GMT)
+        by irvmail002.ir.intel.com (Postfix) with ESMTP id DD5E87AE07;
+        Mon, 13 Mar 2023 19:09:44 +0000 (GMT)
 From:   Alexander Lobakin <aleksander.lobakin@intel.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -59,11 +59,10 @@ Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Eric Dumazet <edumazet@google.com>,
         Paolo Abeni <pabeni@redhat.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH bpf-next v3 2/4] net: page_pool, skbuff: make skb_mark_for_recycle() always available
-Date:   Mon, 13 Mar 2023 20:08:11 +0100
-Message-Id: <20230313190813.1036595-3-aleksander.lobakin@intel.com>
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v3 4/4] xdp: remove unused {__,}xdp_release_frame()
+Date:   Mon, 13 Mar 2023 20:08:13 +0100
+Message-Id: <20230313190813.1036595-5-aleksander.lobakin@intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230313190813.1036595-1-aleksander.lobakin@intel.com>
 References: <20230313190813.1036595-1-aleksander.lobakin@intel.com>
@@ -73,40 +72,85 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-skb_mark_for_recycle() is guarded with CONFIG_PAGE_POOL, this creates
-unneeded complication when using it in the generic code. For now, it's
-only used in the drivers always selecting Page Pool, so this works.
-Move the guards so that preprocessor will cut out only the operation
-itself and the function will still be a noop on !PAGE_POOL systems,
-but available there as well.
-No functional changes.
+__xdp_build_skb_from_frame() was the last user of
+{__,}xdp_release_frame(), which detaches pages from the page_pool.
+All the consumers now recycle Page Pool skbs and page, except mlx5,
+stmmac and tsnep drivers, which use page_pool_release_page() directly
+(might change one day). It's safe to assume this functionality is not
+needed anymore and can be removed (in favor of recycling).
 
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202303020342.Wi2PRFFH-lkp@intel.com
 Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
 ---
- include/linux/skbuff.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ include/net/xdp.h | 29 -----------------------------
+ net/core/xdp.c    | 15 ---------------
+ 2 files changed, 44 deletions(-)
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index fe661011644b..3f3a2a82a86b 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -5069,12 +5069,12 @@ static inline u64 skb_get_kcov_handle(struct sk_buff *skb)
- #endif
- }
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index d517bfac937b..5393b3ebe56e 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -317,35 +317,6 @@ void xdp_flush_frame_bulk(struct xdp_frame_bulk *bq);
+ void xdp_return_frame_bulk(struct xdp_frame *xdpf,
+ 			   struct xdp_frame_bulk *bq);
  
--#ifdef CONFIG_PAGE_POOL
- static inline void skb_mark_for_recycle(struct sk_buff *skb)
- {
-+#ifdef CONFIG_PAGE_POOL
- 	skb->pp_recycle = 1;
+-/* When sending xdp_frame into the network stack, then there is no
+- * return point callback, which is needed to release e.g. DMA-mapping
+- * resources with page_pool.  Thus, have explicit function to release
+- * frame resources.
+- */
+-void __xdp_release_frame(void *data, struct xdp_mem_info *mem);
+-static inline void xdp_release_frame(struct xdp_frame *xdpf)
+-{
+-	struct xdp_mem_info *mem = &xdpf->mem;
+-	struct skb_shared_info *sinfo;
+-	int i;
+-
+-	/* Curr only page_pool needs this */
+-	if (mem->type != MEM_TYPE_PAGE_POOL)
+-		return;
+-
+-	if (likely(!xdp_frame_has_frags(xdpf)))
+-		goto out;
+-
+-	sinfo = xdp_get_shared_info_from_frame(xdpf);
+-	for (i = 0; i < sinfo->nr_frags; i++) {
+-		struct page *page = skb_frag_page(&sinfo->frags[i]);
+-
+-		__xdp_release_frame(page_address(page), mem);
+-	}
+-out:
+-	__xdp_release_frame(xdpf->data, mem);
 -}
- #endif
-+}
+-
+ static __always_inline unsigned int xdp_get_frame_len(struct xdp_frame *xdpf)
+ {
+ 	struct skb_shared_info *sinfo;
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index a2237cfca8e9..8d3ad315f18d 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -531,21 +531,6 @@ void xdp_return_buff(struct xdp_buff *xdp)
+ }
+ EXPORT_SYMBOL_GPL(xdp_return_buff);
  
- #endif	/* __KERNEL__ */
- #endif	/* _LINUX_SKBUFF_H */
+-/* Only called for MEM_TYPE_PAGE_POOL see xdp.h */
+-void __xdp_release_frame(void *data, struct xdp_mem_info *mem)
+-{
+-	struct xdp_mem_allocator *xa;
+-	struct page *page;
+-
+-	rcu_read_lock();
+-	xa = rhashtable_lookup(mem_id_ht, &mem->id, mem_id_rht_params);
+-	page = virt_to_head_page(data);
+-	if (xa)
+-		page_pool_release_page(xa->page_pool, page);
+-	rcu_read_unlock();
+-}
+-EXPORT_SYMBOL_GPL(__xdp_release_frame);
+-
+ void xdp_attachment_setup(struct xdp_attachment_info *info,
+ 			  struct netdev_bpf *bpf)
+ {
 -- 
 2.39.2
 
