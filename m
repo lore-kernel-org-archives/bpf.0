@@ -2,35 +2,44 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9295AC61DA4
-	for <bpf@archiver.kernel.org>; Mon, 13 Mar 2023 14:27:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45875C6FD19
+	for <bpf@archiver.kernel.org>; Mon, 13 Mar 2023 14:32:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231301AbjCMO1P (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Mar 2023 10:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35982 "EHLO
+        id S231349AbjCMOcr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Mar 2023 10:32:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230333AbjCMO1O (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 13 Mar 2023 10:27:14 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7191FFF21;
-        Mon, 13 Mar 2023 07:27:13 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id ADD6C378;
-        Mon, 13 Mar 2023 14:27:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net ADD6C378
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1678717632; bh=we1dOyh2dtdOcF4wGKKVNAnTN7oZ4JTOZZ2/z75YBYY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=gBEYFFGXY6FN/xfn5GN6z1RIvDKDZLE2Jy03LTN5SDP74r8RmlO1nZ5kDagcHEpgk
-         /SS8JYmVjaX7bcVgA7AKtcFDk6osdrrHEy97vnWOTYcmoXTDtaOVXTQcjdwrwjcOEM
-         FAonGDMWicA64t3bGXbxpAC4R5/aWL8FgFqv+KRG+dEb38oiSHtbJzjCTQwf/VH+RJ
-         FclxWKR56bmLxRS14Ie0rWLKsE8sx7PQmstlOWXg0qv3HW/dHZABlM4cM20kXBrfF6
-         zbG2p/Qc7ouAOFinatBTKNrBXrJdX/sEV0vWUiZAkkiSP/ScRkc1LxcnGKPn8yNxeL
-         6tLOVCeuKZkYA==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     David Vernet <void@manifault.com>
+        with ESMTP id S231410AbjCMOcq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 13 Mar 2023 10:32:46 -0400
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D85A64AA5;
+        Mon, 13 Mar 2023 07:32:44 -0700 (PDT)
+Received: by mail-qt1-f170.google.com with SMTP id d7so13225368qtr.12;
+        Mon, 13 Mar 2023 07:32:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678717963;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cTi73Q81+ETNnAfOPWev/jD86ObO6SL82+Ks7Qrg148=;
+        b=nJpwrQWQdIIYvjbX8XcFtxUk4k98Amnq6t1OwEpIJi9MDC0TKRx1c2PBpNJJk3RIw0
+         YdKVwXxyjy8dMop8fFOY1Rv/vtw+hipkYNyQSjykoI68IUTB+l4f+LrnYKfbtf3rD0ax
+         +DNnjrr7A3LAJ3xNvWHCKyjdyKSlOlIORcK1RUrEDnDo781bhiBxWmPXoeBhpI6CY+UD
+         LC7WC6i2vgAWS+1XHwB6b6+VPE0SKsGoyGfMkVfB6yWY5Ellqc3FgXsKODy3WU5Kpx2l
+         hm52yp83fp6FY5g5n9kC1hbdzmrIrS0XW2GlxegZ0PWTwUXLtR6sujy41G59N3pBrJuv
+         jktg==
+X-Gm-Message-State: AO0yUKWb426iamzYvtEoa02gtCAeVjIumdvmvVdmkPjKr1UvFh4wbvwG
+        405kywtnQHAB0HXJReLKXKw=
+X-Google-Smtp-Source: AK7set9Q+JPZ2i1V6OMj9i68y+HnrzPjdi6QEw689/b6Zj7pl7FbRyDq8rVsfPRvScvQuOV3PhOCBA==
+X-Received: by 2002:a05:622a:1b9e:b0:3bf:e2d8:28d4 with SMTP id bp30-20020a05622a1b9e00b003bfe2d828d4mr24052310qtb.14.1678717963117;
+        Mon, 13 Mar 2023 07:32:43 -0700 (PDT)
+Received: from maniforge ([2620:10d:c091:400::5:b967])
+        by smtp.gmail.com with ESMTPSA id a5-20020ac84345000000b003bfaff2a6b9sm5541060qtn.10.2023.03.13.07.32.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 07:32:42 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 09:32:40 -0500
+From:   David Vernet <void@manifault.com>
+To:     Jonathan Corbet <corbet@lwn.net>
 Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
         Linux BPF <bpf@vger.kernel.org>,
         Linux Documentation <linux-doc@vger.kernel.org>,
@@ -48,49 +57,61 @@ Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
         "Tobin C. Harding" <me@tobin.cc>
 Subject: Re: [PATCH bpf-next] bpf, doc: use internal linking for link to
  netdev FAQ
-In-Reply-To: <20230313135638.GD2392@maniforge>
+Message-ID: <20230313143240.GE2392@maniforge>
 References: <20230313025119.17430-1-bagasdotme@gmail.com>
- <20230313030938.GA152792@maniforge> <ZA6knaEQcddfTCyS@debian.me>
+ <20230313030938.GA152792@maniforge>
+ <ZA6knaEQcddfTCyS@debian.me>
  <fefa25fe-8148-cbd7-a91e-e4713eb6b0ef@gmail.com>
  <4653cfd1-7209-6e49-4f01-fcc3f82f16ce@gmail.com>
- <20230313123602.GA2392@maniforge> <87wn3kvkkq.fsf@meer.lwn.net>
+ <20230313123602.GA2392@maniforge>
+ <87wn3kvkkq.fsf@meer.lwn.net>
  <20230313135638.GD2392@maniforge>
-Date:   Mon, 13 Mar 2023 08:27:11 -0600
-Message-ID: <87sfe8vi9s.fsf@meer.lwn.net>
+ <87sfe8vi9s.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87sfe8vi9s.fsf@meer.lwn.net>
+User-Agent: Mutt/2.2.9 (2022-11-12)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-David Vernet <void@manifault.com> writes:
+On Mon, Mar 13, 2023 at 08:27:11AM -0600, Jonathan Corbet wrote:
+> David Vernet <void@manifault.com> writes:
+> 
+> >> In this specific case, though, there is a better solution.  Text like:
+> >> 
+> >>   see the netdev FAQ (Documentation/process/maintainer-netdev.rst)
+> >> 
+> >> will add links in the built docs, and also tells readers of the
+> >> plain-text files where they should be looking.  Without adding warnings.
+> >
+> > Nice, seems like the best of both worlds. A syntax clarification
+> > question: are you saying that this would work?
+> >
+> >> see the `netdev-FAQ`_.
+> >>
+> >>   <snip>
+> >>
+> >> .. _netdev-FAQ: Documentation/process/maintainer-netdev.rst
+> >
+> > Or is it required to have the full path inline in the text, as in your
+> > example:
+> >
+> >>   see the netdev FAQ (Documentation/process/maintainer-netdev.rst)
+> >
+> > The benefit of the former is of course that you only have to specify the
+> > link in one place.
+> 
+> Yeah, but the latter is what we actually have.
 
->> In this specific case, though, there is a better solution.  Text like:
->> 
->>   see the netdev FAQ (Documentation/process/maintainer-netdev.rst)
->> 
->> will add links in the built docs, and also tells readers of the
->> plain-text files where they should be looking.  Without adding warnings.
->
-> Nice, seems like the best of both worlds. A syntax clarification
-> question: are you saying that this would work?
->
->> see the `netdev-FAQ`_.
->>
->>   <snip>
->>
->> .. _netdev-FAQ: Documentation/process/maintainer-netdev.rst
->
-> Or is it required to have the full path inline in the text, as in your
-> example:
->
->>   see the netdev FAQ (Documentation/process/maintainer-netdev.rst)
->
-> The benefit of the former is of course that you only have to specify the
-> link in one place.
+Ack, just wanted to make sure I understood the suggestion. I think this
+is just fine. There's really no need to add 5 - 6 links in the same file
+anyways.
 
-Yeah, but the latter is what we actually have.
+Bagas would you be OK with submitting a v2 patch which changes the first
+instance of the `netdev-FAQ`_ to netdev FAQ
+(Documentation/process/maintainer-netdev.rst) per Jon's suggestion?
 
 Thanks,
-
-jon
+David
