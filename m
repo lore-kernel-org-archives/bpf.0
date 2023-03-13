@@ -2,177 +2,107 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF7F0C7618B
-	for <bpf@archiver.kernel.org>; Mon, 13 Mar 2023 20:49:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D61BC6FD19
+	for <bpf@archiver.kernel.org>; Mon, 13 Mar 2023 20:57:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbjCMUsq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Mar 2023 16:48:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53458 "EHLO
+        id S229880AbjCMU5f (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Mar 2023 16:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbjCMUsf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 13 Mar 2023 16:48:35 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7965B6187;
-        Mon, 13 Mar 2023 13:48:31 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id y2so13279204pjg.3;
-        Mon, 13 Mar 2023 13:48:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678740511;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JMkL+RuV2gz/hzkO+iEW9HUlD0V+BM8BplklCfPzrkE=;
-        b=TrDJUwoqnKQ/G6hrEF9tBK6uK6Tt8itetLQoIX1DE61g0mlVnfnAfJv/wzZ3vVxClO
-         u4Y/mYRnrYHipfL5j3C4tCWfMwR5slRbu0Cu5Mzl4uMbRICLMSho1vor6UQeXVo4RgEM
-         7GTkSFyG0FHYaZ7kO4zzBDROeJwi1g2+bt4/Yx8/xG4kCZbUxeG/t2MaZMuyCeyREnoW
-         m8VFroBuCZVS3HYr/2HxBd5qka5SZnxcpyeMEs3Ee5JAweEb7oW1wbCi4OSb07sXrX+U
-         qz3tJQYV91qFkOZIV81kHgNuAP0F1XcggZcDk8PsfBK3LmFTtjaYwaVpsVYL2RqXqcnq
-         zL1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678740511;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=JMkL+RuV2gz/hzkO+iEW9HUlD0V+BM8BplklCfPzrkE=;
-        b=bXr6GXM22MdomqzTuvVdpMY3weDG8xvXrAVEFqPmeZ/DoyWnCLb89/gzhfF3DHEyQ/
-         ABVGTFRDFNgLS2A4z1tsXdJjMY0Cu/uP0GH6EHSwZEGtdEdYl3oy/wBPRhtTKX/Tsqt3
-         Qo2W2d3mB/+e8f9VXcH1r8UYqXKThubxogOfudPPFlxZFoXmIQ1+SuT6qpJoSty/LIDC
-         Hl4Jx1zw1lVxZv4aaGwWLotjVxVh5OEkR5/INHyhKXTAOgE9sHGzsJ1zGuFl7p1FelBv
-         mftdGE7QBmhBOpCxp+2eqOeIEYWsuCiE+5QZOEHyTpj6rAZA/4EdNHrctQeDbGW6f9kd
-         q85w==
-X-Gm-Message-State: AO0yUKVWdpVL5Qf8WT1a1J9JTj2tDPhowx4kgP4AI9nrg0qD4guxYkoX
-        LRULImRrbgtokG4EFbx+3Ps=
-X-Google-Smtp-Source: AK7set/ksRuDZOws2N7QlY5ec1AmU0FdbxEc5J5WSEFPJ+yfMpOuGnjCn8xJG9MnXMNhCSB2lB1nPA==
-X-Received: by 2002:a17:90b:1b08:b0:23b:308e:b0ab with SMTP id nu8-20020a17090b1b0800b0023b308eb0abmr9028191pjb.34.1678740510896;
-        Mon, 13 Mar 2023 13:48:30 -0700 (PDT)
-Received: from moohyul.svl.corp.google.com ([2620:15c:2d4:203:26de:6cd7:2c4f:96d5])
-        by smtp.gmail.com with ESMTPSA id s12-20020a17090aba0c00b0023af8a3cf6esm265026pjr.48.2023.03.13.13.48.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 13:48:30 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Song Liu <song@kernel.org>,
-        Hao Luo <haoluo@google.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Stephane Eranian <eranian@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH 2/4] perf lock contention: Track and show siglock with address
-Date:   Mon, 13 Mar 2023 13:48:23 -0700
-Message-Id: <20230313204825.2665483-3-namhyung@kernel.org>
+        with ESMTP id S229987AbjCMU5d (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 13 Mar 2023 16:57:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DFC8B317;
+        Mon, 13 Mar 2023 13:57:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B2D9614D5;
+        Mon, 13 Mar 2023 20:57:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41405C433D2;
+        Mon, 13 Mar 2023 20:57:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678741051;
+        bh=FvPsyX72CjxlJgwPPQ0SI92LE0LVha0nXzy8vJXXD6c=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=nZJfd+Pifk1LQRZ1I+PomQWtGL7T7PIhrwQ9xX45ipw8VPKKm6gopnobZI/NB1IvX
+         DJnROndP/zkxNKHGBet4zV97JQfOSyammDQvaIzUyjMw8OyJWnk5DsV1cutwzXqpKh
+         nNdOjx23vydtQFfvtD31BxJMnehnCSLlgnhyigu5scLhmENX9QpK+1pTOS/mwJbmXT
+         3iURODJ89aOgEXrJLgZgLPFSZ9GbKPRdcnF404vxFRPzXJBRvhNElfOY1p2rGdfoWl
+         kGJBSZOnnAKzHDFwjVHSSrooxRBKLtYuJE1xnQ+g290oUg4ADJ40Rr2+Gkbwr+xGbs
+         /TSopWQH4wPyQ==
+From:   Ross Zwisler <zwisler@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ross Zwisler <zwisler@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v4 0/2] use canonical ftrace path whenever possible
+Date:   Mon, 13 Mar 2023 14:56:26 -0600
+Message-Id: <20230313205628.1058720-1-zwisler@kernel.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-In-Reply-To: <20230313204825.2665483-1-namhyung@kernel.org>
-References: <20230313204825.2665483-1-namhyung@kernel.org>
+In-Reply-To: <20230310192050.4096886-1-zwisler@kernel.org>
+References: <20230310192050.4096886-1-zwisler@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Likewise, we can display siglock by following the pointer like
-current->sighand->siglock.
+From: Ross Zwisler <zwisler@google.com>
 
-  $ sudo ./perf lock con -abl -- sleep 1
-   contended   total wait     max wait     avg wait            address   symbol
+v3 here:
+https://lore.kernel.org/all/20230310192050.4096886-1-zwisler@kernel.org/
 
-          16      2.18 ms    305.35 us    136.34 us   ffffffff92e06080   tasklist_lock
-          28    521.78 us     31.16 us     18.63 us   ffff8cc703783ec4
-           7    119.03 us     23.55 us     17.00 us   ffff8ccb92479440
-          15     88.29 us     10.06 us      5.89 us   ffff8cd560b5f380   siglock
-           7     37.67 us      9.16 us      5.38 us   ffff8d053daf0c80
-           5      8.81 us      4.92 us      1.76 us   ffff8d053d6b0c80
+Changes since v3:
+ * Added braces around a few multi-line if/else statements (Steven Rostedt)
+ * Added Reviewed-by from Steven to patch 1
+ * Rebased onto the current bpf/bpf-next
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- tools/perf/builtin-lock.c                      | 3 +--
- tools/perf/util/bpf_lock_contention.c          | 8 ++++++--
- tools/perf/util/bpf_skel/lock_contention.bpf.c | 5 +++++
- tools/perf/util/bpf_skel/lock_data.h           | 3 ++-
- 4 files changed, 14 insertions(+), 5 deletions(-)
+Ross Zwisler (2):
+  bpf: use canonical ftrace path
+  selftests/bpf: use canonical ftrace path
 
-diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-index c62f4d9363a6..c710a5d46638 100644
---- a/tools/perf/builtin-lock.c
-+++ b/tools/perf/builtin-lock.c
-@@ -1662,8 +1662,7 @@ static void print_contention_result(struct lock_contention *con)
- 				pid, pid == -1 ? "Unknown" : thread__comm_str(t));
- 			break;
- 		case LOCK_AGGR_ADDR:
--			pr_info("  %016llx   %s\n", (unsigned long long)st->addr,
--				(st->flags & LCD_F_MMAP_LOCK) ? "mmap_lock" : st->name);
-+			pr_info("  %016llx   %s\n", (unsigned long long)st->addr, st->name);
- 			break;
- 		default:
- 			break;
-diff --git a/tools/perf/util/bpf_lock_contention.c b/tools/perf/util/bpf_lock_contention.c
-index fadcacb9d501..51631af3b4d6 100644
---- a/tools/perf/util/bpf_lock_contention.c
-+++ b/tools/perf/util/bpf_lock_contention.c
-@@ -169,7 +169,7 @@ int lock_contention_stop(void)
- 
- static const char *lock_contention_get_name(struct lock_contention *con,
- 					    struct contention_key *key,
--					    u64 *stack_trace)
-+					    u64 *stack_trace, u32 flags)
- {
- 	int idx = 0;
- 	u64 addr;
-@@ -198,6 +198,10 @@ static const char *lock_contention_get_name(struct lock_contention *con,
- 	}
- 
- 	if (con->aggr_mode == LOCK_AGGR_ADDR) {
-+		if (flags & LCD_F_MMAP_LOCK)
-+			return "mmap_lock";
-+		if (flags & LCD_F_SIGHAND_LOCK)
-+			return "siglock";
- 		sym = machine__find_kernel_symbol(machine, key->lock_addr, &kmap);
- 		if (sym)
- 			name = sym->name;
-@@ -301,7 +305,7 @@ int lock_contention_read(struct lock_contention *con)
- 			goto next;
- 		}
- 
--		name = lock_contention_get_name(con, &key, stack_trace);
-+		name = lock_contention_get_name(con, &key, stack_trace, data.flags);
- 		st = lock_stat_findnew(ls_key, name, data.flags);
- 		if (st == NULL)
- 			break;
-diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c b/tools/perf/util/bpf_skel/lock_contention.bpf.c
-index f092a78ae2b5..4ba34caf84eb 100644
---- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
-+++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
-@@ -236,6 +236,11 @@ static inline __u32 check_lock_type(__u64 lock, __u32 flags)
- 				return LCD_F_MMAP_LOCK;
- 		}
- 		break;
-+	case LCB_F_SPIN:  /* spinlock */
-+		curr = bpf_get_current_task_btf();
-+		if (&curr->sighand->siglock == (void *)lock)
-+			return LCD_F_SIGHAND_LOCK;
-+		break;
- 	default:
- 		break;
- 	}
-diff --git a/tools/perf/util/bpf_skel/lock_data.h b/tools/perf/util/bpf_skel/lock_data.h
-index 789f20833798..5ed1a0955015 100644
---- a/tools/perf/util/bpf_skel/lock_data.h
-+++ b/tools/perf/util/bpf_skel/lock_data.h
-@@ -19,7 +19,8 @@ struct contention_task_data {
-  * Upper bits of the flags in the contention_data are used to identify
-  * some well-known locks which do not have symbols (non-global locks).
-  */
--#define LCD_F_MMAP_LOCK  (1U << 31)
-+#define LCD_F_MMAP_LOCK		(1U << 31)
-+#define LCD_F_SIGHAND_LOCK	(1U << 30)
- 
- struct contention_data {
- 	u64 total_time;
+ include/uapi/linux/bpf.h                            |  8 ++++----
+ samples/bpf/cpustat_kern.c                          |  4 ++--
+ samples/bpf/hbm.c                                   |  4 ++--
+ samples/bpf/ibumad_kern.c                           |  4 ++--
+ samples/bpf/lwt_len_hist.sh                         |  2 +-
+ samples/bpf/offwaketime_kern.c                      |  2 +-
+ samples/bpf/task_fd_query_user.c                    |  4 ++--
+ samples/bpf/test_lwt_bpf.sh                         |  2 +-
+ samples/bpf/test_overhead_tp.bpf.c                  |  4 ++--
+ tools/include/uapi/linux/bpf.h                      |  8 ++++----
+ tools/testing/selftests/bpf/get_cgroup_id_user.c    |  9 +++++++--
+ .../selftests/bpf/prog_tests/kprobe_multi_test.c    |  7 ++++++-
+ .../selftests/bpf/prog_tests/task_fd_query_tp.c     |  9 +++++++--
+ .../selftests/bpf/prog_tests/tp_attach_query.c      |  9 +++++++--
+ .../testing/selftests/bpf/prog_tests/trace_printk.c | 10 +++++++---
+ .../selftests/bpf/prog_tests/trace_vprintk.c        | 10 +++++++---
+ .../selftests/bpf/progs/test_stacktrace_map.c       |  2 +-
+ tools/testing/selftests/bpf/progs/test_tracepoint.c |  2 +-
+ tools/testing/selftests/bpf/test_ftrace.sh          |  7 ++++++-
+ tools/testing/selftests/bpf/test_tunnel.sh          | 13 +++++++++----
+ tools/testing/selftests/bpf/trace_helpers.c         |  8 ++++++--
+ 21 files changed, 85 insertions(+), 43 deletions(-)
+
+
+base-commit: 22df776a9a866713d9decfb92b633bcfdb571954
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
