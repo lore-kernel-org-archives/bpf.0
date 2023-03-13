@@ -2,146 +2,123 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6D6AC74A4B
-	for <bpf@archiver.kernel.org>; Mon, 13 Mar 2023 16:32:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B60BAC6FD1F
+	for <bpf@archiver.kernel.org>; Mon, 13 Mar 2023 16:38:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbjCMQcU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Mar 2023 12:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59522 "EHLO
+        id S231487AbjCMQin (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Mar 2023 12:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbjCMQcS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 13 Mar 2023 12:32:18 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68FA7B49B
-        for <bpf@vger.kernel.org>; Mon, 13 Mar 2023 09:31:48 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id er25so22965467edb.5
-        for <bpf@vger.kernel.org>; Mon, 13 Mar 2023 09:31:48 -0700 (PDT)
+        with ESMTP id S231485AbjCMQi1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 13 Mar 2023 12:38:27 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85209211EF
+        for <bpf@vger.kernel.org>; Mon, 13 Mar 2023 09:38:09 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id z83so8581876ybb.2
+        for <bpf@vger.kernel.org>; Mon, 13 Mar 2023 09:38:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1678725080;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iC/9rxrLtt9j5YQSFIj4r+xqIhr4OIPVnE5VID9BZVo=;
-        b=YtADCUojuhirIfFRQL1K75A264lIItj+966LATxLRu6s7fqnP9LTwc+RnSBOr2EcbT
-         E9kGP2na4r89BHbgbTu7AZ1e5R+jpSnaB0D+TpNokmpEjrkwQP1lBU1uvUz0s8u7y3LR
-         5Fh+7q0UUy/aXKPe3Ahm+SWO46nK/U11SFIGasx2DnETfMGQUVbeq+JTp+mBpSLB/INF
-         tAvd5mVQKWBnACY+0rdmyJFUjWUtDgiw9T+nRsuzS9o+njas4jw2XdW6qfzy0GeDSTqv
-         uoipGOIKoNrL6oWZgqXGCp9qIilYErr0QQwMNpC24KPCzTPF6G30PkHQkm0kAmuqInLZ
-         6XOA==
+        d=google.com; s=20210112; t=1678725489;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JXVCL+FUXjevsSnXExogjehFT5TaSaLvqJy7Moz3lmw=;
+        b=G8JNrqDsB+7Mb8BTzjDSH4wSJkqHGLkb1EYmXYIZLmRlgKlwJLWcTZAcln37LifxBA
+         GM+LIRREH3fQsw2O0o+RbCPCUqzrZhRm6FUIxV0fraGcNM62H8hIrGx/ZVVXXwlYqXVS
+         dz9iV8xfqIShuxvgCX5WmI4PH40Poqu7Q66+BzLATPGfTp1JU94A/IJzLGWaN3KxXI2f
+         MSq7tDLIj08Nh10+TwsgxKwJAWRw6+FC0NEHwnoFcYifvq6iilrg4JbthBrDLGB+y0h9
+         f0HKW/NQ43wpjNBqRs+iiM6718O4759m3LIyjtn6/7Y/TnKAcJaHq0W+tFzU8gvLgVsD
+         Le/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678725080;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iC/9rxrLtt9j5YQSFIj4r+xqIhr4OIPVnE5VID9BZVo=;
-        b=3A7O1uzRvlDphPbwMTCB0jaivo9YYkM3QqyoURy9E4kk4bpzMh//CxzeI8tpBvY24e
-         Y+P5vuNLYYrm12Bs4BM09IvLJ2Ezvz/6nW/L/gLuKAvQ/q+J9FiYsDqlDVZsqoOCXyDD
-         PsUGzs+KJssVEg+4QSLfc0izAGzbwJbh4Uq2zGJbSOcDsbGss4UCS3j+PEDEIOxjADP4
-         oQxcUBO2Sn0JWcLvmEI7kGL8nVkjNjVQJsQuvbSvhmGmjkig8AZyV6XRFILU6vbUt2Y7
-         NLMrkUfDVDcYI5fKFVFwNnE02Qqze/COx56J1EcfhXNqghFjb/l22GxfzAJmcu6vuG9F
-         lDWw==
-X-Gm-Message-State: AO0yUKVzExdFEO9Fu1y5SGV8VTTKdy2CoM94K0qQ2gg7pW/8PrLD+Smn
-        6yqEDDIhvdBblAecbG/9LTnffg==
-X-Google-Smtp-Source: AK7set+PlugTltwa4XqV6a/Qhb5TzyW/J1rlDrVJgoGyg5zLPsyfQOG83Zh0xrpRM/pyV7uWxPOa3A==
-X-Received: by 2002:a05:6402:7d3:b0:4b0:87ec:2b98 with SMTP id u19-20020a05640207d300b004b087ec2b98mr33964833edy.16.1678725080373;
-        Mon, 13 Mar 2023 09:31:20 -0700 (PDT)
-Received: from [10.44.2.5] ([81.246.10.41])
-        by smtp.gmail.com with ESMTPSA id pw23-20020a17090720b700b008f398f25beesm3629029ejb.189.2023.03.13.09.31.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 09:31:20 -0700 (PDT)
-Message-ID: <284f332d-675c-6d7f-94f0-5d8a944ea075@tessares.net>
-Date:   Mon, 13 Mar 2023 17:31:19 +0100
+        d=1e100.net; s=20210112; t=1678725489;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JXVCL+FUXjevsSnXExogjehFT5TaSaLvqJy7Moz3lmw=;
+        b=EeJXJo8fT86v7D+11ftE3npeF9XVfArWdDi/xa3rCcWuN/XHvz/CJCZm7U7LY1RgQY
+         K0AL/8s9JwtoFKS5UqLRLeWeY/DfWVrulazYZXoIosEJRKgOu4FgCPf/rVUO1tTDxsDE
+         hF9y/FCyo5uvN89lJ4tRivcoQWFMvXgTQ15rNS4dHnoNtbKuJDkDNMCGc4n8JfXoR62q
+         sHFxLlk1/ePo62qJbTM+qULrys2otHspxGJHYtpc04Qm6QTOFTDUCrH+PtQwXQZIS4P7
+         7+gtLjotdhnPVnmU/vLDu/KKZVyBeAM+r7axretQryquinmd7PbU8xOb63TkN5d9kXkh
+         Cpaw==
+X-Gm-Message-State: AO0yUKX/4eSp3VFOB7LSY2nPRK+6A9tVO1J8aAim7AwxnnYLbBbfz6qz
+        NbxAawOP3+UUgGmba7lBPvLDSrGS9i0JMMomIOJTbg==
+X-Google-Smtp-Source: AK7set/IQcNZthyx88Mbxzx66TOXfEDevKhd+YrWCFW0+HXybGOYBv2DXDnXATMlxiBLluWLdUbud6Poejw1CGZhlIA=
+X-Received: by 2002:a5b:4ca:0:b0:aaf:b6ca:9a30 with SMTP id
+ u10-20020a5b04ca000000b00aafb6ca9a30mr21440309ybp.6.1678725488813; Mon, 13
+ Mar 2023 09:38:08 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
+References: <cover.1678364612.git.lorenzo@kernel.org> <f20cfdb08d7357b0853d25be3b34ace4408693be.1678364613.git.lorenzo@kernel.org>
+ <f5167659-99d7-04a1-2175-60ff1dabae71@tessares.net> <CANn89i+4F0QUqyDTqJ8GWrWvGnTyLTxja2hbL1W_rVdMqqmxaQ@mail.gmail.com>
+ <CANn89iL=zQQygGg4mkAG+MES6-CpkYBL5KY+kn4j=hAowexVZw@mail.gmail.com> <ZA9Q7fvuf4oGh9PY@lore-desk>
+In-Reply-To: <ZA9Q7fvuf4oGh9PY@lore-desk>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 13 Mar 2023 09:37:57 -0700
+Message-ID: <CANn89iJEtCp1jUDkW9e4v0tbB0w8TjFczS0YSJcYDOVBeL5zhA@mail.gmail.com>
 Subject: Re: [PATCH net v2 6/8] veth: take into account device reconfiguration
  for xdp_features flag
-Content-Language: en-GB
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Lorenzo Bianconi <lorenzo@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
-        hawk@kernel.org, john.fastabend@gmail.com, saeedm@nvidia.com,
-        leon@kernel.org, shayagr@amazon.com, akiyano@amazon.com,
-        darinzon@amazon.com, sgoutham@marvell.com,
+To:     Lorenzo Bianconi <lorenzo@kernel.org>
+Cc:     Matthieu Baerts <matthieu.baerts@tessares.net>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+        saeedm@nvidia.com, leon@kernel.org, shayagr@amazon.com,
+        akiyano@amazon.com, darinzon@amazon.com, sgoutham@marvell.com,
         lorenzo.bianconi@redhat.com, toke@redhat.com, teknoraver@meta.com,
         ttoukan.linux@gmail.com
-References: <cover.1678364612.git.lorenzo@kernel.org>
- <f20cfdb08d7357b0853d25be3b34ace4408693be.1678364613.git.lorenzo@kernel.org>
- <f5167659-99d7-04a1-2175-60ff1dabae71@tessares.net>
- <CANn89i+4F0QUqyDTqJ8GWrWvGnTyLTxja2hbL1W_rVdMqqmxaQ@mail.gmail.com>
- <CANn89iL=zQQygGg4mkAG+MES6-CpkYBL5KY+kn4j=hAowexVZw@mail.gmail.com>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <CANn89iL=zQQygGg4mkAG+MES6-CpkYBL5KY+kn4j=hAowexVZw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Eric,
+On Mon, Mar 13, 2023 at 9:36=E2=80=AFAM Lorenzo Bianconi <lorenzo@kernel.or=
+g> wrote:
+>
+> > On Mon, Mar 13, 2023 at 8:50=E2=80=AFAM Eric Dumazet <edumazet@google.c=
+om> wrote:
+> > >
+> > > On Mon, Mar 13, 2023 at 7:15=E2=80=AFAM Matthieu Baerts
+> > > <matthieu.baerts@tessares.net> wrote:
+> > > >
+> > > > Hi Lorenzo,
+> > > >
+> > > > On 09/03/2023 13:25, Lorenzo Bianconi wrote:
+> > > > > Take into account tx/rx queues reconfiguration setting device
+> > > > > xdp_features flag. Moreover consider NETIF_F_GRO flag in order to=
+ enable
+> > > > > ndo_xdp_xmit callback.
+> > > > >
+> > > > > Fixes: 66c0e13ad236 ("drivers: net: turn on XDP features")
+> > > > > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> > > >
+> > > > Thank you for the modification.
+> > > >
+> > > > Unfortunately, 'git bisect' just told me this modification is the o=
+rigin
+> > > > of a new WARN when using veth in a netns:
+> > > >
+> > > >
+> > > > ###################### 8< ######################
+> > > >
+> > > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D
+> > > > WARNING: suspicious RCU usage
+> > > > 6.3.0-rc1-00144-g064d70527aaa #149 Not tainted
+> > > > -----------------------------
+> > > > drivers/net/veth.c:1265 suspicious rcu_dereference_check() usage!
+> > > >
+> > > > other info that might help us debug this:
+> > > >
+> > >
+> > > Same observation here, I am releasing a syzbot report with a repro.
+> > >
+> > >
+> >
+> > I guess a fix would be:
+> >
+>
+> Acked-by: Lorenzo Bianconi <lorenzo@kernel.org>
 
-On 13/03/2023 16:53, Eric Dumazet wrote:
-> On Mon, Mar 13, 2023 at 8:50 AM Eric Dumazet <edumazet@google.com> wrote:
->>
->> On Mon, Mar 13, 2023 at 7:15 AM Matthieu Baerts
->> <matthieu.baerts@tessares.net> wrote:
->>>
->>> Hi Lorenzo,
->>>
->>> On 09/03/2023 13:25, Lorenzo Bianconi wrote:
->>>> Take into account tx/rx queues reconfiguration setting device
->>>> xdp_features flag. Moreover consider NETIF_F_GRO flag in order to enable
->>>> ndo_xdp_xmit callback.
->>>>
->>>> Fixes: 66c0e13ad236 ("drivers: net: turn on XDP features")
->>>> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
->>>
->>> Thank you for the modification.
->>>
->>> Unfortunately, 'git bisect' just told me this modification is the origin
->>> of a new WARN when using veth in a netns:
->>>
->>>
->>> ###################### 8< ######################
->>>
->>> =============================
->>> WARNING: suspicious RCU usage
->>> 6.3.0-rc1-00144-g064d70527aaa #149 Not tainted
->>> -----------------------------
->>> drivers/net/veth.c:1265 suspicious rcu_dereference_check() usage!
->>>
->>> other info that might help us debug this:
->>>
->>
->> Same observation here, I am releasing a syzbot report with a repro.
->>
->>
-> 
-> I guess a fix would be:
-> 
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index 293dc3b2c84a6c1931e8df42cdcd5f2798004f3c..4da74ac27f9a2425d8d3f4ffcc93f453bd58e3a5
-> 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-> @@ -1262,7 +1262,7 @@ static void veth_set_xdp_features(struct net_device *dev)
->         struct veth_priv *priv = netdev_priv(dev);
->         struct net_device *peer;
-> 
-> -       peer = rcu_dereference(priv->peer);
-> +       peer = rtnl_dereference(priv->peer);
->         if (peer && peer->real_num_tx_queues <= dev->real_num_rx_queues) {
->                 xdp_features_t val = NETDEV_XDP_ACT_BASIC |
->                                      NETDEV_XDP_ACT_REDIRECT |
-> 
+Can you submit a formal fix ?
 
-Thank you for having looked!
-
-This patch avoids the warning on our side.
-
-Cheers,
-Matt
--- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+Thanks.
