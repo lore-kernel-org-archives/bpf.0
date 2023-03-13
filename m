@@ -2,101 +2,135 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C78FAC6FD19
-	for <bpf@archiver.kernel.org>; Thu, 16 Mar 2023 08:18:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63A7EC7618A
+	for <bpf@archiver.kernel.org>; Thu, 16 Mar 2023 08:24:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjCPISm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Mar 2023 04:18:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
+        id S229688AbjCPIYk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Mar 2023 04:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbjCPISj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Mar 2023 04:18:39 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF2B25974;
-        Thu, 16 Mar 2023 01:18:13 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 87BCC21A37;
-        Thu, 16 Mar 2023 08:18:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1678954691; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hatJpOnSsIAYycIYBXhXmiUf3AaZdss4FBUHrje79BU=;
-        b=CEKvMlo86HMsqhsYEvFOx9bJ/4gkgg6ZuenPJbAd5wdNMhB8hnbBqQ8DEi2v3JHGlGVEpO
-        v9i1oUizAkiZaF395GqZb51NZ46Re6xz8PWCJYlWzyZHjBU2EZB6Z5qqKcMsxn6P/mplQg
-        /Pu5Bka0fMvruR8hGoNVXBf5FoXB9Ow=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1678954691;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hatJpOnSsIAYycIYBXhXmiUf3AaZdss4FBUHrje79BU=;
-        b=6KYYDi/9xr3de71WiWcvgrBeGMcGacvfhuQUQn7UkSQaEB0gzFdQ6jVHiXr2hBpkpTRtGf
-        ycwHGf+9Xyd6/yBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 60079133E0;
-        Thu, 16 Mar 2023 08:18:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id cvzRFsPQEmShGwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 16 Mar 2023 08:18:11 +0000
-Message-ID: <c87d4f6c-e947-70b2-f74f-2e5145572123@suse.cz>
-Date:   Thu, 16 Mar 2023 09:18:11 +0100
+        with ESMTP id S230232AbjCPIYj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Mar 2023 04:24:39 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DE65584;
+        Thu, 16 Mar 2023 01:24:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678955077; x=1710491077;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=pLr4zyKR9mScniLFymNZ6LCQtLSp1OBPkBpafzPWR8w=;
+  b=KWZp8iROh9hHs7mGb26lzr7AaWlUzV6ncxnTziBXvu7GdrHhePoWPcSu
+   iDVRpdElIju/9OpEDJCW/2p/sovg+5BfHxMSY5NTlmwtcAhUjjhs4sqjV
+   O1SdtQBg1B/9pDbMaX8QHmeGLmnEMy6XA4zza5/iskbsuAaUeEhapkk3a
+   DF+8L3faGL4xSdWBTf6zkq7KRJAdHjF5QiwFCk3d9FsB/1M0psDT6uDDY
+   axay+5CnKW/FBKDXatG8Zkm/2Rl6ZzJpSU/GTQqDOy7+r4PNqvo9Fc6Z5
+   p/+ujZ79DR/ROe9ixtn1sCeoTPrvMmJ7WnVPlg3UY/FFkfoQvvelfcmwi
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="402794202"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="402794202"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 01:24:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="823141544"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="823141544"
+Received: from irvmail002.ir.intel.com ([10.43.11.120])
+  by fmsmga001.fm.intel.com with ESMTP; 16 Mar 2023 01:24:32 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail002.ir.intel.com (Postfix) with ESMTP id CE2F17525B;
+        Mon, 13 Mar 2023 19:09:39 +0000 (GMT)
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>
+Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Song Liu <song@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        Mykola Lysenko <mykolal@fb.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v3 0/4] xdp: recycle Page Pool backed skbs built from XDP frames
+Date:   Mon, 13 Mar 2023 20:08:09 +0100
+Message-Id: <20230313190813.1036595-1-aleksander.lobakin@intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [LSF/MM/BPF TOPIC] SLOB+SLAB allocators removal and future SLUB
- improvements
-Content-Language: en-US
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     lsf-pc@lists.linux-foundation.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-block@vger.kernel.org,
-        bpf@vger.kernel.org, linux-xfs@vger.kernel.org,
-        David Rientjes <rientjes@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-References: <4b9fc9c6-b48c-198f-5f80-811a44737e5f@suse.cz>
- <ZBEzUN35gOK5igmT@P9FQF9L96D>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <ZBEzUN35gOK5igmT@P9FQF9L96D>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 3/15/23 03:54, Roman Gushchin wrote:
-> On Tue, Mar 14, 2023 at 09:05:13AM +0100, Vlastimil Babka wrote:
->> As you're probably aware, my plan is to get rid of SLOB and SLAB, leaving
->> only SLUB going forward. The removal of SLOB seems to be going well, there
->> were no objections to the deprecation and I've posted v1 of the removal
->> itself [1] so it could be in -next soon.
->> 
->> The immediate benefit of that is that we can allow kfree() (and kfree_rcu())
->> to free objects from kmem_cache_alloc() - something that IIRC at least xfs
->> people wanted in the past, and SLOB was incompatible with that.
->> 
->> For SLAB removal I haven't yet heard any objections (but also didn't
->> deprecate it yet) but if there are any users due to particular workloads
->> doing better with SLAB than SLUB, we can discuss why those would regress and
->> what can be done about that in SLUB.
->> 
->> Once we have just one slab allocator in the kernel, we can take a closer
->> look at what the users are missing from it that forces them to create own
->> allocators (e.g. BPF), and could be considered to be added as a generic
->> implementation to SLUB.
-> 
-> I guess eventually we want to merge the percpu allocator too.
+Yeah, I still remember that "Who needs cpumap nowadays" (c), but anyway.
 
-What exactly do you mean here, probably not mm/percpu.c which is too
-different from slab, but some kind of per-cpu object cache on top of slab?
+__xdp_build_skb_from_frame() missed the moment when the networking stack
+became able to recycle skb pages backed by a page_pool. This was making
+e.g. cpumap redirect even less effective than simple %XDP_PASS. veth was
+also affected in some scenarios.
+A lot of drivers use skb_mark_for_recycle() already, it's been almost
+two years and seems like there are no issues in using it in the generic
+code too. {__,}xdp_release_frame() can be then removed as it losts its
+last user.
+Page Pool becomes then zero-alloc (or almost) in the abovementioned
+cases, too. Other memory type models (who needs them at this point)
+have no changes.
+
+Some numbers on 1 Xeon Platinum core bombed with 27 Mpps of 64-byte
+IPv6 UDP, iavf w/XDP[0] (CONFIG_PAGE_POOL_STATS is enabled):
+
+Plain %XDP_PASS on baseline, Page Pool driver:
+
+src cpu Rx     drops  dst cpu Rx
+  2.1 Mpps       N/A    2.1 Mpps
+
+cpumap redirect (cross-core, w/o leaving its NUMA node) on baseline:
+
+  6.8 Mpps  5.0 Mpps    1.8 Mpps
+
+cpumap redirect with skb PP recycling:
+
+  7.9 Mpps  5.7 Mpps    2.2 Mpps
+                       +22% (from cpumap redir on baseline)
+
+[0] https://github.com/alobakin/linux/commits/iavf-xdp
+
+Alexander Lobakin (4):
+  selftests/bpf: robustify test_xdp_do_redirect with more payload magics
+  net: page_pool, skbuff: make skb_mark_for_recycle() always available
+  xdp: recycle Page Pool backed skbs built from XDP frames
+  xdp: remove unused {__,}xdp_release_frame()
+
+ include/linux/skbuff.h                        |  4 +--
+ include/net/xdp.h                             | 29 ---------------
+ net/core/xdp.c                                | 19 ++--------
+ .../bpf/progs/test_xdp_do_redirect.c          | 36 +++++++++++++------
+ 4 files changed, 30 insertions(+), 58 deletions(-)
+
+---
+From v2[1]:
+* fix the test_xdp_do_redirect selftest failing after the series: it was
+  relying on that %XDP_PASS frames can't be recycled on veth
+  (BPF CI, Alexei);
+* explain "w/o leaving its node" in the cover letter (Jesper).
+
+From v1[2]:
+* make skb_mark_for_recycle() always available, otherwise there are build
+  failures on non-PP systems (kbuild bot);
+* 'Page Pool' -> 'page_pool' when it's about a page_pool instance, not
+  API (Jesper);
+* expanded test system info a bit in the cover letter (Jesper).
+
+[1] https://lore.kernel.org/bpf/20230303133232.2546004-1-aleksander.lobakin@intel.com
+[2] https://lore.kernel.org/bpf/20230301160315.1022488-1-aleksander.lobakin@intel.com
+-- 
+2.39.2
+
