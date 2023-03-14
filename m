@@ -2,208 +2,191 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BA08C6FD1F
-	for <bpf@archiver.kernel.org>; Tue, 14 Mar 2023 07:35:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B961C6FD1F
+	for <bpf@archiver.kernel.org>; Tue, 14 Mar 2023 07:45:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbjCNHf0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Mar 2023 03:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49894 "EHLO
+        id S230072AbjCNHpg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Mar 2023 03:45:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjCNHfY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Mar 2023 03:35:24 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B348F7F01B;
-        Tue, 14 Mar 2023 00:35:22 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PbQKf2HsQz4f3pG8;
-        Tue, 14 Mar 2023 15:35:18 +0800 (CST)
-Received: from k01.huawei.com (unknown [10.67.174.197])
-        by APP4 (Coremail) with SMTP id gCh0CgBnF6utIxBk_rhhFQ--.63403S4;
-        Tue, 14 Mar 2023 15:35:19 +0800 (CST)
-From:   Xu Kuohai <xukuohai@huaweicloud.com>
-To:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        with ESMTP id S230268AbjCNHpc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Mar 2023 03:45:32 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7D915C95;
+        Tue, 14 Mar 2023 00:45:18 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id y189so4186367pgb.10;
+        Tue, 14 Mar 2023 00:45:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678779918;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wkbLUz3t4yNMZloDeQATgW6sx1hgcVThGklposOFn50=;
+        b=QNQO0u0sIxZTgk06Widi13P5TGO2Qx7wWen083tyd1qpTR8+GNo8MopmdAYQWIpQTy
+         wxegRtWriC+E5IZgVOI15ngBpzGN1N81sB88IsZdmNo+zqtu6W8k9SZ+qiD0w4tYEm7h
+         L/Lu9Q3vmVAlrhwr8v3HgbxPfy0WpzeEGE3f/IQV514o/MCTr3bypfxE5c7Fdu97Kl2r
+         wKBI6FewS9vJWPe99SUeOzjMUEMBH4BCI0DHfC1GK3uvX37C61rBKxvS1QQhOUg4Z76A
+         AA3EbZh5pTYED1anw6viin9F2Fc022Zf+/SEqj43R9dgyQktaDbjUY/iW3QUa9vazp4d
+         E5hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678779918;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wkbLUz3t4yNMZloDeQATgW6sx1hgcVThGklposOFn50=;
+        b=Ryhfr9hoILkVmdVCHWBfpiy0ffVDd21EkwcS34bvtvPzW+jzGxEb+HjNAnPgCFD1Vo
+         lbse0BWyNDQiNlkPE4jwtpBNnF7ud8Bsckox5GpYyfZJ+So3wpXorqmtTOY1myu4JOl/
+         uEmeoz7UjJl/W5MzLmjVNBLkHSztWDqsMyVSP/32qiFJjNvSfWMVGQ1cHDTiA64Bo5dP
+         Q6vk/j4gc49usDb75KgKO7Z+by/3l9QwyArUP3TUahwlZOFMEms0yuXO7uMX78bwM+g+
+         jNa759aJfony4OPRk3L6LhrzdRnFWOVn1QQzKHGviYU/cI/+YcQgu+kayAGaPR+xUahJ
+         SsEg==
+X-Gm-Message-State: AO0yUKVWK3VzWPwvSIo6KwAu1opyyRdHb5GdBk8IJf/KZ90TN6YPbTRP
+        4fp1sNQInlY+r6cDLnOXbhc=
+X-Google-Smtp-Source: AK7set9/cPv5U5/o/v6s8RyauzxAR4FNVrk9s2o7JTfwwUiaP6vCIHWOY8NvcW6sKgQFxDjL42s4PA==
+X-Received: by 2002:a62:4dc6:0:b0:624:6fdf:b36e with SMTP id a189-20020a624dc6000000b006246fdfb36emr5357025pfb.28.1678779918255;
+        Tue, 14 Mar 2023 00:45:18 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-23.three.co.id. [180.214.232.23])
+        by smtp.gmail.com with ESMTPSA id x4-20020aa79184000000b006089fb79f1esm951603pfa.96.2023.03.14.00.45.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 00:45:17 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 15BF01065A6; Tue, 14 Mar 2023 14:45:13 +0700 (WIB)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Linux BPF <bpf@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <martin.lau@linux.dev>,
         Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: check bounds not in the 32-bit range
-Date:   Tue, 14 Mar 2023 16:34:24 -0400
-Message-Id: <20230314203424.4015351-3-xukuohai@huaweicloud.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230314203424.4015351-1-xukuohai@huaweicloud.com>
-References: <20230314203424.4015351-1-xukuohai@huaweicloud.com>
+        Jonathan Corbet <corbet@lwn.net>,
+        David Vernet <void@manifault.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Tobin C. Harding" <me@tobin.cc>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: [PATCH bpf-next v2] bpf, docs: Use internal linking for link to netdev subsystem doc
+Date:   Tue, 14 Mar 2023 14:44:49 +0700
+Message-Id: <20230314074449.23620-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5399; i=bagasdotme@gmail.com; h=from:subject; bh=l4lUIuUTeBYSWJjEBK5BU+4Eb6nddzH8ARgPVJatgyA=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCkCqq/iauwCTFfYVf54sEw0I+JAwOTWpvkdf+WelUz5Eaqy 0keoo5SFQYyLQVZMkWVSIl/T6V1GIhfa1zrCzGFlAhnCwMUpABOx3MnwP+G5UYHUfzfF57LapzfP5/ OaFy0scuFEXKWcc1rEn1sW8xj+ikxLuGLw8+BEtY9bl3xZYrV+tk5mwuN6fs9Hz0ROu4oVMAIA
+X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBnF6utIxBk_rhhFQ--.63403S4
-X-Coremail-Antispam: 1UD129KBjvPXoW5XFyrGF1DAw4DAr1fKrW3p5X_Ar47ZoZ8Wr
-        y7tr48Gr1kXas3Kw4fCasrZw4rKF1vyFsIkayUAFyrZrnrZrZxJwn7XF4qvw1UWr18Z34U
-        XFn0kwnxJFykn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3AaLa
-        J3UjIYCTnIWjp_UUUOn7kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAv
-        wI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VW8XVW5AwA204
-        8vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2II
-        xxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjc
-        xK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28E
-        F7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F4
-        0EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_
-        Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8c
-        xan2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8C
-        rVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXw
-        CIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x02
-        67AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
-        0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Gg
-        4DUUUUU==
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Xu Kuohai <xukuohai@huawei.com>
+Commit d56b0c461d19da ("bpf, docs: Fix link to netdev-FAQ target")
+attempts to fix linking problem to undefined "netdev-FAQ" label
+introduced in 287f4fa99a5281 ("docs: Update references to netdev-FAQ")
+by changing internal cross reference to netdev subsystem documentation
+(Documentation/process/maintainer-netdev.rst) to external one at
+docs.kernel.org. However, the linking problem is still not
+resolved, as the generated link points to non-existent netdev-FAQ
+section of the external doc, which when clicked, will instead going to
+the top of the doc.
 
-Add cases to check if bound is updated correctly when 64-bit value is
-not in the 32-bit range.
+Revert back to internal linking by simply mention the doc path while
+massaging the leading text to the link, since the netdev subsystem doc
+contains no FAQs but rather general information about the subsystem.
 
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+Fixes: d56b0c461d19da ("bpf, docs: Fix link to netdev-FAQ target")
+Fixes: 287f4fa99a5281 ("docs: Update references to netdev-FAQ")
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 ---
- tools/testing/selftests/bpf/verifier/bounds.c | 121 ++++++++++++++++++
- 1 file changed, 121 insertions(+)
+ Changes since v1 [1]:
 
-diff --git a/tools/testing/selftests/bpf/verifier/bounds.c b/tools/testing/selftests/bpf/verifier/bounds.c
-index 33125d5f6772..74b1917d4208 100644
---- a/tools/testing/selftests/bpf/verifier/bounds.c
-+++ b/tools/testing/selftests/bpf/verifier/bounds.c
-@@ -753,3 +753,124 @@
- 	.result_unpriv = REJECT,
- 	.result = ACCEPT,
- },
-+{
-+	"bound check with JMP_JLT for crossing 64-bit signed boundary",
-+	.insns = {
-+	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
-+	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data_end)),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 8),
-+
-+	BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
-+	BPF_LD_IMM64(BPF_REG_0, 0x7fffffffffffff10),
-+	BPF_ALU64_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
-+
-+	BPF_LD_IMM64(BPF_REG_0, 0x8000000000000000),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
-+	/* r1 unsigned range is [0x7fffffffffffff10, 0x800000000000000f] */
-+	BPF_JMP_REG(BPF_JLT, BPF_REG_0, BPF_REG_1, -2),
-+
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+},
-+{
-+	"bound check with JMP_JSLT for crossing 64-bit signed boundary",
-+	.insns = {
-+	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
-+	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data_end)),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 8),
-+
-+	BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
-+	BPF_LD_IMM64(BPF_REG_0, 0x7fffffffffffff10),
-+	BPF_ALU64_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
-+
-+	BPF_LD_IMM64(BPF_REG_0, 0x8000000000000000),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
-+	/* r1 signed range is [S64_MIN, S64_MAX] */
-+	BPF_JMP_REG(BPF_JSLT, BPF_REG_0, BPF_REG_1, -2),
-+
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.errstr = "BPF program is too large",
-+	.result = REJECT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+},
-+{
-+	"bound check for loop upper bound greater than U32_MAX",
-+	.insns = {
-+	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
-+	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data_end)),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 8),
-+
-+	BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
-+	BPF_LD_IMM64(BPF_REG_0, 0x100000000),
-+	BPF_ALU64_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
-+
-+	BPF_LD_IMM64(BPF_REG_0, 0x100000000),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
-+	BPF_JMP_REG(BPF_JLT, BPF_REG_0, BPF_REG_1, -2),
-+
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+},
-+{
-+	"bound check with JMP32_JLT for crossing 32-bit signed boundary",
-+	.insns = {
-+	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
-+	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data_end)),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 6),
-+
-+	BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
-+	BPF_MOV32_IMM(BPF_REG_0, 0x7fffff10),
-+	BPF_ALU32_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
-+
-+	BPF_MOV32_IMM(BPF_REG_0, 0x80000000),
-+	BPF_ALU32_IMM(BPF_ADD, BPF_REG_0, 1),
-+	/* r1 unsigned range is [0, 0x8000000f] */
-+	BPF_JMP32_REG(BPF_JLT, BPF_REG_0, BPF_REG_1, -2),
-+
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+},
-+{
-+	"bound check with JMP32_JSLT for crossing 32-bit signed boundary",
-+	.insns = {
-+	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
-+	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data_end)),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 6),
-+
-+	BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
-+	BPF_MOV32_IMM(BPF_REG_0, 0x7fffff10),
-+	BPF_ALU32_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
-+
-+	BPF_MOV32_IMM(BPF_REG_0, 0x80000000),
-+	BPF_ALU32_IMM(BPF_ADD, BPF_REG_0, 1),
-+	/* r1 signed range is [S32_MIN, S32_MAX] */
-+	BPF_JMP32_REG(BPF_JSLT, BPF_REG_0, BPF_REG_1, -2),
-+
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.errstr = "BPF program is too large",
-+	.result = REJECT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+},
+   * Use plain doc path for internal linking
+   * Edit the surrounding text to mention what the target is about
+
+ There is an unresolved question: Is this cross-ref fixup should be made
+ against bpf tree instead, because the original problem is also seen there?
+ If so, I will do the fix against that tree instead.
+
+ [1]: https://lore.kernel.org/linux-doc/20230313025119.17430-1-bagasdotme@gmail.com/
+
+ Documentation/bpf/bpf_devel_QA.rst | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
+
+diff --git a/Documentation/bpf/bpf_devel_QA.rst b/Documentation/bpf/bpf_devel_QA.rst
+index 5f5f9ccc3862b4..e151e61dff3818 100644
+--- a/Documentation/bpf/bpf_devel_QA.rst
++++ b/Documentation/bpf/bpf_devel_QA.rst
+@@ -128,7 +128,8 @@ into the bpf-next tree will make their way into net-next tree. net and
+ net-next are both run by David S. Miller. From there, they will go
+ into the kernel mainline tree run by Linus Torvalds. To read up on the
+ process of net and net-next being merged into the mainline tree, see
+-the `netdev-FAQ`_.
++the documentation on netdev subsystem at
++Documentation/process/maintainer-netdev.rst.
+ 
+ 
+ 
+@@ -147,7 +148,8 @@ request)::
+ Q: How do I indicate which tree (bpf vs. bpf-next) my patch should be applied to?
+ ---------------------------------------------------------------------------------
+ 
+-A: The process is the very same as described in the `netdev-FAQ`_,
++A: The process is the very same as described in the netdev subsystem
++documentation at Documentation/process/maintainer-netdev.rst,
+ so please read up on it. The subject line must indicate whether the
+ patch is a fix or rather "next-like" content in order to let the
+ maintainers know whether it is targeted at bpf or bpf-next.
+@@ -206,8 +208,9 @@ ii) run extensive BPF test suite and
+ Once the BPF pull request was accepted by David S. Miller, then
+ the patches end up in net or net-next tree, respectively, and
+ make their way from there further into mainline. Again, see the
+-`netdev-FAQ`_ for additional information e.g. on how often they are
+-merged to mainline.
++documentation for netdev subsystem at
++Documentation/process/maintainer-netdev.rst for additional information
++e.g. on how often they are merged to mainline.
+ 
+ Q: How long do I need to wait for feedback on my BPF patches?
+ -------------------------------------------------------------
+@@ -230,7 +233,8 @@ Q: Are patches applied to bpf-next when the merge window is open?
+ -----------------------------------------------------------------
+ A: For the time when the merge window is open, bpf-next will not be
+ processed. This is roughly analogous to net-next patch processing,
+-so feel free to read up on the `netdev-FAQ`_ about further details.
++so feel free to read up on the netdev docs at
++Documentation/process/maintainer-netdev.rst about further details.
+ 
+ During those two weeks of merge window, we might ask you to resend
+ your patch series once bpf-next is open again. Once Linus released
+@@ -394,7 +398,8 @@ netdev kernel mailing list in Cc and ask for the fix to be queued up:
+   netdev@vger.kernel.org
+ 
+ The process in general is the same as on netdev itself, see also the
+-`netdev-FAQ`_.
++the documentation on networking subsystem at
++Documentation/process/maintainer-netdev.rst.
+ 
+ Q: Do you also backport to kernels not currently maintained as stable?
+ ----------------------------------------------------------------------
+@@ -410,7 +415,7 @@ Q: The BPF patch I am about to submit needs to go to stable as well
+ What should I do?
+ 
+ A: The same rules apply as with netdev patch submissions in general, see
+-the `netdev-FAQ`_.
++the netdev docs at Documentation/process/maintainer-netdev.rst.
+ 
+ Never add "``Cc: stable@vger.kernel.org``" to the patch description, but
+ ask the BPF maintainers to queue the patches instead. This can be done
+@@ -685,7 +690,6 @@ when:
+ 
+ .. Links
+ .. _Documentation/process/: https://www.kernel.org/doc/html/latest/process/
+-.. _netdev-FAQ: https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html
+ .. _selftests:
+    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/bpf/
+ .. _Documentation/dev-tools/kselftest.rst:
+
+base-commit: 9e36a204bd43553a9cd4bd574612cd9a5df791ea
 -- 
-2.30.2
+An old man doll... just what I always wanted! - Clara
 
