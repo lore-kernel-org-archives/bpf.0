@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0182AC6FD1D
-	for <bpf@archiver.kernel.org>; Tue, 14 Mar 2023 23:43:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD6EAC7618B
+	for <bpf@archiver.kernel.org>; Tue, 14 Mar 2023 23:44:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230191AbjCNXnb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Mar 2023 19:43:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57218 "EHLO
+        id S229707AbjCNXoi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Mar 2023 19:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230129AbjCNXnN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Mar 2023 19:43:13 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3083C3E618;
-        Tue, 14 Mar 2023 16:42:52 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id h11-20020a17090a2ecb00b00237c740335cso98923pjs.3;
-        Tue, 14 Mar 2023 16:42:52 -0700 (PDT)
+        with ESMTP id S230111AbjCNXnM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Mar 2023 19:43:12 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12823D902;
+        Tue, 14 Mar 2023 16:42:49 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id v21so8160794ple.9;
+        Tue, 14 Mar 2023 16:42:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678837371;
+        d=gmail.com; s=20210112; t=1678837369;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jMxL2NHeZsRCM6blhtDc4AW9Gdpz11WHZ6f52Ygl1HM=;
-        b=hFOpgmG+9oZLXQ6Ujq4k3ob30nepb+lX1yE1Ppvn7qFOJfNhU6OAsOLfgOqcQlVgt0
-         RSlJO8U7ybCppY6tzgqzeE1EoGl7DdkFyvjwiIbd21/KEMUp2OH2H5UK4O5K1obXfN/B
-         WfzmvWNbuh5Vee3ZyjKCiqUWYh1ri/Gpm1zkMP1LL5eXgw2EXJJH2UHXtWozPtY3P+Y6
-         iguS0GZwuDy6Xv6BWnbqLV5ibQllK8FTyJY9TNma/2HqeWqsMoUYJs8C1bnRPvx/cbPC
-         Ec8/8d2yLtypddxgnIbSp2KbkenRGm/YnYF19ExvVURWVDGk+uJ382e91Y0L/C0jEKi1
-         331A==
+        bh=AUz9t3miV/6g18NoyX2KHMC0EiLYl+hvlFPuzWmCtsU=;
+        b=XomfK7jyB3k61EfY5qAfnfRDEZ3ZWHdtMyzPh8jWVWzBgiVOnXqrV6fHKfDymD9WyU
+         K4raOz7T4Frod+/HmNne94Kl42KqEQER5atLtKI7m+uIdVs6+skh2mioVGUhQtkgM4gN
+         mUm/flgUHzBUNTQC6+mAgPfwVnVGI4re2n420OAylxucfbvWonrQheMYb6L3FCEYddov
+         nqYUhc/ZraL6nw9+wqaJzqhwTAZIH9ATmgcHxVpri+HhhsKVlJUVP6v7fzuHAjU7d9V4
+         I8+dJwwJ/yxP2QB77leav+cqL37eFVXdv0eJjk5CaSBMdInPmrmgimRbcTCvoQ1YXRuY
+         BuwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678837371;
+        d=1e100.net; s=20210112; t=1678837369;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=jMxL2NHeZsRCM6blhtDc4AW9Gdpz11WHZ6f52Ygl1HM=;
-        b=BsrT+A8eJlD3WoYGtg6FLtcaEQad+rk4ZNviqH6x1TbGKtJipGg1KUNhZujU3cROST
-         x5jitESCUUKOR86baoO1DVqzpq9UIfTGcWqnazB1nym/EjrrTbbe9Hon0bWxOJoj68BW
-         JJrxk4Lvw86Q3uCJtfFP4zi/ANir9PybFahXxTRlm5pEgPNWqy07ygEK3rB5+I9DphPE
-         MXzq3IKUizTU98IjfEAcjn9hTt+PZHs9QXrUghkyD0UyJ3lfgPl6eHeAmgb2NK8SQvdT
-         gnPix/pONOdn7+r70et7GrE2jHJ6w/mFmat44zgawdszifMmlcIQH4CnPEOTkziXO6Lm
-         WH2Q==
-X-Gm-Message-State: AO0yUKX0IORcm+YzW4jyzdJwBXXOaJk/d2g9ND367oTOXvbuXYIemoR4
-        2/us0QqEdy3P1QTch3Du1wY=
-X-Google-Smtp-Source: AK7set8vh9xqppIpf5fA95KYD5Zk7VVQEXve2fZFcJflST1qVDIZ8jzlmCTcLzC6ZS8jBoK34aYWxw==
-X-Received: by 2002:a17:903:11c5:b0:19c:ea4d:5995 with SMTP id q5-20020a17090311c500b0019cea4d5995mr761040plh.68.1678837371651;
-        Tue, 14 Mar 2023 16:42:51 -0700 (PDT)
+        bh=AUz9t3miV/6g18NoyX2KHMC0EiLYl+hvlFPuzWmCtsU=;
+        b=v/3RoHVnhJ6fI/WXB8fuXE3pSJ/xEe+jd4xD3xJ4epq6w1t7jZ3P+sBnN17apVonBx
+         Tc61su07zPsB6bStjqQqSq/d4PMw+iasvXEsCPgRm/QWD+Q0I+xj74+qbZmpzOJMrg33
+         oK71anQyMzBUEbMxYa4xH1NEbTQ5hlm2OTXuwil9ktGdozWpumNuAuZ+DJFpVSnN8iZO
+         dYaSKk6h3Onio8MhzDfsSIbZtbBTRVAywWmoJQPZNaRh7HeR+PnexJaKWrgCpfwpsSoA
+         fFSmOODiZOWkwII3bT16sKXoK7weE4Pr3LSz1fsHtks25ekxzfWvx3OkUdz0KRIIv5Iy
+         EitQ==
+X-Gm-Message-State: AO0yUKVaqscWIc/VEFEMXZu6+RoJZdFiJ1FQQqBuTxugq6ZKwztEWO+E
+        joHGfNgRoqLyfTc3HiA9lyk=
+X-Google-Smtp-Source: AK7set/lPJTrFbOOgl/ZD7hgiVjyoz/bxi1eJbzxhfRSZnVtMnMxLmIKpYVxzOJgRaTqqxjTxKEsLA==
+X-Received: by 2002:a17:903:234a:b0:19f:3797:d8de with SMTP id c10-20020a170903234a00b0019f3797d8demr879742plh.9.1678837369104;
+        Tue, 14 Mar 2023 16:42:49 -0700 (PDT)
 Received: from moohyul.svl.corp.google.com ([2620:15c:2d4:203:3826:a5cd:1f1d:6c85])
-        by smtp.gmail.com with ESMTPSA id ik13-20020a170902ab0d00b0019f39e4f120sm2280806plb.18.2023.03.14.16.42.50
+        by smtp.gmail.com with ESMTPSA id ik13-20020a170902ab0d00b0019f39e4f120sm2280806plb.18.2023.03.14.16.42.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 16:42:51 -0700 (PDT)
+        Tue, 14 Mar 2023 16:42:48 -0700 (PDT)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -66,9 +66,9 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
         LKML <linux-kernel@vger.kernel.org>,
         linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH 09/10] perf bpf filter: Show warning for missing sample flags
-Date:   Tue, 14 Mar 2023 16:42:36 -0700
-Message-Id: <20230314234237.3008956-10-namhyung@kernel.org>
+Subject: [PATCH 07/10] perf bpf filter: Add data_src sample data support
+Date:   Tue, 14 Mar 2023 16:42:34 -0700
+Message-Id: <20230314234237.3008956-8-namhyung@kernel.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 In-Reply-To: <20230314234237.3008956-1-namhyung@kernel.org>
 References: <20230314234237.3008956-1-namhyung@kernel.org>
@@ -78,116 +78,165 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-For a BPF filter to work properly, users need to provide appropriate
-options to enable the sample types.  Otherwise the BPF program would
-see an invalid value (i.e. always 0) and filter won't work well.
+The data_src has many entries to express memory behaviors.  Add each
+term separately so that users can combine them for their purpose.
 
-Show a warning message if sample types are missing like below.
+I didn't add prefix for the constants for simplicity as they are mostly
+distinguishable but I had to use l1_miss and l2_hit for mem_dtlb since
+mem_lvl has different values for the same names.  Note that I decided
+mem_lvl to be used as an alias of mem_lvlnum as it's deprecated now.
+According to the comment in the UAPI header, users should use the mix
+of mem_lvlnum, mem_remote and mem_snoop.  Also the SNOOPX bits are
+concatenated to mem_snoop for simplicity.
 
-  $ sudo ./perf record -e cycles --filter 'addr < 100' true
-  Error: cycles event does not have PERF_SAMPLE_ADDR
-   Hint: please add -d option to perf record.
-  failed to set filter "BPF" on event cycles with 22 (Invalid argument)
+The following terms are used for data_src and the corresponding perf
+sample data fields:
 
+ * mem_op : { load, store, pfetch, exec }
+ * mem_lvl: { l1, l2, l3, l4, cxl, io, any_cache, lfb, ram, pmem }
+ * mem_snoop: { none, hit, miss, hitm, fwd, peer }
+ * mem_remote: { remote }
+ * mem_lock: { locked }
+ * mem_dtlb { l1_hit, l1_miss, l2_hit, l2_miss, any_hit, any_miss, walk, fault }
+ * mem_blk { by_data, by_addr }
+ * mem_hops { hops0, hops1, hops2, hops3 }
+
+We can now use a filter expression like below:
+
+  'mem_op == load, mem_lvl <= l2, mem_dtlb == l1_hit'
+  'mem_dtlb == l2_miss, mem_hops > hops1'
+  'mem_lvl == ram, mem_remote == 1'
+
+Note that 'na' is shared among the terms as it has the same value except
+for mem_lvl.  I don't have a good idea to handle that for now.
+
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/builtin-record.c  |  2 +-
- tools/perf/util/bpf-filter.c | 62 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 63 insertions(+), 1 deletion(-)
+ tools/perf/util/bpf-filter.l                 | 61 ++++++++++++++++++++
+ tools/perf/util/bpf_skel/sample_filter.bpf.c | 23 ++++++++
+ 2 files changed, 84 insertions(+)
 
-diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-index 6df8b823859d..7b7e74a56346 100644
---- a/tools/perf/builtin-record.c
-+++ b/tools/perf/builtin-record.c
-@@ -1353,7 +1353,7 @@ static int record__open(struct record *rec)
+diff --git a/tools/perf/util/bpf-filter.l b/tools/perf/util/bpf-filter.l
+index 419f923b35c0..3e66b7a0215e 100644
+--- a/tools/perf/util/bpf-filter.l
++++ b/tools/perf/util/bpf-filter.l
+@@ -42,6 +42,12 @@ static int value(int base)
+ 	return BFT_NUM;
+ }
  
- 	if (evlist__apply_filters(evlist, &pos)) {
- 		pr_err("failed to set filter \"%s\" on event %s with %d (%s)\n",
--			pos->filter, evsel__name(pos), errno,
-+			pos->filter ?: "BPF", evsel__name(pos), errno,
- 			str_error_r(errno, msg, sizeof(msg)));
- 		rc = -1;
- 		goto out;
-diff --git a/tools/perf/util/bpf-filter.c b/tools/perf/util/bpf-filter.c
-index bd638737e12f..0b30688d78a7 100644
---- a/tools/perf/util/bpf-filter.c
-+++ b/tools/perf/util/bpf-filter.c
-@@ -17,6 +17,64 @@
- 
- #define FD(e, x, y) (*(int *)xyarray__entry(e->core.fd, x, y))
- 
-+#define __PERF_SAMPLE_TYPE(st, opt)	{ st, #st, opt }
-+#define PERF_SAMPLE_TYPE(_st, opt)	__PERF_SAMPLE_TYPE(PERF_SAMPLE_##_st, opt)
-+
-+static const struct perf_sample_info {
-+	u64 type;
-+	const char *name;
-+	const char *option;
-+} sample_table[] = {
-+	/* default sample flags */
-+	PERF_SAMPLE_TYPE(IP, NULL),
-+	PERF_SAMPLE_TYPE(TID, NULL),
-+	PERF_SAMPLE_TYPE(PERIOD, NULL),
-+	/* flags mostly set by default, but still have options */
-+	PERF_SAMPLE_TYPE(ID, "--sample-identifier"),
-+	PERF_SAMPLE_TYPE(CPU, "--sample-cpu"),
-+	PERF_SAMPLE_TYPE(TIME, "-T"),
-+	/* optional sample flags */
-+	PERF_SAMPLE_TYPE(ADDR, "-d"),
-+	PERF_SAMPLE_TYPE(DATA_SRC, "-d"),
-+	PERF_SAMPLE_TYPE(PHYS_ADDR, "--phys-data"),
-+	PERF_SAMPLE_TYPE(WEIGHT, "-W"),
-+	PERF_SAMPLE_TYPE(WEIGHT_STRUCT, "-W"),
-+	PERF_SAMPLE_TYPE(TRANSACTION, "--transaction"),
-+	PERF_SAMPLE_TYPE(CODE_PAGE_SIZE, "--code-page-size"),
-+	PERF_SAMPLE_TYPE(DATA_PAGE_SIZE, "--data-page-size"),
-+};
-+
-+static const struct perf_sample_info *get_sample_info(u64 flags)
++static int constant(int val)
 +{
-+	size_t i;
-+
-+	for (i = 0; i < ARRAY_SIZE(sample_table); i++) {
-+		if (sample_table[i].type == flags)
-+			return &sample_table[i];
-+	}
-+	return NULL;
++	perf_bpf_filter_lval.num = val;
++	return BFT_NUM;
 +}
 +
-+static int check_sample_flags(struct evsel *evsel, struct perf_bpf_filter_expr *expr)
-+{
-+	const struct perf_sample_info *info;
-+
-+	if (evsel->core.attr.sample_type & expr->sample_flags)
-+		return 0;
-+
-+	info = get_sample_info(expr->sample_flags);
-+	if (info == NULL) {
-+		pr_err("Error: %s event does not have sample flags %lx\n",
-+		       evsel__name(evsel), expr->sample_flags);
-+		return -1;
-+	}
-+
-+	pr_err("Error: %s event does not have %s\n", evsel__name(evsel), info->name);
-+	if (info->option)
-+		pr_err(" Hint: please add %s option to perf record\n", info->option);
-+	return -1;
-+}
-+
- int perf_bpf_filter__prepare(struct evsel *evsel)
+ static int error(const char *str)
  {
- 	int i, x, y, fd;
-@@ -40,6 +98,10 @@ int perf_bpf_filter__prepare(struct evsel *evsel)
- 			.flags = expr->sample_flags,
- 			.value = expr->val,
- 		};
-+
-+		if (check_sample_flags(evsel, expr) < 0)
-+			return -1;
-+
- 		bpf_map_update_elem(fd, &i, &entry, BPF_ANY);
- 		i++;
+ 	printf("perf_bpf_filter: Unexpected filter %s: %s\n", str, perf_bpf_filter_text);
+@@ -80,6 +86,15 @@ retire_lat	{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 3); } /* alias for we
+ phys_addr	{ return sample(PERF_SAMPLE_PHYS_ADDR); }
+ code_pgsz	{ return sample(PERF_SAMPLE_CODE_PAGE_SIZE); }
+ data_pgsz	{ return sample(PERF_SAMPLE_DATA_PAGE_SIZE); }
++mem_op		{ return sample_part(PERF_SAMPLE_DATA_SRC, 1); }
++mem_lvlnum	{ return sample_part(PERF_SAMPLE_DATA_SRC, 2); }
++mem_lvl		{ return sample_part(PERF_SAMPLE_DATA_SRC, 2); } /* alias for mem_lvlnum */
++mem_snoop	{ return sample_part(PERF_SAMPLE_DATA_SRC, 3); } /* include snoopx */
++mem_remote	{ return sample_part(PERF_SAMPLE_DATA_SRC, 4); }
++mem_lock	{ return sample_part(PERF_SAMPLE_DATA_SRC, 5); }
++mem_dtlb	{ return sample_part(PERF_SAMPLE_DATA_SRC, 6); }
++mem_blk		{ return sample_part(PERF_SAMPLE_DATA_SRC, 7); }
++mem_hops	{ return sample_part(PERF_SAMPLE_DATA_SRC, 8); }
  
+ "=="		{ return operator(PBF_OP_EQ); }
+ "!="		{ return operator(PBF_OP_NEQ); }
+@@ -89,6 +104,52 @@ data_pgsz	{ return sample(PERF_SAMPLE_DATA_PAGE_SIZE); }
+ "<="		{ return operator(PBF_OP_LE); }
+ "&"		{ return operator(PBF_OP_AND); }
+ 
++na		{ return constant(PERF_MEM_OP_NA); }
++load		{ return constant(PERF_MEM_OP_LOAD); }
++store		{ return constant(PERF_MEM_OP_STORE); }
++pfetch		{ return constant(PERF_MEM_OP_PFETCH); }
++exec		{ return constant(PERF_MEM_OP_EXEC); }
++
++l1		{ return constant(PERF_MEM_LVLNUM_L1); }
++l2		{ return constant(PERF_MEM_LVLNUM_L2); }
++l3		{ return constant(PERF_MEM_LVLNUM_L3); }
++l4		{ return constant(PERF_MEM_LVLNUM_L4); }
++cxl		{ return constant(PERF_MEM_LVLNUM_CXL); }
++io		{ return constant(PERF_MEM_LVLNUM_IO); }
++any_cache	{ return constant(PERF_MEM_LVLNUM_ANY_CACHE); }
++lfb		{ return constant(PERF_MEM_LVLNUM_LFB); }
++ram		{ return constant(PERF_MEM_LVLNUM_RAM); }
++pmem		{ return constant(PERF_MEM_LVLNUM_PMEM); }
++
++none		{ return constant(PERF_MEM_SNOOP_NONE); }
++hit		{ return constant(PERF_MEM_SNOOP_HIT); }
++miss		{ return constant(PERF_MEM_SNOOP_MISS); }
++hitm		{ return constant(PERF_MEM_SNOOP_HITM); }
++fwd		{ return constant(PERF_MEM_SNOOPX_FWD); }
++peer		{ return constant(PERF_MEM_SNOOPX_PEER); }
++
++remote		{ return constant(PERF_MEM_REMOTE_REMOTE); }
++
++locked		{ return constant(PERF_MEM_LOCK_LOCKED); }
++
++l1_hit		{ return constant(PERF_MEM_TLB_L1 | PERF_MEM_TLB_HIT); }
++l1_miss		{ return constant(PERF_MEM_TLB_L1 | PERF_MEM_TLB_MISS); }
++l2_hit		{ return constant(PERF_MEM_TLB_L2 | PERF_MEM_TLB_HIT); }
++l2_miss		{ return constant(PERF_MEM_TLB_L2 | PERF_MEM_TLB_MISS); }
++any_hit		{ return constant(PERF_MEM_TLB_HIT); }
++any_miss	{ return constant(PERF_MEM_TLB_MISS); }
++walk		{ return constant(PERF_MEM_TLB_WK); }
++os		{ return constant(PERF_MEM_TLB_OS); }
++fault		{ return constant(PERF_MEM_TLB_OS); } /* alias for os */
++
++by_data		{ return constant(PERF_MEM_BLK_DATA); }
++by_addr		{ return constant(PERF_MEM_BLK_ADDR); }
++
++hops0		{ return constant(PERF_MEM_HOPS_0); }
++hops1		{ return constant(PERF_MEM_HOPS_1); }
++hops2		{ return constant(PERF_MEM_HOPS_2); }
++hops3		{ return constant(PERF_MEM_HOPS_3); }
++
+ ","		{ return ','; }
+ 
+ {ident}		{ return error("ident"); }
+diff --git a/tools/perf/util/bpf_skel/sample_filter.bpf.c b/tools/perf/util/bpf_skel/sample_filter.bpf.c
+index d930401c5bfc..88dbc788d257 100644
+--- a/tools/perf/util/bpf_skel/sample_filter.bpf.c
++++ b/tools/perf/util/bpf_skel/sample_filter.bpf.c
+@@ -70,6 +70,29 @@ static inline __u64 perf_get_sample(struct bpf_perf_event_data_kern *kctx,
+ 		return kctx->data->code_page_size;
+ 	case PERF_SAMPLE_DATA_PAGE_SIZE:
+ 		return kctx->data->data_page_size;
++	case PERF_SAMPLE_DATA_SRC:
++		if (entry->part == 1)
++			return kctx->data->data_src.mem_op;
++		if (entry->part == 2)
++			return kctx->data->data_src.mem_lvl_num;
++		if (entry->part == 3) {
++			__u32 snoop = kctx->data->data_src.mem_snoop;
++			__u32 snoopx = kctx->data->data_src.mem_snoopx;
++
++			return (snoopx << 5) | snoop;
++		}
++		if (entry->part == 4)
++			return kctx->data->data_src.mem_remote;
++		if (entry->part == 5)
++			return kctx->data->data_src.mem_lock;
++		if (entry->part == 6)
++			return kctx->data->data_src.mem_dtlb;
++		if (entry->part == 7)
++			return kctx->data->data_src.mem_blk;
++		if (entry->part == 8)
++			return kctx->data->data_src.mem_hops;
++		/* return the whole word */
++		return kctx->data->data_src.val;
+ 	default:
+ 		break;
+ 	}
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
