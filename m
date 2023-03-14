@@ -2,171 +2,117 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A4BAC7618A
-	for <bpf@archiver.kernel.org>; Tue, 14 Mar 2023 13:18:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A500C6FD1C
+	for <bpf@archiver.kernel.org>; Tue, 14 Mar 2023 13:26:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbjCNNSr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Mar 2023 09:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50522 "EHLO
+        id S232411AbjCNN0G (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Mar 2023 09:26:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232047AbjCNNSW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Mar 2023 09:18:22 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0052AA730;
-        Tue, 14 Mar 2023 06:15:13 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id k2so8665504pll.8;
-        Tue, 14 Mar 2023 06:15:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678799701;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kcWoqfvA9IE0sL0PZdVOZ872E1skiGdEi9aMnqvt7k0=;
-        b=KALZf0IbRmqSNwlp7+T8n48OrNg0JWoB5O37QP6NCehvUpOCt+K9jgOvDW47eqMnvb
-         xlAcpDlVAMmkxGkf3zxQuPUgEpwGREdr1DGG+hq8XQeIaSDIUVxnY4QGOxSG4yWgHmq9
-         4238pd7VcjP4juWG0NPZlmQiQ2D4SxL4yiEbu2sQw3Omxi+OxRt7ZKXyPUkxBOsHUA/Y
-         1zz1zL03ifFKDS/DqZt84he9pFM5CmcqT0XdV0kE/6MMBCUeIuIZ76rJ7wq9x0ls4ogE
-         6c0xG5Ar4hlYkdSMtL4db8opVjktytqfxpcWl6BYThRQ+jgDFuEsY+39bESYh8AqdPdk
-         wq7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678799701;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kcWoqfvA9IE0sL0PZdVOZ872E1skiGdEi9aMnqvt7k0=;
-        b=ZVSBcsKKNJSLn745Ko14toIvLNneaGCgJPk4pn25oeK/2ZqCDBpXruX+Q2upA8h911
-         hWDD4hDHPTgXdwcMJHJ6nR7cBnFiCJB47+mtetM1z0zCJsh+2o1Gj4+5wRVuNWgFRqrU
-         quvE3dS7jTOuhzwPtE03BlbB4Jq10Etd7RXJ8GVxepadUK/0e9zgWW2r9vUXk+pxvi8c
-         yjVDprhqDlxODFBDsfXCfKqUAdr8z76rYOPZFizBi6IzOJHSnw77solTpLR60RCPEIzs
-         5VBCSrnbRuuYhM90ALh09dkXvQD+tYxDwlC6ByO1KXJShdg5YRk8HqLHl22PxJXiyQg3
-         7lHw==
-X-Gm-Message-State: AO0yUKVqN8dJD/kgxVhR816kPA2ifywR4a6KuGQht28qAyjywbjKq7LJ
-        mdCmJfXq0NfEs1UbKj6mKow=
-X-Google-Smtp-Source: AK7set+DEJZR2cUVwxNY3w4ozrdvxd+TZjWmnco0wUDNLN6E+lemTjl35jMINsvOjseHySmPfGGxuQ==
-X-Received: by 2002:a17:90a:db46:b0:23d:19c6:84b7 with SMTP id u6-20020a17090adb4600b0023d19c684b7mr4612319pjx.16.1678799701136;
-        Tue, 14 Mar 2023 06:15:01 -0700 (PDT)
-Received: from KERNELXING-MB0.tencent.com ([103.7.29.31])
-        by smtp.gmail.com with ESMTPSA id g15-20020a17090a7d0f00b0023d36aa85fesm1465843pjl.40.2023.03.14.06.14.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 06:15:00 -0700 (PDT)
-From:   Jason Xing <kerneljasonxing@gmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
-        hawk@kernel.org, john.fastabend@gmail.com,
-        stephen@networkplumber.org, simon.horman@corigine.com,
-        sinquersw@gmail.com
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kerneljasonxing@gmail.com,
-        Jason Xing <kernelxing@tencent.com>
-Subject: [PATCH v3 net-next 2/2] net: introduce budget_squeeze to help us tune rx behavior
-Date:   Tue, 14 Mar 2023 21:14:27 +0800
-Message-Id: <20230314131427.85135-3-kerneljasonxing@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20230314131427.85135-1-kerneljasonxing@gmail.com>
-References: <20230314131427.85135-1-kerneljasonxing@gmail.com>
+        with ESMTP id S232376AbjCNNZr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Mar 2023 09:25:47 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF90996616;
+        Tue, 14 Mar 2023 06:23:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=CyA6aX3LWF3S0LPq2B7KDIy9+tGtAg2Aqm4KsZBo8Hk=; b=IjN16Nr/j4WtYjF4MKbc6hAh/E
+        r1bkPgb4/YGLPSO+ZHwaIHrCj6AYOllQjfgCiURKiKyBq/kCQXyJstxnIGpP0Vp2YeHco2JAHOzMx
+        fSXXBplsiWXjS1M9T8XQcAljcKIllA2fXBIzNlruoPlmC8WzJ+VS9zhbX79ayTGui8Q4CwDm0kTmu
+        Jhcre75eo3MY1gtiyS20cX/f7Sdv32876LgD2fKZ45TJf/GjH/ZYl4xy5PxXk9sg9M46M1hQWZq7B
+        X+GRLXQN4L6C2qX9h4igSgw7kW9G0VopqYa1C22FUfitHAIXtVRczeFUkUdA8DPHR+A9X2P7rg78c
+        pS15A3pw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pc4MQ-00CvDN-HJ; Tue, 14 Mar 2023 13:06:38 +0000
+Date:   Tue, 14 Mar 2023 13:06:38 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     lsf-pc@lists.linux-foundation.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-block@vger.kernel.org,
+        bpf@vger.kernel.org, linux-xfs@vger.kernel.org,
+        David Rientjes <rientjes@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>
+Subject: Re: [LSF/MM/BPF TOPIC] SLOB+SLAB allocators removal and future SLUB
+ improvements
+Message-ID: <ZBBxXhvL/oS3uu5/@casper.infradead.org>
+References: <4b9fc9c6-b48c-198f-5f80-811a44737e5f@suse.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4b9fc9c6-b48c-198f-5f80-811a44737e5f@suse.cz>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jason Xing <kernelxing@tencent.com>
+On Tue, Mar 14, 2023 at 09:05:13AM +0100, Vlastimil Babka wrote:
+> The immediate benefit of that is that we can allow kfree() (and kfree_rcu())
+> to free objects from kmem_cache_alloc() - something that IIRC at least xfs
+> people wanted in the past, and SLOB was incompatible with that.
+> 
+> For SLAB removal I haven't yet heard any objections (but also didn't
+> deprecate it yet) but if there are any users due to particular workloads
+> doing better with SLAB than SLUB, we can discuss why those would regress and
+> what can be done about that in SLUB.
+> 
+> Once we have just one slab allocator in the kernel, we can take a closer
+> look at what the users are missing from it that forces them to create own
+> allocators (e.g. BPF), and could be considered to be added as a generic
+> implementation to SLUB.
 
-When we encounter some performance issue and then get lost on how
-to tune the budget limit and time limit in net_rx_action() function,
-we can separately counting both of them to avoid the confusion.
+With kfree() now working on kmem_cache_alloc(), I'd like to re-propose
+the introduction of a generic free() function which can free any
+allocated object.  It starts out looking a lot like kvfree(), but
+can be enhanced to cover other things ... here's a version I did from
+2018 before giving up on it when I realised slob made it impossible:
 
-Signed-off-by: Jason Xing <kernelxing@tencent.com>
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
----
-v3:
-1) drop the comment suggested by Simon
-Link: https://lore.kernel.org/lkml/20230314030532.9238-3-kerneljasonxing@gmail.com/
++/**
++ * free() - Free memory
++ * @ptr: Pointer to memory
++ *
++ * This function can free almost any type of memory.  It can safely be
++ * called on:
++ * * NULL pointers.
++ * * Pointers to read-only data (will do nothing).
++ * * Pointers to memory allocated from kmalloc().
++ * * Pointers to memory allocated from kmem_cache_alloc().
++ * * Pointers to memory allocated from vmalloc().
++ * * Pointers to memory allocated from alloc_percpu().
++ * * Pointers to memory allocated from __get_free_pages().
++ * * Pointers to memory allocated from page_frag_alloc().
++ *
++ * It cannot free memory allocated by dma_pool_alloc() or dma_alloc_coherent().
++ */
++void free(const void *ptr)
++{
++       struct page *page;
++
++       if (unlikely(ZERO_OR_NULL_PTR(ptr)))
++               return;
++       if (is_kernel_rodata((unsigned long)ptr))
++               return;
++
++       page = virt_to_head_page(ptr);
++       if (likely(PageSlab(page)))
++               return kmem_cache_free(page->slab_cache, (void *)ptr);
++
++       if (is_vmalloc_addr(ptr))
++               return vfree(ptr);
++       if (is_kernel_percpu_address((unsigned long)ptr))
++               free_percpu((void __percpu *)ptr);
++       if (put_page_testzero(page))
++               __put_page(page);
++}
++EXPORT_SYMBOL(free);
 
-v2:
-1) change the coding style suggested by Stephen and Simon
-2) Keep the display of the old data (time_squeeze) untouched suggested
-by Kui-Feng
-Link: https://lore.kernel.org/lkml/20230311163614.92296-1-kerneljasonxing@gmail.com/
----
- include/linux/netdevice.h |  1 +
- net/core/dev.c            | 12 ++++++++----
- net/core/net-procfs.c     |  8 +++++---
- 3 files changed, 14 insertions(+), 7 deletions(-)
+Looking at it now, I'd also include a test for stack memory (and do
+nothing if it is)
 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 6a14b7b11766..5736311a2133 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -3157,6 +3157,7 @@ struct softnet_data {
- 	/* stats */
- 	unsigned int		processed;
- 	unsigned int		time_squeeze;
-+	unsigned int		budget_squeeze;
- #ifdef CONFIG_RPS
- 	struct softnet_data	*rps_ipi_list;
- #endif
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 253584777101..1518a366783b 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -6637,6 +6637,7 @@ static __latent_entropy void net_rx_action(struct softirq_action *h)
- 	unsigned long time_limit = jiffies +
- 		usecs_to_jiffies(READ_ONCE(netdev_budget_usecs));
- 	int budget = READ_ONCE(netdev_budget);
-+	bool done = false;
- 	LIST_HEAD(list);
- 	LIST_HEAD(repoll);
- 
-@@ -6644,7 +6645,7 @@ static __latent_entropy void net_rx_action(struct softirq_action *h)
- 	list_splice_init(&sd->poll_list, &list);
- 	local_irq_enable();
- 
--	for (;;) {
-+	while (!done) {
- 		struct napi_struct *n;
- 
- 		skb_defer_free_flush(sd);
-@@ -6662,10 +6663,13 @@ static __latent_entropy void net_rx_action(struct softirq_action *h)
- 		 * Allow this to run for 2 jiffies since which will allow
- 		 * an average latency of 1.5/HZ.
- 		 */
--		if (unlikely(budget <= 0 ||
--			     time_after_eq(jiffies, time_limit))) {
-+		if (unlikely(budget <= 0)) {
-+			sd->budget_squeeze++;
-+			done = true;
-+		}
-+		if (unlikely(time_after_eq(jiffies, time_limit))) {
- 			sd->time_squeeze++;
--			break;
-+			done = true;
- 		}
- 	}
- 
-diff --git a/net/core/net-procfs.c b/net/core/net-procfs.c
-index 8056f39da8a1..3b53812a9ac9 100644
---- a/net/core/net-procfs.c
-+++ b/net/core/net-procfs.c
-@@ -179,13 +179,15 @@ static int softnet_seq_show(struct seq_file *seq, void *v)
- 	 */
- 	seq_printf(seq,
- 		   "%08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08x "
--		   "%08x %08x\n",
--		   sd->processed, sd->dropped, sd->time_squeeze, 0,
-+		   "%08x %08x %08x %08x\n",
-+		   sd->processed, sd->dropped,
-+		   sd->time_squeeze + sd->budget_squeeze, 0,
- 		   0, 0, 0, 0, /* was fastroute */
- 		   0,	/* was cpu_collision */
- 		   sd->received_rps, flow_limit_count,
- 		   softnet_backlog_len(sd), (int)seq->index,
--		   softnet_input_pkt_queue_len(sd), softnet_process_queue_len(sd));
-+		   softnet_input_pkt_queue_len(sd), softnet_process_queue_len(sd),
-+		   sd->time_squeeze, sd->budget_squeeze);
- 	return 0;
- }
- 
--- 
-2.37.3
-
+There are some prep patches that I'm not including here to clear out
+the use of 'free' as a function name (some conflicting identifiers named
+'free') and a fun one to set a SLAB_PAGE_DTOR on compound pages.
