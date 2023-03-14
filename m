@@ -2,178 +2,213 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05023C6FD1C
-	for <bpf@archiver.kernel.org>; Tue, 14 Mar 2023 08:42:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85119C6FD1F
+	for <bpf@archiver.kernel.org>; Tue, 14 Mar 2023 09:11:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbjCNImJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Mar 2023 04:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50274 "EHLO
+        id S229796AbjCNJLc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Mar 2023 05:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbjCNIlw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Mar 2023 04:41:52 -0400
+        with ESMTP id S229784AbjCNJL1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Mar 2023 05:11:27 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BCBB12870
-        for <bpf@vger.kernel.org>; Tue, 14 Mar 2023 01:40:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCE562B6F
+        for <bpf@vger.kernel.org>; Tue, 14 Mar 2023 02:10:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678783221;
+        s=mimecast20190719; t=1678785034;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=sD9LoUVikuufWarTa4hDwA4KAYgIH+8Oq0l3DREwlbw=;
-        b=bvcedFVHjyDCUu0utnxP/PHEt4zH5iY3G+nbsDMBlqpkKhwcBG4aBSk9b4eHiqFjoAqegn
-        4XYzhzMjNo4EkYjna51wWzKI+VNxz46JoxlZYpVjlH1HOV0enbXOx6ilqYM+8A0ymFF6mf
-        oSPxqYkjnuP1dfWdGyPlumvpMZMzbc4=
+        bh=inTYRuBYdEyfaIIdpUFfmONa7poVEUBWalb1yUnL2VM=;
+        b=cFIi7/PC+bSU2S9GCElMqL7/x69SDW0KnJD1+ciyooj8QuXOv9/3jniwparF5anJFzRIVP
+        IPjugdfS7m5CgP1xnTMiSoUM9DrnxnCxSewxPc0Dqfayqo1w9zJ94KbL6h8GMDwq1xXiqO
+        I/EF8EfiKaD5BYvHhgHFOCg+2/+6rJM=
 Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
  [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-249-Gkl14g1MNKi_h4o-gtx3iQ-1; Tue, 14 Mar 2023 04:39:40 -0400
-X-MC-Unique: Gkl14g1MNKi_h4o-gtx3iQ-1
-Received: by mail-ed1-f72.google.com with SMTP id j21-20020a508a95000000b004fd82403c91so2004042edj.3
-        for <bpf@vger.kernel.org>; Tue, 14 Mar 2023 01:39:39 -0700 (PDT)
+ us-mta-659-TRakANuINyqvInNodcCabw-1; Tue, 14 Mar 2023 05:10:32 -0400
+X-MC-Unique: TRakANuINyqvInNodcCabw-1
+Received: by mail-ed1-f72.google.com with SMTP id m8-20020a056402430800b004cdaaa4f428so21052914edc.20
+        for <bpf@vger.kernel.org>; Tue, 14 Mar 2023 02:10:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678783179;
-        h=content-transfer-encoding:in-reply-to:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sD9LoUVikuufWarTa4hDwA4KAYgIH+8Oq0l3DREwlbw=;
-        b=z0UsxRYge/UYHvztEPsxrD+UL3Oe5hFfRaN9KTXwBZ8auxJRo9/LLMP825TQ5GxJbp
-         ki/lIdRo/7gtiEklZ0p074n3fQ+Nsy05PDyo/dNjDAMEGWFWd746LDDzrJRZeK3C4D+e
-         foW3yHqTz36p/E5VNQboEVRWD11bHU2yypsqFeMX+MEujBmzQMs2Pwijj6cIkzctO2xC
-         N3QU1uVNCqrdERqBGFUXa982w4YmYppJcup6XqY/yGLvpIIwq0dwFp/W5wJ2SVQpeve+
-         TGFzsWOulOrFHnAFpSP+qDehNDBHhSvWo4p+n2P3TXex2iPiSNNnTL6IfD54YLClGr1r
-         agpQ==
-X-Gm-Message-State: AO0yUKUwewxvdNRfmXvynqIBkqCfI6yM2DRLhFe4eUZBBoYbFTgjKLsM
-        m+eEX7pOKEbs0YfEG7dFxl5hCDcKei8frCTmOlOgoUlfOVs3obVWPV7eOLt7ooIYf0F8VHLAu5C
-        plAUo0Hu7DhPP
-X-Received: by 2002:a17:906:3e1b:b0:92a:55a1:63cb with SMTP id k27-20020a1709063e1b00b0092a55a163cbmr1565726eji.69.1678783178872;
-        Tue, 14 Mar 2023 01:39:38 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+FiggjlYxyAID/QDMx5a5yjPuf8P3jq28udhfgIjtV+hTh9l6ZNW/bhi7Z3RwIiHSLLN7gGA==
-X-Received: by 2002:a17:906:3e1b:b0:92a:55a1:63cb with SMTP id k27-20020a1709063e1b00b0092a55a163cbmr1565708eji.69.1678783178599;
-        Tue, 14 Mar 2023 01:39:38 -0700 (PDT)
-Received: from ?IPV6:2a06:4000:52:0:aade:4726:c0f0:4625? ([2a06:4000:52:0:aade:4726:c0f0:4625])
-        by smtp.gmail.com with ESMTPSA id a38-20020a509ea9000000b004c06f786602sm631838edf.85.2023.03.14.01.39.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 01:39:37 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <3a103f0b-7c90-b9f5-0337-22ef46eba1a5@redhat.com>
-Date:   Tue, 14 Mar 2023 09:39:35 +0100
+        d=1e100.net; s=20210112; t=1678785031;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=inTYRuBYdEyfaIIdpUFfmONa7poVEUBWalb1yUnL2VM=;
+        b=A51ch3pUzwTZzLvIARUFDQNIWKe/HCyFsanYYaPPDQ1S1uzP6SVOs3a+Gz2ALImFq5
+         H/JSi3G+hQwxdELN0AvaXhoNNPkeP1hOwgFzAxUhQGwoMqkbUZLe6PKZItgoacWd8z6Y
+         EymtmZlkq8RncI4kK1nkJYp55NxltaCavLcB1aDmabbyco7rpoVrtonufUuDlDiqJ+kk
+         x9o7C950jb8SahBfx1XcrJ6AiGHMiRDIytu3kxdylXfnvF5tNN/PkdfCeNxxAR0fFj33
+         yTdmsU53cDhSUY4ydesU4xd8endwMf3zg/lpF4CPJuaN86fi6Vy1j44FA0Tk7LG88esa
+         hTEg==
+X-Gm-Message-State: AO0yUKX2MzU7kSDV+PuFCGFfyIISXjjUeNtsx0PCjiMUYEMR7aGU0xJA
+        lVSiS46BZSB3Y6yuFIq0snW05KFpErAzwd19xlzbPJQlUXinw81tNnaoRPgYe1TsBrz7AA3r3hG
+        6FBaN0uNXlx6V
+X-Received: by 2002:a17:906:1c93:b0:87b:dac0:b23b with SMTP id g19-20020a1709061c9300b0087bdac0b23bmr1327860ejh.55.1678785031197;
+        Tue, 14 Mar 2023 02:10:31 -0700 (PDT)
+X-Google-Smtp-Source: AK7set9ca8MKg50CqdX2YBXH2dEYDlTe+JUpLw7Qppj9Xz64AY7ahYV20CH9ObIQMg77ERjtHm7/OQ==
+X-Received: by 2002:a17:906:1c93:b0:87b:dac0:b23b with SMTP id g19-20020a1709061c9300b0087bdac0b23bmr1327839ejh.55.1678785030910;
+        Tue, 14 Mar 2023 02:10:30 -0700 (PDT)
+Received: from redhat.com ([2a02:14f:1f7:4129:3ef9:ea05:f0ca:6b81])
+        by smtp.gmail.com with ESMTPSA id hp2-20020a1709073e0200b008b175c46867sm846004ejc.116.2023.03.14.02.10.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 02:10:30 -0700 (PDT)
+Date:   Tue, 14 Mar 2023 05:10:24 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc:     netdev@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Heng Qi <hengqi@linux.alibaba.com>,
+        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net 1/2] virtio_net: fix page_to_skb() miss headroom
+Message-ID: <20230314051010-mutt-send-email-mst@kernel.org>
+References: <20230314083901.40521-1-xuanzhuo@linux.alibaba.com>
+ <20230314083901.40521-2-xuanzhuo@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Cc:     brouer@redhat.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        kuniyu@amazon.com, liuhangbin@gmail.com, xiangxia.m.yue@gmail.com,
-        jiri@nvidia.com, andy.ren@getcruise.com, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jason Xing <kernelxing@tencent.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Simon Sundberg <Simon.Sundberg@kau.se>
-Subject: Re: [PATCH net-next] net: introduce budget_squeeze to help us tune rx
- behavior
-Content-Language: en-US
-To:     Jason Xing <kerneljasonxing@gmail.com>,
-        Kui-Feng Lee <sinquersw@gmail.com>
-References: <20230311163614.92296-1-kerneljasonxing@gmail.com>
- <cb09d3eb-8796-b6b8-10cb-35700ea9b532@gmail.com>
- <CAL+tcoB9Gq44dKyZ2yvZdDHXp30=Hc_trbuuWDEeUZiNy9wRAw@mail.gmail.com>
-In-Reply-To: <CAL+tcoB9Gq44dKyZ2yvZdDHXp30=Hc_trbuuWDEeUZiNy9wRAw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314083901.40521-2-xuanzhuo@linux.alibaba.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-
-On 14/03/2023 02.57, Jason Xing wrote:
-> On Tue, Mar 14, 2023 at 5:58 AM Kui-Feng Lee <sinquersw@gmail.com> wrote:
->>
->> On 3/11/23 08:36, Jason Xing wrote:
->>> From: Jason Xing <kernelxing@tencent.com>
->>>
->>> When we encounter some performance issue and then get lost on how
->>> to tune the budget limit and time limit in net_rx_action() function,
->>> we can separately counting both of them to avoid the confusion.
->>>
->>> Signed-off-by: Jason Xing <kernelxing@tencent.com>
->>> ---
->>> note: this commit is based on the link as below:
->>> https://lore.kernel.org/lkml/20230311151756.83302-1-kerneljasonxing@gmail.com/
->>> ---
-[...]
->>> diff --git a/net/core/net-procfs.c b/net/core/net-procfs.c
->>> index 97a304e1957a..4d1a499d7c43 100644
->>> --- a/net/core/net-procfs.c
->>> +++ b/net/core/net-procfs.c
->>> @@ -174,14 +174,17 @@ static int softnet_seq_show(struct seq_file *seq, void *v)
->>>         */
->>>        seq_printf(seq,
->>>                   "%08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08x "
->>> -                "%08x %08x\n",
->>> -                sd->processed, sd->dropped, sd->time_squeeze, 0,
->>> +                "%08x %08x %08x %08x\n",
->>> +                sd->processed, sd->dropped,
->>> +                0, /* was old way to count time squeeze */
->>
->> Should we show a proximate number?  For example,
->> sd->time_squeeze + sd->bud_squeeze.
+On Tue, Mar 14, 2023 at 04:39:00PM +0800, Xuan Zhuo wrote:
+> Because headroom is not passed to page_to_skb(), this causes the shinfo
+> exceeds the range. Then the frags of shinfo are changed by other process.
 > 
-> Yeah, It does make sense. Let the old way to display untouched.
->
+> [  157.724634] stack segment: 0000 [#1] PREEMPT SMP NOPTI
+> [  157.725358] CPU: 3 PID: 679 Comm: xdp_pass_user_f Tainted: G            E      6.2.0+ #150
+> [  157.726401] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/4
+> [  157.727820] RIP: 0010:skb_release_data+0x11b/0x180
+> [  157.728449] Code: 44 24 02 48 83 c3 01 39 d8 7e be 48 89 d8 48 c1 e0 04 41 80 7d 7e 00 49 8b 6c 04 30 79 0c 48 89 ef e8 89 b
+> [  157.730751] RSP: 0018:ffffc90000178b48 EFLAGS: 00010202
+> [  157.731383] RAX: 0000000000000010 RBX: 0000000000000001 RCX: 0000000000000000
+> [  157.732270] RDX: 0000000000000000 RSI: 0000000000000002 RDI: ffff888100dd0b00
+> [  157.733117] RBP: 5d5d76010f6e2408 R08: ffff888100dd0b2c R09: 0000000000000000
+> [  157.734013] R10: ffffffff82effd30 R11: 000000000000a14e R12: ffff88810981ffc0
+> [  157.734904] R13: ffff888100dd0b00 R14: 0000000000000002 R15: 0000000000002310
+> [  157.735793] FS:  00007f06121d9740(0000) GS:ffff88842fcc0000(0000) knlGS:0000000000000000
+> [  157.736794] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  157.737522] CR2: 00007ffd9a56c084 CR3: 0000000104bda001 CR4: 0000000000770ee0
+> [  157.738420] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [  157.739283] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [  157.740146] PKRU: 55555554
+> [  157.740502] Call Trace:
+> [  157.740843]  <IRQ>
+> [  157.741117]  kfree_skb_reason+0x50/0x120
+> [  157.741613]  __udp4_lib_rcv+0x52b/0x5e0
+> [  157.742132]  ip_protocol_deliver_rcu+0xaf/0x190
+> [  157.742715]  ip_local_deliver_finish+0x77/0xa0
+> [  157.743280]  ip_sublist_rcv_finish+0x80/0x90
+> [  157.743834]  ip_list_rcv_finish.constprop.0+0x16f/0x190
+> [  157.744493]  ip_list_rcv+0x126/0x140
+> [  157.744952]  __netif_receive_skb_list_core+0x29b/0x2c0
+> [  157.745602]  __netif_receive_skb_list+0xed/0x160
+> [  157.746190]  ? udp4_gro_receive+0x275/0x350
+> [  157.746732]  netif_receive_skb_list_internal+0xf2/0x1b0
+> [  157.747398]  napi_gro_receive+0xd1/0x210
+> [  157.747911]  virtnet_receive+0x75/0x1c0
+> [  157.748422]  virtnet_poll+0x48/0x1b0
+> [  157.748878]  __napi_poll+0x29/0x1b0
+> [  157.749330]  net_rx_action+0x27a/0x340
+> [  157.749812]  __do_softirq+0xf3/0x2fb
+> [  157.750298]  do_softirq+0xa2/0xd0
+> [  157.750745]  </IRQ>
+> [  157.751563]  <TASK>
+> [  157.752329]  __local_bh_enable_ip+0x6d/0x80
+> [  157.753178]  virtnet_xdp_set+0x482/0x860
+> [  157.754159]  ? __pfx_virtnet_xdp+0x10/0x10
+> [  157.755129]  dev_xdp_install+0xa4/0xe0
+> [  157.756033]  dev_xdp_attach+0x20b/0x5e0
+> [  157.756933]  do_setlink+0x82e/0xc90
+> [  157.757777]  ? __nla_validate_parse+0x12b/0x1e0
+> [  157.758744]  rtnl_setlink+0xd8/0x170
+> [  157.759549]  ? mod_objcg_state+0xcb/0x320
+> [  157.760328]  ? security_capable+0x37/0x60
+> [  157.761209]  ? security_capable+0x37/0x60
+> [  157.762072]  rtnetlink_rcv_msg+0x145/0x3d0
+> [  157.762929]  ? ___slab_alloc+0x327/0x610
+> [  157.763754]  ? __alloc_skb+0x141/0x170
+> [  157.764533]  ? __pfx_rtnetlink_rcv_msg+0x10/0x10
+> [  157.765422]  netlink_rcv_skb+0x58/0x110
+> [  157.766229]  netlink_unicast+0x21f/0x330
+> [  157.766951]  netlink_sendmsg+0x240/0x4a0
+> [  157.767654]  sock_sendmsg+0x93/0xa0
+> [  157.768434]  ? sockfd_lookup_light+0x12/0x70
+> [  157.769245]  __sys_sendto+0xfe/0x170
+> [  157.770079]  ? handle_mm_fault+0xe9/0x2d0
+> [  157.770859]  ? preempt_count_add+0x51/0xa0
+> [  157.771645]  ? up_read+0x3c/0x80
+> [  157.772340]  ? do_user_addr_fault+0x1e9/0x710
+> [  157.773166]  ? kvm_read_and_reset_apf_flags+0x49/0x60
+> [  157.774087]  __x64_sys_sendto+0x29/0x30
+> [  157.774856]  do_syscall_64+0x3c/0x90
+> [  157.775518]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> [  157.776382] RIP: 0033:0x7f06122def70
+> 
+> Fixes: 18117a842ab0 ("virtio-net: remove xdp related info from page_to_skb()")
+> Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 
-Yes, I don't think we can/should remove this squeeze stat because
-several tools e.g. my own[1] captures these stats (and I know Willem
-also have his own tool).
-I like the sd->time_squeeze + sd->budget_squeeze suggestion.
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
 
-  [1] 
-https://github.com/netoptimizer/network-testing/blob/master/bin/softnet_stat.pl
-
-
->>
->>
->>> +                0,
->>>                   0, 0, 0, 0, /* was fastroute */
->>>                   0,   /* was cpu_collision */
->>>                   sd->received_rps, flow_limit_count,
->>>                   0,   /* was len of two backlog queues */
->>>                   (int)seq->index,
->>> -                softnet_input_pkt_queue_len(sd), softnet_process_queue_len(sd));
->>> +                softnet_input_pkt_queue_len(sd), softnet_process_queue_len(sd),
->>> +                sd->time_squeeze, sd->budget_squeeze);
->>>        return 0;
->>>    }
->>>
-
-We recently had a very long troubleshooting session around a latency
-issue (Cc Simon) where we used the tool[1].  The issue was NIC hardware
-RX queue was backlogged, but we didn't see any squeeze events, which
-confused us. (This happens because budget was 300 and two NICs using 64
-budget each doesn't exceed 300).
-
-We were/are missing another counter to tell us net_rx_action() "repoll"
-is happening (as code !list_empty(&repoll)).  That were the case and it
-would have "told" us that hardware RX ring was full (larger than 64).
-
-We worked around this limitation by using the tracepoint for napi_poll,
-and manually deduced that 64 bulking must mean that "repoll" were happening.
-
-Oneliner bpftrace script:
-
-  bpftrace -e 'tracepoint:napi:napi_poll { 
-@napi_rx_bulk[str(args->dev_name)] = lhist(args->work, 0, 64, 4); }'
-
-We used this script (that also measures softirq latency):
-
- 
-https://github.com/xdp-project/xdp-project/blob/master/areas/latency/napi_monitor.bt 
-
-
-I do wonder is it would be valuable to *also* add a tracepoint to
-net_rx_action, that expose sd->time_squeeze, sd->budget_squeeze and
-repoll-not-empty.
-
---Jesper
+> ---
+>  drivers/net/virtio_net.c | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 1a309cfb4976..8ecf7a341d54 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -446,7 +446,8 @@ static unsigned int mergeable_ctx_to_truesize(void *mrg_ctx)
+>  static struct sk_buff *page_to_skb(struct virtnet_info *vi,
+>  				   struct receive_queue *rq,
+>  				   struct page *page, unsigned int offset,
+> -				   unsigned int len, unsigned int truesize)
+> +				   unsigned int len, unsigned int truesize,
+> +				   unsigned int headroom)
+>  {
+>  	struct sk_buff *skb;
+>  	struct virtio_net_hdr_mrg_rxbuf *hdr;
+> @@ -464,11 +465,11 @@ static struct sk_buff *page_to_skb(struct virtnet_info *vi,
+>  	else
+>  		hdr_padded_len = sizeof(struct padded_vnet_hdr);
+>  
+> -	buf = p;
+> +	buf = p - headroom;
+>  	len -= hdr_len;
+>  	offset += hdr_padded_len;
+>  	p += hdr_padded_len;
+> -	tailroom = truesize - hdr_padded_len - len;
+> +	tailroom = truesize - headroom  - hdr_padded_len - len;
+>  
+>  	shinfo_size = SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+>  
+> @@ -1009,7 +1010,7 @@ static struct sk_buff *receive_big(struct net_device *dev,
+>  {
+>  	struct page *page = buf;
+>  	struct sk_buff *skb =
+> -		page_to_skb(vi, rq, page, 0, len, PAGE_SIZE);
+> +		page_to_skb(vi, rq, page, 0, len, PAGE_SIZE, 0);
+>  
+>  	stats->bytes += len - vi->hdr_len;
+>  	if (unlikely(!skb))
+> @@ -1332,7 +1333,7 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+>  	rcu_read_unlock();
+>  
+>  skip_xdp:
+> -	head_skb = page_to_skb(vi, rq, page, offset, len, truesize);
+> +	head_skb = page_to_skb(vi, rq, page, offset, len, truesize, headroom);
+>  	curr_skb = head_skb;
+>  
+>  	if (unlikely(!curr_skb))
+> -- 
+> 2.32.0.3.g01195cf9f
 
