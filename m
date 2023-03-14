@@ -2,86 +2,85 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE006C6FD1F
-	for <bpf@archiver.kernel.org>; Tue, 14 Mar 2023 06:40:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9775C6FD1F
+	for <bpf@archiver.kernel.org>; Tue, 14 Mar 2023 07:35:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjCNGkV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Mar 2023 02:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55244 "EHLO
+        id S229801AbjCNHfR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Mar 2023 03:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbjCNGkU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Mar 2023 02:40:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1E951C8A;
-        Mon, 13 Mar 2023 23:40:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E76DE615CD;
-        Tue, 14 Mar 2023 06:40:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4F6DEC4339B;
-        Tue, 14 Mar 2023 06:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678776018;
-        bh=S/evt7zjetgiN2BMM4mSEN3WplNPDs/OsGnIu1y3LdU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Yrp74YoCrOdHxh2xAg9cyOF46rMdOl4fYJt5ANGwf+H7qTPeCkjLDl0RHTaWfbwfE
-         KmV5YGl8U6gutFh30slM6HmlXHnefJ5si8D4lOqTuhpNePxlDMKka4erSKZawlyZCY
-         bUcTp5UoDn5QdlFUaa9zk0CKTj4/tiEoeTz6lM+RAutIDCPmsIf2np2c5AAicAdcbR
-         7pIgPZTWtR9HxZK6nXoPB7gsQevhZPpahVuYAfgMvNl15IszfnxK6b8Cqo7kLbY0a8
-         9KuAnOF+3CzfHlV7M2lK3BsRLSRJcFAY+CchYwnOrI9w2Ho+CkxgrViCvDPqnPK+Pg
-         hlaD3jv0ME1wA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 317CEE66CBB;
-        Tue, 14 Mar 2023 06:40:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229624AbjCNHfQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Mar 2023 03:35:16 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173F87E7A6;
+        Tue, 14 Mar 2023 00:35:15 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PbQKV0nZqz4f3l80;
+        Tue, 14 Mar 2023 15:35:10 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+        by APP4 (Coremail) with SMTP id gCh0CgBnF6utIxBk_rhhFQ--.63403S2;
+        Tue, 14 Mar 2023 15:35:10 +0800 (CST)
+From:   Xu Kuohai <xukuohai@huaweicloud.com>
+To:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Subject: [PATCH bpf-next v2 0/2] bpf: Fix a umin > umax reg bound error
+Date:   Tue, 14 Mar 2023 16:34:22 -0400
+Message-Id: <20230314203424.4015351-1-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next 0/3] bpf: Allow helpers access ptr_to_btf_id.
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167877601819.27484.6120031814046560581.git-patchwork-notify@kernel.org>
-Date:   Tue, 14 Mar 2023 06:40:18 +0000
-References: <20230313235845.61029-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20230313235845.61029-1-alexei.starovoitov@gmail.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     davem@davemloft.net, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@kernel.org, void@manifault.com, davemarchevsky@meta.com,
-        tj@kernel.org, memxor@gmail.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, kernel-team@fb.com
+X-CM-TRANSID: gCh0CgBnF6utIxBk_rhhFQ--.63403S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrXr1kCFyxGFWrZF1Dtw4DCFg_yoWxGFXEya
+        y8tas8JFnrXFy5Ja97KF17XrZrGrs09ryfAF1DtrWUJr1UZr18GFs5GF4Fqa4DXa18JrZ7
+        Jr90ya97Ar4agjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbsxYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l87I20VAvwVAaII0Ic2I_Grv_XF1l8c
+        AvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq
+        3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gc
+        CE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxI
+        r21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87
+        Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIE
+        c7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
+        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
+        6r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
+        IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2
+        jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0x
+        ZFpf9x07joksgUUUUU=
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+From: Xu Kuohai <xukuohai@huawei.com>
 
-This series was applied to bpf/bpf-next.git (master)
-by Martin KaFai Lau <martin.lau@kernel.org>:
+This patchset fixes a umin > umax reg bound error and adds cases for it.
 
-On Mon, 13 Mar 2023 16:58:42 -0700 you wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
-> 
-> Allow code like:
-> bpf_strncmp(task->comm, 16, "foo");
-> 
-> Alexei Starovoitov (3):
->   bpf: Fix bpf_strncmp proto.
->   bpf: Allow helpers access trusted PTR_TO_BTF_ID.
->   selftests/bpf: Add various tests to check helper access into
->     ptr_to_btf_id.
-> 
-> [...]
+v2:
+1. add bound check to avoid min > max 
+2. update 32-bit reg min/max when 64-bit reg value is a constant
+3. add Fixes tag
 
-Here is the summary with links:
-  - [bpf-next,1/3] bpf: Fix bpf_strncmp proto.
-    https://git.kernel.org/bpf/bpf-next/c/c9267aa8b794
-  - [bpf-next,2/3] bpf: Allow helpers access trusted PTR_TO_BTF_ID.
-    https://git.kernel.org/bpf/bpf-next/c/3e30be4288b3
-  - [bpf-next,3/3] selftests/bpf: Add various tests to check helper access into ptr_to_btf_id.
-    https://git.kernel.org/bpf/bpf-next/c/f25fd6088216
+v1: https://lore.kernel.org/bpf/20230307220449.2933650-1-xukuohai@huaweicloud.com/
 
-You are awesome, thank you!
+Xu Kuohai (2):
+  bpf: Fix a umin > umax reg bound error
+  selftests/bpf: check bounds not in the 32-bit range
+
+ kernel/bpf/verifier.c                         | 143 ++++++++++++------
+ tools/testing/selftests/bpf/verifier/bounds.c | 121 +++++++++++++++
+ 2 files changed, 214 insertions(+), 50 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.30.2
 
