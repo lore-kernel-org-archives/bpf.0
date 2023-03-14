@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EDA9AC7618A
-	for <bpf@archiver.kernel.org>; Tue, 14 Mar 2023 08:40:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABE73C6FD1F
+	for <bpf@archiver.kernel.org>; Tue, 14 Mar 2023 08:40:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbjCNIkF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S230252AbjCNIkF (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 14 Mar 2023 04:40:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbjCNIju (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Mar 2023 04:39:50 -0400
-Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A801CBD0;
-        Tue, 14 Mar 2023 01:39:04 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0VdrZsQ2_1678783141;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VdrZsQ2_1678783141)
+        with ESMTP id S230499AbjCNIjx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Mar 2023 04:39:53 -0400
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E8F5CC0E;
+        Tue, 14 Mar 2023 01:39:08 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R591e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0VdraCBA_1678783143;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VdraCBA_1678783143)
           by smtp.aliyun-inc.com;
-          Tue, 14 Mar 2023 16:39:01 +0800
+          Tue, 14 Mar 2023 16:39:04 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     netdev@vger.kernel.org
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
@@ -33,10 +33,12 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
         Heng Qi <hengqi@linux.alibaba.com>,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH net 0/2] virtio_net: fix two bugs related to XDP
-Date:   Tue, 14 Mar 2023 16:38:59 +0800
-Message-Id: <20230314083901.40521-1-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net 2/2] virtio_net: free xdp shinfo frags when build_skb_from_xdp_buff() fails
+Date:   Tue, 14 Mar 2023 16:39:01 +0800
+Message-Id: <20230314083901.40521-3-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
+In-Reply-To: <20230314083901.40521-1-xuanzhuo@linux.alibaba.com>
+References: <20230314083901.40521-1-xuanzhuo@linux.alibaba.com>
 MIME-Version: 1.0
 X-Git-Hash: 007492630ac1
 Content-Transfer-Encoding: 8bit
@@ -44,16 +46,33 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch set fixes two bugs related to XDP.
-These two patch is not associated.
+build_skb_from_xdp_buff() may return NULL, on this
+scene we need to free the frags of xdp shinfo.
 
-Xuan Zhuo (2):
-  virtio_net: fix page_to_skb() miss headroom
-  virtio_net: free xdp shinfo frags when build_skb_from_xdp_buff() fails
+Fixes: fab89bafa95b ("virtio-net: support multi-buffer xdp")
+Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+---
+ drivers/net/virtio_net.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
- drivers/net/virtio_net.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
-
---
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index 8ecf7a341d54..d36183be0481 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -1273,9 +1273,12 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 
+ 		switch (act) {
+ 		case XDP_PASS:
++			head_skb = build_skb_from_xdp_buff(dev, vi, &xdp, xdp_frags_truesz);
++			if (!head_skb)
++				goto err_xdp_frags;
++
+ 			if (unlikely(xdp_page != page))
+ 				put_page(page);
+-			head_skb = build_skb_from_xdp_buff(dev, vi, &xdp, xdp_frags_truesz);
+ 			rcu_read_unlock();
+ 			return head_skb;
+ 		case XDP_TX:
+-- 
 2.32.0.3.g01195cf9f
 
