@@ -2,158 +2,286 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB959C7618B
-	for <bpf@archiver.kernel.org>; Wed, 15 Mar 2023 12:32:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1442C6FD1D
+	for <bpf@archiver.kernel.org>; Wed, 15 Mar 2023 12:52:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232663AbjCOMcH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Mar 2023 08:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39610 "EHLO
+        id S233084AbjCOMw5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Mar 2023 08:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232665AbjCOMbp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Mar 2023 08:31:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D384896F2A;
-        Wed, 15 Mar 2023 05:31:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39049B81E00;
-        Wed, 15 Mar 2023 12:31:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B585C433D2;
-        Wed, 15 Mar 2023 12:31:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678883462;
-        bh=O9G3Ukd/8dqvyDo7r2q/sW72hVNnJsrFDdx48qvwsmA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GEscC2Mh87NwTojGMokSkq5RcD0KR0hlPLOZpuemv0ZS4xJk0EzUSHvZt6yun2BPR
-         wbcS5lcGF6B1gvyqObfMAHHZL0BX/oIxUFCDDfr7iYf2OdtQbrk8VkA+a6pk1CBw2g
-         HgSSTk5ulGOU8IDUCUyL3UBVWp4BbU58snRtkQNA=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, Andres Freund <andres@anarazel.de>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Ben Hutchings <benh@debian.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>, bpf@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>
-Subject: [PATCH 5.15 137/145] tools bpf_jit_disasm: Fix compilation error with new binutils
-Date:   Wed, 15 Mar 2023 13:13:23 +0100
-Message-Id: <20230315115743.439488716@linuxfoundation.org>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230315115738.951067403@linuxfoundation.org>
-References: <20230315115738.951067403@linuxfoundation.org>
-User-Agent: quilt/0.67
-MIME-Version: 1.0
+        with ESMTP id S232754AbjCOMw4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Mar 2023 08:52:56 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4D88569E;
+        Wed, 15 Mar 2023 05:52:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678884772; x=1710420772;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=SUsnUofbnZ17R3vhZK0KxvR7Ggj2IlHgALrzBei3N10=;
+  b=Bz6a9LT01vKKue9/zPqyv4ouuspG3D+BLkfKJC3mFmZTNTUXI8EckEeS
+   N3By8lR2wnj6qr850vRdmEnzW79mmv3v+aI5LBbclIqX9KBgvGJ9fOtUt
+   NO5WeRqRHqF2b0i8uZStK3DbAWEI+2sdW/6tX6cK2Opdax/a6Xa61WdmJ
+   4YMusc6ebYjbatV31WQ05zZJF3MR5fV4WAcy/amuaKt+LGO3B3et8CQL4
+   v1nBQZue1f+ESoef5EdmAYr9ZP6/AC8O2v85ZxBkqhDY6LDTiEUQ1T1ro
+   uNdFsf730VPC35VZJZBjt36IXvkov9q0ZDxl1adhAc0uuJ5jfIpp8gll/
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="318085855"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="318085855"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 05:52:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="925331748"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="925331748"
+Received: from newjersey.igk.intel.com ([10.102.20.203])
+  by fmsmga006.fm.intel.com with ESMTP; 15 Mar 2023 05:52:45 -0700
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+To:     ast@kernel.org,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>
+Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        syzbot <syzbot+e1d1b65f7c32f2a86a9f@syzkaller.appspotmail.com>,
+        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        edumazet@google.com, hawk@kernel.org, john.fastabend@gmail.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [bpf?] [net?] BUG: unable to handle kernel NULL pointer dereference in __build_skb_around
+Date:   Wed, 15 Mar 2023 13:51:23 +0100
+Message-Id: <ec94dad7-188b-96d8-9005-74f507d96967@intel.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <6b48673b-33a2-877d-dadd-b43a1364b330@intel.com>
+References: <000000000000f1985705f6ef2243@google.com> <6b48673b-33a2-877d-dadd-b43a1364b330@intel.com>
 Content-Type: text/plain; charset=UTF-8
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Andres Freund <andres@anarazel.de>
+From: Alexander Lobakin <aleksander.lobakin@intel.com>
+Date: Wed, 15 Mar 2023 13:10:44 +0100
 
-commit 96ed066054abf11c7d3e106e3011a51f3f1227a3 upstream.
+> From: Syzbot <syzbot+e1d1b65f7c32f2a86a9f@syzkaller.appspotmail.com>
+> Date: Wed, 15 Mar 2023 05:03:47 -0700
+> 
+>> Hello,
+>>
+>> syzbot found the following issue on:
+>>
+>> HEAD commit:    3c2611bac08a selftests/bpf: Fix trace_virtqueue_add_sgs te..
+>> git tree:       bpf-next
+>> console+strace: https://syzkaller.appspot.com/x/log.txt?x=1026d472c80000
+>> kernel config:  https://syzkaller.appspot.com/x/.config?x=cab35c936731a347
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=e1d1b65f7c32f2a86a9f
+>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15826bc6c80000
+>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15cd12e2c80000
+>>
+>> Downloadable assets:
+>> disk image: https://storage.googleapis.com/syzbot-assets/36a32f4d222a/disk-3c2611ba.raw.xz
+>> vmlinux: https://storage.googleapis.com/syzbot-assets/f5c0da04f143/vmlinux-3c2611ba.xz
+>> kernel image: https://storage.googleapis.com/syzbot-assets/ae2ca9bce51a/bzImage-3c2611ba.xz
+>>
+>> The issue was bisected to:
+>>
+>> commit 9c94bbf9a87b264294f42e6cc0f76d87854733ec
+>> Author: Alexander Lobakin <aleksander.lobakin@intel.com>
+>> Date:   Mon Mar 13 21:55:52 2023 +0000
+>>
+>>     xdp: recycle Page Pool backed skbs built from XDP frames
+>>
+>> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11deec2ac80000
+>> final oops:     https://syzkaller.appspot.com/x/report.txt?x=13deec2ac80000
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=15deec2ac80000
+>>
+>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>> Reported-by: syzbot+e1d1b65f7c32f2a86a9f@syzkaller.appspotmail.com
+>> Fixes: 9c94bbf9a87b ("xdp: recycle Page Pool backed skbs built from XDP frames")
+>>
+>> BUG: kernel NULL pointer dereference, address: 0000000000000d28
+>> #PF: supervisor write access in kernel mode
+>> #PF: error_code(0x0002) - not-present page
+>> PGD 7b741067 P4D 7b741067 PUD 7c1ca067 PMD 0 
+>> Oops: 0002 [#1] PREEMPT SMP KASAN
+>> CPU: 1 PID: 5080 Comm: syz-executor371 Not tainted 6.2.0-syzkaller-13030-g3c2611bac08a #0
+>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+>> RIP: 0010:memset_erms+0xd/0x20 arch/x86/lib/memset_64.S:66
+>> Code: 01 48 0f af c6 f3 48 ab 89 d1 f3 aa 4c 89 c8 c3 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 66 0f 1f 00 49 89 f9 40 88 f0 48 89 d1 <f3> aa 4c 89 c8 c3 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 66 0f 1f
+>> RSP: 0018:ffffc90003baf730 EFLAGS: 00010246
+>> RAX: 0000000000000000 RBX: ffff888028b94000 RCX: 0000000000000020
+>> RDX: 0000000000000020 RSI: 0000000000000000 RDI: 0000000000000d28
+>> RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000d28
+>> R10: ffffed100517281c R11: 0000000000094001 R12: 0000000000000d48
+>> R13: 0000000000000d28 R14: 0000000000000f68 R15: 0000000000000100
+>> FS:  0000555555979300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> CR2: 0000000000000d28 CR3: 0000000028e2d000 CR4: 00000000003506e0
+>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>> Call Trace:
+>>  <TASK>
+>>  __finalize_skb_around net/core/skbuff.c:321 [inline]
+>>  __build_skb_around+0x232/0x3a0 net/core/skbuff.c:379
+>>  build_skb_around+0x32/0x290 net/core/skbuff.c:444
+>>  __xdp_build_skb_from_frame+0x121/0x760 net/core/xdp.c:622
+>>  xdp_recv_frames net/bpf/test_run.c:248 [inline]
+>>  xdp_test_run_batch net/bpf/test_run.c:334 [inline]
+>>  bpf_test_run_xdp_live+0x1289/0x1930 net/bpf/test_run.c:362
+>>  bpf_prog_test_run_xdp+0xa05/0x14e0 net/bpf/test_run.c:1418
+>>  bpf_prog_test_run kernel/bpf/syscall.c:3675 [inline]
+>>  __sys_bpf+0x1598/0x5100 kernel/bpf/syscall.c:5028
+>>  __do_sys_bpf kernel/bpf/syscall.c:5114 [inline]
+>>  __se_sys_bpf kernel/bpf/syscall.c:5112 [inline]
+>>  __x64_sys_bpf+0x79/0xc0 kernel/bpf/syscall.c:5112
+>>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>>  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+>>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>> RIP: 0033:0x7f320b4efca9
+>> Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+>> RSP: 002b:00007ffd2c9924d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+>> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f320b4efca9
+>> RDX: 0000000000000048 RSI: 0000000020000080 RDI: 000000000000000a
+>> RBP: 00007f320b4b3e50 R08: 0000000000000000 R09: 0000000000000000
+>> R10: 0000000000000000 R11: 0000000000000246 R12: 00007f320b4b3ee0
+>> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+>>  </TASK>
+>> Modules linked in:
+>> CR2: 0000000000000d28
+>> ---[ end trace 0000000000000000 ]---
+>> RIP: 0010:memset_erms+0xd/0x20 arch/x86/lib/memset_64.S:66
+>> Code: 01 48 0f af c6 f3 48 ab 89 d1 f3 aa 4c 89 c8 c3 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 66 0f 1f 00 49 89 f9 40 88 f0 48 89 d1 <f3> aa 4c 89 c8 c3 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 66 0f 1f
+>> RSP: 0018:ffffc90003baf730 EFLAGS: 00010246
+>> RAX: 0000000000000000 RBX: ffff888028b94000 RCX: 0000000000000020
+>> RDX: 0000000000000020 RSI: 0000000000000000 RDI: 0000000000000d28
+>> RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000d28
+>> R10: ffffed100517281c R11: 0000000000094001 R12: 0000000000000d48
+>> R13: 0000000000000d28 R14: 0000000000000f68 R15: 0000000000000100
+>> FS:  0000555555979300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> CR2: 0000000000000d28 CR3: 0000000028e2d000 CR4: 00000000003506e0
+>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>> ----------------
+>> Code disassembly (best guess), 1 bytes skipped:
+>>    0:	48 0f af c6          	imul   %rsi,%rax
+>>    4:	f3 48 ab             	rep stos %rax,%es:(%rdi)
+>>    7:	89 d1                	mov    %edx,%ecx
+>>    9:	f3 aa                	rep stos %al,%es:(%rdi)
+>>    b:	4c 89 c8             	mov    %r9,%rax
+>>    e:	c3                   	retq
+>>    f:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
+>>   16:	00 00 00 00
+>>   1a:	66 90                	xchg   %ax,%ax
+>>   1c:	66 0f 1f 00          	nopw   (%rax)
+>>   20:	49 89 f9             	mov    %rdi,%r9
+>>   23:	40 88 f0             	mov    %sil,%al
+>>   26:	48 89 d1             	mov    %rdx,%rcx
+>> * 29:	f3 aa                	rep stos %al,%es:(%rdi) <-- trapping instruction
+> 
+> Looks like skb_shinfo() returns %NULL inside __finalize_skb_around(). My
+> code didn't touch this at all, but I'm digging this already anyway :s
 
-binutils changed the signature of init_disassemble_info(), which now causes
-compilation to fail for tools/bpf/bpf_jit_disasm.c, e.g. on debian
-unstable.
+Ok got it.
+So previously, on %XDP_PASS a page was released from the Pool and then a
+new one allocated and its context filled. Now, the page gets recycled,
+and when it gets recycled, PP doesn't reinit its context. But
+xdp_scrub_frame() sets xdpf->data to %NULL, which means the ctx needs to
+be reinitialized. Plus the &xdp_frame itself is located in the place
+which might easily get overwritten when skb is wandering around the stack.
+I'm curious then how it's been working on my side for several weeks
+already and I've been using XDP trafgen extensively :D
+Thus, I'd change it like that (see below). It's in general unsafe to
+assume &xdp_frame residing at the beginning of data_hard_start is still
+valid after the frame was cruising around. But let's wait for Toke's
+comment.
 
-Relevant binutils commit:
+Also, please merge bpf into bpf-next. I see it doesn't contain my fix
+for ctx->frame. This will add merge conflicts after this one is fixed
+and also can provoke additional bugs.
 
-  https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=60a3da00bd5407f07
+> 
+> + Toke, test_run author :p
+> 
+>>   2b:	4c 89 c8             	mov    %r9,%rax
+>>   2e:	c3                   	retq
+>>   2f:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
+>>   36:	00 00 00 00
+>>   3a:	66 90                	xchg   %ax,%ax
+>>   3c:	66                   	data16
+>>   3d:	0f                   	.byte 0xf
+>>   3e:	1f                   	(bad)
+>>
+>>
+>> ---
+>> This report is generated by a bot. It may contain errors.
+>> See https://goo.gl/tpsmEJ for more information about syzbot.
+>> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>>
+>> syzbot will keep track of this issue. See:
+>> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+>> syzbot can test patches for this issue, for details see:
+>> https://goo.gl/tpsmEJ#testing-patches
+> 
+> Thanks,
+> Olek
 
-Wire up the feature test and switch to init_disassemble_info_compat(),
-which were introduced in prior commits, fixing the compilation failure.
-
-I verified that bpf_jit_disasm can still disassemble bpf programs, both
-with the old and new dis-asm.h API. With old binutils there's no change in
-output before/after this patch. When comparing the output from old
-binutils (2.35) to new bintuils with the patch (upstream snapshot) there
-are a few output differences, but they are unrelated to this patch. An
-example hunk is:
-
-     f4:	mov    %r14,%rsi
-     f7:	mov    %r15,%rdx
-     fa:	mov    $0x2a,%ecx
-  -  ff:	callq  0xffffffffea8c4988
-  +  ff:	call   0xffffffffea8c4988
-    104:	test   %rax,%rax
-    107:	jge    0x0000000000000110
-    109:	xor    %eax,%eax
-  - 10b:	jmpq   0x0000000000000073
-  + 10b:	jmp    0x0000000000000073
-    110:	cmp    $0x16,%rax
-
-However, I had to use an older kernel to generate the bpf_jit_enabled =
-2 output, as that has been broken since 5.18 / 1022a5498f6f745c ("bpf,
-x86_64: Use bpf_jit_binary_pack_alloc").
-
-  https://lore.kernel.org/20220703030210.pmjft7qc2eajzi6c@alap3.anarazel.de
-
-Signed-off-by: Andres Freund <andres@anarazel.de>
-Acked-by: Quentin Monnet <quentin@isovalent.com>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Ben Hutchings <benh@debian.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Quentin Monnet <quentin@isovalent.com>
-Cc: Sedat Dilek <sedat.dilek@gmail.com>
-Cc: bpf@vger.kernel.org
-Link: http://lore.kernel.org/lkml/20220622181918.ykrs5rsnmx3og4sv@alap3.anarazel.de
-Link: https://lore.kernel.org/r/20220801013834.156015-6-andres@anarazel.de
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Cc: Hauke Mehrtens <hauke@hauke-m.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Thanks,
+Olek
 ---
- tools/bpf/Makefile         |    5 ++++-
- tools/bpf/bpf_jit_disasm.c |    5 ++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 6a8b33a103a4..5b9ca36ff21d 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -217,12 +217,12 @@ static bool ctx_was_changed(struct xdp_page_head *head)
+ 
+ static void reset_ctx(struct xdp_page_head *head)
+ {
+-	if (likely(!ctx_was_changed(head)))
+-		return;
++	if (unlikely(!ctx_was_changed(head))) {
++		head->ctx.data = head->orig_ctx.data;
++		head->ctx.data_meta = head->orig_ctx.data_meta;
++		head->ctx.data_end = head->orig_ctx.data_end;
++	}
+ 
+-	head->ctx.data = head->orig_ctx.data;
+-	head->ctx.data_meta = head->orig_ctx.data_meta;
+-	head->ctx.data_end = head->orig_ctx.data_end;
+ 	xdp_update_frame_from_buff(&head->ctx, &head->frm);
+ }
+ 
+---
+Alternative version, which fixes only this particular problem, but is
+less safe as still assumes only xdpf->data could be nulled-out. It can
+save a bunch o'cycles on hotpath tho, thus attaching it as well:
 
---- a/tools/bpf/Makefile
-+++ b/tools/bpf/Makefile
-@@ -34,7 +34,7 @@ else
- endif
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 6a8b33a103a4..55789772f039 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -217,13 +217,15 @@ static bool ctx_was_changed(struct xdp_page_head *head)
  
- FEATURE_USER = .bpf
--FEATURE_TESTS = libbfd disassembler-four-args
-+FEATURE_TESTS = libbfd disassembler-four-args disassembler-init-styled
- FEATURE_DISPLAY = libbfd disassembler-four-args
+ static void reset_ctx(struct xdp_page_head *head)
+ {
+-	if (likely(!ctx_was_changed(head)))
+-		return;
++	if (unlikely(ctx_was_changed(head))) {
++		head->ctx.data = head->orig_ctx.data;
++		head->ctx.data_meta = head->orig_ctx.data_meta;
++		head->ctx.data_end = head->orig_ctx.data_end;
++		head->frm.data = NULL;
++	}
  
- check_feat := 1
-@@ -56,6 +56,9 @@ endif
- ifeq ($(feature-disassembler-four-args), 1)
- CFLAGS += -DDISASM_FOUR_ARGS_SIGNATURE
- endif
-+ifeq ($(feature-disassembler-init-styled), 1)
-+CFLAGS += -DDISASM_INIT_STYLED
-+endif
+-	head->ctx.data = head->orig_ctx.data;
+-	head->ctx.data_meta = head->orig_ctx.data_meta;
+-	head->ctx.data_end = head->orig_ctx.data_end;
+-	xdp_update_frame_from_buff(&head->ctx, &head->frm);
++	if (head->frm.data != head->ctx.data)
++		xdp_update_frame_from_buff(&head->ctx, &head->frm);
+ }
  
- $(OUTPUT)%.yacc.c: $(srctree)/tools/bpf/%.y
- 	$(QUIET_BISON)$(YACC) -o $@ -d $<
---- a/tools/bpf/bpf_jit_disasm.c
-+++ b/tools/bpf/bpf_jit_disasm.c
-@@ -28,6 +28,7 @@
- #include <sys/types.h>
- #include <sys/stat.h>
- #include <limits.h>
-+#include <tools/dis-asm-compat.h>
- 
- #define CMD_ACTION_SIZE_BUFFER		10
- #define CMD_ACTION_READ_ALL		3
-@@ -64,7 +65,9 @@ static void get_asm_insns(uint8_t *image
- 	assert(bfdf);
- 	assert(bfd_check_format(bfdf, bfd_object));
- 
--	init_disassemble_info(&info, stdout, (fprintf_ftype) fprintf);
-+	init_disassemble_info_compat(&info, stdout,
-+				     (fprintf_ftype) fprintf,
-+				     fprintf_styled);
- 	info.arch = bfd_get_arch(bfdf);
- 	info.mach = bfd_get_mach(bfdf);
- 	info.buffer = image;
-
-
+ static int xdp_recv_frames(struct xdp_frame **frames, int nframes,
