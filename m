@@ -2,124 +2,86 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54966C61DA4
-	for <bpf@archiver.kernel.org>; Wed, 15 Mar 2023 16:56:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E985C6FD1D
+	for <bpf@archiver.kernel.org>; Wed, 15 Mar 2023 17:16:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231987AbjCOQ4a (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Mar 2023 12:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46274 "EHLO
+        id S230059AbjCORQK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Mar 2023 13:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232048AbjCOQ43 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Mar 2023 12:56:29 -0400
-Received: from faui40.informatik.uni-erlangen.de (faui40.informatik.uni-erlangen.de [131.188.34.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E437B106;
-        Wed, 15 Mar 2023 09:56:11 -0700 (PDT)
-Received: from luis-i4.informatik.uni-erlangen.de (i4laptop35.informatik.uni-erlangen.de [10.188.34.202])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: gerhorst)
-        by faui40.informatik.uni-erlangen.de (Postfix) with ESMTPSA id 4PcGkH5cMdznkbm;
-        Wed, 15 Mar 2023 17:56:07 +0100 (CET)
-From:   Luis Gerhorst <gerhorst@cs.fau.de>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Andrei Matei <andreimatei1@gmail.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Luis Gerhorst <gerhorst@cs.fau.de>
-Subject: [PATCH] bpf: remove misleading spec_v1 check on var-offset stack read
-Date:   Wed, 15 Mar 2023 17:54:00 +0100
-Message-Id: <20230315165358.23701-1-gerhorst@cs.fau.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <ff8135a6-506f-330f-89fb-f98672467b27@cs.fau.de>
-References: 
+        with ESMTP id S229974AbjCORQJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Mar 2023 13:16:09 -0400
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88475867FB
+        for <bpf@vger.kernel.org>; Wed, 15 Mar 2023 10:16:06 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 048482407C2
+        for <bpf@vger.kernel.org>; Wed, 15 Mar 2023 18:16:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1678900565; bh=T7oQUm+ypc/roZDz1Lt9WOrkLZYufjpjFKViVcE1cQY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=C3sm/WA59iZI1PZBTwNJZWT3M2/y7fy9w0nTeOuVW0e5joy7XsaeCZYkU/3zv4GIW
+         lx0p0nOO6mCP2LQPd4Kx1PIEsAj7LFmVJfRM8JJEZuJh/VNk8bqfQLZ6cZDkIsH3xs
+         0CTvjj1NyT4G9hDN6en83S08hv3SdkYOUQxgTXCqzIM7/GfxBhXJSkxfRU8OZA/xKn
+         xtK36wrWOX8kHF9MCPNpP+6CI67NIrYmrBrV5Gpq2KhoI4/vJwXyNDy7+oS/Ns307L
+         52xgh+EI2UkFw3RoCPQDlCOpwWxdd4btS3zxdDme9yX5Y72QT5CxhFX4Nq2e+4bQ9S
+         faI/W4hOZiPJg==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4PcH9J0YxWz9rxM;
+        Wed, 15 Mar 2023 18:16:04 +0100 (CET)
+From:   =?UTF-8?q?Daniel=20M=C3=BCller?= <deso@posteo.net>
+To:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com
+Cc:     Linux Kernel Functional Testing <lkft@linaro.org>
+Subject: [PATCH bpf-next] libbpf: Ignore warnings about "inefficient alignment"
+Date:   Wed, 15 Mar 2023 17:15:50 +0000
+Message-Id: <20230315171550.1551603-1-deso@posteo.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-For every BPF_ADD/SUB involving a pointer, adjust_ptr_min_max_vals()
-ensures that the resulting pointer has a constant offset if
-bypass_spec_v1 is false. This is ensured by calling
-sanitize_check_bounds() which in turn calls
-check_stack_access_for_ptr_arithmetic(). There, -EACCESS is returned if
-the register's offset is not constant, thereby rejecting the program.
+Some consumers of libbpf compile the code base with different warnings
+enabled. In a report for perf, for example, -Wpacked was set which
+caused warnings about "inefficient alignment" to be emitted on a subset
+of supported architectures.
+With this change we silence specifically those warnings, as we
+intentionally worked with packed structs.
 
-In summary, an unprivileged user must never be able to create stack
-pointers with a variable offset. That is also the case, because a
-respective check in check_stack_write() is missing. If they were able to
-create a variable-offset pointer, users could still use it in a
-stack-write operation to trigger unsafe speculative behavior [1].
-
-Because unprivileged users must already be prevented from creating
-variable-offset stack pointers, viable options are to either remove this
-check (replacing it with a clarifying comment), or to turn it into a
-"verifier BUG"-message, also adding a similar check in
-check_stack_write() (for consistency, as a second-level defense). This
-patch implements the first option to reduce verifier bloat.
-
-This check was introduced by commit 01f810ace9ed ("bpf: Allow
-variable-offset stack access") which correctly notes that
-"variable-offset reads and writes are disallowed (they were already
-disallowed for the indirect access case) because the speculative
-execution checking code doesn't support them". However, it does not
-further discuss why the check in check_stack_read() is necessary. The
-code which made this check obsolete was also introduced in this commit.
-
-I have compiled ~650 programs from the Linux selftests, Linux samples,
-Cilium, and libbpf/examples projects and confirmed that none of these
-trigger the check in check_stack_read() [2]. Instead, all of these
-programs are, as expected, already rejected when constructing the
-variable-offset pointers. Note that the check in
-check_stack_access_for_ptr_arithmetic() also prints "off=%d" while the
-code removed by this patch does not (the error removed does not appear
-in the "verification_error" values). For reproducibility, the repository
-linked includes the raw data and scripts used to create the plot.
-
-[1] https://arxiv.org/pdf/1807.03757.pdf
-[2] https://gitlab.cs.fau.de/un65esoq/bpf-spectre/-/raw/53dc19fcf459c186613b1156a81504b39c8d49db/data/plots/23-02-26_23-56_bpftool/bpftool/0004-errors.pdf?inline=false
-
-Fixes: 01f810ace9ed ("bpf: Allow variable-offset stack access")
-Signed-off-by: Luis Gerhorst <gerhorst@cs.fau.de>
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Link: https://lore.kernel.org/bpf/CA+G9fYtBnwxAWXi2+GyNByApxnf_DtP1-6+_zOKAdJKnJBexjg@mail.gmail.com/
+Fixes: 1eebcb60633f ("libbpf: Implement basic zip archive parsing support")
+Signed-off-by: Daniel Müller <deso@posteo.net>
 ---
- kernel/bpf/verifier.c | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+ tools/lib/bpf/zip.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 8c13dd0f73e5..c1dc7fed655c 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3958,16 +3958,13 @@ static int check_stack_read(struct bpf_verifier_env *env,
- 	}
- 	/* Variable offset is prohibited for unprivileged mode for simplicity
- 	 * since it requires corresponding support in Spectre masking for stack
--	 * ALU. See also retrieve_ptr_limit().
-+	 * ALU. See also retrieve_ptr_limit(). The check in
-+	 * check_stack_access_for_ptr_arithmetic() called by
-+	 * adjust_ptr_min_max_vals() prevents users from creating stack pointers
-+	 * with variable offsets, therefore no check is required here. Further,
-+	 * just checking it here would be insufficient as speculative stack
-+	 * writes could still lead to unsafe speculative behaviour.
- 	 */
--	if (!env->bypass_spec_v1 && var_off) {
--		char tn_buf[48];
--
--		tnum_strn(tn_buf, sizeof(tn_buf), reg->var_off);
--		verbose(env, "R%d variable offset stack access prohibited for !root, var_off=%s\n",
--				ptr_regno, tn_buf);
--		return -EACCES;
--	}
+diff --git a/tools/lib/bpf/zip.c b/tools/lib/bpf/zip.c
+index f561aa..3f26d62 100644
+--- a/tools/lib/bpf/zip.c
++++ b/tools/lib/bpf/zip.c
+@@ -16,6 +16,10 @@
+ #include "libbpf_internal.h"
+ #include "zip.h"
  
- 	if (!var_off) {
- 		off += reg->var_off.value;
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wpacked"
++#pragma GCC diagnostic ignored "-Wattributes"
++
+ /* Specification of ZIP file format can be found here:
+  * https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT
+  * For a high level overview of the structure of a ZIP file see
+@@ -119,6 +123,8 @@ struct local_file_header {
+ 	__u16 extra_field_length;
+ } __attribute__((packed));
+ 
++#pragma GCC diagnostic pop
++
+ struct zip_archive {
+ 	void *data;
+ 	__u32 size;
 -- 
 2.34.1
 
