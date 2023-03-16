@@ -2,119 +2,136 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 507E3C6FD19
-	for <bpf@archiver.kernel.org>; Thu, 16 Mar 2023 06:49:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65099C76195
+	for <bpf@archiver.kernel.org>; Thu, 16 Mar 2023 07:15:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbjCPGtu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Mar 2023 02:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38210 "EHLO
+        id S230105AbjCPHPJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Mar 2023 03:15:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjCPGto (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Mar 2023 02:49:44 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555004E5ED;
-        Wed, 15 Mar 2023 23:49:43 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id x3so3481567edb.10;
-        Wed, 15 Mar 2023 23:49:43 -0700 (PDT)
+        with ESMTP id S230206AbjCPHOm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Mar 2023 03:14:42 -0400
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2ECD53DB5
+        for <bpf@vger.kernel.org>; Thu, 16 Mar 2023 00:14:13 -0700 (PDT)
+Received: by mail-ua1-x936.google.com with SMTP id r7so550898uaj.2
+        for <bpf@vger.kernel.org>; Thu, 16 Mar 2023 00:14:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678949381;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NobcGFjFqRwtEdv6+swHPVneynH/FVlXOlQI5RE6hRs=;
-        b=BiKPjQ7E3suXHFkCVj7KMC4WC1lsQ1DXAnEqXXgL6ae6/w7GNLN1G90DXcBYANYVe2
-         OjhNN0HtOVhNUoqia5C6ml4JQKEsIMYVMXfW+vVemZbcAIk/2jEjGyI88S9OaipaN1eD
-         8D+NoFr3Sbj3FvC3tqQ/XeOGYt04lMcVC2sB5+8tQ+cI9LZoQshUPuaiBEcQ5dXik2Wq
-         7ffya8zzW7cfYaj+/yB+kX4x652CSm0Hie+AEkIExfNDDein0M99Qh6arZEKbqSzPsG3
-         F4exh75E64oIkYf1787pzTAtrhSPrk/FjormmT9nPu+Q3gzWATc4k5BaZEs5nSIe0KIj
-         u9dw==
+        d=linaro.org; s=google; t=1678950851;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DIcQiQ+PixIuhqgdCx8gDBGlIxjSr4mA5y32j1Q4pG4=;
+        b=F5t/9b92W8kdvvTdhOSrm+AL7r2052O8R1daRmqonXkg27V3xMTVUtwBK4/b7aFzpB
+         WpaTRyfApUQXY3QRH4xKd7QHs5Nh9TLaQZ45obTYRnQtWCO+sPjK28tpLclYis3M5wk3
+         Se+AYliFMtuOqwJH7JC47wxdYTOVEh9ms0NLJCGSMpLg8i2jFxY+qzFRbCqGsYOChfR9
+         533CMQ94A5hSU3U6Vt8qcv8VazSSWJS+E+p3UAIjW11h5OX49XtgjjDq4ZEoLupggRI9
+         KhLhoHdC9OJEb33SGAPVrgfPLoEK72IPfT5P87UqHHc6K/r2GcK4xFkoHWb4UekX7Fws
+         3++Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678949381;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NobcGFjFqRwtEdv6+swHPVneynH/FVlXOlQI5RE6hRs=;
-        b=7Lpx8npNSdN9L/eR5ZSUeW6uJx8CmjoV3pl4redCooSVlmhkwuRcE7KS54mqyPIRpJ
-         M/CIwSikteXB3JmZdusqGAfSrpPgqdTl9Z2YmXrAz+nIIinS3cAHY+HJX8Bn9YMPxaUa
-         Gg1YB/+kLgUveUCIGGEvDL8+/+LSTstcy0HFDXKbbMvmAGlRcw5XXeG48xDcuaH81suU
-         9xigIfnhheVCzXhcAP1UaRVg3n/cSTAbSbmKE4gUc5PWlF8FuWX/935MPn4hNG0tKSzs
-         lM3eAmoUKKdItFfnx0dzkTB6gzFhir6nDk4+woIZ5AA2WrIxj4j5O2b6QquL5vMHgcc2
-         DK3Q==
-X-Gm-Message-State: AO0yUKXJWnz7ait3RWUCyIiQ5TTaR2iTrP7sv/YarHLC24eNKQHRrS0S
-        JFJX8WQvNHk7OOoNkztD8ss=
-X-Google-Smtp-Source: AK7set/J9BodG25oa0qgrhp5hsw5qnwrJkUXfeWalep4xc33qBAinWsauY9LbMdCfVRiaC+jeMnYEQ==
-X-Received: by 2002:a17:906:d79c:b0:87b:d3f3:dcf3 with SMTP id pj28-20020a170906d79c00b0087bd3f3dcf3mr9008494ejb.35.1678949381339;
-        Wed, 15 Mar 2023 23:49:41 -0700 (PDT)
-Received: from [192.168.0.106] ([77.126.33.94])
-        by smtp.gmail.com with ESMTPSA id kq13-20020a170906abcd00b008ec43ae626csm3389712ejb.167.2023.03.15.23.49.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 23:49:40 -0700 (PDT)
-Message-ID: <ebe10b79-34c2-4e85-2cf7-b7491266748e@gmail.com>
-Date:   Thu, 16 Mar 2023 08:49:38 +0200
+        d=1e100.net; s=20210112; t=1678950851;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DIcQiQ+PixIuhqgdCx8gDBGlIxjSr4mA5y32j1Q4pG4=;
+        b=t76IorJj4IEzEUynQxZwjg9DjrCeqktJV1LdK6rT44S/NwpbPO8fesMHE4j0PpCJdA
+         WhgjUT3zZ22uo6r3K6vcsVYvaz8IUOAipn7ZUJDWX5cq6lS9vje9D2gNNaur6bOSF3zH
+         WWZfJUnwkyDMzRy+vaV2PzdK+InCD3z6Qdy2FSzWpfTVD6BIz4P+faVGAbMJ/t+S6aHz
+         5Q8WbVW2DbdBH0AkkGS9diZSXwHSIcmIJ5G/CoPVPXn3t6TgXwzWlglW5ibkmeJtl2w7
+         i27oyqSTyAeOiiXubnrkq84GnCMnIKaFsWf9Nv08zoMPeIxx9U27d8lKPMfvXUO/msQ9
+         ecFw==
+X-Gm-Message-State: AO0yUKX4hIjX8O87kzUfeBCLOlsH9vkxm6vWJYlk4o72NKtgOhpehz7W
+        2hvJL4jsGTLQULj40X3I6YOPPLu2/6G3mOpw/HWT/g==
+X-Google-Smtp-Source: AK7set/wk7hUQtvHn1YRvBN6v4aKwj3cuIxPyxHD5UJMl/24sS4nsnvSb5aa2bWhWIS3UFZqDPvXKrPS0cOj6alRCDc=
+X-Received: by 2002:a1f:5283:0:b0:40c:4d1:b550 with SMTP id
+ g125-20020a1f5283000000b0040c04d1b550mr24714137vkb.0.1678950851171; Thu, 16
+ Mar 2023 00:14:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH net] net: xdp: don't call notifiers during driver init
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Cc:     netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
-        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-        john.fastabend@gmail.com, lorenzo@kernel.org, tariqt@nvidia.com,
-        bpf@vger.kernel.org, Tariq Toukan <tariqt@nvidia.com>
-References: <20230316002903.492497-1-kuba@kernel.org>
-From:   Tariq Toukan <ttoukan.linux@gmail.com>
-In-Reply-To: <20230316002903.492497-1-kuba@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 16 Mar 2023 12:44:00 +0530
+Message-ID: <CA+G9fYsqpaicB4TKpMHKbma+YKs0Lm_mpsGBnxvh4tHcubAUeg@mail.gmail.com>
+Subject: next: arm-32bit: build errors: kernel/module/internal.h:252:56:
+ error: expected ';', ',' or ')' before 'const'
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, bpf <bpf@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Viktor Malik <vmalik@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Results from Linaro=E2=80=99s test farm.
+Following mips and arm builds failed.
+
+Regressions found on mips:
+ - build/gcc-12-ath79_defconfig
+ - build/gcc-8-ath79_defconfig
+
+Regressions found on arm:
+ - build/gcc-8-omap1_defconfig
+ - build/gcc-12-omap1_defconfig
+ - build/clang-nightly-omap1_defconfig
+ - build/clang-16-omap1_defconfig
 
 
-On 16/03/2023 2:29, Jakub Kicinski wrote:
-> Drivers will commonly perform feature setting during init, if they use
-> the xdp_set_features_flag() helper they'll likely run into an ASSERT_RTNL()
-> inside call_netdevice_notifiers_info().
-> 
-> Don't call the notifier until the device is actually registered.
-> Nothing should be tracking the device until its registered.
-> 
-> Fixes: 4d5ab0ad964d ("net/mlx5e: take into account device reconfiguration for xdp_features flag")
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: ast@kernel.org
-> CC: daniel@iogearbox.net
-> CC: hawk@kernel.org
-> CC: john.fastabend@gmail.com
-> CC: lorenzo@kernel.org
-> CC: tariqt@nvidia.com
-> CC: bpf@vger.kernel.org
-> ---
->   net/core/xdp.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/net/core/xdp.c b/net/core/xdp.c
-> index 87e654b7d06c..5722a1fc6e9e 100644
-> --- a/net/core/xdp.c
-> +++ b/net/core/xdp.c
-> @@ -781,6 +781,9 @@ void xdp_set_features_flag(struct net_device *dev, xdp_features_t val)
->   		return;
->   
->   	dev->xdp_features = val;
-> +
-> +	if (dev->reg_state < NETREG_REGISTERED)
-> +		return;
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-I maybe need to dig deeper, but, it looks strange to still 
-call_netdevice_notifiers in cases > NETREG_REGISTERED.
+Build log:
+------------
 
-Isn't it problematic to call it with NETREG_UNREGISTERED ?
+In file included from kernel/module/main.c:59:
+kernel/module/internal.h:252:56: error: expected ';', ',' or ')' before 'co=
+nst'
+  252 |                                                        const char *=
+name)
+      |                                                        ^~~~~
+make[4]: *** [scripts/Makefile.build:252: kernel/module/main.o] Error 1
+In file included from kernel/module/strict_rwx.c:12:
+kernel/module/internal.h:252:56: error: expected ';', ',' or ')' before 'co=
+nst'
+  252 |                                                        const char *=
+name)
+      |                                                        ^~~~~
+make[4]: *** [scripts/Makefile.build:252: kernel/module/strict_rwx.o] Error=
+ 1
+In file included from kernel/module/tree_lookup.c:11:
+kernel/module/internal.h:252:56: error: expected ';', ',' or ')' before 'co=
+nst'
+  252 |                                                        const char *=
+name)
+      |                                                        ^~~~~
+make[4]: *** [scripts/Makefile.build:252: kernel/module/tree_lookup.o] Erro=
+r 1
+In file included from kernel/module/procfs.c:13:
+kernel/module/internal.h:252:56: error: expected ';', ',' or ')' before 'co=
+nst'
+  252 |                                                        const char *=
+name)
+      |                                                        ^~~~~
+make[4]: *** [scripts/Makefile.build:252: kernel/module/procfs.o] Error 1
+In file included from kernel/module/sysfs.c:15:
+kernel/module/internal.h:252:56: error: expected ';', ',' or ')' before 'co=
+nst'
+  252 |                                                        const char *=
+name)
+      |                                                        ^~~~~
+make[4]: *** [scripts/Makefile.build:252: kernel/module/sysfs.o] Error 1
 
-For comparison, netif_set_real_num_tx_queues has this ASSERT_RTNL() only 
-under dev->reg_state == NETREG_REGISTERED || dev->reg_state == 
-NETREG_UNREGISTERING.
 
->   	call_netdevice_notifiers(NETDEV_XDP_FEAT_CHANGE, dev);
->   }
->   EXPORT_SYMBOL_GPL(xdp_set_features_flag);
+build log:
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230316=
+/testrun/15632981/suite/build/test/gcc-12-omap1_defconfig/log
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230316=
+/testrun/15632981/suite/build/test/gcc-12-omap1_defconfig/details/
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
