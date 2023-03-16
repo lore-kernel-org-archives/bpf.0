@@ -2,115 +2,86 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5203C6FD19
-	for <bpf@archiver.kernel.org>; Thu, 16 Mar 2023 17:50:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A53B5C6FD1F
+	for <bpf@archiver.kernel.org>; Thu, 16 Mar 2023 17:52:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbjCPRuy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Mar 2023 13:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55338 "EHLO
+        id S230123AbjCPRwx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Mar 2023 13:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbjCPRut (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Mar 2023 13:50:49 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F23B145B62
-        for <bpf@vger.kernel.org>; Thu, 16 Mar 2023 10:50:33 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id bp11so1434587ilb.3
-        for <bpf@vger.kernel.org>; Thu, 16 Mar 2023 10:50:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678989031;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wVREMZ5kpSW/gc2Ge3hXpJkQknE5nkfYCVcEvxv4EXI=;
-        b=asLa2HDFhrf4l/5L/rbsFjIMDSD0pGnamZAh61JnlEKslGh4/ioiqBPX5uimZuV0/A
-         l9Uu2x/ecW9+abZ5qSQlxUkjLcxSO4AjWkr2OAV6V20nTK80dRjDAVHq9s4SNcHZaCTh
-         b/EMGCnN6cbq8pBPRyI3yiSwd4l+szi8F2T9/R/zJdHOpp2H+nZM+3rja9gmrjzL09aV
-         8lzePT6Z0KcwYBoJ83jCr/EoE3t87+M/o+qfIQ5LGn+BHwcypDU2tBHD+I1ut+qd2cmS
-         ccWeNJOdkJgAGQDu7tIrozPi3pqswZfkqeC1NtX9dIp0M+C033XYN3Mw5Raq2rTKVtl0
-         qSug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678989031;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wVREMZ5kpSW/gc2Ge3hXpJkQknE5nkfYCVcEvxv4EXI=;
-        b=hInHBD7o7RaeW2RAghmyAsINW7fRpMfbEquq9LpjuJGzmJnFGNGUG39DIBC5MwnjSv
-         7FF1/DzKSCYuPt3/S17YFrp8cl6oFK1xGmJSYVRz3/fOqosxiSP4t/XBBJMwZnFkp5aJ
-         j9vqBKBLPC7E8nqC7k4/jC9KjuScm08EQfsBgX5T+umohCZApFr2H8iuDUcPf399dzj6
-         8GnyYtXivJcSPaduvOXf3fNa9/wBW+bs5RnJewyungYqQ088f+ZjI6Biu/XUfhFFGhnt
-         Zhltxh3MvF9tebOSLIrnYXZJQ4fITqniRxsMnGzCdibCeWLOtUjuXCTX4EM1zgeIZsMN
-         7Yag==
-X-Gm-Message-State: AO0yUKVEs48URBlIloKLeH0xEE8rDKW3LHLai1dEeMG+jn1Jn84/Ci48
-        EX8y9T14/gIzDxp+f0IUt9OGnmnH2A7FdVmnjsbO6Q==
-X-Google-Smtp-Source: AK7set8mXf20D2vvZ13VDFjuQCTRthMKZlP5n2x8/krArMampywj3ASCIlATMoK0zgwEG6o2Ok5YuhGPd3VwvvLLZVk=
-X-Received: by 2002:a92:c542:0:b0:313:93c8:e71b with SMTP id
- a2-20020a92c542000000b0031393c8e71bmr243410ilj.15.1678989031152; Thu, 16 Mar
- 2023 10:50:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230316170149.4106586-1-jolsa@kernel.org> <ZBNTMZjEoETU9d8N@casper.infradead.org>
-In-Reply-To: <ZBNTMZjEoETU9d8N@casper.infradead.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 16 Mar 2023 10:50:16 -0700
-Message-ID: <CAP-5=fVYriALLwF2FU1ZUtLuHndnvPw=3SctVqY6Uwex8JfscA@mail.gmail.com>
-Subject: Re: [PATCHv3 bpf-next 0/9] mm/bpf/perf: Store build id in file object
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Hao Luo <haoluo@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        bpf@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
+        with ESMTP id S229704AbjCPRwv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Mar 2023 13:52:51 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E50865A1;
+        Thu, 16 Mar 2023 10:52:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678989162; x=1710525162;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6TaiTLcmKSeve63HxvGNvZdw/WyLdEEKe9rIMAI6pQA=;
+  b=SLQA23OmQofHHqQvlNY6U9LmgBpIepMoPxSQmM3tmePEisT7VQ9yPc7E
+   ZLYPQJ0ffYwF8zSUpbxqkMPLhm6HuqUqjh4/GJcf5/ou0yg1Pv6W8UJ/d
+   uvrh+CPF5XvKcino3u9hhJ4SZDyG8pVBQBeT/vELB66YVjhwXbDA6bHY3
+   tdYuQpkTcvUR04MaxWeiqCak8qOlDUAngkIWjZH2u20al/lBk2wdOb+VD
+   idGbGaYdzRTz5bfrwr/MoOynyli3Ibk0pa5ZiJEawbFYuR9Z049vySMxr
+   aUlaZ4DKz4VXIK4Rj+51Hl/p0gqQFW7Ze0oQMqe2hzwdJKBvZ+4Pa5og7
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="317721432"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="317721432"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 10:52:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="823351254"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="823351254"
+Received: from newjersey.igk.intel.com ([10.102.20.203])
+  by fmsmga001.fm.intel.com with ESMTP; 16 Mar 2023 10:52:02 -0700
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Namhyung Kim <namhyung@gmail.com>,
-        Dave Chinner <david@fromorbit.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>
+Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Song Liu <song@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 0/2] double-fix bpf_test_run + XDP_PASS recycling
+Date:   Thu, 16 Mar 2023 18:50:49 +0100
+Message-Id: <20230316175051.922550-1-aleksander.lobakin@intel.com>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 10:35=E2=80=AFAM Matthew Wilcox <willy@infradead.or=
-g> wrote:
->
-> On Thu, Mar 16, 2023 at 06:01:40PM +0100, Jiri Olsa wrote:
-> > hi,
-> > this patchset adds build id object pointer to struct file object.
-> >
-> > We have several use cases for build id to be used in BPF programs
-> > [2][3].
->
-> Yes, you have use cases, but you never answered the question I asked:
->
-> Is this going to be enabled by every distro kernel, or is it for special
-> use-cases where only people doing a very specialised thing who are
-> willing to build their own kernels will use it?
->
-> Saying "hubble/tetragon" doesn't answer that question.  Maybe it does
-> to you, but I have no idea what that software is.
->
-> Put it another way: how does this make *MY* life better?  Literally me.
-> How will it affect my life?
+Enabling skb PP recycling revealed a couple issues in the bpf_test_run
+code. Recycling broke the assumption that the headroom won't ever be
+touched during the test_run execution: xdp_scrub_frame() invalidates the
+XDP frame at the headroom start, while neigh xmit code overwrites 2 bytes
+to the left of the Ethernet header. The first makes the kernel panic in
+certain cases, while the second breaks xdp_do_redirect selftest on BE.
+test_run is a limited-scope entity, so let's hope no more corner cases
+will happen here or at least they will be as easy and pleasant to fix
+as those two.
 
-So at Google we use build IDs for all profiling, I believe Meta is the
-same but obviously I can't speak for them. For BPF program stack
-traces, using build ID + offset stack traces is preferable to perf's
-whole system synthesis of mmap events based on data held in
-/proc/pid/maps. Individual stack traces are larger, but you avoid the
-ever growing problem of coming up with some initial virtual memory
-state that will allow you to identify samples.
+Alexander Lobakin (2):
+  bpf, test_run: fix crashes due to XDP frame overwriting/corruption
+  selftests/bpf: fix "metadata marker" getting overwritten by the
+    netstack
 
-This doesn't answer the question about how this will help you, but I
-expect over time you will see scalability issues and also want to use
-tools assuming build IDs are present and cheap to access.
+ net/bpf/test_run.c                                   | 12 +++++++++++-
+ .../selftests/bpf/prog_tests/xdp_do_redirect.c       |  7 ++++---
+ .../selftests/bpf/progs/test_xdp_do_redirect.c       |  2 +-
+ 3 files changed, 16 insertions(+), 5 deletions(-)
 
-Thanks,
-Ian
+-- 
+2.39.2
+
