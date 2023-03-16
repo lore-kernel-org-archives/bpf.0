@@ -2,48 +2,48 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD132C61DA4
-	for <bpf@archiver.kernel.org>; Thu, 16 Mar 2023 02:37:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CEACC6FD1D
+	for <bpf@archiver.kernel.org>; Thu, 16 Mar 2023 02:37:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbjCPCh5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Mar 2023 22:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33350 "EHLO
+        id S229513AbjCPCh6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Mar 2023 22:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjCPCh4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Mar 2023 22:37:56 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15DECB057
+        with ESMTP id S229542AbjCPCh5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Mar 2023 22:37:57 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044BACC304
         for <bpf@vger.kernel.org>; Wed, 15 Mar 2023 19:37:54 -0700 (PDT)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 32G1maTr012784
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32G1mbIl032505
         for <bpf@vger.kernel.org>; Wed, 15 Mar 2023 19:37:54 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=RdgXWmPBFrHX+JmhwI9q627qDN05HjtueVko+UJNHT8=;
- b=fwS0/YMcZ9e3TLYrGcYu6/Xt+llxVKFMzJ2re7lLJOyU3ZPHodWcG6Q5VLbGjtM/chyx
- ZuIjG2zZN+CWAysPgE7eJ479yZW+IH6PCiwNfMa2IfNQQDezPOA3lifk51jWe9KwLQ8l
- skcPo6Or5lzttlDX/TCmg/9hiw8tVONzl2wdzA4u7ACIDgtvB0ZaMvRGu92az6jsFgbm
- S98WAz2R/RGfMAZ9o+eCfaoZrpZrLpuhOQlW1VKaahY7GlApj27gwHDZB0D0t8w0qAue
- dUVQhPo1xLLunwr95lCHhhu5jvjbX1TD+BvPNCgw7m+uREvBzx9DkdAljxhkxOOqtEAq nQ== 
+ bh=bLaBpB3ICw2koLk1Zlaoyy+AIJQaF6X/LxEMLl6f3bg=;
+ b=XN98Qs59T4tHVgk5kUYFm38HtVV2pUTjPkqUaCqtWjJUworNj2MhJAJY5HpkgIHGv9I8
+ UK7Kpup6yTU2vgEfBTa48rB9VOlgzXmjBJnBxS9ZBsPSeqr1DzqebD0+Cpoi2vnLfKbX
+ A3D/nEgA8ufAywQjJUWnmaHpDv8UULwnXNTGZzvcd1yQIRPGp1vEcR3teqIu/08mdsEZ
+ 5YJYnC7tbBjbC3V7cVTGWREi9zzmN2yTRTntKDS/cKusGXnpSgodsNlfL2LlfmP9iyDO
+ 0ZTERMLiWcgiYuaIGNEb6igtyejpVgvx/LEeSSQu/sE++TMlnwa6p9Uy6XmYyRF17crL sA== 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3pbs3c8bw5-2
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3pbs38gbsc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 15 Mar 2023 19:37:54 -0700
-Received: from twshared33736.38.frc1.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 15 Mar 2023 19:37:53 -0700
+Received: from twshared33736.38.frc1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.17; Wed, 15 Mar 2023 19:37:52 -0700
 Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
-        id 52C1977002D7; Wed, 15 Mar 2023 19:37:47 -0700 (PDT)
+        id 3433577002A4; Wed, 15 Mar 2023 19:37:43 -0700 (PDT)
 From:   Kui-Feng Lee <kuifeng@meta.com>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <martin.lau@linux.dev>,
         <song@kernel.org>, <kernel-team@meta.com>, <andrii@kernel.org>,
         <sdf@google.com>
 CC:     Kui-Feng Lee <kuifeng@meta.com>
-Subject: [PATCH bpf-next v7 8/8] selftests/bpf: Test switching TCP Congestion Control algorithms.
-Date:   Wed, 15 Mar 2023 19:36:41 -0700
-Message-ID: <20230316023641.2092778-9-kuifeng@meta.com>
+Subject: [PATCH bpf-next v7 4/8] libbpf: Create a bpf_link in bpf_map__attach_struct_ops().
+Date:   Wed, 15 Mar 2023 19:36:37 -0700
+Message-ID: <20230316023641.2092778-5-kuifeng@meta.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230316023641.2092778-1-kuifeng@meta.com>
 References: <20230316023641.2092778-1-kuifeng@meta.com>
@@ -51,8 +51,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: 76btYYmqvCcKwc0AkcXq596DSL4EKMsI
-X-Proofpoint-ORIG-GUID: 76btYYmqvCcKwc0AkcXq596DSL4EKMsI
+X-Proofpoint-GUID: DmK7iRbgEE2V0iw-K5Z9VA_LIo_IZ3Yu
+X-Proofpoint-ORIG-GUID: DmK7iRbgEE2V0iw-K5Z9VA_LIo_IZ3Yu
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-16_02,2023-03-15_01,2023-02-09_01
@@ -60,226 +60,173 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Create a pair of sockets that utilize the congestion control algorithm
-under a particular name. Then switch up this congestion control
-algorithm to another implementation and check whether newly created
-connections using the same cc name now run the new implementation.
+bpf_map__attach_struct_ops() was creating a dummy bpf_link as a
+placeholder, but now it is constructing an authentic one by calling
+bpf_link_create() if the map has the BPF_F_LINK flag.
 
-Also, try to update a link with a struct_ops that is without
-BPF_F_LINK or with a wrong or different name.  These cases should fail
-due to the violation of assumptions.  To update a bpf_link of a
-struct_ops, it must be replaced with another struct_ops that is
-identical in type and name and has the BPF_F_LINK flag.
+You can flag a struct_ops map with BPF_F_LINK by calling
+bpf_map__set_map_flags().
 
 Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
 ---
- .../selftests/bpf/prog_tests/bpf_tcp_ca.c     | 91 +++++++++++++++++++
- .../selftests/bpf/progs/tcp_ca_update.c       | 80 ++++++++++++++++
- 2 files changed, 171 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/tcp_ca_update.c
+ tools/lib/bpf/libbpf.c | 90 +++++++++++++++++++++++++++++++-----------
+ 1 file changed, 66 insertions(+), 24 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/tools/=
-testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-index e980188d4124..e53d611bbf06 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-@@ -8,6 +8,7 @@
- #include "bpf_dctcp.skel.h"
- #include "bpf_cubic.skel.h"
- #include "bpf_tcp_nogpl.skel.h"
-+#include "tcp_ca_update.skel.h"
- #include "bpf_dctcp_release.skel.h"
- #include "tcp_ca_write_sk_pacing.skel.h"
- #include "tcp_ca_incompl_cong_ops.skel.h"
-@@ -381,6 +382,90 @@ static void test_unsupp_cong_op(void)
- 	libbpf_set_print(old_print_fn);
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index a557718401e4..6dbae7ffab48 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -116,6 +116,7 @@ static const char * const attach_type_name[] =3D {
+ 	[BPF_SK_REUSEPORT_SELECT_OR_MIGRATE]	=3D "sk_reuseport_select_or_migrat=
+e",
+ 	[BPF_PERF_EVENT]		=3D "perf_event",
+ 	[BPF_TRACE_KPROBE_MULTI]	=3D "trace_kprobe_multi",
++	[BPF_STRUCT_OPS]		=3D "struct_ops",
+ };
+=20
+ static const char * const link_type_name[] =3D {
+@@ -7677,6 +7678,37 @@ static int bpf_object__resolve_externs(struct bpf_=
+object *obj,
+ 	return 0;
  }
 =20
-+static void test_update_ca(void)
++static void bpf_map_prepare_vdata(const struct bpf_map *map)
 +{
-+	struct tcp_ca_update *skel;
-+	struct bpf_link *link;
-+	int saved_ca1_cnt;
-+	int err;
++	struct bpf_struct_ops *st_ops;
++	__u32 i;
 +
-+	skel =3D tcp_ca_update__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open"))
-+		return;
++	st_ops =3D map->st_ops;
++	for (i =3D 0; i < btf_vlen(st_ops->type); i++) {
++		struct bpf_program *prog =3D st_ops->progs[i];
++		void *kern_data;
++		int prog_fd;
 +
-+	link =3D bpf_map__attach_struct_ops(skel->maps.ca_update_1);
-+	ASSERT_OK_PTR(link, "attach_struct_ops");
++		if (!prog)
++			continue;
 +
-+	do_test("tcp_ca_update", NULL);
-+	saved_ca1_cnt =3D skel->bss->ca1_cnt;
-+	ASSERT_GT(saved_ca1_cnt, 0, "ca1_ca1_cnt");
-+
-+	err =3D bpf_link__update_map(link, skel->maps.ca_update_2);
-+	ASSERT_OK(err, "update_map");
-+
-+	do_test("tcp_ca_update", NULL);
-+	ASSERT_EQ(skel->bss->ca1_cnt, saved_ca1_cnt, "ca2_ca1_cnt");
-+	ASSERT_GT(skel->bss->ca2_cnt, 0, "ca2_ca2_cnt");
-+
-+	bpf_link__destroy(link);
-+	tcp_ca_update__destroy(skel);
++		prog_fd =3D bpf_program__fd(prog);
++		kern_data =3D st_ops->kern_vdata + st_ops->kern_func_off[i];
++		*(unsigned long *)kern_data =3D prog_fd;
++	}
 +}
 +
-+static void test_update_wrong(void)
++static int bpf_object_prepare_struct_ops(struct bpf_object *obj)
 +{
-+	struct tcp_ca_update *skel;
-+	struct bpf_link *link;
-+	int saved_ca1_cnt;
-+	int err;
++	int i;
 +
-+	skel =3D tcp_ca_update__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open"))
-+		return;
++	for (i =3D 0; i < obj->nr_maps; i++)
++		if (bpf_map__is_struct_ops(&obj->maps[i]))
++			bpf_map_prepare_vdata(&obj->maps[i]);
 +
-+	link =3D bpf_map__attach_struct_ops(skel->maps.ca_update_1);
-+	ASSERT_OK_PTR(link, "attach_struct_ops");
-+
-+	do_test("tcp_ca_update", NULL);
-+	saved_ca1_cnt =3D skel->bss->ca1_cnt;
-+	ASSERT_GT(saved_ca1_cnt, 0, "ca1_ca1_cnt");
-+
-+	err =3D bpf_link__update_map(link, skel->maps.ca_wrong);
-+	ASSERT_ERR(err, "update_map");
-+
-+	do_test("tcp_ca_update", NULL);
-+	ASSERT_GT(skel->bss->ca1_cnt, saved_ca1_cnt, "ca2_ca1_cnt");
-+
-+	bpf_link__destroy(link);
-+	tcp_ca_update__destroy(skel);
++	return 0;
 +}
 +
-+static void test_mixed_links(void)
-+{
-+	struct tcp_ca_update *skel;
-+	struct bpf_link *link, *link_nl;
-+	int err;
-+
-+	skel =3D tcp_ca_update__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open"))
-+		return;
-+
-+	link_nl =3D bpf_map__attach_struct_ops(skel->maps.ca_no_link);
-+	ASSERT_OK_PTR(link_nl, "attach_struct_ops_nl");
-+
-+	link =3D bpf_map__attach_struct_ops(skel->maps.ca_update_1);
-+	ASSERT_OK_PTR(link, "attach_struct_ops");
-+
-+	do_test("tcp_ca_update", NULL);
-+	ASSERT_GT(skel->bss->ca1_cnt, 0, "ca1_ca1_cnt");
-+
-+	err =3D bpf_link__update_map(link, skel->maps.ca_no_link);
-+	ASSERT_ERR(err, "update_map");
-+
-+	bpf_link__destroy(link);
-+	bpf_link__destroy(link_nl);
-+	tcp_ca_update__destroy(skel);
-+}
-+
- void test_bpf_tcp_ca(void)
+ static int bpf_object_load(struct bpf_object *obj, int extra_log_level, =
+const char *target_btf_path)
  {
- 	if (test__start_subtest("dctcp"))
-@@ -399,4 +484,10 @@ void test_bpf_tcp_ca(void)
- 		test_incompl_cong_ops();
- 	if (test__start_subtest("unsupp_cong_op"))
- 		test_unsupp_cong_op();
-+	if (test__start_subtest("update_ca"))
-+		test_update_ca();
-+	if (test__start_subtest("update_wrong"))
-+		test_update_wrong();
-+	if (test__start_subtest("mixed_links"))
-+		test_mixed_links();
+ 	int err, i;
+@@ -7702,6 +7734,7 @@ static int bpf_object_load(struct bpf_object *obj, =
+int extra_log_level, const ch
+ 	err =3D err ? : bpf_object__relocate(obj, obj->btf_custom_path ? : targ=
+et_btf_path);
+ 	err =3D err ? : bpf_object__load_progs(obj, extra_log_level);
+ 	err =3D err ? : bpf_object_init_prog_arrays(obj);
++	err =3D err ? : bpf_object_prepare_struct_ops(obj);
+=20
+ 	if (obj->gen_loader) {
+ 		/* reset FDs */
+@@ -11566,22 +11599,30 @@ struct bpf_link *bpf_program__attach(const stru=
+ct bpf_program *prog)
+ 	return link;
  }
-diff --git a/tools/testing/selftests/bpf/progs/tcp_ca_update.c b/tools/te=
-sting/selftests/bpf/progs/tcp_ca_update.c
-new file mode 100644
-index 000000000000..b93a0ed33057
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tcp_ca_update.c
-@@ -0,0 +1,80 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") =3D "GPL";
-+
-+int ca1_cnt =3D 0;
-+int ca2_cnt =3D 0;
-+
-+static inline struct tcp_sock *tcp_sk(const struct sock *sk)
-+{
-+	return (struct tcp_sock *)sk;
-+}
-+
-+SEC("struct_ops/ca_update_1_init")
-+void BPF_PROG(ca_update_1_init, struct sock *sk)
-+{
-+	ca1_cnt++;
-+}
-+
-+SEC("struct_ops/ca_update_2_init")
-+void BPF_PROG(ca_update_2_init, struct sock *sk)
-+{
-+	ca2_cnt++;
-+}
-+
-+SEC("struct_ops/ca_update_cong_control")
-+void BPF_PROG(ca_update_cong_control, struct sock *sk,
-+	      const struct rate_sample *rs)
-+{
-+}
-+
-+SEC("struct_ops/ca_update_ssthresh")
-+__u32 BPF_PROG(ca_update_ssthresh, struct sock *sk)
-+{
-+	return tcp_sk(sk)->snd_ssthresh;
-+}
-+
-+SEC("struct_ops/ca_update_undo_cwnd")
-+__u32 BPF_PROG(ca_update_undo_cwnd, struct sock *sk)
-+{
-+	return tcp_sk(sk)->snd_cwnd;
-+}
-+
-+SEC(".struct_ops.link")
-+struct tcp_congestion_ops ca_update_1 =3D {
-+	.init =3D (void *)ca_update_1_init,
-+	.cong_control =3D (void *)ca_update_cong_control,
-+	.ssthresh =3D (void *)ca_update_ssthresh,
-+	.undo_cwnd =3D (void *)ca_update_undo_cwnd,
-+	.name =3D "tcp_ca_update",
+=20
++struct bpf_link_struct_ops {
++	struct bpf_link link;
++	int map_fd;
 +};
 +
-+SEC(".struct_ops.link")
-+struct tcp_congestion_ops ca_update_2 =3D {
-+	.init =3D (void *)ca_update_2_init,
-+	.cong_control =3D (void *)ca_update_cong_control,
-+	.ssthresh =3D (void *)ca_update_ssthresh,
-+	.undo_cwnd =3D (void *)ca_update_undo_cwnd,
-+	.name =3D "tcp_ca_update",
-+};
+ static int bpf_link__detach_struct_ops(struct bpf_link *link)
+ {
++	struct bpf_link_struct_ops *st_link;
+ 	__u32 zero =3D 0;
+=20
+-	if (bpf_map_delete_elem(link->fd, &zero))
+-		return -errno;
++	st_link =3D container_of(link, struct bpf_link_struct_ops, link);
+=20
+-	return 0;
++	if (st_link->map_fd < 0)
++		/* w/o a real link */
++		return bpf_map_delete_elem(link->fd, &zero);
 +
-+SEC(".struct_ops.link")
-+struct tcp_congestion_ops ca_wrong =3D {
-+	.cong_control =3D (void *)ca_update_cong_control,
-+	.ssthresh =3D (void *)ca_update_ssthresh,
-+	.undo_cwnd =3D (void *)ca_update_undo_cwnd,
-+	.name =3D "tcp_ca_wrong",
-+};
-+
-+SEC(".struct_ops")
-+struct tcp_congestion_ops ca_no_link =3D {
-+	.cong_control =3D (void *)ca_update_cong_control,
-+	.ssthresh =3D (void *)ca_update_ssthresh,
-+	.undo_cwnd =3D (void *)ca_update_undo_cwnd,
-+	.name =3D "tcp_ca_no_link",
-+};
++	return close(link->fd);
+ }
+=20
+ struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map)
+ {
+-	struct bpf_struct_ops *st_ops;
+-	struct bpf_link *link;
+-	__u32 i, zero =3D 0;
+-	int err;
++	struct bpf_link_struct_ops *link;
++	__u32 zero =3D 0;
++	int err, fd;
+=20
+ 	if (!bpf_map__is_struct_ops(map) || map->fd =3D=3D -1)
+ 		return libbpf_err_ptr(-EINVAL);
+@@ -11590,31 +11631,32 @@ struct bpf_link *bpf_map__attach_struct_ops(con=
+st struct bpf_map *map)
+ 	if (!link)
+ 		return libbpf_err_ptr(-EINVAL);
+=20
+-	st_ops =3D map->st_ops;
+-	for (i =3D 0; i < btf_vlen(st_ops->type); i++) {
+-		struct bpf_program *prog =3D st_ops->progs[i];
+-		void *kern_data;
+-		int prog_fd;
++	/* kern_vdata should be prepared during the loading phase. */
++	err =3D bpf_map_update_elem(map->fd, &zero, map->st_ops->kern_vdata, 0)=
+;
++	if (err) {
++		free(link);
++		return libbpf_err_ptr(err);
++	}
+=20
+-		if (!prog)
+-			continue;
++	link->link.detach =3D bpf_link__detach_struct_ops;
+=20
+-		prog_fd =3D bpf_program__fd(prog);
+-		kern_data =3D st_ops->kern_vdata + st_ops->kern_func_off[i];
+-		*(unsigned long *)kern_data =3D prog_fd;
++	if (!(map->def.map_flags & BPF_F_LINK)) {
++		/* w/o a real link */
++		link->link.fd =3D map->fd;
++		link->map_fd =3D -1;
++		return &link->link;
+ 	}
+=20
+-	err =3D bpf_map_update_elem(map->fd, &zero, st_ops->kern_vdata, 0);
+-	if (err) {
+-		err =3D -errno;
++	fd =3D bpf_link_create(map->fd, -1, BPF_STRUCT_OPS, NULL);
++	if (fd < 0) {
+ 		free(link);
+-		return libbpf_err_ptr(err);
++		return libbpf_err_ptr(fd);
+ 	}
+=20
+-	link->detach =3D bpf_link__detach_struct_ops;
+-	link->fd =3D map->fd;
++	link->link.fd =3D fd;
++	link->map_fd =3D map->fd;
+=20
+-	return link;
++	return &link->link;
+ }
+=20
+ typedef enum bpf_perf_event_ret (*bpf_perf_event_print_t)(struct perf_ev=
+ent_header *hdr,
 --=20
 2.34.1
 
