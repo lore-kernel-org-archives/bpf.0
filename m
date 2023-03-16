@@ -2,163 +2,329 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD17DC7618E
-	for <bpf@archiver.kernel.org>; Thu, 16 Mar 2023 17:53:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F8D5C6FD19
+	for <bpf@archiver.kernel.org>; Thu, 16 Mar 2023 18:30:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbjCPRxF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Mar 2023 13:53:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58862 "EHLO
+        id S229577AbjCPSal convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 16 Mar 2023 14:30:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbjCPRw4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Mar 2023 13:52:56 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DAC1EFC1;
-        Thu, 16 Mar 2023 10:52:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678989171; x=1710525171;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=QRih3njZUr377Ux29J6E8DuVOV2jEWZRLenNqTC3HQw=;
-  b=FNIx2AaUemVDBoHyq/v0YRfT15JHboRqBlN9pCf3Msmv7k2dsZeQ1MIC
-   icHyBHo/V7/sY3LqCg7H/DAkjSnCp3hwdxn3kNkE/PTh2n55gFJtQ3WzW
-   Rhp5Jyww7AJbCKc95r3Y6AgEcGzwNHR4F7Y7DVZBa5IWblO7XHfBnnMMh
-   rDBrEDGRsU0trqPgRQ4JeL8BTbKBuXhXTa4H54nIqyJu2SGMUM+ewcMvc
-   8mNZ0BdpmxfZiBvoUrOftPtIxrwipqz42z5vv3N0fs/zFeEboMxU5gzgN
-   YF4fT8UcDVlmi7T4wSNpTe7m5Y6gYFys3Pf+zVd+jkcLLKn8054zmvrsy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="317721473"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="317721473"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 10:52:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="823351351"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="823351351"
-Received: from newjersey.igk.intel.com ([10.102.20.203])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Mar 2023 10:52:09 -0700
-From:   Alexander Lobakin <aleksander.lobakin@intel.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Song Liu <song@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 2/2] selftests/bpf: fix "metadata marker" getting overwritten by the netstack
-Date:   Thu, 16 Mar 2023 18:50:51 +0100
-Message-Id: <20230316175051.922550-3-aleksander.lobakin@intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230316175051.922550-1-aleksander.lobakin@intel.com>
-References: <20230316175051.922550-1-aleksander.lobakin@intel.com>
+        with ESMTP id S229885AbjCPSak (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Mar 2023 14:30:40 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BED52916
+        for <bpf@vger.kernel.org>; Thu, 16 Mar 2023 11:30:37 -0700 (PDT)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32GI6klY032522
+        for <bpf@vger.kernel.org>; Thu, 16 Mar 2023 11:30:37 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3pbpxsp9qy-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 16 Mar 2023 11:30:37 -0700
+Received: from twshared58712.02.prn6.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Thu, 16 Mar 2023 11:30:34 -0700
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id 80CAA2AC19580; Thu, 16 Mar 2023 11:30:23 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <martin.lau@kernel.org>
+CC:     <andrii@kernel.org>, <kernel-team@meta.com>
+Subject: [PATCH bpf-next 1/6] bpf: split off basic BPF verifier log into separate file
+Date:   Thu, 16 Mar 2023 11:30:08 -0700
+Message-ID: <20230316183013.2882810-2-andrii@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230316183013.2882810-1-andrii@kernel.org>
+References: <20230316183013.2882810-1-andrii@kernel.org>
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: nYGasoiXTvDRrukZVy183G_QIxJA2ThH
+X-Proofpoint-GUID: nYGasoiXTvDRrukZVy183G_QIxJA2ThH
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-16_12,2023-03-16_01,2023-02-09_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Alexei noticed xdp_do_redirect test on BPF CI started failing on
-BE systems after skb PP recycling was enabled:
+kernel/bpf/verifier.c file is large and growing larger all the time. So
+it's good to start splitting off more or less self-contained parts into
+separate files to keep source code size (somewhat) somewhat under
+control.
 
-test_xdp_do_redirect:PASS:prog_run 0 nsec
-test_xdp_do_redirect:PASS:pkt_count_xdp 0 nsec
-test_xdp_do_redirect:PASS:pkt_count_zero 0 nsec
-test_xdp_do_redirect:FAIL:pkt_count_tc unexpected pkt_count_tc: actual
-220 != expected 9998
-test_max_pkt_size:PASS:prog_run_max_size 0 nsec
-test_max_pkt_size:PASS:prog_run_too_big 0 nsec
-close_netns:PASS:setns 0 nsec
- #289 xdp_do_redirect:FAIL
-Summary: 270/1674 PASSED, 30 SKIPPED, 1 FAILED
+This patch is a one step in this direction, moving some of BPF verifier log
+routines into a separate kernel/bpf/log.c. Right now it's most low-level
+and isolated routines to append data to log, reset log to previous
+position, etc. Eventually we could probably move verifier state
+printing logic here as well, but this patch doesn't attempt to do that
+yet.
 
-and it doesn't happen on LE systems.
-Ilya then hunted it down to:
+Subsequent patches will add more logic to verifier log management, so
+having basics in a separate file will make sure verifier.c doesn't grow
+more with new changes.
 
- #0  0x0000000000aaeee6 in neigh_hh_output (hh=0x83258df0,
-skb=0x88142200) at linux/include/net/neighbour.h:503
- #1  0x0000000000ab2cda in neigh_output (skip_cache=false,
-skb=0x88142200, n=<optimized out>) at linux/include/net/neighbour.h:544
- #2  ip6_finish_output2 (net=net@entry=0x88edba00, sk=sk@entry=0x0,
-skb=skb@entry=0x88142200) at linux/net/ipv6/ip6_output.c:134
- #3  0x0000000000ab4cbc in __ip6_finish_output (skb=0x88142200, sk=0x0,
-net=0x88edba00) at linux/net/ipv6/ip6_output.c:195
- #4  ip6_finish_output (net=0x88edba00, sk=0x0, skb=0x88142200) at
-linux/net/ipv6/ip6_output.c:206
-
-xdp_do_redirect test places a u32 marker (0x42) right before the Ethernet
-header to check it then in the XDP program and return %XDP_ABORTED if it's
-not there. Neigh xmit code likes to round up hard header length to speed
-up copying the header, so it overwrites two bytes in front of the Eth
-header. On LE systems, 0x42 is one byte at `data - 4`, while on BE it's
-`data - 1`, what explains why it happens only there.
-It didn't happen previously due to that %XDP_PASS meant the page will be
-discarded and replaced by a new one, but now it can be recycled as well,
-while bpf_test_run code doesn't reinitialize the content of recycled
-pages. This mark is limited to this particular test and its setup though,
-so there's no need to predict 1000 different possible cases. Just move
-it 4 bytes to the left, still keeping it 32 bit to match on more bytes.
-
-Fixes: 9c94bbf9a87b ("xdp: recycle Page Pool backed skbs built from XDP frames")
-Reported-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/CAADnVQ+B_JOU+EpP=DKhbY9yXdN6GiRPnpTTXfEZ9sNkUeb-yQ@mail.gmail.com
-Reported-by: Ilya Leoshkevich <iii@linux.ibm.com> # + debugging
-Link: https://lore.kernel.org/bpf/8341c1d9f935f410438e79d3bd8a9cc50aefe105.camel@linux.ibm.com
-Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c | 7 ++++---
- tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c | 2 +-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ include/linux/bpf_verifier.h | 19 +++-----
+ kernel/bpf/Makefile          |  3 +-
+ kernel/bpf/log.c             | 85 ++++++++++++++++++++++++++++++++++++
+ kernel/bpf/verifier.c        | 69 -----------------------------
+ 4 files changed, 94 insertions(+), 82 deletions(-)
+ create mode 100644 kernel/bpf/log.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-index 856cbc29e6a1..4eaa3dcaebc8 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-@@ -86,12 +86,12 @@ static void test_max_pkt_size(int fd)
- void test_xdp_do_redirect(void)
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 81d525d057c7..83dff25545ee 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -498,11 +498,6 @@ struct bpf_verifier_log {
+ 	u32 len_total;
+ };
+ 
+-static inline bool bpf_verifier_log_full(const struct bpf_verifier_log *log)
+-{
+-	return log->len_used >= log->len_total - 1;
+-}
+-
+ #define BPF_LOG_LEVEL1	1
+ #define BPF_LOG_LEVEL2	2
+ #define BPF_LOG_STATS	4
+@@ -512,6 +507,11 @@ static inline bool bpf_verifier_log_full(const struct bpf_verifier_log *log)
+ #define BPF_LOG_MIN_ALIGNMENT 8U
+ #define BPF_LOG_ALIGNMENT 40U
+ 
++static inline bool bpf_verifier_log_full(const struct bpf_verifier_log *log)
++{
++	return log->len_used >= log->len_total - 1;
++}
++
+ static inline bool bpf_verifier_log_needed(const struct bpf_verifier_log *log)
  {
- 	int err, xdp_prog_fd, tc_prog_fd, ifindex_src, ifindex_dst;
--	char data[sizeof(pkt_udp) + sizeof(__u32)];
-+	char data[sizeof(pkt_udp) + sizeof(__u64)];
- 	struct test_xdp_do_redirect *skel = NULL;
- 	struct nstoken *nstoken = NULL;
- 	struct bpf_link *link;
- 	LIBBPF_OPTS(bpf_xdp_query_opts, query_opts);
--	struct xdp_md ctx_in = { .data = sizeof(__u32),
-+	struct xdp_md ctx_in = { .data = sizeof(__u64),
- 				 .data_end = sizeof(data) };
- 	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
- 			    .data_in = &data,
-@@ -105,8 +105,9 @@ void test_xdp_do_redirect(void)
- 	DECLARE_LIBBPF_OPTS(bpf_tc_hook, tc_hook,
- 			    .attach_point = BPF_TC_INGRESS);
+ 	return log &&
+@@ -519,13 +519,6 @@ static inline bool bpf_verifier_log_needed(const struct bpf_verifier_log *log)
+ 		 log->level == BPF_LOG_KERNEL);
+ }
  
--	memcpy(&data[sizeof(__u32)], &pkt_udp, sizeof(pkt_udp));
-+	memcpy(&data[sizeof(__u64)], &pkt_udp, sizeof(pkt_udp));
- 	*((__u32 *)data) = 0x42; /* metadata test value */
-+	*((__u32 *)data + 4) = 0;
+-static inline bool
+-bpf_verifier_log_attr_valid(const struct bpf_verifier_log *log)
+-{
+-	return log->len_total >= 128 && log->len_total <= UINT_MAX >> 2 &&
+-	       log->level && log->ubuf && !(log->level & ~BPF_LOG_MASK);
+-}
+-
+ #define BPF_MAX_SUBPROGS 256
  
- 	skel = test_xdp_do_redirect__open();
- 	if (!ASSERT_OK_PTR(skel, "skel"))
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c b/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
-index cd2d4e3258b8..5baaafed0d2d 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
-@@ -52,7 +52,7 @@ int xdp_redirect(struct xdp_md *xdp)
+ struct bpf_subprog_info {
+@@ -608,12 +601,14 @@ struct bpf_verifier_env {
+ 	char type_str_buf[TYPE_STR_BUF_LEN];
+ };
  
- 	*payload = MARK_IN;
++bool bpf_verifier_log_attr_valid(const struct bpf_verifier_log *log);
+ __printf(2, 0) void bpf_verifier_vlog(struct bpf_verifier_log *log,
+ 				      const char *fmt, va_list args);
+ __printf(2, 3) void bpf_verifier_log_write(struct bpf_verifier_env *env,
+ 					   const char *fmt, ...);
+ __printf(2, 3) void bpf_log(struct bpf_verifier_log *log,
+ 			    const char *fmt, ...);
++void bpf_vlog_reset(struct bpf_verifier_log *log, u32 new_pos);
  
--	if (bpf_xdp_adjust_meta(xdp, 4))
-+	if (bpf_xdp_adjust_meta(xdp, sizeof(__u64)))
- 		return XDP_ABORTED;
+ static inline struct bpf_func_state *cur_func(struct bpf_verifier_env *env)
+ {
+diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+index 02242614dcc7..1d3892168d32 100644
+--- a/kernel/bpf/Makefile
++++ b/kernel/bpf/Makefile
+@@ -6,7 +6,8 @@ cflags-nogcse-$(CONFIG_X86)$(CONFIG_CC_IS_GCC) := -fno-gcse
+ endif
+ CFLAGS_core.o += $(call cc-disable-warning, override-init) $(cflags-nogcse-yy)
  
- 	if (retcode > XDP_PASS)
+-obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o bpf_iter.o map_iter.o task_iter.o prog_iter.o link_iter.o
++obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o log.o
++obj-$(CONFIG_BPF_SYSCALL) += bpf_iter.o map_iter.o task_iter.o prog_iter.o link_iter.o
+ obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o bloom_filter.o
+ obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o
+ obj-$(CONFIG_BPF_SYSCALL) += bpf_local_storage.o bpf_task_storage.o
+diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+new file mode 100644
+index 000000000000..920061e38d2e
+--- /dev/null
++++ b/kernel/bpf/log.c
+@@ -0,0 +1,85 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright (c) 2011-2014 PLUMgrid, http://plumgrid.com
++ * Copyright (c) 2016 Facebook
++ * Copyright (c) 2018 Covalent IO, Inc. http://covalent.io
++ */
++#include <uapi/linux/btf.h>
++#include <linux/kernel.h>
++#include <linux/types.h>
++#include <linux/bpf.h>
++#include <linux/bpf_verifier.h>
++
++bool bpf_verifier_log_attr_valid(const struct bpf_verifier_log *log)
++{
++	return log->len_total >= 128 && log->len_total <= UINT_MAX >> 2 &&
++	       log->level && log->ubuf && !(log->level & ~BPF_LOG_MASK);
++}
++
++void bpf_verifier_vlog(struct bpf_verifier_log *log, const char *fmt,
++		       va_list args)
++{
++	unsigned int n;
++
++	n = vscnprintf(log->kbuf, BPF_VERIFIER_TMP_LOG_SIZE, fmt, args);
++
++	WARN_ONCE(n >= BPF_VERIFIER_TMP_LOG_SIZE - 1,
++		  "verifier log line truncated - local buffer too short\n");
++
++	if (log->level == BPF_LOG_KERNEL) {
++		bool newline = n > 0 && log->kbuf[n - 1] == '\n';
++
++		pr_err("BPF: %s%s", log->kbuf, newline ? "" : "\n");
++		return;
++	}
++
++	n = min(log->len_total - log->len_used - 1, n);
++	log->kbuf[n] = '\0';
++	if (!copy_to_user(log->ubuf + log->len_used, log->kbuf, n + 1))
++		log->len_used += n;
++	else
++		log->ubuf = NULL;
++}
++
++void bpf_vlog_reset(struct bpf_verifier_log *log, u32 new_pos)
++{
++	char zero = 0;
++
++	if (!bpf_verifier_log_needed(log))
++		return;
++
++	log->len_used = new_pos;
++	if (put_user(zero, log->ubuf + new_pos))
++		log->ubuf = NULL;
++}
++
++/* log_level controls verbosity level of eBPF verifier.
++ * bpf_verifier_log_write() is used to dump the verification trace to the log,
++ * so the user can figure out what's wrong with the program
++ */
++__printf(2, 3) void bpf_verifier_log_write(struct bpf_verifier_env *env,
++					   const char *fmt, ...)
++{
++	va_list args;
++
++	if (!bpf_verifier_log_needed(&env->log))
++		return;
++
++	va_start(args, fmt);
++	bpf_verifier_vlog(&env->log, fmt, args);
++	va_end(args);
++}
++EXPORT_SYMBOL_GPL(bpf_verifier_log_write);
++
++__printf(2, 3) void bpf_log(struct bpf_verifier_log *log,
++			    const char *fmt, ...)
++{
++	va_list args;
++
++	if (!bpf_verifier_log_needed(log))
++		return;
++
++	va_start(args, fmt);
++	bpf_verifier_vlog(log, fmt, args);
++	va_end(args);
++}
++EXPORT_SYMBOL_GPL(bpf_log);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 60793f793ca6..203d6e644e44 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -335,61 +335,6 @@ find_linfo(const struct bpf_verifier_env *env, u32 insn_off)
+ 	return &linfo[i - 1];
+ }
+ 
+-void bpf_verifier_vlog(struct bpf_verifier_log *log, const char *fmt,
+-		       va_list args)
+-{
+-	unsigned int n;
+-
+-	n = vscnprintf(log->kbuf, BPF_VERIFIER_TMP_LOG_SIZE, fmt, args);
+-
+-	WARN_ONCE(n >= BPF_VERIFIER_TMP_LOG_SIZE - 1,
+-		  "verifier log line truncated - local buffer too short\n");
+-
+-	if (log->level == BPF_LOG_KERNEL) {
+-		bool newline = n > 0 && log->kbuf[n - 1] == '\n';
+-
+-		pr_err("BPF: %s%s", log->kbuf, newline ? "" : "\n");
+-		return;
+-	}
+-
+-	n = min(log->len_total - log->len_used - 1, n);
+-	log->kbuf[n] = '\0';
+-	if (!copy_to_user(log->ubuf + log->len_used, log->kbuf, n + 1))
+-		log->len_used += n;
+-	else
+-		log->ubuf = NULL;
+-}
+-
+-static void bpf_vlog_reset(struct bpf_verifier_log *log, u32 new_pos)
+-{
+-	char zero = 0;
+-
+-	if (!bpf_verifier_log_needed(log))
+-		return;
+-
+-	log->len_used = new_pos;
+-	if (put_user(zero, log->ubuf + new_pos))
+-		log->ubuf = NULL;
+-}
+-
+-/* log_level controls verbosity level of eBPF verifier.
+- * bpf_verifier_log_write() is used to dump the verification trace to the log,
+- * so the user can figure out what's wrong with the program
+- */
+-__printf(2, 3) void bpf_verifier_log_write(struct bpf_verifier_env *env,
+-					   const char *fmt, ...)
+-{
+-	va_list args;
+-
+-	if (!bpf_verifier_log_needed(&env->log))
+-		return;
+-
+-	va_start(args, fmt);
+-	bpf_verifier_vlog(&env->log, fmt, args);
+-	va_end(args);
+-}
+-EXPORT_SYMBOL_GPL(bpf_verifier_log_write);
+-
+ __printf(2, 3) static void verbose(void *private_data, const char *fmt, ...)
+ {
+ 	struct bpf_verifier_env *env = private_data;
+@@ -403,20 +348,6 @@ __printf(2, 3) static void verbose(void *private_data, const char *fmt, ...)
+ 	va_end(args);
+ }
+ 
+-__printf(2, 3) void bpf_log(struct bpf_verifier_log *log,
+-			    const char *fmt, ...)
+-{
+-	va_list args;
+-
+-	if (!bpf_verifier_log_needed(log))
+-		return;
+-
+-	va_start(args, fmt);
+-	bpf_verifier_vlog(log, fmt, args);
+-	va_end(args);
+-}
+-EXPORT_SYMBOL_GPL(bpf_log);
+-
+ static const char *ltrim(const char *s)
+ {
+ 	while (isspace(*s))
 -- 
-2.39.2
+2.34.1
 
