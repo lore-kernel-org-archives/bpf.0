@@ -2,76 +2,80 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7221AC7618B
-	for <bpf@archiver.kernel.org>; Thu, 16 Mar 2023 17:41:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF7B7C6FD19
+	for <bpf@archiver.kernel.org>; Thu, 16 Mar 2023 17:50:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjCPRlB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Mar 2023 13:41:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37388 "EHLO
+        id S230202AbjCPRu1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Mar 2023 13:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjCPRlA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Mar 2023 13:41:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B696FC6419;
-        Thu, 16 Mar 2023 10:40:19 -0700 (PDT)
+        with ESMTP id S230234AbjCPRuZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Mar 2023 13:50:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C95DCA40;
+        Thu, 16 Mar 2023 10:50:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78081620CE;
-        Thu, 16 Mar 2023 17:40:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C737DC4339B;
-        Thu, 16 Mar 2023 17:40:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C865B822F0;
+        Thu, 16 Mar 2023 17:50:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0EC62C4339B;
+        Thu, 16 Mar 2023 17:50:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678988417;
-        bh=WbWJzWWmjrBLQSbLSwG+zCFQ5vbzSmmf/MuGY6JVjaY=;
+        s=k20201202; t=1678989020;
+        bh=IJDYG+9CxMOoa0OhQpSvem/aupmEe+hwiEbqjI121r0=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=WD1A5EIfxaW2EwkTzUE5gI/bgoh/KAjABQsV9JRwFXqaqJ7pddtA+ok+dGrw1rQEW
-         hL3/foiYYLyVIHhk95u4pkW1c9bKBYfVGe3t0LgWDU3zDf2YsCEsqeH3V03/0j1CW1
-         DhG5VTLVG7PPtFOdUHtcn6EsNPKuu5ZIwW11sxdIwqu9W0vvApWy4qIr/RoJNyo4FI
-         FYAN3JWutoLGSyMhjZ/vD82GqO+d84z0P18Kdme+ngxt6ZMYxQKJqT7QofvmfKZwlf
-         xu4GEIcfnKUor0HHse9Zu5kh7dkEgKOhC0c1g3LBv7Sbi+Q9ABheC90nApCAQ0IMIn
-         HJgXpfSDHRnhQ==
+        b=hxAJ+P55+9YksBnbEHsTRNP3zNvY/3vyJvSJ7oQ7Yu/qpJNrUzqOR63UZw6majpi9
+         9ADeBqRNUofbadwieVSkbfJI/XrhFnHhjH89BryZBfhT+AUa1V8RWSm7iaNnhdeUmJ
+         DM4+MHWCQjf5+xjjYQ0zFFRsIVphHoMeTcpWHJG07xvpsAymJV3yFoNeaGXAHKdgq6
+         Z9S9SRSGMpQ8cN2ORkYfvG6MmI8OPkCP4oPolwq5g8T9XzhHFm0U5xchI2OeZSdA8d
+         vAgIOb+K4hQcHgc35Yr9U1y1peG3G3g7SqhGKlbv1zBtNHSoImDFUmdUU791KIM5Db
+         XfkgVWuET8/CA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A2DA8E66CBB;
-        Thu, 16 Mar 2023 17:40:17 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DFD12E66CBF;
+        Thu, 16 Mar 2023 17:50:19 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 1/1] ice: xsk: disable txq irq before flushing hw
+Subject: Re: [PATCH net v2 0/2] virtio_net: fix two bugs related to XDP
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167898841766.29063.15581899056946442159.git-patchwork-notify@kernel.org>
-Date:   Thu, 16 Mar 2023 17:40:17 +0000
-References: <20230314174543.1048607-1-anthony.l.nguyen@intel.com>
-In-Reply-To: <20230314174543.1048607-1-anthony.l.nguyen@intel.com>
-To:     Tony Nguyen <anthony.l.nguyen@intel.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        edumazet@google.com, netdev@vger.kernel.org,
-        maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
-        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-        john.fastabend@gmail.com, bpf@vger.kernel.org,
-        larysa.zaremba@intel.com, chandanx.rout@intel.com
+Message-Id: <167898901991.2133.10546001323200249698.git-patchwork-notify@kernel.org>
+Date:   Thu, 16 Mar 2023 17:50:19 +0000
+References: <20230315015223.89137-1-xuanzhuo@linux.alibaba.com>
+In-Reply-To: <20230315015223.89137-1-xuanzhuo@linux.alibaba.com>
+To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc:     netdev@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com,
+        hengqi@linux.alibaba.com,
+        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 Hello:
 
-This patch was applied to netdev/net.git (main)
+This series was applied to netdev/net.git (main)
 by David S. Miller <davem@davemloft.net>:
 
-On Tue, 14 Mar 2023 10:45:43 -0700 you wrote:
-> From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+On Wed, 15 Mar 2023 09:52:21 +0800 you wrote:
+> This patch set fixes two bugs related to XDP.
+> These two patch is not associated.
 > 
-> ice_qp_dis() intends to stop a given queue pair that is a target of xsk
-> pool attach/detach. One of the steps is to disable interrupts on these
-> queues. It currently is broken in a way that txq irq is turned off
-> *after* HW flush which in turn takes no effect.
+> v2:
+>     1. add unlikely()
+> 
+> v1:
+>     1. fix the grammer error
 > 
 > [...]
 
 Here is the summary with links:
-  - [net,1/1] ice: xsk: disable txq irq before flushing hw
-    https://git.kernel.org/netdev/net/c/b830c9642386
+  - [net,v2,1/2] virtio_net: fix page_to_skb() miss headroom
+    https://git.kernel.org/netdev/net/c/fa0f1ba7c823
+  - [net,v2,2/2] virtio_net: free xdp shinfo frags when build_skb_from_xdp_buff() fails
+    https://git.kernel.org/netdev/net/c/1a3bd6eabae3
 
 You are awesome, thank you!
 -- 
