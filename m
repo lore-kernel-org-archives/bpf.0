@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17E79C6FD19
-	for <bpf@archiver.kernel.org>; Thu, 16 Mar 2023 18:33:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92DDAC6FD1F
+	for <bpf@archiver.kernel.org>; Thu, 16 Mar 2023 18:33:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbjCPSdV convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 16 Mar 2023 14:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34616 "EHLO
+        id S229894AbjCPSd2 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 16 Mar 2023 14:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbjCPSdU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Mar 2023 14:33:20 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63EEF7EEE
-        for <bpf@vger.kernel.org>; Thu, 16 Mar 2023 11:33:16 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32GI6rG1000532
-        for <bpf@vger.kernel.org>; Thu, 16 Mar 2023 11:33:16 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3pbpxspadw-3
+        with ESMTP id S229678AbjCPSd1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Mar 2023 14:33:27 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1C82332B
+        for <bpf@vger.kernel.org>; Thu, 16 Mar 2023 11:33:21 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 32GI7H16006551
+        for <bpf@vger.kernel.org>; Thu, 16 Mar 2023 11:33:21 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3pbs3cdjxe-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 16 Mar 2023 11:33:16 -0700
-Received: from twshared33736.38.frc1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 16 Mar 2023 11:33:20 -0700
+Received: from twshared52565.14.frc2.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 16 Mar 2023 11:33:13 -0700
+ 15.1.2507.17; Thu, 16 Mar 2023 11:33:19 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 52BF42AC196F8; Thu, 16 Mar 2023 11:30:34 -0700 (PDT)
+        id 1D8AE2AC19636; Thu, 16 Mar 2023 11:30:29 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC:     <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next 6/6] selftests/bpf: add fixed vs rotating verifier log tests
-Date:   Thu, 16 Mar 2023 11:30:13 -0700
-Message-ID: <20230316183013.2882810-7-andrii@kernel.org>
+Subject: [PATCH bpf-next 4/6] libbpf: don't enfore verifier log levels on libbpf side
+Date:   Thu, 16 Mar 2023 11:30:11 -0700
+Message-ID: <20230316183013.2882810-5-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230316183013.2882810-1-andrii@kernel.org>
 References: <20230316183013.2882810-1-andrii@kernel.org>
@@ -41,126 +41,37 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: I3CBZPMKv6Tm19JQp1lJA1H4kfzbA6Rd
-X-Proofpoint-GUID: I3CBZPMKv6Tm19JQp1lJA1H4kfzbA6Rd
+X-Proofpoint-GUID: vcCCwvURNUC9iO95TtfC4GV7dIyO2iqI
+X-Proofpoint-ORIG-GUID: vcCCwvURNUC9iO95TtfC4GV7dIyO2iqI
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-16_12,2023-03-16_01,2023-02-09_01
+ definitions=2023-03-16_12,2023-03-16_02,2023-02-09_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add selftests validating BPF_LOG_FIXED behavior, which used to be the
-only behavior, and now default rotating BPF verifier log, which returns
-just up to last N bytes of full verifier log, instead of returning
--ENOSPC.
-
-To stress test correctness of in-kernel verifier log logic, we force it
-to truncate program's verifier log to all lengths from 1 all the way to
-its full size (about 450 bytes today). This was a useful stress test
-while developing the feature.
+This basically prevents any forward compatibility. And we either way
+just return -EINVAL, which would otherwise be returned from bpf()
+syscall anyways.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- .../selftests/bpf/prog_tests/verifier_log.c   | 89 +++++++++++++++++++
- 1 file changed, 89 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/verifier_log.c
+ tools/lib/bpf/bpf.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier_log.c b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-new file mode 100644
-index 000000000000..4d9630d74ae0
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-@@ -0,0 +1,89 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Meta Platforms, Inc. and affiliates. */
-+
-+#include <test_progs.h>
-+#include <bpf/btf.h>
-+
-+#include "test_log_buf.skel.h"
-+
-+void test_verifier_log(void)
-+{
-+	LIBBPF_OPTS(bpf_prog_load_opts, opts);
-+	char full_log[1024], log_buf[1024], *exp_log;
-+	char prog_name[16], op_name[32];
-+	struct test_log_buf *skel;
-+	const struct bpf_insn *insns;
-+	size_t insn_cnt, fixed_log_sz;
-+	int i, err, prog_fd;
-+
-+	skel = test_log_buf__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	bpf_program__set_autoload(skel->progs.bad_prog, false);
-+
-+	err = test_log_buf__load(skel);
-+	if (!ASSERT_OK(err, "skel_load"))
-+		goto cleanup;
-+
-+	insns = bpf_program__insns(skel->progs.good_prog);
-+	insn_cnt = bpf_program__insn_cnt(skel->progs.good_prog);
-+
-+	opts.log_buf = full_log;
-+	opts.log_size = sizeof(full_log);
-+	opts.log_level = 2 | 8 /* BPF_LOG_FIXED */;
-+	prog_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT, "log_fixed",
-+				"GPL", insns, insn_cnt, &opts);
-+	if (!ASSERT_GT(prog_fd, 0, "fixed_log_prog_load"))
-+		goto cleanup;
-+	close(prog_fd);
-+
-+	fixed_log_sz = strlen(full_log) + 1;
-+	if (!ASSERT_GT(fixed_log_sz, 100, "fixed_log_sz"))
-+		goto cleanup;
-+
-+	/* validate BPF_LOG_FIXED works as verifier log used to work, that is:
-+	 * we get -ENOSPC and beginning of the full verifier log
-+	 */
-+	opts.log_buf = log_buf;
-+	opts.log_level = 2 | 8; /* verbose level 2, fixed-length log */
-+	opts.log_size = 50;
-+
-+	prog_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT, "log_fixed50",
-+				"GPL", insns, insn_cnt, &opts);
-+	if (!ASSERT_EQ(prog_fd, -ENOSPC, "unexpected_log_fixed_prog_load_result")) {
-+		if (prog_fd >= 0)
-+			close(prog_fd);
-+		goto cleanup;
-+	}
-+	if (!ASSERT_EQ(strlen(log_buf), 49, "log_fixed_50"))
-+		goto cleanup;
-+	if (!ASSERT_STRNEQ(log_buf, full_log, 49, op_name))
-+		goto cleanup;
-+
-+	/* validate rolling verifier log logic: try all variations of log buf
-+	 * length to force various truncation scenarios
-+	 */
-+	opts.log_buf = log_buf;
-+	opts.log_level = 2; /* verbose level 2, rolling log */
-+	for (i = 1; i <= fixed_log_sz; i++) {
-+		opts.log_size = i;
-+
-+		snprintf(prog_name, sizeof(prog_name), "log_roll_%d", i);
-+		prog_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT, prog_name,
-+					"GPL", insns, insn_cnt, &opts);
-+
-+		snprintf(op_name, sizeof(op_name), "log_roll_prog_load_%d", i);
-+		if (!ASSERT_GT(prog_fd, 0, op_name))
-+			goto cleanup;
-+		close(prog_fd);
-+
-+		exp_log = full_log + fixed_log_sz - i;
-+		snprintf(op_name, sizeof(op_name), "log_roll_contents_%d", i);
-+		if (!ASSERT_STREQ(log_buf, exp_log, op_name))
-+			goto cleanup;
-+	}
-+
-+cleanup:
-+	test_log_buf__destroy(skel);
-+}
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index e750b6f5fcc3..eb08a998b526 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -290,8 +290,6 @@ int bpf_prog_load(enum bpf_prog_type prog_type,
+ 
+ 	if (!!log_buf != !!log_size)
+ 		return libbpf_err(-EINVAL);
+-	if (log_level > (4 | 2 | 1))
+-		return libbpf_err(-EINVAL);
+ 	if (log_level && !log_buf)
+ 		return libbpf_err(-EINVAL);
+ 
 -- 
 2.34.1
 
