@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 364FEC76195
-	for <bpf@archiver.kernel.org>; Fri, 17 Mar 2023 22:04:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43D96C74A5B
+	for <bpf@archiver.kernel.org>; Fri, 17 Mar 2023 22:04:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbjCQWEP convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 17 Mar 2023 18:04:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48270 "EHLO
+        id S229517AbjCQWEg convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 17 Mar 2023 18:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230403AbjCQWEO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Mar 2023 18:04:14 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C824031BDA
-        for <bpf@vger.kernel.org>; Fri, 17 Mar 2023 15:04:06 -0700 (PDT)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32HKFcum001680
-        for <bpf@vger.kernel.org>; Fri, 17 Mar 2023 15:04:06 -0700
+        with ESMTP id S230100AbjCQWEf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Mar 2023 18:04:35 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCEF31BD2
+        for <bpf@vger.kernel.org>; Fri, 17 Mar 2023 15:04:32 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 32HKEuV5001839
+        for <bpf@vger.kernel.org>; Fri, 17 Mar 2023 15:04:31 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3pcp01m3qd-3
+        by m0089730.ppops.net (PPS) with ESMTPS id 3pcsyutsv9-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 17 Mar 2023 15:04:06 -0700
-Received: from twshared13785.14.prn3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 17 Mar 2023 15:04:31 -0700
+Received: from twshared6687.46.prn1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Fri, 17 Mar 2023 15:04:03 -0700
+ 15.1.2507.17; Fri, 17 Mar 2023 15:04:08 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 08DE72AEB748D; Fri, 17 Mar 2023 15:03:58 -0700 (PDT)
+        id 340462AEB756E; Fri, 17 Mar 2023 15:04:05 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC:     <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next 3/6] bpf: switch BPF verifier log to be a rotating log by default
-Date:   Fri, 17 Mar 2023 15:03:48 -0700
-Message-ID: <20230317220351.2970665-4-andrii@kernel.org>
+Subject: [PATCH bpf-next 6/6] selftests/bpf: add fixed vs rotating verifier log tests
+Date:   Fri, 17 Mar 2023 15:03:51 -0700
+Message-ID: <20230317220351.2970665-7-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230317220351.2970665-1-andrii@kernel.org>
 References: <20230317220351.2970665-1-andrii@kernel.org>
@@ -41,8 +41,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: fasmFTioLvzY45tiq5v1ca-i53PHuJUE
-X-Proofpoint-GUID: fasmFTioLvzY45tiq5v1ca-i53PHuJUE
+X-Proofpoint-ORIG-GUID: Q1BISTPWBEKHKnulKx1qk1XT0a7ruF54
+X-Proofpoint-GUID: Q1BISTPWBEKHKnulKx1qk1XT0a7ruF54
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-17_17,2023-03-16_02,2023-02-09_01
@@ -50,417 +50,184 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, if user-supplied log buffer to collect BPF verifier log turns
-out to be too small to contain full log, bpf() syscall return -ENOSPC,
-fails BPF program verification/load, but preserves first N-1 bytes of
-verifier log (where N is the size of user-supplied buffer).
+Add selftests validating BPF_LOG_FIXED behavior, which used to be the
+only behavior, and now default rotating BPF verifier log, which returns
+just up to last N bytes of full verifier log, instead of returning
+-ENOSPC.
 
-This is problematic in a bunch of common scenarios, especially when
-working with real-world BPF programs that tend to be pretty complex as
-far as verification goes and require big log buffers. Typically, it's
-when debugging tricky cases at log level 2 (verbose). Also, when BPF program
-is successfully validated, log level 2 is the only way to actually see
-verifier state progression and all the important details.
-
-Even with log level 1, it's possible to get -ENOSPC even if the final
-verifier log fits in log buffer, if there is a code path that's deep
-enough to fill up entire log, even if normally it would be reset later
-on (there is a logic to chop off successfully validated portions of BPF
-verifier log).
-
-In short, it's not always possible to pre-size log buffer. Also, in
-practice, the end of the log most often is way more important than the
-beginning.
-
-This patch switches BPF verifier log behavior to effectively behave as
-rotating log. That is, if user-supplied log buffer turns out to be too
-short, instead of failing with -ENOSPC, verifier will keep overwriting
-previously written log, effectively treating user's log buffer as a ring
-buffer.
-
-Importantly, though, to preserve good user experience and not require
-every user-space application to adopt to this new behavior, before
-exiting to user-space verifier will rotate log (in place) to make it
-start at the very beginning of user buffer as a continuous
-zero-terminated string. The contents will be a chopped off N-1 last
-bytes of full verifier log, of course.
-
-Given beginning of log is sometimes important as well, we add
-BPF_LOG_FIXED (which equals 8) flag to force old behavior, which allows
-tools like veristat to request first part of verifier log, if necessary.
-
-On the implementation side, conceptually, it's all simple. We maintain
-64-bit logical start and end positions. If we need to truncate the log,
-start position will be adjusted accordingly to lag end position by
-N bytes. We then use those logical positions to calculate their matching
-actual positions in user buffer and handle wrap around the end of the
-buffer properly. Finally, right before returning from bpf_check(), we
-rotate user log buffer contents in-place as necessary, to make log
-contents contiguous. See comments in relevant functions for details.
+To stress test correctness of in-kernel verifier log logic, we force it
+to truncate program's verifier log to all lengths from 1 all the way to
+its full size (about 450 bytes today). This was a useful stress test
+while developing the feature.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- include/linux/bpf_verifier.h                  |  32 ++-
- kernel/bpf/log.c                              | 187 +++++++++++++++++-
- kernel/bpf/verifier.c                         |  17 +-
- .../selftests/bpf/prog_tests/log_fixup.c      |   1 +
- 4 files changed, 213 insertions(+), 24 deletions(-)
+ .../selftests/bpf/prog_tests/verifier_log.c   | 156 ++++++++++++++++++
+ 1 file changed, 156 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/verifier_log.c
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 83dff25545ee..cff11c99ed9a 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -491,25 +491,42 @@ struct bpf_insn_aux_data {
- #define BPF_VERIFIER_TMP_LOG_SIZE	1024
- 
- struct bpf_verifier_log {
--	u32 level;
--	char kbuf[BPF_VERIFIER_TMP_LOG_SIZE];
-+	/* Logical start and end positions of a "log window" of the verifier log.
-+	 * start_pos == 0 means we haven't truncated anything.
-+	 * Once truncation starts to happen, start_pos + len_total == end_pos,
-+	 * except during log reset situations, in which (end_pos - start_pos)
-+	 * might get smaller than len_total (see bpf_vlog_reset()).
-+	 * Generally, (end_pos - start_pos) gives number of useful data in
-+	 * user log buffer.
-+	 */
-+	u64 start_pos;
-+	u64 end_pos;
- 	char __user *ubuf;
--	u32 len_used;
-+	u32 level;
- 	u32 len_total;
-+	char kbuf[BPF_VERIFIER_TMP_LOG_SIZE];
- };
- 
- #define BPF_LOG_LEVEL1	1
- #define BPF_LOG_LEVEL2	2
- #define BPF_LOG_STATS	4
-+#define BPF_LOG_FIXED	8
- #define BPF_LOG_LEVEL	(BPF_LOG_LEVEL1 | BPF_LOG_LEVEL2)
--#define BPF_LOG_MASK	(BPF_LOG_LEVEL | BPF_LOG_STATS)
-+#define BPF_LOG_MASK	(BPF_LOG_LEVEL | BPF_LOG_STATS | BPF_LOG_FIXED)
- #define BPF_LOG_KERNEL	(BPF_LOG_MASK + 1) /* kernel internal flag */
- #define BPF_LOG_MIN_ALIGNMENT 8U
- #define BPF_LOG_ALIGNMENT 40U
- 
-+static inline u32 bpf_log_used(const struct bpf_verifier_log *log)
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier_log.c b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
+new file mode 100644
+index 000000000000..3c5cdf257014
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
+@@ -0,0 +1,156 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2023 Meta Platforms, Inc. and affiliates. */
++
++#include <test_progs.h>
++#include <bpf/btf.h>
++
++#include "test_log_buf.skel.h"
++
++
++static bool check_prog_load(int prog_fd, bool expect_err, const char *tag)
 +{
-+	return log->end_pos - log->start_pos;
-+}
-+
- static inline bool bpf_verifier_log_full(const struct bpf_verifier_log *log)
- {
--	return log->len_used >= log->len_total - 1;
-+	if (log->level & BPF_LOG_FIXED)
-+		return bpf_log_used(log) >= log->len_total - 1;
-+	return false;
- }
- 
- static inline bool bpf_verifier_log_needed(const struct bpf_verifier_log *log)
-@@ -596,7 +613,7 @@ struct bpf_verifier_env {
- 	u32 scratched_regs;
- 	/* Same as scratched_regs but for stack slots */
- 	u64 scratched_stack_slots;
--	u32 prev_log_len, prev_insn_print_len;
-+	u64 prev_log_pos, prev_insn_print_pos;
- 	/* buffer used in reg_type_str() to generate reg_type string */
- 	char type_str_buf[TYPE_STR_BUF_LEN];
- };
-@@ -608,7 +625,8 @@ __printf(2, 3) void bpf_verifier_log_write(struct bpf_verifier_env *env,
- 					   const char *fmt, ...);
- __printf(2, 3) void bpf_log(struct bpf_verifier_log *log,
- 			    const char *fmt, ...);
--void bpf_vlog_reset(struct bpf_verifier_log *log, u32 new_pos);
-+void bpf_vlog_reset(struct bpf_verifier_log *log, u64 new_pos);
-+void bpf_vlog_finalize(struct bpf_verifier_log *log);
- 
- static inline struct bpf_func_state *cur_func(struct bpf_verifier_env *env)
- {
-diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index 1974891fc324..c4a47862c1cd 100644
---- a/kernel/bpf/log.c
-+++ b/kernel/bpf/log.c
-@@ -8,6 +8,7 @@
- #include <linux/types.h>
- #include <linux/bpf.h>
- #include <linux/bpf_verifier.h>
-+#include <linux/math64.h>
- 
- bool bpf_verifier_log_attr_valid(const struct bpf_verifier_log *log)
- {
-@@ -32,23 +33,191 @@ void bpf_verifier_vlog(struct bpf_verifier_log *log, const char *fmt,
- 		return;
- 	}
- 
--	n = min(log->len_total - log->len_used - 1, n);
--	log->kbuf[n] = '\0';
--	if (!copy_to_user(log->ubuf + log->len_used, log->kbuf, n + 1))
--		log->len_used += n;
--	else
--		log->ubuf = NULL;
-+	if (log->level & BPF_LOG_FIXED) {
-+		n = min(log->len_total - bpf_log_used(log) - 1, n);
-+		log->kbuf[n] = '\0';
-+		n += 1;
-+
-+		if (copy_to_user(log->ubuf + log->end_pos, log->kbuf, n))
-+			goto fail;
-+
-+		log->end_pos += n - 1; /* don't count terminating '\0' */
-+	} else {
-+		u64 new_end, new_start, cur_pos;
-+		u32 buf_start, buf_end, new_n;
-+
-+		log->kbuf[n] = '\0';
-+		n += 1;
-+
-+		new_end = log->end_pos + n;
-+		if (new_end - log->start_pos >= log->len_total)
-+			new_start = new_end - log->len_total;
-+		else
-+			new_start = log->start_pos;
-+		new_n = min(n, log->len_total);
-+		cur_pos = new_end - new_n;
-+
-+		div_u64_rem(cur_pos, log->len_total, &buf_start);
-+		div_u64_rem(new_end, log->len_total, &buf_end);
-+		/* new_end and buf_end are exclusive indices, so if buf_end is
-+		 * exactly zero, then it actually points right to the end of
-+		 * ubuf and there is no wrap around
-+		 */
-+		if (buf_end == 0)
-+			buf_end = log->len_total;
-+
-+		/* if buf_start > buf_end, we wrapped around;
-+		 * if buf_start == buf_end, then we fill ubuf completely; we
-+		 * can't have buf_start == buf_end to mean that there is
-+		 * nothing to write, because we always write at least
-+		 * something, even if terminal '\0'
-+		 */
-+		if (buf_start < buf_end) {
-+			/* message fits within contiguous chunk of ubuf */
-+			if (copy_to_user(log->ubuf + buf_start,
-+					 log->kbuf + n - new_n,
-+					 buf_end - buf_start))
-+				goto fail;
-+		} else {
-+			/* message wraps around the end of ubuf, copy in two chunks */
-+			if (copy_to_user(log->ubuf + buf_start,
-+					 log->kbuf + n - new_n,
-+					 log->len_total - buf_start))
-+				goto fail;
-+			if (copy_to_user(log->ubuf,
-+					 log->kbuf + n - buf_end,
-+					 buf_end))
-+				goto fail;
++	if (expect_err) {
++		if (!ASSERT_LT(prog_fd, 0, tag)) {
++			close(prog_fd);
++			return false;
 +		}
++	} else /* !expect_err */ {
++		if (!ASSERT_GT(prog_fd, 0, tag))
++			return false;
++	}
++	return true;
++}
 +
-+		log->start_pos = new_start;
-+		log->end_pos = new_end - 1; /* don't count terminating '\0' */
++static void verif_log_subtest(const char *name, bool expect_load_error, int log_level)
++{
++	LIBBPF_OPTS(bpf_prog_load_opts, opts);
++	struct {
++		/* strategically placed before others to avoid accidental modification by kernel */
++		char filler[1024];
++		char buf[1024];
++		/* strategically placed after buf[] to catch more accidental corruptions */
++		char reference[1024];
++	} logs;
++	char *exp_log, prog_name[16], op_name[32];
++	struct test_log_buf *skel;
++	struct bpf_program *prog;
++	const struct bpf_insn *insns;
++	size_t insn_cnt, fixed_log_sz;
++	int i, err, prog_fd;
++
++	skel = test_log_buf__open();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		return;
++
++	bpf_object__for_each_program(prog, skel->obj) {
++		if (strcmp(bpf_program__name(prog), name) == 0)
++			bpf_program__set_autoload(prog, true);
++		else
++			bpf_program__set_autoload(prog, false);
 +	}
 +
-+	return;
-+fail:
-+	log->ubuf = NULL;
- }
- 
--void bpf_vlog_reset(struct bpf_verifier_log *log, u32 new_pos)
-+void bpf_vlog_reset(struct bpf_verifier_log *log, u64 new_pos)
- {
- 	char zero = 0;
-+	u32 pos;
- 
- 	if (!bpf_verifier_log_needed(log))
- 		return;
- 
--	log->len_used = new_pos;
--	if (put_user(zero, log->ubuf + new_pos))
-+	/* if position to which we reset is beyond current log window,
-+	 * then we didn't preserve any useful content and should adjust
-+	 * start_pos to end up with an empty log (start_pos == end_pos)
++	err = test_log_buf__load(skel);
++	if (!expect_load_error && !ASSERT_OK(err, "unexpected_load_failure"))
++		goto cleanup;
++	if (expect_load_error && !ASSERT_ERR(err, "unexpected_load_success"))
++		goto cleanup;
++
++	insns = bpf_program__insns(skel->progs.good_prog);
++	insn_cnt = bpf_program__insn_cnt(skel->progs.good_prog);
++
++	opts.log_buf = logs.reference;
++	opts.log_size = sizeof(logs.reference);
++	opts.log_level = log_level | 8 /* BPF_LOG_FIXED */;
++	prog_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT, "log_fixed",
++				"GPL", insns, insn_cnt, &opts);
++	if (!check_prog_load(prog_fd, expect_load_error, "fixed_buf_prog_load"))
++		goto cleanup;
++	close(prog_fd);
++
++	fixed_log_sz = strlen(logs.reference) + 1;
++	if (!ASSERT_GT(fixed_log_sz, 50, "fixed_log_sz"))
++		goto cleanup;
++
++	/* validate BPF_LOG_FIXED works as verifier log used to work, that is:
++	 * we get -ENOSPC and beginning of the full verifier log. This only
++	 * works for log_level 2 and log_level 1 + failed program. For log
++	 * level 2 we don't reset log at all. For log_level 1 + failed program
++	 * we don't get to verification stats output. With log level 1
++	 * for successful program  final result will be just verifier stats.
++	 * But if provided too short log buf, kernel will NULL-out log->ubuf
++	 * and will stop emitting further log. This means we'll never see
++	 * predictable verifier stats.
++	 * Long story short, we do the following -ENOSPC test only for
++	 * predictable combinations.
 +	 */
-+	log->end_pos = new_pos;
-+	if (log->end_pos < log->start_pos)
-+		log->start_pos = log->end_pos;
-+	div_u64_rem(new_pos, log->len_total, &pos);
-+	if (put_user(zero, log->ubuf + pos))
-+		log->ubuf = NULL;
-+}
++	if (log_level >= 2 || expect_load_error) {
++		opts.log_buf = logs.buf;
++		opts.log_level = log_level | 8; /* fixed-length log */
++		opts.log_size = 25;
 +
-+static void bpf_vlog_reverse_kbuf(char *buf, int len)
-+{
-+	int i, j;
-+
-+	for (i = 0, j = len - 1; i < j; i++, j--)
-+		swap(buf[i], buf[j]);
-+}
-+
-+static int bpf_vlog_reverse_ubuf(struct bpf_verifier_log *log, int start, int end)
-+{
-+	/* we split log->kbuf into two equal parts for both ends of array */
-+	int n = sizeof(log->kbuf) / 2, nn;
-+	char *lbuf = log->kbuf, *rbuf = log->kbuf + n;
-+
-+	/* Read ubuf's section [start, end) two chunks at a time, from left
-+	 * and right side; within each chunk, swap all the bytes; after that
-+	 * reverse the order of lbuf and rbuf and write result back to ubuf.
-+	 * This way we'll end up with swapped contents of specified
-+	 * [start, end) ubuf segment.
-+	 */
-+	while (end - start > 1) {
-+		nn = min(n, (end - start ) / 2);
-+
-+		if (copy_from_user(lbuf, log->ubuf + start, nn))
-+			return -EFAULT;
-+		if (copy_from_user(rbuf, log->ubuf + end - nn, nn))
-+			return -EFAULT;
-+
-+		bpf_vlog_reverse_kbuf(lbuf, nn);
-+		bpf_vlog_reverse_kbuf(rbuf, nn);
-+
-+		/* we write lbuf to the right end of ubuf, while rbuf to the
-+		 * left one to end up with properly reversed overall ubuf
-+		 */
-+		if (copy_to_user(log->ubuf + start, rbuf, nn))
-+			return -EFAULT;
-+		if (copy_to_user(log->ubuf + end - nn, lbuf, nn))
-+			return -EFAULT;
-+
-+		start += nn;
-+		end -= nn;
++		prog_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT, "log_fixed50",
++					"GPL", insns, insn_cnt, &opts);
++		if (!ASSERT_EQ(prog_fd, -ENOSPC, "unexpected_log_fixed_prog_load_result")) {
++			if (prog_fd >= 0)
++				close(prog_fd);
++			goto cleanup;
++		}
++		if (!ASSERT_EQ(strlen(logs.buf), 24, "log_fixed_25"))
++			goto cleanup;
++		if (!ASSERT_STRNEQ(logs.buf, logs.reference, 24, op_name))
++			goto cleanup;
 +	}
 +
-+	return 0;
++	/* validate rolling verifier log logic: try all variations of log buf
++	 * length to force various truncation scenarios
++	 */
++	opts.log_buf = logs.buf;
++	opts.log_level = log_level; /* rolling log */
++
++	/* prefill logs.buf with 'A's to detect any write beyond allowed length */
++	memset(logs.filler, 'A', sizeof(logs.filler));
++	logs.filler[sizeof(logs.filler) - 1] = '\0';
++	memset(logs.buf, 'A', sizeof(logs.buf));
++	logs.buf[sizeof(logs.buf) - 1] = '\0';
++
++	for (i = 1; i <= fixed_log_sz; i++) {
++		opts.log_size = i;
++
++		snprintf(prog_name, sizeof(prog_name), "log_roll_%d", i);
++		prog_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT, prog_name,
++					"GPL", insns, insn_cnt, &opts);
++
++		snprintf(op_name, sizeof(op_name), "log_roll_prog_load_%d", i);
++		if (!check_prog_load(prog_fd, expect_load_error, op_name))
++			goto cleanup;
++		close(prog_fd);
++
++		exp_log = logs.reference + fixed_log_sz - i;
++		snprintf(op_name, sizeof(op_name), "log_roll_contents_%d", i);
++		if (!ASSERT_STREQ(logs.buf, exp_log, op_name))
++			goto cleanup;
++
++		printf("CMP:%d\nS1:'%s'\nS2:'%s'\n", strcmp(logs.buf + i, logs.filler + i),
++				logs.buf + i, logs.filler + i);
++
++		/* check that unused portions of logs.buf is not overwritten */
++		snprintf(op_name, sizeof(op_name), "log_roll_unused_tail_%d", i);
++		if (!ASSERT_STREQ(logs.buf + i, logs.filler + i, op_name))
++			goto cleanup;
++	}
++
++cleanup:
++	test_log_buf__destroy(skel);
 +}
 +
-+void bpf_vlog_finalize(struct bpf_verifier_log *log)
++void test_verifier_log(void)
 +{
-+	u32 sublen;
-+	int err;
-+
-+	if (!log || !log->level || !log->ubuf)
-+		return;
-+	if ((log->level & BPF_LOG_FIXED) || log->level == BPF_LOG_KERNEL)
-+		return;
-+
-+	/* If we never truncated log, there is nothing to move around. */
-+	if (log->start_pos == 0)
-+		return;
-+
-+	/* Otherwise we need to rotate log contents to make it start from the
-+	 * buffer beginning and be a continuous zero-terminated string. Note
-+	 * that if log->start_pos != 0 then we definitely filled up entire log
-+	 * buffer with no gaps, and we just need to shift buffer contents to
-+	 * the left by (log->start_pos % log->len_total) bytes.
-+	 *
-+	 * Unfortunately, user buffer could be huge and we don't want to
-+	 * allocate temporary kernel memory of the same size just to shift
-+	 * contents in a straightforward fashion. Instead, we'll be clever and
-+	 * do in-place array rotation. This is a leetcode-style problem, which
-+	 * could be solved by three rotations.
-+	 *
-+	 * Let's say we have log buffer that has to be shifted left by 7 bytes
-+	 * (spaces and vertical bar is just for demonstrative purposes):
-+	 *   E F G H I J K | A B C D
-+	 *
-+	 * First, we reverse entire array:
-+	 *   D C B A | K J I H G F E
-+	 *
-+	 * Then we rotate first 4 bytes (DCBA) and separately last 7 bytes
-+	 * (KJIHGFE), resulting in a properly rotated array:
-+	 *   A B C D | E F G H I J K
-+	 *
-+	 * We'll utilize log->kbuf to read user memory chunk by chunk, swap
-+	 * bytes, and write them back. Doing it byte-by-byte would be
-+	 * unnecessarily inefficient. Altogether we are going to read and
-+	 * write each byte twice.
-+	 */
-+
-+	/* length of the chopped off part that will be the beginning;
-+	 * len(ABCD) in the example above
-+	 */
-+	div_u64_rem(log->start_pos, log->len_total, &sublen);
-+	sublen = log->len_total - sublen;
-+
-+	err = bpf_vlog_reverse_ubuf(log, 0, log->len_total);
-+	err = err ?: bpf_vlog_reverse_ubuf(log, 0, sublen);
-+	err = err ?: bpf_vlog_reverse_ubuf(log, sublen, log->len_total);
-+	if (err)
- 		log->ubuf = NULL;
- }
- 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 48b7809c429f..391bbb3b2274 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1435,10 +1435,10 @@ static inline u32 vlog_alignment(u32 pos)
- static void print_insn_state(struct bpf_verifier_env *env,
- 			     const struct bpf_func_state *state)
- {
--	if (env->prev_log_len && env->prev_log_len == env->log.len_used) {
-+	if (env->prev_log_pos && env->prev_log_pos == env->log.end_pos) {
- 		/* remove new line character */
--		bpf_vlog_reset(&env->log, env->prev_log_len - 1);
--		verbose(env, "%*c;", vlog_alignment(env->prev_insn_print_len), ' ');
-+		bpf_vlog_reset(&env->log, env->prev_log_pos - 1);
-+		verbose(env, "%*c;", vlog_alignment(env->prev_insn_print_pos), ' ');
- 	} else {
- 		verbose(env, "%d:", env->insn_idx);
- 	}
-@@ -1746,7 +1746,7 @@ static struct bpf_verifier_state *push_stack(struct bpf_verifier_env *env,
- 	elem->insn_idx = insn_idx;
- 	elem->prev_insn_idx = prev_insn_idx;
- 	elem->next = env->head;
--	elem->log_pos = env->log.len_used;
-+	elem->log_pos = env->log.end_pos;
- 	env->head = elem;
- 	env->stack_size++;
- 	err = copy_verifier_state(&elem->st, cur);
-@@ -2282,7 +2282,7 @@ static struct bpf_verifier_state *push_async_cb(struct bpf_verifier_env *env,
- 	elem->insn_idx = insn_idx;
- 	elem->prev_insn_idx = prev_insn_idx;
- 	elem->next = env->head;
--	elem->log_pos = env->log.len_used;
-+	elem->log_pos = env->log.end_pos;
- 	env->head = elem;
- 	env->stack_size++;
- 	if (env->stack_size > BPF_COMPLEXITY_LIMIT_JMP_SEQ) {
-@@ -15560,11 +15560,11 @@ static int do_check(struct bpf_verifier_env *env)
- 				print_insn_state(env, state->frame[state->curframe]);
- 
- 			verbose_linfo(env, env->insn_idx, "; ");
--			env->prev_log_len = env->log.len_used;
-+			env->prev_log_pos = env->log.end_pos;
- 			verbose(env, "%d: ", env->insn_idx);
- 			print_bpf_insn(&cbs, insn, env->allow_ptr_leaks);
--			env->prev_insn_print_len = env->log.len_used - env->prev_log_len;
--			env->prev_log_len = env->log.len_used;
-+			env->prev_insn_print_pos = env->log.end_pos - env->prev_log_pos;
-+			env->prev_log_pos = env->log.end_pos;
- 		}
- 
- 		if (bpf_prog_is_offloaded(env->prog->aux)) {
-@@ -18777,6 +18777,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr)
- 	print_verification_stats(env);
- 	env->prog->aux->verified_insns = env->insn_processed;
- 
-+	bpf_vlog_finalize(log);
- 	if (log->level && bpf_verifier_log_full(log))
- 		ret = -ENOSPC;
- 	if (log->level && !log->ubuf) {
-diff --git a/tools/testing/selftests/bpf/prog_tests/log_fixup.c b/tools/testing/selftests/bpf/prog_tests/log_fixup.c
-index 239e1c5753b0..bc27170bdeb0 100644
---- a/tools/testing/selftests/bpf/prog_tests/log_fixup.c
-+++ b/tools/testing/selftests/bpf/prog_tests/log_fixup.c
-@@ -24,6 +24,7 @@ static void bad_core_relo(size_t log_buf_size, enum trunc_type trunc_type)
- 	bpf_program__set_autoload(skel->progs.bad_relo, true);
- 	memset(log_buf, 0, sizeof(log_buf));
- 	bpf_program__set_log_buf(skel->progs.bad_relo, log_buf, log_buf_size ?: sizeof(log_buf));
-+	bpf_program__set_log_level(skel->progs.bad_relo, 1 | 8); /* BPF_LOG_FIXED to force truncation */
- 
- 	err = test_log_fixup__load(skel);
- 	if (!ASSERT_ERR(err, "load_fail"))
++	if (test__start_subtest("good_prog-level1"))
++		verif_log_subtest("good_prog", false, 1);
++	if (test__start_subtest("good_prog-level2"))
++		verif_log_subtest("good_prog", false, 2);
++	if (test__start_subtest("bad_prog-level1"))
++		verif_log_subtest("bad_prog", true, 1);
++	if (test__start_subtest("bad_prog-level2"))
++		verif_log_subtest("bad_prog", true, 2);
++}
 -- 
 2.34.1
 
