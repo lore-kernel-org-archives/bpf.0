@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A917C7618B
-	for <bpf@archiver.kernel.org>; Fri, 17 Mar 2023 21:36:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15946C74A5B
+	for <bpf@archiver.kernel.org>; Fri, 17 Mar 2023 21:36:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231184AbjCQVg3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Mar 2023 17:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52120 "EHLO
+        id S230330AbjCQVgd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Mar 2023 17:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjCQVgW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Mar 2023 17:36:22 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E56C2B9D9;
+        with ESMTP id S230469AbjCQVgX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Mar 2023 17:36:23 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400FF3D908;
         Fri, 17 Mar 2023 14:35:38 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id e15-20020a17090ac20f00b0023d1b009f52so10569099pjt.2;
-        Fri, 17 Mar 2023 14:35:37 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id l9-20020a17090a3f0900b0023d32684e7fso8929451pjc.1;
+        Fri, 17 Mar 2023 14:35:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679088830;
+        d=gmail.com; s=20210112; t=1679088861;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Hj8cLjQDLjXQ1ZfCGY4fgdKd/DSkCX4r/5xti3BJx2Q=;
-        b=SL77xmJ9qXwFUFkWfvQLbr2oAZctrFIRH1zYs6aiSXgaXesy4X9bbCc43J+9eu7BwZ
-         oQ5gpgLhJe8AlvwhIjFD9fwm6HOV+aTa/I02IjXcjxAmaJNGPS3ymgflyQg833brBgs7
-         84m+/ooDtKn6Ij3ePqTiRldtbg/5JadmV2CKcQHFrYHK1MIZb3JiQZItVnLirykhMwD+
-         4DXceV50PClFpYHAnpemnfed3iOsz3CZOXKBLcLNOYZQ0bjx2AwMxczYK+4Wbtn5m0Td
-         6qyHhqHDOe90XFAfM7/SJjOm33J83u/+ekfpbYg6lZzffSkpzsbctqrsa8GiLeQQhE54
-         qDtw==
+        bh=+9y1dItfFtvTCcd2jMRX78Y3CvuU5tntYbyJY+7/t8A=;
+        b=ZpXwb6WPuIxmUQqBt/R3yfcYXdA/7uFM9veLj2HAlkXZzsnvCKCo2eYLCtmp14uugo
+         vQCrkDAVapWb9kT3E3oUOAHtJky++qTgxsiFPrtI+gFhRjvxOfsxRi4tmMVob8jCMRlU
+         ZR5VKttkktVdbc6Fh93bCOAADhEjk6/cIeYePW72/mioshB3wvVB7teXIEnEz5yZ8eAH
+         es+sM/WOSD9W1ElluEQYh2wuQ/Pqdz0luC4FEHWJLJWuzd4XMROeKwaDMgUeEc+GDtvQ
+         FSEOKDTsqdBtqYYbh6ke/d9Hb9kmgUl/1d2wv10qCOdhXikbnFqUYBI/LCJlgYkd+O5W
+         Wxjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679088830;
+        d=1e100.net; s=20210112; t=1679088861;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Hj8cLjQDLjXQ1ZfCGY4fgdKd/DSkCX4r/5xti3BJx2Q=;
-        b=dBqx6jNGU870rF2nB3NnRfn+uSFhXDgJOXZgfiJWYa/YWheyzySirKyKr6K2PYxKAr
-         UaNGpsrA3KIlNUlX4CL1uXvCNgDMSsgRQUdDLN0EC7VIkXYjiuZ4Zl3x3SMK3Vko5fdc
-         3c/Ej3Y5XNvXUddHznN/+IISKGDWk719DCGCwkGWCL8MKD8MBqObjQRsLXPorMLGlqsN
-         6X/CAm+evanquY+3zxpS5CKLp1AY8KDkvKUu+7zcU2kHZa9Fu7q4RqKpHBT+so2aIFt1
-         2HP2cvUW8CCZTJIXpPJ2nDv7UlYZiXGX5/0lrhml7COf5KDlLlnLK7zUJL4jjMh83bgY
-         Oqcg==
-X-Gm-Message-State: AO0yUKUwXNGzff0TtoybdnxugoabD+n/hiKBwVoblu9qK6bf5LpwWC4H
-        usEUy0u0cwZyyvEL4SiJb34=
-X-Google-Smtp-Source: AK7set8tTIMwbsrX82yWCWzS7G+Yo1Zo2mQnccqtgoMU9W4EomnZ107bQTHWY8qfkhWvNO360+SAtA==
-X-Received: by 2002:a17:902:ec91:b0:1a0:72b8:4030 with SMTP id x17-20020a170902ec9100b001a072b84030mr10550746plg.48.1679088830398;
-        Fri, 17 Mar 2023 14:33:50 -0700 (PDT)
+        bh=+9y1dItfFtvTCcd2jMRX78Y3CvuU5tntYbyJY+7/t8A=;
+        b=5q3HxNbwy2+Aba/Emeg8/rn11Vj+Y7Lj3WtRXc4MXWxHDamXTJswSQcrUMekd2pvv1
+         B+CL/v+XEP6LjfxgBR2Wt3c6YffQ3DVZ8Mx9FC+R59+hs3AlvLoSnCTHbw3jhgaMvdfS
+         C605hNX8uMeDKEh/oFycKoyeuvZXx9IvG7uuQDhZWlz9RzGI2U+F6SGEqFpFr0bOjroO
+         9gMaPWFtw6CHFrU4aVjc5yglRGLJ/2JVq8jOnUotCigYajCQwZc5D5fR8Jltq68HdGn0
+         Y1PlqBGJFnzSsTTXqoxA20dqzfAwxOq9lCkOG/KEPHELM7TOT9qbhZFt5BQf+S0u0s3c
+         bF8A==
+X-Gm-Message-State: AO0yUKXMekpWOwMramRFD/XygX0QNni2MllABvJpRX6iCHbVtFjpu0Ez
+        zyovIh9w5J3Awhy54V+YwlE=
+X-Google-Smtp-Source: AK7set8B9xSI+6ufe/QmUf+zYTjIF6lxtlzSfJ5ut4Z3OiKHhCzqVs57qr5Hb8p/Lh/KdCXTusHZ9Q==
+X-Received: by 2002:a05:6a20:b285:b0:d7:5f98:d2a3 with SMTP id ei5-20020a056a20b28500b000d75f98d2a3mr5443486pzb.54.1679088861348;
+        Fri, 17 Mar 2023 14:34:21 -0700 (PDT)
 Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id jl24-20020a170903135800b001a0450da45csm1973726plb.185.2023.03.17.14.33.49
+        by smtp.gmail.com with ESMTPSA id j10-20020a63fc0a000000b00503000f0492sm1873374pgi.14.2023.03.17.14.34.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 14:33:50 -0700 (PDT)
+        Fri, 17 Mar 2023 14:34:21 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
 From:   Tejun Heo <tj@kernel.org>
 To:     torvalds@linux-foundation.org, mingo@redhat.com,
@@ -62,9 +62,9 @@ To:     torvalds@linux-foundation.org, mingo@redhat.com,
         dschatzberg@meta.com, dskarlat@cs.cmu.edu, riel@surriel.com
 Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
         kernel-team@meta.com, Tejun Heo <tj@kernel.org>
-Subject: [PATCH 04/32] sched: Allow sched_cgroup_fork() to fail and introduce sched_cancel_fork()
-Date:   Fri, 17 Mar 2023 11:33:05 -1000
-Message-Id: <20230317213333.2174969-5-tj@kernel.org>
+Subject: [PATCH 21/32] sched_ext: Add task state tracking operations
+Date:   Fri, 17 Mar 2023 11:33:22 -1000
+Message-Id: <20230317213333.2174969-22-tj@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230317213333.2174969-1-tj@kernel.org>
 References: <20230317213333.2174969-1-tj@kernel.org>
@@ -74,19 +74,24 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-A new BPF extensible sched_class will need more control over the forking
-process. It wants to be able to fail from sched_cgroup_fork() after the new
-task's sched_task_group is initialized so that the loaded BPF program can
-prepare the task with its cgroup association is established and reject fork
-if e.g. allocation fails.
+Being able to track the task runnable and running state transitions are
+useful for a variety of purposes including latency tracking and load factor
+calculation.
 
-Allow sched_cgroup_fork() to fail by making it return int instead of void
-and adding sched_cancel_fork() to undo sched_fork() in the error path.
+Currently, BPF schedulers don't have a good way of tracking these
+transitions. Becoming runnable can be determined from ops.enqueue() but
+becoming quiescent can only be inferred from the lack of subsequent enqueue.
+Also, as the local dsq can have multiple tasks and some events are handled
+in the sched_ext core, it's difficult to determine when a given task starts
+and stops executing.
 
-sched_cgroup_fork() doesn't fail yet and this patch shouldn't cause any
-behavior changes.
-
-v2: Patch description updated to detail the expected use.
+This patch adds sched_ext_ops.runnable(), .running(), .stopping() and
+.quiescent() operations to track the task runnable and running state
+transitions. They're mostly self explanatory; however, we want to ensure
+that running <-> stopping transitions are always contained within runnable
+<-> quiescent transitions which is a bit different from how the scheduler
+core behaves. This adds a bit of complication. See the comment in
+dequeue_task_scx().
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
 Reviewed-by: David Vernet <dvernet@meta.com>
@@ -94,113 +99,149 @@ Acked-by: Josh Don <joshdon@google.com>
 Acked-by: Hao Luo <haoluo@google.com>
 Acked-by: Barret Rhoden <brho@google.com>
 ---
- include/linux/sched/task.h |  3 ++-
- kernel/fork.c              | 15 ++++++++++-----
- kernel/sched/core.c        |  8 +++++++-
- 3 files changed, 19 insertions(+), 7 deletions(-)
+ include/linux/sched/ext.h | 65 +++++++++++++++++++++++++++++++++++++++
+ kernel/sched/ext.c        | 31 +++++++++++++++++++
+ 2 files changed, 96 insertions(+)
 
-diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
-index 357e0068497c..dcff721170c3 100644
---- a/include/linux/sched/task.h
-+++ b/include/linux/sched/task.h
-@@ -58,7 +58,8 @@ extern asmlinkage void schedule_tail(struct task_struct *prev);
- extern void init_idle(struct task_struct *idle, int cpu);
- 
- extern int sched_fork(unsigned long clone_flags, struct task_struct *p);
--extern void sched_cgroup_fork(struct task_struct *p, struct kernel_clone_args *kargs);
-+extern int sched_cgroup_fork(struct task_struct *p, struct kernel_clone_args *kargs);
-+extern void sched_cancel_fork(struct task_struct *p);
- extern void sched_post_fork(struct task_struct *p);
- extern void sched_dead(struct task_struct *p);
- 
-diff --git a/kernel/fork.c b/kernel/fork.c
-index f68954d05e89..0d166537a1a3 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -2242,7 +2242,7 @@ static __latent_entropy struct task_struct *copy_process(
- 
- 	retval = perf_event_init_task(p, clone_flags);
- 	if (retval)
--		goto bad_fork_cleanup_policy;
-+		goto bad_fork_sched_cancel_fork;
- 	retval = audit_alloc(p);
- 	if (retval)
- 		goto bad_fork_cleanup_perf;
-@@ -2383,7 +2383,9 @@ static __latent_entropy struct task_struct *copy_process(
- 	 * cgroup specific, it unconditionally needs to place the task on a
- 	 * runqueue.
+diff --git a/include/linux/sched/ext.h b/include/linux/sched/ext.h
+index ac19b720374d..16eb54635e35 100644
+--- a/include/linux/sched/ext.h
++++ b/include/linux/sched/ext.h
+@@ -192,6 +192,71 @@ struct sched_ext_ops {
  	 */
--	sched_cgroup_fork(p, args);
-+	retval = sched_cgroup_fork(p, args);
-+	if (retval)
-+		goto bad_fork_cancel_cgroup;
+ 	void (*dispatch)(s32 cpu, struct task_struct *prev);
  
++	/**
++	 * runnable - A task is becoming runnable on its associated CPU
++	 * @p: task becoming runnable
++	 * @enq_flags: %SCX_ENQ_*
++	 *
++	 * This and the following three functions can be used to track a task's
++	 * execution state transitions. A task becomes ->runnable() on a CPU,
++	 * and then goes through one or more ->running() and ->stopping() pairs
++	 * as it runs on the CPU, and eventually becomes ->quiescent() when it's
++	 * done running on the CPU.
++	 *
++	 * @p is becoming runnable on the CPU because it's
++	 *
++	 * - waking up (%SCX_ENQ_WAKEUP)
++	 * - being moved from another CPU
++	 * - being restored after temporarily taken off the queue for an
++	 *   attribute change.
++	 *
++	 * This and ->enqueue() are related but not coupled. This operation
++	 * notifies @p's state transition and may not be followed by ->enqueue()
++	 * e.g. when @p is being dispatched to a remote CPU. Likewise, a task
++	 * may be ->enqueue()'d without being preceded by this operation e.g.
++	 * after exhausting its slice.
++	 */
++	void (*runnable)(struct task_struct *p, u64 enq_flags);
++
++	/**
++	 * running - A task is starting to run on its associated CPU
++	 * @p: task starting to run
++	 *
++	 * See ->runnable() for explanation on the task state notifiers.
++	 */
++	void (*running)(struct task_struct *p);
++
++	/**
++	 * stopping - A task is stopping execution
++	 * @p: task stopping to run
++	 * @runnable: is task @p still runnable?
++	 *
++	 * See ->runnable() for explanation on the task state notifiers. If
++	 * !@runnable, ->quiescent() will be invoked after this operation
++	 * returns.
++	 */
++	void (*stopping)(struct task_struct *p, bool runnable);
++
++	/**
++	 * quiescent - A task is becoming not runnable on its associated CPU
++	 * @p: task becoming not runnable
++	 * @deq_flags: %SCX_DEQ_*
++	 *
++	 * See ->runnable() for explanation on the task state notifiers.
++	 *
++	 * @p is becoming quiescent on the CPU because it's
++	 *
++	 * - sleeping (%SCX_DEQ_SLEEP)
++	 * - being moved to another CPU
++	 * - being temporarily taken off the queue for an attribute change
++	 *   (%SCX_DEQ_SAVE)
++	 *
++	 * This and ->dequeue() are related but not coupled. This operation
++	 * notifies @p's state transition and may not be preceded by ->dequeue()
++	 * e.g. when @p is being dispatched to a remote CPU.
++	 */
++	void (*quiescent)(struct task_struct *p, u64 deq_flags);
++
+ 	/**
+ 	 * yield - Yield CPU
+ 	 * @from: yielding task
+diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
+index 56fa5eed33ac..c9aa74e55999 100644
+--- a/kernel/sched/ext.c
++++ b/kernel/sched/ext.c
+@@ -776,6 +776,9 @@ static void enqueue_task_scx(struct rq *rq, struct task_struct *p, int enq_flags
+ 	rq->scx.nr_running++;
+ 	add_nr_running(rq, 1);
+ 
++	if (SCX_HAS_OP(runnable))
++		SCX_CALL_OP(SCX_KF_REST, runnable, p, enq_flags);
++
+ 	do_enqueue_task(rq, p, enq_flags, sticky_cpu);
+ }
+ 
+@@ -836,6 +839,26 @@ static void dequeue_task_scx(struct rq *rq, struct task_struct *p, int deq_flags
+ 
+ 	ops_dequeue(p, deq_flags);
+ 
++	/*
++	 * A currently running task which is going off @rq first gets dequeued
++	 * and then stops running. As we want running <-> stopping transitions
++	 * to be contained within runnable <-> quiescent transitions, trigger
++	 * ->stopping() early here instead of in put_prev_task_scx().
++	 *
++	 * @p may go through multiple stopping <-> running transitions between
++	 * here and put_prev_task_scx() if task attribute changes occur while
++	 * balance_scx() leaves @rq unlocked. However, they don't contain any
++	 * information meaningful to the BPF scheduler and can be suppressed by
++	 * skipping the callbacks if the task is !QUEUED.
++	 */
++	if (SCX_HAS_OP(stopping) && task_current(rq, p)) {
++		update_curr_scx(rq);
++		SCX_CALL_OP(SCX_KF_REST, stopping, p, false);
++	}
++
++	if (SCX_HAS_OP(quiescent))
++		SCX_CALL_OP(SCX_KF_REST, quiescent, p, deq_flags);
++
+ 	if (deq_flags & SCX_DEQ_SLEEP)
+ 		p->scx.flags |= SCX_TASK_DEQD_FOR_SLEEP;
+ 	else
+@@ -1372,6 +1395,10 @@ static void set_next_task_scx(struct rq *rq, struct task_struct *p, bool first)
+ 
+ 	p->se.exec_start = rq_clock_task(rq);
+ 
++	/* see dequeue_task_scx() on why we skip when !QUEUED */
++	if (SCX_HAS_OP(running) && (p->scx.flags & SCX_TASK_QUEUED))
++		SCX_CALL_OP(SCX_KF_REST, running, p);
++
+ 	watchdog_unwatch_task(p, true);
+ }
+ 
+@@ -1410,6 +1437,10 @@ static void put_prev_task_scx(struct rq *rq, struct task_struct *p)
+ 
+ 	update_curr_scx(rq);
+ 
++	/* see dequeue_task_scx() on why we skip when !QUEUED */
++	if (SCX_HAS_OP(stopping) && (p->scx.flags & SCX_TASK_QUEUED))
++		SCX_CALL_OP(SCX_KF_REST, stopping, p, true);
++
  	/*
- 	 * From this point on we must avoid any synchronous user-space
-@@ -2429,13 +2431,13 @@ static __latent_entropy struct task_struct *copy_process(
- 	/* Don't start children in a dying pid namespace */
- 	if (unlikely(!(ns_of_pid(pid)->pid_allocated & PIDNS_ADDING))) {
- 		retval = -ENOMEM;
--		goto bad_fork_cancel_cgroup;
-+		goto bad_fork_core_free;
- 	}
- 
- 	/* Let kill terminate clone/fork in the middle */
- 	if (fatal_signal_pending(current)) {
- 		retval = -EINTR;
--		goto bad_fork_cancel_cgroup;
-+		goto bad_fork_core_free;
- 	}
- 
- 	/* No more failure paths after this point. */
-@@ -2510,10 +2512,11 @@ static __latent_entropy struct task_struct *copy_process(
- 
- 	return p;
- 
--bad_fork_cancel_cgroup:
-+bad_fork_core_free:
- 	sched_core_free(p);
- 	spin_unlock(&current->sighand->siglock);
- 	write_unlock_irq(&tasklist_lock);
-+bad_fork_cancel_cgroup:
- 	cgroup_cancel_fork(p, args);
- bad_fork_put_pidfd:
- 	if (clone_flags & CLONE_PIDFD) {
-@@ -2552,6 +2555,8 @@ static __latent_entropy struct task_struct *copy_process(
- 	audit_free(p);
- bad_fork_cleanup_perf:
- 	perf_event_free_task(p);
-+bad_fork_sched_cancel_fork:
-+	sched_cancel_fork(p);
- bad_fork_cleanup_policy:
- 	lockdep_free_task(p);
- #ifdef CONFIG_NUMA
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index efac96fd6cfd..fdf4dba12a7e 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -4768,7 +4768,7 @@ int sched_fork(unsigned long clone_flags, struct task_struct *p)
- 	return 0;
- }
- 
--void sched_cgroup_fork(struct task_struct *p, struct kernel_clone_args *kargs)
-+int sched_cgroup_fork(struct task_struct *p, struct kernel_clone_args *kargs)
- {
- 	unsigned long flags;
- 
-@@ -4795,6 +4795,12 @@ void sched_cgroup_fork(struct task_struct *p, struct kernel_clone_args *kargs)
- 	if (p->sched_class->task_fork)
- 		p->sched_class->task_fork(p);
- 	raw_spin_unlock_irqrestore(&p->pi_lock, flags);
-+
-+	return 0;
-+}
-+
-+void sched_cancel_fork(struct task_struct *p)
-+{
- }
- 
- void sched_post_fork(struct task_struct *p)
+ 	 * If we're being called from put_prev_task_balance(), balance_scx() may
+ 	 * have decided that @p should keep running.
 -- 
 2.39.2
 
