@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47282C7618B
-	for <bpf@archiver.kernel.org>; Fri, 17 Mar 2023 21:38:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6BB9C76196
+	for <bpf@archiver.kernel.org>; Fri, 17 Mar 2023 21:38:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231308AbjCQVh7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Mar 2023 17:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52300 "EHLO
+        id S231169AbjCQViY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Mar 2023 17:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCQVhS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Mar 2023 17:37:18 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104FD5B41B;
-        Fri, 17 Mar 2023 14:36:03 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id p13-20020a17090a284d00b0023d2e945aebso8954266pjf.0;
-        Fri, 17 Mar 2023 14:36:03 -0700 (PDT)
+        with ESMTP id S231205AbjCQVhV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Mar 2023 17:37:21 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB5B66D01;
+        Fri, 17 Mar 2023 14:36:15 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id j3-20020a17090adc8300b0023d09aea4a6so10550868pjv.5;
+        Fri, 17 Mar 2023 14:36:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679088874;
+        d=gmail.com; s=20210112; t=1679088869;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zcAq54KD+rWTpmvPHGmfB14ufok5F164YgicPOJDfJM=;
-        b=OCg64XYySmuP+BoMBml8+fc0FN+P4woAcE09yZqeUg6Aopvg0dLK+1YRmW91h2DNuF
-         Tiu8Zz3AAMgPaBu+wt2eXASWgcTjYHvxvu5T0PNc5M85gV7bJz8U5g+WL05Pxofxuh14
-         Cimc8PO2I3Ip1XXj4nkDK7tZJGFv0xWuXc7SnmWk57rx5fdPump+lof91pmiNDE1QqYq
-         v7CYFcGOGddBB0r9VkQ0mlHe7LHSixKEWfXDgJSohr+8ckCbWWTgS0lyPwL/FoJVwbB0
-         zClTUd+3G8/It7HWeOnOIYVg09l3lIITEVs9BbQue9VMFWfvOu1g2IFxRiy7gkvF6WVz
-         bvng==
+        bh=/eoGGlzywStMiYbVMcBjMDTNFvxz4K+Jg2JHrfcCjW0=;
+        b=UjNKU/f2J8N3ifxLlrYmdFdbzq7XZBHYfs9mFRkSXDvsoRakA7tI58rig1WQXFUYdq
+         L0jHLrneNSqmryneQwVQF6ipWGkNr7rMc/0YAb0l2RMBc8zFiYtvtQRg4fyzK2lJEs1n
+         9/lVggDZVYMDgWjBdNvpzBRXke2jcJk60HVjoULdbTy1bCEnHLidFnDWYsISVvHF9y5A
+         9Au466uluvLuqEXTNIQpHvgO7bfpWqeLWyA3WICW4ez3u//f86kGvufh5Yf87oG9KX5N
+         DdOzHJFL+kwnLwoCVgzCziCyfAURdCQBG+jH8wOBBRQsGR9vF0y85YFZN69Lc+xHqbbz
+         oDCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679088874;
+        d=1e100.net; s=20210112; t=1679088869;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=zcAq54KD+rWTpmvPHGmfB14ufok5F164YgicPOJDfJM=;
-        b=VGPlkks39w947qPX0AIy59COKx8hi/hwV5b5QMegwSIkQk1j3nQlkGc69r5KYS1Dxz
-         HG3UUY+rjRt0iqRo7ZhSQHE+GRhaxIWvlCizs7X9G2r2GLhYQV59bFHuGI/BJeaDPIzb
-         CUVBjeQobplWgM5P//qOWLZlxVz0096o+95iaPNqv2xhaBtdMv3KN58gQLJqrJ4A7iav
-         i7XY3of0stte2FuSrSIx6DnxWcbyx+6eKp4p/zLLcvWzWMqLqEz9VW8N3nWIPTcjlL1n
-         6y9RjqniGzWWkP0qDfUrJE62wVbKsWyBNY9l0+CAivBCyOAiWBABzrQJQE/Veifn98OH
-         swtQ==
-X-Gm-Message-State: AO0yUKXzXnOtQ6DNPDgGJpz0KJ8mK/UJAv0mePfY3hkILlufhAgYmGqN
-        Pq6CFfWFIMUy0jfbZd4hC0Q=
-X-Google-Smtp-Source: AK7set8o8kj3JJGx0xUPlB8wtvZGnXiCxJwLaHGfDUk/XD2xnjPxwile1YaQWHIED59I+xxHzLuxzQ==
-X-Received: by 2002:a05:6a21:3398:b0:d5:909a:7955 with SMTP id yy24-20020a056a21339800b000d5909a7955mr10601946pzb.41.1679088874023;
-        Fri, 17 Mar 2023 14:34:34 -0700 (PDT)
+        bh=/eoGGlzywStMiYbVMcBjMDTNFvxz4K+Jg2JHrfcCjW0=;
+        b=h8gidpAcbNkiGlH5K4tN9UNX8DNIoLf/TwxOWyL5rMoYLnWwDIBkpUPor+4PQ86fcI
+         9NOdjzsOJV2e7pPTS791rY0Px3a0Rn/48GRP8WJl7DT8MRTwq/w9+lzwCxQgx7Ef6oX9
+         6wE3AhRe111jL6HP0cJUdzb8o20SiDaGMLfLbXlFvPuEpa5KkuXSyNM+AGqhIaIjqM+G
+         kUgO9i0n5aBrKwkbW1hdV/gvrVr4i2li9g2CMalNdPNENErhQVhy6TiOVYdd/COPZqSa
+         c+JPWu8myxT/pHO4OuqYuZMaJ84oCcnaAIsZIt8RgIo4p0NF42F4XyrxVOebN5QWDMNI
+         N5qA==
+X-Gm-Message-State: AO0yUKXU0f3g5eNe+vvO5PFcHpPHA4xaygJ3cd8tKSOgMlx1PM6gVg/4
+        kh/WDxpNTrYG10BjZHPkVsU=
+X-Google-Smtp-Source: AK7set+m7GRsaoPzkfAfbjlauBjRfolG+naN1e5cxMP/j+XlkiBIf5dODzQCsCUqQMFbmIkC/jX9TA==
+X-Received: by 2002:a17:902:f685:b0:1a0:67fb:445c with SMTP id l5-20020a170902f68500b001a067fb445cmr4637107plg.28.1679088868688;
+        Fri, 17 Mar 2023 14:34:28 -0700 (PDT)
 Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id p9-20020a63f449000000b0050bf1d1cdc8sm1891659pgk.21.2023.03.17.14.34.33
+        by smtp.gmail.com with ESMTPSA id 6-20020a170902c20600b0019b089bc8d7sm1997428pll.78.2023.03.17.14.34.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 14:34:33 -0700 (PDT)
+        Fri, 17 Mar 2023 14:34:28 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
 From:   Tejun Heo <tj@kernel.org>
 To:     torvalds@linux-foundation.org, mingo@redhat.com,
@@ -62,9 +62,9 @@ To:     torvalds@linux-foundation.org, mingo@redhat.com,
         dschatzberg@meta.com, dskarlat@cs.cmu.edu, riel@surriel.com
 Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
         kernel-team@meta.com, Tejun Heo <tj@kernel.org>
-Subject: [PATCH 28/32] sched_ext: Implement core-sched support
-Date:   Fri, 17 Mar 2023 11:33:29 -1000
-Message-Id: <20230317213333.2174969-29-tj@kernel.org>
+Subject: [PATCH 25/32] sched_ext: Implement SCX_KICK_WAIT
+Date:   Fri, 17 Mar 2023 11:33:26 -1000
+Message-Id: <20230317213333.2174969-26-tj@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230317213333.2174969-1-tj@kernel.org>
 References: <20230317213333.2174969-1-tj@kernel.org>
@@ -74,680 +74,193 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The core-sched support is composed of the following parts:
+From: David Vernet <dvernet@meta.com>
 
-* task_struct->scx.core_sched_at is added. This is a timestamp which can be
-  used to order tasks. Depending on whether the BPF scheduler implements
-  custom ordering, it tracks either global FIFO ordering of all tasks or
-  local-DSQ ordering within the dispatched tasks on a CPU.
+If set when calling scx_bpf_kick_cpu(), the invoking CPU will busy wait for
+the kicked cpu to enter the scheduler. This will be used to improve the
+exclusion guarantees in scx_example_pair.
 
-* prio_less() is updated to call scx_prio_less() when comparing SCX tasks.
-  scx_prio_less() calls ops.core_sched_before() if available or uses the
-  core_sched_at timestamp. For global FIFO ordering, the BPF scheduler
-  doesn't need to do anything. Otherwise, it should implement
-  ops.core_sched_before() which reflects the ordering.
-
-* When core-sched is enabled, balance_scx() balances all SMT siblings so
-  that they all have tasks dispatched if necessary before pick_task_scx() is
-  called. pick_task_scx() picks between the current task and the first
-  dispatched task on the local DSQ based on availability and the
-  core_sched_at timestamps. Note that FIFO ordering is expected among the
-  already dispatched tasks whether running or on the local DSQ, so this path
-  always compares core_sched_at instead of calling into
-  ops.core_sched_before().
-
-qmap_core_sched_before() is added to scx_example_qmap. It scales the
-distances from the heads of the queues to compare the tasks across different
-priority queues and seems to behave as expected.
-
-v2: * Sched core added the const qualifiers to prio_less task arguments.
-      Explicitly drop them for ops.core_sched_before() task arguments. BPF
-      enforces access control through the verifier, so the qualifier isn't
-      actually operative and only gets in the way when interacting with
-      various helpers.
-
+Signed-off-by: David Vernet <dvernet@meta.com>
+Reviewed-by: Tejun Heo <tj@kernel.org>
 Signed-off-by: Tejun Heo <tj@kernel.org>
-Reviewed-by: David Vernet <dvernet@meta.com>
-Reviewed-by: Josh Don <joshdon@google.com>
+Acked-by: Josh Don <joshdon@google.com>
+Acked-by: Hao Luo <haoluo@google.com>
+Acked-by: Barret Rhoden <brho@google.com>
 ---
- include/linux/sched/ext.h              |  21 +++
- kernel/Kconfig.preempt                 |   2 +-
- kernel/sched/core.c                    |  12 +-
- kernel/sched/ext.c                     | 219 +++++++++++++++++++++++--
- kernel/sched/ext.h                     |  13 ++
- tools/sched_ext/scx_example_qmap.bpf.c |  87 +++++++++-
- tools/sched_ext/scx_example_qmap.c     |   5 +-
- 7 files changed, 342 insertions(+), 17 deletions(-)
+ kernel/sched/core.c  |  4 +++-
+ kernel/sched/ext.c   | 33 ++++++++++++++++++++++++++++++++-
+ kernel/sched/ext.h   | 20 ++++++++++++++++++++
+ kernel/sched/sched.h |  2 ++
+ 4 files changed, 57 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/sched/ext.h b/include/linux/sched/ext.h
-index 63a011860f59..210b8516d197 100644
---- a/include/linux/sched/ext.h
-+++ b/include/linux/sched/ext.h
-@@ -316,6 +316,24 @@ struct sched_ext_ops {
- 	 */
- 	bool (*yield)(struct task_struct *from, struct task_struct *to);
- 
-+	/**
-+	 * core_sched_before - Task ordering for core-sched
-+	 * @a: task A
-+	 * @b: task B
-+	 *
-+	 * Used by core-sched to determine the ordering between two tasks. See
-+	 * Documentation/admin-guide/hw-vuln/core-scheduling.rst for details on
-+	 * core-sched.
-+	 *
-+	 * Both @a and @b are runnable and may or may not currently be queued on
-+	 * the BPF scheduler. Should return %true if @a should run before @b.
-+	 * %false if there's no required ordering or @b should run before @a.
-+	 *
-+	 * If not specified, the default is ordering them according to when they
-+	 * became runnable.
-+	 */
-+	bool (*core_sched_before)(struct task_struct *a,struct task_struct *b);
-+
- 	/**
- 	 * set_weight - Set task weight
- 	 * @p: task to set weight for
-@@ -628,6 +646,9 @@ struct sched_ext_entity {
- 	struct task_struct	*kf_tasks[2];	/* see SCX_CALL_OP_TASK() */
- 	atomic64_t		ops_state;
- 	unsigned long		runnable_at;
-+#ifdef CONFIG_SCHED_CORE
-+	u64			core_sched_at;	/* see scx_prio_less() */
-+#endif
- 
- 	/* BPF scheduler modifiable fields */
- 
-diff --git a/kernel/Kconfig.preempt b/kernel/Kconfig.preempt
-index 0afcda19bc50..e12a057ead7b 100644
---- a/kernel/Kconfig.preempt
-+++ b/kernel/Kconfig.preempt
-@@ -135,7 +135,7 @@ config SCHED_CORE
- 
- config SCHED_CLASS_EXT
- 	bool "Extensible Scheduling Class"
--	depends on BPF_SYSCALL && BPF_JIT && !SCHED_CORE
-+	depends on BPF_SYSCALL && BPF_JIT
- 	help
- 	  This option enables a new scheduler class sched_ext (SCX), which
- 	  allows scheduling policies to be implemented as BPF programs to
 diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index ff51977968fb..146d736fe73b 100644
+index 0780414f3c15..ff51977968fb 100644
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
-@@ -163,7 +163,12 @@ static inline int __task_prio(const struct task_struct *p)
- 	if (p->sched_class == &idle_sched_class)
- 		return MAX_RT_PRIO + NICE_WIDTH; /* 140 */
+@@ -6019,8 +6019,10 @@ __pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
  
--	return MAX_RT_PRIO + MAX_NICE; /* 120, squash fair */
-+#ifdef CONFIG_SCHED_CLASS_EXT
-+	if (p->sched_class == &ext_sched_class)
-+		return MAX_RT_PRIO + MAX_NICE + 1; /* 120, squash ext */
-+#endif
-+
-+	return MAX_RT_PRIO + MAX_NICE; /* 119, squash fair */
- }
+ 	for_each_active_class(class) {
+ 		p = class->pick_next_task(rq);
+-		if (p)
++		if (p) {
++			scx_notify_pick_next_task(rq, p, class);
+ 			return p;
++		}
+ 	}
  
- /*
-@@ -192,6 +197,11 @@ static inline bool prio_less(const struct task_struct *a,
- 	if (pa == MAX_RT_PRIO + MAX_NICE)	/* fair */
- 		return cfs_prio_less(a, b, in_fi);
- 
-+#ifdef CONFIG_SCHED_CLASS_EXT
-+	if (pa == MAX_RT_PRIO + MAX_NICE + 1)	/* ext */
-+		return scx_prio_less(a, b, in_fi);
-+#endif
-+
- 	return false;
- }
- 
+ 	BUG(); /* The idle class should always have a runnable task. */
 diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
-index dbeec22bee73..7f593f2012c2 100644
+index 736f764d0f62..fbdbe4603853 100644
 --- a/kernel/sched/ext.c
 +++ b/kernel/sched/ext.c
-@@ -530,6 +530,49 @@ static int ops_sanitize_err(const char *ops_name, s32 err)
- 	return -EPROTO;
- }
+@@ -126,6 +126,9 @@ static struct {
+ static bool __cacheline_aligned_in_smp scx_has_idle_cpus;
+ #endif	/* CONFIG_SMP */
  
-+/**
-+ * touch_core_sched - Update timestamp used for core-sched task ordering
-+ * @rq: rq to read clock from, must be locked
-+ * @p: task to update the timestamp for
-+ *
-+ * Update @p->scx.core_sched_at timestamp. This is used by scx_prio_less() to
-+ * implement global or local-DSQ FIFO ordering for core-sched. Should be called
-+ * when a task becomes runnable and its turn on the CPU ends (e.g. slice
-+ * exhaustion).
-+ */
-+static void touch_core_sched(struct rq *rq, struct task_struct *p)
-+{
-+#ifdef CONFIG_SCHED_CORE
-+	/*
-+	 * It's okay to update the timestamp spuriously. Use
-+	 * sched_core_disabled() which is cheaper than enabled().
-+	 */
-+	if (!sched_core_disabled())
-+		p->scx.core_sched_at = rq_clock_task(rq);
-+#endif
-+}
++/* for %SCX_KICK_WAIT */
++static u64 __percpu *scx_kick_cpus_pnt_seqs;
 +
-+/**
-+ * touch_core_sched_dispatch - Update core-sched timestamp on dispatch
-+ * @rq: rq to read clock from, must be locked
-+ * @p: task being dispatched
-+ *
-+ * If the BPF scheduler implements custom core-sched ordering via
-+ * ops.core_sched_before(), @p->scx.core_sched_at is used to implement FIFO
-+ * ordering within each local DSQ. This function is called from dispatch paths
-+ * and updates @p->scx.core_sched_at if custom core-sched ordering is in effect.
-+ */
-+static void touch_core_sched_dispatch(struct rq *rq, struct task_struct *p)
-+{
-+	lockdep_assert_rq_held(rq);
-+	assert_clock_updated(rq);
-+
-+#ifdef CONFIG_SCHED_CORE
-+	if (SCX_HAS_OP(core_sched_before))
-+		touch_core_sched(rq, p);
-+#endif
-+}
-+
- static void update_curr_scx(struct rq *rq)
+ /*
+  * Direct dispatch marker.
+  *
+@@ -3215,6 +3218,7 @@ static const struct sysrq_key_op sysrq_sched_ext_reset_op = {
+ static void kick_cpus_irq_workfn(struct irq_work *irq_work)
  {
- 	struct task_struct *curr = rq->curr;
-@@ -545,8 +588,11 @@ static void update_curr_scx(struct rq *rq)
- 	account_group_exec_runtime(curr, delta_exec);
- 	cgroup_account_cputime(curr, delta_exec);
+ 	struct rq *this_rq = this_rq();
++	u64 *pseqs = this_cpu_ptr(scx_kick_cpus_pnt_seqs);
+ 	int this_cpu = cpu_of(this_rq);
+ 	int cpu;
  
--	if (curr->scx.slice != SCX_SLICE_INF)
-+	if (curr->scx.slice != SCX_SLICE_INF) {
- 		curr->scx.slice -= min(curr->scx.slice, delta_exec);
-+		if (!curr->scx.slice)
-+			touch_core_sched(rq, curr);
-+	}
- }
- 
- static void dispatch_enqueue(struct scx_dispatch_q *dsq, struct task_struct *p,
-@@ -702,6 +748,8 @@ static void direct_dispatch(struct task_struct *ddsp_task, struct task_struct *p
- 		return;
- 	}
- 
-+	touch_core_sched_dispatch(task_rq(p), p);
-+
- 	dsq = find_dsq_for_dispatch(task_rq(p), dsq_id, p);
- 	dispatch_enqueue(dsq, p, enq_flags | SCX_ENQ_CLEAR_OPSS);
- 
-@@ -785,12 +833,19 @@ static void do_enqueue_task(struct rq *rq, struct task_struct *p, u64 enq_flags,
- 	return;
- 
- local:
-+	/*
-+	 * For task-ordering, slice refill must be treated as implying the end
-+	 * of the current slice. Otherwise, the longer @p stays on the CPU, the
-+	 * higher priority it becomes from scx_prio_less()'s POV.
-+	 */
-+	touch_core_sched(rq, p);
- 	p->scx.slice = SCX_SLICE_DFL;
- local_norefill:
- 	dispatch_enqueue(&rq->scx.local_dsq, p, enq_flags);
- 	return;
- 
- global:
-+	touch_core_sched(rq, p);	/* see the comment in local: */
- 	p->scx.slice = SCX_SLICE_DFL;
- 	dispatch_enqueue(&scx_dsq_global, p, enq_flags);
- }
-@@ -847,6 +902,9 @@ static void enqueue_task_scx(struct rq *rq, struct task_struct *p, int enq_flags
- 	if (SCX_HAS_OP(runnable))
- 		SCX_CALL_OP_TASK(SCX_KF_REST, runnable, p, enq_flags);
- 
-+	if (enq_flags & SCX_ENQ_WAKEUP)
-+		touch_core_sched(rq, p);
-+
- 	do_enqueue_task(rq, p, enq_flags, sticky_cpu);
- }
- 
-@@ -1297,6 +1355,7 @@ static void finish_dispatch(struct rq *rq, struct rq_flags *rf,
- 	struct scx_dispatch_q *dsq;
- 	u64 opss;
- 
-+	touch_core_sched_dispatch(rq, p);
- retry:
- 	/*
- 	 * No need for _acquire here. @p is accessed only after a successful
-@@ -1374,8 +1433,8 @@ static void flush_dispatch_buf(struct rq *rq, struct rq_flags *rf)
- 	dspc->buf_cursor = 0;
- }
- 
--static int balance_scx(struct rq *rq, struct task_struct *prev,
--		       struct rq_flags *rf)
-+static int balance_one(struct rq *rq, struct task_struct *prev,
-+		       struct rq_flags *rf, bool local)
- {
- 	struct scx_rq *scx_rq = &rq->scx;
- 	struct scx_dsp_ctx *dspc = this_cpu_ptr(&scx_dsp_ctx);
-@@ -1399,7 +1458,7 @@ static int balance_scx(struct rq *rq, struct task_struct *prev,
- 	}
- 
- 	if (prev_on_scx) {
--		WARN_ON_ONCE(prev->scx.flags & SCX_TASK_BAL_KEEP);
-+		WARN_ON_ONCE(local && (prev->scx.flags & SCX_TASK_BAL_KEEP));
- 		update_curr_scx(rq);
- 
- 		/*
-@@ -1411,10 +1470,16 @@ static int balance_scx(struct rq *rq, struct task_struct *prev,
- 		 *
- 		 * See scx_ops_disable_workfn() for the explanation on the
- 		 * disabling() test.
-+		 *
-+		 * When balancing a remote CPU for core-sched, there won't be a
-+		 * following put_prev_task_scx() call and we don't own
-+		 * %SCX_TASK_BAL_KEEP. Instead, pick_task_scx() will test the
-+		 * same conditions later and pick @rq->curr accordingly.
- 		 */
- 		if ((prev->scx.flags & SCX_TASK_QUEUED) &&
- 		    prev->scx.slice && !scx_ops_disabling()) {
--			prev->scx.flags |= SCX_TASK_BAL_KEEP;
-+			if (local)
-+				prev->scx.flags |= SCX_TASK_BAL_KEEP;
- 			return 1;
+@@ -3228,14 +3232,32 @@ static void kick_cpus_irq_workfn(struct irq_work *irq_work)
+ 			if (cpumask_test_cpu(cpu, this_rq->scx.cpus_to_preempt) &&
+ 			    rq->curr->sched_class == &ext_sched_class)
+ 				rq->curr->scx.slice = 0;
++			pseqs[cpu] = rq->scx.pnt_seq;
+ 			resched_curr(rq);
++		} else {
++			cpumask_clear_cpu(cpu, this_rq->scx.cpus_to_wait);
  		}
- 	}
-@@ -1470,10 +1535,55 @@ static int balance_scx(struct rq *rq, struct task_struct *prev,
- 	return 0;
- }
  
-+static int balance_scx(struct rq *rq, struct task_struct *prev,
-+		       struct rq_flags *rf)
-+{
-+	int ret;
-+
-+	ret = balance_one(rq, prev, rf, true);
-+
-+	/*
-+	 * When core-sched is enabled, this ops.balance() call will be followed
-+	 * by put_prev_scx() and pick_task_scx() on this CPU and pick_task_scx()
-+	 * on the SMT siblings. Balance the siblings too.
-+	 */
-+	if (sched_core_enabled(rq)) {
-+		const struct cpumask *smt_mask = cpu_smt_mask(cpu_of(rq));
-+		int scpu;
-+
-+		for_each_cpu_andnot(scpu, smt_mask, cpumask_of(cpu_of(rq))) {
-+			struct rq *srq = cpu_rq(scpu);
-+			struct rq_flags srf;
-+			struct task_struct *sprev = srq->curr;
-+
-+			/*
-+			 * While core-scheduling, rq lock is shared among
-+			 * siblings but the debug annotations and rq clock
-+			 * aren't. Do pinning dance to transfer the ownership.
-+			 */
-+			WARN_ON_ONCE(__rq_lockp(rq) != __rq_lockp(srq));
-+			rq_unpin_lock(rq, rf);
-+			rq_pin_lock(srq, &srf);
-+
-+			update_rq_clock(srq);
-+			balance_one(srq, sprev, &srf, false);
-+
-+			rq_unpin_lock(srq, &srf);
-+			rq_repin_lock(rq, rf);
-+		}
-+	}
-+
-+	return ret;
-+}
-+
- static void set_next_task_scx(struct rq *rq, struct task_struct *p, bool first)
- {
- 	if (p->scx.flags & SCX_TASK_QUEUED) {
--		WARN_ON_ONCE(atomic64_read(&p->scx.ops_state) != SCX_OPSS_NONE);
-+		/*
-+		 * Core-sched might decide to execute @p before it is
-+		 * dispatched. Call ops_dequeue() to notify the BPF scheduler.
-+		 */
-+		ops_dequeue(p, SCX_DEQ_CORE_SCHED_EXEC);
- 		dispatch_dequeue(&rq->scx, p);
+ 		raw_spin_rq_unlock_irqrestore(rq, flags);
  	}
  
-@@ -1556,7 +1666,8 @@ static void put_prev_task_scx(struct rq *rq, struct task_struct *p)
- 		/*
- 		 * If @p has slice left and balance_scx() didn't tag it for
- 		 * keeping, @p is getting preempted by a higher priority
--		 * scheduler class. Leave it at the head of the local DSQ.
-+		 * scheduler class or core-sched forcing a different task. Leave
-+		 * it at the head of the local DSQ.
- 		 */
- 		if (p->scx.slice && !scx_ops_disabling()) {
- 			dispatch_enqueue(&rq->scx.local_dsq, p, SCX_ENQ_HEAD);
-@@ -1613,6 +1724,84 @@ static struct task_struct *pick_next_task_scx(struct rq *rq)
- 	return p;
- }
- 
-+#ifdef CONFIG_SCHED_CORE
-+/**
-+ * scx_prio_less - Task ordering for core-sched
-+ * @a: task A
-+ * @b: task B
-+ *
-+ * Core-sched is implemented as an additional scheduling layer on top of the
-+ * usual sched_class'es and needs to find out the expected task ordering. For
-+ * SCX, core-sched calls this function to interrogate the task ordering.
-+ *
-+ * Unless overridden by ops.core_sched_before(), @p->scx.core_sched_at is used
-+ * to implement the default task ordering. The older the timestamp, the higher
-+ * prority the task - the global FIFO ordering matching the default scheduling
-+ * behavior.
-+ *
-+ * When ops.core_sched_before() is enabled, @p->scx.core_sched_at is used to
-+ * implement FIFO ordering within each local DSQ. See pick_task_scx().
-+ */
-+bool scx_prio_less(const struct task_struct *a, const struct task_struct *b,
-+		   bool in_fi)
-+{
-+	/*
-+	 * The const qualifiers are dropped from task_struct pointers when
-+	 * calling ops.core_sched_before(). Accesses are controlled by the
-+	 * verifier.
-+	 */
-+	if (SCX_HAS_OP(core_sched_before) && !scx_ops_disabling())
-+		return SCX_CALL_OP_2TASKS_RET(SCX_KF_REST, core_sched_before,
-+					      (struct task_struct *)a,
-+					      (struct task_struct *)b);
-+	else
-+		return time_after64(a->scx.core_sched_at, b->scx.core_sched_at);
-+}
-+
-+/**
-+ * pick_task_scx - Pick a candidate task for core-sched
-+ * @rq: rq to pick the candidate task from
-+ *
-+ * Core-sched calls this function on each SMT sibling to determine the next
-+ * tasks to run on the SMT siblings. balance_one() has been called on all
-+ * siblings and put_prev_task_scx() has been called only for the current CPU.
-+ *
-+ * As put_prev_task_scx() hasn't been called on remote CPUs, we can't just look
-+ * at the first task in the local dsq. @rq->curr has to be considered explicitly
-+ * to mimic %SCX_TASK_BAL_KEEP.
-+ */
-+static struct task_struct *pick_task_scx(struct rq *rq)
-+{
-+	struct task_struct *curr = rq->curr;
-+	struct task_struct *first = first_local_task(rq);
-+
-+	if (curr->scx.flags & SCX_TASK_QUEUED) {
-+		/* is curr the only runnable task? */
-+		if (!first)
-+			return curr;
-+
++	for_each_cpu_andnot(cpu, this_rq->scx.cpus_to_wait,
++			    cpumask_of(this_cpu)) {
 +		/*
-+		 * Does curr trump first? We can always go by core_sched_at for
-+		 * this comparison as it represents global FIFO ordering when
-+		 * the default core-sched ordering is used and local-DSQ FIFO
-+		 * ordering otherwise.
++		 * Pairs with smp_store_release() issued by this CPU in
++		 * scx_notify_pick_next_task() on the resched path.
 +		 *
-+		 * We can have a task with an earlier timestamp on the DSQ. For
-+		 * example, when a current task is preempted by a sibling
-+		 * picking a different cookie, the task would be requeued at the
-+		 * head of the local DSQ with an earlier timestamp than the
-+		 * core-sched picked next task. Besides, the BPF scheduler may
-+		 * dispatch any tasks to the local DSQ anytime.
++		 * We busy-wait here to guarantee that no other task can be
++		 * scheduled on our core before the target CPU has entered the
++		 * resched path.
 +		 */
-+		if (curr->scx.slice && time_before64(curr->scx.core_sched_at,
-+						     first->scx.core_sched_at))
-+			return curr;
++		while (smp_load_acquire(&cpu_rq(cpu)->scx.pnt_seq) == pseqs[cpu])
++			cpu_relax();
 +	}
 +
-+	return first;	/* this may be %NULL */
-+}
-+#endif	/* CONFIG_SCHED_CORE */
-+
- static enum scx_cpu_preempt_reason
- preempt_reason_from_class(const struct sched_class *class)
- {
-@@ -1893,11 +2082,13 @@ static void task_tick_scx(struct rq *rq, struct task_struct *curr, int queued)
- 	update_curr_scx(rq);
+ 	cpumask_clear(this_rq->scx.cpus_to_kick);
+ 	cpumask_clear(this_rq->scx.cpus_to_preempt);
++	cpumask_clear(this_rq->scx.cpus_to_wait);
+ }
  
- 	/*
--	 * While disabling, always resched as we can't trust the slice
--	 * management.
-+	 * While disabling, always resched and refresh core-sched timestamp as
-+	 * we can't trust the slice management or ops.core_sched_before().
+ void __init init_sched_ext_class(void)
+@@ -3249,7 +3271,7 @@ void __init init_sched_ext_class(void)
+ 	 * through the generated vmlinux.h.
  	 */
--	if (scx_ops_disabling())
-+	if (scx_ops_disabling()) {
- 		curr->scx.slice = 0;
-+		touch_core_sched(rq, curr);
-+	}
+ 	WRITE_ONCE(v, SCX_WAKE_EXEC | SCX_ENQ_WAKEUP | SCX_DEQ_SLEEP |
+-		   SCX_TG_ONLINE);
++		   SCX_TG_ONLINE | SCX_KICK_PREEMPT);
  
- 	if (!curr->scx.slice)
- 		resched_curr(rq);
-@@ -2347,6 +2538,10 @@ DEFINE_SCHED_CLASS(ext) = {
- 	.rq_offline		= rq_offline_scx,
+ 	BUG_ON(rhashtable_init(&dsq_hash, &dsq_hash_params));
+ 	init_dsq(&scx_dsq_global, SCX_DSQ_GLOBAL);
+@@ -3257,6 +3279,12 @@ void __init init_sched_ext_class(void)
+ 	BUG_ON(!alloc_cpumask_var(&idle_masks.cpu, GFP_KERNEL));
+ 	BUG_ON(!alloc_cpumask_var(&idle_masks.smt, GFP_KERNEL));
  #endif
- 
-+#ifdef CONFIG_SCHED_CORE
-+	.pick_task		= pick_task_scx,
-+#endif
++	scx_kick_cpus_pnt_seqs =
++		__alloc_percpu(sizeof(scx_kick_cpus_pnt_seqs[0]) *
++			       num_possible_cpus(),
++			       __alignof__(scx_kick_cpus_pnt_seqs[0]));
++	BUG_ON(!scx_kick_cpus_pnt_seqs);
 +
- 	.task_tick		= task_tick_scx,
+ 	for_each_possible_cpu(cpu) {
+ 		struct rq *rq = cpu_rq(cpu);
  
- 	.switching_to		= switching_to_scx,
-@@ -2675,9 +2870,11 @@ static void scx_ops_disable_workfn(struct kthread_work *work)
- 	 *
- 	 * b. balance_scx() never sets %SCX_TASK_BAL_KEEP as the slice value
- 	 *    can't be trusted. Whenever a tick triggers, the running task is
--	 *    rotated to the tail of the queue.
-+	 *    rotated to the tail of the queue with core_sched_at touched.
- 	 *
- 	 * c. pick_next_task() suppresses zero slice warning.
-+	 *
-+	 * d. scx_prio_less() reverts to the default core_sched_at order.
- 	 */
- 	scx_ops.enqueue = scx_ops_fallback_enqueue;
- 	scx_ops.dispatch = scx_ops_fallback_dispatch;
+@@ -3265,6 +3293,7 @@ void __init init_sched_ext_class(void)
+ 
+ 		BUG_ON(!zalloc_cpumask_var(&rq->scx.cpus_to_kick, GFP_KERNEL));
+ 		BUG_ON(!zalloc_cpumask_var(&rq->scx.cpus_to_preempt, GFP_KERNEL));
++		BUG_ON(!zalloc_cpumask_var(&rq->scx.cpus_to_wait, GFP_KERNEL));
+ 		init_irq_work(&rq->scx.kick_cpus_irq_work, kick_cpus_irq_workfn);
+ 	}
+ 
+@@ -3533,6 +3562,8 @@ void scx_bpf_kick_cpu(s32 cpu, u64 flags)
+ 	cpumask_set_cpu(cpu, rq->scx.cpus_to_kick);
+ 	if (flags & SCX_KICK_PREEMPT)
+ 		cpumask_set_cpu(cpu, rq->scx.cpus_to_preempt);
++	if (flags & SCX_KICK_WAIT)
++		cpumask_set_cpu(cpu, rq->scx.cpus_to_wait);
+ 
+ 	irq_work_queue(&rq->scx.kick_cpus_irq_work);
+ 	preempt_enable();
 diff --git a/kernel/sched/ext.h b/kernel/sched/ext.h
-index 4b22219c0dd9..7b7973e6d8c0 100644
+index 0c5a109e7e6d..fc27b28acfde 100644
 --- a/kernel/sched/ext.h
 +++ b/kernel/sched/ext.h
-@@ -68,6 +68,14 @@ enum scx_enq_flags {
- enum scx_deq_flags {
- 	/* expose select DEQUEUE_* flags as enums */
- 	SCX_DEQ_SLEEP		= DEQUEUE_SLEEP,
-+
-+	/* high 32bits are SCX specific */
-+
-+	/*
-+	 * The generic core-sched layer decided to execute the task even though
-+	 * it hasn't been dispatched yet. Dequeue from the BPF side.
-+	 */
-+	SCX_DEQ_CORE_SCHED_EXEC	= 1LLU << 32,
+@@ -66,6 +66,7 @@ enum scx_tg_flags {
+ 
+ enum scx_kick_flags {
+ 	SCX_KICK_PREEMPT	= 1LLU << 0,	/* force scheduling on the CPU */
++	SCX_KICK_WAIT		= 1LLU << 1,	/* wait for the CPU to be rescheduled */
  };
  
- enum scx_tg_flags {
-@@ -173,6 +181,11 @@ static inline const struct sched_class *next_active_class(const struct sched_cla
- 	for_active_class_range(class, (prev_class) > &ext_sched_class ?		\
- 			       &ext_sched_class : (prev_class), (end_class))
+ #ifdef CONFIG_SCHED_CLASS_EXT
+@@ -95,6 +96,22 @@ __printf(2, 3) void scx_ops_error_type(enum scx_exit_type type,
+ #define scx_ops_error(fmt, args...)						\
+ 	scx_ops_error_type(SCX_EXIT_ERROR, fmt, ##args)
  
-+#ifdef CONFIG_SCHED_CORE
-+bool scx_prio_less(const struct task_struct *a, const struct task_struct *b,
-+		   bool in_fi);
++static inline void scx_notify_pick_next_task(struct rq *rq,
++					     const struct task_struct *p,
++					     const struct sched_class *active)
++{
++#ifdef CONFIG_SMP
++	if (!scx_enabled())
++		return;
++	/*
++	 * Pairs with the smp_load_acquire() issued by a CPU in
++	 * kick_cpus_irq_workfn() who is waiting for this CPU to perform a
++	 * resched.
++	 */
++	smp_store_release(&rq->scx.pnt_seq, rq->scx.pnt_seq + 1);
 +#endif
++}
 +
- #else	/* CONFIG_SCHED_CLASS_EXT */
- 
- #define scx_enabled()		false
-diff --git a/tools/sched_ext/scx_example_qmap.bpf.c b/tools/sched_ext/scx_example_qmap.bpf.c
-index 88e69b967004..579ab21ae403 100644
---- a/tools/sched_ext/scx_example_qmap.bpf.c
-+++ b/tools/sched_ext/scx_example_qmap.bpf.c
-@@ -13,6 +13,7 @@
-  * - Sleepable per-task storage allocation using ops.prep_enable().
-  * - Using ops.cpu_release() to handle a higher priority scheduling class taking
-  *   the CPU away.
-+ * - Core-sched support.
-  *
-  * This scheduler is primarily for demonstration and testing of sched_ext
-  * features and unlikely to be useful for actual workloads.
-@@ -62,9 +63,21 @@ struct {
- 	},
- };
- 
-+/*
-+ * Per-queue sequence numbers to implement core-sched ordering.
-+ *
-+ * Tail seq is assigned to each queued task and incremented. Head seq tracks the
-+ * sequence number of the latest dispatched task. The distance between the a
-+ * task's seq and the associated queue's head seq is called the queue distance
-+ * and used when comparing two tasks for ordering. See qmap_core_sched_before().
-+ */
-+static u64 core_sched_head_seqs[5];
-+static u64 core_sched_tail_seqs[5];
-+
- /* Per-task scheduling context */
- struct task_ctx {
- 	bool	force_local;	/* Dispatch directly to local_dsq */
-+	u64	core_sched_seq;
- };
- 
- struct {
-@@ -84,6 +97,7 @@ struct {
- 
- /* Statistics */
- unsigned long nr_enqueued, nr_dispatched, nr_reenqueued, nr_dequeued;
-+unsigned long nr_core_sched_execed;
- 
- s32 BPF_STRUCT_OPS(qmap_select_cpu, struct task_struct *p,
- 		   s32 prev_cpu, u64 wake_flags)
-@@ -150,8 +164,18 @@ void BPF_STRUCT_OPS(qmap_enqueue, struct task_struct *p, u64 enq_flags)
- 		return;
- 	}
- 
--	/* Is select_cpu() is telling us to enqueue locally? */
--	if (tctx->force_local) {
-+	/*
-+	 * All enqueued tasks must have their core_sched_seq updated for correct
-+	 * core-sched ordering, which is why %SCX_OPS_ENQ_LAST is specified in
-+	 * qmap_ops.flags.
-+	 */
-+	tctx->core_sched_seq = core_sched_tail_seqs[idx]++;
-+
-+	/*
-+	 * If qmap_select_cpu() is telling us to or this is the last runnable
-+	 * task on the CPU, enqueue locally.
-+	 */
-+	if (tctx->force_local || (enq_flags & SCX_ENQ_LAST)) {
- 		tctx->force_local = false;
- 		scx_bpf_dispatch(p, SCX_DSQ_LOCAL, slice_ns, enq_flags);
- 		return;
-@@ -195,6 +219,19 @@ void BPF_STRUCT_OPS(qmap_enqueue, struct task_struct *p, u64 enq_flags)
- void BPF_STRUCT_OPS(qmap_dequeue, struct task_struct *p, u64 deq_flags)
+ static inline void scx_notify_sched_tick(void)
  {
- 	__sync_fetch_and_add(&nr_dequeued, 1);
-+	if (deq_flags & SCX_DEQ_CORE_SCHED_EXEC)
-+		__sync_fetch_and_add(&nr_core_sched_execed, 1);
-+}
-+
-+static void update_core_sched_head_seq(struct task_struct *p)
-+{
-+	struct task_ctx *tctx = bpf_task_storage_get(&task_ctx_stor, p, 0, 0);
-+	int idx = weight_to_idx(p->scx.weight);
-+
-+	if (tctx)
-+		core_sched_head_seqs[idx] = tctx->core_sched_seq;
-+	else
-+		scx_bpf_error("task_ctx lookup failed");
- }
+ 	unsigned long last_check;
+@@ -149,6 +166,9 @@ static inline int scx_check_setscheduler(struct task_struct *p,
+ 					 int policy) { return 0; }
+ static inline bool scx_can_stop_tick(struct rq *rq) { return true; }
+ static inline void init_sched_ext_class(void) {}
++static inline void scx_notify_pick_next_task(struct rq *rq,
++					     const struct task_struct *p,
++					     const struct sched_class *active) {}
+ static inline void scx_notify_sched_tick(void) {}
  
- void BPF_STRUCT_OPS(qmap_dispatch, s32 cpu, struct task_struct *prev)
-@@ -247,6 +284,7 @@ void BPF_STRUCT_OPS(qmap_dispatch, s32 cpu, struct task_struct *prev)
- 
- 			p = bpf_task_from_pid(pid);
- 			if (p) {
-+				update_core_sched_head_seq(p);
- 				__sync_fetch_and_add(&nr_dispatched, 1);
- 				scx_bpf_dispatch(p, SCX_DSQ_GLOBAL, slice_ns, 0);
- 				bpf_task_release(p);
-@@ -258,6 +296,49 @@ void BPF_STRUCT_OPS(qmap_dispatch, s32 cpu, struct task_struct *prev)
- 	}
- }
- 
-+/*
-+ * The distance from the head of the queue scaled by the weight of the queue.
-+ * The lower the number, the older the task and the higher the priority.
-+ */
-+static s64 task_qdist(struct task_struct *p)
-+{
-+	int idx = weight_to_idx(p->scx.weight);
-+	struct task_ctx *tctx;
-+	s64 qdist;
-+
-+	tctx = bpf_task_storage_get(&task_ctx_stor, p, 0, 0);
-+	if (!tctx) {
-+		scx_bpf_error("task_ctx lookup failed");
-+		return 0;
-+	}
-+
-+	qdist = tctx->core_sched_seq - core_sched_head_seqs[idx];
-+
-+	/*
-+	 * As queue index increments, the priority doubles. The queue w/ index 3
-+	 * is dispatched twice more frequently than 2. Reflect the difference by
-+	 * scaling qdists accordingly. Note that the shift amount needs to be
-+	 * flipped depending on the sign to avoid flipping priority direction.
-+	 */
-+	if (qdist >= 0)
-+		return qdist << (4 - idx);
-+	else
-+		return qdist << idx;
-+}
-+
-+/*
-+ * This is called to determine the task ordering when core-sched is picking
-+ * tasks to execute on SMT siblings and should encode about the same ordering as
-+ * the regular scheduling path. Use the priority-scaled distances from the head
-+ * of the queues to compare the two tasks which should be consistent with the
-+ * dispatch path behavior.
-+ */
-+bool BPF_STRUCT_OPS(qmap_core_sched_before,
-+		    struct task_struct *a, struct task_struct *b)
-+{
-+	return task_qdist(a) > task_qdist(b);
-+}
-+
- void BPF_STRUCT_OPS(qmap_cpu_release, s32 cpu, struct scx_cpu_release_args *args)
- {
- 	u32 cnt;
-@@ -309,10 +390,12 @@ struct sched_ext_ops qmap_ops = {
- 	.enqueue		= (void *)qmap_enqueue,
- 	.dequeue		= (void *)qmap_dequeue,
- 	.dispatch		= (void *)qmap_dispatch,
-+	.core_sched_before	= (void *)qmap_core_sched_before,
- 	.cpu_release		= (void *)qmap_cpu_release,
- 	.prep_enable		= (void *)qmap_prep_enable,
- 	.init			= (void *)qmap_init,
- 	.exit			= (void *)qmap_exit,
-+	.flags			= SCX_OPS_ENQ_LAST,
- 	.timeout_ms		= 5000U,
- 	.name			= "qmap",
+ #define for_each_active_class		for_each_class
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 3571cfda62a3..4b7f48239248 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -710,6 +710,8 @@ struct scx_rq {
+ 	u32			flags;
+ 	cpumask_var_t		cpus_to_kick;
+ 	cpumask_var_t		cpus_to_preempt;
++	cpumask_var_t		cpus_to_wait;
++	u64			pnt_seq;
+ 	struct irq_work		kick_cpus_irq_work;
  };
-diff --git a/tools/sched_ext/scx_example_qmap.c b/tools/sched_ext/scx_example_qmap.c
-index 2ae3794c9ea8..ccb4814ee61b 100644
---- a/tools/sched_ext/scx_example_qmap.c
-+++ b/tools/sched_ext/scx_example_qmap.c
-@@ -92,9 +92,10 @@ int main(int argc, char **argv)
- 		long nr_enqueued = skel->bss->nr_enqueued;
- 		long nr_dispatched = skel->bss->nr_dispatched;
- 
--		printf("enq=%lu, dsp=%lu, delta=%ld, reenq=%lu, deq=%lu\n",
-+		printf("enq=%lu, dsp=%lu, delta=%ld, reenq=%lu, deq=%lu, core=%lu\n",
- 		       nr_enqueued, nr_dispatched, nr_enqueued - nr_dispatched,
--		       skel->bss->nr_reenqueued, skel->bss->nr_dequeued);
-+		       skel->bss->nr_reenqueued, skel->bss->nr_dequeued,
-+		       skel->bss->nr_core_sched_execed);
- 		fflush(stdout);
- 		sleep(1);
- 	}
+ #endif /* CONFIG_SCHED_CLASS_EXT */
 -- 
 2.39.2
 
