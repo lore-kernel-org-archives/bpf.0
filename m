@@ -2,106 +2,160 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 118CCC6FD1D
-	for <bpf@archiver.kernel.org>; Fri, 17 Mar 2023 21:48:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE972C6FD1D
+	for <bpf@archiver.kernel.org>; Fri, 17 Mar 2023 21:51:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbjCQVsb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Mar 2023 17:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46224 "EHLO
+        id S230044AbjCQVvu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Mar 2023 17:51:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjCQVsZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Mar 2023 17:48:25 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11E338B52;
-        Fri, 17 Mar 2023 14:47:41 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id iw3so6704056plb.6;
-        Fri, 17 Mar 2023 14:47:41 -0700 (PDT)
+        with ESMTP id S229765AbjCQVvu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Mar 2023 17:51:50 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C9BC3CE7;
+        Fri, 17 Mar 2023 14:51:13 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id p3-20020a17090a74c300b0023f69bc7a68so2177297pjl.4;
+        Fri, 17 Mar 2023 14:51:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679089597;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F/BU/W8lH7cT5BJ1G0LSjqLvqmzeVi/1nXNmiJsFiQw=;
-        b=ExxFDNebIPcEMGNRBSRPuF6/2/qWbWZJp1w8uIcEMu6itos3/DoG6V2t2qQitkGNcC
-         TlkWMaEPUq6RXcWEi6b8hXSDjA7xT5lG05PuUuL3O994K9yblZvEZMyPZ9hICKJ/8wrf
-         KWXxm/ou2sBcRLtUY/9XnJ2DAka3AR1JTOuGdNTUrgPN1Qld0mR/UUWpMTQ0ReAFj26d
-         Y/5zjEaRTMvuVhEzpS9wllw7Wdwy8FAzEUVOEoQLaIrjA5ZS9pkC38J0kNb3mGEzlxsH
-         UMGT0CE/odXvvgEc/eds5NTukVWUxysBa6/c2d9T814AQ/zxzj3JtoBgaeCXkMvz15Qe
-         Gz7A==
+        d=gmail.com; s=20210112; t=1679089869;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DHm+NYWQnKdGMy+c994+YcNwf72k/1epACWefCI4KNA=;
+        b=ELiyrGpS0ug/qpUKT1OkjjcYKOXAav6kIo+QL8/nNxFIv5tYFHHuI2q8pSJDs3q+6U
+         pC3SxMSEiv3mnkH/lG72+a1n/qzaN4xu5GlPp1vu4nxcaLqe63tVHBQ5uDuwJZ9cruLg
+         4fXT+0N+PfoHwbMPz9YgZ/yDyeoKG2aJpI/Fye63W7fvI9qivZ1rRznY4A3J0+fOCzkV
+         zY63p8VrOlCys5SAytAwNjah3RmZtjlsQxYJPR3mTieNjq+kzYimhqtliQdKwC6weAmF
+         dHdQarnMOog4NSfA2LW1ZDy1EyhdWXtXHvaxP+aRq01tFPwQF0RdKfO3MxmxoN1Bdh98
+         UmlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679089597;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F/BU/W8lH7cT5BJ1G0LSjqLvqmzeVi/1nXNmiJsFiQw=;
-        b=FNZH888kDMB2T40KfqaAAA/GqTmFJHXiRshuLe0Wz1YBmL2vKEHuF8wBaIVNmCmFZR
-         8vtwe7TD4NyxelFcpumBYb3qd/OX4CAJ3YMx5J+v3OoPbrpiD5gXTA0NlJVvun0MrMgv
-         P1PJCj42DfsZJd0PiNM5jX3BN5VmzTYLGjOC+IN8A5X/a1ifR0O8rcV7lVXC37cOZemA
-         jS/TTntzUnbgE1rexmeKXI+MZXNX5y8dJlgN/sa2lqDz8ghuEFB+D9bMob+xotl+zjVs
-         h80QHAwYh5epmgujp1YVd7RMrZRgS3gbjCDK8yBaeVCDScj0J92W0uKNS+SA2oSQPbyT
-         gPxA==
-X-Gm-Message-State: AO0yUKWzYP/Hb4hw5/mjsfr7yRcpjXKcBtH7RxtcJPFbYA03mQE39hmg
-        x2sTcxVZrxvcYQwGWYPjLTY=
-X-Google-Smtp-Source: AK7set8MILLIaeW6Xq+4Uh9meXyQ6MxrFX0iBrKJ+UOvhYnz/ZiAugZ228Jnyxkz7FwexRr40QX5UA==
-X-Received: by 2002:a17:902:cecd:b0:19e:9f97:f427 with SMTP id d13-20020a170902cecd00b0019e9f97f427mr10457478plg.10.1679089597455;
-        Fri, 17 Mar 2023 14:46:37 -0700 (PDT)
-Received: from ?IPV6:2620:10d:c085:21e8::1380? ([2620:10d:c090:400::5:87c3])
-        by smtp.gmail.com with ESMTPSA id a10-20020a170902b58a00b00198b01b412csm1958472pls.303.2023.03.17.14.46.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 14:46:36 -0700 (PDT)
-Message-ID: <8a268c26-ea57-89ec-9fea-72ec5b8e12e2@gmail.com>
-Date:   Fri, 17 Mar 2023 14:46:34 -0700
+        d=1e100.net; s=20210112; t=1679089869;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=DHm+NYWQnKdGMy+c994+YcNwf72k/1epACWefCI4KNA=;
+        b=xFlD/vjI4qV2W9jkKmz6fEwn74b4+p9etUpIRdZZCS/tEHgfXBQbVg2/QO1P6CKaSf
+         v8wZgxh/TKOqcvJIl9Cb0D/qpuo5cPUVjurgnnHUD51p1ovXWcmMv7bIZB4JcGjtdgOM
+         bAss6QqZZKY/1HcRS+nCW3tqDw+UzpTZUn4Rr9q14ButicJRebtY/m6X4xxTGrCIwxRU
+         oQbmBY/XtY14kKBbL6ZzpzRBunl5KEgTzRxiRabMRrLA66DF6q4pGnyc63ESO31z6xeN
+         NazlA3NCX59bdUWaO8ZUosM0qXfuCtk+b8LQvo0HrG2E955h/50aC4muzhUaPOBh/o6P
+         FKIA==
+X-Gm-Message-State: AO0yUKV3txg9jri5efA8ngRR/3Q0ACouYVa3M1nNWuCi1flTerudgIRg
+        pXawD+bmWSsGpPSwt6A1hGXI956m5i0=
+X-Google-Smtp-Source: AK7set+6PvSSZVTvmWDp0ylnj31HhLaOifZPuAg/KzsQMZJAZ8vWXsoqdztGVwt3IbC+dhk7tYs9Qg==
+X-Received: by 2002:a17:90a:1910:b0:23f:2757:ce99 with SMTP id 16-20020a17090a191000b0023f2757ce99mr8038056pjg.49.1679088832114;
+        Fri, 17 Mar 2023 14:33:52 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id ch7-20020a17090af40700b0023cd53e7706sm5411264pjb.47.2023.03.17.14.33.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 14:33:51 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+From:   Tejun Heo <tj@kernel.org>
+To:     torvalds@linux-foundation.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
+        joshdon@google.com, brho@google.com, pjt@google.com,
+        derkling@google.com, haoluo@google.com, dvernet@meta.com,
+        dschatzberg@meta.com, dskarlat@cs.cmu.edu, riel@surriel.com
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-team@meta.com, Tejun Heo <tj@kernel.org>
+Subject: [PATCH 05/32] sched: Add sched_class->reweight_task()
+Date:   Fri, 17 Mar 2023 11:33:06 -1000
+Message-Id: <20230317213333.2174969-6-tj@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230317213333.2174969-1-tj@kernel.org>
+References: <20230317213333.2174969-1-tj@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH bpf-next v7 2/8] net: Update an existing TCP congestion
- control algorithm.
-Content-Language: en-US, en-ZW
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Kui-Feng Lee <kuifeng@meta.com>, bpf@vger.kernel.org,
-        ast@kernel.org, song@kernel.org, kernel-team@meta.com,
-        andrii@kernel.org, sdf@google.com
-References: <20230316023641.2092778-1-kuifeng@meta.com>
- <20230316023641.2092778-3-kuifeng@meta.com>
- <f72b77c3-15ac-3de3-5bce-c263564c1487@iogearbox.net>
- <ee8cab13-9018-5f62-0415-16409ee1610b@linux.dev>
- <b8b54ef5-8a24-5886-8f4e-8856dbaa9c34@iogearbox.net>
-From:   Kui-Feng Lee <sinquersw@gmail.com>
-In-Reply-To: <b8b54ef5-8a24-5886-8f4e-8856dbaa9c34@iogearbox.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Currently, during a task weight change, sched core directly calls
+reweight_task() defined in fair.c if @p is on CFS. Let's make it a proper
+sched_class operation instead. CFS's reweight_task() is renamed to
+reweight_task_fair() and now called through sched_class.
 
+While it turns a direct call into an indirect one, set_load_weight() isn't
+called from a hot path and this change shouldn't cause any noticeable
+difference. This will be used to implement reweight_task for a new BPF
+extensible sched_class so that it can keep its cached task weight
+up-to-date.
 
-On 3/17/23 10:23, Daniel Borkmann wrote:
-> On 3/17/23 6:18 PM, Martin KaFai Lau wrote:
->> On 3/17/23 8:23 AM, Daniel Borkmann wrote:
->>>  From the function itself what is not clear whether
->>> callers that replace an existing one should do the synchronize_rcu() 
->>> themselves or if this should
->>> be part of tcp_update_congestion_control?
->>
->> bpf_struct_ops_map_free (in patch 1) also does synchronize_rcu() for 
->> another reason (bpf_setsockopt), so the caller (bpf_struct_ops) is 
->> doing it. From looking at tcp_unregister_congestion_control(), make 
->> sense that it is more correct to have another synchronize_rcu() also 
->> in tcp_update_congestion_control in case there will be other non 
->> bpf_struct_ops caller doing update in the future.
-> 
-> Agree, I was looking at 'bpf: Update the struct_ops of a bpf_link', and 
-> essentially as-is
-> it was implicit via map free. +1, tcp_update_congestion_control() would 
-> be more obvious and
-> better for other/non-BPF users.
+This will be used by a new sched_class to track weight changes.
 
-It makes sense to me.
-I will refactor functions as well.
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Reviewed-by: David Vernet <dvernet@meta.com>
+Acked-by: Josh Don <joshdon@google.com>
+Acked-by: Hao Luo <haoluo@google.com>
+Acked-by: Barret Rhoden <brho@google.com>
+---
+ kernel/sched/core.c  | 4 ++--
+ kernel/sched/fair.c  | 3 ++-
+ kernel/sched/sched.h | 4 ++--
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-> 
-> Thanks,
-> Daniel
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index fdf4dba12a7e..5a6f4884384e 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -1277,8 +1277,8 @@ static void set_load_weight(struct task_struct *p, bool update_load)
+ 	 * SCHED_OTHER tasks have to update their load when changing their
+ 	 * weight
+ 	 */
+-	if (update_load && p->sched_class == &fair_sched_class) {
+-		reweight_task(p, prio);
++	if (update_load && p->sched_class->reweight_task) {
++		p->sched_class->reweight_task(task_rq(p), p, prio);
+ 	} else {
+ 		load->weight = scale_load(sched_prio_to_weight[prio]);
+ 		load->inv_weight = sched_prio_to_wmult[prio];
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 7a1b1f855b96..681ab0dd0bc1 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -3342,7 +3342,7 @@ static void reweight_entity(struct cfs_rq *cfs_rq, struct sched_entity *se,
+ 
+ }
+ 
+-void reweight_task(struct task_struct *p, int prio)
++static void reweight_task_fair(struct rq *rq, struct task_struct *p, int prio)
+ {
+ 	struct sched_entity *se = &p->se;
+ 	struct cfs_rq *cfs_rq = cfs_rq_of(se);
+@@ -12547,6 +12547,7 @@ DEFINE_SCHED_CLASS(fair) = {
+ 	.task_tick		= task_tick_fair,
+ 	.task_fork		= task_fork_fair,
+ 
++	.reweight_task		= reweight_task_fair,
+ 	.prio_changed		= prio_changed_fair,
+ 	.switched_from		= switched_from_fair,
+ 	.switched_to		= switched_to_fair,
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 3e8df6d31c1e..7934b597053d 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -2213,6 +2213,8 @@ struct sched_class {
+ 	 */
+ 	void (*switched_from)(struct rq *this_rq, struct task_struct *task);
+ 	void (*switched_to)  (struct rq *this_rq, struct task_struct *task);
++	void (*reweight_task)(struct rq *this_rq, struct task_struct *task,
++			      int newprio);
+ 	void (*prio_changed) (struct rq *this_rq, struct task_struct *task,
+ 			      int oldprio);
+ 
+@@ -2365,8 +2367,6 @@ extern void init_sched_dl_class(void);
+ extern void init_sched_rt_class(void);
+ extern void init_sched_fair_class(void);
+ 
+-extern void reweight_task(struct task_struct *p, int prio);
+-
+ extern void resched_curr(struct rq *rq);
+ extern void resched_cpu(int cpu);
+ 
+-- 
+2.39.2
+
