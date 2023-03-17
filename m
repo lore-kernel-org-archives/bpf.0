@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA133C6FD1D
-	for <bpf@archiver.kernel.org>; Fri, 17 Mar 2023 21:36:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CB89C74A5B
+	for <bpf@archiver.kernel.org>; Fri, 17 Mar 2023 21:37:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjCQVgu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Mar 2023 17:36:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
+        id S231315AbjCQVhU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Mar 2023 17:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbjCQVg0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Mar 2023 17:36:26 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724E847806;
-        Fri, 17 Mar 2023 14:35:41 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id j3-20020a17090adc8300b0023d09aea4a6so10550714pjv.5;
-        Fri, 17 Mar 2023 14:35:41 -0700 (PDT)
+        with ESMTP id S230456AbjCQVg3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Mar 2023 17:36:29 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527954BE95;
+        Fri, 17 Mar 2023 14:35:44 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id x37so3693643pga.1;
+        Fri, 17 Mar 2023 14:35:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679088865;
+        d=gmail.com; s=20210112; t=1679088872;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RSrWwn78A8NkyoI+B6fTIg1qB48gzCqnhlfC8zaKofU=;
-        b=bAJustyimCzGyUNZgui6WmJ41dqCROMR0HuUpK6eoRL78iUIT9q/55S041hqCnYWnN
-         ICczAp6A5ZLEXdcN21+zoqTNxwXuCrBAkA4DAckVjj470nKvk3Kna1VSjjSdJembBlz3
-         OwqbAPamEOGT3eSeyiQJzrmthixbaFrIn6JHJahf9zFDFw8/iCnI4/HyVS4BlzjKRStY
-         /AnmGPJ0/vl7tzaTXWDcfwwZWjXWP5pO6Ra9mIJeWKuudvRVDjGii+pCrlJqFaBlWtCo
-         ybPf6aomavu6v+eVJ+ZvOdtShGftW8fa7Us0+mSoeh1+4Kic1r3uXh+0yhefqv7gIk7b
-         1pDQ==
+        bh=mFCkEOmw90Jjcera7igv6WX4z3OoBiQTwIKlnmq8L8s=;
+        b=EQjZrfDdctZarieGDQuSWN9o8QXycWg6RDZ8NtZ35BpwmjqQXpoBYsTmKlZHb3hIZt
+         wn2wDlkUSrAdeK2JZQdzDdsXvqU6QZG9hPm2zJhkJOtgbukIgIzxG+wC7GOBPLN4Fz6I
+         L0lEK4Iz5DYKOXksnTFd+ubMJX6AplWMvcyEBbkQcPUCzbidTesCkWdYy9MTSlk/Dmea
+         7CS8Owf1OA17Y+dLJ0EgFWnhMkpBT4FY18kC1fnnHIvKI0LIWnDyUpBs1vqYfddQO+/I
+         u5mWoVvwKEBuMBwoYI9W8d+HVV9RFtcl7jYY7bFbHjh5uLhaU3WBCgZ7nfqyGWWA7zYe
+         v4iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679088865;
+        d=1e100.net; s=20210112; t=1679088872;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=RSrWwn78A8NkyoI+B6fTIg1qB48gzCqnhlfC8zaKofU=;
-        b=W8klN+JVZt6CzBPT3B8+4EYN5CGVgbLpW87HpCkcc5lKLzk8noyjObEfQQTqmWHaP/
-         gT1LtSlgZK0cwfSPD95EaWPf8GwO2V9li0iA9At2vg09E78RFdKozhAr/yhs9NbGdlQL
-         FPzLlwygpGfIGiGWtDTZHdTZ/8jjJk44p6TkeDluUUsVdBiSrK1be/Hb+YCUyskwZiyN
-         /XZrNwdUMONYvWdVx8Cu3hkFTztq9563jCzlwi8VAMKdZ8bM5iPduLMEJxiyn8EqcdkR
-         NDumUsHt0lPR5SXwnoGFQ5GHeLpNuayT2mCrVUYML+t7CWylakwmu6Oy5FaWQo4snN7W
-         eUdg==
-X-Gm-Message-State: AO0yUKXX+7xX7DL4N8UDCyVp5yhEvFhqCepFUp9uUgwX3TyQv03hLGgc
-        YdLk4p579aRoW1LIv9FyPHk=
-X-Google-Smtp-Source: AK7set8Bma9o2aao6NaaLFQAvw962fF6KWbQYyfO4Nw5Xcp6WobtWua5ckzqpWMWtpyBxzTb+JCcZw==
-X-Received: by 2002:a17:902:e195:b0:1a0:6721:6cd2 with SMTP id y21-20020a170902e19500b001a067216cd2mr6909965pla.28.1679088864896;
-        Fri, 17 Mar 2023 14:34:24 -0700 (PDT)
+        bh=mFCkEOmw90Jjcera7igv6WX4z3OoBiQTwIKlnmq8L8s=;
+        b=azyJAYKMtk/oKDY1Z0GNOBMBYqxsNkgT+EUqYVcVG/jEptbtVABrSTR5Vgn7p5zSo0
+         Gu8VNcs/ZmO/H8qiI3kq0LnCe12TVgyoKyGxttyDsaFuf0IL1Ni5JkxRkqE95Qq2QA4f
+         2ITXU/F3Mp9NO9ePee0IZ2/3B9IgXAxnf7WPW5XUB9KmnmFzo3cuFaD9nu40pYsdl4z5
+         xWzV9Ggace/BGv2eavm5y5hBFJhJZszMhCnD/MkNK+Tz2wbxaMCxDCLXtg55K9XckkuG
+         jUW/IfvIfMtiitGVhpOTH6+iUDMncakVvnutk3GqwH5tq/fsBKy6iqscb71gz6csNLMN
+         Yfhw==
+X-Gm-Message-State: AO0yUKVc0meSwjN2FxBHfmzsP61xtXm5ncsgd4SmLeibfFtqOOAzXqDT
+        6OVzPilapqOr7t9sVgGR5Z0=
+X-Google-Smtp-Source: AK7set+QbTsk+yt/GGE6IK0Z4aRTtBWCYNm5zrZEOnATrmEVYJkXFHJ1Qj6JxqxJUUdDzIkMKlmNTA==
+X-Received: by 2002:a62:1dc3:0:b0:622:749a:b9de with SMTP id d186-20020a621dc3000000b00622749ab9demr7318031pfd.27.1679088872276;
+        Fri, 17 Mar 2023 14:34:32 -0700 (PDT)
 Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id d3-20020a170902728300b0019c32968271sm1994614pll.11.2023.03.17.14.34.24
+        by smtp.gmail.com with ESMTPSA id 3-20020aa79143000000b0059261bd5bacsm1944724pfi.202.2023.03.17.14.34.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 14:34:24 -0700 (PDT)
+        Fri, 17 Mar 2023 14:34:31 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
 From:   Tejun Heo <tj@kernel.org>
 To:     torvalds@linux-foundation.org, mingo@redhat.com,
@@ -62,9 +62,9 @@ To:     torvalds@linux-foundation.org, mingo@redhat.com,
         dschatzberg@meta.com, dskarlat@cs.cmu.edu, riel@surriel.com
 Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
         kernel-team@meta.com, Tejun Heo <tj@kernel.org>
-Subject: [PATCH 23/32] sched_ext: Track tasks that are subjects of the in-flight SCX operation
-Date:   Fri, 17 Mar 2023 11:33:24 -1000
-Message-Id: <20230317213333.2174969-24-tj@kernel.org>
+Subject: [PATCH 27/32] sched_ext: Implement sched_ext_ops.cpu_online/offline()
+Date:   Fri, 17 Mar 2023 11:33:28 -1000
+Message-Id: <20230317213333.2174969-28-tj@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230317213333.2174969-1-tj@kernel.org>
 References: <20230317213333.2174969-1-tj@kernel.org>
@@ -74,255 +74,93 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When some SCX operations are in flight, it is known that the subject task's
-rq lock is held throughout which makes it safe to access certain fields of
-the task - e.g. its current task_group. We want to add SCX kfunc helpers
-that can make use of this guarantee - e.g. to help determining the currently
-associated CPU cgroup from the task's current task_group.
-
-As it'd be dangerous call such a helper on a task which isn't rq lock
-protected, the helper should be able to verify the input task and reject
-accordingly. This patch adds sched_ext_entity.kf_tasks[] that track the
-tasks which are currently being operated on by a terminal SCX operation. The
-new SCX_CALL_OP_[2]TASK[_RET]() can be used when invoking SCX operations
-which take tasks as arguments and the scx_kf_allowed_on_arg_tasks() can be
-used by kfunc helpers to verify the input task status.
-
-Note that as sched_ext_entity.kf_tasks[] can't handle nesting, the tracking
-is currently only limited to terminal SCX operations. If needed in the
-future, this restriction can be removed by moving the tracking to the task
-side with a couple per-task counters.
+Add ops.cpu_online/offline() which are invoked when CPUs come online and
+offline respectively. As the enqueue path already automatically bypasses
+tasks to the local dsq on a deactivated CPU, BPF schedulers are guaranteed
+to see tasks only on CPUs which are between online() and offline().
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
 Reviewed-by: David Vernet <dvernet@meta.com>
+Acked-by: Josh Don <joshdon@google.com>
+Acked-by: Hao Luo <haoluo@google.com>
+Acked-by: Barret Rhoden <brho@google.com>
 ---
- include/linux/sched/ext.h |  2 +
- kernel/sched/ext.c        | 91 +++++++++++++++++++++++++++++++--------
- 2 files changed, 76 insertions(+), 17 deletions(-)
+ include/linux/sched/ext.h | 18 ++++++++++++++++++
+ kernel/sched/ext.c        | 18 +++++++++++++++++-
+ 2 files changed, 35 insertions(+), 1 deletion(-)
 
 diff --git a/include/linux/sched/ext.h b/include/linux/sched/ext.h
-index 2f2ee3e05904..1ed07b4bdb24 100644
+index 826da32e29ba..63a011860f59 100644
 --- a/include/linux/sched/ext.h
 +++ b/include/linux/sched/ext.h
-@@ -449,6 +449,7 @@ enum scx_kf_mask {
- 	SCX_KF_REST		= 1 << 5, /* other rq-locked operations */
+@@ -378,6 +378,24 @@ struct sched_ext_ops {
+ 	 */
+ 	void (*cpu_release)(s32 cpu, struct scx_cpu_release_args *args);
  
- 	__SCX_KF_RQ_LOCKED	= SCX_KF_DISPATCH | SCX_KF_ENQUEUE | SCX_KF_REST,
-+	__SCX_KF_TERMINAL	= SCX_KF_ENQUEUE | SCX_KF_REST,
- };
- 
- /*
-@@ -464,6 +465,7 @@ struct sched_ext_entity {
- 	s32			sticky_cpu;
- 	s32			holding_cpu;
- 	u32			kf_mask;	/* see scx_kf_mask above */
-+	struct task_struct	*kf_tasks[2];	/* see SCX_CALL_OP_TASK() */
- 	atomic64_t		ops_state;
- 	unsigned long		runnable_at;
- 
++	/**
++	 * cpu_online - A CPU became online
++	 * @cpu: CPU which just came up
++	 *
++	 * @cpu just came online. @cpu doesn't call ops.enqueue() or run tasks
++	 * associated with other CPUs beforehand.
++	 */
++	void (*cpu_online)(s32 cpu);
++
++	/**
++	 * cpu_offline - A CPU is going offline
++	 * @cpu: CPU which is going offline
++	 *
++	 * @cpu is going offline. @cpu doesn't call ops.enqueue() or run tasks
++	 * associated with other CPUs afterwards.
++	 */
++	void (*cpu_offline)(s32 cpu);
++
+ 	/**
+ 	 * prep_enable - Prepare to enable BPF scheduling for a task
+ 	 * @p: task to prepare BPF scheduling for
 diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
-index ed35b5575b9f..ac7b2d57b656 100644
+index 4f342b7a6f45..dbeec22bee73 100644
 --- a/kernel/sched/ext.c
 +++ b/kernel/sched/ext.c
-@@ -239,6 +239,47 @@ do {										\
- 	__ret;									\
- })
+@@ -1393,7 +1393,8 @@ static int balance_scx(struct rq *rq, struct task_struct *prev,
+ 		 * emitted in scx_notify_pick_next_task().
+ 		 */
+ 		if (SCX_HAS_OP(cpu_acquire))
+-			SCX_CALL_OP(0, cpu_acquire, cpu_of(rq), NULL);
++			SCX_CALL_OP(SCX_KF_UNLOCKED, cpu_acquire, cpu_of(rq),
++				    NULL);
+ 		rq->scx.cpu_released = false;
+ 	}
  
-+/*
-+ * Some kfuncs are allowed only on the tasks that are subjects of the
-+ * in-progress scx_ops operation for, e.g., locking guarantees. To enforce such
-+ * restrictions, the following SCX_CALL_OP_*() variants should be used when
-+ * invoking scx_ops operations that take task arguments. These can only be used
-+ * for non-nesting operations due to the way the tasks are tracked.
-+ *
-+ * kfuncs which can only operate on such tasks can in turn use
-+ * scx_kf_allowed_on_arg_tasks() to test whether the invocation is allowed on
-+ * the specific task.
-+ */
-+#define SCX_CALL_OP_TASK(mask, op, task, args...)				\
-+do {										\
-+	BUILD_BUG_ON(mask & ~__SCX_KF_TERMINAL);				\
-+	current->scx.kf_tasks[0] = task;					\
-+	SCX_CALL_OP(mask, op, task, ##args);					\
-+	current->scx.kf_tasks[0] = NULL;					\
-+} while (0)
-+
-+#define SCX_CALL_OP_TASK_RET(mask, op, task, args...)				\
-+({										\
-+	__typeof__(scx_ops.op(task, ##args)) __ret;				\
-+	BUILD_BUG_ON(mask & ~__SCX_KF_TERMINAL);				\
-+	current->scx.kf_tasks[0] = task;					\
-+	__ret = SCX_CALL_OP_RET(mask, op, task, ##args);			\
-+	current->scx.kf_tasks[0] = NULL;					\
-+	__ret;									\
-+})
-+
-+#define SCX_CALL_OP_2TASKS_RET(mask, op, task0, task1, args...)			\
-+({										\
-+	__typeof__(scx_ops.op(task0, task1, ##args)) __ret;			\
-+	BUILD_BUG_ON(mask & ~__SCX_KF_TERMINAL);				\
-+	current->scx.kf_tasks[0] = task0;					\
-+	current->scx.kf_tasks[1] = task1;					\
-+	__ret = SCX_CALL_OP_RET(mask, op, task0, task1, ##args);		\
-+	current->scx.kf_tasks[0] = NULL;					\
-+	current->scx.kf_tasks[1] = NULL;					\
-+	__ret;									\
-+})
-+
- /* @mask is constant, always inline to cull unnecessary branches */
- static __always_inline bool scx_kf_allowed(u32 mask)
- {
-@@ -269,6 +310,22 @@ static __always_inline bool scx_kf_allowed(u32 mask)
- 	return true;
+@@ -1824,6 +1825,18 @@ void __scx_update_idle(struct rq *rq, bool idle)
+ 	}
  }
  
-+/* see SCX_CALL_OP_TASK() */
-+static __always_inline bool scx_kf_allowed_on_arg_tasks(u32 mask,
-+							struct task_struct *p)
++static void rq_online_scx(struct rq *rq, enum rq_onoff_reason reason)
 +{
-+	if (!scx_kf_allowed(__SCX_KF_RQ_LOCKED))
-+		return false;
-+
-+	if (unlikely((p != current->scx.kf_tasks[0] &&
-+		      p != current->scx.kf_tasks[1]))) {
-+		scx_ops_error("called on a task not being operated on");
-+		return false;
-+	}
-+
-+	return true;
++	if (SCX_HAS_OP(cpu_online) && reason == RQ_ONOFF_HOTPLUG)
++		SCX_CALL_OP(SCX_KF_REST, cpu_online, cpu_of(rq));
 +}
 +
- /**
-  * scx_task_iter_init - Initialize a task iterator
-  * @iter: iterator to init
-@@ -706,7 +763,7 @@ static void do_enqueue_task(struct rq *rq, struct task_struct *p, u64 enq_flags,
- 	WARN_ON_ONCE(*ddsp_taskp);
- 	*ddsp_taskp = p;
++static void rq_offline_scx(struct rq *rq, enum rq_onoff_reason reason)
++{
++	if (SCX_HAS_OP(cpu_offline) && reason == RQ_ONOFF_HOTPLUG)
++		SCX_CALL_OP(SCX_KF_REST, cpu_offline, cpu_of(rq));
++}
++
+ #else /* !CONFIG_SMP */
  
--	SCX_CALL_OP(SCX_KF_ENQUEUE, enqueue, p, enq_flags);
-+	SCX_CALL_OP_TASK(SCX_KF_ENQUEUE, enqueue, p, enq_flags);
+ static bool test_and_clear_cpu_idle(int cpu) { return false; }
+@@ -2329,6 +2342,9 @@ DEFINE_SCHED_CLASS(ext) = {
+ 	.balance		= balance_scx,
+ 	.select_task_rq		= select_task_rq_scx,
+ 	.set_cpus_allowed	= set_cpus_allowed_scx,
++
++	.rq_online		= rq_online_scx,
++	.rq_offline		= rq_offline_scx,
+ #endif
  
- 	/*
- 	 * If not directly dispatched, QUEUEING isn't clear yet and dispatch or
-@@ -778,7 +835,7 @@ static void enqueue_task_scx(struct rq *rq, struct task_struct *p, int enq_flags
- 	add_nr_running(rq, 1);
- 
- 	if (SCX_HAS_OP(runnable))
--		SCX_CALL_OP(SCX_KF_REST, runnable, p, enq_flags);
-+		SCX_CALL_OP_TASK(SCX_KF_REST, runnable, p, enq_flags);
- 
- 	do_enqueue_task(rq, p, enq_flags, sticky_cpu);
- }
-@@ -803,7 +860,7 @@ static void ops_dequeue(struct task_struct *p, u64 deq_flags)
- 		BUG();
- 	case SCX_OPSS_QUEUED:
- 		if (SCX_HAS_OP(dequeue))
--			SCX_CALL_OP(SCX_KF_REST, dequeue, p, deq_flags);
-+			SCX_CALL_OP_TASK(SCX_KF_REST, dequeue, p, deq_flags);
- 
- 		if (atomic64_try_cmpxchg(&p->scx.ops_state, &opss,
- 					 SCX_OPSS_NONE))
-@@ -854,11 +911,11 @@ static void dequeue_task_scx(struct rq *rq, struct task_struct *p, int deq_flags
- 	 */
- 	if (SCX_HAS_OP(stopping) && task_current(rq, p)) {
- 		update_curr_scx(rq);
--		SCX_CALL_OP(SCX_KF_REST, stopping, p, false);
-+		SCX_CALL_OP_TASK(SCX_KF_REST, stopping, p, false);
- 	}
- 
- 	if (SCX_HAS_OP(quiescent))
--		SCX_CALL_OP(SCX_KF_REST, quiescent, p, deq_flags);
-+		SCX_CALL_OP_TASK(SCX_KF_REST, quiescent, p, deq_flags);
- 
- 	if (deq_flags & SCX_DEQ_SLEEP)
- 		p->scx.flags |= SCX_TASK_DEQD_FOR_SLEEP;
-@@ -877,7 +934,7 @@ static void yield_task_scx(struct rq *rq)
- 	struct task_struct *p = rq->curr;
- 
- 	if (SCX_HAS_OP(yield))
--		SCX_CALL_OP_RET(SCX_KF_REST, yield, p, NULL);
-+		SCX_CALL_OP_2TASKS_RET(SCX_KF_REST, yield, p, NULL);
- 	else
- 		p->scx.slice = 0;
- }
-@@ -887,7 +944,7 @@ static bool yield_to_task_scx(struct rq *rq, struct task_struct *to)
- 	struct task_struct *from = rq->curr;
- 
- 	if (SCX_HAS_OP(yield))
--		return SCX_CALL_OP_RET(SCX_KF_REST, yield, from, to);
-+		return SCX_CALL_OP_2TASKS_RET(SCX_KF_REST, yield, from, to);
- 	else
- 		return false;
- }
-@@ -1398,7 +1455,7 @@ static void set_next_task_scx(struct rq *rq, struct task_struct *p, bool first)
- 
- 	/* see dequeue_task_scx() on why we skip when !QUEUED */
- 	if (SCX_HAS_OP(running) && (p->scx.flags & SCX_TASK_QUEUED))
--		SCX_CALL_OP(SCX_KF_REST, running, p);
-+		SCX_CALL_OP_TASK(SCX_KF_REST, running, p);
- 
- 	watchdog_unwatch_task(p, true);
- 
-@@ -1454,7 +1511,7 @@ static void put_prev_task_scx(struct rq *rq, struct task_struct *p)
- 
- 	/* see dequeue_task_scx() on why we skip when !QUEUED */
- 	if (SCX_HAS_OP(stopping) && (p->scx.flags & SCX_TASK_QUEUED))
--		SCX_CALL_OP(SCX_KF_REST, stopping, p, true);
-+		SCX_CALL_OP_TASK(SCX_KF_REST, stopping, p, true);
- 
- 	/*
- 	 * If we're being called from put_prev_task_balance(), balance_scx() may
-@@ -1617,8 +1674,8 @@ static int select_task_rq_scx(struct task_struct *p, int prev_cpu, int wake_flag
- 	if (SCX_HAS_OP(select_cpu)) {
- 		s32 cpu;
- 
--		cpu = SCX_CALL_OP_RET(SCX_KF_REST, select_cpu, p, prev_cpu,
--				      wake_flags);
-+		cpu = SCX_CALL_OP_TASK_RET(SCX_KF_REST, select_cpu, p, prev_cpu,
-+					   wake_flags);
- 		if (ops_cpu_valid(cpu)) {
- 			return cpu;
- 		} else {
-@@ -1644,8 +1701,8 @@ static void set_cpus_allowed_scx(struct task_struct *p,
- 	 * designation pointless. Cast it away when calling the operation.
- 	 */
- 	if (SCX_HAS_OP(set_cpumask))
--		SCX_CALL_OP(SCX_KF_REST, set_cpumask, p,
--			    (struct cpumask *)p->cpus_ptr);
-+		SCX_CALL_OP_TASK(SCX_KF_REST, set_cpumask, p,
-+				 (struct cpumask *)p->cpus_ptr);
- }
- 
- static void reset_idle_masks(void)
-@@ -1806,7 +1863,7 @@ static void scx_ops_enable_task(struct task_struct *p)
- 
- 	if (SCX_HAS_OP(enable)) {
- 		struct scx_enable_args args = { };
--		SCX_CALL_OP(SCX_KF_REST, enable, p, &args);
-+		SCX_CALL_OP_TASK(SCX_KF_REST, enable, p, &args);
- 	}
- 	p->scx.flags &= ~SCX_TASK_OPS_PREPPED;
- 	p->scx.flags |= SCX_TASK_OPS_ENABLED;
-@@ -1845,7 +1902,7 @@ static void refresh_scx_weight(struct task_struct *p)
- 
- 	p->scx.weight = sched_weight_to_cgroup(weight);
- 	if (SCX_HAS_OP(set_weight))
--		SCX_CALL_OP(SCX_KF_REST, set_weight, p, p->scx.weight);
-+		SCX_CALL_OP_TASK(SCX_KF_REST, set_weight, p, p->scx.weight);
- }
- 
- void scx_pre_fork(struct task_struct *p)
-@@ -1936,8 +1993,8 @@ static void switching_to_scx(struct rq *rq, struct task_struct *p)
- 	 * different scheduler class. Keep the BPF scheduler up-to-date.
- 	 */
- 	if (SCX_HAS_OP(set_cpumask))
--		SCX_CALL_OP(SCX_KF_REST, set_cpumask, p,
--			    (struct cpumask *)p->cpus_ptr);
-+		SCX_CALL_OP_TASK(SCX_KF_REST, set_cpumask, p,
-+				 (struct cpumask *)p->cpus_ptr);
- }
- 
- static void check_preempt_curr_scx(struct rq *rq, struct task_struct *p,int wake_flags) {}
+ 	.task_tick		= task_tick_scx,
 -- 
 2.39.2
 
