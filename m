@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFBA0C6FD1D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EDCE4C76195
 	for <bpf@archiver.kernel.org>; Fri, 17 Mar 2023 21:38:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231384AbjCQViZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Mar 2023 17:38:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52148 "EHLO
+        id S230031AbjCQVi0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Mar 2023 17:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbjCQVhV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S231318AbjCQVhV (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 17 Mar 2023 17:37:21 -0400
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C7438460;
-        Fri, 17 Mar 2023 14:36:16 -0700 (PDT)
-Received: by mail-pj1-f54.google.com with SMTP id qe8-20020a17090b4f8800b0023f07253a2cso6625400pjb.3;
-        Fri, 17 Mar 2023 14:36:16 -0700 (PDT)
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3982962FD8;
+        Fri, 17 Mar 2023 14:36:18 -0700 (PDT)
+Received: by mail-pl1-f180.google.com with SMTP id h8so6660037plf.10;
+        Fri, 17 Mar 2023 14:36:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679088834;
+        d=gmail.com; s=20210112; t=1679088838;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=a5RYcwx9iQWgNlT0187t5NhcGeh1nY2e8DTY6uu1F9k=;
-        b=KnGUtjGld2eavhY0nV7HDE35mBtuIWhB1vCYI+6hUw1whbxTqlRP/HVJmAOtjw7CGZ
-         XoWk5NzaCey8siqObwBHeMVno3GGcGi4CAK+QwrlQst1f1lHFnfGtNV383iJH3S8jmeM
-         p/JpSju7bNUUNqbMjhRbUYxugQ0mWk4TW5zXlXu5WhpH/p3OekuAk9x8Bw+QcSmWddi8
-         /TjOVylJKCiOFluMtlAJTnWsYQOxInqnnu29NpvVD51xajyLUdR5rdnPgwWmJ8ErCinV
-         LEW1km3yY39wF2LwyETTG6c7BpVXOpcOBXrwh/zG72JYDv+a2mPrAmTcBll5NQdZmh6o
-         E8ug==
+        bh=Ek2xB039Z37SY+SNJqL7xVXjLO75eTCaHSia7ob4yw8=;
+        b=PcmKwOuwLfBUobUpytlBICTcmmbYezLZ2HfCN7STw9plQvvPtS8XdFhZ8mdx1kkMkO
+         vdVV0GQBpCN5MVQHMHI55XHWiBJw4JOGDaIMCuxPCt31Jjn4ZcRnNkTCibwDW2OZGbrA
+         1VrSYyzvIS9B/T3MqJsxnn/t8ZAEIF2qZQ1/XeXUEVkm/mia/jJ3D+JkJSlBRGjsovmu
+         pdIXV7J1+70COvQIs1ui6h51LNoOVW8XXknD2oH/50DZMX5HWcdBqdWawrQisXNHbm6x
+         oRaKpGJuZM01RDQSwvYHheXH0sP0ygsladF5BlF9nce5pZwZ5Tn5N32izHTXA1CoZeM7
+         ICjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679088834;
+        d=1e100.net; s=20210112; t=1679088838;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=a5RYcwx9iQWgNlT0187t5NhcGeh1nY2e8DTY6uu1F9k=;
-        b=bkcBxNzV9NpkmovC9yQaYi0l6l2WdL1aj5UV9qmvgHjAqGADwA9GPOXu87HGR47432
-         LzczaxUyFatvBRewvjkxDeIDjZKZiC0ikOQ7eEODLsyzCXRhNS+xzb3m59Syy6P0+OOV
-         V1D0SnWAz14wG1ve2i2wXSRmMW6G+b6IfuK/3yrctqKWk077rxMNK7VFIl5l24/JZbZL
-         ROR2sqnYJH4lGhsnHtEY9/7PfZOgIswd+PQGFgbdfx24DpdNSNhTIdpat4nDQo54rYMv
-         hUfoxinoaR7F3Y+B3qe0TYPM5b2inxVi29b1oPYe9q1v7cKWyI65psZnBxcKSM9KwwLx
-         3LwA==
-X-Gm-Message-State: AO0yUKVQZYnmUm6Fu4cOX0pQtOajlu5+7qwmscov1k5mzGa+SK3isIlP
-        Ir5cBQ6XasRdzlabYCD5dJMIEfdtz+A=
-X-Google-Smtp-Source: AK7set+wYKqTu+UvkEUiB9+iJeVt9Zmjl0xO6rrvXVzbme08VsjclTAvv6X8kLE73mZ0QWmebCrPWg==
-X-Received: by 2002:a17:90b:1b4c:b0:23d:2532:ae34 with SMTP id nv12-20020a17090b1b4c00b0023d2532ae34mr4736986pjb.2.1679088833872;
-        Fri, 17 Mar 2023 14:33:53 -0700 (PDT)
+        bh=Ek2xB039Z37SY+SNJqL7xVXjLO75eTCaHSia7ob4yw8=;
+        b=5zy+XHnsyoXU9DFz+Q1gBE2Tj3NhV1VO7tOg5KdFVreLl08K9JoH38hMON1jt6z49N
+         XtFfRlAZqqmxplKqjLsUFYzQTqTB8H4UCGeEBWjjnxYjzb3517FhI4ZUk/4heebhHArA
+         EDhoh3CH9rK86o8MCRcic3GZF/68uWu+AJDu9WIUAH46GKN6rcxxAZ1oG6Q1NJyb9RXk
+         LKkm46qerQBdC+prn5Zmkm5k/AnRUA5PIfdHiNgCxvb+iQNxWV4tRMNkcBe6yfA0iVy3
+         Enimc4ZaVDUoeSBW0FbfMw1VJP2rzZb5PKhYvieOfA6kSvOY3tTWCWsVgzh3UqYcFMGk
+         pz2g==
+X-Gm-Message-State: AO0yUKVpNIMzj10lqoLY19Lxi03WH8mSBMt1t002K7qlB/I2IDgAWpaD
+        KLnTzLoTdekMo+C+kqKY5f0=
+X-Google-Smtp-Source: AK7set8+6hmCgCd6GrzyIyILipgdQZGDuGy8Zy8U81iwEJ4CpsPIOVxXEQzo3LcXxe+JJxpM1tAOjA==
+X-Received: by 2002:a05:6a20:bc88:b0:d5:58df:fb7a with SMTP id fx8-20020a056a20bc8800b000d558dffb7amr5112510pzb.3.1679088837521;
+        Fri, 17 Mar 2023 14:33:57 -0700 (PDT)
 Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id fa23-20020a17090af0d700b00231227781d5sm5560031pjb.2.2023.03.17.14.33.53
+        by smtp.gmail.com with ESMTPSA id d16-20020aa78150000000b005825b8e0540sm1948805pfn.204.2023.03.17.14.33.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 14:33:53 -0700 (PDT)
+        Fri, 17 Mar 2023 14:33:57 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
 From:   Tejun Heo <tj@kernel.org>
 To:     torvalds@linux-foundation.org, mingo@redhat.com,
@@ -61,10 +61,11 @@ To:     torvalds@linux-foundation.org, mingo@redhat.com,
         derkling@google.com, haoluo@google.com, dvernet@meta.com,
         dschatzberg@meta.com, dskarlat@cs.cmu.edu, riel@surriel.com
 Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        kernel-team@meta.com, Tejun Heo <tj@kernel.org>
-Subject: [PATCH 06/32] sched: Add sched_class->switching_to() and expose check_class_changing/changed()
-Date:   Fri, 17 Mar 2023 11:33:07 -1000
-Message-Id: <20230317213333.2174969-7-tj@kernel.org>
+        kernel-team@meta.com, Tejun Heo <tj@kernel.org>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH 08/32] sched: Expose css_tg(), __setscheduler_prio() and SCHED_CHANGE_BLOCK()
+Date:   Fri, 17 Mar 2023 11:33:09 -1000
+Message-Id: <20230317213333.2174969-9-tj@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230317213333.2174969-1-tj@kernel.org>
 References: <20230317213333.2174969-1-tj@kernel.org>
@@ -74,116 +75,194 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When a task switches to a new sched_class, the prev and new classes are
-notified through ->switched_from() and ->switched_to(), respectively, after
-the switching is done.
+These will be used by a new BPF extensible sched_class.
 
-A new BPF extensible sched_class will have callbacks that allow the BPF
-scheduler to keep track of relevant task states (like priority and cpumask).
-Those callbacks aren't called while a task is on a different sched_class.
-When a task comes back, we wanna tell the BPF progs the up-to-date state
-before the task gets enqueued, so we need a hook which is called before the
-switching is committed.
+css_tg() will be used in the init and exit paths to visit all task_groups by
+walking cgroups.
 
-This patch adds ->switching_to() which is called during sched_class switch
-through check_class_changing() before the task is restored. Also, this patch
-exposes check_class_changing/changed() in kernel/sched/sched.h. They will be
-used by the new BPF extensible sched_class to implement implicit sched_class
-switching which is used e.g. when falling back to CFS when the BPF scheduler
-fails or unloads.
+__setscheduler_prio() is used to pick the sched_class matching the current
+prio of the task. For the new BPF extensible sched_class, the mapping from
+the task configuration to sched_class isn't static and depends on a few
+factors - e.g. whether the BPF progs implementing the scheduler are loaded
+and in a serviceable state. That mapping logic will be added to
+__setscheduler_prio().
 
-This is a prep patch and doesn't cause any behavior changes. The new
-operation and exposed functions aren't used yet.
+When the BPF scheduler progs get loaded and unloaded, the mapping changes
+and the new sched_class will walk the tasks applying the new mapping using
+SCHED_CHANGE_BLOCK() and __setscheduler_prio().
 
-v2: Improve patch description w/ details on planned use.
+v2: Expose SCHED_CHANGE_BLOCK() too and update the description.
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
 Reviewed-by: David Vernet <dvernet@meta.com>
 Acked-by: Josh Don <joshdon@google.com>
 Acked-by: Hao Luo <haoluo@google.com>
 Acked-by: Barret Rhoden <brho@google.com>
+Reported-by: kernel test robot <lkp@intel.com>
 ---
- kernel/sched/core.c  | 20 +++++++++++++++++---
- kernel/sched/sched.h |  7 +++++++
- 2 files changed, 24 insertions(+), 3 deletions(-)
+ kernel/sched/core.c  | 47 +++----------------------------------------
+ kernel/sched/sched.h | 48 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 51 insertions(+), 44 deletions(-)
 
 diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 5a6f4884384e..a378e8e09061 100644
+index fc7008095249..2a602f93f5f8 100644
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
-@@ -2223,6 +2223,17 @@ inline int task_curr(const struct task_struct *p)
- 	return cpu_curr(task_cpu(p)) == p;
+@@ -2096,15 +2096,7 @@ void deactivate_task(struct rq *rq, struct task_struct *p, int flags)
+ 	dequeue_task(rq, p, flags);
  }
  
-+/*
-+ * ->switching_to() is called with the pi_lock and rq_lock held and must not
-+ * mess with locking.
-+ */
-+void check_class_changing(struct rq *rq, struct task_struct *p,
-+			  const struct sched_class *prev_class)
-+{
-+	if (prev_class != p->sched_class && p->sched_class->switching_to)
-+		p->sched_class->switching_to(rq, p);
-+}
-+
- /*
-  * switched_from, switched_to and prio_changed must _NOT_ drop rq->lock,
-  * use the balance_callback list if you want balancing.
-@@ -2230,9 +2241,9 @@ inline int task_curr(const struct task_struct *p)
-  * this means any call to check_class_changed() must be followed by a call to
-  * balance_callback().
-  */
--static inline void check_class_changed(struct rq *rq, struct task_struct *p,
--				       const struct sched_class *prev_class,
--				       int oldprio)
-+void check_class_changed(struct rq *rq, struct task_struct *p,
-+			 const struct sched_class *prev_class,
-+			 int oldprio)
+-struct sched_change_guard {
+-	struct task_struct	*p;
+-	struct rq		*rq;
+-	bool			queued;
+-	bool			running;
+-	bool			done;
+-};
+-
+-static struct sched_change_guard
++struct sched_change_guard
+ sched_change_guard_init(struct rq *rq, struct task_struct *p, int flags)
  {
- 	if (prev_class != p->sched_class) {
- 		if (prev_class->switched_from)
-@@ -7139,6 +7150,7 @@ void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task)
- 		}
+ 	struct sched_change_guard cg = {
+@@ -2129,7 +2121,7 @@ sched_change_guard_init(struct rq *rq, struct task_struct *p, int flags)
+ 	return cg;
+ }
  
- 		__setscheduler_prio(p, prio);
-+		check_class_changing(rq, p, prev_class);
- 	}
+-static void sched_change_guard_fini(struct sched_change_guard *cg, int flags)
++void sched_change_guard_fini(struct sched_change_guard *cg, int flags)
+ {
+ 	if (cg->queued)
+ 		enqueue_task(cg->rq, cg->p, flags | ENQUEUE_NOCLOCK);
+@@ -2138,34 +2130,6 @@ static void sched_change_guard_fini(struct sched_change_guard *cg, int flags)
+ 	cg->done = true;
+ }
  
- 	check_class_changed(rq, p, prev_class, oldprio);
-@@ -7748,6 +7760,8 @@ static int __sched_setscheduler(struct task_struct *p,
- 		}
- 		__setscheduler_uclamp(p, attr);
+-/**
+- * SCHED_CHANGE_BLOCK - Nested block for task attribute updates
+- * @__rq: Runqueue the target task belongs to
+- * @__p: Target task
+- * @__flags: DEQUEUE/ENQUEUE_* flags
+- *
+- * A task may need to be dequeued and put_prev_task'd for attribute updates and
+- * set_next_task'd and re-enqueued afterwards. This helper defines a nested
+- * block which automatically handles these preparation and cleanup operations.
+- *
+- *  SCHED_CHANGE_BLOCK(rq, p, DEQUEUE_SAVE | DEQUEUE_NOCLOCK) {
+- *	  update_attribute(p);
+- *        ...
+- *  }
+- *
+- * If @__flags is a variable, the variable may be updated in the block body and
+- * the updated value will be used when re-enqueueing @p.
+- *
+- * If %DEQUEUE_NOCLOCK is specified, the caller is responsible for calling
+- * update_rq_clock() beforehand. Otherwise, the rq clock is automatically
+- * updated iff the task needs to be dequeued and re-enqueued. Only the former
+- * case guarantees that the rq clock is up-to-date inside and after the block.
+- */
+-#define SCHED_CHANGE_BLOCK(__rq, __p, __flags)					\
+-	for (struct sched_change_guard __cg =					\
+-			sched_change_guard_init(__rq, __p, __flags);		\
+-	     !__cg.done; sched_change_guard_fini(&__cg, __flags))
+-
+ static inline int __normal_prio(int policy, int rt_prio, int nice)
+ {
+ 	int prio;
+@@ -7016,7 +6980,7 @@ int default_wake_function(wait_queue_entry_t *curr, unsigned mode, int wake_flag
+ }
+ EXPORT_SYMBOL(default_wake_function);
  
-+		check_class_changing(rq, p, prev_class);
-+
- 		/*
- 		 * We enqueue to tail when the priority of a task is
- 		 * increased (user space view).
+-static void __setscheduler_prio(struct task_struct *p, int prio)
++void __setscheduler_prio(struct task_struct *p, int prio)
+ {
+ 	if (dl_prio(prio))
+ 		p->sched_class = &dl_sched_class;
+@@ -10413,11 +10377,6 @@ void sched_move_task(struct task_struct *tsk)
+ 	task_rq_unlock(rq, tsk, &rf);
+ }
+ 
+-static inline struct task_group *css_tg(struct cgroup_subsys_state *css)
+-{
+-	return css ? container_of(css, struct task_group, css) : NULL;
+-}
+-
+ static struct cgroup_subsys_state *
+ cpu_cgroup_css_alloc(struct cgroup_subsys_state *parent_css)
+ {
 diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 7934b597053d..1545779c5db8 100644
+index 9a6cba6f9299..866ce69a445e 100644
 --- a/kernel/sched/sched.h
 +++ b/kernel/sched/sched.h
-@@ -2211,6 +2211,7 @@ struct sched_class {
- 	 * cannot assume the switched_from/switched_to pair is serialized by
- 	 * rq->lock. They are however serialized by p->pi_lock.
- 	 */
-+	void (*switching_to) (struct rq *this_rq, struct task_struct *task);
- 	void (*switched_from)(struct rq *this_rq, struct task_struct *task);
- 	void (*switched_to)  (struct rq *this_rq, struct task_struct *task);
- 	void (*reweight_task)(struct rq *this_rq, struct task_struct *task,
-@@ -2447,6 +2448,12 @@ static inline void sub_nr_running(struct rq *rq, unsigned count)
+@@ -469,6 +469,11 @@ static inline int walk_tg_tree(tg_visitor down, tg_visitor up, void *data)
+ 	return walk_tg_tree_from(&root_task_group, down, up, data);
+ }
+ 
++static inline struct task_group *css_tg(struct cgroup_subsys_state *css)
++{
++	return css ? container_of(css, struct task_group, css) : NULL;
++}
++
+ extern int tg_nop(struct task_group *tg, void *data);
+ 
+ extern void free_fair_sched_group(struct task_group *tg);
+@@ -2386,6 +2391,8 @@ extern void init_sched_dl_class(void);
+ extern void init_sched_rt_class(void);
+ extern void init_sched_fair_class(void);
+ 
++extern void __setscheduler_prio(struct task_struct *p, int prio);
++
+ extern void resched_curr(struct rq *rq);
+ extern void resched_cpu(int cpu);
+ 
+@@ -2466,6 +2473,47 @@ static inline void sub_nr_running(struct rq *rq, unsigned count)
  extern void activate_task(struct rq *rq, struct task_struct *p, int flags);
  extern void deactivate_task(struct rq *rq, struct task_struct *p, int flags);
  
-+extern void check_class_changing(struct rq *rq, struct task_struct *p,
-+				 const struct sched_class *prev_class);
-+extern void check_class_changed(struct rq *rq, struct task_struct *p,
-+				const struct sched_class *prev_class,
-+				int oldprio);
++struct sched_change_guard {
++	struct task_struct	*p;
++	struct rq		*rq;
++	bool			queued;
++	bool			running;
++	bool			done;
++};
 +
- extern void check_preempt_curr(struct rq *rq, struct task_struct *p, int flags);
- 
- #ifdef CONFIG_PREEMPT_RT
++extern struct sched_change_guard
++sched_change_guard_init(struct rq *rq, struct task_struct *p, int flags);
++
++extern void sched_change_guard_fini(struct sched_change_guard *cg, int flags);
++
++/**
++ * SCHED_CHANGE_BLOCK - Nested block for task attribute updates
++ * @__rq: Runqueue the target task belongs to
++ * @__p: Target task
++ * @__flags: DEQUEUE/ENQUEUE_* flags
++ *
++ * A task may need to be dequeued and put_prev_task'd for attribute updates and
++ * set_next_task'd and re-enqueued afterwards. This helper defines a nested
++ * block which automatically handles these preparation and cleanup operations.
++ *
++ *  SCHED_CHANGE_BLOCK(rq, p, DEQUEUE_SAVE | DEQUEUE_NOCLOCK) {
++ *	  update_attribute(p);
++ *        ...
++ *  }
++ *
++ * If @__flags is a variable, the variable may be updated in the block body and
++ * the updated value will be used when re-enqueueing @p.
++ *
++ * If %DEQUEUE_NOCLOCK is specified, the caller is responsible for calling
++ * update_rq_clock() beforehand. Otherwise, the rq clock is automatically
++ * updated iff the task needs to be dequeued and re-enqueued. Only the former
++ * case guarantees that the rq clock is up-to-date inside and after the block.
++ */
++#define SCHED_CHANGE_BLOCK(__rq, __p, __flags)					\
++	for (struct sched_change_guard __cg =					\
++			sched_change_guard_init(__rq, __p, __flags);		\
++	     !__cg.done; sched_change_guard_fini(&__cg, __flags))
++
+ extern void check_class_changing(struct rq *rq, struct task_struct *p,
+ 				 const struct sched_class *prev_class);
+ extern void check_class_changed(struct rq *rq, struct task_struct *p,
 -- 
 2.39.2
 
