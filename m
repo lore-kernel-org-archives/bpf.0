@@ -2,308 +2,207 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2088FC76195
-	for <bpf@archiver.kernel.org>; Fri, 17 Mar 2023 21:39:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B99BBC6FD1D
+	for <bpf@archiver.kernel.org>; Fri, 17 Mar 2023 21:42:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbjCQVi6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Mar 2023 17:38:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
+        id S231319AbjCQVmI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Mar 2023 17:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231391AbjCQVi1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Mar 2023 17:38:27 -0400
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2302774A6C;
-        Fri, 17 Mar 2023 14:36:51 -0700 (PDT)
-Received: by mail-pj1-f44.google.com with SMTP id qe8-20020a17090b4f8800b0023f07253a2cso6625817pjb.3;
-        Fri, 17 Mar 2023 14:36:51 -0700 (PDT)
+        with ESMTP id S230158AbjCQVlr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Mar 2023 17:41:47 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406A65DCB8
+        for <bpf@vger.kernel.org>; Fri, 17 Mar 2023 14:40:38 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id o6-20020a17090a9f8600b0023f32869993so6647417pjp.1
+        for <bpf@vger.kernel.org>; Fri, 17 Mar 2023 14:40:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679088845;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QK2aJVKovuD8X9fkbu87j/H7Z7JuonUqKoeh6yiYhnU=;
-        b=DWP/A6JL25BlAScJg8Mki7VMS8L338jbzxjTJehps9vOBsi9ZV1lfEeMKn2IjLzSKM
-         Bey1eWR5JXAi5uMKygnqVH918L2m7qjWG5UxVBH/OyHQgq8pDAtgN5HxXXg8duYQq2f3
-         JfCRrofmXL7UEVArd9u70V8nrEJzAeU/XrnWqAl1XOoHZZvRGDEQHcPDiHqea0tM/Ik2
-         vN7UQ867RTfemMFk9v+/RSMukUoKV1V01Ea/ME/QRzsD+Gq7K/3/yFPRbGbuMIZX7QEm
-         gm8K+O6t3a6nd4Vm9siK4gxKpdI8inMcz046rPnqciExTJYWnbvErJ16PYTUpZKVbjlZ
-         ksIA==
+        d=gmail.com; s=20210112; t=1679089155;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JHwsZegNAf4nARUjlBYtpe/56/Cp7gywNbTMA9rXbsc=;
+        b=Kl76Iij3eY8nIWvcrAeaV9mkMvNl1Cld4NkLV99X9nQCLMnIA7IQeFyNyDIueNCo6e
+         rhuQGwljHItHnOJ2linMu7X4RmZc9FWIJubTVHlaYda8bnbQvg+QQV8cHBVi5waaWH7p
+         Li8P0AD/yZh7g80IAduOr8MNQ0SaqrlsVCcuBOZ4qMZUjQUnPE8n/tloqhNWcYbIeZs7
+         XtPleCMwPzrzniAutBiobA2buiaTqZCXCiZ7EquOJd6v4MsoPf/35Fd4Ll0QuEFapBqc
+         T2y16BcEKRHorR8+4S9lkoF/K+xM+EdLQcc+MSbLKoM0Uh0LV6F0ZrFpEXIUDUbQk8hN
+         TzMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679088845;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=QK2aJVKovuD8X9fkbu87j/H7Z7JuonUqKoeh6yiYhnU=;
-        b=O3vgLBlYtWn8MCQYqBxaefaqU3ah/cu1FIieCQ8wN0zltkESkV/EgW9CmsnffL4DwL
-         KEzUk/glYCkUJt+0OWXNPehdd2Lg4dYkdDcahlafiNpNLEBYFi2hKzri61TiDhqvI9l2
-         /zWH9VenNFb0fiWQ7X3rxdzP5C09s3pZ+z7XGmK2kr+DNSLySBLcitAcJ4an0Ddj158F
-         uXnTM4IGjOae0Ym2rUryKGHm9rLHyNWIEwSfwknqisAVBtWMMUu8NaGL2wOLOq2v1bvY
-         qdu7QlUW0UXfYROmurKz1vRNpwwo/AGrdRKF+v8NhNGIIKTHNkYjxR2X5STEn/gUtVeW
-         SKxQ==
-X-Gm-Message-State: AO0yUKX90hIJb96Lu+0DPU+kASv75fN86r+idMlQWjpTqMcI+f/lIMJE
-        THvwmFOMegC3w4TfK4IBnDI=
-X-Google-Smtp-Source: AK7set8B/7PevrNGdStT+45BZoFOmumu4wp0v36haQyhTH+fqHdz/ucGTEC9p63/hgY3fJHRwhaOgA==
-X-Received: by 2002:a17:90a:de94:b0:237:47b0:3235 with SMTP id n20-20020a17090ade9400b0023747b03235mr9519254pjv.32.1679088844803;
-        Fri, 17 Mar 2023 14:34:04 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id x3-20020a17090abc8300b0023f4274bd9asm1837666pjr.29.2023.03.17.14.34.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 14:34:04 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-From:   Tejun Heo <tj@kernel.org>
-To:     torvalds@linux-foundation.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
-        joshdon@google.com, brho@google.com, pjt@google.com,
-        derkling@google.com, haoluo@google.com, dvernet@meta.com,
-        dschatzberg@meta.com, dskarlat@cs.cmu.edu, riel@surriel.com
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        kernel-team@meta.com, Tejun Heo <tj@kernel.org>
-Subject: [PATCH 12/32] sched_ext: Add boilerplate for extensible scheduler class
-Date:   Fri, 17 Mar 2023 11:33:13 -1000
-Message-Id: <20230317213333.2174969-13-tj@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230317213333.2174969-1-tj@kernel.org>
-References: <20230317213333.2174969-1-tj@kernel.org>
+        d=1e100.net; s=20210112; t=1679089155;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JHwsZegNAf4nARUjlBYtpe/56/Cp7gywNbTMA9rXbsc=;
+        b=v8vRzKre3+9whOjsk4Klnyx8iOreEjDt5oAcfhYnrWZ4YDtKrnjn86x6mK4PdjBUZj
+         L3wQZAZqd1pX2UNt1SvHRED7RI71jVxuUvy/Z5tMaP+eJKiY0Sp9QpOq3NJjoUhG07Au
+         KW15GnBLdL6v5VNhwOQoUGN3TxfEma6ih4Fs5Bg5Yzb5wxxtSX5Aoy3fLL3XCwM1OmUD
+         rU2yNlkL3vjr+rgO/b1dWFWi+7WX+ZJqoJEWsJIlBu3tWb/qaeLtd+EhqWZ9tN0pAiSm
+         yY5Nk2IS+nHzikRwL8Izp6fMquKc7DQDjqPXxp4/WxRNZ0+Z4KmXADPHV8oQPRzEO3Ey
+         ZDZA==
+X-Gm-Message-State: AO0yUKWJDwdI93RQnSgH4G6m044PZyBrYID027JCPWozz2LCp0+1bv9d
+        E4YQH3fEvu/ilAUbOQOeaTs=
+X-Google-Smtp-Source: AK7set+sR1fNAIy1ExR/hu3OVBMLrf0PgnmwloFrOsRU0lELGNmW82f497R0ZuRYuHqcIzr1z0wMMA==
+X-Received: by 2002:a17:903:120a:b0:1a0:4f24:cae0 with SMTP id l10-20020a170903120a00b001a04f24cae0mr5111562plh.12.1679089155650;
+        Fri, 17 Mar 2023 14:39:15 -0700 (PDT)
+Received: from ?IPV6:2620:10d:c085:21e8::1380? ([2620:10d:c090:400::5:87c3])
+        by smtp.gmail.com with ESMTPSA id d18-20020a170902aa9200b001a1add0d616sm945653plr.161.2023.03.17.14.39.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Mar 2023 14:39:15 -0700 (PDT)
+Message-ID: <323e271d-c30a-a5ef-0636-a1f648f7fa63@gmail.com>
+Date:   Fri, 17 Mar 2023 14:39:12 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH bpf-next v7 5/8] bpf: Update the struct_ops of a bpf_link.
+Content-Language: en-US, en-ZW
+To:     Martin KaFai Lau <martin.lau@linux.dev>,
+        Kui-Feng Lee <kuifeng@meta.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, song@kernel.org,
+        kernel-team@meta.com, andrii@kernel.org, sdf@google.com
+References: <20230316023641.2092778-1-kuifeng@meta.com>
+ <20230316023641.2092778-6-kuifeng@meta.com>
+ <690c5fff-4828-c849-c946-1f1a29e168c8@linux.dev>
+From:   Kui-Feng Lee <sinquersw@gmail.com>
+In-Reply-To: <690c5fff-4828-c849-c946-1f1a29e168c8@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This adds dummy implementations of sched_ext interfaces which interact with
-the scheduler core and hook them in the correct places. As they're all
-dummies, this doesn't cause any behavior changes. This is split out to help
-reviewing.
 
-v2: balance_scx_on_up() dropped. This will be handled in sched_ext proper.
 
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Reviewed-by: David Vernet <dvernet@meta.com>
-Acked-by: Josh Don <joshdon@google.com>
-Acked-by: Hao Luo <haoluo@google.com>
-Acked-by: Barret Rhoden <brho@google.com>
----
- include/linux/sched/ext.h | 12 ++++++++++++
- kernel/fork.c             |  2 ++
- kernel/sched/core.c       | 32 ++++++++++++++++++++++++--------
- kernel/sched/ext.h        | 24 ++++++++++++++++++++++++
- kernel/sched/idle.c       |  2 ++
- kernel/sched/sched.h      |  2 ++
- 6 files changed, 66 insertions(+), 8 deletions(-)
- create mode 100644 include/linux/sched/ext.h
- create mode 100644 kernel/sched/ext.h
+On 3/17/23 12:23, Martin KaFai Lau wrote:
+> On 3/15/23 7:36 PM, Kui-Feng Lee wrote:
+>> +static int bpf_struct_ops_map_link_update(struct bpf_link *link, 
+>> struct bpf_map *new_map)
+>> +{
+>> +    struct bpf_struct_ops_map *st_map, *old_st_map;
+>> +    struct bpf_struct_ops_link *st_link;
+>> +    struct bpf_map *old_map;
+>> +    int err = 0;
+>> +
+>> +    st_link = container_of(link, struct bpf_struct_ops_link, link);
+>> +    st_map = container_of(new_map, struct bpf_struct_ops_map, map);
+>> +
+>> +    if (!bpf_struct_ops_valid_to_reg(new_map))
+>> +        return -EINVAL;
+>> +
+>> +    mutex_lock(&update_mutex);
+>> +
+>> +    old_map = rcu_dereference_protected(st_link->map, 
+>> lockdep_is_held(&update_mutex));
+>> +    old_st_map = container_of(old_map, struct bpf_struct_ops_map, map);
+>> +    /* The new and old struct_ops must be the same type. */
+>> +    if (st_map->st_ops != old_st_map->st_ops) {
+>> +        err = -EINVAL;
+>> +        goto err_out;
+>> +    }
+>> +
+>> +    err = st_map->st_ops->update(st_map->kvalue.data, 
+>> old_st_map->kvalue.data);
+> 
+> I don't think it has completely addressed Andrii's comment in v4 
+> regarding BPF_F_REPLACE: 
+> https://lore.kernel.org/bpf/CAEf4BzbK8s+VFG5HefydD7CRLzkRFKg-Er0PKV_-C2-yttfXzA@mail.gmail.com/
 
-diff --git a/include/linux/sched/ext.h b/include/linux/sched/ext.h
-new file mode 100644
-index 000000000000..a05dfcf533b0
---- /dev/null
-+++ b/include/linux/sched/ext.h
-@@ -0,0 +1,12 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_SCHED_EXT_H
-+#define _LINUX_SCHED_EXT_H
-+
-+#ifdef CONFIG_SCHED_CLASS_EXT
-+#error "NOT IMPLEMENTED YET"
-+#else	/* !CONFIG_SCHED_CLASS_EXT */
-+
-+static inline void sched_ext_free(struct task_struct *p) {}
-+
-+#endif	/* CONFIG_SCHED_CLASS_EXT */
-+#endif	/* _LINUX_SCHED_EXT_H */
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 0d166537a1a3..68d08701acd0 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -23,6 +23,7 @@
- #include <linux/sched/task.h>
- #include <linux/sched/task_stack.h>
- #include <linux/sched/cputime.h>
-+#include <linux/sched/ext.h>
- #include <linux/seq_file.h>
- #include <linux/rtmutex.h>
- #include <linux/init.h>
-@@ -843,6 +844,7 @@ void __put_task_struct(struct task_struct *tsk)
- 	WARN_ON(refcount_read(&tsk->usage));
- 	WARN_ON(tsk == current);
- 
-+	sched_ext_free(tsk);
- 	io_uring_free(tsk);
- 	cgroup_free(tsk);
- 	task_numa_free(tsk, true);
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index aa63371aa84c..9ecee40eb0bc 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -4682,6 +4682,8 @@ late_initcall(sched_core_sysctl_init);
-  */
- int sched_fork(unsigned long clone_flags, struct task_struct *p)
- {
-+	int ret;
-+
- 	__sched_fork(clone_flags, p);
- 	/*
- 	 * We mark the process as NEW here. This guarantees that
-@@ -4718,12 +4720,16 @@ int sched_fork(unsigned long clone_flags, struct task_struct *p)
- 		p->sched_reset_on_fork = 0;
- 	}
- 
--	if (dl_prio(p->prio))
--		return -EAGAIN;
--	else if (rt_prio(p->prio))
-+	scx_pre_fork(p);
-+
-+	if (dl_prio(p->prio)) {
-+		ret = -EAGAIN;
-+		goto out_cancel;
-+	} else if (rt_prio(p->prio)) {
- 		p->sched_class = &rt_sched_class;
--	else
-+	} else {
- 		p->sched_class = &fair_sched_class;
-+	}
- 
- 	init_entity_runnable_average(&p->se);
- 
-@@ -4741,6 +4747,10 @@ int sched_fork(unsigned long clone_flags, struct task_struct *p)
- 	RB_CLEAR_NODE(&p->pushable_dl_tasks);
- #endif
- 	return 0;
-+
-+out_cancel:
-+	scx_cancel_fork(p);
-+	return ret;
- }
- 
- int sched_cgroup_fork(struct task_struct *p, struct kernel_clone_args *kargs)
-@@ -4771,16 +4781,18 @@ int sched_cgroup_fork(struct task_struct *p, struct kernel_clone_args *kargs)
- 		p->sched_class->task_fork(p);
- 	raw_spin_unlock_irqrestore(&p->pi_lock, flags);
- 
--	return 0;
-+	return scx_fork(p);
- }
- 
- void sched_cancel_fork(struct task_struct *p)
- {
-+	scx_cancel_fork(p);
- }
- 
- void sched_post_fork(struct task_struct *p)
- {
- 	uclamp_post_fork(p);
-+	scx_post_fork(p);
- }
- 
- unsigned long to_ratio(u64 period, u64 runtime)
-@@ -5935,7 +5947,7 @@ static void put_prev_task_balance(struct rq *rq, struct task_struct *prev,
- 	 * We can terminate the balance pass as soon as we know there is
- 	 * a runnable task of @class priority or higher.
- 	 */
--	for_class_range(class, prev->sched_class, &idle_sched_class) {
-+	for_balance_class_range(class, prev->sched_class, &idle_sched_class) {
- 		if (class->balance(rq, prev, rf))
- 			break;
- 	}
-@@ -5953,6 +5965,9 @@ __pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
- 	const struct sched_class *class;
- 	struct task_struct *p;
- 
-+	if (scx_enabled())
-+		goto restart;
-+
- 	/*
- 	 * Optimization: we know that if all tasks are in the fair class we can
- 	 * call that function directly, but only if the @prev task wasn't of a
-@@ -5978,7 +5993,7 @@ __pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
- restart:
- 	put_prev_task_balance(rq, prev, rf);
- 
--	for_each_class(class) {
-+	for_each_active_class(class) {
- 		p = class->pick_next_task(rq);
- 		if (p)
- 			return p;
-@@ -6011,7 +6026,7 @@ static inline struct task_struct *pick_task(struct rq *rq)
- 	const struct sched_class *class;
- 	struct task_struct *p;
- 
--	for_each_class(class) {
-+	for_each_active_class(class) {
- 		p = class->pick_task(rq);
- 		if (p)
- 			return p;
-@@ -9953,6 +9968,7 @@ void __init sched_init(void)
- 	balance_push_set(smp_processor_id(), false);
- #endif
- 	init_sched_fair_class();
-+	init_sched_ext_class();
- 
- 	psi_init();
- 
-diff --git a/kernel/sched/ext.h b/kernel/sched/ext.h
-new file mode 100644
-index 000000000000..6a93c4825339
---- /dev/null
-+++ b/kernel/sched/ext.h
-@@ -0,0 +1,24 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifdef CONFIG_SCHED_CLASS_EXT
-+#error "NOT IMPLEMENTED YET"
-+#else	/* CONFIG_SCHED_CLASS_EXT */
-+
-+#define scx_enabled()		false
-+
-+static inline void scx_pre_fork(struct task_struct *p) {}
-+static inline int scx_fork(struct task_struct *p) { return 0; }
-+static inline void scx_post_fork(struct task_struct *p) {}
-+static inline void scx_cancel_fork(struct task_struct *p) {}
-+static inline void init_sched_ext_class(void) {}
-+
-+#define for_each_active_class		for_each_class
-+#define for_balance_class_range		for_class_range
-+
-+#endif	/* CONFIG_SCHED_CLASS_EXT */
-+
-+#if defined(CONFIG_SCHED_CLASS_EXT) && defined(CONFIG_SMP)
-+#error "NOT IMPLEMENTED YET"
-+#else
-+static inline void scx_update_idle(struct rq *rq, bool idle) {}
-+#endif
-diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
-index e9ef66be2870..65378f0be8dc 100644
---- a/kernel/sched/idle.c
-+++ b/kernel/sched/idle.c
-@@ -407,11 +407,13 @@ static void check_preempt_curr_idle(struct rq *rq, struct task_struct *p, int fl
- 
- static void put_prev_task_idle(struct rq *rq, struct task_struct *prev)
- {
-+	scx_update_idle(rq, false);
- }
- 
- static void set_next_task_idle(struct rq *rq, struct task_struct *next, bool first)
- {
- 	update_idle_core(rq);
-+	scx_update_idle(rq, true);
- 	schedstat_inc(rq->sched_goidle);
- }
- 
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 6397843b4482..6c42b042daa4 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -3411,4 +3411,6 @@ enum cpu_cftype_id {
- extern struct cftype cpu_cftypes[CPU_CFTYPE_CNT + 1];
- #endif /* CONFIG_CGROUP_SCHED */
- 
-+#include "ext.h"
-+
- #endif /* _KERNEL_SCHED_SCHED_H */
--- 
-2.39.2
+I just check with Andrii.
+For this, I will add a old_map_fd field in bpf_attr to pass a fd of
+the old map.  The definition of the type of bpf_link_ops::update_map
+will be changed to pass an old_map.  So, we can check if it is expected.
 
+> 
+> For now, tcp_update_congestion_control() enforces the same cc-name. 
+> However, it is still not the same as what BPF_F_REPLACE intented to do: 
+> update only when it is the same old-map. Same cc-name does not 
+> necessarily mean the same old-map.
+
+st_ops->update() will check if old_st_mp->kvalue.data is the same
+one registered before.  That will enforce that old_st_map is old_map.
+
+> 
+>> +    if (err)
+>> +        goto err_out;
+>> +
+>> +    bpf_map_inc(new_map);
+>> +    rcu_assign_pointer(st_link->map, new_map);
+>> +    bpf_map_put(old_map);
+>> +
+>> +err_out:
+>> +    mutex_unlock(&update_mutex);
+>> +
+>> +    return err;
+>> +}
+>> +
+>>   static const struct bpf_link_ops bpf_struct_ops_map_lops = {
+>>       .dealloc = bpf_struct_ops_map_link_dealloc,
+>>       .show_fdinfo = bpf_struct_ops_map_link_show_fdinfo,
+>>       .fill_link_info = bpf_struct_ops_map_link_fill_link_info,
+>> +    .update_map = bpf_struct_ops_map_link_update,
+>>   };
+>>   int bpf_struct_ops_link_create(union bpf_attr *attr)
+>> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+>> index 5a45e3bf34e2..6fa10d108278 100644
+>> --- a/kernel/bpf/syscall.c
+>> +++ b/kernel/bpf/syscall.c
+>> @@ -4676,6 +4676,21 @@ static int link_create(union bpf_attr *attr, 
+>> bpfptr_t uattr)
+>>       return ret;
+>>   }
+>> +static int link_update_map(struct bpf_link *link, union bpf_attr *attr)
+>> +{
+>> +    struct bpf_map *new_map;
+>> +    int ret = 0;
+> 
+> nit. init zero is unnecessarily.
+> 
+>> +
+>> +    new_map = bpf_map_get(attr->link_update.new_map_fd);
+>> +    if (IS_ERR(new_map))
+>> +        return -EINVAL;
+>> +
+>> +    ret = link->ops->update_map(link, new_map);
+>> +
+>> +    bpf_map_put(new_map);
+>> +    return ret;
+>> +}
+>> +
+>>   #define BPF_LINK_UPDATE_LAST_FIELD link_update.old_prog_fd
+>>   static int link_update(union bpf_attr *attr)
+>> @@ -4696,6 +4711,11 @@ static int link_update(union bpf_attr *attr)
+>>       if (IS_ERR(link))
+>>           return PTR_ERR(link);
+>> +    if (link->ops->update_map) {
+>> +        ret = link_update_map(link, attr);
+>> +        goto out_put_link;
+>> +    }
+>> +
+>>       new_prog = bpf_prog_get(attr->link_update.new_prog_fd);
+>>       if (IS_ERR(new_prog)) {
+>>           ret = PTR_ERR(new_prog);
+>> diff --git a/net/bpf/bpf_dummy_struct_ops.c 
+>> b/net/bpf/bpf_dummy_struct_ops.c
+>> index ff4f89a2b02a..158f14e240d0 100644
+>> --- a/net/bpf/bpf_dummy_struct_ops.c
+>> +++ b/net/bpf/bpf_dummy_struct_ops.c
+>> @@ -222,12 +222,18 @@ static void bpf_dummy_unreg(void *kdata)
+>>   {
+>>   }
+>> +static int bpf_dummy_update(void *kdata, void *old_kdata)
+>> +{
+>> +    return -EOPNOTSUPP;
+>> +}
+>> +
+>>   struct bpf_struct_ops bpf_bpf_dummy_ops = {
+>>       .verifier_ops = &bpf_dummy_verifier_ops,
+>>       .init = bpf_dummy_init,
+>>       .check_member = bpf_dummy_ops_check_member,
+>>       .init_member = bpf_dummy_init_member,
+>>       .reg = bpf_dummy_reg,
+>> +    .update = bpf_dummy_update,
+> 
+> When looking at this together in patch 5, the changes in 
+> bpf_dummy_struct_ops.c should not be needed.
+> 
+> 
