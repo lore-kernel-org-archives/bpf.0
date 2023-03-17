@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D4C5C6FD1D
-	for <bpf@archiver.kernel.org>; Fri, 17 Mar 2023 21:36:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11FAEC7618B
+	for <bpf@archiver.kernel.org>; Fri, 17 Mar 2023 21:36:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbjCQVgT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Mar 2023 17:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51862 "EHLO
+        id S231199AbjCQVgU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Mar 2023 17:36:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbjCQVgJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S230071AbjCQVgJ (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 17 Mar 2023 17:36:09 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C7C38E8A;
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092AB4AD25;
         Fri, 17 Mar 2023 14:35:25 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so6659407pjb.0;
+Received: by mail-pl1-x633.google.com with SMTP id c18so6658520ple.11;
         Fri, 17 Mar 2023 14:35:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679088836;
+        d=gmail.com; s=20210112; t=1679088843;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xVdIfb6F5UB3YBDHRdzW1feeALJRZ0rog2R5eaNMiiY=;
-        b=RJmQKieuoBpzebcHh2VLzlzU09dKDuNr31pYdWA7spYf07t01yCuqSOO3b1EfKdXuS
-         9DeI7YtFajTo1jm29L5bL27jHQnXaSZo3GrFOgc+8+DlhCfAgw6ijtdvHXKwkQC+2+H9
-         bdYhVwlbCnu/KkzqRpp5q3Hwtbpk7Ybj6kBaE1wjimDvMBbefdhKh2bQMFQ2pGTCSvic
-         HmZpuPOKYKbXydjuERTJT5IselTQ0ZeK2D4Fozjwin0AlMny6cn+ZgI+lfgOMoml39o6
-         prWd++S3lMSsL2ZWeQkdy5/XI4Rz3BgvtKR9alGLssQRdmwBG98Mx/ipb40IcnSITpo5
-         Fg5w==
+        bh=X6qz8Axre0zWemU+wtTjt8NnBoL1lg5OlFMGApoRxNc=;
+        b=CuW8/lpwFnxQ67YvF+TfhggE1zVruHd28MH7kNA52B4YdNuXAQovYBoqFFJJFtMWle
+         VRkl0RTm4kIQgXteqZxZ1hFDIBVXgiavfFYG/qXzTe09qZeevxVbV2t13cm2Xz7ev/ca
+         WPKfRt+xEcFPqsDpw6lA/+qehrpcXAgjaF1C3PUPoAOjGV+aRFnVuoXkJGJezCNk3qAx
+         s+uw0YagcHE9UNFrWNq5egcZfxp6BkjgMhpDRhAoXhS4Xqi0cO+Aa8sEG3II3WvmpMUf
+         2QxFiXp10Gq3+Br7jkk8vNxiCBDXIPDBp5apqkhymDBjX61Eb980ZWR3ASzQED6FK0jl
+         1YTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679088836;
+        d=1e100.net; s=20210112; t=1679088843;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=xVdIfb6F5UB3YBDHRdzW1feeALJRZ0rog2R5eaNMiiY=;
-        b=Kf0QZd+bFCiCkGIIXw3ZZikx2YblmpKFZPTue1Bb9IvvZJbkcV6LoKTvlzm9Wi1bxV
-         gVIg7vwkJaA1TMj/p5h4/me8nqauSuCgQ5owev91TEKctukqrFJwJ6FqOL18tGdg0oqu
-         8Qt+nw0pNu4ATuokD/hK2/kV3RgpFKdSp/1qqvjiXdazAqvYwkZecEdxGwm7WvvC5u4i
-         Gs6guhPm77CZwq5SYSB2bHgL8olAk0po5eJEavH9v8t7vGVKiplIfeLRIgFVj99smaeK
-         X8U1ORYbDj1+j/20qeqQcB1rUqUSeaMVaItGx822AkiTGmPHAqWucKSQ6xxvtLV0VL64
-         IWqQ==
-X-Gm-Message-State: AO0yUKW+fenmQ/V/Md8qy1gzS8NLfw+bFq50j4/jzBsm2iJz3k/zQy9J
-        VlHXWmyJOTZnCmiblp9ft9c=
-X-Google-Smtp-Source: AK7set8CMcaflKZpZ60O6YRH4i/Tr2l2f0XIGipn6UaSEVdu27Xhdu3XvZ+g5ThSz2wF+2JjggkWPg==
-X-Received: by 2002:a17:90b:3e8e:b0:234:ba6f:c980 with SMTP id rj14-20020a17090b3e8e00b00234ba6fc980mr9358653pjb.17.1679088835772;
-        Fri, 17 Mar 2023 14:33:55 -0700 (PDT)
+        bh=X6qz8Axre0zWemU+wtTjt8NnBoL1lg5OlFMGApoRxNc=;
+        b=Ke4tXfTJaohiGzXNIx4/lnuFJBw2gSFTjIBV+NDPdAyM8xSf6KGl8ZMH6zTGY8RE9r
+         gkkntKEF6DVRDEYrG5vMfSHbhyNYCR+hyocdKMGsLzCZ95g0es/CORbqWDBi5M2nvnkh
+         WpAOuaKfjAzbYwb0xh0HBsN/WIhjCpH7VFcaNEmUYV0S0rCZ+pXCSpYrDqUGQ+mjVX8U
+         xHNA0mUAJN7xhFTzUnMx2RHQTXNquYJy1XD5IUHKDy5BtP0sXas1r729nSxMly3O6Ahg
+         LG2Kl9fMbhgjnqeFEkLcgd/78cnxhuLed0RV0HO+tNhSIVvuVYPTiIoeaCVQFRe5VphN
+         46mQ==
+X-Gm-Message-State: AO0yUKU18Ut7A4CzWaJQOM5bAAc+po2cZDM4/zhruYbCviprCNVHu665
+        WuTjH5Tzl/CaGuORyYmGQH4=
+X-Google-Smtp-Source: AK7set+5U0vFlbi8Qucd968t4RJ5sZmCSbvb4lu7vsIf4g6NLJQJc+aJ4mhWG8IrIb0v5XTiTtawQw==
+X-Received: by 2002:a17:90b:17d0:b0:23f:634a:6c7 with SMTP id me16-20020a17090b17d000b0023f634a06c7mr2937291pjb.15.1679088842922;
+        Fri, 17 Mar 2023 14:34:02 -0700 (PDT)
 Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id q2-20020a63d602000000b00476dc914262sm1949664pgg.1.2023.03.17.14.33.55
+        by smtp.gmail.com with ESMTPSA id t7-20020a170902bc4700b0019a91895cdfsm2002559plz.50.2023.03.17.14.34.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 14:33:55 -0700 (PDT)
+        Fri, 17 Mar 2023 14:34:02 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
 From:   Tejun Heo <tj@kernel.org>
 To:     torvalds@linux-foundation.org, mingo@redhat.com,
@@ -62,9 +62,9 @@ To:     torvalds@linux-foundation.org, mingo@redhat.com,
         dschatzberg@meta.com, dskarlat@cs.cmu.edu, riel@surriel.com
 Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
         kernel-team@meta.com, Tejun Heo <tj@kernel.org>
-Subject: [PATCH 07/32] sched: Factor out cgroup weight conversion functions
-Date:   Fri, 17 Mar 2023 11:33:08 -1000
-Message-Id: <20230317213333.2174969-8-tj@kernel.org>
+Subject: [PATCH 11/32] sched: Add normal_policy()
+Date:   Fri, 17 Mar 2023 11:33:12 -1000
+Message-Id: <20230317213333.2174969-12-tj@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230317213333.2174969-1-tj@kernel.org>
 References: <20230317213333.2174969-1-tj@kernel.org>
@@ -74,18 +74,13 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Factor out sched_weight_from/to_cgroup() which convert between scheduler
-shares and cgroup weight. No functional change. The factored out functions
-will be used by a new BPF extensible sched_class so that the weights can be
-exposed to the BPF programs in a way which is consistent cgroup weights and
-easier to interpret.
+A new BPF extensible sched_class will need to dynamically change how a task
+picks its sched_class. For example, if the loaded BPF scheduler progs fail,
+the tasks will be forced back on CFS even if the task's policy is set to the
+new sched_class. To support such mapping, add normal_policy() which wraps
+testing for %SCHED_NORMAL. This doesn't cause any behavior changes.
 
-The weight conversions will be used regardless of cgroup usage. It's just
-borrowing the cgroup weight range as it's more intuitive.
-CGROUP_WEIGHT_MIN/DFL/MAX constants are moved outside CONFIG_CGROUPS so that
-the conversion helpers can always be defined.
-
-v2: The helpers are now defined regardless of COFNIG_CGROUPS.
+v2: Update the description with more details on the expected use.
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
 Reviewed-by: David Vernet <dvernet@meta.com>
@@ -93,117 +88,44 @@ Acked-by: Josh Don <joshdon@google.com>
 Acked-by: Hao Luo <haoluo@google.com>
 Acked-by: Barret Rhoden <brho@google.com>
 ---
- include/linux/cgroup.h |  4 ++--
- kernel/sched/core.c    | 28 +++++++++++++---------------
- kernel/sched/sched.h   | 18 ++++++++++++++++++
- 3 files changed, 33 insertions(+), 17 deletions(-)
+ kernel/sched/fair.c  | 2 +-
+ kernel/sched/sched.h | 8 +++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
-index a8c6982c2c24..5080dfc8ee48 100644
---- a/include/linux/cgroup.h
-+++ b/include/linux/cgroup.h
-@@ -29,8 +29,6 @@
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 28204472a3f1..ea3788ef9686 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -7806,7 +7806,7 @@ static void check_preempt_wakeup(struct rq *rq, struct task_struct *p, int wake_
+ 	 * Batch and idle tasks do not preempt non-idle tasks (their preemption
+ 	 * is driven by the tick):
+ 	 */
+-	if (unlikely(p->policy != SCHED_NORMAL) || !sched_feat(WAKEUP_PREEMPTION))
++	if (unlikely(!normal_policy(p->policy)) || !sched_feat(WAKEUP_PREEMPTION))
+ 		return;
  
- struct kernel_clone_args;
- 
--#ifdef CONFIG_CGROUPS
--
- /*
-  * All weight knobs on the default hierarchy should use the following min,
-  * default and max values.  The default value is the logarithmic center of
-@@ -40,6 +38,8 @@ struct kernel_clone_args;
- #define CGROUP_WEIGHT_DFL		100
- #define CGROUP_WEIGHT_MAX		10000
- 
-+#ifdef CONFIG_CGROUPS
-+
- /* walk only threadgroup leaders */
- #define CSS_TASK_ITER_PROCS		(1U << 0)
- /* walk all threaded css_sets in the domain */
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index a378e8e09061..fc7008095249 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -11145,29 +11145,27 @@ static int cpu_extra_stat_show(struct seq_file *sf,
- }
- 
- #ifdef CONFIG_FAIR_GROUP_SCHED
-+
-+static unsigned long tg_weight(struct task_group *tg)
-+{
-+	return scale_load_down(tg->shares);
-+}
-+
- static u64 cpu_weight_read_u64(struct cgroup_subsys_state *css,
- 			       struct cftype *cft)
- {
--	struct task_group *tg = css_tg(css);
--	u64 weight = scale_load_down(tg->shares);
--
--	return DIV_ROUND_CLOSEST_ULL(weight * CGROUP_WEIGHT_DFL, 1024);
-+	return sched_weight_to_cgroup(tg_weight(css_tg(css)));
- }
- 
- static int cpu_weight_write_u64(struct cgroup_subsys_state *css,
--				struct cftype *cft, u64 weight)
-+				struct cftype *cft, u64 cgrp_weight)
- {
--	/*
--	 * cgroup weight knobs should use the common MIN, DFL and MAX
--	 * values which are 1, 100 and 10000 respectively.  While it loses
--	 * a bit of range on both ends, it maps pretty well onto the shares
--	 * value used by scheduler and the round-trip conversions preserve
--	 * the original value over the entire range.
--	 */
--	if (weight < CGROUP_WEIGHT_MIN || weight > CGROUP_WEIGHT_MAX)
-+	unsigned long weight;
-+
-+	if (cgrp_weight < CGROUP_WEIGHT_MIN || cgrp_weight > CGROUP_WEIGHT_MAX)
- 		return -ERANGE;
- 
--	weight = DIV_ROUND_CLOSEST_ULL(weight * 1024, CGROUP_WEIGHT_DFL);
-+	weight = sched_weight_from_cgroup(cgrp_weight);
- 
- 	return sched_group_set_shares(css_tg(css), scale_load(weight));
- }
-@@ -11175,7 +11173,7 @@ static int cpu_weight_write_u64(struct cgroup_subsys_state *css,
- static s64 cpu_weight_nice_read_s64(struct cgroup_subsys_state *css,
- 				    struct cftype *cft)
- {
--	unsigned long weight = scale_load_down(css_tg(css)->shares);
-+	unsigned long weight = tg_weight(css_tg(css));
- 	int last_delta = INT_MAX;
- 	int prio, delta;
- 
+ 	find_matching_se(&se, &pse);
 diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 1545779c5db8..9a6cba6f9299 100644
+index 958613dd8290..6397843b4482 100644
 --- a/kernel/sched/sched.h
 +++ b/kernel/sched/sched.h
-@@ -232,6 +232,24 @@ static inline void update_avg(u64 *avg, u64 sample)
- #define shr_bound(val, shift)							\
- 	(val >> min_t(typeof(shift), shift, BITS_PER_TYPE(typeof(val)) - 1))
+@@ -182,9 +182,15 @@ static inline int idle_policy(int policy)
+ {
+ 	return policy == SCHED_IDLE;
+ }
++
++static inline int normal_policy(int policy)
++{
++	return policy == SCHED_NORMAL;
++}
++
+ static inline int fair_policy(int policy)
+ {
+-	return policy == SCHED_NORMAL || policy == SCHED_BATCH;
++	return normal_policy(policy) || policy == SCHED_BATCH;
+ }
  
-+/*
-+ * cgroup weight knobs should use the common MIN, DFL and MAX values which are
-+ * 1, 100 and 10000 respectively. While it loses a bit of range on both ends, it
-+ * maps pretty well onto the shares value used by scheduler and the round-trip
-+ * conversions preserve the original value over the entire range.
-+ */
-+static inline unsigned long sched_weight_from_cgroup(unsigned long cgrp_weight)
-+{
-+	return DIV_ROUND_CLOSEST_ULL(cgrp_weight * 1024, CGROUP_WEIGHT_DFL);
-+}
-+
-+static inline unsigned long sched_weight_to_cgroup(unsigned long weight)
-+{
-+	return clamp_t(unsigned long,
-+		       DIV_ROUND_CLOSEST_ULL(weight * CGROUP_WEIGHT_DFL, 1024),
-+		       CGROUP_WEIGHT_MIN, CGROUP_WEIGHT_MAX);
-+}
-+
- /*
-  * !! For sched_setattr_nocheck() (kernel) only !!
-  *
+ static inline int rt_policy(int policy)
 -- 
 2.39.2
 
