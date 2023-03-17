@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AE21C74A5B
-	for <bpf@archiver.kernel.org>; Fri, 17 Mar 2023 21:36:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 658BDC7618B
+	for <bpf@archiver.kernel.org>; Fri, 17 Mar 2023 21:36:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbjCQVgW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Mar 2023 17:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51994 "EHLO
+        id S230509AbjCQVg0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Mar 2023 17:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230461AbjCQVgL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Mar 2023 17:36:11 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945C14AD34;
-        Fri, 17 Mar 2023 14:35:26 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id e15-20020a17090ac20f00b0023d1b009f52so10569536pjt.2;
-        Fri, 17 Mar 2023 14:35:26 -0700 (PDT)
+        with ESMTP id S231161AbjCQVgP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Mar 2023 17:36:15 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F6A38477;
+        Fri, 17 Mar 2023 14:35:32 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id cn6so6680695pjb.2;
+        Fri, 17 Mar 2023 14:35:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679088841;
+        d=gmail.com; s=20210112; t=1679088854;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YWw2v1UnTVnbdS72T7wGx5fNyybAmUxe9bUw37LCRvo=;
-        b=Agw5iz0eFlCMtSGY5mRtsHN6rrRxdhNbZnER8AKAoat/O5xaHjX7SL3c7GZ3qItUsL
-         hKON97uP+aKGWt92sQDNkmCOwFR8wv2wZhO0Ktu3Sh4A8hHGoJlxnGYWXYZ56LTFmfiA
-         LYq1c1+/Qous0sUaovLvwojE/SPl1jgbceikPlt1UYOawglhpTlW4SBNL0Ar7TfIIEI4
-         Qj0WmyY9QbrBY/dTd1N7FtbcrYl9hG4BM8FQJ32sEhqzqwAfRDS88DZke5fqsLtmqaAV
-         5TNVeHqUlE8j29hQaGSMr8xR4zkIEN2/t0RDYS9sHR8Wc0LWq6cWKdDY+1RFdJqyk83+
-         IODw==
+        bh=0ptHP2lhItNL95igmnoTpFfZGEIfkLjzOV4nlaJyR3w=;
+        b=mxraJSkI3+hxKN6bG72vHdJdSZ4hDbKdmWm9TFLuqXrdKZc7NiXj1HW0RvduPhVRTY
+         5CB/I4/yZ+4I6H1sJbKwEmpG0+jbTJxpGlNP76Obo9AJbvyUHg6ENP22a0OirCXFFRzV
+         xXvKEzZOgQFtIpv8uFVJCAlcdrQ6gE98jUPym1doZYt+GqjU94WXl0fOIZqYrW5bf1vw
+         DQv71EqYaU0hWeJ9oEB1BktmHrRUAEzkf8lSlmiUaI2Oq3F8lYGr9QtBMoH5qjI9ReTR
+         w78aPHRuwkmmqh4MvVfybuzF7QdDgrivtE47gWCWqCvg0ragNLa9delfVCVGNBnQb7Z6
+         lrxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679088841;
+        d=1e100.net; s=20210112; t=1679088854;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=YWw2v1UnTVnbdS72T7wGx5fNyybAmUxe9bUw37LCRvo=;
-        b=fvoJTAs1grpzOVprgPTyizQGWP8SQZxcxfJHsbyAMGhQ8Pbrc7rrR8jV1Q3Kkqxg7q
-         TVbwMpyViGlWtCNvDT4JnV+v/rsoCWWUMaS5N6ye+Bdb/iRyXlmwzfod3a4ug2y+Ro0g
-         vNFGYSHA+LJwXzXhABMWtIT8dLToXE71UnX57Vg3cMwx/dJRIMLDs1ASUB+1S9roIEvw
-         IaSwT/SzBBof7t8xZ/uTxNdVQTO/H6nNfJfrsa6lGhmw04feFXYUJT/PjqJ/DSD6kCkY
-         4CHQpb/Vn6jTZk6NA7FUaV0iIt/I7gi9z6170VJE3UR59BzTFZGjXu6qTrN2aZqV0sNv
-         iECA==
-X-Gm-Message-State: AO0yUKV+BZcFl/cnkwNypEDvIgKXeYT5t4p4FvEGgi4yf4MWfGoA6ykV
-        9qh4Ghry2uIbjZb3IC+0mf8=
-X-Google-Smtp-Source: AK7set94O+oaHyjhIU7+YxEozCc8PCEm3AqV/gZy35nCSnqfd8vw+u819uDUEAXPXUcSEztLpr4W+g==
-X-Received: by 2002:a17:90b:4f90:b0:23b:4bf6:bbfa with SMTP id qe16-20020a17090b4f9000b0023b4bf6bbfamr10391873pjb.11.1679088841085;
-        Fri, 17 Mar 2023 14:34:01 -0700 (PDT)
+        bh=0ptHP2lhItNL95igmnoTpFfZGEIfkLjzOV4nlaJyR3w=;
+        b=5lURyX0b+rgLjx473oMXBOoImVPGVpmtgjBHGvKmNHIuZUdFuHinD3izoM2kSuc2vC
+         afiYL8arjnj4MoQLzKTamZGgH0ACcQeO2dU3MvDdkq9URO0Xngz//2pWOXvbgSsMNGty
+         oH+gqYJovzaw2P4cs4bDit4DjhpPZgm5eyyu1DVQpr0EVkn6FXypQZt2tMo9Owq+1nuI
+         wJql5uiggLykwORbTg2TaDuhm5EZM3ALpZn4HTBWDSoqqBga0iFeJyrpxG5WMe20SmK1
+         YejPHB4y7AgJZiOMcxi8Xp1SBotn1DyXO2EMaC8+6A9tze4u5LEHagAduMhaHAm92D8U
+         ITXw==
+X-Gm-Message-State: AO0yUKUj53oQ4vB+amb+7HTVuflMK3htosT7wbvoUgW53glcLgr51pU+
+        YilxFd/xxgiK03DS5JQ1b5xnuvXpmDc=
+X-Google-Smtp-Source: AK7set+mZihIENNkd/k2iSntcY7BEOXkfColT5Yt7bbLCqwofrbplzguKmYZ9ilNFIe5iEUlM/4Nfg==
+X-Received: by 2002:a17:902:c944:b0:19c:94ad:cbe8 with SMTP id i4-20020a170902c94400b0019c94adcbe8mr11913651pla.36.1679088854326;
+        Fri, 17 Mar 2023 14:34:14 -0700 (PDT)
 Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id w23-20020a17090a15d700b00233b5d6b4b5sm5326472pjd.16.2023.03.17.14.34.00
+        by smtp.gmail.com with ESMTPSA id q12-20020a170902b10c00b0019a70a42b0asm1985258plr.169.2023.03.17.14.34.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 14:34:00 -0700 (PDT)
+        Fri, 17 Mar 2023 14:34:13 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
 From:   Tejun Heo <tj@kernel.org>
 To:     torvalds@linux-foundation.org, mingo@redhat.com,
@@ -62,9 +62,9 @@ To:     torvalds@linux-foundation.org, mingo@redhat.com,
         dschatzberg@meta.com, dskarlat@cs.cmu.edu, riel@surriel.com
 Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
         kernel-team@meta.com, Tejun Heo <tj@kernel.org>
-Subject: [PATCH 10/32] sched: Add @reason to sched_class->rq_{on|off}line()
-Date:   Fri, 17 Mar 2023 11:33:11 -1000
-Message-Id: <20230317213333.2174969-11-tj@kernel.org>
+Subject: [PATCH 17/32] sched_ext: Allow BPF schedulers to disallow specific tasks from joining SCHED_EXT
+Date:   Fri, 17 Mar 2023 11:33:18 -1000
+Message-Id: <20230317213333.2174969-18-tj@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230317213333.2174969-1-tj@kernel.org>
 References: <20230317213333.2174969-1-tj@kernel.org>
@@ -74,210 +74,231 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-->rq_{on|off}line are called either during CPU hotplug or cpuset partition
-updates. A planned BPF extensible sched_class wants to tell the BPF
-scheduler progs about CPU hotplug events in a way that's synchronized with
-rq state changes.
+BPF schedulers might not want to schedule certain tasks - e.g. kernel
+threads. This patch adds p->scx.disallow which can be set by BPF schedulers
+in such cases. The field can be changed anytime and setting it in
+ops.prep_enable() guarantees that the task can never be scheduled by
+sched_ext.
 
-As the BPF scheduler progs aren't necessarily affected by cpuset partition
-updates, we need a way to distinguish the two types of events. Let's add an
-argument to tell them apart.
+scx_example_qmap is updated with the -d option to disallow a specific PID:
 
-v2: Patch description updated to detail the expected use.
+  # echo $$
+  1092
+  # egrep '(policy)|(ext\.enabled)' /proc/self/sched
+  policy                                       :                    0
+  ext.enabled                                  :                    0
+  # ./set-scx 1092
+  # egrep '(policy)|(ext\.enabled)' /proc/self/sched
+  policy                                       :                    7
+  ext.enabled                                  :                    0
+
+Run "scx_example_qmap -d 1092" in another terminal.
+
+  # grep rejected /sys/kernel/debug/sched/ext
+  nr_rejected                   : 1
+  # egrep '(policy)|(ext\.enabled)' /proc/self/sched
+  policy                                       :                    0
+  ext.enabled                                  :                    0
+  # ./set-scx 1092
+  setparam failed for 1092 (Permission denied)
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
+Suggested-by: Barret Rhoden <brho@google.com>
 Reviewed-by: David Vernet <dvernet@meta.com>
 Acked-by: Josh Don <joshdon@google.com>
 Acked-by: Hao Luo <haoluo@google.com>
 Acked-by: Barret Rhoden <brho@google.com>
 ---
- kernel/sched/core.c     | 12 ++++++------
- kernel/sched/deadline.c |  4 ++--
- kernel/sched/fair.c     |  4 ++--
- kernel/sched/rt.c       |  4 ++--
- kernel/sched/sched.h    | 13 +++++++++----
- kernel/sched/topology.c |  4 ++--
- 6 files changed, 23 insertions(+), 18 deletions(-)
+ include/linux/sched/ext.h              | 12 ++++++++
+ kernel/sched/core.c                    |  4 +++
+ kernel/sched/ext.c                     | 38 ++++++++++++++++++++++++++
+ kernel/sched/ext.h                     |  3 ++
+ tools/sched_ext/scx_example_qmap.bpf.c |  4 +++
+ tools/sched_ext/scx_example_qmap.c     |  8 +++++-
+ 6 files changed, 68 insertions(+), 1 deletion(-)
 
+diff --git a/include/linux/sched/ext.h b/include/linux/sched/ext.h
+index 7a4d088a2378..da85bc3751ad 100644
+--- a/include/linux/sched/ext.h
++++ b/include/linux/sched/ext.h
+@@ -411,6 +411,18 @@ struct sched_ext_entity {
+ 	 */
+ 	u64			slice;
+ 
++	/*
++	 * If set, reject future sched_setscheduler(2) calls updating the policy
++	 * to %SCHED_EXT with -%EACCES.
++	 *
++	 * If set from ops.prep_enable() and the task's policy is already
++	 * %SCHED_EXT, which can happen while the BPF scheduler is being loaded
++	 * or by inhering the parent's policy during fork, the task's policy is
++	 * rejected and forcefully reverted to %SCHED_NORMAL. The number of such
++	 * events are reported through /sys/kernel/debug/sched_ext::nr_rejected.
++	 */
++	bool			disallow;	/* reject switching into SCX */
++
+ 	/* cold fields */
+ 	struct list_head	tasks_node;
+ };
 diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 59136fafa94c..aa63371aa84c 100644
+index 9f721df512f0..08a72f146f9d 100644
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
-@@ -9428,7 +9428,7 @@ static inline void balance_hotplug_wait(void)
- 
- #endif /* CONFIG_HOTPLUG_CPU */
- 
--void set_rq_online(struct rq *rq)
-+void set_rq_online(struct rq *rq, enum rq_onoff_reason reason)
- {
- 	if (!rq->online) {
- 		const struct sched_class *class;
-@@ -9438,19 +9438,19 @@ void set_rq_online(struct rq *rq)
- 
- 		for_each_class(class) {
- 			if (class->rq_online)
--				class->rq_online(rq);
-+				class->rq_online(rq, reason);
- 		}
+@@ -7665,6 +7665,10 @@ static int __sched_setscheduler(struct task_struct *p,
+ 		goto unlock;
  	}
- }
  
--void set_rq_offline(struct rq *rq)
-+void set_rq_offline(struct rq *rq, enum rq_onoff_reason reason)
- {
- 	if (rq->online) {
- 		const struct sched_class *class;
- 
- 		for_each_class(class) {
- 			if (class->rq_offline)
--				class->rq_offline(rq);
-+				class->rq_offline(rq, reason);
- 		}
- 
- 		cpumask_clear_cpu(rq->cpu, rq->rd->online);
-@@ -9546,7 +9546,7 @@ int sched_cpu_activate(unsigned int cpu)
- 	rq_lock_irqsave(rq, &rf);
- 	if (rq->rd) {
- 		BUG_ON(!cpumask_test_cpu(cpu, rq->rd->span));
--		set_rq_online(rq);
-+		set_rq_online(rq, RQ_ONOFF_HOTPLUG);
- 	}
- 	rq_unlock_irqrestore(rq, &rf);
- 
-@@ -9591,7 +9591,7 @@ int sched_cpu_deactivate(unsigned int cpu)
- 	if (rq->rd) {
- 		update_rq_clock(rq);
- 		BUG_ON(!cpumask_test_cpu(cpu, rq->rd->span));
--		set_rq_offline(rq);
-+		set_rq_offline(rq, RQ_ONOFF_HOTPLUG);
- 	}
- 	rq_unlock_irqrestore(rq, &rf);
- 
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index 71b24371a6f7..a7bb573c4c82 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -2518,7 +2518,7 @@ static void set_cpus_allowed_dl(struct task_struct *p,
- }
- 
- /* Assumes rq->lock is held */
--static void rq_online_dl(struct rq *rq)
-+static void rq_online_dl(struct rq *rq, enum rq_onoff_reason reason)
- {
- 	if (rq->dl.overloaded)
- 		dl_set_overload(rq);
-@@ -2529,7 +2529,7 @@ static void rq_online_dl(struct rq *rq)
- }
- 
- /* Assumes rq->lock is held */
--static void rq_offline_dl(struct rq *rq)
-+static void rq_offline_dl(struct rq *rq, enum rq_onoff_reason reason)
- {
- 	if (rq->dl.overloaded)
- 		dl_clear_overload(rq);
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 681ab0dd0bc1..28204472a3f1 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -11805,14 +11805,14 @@ void trigger_load_balance(struct rq *rq)
- 	nohz_balancer_kick(rq);
- }
- 
--static void rq_online_fair(struct rq *rq)
-+static void rq_online_fair(struct rq *rq, enum rq_onoff_reason reason)
- {
- 	update_sysctl();
- 
- 	update_runtime_enabled(rq);
- }
- 
--static void rq_offline_fair(struct rq *rq)
-+static void rq_offline_fair(struct rq *rq, enum rq_onoff_reason reason)
- {
- 	update_sysctl();
- 
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index 0a11f44adee5..2b4c769438a1 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -2473,7 +2473,7 @@ static void task_woken_rt(struct rq *rq, struct task_struct *p)
- }
- 
- /* Assumes rq->lock is held */
--static void rq_online_rt(struct rq *rq)
-+static void rq_online_rt(struct rq *rq, enum rq_onoff_reason reason)
- {
- 	if (rq->rt.overloaded)
- 		rt_set_overload(rq);
-@@ -2484,7 +2484,7 @@ static void rq_online_rt(struct rq *rq)
- }
- 
- /* Assumes rq->lock is held */
--static void rq_offline_rt(struct rq *rq)
-+static void rq_offline_rt(struct rq *rq, enum rq_onoff_reason reason)
- {
- 	if (rq->rt.overloaded)
- 		rt_clear_overload(rq);
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 67f7f1149630..958613dd8290 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -2183,6 +2183,11 @@ extern const u32		sched_prio_to_wmult[40];
- 
- #define RETRY_TASK		((void *)-1UL)
- 
-+enum rq_onoff_reason {
-+	RQ_ONOFF_HOTPLUG,		/* CPU is going on/offline */
-+	RQ_ONOFF_TOPOLOGY,		/* sched domain topology update */
-+};
++	retval = scx_check_setscheduler(p, policy);
++	if (retval)
++		goto unlock;
 +
- struct affinity_context {
- 	const struct cpumask *new_mask;
- 	struct cpumask *user_mask;
-@@ -2219,8 +2224,8 @@ struct sched_class {
+ 	/*
+ 	 * If not changing anything there's no need to proceed further,
+ 	 * but store a possible modification of reset_on_fork.
+diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
+index 92e0780b182f..52744d7dd181 100644
+--- a/kernel/sched/ext.c
++++ b/kernel/sched/ext.c
+@@ -1687,6 +1687,8 @@ static int scx_ops_prepare_task(struct task_struct *p, struct task_group *tg)
  
- 	void (*set_cpus_allowed)(struct task_struct *p, struct affinity_context *ctx);
+ 	WARN_ON_ONCE(p->scx.flags & SCX_TASK_OPS_PREPPED);
  
--	void (*rq_online)(struct rq *rq);
--	void (*rq_offline)(struct rq *rq);
-+	void (*rq_online)(struct rq *rq, enum rq_onoff_reason reason);
-+	void (*rq_offline)(struct rq *rq, enum rq_onoff_reason reason);
++	p->scx.disallow = false;
++
+ 	if (SCX_HAS_OP(prep_enable)) {
+ 		struct scx_enable_args args = { };
  
- 	struct rq *(*find_lock_rq)(struct task_struct *p, struct rq *rq);
- #endif
-@@ -2787,8 +2792,8 @@ static inline void double_rq_unlock(struct rq *rq1, struct rq *rq2)
- 	raw_spin_rq_unlock(rq1);
+@@ -1697,6 +1699,27 @@ static int scx_ops_prepare_task(struct task_struct *p, struct task_group *tg)
+ 		}
+ 	}
+ 
++	if (p->scx.disallow) {
++		struct rq *rq;
++		struct rq_flags rf;
++
++		rq = task_rq_lock(p, &rf);
++
++		/*
++		 * We're either in fork or load path and @p->policy will be
++		 * applied right after. Reverting @p->policy here and rejecting
++		 * %SCHED_EXT transitions from scx_check_setscheduler()
++		 * guarantees that if ops.prep_enable() sets @p->disallow, @p
++		 * can never be in SCX.
++		 */
++		if (p->policy == SCHED_EXT) {
++			p->policy = SCHED_NORMAL;
++			atomic64_inc(&scx_nr_rejected);
++		}
++
++		task_rq_unlock(rq, p, &rf);
++	}
++
+ 	p->scx.flags |= (SCX_TASK_OPS_PREPPED | SCX_TASK_WATCHDOG_RESET);
+ 	return 0;
  }
+@@ -1845,6 +1868,18 @@ static void switching_to_scx(struct rq *rq, struct task_struct *p)
+ static void check_preempt_curr_scx(struct rq *rq, struct task_struct *p,int wake_flags) {}
+ static void switched_to_scx(struct rq *rq, struct task_struct *p) {}
  
--extern void set_rq_online (struct rq *rq);
--extern void set_rq_offline(struct rq *rq);
-+extern void set_rq_online (struct rq *rq, enum rq_onoff_reason reason);
-+extern void set_rq_offline(struct rq *rq, enum rq_onoff_reason reason);
- extern bool sched_smp_initialized;
++int scx_check_setscheduler(struct task_struct *p, int policy)
++{
++	lockdep_assert_rq_held(task_rq(p));
++
++	/* if disallow, reject transitioning into SCX */
++	if (scx_enabled() && READ_ONCE(p->scx.disallow) &&
++	    p->policy != policy && policy == SCHED_EXT)
++		return -EACCES;
++
++	return 0;
++}
++
+ /*
+  * Omitted operations:
+  *
+@@ -2528,6 +2563,9 @@ static int bpf_scx_btf_struct_access(struct bpf_verifier_log *log,
+ 		if (off >= offsetof(struct task_struct, scx.slice) &&
+ 		    off + size <= offsetofend(struct task_struct, scx.slice))
+ 			return SCALAR_VALUE;
++		if (off >= offsetof(struct task_struct, scx.disallow) &&
++		    off + size <= offsetofend(struct task_struct, scx.disallow))
++			return SCALAR_VALUE;
+ 	}
  
- #else /* CONFIG_SMP */
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 051aaf65c749..155c4e7e0f08 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -495,7 +495,7 @@ void rq_attach_root(struct rq *rq, struct root_domain *rd)
- 		old_rd = rq->rd;
+ 	if (atype == BPF_READ)
+diff --git a/kernel/sched/ext.h b/kernel/sched/ext.h
+index 7dfa7b888487..76c94babd19e 100644
+--- a/kernel/sched/ext.h
++++ b/kernel/sched/ext.h
+@@ -67,6 +67,7 @@ void scx_pre_fork(struct task_struct *p);
+ int scx_fork(struct task_struct *p);
+ void scx_post_fork(struct task_struct *p);
+ void scx_cancel_fork(struct task_struct *p);
++int scx_check_setscheduler(struct task_struct *p, int policy);
+ void init_sched_ext_class(void);
  
- 		if (cpumask_test_cpu(rq->cpu, old_rd->online))
--			set_rq_offline(rq);
-+			set_rq_offline(rq, RQ_ONOFF_TOPOLOGY);
+ __printf(2, 3) void scx_ops_error_type(enum scx_exit_type type,
+@@ -121,6 +122,8 @@ static inline void scx_pre_fork(struct task_struct *p) {}
+ static inline int scx_fork(struct task_struct *p) { return 0; }
+ static inline void scx_post_fork(struct task_struct *p) {}
+ static inline void scx_cancel_fork(struct task_struct *p) {}
++static inline int scx_check_setscheduler(struct task_struct *p,
++					 int policy) { return 0; }
+ static inline void init_sched_ext_class(void) {}
+ static inline void scx_notify_sched_tick(void) {}
  
- 		cpumask_clear_cpu(rq->cpu, old_rd->span);
+diff --git a/tools/sched_ext/scx_example_qmap.bpf.c b/tools/sched_ext/scx_example_qmap.bpf.c
+index 2a969c68a2e4..0e4cccf878f5 100644
+--- a/tools/sched_ext/scx_example_qmap.bpf.c
++++ b/tools/sched_ext/scx_example_qmap.bpf.c
+@@ -27,6 +27,7 @@ char _license[] SEC("license") = "GPL";
+ const volatile u64 slice_ns = SCX_SLICE_DFL;
+ const volatile u32 stall_user_nth;
+ const volatile u32 stall_kernel_nth;
++const volatile s32 disallow_tgid;
  
-@@ -513,7 +513,7 @@ void rq_attach_root(struct rq *rq, struct root_domain *rd)
+ u32 test_error_cnt;
  
- 	cpumask_set_cpu(rq->cpu, rd->span);
- 	if (cpumask_test_cpu(rq->cpu, cpu_active_mask))
--		set_rq_online(rq);
-+		set_rq_online(rq, RQ_ONOFF_TOPOLOGY);
+@@ -224,6 +225,9 @@ void BPF_STRUCT_OPS(qmap_dispatch, s32 cpu, struct task_struct *prev)
+ s32 BPF_STRUCT_OPS(qmap_prep_enable, struct task_struct *p,
+ 		   struct scx_enable_args *args)
+ {
++	if (p->tgid == disallow_tgid)
++		p->scx.disallow = true;
++
+ 	/*
+ 	 * @p is new. Let's ensure that its task_ctx is available. We can sleep
+ 	 * in this function and the following will automatically use GFP_KERNEL.
+diff --git a/tools/sched_ext/scx_example_qmap.c b/tools/sched_ext/scx_example_qmap.c
+index 3f98534c2a9c..d080a0c853c0 100644
+--- a/tools/sched_ext/scx_example_qmap.c
++++ b/tools/sched_ext/scx_example_qmap.c
+@@ -20,12 +20,13 @@ const char help_fmt[] =
+ "\n"
+ "See the top-level comment in .bpf.c for more details.\n"
+ "\n"
+-"Usage: %s [-s SLICE_US] [-e COUNT] [-t COUNT] [-T COUNT]\n"
++"Usage: %s [-s SLICE_US] [-e COUNT] [-t COUNT] [-T COUNT] [-d PID]\n"
+ "\n"
+ "  -s SLICE_US   Override slice duration\n"
+ "  -e COUNT      Trigger scx_bpf_error() after COUNT enqueues\n"
+ "  -t COUNT      Stall every COUNT'th user thread\n"
+ "  -T COUNT      Stall every COUNT'th kernel thread\n"
++"  -d PID        Disallow a process from switching into SCHED_EXT (-1 for self)\n"
+ "  -h            Display this help and exit\n";
  
- 	raw_spin_rq_unlock_irqrestore(rq, flags);
- 
+ static volatile int exit_req;
+@@ -63,6 +64,11 @@ int main(int argc, char **argv)
+ 		case 'T':
+ 			skel->rodata->stall_kernel_nth = strtoul(optarg, NULL, 0);
+ 			break;
++		case 'd':
++			skel->rodata->disallow_tgid = strtol(optarg, NULL, 0);
++			if (skel->rodata->disallow_tgid < 0)
++				skel->rodata->disallow_tgid = getpid();
++			break;
+ 		default:
+ 			fprintf(stderr, help_fmt, basename(argv[0]));
+ 			return opt != 'h';
 -- 
 2.39.2
 
