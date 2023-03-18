@@ -2,327 +2,201 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E7E4C761A6
-	for <bpf@archiver.kernel.org>; Sat, 18 Mar 2023 05:57:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE59FC77B60
+	for <bpf@archiver.kernel.org>; Sat, 18 Mar 2023 06:09:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjCRF5K (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 18 Mar 2023 01:57:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41202 "EHLO
+        id S229588AbjCRGJD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 18 Mar 2023 02:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjCRF5J (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 18 Mar 2023 01:57:09 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E306CA7B9
-        for <bpf@vger.kernel.org>; Fri, 17 Mar 2023 22:57:07 -0700 (PDT)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 32I0F5oG025781
-        for <bpf@vger.kernel.org>; Fri, 17 Mar 2023 22:57:07 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=250zDJIaOCI/0NSrmRzvQLYeEZCXgM1J8p6NoY5yvAo=;
- b=U/iCgNBjnOdUuMDf+wf67Xe3HpLYMbQRX+XVNIDqRxUmA/Cu0KZ1Zwm6mEcS6WACkhdm
- Hb97dt5zPyFlSSDTTt/p1MPMX6HtMKZ1v048U96Gv6wvPJcOq70i9mzNLmeOQl76bPcC
- /SXjDwJ1n62RGS+1gq0yx4V/YDenqjvEJl0r/Ez/qD5dZZ5GF6MRFYNpJd68pPeslhML
- sC0BpVyQsDeGzqaAvF78mm4rpY0mndN9ZtxLMwb2sa8Q99KWinjV64LQVM5gVTF1KvZX
- R1RD0TlOeaShx+ZhTQArYqNMD0WWGeBu0nK84EMCtwH6onzmxfJBf02AsjC/xpEhID5V HQ== 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3pcndedww9-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 17 Mar 2023 22:57:07 -0700
-Received: from twshared15216.17.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Fri, 17 Mar 2023 22:57:04 -0700
-Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
-        id 65AC879EB02F; Fri, 17 Mar 2023 22:31:53 -0700 (PDT)
-From:   Kui-Feng Lee <kuifeng@meta.com>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <martin.lau@linux.dev>,
-        <song@kernel.org>, <kernel-team@meta.com>, <andrii@kernel.org>,
-        <sdf@google.com>
-CC:     Kui-Feng Lee <kuifeng@meta.com>
-Subject: [PATCH bpf-next v8 7/8] libbpf: Use .struct_ops.link section to indicate a struct_ops with a link.
-Date:   Fri, 17 Mar 2023 22:31:43 -0700
-Message-ID: <20230318053144.1180301-8-kuifeng@meta.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230318053144.1180301-1-kuifeng@meta.com>
-References: <20230318053144.1180301-1-kuifeng@meta.com>
+        with ESMTP id S229590AbjCRGJD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 18 Mar 2023 02:09:03 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D489F3B664;
+        Fri, 17 Mar 2023 23:08:59 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id y4so28161216edo.2;
+        Fri, 17 Mar 2023 23:08:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679119738;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kV6D6PWuyY+pzJCeIR0JhzUrH+GgDghjB9uU7AntUqA=;
+        b=ohCbefDAyCpU7VGBYqZpzJHtlEkbOY7Acj9MBcGEFIKZQ02InFEathyokeRbr/+LRi
+         5OaU4RFGmzKS4u7JBelbcT1IDEaXUuEjStkFDpvE45mo2RD1IUSwzC974CU2MgIGXnkI
+         g643/nyEUBUMu0xbJDTEJAUR9Syt+GIoMIYgaWga7pFQzMb4AALVIKcH1d+GVExOoZI5
+         /jdWvi8OKRx5/UJNVM8SBBJLg2oqE5HHWAS70YjOskmsToTtt2yzbeG7Djhfjm7XlIyk
+         qABY68h9/bSktn/pRHowHwANI2c2+bSCdHgZMJa/jupIa6QCDgMnP2IndATSAsbk3CN9
+         3Hzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679119738;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kV6D6PWuyY+pzJCeIR0JhzUrH+GgDghjB9uU7AntUqA=;
+        b=YRMX72YZBCOo+q0UY+4owasXSqitlBxmAKMIljc6TkJOHX+Eu/8hFcIt2/jkVLoPg2
+         WMeFNLwrVUfWCK5N0ORSWlhwNkY2jTKhzxt9O8iGnOOEaA4HQ4/7q5i/gc38iB5LdYfP
+         otSrwGL+aCwwa9E3SJer7S70jUhPOVvu1lBBt9XNOG7yXLDHeDBhfYTReOW3drE1dTja
+         BXnhgfih+7eBE0ZK1AdYjDdtbn87oD4ona3xJfZPYGmt++ila7ol/ZIxMabv6AradPta
+         3i9ArrT5OotD7AbWJFbYT0tYpbFD3AVTzV450KzsqUX/BhqCLGPWt45TN5JqiNsXlaFR
+         68hA==
+X-Gm-Message-State: AO0yUKXgASohUg1A8Tz7HoNJ/BXkasfXOvxzt51q88pOTii5EZhzwn0Q
+        SeUeb/i6yI+cKbHafiqml+KCUCVh9SdAKUwbB0E=
+X-Google-Smtp-Source: AK7set9vNfDYTp13qC3VLlkv2NKrpoWodSQ81WtPPKmcZNYmxSE0tQmMZA6FKAfCBAih1aFLohvSXIcdvr4MosOWD90=
+X-Received: by 2002:a17:906:b4b:b0:931:c1a:b526 with SMTP id
+ v11-20020a1709060b4b00b009310c1ab526mr814048ejg.5.1679119738091; Fri, 17 Mar
+ 2023 23:08:58 -0700 (PDT)
 MIME-Version: 1.0
+References: <20230316170149.4106586-1-jolsa@kernel.org> <ZBNTMZjEoETU9d8N@casper.infradead.org>
+ <CAP-5=fVYriALLwF2FU1ZUtLuHndnvPw=3SctVqY6Uwex8JfscA@mail.gmail.com>
+ <CAEf4BzYgyGTVv=cDwaW+DBke1uk_aLCg3CB_9W6+9tkS8Nyn_Q@mail.gmail.com>
+ <ZBPjs1b8crUv4ur6@casper.infradead.org> <CAEf4BzbPa-5b9uU0+GN=iaMGc6otje3iNQd+MOg_byTSYU8fEQ@mail.gmail.com>
+ <20230317211403.GZ3390869@ZenIV> <20230317212125.GA3390869@ZenIV>
+In-Reply-To: <20230317212125.GA3390869@ZenIV>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 17 Mar 2023 23:08:44 -0700
+Message-ID: <CAEf4BzYQ-bktO9s8yhBk7xUoz=2NFrgdGviWsN2=HWPBaGv6hA@mail.gmail.com>
+Subject: Re: [PATCHv3 bpf-next 0/9] mm/bpf/perf: Store build id in file object
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Hao Luo <haoluo@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        bpf@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Namhyung Kim <namhyung@gmail.com>,
+        Dave Chinner <david@fromorbit.com>, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: dBNXk_u6jTisnKIi2W3vl8IuLmX8eRNG
-X-Proofpoint-ORIG-GUID: dBNXk_u6jTisnKIi2W3vl8IuLmX8eRNG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-18_02,2023-03-16_02,2023-02-09_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Flags a struct_ops is to back a bpf_link by putting it to the
-".struct_ops.link" section.  Once it is flagged, the created
-struct_ops can be used to create a bpf_link or update a bpf_link that
-has been backed by another struct_ops.
+On Fri, Mar 17, 2023 at 2:21=E2=80=AFPM Al Viro <viro@zeniv.linux.org.uk> w=
+rote:
+>
+> On Fri, Mar 17, 2023 at 09:14:03PM +0000, Al Viro wrote:
+> > On Fri, Mar 17, 2023 at 09:33:17AM -0700, Andrii Nakryiko wrote:
+> >
+> > > > But build IDs are _generally_ available.  The only problem (AIUI)
+> > > > is when you're trying to examine the contents of one container from
+> > > > another container.  And to solve that problem, you're imposing a co=
+st
+> > > > on everybody else with (so far) pretty vague justifications.  I rea=
+lly
+> > > > don't like to see you growing struct file for this (nor struct inod=
+e,
+> > > > nor struct vm_area_struct).  It's all quite unsatisfactory and I do=
+n't
+> > > > have a good suggestion.
+> > >
+> > > There is a lot of profiling, observability and debugging tooling buil=
+t
+> > > using BPF. And when capturing stack traces from BPF programs, if the
+> > > build ID note is not physically present in memory, fetching it from
+> > > the BPF program might fail in NMI (and other non-faultable contexts).
+> > > This patch set is about making sure we always can fetch build ID, eve=
+n
+> > > from most restrictive environments. It's guarded by Kconfig to avoid
+> > > adding 8 bytes of overhead to struct file for environment where this
+> > > might be unacceptable, giving users and distros a choice.
+> >
+> > Lovely.  As an exercise you might want to collect the stats on the
+> > number of struct file instances on the system vs. the number of files
+> > that happen to be ELF objects and are currently mmapped anywhere.
 
-Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/lib/bpf/libbpf.c | 60 +++++++++++++++++++++++++++++++-----------
- 1 file changed, 44 insertions(+), 16 deletions(-)
+That's a good suggestion. I wrote a simple script that uses the drgn
+tool ([0]), it enables nice introspection of the state of the kernel
+memory for the running kernel. The script is at the bottom ([1]) for
+anyone to sanity check. I didn't try to figure out which file is
+mmaped as executable and which didn't, so let's do worst case and
+assume that none of the file is executable, and thus that 8 byte
+pointer is a waste for all of them.
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index f84d68c049e3..d801ab3a46d8 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -468,6 +468,7 @@ struct bpf_struct_ops {
- #define KCONFIG_SEC ".kconfig"
- #define KSYMS_SEC ".ksyms"
- #define STRUCT_OPS_SEC ".struct_ops"
-+#define STRUCT_OPS_LINK_SEC ".struct_ops.link"
-=20
- enum libbpf_map_type {
- 	LIBBPF_MAP_UNSPEC,
-@@ -597,6 +598,7 @@ struct elf_state {
- 	Elf64_Ehdr *ehdr;
- 	Elf_Data *symbols;
- 	Elf_Data *st_ops_data;
-+	Elf_Data *st_ops_link_data;
- 	size_t shstrndx; /* section index for section name strings */
- 	size_t strtabidx;
- 	struct elf_sec_desc *secs;
-@@ -606,6 +608,7 @@ struct elf_state {
- 	int text_shndx;
- 	int symbols_shndx;
- 	int st_ops_shndx;
-+	int st_ops_link_shndx;
- };
-=20
- struct usdt_manager;
-@@ -1119,7 +1122,8 @@ static int bpf_object__init_kern_struct_ops_maps(st=
-ruct bpf_object *obj)
- 	return 0;
- }
-=20
--static int bpf_object__init_struct_ops_maps(struct bpf_object *obj)
-+static int init_struct_ops_maps(struct bpf_object *obj, const char *sec_=
-name,
-+				int shndx, Elf_Data *data, __u32 map_flags)
- {
- 	const struct btf_type *type, *datasec;
- 	const struct btf_var_secinfo *vsi;
-@@ -1130,15 +1134,15 @@ static int bpf_object__init_struct_ops_maps(struc=
-t bpf_object *obj)
- 	struct bpf_map *map;
- 	__u32 i;
-=20
--	if (obj->efile.st_ops_shndx =3D=3D -1)
-+	if (shndx =3D=3D -1)
- 		return 0;
-=20
- 	btf =3D obj->btf;
--	datasec_id =3D btf__find_by_name_kind(btf, STRUCT_OPS_SEC,
-+	datasec_id =3D btf__find_by_name_kind(btf, sec_name,
- 					    BTF_KIND_DATASEC);
- 	if (datasec_id < 0) {
- 		pr_warn("struct_ops init: DATASEC %s not found\n",
--			STRUCT_OPS_SEC);
-+			sec_name);
- 		return -EINVAL;
- 	}
-=20
-@@ -1151,7 +1155,7 @@ static int bpf_object__init_struct_ops_maps(struct =
-bpf_object *obj)
- 		type_id =3D btf__resolve_type(obj->btf, vsi->type);
- 		if (type_id < 0) {
- 			pr_warn("struct_ops init: Cannot resolve var type_id %u in DATASEC %s=
-\n",
--				vsi->type, STRUCT_OPS_SEC);
-+				vsi->type, sec_name);
- 			return -EINVAL;
- 		}
-=20
-@@ -1170,7 +1174,7 @@ static int bpf_object__init_struct_ops_maps(struct =
-bpf_object *obj)
- 		if (IS_ERR(map))
- 			return PTR_ERR(map);
-=20
--		map->sec_idx =3D obj->efile.st_ops_shndx;
-+		map->sec_idx =3D shndx;
- 		map->sec_offset =3D vsi->offset;
- 		map->name =3D strdup(var_name);
- 		if (!map->name)
-@@ -1180,6 +1184,7 @@ static int bpf_object__init_struct_ops_maps(struct =
-bpf_object *obj)
- 		map->def.key_size =3D sizeof(int);
- 		map->def.value_size =3D type->size;
- 		map->def.max_entries =3D 1;
-+		map->def.map_flags =3D map_flags;
-=20
- 		map->st_ops =3D calloc(1, sizeof(*map->st_ops));
- 		if (!map->st_ops)
-@@ -1192,14 +1197,14 @@ static int bpf_object__init_struct_ops_maps(struc=
-t bpf_object *obj)
- 		if (!st_ops->data || !st_ops->progs || !st_ops->kern_func_off)
- 			return -ENOMEM;
-=20
--		if (vsi->offset + type->size > obj->efile.st_ops_data->d_size) {
-+		if (vsi->offset + type->size > data->d_size) {
- 			pr_warn("struct_ops init: var %s is beyond the end of DATASEC %s\n",
--				var_name, STRUCT_OPS_SEC);
-+				var_name, sec_name);
- 			return -EINVAL;
- 		}
-=20
- 		memcpy(st_ops->data,
--		       obj->efile.st_ops_data->d_buf + vsi->offset,
-+		       data->d_buf + vsi->offset,
- 		       type->size);
- 		st_ops->tname =3D tname;
- 		st_ops->type =3D type;
-@@ -1212,6 +1217,19 @@ static int bpf_object__init_struct_ops_maps(struct=
- bpf_object *obj)
- 	return 0;
- }
-=20
-+static int bpf_object_init_struct_ops(struct bpf_object *obj)
-+{
-+	int err;
-+
-+	err =3D init_struct_ops_maps(obj, STRUCT_OPS_SEC, obj->efile.st_ops_shn=
-dx,
-+				   obj->efile.st_ops_data, 0);
-+	err =3D err ?: init_struct_ops_maps(obj, STRUCT_OPS_LINK_SEC,
-+					  obj->efile.st_ops_link_shndx,
-+					  obj->efile.st_ops_link_data,
-+					  BPF_F_LINK);
-+	return err;
-+}
-+
- static struct bpf_object *bpf_object__new(const char *path,
- 					  const void *obj_buf,
- 					  size_t obj_buf_sz,
-@@ -1248,6 +1266,7 @@ static struct bpf_object *bpf_object__new(const cha=
-r *path,
- 	obj->efile.obj_buf_sz =3D obj_buf_sz;
- 	obj->efile.btf_maps_shndx =3D -1;
- 	obj->efile.st_ops_shndx =3D -1;
-+	obj->efile.st_ops_link_shndx =3D -1;
- 	obj->kconfig_map_idx =3D -1;
-=20
- 	obj->kern_version =3D get_kernel_version();
-@@ -1265,6 +1284,7 @@ static void bpf_object__elf_finish(struct bpf_objec=
-t *obj)
- 	obj->efile.elf =3D NULL;
- 	obj->efile.symbols =3D NULL;
- 	obj->efile.st_ops_data =3D NULL;
-+	obj->efile.st_ops_link_data =3D NULL;
-=20
- 	zfree(&obj->efile.secs);
- 	obj->efile.sec_cnt =3D 0;
-@@ -2619,7 +2639,7 @@ static int bpf_object__init_maps(struct bpf_object =
-*obj,
- 	err =3D bpf_object__init_user_btf_maps(obj, strict, pin_root_path);
- 	err =3D err ?: bpf_object__init_global_data_maps(obj);
- 	err =3D err ?: bpf_object__init_kconfig_map(obj);
--	err =3D err ?: bpf_object__init_struct_ops_maps(obj);
-+	err =3D err ?: bpf_object_init_struct_ops(obj);
-=20
- 	return err;
- }
-@@ -2753,12 +2773,13 @@ static bool libbpf_needs_btf(const struct bpf_obj=
-ect *obj)
- {
- 	return obj->efile.btf_maps_shndx >=3D 0 ||
- 	       obj->efile.st_ops_shndx >=3D 0 ||
-+	       obj->efile.st_ops_link_shndx >=3D 0 ||
- 	       obj->nr_extern > 0;
- }
-=20
- static bool kernel_needs_btf(const struct bpf_object *obj)
- {
--	return obj->efile.st_ops_shndx >=3D 0;
-+	return obj->efile.st_ops_shndx >=3D 0 || obj->efile.st_ops_link_shndx >=
-=3D 0;
- }
-=20
- static int bpf_object__init_btf(struct bpf_object *obj,
-@@ -3451,6 +3472,9 @@ static int bpf_object__elf_collect(struct bpf_objec=
-t *obj)
- 			} else if (strcmp(name, STRUCT_OPS_SEC) =3D=3D 0) {
- 				obj->efile.st_ops_data =3D data;
- 				obj->efile.st_ops_shndx =3D idx;
-+			} else if (strcmp(name, STRUCT_OPS_LINK_SEC) =3D=3D 0) {
-+				obj->efile.st_ops_link_data =3D data;
-+				obj->efile.st_ops_link_shndx =3D idx;
- 			} else {
- 				pr_info("elf: skipping unrecognized data section(%d) %s\n",
- 					idx, name);
-@@ -3465,6 +3489,7 @@ static int bpf_object__elf_collect(struct bpf_objec=
-t *obj)
- 			/* Only do relo for section with exec instructions */
- 			if (!section_have_execinstr(obj, targ_sec_idx) &&
- 			    strcmp(name, ".rel" STRUCT_OPS_SEC) &&
-+			    strcmp(name, ".rel" STRUCT_OPS_LINK_SEC) &&
- 			    strcmp(name, ".rel" MAPS_ELF_SEC)) {
- 				pr_info("elf: skipping relo section(%d) %s for section(%d) %s\n",
- 					idx, name, targ_sec_idx,
-@@ -6611,7 +6636,7 @@ static int bpf_object__collect_relos(struct bpf_obj=
-ect *obj)
- 			return -LIBBPF_ERRNO__INTERNAL;
- 		}
-=20
--		if (idx =3D=3D obj->efile.st_ops_shndx)
-+		if (idx =3D=3D obj->efile.st_ops_shndx || idx =3D=3D obj->efile.st_ops=
-_link_shndx)
- 			err =3D bpf_object__collect_st_ops_relos(obj, shdr, data);
- 		else if (idx =3D=3D obj->efile.btf_maps_shndx)
- 			err =3D bpf_object__collect_map_relos(obj, shdr, data);
-@@ -8850,6 +8875,7 @@ const char *libbpf_bpf_prog_type_str(enum bpf_prog_=
-type t)
- }
-=20
- static struct bpf_map *find_struct_ops_map_by_offset(struct bpf_object *=
-obj,
-+						     int sec_idx,
- 						     size_t offset)
- {
- 	struct bpf_map *map;
-@@ -8859,7 +8885,8 @@ static struct bpf_map *find_struct_ops_map_by_offse=
-t(struct bpf_object *obj,
- 		map =3D &obj->maps[i];
- 		if (!bpf_map__is_struct_ops(map))
- 			continue;
--		if (map->sec_offset <=3D offset &&
-+		if (map->sec_idx =3D=3D sec_idx &&
-+		    map->sec_offset <=3D offset &&
- 		    offset - map->sec_offset < map->def.value_size)
- 			return map;
- 	}
-@@ -8901,7 +8928,7 @@ static int bpf_object__collect_st_ops_relos(struct =
-bpf_object *obj,
- 		}
-=20
- 		name =3D elf_sym_str(obj, sym->st_name) ?: "<?>";
--		map =3D find_struct_ops_map_by_offset(obj, rel->r_offset);
-+		map =3D find_struct_ops_map_by_offset(obj, shdr->sh_info, rel->r_offse=
-t);
- 		if (!map) {
- 			pr_warn("struct_ops reloc: cannot find map at rel->r_offset %zu\n",
- 				(size_t)rel->r_offset);
-@@ -8968,8 +8995,9 @@ static int bpf_object__collect_st_ops_relos(struct =
-bpf_object *obj,
- 		}
-=20
- 		/* struct_ops BPF prog can be re-used between multiple
--		 * .struct_ops as long as it's the same struct_ops struct
--		 * definition and the same function pointer field
-+		 * .struct_ops & .struct_ops.link as long as it's the
-+		 * same struct_ops struct definition and the same
-+		 * function pointer field
- 		 */
- 		if (prog->attach_btf_id !=3D st_ops->type_id ||
- 		    prog->expected_attach_type !=3D member_idx) {
---=20
-2.34.1
+On my devserver I got:
 
+task_cnt=3D15984 uniq_file_cnt=3D56780
+
+On randomly chosen production host I got:
+
+task_cnt=3D6387 uniq_file_cnt=3D22514
+
+So it seems like my devserver is "busier" than the production host. :)
+
+Above numbers suggest that my devserver's kernel has about 57000
+*unique* `struct file *` instances. That's 450KB of overhead. That's
+not much by any modern standard.
+
+But let's say I'm way off, and we have 1 million struct files. That's
+8MB overhead. I'd argue that those 8MB is not a big deal even on a
+normal laptop, even less so on production servers. Especially if you
+have 1 million active struct file instances created in the system, as
+way more will be used for application-specific needs.
+
+
+> > That does depend upon the load, obviously, but it's not hard to collect=
+ -
+> > you already have more than enough hooks inserted in the relevant places=
+.
+> > That might give a better appreciation of the reactions...
+>
+> One possibility would be a bit stolen from inode flags + hash keyed by
+> struct inode address (middle bits make for a decent hash function);
+> inode eviction would check that bit and kick the corresponding thing
+> from hash if the bit is set.
+>
+> Associating that thing with inode =3D> hash lookup/insert + set the bit.
+
+This is an interesting idea, but now we are running into a few
+unnecessary problems. We need to have a global dynamically sized hash
+map in the system. If we fix the number of buckets, we risk either
+wasting memory on an underutilized system (if we oversize), or
+performance problems due to collisions (if we undersize) if we have a
+busy system with lots of executables mapped in memory. If we don't
+pre-size, then we are talking about reallocations, rehashing, and
+doing that under global lock or something like that. Further, we'd
+have to take locks on buckets, which causes further problems for
+looking up build ID from this hashmap in NMI context for perf events
+and BPF programs, as locks can't be safely taken under those
+conditions, and thus fetching build ID would still be unreliable
+(though less so than it is today, of course).
+
+All of this is solvable to some degree (but not perfectly and not with
+simple and elegant approaches), but seems like an unnecessarily
+overcomplication compared to the amount of memory that we hope to
+save. It still feels like a Kconfig-guarded 8 byte field per struct
+file is a reasonable price for gaining reliable build ID information
+for profiling/tracing tools.
+
+
+  [0] https://drgn.readthedocs.io/en/latest/index.html
+
+  [1] Script I used:
+
+from drgn.helpers.linux.pid import for_each_task
+from drgn.helpers.linux.fs import for_each_file
+
+task_cnt =3D 0
+file_set =3D set()
+
+for task in for_each_task(prog):
+    task_cnt +=3D 1
+    try:
+        for (fd, file) in for_each_file(task):
+            file_set.add(file.value_())
+    except:
+        pass
+
+uniq_file_cnt =3D len(file_set)
+print(f"task_cnt=3D{task_cnt} uniq_file_cnt=3D{uniq_file_cnt}")
