@@ -2,114 +2,105 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8186C7618A
-	for <bpf@archiver.kernel.org>; Mon, 20 Mar 2023 01:28:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 335E6C6FD1F
+	for <bpf@archiver.kernel.org>; Mon, 20 Mar 2023 03:07:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjCTB2N (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 19 Mar 2023 21:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33860 "EHLO
+        id S229493AbjCTDHe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 19 Mar 2023 23:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbjCTB1v (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 19 Mar 2023 21:27:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C61425294;
-        Sun, 19 Mar 2023 18:20:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45588B80D44;
-        Mon, 20 Mar 2023 00:54:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78F13C4339B;
-        Mon, 20 Mar 2023 00:54:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679273673;
-        bh=CDjeeZ1RdIAASgt1N4rP5Uw1t49BKchPFbEVdT+waE4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r5y4CKs3V+8WgmqXqAe/I0++CZp4cSyz2Re4sPQoMItV71RNuNCNAhegk2/G/HmhC
-         aim2RP3+H9pPCL+6ZIGBovnEyrIL0JXIhmp3OZPMH574U1CW0cFzJqglFo39bt6gdv
-         Q1LVtSlSZO7bRj/FLITcRmnRMkRMWY6a9NmM1kqzQYVE25Ds58H08wDQyldnIBZAOn
-         GOicYer4OV3I1UryzRV+6ETArIv1Y0+pUkCJOEbyWUqM92Cpx6e13yp3d+bpWVoK1Z
-         f0+E1VrQ1ueZSZb03SbHA51SvdV9jnkOoNaj5as1jtBrZM57xTIrOP4MuXgeqg22Zy
-         OfkSY1OVQkHVQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Lorenz Bauer <lorenz.bauer@isovalent.com>,
-        Lorenz Bauer <lmb@isovalent.com>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, andrii@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, shuah@kernel.org, yhs@fb.com,
-        eddyz87@gmail.com, sdf@google.com, iii@linux.ibm.com,
-        memxor@gmail.com, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 08/29] selftests/bpf: check that modifier resolves after pointer
-Date:   Sun, 19 Mar 2023 20:53:50 -0400
-Message-Id: <20230320005413.1428452-8-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230320005413.1428452-1-sashal@kernel.org>
-References: <20230320005413.1428452-1-sashal@kernel.org>
+        with ESMTP id S229572AbjCTDHc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 19 Mar 2023 23:07:32 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F41D61B54A
+        for <bpf@vger.kernel.org>; Sun, 19 Mar 2023 20:07:27 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so10932602pjz.1
+        for <bpf@vger.kernel.org>; Sun, 19 Mar 2023 20:07:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679281647;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kg5Vif5X/yN6y3sF4oGlRb5yrLSkawXHL1PPLVWYUvc=;
+        b=fKvK6spjI3vl1MDXygqxuU7Un9/V04mkXSx0pCwGNLm7FtUOhVzMDewHjjCGXB1in0
+         VjOZxKZeyoPZvL3LBZJiH3UYrNPEln6lACROqvN3g88wG1Sh1BPLr8EbPqnZ9XN/7LUG
+         us+IwO27jE7yPCBy2lYwF1yw7uwsHYYJvhbO9FPh7WNxk6N2B3eVP7Vwpj2MdK3ytfAE
+         FWPJBVwoaZJB+l3sZL5GFIoDYyUj7rvYYq5Pr407h9t0Jb8BvFxMyy/tA4pjjSsn9LiA
+         SPhqa1PbBM9S+SL5tQTuhYjT9lWkSWCB28b99Iifv8ohcHEV+s0y2NpbJ5LPwV0srGex
+         ZWhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679281647;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kg5Vif5X/yN6y3sF4oGlRb5yrLSkawXHL1PPLVWYUvc=;
+        b=ZUUzDavy1ZMMMkdzB4mcQ1N1s399EGzBbBvbixwRPC6TNdqeIIGRPwdHbYt5qQ0+1S
+         +5e7lDvFzI31lzG4hpoRKOy+j9M6SU5TOhcf4bgsSdGP9VXqfnhMWfYxmvzI7ypsqLgc
+         C0JpUpk1ot2PUtVt9QKUSx9/who820XJssTte/4WGA/dASvIW7TSH7kD3Jk0/ph8tqYg
+         5M5rDd4g/qSzx9d0PsnItPyoc9ULWJbZMLKkKfrQafuoNcBiGDbubMIV1/ZLQlP0pjVQ
+         JreS+ag1XwmLXrQv0XIWOkMrhxCkZ4t41ckBNLJJEyLs0JFhRHbRPYQK5TDPhV7UWTe1
+         gbdw==
+X-Gm-Message-State: AO0yUKWeLkbZctxI32PFrYtwKeRmWG66NixO6D1IO6niX0wPW5saKW8H
+        gajZxZN65iHmlZfNrJWfnqiatcmjcZECCA==
+X-Google-Smtp-Source: AK7set/o7K21bpmmZTgY3hNd/okOC+iuf003R9c0rpAnrnpNRgckWV9NSF/+7D7oYa79vvb33JMADQ==
+X-Received: by 2002:a17:90a:5:b0:234:4187:1acc with SMTP id 5-20020a17090a000500b0023441871accmr11127166pja.19.1679281646688;
+        Sun, 19 Mar 2023 20:07:26 -0700 (PDT)
+Received: from localhost.localdomain (212.50.246.164.16clouds.com. [212.50.246.164])
+        by smtp.gmail.com with ESMTPSA id ch7-20020a17090af40700b0023cd53e7706sm8506736pjb.47.2023.03.19.20.07.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Mar 2023 20:07:26 -0700 (PDT)
+From:   Liu Pan <patteliu@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     Liu Pan <patteliu@gmail.com>
+Subject: [PATCH v1] libbpf: Explicitly call write to append content to file
+Date:   Mon, 20 Mar 2023 11:07:20 +0800
+Message-Id: <20230320030720.650-1-patteliu@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Lorenz Bauer <lorenz.bauer@isovalent.com>
+Write data to fd by calling "vdprintf", in most implementations
+of the standard library, the data is finally written by the writev syscall.
+But "uprobe_events/kprobe_events" does not allow segmented writes,
+so switch the "append_to_file" function to explicit write() call.
 
-[ Upstream commit dfdd608c3b365f0fd49d7e13911ebcde06b9865b ]
-
-Add a regression test that ensures that a VAR pointing at a
-modifier which follows a PTR (or STRUCT or ARRAY) is resolved
-correctly by the datasec validator.
-
-Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
-Link: https://lore.kernel.org/r/20230306112138.155352-3-lmb@isovalent.com
-Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Liu Pan <patteliu@gmail.com>
 ---
- tools/testing/selftests/bpf/prog_tests/btf.c | 28 ++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ tools/lib/bpf/libbpf.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
-index 24dd6214394e0..d711f4bea98ea 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf.c
-@@ -879,6 +879,34 @@ static struct btf_raw_test raw_tests[] = {
- 	.btf_load_err = true,
- 	.err_str = "Invalid elem",
- },
-+{
-+	.descr = "var after datasec, ptr followed by modifier",
-+	.raw_types = {
-+		/* .bss section */				/* [1] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 2),
-+			sizeof(void*)+4),
-+		BTF_VAR_SECINFO_ENC(4, 0, sizeof(void*)),
-+		BTF_VAR_SECINFO_ENC(6, sizeof(void*), 4),
-+		/* int */					/* [2] */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),
-+		/* int* */					/* [3] */
-+		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_PTR, 0, 0), 2),
-+		BTF_VAR_ENC(NAME_TBD, 3, 0),			/* [4] */
-+		/* const int */					/* [5] */
-+		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_CONST, 0, 0), 2),
-+		BTF_VAR_ENC(NAME_TBD, 5, 0),			/* [6] */
-+		BTF_END_RAW,
-+	},
-+	.str_sec = "\0a\0b\0c\0",
-+	.str_sec_size = sizeof("\0a\0b\0c\0"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = ".bss",
-+	.key_size = sizeof(int),
-+	.value_size = sizeof(void*)+4,
-+	.key_type_id = 0,
-+	.value_type_id = 1,
-+	.max_entries = 1,
-+},
- /* Test member exceeds the size of struct.
-  *
-  * struct A {
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index a557718401e4..7d865ca95c81 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -9912,16 +9912,20 @@ static int append_to_file(const char *file, const char *fmt, ...)
+ {
+ 	int fd, n, err = 0;
+ 	va_list ap;
++	char buf[1024];
++
++	va_start(ap, fmt);
++	n = vsnprintf(buf, sizeof(buf), fmt, ap);
++	va_end(ap);
++
++	if (n < 0 || n >= sizeof(buf))
++		return -EINVAL;
+ 
+ 	fd = open(file, O_WRONLY | O_APPEND | O_CLOEXEC, 0);
+ 	if (fd < 0)
+ 		return -errno;
+ 
+-	va_start(ap, fmt);
+-	n = vdprintf(fd, fmt, ap);
+-	va_end(ap);
+-
+-	if (n < 0)
++	if (write(fd, buf, n) < 0)
+ 		err = -errno;
+ 
+ 	close(fd);
 -- 
-2.39.2
+2.20.1
 
