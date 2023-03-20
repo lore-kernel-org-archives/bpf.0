@@ -2,104 +2,58 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26EF4C6FD1C
-	for <bpf@archiver.kernel.org>; Mon, 20 Mar 2023 19:32:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B8E9C761A6
+	for <bpf@archiver.kernel.org>; Mon, 20 Mar 2023 19:32:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230436AbjCTTcD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 20 Mar 2023 15:32:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40870 "EHLO
+        id S229548AbjCTTcF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 20 Mar 2023 15:32:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbjCTTbX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 20 Mar 2023 15:31:23 -0400
+        with ESMTP id S230151AbjCTTbd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 20 Mar 2023 15:31:33 -0400
 Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D231ACF9
-        for <bpf@vger.kernel.org>; Mon, 20 Mar 2023 12:24:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B6D1025F
+        for <bpf@vger.kernel.org>; Mon, 20 Mar 2023 12:24:27 -0700 (PDT)
 Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 32KH7VHc015190
-        for <bpf@vger.kernel.org>; Mon, 20 Mar 2023 12:24:22 -0700
+        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 32KH7X3u015216
+        for <bpf@vger.kernel.org>; Mon, 20 Mar 2023 12:24:26 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=s2048-2021-q4;
- bh=2XKew6Qt7ahCguRH0gt1ynAdJqRurJvbAvz7eCOM9Zk=;
- b=bEIM8bWKG0Mr+Dzfzxtt/JfeWvco/NGuu57XHVWWwC4O1iwSyjiqBgt2FEge69+qTAmb
- 9PQk4Zom3FPurAaPxBalc7u+dGJXVXZC2A2unZ5LN+XFbQwBtWvFmP0qqkEZ2AGoRXmi
- prPExfrMZd97e0FT0AY3JDTrFJTwqQum/WLo9mpVfJsdhLtd15zkafAH/mGCicVzL+bG
- 7+WnFWNOHMz1Pgkv3a+t+nDd3j51sRGm01e28EoaSqA3qaliaDCKBjMGKbaEGx7AjJtV
- ybDDaXGRIYZ2xDB2krnDrY58jXcPa7TWUJt7u8WW8iDglM2hje4vJfTjT8PhIgMvVhUu pQ== 
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2045.outbound.protection.outlook.com [104.47.57.45])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3pd8tbuq7g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 20 Mar 2023 12:24:22 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FoxH+ohPuU86fZHecOfXe7mj9GQjsLF9M+/3vL+8fTZMqozjqPZHTI8/kIr4XH2cpnZZUDRJjIFxSzi03+L1CbAWQd+CNxCQEomSw3zzEj6AvBC2KJywVV59uRXELVAsLtg3fEJSvaW4necoOOSnLwHI2Z300BFHUbcEqrxxhp8Tf7HKYDKRGu0vwtGIs6GTrp2kZqwpZDQBsxvF2uvbSjsWXyQY0uLU5zAPIdY09LFLW5kiSgRZy7wID92mcXrz7xQWk/UNcGROM603uEBiQ0ha6OuGm8wXX2JQlw0k4r1YQ25l6ux/2qLeGPjPwat717e8cMkuMCMlOl1NkdzXhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d+SfDJzHITrUcq6lr1ylKxlR/OiW+zVDK4zrmbvcXhw=;
- b=cl03CI2cwvuQ2etvK9PtlbQSsA8CZdnQQufBxCkeR+Mi/Iqk2VnUrhdeFmzHsB4qY8vG51laogXlVoCrXlcOJ+8lUtzCTnWP7bf7XWL3ofUYxQCcIpWLCVVsfq8rDPzGITQyFppOHECOYQ2ymo/SawseShsaG/xbFIhkmVTOKBueOEsatmFqYYQxio1YbLKUWPolcPiCm1s/CUMs8JhOznnfAyrrWzhI97VVMn/vQ7kABplA5boej2giwPqJ52m5pypYOQMTV4FJGKOoQ9ObZjxDpHH7538GYiJjxSpR1//w18nXHNXlDtW5ptg3ahRvnyBcYV5BiNg2fzKHRxbK/g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 69.171.232.181) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=meta.com;
- dmarc=fail (p=reject sp=reject pct=100) action=oreject header.from=meta.com;
- dkim=none (message not signed); arc=none
-Received: from DM6PR03CA0073.namprd03.prod.outlook.com (2603:10b6:5:333::6) by
- MN6PR15MB5978.namprd15.prod.outlook.com (2603:10b6:208:47a::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.37; Mon, 20 Mar 2023 19:24:16 +0000
-Received: from DM6NAM12FT093.eop-nam12.prod.protection.outlook.com
- (2603:10b6:5:333:cafe::18) by DM6PR03CA0073.outlook.office365.com
- (2603:10b6:5:333::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37 via Frontend
- Transport; Mon, 20 Mar 2023 19:24:20 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 69.171.232.181)
- smtp.mailfrom=meta.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=oreject header.from=meta.com;
-Received-SPF: Fail (protection.outlook.com: domain of meta.com does not
- designate 69.171.232.181 as permitted sender)
- receiver=protection.outlook.com; client-ip=69.171.232.181;
- helo=69-171-232-181.mail-mxout.facebook.com;
-Received: from 69-171-232-181.mail-mxout.facebook.com (69.171.232.181) by
- DM6NAM12FT093.mail.protection.outlook.com (10.13.179.20) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6222.11 via Frontend Transport; Mon, 20 Mar 2023 19:24:20 +0000
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=s2048-2021-q4;
+ bh=BjQy3aUUufJ+026SPDGyGiUVo6uCwdZYOChPF0HQ8Ko=;
+ b=Ct9FK/tmELd2IbZ3ST/whZdUvOuv8S1yvsKKvK8cu/3EUO1tp9PTf3WCFDWsIRpjBWkg
+ SNNabvVCS+eYQVL6HR33czIPkh2XXIr8go4N0BKeKZiiLCnkNp2SrUmDvi6qiG4lV+4t
+ ZKiC5s3BVM7BIc9oqwrMzI0pMTkoWGD1vbNzjjiSI65/5Xkv0QZcfr/bo3Ko6zpSpXNZ
+ 6jYUfAUoeLjMmogdyZA8WHIUpzkTohIRNTtYgvNi4LsXTwdFw8eFOB3e0rUw2wZSOCbs
+ ILuxpE3fEhS6jx5atA734WbBXzq4ulTXjPsXUdq9AN5LGqHxRmQ5UhCSIVjrH6cUKEU5 Nw== 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3pd8tbuq7a-8
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 20 Mar 2023 12:24:26 -0700
+Received: from twshared21760.39.frc1.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Mon, 20 Mar 2023 12:24:20 -0700
 Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
-        id 92FB07D435F9; Mon, 20 Mar 2023 12:24:12 -0700 (PDT)
+        id A93D17D435FD; Mon, 20 Mar 2023 12:24:12 -0700 (PDT)
 From:   Kui-Feng Lee <kuifeng@meta.com>
-To:     bpf@vger.kernel.org, ast@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, kernel-team@meta.com, andrii@kernel.org,
-        sdf@google.com
-Cc:     Kui-Feng Lee <kuifeng@meta.com>
-Subject: [PATCH bpf-next v9 0/8] Transit between BPF TCP congestion controls.
-Date:   Mon, 20 Mar 2023 12:24:02 -0700
-Message-Id: <20230320192410.1624645-1-kuifeng@meta.com>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <martin.lau@linux.dev>,
+        <song@kernel.org>, <kernel-team@meta.com>, <andrii@kernel.org>,
+        <sdf@google.com>
+CC:     Kui-Feng Lee <kuifeng@meta.com>, <netdev@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>
+Subject: [PATCH bpf-next v9 2/8] net: Update an existing TCP congestion control algorithm.
+Date:   Mon, 20 Mar 2023 12:24:04 -0700
+Message-ID: <20230320192410.1624645-3-kuifeng@meta.com>
 X-Mailer: git-send-email 2.34.1
-X-FB-Internal: Safe
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM12FT093:EE_|MN6PR15MB5978:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 29d1b3e4-e736-48e0-331e-08db2978b45d
-X-ETR:  Bypass spam filtering
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LYQYMsxsMEMmuFO1CQI5FhwebU2fgeB/Eea2sS706XEg66b5AwucfYoxKdoZ8R+WyM5F4WRWyTCzpL6W1GJpBAqhx/K4cn4Uo4S+OQGp8Y2uGr6GXfv87U1FGyr8X+5s4dMxehO8lThetjGnMXOZhuKcZXnNJsj4FFlCN/semiBMQTunaSElbo8XoS/uE7nqPd04NYlFzr6uM2YAYZz0KyQTGUMJDCCV1DJOCfZbSpLYJQUY81Vj97fdsB3Q92+LUZNpM4m6dKPdPGPEqXcdEV8jZTlwvjqEF/EDz9RNPvhiTiO3il/3E765cCNMifXjByOCfibNS/YQd21QyhrCGqvZBd4Q4qjVSU8eqVBk4nbLQ1A65rNTTPFaKRCFWMV3kLu7fTHGg/7LSRo4WEA1901xP+fyk79aQbNSObnnF2xHqHnUIIEE8m/9pbmpc8WzhguVMKjEG1Hp48zpkCAY852kJrlrR8hN/wfXfTNN3UIQwV81noodc57vGpXplIorEGQKhsVj45vYdAwWtMS7R+rKHgLyxHcwWjTu3tyLdTrMR6gyxPJcXaou1yPhnOqRKOyptYUXiv0EbxxckQD/S/17fRhQZEcFgM8aThGgwbJz81dkR4bGKMHeFHEnApTf03vW8bCBvcrEKuxX1fFGxnzGziIM/53YAuMd4fxtixW2C9q5WDa37lb/GcGnbK1Ug90Ou7Nopu4n8IbZAdILZAFhTisj2wKj8xXYMACrTjs=
-X-Forefront-Antispam-Report: CIP:69.171.232.181;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:69-171-232-181.mail-mxout.facebook.com;PTR:69-171-232-181.mail-mxout.facebook.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(136003)(396003)(376002)(451199018)(36840700001)(40470700004)(46966006)(356005)(2616005)(6666004)(336012)(107886003)(966005)(33570700077)(26005)(6266002)(186003)(1076003)(47076005)(7636003)(7596003)(2906002)(40460700003)(478600001)(82740400003)(83380400001)(86362001)(82310400005)(316002)(42186006)(40480700001)(8676002)(5660300002)(4326008)(41300700001)(8936002)(36756003)(70206006)(36860700001);DIR:OUT;SFP:1501;
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 19:24:20.0784
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 29d1b3e4-e736-48e0-331e-08db2978b45d
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=8ae927fe-1255-47a7-a2af-5f3a069daaa2;Ip=[69.171.232.181];Helo=[69-171-232-181.mail-mxout.facebook.com]
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-DM6NAM12FT093.eop-nam12.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR15MB5978
-X-Proofpoint-ORIG-GUID: tZE1zOspn_keCPwTxasMlO3ti2JW8S6B
-X-Proofpoint-GUID: tZE1zOspn_keCPwTxasMlO3ti2JW8S6B
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+In-Reply-To: <20230320192410.1624645-1-kuifeng@meta.com>
+References: <20230320192410.1624645-1-kuifeng@meta.com>
 MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: whabF2CLGwz65UrlH0NPS6HvqL8-E-ZC
+X-Proofpoint-GUID: whabF2CLGwz65UrlH0NPS6HvqL8-E-ZC
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-20_16,2023-03-20_02,2023-02-09_01
@@ -107,165 +61,143 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Major changes:
+This feature lets you immediately transition to another congestion
+control algorithm or implementation with the same name.  Once a name
+is updated, new connections will apply this new algorithm.
 
- - Create bpf_links in the kernel for BPF struct_ops to register and
-   unregister it.
+The purpose is to update a customized algorithm implemented in BPF
+struct_ops with a new version on the flight.  The following is an
+example of using the userspace API implemented in later BPF patches.
 
- - Enables switching between implementations of bpf-tcp-cc under a
-   name instantly by replacing the backing struct_ops map of a
-   bpf_link.
+   link =3D bpf_map__attach_struct_ops(skel->maps.ca_update_1);
+   .......
+   err =3D bpf_link__update_map(link, skel->maps.ca_update_2);
 
-Previously, BPF struct_ops didn't go off, as even when the user
-program creating it was terminated, none of these ever were pinned.
-For instance, the TCP congestion control subsystem indirectly
-maintains a reference count on the struct_ops of any registered BPF
-implemented algorithm. Thus, the algorithm won't be deactivated until
-someone deliberately unregisters it.  For compatibility with other BPF
-programs, bpf_links have been created to work in coordination with
-struct_ops maps. This ensures that the registration and unregistration
-of these respective maps is carried out at the start and end of the
-bpf_link.
+We first load and register an algorithm implemented in BPF struct_ops,
+then swap it out with a new one using the same name. After that, newly
+created connections will apply the updated algorithm, while older ones
+retain the previous version already applied.
 
-We also faced complications when attempting to replace an existing TCP
-congestion control algorithm with a new implementation on the fly. A
-struct_ops map was used to register a TCP congestion control algorithm
-with a unique name.  We had to either register the alternative
-implementation with a new name and move over or unregister the current
-one before being able to reregistration with the same name.  To fix
-this problem, we can an option to migrate the registration of the
-algorithm from struct_ops maps to bpf_links. By modifying the backing
-map of a bpf_link, it suddenly becomes possible to replace an existing
-TCP congestion control algorithm with ease.
+This patch also takes this chance to refactor the ca validation into
+the new tcp_validate_congestion_control() function.
 
+Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>
+Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
 ---
+ include/net/tcp.h   |  3 +++
+ net/ipv4/tcp_cong.c | 65 ++++++++++++++++++++++++++++++++++++++++-----
+ 2 files changed, 61 insertions(+), 7 deletions(-)
 
-The major differences form v8:
-
- - Check bpf_struct_ops::{validate,update} in
-   bpf_struct_ops_map_alloc()
-
-The major differences from v7:
-
- - Use synchronize_rcu_mult(call_rcu, call_rcu_tasks) to replace
-   synchronize_rcu() *** BLURB HERE *** synchronize_rcu_tasks().
-
- - Call synchronize_rcu() in tcp_update_congestion_control().
-
- - Handle -EBUSY in bpf_map__attach_struct_ops() to allow a struct_ops
-   can be used to create links more than once.  Include a test case.
-
- - Add old_map_fd to bpf_attr and handle BPF_F_REPLACE in
-   bpf_struct_ops_map_link_update().
-
- - Remove changes in bpf_dummy_struct_ops.c and add a check of .update
-   function pointer of bpf_struct_ops.
-
-The major differences from v6:
-
- - Reword commit logs of the patch 1, 2, and 8.
-
- - Call syncrhonize_rcu_tasks() as well in bpf_struct_ops_map_free().
-
- - Refactor bpf_struct_ops_map_free() so that
-   bpf_struct_ops_map_alloc() can free a struct_ops without waiting
-   for a RCU grace period.
-
-The major differences from v5:
-
- - Add a new step to bpf_object__load() to prepare vdata.
-
- - Accept BPF_F_REPLACE.
-
- - Check section IDs in find_struct_ops_map_by_offset()
-
- - Add a test case to check mixing w/ and w/o link struct_ops.
-
- - Add a test case of using struct_ops w/o link to update a link.
-
- - Improve bpf_link__detach_struct_ops() to handle the w/ link case.
-
-The major differences from v4:
-
- - Rebase.
-
- - Reorder patches and merge part 4 to part 2 of the v4.
-
-The major differences from v3:
-
- - Remove bpf_struct_ops_map_free_rcu(), and use synchronize_rcu().
-
- - Improve the commit log of the part 1.
-
- - Before transitioning to the READY state, we conduct a value check
-   to ensure that struct_ops can be successfully utilized and links
-   created later.
-
-The major differences from v2:
-
- - Simplify states
-
-   - Remove TOBEUNREG.
-
-   - Rename UNREG to READY.
-
- - Stop using the refcnt of the kvalue of a struct_ops. Explicitly
-   increase and decrease the refcount of struct_ops.
-
- - Prepare kernel vdata during the load phase of libbpf.
-
-The major differences from v1:
-
- - Added bpf_struct_ops_link to replace the previous union-based
-   approach.
-
- - Added UNREG and TOBEUNREG to the state of bpf_struct_ops_map.
-
-   - bpf_struct_ops_transit_state() maintains state transitions.
-
- - Fixed synchronization issue.
-
- - Prepare kernel vdata of struct_ops during the loading phase of
-   bpf_object.
-
- - Merged previous patch 3 to patch 1.
-
-v8: https://lore.kernel.org/all/20230318053144.1180301-1-kuifeng@meta.com/
-v7: https://lore.kernel.org/all/20230316023641.2092778-1-kuifeng@meta.com/
-v6: https://lore.kernel.org/all/20230310043812.3087672-1-kuifeng@meta.com/
-v5: https://lore.kernel.org/all/20230308005050.255859-1-kuifeng@meta.com/
-v4: https://lore.kernel.org/all/20230307232913.576893-1-andrii@kernel.org/
-v3: https://lore.kernel.org/all/20230303012122.852654-1-kuifeng@meta.com/
-v2: https://lore.kernel.org/bpf/20230223011238.12313-1-kuifeng@meta.com/
-v1: https://lore.kernel.org/bpf/20230214221718.503964-1-kuifeng@meta.com/
-
-Kui-Feng Lee (8):
-  bpf: Retire the struct_ops map kvalue->refcnt.
-  net: Update an existing TCP congestion control algorithm.
-  bpf: Create links for BPF struct_ops maps.
-  libbpf: Create a bpf_link in bpf_map__attach_struct_ops().
-  bpf: Update the struct_ops of a bpf_link.
-  libbpf: Update a bpf_link with another struct_ops.
-  libbpf: Use .struct_ops.link section to indicate a struct_ops with a
-    link.
-  selftests/bpf: Test switching TCP Congestion Control algorithms.
-
- include/linux/bpf.h                           |  11 +
- include/net/tcp.h                             |   3 +
- include/uapi/linux/bpf.h                      |  33 ++-
- kernel/bpf/bpf_struct_ops.c                   | 250 +++++++++++++++---
- kernel/bpf/syscall.c                          |  63 ++++-
- net/ipv4/bpf_tcp_ca.c                         |  14 +-
- net/ipv4/tcp_cong.c                           |  65 ++++-
- tools/include/uapi/linux/bpf.h                |  33 ++-
- tools/lib/bpf/libbpf.c                        | 190 ++++++++++---
- tools/lib/bpf/libbpf.h                        |   1 +
- tools/lib/bpf/libbpf.map                      |   1 +
- .../selftests/bpf/prog_tests/bpf_tcp_ca.c     | 116 ++++++++
- .../selftests/bpf/progs/tcp_ca_update.c       |  80 ++++++
- 13 files changed, 759 insertions(+), 101 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/tcp_ca_update.c
-
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index db9f828e9d1e..2abb755e6a3a 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -1117,6 +1117,9 @@ struct tcp_congestion_ops {
+=20
+ int tcp_register_congestion_control(struct tcp_congestion_ops *type);
+ void tcp_unregister_congestion_control(struct tcp_congestion_ops *type);
++int tcp_update_congestion_control(struct tcp_congestion_ops *type,
++				  struct tcp_congestion_ops *old_type);
++int tcp_validate_congestion_control(struct tcp_congestion_ops *ca);
+=20
+ void tcp_assign_congestion_control(struct sock *sk);
+ void tcp_init_congestion_control(struct sock *sk);
+diff --git a/net/ipv4/tcp_cong.c b/net/ipv4/tcp_cong.c
+index db8b4b488c31..e677d0bc12ad 100644
+--- a/net/ipv4/tcp_cong.c
++++ b/net/ipv4/tcp_cong.c
+@@ -75,14 +75,8 @@ struct tcp_congestion_ops *tcp_ca_find_key(u32 key)
+ 	return NULL;
+ }
+=20
+-/*
+- * Attach new congestion control algorithm to the list
+- * of available options.
+- */
+-int tcp_register_congestion_control(struct tcp_congestion_ops *ca)
++int tcp_validate_congestion_control(struct tcp_congestion_ops *ca)
+ {
+-	int ret =3D 0;
+-
+ 	/* all algorithms must implement these */
+ 	if (!ca->ssthresh || !ca->undo_cwnd ||
+ 	    !(ca->cong_avoid || ca->cong_control)) {
+@@ -90,6 +84,20 @@ int tcp_register_congestion_control(struct tcp_congest=
+ion_ops *ca)
+ 		return -EINVAL;
+ 	}
+=20
++	return 0;
++}
++
++/* Attach new congestion control algorithm to the list
++ * of available options.
++ */
++int tcp_register_congestion_control(struct tcp_congestion_ops *ca)
++{
++	int ret;
++
++	ret =3D tcp_validate_congestion_control(ca);
++	if (ret)
++		return ret;
++
+ 	ca->key =3D jhash(ca->name, sizeof(ca->name), strlen(ca->name));
+=20
+ 	spin_lock(&tcp_cong_list_lock);
+@@ -130,6 +138,49 @@ void tcp_unregister_congestion_control(struct tcp_co=
+ngestion_ops *ca)
+ }
+ EXPORT_SYMBOL_GPL(tcp_unregister_congestion_control);
+=20
++/* Replace a registered old ca with a new one.
++ *
++ * The new ca must have the same name as the old one, that has been
++ * registered.
++ */
++int tcp_update_congestion_control(struct tcp_congestion_ops *ca, struct =
+tcp_congestion_ops *old_ca)
++{
++	struct tcp_congestion_ops *existing;
++	int ret;
++
++	ret =3D tcp_validate_congestion_control(ca);
++	if (ret)
++		return ret;
++
++	ca->key =3D jhash(ca->name, sizeof(ca->name), strlen(ca->name));
++
++	spin_lock(&tcp_cong_list_lock);
++	existing =3D tcp_ca_find_key(old_ca->key);
++	if (ca->key =3D=3D TCP_CA_UNSPEC || !existing || strcmp(existing->name,=
+ ca->name)) {
++		pr_notice("%s not registered or non-unique key\n",
++			  ca->name);
++		ret =3D -EINVAL;
++	} else if (existing !=3D old_ca) {
++		pr_notice("invalid old congestion control algorithm to replace\n");
++		ret =3D -EINVAL;
++	} else {
++		/* Add the new one before removing the old one to keep
++		 * one implementation available all the time.
++		 */
++		list_add_tail_rcu(&ca->list, &tcp_cong_list);
++		list_del_rcu(&existing->list);
++		pr_debug("%s updated\n", ca->name);
++	}
++	spin_unlock(&tcp_cong_list_lock);
++
++	/* Wait for outstanding readers to complete before the
++	 * module or struct_ops gets removed entirely.
++	 */
++	synchronize_rcu();
++
++	return ret;
++}
++
+ u32 tcp_ca_get_key_by_name(struct net *net, const char *name, bool *ecn_=
+ca)
+ {
+ 	const struct tcp_congestion_ops *ca;
 --=20
 2.34.1
 
