@@ -2,56 +2,57 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B88BC6FD20
-	for <bpf@archiver.kernel.org>; Tue, 21 Mar 2023 23:28:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A301FC6FD20
+	for <bpf@archiver.kernel.org>; Tue, 21 Mar 2023 23:28:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbjCUX2X (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 Mar 2023 19:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43362 "EHLO
+        id S229682AbjCUX2c (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Mar 2023 19:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjCUX2W (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 21 Mar 2023 19:28:22 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9071F5261
-        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 16:28:21 -0700 (PDT)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 32LNGMbt018151
-        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 16:28:20 -0700
+        with ESMTP id S229524AbjCUX2b (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 21 Mar 2023 19:28:31 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14BA76AE
+        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 16:28:30 -0700 (PDT)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32LNGSJR023601
+        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 16:28:30 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=s2048-2021-q4;
- bh=UZ9yFkRw7vw7TCWrjJil17cKFaTE2QYTpAX0GMkuieo=;
- b=bMDknWWD8qUsu23vcMFlceVdNYlFnx0HwggTbcLYbKWwJXT+CEBv0m+dBrXn5p4WM2C7
- hI0T49mUIMYwiKhNXK7AsEfKxxqbVgwt8rZFBWvCCoWtovvKqmABbkJuxvgafhfR9Lu4
- J4l5kRBvzwRgZJYHLrT93woRgA/J2wHbkq30/IRSaoYXKYR3v0DngZP6cF4LPUpw7Bou
- xULziIq+BywVu6IfJcdeKDmnZVjsm2rpI/GM5+o2k90K+nImQTZO/Oxa/LjeNc31ffPC
- UcZ/AzCveVzOtemxHX06bQX5XXa6fSINJ1K+UWOkiDP2CaIsujLmRQuj45Bi34XXBas4 iw== 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3pf7vkntet-1
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=s2048-2021-q4;
+ bh=uQKgToFNYGD9uVmPouq5ZbZmbDZB9yDXMX2oAhLh8AE=;
+ b=mRPIN+Bl689GMMqBOF1VQj5tJTajgRE9zlS3ts/nocYzJfcyPdGAIBmle+2zRVOhrJIV
+ kS6va905AOgzf4wMKGS9kL6mIXu4Cvmvcu5IDet+mR0+SxoGlbSXtFkpCYq/3a+eqUWt
+ rX/hcwsHFzHjG4tjbIwrhPefuypi2dV7jccA/T3XWB2sF9sXGbp1o2nbiZLqPSmFiKh9
+ pyiLIiUHK/LqEwWJhpU5mEmB2nDh0tHZBT1DjOdDx+0Ilt40UfrCPL9O2CAm24I6DlHb
+ 3U7Y50H68GmrUN6mLhroisDpms8v+w1xF4dYTyV+cpfjYFEujUfRxvsq3yl4fTrt/TxC cg== 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3pf07cyqcb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 16:28:20 -0700
-Received: from twshared16996.15.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 16:28:29 -0700
+Received: from twshared21709.17.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 21 Mar 2023 16:28:19 -0700
+ 15.1.2507.17; Tue, 21 Mar 2023 16:28:28 -0700
 Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
-        id 46A497EEB558; Tue, 21 Mar 2023 16:28:15 -0700 (PDT)
+        id 6DC497EEB560; Tue, 21 Mar 2023 16:28:15 -0700 (PDT)
 From:   Kui-Feng Lee <kuifeng@meta.com>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <martin.lau@linux.dev>,
         <song@kernel.org>, <kernel-team@meta.com>, <andrii@kernel.org>,
         <sdf@google.com>
 CC:     Kui-Feng Lee <kuifeng@meta.com>
-Subject: [PATCH bpf-next v10 0/8] Transit between BPF TCP congestion controls.
-Date:   Tue, 21 Mar 2023 16:28:05 -0700
-Message-ID: <20230321232813.3376064-1-kuifeng@meta.com>
+Subject: [PATCH bpf-next v10 4/8] libbpf: Create a bpf_link in bpf_map__attach_struct_ops().
+Date:   Tue, 21 Mar 2023 16:28:09 -0700
+Message-ID: <20230321232813.3376064-5-kuifeng@meta.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230321232813.3376064-1-kuifeng@meta.com>
+References: <20230321232813.3376064-1-kuifeng@meta.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: 26X6bTY8r7emfZ83FqwxRCgdZHZtDzuU
-X-Proofpoint-ORIG-GUID: 26X6bTY8r7emfZ83FqwxRCgdZHZtDzuU
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-ORIG-GUID: j14obUebU3ML_fRQKf696-K78mnanxWP
+X-Proofpoint-GUID: j14obUebU3ML_fRQKf696-K78mnanxWP
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-21_11,2023-03-21_01,2023-02-09_01
@@ -59,177 +60,178 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Major changes:
+bpf_map__attach_struct_ops() was creating a dummy bpf_link as a
+placeholder, but now it is constructing an authentic one by calling
+bpf_link_create() if the map has the BPF_F_LINK flag.
 
- - Create bpf_links in the kernel for BPF struct_ops to register and
-   unregister it.
+You can flag a struct_ops map with BPF_F_LINK by calling
+bpf_map__set_map_flags().
 
- - Enables switching between implementations of bpf-tcp-cc under a
-   name instantly by replacing the backing struct_ops map of a
-   bpf_link.
-
-Previously, BPF struct_ops didn't go off, as even when the user
-program creating it was terminated, none of these ever were pinned.
-For instance, the TCP congestion control subsystem indirectly
-maintains a reference count on the struct_ops of any registered BPF
-implemented algorithm. Thus, the algorithm won't be deactivated until
-someone deliberately unregisters it.  For compatibility with other BPF
-programs, bpf_links have been created to work in coordination with
-struct_ops maps. This ensures that the registration and unregistration
-of these respective maps is carried out at the start and end of the
-bpf_link.
-
-We also faced complications when attempting to replace an existing TCP
-congestion control algorithm with a new implementation on the fly. A
-struct_ops map was used to register a TCP congestion control algorithm
-with a unique name.  We had to either register the alternative
-implementation with a new name and move over or unregister the current
-one before being able to reregistration with the same name.  To fix
-this problem, we can an option to migrate the registration of the
-algorithm from struct_ops maps to bpf_links. By modifying the backing
-map of a bpf_link, it suddenly becomes possible to replace an existing
-TCP congestion control algorithm with ease.
-
+Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
 ---
+ tools/lib/bpf/libbpf.c | 95 +++++++++++++++++++++++++++++++-----------
+ 1 file changed, 71 insertions(+), 24 deletions(-)
 
-The major differences from v9:
-
- - Add test case for BPF_F_LINK.  Includes adding old_map_fd to struct
-   bpf_link_update_opts in patch 6.
-
- - Return -EPERM instead of -EINVAL when the old map fd doesn't match
-   with BPF_F_LINK.
-
- - Fix -EBUSY case in bpf_map__attach_struct_ops().
-
-The major differences form v8:
-
- - Check bpf_struct_ops::{validate,update} in
-   bpf_struct_ops_map_alloc()
-
-The major differences from v7:
-
- - Use synchronize_rcu_mult(call_rcu, call_rcu_tasks) to replace
-   synchronize_rcu() *** BLURB HERE *** synchronize_rcu_tasks().
-
- - Call synchronize_rcu() in tcp_update_congestion_control().
-
- - Handle -EBUSY in bpf_map__attach_struct_ops() to allow a struct_ops
-   can be used to create links more than once.  Include a test case.
-
- - Add old_map_fd to bpf_attr and handle BPF_F_REPLACE in
-   bpf_struct_ops_map_link_update().
-
- - Remove changes in bpf_dummy_struct_ops.c and add a check of .update
-   function pointer of bpf_struct_ops.
-
-The major differences from v6:
-
- - Reword commit logs of the patch 1, 2, and 8.
-
- - Call synchronize_rcu_tasks() as well in bpf_struct_ops_map_free().
-
- - Refactor bpf_struct_ops_map_free() so that
-   bpf_struct_ops_map_alloc() can free a struct_ops without waiting
-   for a RCU grace period.
-
-The major differences from v5:
-
- - Add a new step to bpf_object__load() to prepare vdata.
-
- - Accept BPF_F_REPLACE.
-
- - Check section IDs in find_struct_ops_map_by_offset()
-
- - Add a test case to check mixing w/ and w/o link struct_ops.
-
- - Add a test case of using struct_ops w/o link to update a link.
-
- - Improve bpf_link__detach_struct_ops() to handle the w/ link case.
-
-The major differences from v4:
-
- - Rebase.
-
- - Reorder patches and merge part 4 to part 2 of the v4.
-
-The major differences from v3:
-
- - Remove bpf_struct_ops_map_free_rcu(), and use synchronize_rcu().
-
- - Improve the commit log of the part 1.
-
- - Before transitioning to the READY state, we conduct a value check
-   to ensure that struct_ops can be successfully utilized and links
-   created later.
-
-The major differences from v2:
-
- - Simplify states
-
-   - Remove TOBEUNREG.
-
-   - Rename UNREG to READY.
-
- - Stop using the refcnt of the kvalue of a struct_ops. Explicitly
-   increase and decrease the refcount of struct_ops.
-
- - Prepare kernel vdata during the load phase of libbpf.
-
-The major differences from v1:
-
- - Added bpf_struct_ops_link to replace the previous union-based
-   approach.
-
- - Added UNREG and TOBEUNREG to the state of bpf_struct_ops_map.
-
-   - bpf_struct_ops_transit_state() maintains state transitions.
-
- - Fixed synchronization issue.
-
- - Prepare kernel vdata of struct_ops during the loading phase of
-   bpf_object.
-
- - Merged previous patch 3 to patch 1.
-
-v9: https://lore.kernel.org/all/20230320195644.1953096-1-kuifeng@meta.com/
-v8: https://lore.kernel.org/all/20230318053144.1180301-1-kuifeng@meta.com/
-v7: https://lore.kernel.org/all/20230316023641.2092778-1-kuifeng@meta.com/
-v6: https://lore.kernel.org/all/20230310043812.3087672-1-kuifeng@meta.com/
-v5: https://lore.kernel.org/all/20230308005050.255859-1-kuifeng@meta.com/
-v4: https://lore.kernel.org/all/20230307232913.576893-1-andrii@kernel.org/
-v3: https://lore.kernel.org/all/20230303012122.852654-1-kuifeng@meta.com/
-v2: https://lore.kernel.org/bpf/20230223011238.12313-1-kuifeng@meta.com/
-v1: https://lore.kernel.org/bpf/20230214221718.503964-1-kuifeng@meta.com/
-
-Kui-Feng Lee (8):
-  bpf: Retire the struct_ops map kvalue->refcnt.
-  net: Update an existing TCP congestion control algorithm.
-  bpf: Create links for BPF struct_ops maps.
-  libbpf: Create a bpf_link in bpf_map__attach_struct_ops().
-  bpf: Update the struct_ops of a bpf_link.
-  libbpf: Update a bpf_link with another struct_ops.
-  libbpf: Use .struct_ops.link section to indicate a struct_ops with a
-    link.
-  selftests/bpf: Test switching TCP Congestion Control algorithms.
-
- include/linux/bpf.h                           |  11 +
- include/net/tcp.h                             |   3 +
- include/uapi/linux/bpf.h                      |  33 ++-
- kernel/bpf/bpf_struct_ops.c                   | 250 +++++++++++++++---
- kernel/bpf/syscall.c                          |  63 ++++-
- net/ipv4/bpf_tcp_ca.c                         |  14 +-
- net/ipv4/tcp_cong.c                           |  65 ++++-
- tools/include/uapi/linux/bpf.h                |  33 ++-
- tools/lib/bpf/bpf.h                           |   5 +-
- tools/lib/bpf/libbpf.c                        | 190 ++++++++++---
- tools/lib/bpf/libbpf.h                        |   1 +
- tools/lib/bpf/libbpf.map                      |   1 +
- .../selftests/bpf/prog_tests/bpf_tcp_ca.c     | 160 +++++++++++
- .../selftests/bpf/progs/tcp_ca_update.c       |  80 ++++++
- 14 files changed, 807 insertions(+), 102 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/tcp_ca_update.c
-
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 4c34fbd7b5be..3b257d5170cb 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -116,6 +116,7 @@ static const char * const attach_type_name[] =3D {
+ 	[BPF_SK_REUSEPORT_SELECT_OR_MIGRATE]	=3D "sk_reuseport_select_or_migrat=
+e",
+ 	[BPF_PERF_EVENT]		=3D "perf_event",
+ 	[BPF_TRACE_KPROBE_MULTI]	=3D "trace_kprobe_multi",
++	[BPF_STRUCT_OPS]		=3D "struct_ops",
+ };
+=20
+ static const char * const link_type_name[] =3D {
+@@ -7683,6 +7684,37 @@ static int bpf_object__resolve_externs(struct bpf_=
+object *obj,
+ 	return 0;
+ }
+=20
++static void bpf_map_prepare_vdata(const struct bpf_map *map)
++{
++	struct bpf_struct_ops *st_ops;
++	__u32 i;
++
++	st_ops =3D map->st_ops;
++	for (i =3D 0; i < btf_vlen(st_ops->type); i++) {
++		struct bpf_program *prog =3D st_ops->progs[i];
++		void *kern_data;
++		int prog_fd;
++
++		if (!prog)
++			continue;
++
++		prog_fd =3D bpf_program__fd(prog);
++		kern_data =3D st_ops->kern_vdata + st_ops->kern_func_off[i];
++		*(unsigned long *)kern_data =3D prog_fd;
++	}
++}
++
++static int bpf_object_prepare_struct_ops(struct bpf_object *obj)
++{
++	int i;
++
++	for (i =3D 0; i < obj->nr_maps; i++)
++		if (bpf_map__is_struct_ops(&obj->maps[i]))
++			bpf_map_prepare_vdata(&obj->maps[i]);
++
++	return 0;
++}
++
+ static int bpf_object_load(struct bpf_object *obj, int extra_log_level, =
+const char *target_btf_path)
+ {
+ 	int err, i;
+@@ -7708,6 +7740,7 @@ static int bpf_object_load(struct bpf_object *obj, =
+int extra_log_level, const ch
+ 	err =3D err ? : bpf_object__relocate(obj, obj->btf_custom_path ? : targ=
+et_btf_path);
+ 	err =3D err ? : bpf_object__load_progs(obj, extra_log_level);
+ 	err =3D err ? : bpf_object_init_prog_arrays(obj);
++	err =3D err ? : bpf_object_prepare_struct_ops(obj);
+=20
+ 	if (obj->gen_loader) {
+ 		/* reset FDs */
+@@ -11572,22 +11605,30 @@ struct bpf_link *bpf_program__attach(const stru=
+ct bpf_program *prog)
+ 	return link;
+ }
+=20
++struct bpf_link_struct_ops {
++	struct bpf_link link;
++	int map_fd;
++};
++
+ static int bpf_link__detach_struct_ops(struct bpf_link *link)
+ {
++	struct bpf_link_struct_ops *st_link;
+ 	__u32 zero =3D 0;
+=20
+-	if (bpf_map_delete_elem(link->fd, &zero))
+-		return -errno;
++	st_link =3D container_of(link, struct bpf_link_struct_ops, link);
+=20
+-	return 0;
++	if (st_link->map_fd < 0)
++		/* w/o a real link */
++		return bpf_map_delete_elem(link->fd, &zero);
++
++	return close(link->fd);
+ }
+=20
+ struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map)
+ {
+-	struct bpf_struct_ops *st_ops;
+-	struct bpf_link *link;
+-	__u32 i, zero =3D 0;
+-	int err;
++	struct bpf_link_struct_ops *link;
++	__u32 zero =3D 0;
++	int err, fd;
+=20
+ 	if (!bpf_map__is_struct_ops(map) || map->fd =3D=3D -1)
+ 		return libbpf_err_ptr(-EINVAL);
+@@ -11596,31 +11637,37 @@ struct bpf_link *bpf_map__attach_struct_ops(con=
+st struct bpf_map *map)
+ 	if (!link)
+ 		return libbpf_err_ptr(-EINVAL);
+=20
+-	st_ops =3D map->st_ops;
+-	for (i =3D 0; i < btf_vlen(st_ops->type); i++) {
+-		struct bpf_program *prog =3D st_ops->progs[i];
+-		void *kern_data;
+-		int prog_fd;
++	/* kern_vdata should be prepared during the loading phase. */
++	err =3D bpf_map_update_elem(map->fd, &zero, map->st_ops->kern_vdata, 0)=
+;
++	/* It can be EBUSY if the map has been used to create or
++	 * update a link before.  We don't allow updating the value of
++	 * a struct_ops once it is set.  That ensures that the value
++	 * never changed.  So, it is safe to skip EBUSY.
++	 */
++	if (err && (!(map->def.map_flags & BPF_F_LINK) || err !=3D -EBUSY)) {
++		free(link);
++		return libbpf_err_ptr(err);
++	}
+=20
+-		if (!prog)
+-			continue;
++	link->link.detach =3D bpf_link__detach_struct_ops;
+=20
+-		prog_fd =3D bpf_program__fd(prog);
+-		kern_data =3D st_ops->kern_vdata + st_ops->kern_func_off[i];
+-		*(unsigned long *)kern_data =3D prog_fd;
++	if (!(map->def.map_flags & BPF_F_LINK)) {
++		/* w/o a real link */
++		link->link.fd =3D map->fd;
++		link->map_fd =3D -1;
++		return &link->link;
+ 	}
+=20
+-	err =3D bpf_map_update_elem(map->fd, &zero, st_ops->kern_vdata, 0);
+-	if (err) {
+-		err =3D -errno;
++	fd =3D bpf_link_create(map->fd, 0, BPF_STRUCT_OPS, NULL);
++	if (fd < 0) {
+ 		free(link);
+-		return libbpf_err_ptr(err);
++		return libbpf_err_ptr(fd);
+ 	}
+=20
+-	link->detach =3D bpf_link__detach_struct_ops;
+-	link->fd =3D map->fd;
++	link->link.fd =3D fd;
++	link->map_fd =3D map->fd;
+=20
+-	return link;
++	return &link->link;
+ }
+=20
+ typedef enum bpf_perf_event_ret (*bpf_perf_event_print_t)(struct perf_ev=
+ent_header *hdr,
 --=20
 2.34.1
 
