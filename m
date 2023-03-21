@@ -2,233 +2,123 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CD1EC6FD1D
-	for <bpf@archiver.kernel.org>; Tue, 21 Mar 2023 18:41:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46159C6FD1D
+	for <bpf@archiver.kernel.org>; Tue, 21 Mar 2023 18:46:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbjCUSl5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 Mar 2023 14:41:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55842 "EHLO
+        id S230511AbjCUSqe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Mar 2023 14:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbjCUSl5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 21 Mar 2023 14:41:57 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA277132FF
-        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 11:41:55 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id ja10so17005948plb.5
-        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 11:41:55 -0700 (PDT)
+        with ESMTP id S230466AbjCUSqG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 21 Mar 2023 14:46:06 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027B25616B
+        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 11:45:53 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id j13so16411578pjd.1
+        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 11:45:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679424115;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=isovalent.com; s=google; t=1679424352;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QhY7Zex6hyzqegpd5VgFoVLv7FRdLDof3Jtch1qYh1M=;
-        b=XMv6/qI7Scp6XV+eP33j1iv4T3/xyHBVKBbW7vMa1s4FWH07uwC1m/FNhBqxtIImBI
-         YKgbmv8diP80jUJQlwWc/ZcEmCsfuzaZVxJcn3lZRS4Ex0rk6ye8tOiqs4xZgRijKlNy
-         4rEjJXq5voTLyz3cc3seU+EM7ljP1Kz1VI+BOiGrlh6YTA71uc1ISQvtQqUTDVWoQUju
-         k+1ztfr4hixFuNZgk2wJRmspLUF8P/L8s6uXZnV87UpUkJScjB7fXSWDtQ5YHsgsSF0K
-         8PRZyf/HjVtVt4tCouMwaAbx14cOccpItd+ed9rOU1rQowJYtUNLREtNPEDGLcVRRliu
-         GALg==
+        bh=Hw/jbz9v/fFialDFe5P2QsHF8bQDPNcaDJeRDmqQ8D8=;
+        b=aQWjMii5blnv7WBgvBVlrrXprMrbchCrlYfgHJBfbzVYEE5QPY/BqT6Q2Aj884ztMK
+         xidihVR32QHczjwRGWws1EHNPZVjODMYY0k/QBcvn3QvKmybGR9+KoG1I+FZhaSEtssH
+         byx8KN0SUWS0RyRZr5wHxUOCjV+qIxwlHGplEmH3NZ+udUPbozu6C4Ne++d6mFuLGAW3
+         kONyn35d6+O87/GNuILOYJvY4pNddDBKMfdBi+XFKGqGHo4uj7Jrmitop/uoVwg/bXFQ
+         qW5T7kOigjv4O9e45sxX3ADm0QjItak5MBH98hEVW4ueFRgWBxMJPGZONMTRWjfM279W
+         hFPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679424115;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1679424352;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QhY7Zex6hyzqegpd5VgFoVLv7FRdLDof3Jtch1qYh1M=;
-        b=kAOBlEOXqoJD3NSk8T0ZXVNhtR/0TLKynNt6/zv9HIof0tzfC8PKgt4ukvljdpALCd
-         3yqIw8Mjf/9aHe/hzYboHlgtimhoYyx/lpevGa3Zv0Gw+Tsh9I1ak5teWqeq2FIrWFQd
-         G7mvp9sxv+p7HMHbc7UWEk+x0hVeVKJRaaE1dYab4xQC4KnT1SG08gkO/zCmSfEWHgjU
-         sETICLcNQx40wkaeZDOnBIxhVffHxKZLsdRvrmOm3XvlCI7K4jDh37PFqS5DzsECnous
-         NPFa2ZYwm7emkgBvGLUaTzHNzlFQD1+lRWSYpEO01Rju4eK0eos0sJfRUM+tNoi0fkVw
-         mK8Q==
-X-Gm-Message-State: AO0yUKWOz7iTk7bRYclZmfixxx/PL18XtNBLOjAoKAfY08OHGCrxlEr+
-        rKsbW3WjnPD8WtS0C+xuZYKxjX3skScg1AYUc5lN3w==
-X-Google-Smtp-Source: AK7set+5gjgppMNfTX5jYGAV+yB0SMlKUPDs49QdhUJDPR6i2bZA3Bm6KvlYJPkPM5kKYGCgo8lQUvsm4Ob9yPnemw0=
-X-Received: by 2002:a17:902:e543:b0:19c:d14b:ee20 with SMTP id
- n3-20020a170902e54300b0019cd14bee20mr44564plf.8.1679424114956; Tue, 21 Mar
- 2023 11:41:54 -0700 (PDT)
+        bh=Hw/jbz9v/fFialDFe5P2QsHF8bQDPNcaDJeRDmqQ8D8=;
+        b=r28QhFFaDzmY4MEnMaoZXylp0GLkK+VX2LFES5fKqmefj9YpkoL17TBHYcz3K7PVHm
+         mkm/6v6QwNNkvlpC0iRyoZpeh9izHzY3I9FSDF994wN5GEifabpVA7BMkoGO7tCU9qLx
+         s5OB8Iu8kF5OamF9eFseYmkdsDtiNi9K4ZC/MpY4+/72hOuzP+yOzxrl2vhfTFhZZ30u
+         /qd+OzRwfsLKGGzMETi090HSzVfuntUjSMFLXwjFY/U8H626Kv8R1wGTNgVEfvy4gKPg
+         cEw4dayK5BbWO9LLXoe/DV3UEcqHtcqlsYdHjEe3DlAp9ok4znfhlHeb+d9N6gmFC5F/
+         tf5A==
+X-Gm-Message-State: AO0yUKUD8MpjfAlFuQUUX25HwUGODmLwlsDTPpt2ngF33274xxDtS6yK
+        RM0PJRqrAyfiqM5cXJxLaQMqX65vZFcp0Uvgeio=
+X-Google-Smtp-Source: AK7set/2SLtauPZJPbJk8fzzaZqkMJNvP4L61DxqudxrAovKfISQ+fHzZsxDh/qKrjDE2EH/qP5ekg==
+X-Received: by 2002:a17:902:ecd1:b0:1a1:e237:5f0 with SMTP id a17-20020a170902ecd100b001a1e23705f0mr64193plh.58.1679424351732;
+        Tue, 21 Mar 2023 11:45:51 -0700 (PDT)
+Received: from localhost.localdomain ([2604:1380:4611:8100::1])
+        by smtp.gmail.com with ESMTPSA id 21-20020a170902c15500b0019cf747253csm9095878plj.87.2023.03.21.11.45.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 11:45:51 -0700 (PDT)
+From:   Aditi Ghag <aditi.ghag@isovalent.com>
+To:     bpf@vger.kernel.org
+Cc:     kafai@fb.com, sdf@google.com, edumazet@google.com,
+        aditi.ghag@isovalent.com
+Subject: [PATCH v3 bpf-next 4/5] [RFC] udp: Fix destroying UDP listening sockets
+Date:   Tue, 21 Mar 2023 18:45:40 +0000
+Message-Id: <20230321184541.1857363-5-aditi.ghag@isovalent.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230321184541.1857363-1-aditi.ghag@isovalent.com>
+References: <20230321184541.1857363-1-aditi.ghag@isovalent.com>
 MIME-Version: 1.0
-References: <167940675120.2718408.8176058626864184420.stgit@firesoul>
-In-Reply-To: <167940675120.2718408.8176058626864184420.stgit@firesoul>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Tue, 21 Mar 2023 11:41:43 -0700
-Message-ID: <CAKH8qBsKEp=v-PR6AOR266MaNf+pm0wYJ-GPtKEm2xbHXgCtnA@mail.gmail.com>
-Subject: Re: [PATCH bpf V2] xdp: bpf_xdp_metadata use EOPNOTSUPP for no driver support
-To:     Jesper Dangaard Brouer <brouer@redhat.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, martin.lau@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, alexandr.lobakin@intel.com,
-        larysa.zaremba@intel.com, xdp-hints@xdp-project.net,
-        anthony.l.nguyen@intel.com, yoong.siang.song@intel.com,
-        boon.leong.ong@intel.com, intel-wired-lan@lists.osuosl.org,
-        pabeni@redhat.com, jesse.brandeburg@intel.com, kuba@kernel.org,
-        edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
-        davem@davemloft.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 6:52=E2=80=AFAM Jesper Dangaard Brouer
-<brouer@redhat.com> wrote:
->
-> When driver doesn't implement a bpf_xdp_metadata kfunc the fallback
-> implementation returns EOPNOTSUPP, which indicate device driver doesn't
-> implement this kfunc.
->
-> Currently many drivers also return EOPNOTSUPP when the hint isn't
-> available, which is ambiguous from an API point of view. Instead
-> change drivers to return ENODATA in these cases.
->
-> There can be natural cases why a driver doesn't provide any hardware
-> info for a specific hint, even on a frame to frame basis (e.g. PTP).
-> Lets keep these cases as separate return codes.
->
-> When describing the return values, adjust the function kernel-doc layout
-> to get proper rendering for the return values.
->
-> Fixes: ab46182d0dcb ("net/mlx4_en: Support RX XDP metadata")
-> Fixes: bc8d405b1ba9 ("net/mlx5e: Support RX XDP metadata")
-> Fixes: 306531f0249f ("veth: Support RX XDP metadata")
-> Fixes: 3d76a4d3d4e5 ("bpf: XDP metadata RX kfuncs")
-> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Previously, UDP listening sockets that bind'ed to a port
+weren't getting properly destroyed via udp_abort.
+Specifically, the sockets were left in the UDP hash table with
+unset source port.
+Fix the issue by unconditionally unhashing and resetting source
+port for sockets that are getting destroyed. This would mean
+that in case of sockets listening on wildcarded address and
+on a specific address with a common port, users would have to
+explicitly select the socket(s) they intend to destroy.
 
-Acked-by: Stanislav Fomichev <sdf@google.com>
+Signed-off-by: Aditi Ghag <aditi.ghag@isovalent.com>
+---
+ net/ipv4/udp.c | 21 ++++++++++++++++++++-
+ 1 file changed, 20 insertions(+), 1 deletion(-)
 
-> ---
->  Documentation/networking/xdp-rx-metadata.rst     |    7 +++++--
->  drivers/net/ethernet/mellanox/mlx4/en_rx.c       |    4 ++--
->  drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c |    4 ++--
->  drivers/net/veth.c                               |    4 ++--
->  net/core/xdp.c                                   |   10 ++++++++--
->  5 files changed, 19 insertions(+), 10 deletions(-)
->
-> diff --git a/Documentation/networking/xdp-rx-metadata.rst b/Documentation=
-/networking/xdp-rx-metadata.rst
-> index aac63fc2d08b..25ce72af81c2 100644
-> --- a/Documentation/networking/xdp-rx-metadata.rst
-> +++ b/Documentation/networking/xdp-rx-metadata.rst
-> @@ -23,10 +23,13 @@ metadata is supported, this set will grow:
->  An XDP program can use these kfuncs to read the metadata into stack
->  variables for its own consumption. Or, to pass the metadata on to other
->  consumers, an XDP program can store it into the metadata area carried
-> -ahead of the packet.
-> +ahead of the packet. Not all packets will necessary have the requested
-> +metadata available in which case the driver returns ``-ENODATA``.
->
->  Not all kfuncs have to be implemented by the device driver; when not
-> -implemented, the default ones that return ``-EOPNOTSUPP`` will be used.
-> +implemented, the default ones that return ``-EOPNOTSUPP`` will be used
-> +to indicate the device driver have not implemented this kfunc.
-> +
->
->  Within an XDP frame, the metadata layout (accessed via ``xdp_buff``) is
->  as follows::
-> diff --git a/drivers/net/ethernet/mellanox/mlx4/en_rx.c b/drivers/net/eth=
-ernet/mellanox/mlx4/en_rx.c
-> index 0869d4fff17b..4b5e459b6d49 100644
-> --- a/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-> +++ b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-> @@ -674,7 +674,7 @@ int mlx4_en_xdp_rx_timestamp(const struct xdp_md *ctx=
-, u64 *timestamp)
->         struct mlx4_en_xdp_buff *_ctx =3D (void *)ctx;
->
->         if (unlikely(_ctx->ring->hwtstamp_rx_filter !=3D HWTSTAMP_FILTER_=
-ALL))
-> -               return -EOPNOTSUPP;
-> +               return -ENODATA;
->
->         *timestamp =3D mlx4_en_get_hwtstamp(_ctx->mdev,
->                                           mlx4_en_get_cqe_ts(_ctx->cqe));
-> @@ -686,7 +686,7 @@ int mlx4_en_xdp_rx_hash(const struct xdp_md *ctx, u32=
- *hash)
->         struct mlx4_en_xdp_buff *_ctx =3D (void *)ctx;
->
->         if (unlikely(!(_ctx->dev->features & NETIF_F_RXHASH)))
-> -               return -EOPNOTSUPP;
-> +               return -ENODATA;
->
->         *hash =3D be32_to_cpu(_ctx->cqe->immed_rss_invalid);
->         return 0;
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/n=
-et/ethernet/mellanox/mlx5/core/en/xdp.c
-> index bcd6370de440..c5dae48b7932 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-> @@ -162,7 +162,7 @@ static int mlx5e_xdp_rx_timestamp(const struct xdp_md=
- *ctx, u64 *timestamp)
->         const struct mlx5e_xdp_buff *_ctx =3D (void *)ctx;
->
->         if (unlikely(!mlx5e_rx_hw_stamp(_ctx->rq->tstamp)))
-> -               return -EOPNOTSUPP;
-> +               return -ENODATA;
->
->         *timestamp =3D  mlx5e_cqe_ts_to_ns(_ctx->rq->ptp_cyc2time,
->                                          _ctx->rq->clock, get_cqe_ts(_ctx=
-->cqe));
-> @@ -174,7 +174,7 @@ static int mlx5e_xdp_rx_hash(const struct xdp_md *ctx=
-, u32 *hash)
->         const struct mlx5e_xdp_buff *_ctx =3D (void *)ctx;
->
->         if (unlikely(!(_ctx->xdp.rxq->dev->features & NETIF_F_RXHASH)))
-> -               return -EOPNOTSUPP;
-> +               return -ENODATA;
->
->         *hash =3D be32_to_cpu(_ctx->cqe->rss_hash_result);
->         return 0;
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index 1bb54de7124d..046461ee42ea 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-> @@ -1610,7 +1610,7 @@ static int veth_xdp_rx_timestamp(const struct xdp_m=
-d *ctx, u64 *timestamp)
->         struct veth_xdp_buff *_ctx =3D (void *)ctx;
->
->         if (!_ctx->skb)
-> -               return -EOPNOTSUPP;
-> +               return -ENODATA;
->
->         *timestamp =3D skb_hwtstamps(_ctx->skb)->hwtstamp;
->         return 0;
-> @@ -1621,7 +1621,7 @@ static int veth_xdp_rx_hash(const struct xdp_md *ct=
-x, u32 *hash)
->         struct veth_xdp_buff *_ctx =3D (void *)ctx;
->
->         if (!_ctx->skb)
-> -               return -EOPNOTSUPP;
-> +               return -ENODATA;
->
->         *hash =3D skb_get_hash(_ctx->skb);
->         return 0;
-> diff --git a/net/core/xdp.c b/net/core/xdp.c
-> index 8d3ad315f18d..7133017bcd74 100644
-> --- a/net/core/xdp.c
-> +++ b/net/core/xdp.c
-> @@ -705,7 +705,10 @@ __diag_ignore_all("-Wmissing-prototypes",
->   * @ctx: XDP context pointer.
->   * @timestamp: Return value pointer.
->   *
-> - * Returns 0 on success or ``-errno`` on error.
-> + * Return:
-> + * * Returns 0 on success or ``-errno`` on error.
-> + * * ``-EOPNOTSUPP`` : means device driver does not implement kfunc
-> + * * ``-ENODATA``    : means no RX-timestamp available for this frame
->   */
->  __bpf_kfunc int bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx, =
-u64 *timestamp)
->  {
-> @@ -717,7 +720,10 @@ __bpf_kfunc int bpf_xdp_metadata_rx_timestamp(const =
-struct xdp_md *ctx, u64 *tim
->   * @ctx: XDP context pointer.
->   * @hash: Return value pointer.
->   *
-> - * Returns 0 on success or ``-errno`` on error.
-> + * Return:
-> + * * Returns 0 on success or ``-errno`` on error.
-> + * * ``-EOPNOTSUPP`` : means device driver doesn't implement kfunc
-> + * * ``-ENODATA``    : means no RX-hash available for this frame
->   */
->  __bpf_kfunc int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, u32 *=
-hash)
->  {
->
->
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index 02d357713838..a495ac88fcee 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -1965,6 +1965,25 @@ int udp_pre_connect(struct sock *sk, struct sockaddr *uaddr, int addr_len)
+ }
+ EXPORT_SYMBOL(udp_pre_connect);
+ 
++int __udp_disconnect_with_abort(struct sock *sk)
++{
++	struct inet_sock *inet = inet_sk(sk);
++
++	sk->sk_state = TCP_CLOSE;
++	inet->inet_daddr = 0;
++	inet->inet_dport = 0;
++	sock_rps_reset_rxhash(sk);
++	sk->sk_bound_dev_if = 0;
++	inet_reset_saddr(sk);
++	inet->inet_sport = 0;
++	sk_dst_reset(sk);
++	/* (TBD) In case of sockets listening on wildcard and specific address
++	 * with a common port, socket will be removed from {hash, hash2} table.
++	 */
++	sk->sk_prot->unhash(sk);
++	return 0;
++}
++
+ int __udp_disconnect(struct sock *sk, int flags)
+ {
+ 	struct inet_sock *inet = inet_sk(sk);
+@@ -2937,7 +2956,7 @@ int udp_abort(struct sock *sk, int err)
+ 
+ 	sk->sk_err = err;
+ 	sk_error_report(sk);
+-	__udp_disconnect(sk, 0);
++	__udp_disconnect_with_abort(sk);
+ 
+ out:
+ 	if (!has_current_bpf_ctx())
+-- 
+2.34.1
+
