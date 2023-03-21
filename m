@@ -2,108 +2,71 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7B82C6FD20
-	for <bpf@archiver.kernel.org>; Tue, 21 Mar 2023 19:22:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83431C6FD20
+	for <bpf@archiver.kernel.org>; Tue, 21 Mar 2023 19:36:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbjCUTWL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 Mar 2023 15:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57972 "EHLO
+        id S230329AbjCUTgB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Mar 2023 15:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjCUTWK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 21 Mar 2023 15:22:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420062139
-        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 12:21:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679426463;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rB+PzEgnKkqk2k+vvj3p24uGcCixq7dziCTji95CjO8=;
-        b=XS8pv2hoWt4VEFyWFTzbz7fXVDfnXAY7+8q+kZGg5X9/mczqzen1RdNQi9io57LNlyD7eK
-        yG8bhcG1T7Sik4syB98KTicoO43FecCVOBzmB71NlSVr5X5+sQ+d9LlRnGr7GZcdlNuMml
-        GSbw/WncyM+5+j09+BoqfMf4iRVPMW0=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-508-Hdd_rr3kMEaIik2L97x0KQ-1; Tue, 21 Mar 2023 15:20:59 -0400
-X-MC-Unique: Hdd_rr3kMEaIik2L97x0KQ-1
-Received: by mail-ed1-f69.google.com with SMTP id ev6-20020a056402540600b004bc2358ac04so23718438edb.21
-        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 12:20:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679426459;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rB+PzEgnKkqk2k+vvj3p24uGcCixq7dziCTji95CjO8=;
-        b=fx+BFshXq4PkLWDJP6tzf4lbqk3qKxKXcyvQm325d7E7i1dM53qK77+RpEV2318p5d
-         Y8wZavHbSBBoR08R3+BbRG2pZo2t8IuT3orswo6gvZDkGFfmN8JAHTRY5g6q+hGtxpNp
-         yDDhisIfY9Y6ir8ST0pEK6bmQoCTFLn45pEwHWzjzHMvj1tzTVBb5eIDPxHa4mcG5OoP
-         EO+g3aTRr59ersnnNTi6IFnerMmBwjkuDNK/ap3lcP/afym+y8GKdlL1tAf1UbgREkmG
-         QGXnT8y5TkVgeVrPlnBAcGohd3pa80UHEaZ/mMlmHaUI9fTqD3e7TLwjAtvFpL8r9A4w
-         +vlw==
-X-Gm-Message-State: AO0yUKWAdmA/h5vpJKE31FcOU8aV0fNaFQpuOeS/4mIXRyUZtUJJR6uV
-        T9gxaQPFV7PK8oIIA3q+Ll07qYstrXw/DW0Xh3vo4ZMkPdBEKP5njLDMPcXkiUkamFHJxU9FZ2J
-        BK7enTiQwM6F9
-X-Received: by 2002:a17:906:fad5:b0:931:5630:a23 with SMTP id lu21-20020a170906fad500b0093156300a23mr3658975ejb.50.1679426458390;
-        Tue, 21 Mar 2023 12:20:58 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9PAjldqIVfgFwiw/sf3tp8nVNBWfUz5CMSnpL+CdmdP5wxKPXBBH2ukPUBvKl8JW297p5lsg==
-X-Received: by 2002:a17:906:fad5:b0:931:5630:a23 with SMTP id lu21-20020a170906fad500b0093156300a23mr3658943ejb.50.1679426457816;
-        Tue, 21 Mar 2023 12:20:57 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id b17-20020a17090630d100b009300424a2fdsm6180946ejb.144.2023.03.21.12.20.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 12:20:57 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id D24AC9E34C5; Tue, 21 Mar 2023 20:20:56 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Jesper Dangaard Brouer <brouer@redhat.com>, bpf@vger.kernel.org
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
-        Stanislav Fomichev <sdf@google.com>, martin.lau@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, alexandr.lobakin@intel.com,
-        larysa.zaremba@intel.com, xdp-hints@xdp-project.net,
-        anthony.l.nguyen@intel.com, yoong.siang.song@intel.com,
-        boon.leong.ong@intel.com, intel-wired-lan@lists.osuosl.org,
-        pabeni@redhat.com, jesse.brandeburg@intel.com, kuba@kernel.org,
-        edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
-        davem@davemloft.net
-Subject: Re: [xdp-hints] [PATCH bpf V2] xdp: bpf_xdp_metadata use EOPNOTSUPP
- for no driver support
-In-Reply-To: <167940675120.2718408.8176058626864184420.stgit@firesoul>
-References: <167940675120.2718408.8176058626864184420.stgit@firesoul>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Tue, 21 Mar 2023 20:20:56 +0100
-Message-ID: <87ttyd7vxj.fsf@toke.dk>
+        with ESMTP id S230475AbjCUTfr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 21 Mar 2023 15:35:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99B624BFA;
+        Tue, 21 Mar 2023 12:35:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0C1561DE2;
+        Tue, 21 Mar 2023 19:34:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99C45C433EF;
+        Tue, 21 Mar 2023 19:34:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679427245;
+        bh=gQ2gzzhOzltEtx3g9kF7Jdq/dw5w9/Uy8ZvBSkBR9AA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QV9CuRJlCSTRmHLL3qTD0DNariHmBpQbnNF2USf+Kp5ln9rftl+H6Tu3tyh5VVhw1
+         /jWkLAYOCygBlpjn90HUzRTtAmPTNgXIudnr9WfW1KvL4eK1uKw8vtWqUJ+0qWZAu6
+         8wq7HKTFdVULngK3EYp8nIuUYjPtJb6bX7HXQyED09un5xKV4wFzP4kD3pFOG7UhYL
+         WFbHbTUCblhweRNz0huHZZnKBHM2JkjUXrPDQawwHCWuSb6GZlkE/cRB5iDmbWGhZh
+         5wseBeird/t2f+XXf8qwwwdByQCFwnQFD+92ZcDG4cruXnqYpYdRKmIor88V5Eit3L
+         qrXebfQNLvNrw==
+Date:   Tue, 21 Mar 2023 12:34:03 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc:     Kal Conley <kal.conley@dectris.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Alexei Starovoitov" <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 1/3] xsk: Support UMEM chunk_size > PAGE_SIZE
+Message-ID: <20230321123403.5e78d582@kernel.org>
+In-Reply-To: <ZBmLe27KrmXp7Qfc@boxer>
+References: <20230319195656.326701-1-kal.conley@dectris.com>
+        <20230319195656.326701-2-kal.conley@dectris.com>
+        <ZBmLe27KrmXp7Qfc@boxer>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Jesper Dangaard Brouer <brouer@redhat.com> writes:
+On Tue, 21 Mar 2023 11:48:27 +0100 Maciej Fijalkowski wrote:
+> tell mlx4 does not support xdp multi-buffer, so you were testing this
 
-> When driver doesn't implement a bpf_xdp_metadata kfunc the fallback
-> implementation returns EOPNOTSUPP, which indicate device driver doesn't
-> implement this kfunc.
->
-> Currently many drivers also return EOPNOTSUPP when the hint isn't
-> available, which is ambiguous from an API point of view. Instead
-> change drivers to return ENODATA in these cases.
->
-> There can be natural cases why a driver doesn't provide any hardware
-> info for a specific hint, even on a frame to frame basis (e.g. PTP).
-> Lets keep these cases as separate return codes.
->
-> When describing the return values, adjust the function kernel-doc layout
-> to get proper rendering for the return values.
->
-> Fixes: ab46182d0dcb ("net/mlx4_en: Support RX XDP metadata")
-> Fixes: bc8d405b1ba9 ("net/mlx5e: Support RX XDP metadata")
-> Fixes: 306531f0249f ("veth: Support RX XDP metadata")
-> Fixes: 3d76a4d3d4e5 ("bpf: XDP metadata RX kfuncs")
-> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+FWIW
 
-Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+ConnectX-3 [PRO] == mlx4
+ConnectX-4       == mlx5
 
+But agreed that more info would help. You'd need to have some TLB
+pressure to see benefit of huge pages.
