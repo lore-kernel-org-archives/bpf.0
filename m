@@ -2,104 +2,127 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FAECC6FD1D
-	for <bpf@archiver.kernel.org>; Tue, 21 Mar 2023 21:32:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4ECAC761AF
+	for <bpf@archiver.kernel.org>; Tue, 21 Mar 2023 21:37:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbjCUVb7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 Mar 2023 17:31:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49466 "EHLO
+        id S229927AbjCUVhR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Mar 2023 17:37:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCUVb6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 21 Mar 2023 17:31:58 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FF9584A0
-        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 14:31:56 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id i36-20020a635424000000b0050f93a35888so1623399pgb.17
-        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 14:31:56 -0700 (PDT)
+        with ESMTP id S229854AbjCUVhR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 21 Mar 2023 17:37:17 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DBD36FD2
+        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 14:37:16 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id e15-20020a17090ac20f00b0023d1b009f52so21740043pjt.2
+        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 14:37:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679434315;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BHaAr0uDAMxGAcb/KipOUQu6/FQIs0rhE+32XUg/qjU=;
-        b=j9tPSOPKmVWWyArQXRU009Jg8h4u639apWU23LgsjLQsM7WeceF5snjZNpa476OMU1
-         qbb2m4Ba3cSwIlBliulfi7d3z9jYP7/dNPMY96n3/y057QMmlQlkzq0MNrq0pcoSFSw/
-         n3GkPfag7kquJ4cBDCYLlF2VR2+nXuhxiFljLpyv2vRkrL06ER3FjqCzo2z3CuXF5/Yk
-         fFWUyIFRszl+5OMRma8aZmnaVZaUfRSpfXUdPfQAYN2uwyzxwxZGeSpjlPwloOBt1aIP
-         5Lw9f9KV8O3ZxPXqJhfK2GydE/CyFQGaf/HeqkHIE/nl2h0aED5KjMw7YrXwStGpam9d
-         2OXg==
+        d=isovalent.com; s=google; t=1679434636;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5EN85YGGyVmLXybh8EneRELiBJA8VR+Ppt7gd1CLcFs=;
+        b=Z5+V15tLENQ/EglBfX/39tP5RJR9pgpAyNIELBcWWie+aD27nC3UDzo/5ZzfvZ+aIE
+         OjMV3AZnin455wybXAQ7cHGlNtCnYQysY1ifNyBnxnUvYM1KWtw1yvqpq1fehLYSj7/+
+         FC+uqKpEvdzEyR03pkDaoj3kxzD/NmUZofN4sBVlkF1dQX1zfHpVYSaLUpNeY0jeCFGa
+         XEBqH2k0sKLg2GYrMAFNDJN8zpPKAObniGrXKj2wNAZPG44B1VWbXd7D0T5YRZhiN/4M
+         MII00oRl14FjJJeShax7iVbVioYXyqdBGRz56PCwMKAU5PS3UleF0r02iaVZljil5BVe
+         iA4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679434315;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BHaAr0uDAMxGAcb/KipOUQu6/FQIs0rhE+32XUg/qjU=;
-        b=Pz+6lcOHXo6ak2py5g2NViGfAlY0Dhz4ifPV+BCuWluuxuuKXCRmXK94EJSQ39kTAD
-         RpMzh4d5erDBO+AdBJK5Hl+OEDf2GGc2JAzMOA/3vg51M+ZpA2fnnVPZQBTH/mIZ4OzO
-         QEazaWNiwBIwjyokp4NTWiWxm/y3tst8YNIeASJDj0TgZesLW73WeldjwFo4zNhpncdu
-         CD4viyRyaubr4tmJr7AoaMmSYU0cKPtuqrdIcWf8afF/H2s+HnqEVs39DdEO6+f1Uiwg
-         FZkXgiOz/6xXm9w7NcoiF77I8ecLjSXWdO0Uk0ej8ntWZN6deghznMEvobj0BZme/YZD
-         skCA==
-X-Gm-Message-State: AO0yUKWgsuPVs1ulyqYkiSGPUXQzDMg7DlhdKwgUYNukPKw/WBgWS+qF
-        zG97ONcSMT0QUEiohfF886wNoyQ=
-X-Google-Smtp-Source: AK7set8RXRP/1D8JaseSa6mJ1mqLl+OZmNRrOo5uzMqvlgM5qXXZBFVejvqzYW3MVGIVlozzXY12hJQ=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a65:61b0:0:b0:50c:bde:50c7 with SMTP id
- i16-20020a6561b0000000b0050c0bde50c7mr115615pgv.12.1679434315388; Tue, 21 Mar
- 2023 14:31:55 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 14:31:54 -0700
-In-Reply-To: <20230321184541.1857363-4-aditi.ghag@isovalent.com>
-Mime-Version: 1.0
-References: <20230321184541.1857363-1-aditi.ghag@isovalent.com> <20230321184541.1857363-4-aditi.ghag@isovalent.com>
-Message-ID: <ZBoiShkzD5KY2uIt@google.com>
-Subject: Re: [PATCH v3 bpf-next 3/5] [RFC] net: Skip taking lock in BPF context
-From:   Stanislav Fomichev <sdf@google.com>
-To:     Aditi Ghag <aditi.ghag@isovalent.com>
+        d=1e100.net; s=20210112; t=1679434636;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5EN85YGGyVmLXybh8EneRELiBJA8VR+Ppt7gd1CLcFs=;
+        b=a/xQ5QArKLGaKDanCt0X0fkMa635WAz73H/+226DXyjW7O43BewK0mfbLAIWMv8f3Y
+         KOrnAm2/VGRTQBZCJrwKdU39BT8JFNahEpYfsNVwOnrqv01pfJjoulIlunf7ycQ09qyO
+         TW3VR7BVedImUe1DkBZQLAFO6zuNVdeaM8dLvpu6Kqz1VWu8p90LiBtxwUmDQ1wCmRCS
+         9ngFdaaOoNPvB2+OjKk7tltAsJLnGT+wyODQy1ONzIFrbgOyw/SGMC6XwuA6zj7fcOdI
+         v62Out00oRGrX2zl8xu1o1x8Zm1uCNFgMxW7lPZ/oHRUlj7CoQ3zELNIf8swo+6WD48E
+         nFOg==
+X-Gm-Message-State: AO0yUKVAE1GMAYxOmtUkvVLskZ1JZpGDIQreQbsAtJr+IidkvA8IaZae
+        wlJGGSNMkLn367f5Kgv67SMUFw==
+X-Google-Smtp-Source: AK7set+IZSDXlxsnhUSgoS1Hie00cDNXEsIdYspy3kRpsyEIy8YnSGVgWZvMRbe7N0GLdzHcwro/3w==
+X-Received: by 2002:a17:903:210b:b0:1a1:d096:7152 with SMTP id o11-20020a170903210b00b001a1d0967152mr382505ple.39.1679434635658;
+        Tue, 21 Mar 2023 14:37:15 -0700 (PDT)
+Received: from ?IPv6:2601:647:4900:bd:3c2d:23b3:12df:a2a1? ([2601:647:4900:bd:3c2d:23b3:12df:a2a1])
+        by smtp.gmail.com with ESMTPSA id jh4-20020a170903328400b0019f398ed834sm9153338plb.212.2023.03.21.14.37.14
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 21 Mar 2023 14:37:15 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.7\))
+Subject: Re: [PATCH v3 bpf-next 3/5] [RFC] net: Skip taking lock in BPF
+ context
+From:   Aditi Ghag <aditi.ghag@isovalent.com>
+In-Reply-To: <ZBoiShkzD5KY2uIt@google.com>
+Date:   Tue, 21 Mar 2023 14:37:13 -0700
 Cc:     bpf@vger.kernel.org, kafai@fb.com, edumazet@google.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <FB5E0B90-2A54-4B35-9393-1E4F018FFBFC@isovalent.com>
+References: <20230321184541.1857363-1-aditi.ghag@isovalent.com>
+ <20230321184541.1857363-4-aditi.ghag@isovalent.com>
+ <ZBoiShkzD5KY2uIt@google.com>
+To:     Stanislav Fomichev <sdf@google.com>
+X-Mailer: Apple Mail (2.3608.120.23.2.7)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 03/21, Aditi Ghag wrote:
-> When sockets are destroyed in the BPF iterator context, sock
-> lock is already acquired, so skip taking the lock. This allows
-> TCP listening sockets to be destroyed from BPF programs.
 
-> Signed-off-by: Aditi Ghag <aditi.ghag@isovalent.com>
-> ---
->   net/ipv4/inet_hashtables.c | 9 ++++++---
->   1 file changed, 6 insertions(+), 3 deletions(-)
 
-> diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-> index e41fdc38ce19..5543a3e0d1b4 100644
-> --- a/net/ipv4/inet_hashtables.c
-> +++ b/net/ipv4/inet_hashtables.c
-> @@ -777,9 +777,11 @@ void inet_unhash(struct sock *sk)
->   		/* Don't disable bottom halves while acquiring the lock to
->   		 * avoid circular locking dependency on PREEMPT_RT.
->   		 */
-> -		spin_lock(&ilb2->lock);
-> +		if (!has_current_bpf_ctx())
-> +			spin_lock(&ilb2->lock);
->   		if (sk_unhashed(sk)) {
-> -			spin_unlock(&ilb2->lock);
-> +			if (!has_current_bpf_ctx())
-> +				spin_unlock(&ilb2->lock);
+> On Mar 21, 2023, at 2:31 PM, Stanislav Fomichev <sdf@google.com> =
+wrote:
+>=20
+> On 03/21, Aditi Ghag wrote:
+>> When sockets are destroyed in the BPF iterator context, sock
+>> lock is already acquired, so skip taking the lock. This allows
+>> TCP listening sockets to be destroyed from BPF programs.
+>=20
+>> Signed-off-by: Aditi Ghag <aditi.ghag@isovalent.com>
+>> ---
+>>  net/ipv4/inet_hashtables.c | 9 ++++++---
+>>  1 file changed, 6 insertions(+), 3 deletions(-)
+>=20
+>> diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+>> index e41fdc38ce19..5543a3e0d1b4 100644
+>> --- a/net/ipv4/inet_hashtables.c
+>> +++ b/net/ipv4/inet_hashtables.c
+>> @@ -777,9 +777,11 @@ void inet_unhash(struct sock *sk)
+>>  		/* Don't disable bottom halves while acquiring the lock =
+to
+>>  		 * avoid circular locking dependency on PREEMPT_RT.
+>>  		 */
+>> -		spin_lock(&ilb2->lock);
+>> +		if (!has_current_bpf_ctx())
+>> +			spin_lock(&ilb2->lock);
+>>  		if (sk_unhashed(sk)) {
+>> -			spin_unlock(&ilb2->lock);
+>> +			if (!has_current_bpf_ctx())
+>> +				spin_unlock(&ilb2->lock);
+>=20
+> That's bucket lock, why do we have to skip it?
 
-That's bucket lock, why do we have to skip it?
+Because we take the bucket lock while iterating UDP sockets. See the =
+first commit in this series around batching. But not all BPF contexts =
+that could invoke this function may not acquire the lock, so we can't =
+always skip it.=20
 
->   			return;
->   		}
-
-> @@ -788,7 +790,8 @@ void inet_unhash(struct sock *sk)
-
->   		__sk_nulls_del_node_init_rcu(sk);
->   		sock_prot_inuse_add(sock_net(sk), sk->sk_prot, -1);
-> -		spin_unlock(&ilb2->lock);
-> +		if (!has_current_bpf_ctx())
-> +			spin_unlock(&ilb2->lock);
->   	} else {
->   		spinlock_t *lock = inet_ehash_lockp(hashinfo, sk->sk_hash);
-
-> --
-> 2.34.1
+>=20
+>>  			return;
+>>  		}
+>=20
+>> @@ -788,7 +790,8 @@ void inet_unhash(struct sock *sk)
+>=20
+>>  		__sk_nulls_del_node_init_rcu(sk);
+>>  		sock_prot_inuse_add(sock_net(sk), sk->sk_prot, -1);
+>> -		spin_unlock(&ilb2->lock);
+>> +		if (!has_current_bpf_ctx())
+>> +			spin_unlock(&ilb2->lock);
+>>  	} else {
+>>  		spinlock_t *lock =3D inet_ehash_lockp(hashinfo, =
+sk->sk_hash);
+>=20
+>> --
+>> 2.34.1
 
