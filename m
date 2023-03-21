@@ -2,82 +2,138 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA895C6FD20
-	for <bpf@archiver.kernel.org>; Tue, 21 Mar 2023 22:26:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 994BCC6FD1D
+	for <bpf@archiver.kernel.org>; Tue, 21 Mar 2023 22:35:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbjCUW0P (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 Mar 2023 18:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
+        id S229869AbjCUWfl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Mar 2023 18:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjCUW0P (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 21 Mar 2023 18:26:15 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A7C570B4
-        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 15:26:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=amj/cY5Bd4KpaGirGywKy4Xv735jwOwUujTU15ug2Mk=; b=EClpkbZYIBvSMEUst3IyLdgjNl
-        qoiqBkHNy4SpQfygdXeE+73IXRSoBWuSweFsF90M5L2O6TekRAXi5mldVqReoqYGaSl8OKbsa7igy
-        FG+BqTTOouB9SZ9UnPnmyIjpLNHTlZ4FAgJoFP7xuLnAkp1qiONMS+1B0yKt0ya0YHyQlj0RhoIdD
-        z06aBxVqMLOhQifrACZ19tUwyWlGhOqvhSPuG/akXbrOOCYfaS4XFVEDcHIt2XwLqmhk52DjhUtIu
-        klO7s0LR7enUHfeWNYWS76qqyrrRa/cS/eHO3d0Rojo8JKGAUGKWMB9K1Be1IuIhk87zvYJEta3iR
-        1KPBzYcw==;
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pekQk-00086N-2w; Tue, 21 Mar 2023 23:26:10 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pekQj-000XBt-Tg; Tue, 21 Mar 2023 23:26:09 +0100
-Subject: [stable] seccomp: Move copy_seccomp() to no failure path.
-To:     Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc:     bpf@vger.kernel.org, lefteris.alexakis@kpn.com, sh@synk.net
-References: <20230320143725.8394-1-daniel@iogearbox.net>
- <20230321170925.74358-1-kuniyu@amazon.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <2a09e672-5cc4-346d-2536-5efa5a59bae1@iogearbox.net>
-Date:   Tue, 21 Mar 2023 23:26:09 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        with ESMTP id S229833AbjCUWfl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 21 Mar 2023 18:35:41 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFECC4FF12;
+        Tue, 21 Mar 2023 15:35:38 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ph5z92Rq0z4x5Q;
+        Wed, 22 Mar 2023 09:35:32 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1679438134;
+        bh=/oDjCLpZZAo6+0F2381aoQIUh5MDRhNocNFZnrdqGqY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Kzj7c6Y0Vuw4W+vizDAhLW72UBFu20lLTMoPgDcyTIPe57J+s/AOcdjHI+pQ4sgyY
+         i6wEHNOZ1vg/DIcf+JDDlpf9WzcOLi6qcffpvYktugJOmkqiNw6Kmka/MXD0B5ub/0
+         CM9ogGIlMdY0bBjj05W5Tl/vjzIe/P/hpiu7wJvAb+AV9Ec3bdUbkDxOi8PyokrHwH
+         m9NzVPAwFRzz+jDRGi3sR5WIrIVaWnCVazQhOmHcAPZKflHUMOtaccE3E0f/PWAx5f
+         sEbNCLBoS9IlPJ4tYbWC3IOGiIUkWMI+O7eLx9HoRj4gQrrCjlQ+fNtTYcsAzxYLJI
+         frIq6UcrLLsyQ==
+Date:   Wed, 22 Mar 2023 09:35:31 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the bpf-next tree
+Message-ID: <20230322093531.7ac8d09e@canb.auug.org.au>
+In-Reply-To: <dca3f426-e3de-207b-51a0-ae272d2b1462@intel.com>
+References: <20230320102619.05b80a98@canb.auug.org.au>
+        <dca3f426-e3de-207b-51a0-ae272d2b1462@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20230321170925.74358-1-kuniyu@amazon.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26850/Tue Mar 21 08:22:52 2023)
+Content-Type: multipart/signed; boundary="Sig_/0+Um03NOXGSe94ZRNB+vyNz";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Kuniyuki,
+--Sig_/0+Um03NOXGSe94ZRNB+vyNz
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 3/21/23 6:09 PM, Kuniyuki Iwashima wrote:
-[...]
->> Link: https://github.com/awslabs/amazon-eks-ami/issues/1179
->> Link: https://github.com/awslabs/amazon-eks-ami/issues/1219
-> 
-> I'm investigating these issues with EKS folks.  On the issue 1179, the
-> customer was using our 5.4 kernel, and on 1219, 5.10 kernel.
-> 
-> Then, I found my memleak fix commit a1140cb215fa ("seccomp: Move
-> copy_seccomp() to no failure path.") was not backported to upstream 5.10
-> stable trees.  We'll test if the issue can be reproduced with/without
-> the fix.
+Hi all,
 
-Good to know that 5.10 EKS kernel is based on top of stable one. It indeed
-looks like this could be happening there given a1140cb215fa is missing. I
-wonder given it has proper Fixes tag why it didn't made it into stable tree
-already. Thanks for checking, if it confirms, then lets ping Greg to cherry-
-pick.
+On Mon, 20 Mar 2023 13:07:23 +0100 Alexander Lobakin <aleksander.lobakin@in=
+tel.com> wrote:
+>
+> > After merging the bpf-next tree, today's linux-next build (powerpc
+> > ppc64_defconfig) failed like this:
+> >=20
+> > net/bpf/test_run.c: In function 'frame_was_changed':
+> > net/bpf/test_run.c:224:22: error: 'const struct xdp_page_head' has no m=
+ember named 'frm'; did you mean 'frame'?
+> >   224 |         return head->frm.data !=3D head->orig_ctx.data ||
+> >       |                      ^~~
+> >       |                      frame
+> > net/bpf/test_run.c:225:22: error: 'const struct xdp_page_head' has no m=
+ember named 'frm'; did you mean 'frame'?
+> >   225 |                head->frm.flags !=3D head->orig_ctx.flags;
+> >       |                      ^~~
+> >       |                      frame =20
+>=20
+> The correct solution is to change `frm.` with `frame->`, but I hope the
+> BPF maintainers will merge bpf into bpf-next to pick up fixes and
+> changes like this :)
 
-> Anyway, I'll backport this patch to our all trees.
+Well, that hasn't happened yet, so I will apply the following patch
+until it does.
 
-Sounds good, thanks!
-Daniel
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 22 Mar 2023 09:20:26 +1100
+Subject: [PATCH] bpf, test_run: fix up for "bpf, test_run: fix &xdp_frame m=
+isplacement for LIVE_FRAMES"
+
+ineracting with commit
+
+  e5995bc7e2ba ("bpf, test_run: fix crashes due to XDP frame overwriting/co=
+rruption")
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ net/bpf/test_run.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index af5804d6bff2..c2bab8e20406 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -221,8 +221,8 @@ static bool frame_was_changed(const struct xdp_page_hea=
+d *head)
+ 	 * i.e. has the highest chances to be overwritten. If those two are
+ 	 * untouched, it's most likely safe to skip the context reset.
+ 	 */
+-	return head->frm.data !=3D head->orig_ctx.data ||
+-	       head->frm.flags !=3D head->orig_ctx.flags;
++	return head->frame->data !=3D head->orig_ctx.data ||
++	       head->frame->flags !=3D head->orig_ctx.flags;
+ }
+=20
+ static bool ctx_was_changed(struct xdp_page_head *head)
+--=20
+2.39.2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/0+Um03NOXGSe94ZRNB+vyNz
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQaMTMACgkQAVBC80lX
+0GwS0gf9Er4xVfO0Mlc8mXSX3iApdbtqop58WwP3iKtf+iVbNohzo5aPacIRNZUg
+FX6hxwG5qAGOjt6mRtadnWfPjGmXTI26SSd9hu3WGQaUtEOPCBY38KiNinkyA7Am
+lRZBQQ9tK1YiRJqOsJPICk2tPNyFoHk9/tVBZWR0RZscEybkIK/4ZrNZ8pej4lmK
+CwCMdTAvJSU8To0TaRubx3RNZKgzyTY91svpJqP3SyzmsdIpCrMezA7yEsKPAnLV
+vWkUJyS3fHUtLG82Vn1Xo2xxkzACs0prFfe9NTsU8IdF0/dRCJjPlnZNoOg0Y/5U
+Efbz1rpDfapBNm9DhYykJWKkUvnesg==
+=1KkB
+-----END PGP SIGNATURE-----
+
+--Sig_/0+Um03NOXGSe94ZRNB+vyNz--
