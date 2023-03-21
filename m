@@ -2,106 +2,135 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 154E1C761A6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE72DC6FD20
 	for <bpf@archiver.kernel.org>; Tue, 21 Mar 2023 18:46:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbjCUSqk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 Mar 2023 14:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33422 "EHLO
+        id S230452AbjCUSql (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Mar 2023 14:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231124AbjCUSq3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 21 Mar 2023 14:46:29 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9599656506
-        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 11:45:52 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id d13so16441034pjh.0
-        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 11:45:52 -0700 (PDT)
+        with ESMTP id S230479AbjCUSqa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 21 Mar 2023 14:46:30 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4389F5651D
+        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 11:45:49 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id o2so9606384plg.4
+        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 11:45:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1679424351;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ySR/7H/KndjNOioe8wi69UHVxagx7ZilKLOoZyQ/76g=;
-        b=jXJGqU5NOSY3X78jYA4klyuheJGhc1gv2EBl7cKlJciO88FzAtSbGkAxxAerIzuPQR
-         H7OnofPlNauub7kVmKCgqLVORgOkLFJ10T0K4lboU/t2/uDuIUXeA7UsHPVHweUXASoX
-         TOvdKqlpXBXPMWMg1OU9YJui3cSBzIbH3tQUv0CnvI7Zfy666I+WW6DLJHUgeVMHk+06
-         tc8pFZtYoEDaevUkfalJS//QolWIxlk4OPsLqdq2VSL+6oq9O7yZfzWuKq8Y7S00pvoq
-         hTbhSIzXaWh43acIooqzlsqOJki6O7SKLZ+Cs0HR0PgzLtr8Lt7O4AwE9J8F2USPN3KP
-         ootQ==
+        d=isovalent.com; s=google; t=1679424348;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ry0HKca0xdvBhNGOZmAmHVj5EjeKBoQg8ueUPsfqq58=;
+        b=HVnqSBaP5shvsPkqzN9bc+hrGoFbP9o0y8W2lNXtxaNEXIJNr/2V37if5lO2fUE0d/
+         iNtXzGn//4anelkY/CtuW/NwuOiWSmGoGj/GXGM95Y9Vy2bAzEqTq0t7r9VFt0BOen0D
+         aKTFnI7qZiWxNBayj/BHismjsDl2/6N9wJLYm5jAQuh+sVcDzBtsmJPpaR5B0U6+uVxN
+         GMZNjlHNMc9MRLrgBjwNBqprTTV4uPxq88EMG1WsOIdtF3U61TSu70HG5TaKXgNZ8buA
+         cOIpEPpBo86sCoE15BDhQb6yfbRqeXXgj8RXdrncqkjUsNxwHfv3ABqV3+jPWUOducsy
+         grzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679424351;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ySR/7H/KndjNOioe8wi69UHVxagx7ZilKLOoZyQ/76g=;
-        b=uEiEH7KE1ABAYgXwzs5jxhQf7bLi+CG28uruqBU/ULHSzExguva8u8mY254RgeKADU
-         4F6TXMYMXkTAfRufQnZObycQHeBGAttl8+S9mKBz4T0gowAi510TNeWpI5gcZk3iqPEf
-         eJYrYbxNMFeGQeWqlhgsquPmYnuHX5N4ZgBoT7/yB2kK4xS6I2ZGy+gy1sJxIlslN/Ty
-         +mAMu0I9cC0KldlJJxWaIl6xSXX2F6mRUaN+HPOeKoiLqnyvi2HKnn5Dw9c+Z9SCuzA6
-         63y8yzK5APH0Jvr5ZBzMu45ql/7B3WBFDAlULnbxtFE/RaeW5s/huDPqIr7HmgAEtK42
-         jVeQ==
-X-Gm-Message-State: AO0yUKUR54gUR6U0oVj8uwMkpflEm6rvx+z69lhLYosVdtuQxpP+4yRN
-        RFVtOxTA/gmwAGQvv51N7HgQv1Tztk21iA/MXZw=
-X-Google-Smtp-Source: AK7set/LKH37N81+ekuT2OO4haAShAmThuI34pBiosUg7tDCw95FaNMGpoK4vmw+oFgOie3UOmRgfw==
-X-Received: by 2002:a17:902:fa0f:b0:1a1:a8eb:d33e with SMTP id la15-20020a170902fa0f00b001a1a8ebd33emr110985plb.8.1679424350837;
-        Tue, 21 Mar 2023 11:45:50 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679424348;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ry0HKca0xdvBhNGOZmAmHVj5EjeKBoQg8ueUPsfqq58=;
+        b=lNgOypMhqjWKVknNhA3e88pfr8ER3oMHTz2AyPPHAkcjhkiHAfG1ScP5p299nsx0zT
+         mhsgI9pxq4Gz1UFL4rkaW0eaU5uwfFCb7MRqFL0GnjlhcdvDxyhSIh86y2LvVuRMbivl
+         1CpxS0Oo9oSBDkI/77YYpPmHa8Lmm9bbt/O0C0T62spPqL0zgXjXuy8qQ5QJ2cMh7v6G
+         p+Ks+OtIk4quW05oZzjEGJTxM3M+eY5koi6dVAdf1broeuuFdrMbnC1XhiAqUzO3oUw9
+         bnk4pxjzf619cDQjMWYEAZ/FibFUIKthp72yi/IHDynQtfFQD4GcR7DSsDXkeKNgNuce
+         Ugyw==
+X-Gm-Message-State: AO0yUKXpchkU+latB5vVQx+JdCxi1Vama2esoVO+wlv5ODha5/OHnMTn
+        FKj2sGZMkd0dWAUIh+EXa2c5w2Jr1ar/QnpP9Jc=
+X-Google-Smtp-Source: AK7set/7k6L8/5lMju9Z2FaG/Qfhh02CdX0jfmyMPj4FwB9gGzXkt/2gmtWLzfVXctG20qW3A17ceQ==
+X-Received: by 2002:a17:90b:1e42:b0:23d:39e0:13b with SMTP id pi2-20020a17090b1e4200b0023d39e0013bmr579629pjb.43.1679424347649;
+        Tue, 21 Mar 2023 11:45:47 -0700 (PDT)
 Received: from localhost.localdomain ([2604:1380:4611:8100::1])
-        by smtp.gmail.com with ESMTPSA id 21-20020a170902c15500b0019cf747253csm9095878plj.87.2023.03.21.11.45.49
+        by smtp.gmail.com with ESMTPSA id 21-20020a170902c15500b0019cf747253csm9095878plj.87.2023.03.21.11.45.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 11:45:50 -0700 (PDT)
+        Tue, 21 Mar 2023 11:45:47 -0700 (PDT)
 From:   Aditi Ghag <aditi.ghag@isovalent.com>
 To:     bpf@vger.kernel.org
 Cc:     kafai@fb.com, sdf@google.com, edumazet@google.com,
         aditi.ghag@isovalent.com
-Subject: [PATCH v3 bpf-next 3/5] [RFC] net: Skip taking lock in BPF context
-Date:   Tue, 21 Mar 2023 18:45:39 +0000
-Message-Id: <20230321184541.1857363-4-aditi.ghag@isovalent.com>
+Subject: [PATCH v3 bpf-next 0/5] bpf-next: Add socket destroy capability
+Date:   Tue, 21 Mar 2023 18:45:36 +0000
+Message-Id: <20230321184541.1857363-1-aditi.ghag@isovalent.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230321184541.1857363-1-aditi.ghag@isovalent.com>
-References: <20230321184541.1857363-1-aditi.ghag@isovalent.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When sockets are destroyed in the BPF iterator context, sock
-lock is already acquired, so skip taking the lock. This allows
-TCP listening sockets to be destroyed from BPF programs.
+This patch adds the capability to destroy sockets in BPF. We plan to use
+the capability in Cilium to force client sockets to reconnect when their
+remote load-balancing backends are deleted. The other use case is
+on-the-fly policy enforcement where existing socket connections prevented
+by policies need to be terminated.
 
-Signed-off-by: Aditi Ghag <aditi.ghag@isovalent.com>
----
- net/ipv4/inet_hashtables.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+The use cases, and more details around
+the selected approach was presented at LPC 2022 -
+https://lpc.events/event/16/contributions/1358/.
+RFC discussion -
+https://lore.kernel.org/netdev/CABG=zsBEh-P4NXk23eBJw7eajB5YJeRS7oPXnTAzs=yob4EMoQ@mail.gmail.com/T/#u.
+v2 patch series -
+https://lore.kernel.org/bpf/20230223215311.926899-1-aditi.ghag@isovalent.com/T/#t
 
-diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-index e41fdc38ce19..5543a3e0d1b4 100644
---- a/net/ipv4/inet_hashtables.c
-+++ b/net/ipv4/inet_hashtables.c
-@@ -777,9 +777,11 @@ void inet_unhash(struct sock *sk)
- 		/* Don't disable bottom halves while acquiring the lock to
- 		 * avoid circular locking dependency on PREEMPT_RT.
- 		 */
--		spin_lock(&ilb2->lock);
-+		if (!has_current_bpf_ctx())
-+			spin_lock(&ilb2->lock);
- 		if (sk_unhashed(sk)) {
--			spin_unlock(&ilb2->lock);
-+			if (!has_current_bpf_ctx())
-+				spin_unlock(&ilb2->lock);
- 			return;
- 		}
- 
-@@ -788,7 +790,8 @@ void inet_unhash(struct sock *sk)
- 
- 		__sk_nulls_del_node_init_rcu(sk);
- 		sock_prot_inuse_add(sock_net(sk), sk->sk_prot, -1);
--		spin_unlock(&ilb2->lock);
-+		if (!has_current_bpf_ctx())
-+			spin_unlock(&ilb2->lock);
- 	} else {
- 		spinlock_t *lock = inet_ehash_lockp(hashinfo, sk->sk_hash);
- 
+v3 highlights:
+- Martin's review comments:
+  - UDP iterator batching patch supports resume operation.
+  - Removed "full_sock" check from the destroy kfunc.
+  - Reset of metadata in case of rebatching.
+- Extended selftests to cover cases for destroying listening sockets.
+- Fixes for destroying listening TCP and UDP sockets.
+- Stan's review:
+  - Refactored selftests to use ASSERT_* in lieu of CHECK.
+  - Free leaking afinfo in fini_udp.
+- Restructured test cases per Andrii's comment.
+
+Notes to the reviewers:
+
+- There are two RFC commits for being able to destroy listening TCP and
+  UDP sockets. The TCP commit isn't quite correct, as inet_unhash could
+  be invoked from BPF context for cases other than iterator.
+  The UDP commit seems reasonable based on my understanding of the code,
+  but it may lead to unintended behavior when there are sockets
+  listening on wildcard and specific address with a common port.
+  I would appreciate insights into both the commits, as I'm not
+  intimately familiar with some of the overall code path.
+
+(Below notes are same as v2 patch series.)
+- I hit a snag while writing the kfunc where verifier complained about the
+  `sock_common` type passed from TCP iterator. With kfuncs, there don't
+  seem to be any options available to pass BTF type hints to the verifier
+  (equivalent of `ARG_PTR_TO_BTF_ID_SOCK_COMMON`, as was the case with the
+  helper).  As a result, I changed the argument type of the sock_destory
+  kfunc to `sock_common`.
+
+- The `vmlinux.h` import in the selftest prog unexpectedly led to libbpf
+  failing to load the program. As it turns out, the libbpf kfunc related
+  code doesn't seem to handle BTF `FWD` type for structs. I've attached debug
+  information about the issue in case the loader logic can accommodate such
+  gotchas. Although the error in this case was specific to the test imports.
+
+Aditi Ghag (5):
+  bpf: Implement batching in UDP iterator
+  bpf: Add bpf_sock_destroy kfunc
+  [RFC] net: Skip taking lock in BPF context
+  [RFC] udp: Fix destroying UDP listening sockets
+  selftests/bpf: Add tests for bpf_sock_destroy
+
+ include/net/udp.h                             |   1 +
+ net/core/filter.c                             |  54 ++++
+ net/ipv4/inet_hashtables.c                    |   9 +-
+ net/ipv4/tcp.c                                |  16 +-
+ net/ipv4/udp.c                                | 283 +++++++++++++++++-
+ .../selftests/bpf/prog_tests/sock_destroy.c   | 190 ++++++++++++
+ .../selftests/bpf/progs/sock_destroy_prog.c   | 151 ++++++++++
+ 7 files changed, 684 insertions(+), 20 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/sock_destroy.c
+ create mode 100644 tools/testing/selftests/bpf/progs/sock_destroy_prog.c
+
 -- 
 2.34.1
 
