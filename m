@@ -2,162 +2,112 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E3CCC6FD1D
-	for <bpf@archiver.kernel.org>; Tue, 21 Mar 2023 21:37:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21A57C6FD20
+	for <bpf@archiver.kernel.org>; Tue, 21 Mar 2023 21:42:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbjCUVhY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 Mar 2023 17:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
+        id S229584AbjCUVmN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Mar 2023 17:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbjCUVhU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 21 Mar 2023 17:37:20 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED06336FD2
-        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 14:37:17 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id o12so65184177edb.9
-        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 14:37:17 -0700 (PDT)
+        with ESMTP id S229511AbjCUVmM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 21 Mar 2023 17:42:12 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9911724124
+        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 14:42:10 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id c1so11897523vsk.2
+        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 14:42:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679434636;
+        d=google.com; s=20210112; t=1679434929;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vIxpnDN2XOCMZEdVpXbCPUIgl3UgN6HIUNp59OLsU+s=;
-        b=EHdTSWUEJeI//LtRCgkMaAp1x1StnZmH04iV9DB4YahXeKGpfYALBGUYhADQEKuNB2
-         5bj+5N1IzN9p8dG9yqnCiQwpGhARlveD27SO5Bt3rUAqg66ddYvTyKbzSVPLphM/QhSo
-         LBmN7gRdFOMPenpXsCAkvi6kiOidoMYK0sDb8/yll5QQYQwy99gPGW8xYhsqrk6ajhAC
-         zXAyTVsToC7A+yl2odlZAz23lA+MsdZTGDGkM055rBZ4yf/7fCtMtKPfxkv0meeVuOGH
-         47JT7Yfz/7WFLK6As0xk1XNv3BjK2Q6IoQCP8+DRptCfj0m/Sxx2Kl1bmZEO279hb32W
-         8Bmg==
+        bh=cDfUW3+1v7UB1svzFHjxoW+eFCQZwpGjpojk/1REWww=;
+        b=NL+Mlc/9bVGBw3VFWGJzqzkxHvlPnlrKBB+SJRM1gnAIXxbrUG0LpjtZYG8ovrTv36
+         UimygkcG2+MK6k81It2QzLeJ+oX9qBdzlLTZmf6HmSfpYfnDpb95RWenFF+JOF3m9JX6
+         nmIXoTqq9x76BFuyTTjKHdlh5GPmP3uSWNdS7TnTsCA9MMEyqIN5tT09tCrA+28wlZTT
+         E0xAHfiD9BtKfwk+jzKm6BzmZMtsBLJmjXR2zrA9w7FVO+MpYcwyfzsEQLFGXqWKCOKa
+         vYfeRzV5mzeYBn4K8+bxCXB4x8FIKpah76xsodJI6TMVvMh7JD9JwprlnyvH4s7FbSEw
+         c5yA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679434636;
+        d=1e100.net; s=20210112; t=1679434929;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vIxpnDN2XOCMZEdVpXbCPUIgl3UgN6HIUNp59OLsU+s=;
-        b=Sd1egCTrvMzqS7Sxsl3sj6/MQon+Kbw4r/N4jnYgniT/MLYMTDCrsJnSkL8JeUtX0t
-         /a6fbDJLiFRIdGBbLjXOzf3uViw7diwijk48IxYG6tMZLrtNcu0hYMa6DkvNV1X4Trg9
-         i+OZjP4fDHsi86R7HvQt5xHT24q/vOrc5y3FLMdqqPInmwV7ghL6gBB2PWAmn2SVTAgX
-         bueoAU/KYpylA56boJN3EgoXDid1jGS2I9v6TO3pNEHPgZdjun30ypvOfL92ShVxTLaj
-         DXha1gciW8cGjCAdw4tQ9mY5ku+ld9mEjT6k7zFY8TycR+Q+BHZyl3FJd0SnSSdlgpqD
-         5BNw==
-X-Gm-Message-State: AO0yUKU0on8l95OvR4k1q88zjaZJemjqKK4FyYVANXPZA9DprqKZXcpr
-        MfM5AZJ8SO61011Sz0NJfIYsIvsOFvn6BMXexic=
-X-Google-Smtp-Source: AK7set/ZJX10/cSe7fwcVSPYRwNL7YZFiAIguQDSc0uy9FlQZ0yfnWQmZw6W5/kVjD5a/s6KpRbEHJ4LprzUQzhNNo4=
-X-Received: by 2002:a17:906:2f02:b0:877:747d:4a85 with SMTP id
- v2-20020a1709062f0200b00877747d4a85mr2076342eji.3.1679434636224; Tue, 21 Mar
- 2023 14:37:16 -0700 (PDT)
+        bh=cDfUW3+1v7UB1svzFHjxoW+eFCQZwpGjpojk/1REWww=;
+        b=aSBA6iTOmzrldvKw+p0a679cuGOO5IiLEeMZwBrrL2HgUVAMY19a85fBqrvE48WCer
+         il+9huHiVE8EaoE5vHeNikd8eyYzmp0noflVdQa3ktS1g/YMnVRt2+rbUw8yMdezhcxD
+         O9f4q9eEvZvU3nx302BIYg9f8lRXfEBkL1vURtxkIlG4UrGq1r+7UrlUQFhI3p4O6jdq
+         b3FreYDrpo0u2Ph/REUpsc4XyqcWxRIFd2pZ39jV+AUOrEdzWgqNs3/wPbuWh4Wtlc6a
+         LuAxtxo+hUrAHLOXkakJDwYVsS5Rt3euIJunZfB5C57LPmBxtveEF3+KLmISqIQqE9zv
+         f1Xw==
+X-Gm-Message-State: AO0yUKU8MVQyFz+5b1Q8mssoFA1zdA/pGljeYwIkHeGVkNV57BelERG2
+        V2MSXS/z4in4LzoTri/94wkKDlMgoLBpGIOHW8qBLvZaMeiS0WLR2+W5LA==
+X-Google-Smtp-Source: AK7set+X9mr3oF6LQ1rEm7DytM6tKQYZMUwTMIE1RViPlHd+YMQ5t9c+54Gs2DZwL6youIq/dughKdkkU0Trd5DhI18=
+X-Received: by 2002:a67:e04a:0:b0:425:f836:59ba with SMTP id
+ n10-20020a67e04a000000b00425f83659bamr2623301vsl.7.1679434929576; Tue, 21 Mar
+ 2023 14:42:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230318011324.203830-1-inwardvessel@gmail.com> <a16c0bc28b0e252263ad689571e14015733cdd77.camel@gmail.com>
-In-Reply-To: <a16c0bc28b0e252263ad689571e14015733cdd77.camel@gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 21 Mar 2023 14:37:04 -0700
-Message-ID: <CAADnVQKKUPDosq3c_bwjKGxME=06ZksfXK=gZoJ6eFGxaeJrPw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/2] error checking where helpers call bpf_map_ops
-To:     Eduard Zingerman <eddyz87@gmail.com>
-Cc:     inwardvessel <inwardvessel@gmail.com>, bpf <bpf@vger.kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Yonghong Song <yhs@meta.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kernel Team <kernel-team@meta.com>
+References: <20230321184541.1857363-1-aditi.ghag@isovalent.com>
+ <20230321184541.1857363-4-aditi.ghag@isovalent.com> <ZBoiShkzD5KY2uIt@google.com>
+ <FB5E0B90-2A54-4B35-9393-1E4F018FFBFC@isovalent.com>
+In-Reply-To: <FB5E0B90-2A54-4B35-9393-1E4F018FFBFC@isovalent.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 21 Mar 2023 14:41:58 -0700
+Message-ID: <CANn89iLcBqGDtOpfny0i4=UV8OUEjWb7RDLizpDP_+wUQeODcw@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next 3/5] [RFC] net: Skip taking lock in BPF context
+To:     Aditi Ghag <aditi.ghag@isovalent.com>
+Cc:     Stanislav Fomichev <sdf@google.com>, bpf@vger.kernel.org,
+        kafai@fb.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 7:19=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
+On Tue, Mar 21, 2023 at 2:37=E2=80=AFPM Aditi Ghag <aditi.ghag@isovalent.co=
+m> wrote:
 >
-> On Fri, 2023-03-17 at 18:13 -0700, inwardvessel wrote:
-> > From: JP Kobryn <inwardvessel@gmail.com>
-> >
-> > Within bpf programs, the bpf helper functions can make inline calls to
-> > kernel functions. In this scenario there can be a disconnect between th=
-e
-> > register the kernel function writes a return value to and the register =
-the
-> > bpf program uses to evaluate that return value.
-> >
-> > As an example, this bpf code:
-> >
-> > long err =3D bpf_map_update_elem(...);
-> > if (err && err !=3D -EEXIST)
-> >       // got some error other than -EEXIST
-> >
-> > ...can result in the bpf assembly:
-> >
-> > ; err =3D bpf_map_update_elem(&mymap, &key, &val, BPF_NOEXIST);
-> >   37: movabs $0xffff976a10730400,%rdi
-> >   41: mov    $0x1,%ecx
-> >   46: call   0xffffffffe103291c       ; htab_map_update_elem
-> > ; if (err && err !=3D -EEXIST) {
-> >   4b: cmp    $0xffffffffffffffef,%rax ; cmp -EEXIST,%rax
-> >   4f: je     0x000000000000008e
-> >   51: test   %rax,%rax
-> >   54: je     0x000000000000008e
-> >
-> > The compare operation here evaluates %rax, while in the preceding call =
-to
-> > htab_map_update_elem the corresponding assembly returns -EEXIST via %ea=
-x:
-> >
-> > movl $0xffffffef, %r9d
-> > ...
-> > movl %r9d, %eax
-> >
-> > ...since it's returning int (32-bit). So the resulting comparison becom=
-es:
-> >
-> > cmp $0xffffffffffffffef, $0x00000000ffffffef
-> >
-> > ...making it not possible to check for negative errors or specific erro=
-rs,
-> > since the sign value is left at the 32nd bit. It means in the original
-> > example, the conditional branch will be entered even when the error is
-> > -EEXIST, which was not intended.
-> >
-> > The selftests added cover these cases for the different bpf_map_ops
-> > functions. When the second patch is applied, changing the return type o=
-f
-> > those functions to long, the comparison works as intended and the tests
-> > pass.
-> >
 >
-> Looks like this fixes commit from 2020:
-> bdb7b79b4ce8 ("bpf: Switch most helper return values from 32-bit int to 6=
-4-bit long")
 >
-> To add to the summary: the issue is caused by the fact that test
-> program uses map function definitions from `bpf_helper_defs.h`, e.g.:
+> > On Mar 21, 2023, at 2:31 PM, Stanislav Fomichev <sdf@google.com> wrote:
+> >
+> > On 03/21, Aditi Ghag wrote:
+> >> When sockets are destroyed in the BPF iterator context, sock
+> >> lock is already acquired, so skip taking the lock. This allows
+> >> TCP listening sockets to be destroyed from BPF programs.
+> >
+> >> Signed-off-by: Aditi Ghag <aditi.ghag@isovalent.com>
+> >> ---
+> >>  net/ipv4/inet_hashtables.c | 9 ++++++---
+> >>  1 file changed, 6 insertions(+), 3 deletions(-)
+> >
+> >> diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+> >> index e41fdc38ce19..5543a3e0d1b4 100644
+> >> --- a/net/ipv4/inet_hashtables.c
+> >> +++ b/net/ipv4/inet_hashtables.c
+> >> @@ -777,9 +777,11 @@ void inet_unhash(struct sock *sk)
+> >>              /* Don't disable bottom halves while acquiring the lock t=
+o
+> >>               * avoid circular locking dependency on PREEMPT_RT.
+> >>               */
+> >> -            spin_lock(&ilb2->lock);
+> >> +            if (!has_current_bpf_ctx())
+> >> +                    spin_lock(&ilb2->lock);
+> >>              if (sk_unhashed(sk)) {
+> >> -                    spin_unlock(&ilb2->lock);
+> >> +                    if (!has_current_bpf_ctx())
+> >> +                            spin_unlock(&ilb2->lock);
+> >
+> > That's bucket lock, why do we have to skip it?
 >
->     static long (*bpf_map_update_elem)(...) 2;
->
-> These definitions are generated from `include/uapi/linux/bpf.h`,
-> which specifies the return type for this helper to be `long`
-> (changed to from `int` in the commit mentioned above).
-> That's why clang does not insert sign extension instructions when
-> helper is called.
+> Because we take the bucket lock while iterating UDP sockets. See the firs=
+t commit in this series around batching. But not all BPF contexts that coul=
+d invoke this function may not acquire the lock, so we can't always skip it=
+.
 
-JP,
+This means the kernel will deadlock right before this patch is applied ?
 
-could you please add Ed's clarification to the commit log
-and add 'Fixes: bdb7b79b4ce8 ...' tag and respin ?
+Please squash this patch into the patch adding this bug.
 
->
-> Interesting how this went under the radar for so long, probably
-> because user code mostly uses `int` to catch return value of map
-> functions.
->
-> That commit changes return types for a lot of functions.
-> I looked through function definitions and verifier.c code for those,
-> but have not found any additional issues, except for two obvious:
-> - bpf_redirect_map / ops->map_redirect
-> - bpf_for_each_map_elem / ops->map_for_each_callback
-
-Please fix these two as well in the same patch.
-
-> Tested-By: Eduard Zingerman <eddyz87@gmail.com>
-
-and please carry the Tested-by tag in the respin.
-
-Thanks!
+Also, ensuring locks are owned would be nice (full LOCKDEP support,
+instead of assumptions)
