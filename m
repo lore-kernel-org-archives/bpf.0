@@ -2,192 +2,91 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78890C76195
-	for <bpf@archiver.kernel.org>; Tue, 21 Mar 2023 20:09:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A3CDC6FD20
+	for <bpf@archiver.kernel.org>; Tue, 21 Mar 2023 20:39:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbjCUUJN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 Mar 2023 16:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
+        id S229487AbjCUUjA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Mar 2023 16:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbjCUUJM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 21 Mar 2023 16:09:12 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52FE23861
-        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 13:09:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=FRzy+JU8J6I6w4NYT0F96m0Z/r0IBlgWhzpWmtbwv/g=; b=g8R0h1av2SeZq1i8F1PMksQK9o
-        OQrQNE+uSKz2V3ZjInuQtBYrtn6hOsmr1AiiVWPsXuqCO3linccIAh68b20OwQ8htDgFUephHvI/Z
-        43N46D/n5SaEiSe6gPQL+vqo3O96mKSdezTJXMC2NUlvgiSXInqS4sdMMxMM45m5icsZtKdAdAeqA
-        g/2F5p2xtqgqxeAGsNFEUEOA7tn5tamO5HCUdIVi6aC/6JB6Bqq3K6uKRxKOCXh+IA3OIhfxoTf3T
-        JeOB6zsq+NhQMXmOtWtEVH7f8udcnRdm6h8AkAVkV4sFJOgJ7hDLkn4G/xksKf88+/SEq4I0tOitb
-        TGq8tBqw==;
-Received: from [81.6.34.132] (helo=localhost)
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pehkG-000CQd-RR; Tue, 21 Mar 2023 20:34:08 +0100
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     bpf@vger.kernel.org
-Cc:     Xu Kuohai <xukuohai@huawei.com>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Check when bounds are not in the 32-bit range
-Date:   Tue, 21 Mar 2023 20:33:54 +0100
-Message-Id: <20230321193354.10445-2-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20230321193354.10445-1-daniel@iogearbox.net>
-References: <20230321193354.10445-1-daniel@iogearbox.net>
+        with ESMTP id S229885AbjCUUi7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 21 Mar 2023 16:38:59 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21D93A864;
+        Tue, 21 Mar 2023 13:38:57 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id z10so9355050pgr.8;
+        Tue, 21 Mar 2023 13:38:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679431137;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SiZ2q8feRrZogsSXuy10V1SXAnZtQZnnaFP+X15KKCg=;
+        b=VenZd4XDd7XaidXlU5XdG8CN+9fkYShGFFfYqxWY/XwfAAkHOzoyxEc3MQhsHodAHG
+         LSKKMcF8wX4hi5mNIbQ5tRK+E9QLn3oXlzjB48VQvgs+m3SPpxNmySANo0UNltCbl03D
+         kTqa/VrYKcSfjgfcyqCdyG6Kx5kKhNGWuM0AluHahQ6H3MLOcbn5QUf+MMI7pHPvFkBi
+         gL2qnnHUmUgkl7GSguHOFO/kTXCp2w/KRiSvBKBHNu+4XY7TOqjLxawW4YijxVH/0aL4
+         ikOAKIhgjBnooptAO4hDocDQwWU/efRcdJNH1NwzZkBFd6ZF3DFxPdosLs3mLSVuyOCa
+         38EA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679431137;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SiZ2q8feRrZogsSXuy10V1SXAnZtQZnnaFP+X15KKCg=;
+        b=HvK6GOlxJGDOvJvsMavYNfHlzO8dbMQlvrZ5xCPFFJfJ3XN/4ZCMqYLuw1obqNkRzQ
+         /dreYM5qXYxSQO5NJH6BY9URtsZLkOV0Ew+ZwSsA1viZ4iA5Xr5lMruVuo8iOxpj2mfL
+         ShgPEcqwXBDFgS4FyDanfoN6Y1UIlZUTrMxVZ1Y3ausuY6TUqNGjMpZKWr8U1KniROzq
+         7gN8JIX5m5kQNSbWKA6zsiMv1xdOIJ9+QbfGg6zfRrWuujqIzgYMANRRM26pSZ+GWbwo
+         Uvv8KdPMeyFA2TYVms1b+XRBtBy3l5B0rVm4vNKfQPXiqhxIJhOlZKPq2HZSWxMm9XRb
+         coOw==
+X-Gm-Message-State: AO0yUKWnM7tqW1yNWC1G465kwG4afmFJyl0Fux/lEFLv+CYIbhSSCFOl
+        hz4HXs3gLslQn3LZQxRZrs8=
+X-Google-Smtp-Source: AK7set+R/RyV9D6h+vuc87KbbjrulqiSyxgfa7EmcXfXGmlTw9GRpreCNlNoCp/Hk15ZmeB7uBo0bQ==
+X-Received: by 2002:a62:1955:0:b0:623:77f5:eeed with SMTP id 82-20020a621955000000b0062377f5eeedmr971045pfz.25.1679431137337;
+        Tue, 21 Mar 2023 13:38:57 -0700 (PDT)
+Received: from macbook-pro-6.dhcp.thefacebook.com ([2620:10d:c090:500::5:34cf])
+        by smtp.gmail.com with ESMTPSA id a21-20020a62bd15000000b005895f9657ebsm8628819pff.70.2023.03.21.13.38.55
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 21 Mar 2023 13:38:56 -0700 (PDT)
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     davem@davemloft.net
+Cc:     daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
+        void@manifault.com, davemarchevsky@meta.com, tj@kernel.org,
+        memxor@gmail.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-team@fb.com
+Subject: [PATCH v2 bpf-next 0/4] bpf: Support ksym detection in light skeleton.
+Date:   Tue, 21 Mar 2023 13:38:50 -0700
+Message-Id: <20230321203854.3035-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26850/Tue Mar 21 08:22:52 2023)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Xu Kuohai <xukuohai@huawei.com>
+From: Alexei Starovoitov <ast@kernel.org>
 
-Add cases to check if bound is updated correctly when 64-bit value is
-not in the 32-bit range.
+v1->v2: update denylist on s390
 
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
----
- tools/testing/selftests/bpf/verifier/bounds.c | 121 ++++++++++++++++++
- 1 file changed, 121 insertions(+)
+Patch 1: Cleanup internal libbpf names.
+Patch 2: Teach the verifier that rdonly_mem != NULL.
+Patch 3: Fix gen_loader to support ksym detection.
+Patch 4: Selftest and update denylist.
 
-diff --git a/tools/testing/selftests/bpf/verifier/bounds.c b/tools/testing/selftests/bpf/verifier/bounds.c
-index 33125d5f6772..74b1917d4208 100644
---- a/tools/testing/selftests/bpf/verifier/bounds.c
-+++ b/tools/testing/selftests/bpf/verifier/bounds.c
-@@ -753,3 +753,124 @@
- 	.result_unpriv = REJECT,
- 	.result = ACCEPT,
- },
-+{
-+	"bound check with JMP_JLT for crossing 64-bit signed boundary",
-+	.insns = {
-+	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
-+	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data_end)),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 8),
-+
-+	BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
-+	BPF_LD_IMM64(BPF_REG_0, 0x7fffffffffffff10),
-+	BPF_ALU64_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
-+
-+	BPF_LD_IMM64(BPF_REG_0, 0x8000000000000000),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
-+	/* r1 unsigned range is [0x7fffffffffffff10, 0x800000000000000f] */
-+	BPF_JMP_REG(BPF_JLT, BPF_REG_0, BPF_REG_1, -2),
-+
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+},
-+{
-+	"bound check with JMP_JSLT for crossing 64-bit signed boundary",
-+	.insns = {
-+	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
-+	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data_end)),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 8),
-+
-+	BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
-+	BPF_LD_IMM64(BPF_REG_0, 0x7fffffffffffff10),
-+	BPF_ALU64_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
-+
-+	BPF_LD_IMM64(BPF_REG_0, 0x8000000000000000),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
-+	/* r1 signed range is [S64_MIN, S64_MAX] */
-+	BPF_JMP_REG(BPF_JSLT, BPF_REG_0, BPF_REG_1, -2),
-+
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.errstr = "BPF program is too large",
-+	.result = REJECT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+},
-+{
-+	"bound check for loop upper bound greater than U32_MAX",
-+	.insns = {
-+	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
-+	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data_end)),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 8),
-+
-+	BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
-+	BPF_LD_IMM64(BPF_REG_0, 0x100000000),
-+	BPF_ALU64_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
-+
-+	BPF_LD_IMM64(BPF_REG_0, 0x100000000),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
-+	BPF_JMP_REG(BPF_JLT, BPF_REG_0, BPF_REG_1, -2),
-+
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+},
-+{
-+	"bound check with JMP32_JLT for crossing 32-bit signed boundary",
-+	.insns = {
-+	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
-+	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data_end)),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 6),
-+
-+	BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
-+	BPF_MOV32_IMM(BPF_REG_0, 0x7fffff10),
-+	BPF_ALU32_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
-+
-+	BPF_MOV32_IMM(BPF_REG_0, 0x80000000),
-+	BPF_ALU32_IMM(BPF_ADD, BPF_REG_0, 1),
-+	/* r1 unsigned range is [0, 0x8000000f] */
-+	BPF_JMP32_REG(BPF_JLT, BPF_REG_0, BPF_REG_1, -2),
-+
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+},
-+{
-+	"bound check with JMP32_JSLT for crossing 32-bit signed boundary",
-+	.insns = {
-+	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
-+	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data_end)),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 6),
-+
-+	BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
-+	BPF_MOV32_IMM(BPF_REG_0, 0x7fffff10),
-+	BPF_ALU32_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
-+
-+	BPF_MOV32_IMM(BPF_REG_0, 0x80000000),
-+	BPF_ALU32_IMM(BPF_ADD, BPF_REG_0, 1),
-+	/* r1 signed range is [S32_MIN, S32_MAX] */
-+	BPF_JMP32_REG(BPF_JSLT, BPF_REG_0, BPF_REG_1, -2),
-+
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.errstr = "BPF program is too large",
-+	.result = REJECT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+},
+Alexei Starovoitov (4):
+  libbpf: Rename RELO_EXTERN_VAR/FUNC.
+  bpf: Teach the verifier to recognize rdonly_mem as not null.
+  libbpf: Support kfunc detection in light skeleton.
+  selftests/bpf: Add light skeleton test for kfunc detection.
+
+ kernel/bpf/verifier.c                         | 14 ++++---
+ tools/lib/bpf/bpf_gen_internal.h              |  4 +-
+ tools/lib/bpf/gen_loader.c                    | 38 +++++++++----------
+ tools/lib/bpf/libbpf.c                        | 25 ++++++------
+ tools/testing/selftests/bpf/DENYLIST.s390x    |  1 +
+ .../selftests/bpf/progs/test_ksyms_weak.c     | 15 ++++++++
+ 6 files changed, 61 insertions(+), 36 deletions(-)
+
 -- 
-2.27.0
+2.34.1
 
