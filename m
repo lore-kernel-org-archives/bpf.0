@@ -2,43 +2,43 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E75F8C76195
-	for <bpf@archiver.kernel.org>; Tue, 21 Mar 2023 01:41:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 916D9C6FD1C
+	for <bpf@archiver.kernel.org>; Tue, 21 Mar 2023 01:41:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbjCUBld (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 20 Mar 2023 21:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51384 "EHLO
+        id S230267AbjCUBle (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 20 Mar 2023 21:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230165AbjCUBlc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 20 Mar 2023 21:41:32 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEF786B5;
-        Mon, 20 Mar 2023 18:41:30 -0700 (PDT)
+        with ESMTP id S230172AbjCUBld (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 20 Mar 2023 21:41:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38485BDC6;
+        Mon, 20 Mar 2023 18:41:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 31319CE173F;
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9BD7B810AB;
         Tue, 21 Mar 2023 01:41:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0779CC4339B;
-        Tue, 21 Mar 2023 01:41:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14E49C433D2;
+        Tue, 21 Mar 2023 01:41:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679362887;
-        bh=e9UoVYp66GtIFtIcoMal2BPABoP3kuilnFUBYDYwR2w=;
+        s=k20201202; t=1679362888;
+        bh=pZlb1qOOkLSZXMdrl8cVqKo/TNTTMcqYADte+v1sIz8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uPCz3UJx3ssf+MCc8YTTH0XXrUVI+exZiGLp/E53nWQnf/RH7HZZEWBBUGCe8JOat
-         UILO/8n31AtDh5RCRPN3NUpWxp7gTzW8A5dhlC8ZJ3cuHVxr/UrIwZJFSJjRjjGQIM
-         fkIRhp6+21WscOjeDM3K6gBXyLwjMzu0bHAgfA24mWPALx3oJCS51UPqU2tuXg/SNz
-         MuhkhoZ5MAiQkC8lv1uSufVXNou0B/MmiVbIygCkc9FL013DyVBZ5xvftK3cRfGWqz
-         0KHGNN94+rXvNxJTx6HnTCF2AfniFrb0Nqb4aidtiW9FEsyp46Ak8PSzQWdIDV6yyH
-         7SXmTnAEGQAWw==
+        b=ho8jUq0ZNsMUGqJPpPsSjRZQJw1YyEq+WXYJoUMA1yB2sol4XWcX1SXoK+In+vuDI
+         mtMJdBFf6JdJMvOK1CLGISRjYnVhf5wxGSZgNfZacPR0+Grsgxz2ROlD5pvUgrGY/r
+         6DnrN/kONDImDZfKiYaa2wz4XfFKR2UTry9rsA/me/llKX2yOvIkpM0NBXA4TcdUrl
+         /pVqm3+VfJHBtmoMgvs3JemwbOOzlxdt2dYyBaxj2JAJThXpUIyfJb7mVHcGxnr3Ee
+         D8Mcwx/G19SSJuVK9WfaFy+LCWwgbKm1o5EPAcpd6FrXQ3PCJw6mZTGu4aNri0SEvB
+         niwabdpbowY+g==
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     martin.lau@linux.dev
 Cc:     ast@kernel.org, daniel@iogearbox.net, bpf@vger.kernel.org,
         netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
         pabeni@redhat.com, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH bpf-next v2 1/3] net: skbuff: rename __pkt_vlan_present_offset to __mono_tc_offset
-Date:   Mon, 20 Mar 2023 18:41:13 -0700
-Message-Id: <20230321014115.997841-2-kuba@kernel.org>
+Subject: [PATCH bpf-next v2 3/3] net: skbuff: move the fields BPF cares about directly next to the offset marker
+Date:   Mon, 20 Mar 2023 18:41:15 -0700
+Message-Id: <20230321014115.997841-4-kuba@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230321014115.997841-1-kuba@kernel.org>
 References: <20230321014115.997841-1-kuba@kernel.org>
@@ -48,104 +48,83 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-vlan_present is gone since
-commit 354259fa73e2 ("net: remove skb->vlan_present")
-rename the offset field to what BPF is currently looking
-for in this byte - mono_delivery_time and tc_at_ingress.
+To avoid more possible BPF dependencies with moving bitfields
+around keep the fields BPF cares about right next to the offset
+marker.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+--
+v2: fix the assembly in tstamp test
 ---
- include/linux/skbuff.h                               | 4 ++--
- net/core/filter.c                                    | 8 ++++----
- tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c | 6 +++---
- 3 files changed, 9 insertions(+), 9 deletions(-)
+ include/linux/skbuff.h                         | 18 +++++++++---------
+ .../selftests/bpf/prog_tests/ctx_rewrite.c     |  8 ++++----
+ 2 files changed, 13 insertions(+), 13 deletions(-)
 
 diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 3f3a2a82a86b..5a63878a4550 100644
+index 36d31e74db37..6aeb0e7b9511 100644
 --- a/include/linux/skbuff.h
 +++ b/include/linux/skbuff.h
-@@ -955,7 +955,7 @@ struct sk_buff {
- 	__u8			csum_valid:1;
- 
+@@ -947,15 +947,15 @@ struct sk_buff {
  	/* private: */
--	__u8			__pkt_vlan_present_offset[0];
-+	__u8			__mono_tc_offset[0];
+ 	__u8			__mono_tc_offset[0];
  	/* public: */
- 	__u8			remcsum_offload:1;
- 	__u8			csum_complete_sw:1;
-@@ -1078,7 +1078,7 @@ struct sk_buff {
- #define TC_AT_INGRESS_MASK		(1 << 7)
- #define SKB_MONO_DELIVERY_TIME_MASK	(1 << 5)
+-	__u8			remcsum_offload:1;
+-	__u8			csum_complete_sw:1;
+-	__u8			csum_level:2;
+-	__u8			dst_pending_confirm:1;
+ 	__u8			mono_delivery_time:1;	/* See SKB_MONO_DELIVERY_TIME_MASK */
+ #ifdef CONFIG_NET_CLS_ACT
+-	__u8			tc_skip_classify:1;
+ 	__u8			tc_at_ingress:1;	/* See TC_AT_INGRESS_MASK */
++	__u8			tc_skip_classify:1;
  #endif
--#define PKT_VLAN_PRESENT_OFFSET	offsetof(struct sk_buff, __pkt_vlan_present_offset)
-+#define SKB_BF_MONO_TC_OFFSET		offsetof(struct sk_buff, __mono_tc_offset)
++	__u8			remcsum_offload:1;
++	__u8			csum_complete_sw:1;
++	__u8			csum_level:2;
++	__u8			dst_pending_confirm:1;
  
- #ifdef __KERNEL__
- /*
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 50f649f1b4a9..3370efad1dda 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -9185,7 +9185,7 @@ static struct bpf_insn *bpf_convert_tstamp_type_read(const struct bpf_insn *si,
- 	__u8 tmp_reg = BPF_REG_AX;
- 
- 	*insn++ = BPF_LDX_MEM(BPF_B, tmp_reg, skb_reg,
--			      PKT_VLAN_PRESENT_OFFSET);
-+			      SKB_BF_MONO_TC_OFFSET);
- 	*insn++ = BPF_JMP32_IMM(BPF_JSET, tmp_reg,
- 				SKB_MONO_DELIVERY_TIME_MASK, 2);
- 	*insn++ = BPF_MOV32_IMM(value_reg, BPF_SKB_TSTAMP_UNSPEC);
-@@ -9232,7 +9232,7 @@ static struct bpf_insn *bpf_convert_tstamp_read(const struct bpf_prog *prog,
- 		/* AX is needed because src_reg and dst_reg could be the same */
- 		__u8 tmp_reg = BPF_REG_AX;
- 
--		*insn++ = BPF_LDX_MEM(BPF_B, tmp_reg, skb_reg, PKT_VLAN_PRESENT_OFFSET);
-+		*insn++ = BPF_LDX_MEM(BPF_B, tmp_reg, skb_reg, SKB_BF_MONO_TC_OFFSET);
- 		*insn++ = BPF_ALU32_IMM(BPF_AND, tmp_reg,
- 					TC_AT_INGRESS_MASK | SKB_MONO_DELIVERY_TIME_MASK);
- 		*insn++ = BPF_JMP32_IMM(BPF_JNE, tmp_reg,
-@@ -9267,14 +9267,14 @@ static struct bpf_insn *bpf_convert_tstamp_write(const struct bpf_prog *prog,
- 	if (!prog->tstamp_type_access) {
- 		__u8 tmp_reg = BPF_REG_AX;
- 
--		*insn++ = BPF_LDX_MEM(BPF_B, tmp_reg, skb_reg, PKT_VLAN_PRESENT_OFFSET);
-+		*insn++ = BPF_LDX_MEM(BPF_B, tmp_reg, skb_reg, SKB_BF_MONO_TC_OFFSET);
- 		/* Writing __sk_buff->tstamp as ingress, goto <clear> */
- 		*insn++ = BPF_JMP32_IMM(BPF_JSET, tmp_reg, TC_AT_INGRESS_MASK, 1);
- 		/* goto <store> */
- 		*insn++ = BPF_JMP_A(2);
- 		/* <clear>: mono_delivery_time */
- 		*insn++ = BPF_ALU32_IMM(BPF_AND, tmp_reg, ~SKB_MONO_DELIVERY_TIME_MASK);
--		*insn++ = BPF_STX_MEM(BPF_B, skb_reg, tmp_reg, PKT_VLAN_PRESENT_OFFSET);
-+		*insn++ = BPF_STX_MEM(BPF_B, skb_reg, tmp_reg, SKB_BF_MONO_TC_OFFSET);
- 	}
+ 	__u8			l4_hash:1;
+ 	__u8			sw_hash:1;
+@@ -1072,11 +1072,11 @@ struct sk_buff {
+  * around, you also must adapt these constants.
+  */
+ #ifdef __BIG_ENDIAN_BITFIELD
+-#define TC_AT_INGRESS_MASK		(1 << 0)
+-#define SKB_MONO_DELIVERY_TIME_MASK	(1 << 2)
++#define SKB_MONO_DELIVERY_TIME_MASK	(1 << 7)
++#define TC_AT_INGRESS_MASK		(1 << 6)
+ #else
+-#define TC_AT_INGRESS_MASK		(1 << 7)
+-#define SKB_MONO_DELIVERY_TIME_MASK	(1 << 5)
++#define SKB_MONO_DELIVERY_TIME_MASK	(1 << 0)
++#define TC_AT_INGRESS_MASK		(1 << 1)
  #endif
+ #define SKB_BF_MONO_TC_OFFSET		offsetof(struct sk_buff, __mono_tc_offset)
  
 diff --git a/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c b/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
-index d5fe3d4b936c..ae7b6e50e405 100644
+index ae7b6e50e405..4951aa978f33 100644
 --- a/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
 +++ b/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
-@@ -68,17 +68,17 @@ static struct test_case test_cases[] = {
- #if defined(__x86_64__) || defined(__aarch64__)
+@@ -69,15 +69,15 @@ static struct test_case test_cases[] = {
  	{
  		N(SCHED_CLS, struct __sk_buff, tstamp),
--		.read  = "r11 = *(u8 *)($ctx + sk_buff::__pkt_vlan_present_offset);"
-+		.read  = "r11 = *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
- 			 "w11 &= 160;"
- 			 "if w11 != 0xa0 goto pc+2;"
+ 		.read  = "r11 = *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
+-			 "w11 &= 160;"
+-			 "if w11 != 0xa0 goto pc+2;"
++			 "w11 &= 3;"
++			 "if w11 != 0x3 goto pc+2;"
  			 "$dst = 0;"
  			 "goto pc+1;"
  			 "$dst = *(u64 *)($ctx + sk_buff::tstamp);",
--		.write = "r11 = *(u8 *)($ctx + sk_buff::__pkt_vlan_present_offset);"
-+		.write = "r11 = *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
- 			 "if w11 & 0x80 goto pc+1;"
+ 		.write = "r11 = *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
+-			 "if w11 & 0x80 goto pc+1;"
++			 "if w11 & 0x2 goto pc+1;"
  			 "goto pc+2;"
- 			 "w11 &= -33;"
--			 "*(u8 *)($ctx + sk_buff::__pkt_vlan_present_offset) = r11;"
-+			 "*(u8 *)($ctx + sk_buff::__mono_tc_offset) = r11;"
+-			 "w11 &= -33;"
++			 "w11 &= -2;"
+ 			 "*(u8 *)($ctx + sk_buff::__mono_tc_offset) = r11;"
  			 "*(u64 *)($ctx + sk_buff::tstamp) = $src;",
  	},
- #endif
 -- 
 2.39.2
 
