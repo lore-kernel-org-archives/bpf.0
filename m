@@ -2,163 +2,150 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3084AC6FD1F
-	for <bpf@archiver.kernel.org>; Wed, 22 Mar 2023 16:08:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D00BAC76196
+	for <bpf@archiver.kernel.org>; Wed, 22 Mar 2023 16:08:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjCVQH7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Mar 2023 12:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47586 "EHLO
+        id S230294AbjCVQIl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Mar 2023 12:08:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjCVQH5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Mar 2023 12:07:57 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0FE62DAF;
-        Wed, 22 Mar 2023 09:07:54 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id w9so75103621edc.3;
-        Wed, 22 Mar 2023 09:07:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679501273;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mOzog1rcJBIJ0IWpoVcxs5p5wXubMGjNYuLplz2RPz0=;
-        b=KwKrLt++JgVHYPV+zzH2vsrhxtmgPAAlhxhmkHaW5Tn1Uv3QfKENWI9nJhy7yvpxlK
-         /lftz09YJtHFS1Oim2MNM2FSKBdNhIeP1Tuz6Tvxn6XgLNhixDP3VM7Zdc9xkrUHQy7C
-         VMc0wxBq0ghfmRfS1WRhg+boL8oug5wZzjhS3yLiSxkglMV5ZKWPWp3eMfI8Fq0dSSbL
-         OA/ey/3LS7BhlvFaMUCQOqORHj7aOrCJqsgFP4wgCuQd+duVn2oCa4eGxPH7LyqAIDFd
-         HyDXN8k1c55LycGNCDmyMDTNFn+bwi9f0ok4XeLJrAh3GtQC7nFbKP8H96/S7vfjKn4b
-         6ENg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679501273;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mOzog1rcJBIJ0IWpoVcxs5p5wXubMGjNYuLplz2RPz0=;
-        b=4GOB3qIbItGd08sCzA+Oycwz5YnrghyEoWH0RoktHu16ImF1waY11HMTTJQXxXFeLz
-         27AYiIKylxSCdhl9p89iJwb7vBGIRCBVBortTCcJINVHvupzI6FdVQkVadABWKB6JfUQ
-         ooNHNrkKHVNurWvxZIqgW5aCrrlZqfqmRJUplYATSYOBK/GDnBVUqaJF0RPyILxKQ8cw
-         KzSrHFUhWzeEOgtty3cIBQ0fV418m09IhY7UEqjAV8+mi/1TzTsaJI/EemtntifDbKpl
-         hPoHd8EjlG/IFYZfSvfElHByZbBwoLPPhT4jIF1VpaQqEBXS6Hv95aChdt57ajwOQbrg
-         PtNw==
-X-Gm-Message-State: AO0yUKVaZr/r1lJIACovOm8mu/51IOOhJmBGawJ6TERX1hFBH57boiLF
-        Q7JAKyXSyOM4HxO6Ai1Y18lIEuVeHRTH9w1y0ys=
-X-Google-Smtp-Source: AK7set8U2axS8vjpTT71ShGMMBPNsw6nJfxB/FJqNUP5haOFL3RpVeqtsMlGUxJwfDHo3l1mRyT0yLGgeSBExss0N70=
-X-Received: by 2002:a17:906:2cc5:b0:931:c1a:b517 with SMTP id
- r5-20020a1709062cc500b009310c1ab517mr3409072ejr.3.1679501273106; Wed, 22 Mar
- 2023 09:07:53 -0700 (PDT)
+        with ESMTP id S230447AbjCVQIf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Mar 2023 12:08:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5DA32CFA
+        for <bpf@vger.kernel.org>; Wed, 22 Mar 2023 09:07:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679501268;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mjoXfv22y8bGZIaFBiqJSnnyyPeBBhNiGzC+o+ftHU0=;
+        b=CDbc9364kqcQXrTdB457zbIYuB6BCs6B9TVvLarSCrXeRh5gJyMxt+h1noBf2FDu5YdfVb
+        oeFoYIkAFdxhyMVVrP7CKpeZBnXGVLqlRd4Yqh0yYYiB9pCOQjbDr0PosMHu7PtVHBEg6y
+        Dqyi9xxRlCunPuNMbO6lXLw1xskdwLQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-368-PysmsBezPACYGbiORGLfKg-1; Wed, 22 Mar 2023 12:01:40 -0400
+X-MC-Unique: PysmsBezPACYGbiORGLfKg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CA97580C8C5;
+        Wed, 22 Mar 2023 16:01:38 +0000 (UTC)
+Received: from firesoul.localdomain (unknown [10.45.242.23])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7DD9F40C6E68;
+        Wed, 22 Mar 2023 16:01:38 +0000 (UTC)
+Received: from [10.1.1.1] (localhost [IPv6:::1])
+        by firesoul.localdomain (Postfix) with ESMTP id A933F30736C72;
+        Wed, 22 Mar 2023 17:01:37 +0100 (CET)
+Subject: [PATCH bpf-next V3 5/6] igc: add XDP hints kfuncs for RX timestamp
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     bpf@vger.kernel.org
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
+        Stanislav Fomichev <sdf@google.com>, martin.lau@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, alexandr.lobakin@intel.com,
+        larysa.zaremba@intel.com, xdp-hints@xdp-project.net,
+        anthony.l.nguyen@intel.com, yoong.siang.song@intel.com,
+        boon.leong.ong@intel.com, intel-wired-lan@lists.osuosl.org,
+        pabeni@redhat.com, jesse.brandeburg@intel.com, kuba@kernel.org,
+        edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
+        davem@davemloft.net
+Date:   Wed, 22 Mar 2023 17:01:37 +0100
+Message-ID: <167950089764.2796265.5969267586331535957.stgit@firesoul>
+In-Reply-To: <167950085059.2796265.16405349421776056766.stgit@firesoul>
+References: <167950085059.2796265.16405349421776056766.stgit@firesoul>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-References: <167940634187.2718137.10209374282891218398.stgit@firesoul>
- <167940643669.2718137.4624187727245854475.stgit@firesoul> <CAKH8qBuv-9TXAmi0oTbB0atC4f6jzFcFhAgQ3D89VX45vUU9hw@mail.gmail.com>
- <080640fc-5835-26f1-2b20-ff079bd59182@redhat.com>
-In-Reply-To: <080640fc-5835-26f1-2b20-ff079bd59182@redhat.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 22 Mar 2023 09:07:41 -0700
-Message-ID: <CAADnVQKsxzLTZ2XoLbmKKLAeaSyvf3P+w8V143iZ4cEWWTEUfw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next V2 3/6] selftests/bpf: xdp_hw_metadata RX hash
- return code info
-To:     Jesper Dangaard Brouer <jbrouer@redhat.com>
-Cc:     Stanislav Fomichev <sdf@google.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        xdp-hints@xdp-project.net, anthony.l.nguyen@intel.com,
-        "Song, Yoong Siang" <yoong.siang.song@intel.com>,
-        "Ong, Boon Leong" <boon.leong.ong@intel.com>,
-        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 9:05=E2=80=AFAM Jesper Dangaard Brouer
-<jbrouer@redhat.com> wrote:
->
->
->
-> On 21/03/2023 19.47, Stanislav Fomichev wrote:
-> > On Tue, Mar 21, 2023 at 6:47=E2=80=AFAM Jesper Dangaard Brouer
-> > <brouer@redhat.com> wrote:
-> >>
-> >> When driver developers add XDP-hints kfuncs for RX hash it is
-> >> practical to print the return code in bpf_printk trace pipe log.
-> >>
-> >> Print hash value as a hex value, both AF_XDP userspace and bpf_prog,
-> >> as this makes it easier to spot poor quality hashes.
-> >>
-> >> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-> >> ---
-> >>   .../testing/selftests/bpf/progs/xdp_hw_metadata.c  |    9 ++++++---
-> >>   tools/testing/selftests/bpf/xdp_hw_metadata.c      |    5 ++++-
-> >>   2 files changed, 10 insertions(+), 4 deletions(-)
-> >>
-> >> diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/too=
-ls/testing/selftests/bpf/progs/xdp_hw_metadata.c
-> >> index 40c17adbf483..ce07010e4d48 100644
-> >> --- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-> >> +++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-> >> @@ -77,10 +77,13 @@ int rx(struct xdp_md *ctx)
-> >>                  meta->rx_timestamp =3D 0; /* Used by AF_XDP as not av=
-ail signal */
-> >>          }
-> >>
-> >> -       if (!bpf_xdp_metadata_rx_hash(ctx, &meta->rx_hash))
-> >> -               bpf_printk("populated rx_hash with %u", meta->rx_hash)=
-;
-> >> -       else
-> >> +       ret =3D bpf_xdp_metadata_rx_hash(ctx, &meta->rx_hash);
-> >> +       if (ret >=3D 0) {
-> >> +               bpf_printk("populated rx_hash with 0x%08X", meta->rx_h=
-ash);
-> >> +       } else {
-> >> +               bpf_printk("rx_hash not-avail errno:%d", ret);
-> >>                  meta->rx_hash =3D 0; /* Used by AF_XDP as not avail s=
-ignal */
-> >> +       }
-> >>
-> >>          return bpf_redirect_map(&xsk, ctx->rx_queue_index, XDP_PASS);
-> >>   }
-> >> diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/tes=
-ting/selftests/bpf/xdp_hw_metadata.c
-> >> index 400bfe19abfe..f3ec07ccdc95 100644
-> >> --- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
-> >> +++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-> >> @@ -3,6 +3,9 @@
-> >>   /* Reference program for verifying XDP metadata on real HW. Function=
-al test
-> >>    * only, doesn't test the performance.
-> >>    *
-> >> + * BPF-prog bpf_printk info outout can be access via
-> >> + * /sys/kernel/debug/tracing/trace_pipe
-> >
-> > s/outout/output/
-> >
->
-> Fixed in V3
->
-> > But let's maybe drop it? If you want to make it more usable, let's
-> > have a separate patch to enable tracing and periodically dump it to
-> > the console instead (as previously discussed).
->
-> Cat'ing /sys/kernel/debug/tracing/trace_pipe work for me regardless of
-> setting in
-> /sys/kernel/debug/tracing/events/bpf_trace/bpf_trace_printk/enable
->
-> We likely need a followup patch that adds a BPF config switch that can
-> disable bpf_printk calls, because this adds overhead and thus affects
-> the timestamps.
+The NIC hardware RX timestamping mechanism adds an optional tailored
+header before the MAC header containing packet reception time. Optional
+depending on RX descriptor TSIP status bit (IGC_RXDADV_STAT_TSIP). In
+case this bit is set driver does offset adjustments to packet data start
+and extracts the timestamp.
 
-No. This is by design.
-Do not use bpf_printk* in production.
+The timestamp need to be extracted before invoking the XDP bpf_prog,
+because this area just before the packet is also accessible by XDP via
+data_meta context pointer (and helper bpf_xdp_adjust_meta). Thus, an XDP
+bpf_prog can potentially overwrite this and corrupt data that we want to
+extract with the new kfunc for reading the timestamp.
+
+Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+---
+ drivers/net/ethernet/intel/igc/igc.h      |    1 +
+ drivers/net/ethernet/intel/igc/igc_main.c |   20 ++++++++++++++++++++
+ 2 files changed, 21 insertions(+)
+
+diff --git a/drivers/net/ethernet/intel/igc/igc.h b/drivers/net/ethernet/intel/igc/igc.h
+index bc67a52e47e8..29941734f1a1 100644
+--- a/drivers/net/ethernet/intel/igc/igc.h
++++ b/drivers/net/ethernet/intel/igc/igc.h
+@@ -503,6 +503,7 @@ struct igc_rx_buffer {
+ struct igc_xdp_buff {
+ 	struct xdp_buff xdp;
+ 	union igc_adv_rx_desc *rx_desc;
++	ktime_t rx_ts; /* data indication bit IGC_RXDADV_STAT_TSIP */
+ };
+ 
+ struct igc_q_vector {
+diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+index a78d7e6bcfd6..f66285c85444 100644
+--- a/drivers/net/ethernet/intel/igc/igc_main.c
++++ b/drivers/net/ethernet/intel/igc/igc_main.c
+@@ -2539,6 +2539,7 @@ static int igc_clean_rx_irq(struct igc_q_vector *q_vector, const int budget)
+ 		if (igc_test_staterr(rx_desc, IGC_RXDADV_STAT_TSIP)) {
+ 			timestamp = igc_ptp_rx_pktstamp(q_vector->adapter,
+ 							pktbuf);
++			ctx.rx_ts = timestamp;
+ 			pkt_offset = IGC_TS_HDR_LEN;
+ 			size -= IGC_TS_HDR_LEN;
+ 		}
+@@ -2727,6 +2728,7 @@ static int igc_clean_rx_irq_zc(struct igc_q_vector *q_vector, const int budget)
+ 		if (igc_test_staterr(desc, IGC_RXDADV_STAT_TSIP)) {
+ 			timestamp = igc_ptp_rx_pktstamp(q_vector->adapter,
+ 							bi->xdp->data);
++			ctx->rx_ts = timestamp;
+ 
+ 			bi->xdp->data += IGC_TS_HDR_LEN;
+ 
+@@ -6481,6 +6483,23 @@ u32 igc_rd32(struct igc_hw *hw, u32 reg)
+ 	return value;
+ }
+ 
++static int igc_xdp_rx_timestamp(const struct xdp_md *_ctx, u64 *timestamp)
++{
++	const struct igc_xdp_buff *ctx = (void *)_ctx;
++
++	if (igc_test_staterr(ctx->rx_desc, IGC_RXDADV_STAT_TSIP)) {
++		*timestamp = ctx->rx_ts;
++
++		return 0;
++	}
++
++	return -ENODATA;
++}
++
++const struct xdp_metadata_ops igc_xdp_metadata_ops = {
++	.xmo_rx_timestamp		= igc_xdp_rx_timestamp,
++};
++
+ /**
+  * igc_probe - Device Initialization Routine
+  * @pdev: PCI device information struct
+@@ -6554,6 +6573,7 @@ static int igc_probe(struct pci_dev *pdev,
+ 	hw->hw_addr = adapter->io_addr;
+ 
+ 	netdev->netdev_ops = &igc_netdev_ops;
++	netdev->xdp_metadata_ops = &igc_xdp_metadata_ops;
+ 	igc_ethtool_set_ops(netdev);
+ 	netdev->watchdog_timeo = 5 * HZ;
+ 
+
+
