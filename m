@@ -2,232 +2,98 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 930B2C761A6
-	for <bpf@archiver.kernel.org>; Wed, 22 Mar 2023 03:03:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23B90C6FD1D
+	for <bpf@archiver.kernel.org>; Wed, 22 Mar 2023 03:04:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbjCVDD1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 Mar 2023 23:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57428 "EHLO
+        id S230215AbjCVDEw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Mar 2023 23:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbjCVDDW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 21 Mar 2023 23:03:22 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2659817165;
-        Tue, 21 Mar 2023 20:03:20 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R301e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VeOqVk._1679454195;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VeOqVk._1679454195)
-          by smtp.aliyun-inc.com;
-          Wed, 22 Mar 2023 11:03:16 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     netdev@vger.kernel.org
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
+        with ESMTP id S229642AbjCVDET (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 21 Mar 2023 23:04:19 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B956125B7
+        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 20:03:47 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id bc12so17470748plb.0
+        for <bpf@vger.kernel.org>; Tue, 21 Mar 2023 20:03:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679454226;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nSzK+kAddtDOWun3i0mOuWQ/h7aW5t+0sg8tPr0P2po=;
+        b=Vkkzqf0IxqkKpi2/xavP/3JYK5PXE9AvcXMIx9JAJ0SB3+gyQkXECqEJgiZd0ATstX
+         g+p2kidaTylhzlbEsXJLXyQx8hQfIC7U5TUSBlgK4S2xZpXV0G+2LneEB4WQY+OjDdGL
+         p5txxssWVmT5bYrcvjaVrw6faRgoqGer1SLRoLwufCjk78Zsn0PUJbWiz2EETp4QuG9u
+         2lCAqC3B6cV5NMOFzk4SYS3GM36CXU9IgBOigrdNZa2rfgR+VkrOsWcy3F3bS/hshbXE
+         CmKxmxIbuz89dZyZvhPNe9LvapvYMELpMCo29ZHrJxBWqUX10AAF68wKznR0AxMUUxea
+         FX5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679454226;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nSzK+kAddtDOWun3i0mOuWQ/h7aW5t+0sg8tPr0P2po=;
+        b=yTkyLI76JuBD1pjaQKWIi7QNIaWNHru0Jpd9kkzZ/W/MdOBbMi3TaM6m8SFIDlAV0f
+         xEs65AevINF2K7ALHurWcWA339nApTaBWnKMNJ9o6y8mXVo2Iq6/w0GuIxReZapx26lj
+         f9YHpZc7Ept5JvEqlhDhiAi7LI4jq5fK8uzcW3RTLYX+LjAZ7Vk3tJp4Z/iroLul0JXD
+         8RlzVpbORHj7OHOV5fNf4YhQRoGFhyrwHaygLV9r23VDjHQBo71A+MPNWwel3MVGdKRU
+         rzpaM37qm62R9cd6CkLLEiRl2eZ2qdl0YiKzEmCt/1p+FpTEVZERfXZBBHfjukhCAUBP
+         Dd8w==
+X-Gm-Message-State: AO0yUKUwcXM2bSjTiZaGdF8Ur1oCKsqMTrCTUZ2nHMp8bPoI2IhtXoaA
+        zN3umDiUYYoZAK0iPyAWpM8=
+X-Google-Smtp-Source: AK7set/oO9YfZrgSlJp+E8HlyKluFK+JYQOzt2vg+T59amrJQC8C2fBIDIKQC0P1fiTHogYUr5Cabg==
+X-Received: by 2002:a17:902:f9c8:b0:1a1:b36d:7803 with SMTP id kz8-20020a170902f9c800b001a1b36d7803mr1167418plb.36.1679454225724;
+        Tue, 21 Mar 2023 20:03:45 -0700 (PDT)
+Received: from dhcp-172-26-102-232.dhcp.thefacebook.com ([2620:10d:c090:400::5:f4cc])
+        by smtp.gmail.com with ESMTPSA id jc20-20020a17090325d400b001963a178dfcsm9420298plb.244.2023.03.21.20.03.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 20:03:45 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 20:03:42 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf@vger.kernel.org, Xu Kuohai <xukuohai@huaweicloud.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH net-next 7/8] virtio_net: introduce receive_mergeable_xdp()
-Date:   Wed, 22 Mar 2023 11:03:07 +0800
-Message-Id: <20230322030308.16046-8-xuanzhuo@linux.alibaba.com>
-X-Mailer: git-send-email 2.32.0.3.g01195cf9f
-In-Reply-To: <20230322030308.16046-1-xuanzhuo@linux.alibaba.com>
-References: <20230322030308.16046-1-xuanzhuo@linux.alibaba.com>
+        Eduard Zingerman <eddyz87@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Fix __reg_bound_offset 64->32 var_off
+ subreg propagation
+Message-ID: <20230322030342.sl4n62pmep3rc6vg@dhcp-172-26-102-232.dhcp.thefacebook.com>
+References: <20230321193354.10445-1-daniel@iogearbox.net>
 MIME-Version: 1.0
-X-Git-Hash: 7e9e1372f356
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321193354.10445-1-daniel@iogearbox.net>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The purpose of this patch is to simplify the receive_mergeable().
-Separate all the logic of XDP into a function.
+On Tue, Mar 21, 2023 at 08:33:53PM +0100, Daniel Borkmann wrote:
+> Xu reports that after commit 3f50f132d840 ("bpf: Verifier, do explicit ALU32
+> bounds tracking"), the following BPF program is rejected by the verifier:
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+...
+> index d517d13878cf..d66e70707172 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -1823,9 +1823,9 @@ static void __reg_bound_offset(struct bpf_reg_state *reg)
+>  	struct tnum var64_off = tnum_intersect(reg->var_off,
+>  					       tnum_range(reg->umin_value,
+>  							  reg->umax_value));
+> -	struct tnum var32_off = tnum_intersect(tnum_subreg(reg->var_off),
+> -						tnum_range(reg->u32_min_value,
+> -							   reg->u32_max_value));
+> +	struct tnum var32_off = tnum_intersect(tnum_subreg(var64_off),
+> +					       tnum_range(reg->u32_min_value,
+> +							  reg->u32_max_value));
 
-Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
----
- drivers/net/virtio_net.c | 128 +++++++++++++++++++++++----------------
- 1 file changed, 76 insertions(+), 52 deletions(-)
+Great fix and excellent analysis!
+The CI is complaining though:
+test_align:FAIL:pointer variable subtraction unexpected error: 1 (errno 13)
+#1/12    align/pointer variable subtraction:FAIL
+#1       align:FAIL
+Summary: 289/1752 PASSED, 29 SKIPPED, 1 FAILED
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 136131a7868a..6ecb17e972e1 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -1316,6 +1316,63 @@ static void *mergeable_xdp_prepare(struct virtnet_info *vi,
- 	return page_address(xdp_page) + VIRTIO_XDP_HEADROOM;
- }
- 
-+static struct sk_buff *receive_mergeable_xdp(struct net_device *dev,
-+					     struct virtnet_info *vi,
-+					     struct receive_queue *rq,
-+					     struct bpf_prog *xdp_prog,
-+					     void *buf,
-+					     void *ctx,
-+					     unsigned int len,
-+					     unsigned int *xdp_xmit,
-+					     struct virtnet_rq_stats *stats)
-+{
-+	struct virtio_net_hdr_mrg_rxbuf *hdr = buf;
-+	int num_buf = virtio16_to_cpu(vi->vdev, hdr->num_buffers);
-+	struct page *page = virt_to_head_page(buf);
-+	int offset = buf - page_address(page);
-+	unsigned int xdp_frags_truesz = 0;
-+	struct sk_buff *head_skb;
-+	unsigned int frame_sz;
-+	struct xdp_buff xdp;
-+	void *data;
-+	u32 act;
-+	int err;
-+
-+	data = mergeable_xdp_prepare(vi, rq, xdp_prog, ctx, &frame_sz, &num_buf, &page,
-+				     offset, &len, hdr);
-+	if (!data)
-+		goto err_xdp;
-+
-+	err = virtnet_build_xdp_buff_mrg(dev, vi, rq, &xdp, data, len, frame_sz,
-+					 &num_buf, &xdp_frags_truesz, stats);
-+	if (unlikely(err))
-+		goto err_xdp;
-+
-+	act = virtnet_xdp_handler(xdp_prog, &xdp, dev, xdp_xmit, stats);
-+
-+	switch (act) {
-+	case VIRTNET_XDP_RES_PASS:
-+		head_skb = build_skb_from_xdp_buff(dev, vi, &xdp, xdp_frags_truesz);
-+		if (unlikely(!head_skb))
-+			goto err_xdp;
-+		return head_skb;
-+
-+	case VIRTNET_XDP_RES_CONSUMED:
-+		return NULL;
-+
-+	case VIRTNET_XDP_RES_DROP:
-+		break;
-+	}
-+
-+err_xdp:
-+	put_page(page);
-+	mergeable_buf_free(rq, num_buf, dev, stats);
-+
-+	stats->xdp_drops++;
-+	stats->drops++;
-+	return NULL;
-+}
-+
- static struct sk_buff *receive_mergeable(struct net_device *dev,
- 					 struct virtnet_info *vi,
- 					 struct receive_queue *rq,
-@@ -1325,18 +1382,16 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
- 					 unsigned int *xdp_xmit,
- 					 struct virtnet_rq_stats *stats)
- {
--	struct virtio_net_hdr_mrg_rxbuf *hdr = buf;
--	int num_buf = virtio16_to_cpu(vi->vdev, hdr->num_buffers);
--	struct page *page = virt_to_head_page(buf);
--	int offset = buf - page_address(page);
--	struct sk_buff *head_skb, *curr_skb;
--	struct bpf_prog *xdp_prog;
- 	unsigned int truesize = mergeable_ctx_to_truesize(ctx);
- 	unsigned int headroom = mergeable_ctx_to_headroom(ctx);
- 	unsigned int tailroom = headroom ? sizeof(struct skb_shared_info) : 0;
- 	unsigned int room = SKB_DATA_ALIGN(headroom + tailroom);
--	unsigned int frame_sz;
--	int err;
-+	struct virtio_net_hdr_mrg_rxbuf *hdr;
-+	struct sk_buff *head_skb, *curr_skb;
-+	struct bpf_prog *xdp_prog;
-+	struct page *page;
-+	int num_buf;
-+	int offset;
- 
- 	head_skb = NULL;
- 	stats->bytes += len - vi->hdr_len;
-@@ -1348,51 +1403,24 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
- 		goto err_skb;
- 	}
- 
--	if (likely(!vi->xdp_enabled)) {
--		xdp_prog = NULL;
--		goto skip_xdp;
--	}
--
--	rcu_read_lock();
--	xdp_prog = rcu_dereference(rq->xdp_prog);
--	if (xdp_prog) {
--		unsigned int xdp_frags_truesz = 0;
--		struct xdp_buff xdp;
--		void *data;
--		u32 act;
--
--		data = mergeable_xdp_prepare(vi, rq, xdp_prog, ctx, &frame_sz, &num_buf, &page,
--					     offset, &len, hdr);
--		if (!data)
--			goto err_xdp;
--
--		err = virtnet_build_xdp_buff_mrg(dev, vi, rq, &xdp, data, len, frame_sz,
--						 &num_buf, &xdp_frags_truesz, stats);
--		if (unlikely(err))
--			goto err_xdp;
--
--		act = virtnet_xdp_handler(xdp_prog, &xdp, dev, xdp_xmit, stats);
--
--		switch (act) {
--		case VIRTNET_XDP_RES_PASS:
--			head_skb = build_skb_from_xdp_buff(dev, vi, &xdp, xdp_frags_truesz);
--			if (unlikely(!head_skb))
--				goto err_xdp;
--
-+	if (likely(vi->xdp_enabled)) {
-+		rcu_read_lock();
-+		xdp_prog = rcu_dereference(rq->xdp_prog);
-+		if (xdp_prog) {
-+			head_skb = receive_mergeable_xdp(dev, vi, rq, xdp_prog,
-+							 buf, ctx, len, xdp_xmit,
-+							 stats);
- 			rcu_read_unlock();
- 			return head_skb;
--
--		case VIRTNET_XDP_RES_CONSUMED:
--			rcu_read_unlock();
--			goto xdp_xmit;
--
--		case VIRTNET_XDP_RES_DROP:
--			goto err_xdp;
- 		}
-+		rcu_read_unlock();
- 	}
--	rcu_read_unlock();
- 
--skip_xdp:
-+	hdr = buf;
-+	num_buf = virtio16_to_cpu(vi->vdev, hdr->num_buffers);
-+	page = virt_to_head_page(buf);
-+	offset = buf - page_address(page);
-+
- 	head_skb = page_to_skb(vi, rq, page, offset, len, truesize, headroom);
- 	curr_skb = head_skb;
- 
-@@ -1458,9 +1486,6 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
- 	ewma_pkt_len_add(&rq->mrg_avg_pkt_len, head_skb->len);
- 	return head_skb;
- 
--err_xdp:
--	rcu_read_unlock();
--	stats->xdp_drops++;
- err_skb:
- 	put_page(page);
- 	mergeable_buf_free(rq, num_buf, dev, stats);
-@@ -1468,7 +1493,6 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
- err_buf:
- 	stats->drops++;
- 	dev_kfree_skb(head_skb);
--xdp_xmit:
- 	return NULL;
- }
- 
--- 
-2.32.0.3.g01195cf9f
+Please roll the update for the test into the fix.
 
+Also agree that bpf-next is a good target for the fix.
+It doesn't look risky, but since it was there for so long it can go through
+bpf-next just fine.
