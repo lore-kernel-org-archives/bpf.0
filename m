@@ -2,405 +2,113 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 338A4C77B60
-	for <bpf@archiver.kernel.org>; Thu, 23 Mar 2023 15:59:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF18AC74A5B
+	for <bpf@archiver.kernel.org>; Thu, 23 Mar 2023 16:00:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232246AbjCWP7j (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Mar 2023 11:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45964 "EHLO
+        id S229864AbjCWQAk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Mar 2023 12:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232239AbjCWP7h (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 Mar 2023 11:59:37 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B928FF25;
-        Thu, 23 Mar 2023 08:59:36 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Pj95G58g6z4f3mJJ;
-        Thu, 23 Mar 2023 23:59:30 +0800 (CST)
-Received: from k01.huawei.com (unknown [10.67.174.197])
-        by APP4 (Coremail) with SMTP id gCh0CgC3aq5fdxxktQW3Fw--.25283S4;
-        Thu, 23 Mar 2023 23:59:32 +0800 (CST)
-From:   Xu Kuohai <xukuohai@huaweicloud.com>
-To:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: check if verifier tracks dst_reg bound for BPF_MOD
-Date:   Fri, 24 Mar 2023 00:58:42 -0400
-Message-Id: <20230324045842.729719-3-xukuohai@huaweicloud.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230324045842.729719-1-xukuohai@huaweicloud.com>
-References: <20230324045842.729719-1-xukuohai@huaweicloud.com>
+        with ESMTP id S231659AbjCWQAg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Mar 2023 12:00:36 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD51F25943
+        for <bpf@vger.kernel.org>; Thu, 23 Mar 2023 09:00:32 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id bz27so15351055qtb.1
+        for <bpf@vger.kernel.org>; Thu, 23 Mar 2023 09:00:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1679587231;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xQQYR3tgoTZGjn44UlqD2Q/Bi/7ZZ0L1D2F+tNyu+vY=;
+        b=JUSYGg90JZTT6Yd13pjG6DLnrb2PDfmyEiLktcz2+MNdTX1qhs8SEmuA54OaIlpPJb
+         DxtqFpASEbLE1v0MWbPxSyp5iJvz/cWT8oHdtMYHkFXPLcVCi5GYkPZurEN1bWPwQDzC
+         weuJE2NJS7RteJovT2yARUM6DjWrj4KVVFVUPsqLMqvDhc6sSQI6Mvr+an7mCsZje+Ma
+         HzcrGuLfySAPmUsyXVd3Jh0ih8mkd/t0KaiLpkyblfIp5tKl5BXeCDVIuYG91jK7wKEU
+         fOndc7BtP6DmMZ+/1A5temMFZBDYv1b7xByaHD0exVuhFbacP6Sn5JBtcOlh09PvP/Ah
+         bUrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679587231;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xQQYR3tgoTZGjn44UlqD2Q/Bi/7ZZ0L1D2F+tNyu+vY=;
+        b=hh15y5f6WgNhPeXQbNe2nvmy4PPBxhB2nUCNsONuTk4uy76Nuiov5t/oASQ5VwD82Y
+         b8h1Yc8vNs73qIrXfC1mXU1sXGwxCnPMjQS8CiJJhUPJugmGKxKQEYDM0dupB0KvvfEk
+         btKBOA7+my8riPWTyAmlHpVNloB5iWJF0aX0zB8QdvCFvgmZmXpsJEShe32BB6Cxey4z
+         OH6Red3upXk5mP/AjSD+hbbZ20CuLH7YjdxMgD1Th8wCiyZseaGsP4QHSLKDGsoN4qHb
+         6FlkrAVzIiFFs5Gu+Urh3VC7V1EIqaWcq5JWz2wpT7CyDd3Vfi7wzY7JpXpFK+UA0NNc
+         9SSg==
+X-Gm-Message-State: AO0yUKV1yHEDbq9ublVJvdg/ZajDjXw6/oYJRnEn0tRqZQ9bheUtMu0r
+        6Ga1/POX7XcN0BvUF3Dq7gVhCQ==
+X-Google-Smtp-Source: AK7set87oFRPV+RhpgHybpu64glNPVjvktx8AzjXw+O057W6zUiIN3FRPNknFZPhV+tY70AZT6E7jg==
+X-Received: by 2002:a05:622a:182a:b0:3e3:90fa:c5d9 with SMTP id t42-20020a05622a182a00b003e390fac5d9mr5230973qtc.40.1679587231698;
+        Thu, 23 Mar 2023 09:00:31 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:62db])
+        by smtp.gmail.com with ESMTPSA id j23-20020ac86657000000b003e0c29112b6sm7802610qtp.7.2023.03.23.09.00.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 09:00:31 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 12:00:30 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 6/7] workingset: memcg: sleep when flushing stats in
+ workingset_refault()
+Message-ID: <20230323160030.GD739026@cmpxchg.org>
+References: <20230323040037.2389095-1-yosryahmed@google.com>
+ <20230323040037.2389095-7-yosryahmed@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgC3aq5fdxxktQW3Fw--.25283S4
-X-Coremail-Antispam: 1UD129KBjvJXoW3Wr48CFW3XrWDGryrAFyrZwb_yoWfCF18p3
-        4rX3WDJr48Jw4YvaykKFyIv3W3Kr4kJrsrCas2gr17ZrW3J3W3W3WUta15CwnxJr1rJrsI
-        qF15C3s7JayjvwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r4Y6ry7M2
-        8IrcIa0xkI8VA2jI8067AKxVWUXwA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK
-        0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4
-        x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2
-        z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4
-        xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v2
-        6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x0262
-        8vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
-        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wr
-        ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
-        1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jr
-        3ktUUUUU=
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323040037.2389095-7-yosryahmed@google.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Xu Kuohai <xukuohai@huawei.com>
+On Thu, Mar 23, 2023 at 04:00:36AM +0000, Yosry Ahmed wrote:
+> In workingset_refault(), we call mem_cgroup_flush_stats_delayed() to
+> flush stats within an RCU read section and with sleeping disallowed.
+> Move the call to mem_cgroup_flush_stats_delayed() above the RCU read
+> section and allow sleeping to avoid unnecessarily performing a lot of
+> work without sleeping.
+> 
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> ---
+> 
+> A lot of code paths call into workingset_refault(), so I am not
+> generally sure at all whether it's okay to sleep in all contexts or not.
+> Feedback here would be very helpful.
+> 
+> ---
+>  mm/workingset.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/mm/workingset.c b/mm/workingset.c
+> index 042eabbb43f6..410bc6684ea7 100644
+> --- a/mm/workingset.c
+> +++ b/mm/workingset.c
+> @@ -406,6 +406,8 @@ void workingset_refault(struct folio *folio, void *shadow)
+>  	unpack_shadow(shadow, &memcgid, &pgdat, &eviction, &workingset);
+>  	eviction <<= bucket_order;
+>  
+> +	/* Flush stats (and potentially sleep) before holding RCU read lock */
+> +	mem_cgroup_flush_stats_delayed(true);
 
-Test cases to check if verifier tracks dst_reg bound for BPF_MOD.
+Btw, it might be a good time to rename this while you're in the
+area. delayed suggests this is using a delayed_work, but this is
+actually sometimes flushing directly from the callsite.
 
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
----
- tools/testing/selftests/bpf/verifier/mod.c | 320 +++++++++++++++++++++
- 1 file changed, 320 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/verifier/mod.c
+What it's doing is ratelimited calls. A better name would be:
 
-diff --git a/tools/testing/selftests/bpf/verifier/mod.c b/tools/testing/selftests/bpf/verifier/mod.c
-new file mode 100644
-index 000000000000..3aec856d5c9f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/verifier/mod.c
-@@ -0,0 +1,320 @@
-+{
-+	"mod64 positive imm",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_ALU64_IMM(BPF_MOD, BPF_REG_0, 1),
-+
-+	BPF_MOV64_IMM(BPF_REG_1, 0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	/* r0 = 0 */
-+	BPF_JMP_REG(BPF_JLT, BPF_REG_1, BPF_REG_0, -2),
-+
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+},
-+{
-+	"mod64 positive reg",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_MOV64_IMM(BPF_REG_1, 1),
-+	BPF_ALU64_REG(BPF_MOD, BPF_REG_0, BPF_REG_1),
-+
-+	BPF_MOV64_IMM(BPF_REG_1, 0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	/* r0 = 0 */
-+	BPF_JMP_REG(BPF_JLT, BPF_REG_1, BPF_REG_0, -2),
-+
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+},
-+{
-+	"mod64 zero",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_MOV64_IMM(BPF_REG_1, 0),
-+	BPF_ALU64_REG(BPF_MOD, BPF_REG_0, BPF_REG_1),
-+
-+	BPF_MOV64_IMM(BPF_REG_1, 0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	/* r0 = 0 */
-+	BPF_JMP_REG(BPF_JLT, BPF_REG_1, BPF_REG_0, -2),
-+
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+},
-+{
-+	"mod64 negative 1",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_MOV64_IMM(BPF_REG_1, -1),
-+	BPF_ALU64_REG(BPF_MOD, BPF_REG_0, BPF_REG_1),
-+
-+	BPF_MOV64_IMM(BPF_REG_1, 0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	/* r0 = 1 */
-+	BPF_JMP_REG(BPF_JLT, BPF_REG_1, BPF_REG_0, -2),
-+
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+	.retval = 1,
-+},
-+{
-+	"mod64 negative 2",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, -4),
-+	BPF_MOV32_IMM(BPF_REG_1, 5),
-+	BPF_ALU64_REG(BPF_MOD, BPF_REG_0, BPF_REG_1),
-+
-+	BPF_MOV64_IMM(BPF_REG_1, 0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	/* r0 = 2 */
-+	BPF_JMP_REG(BPF_JLT, BPF_REG_1, BPF_REG_0, -2),
-+
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+	.retval = 2,
-+},
-+{
-+	"mod64 negative 3",
-+	.insns = {
-+	BPF_MOV32_IMM(BPF_REG_0, -4),
-+	BPF_MOV32_IMM(BPF_REG_1, -5),
-+	BPF_ALU64_REG(BPF_MOD, BPF_REG_0, BPF_REG_1),
-+
-+	BPF_MOV64_IMM(BPF_REG_1, 0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	/* r0 = 1 */
-+	BPF_JMP_REG(BPF_JLT, BPF_REG_1, BPF_REG_0, -2),
-+
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+	.retval = 1,
-+},
-+{
-+	"mod64 variable dividend cross signed boundary, with JLT",
-+	.insns = {
-+	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
-+		    offsetof(struct xdp_md, data)),
-+	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
-+		    offsetof(struct xdp_md, data_end)),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 11),
-+
-+	BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
-+	BPF_LD_IMM64(BPF_REG_0, 0x7fffffffffffff10),
-+	BPF_ALU64_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
-+	BPF_LD_IMM64(BPF_REG_0, 0x80000000000000ff),
-+	BPF_ALU64_REG(BPF_MOD, BPF_REG_1, BPF_REG_0),
-+
-+	BPF_LD_IMM64(BPF_REG_0, 0x8000000000000000),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
-+	/* r1 unsigned range is [0x7fffffffffffff10, 0x800000000000000f] */
-+	BPF_JMP_REG(BPF_JLT, BPF_REG_0, BPF_REG_1, -2),
-+
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+},
-+{
-+	"mod64 variable dividend cross signed boundary, with JSLT",
-+	.insns = {
-+	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
-+		    offsetof(struct xdp_md, data)),
-+	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
-+		    offsetof(struct xdp_md, data_end)),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 11),
-+
-+	BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
-+	BPF_LD_IMM64(BPF_REG_0, 0x7fffffffffffff10),
-+	BPF_ALU64_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
-+	BPF_LD_IMM64(BPF_REG_0, 0x80000000000000ff),
-+	BPF_ALU64_REG(BPF_MOD, BPF_REG_1, BPF_REG_0),
-+
-+	BPF_LD_IMM64(BPF_REG_0, 0x8000000000000000),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
-+	/* r1 signed range is [S64_MIN, S64_MAX] */
-+	BPF_JMP_REG(BPF_JSLT, BPF_REG_0, BPF_REG_1, -2),
-+
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.errstr = "BPF program is too large.",
-+	.result = REJECT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+},
-+{
-+	"mod32 positive imm",
-+	.insns = {
-+	BPF_MOV32_IMM(BPF_REG_0, 0),
-+	BPF_ALU32_IMM(BPF_MOD, BPF_REG_0, 1),
-+
-+	BPF_MOV64_IMM(BPF_REG_1, 0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	/* r0 = 0 */
-+	BPF_JMP_REG(BPF_JLT, BPF_REG_1, BPF_REG_0, -2),
-+
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+},
-+{
-+	"mod32 positive reg",
-+	.insns = {
-+	BPF_MOV32_IMM(BPF_REG_0, 0),
-+	BPF_MOV32_IMM(BPF_REG_1, 1),
-+	BPF_ALU32_REG(BPF_MOD, BPF_REG_0, BPF_REG_1),
-+
-+	BPF_MOV64_IMM(BPF_REG_1, 0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	/* r0 = 0 */
-+	BPF_JMP_REG(BPF_JLT, BPF_REG_1, BPF_REG_0, -2),
-+
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+},
-+{
-+	"mod32 zero",
-+	.insns = {
-+	BPF_MOV32_IMM(BPF_REG_0, 0),
-+	BPF_MOV32_IMM(BPF_REG_1, 0),
-+	BPF_ALU32_REG(BPF_MOD, BPF_REG_0, BPF_REG_1),
-+
-+	BPF_MOV64_IMM(BPF_REG_1, 0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	/* r0 = 0 */
-+	BPF_JMP_REG(BPF_JLT, BPF_REG_1, BPF_REG_0, -2),
-+
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+},
-+{
-+	"mod32 negative 1",
-+	.insns = {
-+	BPF_MOV32_IMM(BPF_REG_0, 1),
-+	BPF_MOV32_IMM(BPF_REG_1, -1),
-+	BPF_ALU32_REG(BPF_MOD, BPF_REG_0, BPF_REG_1),
-+
-+	BPF_MOV64_IMM(BPF_REG_1, 0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	/* r0 = 1 */
-+	BPF_JMP_REG(BPF_JLT, BPF_REG_1, BPF_REG_0, -2),
-+
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+	.retval = 1,
-+},
-+{
-+	"mod32 negative 2",
-+	.insns = {
-+	BPF_MOV32_IMM(BPF_REG_0, -4),
-+	BPF_MOV32_IMM(BPF_REG_1, 5),
-+	BPF_ALU32_REG(BPF_MOD, BPF_REG_0, BPF_REG_1),
-+
-+	BPF_MOV64_IMM(BPF_REG_1, 0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	/* r0 = 2 */
-+	BPF_JMP_REG(BPF_JLT, BPF_REG_1, BPF_REG_0, -2),
-+
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+	.retval = 2,
-+},
-+{
-+	"mod32 negative 3",
-+	.insns = {
-+	BPF_MOV32_IMM(BPF_REG_0, -4),
-+	BPF_MOV32_IMM(BPF_REG_1, -5),
-+	BPF_ALU32_REG(BPF_MOD, BPF_REG_0, BPF_REG_1),
-+
-+	BPF_MOV64_IMM(BPF_REG_1, 0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	/* r0 = 1 */
-+	BPF_JMP_REG(BPF_JLT, BPF_REG_1, BPF_REG_0, -2),
-+
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+	.retval = 1,
-+},
-+{
-+	"mod32 variable dividend cross signed boundary, with JLT",
-+	.insns = {
-+	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
-+		    offsetof(struct xdp_md, data)),
-+	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
-+		    offsetof(struct xdp_md, data_end)),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 7),
-+
-+	BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
-+	BPF_MOV64_IMM(BPF_REG_0, 0x7fffff10),
-+	BPF_ALU64_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
-+	BPF_ALU32_IMM(BPF_MOD, BPF_REG_1, 0x800000ff),
-+
-+	BPF_MOV32_IMM(BPF_REG_0, 0x80000000),
-+	BPF_ALU32_IMM(BPF_ADD, BPF_REG_0, 1),
-+	/* r1 unsigned 32-bit range is [0x7fffff10, 0x8000000f] */
-+	BPF_JMP32_REG(BPF_JLT, BPF_REG_0, BPF_REG_1, -2),
-+
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+},
-+{
-+	"mod32 variable dividend cross signed boundary, with JSLT",
-+	.insns = {
-+	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
-+		    offsetof(struct xdp_md, data)),
-+	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
-+		    offsetof(struct xdp_md, data_end)),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 7),
-+
-+	BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
-+	BPF_MOV64_IMM(BPF_REG_0, 0x7fffff10),
-+	BPF_ALU64_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
-+	BPF_ALU32_IMM(BPF_MOD, BPF_REG_1, 0x800000ff),
-+
-+	BPF_MOV32_IMM(BPF_REG_0, 0x80000000),
-+	BPF_ALU32_IMM(BPF_ADD, BPF_REG_0, 1),
-+	/* r1 signed 32-bit range is [S32_MIN, S32_MAX] */
-+	BPF_JMP32_REG(BPF_JSLT, BPF_REG_0, BPF_REG_1, -2),
-+
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.errstr = "BPF program is too large.",
-+	.result = REJECT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+},
--- 
-2.30.2
-
+	mem_cgroup_flush_stats_ratelimited()
