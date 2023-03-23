@@ -2,148 +2,207 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68A3FC6FD1C
-	for <bpf@archiver.kernel.org>; Thu, 23 Mar 2023 03:46:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76B2CC6FD1D
+	for <bpf@archiver.kernel.org>; Thu, 23 Mar 2023 04:00:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbjCWDq0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Mar 2023 23:46:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60064 "EHLO
+        id S230145AbjCWEAy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Mar 2023 00:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjCWDqZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Mar 2023 23:46:25 -0400
-Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463C92C677;
-        Wed, 22 Mar 2023 20:46:23 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R231e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VeShdPK_1679543179;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VeShdPK_1679543179)
-          by smtp.aliyun-inc.com;
-          Thu, 23 Mar 2023 11:46:19 +0800
-Message-ID: <1679543111.9544318-1-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH net-next 1/8] virtio_net: mergeable xdp: put old page immediately
-Date:   Thu, 23 Mar 2023 11:45:11 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Yunsheng Lin <linyunsheng@huawei.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        <virtualization@lists.linux-foundation.org>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-References: <20230322030308.16046-1-xuanzhuo@linux.alibaba.com>
- <20230322030308.16046-2-xuanzhuo@linux.alibaba.com>
- <4bd07874-b1ad-336b-b15e-ba56a10182e9@huawei.com>
- <1679535365.5410192-1-xuanzhuo@linux.alibaba.com>
- <941a16c5-ba64-ca49-9af9-68d9615dca00@huawei.com>
-In-Reply-To: <941a16c5-ba64-ca49-9af9-68d9615dca00@huawei.com>
+        with ESMTP id S229463AbjCWEAw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Mar 2023 00:00:52 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD0F1F92C
+        for <bpf@vger.kernel.org>; Wed, 22 Mar 2023 21:00:43 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id m9-20020a17090a7f8900b0023769205928so370047pjl.6
+        for <bpf@vger.kernel.org>; Wed, 22 Mar 2023 21:00:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679544043;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zlRHMwQCwPxTz7URsIPFYEiZ1y/NkKG6JVNDPEffcgo=;
+        b=q0IiHI38SIToezuWJ5YCNMq/43EaxUo3i4AMEPHcC9bZCfWe3qfaYbxabY9EbcCoqm
+         LUESQ/1v1D2aalE9SO+twkVNP5hnW+UNiSPbsUMxGnfaQG+8mDUTyeXBv18fXpGW3SWD
+         GCVDR2eWTWBw72p7FFHYiZQYGqUWBUdEyjEquw53iNIuEWGhIQhSBNfbqBw3sfwQmtJy
+         zq0COAvO1AYz/HqEKQJev5lhSkkjfsk/GYKhQDhBPMJgp6hmFHeDaNzuC/4om1icb3Uk
+         IS34ZPkCnh/Dxdz7tz/xvLp+bFG8mdt7D5IhxCaGQj3LQws3RSkaD2yIkaXnXsqGxGWA
+         GdAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679544043;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zlRHMwQCwPxTz7URsIPFYEiZ1y/NkKG6JVNDPEffcgo=;
+        b=NSK+YHM2c1Hf5xz2knqMlBtL2iy2OBkagte16rcORf1XP/CKNSS+O/TujPePsFOMfU
+         16TMQ+HpuAEOgapJ2S+ycLJLDy77dHu63D5ZP4ebS1UuP0roAjZUG/toTr6snfgnYtsH
+         YZ8mt6ZBM070uEiLmRw2sNVjmsupmPEMBtljMljaBwYKRYicktggNaxHFXThpOUSs+Wb
+         F/VbyjFSfhItcc3CEr8Vm26STP0Nokp+pK5ZLoxe2BGvt0brPKhfFoMR8DrIh7C/i/pE
+         gznNHeBP/yRuxprcyC64xBObx8R5F1cFFJz1FiiTLkvYNrptORlKN0ENA9Ahla6uGqqX
+         bCNQ==
+X-Gm-Message-State: AO0yUKUDgFlCL+J9joIzMq8uK/X+P3HUStIec/1gu4mGZL6TrdjrHUgQ
+        0O91RM3xRLHXglbX4U29onSv+9T9VtHM2z13
+X-Google-Smtp-Source: AK7set97jrlAfVvPpHOrM2Vr0RCmWVnsZU6sMMMwHyygC2dGwvgADEuqjxobUXV27YUvQlS1Att+r/ZLiyOif2dS
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:a17:902:e745:b0:1a0:4aa3:3a9a with SMTP
+ id p5-20020a170902e74500b001a04aa33a9amr1983132plf.2.1679544043324; Wed, 22
+ Mar 2023 21:00:43 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 04:00:31 +0000
+In-Reply-To: <20230323040037.2389095-1-yosryahmed@google.com>
+Mime-Version: 1.0
+References: <20230323040037.2389095-1-yosryahmed@google.com>
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+Message-ID: <20230323040037.2389095-2-yosryahmed@google.com>
+Subject: [RFC PATCH 1/7] cgroup: rstat: only disable interrupts for the percpu lock
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Vasily Averin <vasily.averin@linux.dev>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, bpf@vger.kernel.org,
+        Yosry Ahmed <yosryahmed@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 23 Mar 2023 11:38:34 +0800, Yunsheng Lin <linyunsheng@huawei.com> w=
-rote:
-> On 2023/3/23 9:36, Xuan Zhuo wrote:
-> > On Wed, 22 Mar 2023 16:22:18 +0800, Yunsheng Lin <linyunsheng@huawei.co=
-m> wrote:
-> >> On 2023/3/22 11:03, Xuan Zhuo wrote:
-> >>> In the xdp implementation of virtio-net mergeable, it always checks
-> >>> whether two page is used and a page is selected to release. This is
-> >>> complicated for the processing of action, and be careful.
-> >>>
-> >>> In the entire process, we have such principles:
-> >>> * If xdp_page is used (PASS, TX, Redirect), then we release the old
-> >>>   page.
-> >>> * If it is a drop case, we will release two. The old page obtained fr=
-om
-> >>>   buf is release inside err_xdp, and xdp_page needs be relased by us.
-> >>>
-> >>> But in fact, when we allocate a new page, we can release the old page
-> >>> immediately. Then just one is using, we just need to release the new
-> >>> page for drop case. On the drop path, err_xdp will release the variab=
-le
-> >>> "page", so we only need to let "page" point to the new xdp_page in
-> >>> advance.
-> >>>
-> >>> Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> >>> ---
-> >>>  drivers/net/virtio_net.c | 15 ++++++---------
-> >>>  1 file changed, 6 insertions(+), 9 deletions(-)
-> >>>
-> >>> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> >>> index e2560b6f7980..4d2bf1ce0730 100644
-> >>> --- a/drivers/net/virtio_net.c
-> >>> +++ b/drivers/net/virtio_net.c
-> >>> @@ -1245,6 +1245,9 @@ static struct sk_buff *receive_mergeable(struct=
- net_device *dev,
-> >>>  			if (!xdp_page)
-> >>>  				goto err_xdp;
-> >>>  			offset =3D VIRTIO_XDP_HEADROOM;
-> >>> +
-> >>> +			put_page(page);
-> >>
-> >> the error handling of xdp_linearize_page() does not seems self contain=
-ed.
-> >> Does it not seem better=EF=BC=9A
-> >> 1. if xdp_linearize_page() succesed, call put_page() for first buffer =
-just
-> >>    as put_page() is call for other buffer
-> >> 2. or call virtqueue_get_buf() and put_page() for all the buffer of th=
-e packet
-> >>    so the error handling is not needed outside the virtqueue_get_buf().
-> >>
-> >> In that case, it seems we can just do below without xdp_page:
-> >> page =3D xdp_linearize_page(rq, num_buf, page, ...);
-> >
-> >
-> > This does look better.
-> >
-> > In fact, we already have vq reset, we can load XDP based on vq reset.
-> > In this way, we can run without xdp_linearize_page.
->
-> For compatibility, it is still needed, right?
+Currently, when sleeping is not allowed during rstat flushing, we hold
+the global rstat lock with interrupts disabled throughout the entire
+flush operation. Flushing in an O(# cgroups * # cpus) operation, and
+having interrupts disabled throughout is dangerous.
 
-Yes
+For some contexts, we may not want to sleep, but can be interrupted
+(e.g. while holding a spinlock or RCU read lock). As such, do not
+disable interrupts throughout rstat flushing, only when holding the
+percpu lock. This breaks down the O(# cgroups * # cpus) duration with
+interrupts disabled to a series of O(# cgroups) durations.
 
+Furthermore, if a cpu spinning waiting for the global rstat lock, it
+doesn't need to spin with interrupts disabled anymore.
 
->
-> >
-> >
-> >>
-> >>
-> >>> +			page =3D xdp_page;
-> >>>  		} else if (unlikely(headroom < virtnet_get_headroom(vi))) {
-> >>>  			xdp_room =3D SKB_DATA_ALIGN(VIRTIO_XDP_HEADROOM +
-> >>>  						  sizeof(struct skb_shared_info));
-> >>> @@ -1259,6 +1262,9 @@ static struct sk_buff *receive_mergeable(struct=
- net_device *dev,
-> >>>  			       page_address(page) + offset, len);
-> >>>  			frame_sz =3D PAGE_SIZE;
-> >>>  			offset =3D VIRTIO_XDP_HEADROOM;
-> >>> +
-> >>> +			put_page(page);
-> >>> +			page =3D xdp_page;
-> >>
-> >> It seems we can limit the scope of xdp_page in this "else if" block.
-> >>
-> >>>  		} else {
-> >>>  			xdp_page =3D page;
-> >>>  		}
-> >>
-> >> It seems the above else block is not needed anymore.
-> >
-> > Yes, the follow-up patch has this optimization.
->
-> Isn't refoctor patch supposed to be self-contianed too, instead of
-> depending on follow-up patch?
+If the caller of rstat flushing needs interrupts to be disabled, it's up
+to them to decide that, and it should be fine to hold the global rstat
+lock with interrupts disabled. There is currently a single context that
+may invoke rstat flushing with interrupts disabled, the
+mem_cgroup_flush_stats() call in mem_cgroup_usage(), if called from
+mem_cgroup_threshold().
 
+To make it safe to hold the global rstat lock with interrupts enabled,
+make sure we only flush from in_task() contexts. The side effect of that
+we read stale stats in interrupt context, but this should be okay, as
+flushing in interrupt context is dangerous anyway as it is an expensive
+operation, so reading stale stats is safer.
 
-I mean that the #2 patch do this.
+Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+---
+ kernel/cgroup/rstat.c | 40 +++++++++++++++++++++++++++++-----------
+ 1 file changed, 29 insertions(+), 11 deletions(-)
 
-Thanks.
+diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
+index 831f1f472bb8..af11e28bd055 100644
+--- a/kernel/cgroup/rstat.c
++++ b/kernel/cgroup/rstat.c
+@@ -7,6 +7,7 @@
+ #include <linux/btf.h>
+ #include <linux/btf_ids.h>
+ 
++/* This lock should only be held from task context */
+ static DEFINE_SPINLOCK(cgroup_rstat_lock);
+ static DEFINE_PER_CPU(raw_spinlock_t, cgroup_rstat_cpu_lock);
+ 
+@@ -210,14 +211,24 @@ static void cgroup_rstat_flush_locked(struct cgroup *cgrp, bool may_sleep)
+ 		/* if @may_sleep, play nice and yield if necessary */
+ 		if (may_sleep && (need_resched() ||
+ 				  spin_needbreak(&cgroup_rstat_lock))) {
+-			spin_unlock_irq(&cgroup_rstat_lock);
++			spin_unlock(&cgroup_rstat_lock);
+ 			if (!cond_resched())
+ 				cpu_relax();
+-			spin_lock_irq(&cgroup_rstat_lock);
++			spin_lock(&cgroup_rstat_lock);
+ 		}
+ 	}
+ }
+ 
++static bool should_skip_flush(void)
++{
++	/*
++	 * We acquire cgroup_rstat_lock without disabling interrupts, so we
++	 * should not try to acquire from interrupt contexts to avoid deadlocks.
++	 * It can be expensive to flush stats in interrupt context anyway.
++	 */
++	return !in_task();
++}
++
+ /**
+  * cgroup_rstat_flush - flush stats in @cgrp's subtree
+  * @cgrp: target cgroup
+@@ -229,15 +240,18 @@ static void cgroup_rstat_flush_locked(struct cgroup *cgrp, bool may_sleep)
+  * This also gets all cgroups in the subtree including @cgrp off the
+  * ->updated_children lists.
+  *
+- * This function may block.
++ * This function is safe to call from contexts that disable interrupts, but
++ * @may_sleep must be set to false, otherwise the function may block.
+  */
+ __bpf_kfunc void cgroup_rstat_flush(struct cgroup *cgrp)
+ {
+-	might_sleep();
++	if (should_skip_flush())
++		return;
+ 
+-	spin_lock_irq(&cgroup_rstat_lock);
++	might_sleep();
++	spin_lock(&cgroup_rstat_lock);
+ 	cgroup_rstat_flush_locked(cgrp, true);
+-	spin_unlock_irq(&cgroup_rstat_lock);
++	spin_unlock(&cgroup_rstat_lock);
+ }
+ 
+ /**
+@@ -248,11 +262,12 @@ __bpf_kfunc void cgroup_rstat_flush(struct cgroup *cgrp)
+  */
+ void cgroup_rstat_flush_irqsafe(struct cgroup *cgrp)
+ {
+-	unsigned long flags;
++	if (should_skip_flush())
++		return;
+ 
+-	spin_lock_irqsave(&cgroup_rstat_lock, flags);
++	spin_lock(&cgroup_rstat_lock);
+ 	cgroup_rstat_flush_locked(cgrp, false);
+-	spin_unlock_irqrestore(&cgroup_rstat_lock, flags);
++	spin_unlock(&cgroup_rstat_lock);
+ }
+ 
+ /**
+@@ -267,8 +282,11 @@ void cgroup_rstat_flush_irqsafe(struct cgroup *cgrp)
+ void cgroup_rstat_flush_hold(struct cgroup *cgrp)
+ 	__acquires(&cgroup_rstat_lock)
+ {
++	if (should_skip_flush())
++		return;
++
+ 	might_sleep();
+-	spin_lock_irq(&cgroup_rstat_lock);
++	spin_lock(&cgroup_rstat_lock);
+ 	cgroup_rstat_flush_locked(cgrp, true);
+ }
+ 
+@@ -278,7 +296,7 @@ void cgroup_rstat_flush_hold(struct cgroup *cgrp)
+ void cgroup_rstat_flush_release(void)
+ 	__releases(&cgroup_rstat_lock)
+ {
+-	spin_unlock_irq(&cgroup_rstat_lock);
++	spin_unlock(&cgroup_rstat_lock);
+ }
+ 
+ int cgroup_rstat_init(struct cgroup *cgrp)
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
+
