@@ -2,91 +2,98 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 096A7C74A5B
-	for <bpf@archiver.kernel.org>; Thu, 23 Mar 2023 15:56:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FCD2C6FD1C
+	for <bpf@archiver.kernel.org>; Thu, 23 Mar 2023 15:59:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbjCWP4S (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Mar 2023 11:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41046 "EHLO
+        id S232211AbjCWP7f (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Mar 2023 11:59:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231705AbjCWP4R (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 Mar 2023 11:56:17 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EEAB21A08
-        for <bpf@vger.kernel.org>; Thu, 23 Mar 2023 08:56:15 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id w25so4498264qtc.5
-        for <bpf@vger.kernel.org>; Thu, 23 Mar 2023 08:56:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1679586974;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=73H5IIveVwCSuj8ISfgz0DD6tM9W3+Bkt6XVlPhAYGQ=;
-        b=BOTN3RHikvmNyJ/5BRIscfqCjptXrf8qpEubjPg0OC/Xwy+boUt94/+OfrbOvrjrzs
-         cJmWGbxdzfNwYKXLNjFeE4gMQoT6n7Ue/HEG5/LMoEeTKeSw/uGUVJVLhA+eCCAdPAw6
-         TtqrrK35mvYRbzkyskIxNy5mDJm9BfKY9K6UzVcc3DGVU9OzF+09jvq6Drjb5mZ2qmVt
-         HenjMS5dF/r4y3zFsqrBc6Pye1BCCpqXxrBcHNF0Eo2mmCOm0/3b/V5FU143KRmBza1U
-         0t4zXTHbwVZfvfVGehbwYOD9++M2yfXXjOlk6zzl04FgUWlZQ7+y/4hEPkd/CR7pqYbK
-         NovA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679586974;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=73H5IIveVwCSuj8ISfgz0DD6tM9W3+Bkt6XVlPhAYGQ=;
-        b=vX8zfmm03Xi+mcZM2kBCBPKnXH2ok+4cX5qriuIZJC/EeEveXkBxoCmXhtAK9ajRxu
-         DnW/xD2OwbqGHd3qVLzJUJk/h5uWhLWVPdaeZLzYhLl9WwrTDKs9l7OgC4YFNqOxAPi4
-         nldBUWEm3KXFOKZMSQa71r34lKZ8UT6rGDOk/cfJwjTzt60vlVo6LqVfBBpvUbvCibJn
-         PjTNfi1bNTXvY9oikoQxC+bV4+fndb6/1EwKYknm9lqRr0oYnD7hxiClGvbNHcDjuILH
-         oQ5x4LGRi8IMpp5X7CvjRf1SxV8lbtS8TvlkDh9NO4WZDzLAZmlU/qhUNOp8teujDlBS
-         +3aA==
-X-Gm-Message-State: AO0yUKXW76bMnaowaUzBv5aqw9n/QV+GYPT/NzlzB9C6XKhBL62MlVhq
-        yAsPTXv03kK/fyx8c5h01bFIWA==
-X-Google-Smtp-Source: AK7set8ZHb51Enf0t/dIsgKw2woHO3ntBPTQ4bYWsu5XGHqtbaXdqba7YQaqZsTNXwWNIceHWF4QLA==
-X-Received: by 2002:ac8:5b87:0:b0:3b9:bc8c:c214 with SMTP id a7-20020ac85b87000000b003b9bc8cc214mr9815638qta.31.1679586974671;
-        Thu, 23 Mar 2023 08:56:14 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:62db])
-        by smtp.gmail.com with ESMTPSA id 201-20020a3708d2000000b007456efa7f73sm8647826qki.85.2023.03.23.08.56.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 08:56:14 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 11:56:13 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 4/7] memcg: sleep during flushing stats in safe
- contexts
-Message-ID: <20230323155613.GC739026@cmpxchg.org>
-References: <20230323040037.2389095-1-yosryahmed@google.com>
- <20230323040037.2389095-5-yosryahmed@google.com>
+        with ESMTP id S231241AbjCWP7e (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Mar 2023 11:59:34 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A841026A;
+        Thu, 23 Mar 2023 08:59:33 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Pj95D4BBmz4f3jqM;
+        Thu, 23 Mar 2023 23:59:28 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+        by APP4 (Coremail) with SMTP id gCh0CgC3aq5fdxxktQW3Fw--.25283S2;
+        Thu, 23 Mar 2023 23:59:29 +0800 (CST)
+From:   Xu Kuohai <xukuohai@huaweicloud.com>
+To:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Subject: [PATCH bpf-next v2 0/2] bpf: add bound tracking for BPF_MOD
+Date:   Fri, 24 Mar 2023 00:58:40 -0400
+Message-Id: <20230324045842.729719-1-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323040037.2389095-5-yosryahmed@google.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgC3aq5fdxxktQW3Fw--.25283S2
+X-Coremail-Antispam: 1UD129KBjvdXoWruFyfKr1UXF1kWrW7Cw47CFg_yoWDtFcEya
+        93tasYvFnxJFnYqFZakF17WrWqkw4UKFyrJF42qrW7XFn7Jr1FgFs5Gry5Ja4DKFWrXrZ7
+        JF9xtayvvrnIkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbs8YFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l87I20VAvwVAaII0Ic2I_Grv_XF1l8c
+        AvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWD
+        JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oV
+        Cq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG
+        8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2js
+        IE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY
+        1x02628vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
+        026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
+        GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
+        vEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280
+        aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43
+        ZEXa7IU8L2-5UUUUU==
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 04:00:34AM +0000, Yosry Ahmed wrote:
-> @@ -644,26 +644,26 @@ static void __mem_cgroup_flush_stats(void)
->  		return;
->  
->  	flush_next_time = jiffies_64 + 2*FLUSH_TIME;
-> -	cgroup_rstat_flush(root_mem_cgroup->css.cgroup, false);
-> +	cgroup_rstat_flush(root_mem_cgroup->css.cgroup, may_sleep);
+From: Xu Kuohai <xukuohai@huawei.com>
 
-How is it safe to call this with may_sleep=true when it's holding the
-stats_flush_lock?
+dst_reg is marked as unknown when BPF_MOD instruction is verified, causing
+the following bpf prog to be incorrectly rejected.
 
->  	atomic_set(&stats_flush_threshold, 0);
->  	spin_unlock(&stats_flush_lock);
->  }
+0: r0 = 0
+1: r0 %= 1   // r0 is marked as unknown
+2: r1 = 0
+3: r1 += 1
+4: if r1 < r0 goto pc-2 // verifier concludes the loop is unbounded
+5: exit
+
+To teach verifier to accept the above prog, this series adds bound tracking
+for BPF_MOD.
+
+v2:
+- fix build warning reported by kernel test robot <lkp@intel.com> [0]
+- add two more cases and update commit message
+
+[0] https://lore.kernel.org/oe-kbuild-all/202303060036.zK05OC5M-lkp@intel.com
+
+v1: https://lore.kernel.org/bpf/20230306033119.2634976-1-xukuohai@huaweicloud.com
+
+Xu Kuohai (2):
+  bpf: add bound tracking for BPF_MOD
+  selftests/bpf: check if verifier tracks dst_reg bound for BPF_MOD
+
+ kernel/bpf/verifier.c                      |  98 ++++++-
+ tools/testing/selftests/bpf/verifier/mod.c | 320 +++++++++++++++++++++
+ 2 files changed, 413 insertions(+), 5 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/verifier/mod.c
+
+-- 
+2.30.2
+
