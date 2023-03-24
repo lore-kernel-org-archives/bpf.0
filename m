@@ -2,98 +2,99 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00547C76196
-	for <bpf@archiver.kernel.org>; Fri, 24 Mar 2023 23:28:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D3A5C761AF
+	for <bpf@archiver.kernel.org>; Fri, 24 Mar 2023 23:28:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbjCXX2E convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 24 Mar 2023 19:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56654 "EHLO
+        id S231706AbjCXX2G (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 24 Mar 2023 19:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231572AbjCXX2E (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 24 Mar 2023 19:28:04 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E1859D5
-        for <bpf@vger.kernel.org>; Fri, 24 Mar 2023 16:28:00 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32OMZdjV018154
-        for <bpf@vger.kernel.org>; Fri, 24 Mar 2023 16:27:59 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3phj7ds2wh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 24 Mar 2023 16:27:59 -0700
-Received: from twshared52565.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Fri, 24 Mar 2023 16:27:57 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 936382BC9C8D4; Fri, 24 Mar 2023 16:27:46 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@kernel.org>
-CC:     <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH v2 bpf-next 0/3] veristat: add better support of freplace programs
-Date:   Fri, 24 Mar 2023 16:27:42 -0700
-Message-ID: <20230324232745.3959567-1-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
-Content-Type: text/plain; charset="UTF-8"
-X-FB-Internal: Safe
-X-Proofpoint-GUID: 5hEgWRNSOTpsr5kfPIoWH0RjdUX8rzRr
-X-Proofpoint-ORIG-GUID: 5hEgWRNSOTpsr5kfPIoWH0RjdUX8rzRr
-Content-Transfer-Encoding: 8BIT
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S231580AbjCXX2F (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 24 Mar 2023 19:28:05 -0400
+Received: from out-36.mta0.migadu.com (out-36.mta0.migadu.com [91.218.175.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8135E2132
+        for <bpf@vger.kernel.org>; Fri, 24 Mar 2023 16:28:03 -0700 (PDT)
+Message-ID: <fe3db636-2f89-3175-a605-2124b43ae4fa@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1679700481;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=znY78L98weuBiMgEonJQOPxggC8U4iELkUSqycl27gU=;
+        b=VryzPjcKbZ2RosICjRNFYfs1mlJfvbCTcNbx5vDMSyHDIJDr+ksGwR1gd4N+wmsCo+Hshp
+        aPfkCsYxzIIUcTfezg61qVf6AYVyKGvoo1V1YKQFPDXaWkDriTpzPq7GDO/sBEaomOckTk
+        enbmAKhyDlSYgIbCvFOnPrN1ZHiTb6Y=
+Date:   Fri, 24 Mar 2023 16:27:51 -0700
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_11,2023-03-24_01,2023-02-09_01
+Subject: Re: [PATCH bpf-next v2 1/2] net/smc: Introduce BPF injection
+ capability for SMC
+Content-Language: en-US
+To:     "D. Wythe" <alibuda@linux.alibaba.com>
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
+        bpf@vger.kernel.org, kgraul@linux.ibm.com, wenjia@linux.ibm.com,
+        jaka@linux.ibm.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org
+References: <1676981919-64884-1-git-send-email-alibuda@linux.alibaba.com>
+ <1676981919-64884-2-git-send-email-alibuda@linux.alibaba.com>
+ <76e226e6-f3bf-f740-c86c-6ee214aff07d@linux.dev>
+ <72030784-451a-2042-cbb7-98e1f9a544d5@linux.alibaba.com>
+ <366b9486-9a00-6add-d54b-5c3f4d35afe9@linux.dev>
+ <6b4728e0-dfb7-ec7b-630f-87ee42233fe8@linux.alibaba.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <6b4728e0-dfb7-ec7b-630f-87ee42233fe8@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Teach veristat how to deal with freplace BPF programs. As they can't be
-directly loaded by veristat without custom user-space part that sets correct
-target program FD, veristat always fails freplace programs. This patch set
-teaches veristat to guess target program type that will be inherited by
-freplace program itself, and subtitute it for BPF_PROG_TYPE_EXT (freplace) one
-for the purposes of BPF verification.
+On 3/23/23 9:08 PM, D. Wythe wrote:
+> 
+> The latest design is that users can register a negotiator implementation indexed 
+> by name, smc_sock can use bpf_setsockopt to specify
+> whether a specific negotiation implementation is required via name. If there are 
+> no settings, there will be no negotiators.
+> 
+> What do you think?
 
-Patch #1 fixes bug in libbpf preventing overriding freplace with specific
-program type.
+tbh, bpf_setsockopt is many steps away. It needs to begin with a syscall 
+setsockopt first. There is little reason it can only be done with a bpf prog. 
+and how does the user know which negotiator a smc sock is using? Currently, ss 
+can learn the tcp-cc of a sk.
 
-Patch #2 adds convenient -d flag to request veristat to emit libbpf debug
-logs. It help debugging why a specific BPF program fails to load, if the
-problem is not due to BPF verification itself.
+~~~~~~~~
 
-v1->v2:
-  - fix compilation error reported by old GCC (my GCC v11 doesn't produce even
-    a warning) and Clang (see CI failure at [0]):
+If this effort is serious, the code quality has to be much improved. The obvious 
+bug and unused variables make this set at most a RFC.
 
-GCC version:
+ From the bpf perspective, it is ok-ish to start with a global negotiator first 
+and skip the setsockopt details for now. However, it needs to be have a name. 
+The new link_update 
+(https://lore.kernel.org/bpf/20230323032405.3735486-1-kuifeng@meta.com/) has to 
+work also. The struct_ops is rcu reader safe, so leverage it whenever it can 
+instead of the read/write lock. It is how struct_ops work for tcp, so try to 
+stay consistent as much as possible in the networking stack.
 
-  veristat.c: In function ‘fixup_obj’:
-  veristat.c:908:1: error: label at end of compound statement
-    908 | skip_freplace_fixup:
-        | ^~~~~~~~~~~~~~~~~~~
+> 
+> In addition, I am very sorry that I have not issued my implementation for such a 
+> long time, and I have encountered some problems with the implementation because
+> the SMC needs to be built as kernel module, I have struggled with the 
+> bpf_setsockopt implementation, and there are some new self-testes that need to 
+> be written.
+> 
 
-Clang version:
+Regarding compiling as module,
 
-  veristat.c:909:1: error: label at end of compound statement is a C2x extension [-Werror,-Wc2x-extensions]
-  }
-  ^
-  1 error generated.
++ifneq ($(CONFIG_SMC),)
++ifeq ($(CONFIG_BPF_SYSCALL),y)
++obj-y				+= smc/bpf_smc_struct_ops.o
++endif
 
-  [0] https://github.com/kernel-patches/bpf/actions/runs/4515972059/jobs/7953845335
-
-Andrii Nakryiko (3):
-  libbpf: disassociate section handler on explicit
-    bpf_program__set_type() call
-  veristat: add -d debug mode option to see debug libbpf log
-  veristat: guess and substitue underlying program type for freplace
-    (EXT) progs
-
- tools/lib/bpf/libbpf.c                 |   1 +
- tools/testing/selftests/bpf/veristat.c | 126 ++++++++++++++++++++++++-
- 2 files changed, 122 insertions(+), 5 deletions(-)
-
--- 
-2.34.1
-
+struct_ops does not support module now. It is on the todo list. The 
+bpf_smc_struct_ops.o above can only be used when CONFIG_SMC=y. Otherwise, the 
+bpf_smc_struct_ops is always built in while most users will never load the smc 
+module.
