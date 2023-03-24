@@ -2,99 +2,77 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D3A5C761AF
-	for <bpf@archiver.kernel.org>; Fri, 24 Mar 2023 23:28:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4147C6FD1C
+	for <bpf@archiver.kernel.org>; Fri, 24 Mar 2023 23:28:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231706AbjCXX2G (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 24 Mar 2023 19:28:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56718 "EHLO
+        id S231623AbjCXX2Z convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 24 Mar 2023 19:28:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231580AbjCXX2F (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 24 Mar 2023 19:28:05 -0400
-Received: from out-36.mta0.migadu.com (out-36.mta0.migadu.com [91.218.175.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8135E2132
-        for <bpf@vger.kernel.org>; Fri, 24 Mar 2023 16:28:03 -0700 (PDT)
-Message-ID: <fe3db636-2f89-3175-a605-2124b43ae4fa@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1679700481;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=znY78L98weuBiMgEonJQOPxggC8U4iELkUSqycl27gU=;
-        b=VryzPjcKbZ2RosICjRNFYfs1mlJfvbCTcNbx5vDMSyHDIJDr+ksGwR1gd4N+wmsCo+Hshp
-        aPfkCsYxzIIUcTfezg61qVf6AYVyKGvoo1V1YKQFPDXaWkDriTpzPq7GDO/sBEaomOckTk
-        enbmAKhyDlSYgIbCvFOnPrN1ZHiTb6Y=
-Date:   Fri, 24 Mar 2023 16:27:51 -0700
+        with ESMTP id S231777AbjCXX2X (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 24 Mar 2023 19:28:23 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28251705
+        for <bpf@vger.kernel.org>; Fri, 24 Mar 2023 16:28:21 -0700 (PDT)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32OMZ5FP003393
+        for <bpf@vger.kernel.org>; Fri, 24 Mar 2023 16:28:21 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3phhut97vn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 24 Mar 2023 16:28:21 -0700
+Received: from twshared38955.16.prn3.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Fri, 24 Mar 2023 16:27:54 -0700
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id 99F652BC9C94B; Fri, 24 Mar 2023 16:27:48 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <martin.lau@kernel.org>
+CC:     <andrii@kernel.org>, <kernel-team@meta.com>
+Subject: [PATCH v2 bpf-next 1/3] libbpf: disassociate section handler on explicit bpf_program__set_type() call
+Date:   Fri, 24 Mar 2023 16:27:43 -0700
+Message-ID: <20230324232745.3959567-2-andrii@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230324232745.3959567-1-andrii@kernel.org>
+References: <20230324232745.3959567-1-andrii@kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 1/2] net/smc: Introduce BPF injection
- capability for SMC
-Content-Language: en-US
-To:     "D. Wythe" <alibuda@linux.alibaba.com>
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
-        bpf@vger.kernel.org, kgraul@linux.ibm.com, wenjia@linux.ibm.com,
-        jaka@linux.ibm.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org
-References: <1676981919-64884-1-git-send-email-alibuda@linux.alibaba.com>
- <1676981919-64884-2-git-send-email-alibuda@linux.alibaba.com>
- <76e226e6-f3bf-f740-c86c-6ee214aff07d@linux.dev>
- <72030784-451a-2042-cbb7-98e1f9a544d5@linux.alibaba.com>
- <366b9486-9a00-6add-d54b-5c3f4d35afe9@linux.dev>
- <6b4728e0-dfb7-ec7b-630f-87ee42233fe8@linux.alibaba.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <6b4728e0-dfb7-ec7b-630f-87ee42233fe8@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 6tsbLQD8zxAQBo4mTHAOkYdlIxxFrcwS
+X-Proofpoint-GUID: 6tsbLQD8zxAQBo4mTHAOkYdlIxxFrcwS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-24_01,2023-02-09_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 3/23/23 9:08 PM, D. Wythe wrote:
-> 
-> The latest design is that users can register a negotiator implementation indexed 
-> by name, smc_sock can use bpf_setsockopt to specify
-> whether a specific negotiation implementation is required via name. If there are 
-> no settings, there will be no negotiators.
-> 
-> What do you think?
+If user explicitly overrides programs's type with
+bpf_program__set_type() API call, we need to disassociate whatever
+SEC_DEF handler libbpf determined initially based on program's SEC()
+definition, as it's not goind to be valid anymore and could lead to
+crashes and/or confusing failures.
 
-tbh, bpf_setsockopt is many steps away. It needs to begin with a syscall 
-setsockopt first. There is little reason it can only be done with a bpf prog. 
-and how does the user know which negotiator a smc sock is using? Currently, ss 
-can learn the tcp-cc of a sk.
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/lib/bpf/libbpf.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-~~~~~~~~
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index f6a071db5c6e..a34ebb6b8508 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -8465,6 +8465,7 @@ int bpf_program__set_type(struct bpf_program *prog, enum bpf_prog_type type)
+ 		return libbpf_err(-EBUSY);
+ 
+ 	prog->type = type;
++	prog->sec_def = NULL;
+ 	return 0;
+ }
+ 
+-- 
+2.34.1
 
-If this effort is serious, the code quality has to be much improved. The obvious 
-bug and unused variables make this set at most a RFC.
-
- From the bpf perspective, it is ok-ish to start with a global negotiator first 
-and skip the setsockopt details for now. However, it needs to be have a name. 
-The new link_update 
-(https://lore.kernel.org/bpf/20230323032405.3735486-1-kuifeng@meta.com/) has to 
-work also. The struct_ops is rcu reader safe, so leverage it whenever it can 
-instead of the read/write lock. It is how struct_ops work for tcp, so try to 
-stay consistent as much as possible in the networking stack.
-
-> 
-> In addition, I am very sorry that I have not issued my implementation for such a 
-> long time, and I have encountered some problems with the implementation because
-> the SMC needs to be built as kernel module, I have struggled with the 
-> bpf_setsockopt implementation, and there are some new self-testes that need to 
-> be written.
-> 
-
-Regarding compiling as module,
-
-+ifneq ($(CONFIG_SMC),)
-+ifeq ($(CONFIG_BPF_SYSCALL),y)
-+obj-y				+= smc/bpf_smc_struct_ops.o
-+endif
-
-struct_ops does not support module now. It is on the todo list. The 
-bpf_smc_struct_ops.o above can only be used when CONFIG_SMC=y. Otherwise, the 
-bpf_smc_struct_ops is always built in while most users will never load the smc 
-module.
