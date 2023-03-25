@@ -2,61 +2,61 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2FF3C761AF
-	for <bpf@archiver.kernel.org>; Sat, 25 Mar 2023 02:55:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C51EDC76195
+	for <bpf@archiver.kernel.org>; Sat, 25 Mar 2023 02:56:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjCYCz6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 24 Mar 2023 22:55:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38274 "EHLO
+        id S231864AbjCYC4E (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 24 Mar 2023 22:56:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjCYCz5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 24 Mar 2023 22:55:57 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A10F015170
-        for <bpf@vger.kernel.org>; Fri, 24 Mar 2023 19:55:56 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id n19so2116999wms.0
-        for <bpf@vger.kernel.org>; Fri, 24 Mar 2023 19:55:56 -0700 (PDT)
+        with ESMTP id S231636AbjCYC4C (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 24 Mar 2023 22:56:02 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CFA1ADF1
+        for <bpf@vger.kernel.org>; Fri, 24 Mar 2023 19:56:01 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id l15-20020a05600c4f0f00b003ed58a9a15eso1993636wmq.5
+        for <bpf@vger.kernel.org>; Fri, 24 Mar 2023 19:56:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679712955;
+        d=gmail.com; s=20210112; t=1679712960;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pF8P9FiaiI2MSHzgq6xQZtBEtCB0PXnPU8XGOb1XJgI=;
-        b=YXUIyv9ZhFKZa93B/vT4qTPfhYkOZt+xekqdVscEJnfz7YfARB52/yPhmPeKa/qbed
-         hy5sYy/fZsDtpOhoL5IJNBpZePJzJvXSymBCIYoPsQOhmrQmM1vekuRVAkEpvW4UZeIH
-         eJMFCOcFxriSaRhrALnvD6Q9AiGCX5ePRj6KFzES5pHt7HhGw9etPYnAgqI0JHUCGOYL
-         +vWT+8H0GT0r3tkWjfYY07a3eI+88UnWhz2qatiI93zBzo93ePH6hUjdvAtlLnUKDydC
-         LmV3aPnZhsdIKSxaNlI/ZeKiq2nuDv/lDjC6MmNDY+5kKGey/tvNbR25ETLvqGyEn5SW
-         37YA==
+        bh=Xs2ypoS2S6JnTsADPKzpYsUTZpFpxWqKV2lJ3bTRuwY=;
+        b=gynRurtN+DLmBAbqIG/cuRlGHeOYaQoqb53DCCDXXVMUsUbIlcLAP25TTQ38UkWQJX
+         7WKm+UvvOdt6Uoib39tELVdxnDcpUUHF+Zsux+KwDg/cokxTRA59pxxK/L37sq/CUXR1
+         DNNzIDNYNFyFPeDW5HbHo/5VBaSvZT9mrmLvSMfllFEiGr5me4TJqmmcxjMu6gSH9NCV
+         9St0TF+aDq0SplJmK4nqLWumCbYHb/BSpgCHsPfryCUb9HtRqh5YAlLczXUH73jC6tr1
+         0mHi2vVN6as7Lt1DumIiVt0LLCbJW2lnf7n5fkshhgQYQIZxH6HwSr/kNXooILjqXZ+j
+         5IPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679712955;
+        d=1e100.net; s=20210112; t=1679712960;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pF8P9FiaiI2MSHzgq6xQZtBEtCB0PXnPU8XGOb1XJgI=;
-        b=Yoz1VSIIGg6kKivBqlUWND/EeVzEm7bPSPwpRqgBsxdKbNYqMjvnNtKltAgfEmDcuM
-         d2hDs9NC70/DcsP2vAlCmTpvZ/ANUlr43U7LYDjyovfvFAfU2EvGtoXF1U0Cdtww8t0J
-         oF3wgswnOvxTGtd57UihBzyjCQdvIicTrN3vzIJ06KhSbHeO+tEgJiE8Z+UUtpA0FsVv
-         mE12I0ianNGJSwyyOJozLlZwBx9rQ/esD3bcGP6RrkvN4xFbW6CaouKcUAp4UbflRcEP
-         3GF0KFJ7tK89mydAO14ciHN5gkHHo2TOfa6vRUVQyHUhtssuB4qAEsWLFkALGbQ2blV8
-         du1w==
-X-Gm-Message-State: AO0yUKV/Du1F3+t1Ap1aPZV4SKZ/7Y8D2UguRDc8vsFeViKT3HxK3K0S
-        4TfjEmqS2gOk9WW2WVxisaUp4TQ89sM=
-X-Google-Smtp-Source: AK7set/ixkvI26YDCnM++HsBhqXWVBZKYLvxEodYDy3lR1CCY9p+LrvBnD/ofokbne7we6T8sAuDtw==
-X-Received: by 2002:a05:600c:213:b0:3e2:1368:e395 with SMTP id 19-20020a05600c021300b003e21368e395mr3854591wmi.33.1679712954991;
-        Fri, 24 Mar 2023 19:55:54 -0700 (PDT)
+        bh=Xs2ypoS2S6JnTsADPKzpYsUTZpFpxWqKV2lJ3bTRuwY=;
+        b=homn4ONS3fFFY7MgQF4FVwmYle4RC2z4MFxApWYS9I1fECJNkGa3T8PkkeGjwtvwiO
+         pbGdT7Sptuk+r2pRQT64lwLi7sHKAL3tQiWSmMen10iXeaK0ngPBqwWPUlagC/DVkgCb
+         2L76fnT7u6oEGEE8zjcIDs3/Wckn5SEcaU6PYjTDWv3U65pgIzKeS+fOeTofJT+9Orc6
+         FrYkAQbNE2+qv38rYprq3Qkv/Wljgt0W/wHF6Mc1yaL9eBOLHmcMLWpDhXt+3RMg7mlS
+         vKTQAkz1jST2DCxEKdhFLHS4KgKMiyrai+di0n4yI9fLjWlmH+lQZ90jP6fd7d8Q6GQ0
+         VF0Q==
+X-Gm-Message-State: AO0yUKVEJqwG9lqQVvrAQDC0uanb6CWVXuU0lWLEvcW9iOEEN9TCygaG
+        Vtpslt2kcjF6S674wM9BmBu+EeSr8Gc=
+X-Google-Smtp-Source: AK7set+Dhs3tSzsM6FXuCbd9XkGaBKU2+p8qJzMHk7zz0O5ZtnWqq5+Y8QAehhENATrOVojxyd/KDA==
+X-Received: by 2002:a05:600c:28b:b0:3ed:5cf7:3080 with SMTP id 11-20020a05600c028b00b003ed5cf73080mr3987784wmk.5.1679712959795;
+        Fri, 24 Mar 2023 19:55:59 -0700 (PDT)
 Received: from bigfoot.. (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id m1-20020a05600c4f4100b003ee1e07a14asm1428724wmq.45.2023.03.24.19.55.53
+        by smtp.gmail.com with ESMTPSA id m1-20020a05600c4f4100b003ee1e07a14asm1428724wmq.45.2023.03.24.19.55.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 19:55:53 -0700 (PDT)
+        Fri, 24 Mar 2023 19:55:59 -0700 (PDT)
 From:   Eduard Zingerman <eddyz87@gmail.com>
 To:     bpf@vger.kernel.org, ast@kernel.org
 Cc:     andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
         kernel-team@fb.com, yhs@fb.com,
         Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next 02/43] selftests/bpf: __imm_insn & __imm_const macro for bpf_misc.h
-Date:   Sat, 25 Mar 2023 04:54:43 +0200
-Message-Id: <20230325025524.144043-3-eddyz87@gmail.com>
+Subject: [PATCH bpf-next 05/43] selftests/bpf: prog_tests entry point for migrated test_verifier tests
+Date:   Sat, 25 Mar 2023 04:54:46 +0200
+Message-Id: <20230325025524.144043-6-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230325025524.144043-1-eddyz87@gmail.com>
 References: <20230325025524.144043-1-eddyz87@gmail.com>
@@ -66,43 +66,53 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add two convenience macro for BPF test cases,
-allowing the following usage:
+prog_tests/verifier.c would be used as a host for verifier/*.c tests
+migrated to use inline assembly and run from test_progs.
 
-  #include <linux/filter.h>
-
-  ...
-  asm volatile (
-  ...
-  ".8byte %[raw_insn];"
-  ...
-  "r1 += %[st_foo_offset];"
-  ...
-  :
-  : __imm_insn(raw_insn, BPF_RAW_INSN(...)),
-    __imm_const(st_foo_offset, offsetof(struct st, foo))
-  : __clobber_all);
+The run_test_aux() function mimics the test_verifier behavior
+dropping CAP_SYS_ADMIN upon entry.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- tools/testing/selftests/bpf/progs/bpf_misc.h | 2 ++
- 1 file changed, 2 insertions(+)
+ .../selftests/bpf/prog_tests/verifier.c       | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/verifier.c
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
-index 3c03ec8056ce..8b4681a96f89 100644
---- a/tools/testing/selftests/bpf/progs/bpf_misc.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
-@@ -35,8 +35,10 @@
- #define __clobber_all "r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9", "memory"
- #define __clobber_common "r0", "r1", "r2", "r3", "r4", "r5", "memory"
- #define __imm(name) [name]"i"(name)
-+#define __imm_const(name, expr) [name]"i"(expr)
- #define __imm_addr(name) [name]"i"(&name)
- #define __imm_ptr(name) [name]"p"(&name)
-+#define __imm_insn(name, expr) [name]"i"(*(long *)&(expr))
- 
- #if defined(__TARGET_ARCH_x86)
- #define SYSCALL_WRAPPER 1
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+new file mode 100644
+index 000000000000..aa63f5d84d97
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -0,0 +1,29 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <test_progs.h>
++
++#include "cap_helpers.h"
++
++__maybe_unused
++static void run_tests_aux(const char *skel_name, skel_elf_bytes_fn elf_bytes_factory)
++{
++	struct test_loader tester = {};
++	__u64 old_caps;
++	int err;
++
++	/* test_verifier tests are executed w/o CAP_SYS_ADMIN, do the same here */
++	err = cap_disable_effective(1ULL << CAP_SYS_ADMIN, &old_caps);
++	if (err) {
++		PRINT_FAIL("failed to drop CAP_SYS_ADMIN: %i, %s\n", err, strerror(err));
++		return;
++	}
++
++	test_loader__run_subtests(&tester, skel_name, elf_bytes_factory);
++	test_loader_fini(&tester);
++
++	err = cap_enable_effective(old_caps, NULL);
++	if (err)
++		PRINT_FAIL("failed to restore CAP_SYS_ADMIN: %i, %s\n", err, strerror(err));
++}
++
++#define RUN(skel) run_tests_aux(#skel, skel##__elf_bytes)
 -- 
 2.40.0
 
