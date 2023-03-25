@@ -2,61 +2,61 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2257DC76195
-	for <bpf@archiver.kernel.org>; Sat, 25 Mar 2023 02:56:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D94FC77B61
+	for <bpf@archiver.kernel.org>; Sat, 25 Mar 2023 02:56:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231913AbjCYC4S (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 24 Mar 2023 22:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38916 "EHLO
+        id S231889AbjCYC4Z (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 24 Mar 2023 22:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231795AbjCYC4R (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 24 Mar 2023 22:56:17 -0400
+        with ESMTP id S231880AbjCYC4Y (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 24 Mar 2023 22:56:24 -0400
 Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D651B2C1
-        for <bpf@vger.kernel.org>; Fri, 24 Mar 2023 19:56:13 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso4187551wmb.0
-        for <bpf@vger.kernel.org>; Fri, 24 Mar 2023 19:56:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA9F15CBB
+        for <bpf@vger.kernel.org>; Fri, 24 Mar 2023 19:56:22 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id s13so2093005wmr.4
+        for <bpf@vger.kernel.org>; Fri, 24 Mar 2023 19:56:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679712971;
+        d=gmail.com; s=20210112; t=1679712980;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XlaIZs/IkkBptzr0u20dosL0OjImscdrFg/Y8qd3Nhs=;
-        b=iwXm5sZxZNR1J+/wwUm2+oVy8rJyHSKgssrWmixC3ceLHuBYbjNm2aFkmGjghTnOIm
-         3PvpI04zMPycKzVSIDUeqm76mZK5D+bM8eroz9Y+wfPP+wncrG0Yul9DmhCqFevT2+R2
-         DnHpyFtfvMJHOrqM/z0R+Fo+Npcrh68yxMHB/i2HmBsZCgcXKe1YXBulpDbX9h1rQxzU
-         wtkjJa1bLASSSRaym5R3wPBbC5TF/qdMfyJ7wBNxinnO/N/cYMisWSrijxgIP0/pfEhI
-         Y/Mq3yZZxzMT3uMMg22iOih9vr/fywDKEI7IjECXF9BdkDHu2XdxpRwuOZvxfe4uW0gR
-         7p8g==
+        bh=dnYhksMqIBtMLwn+VGAgtwRDsLmLXEIwPH72cKVGaYM=;
+        b=RmvK5R118FAcZyHfowgFsKUEGpL/edMnAcE1RMx14KfpheFwzjEWDjsG+H4lGaKYmK
+         wOVnm78Mcdm3oBA08+LT45kozxYKiNo8C0Q1Z7xlQZyX15DHA025e3yRHrGdXk5hjWf8
+         Cuvu4nHaAoxclnlOS61qlEBIoxUv284TRzf1BmZwEvB6W+h/ayt3USBvk3IowTU1B4OQ
+         JrWuD/XVvBcLUPAFxdvI/pWcB2hFalhHVQhrj+4FBpueOcvEwA9XfKM0OKueSdrma3aw
+         sOKRiWsHdEsOfsTlPESzRK3rnGb8qFjCaUA9Z6i/LaxNFeLskzp34SavmInifguwnHUt
+         KHGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679712971;
+        d=1e100.net; s=20210112; t=1679712980;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XlaIZs/IkkBptzr0u20dosL0OjImscdrFg/Y8qd3Nhs=;
-        b=ErdDd92feo1+FYGxXJtp7FklOtopmHoQwDX4hfIRqqEWIcBB9FB4iAHWut/gx1LdZ8
-         xWHeWBOtqwkPHxJL+gAk69sSwo8MIqhTnhHqw+Hk4b1bp0nEQMbmi+iEvWItqHkdGhwe
-         B9mvwUQSuoSea0SHHjO00UiiUbQ+NctlUfNBFWj5TuP/1R+KbXxEsWomhEsqGFW8LPpj
-         0eBRnfrmgfrg4rB8apr/5XcUwniCOAPHZluI/poLWiOHpYdR0VZ2JJIN+P9Hm9mI6Zja
-         44Hh4dJvt0mKZYSMHOFn+DQpo0i2qSqophwbjmP+0n9hQwwVkAFHbZEUbLiZ4581i5iY
-         mr+Q==
-X-Gm-Message-State: AAQBX9fBRXtZGMkj9HFA/Sg19fw7vCvHi7RINaqj0FjvpTkZEfrSU/Kq
-        sIUvU+mPJaaqSfOH14DIj3cTXV6j7nA=
-X-Google-Smtp-Source: AKy350b8M1EKKt6aCyVtnqmqjPQZLo60A08VAWgOJUb7Ez820FHmWxRyKm7zTdMbatuCUiOCbIBF7w==
-X-Received: by 2002:a7b:c005:0:b0:3ef:5dd6:2f94 with SMTP id c5-20020a7bc005000000b003ef5dd62f94mr2374590wmb.31.1679712971583;
-        Fri, 24 Mar 2023 19:56:11 -0700 (PDT)
+        bh=dnYhksMqIBtMLwn+VGAgtwRDsLmLXEIwPH72cKVGaYM=;
+        b=xFAfsR62/UXDh9kXUwXV4i7iVKtzQRtUfZTYRKldpev/Hw69UlPop2I7RL4zo1hMhJ
+         Uk4kbqWJQuNmKwOCFTSkiWeq+cq8y61eWesRl7uLJLwOhc28ApxKogyxhmf7V0jShJtb
+         20UuU2bVlmx6sv29CrT57A4AyhT1TDmhH7wGi5fuEWxh9D/mu9LBNx5CZaQI6EdkiVI4
+         Ga+Im/s8/XeGLiTrRkNvk18KwAxNPHVGcDkQ9XBVoCciBDPXqwYMeioBxCWC+NT1lLHT
+         y2wJFde/q7Zo+m7q2Vm9a9AgQFDEueJfFytcDdijvL/qENLEH62FMJClm81P/TgsT1Kr
+         c/Xw==
+X-Gm-Message-State: AO0yUKWPsp84Wo+NROQ19qQfNTugAksPoVayCDsxFgATDqNuqHxGEwOq
+        Jlo2EdG2SSe82C+J0LBUe61UZYvistg=
+X-Google-Smtp-Source: AK7set8vobuKsF+40aO0A7vbMUbiuVFweWgjpAujDBtrLbnbm8V/BIpeiTuwz9pbL4fdO0NWpR9oNg==
+X-Received: by 2002:a05:600c:3b1b:b0:3ed:24f7:2b48 with SMTP id m27-20020a05600c3b1b00b003ed24f72b48mr6849761wms.8.1679712980173;
+        Fri, 24 Mar 2023 19:56:20 -0700 (PDT)
 Received: from bigfoot.. (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id m1-20020a05600c4f4100b003ee1e07a14asm1428724wmq.45.2023.03.24.19.56.10
+        by smtp.gmail.com with ESMTPSA id m1-20020a05600c4f4100b003ee1e07a14asm1428724wmq.45.2023.03.24.19.56.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 19:56:11 -0700 (PDT)
+        Fri, 24 Mar 2023 19:56:19 -0700 (PDT)
 From:   Eduard Zingerman <eddyz87@gmail.com>
 To:     bpf@vger.kernel.org, ast@kernel.org
 Cc:     andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
         kernel-team@fb.com, yhs@fb.com,
         Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next 13/43] selftests/bpf: verifier/cgroup_skb.c converted to inline assembly
-Date:   Sat, 25 Mar 2023 04:54:54 +0200
-Message-Id: <20230325025524.144043-14-eddyz87@gmail.com>
+Subject: [PATCH bpf-next 19/43] selftests/bpf: verifier/div_overflow.c converted to inline assembly
+Date:   Sat, 25 Mar 2023 04:55:00 +0200
+Message-Id: <20230325025524.144043-20-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230325025524.144043-1-eddyz87@gmail.com>
 References: <20230325025524.144043-1-eddyz87@gmail.com>
@@ -66,469 +66,299 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Test verifier/cgroup_skb.c automatically converted to use inline assembly.
+Test verifier/div_overflow.c automatically converted to use inline assembly.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
  .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../selftests/bpf/progs/verifier_cgroup_skb.c | 227 ++++++++++++++++++
- .../selftests/bpf/verifier/cgroup_skb.c       | 197 ---------------
- 3 files changed, 229 insertions(+), 197 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_cgroup_skb.c
- delete mode 100644 tools/testing/selftests/bpf/verifier/cgroup_skb.c
+ .../bpf/progs/verifier_div_overflow.c         | 144 ++++++++++++++++++
+ .../selftests/bpf/verifier/div_overflow.c     | 110 -------------
+ 3 files changed, 146 insertions(+), 110 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_div_overflow.c
+ delete mode 100644 tools/testing/selftests/bpf/verifier/div_overflow.c
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index b138c9894abb..53e41af90821 100644
+index b172c41cdc61..d92211b4c3af 100644
 --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
 +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -10,6 +10,7 @@
- #include "verifier_bounds_mix_sign_unsign.skel.h"
- #include "verifier_cfg.skel.h"
- #include "verifier_cgroup_inv_retcode.skel.h"
-+#include "verifier_cgroup_skb.skel.h"
+@@ -16,6 +16,7 @@
+ #include "verifier_ctx_sk_msg.skel.h"
+ #include "verifier_direct_stack_access_wraparound.skel.h"
+ #include "verifier_div0.skel.h"
++#include "verifier_div_overflow.skel.h"
  
  __maybe_unused
  static void run_tests_aux(const char *skel_name, skel_elf_bytes_fn elf_bytes_factory)
-@@ -42,3 +43,4 @@ void test_verifier_bounds_deduction(void)     { RUN(verifier_bounds_deduction);
- void test_verifier_bounds_mix_sign_unsign(void) { RUN(verifier_bounds_mix_sign_unsign); }
- void test_verifier_cfg(void)                  { RUN(verifier_cfg); }
- void test_verifier_cgroup_inv_retcode(void)   { RUN(verifier_cgroup_inv_retcode); }
-+void test_verifier_cgroup_skb(void)           { RUN(verifier_cgroup_skb); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_cgroup_skb.c b/tools/testing/selftests/bpf/progs/verifier_cgroup_skb.c
+@@ -54,3 +55,4 @@ void test_verifier_const_or(void)             { RUN(verifier_const_or); }
+ void test_verifier_ctx_sk_msg(void)           { RUN(verifier_ctx_sk_msg); }
+ void test_verifier_direct_stack_access_wraparound(void) { RUN(verifier_direct_stack_access_wraparound); }
+ void test_verifier_div0(void)                 { RUN(verifier_div0); }
++void test_verifier_div_overflow(void)         { RUN(verifier_div_overflow); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_div_overflow.c b/tools/testing/selftests/bpf/progs/verifier_div_overflow.c
 new file mode 100644
-index 000000000000..5ee3d349d6d0
+index 000000000000..458984da804c
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_cgroup_skb.c
-@@ -0,0 +1,227 @@
++++ b/tools/testing/selftests/bpf/progs/verifier_div_overflow.c
+@@ -0,0 +1,144 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/* Converted from tools/testing/selftests/bpf/verifier/cgroup_skb.c */
++/* Converted from tools/testing/selftests/bpf/verifier/div_overflow.c */
 +
 +#include <linux/bpf.h>
 +#include <bpf/bpf_helpers.h>
++#include <limits.h>
 +#include "bpf_misc.h"
 +
-+SEC("cgroup/skb")
-+__description("direct packet read test#1 for CGROUP_SKB")
-+__success __failure_unpriv
-+__msg_unpriv("invalid bpf_context access off=76 size=4")
-+__retval(0)
-+__naked void test_1_for_cgroup_skb(void)
++/* Just make sure that JITs used udiv/umod as otherwise we get
++ * an exception from INT_MIN/-1 overflow similarly as with div
++ * by zero.
++ */
++
++SEC("tc")
++__description("DIV32 overflow, check 1")
++__success __retval(0)
++__naked void div32_overflow_check_1(void)
 +{
 +	asm volatile ("					\
-+	r2 = *(u32*)(r1 + %[__sk_buff_data]);		\
-+	r3 = *(u32*)(r1 + %[__sk_buff_data_end]);	\
-+	r4 = *(u32*)(r1 + %[__sk_buff_len]);		\
-+	r5 = *(u32*)(r1 + %[__sk_buff_pkt_type]);	\
-+	r6 = *(u32*)(r1 + %[__sk_buff_mark]);		\
-+	*(u32*)(r1 + %[__sk_buff_mark]) = r6;		\
-+	r7 = *(u32*)(r1 + %[__sk_buff_queue_mapping]);	\
-+	r8 = *(u32*)(r1 + %[__sk_buff_protocol]);	\
-+	r9 = *(u32*)(r1 + %[__sk_buff_vlan_present]);	\
-+	r0 = r2;					\
-+	r0 += 8;					\
-+	if r0 > r3 goto l0_%=;				\
-+	r0 = *(u8*)(r2 + 0);				\
-+l0_%=:	r0 = 0;						\
++	w1 = -1;					\
++	w0 = %[int_min];				\
++	w0 /= w1;					\
 +	exit;						\
 +"	:
-+	: __imm_const(__sk_buff_data, offsetof(struct __sk_buff, data)),
-+	  __imm_const(__sk_buff_data_end, offsetof(struct __sk_buff, data_end)),
-+	  __imm_const(__sk_buff_len, offsetof(struct __sk_buff, len)),
-+	  __imm_const(__sk_buff_mark, offsetof(struct __sk_buff, mark)),
-+	  __imm_const(__sk_buff_pkt_type, offsetof(struct __sk_buff, pkt_type)),
-+	  __imm_const(__sk_buff_protocol, offsetof(struct __sk_buff, protocol)),
-+	  __imm_const(__sk_buff_queue_mapping, offsetof(struct __sk_buff, queue_mapping)),
-+	  __imm_const(__sk_buff_vlan_present, offsetof(struct __sk_buff, vlan_present))
++	: __imm_const(int_min, INT_MIN)
 +	: __clobber_all);
 +}
 +
-+SEC("cgroup/skb")
-+__description("direct packet read test#2 for CGROUP_SKB")
-+__success __success_unpriv __retval(0)
-+__naked void test_2_for_cgroup_skb(void)
++SEC("tc")
++__description("DIV32 overflow, check 2")
++__success __retval(0)
++__naked void div32_overflow_check_2(void)
 +{
 +	asm volatile ("					\
-+	r4 = *(u32*)(r1 + %[__sk_buff_vlan_tci]);	\
-+	r5 = *(u32*)(r1 + %[__sk_buff_vlan_proto]);	\
-+	r6 = *(u32*)(r1 + %[__sk_buff_priority]);	\
-+	*(u32*)(r1 + %[__sk_buff_priority]) = r6;	\
-+	r7 = *(u32*)(r1 + %[__sk_buff_ingress_ifindex]);\
-+	r8 = *(u32*)(r1 + %[__sk_buff_tc_index]);	\
-+	r9 = *(u32*)(r1 + %[__sk_buff_hash]);		\
-+	r0 = 0;						\
++	w0 = %[int_min];				\
++	w0 /= -1;					\
 +	exit;						\
 +"	:
-+	: __imm_const(__sk_buff_hash, offsetof(struct __sk_buff, hash)),
-+	  __imm_const(__sk_buff_ingress_ifindex, offsetof(struct __sk_buff, ingress_ifindex)),
-+	  __imm_const(__sk_buff_priority, offsetof(struct __sk_buff, priority)),
-+	  __imm_const(__sk_buff_tc_index, offsetof(struct __sk_buff, tc_index)),
-+	  __imm_const(__sk_buff_vlan_proto, offsetof(struct __sk_buff, vlan_proto)),
-+	  __imm_const(__sk_buff_vlan_tci, offsetof(struct __sk_buff, vlan_tci))
++	: __imm_const(int_min, INT_MIN)
 +	: __clobber_all);
 +}
 +
-+SEC("cgroup/skb")
-+__description("direct packet read test#3 for CGROUP_SKB")
-+__success __success_unpriv __retval(0)
-+__naked void test_3_for_cgroup_skb(void)
++SEC("tc")
++__description("DIV64 overflow, check 1")
++__success __retval(0)
++__naked void div64_overflow_check_1(void)
 +{
 +	asm volatile ("					\
-+	r4 = *(u32*)(r1 + %[__sk_buff_cb_0]);		\
-+	r5 = *(u32*)(r1 + %[__sk_buff_cb_1]);		\
-+	r6 = *(u32*)(r1 + %[__sk_buff_cb_2]);		\
-+	r7 = *(u32*)(r1 + %[__sk_buff_cb_3]);		\
-+	r8 = *(u32*)(r1 + %[__sk_buff_cb_4]);		\
-+	r9 = *(u32*)(r1 + %[__sk_buff_napi_id]);	\
-+	*(u32*)(r1 + %[__sk_buff_cb_0]) = r4;		\
-+	*(u32*)(r1 + %[__sk_buff_cb_1]) = r5;		\
-+	*(u32*)(r1 + %[__sk_buff_cb_2]) = r6;		\
-+	*(u32*)(r1 + %[__sk_buff_cb_3]) = r7;		\
-+	*(u32*)(r1 + %[__sk_buff_cb_4]) = r8;		\
-+	r0 = 0;						\
-+	exit;						\
++	r1 = -1;					\
++	r2 = %[llong_min] ll;				\
++	r2 /= r1;					\
++	w0 = 0;						\
++	if r0 == r2 goto l0_%=;				\
++	w0 = 1;						\
++l0_%=:	exit;						\
 +"	:
-+	: __imm_const(__sk_buff_cb_0, offsetof(struct __sk_buff, cb[0])),
-+	  __imm_const(__sk_buff_cb_1, offsetof(struct __sk_buff, cb[1])),
-+	  __imm_const(__sk_buff_cb_2, offsetof(struct __sk_buff, cb[2])),
-+	  __imm_const(__sk_buff_cb_3, offsetof(struct __sk_buff, cb[3])),
-+	  __imm_const(__sk_buff_cb_4, offsetof(struct __sk_buff, cb[4])),
-+	  __imm_const(__sk_buff_napi_id, offsetof(struct __sk_buff, napi_id))
++	: __imm_const(llong_min, LLONG_MIN)
 +	: __clobber_all);
 +}
 +
-+SEC("cgroup/skb")
-+__description("direct packet read test#4 for CGROUP_SKB")
-+__success __success_unpriv __retval(0)
-+__naked void test_4_for_cgroup_skb(void)
++SEC("tc")
++__description("DIV64 overflow, check 2")
++__success __retval(0)
++__naked void div64_overflow_check_2(void)
 +{
 +	asm volatile ("					\
-+	r2 = *(u32*)(r1 + %[__sk_buff_family]);		\
-+	r3 = *(u32*)(r1 + %[__sk_buff_remote_ip4]);	\
-+	r4 = *(u32*)(r1 + %[__sk_buff_local_ip4]);	\
-+	r5 = *(u32*)(r1 + %[__sk_buff_remote_ip6_0]);	\
-+	r5 = *(u32*)(r1 + %[__sk_buff_remote_ip6_1]);	\
-+	r5 = *(u32*)(r1 + %[__sk_buff_remote_ip6_2]);	\
-+	r5 = *(u32*)(r1 + %[__sk_buff_remote_ip6_3]);	\
-+	r6 = *(u32*)(r1 + %[__sk_buff_local_ip6_0]);	\
-+	r6 = *(u32*)(r1 + %[__sk_buff_local_ip6_1]);	\
-+	r6 = *(u32*)(r1 + %[__sk_buff_local_ip6_2]);	\
-+	r6 = *(u32*)(r1 + %[__sk_buff_local_ip6_3]);	\
-+	r7 = *(u32*)(r1 + %[__sk_buff_remote_port]);	\
-+	r8 = *(u32*)(r1 + %[__sk_buff_local_port]);	\
-+	r0 = 0;						\
-+	exit;						\
++	r1 = %[llong_min] ll;				\
++	r1 /= -1;					\
++	w0 = 0;						\
++	if r0 == r1 goto l0_%=;				\
++	w0 = 1;						\
++l0_%=:	exit;						\
 +"	:
-+	: __imm_const(__sk_buff_family, offsetof(struct __sk_buff, family)),
-+	  __imm_const(__sk_buff_local_ip4, offsetof(struct __sk_buff, local_ip4)),
-+	  __imm_const(__sk_buff_local_ip6_0, offsetof(struct __sk_buff, local_ip6[0])),
-+	  __imm_const(__sk_buff_local_ip6_1, offsetof(struct __sk_buff, local_ip6[1])),
-+	  __imm_const(__sk_buff_local_ip6_2, offsetof(struct __sk_buff, local_ip6[2])),
-+	  __imm_const(__sk_buff_local_ip6_3, offsetof(struct __sk_buff, local_ip6[3])),
-+	  __imm_const(__sk_buff_local_port, offsetof(struct __sk_buff, local_port)),
-+	  __imm_const(__sk_buff_remote_ip4, offsetof(struct __sk_buff, remote_ip4)),
-+	  __imm_const(__sk_buff_remote_ip6_0, offsetof(struct __sk_buff, remote_ip6[0])),
-+	  __imm_const(__sk_buff_remote_ip6_1, offsetof(struct __sk_buff, remote_ip6[1])),
-+	  __imm_const(__sk_buff_remote_ip6_2, offsetof(struct __sk_buff, remote_ip6[2])),
-+	  __imm_const(__sk_buff_remote_ip6_3, offsetof(struct __sk_buff, remote_ip6[3])),
-+	  __imm_const(__sk_buff_remote_port, offsetof(struct __sk_buff, remote_port))
++	: __imm_const(llong_min, LLONG_MIN)
 +	: __clobber_all);
 +}
 +
-+SEC("cgroup/skb")
-+__description("invalid access of tc_classid for CGROUP_SKB")
-+__failure __msg("invalid bpf_context access")
-+__failure_unpriv
-+__naked void tc_classid_for_cgroup_skb(void)
++SEC("tc")
++__description("MOD32 overflow, check 1")
++__success __retval(INT_MIN)
++__naked void mod32_overflow_check_1(void)
 +{
 +	asm volatile ("					\
-+	r0 = *(u32*)(r1 + %[__sk_buff_tc_classid]);	\
-+	r0 = 0;						\
++	w1 = -1;					\
++	w0 = %[int_min];				\
++	w0 %%= w1;					\
 +	exit;						\
 +"	:
-+	: __imm_const(__sk_buff_tc_classid, offsetof(struct __sk_buff, tc_classid))
++	: __imm_const(int_min, INT_MIN)
 +	: __clobber_all);
 +}
 +
-+SEC("cgroup/skb")
-+__description("invalid access of data_meta for CGROUP_SKB")
-+__failure __msg("invalid bpf_context access")
-+__failure_unpriv
-+__naked void data_meta_for_cgroup_skb(void)
++SEC("tc")
++__description("MOD32 overflow, check 2")
++__success __retval(INT_MIN)
++__naked void mod32_overflow_check_2(void)
 +{
 +	asm volatile ("					\
-+	r0 = *(u32*)(r1 + %[__sk_buff_data_meta]);	\
-+	r0 = 0;						\
++	w0 = %[int_min];				\
++	w0 %%= -1;					\
 +	exit;						\
 +"	:
-+	: __imm_const(__sk_buff_data_meta, offsetof(struct __sk_buff, data_meta))
++	: __imm_const(int_min, INT_MIN)
 +	: __clobber_all);
 +}
 +
-+SEC("cgroup/skb")
-+__description("invalid access of flow_keys for CGROUP_SKB")
-+__failure __msg("invalid bpf_context access")
-+__failure_unpriv
-+__naked void flow_keys_for_cgroup_skb(void)
++SEC("tc")
++__description("MOD64 overflow, check 1")
++__success __retval(1)
++__naked void mod64_overflow_check_1(void)
 +{
 +	asm volatile ("					\
-+	r0 = *(u32*)(r1 + %[__sk_buff_flow_keys]);	\
-+	r0 = 0;						\
-+	exit;						\
++	r1 = -1;					\
++	r2 = %[llong_min] ll;				\
++	r3 = r2;					\
++	r2 %%= r1;					\
++	w0 = 0;						\
++	if r3 != r2 goto l0_%=;				\
++	w0 = 1;						\
++l0_%=:	exit;						\
 +"	:
-+	: __imm_const(__sk_buff_flow_keys, offsetof(struct __sk_buff, flow_keys))
++	: __imm_const(llong_min, LLONG_MIN)
 +	: __clobber_all);
 +}
 +
-+SEC("cgroup/skb")
-+__description("invalid write access to napi_id for CGROUP_SKB")
-+__failure __msg("invalid bpf_context access")
-+__failure_unpriv
-+__naked void napi_id_for_cgroup_skb(void)
++SEC("tc")
++__description("MOD64 overflow, check 2")
++__success __retval(1)
++__naked void mod64_overflow_check_2(void)
 +{
 +	asm volatile ("					\
-+	r9 = *(u32*)(r1 + %[__sk_buff_napi_id]);	\
-+	*(u32*)(r1 + %[__sk_buff_napi_id]) = r9;	\
-+	r0 = 0;						\
-+	exit;						\
++	r2 = %[llong_min] ll;				\
++	r3 = r2;					\
++	r2 %%= -1;					\
++	w0 = 0;						\
++	if r3 != r2 goto l0_%=;				\
++	w0 = 1;						\
++l0_%=:	exit;						\
 +"	:
-+	: __imm_const(__sk_buff_napi_id, offsetof(struct __sk_buff, napi_id))
-+	: __clobber_all);
-+}
-+
-+SEC("cgroup/skb")
-+__description("write tstamp from CGROUP_SKB")
-+__success __failure_unpriv
-+__msg_unpriv("invalid bpf_context access off=152 size=8")
-+__retval(0)
-+__naked void write_tstamp_from_cgroup_skb(void)
-+{
-+	asm volatile ("					\
-+	r0 = 0;						\
-+	*(u64*)(r1 + %[__sk_buff_tstamp]) = r0;		\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm_const(__sk_buff_tstamp, offsetof(struct __sk_buff, tstamp))
-+	: __clobber_all);
-+}
-+
-+SEC("cgroup/skb")
-+__description("read tstamp from CGROUP_SKB")
-+__success __success_unpriv __retval(0)
-+__naked void read_tstamp_from_cgroup_skb(void)
-+{
-+	asm volatile ("					\
-+	r0 = *(u64*)(r1 + %[__sk_buff_tstamp]);		\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm_const(__sk_buff_tstamp, offsetof(struct __sk_buff, tstamp))
++	: __imm_const(llong_min, LLONG_MIN)
 +	: __clobber_all);
 +}
 +
 +char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/verifier/cgroup_skb.c b/tools/testing/selftests/bpf/verifier/cgroup_skb.c
+diff --git a/tools/testing/selftests/bpf/verifier/div_overflow.c b/tools/testing/selftests/bpf/verifier/div_overflow.c
 deleted file mode 100644
-index 52e4c03b076b..000000000000
---- a/tools/testing/selftests/bpf/verifier/cgroup_skb.c
+index acab4f00819f..000000000000
+--- a/tools/testing/selftests/bpf/verifier/div_overflow.c
 +++ /dev/null
-@@ -1,197 +0,0 @@
+@@ -1,110 +0,0 @@
+-/* Just make sure that JITs used udiv/umod as otherwise we get
+- * an exception from INT_MIN/-1 overflow similarly as with div
+- * by zero.
+- */
 -{
--	"direct packet read test#1 for CGROUP_SKB",
+-	"DIV32 overflow, check 1",
 -	.insns = {
--	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
--		    offsetof(struct __sk_buff, data)),
--	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
--		    offsetof(struct __sk_buff, data_end)),
--	BPF_LDX_MEM(BPF_W, BPF_REG_4, BPF_REG_1,
--		    offsetof(struct __sk_buff, len)),
--	BPF_LDX_MEM(BPF_W, BPF_REG_5, BPF_REG_1,
--		    offsetof(struct __sk_buff, pkt_type)),
--	BPF_LDX_MEM(BPF_W, BPF_REG_6, BPF_REG_1,
--		    offsetof(struct __sk_buff, mark)),
--	BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_6,
--		    offsetof(struct __sk_buff, mark)),
--	BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_1,
--		    offsetof(struct __sk_buff, queue_mapping)),
--	BPF_LDX_MEM(BPF_W, BPF_REG_8, BPF_REG_1,
--		    offsetof(struct __sk_buff, protocol)),
--	BPF_LDX_MEM(BPF_W, BPF_REG_9, BPF_REG_1,
--		    offsetof(struct __sk_buff, vlan_present)),
--	BPF_MOV64_REG(BPF_REG_0, BPF_REG_2),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 8),
--	BPF_JMP_REG(BPF_JGT, BPF_REG_0, BPF_REG_3, 1),
--	BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_2, 0),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
+-	BPF_MOV32_IMM(BPF_REG_1, -1),
+-	BPF_MOV32_IMM(BPF_REG_0, INT_MIN),
+-	BPF_ALU32_REG(BPF_DIV, BPF_REG_0, BPF_REG_1),
 -	BPF_EXIT_INSN(),
 -	},
+-	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
 -	.result = ACCEPT,
--	.result_unpriv = REJECT,
--	.errstr_unpriv = "invalid bpf_context access off=76 size=4",
--	.prog_type = BPF_PROG_TYPE_CGROUP_SKB,
+-	.retval = 0,
 -},
 -{
--	"direct packet read test#2 for CGROUP_SKB",
+-	"DIV32 overflow, check 2",
 -	.insns = {
--	BPF_LDX_MEM(BPF_W, BPF_REG_4, BPF_REG_1,
--		    offsetof(struct __sk_buff, vlan_tci)),
--	BPF_LDX_MEM(BPF_W, BPF_REG_5, BPF_REG_1,
--		    offsetof(struct __sk_buff, vlan_proto)),
--	BPF_LDX_MEM(BPF_W, BPF_REG_6, BPF_REG_1,
--		    offsetof(struct __sk_buff, priority)),
--	BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_6,
--		    offsetof(struct __sk_buff, priority)),
--	BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_1,
--		    offsetof(struct __sk_buff, ingress_ifindex)),
--	BPF_LDX_MEM(BPF_W, BPF_REG_8, BPF_REG_1,
--		    offsetof(struct __sk_buff, tc_index)),
--	BPF_LDX_MEM(BPF_W, BPF_REG_9, BPF_REG_1,
--		    offsetof(struct __sk_buff, hash)),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
+-	BPF_MOV32_IMM(BPF_REG_0, INT_MIN),
+-	BPF_ALU32_IMM(BPF_DIV, BPF_REG_0, -1),
 -	BPF_EXIT_INSN(),
 -	},
+-	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
 -	.result = ACCEPT,
--	.prog_type = BPF_PROG_TYPE_CGROUP_SKB,
+-	.retval = 0,
 -},
 -{
--	"direct packet read test#3 for CGROUP_SKB",
+-	"DIV64 overflow, check 1",
 -	.insns = {
--	BPF_LDX_MEM(BPF_W, BPF_REG_4, BPF_REG_1,
--		    offsetof(struct __sk_buff, cb[0])),
--	BPF_LDX_MEM(BPF_W, BPF_REG_5, BPF_REG_1,
--		    offsetof(struct __sk_buff, cb[1])),
--	BPF_LDX_MEM(BPF_W, BPF_REG_6, BPF_REG_1,
--		    offsetof(struct __sk_buff, cb[2])),
--	BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_1,
--		    offsetof(struct __sk_buff, cb[3])),
--	BPF_LDX_MEM(BPF_W, BPF_REG_8, BPF_REG_1,
--		    offsetof(struct __sk_buff, cb[4])),
--	BPF_LDX_MEM(BPF_W, BPF_REG_9, BPF_REG_1,
--		    offsetof(struct __sk_buff, napi_id)),
--	BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_4,
--		    offsetof(struct __sk_buff, cb[0])),
--	BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_5,
--		    offsetof(struct __sk_buff, cb[1])),
--	BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_6,
--		    offsetof(struct __sk_buff, cb[2])),
--	BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_7,
--		    offsetof(struct __sk_buff, cb[3])),
--	BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_8,
--		    offsetof(struct __sk_buff, cb[4])),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
+-	BPF_MOV64_IMM(BPF_REG_1, -1),
+-	BPF_LD_IMM64(BPF_REG_2, LLONG_MIN),
+-	BPF_ALU64_REG(BPF_DIV, BPF_REG_2, BPF_REG_1),
+-	BPF_MOV32_IMM(BPF_REG_0, 0),
+-	BPF_JMP_REG(BPF_JEQ, BPF_REG_0, BPF_REG_2, 1),
+-	BPF_MOV32_IMM(BPF_REG_0, 1),
 -	BPF_EXIT_INSN(),
 -	},
+-	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
 -	.result = ACCEPT,
--	.prog_type = BPF_PROG_TYPE_CGROUP_SKB,
+-	.retval = 0,
 -},
 -{
--	"direct packet read test#4 for CGROUP_SKB",
+-	"DIV64 overflow, check 2",
 -	.insns = {
--	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
--		    offsetof(struct __sk_buff, family)),
--	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
--		    offsetof(struct __sk_buff, remote_ip4)),
--	BPF_LDX_MEM(BPF_W, BPF_REG_4, BPF_REG_1,
--		    offsetof(struct __sk_buff, local_ip4)),
--	BPF_LDX_MEM(BPF_W, BPF_REG_5, BPF_REG_1,
--		    offsetof(struct __sk_buff, remote_ip6[0])),
--	BPF_LDX_MEM(BPF_W, BPF_REG_5, BPF_REG_1,
--		    offsetof(struct __sk_buff, remote_ip6[1])),
--	BPF_LDX_MEM(BPF_W, BPF_REG_5, BPF_REG_1,
--		    offsetof(struct __sk_buff, remote_ip6[2])),
--	BPF_LDX_MEM(BPF_W, BPF_REG_5, BPF_REG_1,
--		    offsetof(struct __sk_buff, remote_ip6[3])),
--	BPF_LDX_MEM(BPF_W, BPF_REG_6, BPF_REG_1,
--		    offsetof(struct __sk_buff, local_ip6[0])),
--	BPF_LDX_MEM(BPF_W, BPF_REG_6, BPF_REG_1,
--		    offsetof(struct __sk_buff, local_ip6[1])),
--	BPF_LDX_MEM(BPF_W, BPF_REG_6, BPF_REG_1,
--		    offsetof(struct __sk_buff, local_ip6[2])),
--	BPF_LDX_MEM(BPF_W, BPF_REG_6, BPF_REG_1,
--		    offsetof(struct __sk_buff, local_ip6[3])),
--	BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_1,
--		    offsetof(struct __sk_buff, remote_port)),
--	BPF_LDX_MEM(BPF_W, BPF_REG_8, BPF_REG_1,
--		    offsetof(struct __sk_buff, local_port)),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
+-	BPF_LD_IMM64(BPF_REG_1, LLONG_MIN),
+-	BPF_ALU64_IMM(BPF_DIV, BPF_REG_1, -1),
+-	BPF_MOV32_IMM(BPF_REG_0, 0),
+-	BPF_JMP_REG(BPF_JEQ, BPF_REG_0, BPF_REG_1, 1),
+-	BPF_MOV32_IMM(BPF_REG_0, 1),
 -	BPF_EXIT_INSN(),
 -	},
+-	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
 -	.result = ACCEPT,
--	.prog_type = BPF_PROG_TYPE_CGROUP_SKB,
+-	.retval = 0,
 -},
 -{
--	"invalid access of tc_classid for CGROUP_SKB",
+-	"MOD32 overflow, check 1",
 -	.insns = {
--	BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
--		    offsetof(struct __sk_buff, tc_classid)),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
+-	BPF_MOV32_IMM(BPF_REG_1, -1),
+-	BPF_MOV32_IMM(BPF_REG_0, INT_MIN),
+-	BPF_ALU32_REG(BPF_MOD, BPF_REG_0, BPF_REG_1),
 -	BPF_EXIT_INSN(),
 -	},
--	.result = REJECT,
--	.errstr = "invalid bpf_context access",
--	.prog_type = BPF_PROG_TYPE_CGROUP_SKB,
--},
--{
--	"invalid access of data_meta for CGROUP_SKB",
--	.insns = {
--	BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
--		    offsetof(struct __sk_buff, data_meta)),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_EXIT_INSN(),
--	},
--	.result = REJECT,
--	.errstr = "invalid bpf_context access",
--	.prog_type = BPF_PROG_TYPE_CGROUP_SKB,
--},
--{
--	"invalid access of flow_keys for CGROUP_SKB",
--	.insns = {
--	BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
--		    offsetof(struct __sk_buff, flow_keys)),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_EXIT_INSN(),
--	},
--	.result = REJECT,
--	.errstr = "invalid bpf_context access",
--	.prog_type = BPF_PROG_TYPE_CGROUP_SKB,
--},
--{
--	"invalid write access to napi_id for CGROUP_SKB",
--	.insns = {
--	BPF_LDX_MEM(BPF_W, BPF_REG_9, BPF_REG_1,
--		    offsetof(struct __sk_buff, napi_id)),
--	BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_9,
--		    offsetof(struct __sk_buff, napi_id)),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_EXIT_INSN(),
--	},
--	.result = REJECT,
--	.errstr = "invalid bpf_context access",
--	.prog_type = BPF_PROG_TYPE_CGROUP_SKB,
--},
--{
--	"write tstamp from CGROUP_SKB",
--	.insns = {
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_0,
--		    offsetof(struct __sk_buff, tstamp)),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_EXIT_INSN(),
--	},
+-	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
 -	.result = ACCEPT,
--	.result_unpriv = REJECT,
--	.errstr_unpriv = "invalid bpf_context access off=152 size=8",
--	.prog_type = BPF_PROG_TYPE_CGROUP_SKB,
+-	.retval = INT_MIN,
 -},
 -{
--	"read tstamp from CGROUP_SKB",
+-	"MOD32 overflow, check 2",
 -	.insns = {
--	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
--		    offsetof(struct __sk_buff, tstamp)),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
+-	BPF_MOV32_IMM(BPF_REG_0, INT_MIN),
+-	BPF_ALU32_IMM(BPF_MOD, BPF_REG_0, -1),
 -	BPF_EXIT_INSN(),
 -	},
+-	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
 -	.result = ACCEPT,
--	.prog_type = BPF_PROG_TYPE_CGROUP_SKB,
+-	.retval = INT_MIN,
+-},
+-{
+-	"MOD64 overflow, check 1",
+-	.insns = {
+-	BPF_MOV64_IMM(BPF_REG_1, -1),
+-	BPF_LD_IMM64(BPF_REG_2, LLONG_MIN),
+-	BPF_MOV64_REG(BPF_REG_3, BPF_REG_2),
+-	BPF_ALU64_REG(BPF_MOD, BPF_REG_2, BPF_REG_1),
+-	BPF_MOV32_IMM(BPF_REG_0, 0),
+-	BPF_JMP_REG(BPF_JNE, BPF_REG_3, BPF_REG_2, 1),
+-	BPF_MOV32_IMM(BPF_REG_0, 1),
+-	BPF_EXIT_INSN(),
+-	},
+-	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
+-	.result = ACCEPT,
+-	.retval = 1,
+-},
+-{
+-	"MOD64 overflow, check 2",
+-	.insns = {
+-	BPF_LD_IMM64(BPF_REG_2, LLONG_MIN),
+-	BPF_MOV64_REG(BPF_REG_3, BPF_REG_2),
+-	BPF_ALU64_IMM(BPF_MOD, BPF_REG_2, -1),
+-	BPF_MOV32_IMM(BPF_REG_0, 0),
+-	BPF_JMP_REG(BPF_JNE, BPF_REG_3, BPF_REG_2, 1),
+-	BPF_MOV32_IMM(BPF_REG_0, 1),
+-	BPF_EXIT_INSN(),
+-	},
+-	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
+-	.result = ACCEPT,
+-	.retval = 1,
 -},
 -- 
 2.40.0
