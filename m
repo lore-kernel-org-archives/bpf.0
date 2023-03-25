@@ -2,61 +2,61 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21320C76195
-	for <bpf@archiver.kernel.org>; Sat, 25 Mar 2023 02:56:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69357C6FD1C
+	for <bpf@archiver.kernel.org>; Sat, 25 Mar 2023 02:56:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231880AbjCYC42 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 24 Mar 2023 22:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
+        id S231985AbjCYC4a (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 24 Mar 2023 22:56:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231928AbjCYC41 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 24 Mar 2023 22:56:27 -0400
+        with ESMTP id S231928AbjCYC43 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 24 Mar 2023 22:56:29 -0400
 Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56711ADEA
-        for <bpf@vger.kernel.org>; Fri, 24 Mar 2023 19:56:22 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso4187646wmb.0
-        for <bpf@vger.kernel.org>; Fri, 24 Mar 2023 19:56:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEDAA1ADFA
+        for <bpf@vger.kernel.org>; Fri, 24 Mar 2023 19:56:24 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id s13so2093043wmr.4
+        for <bpf@vger.kernel.org>; Fri, 24 Mar 2023 19:56:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679712982;
+        d=gmail.com; s=20210112; t=1679712984;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=i8tn8+l3oy1A+lhrcMuXy7wVfdsCvsWvcdXuY0OL5Uw=;
-        b=hSFAVHueUIUvZSSvVOKofSExKlGQNwlc5A7YhgVGKdEB6d9+Orq02DqSAPj5MI4LK8
-         RIcTYssT69738sk8cEDX+fvtyAmaFcndkwD7jIsRD0pdbun1BLXkSaE6SDFBvcWOUTcy
-         hxaAOXqryoS0QeFNcNrK/SpY3VE7aC1vrOkdRAwgLBxAsSiywKZjpxCLiAFDbnYupSaq
-         I4uYBU/GAUFTK7etQinITS3x0lF7ns7h6TGCGauj3gfEeeNbCS9/LhxH6/N/7yqkfM3P
-         IMwL018eifqY7ZaO+g7XL2s0M6BHi+I7kuoPcRHUMdtaJdjXUsaidlOS62w9ZUjuqOP6
-         WHFQ==
+        bh=RBDbn7tGP1SUZfbRNNiRXWBj71K6/BcDGvYH+3Q/RXE=;
+        b=K/CROrnIYqlvV3NZSUjLevS5fz2CBoilSf58tP3iS7aZ3729D8neZ3dkVlJKfxdTFf
+         /MBMn5PD20ctlbvjTzFHiMHECS2wTp4ug/Gc8Pso8xo1NGdaSH0cuJgu0JQq+a4e/PlC
+         CYUilbpDoLJutg9FGchAc3A6puX4gXkSn5GBr65SQnIjtf8bhKiYm1b/lCp7CXyWw3/o
+         Caq0LrZw85clMrVapiKekCrRNxEB6/yhGI0wUjqJrWIjq5zkV6qjidKTVigoXKHdcfnA
+         SneoUjAM9UiitlJS0yAeXrNTrM5n/vqEnmQHT/XAjpagF/2XbNjbGbN1kXQbDKteztsS
+         KoRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679712982;
+        d=1e100.net; s=20210112; t=1679712984;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=i8tn8+l3oy1A+lhrcMuXy7wVfdsCvsWvcdXuY0OL5Uw=;
-        b=EIFTj4517ixkvg0ufUY1+XajTthLYFxKAxgI9NYd0RcNio7TvjVhhj7u3Y0U2i1a1N
-         SDnJW2UuWw1J4x8gJ9w+h5Qr80FgwQ6XfFAQfehq1AwhgDB5Yrz2l4hdjQW8bWU3aPYW
-         HV7iVuc3td88ggT67smB+Z0eoF9jCJpDo8FN8GPqrnJIQKqAOxshL+jl3cP95MfPqcOH
-         6TCZ7nrBcmiVgniVP1xBstIN1uiJEVAXwDz1rjTF+OsQrmGSWn+PnXjjxTKS8CGJE6Y9
-         S0Brhql6WYiNY74z7mCK4V/sUuDNpB8YLcwtxUzn6XmH4yBXYs7maIItKDPMGHtXLj5J
-         L6eQ==
-X-Gm-Message-State: AO0yUKWZR916rFJpYWGZL9wnrCHmc9DXDg3fvwARHblAdNMa0BziXV99
-        30jnaGROnhmRozsMnvUkscGMrKyjHYA=
-X-Google-Smtp-Source: AK7set8GyggqP+330sEOs0MBDX0SfhPd2YcAVCI26w7IKzDzpMrmTsM+S4ZSQDrPBVHB8ZPTuxrv3w==
-X-Received: by 2002:a7b:ce86:0:b0:3ed:a2db:dd24 with SMTP id q6-20020a7bce86000000b003eda2dbdd24mr4373084wmj.32.1679712981471;
-        Fri, 24 Mar 2023 19:56:21 -0700 (PDT)
+        bh=RBDbn7tGP1SUZfbRNNiRXWBj71K6/BcDGvYH+3Q/RXE=;
+        b=E3Kc+sC4uMMk0Fh/lInJzN9L3lGe7uonhCN+kZA0yWXncLCjo6koDA1aCsax+53hQM
+         ZPQ2khvAUKJ80LjAANKsvRE+qAdXRPJQPt5UxA6KV+D8BVdVfVqgQJr7CtvzjzEgQEHg
+         kjjJmN82C42EVJlxOkOpBb2SQQHXnv2qhdtRX2UITKEOcxWNg/INhAPPd12AvIQy+BQK
+         Bo711+qOT7iqhHtjGzHEWqWh+6/B0XugziwYsjR8xFiEQvHUb5pwbSy8YDlxNzhAycpE
+         jd0tFEBU/vV02BlWQ3F75EHVdh7IVV47p0VY3PIQ/7vpL7G8hqiECPBtzkud74kiGznp
+         x6bg==
+X-Gm-Message-State: AO0yUKWEBvnZdD7E/ILBJByneDgSR8L6OYC8GK7Y8RG8VtsVWQUvejKj
+        7cxC96kCBYqb7eIh1gv8z5yhEvxNxMY=
+X-Google-Smtp-Source: AK7set/SCYp+l0dCPZXjueF8pchePM9q19cHftHYLQvQXrMij30pQBNfJXNf4UIpHNXwtCAHDIDshQ==
+X-Received: by 2002:a05:600c:2101:b0:3ee:7e12:f50 with SMTP id u1-20020a05600c210100b003ee7e120f50mr3633017wml.8.1679712984110;
+        Fri, 24 Mar 2023 19:56:24 -0700 (PDT)
 Received: from bigfoot.. (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id m1-20020a05600c4f4100b003ee1e07a14asm1428724wmq.45.2023.03.24.19.56.20
+        by smtp.gmail.com with ESMTPSA id m1-20020a05600c4f4100b003ee1e07a14asm1428724wmq.45.2023.03.24.19.56.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 19:56:20 -0700 (PDT)
+        Fri, 24 Mar 2023 19:56:23 -0700 (PDT)
 From:   Eduard Zingerman <eddyz87@gmail.com>
 To:     bpf@vger.kernel.org, ast@kernel.org
 Cc:     andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
         kernel-team@fb.com, yhs@fb.com,
         Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next 20/43] selftests/bpf: verifier/helper_access_var_len.c converted to inline assembly
-Date:   Sat, 25 Mar 2023 04:55:01 +0200
-Message-Id: <20230325025524.144043-21-eddyz87@gmail.com>
+Subject: [PATCH bpf-next 22/43] selftests/bpf: verifier/helper_restricted.c converted to inline assembly
+Date:   Sat, 25 Mar 2023 04:55:03 +0200
+Message-Id: <20230325025524.144043-23-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230325025524.144043-1-eddyz87@gmail.com>
 References: <20230325025524.144043-1-eddyz87@gmail.com>
@@ -66,1520 +66,520 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Test verifier/helper_access_var_len.c automatically converted to use inline assembly.
+Test verifier/helper_restricted.c automatically converted to use inline assembly.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
  .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../progs/verifier_helper_access_var_len.c    | 825 ++++++++++++++++++
- .../bpf/verifier/helper_access_var_len.c      | 650 --------------
- 3 files changed, 827 insertions(+), 650 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_helper_access_var_len.c
- delete mode 100644 tools/testing/selftests/bpf/verifier/helper_access_var_len.c
+ .../bpf/progs/verifier_helper_restricted.c    | 279 ++++++++++++++++++
+ .../bpf/verifier/helper_restricted.c          | 196 ------------
+ 3 files changed, 281 insertions(+), 196 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_helper_restricted.c
+ delete mode 100644 tools/testing/selftests/bpf/verifier/helper_restricted.c
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index d92211b4c3af..22d7e152c05e 100644
+index 1cd162daf150..02983d1de218 100644
 --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
 +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -17,6 +17,7 @@
- #include "verifier_direct_stack_access_wraparound.skel.h"
- #include "verifier_div0.skel.h"
+@@ -19,6 +19,7 @@
  #include "verifier_div_overflow.skel.h"
-+#include "verifier_helper_access_var_len.skel.h"
+ #include "verifier_helper_access_var_len.skel.h"
+ #include "verifier_helper_packet_access.skel.h"
++#include "verifier_helper_restricted.skel.h"
  
  __maybe_unused
  static void run_tests_aux(const char *skel_name, skel_elf_bytes_fn elf_bytes_factory)
-@@ -56,3 +57,4 @@ void test_verifier_ctx_sk_msg(void)           { RUN(verifier_ctx_sk_msg); }
- void test_verifier_direct_stack_access_wraparound(void) { RUN(verifier_direct_stack_access_wraparound); }
- void test_verifier_div0(void)                 { RUN(verifier_div0); }
+@@ -60,3 +61,4 @@ void test_verifier_div0(void)                 { RUN(verifier_div0); }
  void test_verifier_div_overflow(void)         { RUN(verifier_div_overflow); }
-+void test_verifier_helper_access_var_len(void) { RUN(verifier_helper_access_var_len); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_helper_access_var_len.c b/tools/testing/selftests/bpf/progs/verifier_helper_access_var_len.c
+ void test_verifier_helper_access_var_len(void) { RUN(verifier_helper_access_var_len); }
+ void test_verifier_helper_packet_access(void) { RUN(verifier_helper_packet_access); }
++void test_verifier_helper_restricted(void)    { RUN(verifier_helper_restricted); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_helper_restricted.c b/tools/testing/selftests/bpf/progs/verifier_helper_restricted.c
 new file mode 100644
-index 000000000000..50c6b22606f6
+index 000000000000..0ede0ccd090c
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_helper_access_var_len.c
-@@ -0,0 +1,825 @@
++++ b/tools/testing/selftests/bpf/progs/verifier_helper_restricted.c
+@@ -0,0 +1,279 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/* Converted from tools/testing/selftests/bpf/verifier/helper_access_var_len.c */
++/* Converted from tools/testing/selftests/bpf/verifier/helper_restricted.c */
 +
 +#include <linux/bpf.h>
 +#include <bpf/bpf_helpers.h>
 +#include "bpf_misc.h"
 +
-+#define MAX_ENTRIES 11
-+
-+struct test_val {
-+	unsigned int index;
-+	int foo[MAX_ENTRIES];
++struct val {
++	int cnt;
++	struct bpf_spin_lock l;
 +};
 +
 +struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(type, BPF_MAP_TYPE_ARRAY);
 +	__uint(max_entries, 1);
-+	__type(key, long long);
-+	__type(value, struct test_val);
-+} map_hash_48b SEC(".maps");
++	__type(key, int);
++	__type(value, struct val);
++} map_spin_lock SEC(".maps");
++
++struct timer {
++	struct bpf_timer t;
++};
 +
 +struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(type, BPF_MAP_TYPE_ARRAY);
 +	__uint(max_entries, 1);
-+	__type(key, long long);
-+	__type(value, long long);
-+} map_hash_8b SEC(".maps");
++	__type(key, int);
++	__type(value, struct timer);
++} map_timer SEC(".maps");
 +
-+struct {
-+	__uint(type, BPF_MAP_TYPE_RINGBUF);
-+	__uint(max_entries, 4096);
-+} map_ringbuf SEC(".maps");
-+
-+SEC("tracepoint")
-+__description("helper access to variable memory: stack, bitwise AND + JMP, correct bounds")
-+__success
-+__naked void bitwise_and_jmp_correct_bounds(void)
++SEC("kprobe")
++__description("bpf_ktime_get_coarse_ns is forbidden in BPF_PROG_TYPE_KPROBE")
++__failure __msg("unknown func bpf_ktime_get_coarse_ns")
++__naked void in_bpf_prog_type_kprobe_1(void)
 +{
 +	asm volatile ("					\
-+	r1 = r10;					\
-+	r1 += -64;					\
++	call %[bpf_ktime_get_coarse_ns];		\
 +	r0 = 0;						\
-+	*(u64*)(r10 - 64) = r0;				\
-+	*(u64*)(r10 - 56) = r0;				\
-+	*(u64*)(r10 - 48) = r0;				\
-+	*(u64*)(r10 - 40) = r0;				\
-+	*(u64*)(r10 - 32) = r0;				\
-+	*(u64*)(r10 - 24) = r0;				\
-+	*(u64*)(r10 - 16) = r0;				\
-+	*(u64*)(r10 - 8) = r0;				\
-+	r2 = 16;					\
-+	*(u64*)(r1 - 128) = r2;				\
-+	r2 = *(u64*)(r1 - 128);				\
-+	r2 &= 64;					\
-+	r4 = 0;						\
-+	if r4 >= r2 goto l0_%=;				\
-+	r3 = 0;						\
-+	call %[bpf_probe_read_kernel];			\
-+l0_%=:	r0 = 0;						\
 +	exit;						\
 +"	:
-+	: __imm(bpf_probe_read_kernel)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("helper access to variable memory: stack, bitwise AND, zero included")
-+/* in privileged mode reads from uninitialized stack locations are permitted */
-+__success __failure_unpriv
-+__msg_unpriv("invalid indirect read from stack R2 off -64+0 size 64")
-+__retval(0)
-+__naked void stack_bitwise_and_zero_included(void)
-+{
-+	asm volatile ("					\
-+	/* set max stack size */			\
-+	r6 = 0;						\
-+	*(u64*)(r10 - 128) = r6;			\
-+	/* set r3 to a random value */			\
-+	call %[bpf_get_prandom_u32];			\
-+	r3 = r0;					\
-+	/* use bitwise AND to limit r3 range to [0, 64] */\
-+	r3 &= 64;					\
-+	r1 = %[map_ringbuf] ll;				\
-+	r2 = r10;					\
-+	r2 += -64;					\
-+	r4 = 0;						\
-+	/* Call bpf_ringbuf_output(), it is one of a few helper functions with\
-+	 * ARG_CONST_SIZE_OR_ZERO parameter allowed in unpriv mode.\
-+	 * For unpriv this should signal an error, because memory at &fp[-64] is\
-+	 * not initialized.				\
-+	 */						\
-+	call %[bpf_ringbuf_output];			\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32),
-+	  __imm(bpf_ringbuf_output),
-+	  __imm_addr(map_ringbuf)
++	: __imm(bpf_ktime_get_coarse_ns)
 +	: __clobber_all);
 +}
 +
 +SEC("tracepoint")
-+__description("helper access to variable memory: stack, bitwise AND + JMP, wrong max")
-+__failure __msg("invalid indirect access to stack R1 off=-64 size=65")
-+__naked void bitwise_and_jmp_wrong_max(void)
++__description("bpf_ktime_get_coarse_ns is forbidden in BPF_PROG_TYPE_TRACEPOINT")
++__failure __msg("unknown func bpf_ktime_get_coarse_ns")
++__naked void in_bpf_prog_type_tracepoint_1(void)
 +{
 +	asm volatile ("					\
-+	r2 = *(u64*)(r1 + 8);				\
-+	r1 = r10;					\
-+	r1 += -64;					\
-+	*(u64*)(r1 - 128) = r2;				\
-+	r2 = *(u64*)(r1 - 128);				\
-+	r2 &= 65;					\
-+	r4 = 0;						\
-+	if r4 >= r2 goto l0_%=;				\
-+	r3 = 0;						\
-+	call %[bpf_probe_read_kernel];			\
-+l0_%=:	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_probe_read_kernel)
-+	: __clobber_all);
-+}
-+
-+SEC("tracepoint")
-+__description("helper access to variable memory: stack, JMP, correct bounds")
-+__success
-+__naked void memory_stack_jmp_correct_bounds(void)
-+{
-+	asm volatile ("					\
-+	r1 = r10;					\
-+	r1 += -64;					\
++	call %[bpf_ktime_get_coarse_ns];		\
 +	r0 = 0;						\
-+	*(u64*)(r10 - 64) = r0;				\
-+	*(u64*)(r10 - 56) = r0;				\
-+	*(u64*)(r10 - 48) = r0;				\
-+	*(u64*)(r10 - 40) = r0;				\
-+	*(u64*)(r10 - 32) = r0;				\
-+	*(u64*)(r10 - 24) = r0;				\
-+	*(u64*)(r10 - 16) = r0;				\
-+	*(u64*)(r10 - 8) = r0;				\
-+	r2 = 16;					\
-+	*(u64*)(r1 - 128) = r2;				\
-+	r2 = *(u64*)(r1 - 128);				\
-+	if r2 > 64 goto l0_%=;				\
-+	r4 = 0;						\
-+	if r4 >= r2 goto l0_%=;				\
-+	r3 = 0;						\
-+	call %[bpf_probe_read_kernel];			\
-+l0_%=:	r0 = 0;						\
 +	exit;						\
 +"	:
-+	: __imm(bpf_probe_read_kernel)
++	: __imm(bpf_ktime_get_coarse_ns)
 +	: __clobber_all);
 +}
 +
-+SEC("tracepoint")
-+__description("helper access to variable memory: stack, JMP (signed), correct bounds")
-+__success
-+__naked void stack_jmp_signed_correct_bounds(void)
++SEC("perf_event")
++__description("bpf_ktime_get_coarse_ns is forbidden in BPF_PROG_TYPE_PERF_EVENT")
++__failure __msg("unknown func bpf_ktime_get_coarse_ns")
++__naked void bpf_prog_type_perf_event_1(void)
 +{
 +	asm volatile ("					\
-+	r1 = r10;					\
-+	r1 += -64;					\
++	call %[bpf_ktime_get_coarse_ns];		\
 +	r0 = 0;						\
-+	*(u64*)(r10 - 64) = r0;				\
-+	*(u64*)(r10 - 56) = r0;				\
-+	*(u64*)(r10 - 48) = r0;				\
-+	*(u64*)(r10 - 40) = r0;				\
-+	*(u64*)(r10 - 32) = r0;				\
-+	*(u64*)(r10 - 24) = r0;				\
-+	*(u64*)(r10 - 16) = r0;				\
-+	*(u64*)(r10 - 8) = r0;				\
-+	r2 = 16;					\
-+	*(u64*)(r1 - 128) = r2;				\
-+	r2 = *(u64*)(r1 - 128);				\
-+	if r2 s> 64 goto l0_%=;				\
-+	r4 = 0;						\
-+	if r4 s>= r2 goto l0_%=;			\
-+	r3 = 0;						\
-+	call %[bpf_probe_read_kernel];			\
-+l0_%=:	r0 = 0;						\
 +	exit;						\
 +"	:
-+	: __imm(bpf_probe_read_kernel)
++	: __imm(bpf_ktime_get_coarse_ns)
 +	: __clobber_all);
 +}
 +
-+SEC("tracepoint")
-+__description("helper access to variable memory: stack, JMP, bounds + offset")
-+__failure __msg("invalid indirect access to stack R1 off=-64 size=65")
-+__naked void memory_stack_jmp_bounds_offset(void)
++SEC("raw_tracepoint")
++__description("bpf_ktime_get_coarse_ns is forbidden in BPF_PROG_TYPE_RAW_TRACEPOINT")
++__failure __msg("unknown func bpf_ktime_get_coarse_ns")
++__naked void bpf_prog_type_raw_tracepoint_1(void)
 +{
 +	asm volatile ("					\
-+	r2 = *(u64*)(r1 + 8);				\
-+	r1 = r10;					\
-+	r1 += -64;					\
-+	*(u64*)(r1 - 128) = r2;				\
-+	r2 = *(u64*)(r1 - 128);				\
-+	if r2 > 64 goto l0_%=;				\
-+	r4 = 0;						\
-+	if r4 >= r2 goto l0_%=;				\
-+	r2 += 1;					\
-+	r3 = 0;						\
-+	call %[bpf_probe_read_kernel];			\
-+l0_%=:	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_probe_read_kernel)
-+	: __clobber_all);
-+}
-+
-+SEC("tracepoint")
-+__description("helper access to variable memory: stack, JMP, wrong max")
-+__failure __msg("invalid indirect access to stack R1 off=-64 size=65")
-+__naked void memory_stack_jmp_wrong_max(void)
-+{
-+	asm volatile ("					\
-+	r2 = *(u64*)(r1 + 8);				\
-+	r1 = r10;					\
-+	r1 += -64;					\
-+	*(u64*)(r1 - 128) = r2;				\
-+	r2 = *(u64*)(r1 - 128);				\
-+	if r2 > 65 goto l0_%=;				\
-+	r4 = 0;						\
-+	if r4 >= r2 goto l0_%=;				\
-+	r3 = 0;						\
-+	call %[bpf_probe_read_kernel];			\
-+l0_%=:	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_probe_read_kernel)
-+	: __clobber_all);
-+}
-+
-+SEC("tracepoint")
-+__description("helper access to variable memory: stack, JMP, no max check")
-+__failure
-+/* because max wasn't checked, signed min is negative */
-+__msg("R2 min value is negative, either use unsigned or 'var &= const'")
-+__naked void stack_jmp_no_max_check(void)
-+{
-+	asm volatile ("					\
-+	r2 = *(u64*)(r1 + 8);				\
-+	r1 = r10;					\
-+	r1 += -64;					\
-+	*(u64*)(r1 - 128) = r2;				\
-+	r2 = *(u64*)(r1 - 128);				\
-+	r4 = 0;						\
-+	if r4 >= r2 goto l0_%=;				\
-+	r3 = 0;						\
-+	call %[bpf_probe_read_kernel];			\
-+l0_%=:	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_probe_read_kernel)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("helper access to variable memory: stack, JMP, no min check")
-+/* in privileged mode reads from uninitialized stack locations are permitted */
-+__success __failure_unpriv
-+__msg_unpriv("invalid indirect read from stack R2 off -64+0 size 64")
-+__retval(0)
-+__naked void stack_jmp_no_min_check(void)
-+{
-+	asm volatile ("					\
-+	/* set max stack size */			\
-+	r6 = 0;						\
-+	*(u64*)(r10 - 128) = r6;			\
-+	/* set r3 to a random value */			\
-+	call %[bpf_get_prandom_u32];			\
-+	r3 = r0;					\
-+	/* use JMP to limit r3 range to [0, 64] */	\
-+	if r3 > 64 goto l0_%=;				\
-+	r1 = %[map_ringbuf] ll;				\
-+	r2 = r10;					\
-+	r2 += -64;					\
-+	r4 = 0;						\
-+	/* Call bpf_ringbuf_output(), it is one of a few helper functions with\
-+	 * ARG_CONST_SIZE_OR_ZERO parameter allowed in unpriv mode.\
-+	 * For unpriv this should signal an error, because memory at &fp[-64] is\
-+	 * not initialized.				\
-+	 */						\
-+	call %[bpf_ringbuf_output];			\
-+l0_%=:	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32),
-+	  __imm(bpf_ringbuf_output),
-+	  __imm_addr(map_ringbuf)
-+	: __clobber_all);
-+}
-+
-+SEC("tracepoint")
-+__description("helper access to variable memory: stack, JMP (signed), no min check")
-+__failure __msg("R2 min value is negative")
-+__naked void jmp_signed_no_min_check(void)
-+{
-+	asm volatile ("					\
-+	r2 = *(u64*)(r1 + 8);				\
-+	r1 = r10;					\
-+	r1 += -64;					\
-+	*(u64*)(r1 - 128) = r2;				\
-+	r2 = *(u64*)(r1 - 128);				\
-+	if r2 s> 64 goto l0_%=;				\
-+	r3 = 0;						\
-+	call %[bpf_probe_read_kernel];			\
++	call %[bpf_ktime_get_coarse_ns];		\
 +	r0 = 0;						\
-+l0_%=:	exit;						\
++	exit;						\
 +"	:
-+	: __imm(bpf_probe_read_kernel)
++	: __imm(bpf_ktime_get_coarse_ns)
 +	: __clobber_all);
 +}
 +
-+SEC("tracepoint")
-+__description("helper access to variable memory: map, JMP, correct bounds")
-+__success
-+__naked void memory_map_jmp_correct_bounds(void)
++SEC("kprobe")
++__description("bpf_timer_init isn restricted in BPF_PROG_TYPE_KPROBE")
++__failure __msg("tracing progs cannot use bpf_timer yet")
++__naked void in_bpf_prog_type_kprobe_2(void)
 +{
 +	asm volatile ("					\
 +	r2 = r10;					\
 +	r2 += -8;					\
 +	r1 = 0;						\
 +	*(u64*)(r2 + 0) = r1;				\
-+	r1 = %[map_hash_48b] ll;			\
++	r1 = %[map_timer] ll;				\
 +	call %[bpf_map_lookup_elem];			\
 +	if r0 == 0 goto l0_%=;				\
 +	r1 = r0;					\
-+	r2 = %[sizeof_test_val];			\
-+	*(u64*)(r10 - 128) = r2;			\
-+	r2 = *(u64*)(r10 - 128);			\
-+	if r2 s> %[sizeof_test_val] goto l1_%=;		\
-+	r4 = 0;						\
-+	if r4 s>= r2 goto l1_%=;			\
-+	r3 = 0;						\
-+	call %[bpf_probe_read_kernel];			\
-+l1_%=:	r0 = 0;						\
-+l0_%=:	exit;						\
++	r2 = %[map_timer] ll;				\
++	r3 = 1;						\
++l0_%=:	call %[bpf_timer_init];				\
++	exit;						\
 +"	:
 +	: __imm(bpf_map_lookup_elem),
-+	  __imm(bpf_probe_read_kernel),
-+	  __imm_addr(map_hash_48b),
-+	  __imm_const(sizeof_test_val, sizeof(struct test_val))
++	  __imm(bpf_timer_init),
++	  __imm_addr(map_timer)
 +	: __clobber_all);
 +}
 +
-+SEC("tracepoint")
-+__description("helper access to variable memory: map, JMP, wrong max")
-+__failure __msg("invalid access to map value, value_size=48 off=0 size=49")
-+__naked void memory_map_jmp_wrong_max(void)
-+{
-+	asm volatile ("					\
-+	r6 = *(u64*)(r1 + 8);				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = 0;						\
-+	*(u64*)(r2 + 0) = r1;				\
-+	r1 = %[map_hash_48b] ll;			\
-+	call %[bpf_map_lookup_elem];			\
-+	if r0 == 0 goto l0_%=;				\
-+	r1 = r0;					\
-+	r2 = r6;					\
-+	*(u64*)(r10 - 128) = r2;			\
-+	r2 = *(u64*)(r10 - 128);			\
-+	if r2 s> %[__imm_0] goto l1_%=;			\
-+	r4 = 0;						\
-+	if r4 s>= r2 goto l1_%=;			\
-+	r3 = 0;						\
-+	call %[bpf_probe_read_kernel];			\
-+l1_%=:	r0 = 0;						\
-+l0_%=:	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm(bpf_probe_read_kernel),
-+	  __imm_addr(map_hash_48b),
-+	  __imm_const(__imm_0, sizeof(struct test_val) + 1)
-+	: __clobber_all);
-+}
-+
-+SEC("tracepoint")
-+__description("helper access to variable memory: map adjusted, JMP, correct bounds")
-+__success
-+__naked void map_adjusted_jmp_correct_bounds(void)
++SEC("perf_event")
++__description("bpf_timer_init is forbidden in BPF_PROG_TYPE_PERF_EVENT")
++__failure __msg("tracing progs cannot use bpf_timer yet")
++__naked void bpf_prog_type_perf_event_2(void)
 +{
 +	asm volatile ("					\
 +	r2 = r10;					\
 +	r2 += -8;					\
 +	r1 = 0;						\
 +	*(u64*)(r2 + 0) = r1;				\
-+	r1 = %[map_hash_48b] ll;			\
++	r1 = %[map_timer] ll;				\
 +	call %[bpf_map_lookup_elem];			\
 +	if r0 == 0 goto l0_%=;				\
 +	r1 = r0;					\
-+	r1 += 20;					\
-+	r2 = %[sizeof_test_val];			\
-+	*(u64*)(r10 - 128) = r2;			\
-+	r2 = *(u64*)(r10 - 128);			\
-+	if r2 s> %[__imm_0] goto l1_%=;			\
-+	r4 = 0;						\
-+	if r4 s>= r2 goto l1_%=;			\
-+	r3 = 0;						\
-+	call %[bpf_probe_read_kernel];			\
-+l1_%=:	r0 = 0;						\
-+l0_%=:	exit;						\
++	r2 = %[map_timer] ll;				\
++	r3 = 1;						\
++l0_%=:	call %[bpf_timer_init];				\
++	exit;						\
 +"	:
 +	: __imm(bpf_map_lookup_elem),
-+	  __imm(bpf_probe_read_kernel),
-+	  __imm_addr(map_hash_48b),
-+	  __imm_const(__imm_0, sizeof(struct test_val) - 20),
-+	  __imm_const(sizeof_test_val, sizeof(struct test_val))
++	  __imm(bpf_timer_init),
++	  __imm_addr(map_timer)
 +	: __clobber_all);
 +}
 +
 +SEC("tracepoint")
-+__description("helper access to variable memory: map adjusted, JMP, wrong max")
-+__failure __msg("R1 min value is outside of the allowed memory range")
-+__naked void map_adjusted_jmp_wrong_max(void)
++__description("bpf_timer_init is forbidden in BPF_PROG_TYPE_TRACEPOINT")
++__failure __msg("tracing progs cannot use bpf_timer yet")
++__naked void in_bpf_prog_type_tracepoint_2(void)
 +{
 +	asm volatile ("					\
-+	r6 = *(u64*)(r1 + 8);				\
 +	r2 = r10;					\
 +	r2 += -8;					\
 +	r1 = 0;						\
 +	*(u64*)(r2 + 0) = r1;				\
-+	r1 = %[map_hash_48b] ll;			\
++	r1 = %[map_timer] ll;				\
 +	call %[bpf_map_lookup_elem];			\
 +	if r0 == 0 goto l0_%=;				\
 +	r1 = r0;					\
-+	r1 += 20;					\
-+	r2 = r6;					\
-+	*(u64*)(r10 - 128) = r2;			\
-+	r2 = *(u64*)(r10 - 128);			\
-+	if r2 s> %[__imm_0] goto l1_%=;			\
-+	r4 = 0;						\
-+	if r4 s>= r2 goto l1_%=;			\
-+	r3 = 0;						\
-+	call %[bpf_probe_read_kernel];			\
-+l1_%=:	r0 = 0;						\
++	r2 = %[map_timer] ll;				\
++	r3 = 1;						\
++l0_%=:	call %[bpf_timer_init];				\
++	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm(bpf_timer_init),
++	  __imm_addr(map_timer)
++	: __clobber_all);
++}
++
++SEC("raw_tracepoint")
++__description("bpf_timer_init is forbidden in BPF_PROG_TYPE_RAW_TRACEPOINT")
++__failure __msg("tracing progs cannot use bpf_timer yet")
++__naked void bpf_prog_type_raw_tracepoint_2(void)
++{
++	asm volatile ("					\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = 0;						\
++	*(u64*)(r2 + 0) = r1;				\
++	r1 = %[map_timer] ll;				\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto l0_%=;				\
++	r1 = r0;					\
++	r2 = %[map_timer] ll;				\
++	r3 = 1;						\
++l0_%=:	call %[bpf_timer_init];				\
++	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm(bpf_timer_init),
++	  __imm_addr(map_timer)
++	: __clobber_all);
++}
++
++SEC("kprobe")
++__description("bpf_spin_lock is forbidden in BPF_PROG_TYPE_KPROBE")
++__failure __msg("tracing progs cannot use bpf_spin_lock yet")
++__naked void in_bpf_prog_type_kprobe_3(void)
++{
++	asm volatile ("					\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = 0;						\
++	*(u64*)(r2 + 0) = r1;				\
++	r1 = %[map_spin_lock] ll;			\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto l0_%=;				\
++	r1 = r0;					\
++	call %[bpf_spin_lock];				\
 +l0_%=:	exit;						\
 +"	:
 +	: __imm(bpf_map_lookup_elem),
-+	  __imm(bpf_probe_read_kernel),
-+	  __imm_addr(map_hash_48b),
-+	  __imm_const(__imm_0, sizeof(struct test_val) - 19)
++	  __imm(bpf_spin_lock),
++	  __imm_addr(map_spin_lock)
 +	: __clobber_all);
 +}
 +
-+SEC("tc")
-+__description("helper access to variable memory: size = 0 allowed on NULL (ARG_PTR_TO_MEM_OR_NULL)")
-+__success __retval(0)
-+__naked void ptr_to_mem_or_null_1(void)
++SEC("tracepoint")
++__description("bpf_spin_lock is forbidden in BPF_PROG_TYPE_TRACEPOINT")
++__failure __msg("tracing progs cannot use bpf_spin_lock yet")
++__naked void in_bpf_prog_type_tracepoint_3(void)
 +{
 +	asm volatile ("					\
-+	r1 = 0;						\
-+	r2 = 0;						\
-+	r3 = 0;						\
-+	r4 = 0;						\
-+	r5 = 0;						\
-+	call %[bpf_csum_diff];				\
-+	exit;						\
-+"	:
-+	: __imm(bpf_csum_diff)
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__description("helper access to variable memory: size > 0 not allowed on NULL (ARG_PTR_TO_MEM_OR_NULL)")
-+__failure __msg("R1 type=scalar expected=fp")
-+__naked void ptr_to_mem_or_null_2(void)
-+{
-+	asm volatile ("					\
-+	r2 = *(u32*)(r1 + 0);				\
-+	r1 = 0;						\
-+	*(u64*)(r10 - 128) = r2;			\
-+	r2 = *(u64*)(r10 - 128);			\
-+	r2 &= 64;					\
-+	r3 = 0;						\
-+	r4 = 0;						\
-+	r5 = 0;						\
-+	call %[bpf_csum_diff];				\
-+	exit;						\
-+"	:
-+	: __imm(bpf_csum_diff)
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__description("helper access to variable memory: size = 0 allowed on != NULL stack pointer (ARG_PTR_TO_MEM_OR_NULL)")
-+__success __retval(0)
-+__naked void ptr_to_mem_or_null_3(void)
-+{
-+	asm volatile ("					\
-+	r1 = r10;					\
-+	r1 += -8;					\
-+	r2 = 0;						\
-+	*(u64*)(r1 + 0) = r2;				\
-+	r2 &= 8;					\
-+	r3 = 0;						\
-+	r4 = 0;						\
-+	r5 = 0;						\
-+	call %[bpf_csum_diff];				\
-+	exit;						\
-+"	:
-+	: __imm(bpf_csum_diff)
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__description("helper access to variable memory: size = 0 allowed on != NULL map pointer (ARG_PTR_TO_MEM_OR_NULL)")
-+__success __retval(0)
-+__naked void ptr_to_mem_or_null_4(void)
-+{
-+	asm volatile ("					\
-+	r1 = 0;						\
-+	*(u64*)(r10 - 8) = r1;				\
 +	r2 = r10;					\
 +	r2 += -8;					\
-+	r1 = %[map_hash_8b] ll;				\
++	r1 = 0;						\
++	*(u64*)(r2 + 0) = r1;				\
++	r1 = %[map_spin_lock] ll;			\
 +	call %[bpf_map_lookup_elem];			\
 +	if r0 == 0 goto l0_%=;				\
 +	r1 = r0;					\
-+	r2 = 0;						\
-+	r3 = 0;						\
-+	r4 = 0;						\
-+	r5 = 0;						\
-+	call %[bpf_csum_diff];				\
-+l0_%=:	exit;						\
-+"	:
-+	: __imm(bpf_csum_diff),
-+	  __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_hash_8b)
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__description("helper access to variable memory: size possible = 0 allowed on != NULL stack pointer (ARG_PTR_TO_MEM_OR_NULL)")
-+__success __retval(0)
-+__naked void ptr_to_mem_or_null_5(void)
-+{
-+	asm volatile ("					\
-+	r1 = 0;						\
-+	*(u64*)(r10 - 8) = r1;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = %[map_hash_8b] ll;				\
-+	call %[bpf_map_lookup_elem];			\
-+	if r0 == 0 goto l0_%=;				\
-+	r2 = *(u64*)(r0 + 0);				\
-+	if r2 > 8 goto l0_%=;				\
-+	r1 = r10;					\
-+	r1 += -8;					\
-+	*(u64*)(r1 + 0) = r2;				\
-+	r3 = 0;						\
-+	r4 = 0;						\
-+	r5 = 0;						\
-+	call %[bpf_csum_diff];				\
-+l0_%=:	exit;						\
-+"	:
-+	: __imm(bpf_csum_diff),
-+	  __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_hash_8b)
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__description("helper access to variable memory: size possible = 0 allowed on != NULL map pointer (ARG_PTR_TO_MEM_OR_NULL)")
-+__success __retval(0)
-+__naked void ptr_to_mem_or_null_6(void)
-+{
-+	asm volatile ("					\
-+	r1 = 0;						\
-+	*(u64*)(r10 - 8) = r1;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = %[map_hash_8b] ll;				\
-+	call %[bpf_map_lookup_elem];			\
-+	if r0 == 0 goto l0_%=;				\
-+	r1 = r0;					\
-+	r2 = *(u64*)(r0 + 0);				\
-+	if r2 > 8 goto l0_%=;				\
-+	r3 = 0;						\
-+	r4 = 0;						\
-+	r5 = 0;						\
-+	call %[bpf_csum_diff];				\
-+l0_%=:	exit;						\
-+"	:
-+	: __imm(bpf_csum_diff),
-+	  __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_hash_8b)
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__description("helper access to variable memory: size possible = 0 allowed on != NULL packet pointer (ARG_PTR_TO_MEM_OR_NULL)")
-+__success __retval(0)
-+/* csum_diff of 64-byte packet */
-+__flag(BPF_F_ANY_ALIGNMENT)
-+__naked void ptr_to_mem_or_null_7(void)
-+{
-+	asm volatile ("					\
-+	r6 = *(u32*)(r1 + %[__sk_buff_data]);		\
-+	r3 = *(u32*)(r1 + %[__sk_buff_data_end]);	\
-+	r0 = r6;					\
-+	r0 += 8;					\
-+	if r0 > r3 goto l0_%=;				\
-+	r1 = r6;					\
-+	r2 = *(u64*)(r6 + 0);				\
-+	if r2 > 8 goto l0_%=;				\
-+	r3 = 0;						\
-+	r4 = 0;						\
-+	r5 = 0;						\
-+	call %[bpf_csum_diff];				\
-+l0_%=:	exit;						\
-+"	:
-+	: __imm(bpf_csum_diff),
-+	  __imm_const(__sk_buff_data, offsetof(struct __sk_buff, data)),
-+	  __imm_const(__sk_buff_data_end, offsetof(struct __sk_buff, data_end))
-+	: __clobber_all);
-+}
-+
-+SEC("tracepoint")
-+__description("helper access to variable memory: size = 0 not allowed on NULL (!ARG_PTR_TO_MEM_OR_NULL)")
-+__failure __msg("R1 type=scalar expected=fp")
-+__naked void ptr_to_mem_or_null_8(void)
-+{
-+	asm volatile ("					\
-+	r1 = 0;						\
-+	r2 = 0;						\
-+	r3 = 0;						\
-+	call %[bpf_probe_read_kernel];			\
-+	exit;						\
-+"	:
-+	: __imm(bpf_probe_read_kernel)
-+	: __clobber_all);
-+}
-+
-+SEC("tracepoint")
-+__description("helper access to variable memory: size > 0 not allowed on NULL (!ARG_PTR_TO_MEM_OR_NULL)")
-+__failure __msg("R1 type=scalar expected=fp")
-+__naked void ptr_to_mem_or_null_9(void)
-+{
-+	asm volatile ("					\
-+	r1 = 0;						\
-+	r2 = 1;						\
-+	r3 = 0;						\
-+	call %[bpf_probe_read_kernel];			\
-+	exit;						\
-+"	:
-+	: __imm(bpf_probe_read_kernel)
-+	: __clobber_all);
-+}
-+
-+SEC("tracepoint")
-+__description("helper access to variable memory: size = 0 allowed on != NULL stack pointer (!ARG_PTR_TO_MEM_OR_NULL)")
-+__success
-+__naked void ptr_to_mem_or_null_10(void)
-+{
-+	asm volatile ("					\
-+	r1 = r10;					\
-+	r1 += -8;					\
-+	r2 = 0;						\
-+	r3 = 0;						\
-+	call %[bpf_probe_read_kernel];			\
-+	exit;						\
-+"	:
-+	: __imm(bpf_probe_read_kernel)
-+	: __clobber_all);
-+}
-+
-+SEC("tracepoint")
-+__description("helper access to variable memory: size = 0 allowed on != NULL map pointer (!ARG_PTR_TO_MEM_OR_NULL)")
-+__success
-+__naked void ptr_to_mem_or_null_11(void)
-+{
-+	asm volatile ("					\
-+	r1 = 0;						\
-+	*(u64*)(r10 - 8) = r1;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = %[map_hash_8b] ll;				\
-+	call %[bpf_map_lookup_elem];			\
-+	if r0 == 0 goto l0_%=;				\
-+	r1 = r0;					\
-+	r2 = 0;						\
-+	r3 = 0;						\
-+	call %[bpf_probe_read_kernel];			\
++	call %[bpf_spin_lock];				\
 +l0_%=:	exit;						\
 +"	:
 +	: __imm(bpf_map_lookup_elem),
-+	  __imm(bpf_probe_read_kernel),
-+	  __imm_addr(map_hash_8b)
++	  __imm(bpf_spin_lock),
++	  __imm_addr(map_spin_lock)
 +	: __clobber_all);
 +}
 +
-+SEC("tracepoint")
-+__description("helper access to variable memory: size possible = 0 allowed on != NULL stack pointer (!ARG_PTR_TO_MEM_OR_NULL)")
-+__success
-+__naked void ptr_to_mem_or_null_12(void)
++SEC("perf_event")
++__description("bpf_spin_lock is forbidden in BPF_PROG_TYPE_PERF_EVENT")
++__failure __msg("tracing progs cannot use bpf_spin_lock yet")
++__naked void bpf_prog_type_perf_event_3(void)
 +{
 +	asm volatile ("					\
-+	r1 = 0;						\
-+	*(u64*)(r10 - 8) = r1;				\
 +	r2 = r10;					\
 +	r2 += -8;					\
-+	r1 = %[map_hash_8b] ll;				\
-+	call %[bpf_map_lookup_elem];			\
-+	if r0 == 0 goto l0_%=;				\
-+	r2 = *(u64*)(r0 + 0);				\
-+	if r2 > 8 goto l0_%=;				\
-+	r1 = r10;					\
-+	r1 += -8;					\
-+	r3 = 0;						\
-+	call %[bpf_probe_read_kernel];			\
-+l0_%=:	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm(bpf_probe_read_kernel),
-+	  __imm_addr(map_hash_8b)
-+	: __clobber_all);
-+}
-+
-+SEC("tracepoint")
-+__description("helper access to variable memory: size possible = 0 allowed on != NULL map pointer (!ARG_PTR_TO_MEM_OR_NULL)")
-+__success
-+__naked void ptr_to_mem_or_null_13(void)
-+{
-+	asm volatile ("					\
 +	r1 = 0;						\
-+	*(u64*)(r10 - 8) = r1;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = %[map_hash_8b] ll;				\
++	*(u64*)(r2 + 0) = r1;				\
++	r1 = %[map_spin_lock] ll;			\
 +	call %[bpf_map_lookup_elem];			\
 +	if r0 == 0 goto l0_%=;				\
 +	r1 = r0;					\
-+	r2 = *(u64*)(r0 + 0);				\
-+	if r2 > 8 goto l0_%=;				\
-+	r3 = 0;						\
-+	call %[bpf_probe_read_kernel];			\
++	call %[bpf_spin_lock];				\
 +l0_%=:	exit;						\
 +"	:
 +	: __imm(bpf_map_lookup_elem),
-+	  __imm(bpf_probe_read_kernel),
-+	  __imm_addr(map_hash_8b)
++	  __imm(bpf_spin_lock),
++	  __imm_addr(map_spin_lock)
 +	: __clobber_all);
 +}
 +
-+SEC("socket")
-+__description("helper access to variable memory: 8 bytes leak")
-+/* in privileged mode reads from uninitialized stack locations are permitted */
-+__success __failure_unpriv
-+__msg_unpriv("invalid indirect read from stack R2 off -64+32 size 64")
-+__retval(0)
-+__naked void variable_memory_8_bytes_leak(void)
++SEC("raw_tracepoint")
++__description("bpf_spin_lock is forbidden in BPF_PROG_TYPE_RAW_TRACEPOINT")
++__failure __msg("tracing progs cannot use bpf_spin_lock yet")
++__naked void bpf_prog_type_raw_tracepoint_3(void)
 +{
 +	asm volatile ("					\
-+	/* set max stack size */			\
-+	r6 = 0;						\
-+	*(u64*)(r10 - 128) = r6;			\
-+	/* set r3 to a random value */			\
-+	call %[bpf_get_prandom_u32];			\
-+	r3 = r0;					\
-+	r1 = %[map_ringbuf] ll;				\
 +	r2 = r10;					\
-+	r2 += -64;					\
-+	r0 = 0;						\
-+	*(u64*)(r10 - 64) = r0;				\
-+	*(u64*)(r10 - 56) = r0;				\
-+	*(u64*)(r10 - 48) = r0;				\
-+	*(u64*)(r10 - 40) = r0;				\
-+	/* Note: fp[-32] left uninitialized */		\
-+	*(u64*)(r10 - 24) = r0;				\
-+	*(u64*)(r10 - 16) = r0;				\
-+	*(u64*)(r10 - 8) = r0;				\
-+	/* Limit r3 range to [1, 64] */			\
-+	r3 &= 63;					\
-+	r3 += 1;					\
-+	r4 = 0;						\
-+	/* Call bpf_ringbuf_output(), it is one of a few helper functions with\
-+	 * ARG_CONST_SIZE_OR_ZERO parameter allowed in unpriv mode.\
-+	 * For unpriv this should signal an error, because memory region [1, 64]\
-+	 * at &fp[-64] is not fully initialized.	\
-+	 */						\
-+	call %[bpf_ringbuf_output];			\
-+	r0 = 0;						\
-+	exit;						\
++	r2 += -8;					\
++	r1 = 0;						\
++	*(u64*)(r2 + 0) = r1;				\
++	r1 = %[map_spin_lock] ll;			\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto l0_%=;				\
++	r1 = r0;					\
++	call %[bpf_spin_lock];				\
++l0_%=:	exit;						\
 +"	:
-+	: __imm(bpf_get_prandom_u32),
-+	  __imm(bpf_ringbuf_output),
-+	  __imm_addr(map_ringbuf)
-+	: __clobber_all);
-+}
-+
-+SEC("tracepoint")
-+__description("helper access to variable memory: 8 bytes no leak (init memory)")
-+__success
-+__naked void bytes_no_leak_init_memory(void)
-+{
-+	asm volatile ("					\
-+	r1 = r10;					\
-+	r0 = 0;						\
-+	r0 = 0;						\
-+	*(u64*)(r10 - 64) = r0;				\
-+	*(u64*)(r10 - 56) = r0;				\
-+	*(u64*)(r10 - 48) = r0;				\
-+	*(u64*)(r10 - 40) = r0;				\
-+	*(u64*)(r10 - 32) = r0;				\
-+	*(u64*)(r10 - 24) = r0;				\
-+	*(u64*)(r10 - 16) = r0;				\
-+	*(u64*)(r10 - 8) = r0;				\
-+	r1 += -64;					\
-+	r2 = 0;						\
-+	r2 &= 32;					\
-+	r2 += 32;					\
-+	r3 = 0;						\
-+	call %[bpf_probe_read_kernel];			\
-+	r1 = *(u64*)(r10 - 16);				\
-+	exit;						\
-+"	:
-+	: __imm(bpf_probe_read_kernel)
++	: __imm(bpf_map_lookup_elem),
++	  __imm(bpf_spin_lock),
++	  __imm_addr(map_spin_lock)
 +	: __clobber_all);
 +}
 +
 +char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/verifier/helper_access_var_len.c b/tools/testing/selftests/bpf/verifier/helper_access_var_len.c
+diff --git a/tools/testing/selftests/bpf/verifier/helper_restricted.c b/tools/testing/selftests/bpf/verifier/helper_restricted.c
 deleted file mode 100644
-index 9c4885885aba..000000000000
---- a/tools/testing/selftests/bpf/verifier/helper_access_var_len.c
+index a067b7098b97..000000000000
+--- a/tools/testing/selftests/bpf/verifier/helper_restricted.c
 +++ /dev/null
-@@ -1,650 +0,0 @@
+@@ -1,196 +0,0 @@
 -{
--	"helper access to variable memory: stack, bitwise AND + JMP, correct bounds",
+-	"bpf_ktime_get_coarse_ns is forbidden in BPF_PROG_TYPE_KPROBE",
 -	.insns = {
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -64),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -64),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -56),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -48),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -40),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -32),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -24),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -16),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -8),
--	BPF_MOV64_IMM(BPF_REG_2, 16),
--	BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, -128),
--	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, -128),
--	BPF_ALU64_IMM(BPF_AND, BPF_REG_2, 64),
--	BPF_MOV64_IMM(BPF_REG_4, 0),
--	BPF_JMP_REG(BPF_JGE, BPF_REG_4, BPF_REG_2, 2),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_EXIT_INSN(),
+-		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_ktime_get_coarse_ns),
+-		BPF_MOV64_IMM(BPF_REG_0, 0),
+-		BPF_EXIT_INSN(),
 -	},
--	.result = ACCEPT,
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
+-	.errstr = "unknown func bpf_ktime_get_coarse_ns",
+-	.result = REJECT,
+-	.prog_type = BPF_PROG_TYPE_KPROBE,
 -},
 -{
--	"helper access to variable memory: stack, bitwise AND, zero included",
+-	"bpf_ktime_get_coarse_ns is forbidden in BPF_PROG_TYPE_TRACEPOINT",
 -	.insns = {
--	/* set max stack size */
--	BPF_ST_MEM(BPF_DW, BPF_REG_10, -128, 0),
--	/* set r3 to a random value */
--	BPF_EMIT_CALL(BPF_FUNC_get_prandom_u32),
--	BPF_MOV64_REG(BPF_REG_3, BPF_REG_0),
--	/* use bitwise AND to limit r3 range to [0, 64] */
--	BPF_ALU64_IMM(BPF_AND, BPF_REG_3, 64),
--	BPF_LD_MAP_FD(BPF_REG_1, 0),
--	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -64),
--	BPF_MOV64_IMM(BPF_REG_4, 0),
--	/* Call bpf_ringbuf_output(), it is one of a few helper functions with
--	 * ARG_CONST_SIZE_OR_ZERO parameter allowed in unpriv mode.
--	 * For unpriv this should signal an error, because memory at &fp[-64] is
--	 * not initialized.
--	 */
--	BPF_EMIT_CALL(BPF_FUNC_ringbuf_output),
--	BPF_EXIT_INSN(),
+-		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_ktime_get_coarse_ns),
+-		BPF_MOV64_IMM(BPF_REG_0, 0),
+-		BPF_EXIT_INSN(),
 -	},
--	.fixup_map_ringbuf = { 4 },
--	.errstr_unpriv = "invalid indirect read from stack R2 off -64+0 size 64",
--	.result_unpriv = REJECT,
--	/* in privileged mode reads from uninitialized stack locations are permitted */
--	.result = ACCEPT,
--},
--{
--	"helper access to variable memory: stack, bitwise AND + JMP, wrong max",
--	.insns = {
--	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, 8),
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -64),
--	BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, -128),
--	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, -128),
--	BPF_ALU64_IMM(BPF_AND, BPF_REG_2, 65),
--	BPF_MOV64_IMM(BPF_REG_4, 0),
--	BPF_JMP_REG(BPF_JGE, BPF_REG_4, BPF_REG_2, 2),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_EXIT_INSN(),
--	},
--	.errstr = "invalid indirect access to stack R1 off=-64 size=65",
+-	.errstr = "unknown func bpf_ktime_get_coarse_ns",
 -	.result = REJECT,
 -	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
 -},
 -{
--	"helper access to variable memory: stack, JMP, correct bounds",
+-	"bpf_ktime_get_coarse_ns is forbidden in BPF_PROG_TYPE_PERF_EVENT",
 -	.insns = {
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -64),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -64),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -56),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -48),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -40),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -32),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -24),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -16),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -8),
--	BPF_MOV64_IMM(BPF_REG_2, 16),
--	BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, -128),
--	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, -128),
--	BPF_JMP_IMM(BPF_JGT, BPF_REG_2, 64, 4),
--	BPF_MOV64_IMM(BPF_REG_4, 0),
--	BPF_JMP_REG(BPF_JGE, BPF_REG_4, BPF_REG_2, 2),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel),
+-	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_ktime_get_coarse_ns),
 -	BPF_MOV64_IMM(BPF_REG_0, 0),
 -	BPF_EXIT_INSN(),
 -	},
--	.result = ACCEPT,
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--},
--{
--	"helper access to variable memory: stack, JMP (signed), correct bounds",
--	.insns = {
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -64),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -64),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -56),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -48),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -40),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -32),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -24),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -16),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -8),
--	BPF_MOV64_IMM(BPF_REG_2, 16),
--	BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, -128),
--	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, -128),
--	BPF_JMP_IMM(BPF_JSGT, BPF_REG_2, 64, 4),
--	BPF_MOV64_IMM(BPF_REG_4, 0),
--	BPF_JMP_REG(BPF_JSGE, BPF_REG_4, BPF_REG_2, 2),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_EXIT_INSN(),
--	},
--	.result = ACCEPT,
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--},
--{
--	"helper access to variable memory: stack, JMP, bounds + offset",
--	.insns = {
--	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, 8),
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -64),
--	BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, -128),
--	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, -128),
--	BPF_JMP_IMM(BPF_JGT, BPF_REG_2, 64, 5),
--	BPF_MOV64_IMM(BPF_REG_4, 0),
--	BPF_JMP_REG(BPF_JGE, BPF_REG_4, BPF_REG_2, 3),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, 1),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_EXIT_INSN(),
--	},
--	.errstr = "invalid indirect access to stack R1 off=-64 size=65",
+-	.errstr = "unknown func bpf_ktime_get_coarse_ns",
 -	.result = REJECT,
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
+-	.prog_type = BPF_PROG_TYPE_PERF_EVENT,
 -},
 -{
--	"helper access to variable memory: stack, JMP, wrong max",
+-	"bpf_ktime_get_coarse_ns is forbidden in BPF_PROG_TYPE_RAW_TRACEPOINT",
 -	.insns = {
--	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, 8),
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -64),
--	BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, -128),
--	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, -128),
--	BPF_JMP_IMM(BPF_JGT, BPF_REG_2, 65, 4),
--	BPF_MOV64_IMM(BPF_REG_4, 0),
--	BPF_JMP_REG(BPF_JGE, BPF_REG_4, BPF_REG_2, 2),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel),
+-	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_ktime_get_coarse_ns),
 -	BPF_MOV64_IMM(BPF_REG_0, 0),
 -	BPF_EXIT_INSN(),
 -	},
--	.errstr = "invalid indirect access to stack R1 off=-64 size=65",
+-	.errstr = "unknown func bpf_ktime_get_coarse_ns",
 -	.result = REJECT,
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
+-	.prog_type = BPF_PROG_TYPE_RAW_TRACEPOINT,
 -},
 -{
--	"helper access to variable memory: stack, JMP, no max check",
--	.insns = {
--	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, 8),
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -64),
--	BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, -128),
--	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, -128),
--	BPF_MOV64_IMM(BPF_REG_4, 0),
--	BPF_JMP_REG(BPF_JGE, BPF_REG_4, BPF_REG_2, 2),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_EXIT_INSN(),
--	},
--	/* because max wasn't checked, signed min is negative */
--	.errstr = "R2 min value is negative, either use unsigned or 'var &= const'",
--	.result = REJECT,
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--},
--{
--	"helper access to variable memory: stack, JMP, no min check",
--	.insns = {
--	/* set max stack size */
--	BPF_ST_MEM(BPF_DW, BPF_REG_10, -128, 0),
--	/* set r3 to a random value */
--	BPF_EMIT_CALL(BPF_FUNC_get_prandom_u32),
--	BPF_MOV64_REG(BPF_REG_3, BPF_REG_0),
--	/* use JMP to limit r3 range to [0, 64] */
--	BPF_JMP_IMM(BPF_JGT, BPF_REG_3, 64, 6),
--	BPF_LD_MAP_FD(BPF_REG_1, 0),
--	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -64),
--	BPF_MOV64_IMM(BPF_REG_4, 0),
--	/* Call bpf_ringbuf_output(), it is one of a few helper functions with
--	 * ARG_CONST_SIZE_OR_ZERO parameter allowed in unpriv mode.
--	 * For unpriv this should signal an error, because memory at &fp[-64] is
--	 * not initialized.
--	 */
--	BPF_EMIT_CALL(BPF_FUNC_ringbuf_output),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_EXIT_INSN(),
--	},
--	.fixup_map_ringbuf = { 4 },
--	.errstr_unpriv = "invalid indirect read from stack R2 off -64+0 size 64",
--	.result_unpriv = REJECT,
--	/* in privileged mode reads from uninitialized stack locations are permitted */
--	.result = ACCEPT,
--},
--{
--	"helper access to variable memory: stack, JMP (signed), no min check",
--	.insns = {
--	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, 8),
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -64),
--	BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, -128),
--	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, -128),
--	BPF_JMP_IMM(BPF_JSGT, BPF_REG_2, 64, 3),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_EXIT_INSN(),
--	},
--	.errstr = "R2 min value is negative",
--	.result = REJECT,
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--},
--{
--	"helper access to variable memory: map, JMP, correct bounds",
+-	"bpf_timer_init isn restricted in BPF_PROG_TYPE_KPROBE",
 -	.insns = {
 -	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
 -	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
 -	BPF_ST_MEM(BPF_DW, BPF_REG_2, 0, 0),
--	BPF_LD_MAP_FD(BPF_REG_1, 0),
--	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
--	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 10),
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
--	BPF_MOV64_IMM(BPF_REG_2, sizeof(struct test_val)),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_2, -128),
--	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_10, -128),
--	BPF_JMP_IMM(BPF_JSGT, BPF_REG_2, sizeof(struct test_val), 4),
--	BPF_MOV64_IMM(BPF_REG_4, 0),
--	BPF_JMP_REG(BPF_JSGE, BPF_REG_4, BPF_REG_2, 2),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_EXIT_INSN(),
--	},
--	.fixup_map_hash_48b = { 3 },
--	.result = ACCEPT,
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--},
--{
--	"helper access to variable memory: map, JMP, wrong max",
--	.insns = {
--	BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 8),
--	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
--	BPF_ST_MEM(BPF_DW, BPF_REG_2, 0, 0),
--	BPF_LD_MAP_FD(BPF_REG_1, 0),
--	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
--	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 10),
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
--	BPF_MOV64_REG(BPF_REG_2, BPF_REG_6),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_2, -128),
--	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_10, -128),
--	BPF_JMP_IMM(BPF_JSGT, BPF_REG_2, sizeof(struct test_val) + 1, 4),
--	BPF_MOV64_IMM(BPF_REG_4, 0),
--	BPF_JMP_REG(BPF_JSGE, BPF_REG_4, BPF_REG_2, 2),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_EXIT_INSN(),
--	},
--	.fixup_map_hash_48b = { 4 },
--	.errstr = "invalid access to map value, value_size=48 off=0 size=49",
--	.result = REJECT,
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--},
--{
--	"helper access to variable memory: map adjusted, JMP, correct bounds",
--	.insns = {
--	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
--	BPF_ST_MEM(BPF_DW, BPF_REG_2, 0, 0),
--	BPF_LD_MAP_FD(BPF_REG_1, 0),
--	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
--	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 11),
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 20),
--	BPF_MOV64_IMM(BPF_REG_2, sizeof(struct test_val)),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_2, -128),
--	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_10, -128),
--	BPF_JMP_IMM(BPF_JSGT, BPF_REG_2, sizeof(struct test_val) - 20, 4),
--	BPF_MOV64_IMM(BPF_REG_4, 0),
--	BPF_JMP_REG(BPF_JSGE, BPF_REG_4, BPF_REG_2, 2),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_EXIT_INSN(),
--	},
--	.fixup_map_hash_48b = { 3 },
--	.result = ACCEPT,
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--},
--{
--	"helper access to variable memory: map adjusted, JMP, wrong max",
--	.insns = {
--	BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 8),
--	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
--	BPF_ST_MEM(BPF_DW, BPF_REG_2, 0, 0),
--	BPF_LD_MAP_FD(BPF_REG_1, 0),
--	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
--	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 11),
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 20),
--	BPF_MOV64_REG(BPF_REG_2, BPF_REG_6),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_2, -128),
--	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_10, -128),
--	BPF_JMP_IMM(BPF_JSGT, BPF_REG_2, sizeof(struct test_val) - 19, 4),
--	BPF_MOV64_IMM(BPF_REG_4, 0),
--	BPF_JMP_REG(BPF_JSGE, BPF_REG_4, BPF_REG_2, 2),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_EXIT_INSN(),
--	},
--	.fixup_map_hash_48b = { 4 },
--	.errstr = "R1 min value is outside of the allowed memory range",
--	.result = REJECT,
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--},
--{
--	"helper access to variable memory: size = 0 allowed on NULL (ARG_PTR_TO_MEM_OR_NULL)",
--	.insns = {
--	BPF_MOV64_IMM(BPF_REG_1, 0),
--	BPF_MOV64_IMM(BPF_REG_2, 0),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_MOV64_IMM(BPF_REG_4, 0),
--	BPF_MOV64_IMM(BPF_REG_5, 0),
--	BPF_EMIT_CALL(BPF_FUNC_csum_diff),
--	BPF_EXIT_INSN(),
--	},
--	.result = ACCEPT,
--	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
--},
--{
--	"helper access to variable memory: size > 0 not allowed on NULL (ARG_PTR_TO_MEM_OR_NULL)",
--	.insns = {
--	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, 0),
--	BPF_MOV64_IMM(BPF_REG_1, 0),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_2, -128),
--	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_10, -128),
--	BPF_ALU64_IMM(BPF_AND, BPF_REG_2, 64),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_MOV64_IMM(BPF_REG_4, 0),
--	BPF_MOV64_IMM(BPF_REG_5, 0),
--	BPF_EMIT_CALL(BPF_FUNC_csum_diff),
--	BPF_EXIT_INSN(),
--	},
--	.errstr = "R1 type=scalar expected=fp",
--	.result = REJECT,
--	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
--},
--{
--	"helper access to variable memory: size = 0 allowed on != NULL stack pointer (ARG_PTR_TO_MEM_OR_NULL)",
--	.insns = {
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
--	BPF_MOV64_IMM(BPF_REG_2, 0),
--	BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, 0),
--	BPF_ALU64_IMM(BPF_AND, BPF_REG_2, 8),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_MOV64_IMM(BPF_REG_4, 0),
--	BPF_MOV64_IMM(BPF_REG_5, 0),
--	BPF_EMIT_CALL(BPF_FUNC_csum_diff),
--	BPF_EXIT_INSN(),
--	},
--	.result = ACCEPT,
--	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
--},
--{
--	"helper access to variable memory: size = 0 allowed on != NULL map pointer (ARG_PTR_TO_MEM_OR_NULL)",
--	.insns = {
--	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
--	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
 -	BPF_LD_MAP_FD(BPF_REG_1, 0),
 -	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
--	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 6),
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
--	BPF_MOV64_IMM(BPF_REG_2, 0),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_MOV64_IMM(BPF_REG_4, 0),
--	BPF_MOV64_IMM(BPF_REG_5, 0),
--	BPF_EMIT_CALL(BPF_FUNC_csum_diff),
--	BPF_EXIT_INSN(),
--	},
--	.fixup_map_hash_8b = { 3 },
--	.result = ACCEPT,
--	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
--},
--{
--	"helper access to variable memory: size possible = 0 allowed on != NULL stack pointer (ARG_PTR_TO_MEM_OR_NULL)",
--	.insns = {
--	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
--	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
--	BPF_LD_MAP_FD(BPF_REG_1, 0),
--	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
--	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 9),
--	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_0, 0),
--	BPF_JMP_IMM(BPF_JGT, BPF_REG_2, 8, 7),
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
--	BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, 0),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_MOV64_IMM(BPF_REG_4, 0),
--	BPF_MOV64_IMM(BPF_REG_5, 0),
--	BPF_EMIT_CALL(BPF_FUNC_csum_diff),
--	BPF_EXIT_INSN(),
--	},
--	.fixup_map_hash_8b = { 3 },
--	.result = ACCEPT,
--	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
--},
--{
--	"helper access to variable memory: size possible = 0 allowed on != NULL map pointer (ARG_PTR_TO_MEM_OR_NULL)",
--	.insns = {
--	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
--	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
--	BPF_LD_MAP_FD(BPF_REG_1, 0),
--	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
--	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 7),
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
--	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_0, 0),
--	BPF_JMP_IMM(BPF_JGT, BPF_REG_2, 8, 4),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_MOV64_IMM(BPF_REG_4, 0),
--	BPF_MOV64_IMM(BPF_REG_5, 0),
--	BPF_EMIT_CALL(BPF_FUNC_csum_diff),
--	BPF_EXIT_INSN(),
--	},
--	.fixup_map_hash_8b = { 3 },
--	.result = ACCEPT,
--	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
--},
--{
--	"helper access to variable memory: size possible = 0 allowed on != NULL packet pointer (ARG_PTR_TO_MEM_OR_NULL)",
--	.insns = {
--	BPF_LDX_MEM(BPF_W, BPF_REG_6, BPF_REG_1,
--		    offsetof(struct __sk_buff, data)),
--	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
--		    offsetof(struct __sk_buff, data_end)),
--	BPF_MOV64_REG(BPF_REG_0, BPF_REG_6),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 8),
--	BPF_JMP_REG(BPF_JGT, BPF_REG_0, BPF_REG_3, 7),
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
--	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_6, 0),
--	BPF_JMP_IMM(BPF_JGT, BPF_REG_2, 8, 4),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_MOV64_IMM(BPF_REG_4, 0),
--	BPF_MOV64_IMM(BPF_REG_5, 0),
--	BPF_EMIT_CALL(BPF_FUNC_csum_diff),
--	BPF_EXIT_INSN(),
--	},
--	.result = ACCEPT,
--	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
--	.retval = 0 /* csum_diff of 64-byte packet */,
--	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
--},
--{
--	"helper access to variable memory: size = 0 not allowed on NULL (!ARG_PTR_TO_MEM_OR_NULL)",
--	.insns = {
--	BPF_MOV64_IMM(BPF_REG_1, 0),
--	BPF_MOV64_IMM(BPF_REG_2, 0),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel),
--	BPF_EXIT_INSN(),
--	},
--	.errstr = "R1 type=scalar expected=fp",
--	.result = REJECT,
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--},
--{
--	"helper access to variable memory: size > 0 not allowed on NULL (!ARG_PTR_TO_MEM_OR_NULL)",
--	.insns = {
--	BPF_MOV64_IMM(BPF_REG_1, 0),
--	BPF_MOV64_IMM(BPF_REG_2, 1),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel),
--	BPF_EXIT_INSN(),
--	},
--	.errstr = "R1 type=scalar expected=fp",
--	.result = REJECT,
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--},
--{
--	"helper access to variable memory: size = 0 allowed on != NULL stack pointer (!ARG_PTR_TO_MEM_OR_NULL)",
--	.insns = {
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
--	BPF_MOV64_IMM(BPF_REG_2, 0),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel),
--	BPF_EXIT_INSN(),
--	},
--	.result = ACCEPT,
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--},
--{
--	"helper access to variable memory: size = 0 allowed on != NULL map pointer (!ARG_PTR_TO_MEM_OR_NULL)",
--	.insns = {
--	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
--	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
--	BPF_LD_MAP_FD(BPF_REG_1, 0),
--	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
 -	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 4),
 -	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
--	BPF_MOV64_IMM(BPF_REG_2, 0),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel),
+-	BPF_LD_MAP_FD(BPF_REG_2, 0),
+-	BPF_MOV64_IMM(BPF_REG_3, 1),
+-	BPF_EMIT_CALL(BPF_FUNC_timer_init),
 -	BPF_EXIT_INSN(),
 -	},
--	.fixup_map_hash_8b = { 3 },
--	.result = ACCEPT,
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
+-	.fixup_map_timer = { 3, 8 },
+-	.errstr = "tracing progs cannot use bpf_timer yet",
+-	.result = REJECT,
+-	.prog_type = BPF_PROG_TYPE_KPROBE,
 -},
 -{
--	"helper access to variable memory: size possible = 0 allowed on != NULL stack pointer (!ARG_PTR_TO_MEM_OR_NULL)",
+-	"bpf_timer_init is forbidden in BPF_PROG_TYPE_PERF_EVENT",
 -	.insns = {
--	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
 -	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
 -	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
+-	BPF_ST_MEM(BPF_DW, BPF_REG_2, 0, 0),
 -	BPF_LD_MAP_FD(BPF_REG_1, 0),
--	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
--	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 6),
--	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_0, 0),
--	BPF_JMP_IMM(BPF_JGT, BPF_REG_2, 8, 4),
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel),
--	BPF_EXIT_INSN(),
--	},
--	.fixup_map_hash_8b = { 3 },
--	.result = ACCEPT,
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--},
--{
--	"helper access to variable memory: size possible = 0 allowed on != NULL map pointer (!ARG_PTR_TO_MEM_OR_NULL)",
--	.insns = {
--	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
--	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
--	BPF_LD_MAP_FD(BPF_REG_1, 0),
--	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
--	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 5),
+-	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
+-	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 4),
 -	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
--	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_0, 0),
--	BPF_JMP_IMM(BPF_JGT, BPF_REG_2, 8, 2),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel),
+-	BPF_LD_MAP_FD(BPF_REG_2, 0),
+-	BPF_MOV64_IMM(BPF_REG_3, 1),
+-	BPF_EMIT_CALL(BPF_FUNC_timer_init),
 -	BPF_EXIT_INSN(),
 -	},
--	.fixup_map_hash_8b = { 3 },
--	.result = ACCEPT,
--	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
+-	.fixup_map_timer = { 3, 8 },
+-	.errstr = "tracing progs cannot use bpf_timer yet",
+-	.result = REJECT,
+-	.prog_type = BPF_PROG_TYPE_PERF_EVENT,
 -},
 -{
--	"helper access to variable memory: 8 bytes leak",
+-	"bpf_timer_init is forbidden in BPF_PROG_TYPE_TRACEPOINT",
 -	.insns = {
--	/* set max stack size */
--	BPF_ST_MEM(BPF_DW, BPF_REG_10, -128, 0),
--	/* set r3 to a random value */
--	BPF_EMIT_CALL(BPF_FUNC_get_prandom_u32),
--	BPF_MOV64_REG(BPF_REG_3, BPF_REG_0),
--	BPF_LD_MAP_FD(BPF_REG_1, 0),
 -	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -64),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -64),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -56),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -48),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -40),
--	/* Note: fp[-32] left uninitialized */
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -24),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -16),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -8),
--	/* Limit r3 range to [1, 64] */
--	BPF_ALU64_IMM(BPF_AND, BPF_REG_3, 63),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_3, 1),
--	BPF_MOV64_IMM(BPF_REG_4, 0),
--	/* Call bpf_ringbuf_output(), it is one of a few helper functions with
--	 * ARG_CONST_SIZE_OR_ZERO parameter allowed in unpriv mode.
--	 * For unpriv this should signal an error, because memory region [1, 64]
--	 * at &fp[-64] is not fully initialized.
--	 */
--	BPF_EMIT_CALL(BPF_FUNC_ringbuf_output),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
+-	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
+-	BPF_ST_MEM(BPF_DW, BPF_REG_2, 0, 0),
+-	BPF_LD_MAP_FD(BPF_REG_1, 0),
+-	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
+-	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 4),
+-	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
+-	BPF_LD_MAP_FD(BPF_REG_2, 0),
+-	BPF_MOV64_IMM(BPF_REG_3, 1),
+-	BPF_EMIT_CALL(BPF_FUNC_timer_init),
 -	BPF_EXIT_INSN(),
 -	},
--	.fixup_map_ringbuf = { 3 },
--	.errstr_unpriv = "invalid indirect read from stack R2 off -64+32 size 64",
--	.result_unpriv = REJECT,
--	/* in privileged mode reads from uninitialized stack locations are permitted */
--	.result = ACCEPT,
+-	.fixup_map_timer = { 3, 8 },
+-	.errstr = "tracing progs cannot use bpf_timer yet",
+-	.result = REJECT,
+-	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
 -},
 -{
--	"helper access to variable memory: 8 bytes no leak (init memory)",
+-	"bpf_timer_init is forbidden in BPF_PROG_TYPE_RAW_TRACEPOINT",
 -	.insns = {
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -64),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -56),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -48),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -40),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -32),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -24),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -16),
--	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -8),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -64),
--	BPF_MOV64_IMM(BPF_REG_2, 0),
--	BPF_ALU64_IMM(BPF_AND, BPF_REG_2, 32),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, 32),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel),
--	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_10, -16),
+-	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
+-	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
+-	BPF_ST_MEM(BPF_DW, BPF_REG_2, 0, 0),
+-	BPF_LD_MAP_FD(BPF_REG_1, 0),
+-	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
+-	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 4),
+-	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
+-	BPF_LD_MAP_FD(BPF_REG_2, 0),
+-	BPF_MOV64_IMM(BPF_REG_3, 1),
+-	BPF_EMIT_CALL(BPF_FUNC_timer_init),
 -	BPF_EXIT_INSN(),
 -	},
--	.result = ACCEPT,
+-	.fixup_map_timer = { 3, 8 },
+-	.errstr = "tracing progs cannot use bpf_timer yet",
+-	.result = REJECT,
+-	.prog_type = BPF_PROG_TYPE_RAW_TRACEPOINT,
+-},
+-{
+-	"bpf_spin_lock is forbidden in BPF_PROG_TYPE_KPROBE",
+-	.insns = {
+-	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
+-	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
+-	BPF_ST_MEM(BPF_DW, BPF_REG_2, 0, 0),
+-	BPF_LD_MAP_FD(BPF_REG_1, 0),
+-	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
+-	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 2),
+-	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
+-	BPF_EMIT_CALL(BPF_FUNC_spin_lock),
+-	BPF_EXIT_INSN(),
+-	},
+-	.fixup_map_spin_lock = { 3 },
+-	.errstr = "tracing progs cannot use bpf_spin_lock yet",
+-	.result = REJECT,
+-	.prog_type = BPF_PROG_TYPE_KPROBE,
+-},
+-{
+-	"bpf_spin_lock is forbidden in BPF_PROG_TYPE_TRACEPOINT",
+-	.insns = {
+-	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
+-	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
+-	BPF_ST_MEM(BPF_DW, BPF_REG_2, 0, 0),
+-	BPF_LD_MAP_FD(BPF_REG_1, 0),
+-	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
+-	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 2),
+-	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
+-	BPF_EMIT_CALL(BPF_FUNC_spin_lock),
+-	BPF_EXIT_INSN(),
+-	},
+-	.fixup_map_spin_lock = { 3 },
+-	.errstr = "tracing progs cannot use bpf_spin_lock yet",
+-	.result = REJECT,
 -	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
+-},
+-{
+-	"bpf_spin_lock is forbidden in BPF_PROG_TYPE_PERF_EVENT",
+-	.insns = {
+-	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
+-	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
+-	BPF_ST_MEM(BPF_DW, BPF_REG_2, 0, 0),
+-	BPF_LD_MAP_FD(BPF_REG_1, 0),
+-	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
+-	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 2),
+-	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
+-	BPF_EMIT_CALL(BPF_FUNC_spin_lock),
+-	BPF_EXIT_INSN(),
+-	},
+-	.fixup_map_spin_lock = { 3 },
+-	.errstr = "tracing progs cannot use bpf_spin_lock yet",
+-	.result = REJECT,
+-	.prog_type = BPF_PROG_TYPE_PERF_EVENT,
+-},
+-{
+-	"bpf_spin_lock is forbidden in BPF_PROG_TYPE_RAW_TRACEPOINT",
+-	.insns = {
+-	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
+-	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
+-	BPF_ST_MEM(BPF_DW, BPF_REG_2, 0, 0),
+-	BPF_LD_MAP_FD(BPF_REG_1, 0),
+-	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
+-	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 2),
+-	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
+-	BPF_EMIT_CALL(BPF_FUNC_spin_lock),
+-	BPF_EXIT_INSN(),
+-	},
+-	.fixup_map_spin_lock = { 3 },
+-	.errstr = "tracing progs cannot use bpf_spin_lock yet",
+-	.result = REJECT,
+-	.prog_type = BPF_PROG_TYPE_RAW_TRACEPOINT,
 -},
 -- 
 2.40.0
