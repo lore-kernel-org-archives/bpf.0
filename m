@@ -2,161 +2,349 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BFECC6FD1C
-	for <bpf@archiver.kernel.org>; Sat, 25 Mar 2023 10:23:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E74ABC6FD1C
+	for <bpf@archiver.kernel.org>; Sat, 25 Mar 2023 11:42:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjCYKXZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 25 Mar 2023 06:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54256 "EHLO
+        id S230073AbjCYLmq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 25 Mar 2023 07:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjCYKXY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 25 Mar 2023 06:23:24 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A696CC00
-        for <bpf@vger.kernel.org>; Sat, 25 Mar 2023 03:23:22 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id z18so2457002pgj.13
-        for <bpf@vger.kernel.org>; Sat, 25 Mar 2023 03:23:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112; t=1679739801;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ogHvFp5W4VZQ/COOYeomRjYjWy0vaDSzhVHiCwG/GNA=;
-        b=nKniuQtfwCWDxyUC7y62NuvEqUaaeoz6ovTkjl7ixashWxqDPAl7uceRtMJ2UN2PsC
-         7iTR+YeTfU1SREVw6y2ErIBFf6Mrx1YnQSIfvQmXZF8s3S1dYXO0MlQ29aKeOG6McUXq
-         TDXLq8Lm73dM10XSh1qA88/u56MeD6jqB/xUEAhhpN2sOHdOlLcDqtNfJrx8jC8W34iB
-         KrWRhuXiZKP7jGdj7o+2fcWc0v534Pf9fI/8X8lagzm8ZvxbQjf1CjnpSL1UD+Ds4xKD
-         en0C1YGElvmFny+QSDAm8xMRGqg+aD6QHmjG3nHm1/dXLeTWVVzSZlISFgEsc87gWGL0
-         umYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679739801;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ogHvFp5W4VZQ/COOYeomRjYjWy0vaDSzhVHiCwG/GNA=;
-        b=RIxE+fHNwIhFeAU374b7CEeYHd0MCKs6aV2uR4lN1Slw75mzT5756qaB7aCaecxJJR
-         qZHh/zzUgvVoMUC8E6tSRpom1PasWCWbDxmAnvz+8KHCB2ulRyiRDKGVhs1zY5g1bCZk
-         XNq1zD4Nn3epvaODaJrodTlmZPvmWoR39GVeIAMIeOX4SUVYx7OIl72HCrTjzmIR0pi0
-         Qq0eXGNvP1PJfizyFkzD56bacD5O+uESGJ3fvH+SWmI9/KKldFKeJgyMU/YlATdZjvP4
-         t6XtyraWrBfHtlnzKSCITKFbAGAxcKthZ+lYxioRL7uITCI3XcXXO7ETQdyeDH7G5o2x
-         UP+g==
-X-Gm-Message-State: AAQBX9c1DipadC2AmlqK+5WT1fTI746m0MZro8p8aPMGzj6lmOye+Qh1
-        jH1UHxovpdXj2GlChEiBrf2S2AbL+Dy4rg==
-X-Google-Smtp-Source: AKy350ZsB3wy/CQK0jh4OwZTY01awUg86+Nrd/g4DZtjTd9emvgfURQQvmW9BbW+88onXo48g1jbPA==
-X-Received: by 2002:a62:1a49:0:b0:625:ffed:b3d1 with SMTP id a70-20020a621a49000000b00625ffedb3d1mr5270258pfa.7.1679739801213;
-        Sat, 25 Mar 2023 03:23:21 -0700 (PDT)
-Received: from mariner-vm.. (dhcp-9320.meeting.ietf.org. [31.133.147.32])
-        by smtp.gmail.com with ESMTPSA id a24-20020a62e218000000b00627f2f23624sm11656419pfi.159.2023.03.25.03.23.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Mar 2023 03:23:20 -0700 (PDT)
-From:   Dave Thaler <dthaler1968@googlemail.com>
-To:     bpf@vger.kernel.org
-Cc:     bpf@ietf.org, Dave Thaler <dthaler@microsoft.com>
-Subject: [PATCH bpf-next v4] bpf, docs: Add extended call instructions
-Date:   Sat, 25 Mar 2023 10:23:14 +0000
-Message-Id: <20230325102314.1504-1-dthaler1968@googlemail.com>
-X-Mailer: git-send-email 2.33.4
+        with ESMTP id S229600AbjCYLmq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 25 Mar 2023 07:42:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A661540C9;
+        Sat, 25 Mar 2023 04:42:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FE6760C3A;
+        Sat, 25 Mar 2023 11:42:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BA59C433D2;
+        Sat, 25 Mar 2023 11:42:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679744563;
+        bh=rnV8vhzu4re24iNDIq/2qMh6krx9j4K6r/K6LBYSd1o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cU2SNM7Ob/fuo4CkAlaLBPTzSx/Q9Vdi32vE494pPOBjP0GQ5wgMtgDUbUN4k6smP
+         14bixCzG77Grf19trudyFENlyYdPkz73nu3C3IvnAL2n1k6p99dkFICVJe7G6zjdmi
+         ojSbVJUK2Vv9I7FcHb+9m5rF5SEMFbjX6UGLQXXu6EPWPelyi5dLC7ZGzs1rW+vbvo
+         rfxVZ5O5uHHCqO8FREzOQjaRlrMnELi4va1U9ml27cUTQ5mXZqF16gWmW0P8JmPJ9Z
+         UKs7787/i9/Xf9DMlXxQllkZtuAcahwiBxp+wW19bHo5/C1EfONzXinsrUGlOdqHwA
+         brb+qB5SxUY0w==
+Received: by mail-oi1-f175.google.com with SMTP id f17so3104196oiw.10;
+        Sat, 25 Mar 2023 04:42:43 -0700 (PDT)
+X-Gm-Message-State: AO0yUKWg8HJ1R3PHa6PoSlcUiihmz+xIHme+ilB0dS6o9bScnhkA3s6/
+        nlfmpC6kLsL9c8ojSq0Ys4cfj4jKhpbLZmLsQmU=
+X-Google-Smtp-Source: AK7set+GftPqKl51eP0hVJ8JeyHT8kMXKRZgx44rAso/ik0kS61bItFbwtMDQt8lpj14WMSyp80hI2PxKbQdflBSX14=
+X-Received: by 2002:a05:6808:284:b0:384:33df:4dfc with SMTP id
+ z4-20020a056808028400b0038433df4dfcmr1534567oic.11.1679744562739; Sat, 25 Mar
+ 2023 04:42:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221012233500.156764-1-masahiroy@kernel.org> <ZBovCrMXJk7NPISp@aurel32.net>
+ <CAMj1kXHwtb9aY+vd4e69Wg47GpL0sT=dDaCUA1sF7=edzc+Qeg@mail.gmail.com>
+ <ZBzAp457rrO52FPy@aurel32.net> <CAMj1kXHvfHwQFX1SKbUvpHWOr3+i7Tp5Hod-_jZE4hDHZmmRZg@mail.gmail.com>
+ <CAK7LNASdsWMP2jud4niOkrR5+a2jG-Vfo0XEa63bh3L3W6_t0Q@mail.gmail.com>
+In-Reply-To: <CAK7LNASdsWMP2jud4niOkrR5+a2jG-Vfo0XEa63bh3L3W6_t0Q@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 25 Mar 2023 20:42:06 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASUbyDV-kMi3fuihUdfnhtzHnk9wosQ0w-fuamDcT2ZBg@mail.gmail.com>
+Message-ID: <CAK7LNASUbyDV-kMi3fuihUdfnhtzHnk9wosQ0w-fuamDcT2ZBg@mail.gmail.com>
+Subject: Re: [PATCH] arm64: remove special treatment for the link order of head.o
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
+        <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Dave Thaler <dthaler@microsoft.com>
+On Sat, Mar 25, 2023 at 3:05=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
+>
+> On Fri, Mar 24, 2023 at 8:33=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org> =
+wrote:
+> >
+> > (cc BTF list and maintainer)
+> >
+> > On Thu, 23 Mar 2023 at 22:12, Aurelien Jarno <aurelien@aurel32.net> wro=
+te:
+> > >
+> > > Hi,
+> > >
+> > > On 2023-03-22 15:51, Ard Biesheuvel wrote:
+> > > > On Tue, 21 Mar 2023 at 23:26, Aurelien Jarno <aurelien@aurel32.net>=
+ wrote:
+> > > > >
+> > > > > Hi,
+> > > > >
+> > > > > On 2022-10-13 08:35, Masahiro Yamada wrote:
+> > > > > > In the previous discussion (see the Link tag), Ard pointed out =
+that
+> > > > > > arm/arm64/kernel/head.o does not need any special treatment - t=
+he only
+> > > > > > piece that must appear right at the start of the binary image i=
+s the
+> > > > > > image header which is emitted into .head.text.
+> > > > > >
+> > > > > > The linker script does the right thing to do. The build system =
+does
+> > > > > > not need to manipulate the link order of head.o.
+> > > > > >
+> > > > > > Link: https://lore.kernel.org/lkml/CAMj1kXH77Ja8bSsq2Qj8Ck9iSZK=
+w=3D1F8Uy-uAWGVDm4-CG=3DEuA@mail.gmail.com/
+> > > > > > Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+> > > > > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > > > > > ---
+> > > > > >
+> > > > > >  scripts/head-object-list.txt | 1 -
+> > > > > >  1 file changed, 1 deletion(-)
+> > > > > >
+> > > > > > diff --git a/scripts/head-object-list.txt b/scripts/head-object=
+-list.txt
+> > > > > > index b16326a92c45..f226e45e3b7b 100644
+> > > > > > --- a/scripts/head-object-list.txt
+> > > > > > +++ b/scripts/head-object-list.txt
+> > > > > > @@ -15,7 +15,6 @@ arch/alpha/kernel/head.o
+> > > > > >  arch/arc/kernel/head.o
+> > > > > >  arch/arm/kernel/head-nommu.o
+> > > > > >  arch/arm/kernel/head.o
+> > > > > > -arch/arm64/kernel/head.o
+> > > > > >  arch/csky/kernel/head.o
+> > > > > >  arch/hexagon/kernel/head.o
+> > > > > >  arch/ia64/kernel/head.o
+> > > > >
+> > > > > This patch causes a significant increase of the arch/arm64/boot/I=
+mage
+> > > > > size. For instance the generic arm64 Debian kernel went from 31 t=
+o 39 MB
+> > > > > after this patch has been applied to the 6.1 stable tree.
+> > > > >
+> > > > > In turn this causes issues with some bootloaders, for instance U-=
+Boot on
+> > > > > a Raspberry Pi limits the kernel size to 36 MB.
+> > > > >
+> > > >
+> > > > I cannot reproduce this with mainline
+> > > >
+> > > > With the patch
+> > > >
+> > > > $ size vmlinux
+> > > >    text    data     bss     dec     hex filename
+> > > > 24567309 14752630 621680 39941619 26175f3 vmlinux
+> > > >
+> > > > With the patch reverted
+> > > >
+> > > > $ size vmlinux
+> > > >    text    data     bss     dec     hex filename
+> > > > 24567309 14752694 621680 39941683 2617633 vmlinux
+> > >
+> > > I have tried with the current mainline, this is what I get, using GCC=
+ 12.2.0
+> > > and binutils 2.40:
+> > >
+> > >    text    data     bss     dec     hex filename
+> > > 32531655        8192996  621968 41346619        276e63b vmlinux.orig
+> > > 25170610        8192996  621968 33985574        2069426 vmlinux.rever=
+t
+> > >
+> > > > It would help to compare the resulting vmlinux ELF images from both
+> > > > builds to see where the extra space is being allocated
+> > >
+> > > At a first glance, it seems the extra space is allocated in the BTF
+> > > section. I have uploaded the resulting files as well as the config fi=
+le
+> > > I used there:
+> > > https://temp.aurel32.net/linux-arm64-size-head.o.tar.gz
+> > >
+> >
+> > Indeed. So we go from
+> >
+> >   [15] .BTF              PROGBITS         ffff8000091d1ff4  011e1ff4
+> >        00000000005093d6  0000000000000000   A       0     0     1
+> >
+> > to
+> >
+> >   [15] .BTF              PROGBITS         ffff8000091d1ff4  011e1ff4
+> >        0000000000c0e5eb  0000000000000000   A       0     0     1
+> >
+> > i.e, from 5 MiB to 12+ MiB of BTF metadata.
+> >
+> > To me, it is not clear at all how one would be related to the other,
+> > so it will leave it to the Kbuild and BTF experts to chew on this one.
+>
+>
+>
+> Strange.
+>
+> I used the .config file Aurelien provided, but
+> I still cannot reproduce this issue.
+>
+>
+> The vmlinux size is small
+> as-is in the current mainline.
+>
+>
+>
+> [mainline]
+>
+>
+> masahiro@zoe:~/ref/linux(master)$ git log --oneline -1
+> 65aca32efdcb (HEAD -> master, origin/master, origin/HEAD) Merge tag
+> 'mm-hotfixes-stable-2023-03-24-17-09' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+> masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-size  vmlinux
+>    text    data     bss     dec     hex filename
+> 24561282 8186912 622032 33370226 1fd3072 vmlinux
+> masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-readelf -S
+> vmlinux | grep -A1 BTF
+>   [15] .BTF              PROGBITS         ffff8000091c0708  011d0708
+>        000000000048209c  0000000000000000   A       0     0     1
+>   [16] .BTF_ids          PROGBITS         ffff8000096427a4  016527a4
+>        0000000000000a1c  0000000000000000   A       0     0     1
+>
+>
+>
+>
+> [mainline + revert 994b7ac]
+>
+> masahiro@zoe:~/ref/linux2(testing)$ git log --oneline -2
+> 856c80dd789c (HEAD -> testing) Revert "arm64: remove special treatment
+> for the link order of head.o"
+> 65aca32efdcb (origin/master, origin/HEAD, master) Merge tag
+> 'mm-hotfixes-stable-2023-03-24-17-09' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+> masahiro@zoe:~/ref/linux2(testing)$ aarch64-linux-gnu-size  vmlinux
+>    text    data     bss     dec     hex filename
+> 24561329 8186912 622032 33370273 1fd30a1 vmlinux
+> masahiro@zoe:~/ref/linux2(testing)$ aarch64-linux-gnu-readelf -S
+> vmlinux | grep -A1 BTF
+>   [15] .BTF              PROGBITS         ffff8000091c0708  011d0708
+>        00000000004820cb  0000000000000000   A       0     0     1
+>   [16] .BTF_ids          PROGBITS         ffff8000096427d4  016527d4
+>        0000000000000a1c  0000000000000000   A       0     0     1
+>
+>
+>
+> I still do not know what affects reproducibility.
+> (compiler version, pahole version, etc. ?)
+>
+>
+>
+>
+> Aurelien used GCC 12 + binutils 2.40, but
+> my toolchain is a bit older.
+>
+>
+>
+> FWIW, I tested this on Ubuntu 22.04LTS.
+>
+> masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-gcc --version
+> aarch64-linux-gnu-gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
+> Copyright (C) 2021 Free Software Foundation, Inc.
+> This is free software; see the source for copying conditions.  There is N=
+O
+> warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOS=
+E.
+>
+> masahiro@zoe:~/ref/linux(master)$ pahole --version
+> v1.22
+>
+> masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-as --version
+> GNU assembler (GNU Binutils for Ubuntu) 2.38
+> Copyright (C) 2022 Free Software Foundation, Inc.
+> This program is free software; you may redistribute it under the terms of
+> the GNU General Public License version 3 or later.
+> This program has absolutely no warranty.
+> This assembler was configured for a target of `aarch64-linux-gnu'.
 
-Add extended call instructions.  Uses the term "program-local" for
-call by offset.  And there are instructions for calling helper functions
-by "address" (the old way of using integer values), and for calling
-helper functions by BTF ID (for kfuncs).
 
----
-V1 -> V2: addressed comments from David Vernet
 
-V2 -> V3: make descriptions in table consistent with updated names
 
-V3 -> V4: addressed comments from Alexei
 
-Signed-off-by: Dave Thaler <dthaler@microsoft.com>
----
- Documentation/bpf/instruction-set.rst | 59 +++++++++++++++++----------
- 1 file changed, 37 insertions(+), 22 deletions(-)
+I did the same things in Deiban sid
+in order to use newer versions of tools.
 
-diff --git a/Documentation/bpf/instruction-set.rst b/Documentation/bpf/instruction-set.rst
-index 5e43e14abe8..ed8f35becb2 100644
---- a/Documentation/bpf/instruction-set.rst
-+++ b/Documentation/bpf/instruction-set.rst
-@@ -242,35 +242,50 @@ Jump instructions
- otherwise identical operations.
- The 'code' field encodes the operation as below:
- 
--========  =====  =========================  ============
--code      value  description                notes
--========  =====  =========================  ============
--BPF_JA    0x00   PC += off                  BPF_JMP only
--BPF_JEQ   0x10   PC += off if dst == src
--BPF_JGT   0x20   PC += off if dst > src     unsigned
--BPF_JGE   0x30   PC += off if dst >= src    unsigned
--BPF_JSET  0x40   PC += off if dst & src
--BPF_JNE   0x50   PC += off if dst != src
--BPF_JSGT  0x60   PC += off if dst > src     signed
--BPF_JSGE  0x70   PC += off if dst >= src    signed
--BPF_CALL  0x80   function call              see `Helper functions`_
--BPF_EXIT  0x90   function / program return  BPF_JMP only
--BPF_JLT   0xa0   PC += off if dst < src     unsigned
--BPF_JLE   0xb0   PC += off if dst <= src    unsigned
--BPF_JSLT  0xc0   PC += off if dst < src     signed
--BPF_JSLE  0xd0   PC += off if dst <= src    signed
--========  =====  =========================  ============
-+========  =====  ===  ===========================================  =========================================
-+code      value  src  description                                  notes
-+========  =====  ===  ===========================================  =========================================
-+BPF_JA    0x0    0x0  PC += offset                                 BPF_JMP only
-+BPF_JEQ   0x1    any  PC += offset if dst == src
-+BPF_JGT   0x2    any  PC += offset if dst > src                    unsigned
-+BPF_JGE   0x3    any  PC += offset if dst >= src                   unsigned
-+BPF_JSET  0x4    any  PC += offset if dst & src
-+BPF_JNE   0x5    any  PC += offset if dst != src
-+BPF_JSGT  0x6    any  PC += offset if dst > src                    signed
-+BPF_JSGE  0x7    any  PC += offset if dst >= src                   signed
-+BPF_CALL  0x8    0x0  call helper function by address		   see `Helper functions`_
-+BPF_CALL  0x8    0x1  call PC += offset                            see `Program-local functions`_
-+BPF_CALL  0x8    0x2  call helper function by BTF ID               see `Helper functions`_
-+BPF_EXIT  0x9    0x0  return                                       BPF_JMP only
-+BPF_JLT   0xa    any  PC += offset if dst < src                    unsigned
-+BPF_JLE   0xb    any  PC += offset if dst <= src                   unsigned
-+BPF_JSLT  0xc    any  PC += offset if dst < src                    signed
-+BPF_JSLE  0xd    any  PC += offset if dst <= src                   signed
-+========  =====  ===  ===========================================  =========================================
- 
- The eBPF program needs to store the return value into register R0 before doing a
--BPF_EXIT.
-+``BPF_EXIT``.
- 
- Helper functions
- ~~~~~~~~~~~~~~~~
- 
- Helper functions are a concept whereby BPF programs can call into a
--set of function calls exposed by the runtime.  Each helper
--function is identified by an integer used in a ``BPF_CALL`` instruction.
--The available helper functions may differ for each program type.
-+set of function calls exposed by the underlying platform.
-+
-+Historically, each helper function was identified by an address
-+encoded in the imm field.  The available helper functions may differ
-+for each program type, but address values are unique across all program types.
-+
-+Platforms that support the BPF Type Format (BTF) support identifying
-+a helper function by a BTF ID encoded in the imm field, where the BTF ID
-+identifies the helper name and type.
-+
-+Program-local functions
-+~~~~~~~~~~~~~~~~~~~~~~~
-+Program-local functions are functions exposed by the same BPF program as the
-+caller, and are referenced by offset from the call instruction, similar to
-+``BPF_JA``.  A ``BPF_EXIT`` within the program-local function will return to
-+the caller.
- 
- Load and store instructions
- ===========================
--- 
-2.33.4
 
+
+Yup, I saw a huge increase in the .BTF section,
+and observed the difference w/wo 994b7ac.
+
+masahiro@3e9802d667e3:~/ref/linux2$ aarch64-linux-gnu-readelf -S
+vmlinux | grep -A1 BTF
+  [15] .BTF              PROGBITS         ffff8000091d26c4  011e26c4
+       000000000093e626  0000000000000000   A       0     0     1
+  [16] .BTF_ids          PROGBITS         ffff800009b10cec  01b20cec
+       0000000000000a1c  0000000000000000   A       0     0     1
+
+
+I guess some tool might be affecting this.
+Even with 994b7ac reverted, the .BTF section
+is much bigger.
+
+
+At the same time, I saw a ton of warnings
+while building BTF.
+
+
+masahiro@3e9802d667e3:~/ref/linux2$ cat /etc/os-release
+PRETTY_NAME=3D"Debian GNU/Linux bookworm/sid"
+NAME=3D"Debian GNU/Linux"
+VERSION_CODENAME=3Dbookworm
+ID=3Ddebian
+HOME_URL=3D"https://www.debian.org/"
+SUPPORT_URL=3D"https://www.debian.org/support"
+BUG_REPORT_URL=3D"https://bugs.debian.org/"
+
+
+
+  LD      vmlinux
+  BTFIDS  vmlinux
+WARN: multiple IDs found for 'task_struct': 177, 16690 - using 177
+WARN: multiple IDs found for 'file': 517, 16712 - using 517
+WARN: multiple IDs found for 'vm_area_struct': 524, 16714 - using 524
+WARN: multiple IDs found for 'inode': 586, 16773 - using 586
+WARN: multiple IDs found for 'path': 618, 16802 - using 618
+WARN: multiple IDs found for 'task_struct': 177, 17267 - using 177
+WARN: multiple IDs found for 'file': 517, 17312 - using 517
+WARN: multiple IDs found for 'vm_area_struct': 524, 17315 - using 524
+WARN: multiple IDs found for 'seq_file': 1029, 17376 - using 1029
+WARN: multiple IDs found for 'inode': 586, 17494 - using 586
+WARN: multiple IDs found for 'path': 618, 17523 - using 618
+WARN: multiple IDs found for 'cgroup': 704, 17532 - using 704
+WARN: multiple IDs found for 'task_struct': 177, 18652 - using 177
+WARN: multiple IDs found for 'file': 517, 18704 - using 517
+WARN: multiple IDs found for 'vm_area_struct': 524, 18707 - using 524
+WARN: multiple IDs found for 'seq_file': 1029, 18781 - using 1029
+WARN: multiple IDs found for 'inode': 586, 18911 - using 586
+WARN: multiple IDs found for 'path': 618, 18940 - using 618
+WARN: multiple IDs found for 'cgroup': 704, 18949 - using 704
+WARN: multiple IDs found for 'task_struct': 177, 20514 - using 177
+WARN: multiple IDs found for 'file': 517, 20515 - using 517
+WARN: multiple IDs found for 'vm_area_struct': 524, 20541 - using 524
+WARN: multiple IDs found for 'inode': 586, 20595 - using 586
+WARN: multiple IDs found for 'path': 618, 20624 - using 618
+WARN: multiple IDs found for 'cgroup': 704, 20639 - using 704
+WARN: multiple IDs found for 'seq_file': 1029, 20801 - using 1029
+   ...
+
+
+
+
+I am not sure whether these warnings are related to
+the current issue or not.
+
+
+I did not look into it any further.
+I may not be seeing a sane build result.
+
+
+--=20
+Best Regards
+Masahiro Yamada
