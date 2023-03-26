@@ -2,52 +2,53 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13495C7619A
-	for <bpf@archiver.kernel.org>; Sun, 26 Mar 2023 09:22:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9032AC77B62
+	for <bpf@archiver.kernel.org>; Sun, 26 Mar 2023 09:22:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231819AbjCZJWW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 26 Mar 2023 05:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43006 "EHLO
+        id S231833AbjCZJWX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 26 Mar 2023 05:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjCZJWU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S230192AbjCZJWU (ORCPT <rfc822;bpf@vger.kernel.org>);
         Sun, 26 Mar 2023 05:22:20 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C2F5BB1;
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F099032;
         Sun, 26 Mar 2023 02:22:19 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id t19so5854847qta.12;
+Received: by mail-qt1-x82f.google.com with SMTP id bz27so5883656qtb.1;
         Sun, 26 Mar 2023 02:22:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679822537;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4JUY0vHvLERzzHWhNq8Rp87qcHqbkDVGp191/I1Fx0o=;
-        b=hxPGVTILocq4nVaMiPMZ+SChKdyPTIUO2eHI7YCoUEHkOB5mK5TxFtSs1jCKOUPltB
-         xykIzzPNFliOyqGx5MZoG/R2wB4+OgBiBgr9CYJAKiXmBJMNC08/+X8naNgmlbkhbPgy
-         3KplZNvj6cImdSZ72dAZGR7JS/GvIFsOkBoQp5umvFqDz2VMDNUS8FU6OTfyGfahpeBf
-         UsaKolEb9DWSuloVPXcVhleg0kUaoKxAhWq78chCp7T/wEx8uZP9JoFw51eUGt00joYz
-         VGx7N7K6YHPOZjUjdiwXPwB9YkKdSmT84qQwDFechghEBJhitGcoLk2vS6ZthdODqDIA
-         Q+0A==
+        d=gmail.com; s=20210112; t=1679822539;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fqlnazOt7kJ3822TP+aL3SiF//u+HTRXad+baVnErHY=;
+        b=ULRmL+goUMzVI5YM5Y3Tyb6Q3Ydk4wgw8+6UtQFRH6EdEXFLldFizOc9kXUV0CRl/o
+         OwLu+mZCMJ7VUWMBNtO9bEU3nRuILHZtYR6BYOzE8dPY2AUmKxv9/8WJEF138QpnKxsa
+         +kAu7TUP7430uq1suJArrJQU+HQ+6vvvKQhK6HCCsAovvHrMlr9FG0Xchxfk5jHwV+q/
+         zmPpsOwGDOG8odIJR86LI5L++nbeSpoPDyXGCHaykARBdbfNBazeOlLoirujo51KSOmN
+         ROb48wG0E2fmz2aBbOsjusCsoJPCq19F3r9/D8m9KLog+wmLgTpS0/8d1C112df0pn8D
+         VmYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679822537;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4JUY0vHvLERzzHWhNq8Rp87qcHqbkDVGp191/I1Fx0o=;
-        b=WL7xqxtTK2cmtizlZef+TCvGV2o7/PCUVOd4pOI3JuGubXxz9eiTiHFdeB+XQDNvRu
-         gwJ2nPRlk0KFo7TifJHMo/UEQCTe3LLUqNJ+zt5UFv1TOTKKG0lUZnLyA9Y1uR2D7Vhj
-         W8RImHYtp9kq/1uJbwJoSoQ9+miF7SqfpUxwJHyXa3UtYVknjnHZeG5KTZ33F9zP5YsD
-         D0Wzmry2xGZ3+D0c4ag29ZFzVk6mMKQeXBd0X5qX2SAWQ6rRYy/kIozSjq0ZYnlh/k++
-         yCDTyBy+CEATlFNfyCby1AyJxuwfE7Vrzyz2Oocmp95jsz+1TnCuKf/Vh4RqjHJDNQIf
-         od4w==
-X-Gm-Message-State: AO0yUKWNFdWMkNAN/7pC9+ZK+K2xEM9RWaREzQuCOWaKRjpU7hEh4qjT
-        mQl3qyTal7E3lznB4Ua8JbE=
-X-Google-Smtp-Source: AK7set9TQzi3X0S39HxxJgzr/e5oAq0ITGXEKrPv9HvQXPBphCrYAtfB0F+0ePye1aAQNqV3OvZOvA==
-X-Received: by 2002:a05:622a:1983:b0:3e0:3d65:19d2 with SMTP id u3-20020a05622a198300b003e03d6519d2mr14458863qtc.20.1679822537149;
-        Sun, 26 Mar 2023 02:22:17 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679822539;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fqlnazOt7kJ3822TP+aL3SiF//u+HTRXad+baVnErHY=;
+        b=PTi/khpkbT5ftwnbkTRCemBQfJ1QETMY8fksWmgu0Ea1wA3/CO76z9M0RzaeJ+oecj
+         V+BrXn6aDpvF9+RgOjxqjAfxppFjgO+SmHkZDZCMKA8ZD9juXW+N14neuGcLA/XnfArO
+         8dNucy6Vhp1pMw1dYfMRfDUl7t5SUU3h1c2aquNCmYsv3KveiiaYEkEIVydr9O8p7llJ
+         33XwS7+1T6ibQYVvtvXNBhuvjU1e9yQpET9VjsqPQc7HqCR54wKnDonPeEzitGt0DIii
+         0Nu4kRd2kH+BObXj+/64vyR6YE8g+HkTH41CYbTYdkDVRn6BB08evRIBpDzx1XaGmnyo
+         CsVQ==
+X-Gm-Message-State: AO0yUKXteKmKXvdFMKhTEvIU9GMFO7m3BbS+wv1blKuis2MznGbd/dYx
+        pm7/TDsHDaI3zhWSCqohpXI=
+X-Google-Smtp-Source: AK7set+qWJoVPRpZDJF9uabDzOXssV1aMtfo3xOWWbAi38faUnSMo8mfC7IGQwWLWU01/6M+R0ifFA==
+X-Received: by 2002:a05:622a:c6:b0:3b6:2c3b:8c00 with SMTP id p6-20020a05622a00c600b003b62c3b8c00mr15120345qtw.66.1679822538836;
+        Sun, 26 Mar 2023 02:22:18 -0700 (PDT)
 Received: from vultr.guest ([2001:19f0:1000:1a1f:5400:4ff:fe5e:1d32])
-        by smtp.gmail.com with ESMTPSA id y5-20020ac87085000000b003e014845d9esm10257987qto.74.2023.03.26.02.22.16
+        by smtp.gmail.com with ESMTPSA id y5-20020ac87085000000b003e014845d9esm10257987qto.74.2023.03.26.02.22.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Mar 2023 02:22:16 -0700 (PDT)
+        Sun, 26 Mar 2023 02:22:18 -0700 (PDT)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
@@ -55,101 +56,40 @@ To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         haoluo@google.com, jolsa@kernel.org
 Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         Yafang Shao <laoar.shao@gmail.com>
-Subject: [RFC PATCH bpf-next 00/13] bpf: Introduce BPF namespace 
-Date:   Sun, 26 Mar 2023 09:21:55 +0000
-Message-Id: <20230326092208.13613-1-laoar.shao@gmail.com>
+Subject: [RFC PATCH bpf-next 02/13] proc_ns: Extend the field type in struct proc_ns_operations to long
+Date:   Sun, 26 Mar 2023 09:21:57 +0000
+Message-Id: <20230326092208.13613-3-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230326092208.13613-1-laoar.shao@gmail.com>
+References: <20230326092208.13613-1-laoar.shao@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently only CAP_SYS_ADMIN can iterate BPF object IDs and convert IDs
-to FDs, that's intended for BPF's security model[1]. Not only does it
-prevent non-privilidged users from getting other users' bpf program, but
-also it prevents the user from iterating his own bpf objects.
+In struct proc_ns_operations, the field 'type' is the new namespace
+clone flag. As the newly introduced CLONE_NEWBPF is more than 32bit,
+we need also extend this field from int to long to adapt to this change.
 
-In container environment, some users want to run bpf programs in their
-containers. These users can run their bpf programs under CAP_BPF and
-some other specific CAPs, but they can't inspect their bpf programs in a
-generic way. For example, the bpftool can't be used as it requires
-CAP_SYS_ADMIN. That is very inconvenient.
+Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+---
+ include/linux/proc_ns.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Without CAP_SYS_ADMIN, the only way to get the information of a bpf object
-which is not created by the process itself is with SCM_RIGHTS, that
-requires each processes which created bpf object has to implement a unix
-domain socket to share the fd of a bpf object between different
-processes, that is really trivial and troublesome.
-
-Hence we need a better mechanism to get bpf object info without
-CAP_SYS_ADMIN. 
-
-BPF namespace is introduced in this patchset with an attempt to remove 
-the CAP_SYS_ADMIN requirement. The user can create bpf map, prog and
-link in a specific bpf namespace, then these bpf objects will not be
-visible to the users in a different bpf namespace. But these bpf
-objects are visible to its parent bpf namespace, so the sys admin can 
-still iterate and inspect them.
-
-BPF namespace is similar to PID namespace, and the bpf objects are
-similar to tasks, so BPF namespace is very easy to understand. These
-patchset only implements BPF namespace for bpf map, prog and link. In the
-future we may extend it to other bpf objects like btf, bpffs and etc.
-For example, we can allow some of the BTF objects to be used in
-non-init bpf namespace, then the container user can only trace the
-processes running in his container, but can't get the information of
-tasks running in other containers.
-
-A simple example is introduced into selftests/bpf on how to use the bpf
-namespace.
-
-Putting bpf map, prog and link into bpf namespace is the first step.
-Let's start with it.
-
-[1]. https://lore.kernel.org/bpf/20200513230355.7858-1-alexei.starovoitov@gmail.com/
-
-Yafang Shao (13):
-  fork: New clone3 flag for BPF namespace
-  proc_ns: Extend the field type in struct proc_ns_operations to long
-  bpf: Implement bpf namespace
-  bpf: No need to check if id is 0
-  bpf: Make bpf objects id have the same alloc and free pattern
-  bpf: Helpers to alloc and free object id in bpf namespace
-  bpf: Add bpf helper to get bpf object id
-  bpf: Alloc and free bpf_map id in bpf namespace
-  bpf: Alloc and free bpf_prog id in bpf namespace
-  bpf: Alloc and free bpf_link id in bpf namespace
-  bpf: Allow iterating bpf objects with CAP_BPF in bpf namespace
-  bpf: Use bpf_idr_lock array instead
-  selftests/bpf: Add selftest for bpf namespace
-
- fs/proc/namespaces.c                      |   4 +
- include/linux/bpf.h                       |   9 +-
- include/linux/bpf_namespace.h             |  88 ++++++++++
- include/linux/nsproxy.h                   |   4 +
- include/linux/proc_ns.h                   |   3 +-
- include/linux/user_namespace.h            |   1 +
- include/uapi/linux/bpf.h                  |   7 +
- include/uapi/linux/sched.h                |   1 +
- kernel/bpf/Makefile                       |   1 +
- kernel/bpf/bpf_namespace.c                | 283 ++++++++++++++++++++++++++++++
- kernel/bpf/offload.c                      |  16 +-
- kernel/bpf/syscall.c                      | 262 ++++++++++-----------------
- kernel/bpf/task_iter.c                    |  12 ++
- kernel/fork.c                             |   5 +-
- kernel/nsproxy.c                          |  19 +-
- kernel/trace/bpf_trace.c                  |   2 +
- kernel/ucount.c                           |   1 +
- tools/bpf/bpftool/skeleton/pid_iter.bpf.c |  13 +-
- tools/include/uapi/linux/bpf.h            |   7 +
- tools/testing/selftests/bpf/Makefile      |   3 +-
- tools/testing/selftests/bpf/test_bpfns.c  |  76 ++++++++
- 21 files changed, 637 insertions(+), 180 deletions(-)
- create mode 100644 include/linux/bpf_namespace.h
- create mode 100644 kernel/bpf/bpf_namespace.c
- create mode 100644 tools/testing/selftests/bpf/test_bpfns.c
-
+diff --git a/include/linux/proc_ns.h b/include/linux/proc_ns.h
+index 75807ec..555c257 100644
+--- a/include/linux/proc_ns.h
++++ b/include/linux/proc_ns.h
+@@ -16,7 +16,7 @@
+ struct proc_ns_operations {
+ 	const char *name;
+ 	const char *real_ns_name;
+-	int type;
++	long type;
+ 	struct ns_common *(*get)(struct task_struct *task);
+ 	void (*put)(struct ns_common *ns);
+ 	int (*install)(struct nsset *nsset, struct ns_common *ns);
 -- 
 1.8.3.1
 
