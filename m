@@ -2,77 +2,101 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF11AC76195
-	for <bpf@archiver.kernel.org>; Mon, 27 Mar 2023 18:50:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E940C6FD1D
+	for <bpf@archiver.kernel.org>; Mon, 27 Mar 2023 18:52:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232019AbjC0Suv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Mar 2023 14:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42778 "EHLO
+        id S232289AbjC0SwS convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Mon, 27 Mar 2023 14:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232142AbjC0Sug (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 27 Mar 2023 14:50:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D193C11
-        for <bpf@vger.kernel.org>; Mon, 27 Mar 2023 11:50:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39978B8070D
-        for <bpf@vger.kernel.org>; Mon, 27 Mar 2023 18:50:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 02F97C4339C;
-        Mon, 27 Mar 2023 18:50:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679943018;
-        bh=572GL67cs6ab1QUecCsTXZaDILMuUMnzBhWCvK9h6xs=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=lS868eoHUq6ABKCQr2XtQPwB+FFUEDrV6zMXMfT6GXdIH3LynGqKj5WbDtMWMadEY
-         /hw9Uz30Zgvm3QCsjpY7Ig0Z2AW/A2G+zCloG9ptsLEmw5tsKv/1hjL1kLdmjSjR1z
-         pNiwA6IGV5xXv5EPat1cHJRQdE5ng2M+g5ibqfUhyrOrwSAy86X4KYlxu+hMuQ+bl5
-         qo+8gvW1seOuvZ/jXtM0w5YBxfwNpZDOfyrFkiDlBAgKheXsi8qa2px8VEpSmFnPHL
-         IhXxOafTcdaIHWRTd1pP7bRQayCUrOiggDfAA8E0g3mJuKxsmIWe9mSWwwPO6NiQZh
-         wwJuOnyIAgM5w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DCD60C41612;
-        Mon, 27 Mar 2023 18:50:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S232314AbjC0SwR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 27 Mar 2023 14:52:17 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A001732
+        for <bpf@vger.kernel.org>; Mon, 27 Mar 2023 11:52:14 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32RDAbvJ009866
+        for <bpf@vger.kernel.org>; Mon, 27 Mar 2023 11:52:14 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3phxnuu6ky-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 27 Mar 2023 11:52:13 -0700
+Received: from twshared52565.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Mon, 27 Mar 2023 11:52:12 -0700
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id 67D242C1D3DD8; Mon, 27 Mar 2023 11:52:07 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <martin.lau@kernel.org>
+CC:     <andrii@kernel.org>, <kernel-team@meta.com>
+Subject: [PATCH v4 bpf-next 2/3] veristat: add -d debug mode option to see debug libbpf log
+Date:   Mon, 27 Mar 2023 11:52:01 -0700
+Message-ID: <20230327185202.1929145-3-andrii@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230327185202.1929145-1-andrii@kernel.org>
+References: <20230327185202.1929145-1-andrii@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: Don't assume page size is 4096
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167994301790.26701.11310541166684776849.git-patchwork-notify@kernel.org>
-Date:   Mon, 27 Mar 2023 18:50:17 +0000
-References: <20230326095341.816023-1-hengqi.chen@gmail.com>
-In-Reply-To: <20230326095341.816023-1-hengqi.chen@gmail.com>
-To:     Hengqi Chen <hengqi.chen@gmail.com>
-Cc:     bpf@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: 1VjdZ9yM7J4iOCWkrkpHdFerROtTb4xE
+X-Proofpoint-ORIG-GUID: 1VjdZ9yM7J4iOCWkrkpHdFerROtTb4xE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-27_02,2023-02-09_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+Add -d option to allow requesting libbpf debug logs from veristat.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/testing/selftests/bpf/veristat.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-On Sun, 26 Mar 2023 09:53:41 +0000 you wrote:
-> The verifier test creates BPF ringbuf maps using hard-coded
-> 4096 as max_entries. Some tests will fail if the page size
-> of the running kernel is not 4096. Use getpagesize() instead.
-> 
-> Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
-> ---
->  tools/testing/selftests/bpf/test_verifier.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: Don't assume page size is 4096
-    https://git.kernel.org/bpf/bpf-next/c/7283137a7622
-
-You are awesome, thank you!
+diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
+index 83231456d3c5..263df32fbda8 100644
+--- a/tools/testing/selftests/bpf/veristat.c
++++ b/tools/testing/selftests/bpf/veristat.c
+@@ -135,6 +135,7 @@ static struct env {
+ 	char **filenames;
+ 	int filename_cnt;
+ 	bool verbose;
++	bool debug;
+ 	bool quiet;
+ 	int log_level;
+ 	enum resfmt out_fmt;
+@@ -169,7 +170,7 @@ static int libbpf_print_fn(enum libbpf_print_level level, const char *format, va
+ {
+ 	if (!env.verbose)
+ 		return 0;
+-	if (level == LIBBPF_DEBUG /* && !env.verbose */)
++	if (level == LIBBPF_DEBUG  && !env.debug)
+ 		return 0;
+ 	return vfprintf(stderr, format, args);
+ }
+@@ -186,6 +187,7 @@ static const struct argp_option opts[] = {
+ 	{ NULL, 'h', NULL, OPTION_HIDDEN, "Show the full help" },
+ 	{ "verbose", 'v', NULL, 0, "Verbose mode" },
+ 	{ "log-level", 'l', "LEVEL", 0, "Verifier log level (default 0 for normal mode, 1 for verbose mode)" },
++	{ "debug", 'd', NULL, 0, "Debug mode (turns on libbpf debug logging)" },
+ 	{ "quiet", 'q', NULL, 0, "Quiet mode" },
+ 	{ "emit", 'e', "SPEC", 0, "Specify stats to be emitted" },
+ 	{ "sort", 's', "SPEC", 0, "Specify sort order" },
+@@ -212,6 +214,10 @@ static error_t parse_arg(int key, char *arg, struct argp_state *state)
+ 	case 'v':
+ 		env.verbose = true;
+ 		break;
++	case 'd':
++		env.debug = true;
++		env.verbose = true;
++		break;
+ 	case 'q':
+ 		env.quiet = true;
+ 		break;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 
