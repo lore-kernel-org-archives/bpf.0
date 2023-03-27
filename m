@@ -2,62 +2,62 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 537FAC6FD1D
-	for <bpf@archiver.kernel.org>; Mon, 27 Mar 2023 17:55:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2371EC761A6
+	for <bpf@archiver.kernel.org>; Mon, 27 Mar 2023 17:55:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232491AbjC0RzB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Mar 2023 13:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
+        id S232597AbjC0RzM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Mar 2023 13:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232408AbjC0Ry7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 27 Mar 2023 13:54:59 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC932D65;
-        Mon, 27 Mar 2023 10:54:54 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id c18so9162659ple.11;
-        Mon, 27 Mar 2023 10:54:54 -0700 (PDT)
+        with ESMTP id S232480AbjC0RzA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 27 Mar 2023 13:55:00 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D43C26A2;
+        Mon, 27 Mar 2023 10:54:58 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id q206so5645679pgq.9;
+        Mon, 27 Mar 2023 10:54:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679939694;
+        d=gmail.com; s=20210112; t=1679939698;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AfTerV6/U69AI92CPlAfsf8FX5XYFtSurKpJkvd75cI=;
-        b=EfSuHwzAQxcT0QXdd86YFMLlA3HlDryz9kg83k/x5t+1jmUu/5Gy0NZhpacX41MDbM
-         2bhHoUaL+IGZOuqdbQ2Sm3LJJTO0YFnr4IId2i0GWgsvDHTkfO02Z7Ik6HkOXwz/HtGQ
-         ssjKytD/hIZ+BAGxbRcIEnakTEhuKi9hz+ySNNad3/l/+pUJRi8ulCnVq/PqHEok6elz
-         Ag7Gw2oMDdzJFgif/3gD4Pu5Q7benvJjCBXvWvK73IWls03O5n49htil01UyWYtVTCn0
-         jDv18ZMGb+zN9uq4zw5uvlsBnUsDuyIcwZeS+qwHD/sZn4PMdNePgJErtZcD8V1t1uP1
-         oI8w==
+        bh=5HnEXOYmvzE8cKApqzizcKudiq0fvSHKWy9J37Q8ln4=;
+        b=ZwW8SEt4LGFc6U/LUMlbh3Dqew+OucsAgxTqoklNX/CmG8nNiiS3MRuHZETlkWySL0
+         W8sxc0tcKhv2hkSOnEGHqtlTj1LWOg7duu2p9vhhIP3jekPmfOitjLzOOxUGU7HH67XS
+         p91n+DmqMSgcD1EB5fLWPqCtacmyqlwJwLxqIeYM6DHEnnbovPSX9G6myZMkkAgSVaPV
+         B7ha7s7qx2hTZWvJpjeIboGIxKElJKCsNZsSoDlf484C5aJTJi8K99nlva+Qn+0ENW4M
+         9ESqCK3nT6bdse1BtJPIuWdO7Zf9IeiiQv2ULMDvUFaGH77WEkpNa2VW5cJxTFbTGm0r
+         h5NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679939694;
+        d=1e100.net; s=20210112; t=1679939698;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AfTerV6/U69AI92CPlAfsf8FX5XYFtSurKpJkvd75cI=;
-        b=ItHEu+dyQaMd6OH40w3H72ep0eoTLZ9jU7ne2wuuaBlPM4dV2VmTQXWzYmTI/0Q12c
-         KQXRI5IQDkG9HqPzAgkQWliiTBY1uwa5Nw9Y7jUsHplSpCOxhQyxlntQ2onVZTB1vx38
-         ynFXKM2u9b4CCk1DcUxjJui4oNH+iaHLxvxGqlHBg7WlzY2ZXPOIPGzzxEKgSzqK3GrH
-         ru3yh0qEbogLm14yr2y5nSIvWsleXLs52TqyjOm95/qFkRup01zpKHKc7Nz+MuZslVG5
-         ybQTeggffHGl+c7sXOz0HAFVoN4dwUggiUqHO+OdRR58eC51BAmh5wYxsG69yn32mwi8
-         Zptw==
-X-Gm-Message-State: AO0yUKUC+gPBsTcz01s8IHxRD1aZ9CJrXo6k6rXUCNDsZDPYlCRfJwQV
-        IDHbA1558/r1/9gGiC0eZM8=
-X-Google-Smtp-Source: AK7set/CRTesWW+HYMx4XSEn53uvqJguIQsExdns0MUMSJMbzbiLMgWX/3U9BxfOFnC7cboYuph6Ww==
-X-Received: by 2002:a05:6a20:1790:b0:db:ae75:c70e with SMTP id bl16-20020a056a20179000b000dbae75c70emr11641043pzb.15.1679939693891;
-        Mon, 27 Mar 2023 10:54:53 -0700 (PDT)
+        bh=5HnEXOYmvzE8cKApqzizcKudiq0fvSHKWy9J37Q8ln4=;
+        b=TrQdnvS5Bq6UR61wA4vjaZjUTv2RD+a+MiVH3cMbb/fWvNLXaLsVAVXeidadZWw0hc
+         oI9TVHAihhsCl6/vhv4MX9YC5qm9r7uUyUw9P28ccuKjaPDU2ULBdvmfMUOqzuo/HhC4
+         1ZgDpKB/wq1uKx/l/wOWRYtt4ouTE2JOyr4bSa89EliTGZIQhRdw5ZwDPBZ45X2MnDa1
+         7FroQxHzZnn040cix1ITf+oo7RNZB1Xcrv2/szrEHvMksZpiV7DJVULCkY16q/7e489Q
+         lANbG3M2yW46kIKnsfn7Gym6zfejcN9qWGc0H72z2gjD02PHufFagdFP1pFVphyi83ze
+         GMaw==
+X-Gm-Message-State: AAQBX9eGKk2ISX93uZzAxhkM3XQmSJdBGoYEH4m2yzh2bbf3sAcbYxUw
+        MURe0F4jxNavec75QIutC6Y=
+X-Google-Smtp-Source: AKy350Yvq/+zoWDCU6gfg33ajI/1zCReghYPGkCdyPosCclz59VsPY/GiNFraRtveOFqpFa2T9YSLQ==
+X-Received: by 2002:aa7:950d:0:b0:5a8:ad9d:83f with SMTP id b13-20020aa7950d000000b005a8ad9d083fmr11971485pfp.24.1679939698065;
+        Mon, 27 Mar 2023 10:54:58 -0700 (PDT)
 Received: from john.lan ([98.97.117.131])
-        by smtp.gmail.com with ESMTPSA id r1-20020a62e401000000b005a8ba70315bsm19408316pfh.6.2023.03.27.10.54.52
+        by smtp.gmail.com with ESMTPSA id r1-20020a62e401000000b005a8ba70315bsm19408316pfh.6.2023.03.27.10.54.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 10:54:53 -0700 (PDT)
+        Mon, 27 Mar 2023 10:54:57 -0700 (PDT)
 From:   John Fastabend <john.fastabend@gmail.com>
 To:     cong.wang@bytedance.com, jakub@cloudflare.com,
         daniel@iogearbox.net, lmb@isovalent.com, edumazet@google.com
 Cc:     john.fastabend@gmail.com, bpf@vger.kernel.org,
         netdev@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
         will@isovalent.com
-Subject: [PATCH bpf v2 03/12] bpf: sockmap, improved check for empty queue
-Date:   Mon, 27 Mar 2023 10:54:37 -0700
-Message-Id: <20230327175446.98151-4-john.fastabend@gmail.com>
+Subject: [PATCH bpf v2 05/12] bpf: sockmap, TCP data stall on recv before accept
+Date:   Mon, 27 Mar 2023 10:54:39 -0700
+Message-Id: <20230327175446.98151-6-john.fastabend@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20230327175446.98151-1-john.fastabend@gmail.com>
 References: <20230327175446.98151-1-john.fastabend@gmail.com>
@@ -67,95 +67,86 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We noticed some rare sk_buffs were stepping past the queue when system was
-under memory pressure. The general theory is to skip enqueueing
-sk_buffs when its not necessary which is the normal case with a system
-that is properly provisioned for the task, no memory pressure and enough
-cpu assigned.
+A common mechanism to put a TCP socket into the sockmap is to hook the
+BPF_SOCK_OPS_{ACTIVE_PASSIVE}_ESTABLISHED_CB event with a BPF program
+that can map the socket info to the correct BPF verdict parser. When
+the user adds the socket to the map the psock is created and the new
+ops are assigned to ensure the verdict program will 'see' the sk_buffs
+as they arrive.
 
-But, if we can't allocate memory due to an ENOMEM error when enqueueing
-the sk_buff into the sockmap receive queue we push it onto a delayed
-workqueue to retry later. When a new sk_buff is received we then check
-if that queue is empty. However, there is a problem with simply checking
-the queue length. When a sk_buff is being processed from the ingress queue
-but not yet on the sockmap msg receive queue its possible to also recv
-a sk_buff through normal path. It will check the ingress queue which is
-zero and then skip ahead of the pkt being processed.
+Part of this process hooks the sk_data_ready op with a BPF specific
+handler to wake up the BPF verdict program when data is ready to read.
+The logic is simple enough (posted here for easy reading)
 
-Previously we used sock lock from both contexts which made the problem
-harder to hit, but not impossible.
+ static void sk_psock_verdict_data_ready(struct sock *sk)
+ {
+	struct socket *sock = sk->sk_socket;
 
-To fix also check the 'state' variable where we would cache partially
-processed sk_buff. This catches the majority of cases. But, we also
-need to use the mutex lock around this check because we can't have both
-codes running and check sensibly. We could perhaps do this with atomic
-bit checks, but we are already here due to memory pressure so slowing
-things down a bit seems OK and simpler to just grab a lock.
+	if (unlikely(!sock || !sock->ops || !sock->ops->read_skb))
+		return;
+	sock->ops->read_skb(sk, sk_psock_verdict_recv);
+ }
 
-To reproduce issue we run NGINX compliance test with sockmap running and
-observe some flakes in our testing that we attributed to this issue.
+The oversight here is sk->sk_socket is not assigned until the application
+accepts() the new socket. However, its entirely ok for the peer application
+to do a connect() followed immediately by sends. The socket on the receiver
+is sitting on the backlog queue of the listening socket until its accepted
+and the data is queued up. If the peer never accepts the socket or is slow
+it will eventually hit data limits and rate limit the session. But,
+important for BPF sockmap hooks when this data is received TCP stack does
+the sk_data_ready() call but the read_skb() for this data is never called
+because sk_socket is missing. The data sits on the sk_receive_queue.
+
+Then once the socket is accepted if we never receive more data from the
+peer there will be no further sk_data_ready calls and all the data
+is still on the sk_receive_queue(). Then user calls recvmsg after accept()
+and for TCP sockets in sockmap we use the tcp_bpf_recvmsg_parser() handler.
+The handler checks for data in the sk_msg ingress queue expecting that
+the BPF program has already run from the sk_data_ready hook and enqueued
+the data as needed. So we are stuck.
+
+To fix do an unlikely check in recvmsg handler for data on the
+sk_receive_queue and if it exists wake up data_ready. We have the sock
+locked in both read_skb and recvmsg so should avoid having multiple
+runners.
 
 Fixes: 04919bed948dc ("tcp: Introduce tcp_read_skb()")
-Tested-by: William Findlay <will@isovalent.com>
 Signed-off-by: John Fastabend <john.fastabend@gmail.com>
 ---
- net/core/skmsg.c | 20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
+ net/ipv4/tcp_bpf.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 96a6a3a74a67..34de0605694e 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -985,6 +985,7 @@ EXPORT_SYMBOL_GPL(sk_psock_tls_strp_read);
- static int sk_psock_verdict_apply(struct sk_psock *psock, struct sk_buff *skb,
- 				  int verdict)
- {
-+	struct sk_psock_work_state *state;
- 	struct sock *sk_other;
- 	int err = 0;
- 	u32 len, off;
-@@ -1001,13 +1002,28 @@ static int sk_psock_verdict_apply(struct sk_psock *psock, struct sk_buff *skb,
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index 3a0f43f3afd8..2c75bbcbefed 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -209,6 +209,26 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+ 		return tcp_recvmsg(sk, msg, len, flags, addr_len);
  
- 		skb_bpf_set_ingress(skb);
- 
-+		/* We need to grab mutex here because in-flight skb is in one of
-+		 * the following states: either on ingress_skb, in psock->state
-+		 * or being processed by backlog and neither in state->skb and
-+		 * ingress_skb may be also empty. The troublesome case is when
-+		 * the skb has been dequeued from ingress_skb list or taken from
-+		 * state->skb because we can not easily test this case. Maybe we
-+		 * could be clever with flags and resolve this but being clever
-+		 * got us here in the first place and we note this is done under
-+		 * sock lock and backlog conditions mean we are already running
-+		 * into ENOMEM or other performance hindering cases so lets do
-+		 * the obvious thing and grab the mutex.
-+		 */
-+		mutex_lock(&psock->work_mutex);
-+		state = &psock->work_state;
+ 	lock_sock(sk);
 +
- 		/* If the queue is empty then we can submit directly
- 		 * into the msg queue. If its not empty we have to
- 		 * queue work otherwise we may get OOO data. Otherwise,
- 		 * if sk_psock_skb_ingress errors will be handled by
- 		 * retrying later from workqueue.
- 		 */
--		if (skb_queue_empty(&psock->ingress_skb)) {
-+		if (skb_queue_empty(&psock->ingress_skb) && likely(!state->skb)) {
- 			len = skb->len;
- 			off = 0;
- 			if (skb_bpf_strparser(skb)) {
-@@ -1028,9 +1044,11 @@ static int sk_psock_verdict_apply(struct sk_psock *psock, struct sk_buff *skb,
- 			spin_unlock_bh(&psock->ingress_lock);
- 			if (err < 0) {
- 				skb_bpf_redirect_clear(skb);
-+				mutex_unlock(&psock->work_mutex);
- 				goto out_free;
- 			}
- 		}
-+		mutex_unlock(&psock->work_mutex);
- 		break;
- 	case __SK_REDIRECT:
- 		err = sk_psock_skb_redirect(psock, skb);
++	/* We may have received data on the sk_receive_queue pre-accept and
++	 * then we can not use read_skb in this context because we haven't
++	 * assigned a sk_socket yet so have no link to the ops. The work-around
++	 * is to check the sk_receive_queue and in these cases read skbs off
++	 * queue again. The read_skb hook is not running at this point because
++	 * of lock_sock so we avoid having multiple runners in read_skb.
++	 */
++	if (unlikely(!skb_queue_empty(&sk->sk_receive_queue))) {
++		tcp_data_ready(sk);
++		/* This handles the ENOMEM errors if we both receive data
++		 * pre accept and are already under memory pressure. At least
++		 * let user no to retry.
++		 */
++		if (unlikely(!skb_queue_empty(&sk->sk_receive_queue))) {
++			copied = -EAGAIN;
++			goto out;
++		}
++	}
++
+ msg_bytes_ready:
+ 	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
+ 	/* The typical case for EFAULT is the socket was gracefully
 -- 
 2.33.0
 
