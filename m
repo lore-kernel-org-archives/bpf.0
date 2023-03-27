@@ -2,62 +2,62 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 503FEC76195
-	for <bpf@archiver.kernel.org>; Mon, 27 Mar 2023 17:55:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8608BC77B60
+	for <bpf@archiver.kernel.org>; Mon, 27 Mar 2023 17:55:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232486AbjC0RzA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Mar 2023 13:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33704 "EHLO
+        id S232518AbjC0RzD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Mar 2023 13:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232411AbjC0Ryy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 27 Mar 2023 13:54:54 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D6F02681;
-        Mon, 27 Mar 2023 10:54:53 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id u38so6231303pfg.10;
-        Mon, 27 Mar 2023 10:54:53 -0700 (PDT)
+        with ESMTP id S232470AbjC0Ry7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 27 Mar 2023 13:54:59 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899C03AAC;
+        Mon, 27 Mar 2023 10:54:56 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id z18so5634428pgj.13;
+        Mon, 27 Mar 2023 10:54:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679939692;
+        d=gmail.com; s=20210112; t=1679939696;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=C16N4t/yebwnWEt3up1L0bcXG9FtrfIrB+7RyncYbw4=;
-        b=Rx+8aMu1S5OCokhgOjj9VcKAd6xcTAfr5TEZ7fMDXcdINXcSceXeRtFpbZpW/miWdW
-         L399WIgI0n/JpnazBmQVwb/TvJcSCo4EOFryfeETVAnQuHLFhkFFf2546nh67FMRs8KW
-         LU41acMfN+kDpFmTdQlTNHlDXMOWX9LdErGZ3hv7lTkF9M35Ts64XFIGPh+lpExgf3WL
-         WAu09kZ/O8/qc/ES5zuEqwpVXvmjxCr9n770yMmvQBx47lOfikOeft6BwCsXoTcSCsPA
-         seuwM4dgecw79Pc6UaH+v+Y2GLc0jPevbpT559hSbX1bfmK1z+18FshJyUkaNuX83a+l
-         HA7A==
+        bh=Y5tqObSMAtHNVK29HuvTPLgGUtx1E+Ad7BIcyyykhH0=;
+        b=C6/0yBFeM8BHKJbCVN8wpZb508TlBLlmCCgmQBBzYr09CH+jqkRNbnBN5GHo3325T9
+         ZgUBsaA7XcUfruoty6pKpAIEkosZnBIHmCBPRvgjw29kkcxRg+5tZ3dlSc7e40xdeu4q
+         pPuUO/ge7WwdVQxX5LITXywJgyVB4ugoUYqnRAPLYPcwa4WKWibxobnzDYoh61PN0paD
+         peYe0qMNI9JlZovlyILXYgycrKUJ4t20W7TMWbjah9UDD4Lchx5z4aHTKcn7ynqZEbN3
+         Cd9WlYK1fDPDurLk2Lu+l8psLNZHR6BSSimqXqC/OtBzHaFYBGYBrHweESV8N4hybYtV
+         nU3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679939692;
+        d=1e100.net; s=20210112; t=1679939696;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=C16N4t/yebwnWEt3up1L0bcXG9FtrfIrB+7RyncYbw4=;
-        b=ydJ1v6y7J35HSis6WESo3W8hxL0Ux+E/AzOw5lshch82kiocDZjtW/vbfF8CsnaJ5n
-         z/VFHU35T98I9ylMXSFchbgAEkcNv7EsZFMoYXrtE1ZeVmO0OM5kBLzdZ/WaTPxF/rdR
-         F+9r2/N/V2VEDmaWN4Lzj3tgK7yypduU96exGeISht9GHET22KOM/ThzaT+XNJ0qTOTC
-         EDTBuyOyLkfGjqAVh/F/qNFohxR3kfTAnXkq1ky143X8zCbXLuOab/+hdtwSXgVM2qr0
-         iIXh8Lg5qCtHsc9amWq+B/D5UX1Kbf3gQr7OF+i3+bB+8ZBgVhDOoFhFnd/pnLARPr6R
-         /xfg==
-X-Gm-Message-State: AO0yUKUPnZ14CXv1AG8dOM2vZBb5Tm+ZIrfW0qDJQvrAIBAjBnVju/6a
-        f+cR14zD9n0xx5hsdZM2cDzNv9DQeD8eOA==
-X-Google-Smtp-Source: AK7set+0QVnVDWf74ydnur5p6Xcm5H8+m01tD0sceNb0GvGWdGBIW4O395t06etQ17KMFQc6MtHqaA==
-X-Received: by 2002:a05:6a00:309e:b0:625:5403:cd87 with SMTP id bh30-20020a056a00309e00b006255403cd87mr15948601pfb.11.1679939692398;
-        Mon, 27 Mar 2023 10:54:52 -0700 (PDT)
+        bh=Y5tqObSMAtHNVK29HuvTPLgGUtx1E+Ad7BIcyyykhH0=;
+        b=DwFGX8uPCA31a0F/uYhzPvxa+yHerhOt8aOjug89fJGWbCRnGkoOkCSP1yP9z/gcCF
+         p7DNvVV+dj/+hI2DXBLwTS3ZEDRh+DVN3kxwbRzKZ1mX5lQ8A/s1+0AZTIz7Q8iGvDPF
+         AqqAkOb1CGs//Rbk/mdNkI1uRQFNZr+aksaG+KEHNt0U28Qe1gbuoOSymTGYC56Rjwe5
+         ALY95swy2l1iLfFvTkudEdYk04zym54WuDe2USmo5jWJfzJEQxzYnbSzsCmTqTrazCl9
+         h+TUBrNhXRuWtCxrLEtrKGZY+dSG7fCd8fhm90LoC/+ec3dhbhoJwdi2Sf3Ob1C3v3m0
+         Xf3A==
+X-Gm-Message-State: AO0yUKVbFHgCgV3twmm5sYeuEafx6Pw+fGBI1Koa+xDxOeARACqJf3ro
+        k5rPeT66wieh4RM3WcjzJ5A=
+X-Google-Smtp-Source: AK7set94V1FjHwxvalM+ftwDbvy0vMdUTn4GBWzD8uCyrN4sX2np/1MLnoOk70huPA0FrdAYrXsapA==
+X-Received: by 2002:a05:6a00:1da8:b0:5a8:c913:b108 with SMTP id z40-20020a056a001da800b005a8c913b108mr18335585pfw.9.1679939696074;
+        Mon, 27 Mar 2023 10:54:56 -0700 (PDT)
 Received: from john.lan ([98.97.117.131])
-        by smtp.gmail.com with ESMTPSA id r1-20020a62e401000000b005a8ba70315bsm19408316pfh.6.2023.03.27.10.54.50
+        by smtp.gmail.com with ESMTPSA id r1-20020a62e401000000b005a8ba70315bsm19408316pfh.6.2023.03.27.10.54.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 10:54:52 -0700 (PDT)
+        Mon, 27 Mar 2023 10:54:55 -0700 (PDT)
 From:   John Fastabend <john.fastabend@gmail.com>
 To:     cong.wang@bytedance.com, jakub@cloudflare.com,
         daniel@iogearbox.net, lmb@isovalent.com, edumazet@google.com
 Cc:     john.fastabend@gmail.com, bpf@vger.kernel.org,
         netdev@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
         will@isovalent.com
-Subject: [PATCH bpf v2 02/12] bpf: sockmap, convert schedule_work into delayed_work
-Date:   Mon, 27 Mar 2023 10:54:36 -0700
-Message-Id: <20230327175446.98151-3-john.fastabend@gmail.com>
+Subject: [PATCH bpf v2 04/12] bpf: sockmap, handle fin correctly
+Date:   Mon, 27 Mar 2023 10:54:38 -0700
+Message-Id: <20230327175446.98151-5-john.fastabend@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20230327175446.98151-1-john.fastabend@gmail.com>
 References: <20230327175446.98151-1-john.fastabend@gmail.com>
@@ -67,166 +67,73 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Sk_buffs are fed into sockmap verdict programs either from a strparser
-(when the user might want to decide how framing of skb is done by attaching
-another parser program) or directly through tcp_read_sock. The
-tcp_read_sock is the preferred method for performance when the BPF logic is
-a stream parser.
+The sockmap code is returning EAGAIN after a FIN packet is received and no
+more data is on the receive queue. Correct behavior is to return 0 to the
+user and the user can then close the socket. The EAGAIN causes many apps
+to retry which masks the problem. Eventually the socket is evicted from
+the sockmap because its released from sockmap sock free handling. The
+issue creates a delay and can cause some errors on application side.
 
-The flow for Cilium's common use case with a stream parser is,
-
- tcp_read_sock()
-  sk_psock_verdict_recv
-    ret = bpf_prog_run_pin_on_cpu()
-    sk_psock_verdict_apply(sock, skb, ret)
-     // if system is under memory pressure or app is slow we may
-     // need to queue skb. Do this queuing through ingress_skb and
-     // then kick timer to wake up handler
-     skb_queue_tail(ingress_skb, skb)
-     schedule_work(work);
-
-
-The work queue is wired up to sk_psock_backlog(). This will then walk the
-ingress_skb skb list that holds our sk_buffs that could not be handled,
-but should be OK to run at some later point. However, its possible that
-the workqueue doing this work still hits an error when sending the skb.
-When this happens the skbuff is requeued on a temporary 'state' struct
-kept with the workqueue. This is necessary because its possible to
-partially send an skbuff before hitting an error and we need to know how
-and where to restart when the workqueue runs next.
-
-Now for the trouble, we don't rekick the workqueue. This can cause a
-stall where the skbuff we just cached on the state variable might never
-be sent. This happens when its the last packet in a flow and no further
-packets come along that would cause the system to kick the workqueue from
-that side.
-
-To fix we could do simple schedule_work(), but while under memory pressure
-it makes sense to back off some instead of continue to retry repeatedly. So
-instead to fix convert schedule_work to schedule_delayed_work and add
-backoff logic to reschedule from backlog queue on errors. Its not obvious
-though what a good backoff is so use '1'.
-
-To test we observed some flakes whil running NGINX compliance test with
-sockmap we attributed these failed test to this bug and subsequent issue.
+To fix this check on sk_msg_recvmsg side if length is zero and FIN flag
+is set then set return to zero. A selftest will be added to check this
+condition.
 
 Fixes: 04919bed948dc ("tcp: Introduce tcp_read_skb()")
 Tested-by: William Findlay <will@isovalent.com>
 Signed-off-by: John Fastabend <john.fastabend@gmail.com>
 ---
- include/linux/skmsg.h |  2 +-
- net/core/skmsg.c      | 19 ++++++++++++-------
- net/core/sock_map.c   |  3 ++-
- 3 files changed, 15 insertions(+), 9 deletions(-)
+ net/ipv4/tcp_bpf.c | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-index 84f787416a54..904ff9a32ad6 100644
---- a/include/linux/skmsg.h
-+++ b/include/linux/skmsg.h
-@@ -105,7 +105,7 @@ struct sk_psock {
- 	struct proto			*sk_proto;
- 	struct mutex			work_mutex;
- 	struct sk_psock_work_state	work_state;
--	struct work_struct		work;
-+	struct delayed_work		work;
- 	struct rcu_work			rwork;
- };
- 
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 2b6d9519ff29..96a6a3a74a67 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -481,7 +481,7 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
- 	}
- out:
- 	if (psock->work_state.skb && copied > 0)
--		schedule_work(&psock->work);
-+		schedule_delayed_work(&psock->work, 0);
- 	return copied;
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index cf26d65ca389..3a0f43f3afd8 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -174,6 +174,24 @@ static int tcp_msg_wait_data(struct sock *sk, struct sk_psock *psock,
+ 	return ret;
  }
- EXPORT_SYMBOL_GPL(sk_msg_recvmsg);
-@@ -639,7 +639,8 @@ static void sk_psock_skb_state(struct sk_psock *psock,
  
- static void sk_psock_backlog(struct work_struct *work)
- {
--	struct sk_psock *psock = container_of(work, struct sk_psock, work);
-+	struct delayed_work *dwork = to_delayed_work(work);
-+	struct sk_psock *psock = container_of(dwork, struct sk_psock, work);
- 	struct sk_psock_work_state *state = &psock->work_state;
- 	struct sk_buff *skb = NULL;
- 	bool ingress;
-@@ -679,6 +680,10 @@ static void sk_psock_backlog(struct work_struct *work)
- 				if (ret == -EAGAIN) {
- 					sk_psock_skb_state(psock, state, skb,
- 							   len, off);
++static bool is_next_msg_fin(struct sk_psock *psock)
++{
++	struct scatterlist *sge;
++	struct sk_msg *msg_rx;
++	int i;
 +
-+					// Delay slightly to prioritize any
-+					// other work that might be here.
-+					schedule_delayed_work(&psock->work, 1);
- 					goto end;
- 				}
- 				/* Hard errors break pipe and stop xmit. */
-@@ -733,7 +738,7 @@ struct sk_psock *sk_psock_init(struct sock *sk, int node)
- 	INIT_LIST_HEAD(&psock->link);
- 	spin_lock_init(&psock->link_lock);
- 
--	INIT_WORK(&psock->work, sk_psock_backlog);
-+	INIT_DELAYED_WORK(&psock->work, sk_psock_backlog);
- 	mutex_init(&psock->work_mutex);
- 	INIT_LIST_HEAD(&psock->ingress_msg);
- 	spin_lock_init(&psock->ingress_lock);
-@@ -822,7 +827,7 @@ static void sk_psock_destroy(struct work_struct *work)
- 
- 	sk_psock_done_strp(psock);
- 
--	cancel_work_sync(&psock->work);
-+	cancel_delayed_work_sync(&psock->work);
- 	mutex_destroy(&psock->work_mutex);
- 
- 	psock_progs_drop(&psock->progs);
-@@ -937,7 +942,7 @@ static int sk_psock_skb_redirect(struct sk_psock *from, struct sk_buff *skb)
- 	}
- 
- 	skb_queue_tail(&psock_other->ingress_skb, skb);
--	schedule_work(&psock_other->work);
-+	schedule_delayed_work(&psock_other->work, 0);
- 	spin_unlock_bh(&psock_other->ingress_lock);
- 	return 0;
- }
-@@ -1017,7 +1022,7 @@ static int sk_psock_verdict_apply(struct sk_psock *psock, struct sk_buff *skb,
- 			spin_lock_bh(&psock->ingress_lock);
- 			if (sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED)) {
- 				skb_queue_tail(&psock->ingress_skb, skb);
--				schedule_work(&psock->work);
-+				schedule_delayed_work(&psock->work, 0);
- 				err = 0;
- 			}
- 			spin_unlock_bh(&psock->ingress_lock);
-@@ -1048,7 +1053,7 @@ static void sk_psock_write_space(struct sock *sk)
- 	psock = sk_psock(sk);
- 	if (likely(psock)) {
- 		if (sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED))
--			schedule_work(&psock->work);
-+			schedule_delayed_work(&psock->work, 0);
- 		write_space = psock->saved_write_space;
- 	}
- 	rcu_read_unlock();
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index a68a7290a3b2..d38267201892 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -1624,9 +1624,10 @@ void sock_map_close(struct sock *sk, long timeout)
- 		rcu_read_unlock();
- 		sk_psock_stop(psock);
- 		release_sock(sk);
--		cancel_work_sync(&psock->work);
-+		cancel_delayed_work_sync(&psock->work);
- 		sk_psock_put(sk, psock);
- 	}
++	msg_rx = sk_psock_peek_msg(psock);
++	i = msg_rx->sg.start;
++	sge = sk_msg_elem(msg_rx, i);
++	if (!sge->length) {
++		struct sk_buff *skb = msg_rx->skb;
 +
- 	/* Make sure we do not recurse. This is a bug.
- 	 * Leak the socket instead of crashing on a stack overflow.
- 	 */
++		if (skb && TCP_SKB_CB(skb)->tcp_flags & TCPHDR_FIN)
++			return true;
++	}
++	return false;
++}
++
+ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+ 				  struct msghdr *msg,
+ 				  size_t len,
+@@ -193,6 +211,19 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+ 	lock_sock(sk);
+ msg_bytes_ready:
+ 	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
++	/* The typical case for EFAULT is the socket was gracefully
++	 * shutdown with a FIN pkt. So check here the other case is
++	 * some error on copy_page_to_iter which would be unexpected.
++	 * On fin return correct return code to zero.
++	 */
++	if (copied == -EFAULT) {
++		bool is_fin = is_next_msg_fin(psock);
++
++		if (is_fin) {
++			copied = 0;
++			goto out;
++		}
++	}
+ 	if (!copied) {
+ 		long timeo;
+ 		int data;
 -- 
 2.33.0
 
