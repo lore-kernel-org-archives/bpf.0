@@ -2,126 +2,135 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D746C74A5B
-	for <bpf@archiver.kernel.org>; Sun, 26 Mar 2023 22:16:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4A70C7619A
+	for <bpf@archiver.kernel.org>; Mon, 27 Mar 2023 02:37:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbjCZWQg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 26 Mar 2023 18:16:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43318 "EHLO
+        id S229479AbjC0ChI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 26 Mar 2023 22:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjCZWQg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 26 Mar 2023 18:16:36 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1072846BF;
-        Sun, 26 Mar 2023 15:16:35 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-5418d54d77bso137205417b3.12;
-        Sun, 26 Mar 2023 15:16:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679868994;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1P2bezaT/u+Scbs1rr3MlchzCBSv/VKeJL8doctcbxc=;
-        b=kqVeQ0N3b8tFo9o1ulILg3HyV99oQvQrv7RcUG5EYbvUE4z0RAyFVqvuBu0mvBk61i
-         NjnBgKYxEPfnUhjijHpqlI/Yp+K8lo7kEKQGZ7481uc4J5Y8ISNlAnVXoizR8S6dyO5p
-         iP8AMe65ChrNWP/K/vmdh6A75Px5iBt1TBPbOGBdVBwCIGiORLRDJxJA9d1RBL+SeLAf
-         r1Vunmt9cz77PudeZeQyrLJ2ezlUiV0gjsHuO5OpB/E2FcrexHzSv8W8QBWEK92SJrwk
-         BEWfjaIA//QqJeJvI4g75ZOMZKybmKmmvBzJXAuAaf4fnp14AxHcmGg+UkiVGUJN6WMo
-         R5uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679868994;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1P2bezaT/u+Scbs1rr3MlchzCBSv/VKeJL8doctcbxc=;
-        b=qPg3KWesd329W+ZjZsmgS/1a86vCKQJLoaSCrWV6QsNOHRlOs3NzglPN1t1r9gG6Sg
-         9YpAvJKPNnb4lRvz6+7PyNcJ3XVxdfI88paZDsN+wmzjuP555AiDkGbjYd7MYmXfSISr
-         pggjTLxCYS8iUSP8JJPHKIiJblc5+UDgYGwG93f8syzPsTk6Pn6RZP2RQr34Xp496PGq
-         uxd5rAQMLcRgB0SWod8TI4/CUur84S1mXWE2B8AlAnzd+VuSrqmA5FCvhJL9feTPd+Ut
-         7HayPHtaZ6P03bWjrdiFWytLJt2EIcrEC7gFkAdkCFhrIU0NG4SuMszU9VqNn34KiKwK
-         CSKQ==
-X-Gm-Message-State: AAQBX9fjbUBk1YRC7jTUhcnKMTwxRzJSTkrVAgxRYX4mLwkEjPFYKJvz
-        i2Q8O2aQgsxljec55lpgOHRPa/0VxWI=
-X-Google-Smtp-Source: AKy350ZyKf8Gu8V3ojqUQsehhjLiQ1gpHz92tP9/hFfDWPeN/370zK1szIzvnChxHg8qEC/A4P2V7g==
-X-Received: by 2002:a0d:f285:0:b0:541:8744:ae5 with SMTP id b127-20020a0df285000000b0054187440ae5mr9211836ywf.8.1679868993930;
-        Sun, 26 Mar 2023 15:16:33 -0700 (PDT)
-Received: from pop-os.attlocal.net ([2600:1700:65a0:ab60:2caa:28f3:5004:3e2d])
-        by smtp.gmail.com with ESMTPSA id a67-20020a811a46000000b00545a0818482sm1657744ywa.18.2023.03.26.15.16.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Mar 2023 15:16:33 -0700 (PDT)
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     bpf@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>,
-        Yafang Shao <laoar.shao@gmail.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        John Fastabend <john.fastabend@gmail.com>
-Subject: [Patch bpf-next] sock_map: include sk_psock memory overhead too
-Date:   Sun, 26 Mar 2023 15:16:12 -0700
-Message-Id: <20230326221612.169289-1-xiyou.wangcong@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229475AbjC0ChH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 26 Mar 2023 22:37:07 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9311140C0;
+        Sun, 26 Mar 2023 19:37:02 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PlH5P09Hcz4f3nKC;
+        Mon, 27 Mar 2023 10:36:57 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+        by APP4 (Coremail) with SMTP id gCh0CgB3J6tKASFkB_OSGA--.18301S2;
+        Mon, 27 Mar 2023 10:36:58 +0800 (CST)
+From:   Xu Kuohai <xukuohai@huaweicloud.com>
+To:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH bpf-next] selftests/bpf: Remove two infinite loop bound check cases
+Date:   Mon, 27 Mar 2023 11:35:38 -0400
+Message-Id: <20230327153538.850440-1-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgB3J6tKASFkB_OSGA--.18301S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZw48AFWkKrW7XrWxKFyDJrb_yoW5WFyrpa
+        4fX3ZrJrWxJw4UAa4kKay2vrySgrWkZa17Aas7Kr1xAry7t3W3Wa4Uta15CwnxtryfGrsa
+        vr1UAwn7tayUWw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r4Y6ry7M2
+        8lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_
+        tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r
+        xl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv
+        0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z2
+        80aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
+        IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
+        z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUcZXoUUUUU
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Cong Wang <cong.wang@bytedance.com>
+From: Xu Kuohai <xukuohai@huawei.com>
 
-When a socket is added to a sockmap, sk_psock is allocated too as its
-sk_user_data, therefore it should be consider as an overhead of sockmap
-memory usage.
+The two infinite loop bound check cases added by commit
+1a3148fc171f ("selftests/bpf: Check when bounds are not in the 32-bit range")
+take a long time to execute but don't add much value.
 
-Before this patch:
+Remove them to reduce run time of test_verifier.
 
-1: sockmap  flags 0x0
-	key 4B  value 4B  max_entries 2  memlock 656B
-	pids echo-sockmap(549)
-
-After this patch:
-
-9: sockmap  flags 0x0
-	key 4B  value 4B  max_entries 2  memlock 1824B
-	pids echo-sockmap(568)
-
-Fixes: 73d2c61919e9 ("bpf, net: sock_map memory usage")
-Cc: Yafang Shao <laoar.shao@gmail.com>
-Cc: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Signed-off-by: Cong Wang <cong.wang@bytedance.com>
+Fixes: 1a3148fc171f ("selftests/bpf: Check when bounds are not in the 32-bit range")
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 ---
- net/core/sock_map.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/verifier/bounds.c | 50 -------------------
+ 1 file changed, 50 deletions(-)
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 7c189c2e2fbf..22197e565ece 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -799,9 +799,17 @@ static void sock_map_fini_seq_private(void *priv_data)
- 
- static u64 sock_map_mem_usage(const struct bpf_map *map)
+diff --git a/tools/testing/selftests/bpf/verifier/bounds.c b/tools/testing/selftests/bpf/verifier/bounds.c
+index 74b1917d4208..515a8222f08f 100644
+--- a/tools/testing/selftests/bpf/verifier/bounds.c
++++ b/tools/testing/selftests/bpf/verifier/bounds.c
+@@ -777,31 +777,6 @@
+ 	.result = ACCEPT,
+ 	.prog_type = BPF_PROG_TYPE_XDP,
+ },
+-{
+-	"bound check with JMP_JSLT for crossing 64-bit signed boundary",
+-	.insns = {
+-	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
+-	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data_end)),
+-	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
+-	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
+-	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 8),
+-
+-	BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
+-	BPF_LD_IMM64(BPF_REG_0, 0x7fffffffffffff10),
+-	BPF_ALU64_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
+-
+-	BPF_LD_IMM64(BPF_REG_0, 0x8000000000000000),
+-	BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
+-	/* r1 signed range is [S64_MIN, S64_MAX] */
+-	BPF_JMP_REG(BPF_JSLT, BPF_REG_0, BPF_REG_1, -2),
+-
+-	BPF_MOV64_IMM(BPF_REG_0, 0),
+-	BPF_EXIT_INSN(),
+-	},
+-	.errstr = "BPF program is too large",
+-	.result = REJECT,
+-	.prog_type = BPF_PROG_TYPE_XDP,
+-},
  {
-+	struct bpf_stab *stab = container_of(map, struct bpf_stab, map);
- 	u64 usage = sizeof(struct bpf_stab);
-+	int i;
- 
- 	usage += (u64)map->max_entries * sizeof(struct sock *);
-+
-+	for (i = 0; i < stab->map.max_entries; i++) {
-+		if (stab->sks[i])
-+			usage += sizeof(struct sk_psock);
-+	}
-+
- 	return usage;
- }
- 
-@@ -1412,7 +1420,7 @@ static u64 sock_hash_mem_usage(const struct bpf_map *map)
- 	u64 usage = sizeof(*htab);
- 
- 	usage += htab->buckets_num * sizeof(struct bpf_shtab_bucket);
--	usage += atomic_read(&htab->count) * (u64)htab->elem_size;
-+	usage += atomic_read(&htab->count) * ((u64)htab->elem_size + sizeof(struct sk_psock));
- 	return usage;
- }
- 
+ 	"bound check for loop upper bound greater than U32_MAX",
+ 	.insns = {
+@@ -849,28 +824,3 @@
+ 	.result = ACCEPT,
+ 	.prog_type = BPF_PROG_TYPE_XDP,
+ },
+-{
+-	"bound check with JMP32_JSLT for crossing 32-bit signed boundary",
+-	.insns = {
+-	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
+-	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data_end)),
+-	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
+-	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
+-	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 6),
+-
+-	BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
+-	BPF_MOV32_IMM(BPF_REG_0, 0x7fffff10),
+-	BPF_ALU32_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
+-
+-	BPF_MOV32_IMM(BPF_REG_0, 0x80000000),
+-	BPF_ALU32_IMM(BPF_ADD, BPF_REG_0, 1),
+-	/* r1 signed range is [S32_MIN, S32_MAX] */
+-	BPF_JMP32_REG(BPF_JSLT, BPF_REG_0, BPF_REG_1, -2),
+-
+-	BPF_MOV64_IMM(BPF_REG_0, 0),
+-	BPF_EXIT_INSN(),
+-	},
+-	.errstr = "BPF program is too large",
+-	.result = REJECT,
+-	.prog_type = BPF_PROG_TYPE_XDP,
+-},
 -- 
-2.34.1
+2.30.2
 
