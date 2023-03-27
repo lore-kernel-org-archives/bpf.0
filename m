@@ -2,144 +2,89 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 642A2C761A6
-	for <bpf@archiver.kernel.org>; Mon, 27 Mar 2023 19:12:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3E05C761A6
+	for <bpf@archiver.kernel.org>; Mon, 27 Mar 2023 19:28:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232817AbjC0TMp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Mar 2023 15:12:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33700 "EHLO
+        id S232276AbjC0T2X (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Mar 2023 15:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232730AbjC0TMa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 27 Mar 2023 15:12:30 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5FD26B6
-        for <bpf@vger.kernel.org>; Mon, 27 Mar 2023 12:11:56 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id ga7so9657093qtb.2
-        for <bpf@vger.kernel.org>; Mon, 27 Mar 2023 12:11:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1679944315;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y+fcBmNwaYYPHaFQTMyMlmEgRAw7iowZyfvTwdusqIc=;
-        b=gADa5RHsTd0tWC9q7vi8VAcRiUWkdYHk5GgP5oAsTxquPj3jVz+x7m2wOss37oS73z
-         pTh5QQCpLYgyc3SqeUeNTmt7khVJASffcx0hXYDDiJGqZfCZvnWRvw/Hf9TsmgqFMPVP
-         Qdb515RMDb/MioZPwwKrAG9Z1jDsv6sJeydT6qMe7g6M7TnR1nbaDqP2d9pz8IhYkO61
-         L1pii3ci8qpHfdSpRUI44PNb1iGeK+pt0v5VYPvQ7870ANQ9OlDzkApm5pcPbNF80osh
-         FCxWyOqjsMp3lWEECMFl7pAXhkdyfC8bOamQTZeL3rzOPfXk4KBoJ8UYfrRvTdeXo7GV
-         3/OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679944315;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y+fcBmNwaYYPHaFQTMyMlmEgRAw7iowZyfvTwdusqIc=;
-        b=uJX0sR1awf/anVp85lV26rri0hVqxCYmfUpiHt+CQlISECD2ns076gYCjV1DbuUEdD
-         yv/c1U4LZqBeKENby1oD0wZeKvdxsg0j/njl2S3czFRbniBAbPfQTeAW+0tL/+ggVdia
-         fGi0a5/dE5AKiSagYvjEvcndDPEomNlZBmQlC6pcWHru7H7H5ciw5sZTrCvmPybdwzW/
-         W213joK8NlHVJ2x1A1XtgF+gL2jO9oxKQc4PAzXm0u+zbjljR0wIfCS9/J8L6XnRg0SL
-         TSHtSjZeia/siRxjz03RgbBw4yPk+UmL4qGSDkBX3oDMNS/nVOKyGeqcdxeuSWwszah8
-         Msfg==
-X-Gm-Message-State: AO0yUKVpXJlB9kBV3JXsSMMHsqAo1wxyj7zic3uqOoLTntcbFQoTT52K
-        IJ9N/WNi0M0Lpr4I1ljQnEg0qA==
-X-Google-Smtp-Source: AK7set+YB+1J9uVDVyg1O0Agv93wcxLr3a7Apewktxjq43LIUgBzdILMJKsuL86AQov6ipS8fdfdLw==
-X-Received: by 2002:ac8:5f4a:0:b0:3e3:90bb:ad9b with SMTP id y10-20020ac85f4a000000b003e390bbad9bmr21749182qta.34.1679944315144;
-        Mon, 27 Mar 2023 12:11:55 -0700 (PDT)
-Received: from [172.17.0.3] ([130.44.215.126])
-        by smtp.gmail.com with ESMTPSA id d185-20020a37b4c2000000b007425ef4cbc2sm16989236qkf.100.2023.03.27.12.11.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 12:11:54 -0700 (PDT)
-From:   Bobby Eshleman <bobby.eshleman@bytedance.com>
-Date:   Mon, 27 Mar 2023 19:11:52 +0000
-Subject: [PATCH net-next v4 2/3] selftests/bpf: add vsock to vmtest.sh
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230327-vsock-sockmap-v4-2-c62b7cd92a85@bytedance.com>
-References: <20230327-vsock-sockmap-v4-0-c62b7cd92a85@bytedance.com>
-In-Reply-To: <20230327-vsock-sockmap-v4-0-c62b7cd92a85@bytedance.com>
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S229705AbjC0T2W (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 27 Mar 2023 15:28:22 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08642D48;
+        Mon, 27 Mar 2023 12:28:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=xcVWACh9AVKFBL+pW+FE9Xpu1vqOmtVYgQ8/xR2RZCI=; b=zrsUJ8Hbn4+JP3KFeqaeFDDib1
+        9I+in64FRU8MmlqsojhKYp4fSx9/Eq37GabpFr3Y0mhunAH34v6wwEO1u2xZsFRMzgibGqGy0wN+K
+        QcjjLcTH/k5PL/cCSVpH9ZoY2jDPIaskWMU587NLbbGuXdFlLJgaxnxwYNoUgAff8PhJpl4ZFgwQr
+        004lzTzr4iHhzG7L3+ZfAODnEFVElU7gXfF+5wfESrU63CXJhgnK+6S0J1EndtBPQ11j1VFuXlZEu
+        hQ1vrtdEyNp1DyRLBuKPMc2bqGE649drC8LCfb22mQXZc9nvwRiEZoBWBzEUeAeqh0zRd8lKPp08K
+        mt2t7EAQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pgsVv-00CE4Z-0k;
+        Mon, 27 Mar 2023 19:28:19 +0000
+Date:   Mon, 27 Mar 2023 12:28:19 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Viktor Malik <vmalik@redhat.com>
+Cc:     bpf@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <martin.lau@linux.dev>,
         Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>
-X-Mailer: b4 0.12.2
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH bpf-next] kallsyms: move module-related functions under
+ correct configs
+Message-ID: <ZCHuU4Wui7Dwmdm2@bombadil.infradead.org>
+References: <20230327161251.1129511-1-vmalik@redhat.com>
+ <ZCHWtptOwPPtUe+u@bombadil.infradead.org>
+ <c076e249-705a-e1bb-c657-f80cd4f2145b@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c076e249-705a-e1bb-c657-f80cd4f2145b@redhat.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add vsock loopback to the test kernel.
+On Mon, Mar 27, 2023 at 08:20:56PM +0200, Viktor Malik wrote:
+> On 3/27/23 19:47, Luis Chamberlain wrote:
+> > On Mon, Mar 27, 2023 at 06:12:51PM +0200, Viktor Malik wrote:
+> > > Functions for searching module kallsyms should have non-empty
+> > > definitions only if CONFIG_MODULES=y and CONFIG_KALLSYMS=y. Until now,
+> > > only CONFIG_MODULES check was used for many of these, which may have
+> > > caused complilation errors on some configs.
+> > > 
+> > > This patch moves all relevant functions under the correct configs.
+> > > 
+> > > Signed-off-by: Viktor Malik <vmalik@redhat.com>
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > Link: https://lore.kernel.org/oe-kbuild-all/202303181535.RFDCnz3E-lkp@intel.com/
+> > 
+> > Thanks Viktor!  Does this fix something from an existing commit? If so
+> > which one?  The commit log should mention it.
+> 
+> Ah, right, I forgot about that. The commit log is missing:
+> 
+> Fixes: bd5314f8dd2d ("kallsyms, bpf: Move find_kallsyms_symbol_value out of internal header")
+> 
+> I can post v2 but I'm also fine with maintainers applying the tag.
 
-This allows sockmap for vsock to be tested.
+That patch went through the bpf tree so its fix can go throug that tree.
+So up to Daniel if he wants a new patch.
 
-Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
-Acked-by: Stefano Garzarella <sgarzare@redhat.com>
----
- tools/testing/selftests/bpf/config.aarch64 | 2 ++
- tools/testing/selftests/bpf/config.s390x   | 3 +++
- tools/testing/selftests/bpf/config.x86_64  | 3 +++
- 3 files changed, 8 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/config.aarch64 b/tools/testing/selftests/bpf/config.aarch64
-index 1f0437644186..253821494884 100644
---- a/tools/testing/selftests/bpf/config.aarch64
-+++ b/tools/testing/selftests/bpf/config.aarch64
-@@ -176,6 +176,8 @@ CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
- CONFIG_VIRTIO_MMIO=y
- CONFIG_VIRTIO_NET=y
- CONFIG_VIRTIO_PCI=y
-+CONFIG_VIRTIO_VSOCKETS_COMMON=y
- CONFIG_VLAN_8021Q=y
- CONFIG_VSOCKETS=y
-+CONFIG_VSOCKETS_LOOPBACK=y
- CONFIG_XFRM_USER=y
-diff --git a/tools/testing/selftests/bpf/config.s390x b/tools/testing/selftests/bpf/config.s390x
-index d49f6170e7bd..2ba92167be35 100644
---- a/tools/testing/selftests/bpf/config.s390x
-+++ b/tools/testing/selftests/bpf/config.s390x
-@@ -140,5 +140,8 @@ CONFIG_VIRTIO_BALLOON=y
- CONFIG_VIRTIO_BLK=y
- CONFIG_VIRTIO_NET=y
- CONFIG_VIRTIO_PCI=y
-+CONFIG_VIRTIO_VSOCKETS_COMMON=y
- CONFIG_VLAN_8021Q=y
-+CONFIG_VSOCKETS=y
-+CONFIG_VSOCKETS_LOOPBACK=y
- CONFIG_XFRM_USER=y
-diff --git a/tools/testing/selftests/bpf/config.x86_64 b/tools/testing/selftests/bpf/config.x86_64
-index dd97d61d325c..b650b2e617b8 100644
---- a/tools/testing/selftests/bpf/config.x86_64
-+++ b/tools/testing/selftests/bpf/config.x86_64
-@@ -234,7 +234,10 @@ CONFIG_VIRTIO_BLK=y
- CONFIG_VIRTIO_CONSOLE=y
- CONFIG_VIRTIO_NET=y
- CONFIG_VIRTIO_PCI=y
-+CONFIG_VIRTIO_VSOCKETS_COMMON=y
- CONFIG_VLAN_8021Q=y
-+CONFIG_VSOCKETS=y
-+CONFIG_VSOCKETS_LOOPBACK=y
- CONFIG_X86_ACPI_CPUFREQ=y
- CONFIG_X86_CPUID=y
- CONFIG_X86_MSR=y
-
--- 
-2.30.2
-
+  Luis
