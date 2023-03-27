@@ -2,47 +2,46 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24307C761A6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D11EBC6FD1D
 	for <bpf@archiver.kernel.org>; Mon, 27 Mar 2023 18:52:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232139AbjC0SwS convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 27 Mar 2023 14:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
+        id S232263AbjC0SwT convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Mon, 27 Mar 2023 14:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232263AbjC0SwR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 27 Mar 2023 14:52:17 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F561997
+        with ESMTP id S232428AbjC0SwS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 27 Mar 2023 14:52:18 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFAC2D52
         for <bpf@vger.kernel.org>; Mon, 27 Mar 2023 11:52:15 -0700 (PDT)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32RC0ZEP025557
-        for <bpf@vger.kernel.org>; Mon, 27 Mar 2023 11:52:14 -0700
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32REKovt004731
+        for <bpf@vger.kernel.org>; Mon, 27 Mar 2023 11:52:15 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3phxg33a5s-3
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3phxnuu6m0-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 27 Mar 2023 11:52:14 -0700
-Received: from twshared52565.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 27 Mar 2023 11:52:15 -0700
+Received: from twshared58712.02.prn6.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.17; Mon, 27 Mar 2023 11:52:12 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 763182C1D3DE3; Mon, 27 Mar 2023 11:52:09 -0700 (PDT)
+        id 46F752C1D3DB0; Mon, 27 Mar 2023 11:52:03 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC:     <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH v4 bpf-next 3/3] veristat: guess and substitue underlying program type for freplace (EXT) progs
-Date:   Mon, 27 Mar 2023 11:52:02 -0700
-Message-ID: <20230327185202.1929145-4-andrii@kernel.org>
+Subject: [PATCH v4 bpf-next 0/3] veristat: add better support of freplace programs
+Date:   Mon, 27 Mar 2023 11:51:59 -0700
+Message-ID: <20230327185202.1929145-1-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230327185202.1929145-1-andrii@kernel.org>
-References: <20230327185202.1929145-1-andrii@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="UTF-8"
 X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: 509-P-AaVDXSXeNNXr2u1coQxj9Sa8-o
-X-Proofpoint-ORIG-GUID: 509-P-AaVDXSXeNNXr2u1coQxj9Sa8-o
+X-Proofpoint-GUID: r4VM8piAIT8f6bY76DRecm1jtpEmBmi8
+X-Proofpoint-ORIG-GUID: r4VM8piAIT8f6bY76DRecm1jtpEmBmi8
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-24_11,2023-03-27_02,2023-02-09_01
@@ -50,204 +49,58 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-SEC("freplace") (i.e., BPF_PROG_TYPE_EXT) programs are not loadable as
-is through veristat, as kernel expects actual program's FD during
-BPF_PROG_LOAD time, which veristat has no way of knowing.
+Teach veristat how to deal with freplace BPF programs. As they can't be
+directly loaded by veristat without custom user-space part that sets correct
+target program FD, veristat always fails freplace programs. This patch set
+teaches veristat to guess target program type that will be inherited by
+freplace program itself, and subtitute it for BPF_PROG_TYPE_EXT (freplace) one
+for the purposes of BPF verification.
 
-Unfortunately, freplace programs are a pretty important class of
-programs, especially when dealing with XDP chaining solutions, which
-rely on EXT programs.
+Patch #1 fixes bug in libbpf preventing overriding freplace with specific
+program type.
 
-So let's do our best and teach veristat to try to guess the original
-program type, based on program's context argument type. And if guessing
-process succeeds, we manually override freplace/EXT with guessed program
-type using bpf_program__set_type() setter to increase chances of proper
-BPF verification.
+Patch #2 adds convenient -d flag to request veristat to emit libbpf debug
+logs. It help debugging why a specific BPF program fails to load, if the
+problem is not due to BPF verification itself.
 
-We rely on BTF and maintain a simple lookup table. This process is
-obviously not 100% bulletproof, as valid program might not use context
-and thus wouldn't have to specify correct type. Also, __sk_buff is very
-ambiguous and is the context type across many different program types.
-We pick BPF_PROG_TYPE_CGROUP_SKB for now, which seems to work fine in
-practice so far. Similarly, some program types require specifying attach
-type, and so we pick one out of possible few variants.
+v3->v4:
+  - fix optional kern_name check when guessing prog type (Alexei);
+v2->v3:
+  - fix bpf_obj_id selftest that uses legacy bpf_prog_test_load() helper,
+    which always sets program type programmatically; teach the helper to do it
+    only if actually necessary (Stanislav);
+v1->v2:
+  - fix compilation error reported by old GCC (my GCC v11 doesn't produce even
+    a warning) and Clang (see CI failure at [0]):
 
-Best effort at its best. But this makes veristat even more widely
-applicable.
+GCC version:
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/testing/selftests/bpf/veristat.c | 121 ++++++++++++++++++++++++-
- 1 file changed, 117 insertions(+), 4 deletions(-)
+  veristat.c: In function ‘fixup_obj’:
+  veristat.c:908:1: error: label at end of compound statement
+    908 | skip_freplace_fixup:
+        | ^~~~~~~~~~~~~~~~~~~
 
-diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
-index 263df32fbda8..055df1abd7ca 100644
---- a/tools/testing/selftests/bpf/veristat.c
-+++ b/tools/testing/selftests/bpf/veristat.c
-@@ -15,6 +15,7 @@
- #include <sys/sysinfo.h>
- #include <sys/stat.h>
- #include <bpf/libbpf.h>
-+#include <bpf/btf.h>
- #include <libelf.h>
- #include <gelf.h>
- #include <float.h>
-@@ -778,7 +779,62 @@ static int parse_verif_log(char * const buf, size_t buf_sz, struct verif_stats *
- 	return 0;
- }
- 
--static void fixup_obj(struct bpf_object *obj)
-+static int guess_prog_type_by_ctx_name(const char *ctx_name,
-+				       enum bpf_prog_type *prog_type,
-+				       enum bpf_attach_type *attach_type)
-+{
-+	/* We need to guess program type based on its declared context type.
-+	 * This guess can't be perfect as many different program types might
-+	 * share the same context type.  So we can only hope to reasonably
-+	 * well guess this and get lucky.
-+	 *
-+	 * Just in case, we support both UAPI-side type names and
-+	 * kernel-internal names.
-+	 */
-+	static struct {
-+		const char *uapi_name;
-+		const char *kern_name;
-+		enum bpf_prog_type prog_type;
-+		enum bpf_attach_type attach_type;
-+	} ctx_map[] = {
-+		/* __sk_buff is most ambiguous, for now we assume cgroup_skb */
-+		{ "__sk_buff", "sk_buff", BPF_PROG_TYPE_CGROUP_SKB, BPF_CGROUP_INET_INGRESS },
-+		{ "bpf_sock", "sock", BPF_PROG_TYPE_CGROUP_SOCK, BPF_CGROUP_INET4_POST_BIND },
-+		{ "bpf_sock_addr", "bpf_sock_addr_kern",  BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_BIND },
-+		{ "bpf_sock_ops", "bpf_sock_ops_kern", BPF_PROG_TYPE_SOCK_OPS, BPF_CGROUP_SOCK_OPS },
-+		{ "sk_msg_md", "sk_msg", BPF_PROG_TYPE_SK_MSG, BPF_SK_MSG_VERDICT },
-+		{ "bpf_cgroup_dev_ctx", "bpf_cgroup_dev_ctx", BPF_PROG_TYPE_CGROUP_DEVICE, BPF_CGROUP_DEVICE },
-+		{ "bpf_sysctl", "bpf_sysctl_kern", BPF_PROG_TYPE_CGROUP_SYSCTL, BPF_CGROUP_SYSCTL },
-+		{ "bpf_sockopt", "bpf_sockopt_kern", BPF_PROG_TYPE_CGROUP_SOCKOPT, BPF_CGROUP_SETSOCKOPT },
-+		{ "sk_reuseport_md", "sk_reuseport_kern", BPF_PROG_TYPE_SK_REUSEPORT, BPF_SK_REUSEPORT_SELECT_OR_MIGRATE },
-+		{ "bpf_sk_lookup", "bpf_sk_lookup_kern", BPF_PROG_TYPE_SK_LOOKUP, BPF_SK_LOOKUP },
-+		{ "xdp_md", "xdp_buff", BPF_PROG_TYPE_XDP, BPF_XDP },
-+		/* tracing types with no expected attach type */
-+		{ "bpf_user_pt_regs_t", "pt_regs", BPF_PROG_TYPE_KPROBE },
-+		{ "bpf_perf_event_data", "bpf_perf_event_data_kern", BPF_PROG_TYPE_PERF_EVENT },
-+		/* raw_tp programs use u64[] from kernel side, we don't want
-+		 * to match on that, probably; so NULL for kern-side type
-+		 */
-+		{ "bpf_raw_tracepoint_args", NULL, BPF_PROG_TYPE_RAW_TRACEPOINT },
-+	};
-+	int i;
-+
-+	if (!ctx_name)
-+		return -EINVAL;
-+
-+	for (i = 0; i < ARRAY_SIZE(ctx_map); i++) {
-+		if (strcmp(ctx_map[i].uapi_name, ctx_name) == 0 ||
-+		    (ctx_map[i].kern_name && strcmp(ctx_map[i].kern_name, ctx_name) == 0)) {
-+			*prog_type = ctx_map[i].prog_type;
-+			*attach_type = ctx_map[i].attach_type;
-+			return 0;
-+		}
-+	}
-+
-+	return -ESRCH;
-+}
-+
-+static void fixup_obj(struct bpf_object *obj, struct bpf_program *prog, const char *filename)
- {
- 	struct bpf_map *map;
- 
-@@ -798,18 +854,75 @@ static void fixup_obj(struct bpf_object *obj)
- 				bpf_map__set_max_entries(map, 1);
- 		}
- 	}
-+
-+	/* SEC(freplace) programs can't be loaded with veristat as is,
-+	 * but we can try guessing their target program's expected type by
-+	 * looking at the type of program's first argument and substituting
-+	 * corresponding program type
-+	 */
-+	if (bpf_program__type(prog) == BPF_PROG_TYPE_EXT) {
-+		const struct btf *btf = bpf_object__btf(obj);
-+		const char *prog_name = bpf_program__name(prog);
-+		enum bpf_prog_type prog_type;
-+		enum bpf_attach_type attach_type;
-+		const struct btf_type *t;
-+		const char *ctx_name;
-+		int id;
-+
-+		if (!btf)
-+			goto skip_freplace_fixup;
-+
-+		id = btf__find_by_name_kind(btf, prog_name, BTF_KIND_FUNC);
-+		t = btf__type_by_id(btf, id);
-+		t = btf__type_by_id(btf, t->type);
-+		if (!btf_is_func_proto(t) || btf_vlen(t) != 1)
-+			goto skip_freplace_fixup;
-+
-+		/* context argument is a pointer to a struct/typedef */
-+		t = btf__type_by_id(btf, btf_params(t)[0].type);
-+		while (t && btf_is_mod(t))
-+			t = btf__type_by_id(btf, t->type);
-+		if (!t || !btf_is_ptr(t))
-+			goto skip_freplace_fixup;
-+		t = btf__type_by_id(btf, t->type);
-+		while (t && btf_is_mod(t))
-+			t = btf__type_by_id(btf, t->type);
-+		if (!t)
-+			goto skip_freplace_fixup;
-+
-+		ctx_name = btf__name_by_offset(btf, t->name_off);
-+
-+		if (guess_prog_type_by_ctx_name(ctx_name, &prog_type, &attach_type) == 0) {
-+			bpf_program__set_type(prog, prog_type);
-+			bpf_program__set_expected_attach_type(prog, attach_type);
-+
-+			if (!env.quiet) {
-+				printf("Using guessed program type '%s' for %s/%s...\n",
-+					libbpf_bpf_prog_type_str(prog_type),
-+					filename, prog_name);
-+			}
-+		} else {
-+			if (!env.quiet) {
-+				printf("Failed to guess program type for freplace program with context type name '%s' for %s/%s. Consider using canonical type names to help veristat...\n",
-+					ctx_name, filename, prog_name);
-+			}
-+		}
-+	}
-+skip_freplace_fixup:
-+	return;
- }
- 
- static int process_prog(const char *filename, struct bpf_object *obj, struct bpf_program *prog)
- {
- 	const char *prog_name = bpf_program__name(prog);
-+	const char *base_filename = basename(filename);
- 	size_t buf_sz = sizeof(verif_log_buf);
- 	char *buf = verif_log_buf;
- 	struct verif_stats *stats;
- 	int err = 0;
- 	void *tmp;
- 
--	if (!should_process_file_prog(basename(filename), bpf_program__name(prog))) {
-+	if (!should_process_file_prog(base_filename, bpf_program__name(prog))) {
- 		env.progs_skipped++;
- 		return 0;
- 	}
-@@ -835,12 +948,12 @@ static int process_prog(const char *filename, struct bpf_object *obj, struct bpf
- 	verif_log_buf[0] = '\0';
- 
- 	/* increase chances of successful BPF object loading */
--	fixup_obj(obj);
-+	fixup_obj(obj, prog, base_filename);
- 
- 	err = bpf_object__load(obj);
- 	env.progs_processed++;
- 
--	stats->file_name = strdup(basename(filename));
-+	stats->file_name = strdup(base_filename);
- 	stats->prog_name = strdup(bpf_program__name(prog));
- 	stats->stats[VERDICT] = err == 0; /* 1 - success, 0 - failure */
- 	parse_verif_log(buf, buf_sz, stats);
+Clang version:
+
+  veristat.c:909:1: error: label at end of compound statement is a C2x extension [-Werror,-Wc2x-extensions]
+  }
+  ^
+  1 error generated.
+
+  [0] https://github.com/kernel-patches/bpf/actions/runs/4515972059/jobs/7953845335
+
+Andrii Nakryiko (3):
+  libbpf: disassociate section handler on explicit
+    bpf_program__set_type() call
+  veristat: add -d debug mode option to see debug libbpf log
+  veristat: guess and substitue underlying program type for freplace
+    (EXT) progs
+
+ tools/lib/bpf/libbpf.c                        |   1 +
+ tools/testing/selftests/bpf/testing_helpers.c |   2 +-
+ tools/testing/selftests/bpf/veristat.c        | 129 +++++++++++++++++-
+ 3 files changed, 126 insertions(+), 6 deletions(-)
+
 -- 
 2.34.1
 
