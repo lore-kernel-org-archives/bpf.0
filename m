@@ -2,246 +2,118 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC3B1C761A6
-	for <bpf@archiver.kernel.org>; Mon, 27 Mar 2023 11:07:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D02ABC7619A
+	for <bpf@archiver.kernel.org>; Mon, 27 Mar 2023 11:26:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232419AbjC0LHP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Mar 2023 07:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52882 "EHLO
+        id S229512AbjC0L0t (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Mar 2023 07:26:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbjC0LHM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 27 Mar 2023 07:07:12 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D29649F5
-        for <bpf@vger.kernel.org>; Mon, 27 Mar 2023 04:07:05 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id m2so8317029wrh.6
-        for <bpf@vger.kernel.org>; Mon, 27 Mar 2023 04:07:05 -0700 (PDT)
+        with ESMTP id S232372AbjC0L0s (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 27 Mar 2023 07:26:48 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA61B4C1C
+        for <bpf@vger.kernel.org>; Mon, 27 Mar 2023 04:26:46 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id cn12so34663350edb.4
+        for <bpf@vger.kernel.org>; Mon, 27 Mar 2023 04:26:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1679915224;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mGQDtSSPMSR1DCIvbtvb1FsnYetWS66LzMfOIyvWXTQ=;
-        b=dN4cPdm+PN+Qid6l9np5JsOkccYV4/KlMHsxqiQiNmF07qaRTN6lNaNbZs8vxnnIFU
-         1JZZ8U8whzYz3S8E84atuMGqWb5//mChbAFJL8Eo3z37frCLpfzhuy3XZkC+B9p8eLU3
-         6fq5to0Bi3zSWjhGcVc5FwxKKPzhapnX7wNB0xBU8N2zPUYHbcg6u5bGwVj4ZIFnVhAl
-         MB0sw0OtzdCupOq7FYwm6mwTj4Bel4JqffBa4yhW60PjEi+UVzP9qrwMQh+hPzUJuX+6
-         sf91TQjAtp0TpHFjndFBWvzZD8vNX8p+o3Mnp7+/l5v3Vwb4oNV7B/6HkeADhQsCSGuv
-         X6+w==
+        d=gmail.com; s=20210112; t=1679916405;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=1X4MwQKdFclwbk9BBWPhEizWXJusalvyvIAyz1IJtK8=;
+        b=ijS/a7N+dDjR36BYCr/dKPMETWkDceoKEMz2+qJCsYgGXdBwb3m9BSr29IAfhjyfRu
+         8nnLP3gIP39VFODSWiPUogpSatMcAzHsArEAEWkkC45POW0dTDhMEh+qZzFDX6AjlXBA
+         J1JWwsrnBMXSZZ3SgeVy8doZG05VbVNCVj9orPm4hdFS8qzKrO3PiE9A+cFFHkT77k5s
+         TPtLX/s2+oKmyR2Q54B68tnod+sY+05lxz/4D1ZZbsOJZtZ4xZKhq8BYoY3ZxQ//AYKI
+         WPlr5Kamfs3EuZz0tTBCtwBiTiQzzfwts0z8u9YegjmqHdzlEL/Yl7h+IlccwWjwy2Iy
+         51Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679915224;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mGQDtSSPMSR1DCIvbtvb1FsnYetWS66LzMfOIyvWXTQ=;
-        b=sH8/3Nk01dMqBngMGUGuLlqb3ShIBPk4AtIPhYF41KGZYqYsLjk3u8ofkpDiprWvx2
-         oov5Ap3t2Ja6Jd/p/XZc52M3DToGJ5MgdFL0Ukuo5HADdb4l/7A+x/AGs0yphBzKo/3P
-         Pu8aHJoytKOf4A1nGmxbbw2DAWxxzvHdIKTOIlhy8N++MTYEn6OoJfDjlNtVeI6lbZn5
-         NVfSphWqBzEbsJq765FQfpaWr+Q32A9A6xSCvpF8wVTGDcIT9P32a/eqwplNHUk8rHRJ
-         xGbRTzLVFZKN/Z49DIeXWTRWojoPPApPESjlSCDCRLtWD7FDBj6XUe09UAz/29rDZQIg
-         U8lg==
-X-Gm-Message-State: AAQBX9dUt2/oXqf4kaVSI0RyUZ0KmK+nG7nwg8XOL8Vt8XRYwyE8Cph8
-        /MFCDujrhXhDpxNdP52OzVoR1Q==
-X-Google-Smtp-Source: AKy350bsbWdignZV5sa6x5NTUCOuxruvpRBwM0GDDFQPG7iHXEYqNM/ISwQNxVaGOFD2TOm0tec4xg==
-X-Received: by 2002:adf:efc7:0:b0:2da:45b6:a1d5 with SMTP id i7-20020adfefc7000000b002da45b6a1d5mr8479541wrp.3.1679915223864;
-        Mon, 27 Mar 2023 04:07:03 -0700 (PDT)
-Received: from harfang.fritz.box ([2a02:8011:e80c:0:61cd:634a:c75b:ba10])
-        by smtp.gmail.com with ESMTPSA id k10-20020a5d6e8a000000b002d1daafea30sm24772958wrz.34.2023.03.27.04.07.03
+        d=1e100.net; s=20210112; t=1679916405;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1X4MwQKdFclwbk9BBWPhEizWXJusalvyvIAyz1IJtK8=;
+        b=Z7qiNju1dAy9qRYP5AnMJNEqJDu/aBwGPtjXpwEzFgsVn+Io9BdLV1+Ov1N2yvWWy4
+         1Ho4QIlgzl6RzDQS7NX2Tk3MmuJvaa4lmWsvOOk1IYgWnv1AaXFsT/0T3Bo4V7ukAN4E
+         MgsiQXiTRbFjX2/jrle9NpBHSC0xUvvscBiZLPQqLr2WWWLc14Oz2dRt6K+PBH341Yhu
+         AWtNULlMOQUfXG3Q9qe8WqATWY/aNC5hnfqcLyOr3O/oSq1myq7VsGiYM/Z4YkOiB0zP
+         9JjtcQubKgiNl+LPmDUU1BgnpPpzN7Sbt3nEjJfm+hB3/hl2xz6gurdoj0ThQTeUf1TP
+         Vdpg==
+X-Gm-Message-State: AAQBX9f6rkgAMUJCWEN3jfPUUMvf7ElfwG7ml7Pda2Pf7aZTMGry3kua
+        +D0TzmNnqoDlCUnczaxowV70NQQMl+nWZg==
+X-Google-Smtp-Source: AKy350Zx98QaC4751Fyu/g4Q9sPMWLeFN1kWcasadtgEXEseWnNu+FCTY38Dpsp/B1SErtRpuwF2KA==
+X-Received: by 2002:a05:6402:cd:b0:502:26b7:7a44 with SMTP id i13-20020a05640200cd00b0050226b77a44mr8366474edu.1.1679916404772;
+        Mon, 27 Mar 2023 04:26:44 -0700 (PDT)
+Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id u2-20020a50a402000000b004c4eed3fe20sm14667455edb.5.2023.03.27.04.26.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 04:07:03 -0700 (PDT)
-From:   Quentin Monnet <quentin@isovalent.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
+        Mon, 27 Mar 2023 04:26:44 -0700 (PDT)
+Message-ID: <0671a6df0f76b37e377cb0cb55076833141799e5.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 00/43] First set of verifier/*.c migrated to
+ inline assembly
+From:   Eduard Zingerman <eddyz87@gmail.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next v2 4/5] bpftool: Support "opcodes", "linum", "visual" simultaneously
-Date:   Mon, 27 Mar 2023 12:06:54 +0100
-Message-Id: <20230327110655.58363-5-quentin@isovalent.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230327110655.58363-1-quentin@isovalent.com>
-References: <20230327110655.58363-1-quentin@isovalent.com>
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Kernel Team <kernel-team@fb.com>, Yonghong Song <yhs@fb.com>
+Date:   Mon, 27 Mar 2023 14:26:43 +0300
+In-Reply-To: <CAADnVQJRDfM=iofPZF2QLPzuxYjBQLMmm1dU25xMcEueEfaNoA@mail.gmail.com>
+References: <20230325025524.144043-1-eddyz87@gmail.com>
+         <ZB5pFYZGnwNORSN9@google.com>
+         <2ac4f6037719e25e3e8b726def6ece2907d785f0.camel@gmail.com>
+         <CAKH8qBv9vYZsMFivzJ9s=i_w-RakGqECfwXBZfWnDigi6oP1EQ@mail.gmail.com>
+         <CAADnVQL5O4FaDDOUn0q1urfhquek4dE9nrhWa7mVYwvMhi311A@mail.gmail.com>
+         <CAEf4BzbbgLg3w5ySX8XxBHBR0gzr71XPvJ5s1Tw=A6ScA6Vmwg@mail.gmail.com>
+         <CAADnVQJRDfM=iofPZF2QLPzuxYjBQLMmm1dU25xMcEueEfaNoA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When dumping a program, the keywords "opcodes" (for printing the raw
-opcodes), "linum" (for displaying the filename, line number, column
-number along with the source code), and "visual" (for generating the
-control flow graph for translated programs) are mutually exclusive. But
-there's no reason why they should be. Let's make it possible to pass
-several of them at once. The "file FILE" option, which makes bpftool
-output a binary image to a file, remains incompatible with the others.
+On Sun, 2023-03-26 at 20:57 -0700, Alexei Starovoitov wrote:
+> On Sun, Mar 26, 2023 at 8:16=E2=80=AFPM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >=20
+> > On Sat, Mar 25, 2023 at 6:19=E2=80=AFPM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >=20
+> > > On Sat, Mar 25, 2023 at 9:16=E2=80=AFAM Stanislav Fomichev <sdf@googl=
+e.com> wrote:
+> > > >=20
+> > > > >=20
+> > > > > It was my understanding from the RFC feedback that this "lighter"=
+ way
+> > > > > is preferable and we already have some tests written like that.
+> > > > > Don't have a strong opinion on this topic.
+> > > >=20
+> > > > Ack, I'm obviously losing a bunch of context here :-(
+> > > > I like coalescing better, but if the original suggestion was to use
+> > > > this lighter way, I'll keep that in mind while reviewing.
+> > >=20
+> > > I still prefer the clean look of the tests, so I've applied this set.
+> > >=20
+> > > But I'm not going to insist that this is the only style developers
+> > > should use moving forward.
+> > > Whoever prefers "" style can use it in the future tests.
+> >=20
+> > Great, because I found out in practice that inability to add comments
+> > to the manually written asm code is a pretty big limitation.
+>=20
+> What do you mean by "inability" ?
+> The comments can be added. See verifier_and.c
+>         r0 &=3D 0xFFFF1234;                               \
+>         /* Upper bits are unknown but AND above masks out 1 zero'ing
+> lower bits */\
+>         if w0 < 1 goto l0_%=3D;                           \
 
-Signed-off-by: Quentin Monnet <quentin@isovalent.com>
-Acked-by: Stanislav Fomichev <sdf@google.com>
----
- .../bpftool/Documentation/bpftool-prog.rst    |  8 +--
- tools/bpf/bpftool/bash-completion/bpftool     | 18 +++---
- tools/bpf/bpftool/prog.c                      | 61 ++++++++++---------
- 3 files changed, 48 insertions(+), 39 deletions(-)
-
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-index 06d1e4314406..9443c524bb76 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-@@ -28,8 +28,8 @@ PROG COMMANDS
- =============
- 
- |	**bpftool** **prog** { **show** | **list** } [*PROG*]
--|	**bpftool** **prog dump xlated** *PROG* [{**file** *FILE* | **opcodes** | **visual** | **linum**}]
--|	**bpftool** **prog dump jited**  *PROG* [{**file** *FILE* | **opcodes** | **linum**}]
-+|	**bpftool** **prog dump xlated** *PROG* [{ **file** *FILE* | [**opcodes**] [**linum**] [**visual**] }]
-+|	**bpftool** **prog dump jited**  *PROG* [{ **file** *FILE* | [**opcodes**] [**linum**] }]
- |	**bpftool** **prog pin** *PROG* *FILE*
- |	**bpftool** **prog** { **load** | **loadall** } *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*] [**autoattach**]
- |	**bpftool** **prog attach** *PROG* *ATTACH_TYPE* [*MAP*]
-@@ -88,7 +88,7 @@ DESCRIPTION
- 		  programs. On such kernels bpftool will automatically emit this
- 		  information as well.
- 
--	**bpftool prog dump xlated** *PROG* [{ **file** *FILE* | **opcodes** | **visual** | **linum** }]
-+	**bpftool prog dump xlated** *PROG* [{ **file** *FILE* | [**opcodes**] [**linum**] [**visual**] }]
- 		  Dump eBPF instructions of the programs from the kernel. By
- 		  default, eBPF will be disassembled and printed to standard
- 		  output in human-readable format. In this case, **opcodes**
-@@ -109,7 +109,7 @@ DESCRIPTION
- 		  be displayed.  If **linum** is specified, the filename, line
- 		  number and line column will also be displayed.
- 
--	**bpftool prog dump jited**  *PROG* [{ **file** *FILE* | **opcodes** | **linum** }]
-+	**bpftool prog dump jited**  *PROG* [{ **file** *FILE* | [**opcodes**] [**linum**] }]
- 		  Dump jited image (host machine code) of the program.
- 
- 		  If *FILE* is specified image will be written to a file,
-diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-index 35f26f7c1124..98eb3852e771 100644
---- a/tools/bpf/bpftool/bash-completion/bpftool
-+++ b/tools/bpf/bpftool/bash-completion/bpftool
-@@ -268,7 +268,7 @@ _bpftool()
- 
-     # Deal with simplest keywords
-     case $prev in
--        help|hex|opcodes|visual|linum)
-+        help|hex)
-             return 0
-             ;;
-         tag)
-@@ -366,13 +366,17 @@ _bpftool()
-                             return 0
-                             ;;
-                         *)
--                            _bpftool_once_attr 'file'
-+                            # "file" is not compatible with other keywords here
-+                            if _bpftool_search_list 'file'; then
-+                                return 0
-+                            fi
-+                            if ! _bpftool_search_list 'linum opcodes visual'; then
-+                                _bpftool_once_attr 'file'
-+                            fi
-+                            _bpftool_once_attr 'linum'
-+                            _bpftool_once_attr 'opcodes'
-                             if _bpftool_search_list 'xlated'; then
--                                COMPREPLY+=( $( compgen -W 'opcodes visual linum' -- \
--                                    "$cur" ) )
--                            else
--                                COMPREPLY+=( $( compgen -W 'opcodes linum' -- \
--                                    "$cur" ) )
-+                                _bpftool_once_attr 'visual'
-                             fi
-                             return 0
-                             ;;
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index d855118f0d96..567ac37dbd86 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -907,37 +907,42 @@ static int do_dump(int argc, char **argv)
- 	if (nb_fds < 1)
- 		goto exit_free;
- 
--	if (is_prefix(*argv, "file")) {
--		NEXT_ARG();
--		if (!argc) {
--			p_err("expected file path");
--			goto exit_close;
--		}
--		if (nb_fds > 1) {
--			p_err("several programs matched");
--			goto exit_close;
--		}
-+	while (argc) {
-+		if (is_prefix(*argv, "file")) {
-+			NEXT_ARG();
-+			if (!argc) {
-+				p_err("expected file path");
-+				goto exit_close;
-+			}
-+			if (nb_fds > 1) {
-+				p_err("several programs matched");
-+				goto exit_close;
-+			}
-+
-+			filepath = *argv;
-+			NEXT_ARG();
-+		} else if (is_prefix(*argv, "opcodes")) {
-+			opcodes = true;
-+			NEXT_ARG();
-+		} else if (is_prefix(*argv, "visual")) {
-+			if (nb_fds > 1) {
-+				p_err("several programs matched");
-+				goto exit_close;
-+			}
- 
--		filepath = *argv;
--		NEXT_ARG();
--	} else if (is_prefix(*argv, "opcodes")) {
--		opcodes = true;
--		NEXT_ARG();
--	} else if (is_prefix(*argv, "visual")) {
--		if (nb_fds > 1) {
--			p_err("several programs matched");
-+			visual = true;
-+			NEXT_ARG();
-+		} else if (is_prefix(*argv, "linum")) {
-+			linum = true;
-+			NEXT_ARG();
-+		} else {
-+			usage();
- 			goto exit_close;
- 		}
--
--		visual = true;
--		NEXT_ARG();
--	} else if (is_prefix(*argv, "linum")) {
--		linum = true;
--		NEXT_ARG();
- 	}
- 
--	if (argc) {
--		usage();
-+	if (filepath && (opcodes || visual || linum)) {
-+		p_err("'file' is not compatible with 'opcodes', 'visual', or 'linum'");
- 		goto exit_close;
- 	}
- 
-@@ -2417,8 +2422,8 @@ static int do_help(int argc, char **argv)
- 
- 	fprintf(stderr,
- 		"Usage: %1$s %2$s { show | list } [PROG]\n"
--		"       %1$s %2$s dump xlated PROG [{ file FILE | opcodes | visual | linum }]\n"
--		"       %1$s %2$s dump jited  PROG [{ file FILE | opcodes | linum }]\n"
-+		"       %1$s %2$s dump xlated PROG [{ file FILE | [opcodes] [linum] [visual] }]\n"
-+		"       %1$s %2$s dump jited  PROG [{ file FILE | [opcodes] [linum] }]\n"
- 		"       %1$s %2$s pin   PROG FILE\n"
- 		"       %1$s %2$s { load | loadall } OBJ  PATH \\\n"
- 		"                         [type TYPE] [dev NAME] \\\n"
--- 
-2.34.1
-
+Yes, /* ... */ work as expected.
+// work as well, but one has to be careful, because without \n the full
+string after first // would be a comment.
