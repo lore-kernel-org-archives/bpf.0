@@ -2,135 +2,96 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4A70C7619A
-	for <bpf@archiver.kernel.org>; Mon, 27 Mar 2023 02:37:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6899DC74A5B
+	for <bpf@archiver.kernel.org>; Mon, 27 Mar 2023 02:39:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbjC0ChI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 26 Mar 2023 22:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52952 "EHLO
+        id S229622AbjC0Cjn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 26 Mar 2023 22:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjC0ChH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 26 Mar 2023 22:37:07 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9311140C0;
-        Sun, 26 Mar 2023 19:37:02 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PlH5P09Hcz4f3nKC;
-        Mon, 27 Mar 2023 10:36:57 +0800 (CST)
-Received: from k01.huawei.com (unknown [10.67.174.197])
-        by APP4 (Coremail) with SMTP id gCh0CgB3J6tKASFkB_OSGA--.18301S2;
-        Mon, 27 Mar 2023 10:36:58 +0800 (CST)
-From:   Xu Kuohai <xukuohai@huaweicloud.com>
-To:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next] selftests/bpf: Remove two infinite loop bound check cases
-Date:   Mon, 27 Mar 2023 11:35:38 -0400
-Message-Id: <20230327153538.850440-1-xukuohai@huaweicloud.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S229475AbjC0Cjm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 26 Mar 2023 22:39:42 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E5E44AD
+        for <bpf@vger.kernel.org>; Sun, 26 Mar 2023 19:39:40 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PlH7z5BK1zKxnw;
+        Mon, 27 Mar 2023 10:39:11 +0800 (CST)
+Received: from [10.67.111.192] (10.67.111.192) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 27 Mar 2023 10:39:38 +0800
+Message-ID: <3a57911f-101f-d6aa-2d69-29a877a47830@huawei.com>
+Date:   Mon, 27 Mar 2023 10:39:37 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Check when bounds are not
+ in the 32-bit range
+Content-Language: en-US
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>
+CC:     bpf <bpf@vger.kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>
+References: <20230322213056.2470-1-daniel@iogearbox.net>
+ <20230322213056.2470-2-daniel@iogearbox.net>
+ <CAADnVQJQ_Kptpa5w=E+Z_PKo7jOxQv+bm6oTDF0cdQ0+avHWcA@mail.gmail.com>
+From:   Xu Kuohai <xukuohai@huawei.com>
+In-Reply-To: <CAADnVQJQ_Kptpa5w=E+Z_PKo7jOxQv+bm6oTDF0cdQ0+avHWcA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgB3J6tKASFkB_OSGA--.18301S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZw48AFWkKrW7XrWxKFyDJrb_yoW5WFyrpa
-        4fX3ZrJrWxJw4UAa4kKay2vrySgrWkZa17Aas7Kr1xAry7t3W3Wa4Uta15CwnxtryfGrsa
-        vr1UAwn7tayUWw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r4Y6ry7M2
-        8lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_
-        tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r
-        xl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv
-        0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z2
-        80aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28I
-        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
-        IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
-        z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUcZXoUUUUU
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-Originating-IP: [10.67.111.192]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Xu Kuohai <xukuohai@huawei.com>
+On 3/26/2023 9:10 AM, Alexei Starovoitov wrote:
+> On Wed, Mar 22, 2023 at 2:38 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>>
+>> From: Xu Kuohai <xukuohai@huawei.com>
+>>
+>> Add cases to check if bound is updated correctly when 64-bit value is
+>> not in the 32-bit range.
+>>
+>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+>> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+>> Acked-by: John Fastabend <john.fastabend@gmail.com>
+>> ---
+>>   tools/testing/selftests/bpf/verifier/bounds.c | 121 ++++++++++++++++++
+>>   1 file changed, 121 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/bpf/verifier/bounds.c b/tools/testing/selftests/bpf/verifier/bounds.c
+>> index 33125d5f6772..74b1917d4208 100644
+>> --- a/tools/testing/selftests/bpf/verifier/bounds.c
+>> +++ b/tools/testing/selftests/bpf/verifier/bounds.c
+> ...
+>> +       BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
+>> +       BPF_LD_IMM64(BPF_REG_0, 0x7fffffffffffff10),
+>> +       BPF_ALU64_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
+>> +
+>> +       BPF_LD_IMM64(BPF_REG_0, 0x8000000000000000),
+>> +       BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
+>> +       /* r1 signed range is [S64_MIN, S64_MAX] */
+>> +       BPF_JMP_REG(BPF_JSLT, BPF_REG_0, BPF_REG_1, -2),
+> ...
+>> +       BPF_MOV32_IMM(BPF_REG_0, 0x80000000),
+>> +       BPF_ALU32_IMM(BPF_ADD, BPF_REG_0, 1),
+>> +       /* r1 signed range is [S32_MIN, S32_MAX] */
+>> +       BPF_JMP32_REG(BPF_JSLT, BPF_REG_0, BPF_REG_1, -2),
+>> +
+>> +       BPF_MOV64_IMM(BPF_REG_0, 0),
+>> +       BPF_EXIT_INSN(),
+>> +       },
+>> +       .errstr = "BPF program is too large",
+> 
+> These infinite loops take a very long time to execute.
+> The test_verifier got a lot slower because of these tests.
+> These infinite loops don't add much value to the actual test.
+> Please rewrite them without infinite loops.
+> .
 
-The two infinite loop bound check cases added by commit
-1a3148fc171f ("selftests/bpf: Check when bounds are not in the 32-bit range")
-take a long time to execute but don't add much value.
-
-Remove them to reduce run time of test_verifier.
-
-Fixes: 1a3148fc171f ("selftests/bpf: Check when bounds are not in the 32-bit range")
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
----
- tools/testing/selftests/bpf/verifier/bounds.c | 50 -------------------
- 1 file changed, 50 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/verifier/bounds.c b/tools/testing/selftests/bpf/verifier/bounds.c
-index 74b1917d4208..515a8222f08f 100644
---- a/tools/testing/selftests/bpf/verifier/bounds.c
-+++ b/tools/testing/selftests/bpf/verifier/bounds.c
-@@ -777,31 +777,6 @@
- 	.result = ACCEPT,
- 	.prog_type = BPF_PROG_TYPE_XDP,
- },
--{
--	"bound check with JMP_JSLT for crossing 64-bit signed boundary",
--	.insns = {
--	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
--	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data_end)),
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
--	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 8),
--
--	BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
--	BPF_LD_IMM64(BPF_REG_0, 0x7fffffffffffff10),
--	BPF_ALU64_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
--
--	BPF_LD_IMM64(BPF_REG_0, 0x8000000000000000),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
--	/* r1 signed range is [S64_MIN, S64_MAX] */
--	BPF_JMP_REG(BPF_JSLT, BPF_REG_0, BPF_REG_1, -2),
--
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_EXIT_INSN(),
--	},
--	.errstr = "BPF program is too large",
--	.result = REJECT,
--	.prog_type = BPF_PROG_TYPE_XDP,
--},
- {
- 	"bound check for loop upper bound greater than U32_MAX",
- 	.insns = {
-@@ -849,28 +824,3 @@
- 	.result = ACCEPT,
- 	.prog_type = BPF_PROG_TYPE_XDP,
- },
--{
--	"bound check with JMP32_JSLT for crossing 32-bit signed boundary",
--	.insns = {
--	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
--	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data_end)),
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
--	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 6),
--
--	BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
--	BPF_MOV32_IMM(BPF_REG_0, 0x7fffff10),
--	BPF_ALU32_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
--
--	BPF_MOV32_IMM(BPF_REG_0, 0x80000000),
--	BPF_ALU32_IMM(BPF_ADD, BPF_REG_0, 1),
--	/* r1 signed range is [S32_MIN, S32_MAX] */
--	BPF_JMP32_REG(BPF_JSLT, BPF_REG_0, BPF_REG_1, -2),
--
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_EXIT_INSN(),
--	},
--	.errstr = "BPF program is too large",
--	.result = REJECT,
--	.prog_type = BPF_PROG_TYPE_XDP,
--},
--- 
-2.30.2
-
+Sorry for that. I've sent a patch to remove these two cases.
