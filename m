@@ -2,61 +2,60 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8578EC761A6
-	for <bpf@archiver.kernel.org>; Mon, 27 Mar 2023 19:12:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1562C77B6C
+	for <bpf@archiver.kernel.org>; Mon, 27 Mar 2023 19:12:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232548AbjC0TM0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Mar 2023 15:12:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34462 "EHLO
+        id S232621AbjC0TM2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Mar 2023 15:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbjC0TMY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 27 Mar 2023 15:12:24 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 130842720
-        for <bpf@vger.kernel.org>; Mon, 27 Mar 2023 12:11:56 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id cn12so6285714qtb.8
-        for <bpf@vger.kernel.org>; Mon, 27 Mar 2023 12:11:56 -0700 (PDT)
+        with ESMTP id S232568AbjC0TM0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 27 Mar 2023 15:12:26 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F10E2112
+        for <bpf@vger.kernel.org>; Mon, 27 Mar 2023 12:11:55 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id n14so9617836qta.10
+        for <bpf@vger.kernel.org>; Mon, 27 Mar 2023 12:11:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1679944316;
+        d=bytedance.com; s=google; t=1679944314;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=OzIQcNqys8Zuk/+dMRpS5HHTGI8p2pv2tGiZ4CSbhe0=;
-        b=igvtpJ4h3mUlwgPmMGjf4lj+LFMtI2T0XYCHEitT1RscqfzENMJBHAjAnDcXeggWw6
-         BbPAk8qywx5LNuJPbvpM5LPKuNdtgstorMSUa2VKyft0Ghm+pq958iTlO31Bo/D21RLA
-         Isr+wZmCR5DbTw3i2Ukpq6BHU8FPyOcdQxORtvQONKTHzcU0KZ/npyCiM0AGLKaIp3bQ
-         c3zpG9mGslhgAvJqvq9FwLylcN9VzV1BdZwEKwrYOtZhxr+Rgn8eFOLI7PI0ojx3O+1h
-         0Osy9DCmUHnGVJ9MPQP4V1H2L6XWqTn3ZxTaIqg8iHNRInwAzGBvvs6QX1yCdHaDp1St
-         s9jQ==
+        bh=S7E9eRcSCLzdTAiji7pdc0DuBlF56s7eyY//klMw3tw=;
+        b=d3eN6OSJuaVX6CcBZqY1aT3ZOcXwvSw17gTVbVUb/6buh/zJJ9cMCdo26BFC6wjl1b
+         xqfE2s6dpUYipxmnYTaYaLiZXXxEhIDR+1nTxFujOUQR1PsvLkwR9kZcEkmcerwsMaUH
+         bmwfx0bGnG+I4sTTaa49SUutDN+LPoApuN5Q7MKr1uMYlrsFZ1Tu2N+8gZv4C+WAwh73
+         NjxiXMyw4Z3IbTuXvauKNRS0TzdpTVTAu3Nfrssi/4Hy2TwpUJij1+odzb9QzZAp21S+
+         n9WcgZL+aHtQwBgjvEXpAgz/LTmAju3PX+ZFiS/cemMIiadmYb+UfsUyUJLRcHo8RpoK
+         g13w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679944316;
+        d=1e100.net; s=20210112; t=1679944314;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OzIQcNqys8Zuk/+dMRpS5HHTGI8p2pv2tGiZ4CSbhe0=;
-        b=Wd8eUzDzogJBmWqqkaZbLwhgrdtQod4sieOhFcqqmhYh/pEhE978jHirQaccNEfHMH
-         Hg0U+CjIZUn5LoCwCOOpQ9MlYPoBrJ6qzhsMl3o/pAn2KTyaSG/ZuhNco3oWwQ1i4qGd
-         iTxtjaDkajLmYJf7rRhNG6dCOg5uteIOkjAfINLBYgFUcBAvAzyzpFQReRQtBN9/tNM7
-         mELu5ALRm5yPhND32fG4JPUPqhJavWGY2Sjo1mtHkw8G/msX+ltYaKdVSAHEYpCLm2cP
-         tpNMMX9HUR/kicyPcuAl+wCp4KQpQxpDQ5Iffa8/H3P+l1pioZcLE5SObStklEyMFUC7
-         Df8Q==
-X-Gm-Message-State: AO0yUKUNvupP7liEaIxELn/2j5oOvJ8JYn54OGnC2+rfDos7xVUYw1O+
-        BuPSjlY3I2phWnrAW3qyl1bVhA==
-X-Google-Smtp-Source: AK7set+DaMDq197o5VboTURLgPUvM1L8Cilfj2fo6Qhqc7ss6X/78vWszCgw7RUV52PIvI5enmaXCA==
-X-Received: by 2002:a05:622a:81:b0:3de:4819:2449 with SMTP id o1-20020a05622a008100b003de48192449mr23393643qtw.38.1679944316085;
-        Mon, 27 Mar 2023 12:11:56 -0700 (PDT)
+        bh=S7E9eRcSCLzdTAiji7pdc0DuBlF56s7eyY//klMw3tw=;
+        b=jFcoCvakYt9mbVEjXIFom04ORWoYlJXRmsiG0QYNv7VSm51ig1YLMgMcLJK6b9R1Jf
+         Jr2t2n4x9tIchYWLX9OWQK+2vROw68DDO06reLdvJNtOaqY/CVI/7U8ztAyu7VShhJmn
+         uKsMPlmB9Mp5fhWn0VtzkSBOkdch2lkhLkG2Zp/3WucLf3sbvni3/Xi8nYr5C0zfW6Qi
+         bcz6vEaNog3DwuinHEjeMEG1XpI5MUI3LaPoEq1HQfRAu4lObuHg5Ph7XgwUQrJWHeKZ
+         su7DbIQ2tIZZfoWgEGRrl/SiW+BPF6pSrDXwlN8QtWIq+rxBrrDtOZyHmfzCfB1LBffM
+         SHTQ==
+X-Gm-Message-State: AO0yUKU9IuFQwnhMFaayoAR7roEToIc3wjSd8HmnwHVIjfi2CoOO6Q2y
+        brCTCQjfoShgNfuSQCn0H9ltpQ==
+X-Google-Smtp-Source: AK7set8TqWWZdzdukJFkEeB4pIRLk59auh4IPSUzMCmPS2Y6mDrPMbVemdA7q32SnFo3mz2rASll3A==
+X-Received: by 2002:a05:622a:1a8e:b0:3bf:9f6e:a383 with SMTP id s14-20020a05622a1a8e00b003bf9f6ea383mr22944122qtc.20.1679944314237;
+        Mon, 27 Mar 2023 12:11:54 -0700 (PDT)
 Received: from [172.17.0.3] ([130.44.215.126])
-        by smtp.gmail.com with ESMTPSA id d185-20020a37b4c2000000b007425ef4cbc2sm16989236qkf.100.2023.03.27.12.11.55
+        by smtp.gmail.com with ESMTPSA id d185-20020a37b4c2000000b007425ef4cbc2sm16989236qkf.100.2023.03.27.12.11.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 12:11:55 -0700 (PDT)
+        Mon, 27 Mar 2023 12:11:53 -0700 (PDT)
 From:   Bobby Eshleman <bobby.eshleman@bytedance.com>
-Date:   Mon, 27 Mar 2023 19:11:53 +0000
-Subject: [PATCH net-next v4 3/3] selftests/bpf: add a test case for vsock
- sockmap
+Date:   Mon, 27 Mar 2023 19:11:51 +0000
+Subject: [PATCH net-next v4 1/3] vsock: support sockmap
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230327-vsock-sockmap-v4-3-c62b7cd92a85@bytedance.com>
+Message-Id: <20230327-vsock-sockmap-v4-1-c62b7cd92a85@bytedance.com>
 References: <20230327-vsock-sockmap-v4-0-c62b7cd92a85@bytedance.com>
 In-Reply-To: <20230327-vsock-sockmap-v4-0-c62b7cd92a85@bytedance.com>
 To:     Stefan Hajnoczi <stefanha@redhat.com>,
@@ -87,230 +86,513 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a test case testing the redirection from connectible AF_VSOCK
-sockets to connectible AF_UNIX sockets.
+This patch adds sockmap support for vsock sockets. It is intended to be
+usable by all transports, but only the virtio and loopback transports
+are implemented.
+
+SOCK_STREAM, SOCK_DGRAM, and SOCK_SEQPACKET are all supported.
 
 Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
-Acked-by: Stefano Garzarella <sgarzare@redhat.com>
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
 ---
- .../selftests/bpf/prog_tests/sockmap_listen.c      | 163 +++++++++++++++++++++
- 1 file changed, 163 insertions(+)
+ drivers/vhost/vsock.c                   |   1 +
+ include/linux/virtio_vsock.h            |   1 +
+ include/net/af_vsock.h                  |  17 ++++
+ net/vmw_vsock/Makefile                  |   1 +
+ net/vmw_vsock/af_vsock.c                |  64 ++++++++++--
+ net/vmw_vsock/virtio_transport.c        |   2 +
+ net/vmw_vsock/virtio_transport_common.c |  25 +++++
+ net/vmw_vsock/vsock_bpf.c               | 174 ++++++++++++++++++++++++++++++++
+ net/vmw_vsock/vsock_loopback.c          |   2 +
+ 9 files changed, 281 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-index 567e07c19ecc..8f09e1ea3ba7 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-@@ -18,6 +18,7 @@
- #include <string.h>
- #include <sys/select.h>
- #include <unistd.h>
-+#include <linux/vm_sockets.h>
+diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
+index c8e6087769a1..6578db78f0ae 100644
+--- a/drivers/vhost/vsock.c
++++ b/drivers/vhost/vsock.c
+@@ -439,6 +439,7 @@ static struct virtio_transport vhost_transport = {
+ 		.notify_send_post_enqueue = virtio_transport_notify_send_post_enqueue,
+ 		.notify_buffer_size       = virtio_transport_notify_buffer_size,
  
- #include <bpf/bpf.h>
- #include <bpf/libbpf.h>
-@@ -251,6 +252,16 @@ static void init_addr_loopback6(struct sockaddr_storage *ss, socklen_t *len)
- 	*len = sizeof(*addr6);
++		.read_skb = virtio_transport_read_skb,
+ 	},
+ 
+ 	.send_pkt = vhost_transport_send_pkt,
+diff --git a/include/linux/virtio_vsock.h b/include/linux/virtio_vsock.h
+index 3f9c16611306..c58453699ee9 100644
+--- a/include/linux/virtio_vsock.h
++++ b/include/linux/virtio_vsock.h
+@@ -245,4 +245,5 @@ u32 virtio_transport_get_credit(struct virtio_vsock_sock *vvs, u32 wanted);
+ void virtio_transport_put_credit(struct virtio_vsock_sock *vvs, u32 credit);
+ void virtio_transport_deliver_tap_pkt(struct sk_buff *skb);
+ int virtio_transport_purge_skbs(void *vsk, struct sk_buff_head *list);
++int virtio_transport_read_skb(struct vsock_sock *vsk, skb_read_actor_t read_actor);
+ #endif /* _LINUX_VIRTIO_VSOCK_H */
+diff --git a/include/net/af_vsock.h b/include/net/af_vsock.h
+index 568a87c5e0d0..0e7504a42925 100644
+--- a/include/net/af_vsock.h
++++ b/include/net/af_vsock.h
+@@ -75,6 +75,7 @@ struct vsock_sock {
+ 	void *trans;
+ };
+ 
++s64 vsock_connectible_has_data(struct vsock_sock *vsk);
+ s64 vsock_stream_has_data(struct vsock_sock *vsk);
+ s64 vsock_stream_has_space(struct vsock_sock *vsk);
+ struct sock *vsock_create_connected(struct sock *parent);
+@@ -173,6 +174,9 @@ struct vsock_transport {
+ 
+ 	/* Addressing. */
+ 	u32 (*get_local_cid)(void);
++
++	/* Read a single skb */
++	int (*read_skb)(struct vsock_sock *, skb_read_actor_t);
+ };
+ 
+ /**** CORE ****/
+@@ -225,5 +229,18 @@ int vsock_init_tap(void);
+ int vsock_add_tap(struct vsock_tap *vt);
+ int vsock_remove_tap(struct vsock_tap *vt);
+ void vsock_deliver_tap(struct sk_buff *build_skb(void *opaque), void *opaque);
++int vsock_connectible_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
++			      int flags);
++int vsock_dgram_recvmsg(struct socket *sock, struct msghdr *msg,
++			size_t len, int flags);
++
++#ifdef CONFIG_BPF_SYSCALL
++extern struct proto vsock_proto;
++int vsock_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore);
++void __init vsock_bpf_build_proto(void);
++#else
++static inline void __init vsock_bpf_build_proto(void)
++{}
++#endif
+ 
+ #endif /* __AF_VSOCK_H__ */
+diff --git a/net/vmw_vsock/Makefile b/net/vmw_vsock/Makefile
+index 6a943ec95c4a..5da74c4a9f1d 100644
+--- a/net/vmw_vsock/Makefile
++++ b/net/vmw_vsock/Makefile
+@@ -8,6 +8,7 @@ obj-$(CONFIG_HYPERV_VSOCKETS) += hv_sock.o
+ obj-$(CONFIG_VSOCKETS_LOOPBACK) += vsock_loopback.o
+ 
+ vsock-y += af_vsock.o af_vsock_tap.o vsock_addr.o
++vsock-$(CONFIG_BPF_SYSCALL) += vsock_bpf.o
+ 
+ vsock_diag-y += diag.o
+ 
+diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+index 19aea7cba26e..5f2dda35c980 100644
+--- a/net/vmw_vsock/af_vsock.c
++++ b/net/vmw_vsock/af_vsock.c
+@@ -116,10 +116,13 @@ static void vsock_sk_destruct(struct sock *sk);
+ static int vsock_queue_rcv_skb(struct sock *sk, struct sk_buff *skb);
+ 
+ /* Protocol family. */
+-static struct proto vsock_proto = {
++struct proto vsock_proto = {
+ 	.name = "AF_VSOCK",
+ 	.owner = THIS_MODULE,
+ 	.obj_size = sizeof(struct vsock_sock),
++#ifdef CONFIG_BPF_SYSCALL
++	.psock_update_sk_prot = vsock_bpf_update_proto,
++#endif
+ };
+ 
+ /* The default peer timeout indicates how long we will wait for a peer response
+@@ -865,7 +868,7 @@ s64 vsock_stream_has_data(struct vsock_sock *vsk)
  }
+ EXPORT_SYMBOL_GPL(vsock_stream_has_data);
  
-+static void init_addr_loopback_vsock(struct sockaddr_storage *ss, socklen_t *len)
-+{
-+	struct sockaddr_vm *addr = memset(ss, 0, sizeof(*ss));
-+
-+	addr->svm_family = AF_VSOCK;
-+	addr->svm_port = VMADDR_PORT_ANY;
-+	addr->svm_cid = VMADDR_CID_LOCAL;
-+	*len = sizeof(*addr);
-+}
-+
- static void init_addr_loopback(int family, struct sockaddr_storage *ss,
- 			       socklen_t *len)
+-static s64 vsock_connectible_has_data(struct vsock_sock *vsk)
++s64 vsock_connectible_has_data(struct vsock_sock *vsk)
  {
-@@ -261,6 +272,9 @@ static void init_addr_loopback(int family, struct sockaddr_storage *ss,
- 	case AF_INET6:
- 		init_addr_loopback6(ss, len);
- 		return;
-+	case AF_VSOCK:
-+		init_addr_loopback_vsock(ss, len);
-+		return;
- 	default:
- 		FAIL("unsupported address family %d", family);
- 	}
-@@ -1478,6 +1492,8 @@ static const char *family_str(sa_family_t family)
- 		return "IPv6";
- 	case AF_UNIX:
- 		return "Unix";
-+	case AF_VSOCK:
-+		return "VSOCK";
- 	default:
- 		return "unknown";
- 	}
-@@ -1689,6 +1705,151 @@ static void test_unix_redir(struct test_sockmap_listen *skel, struct bpf_map *ma
- 	unix_skb_redir_to_connected(skel, map, sotype);
+ 	struct sock *sk = sk_vsock(vsk);
+ 
+@@ -874,6 +877,7 @@ static s64 vsock_connectible_has_data(struct vsock_sock *vsk)
+ 	else
+ 		return vsock_stream_has_data(vsk);
+ }
++EXPORT_SYMBOL_GPL(vsock_connectible_has_data);
+ 
+ s64 vsock_stream_has_space(struct vsock_sock *vsk)
+ {
+@@ -1131,6 +1135,13 @@ static __poll_t vsock_poll(struct file *file, struct socket *sock,
+ 	return mask;
  }
  
-+/* Returns two connected loopback vsock sockets */
-+static int vsock_socketpair_connectible(int sotype, int *v0, int *v1)
++static int vsock_read_skb(struct sock *sk, skb_read_actor_t read_actor)
 +{
-+	struct sockaddr_storage addr;
-+	socklen_t len = sizeof(addr);
-+	int s, p, c;
++	struct vsock_sock *vsk = vsock_sk(sk);
 +
-+	s = socket_loopback(AF_VSOCK, sotype);
-+	if (s < 0)
-+		return -1;
-+
-+	c = xsocket(AF_VSOCK, sotype | SOCK_NONBLOCK, 0);
-+	if (c == -1)
-+		goto close_srv;
-+
-+	if (getsockname(s, sockaddr(&addr), &len) < 0)
-+		goto close_cli;
-+
-+	if (connect(c, sockaddr(&addr), len) < 0 && errno != EINPROGRESS) {
-+		FAIL_ERRNO("connect");
-+		goto close_cli;
-+	}
-+
-+	len = sizeof(addr);
-+	p = accept_timeout(s, sockaddr(&addr), &len, IO_TIMEOUT_SEC);
-+	if (p < 0)
-+		goto close_cli;
-+
-+	*v0 = p;
-+	*v1 = c;
-+
-+	return 0;
-+
-+close_cli:
-+	close(c);
-+close_srv:
-+	close(s);
-+
-+	return -1;
++	return vsk->transport->read_skb(vsk, read_actor);
 +}
 +
-+static void vsock_unix_redir_connectible(int sock_mapfd, int verd_mapfd,
-+					 enum redir_mode mode, int sotype)
-+{
-+	const char *log_prefix = redir_mode_str(mode);
-+	char a = 'a', b = 'b';
-+	int u0, u1, v0, v1;
-+	int sfd[2];
-+	unsigned int pass;
-+	int err, n;
-+	u32 key;
+ static int vsock_dgram_sendmsg(struct socket *sock, struct msghdr *msg,
+ 			       size_t len)
+ {
+@@ -1242,18 +1253,42 @@ static int vsock_dgram_connect(struct socket *sock,
+ 	memcpy(&vsk->remote_addr, remote_addr, sizeof(vsk->remote_addr));
+ 	sock->state = SS_CONNECTED;
+ 
++	/* sock map disallows redirection of non-TCP sockets with sk_state !=
++	 * TCP_ESTABLISHED (see sock_map_redirect_allowed()), so we set
++	 * TCP_ESTABLISHED here to allow redirection of connected vsock dgrams.
++	 *
++	 * This doesn't seem to be abnormal state for datagram sockets, as the
++	 * same approach can be see in other datagram socket types as well
++	 * (such as unix sockets).
++	 */
++	sk->sk_state = TCP_ESTABLISHED;
 +
-+	zero_verdict_count(verd_mapfd);
+ out:
+ 	release_sock(sk);
+ 	return err;
+ }
+ 
+-static int vsock_dgram_recvmsg(struct socket *sock, struct msghdr *msg,
+-			       size_t len, int flags)
++int vsock_dgram_recvmsg(struct socket *sock, struct msghdr *msg,
++			size_t len, int flags)
+ {
+-	struct vsock_sock *vsk = vsock_sk(sock->sk);
++#ifdef CONFIG_BPF_SYSCALL
++	const struct proto *prot;
++#endif
++	struct vsock_sock *vsk;
++	struct sock *sk;
 +
-+	if (socketpair(AF_UNIX, SOCK_STREAM | SOCK_NONBLOCK, 0, sfd))
-+		return;
++	sk = sock->sk;
++	vsk = vsock_sk(sk);
 +
-+	u0 = sfd[0];
-+	u1 = sfd[1];
-+
-+	err = vsock_socketpair_connectible(sotype, &v0, &v1);
-+	if (err) {
-+		FAIL("vsock_socketpair_connectible() failed");
-+		goto close_uds;
++#ifdef CONFIG_BPF_SYSCALL
++	prot = READ_ONCE(sk->sk_prot);
++	if (prot != &vsock_proto)
++		return prot->recvmsg(sk, msg, len, flags, NULL);
++#endif
+ 
+ 	return vsk->transport->dgram_dequeue(vsk, msg, len, flags);
+ }
++EXPORT_SYMBOL_GPL(vsock_dgram_recvmsg);
+ 
+ static const struct proto_ops vsock_dgram_ops = {
+ 	.family = PF_VSOCK,
+@@ -1272,6 +1307,7 @@ static const struct proto_ops vsock_dgram_ops = {
+ 	.recvmsg = vsock_dgram_recvmsg,
+ 	.mmap = sock_no_mmap,
+ 	.sendpage = sock_no_sendpage,
++	.read_skb = vsock_read_skb,
+ };
+ 
+ static int vsock_transport_cancel_pkt(struct vsock_sock *vsk)
+@@ -2086,13 +2122,16 @@ static int __vsock_seqpacket_recvmsg(struct sock *sk, struct msghdr *msg,
+ 	return err;
+ }
+ 
+-static int
++int
+ vsock_connectible_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
+ 			  int flags)
+ {
+ 	struct sock *sk;
+ 	struct vsock_sock *vsk;
+ 	const struct vsock_transport *transport;
++#ifdef CONFIG_BPF_SYSCALL
++	const struct proto *prot;
++#endif
+ 	int err;
+ 
+ 	sk = sock->sk;
+@@ -2139,6 +2178,14 @@ vsock_connectible_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
+ 		goto out;
+ 	}
+ 
++#ifdef CONFIG_BPF_SYSCALL
++	prot = READ_ONCE(sk->sk_prot);
++	if (prot != &vsock_proto) {
++		release_sock(sk);
++		return prot->recvmsg(sk, msg, len, flags, NULL);
 +	}
++#endif
 +
-+	err = add_to_sockmap(sock_mapfd, u0, v0);
-+	if (err) {
-+		FAIL("add_to_sockmap failed");
-+		goto close_vsock;
-+	}
+ 	if (sk->sk_type == SOCK_STREAM)
+ 		err = __vsock_stream_recvmsg(sk, msg, len, flags);
+ 	else
+@@ -2148,6 +2195,7 @@ vsock_connectible_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
+ 	release_sock(sk);
+ 	return err;
+ }
++EXPORT_SYMBOL_GPL(vsock_connectible_recvmsg);
+ 
+ static int vsock_set_rcvlowat(struct sock *sk, int val)
+ {
+@@ -2188,6 +2236,7 @@ static const struct proto_ops vsock_stream_ops = {
+ 	.mmap = sock_no_mmap,
+ 	.sendpage = sock_no_sendpage,
+ 	.set_rcvlowat = vsock_set_rcvlowat,
++	.read_skb = vsock_read_skb,
+ };
+ 
+ static const struct proto_ops vsock_seqpacket_ops = {
+@@ -2209,6 +2258,7 @@ static const struct proto_ops vsock_seqpacket_ops = {
+ 	.recvmsg = vsock_connectible_recvmsg,
+ 	.mmap = sock_no_mmap,
+ 	.sendpage = sock_no_sendpage,
++	.read_skb = vsock_read_skb,
+ };
+ 
+ static int vsock_create(struct net *net, struct socket *sock,
+@@ -2348,6 +2398,8 @@ static int __init vsock_init(void)
+ 		goto err_unregister_proto;
+ 	}
+ 
++	vsock_bpf_build_proto();
 +
-+	n = write(v1, &a, sizeof(a));
-+	if (n < 0)
-+		FAIL_ERRNO("%s: write", log_prefix);
-+	if (n == 0)
-+		FAIL("%s: incomplete write", log_prefix);
-+	if (n < 1)
-+		goto out;
+ 	return 0;
+ 
+ err_unregister_proto:
+diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
+index 28b5a8e8e094..e95df847176b 100644
+--- a/net/vmw_vsock/virtio_transport.c
++++ b/net/vmw_vsock/virtio_transport.c
+@@ -457,6 +457,8 @@ static struct virtio_transport virtio_transport = {
+ 		.notify_send_pre_enqueue  = virtio_transport_notify_send_pre_enqueue,
+ 		.notify_send_post_enqueue = virtio_transport_notify_send_post_enqueue,
+ 		.notify_buffer_size       = virtio_transport_notify_buffer_size,
 +
-+	n = recv(mode == REDIR_INGRESS ? u0 : u1, &b, sizeof(b), MSG_DONTWAIT);
-+	if (n < 0)
-+		FAIL("%s: recv() err, errno=%d", log_prefix, errno);
-+	if (n == 0)
-+		FAIL("%s: incomplete recv", log_prefix);
-+	if (b != a)
-+		FAIL("%s: vsock socket map failed, %c != %c", log_prefix, a, b);
-+
-+	key = SK_PASS;
-+	err = xbpf_map_lookup_elem(verd_mapfd, &key, &pass);
-+	if (err)
-+		goto out;
-+	if (pass != 1)
-+		FAIL("%s: want pass count 1, have %d", log_prefix, pass);
-+out:
-+	key = 0;
-+	bpf_map_delete_elem(sock_mapfd, &key);
-+	key = 1;
-+	bpf_map_delete_elem(sock_mapfd, &key);
-+
-+close_vsock:
-+	close(v0);
-+	close(v1);
-+
-+close_uds:
-+	close(u0);
-+	close(u1);
-+}
-+
-+static void vsock_unix_skb_redir_connectible(struct test_sockmap_listen *skel,
-+					     struct bpf_map *inner_map,
-+					     int sotype)
++		.read_skb = virtio_transport_read_skb,
+ 	},
+ 
+ 	.send_pkt = virtio_transport_send_pkt,
+diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+index 957cdc01c8e8..cb0748dc281b 100644
+--- a/net/vmw_vsock/virtio_transport_common.c
++++ b/net/vmw_vsock/virtio_transport_common.c
+@@ -1383,6 +1383,31 @@ int virtio_transport_purge_skbs(void *vsk, struct sk_buff_head *queue)
+ }
+ EXPORT_SYMBOL_GPL(virtio_transport_purge_skbs);
+ 
++int virtio_transport_read_skb(struct vsock_sock *vsk, skb_read_actor_t recv_actor)
 +{
-+	int verdict = bpf_program__fd(skel->progs.prog_skb_verdict);
-+	int verdict_map = bpf_map__fd(skel->maps.verdict_map);
-+	int sock_map = bpf_map__fd(inner_map);
++	struct virtio_vsock_sock *vvs = vsk->trans;
++	struct sock *sk = sk_vsock(vsk);
++	struct sk_buff *skb;
++	int off = 0;
++	int copied;
 +	int err;
 +
-+	err = xbpf_prog_attach(verdict, sock_map, BPF_SK_SKB_VERDICT, 0);
-+	if (err)
-+		return;
++	spin_lock_bh(&vvs->rx_lock);
++	/* Use __skb_recv_datagram() for race-free handling of the receive. It
++	 * works for types other than dgrams.
++	 */
++	skb = __skb_recv_datagram(sk, &vvs->rx_queue, MSG_DONTWAIT, &off, &err);
++	spin_unlock_bh(&vvs->rx_lock);
 +
-+	skel->bss->test_ingress = false;
-+	vsock_unix_redir_connectible(sock_map, verdict_map, REDIR_EGRESS, sotype);
-+	skel->bss->test_ingress = true;
-+	vsock_unix_redir_connectible(sock_map, verdict_map, REDIR_INGRESS, sotype);
++	if (!skb)
++		return err;
 +
-+	xbpf_prog_detach2(verdict, sock_map, BPF_SK_SKB_VERDICT);
++	copied = recv_actor(sk, skb);
++	kfree_skb(skb);
++	return copied;
 +}
++EXPORT_SYMBOL_GPL(virtio_transport_read_skb);
 +
-+static void test_vsock_redir(struct test_sockmap_listen *skel, struct bpf_map *map)
+ MODULE_LICENSE("GPL v2");
+ MODULE_AUTHOR("Asias He");
+ MODULE_DESCRIPTION("common code for virtio vsock");
+diff --git a/net/vmw_vsock/vsock_bpf.c b/net/vmw_vsock/vsock_bpf.c
+new file mode 100644
+index 000000000000..a3c97546ab84
+--- /dev/null
++++ b/net/vmw_vsock/vsock_bpf.c
+@@ -0,0 +1,174 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2022 Bobby Eshleman <bobby.eshleman@bytedance.com>
++ *
++ * Based off of net/unix/unix_bpf.c
++ */
++
++#include <linux/bpf.h>
++#include <linux/module.h>
++#include <linux/skmsg.h>
++#include <linux/socket.h>
++#include <linux/wait.h>
++#include <net/af_vsock.h>
++#include <net/sock.h>
++
++#define vsock_sk_has_data(__sk, __psock)				\
++		({	!skb_queue_empty(&(__sk)->sk_receive_queue) ||	\
++			!skb_queue_empty(&(__psock)->ingress_skb) ||	\
++			!list_empty(&(__psock)->ingress_msg);		\
++		})
++
++static struct proto *vsock_prot_saved __read_mostly;
++static DEFINE_SPINLOCK(vsock_prot_lock);
++static struct proto vsock_bpf_prot;
++
++static bool vsock_has_data(struct sock *sk, struct sk_psock *psock)
 +{
-+	const char *family_name, *map_name;
-+	char s[MAX_TEST_NAME];
++	struct vsock_sock *vsk = vsock_sk(sk);
++	s64 ret;
 +
-+	family_name = family_str(AF_VSOCK);
-+	map_name = map_type_str(map);
-+	snprintf(s, sizeof(s), "%s %s %s", map_name, family_name, __func__);
-+	if (!test__start_subtest(s))
-+		return;
++	ret = vsock_connectible_has_data(vsk);
++	if (ret > 0)
++		return true;
 +
-+	vsock_unix_skb_redir_connectible(skel, map, SOCK_STREAM);
-+	vsock_unix_skb_redir_connectible(skel, map, SOCK_SEQPACKET);
++	return vsock_sk_has_data(sk, psock);
 +}
 +
- static void test_reuseport(struct test_sockmap_listen *skel,
- 			   struct bpf_map *map, int family, int sotype)
- {
-@@ -2060,12 +2221,14 @@ void serial_test_sockmap_listen(void)
- 	run_tests(skel, skel->maps.sock_map, AF_INET6);
- 	test_unix_redir(skel, skel->maps.sock_map, SOCK_DGRAM);
- 	test_unix_redir(skel, skel->maps.sock_map, SOCK_STREAM);
-+	test_vsock_redir(skel, skel->maps.sock_map);
++static bool vsock_msg_wait_data(struct sock *sk, struct sk_psock *psock, long timeo)
++{
++	bool ret;
++
++	DEFINE_WAIT_FUNC(wait, woken_wake_function);
++
++	if (sk->sk_shutdown & RCV_SHUTDOWN)
++		return true;
++
++	if (!timeo)
++		return false;
++
++	add_wait_queue(sk_sleep(sk), &wait);
++	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
++	ret = vsock_has_data(sk, psock);
++	if (!ret) {
++		wait_woken(&wait, TASK_INTERRUPTIBLE, timeo);
++		ret = vsock_has_data(sk, psock);
++	}
++	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
++	remove_wait_queue(sk_sleep(sk), &wait);
++	return ret;
++}
++
++static int __vsock_recvmsg(struct sock *sk, struct msghdr *msg, size_t len, int flags)
++{
++	struct socket *sock = sk->sk_socket;
++	int err;
++
++	if (sk->sk_type == SOCK_STREAM || sk->sk_type == SOCK_SEQPACKET)
++		err = vsock_connectible_recvmsg(sock, msg, len, flags);
++	else if (sk->sk_type == SOCK_DGRAM)
++		err = vsock_dgram_recvmsg(sock, msg, len, flags);
++	else
++		err = -EPROTOTYPE;
++
++	return err;
++}
++
++static int vsock_bpf_recvmsg(struct sock *sk, struct msghdr *msg,
++			     size_t len, int flags, int *addr_len)
++{
++	struct sk_psock *psock;
++	int copied;
++
++	psock = sk_psock_get(sk);
++	if (unlikely(!psock))
++		return __vsock_recvmsg(sk, msg, len, flags);
++
++	lock_sock(sk);
++	if (vsock_has_data(sk, psock) && sk_psock_queue_empty(psock)) {
++		release_sock(sk);
++		sk_psock_put(sk, psock);
++		return __vsock_recvmsg(sk, msg, len, flags);
++	}
++
++	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
++	while (copied == 0) {
++		long timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
++
++		if (!vsock_msg_wait_data(sk, psock, timeo)) {
++			copied = -EAGAIN;
++			break;
++		}
++
++		if (sk_psock_queue_empty(psock)) {
++			release_sock(sk);
++			sk_psock_put(sk, psock);
++			return __vsock_recvmsg(sk, msg, len, flags);
++		}
++
++		copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
++	}
++
++	release_sock(sk);
++	sk_psock_put(sk, psock);
++
++	return copied;
++}
++
++/* Copy of original proto with updated sock_map methods */
++static struct proto vsock_bpf_prot = {
++	.close = sock_map_close,
++	.recvmsg = vsock_bpf_recvmsg,
++	.sock_is_readable = sk_msg_is_readable,
++	.unhash = sock_map_unhash,
++};
++
++static void vsock_bpf_rebuild_protos(struct proto *prot, const struct proto *base)
++{
++	*prot        = *base;
++	prot->close  = sock_map_close;
++	prot->recvmsg = vsock_bpf_recvmsg;
++	prot->sock_is_readable = sk_msg_is_readable;
++}
++
++static void vsock_bpf_check_needs_rebuild(struct proto *ops)
++{
++	/* Paired with the smp_store_release() below. */
++	if (unlikely(ops != smp_load_acquire(&vsock_prot_saved))) {
++		spin_lock_bh(&vsock_prot_lock);
++		if (likely(ops != vsock_prot_saved)) {
++			vsock_bpf_rebuild_protos(&vsock_bpf_prot, ops);
++			/* Make sure proto function pointers are updated before publishing the
++			 * pointer to the struct.
++			 */
++			smp_store_release(&vsock_prot_saved, ops);
++		}
++		spin_unlock_bh(&vsock_prot_lock);
++	}
++}
++
++int vsock_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore)
++{
++	struct vsock_sock *vsk;
++
++	if (restore) {
++		sk->sk_write_space = psock->saved_write_space;
++		sock_replace_proto(sk, psock->sk_proto);
++		return 0;
++	}
++
++	vsk = vsock_sk(sk);
++	if (!vsk->transport)
++		return -ENODEV;
++
++	if (!vsk->transport->read_skb)
++		return -EOPNOTSUPP;
++
++	vsock_bpf_check_needs_rebuild(psock->sk_proto);
++	sock_replace_proto(sk, &vsock_bpf_prot);
++	return 0;
++}
++
++void __init vsock_bpf_build_proto(void)
++{
++	vsock_bpf_rebuild_protos(&vsock_bpf_prot, &vsock_proto);
++}
+diff --git a/net/vmw_vsock/vsock_loopback.c b/net/vmw_vsock/vsock_loopback.c
+index 671e03240fc5..40753b661c13 100644
+--- a/net/vmw_vsock/vsock_loopback.c
++++ b/net/vmw_vsock/vsock_loopback.c
+@@ -94,6 +94,8 @@ static struct virtio_transport loopback_transport = {
+ 		.notify_send_pre_enqueue  = virtio_transport_notify_send_pre_enqueue,
+ 		.notify_send_post_enqueue = virtio_transport_notify_send_post_enqueue,
+ 		.notify_buffer_size       = virtio_transport_notify_buffer_size,
++
++		.read_skb = virtio_transport_read_skb,
+ 	},
  
- 	skel->bss->test_sockmap = false;
- 	run_tests(skel, skel->maps.sock_hash, AF_INET);
- 	run_tests(skel, skel->maps.sock_hash, AF_INET6);
- 	test_unix_redir(skel, skel->maps.sock_hash, SOCK_DGRAM);
- 	test_unix_redir(skel, skel->maps.sock_hash, SOCK_STREAM);
-+	test_vsock_redir(skel, skel->maps.sock_hash);
- 
- 	test_sockmap_listen__destroy(skel);
- }
+ 	.send_pkt = vsock_loopback_send_pkt,
 
 -- 
 2.30.2
