@@ -2,108 +2,120 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB1D9C76195
-	for <bpf@archiver.kernel.org>; Mon, 27 Mar 2023 18:17:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D56CC76195
+	for <bpf@archiver.kernel.org>; Mon, 27 Mar 2023 18:21:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbjC0SRu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Mar 2023 14:17:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58226 "EHLO
+        id S229550AbjC0SVv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Mar 2023 14:21:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjC0SRt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 27 Mar 2023 14:17:49 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8625213C;
-        Mon, 27 Mar 2023 11:17:48 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id fb38so6296936pfb.7;
-        Mon, 27 Mar 2023 11:17:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679941068;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+Vi/Vv4Ii7DOvoFpFwntmDUanvKO2EfmjxpTZ1StCdY=;
-        b=I26JdAX+3TuKYJjsCYyzhZ9B09gut/FTRMAvLKPKWdkPU9mZgCjwhb1k94kK8ks8iA
-         QJA+vQ3ymv/++GennEwkjrDo9C6Ff7qrdU+IOpbQjBMvD0Tj2Ktkg38a2Exhp33nrJR6
-         w2yUoW/LwEAtbqeNkiGyXLqSHPvttQENVcVaZ4/aIXUqjxwZAgyFp9lpzhonluRkcU2l
-         O3p3oBDuVEWAzcQaRVWDg5YVUJc7ws78TB/JeNuF0ZRhXxj/xIxiQsJ3YxhaQvVbPDjJ
-         yytbG6pdnK5Bte0ZfKA/LOywNxSs2sCO2QIemIzHEnzw58K5+VO1GGxJKjNa8qkcUnh1
-         CVlw==
+        with ESMTP id S230468AbjC0SVv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 27 Mar 2023 14:21:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFEC3A8D
+        for <bpf@vger.kernel.org>; Mon, 27 Mar 2023 11:21:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679941262;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8QmIkpEKXa5UxgJDPzN81fUKnNNvP0DAA7O3XVhN+u0=;
+        b=EQ6t3VRB5Zba27t5ZzvVizS9pm3bknvNU0d/FXKE2Z0s1413tAlAefNjv7q5E5c7SllITe
+        nB8/3Qhado5pNVq2j8Qf42XFfAzYvcG0AoN8pJf/zABkmewpfBGYUlNlGku4kKoQMAq4Ke
+        fcRC8Ow+4DvMCg1kYS3REW71JkraonY=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-472-tCNcZ_oONhihQz907N6nSA-1; Mon, 27 Mar 2023 14:20:59 -0400
+X-MC-Unique: tCNcZ_oONhihQz907N6nSA-1
+Received: by mail-ed1-f71.google.com with SMTP id m18-20020a50d7d2000000b00501dfd867a4so13918960edj.20
+        for <bpf@vger.kernel.org>; Mon, 27 Mar 2023 11:20:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679941068;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+Vi/Vv4Ii7DOvoFpFwntmDUanvKO2EfmjxpTZ1StCdY=;
-        b=LaCysDhem23M8ScseagGSppASG2ZHy2ttGTVwX8aQ7mLRVcIOTO+jDuW5OFLb8B0Br
-         68PMvnaCFoHqmycq1Q2xr+ZWYcymrxGw5Bj+It+vDKJsZjC3dFnkrN1wJXDN0QAUwDTK
-         ElUKcUqplOc1JYA4QPPgASdDWlemHPt0967GCC62L8+4EV1DrG1jYwI3EDGP8YjAEFCy
-         Q2LXW0eWNuTsAvIunEwOrPHudWf/ujblSt3TESvAfArTVxRi6ItLM1gI3wkby3eZ+N2K
-         Tfyp4nsifjSUGPK9XK420iMr8KmUyN4a+b0ELjy8VpRK+UuJml2oA54E/qyHtQML3Aao
-         KClQ==
-X-Gm-Message-State: AAQBX9cm9iFzwcJ7fU/XkHPopBCc0h+rC4ebNBHXaN7QEyq5XEF6OzL6
-        mMfCwJAzqbb/LdOpxkyIryk=
-X-Google-Smtp-Source: AKy350Y8012cAr/N6sF0Ywui6BJ1fiKkY6zGyYY2AJjke0ROq/QFduoR2RbH8S8BdP+vcVAL/vuuKg==
-X-Received: by 2002:aa7:9696:0:b0:5a8:bcf2:125 with SMTP id f22-20020aa79696000000b005a8bcf20125mr12462613pfk.21.1679941068276;
-        Mon, 27 Mar 2023 11:17:48 -0700 (PDT)
-Received: from localhost ([98.97.117.131])
-        by smtp.gmail.com with ESMTPSA id x4-20020aa79184000000b005a8b4dcd21asm19930470pfa.15.2023.03.27.11.17.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 11:17:47 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 11:17:45 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     John Fastabend <john.fastabend@gmail.com>, cong.wang@bytedance.com,
-        jakub@cloudflare.com, daniel@iogearbox.net, lmb@isovalent.com,
-        edumazet@google.com
-Cc:     john.fastabend@gmail.com, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        will@isovalent.com
-Message-ID: <6421ddc9f15b8_18d4f208ec@john.notmuch>
-In-Reply-To: <20230327175446.98151-1-john.fastabend@gmail.com>
-References: <20230327175446.98151-1-john.fastabend@gmail.com>
-Subject: RE: [PATCH bpf v2 00/11] bpf sockmap fixes
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+        d=1e100.net; s=20210112; t=1679941258;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8QmIkpEKXa5UxgJDPzN81fUKnNNvP0DAA7O3XVhN+u0=;
+        b=o1aP9KeiqW28XvBkUmKgDPNkjAmRyE8r10ZqgTiD2zT6twpbAiUG0KsdNnbs0KX/so
+         2GnVvB1EYHhKQ9Dt1CfGFa2quhGCJa9CrddtIR4OrMJKrFppbYMOPyBjkeizR6jWJs3L
+         sF0RT2QgFbZXsW6sPVb5jVyQGZ1eKhhnNGlFGEUpN3P0SXuzuqh/9oFUkKOSAmsgnhWa
+         BMEOWT8RB07SadkwO+R1sVmnAEcFxIc8+iIumhp4MycIDO0WuGAUtUD2Z9VRKaa0UDZF
+         qJp6fmQQKE1Q1T+4LbDp1KedRP6q7NBO3WzoO+IGQH+KkicmMtxjmVYJULD3EZSneWF8
+         Milw==
+X-Gm-Message-State: AAQBX9ec9xX8/D4YWwmluyeBNinQ7ymYXcAliDg0AHIv6dx9qO3UyACl
+        c1XZpcyBcHWrHLdx3mWwgiVmavj5nsYEi37xGZwdHXje1haA4D6KhwYr857WUCu/hXLboemyUuO
+        En4x9XM917yQ=
+X-Received: by 2002:a17:906:578c:b0:88f:a236:69e6 with SMTP id k12-20020a170906578c00b0088fa23669e6mr13411015ejq.7.1679941258630;
+        Mon, 27 Mar 2023 11:20:58 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YyqZAVBR4sO7omGkqBh61MtackTk3PX7Mi9DzjBUxd+qSqTRoWMD57UFZPSeAY/JpJfDLw8w==
+X-Received: by 2002:a17:906:578c:b0:88f:a236:69e6 with SMTP id k12-20020a170906578c00b0088fa23669e6mr13410994ejq.7.1679941258315;
+        Mon, 27 Mar 2023 11:20:58 -0700 (PDT)
+Received: from [192.168.0.159] (185-219-167-205-static.vivo.cz. [185.219.167.205])
+        by smtp.gmail.com with ESMTPSA id l11-20020a1709066b8b00b00939faf4be97sm9309590ejr.215.2023.03.27.11.20.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Mar 2023 11:20:58 -0700 (PDT)
+Message-ID: <c076e249-705a-e1bb-c657-f80cd4f2145b@redhat.com>
+Date:   Mon, 27 Mar 2023 20:20:56 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH bpf-next] kallsyms: move module-related functions under
+ correct configs
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     bpf@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>
+References: <20230327161251.1129511-1-vmalik@redhat.com>
+ <ZCHWtptOwPPtUe+u@bombadil.infradead.org>
+From:   Viktor Malik <vmalik@redhat.com>
+In-Reply-To: <ZCHWtptOwPPtUe+u@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-John Fastabend wrote:
-> Fixes for sockmap running against NGINX TCP tests and also on an
-> underprovisioned VM so that we hit error (ENOMEM) cases regularly.
+On 3/27/23 19:47, Luis Chamberlain wrote:
+> On Mon, Mar 27, 2023 at 06:12:51PM +0200, Viktor Malik wrote:
+>> Functions for searching module kallsyms should have non-empty
+>> definitions only if CONFIG_MODULES=y and CONFIG_KALLSYMS=y. Until now,
+>> only CONFIG_MODULES check was used for many of these, which may have
+>> caused complilation errors on some configs.
+>>
+>> This patch moves all relevant functions under the correct configs.
+>>
+>> Signed-off-by: Viktor Malik <vmalik@redhat.com>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Link: https://lore.kernel.org/oe-kbuild-all/202303181535.RFDCnz3E-lkp@intel.com/
 > 
-> The first 3 patches fix cases related to ENOMEM that were either
-> causing splats or data hangs.
+> Thanks Viktor!  Does this fix something from an existing commit? If so
+> which one?  The commit log should mention it.
+
+Ah, right, I forgot about that. The commit log is missing:
+
+Fixes: bd5314f8dd2d ("kallsyms, bpf: Move find_kallsyms_symbol_value out of internal header")
+
+I can post v2 but I'm also fine with maintainers applying the tag.
+
+Thanks!
+Viktor
+
 > 
-> Then 4-7 resolved cases found when running NGINX with its sockets
-> assigned to sockmap. These mostly have to do with handling fin/shutdown
-> incorrectly and ensuring epoll_wait works as expected.
-> 
-> Patches 8 and 9 extract some of the logic used for sockmap_listen tests
-> so that we can use it in other tests because it didn't make much
-> sense to me to add tests to the sockmap_listen cases when here we
-> are testing send/recv *basic* cases.
-> 
-> Finally patches 10 and 11 add the new tests to ensure we handle
-> ioctl(FIONREAD) and shutdown correctly.
-> 
-> To test the series I ran the NGINX compliance tests and the sockmap
-> selftests. For now our compliance test just runs with SK_PASS.
-> 
-> There are some more things to be done here, but these 11 patches
-> stand on their own in my opionion and fix issues we are having in
-> CI now. For bpf-next we can fixup/improve selftests to use the
-> ASSERT_* in sockmap_helpers, streamline some of the testing, and
-> add more tests. We also still are debugging a few additional flakes
-> patches coming soon.
-> 
-> v2: use skb_queue_empty instead of *_empty_lockless (Eric)
->     oops incorrectly updated copied_seq on DROP case (Eric)
->     added test for drop case copied_seq update
+>    LUis
 > 
 
-Sorry folks on the to line there I resent with the cc list here. I had
-suppressed the CC list in the first batch.
-
-.John
