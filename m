@@ -2,233 +2,193 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA960C76196
-	for <bpf@archiver.kernel.org>; Tue, 28 Mar 2023 12:20:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 454DEC76196
+	for <bpf@archiver.kernel.org>; Tue, 28 Mar 2023 12:41:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbjC1MUz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Mar 2023 08:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54560 "EHLO
+        id S232748AbjC1Ml1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Mar 2023 08:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjC1MUy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Mar 2023 08:20:54 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 059101AC
-        for <bpf@vger.kernel.org>; Tue, 28 Mar 2023 05:20:53 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id eh3so48815256edb.11
-        for <bpf@vger.kernel.org>; Tue, 28 Mar 2023 05:20:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google; t=1680006051;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=k0ihwQt2nqdrwOe9JLFYGsen3V9a0AkY0Ja7Mxmjdic=;
-        b=cdY6DsRd5fCeM2URW+mDXaUD00uIvtJzeYlj9HGxvUTs6pCUYXEkop4diNOtjdkOj2
-         C4MO66ZjagSmfpikCPPnGgx16kaRGsUDyEvWMZzp9xZCzWzS5it7u0VZe19lthXLwBpJ
-         NETsNVK5oq5v5TWGafSQCyhRwJma0Os6GJapg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680006051;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k0ihwQt2nqdrwOe9JLFYGsen3V9a0AkY0Ja7Mxmjdic=;
-        b=fQkTICbcj0SlIbUctip9ar87QrMTkypky4WbSMUhAK1m/5XG9Si0xIYPolvErJFcxO
-         iT0zTAJZh8SgWkRksDIqC6NXpHBrMWcpCMYpmh2QUKih2BuKWQAJ7U3S3LYn6xe+B++z
-         3Dtp1Drh9ac4oCxVbykyNVPMel/KXCQ0yPNSJJTknEpVbRt8Y0OdUnMX4nkCyLzzNmNm
-         0TrHJ81CsPoBvgYtWq0aIY49ezS2DnGLFWmfKlYvcWEw6TiK6taFBuk3DqZT44qnGNqd
-         2HfkdB0QSjqj4iykEQSrFR7noZw1ntExg9nGj05rYWFAteqjNL/8DqP+ZGropQ3qQoIz
-         Oxsg==
-X-Gm-Message-State: AAQBX9fj9lqIhQmtFEYZNxWN7ZvrzDY5hLLxWA7rCQ9V5fl3FiKM6HWP
-        N1XeY9wgJecX8+wLHE1QGeC6QQt+VxZ4q344vK4=
-X-Google-Smtp-Source: AKy350bRcb9OoYfrgbGllA/FaDg7R1VVPVhPQiPVbyJvcu4BleKhs5iRr8p+o49TaulcllkigkxC8w==
-X-Received: by 2002:aa7:cac4:0:b0:4fc:709f:7abd with SMTP id l4-20020aa7cac4000000b004fc709f7abdmr14860038edt.2.1680006051368;
-        Tue, 28 Mar 2023 05:20:51 -0700 (PDT)
-Received: from cloudflare.com (79.184.147.137.ipv4.supernova.orange.pl. [79.184.147.137])
-        by smtp.gmail.com with ESMTPSA id cd2-20020a170906b34200b0092c8da1e5ecsm15238229ejb.21.2023.03.28.05.20.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 05:20:50 -0700 (PDT)
-References: <20230327175446.98151-1-john.fastabend@gmail.com>
- <20230327175446.98151-3-john.fastabend@gmail.com>
-User-agent: mu4e 1.6.10; emacs 28.2
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     cong.wang@bytedance.com, daniel@iogearbox.net, lmb@isovalent.com,
-        edumazet@google.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
-        ast@kernel.org, andrii@kernel.org, will@isovalent.com
-Subject: Re: [PATCH bpf v2 02/12] bpf: sockmap, convert schedule_work into
- delayed_work
-Date:   Tue, 28 Mar 2023 14:09:27 +0200
-In-reply-to: <20230327175446.98151-3-john.fastabend@gmail.com>
-Message-ID: <87tty55aou.fsf@cloudflare.com>
+        with ESMTP id S232743AbjC1MlV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Mar 2023 08:41:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA6EAD08;
+        Tue, 28 Mar 2023 05:41:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2ABD461756;
+        Tue, 28 Mar 2023 12:40:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 349F9C433EF;
+        Tue, 28 Mar 2023 12:40:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680007257;
+        bh=CQ4IVV781DkJukhgUnV5I5MiXxgHEAr0yze5wUMQGD0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jSTD76emm4A5eKALdBIaQ3QiObyvc/EMlMJt1TRimdv0s8YTuRll6/Rq9kQR3XDjw
+         sqMkhpkSleRPEYmdPECEutj2gCeiENx0CmU5HMvyTzt6j3Ia7MUB3xVKmCqrYhA8A9
+         1v/P1oFza2mt/o1UowBVxbRT1fC1Cqbzqn62LJ5/mXwU6/MqO897VtuLWvbYTiKa8G
+         K3qAjdom1k9nS5yK3xMKWA6n/Q8bbJn7c98vqe91bCXhX8rlmEWAY1a2kMbFh5xMJP
+         9QNtVNpgGxMlYzcB5dOekgE6GS7qsfU1kWQAFNvfcnt2Jfia5tRFShgeKmOrdbpYpt
+         v83NWk1SnFYsA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id A0F324052D; Tue, 28 Mar 2023 09:40:54 -0300 (-03)
+Date:   Tue, 28 Mar 2023 09:40:54 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Eduard Zingerman <eddyz87@gmail.com>
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        dwarves@vger.kernel.org, bpf@vger.kernel.org, kernel-team@fb.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        yhs@fb.com, jose.marchesi@oracle.com, david.faust@oracle.com,
+        alan.maguire@oracle.com
+Subject: Re: [PATCH dwarves v2 1/5] fprintf: Correct names for types with
+ btf_type_tag attribute
+Message-ID: <ZCLgVrwpb3fhnnE7@kernel.org>
+References: <20230314230417.1507266-1-eddyz87@gmail.com>
+ <20230314230417.1507266-2-eddyz87@gmail.com>
+ <ZCGCBF5iYxCtBQKh@kernel.org>
+ <b89f55694845d9d8784fe02700f184ff1de83e2e.camel@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b89f55694845d9d8784fe02700f184ff1de83e2e.camel@gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 10:54 AM -07, John Fastabend wrote:
-> Sk_buffs are fed into sockmap verdict programs either from a strparser
-> (when the user might want to decide how framing of skb is done by attaching
-> another parser program) or directly through tcp_read_sock. The
-> tcp_read_sock is the preferred method for performance when the BPF logic is
-> a stream parser.
->
-> The flow for Cilium's common use case with a stream parser is,
->
->  tcp_read_sock()
->   sk_psock_verdict_recv
->     ret = bpf_prog_run_pin_on_cpu()
->     sk_psock_verdict_apply(sock, skb, ret)
->      // if system is under memory pressure or app is slow we may
->      // need to queue skb. Do this queuing through ingress_skb and
->      // then kick timer to wake up handler
->      skb_queue_tail(ingress_skb, skb)
->      schedule_work(work);
->
->
-> The work queue is wired up to sk_psock_backlog(). This will then walk the
-> ingress_skb skb list that holds our sk_buffs that could not be handled,
-> but should be OK to run at some later point. However, its possible that
-> the workqueue doing this work still hits an error when sending the skb.
-> When this happens the skbuff is requeued on a temporary 'state' struct
-> kept with the workqueue. This is necessary because its possible to
-> partially send an skbuff before hitting an error and we need to know how
-> and where to restart when the workqueue runs next.
->
-> Now for the trouble, we don't rekick the workqueue. This can cause a
-> stall where the skbuff we just cached on the state variable might never
-> be sent. This happens when its the last packet in a flow and no further
-> packets come along that would cause the system to kick the workqueue from
-> that side.
->
-> To fix we could do simple schedule_work(), but while under memory pressure
-> it makes sense to back off some instead of continue to retry repeatedly. So
-> instead to fix convert schedule_work to schedule_delayed_work and add
-> backoff logic to reschedule from backlog queue on errors. Its not obvious
-> though what a good backoff is so use '1'.
->
-> To test we observed some flakes whil running NGINX compliance test with
-> sockmap we attributed these failed test to this bug and subsequent issue.
->
-> Fixes: 04919bed948dc ("tcp: Introduce tcp_read_skb()")
-> Tested-by: William Findlay <will@isovalent.com>
-> Signed-off-by: John Fastabend <john.fastabend@gmail.com>
-> ---
->  include/linux/skmsg.h |  2 +-
->  net/core/skmsg.c      | 19 ++++++++++++-------
->  net/core/sock_map.c   |  3 ++-
->  3 files changed, 15 insertions(+), 9 deletions(-)
->
-> diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-> index 84f787416a54..904ff9a32ad6 100644
-> --- a/include/linux/skmsg.h
-> +++ b/include/linux/skmsg.h
-> @@ -105,7 +105,7 @@ struct sk_psock {
->  	struct proto			*sk_proto;
->  	struct mutex			work_mutex;
->  	struct sk_psock_work_state	work_state;
-> -	struct work_struct		work;
-> +	struct delayed_work		work;
->  	struct rcu_work			rwork;
->  };
->  
-> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> index 2b6d9519ff29..96a6a3a74a67 100644
-> --- a/net/core/skmsg.c
-> +++ b/net/core/skmsg.c
-> @@ -481,7 +481,7 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
->  	}
->  out:
->  	if (psock->work_state.skb && copied > 0)
-> -		schedule_work(&psock->work);
-> +		schedule_delayed_work(&psock->work, 0);
->  	return copied;
->  }
->  EXPORT_SYMBOL_GPL(sk_msg_recvmsg);
-> @@ -639,7 +639,8 @@ static void sk_psock_skb_state(struct sk_psock *psock,
->  
->  static void sk_psock_backlog(struct work_struct *work)
->  {
-> -	struct sk_psock *psock = container_of(work, struct sk_psock, work);
-> +	struct delayed_work *dwork = to_delayed_work(work);
-> +	struct sk_psock *psock = container_of(dwork, struct sk_psock, work);
->  	struct sk_psock_work_state *state = &psock->work_state;
->  	struct sk_buff *skb = NULL;
->  	bool ingress;
-> @@ -679,6 +680,10 @@ static void sk_psock_backlog(struct work_struct *work)
->  				if (ret == -EAGAIN) {
->  					sk_psock_skb_state(psock, state, skb,
->  							   len, off);
-> +
-> +					// Delay slightly to prioritize any
-> +					// other work that might be here.
-> +					schedule_delayed_work(&psock->work, 1);
+Em Mon, Mar 27, 2023 at 03:10:22PM +0300, Eduard Zingerman escreveu:
+> On Mon, 2023-03-27 at 08:46 -0300, Arnaldo Carvalho de Melo wrote:
+> > Em Wed, Mar 15, 2023 at 01:04:13AM +0200, Eduard Zingerman escreveu:
+> > > The following example contains a structure field annotated with
+> > > btf_type_tag attribute:
+> > > 
+> > >     #define __tag1 __attribute__((btf_type_tag("tag1")))
+> > > 
+> > >     struct st {
+> > >       int __tag1 *a;
+> > >     } g;
+> > > 
+> > > It is not printed correctly by `pahole -F dwarf` command:
+> > > 
+> > >     $ clang -g -c test.c -o test.o
+> > >     pahole -F dwarf test.o
+> > >     struct st {
+> > >     	tag1 *                     a;                    /*     0     8 */
+> > >     	...
+> > >     };
+> > > 
+> > > Note the type for variable `a`: `tag1` is printed instead of `int`.
+> > > This commit teaches `type__fprintf()` and `__tag_name()` logic to skip
+> > > `DW_TAG_LLVM_annotation` objects that are used to encode type tags.
+> > 
+> > I'm applying this now to make progress on this front, but longer term we
+> > should printf it too, as we want the output to match the original source
+> > code as much as possible from the type information.
+> 
+> Understood, thank you.
+> 
+> Also, I want to give a heads-up about ongoing discussion in:
+> https://reviews.llvm.org/D143967
+> 
+> The gist of the discussion is that for the code like:
+> 
+>   volatile __tag("foo") int;
+>   
+> Kernel expects BTF to be:
+> 
+>   __tag("foo") -> volatile -> int
+>   
+> And I encode it in DWARF as:
+> 
+>   volatile       -> int
+>     __tag("foo")
+>     
+> But GCC guys argue that DWARF should be like this:
+> 
+>   volatile       -> int
+>                       __tag("foo")
+> 
+> So, to get the BTF to a form acceptable for kernel some additional
+> pahole modifications might be necessary. (I will work on a prototype
+> for such modifications this week).
+> 
+> Maybe put this patch-set on-hold until that is resolved?
 
-Do IIUC that this means we can back out changes from commit bec217197b41
-("skmsg: Schedule psock work if the cached skb exists on the psock")?
+Ok, so I'll apply just the first two, to get btfdiff a down to those
+zero sized arrays when processing clang generated DWARF for a recent
+kernel, see below.
 
-Nit: Comment syntax.
+Ok?
 
->  					goto end;
->  				}
->  				/* Hard errors break pipe and stop xmit. */
-> @@ -733,7 +738,7 @@ struct sk_psock *sk_psock_init(struct sock *sk, int node)
->  	INIT_LIST_HEAD(&psock->link);
->  	spin_lock_init(&psock->link_lock);
->  
-> -	INIT_WORK(&psock->work, sk_psock_backlog);
-> +	INIT_DELAYED_WORK(&psock->work, sk_psock_backlog);
->  	mutex_init(&psock->work_mutex);
->  	INIT_LIST_HEAD(&psock->ingress_msg);
->  	spin_lock_init(&psock->ingress_lock);
-> @@ -822,7 +827,7 @@ static void sk_psock_destroy(struct work_struct *work)
->  
->  	sk_psock_done_strp(psock);
->  
-> -	cancel_work_sync(&psock->work);
-> +	cancel_delayed_work_sync(&psock->work);
->  	mutex_destroy(&psock->work_mutex);
->  
->  	psock_progs_drop(&psock->progs);
-> @@ -937,7 +942,7 @@ static int sk_psock_skb_redirect(struct sk_psock *from, struct sk_buff *skb)
->  	}
->  
->  	skb_queue_tail(&psock_other->ingress_skb, skb);
-> -	schedule_work(&psock_other->work);
-> +	schedule_delayed_work(&psock_other->work, 0);
->  	spin_unlock_bh(&psock_other->ingress_lock);
->  	return 0;
->  }
-> @@ -1017,7 +1022,7 @@ static int sk_psock_verdict_apply(struct sk_psock *psock, struct sk_buff *skb,
->  			spin_lock_bh(&psock->ingress_lock);
->  			if (sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED)) {
->  				skb_queue_tail(&psock->ingress_skb, skb);
-> -				schedule_work(&psock->work);
-> +				schedule_delayed_work(&psock->work, 0);
->  				err = 0;
->  			}
->  			spin_unlock_bh(&psock->ingress_lock);
-> @@ -1048,7 +1053,7 @@ static void sk_psock_write_space(struct sock *sk)
->  	psock = sk_psock(sk);
->  	if (likely(psock)) {
->  		if (sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED))
-> -			schedule_work(&psock->work);
-> +			schedule_delayed_work(&psock->work, 0);
->  		write_space = psock->saved_write_space;
->  	}
->  	rcu_read_unlock();
-> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-> index a68a7290a3b2..d38267201892 100644
-> --- a/net/core/sock_map.c
-> +++ b/net/core/sock_map.c
-> @@ -1624,9 +1624,10 @@ void sock_map_close(struct sock *sk, long timeout)
->  		rcu_read_unlock();
->  		sk_psock_stop(psock);
->  		release_sock(sk);
-> -		cancel_work_sync(&psock->work);
-> +		cancel_delayed_work_sync(&psock->work);
->  		sk_psock_put(sk, psock);
->  	}
-> +
->  	/* Make sure we do not recurse. This is a bug.
->  	 * Leak the socket instead of crashing on a stack overflow.
->  	 */
+- A rnaldo
 
+⬢[acme@toolbox pahole]$ git log --oneline -5
+b43651673676c1dc (HEAD -> master) btf_loader: A hack for BTF import of btf_type_tag attributes
+e7fb771f2649fc1b fprintf: Correct names for types with btf_type_tag attribute
+4d17096076b2351f (quaco/master, quaco/HEAD, github/tmp.master, github/next, acme/tmp.master, acme/next) btf_encoder: Compare functions via prototypes not parameter names
+82730394195276ac fprintf: Support skipping modifier
+d184aaa125ea40ff fprintf: Generalize function prototype print to support passing conf
+⬢[acme@toolbox pahole]$
+
+⬢[acme@toolbox pahole]$ btfdiff ../vmlinux-clang-pahole-1.25+rust
+die__process_class: tag not supported 0x2f (template_type_parameter)!
+die__process_class: tag not supported 0x33 (variant_part)!
+--- /tmp/btfdiff.dwarf.EiDOTz	2023-03-28 09:38:09.283942846 -0300
++++ /tmp/btfdiff.btf.rWM9v6	2023-03-28 09:38:09.624952028 -0300
+@@ -14496,7 +14496,7 @@ struct bpf_cand_cache {
+ 	struct {
+ 		const struct btf  * btf;                 /*    16     8 */
+ 		u32                id;                   /*    24     4 */
+-	} cands[0]; /*    16     0 */
++	} cands[]; /*    16     0 */
+
+ 	/* size: 16, cachelines: 1, members: 5 */
+ 	/* last cacheline: 16 bytes */
+@@ -18310,7 +18310,7 @@ struct btf_id_set8 {
+ 	struct {
+ 		u32                id;                   /*     8     4 */
+ 		u32                flags;                /*    12     4 */
+-	} pairs[0]; /*     8     0 */
++	} pairs[]; /*     8     0 */
+
+ 	/* size: 8, cachelines: 1, members: 3 */
+ 	/* last cacheline: 8 bytes */
+@@ -27765,7 +27765,7 @@ struct cpu_rmap {
+ 	struct {
+ 		u16                index;                /*    16     2 */
+ 		u16                dist;                 /*    18     2 */
+-	} near[0]; /*    16     0 */
++	} near[]; /*    16     0 */
+
+ 	/* size: 16, cachelines: 1, members: 5 */
+ 	/* last cacheline: 16 bytes */
+@@ -73931,7 +73931,7 @@ struct linux_efi_memreserve {
+ 	struct {
+ 		phys_addr_t        base;                 /*    16     8 */
+ 		phys_addr_t        size;                 /*    24     8 */
+-	} entry[0]; /*    16     0 */
++	} entry[]; /*    16     0 */
+
+ 	/* size: 16, cachelines: 1, members: 4 */
+ 	/* last cacheline: 16 bytes */
+@@ -84345,7 +84345,7 @@ struct netlink_policy_dump_state {
+ 	struct {
+ 		const struct nla_policy  * policy;       /*    16     8 */
+ 		unsigned int       maxtype;              /*    24     4 */
+-	} policies[0]; /*    16     0 */
++	} policies[]; /*    16     0 */
+
+ 	/* size: 16, cachelines: 1, members: 4 */
+ 	/* sum members: 12, holes: 1, sum holes: 4 */
+@@ -139178,7 +139178,7 @@ struct uv_rtc_timer_head {
+ 		/* XXX 4 bytes hole, try to pack */
+
+ 		u64                expires;              /*    24     8 */
+-	} cpu[0]; /*    16     0 */
++	} cpu[]; /*    16     0 */
+
+ 	/* size: 16, cachelines: 1, members: 4 */
+ 	/* sum members: 12, holes: 1, sum holes: 4 */
+⬢[acme@toolbox pahole]$
