@@ -2,105 +2,62 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B0B1C761A6
-	for <bpf@archiver.kernel.org>; Tue, 28 Mar 2023 07:52:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E956C76196
+	for <bpf@archiver.kernel.org>; Tue, 28 Mar 2023 08:12:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjC1Hw6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Mar 2023 03:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42324 "EHLO
+        id S230197AbjC1IM1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Mar 2023 04:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbjC1Hw4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Mar 2023 03:52:56 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCE3A3;
-        Tue, 28 Mar 2023 00:52:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1679989971; bh=Jn2x0nOTgnxlUFnZ2c/7x81qzDXrhBH81tHUgVzMh84=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=D4kjclj9I5MlPea1nrgZ+Jp1SADA82MHNz9O/BLHhL5rmlE2Pynqw4BDIYZsiQ8DN
-         vdxcfu6HsITGmbGv41PgCAfRTn2AG3su0XSosEei+5OYdimDyyGMZtctbsj3KWaq7x
-         4OAfX0q6HoOWQS2Boz5dIVSuH8/tETISuWhJj+VE=
-Received: from [100.100.33.167] (unknown [220.248.53.61])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 44761600CE;
-        Tue, 28 Mar 2023 15:52:51 +0800 (CST)
-Message-ID: <d4409486-7b3e-5b59-3b4e-9e832a7c98d5@xen0n.name>
-Date:   Tue, 28 Mar 2023 15:52:50 +0800
+        with ESMTP id S229645AbjC1IM0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Mar 2023 04:12:26 -0400
+X-Greylist: delayed 382 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 28 Mar 2023 01:12:24 PDT
+Received: from mail.simsborovin.com (mail.simsborovin.com [89.40.118.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87A3B1
+        for <bpf@vger.kernel.org>; Tue, 28 Mar 2023 01:12:24 -0700 (PDT)
+Received: by mail.simsborovin.com (Postfix, from userid 1001)
+        id 3DF6685BC8; Tue, 28 Mar 2023 09:05:58 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=simsborovin.com;
+        s=mail; t=1679990763;
+        bh=so3xiFooQ9N0D/cd/+ivPaO6nnHsd9cY/G2xa/w5Tfg=;
+        h=Date:From:To:Subject:From;
+        b=UaVw3/g4eaN6lXsPrcyhs6PA3oG+K74fPebGmQuBA9kqEDbzpqfEPmlAkz06mDs1L
+         ZJSFdNOBR9/vgnnz7es4Ujvz8vH+R827a7rHFHaPOC1sz0J8mfWnUz0PPVFQv4wYCb
+         bM/1P0n8l5dOCYP6Wfz3XTR/3uSBL3xPUpIDBGRyMfRUssUNfCoFGiQKNwRAwH7lxF
+         rHH4ERLTuSTQ1jm2xxDUNnwhLeRgoSfGRuwXizIdR6EXdZxz0kzJ3kyiKTuHJKmHdF
+         2eULbBC2diwbB6NmmNRzK6p7eOuaFpLtyYX39ITJsKvnT4z8xtsrxSZZUZ7tGauABt
+         ZVwvNd5hWovKw==
+Received: by mail.simsborovin.com for <bpf@vger.kernel.org>; Tue, 28 Mar 2023 08:05:53 GMT
+Message-ID: <20230328074502-0.1.2m.3lgx.0.04lhejbol8@simsborovin.com>
+Date:   Tue, 28 Mar 2023 08:05:53 GMT
+From:   "Konrad Trojanowski" <konrad.trojanowski@simsborovin.com>
+To:     <bpf@vger.kernel.org>
+Subject: W sprawie samochodu
+X-Mailer: mail.simsborovin.com
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH v2] loongarch/bpf: Skip speculation barrier opcode, which
- caused ltp testcase bpf_prog02 to fail
-Content-Language: en-US
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        George Guo <guodongtai@kylinos.cn>
-Cc:     ast@kernel.org, bpf@vger.kernel.org, chenhuacai@kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, masahiroy@kernel.org,
-        michal.lkml@markovi.net, ndesaulniers@google.com,
-        hengqi.chen@gmail.com, yangtiezhu@loongson.cn,
-        tangyouling@loongson.cn
-References: <c1932d0d-cf3f-5005-958d-7e08dddf42c9@iogearbox.net>
- <20230328071335.2664966-1-guodongtai@kylinos.cn>
- <ddb2f552-252f-4533-469b-31044b4fc2d6@iogearbox.net>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <ddb2f552-252f-4533-469b-31044b4fc2d6@iogearbox.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2023/3/28 15:22, Daniel Borkmann wrote:
-> On 3/28/23 9:13 AM, George Guo wrote:
->> Here just skip the opcode(BPF_ST | BPF_NOSPEC) that has no couterpart 
->> to the loongarch.
->>
->> <snip>
->>
->> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
->> index 288003a9f0ca..d3c6b1c4ccbb 100644
->> --- a/arch/loongarch/net/bpf_jit.c
->> +++ b/arch/loongarch/net/bpf_jit.c
->> @@ -1022,6 +1022,11 @@ static int build_insn(const struct bpf_insn 
->> *insn, struct jit_ctx *ctx, bool ext
->>           emit_atomic(insn, ctx);
->>           break;
->> +    /* Speculation barrier */
->> +    case BPF_ST | BPF_NOSPEC:
->> +        pr_info_once("bpf_jit: skip speculation barrier opcode 
->> %0x2x\n", code);
->> +        break;
-> 
-> Thanks that looks better. Question to LoongArch folks (Cc): There is no 
-> equivalent
-> to a speculation barrier here, correct? Either way, I think the 
-> pr_info_once() can
-> just be removed given there is little value for a users to have this in 
-> the kernel
-> log. I can take care of this while applying, that's fine.
+Dzie=C5=84 dobry,
 
-I can confirm there's currently no speculation barrier equivalent on 
-lonogarch. (Loongson says there are builtin mitigations for Spectre-V1 
-and V2 on their chips, and AFAIK efforts to port the exploits to 
-mips/loongarch have all failed a few years ago.)
+chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
+, je=C5=9Bli chodzi o system monitoringu GPS.
 
-And yes I'd agree with removing the warning altogether. Thanks for the 
-reviews!
+Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
+e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
+a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
 
-Acked-by: WANG Xuerui <git@xen0n.name>
+Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
+dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
+szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
+mne znaczenie.
 
-> 
->>       default:
->>           pr_err("bpf_jit: unknown opcode %02x\n", code);
->>           return -EINVAL;
->>
-> 
+Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
+b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
 
--- 
-WANG "xen0n" Xuerui
 
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
-
+Pozdrawiam
+Konrad Trojanowski
