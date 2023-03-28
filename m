@@ -2,147 +2,140 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3738C76195
-	for <bpf@archiver.kernel.org>; Tue, 28 Mar 2023 03:42:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE0B9C76196
+	for <bpf@archiver.kernel.org>; Tue, 28 Mar 2023 03:49:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232546AbjC1Dms (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Mar 2023 23:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50614 "EHLO
+        id S232322AbjC1Dsv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Mar 2023 23:48:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230328AbjC1Dmr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 27 Mar 2023 23:42:47 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D607171E;
-        Mon, 27 Mar 2023 20:42:46 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id o82so3149671qka.11;
-        Mon, 27 Mar 2023 20:42:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679974965;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=v53+mhuHaVyRCA9ANp2YWn8fT8oGsc0ngrPG41Abz6w=;
-        b=Y41L4pVTOWSp2kmEl6c2veo6Izsu4wPeBEjE/u/WWnM6GqkzfLVioMLiw/VYdUSk+x
-         ruhBvMA78bRn7tJJ6+dC4E2Nzl7LSQf+gE1TsqsScRA0SenJc4cA1ko4OiBrXWOINMby
-         J75qhcGSsGGHdUHzizIOVC8jL75mwhGcImayvEjGQBry07F/38FRDYQf/7fa/Q3xSGbO
-         IyaFrM0rtJtkjzfoVBSBSB73rDgENq/FVdtNOZD/ZYNDeR9wPVaQm1wZn2tL9VgM5lZg
-         mtDdUQVzeG2TKjE/WGv9P7IaTSWFl97lwXjf/tYDrVTlQhKJk/cs2OmaKC5wIe9J5DTO
-         UYbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679974965;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=v53+mhuHaVyRCA9ANp2YWn8fT8oGsc0ngrPG41Abz6w=;
-        b=tzmEZd6dWzSMhg1rQNzx05MpWZ77AO2YRQypJz8dIuzTDwAvvqwtzIS+lfpC/YybGt
-         SNrROSkgpe/Mxdg4M2FuWhowqeAKkSYtnlunlmhvmnAHrSTNWv/1q2oemjN3F1nl8fBa
-         yULedZYriXVEtyyKDNJgmzJFFIDcJkch9BTTWQ9qUX4NS/t7RyQHLLplEfnzC6LWNM4N
-         KymzJcno0zZLhO2GFpuL7m8gHdDMcDyXeoPi8Jsiot0WFVFyGhnSO5/DOOqK25+CE+Ze
-         ++wPjnl47qjCOp4RhuFBdcUHMKoyqZwIBfKPR/jZzDgDFCTwcXUXmSCVn5TxIDxZAleg
-         ep0g==
-X-Gm-Message-State: AO0yUKWEcvxSQCDxp/Qbwqi6Fai2aiWR0dn71kmWSjpUgE1UioDkld8w
-        JJ7DUFYAnnvMscNoqKrgAw40Tvl5Y0+mBlpFYYY=
-X-Google-Smtp-Source: AK7set8B/zPWcoITUIpNoYgY5xGATb2bsU+4eea3277XnaA9+Fhtk4i+PnbwB28qbL53lfsaD2IpHlw7VswLssX7zjg=
-X-Received: by 2002:a05:620a:a88:b0:743:6092:91b4 with SMTP id
- v8-20020a05620a0a8800b00743609291b4mr3186427qkg.14.1679974964928; Mon, 27 Mar
- 2023 20:42:44 -0700 (PDT)
+        with ESMTP id S232870AbjC1Dsk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 27 Mar 2023 23:48:40 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FEE1721
+        for <bpf@vger.kernel.org>; Mon, 27 Mar 2023 20:48:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=udoYHX47BgHSQOxnmeb4YYo125F42vKks2vtpqe2oc0=; b=cvaunPKF75eMvvm/oxqTGvKcgf
+        WbKlNFGdmIX8o5O0rNuRJeDXbhkuUeB5IwvVdS7ZgDomw+mef8UbWyscE/Lkzaj+L24YXZexj6eHt
+        6EXwN7XdXivN3VdDlBjD61/w3qEHCov1nwxezW+UvP8vpAiYgtRzuE9Tyk5q745/2V7tznJBltOe1
+        TuHIo8jvSOrjfCfCA+/q8wYBVa7GxSgfoQoHyqasUMPJJ4rG7TNHiQxOiA67dLpg/Y9lOL3ib28fr
+        U4Zo3fdHHjP+GJF6qe9Gn6/fT8jF18YkDooVrq3c9H1X1ZzjBwMZD2CAmEf6wtyncXmwv1Uuq5n9E
+        0L+RjVhA==;
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ph0K1-000Gs1-7j; Tue, 28 Mar 2023 05:48:33 +0200
+Received: from [219.59.88.22] (helo=localhost.localdomain)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ph0K0-000EBX-N5; Tue, 28 Mar 2023 05:48:33 +0200
+Subject: Re: [PATCH bpf-next 00/43] First set of verifier/*.c migrated to
+ inline assembly
+To:     Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
+        ast@kernel.org
+Cc:     andrii@kernel.org, martin.lau@linux.dev, kernel-team@fb.com,
+        yhs@fb.com
+References: <20230325025524.144043-1-eddyz87@gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <359ea18b-5996-afea-b81e-32f13f134852@iogearbox.net>
+Date:   Tue, 28 Mar 2023 05:48:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20230326092208.13613-1-laoar.shao@gmail.com> <ZCHSOxto9DlEzVy9@google.com>
-In-Reply-To: <ZCHSOxto9DlEzVy9@google.com>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Tue, 28 Mar 2023 11:42:08 +0800
-Message-ID: <CALOAHbBJEXdR4Myk1zrgFDf9UJYu2-3tbjz0ETNvK3WamD5sFg@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 00/13] bpf: Introduce BPF namespace
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, haoluo@google.com,
-        jolsa@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230325025524.144043-1-eddyz87@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26856/Mon Mar 27 09:24:05 2023)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 1:28=E2=80=AFAM Stanislav Fomichev <sdf@google.com>=
- wrote:
->
-> On 03/26, Yafang Shao wrote:
-> > Currently only CAP_SYS_ADMIN can iterate BPF object IDs and convert IDs
-> > to FDs, that's intended for BPF's security model[1]. Not only does it
-> > prevent non-privilidged users from getting other users' bpf program, bu=
-t
-> > also it prevents the user from iterating his own bpf objects.
->
-> > In container environment, some users want to run bpf programs in their
-> > containers. These users can run their bpf programs under CAP_BPF and
-> > some other specific CAPs, but they can't inspect their bpf programs in =
-a
-> > generic way. For example, the bpftool can't be used as it requires
-> > CAP_SYS_ADMIN. That is very inconvenient.
->
-> > Without CAP_SYS_ADMIN, the only way to get the information of a bpf obj=
-ect
-> > which is not created by the process itself is with SCM_RIGHTS, that
-> > requires each processes which created bpf object has to implement a uni=
-x
-> > domain socket to share the fd of a bpf object between different
-> > processes, that is really trivial and troublesome.
->
-> > Hence we need a better mechanism to get bpf object info without
-> > CAP_SYS_ADMIN.
->
-> [..]
->
-> > BPF namespace is introduced in this patchset with an attempt to remove
-> > the CAP_SYS_ADMIN requirement. The user can create bpf map, prog and
-> > link in a specific bpf namespace, then these bpf objects will not be
-> > visible to the users in a different bpf namespace. But these bpf
-> > objects are visible to its parent bpf namespace, so the sys admin can
-> > still iterate and inspect them.
->
-> Does it essentially mean unpriv bpf?
+Hi Eduard,
 
-Right. With CAP_BPF and some other CAPs enabled.
+On 3/25/23 3:54 AM, Eduard Zingerman wrote:
+> This is a follow up for RFC [1]. It migrates a first batch of 38
+> verifier/*.c tests to inline assembly and use of ./test_progs for
+> actual execution. The migration is done by a python script (see [2]).
+> 
+> Each migrated verifier/xxx.c file is mapped to progs/verifier_xxx.c
+> plus an entry in the prog_tests/verifier.c. One patch per each file.
+> 
+> A few patches at the beginning of the patch-set extend test_loader
+> with necessary functionality, mainly:
+> - support for tests execution in unprivileged mode;
+> - support for test runs for test programs.
+> 
+> Migrated tests could be selected for execution using the following filter:
+> 
+>    ./test_progs -a verifier_*
+>    
+> An example of the migrated test:
+> 
+>    SEC("xdp")
+>    __description("XDP pkt read, pkt_data' > pkt_end, corner case, good access")
+>    __success __retval(0) __flag(BPF_F_ANY_ALIGNMENT)
+>    __naked void end_corner_case_good_access_1(void)
+>    {
+>            asm volatile ("                                 \
+>            r2 = *(u32*)(r1 + %[xdp_md_data]);              \
+>            r3 = *(u32*)(r1 + %[xdp_md_data_end]);          \
+>            r1 = r2;                                        \
+>            r1 += 8;                                        \
+>            if r1 > r3 goto l0_%=;                          \
+>            r0 = *(u64*)(r1 - 8);                           \
+>    l0_%=:  r0 = 0;                                         \
+>            exit;                                           \
+>    "       :
+>            : __imm_const(xdp_md_data, offsetof(struct xdp_md, data)),
+>              __imm_const(xdp_md_data_end, offsetof(struct xdp_md, data_end))
+>            : __clobber_all);
+>    }
+> 
+> Changes compared to RFC:
+> - test_loader.c is extended to support test program runs;
+> - capabilities handling now matches behavior of test_verifier;
+> - BPF_ST_MEM instructions are automatically replaced by BPF_STX_MEM
+>    instructions to overcome current clang limitations;
+> - tests styling updates according to RFC feedback;
+> - 38 migrated files are included instead of 1.
+> 
+> I used the following means for testing:
+> - migration tool itself has a set of self-tests;
+> - migrated tests are passing;
+> - manually compared each old/new file side-by-side.
+> 
+> While doing side-by-side comparison I've noted a few defects in the
+> original tests:
+> - and.c:
+>    - One of the jump targets is off by one;
+>    - BPF_ST_MEM wrong OFF/IMM ordering;
+> - array_access.c:
+>    - BPF_ST_MEM wrong OFF/IMM ordering;
+> - value_or_null.c:
+>    - BPF_ST_MEM wrong OFF/IMM ordering.
+> 
+> These defects would be addressed separately.
 
-> Can I, as a non-root, create
-> a new bpf namespace and start loading/attaching progs?
+The cover letter describes what this series does, but not /why/ we need it. Would be
+useful in future to also have the rationale in here. The migration of the verifier
+tests look ok, and probably simplifies things to some degree, it certainly makes the
+tests more readable. Is the goal to eventually get rid of test_verifier altogether?
+I don't think we fully can do that, e.g. what about verifier testing of invalid insn
+encodings or things like invalid jumps into the middle of double insns, invalid call
+offsets, etc?
 
-No, you can't create a new bpf namespace as a non-root, see also
-copy_namespaces().
-In the container environment, new namespaces are always created by
-containered, which is started by root.
+> [1] RFC
+>      https://lore.kernel.org/bpf/20230123145148.2791939-1-eddyz87@gmail.com/
+> [2] Migration tool
+>      https://github.com/eddyz87/verifier-tests-migrator
 
-> Maybe add a paragraph about now vs whatever you're proposing.
-
-What I'm proposing in this patchset is to put bpf objects (map, prog,
-link, and btf) into the bpf namespace. Next step I will put bpffs into
-the bpf namespace as well.
-That said, I'm trying to put  all the objects created in bpf into the
-bpf namespace. Below is a simple paragraph to illustrate it.
-
-Regarding the unpriv user with CAP_BPF enabled,
-                                                             Now | Future
-------------------------------------------------------------------------
-Iterate his BPF IDs                                | N   |  Y  |
-Iterate others' BPF IDs                          | N   |  N  |
-Convert his BPF IDs to FDs                  | N   |  Y  |
-Convert others' BPF IDs to FDs            | N   |  N  |
-Get others' object info from pinned file  | Y(*) | N  |
-------------------------------------------------------------------------
-
-(*) It can be improved by,
-     1). Different containers has different bpffs
-     2). Setting file permission
-     That's not perfect, for example, if one single user has two bpf
-instances, but we don't want them to inspect each other.
-
-> Otherwise it's not very clear what's the security story.
-> (haven't looked at the whole series, so maybe it's answered somewhere els=
-e?)
->
-
-
---=20
-Regards
-Yafang
+Thanks,
+Daniel
