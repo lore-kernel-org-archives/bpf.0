@@ -2,275 +2,178 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D72A5C761AF
-	for <bpf@archiver.kernel.org>; Wed, 29 Mar 2023 15:43:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1345C77B61
+	for <bpf@archiver.kernel.org>; Wed, 29 Mar 2023 16:00:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbjC2Pn4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 29 Mar 2023 11:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
+        id S229906AbjC2QAK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 29 Mar 2023 12:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbjC2Pn4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 29 Mar 2023 11:43:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7FFE2;
-        Wed, 29 Mar 2023 08:43:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4419961D8F;
-        Wed, 29 Mar 2023 15:43:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68EC2C433D2;
-        Wed, 29 Mar 2023 15:43:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680104633;
-        bh=PayhhRO1vkav4N1ifvU/LSz3rnL+UNjzB3tII3q4XDs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=anpXQy1Aqn/JydIt13rXSM9bnP7NRchVzPfTckFrZAF/0ORBRY48A/ThGZweLhhPH
-         neghCke5IOU1hq8h/+lVFddWCTcDJVDmzsDv49nzWQZhzclX2kSFIEHEFrzUkoxWvG
-         eEWsa8bSwqPsQrlrQeYB1KGJDJ7LbYVpRjTDTjTBuzol872GRYx/PlCJlUAgLgss0A
-         ftagjGWGu2E6fggbQgFV5oms10JteVW5H5GtvKxx+eC5VszbBQCAzuGPvsMlztfq+p
-         eo8iqTiKHX56IkmycsP0i51TXpBPh0Fr6uHdzp1MLkHRbimR1mKhaTmx8uUPvsENBQ
-         q5vxSTVnvp08A==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 37E044052D; Wed, 29 Mar 2023 12:43:50 -0300 (-03)
-Date:   Wed, 29 Mar 2023 12:43:50 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Eduard Zingerman <eddyz87@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        dwarves@vger.kernel.org, bpf@vger.kernel.org, kernel-team@fb.com,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        yhs@fb.com, jose.marchesi@oracle.com, david.faust@oracle.com,
-        alan.maguire@oracle.com
-Subject: Re: [PATCH dwarves v2 1/5] fprintf: Correct names for types with
- btf_type_tag attribute
-Message-ID: <ZCRctmB2yrwgsNMh@kernel.org>
-References: <20230314230417.1507266-1-eddyz87@gmail.com>
- <20230314230417.1507266-2-eddyz87@gmail.com>
- <ZCLy0hjyR3KuYy3e@kernel.org>
- <f4803213ab27c65517eea19a12be78dd4ec9f6b0.camel@gmail.com>
- <ZCMHKFdmjVpOSNsJ@kernel.org>
- <50a160d802ad3f84e91cf05c8f541e0c2e388fc8.camel@gmail.com>
- <ZCNZcl1mkC9yhwDD@kernel.org>
- <fabfc71fd43be48f68019c911c6a3af1412f4635.camel@gmail.com>
+        with ESMTP id S231293AbjC2P7i (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 29 Mar 2023 11:59:38 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B532D61A1
+        for <bpf@vger.kernel.org>; Wed, 29 Mar 2023 08:59:02 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id er13so24304990edb.9
+        for <bpf@vger.kernel.org>; Wed, 29 Mar 2023 08:59:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dectris.com; s=google; t=1680105541;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=O9rVM+TyMjTEamPO1YLxI72VkrMEpvNCPXT/D1jIETM=;
+        b=XElgWmxaLhWe5F03cqiSoKI5bsUuTFyQ+Omq+unoOkkS+T83i7Pjlb4L8E3+ae9LnX
+         FmEl9W3QfJ+4JLTMi2uGEKY4oZYK3OWdsd4EzdiU9RAOcJgrr4KVwihtVUD1H95qPzjz
+         BQl6Y6HRA0H+bj9LIN7FpbHJPOb6pZ9HmVQ2g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680105541;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O9rVM+TyMjTEamPO1YLxI72VkrMEpvNCPXT/D1jIETM=;
+        b=PxnQlJovN5JrQpSNSWk5q28BFFf5iFgnd25cawsvpVfAc9U01cpoHPAh2MRHFIPk66
+         ABgwajYbNCqPar2dNk0D+sjDGDPx8zmVAWgkri94wSeRBOZMBi/244TZkT6iKsfVZCLb
+         /HiUPvHdhJUwrQyR4gkGzyREaropgGGmoLgCrfMo/VkWnBj+3jlzj4I0U87Mr4c1WoOm
+         dW6CxjX/1TyOE5vMJhIdvCBnHKdMGUv1BAOIJS5nqrDdoRhfQEWkuwbBiQh/p1za6d6O
+         KDuGtS8ArSWs9/f2IotgJlt1CLRk3MRyzAP7rPJ4OSs+AmbaYTSFbZwJ6RiOXaKLMhRM
+         c35Q==
+X-Gm-Message-State: AAQBX9ft2pAucQ+m7hiwvnrpbZeafuxAV1KIecsbR6ApMrF4hFfmpjr6
+        xvppOVtGy/9cA8ZTuwzfJO0zDeYEwrZdryHQluBbQQ==
+X-Google-Smtp-Source: AKy350Zsj7496tj4JV/et0FhpoM2AUiFOnO2pMRSyzkfT3qLg0ZXJJR+WBgcmP04Czf7BiQbP518zk4JdiFw8TQBcvI=
+X-Received: by 2002:a17:907:a49:b0:931:6f5b:d27d with SMTP id
+ be9-20020a1709070a4900b009316f5bd27dmr10361097ejc.0.1680105540984; Wed, 29
+ Mar 2023 08:59:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fabfc71fd43be48f68019c911c6a3af1412f4635.camel@gmail.com>
-X-Url:  http://acmel.wordpress.com
+References: <20230319195656.326701-1-kal.conley@dectris.com>
+ <20230319195656.326701-2-kal.conley@dectris.com> <CAJ8uoz2d9cSvLeguJ+5KenCqibxpshCiAKms4c75mGgzJVmkBA@mail.gmail.com>
+In-Reply-To: <CAJ8uoz2d9cSvLeguJ+5KenCqibxpshCiAKms4c75mGgzJVmkBA@mail.gmail.com>
+From:   Kal Cutter Conley <kal.conley@dectris.com>
+Date:   Wed, 29 Mar 2023 18:03:35 +0200
+Message-ID: <CAHApi-mEwbAcYzHHTR0QMSA8EqByvmwzLCBkMw2_6hxqkiCBmQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/3] xsk: Support UMEM chunk_size > PAGE_SIZE
+To:     Magnus Karlsson <magnus.karlsson@gmail.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em Wed, Mar 29, 2023 at 06:36:34PM +0300, Eduard Zingerman escreveu:
-> On Tue, 2023-03-28 at 18:17 -0300, Arnaldo Carvalho de Melo wrote:
-> > Em Tue, Mar 28, 2023 at 06:30:05PM +0300, Eduard Zingerman escreveu:
-> > > On Tue, 2023-03-28 at 12:26 -0300, Arnaldo Carvalho de Melo wrote:
-> > > [...] 
-> > > > Sure, but look:
-> > > > 
-> > > > > > -       struct qdisc_size_table *  stab;                 /*    32     8 */
-> > > > > > +       struct qdisc_size_table    stab;                 /*    32     8 */
-> > > > 
-> > > > Its the DW_TAG_pointer_type that is getting lost somehow:
-> > > > 
-> > > >  <1><b0af32>: Abbrev Number: 81 (DW_TAG_structure_type)
-> > > >     <b0af33>   DW_AT_name        : (indirect string, offset: 0xe825): Qdisc
-> > > >     <b0af37>   DW_AT_byte_size   : 384
-> > > >     <b0af39>   DW_AT_decl_file   : 223
-> > > >     <b0af3a>   DW_AT_decl_line   : 72
-> > > > 
-> > > > <SNIP>
-> > > > 
-> > > >  <2><b0af77>: Abbrev Number: 65 (DW_TAG_member)
-> > > >     <b0af78>   DW_AT_name        : (indirect string, offset: 0x4745ff): stab
-> > > >     <b0af7c>   DW_AT_type        : <0xb0b76b>
-> > > >     <b0af80>   DW_AT_decl_file   : 223
-> > > >     <b0af81>   DW_AT_decl_line   : 99
-> > > >     <b0af82>   DW_AT_data_member_location: 32
-> > > > 
-> > > > <SNIP>
-> > > > 
-> > > > <1><b0b76b>: Abbrev Number: 61 (DW_TAG_pointer_type)
-> > > >     <b0b76c>   DW_AT_type        : <0xb0b77a>
-> > > >  <2><b0b770>: Abbrev Number: 62 (User TAG value: 0x6000)
-> > > >     <b0b771>   DW_AT_name        : (indirect string, offset: 0x378): btf_type_tag
-> > > >     <b0b775>   DW_AT_const_value : (indirect string, offset: 0x6e93): rcu
-> > > >  <2><b0b779>: Abbrev Number: 0
-> > > >  <1><b0b77a>: Abbrev Number: 69 (DW_TAG_structure_type)
-> > > >     <b0b77b>   DW_AT_name        : (indirect string, offset: 0x6e5ed): qdisc_size_table
-> > > >     <b0b77f>   DW_AT_byte_size   : 64
-> > > >     <b0b780>   DW_AT_decl_file   : 223
-> > > >     <b0b781>   DW_AT_decl_line   : 56
-> > > > 
-> > > >  
-> > > > So it's all there in the DWARF info:
-> > > > 
-> > > >    b0af77 has type 0xb0b76b which is a DW_TAG_pointer_type that has type
-> > > >    0xb0b77a, that is DW_TAG_structure_type.
-> > > > 
-> > > > Now lets see how this was encoded into BTF:
-> > > > 
-> > > > [4725] STRUCT 'Qdisc' size=384 vlen=28
-> > > > <SNIP>
-> > > >         'stab' type_id=4790 bits_offset=256
-> > > > <SNIP>
-> > > > [4790] PTR '(anon)' type_id=4789
-> > > > <SNIP>
-> > > > [4789] TYPE_TAG 'rcu' type_id=4791
-> > > > <SNIP>
-> > > > [4791] STRUCT 'qdisc_size_table' size=64 vlen=5
-> > > >         'rcu' type_id=320 bits_offset=0
-> > > >         'list' type_id=87 bits_offset=128
-> > > >         'szopts' type_id=4792 bits_offset=256
-> > > >         'refcnt' type_id=16 bits_offset=448
-> > > >         'data' type_id=4659 bits_offset=480
-> > > > 
-> > > > So it all seems ok, we should keep all the info and teach fprintf to
-> > > > handle TYPE_TAG.
-> > > > 
-> > > > Which you tried, but somehow the '*' link is missing.
-> > > 
-> > > Yep, thanks a lot for the analysis, I will take a look.
-> > > Hopefully will send v2 tomorrow.
-> > 
-> > So, with the patch below it gets equivalent, but some more tweaking is
-> > needed to make the output completely match (spaces, "long usigned" ->
-> > "unsigned long", which seems to be all equivalent):
-> > 
-> > --- /tmp/gcc    2023-03-28 18:13:42.022385428 -0300
-> > +++ /tmp/clang  2023-03-28 18:13:45.854486885 -0300
-> > @@ -73,15 +73,15 @@
-> >         unsigned int               flags;                /*    16     4 */
-> >         u32                        limit;                /*    20     4 */
-> >         const struct Qdisc_ops  *  ops;                  /*    24     8 */
-> > -       struct qdisc_size_table *  stab;                 /*    32     8 */
-> > +       struct qdisc_size_table  * stab;                 /*    32     8 */
-> >         struct hlist_node          hash;                 /*    40    16 */
-> >         u32                        handle;               /*    56     4 */
-> >         u32                        parent;               /*    60     4 */
-> >         /* --- cacheline 1 boundary (64 bytes) --- */
-> >         struct netdev_queue *      dev_queue;            /*    64     8 */
-> > -       struct net_rate_estimator * rate_est;            /*    72     8 */
-> > -       struct gnet_stats_basic_sync * cpu_bstats;       /*    80     8 */
-> > -       struct gnet_stats_queue *  cpu_qstats;           /*    88     8 */
-> > +       struct net_rate_estimator  * rate_est;           /*    72     8 */
-> > +       struct gnet_stats_basic_sync  * cpu_bstats;      /*    80     8 */
-> > +       struct gnet_stats_queue  * cpu_qstats;           /*    88     8 */
-> >         int                        pad;                  /*    96     4 */
-> >         refcount_t                 refcnt;               /*   100     4 */
-> > 
-> > @@ -96,8 +96,8 @@
-> > 
-> >         /* XXX 4 bytes hole, try to pack */
-> > 
-> > -       long unsigned int          state;                /*   216     8 */
-> > -       long unsigned int          state2;               /*   224     8 */
-> > +       unsigned long              state;                /*   216     8 */
-> > +       unsigned long              state2;               /*   224     8 */
-> >         struct Qdisc *             next_sched;           /*   232     8 */
-> >         struct sk_buff_head        skb_bad_txq;          /*   240    24 */
-> > 
-> > @@ -112,7 +112,7 @@
-> >         /* XXX 40 bytes hole, try to pack */
-> > 
-> >         /* --- cacheline 6 boundary (384 bytes) --- */
-> > -       long int                   privdata[];           /*   384     0 */
-> > +       long                       privdata[];           /*   384     0 */
-> > 
-> >         /* size: 384, cachelines: 6, members: 28 */
-> >         /* sum members: 260, holes: 4, sum holes: 124 */
-> > @@ -145,19 +145,19 @@
-> >         /* XXX 4 bytes hole, try to pack */
-> > 
-> >         struct netdev_queue *      (*select_queue)(struct Qdisc *, struct tcmsg *); /*     8     8 */
-> > -       int                        (*graft)(struct Qdisc *, long unsigned int, struct Qdisc *, struct Qdisc * *, struct netlink_ext_ack *); /*    16     8 */
-> > +       int                        (*graft)(struct Qdisc *, unsigned long, struct Qdisc *, struct Qdisc * *, struct netlink_ext_ack *); /*    16     8 */
-> > -       struct Qdisc *             (*leaf)(struct Qdisc *, long unsigned int); /*    24     8 */
-> > +       struct Qdisc *             (*leaf)(struct Qdisc *, unsigned long); /*    24     8 */
-> > -       void                       (*qlen_notify)(struct Qdisc *, long unsigned int); /*    32     8 */
-> > +       void                       (*qlen_notify)(struct Qdisc *, unsigned long); /*    32     8 */
-> > -       long unsigned int          (*find)(struct Qdisc *, u32); /*    40     8 */
-> > +       unsigned long              (*find)(struct Qdisc *, u32); /*    40     8 */
-> > -       int                        (*change)(struct Qdisc *, u32, u32, struct nlattr * *, long unsigned int *, struct netlink_ext_ack *); /*    48     8 */
-> > +       int                        (*change)(struct Qdisc *, u32, u32, struct nlattr * *, unsigned long *, struct netlink_ext_ack *); /*    48     8 */
-> > -       int                        (*delete)(struct Qdisc *, long unsigned int, struct netlink_ext_ack *); /*    56     8 */
-> > +       int                        (*delete)(struct Qdisc *, unsigned long, struct netlink_ext_ack *); /*    56     8 */
-> > 
-> > diff --git a/dwarves_fprintf.c b/dwarves_fprintf.c
-> > index 1e6147a82056c188..1ecc24321bf8f975 100644
-> > --- a/dwarves_fprintf.c
-> > +++ b/dwarves_fprintf.c
-> > @@ -788,8 +788,15 @@ next_type:
-> >  			if (n)
-> >  				return printed + n;
-> >  			if (ptype->tag == DW_TAG_LLVM_annotation) {
-> > -				type = ptype;
-> > -				goto next_type;
-> > +				// FIXME: Just skip this for now, we need to print this annotation
-> > +				// to match the original source code.
-> > +
-> > +				if (ptype->type == 0) {
-> > +					printed += fprintf(fp, "%-*s %s", tconf.type_spacing, "void *", name);
-> > +					break;
-> > +				}
-> > +
-> > +				ptype = cu__type(cu, ptype->type);
-> >  			}
-> >  			if (ptype->tag == DW_TAG_subroutine_type) {
-> >  				printed += ftype__fprintf(tag__ftype(ptype),
-> 
-> This explains why '*' was missing, but unfortunately it breaks apart
-> when there are multiple type tags, e.g.:
-> 
-> 
->     $ cat tag-test.c
->     #define __t __attribute__((btf_type_tag("t1")))
->     
->     struct foo {
->       int  (__t __t *a)(void);
->     } g;
->     $ clang -g -c tag-test.c -o tag-test.o && pahole -J tag-test.o && pahole --sort -F dwarf tag-test.o
->     struct foo {
->     	int ()(void)   *           a;                    /*     0     8 */
->     
->     	/* size: 8, cachelines: 1, members: 1 */
->     	/* last cacheline: 8 bytes */
->     };
->     $ clang -g -c tag-test.c -o tag-test.o && pahole -J tag-test.o && pahole --sort -F btf tag-test.o
->     struct foo {
->     	int ()(void)   *           a;                    /*     0     8 */
->     
->     	/* size: 8, cachelines: 1, members: 1 */
->     	/* last cacheline: 8 bytes */
->     };
->     
-> What I don't understand is why pointer's type is LLVM_annotation.
+> > Add core AF_XDP support for chunk sizes larger than PAGE_SIZE. This
+> > enables sending/receiving jumbo ethernet frames up to the theoretical
+> > maxiumum of 64 KiB. For chunk sizes > PAGE_SIZE, the UMEM is required
+> > to consist of HugeTLB VMAs (and be hugepage aligned). Initially, only
+> > XDP_COPY mode is usuable pending future driver work.
+>
+> nit: useable
 
-Well, that is how it is encoded in BTF and then you supported it in:
+Fixed in v2.
 
-Author: Eduard Zingerman <eddyz87@gmail.com>
-Date:   Wed Mar 15 01:04:14 2023 +0200
+>
+> > For consistency, check for HugeTLB pages during UMEM registration. This
+> > implies that hugepages are required for XDP_COPY mode despite DMA not
+> > being used. This restriction is desirable since it ensures user software
+> > can take advantage of future driver support.
+> >
+> > Even in HugeTLB mode, continue to do page accounting using order-0
+> > (4 KiB) pages. This minimizes the size of this change and reduces the
+> > risk of impacting driver code. Taking full advantage of hugepages for
+> > accounting should improve XDP performance in the general case.
+>
+> Thank you Kal for working on this. Interesting stuff.
+>
+> First some general comments and questions on the patch set:
+>
+> * Please document this new feature in Documentation/networking/af_xdp.rst
 
-    btf_loader: A hack for BTF import of btf_type_tag attributes`
+Fixed in v2.
 
+> * Have you verified the SKB path for Rx? Tx was exercised by running l2fwd.
 
-I find it natural, and think that annots thing is a variation on how to
-store modifiers for types, see, this DW_TAG_LLVM_annotation is in the
-same class as 'restrict', 'const', 'volatile', "atomic", etc
+This patchset allows sending/receiving 9000 MTU packets with xdpsock
+(slightly modified). The benchmark numbers show the results for rxdrop
+(-r).
 
-I understand that for encoding _DWARF_ people preferred to make it as a
-child DIE to avoid breaking existing DWARF consumers, but in
-pahole's dwarf_loader.c we can just make it work like BTF and insert the
-btf_type_tag in the chain, just like 'const', etc, no?
+> * Have you checked that an XDP program can access the full >4K packet?
+> The xdp_buff has no problem with this as the buffer is consecutive,
+> but just wondering if there is some other check or limit in there?
+> Jesper and Toke will likely know, so roping them in.
 
-pahole wants to print those annotation just like it prints 'const',
-'volatile', etc.
+Yes, the full packet can be accessed from a SEC("xdp") BPF program
+(only tested in SKB mode).
 
-> Probably, the cleanest solution would be to make DWARF and BTF loaders
-> work in a similar way and attach LLVM_annotation as `annots` field of
-> the `struct btf_type_tag_ptr_type`. Thus, avoiding 'LLVM_annotation's
-> in the middle of type chains. I'll work on this.
+> * Would be interesting to know your thoughts about taking this to
+> zero-copy mode too. It would be good if you could support all modes
+> from the get go, instead of partial support for some unknown amount of
+> time and then zero-copy support. Partial support makes using the
+> feature more cumbersome when an app is deployed on various systems.
+> The continuity checking code you have at the end of the patch is a
+> step in the direction of zero-copy support, it seems.
 
--- 
+I think this patchset is enough to support zero-copy as long as the
+driver allows it. Currently, no drivers will work out of the box AFAIK
+since they all validate the chunk_size or the MTU size. I would
+absolutely love for drivers to support this. Hopefully this patchset
+is enough inspiration? :-) Do you think it's absolutely necessary to
+have driver ZC support ready to land this?
 
-- Arnaldo
+> * What happens if I try to run this in zero-copy mode with a chunk_size > 4K?
+
+AFAIK drivers check for this and throw an error. Maybe there are some
+drivers that don't check this properly?
+
+> * There are some compilation errors to fix from the kernel test robot
+
+Fixed in v2.
+
+>
+> require_hugetlb would be a clearer name
+
+Fixed in v2. Renamed to `need_hugetlb`.
+
+>
+> next_mapping? n as a name is not very descriptive.
+
+Fixed in v2. Renamed to `stride`.
+
+>
+> >         u32 i;
+> >
+> > -       for (i = 0; i < dma_map->dma_pages_cnt - 1; i++) {
+> > -               if (dma_map->dma_pages[i] + PAGE_SIZE == dma_map->dma_pages[i + 1])
+> > +       for (i = 0; i + n < dma_map->dma_pages_cnt; i++) {
+> > +               if (dma_map->dma_pages[i] + page_size == dma_map->dma_pages[i + n])
+> >                         dma_map->dma_pages[i] |= XSK_NEXT_PG_CONTIG_MASK;
+> >                 else
+> >                         dma_map->dma_pages[i] &= ~XSK_NEXT_PG_CONTIG_MASK;
+> >         }
+> > +       for (; i < dma_map->dma_pages_cnt; i++)
+> > +               dma_map->dma_pages[i] &= ~XSK_NEXT_PG_CONTIG_MASK;
+>
+> Is this not too conservative? If your umem consists of two huge pages
+> mappings but they are not mapped consecutively in physical memory, you
+> are going to mark all the chunks as non-consecutive. Would it not be
+> better to just look chunk_size ahead of you instead of page_size
+> above? The only thing you care about is that the chunk you are in is
+> in consecutive physical memory, and that is strictly only true for
+> zero-copy mode. So this seems to be in preparation for zero-copy mode.
+>
+
+It is slightly too conservative. I have updated the logic a bit in v2.
+If the packet doesn't cross a page boundary, then this array is not
+read anyway.
+
+Thanks!
+Kal
