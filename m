@@ -2,109 +2,86 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BAB6C74A5B
-	for <bpf@archiver.kernel.org>; Wed, 29 Mar 2023 14:43:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 531C4C74A5B
+	for <bpf@archiver.kernel.org>; Wed, 29 Mar 2023 15:36:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbjC2Ono (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 29 Mar 2023 10:43:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
+        id S230054AbjC2Pgd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 29 Mar 2023 11:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbjC2OnR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 29 Mar 2023 10:43:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9F5CA
-        for <bpf@vger.kernel.org>; Wed, 29 Mar 2023 07:39:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680100784;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eOGvCBK3xTc7UhN8iQW8f99rBt5fCj0lar0/GGKSAUo=;
-        b=aP124Yejpz1QELZiLro/EoDC2jD7s9HnnAl1GIOiy/RsOvZXFO3ybz5Yh6fxbW4ey+y2aZ
-        6hq3Hr7dlkjMA08ujg0U2ONMJftq3Xwc57iics6EwU2G9xzSqwgZbHhlmzxxLfbsFWI7Y2
-        6UIVQ8ic7CsDllaCdKrqKswv1UTDazo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-586-OX_M3mnhOyOLIjTwhOpgsw-1; Wed, 29 Mar 2023 10:39:40 -0400
-X-MC-Unique: OX_M3mnhOyOLIjTwhOpgsw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 52F783C10ED2;
-        Wed, 29 Mar 2023 14:39:38 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 900FA2166B33;
-        Wed, 29 Mar 2023 14:39:34 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <e128356a-f56f-4c02-7437-dfea38e4194b@suse.de>
-References: <e128356a-f56f-4c02-7437-dfea38e4194b@suse.de> <20230329141354.516864-1-dhowells@redhat.com> <20230329141354.516864-49-dhowells@redhat.com>
-To:     Hannes Reinecke <hare@suse.de>
-cc:     David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
+        with ESMTP id S229874AbjC2Pga (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 29 Mar 2023 11:36:30 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F0659FE
+        for <bpf@vger.kernel.org>; Wed, 29 Mar 2023 08:35:56 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id b20so65056484edd.1
+        for <bpf@vger.kernel.org>; Wed, 29 Mar 2023 08:35:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dectris.com; s=google; t=1680104150;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qgfm73gIETNl2zPIB+HRG6xi4vXnA98QP90kl6J3mWM=;
+        b=aTWP0Aae6Of/VMbZvuC5nF+xa21oqeIpBUqvTswtT5wJWrf+oA/Q2xCk5McpObXCQ1
+         kuovw/S1qKplGqYSOfL6dDfFUwN2o84rt8XLEM7s881rSEy8WuljUq39d5y+VXpKSo3/
+         NNhiMyJHLK9xI5Zbog638fWBIA+eBFyny4CZI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680104150;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Qgfm73gIETNl2zPIB+HRG6xi4vXnA98QP90kl6J3mWM=;
+        b=CaR3qQCDNob4v0txS0emtggpvOVrvuzUzp+UIWOl57Fvm1KPc+MPRS7eWDQtRmL//J
+         ocugx9MTGKiIP2bGEN9Qsw9g0JFcgSdNXUV5N9PAocIyPcezitF/zI0+mNr/q9JDVm5V
+         bpj+ykTyUm3ZqlCKnCPRqtErC3BDKI7Cu+b/ZzhIzwwf4s0tCzAucMMdy83YyCS2Zcl+
+         OJTKmabu5jEI/Yw3+LyJi5TwCJhP+4d2aQfXFl7lAdCPhjhI+985XnvYJlY66MTS1x2k
+         HlN1J6yIhjoxSkudmkC5DrwCz1dpEUIbkfjY77nOifbmiNIz9+4XvVc6GoI56Xr2MXHB
+         E5Ew==
+X-Gm-Message-State: AAQBX9frroqzeJpZtgjRN947VnPVu3duBeamG/dalCnL0k254oYT/sue
+        29Lhpqr3d+xUJcuo8r9etxOrQS6jY/kBV6A/sAr96A==
+X-Google-Smtp-Source: AKy350ZKfBNpNw+XrNHpCRVQVFXAlTzo3esOC/YoGW4ySaR30jIKluQgcwgqA332mASpevOJBFlCCZkOBlV6CMuiK3A=
+X-Received: by 2002:a17:907:a49:b0:931:6f5b:d27d with SMTP id
+ be9-20020a1709070a4900b009316f5bd27dmr10319862ejc.0.1680104150739; Wed, 29
+ Mar 2023 08:35:50 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230319195656.326701-1-kal.conley@dectris.com>
+ <20230319195656.326701-2-kal.conley@dectris.com> <ZBmLe27KrmXp7Qfc@boxer>
+In-Reply-To: <ZBmLe27KrmXp7Qfc@boxer>
+From:   Kal Cutter Conley <kal.conley@dectris.com>
+Date:   Wed, 29 Mar 2023 17:40:25 +0200
+Message-ID: <CAHApi-nt+B8wQTDbXYWW+DSi0-MN8smXNqkyCHGOCpwQ2BtFng@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/3] xsk: Support UMEM chunk_size > PAGE_SIZE
+To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-doc@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, linux-mm@kvack.org,
-        linux-sctp@vger.kernel.org, linux-afs@lists.infradead.org,
-        rds-devel@oss.oracle.com, linux-x25@vger.kernel.org,
-        dccp@vger.kernel.org, linux-rdma@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-wpan@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Al Viro <viro@zeniv.linux.org.uk>, linux-hams@vger.kernel.org,
-        mptcp@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Christian Brauner <brauner@kernel.org>, netdev@vger.kernel.org,
-        Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        tipc-discussion@lists.sourceforge.net,
-        linux-crypto@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        bpf@vger.kernel.org, Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [RFC PATCH v2 48/48] sock: Remove ->sendpage*() in favour of sendmsg(MSG_SPLICE_PAGES)
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <518630.1680100773.1@warthog.procyon.org.uk>
-Date:   Wed, 29 Mar 2023 15:39:33 +0100
-Message-ID: <518631.1680100773@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hannes Reinecke <hare@suse.de> wrote:
+> can you tell us a bit more about your environment setup - from what i can
+> tell mlx4 does not support xdp multi-buffer, so you were testing this
+> feature with XDP program attached in generic mode?
 
-> > [!] Note: This is a work in progress.  At the moment, some things won't
-> >      build if this patch is applied.  nvme, kcm, smc, tls.
+This card uses the mlx5 driver. These numbers were taken from a
+slightly modified xdpsock example. XDP multi-buffer was not used.
 
-Actually, that needs updating.  nvme and smc now build.
+>
+> if you were using xdpsock -S or xdpsock -c? or maybe even something
+> different?
+>
+> what was your MTU size on NIC?
 
-> Weelll ... what happens to consumers of kernel_sendpage()?
-> (Let's call them nvme ...)
-> Should they be moved over, too?
+I will update the table in the v2 patchset with more information.
 
-Patch 42 should address NVMe, I think.  I can't test it, though, as I don't
-have hardware.
-
-There should be no callers of kernel_sendmsg() by the end of this patchset,
-and the only remaining implementors of sendpage are Chelsio-TLS, AF_TLS and
-AF_KCM, which as stated in the cover, aren't yet converted and won't build.
-
-> Or what is the general consensus here?
-> 
-> (And what do we do with TLS? It does have a ->sendpage() version, too ...)
-
-I know.  There are three things left that I need to tackle, but I'd like to
-get opinions on some of the other bits and I might need some help with AF_TLS
-and AF_KCM.
-
-That said, should I just remove tls_sw_do_sendpage() since presumably the data
-is going to get copied(?) and encrypted and the source pages aren't going to
-be held onto?
-
-David
-
+Kal
