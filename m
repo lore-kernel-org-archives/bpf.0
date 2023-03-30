@@ -2,46 +2,46 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C0A8C77B60
-	for <bpf@archiver.kernel.org>; Thu, 30 Mar 2023 17:09:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2256C761A6
+	for <bpf@archiver.kernel.org>; Thu, 30 Mar 2023 17:09:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbjC3RI7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 30 Mar 2023 13:08:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34706 "EHLO
+        id S232191AbjC3RJS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 30 Mar 2023 13:09:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232178AbjC3RIv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 30 Mar 2023 13:08:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6E1CDDF
-        for <bpf@vger.kernel.org>; Thu, 30 Mar 2023 10:08:03 -0700 (PDT)
+        with ESMTP id S231543AbjC3RJD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 30 Mar 2023 13:09:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A7210A
+        for <bpf@vger.kernel.org>; Thu, 30 Mar 2023 10:08:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680196082;
+        s=mimecast20190719; t=1680196094;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=NZoFlTLlLEFnWNA/e5RUGygzU5KPyB6B2U1PTeQjWe4=;
-        b=WnwgCtqppdJ3oYYa9rQu5zfxaDug4Mwud25OD+uZ43Mbst0KcS2ZMQuLxp9zK+SnKMW9D6
-        3+OjuqkDo4XJCj/UcosW80MGtX6P3mz0WRAfVY5zMaDBRZKDWSUIowbiH3vtkmPE0Hxa4R
-        60URHSgIkWCPHi7rnWiCoPQJ2LxrduQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=bSAIg+VQz7pDyr1tmWltn+wlC+zEEhL6e8qNwdj8hqQ=;
+        b=Sa+a1K+AHmq6iYDheoFwtmYFXhC2//YRBDmvWK11MavqayKxmIAebusKxqccwa7esI/k24
+        jArAGFN0NjwhFfH1TtQIuFpisqZZ18hIPhpvf1BR08YFL/6EHsJ1M/MNYEZlA3wQRy3foS
+        /1Sg5ivqflLcPbDC/3Io6Wd9i0or2ec=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-452-aug2f9xDNsKg0k9hF4gfzg-1; Thu, 30 Mar 2023 13:07:58 -0400
-X-MC-Unique: aug2f9xDNsKg0k9hF4gfzg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+ us-mta-261-7dlY1MtQN3CqUPOVkfBPlA-1; Thu, 30 Mar 2023 13:08:09 -0400
+X-MC-Unique: 7dlY1MtQN3CqUPOVkfBPlA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C643A101A54F;
-        Thu, 30 Mar 2023 17:07:56 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5895B3811F21;
+        Thu, 30 Mar 2023 17:08:07 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.45.242.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 860244042AC0;
-        Thu, 30 Mar 2023 17:07:56 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EA01A14171C3;
+        Thu, 30 Mar 2023 17:08:06 +0000 (UTC)
 Received: from [10.1.1.1] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id E2D5430736C72;
-        Thu, 30 Mar 2023 19:07:55 +0200 (CEST)
-Subject: [PATCH bpf RFC-V3 3/5] veth: bpf_xdp_metadata_rx_hash add xdp rss
- hash type
+        by firesoul.localdomain (Postfix) with ESMTP id 0CC0A30736C72;
+        Thu, 30 Mar 2023 19:08:06 +0200 (CEST)
+Subject: [PATCH bpf RFC-V3 5/5] selftests/bpf: Adjust bpf_xdp_metadata_rx_hash
+ for new arg
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     bpf@vger.kernel.org, Stanislav Fomichev <sdf@google.com>
 Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
@@ -53,61 +53,147 @@ Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
         pabeni@redhat.com, jesse.brandeburg@intel.com, kuba@kernel.org,
         edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
         davem@davemloft.net
-Date:   Thu, 30 Mar 2023 19:07:55 +0200
-Message-ID: <168019607588.3557870.8079404138352729694.stgit@firesoul>
+Date:   Thu, 30 Mar 2023 19:08:06 +0200
+Message-ID: <168019608600.3557870.7120119859607204078.stgit@firesoul>
 In-Reply-To: <168019602958.3557870.9960387532660882277.stgit@firesoul>
 References: <168019602958.3557870.9960387532660882277.stgit@firesoul>
 User-Agent: StGit/1.4
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Update API for bpf_xdp_metadata_rx_hash() with arg for xdp rss hash type.
-
-The veth driver currently only support XDP-hints based on SKB code path.
-The SKB have lost information about the RSS hash type, by compressing
-the information down to a single bitfield skb->l4_hash, that only knows
-if this was a L4 hash value.
-
-In preparation for veth, the xdp_rss_hash_type have an L4 indication
-bit that allow us to return a meaningful L4 indication when working
-with SKB based packets.
-
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 ---
- drivers/net/veth.c |   11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ .../selftests/bpf/prog_tests/xdp_metadata.c        |    2 ++
+ .../testing/selftests/bpf/progs/xdp_hw_metadata.c  |   14 +++++++++-----
+ tools/testing/selftests/bpf/progs/xdp_metadata.c   |    6 +++---
+ tools/testing/selftests/bpf/progs/xdp_metadata2.c  |    7 ++++---
+ tools/testing/selftests/bpf/xdp_hw_metadata.c      |    2 +-
+ tools/testing/selftests/bpf/xdp_metadata.h         |    1 +
+ 6 files changed, 20 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index c1178915496d..f5381e7c9310 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -1648,14 +1648,19 @@ static int veth_xdp_rx_timestamp(const struct xdp_md *ctx, u64 *timestamp)
- 	return 0;
- }
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+index aa4beae99f4f..8c5e98da9ae9 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+@@ -273,6 +273,8 @@ static int verify_xsk_metadata(struct xsk *xsk)
+ 	if (!ASSERT_NEQ(meta->rx_hash, 0, "rx_hash"))
+ 		return -1;
  
--static int veth_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash)
-+static int veth_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
-+			    enum xdp_rss_hash_type *rss_type)
++	ASSERT_EQ(meta->rx_hash_type, 0, "rx_hash_type");
 +
+ 	xsk_ring_cons__release(&xsk->rx, 1);
+ 	refill_rx(xsk, comp_addr);
+ 
+diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+index 4c55b4d79d3d..7b3fc12e96d6 100644
+--- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
++++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+@@ -14,8 +14,8 @@ struct {
+ 
+ extern int bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx,
+ 					 __u64 *timestamp) __ksym;
+-extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx,
+-				    __u32 *hash) __ksym;
++extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, __u32 *hash,
++				    enum xdp_rss_hash_type *rss_type) __ksym;
+ 
+ SEC("xdp")
+ int rx(struct xdp_md *ctx)
+@@ -74,10 +74,14 @@ int rx(struct xdp_md *ctx)
+ 	else
+ 		meta->rx_timestamp = 0; /* Used by AF_XDP as not avail signal */
+ 
+-	if (!bpf_xdp_metadata_rx_hash(ctx, &meta->rx_hash))
+-		bpf_printk("populated rx_hash with %u", meta->rx_hash);
+-	else
++	if (!bpf_xdp_metadata_rx_hash(ctx, &meta->rx_hash, &meta->rx_hash_type)) {
++		bpf_printk("populated rx_hash:0x%X type:0x%X",
++			   meta->rx_hash, meta->rx_hash_type);
++		if (!(meta->rx_hash_type & XDP_RSS_L4))
++			bpf_printk("rx_hash low quality L3 hash type");
++	} else {
+ 		meta->rx_hash = 0; /* Used by AF_XDP as not avail signal */
++	}
+ 
+ 	return bpf_redirect_map(&xsk, ctx->rx_queue_index, XDP_PASS);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/xdp_metadata.c b/tools/testing/selftests/bpf/progs/xdp_metadata.c
+index 77678b034389..d151d406a123 100644
+--- a/tools/testing/selftests/bpf/progs/xdp_metadata.c
++++ b/tools/testing/selftests/bpf/progs/xdp_metadata.c
+@@ -21,8 +21,8 @@ struct {
+ 
+ extern int bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx,
+ 					 __u64 *timestamp) __ksym;
+-extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx,
+-				    __u32 *hash) __ksym;
++extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, __u32 *hash,
++				    enum xdp_rss_hash_type *rss_type) __ksym;
+ 
+ SEC("xdp")
+ int rx(struct xdp_md *ctx)
+@@ -56,7 +56,7 @@ int rx(struct xdp_md *ctx)
+ 	if (timestamp == 0)
+ 		meta->rx_timestamp = 1;
+ 
+-	bpf_xdp_metadata_rx_hash(ctx, &meta->rx_hash);
++	bpf_xdp_metadata_rx_hash(ctx, &meta->rx_hash, &meta->rx_hash_type);
+ 
+ 	return bpf_redirect_map(&xsk, ctx->rx_queue_index, XDP_PASS);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/xdp_metadata2.c b/tools/testing/selftests/bpf/progs/xdp_metadata2.c
+index cf69d05451c3..85f88d9d7a78 100644
+--- a/tools/testing/selftests/bpf/progs/xdp_metadata2.c
++++ b/tools/testing/selftests/bpf/progs/xdp_metadata2.c
+@@ -5,17 +5,18 @@
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_endian.h>
+ 
+-extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx,
+-				    __u32 *hash) __ksym;
++extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, __u32 *hash,
++				    enum xdp_rss_hash_type *rss_type) __ksym;
+ 
+ int called;
+ 
+ SEC("freplace/rx")
+ int freplace_rx(struct xdp_md *ctx)
  {
- 	struct veth_xdp_buff *_ctx = (void *)ctx;
-+	struct sk_buff *skb = _ctx->skb;
++	enum xdp_rss_hash_type type = 0;
+ 	u32 hash = 0;
+ 	/* Call _any_ metadata function to make sure we don't crash. */
+-	bpf_xdp_metadata_rx_hash(ctx, &hash);
++	bpf_xdp_metadata_rx_hash(ctx, &hash, &type);
+ 	called++;
+ 	return XDP_PASS;
+ }
+diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+index 1c8acb68b977..4ca29e0c9646 100644
+--- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
++++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+@@ -141,7 +141,7 @@ static void verify_xdp_metadata(void *data)
+ 	meta = data - sizeof(*meta);
  
--	if (!_ctx->skb)
-+	if (!skb)
- 		return -ENODATA;
- 
--	*hash = skb_get_hash(_ctx->skb);
-+	*hash = skb_get_hash(skb);
-+	*rss_type = skb->l4_hash ? XDP_RSS_TYPE_L4_ANY : XDP_RSS_TYPE_NONE;
-+
- 	return 0;
+ 	printf("rx_timestamp: %llu\n", meta->rx_timestamp);
+-	printf("rx_hash: %u\n", meta->rx_hash);
++	printf("rx_hash: 0x%X RSS type:0x%X\n", meta->rx_hash, meta->rx_hash_type);
  }
  
+ static void verify_skb_metadata(int fd)
+diff --git a/tools/testing/selftests/bpf/xdp_metadata.h b/tools/testing/selftests/bpf/xdp_metadata.h
+index f6780fbb0a21..899da872fee1 100644
+--- a/tools/testing/selftests/bpf/xdp_metadata.h
++++ b/tools/testing/selftests/bpf/xdp_metadata.h
+@@ -12,4 +12,5 @@
+ struct xdp_meta {
+ 	__u64 rx_timestamp;
+ 	__u32 rx_hash;
++	__u32 rx_hash_type;
+ };
 
 
