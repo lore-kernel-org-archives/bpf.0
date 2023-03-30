@@ -2,54 +2,56 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23350C761AF
-	for <bpf@archiver.kernel.org>; Thu, 30 Mar 2023 05:56:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DD0AC74A5B
+	for <bpf@archiver.kernel.org>; Thu, 30 Mar 2023 05:56:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbjC3F4T (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 30 Mar 2023 01:56:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
+        id S229486AbjC3F4Y (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 30 Mar 2023 01:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjC3F4S (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 30 Mar 2023 01:56:18 -0400
+        with ESMTP id S229925AbjC3F4Y (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 30 Mar 2023 01:56:24 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC935B8E
-        for <bpf@vger.kernel.org>; Wed, 29 Mar 2023 22:56:09 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32U0B3Ju003930
-        for <bpf@vger.kernel.org>; Wed, 29 Mar 2023 22:56:09 -0700
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0166F61AD
+        for <bpf@vger.kernel.org>; Wed, 29 Mar 2023 22:56:22 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32TKZ9nv023186
+        for <bpf@vger.kernel.org>; Wed, 29 Mar 2023 22:56:22 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=facebook; bh=goFsdJ5l/64dPrBtRd9UXqUAtaNzQVbA2rVQ/PAQceo=;
- b=k8U+NcIlwVDFc8nTU5HB6oLu35d7FnFcBc8YgIE/IgnWsj4t+L9lbzWVDrb/+X3r3/il
- iwPTflDTd1n9hoeiYkD+0yRnq+vZ8f/nKMFLi8/tF4tlCmEKnJ87GL2jkWMnNDFk5xKi
- Yw+uP4zu57HNvRF+O+o4kGyXNXM+OaFa0/M= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=cdVBTmppb2Zc7nOaR2ZJaZJR7ujQn5noXozWykg21wE=;
+ b=avvBc9o537+jqx2dm1Tdray/tT6igxaTacJx9suX38dGISvd7LZOoqT/vxIoOSpgrm86
+ WKZW+id/DV7vSiBJx2khP6qg4h+tTsiuWQGv80TDjR1AWA3B9hbnzAWbINA27ACZ23VX
+ XapbRHXLMwwyza2mj1cNJBat63fNmCd3Dio= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3pmyn5sgub-2
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3pmvg5aqaq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 29 Mar 2023 22:56:09 -0700
-Received: from twshared8568.05.ash9.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 29 Mar 2023 22:56:22 -0700
+Received: from twshared17808.08.ash9.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Wed, 29 Mar 2023 22:56:08 -0700
+ 15.1.2507.17; Wed, 29 Mar 2023 22:56:21 -0700
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id 17DA51BA2D6F8; Wed, 29 Mar 2023 22:56:00 -0700 (PDT)
+        id 6A1291BA2D763; Wed, 29 Mar 2023 22:56:10 -0700 (PDT)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next 0/7] bpf: Improve verifier for cond_op and spilled loop index variables
-Date:   Wed, 29 Mar 2023 22:56:00 -0700
-Message-ID: <20230330055600.86870-1-yhs@fb.com>
+Subject: [PATCH bpf-next 2/7] selftests/bpf: Add tests for non-constant cond_op NE/EQ bound deduction
+Date:   Wed, 29 Mar 2023 22:56:10 -0700
+Message-ID: <20230330055610.89177-1-yhs@fb.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230330055600.86870-1-yhs@fb.com>
+References: <20230330055600.86870-1-yhs@fb.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: O-knJl57xAYpfeJWDR1VDiAhZcauxJWp
-X-Proofpoint-ORIG-GUID: O-knJl57xAYpfeJWDR1VDiAhZcauxJWp
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-GUID: WVdNu4x7mPVWc0Cf7RHCmWzSVhIS8iVv
+X-Proofpoint-ORIG-GUID: WVdNu4x7mPVWc0Cf7RHCmWzSVhIS8iVv
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-30_02,2023-03-30_01,2023-02-09_01
@@ -57,158 +59,153 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-LLVM commit [1] introduced hoistMinMax optimization like
-  (i < VIRTIO_MAX_SGS) && (i < out_sgs)
-to
-  upper =3D MIN(VIRTIO_MAX_SGS, out_sgs)
-  ... i < upper ...
-and caused the verification failure. Commit [2] workarounded the issue by
-adding some bpf assembly code to prohibit the above optimization.
-This patch improved verifier such that verification can succeed without
-the above workaround.
+Add various tests for code pattern '<non-const> NE/EQ <const>' implemente=
+d
+in the previous verifier patch. Without the verifier patch, these new
+tests will fail.
 
-Without [2], the current verifier will hit the following failures:
-  ...
-  119: (15) if r1 =3D=3D 0x0 goto pc+1=20=20=20=20=20=20
-  The sequence of 8193 jumps is too complex.
-  verification time 525829 usec
-  stack depth 64
-  processed 156616 insns (limit 1000000) max_states_per_insn 8 total_states=
- 1754 peak_states 1712 mark_read 12
-  -- END PROG LOAD LOG --
-  libbpf: prog 'trace_virtqueue_add_sgs': failed to load: -14
-  libbpf: failed to load object 'loop6.bpf.o'
-  ...
-The failure is due to verifier inadequately handling '<const> <cond_op> <no=
-n_const>' which will
-go through both pathes and generate the following verificaiton states:
-  ...
-  89: (07) r2 +=3D 1                      ; R2_w=3D5
-  90: (79) r8 =3D *(u64 *)(r10 -48)       ; R8_w=3Dscalar() R10=3Dfp0
-  91: (79) r1 =3D *(u64 *)(r10 -56)       ; R1_w=3Dscalar(umax=3D5,var_off=
-=3D(0x0; 0x7)) R10=3Dfp0
-  92: (ad) if r2 < r1 goto pc+41        ; R0_w=3Dscalar() R1_w=3Dscalar(umi=
-n=3D6,umax=3D5,var_off=3D(0x4; 0x3))
-      R2_w=3D5 R6_w=3Dscalar(id=3D385) R7_w=3D0 R8_w=3Dscalar() R9_w=3Dscal=
-ar(umax=3D21474836475,var_off=3D(0x0; 0x7ffffffff))
-      R10=3Dfp0 fp-8=3Dmmmmmmmm fp-16=3Dmmmmmmmm fp-24=3Dmmmm???? fp-32=3D =
-fp-40_w=3D4 fp-48=3Dmmmmmmmm fp-56=3D fp-64=3Dmmmmmmmm=20=20=20=20
-  ...
-  89: (07) r2 +=3D 1                      ; R2_w=3D6
-  90: (79) r8 =3D *(u64 *)(r10 -48)       ; R8_w=3Dscalar() R10=3Dfp0
-  91: (79) r1 =3D *(u64 *)(r10 -56)       ; R1_w=3Dscalar(umax=3D5,var_off=
-=3D(0x0; 0x7)) R10=3Dfp0
-  92: (ad) if r2 < r1 goto pc+41        ; R0_w=3Dscalar() R1_w=3Dscalar(umi=
-n=3D7,umax=3D5,var_off=3D(0x4; 0x3))
-      R2_w=3D6 R6=3Dscalar(id=3D388) R7=3D0 R8_w=3Dscalar() R9_w=3Dscalar(u=
-max=3D25769803770,var_off=3D(0x0; 0x7ffffffff))
-      R10=3Dfp0 fp-8=3Dmmmmmmmm fp-16=3Dmmmmmmmm fp-24=3Dmmmm???? fp-32=3D =
-fp-40=3D5 fp-48=3Dmmmmmmmm fp-56=3D fp-64=3Dmmmmmmmm
-    ...
-  89: (07) r2 +=3D 1                      ; R2_w=3D4088
-  90: (79) r8 =3D *(u64 *)(r10 -48)       ; R8_w=3Dscalar() R10=3Dfp0
-  91: (79) r1 =3D *(u64 *)(r10 -56)       ; R1_w=3Dscalar(umax=3D5,var_off=
-=3D(0x0; 0x7)) R10=3Dfp0
-  92: (ad) if r2 < r1 goto pc+41        ; R0=3Dscalar() R1=3Dscalar(umin=3D=
-4089,umax=3D5,var_off=3D(0x0; 0x7))
-      R2=3D4088 R6=3Dscalar(id=3D12634) R7=3D0 R8=3Dscalar() R9=3Dscalar(um=
-ax=3D17557826301960,var_off=3D(0x0; 0xfffffffffff))
-      R10=3Dfp0 fp-8=3Dmmmmmmmm fp-16=3Dmmmmmmmm fp-24=3Dmmmm???? fp-32=3D =
-fp-40=3D4087 fp-48=3Dmmmmmmmm fp-56=3D fp-64=3Dmmmmmmmm
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ .../selftests/bpf/prog_tests/verifier.c       |  2 +
+ .../verifier_bounds_deduction_non_const.c     | 93 +++++++++++++++++++
+ 2 files changed, 95 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_bounds_ded=
+uction_non_const.c
 
-Patch 3 fixed the above issue by handling '<const> <cond_op> <non_const>' p=
-roperly.
-During developing selftests for Patch 3, I found some issues with bound ded=
-uction with
-BPF_EQ/BPF_NE and fixed the issue in Patch 1.
-
-After the above issue is fixed, the second issue shows up.
-  ...
-  67: (07) r1 +=3D -16                    ; R1_w=3Dfp-16
-  ; bpf_probe_read_kernel(&sgp, sizeof(sgp), sgs + i);
-  68: (b4) w2 =3D 8                       ; R2_w=3D8
-  69: (85) call bpf_probe_read_kernel#113       ; R0_w=3Dscalar() fp-16=3Dm=
-mmmmmmm
-  ; return sgp;
-  70: (79) r6 =3D *(u64 *)(r10 -16)       ; R6=3Dscalar() R10=3Dfp0
-  ; for (n =3D 0, sgp =3D get_sgp(sgs, i); sgp && (n < SG_MAX);
-  71: (15) if r6 =3D=3D 0x0 goto pc-49      ; R6=3Dscalar()
-  72: (b4) w1 =3D 0                       ; R1_w=3D0
-  73: (05) goto pc-46
-  ; for (i =3D 0; (i < VIRTIO_MAX_SGS) && (i < out_sgs); i++) {
-  28: (bc) w7 =3D w1                      ; R1_w=3D0 R7_w=3D0
-  ; bpf_probe_read_kernel(&len, sizeof(len), &sgp->length);
-  ...
-  23: (79) r3 =3D *(u64 *)(r10 -40)       ; R3_w=3D2 R10=3Dfp0
-  ; for (i =3D 0; (i < VIRTIO_MAX_SGS) && (i < out_sgs); i++) {
-  24: (07) r3 +=3D 1                      ; R3_w=3D3
-  ; for (i =3D 0; (i < VIRTIO_MAX_SGS) && (i < out_sgs); i++) {
-  25: (79) r1 =3D *(u64 *)(r10 -56)       ; R1_w=3Dscalar(umax=3D5,var_off=
-=3D(0x0; 0x7)) R10=3Dfp0
-  26: (ad) if r3 < r1 goto pc+34 61: R0=3Dscalar() R1_w=3Dscalar(umin=3D4,u=
-max=3D5,var_off=3D(0x4; 0x1)) R3_w=3D3 R6=3Dscalar(id=3D1658)
-     R7=3D0 R8=3Dscalar(id=3D1653) R9=3Dscalar(umax=3D4294967295,var_off=3D=
-(0x0; 0xffffffff)) R10=3Dfp0 fp-8=3Dmmmmmmmm fp-16=3Dmmmmmmmm
-     fp-24=3Dmmmm???? fp-32=3D fp-40=3D2 fp-56=3D fp-64=3Dmmmmmmmm
-  ; if (sg_is_chain(&sg))=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20
-  61: (7b) *(u64 *)(r10 -40) =3D r3       ; R3_w=3D3 R10=3Dfp0 fp-40_w=3D3
-    ...
-  67: (07) r1 +=3D -16                    ; R1_w=3Dfp-16
-  ; bpf_probe_read_kernel(&sgp, sizeof(sgp), sgs + i);
-  68: (b4) w2 =3D 8                       ; R2_w=3D8
-  69: (85) call bpf_probe_read_kernel#113       ; R0_w=3Dscalar() fp-16=3Dm=
-mmmmmmm
-  ; return sgp;
-  70: (79) r6 =3D *(u64 *)(r10 -16)=20=20=20=20=20=20=20
-  ; for (n =3D 0, sgp =3D get_sgp(sgs, i); sgp && (n < SG_MAX);
-  infinite loop detected at insn 71=20=20=20=20=20
-  verification time 90800 usec
-  stack depth 64
-  processed 25017 insns (limit 1000000) max_states_per_insn 20 total_states=
- 491 peak_states 169 mark_read 12
-  -- END PROG LOAD LOG --
-  libbpf: prog 'trace_virtqueue_add_sgs': failed to load: -22
-
-Further analysis found the index variable 'i' is spilled but since it is no=
-t marked as precise, regsafe will ignore
-comparison since they are scalar values.
-
-Since it is hard for verifier to determine whether a particular scalar is i=
-ndex variable or not, Patch 5 implemented
-a heuristic such that if both old and new reg states are constant, mark the=
- old one as precise to force scalar value
-comparison and this fixed the problem.
-
-The rest of patches are selftests related.
-
-  [1] https://reviews.llvm.org/D143726
-  [2] Commit 3c2611bac08a ("selftests/bpf: Fix trace_virtqueue_add_sgs test=
- issue with LLVM 17.")
-
-Yonghong Song (7):
-  bpf: Improve verifier JEQ/JNE insn branch taken checking
-  selftests/bpf: Add tests for non-constant cond_op NE/EQ bound
-    deduction
-  bpf: Improve handling of pattern '<const> <cond_op> <non_const>' in
-    verifier
-  selftests/bpf: Add verifier tests for code pattern '<const> <cond_op>
-    <non_const>'
-  bpf: Mark potential spilled loop index variable as precise
-  selftests/bpf: Remove previous workaround for test verif_scale_loop6
-  selftests/bpf: Add a new test based on loop6.c
-
- kernel/bpf/verifier.c                         |  40 +-
- .../bpf/prog_tests/bpf_verif_scale.c          |   5 +
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- tools/testing/selftests/bpf/progs/loop6.c     |   2 -
- tools/testing/selftests/bpf/progs/loop7.c     | 102 ++++
- .../verifier_bounds_deduction_non_const.c     | 553 ++++++++++++++++++
- .../progs/verifier_bounds_mix_sign_unsign.c   |   2 +-
- 7 files changed, 701 insertions(+), 5 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/loop7.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_bounds_deduc=
-tion_non_const.c
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
+sting/selftests/bpf/prog_tests/verifier.c
+index efc8cf2e18d0..73dff693d411 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -7,6 +7,7 @@
+ #include "verifier_array_access.skel.h"
+ #include "verifier_basic_stack.skel.h"
+ #include "verifier_bounds_deduction.skel.h"
++#include "verifier_bounds_deduction_non_const.skel.h"
+ #include "verifier_bounds_mix_sign_unsign.skel.h"
+ #include "verifier_cfg.skel.h"
+ #include "verifier_cgroup_inv_retcode.skel.h"
+@@ -70,6 +71,7 @@ void test_verifier_and(void)                  { RUN(ver=
+ifier_and); }
+ void test_verifier_array_access(void)         { RUN(verifier_array_acces=
+s); }
+ void test_verifier_basic_stack(void)          { RUN(verifier_basic_stack=
+); }
+ void test_verifier_bounds_deduction(void)     { RUN(verifier_bounds_dedu=
+ction); }
++void test_verifier_bounds_deduction_non_const(void)     { RUN(verifier_b=
+ounds_deduction_non_const); }
+ void test_verifier_bounds_mix_sign_unsign(void) { RUN(verifier_bounds_mi=
+x_sign_unsign); }
+ void test_verifier_cfg(void)                  { RUN(verifier_cfg); }
+ void test_verifier_cgroup_inv_retcode(void)   { RUN(verifier_cgroup_inv_=
+retcode); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds_deduction_=
+non_const.c b/tools/testing/selftests/bpf/progs/verifier_bounds_deduction=
+_non_const.c
+new file mode 100644
+index 000000000000..c07af47c489e
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_bounds_deduction_non_con=
+st.c
+@@ -0,0 +1,93 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++SEC("socket")
++__description("check deducing bounds from non-const, jmp64, <non_const> =
+=3D=3D <const>")
++__success __retval(0)
++__naked void deducing_bounds_from_non_const_1(void)
++{
++	asm volatile ("					\
++	call %[bpf_ktime_get_ns];			\
++	if r0 < 3 goto l0_%=3D;				\
++	r2 =3D 2;						\
++	if r0 =3D=3D r2 goto l1_%=3D;				\
++l0_%=3D:							\
++	r0 =3D 0;						\
++	exit;						\
++l1_%=3D:							\
++	r0 -=3D r1;					\
++	exit;						\
++"	:
++	: __imm(bpf_ktime_get_ns)
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("check deducing bounds from non-const, jmp64, <non_const> =
+!=3D <const>")
++__success __retval(0)
++__naked void deducing_bounds_from_non_const_2(void)
++{
++	asm volatile ("					\
++	call %[bpf_ktime_get_ns];			\
++	if r0 < 3 goto l0_%=3D;				\
++	r2 =3D 2;						\
++	if r0 !=3D r2 goto l0_%=3D;				\
++	goto l1_%=3D;					\
++l0_%=3D:							\
++	r0 =3D 0;						\
++	exit;						\
++l1_%=3D:							\
++	r0 -=3D r1;					\
++	exit;						\
++"	:
++	: __imm(bpf_ktime_get_ns)
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("check deducing bounds from non-const, jmp32, <non_const> =
+=3D=3D <const>")
++__success __retval(0)
++__naked void deducing_bounds_from_non_const_3(void)
++{
++	asm volatile ("					\
++	call %[bpf_ktime_get_ns];			\
++	if w0 < 4 goto l0_%=3D;				\
++	w2 =3D 3;						\
++	if w0 =3D=3D w2 goto l1_%=3D;				\
++l0_%=3D:							\
++	r0 =3D 0;						\
++	exit;						\
++l1_%=3D:							\
++	r0 -=3D r1;					\
++	exit;						\
++"	:
++	: __imm(bpf_ktime_get_ns)
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("check deducing bounds from non-const, jmp32, <non_const> =
+!=3D <const>")
++__success __retval(0)
++__naked void deducing_bounds_from_non_const_4(void)
++{
++	asm volatile ("					\
++	call %[bpf_ktime_get_ns];			\
++	if w0 < 3 goto l0_%=3D;				\
++	w2 =3D 2;						\
++	if w0 !=3D w2 goto l0_%=3D;				\
++	goto l1_%=3D;					\
++l0_%=3D:							\
++	r0 =3D 0;						\
++	exit;						\
++l1_%=3D:							\
++	r0 -=3D r1;					\
++	exit;						\
++"	:
++	: __imm(bpf_ktime_get_ns)
++	: __clobber_all);
++}
++
++char _license[] SEC("license") =3D "GPL";
 --=20
 2.34.1
 
