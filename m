@@ -2,148 +2,107 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5061FC761A6
-	for <bpf@archiver.kernel.org>; Fri, 31 Mar 2023 16:18:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FD41C761A6
+	for <bpf@archiver.kernel.org>; Fri, 31 Mar 2023 16:34:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbjCaQST (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 31 Mar 2023 12:18:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45828 "EHLO
+        id S232351AbjCaQea (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 31 Mar 2023 12:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232852AbjCaQRq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 31 Mar 2023 12:17:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0ABA27807
-        for <bpf@vger.kernel.org>; Fri, 31 Mar 2023 09:11:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680279081;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cLmy3QT3PxPcXOXP8Tmrcj7ottmHeL6VPbhO66kxXIU=;
-        b=RJ713l2JxPvW/ajQYeHTY1JD6jFg4tF8Zbw61dJ9gFYY0hmt6VYV9yMUbRN4uI3/tkBjMi
-        hE/fWPJJg5qD6IJAnXvNtpdZomfMYapOOPeQjuQD2/76jCEeQ0a43FkVoPHe7qcNSqDwC0
-        hvmFLLNP4lrShVUKPFUXA36xoPM+/ds=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-340-Fj3IfQ9LOuGHr1f7veDhWA-1; Fri, 31 Mar 2023 12:11:18 -0400
-X-MC-Unique: Fj3IfQ9LOuGHr1f7veDhWA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 30B60886065;
-        Fri, 31 Mar 2023 16:11:17 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 072FE202701E;
-        Fri, 31 Mar 2023 16:11:14 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     Matthew Wilcox <willy@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>, bpf@vger.kernel.org
-Subject: [PATCH v3 42/55] tcp_bpf: Make tcp_bpf_sendpage() go through tcp_bpf_sendmsg(MSG_SPLICE_PAGES)
-Date:   Fri, 31 Mar 2023 17:09:01 +0100
-Message-Id: <20230331160914.1608208-43-dhowells@redhat.com>
-In-Reply-To: <20230331160914.1608208-1-dhowells@redhat.com>
-References: <20230331160914.1608208-1-dhowells@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+        with ESMTP id S232456AbjCaQdt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 31 Mar 2023 12:33:49 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B384023B76
+        for <bpf@vger.kernel.org>; Fri, 31 Mar 2023 09:30:41 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id ie21-20020a17090b401500b0023b4ba1e433so7375893pjb.0
+        for <bpf@vger.kernel.org>; Fri, 31 Mar 2023 09:30:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680280241;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FuU0X18NA2vfKqA+27nNi+qvFb7A+8NhIy9/ITvEFps=;
+        b=eikErdC7IICJhhwmuS6mSRXF9PSaDCK6Hb502DIcMwEihqM3SSqInbY02vh2KRmxbw
+         L1DPPI2JRFX2033gNwvIYJ6+uFY3/kUAG/pKGK9m4P76ZcYNz+LIbNzzjOi8Pft+M6eR
+         ikfClExVxzr+Za2HW407xqBShUtz/gdVuzG9jQFeQPXIvrWVct4wiqYT8P8aiCMK8QyO
+         v2+f5fwWFSlrbUe6TH2pN/7jDwaJR8vXFTuO/GGq+56r43sdlHzugjX3lXX7nH07I4Hm
+         1nJq2+JVACzeE4/YfsjdKpyoPGU0YN/jMfdiXAs1vPLTsAWfTLTbZKHoNIbXKI7UuMLB
+         VhHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680280241;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FuU0X18NA2vfKqA+27nNi+qvFb7A+8NhIy9/ITvEFps=;
+        b=DGnXxqR2Dh+t8ymr3toZiI4jEtDavKX7dUfRrA9tum1XA7vixJe1xj9CsQT/uw0eBU
+         dXzEq3uW0ZVOMgQdJrWaMMVa8V79Y1gd53DawMjGOAtdavp/POBE3nqN8atCVz1UO+4z
+         oIYdVXgwazNJXTlzkXhf8qHEB3tj/DzsoEFZS8VYyZO/1sarnXwqZUGQWkQveSzaXORb
+         UkYrBoX291xcb9HBwdH6QTVkqigsVHyQA4zzFBd483g5JVVLra1JNYk3cSe+t7bN19Q0
+         k+iArCWO4zyLSXBbn94owvCjOYgWC5+zhYKb6ByRs39X1u2TxIrGcSYWc6HUwXifx3pW
+         NnKQ==
+X-Gm-Message-State: AAQBX9d3EzRQauZHXJBe18aI69LmjGn2mWHl1aOv5/In8Xs/jCvctGw+
+        bsvw2UKpsobN0jC2yz4syzNxe8w=
+X-Google-Smtp-Source: AKy350YqrZGH7LT9CkWwnnCK5H2FURN0Q8DDSeBB4aSbUucJfZ3SItP8t85KLXk3UlddQxE5yS0f9b4=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a17:90b:d85:b0:240:d8d8:12c4 with SMTP id
+ bg5-20020a17090b0d8500b00240d8d812c4mr1364835pjb.3.1680280241163; Fri, 31 Mar
+ 2023 09:30:41 -0700 (PDT)
+Date:   Fri, 31 Mar 2023 09:30:39 -0700
+In-Reply-To: <168027495947.3941176.6690238098903275241.stgit@firesoul>
+Mime-Version: 1.0
+References: <168027495947.3941176.6690238098903275241.stgit@firesoul>
+Message-ID: <ZCcKr69B+HKJdFEl@google.com>
+Subject: Re: [PATCH bpf V4 0/5] XDP-hints: API change for RX-hash kfunc bpf_xdp_metadata_rx_hash
+From:   Stanislav Fomichev <sdf@google.com>
+To:     Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     bpf@vger.kernel.org,
+        "Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?=" <toke@redhat.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        martin.lau@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        alexandr.lobakin@intel.com, larysa.zaremba@intel.com,
+        xdp-hints@xdp-project.net, anthony.l.nguyen@intel.com,
+        yoong.siang.song@intel.com, boon.leong.ong@intel.com,
+        intel-wired-lan@lists.osuosl.org, pabeni@redhat.com,
+        jesse.brandeburg@intel.com, kuba@kernel.org, edumazet@google.com,
+        john.fastabend@gmail.com, hawk@kernel.org, davem@davemloft.net,
+        tariqt@nvidia.com
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Translate tcp_bpf_sendpage() calls to tcp_bpf_sendmsg(MSG_SPLICE_PAGES).
+On 03/31, Jesper Dangaard Brouer wrote:
+> Current API for bpf_xdp_metadata_rx_hash() returns the raw RSS hash value,
+> but doesn't provide information on the RSS hash type (part of 6.3-rc).
+> 
+> This patchset proposal is to change the function call signature via adding
+> a pointer value argument for providing the RSS hash type.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: John Fastabend <john.fastabend@gmail.com>
-cc: Jakub Sitnicki <jakub@cloudflare.com>
-cc: "David S. Miller" <davem@davemloft.net>
-cc: Eric Dumazet <edumazet@google.com>
-cc: Jakub Kicinski <kuba@kernel.org>
-cc: Paolo Abeni <pabeni@redhat.com>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: bpf@vger.kernel.org
-cc: netdev@vger.kernel.org
----
- net/ipv4/tcp_bpf.c | 49 +++++++++-------------------------------------
- 1 file changed, 9 insertions(+), 40 deletions(-)
+Acked-by: Stanislav Fomichev <sdf@google.com>
 
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index 7f17134637eb..de37a4372437 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -485,49 +485,18 @@ static int tcp_bpf_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
- static int tcp_bpf_sendpage(struct sock *sk, struct page *page, int offset,
- 			    size_t size, int flags)
- {
--	struct sk_msg tmp, *msg = NULL;
--	int err = 0, copied = 0;
--	struct sk_psock *psock;
--	bool enospc = false;
--
--	psock = sk_psock_get(sk);
--	if (unlikely(!psock))
--		return tcp_sendpage(sk, page, offset, size, flags);
-+	struct bio_vec bvec;
-+	struct msghdr msg = {
-+		.msg_flags = flags | MSG_SPLICE_PAGES,
-+	};
- 
--	lock_sock(sk);
--	if (psock->cork) {
--		msg = psock->cork;
--	} else {
--		msg = &tmp;
--		sk_msg_init(msg);
--	}
-+	bvec_set_page(&bvec, page, size, offset);
-+	iov_iter_bvec(&msg.msg_iter, ITER_SOURCE, &bvec, 1, size);
- 
--	/* Catch case where ring is full and sendpage is stalled. */
--	if (unlikely(sk_msg_full(msg)))
--		goto out_err;
--
--	sk_msg_page_add(msg, page, size, offset);
--	sk_mem_charge(sk, size);
--	copied = size;
--	if (sk_msg_full(msg))
--		enospc = true;
--	if (psock->cork_bytes) {
--		if (size > psock->cork_bytes)
--			psock->cork_bytes = 0;
--		else
--			psock->cork_bytes -= size;
--		if (psock->cork_bytes && !enospc)
--			goto out_err;
--		/* All cork bytes are accounted, rerun the prog. */
--		psock->eval = __SK_NONE;
--		psock->cork_bytes = 0;
--	}
-+	if (flags & MSG_SENDPAGE_NOTLAST)
-+		msg.msg_flags |= MSG_MORE;
- 
--	err = tcp_bpf_send_verdict(sk, psock, msg, &copied, flags);
--out_err:
--	release_sock(sk);
--	sk_psock_put(sk, psock);
--	return copied ? copied : err;
-+	return tcp_bpf_sendmsg(sk, &msg, size);
- }
- 
- enum {
-
+> ---
+> 
+> Jesper Dangaard Brouer (5):
+>       xdp: rss hash types representation
+>       mlx5: bpf_xdp_metadata_rx_hash add xdp rss hash type
+>       veth: bpf_xdp_metadata_rx_hash add xdp rss hash type
+>       mlx4: bpf_xdp_metadata_rx_hash add xdp rss hash type
+>       selftests/bpf: Adjust bpf_xdp_metadata_rx_hash for new arg
+> 
+> 
+>  drivers/net/ethernet/mellanox/mlx4/en_rx.c    | 22 ++++++-
+>  drivers/net/ethernet/mellanox/mlx4/mlx4_en.h  |  3 +-
+>  .../net/ethernet/mellanox/mlx5/core/en/xdp.c  | 63 ++++++++++++++++++-
+>  drivers/net/veth.c                            | 11 +++-
+>  include/linux/mlx5/device.h                   | 14 ++++-
+>  include/linux/netdevice.h                     |  3 +-
+>  include/net/xdp.h                             | 48 ++++++++++++++
+>  net/core/xdp.c                                | 10 ++-
+>  .../selftests/bpf/prog_tests/xdp_metadata.c   |  2 +
+>  .../selftests/bpf/progs/xdp_hw_metadata.c     | 14 +++--
+>  .../selftests/bpf/progs/xdp_metadata.c        |  6 +-
+>  .../selftests/bpf/progs/xdp_metadata2.c       |  7 ++-
+>  tools/testing/selftests/bpf/xdp_hw_metadata.c |  2 +-
+>  tools/testing/selftests/bpf/xdp_metadata.h    |  1 +
+>  14 files changed, 182 insertions(+), 24 deletions(-)
+> 
+> --
+> 
