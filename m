@@ -2,130 +2,121 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D84E9C761A6
-	for <bpf@archiver.kernel.org>; Fri, 31 Mar 2023 18:58:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4D61C76196
+	for <bpf@archiver.kernel.org>; Fri, 31 Mar 2023 18:58:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbjCaS6B (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 31 Mar 2023 14:58:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59116 "EHLO
+        id S230039AbjCaS6s convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 31 Mar 2023 14:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232739AbjCaS42 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 31 Mar 2023 14:56:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177DA23FE0
-        for <bpf@vger.kernel.org>; Fri, 31 Mar 2023 11:55:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680288931;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=X2qMh1719XPTmN3fL+GQW8KuUqpmNliiESfRG6QrFt4=;
-        b=E9+6YQmzyRSdIVFX+S6Vn47n1prHW+NcCgYZ64DVQoSEueWUYk9DN4JrtmnmiKzkr3vlQv
-        2eMDQZiN7KsQ36UroNzdgk9GPi31ZCgdhwzRsd+ESf46mjYttT/9PiHfnzDGy9SIMEFsq9
-        34XwOyOMTd6fGkMs4SWrkfto1CYYOfc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-240-v4-GH0L9OTuxc76d_jjTmQ-1; Fri, 31 Mar 2023 14:55:23 -0400
-X-MC-Unique: v4-GH0L9OTuxc76d_jjTmQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3F445185A78F;
-        Fri, 31 Mar 2023 18:55:20 +0000 (UTC)
-Received: from firesoul.localdomain (unknown [10.45.242.12])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F38472166B33;
-        Fri, 31 Mar 2023 18:55:19 +0000 (UTC)
-Received: from [10.1.1.1] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 4360E30736C72;
-        Fri, 31 Mar 2023 20:55:19 +0200 (CEST)
-Subject: [PATCH bpf V5 4/5] mlx4: bpf_xdp_metadata_rx_hash add xdp rss hash
- type
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     bpf@vger.kernel.org, Stanislav Fomichev <sdf@google.com>,
-        =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, martin.lau@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, alexandr.lobakin@intel.com,
-        larysa.zaremba@intel.com, xdp-hints@xdp-project.net,
-        anthony.l.nguyen@intel.com, yoong.siang.song@intel.com,
-        boon.leong.ong@intel.com, intel-wired-lan@lists.osuosl.org,
-        pabeni@redhat.com, jesse.brandeburg@intel.com, kuba@kernel.org,
-        edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
-        davem@davemloft.net, tariqt@nvidia.com
-Date:   Fri, 31 Mar 2023 20:55:19 +0200
-Message-ID: <168028891923.4030852.4939492113139299611.stgit@firesoul>
-In-Reply-To: <168028882260.4030852.1100965689789226162.stgit@firesoul>
-References: <168028882260.4030852.1100965689789226162.stgit@firesoul>
-User-Agent: StGit/1.4
+        with ESMTP id S231444AbjCaS6q (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 31 Mar 2023 14:58:46 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E051022206
+        for <bpf@vger.kernel.org>; Fri, 31 Mar 2023 11:58:24 -0700 (PDT)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32VIj2CB009060
+        for <bpf@vger.kernel.org>; Fri, 31 Mar 2023 11:57:41 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3pnx3ju3f6-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 31 Mar 2023 11:57:41 -0700
+Received: from twshared38955.16.prn3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Fri, 31 Mar 2023 11:57:40 -0700
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id 734792C9C1922; Fri, 31 Mar 2023 11:57:23 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <martin.lau@kernel.org>
+CC:     <andrii@kernel.org>, <kernel-team@meta.com>
+Subject: [PATCH bpf-next 2/2] veristat: improve version reporting
+Date:   Fri, 31 Mar 2023 11:56:37 -0700
+Message-ID: <20230331185637.2026519-2-andrii@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230331185637.2026519-1-andrii@kernel.org>
+References: <20230331185637.2026519-1-andrii@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: dddi0bNUZaKcoIiZQYucgPBNlg3ucq_R
+X-Proofpoint-GUID: dddi0bNUZaKcoIiZQYucgPBNlg3ucq_R
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-31_07,2023-03-31_01,2023-02-09_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Update API for bpf_xdp_metadata_rx_hash() with arg for xdp rss hash type
-via matching indiviual Completion Queue Entry (CQE) status bits.
+For packaging version of the tool is important, so add a simple way to
+specify veristat version for upstream mirror at Github.
 
-Fixes: ab46182d0dcb ("net/mlx4_en: Support RX XDP metadata")
-Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Acked-by: Stanislav Fomichev <sdf@google.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx4/en_rx.c   |   19 ++++++++++++++++++-
- drivers/net/ethernet/mellanox/mlx4/mlx4_en.h |    3 ++-
- 2 files changed, 20 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/veristat.c | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx4/en_rx.c b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-index 73d10aa4c503..332472fe4990 100644
---- a/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-+++ b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-@@ -685,11 +685,28 @@ int mlx4_en_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
- 			enum xdp_rss_hash_type *rss_type)
- {
- 	struct mlx4_en_xdp_buff *_ctx = (void *)ctx;
-+	struct mlx4_cqe *cqe = _ctx->cqe;
-+	enum xdp_rss_hash_type xht = 0;
-+	__be16 status;
+diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
+index 612ca52c6fba..daac72b76508 100644
+--- a/tools/testing/selftests/bpf/veristat.c
++++ b/tools/testing/selftests/bpf/veristat.c
+@@ -140,6 +140,7 @@ static struct env {
+ 	bool quiet;
+ 	int log_level;
+ 	enum resfmt out_fmt;
++	bool show_version;
+ 	bool comparison_mode;
+ 	bool replay_mode;
  
- 	if (unlikely(!(_ctx->dev->features & NETIF_F_RXHASH)))
- 		return -ENODATA;
- 
--	*hash = be32_to_cpu(_ctx->cqe->immed_rss_invalid);
-+	*hash = be32_to_cpu(cqe->immed_rss_invalid);
-+	status = cqe->status;
-+	if (status & cpu_to_be16(MLX4_CQE_STATUS_TCP))
-+		xht = XDP_RSS_L4_TCP;
-+	if (status & cpu_to_be16(MLX4_CQE_STATUS_UDP))
-+		xht = XDP_RSS_L4_UDP;
-+	if (status & cpu_to_be16(MLX4_CQE_STATUS_IPV4 | MLX4_CQE_STATUS_IPV4F))
-+		xht |= XDP_RSS_L3_IPV4;
-+	if (status & cpu_to_be16(MLX4_CQE_STATUS_IPV6)) {
-+		xht |= XDP_RSS_L3_IPV6;
-+		if (cqe->ipv6_ext_mask)
-+			xht |= XDP_RSS_L3_DYNHDR;
-+	}
-+	*rss_type = xht;
-+
- 	return 0;
+@@ -176,16 +177,22 @@ static int libbpf_print_fn(enum libbpf_print_level level, const char *format, va
+ 	return vfprintf(stderr, format, args);
  }
  
-diff --git a/drivers/net/ethernet/mellanox/mlx4/mlx4_en.h b/drivers/net/ethernet/mellanox/mlx4/mlx4_en.h
-index 544e09b97483..4ac4d883047b 100644
---- a/drivers/net/ethernet/mellanox/mlx4/mlx4_en.h
-+++ b/drivers/net/ethernet/mellanox/mlx4/mlx4_en.h
-@@ -798,7 +798,8 @@ int mlx4_en_netdev_event(struct notifier_block *this,
+-const char *argp_program_version = "veristat";
++#ifndef VERISTAT_VERSION
++#define VERISTAT_VERSION "<kernel>"
++#endif
++
++const char *argp_program_version = "veristat v" VERISTAT_VERSION;
+ const char *argp_program_bug_address = "<bpf@vger.kernel.org>";
+ const char argp_program_doc[] =
+ "veristat    BPF verifier stats collection and comparison tool.\n"
+ "\n"
+ "USAGE: veristat <obj-file> [<obj-file>...]\n"
+-"   OR: veristat -C <baseline.csv> <comparison.csv>\n";
++"   OR: veristat -C <baseline.csv> <comparison.csv>\n"
++"   OR: veristat -R <results.csv>\n";
  
- struct xdp_md;
- int mlx4_en_xdp_rx_timestamp(const struct xdp_md *ctx, u64 *timestamp);
--int mlx4_en_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash);
-+int mlx4_en_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
-+			enum xdp_rss_hash_type *rss_type);
+ static const struct argp_option opts[] = {
+ 	{ NULL, 'h', NULL, OPTION_HIDDEN, "Show the full help" },
++	{ "version", 'V', NULL, 0, "Print version" },
+ 	{ "verbose", 'v', NULL, 0, "Verbose mode" },
+ 	{ "log-level", 'l', "LEVEL", 0, "Verifier log level (default 0 for normal mode, 1 for verbose mode)" },
+ 	{ "debug", 'd', NULL, 0, "Debug mode (turns on libbpf debug logging)" },
+@@ -212,6 +219,9 @@ static error_t parse_arg(int key, char *arg, struct argp_state *state)
+ 	case 'h':
+ 		argp_state_help(state, stderr, ARGP_HELP_STD_HELP);
+ 		break;
++	case 'V':
++		env.show_version = true;
++		break;
+ 	case 'v':
+ 		env.verbose = true;
+ 		break;
+@@ -1991,6 +2001,11 @@ int main(int argc, char **argv)
+ 	if (argp_parse(&argp, argc, argv, 0, NULL, NULL))
+ 		return 1;
  
- /*
-  * Functions for time stamping
-
++	if (env.show_version) {
++		printf("%s\n", argp_program_version);
++		return 0;
++	}
++
+ 	if (env.verbose && env.quiet) {
+ 		fprintf(stderr, "Verbose and quiet modes are incompatible, please specify just one or neither!\n\n");
+ 		argp_help(&argp, stderr, ARGP_HELP_USAGE, "veristat");
+-- 
+2.34.1
 
