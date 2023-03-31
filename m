@@ -2,80 +2,99 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37714C761A6
-	for <bpf@archiver.kernel.org>; Fri, 31 Mar 2023 18:58:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9964FC77B60
+	for <bpf@archiver.kernel.org>; Fri, 31 Mar 2023 19:04:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229441AbjCaS6w convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 31 Mar 2023 14:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37066 "EHLO
+        id S231241AbjCaTE2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 31 Mar 2023 15:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbjCaS6v (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 31 Mar 2023 14:58:51 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEFC523FD0
-        for <bpf@vger.kernel.org>; Fri, 31 Mar 2023 11:58:32 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32VIiUDM022151
-        for <bpf@vger.kernel.org>; Fri, 31 Mar 2023 11:57:31 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3pnr3fvscq-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 31 Mar 2023 11:57:31 -0700
-Received: from twshared24004.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Fri, 31 Mar 2023 11:57:29 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 170A32C9C17D2; Fri, 31 Mar 2023 11:56:38 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@kernel.org>
-CC:     <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next 1/2] veristat: relicense veristat.c as dual GPL-2.0-only or BSD-2-Clause licensed
-Date:   Fri, 31 Mar 2023 11:56:36 -0700
-Message-ID: <20230331185637.2026519-1-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229441AbjCaTE0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 31 Mar 2023 15:04:26 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B461622933
+        for <bpf@vger.kernel.org>; Fri, 31 Mar 2023 12:04:25 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id eh3so93496869edb.11
+        for <bpf@vger.kernel.org>; Fri, 31 Mar 2023 12:04:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680289464;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CBgtdWro37xy0xED7gYpWdnIpcRD6CvxaVJDB91GKvs=;
+        b=fL6JQwfkCzg5k8MIp2yW1eevTYpumo4axpAUWjeQVnxZ023oShCKTwLmnAc/fye6xx
+         neR98ZJVj6piv4J9ecd7xjjIQYyACuTq59qmaCS3yTQOGPhA91OF92s4v9CkBWSpvvKM
+         rz65GCEGOOJ8yjBjMqwAS3b3tgCOZKNxFJajWQaJRjRdc4CSg/cA57O8D+Oq6Oe1LAJ4
+         2mVn/cvkii1QVT3GcQW/mRwIrCzXmOwHpOMN8C/onm9XRgMZ288OdnZgwdQUr7MMj8+8
+         RRbSZfC/Y3QYlXMJZsdEzOOnNaU20+AvLyLZyFhObvmRedEK5bFf9W0VpJPo3NjJ/PlU
+         ADqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680289464;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CBgtdWro37xy0xED7gYpWdnIpcRD6CvxaVJDB91GKvs=;
+        b=RPYLxO0OMBMyBky+A8ZicibI9Y0eUh6Gia8Y3U3LlGN9SQmQz/JgjG4RbOyB0kXtH1
+         lmu+fMSCtCN9IS6/4NZqaf/eqlbwtBJAqXWPhL2Nl6tC0zMvrjGL7rOspUHIk70Z5iMe
+         mOvnkbm4yOnlMsR90GaqPrRcdtn6tii4YracbyvR2dVGhvkeRP/ML087bnb+oXSCQzn3
+         eR+b5v7ZOHbFBs1h13KPgesPEpQTAWX22OFso9h9qSp1aL/FfPV5PkbfRKcia8Zy+cqs
+         NA61Y5OvWFMAB6HglfV9a92N/7/E/Ozei4SMU7iyoc057TE7yUoBO6wK+S/Ajng2jTIH
+         xMCA==
+X-Gm-Message-State: AAQBX9dGm0C3mtR5BtWenwxQ8LnsXMlucLqNZW1pHaVenxF0kknkwenm
+        H+R7G/xuBsLKsHHVygyFmFLWiY6TM8i3jmaiDfP5Vg==
+X-Google-Smtp-Source: AKy350Zu5bBwTsywOca+UGIcS/HARlLbeBWAVVNB4lZtMspaiROXuzs3nwneenpby7qGskVTJooNUd+2uG/N2dk1CQM=
+X-Received: by 2002:a17:906:2456:b0:8e5:411d:4d09 with SMTP id
+ a22-20020a170906245600b008e5411d4d09mr14495139ejb.15.1680289464033; Fri, 31
+ Mar 2023 12:04:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: Lyyxxy04qYJh-q8SNmV3O7jA1MXZhKf4
-X-Proofpoint-ORIG-GUID: Lyyxxy04qYJh-q8SNmV3O7jA1MXZhKf4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-31_07,2023-03-31_01,2023-02-09_01
+References: <CAJD7tkb-UpKm2QbjYzB=B=oGk6Hyj9cbUviZUPC+7VsvBecH7g@mail.gmail.com>
+ <20230329192059.2nlme5ubshzdbpg6@google.com> <ZCU1Bp+5bKNJzWIu@dhcp22.suse.cz>
+ <CAJD7tka0CmRvcvB0k8DZuid1vC9OK_mFriHHbXNTUkVE7OjaTA@mail.gmail.com>
+ <ZCU+8lSi+e4WgT3F@dhcp22.suse.cz> <CAJD7tkaKd9Bcb2-e83Q-kzF7G+crr1U+7uqUPBARXWq-LpyKvw@mail.gmail.com>
+ <ZCVFA78lDj2/Uy0C@dhcp22.suse.cz> <CAJD7tkbjmBaXghQ+14Hy28r2LoWSim+LEjOPxaamYeA_kr2uVw@mail.gmail.com>
+ <ZCVKqN2nDkkQFvO0@dhcp22.suse.cz> <CAJD7tkYEOVRcXs-Ag3mWn69EwE4rjFt9j5MAcTGCNE8BuhTd+A@mail.gmail.com>
+ <ZCa9sixp3GJcjf8Y@dhcp22.suse.cz>
+In-Reply-To: <ZCa9sixp3GJcjf8Y@dhcp22.suse.cz>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Fri, 31 Mar 2023 12:03:47 -0700
+Message-ID: <CAJD7tka-2vNn25=NdrKQoMf4ntdbWtojY0k4eAa-c9D+v7J=HQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/9] cgroup: rstat: add WARN_ON_ONCE() if flushing
+ outside task context
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>, Tejun Heo <tj@kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Dual-license veristat.c to dual GPL-2.0-only or BSD-2-Clause license.
-This is needed to mirror it to Github to make it convenient for distro
-packagers to package veristat as a separate package.
+On Fri, Mar 31, 2023 at 4:02=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrot=
+e:
+>
+> On Thu 30-03-23 01:53:38, Yosry Ahmed wrote:
+> [...]
+> > Maybe we can add a primitive like might_sleep() for this, just food for=
+ thought.
+>
+> I do not think it is the correct to abuse might_sleep if the function
+> itself doesn't sleep. If it does might_sleep is already involved.
 
-Veristat grew into a useful tool by itself, and there are already
-a bunch of users relying on veristat as generic BPF loading and
-verification helper tool. So making it easy to packagers by providing
-Github mirror just like we do for bpftool and libbpf is the next step to
-get veristat into the hands of users.
+Oh, sorry if I wasn't clear, I did not mean to reuse might_sleep() --
+I meant introducing a new similar debug primitive that shouts if irqs
+are disabled.
 
-Apart from few typo fixes, I'm the sole contributor to veristat.c so
-far, so no extra Acks should be needed for relicensing.
-
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/testing/selftests/bpf/veristat.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
-index 7888c03ba631..612ca52c6fba 100644
---- a/tools/testing/selftests/bpf/veristat.c
-+++ b/tools/testing/selftests/bpf/veristat.c
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- /* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
- #define _GNU_SOURCE
- #include <argp.h>
--- 
-2.34.1
-
+> --
+> Michal Hocko
+> SUSE Labs
