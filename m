@@ -2,102 +2,99 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0C7FC76196
-	for <bpf@archiver.kernel.org>; Fri, 31 Mar 2023 15:03:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4898C76196
+	for <bpf@archiver.kernel.org>; Fri, 31 Mar 2023 15:03:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232593AbjCaPDP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 31 Mar 2023 11:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53842 "EHLO
+        id S231713AbjCaPDy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 31 Mar 2023 11:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233006AbjCaPDO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 31 Mar 2023 11:03:14 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E577BCA38
-        for <bpf@vger.kernel.org>; Fri, 31 Mar 2023 08:03:13 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id t14so23357105ljd.5
-        for <bpf@vger.kernel.org>; Fri, 31 Mar 2023 08:03:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680274992; x=1682866992;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=1ei0Vy5AzwtUR/Iz03nIvnJMR+AQ26BG84xZdFlWve8=;
-        b=dKfTCSAbDzaxRMKGVwII+5e+bMdSxFNq5AK8NKa5n5XLJW8wbfyOhVJL5yFOGVSXi0
-         gCtT1dr8CQs7alVCprBL2CxtPgbKfToou8jPoYG1don7l9VvZ9JTv5ADGN4OdNW0R6hU
-         gZFl2OjiUN3qJZ/pjHhtaDGZgdLrdTq6ujO3dQLyxTydn+ZnaLsGYFfgY58LwU+wx5xz
-         vEVZZfbnhAP5z3p9iT44EmY/lOTWy2FVYjfAhFYq8GFgd5byYVkndZRGdFnyOMnagRXm
-         +nbddHx4Aj3dyKBqzzXuu0EoOBj3/TgL/F1wFpUKw4ptZBohPsAqpcg8mu/Ecvq0pE60
-         BZMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680274992; x=1682866992;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1ei0Vy5AzwtUR/Iz03nIvnJMR+AQ26BG84xZdFlWve8=;
-        b=xVTT/sJAkUzmWd2HeYTYaxdAEs658yE5gqUgu8A0uopUkfY14fGj1N60jpJgk8qjsA
-         CvTquDuzgOZOtzDAP0c/MPeANdsbo0pX6BeVRAHA+3tJz/8mZ4AJ28PaYApxeC1aFAvW
-         tnoKAlEDFUrp5AMUWGf1jE/AJVwdVvDZ0T7YtEYvsqH9uU4ZX03AdH9+VYygzw40pPSi
-         7gDoC/BOfDcJ3BRlKa+ZVuxDCeZUEldFYeEECTW7hVRZE2qxM86DA5CuQbWi90SiyPOb
-         Tjjm/9Y42hz/up7Xk8+n/KIyNVtH9W5ArYc3UUbkGuHZ+Fk4cq2vRl8kmN0wX4vBG3P2
-         a9zA==
-X-Gm-Message-State: AAQBX9c6hAWO4IFf+/cM1LwZOP01MGkSSe2kJUN5kT8SY41qaNYYHRGk
-        /NASQ/qmM1oiIdShia/hHEc=
-X-Google-Smtp-Source: AKy350bDpG9WABbvwFPmRvBiKH/qVcfwIggRoZyJ5+MdlGXgOR6/DhqkPVxeiENmSGy7amgZeT9wkQ==
-X-Received: by 2002:a05:651c:204:b0:298:a7f5:755 with SMTP id y4-20020a05651c020400b00298a7f50755mr7967064ljn.14.1680274992207;
-        Fri, 31 Mar 2023 08:03:12 -0700 (PDT)
-Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id h3-20020a2e9ec3000000b00293d7c95df1sm393794ljk.78.2023.03.31.08.03.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 08:03:11 -0700 (PDT)
-Message-ID: <1feb20b6f2659b4a1e19a7522ec7e5e9993765cd.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 5/5] bpftool: Support printing opcodes and
- source file references in CFG
-From:   Eduard Zingerman <eddyz87@gmail.com>
-To:     Quentin Monnet <quentin@isovalent.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org
-Date:   Fri, 31 Mar 2023 18:03:09 +0300
-In-Reply-To: <899fb41c-2bc4-c60f-c83b-4eb5c348e711@isovalent.com>
-References: <20230327110655.58363-1-quentin@isovalent.com>
-         <20230327110655.58363-6-quentin@isovalent.com>
-         <fa28d05a6a123aea329a02ac666dbb18e7c5f519.camel@gmail.com>
-         <899fb41c-2bc4-c60f-c83b-4eb5c348e711@isovalent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        with ESMTP id S231566AbjCaPDy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 31 Mar 2023 11:03:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54972BDD4
+        for <bpf@vger.kernel.org>; Fri, 31 Mar 2023 08:03:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680274988;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=gv9lpLkUR0eWtRlCM7NhI7WzuMiVdPebKqKn6q9cE5c=;
+        b=X4yUHeNDK+5YoVqOBd4JBG/OU2vtK4KrMZ6KsosHBT8ZGxugFg/s0a8NNw+iiyFwTL3XgV
+        GcozMA5oZPBwnt69sz64zmTJTKZQTXRePsKVVNOMzvQYeuoS/m68RfMIq/G2atlqxp5gQ0
+        KXga3T9bZ5EQX/xFeJrLkIrhjAyjO/Q=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-36-DdbXnNgIN2CWEt89d973kA-1; Fri, 31 Mar 2023 11:03:04 -0400
+X-MC-Unique: DdbXnNgIN2CWEt89d973kA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5ADA51C0950F;
+        Fri, 31 Mar 2023 15:03:03 +0000 (UTC)
+Received: from firesoul.localdomain (unknown [10.45.242.12])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D41C640BC797;
+        Fri, 31 Mar 2023 15:03:02 +0000 (UTC)
+Received: from [10.1.1.1] (localhost [IPv6:::1])
+        by firesoul.localdomain (Postfix) with ESMTP id D83C130736C72;
+        Fri, 31 Mar 2023 17:03:01 +0200 (CEST)
+Subject: [PATCH bpf V4 0/5] XDP-hints: API change for RX-hash kfunc
+ bpf_xdp_metadata_rx_hash
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     bpf@vger.kernel.org, Stanislav Fomichev <sdf@google.com>,
+        =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.lau@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, alexandr.lobakin@intel.com,
+        larysa.zaremba@intel.com, xdp-hints@xdp-project.net,
+        anthony.l.nguyen@intel.com, yoong.siang.song@intel.com,
+        boon.leong.ong@intel.com, intel-wired-lan@lists.osuosl.org,
+        pabeni@redhat.com, jesse.brandeburg@intel.com, kuba@kernel.org,
+        edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
+        davem@davemloft.net, tariqt@nvidia.com
+Date:   Fri, 31 Mar 2023 17:03:01 +0200
+Message-ID: <168027495947.3941176.6690238098903275241.stgit@firesoul>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 2023-03-31 at 15:52 +0100, Quentin Monnet wrote:
-[...]
-> > > @@ -413,6 +414,16 @@ void dump_xlated_for_graph(struct dump_data *dd,=
- void *buf_start, void *buf_end,
-> > >  		printf("%d: ", insn_off);
-> > >  		print_bpf_insn(&cbs, cur, true);
-> > > =20
-> > > +		if (opcodes) {
-> > > +			printf("       ");
-> >=20
-> > These spaces are treated as a single space by the dot renderer, as [1]
-> > says: "Spaces are interpreted as separators between tokens, so they
-> > must be escaped if you want spaces in the text."
-> >=20
-> > [1] https://graphviz.org/doc/info/shapes.html#record
->=20
-> I noticed, I kept the multiple spaces to make the DOT output slightly
-> more readable. But it would maybe make sense to indent more in the graph
-> as well, if it doesn't make opcode sequences wider than instructions.
-> I'll have a look at this.
+Current API for bpf_xdp_metadata_rx_hash() returns the raw RSS hash value,
+but doesn't provide information on the RSS hash type (part of 6.3-rc).
 
-Oh, sorry, that did not occur to me, making DOT itself more readable
-makes total sense.
+This patchset proposal is to change the function call signature via adding
+a pointer value argument for providing the RSS hash type.
+
+---
+
+Jesper Dangaard Brouer (5):
+      xdp: rss hash types representation
+      mlx5: bpf_xdp_metadata_rx_hash add xdp rss hash type
+      veth: bpf_xdp_metadata_rx_hash add xdp rss hash type
+      mlx4: bpf_xdp_metadata_rx_hash add xdp rss hash type
+      selftests/bpf: Adjust bpf_xdp_metadata_rx_hash for new arg
+
+
+ drivers/net/ethernet/mellanox/mlx4/en_rx.c    | 22 ++++++-
+ drivers/net/ethernet/mellanox/mlx4/mlx4_en.h  |  3 +-
+ .../net/ethernet/mellanox/mlx5/core/en/xdp.c  | 63 ++++++++++++++++++-
+ drivers/net/veth.c                            | 11 +++-
+ include/linux/mlx5/device.h                   | 14 ++++-
+ include/linux/netdevice.h                     |  3 +-
+ include/net/xdp.h                             | 48 ++++++++++++++
+ net/core/xdp.c                                | 10 ++-
+ .../selftests/bpf/prog_tests/xdp_metadata.c   |  2 +
+ .../selftests/bpf/progs/xdp_hw_metadata.c     | 14 +++--
+ .../selftests/bpf/progs/xdp_metadata.c        |  6 +-
+ .../selftests/bpf/progs/xdp_metadata2.c       |  7 ++-
+ tools/testing/selftests/bpf/xdp_hw_metadata.c |  2 +-
+ tools/testing/selftests/bpf/xdp_metadata.h    |  1 +
+ 14 files changed, 182 insertions(+), 24 deletions(-)
+
+--
+
