@@ -2,262 +2,162 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F49FC77B60
-	for <bpf@archiver.kernel.org>; Sat,  1 Apr 2023 10:10:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27344C6FD1D
+	for <bpf@archiver.kernel.org>; Sat,  1 Apr 2023 10:43:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjDAKK3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 1 Apr 2023 06:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39360 "EHLO
+        id S229461AbjDAKnA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 1 Apr 2023 06:43:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbjDAKK2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 1 Apr 2023 06:10:28 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4650821AB8
-        for <bpf@vger.kernel.org>; Sat,  1 Apr 2023 03:10:26 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id r19-20020a05600c459300b003eb3e2a5e7bso15334485wmo.0
-        for <bpf@vger.kernel.org>; Sat, 01 Apr 2023 03:10:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1680343824;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yx0hUonKOCJvsiUNCX2Mck76mSOuFa1YQc/x2HBheZA=;
-        b=Dkp7MRTDtyCKlvKMHvAxZjw6mc9yXXprCfs6MNm0FwBuqnQX4733R8v/eVvo3yCqMG
-         T2sN+tJtshSV4fViLhzvKiabirkHl/WIpCpf0C2/B4lMVQfGA/GZ5UYhP6f6VO0+di/I
-         4HRRvm78N3UTmM1npZNKhWNfYkGBCIzcCsSuVwdarcJBEvg3CbJs+Q/BqzfuMCsrT+j9
-         uX1Du/H60U4u1DDmMmc2MHmweuKvatFf4uqq9OY5OhSkBRy1LYzfHvI3s7Uj6h6wKRmO
-         WJobqvD09+mMMwM7gcpj0NaS0Eas5t9qH7IoubzQiOzIChI0fJahq2vTIlFw0kHWPhCz
-         K4hA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680343824;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yx0hUonKOCJvsiUNCX2Mck76mSOuFa1YQc/x2HBheZA=;
-        b=3UvV9wfrYM0lMCXGK83kAY+6dgXAZqnc6s4vRm7wgFB7fnVUiKArd3rxsrtx+72x05
-         N8aXICNCkgOFAQMFcVWhdUYY4eHIHKkd64PojrdcM20yNkaZouJhwM1zeF6+dAi5zKMC
-         Jqm/aFwI6k7Poj+87tOBJmyknyUs1xM/L2ZJEsmwrZfG/acyvGMIq74DS8VtLFMrNzHb
-         /0qovhv9AgaLFda1I6ohydpWIX7ulDyQgJTAIUkqqZpqJ2EI4ItAPKQYfmHVAgNsgpQw
-         89RcirrYErEP89pDG1b95zJ/CaB1gkG4jAERQ84jiYxMiorTxrpsWv3Rvi0bOhGZt3kn
-         OGIg==
-X-Gm-Message-State: AAQBX9cZbtyljaS1jriAuYYP52+aZ1ppCOEwIwHTJbH8a89z2vQMBT1l
-        1Kgc9SKQUJecNr99sgag/PV+gYxyNCJxAw8tncyW2w==
-X-Google-Smtp-Source: AKy350bnFvUR7Npx+ch5FmAZ7qfBQxDCUulXidN6zgYaCqyKaFR3DUnDP8mXDqfWMmCSPsmKWyFixw==
-X-Received: by 2002:a7b:c3d1:0:b0:3ef:61f6:d7c4 with SMTP id t17-20020a7bc3d1000000b003ef61f6d7c4mr18897506wmj.18.1680343824325;
-        Sat, 01 Apr 2023 03:10:24 -0700 (PDT)
-Received: from zh-lab-node-5.home ([2a02:168:f656:0:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id m26-20020a05600c3b1a00b003ede2c4701dsm12804697wms.14.2023.04.01.03.10.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Apr 2023 03:10:23 -0700 (PDT)
-From:   Anton Protopopov <aspsk@isovalent.com>
-To:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     Anton Protopopov <aspsk@isovalent.com>
-Subject: [PATCH bpf-next] bpf: optimize hashmap lookups when key_size is divisible by 4
-Date:   Sat,  1 Apr 2023 10:10:50 +0000
-Message-Id: <20230401101050.358342-1-aspsk@isovalent.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229379AbjDAKm7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 1 Apr 2023 06:42:59 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107D526A0;
+        Sat,  1 Apr 2023 03:42:56 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PpYdj6qS1z4f3plF;
+        Sat,  1 Apr 2023 18:42:49 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+        by APP4 (Coremail) with SMTP id gCh0CgBH96qqCihkGI77GQ--.56456S2;
+        Sat, 01 Apr 2023 18:42:51 +0800 (CST)
+From:   Xu Kuohai <xukuohai@huaweicloud.com>
+To:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Florent Revest <revest@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: [PATCH bpf-next] bpf, arm64: Fixed a BTI error on returning to patched function
+Date:   Sat,  1 Apr 2023 19:41:44 -0400
+Message-Id: <20230401234144.3719742-1-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgBH96qqCihkGI77GQ--.56456S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWrWxtF18Xr15uw45WFyDZFb_yoWrWrW3pw
+        1DGr43Cr4vgr1UuFW8JF17Xr4YyF4DAF1UGFy7try5JF1Yq34UtF15t3y2grs8Gr15Zr13
+        KFyqyr4Fk3WkXaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r4Y6ry7M2
+        8lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E
+        3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gc
+        CE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxI
+        r21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87
+        Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU0jYLPUUUUU==
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The BPF hashmap uses the jhash() hash function. There is an optimized version
-of this hash function which may be used if hash size is a multiple of 4. Apply
-this optimization to the hashmap in a similar way as it is done in the bloom
-filter map.
+From: Xu Kuohai <xukuohai@huawei.com>
 
-On practice the optimization is only noticeable for smaller key sizes, which,
-however, is sufficient for many applications. An example is listed in the
-following table of measurements (a hashmap of 65536 elements was used):
+When BPF_TRAMP_F_CALL_ORIG is set, bpf trampoline uses BLR to jump
+back to the instruction next to call site to call the patched function.
+For BTI-enabled kernel, the instruction next to call site is usually
+PACIASP, in this case, it's safe to jump back with BLR. But when
+the call site is not followed by a PACIASP or bti, a BTI exception
+is triggered.
 
-    --------------------------------------------------------------------
-    | key_size | fullness | lookups /sec | lookups (opt) /sec |   gain |
-    --------------------------------------------------------------------
-    |        4 |      25% |      42.990M |            46.000M |   7.0% |
-    |        4 |      50% |      37.910M |            39.094M |   3.1% |
-    |        4 |      75% |      34.486M |            36.124M |   4.7% |
-    |        4 |     100% |      31.760M |            32.719M |   3.0% |
-    --------------------------------------------------------------------
-    |        8 |      25% |      43.855M |            49.626M |  13.2% |
-    |        8 |      50% |      38.328M |            42.152M |  10.0% |
-    |        8 |      75% |      34.483M |            38.088M |  10.5% |
-    |        8 |     100% |      31.306M |            34.686M |  10.8% |
-    --------------------------------------------------------------------
-    |       12 |      25% |      38.398M |            43.770M |  14.0% |
-    |       12 |      50% |      33.336M |            37.712M |  13.1% |
-    |       12 |      75% |      29.917M |            34.440M |  15.1% |
-    |       12 |     100% |      27.322M |            30.480M |  11.6% |
-    --------------------------------------------------------------------
-    |       16 |      25% |      41.491M |            41.921M |   1.0% |
-    |       16 |      50% |      36.206M |            36.474M |   0.7% |
-    |       16 |      75% |      32.529M |            33.027M |   1.5% |
-    |       16 |     100% |      29.581M |            30.325M |   2.5% |
-    --------------------------------------------------------------------
-    |       20 |      25% |      34.240M |            36.787M |   7.4% |
-    |       20 |      50% |      30.328M |            32.663M |   7.7% |
-    |       20 |      75% |      27.536M |            29.354M |   6.6% |
-    |       20 |     100% |      24.847M |            26.505M |   6.7% |
-    --------------------------------------------------------------------
-    |       24 |      25% |      36.329M |            40.608M |  11.8% |
-    |       24 |      50% |      31.444M |            35.059M |  11.5% |
-    |       24 |      75% |      28.426M |            31.452M |  10.6% |
-    |       24 |     100% |      26.278M |            28.741M |   9.4% |
-    --------------------------------------------------------------------
-    |       28 |      25% |      31.540M |            31.944M |   1.3% |
-    |       28 |      50% |      27.739M |            28.063M |   1.2% |
-    |       28 |      75% |      24.993M |            25.814M |   3.3% |
-    |       28 |     100% |      23.513M |            23.500M |  -0.1% |
-    --------------------------------------------------------------------
-    |       32 |      25% |      32.116M |            33.953M |   5.7% |
-    |       32 |      50% |      28.879M |            29.859M |   3.4% |
-    |       32 |      75% |      26.227M |            26.948M |   2.7% |
-    |       32 |     100% |      23.829M |            24.613M |   3.3% |
-    --------------------------------------------------------------------
-    |       64 |      25% |      22.535M |            22.554M |   0.1% |
-    |       64 |      50% |      20.471M |            20.675M |   1.0% |
-    |       64 |      75% |      19.077M |            19.146M |   0.4% |
-    |       64 |     100% |      17.710M |            18.131M |   2.4% |
-    --------------------------------------------------------------------
+Here is a fault log:
 
-The following script was used to gather the results (SMT & frequency off):
+ Unhandled 64-bit el1h sync exception on CPU0, ESR 0x0000000034000002 -- BTI
+ CPU: 0 PID: 263 Comm: test_progs Tainted: GF
+ Hardware name: linux,dummy-virt (DT)
+ pstate: 40400805 (nZcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=-c)
+ pc : bpf_fentry_test1+0xc/0x30
+ lr : bpf_trampoline_6442573892_0+0x48/0x1000
+ sp : ffff80000c0c3a50
+ x29: ffff80000c0c3a90 x28: ffff0000c2e6c080 x27: 0000000000000000
+ x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000050
+ x23: 0000000000000000 x22: 0000ffffcfd2a7f0 x21: 000000000000000a
+ x20: 0000ffffcfd2a7f0 x19: 0000000000000000 x18: 0000000000000000
+ x17: 0000000000000000 x16: 0000000000000000 x15: 0000ffffcfd2a7f0
+ x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
+ x11: 0000000000000000 x10: ffff80000914f5e4 x9 : ffff8000082a1528
+ x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0101010101010101
+ x5 : 0000000000000000 x4 : 00000000fffffff2 x3 : 0000000000000001
+ x2 : ffff8001f4b82000 x1 : 0000000000000000 x0 : 0000000000000001
+ Kernel panic - not syncing: Unhandled exception
+ CPU: 0 PID: 263 Comm: test_progs Tainted: GF
+ Hardware name: linux,dummy-virt (DT)
+ Call trace:
+  dump_backtrace+0xec/0x144
+  show_stack+0x24/0x7c
+  dump_stack_lvl+0x8c/0xb8
+  dump_stack+0x18/0x34
+  panic+0x1cc/0x3ec
+  __el0_error_handler_common+0x0/0x130
+  el1h_64_sync_handler+0x60/0xd0
+  el1h_64_sync+0x78/0x7c
+  bpf_fentry_test1+0xc/0x30
+  bpf_fentry_test1+0xc/0x30
+  bpf_prog_test_run_tracing+0xdc/0x2a0
+  __sys_bpf+0x438/0x22a0
+  __arm64_sys_bpf+0x30/0x54
+  invoke_syscall+0x78/0x110
+  el0_svc_common.constprop.0+0x6c/0x1d0
+  do_el0_svc+0x38/0xe0
+  el0_svc+0x30/0xd0
+  el0t_64_sync_handler+0x1ac/0x1b0
+  el0t_64_sync+0x1a0/0x1a4
+ Kernel Offset: disabled
+ CPU features: 0x0000,00034c24,f994fdab
+ Memory Limit: none
 
-    cd tools/testing/selftests/bpf
-    for key_size in 4 8 12 16 20 24 28 32 64; do
-            for nr_entries in `seq 16384 16384 65536`; do
-                    fullness=$(printf '%3s' $((nr_entries*100/65536)))
-                    echo -n "key_size=$key_size: $fullness% full: "
-                    sudo ./bench -d2 -a bpf-hashmap-lookup --key_size=$key_size --nr_entries=$nr_entries --max_entries=65536 --nr_loops=2000000 --map_flags=0x40 | grep cpu
-            done
-            echo
-    done
+And the instruction next to call site of bpf_fentry_test1 is ADD,
+not PACIASP:
 
-Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
+<bpf_fentry_test1>:
+	bti     c
+	nop
+	nop
+	add     w0, w0, #0x1
+	paciasp
+
+For bpf prog, jit always puts a PACIASP after call site for BTI-enabled
+kernel, so there is no problem.
+
+To fix it, replace BLR with RET to bypass the branch target check.
+
+Fixes: efc9909fdce0 ("bpf, arm64: Add bpf trampoline for arm64")
+Reported-by: Florent Revest <revest@chromium.org>
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 ---
- kernel/bpf/hashtab.c | 29 ++++++++++++++++++-----------
- 1 file changed, 18 insertions(+), 11 deletions(-)
+ arch/arm64/net/bpf_jit.h      | 4 ++++
+ arch/arm64/net/bpf_jit_comp.c | 3 ++-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 96b645bba3a4..eb804815f7c3 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -103,6 +103,7 @@ struct bpf_htab {
- 	u32 n_buckets;	/* number of hash buckets */
- 	u32 elem_size;	/* size of each element in bytes */
- 	u32 hashrnd;
-+	u32 key_size_u32;
- 	struct lock_class_key lockdep_key;
- 	int __percpu *map_locked[HASHTAB_MAP_LOCK_COUNT];
- };
-@@ -510,6 +511,10 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
- 	else
- 		htab->elem_size += round_up(htab->map.value_size, 8);
+diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
+index a6acb94ea3d6..c2edadb8ec6a 100644
+--- a/arch/arm64/net/bpf_jit.h
++++ b/arch/arm64/net/bpf_jit.h
+@@ -281,4 +281,8 @@
+ /* DMB */
+ #define A64_DMB_ISH aarch64_insn_gen_dmb(AARCH64_INSN_MB_ISH)
  
-+	/* optimize hash computations if key_size is divisible by 4 */
-+	if ((attr->key_size & (sizeof(u32) - 1)) == 0)
-+		htab->key_size_u32 = attr->key_size / sizeof(u32);
++/* ADR */
++#define A64_ADR(Rd, offset) \
++	aarch64_insn_gen_adr(0, offset, Rd, AARCH64_INSN_ADR_TYPE_ADR)
 +
- 	err = -E2BIG;
- 	/* prevent zero size kmalloc and check for u32 overflow */
- 	if (htab->n_buckets == 0 ||
-@@ -605,9 +610,11 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
- 	return ERR_PTR(err);
- }
- 
--static inline u32 htab_map_hash(const void *key, u32 key_len, u32 hashrnd)
-+static inline u32 htab_map_hash(const struct bpf_htab *htab, const void *key, u32 key_len)
- {
--	return jhash(key, key_len, hashrnd);
-+	if (likely(htab->key_size_u32))
-+		return jhash2(key, htab->key_size_u32, htab->hashrnd);
-+	return jhash(key, key_len, htab->hashrnd);
- }
- 
- static inline struct bucket *__select_bucket(struct bpf_htab *htab, u32 hash)
-@@ -673,7 +680,7 @@ static void *__htab_map_lookup_elem(struct bpf_map *map, void *key)
- 
- 	key_size = map->key_size;
- 
--	hash = htab_map_hash(key, key_size, htab->hashrnd);
-+	hash = htab_map_hash(htab, key, key_size);
- 
- 	head = select_bucket(htab, hash);
- 
-@@ -832,7 +839,7 @@ static int htab_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
- 	if (!key)
- 		goto find_first_elem;
- 
--	hash = htab_map_hash(key, key_size, htab->hashrnd);
-+	hash = htab_map_hash(htab, key, key_size);
- 
- 	head = select_bucket(htab, hash);
- 
-@@ -1093,7 +1100,7 @@ static long htab_map_update_elem(struct bpf_map *map, void *key, void *value,
- 
- 	key_size = map->key_size;
- 
--	hash = htab_map_hash(key, key_size, htab->hashrnd);
-+	hash = htab_map_hash(htab, key, key_size);
- 
- 	b = __select_bucket(htab, hash);
- 	head = &b->head;
-@@ -1195,7 +1202,7 @@ static long htab_lru_map_update_elem(struct bpf_map *map, void *key, void *value
- 
- 	key_size = map->key_size;
- 
--	hash = htab_map_hash(key, key_size, htab->hashrnd);
-+	hash = htab_map_hash(htab, key, key_size);
- 
- 	b = __select_bucket(htab, hash);
- 	head = &b->head;
-@@ -1263,7 +1270,7 @@ static long __htab_percpu_map_update_elem(struct bpf_map *map, void *key,
- 
- 	key_size = map->key_size;
- 
--	hash = htab_map_hash(key, key_size, htab->hashrnd);
-+	hash = htab_map_hash(htab, key, key_size);
- 
- 	b = __select_bucket(htab, hash);
- 	head = &b->head;
-@@ -1318,7 +1325,7 @@ static long __htab_lru_percpu_map_update_elem(struct bpf_map *map, void *key,
- 
- 	key_size = map->key_size;
- 
--	hash = htab_map_hash(key, key_size, htab->hashrnd);
-+	hash = htab_map_hash(htab, key, key_size);
- 
- 	b = __select_bucket(htab, hash);
- 	head = &b->head;
-@@ -1393,7 +1400,7 @@ static long htab_map_delete_elem(struct bpf_map *map, void *key)
- 
- 	key_size = map->key_size;
- 
--	hash = htab_map_hash(key, key_size, htab->hashrnd);
-+	hash = htab_map_hash(htab, key, key_size);
- 	b = __select_bucket(htab, hash);
- 	head = &b->head;
- 
-@@ -1429,7 +1436,7 @@ static long htab_lru_map_delete_elem(struct bpf_map *map, void *key)
- 
- 	key_size = map->key_size;
- 
--	hash = htab_map_hash(key, key_size, htab->hashrnd);
-+	hash = htab_map_hash(htab, key, key_size);
- 	b = __select_bucket(htab, hash);
- 	head = &b->head;
- 
-@@ -1572,7 +1579,7 @@ static int __htab_map_lookup_and_delete_elem(struct bpf_map *map, void *key,
- 
- 	key_size = map->key_size;
- 
--	hash = htab_map_hash(key, key_size, htab->hashrnd);
-+	hash = htab_map_hash(htab, key, key_size);
- 	b = __select_bucket(htab, hash);
- 	head = &b->head;
- 
+ #endif /* _BPF_JIT_H */
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 62f805f427b7..b26da8efa616 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -1900,7 +1900,8 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 		restore_args(ctx, args_off, nargs);
+ 		/* call original func */
+ 		emit(A64_LDR64I(A64_R(10), A64_SP, retaddr_off), ctx);
+-		emit(A64_BLR(A64_R(10)), ctx);
++		emit(A64_ADR(A64_LR, AARCH64_INSN_SIZE * 2), ctx);
++		emit(A64_RET(A64_R(10)), ctx);
+ 		/* store return value */
+ 		emit(A64_STR64I(A64_R(0), A64_SP, retval_off), ctx);
+ 		/* reserve a nop for bpf_tramp_image_put */
 -- 
-2.34.1
+2.30.2
 
