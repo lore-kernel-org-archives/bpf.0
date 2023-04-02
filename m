@@ -2,50 +2,67 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 596D5C77B6D
-	for <bpf@archiver.kernel.org>; Sun,  2 Apr 2023 08:32:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D60FC7619A
+	for <bpf@archiver.kernel.org>; Sun,  2 Apr 2023 08:38:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbjDBIcT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 2 Apr 2023 04:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51098 "EHLO
+        id S229659AbjDBIi0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 2 Apr 2023 04:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbjDBIcH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 2 Apr 2023 04:32:07 -0400
+        with ESMTP id S229503AbjDBIiZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 2 Apr 2023 04:38:25 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D381B35E
-        for <bpf@vger.kernel.org>; Sun,  2 Apr 2023 01:30:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21FABFA
+        for <bpf@vger.kernel.org>; Sun,  2 Apr 2023 01:37:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680424204;
+        s=mimecast20190719; t=1680424657;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=X2qMh1719XPTmN3fL+GQW8KuUqpmNliiESfRG6QrFt4=;
-        b=YeeVFFAvuLkcOdFRByqZ7wVG38dBrjGide4Oy3aexIOybP5gFVEmo8B8+U77240bqcRjW2
-        ixlyaqGikE4W5Gu3QCVtF9lXKtIkUDkitxR61pSdlMHw4/wBdj6roVtuKER7lHFb+ZgVox
-        fTRFz6/qDcCjL2PJ8PLxUowQ0EEiAck=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-575-nGHAPBa7MTGybiLRF4_0rg-1; Sun, 02 Apr 2023 04:30:00 -0400
-X-MC-Unique: nGHAPBa7MTGybiLRF4_0rg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9C5C229ABA07;
-        Sun,  2 Apr 2023 08:29:59 +0000 (UTC)
-Received: from firesoul.localdomain (unknown [10.45.242.12])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 528AA1400E6D;
-        Sun,  2 Apr 2023 08:29:59 +0000 (UTC)
-Received: from [10.1.1.1] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 6888B30736C72;
-        Sun,  2 Apr 2023 10:29:58 +0200 (CEST)
-Subject: [PATCH bpf V6 4/5] mlx4: bpf_xdp_metadata_rx_hash add xdp rss hash
- type
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     bpf@vger.kernel.org, Stanislav Fomichev <sdf@google.com>,
-        =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
+        bh=i924t6g/U8Sz5oZNi8eHpwH9+wgHgEL8rUIeN7Yevhk=;
+        b=eeYaqUv8N3TVdc6WHbiEqDq9YegCHTUXEvsWbIKD9m2zR8GMJGUIJAiW+QQc1xlpTnZm3A
+        VvQO0sZJ2O8z6VqUFiGYgVGCoC62Xm61LqFTdaYwtOyGor4RGOWjEH3Jb1mz+ErjUoHuqo
+        PSjQ+5HSwWhPR77P43blndAoXF1lzLE=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-395-NQ7Aol_jP8G42-Whuys-3g-1; Sun, 02 Apr 2023 04:37:36 -0400
+X-MC-Unique: NQ7Aol_jP8G42-Whuys-3g-1
+Received: by mail-lf1-f72.google.com with SMTP id b10-20020a056512060a00b004eaf5a72b99so10429786lfe.17
+        for <bpf@vger.kernel.org>; Sun, 02 Apr 2023 01:37:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680424654;
+        h=content-transfer-encoding:in-reply-to:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i924t6g/U8Sz5oZNi8eHpwH9+wgHgEL8rUIeN7Yevhk=;
+        b=lcJvqEMUbp01l9BODAkGNgvTFi+dIno31Ol3HaappJgEXRt9q95mkWTuG6tDj0hcpm
+         bakNyelRwnTKww4d+LAoQYyQboUbYD0bViR6kz3o0A49icxPIOjsehCUZ72wOVLk6WGw
+         iyrqr4mlAL0V/oMLmA6mnnjwDNfWVomIpHrgpGoK0o7OLmKzRThI8E/L10uGPVZiqsMY
+         BDBr8R74DizlAtfcmGvekxm10jz0qB3U36RYe/jMRTF4dAIAjCGypEfGscUFpIHZluUt
+         AHL7+mUx06KihBOTBcNQ26XHxvnNJBX8LbmgOI2M12ca19uqrDbkh/pYn9GKLN1p9NqS
+         Bbgw==
+X-Gm-Message-State: AAQBX9cq3PKZ4UcNIus4v7mHyiAqoqMnR/rzWOMy+uefpsuleyk3m+IX
+        PAh8qHPvAn68h+Df3yIgBMcZaCK+yEQ6gbKACC3we6wr+0UHY5czeGHjLpm/AHS6oInDhypluEJ
+        Omiu9W7S0L1lowOFhhcjUD+eGF6DS7y1Ax/CtlLUKQhJqGdEsD+jNNLnD2SFh+5FOkzpm628=
+X-Received: by 2002:a19:7613:0:b0:4db:3e56:55c8 with SMTP id c19-20020a197613000000b004db3e5655c8mr9495438lff.59.1680424654752;
+        Sun, 02 Apr 2023 01:37:34 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YT4NdKfptHbUEwzqYe1WUNC6ROtPlFgUhwZhzhr8UJaaCb11s1bFmgFwrE8lhNBuBu1uo19g==
+X-Received: by 2002:a19:7613:0:b0:4db:3e56:55c8 with SMTP id c19-20020a197613000000b004db3e5655c8mr9495407lff.59.1680424654319;
+        Sun, 02 Apr 2023 01:37:34 -0700 (PDT)
+Received: from [192.168.42.100] (83-90-141-187-cable.dk.customer.tdc.net. [83.90.141.187])
+        by smtp.gmail.com with ESMTPSA id j18-20020a19f512000000b004eb2eb63144sm1114728lfb.120.2023.04.02.01.37.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Apr 2023 01:37:33 -0700 (PDT)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <df64f630-93e6-1ec3-83bc-4584f2856acb@redhat.com>
+Date:   Sun, 2 Apr 2023 10:37:31 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Cc:     brouer@redhat.com, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, martin.lau@kernel.org,
         ast@kernel.org, daniel@iogearbox.net, alexandr.lobakin@intel.com,
         larysa.zaremba@intel.com, xdp-hints@xdp-project.net,
@@ -53,80 +70,35 @@ Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
         boon.leong.ong@intel.com, intel-wired-lan@lists.osuosl.org,
         pabeni@redhat.com, jesse.brandeburg@intel.com, kuba@kernel.org,
         edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
-        davem@davemloft.net, tariqt@nvidia.com, saeedm@nvidia.com,
-        leon@kernel.org, linux-rdma@vger.kernel.org
-Date:   Sun, 02 Apr 2023 10:29:58 +0200
-Message-ID: <168042419838.4051476.9203995216212009644.stgit@firesoul>
-In-Reply-To: <168042409059.4051476.8176861613304493950.stgit@firesoul>
-References: <168042409059.4051476.8176861613304493950.stgit@firesoul>
-User-Agent: StGit/1.4
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+        davem@davemloft.net, tariqt@nvidia.com
+Subject: Re: [PATCH bpf V5 0/5] XDP-hints: API change for RX-hash kfunc
+ bpf_xdp_metadata_rx_hash
+Content-Language: en-US
+To:     bpf@vger.kernel.org, Stanislav Fomichev <sdf@google.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>
+References: <168028882260.4030852.1100965689789226162.stgit@firesoul>
+ <d4b3a22a-c815-a337-29b1-737efd9a7494@redhat.com>
+In-Reply-To: <d4b3a22a-c815-a337-29b1-737efd9a7494@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Update API for bpf_xdp_metadata_rx_hash() with arg for xdp rss hash type
-via matching indiviual Completion Queue Entry (CQE) status bits.
 
-Fixes: ab46182d0dcb ("net/mlx4_en: Support RX XDP metadata")
-Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Acked-by: Stanislav Fomichev <sdf@google.com>
----
- drivers/net/ethernet/mellanox/mlx4/en_rx.c   |   19 ++++++++++++++++++-
- drivers/net/ethernet/mellanox/mlx4/mlx4_en.h |    3 ++-
- 2 files changed, 20 insertions(+), 2 deletions(-)
+On 01/04/2023 18.47, Jesper Dangaard Brouer wrote:
+> 
+> Why have this patchset[1] been marked "Changes Requested" ?
+> 
+> Notice: The BPF test_progs are failing on "xdp_do_redirect", but that is
+> not related to this patchset as it already happens on a clean bpf-tree.
+> 
+> [1] https://patchwork.kernel.org/project/netdevbpf/list/?series=735957&state=%2A
 
-diff --git a/drivers/net/ethernet/mellanox/mlx4/en_rx.c b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-index 73d10aa4c503..332472fe4990 100644
---- a/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-+++ b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-@@ -685,11 +685,28 @@ int mlx4_en_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
- 			enum xdp_rss_hash_type *rss_type)
- {
- 	struct mlx4_en_xdp_buff *_ctx = (void *)ctx;
-+	struct mlx4_cqe *cqe = _ctx->cqe;
-+	enum xdp_rss_hash_type xht = 0;
-+	__be16 status;
- 
- 	if (unlikely(!(_ctx->dev->features & NETIF_F_RXHASH)))
- 		return -ENODATA;
- 
--	*hash = be32_to_cpu(_ctx->cqe->immed_rss_invalid);
-+	*hash = be32_to_cpu(cqe->immed_rss_invalid);
-+	status = cqe->status;
-+	if (status & cpu_to_be16(MLX4_CQE_STATUS_TCP))
-+		xht = XDP_RSS_L4_TCP;
-+	if (status & cpu_to_be16(MLX4_CQE_STATUS_UDP))
-+		xht = XDP_RSS_L4_UDP;
-+	if (status & cpu_to_be16(MLX4_CQE_STATUS_IPV4 | MLX4_CQE_STATUS_IPV4F))
-+		xht |= XDP_RSS_L3_IPV4;
-+	if (status & cpu_to_be16(MLX4_CQE_STATUS_IPV6)) {
-+		xht |= XDP_RSS_L3_IPV6;
-+		if (cqe->ipv6_ext_mask)
-+			xht |= XDP_RSS_L3_DYNHDR;
-+	}
-+	*rss_type = xht;
-+
- 	return 0;
- }
- 
-diff --git a/drivers/net/ethernet/mellanox/mlx4/mlx4_en.h b/drivers/net/ethernet/mellanox/mlx4/mlx4_en.h
-index 544e09b97483..4ac4d883047b 100644
---- a/drivers/net/ethernet/mellanox/mlx4/mlx4_en.h
-+++ b/drivers/net/ethernet/mellanox/mlx4/mlx4_en.h
-@@ -798,7 +798,8 @@ int mlx4_en_netdev_event(struct notifier_block *this,
- 
- struct xdp_md;
- int mlx4_en_xdp_rx_timestamp(const struct xdp_md *ctx, u64 *timestamp);
--int mlx4_en_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash);
-+int mlx4_en_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
-+			enum xdp_rss_hash_type *rss_type);
- 
- /*
-  * Functions for time stamping
+I've now sent V6:
 
+  [2] 
+https://patchwork.kernel.org/project/netdevbpf/list/?series=736141&state=%2A
+
+--Jesper
 
