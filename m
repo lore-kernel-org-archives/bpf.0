@@ -2,79 +2,104 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4602DC6FD1D
-	for <bpf@archiver.kernel.org>; Sat,  1 Apr 2023 22:20:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F95FC7619A
+	for <bpf@archiver.kernel.org>; Sun,  2 Apr 2023 06:18:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbjDAWUX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 1 Apr 2023 18:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45826 "EHLO
+        id S229849AbjDBGS4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 2 Apr 2023 02:18:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjDAWUW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 1 Apr 2023 18:20:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DA412845
-        for <bpf@vger.kernel.org>; Sat,  1 Apr 2023 15:20:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF047B80DBF
-        for <bpf@vger.kernel.org>; Sat,  1 Apr 2023 22:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9400BC4339B;
-        Sat,  1 Apr 2023 22:20:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680387617;
-        bh=4YJK1R8SHQK+kWarIszUO2Hzyj/XfmBI1I2NjjFaJ8M=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=bPQCmt+hloGwApQ9ZpAbE0lKnKIqfdxm9dhUc0GP7ssA2lTAUK50qrpykxDLBi1yo
-         nrrD2kje1+26Hzfct04DRHbkNwkjJKl7pugzFfBGAPA1Rw5+HWH5xLj/4VP/cUAdkm
-         zEHzrx6fvE8FWAq1qkvGeFurXnlZoRQp8wVBX21JdadDAW8VYKjvsMKXNACr+HBoGT
-         w3/bpXkavUO8yihh7JptbkVNhGVOZ2kC++hgtutoEsUjPelh0QzmePSaoPWLaoyqQB
-         Vrk2dWTRUxlx9QE2elwd4sFzij5g0m9jU4wjF0QqdgcRv43G0jKyud8wya52WFB3tK
-         3iQ6ETmEFmjMQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7878AC395C3;
-        Sat,  1 Apr 2023 22:20:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229445AbjDBGSz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 2 Apr 2023 02:18:55 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74F92D41
+        for <bpf@vger.kernel.org>; Sat,  1 Apr 2023 23:18:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680416333; x=1711952333;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Np+gEOwOm/rfEcRXcmPVfhSGIs/kFLqBSqz8TTtlT8s=;
+  b=Cg2Mfduuuqr8RzB33MMscX1ytPBwgSqSx0JxMFdq32ATWRKrFkg/0r60
+   3EVi8HZ172HA5k5JOzBeiIXTyOKJmkIquHWVDl/ymyWj8OwxJqV7I4CLU
+   UIDHdVPSc0kejADbQ0qGq5j973l0wwCY0t8Kz0JxJeWB0JtAeX3rrxWPM
+   +rLXUennMSAtbK1r3mdl0XgzjodG2bSNDQ99IyKgjFHT0dIaLv0UW4laE
+   /LCACsu1R8n9nB/TVN1WBWMP5xMOlckGkWh+5A32N7X88IzI94YlTslAr
+   IpAa9MT1rw49qj9PC4M2swmOWdGdMOpm7WQeUysPcivFIZVESf+XMJBHj
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="330272260"
+X-IronPort-AV: E=Sophos;i="5.98,312,1673942400"; 
+   d="scan'208";a="330272260"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 23:18:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="859803287"
+X-IronPort-AV: E=Sophos;i="5.98,312,1673942400"; 
+   d="scan'208";a="859803287"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 01 Apr 2023 23:18:51 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pir3C-000NGz-32;
+        Sun, 02 Apr 2023 06:18:50 +0000
+Date:   Sun, 2 Apr 2023 14:18:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Aditi Ghag <aditi.ghag@isovalent.com>, bpf@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, kafai@fb.com, sdf@google.com,
+        edumazet@google.com, aditi.ghag@isovalent.com
+Subject: Re: [PATCH v5 bpf-next 3/7] udp: seq_file: Helper function to match
+ socket attributes
+Message-ID: <202304021454.snASElSi-lkp@intel.com>
+References: <20230330151758.531170-4-aditi.ghag@isovalent.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 bpf-next] bpf: optimize hashmap lookups when key_size is
- divisible by 4
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168038761749.29492.1401049227998557631.git-patchwork-notify@kernel.org>
-Date:   Sat, 01 Apr 2023 22:20:17 +0000
-References: <20230401200602.3275-1-aspsk@isovalent.com>
-In-Reply-To: <20230401200602.3275-1-aspsk@isovalent.com>
-To:     Anton Protopopov <aspsk@isovalent.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, john.fastabend@gmail.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230330151758.531170-4-aditi.ghag@isovalent.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+Hi Aditi,
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Thank you for the patch! Perhaps something to improve:
 
-On Sat,  1 Apr 2023 20:06:02 +0000 you wrote:
-> The BPF hashmap uses the jhash() hash function. There is an optimized version
-> of this hash function which may be used if hash size is a multiple of 4. Apply
-> this optimization to the hashmap in a similar way as it is done in the bloom
-> filter map.
-> 
-> On practice the optimization is only noticeable for smaller key sizes, which,
-> however, is sufficient for many applications. An example is listed in the
-> following table of measurements (a hashmap of 65536 elements was used):
-> 
-> [...]
+[auto build test WARNING on bpf-next/master]
 
-Here is the summary with links:
-  - [v2,bpf-next] bpf: optimize hashmap lookups when key_size is divisible by 4
-    https://git.kernel.org/bpf/bpf-next/c/5b85575ad428
+url:    https://github.com/intel-lab-lkp/linux/commits/Aditi-Ghag/bpf-tcp-Avoid-taking-fast-sock-lock-in-iterator/20230330-232137
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20230330151758.531170-4-aditi.ghag%40isovalent.com
+patch subject: [PATCH v5 bpf-next 3/7] udp: seq_file: Helper function to match socket attributes
+config: i386-randconfig-s001 (https://download.01.org/0day-ci/archive/20230402/202304021454.snASElSi-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/66cc617bebf6cb3d2162587d6e248d86bc59c1c2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Aditi-Ghag/bpf-tcp-Avoid-taking-fast-sock-lock-in-iterator/20230330-232137
+        git checkout 66cc617bebf6cb3d2162587d6e248d86bc59c1c2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 olddefconfig
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash net/ipv4/
 
-You are awesome, thank you!
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304021454.snASElSi-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+   net/ipv4/udp.c:1487:28: sparse: sparse: context imbalance in 'udp_rmem_release' - unexpected unlock
+   net/ipv4/udp.c:1519:19: sparse: sparse: context imbalance in 'busylock_acquire' - wrong count at exit
+   net/ipv4/udp.c:1531:28: sparse: sparse: context imbalance in 'busylock_release' - unexpected unlock
+>> net/ipv4/udp.c:2986:32: sparse: sparse: marked inline, but without a definition
+>> net/ipv4/udp.c:2986:32: sparse: sparse: marked inline, but without a definition
+
+vim +2986 net/ipv4/udp.c
+
+  2985	
+> 2986	static inline bool seq_sk_match(struct seq_file *seq, const struct sock *sk);
+  2987	
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
