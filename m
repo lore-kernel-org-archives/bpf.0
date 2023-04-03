@@ -2,339 +2,181 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29293C761A6
-	for <bpf@archiver.kernel.org>; Mon,  3 Apr 2023 11:13:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67C31C761A6
+	for <bpf@archiver.kernel.org>; Mon,  3 Apr 2023 11:17:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232224AbjDCLN1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 3 Apr 2023 07:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
+        id S232343AbjDCLRV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 3 Apr 2023 07:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232117AbjDCLNN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 3 Apr 2023 07:13:13 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE17FF09
-        for <bpf@vger.kernel.org>; Mon,  3 Apr 2023 04:12:45 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id y14so28948334wrq.4
-        for <bpf@vger.kernel.org>; Mon, 03 Apr 2023 04:12:45 -0700 (PDT)
+        with ESMTP id S232357AbjDCLRS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 3 Apr 2023 07:17:18 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6010B1D923
+        for <bpf@vger.kernel.org>; Mon,  3 Apr 2023 04:16:56 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso32148037pjb.3
+        for <bpf@vger.kernel.org>; Mon, 03 Apr 2023 04:16:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google; t=1680520363;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1680520615;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JJGK6+z2A0j3BXRQbw4triQYURy3/oqOBEOPJiYTwI4=;
-        b=tpFFS4UnM3prfzvnWok4lKRG4k267cw8oCzicAYmRl1H6CB6VSOmte/empqxGvcWy7
-         Moqy9a1QyOZJ+XDWTAYRrDqM8ZZJZSxJG2WHAKEPIcRN2W2/t0mIggTKqDNFn6iAhKUd
-         khD3w7P4NcOnjfp3u7S5/YNSB+jEavbx+NV+Y=
+        bh=Ke1BmpJax0dFxDzlH+fS+VmzwhJuJbFy2IGCh2H/H80=;
+        b=do6CEDVjMR71jqF0bpSY9nVTAnaHoU/UV9pX90cv0snUMn6ZJpMxCCfot2PUitZoc5
+         pEuoGjhoDLKX9C6YmLu1zhyJjjpdMcheApGJQxUn+43jMWvW1GVGR5gMzDxk+Dryzfg5
+         nowHGujOvTKHYjNjqhmSRlcM2LT0ZIa6+R1lc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680520363;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1680520615;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JJGK6+z2A0j3BXRQbw4triQYURy3/oqOBEOPJiYTwI4=;
-        b=HtjL1g2YeNhho6ZTUrdK0NOssm2xGhW9M0/Mj40gjXziOxTiv9XpX5Yeg98RLAIJxA
-         RODOrFlbWHrhPnJY8RvgROhqoM9ARoVhC3ousQISdAAnfG1TnqcbsfnBBMqYNT+/zqfC
-         AXatJk1KQ9hyt2FGB1dFe9v0albc/P5cd08R4VQokHC5ONGsUjPEK0UoOEkedidZyt1u
-         LQhYGEano6qxNhqioOVYYWv1DDON6HhrZB4c6kWTHJHbX7fBZ8BRlb3VfFaZI8Hmr4Ct
-         mk6WC9SkjpfhZCeZ9g8pBGKKIY/dSxJ5FeezmF0gxrhryqvOlHc3N7AHRcr2eF2aevmm
-         b2RA==
-X-Gm-Message-State: AAQBX9f48HCGDUzMLPco0737MffflRZHFzEEZemzxTN91AGzYS1xtOwD
-        zrQknKd0JKh9Ipo+3Zyryxbr6pGWzpuOYt4Rp3Q1avdT
-X-Google-Smtp-Source: AKy350bcITxGCnkiMeQi5Vz8Ia9/Zlb9CV3ZkbXUJUt3e/Xz42s2EhmH92FXuuBHO4CBhxxI/xNO2g==
-X-Received: by 2002:adf:fccc:0:b0:2cf:e868:f789 with SMTP id f12-20020adffccc000000b002cfe868f789mr25909194wrs.48.1680520362592;
-        Mon, 03 Apr 2023 04:12:42 -0700 (PDT)
-Received: from workstation.ehrig.io (tmo-066-125.customers.d1-online.com. [80.187.66.125])
-        by smtp.gmail.com with ESMTPSA id y11-20020adffa4b000000b002c7066a6f77sm9505517wrr.31.2023.04.03.04.12.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 04:12:42 -0700 (PDT)
-From:   Christian Ehrig <cehrig@cloudflare.com>
-To:     bpf@vger.kernel.org
-Cc:     cehrig@cloudflare.com, kernel-team@cloudflare.com,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Kaixi Fan <fankaixi.li@bytedance.com>,
-        Paul Chaignon <paul@isovalent.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 3/3] selftests/bpf: Test FOU kfuncs for externally controlled ipip devices
-Date:   Mon,  3 Apr 2023 14:12:09 +0200
-Message-Id: <528a824713c1545839d870eaad84d87749a23371.1680520500.git.cehrig@cloudflare.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <cover.1680520500.git.cehrig@cloudflare.com>
-References: <cover.1680520500.git.cehrig@cloudflare.com>
+        bh=Ke1BmpJax0dFxDzlH+fS+VmzwhJuJbFy2IGCh2H/H80=;
+        b=Z/MW8ASMWe9SNNdWDdvzdWpWHy86NPaxhHSR8sK/ZYmUEPr6uGKA4Sz8GqywxtxW9r
+         v6wr9PoF7fC55thc5bYcZ4QJ40hgrfntbYFP0UNvMOQHdVCCrH7ArchpkVuq3iiXMoib
+         w3qgC52gsj+6w/l6wMKcKkL9nsFKz6/7XvVwGh86Vsk5WFSJc/hlTBQDTLqdZO6f9Tlp
+         JaBB1H0vpcBBRf0S4JSivpQMAXZ1YSrug2tmYNWdoZsCbLFMpmE36H/2htKKdzYb/Z+b
+         Edy8BcdrvyqlDanDOjShO3ae7xfMBR0J88xrJI/i1m0+uHVDs2ZpJCJhRRWVNUTulYIN
+         d12A==
+X-Gm-Message-State: AAQBX9c9oVzWup9QH2JVp3HS9RUVSlCqSAyWojddrsawkc7TnYH7OwzU
+        RuAcBg9MNS1Mw2Dew6twt6recFL6UBhyX5yDBvni1A==
+X-Google-Smtp-Source: AKy350a0m8UMHP75L6OmsSj6MDl520edXzfsPgoQs+rXUr4+WE0UzLlQtsiZsOVTXM31l2z3Sxh1PKzALboC62Ci13M=
+X-Received: by 2002:a17:902:d70c:b0:1a1:def4:a030 with SMTP id
+ w12-20020a170902d70c00b001a1def4a030mr6366338ply.0.1680520615096; Mon, 03 Apr
+ 2023 04:16:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230401234144.3719742-1-xukuohai@huaweicloud.com>
+In-Reply-To: <20230401234144.3719742-1-xukuohai@huaweicloud.com>
+From:   Florent Revest <revest@chromium.org>
+Date:   Mon, 3 Apr 2023 13:16:44 +0200
+Message-ID: <CABRcYmJ7Oi6fpU76aNFpEwa94sZ+O7q6M1k-LMB0f0iXbFXGZQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf, arm64: Fixed a BTI error on returning to
+ patched function
+To:     Xu Kuohai <xukuohai@huaweicloud.com>
+Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add tests for FOU and GUE encapsulation via the bpf_skb_{set,get}_fou_encap
-kfuncs, using ipip devices in collect-metadata mode.
+On Sat, Apr 1, 2023 at 12:43=E2=80=AFPM Xu Kuohai <xukuohai@huaweicloud.com=
+> wrote:
+>
+> From: Xu Kuohai <xukuohai@huawei.com>
+>
+> When BPF_TRAMP_F_CALL_ORIG is set, bpf trampoline uses BLR to jump
+> back to the instruction next to call site to call the patched function.
+> For BTI-enabled kernel, the instruction next to call site is usually
+> PACIASP, in this case, it's safe to jump back with BLR. But when
+> the call site is not followed by a PACIASP or bti, a BTI exception
+> is triggered.
+>
+> Here is a fault log:
+>
+>  Unhandled 64-bit el1h sync exception on CPU0, ESR 0x0000000034000002 -- =
+BTI
+>  CPU: 0 PID: 263 Comm: test_progs Tainted: GF
+>  Hardware name: linux,dummy-virt (DT)
+>  pstate: 40400805 (nZcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=3D-c)
+>  pc : bpf_fentry_test1+0xc/0x30
+>  lr : bpf_trampoline_6442573892_0+0x48/0x1000
+>  sp : ffff80000c0c3a50
+>  x29: ffff80000c0c3a90 x28: ffff0000c2e6c080 x27: 0000000000000000
+>  x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000050
+>  x23: 0000000000000000 x22: 0000ffffcfd2a7f0 x21: 000000000000000a
+>  x20: 0000ffffcfd2a7f0 x19: 0000000000000000 x18: 0000000000000000
+>  x17: 0000000000000000 x16: 0000000000000000 x15: 0000ffffcfd2a7f0
+>  x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
+>  x11: 0000000000000000 x10: ffff80000914f5e4 x9 : ffff8000082a1528
+>  x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0101010101010101
+>  x5 : 0000000000000000 x4 : 00000000fffffff2 x3 : 0000000000000001
+>  x2 : ffff8001f4b82000 x1 : 0000000000000000 x0 : 0000000000000001
+>  Kernel panic - not syncing: Unhandled exception
+>  CPU: 0 PID: 263 Comm: test_progs Tainted: GF
+>  Hardware name: linux,dummy-virt (DT)
+>  Call trace:
+>   dump_backtrace+0xec/0x144
+>   show_stack+0x24/0x7c
+>   dump_stack_lvl+0x8c/0xb8
+>   dump_stack+0x18/0x34
+>   panic+0x1cc/0x3ec
+>   __el0_error_handler_common+0x0/0x130
+>   el1h_64_sync_handler+0x60/0xd0
+>   el1h_64_sync+0x78/0x7c
+>   bpf_fentry_test1+0xc/0x30
+>   bpf_fentry_test1+0xc/0x30
+>   bpf_prog_test_run_tracing+0xdc/0x2a0
+>   __sys_bpf+0x438/0x22a0
+>   __arm64_sys_bpf+0x30/0x54
+>   invoke_syscall+0x78/0x110
+>   el0_svc_common.constprop.0+0x6c/0x1d0
+>   do_el0_svc+0x38/0xe0
+>   el0_svc+0x30/0xd0
+>   el0t_64_sync_handler+0x1ac/0x1b0
+>   el0t_64_sync+0x1a0/0x1a4
+>  Kernel Offset: disabled
+>  CPU features: 0x0000,00034c24,f994fdab
+>  Memory Limit: none
+>
+> And the instruction next to call site of bpf_fentry_test1 is ADD,
+> not PACIASP:
+>
+> <bpf_fentry_test1>:
+>         bti     c
+>         nop
+>         nop
+>         add     w0, w0, #0x1
+>         paciasp
+>
+> For bpf prog, jit always puts a PACIASP after call site for BTI-enabled
+> kernel, so there is no problem.
+>
+> To fix it, replace BLR with RET to bypass the branch target check.
+>
+> Fixes: efc9909fdce0 ("bpf, arm64: Add bpf trampoline for arm64")
+> Reported-by: Florent Revest <revest@chromium.org>
+> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 
-These tests make sure that we can successfully set and obtain FOU and GUE
-encap parameters using ingress / egress BPF tc-hooks.
+Thank you Xu! It does fix the BTI Oops I observed :)
 
-Signed-off-by: Christian Ehrig <cehrig@cloudflare.com>
----
- .../selftests/bpf/progs/test_tunnel_kern.c    | 117 ++++++++++++++++++
- tools/testing/selftests/bpf/test_tunnel.sh    |  81 ++++++++++++
- 2 files changed, 198 insertions(+)
+Tested-by: Florent Revest <revest@chromium.org>
+Acked-by: Florent Revest <revest@chromium.org>
 
-diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-index 9ab2d55ab7c0..f66af753bbbb 100644
---- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-@@ -52,6 +52,21 @@ struct vxlan_metadata {
- 	__u32     gbp;
- };
- 
-+struct bpf_fou_encap {
-+	__be16 sport;
-+	__be16 dport;
-+};
-+
-+enum bpf_fou_encap_type {
-+	FOU_BPF_ENCAP_FOU,
-+	FOU_BPF_ENCAP_GUE,
-+};
-+
-+int bpf_skb_set_fou_encap(struct __sk_buff *skb_ctx,
-+			  struct bpf_fou_encap *encap, int type) __ksym;
-+int bpf_skb_get_fou_encap(struct __sk_buff *skb_ctx,
-+			  struct bpf_fou_encap *encap) __ksym;
-+
- struct {
- 	__uint(type, BPF_MAP_TYPE_ARRAY);
- 	__uint(max_entries, 1);
-@@ -749,6 +764,108 @@ int ipip_get_tunnel(struct __sk_buff *skb)
- 	return TC_ACT_OK;
- }
- 
-+SEC("tc")
-+int ipip_gue_set_tunnel(struct __sk_buff *skb)
-+{
-+	struct bpf_tunnel_key key = {};
-+	struct bpf_fou_encap encap = {};
-+	void *data = (void *)(long)skb->data;
-+	struct iphdr *iph = data;
-+	void *data_end = (void *)(long)skb->data_end;
-+	int ret;
-+
-+	if (data + sizeof(*iph) > data_end) {
-+		log_err(1);
-+		return TC_ACT_SHOT;
-+	}
-+
-+	key.tunnel_ttl = 64;
-+	if (iph->protocol == IPPROTO_ICMP)
-+		key.remote_ipv4 = 0xac100164; /* 172.16.1.100 */
-+
-+	ret = bpf_skb_set_tunnel_key(skb, &key, sizeof(key), 0);
-+	if (ret < 0) {
-+		log_err(ret);
-+		return TC_ACT_SHOT;
-+	}
-+
-+	encap.sport = 0;
-+	encap.dport = bpf_htons(5555);
-+
-+	ret = bpf_skb_set_fou_encap(skb, &encap, FOU_BPF_ENCAP_GUE);
-+	if (ret < 0) {
-+		log_err(ret);
-+		return TC_ACT_SHOT;
-+	}
-+
-+	return TC_ACT_OK;
-+}
-+
-+SEC("tc")
-+int ipip_fou_set_tunnel(struct __sk_buff *skb)
-+{
-+	struct bpf_tunnel_key key = {};
-+	struct bpf_fou_encap encap = {};
-+	void *data = (void *)(long)skb->data;
-+	struct iphdr *iph = data;
-+	void *data_end = (void *)(long)skb->data_end;
-+	int ret;
-+
-+	if (data + sizeof(*iph) > data_end) {
-+		log_err(1);
-+		return TC_ACT_SHOT;
-+	}
-+
-+	key.tunnel_ttl = 64;
-+	if (iph->protocol == IPPROTO_ICMP)
-+		key.remote_ipv4 = 0xac100164; /* 172.16.1.100 */
-+
-+	ret = bpf_skb_set_tunnel_key(skb, &key, sizeof(key), 0);
-+	if (ret < 0) {
-+		log_err(ret);
-+		return TC_ACT_SHOT;
-+	}
-+
-+	encap.sport = 0;
-+	encap.dport = bpf_htons(5555);
-+
-+	ret = bpf_skb_set_fou_encap(skb, &encap, FOU_BPF_ENCAP_FOU);
-+	if (ret < 0) {
-+		log_err(ret);
-+		return TC_ACT_SHOT;
-+	}
-+
-+	return TC_ACT_OK;
-+}
-+
-+SEC("tc")
-+int ipip_encap_get_tunnel(struct __sk_buff *skb)
-+{
-+	int ret;
-+	struct bpf_tunnel_key key = {};
-+	struct bpf_fou_encap encap = {};
-+
-+	ret = bpf_skb_get_tunnel_key(skb, &key, sizeof(key), 0);
-+	if (ret < 0) {
-+		log_err(ret);
-+		return TC_ACT_SHOT;
-+	}
-+
-+	ret = bpf_skb_get_fou_encap(skb, &encap);
-+	if (ret < 0) {
-+		log_err(ret);
-+		return TC_ACT_SHOT;
-+	}
-+
-+	if (bpf_ntohs(encap.dport) != 5555)
-+		return TC_ACT_SHOT;
-+
-+	bpf_printk("%d remote ip 0x%x, sport %d, dport %d\n", ret,
-+		   key.remote_ipv4, bpf_ntohs(encap.sport),
-+		   bpf_ntohs(encap.dport));
-+	return TC_ACT_OK;
-+}
-+
- SEC("tc")
- int ipip6_set_tunnel(struct __sk_buff *skb)
- {
-diff --git a/tools/testing/selftests/bpf/test_tunnel.sh b/tools/testing/selftests/bpf/test_tunnel.sh
-index 2dec7dbf29a2..f2379414a887 100755
---- a/tools/testing/selftests/bpf/test_tunnel.sh
-+++ b/tools/testing/selftests/bpf/test_tunnel.sh
-@@ -212,6 +212,24 @@ add_ipip_tunnel()
- 	ip addr add dev $DEV 10.1.1.200/24
- }
- 
-+add_ipip_encap_tunnel()
-+{
-+	# at_ns0 namespace
-+  ip netns exec at_ns0 ip fou add port 5555 $IPPROTO
-+  ip netns exec at_ns0 \
-+  	ip link add dev $DEV_NS type $TYPE \
-+  	local 172.16.1.100 remote 172.16.1.200 \
-+  	encap $ENCAP encap-sport auto encap-dport 5555 noencap-csum
-+  ip netns exec at_ns0 ip link set dev $DEV_NS up
-+  ip netns exec at_ns0 ip addr add dev $DEV_NS 10.1.1.100/24
-+
-+  # root namespace
-+  ip fou add port 5555 $IPPROTO
-+  ip link add dev $DEV type $TYPE external
-+  ip link set dev $DEV up
-+  ip addr add dev $DEV 10.1.1.200/24
-+}
-+
- add_ip6tnl_tunnel()
- {
- 	ip netns exec at_ns0 ip addr add ::11/96 dev veth0
-@@ -461,6 +479,60 @@ test_ipip()
-         echo -e ${GREEN}"PASS: $TYPE"${NC}
- }
- 
-+test_ipip_gue()
-+{
-+	TYPE=ipip
-+	DEV_NS=ipip00
-+	DEV=ipip11
-+	ret=0
-+	ENCAP=gue
-+	IPPROTO=$ENCAP
-+
-+	check $TYPE
-+	config_device
-+	add_ipip_encap_tunnel
-+	ip link set dev veth1 mtu 1500
-+	attach_bpf $DEV ipip_gue_set_tunnel ipip_encap_get_tunnel
-+	ping $PING_ARG 10.1.1.100
-+	check_err $?
-+	ip netns exec at_ns0 ping $PING_ARG 10.1.1.200
-+	check_err $?
-+	cleanup
-+
-+	if [ $ret -ne 0 ]; then
-+                echo -e ${RED}"FAIL: $TYPE (GUE)"${NC}
-+                return 1
-+        fi
-+        echo -e ${GREEN}"PASS: $TYPE (GUE)"${NC}
-+}
-+
-+test_ipip_fou()
-+{
-+	TYPE=ipip
-+	DEV_NS=ipip00
-+	DEV=ipip11
-+	ret=0
-+	ENCAP=fou
-+	IPPROTO="ipproto 4"
-+
-+	check $TYPE
-+	config_device
-+	add_ipip_encap_tunnel
-+	ip link set dev veth1 mtu 1500
-+	attach_bpf $DEV ipip_fou_set_tunnel ipip_encap_get_tunnel
-+	ping $PING_ARG 10.1.1.100
-+	check_err $?
-+	ip netns exec at_ns0 ping $PING_ARG 10.1.1.200
-+	check_err $?
-+	cleanup
-+
-+	if [ $ret -ne 0 ]; then
-+                echo -e ${RED}"FAIL: $TYPE (FOU)"${NC}
-+                return 1
-+        fi
-+        echo -e ${GREEN}"PASS: $TYPE (FOU)"${NC}
-+}
-+
- test_ipip6()
- {
- 	TYPE=ip6tnl
-@@ -634,6 +706,7 @@ cleanup()
- 	ip xfrm policy delete dir in src 10.1.1.100/32 dst 10.1.1.200/32 2> /dev/null
- 	ip xfrm state delete src 172.16.1.100 dst 172.16.1.200 proto esp spi 0x1 2> /dev/null
- 	ip xfrm state delete src 172.16.1.200 dst 172.16.1.100 proto esp spi 0x2 2> /dev/null
-+	ip fou del port 5555 gue 2> /dev/null
- }
- 
- cleanup_exit()
-@@ -708,6 +781,14 @@ bpf_tunnel_test()
- 	test_ipip
- 	errors=$(( $errors + $? ))
- 
-+	echo "Testing IPIP (GUE) tunnel..."
-+  test_ipip_gue
-+  errors=$(( $errors + $? ))
-+
-+	echo "Testing IPIP (FOU) tunnel..."
-+  test_ipip_fou
-+  errors=$(( $errors + $? ))
-+
- 	echo "Testing IPIP6 tunnel..."
- 	test_ipip6
- 	errors=$(( $errors + $? ))
--- 
-2.39.2
-
+> ---
+>  arch/arm64/net/bpf_jit.h      | 4 ++++
+>  arch/arm64/net/bpf_jit_comp.c | 3 ++-
+>  2 files changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
+> index a6acb94ea3d6..c2edadb8ec6a 100644
+> --- a/arch/arm64/net/bpf_jit.h
+> +++ b/arch/arm64/net/bpf_jit.h
+> @@ -281,4 +281,8 @@
+>  /* DMB */
+>  #define A64_DMB_ISH aarch64_insn_gen_dmb(AARCH64_INSN_MB_ISH)
+>
+> +/* ADR */
+> +#define A64_ADR(Rd, offset) \
+> +       aarch64_insn_gen_adr(0, offset, Rd, AARCH64_INSN_ADR_TYPE_ADR)
+> +
+>  #endif /* _BPF_JIT_H */
+> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.=
+c
+> index 62f805f427b7..b26da8efa616 100644
+> --- a/arch/arm64/net/bpf_jit_comp.c
+> +++ b/arch/arm64/net/bpf_jit_comp.c
+> @@ -1900,7 +1900,8 @@ static int prepare_trampoline(struct jit_ctx *ctx, =
+struct bpf_tramp_image *im,
+>                 restore_args(ctx, args_off, nargs);
+>                 /* call original func */
+>                 emit(A64_LDR64I(A64_R(10), A64_SP, retaddr_off), ctx);
+> -               emit(A64_BLR(A64_R(10)), ctx);
+> +               emit(A64_ADR(A64_LR, AARCH64_INSN_SIZE * 2), ctx);
+> +               emit(A64_RET(A64_R(10)), ctx);
+>                 /* store return value */
+>                 emit(A64_STR64I(A64_R(0), A64_SP, retval_off), ctx);
+>                 /* reserve a nop for bpf_tramp_image_put */
+> --
+> 2.30.2
+>
