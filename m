@@ -2,109 +2,148 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A09FC761A6
-	for <bpf@archiver.kernel.org>; Mon,  3 Apr 2023 12:05:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A81DFC761A6
+	for <bpf@archiver.kernel.org>; Mon,  3 Apr 2023 12:23:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232062AbjDCMFP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 3 Apr 2023 08:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33008 "EHLO
+        id S231849AbjDCMX2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 3 Apr 2023 08:23:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231826AbjDCMFO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 3 Apr 2023 08:05:14 -0400
-Received: from mail-lj1-x262.google.com (mail-lj1-x262.google.com [IPv6:2a00:1450:4864:20::262])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDEA359F1
-        for <bpf@vger.kernel.org>; Mon,  3 Apr 2023 05:04:59 -0700 (PDT)
-Received: by mail-lj1-x262.google.com with SMTP id b6so10034355ljr.1
-        for <bpf@vger.kernel.org>; Mon, 03 Apr 2023 05:04:59 -0700 (PDT)
+        with ESMTP id S231886AbjDCMX0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 3 Apr 2023 08:23:26 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427F311643;
+        Mon,  3 Apr 2023 05:23:21 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id j7so34508999ybg.4;
+        Mon, 03 Apr 2023 05:23:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1680523498;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dubmJZzj9ewK7VdPsSH0OrrerYhQltiRGNAZ5sYhsdE=;
-        b=owWYS1VVibUABjXX7VSbtvRh0XtK1zmGJqqs+aa0pqCH5H4x0JQhsXiwVyNu+HHeyY
-         37mKtGwGmRcsh6ob2/NSrbFsxSqlE2ZztPtJJ869q7Zq07tIFXnzdIv7YbJ2ZKoCHlmw
-         e88iSnpzMFdgVnavEgGXPliO2xm0td647Oo5Q=
+        d=gmail.com; s=20210112; t=1680524600;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CV4hHC1sA+rpldeBpV1/b7vAGylUfHwT+E3ZkcI7AzQ=;
+        b=XeY0WrqhUZ/g4ek0FdjnYgmHtmbG3qzJaYZhjQVJ+o4apLcLXmBZIgDwVfoD9nsCcR
+         W9eqXIWeT0u/Ju66kuEfhNKS5YuYZ6gTBUoWdf1tda8Aohjhs3tMB1MX23u+Glj/6HIA
+         nntCLT+9O5By/sSUimOneh0Yi+cPcWi/mMArl44T61hPh3hugZa4QwammMMwkGtBAShY
+         5fyJU4xFw2F/Jwr3qQg10NHA3UyAsS3h7z+HH4MWN+Np/6laneGn5JcnBK8x4wRJQduc
+         QbuAv+mm5RHdwkoPewL7wlEMTfJceKqukF6qvVs84j9YFSpo8KNA5ImkRkB+p7IgH+fF
+         adXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680523498;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1680524600;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dubmJZzj9ewK7VdPsSH0OrrerYhQltiRGNAZ5sYhsdE=;
-        b=iOTjUFAkUweOM1RmgEDRUPABseZfnGFCcumnOnGNy2Kft5pPJpvovlUOQ/BRVvtAG9
-         2XHFjaCw71ZgkW7UTx3Goto2Q4tDeVUcqW3kCRM3SjZ7xIGCquGZ83VjGJMuzYTh6vln
-         XT8ZLxUjgD7Co2AP8Go90D/7BWe4+CTSlaSM9YOl6P5nGmURXrBG+2CJQDMhIgfW4+9t
-         E50i006pbzidGd464cAjcgK7z3xbxvg4NDT2C8AWxzi3B3UN+ubLYi7QCJMcKKb9NrV0
-         BhOKoHSPK5L4y2QKlXurEc7i8VOhc9LnWZfJUIHZCjbIlOHPKKLSpqAKuFpjZf/rz7hb
-         p4VA==
-X-Gm-Message-State: AAQBX9cxnoOGvYsVCv4DlY3aN8e9srfVHt2s6UT4CCxgmz80WpTvZisj
-        amkK45oYvcDRLz2oTOU7pbY+xmv5IsMWOp6dtb56/mUOXadg
-X-Google-Smtp-Source: AKy350YerD1mBS1N0DhMKmHhnV36wHp/bArUw8WNCwFwDem7NnjRkJ70Xq8ME/XUvVF7/+TWaOidByobHMw/
-X-Received: by 2002:a2e:8786:0:b0:2a6:389f:d0d0 with SMTP id n6-20020a2e8786000000b002a6389fd0d0mr653005lji.37.1680523498077;
-        Mon, 03 Apr 2023 05:04:58 -0700 (PDT)
-Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id bg27-20020a05651c0b9b00b002905c01ea6dsm2299495ljb.31.2023.04.03.05.04.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 05:04:58 -0700 (PDT)
-X-Relaying-Domain: dectris.com
-From:   Kal Conley <kal.conley@dectris.com>
-To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        bh=CV4hHC1sA+rpldeBpV1/b7vAGylUfHwT+E3ZkcI7AzQ=;
+        b=JBNy0zr1uv9+tA0lv+ww/RoBlLjWhJVcalDs9prU+Gsbg8tjHGi9OzbPgu6STI2umG
+         idl95Agho6NhfO/J3MBlC945cfKBAz1RTLRedxOYTJkLsiyjjiSyrDhunI3hX3PYCW2a
+         EBm254XtOfrzHwe4+dB4c3u5odM0GGagMXwjkyYO+JmdwQIhv9Zk48DjbpEyo3QKbIv7
+         JtylNNylD7iVkFQnsMocE7KAlueIzcd3aLqQDHRwWG+ezWsWI4q1hCm/amPe6ICHgKQH
+         fbtit1r1gqRZSj0dXHJYgDVEn+PQTUjZj9rs4366Rtite75dAJeW9Q/nvoaNLmzxoRTv
+         8m7A==
+X-Gm-Message-State: AAQBX9f1thS8SEP5cEfbUlb5SpypOlDIYE8Bx2w9si/auN/x+c7n5yKL
+        74QJB4Jfe98CWAkqmd7iaX1Ibn6w/NiZMLG9ALE=
+X-Google-Smtp-Source: AKy350ZR8wMNk5BPNSKULI1BOgMr9PfQo/lOb8oFr5/gsE836uLouUYLoDYaRgjlrDPjkrz5SCNytqcHsm4bIec2wlM=
+X-Received: by 2002:a05:6902:154a:b0:b3c:637f:ad00 with SMTP id
+ r10-20020a056902154a00b00b3c637fad00mr23972399ybu.5.1680524600282; Mon, 03
+ Apr 2023 05:23:20 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230329180502.1884307-1-kal.conley@dectris.com> <20230329180502.1884307-7-kal.conley@dectris.com>
+In-Reply-To: <20230329180502.1884307-7-kal.conley@dectris.com>
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+Date:   Mon, 3 Apr 2023 14:23:09 +0200
+Message-ID: <CAJ8uoz0a3gJgWDxP0zPLsiWzUZHmGqRbrumdRq2Gv1HdVm4ObQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 06/10] xsk: Add check for unaligned
+ descriptors that overrun UMEM
+To:     Kal Conley <kal.conley@dectris.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
         Magnus Karlsson <magnus.karlsson@intel.com>,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
         Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Weqaar Janjua <weqaar.janjua@gmail.com>
-Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Maxim Mikityanskiy <maximmi@mellanox.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH bpf] selftests: xsk: Disable IPv6 on VETH1
-Date:   Mon,  3 Apr 2023 14:04:51 +0200
-Message-Id: <20230403120451.31041-1-kal.conley@dectris.com>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This change fixes flakiness in the BIDIRECTIONAL test:
+On Wed, 29 Mar 2023 at 20:11, Kal Conley <kal.conley@dectris.com> wrote:
+>
+> Make sure unaligned descriptors that straddle the end of the UMEM are
+> considered invalid. This check needs to happen before the page boundary
+> and contiguity checks in xp_desc_crosses_non_contig_pg(). Check this in
+> xp_unaligned_validate_desc() instead like xp_check_unaligned() already
+> does.
+>
+> Fixes: 2b43470add8c ("xsk: Introduce AF_XDP buffer allocation API")
+> Signed-off-by: Kal Conley <kal.conley@dectris.com>
+> ---
+>  include/net/xsk_buff_pool.h | 9 ++-------
+>  net/xdp/xsk_queue.h         | 1 +
+>  2 files changed, 3 insertions(+), 7 deletions(-)
+>
+> diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
+> index 3e952e569418..d318c769b445 100644
+> --- a/include/net/xsk_buff_pool.h
+> +++ b/include/net/xsk_buff_pool.h
+> @@ -180,13 +180,8 @@ static inline bool xp_desc_crosses_non_contig_pg(struct xsk_buff_pool *pool,
+>         if (likely(!cross_pg))
+>                 return false;
+>
+> -       if (pool->dma_pages_cnt) {
+> -               return !(pool->dma_pages[addr >> PAGE_SHIFT] &
+> -                        XSK_NEXT_PG_CONTIG_MASK);
+> -       }
+> -
+> -       /* skb path */
+> -       return addr + len > pool->addrs_cnt;
+> +       return pool->dma_pages_cnt &&
+> +              !(pool->dma_pages[addr >> PAGE_SHIFT] & XSK_NEXT_PG_CONTIG_MASK);
+>  }
+>
+>  static inline u64 xp_aligned_extract_addr(struct xsk_buff_pool *pool, u64 addr)
+> diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
+> index bfb2a7e50c26..66c6f57c9c44 100644
+> --- a/net/xdp/xsk_queue.h
+> +++ b/net/xdp/xsk_queue.h
+> @@ -162,6 +162,7 @@ static inline bool xp_unaligned_validate_desc(struct xsk_buff_pool *pool,
+>                 return false;
+>
+>         if (base_addr >= pool->addrs_cnt || addr >= pool->addrs_cnt ||
+> +           addr + desc->len > pool->addrs_cnt ||
+>             xp_desc_crosses_non_contig_pg(pool, addr, desc->len))
+>                 return false;
+>
 
-    # [is_pkt_valid] expected length [60], got length [90]
-    not ok 1 FAIL: SKB BUSY-POLL BIDIRECTIONAL
+Let me just check that I understand the conditions under which this
+occurs. When selecting unaligned mode, there is no check that the size
+is divisible by the chunk_size as is the case in aligned mode. So we
+can register a umem that is for example 15 4K pages plus 100 bytes and
+in this case the second to last page will be marked as contiguous
+(with the CONTIG_MASK) and a packet of length 300 starting at 15*4K -
+100 will be marked as valid even though it extends 100 bytes outside
+the umem which ends at 15*4K + 100. Did I get this correctly? If so,
+some more color in the commit message would be highly appreciated.
 
-When IPv6 is enabled, the interface will periodically send MLDv1 and
-MLDv2 packets. These packets can cause the BIDIRECTIONAL test to fail
-since it uses VETH0 for RX.
+The best way around this would have been if we made sure that the umem
+size was always divisible by PAGE_SIZE, but as there are users out
+there that might have an unaligned umem of an slightly odd size, we
+cannot risk breaking their program. PAGE_SIZE is also architecture
+dependent and even configurable within some. So I think your solution
+here is the right one.
 
-For other tests, this was not a problem since they only receive on VETH1
-and IPv6 was already disabled on VETH0.
+This one should be considered a bug fix to and go to bpf. Good catch
+if I understood the problem correctly above.
 
-Fixes: a89052572ebb ("selftests/bpf: Xsk selftests framework")
-Signed-off-by: Kal Conley <kal.conley@dectris.com>
----
- tools/testing/selftests/bpf/test_xsk.sh | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/bpf/test_xsk.sh b/tools/testing/selftests/bpf/test_xsk.sh
-index b077cf58f825..377fb157a57c 100755
---- a/tools/testing/selftests/bpf/test_xsk.sh
-+++ b/tools/testing/selftests/bpf/test_xsk.sh
-@@ -116,6 +116,7 @@ setup_vethPairs() {
- 	ip link add ${VETH0} numtxqueues 4 numrxqueues 4 type veth peer name ${VETH1} numtxqueues 4 numrxqueues 4
- 	if [ -f /proc/net/if_inet6 ]; then
- 		echo 1 > /proc/sys/net/ipv6/conf/${VETH0}/disable_ipv6
-+		echo 1 > /proc/sys/net/ipv6/conf/${VETH1}/disable_ipv6
- 	fi
- 	if [[ $verbose -eq 1 ]]; then
- 	        echo "setting up ${VETH1}"
--- 
-2.39.2
 
+> --
+> 2.39.2
+>
