@@ -2,94 +2,71 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B6D5C761A6
-	for <bpf@archiver.kernel.org>; Mon,  3 Apr 2023 12:53:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7C30C76196
+	for <bpf@archiver.kernel.org>; Mon,  3 Apr 2023 12:59:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232435AbjDCMx6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 3 Apr 2023 08:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46020 "EHLO
+        id S232112AbjDCM7w (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 3 Apr 2023 08:59:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232440AbjDCMx5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 3 Apr 2023 08:53:57 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A002910A8E;
-        Mon,  3 Apr 2023 05:53:54 -0700 (PDT)
-Received: from dggpemm500013.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PqrN45NjmznZyj;
-        Mon,  3 Apr 2023 20:50:28 +0800 (CST)
-Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 3 Apr
- 2023 20:53:51 +0800
-Message-ID: <7029502b-f048-88f8-5c6a-f3bc397b979c@huawei.com>
-Date:   Mon, 3 Apr 2023 20:53:51 +0800
+        with ESMTP id S231992AbjDCM7v (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 3 Apr 2023 08:59:51 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A779421A
+        for <bpf@vger.kernel.org>; Mon,  3 Apr 2023 05:59:50 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id i5so117188996eda.0
+        for <bpf@vger.kernel.org>; Mon, 03 Apr 2023 05:59:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dectris.com; s=google; t=1680526789;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dWMhy/t539IzUjxTQlxZzF55vJj38fXw5CgiiST7WoI=;
+        b=EIMfkueJsSyGSK+8OPBVlrRE1m7H37jVvs3YRP8wgnjjjRYhCkyZw9/mpLD8XtG0p6
+         iYyw3yyXtJ2gIgLf+G3BBfv3U9NkkwcMMp2PCwbaozw0ZL9r7HaagO/zFa5Q3Le1/ROw
+         Z7mTY9gOCIuGDV7f8rX3OPnzLs42QOvsnasDU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680526789;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dWMhy/t539IzUjxTQlxZzF55vJj38fXw5CgiiST7WoI=;
+        b=MIUXj2qdrofWhyE8v5Ox/RDqv90oHpqYoO/b5TRGKJKCAiXOWUhxbz8coyFhhKpzA1
+         BKZX8zqJocT6HVg1vyxNrhTywwpZL0h8gCswc2brf3I3F+RQ9sABJi0NrlN5Idn6ZE26
+         mEc2B3s7CWjbgVF6X5HfAv/FIAZFWEFnPkBv323e0qFxXgUU0pOPz57kyFD70gjjfTjP
+         uavVoyIyV1vAVduMHBfI1UiaUh+L1JJ0zocrIcU3cSNHhDHwlfbaBjsqdPL4iHMxai7D
+         Ty3mMkZeFrzC491STpJpX4QFGHrmi7saQKqsAtis+JuviZgONm69zfCeIX/NvM+6tpFe
+         fKUg==
+X-Gm-Message-State: AAQBX9cQ42Ksy5sx3QM8YOpY2BDwOdpbpDKOOlYsUDSToi+cMP/m/88p
+        GO5gmkhCiQoVhDh0L/HvvQaFNnW0UTykKKgBAWUs6w==
+X-Google-Smtp-Source: AKy350buzM/6fGqG9ifTA/zHfPscPJQRPN9Aaudu77e/ZrcnbirUhnCLxw1InMJ7FFXja1clKzLlL1EHhV8lpgNhmyM=
+X-Received: by 2002:a17:907:3f96:b0:8f1:4cc5:f14c with SMTP id
+ hr22-20020a1709073f9600b008f14cc5f14cmr19885345ejc.0.1680526789038; Mon, 03
+ Apr 2023 05:59:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Content-Language: en-US
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-Subject: Syzkaller reported fail of bpf_trampoline_unlink_prog
-CC:     Xu Kuohai <xukuohai@huawei.com>,
-        Zhangjinhao <zhangjinhao2@huawei.com>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>
-To:     bpf <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
+References: <20230403120318.30992-1-kal.conley@dectris.com>
+In-Reply-To: <20230403120318.30992-1-kal.conley@dectris.com>
+From:   Kal Cutter Conley <kal.conley@dectris.com>
+Date:   Mon, 3 Apr 2023 15:04:29 +0200
+Message-ID: <CAHApi-=9Rgss=8spbOm=V0UBS+_XesmFUZVhDK20RWdTSXRa5Q@mail.gmail.com>
+Subject: Re: [PATCH bpf] selftests: xsk: Add xskxceiver.h dependency to Makefile
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>
+Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Syzkaller reported follow WARNING:
-
-WARNING: CPU: 0 PID: 17072 at bpf_tracing_link_release+0x88/0x90
-Modules linked in:
-CPU: 0 PID: 17072 Comm: syz-executor.1
-RIP: 0010:bpf_tracing_link_release+0x88/0x90
-Call Trace:
-  bpf_link_free+0x98/0xe0
-  bpf_link_put+0xd9/0xf0
-  bpf_link_release+0x26/0x30
-  __fput+0x219/0x560
-  task_work_run+0xbb/0x120
-  exit_to_user_mode_prepare+0x12f/0x140
-  syscall_exit_to_user_mode+0x23/0x80
-  entry_SYSCALL_64_after_hwframe+0x61/0xc6
-
-This is simply caused by fault injection which makes memory allocation fail in
-bpf_trampoline_unlink_prog->bpf_trampoline_update
-Then bpf_trampoline_unlink_prog returns error and triggers WARN_ON in bpf_tracing_link_relaese.
-
-At first I though it is a false positive report as bpf_trampoline_unlink_prog says
-it should never fail. But actually it is possible.
-When the bpf_trampoline_update is added at first, there is a "half page" optimization
-to promise there is no memory allocation in the unlink path
-But 88fd9e5352fe ("bpf: Refactor trampoline update code") added bpf_trampoline_get_progs,
-which broke this.
-Then the "half page" part was also removed in e21aa341785c ("bpf: Fix fexit trampoline.").
-Besides, as I know the relied ftrace interface is not promised to success as well.
-
-In bpf_trampoline_link_prog it will handle these error, but unlink_prog
-just reports the warning once and continue to put tr_link->trampoline and link->prog.
-Sorry for that I have not fully tested this but I guess this could cause some bad
-consequence such as memory leak or null pointer reference.
-
-Anyway, now the interface to detach bpf link is not 100% safe, and because of
-the complex logic in bpf_trampoline_update, I think this can't be avoided.
-Because now these release ops return void, we cannot just simply keep these resources
-and have another try.
-
-I just want to know does anyone has plan or advice to handle these error scenarios gracefully?
-
-Thanks for your help!
-
-Best,
-Chen
-
+I will resubmit this against bpf-next.
