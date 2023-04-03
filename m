@@ -2,112 +2,132 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EED3C76196
-	for <bpf@archiver.kernel.org>; Mon,  3 Apr 2023 11:12:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED327C76196
+	for <bpf@archiver.kernel.org>; Mon,  3 Apr 2023 11:13:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232186AbjDCLMQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 3 Apr 2023 07:12:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
+        id S232305AbjDCLNV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 3 Apr 2023 07:13:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232116AbjDCLMP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 3 Apr 2023 07:12:15 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B1912BE3
-        for <bpf@vger.kernel.org>; Mon,  3 Apr 2023 04:11:49 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id y4so115839044edo.2
-        for <bpf@vger.kernel.org>; Mon, 03 Apr 2023 04:11:49 -0700 (PDT)
+        with ESMTP id S232244AbjDCLNI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 3 Apr 2023 07:13:08 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C4812051
+        for <bpf@vger.kernel.org>; Mon,  3 Apr 2023 04:12:37 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id e18so28915958wra.9
+        for <bpf@vger.kernel.org>; Mon, 03 Apr 2023 04:12:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google; t=1680520306;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=4ZRh2XQyIvIwD7cqmGWwOTXCG6mNEaPqsaGSyOgg7i4=;
-        b=n0hy6/6JIlQMRkVpsji5O/0qByX6i5cmJmOgStebSf/Eb7LsNl2kfeDqoFsJ/D9VCB
-         cnM9t9ddqk5UI6NcpvgNVeEmpbszVlYJfgyK1bXOKsc2w6BF4nHV9Uzv9wYHvP5h+WFw
-         wu7CJIi6A0BSWBAjUQAjdwilWZfeCFu0/jXY0=
+        d=cloudflare.com; s=google; t=1680520347;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XDScleNPhVPO54kxOKxQumxr8xmhVAhL3xX9seLkjNI=;
+        b=HgabHVAEwxuQvMaYMbnLI6gcoQaR6MCVEcwO9KWwr+XCrszcTScNEkOgZh53S7rCGL
+         lx0H65pMjpwzz2zOZTxxF+i5WB9RciFYT1s/ORth0tyPdpo60cphbJb08QY15hQC5tnv
+         LJ5cMuSNL6e4s38Qa4zvct2xAA6wj31Zvg8Nc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680520306;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4ZRh2XQyIvIwD7cqmGWwOTXCG6mNEaPqsaGSyOgg7i4=;
-        b=i2VSkggRnZTe76VSjy+zl52H15zVe4XKnyYZG05/IRz187lR2HIvYamQaQ9Nd2F+FP
-         VyaQblqHMn62Eazxf6hFN+28lbEVId76wkutbR5bjIEXU5Tfhgc9646ykvJGkCQAds/X
-         smg0Mn/Jy173NvDDDrsD9wtwetDKJhqYjaULT90XLAa6HMEQWkn7JmDaTVTPr//3Q/of
-         A7uNVslmdY7V6/zpeZEoxe6++AfbQ24njSc3h9KgWO8EvkUNRHksyVkdokWyifqyyIkP
-         NZGQAeIL5x5b2gNQMTE958v5iS5x+3KY2l54Ca7jukuT/bYKSAV+0Ir+luvdKCTpIKO0
-         qJEQ==
-X-Gm-Message-State: AAQBX9f4xHm4qx/PdzAXOogFDV91RmojlpMeyHqk4lCq25IwSYTGaY97
-        hIE9ePpLVBQvZYZTYkHhFYTRaA==
-X-Google-Smtp-Source: AKy350anEoDP359aHJUBzytOzEWbBgIfBALZFpTy999DQOdoE68VVg6Q0J8X1Xa+C+jfH1VtJQo6VA==
-X-Received: by 2002:aa7:d052:0:b0:4fb:54b7:50ea with SMTP id n18-20020aa7d052000000b004fb54b750eamr34365689edo.21.1680520306197;
-        Mon, 03 Apr 2023 04:11:46 -0700 (PDT)
-Received: from cloudflare.com (79.184.147.137.ipv4.supernova.orange.pl. [79.184.147.137])
-        by smtp.gmail.com with ESMTPSA id m30-20020a50999e000000b005027d31615dsm4090409edb.62.2023.04.03.04.11.45
+        d=1e100.net; s=20210112; t=1680520347;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XDScleNPhVPO54kxOKxQumxr8xmhVAhL3xX9seLkjNI=;
+        b=VaNYpfDMCbxm+eID7D3koimeSce8ec5SsuR7xGNoR2BK+pkACkaR4zVA6Mw5Unx9rJ
+         KTd3PA/zU4/ENlGG130SUPiiNxrUaO6zgLWKwfVOAhjTJ3jzXU7ZhFIwI+Uhm5eETPo1
+         6t70Oye0Nh5ulJwj5NnI5deM3FO4nYd+EwaxfT7rXtwPpQpv2HC3sVoUqT2k0/JwLreQ
+         vEarwvfBtOyvfUoaNpmWa/2PXe55gGmLADnrbPeRDr4hDXMyZ5U2v+NFQGzM3IP0Cmln
+         JE3ThUOGSSSF0quv/IRbuWzkwOZ9wwk1krKPmSSEiq4idj0DaKxmMexbOHT9NDLcBRG9
+         kv3A==
+X-Gm-Message-State: AAQBX9eVmKH/c/iNviF17LxMiotcSRq6AxrVsKfiGZLrWhltTVZINlGV
+        e89F0YZRlx8P/Dm4hPtTGnjCQTVH58xQQsuXN+rcsIQO
+X-Google-Smtp-Source: AKy350Yqx4cRtTXF3KLY6laEarBP/P2dxp+d9gjJUyfNwHScLSUEItjpvdB0n5IwC7szeH8JhB2hnQ==
+X-Received: by 2002:a5d:67cd:0:b0:2d7:babe:104c with SMTP id n13-20020a5d67cd000000b002d7babe104cmr25864956wrw.15.1680520347373;
+        Mon, 03 Apr 2023 04:12:27 -0700 (PDT)
+Received: from workstation.ehrig.io (tmo-066-125.customers.d1-online.com. [80.187.66.125])
+        by smtp.gmail.com with ESMTPSA id y11-20020adffa4b000000b002c7066a6f77sm9505517wrr.31.2023.04.03.04.12.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 04:11:45 -0700 (PDT)
-References: <20230327175446.98151-1-john.fastabend@gmail.com>
- <20230327175446.98151-5-john.fastabend@gmail.com>
-User-agent: mu4e 1.6.10; emacs 28.2
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     cong.wang@bytedance.com, daniel@iogearbox.net, lmb@isovalent.com,
-        edumazet@google.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
-        ast@kernel.org, andrii@kernel.org, will@isovalent.com
-Subject: Re: [PATCH bpf v2 04/12] bpf: sockmap, handle fin correctly
-Date:   Mon, 03 Apr 2023 13:11:07 +0200
-In-reply-to: <20230327175446.98151-5-john.fastabend@gmail.com>
-Message-ID: <87a5zpdxu7.fsf@cloudflare.com>
+        Mon, 03 Apr 2023 04:12:26 -0700 (PDT)
+From:   Christian Ehrig <cehrig@cloudflare.com>
+To:     bpf@vger.kernel.org
+Cc:     cehrig@cloudflare.com, kernel-team@cloudflare.com,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Kaixi Fan <fankaixi.li@bytedance.com>,
+        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Mykola Lysenko <mykolal@fb.com>, netdev@vger.kernel.org,
+        Paul Chaignon <paul@isovalent.com>,
+        Shmulik Ladkani <shmulik@metanetworks.com>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>, Yonghong Song <yhs@fb.com>
+Subject: [PATCH bpf-next v2 0/3] Add FOU support for externally controlled ipip devices
+Date:   Mon,  3 Apr 2023 14:12:06 +0200
+Message-Id: <cover.1680520500.git.cehrig@cloudflare.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 10:54 AM -07, John Fastabend wrote:
-> The sockmap code is returning EAGAIN after a FIN packet is received and no
-> more data is on the receive queue. Correct behavior is to return 0 to the
-> user and the user can then close the socket. The EAGAIN causes many apps
-> to retry which masks the problem. Eventually the socket is evicted from
-> the sockmap because its released from sockmap sock free handling. The
-> issue creates a delay and can cause some errors on application side.
->
-> To fix this check on sk_msg_recvmsg side if length is zero and FIN flag
-> is set then set return to zero. A selftest will be added to check this
-> condition.
->
-> Fixes: 04919bed948dc ("tcp: Introduce tcp_read_skb()")
-> Tested-by: William Findlay <will@isovalent.com>
-> Signed-off-by: John Fastabend <john.fastabend@gmail.com>
-> ---
->  net/ipv4/tcp_bpf.c | 31 +++++++++++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
->
-> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-> index cf26d65ca389..3a0f43f3afd8 100644
-> --- a/net/ipv4/tcp_bpf.c
-> +++ b/net/ipv4/tcp_bpf.c
+This patch set adds support for using FOU or GUE encapsulation with
+an ipip device operating in collect-metadata mode and a set of kfuncs
+for controlling encap parameters exposed to a BPF tc-hook.
 
-[...]
+BPF tc-hooks allow us to read tunnel metadata (like remote IP addresses)
+in the ingress path of an externally controlled tunnel interface via
+the bpf_skb_get_tunnel_{key,opt} bpf-helpers. Packets can then be
+redirected to the same or a different externally controlled tunnel
+interface by overwriting metadata via the bpf_skb_set_tunnel_{key,opt}
+helpers and a call to bpf_redirect. This enables us to redirect packets
+between tunnel interfaces - and potentially change the encapsulation
+type - using only a single BPF program.
 
-> @@ -193,6 +211,19 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
->  	lock_sock(sk);
->  msg_bytes_ready:
->  	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
-> +	/* The typical case for EFAULT is the socket was gracefully
-> +	 * shutdown with a FIN pkt. So check here the other case is
-> +	 * some error on copy_page_to_iter which would be unexpected.
-> +	 * On fin return correct return code to zero.
-> +	 */
-> +	if (copied == -EFAULT) {
-> +		bool is_fin = is_next_msg_fin(psock);
-> +
-> +		if (is_fin) {
-> +			copied = 0;
-> +			goto out;
-> +		}
-> +	}
->  	if (!copied) {
->  		long timeo;
->  		int data;
+Today this approach works fine for a couple of tunnel combinations.
+For example: redirecting packets between Geneve and GRE interfaces or
+GRE and plain ipip interfaces. However, redirecting using FOU or GUE is
+not supported today. The ip_tunnel module does not allow us to egress
+packets using additional UDP encapsulation from an ipip device in
+collect-metadata mode.
 
-tcp_bpf_recvmsg needs a similar fix, no?
+Patch 1 lifts this restriction by adding a struct ip_tunnel_encap to
+the tunnel metadata. It can be filled by a new BPF kfunc introduced
+in Patch 2 and evaluated by the ip_tunnel egress path. This will allow
+us to use FOU and GUE encap with externally controlled ipip devices.
+
+Patch 2 introduces two new BPF kfuncs: bpf_skb_{set,get}_fou_encap.
+These helpers can be used to set and get UDP encap parameters from the
+BPF tc-hook doing the packet redirect.
+
+Patch 3 adds BPF tunnel selftests using the two kfuncs.
+
+---
+v2:
+ - Fixes for checkpatch.pl
+ - Fixes for kernel test robot
+
+Christian Ehrig (3):
+  ipip,ip_tunnel,sit: Add FOU support for externally controlled ipip
+    devices
+  bpf,fou: Add bpf_skb_{set,get}_fou_encap kfuncs
+  selftests/bpf: Test FOU kfuncs for externally controlled ipip devices
+
+ include/net/fou.h                             |   2 +
+ include/net/ip_tunnels.h                      |  28 +++--
+ net/ipv4/Makefile                             |   2 +-
+ net/ipv4/fou_bpf.c                            | 119 ++++++++++++++++++
+ net/ipv4/fou_core.c                           |   5 +
+ net/ipv4/ip_tunnel.c                          |  22 +++-
+ net/ipv4/ipip.c                               |   1 +
+ net/ipv6/sit.c                                |   2 +-
+ .../selftests/bpf/progs/test_tunnel_kern.c    | 117 +++++++++++++++++
+ tools/testing/selftests/bpf/test_tunnel.sh    |  81 ++++++++++++
+ 10 files changed, 362 insertions(+), 17 deletions(-)
+ create mode 100644 net/ipv4/fou_bpf.c
+
+-- 
+2.39.2
+
