@@ -2,332 +2,449 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48DABC761AF
-	for <bpf@archiver.kernel.org>; Mon,  3 Apr 2023 17:26:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35CDEC76196
+	for <bpf@archiver.kernel.org>; Mon,  3 Apr 2023 17:29:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233140AbjDCR0t (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 3 Apr 2023 13:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60214 "EHLO
+        id S233158AbjDCR3O (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 3 Apr 2023 13:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbjDCR0r (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 3 Apr 2023 13:26:47 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B513113;
-        Mon,  3 Apr 2023 10:26:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680542806; x=1712078806;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=jWLE3P5AwU+l9qIYMswvippFjwIYn8nuFIB8ynCWmOw=;
-  b=LF+r5sobqfsmGtpctdOVgiD/jVwdX5Ccdiao+uKDqq0briE6XPy9yoMT
-   xpnJVzaoqe5nZt58i8iIcPwVS1B/BPYwq1yrjB4IIt1BjJzlFe9La4Dsz
-   qQcCJqrntBQLp59URKLUP0me0v5HiaXd5pWI4bxxSEHP3eDH4Vc9ock/5
-   rc3cj1yhvpjvqB6GSrxyO2epl1RLf1YlxAheDuyuwZ4xV1w4c0pTThX9L
-   IJb1NLdCEG4uiRCqMgUJc+UPBdMOxCGT3vWrzx276c5xYe9n2arfy20IV
-   UNXBvXnThxinmRvjvAOMHiX31+EVu6FCHMYUal+2sQtkYtZJKDGHubFpH
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="428254370"
-X-IronPort-AV: E=Sophos;i="5.98,315,1673942400"; 
-   d="scan'208";a="428254370"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 10:26:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="829649672"
-X-IronPort-AV: E=Sophos;i="5.98,315,1673942400"; 
-   d="scan'208";a="829649672"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga001.fm.intel.com with ESMTP; 03 Apr 2023 10:26:46 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 3 Apr 2023 10:26:45 -0700
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 3 Apr 2023 10:26:44 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Mon, 3 Apr 2023 10:26:44 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.102)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Mon, 3 Apr 2023 10:26:38 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l3YBX9jiFUuXPWFtZGP/glpHsdp9LpHq8mjJuzX2Ix2wZG3gwo57REsxgzRyA+Ek39E+tyq3IqFTuCWH4VnL22ME0OhCzro4FGuuj1s2CvEV+/i2Q4BshXSiO+mY1upX4WFn9Fb6CUbZ5QjGEd5gQ2LWuOxZxBV8BkmP5u3HwZ66H02dOa5rJdKYvhMgpILOBj4wzfIyPnB4c6wn4GyB6LWRqt/igVWE3E01KTKyEbrwT+PoT/8KsGLi9NfDp8HgUBhjkZC+7rP+PMIuNTUhobsEhZ0CXgVEzcNrta6+uj4QPj12LVS48AFBIN4Jr9eui3mx0gyUhhQlZuoCHhGjJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YbkpszxyXPPAfp4ZxzLn6Hunw9WumRObVLZuAGMj4BQ=;
- b=QVaXCuS/pnQLPa6lNWbitVwOprXw/9jYIX6PkHvGAYDS2muOwO7LvzwB2Qq7lyO48oo/8ODt1k5Leh+YPi4yOTW1TWEEQSe9MTAdlOHd44jA9GZuPHnnVYXczJvpR+Mp8EoSi5HzNPImApC0LJGghbWiArKm3H1KSd09NCDwNEUAB2izlcxYvsF9qHFZ+zhVV0dQUVQ8BlxS2nebBycHq3QM+4kXORnZkz3nwZQCaW5ZgjU+6YdFPrAnavWj17XFPiVHqtuKPhQ8XZv23/X/GPtY9M6A+VIjJWgdFaYgeH4+LIWIV8yrwbbaVhGovbY6ZfuLLOnM+P58H4z8hAXt9Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
- DM6PR11MB4692.namprd11.prod.outlook.com (2603:10b6:5:2aa::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6254.33; Mon, 3 Apr 2023 17:26:20 +0000
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::9e4f:80cc:e0aa:6809]) by DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::9e4f:80cc:e0aa:6809%3]) with mapi id 15.20.6254.033; Mon, 3 Apr 2023
- 17:26:20 +0000
-Date:   Mon, 3 Apr 2023 19:26:12 +0200
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     Gerhard Engleder <gerhard@engleder-embedded.com>
-CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <davem@davemloft.net>, <kuba@kernel.org>, <edumazet@google.com>,
-        <pabeni@redhat.com>, <bjorn@kernel.org>,
-        <magnus.karlsson@intel.com>, <jonathan.lemon@gmail.com>
-Subject: Re: [PATCH net-next 4/5] tsnep: Add XDP socket zero-copy RX support
-Message-ID: <ZCsMNKCK0xQECDJh@boxer>
-References: <20230402193838.54474-1-gerhard@engleder-embedded.com>
- <20230402193838.54474-5-gerhard@engleder-embedded.com>
- <ZCsKkygVjB3J+XrO@boxer>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZCsKkygVjB3J+XrO@boxer>
-X-ClientProxiedBy: FR3P281CA0026.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1c::17) To DM4PR11MB6117.namprd11.prod.outlook.com
- (2603:10b6:8:b3::19)
+        with ESMTP id S233174AbjDCR3M (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 3 Apr 2023 13:29:12 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2321BE4
+        for <bpf@vger.kernel.org>; Mon,  3 Apr 2023 10:29:10 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 333GlRrB000332;
+        Mon, 3 Apr 2023 17:28:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=2jdK+vmpcKywKdd3N5R0+BsV+fPX1W+tALrCSnAt4KI=;
+ b=fJb1n5kwoxEZIBcINPzmB2CmgZUrAAleve0IttmzPHffl9Yvc5MUSWKe+eqaAlioGTTq
+ 5nWTjurjbXCpZlipZgxyVV33wnT4FEh4r3VkrSeDTv3wgTRZZ6c9SiuyoBn5aXF2lj0B
+ liU/71cwPJ2P++JWQUrzfENwBwFDgy6fbHX7TdTWnc7ij5+UGadPI/c+Rs+R70qdNiZO
+ 61/KXWpw7+FOOK0P4oQgwKnhNuu4ocSrbqd9HzTrElwnjja8QluWQCP4SjSJF9bnj8tB
+ 9ted/tRc+VFKZFbv1eaoRXDMSdz/PM/sg8qiGySR90y9VRRNnVyR0G23/kHh/jhI9ea3 LQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pr2mbrxej-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Apr 2023 17:28:48 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 333HSmtG010875;
+        Mon, 3 Apr 2023 17:28:48 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pr2mbrxe0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Apr 2023 17:28:48 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 332NALjp005225;
+        Mon, 3 Apr 2023 17:28:46 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3ppc879wfg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Apr 2023 17:28:46 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 333HSfp219923526
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 3 Apr 2023 17:28:42 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2439120043;
+        Mon,  3 Apr 2023 17:28:41 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 61DE020040;
+        Mon,  3 Apr 2023 17:28:40 +0000 (GMT)
+Received: from heavy.boeblingen.de.ibm.com (unknown [9.171.72.121])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon,  3 Apr 2023 17:28:40 +0000 (GMT)
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Jiri Olsa <olsajiri@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: [PATCH bpf-next v4] bpf: Support 64-bit pointers to kfuncs
+Date:   Mon,  3 Apr 2023 19:28:33 +0200
+Message-Id: <20230403172833.1552354-1-iii@linux.ibm.com>
+X-Mailer: git-send-email 2.39.2
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: n-Qcj5HipmqyZejATuoZcLsG9sPC1xK6
+X-Proofpoint-ORIG-GUID: 77H8q6Tfk_IuRfHH9UHMbOe0Xxq85BCT
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|DM6PR11MB4692:EE_
-X-MS-Office365-Filtering-Correlation-Id: 34a0c5ef-754a-4f31-9621-08db346889bb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TjMU6UZSjHpnfjFRRpBMzhA2n4Ya7Azj5hcX42faVPItZZF/JBJZeznPxuyQ+ch1kEiKyLzS3QpIbqlbag5EzZwaWGxhd4dvga8RONZvbZNyRvG7T4NBmhLkBR/bIzRB6Pd6m0JmjdXimnGSuiNjGseCl6yDvLGOzv4Hhexm0jOkRNlJWObBeipXeUrW/xMVBAw53lm5M0olFoc65ObniBDSTYYQ3vWGNG1mRK0fHkJ6d2QuGTlk26DQFQKRsmcZs1EEHULtLN6AiCYhTEgldfwkID7Hnx1OVyj3hkg8w4Dp6LewamSAZDBKx44/VGJQy4CmanGqAFzMK4kfpBxyYoreX8q3/P7k5s4IXxAQ2uxgfIEZI224OQZXOj1ITKHEwv1CTp2PgJcL7qfZNw//b8QtUjpNdwOMk/IQbB5RnAannbfmb/aJ4A5mgbAQK39fPi2O/y0CTdUj8P2k4+CvkvYDJOrQPfnUVgxnfPA4S2jyZCoxHJrTndfDqvjMHzVqBRSuc4wAD8HnKAfgrc+0gDwB/Sr1WYp4eNu8beITdKEJLbZ/XKEQKTNrRnu0gF1C
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(39860400002)(366004)(136003)(346002)(396003)(376002)(451199021)(2906002)(44832011)(38100700002)(5660300002)(66476007)(82960400001)(66556008)(66946007)(8936002)(41300700001)(4326008)(6916009)(8676002)(316002)(83380400001)(86362001)(478600001)(186003)(9686003)(6512007)(6506007)(26005)(6666004)(6486002)(33716001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QULwvN5e87N9B1NBsOWCFeXO9tZ2Qn4V89fQcyXDxoZ3ZQl8yfYW8+/AB0gb?=
- =?us-ascii?Q?R4cFapa2jgMCFsi1gj5L7BtsH8BRmbKKW1b54Y+u8TsoRMAcJMbEIqmsVXHF?=
- =?us-ascii?Q?yVzwA3Cri1rY/eVwd7wOWH9BhU87OCAIj1kUMGLjiNFjy4LiQ8qqseY9yP15?=
- =?us-ascii?Q?yYchtPhK91cUVmSTXC38MwL4yKfP0VbK7eBEVIijK+glhUvzrLExaGfJ94cB?=
- =?us-ascii?Q?Nkip2LH57sEdccHgJ6e8DqZDTDZOnPnC+8qeX1kLlnwVbe44sgOJ0JZF0Riq?=
- =?us-ascii?Q?7ND2ePQuNd3BrjfI0Tgbm3yjxVoGhC5OL4nTycEW+ZWnnpWfLkNYwX6rHxHV?=
- =?us-ascii?Q?ufwrTBjiAo/cc2g6e15CmQbZNvQF5OCk4Z0knaY3qaIfU3RjxM2b9BBw4Wb2?=
- =?us-ascii?Q?eT7PEc6igv+cMZgvmkfrMf5vUTb2ODl8sJ0/8xi5PhANwGKmtp3loXuYbBSE?=
- =?us-ascii?Q?5qnJLGbLPu3VjJWlhNQesTFqRjbSMXNWjEcuSLkw4H/cIEMgtyOM3P9sFR33?=
- =?us-ascii?Q?LJSV3/fmBW626J8J0iK/dXDO5iFasLDARkNiJxh/Tz5niEm/FQzaK2YbShoV?=
- =?us-ascii?Q?RjHbkVcg+ahAOw+DK8S9z+UB6rkBslgkCMBk3kv0ERWY2E4rxZ8+2jDJ4P6o?=
- =?us-ascii?Q?bqJJ9/fKc0NCOMa0LnC18J3KCt0F2bpnQNtl7Mw/kMe1xdDM26CKlvX9Mj/r?=
- =?us-ascii?Q?KG0eoZpyDeRXBpnR0HtY/tJr8GC+VjzpPQIGUZH3ITholuVoogr+1RknKya+?=
- =?us-ascii?Q?5Pr34KInjBn/0qvxe43dSTG9wNMc31SlUYbBT/VZEilsrZ+kxNDrbn4OYju2?=
- =?us-ascii?Q?zBg1THD/Ual1KW3rcKr45J8oi/RvAVSLEYPW7nRjgeeaDL+XaQfRzd4tGQaF?=
- =?us-ascii?Q?MnzL9ZTFxjbP1lmpF+CJ8Ff7nI5WfcrEZQTgLkPAYV7Z2d4DqivvnoEZLGww?=
- =?us-ascii?Q?hfK7OzBHGlqwAiUkODedip5T1rLoRDpErIn7/2XjHdMDVzb/WC1WM+MNaCiR?=
- =?us-ascii?Q?+kBMiR4ogWtb84mlCcITE7OzH9tQke0+tr3LmpIz335Zg5lMFipbCJPXaKHX?=
- =?us-ascii?Q?sbxb2O1a+g096mKhQfxXcmcl9DfcXvJJeMyMljfigKwnddjiy5Dqy8LBFJeS?=
- =?us-ascii?Q?b2c67bSw11qaKq7v8xZMVcnJonB84jPGtMIFgzJ6S+gQoLXpbxgL77t3q9Fm?=
- =?us-ascii?Q?dsJgMaMydDx/p55TzIXotVaeY9jNDTetj47T4rH+L0RWOD3nV/6imJvxcaSL?=
- =?us-ascii?Q?2p/8sLryYX2muqZrm379IQWQ+5gRHYKTee13a2rYUSXUxMRvpu3Uy9/L6Hbx?=
- =?us-ascii?Q?MkBWvtBYpV+A5c8y+DRqTlcQQpaW15I20j77xzwLJP4Wm0pAXUS/9G4HfNt5?=
- =?us-ascii?Q?bkplQUziYg12iRjaDTg81YAAJb9SOOA2gBvsCsp3Z5JULAeNmRkru/4y5u9T?=
- =?us-ascii?Q?4/THsQPKpPSyJa0o5kmqN/NgAHZjkXgNoJG1/U1YapquHg2M1/0d/yKr9mM7?=
- =?us-ascii?Q?ymZ+Hnw6DccUD6+uABr45fAY0+f+004w4LnYyTdTk1Sc27TgjTY+Kyl2xw2M?=
- =?us-ascii?Q?yMNG/4R6hik2cCltCm+4InM1Ix2oddusF0PDGiYrd5XEg7e/Qo6Fkow+dmP4?=
- =?us-ascii?Q?2Q=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 34a0c5ef-754a-4f31-9621-08db346889bb
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2023 17:26:19.6859
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: i5ECDPVxsk63UJcTfI32CEnUfGya0F4swRV+gUeEkzXyxSZJ4GyC4cvPURUYXlMI8uu9VIuCyNIQAbeS/lytMlKkm4SQGW3iGyCbQQxATEk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4692
-X-OriginatorOrg: intel.com
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-03_14,2023-04-03_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
+ mlxscore=0 bulkscore=0 adultscore=0 priorityscore=1501 impostorscore=0
+ lowpriorityscore=0 suspectscore=0 clxscore=1015 mlxlogscore=999
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304030128
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 07:19:15PM +0200, Maciej Fijalkowski wrote:
-> On Sun, Apr 02, 2023 at 09:38:37PM +0200, Gerhard Engleder wrote:
-> 
-> Hey Gerhard,
-> 
-> > Add support for XSK zero-copy to RX path. The setup of the XSK pool can
-> > be done at runtime. If the netdev is running, then the queue must be
-> > disabled and enabled during reconfiguration. This can be done easily
-> > with functions introduced in previous commits.
-> > 
-> > A more important property is that, if the netdev is running, then the
-> > setup of the XSK pool shall not stop the netdev in case of errors. A
-> > broken netdev after a failed XSK pool setup is bad behavior. Therefore,
-> > the allocation and setup of resources during XSK pool setup is done only
-> > before any queue is disabled. Additionally, freeing and later allocation
-> > of resources is eliminated in some cases. Page pool entries are kept for
-> > later use. Two memory models are registered in parallel. As a result,
-> > the XSK pool setup cannot fail during queue reconfiguration.
-> > 
-> > In contrast to other drivers, XSK pool setup and XDP BPF program setup
-> > are separate actions. XSK pool setup can be done without any XDP BPF
-> > program. The XDP BPF program can be added, removed or changed without
-> > any reconfiguration of the XSK pool.
-> 
-> I won't argue about your design, but I'd be glad if you would present any
-> perf numbers (ZC vs copy mode) just to give us some overview how your
-> implementation works out. Also, please consider using batching APIs and
-> see if this gives you any boost (my assumption is that it would).
-> 
-> > 
-> > Signed-off-by: Gerhard Engleder <gerhard@engleder-embedded.com>
-> > ---
-> >  drivers/net/ethernet/engleder/tsnep.h      |   7 +
-> >  drivers/net/ethernet/engleder/tsnep_main.c | 432 ++++++++++++++++++++-
-> >  drivers/net/ethernet/engleder/tsnep_xdp.c  |  67 ++++
-> >  3 files changed, 488 insertions(+), 18 deletions(-)
+test_ksyms_module fails to emit a kfunc call targeting a module on
+s390x, because the verifier stores the difference between kfunc
+address and __bpf_call_base in bpf_insn.imm, which is s32, and modules
+are roughly (1 << 42) bytes away from the kernel on s390x.
 
-(...)
+Fix by keeping BTF id in bpf_insn.imm for BPF_PSEUDO_KFUNC_CALLs,
+and storing the absolute address in bpf_kfunc_desc.
 
-> > +
-> >  static bool tsnep_xdp_run_prog(struct tsnep_rx *rx, struct bpf_prog *prog,
-> >  			       struct xdp_buff *xdp, int *status,
-> > -			       struct netdev_queue *tx_nq, struct tsnep_tx *tx)
-> > +			       struct netdev_queue *tx_nq, struct tsnep_tx *tx,
-> > +			       bool zc)
-> >  {
-> >  	unsigned int length;
-> > -	unsigned int sync;
-> >  	u32 act;
-> >  
-> >  	length = xdp->data_end - xdp->data_hard_start - XDP_PACKET_HEADROOM;
-> >  
-> >  	act = bpf_prog_run_xdp(prog, xdp);
-> > -
-> > -	/* Due xdp_adjust_tail: DMA sync for_device cover max len CPU touch */
-> > -	sync = xdp->data_end - xdp->data_hard_start - XDP_PACKET_HEADROOM;
-> > -	sync = max(sync, length);
-> > -
-> >  	switch (act) {
-> >  	case XDP_PASS:
-> >  		return false;
-> > @@ -1027,8 +1149,21 @@ static bool tsnep_xdp_run_prog(struct tsnep_rx *rx, struct bpf_prog *prog,
-> >  		trace_xdp_exception(rx->adapter->netdev, prog, act);
-> >  		fallthrough;
-> >  	case XDP_DROP:
-> > -		page_pool_put_page(rx->page_pool, virt_to_head_page(xdp->data),
-> > -				   sync, true);
-> > +		if (zc) {
-> > +			xsk_buff_free(xdp);
-> > +		} else {
-> > +			unsigned int sync;
-> > +
-> > +			/* Due xdp_adjust_tail: DMA sync for_device cover max
-> > +			 * len CPU touch
-> > +			 */
-> > +			sync = xdp->data_end - xdp->data_hard_start -
-> > +			       XDP_PACKET_HEADROOM;
-> > +			sync = max(sync, length);
-> > +			page_pool_put_page(rx->page_pool,
-> > +					   virt_to_head_page(xdp->data), sync,
-> > +					   true);
-> > +		}
-> >  		return true;
-> >  	}
-> >  }
-> > @@ -1181,7 +1316,8 @@ static int tsnep_rx_poll(struct tsnep_rx *rx, struct napi_struct *napi,
-> >  					 length, false);
-> >  
-> >  			consume = tsnep_xdp_run_prog(rx, prog, &xdp,
-> > -						     &xdp_status, tx_nq, tx);
-> > +						     &xdp_status, tx_nq, tx,
-> > +						     false);
-> >  			if (consume) {
-> >  				rx->packets++;
-> >  				rx->bytes += length;
-> > @@ -1205,6 +1341,125 @@ static int tsnep_rx_poll(struct tsnep_rx *rx, struct napi_struct *napi,
-> >  	return done;
-> >  }
-> >  
-> > +static int tsnep_rx_poll_zc(struct tsnep_rx *rx, struct napi_struct *napi,
-> > +			    int budget)
-> > +{
-> > +	struct tsnep_rx_entry *entry;
-> > +	struct netdev_queue *tx_nq;
-> > +	struct bpf_prog *prog;
-> > +	struct tsnep_tx *tx;
-> > +	int desc_available;
-> > +	int xdp_status = 0;
-> > +	struct page *page;
-> > +	int done = 0;
-> > +	int length;
-> > +
-> > +	desc_available = tsnep_rx_desc_available(rx);
-> > +	prog = READ_ONCE(rx->adapter->xdp_prog);
-> > +	if (prog) {
-> > +		tx_nq = netdev_get_tx_queue(rx->adapter->netdev,
-> > +					    rx->tx_queue_index);
-> > +		tx = &rx->adapter->tx[rx->tx_queue_index];
-> > +	}
-> > +
-> > +	while (likely(done < budget) && (rx->read != rx->write)) {
-> > +		entry = &rx->entry[rx->read];
-> > +		if ((__le32_to_cpu(entry->desc_wb->properties) &
-> > +		     TSNEP_DESC_OWNER_COUNTER_MASK) !=
-> > +		    (entry->properties & TSNEP_DESC_OWNER_COUNTER_MASK))
-> > +			break;
-> > +		done++;
-> > +
-> > +		if (desc_available >= TSNEP_RING_RX_REFILL) {
-> > +			bool reuse = desc_available >= TSNEP_RING_RX_REUSE;
-> > +
-> > +			desc_available -= tsnep_rx_refill_zc(rx, desc_available,
-> > +							     reuse);
-> > +			if (!entry->xdp) {
-> > +				/* buffer has been reused for refill to prevent
-> > +				 * empty RX ring, thus buffer cannot be used for
-> > +				 * RX processing
-> > +				 */
-> > +				rx->read = (rx->read + 1) % TSNEP_RING_SIZE;
-> > +				desc_available++;
-> > +
-> > +				rx->dropped++;
-> > +
-> > +				continue;
-> > +			}
-> > +		}
-> > +
-> > +		/* descriptor properties shall be read first, because valid data
-> > +		 * is signaled there
-> > +		 */
-> > +		dma_rmb();
-> > +
-> > +		prefetch(entry->xdp->data);
-> > +		length = __le32_to_cpu(entry->desc_wb->properties) &
-> > +			 TSNEP_DESC_LENGTH_MASK;
-> > +		entry->xdp->data_end = entry->xdp->data + length;
-> > +		xsk_buff_dma_sync_for_cpu(entry->xdp, rx->xsk_pool);
-> > +
-> > +		/* RX metadata with timestamps is in front of actual data,
-> > +		 * subtract metadata size to get length of actual data and
-> > +		 * consider metadata size as offset of actual data during RX
-> > +		 * processing
-> > +		 */
-> > +		length -= TSNEP_RX_INLINE_METADATA_SIZE;
-> > +
-> > +		rx->read = (rx->read + 1) % TSNEP_RING_SIZE;
-> > +		desc_available++;
-> > +
-> > +		if (prog) {
-> > +			bool consume;
-> > +
-> > +			entry->xdp->data += TSNEP_RX_INLINE_METADATA_SIZE;
-> > +			entry->xdp->data_meta += TSNEP_RX_INLINE_METADATA_SIZE;
-> > +
-> > +			consume = tsnep_xdp_run_prog(rx, prog, entry->xdp,
-> > +						     &xdp_status, tx_nq, tx,
-> > +						     true);
-> 
-> reason for separate xdp run prog routine for ZC was usually "likely-fying"
-> XDP_REDIRECT action as this is the main action for AF_XDP which was giving
-> us perf improvement. Please try this out on your side to see if this
-> yields any positive value.
+Introduce bpf_jit_supports_far_kfunc_call() in order to limit this new
+behavior to the s390x JIT. Otherwise other JITs need to be modified,
+which is not desired.
 
-One more thing - you have to handle XDP_TX action in a ZC specific way.
-Your current code will break if you enable xsk_pool and return XDP_TX from
-XDP prog.
+Introduce bpf_get_kfunc_addr() instead of exposing both
+find_kfunc_desc() and struct bpf_kfunc_desc.
+
+In addition to sorting kfuncs by imm, also sort them by offset, in
+order to handle conflicting imms from different modules. Do this on
+all architectures in order to simplify code.
+
+Factor out resolving specialized kfuncs (XPD and dynptr) from
+fixup_kfunc_call(). This was required in the first place, because
+fixup_kfunc_call() uses find_kfunc_desc(), which returns a const
+pointer, so it's not possible to modify kfunc addr without stripping
+const, which is not nice. It also removes repetition of code like:
+
+	if (bpf_jit_supports_far_kfunc_call())
+		desc->addr = func;
+	else
+		insn->imm = BPF_CALL_IMM(func);
+
+and separates kfunc_desc_tab fixups from kfunc_call fixups.
+
+Suggested-by: Jiri Olsa <olsajiri@gmail.com>
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+---
+
+v3: https://lore.kernel.org/bpf/20230222223714.80671-1-iii@linux.ibm.com/
+v3 -> v4: Use Jiri's proposal and make it work on s390x.
+
+ arch/s390/net/bpf_jit_comp.c |   5 ++
+ include/linux/bpf.h          |   2 +
+ include/linux/filter.h       |   1 +
+ kernel/bpf/core.c            |  11 ++++
+ kernel/bpf/verifier.c        | 116 +++++++++++++++++++++++++----------
+ 5 files changed, 101 insertions(+), 34 deletions(-)
+
+diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
+index d0846ba818ee..7102e4b674a0 100644
+--- a/arch/s390/net/bpf_jit_comp.c
++++ b/arch/s390/net/bpf_jit_comp.c
+@@ -2001,6 +2001,11 @@ bool bpf_jit_supports_kfunc_call(void)
+ 	return true;
+ }
+ 
++bool bpf_jit_supports_far_kfunc_call(void)
++{
++	return true;
++}
++
+ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
+ 		       void *old_addr, void *new_addr)
+ {
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 2d8f3f639e68..b60945e135ee 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2296,6 +2296,8 @@ bool bpf_prog_has_kfunc_call(const struct bpf_prog *prog);
+ const struct btf_func_model *
+ bpf_jit_find_kfunc_model(const struct bpf_prog *prog,
+ 			 const struct bpf_insn *insn);
++int bpf_get_kfunc_addr(const struct bpf_prog *prog, u32 func_id, u16 offset,
++		       u8 **func_addr);
+ struct bpf_core_ctx {
+ 	struct bpf_verifier_log *log;
+ 	const struct btf *btf;
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 23c08c31bea9..e2bf9d4e6081 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -921,6 +921,7 @@ void bpf_jit_compile(struct bpf_prog *prog);
+ bool bpf_jit_needs_zext(void);
+ bool bpf_jit_supports_subprog_tailcalls(void);
+ bool bpf_jit_supports_kfunc_call(void);
++bool bpf_jit_supports_far_kfunc_call(void);
+ bool bpf_helper_changes_pkt_data(void *func);
+ 
+ static inline bool bpf_dump_raw_ok(const struct cred *cred)
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index b297e9f60ca1..7a75fdfd707e 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1187,6 +1187,7 @@ int bpf_jit_get_func_addr(const struct bpf_prog *prog,
+ 	s16 off = insn->off;
+ 	s32 imm = insn->imm;
+ 	u8 *addr;
++	int err;
+ 
+ 	*func_addr_fixed = insn->src_reg != BPF_PSEUDO_CALL;
+ 	if (!*func_addr_fixed) {
+@@ -1201,6 +1202,11 @@ int bpf_jit_get_func_addr(const struct bpf_prog *prog,
+ 			addr = (u8 *)prog->aux->func[off]->bpf_func;
+ 		else
+ 			return -EINVAL;
++	} else if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL &&
++		   bpf_jit_supports_far_kfunc_call()) {
++		err = bpf_get_kfunc_addr(prog, insn->imm, insn->off, &addr);
++		if (err)
++			return err;
+ 	} else {
+ 		/* Address of a BPF helper call. Since part of the core
+ 		 * kernel, it's always at a fixed location. __bpf_call_base
+@@ -2732,6 +2738,11 @@ bool __weak bpf_jit_supports_kfunc_call(void)
+ 	return false;
+ }
+ 
++bool __weak bpf_jit_supports_far_kfunc_call(void)
++{
++	return false;
++}
++
+ /* To execute LD_ABS/LD_IND instructions __bpf_prog_run() may call
+  * skb_copy_bits(), so provide a weak definition of it for NET-less config.
+  */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 92ae4e8ab87b..873822e3a8f9 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2443,6 +2443,7 @@ struct bpf_kfunc_desc {
+ 	u32 func_id;
+ 	s32 imm;
+ 	u16 offset;
++	unsigned long addr;
+ };
+ 
+ struct bpf_kfunc_btf {
+@@ -2452,6 +2453,11 @@ struct bpf_kfunc_btf {
+ };
+ 
+ struct bpf_kfunc_desc_tab {
++	/* Sorted by func_id (BTF ID) and offset (fd_array offset) during
++	 * verification. JITs do lookups by bpf_insn, where func_id may not be
++	 * available, therefore at the end of verification do_misc_fixups()
++	 * sorts this by imm and offset.
++	 */
+ 	struct bpf_kfunc_desc descs[MAX_KFUNC_DESCS];
+ 	u32 nr_descs;
+ };
+@@ -2492,6 +2498,19 @@ find_kfunc_desc(const struct bpf_prog *prog, u32 func_id, u16 offset)
+ 		       sizeof(tab->descs[0]), kfunc_desc_cmp_by_id_off);
+ }
+ 
++int bpf_get_kfunc_addr(const struct bpf_prog *prog, u32 func_id, u16 offset,
++		       u8 **func_addr)
++{
++	const struct bpf_kfunc_desc *desc;
++
++	desc = find_kfunc_desc(prog, func_id, offset);
++	if (!desc)
++		return -EFAULT;
++
++	*func_addr = (u8 *)desc->addr;
++	return 0;
++}
++
+ static struct btf *__find_kfunc_desc_btf(struct bpf_verifier_env *env,
+ 					 s16 offset)
+ {
+@@ -2672,7 +2691,8 @@ static int add_kfunc_call(struct bpf_verifier_env *env, u32 func_id, s16 offset)
+ 		return -EINVAL;
+ 	}
+ 
+-	call_imm = BPF_CALL_IMM(addr);
++	call_imm = bpf_jit_supports_far_kfunc_call() ? func_id :
++						       BPF_CALL_IMM(addr);
+ 	/* Check whether or not the relative offset overflows desc->imm */
+ 	if ((unsigned long)(s32)call_imm != call_imm) {
+ 		verbose(env, "address of kernel function %s is out of range\n",
+@@ -2690,6 +2710,7 @@ static int add_kfunc_call(struct bpf_verifier_env *env, u32 func_id, s16 offset)
+ 	desc->func_id = func_id;
+ 	desc->imm = call_imm;
+ 	desc->offset = offset;
++	desc->addr = addr;
+ 	err = btf_distill_func_proto(&env->log, desc_btf,
+ 				     func_proto, func_name,
+ 				     &desc->func_model);
+@@ -2699,19 +2720,15 @@ static int add_kfunc_call(struct bpf_verifier_env *env, u32 func_id, s16 offset)
+ 	return err;
+ }
+ 
+-static int kfunc_desc_cmp_by_imm(const void *a, const void *b)
++static int kfunc_desc_cmp_by_imm_off(const void *a, const void *b)
+ {
+ 	const struct bpf_kfunc_desc *d0 = a;
+ 	const struct bpf_kfunc_desc *d1 = b;
+ 
+-	if (d0->imm > d1->imm)
+-		return 1;
+-	else if (d0->imm < d1->imm)
+-		return -1;
+-	return 0;
++	return d0->imm - d1->imm ?: d0->offset - d1->offset;
+ }
+ 
+-static void sort_kfunc_descs_by_imm(struct bpf_prog *prog)
++static void sort_kfunc_descs_by_imm_off(struct bpf_prog *prog)
+ {
+ 	struct bpf_kfunc_desc_tab *tab;
+ 
+@@ -2720,7 +2737,7 @@ static void sort_kfunc_descs_by_imm(struct bpf_prog *prog)
+ 		return;
+ 
+ 	sort(tab->descs, tab->nr_descs, sizeof(tab->descs[0]),
+-	     kfunc_desc_cmp_by_imm, NULL);
++	     kfunc_desc_cmp_by_imm_off, NULL);
+ }
+ 
+ bool bpf_prog_has_kfunc_call(const struct bpf_prog *prog)
+@@ -2734,13 +2751,14 @@ bpf_jit_find_kfunc_model(const struct bpf_prog *prog,
+ {
+ 	const struct bpf_kfunc_desc desc = {
+ 		.imm = insn->imm,
++		.offset = insn->off,
+ 	};
+ 	const struct bpf_kfunc_desc *res;
+ 	struct bpf_kfunc_desc_tab *tab;
+ 
+ 	tab = prog->aux->kfunc_tab;
+ 	res = bsearch(&desc, tab->descs, tab->nr_descs,
+-		      sizeof(tab->descs[0]), kfunc_desc_cmp_by_imm);
++		      sizeof(tab->descs[0]), kfunc_desc_cmp_by_imm_off);
+ 
+ 	return res ? &res->func_model : NULL;
+ }
+@@ -17293,11 +17311,59 @@ static int fixup_call_args(struct bpf_verifier_env *env)
+ 	return err;
+ }
+ 
++/* replace a generic kfunc with a specialized version if necessary */
++static void fixup_kfunc_desc(struct bpf_verifier_env *env,
++			     struct bpf_kfunc_desc *desc)
++{
++	struct bpf_prog *prog = env->prog;
++	u32 func_id = desc->func_id;
++	u16 offset = desc->offset;
++	bool seen_direct_write;
++	void *xdp_kfunc;
++	bool is_rdonly;
++
++	if (bpf_dev_bound_kfunc_id(func_id)) {
++		xdp_kfunc = bpf_dev_bound_resolve_kfunc(prog, func_id);
++		if (xdp_kfunc) {
++			desc->addr = (unsigned long)xdp_kfunc;
++			return;
++		}
++		/* fallback to default kfunc when not supported by netdev */
++	}
++
++	if (offset)
++		return;
++
++	if (func_id == special_kfunc_list[KF_bpf_dynptr_from_skb]) {
++		seen_direct_write = env->seen_direct_write;
++		is_rdonly = !may_access_direct_pkt_data(env, NULL, BPF_WRITE);
++
++		if (is_rdonly)
++			desc->addr = (unsigned long)bpf_dynptr_from_skb_rdonly;
++
++		/* restore env->seen_direct_write to its original value, since
++		 * may_access_direct_pkt_data mutates it
++		 */
++		env->seen_direct_write = seen_direct_write;
++	}
++}
++
++static void fixup_kfunc_desc_tab(struct bpf_verifier_env *env)
++{
++	struct bpf_kfunc_desc_tab *tab = env->prog->aux->kfunc_tab;
++	u32 i;
++
++	if (!tab)
++		return;
++
++	for (i = 0; i < tab->nr_descs; i++)
++		fixup_kfunc_desc(env, &tab->descs[i]);
++}
++
+ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			    struct bpf_insn *insn_buf, int insn_idx, int *cnt)
+ {
+ 	const struct bpf_kfunc_desc *desc;
+-	void *xdp_kfunc;
+ 
+ 	if (!insn->imm) {
+ 		verbose(env, "invalid kernel function call not eliminated in verifier pass\n");
+@@ -17306,16 +17372,6 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 
+ 	*cnt = 0;
+ 
+-	if (bpf_dev_bound_kfunc_id(insn->imm)) {
+-		xdp_kfunc = bpf_dev_bound_resolve_kfunc(env->prog, insn->imm);
+-		if (xdp_kfunc) {
+-			insn->imm = BPF_CALL_IMM(xdp_kfunc);
+-			return 0;
+-		}
+-
+-		/* fallback to default kfunc when not supported by netdev */
+-	}
+-
+ 	/* insn->imm has the btf func_id. Replace it with
+ 	 * an address (relative to __bpf_call_base).
+ 	 */
+@@ -17326,7 +17382,8 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		return -EFAULT;
+ 	}
+ 
+-	insn->imm = desc->imm;
++	if (!bpf_jit_supports_far_kfunc_call())
++		insn->imm = BPF_CALL_IMM(desc->addr);
+ 	if (insn->off)
+ 		return 0;
+ 	if (desc->func_id == special_kfunc_list[KF_bpf_obj_new_impl]) {
+@@ -17351,17 +17408,6 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		   desc->func_id == special_kfunc_list[KF_bpf_rdonly_cast]) {
+ 		insn_buf[0] = BPF_MOV64_REG(BPF_REG_0, BPF_REG_1);
+ 		*cnt = 1;
+-	} else if (desc->func_id == special_kfunc_list[KF_bpf_dynptr_from_skb]) {
+-		bool seen_direct_write = env->seen_direct_write;
+-		bool is_rdonly = !may_access_direct_pkt_data(env, NULL, BPF_WRITE);
+-
+-		if (is_rdonly)
+-			insn->imm = BPF_CALL_IMM(bpf_dynptr_from_skb_rdonly);
+-
+-		/* restore env->seen_direct_write to its original value, since
+-		 * may_access_direct_pkt_data mutates it
+-		 */
+-		env->seen_direct_write = seen_direct_write;
+ 	}
+ 	return 0;
+ }
+@@ -17384,6 +17430,8 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+ 	struct bpf_map *map_ptr;
+ 	int i, ret, cnt, delta = 0;
+ 
++	fixup_kfunc_desc_tab(env);
++
+ 	for (i = 0; i < insn_cnt; i++, insn++) {
+ 		/* Make divide-by-zero exceptions impossible. */
+ 		if (insn->code == (BPF_ALU64 | BPF_MOD | BPF_X) ||
+@@ -17891,7 +17939,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+ 		}
+ 	}
+ 
+-	sort_kfunc_descs_by_imm(env->prog);
++	sort_kfunc_descs_by_imm_off(env->prog);
+ 
+ 	return 0;
+ }
+-- 
+2.39.2
+
