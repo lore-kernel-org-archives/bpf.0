@@ -2,134 +2,146 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6404C76188
-	for <bpf@archiver.kernel.org>; Wed,  5 Apr 2023 19:48:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67A16C761AF
+	for <bpf@archiver.kernel.org>; Wed,  5 Apr 2023 19:50:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234232AbjDETsn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 5 Apr 2023 15:48:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46780 "EHLO
+        id S233773AbjDETua (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 5 Apr 2023 15:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233998AbjDETs0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 5 Apr 2023 15:48:26 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E431C7EDA
-        for <bpf@vger.kernel.org>; Wed,  5 Apr 2023 12:48:08 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id l12so37293045wrm.10
-        for <bpf@vger.kernel.org>; Wed, 05 Apr 2023 12:48:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680724086;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2CU/wqXDquoM5iWh5fb3D/RMmrzIlHoB0ba0E3004b4=;
-        b=eMRuS9EyVLJMDLwDK0g79KHNxCAnYRdZUPH4KiP38+XxFjvV4KeSHiVVA9CqQGpx00
-         GrrHP7yJKxB9hnSG9ZHPLfljeqKbir7udiIqqqKPaLGaPI3lCBCT571TEFHU2CaROFOA
-         Y0h239vruAnlPLQ50G/fyzHPvXjEalfpN625OqG6XPNnung2WMJk/wEMg2bXxr1rZ74m
-         1dalar/zW9URBb19pFaIJCFkpzTQtxe9nsTAfm/Y1EFDvyksvoGvDBx0p+j3bWyoh0KW
-         FJLlP6a31ZqaU/K3+g/4y82zvP6hty21Qnryel/86EFDPR9Lcq95e1Z+At2aU4WLPoLE
-         oT9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680724086;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2CU/wqXDquoM5iWh5fb3D/RMmrzIlHoB0ba0E3004b4=;
-        b=GGPiBGTrQqqtZKR13MOrSK2oqiRx0HQlCOGp9BUW/bRFF9ASLGvdDczxz71DjNL8Rj
-         x851WbxEsbrxuqlhPwMltZQD2m0HoAHp2hh5RrqftKOhXvrwi0bp+3jL3GfscRo23XTH
-         nqtcHMAHQyBzKiv2JsgxYpOr6Eh13j4wD77brDu4wCdJYYSrpQDfjDvbgeojl91fOIgp
-         NzIemg9kC4wYg3KZqzvC6eSU4Eu6MylzfGDfretOftciLDCbao9rX4BZw9ackcvKO25B
-         kL10ZBUtxiJxG3fD1QgOqiIZ17YB6zxzdDIIomkthsB9Okvb9A0xXyZLYTqbQoKgM9z+
-         UCDA==
-X-Gm-Message-State: AAQBX9fjs8YNQ4h7OyKFMaTYTKktY5iW5Dc9LPilXczui0l/zR29a1IO
-        LeSrp3RUQQe5DKScrGdBULkHSwq1iIb26fTn2A80Sw==
-X-Google-Smtp-Source: AKy350aeaYHLJq/TU0Pt84k7DKQ9XA3V8glYD/ljox0u0btbqTyv19eQ+lB7J0ClP0EF6eaBfn7pd5ZJ6saf2+mYv3Y=
-X-Received: by 2002:adf:fc41:0:b0:2ce:a5f8:b786 with SMTP id
- e1-20020adffc41000000b002cea5f8b786mr1381127wrs.12.1680724086448; Wed, 05 Apr
- 2023 12:48:06 -0700 (PDT)
+        with ESMTP id S234096AbjDETuQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 5 Apr 2023 15:50:16 -0400
+Received: from out-60.mta1.migadu.com (out-60.mta1.migadu.com [IPv6:2001:41d0:203:375::3c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF4A83E6
+        for <bpf@vger.kernel.org>; Wed,  5 Apr 2023 12:49:51 -0700 (PDT)
+Message-ID: <1ec1178e-7a7a-d49c-ba3d-fb2349a55c24@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1680724190;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Jcwcfq1HabL06YWO4RYJWNsbg0LRNmnhjGzEhY3v8ro=;
+        b=DZ69gwEDf0j5AmC9Cl+z0KORJM6Mhc+EukY91YY2oUECbUcFGKMdpXllJtXwp0+rwe0oBU
+        zCrkQIkdG4dLMwfm1roSyC3kdrAUiw0IaTmF528P4LGU6bAkzpL8WzqgKAWWyMWA7nRBUo
+        R4DBbBltODJG7SHW8YsvC9hTzn6gmGI=
+Date:   Wed, 5 Apr 2023 12:49:47 -0700
 MIME-Version: 1.0
-References: <CANn89iKn4rpqj_8fYt0UMMgAq5L_2PNoY0Ev70ck8u4t4FC_=g@mail.gmail.com>
- <20230405194143.15708-1-kuniyu@amazon.com>
-In-Reply-To: <20230405194143.15708-1-kuniyu@amazon.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 5 Apr 2023 21:47:54 +0200
-Message-ID: <CANn89iJeHFb8VnFPUq4-d+jzAO6XKiSQhaPsPFY98wjH0Yx1Lw@mail.gmail.com>
-Subject: Re: KASAN: use-after-free Read in tcp_write_timer_handler
-To:     Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc:     bpf@vger.kernel.org, davem@davemloft.net, dsahern@kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, threeearcat@gmail.com,
-        yoshfuji@linux-ipv6.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next 0/2] selftests: xsk: Add test case for packets at
+ end of UMEM
+Content-Language: en-US
+To:     Kal Cutter Conley <kal.conley@dectris.com>
+Cc:     Magnus Karlsson <magnus.karlsson@gmail.com>, bpf@vger.kernel.org
+References: <20230403145047.33065-1-kal.conley@dectris.com>
+ <00f36cce-f186-2d39-ae5c-67da3f43129b@linux.dev>
+ <CAHApi-k9G6o_Xf9piDKRPLGTMa+CD-1F2-aDqth-dz0_yoYZfg@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <CAHApi-k9G6o_Xf9piDKRPLGTMa+CD-1F2-aDqth-dz0_yoYZfg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Apr 5, 2023 at 9:42=E2=80=AFPM Kuniyuki Iwashima <kuniyu@amazon.com=
-> wrote:
->
-> From:   Eric Dumazet <edumazet@google.com>
-> Date:   Wed, 5 Apr 2023 13:28:16 +0200
-> > On Wed, Apr 5, 2023 at 12:41=E2=80=AFPM Dae R. Jeong <threeearcat@gmail=
-.com> wrote:
-> > >
-> > > Hi,
-> > >
-> > > We observed an issue "KASAN: use-after-free Read in tcp_write_timer_h=
-andler" during fuzzing.
-> > >
-> > > Unfortunately, we have not found a reproducer for the crash yet. We
-> > > will inform you if we have any update on this crash.  Detailed crash
-> > > information is attached below.
-> > >
-> >
-> > Thanks for the report.
-> >
-> > I have dozens of similar syzbot reports, with no repro.
-> >
-> > I usually hold them, because otherwise it is just noise to mailing list=
-s.
-> >
-> > Normally, all user TCP sockets hold a reference on the netns
-> >
-> > In all these cases, we see a netns being dismantled while there is at
-> > least one socket with a live timer.
-> >
-> > This is therefore a kernel TCP socket, for which we do not have yet
-> > debugging infra ( REF_TRACKER )
-> >
-> > CONFIG_NET_DEV_REFCNT_TRACKER=3Dy is helping to detect too many dev_put=
-(),
-> > we need something tracking the "kernel sockets" as well.
->
-> Maybe I missed something, but we track kernel sockets with netns
-> by notrefcnt_tracker ?
+On 4/5/23 12:31 PM, Kal Cutter Conley wrote:
+>> I tried test_xsk.sh. The changed subtest runs ok, so applied.
+>>
+>> I got failures from test_xsk.sh (even before this set) though. Are these
+>> expected or something missing in the environment like kconfig?
+> 
+> I fixed the other errors here and here (please apply those):
+> https://patchwork.kernel.org/project/netdevbpf/patch/20230403120400.31018-1-kal.conley@dectris.com/
+> https://patchwork.kernel.org/project/netdevbpf/patch/20230405082905.6303-1-kal.conley@dectris.com/
+> 
+> One is against bpf and one is against bpf-next (because someone told
+> me to move it). I guess they should both be applied to the same
+> branch, probably bpf?
 
-Oh right, I forgot I did this already :)
+They are all fixing a selftests, so applied both to bpf-next also. better but 
+still has errors. The errors are down to 'fail:2' now:
 
-commit 0cafd77dcd032d1687efaba5598cf07bce85997f
-Author: Eric Dumazet <edumazet@google.com>
-Date:   Thu Oct 20 23:20:18 2022 +0000
+./test_xsk.sh
+PREREQUISITES: [ PASS ]
+1..42
+ok 1 PASS: SKB RUN_TO_COMPLETION
+ok 2 PASS: SKB RUN_TO_COMPLETION_2K_FRAME_SIZE
+ok 3 PASS: SKB RUN_TO_COMPLETION_SINGLE_PKT
+ok 4 PASS: SKB POLL_RX
+ok 5 PASS: SKB POLL_TX
+ok 6 PASS: SKB POLL_RXQ_EMPTY
+ok 7 PASS: SKB POLL_TXQ_FULL
+ok 8 # SKIP No 2M huge pages present.
+ok 9 PASS: SKB ALIGNED_INV_DESC
+ok 10 PASS: SKB ALIGNED_INV_DESC_2K_FRAME_SIZE
+ok 11 # SKIP No 2M huge pages present.
+ok 12 PASS: SKB UMEM_HEADROOM
+ok 13 PASS: SKB TEARDOWN
+ok 14 PASS: SKB BIDIRECTIONAL
+ok 15 PASS: SKB STAT_RX_DROPPED
+ok 16 PASS: SKB STAT_TX_INVALID
+ok 17 PASS: SKB STAT_RX_FULL
+ok 18 PASS: SKB STAT_RX_FILL_EMPTY
+ok 19 PASS: SKB BPF_RES
+ok 20 PASS: SKB XDP_DROP_HALF
+ok 21 PASS: SKB XDP_METADATA_COUNT
+ok 22 PASS: DRV RUN_TO_COMPLETION
+ok 23 PASS: DRV RUN_TO_COMPLETION_2K_FRAME_SIZE
+ok 24 PASS: DRV RUN_TO_COMPLETION_SINGLE_PKT
+ok 25 PASS: DRV POLL_RX
+ok 26 PASS: DRV POLL_TX
+ok 27 PASS: DRV POLL_RXQ_EMPTY
+ok 28 PASS: DRV POLL_TXQ_FULL
+ok 29 # SKIP No 2M huge pages present.
+ok 30 PASS: DRV ALIGNED_INV_DESC
+ok 31 PASS: DRV ALIGNED_INV_DESC_2K_FRAME_SIZE
+ok 32 # SKIP No 2M huge pages present.
+ok 33 PASS: DRV UMEM_HEADROOM
+ok 34 PASS: DRV TEARDOWN
+ok 35 PASS: DRV BIDIRECTIONAL
+ok 36 PASS: DRV STAT_RX_DROPPED
+ok 37 PASS: DRV STAT_TX_INVALID
+ok 38 PASS: DRV STAT_RX_FULL
+ok 39 PASS: DRV STAT_RX_FILL_EMPTY
+ok 40 PASS: DRV BPF_RES
+ok 41 PASS: DRV XDP_DROP_HALF
+ok 42 PASS: DRV XDP_METADATA_COUNT
+# Totals: pass:38 fail:0 xfail:0 xpass:0 skip:4 error:0
+XSK_SELFTESTS_ve5350_SOFTIRQ: [ PASS ]
+1..42
+ok 1 PASS: SKB BUSY-POLL RUN_TO_COMPLETION
+ok 2 PASS: SKB BUSY-POLL RUN_TO_COMPLETION_2K_FRAME_SIZE
+ok 3 PASS: SKB BUSY-POLL RUN_TO_COMPLETION_SINGLE_PKT
+ok 4 PASS: SKB BUSY-POLL POLL_RX
+ok 5 PASS: SKB BUSY-POLL POLL_TX
+ok 6 PASS: SKB BUSY-POLL POLL_RXQ_EMPTY
+ok 7 PASS: SKB BUSY-POLL POLL_TXQ_FULL
+ok 8 # SKIP No 2M huge pages present.
+ok 9 PASS: SKB BUSY-POLL ALIGNED_INV_DESC
+ok 10 PASS: SKB BUSY-POLL ALIGNED_INV_DESC_2K_FRAME_SIZE
+ok 11 # SKIP No 2M huge pages present.
+ok 12 PASS: SKB BUSY-POLL UMEM_HEADROOM
+ok 13 PASS: SKB BUSY-POLL TEARDOWN
+ok 14 PASS: SKB BUSY-POLL BIDIRECTIONAL
+ok 15 PASS: SKB BUSY-POLL STAT_RX_DROPPED
+ok 16 PASS: SKB BUSY-POLL STAT_TX_INVALID
+ok 17 PASS: SKB BUSY-POLL STAT_RX_FULL
+ok 18 PASS: SKB BUSY-POLL STAT_RX_FILL_EMPTY
+ok 19 PASS: SKB BUSY-POLL BPF_RES
+ok 20 PASS: SKB BUSY-POLL XDP_DROP_HALF
+ok 21 PASS: SKB BUSY-POLL XDP_METADATA_COUNT
+ok 22 PASS: DRV BUSY-POLL RUN_TO_COMPLETION
+ok 23 PASS: DRV BUSY-POLL RUN_TO_COMPLETION_2K_FRAME_SIZE
+ok 24 PASS: DRV BUSY-POLL RUN_TO_COMPLETION_SINGLE_PKT
+ok 25 PASS: DRV BUSY-POLL POLL_RX
+# [is_pkt_valid] expected seqnum [703], got seqnum [704]
+not ok 26 FAIL: DRV BUSY-POLL POLL_TX
+ok 27 PASS: DRV BUSY-POLL POLL_RXQ_EMPTY
+ok 28 PASS: DRV BUSY-POLL POLL_TXQ_FULL
+ok 29 # SKIP No 2M huge pages present.
+not ok 30 [xskxceiver.c:xsk_configure_socket:1236]: ERROR: 16/"Device or 
+resource busy"
+# Planned tests != run tests (42 != 30)
+# Totals: pass:25 fail:2 xfail:0 xpass:0 skip:3 error:0
 
-    net: add a refcount tracker for kernel sockets
-
-Dae, make sure to not send reports based on old kernels.
-
-Using 6.0-rc7 is a waste of your time, and everyone else reading this threa=
-d.
-
-I confess I did not check this, and I really should do that all the time.
-
-
-
->
-> I thought now CONFIG_NET_NS_REFCNT_TRACKER can catch the case.
->
->
-> >
-> > Otherwise bugs in subsystems not properly dismantling their kernel
-> > socket at netns dismantle are next to impossible to track and fix.
-> >
-> > If anyone has time to implement this, feel free to submit patches.
-> >
-> > Thanks.
