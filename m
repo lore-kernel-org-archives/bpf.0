@@ -2,118 +2,69 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DFF4C7619A
-	for <bpf@archiver.kernel.org>; Wed,  5 Apr 2023 20:12:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B1D1C76188
+	for <bpf@archiver.kernel.org>; Wed,  5 Apr 2023 20:42:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233346AbjDEUMT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 5 Apr 2023 16:12:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52558 "EHLO
+        id S234571AbjDEUm1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 5 Apr 2023 16:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234331AbjDEUMR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 5 Apr 2023 16:12:17 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D847D93;
-        Wed,  5 Apr 2023 13:11:51 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id t10so143864711edd.12;
-        Wed, 05 Apr 2023 13:11:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680725474;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RolzALN/i4hTsXdHwsUEcc9nlet40/ppXVO8mjfW8J0=;
-        b=Paa3T8LoEcSkq3oxN5BIUzryrUFeI7Pxhh6k62iQP/whVlGwX8syueCUwZbPHN06wF
-         dczcatlFLUyS88+5By2Gk9ghchQrWUFf7/O3ej/vLwCHcPfUf7napfFHtmw1XQ8lwtn0
-         a9zu2qSn8WqFY+2dr/BlnQ5Z2ZQxpA4zEyd1bnQyjfx9d7FdH94nK9kHMqj00pwcRvQy
-         8V43JXL2sSZaGiITcoWVV5Ff9lFvBK6xrJOzxzkDvtMn3/vfAGNn0muWxTZLS557XKrB
-         mtLsMxX1ShOjgnePktwxe1zxVUOc8XEVO5O7tLMXU8GfAUrBRJdmsdv6F1oXGADtD3Sh
-         mmlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680725474;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RolzALN/i4hTsXdHwsUEcc9nlet40/ppXVO8mjfW8J0=;
-        b=QeUIg5YDn/NGjiduLaxAYKaX2dJpPe4VaVCATWxV3kboln4LlKahuAg8D9mTPHVw1E
-         B1SdV7Vd6qWYdETtmS2xy1v3WHkgvVk/W6c6XWRDeqqTy/FbMht/lVIpjr8I3EHrGxGb
-         KD7sMb79OjxRlAvJ2RuReTL2htrfW7m+v271DY4M+HLnptRJ9qeQiA8jECtBZ/0sX9m0
-         Q+iBVimsDRbhrn1gGe62FjR9W3SD/Gw+xKvQ97eZj5wFXXpNYFGX8sxWOXgHMetlZbPm
-         DhpHq/Ar1jBZMuWbZ4hggs/GcCvXT1ajnO2JvctAXwpl+/SWG8oW5S9k+TL7dK6GFanV
-         MvNQ==
-X-Gm-Message-State: AAQBX9fkzu7Cxa3jxM1E28cJ1EbC/ZdSjE2YVX8UFCqEEoUNK6V2EhSw
-        1pjn1G+E8Yy0Lw1emZtLvbjPxXeIbnvTGp9DqCg=
-X-Google-Smtp-Source: AKy350aILvRCcVMZX5nsxabLI+H0XyanrsJx7nh9j3yk2Mi2N30LGL70g3zVuxdmzLWFvhyK8H01d+gu0RZkuV8oulI=
-X-Received: by 2002:a17:906:9488:b0:931:ce20:db96 with SMTP id
- t8-20020a170906948800b00931ce20db96mr2226783ejx.5.1680725474171; Wed, 05 Apr
- 2023 13:11:14 -0700 (PDT)
+        with ESMTP id S234696AbjDEUmJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 5 Apr 2023 16:42:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA637ED2;
+        Wed,  5 Apr 2023 13:41:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C85FE6416A;
+        Wed,  5 Apr 2023 20:40:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B12BC433D2;
+        Wed,  5 Apr 2023 20:40:26 +0000 (UTC)
+Date:   Wed, 5 Apr 2023 16:40:24 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Florent Revest <revest@chromium.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        catalin.marinas@arm.com, will@kernel.org, mhiramat@kernel.org,
+        mark.rutland@arm.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kpsingh@kernel.org, jolsa@kernel.org,
+        xukuohai@huaweicloud.com, lihuafei1@huawei.com
+Subject: Re: [PATCH v6 3/5] samples: ftrace: Save required argument
+ registers in sample trampolines
+Message-ID: <20230405164024.5f5c3b6b@gandalf.local.home>
+In-Reply-To: <20230405180250.2046566-4-revest@chromium.org>
+References: <20230405180250.2046566-1-revest@chromium.org>
+        <20230405180250.2046566-4-revest@chromium.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230404045029.82870-1-alexei.starovoitov@gmail.com>
- <20230404145131.GB3896@maniforge> <CAEf4BzYXpHMNDTCrBTjwvj3UU5xhS9mAKLx152NniKO27Rdbeg@mail.gmail.com>
- <CAADnVQKLe8+zJ0sMEOsh74EHhV+wkg0k7uQqbTkB3THx1CUyqw@mail.gmail.com>
- <20230404185147.17bf217a@kernel.org> <CAEf4BzY3-pXiM861OkqZ6eciBJnZS8gsBL2Le2rGiSU64GKYcg@mail.gmail.com>
- <20230405111926.7930dbcc@kernel.org>
-In-Reply-To: <20230405111926.7930dbcc@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 5 Apr 2023 13:11:02 -0700
-Message-ID: <CAEf4Bza6BgD2Dr=8M2daiPKBkytsOXHG7XbN=8jv68Tu3Bq1Fg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/8] bpf: Follow up to RCU enforcement in the verifier.
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        David Vernet <void@manifault.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Dave Marchevsky <davemarchevsky@meta.com>,
-        Tejun Heo <tj@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>,
-        Yonghong Song <yhs@meta.com>, Song Liu <song@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Apr 5, 2023 at 11:19=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
->
-> On Wed, 5 Apr 2023 10:22:16 -0700 Andrii Nakryiko wrote:
-> > So I'm exclusively using `pw-apply -c <patchworks-url>` to apply
-> > everything locally.
->
-> I think you can throw -M after -c $url? It can only help... :)
->
-> > I'd expect that at this time the script would
-> > detect any Acked-by replies on *cover letter patch*, and apply them
-> > across all patches in the series. Such that we (humans) can look at
-> > them, fix them, add them, etc. Doing something like this in git hook
-> > seems unnecessary?
->
-> Maybe mb2q can do it, IDK. I don't use the mb2q thing.
-> I don't think git has a way of doing git am and insert these tags if
-> they don't exist, in a single command.
->
-> > So I think the only thing that's missing is the code that would fetch
-> > all replies on the cover letter "patch" (e.g., like on [0]) and just
-> > apply it across everything. We must be doing something like this for
-> > acks on individual patches, so I imagine we are not far off to make
-> > this work, but I haven't looked at pw-apply carefully enough to know
-> > for sure.
->
-> The individual patches are handled by patchwork.
+On Wed,  5 Apr 2023 20:02:48 +0200
+Florent Revest <revest@chromium.org> wrote:
+
+> The ftrace-direct-too sample traces the handle_mm_fault function whose
+> signature changed since the introduction of the sample. Since:
+> commit bce617edecad ("mm: do page fault accounting in handle_mm_fault")
+> handle_mm_fault now has 4 arguments. Therefore, the sample trampoline
+> should save 4 argument registers.
+> 
+> s390 saves all argument registers already so it does not need a change
+> but x86_64 needs an extra push and pop.
+> 
+> This also evolves the signature of the tracing function to make it
+> mirror the signature of the traced function.
 >
 
-Ah, I see, so yeah, it would be harder to do in pw-apply then.
+Should probably add:
 
-> Don't get me wrong, I'm not disagreeing with you. Just trying to help
-> and point out existing workarounds..
+Cc: stable@vger.kernel.org
+Fixes: bce617edecad ("mm: do page fault accounting in handle_mm_fault")
 
-Oh, absolutely, I think we are all on the same page here. Daniel
-mentioned -a in another reply, I didn't know about that and will use
-that for the time being, still will save a bunch of time next time.
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-When I feel inspired to deal with a bit of bash, curl, and stuff, I'll
-see if we can extend `pw-apply -c` to do this automatically. Thanks
-for the discussion!
+-- Steve
