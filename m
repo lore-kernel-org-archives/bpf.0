@@ -2,146 +2,85 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67A16C761AF
-	for <bpf@archiver.kernel.org>; Wed,  5 Apr 2023 19:50:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE7B9C76188
+	for <bpf@archiver.kernel.org>; Wed,  5 Apr 2023 19:51:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233773AbjDETua (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 5 Apr 2023 15:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50442 "EHLO
+        id S231190AbjDETu6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 5 Apr 2023 15:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234096AbjDETuQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 5 Apr 2023 15:50:16 -0400
-Received: from out-60.mta1.migadu.com (out-60.mta1.migadu.com [IPv6:2001:41d0:203:375::3c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF4A83E6
-        for <bpf@vger.kernel.org>; Wed,  5 Apr 2023 12:49:51 -0700 (PDT)
-Message-ID: <1ec1178e-7a7a-d49c-ba3d-fb2349a55c24@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1680724190;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Jcwcfq1HabL06YWO4RYJWNsbg0LRNmnhjGzEhY3v8ro=;
-        b=DZ69gwEDf0j5AmC9Cl+z0KORJM6Mhc+EukY91YY2oUECbUcFGKMdpXllJtXwp0+rwe0oBU
-        zCrkQIkdG4dLMwfm1roSyC3kdrAUiw0IaTmF528P4LGU6bAkzpL8WzqgKAWWyMWA7nRBUo
-        R4DBbBltODJG7SHW8YsvC9hTzn6gmGI=
-Date:   Wed, 5 Apr 2023 12:49:47 -0700
+        with ESMTP id S231173AbjDETuj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 5 Apr 2023 15:50:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9637A96;
+        Wed,  5 Apr 2023 12:50:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C667B640E8;
+        Wed,  5 Apr 2023 19:50:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 117CAC4339B;
+        Wed,  5 Apr 2023 19:50:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680724219;
+        bh=C2JZKsWWj3Lk4gHlvzP56MFwzu9QP4vVz64o99qXE54=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=HmnEib3n+9AJTSeAllh6ljIfZDRl+CJsFJ5MYKYAezCHCTOCV39ELj2QaGW6TMGlT
+         lm1yJXhUFo7yi4vKzewrkp40zSdKvIlGOee0lU99yaQqOIeOy4c2eXAY2aUo4/z0O8
+         SS5DnamGrcFqYIjWIzAf5ok7rr+Ew9dReLfaznTJTNoP4cq3gaoaY+YJVyMpqhhGJW
+         4qHLDwJVp3FwOeWPcrXHsK9F/aa2yCr86ppnDZ8uAli7V9mRgh8vInjwEpCfSUhJkQ
+         lbaQ+7O1G79wlhai1swhnSUf6QaNm/8MNLYj8GToWjxrkGFXl2ATV0wmoycCEDdeJq
+         BQDrG3YKda08Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E7674C395D8;
+        Wed,  5 Apr 2023 19:50:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 0/2] selftests: xsk: Add test case for packets at
- end of UMEM
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf] selftests: xsk: Deflakify STATS_RX_DROPPED test
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168072421894.28321.18230230316101507233.git-patchwork-notify@kernel.org>
+Date:   Wed, 05 Apr 2023 19:50:18 +0000
+References: <20230403120400.31018-1-kal.conley@dectris.com>
+In-Reply-To: <20230403120400.31018-1-kal.conley@dectris.com>
 To:     Kal Cutter Conley <kal.conley@dectris.com>
-Cc:     Magnus Karlsson <magnus.karlsson@gmail.com>, bpf@vger.kernel.org
-References: <20230403145047.33065-1-kal.conley@dectris.com>
- <00f36cce-f186-2d39-ae5c-67da3f43129b@linux.dev>
- <CAHApi-k9G6o_Xf9piDKRPLGTMa+CD-1F2-aDqth-dz0_yoYZfg@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <CAHApi-k9G6o_Xf9piDKRPLGTMa+CD-1F2-aDqth-dz0_yoYZfg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Cc:     bjorn@kernel.org, magnus.karlsson@intel.com,
+        maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        shuah@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 4/5/23 12:31 PM, Kal Cutter Conley wrote:
->> I tried test_xsk.sh. The changed subtest runs ok, so applied.
->>
->> I got failures from test_xsk.sh (even before this set) though. Are these
->> expected or something missing in the environment like kconfig?
-> 
-> I fixed the other errors here and here (please apply those):
-> https://patchwork.kernel.org/project/netdevbpf/patch/20230403120400.31018-1-kal.conley@dectris.com/
-> https://patchwork.kernel.org/project/netdevbpf/patch/20230405082905.6303-1-kal.conley@dectris.com/
-> 
-> One is against bpf and one is against bpf-next (because someone told
-> me to move it). I guess they should both be applied to the same
-> branch, probably bpf?
+Hello:
 
-They are all fixing a selftests, so applied both to bpf-next also. better but 
-still has errors. The errors are down to 'fail:2' now:
+This patch was applied to bpf/bpf-next.git (master)
+by Martin KaFai Lau <martin.lau@kernel.org>:
 
-./test_xsk.sh
-PREREQUISITES: [ PASS ]
-1..42
-ok 1 PASS: SKB RUN_TO_COMPLETION
-ok 2 PASS: SKB RUN_TO_COMPLETION_2K_FRAME_SIZE
-ok 3 PASS: SKB RUN_TO_COMPLETION_SINGLE_PKT
-ok 4 PASS: SKB POLL_RX
-ok 5 PASS: SKB POLL_TX
-ok 6 PASS: SKB POLL_RXQ_EMPTY
-ok 7 PASS: SKB POLL_TXQ_FULL
-ok 8 # SKIP No 2M huge pages present.
-ok 9 PASS: SKB ALIGNED_INV_DESC
-ok 10 PASS: SKB ALIGNED_INV_DESC_2K_FRAME_SIZE
-ok 11 # SKIP No 2M huge pages present.
-ok 12 PASS: SKB UMEM_HEADROOM
-ok 13 PASS: SKB TEARDOWN
-ok 14 PASS: SKB BIDIRECTIONAL
-ok 15 PASS: SKB STAT_RX_DROPPED
-ok 16 PASS: SKB STAT_TX_INVALID
-ok 17 PASS: SKB STAT_RX_FULL
-ok 18 PASS: SKB STAT_RX_FILL_EMPTY
-ok 19 PASS: SKB BPF_RES
-ok 20 PASS: SKB XDP_DROP_HALF
-ok 21 PASS: SKB XDP_METADATA_COUNT
-ok 22 PASS: DRV RUN_TO_COMPLETION
-ok 23 PASS: DRV RUN_TO_COMPLETION_2K_FRAME_SIZE
-ok 24 PASS: DRV RUN_TO_COMPLETION_SINGLE_PKT
-ok 25 PASS: DRV POLL_RX
-ok 26 PASS: DRV POLL_TX
-ok 27 PASS: DRV POLL_RXQ_EMPTY
-ok 28 PASS: DRV POLL_TXQ_FULL
-ok 29 # SKIP No 2M huge pages present.
-ok 30 PASS: DRV ALIGNED_INV_DESC
-ok 31 PASS: DRV ALIGNED_INV_DESC_2K_FRAME_SIZE
-ok 32 # SKIP No 2M huge pages present.
-ok 33 PASS: DRV UMEM_HEADROOM
-ok 34 PASS: DRV TEARDOWN
-ok 35 PASS: DRV BIDIRECTIONAL
-ok 36 PASS: DRV STAT_RX_DROPPED
-ok 37 PASS: DRV STAT_TX_INVALID
-ok 38 PASS: DRV STAT_RX_FULL
-ok 39 PASS: DRV STAT_RX_FILL_EMPTY
-ok 40 PASS: DRV BPF_RES
-ok 41 PASS: DRV XDP_DROP_HALF
-ok 42 PASS: DRV XDP_METADATA_COUNT
-# Totals: pass:38 fail:0 xfail:0 xpass:0 skip:4 error:0
-XSK_SELFTESTS_ve5350_SOFTIRQ: [ PASS ]
-1..42
-ok 1 PASS: SKB BUSY-POLL RUN_TO_COMPLETION
-ok 2 PASS: SKB BUSY-POLL RUN_TO_COMPLETION_2K_FRAME_SIZE
-ok 3 PASS: SKB BUSY-POLL RUN_TO_COMPLETION_SINGLE_PKT
-ok 4 PASS: SKB BUSY-POLL POLL_RX
-ok 5 PASS: SKB BUSY-POLL POLL_TX
-ok 6 PASS: SKB BUSY-POLL POLL_RXQ_EMPTY
-ok 7 PASS: SKB BUSY-POLL POLL_TXQ_FULL
-ok 8 # SKIP No 2M huge pages present.
-ok 9 PASS: SKB BUSY-POLL ALIGNED_INV_DESC
-ok 10 PASS: SKB BUSY-POLL ALIGNED_INV_DESC_2K_FRAME_SIZE
-ok 11 # SKIP No 2M huge pages present.
-ok 12 PASS: SKB BUSY-POLL UMEM_HEADROOM
-ok 13 PASS: SKB BUSY-POLL TEARDOWN
-ok 14 PASS: SKB BUSY-POLL BIDIRECTIONAL
-ok 15 PASS: SKB BUSY-POLL STAT_RX_DROPPED
-ok 16 PASS: SKB BUSY-POLL STAT_TX_INVALID
-ok 17 PASS: SKB BUSY-POLL STAT_RX_FULL
-ok 18 PASS: SKB BUSY-POLL STAT_RX_FILL_EMPTY
-ok 19 PASS: SKB BUSY-POLL BPF_RES
-ok 20 PASS: SKB BUSY-POLL XDP_DROP_HALF
-ok 21 PASS: SKB BUSY-POLL XDP_METADATA_COUNT
-ok 22 PASS: DRV BUSY-POLL RUN_TO_COMPLETION
-ok 23 PASS: DRV BUSY-POLL RUN_TO_COMPLETION_2K_FRAME_SIZE
-ok 24 PASS: DRV BUSY-POLL RUN_TO_COMPLETION_SINGLE_PKT
-ok 25 PASS: DRV BUSY-POLL POLL_RX
-# [is_pkt_valid] expected seqnum [703], got seqnum [704]
-not ok 26 FAIL: DRV BUSY-POLL POLL_TX
-ok 27 PASS: DRV BUSY-POLL POLL_RXQ_EMPTY
-ok 28 PASS: DRV BUSY-POLL POLL_TXQ_FULL
-ok 29 # SKIP No 2M huge pages present.
-not ok 30 [xskxceiver.c:xsk_configure_socket:1236]: ERROR: 16/"Device or 
-resource busy"
-# Planned tests != run tests (42 != 30)
-# Totals: pass:25 fail:2 xfail:0 xpass:0 skip:3 error:0
+On Mon,  3 Apr 2023 14:03:59 +0200 you wrote:
+> Fix flaky STATS_RX_DROPPED test. The receiver calls getsockopt after
+> receiving the last (valid) packet which is not the final packet sent in
+> the test (valid and invalid packets are sent in alternating fashion with
+> the final packet being invalid). Since the last packet may or may not
+> have been dropped already, both outcomes must be allowed.
+> 
+> This issue could also be fixed by making sure the last packet sent is
+> valid. This alternative is left as an exercise to the reader (or the
+> benevolent maintainers of this file).
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf] selftests: xsk: Deflakify STATS_RX_DROPPED test
+    https://git.kernel.org/bpf/bpf-next/c/68e7322142f5
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
