@@ -2,56 +2,136 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01B67C76196
-	for <bpf@archiver.kernel.org>; Thu,  6 Apr 2023 16:48:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1FE9C76196
+	for <bpf@archiver.kernel.org>; Thu,  6 Apr 2023 16:49:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjDFQsO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 6 Apr 2023 12:48:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60406 "EHLO
+        id S239013AbjDFQtq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 6 Apr 2023 12:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239712AbjDFQsM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 6 Apr 2023 12:48:12 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850D5AD3F
-        for <bpf@vger.kernel.org>; Thu,  6 Apr 2023 09:47:53 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 336FbhpP025157
-        for <bpf@vger.kernel.org>; Thu, 6 Apr 2023 09:47:53 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=rdah0lRE5lBWFCe/hs+VSMJGwGcSJAUGY1ans0uX/I0=;
- b=dCdtAVktlqWAAy3o+q7yJBCJYji3ohevPu7YdzqVVYd8SFsTmSkK6tL0tEEe3yv61vk0
- 0BZ7kONDd82hYEWLiPu9zos8kjLYkUlZHFGP89eur1T0HR/hGZ9xkqTwyy2rAZiVpXb3
- M6Uo9PV78IyWkHxoeVpNH41IGSuM2j4Ttn4= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3psk7avu3k-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 06 Apr 2023 09:47:53 -0700
-Received: from twshared7147.05.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 6 Apr 2023 09:47:51 -0700
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id AF4481C5BEE3D; Thu,  6 Apr 2023 09:45:00 -0700 (PDT)
-From:   Yonghong Song <yhs@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S239616AbjDFQto (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 6 Apr 2023 12:49:44 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1B112D
+        for <bpf@vger.kernel.org>; Thu,  6 Apr 2023 09:49:41 -0700 (PDT)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 336EEhL9032570;
+        Thu, 6 Apr 2023 09:49:27 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=s2048-2021-q4;
+ bh=fQn8eF4wIvkUt6I8ruVVeVUb1UojRMXXrnc2qBR17Yc=;
+ b=OLM2XrLzPro3HRnXEhgeSIAADW8uz0zfZnzAxgVYpbIueD5Mmx3okEEv7TrLjIMqyr+c
+ iLaatgMDRv6vRhX7sIDR+s4yMjbUgWLOEZexLh44P1AdUV6iYsy/2+OrvkwdPSNHmAxG
+ XQYFh3XUNG46EgMC2UU0n7/E5biys5xWRxrtQKdnolMM6ZbGp25euBqp874FBoXf82W8
+ WNUEY3fRKbeHH0B19ddppJILLSmseu3HmekqNsmRiGHRmX7KghUrJcyBU0L4zuyy9SYe
+ 1rXkO7qkzyYk8Q3iro/07joaUCfUQvVLuyRa1Dn5TqXVVALW5xctmmFbdJ1kexl/zu8B Bg== 
+Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam04lp2171.outbound.protection.outlook.com [104.47.73.171])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3psynn14ce-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Apr 2023 09:49:26 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=i/E+6uu9x0KH7V3cGqAWc3t/HPZqHVrkcB2PLV6W3rRdFcsiAmcgWnTJhTOHTLTeXWDUiyWla1wqH9FLJdVeOQkDI6r2TBLFzvqkTwArcU8r5iAiBdRDnSnH8vpkZ1WZTvZH2HJcmYRZCIrise0IzcxK/afRx+0JUKk3Ztpy9YLruLo43IsSOAnUC8P50pzowOoAQ06mbPhXQqufHFT+3GaoZQr3rZxQSWpI4JG3tz8It//Aqsh/P53S3AhDMowWhf0e34pSmBIYD192Lt4dyhIefY+4nMresKBC4tErkLF8SYfLoLOCDLjDYuDx7ibFpIQ2QmHqtl7YeFIcMx+wPQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fQn8eF4wIvkUt6I8ruVVeVUb1UojRMXXrnc2qBR17Yc=;
+ b=UQCQ2/y1T3LhOCh1yjjqfHmRSKjWF1F9gHypsjK67qJQeK6kqjxzDbQfEICQ7xRLGDf+XW0+MfssaL4qctdrpUik0ktIktyhUl421bOGK0mEvAIfHQOD7Dv4a2xnQgPucC1y8tqxQq45orpJne1OeRJC2QYQwZC4TEelH0URigTux7z/Wyq3eCeTJLfXvt9wZmQuCyj/Kgs28M/bpNbhw46wWY1xWeTtPnB73vNUzSw0o2cSnDfte/b+WMNbZ6zPTReH+1v/1u+sjbUNZ5knk2ZNm3O/B29mXiqZWsNzUwgEmblwBXjpGWAVa9KDn/3bYOotb86z2qAtdhlVVAQiZQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by DM4PR15MB5355.namprd15.prod.outlook.com (2603:10b6:8:5e::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.33; Thu, 6 Apr
+ 2023 16:49:23 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::589f:9230:518:7f53]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::589f:9230:518:7f53%6]) with mapi id 15.20.6254.035; Thu, 6 Apr 2023
+ 16:49:23 +0000
+Message-ID: <b73075cb-67c4-2144-64f9-fc564eb00833@meta.com>
+Date:   Thu, 6 Apr 2023 09:49:19 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH bpf-next 0/7] bpf: Improve verifier for cond_op and
+ spilled loop index variables
+Content-Language: en-US
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Yonghong Song <yhs@fb.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
         Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v2 2/4] selftests/bpf: Add tests for non-constant cond_op NE/EQ bound deduction
-Date:   Thu, 6 Apr 2023 09:45:00 -0700
-Message-ID: <20230406164500.1045715-1-yhs@fb.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230406164450.1044952-1-yhs@fb.com>
-References: <20230406164450.1044952-1-yhs@fb.com>
+References: <20230330055600.86870-1-yhs@fb.com>
+ <CAEf4Bzayt_FUG6JyMzU060swqP_w=W9TFJOKD15ux6GNDm3qSg@mail.gmail.com>
+From:   Yonghong Song <yhs@meta.com>
+In-Reply-To: <CAEf4Bzayt_FUG6JyMzU060swqP_w=W9TFJOKD15ux6GNDm3qSg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BYAPR02CA0024.namprd02.prod.outlook.com
+ (2603:10b6:a02:ee::37) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: AqnzijtCaTtZe_SmWM0BUJcAtvUHWLJR
-X-Proofpoint-ORIG-GUID: AqnzijtCaTtZe_SmWM0BUJcAtvUHWLJR
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|DM4PR15MB5355:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1cbf4556-78cd-487e-4223-08db36bedfea
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: m3D5whsgg6lc6dqGnZsZQTnbbWjI2KEsHwv/f7oreTNVb1E8vk19RBnVO2u9mKRxlaCUxjVcVt5BGGSSJV3jxMFSn8bJBpYT9tmaOgfo6eZ00cq9zeLDqEgaROV8l5lYRJe+vSxNFZ4SPVF+SRG5Nj3vK2hqcncMm4/MmJko01pyRsDjZmPC72qL1LhAOwD0/VKHg2+9eLfmWwDRvvTw9Xy7vHmbN2y0wvIxsTI6+i0NCCjn2NbMrLMxU/DZRwRERv310wGamHWKT70Tx1aoV5yvbwotQDeN6j2xfng2nm8jaqZBiTJTm9ZCDDmLYcGtYy/roh8xeqXwy5Rojfb67zBbxahwxmEtf303udqBlMdJIXuQPCMZaNqpRW/aeKlJ9isu6ptd9AiEOwUNm71P5o1pa4rZ/DbskZRJUopoW8VttgwI94cWDNXkzuzVD5LcLR+YBaKU0br73P/M4s4DTgBUPpMwuqsBCsG5tT1Tp+srK928lR1goyCcyROgWEaJjcctFH3CD7N0IgVW22/MKEhyfG0OzCppM8J75at9GR06bEE03mpFP5vk0OERrnjSGquR3aEQFHZb1uPf9J2pd0FN5nBJN4MbsGla1MZwKjhhrO75vMg3S+IoUGPWziWPZe/0i5IBPjdzagovS2978Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(376002)(39860400002)(136003)(396003)(451199021)(478600001)(66476007)(66946007)(8676002)(66556008)(4326008)(38100700002)(110136005)(41300700001)(8936002)(54906003)(5660300002)(316002)(186003)(53546011)(6512007)(6486002)(2616005)(83380400001)(6506007)(6666004)(31696002)(2906002)(36756003)(86362001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cEI0UWtrNTFiU0UvZWF6NVYwMlRUYTBxUkpEUUZ1NkFtbkZXcjBOaXA4bW5l?=
+ =?utf-8?B?MVB2YUprTEpYQmcvV3lZYlVHSWlsMGlsRHByVVA4RTFQVUhKeitxYi9VSDNk?=
+ =?utf-8?B?ZDNLVmpFcndkS1huMGhBS1UzbU5UaU83M0xNRVB2QW5aMEk0Q0FZM0Rkb0tr?=
+ =?utf-8?B?cUNGcHp4alROU1FwajlXOHhHa09JZm5VUjB1YXVOanBZRzBpblhTQ1R3bVFX?=
+ =?utf-8?B?QmZmenlZNGxCdGFENUhRM25BNWdKU3VPZFdoQUFGdThXcXg4aXNQNnpnM2tw?=
+ =?utf-8?B?L1orMDdFZE9CdzBCejJYblhncmRIVFFjekZlYVBEOVdvK2NBcUswd2l4cFlp?=
+ =?utf-8?B?d0FSTkoyL05EUWZTMXZQWXM1NmFvUjBHN0xJSFFOcjBNanEvRWNteEkxYzdh?=
+ =?utf-8?B?amx4MHFwb216WjNjY1dPYkd4dWcxMnIzNEdMclVqN0FjVDVieUNQNFZweGFQ?=
+ =?utf-8?B?c21tQ3hZeGxya3EyMThDanVTVDdZMUVFY0U0U1JWSmhBL0MvU1crem1sR2dH?=
+ =?utf-8?B?azAvSzZCb3dRdDdrWlRjZWhBVllaekdqOTJYTXIxS1RxeEJ1Q2U0ZFRmUEJC?=
+ =?utf-8?B?NjArTzVVUFdYTXlkWlJ1eVZyM2RJOS9ESkRmTWQxQzRmTG9Zeko2WmpCKzQy?=
+ =?utf-8?B?QWxMMDExN2w0QW1YQllKeFluNldyR0xMSmRBQW1SUmpTbEIrY1ZESmorS1Ay?=
+ =?utf-8?B?emtkTFZ0OEcxVVhIS0hPbzdsMGRSdjNBYUdVKzlDbFlkUDhzNUM1N21id25T?=
+ =?utf-8?B?T3pEMXhSZWZ2OE5zaWgyZlRDenVZK0dvakVJQ2hMVGxwUXlsTUJORTFNKzhu?=
+ =?utf-8?B?MG9Eem83OGlpUnY3TTJyWk0xSkJEc0wwZlpQWFpRZ1YyVUFMNWtuNEVqN3Mv?=
+ =?utf-8?B?akJUbHN3Um43TDd3dmY5MlRacWtXTFJ0eThMSjY5WXBjemhzbHVwNTV1ZkhO?=
+ =?utf-8?B?bEJhNG1NWUsvelExbEpqZ2VUajM1WjgyOVZUQ3BIQUVYK0dJdGZhZlBYdkdN?=
+ =?utf-8?B?Z3FhVmN4clJvZGplUkRpek44MGlqR2c5dEZDVVIrRVFmMEpvc2lRTnU4VlJV?=
+ =?utf-8?B?R2dDRThtMlRIRS9EWTdiNGRNNTVYRkpob0lmTlRjY29YUUdRQVZqc05SaDU0?=
+ =?utf-8?B?eUpxZ254ek8xOFZubk5wUWI4RHJoRjE0R2VmSHpRMzJSZVMrVkZVU1RrcDN4?=
+ =?utf-8?B?SGE3UWVPcVFwclRlcE5jUnBGSnBnNDE5Ri9UcjdMYXFrVTdQd2xHU2IveUJM?=
+ =?utf-8?B?M1Z3Z25pRTgwcHBTV0lsS0E2UVNKM1FKdnFuUTlGL2NpMmM2Ym55SlNJbXU5?=
+ =?utf-8?B?czY2VWZhZGN5S0l0TFJWSU1heGs2blFDRndOQlRMZlEzZVFVWDQxejNHbEFP?=
+ =?utf-8?B?SC96bC90VVdqQm9NNGpoK3RaWkVtYmRmN1ZlL3d3OGJaNFh2VTdMZU1iTG5o?=
+ =?utf-8?B?VGRMZjRnczI1b241elplQkJrUTRUcEIvcTMvaDNjR3VzVjZZSGZGeHZNMElR?=
+ =?utf-8?B?Nm1VaW9qYXQyK2ZIN3RsVWRYWVV6djZzSkVFZzVHME1kQlJmTldkTFFSb2pz?=
+ =?utf-8?B?b2lMalpwODROdnFuMitVcVBCT2ZXdkFDZENQVjVKYUc2bHVWOEp2a2w0TkZl?=
+ =?utf-8?B?MEs5Qk1xdlBZZG9oTVdjVW94ZEl4d0VrUTFOWVJVWEJvRVJIK3ZYZmhmRWh5?=
+ =?utf-8?B?bXlteXdTVy9ERkE5TjJtTHlZOSs4MEJ2Sk1BWU1ZUjVNN3BYWGc5MzVYR08r?=
+ =?utf-8?B?L0JSSzhSajV4Zk94MFNVVWhKUVI4eFE1SWRTTE1JWjlNMmVQWER4bW8xYmU1?=
+ =?utf-8?B?SHlocGcxeVo3K2w3OEJiOXM4SlVGR3BpeXlKL0F2Nk92K0ROejU4VzhCWlB0?=
+ =?utf-8?B?Z2J1ZUI4TFZWcFB4K1pqRDNoMUxLTW5TVEdlS0E5dzhDRDA3d0d4N0ZEamV0?=
+ =?utf-8?B?RTVJaDliWE1rZWRXWnMzSjZhZFpDSGl2WlZEb3lSZ1dSdVgvNWUySElvWEdD?=
+ =?utf-8?B?SzBpcFdkMFk2UDV2NGJ6N21JQVl1ZDNNRm1sOGVIMkFhUlhpRjFFYTNRYTdI?=
+ =?utf-8?B?SWRZcnpBZ1NxQkQrWG5WRDM5QStOazlBOGdaWkt2TnhwTTg1ZTVGUTFCam54?=
+ =?utf-8?B?ZmFBODRJeGtNSW96TnFzZEpkbFZrWXBrVDV5Tk01bkdPU1FJVVJKZ0VkQkg4?=
+ =?utf-8?B?Z1E9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1cbf4556-78cd-487e-4223-08db36bedfea
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2023 16:49:23.2798
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: BBEfcJGkvT7PPI8CZjXv9AGmGqj2o3aZ0kq/hkR1OvzQkW4BFFRBewkb6aBF5BbX
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR15MB5355
+X-Proofpoint-ORIG-GUID: b_JVkY0a4uJVh5N_ps0djr6U2fbC9BtF
+X-Proofpoint-GUID: b_JVkY0a4uJVh5N_ps0djr6U2fbC9BtF
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-04-06_10,2023-04-06_03,2023-02-09_01
@@ -59,243 +139,69 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add various tests for code pattern '<non-const> NE/EQ <const>' implemente=
-d
-in the previous verifier patch. Without the verifier patch, these new
-tests will fail.
 
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../verifier_bounds_deduction_non_const.c     | 179 ++++++++++++++++++
- 2 files changed, 181 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_bounds_ded=
-uction_non_const.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
-sting/selftests/bpf/prog_tests/verifier.c
-index efc8cf2e18d0..73dff693d411 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -7,6 +7,7 @@
- #include "verifier_array_access.skel.h"
- #include "verifier_basic_stack.skel.h"
- #include "verifier_bounds_deduction.skel.h"
-+#include "verifier_bounds_deduction_non_const.skel.h"
- #include "verifier_bounds_mix_sign_unsign.skel.h"
- #include "verifier_cfg.skel.h"
- #include "verifier_cgroup_inv_retcode.skel.h"
-@@ -70,6 +71,7 @@ void test_verifier_and(void)                  { RUN(ver=
-ifier_and); }
- void test_verifier_array_access(void)         { RUN(verifier_array_acces=
-s); }
- void test_verifier_basic_stack(void)          { RUN(verifier_basic_stack=
-); }
- void test_verifier_bounds_deduction(void)     { RUN(verifier_bounds_dedu=
-ction); }
-+void test_verifier_bounds_deduction_non_const(void)     { RUN(verifier_b=
-ounds_deduction_non_const); }
- void test_verifier_bounds_mix_sign_unsign(void) { RUN(verifier_bounds_mi=
-x_sign_unsign); }
- void test_verifier_cfg(void)                  { RUN(verifier_cfg); }
- void test_verifier_cgroup_inv_retcode(void)   { RUN(verifier_cgroup_inv_=
-retcode); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds_deduction_=
-non_const.c b/tools/testing/selftests/bpf/progs/verifier_bounds_deduction=
-_non_const.c
-new file mode 100644
-index 000000000000..fe570d866139
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds_deduction_non_con=
-st.c
-@@ -0,0 +1,179 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+SEC("socket")
-+__description("check deducing bounds from non-const, jmp64, <non_const> =
-=3D=3D <const>, 1")
-+__success __retval(0)
-+__naked void deducing_bounds_from_non_const_1(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_ktime_get_ns];			\
-+	if r0 < 3 goto l0_%=3D;				\
-+	r2 =3D 2;						\
-+	if r0 =3D=3D r2 goto l1_%=3D;				\
-+l0_%=3D:							\
-+	r0 =3D 0;						\
-+	exit;						\
-+l1_%=3D:							\
-+	r0 -=3D r1;					\
-+	exit;						\
-+"	:
-+	: __imm(bpf_ktime_get_ns)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("check deducing bounds from non-const, jmp64, <non_const> =
-=3D=3D <const>, 2")
-+__success __retval(0)
-+__naked void deducing_bounds_from_non_const_2(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_ktime_get_ns];			\
-+	if r0 > 3 goto l0_%=3D;				\
-+	r2 =3D 4;						\
-+	if r0 =3D=3D r2 goto l1_%=3D;				\
-+l0_%=3D:							\
-+	r0 =3D 0;						\
-+	exit;						\
-+l1_%=3D:							\
-+	r0 -=3D r1;					\
-+	exit;						\
-+"	:
-+	: __imm(bpf_ktime_get_ns)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("check deducing bounds from non-const, jmp64, <non_const> =
-!=3D <const>, 1")
-+__success __retval(0)
-+__naked void deducing_bounds_from_non_const_3(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_ktime_get_ns];			\
-+	if r0 < 3 goto l0_%=3D;				\
-+	r2 =3D 2;						\
-+	if r0 !=3D r2 goto l0_%=3D;				\
-+	goto l1_%=3D;					\
-+l0_%=3D:							\
-+	r0 =3D 0;						\
-+	exit;						\
-+l1_%=3D:							\
-+	r0 -=3D r1;					\
-+	exit;						\
-+"	:
-+	: __imm(bpf_ktime_get_ns)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("check deducing bounds from non-const, jmp64, <non_const> =
-!=3D <const>, 2")
-+__success __retval(0)
-+__naked void deducing_bounds_from_non_const_4(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_ktime_get_ns];			\
-+	if r0 > 3 goto l0_%=3D;				\
-+	r2 =3D 4;						\
-+	if r0 !=3D r2 goto l0_%=3D;				\
-+	goto l1_%=3D;					\
-+l0_%=3D:							\
-+	r0 =3D 0;						\
-+	exit;						\
-+l1_%=3D:							\
-+	r0 -=3D r1;					\
-+	exit;						\
-+"	:
-+	: __imm(bpf_ktime_get_ns)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("check deducing bounds from non-const, jmp32, <non_const> =
-=3D=3D <const>, 1")
-+__success __retval(0)
-+__naked void deducing_bounds_from_non_const_5(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_ktime_get_ns];			\
-+	if w0 < 4 goto l0_%=3D;				\
-+	w2 =3D 3;						\
-+	if w0 =3D=3D w2 goto l1_%=3D;				\
-+l0_%=3D:							\
-+	r0 =3D 0;						\
-+	exit;						\
-+l1_%=3D:							\
-+	r0 -=3D r1;					\
-+	exit;						\
-+"	:
-+	: __imm(bpf_ktime_get_ns)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("check deducing bounds from non-const, jmp32, <non_const> =
-=3D=3D <const>, 2")
-+__success __retval(0)
-+__naked void deducing_bounds_from_non_const_6(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_ktime_get_ns];			\
-+	if w0 > 4 goto l0_%=3D;				\
-+	w2 =3D 5;						\
-+	if w0 =3D=3D w2 goto l1_%=3D;				\
-+l0_%=3D:							\
-+	r0 =3D 0;						\
-+	exit;						\
-+l1_%=3D:							\
-+	r0 -=3D r1;					\
-+	exit;						\
-+"	:
-+	: __imm(bpf_ktime_get_ns)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("check deducing bounds from non-const, jmp32, <non_const> =
-!=3D <const>, 1")
-+__success __retval(0)
-+__naked void deducing_bounds_from_non_const_7(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_ktime_get_ns];			\
-+	if w0 < 3 goto l0_%=3D;				\
-+	w2 =3D 2;						\
-+	if w0 !=3D w2 goto l0_%=3D;				\
-+	goto l1_%=3D;					\
-+l0_%=3D:							\
-+	r0 =3D 0;						\
-+	exit;						\
-+l1_%=3D:							\
-+	r0 -=3D r1;					\
-+	exit;						\
-+"	:
-+	: __imm(bpf_ktime_get_ns)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("check deducing bounds from non-const, jmp32, <non_const> =
-!=3D <const>, 2")
-+__success __retval(0)
-+__naked void deducing_bounds_from_non_const_8(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_ktime_get_ns];			\
-+	if w0 > 3 goto l0_%=3D;				\
-+	w2 =3D 4;						\
-+	if w0 !=3D w2 goto l0_%=3D;				\
-+	goto l1_%=3D;					\
-+l0_%=3D:							\
-+	r0 =3D 0;						\
-+	exit;						\
-+l1_%=3D:							\
-+	r0 -=3D r1;					\
-+	exit;						\
-+"	:
-+	: __imm(bpf_ktime_get_ns)
-+	: __clobber_all);
-+}
-+
-+char _license[] SEC("license") =3D "GPL";
---=20
-2.34.1
+On 4/4/23 2:46 PM, Andrii Nakryiko wrote:
+> On Wed, Mar 29, 2023 at 10:56 PM Yonghong Song <yhs@fb.com> wrote:
+>>
+>> LLVM commit [1] introduced hoistMinMax optimization like
+>>    (i < VIRTIO_MAX_SGS) && (i < out_sgs)
+>> to
+>>    upper = MIN(VIRTIO_MAX_SGS, out_sgs)
+>>    ... i < upper ...
+>> and caused the verification failure. Commit [2] workarounded the issue by
+>> adding some bpf assembly code to prohibit the above optimization.
+>> This patch improved verifier such that verification can succeed without
+>> the above workaround.
+>>
+>> Without [2], the current verifier will hit the following failures:
+>>    ...
+>>    119: (15) if r1 == 0x0 goto pc+1
+>>    The sequence of 8193 jumps is too complex.
+>>    verification time 525829 usec
+>>    stack depth 64
+>>    processed 156616 insns (limit 1000000) max_states_per_insn 8 total_states 1754 peak_states 1712 mark_read 12
+>>    -- END PROG LOAD LOG --
+>>    libbpf: prog 'trace_virtqueue_add_sgs': failed to load: -14
+>>    libbpf: failed to load object 'loop6.bpf.o'
+>>    ...
+>> The failure is due to verifier inadequately handling '<const> <cond_op> <non_const>' which will
+>> go through both pathes and generate the following verificaiton states:
+>>    ...
+>>    89: (07) r2 += 1                      ; R2_w=5
+>>    90: (79) r8 = *(u64 *)(r10 -48)       ; R8_w=scalar() R10=fp0
+>>    91: (79) r1 = *(u64 *)(r10 -56)       ; R1_w=scalar(umax=5,var_off=(0x0; 0x7)) R10=fp0
+>>    92: (ad) if r2 < r1 goto pc+41        ; R0_w=scalar() R1_w=scalar(umin=6,umax=5,var_off=(0x4; 0x3))
+> 
+> offtopic, but if this is a real output, then something is wrong with
+> scratching register logic for conditional, it should have emitted
+> states of R1 and R2, maybe you can take a look while working on this
+> patch set?
 
+Yes, this is the real output. Yes, the above R1_w should be an 
+impossible state. This is what this patch tries to fix.
+I am not what verifier should do if this state indeed happens,
+return an -EFAULT or something?
+
+> 
+>>        R2_w=5 R6_w=scalar(id=385) R7_w=0 R8_w=scalar() R9_w=scalar(umax=21474836475,var_off=(0x0; 0x7ffffffff))
+>>        R10=fp0 fp-8=mmmmmmmm fp-16=mmmmmmmm fp-24=mmmm???? fp-32= fp-40_w=4 fp-48=mmmmmmmm fp-56= fp-64=mmmmmmmm
+>>    ...
+>>    89: (07) r2 += 1                      ; R2_w=6
+>>    90: (79) r8 = *(u64 *)(r10 -48)       ; R8_w=scalar() R10=fp0
+>>    91: (79) r1 = *(u64 *)(r10 -56)       ; R1_w=scalar(umax=5,var_off=(0x0; 0x7)) R10=fp0
+>>    92: (ad) if r2 < r1 goto pc+41        ; R0_w=scalar() R1_w=scalar(umin=7,umax=5,var_off=(0x4; 0x3))
+>>        R2_w=6 R6=scalar(id=388) R7=0 R8_w=scalar() R9_w=scalar(umax=25769803770,var_off=(0x0; 0x7ffffffff))
+>>        R10=fp0 fp-8=mmmmmmmm fp-16=mmmmmmmm fp-24=mmmm???? fp-32= fp-40=5 fp-48=mmmmmmmm fp-56= fp-64=mmmmmmmm
+>>      ...
+>>    89: (07) r2 += 1                      ; R2_w=4088
+>>    90: (79) r8 = *(u64 *)(r10 -48)       ; R8_w=scalar() R10=fp0
+>>    91: (79) r1 = *(u64 *)(r10 -56)       ; R1_w=scalar(umax=5,var_off=(0x0; 0x7)) R10=fp0
+>>    92: (ad) if r2 < r1 goto pc+41        ; R0=scalar() R1=scalar(umin=4089,umax=5,var_off=(0x0; 0x7))
+>>        R2=4088 R6=scalar(id=12634) R7=0 R8=scalar() R9=scalar(umax=17557826301960,var_off=(0x0; 0xfffffffffff))
+>>        R10=fp0 fp-8=mmmmmmmm fp-16=mmmmmmmm fp-24=mmmm???? fp-32= fp-40=4087 fp-48=mmmmmmmm fp-56= fp-64=mmmmmmmm
+>>
+>> Patch 3 fixed the above issue by handling '<const> <cond_op> <non_const>' properly.
+>> During developing selftests for Patch 3, I found some issues with bound deduction with
+>> BPF_EQ/BPF_NE and fixed the issue in Patch 1.
+[...]
