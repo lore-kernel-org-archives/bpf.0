@@ -2,39 +2,39 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCBD8C77B6C
-	for <bpf@archiver.kernel.org>; Thu,  6 Apr 2023 23:43:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA0C6C77B70
+	for <bpf@archiver.kernel.org>; Thu,  6 Apr 2023 23:43:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232725AbjDFXnX convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 6 Apr 2023 19:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44704 "EHLO
+        id S230165AbjDFXnY convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 6 Apr 2023 19:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232254AbjDFXmd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 6 Apr 2023 19:42:33 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E9F9740
-        for <bpf@vger.kernel.org>; Thu,  6 Apr 2023 16:42:32 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 336N5ANo032444
-        for <bpf@vger.kernel.org>; Thu, 6 Apr 2023 16:42:31 -0700
+        with ESMTP id S238567AbjDFXms (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 6 Apr 2023 19:42:48 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23851AD39
+        for <bpf@vger.kernel.org>; Thu,  6 Apr 2023 16:42:36 -0700 (PDT)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 336MW9IL013462
+        for <bpf@vger.kernel.org>; Thu, 6 Apr 2023 16:42:35 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3pt7e6g5er-3
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3pt6y20aax-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 06 Apr 2023 16:42:31 -0700
-Received: from twshared38955.16.prn3.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 06 Apr 2023 16:42:35 -0700
+Received: from twshared58712.02.prn6.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 6 Apr 2023 16:42:30 -0700
+ 15.1.2507.17; Thu, 6 Apr 2023 16:42:32 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 58C742D5BE2A6; Thu,  6 Apr 2023 16:42:17 -0700 (PDT)
+        id 966722D5BE38F; Thu,  6 Apr 2023 16:42:25 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>, <lmb@isovalent.com>, <timo@incline.eu>,
         <robin.goegge@isovalent.com>
 CC:     <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH v4 bpf-next 05/19] veristat: add more veristat control over verifier log options
-Date:   Thu, 6 Apr 2023 16:41:51 -0700
-Message-ID: <20230406234205.323208-6-andrii@kernel.org>
+Subject: [PATCH v4 bpf-next 09/19] bpf: avoid incorrect -EFAULT error in BPF_LOG_KERNEL mode
+Date:   Thu, 6 Apr 2023 16:41:55 -0700
+Message-ID: <20230406234205.323208-10-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230406234205.323208-1-andrii@kernel.org>
 References: <20230406234205.323208-1-andrii@kernel.org>
@@ -42,8 +42,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: MHBSCStpLnnIOYrfzRFWAJKeufW0voRu
-X-Proofpoint-GUID: MHBSCStpLnnIOYrfzRFWAJKeufW0voRu
+X-Proofpoint-ORIG-GUID: oOYgh1aknxCN4jMLJNu5YIWUboQtD9Pa
+X-Proofpoint-GUID: oOYgh1aknxCN4jMLJNu5YIWUboQtD9Pa
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-04-06_13,2023-04-06_03,2023-02-09_01
@@ -51,119 +51,29 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add --log-size to be able to customize log buffer sent to bpf() syscall
-for BPF program verification logging.
+If verifier log is in BPF_LOG_KERNEL mode, no log->ubuf is expected and
+it stays NULL throughout entire verification process. Don't erroneously
+return -EFAULT in such case.
 
-Add --log-fixed to enforce BPF_LOG_FIXED behavior for BPF verifier log.
-This is useful in unlikely event that beginning of truncated verifier
-log is more important than the end of it (which with rotating verifier
-log behavior is the default now).
-
+Acked-by: Lorenz Bauer <lmb@isovalent.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/testing/selftests/bpf/veristat.c | 44 ++++++++++++++++++++------
- 1 file changed, 35 insertions(+), 9 deletions(-)
+ kernel/bpf/verifier.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
-index 53d7ec168268..af6d7a555dbd 100644
---- a/tools/testing/selftests/bpf/veristat.c
-+++ b/tools/testing/selftests/bpf/veristat.c
-@@ -141,12 +141,15 @@ static struct env {
- 	bool verbose;
- 	bool debug;
- 	bool quiet;
--	int log_level;
- 	enum resfmt out_fmt;
- 	bool show_version;
- 	bool comparison_mode;
- 	bool replay_mode;
- 
-+	int log_level;
-+	int log_size;
-+	bool log_fixed;
-+
- 	struct verif_stats *prog_stats;
- 	int prog_stat_cnt;
- 
-@@ -193,12 +196,19 @@ const char argp_program_doc[] =
- "   OR: veristat -C <baseline.csv> <comparison.csv>\n"
- "   OR: veristat -R <results.csv>\n";
- 
-+enum {
-+	OPT_LOG_FIXED = 1000,
-+	OPT_LOG_SIZE = 1001,
-+};
-+
- static const struct argp_option opts[] = {
- 	{ NULL, 'h', NULL, OPTION_HIDDEN, "Show the full help" },
- 	{ "version", 'V', NULL, 0, "Print version" },
- 	{ "verbose", 'v', NULL, 0, "Verbose mode" },
--	{ "log-level", 'l', "LEVEL", 0, "Verifier log level (default 0 for normal mode, 1 for verbose mode)" },
- 	{ "debug", 'd', NULL, 0, "Debug mode (turns on libbpf debug logging)" },
-+	{ "log-level", 'l', "LEVEL", 0, "Verifier log level (default 0 for normal mode, 1 for verbose mode)" },
-+	{ "log-fixed", OPT_LOG_FIXED, NULL, 0, "Disable verifier log rotation" },
-+	{ "log-size", OPT_LOG_SIZE, "BYTES", 0, "Customize verifier log size (default to 16MB)" },
- 	{ "quiet", 'q', NULL, 0, "Quiet mode" },
- 	{ "emit", 'e', "SPEC", 0, "Specify stats to be emitted" },
- 	{ "sort", 's', "SPEC", 0, "Specify sort order" },
-@@ -263,6 +273,17 @@ static error_t parse_arg(int key, char *arg, struct argp_state *state)
- 			argp_usage(state);
- 		}
- 		break;
-+	case OPT_LOG_FIXED:
-+		env.log_fixed = true;
-+		break;
-+	case OPT_LOG_SIZE:
-+		errno = 0;
-+		env.log_size = strtol(arg, NULL, 10);
-+		if (errno) {
-+			fprintf(stderr, "invalid log size: %s\n", arg);
-+			argp_usage(state);
-+		}
-+		break;
- 	case 'C':
- 		env.comparison_mode = true;
- 		break;
-@@ -929,8 +950,8 @@ static int process_prog(const char *filename, struct bpf_object *obj, struct bpf
- {
- 	const char *prog_name = bpf_program__name(prog);
- 	const char *base_filename = basename(filename);
--	size_t buf_sz = sizeof(verif_log_buf);
--	char *buf = verif_log_buf;
-+	char *buf;
-+	int buf_sz, log_level;
- 	struct verif_stats *stats;
- 	int err = 0;
- 	void *tmp;
-@@ -948,18 +969,23 @@ static int process_prog(const char *filename, struct bpf_object *obj, struct bpf
- 	memset(stats, 0, sizeof(*stats));
- 
- 	if (env.verbose) {
--		buf_sz = 16 * 1024 * 1024;
-+		buf_sz = env.log_size ? env.log_size : 16 * 1024 * 1024;
- 		buf = malloc(buf_sz);
- 		if (!buf)
- 			return -ENOMEM;
--		bpf_program__set_log_buf(prog, buf, buf_sz);
--		bpf_program__set_log_level(prog, env.log_level | 4); /* stats + log */
-+		/* ensure we always request stats */
-+		log_level = env.log_level | 4 | (env.log_fixed ? 8 : 0);
- 	} else {
--		bpf_program__set_log_buf(prog, buf, buf_sz);
--		bpf_program__set_log_level(prog, 4); /* only verifier stats */
-+		buf = verif_log_buf;
-+		buf_sz = sizeof(verif_log_buf);
-+		/* request only verifier stats */
-+		log_level = 4 | (env.log_fixed ? 8 : 0);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 1ff5f6e2a9ee..52fb5216f44c 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -18843,7 +18843,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr)
+ 	bpf_vlog_finalize(log);
+ 	if (log->level && bpf_vlog_truncated(log))
+ 		ret = -ENOSPC;
+-	if (log->level && !log->ubuf) {
++	if (log->level && log->level != BPF_LOG_KERNEL && !log->ubuf) {
+ 		ret = -EFAULT;
+ 		goto err_release_maps;
  	}
- 	verif_log_buf[0] = '\0';
- 
-+	bpf_program__set_log_buf(prog, buf, buf_sz);
-+	bpf_program__set_log_level(prog, log_level);
-+
- 	/* increase chances of successful BPF object loading */
- 	fixup_obj(obj, prog, base_filename);
- 
 -- 
 2.34.1
 
