@@ -2,214 +2,317 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40726C77B71
-	for <bpf@archiver.kernel.org>; Thu,  6 Apr 2023 04:51:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33A1BC76196
+	for <bpf@archiver.kernel.org>; Thu,  6 Apr 2023 05:11:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234523AbjDFEvt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 6 Apr 2023 00:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
+        id S233235AbjDFFLm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 6 Apr 2023 01:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjDFEvp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 6 Apr 2023 00:51:45 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25846EB8;
-        Wed,  5 Apr 2023 21:51:44 -0700 (PDT)
+        with ESMTP id S233007AbjDFFLm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 6 Apr 2023 01:11:42 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562FB9027
+        for <bpf@vger.kernel.org>; Wed,  5 Apr 2023 22:11:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680756704; x=1712292704;
+  t=1680757900; x=1712293900;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=WAk4a5YPZyL+Po9HZxq/HOFKVLqFQTC42kxDfeTqoiU=;
-  b=n76neJJe6U/RmbTU05lw9u9MbjUFzZBr3NGFCp/6zvPYF5/FoDCm2lqQ
-   UR7azFBPIU0p2KCG2q9a4FSWwr38lLF489LADeg5p961/M+MMLEF3cEzp
-   PcEJqbwFgda/UO8YhQa+jwSpXTYW91+WY7hQjGRp9pyb+/X1Yi546Ocy0
-   6+RWCae1FEJM7uJeTnRhhcBpcrOwcUcVXAB8ZuARbUftbP/sSh/FYKFnv
-   CUXB2neTOlC2g0eZmtD3LxH5FMnz1kxG4vzGt2NY2KHHk4YuSnLtxno/M
-   3/inh0mfrtKhVSYrk+16zxCbosza7yJ9qGVLFaAmbd7BlYK9llmdHiJeK
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="405421823"
+  bh=cbi484CH46X2BoZOa9u1XsFz307+3y9rdcfUUTEJFek=;
+  b=a9n+zShIOYj8whxRAdFQ5imeUEl1Z8X9+Wz3284V6m+QKGqi61gCTwi1
+   V2T+MvqP18+ql4biDaercPcTEhjaLxeA0f8q4UnASg/pVZ5Igkibqxnhx
+   K+/sg/is/FXkgRagFpUBcYQ3xEOq73ASJYXqba8Xx2At1tAMxVkKANl9t
+   7+LBOWgMBMIwaHAaNT73G8EgcSDCtTxZpQLtvxGMIaQHgXNv6jnNa77c0
+   dXH3Rm/DJJljs+pb1R7f5PS7mgzbqEkfkpUN3CEuMOJV1EJPnKpmlseem
+   vTZuAEnjoACAMdUTXDV2OJoqxQ5kEQuJTH8AjNicTO1eeV4Ja8qqQvXR4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="407734339"
 X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
-   d="scan'208";a="405421823"
+   d="scan'208";a="407734339"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 21:51:44 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 22:11:39 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="680521713"
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="680525262"
 X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
-   d="scan'208";a="680521713"
+   d="scan'208";a="680525262"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 05 Apr 2023 21:51:42 -0700
+  by orsmga007.jf.intel.com with ESMTP; 05 Apr 2023 22:11:38 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pkHay-000R3G-2K;
-        Thu, 06 Apr 2023 04:51:36 +0000
-Date:   Thu, 6 Apr 2023 12:50:53 +0800
+        id 1pkHuL-000R4u-1l;
+        Thu, 06 Apr 2023 05:11:37 +0000
+Date:   Thu, 6 Apr 2023 13:11:28 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, netfilter-devel@vger.kernel.org,
-        bpf@vger.kernel.org, dxu@dxuuu.xyz, qde@naccy.de,
-        Florian Westphal <fw@strlen.de>
-Subject: Re: [PATCH bpf-next 1/6] bpf: add bpf_link support for BPF_NETFILTER
- programs
-Message-ID: <202304061228.XRcVvxoL-lkp@intel.com>
-References: <20230405161116.13565-2-fw@strlen.de>
+To:     zhongjun@uniontech.com, bpf@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        zhongjun <zhongjun@uniontech.com>
+Subject: Re: [PATCH] BPF: make verifier 'misconfigured' errors more meaningful
+Message-ID: <202304061209.cT4cNzgn-lkp@intel.com>
+References: <20230406014351.8984-1-zhongjun@uniontech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230405161116.13565-2-fw@strlen.de>
+In-Reply-To: <20230406014351.8984-1-zhongjun@uniontech.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Florian,
+Hi,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on bpf-next/master]
+[auto build test WARNING on 738a96c4a8c36950803fdd27e7c30aca92dccefd]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Florian-Westphal/bpf-add-bpf_link-support-for-BPF_NETFILTER-programs/20230406-001447
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20230405161116.13565-2-fw%40strlen.de
-patch subject: [PATCH bpf-next 1/6] bpf: add bpf_link support for BPF_NETFILTER programs
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20230406/202304061228.XRcVvxoL-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+url:    https://github.com/intel-lab-lkp/linux/commits/zhongjun-uniontech-com/BPF-make-verifier-misconfigured-errors-more-meaningful/20230406-094605
+base:   738a96c4a8c36950803fdd27e7c30aca92dccefd
+patch link:    https://lore.kernel.org/r/20230406014351.8984-1-zhongjun%40uniontech.com
+patch subject: [PATCH] BPF: make verifier 'misconfigured' errors more meaningful
+config: arm-randconfig-r021-20230403 (https://download.01.org/0day-ci/archive/20230406/202304061209.cT4cNzgn-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/f373efb623e6ff708403b172fafb506028de6cb8
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/e5263a5893bdd6f559e1dbc9e585339a933c7351
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Florian-Westphal/bpf-add-bpf_link-support-for-BPF_NETFILTER-programs/20230406-001447
-        git checkout f373efb623e6ff708403b172fafb506028de6cb8
+        git fetch --no-tags linux-review zhongjun-uniontech-com/BPF-make-verifier-misconfigured-errors-more-meaningful/20230406-094605
+        git checkout e5263a5893bdd6f559e1dbc9e585339a933c7351
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash kernel/bpf/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304061228.XRcVvxoL-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304061209.cT4cNzgn-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   ld: vmlinux.o: in function `link_create':
->> kernel/bpf/syscall.c:4671: undefined reference to `bpf_nf_link_attach'
+>> kernel/bpf/verifier.c:15826:11: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
+                                           cnt, ARRAY_SIZE(insn_buf));
+                                                ^~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:55:25: note: expanded from macro 'ARRAY_SIZE'
+   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/bpf/verifier.c:16408:12: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
+                                                   cnt, ARRAY_SIZE(insn_buf));
+                                                        ^~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:55:25: note: expanded from macro 'ARRAY_SIZE'
+   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/bpf/verifier.c:16656:13: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
+                                                           cnt, ARRAY_SIZE(insn_buf));
+                                                                ^~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:55:25: note: expanded from macro 'ARRAY_SIZE'
+   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   3 warnings generated.
 
 
-vim +4671 kernel/bpf/syscall.c
+vim +15826 kernel/bpf/verifier.c
 
-  4578	
-  4579	#define BPF_LINK_CREATE_LAST_FIELD link_create.kprobe_multi.cookies
-  4580	static int link_create(union bpf_attr *attr, bpfptr_t uattr)
-  4581	{
-  4582		enum bpf_prog_type ptype;
-  4583		struct bpf_prog *prog;
-  4584		int ret;
-  4585	
-  4586		if (CHECK_ATTR(BPF_LINK_CREATE))
-  4587			return -EINVAL;
-  4588	
-  4589		if (attr->link_create.attach_type == BPF_STRUCT_OPS)
-  4590			return bpf_struct_ops_link_create(attr);
-  4591	
-  4592		prog = bpf_prog_get(attr->link_create.prog_fd);
-  4593		if (IS_ERR(prog))
-  4594			return PTR_ERR(prog);
-  4595	
-  4596		ret = bpf_prog_attach_check_attach_type(prog,
-  4597							attr->link_create.attach_type);
-  4598		if (ret)
-  4599			goto out;
-  4600	
-  4601		switch (prog->type) {
-  4602		case BPF_PROG_TYPE_EXT:
-  4603		case BPF_PROG_TYPE_NETFILTER:
-  4604			break;
-  4605		case BPF_PROG_TYPE_PERF_EVENT:
-  4606		case BPF_PROG_TYPE_TRACEPOINT:
-  4607			if (attr->link_create.attach_type != BPF_PERF_EVENT) {
-  4608				ret = -EINVAL;
-  4609				goto out;
-  4610			}
-  4611			break;
-  4612		case BPF_PROG_TYPE_KPROBE:
-  4613			if (attr->link_create.attach_type != BPF_PERF_EVENT &&
-  4614			    attr->link_create.attach_type != BPF_TRACE_KPROBE_MULTI) {
-  4615				ret = -EINVAL;
-  4616				goto out;
-  4617			}
-  4618			break;
-  4619		default:
-  4620			ptype = attach_type_to_prog_type(attr->link_create.attach_type);
-  4621			if (ptype == BPF_PROG_TYPE_UNSPEC || ptype != prog->type) {
-  4622				ret = -EINVAL;
-  4623				goto out;
-  4624			}
-  4625			break;
-  4626		}
-  4627	
-  4628		switch (prog->type) {
-  4629		case BPF_PROG_TYPE_CGROUP_SKB:
-  4630		case BPF_PROG_TYPE_CGROUP_SOCK:
-  4631		case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
-  4632		case BPF_PROG_TYPE_SOCK_OPS:
-  4633		case BPF_PROG_TYPE_CGROUP_DEVICE:
-  4634		case BPF_PROG_TYPE_CGROUP_SYSCTL:
-  4635		case BPF_PROG_TYPE_CGROUP_SOCKOPT:
-  4636			ret = cgroup_bpf_link_attach(attr, prog);
-  4637			break;
-  4638		case BPF_PROG_TYPE_EXT:
-  4639			ret = bpf_tracing_prog_attach(prog,
-  4640						      attr->link_create.target_fd,
-  4641						      attr->link_create.target_btf_id,
-  4642						      attr->link_create.tracing.cookie);
-  4643			break;
-  4644		case BPF_PROG_TYPE_LSM:
-  4645		case BPF_PROG_TYPE_TRACING:
-  4646			if (attr->link_create.attach_type != prog->expected_attach_type) {
-  4647				ret = -EINVAL;
-  4648				goto out;
-  4649			}
-  4650			if (prog->expected_attach_type == BPF_TRACE_RAW_TP)
-  4651				ret = bpf_raw_tp_link_attach(prog, NULL);
-  4652			else if (prog->expected_attach_type == BPF_TRACE_ITER)
-  4653				ret = bpf_iter_link_attach(attr, uattr, prog);
-  4654			else if (prog->expected_attach_type == BPF_LSM_CGROUP)
-  4655				ret = cgroup_bpf_link_attach(attr, prog);
-  4656			else
-  4657				ret = bpf_tracing_prog_attach(prog,
-  4658							      attr->link_create.target_fd,
-  4659							      attr->link_create.target_btf_id,
-  4660							      attr->link_create.tracing.cookie);
-  4661			break;
-  4662		case BPF_PROG_TYPE_FLOW_DISSECTOR:
-  4663		case BPF_PROG_TYPE_SK_LOOKUP:
-  4664			ret = netns_bpf_link_create(attr, prog);
-  4665			break;
-  4666	#ifdef CONFIG_NET
-  4667		case BPF_PROG_TYPE_XDP:
-  4668			ret = bpf_xdp_link_attach(attr, prog);
-  4669			break;
-  4670		case BPF_PROG_TYPE_NETFILTER:
-> 4671			ret = bpf_nf_link_attach(attr, prog);
-  4672			break;
-  4673	#endif
-  4674		case BPF_PROG_TYPE_PERF_EVENT:
-  4675		case BPF_PROG_TYPE_TRACEPOINT:
-  4676			ret = bpf_perf_link_attach(attr, prog);
-  4677			break;
-  4678		case BPF_PROG_TYPE_KPROBE:
-  4679			if (attr->link_create.attach_type == BPF_PERF_EVENT)
-  4680				ret = bpf_perf_link_attach(attr, prog);
-  4681			else
-  4682				ret = bpf_kprobe_multi_link_attach(attr, prog);
-  4683			break;
-  4684		default:
-  4685			ret = -EINVAL;
-  4686		}
-  4687	
-  4688	out:
-  4689		if (ret < 0)
-  4690			bpf_prog_put(prog);
-  4691		return ret;
-  4692	}
-  4693	
+ 15800	
+ 15801	/* convert load instructions that access fields of a context type into a
+ 15802	 * sequence of instructions that access fields of the underlying structure:
+ 15803	 *     struct __sk_buff    -> struct sk_buff
+ 15804	 *     struct bpf_sock_ops -> struct sock
+ 15805	 */
+ 15806	static int convert_ctx_accesses(struct bpf_verifier_env *env)
+ 15807	{
+ 15808		const struct bpf_verifier_ops *ops = env->ops;
+ 15809		int i, cnt, size, ctx_field_size, delta = 0;
+ 15810		const int insn_cnt = env->prog->len;
+ 15811		struct bpf_insn insn_buf[16], *insn;
+ 15812		u32 target_size, size_default, off;
+ 15813		struct bpf_prog *new_prog;
+ 15814		enum bpf_access_type type;
+ 15815		bool is_narrower_load;
+ 15816	
+ 15817		if (ops->gen_prologue || env->seen_direct_write) {
+ 15818			if (!ops->gen_prologue) {
+ 15819				verbose(env, "bpf verifier is misconfigured: gen_prologue is NULL\n");
+ 15820				return -EINVAL;
+ 15821			}
+ 15822			cnt = ops->gen_prologue(insn_buf, env->seen_direct_write,
+ 15823						env->prog);
+ 15824			if (cnt >= ARRAY_SIZE(insn_buf)) {
+ 15825				verbose(env, "bpf verifier is misconfigured: cnt=%d exceeds limit@%lu\n",
+ 15826						cnt, ARRAY_SIZE(insn_buf));
+ 15827				return -EINVAL;
+ 15828			} else if (cnt) {
+ 15829				new_prog = bpf_patch_insn_data(env, 0, insn_buf, cnt);
+ 15830				if (!new_prog)
+ 15831					return -ENOMEM;
+ 15832	
+ 15833				env->prog = new_prog;
+ 15834				delta += cnt - 1;
+ 15835			}
+ 15836		}
+ 15837	
+ 15838		if (bpf_prog_is_offloaded(env->prog->aux))
+ 15839			return 0;
+ 15840	
+ 15841		insn = env->prog->insnsi + delta;
+ 15842	
+ 15843		for (i = 0; i < insn_cnt; i++, insn++) {
+ 15844			bpf_convert_ctx_access_t convert_ctx_access;
+ 15845			bool ctx_access;
+ 15846	
+ 15847			if (insn->code == (BPF_LDX | BPF_MEM | BPF_B) ||
+ 15848			    insn->code == (BPF_LDX | BPF_MEM | BPF_H) ||
+ 15849			    insn->code == (BPF_LDX | BPF_MEM | BPF_W) ||
+ 15850			    insn->code == (BPF_LDX | BPF_MEM | BPF_DW)) {
+ 15851				type = BPF_READ;
+ 15852				ctx_access = true;
+ 15853			} else if (insn->code == (BPF_STX | BPF_MEM | BPF_B) ||
+ 15854				   insn->code == (BPF_STX | BPF_MEM | BPF_H) ||
+ 15855				   insn->code == (BPF_STX | BPF_MEM | BPF_W) ||
+ 15856				   insn->code == (BPF_STX | BPF_MEM | BPF_DW) ||
+ 15857				   insn->code == (BPF_ST | BPF_MEM | BPF_B) ||
+ 15858				   insn->code == (BPF_ST | BPF_MEM | BPF_H) ||
+ 15859				   insn->code == (BPF_ST | BPF_MEM | BPF_W) ||
+ 15860				   insn->code == (BPF_ST | BPF_MEM | BPF_DW)) {
+ 15861				type = BPF_WRITE;
+ 15862				ctx_access = BPF_CLASS(insn->code) == BPF_STX;
+ 15863			} else {
+ 15864				continue;
+ 15865			}
+ 15866	
+ 15867			if (type == BPF_WRITE &&
+ 15868			    env->insn_aux_data[i + delta].sanitize_stack_spill) {
+ 15869				struct bpf_insn patch[] = {
+ 15870					*insn,
+ 15871					BPF_ST_NOSPEC(),
+ 15872				};
+ 15873	
+ 15874				cnt = ARRAY_SIZE(patch);
+ 15875				new_prog = bpf_patch_insn_data(env, i + delta, patch, cnt);
+ 15876				if (!new_prog)
+ 15877					return -ENOMEM;
+ 15878	
+ 15879				delta    += cnt - 1;
+ 15880				env->prog = new_prog;
+ 15881				insn      = new_prog->insnsi + i + delta;
+ 15882				continue;
+ 15883			}
+ 15884	
+ 15885			if (!ctx_access)
+ 15886				continue;
+ 15887	
+ 15888			switch ((int)env->insn_aux_data[i + delta].ptr_type) {
+ 15889			case PTR_TO_CTX:
+ 15890				if (!ops->convert_ctx_access)
+ 15891					continue;
+ 15892				convert_ctx_access = ops->convert_ctx_access;
+ 15893				break;
+ 15894			case PTR_TO_SOCKET:
+ 15895			case PTR_TO_SOCK_COMMON:
+ 15896				convert_ctx_access = bpf_sock_convert_ctx_access;
+ 15897				break;
+ 15898			case PTR_TO_TCP_SOCK:
+ 15899				convert_ctx_access = bpf_tcp_sock_convert_ctx_access;
+ 15900				break;
+ 15901			case PTR_TO_XDP_SOCK:
+ 15902				convert_ctx_access = bpf_xdp_sock_convert_ctx_access;
+ 15903				break;
+ 15904			case PTR_TO_BTF_ID:
+ 15905			case PTR_TO_BTF_ID | PTR_UNTRUSTED:
+ 15906			/* PTR_TO_BTF_ID | MEM_ALLOC always has a valid lifetime, unlike
+ 15907			 * PTR_TO_BTF_ID, and an active ref_obj_id, but the same cannot
+ 15908			 * be said once it is marked PTR_UNTRUSTED, hence we must handle
+ 15909			 * any faults for loads into such types. BPF_WRITE is disallowed
+ 15910			 * for this case.
+ 15911			 */
+ 15912			case PTR_TO_BTF_ID | MEM_ALLOC | PTR_UNTRUSTED:
+ 15913				if (type == BPF_READ) {
+ 15914					insn->code = BPF_LDX | BPF_PROBE_MEM |
+ 15915						BPF_SIZE((insn)->code);
+ 15916					env->prog->aux->num_exentries++;
+ 15917				}
+ 15918				continue;
+ 15919			default:
+ 15920				continue;
+ 15921			}
+ 15922	
+ 15923			ctx_field_size = env->insn_aux_data[i + delta].ctx_field_size;
+ 15924			size = BPF_LDST_BYTES(insn);
+ 15925	
+ 15926			/* If the read access is a narrower load of the field,
+ 15927			 * convert to a 4/8-byte load, to minimum program type specific
+ 15928			 * convert_ctx_access changes. If conversion is successful,
+ 15929			 * we will apply proper mask to the result.
+ 15930			 */
+ 15931			is_narrower_load = size < ctx_field_size;
+ 15932			size_default = bpf_ctx_off_adjust_machine(ctx_field_size);
+ 15933			off = insn->off;
+ 15934			if (is_narrower_load) {
+ 15935				u8 size_code;
+ 15936	
+ 15937				if (type == BPF_WRITE) {
+ 15938					verbose(env, "bpf verifier narrow ctx access misconfigured\n");
+ 15939					return -EINVAL;
+ 15940				}
+ 15941	
+ 15942				size_code = BPF_H;
+ 15943				if (ctx_field_size == 4)
+ 15944					size_code = BPF_W;
+ 15945				else if (ctx_field_size == 8)
+ 15946					size_code = BPF_DW;
+ 15947	
+ 15948				insn->off = off & ~(size_default - 1);
+ 15949				insn->code = BPF_LDX | BPF_MEM | size_code;
+ 15950			}
+ 15951	
+ 15952			target_size = 0;
+ 15953			cnt = convert_ctx_access(type, insn, insn_buf, env->prog,
+ 15954						 &target_size);
+ 15955			if (cnt == 0 || cnt >= ARRAY_SIZE(insn_buf) ||
+ 15956			    (ctx_field_size && !target_size)) {
+ 15957				verbose(env, "bpf verifier is misconfigured: ins[%d] cnt=%d ctx_s=%u tg_s=%u\n",
+ 15958						i, cnt, ctx_field_size, target_size);
+ 15959				return -EINVAL;
+ 15960			}
+ 15961	
+ 15962			if (is_narrower_load && size < target_size) {
+ 15963				u8 shift = bpf_ctx_narrow_access_offset(
+ 15964					off, size, size_default) * 8;
+ 15965				if (shift && cnt + 1 >= ARRAY_SIZE(insn_buf)) {
+ 15966					verbose(env, "bpf verifier narrow ctx load misconfigured\n");
+ 15967					return -EINVAL;
+ 15968				}
+ 15969				if (ctx_field_size <= 4) {
+ 15970					if (shift)
+ 15971						insn_buf[cnt++] = BPF_ALU32_IMM(BPF_RSH,
+ 15972										insn->dst_reg,
+ 15973										shift);
+ 15974					insn_buf[cnt++] = BPF_ALU32_IMM(BPF_AND, insn->dst_reg,
+ 15975									(1 << size * 8) - 1);
+ 15976				} else {
+ 15977					if (shift)
+ 15978						insn_buf[cnt++] = BPF_ALU64_IMM(BPF_RSH,
+ 15979										insn->dst_reg,
+ 15980										shift);
+ 15981					insn_buf[cnt++] = BPF_ALU64_IMM(BPF_AND, insn->dst_reg,
+ 15982									(1ULL << size * 8) - 1);
+ 15983				}
+ 15984			}
+ 15985	
+ 15986			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+ 15987			if (!new_prog)
+ 15988				return -ENOMEM;
+ 15989	
+ 15990			delta += cnt - 1;
+ 15991	
+ 15992			/* keep walking new program and skip insns we just inserted */
+ 15993			env->prog = new_prog;
+ 15994			insn      = new_prog->insnsi + i + delta;
+ 15995		}
+ 15996	
+ 15997		return 0;
+ 15998	}
+ 15999	
 
 -- 
 0-DAY CI Kernel Test Service
