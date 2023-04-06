@@ -2,270 +2,189 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45264C77B6C
-	for <bpf@archiver.kernel.org>; Thu,  6 Apr 2023 23:46:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D474C77B6C
+	for <bpf@archiver.kernel.org>; Thu,  6 Apr 2023 23:54:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbjDFXqC convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 6 Apr 2023 19:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49042 "EHLO
+        id S230341AbjDFXyM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 6 Apr 2023 19:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237374AbjDFXpx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 6 Apr 2023 19:45:53 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2314D9C
-        for <bpf@vger.kernel.org>; Thu,  6 Apr 2023 16:45:52 -0700 (PDT)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 336MW9Id013462
-        for <bpf@vger.kernel.org>; Thu, 6 Apr 2023 16:45:51 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3pt6y20apa-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 06 Apr 2023 16:45:51 -0700
-Received: from twshared58712.02.prn6.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 6 Apr 2023 16:45:49 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 1E0312D5BE617; Thu,  6 Apr 2023 16:42:48 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@kernel.org>, <lmb@isovalent.com>, <timo@incline.eu>,
-        <robin.goegge@isovalent.com>
-CC:     <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH v4 bpf-next 19/19] selftests/bpf: add verifier log tests for BPF_BTF_LOAD command
-Date:   Thu, 6 Apr 2023 16:42:05 -0700
-Message-ID: <20230406234205.323208-20-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230406234205.323208-1-andrii@kernel.org>
-References: <20230406234205.323208-1-andrii@kernel.org>
+        with ESMTP id S231867AbjDFXyI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 6 Apr 2023 19:54:08 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2806A9748
+        for <bpf@vger.kernel.org>; Thu,  6 Apr 2023 16:54:07 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id e18so41004481wra.9
+        for <bpf@vger.kernel.org>; Thu, 06 Apr 2023 16:54:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680825245;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OpgIrgXDKr7mYg657t1IZTUwOa1v/O9NHLLvRs1T5EE=;
+        b=XGw0NFEjCUWYQ8Pl3k09rGtpOhBQ1j9EYPBoDuH/ey4Uv4mABaPLARUOLV57QEfOyC
+         hmcf/+/xa1/olflr0nFEn0YgxzwQv28Eft+fNmkv+y8xRsXrfcvxJxRH1tQj84eQpF/n
+         OctUWf/ECKAln/KX/AyC1KdIDU4goZOpYD+5TMkhUhG5hlRZ9YGR+PouPV0CallTs8wT
+         UnCAUKD9zhzO/ByAPCC/53DVfUPtjD7mYX0ZDCvyY3y6CerCGNtEx8d56Yv/u7JUbwIb
+         LWIAbnFrsu2finCvgv4RWKgSx4GK09sODz0qavz3Jfo3nEYMs7hvWtOI38FdJxw82CG9
+         Hprg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680825245;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OpgIrgXDKr7mYg657t1IZTUwOa1v/O9NHLLvRs1T5EE=;
+        b=XzZ+aQ8lF/L2VZ3YykWBSNm6V1yWjagVrgpgS6sWzhQZQRZgVH1DMKeCy4DUO/BsT+
+         JbLerxM1WnJLQSiDqbI/q7q/lFGWlFB8fec8WcpfrflHdI4UIvK9qgvffZsIurkBTv4T
+         5y7SGQcUc7JaE4tMkVHkgRTlKu2mYuG6HHo/PgddAEKiFcuptz+eLj9ZmUbKnKhxUj+W
+         XSdsbkdOKjz29wY0EhuAokk+Kr6K/PC+EOENPdWFcto+s78HotD4U3qyQcHNQqF24nEh
+         UrSh9bpTMyAwLCB0lQh4mcdJs+YohhWdPrT5I6/zDkSOFK0MGVA35f6zPtJdrac5oUHD
+         I0wQ==
+X-Gm-Message-State: AAQBX9fkSPjm3rsHtQ0Cxi1iMuGZSSNY0DIBxzSpeA/nViNJfxCuh89T
+        QHHKBu7CfxMgKpBq4rlIsEiOZ665hxU2/Q==
+X-Google-Smtp-Source: AKy350a9hSZN1y0YBUJrCuhM4ty/IcPPvyI8+R6kMe+CQQjOhGZJ8vPkZmHeE/ZeWTy8WqTlZi9D2w==
+X-Received: by 2002:a05:6000:1b81:b0:2d7:3d7c:19cb with SMTP id r1-20020a0560001b8100b002d73d7c19cbmr126353wru.4.1680825245334;
+        Thu, 06 Apr 2023 16:54:05 -0700 (PDT)
+Received: from localhost ([2a02:1210:74a0:3200:2fc:d4f0:c121:5e8b])
+        by smtp.gmail.com with ESMTPSA id x13-20020a5d60cd000000b002efabde5609sm904956wrt.92.2023.04.06.16.54.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 16:54:04 -0700 (PDT)
+Date:   Fri, 7 Apr 2023 01:54:03 +0200
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        David Vernet <void@manifault.com>
+Subject: Re: [PATCH RFC bpf-next v1 3/9] bpf: Implement bpf_throw kfunc
+Message-ID: <xmehxhdk4ba2j75ltdygzi2b56aftcei36dndptg3v6gdumrh2@zadr5xdn5g3m>
+References: <20230405004239.1375399-1-memxor@gmail.com>
+ <20230405004239.1375399-4-memxor@gmail.com>
+ <20230406021622.xbgzrmfjxli6dkpt@dhcp-172-26-102-232.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: v2AlsmZA-E6kvzfSAN_J5Qvp5_05MTyK
-X-Proofpoint-GUID: v2AlsmZA-E6kvzfSAN_J5Qvp5_05MTyK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-06_13,2023-04-06_03,2023-02-09_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230406021622.xbgzrmfjxli6dkpt@dhcp-172-26-102-232.dhcp.thefacebook.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add verifier log tests for BPF_BTF_LOAD command, which are very similar,
-conceptually, to BPF_PROG_LOAD tests. These are two separate commands
-dealing with verbose verifier log, so should be both tested separately.
+On Thu, Apr 06, 2023 at 04:16:22AM CEST, Alexei Starovoitov wrote:
+> On Wed, Apr 05, 2023 at 02:42:33AM +0200, Kumar Kartikeya Dwivedi wrote:
+> >
+> > - The exception state is represented using four booleans in the
+> >   task_struct of current task. Each boolean corresponds to the exception
+> >   state for each kernel context. This allows BPF programs to be
+> >   interrupted and still not clobber the other's exception state.
+>
+> that doesn't work for sleepable bpf progs and in RT for regular progs too.
+>
 
-Test that log_buf==NULL condition *does not* return -ENOSPC.
+Can you elaborate? If a sleepable program blocks, that means the task is
+scheduled out, so the next program will use the other task's task_struct.
+Same for preemption for normal progs (under RT or not).
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- .../selftests/bpf/prog_tests/verifier_log.c   | 188 ++++++++++++++++++
- 1 file changed, 188 insertions(+)
+Is there something else that I'm missing?
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier_log.c b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-index 9ae0ac6e3b25..475092a78deb 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-@@ -249,6 +249,190 @@ static void verif_log_subtest(const char *name, bool expect_load_error, int log_
- 	test_log_buf__destroy(skel);
- }
- 
-+static const void *btf_data;
-+static u32 btf_data_sz;
-+
-+static int load_btf(struct bpf_btf_load_opts *opts, bool expect_err)
-+{
-+	int fd;
-+
-+	fd = bpf_btf_load(btf_data, btf_data_sz, opts);
-+	if (fd >= 0)
-+		close(fd);
-+	if (expect_err)
-+		ASSERT_LT(fd, 0, "btf_load_failure");
-+	else /* !expect_err */
-+		ASSERT_GT(fd, 0, "btf_load_success");
-+	return fd;
-+}
-+
-+static void verif_btf_log_subtest(bool bad_btf)
-+{
-+	LIBBPF_OPTS(bpf_btf_load_opts, opts);
-+	struct btf *btf;
-+	struct btf_type *t;
-+	char *exp_log, op_name[32];
-+	size_t fixed_log_sz;
-+	__u32 log_true_sz_fixed, log_true_sz_rolling;
-+	int i, res;
-+
-+	/* prepare simple BTF contents */
-+	btf = btf__new_empty();
-+	if (!ASSERT_OK_PTR(btf, "btf_new_empty"))
-+		return;
-+	res = btf__add_int(btf, "whatever", 4, 0);
-+	if (!ASSERT_GT(res, 0, "btf_add_int_id"))
-+		goto cleanup;
-+	if (bad_btf) {
-+		/* btf__add_int() doesn't allow bad value of size, so we'll just
-+		 * force-cast btf_type pointer and manually override size to invalid
-+		 * 3 if we need to simulate failure
-+		 */
-+		t = (void *)btf__type_by_id(btf, res);
-+		if (!ASSERT_OK_PTR(t, "int_btf_type"))
-+			goto cleanup;
-+		t->size = 3;
-+	}
-+
-+	btf_data = btf__raw_data(btf, &btf_data_sz);
-+	if (!ASSERT_OK_PTR(btf_data, "btf_data"))
-+		goto cleanup;
-+
-+	load_btf(&opts, bad_btf);
-+
-+	opts.log_buf = logs.reference;
-+	opts.log_size = sizeof(logs.reference);
-+	opts.log_level = 1 | 8 /* BPF_LOG_FIXED */;
-+	load_btf(&opts, bad_btf);
-+
-+	fixed_log_sz = strlen(logs.reference) + 1;
-+	if (!ASSERT_GT(fixed_log_sz, 50, "fixed_log_sz"))
-+		goto cleanup;
-+	memset(logs.reference + fixed_log_sz, 0, sizeof(logs.reference) - fixed_log_sz);
-+
-+	/* validate BPF_LOG_FIXED truncation works as verifier log used to work */
-+	opts.log_buf = logs.buf;
-+	opts.log_level = 1 | 8; /* fixed-length log */
-+	opts.log_size = 25;
-+	res = load_btf(&opts, true);
-+	ASSERT_EQ(res, -ENOSPC, "half_log_fd");
-+	ASSERT_EQ(strlen(logs.buf), 24, "log_fixed_25");
-+	ASSERT_STRNEQ(logs.buf, logs.reference, 24, op_name);
-+
-+	/* validate rolling verifier log logic: try all variations of log buf
-+	 * length to force various truncation scenarios
-+	 */
-+	opts.log_buf = logs.buf;
-+	opts.log_level = 1; /* rolling log */
-+
-+	/* prefill logs.buf with 'A's to detect any write beyond allowed length */
-+	memset(logs.filler, 'A', sizeof(logs.filler));
-+	logs.filler[sizeof(logs.filler) - 1] = '\0';
-+	memset(logs.buf, 'A', sizeof(logs.buf));
-+	logs.buf[sizeof(logs.buf) - 1] = '\0';
-+
-+	for (i = 1; i < fixed_log_sz; i++) {
-+		opts.log_size = i;
-+
-+		snprintf(op_name, sizeof(op_name), "log_roll_btf_load_%d", i);
-+		res = load_btf(&opts, true);
-+		if (!ASSERT_EQ(res, -ENOSPC, op_name))
-+			goto cleanup;
-+
-+		exp_log = logs.reference + fixed_log_sz - i;
-+		snprintf(op_name, sizeof(op_name), "log_roll_contents_%d", i);
-+		if (!ASSERT_STREQ(logs.buf, exp_log, op_name)) {
-+			printf("CMP:%d\nS1:'%s'\nS2:'%s'\n",
-+				strcmp(logs.buf, exp_log),
-+				logs.buf, exp_log);
-+			goto cleanup;
-+		}
-+
-+		/* check that unused portions of logs.buf are not overwritten */
-+		snprintf(op_name, sizeof(op_name), "log_roll_unused_tail_%d", i);
-+		if (!ASSERT_STREQ(logs.buf + i, logs.filler + i, op_name)) {
-+			printf("CMP:%d\nS1:'%s'\nS2:'%s'\n",
-+				strcmp(logs.buf + i, logs.filler + i),
-+				logs.buf + i, logs.filler + i);
-+			goto cleanup;
-+		}
-+	}
-+
-+	/* (FIXED) get actual log size */
-+	opts.log_buf = logs.buf;
-+	opts.log_level = 1 | 8; /* BPF_LOG_FIXED */
-+	opts.log_size = sizeof(logs.buf);
-+	opts.log_true_size = 0;
-+	res = load_btf(&opts, bad_btf);
-+	ASSERT_NEQ(res, -ENOSPC, "btf_load_res_fixed");
-+
-+	log_true_sz_fixed = opts.log_true_size;
-+	ASSERT_GT(log_true_sz_fixed, 0, "log_true_sz_fixed");
-+
-+	/* (FIXED, NULL) get actual log size */
-+	opts.log_buf = NULL;
-+	opts.log_level = 1 | 8; /* BPF_LOG_FIXED */
-+	opts.log_size = 0;
-+	opts.log_true_size = 0;
-+	res = load_btf(&opts, bad_btf);
-+	ASSERT_NEQ(res, -ENOSPC, "btf_load_res_fixed_null");
-+	ASSERT_EQ(opts.log_true_size, log_true_sz_fixed, "log_sz_fixed_null_eq");
-+
-+	/* (ROLLING) get actual log size */
-+	opts.log_buf = logs.buf;
-+	opts.log_level = 1;
-+	opts.log_size = sizeof(logs.buf);
-+	opts.log_true_size = 0;
-+	res = load_btf(&opts, bad_btf);
-+	ASSERT_NEQ(res, -ENOSPC, "btf_load_res_rolling");
-+
-+	log_true_sz_rolling = opts.log_true_size;
-+	ASSERT_EQ(log_true_sz_rolling, log_true_sz_fixed, "log_true_sz_eq");
-+
-+	/* (ROLLING, NULL) get actual log size */
-+	opts.log_buf = NULL;
-+	opts.log_level = 1;
-+	opts.log_size = 0;
-+	opts.log_true_size = 0;
-+	res = load_btf(&opts, bad_btf);
-+	ASSERT_NEQ(res, -ENOSPC, "btf_load_res_rolling_null");
-+	ASSERT_EQ(opts.log_true_size, log_true_sz_rolling, "log_true_sz_null_eq");
-+
-+	/* (FIXED) expect -ENOSPC for one byte short log */
-+	opts.log_buf = logs.buf;
-+	opts.log_level = 1 | 8; /* BPF_LOG_FIXED */
-+	opts.log_size = log_true_sz_fixed - 1;
-+	opts.log_true_size = 0;
-+	res = load_btf(&opts, true);
-+	ASSERT_EQ(res, -ENOSPC, "btf_load_res_too_short_fixed");
-+
-+	/* (FIXED) expect *not* -ENOSPC with exact log_true_size buffer */
-+	opts.log_buf = logs.buf;
-+	opts.log_level = 1 | 8; /* BPF_LOG_FIXED */
-+	opts.log_size = log_true_sz_fixed;
-+	opts.log_true_size = 0;
-+	res = load_btf(&opts, bad_btf);
-+	ASSERT_NEQ(res, -ENOSPC, "btf_load_res_just_right_fixed");
-+
-+	/* (ROLLING) expect -ENOSPC for one byte short log */
-+	opts.log_buf = logs.buf;
-+	opts.log_level = 1;
-+	opts.log_size = log_true_sz_rolling - 1;
-+	res = load_btf(&opts, true);
-+	ASSERT_EQ(res, -ENOSPC, "btf_load_res_too_short_rolling");
-+
-+	/* (ROLLING) expect *not* -ENOSPC with exact log_true_size buffer */
-+	opts.log_buf = logs.buf;
-+	opts.log_level = 1;
-+	opts.log_size = log_true_sz_rolling;
-+	opts.log_true_size = 0;
-+	res = load_btf(&opts, bad_btf);
-+	ASSERT_NEQ(res, -ENOSPC, "btf_load_res_just_right_rolling");
-+
-+cleanup:
-+	btf__free(btf);
-+}
-+
- void test_verifier_log(void)
- {
- 	if (test__start_subtest("good_prog-level1"))
-@@ -259,4 +443,8 @@ void test_verifier_log(void)
- 		verif_log_subtest("bad_prog", true, 1);
- 	if (test__start_subtest("bad_prog-level2"))
- 		verif_log_subtest("bad_prog", true, 2);
-+	if (test__start_subtest("bad_btf"))
-+		verif_btf_log_subtest(true /* bad btf */);
-+	if (test__start_subtest("good_btf"))
-+		verif_btf_log_subtest(false /* !bad btf */);
- }
--- 
-2.34.1
+> > - The other vexing case is of recursion. If a program calls into another
+> >   program (e.g. call into helper which invokes tracing program
+> >   eventually), it may throw and clobber the current exception state. To
+> >   avoid this, an invariant is maintained across the implementation:
+> > 	Exception state is always cleared on entry and exit of the main
+> > 	BPF program.
+> >   This implies that if recursion occurs, the BPF program will clear the
+> >   current exception state on entry and exit. However, callbacks do not
+> >   do the same, because they are subprograms. The case for propagating
+> >   exceptions of callbacks invoked by the kernel back to the BPF program
+> >   is handled in the next commit. This is also the main reason to clear
+> >   exception state on entry, asynchronous callbacks can clobber exception
+> >   state even though we make sure it's always set to be 0 within the
+> >   kernel.
+> >   Anyhow, the only other thing to be kept in mind is to never allow a
+> >   BPF program to execute when the program is being unwinded. This
+> >   implies that every function involved in this path must be notrace,
+> >   which is the case for bpf_throw, bpf_get_exception and
+> >   bpf_reset_exception.
+>
+> ...
+>
+> > +			struct bpf_insn entry_insns[] = {
+> > +				BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
+> > +				BPF_EMIT_CALL(bpf_reset_exception),
+> > +				BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
+> > +				insn[i],
+> > +			};
+>
+> Is not correct in global bpf progs that take more than 1 argument.
+>
 
+But this is not done for global subprogs, only for the main subprog, it only
+needs to be done when we enter the program from the kernel.
+
+> How about using a scratch space in prog->aux->exception[] instead of current task?
+>
+
+I actually had this thought. It's even better because we can hardcode the
+address of the exception state right in the program (since prog->aux remains
+stable during bpf_patch_insn_data). However, concurrent program invocations on
+multiple CPUs doesn't work well with this. It's like, one program sets the state
+while the other tries to check it. It can be per-CPU but then we have to disable
+preemption (which cannot be done).
+
+Unfortunately per-task state seemed like the only choice which works without
+complicating things too much.
+
+> > +notrace u64 bpf_get_exception(void)
+> > +{
+> > +	int i = interrupt_context_level();
+> > +
+> > +	return current->bpf_exception_thrown[i];
+> > +}
+>
+> this is too slow to be acceptable.
+
+I agree, also partly why I still marked this an RFC.
+
+> it needs to be single load plus branch.
+> with prog->aux->exception approach we can achieve that.
+> Instead of inserting a call to bpf_get_exception() we can do load+cmp.
+> We probably should pass prog->aux into exception callback, so it
+> can know where throw came from.
+>
+
+IMO prog->aux->exception won't work either (unless I'm missing some way which
+you can point out). The other option would be that we spill pointer to the
+per-task exception state to the program's stack on entry, and then every check
+loads the value and performs the check. It will be a load from stack, load from
+memory and then a jump instruction. Still not as good as a direct load though,
+which we'd have with prog->aux, but much better than the current state.
+
+> > - Rewrites happen for bpf_throw and call instructions to subprogs.
+> >   The instructions which are executed in the main frame of the main
+> >   program (thus, not global functions and extension programs, which end
+> >   up executing in frame > 0) need to be rewritten differently. This is
+> >   tracked using BPF_THROW_OUTER vs BPF_THROW_INNER. If not done, a
+>
+> how about BPF_THROW_OUTER vs BPF_THROW_ANY_INNER ?
+> would it be more precise ?
+
+I'm fine with the renaming. The only thing the type signifies is if we need to
+do the rewrite for frame 0 vs frame N.
+
+>
+> > +__bpf_kfunc notrace void bpf_throw(void)
+> > +{
+> > +	int i = interrupt_context_level();
+> > +
+> > +	current->bpf_exception_thrown[i] = true;
+> > +}
+>
+> I think this needs to take u64 or couple u64 args and store them
+> in the scratch area.
+> bpf_assert* macros also need a way for bpf prog to specify
+> the reason for the assertion.
+> Otherwise there won't be any way to debug what happened.
+
+I agree. Should we force it to be a constant value? Then we can hardcode it in
+the .text without having to save and restore it, but that might end up being a
+little too restrictive?
