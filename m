@@ -2,47 +2,47 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26AA7C77B6F
-	for <bpf@archiver.kernel.org>; Thu,  6 Apr 2023 16:45:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41DADC77B73
+	for <bpf@archiver.kernel.org>; Thu,  6 Apr 2023 16:45:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbjDFQpi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 6 Apr 2023 12:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
+        id S239445AbjDFQpk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 6 Apr 2023 12:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239593AbjDFQpH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 6 Apr 2023 12:45:07 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482C955AE
-        for <bpf@vger.kernel.org>; Thu,  6 Apr 2023 09:45:06 -0700 (PDT)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 336EQw2W008074
-        for <bpf@vger.kernel.org>; Thu, 6 Apr 2023 09:45:05 -0700
+        with ESMTP id S239602AbjDFQpS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 6 Apr 2023 12:45:18 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F31559F
+        for <bpf@vger.kernel.org>; Thu,  6 Apr 2023 09:45:17 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 336EBe1l022416
+        for <bpf@vger.kernel.org>; Thu, 6 Apr 2023 09:45:16 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=NExDBiWxsVOGwNsECUFx7fbwTXuVpN72UB85Bd1PvlE=;
- b=HhNws0dc8IXandGsJRk+LFViguEad9Ypk/ys6g4xMh2vvI11EXfF+24LBDf7WoPgbpOu
- gxoIj0VFgwXzunFznROMS21BkTX9CfkEQnhefBoLU8fEKFlye8FIvn/kS9dEmlwqsMjj
- xlTqmKHGEpvzGv1+LOVF4CCce3B9DW+z3dM= 
+ bh=11irFytXWSzxWLE9NUf+/Mdolo1b5lxSUQwvxBsybPs=;
+ b=iobgNAI/x8bH766CJ14LsiITTGK+Zw6nyegJiQkrLCzDpsTY5E1I98MTAUx6AFYsImnW
+ nDl+p95NY5slAmS0CrwtdiGuzVp/IEgbKbdMXCZWoxfwsFEYJRvcJmg2SsaSu96PXCGL
+ Nd1HpQTc+iveHcD4vMn6xkse6s99wfkxkwU= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3psyun0yy3-1
+        by m0089730.ppops.net (PPS) with ESMTPS id 3psym6h50q-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 06 Apr 2023 09:45:05 -0700
-Received: from twshared8216.02.ash9.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 06 Apr 2023 09:45:16 -0700
+Received: from twshared0333.05.ash8.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 6 Apr 2023 09:45:05 -0700
+ 15.1.2507.17; Thu, 6 Apr 2023 09:45:14 -0700
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id 584351C5BEE08; Thu,  6 Apr 2023 09:44:55 -0700 (PDT)
+        id D2E8C1C5BEE7C; Thu,  6 Apr 2023 09:45:05 -0700 (PDT)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v2 1/4] bpf: Improve verifier JEQ/JNE insn branch taken checking
-Date:   Thu, 6 Apr 2023 09:44:55 -0700
-Message-ID: <20230406164455.1045294-1-yhs@fb.com>
+Subject: [PATCH bpf-next v2 3/4] bpf: Improve handling of pattern '<const> <cond_op> <non_const>' in verifier
+Date:   Thu, 6 Apr 2023 09:45:05 -0700
+Message-ID: <20230406164505.1046801-1-yhs@fb.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230406164450.1044952-1-yhs@fb.com>
 References: <20230406164450.1044952-1-yhs@fb.com>
@@ -50,8 +50,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: OZkdI7IbtNtZG8lQg6trmlpMsl0cjEom
-X-Proofpoint-ORIG-GUID: OZkdI7IbtNtZG8lQg6trmlpMsl0cjEom
+X-Proofpoint-GUID: IBBvTQXAoY6-dDKkA_zQ77rMQXOKINHS
+X-Proofpoint-ORIG-GUID: IBBvTQXAoY6-dDKkA_zQ77rMQXOKINHS
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-04-06_10,2023-04-06_03,2023-02-09_01
@@ -59,91 +59,75 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, for BPF_JEQ/BPF_JNE insn, verifier determines
-whether the branch is taken or not only if both operands
-are constants. Therefore, for the following code snippet,
-  0: (85) call bpf_ktime_get_ns#5       ; R0_w=3Dscalar()
-  1: (a5) if r0 < 0x3 goto pc+2         ; R0_w=3Dscalar(umin=3D3)
-  2: (b7) r2 =3D 2                        ; R2_w=3D2
-  3: (1d) if r0 =3D=3D r2 goto pc+2 6
+Currently, the verifier does not handle '<const> <cond_op> <non_const>' w=
+ell.
+For example,
+  ...
+  10: (79) r1 =3D *(u64 *)(r10 -16)       ; R1_w=3Dscalar() R10=3Dfp0
+  11: (b7) r2 =3D 0                       ; R2_w=3D0
+  12: (2d) if r2 > r1 goto pc+2
+  13: (b7) r0 =3D 0
+  14: (95) exit
+  15: (65) if r1 s> 0x1 goto pc+3
+  16: (0f) r0 +=3D r1
+  ...
+At insn 12, verifier decides both true and false branch are possible, but
+actually only false branch is possible.
 
-At insn 3, since r0 is not a constant, verifier assumes both branch
-can be taken which may lead inproper verification failure.
+Currently, the verifier already supports patterns '<non_const> <cond_op> =
+<const>.
+Add support for patterns '<const> <cond_op> <non_const>' in a similar way=
+.
 
-Add comparing umin/umax value and the constant. If the umin value
-is greater than the constant, or umax value is smaller than the constant,
-for JEQ the branch must be not-taken, and for JNE the branch must be take=
-n.
-The jmp32 mode JEQ/JNE branch taken checking is also handled similarly.
-
-The following lists the veristat result w.r.t. changed number
-of processes insns during verification:
-
-File                                                   Program           =
-                                    Insns (A)  Insns (B)  Insns    (DIFF)
------------------------------------------------------  ------------------=
-----------------------------------  ---------  ---------  ---------------
-test_cls_redirect.bpf.linked3.o                        cls_redirect      =
-                                        64980      73472  +8492 (+13.07%)
-test_seg6_loop.bpf.linked3.o                           __add_egr_x       =
-                                        12425      12423      -2 (-0.02%)
-test_tcp_hdr_options.bpf.linked3.o                     estab             =
-                                         2634       2558     -76 (-2.89%)
-test_parse_tcp_hdr_opt.bpf.linked3.o                   xdp_ingress_v6    =
-                                         1421       1420      -1 (-0.07%)
-test_parse_tcp_hdr_opt_dynptr.bpf.linked3.o            xdp_ingress_v6    =
-                                         1238       1237      -1 (-0.08%)
-test_tc_dtime.bpf.linked3.o                            egress_fwdns_prio1=
-00                                        414        411      -3 (-0.72%)
-
-Mostly a small improvement but test_cls_redirect.bpf.linked3.o has a 13% =
-regression.
-I checked with verifier log and found it this is due to pruning.
-For some JEQ/JNE branches impacted by this patch,
-one branch is explored and the other has state equivalence and
-pruned.
+Also fix selftest 'verifier_bounds_mix_sign_unsign/bounds checks mixing s=
+igned and unsigned, variant 10'
+due to this change.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- kernel/bpf/verifier.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ kernel/bpf/verifier.c                                | 12 ++++++++++++
+ .../bpf/progs/verifier_bounds_mix_sign_unsign.c      |  2 +-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 56f569811f70..5c6b90e384a5 100644
+index 5c6b90e384a5..3660b573048a 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -12651,10 +12651,14 @@ static int is_branch32_taken(struct bpf_reg_sta=
-te *reg, u32 val, u8 opcode)
- 	case BPF_JEQ:
- 		if (tnum_is_const(subreg))
- 			return !!tnum_equals_const(subreg, val);
-+		else if (val < reg->u32_min_value || val > reg->u32_max_value)
-+			return 0;
- 		break;
- 	case BPF_JNE:
- 		if (tnum_is_const(subreg))
- 			return !tnum_equals_const(subreg, val);
-+		else if (val < reg->u32_min_value || val > reg->u32_max_value)
-+			return 1;
- 		break;
- 	case BPF_JSET:
- 		if ((~subreg.mask & subreg.value) & val)
-@@ -12724,10 +12728,14 @@ static int is_branch64_taken(struct bpf_reg_sta=
-te *reg, u64 val, u8 opcode)
- 	case BPF_JEQ:
- 		if (tnum_is_const(reg->var_off))
- 			return !!tnum_equals_const(reg->var_off, val);
-+		else if (val < reg->umin_value || val > reg->umax_value)
-+			return 0;
- 		break;
- 	case BPF_JNE:
- 		if (tnum_is_const(reg->var_off))
- 			return !tnum_equals_const(reg->var_off, val);
-+		else if (val < reg->umin_value || val > reg->umax_value)
-+			return 1;
- 		break;
- 	case BPF_JSET:
- 		if ((~reg->var_off.mask & reg->var_off.value) & val)
+@@ -13356,6 +13356,18 @@ static int check_cond_jmp_op(struct bpf_verifier=
+_env *env,
+ 				       src_reg->var_off.value,
+ 				       opcode,
+ 				       is_jmp32);
++	} else if (dst_reg->type =3D=3D SCALAR_VALUE &&
++		   is_jmp32 && tnum_is_const(tnum_subreg(dst_reg->var_off))) {
++		pred =3D is_branch_taken(src_reg,
++				       tnum_subreg(dst_reg->var_off).value,
++				       flip_opcode(opcode),
++				       is_jmp32);
++	} else if (dst_reg->type =3D=3D SCALAR_VALUE &&
++		   !is_jmp32 && tnum_is_const(dst_reg->var_off)) {
++		pred =3D is_branch_taken(src_reg,
++				       dst_reg->var_off.value,
++				       flip_opcode(opcode),
++				       is_jmp32);
+ 	} else if (reg_is_pkt_pointer_any(dst_reg) &&
+ 		   reg_is_pkt_pointer_any(src_reg) &&
+ 		   !is_jmp32) {
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds_mix_sign_u=
+nsign.c b/tools/testing/selftests/bpf/progs/verifier_bounds_mix_sign_unsi=
+gn.c
+index 91a66357896a..4f40144748a5 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_bounds_mix_sign_unsign.c
++++ b/tools/testing/selftests/bpf/progs/verifier_bounds_mix_sign_unsign.c
+@@ -354,7 +354,7 @@ __naked void signed_and_unsigned_variant_10(void)
+ 	call %[bpf_map_lookup_elem];			\
+ 	if r0 =3D=3D 0 goto l0_%=3D;				\
+ 	r1 =3D *(u64*)(r10 - 16);				\
+-	r2 =3D 0;						\
++	r2 =3D -1;						\
+ 	if r2 > r1 goto l1_%=3D;				\
+ 	r0 =3D 0;						\
+ 	exit;						\
 --=20
 2.34.1
 
