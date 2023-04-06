@@ -2,265 +2,144 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C33DC77B7F
-	for <bpf@archiver.kernel.org>; Thu,  6 Apr 2023 15:31:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE901C76196
+	for <bpf@archiver.kernel.org>; Thu,  6 Apr 2023 15:42:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239755AbjDFPa6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 6 Apr 2023 11:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35854 "EHLO
+        id S229800AbjDFPmW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 6 Apr 2023 11:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239202AbjDFPav (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 6 Apr 2023 11:30:51 -0400
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C457083FD;
-        Thu,  6 Apr 2023 08:30:47 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=alibuda@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VfTVmiA_1680795043;
-Received: from j66a10360.sqa.eu95.tbsite.net(mailfrom:alibuda@linux.alibaba.com fp:SMTPD_---0VfTVmiA_1680795043)
-          by smtp.aliyun-inc.com;
-          Thu, 06 Apr 2023 23:30:44 +0800
-From:   "D. Wythe" <alibuda@linux.alibaba.com>
-To:     kgraul@linux.ibm.com, wenjia@linux.ibm.com, jaka@linux.ibm.com,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [RFC PATCH bpf-next 4/5] bpf: add smc negotiator support in BPF struct_ops
-Date:   Thu,  6 Apr 2023 23:30:33 +0800
-Message-Id: <1680795034-86384-5-git-send-email-alibuda@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1680795034-86384-1-git-send-email-alibuda@linux.alibaba.com>
-References: <1680795034-86384-1-git-send-email-alibuda@linux.alibaba.com>
+        with ESMTP id S229617AbjDFPmV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 6 Apr 2023 11:42:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CC212E;
+        Thu,  6 Apr 2023 08:42:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17E5264969;
+        Thu,  6 Apr 2023 15:42:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4438C433EF;
+        Thu,  6 Apr 2023 15:42:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680795739;
+        bh=0rP+btQt9/KN1Mx9paUelvp606aFxYbSoZghoDoq1H4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AnKzCJXZBQ+rUdAxMp1hybL8+phnHiu+OVmBUUCFnjaaFhe3+JBjd9o4VRS+GFJN5
+         0ly1kVhxI2roMjWYQf2+y5dMUvv1Ci2GTB8X6niozwhaxs1fWG7/KuVTMCenbUs5xJ
+         R8hXBtyUSFnoU+CNCYwYm25JwnlAIBSzxJdnDB+2hCq3SOx7fwcXDY8zsCk14N9qoq
+         cO6tIQNLWF5gMXxvCymTVgRxpzqnxdep0YsXGAt8iSW0KNea1/dVI1nKiiV2A6tVBN
+         xZtV/Jig2E6z6EErWTaAiJWQujsjky70lsqYCoWXhW8RYF7/gAmGPfUx9p2iEz7+sS
+         fW0nGSTlmCNtg==
+Date:   Thu, 6 Apr 2023 08:42:17 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        David Vernet <void@manifault.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        Dave Marchevsky <davemarchevsky@meta.com>,
+        Tejun Heo <tj@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>,
+        Yonghong Song <yhs@meta.com>, Song Liu <song@kernel.org>
+Subject: Re: [PATCH bpf-next 0/8] bpf: Follow up to RCU enforcement in the
+ verifier.
+Message-ID: <20230406084217.44fff254@kernel.org>
+In-Reply-To: <CAADnVQLhLuB2HG4WqQk6T=oOq2dtXkwy0TjQbnxa4cVDLHq7bg@mail.gmail.com>
+References: <20230404045029.82870-1-alexei.starovoitov@gmail.com>
+        <20230404145131.GB3896@maniforge>
+        <CAEf4BzYXpHMNDTCrBTjwvj3UU5xhS9mAKLx152NniKO27Rdbeg@mail.gmail.com>
+        <CAADnVQKLe8+zJ0sMEOsh74EHhV+wkg0k7uQqbTkB3THx1CUyqw@mail.gmail.com>
+        <20230404185147.17bf217a@kernel.org>
+        <CAEf4BzY3-pXiM861OkqZ6eciBJnZS8gsBL2Le2rGiSU64GKYcg@mail.gmail.com>
+        <20230405111926.7930dbcc@kernel.org>
+        <CAADnVQLhLuB2HG4WqQk6T=oOq2dtXkwy0TjQbnxa4cVDLHq7bg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: "D. Wythe" <alibuda@linux.alibaba.com>
+On Wed, 5 Apr 2023 22:13:26 -0700 Alexei Starovoitov wrote:
+> On Wed, Apr 5, 2023 at 11:19=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> =
+wrote:
+> >
+> > On Wed, 5 Apr 2023 10:22:16 -0700 Andrii Nakryiko wrote: =20
+> > > So I'm exclusively using `pw-apply -c <patchworks-url>` to apply
+> > > everything locally. =20
+> >
+> > I think you can throw -M after -c $url? It can only help... :) =20
+>=20
+> Yeah. If only...
+> I'm exclusively using -c.
+> -M only works with -s, but I couldn't make -s -M work either.
+> Do you pass the series as a number?
 
-This PATCH attempts to introduce BPF injection capability for SMC.
-Considering that the SMC protocol is not suitable for all scenarios,
-especially for short-lived. However, for most applications, they cannot
-guarantee that there are no such scenarios at all. Therefore, apps
-may need some specific strategies to decide shall we need to use SMC
-or not, for example, apps can limit the scope of the SMC to a specific
-IP address or port.
+Yes, it copy just the numerical ID into the terminal.
 
-Based on the consideration of transparent replacement, we hope that apps
-can remain transparent even if they need to formulate some specific
-strategies for SMC using. That is, do not need to recompile their code.
+> but then series_json=3D$(curl -s $srv/series/$1/) line
+> doesn't look right, since it's missing "/mbox/" ?
 
-On the other hand, we need to ensure the scalability of strategies
-implementation. Although it is simple to use socket options or sysctl,
-it will bring more complexity to subsequent expansion.
+That's loading JSON from the patchwork's REST API.
 
-Fortunately, BPF can solve these concerns very well, users can write
-thire own strategies in eBPF to choose whether to use SMC or not.
-And it's quite easy for them to modify their strategies in the future.
+> User error on my side, I guess.
+> My bash skills were too weak to make -c and -M work,
+> but .git/hooks tip is great!
+> Thank you.
 
-This PATCH implement injection capability for SMC via struct_ops.
-In that way, we can add new injection scenarios in the future.
+FWIW I think the below may work for using -c instead of -s.
+But it is mixing "Daniel paths" and "Jakub paths" in the script.
+The output is still a bit different than when using -s.
 
-Signed-off-by: D. Wythe <alibuda@linux.alibaba.com>
----
- kernel/bpf/bpf_struct_ops_types.h |   4 +
- net/smc/bpf_smc.c                 | 159 ++++++++++++++++++++++++++++++++++++++
- 2 files changed, 163 insertions(+)
-
-diff --git a/kernel/bpf/bpf_struct_ops_types.h b/kernel/bpf/bpf_struct_ops_types.h
-index 5678a9d..35cdd15 100644
---- a/kernel/bpf/bpf_struct_ops_types.h
-+++ b/kernel/bpf/bpf_struct_ops_types.h
-@@ -9,4 +9,8 @@
- #include <net/tcp.h>
- BPF_STRUCT_OPS_TYPE(tcp_congestion_ops)
- #endif
-+#if IS_ENABLED(CONFIG_SMC)
-+#include <net/smc.h>
-+BPF_STRUCT_OPS_TYPE(smc_sock_negotiator_ops)
-+#endif
- #endif
-diff --git a/net/smc/bpf_smc.c b/net/smc/bpf_smc.c
-index e41c238..c245862 100644
---- a/net/smc/bpf_smc.c
-+++ b/net/smc/bpf_smc.c
-@@ -7,14 +7,20 @@
-  *  Author(s):  D. Wythe <alibuda@linux.alibaba.com>
-  */
- 
-+#include <linux/bpf_verifier.h>
-+#include <linux/btf_ids.h>
- #include <linux/kernel.h>
- #include <linux/bpf.h>
-+#include <linux/btf.h>
- #include <linux/smc.h>
- #include <net/sock.h>
- #include "smc.h"
- 
-+struct bpf_struct_ops bpf_smc_sock_negotiator_ops;
-+
- static DEFINE_SPINLOCK(smc_sock_negotiator_list_lock);
- static LIST_HEAD(smc_sock_negotiator_list);
-+static u32 smc_sock_id, sock_id;
- 
- /* required smc_sock_negotiator_list_lock locked */
- static struct smc_sock_negotiator_ops *smc_negotiator_ops_get_by_key(u32 key)
-@@ -198,3 +204,156 @@ void smc_sock_clone_negotiator_ops(struct sock *parent, struct sock *child)
+diff --git a/pw-apply b/pw-apply
+index 5fc37a24b027..c9cec94a4a8c 100755
+--- a/pw-apply
++++ b/pw-apply
+@@ -81,17 +81,15 @@ accept_series()
  }
- EXPORT_SYMBOL_GPL(smc_sock_clone_negotiator_ops);
- 
-+static int bpf_smc_negotiator_init(struct btf *btf)
-+{
-+	s32 type_id;
+=20
+ cover_from_url()
+ {
+   curl -s $1 | gunzip -f -c > tmp.i
+-  series_num=3D`grep "href=3D\"/series" tmp.i|cut -d/ -f3|head -1`
++  series=3D`grep "href=3D\"/series" tmp.i|cut -d/ -f3|head -1`
+   cover_url=3D`grep "href=3D\"/project/netdevbpf/cover" tmp.i|cut -d\" -f2`
+   if [ ! -z "$cover_url" ]; then
+-    curl -s https://patchwork.kernel.org${cover_url}mbox/ | gunzip -f -c >=
+ cover.i
+     merge=3D"1"
+   fi
+-  curl -s https://patchwork.kernel.org/series/$series_num/mbox/ | gunzip -=
+f -c > mbox.i
+ }
+=20
+ edits=3D""
+ am_flags=3D""
+ branch=3D"mbox"
+@@ -118,18 +116,20 @@ while true; do
+     -h | --help ) usage; break ;;
+     -- ) shift; break ;;
+     * )  break ;;
+   esac
+ done
++# Load the info from cover first, it may will populate $series and $merge
++[ ! -z "$cover" ]  && cover_from_url $cover
 +
-+	type_id = btf_find_by_name_kind(btf, "sock", BTF_KIND_STRUCT);
-+	if (type_id < 0)
-+		return -EINVAL;
-+	sock_id = type_id;
-+
-+	type_id = btf_find_by_name_kind(btf, "smc_sock", BTF_KIND_STRUCT);
-+	if (type_id < 0)
-+		return -EINVAL;
-+	smc_sock_id = type_id;
-+
-+	return 0;
-+}
-+
-+/* register ops */
-+static int bpf_smc_negotiator_reg(void *kdata)
-+{
-+	return smc_sock_register_negotiator_ops(kdata);
-+}
-+
-+/* unregister ops */
-+static void bpf_smc_negotiator_unreg(void *kdata)
-+{
-+	smc_sock_unregister_negotiator_ops(kdata);
-+}
-+
-+/* unregister ops */
-+static int bpf_smc_negotiator_update(void *kdata, void *old_kdata)
-+{
-+	return smc_sock_update_negotiator_ops(kdata, old_kdata);
-+}
-+
-+static int bpf_smc_negotiator_validate(void *kdata)
-+{
-+	return smc_sock_validate_negotiator_ops(kdata);
-+}
-+
-+static int bpf_smc_negotiator_check_member(const struct btf_type *t,
-+					   const struct btf_member *member,
-+					   const struct bpf_prog *prog)
-+{
-+	return 0;
-+}
-+
-+static int bpf_smc_negotiator_init_member(const struct btf_type *t,
-+					  const struct btf_member *member,
-+					  void *kdata, const void *udata)
-+{
-+	const struct smc_sock_negotiator_ops *uops;
-+	struct smc_sock_negotiator_ops *ops;
-+	u32 moff;
-+
-+	uops = (const struct smc_sock_negotiator_ops *)udata;
-+	ops = (struct smc_sock_negotiator_ops *)kdata;
-+
-+	moff = __btf_member_bit_offset(t, member) / 8;
-+
-+	/* init name */
-+	if (moff ==  offsetof(struct smc_sock_negotiator_ops, name)) {
-+		if (bpf_obj_name_cpy(ops->name, uops->name,
-+				     sizeof(uops->name)) <= 0)
-+			return -EINVAL;
-+		return 1;
-+	}
-+
-+	return 0;
-+}
-+
-+BPF_CALL_1(bpf_smc_skc_to_tcp_sock, struct sock *, sk)
-+{
-+	if (sk && sk_fullsock(sk) && sk->sk_family == AF_SMC)
-+		return (unsigned long)((struct smc_sock *)(sk))->clcsock->sk;
-+
-+	return (unsigned long)NULL;
-+}
-+
-+const struct bpf_func_proto bpf_smc_skc_to_tcp_sock_proto = {
-+	.func			= bpf_smc_skc_to_tcp_sock,
-+	.gpl_only		= false,
-+	.ret_type		= RET_PTR_TO_BTF_ID_OR_NULL,
-+	.arg1_type		= ARG_PTR_TO_BTF_ID_SOCK_COMMON,
-+	.ret_btf_id		= &btf_sock_ids[BTF_SOCK_TYPE_TCP],
-+};
-+
-+static const struct bpf_func_proto *
-+smc_negotiator_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
-+{
-+	const struct btf_member *m;
-+	const struct btf_type *t;
-+	u32 midx, moff;
-+
-+	midx = prog->expected_attach_type;
-+	t = bpf_smc_sock_negotiator_ops.type;
-+	m = &btf_type_member(t)[midx];
-+
-+	moff = __btf_member_bit_offset(t, m) / 8;
-+
-+	switch (func_id) {
-+	case BPF_FUNC_setsockopt:
-+		switch (moff) {
-+		/* Avoid potential deadloop risk */
-+		case offsetof(struct smc_sock_negotiator_ops, init):
-+			fallthrough;
-+		/* Avoid potential leak risk */
-+		case offsetof(struct smc_sock_negotiator_ops, release):
-+			return NULL;
-+		}
-+		return &bpf_sk_setsockopt_proto;
-+	case BPF_FUNC_getsockopt:
-+		return &bpf_sk_getsockopt_proto;
-+	case BPF_FUNC_skc_to_tcp_sock:
-+		return &bpf_smc_skc_to_tcp_sock_proto;
-+	default:
-+		return bpf_base_func_proto(func_id);
-+	}
-+}
-+
-+static bool smc_negotiator_prog_is_valid_access(int off, int size, enum bpf_access_type type,
-+						const struct bpf_prog *prog,
-+						struct bpf_insn_access_aux *info)
-+{
-+	if (!bpf_tracing_btf_ctx_access(off, size, type, prog, info))
-+		return false;
-+
-+	/* promote it to smc_sock */
-+	if (base_type(info->reg_type) == PTR_TO_BTF_ID &&
-+	    !bpf_type_has_unsafe_modifiers(info->reg_type) &&
-+	    info->btf_id == sock_id)
-+		info->btf_id = smc_sock_id;
-+
-+	return true;
-+}
-+
-+static const struct bpf_verifier_ops bpf_smc_negotiator_verifier_ops = {
-+	.get_func_proto  = smc_negotiator_prog_func_proto,
-+	.is_valid_access = smc_negotiator_prog_is_valid_access,
-+};
-+
-+struct bpf_struct_ops bpf_smc_sock_negotiator_ops = {
-+	.verifier_ops = &bpf_smc_negotiator_verifier_ops,
-+	.init = bpf_smc_negotiator_init,
-+	.check_member = bpf_smc_negotiator_check_member,
-+	.init_member = bpf_smc_negotiator_init_member,
-+	.reg = bpf_smc_negotiator_reg,
-+	.update = bpf_smc_negotiator_update,
-+	.unreg = bpf_smc_negotiator_unreg,
-+	.validate = bpf_smc_negotiator_validate,
-+	.name = "smc_sock_negotiator_ops",
-+};
-+
--- 
-1.8.3.1
-
+ [ ! -z "$auto_branch" ] && [ -z "$series" ] && usage
+ [ ! -z "$mbox" ]   && [ ! -z "$series" ] && usage
+ [   -z "$mbox" ]   && [   -z "$series" ] && [ -z "$cover" ] && usage
+ [ ! -z "$accept" ] && [ ! -z "$mbox" ]   && usage
+ [ ! -z "$series" ] && mbox_from_series $series
+ [ ! -z "$mbox" ]   && mbox_from_url $mbox
+ [ ! -z "$accept" ] && accept_series $series
+-[ ! -z "$cover" ]  && cover_from_url $cover
+=20
+ target=3D$(git branch --show-current)
+=20
+ body=3D
+ author=3DXYZ
