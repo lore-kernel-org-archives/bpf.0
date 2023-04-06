@@ -2,82 +2,84 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 643D0C7618D
-	for <bpf@archiver.kernel.org>; Thu,  6 Apr 2023 00:07:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5408C7619A
+	for <bpf@archiver.kernel.org>; Thu,  6 Apr 2023 00:12:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234086AbjDFAHc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 5 Apr 2023 20:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54992 "EHLO
+        id S232063AbjDFAMi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 5 Apr 2023 20:12:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233940AbjDFAHb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 5 Apr 2023 20:07:31 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BC0132
-        for <bpf@vger.kernel.org>; Wed,  5 Apr 2023 17:07:30 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id eh3so145256048edb.11
-        for <bpf@vger.kernel.org>; Wed, 05 Apr 2023 17:07:29 -0700 (PDT)
+        with ESMTP id S233370AbjDFAMg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 5 Apr 2023 20:12:36 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204A56E82
+        for <bpf@vger.kernel.org>; Wed,  5 Apr 2023 17:12:35 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-948a1aec279so77399766b.2
+        for <bpf@vger.kernel.org>; Wed, 05 Apr 2023 17:12:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1680739648;
+        d=dectris.com; s=google; t=1680739953;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=T4OZm66D1iuYjWvpX8km2uh3RDDcdiQCrxjSQ3ETEMI=;
-        b=qbyNmQueWRkeUpg8SW/U23pk8mPAl9x0WkQmuIK2YiW6eA34PTitc9sbjcUzL5dVvJ
-         nQW5jLdWOowiQvhdvWqZFpZMjg/a1G01bwMSEe34alyrNNLhSPX31NBFfPR6jgBxoLMm
-         bUQnZpITHIEjwvKDEqfr9xTklKbGXqkkHqr/Q=
+        bh=QWqojSp8qeBF+mnrDb0v8Y1VEeoiQlSQ1yGGpxufYDs=;
+        b=mmtf2AayBWm/z9sUCranjsDtUq8AxYpmX4yPfK4znmF2gMIODJ7tf13ZcvRf7XB84K
+         AgOJLhfcSJpYEPHYwm5X0Fu3pt6ZBax5QjRsO69RzY2rTbyqiLNyDuId8qaErMGe3LMS
+         iWF5PYWGarqFRVHJNktro71deVYVccaeWoaJw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680739648;
+        d=1e100.net; s=20210112; t=1680739953;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=T4OZm66D1iuYjWvpX8km2uh3RDDcdiQCrxjSQ3ETEMI=;
-        b=dC/Y9ntlu2xpEH1qVv2OYlDP7igZ72AzJbI8V85bWUqEqKvEW4hjSUNevvAfj+ZsoA
-         tAF9yEbZ+K4yVAtTQr51K0qJIc6UUNOYq7fqrCTkWt9qMhnYdzvIneeSnov6+A9VLA4Y
-         WavPaRw98aZsTIURJ6lnjEKFUp8ugA3E01+GdHt97VE2BrYSd9O91L5vzmklDEGkQlEX
-         5X7GaPyHHItN6DIF9ftoyhxetbMSVEcpUuf9VNB8XIaYVER5uWg6G2RV6zrO++eu6xTO
-         zlJ4re+fneb2pi0wMLok/Uxa7sqFG8tnra+KensePlhC/66nVsVyju5wobp4fvWecxim
-         Bjrw==
-X-Gm-Message-State: AAQBX9cavG7GIa3sJ6yLogIgc5PppI5jd9U29M2TrNBWRtCw689zXSQ1
-        rGXWko8Y4EGaJ8xjIjU3oaQp+KkFaUBkgune5sQP8Q==
-X-Google-Smtp-Source: AKy350byOa8zlSbWdoReei9+/UfRy7XhdT2nydpKhU51toc0nAQkMpw7TaTBXeCWzL7RcdXZTUO04/3oRInr+tQrzi0=
-X-Received: by 2002:a17:907:c607:b0:932:e546:b8bb with SMTP id
- ud7-20020a170907c60700b00932e546b8bbmr2816057ejc.0.1680739648606; Wed, 05 Apr
- 2023 17:07:28 -0700 (PDT)
+        bh=QWqojSp8qeBF+mnrDb0v8Y1VEeoiQlSQ1yGGpxufYDs=;
+        b=6PnLCwJrcCOFKrvXcT2tYGFBKcEHhxeNqisSdvESTuDNpdIebvJxwV/Md+WD/QImeN
+         LbFZnUYbMPjuauMBc3X/nm6/C/AEYOLxtIhjmYL0r6cBnLRtaE2KRaLRG0ft8KxCtTpn
+         UO1vzMb9sKI+dAZOd2y0qPzZQNCilhFyCI5pfTZoCncbyvFfSu90DVgXOKR9UOwc+QL6
+         gW7qSgXifTuWA2uci1RZoNozbtaXZP3sOHt+R85AYUMml7Qc45P2CfhOI5CLbESk51Mq
+         qPN5ZHGvMgQMsFOZACJsWPTvpBZCmA6Wy9sTMBu4McUxFyBJv/bEwBblgvBMB0lNG+5J
+         Cwgw==
+X-Gm-Message-State: AAQBX9c+v/PK3Vl1WwhraNB7R2p2Qr+PbnVnBaj8SG3le1VxhM0S8X9h
+        QybqUS9CDH3xoMA2+EzZqk08qa0aK4j95LryfJMZBw==
+X-Google-Smtp-Source: AKy350bSg5cQf76vayF8cuTHt7hGbMj/aBgU/6HTmDSPmn/KXvw21Y1A4RFFgZK1jB9dW9Ud6Cu2kqEjEDgC+YjCXjw=
+X-Received: by 2002:a50:8adc:0:b0:502:3c99:417f with SMTP id
+ k28-20020a508adc000000b005023c99417fmr2041304edk.6.1680739953661; Wed, 05 Apr
+ 2023 17:12:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230403143601.32168-1-kal.conley@dectris.com>
- <CAJ8uoz1BKJ1_jq6Sum-OkZQTR_ftmr5Enj+Cmn4Qsi15_jOpbQ@mail.gmail.com>
- <c0596a62-0873-5638-920b-235c55ff33a2@linux.dev> <CAHApi-mzLH7yVOT0cM03yafzTJJqfGwOBTa3q5U6jBdWnAx3VQ@mail.gmail.com>
- <f1a32d5a-03e7-fce1-f5a5-6095f365f0a9@linux.dev>
-In-Reply-To: <f1a32d5a-03e7-fce1-f5a5-6095f365f0a9@linux.dev>
+References: <20230405235920.7305-1-kal.conley@dectris.com> <20230405235920.7305-3-kal.conley@dectris.com>
+In-Reply-To: <20230405235920.7305-3-kal.conley@dectris.com>
 From:   Kal Cutter Conley <kal.conley@dectris.com>
-Date:   Thu, 6 Apr 2023 02:12:07 +0200
-Message-ID: <CAHApi-kjLp3WspBayU780aX7hLOu5GTkfqma7JAM3t74kU6MdA@mail.gmail.com>
-Subject: Re: [PATCH bpf] xsk: Fix unaligned descriptor validation
-To:     Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     Magnus Karlsson <magnus.karlsson@gmail.com>,
+Date:   Thu, 6 Apr 2023 02:17:13 +0200
+Message-ID: <CAHApi-kRav_7jpkyTf+Ko7LJwx6_UO+1QydoAr-fMqeyBE=OYw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/2] selftests: xsk: Add test UNALIGNED_INV_DESC_4K1_FRAME_SIZE
+To:     Magnus Karlsson <magnus.karlsson@intel.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
         =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
         Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        Maxim Mikityanskiy <maximmi@mellanox.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-> Since you already have a test case, it is better to submit them together such
-> that this case can be covered earlier than later.
+> Add unaligned descriptor test for frame size of 4001. Using an odd frame
+> size ensures that the end of the UMEM is not near a page boundary. This
+> allows testing descriptors that staddle the end of the UMEM but not a
+> page.
 >
-> Other xskxceiver fixes have already landed to bpf-next. imo, I think for this
-> particular case, bpf-next for both the fix and the test is fine.
+> This test used to fail without the previous commit ("xsk: Add check for
+> unaligned descriptors that overrun UMEM").
 
-Done. See: https://lore.kernel.org/all/20230405235920.7305-1-kal.conley@dectris.com/
+Sorry I forgot to update the commit message with the new commit label.
+If accepted, please change the second paragraph to :
+
+This test used to fail without the previous commit ("xsk: Fix unaligned
+descriptor validation").
