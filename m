@@ -2,192 +2,148 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49303C76196
-	for <bpf@archiver.kernel.org>; Thu,  6 Apr 2023 16:17:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26AA7C77B6F
+	for <bpf@archiver.kernel.org>; Thu,  6 Apr 2023 16:45:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239899AbjDFQRS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 6 Apr 2023 12:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58236 "EHLO
+        id S229833AbjDFQpi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 6 Apr 2023 12:45:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238766AbjDFQRR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 6 Apr 2023 12:17:17 -0400
-Received: from sonic305-8.consmr.mail.bf2.yahoo.com (sonic305-8.consmr.mail.bf2.yahoo.com [74.6.133.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B4930FD
-        for <bpf@vger.kernel.org>; Thu,  6 Apr 2023 09:17:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1680797835; bh=VuSERGq4d+Cfe8sCq/lVtoww/oUbwbdKqqQ64i5D7LE=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=CsZM3TfsFQb7BNQgiB/R9kYXLI4Q2KKUe9O9pONITa1Dx+4yOTGTRTKpQ446oHSdudyl0+JADNfEqGgygI9f2Pm34+rCj2P+WjSIVpf2mVoy4z0L4yAgmJazkEmQXyBK5ftOECMulXkgn68LXi0pMiJAiMidP9hz3z+S39wbNliwxB3nN/OGViHW/D3C8U7dTQySEP1QB0ikfvsYBbr0kQ2hFjLjYmEn27YL8OcKXlQfw93drrHiXkrQ2KYMSFU3IQDYMTnJRpvDB/by4+0quD9/FZQzBpclu4WcnavOD1XptAMxhJVsXeu6RrtvH5+ziDnJ9KdXG3qxxqZqc02cJA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1680797835; bh=v7+6uJ/gTTHM32UIrDPLnkqewRfrVmpO9kVwo6uf8Ae=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=DX9NxAD4QaVMT6cTyZN5NRiifiNAypC1h5aP7OLFADPjqRcxUDCyVF3icU093dfGYG1rpWtyH0kymCyMP2J3yFVD93Bfsy0D4PXNNAc2lJ2HW2zuGny55ZZzcgwR3xy74dTTBIcdeLXoktX2Pc9piBaUC/Nw0iR77iaUmeWvJDazg2IRz7D+eNM/itt2MCEFZqwnoDAcy8zuIswtJ0qKcAbdQnfRVqMt/NmX3TtKGYRM0Gut/9wQRaA9Pat8QFXvz/SHdBj9sQ94ErYfntak5udtYEnAE44ZaxQs/GmjNjPZzC9ORJZcjc0Bv9NDE3TANAkhhNrdWo+qvu9UTmjIRw==
-X-YMail-OSG: tUl9KEgVM1nZI52wCWlixedTkWjoD82z33IB7eYk.U.gLbKfV00IOSqzvK0IKoj
- G3ge29ww6dMqQd_DL3lZh2GQUwNkQjIg1dxxbB3QOtPeMZ5kP4TLxyonjCa9JGqZsrLYZdTB1WZD
- xriXzcbUzYX_aHD_WxwVQ783Y28dDq80HY1MiUTQInClC4N2_O4_lxcY9ZkygdCATm4tZHs9Ts..
- sd51Z_yQ7n32roXV8qE46ezdc3wD3cjnYWMmD.MFWrH4tQQvrTPFvMYgCrxiNx7N2mm7LIW2nd2k
- GwGI0ETmkMEKEQkMueJz0njns11ZG50ti9Bu4lZmHG9rpz2pqREQU.jqqYJGKsckrtfBE7OcV3hv
- nUDu78ugyve1Uf37Dqe2l.GoRuwEJnbcco4W8C..79Jdcwth5G2ikiCfIZhvqGJ7DnxIbLPqJkb5
- ku1H5q.Z8CX7zDcHGfUIa27p.SXe6OBBQmFZB3DPKmpGshvOlTenY_Nc9jpYgRTh9yvDrdJvT3sA
- pj.vIXfraVL.Q0G6s2xkvXY69xrnqxUSyDIkARl8ckbdZ2dGJtPZe12z36RLS.ZDrauDO7wD0Abf
- u.v7ooL4zzY8zbGlhZebQ.1AiXDPtUMSmvhz76KxDRhbwQlqVeUK9fkvgp3N4EPpFw05nVOHNKUj
- WNVzUKUWLXjI2P05JQ6q1ZLBNiBhpeDUzPlFvfLcBCoJZABD7CxAiyuWtaSKjDgO5_0yg4v3wLZr
- kwuhN2YhiM0w.xd4Y0LG4md0TQtt50bjXTM92hr2sAqlRNzPjKKCgIRCn_VElhaND08YOIMpSC3y
- huSQgyj0.XHRFJEdkkTrPrnZW4zOQUixljoICU73WmPyZy2TL.bANJ5L_pqtvggKXE2TV7J7SjOD
- MrVF.XhIpSkVoULX4JBYjeHVuqDAJjx_EQIE7cLDg6SssE5_xgeZB11ERI7U9FPWiANKxjjOwWDf
- BDavf94W3izvMHPAGMlj2jOH5OyUqloJr6pjDYRawTqb4J94fJHQqzZ62xtSA24NfgCnrXXN132v
- z.75vIBpXqWmAM2pvdkOWebMt9DemPfVoLxso6HOuw49bYUwBgXznRJ_rGjR3Qd8FAkoa8GNTLqx
- zyFTD2Zu_y9qD5fqUGSzA475juGX7AjwYSArdfA.P3z6G7KIbeMi8p6TlU8JPNKJjVZ_j466PWMy
- jTp7XfhA2ch9LTMN_eEG4fsrSN4G.R1WUTpCVWVUoJ9jLgW18GYUb2SstccyUuloZ_P3_gIYSprO
- zYoFnJbot9PgRepf8.XjUE2X7UO84O.QiLKtdPnYM5lEm93J5DRF7o6feNAphPGkkAepjKozmEPJ
- iSm0V2Tb.QR3C1hoQpqtFZQ_ipDfpfj140ItI8w9cmqFW.tjSSXZ.CU0dKXIXhvGaf1i62lRgxlU
- TfHXUB7vBZobFxop2lMEFqLnKoNv.vVUvIflnH0GHxyM1z0TI1hslusOc7bmj1DUXyKsIKaFcgeb
- v_d5ltbqCMIK2m31AfxFNu4RDiO9pkhbW0W4.5AkESY.Y5QkwbpZpjc7Ydogu_M5n5HhAQcSxlYq
- azCQ65opt4hTxncUJXBToKLelbu0_IB8z22kUTulktDRp_kg2pVwp3QXRMQA47jZ8Qm1K8SDt6fr
- oVmuyT9GjQVK_8bAuV0Xt.jsD2yvuMiDJZDuE8juy4yNg9Dg4Fx7AEtrujLggWPoWMj_C.DAatMA
- TtjL3z.7POVPurCd_c8O0hbwJqNhTs1zEhuD07rcAQTN8Jz1SkLEjwOxvWodWOM5nW_oVXEcccNb
- BN8YfHKqbfuuZcRd3exnLLnr3t_2lA7skqny7gH6okQTPFiRhs0cx8RsDcVwlnl3VsN027SnMz2F
- BOsVqMMtGaPd72OF4XQzR9PGuX8WI9L3F8kLtxRWgEvQB9q57SynSDtBvglRRaj0S3bFuZ.Q6zZR
- JaKou5M9syXv7pU1JTbWwh0iYgj2ruFMFSvp7ToscTvcbPuwUEU4yL.1yCwtgUmWrjUt0ZjoncmJ
- WrNbwsNajw86RaVWWM.h_vCIVbZoTrlfIacRxKBPRCfKMbOS6u8sGizS0Jkc4hXfgnQ_i09JIXr4
- wMlVWD1iSOt9GbpzqruE8raC5UBH3UsrQb2b9XEVgh54Rk79.QIpdT1fqhZVUhB1b50LNLOdMAKz
- QYEXi3ZqlHsSPZOgaYWW7CDPSSzUMCUwUa.DdYql2GOml3wcrPXNEPUpWH2HUcWWje23W6EVGutF
- sirSNvz1SqsikKqYxTAetEMUZp2ri303tGVy7tw--
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: a5a8ccf3-a3b9-4c0d-b117-55a4932d35a3
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.bf2.yahoo.com with HTTP; Thu, 6 Apr 2023 16:17:15 +0000
-Received: by hermes--production-ne1-7dbd98dd99-nn8pc (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 24a7d9931c2812c4db7376cbcf2cd759;
-          Thu, 06 Apr 2023 16:17:08 +0000 (UTC)
-Message-ID: <733a7896-0b0e-f86f-0068-0285d646d563@schaufler-ca.com>
-Date:   Thu, 6 Apr 2023 09:17:05 -0700
+        with ESMTP id S239593AbjDFQpH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 6 Apr 2023 12:45:07 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482C955AE
+        for <bpf@vger.kernel.org>; Thu,  6 Apr 2023 09:45:06 -0700 (PDT)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 336EQw2W008074
+        for <bpf@vger.kernel.org>; Thu, 6 Apr 2023 09:45:05 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=NExDBiWxsVOGwNsECUFx7fbwTXuVpN72UB85Bd1PvlE=;
+ b=HhNws0dc8IXandGsJRk+LFViguEad9Ypk/ys6g4xMh2vvI11EXfF+24LBDf7WoPgbpOu
+ gxoIj0VFgwXzunFznROMS21BkTX9CfkEQnhefBoLU8fEKFlye8FIvn/kS9dEmlwqsMjj
+ xlTqmKHGEpvzGv1+LOVF4CCce3B9DW+z3dM= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3psyun0yy3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 06 Apr 2023 09:45:05 -0700
+Received: from twshared8216.02.ash9.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Thu, 6 Apr 2023 09:45:05 -0700
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+        id 584351C5BEE08; Thu,  6 Apr 2023 09:44:55 -0700 (PDT)
+From:   Yonghong Song <yhs@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        Martin KaFai Lau <martin.lau@kernel.org>
+Subject: [PATCH bpf-next v2 1/4] bpf: Improve verifier JEQ/JNE insn branch taken checking
+Date:   Thu, 6 Apr 2023 09:44:55 -0700
+Message-ID: <20230406164455.1045294-1-yhs@fb.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230406164450.1044952-1-yhs@fb.com>
+References: <20230406164450.1044952-1-yhs@fb.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v10 2/4] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-Content-Language: en-US
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Paul Moore <paul@paul-moore.com>
-Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, reiserfs-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20230331123221.3273328-1-roberto.sassu@huaweicloud.com>
- <20230331123221.3273328-3-roberto.sassu@huaweicloud.com>
- <CAHC9VhSbGdij6xz9D49my37kD9qYrBmh2x7=cNFFDL2dZ=EZTw@mail.gmail.com>
- <5dbb9430-1e26-ec12-26a2-3718c84e33c2@schaufler-ca.com>
- <7549b624-421e-30b9-ca99-de42929354c7@huaweicloud.com>
- <CAHC9VhTsSUM6_g5+ZOqZ=P6307hCAJW+-xEc4fKQcymPs5pYjQ@mail.gmail.com>
- <83ddfcb9-b4a6-71b4-a20c-62f484c8e040@schaufler-ca.com>
- <CAHC9VhTO02CGUt0DUUmx=TUYS7Q81fas_Qy5miOFonaye0NEmw@mail.gmail.com>
- <c3751b2b-aa4b-2105-c238-29816bc85607@schaufler-ca.com>
- <841747d7-ab17-2904-ea1d-6adb3d35c711@huaweicloud.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <841747d7-ab17-2904-ea1d-6adb3d35c711@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.21284 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: OZkdI7IbtNtZG8lQg6trmlpMsl0cjEom
+X-Proofpoint-ORIG-GUID: OZkdI7IbtNtZG8lQg6trmlpMsl0cjEom
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-06_10,2023-04-06_03,2023-02-09_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 4/6/2023 2:14 AM, Roberto Sassu wrote:
-> On 4/5/2023 11:07 PM, Casey Schaufler wrote:
->> On 4/5/2023 1:49 PM, Paul Moore wrote:
->>> On Wed, Apr 5, 2023 at 4:43 PM Casey Schaufler
->>> <casey@schaufler-ca.com> wrote:
->>>> On 4/5/2023 12:59 PM, Paul Moore wrote:
->>>>> On Wed, Apr 5, 2023 at 5:44 AM Roberto Sassu
->>>>> <roberto.sassu@huaweicloud.com> wrote:
->>>>>> On 4/5/2023 4:08 AM, Casey Schaufler wrote:
->>>>>>> On 4/4/2023 11:54 AM, Paul Moore wrote:
->>>>>>>> On Fri, Mar 31, 2023 at 8:33 AM Roberto Sassu
->>>>>>>> <roberto.sassu@huaweicloud.com> wrote:
->>>>> ..
->>>>>
->>>>>>>>> diff --git a/security/smack/smack_lsm.c
->>>>>>>>> b/security/smack/smack_lsm.c
->>>>>>>>> index cfcbb748da2..8392983334b 100644
->>>>>>>>> --- a/security/smack/smack_lsm.c
->>>>>>>>> +++ b/security/smack/smack_lsm.c
->>>>>>>>> @@ -52,6 +52,15 @@
->>>>>>>>>    #define SMK_RECEIVING  1
->>>>>>>>>    #define SMK_SENDING    2
->>>>>>>>>
->>>>>>>>> +/*
->>>>>>>>> + * Smack uses multiple xattrs.
->>>>>>>>> + * SMACK64 - for access control, SMACK64EXEC - label for the
->>>>>>>>> program,
->>>>>>>> I think it would be good to move SMACK64EXEC to its own line;
->>>>>>>> it took
->>>>>>>> me a minute to figure out why SMACK_INODE_INIT_XATTRS was set
->>>>>>>> to '4'
->>>>>>>> when I only say three comment lines ... ;)
->>>>>>>>
->>>>>>>>> + * SMACK64MMAP - controls library loading,
->>>>>>>>> + * SMACK64TRANSMUTE - label initialization,
->>>>>>>>> + * Not saved on files - SMACK64IPIN and SMACK64IPOUT
->>>>>>>>> + */
->>>>>>>>> +#define SMACK_INODE_INIT_XATTRS 4
->>>>>>>> If smack_inode_init_security() only ever populates a single
->>>>>>>> xattr, and
->>>>>>>> that is the only current user of SMACK_INODE_INIT_XATTRS, can
->>>>>>>> we make
->>>>>>>> this '1' and shrink the xattr allocation a bit?
->>>>>>> If the parent directory is marked with SMACK64_TRANSMUTE, the
->>>>>>> access
->>>>>>> rule allowing the access has the "t" mode, and the object being
->>>>>>> initialized
->>>>>>> is a directory, the new inode should get the SMACK64_TRANSMUTE
->>>>>>> attribute.
->>>>>>> The callers of security_inode_init_security() don't seem to care.
->>>>>>> I can't say if the evm code is getting SMACK64_TRANSMUTE or, for
->>>>>>> that
->>>>>>> matter, SMACK64_EXEC and SMACK64_MMAP, some other way. The older
->>>>>>> system
->>>>>>> allowed for multiple Smack xattrs, but I'm not clear on exactly
->>>>>>> how.
->>>>>> If you like to set an additional xattr, that would be possible now.
->>>>>> Since we reserve multiple xattrs, we can call lsm_get_xattr_slot()
->>>>>> another time and set SMACK64_TRANSMUTE.
->>>>>>
->>>>>> I think, if the kernel config has CONFIG_EVM_EXTRA_SMACK_XATTRS set,
->>>>>> EVM would protect SMACK64_TRANSMUTE too.
->>>>> Ooookay, but can someone explain to me how either the current, or
->>>>> patched, smack_inode_init_security() function can return multiple
->>>>> xattrs via the security_inode_init_security() LSM hook?
->>>> It can't.
->>> I didn't think so.
->>>
->>> To be really specific, that's what we're talking about with this
->>> patch: the number of xattrs that smack_inode_init_security() can
->>> return to the LSM hook (and EVM, and the caller ...).  If it's only
->>> ever going to be one, I think we can adjust the
->>> 'SMACK_INODE_INIT_XATTRS' down to '1' and save ourselves some
->>> allocation space.
->>
->> Does evm have an expectation that mumble_inode_init_security() is
->> going to report all the relevant attributes? It has to be getting
->> them somehow, which leads me to wonder if we might want to extend
->> smack_inode_init_security() to do so. Even if we did, the maximum
->> value would be '2', SMACK64 and SMACK64_TRANSMUTE. Now that would
->> require a whole lot of work in the calling filesystems, as setting
->> the transmute attribute would be moving out of smack_d_instantiate()
->> and into the callers. Or something like that.
->
-> After changing the inode_init_security hook definition to pass the
-> full xattr array, this is not going to be a problem. EVM sees all
-> xattrs that are going to be set when an inode is created, and adds its
-> own too.
->
-> If you have enough information to set security.SMACK_TRANSMUTE64 in
-> smack_inode_init_security(),
+Currently, for BPF_JEQ/BPF_JNE insn, verifier determines
+whether the branch is taken or not only if both operands
+are constants. Therefore, for the following code snippet,
+  0: (85) call bpf_ktime_get_ns#5       ; R0_w=3Dscalar()
+  1: (a5) if r0 < 0x3 goto pc+2         ; R0_w=3Dscalar(umin=3D3)
+  2: (b7) r2 =3D 2                        ; R2_w=3D2
+  3: (1d) if r0 =3D=3D r2 goto pc+2 6
 
-I think there's enough information to do that. I'm going to have to look
-at your patch more closely.
+At insn 3, since r0 is not a constant, verifier assumes both branch
+can be taken which may lead inproper verification failure.
 
-> this patch sets already allows to set both xattrs at the same time. We
-> would just need to call lsm_get_xattr_slot() another time, assuming
-> that we reserve two xattrs.
->
-> Roberto
->
+Add comparing umin/umax value and the constant. If the umin value
+is greater than the constant, or umax value is smaller than the constant,
+for JEQ the branch must be not-taken, and for JNE the branch must be take=
+n.
+The jmp32 mode JEQ/JNE branch taken checking is also handled similarly.
+
+The following lists the veristat result w.r.t. changed number
+of processes insns during verification:
+
+File                                                   Program           =
+                                    Insns (A)  Insns (B)  Insns    (DIFF)
+-----------------------------------------------------  ------------------=
+----------------------------------  ---------  ---------  ---------------
+test_cls_redirect.bpf.linked3.o                        cls_redirect      =
+                                        64980      73472  +8492 (+13.07%)
+test_seg6_loop.bpf.linked3.o                           __add_egr_x       =
+                                        12425      12423      -2 (-0.02%)
+test_tcp_hdr_options.bpf.linked3.o                     estab             =
+                                         2634       2558     -76 (-2.89%)
+test_parse_tcp_hdr_opt.bpf.linked3.o                   xdp_ingress_v6    =
+                                         1421       1420      -1 (-0.07%)
+test_parse_tcp_hdr_opt_dynptr.bpf.linked3.o            xdp_ingress_v6    =
+                                         1238       1237      -1 (-0.08%)
+test_tc_dtime.bpf.linked3.o                            egress_fwdns_prio1=
+00                                        414        411      -3 (-0.72%)
+
+Mostly a small improvement but test_cls_redirect.bpf.linked3.o has a 13% =
+regression.
+I checked with verifier log and found it this is due to pruning.
+For some JEQ/JNE branches impacted by this patch,
+one branch is explored and the other has state equivalence and
+pruned.
+
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ kernel/bpf/verifier.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 56f569811f70..5c6b90e384a5 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -12651,10 +12651,14 @@ static int is_branch32_taken(struct bpf_reg_sta=
+te *reg, u32 val, u8 opcode)
+ 	case BPF_JEQ:
+ 		if (tnum_is_const(subreg))
+ 			return !!tnum_equals_const(subreg, val);
++		else if (val < reg->u32_min_value || val > reg->u32_max_value)
++			return 0;
+ 		break;
+ 	case BPF_JNE:
+ 		if (tnum_is_const(subreg))
+ 			return !tnum_equals_const(subreg, val);
++		else if (val < reg->u32_min_value || val > reg->u32_max_value)
++			return 1;
+ 		break;
+ 	case BPF_JSET:
+ 		if ((~subreg.mask & subreg.value) & val)
+@@ -12724,10 +12728,14 @@ static int is_branch64_taken(struct bpf_reg_sta=
+te *reg, u64 val, u8 opcode)
+ 	case BPF_JEQ:
+ 		if (tnum_is_const(reg->var_off))
+ 			return !!tnum_equals_const(reg->var_off, val);
++		else if (val < reg->umin_value || val > reg->umax_value)
++			return 0;
+ 		break;
+ 	case BPF_JNE:
+ 		if (tnum_is_const(reg->var_off))
+ 			return !tnum_equals_const(reg->var_off, val);
++		else if (val < reg->umin_value || val > reg->umax_value)
++			return 1;
+ 		break;
+ 	case BPF_JSET:
+ 		if ((~reg->var_off.mask & reg->var_off.value) & val)
+--=20
+2.34.1
+
