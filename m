@@ -2,113 +2,146 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5016DC7619A
-	for <bpf@archiver.kernel.org>; Thu,  6 Apr 2023 00:14:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60E22C7618D
+	for <bpf@archiver.kernel.org>; Thu,  6 Apr 2023 00:26:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbjDFAOS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 5 Apr 2023 20:14:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33784 "EHLO
+        id S234523AbjDFA0n (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 5 Apr 2023 20:26:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232656AbjDFAOR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 5 Apr 2023 20:14:17 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365115B9A;
-        Wed,  5 Apr 2023 17:14:16 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id kq3so35949697plb.13;
-        Wed, 05 Apr 2023 17:14:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680740056; x=1683332056;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qInFTMVuma/1U/ExvGc6BZLbekGojBtLyDDjkV4HnlU=;
-        b=QbcFAsF0nJsFYsGxawligS9Oggy4lOA3uZwDLUK4pDRBpVCrmUNvSHb9UtvZWn3U73
-         7GdsQPwxyDwuQ5/4MvwXlIUzJpjUtMKikozJe1x8LhaVkaGrj8INWgDP/revaC8sNanA
-         +djKmXrx3rdcqYiB0nz8xnxQZBhIRLP2ll8C9BPWhzdt5j4YlGDr5r2o99o6b5q2WMUf
-         T8Om2PhZJlVtqcwiHkQz8bvn6hq/a3T0bA38g4O4I2AyrfC8gUPmifmiBSWGk59Q8Qbw
-         Wn4cyi2PijH4BStkoDs/wyK336eI/YQZdxWrjzfSy+uQvWXTe1fpSKDpM1wKUOk3NwKB
-         PIKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680740056; x=1683332056;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=qInFTMVuma/1U/ExvGc6BZLbekGojBtLyDDjkV4HnlU=;
-        b=fDQD78DuVMTrSg6NQlFXD2jFIq9eJG4t3JIFWvKpOG8Lkq2R0/vrwioGN6gH/pEFXH
-         ih3i97+piTEt313RsGHDG5dch3mrrkYlOua6mYJMHtjyn3aPNSiv/EfdMr+kGEe6vGkD
-         HpUXkfo3lzwGOfH/Sqx808Wt42MEKTtAtV42m9adBbs1X/0hSwA8ZgpZgTBQcNaEFMLk
-         urmzuZl5WdTtLKrpFKe1ae/CcUXo9Msk6UO4maBG3MRiBs6AVGzNOCZQ4E2pXP4oGrRe
-         iEUqHsxHteNBz8He3ByjYwaw1zoDZ2BnlzUNXTLWOyjaK5QcOH1e800FhMCWrzbLNu2a
-         wo4w==
-X-Gm-Message-State: AAQBX9cADk/dSVG85uJgQzd+WwUfjjAYlgeXhh27YqpBNSRdeZb1nI+q
-        ZfgMMCrCwFb/WN7pa2NZ/ek=
-X-Google-Smtp-Source: AKy350YFdh/WfNfq5FSxt7gKSoI4EMNZOfE9joSY9SydyNN/tHC+wUOdluIJyggg0fRXYDfEeMJW+A==
-X-Received: by 2002:a17:902:fa87:b0:1a1:7899:f001 with SMTP id lc7-20020a170902fa8700b001a17899f001mr7523281plb.42.1680740055651;
-        Wed, 05 Apr 2023 17:14:15 -0700 (PDT)
-Received: from localhost ([98.97.117.85])
-        by smtp.gmail.com with ESMTPSA id bf2-20020a170902b90200b00186cf82717fsm93926plb.165.2023.04.05.17.14.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 17:14:15 -0700 (PDT)
-Date:   Wed, 05 Apr 2023 17:14:13 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     John Fastabend <john.fastabend@gmail.com>, jakub@cloudflare.com,
-        daniel@iogearbox.net, edumazet@google.com, cong.wang@bytedance.com,
-        lmb@isovalent.com
-Cc:     john.fastabend@gmail.com, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        will@isovalent.com
-Message-ID: <642e0ed567494_37d6a208a5@john.notmuch>
-In-Reply-To: <20230405220904.153149-1-john.fastabend@gmail.com>
-References: <20230405220904.153149-1-john.fastabend@gmail.com>
-Subject: RE: [PATCH bpf v4 00/12] bpf sockmap fixes
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+        with ESMTP id S234493AbjDFA0h (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 5 Apr 2023 20:26:37 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D136A47
+        for <bpf@vger.kernel.org>; Wed,  5 Apr 2023 17:26:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680740795; x=1712276795;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=y0HR/Gozx//xJ8/EGuGbmqITdsjjfBUtKstoI0tr++o=;
+  b=VjzFF6B1OzQa8lo74KxchAu4HRKK1wWXleac13s9+BvgWMK//UJTZY5G
+   XgSfFDzEwt4pG18duJ3vUJATFJWHUV29qas80CwThGrwZutvt5/Q5beps
+   90P/nfuSu0zO/Q2I5EnXQ534vPD+iKAECoG+7TRpabyLBjewH1/IxzGBU
+   nyIBT81ikhV7i0mOC/Po2C7Ze+f6MByxH+N3NTqC4Tdy8zdqHiQ+ICwhe
+   92T/9EJ/xk0aLpD9NhcT6ud7Y+Q4eEN0F5wL57dHn9laqO9Z/owkc3pJN
+   u9KgIepnXT0ZylLC4se+AxdxPFMrI0npUDsTP4g6nxpaCuA5ZY0BzNWIw
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="342614791"
+X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
+   d="scan'208";a="342614791"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 17:26:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="810805582"
+X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
+   d="scan'208";a="810805582"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 05 Apr 2023 17:26:31 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pkDSR-000Qvw-04;
+        Thu, 06 Apr 2023 00:26:31 +0000
+Date:   Thu, 6 Apr 2023 08:25:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ilya Leoshkevich <iii@linux.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, bpf@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Jiri Olsa <olsajiri@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: Re: [PATCH bpf-next v6] bpf: Support 64-bit pointers to kfuncs
+Message-ID: <202304060822.L9VsdUzS-lkp@intel.com>
+References: <20230405213453.49756-1-iii@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230405213453.49756-1-iii@linux.ibm.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-John Fastabend wrote:
-> Fixes for sockmap running against NGINX TCP tests and also on an
-> underprovisioned VM so that we hit error (ENOMEM) cases regularly.
-> 
-> The first 3 patches fix cases related to ENOMEM that were either
-> causing splats or data hangs.
-> 
-> Then 4-7 resolved cases found when running NGINX with its sockets
-> assigned to sockmap. These mostly have to do with handling fin/shutdown
-> incorrectly and ensuring epoll_wait works as expected.
-> 
-> Patches 8 and 9 extract some of the logic used for sockmap_listen tests
-> so that we can use it in other tests because it didn't make much
-> sense to me to add tests to the sockmap_listen cases when here we
-> are testing send/recv *basic* cases.
-> 
-> Finally patches 10, 11 and 12 add the new tests to ensure we handle
-> ioctl(FIONREAD) and shutdown correctly.
-> 
-> To test the series I ran the NGINX compliance tests and the sockmap
-> selftests. For now our compliance test just runs with SK_PASS.
-> 
-> There are some more things to be done here, but these 11 patches
-> stand on their own in my opionion and fix issues we are having in
-> CI now. For bpf-next we can fixup/improve selftests to use the
-> ASSERT_* in sockmap_helpers, streamline some of the testing, and
-> add more tests. We also still are debugging a few additional flakes
-> patches coming soon.
-> 
-> v2: use skb_queue_empty instead of *_empty_lockless (Eric)
->     oops incorrectly updated copied_seq on DROP case (Eric)
->     added test for drop case copied_seq update
-> 
-> v3: Fix up comment to use /**/ formatting and update commit
->     message to capture discussion about previous fix attempt
->     for hanging backlog being imcomplete.
-> 
-> v4: build error sockmap things are behind NET_SKMSG not in
->     BPF_SYSCALL otherwise you can build the .c file but not
->     have correct headers.
-> 
+Hi Ilya,
 
-Will send a v5 with typo fix. Thanks.
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ilya-Leoshkevich/bpf-Support-64-bit-pointers-to-kfuncs/20230406-053713
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20230405213453.49756-1-iii%40linux.ibm.com
+patch subject: [PATCH bpf-next v6] bpf: Support 64-bit pointers to kfuncs
+config: i386-randconfig-c001-20230403 (https://download.01.org/0day-ci/archive/20230406/202304060822.L9VsdUzS-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/2a9559efd98d24493ac5c889a3ae03dd66b0de26
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ilya-Leoshkevich/bpf-Support-64-bit-pointers-to-kfuncs/20230406-053713
+        git checkout 2a9559efd98d24493ac5c889a3ae03dd66b0de26
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304060822.L9VsdUzS-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   ld: kernel/bpf/core.o: in function `bpf_jit_get_func_addr':
+>> kernel/bpf/core.c:1207: undefined reference to `bpf_get_kfunc_addr'
+
+
+vim +1207 kernel/bpf/core.c
+
+  1182	
+  1183	int bpf_jit_get_func_addr(const struct bpf_prog *prog,
+  1184				  const struct bpf_insn *insn, bool extra_pass,
+  1185				  u64 *func_addr, bool *func_addr_fixed)
+  1186	{
+  1187		s16 off = insn->off;
+  1188		s32 imm = insn->imm;
+  1189		u8 *addr;
+  1190		int err;
+  1191	
+  1192		*func_addr_fixed = insn->src_reg != BPF_PSEUDO_CALL;
+  1193		if (!*func_addr_fixed) {
+  1194			/* Place-holder address till the last pass has collected
+  1195			 * all addresses for JITed subprograms in which case we
+  1196			 * can pick them up from prog->aux.
+  1197			 */
+  1198			if (!extra_pass)
+  1199				addr = NULL;
+  1200			else if (prog->aux->func &&
+  1201				 off >= 0 && off < prog->aux->func_cnt)
+  1202				addr = (u8 *)prog->aux->func[off]->bpf_func;
+  1203			else
+  1204				return -EINVAL;
+  1205		} else if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL &&
+  1206			   bpf_jit_supports_far_kfunc_call()) {
+> 1207			err = bpf_get_kfunc_addr(prog, insn->imm, insn->off, &addr);
+  1208			if (err)
+  1209				return err;
+  1210		} else {
+  1211			/* Address of a BPF helper call. Since part of the core
+  1212			 * kernel, it's always at a fixed location. __bpf_call_base
+  1213			 * and the helper with imm relative to it are both in core
+  1214			 * kernel.
+  1215			 */
+  1216			addr = (u8 *)__bpf_call_base + imm;
+  1217		}
+  1218	
+  1219		*func_addr = (unsigned long)addr;
+  1220		return 0;
+  1221	}
+  1222	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
