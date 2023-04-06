@@ -2,146 +2,93 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2142C76196
-	for <bpf@archiver.kernel.org>; Thu,  6 Apr 2023 04:24:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EEFAC7618D
+	for <bpf@archiver.kernel.org>; Thu,  6 Apr 2023 04:30:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234712AbjDFEYU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 6 Apr 2023 00:24:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39576 "EHLO
+        id S233501AbjDFEaW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 6 Apr 2023 00:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234244AbjDFEYT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 6 Apr 2023 00:24:19 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2B07AAC;
-        Wed,  5 Apr 2023 21:24:13 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id ew6so146141989edb.7;
-        Wed, 05 Apr 2023 21:24:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680755052; x=1683347052;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RXsgvmzHukaaTecEY3Yt625/lLug2G4Dbez5De3xAOM=;
-        b=Fdz+ZTUWOR98kFskw8WAXK8kkfJhEe1LRWVhn2tWMXz1ZAIrrAcpvrkN85FHGGEQCf
-         V7LKb0DctSR2FCqZURuIwXiJ35yX98y/2K2ImkeD87WatEVmaJClsAYU6c5MwSInz2ed
-         hNXO5GgM4v9qo6J7azUzy7TI1Ctc9tRJEo022aqC6epZK6uI03Z2N3mlaFau0UT1qFkA
-         Ae8/wk3H3GGGDAIgYXt9PgKDQEU6T50qtNBU6oa5KDNYbougxMTd83LLMhci+5z4u3Vs
-         5wsmFCiPxBbnDqFBg4JPZuBRnjnGqs4ZKchKcEmC5baRiE5HgMJjpJ3onSLdjF35jxWF
-         qRxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680755052; x=1683347052;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RXsgvmzHukaaTecEY3Yt625/lLug2G4Dbez5De3xAOM=;
-        b=Hl2udt4tznJff8pt3E2JalpNwbpiUzdjshGE1Noek6Wiu8yg72sUGZ/5FQU/HdhbSo
-         oNRJiqxcPGM01gcWiFhryLPwEKLnNHjjpM4JBmhfrm5SCHiWVsWDoQniY43BcKyFEfhV
-         0lVL1ujMLr9zBpC6WcwF5laElxEnJpDMmabEL9TREIpeIHJYRapiWxFt9KKmBv5hf9KI
-         gGbXFfcvfX0U40ivBOkjJSCsywyuuSWSEzHVax3JaG+wTKNkFNuoRK7bEAl6WIoHJ1TB
-         1Tq6eseDZSNM3KVCTYB5VU9Jk8G/glrgNlCCM/2OLQSKmurIeTCrDTQyMVifNzWeSktK
-         z33g==
-X-Gm-Message-State: AAQBX9e4nKlsCVx3mdx9At8xdv1IwGtidQn6/U1iwomaW4l1L4c2Ej1Z
-        njg4l3g9E3aX5zLipkg7Q49AevoRdL9KL7H36quaq2lP
-X-Google-Smtp-Source: AKy350a9wYLbU5oSTk06jkpVn/2X4h/tjTlb5DJoEV6xT+TELnb0TC1J749GC+pE/8aOtz4ULJnFzbBUyZHCvVM8gFI=
-X-Received: by 2002:a17:907:8a07:b0:924:32b2:e3d1 with SMTP id
- sc7-20020a1709078a0700b0092432b2e3d1mr2786379ejc.3.1680755052190; Wed, 05 Apr
- 2023 21:24:12 -0700 (PDT)
+        with ESMTP id S231696AbjDFEaW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 6 Apr 2023 00:30:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6144D7AAC
+        for <bpf@vger.kernel.org>; Wed,  5 Apr 2023 21:30:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E243362D20
+        for <bpf@vger.kernel.org>; Thu,  6 Apr 2023 04:30:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3BBBFC433D2;
+        Thu,  6 Apr 2023 04:30:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680755420;
+        bh=eLLUHA7t1T3pN97KkiiFAsWGVAs60VoW39xuFuh7eeQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=W7lmKs9/LSg2DcLA6iJHsvSozPgoB+ZKNeMrl64phhIZYjwPz2hT6/TCzvapB8Qnc
+         BJxaigJowkZO5OjSD5fJsJSBgwafx52vClqC7CSbEN5Rdif+DjVXuYQP3mdq0sk8tM
+         KLqqyrYlZgOap4C+Q+/RInFAxNfuSrUFMf/rOQnoR0fnBwI3ImFhhEbb1MfJT9dpBw
+         eMrQnJ03eHrUl/QFlcmdgDOHrQnURDugK5lTfgGQ6CoAJPBLPx0UOCGnXPEBwCTwQJ
+         sRbwE73zicnpg9A4BcZfDqjOiUsr4YnU0ixATjAzaiSOdi9ybpn051tB0K4JFTmM76
+         dhK/pw+n8SRxQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 16A36C41671;
+        Thu,  6 Apr 2023 04:30:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230326092208.13613-1-laoar.shao@gmail.com> <CAPhsuW43EiH0tVKU8s+JwV_V6EBETTDyXsAmMzAftpVtcgLHag@mail.gmail.com>
- <CALOAHbCqCb3xmSpNe1Qvm75GBY4ZEGrAOHfVJvpZV5t=akTTgQ@mail.gmail.com>
- <20230402233740.haxb7lgfavcoe27f@dhcp-172-26-102-232.dhcp.thefacebook.com>
- <CALOAHbBj-+xY5jGLynUrg1GfSftZ+LT5DkADKz_+8+tL2kWMSw@mail.gmail.com>
- <20230403225017.onl5pbp7h2ugclbk@dhcp-172-26-102-232.dhcp.thefacebook.com>
- <CALOAHbDQROKrWe732Qv1CsZwr6nMJN-2y77JW3EuT53D8At+Ow@mail.gmail.com>
- <20230406020656.7v5ongxyon5fr4s7@dhcp-172-26-102-232.dhcp.thefacebook.com>
- <CALOAHbCEsucGRB+n5hTnPm-HssmB91HD4PFVRhdO=CZnJXfR6A@mail.gmail.com>
- <CAADnVQ+1VEBHTM5Rm-gx8-bg=tfv=4x+aONhF0bAmBFZG3W8Qg@mail.gmail.com> <CALOAHbAorooyteDjgs82TtujP4Fwo5hSkh-Z5QhxhV9p7_2mfw@mail.gmail.com>
-In-Reply-To: <CALOAHbAorooyteDjgs82TtujP4Fwo5hSkh-Z5QhxhV9p7_2mfw@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 5 Apr 2023 21:24:00 -0700
-Message-ID: <CAADnVQKr5Y3z9f_Vv49DvRFcN+OF3JaFx_9NgBL58pz+TLq8ig@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 00/13] bpf: Introduce BPF namespace
-To:     Yafang Shao <laoar.shao@gmail.com>
-Cc:     Song Liu <song@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v3 0/7] bpftool: Add inline annotations when dumping
+ program CFGs
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168075542008.12496.8604008028921480344.git-patchwork-notify@kernel.org>
+Date:   Thu, 06 Apr 2023 04:30:20 +0000
+References: <20230405132120.59886-1-quentin@isovalent.com>
+In-Reply-To: <20230405132120.59886-1-quentin@isovalent.com>
+To:     Quentin Monnet <quentin@isovalent.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+        eddyz87@gmail.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Apr 5, 2023 at 8:22=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com> w=
-rote:
->
-> On Thu, Apr 6, 2023 at 11:06=E2=80=AFAM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Wed, Apr 5, 2023 at 7:55=E2=80=AFPM Yafang Shao <laoar.shao@gmail.co=
-m> wrote:
-> > >
-> > > It seems that I didn't describe the issue clearly.
-> > > The container doesn't have CAP_SYS_ADMIN, but the CAP_SYS_ADMIN is
-> > > required to run bpftool,  so the bpftool running in the container
-> > > can't get the ID of bpf objects or convert IDs to FDs.
-> > > Is there something that I missed ?
-> >
-> > Nothing. This is by design. bpftool needs sudo. That's all.
-> >
->
-> Hmm, what I'm trying to do is make bpftool run without sudo.
+Hello:
 
-This is not a task that is worth solving.
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-> > > Some questions,
-> > > - What if the process exits after attaching the bpf prog and the prog
-> > > is not auto-detachable?
-> > >   For example, the reuserport bpf prog is not auto-detachable. After
-> > > pins the reuserport bpf prog, a task can attach it through the pinned
-> > > bpf file, but if the task forgets to detach it and the pinned file is
-> > > removed, then it seems there's no way to figure out which task or
-> > > cgroup this prog belongs to...
-> >
-> > you're saying that there is a bpf prog in the kernel without
-> > corresponding user space ?
->
-> No, it is corresponding to user space. For example, it may be
-> corresponding to a socket fd, or a cgroup fd.
->
-> > Meaning no user space process has an FD
-> > that points to this prog or FD to a map that this prog is using?
-> > In such a case this is truly kernel bpf prog. It doesn't belong to cgro=
-up.
-> >
->
-> Even if it is kernel bpf prog, it is created by a process. The user
-> needs to know which one created it.
+On Wed,  5 Apr 2023 14:21:13 +0100 you wrote:
+> This set contains some improvements for bpftool's "visual" program dump
+> option, which produces the control flow graph in a DOT format. The main
+> objective is to add support for inline annotations on such graphs, so that
+> we can have the C source code for the program showing up alongside the
+> instructions, when available. The last commits also make it possible to
+> display the line numbers or the bare opcodes in the graph, as supported by
+> regular program dumps.
+> 
+> [...]
 
-In some situations it's certainly interesting to know which process
-loaded a particular program.
-In many other situations it's irrelevant.
-For example, the process that loaded a prog could have been moved to a
-different cgroup.
-If you want to track the loading you need to install bpf_lsm
-that monitors prog_load hook and collect that info.
-It's not the job of the kernel to do it.
+Here is the summary with links:
+  - [bpf-next,v3,1/7] bpftool: Fix documentation about line info display for prog dumps
+    https://git.kernel.org/bpf/bpf-next/c/e27f0f1620b6
+  - [bpf-next,v3,2/7] bpftool: Fix bug for long instructions in program CFG dumps
+    https://git.kernel.org/bpf/bpf-next/c/67cf52cdb6c8
+  - [bpf-next,v3,3/7] bpftool: Support inline annotations when dumping the CFG of a program
+    https://git.kernel.org/bpf/bpf-next/c/9fd496848b1c
+  - [bpf-next,v3,4/7] bpftool: Return an error on prog dumps if both CFG and JSON are required
+    https://git.kernel.org/bpf/bpf-next/c/05a06be72289
+  - [bpf-next,v3,5/7] bpftool: Support "opcodes", "linum", "visual" simultaneously
+    https://git.kernel.org/bpf/bpf-next/c/9b79f02722bb
+  - [bpf-next,v3,6/7] bpftool: Support printing opcodes and source file references in CFG
+    https://git.kernel.org/bpf/bpf-next/c/7483a7a70a12
+  - [bpf-next,v3,7/7] bpftool: Clean up _bpftool_once_attr() calls in bash completion
+    https://git.kernel.org/bpf/bpf-next/c/7319296855f1
 
-> > > - Could you pls. explain in detail how to get comm, pid, or cgroup
-> > > from a pinned bpffs file?
-> >
-> > pinned bpf prog and no user space holds FD to it?
-> > It's not part of any cgroup. Nothing to print.
->
-> As I explained above, even if it holds nothing, the user needs to know
-> the information from it. For example, if it is expected, which one
-> created it?
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-See the answer above. The kernel has enough hooks already to provide
-this information to user space. No kernel changes necessary.
+
