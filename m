@@ -2,103 +2,109 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C4D0C77B70
-	for <bpf@archiver.kernel.org>; Mon, 10 Apr 2023 12:08:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA7D3C77B61
+	for <bpf@archiver.kernel.org>; Mon, 10 Apr 2023 12:18:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjDJMIN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 10 Apr 2023 08:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32776 "EHLO
+        id S229649AbjDJMS5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 10 Apr 2023 08:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbjDJMID (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 10 Apr 2023 08:08:03 -0400
+        with ESMTP id S229571AbjDJMS4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 10 Apr 2023 08:18:56 -0400
 Received: from mail-ej1-x663.google.com (mail-ej1-x663.google.com [IPv6:2a00:1450:4864:20::663])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA751BD5
-        for <bpf@vger.kernel.org>; Mon, 10 Apr 2023 05:07:58 -0700 (PDT)
-Received: by mail-ej1-x663.google.com with SMTP id dm2so12114968ejc.8
-        for <bpf@vger.kernel.org>; Mon, 10 Apr 2023 05:07:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986812723
+        for <bpf@vger.kernel.org>; Mon, 10 Apr 2023 05:18:55 -0700 (PDT)
+Received: by mail-ej1-x663.google.com with SMTP id q23so2598864ejz.3
+        for <bpf@vger.kernel.org>; Mon, 10 Apr 2023 05:18:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1681128477;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xNbic2k37/uJb//jGocyCjKfzDNnw7vJzB+19fgD/vU=;
-        b=lFDITA5hSIO3u8hVF0yCmco2vpi7O1SZ04BShKnCIMBu9qWkXJHcVolsDdPBa0XnUt
-         QBPL+VSVMCKgFgUGuUEsm69+xFRAvRV+4iNWrKhre0ZGaNgVteqGAqqWpvE8mevhZ/sK
-         cob8b+aOSEtLhNj+/1HmHwf0IvR/ENfA/0UlM=
+        d=dectris.com; s=google; t=1681129134;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TKzhndpkxHQaGoJcxBtWzexess8OGVr/hjWI7n+mKCs=;
+        b=DMtw1rNUdeK78HaJM++4Hxl3994D+oHO9KLUurJjVhK+mZdpXBESJ4Vw1DsJiOLJm9
+         69fIUhi0t3HpjLxup9cpkmxAUXMrGtDnDuVlyuwk77v9leRxg48AZ6dSSYERd0T7qtIg
+         gLgqoBDEQ9g2UlgsQHGxPfo8yAN6Kh26T4tSU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681128477;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xNbic2k37/uJb//jGocyCjKfzDNnw7vJzB+19fgD/vU=;
-        b=Lq0vOMscgow4tMyEKB998oZSPDgK/pdVUAw22NJRVMsbnBi050O6opd5rt3wJoDa8E
-         5ru4HT40clYeYZn0QWWjwNcNsfy2pefwXrPYFRZtEzUakVV39TpJAnVNce/cSbP4ErL4
-         M+yGc7Z2fi+zFy8H+n4ykiwS0A5Oj6PMJ1cJ2gViwG733Z+VTwuHTiAhE19rreqdU1W6
-         gKDz6k1fTek9hRsx1ypW9ZZ1glbcBLNbpq9lhNtUo346p3g+bL9UBZeEdYxrIQl+357a
-         YvqYsdiMjuBQiNp+6I05IAOu9uWW3kUjhgsymHCJ7YADYG07yXtHwA2Vo3HsHY0YDnwH
-         04Bg==
-X-Gm-Message-State: AAQBX9d/JnejI4u1yy9QB7JJbQPZGeSBA8XPuVGEczJDFU0eMBvPMJxf
-        snHOdQFCKiZaafPVTgbyjCYpIs1o9ur58GtZDOblSKZgekaM
-X-Google-Smtp-Source: AKy350bX+Gw5pkRVI9K7HZRdso4z0tqD2c56eUTXhw9H9zhtDwHal9R9E6C8al4EM8JEj1WzI54XGl0VGR4K
-X-Received: by 2002:a17:907:2d2a:b0:8b1:7eba:de5 with SMTP id gs42-20020a1709072d2a00b008b17eba0de5mr7635152ejc.10.1681128477114;
-        Mon, 10 Apr 2023 05:07:57 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1681129134;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TKzhndpkxHQaGoJcxBtWzexess8OGVr/hjWI7n+mKCs=;
+        b=1v3zcIfBfALtzuF4we5xmUMdxMS0PK6e/WwkDvJt+/h0brJeUnhQox+0Gvu2BdkPEm
+         SfOn5mObOVmegtbLEBk2m/yLHgIi7FZG9MMMTZBVsixGGFJbNHO6ZkCDeGyBbp4CaCaA
+         2ZNzYljK4oY9/qWuOQJIHX5ewUUjBaXhYKGQMVsoSlHMXnKfdADsE95CHb2pza1YZBWT
+         fUJLXJAxJplwMAwIhHveJPsD3POI6qCa5T85XuI9ZUvd3mmui3BqQBWd0Z/fiCCuB29a
+         xpqaF1niXoPPnlmGmkgvBg+QGL9LqeEL5OozzxFPgeAySzw3fMXK6smX/ufGFbiW3+iy
+         QouA==
+X-Gm-Message-State: AAQBX9fRPExbcMNfjMz4yudyOYly5BHfWtW/zUGpMDnC2k6qchUyjz2U
+        tJ5PphwAYq3EwE8v9kcbyYgbiHFvwkCIqhgaAj1dRp53gwEe
+X-Google-Smtp-Source: AKy350ZkMU0s/JF20E6yb6mctLIlUuttVuOc3SupfDQb+GIrqy9L2A4xh5ef0Plqj6p/2e0odjDNgzNcscT8
+X-Received: by 2002:a17:906:b041:b0:931:20fd:3d09 with SMTP id bj1-20020a170906b04100b0093120fd3d09mr7422636ejb.17.1681129134038;
+        Mon, 10 Apr 2023 05:18:54 -0700 (PDT)
 Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id nb39-20020a1709071ca700b008b1fc5abd08sm2089769ejc.56.2023.04.10.05.07.56
+        by smtp-relay.gmail.com with ESMTPS id ga7-20020a1709070c0700b0094418efd9f7sm2115681ejc.288.2023.04.10.05.18.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 05:07:57 -0700 (PDT)
+        Mon, 10 Apr 2023 05:18:54 -0700 (PDT)
 X-Relaying-Domain: dectris.com
 From:   Kal Conley <kal.conley@dectris.com>
-To:     Magnus Karlsson <magnus.karlsson@intel.com>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
         Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>
 Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v5 3/4] selftests: xsk: Use hugepages when umem->frame_size > PAGE_SIZE
-Date:   Mon, 10 Apr 2023 14:06:28 +0200
-Message-Id: <20230410120629.642955-4-kal.conley@dectris.com>
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] xsk: Simplify xp_aligned_validate_desc implementation
+Date:   Mon, 10 Apr 2023 14:18:41 +0200
+Message-Id: <20230410121841.643254-1-kal.conley@dectris.com>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230410120629.642955-1-kal.conley@dectris.com>
-References: <20230410120629.642955-1-kal.conley@dectris.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-HugeTLB UMEMs now support chunk_size > PAGE_SIZE. Set MAP_HUGETLB when
-frame_size > PAGE_SIZE for future tests.
+Perform the chunk boundary check like the page boundary check in
+xp_desc_crosses_non_contig_pg(). This simplifies the implementation and
+reduces the number of branches.
 
 Signed-off-by: Kal Conley <kal.conley@dectris.com>
 ---
- tools/testing/selftests/bpf/xskxceiver.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/xdp/xsk_queue.h | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-index 5a9691e942de..7eccf57a0ccc 100644
---- a/tools/testing/selftests/bpf/xskxceiver.c
-+++ b/tools/testing/selftests/bpf/xskxceiver.c
-@@ -1289,7 +1289,7 @@ static void thread_common_ops(struct test_spec *test, struct ifobject *ifobject)
- 	void *bufs;
- 	int ret;
+diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
+index dea4f378327d..6d40a77fccbe 100644
+--- a/net/xdp/xsk_queue.h
++++ b/net/xdp/xsk_queue.h
+@@ -133,16 +133,12 @@ static inline bool xskq_cons_read_addr_unchecked(struct xsk_queue *q, u64 *addr)
+ static inline bool xp_aligned_validate_desc(struct xsk_buff_pool *pool,
+ 					    struct xdp_desc *desc)
+ {
+-	u64 chunk, chunk_end;
++	u64 offset = desc->addr & (pool->chunk_size - 1);
  
--	if (ifobject->umem->unaligned_mode)
-+	if (ifobject->umem->frame_size > sysconf(_SC_PAGESIZE) || ifobject->umem->unaligned_mode)
- 		mmap_flags |= MAP_HUGETLB;
+-	chunk = xp_aligned_extract_addr(pool, desc->addr);
+-	if (likely(desc->len)) {
+-		chunk_end = xp_aligned_extract_addr(pool, desc->addr + desc->len - 1);
+-		if (chunk != chunk_end)
+-			return false;
+-	}
++	if (offset + desc->len > pool->chunk_size)
++		return false;
  
- 	if (ifobject->shared_umem)
+-	if (chunk >= pool->addrs_cnt)
++	if (desc->addr >= pool->addrs_cnt)
+ 		return false;
+ 
+ 	if (desc->options)
 -- 
 2.39.2
 
