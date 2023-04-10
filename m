@@ -2,112 +2,107 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38CE4C77B6F
-	for <bpf@archiver.kernel.org>; Mon, 10 Apr 2023 08:59:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9560C76196
+	for <bpf@archiver.kernel.org>; Mon, 10 Apr 2023 10:10:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjDJI7z (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 10 Apr 2023 04:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52792 "EHLO
+        id S229650AbjDJKK3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 10 Apr 2023 06:10:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbjDJI7y (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 10 Apr 2023 04:59:54 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7AB3589
-        for <bpf@vger.kernel.org>; Mon, 10 Apr 2023 01:59:29 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id 20so5959751plk.10
-        for <bpf@vger.kernel.org>; Mon, 10 Apr 2023 01:59:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1681117169;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ueHlf63HU9JRFKSuWrERCIbxEHTEvzXB14p8A02eQpo=;
-        b=CbC7kM3gDgrsz/8uuOl3IsHCOrSEg1QePC6wsHtePGDcEdppy/6fDvhBkRWD7aQrkh
-         CMFzel33HYF9q1bIlal4ejP5H1RyYVC9Xu0BKNsfvPU2sD+GBAOmEBDE4fZVIUY3tNqH
-         NIqNcSjZdloqdwwU2sVwX+ECL34OQPaO3MAlUJh5j5gY7dcz+t6DMxHgX8neu25sDUgh
-         Ij8G8mRN050YaUJ4v3SPVOUvp2KPOV2c1enYRJhrl+B2txm/l/XJQRxvkXdRhlBQGc/9
-         Trzi+X+9jKajfI61tHtWXNNXFvFKoW2a94Yz6ATFO5vXeBsHloPIYg8lD+Bct6LTkHKn
-         XCxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681117169;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ueHlf63HU9JRFKSuWrERCIbxEHTEvzXB14p8A02eQpo=;
-        b=n/WOfRTHwzMbZn35L8vBn3BpmqV7fhMU7kCyhl1xpX2QAiOJhbGG8nv5Hm8MGKqKTe
-         nAiGLIhrQVzjeKqmVEpVTUhmZOCx+UVVp7p8BT1SuUlOjGH+RSnXNj6CapnSv78qjLjG
-         6+T72By2dCYf+DxOvXr11/50amezJLt9hMh16wvhh0aw1jt2nblbUHTRIU1E17Gmy8Uu
-         JuaLLcXICZy70j1R/AZ2uycjLVt1U0MVDq806ex8zqHsee4c4gYuNoL3nCOh6C9mwTes
-         NFRefWmmxjRilKi5ukCH9p2ChsI0z4XXWEu7B4f0OTibAE9T7SlIm7NZkDhqGwx8tFoi
-         Dtww==
-X-Gm-Message-State: AAQBX9fUvpWsGmg8MVgiJVnYs5Q7aiM/I57SndNWKRb2NG2CMGhFT7ix
-        jpvDVEexnUtkQofTDXbWI8KDkw==
-X-Google-Smtp-Source: AKy350Yo1QN1keYMBG5X4wrxjlA7RdV5x6e9ubtteeY2QslDbmfBLvvkwOiZQJX6rEtxB2KABWGVvw==
-X-Received: by 2002:a05:6a20:6707:b0:dd:f44a:2717 with SMTP id q7-20020a056a20670700b000ddf44a2717mr10980029pzh.8.1681117169277;
-        Mon, 10 Apr 2023 01:59:29 -0700 (PDT)
-Received: from C02F52LSML85.bytedance.net ([139.177.225.238])
-        by smtp.gmail.com with ESMTPSA id s21-20020aa78295000000b0058bacd6c4e8sm7279526pfm.207.2023.04.10.01.59.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 01:59:28 -0700 (PDT)
-From:   Feng zhou <zhoufeng.zf@bytedance.com>
-To:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        mykolal@fb.com, shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
-        zhouchengming@bytedance.com, zhoufeng.zf@bytedance.com
-Subject: [PATCH v3 1/2] bpf/btf: Fix is_int_ptr()
-Date:   Mon, 10 Apr 2023 16:59:07 +0800
-Message-Id: <20230410085908.98493-2-zhoufeng.zf@bytedance.com>
-X-Mailer: git-send-email 2.39.2 (Apple Git-143)
-In-Reply-To: <20230410085908.98493-1-zhoufeng.zf@bytedance.com>
-References: <20230410085908.98493-1-zhoufeng.zf@bytedance.com>
+        with ESMTP id S229868AbjDJKK0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 10 Apr 2023 06:10:26 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E034EC1;
+        Mon, 10 Apr 2023 03:10:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681121420; x=1712657420;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8eoxuz0kULjCVGWAEGYIGKMQ5ODOXKen7qD6Fb3jxRI=;
+  b=azgUmcdZ/hJURMyJkeDdPPDxGtWTENvd4Me9Elig3WpG64MNuOLfQ7LK
+   D+DQLtl8E1Nv0J2mcHYsfl+UmkUiF7uHrHnj3T2vE7tY53uSrDmALH+JT
+   rbkdH729mj5nIXakU6atrVx/zjBrQJ+D7jLAz25YtBuTn3IrGxlMlFodk
+   f0vHp4Gcb5tgD+hW0sieFEOTo/z7fhAPEdGdz1yZsp9ukgjAQPcLW7Zfi
+   sKOyEWr46lS/68zJOHQ+CmkmC4ZDDJxCWnvaj2PUbjbsq9/caKXSNPF80
+   9ad03VNq6Mrcr8Nhc33w7zQAQo5hcK0dzCGE67kdz8/07jpuEuRLUUiAd
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="340815277"
+X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
+   d="scan'208";a="340815277"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 03:10:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="752715966"
+X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
+   d="scan'208";a="752715966"
+Received: from p12ill20yoongsia.png.intel.com ([10.88.227.28])
+  by fmsmga008.fm.intel.com with ESMTP; 10 Apr 2023 03:10:14 -0700
+From:   Song Yoong Siang <yoong.siang.song@intel.com>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>
+Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, xdp-hints@xdp-project.net,
+        Song Yoong Siang <yoong.siang.song@intel.com>
+Subject: [PATCH net-next 0/4] XDP Rx HWTS metadata for stmmac driver
+Date:   Mon, 10 Apr 2023 18:09:35 +0800
+Message-Id: <20230410100939.331833-1-yoong.siang.song@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Feng Zhou <zhoufeng.zf@bytedance.com>
+Implemented XDP receive hardware timestamp metadata for stmmac driver.
 
-When tracing a kernel function with arg type is u32*, btf_ctx_access()
-would report error: arg2 type INT is not a struct.
+This patchset is tested with tools/testing/selftests/bpf/xdp_hw_metadata.
+Below are the test steps and results.
 
-The commit bb6728d75611 ("bpf: Allow access to int pointer arguments
-in tracing programs") added support for int pointer, but don't skip
-modifiers before checking it's type. This patch fixes it.
+Command on DUT:
+	sudo ./xdp_hw_metadata <interface name>
 
-Fixes: bb6728d75611 ("bpf: Allow access to int pointer arguments in tracing programs")
-Co-developed-by: Chengming Zhou <zhouchengming@bytedance.com>
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+Command on Link Partner:
+	echo -n xdp | nc -u -q1 <destination IPv4 addr> 9091
+	echo -n skb | nc -u -q1 <destination IPv4 addr> 9092
+
+Result for port 9091:
+	0x55fdb5f006d0: rx_desc[3]->addr=1000000003bd000 addr=3bd100 comp_addr=3bd000
+	rx_timestamp: 1677762474360150047
+	rx_hash: 0
+	0x55fdb5f006d0: complete idx=515 addr=3bd000
+
+Result for port 9092:
+	found skb hwtstamp = 1677762476.320146161
+
 ---
- kernel/bpf/btf.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 593c45a294d0..5abd8dfa6b70 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -5910,12 +5910,8 @@ struct btf *bpf_prog_get_target_btf(const struct bpf_prog *prog)
- 
- static bool is_int_ptr(struct btf *btf, const struct btf_type *t)
- {
--	/* t comes in already as a pointer */
--	t = btf_type_by_id(btf, t->type);
--
--	/* allow const */
--	if (BTF_INFO_KIND(t->info) == BTF_KIND_CONST)
--		t = btf_type_by_id(btf, t->type);
-+	/* skip modifiers */
-+	t = btf_type_skip_modifiers(btf, t->type, NULL);
- 
- 	return btf_type_is_int(t);
- }
+Ong Boon Leong (1):
+  net: stmmac: restructure Rx hardware timestamping function
+
+Song Yoong Siang (3):
+  net: stmmac: introduce wrapper for struct xdp_buff
+  net: stmmac: add Rx HWTS metadata to XDP receive pkt
+  net: stmmac: add Rx HWTS metadata to XDP ZC receive pkt
+
+ drivers/net/ethernet/stmicro/stmmac/stmmac.h  |  5 ++
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 88 ++++++++++++++-----
+ 2 files changed, 73 insertions(+), 20 deletions(-)
+
 -- 
-2.20.1
+2.34.1
 
