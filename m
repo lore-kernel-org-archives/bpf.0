@@ -2,78 +2,71 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61032C76196
-	for <bpf@archiver.kernel.org>; Tue, 11 Apr 2023 10:52:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D2E7C77B6F
+	for <bpf@archiver.kernel.org>; Tue, 11 Apr 2023 12:36:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbjDKKwJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 11 Apr 2023 06:52:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44692 "EHLO
+        id S229881AbjDKMgx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 11 Apr 2023 08:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjDKKwI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 11 Apr 2023 06:52:08 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C582D57
-        for <bpf@vger.kernel.org>; Tue, 11 Apr 2023 03:52:07 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id jg21so18858430ejc.2
-        for <bpf@vger.kernel.org>; Tue, 11 Apr 2023 03:52:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1681210326;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iIneWuWqtNAcWU2RXauFR9ffbopRvSw0g0bao3/EIE4=;
-        b=Kf4Z06SYVLtsre+IVCn3Z0w/gc4cjIYLKxtnQpSur7ILDdAJ9vylZPT5XnBwx/GdSt
-         NkLyLzX+JdncHXcAGJBSKHVEbpTwgHFU7kRoMRirECwchBjpF2OOx2dLg+d4d4JUd3Om
-         RXf9avVf+g1kKDSqxnfLO18JGVqlfduDGSBeFvsJQAAKD5Wj+coyvfJPWwwoCmEEJjhC
-         /4G2Ry0lHg3aa2vYO4DPTa7I5tENdNCBCadF9UzfDTq/niHpgNIvTHE1LtCZdIyJ6/K8
-         7xkXCuuMwbk8x/3y/4aU5p7CK3DDx8BubA3lbCjrD68ozmOecVckVZA00xnOOV8i21NF
-         nifg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681210326;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iIneWuWqtNAcWU2RXauFR9ffbopRvSw0g0bao3/EIE4=;
-        b=j5v5LlsNThoapj9eGZKiqGOV1ia9o5aq6HOE8sG8URZF6Q+yS0BXl9NZJB8WN2L32I
-         h6tkiB8nY1nuwUCumosd71wg+XysEPdwAhxAcI3nPx+TIu6hSYzXQutv79yxQ5tpFoj0
-         gsaaNPvLtbtbZjy+btdBv0Ib5dZkmwFCRM7i9Rk/p7/4vR7Rnm5FQffQQDuj6K5yB8MX
-         ilVwCiMJ6F+sKfxQQmRaatY/KHbAf3zqA0FhmCw/F4p7tVjuNBXrzeX1HY2WClPXTYPI
-         mE2Lt1uikqgXyvpXFHJi7qMApCrIxQ8+1JYm9V4fL82U7JXCTDSS7ruJdtEjRNjdlUKw
-         AChw==
-X-Gm-Message-State: AAQBX9dSxwd2inSHKeok/nzh7i1Rdddf7wjr1onipBxeBbxpOEFObMmx
-        6ycDSECrTYP2XhzoD4sBxUdNij/mkQ4eKfB1ZrxmSg==
-X-Google-Smtp-Source: AKy350Z26lOw0uiG5GVM7W/bqUZz1i4Lf+EysXEq2/XnJUaf02aJaDCrLF7t7eYDrYairCRHXnW3IL/tCg5w/9aEU2I=
-X-Received: by 2002:a17:906:8491:b0:949:87f1:8129 with SMTP id
- m17-20020a170906849100b0094987f18129mr4471007ejx.14.1681209872161; Tue, 11
- Apr 2023 03:44:32 -0700 (PDT)
+        with ESMTP id S229749AbjDKMgs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 11 Apr 2023 08:36:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78BC3C2A;
+        Tue, 11 Apr 2023 05:36:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6484061F16;
+        Tue, 11 Apr 2023 12:36:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64DA8C433EF;
+        Tue, 11 Apr 2023 12:36:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681216604;
+        bh=AjCxCaXiBfBIIiYEZTEj1eySlj1ybIW13Hqi+EYrbqY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j/e3OLK+kwFI1mRpGIHMJAEVm1iJxFvGLrCDNX5U35e7Mq4eXFJNuvwi9gZCf+8qQ
+         GBYDrSMysuGInpCiMQk2EuVbgWh9yTI0EVXUj3aNAjqx2l6qJLqTHdY2dzReWvbDKe
+         t5cbTl5bsM20ABOy4bo1WeyhL7lIb8zavhj/ZYTcPUUjnODuwTy0C7QMTMP2RHokES
+         dD57VUhDnyTlUlatSSFkQKPk7erT85AFrjosW0MI+9knLNh3rSRZBFWJT8R0Rhf9Ew
+         s9MJb/LrTR7QUqCcOL+a+rHrOnbQZkVhd8rSd3OSaRiFtaFE8UzgnwJ/Ivc33n3bcv
+         WiDU+dHPOf2ZQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 3A70C40080; Tue, 11 Apr 2023 09:36:11 -0300 (-03)
+Date:   Tue, 11 Apr 2023 09:36:11 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH] perf bperf: Avoid use after free via union
+Message-ID: <ZDVUO/bg8WwnL8V+@kernel.org>
+References: <20230411051718.267228-1-irogers@google.com>
 MIME-Version: 1.0
-References: <20230406234205.323208-1-andrii@kernel.org> <20230406234205.323208-18-andrii@kernel.org>
-In-Reply-To: <20230406234205.323208-18-andrii@kernel.org>
-From:   Lorenz Bauer <lmb@isovalent.com>
-Date:   Tue, 11 Apr 2023 11:44:21 +0100
-Message-ID: <CAN+4W8ipTr8S=FYJD00iO5+b6MtM-EhivDmgeWtuWMXybN-77A@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf-next 17/19] selftests/bpf: add tests to validate
- log_true_size feature
-To:     Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        martin.lau@kernel.org, timo@incline.eu, robin.goegge@isovalent.com,
-        kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230411051718.267228-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Apr 7, 2023 at 12:43=E2=80=AFAM Andrii Nakryiko <andrii@kernel.org>=
- wrote:
->
-> Add additional test cases validating that log_true_size is consistent
-> between fixed and rotating log modes, and that log_true_size can be
-> used *exactly* without causing -ENOSPC, while using just 1 byte shorter
-> log buffer would cause -ENOSPC.
->
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Em Mon, Apr 10, 2023 at 10:17:18PM -0700, Ian Rogers escreveu:
+> If bperf sets leader_skel or follower_skel then it appears bpf_skel is
+> set and can trigger the following use-after-free:
 
-Great idea to test the size - 1 case!
+<SNIP>
+ 
+> Resolve by clearing bpf_skel as part of bpf_counter__destroy.
+ 
+> Suggested-by: Namhyung Kim <namhyung@kernel.org>
 
-Acked-by: Lorenz Bauer <lmb@isovalent.com>
+Thanks, applied.
+
+- Arnaldo
