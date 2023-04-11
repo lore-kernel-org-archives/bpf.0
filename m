@@ -2,89 +2,143 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E67DC7619A
-	for <bpf@archiver.kernel.org>; Tue, 11 Apr 2023 18:40:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 841D9C7619A
+	for <bpf@archiver.kernel.org>; Tue, 11 Apr 2023 22:42:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbjDKSkV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 11 Apr 2023 14:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59694 "EHLO
+        id S229469AbjDKWm2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 11 Apr 2023 18:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjDKSkU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 11 Apr 2023 14:40:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A063955BB;
-        Tue, 11 Apr 2023 11:40:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C93162AE1;
-        Tue, 11 Apr 2023 18:40:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 63474C4339B;
-        Tue, 11 Apr 2023 18:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681238418;
-        bh=EjKgf2PTCczgYBkSi2vxGlcp9usrVW2XMZByy441xuc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=AMnVIsM36I8/GWgy1z6Qr2j2pErNx/CpftijK2ABaEbrA/YLacoA1zqUtKhZuMPuU
-         M/j1jEa0ggQtWtONh0B1KSzbbeG5cCQ/xJyQI8PJDq+SjwDXXSwWYWyAyg1E1++dBt
-         13Y22U5BUsN0bV2H9S9BJycgu5gcGmspgSP/7rJW0KMYG3Ac5lxSwtAfn1RsaccOrj
-         mDHU+0yGwn6C6x6xu/jlMCzdw/h56TUZDWf2wBoVexvw2Za5HhapBic5aIc/EWJMA4
-         9ORK0LhP5FG7NddahxYFRhc0rh8BaGTraI80WWdVDCkXEqOoHxQFBqy9NqAwyeloyR
-         KBCYnQVt5angQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3F0BBC395C3;
-        Tue, 11 Apr 2023 18:40:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229451AbjDKWm1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 11 Apr 2023 18:42:27 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D103B172D
+        for <bpf@vger.kernel.org>; Tue, 11 Apr 2023 15:42:25 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id ke16so9300153plb.6
+        for <bpf@vger.kernel.org>; Tue, 11 Apr 2023 15:42:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681252945;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E0xO9Bx9i5tldfd7adzq3NuOgykDM+T3WB8seKN/9fM=;
+        b=uKwy/ailVcOdYbsnJvdxytCFTrv0n9YS+0ARjJFB00iUjwbkqRfGDfF4iYzZ1iG9Kv
+         82FGZ/RpThSY7QFxdhSjPl4N6pfaAYAQMd9Ex1gbWk6CB/OpsWHbkyHE5HbkBtCln6AE
+         CCetfIcGqIF201lBE0Y2PEFqvyxG/rYdrihtSshNnCdmy+JT1Jp8YKvBWU+bzR94zy3Y
+         gb0f4CVOuc7NI5ZIKEg3JU+1EpjqKZ28E3JxVlDdNU6OSXDzHwfO/rXmhyT3vdqjpb9S
+         lWZdb+Ngq9YKJhhVvmPUq+K8pUbhytxE29NwfYYWpcUSUjgY+3DZpEWJQCeBrv1S5tuK
+         3KDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681252945;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E0xO9Bx9i5tldfd7adzq3NuOgykDM+T3WB8seKN/9fM=;
+        b=X/CAhyC/jJ3c2MGGViIe8+jEl5tI7126aPr7ESq5akGo4z6Xr51U6t4gSequzbmVhU
+         7jOu9ORRo8Ei0Wmmqbw5cqpb0EJBmy8PUjkfT+t0++tqO9tptmLpIrNc55EFO/iW8eS5
+         FxFtxdvZ9vbMHscMGKO66Lrc5KPOrDdTX4eabmK17HokIh/3Y+LL8xaqwLCc6VoWnImV
+         CkzgyuXf3Ekpw1O86RtDBEQ4OoBfhJIRNPUKYw6hLetF3JYGWLAWuYy4GD7aDdMIYg54
+         kWLTrS6c4LS8BNKQkiFs5tnKUiou8tYUceYqN8eHQpCyIjZHqQBx4dJv5llXNjRe/4L3
+         423g==
+X-Gm-Message-State: AAQBX9fBd/T3Vs24lcFp4z+NhJwkgjCb2bBjPj5HkQ6VMB1nPGygKvrW
+        bnain/sZ9j45UaHp6RTGbICFZoEOr1xOmZ1jQD0cVA==
+X-Google-Smtp-Source: AKy350Yke3xHvPIcVDrfJDNbsXAC8S4tRog/pB48r6EGnMKgP8FWKKWc/STPyg9eHg7eVsBk44WhbqLGoyLPXsVzwRk=
+X-Received: by 2002:a17:90a:6bc3:b0:23b:36cc:f347 with SMTP id
+ w61-20020a17090a6bc300b0023b36ccf347mr3906797pjj.9.1681252945157; Tue, 11 Apr
+ 2023 15:42:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 0/2] Fix failure to access u32* argument of tracked
- function
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168123841824.29369.17941066959560460270.git-patchwork-notify@kernel.org>
-Date:   Tue, 11 Apr 2023 18:40:18 +0000
-References: <20230410085908.98493-1-zhoufeng.zf@bytedance.com>
-In-Reply-To: <20230410085908.98493-1-zhoufeng.zf@bytedance.com>
-To:     Feng zhou <zhoufeng.zf@bytedance.com>
-Cc:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        mykolal@fb.com, shuah@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, yangzhenze@bytedance.com,
-        wangdongdong.6@bytedance.com, zhouchengming@bytedance.com
+References: <168098183268.96582.7852359418481981062.stgit@firesoul> <168098188134.96582.7870014252568928901.stgit@firesoul>
+In-Reply-To: <168098188134.96582.7870014252568928901.stgit@firesoul>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Tue, 11 Apr 2023 15:42:13 -0700
+Message-ID: <CAKH8qBu2ieR+puSkF30-df3YikOvDZErxc2qjjVXPPAvCecihA@mail.gmail.com>
+Subject: Re: [PATCH bpf V7 1/7] selftests/bpf: xdp_hw_metadata default disable bpf_printk
+To:     Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     bpf@vger.kernel.org,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        martin.lau@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        alexandr.lobakin@intel.com, larysa.zaremba@intel.com,
+        xdp-hints@xdp-project.net, anthony.l.nguyen@intel.com,
+        yoong.siang.song@intel.com, boon.leong.ong@intel.com,
+        intel-wired-lan@lists.osuosl.org, pabeni@redhat.com,
+        jesse.brandeburg@intel.com, kuba@kernel.org, edumazet@google.com,
+        john.fastabend@gmail.com, hawk@kernel.org, davem@davemloft.net,
+        tariqt@nvidia.com, saeedm@nvidia.com, leon@kernel.org,
+        linux-rdma@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+On Sat, Apr 8, 2023 at 12:24=E2=80=AFPM Jesper Dangaard Brouer
+<brouer@redhat.com> wrote:
+>
+> The tool xdp_hw_metadata can be used by driver developers
+> implementing XDP-hints kfuncs.  The tool transfers the
+> XDP-hints via metadata information to an AF_XDP userspace
+> process. When everything works the bpf_printk calls are
+> unncesssary.  Thus, disable bpf_printk by default, but
+> make it easy to reenable for driver developers to use
+> when debugging their driver implementation.
+>
+> This also converts bpf_printk "forwarding UDP:9091 to AF_XDP"
+> into a code comment.  The bpf_printk's that are important
+> to the driver developers is when bpf_xdp_adjust_meta fails.
+> The likely mistake from driver developers is expected to
+> be that they didn't implement XDP metadata adjust support.
+>
+> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+> ---
+>  .../testing/selftests/bpf/progs/xdp_hw_metadata.c  |   16 ++++++++++++++=
+--
+>  1 file changed, 14 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/tools/=
+testing/selftests/bpf/progs/xdp_hw_metadata.c
+> index 4c55b4d79d3d..980eb60d8e5b 100644
+> --- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+> +++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+> @@ -5,6 +5,19 @@
+>  #include <bpf/bpf_helpers.h>
+>  #include <bpf/bpf_endian.h>
+>
+> +/* Per default below bpf_printk() calls are disabled.  Can be
+> + * reenabled manually for convenience by XDP-hints driver developer,
+> + * when troublshooting the drivers kfuncs implementation details.
+> + *
+> + * Remember BPF-prog bpf_printk info output can be access via:
+> + *  /sys/kernel/debug/tracing/trace_pipe
+> + */
+> +//#define DEBUG        1
+> +#ifndef DEBUG
+> +#undef  bpf_printk
+> +#define bpf_printk(fmt, ...) ({})
+> +#endif
 
-This series was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+Are you planning to eventually do somethike similar to what I've
+mentioned in [0]? If not, should I try to send a patch?
 
-On Mon, 10 Apr 2023 16:59:06 +0800 you wrote:
-> From: Feng Zhou <zhoufeng.zf@bytedance.com>
-> 
-> When access traced function arguments with type is u32*, bpf verifier failed.
-> Because u32 have typedef, needs to skip modifier. Add btf_type_is_modifier in
-> is_int_ptr. Add a selftest to check it.
-> 
-> Feng Zhou (2):
->   bpf/btf: Fix is_int_ptr()
->   selftests/bpf: Add test to access u32 ptr argument in tracing program
-> 
-> [...]
+0: https://lore.kernel.org/netdev/CAKH8qBupRYEg+SPMTMb4h532GESG7P1QdaFJ-+zr=
+bARVN9xrdA@mail.gmail.com/
 
-Here is the summary with links:
-  - [v3,1/2] bpf/btf: Fix is_int_ptr()
-    https://git.kernel.org/bpf/bpf-next/c/91f2dc6838c1
-  - [v3,2/2] selftests/bpf: Add test to access u32 ptr argument in tracing program
-    https://git.kernel.org/bpf/bpf-next/c/75dcef8d3609
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> +
+>  struct {
+>         __uint(type, BPF_MAP_TYPE_XSKMAP);
+>         __uint(max_entries, 256);
+> @@ -49,11 +62,10 @@ int rx(struct xdp_md *ctx)
+>         if (!udp)
+>                 return XDP_PASS;
+>
+> +       /* Forwarding UDP:9091 to AF_XDP */
+>         if (udp->dest !=3D bpf_htons(9091))
+>                 return XDP_PASS;
+>
+> -       bpf_printk("forwarding UDP:9091 to AF_XDP");
+> -
+>         ret =3D bpf_xdp_adjust_meta(ctx, -(int)sizeof(struct xdp_meta));
+>         if (ret !=3D 0) {
+>                 bpf_printk("bpf_xdp_adjust_meta returned %d", ret);
+>
+>
