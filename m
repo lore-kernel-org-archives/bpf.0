@@ -2,267 +2,145 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11984C77B6E
-	for <bpf@archiver.kernel.org>; Wed, 12 Apr 2023 12:47:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 480B3C77B6E
+	for <bpf@archiver.kernel.org>; Wed, 12 Apr 2023 13:28:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbjDLMra (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 12 Apr 2023 08:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34016 "EHLO
+        id S229498AbjDLN2x (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 12 Apr 2023 09:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjDLMrO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 12 Apr 2023 08:47:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B5A39776
-        for <bpf@vger.kernel.org>; Wed, 12 Apr 2023 05:45:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681303382;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HL2+nZ3ony7g1DbggJ7CDo8uNVT9LxTWALi4pMFYEfg=;
-        b=FtI7Khyl+JGz0KmCje6T+wCX+P+ToufnwlH7itqkHqQtZKE0l6XcfFxYbS2FWtKEFZDYo3
-        CEIyZbCl5YfseHYTOw0wrpjMiRE4ADdwTSQ0HqCJmK+qgh8s8EETbbPgnxtfjd5W/rPDI7
-        8HWc2YyhywT6HjZ6GLK+huLlLAwQKvU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-617-iMZuKDMfMQ2MZbpjqZOsvA-1; Wed, 12 Apr 2023 08:42:55 -0400
-X-MC-Unique: iMZuKDMfMQ2MZbpjqZOsvA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B96481C05142;
-        Wed, 12 Apr 2023 12:42:53 +0000 (UTC)
-Received: from firesoul.localdomain (unknown [10.45.242.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4BEB4492C13;
-        Wed, 12 Apr 2023 12:42:53 +0000 (UTC)
-Received: from [10.1.1.1] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 67B8B307372E8;
-        Wed, 12 Apr 2023 14:42:52 +0200 (CEST)
-Subject: [PATCH bpf V8 3/7] xdp: rss hash types representation
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     bpf@vger.kernel.org, Stanislav Fomichev <sdf@google.com>,
-        =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, martin.lau@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, alexandr.lobakin@intel.com,
-        larysa.zaremba@intel.com, xdp-hints@xdp-project.net,
-        anthony.l.nguyen@intel.com, yoong.siang.song@intel.com,
-        boon.leong.ong@intel.com, intel-wired-lan@lists.osuosl.org,
-        pabeni@redhat.com, jesse.brandeburg@intel.com, kuba@kernel.org,
-        edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
-        davem@davemloft.net, tariqt@nvidia.com, saeedm@nvidia.com,
-        leon@kernel.org, linux-rdma@vger.kernel.org
-Date:   Wed, 12 Apr 2023 14:42:52 +0200
-Message-ID: <168130337235.150247.6938159999375701232.stgit@firesoul>
-In-Reply-To: <168130333143.150247.11159481574477358816.stgit@firesoul>
-References: <168130333143.150247.11159481574477358816.stgit@firesoul>
-User-Agent: StGit/1.4
+        with ESMTP id S230176AbjDLN2s (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 12 Apr 2023 09:28:48 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7143E6A40
+        for <bpf@vger.kernel.org>; Wed, 12 Apr 2023 06:28:24 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id n9-20020a05600c4f8900b003f05f617f3cso12907066wmq.2
+        for <bpf@vger.kernel.org>; Wed, 12 Apr 2023 06:28:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1681306045; x=1683898045;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7mmRBjnE+5jMO2xvU6ASHfM67DD3ZZge+9wZq6e0F68=;
+        b=ZpSfYTFYiufEke2gGFSquiKowLG1jeR2Lx0WUBDFqv9YOUbUz6hGaCx7bprM//mq4/
+         dTnsxsQqr8Yajl01HzbBNg2tsLVQrERcY1zk6HXL9qfbkTj/txf/jTq2esNYJmpghsHq
+         JZPVf9CZx2LLXtpX0A57DPYCpA1SAnaDGhls8nSbWpmTAdL3yt7Tl6ym6Z1b7k4xsrjb
+         v8st7yKaZmk6DmyyKvA5XFt4N07IgTIH54D3I2AbSNTa/adINTCjqggfsb9GZrWQdOR7
+         Qo7el1a3wydXqJk7StMhDiR33tVrxn+vx8hZaZta/OaSscM1WaPt88MbOReFs7Z8zZ9q
+         wzKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681306045; x=1683898045;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7mmRBjnE+5jMO2xvU6ASHfM67DD3ZZge+9wZq6e0F68=;
+        b=cpmVsmZoaI/np4OQ7o8atc6cr0fUtA88UsSgcejgS9GA8LhLeMkoFLUFNcXMTF/WH1
+         b5To1Xc/MZ8628IFL+GbX7+iWiVmviqy/Hm5Plwrr73GLckXf4QpPJdkZ8ye8VXwnJ29
+         37Wc3qqhExGu6qOSG/wMG+1RVzaN+Jka8FmY6Cn0rk02wiMGdOjL6bXfLiy1l0PFa/fu
+         iS0sg4hVcYcHrLUDdkv9NdpE1Dg++HlLzbL+pGFEOApBCZcW6dHa1EFRtbxB9t2VxcTP
+         my7ZgBbRViervyTWKAyuWrnuXsFgHfiA2Xsg5uW1HQ6iDbTMuSjyO0nEH/8LNwywOF6O
+         iiEg==
+X-Gm-Message-State: AAQBX9cZuDWHDOW0F1QBI96O2IEsvbBJivts/yFRzKspnfu9Z51b/bDx
+        TZaZJ+bDICqQImQsNWQW0vnFRnjgK8HCaX34hF/YqA==
+X-Google-Smtp-Source: AKy350a1IiABTRdfDQ/hd7uv3NzzsZ+kTyGueBt65A3/9CmK/QfUOuRVk87B1m4dKTILCUUHHwf9Hw==
+X-Received: by 2002:a05:600c:2941:b0:3ed:2eb5:c2e8 with SMTP id n1-20020a05600c294100b003ed2eb5c2e8mr11928494wmd.10.1681306045408;
+        Wed, 12 Apr 2023 06:27:25 -0700 (PDT)
+Received: from ?IPV6:2a02:8011:e80c:0:53b:acfc:bce0:dc7d? ([2a02:8011:e80c:0:53b:acfc:bce0:dc7d])
+        by smtp.gmail.com with ESMTPSA id v10-20020a05600c470a00b003ef36ef3833sm2540483wmo.8.2023.04.12.06.27.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Apr 2023 06:27:24 -0700 (PDT)
+Message-ID: <3f952aed-0926-eb26-6472-2d0443c1a0ff@isovalent.com>
+Date:   Wed, 12 Apr 2023 14:27:23 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] bpftool: fix broken compile on s390 for linux-next
+ repository
+Content-Language: en-GB
+To:     Thomas Richter <tmricht@linux.ibm.com>, hca@linux.ibm.com,
+        bpf@vger.kernel.org, linux-next@vger.kernel.org
+References: <20230412123636.2358949-1-tmricht@linux.ibm.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <20230412123636.2358949-1-tmricht@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The RSS hash type specifies what portion of packet data NIC hardware used
-when calculating RSS hash value. The RSS types are focused on Internet
-traffic protocols at OSI layers L3 and L4. L2 (e.g. ARP) often get hash
-value zero and no RSS type. For L3 focused on IPv4 vs. IPv6, and L4
-primarily TCP vs UDP, but some hardware supports SCTP.
+2023-04-12 14:36 UTC+0200 ~ Thomas Richter <tmricht@linux.ibm.com>
+> Commit 9fd496848b1c ("bpftool: Support inline annotations when dumping the CFG of a program")
+> breaks the build of the perf tool on s390 in the linux-next repository.
+> Here is the make output:
+> 
+> make -C tools/perf
+> ....
+> btf_dumper.c: In function 'dotlabel_puts':
+> DEBUG: btf_dumper.c:838:25: error: '__fallthrough' undeclared \
+> 		(first use in this function); did you mean 'fallthrough'?
+> DEBUG:   838 |                         __fallthrough;
+> DEBUG:       |                         ^~~~~~~~~~~~~
+> DEBUG:       |                         fallthrough
+> DEBUG: btf_dumper.c:838:25: note: each undeclared identifier is reported \
+> 		only once for each function it appears in
+> DEBUG: btf_dumper.c:837:25: warning: this statement may fall through \
+>                 [-Wimplicit-fallthrough=]
+> DEBUG:   837 |                         putchar('\\');
+> DEBUG:       |                         ^~~~~~~~~~~~~
+> DEBUG: btf_dumper.c:839:17: note: here
+> DEBUG:   839 |                 default:
+> DEBUG:       |                 ^~~~~~~
+> DEBUG: make[3]: *** [Makefile:247: /builddir/build/BUILD/kernel-6.2.fc37/\
+> 		        linux-6.2/tools/perf/util/bpf_skel/ \
+> 		        .tmp/bootstrap/btf_dumper.o] Error 1
+> 
+> The compile fails because symbol __fallthrough unknown, but symbol
+> fallthrough is known and works fine.
+> 
+> Fix this and replace __fallthrough by fallthrough.
+> 
+> With this change, the compile works.
+> 
+> Output after:
+> 
+>  # make -C tools/perf
+>  ....
+>  CC      util/bpf-filter.o
+>  CC      util/bpf-filter-flex.o
+>  LD      util/perf-in.o
+>  LD      perf-in.o
+>  LINK    perf
+>  make: Leaving directory '/root/mirror-linux-next/tools/perf'
+>  #
+> 
+> Fixes: 9fd496848b1c ("bpftool: Support inline annotations when dumping the CFG of a program")
+> Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
+> ---
+>  tools/bpf/bpftool/btf_dumper.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumper.c
+> index 6c5e0e82da22..1b7f69714604 100644
+> --- a/tools/bpf/bpftool/btf_dumper.c
+> +++ b/tools/bpf/bpftool/btf_dumper.c
+> @@ -835,7 +835,7 @@ static void dotlabel_puts(const char *s)
+>  		case '|':
+>  		case ' ':
+>  			putchar('\\');
+> -			__fallthrough;
+> +			fallthrough;
+>  		default:
+>  			putchar(*s);
+>  		}
 
-Hardware RSS types are differently encoded for each hardware NIC. Most
-hardware represent RSS hash type as a number. Determining L3 vs L4 often
-requires a mapping table as there often isn't a pattern or sorting
-according to ISO layer.
+Also reported by Sven Schnelle, and discussed at
+https://lore.kernel.org/all/yt9dttxlwal7.fsf@linux.ibm.com/.
 
-The patch introduce a XDP RSS hash type (enum xdp_rss_hash_type) that
-contains both BITs for the L3/L4 types, and combinations to be used by
-drivers for their mapping tables. The enum xdp_rss_type_bits get exposed
-to BPF via BTF, and it is up to the BPF-programmer to match using these
-defines.
+This is for linux-next, it cannot go through bpf-next given that commit
+f7a858bffcdd ("tools: Rename __fallthrough to fallthrough") is not in
+there yet.
 
-This proposal change the kfunc API bpf_xdp_metadata_rx_hash() adding
-a pointer value argument for provide the RSS hash type.
-Change signature for all xmo_rx_hash calls in drivers to make it compile.
+Acked-by: Quentin Monnet <quentin@isovalent.com>
 
-The RSS type implementations for each driver comes as separate patches.
-
-Fixes: 3d76a4d3d4e5 ("bpf: XDP metadata RX kfuncs")
-Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Acked-by: Stanislav Fomichev <sdf@google.com>
----
- drivers/net/ethernet/mellanox/mlx4/en_rx.c       |    3 +
- drivers/net/ethernet/mellanox/mlx4/mlx4_en.h     |    3 +
- drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c |    3 +
- drivers/net/veth.c                               |    3 +
- include/linux/netdevice.h                        |    3 +
- include/net/xdp.h                                |   45 ++++++++++++++++++++++
- net/core/xdp.c                                   |   10 ++++-
- 7 files changed, 64 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/net/ethernet/mellanox/mlx4/en_rx.c b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-index 4b5e459b6d49..73d10aa4c503 100644
---- a/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-+++ b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-@@ -681,7 +681,8 @@ int mlx4_en_xdp_rx_timestamp(const struct xdp_md *ctx, u64 *timestamp)
- 	return 0;
- }
- 
--int mlx4_en_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash)
-+int mlx4_en_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
-+			enum xdp_rss_hash_type *rss_type)
- {
- 	struct mlx4_en_xdp_buff *_ctx = (void *)ctx;
- 
-diff --git a/drivers/net/ethernet/mellanox/mlx4/mlx4_en.h b/drivers/net/ethernet/mellanox/mlx4/mlx4_en.h
-index 544e09b97483..4ac4d883047b 100644
---- a/drivers/net/ethernet/mellanox/mlx4/mlx4_en.h
-+++ b/drivers/net/ethernet/mellanox/mlx4/mlx4_en.h
-@@ -798,7 +798,8 @@ int mlx4_en_netdev_event(struct notifier_block *this,
- 
- struct xdp_md;
- int mlx4_en_xdp_rx_timestamp(const struct xdp_md *ctx, u64 *timestamp);
--int mlx4_en_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash);
-+int mlx4_en_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
-+			enum xdp_rss_hash_type *rss_type);
- 
- /*
-  * Functions for time stamping
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-index c5dae48b7932..efe609f8e3aa 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-@@ -169,7 +169,8 @@ static int mlx5e_xdp_rx_timestamp(const struct xdp_md *ctx, u64 *timestamp)
- 	return 0;
- }
- 
--static int mlx5e_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash)
-+static int mlx5e_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
-+			     enum xdp_rss_hash_type *rss_type)
- {
- 	const struct mlx5e_xdp_buff *_ctx = (void *)ctx;
- 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index c1178915496d..424e8876a16b 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -1648,7 +1648,8 @@ static int veth_xdp_rx_timestamp(const struct xdp_md *ctx, u64 *timestamp)
- 	return 0;
- }
- 
--static int veth_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash)
-+static int veth_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
-+			    enum xdp_rss_hash_type *rss_type)
- {
- 	struct veth_xdp_buff *_ctx = (void *)ctx;
- 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 470085b121d3..c35f04f636f1 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -1624,7 +1624,8 @@ struct net_device_ops {
- 
- struct xdp_metadata_ops {
- 	int	(*xmo_rx_timestamp)(const struct xdp_md *ctx, u64 *timestamp);
--	int	(*xmo_rx_hash)(const struct xdp_md *ctx, u32 *hash);
-+	int	(*xmo_rx_hash)(const struct xdp_md *ctx, u32 *hash,
-+			       enum xdp_rss_hash_type *rss_type);
- };
- 
- /**
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 41c57b8b1671..a76c4ea203ea 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -8,6 +8,7 @@
- 
- #include <linux/skbuff.h> /* skb_shared_info */
- #include <uapi/linux/netdev.h>
-+#include <linux/bitfield.h>
- 
- /**
-  * DOC: XDP RX-queue information
-@@ -425,6 +426,50 @@ XDP_METADATA_KFUNC_xxx
- MAX_XDP_METADATA_KFUNC,
- };
- 
-+enum xdp_rss_hash_type {
-+	/* First part: Individual bits for L3/L4 types */
-+	XDP_RSS_L3_IPV4		= BIT(0),
-+	XDP_RSS_L3_IPV6		= BIT(1),
-+
-+	/* The fixed (L3) IPv4 and IPv6 headers can both be followed by
-+	 * variable/dynamic headers, IPv4 called Options and IPv6 called
-+	 * Extension Headers. HW RSS type can contain this info.
-+	 */
-+	XDP_RSS_L3_DYNHDR	= BIT(2),
-+
-+	/* When RSS hash covers L4 then drivers MUST set XDP_RSS_L4 bit in
-+	 * addition to the protocol specific bit.  This ease interaction with
-+	 * SKBs and avoids reserving a fixed mask for future L4 protocol bits.
-+	 */
-+	XDP_RSS_L4		= BIT(3), /* L4 based hash, proto can be unknown */
-+	XDP_RSS_L4_TCP		= BIT(4),
-+	XDP_RSS_L4_UDP		= BIT(5),
-+	XDP_RSS_L4_SCTP		= BIT(6),
-+	XDP_RSS_L4_IPSEC	= BIT(7), /* L4 based hash include IPSEC SPI */
-+
-+	/* Second part: RSS hash type combinations used for driver HW mapping */
-+	XDP_RSS_TYPE_NONE            = 0,
-+	XDP_RSS_TYPE_L2              = XDP_RSS_TYPE_NONE,
-+
-+	XDP_RSS_TYPE_L3_IPV4         = XDP_RSS_L3_IPV4,
-+	XDP_RSS_TYPE_L3_IPV6         = XDP_RSS_L3_IPV6,
-+	XDP_RSS_TYPE_L3_IPV4_OPT     = XDP_RSS_L3_IPV4 | XDP_RSS_L3_DYNHDR,
-+	XDP_RSS_TYPE_L3_IPV6_EX      = XDP_RSS_L3_IPV6 | XDP_RSS_L3_DYNHDR,
-+
-+	XDP_RSS_TYPE_L4_ANY          = XDP_RSS_L4,
-+	XDP_RSS_TYPE_L4_IPV4_TCP     = XDP_RSS_L3_IPV4 | XDP_RSS_L4 | XDP_RSS_L4_TCP,
-+	XDP_RSS_TYPE_L4_IPV4_UDP     = XDP_RSS_L3_IPV4 | XDP_RSS_L4 | XDP_RSS_L4_UDP,
-+	XDP_RSS_TYPE_L4_IPV4_SCTP    = XDP_RSS_L3_IPV4 | XDP_RSS_L4 | XDP_RSS_L4_SCTP,
-+
-+	XDP_RSS_TYPE_L4_IPV6_TCP     = XDP_RSS_L3_IPV6 | XDP_RSS_L4 | XDP_RSS_L4_TCP,
-+	XDP_RSS_TYPE_L4_IPV6_UDP     = XDP_RSS_L3_IPV6 | XDP_RSS_L4 | XDP_RSS_L4_UDP,
-+	XDP_RSS_TYPE_L4_IPV6_SCTP    = XDP_RSS_L3_IPV6 | XDP_RSS_L4 | XDP_RSS_L4_SCTP,
-+
-+	XDP_RSS_TYPE_L4_IPV6_TCP_EX  = XDP_RSS_TYPE_L4_IPV6_TCP  | XDP_RSS_L3_DYNHDR,
-+	XDP_RSS_TYPE_L4_IPV6_UDP_EX  = XDP_RSS_TYPE_L4_IPV6_UDP  | XDP_RSS_L3_DYNHDR,
-+	XDP_RSS_TYPE_L4_IPV6_SCTP_EX = XDP_RSS_TYPE_L4_IPV6_SCTP | XDP_RSS_L3_DYNHDR,
-+};
-+
- #ifdef CONFIG_NET
- u32 bpf_xdp_metadata_kfunc_id(int id);
- bool bpf_dev_bound_kfunc_id(u32 btf_id);
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 528d4b37983d..fb85aca81961 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -734,13 +734,21 @@ __bpf_kfunc int bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx, u64 *tim
-  * bpf_xdp_metadata_rx_hash - Read XDP frame RX hash.
-  * @ctx: XDP context pointer.
-  * @hash: Return value pointer.
-+ * @rss_type: Return value pointer for RSS type.
-+ *
-+ * The RSS hash type (@rss_type) specifies what portion of packet headers NIC
-+ * hardware used when calculating RSS hash value.  The RSS type can be decoded
-+ * via &enum xdp_rss_hash_type either matching on individual L3/L4 bits
-+ * ``XDP_RSS_L*`` or by combined traditional *RSS Hashing Types*
-+ * ``XDP_RSS_TYPE_L*``.
-  *
-  * Return:
-  * * Returns 0 on success or ``-errno`` on error.
-  * * ``-EOPNOTSUPP`` : means device driver doesn't implement kfunc
-  * * ``-ENODATA``    : means no RX-hash available for this frame
-  */
--__bpf_kfunc int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, u32 *hash)
-+__bpf_kfunc int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, u32 *hash,
-+					 enum xdp_rss_hash_type *rss_type)
- {
- 	return -EOPNOTSUPP;
- }
-
-
+Thanks!
+Quentin
