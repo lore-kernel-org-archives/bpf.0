@@ -2,101 +2,145 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCE49C77B73
-	for <bpf@archiver.kernel.org>; Wed, 12 Apr 2023 04:35:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D45D9C77B73
+	for <bpf@archiver.kernel.org>; Wed, 12 Apr 2023 06:04:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjDLEfw convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 12 Apr 2023 00:35:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
+        id S229491AbjDLGEb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 12 Apr 2023 02:04:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjDLEfv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 12 Apr 2023 00:35:51 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976E92136
-        for <bpf@vger.kernel.org>; Tue, 11 Apr 2023 21:35:50 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33BNTnNl005888
-        for <bpf@vger.kernel.org>; Tue, 11 Apr 2023 21:35:50 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3pw3jc6h5u-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 11 Apr 2023 21:35:50 -0700
-Received: from ash-exhub204.TheFacebook.com (2620:10d:c0a8:83::4) by
- ash-exhub101.TheFacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 11 Apr 2023 21:35:48 -0700
-Received: from twshared6687.46.prn1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 11 Apr 2023 21:35:47 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 5B7492DCF455A; Tue, 11 Apr 2023 21:33:25 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <kpsingh@kernel.org>, <keescook@chromium.org>,
-        <paul@paul-moore.com>
-CC:     <linux-security-module@vger.kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Subject: [PATCH bpf-next 6/8] bpf: drop unnecessary bpf_capable() check in BPF_MAP_FREEZE command
-Date:   Tue, 11 Apr 2023 21:32:58 -0700
-Message-ID: <20230412043300.360803-7-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230412043300.360803-1-andrii@kernel.org>
-References: <20230412043300.360803-1-andrii@kernel.org>
+        with ESMTP id S229555AbjDLGEa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 12 Apr 2023 02:04:30 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359DEF7;
+        Tue, 11 Apr 2023 23:04:29 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33C5tMQ5023544;
+        Wed, 12 Apr 2023 06:04:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : references : date : in-reply-to : message-id : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=nhscJsslmlKYVcGYTBp8JzDV6+njDKE79AOyU0p7Zss=;
+ b=SjgxhJQPVGK5mF/6MZXVn7slvk2mnbpJaVeBdlUZ0SuLPbhUa6WQ8RmNnKc5BwUraFiP
+ HXSOs9x5CfUTTReVUNv4tA4qzOjd9IO+o0S2NEsXaiT2inWW0p8t2tuLILphzsnRBHY7
+ Q1jVZTuMYsx1PbAbluR8NOva9PRAviqTI1GoFH3lNpPe7Rf/W7Ae14WwEqf+jVyXSDUr
+ dnsMxbLnQP86jDRsDArNMEvoaklq5zcTQUES8lu9VHe1k1paNY++bCmXe4xhTky4iLML
+ eMfZtO20qbYIuPOpp/YFYBq087jGnOMPc947Ms/OMzVxib6Zb4N5QYLLe49XP1D7EOuO ig== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pwpwqr9wk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 06:04:11 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33C5wS0C031385;
+        Wed, 12 Apr 2023 06:04:10 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pwpwqr9t0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 06:04:10 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33C4Coib012368;
+        Wed, 12 Apr 2023 06:04:08 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3pu0hq1tkw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Apr 2023 06:04:07 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33C645iH16974374
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 Apr 2023 06:04:05 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8108020043;
+        Wed, 12 Apr 2023 06:04:05 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 29E2520040;
+        Wed, 12 Apr 2023 06:04:05 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Wed, 12 Apr 2023 06:04:05 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Quentin Monnet <quentin@isovalent.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, Eduard Zingerman <eddyz87@gmail.com>,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3 3/7] bpftool: Support inline annotations
+ when dumping the CFG of a program
+References: <20230405132120.59886-1-quentin@isovalent.com>
+        <20230405132120.59886-4-quentin@isovalent.com>
+Date:   Wed, 12 Apr 2023 08:04:04 +0200
+In-Reply-To: <20230405132120.59886-4-quentin@isovalent.com> (Quentin Monnet's
+        message of "Wed, 5 Apr 2023 14:21:16 +0100")
+Message-ID: <yt9d8rexy6uj.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: 4VyTn9IiFrIyG24aLjXU9ZU6YgabHP4O
-X-Proofpoint-ORIG-GUID: 4VyTn9IiFrIyG24aLjXU9ZU6YgabHP4O
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: uxpDhElEdIp8Tp4uP4bAiiZjnrtXpw3B
+X-Proofpoint-GUID: 1_OgglVB3CC42JzZqwqVZC-rujYoy46N
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-04-11_16,2023-04-11_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ suspectscore=0 phishscore=0 impostorscore=0 spamscore=0 bulkscore=0
+ adultscore=0 priorityscore=1501 clxscore=1011 mlxlogscore=999
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304120054
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Seems like that extra bpf_capable() check in BPF_MAP_FREEZE handler was
-unintentionally left when we switched to a model that all BPF map
-operations should be allowed regardless of CAP_BPF (or any other
-capabilities), as long as process got BPF map FD somehow.
+Quentin Monnet <quentin@isovalent.com> writes:
 
-This patch replaces bpf_capable() check in BPF_MAP_FREEZE handler with
-writeable access check, given conceptually freezing the map is modifying
-it: map becomes unmodifiable for subsequent updates.
+> diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumpe=
+r.c
+> index e7f6ec3a8f35..583aa843df92 100644
+> --- a/tools/bpf/bpftool/btf_dumper.c
+> +++ b/tools/bpf/bpftool/btf_dumper.c
+> @@ -821,3 +821,37 @@ void btf_dump_linfo_json(const struct btf *btf,
+>  					BPF_LINE_INFO_LINE_COL(linfo->line_col));
+>  	}
+>  }
+> +
+> +static void dotlabel_puts(const char *s)
+> +{
+> +	for (; *s; ++s) {
+> +		switch (*s) {
+> +		case '\\':
+> +		case '"':
+> +		case '{':
+> +		case '}':
+> +		case '<':
+> +		case '>':
+> +		case '|':
+> +		case ' ':
+> +			putchar('\\');
+> +			__fallthrough;
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- kernel/bpf/syscall.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+Is __fallthrough correct? I see the following compile error on s390 in
+linux-next (20230412):
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 7d1165814efc..42d8473237ab 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2001,6 +2001,11 @@ static int map_freeze(const union bpf_attr *attr)
- 		return -ENOTSUPP;
- 	}
- 
-+	if (!(map_get_sys_perms(map, f) & FMODE_CAN_WRITE)) {
-+		err = -EPERM;
-+		goto err_put;
-+	}
-+
- 	mutex_lock(&map->freeze_mutex);
- 	if (bpf_map_write_active(map)) {
- 		err = -EBUSY;
-@@ -2010,10 +2015,6 @@ static int map_freeze(const union bpf_attr *attr)
- 		err = -EBUSY;
- 		goto err_put;
- 	}
--	if (!bpf_capable()) {
--		err = -EPERM;
--		goto err_put;
--	}
- 
- 	WRITE_ONCE(map->frozen, true);
- err_put:
--- 
-2.34.1
+  CC      btf_dumper.o
+btf_dumper.c: In function =E2=80=98dotlabel_puts=E2=80=99:
+btf_dumper.c:838:25: error: =E2=80=98__fallthrough=E2=80=99 undeclared (fir=
+st use in this function); did you mean =E2=80=98fallthrough=E2=80=99?
+  838 |                         __fallthrough;
+      |                         ^~~~~~~~~~~~~
 
+removing the two underscores fixes this.
+
+> +		default:
+> +			putchar(*s);
+> +		}
+> +	}
+> +}
+
+Thanks,
+Sven
