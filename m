@@ -2,154 +2,146 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10247C7619A
-	for <bpf@archiver.kernel.org>; Wed, 12 Apr 2023 10:28:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EC59C77B6E
+	for <bpf@archiver.kernel.org>; Wed, 12 Apr 2023 10:55:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjDLK2O (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 12 Apr 2023 06:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39696 "EHLO
+        id S229700AbjDLKzh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 12 Apr 2023 06:55:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjDLK2O (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 12 Apr 2023 06:28:14 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DDDB1726
-        for <bpf@vger.kernel.org>; Wed, 12 Apr 2023 03:28:12 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id ud9so27329048ejc.7
-        for <bpf@vger.kernel.org>; Wed, 12 Apr 2023 03:28:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google; t=1681295291;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=rj9fvcibMW48MaloVAPMPFjLFvW3M+fUPLz4gOoA3Ik=;
-        b=ee+lQfruVja98WkllDE+Uw4cGzCpW/8AsOBtsPDfeNh8ekKqBXplLBtZW4Kwb4PW2m
-         DdzXPx28rDHyEroyeDSSHv0Ndxr7/Dt4D7Hzrh1opeIODm73hc/0ANboiAjmIqHo4nKE
-         ugrF9GvBXASJD1AlBbgifMkzLwu7lOuxPtqH8=
+        with ESMTP id S229553AbjDLKzg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 12 Apr 2023 06:55:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9AA46A6E
+        for <bpf@vger.kernel.org>; Wed, 12 Apr 2023 03:54:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681296889;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9alFis21lp3H1PeQGiwFBeiCWEcrStDft1SvCWrv9fk=;
+        b=FQT6jJGu3OYTx1455515yVvDwRtzkD0nmiVHVDt3/PA9u4tf9gSjMbeFKHXmDhBdNpx+R8
+        dAaBXRd80u7yj8mx0ar/l/Gnsi0STW1FaULk4Oexu7TvXuRcuQQuIHqG+Jizwsry0vViZj
+        KSyqPsth4mgQTwblZByG2pYgqAlJu2o=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-531-ev8dimJEPlmTLWoEONNWaw-1; Wed, 12 Apr 2023 06:54:48 -0400
+X-MC-Unique: ev8dimJEPlmTLWoEONNWaw-1
+Received: by mail-ed1-f70.google.com with SMTP id q27-20020a50aa9b000000b00505034ae370so976809edc.3
+        for <bpf@vger.kernel.org>; Wed, 12 Apr 2023 03:54:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681295291;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rj9fvcibMW48MaloVAPMPFjLFvW3M+fUPLz4gOoA3Ik=;
-        b=cR2GH9CRoF75EwMaveWZV2mPbfffScxk/OmHD315dpSnsqQ4n3+qbpms3B2n+MubHT
-         jWyfPRCAeppZ9/B5lh4/dNa0OGToguk2WxYduyUmiHU+ejK9QQg2n+XMIzKW1Z8aAPSD
-         A2atkQeiXZBwlUOfcJ6bktnYMm6D8uukpU1MgKWKTRYwqfsj6GQeRPkkJo7SRpmRYDmf
-         L7TWPp0S7wqP11VK/6mTgwrGxd6UldxWdBcUHjEzSp5hgGNcZ97cWWuVDWqFvdt0TWF4
-         OoEjzUjmQ9C7ZVTb1e4fBuo4r68nj6kLetT1txw9MIooZfOHkHoVPmaoPcyhUCl3L9Zu
-         1dZg==
-X-Gm-Message-State: AAQBX9fWe8Qd7PvqfU1BpVpZvYTqZe9wYuYBg0dAnZs5tHLLgImRN3fx
-        P5Tgbp2OGAfAIO+JiC3AgCY9Ig==
-X-Google-Smtp-Source: AKy350b/KwvBgywfJF1XiTTRvbAnBijFvZlR3HJKqcKy/p11ynNkG51ywF0PTInFnPbePV18GFZerg==
-X-Received: by 2002:a17:906:4c48:b0:94a:86dc:3a13 with SMTP id d8-20020a1709064c4800b0094a86dc3a13mr10499450ejw.75.1681295290916;
-        Wed, 12 Apr 2023 03:28:10 -0700 (PDT)
-Received: from cloudflare.com (79.191.181.173.ipv4.supernova.orange.pl. [79.191.181.173])
-        by smtp.gmail.com with ESMTPSA id s7-20020a170906a18700b00929fc8d264dsm7197146ejy.17.2023.04.12.03.28.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 03:28:10 -0700 (PDT)
-References: <20230407171654.107311-1-john.fastabend@gmail.com>
- <20230407171654.107311-6-john.fastabend@gmail.com>
-User-agent: mu4e 1.6.10; emacs 28.2
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     daniel@iogearbox.net, lmb@isovalent.com, edumazet@google.com,
-        bpf@vger.kernel.org, netdev@vger.kernel.org, ast@kernel.org,
-        andrii@kernel.org, will@isovalent.com
-Subject: Re: [PATCH bpf v6 05/12] bpf: sockmap, TCP data stall on recv
- before accept
-Date:   Wed, 12 Apr 2023 12:26:04 +0200
-In-reply-to: <20230407171654.107311-6-john.fastabend@gmail.com>
-Message-ID: <87h6tlgzt3.fsf@cloudflare.com>
+        d=1e100.net; s=20210112; t=1681296887; x=1683888887;
+        h=content-transfer-encoding:in-reply-to:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9alFis21lp3H1PeQGiwFBeiCWEcrStDft1SvCWrv9fk=;
+        b=W1XdH/m9Bq7Tr1IgfWsQM17Lr/zCYeJpJWgbekKrr0d7wZad+LTo2YGWqWdLwErXQB
+         eYdCYiYdeAxY9PWV447pnDhx1jhdu/ZJBryvNpHtwew8N8JY7z4A4I1KLAUCLrIYWbzV
+         DuM4D+s/ksWZY3KvueV0/CCK9wAka1mXVdhPcep4+9ZGNVmCRdlUzBc7kS2s7g1MZLh0
+         p214PVvwxOB8cQhmvDr5EOmYbhpij5iktF+JJjO4o73u2rUQTlWAnaiDJYe9cVb2+Asq
+         ZklpjxHcEk3FjV5ZpX/5i8vm6PDKPB5btvYVcmuBICYHDmSkZsldKZdE8zeVd1S3yvJE
+         Uukw==
+X-Gm-Message-State: AAQBX9fKIjjT0h1k12o3Ii6kjeuoyhQHTdtR/ZRzEOV1R53iZwwmo1J0
+        Gfupnmf8QPy4uqXfgNTeBZEHEGA/uIrKer49/cH8fkYSIAQwiCGKRtkLDOwHMOHOwyI3KuLaH0H
+        U0nEXw0WP5IAYri99lSEr
+X-Received: by 2002:a17:906:6d16:b0:948:c047:467d with SMTP id m22-20020a1709066d1600b00948c047467dmr5713199ejr.23.1681296887176;
+        Wed, 12 Apr 2023 03:54:47 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bMaqa5uHrrM7B5IePYN1OMBi6DPhLMgrCl1TykvEZOYX14RUF+y2TD0HStIwcvwi/F7K0XRg==
+X-Received: by 2002:a17:906:6d16:b0:948:c047:467d with SMTP id m22-20020a1709066d1600b00948c047467dmr5713173ejr.23.1681296886799;
+        Wed, 12 Apr 2023 03:54:46 -0700 (PDT)
+Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
+        by smtp.gmail.com with ESMTPSA id g19-20020a1709065d1300b00928e0ea53e5sm7083290ejt.84.2023.04.12.03.54.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Apr 2023 03:54:46 -0700 (PDT)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <402a3c73-d26d-3619-d69a-c90eb3f0e9ee@redhat.com>
+Date:   Wed, 12 Apr 2023 12:54:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Cc:     brouer@redhat.com, bpf@vger.kernel.org,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        martin.lau@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        alexandr.lobakin@intel.com, larysa.zaremba@intel.com,
+        xdp-hints@xdp-project.net, anthony.l.nguyen@intel.com,
+        yoong.siang.song@intel.com, boon.leong.ong@intel.com,
+        intel-wired-lan@lists.osuosl.org, pabeni@redhat.com,
+        jesse.brandeburg@intel.com, kuba@kernel.org, edumazet@google.com,
+        john.fastabend@gmail.com, hawk@kernel.org, davem@davemloft.net,
+        tariqt@nvidia.com, saeedm@nvidia.com, leon@kernel.org,
+        linux-rdma@vger.kernel.org
+Subject: Re: [PATCH bpf V7 1/7] selftests/bpf: xdp_hw_metadata default disable
+ bpf_printk
+Content-Language: en-US
+To:     Stanislav Fomichev <sdf@google.com>
+References: <168098183268.96582.7852359418481981062.stgit@firesoul>
+ <168098188134.96582.7870014252568928901.stgit@firesoul>
+ <CAKH8qBu2ieR+puSkF30-df3YikOvDZErxc2qjjVXPPAvCecihA@mail.gmail.com>
+In-Reply-To: <CAKH8qBu2ieR+puSkF30-df3YikOvDZErxc2qjjVXPPAvCecihA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 10:16 AM -07, John Fastabend wrote:
-> A common mechanism to put a TCP socket into the sockmap is to hook the
-> BPF_SOCK_OPS_{ACTIVE_PASSIVE}_ESTABLISHED_CB event with a BPF program
-> that can map the socket info to the correct BPF verdict parser. When
-> the user adds the socket to the map the psock is created and the new
-> ops are assigned to ensure the verdict program will 'see' the sk_buffs
-> as they arrive.
->
-> Part of this process hooks the sk_data_ready op with a BPF specific
-> handler to wake up the BPF verdict program when data is ready to read.
-> The logic is simple enough (posted here for easy reading)
->
->  static void sk_psock_verdict_data_ready(struct sock *sk)
->  {
-> 	struct socket *sock = sk->sk_socket;
->
-> 	if (unlikely(!sock || !sock->ops || !sock->ops->read_skb))
-> 		return;
-> 	sock->ops->read_skb(sk, sk_psock_verdict_recv);
->  }
->
-> The oversight here is sk->sk_socket is not assigned until the application
-> accepts() the new socket. However, its entirely ok for the peer application
-> to do a connect() followed immediately by sends. The socket on the receiver
-> is sitting on the backlog queue of the listening socket until its accepted
-> and the data is queued up. If the peer never accepts the socket or is slow
-> it will eventually hit data limits and rate limit the session. But,
-> important for BPF sockmap hooks when this data is received TCP stack does
-> the sk_data_ready() call but the read_skb() for this data is never called
-> because sk_socket is missing. The data sits on the sk_receive_queue.
->
-> Then once the socket is accepted if we never receive more data from the
-> peer there will be no further sk_data_ready calls and all the data
-> is still on the sk_receive_queue(). Then user calls recvmsg after accept()
-> and for TCP sockets in sockmap we use the tcp_bpf_recvmsg_parser() handler.
-> The handler checks for data in the sk_msg ingress queue expecting that
-> the BPF program has already run from the sk_data_ready hook and enqueued
-> the data as needed. So we are stuck.
->
-> To fix do an unlikely check in recvmsg handler for data on the
-> sk_receive_queue and if it exists wake up data_ready. We have the sock
-> locked in both read_skb and recvmsg so should avoid having multiple
-> runners.
->
-> Fixes: 04919bed948dc ("tcp: Introduce tcp_read_skb()")
-> Signed-off-by: John Fastabend <john.fastabend@gmail.com>
-> ---
->  net/ipv4/tcp_bpf.c | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
->
-> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-> index 804bd0c247d0..ae6c7130551c 100644
-> --- a/net/ipv4/tcp_bpf.c
-> +++ b/net/ipv4/tcp_bpf.c
-> @@ -212,6 +212,26 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
->  		return tcp_recvmsg(sk, msg, len, flags, addr_len);
->  
->  	lock_sock(sk);
-> +
-> +	/* We may have received data on the sk_receive_queue pre-accept and
-> +	 * then we can not use read_skb in this context because we haven't
-> +	 * assigned a sk_socket yet so have no link to the ops. The work-around
-> +	 * is to check the sk_receive_queue and in these cases read skbs off
-> +	 * queue again. The read_skb hook is not running at this point because
-> +	 * of lock_sock so we avoid having multiple runners in read_skb.
-> +	 */
-> +	if (unlikely(!skb_queue_empty(&sk->sk_receive_queue))) {
-> +		tcp_data_ready(sk);
-> +		/* This handles the ENOMEM errors if we both receive data
-> +		 * pre accept and are already under memory pressure. At least
-> +		 * let user no to retry.
 
-Nit: s/no/know/
+On 12/04/2023 00.42, Stanislav Fomichev wrote:
+> On Sat, Apr 8, 2023 at 12:24 PM Jesper Dangaard Brouer
+> <brouer@redhat.com> wrote:
+>>
+>> The tool xdp_hw_metadata can be used by driver developers
+>> implementing XDP-hints kfuncs.  The tool transfers the
+>> XDP-hints via metadata information to an AF_XDP userspace
+>> process. When everything works the bpf_printk calls are
+>> unncesssary.  Thus, disable bpf_printk by default, but
+>> make it easy to reenable for driver developers to use
+>> when debugging their driver implementation.
+>>
+>> This also converts bpf_printk "forwarding UDP:9091 to AF_XDP"
+>> into a code comment.  The bpf_printk's that are important
+>> to the driver developers is when bpf_xdp_adjust_meta fails.
+>> The likely mistake from driver developers is expected to
+>> be that they didn't implement XDP metadata adjust support.
+>>
+>> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+>> ---
+>>   .../testing/selftests/bpf/progs/xdp_hw_metadata.c  |   16 ++++++++++++++--
+>>   1 file changed, 14 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+>> index 4c55b4d79d3d..980eb60d8e5b 100644
+>> --- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+>> +++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+>> @@ -5,6 +5,19 @@
+>>   #include <bpf/bpf_helpers.h>
+>>   #include <bpf/bpf_endian.h>
+>>
+>> +/* Per default below bpf_printk() calls are disabled.  Can be
+>> + * reenabled manually for convenience by XDP-hints driver developer,
+>> + * when troublshooting the drivers kfuncs implementation details.
+>> + *
+>> + * Remember BPF-prog bpf_printk info output can be access via:
+>> + *  /sys/kernel/debug/tracing/trace_pipe
+>> + */
+>> +//#define DEBUG        1
+>> +#ifndef DEBUG
+>> +#undef  bpf_printk
+>> +#define bpf_printk(fmt, ...) ({})
+>> +#endif
+> 
+> Are you planning to eventually do somethike similar to what I've
+> mentioned in [0]? If not, should I try to send a patch?
 
-> +		 */
-> +		if (unlikely(!skb_queue_empty(&sk->sk_receive_queue))) {
-> +			copied = -EAGAIN;
-> +			goto out;
-> +		}
-> +	}
-> +
->  msg_bytes_ready:
->  	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
->  	/* The typical case for EFAULT is the socket was gracefully
+See next patch:
+  - [PATCH bpf V7 2/7] selftests/bpf: Add counters to xdp_hw_metadata
 
-Similar to patch 04/12, we will need this corner case fix in
-tcp_bpf_recvmsg as well.
+where I add these counters :-)
 
-Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
+> 
+> 0: https://lore.kernel.org/netdev/CAKH8qBupRYEg+SPMTMb4h532GESG7P1QdaFJ-+zrbARVN9xrdA@mail.gmail.com/
+> 
+
