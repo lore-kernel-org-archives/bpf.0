@@ -2,204 +2,182 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E781C77B73
-	for <bpf@archiver.kernel.org>; Wed, 12 Apr 2023 19:46:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB19FC7619A
+	for <bpf@archiver.kernel.org>; Wed, 12 Apr 2023 19:49:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbjDLTq0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 12 Apr 2023 15:46:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35218 "EHLO
+        id S229947AbjDLTta (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 12 Apr 2023 15:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbjDLTqU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 12 Apr 2023 15:46:20 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03ADC6EAB
-        for <bpf@vger.kernel.org>; Wed, 12 Apr 2023 12:46:18 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id 21so4382493plg.12
-        for <bpf@vger.kernel.org>; Wed, 12 Apr 2023 12:46:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681328777; x=1683920777;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rh9IeKDPhLqCojjOCexRwPlfwC8qA4P7+b4pfmzZpz8=;
-        b=Vq8ocvLAWPveGsh0A2b2x85pBicdwLVZJvrBdDjjWoXLCkPWZ/eLZe3Ti9MyGwtiAz
-         an8xb+nDsweekAFyG4fw1515dMWcc52bdIwAw3gORtSd9BaRbMfZCklOrnAk/KQD8J29
-         CZpDwduNzJUvj4JGHCdaK6AEbZ1Lc8iE4DSDOOtWUCC26z2PKY55ia3S2BXQvlIg7nlr
-         QClsh38N3tdwNJZI8PK0JZKdl5dPvqpgPaSWHaRCJMSWyQogFN1LemAP1ZcbgF9XTp8A
-         0BAK8PrMXCpEykmIS7uh6FmnU5nbp0i2wHp9G/UrNkBz1V5seeNFqwZgsU5Acfkbuibr
-         C/vA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681328777; x=1683920777;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rh9IeKDPhLqCojjOCexRwPlfwC8qA4P7+b4pfmzZpz8=;
-        b=EiZLqZoTu969rWD4FgiyNrk7w+Qw1NyURQYtfdHDKbIJv9pU8KIqAvmMD0f5ohtxG/
-         WQ5u7zlPv0rPLX0Dw2s9VfY8Zm0iIBJA70n1ylFazJVwQR+X1XhCXpmor/u1fS7UwQ5z
-         uEQVNGtGEJ/CNaB3kH1KfsiZaUcabMuMqiivLJc+IU4W5T3+kYayMCMi9r+prIbrWanV
-         F1yHFSt14H8gqWGEMhMSrPjyZTowmVpJPNS18GoThPZO6Z0xc4DtUiy0b2BAXwWT0IOO
-         crorL0AzpRsmX0mOqr0t1qxLfc4DwsU7MpvpORQyFXDYcxVwAZrMwO3D9sUgWNRrgHgo
-         klLQ==
-X-Gm-Message-State: AAQBX9cU8aYILC6ys5QI9H9C/ms+gfkdD7l6rSkp2bQT5gt5knz3BXrS
-        ml8rlBuUpojwEIfllB2gDEg=
-X-Google-Smtp-Source: AKy350bY02DSUIMCfmdxHozQ9td3hyWBjqRG65bsvgwUFGkHiuLOfGiwzK13OCfzc1M4nM3nMmbmWQ==
-X-Received: by 2002:a05:6a20:a888:b0:db:df13:4f73 with SMTP id ca8-20020a056a20a88800b000dbdf134f73mr15411796pzb.26.1681328777334;
-        Wed, 12 Apr 2023 12:46:17 -0700 (PDT)
-Received: from macbook-pro-6.dhcp.thefacebook.com ([2620:10d:c090:400::5:5010])
-        by smtp.gmail.com with ESMTPSA id e15-20020a63ee0f000000b005141568e322sm10650014pgi.81.2023.04.12.12.46.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 12:46:16 -0700 (PDT)
-Date:   Wed, 12 Apr 2023 12:46:14 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        David Vernet <void@manifault.com>
-Subject: Re: [PATCH RFC bpf-next v1 9/9] selftests/bpf: Add tests for BPF
- exceptions
-Message-ID: <20230412194614.prin3fbc377jlh56@macbook-pro-6.dhcp.thefacebook.com>
-References: <20230405004239.1375399-1-memxor@gmail.com>
- <20230405004239.1375399-10-memxor@gmail.com>
- <20230406023809.jffvgx5r7eyjw24g@dhcp-172-26-102-232.dhcp.thefacebook.com>
- <qcyhnf2nmjyb6yjaqpibv2q6m4tqr63ftxmwuua3k6efjpx77u@5gohye433ufp>
- <20230407023007.uqito235y2aatfb2@dhcp-172-26-102-232.dhcp.thefacebook.com>
- <e3fypriihcxl75uarpqqfqqyln376lmljshzzrx4pa2lskio46@yv2se4ow2yvu>
+        with ESMTP id S229620AbjDLTt3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 12 Apr 2023 15:49:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8745FF2
+        for <bpf@vger.kernel.org>; Wed, 12 Apr 2023 12:48:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681328922;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lfDGD9RcxJ2qdgcYebzeDAtUwxX7ZOftORqmzBm8cuY=;
+        b=d/B8o1Qlx6krOc9ca0y3Ebqz2R30Teg8xJHjlJstuHU1OpYsLos0gwCjnt5JpSRw8e1tGC
+        frd2xMKBNSu2eKVj30FCEWtNhxf1mvM8HbtEnZuMPMGv7k9vpFnOPQRFo1apQWU3zouC/m
+        MvipUhbtSYZ/tVq1GuV7H7+qLoTFJcU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-173-gt3IM4NpNXaLCyXGbVZZGw-1; Wed, 12 Apr 2023 15:48:37 -0400
+X-MC-Unique: gt3IM4NpNXaLCyXGbVZZGw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 959503C025C1;
+        Wed, 12 Apr 2023 19:48:36 +0000 (UTC)
+Received: from firesoul.localdomain (unknown [10.45.242.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4D05CFD6E;
+        Wed, 12 Apr 2023 19:48:36 +0000 (UTC)
+Received: from [10.1.1.1] (localhost [IPv6:::1])
+        by firesoul.localdomain (Postfix) with ESMTP id 61D45307372E8;
+        Wed, 12 Apr 2023 21:48:35 +0200 (CEST)
+Subject: [PATCH bpf V10 1/6] selftests/bpf: xdp_hw_metadata remove bpf_printk
+ and add counters
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     bpf@vger.kernel.org, Stanislav Fomichev <sdf@google.com>,
+        =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.lau@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, alexandr.lobakin@intel.com,
+        larysa.zaremba@intel.com, xdp-hints@xdp-project.net,
+        anthony.l.nguyen@intel.com, yoong.siang.song@intel.com,
+        boon.leong.ong@intel.com, intel-wired-lan@lists.osuosl.org,
+        pabeni@redhat.com, jesse.brandeburg@intel.com, kuba@kernel.org,
+        edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
+        davem@davemloft.net, tariqt@nvidia.com, saeedm@nvidia.com,
+        leon@kernel.org, linux-rdma@vger.kernel.org
+Date:   Wed, 12 Apr 2023 21:48:35 +0200
+Message-ID: <168132891533.340624.7313781245316405141.stgit@firesoul>
+In-Reply-To: <168132888942.340624.2449617439220153267.stgit@firesoul>
+References: <168132888942.340624.2449617439220153267.stgit@firesoul>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e3fypriihcxl75uarpqqfqqyln376lmljshzzrx4pa2lskio46@yv2se4ow2yvu>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 05:12:24AM +0200, Kumar Kartikeya Dwivedi wrote:
-> On Fri, Apr 07, 2023 at 04:30:07AM CEST, Alexei Starovoitov wrote:
-> > On Fri, Apr 07, 2023 at 02:42:14AM +0200, Kumar Kartikeya Dwivedi wrote:
-> > > On Thu, Apr 06, 2023 at 04:38:09AM CEST, Alexei Starovoitov wrote:
-> > > > On Wed, Apr 05, 2023 at 02:42:39AM +0200, Kumar Kartikeya Dwivedi wrote:
-> > > > > +static __noinline int throwing_subprog(struct __sk_buff *ctx)
-> > > > > +{
-> > > > > +	if (ctx)
-> > > > > +		bpf_throw();
-> > > > > +	return 0;
-> > > > > +}
-> > > > > +
-> > > > > +__noinline int global_subprog(struct __sk_buff *ctx)
-> > > > > +{
-> > > > > +	return subprog(ctx) + 1;
-> > > > > +}
-> > > > > +
-> > > > > +__noinline int throwing_global_subprog(struct __sk_buff *ctx)
-> > > > > +{
-> > > > > +	if (ctx)
-> > > > > +		bpf_throw();
-> > > > > +	return 0;
-> > > > > +}
-> > > > > +
-> > > > > +static __noinline int exception_cb(void)
-> > > > > +{
-> > > > > +	return 16;
-> > > > > +}
-> > > > > +
-> > > > > +SEC("tc")
-> > > > > +int exception_throw_subprog(struct __sk_buff *ctx)
-> > > > > +{
-> > > > > +	volatile int i;
-> > > > > +
-> > > > > +	exception_cb();
-> > > > > +	bpf_set_exception_callback(exception_cb);
-> > > > > +	i = subprog(ctx);
-> > > > > +	i += global_subprog(ctx) - 1;
-> > > > > +	if (!i)
-> > > > > +		return throwing_global_subprog(ctx);
-> > > > > +	else
-> > > > > +		return throwing_subprog(ctx);
-> > > > > +	bpf_throw();
-> > > > > +	return 0;
-> > > > > +}
-> > > > > +
-> > > > > +__noinline int throwing_gfunc(volatile int i)
-> > > > > +{
-> > > > > +	bpf_assert_eq(i, 0);
-> > > > > +	return 1;
-> > > > > +}
-> > > > > +
-> > > > > +__noinline static int throwing_func(volatile int i)
-> > > > > +{
-> > > > > +	bpf_assert_lt(i, 1);
-> > > > > +	return 1;
-> > > > > +}
-> > > >
-> > > > exception_cb() has no way of knowning which assert statement threw the exception.
-> > > > How about extending a macro:
-> > > > bpf_assert_eq(i, 0, MY_INT_ERR);
-> > > > or
-> > > > bpf_assert_eq(i, 0) {bpf_throw(MY_INT_ERR);}
-> > > >
-> > > > bpf_throw can store it in prog->aux->exception pass the address to cb.
-> > > >
-> > >
-> > > I agree and will add passing of a value that gets passed to the callback
-> > > (probably just set it in the exception state), but I don't think prog->aux will
-> > > work, see previous mails.
-> > >
-> > > > Also I think we shouldn't complicate the verifier with auto release of resources.
-> > > > If the user really wants to assert when spin_lock is held it should be user's
-> > > > job to specify what resources should be released.
-> > > > Can we make it look like:
-> > > >
-> > > > bpf_spin_lock(&lock);
-> > > > bpf_assert_eq(i, 0) {
-> > > >   bpf_spin_unlock(&lock);
-> > > >   bpf_throw(MY_INT_ERR);
-> > > > }
-> > >
-> > > Do you mean just locks or all resources? Then it kind of undermines the point of
-> > > having something like bpf_throw IMO. Since it's easy to insert code from the
-> > > point of throw but it's not possible to do the same in callers (unless we add a
-> > > way to 'catch' throws), so it only works for some particular cases where callers
-> > > don't hold references (or in the main subprog).
-> >
-> > That's a good point. This approach will force caller of functions that can
-> > throw not hold any referenced objects (spin_locks, sk_lookup, obj_new, etc)
-> > That indeed might be too restrictive.
-> > It would be great if we could come up with a way for bpf prog to release resources
-> > explicitly though. I'm not a fan of magic release of spin locks.
-> >
-> 
-> I think to realize that, we need a way to 'catch' thrown exceptions in the
-> caller. The user will write a block of code that handles release of resources in
-> the current scope and resume unwinding (implicitly by calling into some
-> intrinsics). 
+The tool xdp_hw_metadata can be used by driver developers
+implementing XDP-hints metadata kfuncs.
 
-or we simply don't allow calling subprogs that can throw while holding resources.
+Remove all bpf_printk calls, as the tool already transfers all the
+XDP-hints related information via metadata area to AF_XDP
+userspace process.
 
-> When we discussed this earlier, you rightly mentioned problems
-> associated with introducing control flow into the program not seen by the
-> compiler (unlike try/catch in something like C++ which has clear semantics).
-> 
-> But to take a step back, and about what you've said below:
-> 
-> > bpf_assert is not analogous to C++ exceptions. It shouldn't be seen a mechanism
-> > to simplify control flow and error handling.
-> 
-> When programs get explicit control and handle the 'exceptional' condition, it
-> begins to mimic more of an alternative 'slow path' of the program when it
-> encounters an error, and starts resembling an alternative error handling
-> mechanism pretty much like C++ exceptions.
-> 
-> I think that was not the goal here, and the automatic release of resources is
-> simply supposed to happen to ensure that the kernel's resource safety is not
-> violated when a program is aborting. An assertion's should never occur at
-> runtime 99.9999% of the time, but when it does, the BPF runtime emits code to
-> ensure that the aborting program does not leave the kernel in an inconsistent
-> state (memory leaks, held locks that other programs can never take again, etc.).
-> 
-> So this will involve clean up of every resource it had acquired when it threw.
-> If we cannot ensure that we can safely release resources (e.g. throwing in NMI
-> context where a kptr_xchg'd pointer cannot be freed), we will bail during
-> verification.
+Add counters for providing remaining information about failure and
+skipped packet events.
 
-exactly. +1 to all of the above. the progs shouldn't be paying run-time cost
-for this 0.0001% case.
+Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Acked-by: Stanislav Fomichev <sdf@google.com>
+---
+ .../testing/selftests/bpf/progs/xdp_hw_metadata.c  |   36 ++++++++++++--------
+ tools/testing/selftests/bpf/xdp_hw_metadata.c      |    4 ++
+ 2 files changed, 24 insertions(+), 16 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+index 4c55b4d79d3d..0687d11162f6 100644
+--- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
++++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+@@ -12,6 +12,10 @@ struct {
+ 	__type(value, __u32);
+ } xsk SEC(".maps");
+ 
++__u64 pkts_skip = 0;
++__u64 pkts_fail = 0;
++__u64 pkts_redir = 0;
++
+ extern int bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx,
+ 					 __u64 *timestamp) __ksym;
+ extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx,
+@@ -26,7 +30,7 @@ int rx(struct xdp_md *ctx)
+ 	struct udphdr *udp = NULL;
+ 	struct iphdr *iph = NULL;
+ 	struct xdp_meta *meta;
+-	int ret;
++	int err;
+ 
+ 	data = (void *)(long)ctx->data;
+ 	data_end = (void *)(long)ctx->data_end;
+@@ -46,17 +50,20 @@ int rx(struct xdp_md *ctx)
+ 			udp = NULL;
+ 	}
+ 
+-	if (!udp)
++	if (!udp) {
++		__sync_add_and_fetch(&pkts_skip, 1);
+ 		return XDP_PASS;
++	}
+ 
+-	if (udp->dest != bpf_htons(9091))
++	/* Forwarding UDP:9091 to AF_XDP */
++	if (udp->dest != bpf_htons(9091)) {
++		__sync_add_and_fetch(&pkts_skip, 1);
+ 		return XDP_PASS;
++	}
+ 
+-	bpf_printk("forwarding UDP:9091 to AF_XDP");
+-
+-	ret = bpf_xdp_adjust_meta(ctx, -(int)sizeof(struct xdp_meta));
+-	if (ret != 0) {
+-		bpf_printk("bpf_xdp_adjust_meta returned %d", ret);
++	err = bpf_xdp_adjust_meta(ctx, -(int)sizeof(struct xdp_meta));
++	if (err) {
++		__sync_add_and_fetch(&pkts_fail, 1);
+ 		return XDP_PASS;
+ 	}
+ 
+@@ -65,20 +72,19 @@ int rx(struct xdp_md *ctx)
+ 	meta = data_meta;
+ 
+ 	if (meta + 1 > data) {
+-		bpf_printk("bpf_xdp_adjust_meta doesn't appear to work");
++		__sync_add_and_fetch(&pkts_fail, 1);
+ 		return XDP_PASS;
+ 	}
+ 
+-	if (!bpf_xdp_metadata_rx_timestamp(ctx, &meta->rx_timestamp))
+-		bpf_printk("populated rx_timestamp with %llu", meta->rx_timestamp);
+-	else
++	err = bpf_xdp_metadata_rx_timestamp(ctx, &meta->rx_timestamp);
++	if (err)
+ 		meta->rx_timestamp = 0; /* Used by AF_XDP as not avail signal */
+ 
+-	if (!bpf_xdp_metadata_rx_hash(ctx, &meta->rx_hash))
+-		bpf_printk("populated rx_hash with %u", meta->rx_hash);
+-	else
++	err = bpf_xdp_metadata_rx_hash(ctx, &meta->rx_hash);
++	if (err)
+ 		meta->rx_hash = 0; /* Used by AF_XDP as not avail signal */
+ 
++	__sync_add_and_fetch(&pkts_redir, 1);
+ 	return bpf_redirect_map(&xsk, ctx->rx_queue_index, XDP_PASS);
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+index 1c8acb68b977..3b942ef7297b 100644
+--- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
++++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+@@ -212,7 +212,9 @@ static int verify_metadata(struct xsk *rx_xsk, int rxq, int server_fd)
+ 	while (true) {
+ 		errno = 0;
+ 		ret = poll(fds, rxq + 1, 1000);
+-		printf("poll: %d (%d)\n", ret, errno);
++		printf("poll: %d (%d) skip=%llu fail=%llu redir=%llu\n",
++		       ret, errno, bpf_obj->bss->pkts_skip,
++		       bpf_obj->bss->pkts_fail, bpf_obj->bss->pkts_redir);
+ 		if (ret < 0)
+ 			break;
+ 		if (ret == 0)
+
+
