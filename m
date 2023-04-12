@@ -2,79 +2,176 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A92CFC77B6E
-	for <bpf@archiver.kernel.org>; Wed, 12 Apr 2023 17:50:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F27CAC7619A
+	for <bpf@archiver.kernel.org>; Wed, 12 Apr 2023 17:53:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjDLRuU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 12 Apr 2023 13:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50326 "EHLO
+        id S229529AbjDLRxn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 12 Apr 2023 13:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjDLRuT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 12 Apr 2023 13:50:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA0DE69;
-        Wed, 12 Apr 2023 10:50:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 239D963656;
-        Wed, 12 Apr 2023 17:50:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6919DC433D2;
-        Wed, 12 Apr 2023 17:50:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681321817;
-        bh=FJ4KPsLqt3/kPJSTAFO3C74a/mwBbKh95cFJHfKaHwk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=atyH/myqDqlj6dbWUz+wMpSFA89bR2kWUsfrk1HvY3C5rCOYJ+nzcgEwhDp038qpJ
-         A2RkX388IB965VbhmWAFuRZjt3saskeOXK8PX1SW+V7Fq3rl4VK9msORyu7dLBLwdo
-         9pf+/huOawhUTEbia28MQKnDezZKyfc+rzQjZ11uE7YQdkhC6NAaySWrTROGohAIuo
-         9T45RrNJ6/s01DRh7Rmcsd8PvujN5pFQTSL6GOdu5pIkX7pfs7xJ9/zOLraGbqiswV
-         oa2YBCDX/rABZ6y+TMAXb3R7IePvgM5kXbS4IKJH4VnI60aFxZm37WeYmYJtvTpwIi
-         ZL9P0HWzDP2Ew==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 52760E5244F;
-        Wed, 12 Apr 2023 17:50:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S230061AbjDLRxg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 12 Apr 2023 13:53:36 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A1D40F4
+        for <bpf@vger.kernel.org>; Wed, 12 Apr 2023 10:53:35 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-63255e756bfso874339b3a.2
+        for <bpf@vger.kernel.org>; Wed, 12 Apr 2023 10:53:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1681322015; x=1683914015;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=DCoX899z8CUiLCRvn/AeqNPe6lm7wbr80nSwfg/+Nck=;
+        b=fMdyEvMbCb4Fr/r3FdOijxh+HzVY0jd0xVNsLDAwx36A1agVjyXL5Hi0DF20Z+GsVp
+         pGrmJfTfS4BNsoOzkLw4nrKofF915+ZmXuQ6FWjKkbrwld2zXdmKk2Qzu5uOMmcttt7y
+         JYp4iSjZYrCoWKtnMNviS0IJeFm4/7ErPz4+0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681322015; x=1683914015;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DCoX899z8CUiLCRvn/AeqNPe6lm7wbr80nSwfg/+Nck=;
+        b=RCMYngRumsZFdYPSJuq5uZpr632HJAg0Hs81Da8f/0ldco4Ui72MCK0WFtOL7J1WYo
+         XfkiBcx3d1XlNeftylnxPYQ1XcH47ZdNdg/o7Wm03z0Yn93qQ14dKO/ilSeQeY0w4E5i
+         bkRzbkmoVsHyE/YaCVtzZWYdO9sByUtn00WireZkpVF29YDB3yeioq33aH99CKJzB5iB
+         z9B5a6xrkY2V5PcXHinfR2yySEoF9Y0bgPOCuNGBBAvA+OPwpeRYQOH4zeo6y5G5J1sh
+         RznhvVH7BZizVVoyxUtLDooAof5iNU8nPK8MLjLAsvVEBjBeTD9PMwwmbPEgGOB+peZF
+         AjOA==
+X-Gm-Message-State: AAQBX9cxLfIJ22w203BLLYddL66ql6ShUz0O0l2UoZE7n+7PFiu3c0gj
+        nXjg6O9xQD2G4koUSNXRnSXPIu2X/6R5w65i/k8=
+X-Google-Smtp-Source: AKy350bv9IJCrLcsEQS+3ujGEGfHCjqAuNNgx+bx62104+d4h8ExjVFOGWptLytn4th0aA/dnM8tVg==
+X-Received: by 2002:aa7:9521:0:b0:63a:f682:a8bf with SMTP id c1-20020aa79521000000b0063af682a8bfmr3813041pfp.17.1681322015063;
+        Wed, 12 Apr 2023 10:53:35 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id k8-20020aa792c8000000b0062dbafced27sm12070286pfa.27.2023.04.12.10.53.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 10:53:34 -0700 (PDT)
+Message-ID: <6436f01e.a70a0220.e12e2.828e@mx.google.com>
+X-Google-Original-Message-ID: <202304121051.@keescook>
+Date:   Wed, 12 Apr 2023 10:53:31 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        kpsingh@kernel.org, paul@paul-moore.com,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH bpf-next 2/8] bpf: inline map creation logic in
+ map_create() function
+References: <20230412043300.360803-1-andrii@kernel.org>
+ <20230412043300.360803-3-andrii@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf: Handle NULL in bpf_local_storage_free.
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168132181733.666.17463837668317872941.git-patchwork-notify@kernel.org>
-Date:   Wed, 12 Apr 2023 17:50:17 +0000
-References: <20230412171252.15635-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20230412171252.15635-1-alexei.starovoitov@gmail.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     davem@davemloft.net, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        kernel-team@fb.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230412043300.360803-3-andrii@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+On Tue, Apr 11, 2023 at 09:32:54PM -0700, Andrii Nakryiko wrote:
+> Keep all the relevant generic sanity checks, permission checks, and
+> creation and initialization logic in one linear piece of code. Currently
+> helper function that handles memory allocation and partial
+> initialization is split apart and is about 1000 lines higher in the
+> file, hurting readability.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+At first glance, this seems like a step in the wrong direction: having a
+single-purpose function pulled out of a larger one seems like a good
+thing for stuff like unit testing, etc. Unless there's a reason later in
+the series for this inlining (which should be called out in the
+changelog here), I would say if it is only readability, just move the
+function down 1000 lines but leave it a separate function.
 
-On Wed, 12 Apr 2023 10:12:52 -0700 you wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
+-Kees
+
 > 
-> During OOM bpf_local_storage_alloc() may fail to allocate 'storage' and
-> call to bpf_local_storage_free() with NULL pointer will cause a crash like:
-> [ 271718.917646] BUG: kernel NULL pointer dereference, address: 00000000000000a0
-> [ 271719.019620] RIP: 0010:call_rcu+0x2d/0x240
-> [ 271719.216274]  bpf_local_storage_alloc+0x19e/0x1e0
-> [ 271719.250121]  bpf_local_storage_update+0x33b/0x740
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
+>  kernel/bpf/syscall.c | 54 ++++++++++++++++++--------------------------
+>  1 file changed, 22 insertions(+), 32 deletions(-)
 > 
-> [...]
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index c1d268025985..a090737f98ea 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -108,37 +108,6 @@ const struct bpf_map_ops bpf_map_offload_ops = {
+>  	.map_mem_usage = bpf_map_offload_map_mem_usage,
+>  };
+>  
+> -static struct bpf_map *find_and_alloc_map(union bpf_attr *attr)
+> -{
+> -	const struct bpf_map_ops *ops;
+> -	u32 type = attr->map_type;
+> -	struct bpf_map *map;
+> -	int err;
+> -
+> -	if (type >= ARRAY_SIZE(bpf_map_types))
+> -		return ERR_PTR(-EINVAL);
+> -	type = array_index_nospec(type, ARRAY_SIZE(bpf_map_types));
+> -	ops = bpf_map_types[type];
+> -	if (!ops)
+> -		return ERR_PTR(-EINVAL);
+> -
+> -	if (ops->map_alloc_check) {
+> -		err = ops->map_alloc_check(attr);
+> -		if (err)
+> -			return ERR_PTR(err);
+> -	}
+> -	if (attr->map_ifindex)
+> -		ops = &bpf_map_offload_ops;
+> -	if (!ops->map_mem_usage)
+> -		return ERR_PTR(-EINVAL);
+> -	map = ops->map_alloc(attr);
+> -	if (IS_ERR(map))
+> -		return map;
+> -	map->ops = ops;
+> -	map->map_type = type;
+> -	return map;
+> -}
+> -
+>  static void bpf_map_write_active_inc(struct bpf_map *map)
+>  {
+>  	atomic64_inc(&map->writecnt);
+> @@ -1124,7 +1093,9 @@ static int map_check_btf(struct bpf_map *map, const struct btf *btf,
+>  /* called via syscall */
+>  static int map_create(union bpf_attr *attr)
+>  {
+> +	const struct bpf_map_ops *ops;
+>  	int numa_node = bpf_map_attr_numa_node(attr);
+> +	u32 map_type = attr->map_type;
+>  	struct btf_field_offs *foffs;
+>  	struct bpf_map *map;
+>  	int f_flags;
+> @@ -1167,9 +1138,28 @@ static int map_create(union bpf_attr *attr)
+>  		return -EINVAL;
+>  
+>  	/* find map type and init map: hashtable vs rbtree vs bloom vs ... */
+> -	map = find_and_alloc_map(attr);
+> +	map_type = attr->map_type;
+> +	if (map_type >= ARRAY_SIZE(bpf_map_types))
+> +		return -EINVAL;
+> +	map_type = array_index_nospec(map_type, ARRAY_SIZE(bpf_map_types));
+> +	ops = bpf_map_types[map_type];
+> +	if (!ops)
+> +		return -EINVAL;
+> +
+> +	if (ops->map_alloc_check) {
+> +		err = ops->map_alloc_check(attr);
+> +		if (err)
+> +			return err;
+> +	}
+> +	if (attr->map_ifindex)
+> +		ops = &bpf_map_offload_ops;
+> +	if (!ops->map_mem_usage)
+> +		return -EINVAL;
+> +	map = ops->map_alloc(attr);
+>  	if (IS_ERR(map))
+>  		return PTR_ERR(map);
+> +	map->ops = ops;
+> +	map->map_type = map_type;
+>  
+>  	err = bpf_obj_name_cpy(map->name, attr->map_name,
+>  			       sizeof(attr->map_name));
+> -- 
+> 2.34.1
+> 
 
-Here is the summary with links:
-  - [bpf-next] bpf: Handle NULL in bpf_local_storage_free.
-    https://git.kernel.org/bpf/bpf-next/c/10fd5f70c397
-
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Kees Cook
