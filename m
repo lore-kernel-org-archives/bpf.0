@@ -2,164 +2,109 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 167FAC7619A
-	for <bpf@archiver.kernel.org>; Wed, 12 Apr 2023 08:16:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A18DC77B77
+	for <bpf@archiver.kernel.org>; Wed, 12 Apr 2023 08:36:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbjDLIQi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 12 Apr 2023 04:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56208 "EHLO
+        id S230301AbjDLIgp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 12 Apr 2023 04:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjDLIQg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 12 Apr 2023 04:16:36 -0400
-Received: from out203-205-221-242.mail.qq.com (out203-205-221-242.mail.qq.com [203.205.221.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CAEC2;
-        Wed, 12 Apr 2023 01:16:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1681287393;
-        bh=Zg7cJ0N5bxqHMBmSaRWwD4RCA39YjoHwbrackzoeNlo=;
-        h=From:To:Cc:Subject:Date;
-        b=E9KpF5Hd+E4ILwlf8rMs8qRgxJ4Q0TAPYbfmqgNrPP4sSXzBP3h5sR831MxdbXxof
-         Y3uSOWXiupRYzSM0O7C5P++odIm4nohyPL9eQoHXBabLVePbRvUTZDgfsher7apQDu
-         NJoi6T+HRwlQyug+IzG+FMwsYT2L3tNGy9poPuyU=
-Received: from localhost.localdomain ([39.156.73.13])
-        by newxmesmtplogicsvrszc1-0.qq.com (NewEsmtp) with SMTP
-        id 41A946FA; Wed, 12 Apr 2023 16:16:26 +0800
-X-QQ-mid: xmsmtpt1681287386th3gm2jcb
-Message-ID: <tencent_A0E82E0BEE925285F8156D540731DF805F05@qq.com>
-X-QQ-XMAILINFO: NojR6Ao/DkEDmiSI3Qg84sUcSSkbAMO67ajz8zB4ch+AK+3RcEtgF76MQBQgEk
-         3DG1rk5jrAzIXcgEDwhOtrTjOH1PI36PlZeJw4+y5OrSLSx5XkVI2ypW95TAz/+wH7pPJ/W0btk1
-         KfvUpDGiz689PR+ync9qYRyhaqzwmjIAzaxpUDi8nK1VBOrqY2oaKH36bVCEONuWn6NdZiVMiVgi
-         Mcgft6+zrRR86jkgJNq/8IjYNB97HcVJ1gxXmpQorxgOYFA5rcLBC8OFeY1gSwkL3N2jneM+cAH5
-         Bn5n5RY7Y2T+NVCWnYogt9bfQqE6F7k8H4WrMVTIwQriJuvOHc02lUhb+xBdYr865oNTwllH+QjP
-         AkoZ7PNkyu2EYhQY/8tRP4lBZ3pBGf0MtTCI0wWVvX4zGX/eCN4hypP36BXJdj43YyF7FOOH0X9S
-         uKnXwsaXNmtH7Sx6DxJus5dT/iHeUcye6iMJ2gQJjiAPxJZlrQMjjZbvj0/9aog/8W3SBt3moMqz
-         aoHKXMvUNoxqR4m1x7gxn7k8Xz6s2dtscAZ0l17D6YV46Zwgh/lj+Nrz2fNOu82KPHUwS3O+HPft
-         3AE87url8UB3pEwA5WcUqduEUEeudtQL6x4xANsoMdiPFzTL2a1AKh9A7EQe+/FHQj8woFhCz1N+
-         nwC00xPuhryM3QxHdLAsU+rQ4GK7wUWXrTeh5oNHy+Yr7NNqearyljVsjbq3bFpeL1SksD3ZexIw
-         P7QtqHqRKYUXm8x4vbGN1x6F6D4X87YPaNEe67tcFKJaHnn+WJH1PKdZ0jJG26UuTOH9a2rfWZxZ
-         /vR0NAO348vhOUiUmDXQ82c8J+W7ncOOrFo6owVUBhInktQ9avQOFsi7A/77QYkP/Z1IcNGRmKcK
-         yQTwNWkvkJe+mH5nmN1V7uRzGtNYQo8snthivgBCWfTzVXBnnZOtbclTFbHHBo7qmgBe+kuQwEpQ
-         KkTqn4zJ5z27GyS5rcAlTqKvIgKvzXKbXEWCecqTk1fSqn+Z/oYg==
-From:   Rong Tao <rtoax@foxmail.com>
-To:     ast@kernel.org, rongtao@cestc.cn
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and
-        Tools)), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH bpf-next] samples/bpf: sampleip: Replace PAGE_OFFSET with _text address
-Date:   Wed, 12 Apr 2023 16:16:24 +0800
-X-OQ-MSGID: <20230412081625.55541-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.39.1
+        with ESMTP id S230135AbjDLIgV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 12 Apr 2023 04:36:21 -0400
+Received: from out199-3.us.a.mail.aliyun.com (out199-3.us.a.mail.aliyun.com [47.90.199.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E696EAF;
+        Wed, 12 Apr 2023 01:34:47 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R661e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=alibuda@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VfvlHTJ_1681288402;
+Received: from 30.221.150.135(mailfrom:alibuda@linux.alibaba.com fp:SMTPD_---0VfvlHTJ_1681288402)
+          by smtp.aliyun-inc.com;
+          Wed, 12 Apr 2023 16:33:23 +0800
+Message-ID: <acb77026-c8eb-39e8-b3a8-23c348cbd60c@linux.alibaba.com>
+Date:   Wed, 12 Apr 2023 16:33:21 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [RFC PATCH bpf-next 0/5] net/smc: Introduce BPF injection
+ capability
+Content-Language: en-US
+From:   "D. Wythe" <alibuda@linux.alibaba.com>
+To:     kgraul@linux.ibm.com, wenjia@linux.ibm.com, jaka@linux.ibm.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
+        bpf@vger.kernel.org
+References: <1680795034-86384-1-git-send-email-alibuda@linux.alibaba.com>
+In-Reply-To: <1680795034-86384-1-git-send-email-alibuda@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+Hi everyone,
 
-Macro PAGE_OFFSET(0xffff880000000000) in sampleip_user.c is inaccurate,
-for example, in aarch64 architecture, this value depends on the
-CONFIG_ARM64_VA_BITS compilation configuration, this value defaults to 48,
-the corresponding PAGE_OFFSET is 0xffff800000000000, if we use the value
-defined in sampleip_user.c, then all KSYMs obtained by sampleip are (user)
+It's seems the RFC patch been hanging for some time.  I would like to 
+politely inquire if there are any suggestions or criticisms.
+Compared to previous patches, this patch has several main features:
 
-Symbol error due to PAGE_OFFSET error:
+1. Allow registration of multiple negotiators, each SMC negotiator has a 
+name and can be indexed that name
+2. no read/write lock anymore
+3. support bpf update
 
-    $ sudo ./sampleip 1
-    Sampling at 99 Hertz for 1 seconds. Ctrl-C also ends.
-    ADDR                KSYM                             COUNT
-    0xffff80000810ceb8  (user)                           1
-    0xffffb28ec880      (user)                           1
-    0xffff8000080c82b8  (user)                           1
-    0xffffb23fed24      (user)                           1
-    0xffffb28944fc      (user)                           1
-    0xffff8000084628bc  (user)                           1
-    0xffffb2a935c0      (user)                           1
-    0xffff80000844677c  (user)                           1
-    0xffff80000857a3a4  (user)                           1
-    ...
+If you have any suggestions or criticisms, please let me know.
 
-A few examples of addresses in the CONFIG_ARM64_VA_BITS=48 environment in
-the aarch64 environment:
+Thanks
+D. Wythe
 
-    $ sudo head /proc/kallsyms
-    ffff8000080a0000 T _text
-    ffff8000080b0000 t gic_handle_irq
-    ffff8000080b0000 T _stext
-    ffff8000080b0000 T __irqentry_text_start
-    ffff8000080b00b0 t gic_handle_irq
-    ffff8000080b0230 t gic_handle_irq
-    ffff8000080b03b4 T __irqentry_text_end
-    ffff8000080b03b8 T __softirqentry_text_start
-    ffff8000080b03c0 T __do_softirq
-    ffff8000080b0718 T __entry_text_start
-
-We just need to replace the PAGE_OFFSET with the address _text in
-/proc/kallsyms to solve this problem:
-
-    $ sudo ./sampleip 1
-    Sampling at 99 Hertz for 1 seconds. Ctrl-C also ends.
-    ADDR                KSYM                             COUNT
-    0xffffb2892ab0      (user)                           1
-    0xffffb2b1edfc      (user)                           1
-    0xffff800008462834  __arm64_sys_ppoll                1
-    0xffff8000084b87f4  eventfd_read                     1
-    0xffffb28e6788      (user)                           1
-    0xffff8000081e96d8  rcu_all_qs                       1
-    0xffffb2ada878      (user)                           1
-    ...
-
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- samples/bpf/sampleip_user.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/samples/bpf/sampleip_user.c b/samples/bpf/sampleip_user.c
-index 921c505bb567..9283f47844fb 100644
---- a/samples/bpf/sampleip_user.c
-+++ b/samples/bpf/sampleip_user.c
-@@ -21,10 +21,10 @@
- #define DEFAULT_FREQ	99
- #define DEFAULT_SECS	5
- #define MAX_IPS		8192
--#define PAGE_OFFSET	0xffff880000000000
- 
- static int map_fd;
- static int nr_cpus;
-+static long _text_addr;
- 
- static void usage(void)
- {
-@@ -108,7 +108,7 @@ static void print_ip_map(int fd)
- 	/* sort and print */
- 	qsort(counts, max, sizeof(struct ipcount), count_cmp);
- 	for (i = 0; i < max; i++) {
--		if (counts[i].ip > PAGE_OFFSET) {
-+		if (counts[i].ip > _text_addr) {
- 			sym = ksym_search(counts[i].ip);
- 			if (!sym) {
- 				printf("ksym not found. Is kallsyms loaded?\n");
-@@ -169,6 +169,13 @@ int main(int argc, char **argv)
- 		return 2;
- 	}
- 
-+	/* used to determine whether the address is kernel space */
-+	_text_addr = ksym_get_addr("_text");
-+	if (!_text_addr) {
-+		fprintf(stderr, "ERROR: no '_text' in /proc/kallsyms\n");
-+		return 3;
-+	}
-+
- 	/* create perf FDs for each CPU */
- 	nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
- 	links = calloc(nr_cpus, sizeof(struct bpf_link *));
--- 
-2.31.1
+On 4/6/23 11:30 PM, D. Wythe wrote:
+> From: "D. Wythe" <alibuda@linux.alibaba.com>
+>
+> This patches attempt to introduce BPF injection capability for SMC,
+> and add selftest to ensure code stability.
+>
+> As we all know that the SMC protocol is not suitable for all scenarios,
+> especially for short-lived. However, for most applications, they cannot
+> guarantee that there are no such scenarios at all. Therefore, apps
+> may need some specific strategies to decide shall we need to use SMC
+> or not, for example, apps can limit the scope of the SMC to a specific
+> IP address or port.
+>
+> Based on the consideration of transparent replacement, we hope that apps
+> can remain transparent even if they need to formulate some specific
+> strategies for SMC using. That is, do not need to recompile their code.
+>
+> On the other hand, we need to ensure the scalability of strategies
+> implementation. Although it is simple to use socket options or sysctl,
+> it will bring more complexity to subsequent expansion.
+>
+> Fortunately, BPF can solve these concerns very well, users can write
+> thire own strategies in eBPF to choose whether to use SMC or not.
+> And it's quite easy for them to modify their strategies in the future.
+>
+> This patches implement injection capability for SMC via struct_ops.
+> In that way, we can add new injection scenarios in the future.
+>
+> D. Wythe (5):
+>    net/smc: move smc_sock related structure definition
+>    net/smc: net/smc: allow smc to negotiate protocols on policies
+>    net/smc: allow set or get smc negotiator by sockopt
+>    bpf: add smc negotiator support in BPF struct_ops
+>    bpf/selftests: add selftest for SMC bpf capability
+>
+>   include/net/smc.h                                | 268 +++++++++++++++++
+>   include/uapi/linux/smc.h                         |   1 +
+>   kernel/bpf/bpf_struct_ops_types.h                |   4 +
+>   net/Makefile                                     |   1 +
+>   net/smc/Kconfig                                  |  13 +
+>   net/smc/af_smc.c                                 | 203 ++++++++++---
+>   net/smc/bpf_smc.c                                | 359 +++++++++++++++++++++++
+>   net/smc/smc.h                                    | 224 --------------
+>   tools/testing/selftests/bpf/prog_tests/bpf_smc.c | 107 +++++++
+>   tools/testing/selftests/bpf/progs/bpf_smc.c      | 265 +++++++++++++++++
+>   10 files changed, 1186 insertions(+), 259 deletions(-)
+>   create mode 100644 net/smc/bpf_smc.c
+>   create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_smc.c
+>   create mode 100644 tools/testing/selftests/bpf/progs/bpf_smc.c
+>
 
