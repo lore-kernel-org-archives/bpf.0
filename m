@@ -2,101 +2,89 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB0F8C77B61
-	for <bpf@archiver.kernel.org>; Thu, 13 Apr 2023 13:04:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63D6DC77B6E
+	for <bpf@archiver.kernel.org>; Thu, 13 Apr 2023 13:06:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbjDMNEe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Apr 2023 09:04:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
+        id S229522AbjDMNGi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Apr 2023 09:06:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjDMNEe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 Apr 2023 09:04:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7000B6A42;
-        Thu, 13 Apr 2023 06:04:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 08E7E61574;
-        Thu, 13 Apr 2023 13:04:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C4B3C433EF;
-        Thu, 13 Apr 2023 13:04:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681391072;
-        bh=45Dth3u/C8VS64hODTY5Dhhg4w/QuvdiQ3hHX+zxnhw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BtGbMQ9T+VLC5Hz2tZj+h9EK2KX7RsXaasedk2hn9l8ca7NBMa6tjnyD9JdYaZnxH
-         GmpzQjuFwlvR74fZELsiqYV4MhOTOhlRmswSZR5o9CXgNDzdCJO0A0sbUp/LuJ5c5L
-         8UrVkagVapbfczpRG/ddGQZAp1tyIdjKleF8FFYxqDFKlw7nGlgYPhO9ENVY1xiEPz
-         WuL/JuIEmMfd0Co+O8/srSEv/G3hPPc+BZv4XnE5MqdtTasSeiz5vSupn4PEqHnvGX
-         qKfG5BCJn/c03b0ocvumaRKaR9ILH6ai9ryJtW0WM7d1QjUBLPcS1QYNyunZopT9Wj
-         sDvfs0hDHZgwg==
-Date:   Thu, 13 Apr 2023 16:04:28 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Haiyang Zhang <haiyangz@microsoft.com>
-Cc:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        decui@microsoft.com, kys@microsoft.com, paulros@microsoft.com,
-        olaf@aepfle.de, vkuznets@redhat.com, davem@davemloft.net,
-        wei.liu@kernel.org, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, longli@microsoft.com,
-        ssengar@linux.microsoft.com, linux-rdma@vger.kernel.org,
-        daniel@iogearbox.net, john.fastabend@gmail.com,
-        bpf@vger.kernel.org, ast@kernel.org, sharmaajay@microsoft.com,
-        hawk@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V3,net-next, 2/4] net: mana: Refactor RX buffer
- allocation code to prepare for various MTU
-Message-ID: <20230413130428.GO17993@unreal>
-References: <1681334163-31084-1-git-send-email-haiyangz@microsoft.com>
- <1681334163-31084-3-git-send-email-haiyangz@microsoft.com>
+        with ESMTP id S229899AbjDMNGg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 Apr 2023 09:06:36 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A64EA253
+        for <bpf@vger.kernel.org>; Thu, 13 Apr 2023 06:06:28 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id ud9so37058981ejc.7
+        for <bpf@vger.kernel.org>; Thu, 13 Apr 2023 06:06:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google; t=1681391187; x=1683983187;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=pbA132ZTxFMmd4gH7ayJTiUjuR7bW8K5R/39kGlGoyo=;
+        b=rpd0J7+KyBTs/v1P6ImEUVYk9NzcZqW1JbwpSJniT0VY92fjxDAEJmVFJ0MYkqsz4m
+         v4LiETVmaOHLPW3BQdlLGcXZliO/HNFA5c/72DDeDJIXoe1Wtk0q4dnlGeC8GOZahpBv
+         VrLNjBQmj3CaSJYK4uVL7/pDww6VyBCqINNlE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681391187; x=1683983187;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pbA132ZTxFMmd4gH7ayJTiUjuR7bW8K5R/39kGlGoyo=;
+        b=XJ9/cXCMFOu3do8iqgYUfEl6dQOmlKmnL+n1pb7/mPWtFkUH8EW6K0chMV1K+p0jZb
+         2JWvMs+TVM7dXtNNxqqJzXJcLD7gJMqd7wLSJZ3A16ykfELoVyWqw5gwW8z/xWY2XpEm
+         R1y0dC22pQhMqVFq+Sjg2ZGbLFIex4g4i9ptQtTEQTcjmU9ej0tXgo1z5Sx88uywIrXh
+         1spUTUktqkshWkrdK2p3pOMFxuaQzAMab4TuJbeVcxs/kytWCX4RrMl5Qjjr2/noWq1s
+         fU8AVE4EPcjeOjtL/y0L7dsxXMQC2kY0xB4b9r+SKipZWzm5Q7BpUQwDuOY2Gu5821cz
+         A4gQ==
+X-Gm-Message-State: AAQBX9cABB2uDbvCEv+/3XVC5Wt8YmCAFqkaDBRIEERXSeM7KlpbsSFq
+        iaLmcmyT2jPJtI/PRQi+UDGP3Q==
+X-Google-Smtp-Source: AKy350bO3OaeaNPjrERyKBdVQIOQXoe+axGQ4BhweLBG9WYBfWNyp4PyjG9dnbIqj00J9jxL5iUvgw==
+X-Received: by 2002:a17:907:238d:b0:94e:83d3:1b51 with SMTP id vf13-20020a170907238d00b0094e83d31b51mr1702389ejb.23.1681391186878;
+        Thu, 13 Apr 2023 06:06:26 -0700 (PDT)
+Received: from cloudflare.com (79.191.181.173.ipv4.supernova.orange.pl. [79.191.181.173])
+        by smtp.gmail.com with ESMTPSA id vf18-20020a170907239200b0094be906a155sm958911ejb.130.2023.04.13.06.06.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 06:06:26 -0700 (PDT)
+References: <20230407171654.107311-1-john.fastabend@gmail.com>
+ <20230407171654.107311-7-john.fastabend@gmail.com>
+User-agent: mu4e 1.6.10; emacs 28.2
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     daniel@iogearbox.net, lmb@isovalent.com, edumazet@google.com,
+        bpf@vger.kernel.org, netdev@vger.kernel.org, ast@kernel.org,
+        andrii@kernel.org, will@isovalent.com
+Subject: Re: [PATCH bpf v6 06/12] bpf: sockmap, wake up polling after data copy
+Date:   Thu, 13 Apr 2023 15:00:02 +0200
+In-reply-to: <20230407171654.107311-7-john.fastabend@gmail.com>
+Message-ID: <87cz48gcdq.fsf@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1681334163-31084-3-git-send-email-haiyangz@microsoft.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 02:16:01PM -0700, Haiyang Zhang wrote:
-> Move out common buffer allocation code from mana_process_rx_cqe() and
-> mana_alloc_rx_wqe() to helper functions.
-> Refactor related variables so they can be changed in one place, and buffer
-> sizes are in sync.
-> 
-> Signed-off-by: Haiyang Zhang <haiyangz@microsoft.com>
-> Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
+On Fri, Apr 07, 2023 at 10:16 AM -07, John Fastabend wrote:
+> When TCP stack has data ready to read sk_data_ready() is called. Sockmap
+> overwrites this with its own handler to call into BPF verdict program.
+> But, the original TCP socket had sock_def_readable that would additionally
+> wake up any user space waiters with sk_wake_async().
+>
+> Sockmap saved the callback when the socket was created so call the saved
+> data ready callback and then we can wake up any epoll() logic waiting
+> on the read.
+>
+> Note we call on 'copied >= 0' to account for returning 0 when a FIN is
+> received because we need to wake up user for this as well so they
+> can do the recvmsg() -> 0 and detect the shutdown.
+>
+> Fixes: 04919bed948dc ("tcp: Introduce tcp_read_skb()")
+> Signed-off-by: John Fastabend <john.fastabend@gmail.com>
 > ---
-> V3:
-> Refectored to multiple patches for readability. Suggested by Jacob Keller.
-> 
-> V2:
-> Refectored to multiple patches for readability. Suggested by Yunsheng Lin.
-> 
-> ---
->  drivers/net/ethernet/microsoft/mana/mana_en.c | 154 ++++++++++--------
->  include/net/mana/mana.h                       |   6 +-
->  2 files changed, 91 insertions(+), 69 deletions(-)
 
-<...>
+One observation. On the happy path, we will be hitting the recently
+introduced sk_data_ready tracepoint [1] twice. However, we have the
+caller IP there, so we can differentiate.
 
-> +static void *mana_get_rxfrag(struct mana_rxq *rxq, struct device *dev,
-> +			     dma_addr_t *da, bool is_napi)
-> +{
-> +	struct page *page;
-> +	void *va;
-> +
-> +	/* Reuse XDP dropped page if available */
-> +	if (rxq->xdp_save_va) {
-> +		va = rxq->xdp_save_va;
-> +		rxq->xdp_save_va = NULL;
-> +	} else {
-> +		page = dev_alloc_page();
+[1] 40e0b0908142 ("net/sock: Introduce trace_sk_data_ready()")
 
-Documentation/networking/page_pool.rst
-   10 Basic use involves replacing alloc_pages() calls with the
-   11 page_pool_alloc_pages() call.  Drivers should use page_pool_dev_alloc_pages()
-   12 replacing dev_alloc_pages().
-
-General question, is this sentence applicable to all new code or only
-for XDP related paths?
-
-Thanks
+Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
