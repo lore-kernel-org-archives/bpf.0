@@ -2,181 +2,215 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE5CFC77B6E
-	for <bpf@archiver.kernel.org>; Thu, 13 Apr 2023 18:43:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF0B8C77B61
+	for <bpf@archiver.kernel.org>; Thu, 13 Apr 2023 18:59:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjDMSng (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Apr 2023 14:43:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60604 "EHLO
+        id S229575AbjDMS72 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Apr 2023 14:59:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbjDMSn2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 Apr 2023 14:43:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6170086AA
-        for <bpf@vger.kernel.org>; Thu, 13 Apr 2023 11:42:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681411341;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jFCzXhj5hVtVaLfINs11NiVB1lGjSKJOD4vnQMSSjnY=;
-        b=AX2iIZQXSOPAR+x0qrZFWut/mxIyWKFG3OFwozxG1MBT71D29wEDt9X8L5RfoUs3zU/W0Z
-        71YB2edpUONnyay4jskZ9WcsyT+ac1wprlCmVwvQZw/xQ7aC0yS/LqmHenq1zZR4l/K24V
-        2lvEoLqDpxF/jPuQJZgWebgzJrahTtk=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-501-wgfTIhqSMqGzUzuqowz5XQ-1; Thu, 13 Apr 2023 14:42:20 -0400
-X-MC-Unique: wgfTIhqSMqGzUzuqowz5XQ-1
-Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-50491d65131so2043550a12.3
-        for <bpf@vger.kernel.org>; Thu, 13 Apr 2023 11:42:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681411338; x=1684003338;
-        h=content-transfer-encoding:in-reply-to:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jFCzXhj5hVtVaLfINs11NiVB1lGjSKJOD4vnQMSSjnY=;
-        b=jI1bO6ewhflch/HNZIdL4ZYnLG2QAvyHRJv2vtFgaoiWtoV2Vk7q+6lzIgYVuJAKlr
-         jGJeY0Xaa77z94amkxULoc9yqSWlf4MPI7NNxSLylxAQzhGqipkG4FE3Bqhi2/odA/fS
-         YLXRqxfDg6yrqiqEC+NwdJ5dK3ORlMVwk5KzgDGhYzSiaQPT14k8wP/YkyXl87gw1zbz
-         Sv97zesnOpEE+ib4mvdl3hmUA45lgPfu7kiznCitlGwzNR2Ah/Xxf0mPl/hae5hslHnp
-         jV1D+0agKYiHaMeHeE0rCu/4/vEDXhqvhbAZCSM3UDdOF+3XC5m6fF5E5FlIElaZM0Jn
-         GMEQ==
-X-Gm-Message-State: AAQBX9cdCJQHYQA2BJsul35UaFIfXkPy/9UVy129RmT1rCT/liPInMcj
-        VZwsbGC4eUW1Xfdg4aod7FhL1A0zQpFalisCZMZXx4PNMk3vKsn/hABp10d1TXtOFoZoccqqtMz
-        UuoUMg3TmXq5i
-X-Received: by 2002:aa7:ce06:0:b0:501:d917:d52 with SMTP id d6-20020aa7ce06000000b00501d9170d52mr3760447edv.8.1681411338589;
-        Thu, 13 Apr 2023 11:42:18 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YYifWUgndL9IzmM9sB+EmC6luF5yXBi1Z7Pu0T2Ye4b4wgDVquW2ymvsXbk5mm7Z5uz0Se4A==
-X-Received: by 2002:aa7:ce06:0:b0:501:d917:d52 with SMTP id d6-20020aa7ce06000000b00501d9170d52mr3760426edv.8.1681411338239;
-        Thu, 13 Apr 2023 11:42:18 -0700 (PDT)
-Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
-        by smtp.gmail.com with ESMTPSA id d12-20020a50fe8c000000b00504c33675cesm1178071edt.35.2023.04.13.11.42.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 11:42:17 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <07a88087-bee8-e549-c069-63d52268aef1@redhat.com>
-Date:   Thu, 13 Apr 2023 20:42:16 +0200
+        with ESMTP id S229530AbjDMS71 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 Apr 2023 14:59:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB3F3C39;
+        Thu, 13 Apr 2023 11:59:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EBEF8640DE;
+        Thu, 13 Apr 2023 18:59:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82C08C433D2;
+        Thu, 13 Apr 2023 18:59:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681412365;
+        bh=29782vFwFT9re9koO2kNccEZccDNBvEZVvzoDaoERp0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZZ/D1WglLjVEvl3tf77pFFqMOZzlQbd30vXlNueZZhcO4pt8Xk4qejCdwqnye2/XQ
+         SGrfo1lHut8LTi82sr6f0ltbQnqLSK45dyWflzXPOk+H7swwpTVzB2vWoUzcbAzn+j
+         Vff2A+YZf1iVk5RIoZoCL0QyQt6jCqUfbdBadDKlJ1Ww2ftIWTq8VlB0eba7TjQ6pP
+         m3yJ2QoDucW7NS6vPSWcp1hmGHQE/FNI5tZj8wYskypMoFbGjDuMrjVw+Vetqsx7/m
+         d12Mq9RhSehNtCRcmI7WFj3oOF/C41DbUfmoLiIW9SrJ5kMqpbLBuZBTGcci0GAATB
+         j0B0Zsstxpuug==
+Date:   Thu, 13 Apr 2023 11:59:22 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Tianyi Liu <i.pear@outlook.com>
+Cc:     joanbrugueram@gmail.com, acme@kernel.org, alan.maguire@oracle.com,
+        alexandref75@gmail.com, bpf@vger.kernel.org, dxu@dxuuu.xyz,
+        jforbes@redhat.com, linux-kernel@vger.kernel.org,
+        olsajiri@gmail.com, peterz@infradead.org, ptalbert@redhat.com,
+        yhs@fb.com
+Subject: [PATCH] vmlinux.lds.h: Discard .note.gnu.property section
+Message-ID: <20230413185922.ufmollqlnlghwyvy@treble>
+References: <20230413022149.94781-1-joanbrugueram@gmail.com>
+ <SY4P282MB10847E614FE5952EB4D46F049D989@SY4P282MB1084.AUSP282.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Cc:     brouer@redhat.com, intel-wired-lan@lists.osuosl.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, xdp-hints@xdp-project.net,
-        stable@vger.kernel.org
-Subject: Re: [PATCH net 1/1] igc: read before write to SRRCTL register
-Content-Language: en-US
-To:     Song Yoong Siang <yoong.siang.song@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Vedang Patel <vedang.patel@intel.com>,
-        Jithu Joseph <jithu.joseph@intel.com>,
-        Andre Guedes <andre.guedes@intel.com>,
-        Stanislav Fomichev <sdf@google.com>
-References: <20230413151222.1864307-1-yoong.siang.song@intel.com>
-In-Reply-To: <20230413151222.1864307-1-yoong.siang.song@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <SY4P282MB10847E614FE5952EB4D46F049D989@SY4P282MB1084.AUSP282.PROD.OUTLOOK.COM>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-
-
-On 13/04/2023 17.12, Song Yoong Siang wrote:
-> igc_configure_rx_ring() function will be called as part of XDP program
-> setup. If Rx hardware timestamp is enabled prio to XDP program setup,
-> this timestamp enablement will be overwritten when buffer size is
-> written into SRRCTL register.
+On Thu, Apr 13, 2023 at 05:23:08PM +0800, Tianyi Liu wrote:
+> > Test 1: Update dwarves (=pahole package on Arch Linux) from the current version
+> >         (1:1.24+r29+g02d67c5-1) to the staging version (1:1.25-1).
+> > Result: The build works correctly.
+> > 
+> >         However, the notes section is still not parsed correctly, as confirmed
+> >         by `readelf -n` or adding a printf near the code on `cus__merging_cu`
+> >         (on `dwarf_loader.c`) pointed to by Tianyi.
+> > 
+> >         A bisect shows the commit that fixes the build is
+> >         a9498899109d3be14f17abbc322a8f55a1067bee
+> >         "dwarf_loader: Fix for BTF id drift caused by adding unspecified types"
+> >         I don't know why though.
 > 
-
-Ah, I believe I have hit this bug with my igc patches.
-Thanks for fixing.
-
-> Thus, this commit read the register value before write to SRRCTL
-> register. This commit is tested by using xdp_hw_metadata bpf selftest
-> tool. The tool enables Rx hardware timestamp and then attach XDP program
-> to igc driver. It will display hardware timestamp of UDP packet with
-> port number 9092. Below are detail of test steps and results.
->
-> Command on DUT:
->    sudo ./xdp_hw_metadata <interface name>
->
-
-Why port 9092 ?
-The ./xdp_hw_metadata prog will redirect port 9091
-
-
-> Command on Link Partner:
->    echo -n skb | nc -u -q1 <destination IPv4 addr> 9092
+> Pahole reads .notes to look for LINUX_ELFNOTE_BUILD_LTO. When LTO is
+> enabled, pahole needs to call cus__merge_and_process_cu to merge compile
+> units, at which point there should only be one unspecified type (used to
+> represent some compilation information) in the global context.
 > 
+> However, when the kernel is compiled without LTO, if pahole calls
+> cus__merge_and_process_cu due to alignment issues with notes, multiple
+> unspecified types may appear after merging the cus, and older versions of
+> pahole only support up to one. This is why pahole 1.24 crashes, while
+> newer versions support multiple. However, the latest version of pahole
+> still does not solve the problem of incorrect LTO recognition, so
+> compiling the kernel may be slower than normal.
 
-Again port 9092 ?
+Thanks for the explanation.  So pahole is still mis-reading the LTO
+note, it just doesn't crash now.
 
-> Result before this patch:
->    skb hwtstamp is not found!
+> If the only objective is to fix the bug of incorrect LTO recognition,
+> perhaps this naive patch[1] could be sufficient.
 > 
-> Result after this patch:
->    found skb hwtstamp = 1677762212.590696226
+> [1]: https://lore.kernel.org/bpf/SY4P282MB1084A0E31D4228DF89FC42639DA29@SY4P282MB1084.AUSP282.PROD.OUTLOOK.COM/
 
-I usually use this cmd to see if number is sane:
+I think we still need to fix the underlying issue (corrupt .notes
+section).
 
-$ date -d @1677762212
-2023-03-02T14:03:32 CET
-
-
+> > Test 2: Applying Josh's patch to force-align the ELF notes section to 4 bytes
+> >         (clarification: using the base pahole version again here)
+> > Result: The build works correctly.
+> >         I can read the notes correctly using `readelf -n` as well,
+> >         and they are aligned to 4 bytes instead of 8.
 > 
-> Fixes: fc9df2a0b520 ("igc: Enable RX via AF_XDP zero-copy")
-> Cc: <stable@vger.kernel.org> # 5.14+
-> Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
-> ---
->   drivers/net/ethernet/intel/igc/igc_base.h | 7 +++++--
->   drivers/net/ethernet/intel/igc/igc_main.c | 5 ++++-
->   2 files changed, 9 insertions(+), 3 deletions(-)
+> I'm still currently unable to reproduce this fix, but it may just be an
+> issue with my environment.
 > 
-> diff --git a/drivers/net/ethernet/intel/igc/igc_base.h b/drivers/net/ethernet/intel/igc/igc_base.h
-> index 7a992befca24..b95007d51d13 100644
-> --- a/drivers/net/ethernet/intel/igc/igc_base.h
-> +++ b/drivers/net/ethernet/intel/igc/igc_base.h
-> @@ -87,8 +87,11 @@ union igc_adv_rx_desc {
->   #define IGC_RXDCTL_SWFLUSH		0x04000000 /* Receive Software Flush */
->   
->   /* SRRCTL bit definitions */
-> -#define IGC_SRRCTL_BSIZEPKT_SHIFT		10 /* Shift _right_ */
-> -#define IGC_SRRCTL_BSIZEHDRSIZE_SHIFT		2  /* Shift _left_ */
-> +#define IGC_SRRCTL_BSIZEPKT_MASK	GENMASK(6, 0)
-> +#define IGC_SRRCTL_BSIZEPKT_SHIFT	10 /* Shift _right_ */
-> +#define IGC_SRRCTL_BSIZEHDRSIZE_MASK	GENMASK(13, 8)
-> +#define IGC_SRRCTL_BSIZEHDRSIZE_SHIFT	2  /* Shift _left_ */
-> +#define IGC_SRRCTL_DESCTYPE_MASK	GENMASK(27, 25)
->   #define IGC_SRRCTL_DESCTYPE_ADV_ONEBUF	0x02000000
->   
->   #endif /* _IGC_BASE_H */
-> diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-> index 25fc6c65209b..de7b21c2ccd6 100644
-> --- a/drivers/net/ethernet/intel/igc/igc_main.c
-> +++ b/drivers/net/ethernet/intel/igc/igc_main.c
-> @@ -641,7 +641,10 @@ static void igc_configure_rx_ring(struct igc_adapter *adapter,
->   	else
->   		buf_size = IGC_RXBUFFER_2048;
->   
-> -	srrctl = IGC_RX_HDR_LEN << IGC_SRRCTL_BSIZEHDRSIZE_SHIFT;
-> +	srrctl = rd32(IGC_SRRCTL(reg_idx));
-> +	srrctl &= ~(IGC_SRRCTL_BSIZEPKT_MASK | IGC_SRRCTL_BSIZEHDRSIZE_MASK |
-> +		  IGC_SRRCTL_DESCTYPE_MASK);
-> +	srrctl |= IGC_RX_HDR_LEN << IGC_SRRCTL_BSIZEHDRSIZE_SHIFT;
->   	srrctl |= buf_size >> IGC_SRRCTL_BSIZEPKT_SHIFT;
->   	srrctl |= IGC_SRRCTL_DESCTYPE_ADV_ONEBUF;
->   
+> > Test 3: Similar to Josh's patch, but instead of force-aligning the sections,
+> >         I added `.note.gnu.property` to the `/DISCARD/` list in the line above.
+> > Result: The build works correctly.
+> >         I can read the notes correctly using `readelf -n` as well
+> >         (of course, the GNU notes which made the alignment be 8 bytes are gone;
+> >          I don't know if this has any negative effect).
+> 
+> I think discarding .note.gnu.property will not have side effects. For some
+> reason, this note does not exist in my final vmlinux. I also did not find
+> any usage of this property in the later steps of compiling the kernel.
+
+It looks like CONFIG_DEBUG_INFO_BTF is already (inadvertently) stripping
+it from vmlinux due to how GNU properties are merged by the linker (see
+"How GNU properties are merged" in the ld man page).
+
+The btf data is extracted from vmlinux.o with "objcopy
+--only-section=.BTF" into .btf.vmlinux.bin.o.  That file doesn't have
+.note.gnu.property, so when it gets modified and linked back into the
+main object, the linker strips it.
+
+GNU properties are important for user space but they don't seem to have
+a purpose for vmlinux.  So yeah, let's just discard .note.gnu.property.
+
+---8<---
+
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: [PATCH] vmlinux.lds.h: Discard .note.gnu.property section
+
+When tooling reads ELF notes, it assumes each note entry is aligned to
+the value listed in the .note section header's sh_addralign field.
+
+The kernel-created ELF notes in the .note.Linux and .note.Xen sections
+are aligned to 4 bytes.  This causes the toolchain to set those
+sections' sh_addralign values to 4.
+
+On the other hand, the GCC-created .note.gnu.property section has an
+sh_addralign value of 8 for some reason, despite being based on struct
+Elf32_Nhdr which only needs 4-byte alignment.
+
+When the mismatched input sections get linked together into the vmlinux
+.notes output section, the higher alignment "wins", resulting in an
+sh_addralign of 8, which confuses tooling.  For example:
+
+  $ readelf -n .tmp_vmlinux.btf
+  ...
+  readelf: .tmp_vmlinux.btf: Warning: note with invalid namesz and/or descsz found at offset 0x170
+  readelf: .tmp_vmlinux.btf: Warning:  type: 0x4, namesize: 0x006e6558, descsize: 0x00008801, alignment: 8
+
+In this case readelf thinks there's alignment padding where there is
+none, so it starts reading an ELF note in the middle.
+
+With newer toolchains (e.g., latest Fedora Rawhide), a similar mismatch
+triggers a build failure when combined with CONFIG_X86_KERNEL_IBT:
+
+  btf_encoder__encode: btf__dedup failed!
+  Failed to encode BTF
+  libbpf: failed to find '.BTF' ELF section in vmlinux
+  FAILED: load BTF from vmlinux: No data available
+  make[1]: *** [scripts/Makefile.vmlinux:35: vmlinux] Error 255
+
+This latter error was caused by pahole crashing when it encountered the
+corrupt .notes section.  This crash has been fixed in dwarves version
+1.25.  As Tianyi Liu describes:
+
+  "Pahole reads .notes to look for LINUX_ELFNOTE_BUILD_LTO. When LTO is
+   enabled, pahole needs to call cus__merge_and_process_cu to merge
+   compile units, at which point there should only be one unspecified
+   type (used to represent some compilation information) in the global
+   context.
+
+   However, when the kernel is compiled without LTO, if pahole calls
+   cus__merge_and_process_cu due to alignment issues with notes,
+   multiple unspecified types may appear after merging the cus, and
+   older versions of pahole only support up to one. This is why pahole
+   1.24 crashes, while newer versions support multiple. However, the
+   latest version of pahole still does not solve the problem of
+   incorrect LTO recognition, so compiling the kernel may be slower
+   than normal."
+
+Even with the newer pahole, the note section misaligment issue still
+exists and pahole is misinterpreting the LTO note.  Fix it by discarding
+the .note.gnu.property section.  While GNU properties are important for
+user space (and VDSO), they don't seem to have any use for vmlinux.
+
+(In fact, they're already getting (inadvertently) stripped from vmlinux
+when CONFIG_DEBUG_INFO_BTF is enabled.  The BTF data is extracted from
+vmlinux.o with "objcopy --only-section=.BTF" into .btf.vmlinux.bin.o.
+That file doesn't have .note.gnu.property, so when it gets modified and
+linked back into the main object, the linker automatically strips it
+(see "How GNU properties are merged" in the ld man page).)
+
+Reported-by: Daniel Xu <dxu@dxuuu.xyz>
+Link: https://lkml.kernel.org/lkml/57830c30-cd77-40cf-9cd1-3bb608aa602e@app.fastmail.com
+Debugged-by: Tianyi Liu <i.pear@outlook.com>
+Suggested-by: Joan Bruguera Micó <joanbrugueram@gmail.com>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+---
+ include/asm-generic/vmlinux.lds.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index d1f57e4868ed..1770b7d87a80 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -894,6 +894,7 @@
+  */
+ #define NOTES								\
+ 	/DISCARD/ : { *(.note.GNU-stack) }				\
++	/DISCARD/ : { *(.note.gnu.property) }				\
+ 	.notes : AT(ADDR(.notes) - LOAD_OFFSET) {			\
+ 		BOUNDED_SECTION_BY(.note.*, _notes)			\
+ 	} NOTES_HEADERS							\
+-- 
+2.39.2
 
