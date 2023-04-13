@@ -2,165 +2,192 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C7E1C77B6E
-	for <bpf@archiver.kernel.org>; Thu, 13 Apr 2023 16:31:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92C42C77B61
+	for <bpf@archiver.kernel.org>; Thu, 13 Apr 2023 16:34:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbjDMQbM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Apr 2023 12:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38802 "EHLO
+        id S229797AbjDMQet (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Apr 2023 12:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbjDMQbJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 Apr 2023 12:31:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8C6AF26;
-        Thu, 13 Apr 2023 09:31:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF02F63FE7;
-        Thu, 13 Apr 2023 16:31:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6576FC433D2;
-        Thu, 13 Apr 2023 16:31:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681403464;
-        bh=ixJOGebRoUo1BEyaLEPH8ePeNJnTnmpcCBkNUL7AClM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F2+T/f6dx5RhPROs62DbPztZ8KbufhYEmZXNWXLzHVV4t6kOsoMy4CUmGMeGqbaOk
-         i/S+vNsURoC6GQZFbvwG/3KVlPNQz3Xq6y8rENPgul5rAk7fKq22ruQkpRdXutectA
-         7X91fWt9+RL+LCSbB7JaV0N7tFLwSbRDlwk9REzzMyHWh8Mt7lhKjN03b9WEEh1/fM
-         26mzi3zXv9q2QjxAGo+3TfcpAAuPBzd8Z7Q0gfCYE3TDY7tNZr1knaBzyvWI3HEo0e
-         YzO5IyW6h23YFJ0dWTMLbfZH7ua5ZUR3h8fXIhM83UGV1g1j2X+DsNoChIJpKIId1G
-         MyEsliI5pKLxA==
-Date:   Thu, 13 Apr 2023 19:30:59 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Haiyang Zhang <haiyangz@microsoft.com>
-Cc:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Paul Rosswurm <paulros@microsoft.com>,
-        "olaf@aepfle.de" <olaf@aepfle.de>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        Long Li <longli@microsoft.com>,
-        "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        Ajay Sharma <sharmaajay@microsoft.com>,
-        "hawk@kernel.org" <hawk@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V3,net-next, 2/4] net: mana: Refactor RX buffer
- allocation code to prepare for various MTU
-Message-ID: <20230413163059.GS17993@unreal>
-References: <1681334163-31084-1-git-send-email-haiyangz@microsoft.com>
- <1681334163-31084-3-git-send-email-haiyangz@microsoft.com>
- <20230413130428.GO17993@unreal>
- <PH7PR21MB3116194E8F7D56EB434B56A6CA989@PH7PR21MB3116.namprd21.prod.outlook.com>
+        with ESMTP id S229902AbjDMQes (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 Apr 2023 12:34:48 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA9A26BA
+        for <bpf@vger.kernel.org>; Thu, 13 Apr 2023 09:34:47 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id q191so15418321pgq.7
+        for <bpf@vger.kernel.org>; Thu, 13 Apr 2023 09:34:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681403687; x=1683995687;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8HvoJ679JuZRdirnHe569ZyC5ZGOdrOnvhMCfAAv7TA=;
+        b=3AV1Vq3WEo42XDTB+pzABN4ZQGhRgzKvgGGRMpqjEY4vrCgRQLSc6nldf0HxtaKXa+
+         kD56HHiCSZzSyEZZfu2q0r+fSBzScCJ03zomGDfbTkvrRRm5KOh5FzGP1yIyr1JW0Rxq
+         mblhLqRHMs7Ag9HWqRwaLyDebTDb3XuOMG+hTbZB1ULS5r2gSRm741v8pVvzIu8TeW/7
+         Pqt7v3nQIuQxKmJ1maXy3a2ncJNhstXZ2QWwC5TyAkwUE3W2UxNwQu3T6/C7arQaUu5/
+         PYJEZ1dps6WXd/BqMAuuaeE0dsGIcgrRr+a+YWF/8/P36E/Zmbrp52oKsgGKdouWF+dm
+         +s7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681403687; x=1683995687;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8HvoJ679JuZRdirnHe569ZyC5ZGOdrOnvhMCfAAv7TA=;
+        b=VntjAPlKf2T3aF5ZaAInODrLEbvp0W7TgGGu+OconwkR5qf0k7USjByCYVCIxwZ3bt
+         MUD1o5zFWYGatvafE31LXH4bUQIwBXtsByBPQkIiHtQ5barzNnnXB/Gl+ivE0pWWeq97
+         8PpMU//KX+gUIXSWH4JphKHV0Bmz5pEsJvTSyIG9kR5ZSl8hezx2gzsV+s9geJwD36Kv
+         gbJvnr9I9YLgLcW5oRPH/5zFR67iIiLBXONxn+lPnIWYxSQ8mIxH7lNL0NMO09tNc32/
+         K8YI7jbD+JF1gj1VW4RV010eAyEnUY6PtHjr91IkQy1ZtRRIchwZjGKtA6ojkh9I8WLd
+         B5ww==
+X-Gm-Message-State: AAQBX9dM2b9dhw92wyRcZ9BvcK9j3zxoYdNqldpLjJGi1uVMbdZk0NT5
+        t5hRUagvcbGVHP3wgCswd42+BGmVt+tCJg0aM1kAcg==
+X-Google-Smtp-Source: AKy350brZLSKImyACD/vTwBAWkj9JzXf2zpBwAPKP+J93fB14HCkdn9PtWI/qhlPPMVYTW639OYp4l/LOfig57cvsRQ=
+X-Received: by 2002:a63:642:0:b0:51b:fa5:7bce with SMTP id 63-20020a630642000000b0051b0fa57bcemr679747pgg.1.1681403686843;
+ Thu, 13 Apr 2023 09:34:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH7PR21MB3116194E8F7D56EB434B56A6CA989@PH7PR21MB3116.namprd21.prod.outlook.com>
+References: <20230413032541.885238-1-yoong.siang.song@intel.com> <20230413032541.885238-3-yoong.siang.song@intel.com>
+In-Reply-To: <20230413032541.885238-3-yoong.siang.song@intel.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Thu, 13 Apr 2023 09:34:35 -0700
+Message-ID: <CAKH8qBsWwaGrL4X_xkqGtDB_4Qr3oM4wcFcWVtBanCEE6F9gCg@mail.gmail.com>
+Subject: Re: [PATCH net-next v4 2/3] net: stmmac: add Rx HWTS metadata to XDP
+ receive pkt
+To:     Song Yoong Siang <yoong.siang.song@intel.com>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, xdp-hints@xdp-project.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Apr 13, 2023 at 02:03:50PM +0000, Haiyang Zhang wrote:
-> 
-> 
-> > -----Original Message-----
-> > From: Leon Romanovsky <leon@kernel.org>
-> > Sent: Thursday, April 13, 2023 9:04 AM
-> > To: Haiyang Zhang <haiyangz@microsoft.com>
-> > Cc: linux-hyperv@vger.kernel.org; netdev@vger.kernel.org; Dexuan Cui
-> > <decui@microsoft.com>; KY Srinivasan <kys@microsoft.com>; Paul Rosswurm
-> > <paulros@microsoft.com>; olaf@aepfle.de; vkuznets@redhat.com;
-> > davem@davemloft.net; wei.liu@kernel.org; edumazet@google.com;
-> > kuba@kernel.org; pabeni@redhat.com; Long Li <longli@microsoft.com>;
-> > ssengar@linux.microsoft.com; linux-rdma@vger.kernel.org;
-> > daniel@iogearbox.net; john.fastabend@gmail.com; bpf@vger.kernel.org;
-> > ast@kernel.org; Ajay Sharma <sharmaajay@microsoft.com>;
-> > hawk@kernel.org; linux-kernel@vger.kernel.org
-> > Subject: Re: [PATCH V3,net-next, 2/4] net: mana: Refactor RX buffer allocation
-> > code to prepare for various MTU
-> > 
-> > On Wed, Apr 12, 2023 at 02:16:01PM -0700, Haiyang Zhang wrote:
-> > > Move out common buffer allocation code from mana_process_rx_cqe() and
-> > > mana_alloc_rx_wqe() to helper functions.
-> > > Refactor related variables so they can be changed in one place, and buffer
-> > > sizes are in sync.
-> > >
-> > > Signed-off-by: Haiyang Zhang <haiyangz@microsoft.com>
-> > > Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
-> > > ---
-> > > V3:
-> > > Refectored to multiple patches for readability. Suggested by Jacob Keller.
-> > >
-> > > V2:
-> > > Refectored to multiple patches for readability. Suggested by Yunsheng Lin.
-> > >
-> > > ---
-> > >  drivers/net/ethernet/microsoft/mana/mana_en.c | 154 ++++++++++-------
-> > -
-> > >  include/net/mana/mana.h                       |   6 +-
-> > >  2 files changed, 91 insertions(+), 69 deletions(-)
-> > 
-> > <...>
-> > 
-> > > +static void *mana_get_rxfrag(struct mana_rxq *rxq, struct device *dev,
-> > > +			     dma_addr_t *da, bool is_napi)
-> > > +{
-> > > +	struct page *page;
-> > > +	void *va;
-> > > +
-> > > +	/* Reuse XDP dropped page if available */
-> > > +	if (rxq->xdp_save_va) {
-> > > +		va = rxq->xdp_save_va;
-> > > +		rxq->xdp_save_va = NULL;
-> > > +	} else {
-> > > +		page = dev_alloc_page();
-> > 
-> > Documentation/networking/page_pool.rst
-> >    10 Basic use involves replacing alloc_pages() calls with the
-> >    11 page_pool_alloc_pages() call.  Drivers should use
-> > page_pool_dev_alloc_pages()
-> >    12 replacing dev_alloc_pages().
-> > 
-> > General question, is this sentence applicable to all new code or only
-> > for XDP related paths?
-> 
-> Quote from the context before that sentence --
-> 
-> =============
-> Page Pool API
-> =============
-> The page_pool allocator is optimized for the XDP mode that uses one frame
-> per-page, but it can fallback on the regular page allocator APIs.
-> Basic use involves replacing alloc_pages() calls with the
-> page_pool_alloc_pages() call.  Drivers should use page_pool_dev_alloc_pages()
-> replacing dev_alloc_pages().
-> 
-> --unquote
-> 
-> So the page pool is optimized for the XDP, and that sentence is applicable to drivers
-> that have set up page pool for XDP optimization.
+On Wed, Apr 12, 2023 at 8:26=E2=80=AFPM Song Yoong Siang
+<yoong.siang.song@intel.com> wrote:
+>
+> Add receive hardware timestamp metadata support via kfunc to XDP receive
+> packets.
+>
+> Suggested-by: Stanislav Fomichev <sdf@google.com>
+> Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
 
-"but it can fallback on the regular page allocator APIs."
+Conceptually looks good, thanks!
+Acked-by: Stanislav Fomichev <sdf@google.com>
 
-> static inline struct page *page_pool_dev_alloc_pages(struct page_pool *pool)  //need a pool been set up
-> 
-> Back to our mana driver, we don't have page pool setup yet. (will consider in the future)
-> So we cannot call page_pool_dev_alloc_pages(pool) in this place yet.
 
-ok, thanks
-
-> 
-> Thanks,
-> - Haiyang
-> 
+> ---
+>  drivers/net/ethernet/stmicro/stmmac/stmmac.h  |  3 ++
+>  .../net/ethernet/stmicro/stmmac/stmmac_main.c | 40 ++++++++++++++++++-
+>  2 files changed, 42 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/e=
+thernet/stmicro/stmmac/stmmac.h
+> index ac8ccf851708..826ac0ec88c6 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+> @@ -94,6 +94,9 @@ struct stmmac_rx_buffer {
+>
+>  struct stmmac_xdp_buff {
+>         struct xdp_buff xdp;
+> +       struct stmmac_priv *priv;
+> +       struct dma_desc *p;
+> +       struct dma_desc *np;
+>  };
+>
+>  struct stmmac_rx_queue {
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
+net/ethernet/stmicro/stmmac/stmmac_main.c
+> index 6ffce52ca837..831a3e22e0d8 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -5313,10 +5313,15 @@ static int stmmac_rx(struct stmmac_priv *priv, in=
+t limit, u32 queue)
+>
+>                         xdp_init_buff(&ctx.xdp, buf_sz, &rx_q->xdp_rxq);
+>                         xdp_prepare_buff(&ctx.xdp, page_address(buf->page=
+),
+> -                                        buf->page_offset, buf1_len, fals=
+e);
+> +                                        buf->page_offset, buf1_len, true=
+);
+>
+>                         pre_len =3D ctx.xdp.data_end - ctx.xdp.data_hard_=
+start -
+>                                   buf->page_offset;
+> +
+> +                       ctx.priv =3D priv;
+> +                       ctx.p =3D p;
+> +                       ctx.np =3D np;
+> +
+>                         skb =3D stmmac_xdp_run_prog(priv, &ctx.xdp);
+>                         /* Due xdp_adjust_tail: DMA sync for_device
+>                          * cover max len CPU touch
+> @@ -7060,6 +7065,37 @@ void stmmac_fpe_handshake(struct stmmac_priv *priv=
+, bool enable)
+>         }
+>  }
+>
+> +static int stmmac_xdp_rx_timestamp(const struct xdp_md *_ctx, u64 *times=
+tamp)
+> +{
+> +       const struct stmmac_xdp_buff *ctx =3D (void *)_ctx;
+> +       struct stmmac_priv *priv =3D ctx->priv;
+> +       struct dma_desc *desc =3D ctx->p;
+> +       struct dma_desc *np =3D ctx->np;
+> +       struct dma_desc *p =3D ctx->p;
+> +       u64 ns =3D 0;
+> +
+> +       if (!priv->hwts_rx_en)
+> +               return -ENODATA;
+> +
+> +       /* For GMAC4, the valid timestamp is from CTX next desc. */
+> +       if (priv->plat->has_gmac4 || priv->plat->has_xgmac)
+> +               desc =3D np;
+> +
+> +       /* Check if timestamp is available */
+> +       if (stmmac_get_rx_timestamp_status(priv, p, np, priv->adv_ts)) {
+> +               stmmac_get_timestamp(priv, desc, priv->adv_ts, &ns);
+> +               ns -=3D priv->plat->cdc_error_adj;
+> +               *timestamp =3D ns_to_ktime(ns);
+> +               return 0;
+> +       }
+> +
+> +       return -ENODATA;
+> +}
+> +
+> +static const struct xdp_metadata_ops stmmac_xdp_metadata_ops =3D {
+> +       .xmo_rx_timestamp               =3D stmmac_xdp_rx_timestamp,
+> +};
+> +
+>  /**
+>   * stmmac_dvr_probe
+>   * @device: device pointer
+> @@ -7167,6 +7203,8 @@ int stmmac_dvr_probe(struct device *device,
+>
+>         ndev->netdev_ops =3D &stmmac_netdev_ops;
+>
+> +       ndev->xdp_metadata_ops =3D &stmmac_xdp_metadata_ops;
+> +
+>         ndev->hw_features =3D NETIF_F_SG | NETIF_F_IP_CSUM | NETIF_F_IPV6=
+_CSUM |
+>                             NETIF_F_RXCSUM;
+>         ndev->xdp_features =3D NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDI=
+RECT |
+> --
+> 2.34.1
+>
