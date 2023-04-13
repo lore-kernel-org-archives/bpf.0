@@ -2,51 +2,55 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E67E0C77B6E
-	for <bpf@archiver.kernel.org>; Thu, 13 Apr 2023 12:40:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12C6DC77B61
+	for <bpf@archiver.kernel.org>; Thu, 13 Apr 2023 13:00:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjDMMkV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Apr 2023 08:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48444 "EHLO
+        id S229904AbjDMNAV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Apr 2023 09:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjDMMkU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 Apr 2023 08:40:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5113393D6
-        for <bpf@vger.kernel.org>; Thu, 13 Apr 2023 05:40:19 -0700 (PDT)
+        with ESMTP id S229708AbjDMNAU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 Apr 2023 09:00:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8885E4C2D;
+        Thu, 13 Apr 2023 06:00:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DDBE363E0D
-        for <bpf@vger.kernel.org>; Thu, 13 Apr 2023 12:40:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2EBA3C433EF;
-        Thu, 13 Apr 2023 12:40:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C54B63E1E;
+        Thu, 13 Apr 2023 13:00:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6E7DFC4339B;
+        Thu, 13 Apr 2023 13:00:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681389618;
-        bh=YXsSydUEoMb55Ox5WxLVBMAVjUtZVJ3DCNOPJCGckTo=;
+        s=k20201202; t=1681390818;
+        bh=zRXU0ckp3oOYqxg3ICueDA/QkpSJMCJXnQu1Pq2cq3k=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=lix0vklBIVE8KmQhb9629RRg1q3OEoV0nTgIjFoK/jQ81y5SBgBEG/gdFe2r+NGCL
-         1OIayGSuCJSqTYfsloi/ZowRo9d48n3x9gUsiCFE+C0o29B8wTzSWm5u4xjFTgNcse
-         ZXxG7nCRRNgG/cU/gUGnfEKgUmsgAjbqQ56Gyl7tmrMOoezHPdhYZjBDKquDyiIJia
-         wSDd2NmrGG4QliCCxt7Z2EsMPfKRTr7vrecJzQenpyPXqDStwNQynK7uJD/MWTSDcm
-         GnKUOUERVGWmxMCz7rr4vvio9/x/tLlnGWAzMyYba10NLBF4DVobnKEtSVfpBbqWNv
-         i9ztRcpPA6ung==
+        b=Y6XCgTW47AjXFnC2g+HY33qv4dsGkEZsXWJfPYI8SAqNYxR2/dUq1UND8c9vALZwo
+         2Mo98suZ80eZJCUB0l/RwFEVuiuBvMUKUS12uaIZkzD4voo+taTchqA81wV7kbvtbe
+         xzR0HvP9wmPZOGmeW3v0sgQmQWJrozBSPs0oVgpEYNRFCDoaQGr49NjlSv/9zvCB3Z
+         aGJgP6oa/J4ydQ6OKrYvvA+8xzCwp2k6+mw0KZoSmr/rDYKMzlb3tBLw8h6nfPBSLE
+         08wO7aDJa4eaCDYGjR5DF8vYtdqfDd5us+4ylRoDZ9XaJu+ZC6VKzd4WA+SMyT4PWX
+         4LPNIa80W9k4g==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 09B38E4508F;
-        Thu, 13 Apr 2023 12:40:18 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 52BA3E4508F;
+        Thu, 13 Apr 2023 13:00:18 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: remove stand-along test_verifier_log
- test binary
+Subject: Re: [PATCH bpf-next] xsk: Simplify xp_aligned_validate_desc
+ implementation
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168138961803.16516.15583743620232393223.git-patchwork-notify@kernel.org>
-Date:   Thu, 13 Apr 2023 12:40:18 +0000
-References: <20230412170655.1866831-1-andrii@kernel.org>
-In-Reply-To: <20230412170655.1866831-1-andrii@kernel.org>
-To:     Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        martin.lau@kernel.org, kernel-team@meta.com
+Message-Id: <168139081832.26604.18081207026429797036.git-patchwork-notify@kernel.org>
+Date:   Thu, 13 Apr 2023 13:00:18 +0000
+References: <20230410121841.643254-1-kal.conley@dectris.com>
+In-Reply-To: <20230410121841.643254-1-kal.conley@dectris.com>
+To:     Kal Cutter Conley <kal.conley@dectris.com>
+Cc:     bjorn@kernel.org, magnus.karlsson@intel.com,
+        maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
@@ -56,20 +60,19 @@ Hello:
 This patch was applied to bpf/bpf-next.git (master)
 by Daniel Borkmann <daniel@iogearbox.net>:
 
-On Wed, 12 Apr 2023 10:06:55 -0700 you wrote:
-> test_prog's prog_tests/verifier_log.c is superseding test_verifier_log
-> stand-alone test. It cover same checks and adds more, and is also
-> integrated into test_progs test runner.
+On Mon, 10 Apr 2023 14:18:41 +0200 you wrote:
+> Perform the chunk boundary check like the page boundary check in
+> xp_desc_crosses_non_contig_pg(). This simplifies the implementation and
+> reduces the number of branches.
 > 
-> Just remove test_verifier_log.c.
-> 
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> 
-> [...]
+> Signed-off-by: Kal Conley <kal.conley@dectris.com>
+> ---
+>  net/xdp/xsk_queue.h | 12 ++++--------
+>  1 file changed, 4 insertions(+), 8 deletions(-)
 
 Here is the summary with links:
-  - [bpf-next] selftests/bpf: remove stand-along test_verifier_log test binary
-    https://git.kernel.org/bpf/bpf-next/c/ee5059a64dba
+  - [bpf-next] xsk: Simplify xp_aligned_validate_desc implementation
+    https://git.kernel.org/bpf/bpf-next/c/0c5f48599bed
 
 You are awesome, thank you!
 -- 
