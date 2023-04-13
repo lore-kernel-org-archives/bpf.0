@@ -2,213 +2,178 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21EE5C77B61
-	for <bpf@archiver.kernel.org>; Thu, 13 Apr 2023 23:11:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89856C77B61
+	for <bpf@archiver.kernel.org>; Thu, 13 Apr 2023 23:42:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjDMXLW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Apr 2023 19:11:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42726 "EHLO
+        id S229902AbjDMXl7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Apr 2023 19:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjDMXLU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 Apr 2023 19:11:20 -0400
-X-Greylist: delayed 462 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 13 Apr 2023 16:11:18 PDT
-Received: from evilolive.daedalian.us (evilolive.daedalian.us [IPv6:2600:3c00::f03c:91ff:fe73:cd86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BCC19AD
-        for <bpf@vger.kernel.org>; Thu, 13 Apr 2023 16:11:18 -0700 (PDT)
-Received: by evilolive.daedalian.us (Postfix, from userid 111)
-        id CA547122A0; Thu, 13 Apr 2023 16:03:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=daedalian.us;
-        s=default; t=1681427015;
-        bh=N/oTU12GaiVjXfEcbgH2DNQl+cPLB6Q4XtC5jYOopfM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XI+4AbpoJgoNS2fOY04JwNrwkKhAzZDDVJPwKuuNC9GKkFgCbPs8aVErfl57yT8ml
-         qspC9gPL+FOKALxZ+Ewa3VfttH7pHP3D//2e6KitYvcrjUzkC1LvsCJmRneHNWbOls
-         bG+HjYceNfUQBKOjI9Gu6kozEExSwVzSuMjJs6LrHJjJ+d4a9GO31K24nfecJHfbms
-         CRB5MOPCkMhE7o6uBOeLyqgErw5OhEYuc6wTtbvPU7ZT+dWyjnISvZiQobxbQ7qCW2
-         Myvkt+BSkqfxH9Y7BqzaaXdJlnRv8JUgGkrvjRJhZ8P/71MTN9kJAjzl2yrBNlC6IL
-         nnmVEe7UpBazg==
-Received: from localhost.localdomain (static-47-181-121-78.lsan.ca.frontiernet.net [47.181.121.78])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by evilolive.daedalian.us (Postfix) with ESMTPSA id A3F6312226;
-        Thu, 13 Apr 2023 16:03:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=daedalian.us;
-        s=default; t=1681427011;
-        bh=N/oTU12GaiVjXfEcbgH2DNQl+cPLB6Q4XtC5jYOopfM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZB/SixbBnXLz1zM0PVkZURtogr+lY+TFo6PiaT+LjuVRUe5gZFijXI7mwTgwEZWWb
-         mUbBMIbS/NlspZYhoU41ZPYeHA7TE3Q4JpTb4Nxvgkn/IBsjLrifR7l6ciFJaXScSP
-         40WKITcP8KaGfz0/CmA0C8H2ll4BGpQjR4LWxPA3ZOHtZzuYWTzOkyqspZCcb1Cp0C
-         ytZh72KxwtM+jCnyN1mzDoCFAuPmfg+KRclOWpHRF1kob8u90/TJEo/ikXqyIgIjhm
-         rewvkJyk+G8q2yV85ngsbjFmz2kWZO/Wkf9uDpBbrkEPFl1aRfxqbEfLdoGLyye3aH
-         tLzAPekcWKFWg==
-From:   John Hickey <jjh@daedalian.us>
-To:     maciej.fijalkowski@intel.com
-Cc:     John Hickey <jjh@daedalian.us>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S229933AbjDMXl6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 Apr 2023 19:41:58 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F1710C1
+        for <bpf@vger.kernel.org>; Thu, 13 Apr 2023 16:41:56 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id d22-20020a17090a111600b0023d1b009f52so19938742pja.2
+        for <bpf@vger.kernel.org>; Thu, 13 Apr 2023 16:41:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681429316; x=1684021316;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ulqJBOxe2R1WB7ubIHijFA0IRLghmqezEGsJd863YjQ=;
+        b=mb69KXH5PdX5pUvCoSwb/MPLOhuuZN7kopY7QP78XyycWuqPIfd95fX82jQGSLT95+
+         F1kA1l+CS5XvzyusyMaqpAZ5qcEZ8Kc+I/pRwNUl6+uIA78D7llrauInNoLY2IEDjaEm
+         KW46WIQZYgs3xsg3aj4gNMpDssqIQovwo8KjSS6GXDn3NONvMaDEoduQzFx837XjfVcs
+         O+6+OLwOVYeCtbJmWecrWxOB+PkU3zDXJIXESbuxX3naPpA66/Ce79mAipYXpXqeesFW
+         dPt164zfHtWIBOpFc9IsZZIzZFzKwSmzBBHVgq1ejhlCHRpHjc15XwZ91APTHd2AG/cx
+         ax5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681429316; x=1684021316;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ulqJBOxe2R1WB7ubIHijFA0IRLghmqezEGsJd863YjQ=;
+        b=Vwcgg/4T4OIrNOTLsGrtbnZGAQYtqwVAiTiSeA7eDg3r9MJ4oUDmoAx3D3R8aGgHcL
+         ouayAj7kt2P926n5KREyNelqsBbk+RLt7iWF/Qj4lO72f/aho10EQrLiXprg9EaOhwvp
+         XWrDCRxBdGx8YaMmgMRa0D50DpLAkk5XERy95QBZ/GdVqAK9Q/b/2AjeW/gT3jUfU/41
+         zRA+YLZ8lvMCY9tbtDnVIftJtu/Wcuv9SDMRCJ8gX7zRjdVZ8RcAn2fL3T/Oi/r5LV48
+         1DOYVV9zp6VRlunXb192GLcXwPeQgmwaNl2YFhOGUtl+sGPPI3CnVkUFWTTf62ooytL5
+         S9Pg==
+X-Gm-Message-State: AAQBX9f4oqOD9S7eWJKAxu1VAbXU04+RJq64pmc7U3kS9jwL0mrtLvkT
+        J/5BDdxEz3j83aYDBSzR3SI=
+X-Google-Smtp-Source: AKy350ZDBSXeZ6pHSsBwDIeCH7dL3mgCWyg55QlPtWETYNDWQKCVUCxZ+VMS9llYa7bbPdxlpVxBkQ==
+X-Received: by 2002:a17:90b:3005:b0:247:ea8:1ac1 with SMTP id hg5-20020a17090b300500b002470ea81ac1mr3554021pjb.11.1681429316163;
+        Thu, 13 Apr 2023 16:41:56 -0700 (PDT)
+Received: from dhcp-172-26-102-232.dhcp.thefacebook.com ([2620:10d:c090:400::5:5f5b])
+        by smtp.gmail.com with ESMTPSA id u8-20020a17090a0c4800b002469eea5559sm1774042pje.6.2023.04.13.16.41.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 16:41:55 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 16:41:52 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Shujin Li <lishujin@kuaishou.com>,
-        Jason Xing <xingwanli@kuaishou.com>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH net v4] ixgbe: Fix panic during XDP_TX with > 64 CPUs
-Date:   Thu, 13 Apr 2023 16:03:00 -0700
-Message-Id: <20230413230300.54858-1-jjh@daedalian.us>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <ZC2IYWgTUFCnlKc9@boxer>
-References: <ZC2IYWgTUFCnlKc9@boxer>
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        David Vernet <void@manifault.com>
+Subject: Re: [PATCH RFC bpf-next v1 4/9] bpf: Handle throwing BPF callbacks
+ in helpers and kfuncs
+Message-ID: <20230413234152.c5canwh6imvbf5al@dhcp-172-26-102-232.dhcp.thefacebook.com>
+References: <20230405004239.1375399-1-memxor@gmail.com>
+ <20230405004239.1375399-5-memxor@gmail.com>
+ <20230406022139.75rkbl4xbwpn4qmp@dhcp-172-26-102-232.dhcp.thefacebook.com>
+ <lhsdwzz7phbcmckprwadzrrvpxqmsnl57bxhhpex3nh5ztnyog@pwqqxtntlnh5>
+ <20230407021519.j5esh3lbt6c6goz5@dhcp-172-26-102-232.dhcp.thefacebook.com>
+ <wlbng3zbk63ezpy7bqv7oezcwc7ctgbp3wy7fvvdeh7cauejzi@ub67so7yzamb>
+ <20230412194306.ltiiutzilk25hnll@macbook-pro-6.dhcp.thefacebook.com>
+ <w6j2sqr77mtsldysqjx5fs4ohso45ac352azjpzneqdarm2mwh@2i7tnmwd35dr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <w6j2sqr77mtsldysqjx5fs4ohso45ac352azjpzneqdarm2mwh@2i7tnmwd35dr>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Commit 4fe815850bdc ("ixgbe: let the xdpdrv work with more than 64 cpus")
-adds support to allow XDP programs to run on systems with more than
-64 CPUs by locking the XDP TX rings and indexing them using cpu % 64
-(IXGBE_MAX_XDP_QS).
+On Thu, Apr 13, 2023 at 07:13:22PM +0200, Kumar Kartikeya Dwivedi wrote:
+> On Wed, Apr 12, 2023 at 09:43:06PM CEST, Alexei Starovoitov wrote:
+> > On Fri, Apr 07, 2023 at 04:57:48AM +0200, Kumar Kartikeya Dwivedi wrote:
+> > > On Fri, Apr 07, 2023 at 04:15:19AM CEST, Alexei Starovoitov wrote:
+> > > > On Fri, Apr 07, 2023 at 02:07:06AM +0200, Kumar Kartikeya Dwivedi wrote:
+> > > > > On Thu, Apr 06, 2023 at 04:21:39AM CEST, Alexei Starovoitov wrote:
+> > > > > > On Wed, Apr 05, 2023 at 02:42:34AM +0200, Kumar Kartikeya Dwivedi wrote:
+> > > > > > > @@ -759,6 +759,8 @@ BPF_CALL_4(bpf_loop, u32, nr_loops, void *, callback_fn, void *, callback_ctx,
+> > > > > > >
+> > > > > > >  	for (i = 0; i < nr_loops; i++) {
+> > > > > > >  		ret = callback((u64)i, (u64)(long)callback_ctx, 0, 0, 0);
+> > > > > > > +		if (bpf_get_exception())
+> > > > > > > +			return -EJUKEBOX;
+> > > > > >
+> > > > > > This is too slow.
+> > > > > > We cannot afford a call and conditional here.
+> > > > >
+> > > > > There are two more options here: have two variants, one with and without the
+> > > > > check (always_inline template and bpf_loop vs bpf_loop_except calling functions
+> > > > > which pass false/true) and dispatch to the appropriate one based on if callback
+> > > > > throws or not (so the cost is not paid for current users at all). Secondly, we
+> > > > > can avoid repeated calls by hoisting the call out and save the pointer to
+> > > > > exception state, then it's a bit less costly.
+> > > > >
+> > > > > > Some time ago folks tried bpf_loop() and went back to bounded loop, because
+> > > > > > the overhead of indirect call was not acceptable.
+> > > > > > After that we've added inlining of bpf_loop() to make overhead to the minimum.
+> > > > > > With prog->aux->exception[] approach it might be ok-ish,
+> > > > > > but my preference would be to disallow throw in callbacks.
+> > > > > > timer cb, rbtree_add cb are typically small.
+> > > > > > bpf_loop cb can be big, but we have open coded iterators now.
+> > > > > > So disabling asserts in cb-s is probably acceptable trade-off.
+> > > > >
+> > > > > If the only reason to avoid them is the added performance cost, we can work
+> > > > > towards eliminating that when bpf_throw is not used (see above). I agree that
+> > > > > supporting it everywhere means thinking about a lot more corner cases, but I
+> > > > > feel it would be less surprising if doing bpf_assert simply worked everywhere.
+> > > > > One of the other reasons is that if it's being used within a shared static
+> > > > > function that both main program and callbacks call into, it will be a bit
+> > > > > annoying that it doesn't work in one context.
+> > > >
+> > > > I hope with open coded iterators the only use case for callbacks will be timers,
+> > > > exception cb and rbtree_add. All three are special cases.
+> > >
+> > > There's also bpf_for_each_map_elem, bpf_find_vma, bpf_user_ringbuf_drain.
+> > >
+> > > > There is nothing to unwind in the timer case.
+> > > > Certinaly not allowed to rethrow in exception cb.
+> > > > less-like rbtree_add should be tiny. And it's gotta to be fast.
+> > >
+> > > I agree for some of the cases above they do not matter too much. The main one
+> > > was bpf_loop, and the ones I listed (like for_each_map) seem to be those where
+> > > people may do siginificant work in the callback.
+> > >
+> > > I think we can make it zero cost for programs that don't use it (even for the
+> > > kernel code), I was just hoping to be able to support it everywhere as a generic
+> > > helper to abort program execution without any special corner cases during usage.
+> > > The other main point was about code sharing of functions which makes use of
+> > > assertions. But I'm ok with dropping support for callbacks if you think it's not
+> > > worth it in the end.
+> >
+> > I think the unexpected run-time slowdown due to checks is a bigger problem.
+> > Since bpf_assert is a 'bad program detector' it should be as zero cost to run-time
+> > as possible. Hence I'm advocating for single load+jmp approach of prog->aux->exception.
+> 
+> I 100% agree, slow down is a big problem and a downside of the current version.
+> They need to be as lightweight as possible. It's too costly right now in this
+> set.
+> 
+> > The run-time matter more than ability to use assert in all conditions. I think
+> > we'd need two flavors of bpf_assert() asm macros: with and without
+> > bpf_throw(). They seem to be useful without actual throw. They will help the
+> > verifier understand the ranges of variables in both cases. The macros are the
+> > 99% of the feature. The actual throw mechanism is 1%. The unwinding and
+> > release of resource is a cost of using macros without explicit control flow in
+> > the bpf programs. The macros without throw might be good enough in many cases.
+> 
+> Ok, I'll update to allow for both variants. But just to confirm, do you want to
+> shelve automatic cleanup (part 2 for now), or want to add it? I'm not clear on
+> whether you agree or disagree it's necessary.
+> 
+> I'll try the prog->aux->exception route, but I must say that we're sort of
+> trading off simpler semantics/behavior for speedup in that case (which is
+> necessary, but it is a cost IMO). I'll post a version using that, but I'll also
+> add comparisons with the variant where we spill ptr to exception state and
+> load+jmp. It's an extra instruction but I will try to benchmark and see how much
+> difference it causes in practice (probably over the XDP benchmark using such
+> exceptions, since that's one of the most important performance-critical use
+> cases). If you agree, let's double down on whatever approach we choose after
+> analysing the difference?
 
-Upon trying this out patch on a system with more than 64 cores,
-the kernel paniced with an array-index-out-of-bounds at the return in
-ixgbe_determine_xdp_ring in ixgbe.h, which means ixgbe_determine_xdp_q_idx
-was just returning the cpu instead of cpu % IXGBE_MAX_XDP_QS.  An example
-splat:
+I think performance considerations dominate implementation and ease of use.
+Could you describe how 'spill to exception state' will look like?
+I think the check after bpf_call insn has to be no more than LD + JMP.
+I was thinking whether we can do static_key like patching of the code.
+bpf_throw will know all locations that should be converted from nop into check
+and will do text_poke_bp before throwing.
+Maybe we can consider offline unwind and release too. The verifier will prep
+release tables and throw will execute them. BPF progs always have frame pointers,
+so walking the stack back is relatively easy. Release per callsite is hard.
 
- ==========================================================================
- UBSAN: array-index-out-of-bounds in
- /var/lib/dkms/ixgbe/5.18.6+focal-1/build/src/ixgbe.h:1147:26
- index 65 is out of range for type 'ixgbe_ring *[64]'
- ==========================================================================
- BUG: kernel NULL pointer dereference, address: 0000000000000058
- #PF: supervisor read access in kernel mode
- #PF: error_code(0x0000) - not-present page
- PGD 0 P4D 0
- Oops: 0000 [#1] SMP NOPTI
- CPU: 65 PID: 408 Comm: ksoftirqd/65
- Tainted: G          IOE     5.15.0-48-generic #54~20.04.1-Ubuntu
- Hardware name: Dell Inc. PowerEdge R640/0W23H8, BIOS 2.5.4 01/13/2020
- RIP: 0010:ixgbe_xmit_xdp_ring+0x1b/0x1c0 [ixgbe]
- Code: 3b 52 d4 cf e9 42 f2 ff ff 66 0f 1f 44 00 00 0f 1f 44 00 00 55 b9
- 00 00 00 00 48 89 e5 41 57 41 56 41 55 41 54 53 48 83 ec 08 <44> 0f b7
- 47 58 0f b7 47 5a 0f b7 57 54 44 0f b7 76 08 66 41 39 c0
- RSP: 0018:ffffbc3fcd88fcb0 EFLAGS: 00010282
- RAX: ffff92a253260980 RBX: ffffbc3fe68b00a0 RCX: 0000000000000000
- RDX: ffff928b5f659000 RSI: ffff928b5f659000 RDI: 0000000000000000
- RBP: ffffbc3fcd88fce0 R08: ffff92b9dfc20580 R09: 0000000000000001
- R10: 3d3d3d3d3d3d3d3d R11: 3d3d3d3d3d3d3d3d R12: 0000000000000000
- R13: ffff928b2f0fa8c0 R14: ffff928b9be20050 R15: 000000000000003c
- FS:  0000000000000000(0000) GS:ffff92b9dfc00000(0000)
- knlGS:0000000000000000
- CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- CR2: 0000000000000058 CR3: 000000011dd6a002 CR4: 00000000007706e0
- DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
- DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
- PKRU: 55555554
- Call Trace:
-  <TASK>
-  ixgbe_poll+0x103e/0x1280 [ixgbe]
-  ? sched_clock_cpu+0x12/0xe0
-  __napi_poll+0x30/0x160
-  net_rx_action+0x11c/0x270
-  __do_softirq+0xda/0x2ee
-  run_ksoftirqd+0x2f/0x50
-  smpboot_thread_fn+0xb7/0x150
-  ? sort_range+0x30/0x30
-  kthread+0x127/0x150
-  ? set_kthread_struct+0x50/0x50
-  ret_from_fork+0x1f/0x30
-  </TASK>
-
-I think this is how it happens:
-
-Upon loading the first XDP program on a system with more than 64 CPUs,
-ixgbe_xdp_locking_key is incremented in ixgbe_xdp_setup.  However,
-immediately after this, the rings are reconfigured by ixgbe_setup_tc.
-ixgbe_setup_tc calls ixgbe_clear_interrupt_scheme which calls
-ixgbe_free_q_vectors which calls ixgbe_free_q_vector in a loop.
-ixgbe_free_q_vector decrements ixgbe_xdp_locking_key once per call if
-it is non-zero.  Commenting out the decrement in ixgbe_free_q_vector
-stopped my system from panicing.
-
-I suspect to make the original patch work, I would need to load an XDP
-program and then replace it in order to get ixgbe_xdp_locking_key back
-above 0 since ixgbe_setup_tc is only called when transitioning between
-XDP and non-XDP ring configurations, while ixgbe_xdp_locking_key is
-incremented every time ixgbe_xdp_setup is called.
-
-Also, ixgbe_setup_tc can be called via ethtool --set-channels, so this
-becomes another path to decrement ixgbe_xdp_locking_key to 0 on systems
-with more than 64 CPUs.
-
-Since ixgbe_xdp_locking_key only protects the XDP_TX path and is tied
-to the number of CPUs present, there is no reason to disable it upon
-unloading an XDP program.  To avoid confusion, I have moved enabling
-ixgbe_xdp_locking_key into ixgbe_sw_init, which is part of the probe path.
-
-Fixes: 4fe815850bdc ("ixgbe: let the xdpdrv work with more than 64 cpus")
-Signed-off-by: John Hickey <jjh@daedalian.us>
-Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
----
-v1 -> v2:
-	Added Fixes and net tag.  No code changes.
-v2 -> v3:
-	Added splat.  Slight clarification as to why ixgbe_xdp_locking_key
-	is not turned off.  Based on feedback from Maciej Fijalkowski.
-v3 -> v4:
-	Moved setting ixgbe_xdp_locking_key into the probe path.
-	Commit message cleanup.
----
- drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c  | 3 ---
- drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 6 ++++--
- 2 files changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
-index f8156fe4b1dc..0ee943db3dc9 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
-@@ -1035,9 +1035,6 @@ static void ixgbe_free_q_vector(struct ixgbe_adapter *adapter, int v_idx)
- 	adapter->q_vector[v_idx] = NULL;
- 	__netif_napi_del(&q_vector->napi);
- 
--	if (static_key_enabled(&ixgbe_xdp_locking_key))
--		static_branch_dec(&ixgbe_xdp_locking_key);
--
- 	/*
- 	 * after a call to __netif_napi_del() napi may still be used and
- 	 * ixgbe_get_stats64() might access the rings on this vector,
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-index 773c35fecace..d7c247e46dfc 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-@@ -6495,6 +6495,10 @@ static int ixgbe_sw_init(struct ixgbe_adapter *adapter,
- 	set_bit(0, adapter->fwd_bitmask);
- 	set_bit(__IXGBE_DOWN, &adapter->state);
- 
-+	/* enable locking for XDP_TX if we have more CPUs than queues */
-+	if (nr_cpu_ids > IXGBE_MAX_XDP_QS)
-+		static_branch_enable(&ixgbe_xdp_locking_key);
-+
- 	return 0;
- }
- 
-@@ -10290,8 +10294,6 @@ static int ixgbe_xdp_setup(struct net_device *dev, struct bpf_prog *prog)
- 	 */
- 	if (nr_cpu_ids > IXGBE_MAX_XDP_QS * 2)
- 		return -ENOMEM;
--	else if (nr_cpu_ids > IXGBE_MAX_XDP_QS)
--		static_branch_inc(&ixgbe_xdp_locking_key);
- 
- 	old_prog = xchg(&adapter->xdp_prog, prog);
- 	need_reset = (!!prog != !!old_prog);
--- 
-2.37.2
-
+As far as benchmarking I'd use selftests/bpf/bench. No need for real network XDP.
