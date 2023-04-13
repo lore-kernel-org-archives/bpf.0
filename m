@@ -2,53 +2,53 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EA70C77B6E
-	for <bpf@archiver.kernel.org>; Thu, 13 Apr 2023 22:58:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BD13C77B61
+	for <bpf@archiver.kernel.org>; Thu, 13 Apr 2023 23:04:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229469AbjDMW6E (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Apr 2023 18:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38612 "EHLO
+        id S229567AbjDMXEM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Apr 2023 19:04:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbjDMW6B (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 Apr 2023 18:58:01 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103431BEA
-        for <bpf@vger.kernel.org>; Thu, 13 Apr 2023 15:57:59 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id b2-20020a17090a6e0200b002470b249e59so5850084pjk.4
-        for <bpf@vger.kernel.org>; Thu, 13 Apr 2023 15:57:59 -0700 (PDT)
+        with ESMTP id S229902AbjDMXEL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 Apr 2023 19:04:11 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C979A2
+        for <bpf@vger.kernel.org>; Thu, 13 Apr 2023 16:04:10 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id h24-20020a17090a9c1800b002404be7920aso16921890pjp.5
+        for <bpf@vger.kernel.org>; Thu, 13 Apr 2023 16:04:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681426679; x=1684018679;
+        d=gmail.com; s=20221208; t=1681427050; x=1684019050;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1OFoeNgRZ4+aQgvJwLAE0B32wf8ZriQONaW/mvfw9n0=;
-        b=nr6N4Hl1m2lpSdmjov+VvOOGWD/R8StLqEESTlQMq5xMdOqO7SWOX7M7Oi6y9h2X2s
-         z0j814cKDV4Aj1O7yrx1zNAY31IonqWW5scduZg079IHZdCUH3imefI/MZ2FJl2duLVV
-         PUOHmfsYFVp7nzGQz70HrnJXSOmwB1n9g61mmwLOfawrG3/MOcqeHwBVRD+vz5gWKDWr
-         NAX5v7J5SV4gr/sjTPKg4jsUOEOY/I5D5YihB10vN25IdgP8N2Y9L78m+nBqXkvfhvoG
-         ePt9qH+EDJZNKF+gn2hfmZbB4XUOLgw19/Y7O7iFNhLrzcMj2u/STM+39VryILklB4Ov
-         u2lA==
+        bh=fqC0FVfhOhqDc94ayEDEASDdt1g+dMscheybO9OfO8o=;
+        b=AyOua4FsuCRIiXkoZckNAK/+NfzkFPYuGWEASGWWGLROVIs5SftfF/y98C2wC+tgxH
+         FeLjW8/rw/fiB0WUXqOBMqUazB8BznnmTXmdehqvP3bhtGvUJJQ+J4V1kXIwSeYMJ0lG
+         xgo9NEtZITQeK55hHMBW73MPWuo5b3K0q5Iac9COpjnRWLRECJbx1ihGyK5FPnM31Hw/
+         6jFmaukD3u5yUjY2Qf+Hf//hTb2nYzPE8znjjrdkinx11vdy7fgQkbB/Jax4AaI1FDX7
+         z+ZIcB9n4w6QahalqlJI4G5uMVEJBN011a4DgRpgvCdctWzJlYCv4KHgV58roxx7EQZj
+         v8qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681426679; x=1684018679;
+        d=1e100.net; s=20221208; t=1681427050; x=1684019050;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1OFoeNgRZ4+aQgvJwLAE0B32wf8ZriQONaW/mvfw9n0=;
-        b=AZnt+qUh30hq+4U+CnCx6mU6ZFKnICFB2FoXG2je5JyE9OK7w+chTpydmmUdLEAUO4
-         997waRQmby2UtKP7E5zHClNr3KFNqnIw0BuzHX09Y+4b9j55aV2mRrr/FdQiw/I+fLMc
-         QDZQJyeBex7b+gxuF+h77PHQM2RG1fKzk4sxXcAmlg4P5aI3hfcDMy996hhKgyCQ3xiq
-         CgUVWH3RTfPfQQcAUilaPf+tKXD46T7l+I5cSqHKhXTgs1Ww6eCO93z5ivH3mLs3Sxlw
-         DlEHsXn4JK9j7pPQVHu1XHKMj5J/3MzKDaz+RSHJp1I/RZf+6kv3V12iovCu3B4dALhM
-         rHrg==
-X-Gm-Message-State: AAQBX9eCTzfS+Yuve+1UI/cL92f5Y+NW3fWJnDHN7dTp32LK5k5ziYb7
-        5IxdYCgHy5qS4N4Jo4hTh1vTipTea/k=
-X-Google-Smtp-Source: AKy350Yf8k8uCw7aCWzXvx0583S0/cTiSUe3Sqc6COxGW+m52dm2PJZkWs3UD6JXOOnYHVsyWfrdkw==
-X-Received: by 2002:a17:90a:a416:b0:240:d3b7:e850 with SMTP id y22-20020a17090aa41600b00240d3b7e850mr3087692pjp.49.1681426679125;
-        Thu, 13 Apr 2023 15:57:59 -0700 (PDT)
+        bh=fqC0FVfhOhqDc94ayEDEASDdt1g+dMscheybO9OfO8o=;
+        b=Wa8xZuf165sDnaXhMuDHpka5ff78he14HALWmvOmgfSJiE6DRiel3noum+Y5j4bLy7
+         MXudmA42/Efr0shca871Ef9731qdE/CfgO+zY7xX3owaWn8rEnVAvWKamLx/eROPSGe8
+         3LJJ0b9wwdVhaiGyeDXLN/qvBdYK1isaivosVHysBxVxOjaQ0q5l+DeC6w0lCKxI5sUF
+         1EZ5UdqjaW4v2+XX1QTWJaus6Y0P1tBX1YZUz1Jn5Mhl3fZpvcLBOrG0gdvK9jqadnxv
+         qPXzL/gpRkirvPd9r3QHz+oso2Fid9tD64Y32TMSM34eAv5HP8jdNhHOyz3U8dRgws7i
+         z0+A==
+X-Gm-Message-State: AAQBX9dOIlIqlTV1SEivLG4O+GON17+fgbpD6Yh4z/bjEQ2QYAAqV8I5
+        2SrjTaAcial87p51t8MiDCI=
+X-Google-Smtp-Source: AKy350ZCmBZ05Yf2kC5OunqB+qBbVIYzeYb+VYVnVNZxGJFyFaNg2fFJ191LZdEfNItzponmhy7+XQ==
+X-Received: by 2002:a17:90a:6b01:b0:246:896a:40a3 with SMTP id v1-20020a17090a6b0100b00246896a40a3mr3444736pjj.45.1681427049802;
+        Thu, 13 Apr 2023 16:04:09 -0700 (PDT)
 Received: from dhcp-172-26-102-232.dhcp.thefacebook.com ([2620:10d:c090:400::5:5f5b])
-        by smtp.gmail.com with ESMTPSA id jw19-20020a170903279300b0019f3cc463absm1984013plb.0.2023.04.13.15.57.57
+        by smtp.gmail.com with ESMTPSA id p18-20020a170902ead200b001a63d8902b6sm1967341pld.93.2023.04.13.16.04.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 15:57:58 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 15:57:56 -0700
+        Thu, 13 Apr 2023 16:04:09 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 16:04:07 -0700
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     Dave Marchevsky <davemarchevsky@fb.com>
 Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
@@ -56,39 +56,175 @@ Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <martin.lau@kernel.org>,
         Kernel Team <kernel-team@fb.com>
-Subject: Re: [PATCH v1 bpf-next 4/9] bpf: Add bpf_refcount_acquire kfunc
-Message-ID: <20230413225756.3j5z6ko54m4z6gbq@dhcp-172-26-102-232.dhcp.thefacebook.com>
+Subject: Re: [PATCH v1 bpf-next 8/9] bpf: Centralize btf_field-specific
+ initialization logic
+Message-ID: <20230413230407.zlpuoqi3h263this@dhcp-172-26-102-232.dhcp.thefacebook.com>
 References: <20230410190753.2012798-1-davemarchevsky@fb.com>
- <20230410190753.2012798-5-davemarchevsky@fb.com>
+ <20230410190753.2012798-9-davemarchevsky@fb.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230410190753.2012798-5-davemarchevsky@fb.com>
+In-Reply-To: <20230410190753.2012798-9-davemarchevsky@fb.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 12:07:48PM -0700, Dave Marchevsky wrote:
-> Currently, BPF programs can interact with the lifetime of refcounted
-> local kptrs in the following ways:
+On Mon, Apr 10, 2023 at 12:07:52PM -0700, Dave Marchevsky wrote:
+> All btf_fields in an object are 0-initialized by memset in
+> bpf_obj_init. This might not be a valid initial state for some field
+> types, in which case kfuncs that use the type will properly initialize
+> their input if it's been 0-initialized. Some BPF graph collection types
+> and kfuncs do this: bpf_list_{head,node} and bpf_rb_node.
 > 
->   bpf_obj_new  - Initialize refcount to 1 as part of new object creation
->   bpf_obj_drop - Decrement refcount and free object if it's 0
->   collection add - Pass ownership to the collection. No change to
->                    refcount but collection is responsible for
-> 		   bpf_obj_dropping it
+> An earlier patch in this series added the bpf_refcount field, for which
+> the 0 state indicates that the refcounted object should be free'd.
+> bpf_obj_init treats this field specially, setting refcount to 1 instead
+> of relying on scattered "refcount is 0? Must have just been initialized,
+> let's set to 1" logic in kfuncs.
 > 
-> In order to be able to add a refcounted local kptr to multiple
-> collections we need to be able to increment the refcount and acquire a
-> new owning reference. This patch adds a kfunc, bpf_refcount_acquire,
-> implementing such an operation.
+> This patch extends this treatment to list and rbtree field types,
+> allowing most scattered initialization logic in kfuncs to be removed.
 > 
-> bpf_refcount_acquire takes a refcounted local kptr and returns a new
-> owning reference to the same underlying memory as the input. The input
-> can be either owning or non-owning. To reinforce why this is safe,
-> consider the following code snippets:
+> Note that bpf_{list_head,rb_root} may be inside a BPF map, in which case
+> they'll be 0-initialized without passing through the newly-added logic,
+> so scattered initialization logic must remain for these collection root
+> types.
 > 
->   struct node *n = bpf_obj_new(typeof(*n)); // A
->   struct node *m = bpf_refcount_acquire(m); // B
+> Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
+> ---
+>  include/linux/bpf.h  | 38 ++++++++++++++++++++++++++++++++++----
+>  kernel/bpf/helpers.c | 17 +++++++----------
+>  2 files changed, 41 insertions(+), 14 deletions(-)
+> 
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 4fc29f9aeaac..8e69948c4adb 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -355,6 +355,39 @@ static inline u32 btf_field_type_align(enum btf_field_type type)
+>  	}
+>  }
+>  
+> +static inline void __bpf_obj_init_field(enum btf_field_type type, u32 size, void *addr)
+> +{
+> +	memset(addr, 0, size);
+> +
+> +	switch (type) {
+> +	case BPF_REFCOUNT:
+> +		refcount_set((refcount_t *)addr, 1);
+> +		break;
+> +	case BPF_RB_NODE:
+> +		RB_CLEAR_NODE((struct rb_node *)addr);
+> +		break;
+> +	case BPF_LIST_HEAD:
+> +	case BPF_LIST_NODE:
+> +		INIT_LIST_HEAD((struct list_head *)addr);
+> +		break;
+> +	case BPF_RB_ROOT:
+> +		/* RB_ROOT_CACHED 0-inits, no need to do anything after memset */
+> +	case BPF_SPIN_LOCK:
+> +	case BPF_TIMER:
+> +	case BPF_KPTR_UNREF:
+> +	case BPF_KPTR_REF:
+> +		break;
+> +	default:
+> +		WARN_ON_ONCE(1);
+> +		return;
+> +	}
+> +}
+> +
+> +static inline void bpf_obj_init_field(const struct btf_field *field, void *addr)
+> +{
+> +	__bpf_obj_init_field(field->type, field->size, addr);
+> +}
+> +
+>  static inline bool btf_record_has_field(const struct btf_record *rec, enum btf_field_type type)
+>  {
+>  	if (IS_ERR_OR_NULL(rec))
+> @@ -369,10 +402,7 @@ static inline void bpf_obj_init(const struct btf_record *rec, void *obj)
+>  	if (IS_ERR_OR_NULL(rec))
+>  		return;
+>  	for (i = 0; i < rec->cnt; i++)
+> -		memset(obj + rec->fields[i].offset, 0, rec->fields[i].size);
+> -
+> -	if (rec->refcount_off >= 0)
+> -		refcount_set((refcount_t *)(obj + rec->refcount_off), 1);
+> +		bpf_obj_init_field(&rec->fields[i], obj + rec->fields[i].offset);
 
-typo. should probably be bpf_refcount_acquire(n) ?
+this part make sense.
+
+>  }
+>  
+>  /* 'dst' must be a temporary buffer and should not point to memory that is being
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 6adbf99dc27f..1208fd8584c9 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -1931,15 +1931,16 @@ __bpf_kfunc void *bpf_refcount_acquire_impl(void *p__refcounted_kptr, void *meta
+>  	return (void *)p__refcounted_kptr;
+>  }
+>  
+> +#define __init_field_infer_size(field_type, addr)\
+> +	__bpf_obj_init_field(field_type, btf_field_type_size(field_type), addr)
+> +
+>  static int __bpf_list_add(struct bpf_list_node *node, struct bpf_list_head *head,
+>  			  bool tail, struct btf_record *rec, u64 off)
+>  {
+>  	struct list_head *n = (void *)node, *h = (void *)head;
+>  
+>  	if (unlikely(!h->next))
+> -		INIT_LIST_HEAD(h);
+> -	if (unlikely(!n->next))
+> -		INIT_LIST_HEAD(n);
+> +		__init_field_infer_size(BPF_LIST_HEAD, h);
+
+but this part is dubious.
+What's the value? I think it's cleaner to keep it open coded with INIT_LIST_HEAD()
+instead of hiding it through the helper.
+
+>  	if (!list_empty(n)) {
+>  		/* Only called from BPF prog, no need to migrate_disable */
+>  		__bpf_obj_drop_impl(n - off, rec);
+> @@ -1976,7 +1977,7 @@ static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head, bool tai
+>  	struct list_head *n, *h = (void *)head;
+>  
+>  	if (unlikely(!h->next))
+> -		INIT_LIST_HEAD(h);
+> +		__init_field_infer_size(BPF_LIST_HEAD, h);
+
+same here.
+
+>  	if (list_empty(h))
+>  		return NULL;
+>  	n = tail ? h->prev : h->next;
+> @@ -1984,6 +1985,8 @@ static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head, bool tai
+>  	return (struct bpf_list_node *)n;
+>  }
+>  
+> +#undef __init_field_infer_size
+> +
+>  __bpf_kfunc struct bpf_list_node *bpf_list_pop_front(struct bpf_list_head *head)
+>  {
+>  	return __bpf_list_del(head, false);
+> @@ -2000,9 +2003,6 @@ __bpf_kfunc struct bpf_rb_node *bpf_rbtree_remove(struct bpf_rb_root *root,
+>  	struct rb_root_cached *r = (struct rb_root_cached *)root;
+>  	struct rb_node *n = (struct rb_node *)node;
+>  
+> -	if (!n->__rb_parent_color)
+> -		RB_CLEAR_NODE(n);
+> -
+>  	if (RB_EMPTY_NODE(n))
+>  		return NULL;
+>  
+> @@ -2022,9 +2022,6 @@ static int __bpf_rbtree_add(struct bpf_rb_root *root, struct bpf_rb_node *node,
+>  	bpf_callback_t cb = (bpf_callback_t)less;
+>  	bool leftmost = true;
+>  
+> -	if (!n->__rb_parent_color)
+> -		RB_CLEAR_NODE(n);
+> -
+>  	if (!RB_EMPTY_NODE(n)) {
+>  		/* Only called from BPF prog, no need to migrate_disable */
+>  		__bpf_obj_drop_impl(n - off, rec);
+> -- 
+> 2.34.1
+> 
