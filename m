@@ -2,85 +2,80 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 401FFC77B6F
-	for <bpf@archiver.kernel.org>; Thu, 13 Apr 2023 12:38:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D77FEC77B61
+	for <bpf@archiver.kernel.org>; Thu, 13 Apr 2023 12:40:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbjDMMiw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Apr 2023 08:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47674 "EHLO
+        id S229638AbjDMMkU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Apr 2023 08:40:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjDMMiw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 Apr 2023 08:38:52 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0233793D6
-        for <bpf@vger.kernel.org>; Thu, 13 Apr 2023 05:38:50 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id dm2so37164597ejc.8
-        for <bpf@vger.kernel.org>; Thu, 13 Apr 2023 05:38:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1681389528; x=1683981528;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=80XOupwEydImNFImNi9YzwZQAYrfVPalPz/6koNH+OQ=;
-        b=WbVa8mtEKFuN8Fzn/sc1Ag//M4u6Tv5kyOLYzxXpgsNB3kQOvmss8fAbTSfgYAqrXz
-         Nz2gdQrelH8JdEkKyk5V5QhlHd6mtgGgZfhNjAaLYa7ccyQIzf/kcqgdvMsMWuqpmwbm
-         3U3PuUG+M0Cm9IQC/KXg12OKTeqLLiws1BHfM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681389528; x=1683981528;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=80XOupwEydImNFImNi9YzwZQAYrfVPalPz/6koNH+OQ=;
-        b=e1QlQzWRxZ4ReW1oqRlSEl/V5ckDPpsOuGb/kWDnH3JBlvukSLrenFFM4dad/Jo14H
-         1LtAJ41VIFXXSmuj0oPPzNkNlHZU8ndxG4hOFj3WZgogsCG0SgpDLahKIK9v3oPm4MWy
-         /7fEOpJMS4CNkkWtj6kpYxw36tHi7BQHEzS/8bAhwN52E1xloRTRoi1zfZLXvZTCGEAl
-         pp4g630NNF/fRBcbU0s3kXy/eOfF9ngimTWKn0NtT6LytuSoWn6ZcZutcvnSGo+NqqT7
-         FWCn+BHrkMIDYbjAiuzONZ/01a+31BEUVT0+nHrYFa2onfvWIcUXoKH1ioQNIQiFhgW4
-         tGJg==
-X-Gm-Message-State: AAQBX9fxO9D2hgmGfKY49ngohcDi3tmPOyNfHjq29RhbW1gKSJHxeocR
-        dALbOJ+V2CC3gPRVIEEOjh8EVo8q77TvwH2jL9f7Qw==
-X-Google-Smtp-Source: AKy350Y86kypZ6iuf2r0dmwP5DoiggvZU1uQ7oDQ8/09NxbbY91pFRClYxEJzsMHwUVBAs0KUgj6mQs5p9MZGnzV/BI=
-X-Received: by 2002:a17:906:d298:b0:932:1bdf:be3e with SMTP id
- ay24-20020a170906d29800b009321bdfbe3emr1232299ejb.0.1681389528500; Thu, 13
- Apr 2023 05:38:48 -0700 (PDT)
+        with ESMTP id S229593AbjDMMkT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 Apr 2023 08:40:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA4593D1
+        for <bpf@vger.kernel.org>; Thu, 13 Apr 2023 05:40:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC67E63E07
+        for <bpf@vger.kernel.org>; Thu, 13 Apr 2023 12:40:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 16562C4339B;
+        Thu, 13 Apr 2023 12:40:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681389618;
+        bh=Q19ttfOh42dMDZ0fuxhXbRiA+HGoWiabEeMSYGWDTAs=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=jXqNiaps1fk0UEva3r9CUaPd4tDhJbJBYU5/18jYDbtNydMPk+YIP1ddiNJeqWRbN
+         DFNeztbxJ4Ah1Cqf/O3cxC5S2oSiOTL0rjcihCpItFFL2m3Mqvo65UyUR5zUx3hrB1
+         GxVR80pzupzh2tMdkrZiVBegbo+gUa92SUiWjv7ov3BCes4xksKQ8PNL5hnm7OedYZ
+         LJaNQm0guQrDOAepSxz5AG1tVvNY6r1DTN3JPwd48vWleFLOXPW40py/qJlW9du59p
+         Q9nJbe7bmnHk7cWz7CavVmXsTrKDMOZ5YdNtTZtm8vtvn4qkQtu6ORJP53MWdU2GPg
+         z1Hsvt97UrfNA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F2E52E52443;
+        Thu, 13 Apr 2023 12:40:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230406130205.49996-1-kal.conley@dectris.com>
- <20230406130205.49996-2-kal.conley@dectris.com> <87sfdckgaa.fsf@toke.dk>
- <ZDBEng1KEEG5lOA6@boxer> <CAHApi-nuD7iSY7fGPeMYiNf8YX3dG27tJx1=n8b_i=ZQdZGZbw@mail.gmail.com>
- <875ya12phx.fsf@toke.dk> <CAHApi-=rMHt7uR8Sw1Vw+MHDrtkyt=jSvTvwz8XKV7SEb01CmQ@mail.gmail.com>
- <87ile011kz.fsf@toke.dk>
-In-Reply-To: <87ile011kz.fsf@toke.dk>
-From:   Kal Cutter Conley <kal.conley@dectris.com>
-Date:   Thu, 13 Apr 2023 14:43:32 +0200
-Message-ID: <CAHApi-m4gu8SX_1rBtUwrw+1-Q3ERFEX-HPMcwcCK1OceirwuA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/3] xsk: Support UMEM chunk_size > PAGE_SIZE
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next 0/3] Fix a few BPF selftests
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168138961799.16516.15133201435348786204.git-patchwork-notify@kernel.org>
+Date:   Thu, 13 Apr 2023 12:40:17 +0000
+References: <20230412210423.900851-1-song@kernel.org>
+In-Reply-To: <20230412210423.900851-1-song@kernel.org>
+To:     Song Liu <song@kernel.org>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kernel-team@meta.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-> Well, you mentioned yourself that:
->
-> > The disadvantage of this patchset is requiring the user to allocate
-> > HugeTLB pages which is an extra complication.
+Hello:
 
-It's a small extra complication *for the user*. However, users that
-need this feature are willing to allocate hugepages. We are one such
-user. For us, having to deal with packets split into disjoint buffers
-(from the XDP multi-buffer paradigm) is a significantly more annoying
-complication than allocating hugepages (particularly on the RX side).
+This series was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
+
+On Wed, 12 Apr 2023 14:04:20 -0700 you wrote:
+> Fix a few BPF selftests. Please see each patch for details of these fixes.
+> 
+> Song Liu (3):
+>   selftests/bpf: Use read_perf_max_sample_freq() in perf_event_stackmap
+>   selftests/bpf: Fix leaked bpf_link in get_stackid_cannot_attach
+>   selftests/bpf: Keep the loop in bpf_testmod_loop_test
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,1/3] selftests/bpf: Use read_perf_max_sample_freq() in perf_event_stackmap
+    https://git.kernel.org/bpf/bpf-next/c/de6d014a09bf
+  - [bpf-next,2/3] selftests/bpf: Fix leaked bpf_link in get_stackid_cannot_attach
+    https://git.kernel.org/bpf/bpf-next/c/c1e07a80cf23
+  - [bpf-next,3/3] selftests/bpf: Keep the loop in bpf_testmod_loop_test
+    https://git.kernel.org/bpf/bpf-next/c/2995f9a8d427
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
