@@ -2,102 +2,97 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0200EC77B6F
-	for <bpf@archiver.kernel.org>; Fri, 14 Apr 2023 09:55:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 439E6C77B70
+	for <bpf@archiver.kernel.org>; Fri, 14 Apr 2023 10:41:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbjDNJzB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 14 Apr 2023 05:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38880 "EHLO
+        id S230211AbjDNKlb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 14 Apr 2023 06:41:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjDNJzA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 14 Apr 2023 05:55:00 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D94A43C33;
-        Fri, 14 Apr 2023 02:54:59 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 984731FD95;
-        Fri, 14 Apr 2023 09:54:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1681466098; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JneUppOda+5TGdxaMKXFrkRT/M0RbNosDbdjrmg3y6k=;
-        b=eoAS1KDc4SAzQxjPHa49axCInW8IYd7O23TIPd4pc4RtFzpXMnPNvJuuh4r8HAN2in8lnb
-        sM/fnESaVmSw9iLUm3YlEHd37s6sPk1uDXk/YScAO02FhmppXPGQyPOLtKAT5DYjazK5y8
-        s0q1QxXYzigtfGSPzu1yV8/MxXm+c3Q=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1681466098;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JneUppOda+5TGdxaMKXFrkRT/M0RbNosDbdjrmg3y6k=;
-        b=T/MqJAD2yZlYNLf1ybBOCRHZrfmQwdHuODNnW6DOSFgHnLD9yHU8HdY3Fjes0PO1zVgAXB
-        A1BgrUiyUa2zRbAQ==
-Received: from kunlun.suse.cz (unknown [10.100.128.76])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 4EF8B2C143;
-        Fri, 14 Apr 2023 09:54:58 +0000 (UTC)
-Date:   Fri, 14 Apr 2023 11:54:57 +0200
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Shung-Hsi Yu <shung-hsi.yu@suse.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Song Liu <songliubraving@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 bpf 02/11] bpftool: define a local bpf_perf_link to
- fix accessing its fields
-Message-ID: <20230414095457.GG63923@kunlun.suse.cz>
-References: <20220421003152.339542-1-alobakin@pm.me>
- <20220421003152.339542-3-alobakin@pm.me>
+        with ESMTP id S230219AbjDNKla (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 14 Apr 2023 06:41:30 -0400
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:237:300::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8143E1FE0;
+        Fri, 14 Apr 2023 03:41:23 -0700 (PDT)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1pnGrp-0000ve-Em; Fri, 14 Apr 2023 12:41:21 +0200
+Date:   Fri, 14 Apr 2023 12:41:21 +0200
+From:   Florian Westphal <fw@strlen.de>
+To:     Quentin Monnet <quentin@isovalent.com>
+Cc:     Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, bpf@vger.kernel.org,
+        dxu@dxuuu.xyz, qde@naccy.de
+Subject: Re: [PATCH bpf-next v2 5/6] tools: bpftool: print netfilter link info
+Message-ID: <20230414104121.GB5889@breakpoint.cc>
+References: <20230413133228.20790-1-fw@strlen.de>
+ <20230413133228.20790-6-fw@strlen.de>
+ <CACdoK4LRjNsDY6m2fvUGY_C9gMvUdX9QpEetr9RtGuR8xb8pmg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220421003152.339542-3-alobakin@pm.me>
+In-Reply-To: <CACdoK4LRjNsDY6m2fvUGY_C9gMvUdX9QpEetr9RtGuR8xb8pmg@mail.gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello,
-
-On Thu, Apr 21, 2022 at 12:38:58AM +0000, Alexander Lobakin wrote:
-> When building bpftool with !CONFIG_PERF_EVENTS:
+Quentin Monnet <quentin@isovalent.com> wrote:
+> On Thu, 13 Apr 2023 at 14:36, Florian Westphal <fw@strlen.de> wrote:
+> >
+> > Dump protocol family, hook and priority value:
+> > $ bpftool link
+> > 2: type 10  prog 20
 > 
-> skeleton/pid_iter.bpf.c:47:14: error: incomplete definition of type 'struct bpf_perf_link'
->         perf_link = container_of(link, struct bpf_perf_link, link);
->                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> tools/bpf/bpftool/bootstrap/libbpf/include/bpf/bpf_helpers.h:74:22: note: expanded from macro 'container_of'
->                 ((type *)(__mptr - offsetof(type, member)));    \
->                                    ^~~~~~~~~~~~~~~~~~~~~~
-> tools/bpf/bpftool/bootstrap/libbpf/include/bpf/bpf_helpers.h:68:60: note: expanded from macro 'offsetof'
->  #define offsetof(TYPE, MEMBER)  ((unsigned long)&((TYPE *)0)->MEMBER)
->                                                   ~~~~~~~~~~~^
-> skeleton/pid_iter.bpf.c:44:9: note: forward declaration of 'struct bpf_perf_link'
->         struct bpf_perf_link *perf_link;
->                ^
+> Could you please update link_type_name in libbpf (libbpf.c) so that we
+> display "netfilter" here instead of "type 10"?
+
+Done.
+
+> > diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+> > index 3823100b7934..c93febc4c75f 100644
+> > --- a/tools/include/uapi/linux/bpf.h
+> > +++ b/tools/include/uapi/linux/bpf.h
+> > @@ -986,6 +986,7 @@ enum bpf_prog_type {
+> >         BPF_PROG_TYPE_LSM,
+> >         BPF_PROG_TYPE_SK_LOOKUP,
+> >         BPF_PROG_TYPE_SYSCALL, /* a program that can execute syscalls */
+> > +       BPF_PROG_TYPE_NETFILTER,
 > 
-> &bpf_perf_link is being defined and used only under the ifdef.
-> Define struct bpf_perf_link___local with the `preserve_access_index`
-> attribute inside the pid_iter BPF prog to allow compiling on any
-> configs. CO-RE will substitute it with the real struct bpf_perf_link
-> accesses later on.
-> container_of() is not CO-REd, but it is a noop for
-> bpf_perf_link <-> bpf_link and the local copy is a full mirror of
-> the original structure.
-> 
-> Fixes: cbdaf71f7e65 ("bpftool: Add bpf_cookie to link output")
+> If netfilter programs could be loaded with bpftool, we'd need to
+> update bpftool's docs. But I don't think this is the case, right?
 
-This does not solve the problem completely. Kernels that don't have
-CONFIG_PERF_EVENTS in the first place are also missing the enum value
-BPF_LINK_TYPE_PERF_EVENT which is used as the condition for handling the
-cookie.
+bpftool prog load nftest.o /sys/fs/bpf/nftest
 
-Thanks
+will work, but the program isn't attached anywhere.
 
-Michal
+> don't currently have a way to pass the pf, hooknum, priority and flags
+> necessary to load the program with "bpftool prog load" so it would
+> fail?
+
+I don't know how to make it work to actually attach it, because
+the hook is unregistered when the link fd is closed.
+
+So either bpftool would have to fork and auto-daemon (maybe
+unexpected...) or wait/block until CTRL-C.
+
+This also needs new libbpf api AFAICS because existing bpf_link
+are specific to the program type, so I'd have to add something like:
+
+struct bpf_link *
+bpf_program__attach_netfilter(const struct bpf_program *prog,
+			      const struct bpf_netfilter_opts *opts)
+
+Advice welcome.
+
+> Have you considered listing netfilter programs in the output of
+> "bpftool net" as well? Given that they're related to networking, it
+> would maybe make sense to have them listed alongside XDP, TC, and flow
+> dissector programs?
+
+I could print the same output that 'bpf link' already shows.
+
+Not sure on the real distinction between those two here.
+
+When should I use 'bpftool link' and when 'bpftool net', and what info
+and features should either of these provide for netfilter programs?
