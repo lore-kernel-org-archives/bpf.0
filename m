@@ -2,41 +2,41 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BF2EC77B77
-	for <bpf@archiver.kernel.org>; Sat, 15 Apr 2023 10:32:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA3E7C77B71
+	for <bpf@archiver.kernel.org>; Sat, 15 Apr 2023 10:32:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbjDOKcl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 15 Apr 2023 06:32:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36790 "EHLO
+        id S229912AbjDOKcq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 15 Apr 2023 06:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbjDOKck (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 15 Apr 2023 06:32:40 -0400
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30DD4ED4;
-        Sat, 15 Apr 2023 03:32:38 -0700 (PDT)
-Received: by mail-qv1-f42.google.com with SMTP id o7so17149799qvs.0;
-        Sat, 15 Apr 2023 03:32:38 -0700 (PDT)
+        with ESMTP id S229829AbjDOKcn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 15 Apr 2023 06:32:43 -0400
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F185583;
+        Sat, 15 Apr 2023 03:32:42 -0700 (PDT)
+Received: by mail-qt1-f180.google.com with SMTP id a23so16908865qtj.8;
+        Sat, 15 Apr 2023 03:32:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681554757; x=1684146757;
+        d=1e100.net; s=20221208; t=1681554761; x=1684146761;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PmESBK5iFZHFQ/euzyaEaeBJD3+SNzyOGDFskPdmi8w=;
-        b=f1nPEuIBFDPQeah0TwfH2JIzyJMJ9OGFnRQYyXkOI1YSfIWrHgWjASxTJhI+8qLeTG
-         BnrvaVSGOcuW5o+v3kC/xJzl0wM/LM6mSe5bhVMg2/R+Leoe8g2qcwWhgv5dpj229vIn
-         4SN4up1rlvdOdahb/LqN/UdU2+vqdUIYcNuLgFEU7xBLgK9e+bWaI/oc+ilt3uV/jxx9
-         u61Mlrhg+Y94J0XXpljU1SjNks+Onrd/pMBeRXJGWXka6zFo0cRYozWmHWBWCG+vBpi3
-         eq/Fno2ZlVBZ69rlVoL9q33B0ShndB6HDESlh0tbbE7qsbtKxtJitSug0bkDQMU4ltXV
-         9eRg==
-X-Gm-Message-State: AAQBX9feGim+m2gVEtO37VUviT5+38cwL3Bqp1EIzWiOYuEFLl1SfdTX
-        B6vzPMQ0zIr40cDl3VH27vir5U1J14/PJqUla3w=
-X-Google-Smtp-Source: AKy350Y74kW5/T3w7aHOgIEzHBAXD2M8fW4QtZvjixppDf7XvIneUMz9g+bPkO4GoGrbGuyLjLzRCQ==
-X-Received: by 2002:a05:6214:246f:b0:5ed:68ba:ce6b with SMTP id im15-20020a056214246f00b005ed68bace6bmr7517111qvb.4.1681554757605;
-        Sat, 15 Apr 2023 03:32:37 -0700 (PDT)
+        bh=bsE9U0MMwp7wZrIbIbCM0Lvuc4kI+kVHJ8gjGciCgfw=;
+        b=WgWD0mXMRbzHmvxltHOK9pGEDT0epNt1+sOywJQfwypk9XSn/E+av0Fb1BMPbBLCyq
+         5D5M7MTTZzTiJ9n4Ow+6rGStQvjGV/Z7msCi2PJTQQbYYny/WlJd36zn2aWAKh99pk5F
+         K6+29tXKUk5aZu0MkQLi0GvquiHJW3UcxKMNK+lob/bpYMQY6xlcD85WRFufLl/JLM2S
+         E/imqB3AjT43NFltZVTmyGoXsJtLNGB9b+Eaqn46FwiyMAOVP70ERmphdVGZHq8aApC/
+         FsoyNiphXUogBhOv+kqbgBJqChcD/qxPB9Pd50GUcvaRqXwh1IEd18f6k5LYv/kd5u6m
+         IIXg==
+X-Gm-Message-State: AAQBX9fvi2139KJOoVp4UA6b4uAlqyn6WJ8G4pWbp7uJlxsypw3tZFdw
+        376Dv0vBoW+055CGJPkXErsDtwUQvijUQ1+uhAE=
+X-Google-Smtp-Source: AKy350aQG49NMz/3L6zMLlF1OewBXa5TMpMehsFIP0Z8mRB0xr6cUpXBsN7jToGFl1BKPoRi+OZTyw==
+X-Received: by 2002:ac8:5a0a:0:b0:3e8:b9a0:babf with SMTP id n10-20020ac85a0a000000b003e8b9a0babfmr13293626qta.12.1681554760689;
+        Sat, 15 Apr 2023 03:32:40 -0700 (PDT)
 Received: from localhost ([24.1.27.177])
-        by smtp.gmail.com with ESMTPSA id nc7-20020a0562142dc700b005dd8b9345absm1699257qvb.67.2023.04.15.03.32.36
+        by smtp.gmail.com with ESMTPSA id j13-20020a05620a288d00b0073b8745fd39sm1827669qkp.110.2023.04.15.03.32.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Apr 2023 03:32:37 -0700 (PDT)
+        Sat, 15 Apr 2023 03:32:40 -0700 (PDT)
 From:   David Vernet <void@manifault.com>
 To:     bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
@@ -44,9 +44,9 @@ Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
         haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
         kernel-team@meta.com, memxor@gmail.com
-Subject: [PATCH bpf-next 1/3] bpf: Remove bpf_kfunc_call_test_kptr_get() test kfunc
-Date:   Sat, 15 Apr 2023 05:32:29 -0500
-Message-Id: <20230415103231.236063-2-void@manifault.com>
+Subject: [PATCH bpf-next 3/3] bpf,docs: Remove KF_KPTR_GET from documentation
+Date:   Sat, 15 Apr 2023 05:32:31 -0500
+Message-Id: <20230415103231.236063-4-void@manifault.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230415103231.236063-1-void@manifault.com>
 References: <20230415103231.236063-1-void@manifault.com>
@@ -56,279 +56,80 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We've managed to improve the UX for kptrs significantly over the last 9
-months. All of the prior main use cases, struct bpf_cpumask *, struct
-task_struct *, and struct cgroup *, have all been updated to be
-synchronized using RCU. In other words, their KF_ACQUIRE kfunc calls are
-all KF_RCU, and the pointers themselves are MEM_RCU and can be accessed
-in an RCU read region in BPF.
-
-In a follow-on change, we'll be removing the KF_KPTR_GET kfunc flag.
-This patch prepares for that by removing the
-bpf_kfunc_call_test_kptr_get() kfunc, and all associated selftests.
+A prior patch removed KF_KPTR_GET from the kernel. Now that it's no
+longer accessible to kfunc authors, this patch removes it from the BPF
+kfunc documentation.
 
 Signed-off-by: David Vernet <void@manifault.com>
 ---
- net/bpf/test_run.c                            | 12 ---
- tools/testing/selftests/bpf/progs/map_kptr.c  | 40 ++--------
- .../selftests/bpf/progs/map_kptr_fail.c       | 78 -------------------
- .../testing/selftests/bpf/verifier/map_kptr.c | 27 -------
- 4 files changed, 5 insertions(+), 152 deletions(-)
+ Documentation/bpf/kfuncs.rst | 21 ++++++---------------
+ 1 file changed, 6 insertions(+), 15 deletions(-)
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 0b9bd9b39990..f170e8a17974 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -679,17 +679,6 @@ __bpf_kfunc void bpf_kfunc_call_int_mem_release(int *p)
- {
- }
+diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+index 3b42cfe12437..ea2516374d92 100644
+--- a/Documentation/bpf/kfuncs.rst
++++ b/Documentation/bpf/kfuncs.rst
+@@ -184,16 +184,7 @@ in. All copies of the pointer being released are invalidated as a result of
+ invoking kfunc with this flag. KF_RELEASE kfuncs automatically receive the
+ protection afforded by the KF_TRUSTED_ARGS flag described below.
  
--__bpf_kfunc struct prog_test_ref_kfunc *
--bpf_kfunc_call_test_kptr_get(struct prog_test_ref_kfunc **pp, int a, int b)
--{
--	struct prog_test_ref_kfunc *p = READ_ONCE(*pp);
+-2.4.4 KF_KPTR_GET flag
+-----------------------
 -
--	if (!p)
--		return NULL;
--	refcount_inc(&p->cnt);
--	return p;
--}
+-The KF_KPTR_GET flag is used to indicate that the kfunc takes the first argument
+-as a pointer to kptr, safely increments the refcount of the object it points to,
+-and returns a reference to the user. The rest of the arguments may be normal
+-arguments of a kfunc. The KF_KPTR_GET flag should be used in conjunction with
+-KF_ACQUIRE and KF_RET_NULL flags.
 -
- struct prog_test_pass1 {
- 	int x0;
- 	struct {
-@@ -804,7 +793,6 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test_get_rdwr_mem, KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_get_rdonly_mem, KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_acq_rdonly_mem, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_kfunc_call_int_mem_release, KF_RELEASE)
--BTF_ID_FLAGS(func, bpf_kfunc_call_test_kptr_get, KF_ACQUIRE | KF_RET_NULL | KF_KPTR_GET)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_pass_ctx)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_pass1)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_pass2)
-diff --git a/tools/testing/selftests/bpf/progs/map_kptr.c b/tools/testing/selftests/bpf/progs/map_kptr.c
-index dae5dab1bbf7..d7150041e5d1 100644
---- a/tools/testing/selftests/bpf/progs/map_kptr.c
-+++ b/tools/testing/selftests/bpf/progs/map_kptr.c
-@@ -115,8 +115,6 @@ DEFINE_MAP_OF_MAP(BPF_MAP_TYPE_HASH_OF_MAPS, hash_malloc_map, hash_of_hash_mallo
- DEFINE_MAP_OF_MAP(BPF_MAP_TYPE_HASH_OF_MAPS, lru_hash_map, hash_of_lru_hash_maps);
+-2.4.5 KF_TRUSTED_ARGS flag
++2.4.4 KF_TRUSTED_ARGS flag
+ --------------------------
  
- extern struct prog_test_ref_kfunc *bpf_kfunc_call_test_acquire(unsigned long *sp) __ksym;
--extern struct prog_test_ref_kfunc *
--bpf_kfunc_call_test_kptr_get(struct prog_test_ref_kfunc **p, int a, int b) __ksym;
- extern void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p) __ksym;
- void bpf_kfunc_call_test_ref(struct prog_test_ref_kfunc *p) __ksym;
+ The KF_TRUSTED_ARGS flag is used for kfuncs taking pointer arguments. It
+@@ -205,7 +196,7 @@ exception described below).
+ There are two types of pointers to kernel objects which are considered "valid":
  
-@@ -187,25 +185,10 @@ static void test_kptr_ref(struct map_value *v)
- 	bpf_kfunc_call_test_release(p);
- }
+ 1. Pointers which are passed as tracepoint or struct_ops callback arguments.
+-2. Pointers which were returned from a KF_ACQUIRE or KF_KPTR_GET kfunc.
++2. Pointers which were returned from a KF_ACQUIRE kfunc.
  
--static void test_kptr_get(struct map_value *v)
--{
--	struct prog_test_ref_kfunc *p;
--
--	p = bpf_kfunc_call_test_kptr_get(&v->ref_ptr, 0, 0);
--	if (!p)
--		return;
--	if (p->a + p->b > 100) {
--		bpf_kfunc_call_test_release(p);
--		return;
--	}
--	bpf_kfunc_call_test_release(p);
--}
--
- static void test_kptr(struct map_value *v)
- {
- 	test_kptr_unref(v);
- 	test_kptr_ref(v);
--	test_kptr_get(v);
- }
+ Pointers to non-BTF objects (e.g. scalar pointers) may also be passed to
+ KF_TRUSTED_ARGS kfuncs, and may have a non-zero offset.
+@@ -232,13 +223,13 @@ In other words, you must:
+ 2. Specify the type and name of the trusted nested field. This field must match
+    the field in the original type definition exactly.
  
- SEC("tc")
-@@ -338,38 +321,25 @@ int test_map_kptr_ref_pre(struct map_value *v)
- 	if (p_st->cnt.refs.counter != ref)
- 		return 4;
+-2.4.6 KF_SLEEPABLE flag
++2.4.5 KF_SLEEPABLE flag
+ -----------------------
  
--	p = bpf_kfunc_call_test_kptr_get(&v->ref_ptr, 0, 0);
--	if (!p)
--		return 5;
--	ref++;
--	if (p_st->cnt.refs.counter != ref) {
--		ret = 6;
--		goto end;
--	}
--	bpf_kfunc_call_test_release(p);
--	ref--;
--	if (p_st->cnt.refs.counter != ref)
--		return 7;
--
- 	p = bpf_kptr_xchg(&v->ref_ptr, NULL);
- 	if (!p)
--		return 8;
-+		return 5;
- 	bpf_kfunc_call_test_release(p);
- 	ref--;
- 	if (p_st->cnt.refs.counter != ref)
--		return 9;
-+		return 6;
+ The KF_SLEEPABLE flag is used for kfuncs that may sleep. Such kfuncs can only
+ be called by sleepable BPF programs (BPF_F_SLEEPABLE).
  
- 	p = bpf_kfunc_call_test_acquire(&arg);
- 	if (!p)
--		return 10;
-+		return 7;
- 	ref++;
- 	p = bpf_kptr_xchg(&v->ref_ptr, p);
- 	if (p) {
--		ret = 11;
-+		ret = 8;
- 		goto end;
- 	}
- 	if (p_st->cnt.refs.counter != ref)
--		return 12;
-+		return 9;
- 	/* Leave in map */
+-2.4.7 KF_DESTRUCTIVE flag
++2.4.6 KF_DESTRUCTIVE flag
+ --------------------------
  
- 	return 0;
-diff --git a/tools/testing/selftests/bpf/progs/map_kptr_fail.c b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
-index 15bf3127dba3..da8c724f839b 100644
---- a/tools/testing/selftests/bpf/progs/map_kptr_fail.c
-+++ b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
-@@ -21,8 +21,6 @@ struct array_map {
+ The KF_DESTRUCTIVE flag is used to indicate functions calling which is
+@@ -247,7 +238,7 @@ rebooting or panicking. Due to this additional restrictions apply to these
+ calls. At the moment they only require CAP_SYS_BOOT capability, but more can be
+ added later.
  
- extern struct prog_test_ref_kfunc *bpf_kfunc_call_test_acquire(unsigned long *sp) __ksym;
- extern void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p) __ksym;
--extern struct prog_test_ref_kfunc *
--bpf_kfunc_call_test_kptr_get(struct prog_test_ref_kfunc **p, int a, int b) __ksym;
+-2.4.8 KF_RCU flag
++2.4.7 KF_RCU flag
+ -----------------
  
- SEC("?tc")
- __failure __msg("kptr access size must be BPF_DW")
-@@ -220,67 +218,6 @@ int reject_kptr_xchg_on_unref(struct __sk_buff *ctx)
- 	return 0;
- }
+ The KF_RCU flag is a weaker version of KF_TRUSTED_ARGS. The kfuncs marked with
+@@ -260,7 +251,7 @@ also be KF_RET_NULL.
  
--SEC("?tc")
--__failure __msg("arg#0 expected pointer to map value")
--int reject_kptr_get_no_map_val(struct __sk_buff *ctx)
--{
--	bpf_kfunc_call_test_kptr_get((void *)&ctx, 0, 0);
--	return 0;
--}
--
--SEC("?tc")
--__failure __msg("arg#0 expected pointer to map value")
--int reject_kptr_get_no_null_map_val(struct __sk_buff *ctx)
--{
--	bpf_kfunc_call_test_kptr_get(bpf_map_lookup_elem(&array_map, &(int){0}), 0, 0);
--	return 0;
--}
--
--SEC("?tc")
--__failure __msg("arg#0 no referenced kptr at map value offset=0")
--int reject_kptr_get_no_kptr(struct __sk_buff *ctx)
--{
--	struct map_value *v;
--	int key = 0;
--
--	v = bpf_map_lookup_elem(&array_map, &key);
--	if (!v)
--		return 0;
--
--	bpf_kfunc_call_test_kptr_get((void *)v, 0, 0);
--	return 0;
--}
--
--SEC("?tc")
--__failure __msg("arg#0 no referenced kptr at map value offset=8")
--int reject_kptr_get_on_unref(struct __sk_buff *ctx)
--{
--	struct map_value *v;
--	int key = 0;
--
--	v = bpf_map_lookup_elem(&array_map, &key);
--	if (!v)
--		return 0;
--
--	bpf_kfunc_call_test_kptr_get(&v->unref_ptr, 0, 0);
--	return 0;
--}
--
--SEC("?tc")
--__failure __msg("kernel function bpf_kfunc_call_test_kptr_get args#0")
--int reject_kptr_get_bad_type_match(struct __sk_buff *ctx)
--{
--	struct map_value *v;
--	int key = 0;
--
--	v = bpf_map_lookup_elem(&array_map, &key);
--	if (!v)
--		return 0;
--
--	bpf_kfunc_call_test_kptr_get((void *)&v->ref_memb_ptr, 0, 0);
--	return 0;
--}
--
- SEC("?tc")
- __failure __msg("R1 type=rcu_ptr_or_null_ expected=percpu_ptr_")
- int mark_ref_as_untrusted_or_null(struct __sk_buff *ctx)
-@@ -428,21 +365,6 @@ int kptr_xchg_ref_state(struct __sk_buff *ctx)
- 	return 0;
- }
+ .. _KF_deprecated_flag:
  
--SEC("?tc")
--__failure __msg("Unreleased reference id=3 alloc_insn=")
--int kptr_get_ref_state(struct __sk_buff *ctx)
--{
--	struct map_value *v;
--	int key = 0;
--
--	v = bpf_map_lookup_elem(&array_map, &key);
--	if (!v)
--		return 0;
--
--	bpf_kfunc_call_test_kptr_get(&v->ref_ptr, 0, 0);
--	return 0;
--}
--
- SEC("?tc")
- __failure __msg("Possibly NULL pointer passed to helper arg2")
- int kptr_xchg_possibly_null(struct __sk_buff *ctx)
-diff --git a/tools/testing/selftests/bpf/verifier/map_kptr.c b/tools/testing/selftests/bpf/verifier/map_kptr.c
-index d775ccb01989..a0cfc06d75bc 100644
---- a/tools/testing/selftests/bpf/verifier/map_kptr.c
-+++ b/tools/testing/selftests/bpf/verifier/map_kptr.c
-@@ -288,33 +288,6 @@
- 	.result = REJECT,
- 	.errstr = "off=0 kptr isn't referenced kptr",
- },
--{
--	"map_kptr: unref: bpf_kfunc_call_test_kptr_get rejected",
--	.insns = {
--	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
--	BPF_LD_MAP_FD(BPF_REG_6, 0),
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -4),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_ST_MEM(BPF_W, BPF_REG_2, 0, 0),
--	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
--	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 1),
--	BPF_EXIT_INSN(),
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
--	BPF_MOV64_IMM(BPF_REG_2, 0),
--	BPF_MOV64_IMM(BPF_REG_3, 0),
--	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
--	BPF_MOV64_IMM(BPF_REG_0, 0),
--	BPF_EXIT_INSN(),
--	},
--	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
--	.fixup_map_kptr = { 1 },
--	.result = REJECT,
--	.errstr = "arg#0 no referenced kptr at map value offset=0",
--	.fixup_kfunc_btf_id = {
--		{ "bpf_kfunc_call_test_kptr_get", 13 },
--	}
--},
- /* Tests for referenced PTR_TO_BTF_ID */
- {
- 	"map_kptr: ref: loaded pointer marked as untrusted",
+-2.4.9 KF_DEPRECATED flag
++2.4.8 KF_DEPRECATED flag
+ ------------------------
+ 
+ The KF_DEPRECATED flag is used for kfuncs which are scheduled to be
 -- 
 2.40.0
 
