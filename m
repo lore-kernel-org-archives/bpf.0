@@ -2,183 +2,101 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CF74C77B76
-	for <bpf@archiver.kernel.org>; Mon, 17 Apr 2023 22:21:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97739C77B76
+	for <bpf@archiver.kernel.org>; Mon, 17 Apr 2023 23:00:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbjDQWVp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Apr 2023 18:21:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59550 "EHLO
+        id S230203AbjDQXAY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 Apr 2023 19:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjDQWVp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 Apr 2023 18:21:45 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA3D15279
-        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 15:21:43 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33HLHp10008519
-        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 15:21:43 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=facebook; bh=v4N/B76Hkx8PgKCTB2ggVqOQrhRoyhOJgESdcNwaeo8=;
- b=doWn2BeJ6SVfgkbEOb30QZi9g3BXZkI8YeOaEtcJWT7Pn1sYCcr0HbHyE+lAm/YPMpbC
- 5thWiPXbM0QOxug2fTlgS44VH+LLtDtxZYU8gqhQuZfszHXMiXA5XNxMkvOvhRYHEJ6k
- 3ev4ClLmxRgnxI7PCytlarOlsYSAqhcjAI0= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3q1ct08qvk-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 15:21:42 -0700
-Received: from twshared52565.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 17 Apr 2023 15:21:41 -0700
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id E5A841D6B102E; Mon, 17 Apr 2023 15:21:34 -0700 (PDT)
-From:   Yonghong Song <yhs@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v2 1/2] bpf: Improve verifier u32 scalar equality checking
-Date:   Mon, 17 Apr 2023 15:21:34 -0700
-Message-ID: <20230417222134.359714-1-yhs@fb.com>
-X-Mailer: git-send-email 2.34.1
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: vNOq8RiwN_WWpkMfsKyU2Z80uk-fj7EY
-X-Proofpoint-ORIG-GUID: vNOq8RiwN_WWpkMfsKyU2Z80uk-fj7EY
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S229477AbjDQXAU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 17 Apr 2023 19:00:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E017B8
+        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 16:00:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E6DDE62AEB
+        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 23:00:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4CB1BC4339B;
+        Mon, 17 Apr 2023 23:00:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681772418;
+        bh=cSFDE4biLs4O7GmPiCNsrWADOdHBft77IR+GHj8m5Rg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=CcP0yt766guEZLagsLjYKPe82CJHlOz/iY0smqrJSmCO4/i1vXwPwK6FULGmWBIhI
+         YI1QC1sMb5zI5/+pAS0ODFI01mirA4Db0MuwRHgLtxGK9X98Te/mGd0XWMYgPN//2q
+         ZDACE3b5huRRukLAzSaOQirZKeECHUIpMfZo0T0CGToiEaqPjWkUP4WUHpHTMvFamz
+         QLmnQaIsycSIfnRqQvVY0ZiqSRu0Fs9Qostrhpuqj/kXb6VayShHSsQd1keWw7NNfB
+         nqakaLsZDZK/aOGx4V4HtEn+/lt6KixqhKj/cG6U5DAgPP9g4dABuz8qAD8zNaAfqo
+         wBEB1ohjqGLtw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 289F9C40C5E;
+        Mon, 17 Apr 2023 23:00:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-17_14,2023-04-17_01,2023-02-09_01
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Improve verifier u32 scalar equality
+ checking
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168177241815.10175.8036375503922112256.git-patchwork-notify@kernel.org>
+Date:   Mon, 17 Apr 2023 23:00:18 +0000
+References: <20230417222134.359714-1-yhs@fb.com>
+In-Reply-To: <20230417222134.359714-1-yhs@fb.com>
+To:     Yonghong Song <yhs@fb.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, kernel-team@fb.com, martin.lau@kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In [1], I tried to remove bpf-specific codes to prevent certain
-llvm optimizations, and add llvm TTI (target transform info) hooks
-to prevent those optimizations. During this process, I found
-if I enable llvm SimplifyCFG:shouldFoldTwoEntryPHINode
-transformation, I will hit the following verification failure with selftest=
-s:
+Hello:
 
-  ...
-  8: (18) r1 =3D 0xffffc900001b2230       ; R1_w=3Dmap_value(off=3D560,ks=
-=3D4,vs=3D564,imm=3D0)
-  10: (61) r1 =3D *(u32 *)(r1 +0)         ; R1_w=3Dscalar(umax=3D4294967295=
-,var_off=3D(0x0; 0xffffffff))
-  ; if (skb->tstamp =3D=3D EGRESS_ENDHOST_MAGIC)
-  11: (79) r2 =3D *(u64 *)(r6 +152)       ; R2_w=3Dscalar() R6=3Dctx(off=3D=
-0,imm=3D0)
-  ; if (skb->tstamp =3D=3D EGRESS_ENDHOST_MAGIC)
-  12: (55) if r2 !=3D 0xb9fbeef goto pc+10        ; R2_w=3D195018479
-  13: (bc) w2 =3D w1                      ; R1_w=3Dscalar(umax=3D4294967295=
-,var_off=3D(0x0; 0xffffffff)) R2_w=3Dscalar(umax=3D4294967295,var_off=3D(0x=
-0; 0xffffffff))
-  ; if (test < __NR_TESTS)
-  14: (a6) if w1 < 0x9 goto pc+1 16: R0=3D2 R1_w=3Dscalar(umax=3D8,var_off=
-=3D(0x0; 0xf)) R2_w=3Dscalar(umax=3D4294967295,var_off=3D(0x0; 0xffffffff))=
- R6=3Dctx(off=3D0,imm=3D0) R10=3Dfp0
-  ;
-  16: (27) r2 *=3D 28                     ; R2_w=3Dscalar(umax=3D1202590842=
-60,var_off=3D(0x0; 0x1ffffffffc),s32_max=3D2147483644,u32_max=3D-4)
-  17: (18) r3 =3D 0xffffc900001b2118      ; R3_w=3Dmap_value(off=3D280,ks=
-=3D4,vs=3D564,imm=3D0)
-  19: (0f) r3 +=3D r2                     ; R2_w=3Dscalar(umax=3D1202590842=
-60,var_off=3D(0x0; 0x1ffffffffc),s32_max=3D2147483644,u32_max=3D-4) R3_w=3D=
-map_value(off=3D280,ks=3D4,vs=3D564,umax=3D120259084260,var_off=3D(0x0; 0x1=
-ffffffffc),s32_max=3D2147483644,u32_max=3D-4)
-  20: (61) r2 =3D *(u32 *)(r3 +0)
-  R3 unbounded memory access, make sure to bounds check any such access
-  processed 97 insns (limit 1000000) max_states_per_insn 1 total_states 10 =
-peak_states 10 mark_read 6
-  -- END PROG LOAD LOG --
-  libbpf: prog 'ingress_fwdns_prio100': failed to load: -13
-  libbpf: failed to load object 'test_tc_dtime'
-  libbpf: failed to load BPF skeleton 'test_tc_dtime': -13
-  ...
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-At insn 14, with condition 'w1 < 9', register r1 is changed from an arbitra=
-ry
-u32 value to `scalar(umax=3D8,var_off=3D(0x0; 0xf))`. Register r2, however,=
- remains
-as an arbitrary u32 value. Current verifier won't claim r1/r2 equality if
-the previous mov is alu32 ('w2 =3D w1').
+On Mon, 17 Apr 2023 15:21:34 -0700 you wrote:
+> In [1], I tried to remove bpf-specific codes to prevent certain
+> llvm optimizations, and add llvm TTI (target transform info) hooks
+> to prevent those optimizations. During this process, I found
+> if I enable llvm SimplifyCFG:shouldFoldTwoEntryPHINode
+> transformation, I will hit the following verification failure with selftests:
+> 
+>   ...
+>   8: (18) r1 = 0xffffc900001b2230       ; R1_w=map_value(off=560,ks=4,vs=564,imm=0)
+>   10: (61) r1 = *(u32 *)(r1 +0)         ; R1_w=scalar(umax=4294967295,var_off=(0x0; 0xffffffff))
+>   ; if (skb->tstamp == EGRESS_ENDHOST_MAGIC)
+>   11: (79) r2 = *(u64 *)(r6 +152)       ; R2_w=scalar() R6=ctx(off=0,imm=0)
+>   ; if (skb->tstamp == EGRESS_ENDHOST_MAGIC)
+>   12: (55) if r2 != 0xb9fbeef goto pc+10        ; R2_w=195018479
+>   13: (bc) w2 = w1                      ; R1_w=scalar(umax=4294967295,var_off=(0x0; 0xffffffff)) R2_w=scalar(umax=4294967295,var_off=(0x0; 0xffffffff))
+>   ; if (test < __NR_TESTS)
+>   14: (a6) if w1 < 0x9 goto pc+1 16: R0=2 R1_w=scalar(umax=8,var_off=(0x0; 0xf)) R2_w=scalar(umax=4294967295,var_off=(0x0; 0xffffffff)) R6=ctx(off=0,imm=0) R10=fp0
+>   ;
+>   16: (27) r2 *= 28                     ; R2_w=scalar(umax=120259084260,var_off=(0x0; 0x1ffffffffc),s32_max=2147483644,u32_max=-4)
+>   17: (18) r3 = 0xffffc900001b2118      ; R3_w=map_value(off=280,ks=4,vs=564,imm=0)
+>   19: (0f) r3 += r2                     ; R2_w=scalar(umax=120259084260,var_off=(0x0; 0x1ffffffffc),s32_max=2147483644,u32_max=-4) R3_w=map_value(off=280,ks=4,vs=564,umax=120259084260,var_off=(0x0; 0x1ffffffffc),s32_max=2147483644,u32_max=-4)
+>   20: (61) r2 = *(u32 *)(r3 +0)
+>   R3 unbounded memory access, make sure to bounds check any such access
+>   processed 97 insns (limit 1000000) max_states_per_insn 1 total_states 10 peak_states 10 mark_read 6
+>   -- END PROG LOAD LOG --
+>   libbpf: prog 'ingress_fwdns_prio100': failed to load: -13
+>   libbpf: failed to load object 'test_tc_dtime'
+>   libbpf: failed to load BPF skeleton 'test_tc_dtime': -13
+>   ...
+> 
+> [...]
 
-If r1 upper 32bit value is not 0, we indeed cannot clamin r1/r2 equality
-after 'w2 =3D w1'. But in this particular case, we know r1 upper 32bit value
-is 0, so it is safe to claim r1/r2 equality. This patch exactly did this.
-For a 32bit subreg mov, if the src register upper 32bit is 0,
-it is okay to claim equality between src and dst registers.
+Here is the summary with links:
+  - [bpf-next,v2,1/2] bpf: Improve verifier u32 scalar equality checking
+    https://git.kernel.org/bpf/bpf-next/c/3be49f79555e
+  - [bpf-next,v2,2/2] selftests/bpf: Add a selftest for checking subreg equality
+    https://git.kernel.org/bpf/bpf-next/c/49859de997c3
 
-With this patch, the above verification sequence becomes
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-  ...
-  8: (18) r1 =3D 0xffffc9000048e230       ; R1_w=3Dmap_value(off=3D560,ks=
-=3D4,vs=3D564,imm=3D0)
-  10: (61) r1 =3D *(u32 *)(r1 +0)         ; R1_w=3Dscalar(umax=3D4294967295=
-,var_off=3D(0x0; 0xffffffff))
-  ; if (skb->tstamp =3D=3D EGRESS_ENDHOST_MAGIC)
-  11: (79) r2 =3D *(u64 *)(r6 +152)       ; R2_w=3Dscalar() R6=3Dctx(off=3D=
-0,imm=3D0)
-  ; if (skb->tstamp =3D=3D EGRESS_ENDHOST_MAGIC)
-  12: (55) if r2 !=3D 0xb9fbeef goto pc+10        ; R2_w=3D195018479
-  13: (bc) w2 =3D w1                      ; R1_w=3Dscalar(id=3D6,umax=3D429=
-4967295,var_off=3D(0x0; 0xffffffff)) R2_w=3Dscalar(id=3D6,umax=3D4294967295=
-,var_off=3D(0x0; 0xffffffff))
-  ; if (test < __NR_TESTS)
-  14: (a6) if w1 < 0x9 goto pc+1        ; R1_w=3Dscalar(id=3D6,umin=3D9,uma=
-x=3D4294967295,var_off=3D(0x0; 0xffffffff))
-  ...
-  from 14 to 16: R0=3D2 R1_w=3Dscalar(id=3D6,umax=3D8,var_off=3D(0x0; 0xf))=
- R2_w=3Dscalar(id=3D6,umax=3D8,var_off=3D(0x0; 0xf)) R6=3Dctx(off=3D0,imm=
-=3D0) R10=3Dfp0
-  16: (27) r2 *=3D 28                     ; R2_w=3Dscalar(umax=3D224,var_of=
-f=3D(0x0; 0xfc))
-  17: (18) r3 =3D 0xffffc9000048e118      ; R3_w=3Dmap_value(off=3D280,ks=
-=3D4,vs=3D564,imm=3D0)
-  19: (0f) r3 +=3D r2
-  20: (61) r2 =3D *(u32 *)(r3 +0)         ; R2_w=3Dscalar(umax=3D4294967295=
-,var_off=3D(0x0; 0xffffffff)) R3_w=3Dmap_value(off=3D280,ks=3D4,vs=3D564,um=
-ax=3D224,var_off=3D(0x0; 0xfc),s32_max=3D252,u32_max=3D252)
-  ...
-
-and eventually the bpf program can be verified successfully.
-
-  [1] https://reviews.llvm.org/D147968
-
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- kernel/bpf/verifier.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 5dae11ee01c3..1e05355facdc 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -12421,12 +12421,17 @@ static int check_alu_op(struct bpf_verifier_env *=
-env, struct bpf_insn *insn)
- 						insn->src_reg);
- 					return -EACCES;
- 				} else if (src_reg->type =3D=3D SCALAR_VALUE) {
-+					bool is_src_reg_u32 =3D src_reg->umax_value <=3D U32_MAX;
-+
-+					if (is_src_reg_u32 && !src_reg->id)
-+						src_reg->id =3D ++env->id_gen;
- 					copy_register_state(dst_reg, src_reg);
--					/* Make sure ID is cleared otherwise
-+					/* Make sure ID is cleared if src_reg is not in u32 range otherwise
- 					 * dst_reg min/max could be incorrectly
- 					 * propagated into src_reg by find_equal_scalars()
- 					 */
--					dst_reg->id =3D 0;
-+					if (!is_src_reg_u32)
-+						dst_reg->id =3D 0;
- 					dst_reg->live |=3D REG_LIVE_WRITTEN;
- 					dst_reg->subreg_def =3D env->insn_idx + 1;
- 				} else {
---=20
-2.34.1
 
