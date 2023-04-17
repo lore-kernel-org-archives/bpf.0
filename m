@@ -2,107 +2,45 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EC05C77B76
-	for <bpf@archiver.kernel.org>; Mon, 17 Apr 2023 15:49:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 964DFC77B76
+	for <bpf@archiver.kernel.org>; Mon, 17 Apr 2023 16:20:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbjDQPtD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Apr 2023 11:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43978 "EHLO
+        id S229559AbjDQQUY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 Apr 2023 12:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231251AbjDQPsp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 Apr 2023 11:48:45 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C753CC09;
-        Mon, 17 Apr 2023 08:48:19 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id o2so26125750plg.4;
-        Mon, 17 Apr 2023 08:48:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681746498; x=1684338498;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hzwNPovO934/64aRBZe++yk+dNmk1JTc3kyHlCW2thM=;
-        b=EtvJ8wzzGeIKNvCSRVQyBRs0///s9z59xSvbgIBRPTP1pfha9sUxogoFUVO0c0db+g
-         M0COUsSWzkRLMZ+BDmNpjNjihYBldeUy7CY+ea/XG6e5FC5qNvtB+ZpwGFQXDIXu8NmX
-         64xY4XB80LHkLvy+SfsRjM+m/8d1gweexpJpB3NblaNolg9oxMkQfNwiF+8FvZ8JM2zW
-         HDzq/NK8MLfgTR9LMciv9ceCAK9TtdmoA4kd/QYe1ZddwdaGqEjucKQNjx8tgVFk6+DH
-         mHGoEyEqZrq9qahzLy0G/E8FMAHx6sLdPtSlzL4L4nx8V2W6JapPUI1wGfB4yMUNmmHB
-         XrYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681746498; x=1684338498;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hzwNPovO934/64aRBZe++yk+dNmk1JTc3kyHlCW2thM=;
-        b=fzEs6b4m7P0M3A8Qfym+mkaSXOol0fiXFsSzY8rWOdvI7T6C7HJnWy6QDAf1gaxnNx
-         /GpRfbTS7QIX2STu8Szb1YBn5NXzwZSavVLxNHimwbVnwi+S1/0zQw8UwByXoQFgsfoj
-         f5Xo3c78+3H0HufoEmUIt6To9HGk4JGT2C5/KItcxkmTbr/kk7BwLfEcpK2aUfbW85uA
-         Ph7HaNRmodLNlPHXJHse4UE+Hkhc3APC/tbIBrUsQaGfLCw9V8HHGlCJA5KEBTIw93Ag
-         oaa3Dk1+VUWQULC8PCRN5qcmzvU8xJULtHAXQxAheEqaJxRGHM/D36nSHySzVskwZfpz
-         pc+A==
-X-Gm-Message-State: AAQBX9fuEF4wEvFvB/ovbpfLu08RuOPTtD97KuCZ1hoBDwqZp+8ZGIlO
-        acWMsaaI6tjTqyknuqeBA10=
-X-Google-Smtp-Source: AKy350Ztle8natRSMegaDwypqIor50+pRLxLEDw9RI/thoOaMOAwGj0hmhhdVjUJTgHAFxDO1bxoCQ==
-X-Received: by 2002:a17:902:eac2:b0:1a1:b440:3773 with SMTP id p2-20020a170902eac200b001a1b4403773mr12088320pld.27.1681746497891;
-        Mon, 17 Apr 2023 08:48:17 -0700 (PDT)
-Received: from vultr.guest ([2401:c080:3800:263c:5400:4ff:fe66:d27f])
-        by smtp.gmail.com with ESMTPSA id jj17-20020a170903049100b001a6b308fcaesm4437513plb.153.2023.04.17.08.48.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 08:48:17 -0700 (PDT)
-From:   Yafang Shao <laoar.shao@gmail.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, rostedt@goodmis.org,
-        mhiramat@kernel.org
-Cc:     bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next 6/6] bpf: Remove some denied functions from the btf id deny list
-Date:   Mon, 17 Apr 2023 15:47:37 +0000
-Message-Id: <20230417154737.12740-7-laoar.shao@gmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230417154737.12740-1-laoar.shao@gmail.com>
-References: <20230417154737.12740-1-laoar.shao@gmail.com>
+        with ESMTP id S229914AbjDQQUW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 17 Apr 2023 12:20:22 -0400
+X-Greylist: delayed 3871 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 Apr 2023 09:20:21 PDT
+Received: from slot0.gie-nz.com (slot0.gie-nz.com [45.81.243.183])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09F679034
+        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 09:20:20 -0700 (PDT)
+From:   FASTWAYBASE.US94@consultant.com
+To:     bpf@vger.kernel.org
+Subject: Re: new order
+Date:   17 Apr 2023 17:15:48 +0200
+Message-ID: <20230417171548.EE5A0ABB693072AF@consultant.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed;
+        boundary="----=_NextPart_000_0012_BA394364.57928252"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-With the generic tracing recursion prevention mechanism applied, it is
-safe to trace migrate_{disable,enable} and preempt_count_{sub,add}. So
-we can remove them from the deny list.
-However we can't remove rcu_read_unlock_strict and
-__rcu_read_{lock,unlock}, because they are used in rcu_read_unlock() or
-rcu_read_lock().
+This is a multi-part message in MIME format.
 
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
----
- kernel/bpf/verifier.c | 8 --------
- 1 file changed, 8 deletions(-)
+------=_NextPart_000_0012_BA394364.57928252
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 83fb94f..40f6b2c 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -18634,17 +18634,9 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 
- BTF_SET_START(btf_id_deny)
- BTF_ID_UNUSED
--#ifdef CONFIG_SMP
--BTF_ID(func, migrate_disable)
--BTF_ID(func, migrate_enable)
--#endif
- #if !defined CONFIG_PREEMPT_RCU && !defined CONFIG_TINY_RCU
- BTF_ID(func, rcu_read_unlock_strict)
- #endif
--#if defined(CONFIG_DEBUG_PREEMPT) || defined(CONFIG_TRACE_PREEMPT_TOGGLE)
--BTF_ID(func, preempt_count_add)
--BTF_ID(func, preempt_count_sub)
--#endif
- #ifdef CONFIG_PREEMPT_RCU
- BTF_ID(func, __rcu_read_lock)
- BTF_ID(func, __rcu_read_unlock)
--- 
-1.8.3.1
+Dea Sir.
 
+Please see attached new order and revert to us the delivery date/
+FOB
+also inform us payment terms.
+
+Best Regards=20
+Susan
+Purchase Manager.
+------=_NextPart_000_0012_BA394364.57928252--
