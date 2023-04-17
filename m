@@ -2,134 +2,121 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 359E7C77B70
-	for <bpf@archiver.kernel.org>; Mon, 17 Apr 2023 15:05:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35915C77B76
+	for <bpf@archiver.kernel.org>; Mon, 17 Apr 2023 15:33:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbjDQPFO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Apr 2023 11:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58772 "EHLO
+        id S229576AbjDQPdP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 Apr 2023 11:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbjDQPFM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 Apr 2023 11:05:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7048A1A8
-        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 08:04:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681743861;
+        with ESMTP id S229951AbjDQPdO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 17 Apr 2023 11:33:14 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4558C164;
+        Mon, 17 Apr 2023 08:32:38 -0700 (PDT)
+From:   Kurt Kanzenbach <kurt.kanzenbach@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1681745520;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=NJBNuSsSRPzwbnWzbfANH/a4n2dZHDD98aiqXtusCOY=;
-        b=Hcr1a8qkYMNQItRsd9Nm1GFGbqWjeCxUdNWPdylliXH0oPuHcOd6MKfVWcZ2VoksL8Fpom
-        E3Cnx03Ki/6jEZCjLMWfC15YOo9/0LGO/ZPBid7g1SwQMWXekHCeHgeLfkREU/PjsfOg1a
-        6SknMX+E9HeJIOEEg2CQ4D5dlhp8DnA=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-100-qJrIeOa5PCCR03ZVGC5_Rg-1; Mon, 17 Apr 2023 11:04:20 -0400
-X-MC-Unique: qJrIeOa5PCCR03ZVGC5_Rg-1
-Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-506a455ee4cso531147a12.3
-        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 08:04:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681743859; x=1684335859;
-        h=content-transfer-encoding:in-reply-to:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NJBNuSsSRPzwbnWzbfANH/a4n2dZHDD98aiqXtusCOY=;
-        b=FzugMJcpVJkXChPMC48PL7brWpcCQuM9lgqemK79S9PRknkFIhf53x5oUokGiys+w+
-         xyZ+6V4t8flWvW5kbod3VwnE0kkUtL06/qIxoOGdN5atrbuhyOhhqYQqtuV+2rfKw3Y/
-         BfU6lXF15JQbBlh7wG6HS7GUyhy8zPTViDq/QH9rQhO2V0VZ/EMdxIpBrOC4xB0KaJwA
-         gZs291za5qltM6olxK22cWZZAIwe/CN7sQCZzSpK/Q10lycEBFoJ6I5LvHRAbdmODvnF
-         SReo79Y0F/qMTz6Dr8h/xFpkQeYHNRq8Xkz0P4b2eX+oZxcCgMN46jZJLUpbuhBi4Qwr
-         hdmQ==
-X-Gm-Message-State: AAQBX9dtNRwzJ+9TOs54ORjjhOPj4WegSghAIeycPQsSDHZc1F1Z+sWP
-        ubIGa4EO0n4rSD/PK7KfdCXHh7CQwB6LXK8nosvN+KwiRI8EESLOkraaujLdyjsKBXMql2CXbrj
-        /iyv0EL9g1fK11JXOfcJY+L01gPsj4SVOjdYmnQiJkQW+RaKXf210wT1i0m8MpsK9VWZulyA=
-X-Received: by 2002:a05:6402:64b:b0:504:a360:e611 with SMTP id u11-20020a056402064b00b00504a360e611mr13762517edx.13.1681743858826;
-        Mon, 17 Apr 2023 08:04:18 -0700 (PDT)
-X-Google-Smtp-Source: AKy350aGCwFvxgC+HLPcIfKk2U/Fm7fSlmjb1ietdTgyJ2DJ6npnOC/Z7W4lbiaEQlJOO6d4h9uKew==
-X-Received: by 2002:a05:6402:64b:b0:504:a360:e611 with SMTP id u11-20020a056402064b00b00504a360e611mr13762480edx.13.1681743858466;
-        Mon, 17 Apr 2023 08:04:18 -0700 (PDT)
-Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
-        by smtp.gmail.com with ESMTPSA id c21-20020aa7df15000000b00505060e4280sm5944035edy.94.2023.04.17.08.04.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 08:04:18 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <0fa94fe1-c448-084f-3a3d-ab52e701c91c@redhat.com>
-Date:   Mon, 17 Apr 2023 17:04:16 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Cc:     brouer@redhat.com, netdev@vger.kernel.org, martin.lau@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, alexandr.lobakin@intel.com,
-        larysa.zaremba@intel.com, xdp-hints@xdp-project.net,
-        yoong.siang.song@intel.com, intel-wired-lan@lists.osuosl.org,
-        pabeni@redhat.com, jesse.brandeburg@intel.com, kuba@kernel.org,
-        edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
-        davem@davemloft.net
-Subject: Re: [PATCH bpf-next V1 5/5] selftests/bpf: xdp_hw_metadata track more
- timestamps
-Content-Language: en-US
-To:     bpf@vger.kernel.org, Stanislav Fomichev <sdf@google.com>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>
+        bh=ZNqAznZucUwar6l9V+SpEqFf4WGQ4TaEWsz5LdTwLO0=;
+        b=h4MK9rQxCNldmspQ2ekSbav6OCDIBvW/lBNViHTg8Eew50AGem+33buONoPvC5dgnRyNij
+        kYFzHh2AjcCXT0UfeqyGUpQmiE2P+iyVUK6aqV7ATLBr/5XwJoyJ7BgsXOd6ZQTr9M5+Tg
+        InWl/G01MrXTXAN0bANkhXc9bchlAWRZI4pHLxPX+dxJuY7bxfgZ8MJFSaL3iQY8zqtDms
+        mg08ta0IdmXbR2GZu6zyujObgpf+0y8uU7Rk0xeDdegiPQ2xID2T3/hVZBrRg2WVWZEb2f
+        MSjlqc8bYzKxWS3wEN+YM9cJvhQnUK5G94/Bf3dszKvEP25KO9iBNailTkfepA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1681745520;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZNqAznZucUwar6l9V+SpEqFf4WGQ4TaEWsz5LdTwLO0=;
+        b=3Rb4+K6SMPMktyFO3+RfZXH19dm4B/+tIp7Nz5cDQuXxblNrtx7bNM12NK/g7FFPDeLHs+
+        gC3+0zdB34IrhqCg==
+To:     Jesper Dangaard Brouer <brouer@redhat.com>, bpf@vger.kernel.org,
+        Stanislav Fomichev <sdf@google.com>,
+        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8r?= =?utf-8?Q?gensen?= 
+        <toke@redhat.com>
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
+        martin.lau@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        alexandr.lobakin@intel.com, larysa.zaremba@intel.com,
+        xdp-hints@xdp-project.net, yoong.siang.song@intel.com,
+        intel-wired-lan@lists.osuosl.org, pabeni@redhat.com,
+        jesse.brandeburg@intel.com, kuba@kernel.org, edumazet@google.com,
+        john.fastabend@gmail.com, hawk@kernel.org, davem@davemloft.net
+Subject: Re: [PATCH bpf-next V1 5/5] selftests/bpf: xdp_hw_metadata track
+ more timestamps
+In-Reply-To: <168174344813.593471.4026230439937368990.stgit@firesoul>
 References: <168174338054.593471.8312147519616671551.stgit@firesoul>
  <168174344813.593471.4026230439937368990.stgit@firesoul>
-In-Reply-To: <168174344813.593471.4026230439937368990.stgit@firesoul>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Date:   Mon, 17 Apr 2023 17:31:58 +0200
+Message-ID: <87leiqsexd.fsf@kurt>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha512; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+--=-=-=
+Content-Type: text/plain
 
-On 17/04/2023 16.57, Jesper Dangaard Brouer wrote:
+On Mon Apr 17 2023, Jesper Dangaard Brouer wrote:
 > To correlate the hardware RX timestamp with something, add tracking of
 > two software timestamps both clock source CLOCK_TAI (see description in
 > man clock_gettime(2)).
-> 
+>
 > XDP metadata is extended with xdp_timestamp for capturing when XDP
 > received the packet. Populated with BPF helper bpf_ktime_get_tai_ns(). I
 > could not find a BPF helper for getting CLOCK_REALTIME, which would have
 > been preferred. In userspace when AF_XDP sees the packet another
 > software timestamp is recorded via clock_gettime() also clock source
 > CLOCK_TAI.
-> 
+>
 > Example output shortly after loading igc driver:
-> 
->    poll: 1 (0) skip=1 fail=0 redir=2
->    xsk_ring_cons__peek: 1
->    0x12557a8: rx_desc[1]->addr=100000000009000 addr=9100 comp_addr=9000
->    rx_hash: 0x82A96531 with RSS type:0x1
->    rx_timestamp:  1681740540304898909 (sec:1681740540.3049)
->    XDP RX-time:   1681740577304958316 (sec:1681740577.3050) delta sec:37.0001 (37000059.407 usec)
->    AF_XDP time:   1681740577305051315 (sec:1681740577.3051) delta sec:0.0001 (92.999 usec)
->    0x12557a8: complete idx=9 addr=9000
-> 
-
-For QA verification testing, I want to mention that this fix[0] were
-applied, in-order to get "rx_timestamp" working on igc:
-
-  [0] 
-https://lore.kernel.org/all/20230414154902.2950535-1-yoong.siang.song@intel.com/
-
-
+>
+>   poll: 1 (0) skip=1 fail=0 redir=2
+>   xsk_ring_cons__peek: 1
+>   0x12557a8: rx_desc[1]->addr=100000000009000 addr=9100 comp_addr=9000
+>   rx_hash: 0x82A96531 with RSS type:0x1
+>   rx_timestamp:  1681740540304898909 (sec:1681740540.3049)
+>   XDP RX-time:   1681740577304958316 (sec:1681740577.3050) delta sec:37.0001 (37000059.407 usec)
+>   AF_XDP time:   1681740577305051315 (sec:1681740577.3051) delta sec:0.0001 (92.999 usec)
+>   0x12557a8: complete idx=9 addr=9000
+>
 > The first observation is that the 37 sec difference between RX HW vs XDP
 > timestamps, which indicate hardware is likely clock source
 > CLOCK_REALTIME, because (as of this writing) CLOCK_TAI is initialised
 > with a 37 sec offset.
-> 
-> The 93 usec (microsec) difference between XDP vs AF_XDP userspace is the
-> userspace wakeup time. On this hardware it was caused by CPU idle sleep
-> states, which can be reduced by tuning /dev/cpu_dma_latency.
-> 
-> View current requested/allowed latency bound via:
->    hexdump --format '"%d\n"' /dev/cpu_dma_latency
-> 
-> More explanation of the output and how this can be used to identify
-> clock drift for the HW clock can be seen here[1]:
-> 
-> [1] https://github.com/xdp-project/xdp-project/blob/master/areas/hints/xdp_hints_kfuncs02_driver_igc.org
-> 
 
+Maybe I'm missing something here, but in order to compare the hardware
+with software timestamps (e.g., by using bpf_ktime_get_tai_ns()) the
+time sources have to be synchronized by using something like
+phc2sys. That should make them comparable within reasonable range
+(nanoseconds).
+
+Thanks,
+Kurt
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJSBAEBCgA8FiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmQ9Zm4eHGt1cnQua2Fu
+emVuYmFjaEBsaW51dHJvbml4LmRlAAoJEMGT0fKqRnOCYtUP/3c5DAmd2vNkZ6A9
+Sy1VrS9EFf5Re6h3DXMxCBsNi1AC/lYiNfkF2YRIY45UPntexdrl8J1ehisiIrWs
+OPi2cIyZObXXrm5SCXDk/o//G3cwv0CwqCC5Wnhk1120d9kpAlXwiYpHZnzZRFGE
+2XKkAcNOaKqjwlC8eKxI8dTIfZEWl2w1nazOzNSQCGnQV9sll1TetJaempzYyXkp
+luI2fmsuLFt9z02xW33jS2W2fRQoIfBbb6PIuGPiAnjGMNiUNeyh6hg7wzDz4uHA
+RnM87yFtBbTlIwzAgpSMXXnmdyLL5uJUmqiiS9RvxZhWYklc2015OsynMBO7namn
+MtT1bPjrFxVrIRBYTQ+YaTuUwRN/sLkye92IG6AttUjcJElvL3xW20kWMs+nqgGP
+yBB2Y/DLsNzWVDIXY7406U1/6bZEZjHaCFawnXbrYUurAXr2zG27x13aFQWxHD69
+wyH3esfAZP8/0yBucSlpbgBiOOwz7ys2M/I9NaAQAKVitL11bDSqHBSuBAp3T1im
+UBZXIws7gqvQ1L3DMj1QnBi1QyheCcjvyS2bXgn00t27aRo5uy8Gdv750bW4RqES
+hMxSATWP2Ee+ePTYVMHOCsUStTkX0qyT7iaPARC7HbpId1dmTVulzrdz5eUGJDJU
+yNNSk0lrFfo1uXx7AScZAHpkl3zZ
+=YsLm
+-----END PGP SIGNATURE-----
+--=-=-=--
