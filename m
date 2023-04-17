@@ -2,131 +2,95 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7823C77B7A
-	for <bpf@archiver.kernel.org>; Mon, 17 Apr 2023 17:53:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8656C77B7A
+	for <bpf@archiver.kernel.org>; Mon, 17 Apr 2023 18:08:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjDQRxY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Apr 2023 13:53:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47030 "EHLO
+        id S229602AbjDQSIr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 Apr 2023 14:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjDQRxX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 Apr 2023 13:53:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013DE40FC;
-        Mon, 17 Apr 2023 10:53:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A52C61F61;
-        Mon, 17 Apr 2023 17:53:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44617C433D2;
-        Mon, 17 Apr 2023 17:53:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681754001;
-        bh=6DYIOeMH2/MwXWM7L636bO7CJIjjghRBQlZZ4EkZRT8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=tbqPGz+WhfLwlheZUGSa6aBPxK4hjwv/Cx/XnWUZLsrQaFyG3Qiv677Wnm/dMv3M7
-         8uvg//MbyFx5U6dqFELGxjPWgV9bNiFkZ9s8Dvud933sSD6k5KCWH1rvIF4KpRFB1a
-         7C9sdb2to6VIv2Kwk1JNQtN8lAxGOFoQdLx5iQz6TXdBJiu6Cwkx7NwPGayZJdzJBG
-         LCAVfp2Jpyq2o9jnZ3XHFkD1PlU0o+1auDpEKwpkbvRTPRs4DtpWnbAK00mTXYcGCW
-         f1F7urrjwzbJpV+WUb/exDpfecm0EPcFaP0j7RwdXq+rczztIPojwMBS/jWFb4bezB
-         zXr+g2HuN58EA==
-Date:   Mon, 17 Apr 2023 19:53:17 +0200
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     netdev@vger.kernel.org
-Cc:     hawk@kernel.org, ilias.apalodimas@linaro.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        bpf@vger.kernel.org, lorenzo.bianconi@redhat.com, nbd@nbd.name
-Subject: issue with inflight pages from page_pool
-Message-ID: <ZD2HjZZSOjtsnQaf@lore-desk>
+        with ESMTP id S229458AbjDQSIr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 17 Apr 2023 14:08:47 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D97310D
+        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 11:08:46 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id z132so843207iof.3
+        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 11:08:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681754925; x=1684346925;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FFRye2b8enKh4h81efhVYyeqGgzP7Su4Fye7jw42xwg=;
+        b=wZl45TbqL6ecocXZBvu0xhtj0IexNHPSwZby/tAHhJkJ41Hx9HHBE3C3WykLMGo7y5
+         W7B0CqASqsQi+7xTzkbMm+W5pXi7xyoDG1mohHjMxXHZCFWk/97Vqq45sEz3EiadSuY+
+         G8I2xTIP06pY7c5OM1gKgbTypkfBPVDT4UsMhydQBVJ4ru65C0DFJ5FYZBM9xP9yelq1
+         IcDMYUMwBZRkIvz9YZ3QByTTutmJzQjWoKaJ/CyXIgXInHt/dCfq0u0dcHapBMVOuLY1
+         9mG9t6nY+mYs1y/L+Wmt0R1Jq5fpYmqvIFqaq0vRsKdLSnNdGR3LcDBfm+5+SDRU6CHA
+         alJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681754925; x=1684346925;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FFRye2b8enKh4h81efhVYyeqGgzP7Su4Fye7jw42xwg=;
+        b=ggpPDKCyHtyNJ3KKDYukd7+XwimojBi6o3myugpLFmhKbu04c2QKk8HC6clxGbMjcb
+         mOcftSdtrl5FYfCQPKkHWSOMSTjbHh8DihYrPxe/t02m4g6g/vslGQ0qo3Z88L+d6TxH
+         AICBd7dzdzapB5vZHEifGaRZ3tsSDTgLXmdikzM3p+TaODnqw9UKrEamS5FFcOV1PrKh
+         3EUUmPdfmlMgNTr3H4rGAetxxedoVOSuqcZcjQvCVIauMo4t0c9dA7mq/HrGwwLaATx5
+         WHZO3EHJ9w8esdEpxdmgNBG44isNKFWzqQz39MiNOp8d5lr32SGLyP5CoBNvechJ3wUV
+         42eg==
+X-Gm-Message-State: AAQBX9cpYfoiSPYcP1tajFJJJmQGxvrkebv/0mFrul8OQurh21nvffBo
+        mxQmKAJcylMzEojhY8D19uMCOpX18qLqU+FHu85/Xw==
+X-Google-Smtp-Source: AKy350ZIPgWkFjEHcpwEMfuwRPw4uUlziBkLPr1Yaj5TwHYjLAwWfkf6t1jQrASFhz7UNUKAOOzi2qdJG2a7B1ERKfE=
+X-Received: by 2002:a02:a19e:0:b0:40f:9859:1fa5 with SMTP id
+ n30-20020a02a19e000000b0040f98591fa5mr3133759jah.2.1681754925382; Mon, 17 Apr
+ 2023 11:08:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="FdGMQvvSKL5XaD/h"
-Content-Disposition: inline
+References: <ZD2HjZZSOjtsnQaf@lore-desk>
+In-Reply-To: <ZD2HjZZSOjtsnQaf@lore-desk>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 17 Apr 2023 20:08:33 +0200
+Message-ID: <CANn89iK7P2aONo0EB9o+YiRG+9VfqqVVra4cd14m_Vo4hcGVnQ@mail.gmail.com>
+Subject: Re: issue with inflight pages from page_pool
+To:     Lorenzo Bianconi <lorenzo@kernel.org>
+Cc:     netdev@vger.kernel.org, hawk@kernel.org,
+        ilias.apalodimas@linaro.org, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, bpf@vger.kernel.org,
+        lorenzo.bianconi@redhat.com, nbd@nbd.name
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-
---FdGMQvvSKL5XaD/h
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-I am triggering an issue with a device running the page_pool allocator.
-In particular, the device is running an iperf tcp server receiving traffic
-=66rom a remote client. On the driver I loaded a simple xdp program returni=
+On Mon, Apr 17, 2023 at 7:53=E2=80=AFPM Lorenzo Bianconi <lorenzo@kernel.or=
+g> wrote:
+>
+> Hi all,
+>
+> I am triggering an issue with a device running the page_pool allocator.
+> In particular, the device is running an iperf tcp server receiving traffi=
+c
+> from a remote client. On the driver I loaded a simple xdp program returni=
 ng
-xdp_pass. When I remove the ebpf program and destroy the pool, page_pool
-allocator starts complaining in page_pool_release_retry() that not all the =
-pages
-have been returned to the allocator. In fact, the pool is not really destro=
-yed
-in this case.
-Debugging the code it seems the pages are stuck softnet_data defer_list and
-they are never freed in skb_defer_free_flush() since I do not have any more=
- tcp
-traffic. To prove it, I tried to set sysctl_skb_defer_max to 0 and the issue
-does not occur.
-I developed the poc patch below and the issue seems to be fixed:
+> xdp_pass. When I remove the ebpf program and destroy the pool, page_pool
+> allocator starts complaining in page_pool_release_retry() that not all th=
+e pages
+> have been returned to the allocator. In fact, the pool is not really dest=
+royed
+> in this case.
+> Debugging the code it seems the pages are stuck softnet_data defer_list a=
+nd
+> they are never freed in skb_defer_free_flush() since I do not have any mo=
+re tcp
+> traffic. To prove it, I tried to set sysctl_skb_defer_max to 0 and the is=
+sue
+> does not occur.
+> I developed the poc patch below and the issue seems to be fixed:
 
-diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-index 193c18799865..160f45c4e3a5 100644
---- a/net/core/page_pool.c
-+++ b/net/core/page_pool.c
-@@ -19,6 +19,7 @@
- #include <linux/mm.h> /* for put_page() */
- #include <linux/poison.h>
- #include <linux/ethtool.h>
-+#include <linux/netdevice.h>
-=20
- #include <trace/events/page_pool.h>
-=20
-@@ -810,12 +811,23 @@ static void page_pool_release_retry(struct work_struc=
-t *wq)
- {
- 	struct delayed_work *dwq =3D to_delayed_work(wq);
- 	struct page_pool *pool =3D container_of(dwq, typeof(*pool), release_dw);
--	int inflight;
-+	int cpu, inflight;
-=20
- 	inflight =3D page_pool_release(pool);
- 	if (!inflight)
- 		return;
-=20
-+	/* Run NET_RX_SOFTIRQ in order to free pending skbs in softnet_data
-+	 * defer_list that can stay in the list until we have enough queued
-+	 * traffic.
-+	 */
-+	for_each_online_cpu(cpu) {
-+		struct softnet_data *sd =3D &per_cpu(softnet_data, cpu);
-+
-+		if (!cmpxchg(&sd->defer_ipi_scheduled, 0, 1))
-+			smp_call_function_single_async(cpu, &sd->defer_csd);
-+	}
-+
- 	/* Periodic warning */
- 	if (time_after_eq(jiffies, pool->defer_warn)) {
- 		int sec =3D (s32)((u32)jiffies - (u32)pool->defer_start) / HZ;
+I do not see why this would be different than having buffers sitting
+in some tcp receive
+(or out or order) queues for a few minutes ?
 
-Is it ok or do you think there is a better solution for issue?
-@Felix: I think we faced a similar issue in mt76 unloading the module, righ=
-t?
-
-Regards,
-Lorenzo
-
---FdGMQvvSKL5XaD/h
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCZD2HjQAKCRA6cBh0uS2t
-rABxAPwNFxl1a2X/8AizFuuEFnBIXXQUjTqEPBt+VJ2S5nCdvgD+JWDBQGuoHczv
-03cYs9N49vAYZxFC4ycY788TGY8TbwA=
-=s5o0
------END PGP SIGNATURE-----
-
---FdGMQvvSKL5XaD/h--
+Or buffers transferred to another socket or pipe (splice() and friends)
