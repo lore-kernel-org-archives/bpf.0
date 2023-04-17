@@ -2,36 +2,29 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 641FCC77B70
-	for <bpf@archiver.kernel.org>; Mon, 17 Apr 2023 04:24:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF781C77B61
+	for <bpf@archiver.kernel.org>; Mon, 17 Apr 2023 06:00:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbjDQEYi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Apr 2023 00:24:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
+        id S229519AbjDQGAf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 Apr 2023 02:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjDQEYh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 Apr 2023 00:24:37 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C307211B;
-        Sun, 16 Apr 2023 21:24:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=PDTJ8vrV/ZSnzPwihhoSPZPy4j8shliYbZRXCXdGPtc=; b=2919Ubu5U3OGXVFavm5v2vae6z
-        d956R6FKwriDSkjqLTwnK0YdSXj2Ecv7uUwKWnG/HzIwqHRuyGt1dhWOJ7dhvNtLP2D/+aDnsvIwK
-        Cw7ZIMkcI+q+ZX4Oq5tGeoPzMELkzlzFoyritFYFaM2aqt2NlP1+yQ/2sObs+8cYPZmcA4+lsYUcs
-        4/LYSd3oQ1yJlLeP/cUY6TJ3ZyItTBX5hF2M75F1t/O/H9A+MSct7H11u7RcPqMtrhvaOVQC0r3CZ
-        lLC7VPJpPrUBg4tjcHV6VlPGT6YQCCZZYHBdr0XOy6Sl9+BiEyckH8gKyuXgQtQKey8I0LxgOLQUm
-        0zezI97Q==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1poGPo-00EpWW-2m;
-        Mon, 17 Apr 2023 04:24:32 +0000
-Date:   Sun, 16 Apr 2023 21:24:32 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+        with ESMTP id S229456AbjDQGAe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 17 Apr 2023 02:00:34 -0400
+Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A11B2D69;
+        Sun, 16 Apr 2023 23:00:32 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VgDbJGf_1681711226;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VgDbJGf_1681711226)
+          by smtp.aliyun-inc.com;
+          Mon, 17 Apr 2023 14:00:27 +0800
+Message-ID: <1681711081.378984-2-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH net-next] xsk: introduce xsk_dma_ops
+Date:   Mon, 17 Apr 2023 13:58:01 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     Christoph Hellwig <hch@infradead.org>
 Cc:     netdev@vger.kernel.org,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+        =?utf-8?b?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
         Magnus Karlsson <magnus.karlsson@intel.com>,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
         Jonathan Lemon <jonathan.lemon@gmail.com>,
@@ -49,21 +42,28 @@ Cc:     netdev@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>,
         Gerd Hoffmann <kraxel@redhat.com>,
         Christoph Hellwig <hch@infradead.org>
-Subject: Re: [PATCH net-next] xsk: introduce xsk_dma_ops
-Message-ID: <ZDzKAD2SNe1q/XA6@infradead.org>
 References: <20230417032750.7086-1-xuanzhuo@linux.alibaba.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230417032750.7086-1-xuanzhuo@linux.alibaba.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+ <ZDzKAD2SNe1q/XA6@infradead.org>
+In-Reply-To: <ZDzKAD2SNe1q/XA6@infradead.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 11:27:50AM +0800, Xuan Zhuo wrote:
-> The purpose of this patch is to allow driver pass the own dma_ops to
-> xsk.
+On Sun, 16 Apr 2023 21:24:32 -0700, Christoph Hellwig <hch@infradead.org> wrote:
+> On Mon, Apr 17, 2023 at 11:27:50AM +0800, Xuan Zhuo wrote:
+> > The purpose of this patch is to allow driver pass the own dma_ops to
+> > xsk.
+>
+> Drivers have no business passing around dma_ops, or even knowing about
+> them.
 
-Drivers have no business passing around dma_ops, or even knowing about
-them.
+
+May misunderstand, here the "dma_ops" is not the "dma_ops" of DMA API.
+
+I mean the callbacks for xsk to do dma.
+
+Maybe, I should rename it in the next version.
+
+Thanks.
+
+
