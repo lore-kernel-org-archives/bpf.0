@@ -2,128 +2,134 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C67C7C77B70
-	for <bpf@archiver.kernel.org>; Mon, 17 Apr 2023 14:59:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 359E7C77B70
+	for <bpf@archiver.kernel.org>; Mon, 17 Apr 2023 15:05:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231207AbjDQO74 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Apr 2023 10:59:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52428 "EHLO
+        id S229509AbjDQPFO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 Apr 2023 11:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231256AbjDQO7r (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 Apr 2023 10:59:47 -0400
+        with ESMTP id S229824AbjDQPFM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 17 Apr 2023 11:05:12 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BEABB455
-        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 07:58:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7048A1A8
+        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 08:04:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681743451;
+        s=mimecast20190719; t=1681743861;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2nb5rOxu+eMXePB1Z1jNJCBWthAXG1RZhUzsVUyexss=;
-        b=Ba4L2fJlhCdCfELqgRzlezU3DnukkcytjDhtj0Bqf/VQBCadHIJnpAIyVHb6BYaUJOeYjD
-        z0QYAxIUcIXZxvNK85JxewuXnzmUcHFueKjHNdBWZh1NIc/Mz8fQgYjijJTkDawLZnYAMG
-        y042pu+5V0A0ZYEB00qqVrKNVZqX3UE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-286-zmQGtHdnOa2694jj_kLFiA-1; Mon, 17 Apr 2023 10:57:25 -0400
-X-MC-Unique: zmQGtHdnOa2694jj_kLFiA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 04676857F81;
-        Mon, 17 Apr 2023 14:57:24 +0000 (UTC)
-Received: from firesoul.localdomain (unknown [10.45.242.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BA4DC1121318;
-        Mon, 17 Apr 2023 14:57:23 +0000 (UTC)
-Received: from [10.1.1.1] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 1CFD9307372E8;
-        Mon, 17 Apr 2023 16:57:23 +0200 (CEST)
-Subject: [PATCH bpf-next V1 4/5] igc: add XDP hints kfuncs for RX hash
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     bpf@vger.kernel.org, Stanislav Fomichev <sdf@google.com>,
-        =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
-        martin.lau@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        alexandr.lobakin@intel.com, larysa.zaremba@intel.com,
-        xdp-hints@xdp-project.net, yoong.siang.song@intel.com,
-        intel-wired-lan@lists.osuosl.org, pabeni@redhat.com,
-        jesse.brandeburg@intel.com, kuba@kernel.org, edumazet@google.com,
-        john.fastabend@gmail.com, hawk@kernel.org, davem@davemloft.net
-Date:   Mon, 17 Apr 2023 16:57:23 +0200
-Message-ID: <168174344307.593471.11961012266841546530.stgit@firesoul>
-In-Reply-To: <168174338054.593471.8312147519616671551.stgit@firesoul>
-References: <168174338054.593471.8312147519616671551.stgit@firesoul>
-User-Agent: StGit/1.4
+        bh=NJBNuSsSRPzwbnWzbfANH/a4n2dZHDD98aiqXtusCOY=;
+        b=Hcr1a8qkYMNQItRsd9Nm1GFGbqWjeCxUdNWPdylliXH0oPuHcOd6MKfVWcZ2VoksL8Fpom
+        E3Cnx03Ki/6jEZCjLMWfC15YOo9/0LGO/ZPBid7g1SwQMWXekHCeHgeLfkREU/PjsfOg1a
+        6SknMX+E9HeJIOEEg2CQ4D5dlhp8DnA=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-100-qJrIeOa5PCCR03ZVGC5_Rg-1; Mon, 17 Apr 2023 11:04:20 -0400
+X-MC-Unique: qJrIeOa5PCCR03ZVGC5_Rg-1
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-506a455ee4cso531147a12.3
+        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 08:04:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681743859; x=1684335859;
+        h=content-transfer-encoding:in-reply-to:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NJBNuSsSRPzwbnWzbfANH/a4n2dZHDD98aiqXtusCOY=;
+        b=FzugMJcpVJkXChPMC48PL7brWpcCQuM9lgqemK79S9PRknkFIhf53x5oUokGiys+w+
+         xyZ+6V4t8flWvW5kbod3VwnE0kkUtL06/qIxoOGdN5atrbuhyOhhqYQqtuV+2rfKw3Y/
+         BfU6lXF15JQbBlh7wG6HS7GUyhy8zPTViDq/QH9rQhO2V0VZ/EMdxIpBrOC4xB0KaJwA
+         gZs291za5qltM6olxK22cWZZAIwe/CN7sQCZzSpK/Q10lycEBFoJ6I5LvHRAbdmODvnF
+         SReo79Y0F/qMTz6Dr8h/xFpkQeYHNRq8Xkz0P4b2eX+oZxcCgMN46jZJLUpbuhBi4Qwr
+         hdmQ==
+X-Gm-Message-State: AAQBX9dtNRwzJ+9TOs54ORjjhOPj4WegSghAIeycPQsSDHZc1F1Z+sWP
+        ubIGa4EO0n4rSD/PK7KfdCXHh7CQwB6LXK8nosvN+KwiRI8EESLOkraaujLdyjsKBXMql2CXbrj
+        /iyv0EL9g1fK11JXOfcJY+L01gPsj4SVOjdYmnQiJkQW+RaKXf210wT1i0m8MpsK9VWZulyA=
+X-Received: by 2002:a05:6402:64b:b0:504:a360:e611 with SMTP id u11-20020a056402064b00b00504a360e611mr13762517edx.13.1681743858826;
+        Mon, 17 Apr 2023 08:04:18 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aGCwFvxgC+HLPcIfKk2U/Fm7fSlmjb1ietdTgyJ2DJ6npnOC/Z7W4lbiaEQlJOO6d4h9uKew==
+X-Received: by 2002:a05:6402:64b:b0:504:a360:e611 with SMTP id u11-20020a056402064b00b00504a360e611mr13762480edx.13.1681743858466;
+        Mon, 17 Apr 2023 08:04:18 -0700 (PDT)
+Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
+        by smtp.gmail.com with ESMTPSA id c21-20020aa7df15000000b00505060e4280sm5944035edy.94.2023.04.17.08.04.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Apr 2023 08:04:18 -0700 (PDT)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <0fa94fe1-c448-084f-3a3d-ab52e701c91c@redhat.com>
+Date:   Mon, 17 Apr 2023 17:04:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Cc:     brouer@redhat.com, netdev@vger.kernel.org, martin.lau@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, alexandr.lobakin@intel.com,
+        larysa.zaremba@intel.com, xdp-hints@xdp-project.net,
+        yoong.siang.song@intel.com, intel-wired-lan@lists.osuosl.org,
+        pabeni@redhat.com, jesse.brandeburg@intel.com, kuba@kernel.org,
+        edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
+        davem@davemloft.net
+Subject: Re: [PATCH bpf-next V1 5/5] selftests/bpf: xdp_hw_metadata track more
+ timestamps
+Content-Language: en-US
+To:     bpf@vger.kernel.org, Stanislav Fomichev <sdf@google.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>
+References: <168174338054.593471.8312147519616671551.stgit@firesoul>
+ <168174344813.593471.4026230439937368990.stgit@firesoul>
+In-Reply-To: <168174344813.593471.4026230439937368990.stgit@firesoul>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This implements XDP hints kfunc for RX-hash (xmo_rx_hash).
-The HW rss hash type is handled via mapping table.
 
-This igc driver driver (default config) does L3 hashing for UDP packets
-(excludes UDP src/dest ports in hash calc).  Meaning RSS hash type is
-L3 based.  Tested that the igc_rss_type_num for UDP is either
-IGC_RSS_TYPE_HASH_IPV4 or IGC_RSS_TYPE_HASH_IPV6.
+On 17/04/2023 16.57, Jesper Dangaard Brouer wrote:
+> To correlate the hardware RX timestamp with something, add tracking of
+> two software timestamps both clock source CLOCK_TAI (see description in
+> man clock_gettime(2)).
+> 
+> XDP metadata is extended with xdp_timestamp for capturing when XDP
+> received the packet. Populated with BPF helper bpf_ktime_get_tai_ns(). I
+> could not find a BPF helper for getting CLOCK_REALTIME, which would have
+> been preferred. In userspace when AF_XDP sees the packet another
+> software timestamp is recorded via clock_gettime() also clock source
+> CLOCK_TAI.
+> 
+> Example output shortly after loading igc driver:
+> 
+>    poll: 1 (0) skip=1 fail=0 redir=2
+>    xsk_ring_cons__peek: 1
+>    0x12557a8: rx_desc[1]->addr=100000000009000 addr=9100 comp_addr=9000
+>    rx_hash: 0x82A96531 with RSS type:0x1
+>    rx_timestamp:  1681740540304898909 (sec:1681740540.3049)
+>    XDP RX-time:   1681740577304958316 (sec:1681740577.3050) delta sec:37.0001 (37000059.407 usec)
+>    AF_XDP time:   1681740577305051315 (sec:1681740577.3051) delta sec:0.0001 (92.999 usec)
+>    0x12557a8: complete idx=9 addr=9000
+> 
 
-Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
----
- drivers/net/ethernet/intel/igc/igc_main.c |   35 +++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+For QA verification testing, I want to mention that this fix[0] were
+applied, in-order to get "rx_timestamp" working on igc:
 
-diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-index 862768d5d134..27f448d0ae94 100644
---- a/drivers/net/ethernet/intel/igc/igc_main.c
-+++ b/drivers/net/ethernet/intel/igc/igc_main.c
-@@ -6507,8 +6507,43 @@ static int igc_xdp_rx_timestamp(const struct xdp_md *_ctx, u64 *timestamp)
- 	return -ENODATA;
- }
- 
-+/* Mapping HW RSS Type to enum xdp_rss_hash_type */
-+enum xdp_rss_hash_type igc_xdp_rss_type[IGC_RSS_TYPE_MAX_TABLE] = {
-+	[IGC_RSS_TYPE_NO_HASH]		= XDP_RSS_TYPE_L2,
-+	[IGC_RSS_TYPE_HASH_TCP_IPV4]	= XDP_RSS_TYPE_L4_IPV4_TCP,
-+	[IGC_RSS_TYPE_HASH_IPV4]	= XDP_RSS_TYPE_L3_IPV4,
-+	[IGC_RSS_TYPE_HASH_TCP_IPV6]	= XDP_RSS_TYPE_L4_IPV6_TCP,
-+	[IGC_RSS_TYPE_HASH_IPV6_EX]	= XDP_RSS_TYPE_L3_IPV6_EX,
-+	[IGC_RSS_TYPE_HASH_IPV6]	= XDP_RSS_TYPE_L3_IPV6,
-+	[IGC_RSS_TYPE_HASH_TCP_IPV6_EX] = XDP_RSS_TYPE_L4_IPV6_TCP_EX,
-+	[IGC_RSS_TYPE_HASH_UDP_IPV4]	= XDP_RSS_TYPE_L4_IPV4_UDP,
-+	[IGC_RSS_TYPE_HASH_UDP_IPV6]	= XDP_RSS_TYPE_L4_IPV6_UDP,
-+	[IGC_RSS_TYPE_HASH_UDP_IPV6_EX] = XDP_RSS_TYPE_L4_IPV6_UDP_EX,
-+	[10] = XDP_RSS_TYPE_NONE, /* RSS Type above 9 "Reserved" by HW  */
-+	[11] = XDP_RSS_TYPE_NONE, /* keep array sized for SW bit-mask   */
-+	[12] = XDP_RSS_TYPE_NONE, /* to handle future HW revisons       */
-+	[13] = XDP_RSS_TYPE_NONE,
-+	[14] = XDP_RSS_TYPE_NONE,
-+	[15] = XDP_RSS_TYPE_NONE,
-+};
-+
-+static int igc_xdp_rx_hash(const struct xdp_md *_ctx, u32 *hash,
-+			   enum xdp_rss_hash_type *rss_type)
-+{
-+	const struct igc_xdp_buff *ctx = (void *)_ctx;
-+
-+	if (!(ctx->xdp.rxq->dev->features & NETIF_F_RXHASH))
-+		return -ENODATA;
-+
-+	*hash = le32_to_cpu(ctx->rx_desc->wb.lower.hi_dword.rss);
-+	*rss_type = igc_xdp_rss_type[igc_rss_type(ctx->rx_desc)];
-+
-+	return 0;
-+}
-+
- const struct xdp_metadata_ops igc_xdp_metadata_ops = {
- 	.xmo_rx_timestamp		= igc_xdp_rx_timestamp,
-+	.xmo_rx_hash			= igc_xdp_rx_hash,
- };
- 
- /**
+  [0] 
+https://lore.kernel.org/all/20230414154902.2950535-1-yoong.siang.song@intel.com/
 
+
+> The first observation is that the 37 sec difference between RX HW vs XDP
+> timestamps, which indicate hardware is likely clock source
+> CLOCK_REALTIME, because (as of this writing) CLOCK_TAI is initialised
+> with a 37 sec offset.
+> 
+> The 93 usec (microsec) difference between XDP vs AF_XDP userspace is the
+> userspace wakeup time. On this hardware it was caused by CPU idle sleep
+> states, which can be reduced by tuning /dev/cpu_dma_latency.
+> 
+> View current requested/allowed latency bound via:
+>    hexdump --format '"%d\n"' /dev/cpu_dma_latency
+> 
+> More explanation of the output and how this can be used to identify
+> clock drift for the HW clock can be seen here[1]:
+> 
+> [1] https://github.com/xdp-project/xdp-project/blob/master/areas/hints/xdp_hints_kfuncs02_driver_igc.org
+> 
 
