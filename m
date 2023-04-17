@@ -2,88 +2,83 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 693D0C77B77
-	for <bpf@archiver.kernel.org>; Mon, 17 Apr 2023 08:08:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FCF3C77B70
+	for <bpf@archiver.kernel.org>; Mon, 17 Apr 2023 08:17:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbjDQII3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Apr 2023 04:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53490 "EHLO
+        id S230347AbjDQIRy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 Apr 2023 04:17:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbjDQII1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 Apr 2023 04:08:27 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56BD46B4
-        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 01:08:01 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id kh6so23185760plb.0
-        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 01:08:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1681718881; x=1684310881;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Swqe8hdnyr90lKGZ34p9/SCrV2uM7jygoSbLirhNYaU=;
-        b=RzueqtYWKHquKbh1r91xnBOR9MFUOwTtEL7JuxAvbQGOmalRQOVk1il2sClha6cktk
-         s5S7cML/Wwg1GRJxaXsrEaCZN/OiX9UnhHG1VTPCe56uCsDOVj88DLWTvKtoFEdGowdK
-         PAXU293prILUVEDi6LZXzQpTFWYDfQT4XC0FOjfOgQ+EERaWxfzeTwj8DKGN6mo6uctv
-         LgzqgPSfu/eoCaiCcEWkSMMeKHCj8EBpaUGmnfZ9BYuIjvu8awDUj6BzfeunPMQ66ufO
-         OdR/gnDrVLXe+KP+ObUuYs5tcysmfvWdJTDWsGF8FoZh/cRnk3gtvxAd+d+pUEHvi6td
-         2haQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681718881; x=1684310881;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Swqe8hdnyr90lKGZ34p9/SCrV2uM7jygoSbLirhNYaU=;
-        b=L2cVLzatMQ+mgaw5eMS+WpvD3ZmdLdoJlUx+i/2lfyIV6dcObX6GUiIIS7nPqcZW2R
-         nLMakSX+KuXSdgnd2oL90bZamkcH+KcaW/AwVXYtWBFVQ1k2itljGd372WIH+mFVHBpy
-         dZ6/yVCiqr2PcByx+d7Y5YzIlneG7+aNlz5izEvn8Nli0TXJtM8Jfo/y99BIJxdhINqd
-         R+N+oKnap211mWRK8RO5TgKpDMPnpOQGCpxTlO5nTg9H8TSy0OtSfoXTPpR41uR5oIVG
-         NBgGQGNmCQ0WvhDMoqeCBlXUvrWP6s3uhtNZhCWwDBWPYhTzdb44EQlBEV5hgcwC0GOY
-         l9yg==
-X-Gm-Message-State: AAQBX9cceeyXFfw684x5FCtWTYY4P7Xl3JoriPbYLN2jF9nXTOmIpP48
-        4H/voLWRZ/JsOZmS+0fM9ITTUg==
-X-Google-Smtp-Source: AKy350YRelaL8B0w4O3NnCLX/PVG+4BiJ3Ah+M51OrPw3Y8gE6kkvDrzEvhk+MJ95rnyIbRwnbV+xA==
-X-Received: by 2002:a17:902:db06:b0:1a1:bff4:49e9 with SMTP id m6-20020a170902db0600b001a1bff449e9mr14009898plx.23.1681718881342;
-        Mon, 17 Apr 2023 01:08:01 -0700 (PDT)
-Received: from C02F52LSML85.bytedance.net ([139.177.225.238])
-        by smtp.gmail.com with ESMTPSA id jc3-20020a17090325c300b0019a97a4324dsm7114135plb.5.2023.04.17.01.07.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 01:08:00 -0700 (PDT)
-From:   Feng zhou <zhoufeng.zf@bytedance.com>
-To:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        mykolal@fb.com, shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
-        zhouchengming@bytedance.com, zhoufeng.zf@bytedance.com
-Subject: [PATCH 0/2] Access variable length array relaxed for integer type
-Date:   Mon, 17 Apr 2023 16:07:47 +0800
-Message-Id: <20230417080749.39074-1-zhoufeng.zf@bytedance.com>
-X-Mailer: git-send-email 2.39.2 (Apple Git-143)
+        with ESMTP id S229912AbjDQIRw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 17 Apr 2023 04:17:52 -0400
+Received: from gofer.mess.org (gofer.mess.org [88.97.38.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765F526B2;
+        Mon, 17 Apr 2023 01:17:51 -0700 (PDT)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id E7D8610006B; Mon, 17 Apr 2023 09:17:48 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
+        t=1681719468; bh=7vrhf8jHivfnFCYmFG2HbdBI1KmJjq7kYoSAnAQyO6E=;
+        h=Date:From:To:Subject:From;
+        b=jnAgdxobsyQiBO+mf1lTUJ1l5zVhvTjnfE96jSjMen+Ig9xVjqbgI/Ubnlck59ZXp
+         vzKJEYsWBTXyQrm5bN3Xnvl6okOHiX7XO9BPX1staWHeOTQ0DSyu2PX0FU1KgyG5qg
+         d/qAe9ZCVFPKSMmKRObAIK2YwGHRDOkJEjYRSZ99Y2RwPSExY+DdGi3S4KNP4EyOC+
+         nbytIPrORFxBMRkD81whgTUHLjBTzLCZXXPC55rw8iSf2kuRwfQBntSnREQqQxTxkN
+         5hMMWES2xojiQ2CKHMZ0U+GKLRwcjOLzhK7eJpEgd7fejBMwz4CFDAzBTY+3SVv99s
+         OvK3PIULkQP9A==
+Date:   Mon, 17 Apr 2023 09:17:48 +0100
+From:   Sean Young <sean@mess.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH v2] bpf: lirc program type should not require SYS_CAP_ADMIN
+Message-ID: <ZD0ArKpwnDBJZsrE@gofer.mess.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Feng Zhou <zhoufeng.zf@bytedance.com>
+Make it possible to load lirc program type with just CAP_BPF. There is
+nothing exceptional about lirc programs that means they require
+SYS_CAP_ADMIN.
 
-Add support for integer type of accessing variable length array.
-Add a selftest to check it.
+In order to attach or detach a lirc program type you need permission to
+open /dev/lirc0; if you have permission to do that, you can alter all
+sorts of lirc receiving options. Changing the IR protocol decoder is no
+different.
 
-Feng Zhou (2):
-  bpf: support access variable length array of integer type
-  selftests/bpf: Add test to access integer type of variable array
+Right now on a typical distribution /dev/lirc devices are only
+read/write by root. Ideally we would make them group read/write like
+other devices so that local users can use them without becoming root.
 
- kernel/bpf/btf.c                              |  8 +++++---
- .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 20 +++++++++++++++++++
- .../selftests/bpf/prog_tests/tracing_struct.c |  2 ++
- .../selftests/bpf/progs/tracing_struct.c      | 13 ++++++++++++
- 4 files changed, 40 insertions(+), 3 deletions(-)
+Signed-off-by: Sean Young <sean@mess.org>
+---
+ kernel/bpf/syscall.c | 1 -
+ 1 file changed, 1 deletion(-)
 
+v2: improved commit message
+
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 6d575505f89c..822ebc742a6a 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2463,7 +2463,6 @@ static bool is_net_admin_prog_type(enum bpf_prog_type prog_type)
+ 	case BPF_PROG_TYPE_LWT_SEG6LOCAL:
+ 	case BPF_PROG_TYPE_SK_SKB:
+ 	case BPF_PROG_TYPE_SK_MSG:
+-	case BPF_PROG_TYPE_LIRC_MODE2:
+ 	case BPF_PROG_TYPE_FLOW_DISSECTOR:
+ 	case BPF_PROG_TYPE_CGROUP_DEVICE:
+ 	case BPF_PROG_TYPE_CGROUP_SOCK:
 -- 
-2.20.1
+2.39.2
 
