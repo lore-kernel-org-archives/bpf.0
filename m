@@ -2,178 +2,78 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B68DFC77B76
-	for <bpf@archiver.kernel.org>; Mon, 17 Apr 2023 20:20:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3CA7C77B72
+	for <bpf@archiver.kernel.org>; Mon, 17 Apr 2023 20:30:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjDQUUg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Apr 2023 16:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46768 "EHLO
+        id S230207AbjDQUaY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 Apr 2023 16:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjDQUUf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 Apr 2023 16:20:35 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072B11723;
-        Mon, 17 Apr 2023 13:20:34 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-50672fbf83eso15922048a12.0;
-        Mon, 17 Apr 2023 13:20:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681762832; x=1684354832;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xSacyJ8CfD1haQX/1ScXD9msxefVSPmbKcZe4LjVLXk=;
-        b=eYwW2f+nLx9BT0fDL99JudU/CPHTgqc+PU4ZDSn3AbX1YDtkhCIb+olpmT80B4gBCo
-         tS6l4XQ8dFUyT7NwOMM/yqLtKAEdLmHYfgu59b0HJU4mPr9bkdcrw/kkLFrP684byZwW
-         pmA+rQvpglHX1J8DW2sN72cTmHakExPWrk5TPiHcwkZL6ZJLOs784h0HYLlALfjBK/TE
-         gpJkO2lcUcejhJlgBS56Dv/aQQRSJYqebH5pfF+B64x62J4ZvU31Qja5VDmurVTSEDLS
-         lg2sOHD2EAzeP/s4r609hA/+lr4NFI1VsBMiD/KVajtQG2E+CS9y6JqrDK1bEXVfC44u
-         tLlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681762832; x=1684354832;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xSacyJ8CfD1haQX/1ScXD9msxefVSPmbKcZe4LjVLXk=;
-        b=gER/dvXl75COl3epyb4aP6BlbpvamN91ypEWzvumzIgMZB2DNZ6WtUMGoOjbA5svLV
-         l8a63DUhTXkksdgWOY3Ss+BeJMnJf3J+H6XQlL5zthaLhuCTRY+3IO3R2lwxj5+50Bpp
-         NJJJPyTJz32WSveQSnlCf5s8aP7wbAc50JaoIk0cVH99VhWXwbwOHqfI2PdT2EbfKH0W
-         7VcZ4CUZgguZXwqZT82qGAFPVgrF7NgGOVIGdbUjdX1fPuXOr9VtDzFZHXYD7X5Mp9Wh
-         aj1/Kdpq1GCxTy/N2yKg9I/tnhyDCZoIV06iJpEWYczZ6YhW2HhkmfXhtqHnj9v0htwb
-         A5Ww==
-X-Gm-Message-State: AAQBX9c2EqbCUafUoNJCKA9a26FofJx1koVbIMiMKvwRvQPSqFIc4ybW
-        GtS+KuzFzas5j3xxKzGH/wd4kA3wf5poeDCiUO+x6a11
-X-Google-Smtp-Source: AKy350ZaF43FrQEJJxJHfp5gOZBMhBbWRmKjQxu14QbxWj+jK6WUpmfqGjJE2t2fs3ti+u6hblaEWaxOJ1DtWtCFrVY=
-X-Received: by 2002:a05:6402:1950:b0:506:7c85:f470 with SMTP id
- f16-20020a056402195000b005067c85f470mr149194edz.3.1681762832337; Mon, 17 Apr
- 2023 13:20:32 -0700 (PDT)
+        with ESMTP id S230218AbjDQUaX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 17 Apr 2023 16:30:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E7C35A2
+        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 13:30:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 405B06208F
+        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 20:30:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A8024C433EF;
+        Mon, 17 Apr 2023 20:30:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681763420;
+        bh=WcsGBjK1yEWvEhinc0n/yMaxJ9ppPW2DStqzE9uSiqU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=c2ENkNlSLvsXPJWKgdr6J1uRg4zIb4CgRN/dokHBlLDjgBAF32Cvr8nktAyM29N7T
+         RQHNCaI2RRDOZYqI+L3FYVoB3RVb5us2kftvmACsfNasz5LUdC/Ynkq9CaByKYnsuh
+         P13LcM7hxzcfijE+5tsIawpeYqoCFhDsP9EYaYVQZVw6tMWZOhcCYoRHQUNs+cDvCI
+         LUAloIm07HGuSmj+yjlgfvISM/S2/PU/eXTB6QY8eRr2dbv5PFMpNY6CoJKf55ImeL
+         aexoT0XIqJu4m1SfKFUdUgvE0LT74/CqIr3YHvs1m+y0x+VZ4yr5vEB9art8N7sFdC
+         RTRAtIMjVMbMA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8B53BE3309F;
+        Mon, 17 Apr 2023 20:30:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <73f0028461c4f3fa577e24d8d797ddd76f1d17c6.1681507058.git.lorenzo@kernel.org>
- <dc994c7b-c8fe-df8e-7203-0d6dae8dee9f@iogearbox.net> <ZDnPXYvfu46i0YpE@lore-desk>
- <dc040740-6823-c524-2580-e9604e04dcb0@iogearbox.net> <ZDqFKnW/3ML7GAOz@lore-desk>
-In-Reply-To: <ZDqFKnW/3ML7GAOz@lore-desk>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 17 Apr 2023 13:20:21 -0700
-Message-ID: <CAADnVQKcoozpmR+C9Ys3uLabq+7DRqVjkZbeMHnyU0FpZh9LNQ@mail.gmail.com>
-Subject: Re: [PATCH bpf] selftests/bpf: fix xdp_redirect xdp-features for
- xdp_bonding selftest
-To:     Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Jussi Maki <joamaki@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] bpf: Set skb redirect and from_ingress info in
+ __bpf_tx_skb
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168176342055.32012.12370430661745438242.git-patchwork-notify@kernel.org>
+Date:   Mon, 17 Apr 2023 20:30:20 +0000
+References: <8cebc8b2b6e967e10cbafe2ffd6795050e74accd.1681739137.git.daniel@iogearbox.net>
+In-Reply-To: <8cebc8b2b6e967e10cbafe2ffd6795050e74accd.1681739137.git.daniel@iogearbox.net>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf@vger.kernel.org, john.fastabend@gmail.com, toke@redhat.com,
+        laoar.shao@gmail.com, xiangxia.m.yue@gmail.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Apr 15, 2023 at 4:06=E2=80=AFAM Lorenzo Bianconi <lorenzo@kernel.or=
-g> wrote:
->
-> > On 4/15/23 12:10 AM, Lorenzo Bianconi wrote:
-> > > > On 4/14/23 11:21 PM, Lorenzo Bianconi wrote:
-> > > > > NETDEV_XDP_ACT_NDO_XMIT is not enabled by default for veth driver=
- but it
-> > > > > depends on the device configuration. Fix XDP_REDIRECT xdp-feature=
-s in
-> > > > > xdp_bonding selftest loading a dummy XDP program on veth2_2 devic=
-e.
-> > > > >
-> > > > > Fixes: fccca038f300 ("veth: take into account device reconfigurat=
-ion for xdp_features flag")
-> > > >
-> > > > Hm, does that mean we're changing^breaking existing user behavior i=
-ff after
-> > > > fccca038f300 you can only make it work by loading dummy prog?
-> > >
-> > > nope, even before in order to enable ndo_xdp_xmit for veth you should=
- load a dummy
-> > > program on the device peer or enable gro on the device peer:
-> > >
-> > > https://github.com/torvalds/linux/blob/master/drivers/net/veth.c#L477
-> > >
-> > > we are just reflecting this behaviour in the xdp_features flag.
-> >
-> > Ok, I'm confused then why it passed before?
->
-> ack, you are right. I guess the issue is in veth driver code. In order to
-> enable NETDEV_XDP_ACT_NDO_XMIT for device "veth0", we need to check the p=
-eer
-> veth1 configuration since the check in veth_xdp_xmit() is on the peer rx =
-queue.
-> Something like:
->
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index e1b38fbf1dd9..4b3c6647edc6 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-> @@ -1262,11 +1262,12 @@ static void veth_set_xdp_features(struct net_devi=
-ce *dev)
->
->         peer =3D rtnl_dereference(priv->peer);
->         if (peer && peer->real_num_tx_queues <=3D dev->real_num_rx_queues=
-) {
-> +               struct veth_priv *priv_peer =3D netdev_priv(peer);
->                 xdp_features_t val =3D NETDEV_XDP_ACT_BASIC |
->                                      NETDEV_XDP_ACT_REDIRECT |
->                                      NETDEV_XDP_ACT_RX_SG;
->
-> -               if (priv->_xdp_prog || veth_gro_requested(dev))
-> +               if (priv_peer->_xdp_prog || veth_gro_requested(peer))
->                         val |=3D NETDEV_XDP_ACT_NDO_XMIT |
->                                NETDEV_XDP_ACT_NDO_XMIT_SG;
->                 xdp_set_features_flag(dev, val);
-> @@ -1504,19 +1505,23 @@ static int veth_set_features(struct net_device *d=
-ev,
->  {
->         netdev_features_t changed =3D features ^ dev->features;
->         struct veth_priv *priv =3D netdev_priv(dev);
-> +       struct net_device *peer;
->         int err;
->
->         if (!(changed & NETIF_F_GRO) || !(dev->flags & IFF_UP) || priv->_=
-xdp_prog)
->                 return 0;
->
-> +       peer =3D rtnl_dereference(priv->peer);
->         if (features & NETIF_F_GRO) {
->                 err =3D veth_napi_enable(dev);
->                 if (err)
->                         return err;
->
-> -               xdp_features_set_redirect_target(dev, true);
-> +               if (peer)
-> +                       xdp_features_set_redirect_target(peer, true);
->         } else {
-> -               xdp_features_clear_redirect_target(dev);
-> +               if (peer)
-> +                       xdp_features_clear_redirect_target(peer);
->                 veth_napi_del(dev);
->         }
->         return 0;
-> @@ -1598,13 +1603,13 @@ static int veth_xdp_set(struct net_device *dev, s=
-truct bpf_prog *prog,
->                         peer->max_mtu =3D max_mtu;
->                 }
->
-> -               xdp_features_set_redirect_target(dev, true);
-> +               xdp_features_set_redirect_target(peer, true);
->         }
->
->         if (old_prog) {
->                 if (!prog) {
-> -                       if (!veth_gro_requested(dev))
-> -                               xdp_features_clear_redirect_target(dev);
-> +                       if (peer && !veth_gro_requested(dev))
-> +                               xdp_features_clear_redirect_target(peer);
->
->                         if (dev->flags & IFF_UP)
->                                 veth_disable_xdp(dev);
->
-> What do you think?
+Hello:
 
-Please send an official patch.
-We need to fix this regression asap.
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Mon, 17 Apr 2023 15:49:15 +0200 you wrote:
+> There are some use-cases where it is desirable to use bpf_redirect()
+> in combination with ifb device, which currently is not supported, for
+> example, around filtering inbound traffic with BPF to then push it to
+> ifb which holds the qdisc for shaping in contrast to doing that on the
+> egress device.
+> 
+> Toke mentions the following case related to OpenWrt:
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next] bpf: Set skb redirect and from_ingress info in __bpf_tx_skb
+    https://git.kernel.org/bpf/bpf-next/c/59e498a3289f
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
