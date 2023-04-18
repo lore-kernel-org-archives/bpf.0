@@ -2,29 +2,40 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1AE5C77B76
-	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 02:30:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BDC4C77B75
+	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 02:54:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbjDRCav (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Apr 2023 22:30:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33254 "EHLO
+        id S230211AbjDRCyF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 Apr 2023 22:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbjDRCav (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 Apr 2023 22:30:51 -0400
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4875B35B7;
-        Mon, 17 Apr 2023 19:30:49 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VgNI19z_1681785044;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VgNI19z_1681785044)
-          by smtp.aliyun-inc.com;
-          Tue, 18 Apr 2023 10:30:45 +0800
-Message-ID: <1681784379.909136-2-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH net-next] xsk: introduce xsk_dma_ops
-Date:   Tue, 18 Apr 2023 10:19:39 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Jakub Kicinski <kuba@kernel.org>
+        with ESMTP id S230210AbjDRCyE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 17 Apr 2023 22:54:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849714C1C;
+        Mon, 17 Apr 2023 19:54:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2036662703;
+        Tue, 18 Apr 2023 02:54:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84C98C4339B;
+        Tue, 18 Apr 2023 02:54:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681786442;
+        bh=A5UbqkJH74U+HOfiKXEJs/6Xs7H9yMHkkcjKJvbrGq4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WAjAERvEWKW2p5v4cLQSHIKlMGymhkKb0oZO06KYIuD6Dzo2oi/82MWlsxQFT50GB
+         gw9aBYB8s9HTOD5O8uMl/20YB01DlEeOH2bfiQc6+aB44QHYlpuq4Gx7f1rboK6N2U
+         gfm05m3T2mcLAaiUglqDBh2QaIdhO1/mD800prINkFV0za8wlX52GQn8kJTBaG/8zx
+         piJUc4DtQ6FRhaFK1m/2qp+H4rQj3eudpYdheRVtO1E57UNtpHaYqxs2XRS4FgXuyx
+         FswYmtkQfjG8mhSmh38JSYmulOmXW6cjetDf+z4KpJgPm6yaaW7ENRxiUip5hf6U5W
+         3lW9h326nbmjg==
+Date:   Mon, 17 Apr 2023 19:54:00 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 Cc:     Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
-        =?utf-8?b?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
         Magnus Karlsson <magnus.karlsson@intel.com>,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
         Jonathan Lemon <jonathan.lemon@gmail.com>,
@@ -39,61 +50,46 @@ Cc:     Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
         "Michael S. Tsirkin" <mst@redhat.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Gerd Hoffmann <kraxel@redhat.com>,
-        Jason Wang <jasowang@redhat.com>
+        Jason Wang <jasowang@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH net-next] xsk: introduce xsk_dma_ops
+Message-ID: <20230417195400.482cfe75@kernel.org>
+In-Reply-To: <1681784379.909136-2-xuanzhuo@linux.alibaba.com>
 References: <20230417032750.7086-1-xuanzhuo@linux.alibaba.com>
- <ZDzKAD2SNe1q/XA6@infradead.org>
- <1681711081.378984-2-xuanzhuo@linux.alibaba.com>
- <20230417115610.7763a87c@kernel.org>
- <20230417115753.7fb64b68@kernel.org>
- <CACGkMEtPNPXFThHt4aNm4g-fC1DqTLcDnB_iBWb9-cAOHMYV_A@mail.gmail.com>
- <20230417181950.5db68526@kernel.org>
-In-Reply-To: <20230417181950.5db68526@kernel.org>
+        <ZDzKAD2SNe1q/XA6@infradead.org>
+        <1681711081.378984-2-xuanzhuo@linux.alibaba.com>
+        <20230417115610.7763a87c@kernel.org>
+        <20230417115753.7fb64b68@kernel.org>
+        <CACGkMEtPNPXFThHt4aNm4g-fC1DqTLcDnB_iBWb9-cAOHMYV_A@mail.gmail.com>
+        <20230417181950.5db68526@kernel.org>
+        <1681784379.909136-2-xuanzhuo@linux.alibaba.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, 17 Apr 2023 18:19:50 -0700, Jakub Kicinski <kuba@kernel.org> wrote:
-> On Tue, 18 Apr 2023 09:07:30 +0800 Jason Wang wrote:
-> > > > Would you mind explaining this a bit more to folks like me who are not
-> > > > familiar with VirtIO?  DMA API is supposed to hide the DMA mapping
-> > > > details from the stack, why is it not sufficient here.
-> >
-> > The reason is that legacy virtio device don't use DMA(vring_use_dma_api()).
-> >
-> > The AF_XDP assumes DMA for netdev doesn't work in this case. We need a
-> > way to make it work.
->
-> Can we not push this down to be bus level? virtio has its own bus it
-> can plug in whatever magic it wants into dma ops.
+On Tue, 18 Apr 2023 10:19:39 +0800 Xuan Zhuo wrote:
+> > Can we not push this down to be bus level? virtio has its own bus it
+> > can plug in whatever magic it wants into dma ops.  
+> 
+> It is actually not possible.
+> 
+> [1] https://lore.kernel.org/virtualization/ZDUCDeYLqAwQVJe7@infradead.org/
 
-It is actually not possible.
+Maybe Christoph, or Greg can comment.
 
-[1] https://lore.kernel.org/virtualization/ZDUCDeYLqAwQVJe7@infradead.org/
+AF_XDP, io_uring, and increasing number of pinned memory / zero copy
+implementations need to do DMA mapping outside the drivers.
+I don't think it's reasonable to be bubbling up custom per-subsystem
+DMA ops into all of them for the sake of virtio.
 
->
-> Doesn't have to be super fast for af_xdp's sake - for af_xdp dma mapping
-> is on the control path. You can keep using the if (vring_use_dma_api())
-> elsewhere for now if there is a perf concern.
+> > Otherwise it really seems like we're bubbling up a virtio hack into
+> > generic code :(  
+> 
+> Can we understand the purpose of this matter to back the DMA operation to the
+> driver?
 
-Sorry, I don't particularly understand this passage.
-
-Now, the question is if vring_use_dma_api() is false, then we cannot use DMA
-API in AF_XDP.
-
-The good news is that except for some of sync's operations, they are in the
-control path. I think it is very small effect on performance. Because in most
-case the sync is unnecessary.
-
-
->
-> Otherwise it really seems like we're bubbling up a virtio hack into
-> generic code :(
-
-Can we understand the purpose of this matter to back the DMA operation to the
-driver? Although I don't know if there are other drivers with similar
-requirements.
-
-Thanks.
-
-
-
+We understand what your code does.
