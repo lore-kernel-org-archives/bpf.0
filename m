@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A86DC77B7C
-	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 06:54:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74793C77B75
+	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 06:54:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231171AbjDRGyI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Apr 2023 02:54:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48034 "EHLO
+        id S231251AbjDRGyH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Apr 2023 02:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbjDRGxw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S231213AbjDRGxw (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 18 Apr 2023 02:53:52 -0400
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB2C55BA;
-        Mon, 17 Apr 2023 23:53:44 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VgOKk2I_1681800820;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VgOKk2I_1681800820)
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D63DB;
+        Mon, 17 Apr 2023 23:53:43 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VgOIH8q_1681800818;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VgOIH8q_1681800818)
           by smtp.aliyun-inc.com;
-          Tue, 18 Apr 2023 14:53:40 +0800
+          Tue, 18 Apr 2023 14:53:38 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     netdev@vger.kernel.org
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
@@ -31,9 +31,9 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH net-next v2 12/14] virtio_net: small: optimize code
-Date:   Tue, 18 Apr 2023 14:53:25 +0800
-Message-Id: <20230418065327.72281-13-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v2 10/14] virtio_net: merge: remove skip_xdp
+Date:   Tue, 18 Apr 2023 14:53:23 +0800
+Message-Id: <20230418065327.72281-11-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20230418065327.72281-1-xuanzhuo@linux.alibaba.com>
 References: <20230418065327.72281-1-xuanzhuo@linux.alibaba.com>
@@ -44,52 +44,59 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In the case of XDP-PASS, skb_reserve uses the delta to compatible
-non-XDP, now remove this logic.
+Now, the logic of merge xdp process is simple, we can remove the
+skip_xdp.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- drivers/net/virtio_net.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ drivers/net/virtio_net.c | 23 ++++++++++-------------
+ 1 file changed, 10 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 34220f5f27d1..f6f5903face2 100644
+index 42e9927e316b..a4bb25f39f12 100644
 --- a/drivers/net/virtio_net.c
 +++ b/drivers/net/virtio_net.c
-@@ -959,9 +959,7 @@ static struct sk_buff *receive_small_xdp(struct net_device *dev,
- 	unsigned int buflen;
- 	struct xdp_buff xdp;
- 	struct sk_buff *skb;
--	unsigned int delta = 0;
- 	unsigned int metasize = 0;
--	void *orig_data;
- 	u32 act;
+@@ -1390,7 +1390,6 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 	struct page *page = virt_to_head_page(buf);
+ 	int offset = buf - page_address(page);
+ 	struct sk_buff *head_skb, *curr_skb;
+-	struct bpf_prog *xdp_prog;
+ 	unsigned int truesize = mergeable_ctx_to_truesize(ctx);
+ 	unsigned int headroom = mergeable_ctx_to_headroom(ctx);
+ 	unsigned int tailroom = headroom ? sizeof(struct skb_shared_info) : 0;
+@@ -1406,22 +1405,20 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 		goto err_skb;
+ 	}
  
- 	if (unlikely(hdr->hdr.gso_type))
-@@ -994,14 +992,12 @@ static struct sk_buff *receive_small_xdp(struct net_device *dev,
- 	xdp_init_buff(&xdp, buflen, &rq->xdp_rxq);
- 	xdp_prepare_buff(&xdp, buf + VIRTNET_RX_PAD + vi->hdr_len,
- 			 xdp_headroom, len, true);
--	orig_data = xdp.data;
+-	if (likely(!vi->xdp_enabled)) {
+-		xdp_prog = NULL;
+-		goto skip_xdp;
+-	}
++	if (unlikely(vi->xdp_enabled)) {
++		struct bpf_prog *xdp_prog;
  
- 	act = virtnet_xdp_handler(xdp_prog, &xdp, dev, xdp_xmit, stats);
+-	rcu_read_lock();
+-	xdp_prog = rcu_dereference(rq->xdp_prog);
+-	if (xdp_prog) {
+-		head_skb = receive_mergeable_xdp(dev, vi, rq, xdp_prog, buf, ctx,
+-						 len, xdp_xmit, stats);
++		rcu_read_lock();
++		xdp_prog = rcu_dereference(rq->xdp_prog);
++		if (xdp_prog) {
++			head_skb = receive_mergeable_xdp(dev, vi, rq, xdp_prog, buf, ctx,
++							 len, xdp_xmit, stats);
++			rcu_read_unlock();
++			return head_skb;
++		}
+ 		rcu_read_unlock();
+-		return head_skb;
+ 	}
+-	rcu_read_unlock();
  
- 	switch (act) {
- 	case VIRTNET_XDP_RES_PASS:
- 		/* Recalculate length in case bpf program changed it */
--		delta = orig_data - xdp.data;
- 		len = xdp.data_end - xdp.data;
- 		metasize = xdp.data - xdp.data_meta;
- 		break;
-@@ -1017,7 +1013,7 @@ static struct sk_buff *receive_small_xdp(struct net_device *dev,
- 	if (!skb)
- 		goto err;
+-skip_xdp:
+ 	head_skb = page_to_skb(vi, rq, page, offset, len, truesize, headroom);
+ 	curr_skb = head_skb;
  
--	skb_reserve(skb, headroom - delta);
-+	skb_reserve(skb, xdp.data - buf);
- 	skb_put(skb, len);
- 	if (metasize)
- 		skb_metadata_set(skb, metasize);
 -- 
 2.32.0.3.g01195cf9f
 
