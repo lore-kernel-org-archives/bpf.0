@@ -2,42 +2,44 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E45B0C77B7D
-	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 19:05:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 604ECC7EE20
+	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 19:05:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231727AbjDRTFM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Apr 2023 15:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
+        id S232718AbjDRTFO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Apr 2023 15:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232239AbjDRTFL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S232513AbjDRTFL (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 18 Apr 2023 15:05:11 -0400
 Received: from mx25lb.world4you.com (mx25lb.world4you.com [81.19.149.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E445FFB;
-        Tue, 18 Apr 2023 12:05:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C116E8E;
+        Tue, 18 Apr 2023 12:05:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=dsBWyfGRaFvX7bIHHJWds7X5trT0UrnBIVsiGmf6RdM=; b=soFGLSpHumQkc4ve8OtnLiww60
-        3e01a2d5lfxFHksFu0e0tqee4Bg3HkOlvR0VdC71SAscGzi/Yd6HkuD4PeX2ZTHYkuvKsXRmRvcGl
-        ElOF7d2K4O1rLLjzaL7rUJhL4m4A9GT1g73nbNmMkAEFQeX+aDTM7LhyuItNC+A2GQwY=;
-Received: from [88.117.57.231] (helo=hornet.engleder.at)
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ad78D/NezaURB5FDAeVbS8FIfyUkmpsrLqg/B5M52Zw=; b=qPc7NaoSsl5kfNX53vYE1p6eBB
+        2otqgXkjrIxR/mzYvm4rIxtXdPB/5nYKgfI6ZmaRPK/Yxkj7g2+8HOhaSNYtq3JgCrB7BVhEAm5Pp
+        V5gldeitVq9fZxcICIymTQUxv+VQHZtphLNEkpHnW/xI+t+VNEUPNutoSn+/ndhahN5Q=;
+Received: from 88-117-57-231.adsl.highway.telekom.at ([88.117.57.231] helo=hornet.engleder.at)
         by mx25lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <gerhard@engleder-embedded.com>)
-        id 1poqdV-0002eV-I9; Tue, 18 Apr 2023 21:05:05 +0200
+        id 1poqdX-0002eV-EN; Tue, 18 Apr 2023 21:05:07 +0200
 From:   Gerhard Engleder <gerhard@engleder-embedded.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
         pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com,
         maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com,
         Gerhard Engleder <gerhard@engleder-embedded.com>
-Subject: [PATCH net-next v3 0/6] tsnep: XDP socket zero-copy support
-Date:   Tue, 18 Apr 2023 21:04:53 +0200
-Message-Id: <20230418190459.19326-1-gerhard@engleder-embedded.com>
+Subject: [PATCH net-next v3 3/6] tsnep: Add functions for queue enable/disable
+Date:   Tue, 18 Apr 2023 21:04:56 +0200
+Message-Id: <20230418190459.19326-4-gerhard@engleder-embedded.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230418190459.19326-1-gerhard@engleder-embedded.com>
+References: <20230418190459.19326-1-gerhard@engleder-embedded.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-AV-Do-Run: Yes
@@ -46,50 +48,193 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Implement XDP socket zero-copy support for tsnep driver. I tried to
-follow existing drivers like igc as far as possible. But one main
-difference is that tsnep does not need any reconfiguration for XDP BPF
-program setup. So I decided to keep this behavior no matter if a XSK
-pool is used or not. As a result, tsnep starts using the XSK pool even
-if no XDP BPF program is available.
+Move queue enable and disable code to separate functions. This way the
+activation and deactivation of the queues are defined actions, which can
+be used in future execution paths.
 
-Another difference is that I tried to prevent potentially failing
-allocations during XSK pool setup. E.g. both memory models for page pool
-and XSK pool are registered all the time. Thus, XSK pool setup cannot
-end up with not working queues.
+This functions will be used for the queue reconfiguration at runtime,
+which is necessary for XSK zero-copy support.
 
-Some prework is done to reduce the last two XSK commits to actual XSK
-changes.
+Signed-off-by: Gerhard Engleder <gerhard@engleder-embedded.com>
+---
+ drivers/net/ethernet/engleder/tsnep_main.c | 97 ++++++++++++++--------
+ 1 file changed, 64 insertions(+), 33 deletions(-)
 
-v3:
-- use __netif_tx_lock_bh() (Paolo Abeni)
-- comment that rx->page_buffer is always zero terminated (Paolo Abeni)
-
-v2:
-- eliminate modulo op in TX/RX path (Maciej Fijalkowski)
-- eliminate retval variable in tsnep_rx_alloc_zc() (Maciej Fijalkowski)
-- scope variable entry within loop (Maciej Fijalkowski)
-- use DMA_ATTR_SKIP_CPU_SYNC directly (Maciej Fijalkowski)
-- union for page/xdp in tsnep_rx_entry (Maciej Fijalkowski)
-- provide performance numbers (Maciej Fijalkowski)
-- use xsk_buff_alloc_batch() (Maciej Fijalkowski)
-- use xsk_tx_peek_release_desc_batch() (Maciej Fijalkowski)
-- don't call tsnep_rx_reopen() if netdev is down
-- init adapter pointer of queue only once
-
-Gerhard Engleder (6):
-  tsnep: Replace modulo operation with mask
-  tsnep: Rework TX/RX queue initialization
-  tsnep: Add functions for queue enable/disable
-  tsnep: Move skb receive action to separate function
-  tsnep: Add XDP socket zero-copy RX support
-  tsnep: Add XDP socket zero-copy TX support
-
- drivers/net/ethernet/engleder/tsnep.h      |  16 +-
- drivers/net/ethernet/engleder/tsnep_main.c | 863 ++++++++++++++++++---
- drivers/net/ethernet/engleder/tsnep_xdp.c  |  66 ++
- 3 files changed, 822 insertions(+), 123 deletions(-)
-
+diff --git a/drivers/net/ethernet/engleder/tsnep_main.c b/drivers/net/ethernet/engleder/tsnep_main.c
+index 095d36e953fc..039629af6a43 100644
+--- a/drivers/net/ethernet/engleder/tsnep_main.c
++++ b/drivers/net/ethernet/engleder/tsnep_main.c
+@@ -866,6 +866,24 @@ static void tsnep_rx_init(struct tsnep_rx *rx)
+ 	rx->increment_owner_counter = TSNEP_RING_SIZE - 1;
+ }
+ 
++static void tsnep_rx_enable(struct tsnep_rx *rx)
++{
++	/* descriptor properties shall be valid before hardware is notified */
++	dma_wmb();
++
++	iowrite32(TSNEP_CONTROL_RX_ENABLE, rx->addr + TSNEP_CONTROL);
++}
++
++static void tsnep_rx_disable(struct tsnep_rx *rx)
++{
++	u32 val;
++
++	iowrite32(TSNEP_CONTROL_RX_DISABLE, rx->addr + TSNEP_CONTROL);
++	readx_poll_timeout(ioread32, rx->addr + TSNEP_CONTROL, val,
++			   ((val & TSNEP_CONTROL_RX_ENABLE) == 0), 10000,
++			   1000000);
++}
++
+ static int tsnep_rx_desc_available(struct tsnep_rx *rx)
+ {
+ 	if (rx->read <= rx->write)
+@@ -932,19 +950,15 @@ static void tsnep_rx_activate(struct tsnep_rx *rx, int index)
+ 	entry->desc->properties = __cpu_to_le32(entry->properties);
+ }
+ 
+-static int tsnep_rx_refill(struct tsnep_rx *rx, int count, bool reuse)
++static int tsnep_rx_alloc(struct tsnep_rx *rx, int count, bool reuse)
+ {
+-	int index;
+ 	bool alloc_failed = false;
+-	bool enable = false;
+-	int i;
+-	int retval;
++	int i, index;
+ 
+ 	for (i = 0; i < count && !alloc_failed; i++) {
+ 		index = (rx->write + i) & TSNEP_RING_MASK;
+ 
+-		retval = tsnep_rx_alloc_buffer(rx, index);
+-		if (unlikely(retval)) {
++		if (unlikely(tsnep_rx_alloc_buffer(rx, index))) {
+ 			rx->alloc_failed++;
+ 			alloc_failed = true;
+ 
+@@ -956,22 +970,23 @@ static int tsnep_rx_refill(struct tsnep_rx *rx, int count, bool reuse)
+ 		}
+ 
+ 		tsnep_rx_activate(rx, index);
+-
+-		enable = true;
+ 	}
+ 
+-	if (enable) {
++	if (i)
+ 		rx->write = (rx->write + i) & TSNEP_RING_MASK;
+ 
+-		/* descriptor properties shall be valid before hardware is
+-		 * notified
+-		 */
+-		dma_wmb();
++	return i;
++}
+ 
+-		iowrite32(TSNEP_CONTROL_RX_ENABLE, rx->addr + TSNEP_CONTROL);
+-	}
++static int tsnep_rx_refill(struct tsnep_rx *rx, int count, bool reuse)
++{
++	int desc_refilled;
+ 
+-	return i;
++	desc_refilled = tsnep_rx_alloc(rx, count, reuse);
++	if (desc_refilled)
++		tsnep_rx_enable(rx);
++
++	return desc_refilled;
+ }
+ 
+ static bool tsnep_xdp_run_prog(struct tsnep_rx *rx, struct bpf_prog *prog,
+@@ -1199,6 +1214,7 @@ static bool tsnep_rx_pending(struct tsnep_rx *rx)
+ 
+ static int tsnep_rx_open(struct tsnep_rx *rx)
+ {
++	int desc_available;
+ 	int retval;
+ 
+ 	retval = tsnep_rx_ring_create(rx);
+@@ -1207,20 +1223,19 @@ static int tsnep_rx_open(struct tsnep_rx *rx)
+ 
+ 	tsnep_rx_init(rx);
+ 
+-	tsnep_rx_refill(rx, tsnep_rx_desc_available(rx), false);
++	desc_available = tsnep_rx_desc_available(rx);
++	retval = tsnep_rx_alloc(rx, desc_available, false);
++	if (retval != desc_available) {
++		tsnep_rx_ring_cleanup(rx);
++
++		return -ENOMEM;
++	}
+ 
+ 	return 0;
+ }
+ 
+ static void tsnep_rx_close(struct tsnep_rx *rx)
+ {
+-	u32 val;
+-
+-	iowrite32(TSNEP_CONTROL_RX_DISABLE, rx->addr + TSNEP_CONTROL);
+-	readx_poll_timeout(ioread32, rx->addr + TSNEP_CONTROL, val,
+-			   ((val & TSNEP_CONTROL_RX_ENABLE) == 0), 10000,
+-			   1000000);
+-
+ 	tsnep_rx_ring_cleanup(rx);
+ }
+ 
+@@ -1377,6 +1392,27 @@ static int tsnep_queue_open(struct tsnep_adapter *adapter,
+ 	return retval;
+ }
+ 
++static void tsnep_queue_enable(struct tsnep_queue *queue)
++{
++	napi_enable(&queue->napi);
++	tsnep_enable_irq(queue->adapter, queue->irq_mask);
++
++	if (queue->rx)
++		tsnep_rx_enable(queue->rx);
++}
++
++static void tsnep_queue_disable(struct tsnep_queue *queue)
++{
++	napi_disable(&queue->napi);
++	tsnep_disable_irq(queue->adapter, queue->irq_mask);
++
++	/* disable RX after NAPI polling has been disabled, because RX can be
++	 * enabled during NAPI polling
++	 */
++	if (queue->rx)
++		tsnep_rx_disable(queue->rx);
++}
++
+ static int tsnep_netdev_open(struct net_device *netdev)
+ {
+ 	struct tsnep_adapter *adapter = netdev_priv(netdev);
+@@ -1413,11 +1449,8 @@ static int tsnep_netdev_open(struct net_device *netdev)
+ 	if (retval)
+ 		goto phy_failed;
+ 
+-	for (i = 0; i < adapter->num_queues; i++) {
+-		napi_enable(&adapter->queue[i].napi);
+-
+-		tsnep_enable_irq(adapter, adapter->queue[i].irq_mask);
+-	}
++	for (i = 0; i < adapter->num_queues; i++)
++		tsnep_queue_enable(&adapter->queue[i]);
+ 
+ 	return 0;
+ 
+@@ -1444,9 +1477,7 @@ static int tsnep_netdev_close(struct net_device *netdev)
+ 	tsnep_phy_close(adapter);
+ 
+ 	for (i = 0; i < adapter->num_queues; i++) {
+-		tsnep_disable_irq(adapter, adapter->queue[i].irq_mask);
+-
+-		napi_disable(&adapter->queue[i].napi);
++		tsnep_queue_disable(&adapter->queue[i]);
+ 
+ 		tsnep_queue_close(&adapter->queue[i], i == 0);
+ 
 -- 
 2.30.2
 
