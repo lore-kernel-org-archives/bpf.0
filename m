@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A9C4C7EE20
-	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 06:53:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19442C77B71
+	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 06:54:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231205AbjDRGxv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Apr 2023 02:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47650 "EHLO
+        id S231243AbjDRGyG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Apr 2023 02:54:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbjDRGxo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 18 Apr 2023 02:53:44 -0400
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5F546B0;
-        Mon, 17 Apr 2023 23:53:41 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VgOLnl._1681800817;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VgOLnl._1681800817)
+        with ESMTP id S231138AbjDRGxu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 18 Apr 2023 02:53:50 -0400
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBF9E7E;
+        Mon, 17 Apr 2023 23:53:42 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VgOIH9a_1681800819;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VgOIH9a_1681800819)
           by smtp.aliyun-inc.com;
-          Tue, 18 Apr 2023 14:53:37 +0800
+          Tue, 18 Apr 2023 14:53:39 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     netdev@vger.kernel.org
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
@@ -31,9 +31,9 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH net-next v2 09/14] virtio_net: introduce receive_mergeable_xdp()
-Date:   Tue, 18 Apr 2023 14:53:22 +0800
-Message-Id: <20230418065327.72281-10-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v2 11/14] virtio_net: introduce receive_small_xdp()
+Date:   Tue, 18 Apr 2023 14:53:24 +0800
+Message-Id: <20230418065327.72281-12-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20230418065327.72281-1-xuanzhuo@linux.alibaba.com>
 References: <20230418065327.72281-1-xuanzhuo@linux.alibaba.com>
@@ -44,120 +44,174 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The purpose of this patch is to simplify the receive_mergeable().
-Separate all the logic of XDP into a function.
+The purpose of this patch is to simplify the receive_small().
+Separate all the logic of XDP of small into a function.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- drivers/net/virtio_net.c | 100 ++++++++++++++++++++++++---------------
- 1 file changed, 61 insertions(+), 39 deletions(-)
+ drivers/net/virtio_net.c | 165 +++++++++++++++++++++++----------------
+ 1 file changed, 99 insertions(+), 66 deletions(-)
 
 diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 266c1670beda..42e9927e316b 100644
+index a4bb25f39f12..34220f5f27d1 100644
 --- a/drivers/net/virtio_net.c
 +++ b/drivers/net/virtio_net.c
-@@ -1319,6 +1319,63 @@ static void *mergeable_xdp_prepare(struct virtnet_info *vi,
- 	return page_address(*page) + VIRTIO_XDP_HEADROOM;
+@@ -941,6 +941,98 @@ static struct page *xdp_linearize_page(struct receive_queue *rq,
+ 	return NULL;
  }
  
-+static struct sk_buff *receive_mergeable_xdp(struct net_device *dev,
-+					     struct virtnet_info *vi,
-+					     struct receive_queue *rq,
-+					     struct bpf_prog *xdp_prog,
-+					     void *buf,
-+					     void *ctx,
-+					     unsigned int len,
-+					     unsigned int *xdp_xmit,
-+					     struct virtnet_rq_stats *stats)
++static struct sk_buff *receive_small_xdp(struct net_device *dev,
++					 struct virtnet_info *vi,
++					 struct receive_queue *rq,
++					 struct bpf_prog *xdp_prog,
++					 void *buf,
++					 unsigned int xdp_headroom,
++					 unsigned int len,
++					 unsigned int *xdp_xmit,
++					 struct virtnet_rq_stats *stats)
 +{
-+	struct virtio_net_hdr_mrg_rxbuf *hdr = buf;
-+	int num_buf = virtio16_to_cpu(vi->vdev, hdr->num_buffers);
++	unsigned int header_offset = VIRTNET_RX_PAD + xdp_headroom;
++	unsigned int headroom = vi->hdr_len + header_offset;
++	struct virtio_net_hdr_mrg_rxbuf *hdr = buf + header_offset;
 +	struct page *page = virt_to_head_page(buf);
-+	int offset = buf - page_address(page);
-+	unsigned int xdp_frags_truesz = 0;
-+	struct sk_buff *head_skb;
-+	unsigned int frame_sz;
++	struct page *xdp_page;
++	unsigned int buflen;
 +	struct xdp_buff xdp;
-+	void *data;
++	struct sk_buff *skb;
++	unsigned int delta = 0;
++	unsigned int metasize = 0;
++	void *orig_data;
 +	u32 act;
-+	int err;
 +
-+	data = mergeable_xdp_prepare(vi, rq, xdp_prog, ctx, &frame_sz, &num_buf, &page,
-+				     offset, &len, hdr);
-+	if (unlikely(!data))
++	if (unlikely(hdr->hdr.gso_type))
 +		goto err_xdp;
 +
-+	err = virtnet_build_xdp_buff_mrg(dev, vi, rq, &xdp, data, len, frame_sz,
-+					 &num_buf, &xdp_frags_truesz, stats);
-+	if (unlikely(err))
-+		goto err_xdp;
++	buflen = SKB_DATA_ALIGN(GOOD_PACKET_LEN + headroom) +
++		SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
++
++	if (unlikely(xdp_headroom < virtnet_get_headroom(vi))) {
++		int offset = buf - page_address(page) + header_offset;
++		unsigned int tlen = len + vi->hdr_len;
++		int num_buf = 1;
++
++		xdp_headroom = virtnet_get_headroom(vi);
++		header_offset = VIRTNET_RX_PAD + xdp_headroom;
++		headroom = vi->hdr_len + header_offset;
++		buflen = SKB_DATA_ALIGN(GOOD_PACKET_LEN + headroom) +
++			SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
++		xdp_page = xdp_linearize_page(rq, &num_buf, page,
++					      offset, header_offset,
++					      &tlen);
++		if (!xdp_page)
++			goto err_xdp;
++
++		buf = page_address(xdp_page);
++		put_page(page);
++		page = xdp_page;
++	}
++
++	xdp_init_buff(&xdp, buflen, &rq->xdp_rxq);
++	xdp_prepare_buff(&xdp, buf + VIRTNET_RX_PAD + vi->hdr_len,
++			 xdp_headroom, len, true);
++	orig_data = xdp.data;
 +
 +	act = virtnet_xdp_handler(xdp_prog, &xdp, dev, xdp_xmit, stats);
 +
 +	switch (act) {
 +	case VIRTNET_XDP_RES_PASS:
-+		head_skb = build_skb_from_xdp_buff(dev, vi, &xdp, xdp_frags_truesz);
-+		if (unlikely(!head_skb))
-+			goto err_xdp;
-+		return head_skb;
++		/* Recalculate length in case bpf program changed it */
++		delta = orig_data - xdp.data;
++		len = xdp.data_end - xdp.data;
++		metasize = xdp.data - xdp.data_meta;
++		break;
 +
 +	case VIRTNET_XDP_RES_CONSUMED:
-+		return NULL;
++		goto xdp_xmit;
 +
 +	case VIRTNET_XDP_RES_DROP:
-+		break;
++		goto err_xdp;
 +	}
 +
-+err_xdp:
-+	put_page(page);
-+	mergeable_buf_free(rq, num_buf, dev, stats);
++	skb = build_skb(buf, buflen);
++	if (!skb)
++		goto err;
 +
++	skb_reserve(skb, headroom - delta);
++	skb_put(skb, len);
++	if (metasize)
++		skb_metadata_set(skb, metasize);
++
++	return skb;
++
++err_xdp:
 +	stats->xdp_drops++;
++err:
 +	stats->drops++;
++	put_page(page);
++xdp_xmit:
 +	return NULL;
 +}
 +
- static struct sk_buff *receive_mergeable(struct net_device *dev,
- 					 struct virtnet_info *vi,
- 					 struct receive_queue *rq,
-@@ -1338,8 +1395,6 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
- 	unsigned int headroom = mergeable_ctx_to_headroom(ctx);
- 	unsigned int tailroom = headroom ? sizeof(struct skb_shared_info) : 0;
- 	unsigned int room = SKB_DATA_ALIGN(headroom + tailroom);
--	unsigned int frame_sz;
--	int err;
+ static struct sk_buff *receive_small(struct net_device *dev,
+ 				     struct virtnet_info *vi,
+ 				     struct receive_queue *rq,
+@@ -957,9 +1049,6 @@ static struct sk_buff *receive_small(struct net_device *dev,
+ 	unsigned int buflen = SKB_DATA_ALIGN(GOOD_PACKET_LEN + headroom) +
+ 			      SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+ 	struct page *page = virt_to_head_page(buf);
+-	unsigned int delta = 0;
+-	struct page *xdp_page;
+-	unsigned int metasize = 0;
  
- 	head_skb = NULL;
- 	stats->bytes += len - vi->hdr_len;
-@@ -1359,39 +1414,10 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 	len -= vi->hdr_len;
+ 	stats->bytes += len;
+@@ -979,57 +1068,10 @@ static struct sk_buff *receive_small(struct net_device *dev,
  	rcu_read_lock();
  	xdp_prog = rcu_dereference(rq->xdp_prog);
  	if (xdp_prog) {
--		unsigned int xdp_frags_truesz = 0;
+-		struct virtio_net_hdr_mrg_rxbuf *hdr = buf + header_offset;
 -		struct xdp_buff xdp;
--		void *data;
+-		void *orig_data;
 -		u32 act;
 -
--		data = mergeable_xdp_prepare(vi, rq, xdp_prog, ctx, &frame_sz,
--					     &num_buf, &page, offset, &len, hdr);
--		if (unlikely(!data))
+-		if (unlikely(hdr->hdr.gso_type))
 -			goto err_xdp;
 -
--		err = virtnet_build_xdp_buff_mrg(dev, vi, rq, &xdp, data, len, frame_sz,
--						 &num_buf, &xdp_frags_truesz, stats);
--		if (unlikely(err))
--			goto err_xdp;
+-		if (unlikely(xdp_headroom < virtnet_get_headroom(vi))) {
+-			int offset = buf - page_address(page) + header_offset;
+-			unsigned int tlen = len + vi->hdr_len;
+-			int num_buf = 1;
+-
+-			xdp_headroom = virtnet_get_headroom(vi);
+-			header_offset = VIRTNET_RX_PAD + xdp_headroom;
+-			headroom = vi->hdr_len + header_offset;
+-			buflen = SKB_DATA_ALIGN(GOOD_PACKET_LEN + headroom) +
+-				 SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+-			xdp_page = xdp_linearize_page(rq, &num_buf, page,
+-						      offset, header_offset,
+-						      &tlen);
+-			if (!xdp_page)
+-				goto err_xdp;
+-
+-			buf = page_address(xdp_page);
+-			put_page(page);
+-			page = xdp_page;
+-		}
+-
+-		xdp_init_buff(&xdp, buflen, &rq->xdp_rxq);
+-		xdp_prepare_buff(&xdp, buf + VIRTNET_RX_PAD + vi->hdr_len,
+-				 xdp_headroom, len, true);
+-		orig_data = xdp.data;
 -
 -		act = virtnet_xdp_handler(xdp_prog, &xdp, dev, xdp_xmit, stats);
 -
 -		switch (act) {
 -		case VIRTNET_XDP_RES_PASS:
--			head_skb = build_skb_from_xdp_buff(dev, vi, &xdp, xdp_frags_truesz);
--			if (unlikely(!head_skb))
--				goto err_xdp;
--
--			rcu_read_unlock();
--			return head_skb;
+-			/* Recalculate length in case bpf program changed it */
+-			delta = orig_data - xdp.data;
+-			len = xdp.data_end - xdp.data;
+-			metasize = xdp.data - xdp.data_meta;
+-			break;
 -
 -		case VIRTNET_XDP_RES_CONSUMED:
 -			rcu_read_unlock();
@@ -166,27 +220,38 @@ index 266c1670beda..42e9927e316b 100644
 -		case VIRTNET_XDP_RES_DROP:
 -			goto err_xdp;
 -		}
-+		head_skb = receive_mergeable_xdp(dev, vi, rq, xdp_prog, buf, ctx,
-+						 len, xdp_xmit, stats);
++		skb = receive_small_xdp(dev, vi, rq, xdp_prog, buf, xdp_headroom,
++					len, xdp_xmit, stats);
 +		rcu_read_unlock();
-+		return head_skb;
++		return skb;
  	}
  	rcu_read_unlock();
  
-@@ -1461,9 +1487,6 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
- 	ewma_pkt_len_add(&rq->mrg_avg_pkt_len, head_skb->len);
- 	return head_skb;
+@@ -1037,25 +1079,16 @@ static struct sk_buff *receive_small(struct net_device *dev,
+ 	skb = build_skb(buf, buflen);
+ 	if (!skb)
+ 		goto err;
+-	skb_reserve(skb, headroom - delta);
++	skb_reserve(skb, headroom);
+ 	skb_put(skb, len);
+-	if (!xdp_prog) {
+-		buf += header_offset;
+-		memcpy(skb_vnet_hdr(skb), buf, vi->hdr_len);
+-	} /* keep zeroed vnet hdr since XDP is loaded */
+-
+-	if (metasize)
+-		skb_metadata_set(skb, metasize);
+ 
++	buf += header_offset;
++	memcpy(skb_vnet_hdr(skb), buf, vi->hdr_len);
+ 	return skb;
  
 -err_xdp:
 -	rcu_read_unlock();
 -	stats->xdp_drops++;
- err_skb:
- 	put_page(page);
- 	mergeable_buf_free(rq, num_buf, dev, stats);
-@@ -1471,7 +1494,6 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
- err_buf:
+ err:
  	stats->drops++;
- 	dev_kfree_skb(head_skb);
+ 	put_page(page);
 -xdp_xmit:
  	return NULL;
  }
