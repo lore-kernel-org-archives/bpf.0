@@ -2,126 +2,164 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A9F9C77B7D
-	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 15:32:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F2F3C6FD18
+	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 15:32:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231338AbjDRPcD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Apr 2023 11:32:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47642 "EHLO
+        id S230489AbjDRPcF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Apr 2023 11:32:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbjDRPcC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 18 Apr 2023 11:32:02 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680BFDB
-        for <bpf@vger.kernel.org>; Tue, 18 Apr 2023 08:31:59 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-51fe0a4afdcso374323a12.2
-        for <bpf@vger.kernel.org>; Tue, 18 Apr 2023 08:31:59 -0700 (PDT)
+        with ESMTP id S229978AbjDRPcD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 18 Apr 2023 11:32:03 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292ECE60
+        for <bpf@vger.kernel.org>; Tue, 18 Apr 2023 08:32:01 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1a6670671e3so19297075ad.0
+        for <bpf@vger.kernel.org>; Tue, 18 Apr 2023 08:32:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1681831918; x=1684423918;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZIDzXyyEhVv1BciPOJpSNrxXXkTgd4yNJmqlw3RoVqc=;
-        b=VxiQlltgkhn+6gVeM29oIc/mC5ITN1g3yIG0+U7SHxPyFF5pxLEj0JNe0eA8XlS/Qk
-         YNwCqmsynO8PwZmLY77sb5zpsa+CPagQ5rukMrBn3BTdCq0azNpTCRCqR0UdXKzXkvet
-         u1+6UYYca2cJSI6+f/PQzxNpnhMhYPWlk6TBIqYAB6+9vlDCpMbi1wlUquOvfAu9sYiy
-         SAyNmH754m7skTHXU2kd4awqx97O5O9tWiFFIpWcUl2WJQkPKaAhOhiAyW5QFPdrEkbY
-         pVU+VCFvmkjhGHOnF1RSCH+V133ic7I86myMUtHEYbt3x8IL9RbblxaBA1sR/vrQqT7U
-         KH4Q==
+        d=isovalent.com; s=google; t=1681831920; x=1684423920;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MUqvsQSwIrgdlIXUPleFIEFJtWEpRJgT9Zrnu0X6Er0=;
+        b=RW1DyetObtW4pDXVWkzzaDts3DFVkqsbpWXAcSLxG39TGlQ7DRZTYzwJzIwAn26wU0
+         6uOqZm8maQ1FmRgcGKvRYvFoiCpVxp5kblso9zOi4yvcbxDAVvlQlU83ZIdtrEaDxR6K
+         fTm6nHpiCcR068rhM5DGvkif1E4ywlJVfSB4Ri6vDCdFs33sXNF2VO7KwQsYIEiTigK1
+         Xlo+UqNzWwEe9L0r5a67NhTSVlPMnxWyS0CyLTmkown1EAII/pZq0yHo3+wZ/DTL5J8A
+         pDwpRymyldgA3yyka2bKobLoGzW4QbCyYf6vG0r3lVCW8rhwFO9hd1xbi/CIXrwO5PgW
+         oppA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681831918; x=1684423918;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZIDzXyyEhVv1BciPOJpSNrxXXkTgd4yNJmqlw3RoVqc=;
-        b=U+CiL8Kf+VKzRAVktYDFAGL2qLD/x4HNLlAE6hma3MwfYj7qDWc7jI5tqGjTQf09pE
-         1WxlGGWqu2fpdZrVwBUexYBkMmageGS+6AjaonTccyzO3Px/wXit6viTiL++eomSBP+v
-         pUkn0ebF2oV9J6Pf4XjliZ6zf3KIA0BhAHQnyOeKEpoIPUqRBJraWwjcEsha5QE9tj1e
-         IL8hAGqB0Ds3UW5mxH2/VBa+OUO8CWAfyxpE/CP22a1teH0DcVwygf3I21/UJqeJz050
-         1nnfRpvYP/QrrdlNZKn/SAOIi5mOh5fxh5jeNjp5R5YFugkUmiu7W+UOBe4Mj7y15qGV
-         5Mbg==
-X-Gm-Message-State: AAQBX9fnhBo2FfCgTMYtknWE2Uu4jQc1KCpFJcNL3CRR5ji5toegzSOJ
-        G/S6kDpdowO8F9Xl1uVVwSCi6/hcY3H6CTwLYbs=
-X-Google-Smtp-Source: AKy350Yx1/EvaupRMVp6nN+79CPAmjNmeY2ENt3m0wnmWxNRsraL8Sn7D7uay4avty+hOdLhxhufNw==
-X-Received: by 2002:a17:902:fa4e:b0:1a6:d8a3:3346 with SMTP id lb14-20020a170902fa4e00b001a6d8a33346mr2208831plb.31.1681831918433;
-        Tue, 18 Apr 2023 08:31:58 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681831920; x=1684423920;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MUqvsQSwIrgdlIXUPleFIEFJtWEpRJgT9Zrnu0X6Er0=;
+        b=kMXBgFBWuOt+S1iBT4pOOEsgj1MS1DLdSu0RSeajB1FWVhAHpqBX4i8MoDyTnzQMrs
+         0/8jUGPOHEG7ppSiyY2gWSjaDdZoRqlV883hWjv+o+tg/hx3iHGTct2+opEuPbXpMDdO
+         yvS+w3aQmBPxxb+dTFteXSdxckyg2VSc2RJj5Dtz7w2omoRKow1KlxS11wggPc3r51iB
+         Icr5Vfm8BXLsoA9GtJ1BZWLZiYdCPU+Xq6F48eXrLTqf13L7KSEMlEO3eu6S4q0FskO/
+         hu3ohhsa3oSM5ZJmNpl6QGWh1rJeGLEbha0CBwkl5m/iW8FJZCMV3wiiCjrvyJhqdyv4
+         yNyw==
+X-Gm-Message-State: AAQBX9cTDz6s4Qv95xVlC418YE4+RBdXQ3+AtheVdvoNY3C13cw/VNJT
+        LUVbBqC33RgN5wzAkVFPmjPetHJfzcg0GQZ5m/E=
+X-Google-Smtp-Source: AKy350a1EHyblUB/s1bHM9EFvt+fHwI9hmiNr2tpXYAq53jDjYu7LBWUcT4ITH+qAmF5wDUEo4CI1A==
+X-Received: by 2002:a17:902:d2c6:b0:1a6:45f7:b332 with SMTP id n6-20020a170902d2c600b001a645f7b332mr2786421plc.63.1681831920301;
+        Tue, 18 Apr 2023 08:32:00 -0700 (PDT)
 Received: from localhost.localdomain ([2604:1380:4611:8100::1])
-        by smtp.gmail.com with ESMTPSA id ba4-20020a170902720400b001a647709864sm9769630plb.155.2023.04.18.08.31.57
+        by smtp.gmail.com with ESMTPSA id ba4-20020a170902720400b001a647709864sm9769630plb.155.2023.04.18.08.31.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 08:31:57 -0700 (PDT)
+        Tue, 18 Apr 2023 08:31:59 -0700 (PDT)
 From:   Aditi Ghag <aditi.ghag@isovalent.com>
 To:     bpf@vger.kernel.org
 Cc:     kafai@fb.com, sdf@google.com, edumazet@google.com,
-        aditi.ghag@isovalent.com
-Subject: [PATCH v6 bpf-next 0/7] bpf: Add socket destroy capability
-Date:   Tue, 18 Apr 2023 15:31:41 +0000
-Message-Id: <20230418153148.2231644-1-aditi.ghag@isovalent.com>
+        aditi.ghag@isovalent.com, Martin KaFai Lau <martin.lau@kernel.org>
+Subject: [PATCH 2/7] udp: seq_file: Remove bpf_seq_afinfo from udp_iter_state
+Date:   Tue, 18 Apr 2023 15:31:43 +0000
+Message-Id: <20230418153148.2231644-3-aditi.ghag@isovalent.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230418153148.2231644-1-aditi.ghag@isovalent.com>
+References: <20230418153148.2231644-1-aditi.ghag@isovalent.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds the capability to destroy sockets in BPF. We plan to use
-the capability in Cilium to force client sockets to reconnect when their
-remote load-balancing backends are deleted. The other use case is
-on-the-fly policy enforcement where existing socket connections prevented
-by policies need to be terminated.
+This is a preparatory commit to remove the field. The field was
+previously shared between proc fs and BPF UDP socket iterators. As the
+follow-up commits will decouple the implementation for the iterators,
+remove the field. As for BPF socket iterator, filtering of sockets is
+exepected to be done in BPF programs.
 
-The use cases, and more details around
-the selected approach were presented at LPC 2022 -
-https://lpc.events/event/16/contributions/1358/.
-RFC discussion -
-https://lore.kernel.org/netdev/CABG=zsBEh-P4NXk23eBJw7eajB5YJeRS7oPXnTAzs=yob4EMoQ@mail.gmail.com/T/#u.
-v5 patch series -
-https://lore.kernel.org/bpf/20230330151758.531170-1-aditi.ghag@isovalent.com/
+Suggested-by: Martin KaFai Lau <martin.lau@kernel.org>
+Signed-off-by: Aditi Ghag <aditi.ghag@isovalent.com>
+---
+ include/net/udp.h |  1 -
+ net/ipv4/udp.c    | 34 ++++------------------------------
+ 2 files changed, 4 insertions(+), 31 deletions(-)
 
-v6 highlights:
-Address review comments:
-Martin:
-- Simplified UDP batching iterator logic.
-- Run tests in a separate netns.
-Stan:
-- Make destroy handler checks opt-in.
-- Extended network helper to get socket port for v4.
-kernel test robot:
-- Updated seq_sk_match and seq_file_family with the necessary ifdefs.
-
-(Below notes are same as v5 patch series that are still relevant. Refer to
-earlier patch series for other notes.)
-- I hit a snag while writing the kfunc where verifier complained about the
-  `sock_common` type passed from TCP iterator. With kfuncs, there don't
-  seem to be any options available to pass BTF type hints to the verifier
-  (equivalent of `ARG_PTR_TO_BTF_ID_SOCK_COMMON`, as was the case with the
-  helper).  As a result, I changed the argument type of the sock_destory
-  kfunc to `sock_common`.
-- Martin's patch restricts the helper to only BPF iterators -
-  https://lore.kernel.org/bpf/20230404060959.2259448-1-martin.lau@linux.dev/.
-  Applied, and tested the patch locally.
-
-
-Aditi Ghag (7):
-  bpf: tcp: Avoid taking fast sock lock in iterator
-  udp: seq_file: Remove bpf_seq_afinfo from udp_iter_state
-  udp: seq_file: Helper function to match socket attributes
-  bpf: udp: Implement batching for sockets iterator
-  bpf: Add bpf_sock_destroy kfunc
-  selftests/bpf: Add helper to get port using getsockname
-  selftests/bpf: Test bpf_sock_destroy
-
- include/net/udp.h                             |   1 -
- net/core/filter.c                             |  57 ++++
- net/ipv4/tcp.c                                |  10 +-
- net/ipv4/tcp_ipv4.c                           |   5 +-
- net/ipv4/udp.c                                | 269 +++++++++++++++---
- tools/testing/selftests/bpf/network_helpers.c |  28 ++
- tools/testing/selftests/bpf/network_helpers.h |   1 +
- .../selftests/bpf/prog_tests/sock_destroy.c   | 217 ++++++++++++++
- .../selftests/bpf/progs/sock_destroy_prog.c   | 147 ++++++++++
- 9 files changed, 690 insertions(+), 45 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/sock_destroy.c
- create mode 100644 tools/testing/selftests/bpf/progs/sock_destroy_prog.c
-
+diff --git a/include/net/udp.h b/include/net/udp.h
+index de4b528522bb..5cad44318d71 100644
+--- a/include/net/udp.h
++++ b/include/net/udp.h
+@@ -437,7 +437,6 @@ struct udp_seq_afinfo {
+ struct udp_iter_state {
+ 	struct seq_net_private  p;
+ 	int			bucket;
+-	struct udp_seq_afinfo	*bpf_seq_afinfo;
+ };
+ 
+ void *udp_seq_start(struct seq_file *seq, loff_t *pos);
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index c605d171eb2d..3c9eeee28678 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -2997,10 +2997,7 @@ static struct sock *udp_get_first(struct seq_file *seq, int start)
+ 	struct udp_table *udptable;
+ 	struct sock *sk;
+ 
+-	if (state->bpf_seq_afinfo)
+-		afinfo = state->bpf_seq_afinfo;
+-	else
+-		afinfo = pde_data(file_inode(seq->file));
++	afinfo = pde_data(file_inode(seq->file));
+ 
+ 	udptable = udp_get_table_afinfo(afinfo, net);
+ 
+@@ -3033,10 +3030,7 @@ static struct sock *udp_get_next(struct seq_file *seq, struct sock *sk)
+ 	struct udp_seq_afinfo *afinfo;
+ 	struct udp_table *udptable;
+ 
+-	if (state->bpf_seq_afinfo)
+-		afinfo = state->bpf_seq_afinfo;
+-	else
+-		afinfo = pde_data(file_inode(seq->file));
++	afinfo = pde_data(file_inode(seq->file));
+ 
+ 	do {
+ 		sk = sk_next(sk);
+@@ -3094,10 +3088,7 @@ void udp_seq_stop(struct seq_file *seq, void *v)
+ 	struct udp_seq_afinfo *afinfo;
+ 	struct udp_table *udptable;
+ 
+-	if (state->bpf_seq_afinfo)
+-		afinfo = state->bpf_seq_afinfo;
+-	else
+-		afinfo = pde_data(file_inode(seq->file));
++	afinfo = pde_data(file_inode(seq->file));
+ 
+ 	udptable = udp_get_table_afinfo(afinfo, seq_file_net(seq));
+ 
+@@ -3415,28 +3406,11 @@ DEFINE_BPF_ITER_FUNC(udp, struct bpf_iter_meta *meta,
+ 
+ static int bpf_iter_init_udp(void *priv_data, struct bpf_iter_aux_info *aux)
+ {
+-	struct udp_iter_state *st = priv_data;
+-	struct udp_seq_afinfo *afinfo;
+-	int ret;
+-
+-	afinfo = kmalloc(sizeof(*afinfo), GFP_USER | __GFP_NOWARN);
+-	if (!afinfo)
+-		return -ENOMEM;
+-
+-	afinfo->family = AF_UNSPEC;
+-	afinfo->udp_table = NULL;
+-	st->bpf_seq_afinfo = afinfo;
+-	ret = bpf_iter_init_seq_net(priv_data, aux);
+-	if (ret)
+-		kfree(afinfo);
+-	return ret;
++	return bpf_iter_init_seq_net(priv_data, aux);
+ }
+ 
+ static void bpf_iter_fini_udp(void *priv_data)
+ {
+-	struct udp_iter_state *st = priv_data;
+-
+-	kfree(st->bpf_seq_afinfo);
+ 	bpf_iter_fini_seq_net(priv_data);
+ }
+ 
 -- 
 2.34.1
 
