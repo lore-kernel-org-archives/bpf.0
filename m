@@ -2,56 +2,56 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3BDFC77B72
-	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 01:43:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 412A7C77B7E
+	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 01:44:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbjDRBnz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Apr 2023 21:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54300 "EHLO
+        id S229669AbjDRBoF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 Apr 2023 21:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbjDRBmw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 Apr 2023 21:42:52 -0400
+        with ESMTP id S231151AbjDRBmy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 17 Apr 2023 21:42:54 -0400
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6B765B9
-        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 18:41:50 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54be7584b28so368343317b3.16
-        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 18:41:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AC56E8E
+        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 18:41:51 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54f810e01f5so165555917b3.0
+        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 18:41:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681782110; x=1684374110;
+        d=google.com; s=20221208; t=1681782101; x=1684374101;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zWwdeYSbe2MZzb6+0YuKWkWzO0OIunr3DIdjLXb+QPs=;
-        b=bvVRAayaKb3f4XHecCOw1fq1zrxbTJlfu+X0j4JJ+ODZZ8s343yV2zF5V5cJPVfBrx
-         vO1QktBuUoSHL08PHmb741zrbYTtLR44mlVkerlNbRbCJGYvY5rfLmHur4kpmRZXckp/
-         5Xt5y4R3xULWEw01wuUy+z/jQtalviK0udMiGXZVR4o34gUJMO46tjSd9TtEsLa3oC0C
-         Qs9ggxL4witMvtnXFhB17F+6dIIHcCSX5M76pppw2FB4zNzSuRHvs30bGFNla01g3E11
-         K2LsOQQ7l/LXtTgEgSoMdbEAFkvDtok6PTyc3QsDYVhsfSDu4Pfk86mtQUxZrOSNJ97d
-         ihKA==
+        bh=ikqE+zYz1BXZh8mMNk5W0C4vdov8fukuxDv9VBrvDl0=;
+        b=lWajx8mafW1seUIDD7+qIrKfh1VFBzwDUsLiwI++++Oz4bdMluxYPYY5tEsxAWa6CH
+         vxq2L9Ahhr00QlIXhuRa3H0R5r+rycy5muTibHI7wt1orB3xYTatC8P/ujh+GxeJv/Ea
+         /qsU11Dq37CWkGOvJwpF5+roapL50puA2pWR52NQY0wwb8g7QRm+EFltGejT5i4Jt/Y1
+         OXZxsrsSrppo/t9R3VKyB1ZTuREyblAyqTJ0f7YYvHtuCgBmBUieoHEv00v6QvsgLSJm
+         90ZuhZjoOrQHXNOmhPGdV9IuQx/Xj2Nnt6uh+MJyIttYHlPKKkqeKwTrP9CBD6HG1qXp
+         E0dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681782110; x=1684374110;
+        d=1e100.net; s=20221208; t=1681782101; x=1684374101;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zWwdeYSbe2MZzb6+0YuKWkWzO0OIunr3DIdjLXb+QPs=;
-        b=DOVvOGD2EojdeeOepggwaLad1ItqjxXVZk6Ztamyb9ONdUZmZa5tq4JYAgTB0IC7az
-         vT5txxgazaEpnS92g83e0BKUc8LLzHzXKw5pgQc83Lr4vUBt6UPh9+U5Y4+6lwEoEnIH
-         3d9fUOqkvnqCU8PaxbF9fzTJY1/RZ4C5Bm9/JO+/VCMbdf+XtlYCYKmCtTOiig3subkI
-         jDiuoZ9YJN1QdPxKeZAKcsHM6LBUlY66O7EP+nfawIZnXiaTkQLC9hUc6hhm1uFRjZmY
-         5l1rWhLRMx1fMBpQFConvjFd3ItlHP63RqTI6i6sKjADQIxrQGOx63iv/yPY+Vjn3l0i
-         jYdA==
-X-Gm-Message-State: AAQBX9eBqA+VaAHhZbkJes5rD/0Xd3GgP6PhwFmv0mCniikGkCaeq5Uq
-        zq3XR1r82ucCw8kcS9xFpQ0KpzkmzJo=
-X-Google-Smtp-Source: AKy350aIiy0yEVjIhRUwhKZEZY7qdBZhQoYfVQEj5j3ErV9/GTclD1JkHLmadrVOBoXwbliIvZF/mWfRLJ4=
+        bh=ikqE+zYz1BXZh8mMNk5W0C4vdov8fukuxDv9VBrvDl0=;
+        b=BJXXGcVG/sCep603jMHc4hsyYf0wXfJ4+weUh2aDKE3OaZTvq6bm/ZgSmZgr7PJyND
+         LTDQ70dLRIum10fz6NW7XDZVI1eDJiNueUMCP+3iZ421HrN5Hql0N8dCoTbfn54pwnUx
+         T0GzQX19zMn6PqdDvMSxpxt04s1fP6imBrwfXEUpb+AsTPHu/9izoyv4ndfDVBeRm8Oz
+         BiwzklNtAWz9KlBqcZnn/ut78iRTa2jgjJNkHGxun5EElxX9mhjTuSfkP+U5ZgLclbAu
+         91tcrd/BAXLjLpTCpoDW3YevpTLWRdDUizU/MXclDDuBGMGigjcoth2+4nmw+fbPA0XL
+         UoCQ==
+X-Gm-Message-State: AAQBX9fS1BAGg2TwnugibboFYGH50HT954mbtzsn3B39kbu5VbqKVrNx
+        UO4X0E9wHt1Mifi+BikNBIts/fHxX2M=
+X-Google-Smtp-Source: AKy350Y8W7u23ruYQztA6DVfVSc2+c8wyOOiKTHLOnbBM9IdQq81SwSucFeU6gGP5hv1qDXkZmp6krD4aBI=
 X-Received: from drosen.mtv.corp.google.com ([2620:15c:211:201:e67a:98b0:942d:86aa])
- (user=drosen job=sendgmr) by 2002:a0d:ec02:0:b0:54c:2723:560d with SMTP id
- q2-20020a0dec02000000b0054c2723560dmr10855123ywn.3.1681782110238; Mon, 17 Apr
- 2023 18:41:50 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 18:40:26 -0700
+ (user=drosen job=sendgmr) by 2002:a81:a807:0:b0:552:f777:88ce with SMTP id
+ f7-20020a81a807000000b00552f77788cemr2101987ywh.3.1681782101478; Mon, 17 Apr
+ 2023 18:41:41 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 18:40:22 -0700
 In-Reply-To: <20230418014037.2412394-1-drosen@google.com>
 Mime-Version: 1.0
 References: <20230418014037.2412394-1-drosen@google.com>
 X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230418014037.2412394-27-drosen@google.com>
-Subject: [RFC PATCH v3 26/37] bpf: Increase struct_op limits
+Message-ID: <20230418014037.2412394-23-drosen@google.com>
+Subject: [RFC PATCH v3 22/37] fuse-bpf: Add support for FUSE_COPY_FILE_RANGE
 From:   Daniel Rosenberg <drosen@google.com>
 To:     Miklos Szeredi <miklos@szeredi.hu>, bpf@vger.kernel.org,
         Alexei Starovoitov <ast@kernel.org>
@@ -69,61 +69,164 @@ Cc:     Amir Goldstein <amir73il@gmail.com>, linux-kernel@vger.kernel.org,
         Jonathan Corbet <corbet@lwn.net>,
         Joanne Koong <joannelkoong@gmail.com>,
         Mykola Lysenko <mykolal@fb.com>, kernel-team@android.com,
-        Daniel Rosenberg <drosen@google.com>
+        Daniel Rosenberg <drosen@google.com>,
+        Paul Lawrence <paullawrence@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fuse bpf goes a bit past the '64' limit here, although in reality, this
-limit seems to be more like 37. After 37, we start overrunning the
-safety checks while setting up the trampoline.
-
-This simply doubles some of these values. This will have the same issue,
-as we'll run out of space way before hitting the 128 limit, but for now
-that unblocks fuse-bpf.
+This adds backing support for FUSE_COPY_FILE_RANGE
 
 Signed-off-by: Daniel Rosenberg <drosen@google.com>
+Signed-off-by: Paul Lawrence <paullawrence@google.com>
 ---
- include/linux/bpf.h         | 2 +-
- kernel/bpf/bpf_struct_ops.c | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ fs/fuse/backing.c | 87 +++++++++++++++++++++++++++++++++++++++++++++++
+ fs/fuse/file.c    |  4 +++
+ fs/fuse/fuse_i.h  | 10 ++++++
+ 3 files changed, 101 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 18b592fde896..c006f823e634 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1537,7 +1537,7 @@ struct bpf_link_primer {
- struct bpf_struct_ops_value;
- struct btf_member;
+diff --git a/fs/fuse/backing.c b/fs/fuse/backing.c
+index 6a6130a16d2b..928b24db2303 100644
+--- a/fs/fuse/backing.c
++++ b/fs/fuse/backing.c
+@@ -801,6 +801,93 @@ int fuse_bpf_lseek(loff_t *out, struct inode *inode, struct file *file, loff_t o
+ 				file, offset, whence);
+ }
  
--#define BPF_STRUCT_OPS_MAX_NR_MEMBERS 64
-+#define BPF_STRUCT_OPS_MAX_NR_MEMBERS 128
- struct bpf_struct_ops {
- 	const struct bpf_verifier_ops *verifier_ops;
- 	int (*init)(struct btf *btf);
-diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-index d3f0a4825fa6..deb9eecaf1e4 100644
---- a/kernel/bpf/bpf_struct_ops.c
-+++ b/kernel/bpf/bpf_struct_ops.c
-@@ -417,7 +417,7 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
- 	udata = &uvalue->data;
- 	kdata = &kvalue->data;
- 	image = st_map->image;
--	image_end = st_map->image + PAGE_SIZE;
-+	image_end = st_map->image + 2 * PAGE_SIZE;
++struct fuse_copy_file_range_args {
++	struct fuse_copy_file_range_in in;
++	struct fuse_write_out out;
++};
++
++static int fuse_copy_file_range_initialize_in(struct bpf_fuse_args *fa,
++					      struct fuse_copy_file_range_args *args,
++					      struct file *file_in, loff_t pos_in, struct file *file_out,
++					      loff_t pos_out, size_t len, unsigned int flags)
++{
++	struct fuse_file *fuse_file_in = file_in->private_data;
++	struct fuse_file *fuse_file_out = file_out->private_data;
++
++	args->in = (struct fuse_copy_file_range_in) {
++		.fh_in = fuse_file_in->fh,
++		.off_in = pos_in,
++		.nodeid_out = fuse_file_out->nodeid,
++		.fh_out = fuse_file_out->fh,
++		.off_out = pos_out,
++		.len = len,
++		.flags = flags,
++	};
++
++	*fa = (struct bpf_fuse_args) {
++		.info = (struct bpf_fuse_meta_info) {
++			.nodeid = get_node_id(file_in->f_inode),
++			.opcode = FUSE_COPY_FILE_RANGE,
++		},
++		.in_numargs = 1,
++		.in_args[0].size = sizeof(args->in),
++		.in_args[0].value = &args->in,
++	};
++
++	return 0;
++}
++
++static int fuse_copy_file_range_initialize_out(struct bpf_fuse_args *fa,
++					       struct fuse_copy_file_range_args *args,
++					       struct file *file_in, loff_t pos_in, struct file *file_out,
++					       loff_t pos_out, size_t len, unsigned int flags)
++{
++	fa->out_numargs = 1;
++	fa->out_args[0].size = sizeof(args->out);
++	fa->out_args[0].value = &args->out;
++
++	return 0;
++}
++
++static int fuse_copy_file_range_backing(struct bpf_fuse_args *fa, ssize_t *out, struct file *file_in,
++					loff_t pos_in, struct file *file_out, loff_t pos_out, size_t len,
++					unsigned int flags)
++{
++	const struct fuse_copy_file_range_in *fci = fa->in_args[0].value;
++	struct fuse_file *fuse_file_in = file_in->private_data;
++	struct file *backing_file_in = fuse_file_in->backing_file;
++	struct fuse_file *fuse_file_out = file_out->private_data;
++	struct file *backing_file_out = fuse_file_out->backing_file;
++
++	/* TODO: Handle changing of in/out files */
++	if (backing_file_out)
++		*out = vfs_copy_file_range(backing_file_in, fci->off_in, backing_file_out,
++					   fci->off_out, fci->len, fci->flags);
++	else
++		*out = generic_copy_file_range(file_in, pos_in, file_out, pos_out, len,
++					       flags);
++	return 0;
++}
++
++static int fuse_copy_file_range_finalize(struct bpf_fuse_args *fa, ssize_t *out, struct file *file_in,
++					 loff_t pos_in, struct file *file_out, loff_t pos_out, size_t len,
++					 unsigned int flags)
++{
++	return 0;
++}
++
++int fuse_bpf_copy_file_range(ssize_t *out, struct inode *inode, struct file *file_in,
++			     loff_t pos_in, struct file *file_out, loff_t pos_out, size_t len,
++			     unsigned int flags)
++{
++	return bpf_fuse_backing(inode, struct fuse_copy_file_range_args, out,
++				fuse_copy_file_range_initialize_in,
++				fuse_copy_file_range_initialize_out,
++				fuse_copy_file_range_backing,
++				fuse_copy_file_range_finalize,
++				file_in, pos_in, file_out, pos_out, len, flags);
++}
++
+ static int fuse_fsync_initialize_in(struct bpf_fuse_args *fa, struct fuse_fsync_in *in,
+ 				    struct file *file, loff_t start, loff_t end, int datasync)
+ {
+diff --git a/fs/fuse/file.c b/fs/fuse/file.c
+index a4a0aeb28e4a..8179afe28c6f 100644
+--- a/fs/fuse/file.c
++++ b/fs/fuse/file.c
+@@ -3199,6 +3199,10 @@ static ssize_t __fuse_copy_file_range(struct file *file_in, loff_t pos_in,
+ 	bool is_unstable = (!fc->writeback_cache) &&
+ 			   ((pos_out + len) > inode_out->i_size);
  
- 	for_each_member(i, t, member) {
- 		const struct btf_type *mtype, *ptype;
-@@ -688,7 +688,7 @@ static struct bpf_map *bpf_struct_ops_map_alloc(union bpf_attr *attr)
- 	st_map->links =
- 		bpf_map_area_alloc(btf_type_vlen(t) * sizeof(struct bpf_links *),
- 				   NUMA_NO_NODE);
--	st_map->image = bpf_jit_alloc_exec(PAGE_SIZE);
-+	st_map->image = bpf_jit_alloc_exec(2 * PAGE_SIZE);
- 	if (!st_map->uvalue || !st_map->links || !st_map->image) {
- 		__bpf_struct_ops_map_free(map);
- 		return ERR_PTR(-ENOMEM);
++	if (fuse_bpf_copy_file_range(&err, file_inode(file_in), file_in, pos_in,
++				     file_out, pos_out, len, flags))
++		return err;
++
+ 	if (fc->no_copy_file_range)
+ 		return -EOPNOTSUPP;
+ 
+diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
+index 17899a1fe885..74540f308636 100644
+--- a/fs/fuse/fuse_i.h
++++ b/fs/fuse/fuse_i.h
+@@ -1421,6 +1421,9 @@ int fuse_bpf_release(int *out, struct inode *inode, struct file *file);
+ int fuse_bpf_releasedir(int *out, struct inode *inode, struct file *file);
+ int fuse_bpf_flush(int *out, struct inode *inode, struct file *file, fl_owner_t id);
+ int fuse_bpf_lseek(loff_t *out, struct inode *inode, struct file *file, loff_t offset, int whence);
++int fuse_bpf_copy_file_range(ssize_t *out, struct inode *inode, struct file *file_in, loff_t pos_in,
++			     struct file *file_out, loff_t pos_out,
++			     size_t len, unsigned int flags);
+ int fuse_bpf_fsync(int *out, struct inode *inode, struct file *file, loff_t start, loff_t end, int datasync);
+ int fuse_bpf_dir_fsync(int *out, struct inode *inode, struct file *file, loff_t start, loff_t end, int datasync);
+ int fuse_bpf_file_read_iter(ssize_t *out, struct inode *inode, struct kiocb *iocb, struct iov_iter *to);
+@@ -1500,6 +1503,13 @@ static inline int fuse_bpf_lseek(loff_t *out, struct inode *inode, struct file *
+ 	return 0;
+ }
+ 
++static inline int fuse_bpf_copy_file_range(ssize_t *out, struct inode *inode, struct file *file_in, loff_t pos_in,
++					   struct file *file_out, loff_t pos_out,
++					   size_t len, unsigned int flags)
++{
++	return 0;
++}
++
+ static inline int fuse_bpf_fsync(int *out, struct inode *inode, struct file *file, loff_t start, loff_t end, int datasync)
+ {
+ 	return 0;
 -- 
 2.40.0.634.g4ca3ef3211-goog
 
