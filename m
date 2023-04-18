@@ -2,195 +2,159 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 534DEC77B78
-	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 14:56:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB6CDC77B7E
+	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 15:32:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbjDRO4X (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Apr 2023 10:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53504 "EHLO
+        id S229849AbjDRPcE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Apr 2023 11:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbjDRO4O (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 18 Apr 2023 10:56:14 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8273BBA6
-        for <bpf@vger.kernel.org>; Tue, 18 Apr 2023 07:55:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681829752; x=1713365752;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=dqilThP98GsGzzzSbGhKj2QyhNyDzOGW9K6xICagjNw=;
-  b=YmQRhhWBginO1RVWcQPBDD354Etp9aew3fTyzgDkbXVa+XBBWo4fPR4P
-   xF0NjBRGvpswtEpgRSgQ1NBsR7Bz9YyTIp1GwjfjPnxRPT9FpfIO95QPd
-   38sQ/VrE5xF7d+Z2ZIVq1JZje3dyOWAcoVNtp6QJcwxeChRns+Ff2KWe/
-   xgNAVVPy+iy3xWF+PyDYYmUgIHJaW3SsZ4eztcUlNRsWRlasFBUSz/1da
-   x+WiyLBMEvPvA0zJ43AGHIUTUGRDJZ8RsB+2rWbXcprYZ/uCsBvWj9PDz
-   DP4SXCogoSZhgBDOvu6NSFCJkgiOGePZzU8LRlxpF2Soel/+nxR+IsSF8
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="408097078"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="408097078"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 07:53:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="780522640"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="780522640"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by FMSMGA003.fm.intel.com with ESMTP; 18 Apr 2023 07:53:45 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 18 Apr 2023 07:53:45 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Tue, 18 Apr 2023 07:53:45 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Tue, 18 Apr 2023 07:53:45 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IqW0Y/485laTQXhINAfsoBvi5WGYyzmfkm04+bPuq7zpUeeV9EDqdfpr0K/8BcsGtjmDOB8Stb591BpZFpqVEJvACnv3yjIJPHZZADH5BhjUWEegSy3ijWvzY+ytyxSNSavZriJqx7lYhIa7RfXBL8WVwtF0BymlFS9Ij3ATAzJkeOveP+TB2p+ZOuB7wv719+jppCkV2ZINkfhT4JR2uu0gsIhYUhGryPH4FLVIux1BO+be87/nHXgwkvGZo9NS6ITeyljpNYL/h09w8pFmbyIn/zV1aJ7ZS9h6/58F346wtct+Lx1LpcSX/lm1gH9pqiXTTVkq79i2IZugB+lxtw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dqilThP98GsGzzzSbGhKj2QyhNyDzOGW9K6xICagjNw=;
- b=J9OuX2bcpg85icgY7iEvB8jQ60kh5heOvAyAJ7TtH3e0LYvh7e7OvyTZYaNAQAWt9St6g7c6csxZW+r8WgJ1N1iUALlvLJjBfoBgfMKfUJ9GiwNX0DlDbcc1T6vmcpDmJMjLfNT2tjhqPE/Rm1CRgzirZzf4tP04+5hnXbz9/V3LcY77BNRX9tEjssAWyHJCnaStmrNAHT+aEKjqbmfy0SmTO4unahHzatmNhheuPgHb2xU86k5pO8c3kx5NrA+qSP39bvRc7mxZy9frYxwljnIqfxnnK6wB/moQPai5VH/dN9zIpNQAyrNtgD4WEwxckOdwjtMLJP9bQZ/O60GvFA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from PH0PR11MB5830.namprd11.prod.outlook.com (2603:10b6:510:129::20)
- by BN9PR11MB5244.namprd11.prod.outlook.com (2603:10b6:408:135::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Tue, 18 Apr
- 2023 14:53:40 +0000
-Received: from PH0PR11MB5830.namprd11.prod.outlook.com
- ([fe80::1c4e:86ae:810d:1fee]) by PH0PR11MB5830.namprd11.prod.outlook.com
- ([fe80::1c4e:86ae:810d:1fee%2]) with mapi id 15.20.6298.045; Tue, 18 Apr 2023
- 14:53:40 +0000
-From:   "Song, Yoong Siang" <yoong.siang.song@intel.com>
-To:     "Brouer, Jesper" <brouer@redhat.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        =?utf-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-CC:     "Brouer, Jesper" <brouer@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "martin.lau@kernel.org" <martin.lau@kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "Lobakin, Aleksander" <aleksander.lobakin@intel.com>,
-        "Zaremba, Larysa" <larysa.zaremba@intel.com>,
-        "xdp-hints@xdp-project.net" <xdp-hints@xdp-project.net>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "hawk@kernel.org" <hawk@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>
-Subject: RE: [PATCH bpf-next V2 0/5] XDP-hints: XDP kfunc metadata for driver
- igc
-Thread-Topic: [PATCH bpf-next V2 0/5] XDP-hints: XDP kfunc metadata for driver
- igc
-Thread-Index: AQHZcfoI9V6NvnDgXkCLqXnH5km0Xq8xJpLg
-Date:   Tue, 18 Apr 2023 14:53:40 +0000
-Message-ID: <PH0PR11MB583075A0520F8760657FC4BED89D9@PH0PR11MB5830.namprd11.prod.outlook.com>
-References: <168182460362.616355.14591423386485175723.stgit@firesoul>
-In-Reply-To: <168182460362.616355.14591423386485175723.stgit@firesoul>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR11MB5830:EE_|BN9PR11MB5244:EE_
-x-ms-office365-filtering-correlation-id: 0d859540-d99c-4399-fcfd-08db401cb27a
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: EVQh/bg25bYp6uKmzHkCV0FTW2Ah2jjPMwlEXgt1uG3zSFT8/qhUecU/EwCSEJQnpaNutS6ND5oUEZaNAQt4pOQwx72+BzNxBUYdhKrbzYkYAmDD5n3ohZcu/z4wtCnKQ84Dru+GF98Hvf0uyyHA/ZYM2dr1+dXiGbcFby949U10wFfOTEhMrkCBVb5a6I705D3J7c4XxlikgKHKcM0PJKQVxJ8acY1xRqYe+KneuK8ptVClTExRzer3jSHGr9jwnYzYtLl/wGJLKKzDN+haMKE0sgTPoK06yd2xe//bEnOWD/ugNXlVz4CZflwn+R3GDKsJEt1taviKbrYObpisgv4bDQHgmnCO1Aw6ulGWjRluT32OGMfpk30bwm2phEtH5sdUeiStECpDMjgZJA2OeMp4zVlSn0JJPd0EcetLHon39ea+6CKXZpwc+N3MENlcGOt7vbCGMGxxGSdBayd98r9+r5uUDAGqk/hnLLGCoBytigqWt+nTbO96ZjVAKNfppPiDIQL69r45TKWgzOcVb9njMXCBwU+fckOk5a3rYRUKzT/bHAgvzC55LlcJwxbk6hWXCNQLfSTHMNRYazByjQE4ZN8/RiKXFpGLhx93Y5ECKV0hqxx3IrBnpFrwzuJG
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5830.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(366004)(136003)(346002)(376002)(39860400002)(451199021)(7416002)(52536014)(5660300002)(86362001)(83380400001)(55236004)(186003)(9686003)(53546011)(122000001)(82960400001)(26005)(6506007)(38100700002)(8676002)(38070700005)(8936002)(33656002)(478600001)(54906003)(110136005)(7696005)(71200400001)(316002)(55016003)(76116006)(41300700001)(66446008)(66476007)(66556008)(4326008)(64756008)(66946007)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?V0ozLzFKMFVYVnQ2UFEwUmJKem9aSWRhbFBCVnhIdXZyeFFBeVB1dko4OU5O?=
- =?utf-8?B?VDFORmxiNTF0QUlvaGhnR0NjU2NVbkZMOVlDSFM3bHQyWHhMYmIrdHNUK05H?=
- =?utf-8?B?VkJPTHFaSGdzMXp3bCsza3QyemdSZTY5ZG1WZlArYUFZL3dKQkR6TitwTi9O?=
- =?utf-8?B?OUxGTUJ2VzBTZE15SXpkbDVZeDJMV2VwZVlXbHd0bGVoSUgrVTBVYXhNTG1D?=
- =?utf-8?B?Y3BoMllnRDFTT0k3SitXV0JtWTYxem9VNC94aU12QURlYk0xaHZZNVFsWEJT?=
- =?utf-8?B?dFh4em5mOGMwNmdSYjhzWm5CaHhJWmhtNU9VUG01ZndrbG4xb2dVamxON1ZV?=
- =?utf-8?B?emlCQUNKWWZwWVRUUWk1dHg4a2tKYVFSbzROT3NHYmRpbm9kWmVYMkw0TXFR?=
- =?utf-8?B?SnQ4T2xFWGJyTDI2V2cvRUhJKzJqMjl5ckEyRnB6bDVpcG1Pd3JNYm93Qi9P?=
- =?utf-8?B?NHNBZ1BBN1pHSDl2aC95L09oTjcwcTlYanB1Y0VsZ1gyREdrRFpTQ251cmdD?=
- =?utf-8?B?Z0h3eE1CS2RvempPZy82MTdUWlp0TzZXdW5sVEhSUUZaUVhFeVN6aE1aZEhQ?=
- =?utf-8?B?S0NTZzRxR0gvNmtNVkRSUUpWS3lQemYwK3B6UWg1SGltc2NLbENURXJDa3Qx?=
- =?utf-8?B?OU5peWx3aEtadktKVEhSNGhBbEY4eThSVDA5ODAvZEpnclNEMjg3YkJLd3dQ?=
- =?utf-8?B?alkwMisyYXMrNG01eHlOdzh1NG1vQ1hDY05ISjhzN2tiSU8rN1NXSEp0Ky9C?=
- =?utf-8?B?aEJUTmQ5NkUwa2tvbEdZTWovYjhKUzBiR0Z1eVZLLy83WDZIM2xJVUhVSlNJ?=
- =?utf-8?B?cTZXeUxOZUxjZDBNNFJoeFo5VnFlMWIwTTZhNTlaaWJTYTB2RWFZS0FrNTU1?=
- =?utf-8?B?ZEREU1JSa045empnaWx0K0tiNTNjcVUrS2k2Y3pGUlo3cFhaalRxL2JBRzRo?=
- =?utf-8?B?OXkwMmxYcVFzOTVYc3BORG51dHVXSXA0cC9WbUVqT0dNMVRmMGk1RTh2cWM3?=
- =?utf-8?B?YkFqelhHU1lOUXBVZU5iRis5dVlSS045QTNvdkN1alM4QWpmdUtobFlsK2Zv?=
- =?utf-8?B?TWVGK0ZzeDVOVHo3THpuc1dSbzhPQmNVQUZlQ2RJanh5d3lXaitHZm4xTW12?=
- =?utf-8?B?MEd5ak5Wc3VFMHB0WERUM3F5VlFQbXJDMlpwMlpnTTYwdUw0eU41TFluYlJN?=
- =?utf-8?B?VXJ0SzJnWG5QVExIbGRtSTI1ZlJYOTJIQTRMQStRUmozUytmWjY0aUhVaDkw?=
- =?utf-8?B?cTE2ejFSRlRkK3JqaE1GWkpXUU4vQnFZOGt4bGZKN1Y4NnhlVTdOWXZOekh0?=
- =?utf-8?B?SUlYektud3lVNHVnMWFZNFhlOG4zSWRRRmpyZlM3WnBpWHBFenB0cjdrZTlR?=
- =?utf-8?B?YUlkbk1jQUNYN29OYlZxVzRnU3AvanF0MXpIUEwzU3hEaTUyYm1yWC84b2NZ?=
- =?utf-8?B?UXJCQ3FZUkkwaWMrRERIZkwybWxqTzFTaWFzM21OUEU5b3poQU1EUVRDWXZu?=
- =?utf-8?B?ejJ1WkZwMEtQR1A5bnI1NldnQWJ5c1d1TTFxbmdFMnNoekNrRVdzeSt2NW0z?=
- =?utf-8?B?czdicnl2Y29GY0pMVERXbEN4WXdXalVrOGlWck5ZVHFlMmpKQVdwQzFQc0pP?=
- =?utf-8?B?WVRCOXVaUG5ST1BvbjZiVWhSS2FpSWtLMjZaQWozZmlWNmg3UndkWk8raEVQ?=
- =?utf-8?B?Rm5EV2hSWjV0TkRMRUZvTFQ4TDgxdXZTSnJuaVB2YjdLYU1jcWp4NTlJOUFy?=
- =?utf-8?B?QytRNTJOWlA3YUExNHhzSUJibGlPS2JPRStkNGp2di8xYUdsN1lHVmlndFFB?=
- =?utf-8?B?WXFTR0NrT2RWRVF2dXBTZmR6WXBzbXRQRStwbHhnMm5sbWpXUERFTlRjbTEv?=
- =?utf-8?B?RUx3TDZGc0Zzd2tHUWp6ZFNZRGhXNHhtejMxc3pSZXpXWURuYWt6WEtSZkZl?=
- =?utf-8?B?RERhWU9vSTdjaHN0aEcwTU4xNU5WNi9TSjJITm9Gbk9yWXVNaDhpZUlrakRr?=
- =?utf-8?B?Lys2OEJHMVR0a3RoT1AvRW91MjA5TzFkOW5hYzZmbGxTWCtVZGZKWnZ4QjFU?=
- =?utf-8?B?cXExVnlDM0NQbDJEbFlPVit2cXBvd2ViQnFUcVM0NmFpdWh4V0hGamczckQ4?=
- =?utf-8?B?RE90cjN4VjdBQVBHY1Z6MWVORGVnYngvZkRSa0FHZ25WOTJXTmgybDdkY3ZJ?=
- =?utf-8?B?QUE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S230489AbjDRPcD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 18 Apr 2023 11:32:03 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27477F9
+        for <bpf@vger.kernel.org>; Tue, 18 Apr 2023 08:32:00 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1a667067275so17993085ad.1
+        for <bpf@vger.kernel.org>; Tue, 18 Apr 2023 08:32:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1681831919; x=1684423919;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dsYgtyatiuEOqLnBne2bDMKGwMEmj6cAm3wGjunMDm4=;
+        b=IgcKbO0F3bzCFJtPpStc9tqZpqIvbbNQSzJu5wwgsrO7Re1ijcMiILnmNWbpijDidn
+         cyG9hum43x62GWAdZ2b4dsvQPa9lVQj5KVwgiVn9iNw4+hUwns9Z0zbVpmWoOp4Bcmsh
+         w49pIhs9AVBxs1+BsT0C5sdvf0Ch+Njk78pPdPj2vmxTQEAt7vwSE/K3pmZiHqQGqp7W
+         kyQjGBNGkJ6UuHQVvmmX5HEMFqi3OboapPxo37I6tBkuotCGQicGgYGOAyp/slDq1p0E
+         4AD3oX5wcoGK0tARhw5eZet4Y9sKDbulb7pzQPqTKJrw8NzXrxbwW87AKDuGvhooj9+7
+         3gtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681831919; x=1684423919;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dsYgtyatiuEOqLnBne2bDMKGwMEmj6cAm3wGjunMDm4=;
+        b=fYdpG+oCLkByS3nc05kHck+MfY82gOTxbuk0tybtrTyERnVmLGV5J+naCT8AOL8NtN
+         +xygKcg1F2A6e6T4AWMhdDn0fWwNsUU8zgNyh3SMufpH2ECTIdTcWfxNYAo0TbeMvMsp
+         L2esYCav9c46iVnjXR7KTPpz0njJqyFYyIx8W2PDl7pvpzsVmX4Pn7WVfi0WqJoxTMu7
+         pyBG5S8tSe3aC4D0P6UAXtcfP3YEPVYJaJFjr8oB2J0Lr0WTpuKeBVoxLPQK+7cNgUAa
+         hALglXLAVQep9vjQWsYifXSZYLia4YRYvPWWYGw4ScL/fW3DS0EdszmYAvkDjyAMrRwk
+         GsXg==
+X-Gm-Message-State: AAQBX9esaten1iWBwVX03rni67HSAdmAgLg6hGd7x2vNw2qA89GqQBIP
+        lOqIt7aDWfV2CSkOpZO6p3Y4u2tTKEDlIvx96iM=
+X-Google-Smtp-Source: AKy350bVeua70D1NdAuCZgIaJ0zaitXDh5GElqnwFysk7bEpkUfgMreUjAvPAstAbTXPzMEae0Rfhw==
+X-Received: by 2002:a17:903:1cf:b0:1a0:50bd:31bf with SMTP id e15-20020a17090301cf00b001a050bd31bfmr2766911plh.32.1681831919324;
+        Tue, 18 Apr 2023 08:31:59 -0700 (PDT)
+Received: from localhost.localdomain ([2604:1380:4611:8100::1])
+        by smtp.gmail.com with ESMTPSA id ba4-20020a170902720400b001a647709864sm9769630plb.155.2023.04.18.08.31.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 08:31:58 -0700 (PDT)
+From:   Aditi Ghag <aditi.ghag@isovalent.com>
+To:     bpf@vger.kernel.org
+Cc:     kafai@fb.com, sdf@google.com, edumazet@google.com,
+        aditi.ghag@isovalent.com
+Subject: [PATCH 1/7] bpf: tcp: Avoid taking fast sock lock in iterator
+Date:   Tue, 18 Apr 2023 15:31:42 +0000
+Message-Id: <20230418153148.2231644-2-aditi.ghag@isovalent.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230418153148.2231644-1-aditi.ghag@isovalent.com>
+References: <20230418153148.2231644-1-aditi.ghag@isovalent.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5830.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0d859540-d99c-4399-fcfd-08db401cb27a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Apr 2023 14:53:40.0204
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 07UpyXFS25M4VRmSJ2XX3OqZPo6SPqqO7O/HiQDRSJjvb2EHkIScwxPU6QHa85m99+zq0OFCOls7f9D1ismaR/r1gTT5aHVQSzP7Yf0YrDM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5244
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-T24gVHVlc2RheSwgQXByaWwgMTgsIDIwMjMgOTozMSBQTSwgSmVzcGVyIERhbmdhYXJkIEJyb3Vl
-ciA8YnJvdWVyQHJlZGhhdC5jb20+IHdyb3RlOg0KPkltcGxlbWVudCBib3RoIFJYIGhhc2ggYW5k
-IFJYIHRpbWVzdGFtcCBYRFAgaGludHMga2Z1bmMgbWV0YWRhdGEgZm9yIGRyaXZlcg0KPmlnYy4N
-Cj4NCj5GaXJzdCBwYXRjaCBmaXggUlggaGFzaGluZyBmb3IgaWdjIGluIGdlbmVyYWwuDQo+DQo+
-TGFzdCBwYXRjaCBjaGFuZ2UgdGVzdCBwcm9ncmFtIHhkcF9od19tZXRhZGF0YSB0byB0cmFjayBt
-b3JlIHRpbWVzdGFtcHMsDQo+d2hpY2ggaGVscHMgdXMgY29ycmVsYXRlIHRoZSBoYXJkd2FyZSBS
-WCB0aW1lc3RhbXAgd2l0aCBzb21ldGhpbmcuDQo+DQo+LS0tDQo+VG8gbWFpbnRhaW5lcnM6IEkn
-bSB1bmNlcnRhaW4gd2hpY2ggZ2l0IHRyZWUgdGhpcyBzaG91bGQgYmUgc2VudCBhZ2FpbnN0LiBU
-aGlzIGlzDQo+cHJpbWFyeSBOSUMgZHJpdmVyIGNvZGUgKG5ldC1uZXh0KSwgYnV0IGl0J3MgQlBG
-L1hEUCByZWxhdGVkIChicGYtbmV4dCkgdmlhDQo+eGRwX21ldGFkYXRhX29wcy4NCj4NCj5KZXNw
-ZXIgRGFuZ2FhcmQgQnJvdWVyICg1KToNCj4gICAgICBpZ2M6IGVuYWJsZSBhbmQgZml4IFJYIGhh
-c2ggdXNhZ2UgYnkgbmV0c3RhY2sNCj4gICAgICBpZ2M6IGFkZCBpZ2NfeGRwX2J1ZmYgd3JhcHBl
-ciBmb3IgeGRwX2J1ZmYgaW4gZHJpdmVyDQo+ICAgICAgaWdjOiBhZGQgWERQIGhpbnRzIGtmdW5j
-cyBmb3IgUlggaGFzaA0KPiAgICAgIGlnYzogYWRkIFhEUCBoaW50cyBrZnVuY3MgZm9yIFJYIHRp
-bWVzdGFtcA0KPiAgICAgIHNlbGZ0ZXN0cy9icGY6IHhkcF9od19tZXRhZGF0YSB0cmFjayBtb3Jl
-IHRpbWVzdGFtcHMNCj4NCj4NCj4gZHJpdmVycy9uZXQvZXRoZXJuZXQvaW50ZWwvaWdjL2lnYy5o
-ICAgICAgICAgIHwgIDM1ICsrKysrKw0KPiBkcml2ZXJzL25ldC9ldGhlcm5ldC9pbnRlbC9pZ2Mv
-aWdjX21haW4uYyAgICAgfCAxMTYgKysrKysrKysrKysrKysrKy0tDQo+IC4uLi9zZWxmdGVzdHMv
-YnBmL3Byb2dzL3hkcF9od19tZXRhZGF0YS5jICAgICB8ICAgNCArLQ0KPiB0b29scy90ZXN0aW5n
-L3NlbGZ0ZXN0cy9icGYveGRwX2h3X21ldGFkYXRhLmMgfCAgNDcgKysrKysrLQ0KPiB0b29scy90
-ZXN0aW5nL3NlbGZ0ZXN0cy9icGYveGRwX21ldGFkYXRhLmggICAgfCAgIDEgKw0KPiA1IGZpbGVz
-IGNoYW5nZWQsIDE4NiBpbnNlcnRpb25zKCspLCAxNyBkZWxldGlvbnMoLSkNCj4NCj4tLQ0KDQpU
-aGlzIHBhdGNoc2V0IGxndG0uDQpUaGFua3MgZm9yIHRoZSBjaGFuZ2VzLg0KDQpUaGFua3MgJiBS
-ZWdhcmRzDQpTaWFuZw0K
+Previously, BPF TCP iterator was acquiring fast version of sock lock that
+disables the BH. This introduced a circular dependency with code paths that
+later acquire sockets hash table bucket lock.
+Replace the fast version of sock lock with slow that faciliates BPF
+programs executed from the iterator to destroy TCP listening sockets
+using the bpf_sock_destroy kfunc (implemened in follow-up commits).
+
+Here is a stack trace that motivated this change:
+
+```
+1) sock_lock with BH disabled + bucket lock
+
+lock_acquire+0xcd/0x330
+_raw_spin_lock_bh+0x38/0x50
+inet_unhash+0x96/0xd0
+tcp_set_state+0x6a/0x210
+tcp_abort+0x12b/0x230
+bpf_prog_f4110fb1100e26b5_iter_tcp6_server+0xa3/0xaa
+bpf_iter_run_prog+0x1ff/0x340
+bpf_iter_tcp_seq_show+0xca/0x190
+bpf_seq_read+0x177/0x450
+vfs_read+0xc6/0x300
+ksys_read+0x69/0xf0
+do_syscall_64+0x3c/0x90
+entry_SYSCALL_64_after_hwframe+0x72/0xdc
+
+2) sock lock with BH enable
+
+[    1.499968]   lock_acquire+0xcd/0x330
+[    1.500316]   _raw_spin_lock+0x33/0x40
+[    1.500670]   sk_clone_lock+0x146/0x520
+[    1.501030]   inet_csk_clone_lock+0x1b/0x110
+[    1.501433]   tcp_create_openreq_child+0x22/0x3f0
+[    1.501873]   tcp_v6_syn_recv_sock+0x96/0x940
+[    1.502284]   tcp_check_req+0x137/0x660
+[    1.502646]   tcp_v6_rcv+0xa63/0xe80
+[    1.502994]   ip6_protocol_deliver_rcu+0x78/0x590
+[    1.503434]   ip6_input_finish+0x72/0x140
+[    1.503818]   __netif_receive_skb_one_core+0x63/0xa0
+[    1.504281]   process_backlog+0x79/0x260
+[    1.504668]   __napi_poll.constprop.0+0x27/0x170
+[    1.505104]   net_rx_action+0x14a/0x2a0
+[    1.505469]   __do_softirq+0x165/0x510
+[    1.505842]   do_softirq+0xcd/0x100
+[    1.506172]   __local_bh_enable_ip+0xcc/0xf0
+[    1.506588]   ip6_finish_output2+0x2a8/0xb00
+[    1.506988]   ip6_finish_output+0x274/0x510
+[    1.507377]   ip6_xmit+0x319/0x9b0
+[    1.507726]   inet6_csk_xmit+0x12b/0x2b0
+[    1.508096]   __tcp_transmit_skb+0x549/0xc40
+[    1.508498]   tcp_rcv_state_process+0x362/0x1180
+
+```
+
+Acked-by: Stanislav Fomichev <sdf@google.com>
+Signed-off-by: Aditi Ghag <aditi.ghag@isovalent.com>
+---
+ net/ipv4/tcp_ipv4.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+index ea370afa70ed..f2d370a9450f 100644
+--- a/net/ipv4/tcp_ipv4.c
++++ b/net/ipv4/tcp_ipv4.c
+@@ -2962,7 +2962,6 @@ static int bpf_iter_tcp_seq_show(struct seq_file *seq, void *v)
+ 	struct bpf_iter_meta meta;
+ 	struct bpf_prog *prog;
+ 	struct sock *sk = v;
+-	bool slow;
+ 	uid_t uid;
+ 	int ret;
+ 
+@@ -2970,7 +2969,7 @@ static int bpf_iter_tcp_seq_show(struct seq_file *seq, void *v)
+ 		return 0;
+ 
+ 	if (sk_fullsock(sk))
+-		slow = lock_sock_fast(sk);
++		lock_sock(sk);
+ 
+ 	if (unlikely(sk_unhashed(sk))) {
+ 		ret = SEQ_SKIP;
+@@ -2994,7 +2993,7 @@ static int bpf_iter_tcp_seq_show(struct seq_file *seq, void *v)
+ 
+ unlock:
+ 	if (sk_fullsock(sk))
+-		unlock_sock_fast(sk, slow);
++		release_sock(sk);
+ 	return ret;
+ 
+ }
+-- 
+2.34.1
+
