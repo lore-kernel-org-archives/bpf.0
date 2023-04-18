@@ -2,117 +2,192 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 388B2C6FD18
-	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 18:46:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBA00C77B7E
+	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 19:05:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbjDRSqH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Apr 2023 14:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38282 "EHLO
+        id S232585AbjDRTFM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Apr 2023 15:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjDRSqG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 18 Apr 2023 14:46:06 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA802694
-        for <bpf@vger.kernel.org>; Tue, 18 Apr 2023 11:46:05 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-54fe3cd445aso164785417b3.5
-        for <bpf@vger.kernel.org>; Tue, 18 Apr 2023 11:46:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681843564; x=1684435564;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r5DwDcMLo0kfrF6PYlvResFE41Vi4fcHn5w37kdon8U=;
-        b=NV0gBrk4yCk6tfQ7IEsStcfJAuEhl8MQ45nVbDBaVbgDgSigjD0bK8cCrJSMG2hTNu
-         fzh13sB+/O7hOVcVd2490CsnjYGGZ4xbd2mo6q9x9fKdGQtk25q2AXh7p6+skHraU00+
-         /6yrU0NCza8IM+bvUk6doWhRKx5JWQoa6dZ7f82JoxP+9Ta8x7+dy4yoA0Z04yuspTUA
-         8x4ukQlNeMxwrKCGW12WvGxDVJzlqoKcf/G/R+Q6kAwDZd3OopZGi30yPlHAIDuM4Dfo
-         52x2p/YKtNaoK7KAPguBux6fzl0+USAj2qBsf+mCoSCNJZje7lmd6xgKMnjPoedy5NGY
-         kpCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681843564; x=1684435564;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=r5DwDcMLo0kfrF6PYlvResFE41Vi4fcHn5w37kdon8U=;
-        b=LqTuQiYSnKYkykk68G+JR5QzP3mj3Ba6FKK6pc1nziPoRmZUOp4djTcj8F5YQitEdX
-         ppTzogNSWsGZRJZRKQiMm+/WqXBBCU6gAgFABI4Iw6vB+mnF7sjD1FJ79nPtRCKewtym
-         6h99pzVOYWD+OMjuLYwX1MkjGYCCsVA5zd5o9cqmfmCyeDcHUElYu4Da4X0Dx975xZOH
-         N9iTbe0teM59kEWfTp7O5OzmbuUWaCZBocd4hlwKVHhGekofXhXwApHP4HiIyu3tZOT4
-         CjAcTPVsNlYyCpaXi4bifIgochGdNPjgpjLrK6lvZp8mR2v6kesetu0Bt4rHtt1wqp6a
-         XDEQ==
-X-Gm-Message-State: AAQBX9djv6lxKs+ysSHanba0j6dv0DQOhDdW5IDj7U1jZtX6nE7uCeOZ
-        JBuH9ungdXlDHXdBZJabauuMPsP9+RCnVL7Gcns=
-X-Google-Smtp-Source: AKy350aiIIRdG42LZtX+GGVgeeXp3SECyx6C3nBvkLILarAGpWYWaHllIP//AYJvsRZVg9l3mXbxSd10MMCRSilKqso=
-X-Received: by 2002:a0d:cc81:0:b0:54e:e136:9f6b with SMTP id
- o123-20020a0dcc81000000b0054ee1369f6bmr756700ywd.46.1681843564407; Tue, 18
- Apr 2023 11:46:04 -0700 (PDT)
+        with ESMTP id S231135AbjDRTFK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 18 Apr 2023 15:05:10 -0400
+Received: from mx25lb.world4you.com (mx25lb.world4you.com [81.19.149.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E449619A2;
+        Tue, 18 Apr 2023 12:05:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=khtgD2dlqys33XlLzQIKFbAd+FNZ0CBOijYymTYFaRE=; b=cCDS/cM56dMtlnMQcXqVKSv8PW
+        iQL5oMnxGVubZ4R+bjwMSUGS8aHhBSC5xHMpfbOfmxjPzPH0ja+tYSvhCS4cwecNgUL6HooYKjy5B
+        yyhYu7rbMWlIGtPBeq3hEkb5/BoPAYADm0UUBtEiPQzSZkL8wG1aSXkQ8xGRldkfMPd4=;
+Received: from 88-117-57-231.adsl.highway.telekom.at ([88.117.57.231] helo=hornet.engleder.at)
+        by mx25lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <gerhard@engleder-embedded.com>)
+        id 1poqdW-0002eV-70; Tue, 18 Apr 2023 21:05:06 +0200
+From:   Gerhard Engleder <gerhard@engleder-embedded.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
+        pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com,
+        maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com,
+        Gerhard Engleder <gerhard@engleder-embedded.com>
+Subject: [PATCH net-next v3 1/6] tsnep: Replace modulo operation with mask
+Date:   Tue, 18 Apr 2023 21:04:54 +0200
+Message-Id: <20230418190459.19326-2-gerhard@engleder-embedded.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230418190459.19326-1-gerhard@engleder-embedded.com>
+References: <20230418190459.19326-1-gerhard@engleder-embedded.com>
 MIME-Version: 1.0
-References: <20230418002148.3255690-1-andrii@kernel.org> <20230418002148.3255690-4-andrii@kernel.org>
- <CAADnVQK-JjutrU-TMCh6f9qfcY_9T2mr59+Lzcw5us8KwDEmug@mail.gmail.com>
- <CAEf4BzaGEhszZ-VxB=0YdF989LQNZA-rnuZasEF_BB-Qy_hdNQ@mail.gmail.com> <CAADnVQ+xJ0sFR1E2rqPDVMd3Cf8MxJTHk+q3_65BEYG5_5BZ+w@mail.gmail.com>
-In-Reply-To: <CAADnVQ+xJ0sFR1E2rqPDVMd3Cf8MxJTHk+q3_65BEYG5_5BZ+w@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 18 Apr 2023 11:45:49 -0700
-Message-ID: <CAEf4BzZXhqr3g8FS=w9EEibzfsLYXwYjcGJLtpx=BQFJ-+HfvA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 3/6] libbpf: improve handling of unresolved kfuncs
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Kernel Team <kernel-team@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-AV-Do-Run: Yes
+X-ACL-Warn: X-W4Y-Internal
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 11:14=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue, Apr 18, 2023 at 11:10=E2=80=AFAM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Mon, Apr 17, 2023 at 6:10=E2=80=AFPM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Mon, Apr 17, 2023 at 5:22=E2=80=AFPM Andrii Nakryiko <andrii@kerne=
-l.org> wrote:
-> > > >                                 insn[0].imm =3D ext->ksym.kernel_bt=
-f_id;
-> > > >                                 insn[0].off =3D ext->ksym.btf_fd_id=
-x;
-> > > > -                       } else { /* unresolved weak kfunc */
-> > > > -                               insn[0].imm =3D 0;
-> > > > -                               insn[0].off =3D 0;
-> > > > +                       } else { /* unresolved weak kfunc call */
-> > > > +                               poison_kfunc_call(prog, i, relo->in=
-sn_idx, insn,
-> > > > +                                                 relo->ext_idx, ex=
-t);
-> > >
-> > > With that done should we remove:
-> > >     /* skip for now, but return error when we find this in fixup_kfun=
-c_call */
-> > >     if (!insn->imm)
-> > >           return 0;
-> > > in check_kfunc_call()...
-> > >
-> > > and  if (!func_id && !offset) in add_kfunc_call() ?
-> > >
-> > > That was added in commit a5d827275241 ("bpf: Be conservative while
-> > > processing invalid kfunc calls")
-> >
-> > I guess?.. I don't know if there was any other situation that this fix
-> > was handling, but if it's only due to unresolved kfuncs by libbpf,
-> > then yep.
->
-> It was specifically to support weak kfunc with imm=3D=3D0 off=3D=3D0.
-> With libbpf doing poisoning and converting call kfunc into call
-> unknown helper that code is no longer needed.
-> The question is whether we should try to support new kernel plus old
-> libbpf combination.
+TX/RX ring size is static and power of 2 to enable compiler to optimize
+modulo operation to mask operation. Make this optimization already in
+the code and don't rely on the compiler.
 
-Let's drop this kernel-side kludge. I don't believe anyone is actively
-using __weak kfuncs yet, so it doesn't seem like it will hurt anyone.
-But let's do it in a follow up if the series is good to go as is.
+Signed-off-by: Gerhard Engleder <gerhard@engleder-embedded.com>
+---
+ drivers/net/ethernet/engleder/tsnep.h      |  1 +
+ drivers/net/ethernet/engleder/tsnep_main.c | 28 +++++++++++-----------
+ 2 files changed, 15 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/net/ethernet/engleder/tsnep.h b/drivers/net/ethernet/engleder/tsnep.h
+index 058c2bcf31a7..1de26aec78d3 100644
+--- a/drivers/net/ethernet/engleder/tsnep.h
++++ b/drivers/net/ethernet/engleder/tsnep.h
+@@ -18,6 +18,7 @@
+ #define TSNEP "tsnep"
+ 
+ #define TSNEP_RING_SIZE 256
++#define TSNEP_RING_MASK (TSNEP_RING_SIZE - 1)
+ #define TSNEP_RING_RX_REFILL 16
+ #define TSNEP_RING_RX_REUSE (TSNEP_RING_SIZE - TSNEP_RING_SIZE / 4)
+ #define TSNEP_RING_ENTRIES_PER_PAGE (PAGE_SIZE / TSNEP_DESC_SIZE)
+diff --git a/drivers/net/ethernet/engleder/tsnep_main.c b/drivers/net/ethernet/engleder/tsnep_main.c
+index ed1b6102cfeb..3d15e673894a 100644
+--- a/drivers/net/ethernet/engleder/tsnep_main.c
++++ b/drivers/net/ethernet/engleder/tsnep_main.c
+@@ -292,7 +292,7 @@ static int tsnep_tx_ring_init(struct tsnep_tx *tx)
+ 	}
+ 	for (i = 0; i < TSNEP_RING_SIZE; i++) {
+ 		entry = &tx->entry[i];
+-		next_entry = &tx->entry[(i + 1) % TSNEP_RING_SIZE];
++		next_entry = &tx->entry[(i + 1) & TSNEP_RING_MASK];
+ 		entry->desc->next = __cpu_to_le64(next_entry->desc_dma);
+ 	}
+ 
+@@ -381,7 +381,7 @@ static int tsnep_tx_map(struct sk_buff *skb, struct tsnep_tx *tx, int count)
+ 	int i;
+ 
+ 	for (i = 0; i < count; i++) {
+-		entry = &tx->entry[(tx->write + i) % TSNEP_RING_SIZE];
++		entry = &tx->entry[(tx->write + i) & TSNEP_RING_MASK];
+ 
+ 		if (!i) {
+ 			len = skb_headlen(skb);
+@@ -419,7 +419,7 @@ static int tsnep_tx_unmap(struct tsnep_tx *tx, int index, int count)
+ 	int i;
+ 
+ 	for (i = 0; i < count; i++) {
+-		entry = &tx->entry[(index + i) % TSNEP_RING_SIZE];
++		entry = &tx->entry[(index + i) & TSNEP_RING_MASK];
+ 
+ 		if (entry->len) {
+ 			if (entry->type & TSNEP_TX_TYPE_SKB)
+@@ -481,9 +481,9 @@ static netdev_tx_t tsnep_xmit_frame_ring(struct sk_buff *skb,
+ 		skb_shinfo(skb)->tx_flags |= SKBTX_IN_PROGRESS;
+ 
+ 	for (i = 0; i < count; i++)
+-		tsnep_tx_activate(tx, (tx->write + i) % TSNEP_RING_SIZE, length,
++		tsnep_tx_activate(tx, (tx->write + i) & TSNEP_RING_MASK, length,
+ 				  i == count - 1);
+-	tx->write = (tx->write + count) % TSNEP_RING_SIZE;
++	tx->write = (tx->write + count) & TSNEP_RING_MASK;
+ 
+ 	skb_tx_timestamp(skb);
+ 
+@@ -516,7 +516,7 @@ static int tsnep_xdp_tx_map(struct xdp_frame *xdpf, struct tsnep_tx *tx,
+ 	frag = NULL;
+ 	len = xdpf->len;
+ 	for (i = 0; i < count; i++) {
+-		entry = &tx->entry[(tx->write + i) % TSNEP_RING_SIZE];
++		entry = &tx->entry[(tx->write + i) & TSNEP_RING_MASK];
+ 		if (type & TSNEP_TX_TYPE_XDP_NDO) {
+ 			data = unlikely(frag) ? skb_frag_address(frag) :
+ 						xdpf->data;
+@@ -589,9 +589,9 @@ static bool tsnep_xdp_xmit_frame_ring(struct xdp_frame *xdpf,
+ 	length = retval;
+ 
+ 	for (i = 0; i < count; i++)
+-		tsnep_tx_activate(tx, (tx->write + i) % TSNEP_RING_SIZE, length,
++		tsnep_tx_activate(tx, (tx->write + i) & TSNEP_RING_MASK, length,
+ 				  i == count - 1);
+-	tx->write = (tx->write + count) % TSNEP_RING_SIZE;
++	tx->write = (tx->write + count) & TSNEP_RING_MASK;
+ 
+ 	/* descriptor properties shall be valid before hardware is notified */
+ 	dma_wmb();
+@@ -691,7 +691,7 @@ static bool tsnep_tx_poll(struct tsnep_tx *tx, int napi_budget)
+ 		/* xdpf is union with skb */
+ 		entry->skb = NULL;
+ 
+-		tx->read = (tx->read + count) % TSNEP_RING_SIZE;
++		tx->read = (tx->read + count) & TSNEP_RING_MASK;
+ 
+ 		tx->packets++;
+ 		tx->bytes += length + ETH_FCS_LEN;
+@@ -839,7 +839,7 @@ static int tsnep_rx_ring_init(struct tsnep_rx *rx)
+ 
+ 	for (i = 0; i < TSNEP_RING_SIZE; i++) {
+ 		entry = &rx->entry[i];
+-		next_entry = &rx->entry[(i + 1) % TSNEP_RING_SIZE];
++		next_entry = &rx->entry[(i + 1) & TSNEP_RING_MASK];
+ 		entry->desc->next = __cpu_to_le64(next_entry->desc_dma);
+ 	}
+ 
+@@ -925,7 +925,7 @@ static int tsnep_rx_refill(struct tsnep_rx *rx, int count, bool reuse)
+ 	int retval;
+ 
+ 	for (i = 0; i < count && !alloc_failed; i++) {
+-		index = (rx->write + i) % TSNEP_RING_SIZE;
++		index = (rx->write + i) & TSNEP_RING_MASK;
+ 
+ 		retval = tsnep_rx_alloc_buffer(rx, index);
+ 		if (unlikely(retval)) {
+@@ -945,7 +945,7 @@ static int tsnep_rx_refill(struct tsnep_rx *rx, int count, bool reuse)
+ 	}
+ 
+ 	if (enable) {
+-		rx->write = (rx->write + i) % TSNEP_RING_SIZE;
++		rx->write = (rx->write + i) & TSNEP_RING_MASK;
+ 
+ 		/* descriptor properties shall be valid before hardware is
+ 		 * notified
+@@ -1090,7 +1090,7 @@ static int tsnep_rx_poll(struct tsnep_rx *rx, struct napi_struct *napi,
+ 				 * empty RX ring, thus buffer cannot be used for
+ 				 * RX processing
+ 				 */
+-				rx->read = (rx->read + 1) % TSNEP_RING_SIZE;
++				rx->read = (rx->read + 1) & TSNEP_RING_MASK;
+ 				desc_available++;
+ 
+ 				rx->dropped++;
+@@ -1117,7 +1117,7 @@ static int tsnep_rx_poll(struct tsnep_rx *rx, struct napi_struct *napi,
+ 		 */
+ 		length -= TSNEP_RX_INLINE_METADATA_SIZE;
+ 
+-		rx->read = (rx->read + 1) % TSNEP_RING_SIZE;
++		rx->read = (rx->read + 1) & TSNEP_RING_MASK;
+ 		desc_available++;
+ 
+ 		if (prog) {
+-- 
+2.30.2
+
