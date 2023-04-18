@@ -2,44 +2,42 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29AC2C77B7F
-	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 19:05:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E45B0C77B7D
+	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 19:05:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232647AbjDRTFN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Apr 2023 15:05:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49716 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232546AbjDRTFM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S231727AbjDRTFM (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 18 Apr 2023 15:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232239AbjDRTFL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 18 Apr 2023 15:05:11 -0400
 Received: from mx25lb.world4you.com (mx25lb.world4you.com [81.19.149.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BC38E;
-        Tue, 18 Apr 2023 12:05:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E445FFB;
+        Tue, 18 Apr 2023 12:05:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=WXholCdDSFyDOnnZacgpwkrBGQRbCLY+pt3CFNncoBs=; b=w0MZYuuviijtTLZw/4D+tbIUei
-        o16gjVRDr9fC1az/HUXpyEp7gxsX9hMiQvRxth1szwvbvSCtBQCuyqT/JuZuPGdvxu5kVgJAlb0RX
-        rAfmD4ggyB2qhqSsGIlxeY5FpCjboLESoy2nal8WFD6tv3+OR43kAo15K4J7d03x40Gg=;
-Received: from 88-117-57-231.adsl.highway.telekom.at ([88.117.57.231] helo=hornet.engleder.at)
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=dsBWyfGRaFvX7bIHHJWds7X5trT0UrnBIVsiGmf6RdM=; b=soFGLSpHumQkc4ve8OtnLiww60
+        3e01a2d5lfxFHksFu0e0tqee4Bg3HkOlvR0VdC71SAscGzi/Yd6HkuD4PeX2ZTHYkuvKsXRmRvcGl
+        ElOF7d2K4O1rLLjzaL7rUJhL4m4A9GT1g73nbNmMkAEFQeX+aDTM7LhyuItNC+A2GQwY=;
+Received: from [88.117.57.231] (helo=hornet.engleder.at)
         by mx25lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <gerhard@engleder-embedded.com>)
-        id 1poqdY-0002eV-0G; Tue, 18 Apr 2023 21:05:08 +0200
+        id 1poqdV-0002eV-I9; Tue, 18 Apr 2023 21:05:05 +0200
 From:   Gerhard Engleder <gerhard@engleder-embedded.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
         pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com,
         maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com,
         Gerhard Engleder <gerhard@engleder-embedded.com>
-Subject: [PATCH net-next v3 4/6] tsnep: Move skb receive action to separate function
-Date:   Tue, 18 Apr 2023 21:04:57 +0200
-Message-Id: <20230418190459.19326-5-gerhard@engleder-embedded.com>
+Subject: [PATCH net-next v3 0/6] tsnep: XDP socket zero-copy support
+Date:   Tue, 18 Apr 2023 21:04:53 +0200
+Message-Id: <20230418190459.19326-1-gerhard@engleder-embedded.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230418190459.19326-1-gerhard@engleder-embedded.com>
-References: <20230418190459.19326-1-gerhard@engleder-embedded.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-AV-Do-Run: Yes
@@ -48,79 +46,50 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The function tsnep_rx_poll() is already pretty long and the skb receive
-action can be reused for XSK zero-copy support. Move page based skb
-receive to separate function.
+Implement XDP socket zero-copy support for tsnep driver. I tried to
+follow existing drivers like igc as far as possible. But one main
+difference is that tsnep does not need any reconfiguration for XDP BPF
+program setup. So I decided to keep this behavior no matter if a XSK
+pool is used or not. As a result, tsnep starts using the XSK pool even
+if no XDP BPF program is available.
 
-Signed-off-by: Gerhard Engleder <gerhard@engleder-embedded.com>
----
- drivers/net/ethernet/engleder/tsnep_main.c | 39 +++++++++++++---------
- 1 file changed, 23 insertions(+), 16 deletions(-)
+Another difference is that I tried to prevent potentially failing
+allocations during XSK pool setup. E.g. both memory models for page pool
+and XSK pool are registered all the time. Thus, XSK pool setup cannot
+end up with not working queues.
 
-diff --git a/drivers/net/ethernet/engleder/tsnep_main.c b/drivers/net/ethernet/engleder/tsnep_main.c
-index 039629af6a43..2db94b96a1f0 100644
---- a/drivers/net/ethernet/engleder/tsnep_main.c
-+++ b/drivers/net/ethernet/engleder/tsnep_main.c
-@@ -1076,6 +1076,28 @@ static struct sk_buff *tsnep_build_skb(struct tsnep_rx *rx, struct page *page,
- 	return skb;
- }
- 
-+static void tsnep_rx_page(struct tsnep_rx *rx, struct napi_struct *napi,
-+			  struct page *page, int length)
-+{
-+	struct sk_buff *skb;
-+
-+	skb = tsnep_build_skb(rx, page, length);
-+	if (skb) {
-+		page_pool_release_page(rx->page_pool, page);
-+
-+		rx->packets++;
-+		rx->bytes += length;
-+		if (skb->pkt_type == PACKET_MULTICAST)
-+			rx->multicast++;
-+
-+		napi_gro_receive(napi, skb);
-+	} else {
-+		page_pool_recycle_direct(rx->page_pool, page);
-+
-+		rx->dropped++;
-+	}
-+}
-+
- static int tsnep_rx_poll(struct tsnep_rx *rx, struct napi_struct *napi,
- 			 int budget)
- {
-@@ -1085,7 +1107,6 @@ static int tsnep_rx_poll(struct tsnep_rx *rx, struct napi_struct *napi,
- 	struct netdev_queue *tx_nq;
- 	struct bpf_prog *prog;
- 	struct xdp_buff xdp;
--	struct sk_buff *skb;
- 	struct tsnep_tx *tx;
- 	int desc_available;
- 	int xdp_status = 0;
-@@ -1170,21 +1191,7 @@ static int tsnep_rx_poll(struct tsnep_rx *rx, struct napi_struct *napi,
- 			}
- 		}
- 
--		skb = tsnep_build_skb(rx, entry->page, length);
--		if (skb) {
--			page_pool_release_page(rx->page_pool, entry->page);
--
--			rx->packets++;
--			rx->bytes += length;
--			if (skb->pkt_type == PACKET_MULTICAST)
--				rx->multicast++;
--
--			napi_gro_receive(napi, skb);
--		} else {
--			page_pool_recycle_direct(rx->page_pool, entry->page);
--
--			rx->dropped++;
--		}
-+		tsnep_rx_page(rx, napi, entry->page, length);
- 		entry->page = NULL;
- 	}
- 
+Some prework is done to reduce the last two XSK commits to actual XSK
+changes.
+
+v3:
+- use __netif_tx_lock_bh() (Paolo Abeni)
+- comment that rx->page_buffer is always zero terminated (Paolo Abeni)
+
+v2:
+- eliminate modulo op in TX/RX path (Maciej Fijalkowski)
+- eliminate retval variable in tsnep_rx_alloc_zc() (Maciej Fijalkowski)
+- scope variable entry within loop (Maciej Fijalkowski)
+- use DMA_ATTR_SKIP_CPU_SYNC directly (Maciej Fijalkowski)
+- union for page/xdp in tsnep_rx_entry (Maciej Fijalkowski)
+- provide performance numbers (Maciej Fijalkowski)
+- use xsk_buff_alloc_batch() (Maciej Fijalkowski)
+- use xsk_tx_peek_release_desc_batch() (Maciej Fijalkowski)
+- don't call tsnep_rx_reopen() if netdev is down
+- init adapter pointer of queue only once
+
+Gerhard Engleder (6):
+  tsnep: Replace modulo operation with mask
+  tsnep: Rework TX/RX queue initialization
+  tsnep: Add functions for queue enable/disable
+  tsnep: Move skb receive action to separate function
+  tsnep: Add XDP socket zero-copy RX support
+  tsnep: Add XDP socket zero-copy TX support
+
+ drivers/net/ethernet/engleder/tsnep.h      |  16 +-
+ drivers/net/ethernet/engleder/tsnep_main.c | 863 ++++++++++++++++++---
+ drivers/net/ethernet/engleder/tsnep_xdp.c  |  66 ++
+ 3 files changed, 822 insertions(+), 123 deletions(-)
+
 -- 
 2.30.2
 
