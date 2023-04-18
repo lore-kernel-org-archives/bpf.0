@@ -2,45 +2,45 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B90F4C77B75
-	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 13:31:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E868C77B75
+	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 13:31:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232390AbjDRNbk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Apr 2023 09:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50132 "EHLO
+        id S231902AbjDRNbz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Apr 2023 09:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232374AbjDRNbh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 18 Apr 2023 09:31:37 -0400
+        with ESMTP id S232404AbjDRNbx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 18 Apr 2023 09:31:53 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CCE15A2A
-        for <bpf@vger.kernel.org>; Tue, 18 Apr 2023 06:30:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C443615461
+        for <bpf@vger.kernel.org>; Tue, 18 Apr 2023 06:30:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681824652;
+        s=mimecast20190719; t=1681824658;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DQLp/bDiJrLIn15C39/j/M4j9TLKrN3SMwzO4FOSIKY=;
-        b=UZThWH0qyHIK/QRo5vM93uKFp2vDJircgL1jP/5qIiH1R7d+RXmOdJkzNLI5cKEnZKUG/A
-        zQcPPP8DF+8XkpIUZlQ5aEjPEiTDcbBvNc8eSRXaGaSKKhB6x2QY6Om8SNWeyS0kjmdlQc
-        SrNcabH63ZrHnjGLQiHgADWX0YZNFSQ=
+        bh=z+Wj+wuar2esG3Vf+0jIPaMSY2J1burZPGTUx2EHY1I=;
+        b=RLXVBPuDySRNtEnmR9qj6maWFTC/+zvtvWapv49Bwuh4mPm6ByU+fW/faSd0blPmU72Z/n
+        uil0gQPc9E5XPqtesWjyoHsKykFOCTVJGR0nxuSyswI2lKwiMkHIDJz8WqsNK15coClDf8
+        jI4b8fhFocewM7//pwRBuSfwyn/d6jE=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-111-C2UzXstBMjCcODvroXG6rw-1; Tue, 18 Apr 2023 09:30:46 -0400
-X-MC-Unique: C2UzXstBMjCcODvroXG6rw-1
+ us-mta-563-5TqzC1WfMP-cICaGFtp0Xg-1; Tue, 18 Apr 2023 09:30:56 -0400
+X-MC-Unique: 5TqzC1WfMP-cICaGFtp0Xg-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C653F3850541;
-        Tue, 18 Apr 2023 13:30:43 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 24F3E1C0170B;
+        Tue, 18 Apr 2023 13:30:54 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.45.242.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 67DC840C83A9;
-        Tue, 18 Apr 2023 13:30:43 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C0DB740C845F;
+        Tue, 18 Apr 2023 13:30:53 +0000 (UTC)
 Received: from [10.1.1.1] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id BD404307372E8;
-        Tue, 18 Apr 2023 15:30:42 +0200 (CEST)
-Subject: [PATCH bpf-next V2 1/5] igc: enable and fix RX hash usage by netstack
+        by firesoul.localdomain (Postfix) with ESMTP id DC7A7307372E8;
+        Tue, 18 Apr 2023 15:30:52 +0200 (CEST)
+Subject: [PATCH bpf-next V2 3/5] igc: add XDP hints kfuncs for RX hash
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     bpf@vger.kernel.org, Stanislav Fomichev <sdf@google.com>,
         =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
@@ -51,8 +51,8 @@ Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
         intel-wired-lan@lists.osuosl.org, pabeni@redhat.com,
         jesse.brandeburg@intel.com, kuba@kernel.org, edumazet@google.com,
         john.fastabend@gmail.com, hawk@kernel.org, davem@davemloft.net
-Date:   Tue, 18 Apr 2023 15:30:42 +0200
-Message-ID: <168182464270.616355.11391652654430626584.stgit@firesoul>
+Date:   Tue, 18 Apr 2023 15:30:52 +0200
+Message-ID: <168182465285.616355.2701740913376314790.stgit@firesoul>
 In-Reply-To: <168182460362.616355.14591423386485175723.stgit@firesoul>
 References: <168182460362.616355.14591423386485175723.stgit@firesoul>
 User-Agent: StGit/1.4
@@ -64,138 +64,133 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When function igc_rx_hash() was introduced in v4.20 via commit 0507ef8a0372
-("igc: Add transmit and receive fastpath and interrupt handlers"), the
-hardware wasn't configured to provide RSS hash, thus it made sense to not
-enable net_device NETIF_F_RXHASH feature bit.
+This implements XDP hints kfunc for RX-hash (xmo_rx_hash).
+The HW rss hash type is handled via mapping table.
 
-The NIC hardware was configured to enable RSS hash info in v5.2 via commit
-2121c2712f82 ("igc: Add multiple receive queues control supporting"), but
-forgot to set the NETIF_F_RXHASH feature bit.
+This igc driver (default config) does L3 hashing for UDP packets
+(excludes UDP src/dest ports in hash calc).  Meaning RSS hash type is
+L3 based.  Tested that the igc_rss_type_num for UDP is either
+IGC_RSS_TYPE_HASH_IPV4 or IGC_RSS_TYPE_HASH_IPV6.
 
-The original implementation of igc_rx_hash() didn't extract the associated
-pkt_hash_type, but statically set PKT_HASH_TYPE_L3. The largest portions of
-this patch are about extracting the RSS Type from the hardware and mapping
-this to enum pkt_hash_types. This was based on Foxville i225 software user
-manual rev-1.3.1 and tested on Intel Ethernet Controller I225-LM (rev 03).
+This patch also updates AF_XDP zero-copy function igc_clean_rx_irq_zc()
+to use the xdp_buff wrapper struct igc_xdp_buff.
 
-For UDP it's worth noting that RSS (type) hashing have been disabled both for
-IPv4 and IPv6 (see IGC_MRQC_RSS_FIELD_IPV4_UDP + IGC_MRQC_RSS_FIELD_IPV6_UDP)
-because hardware RSS doesn't handle fragmented pkts well when enabled (can
-cause out-of-order). This results in PKT_HASH_TYPE_L3 for UDP packets, and
-hash value doesn't include UDP port numbers. Not being PKT_HASH_TYPE_L4, have
-the effect that netstack will do a software based hash calc calling into
-flow_dissect, but only when code calls skb_get_hash(), which doesn't
-necessary happen for local delivery.
-
-For QA verification testing I wrote a small bpftrace prog:
- [0] https://github.com/xdp-project/xdp-project/blob/master/areas/hints/monitor_skb_hash_on_dev.bt
-
-Fixes: 2121c2712f82 ("igc: Add multiple receive queues control supporting")
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 ---
- drivers/net/ethernet/intel/igc/igc.h      |   28 ++++++++++++++++++++++++++
- drivers/net/ethernet/intel/igc/igc_main.c |   31 +++++++++++++++++++++++++----
- 2 files changed, 55 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/intel/igc/igc.h      |    1 +
+ drivers/net/ethernet/intel/igc/igc_main.c |   53 +++++++++++++++++++++++++++++
+ 2 files changed, 54 insertions(+)
 
 diff --git a/drivers/net/ethernet/intel/igc/igc.h b/drivers/net/ethernet/intel/igc/igc.h
-index 34aebf00a512..f7f9e217e7b4 100644
+index 76a5115aefc8..c609a2e648f8 100644
 --- a/drivers/net/ethernet/intel/igc/igc.h
 +++ b/drivers/net/ethernet/intel/igc/igc.h
-@@ -13,6 +13,7 @@
- #include <linux/ptp_clock_kernel.h>
- #include <linux/timecounter.h>
- #include <linux/net_tstamp.h>
-+#include <linux/bitfield.h>
+@@ -502,6 +502,7 @@ struct igc_rx_buffer {
+ /* context wrapper around xdp_buff to provide access to descriptor metadata */
+ struct igc_xdp_buff {
+ 	struct xdp_buff xdp;
++	union igc_adv_rx_desc *rx_desc;
+ };
  
- #include "igc_hw.h"
- 
-@@ -311,6 +312,33 @@ extern char igc_driver_name[];
- #define IGC_MRQC_RSS_FIELD_IPV4_UDP	0x00400000
- #define IGC_MRQC_RSS_FIELD_IPV6_UDP	0x00800000
- 
-+/* RX-desc Write-Back format RSS Type's */
-+enum igc_rss_type_num {
-+	IGC_RSS_TYPE_NO_HASH		= 0,
-+	IGC_RSS_TYPE_HASH_TCP_IPV4	= 1,
-+	IGC_RSS_TYPE_HASH_IPV4		= 2,
-+	IGC_RSS_TYPE_HASH_TCP_IPV6	= 3,
-+	IGC_RSS_TYPE_HASH_IPV6_EX	= 4,
-+	IGC_RSS_TYPE_HASH_IPV6		= 5,
-+	IGC_RSS_TYPE_HASH_TCP_IPV6_EX	= 6,
-+	IGC_RSS_TYPE_HASH_UDP_IPV4	= 7,
-+	IGC_RSS_TYPE_HASH_UDP_IPV6	= 8,
-+	IGC_RSS_TYPE_HASH_UDP_IPV6_EX	= 9,
-+	IGC_RSS_TYPE_MAX		= 10,
-+};
-+#define IGC_RSS_TYPE_MAX_TABLE		16
-+#define IGC_RSS_TYPE_MASK		GENMASK(3,0) /* 4-bits (3:0) = mask 0x0F */
-+
-+/* igc_rss_type - Rx descriptor RSS type field */
-+static inline u32 igc_rss_type(const union igc_adv_rx_desc *rx_desc)
-+{
-+	/* RSS Type 4-bits (3:0) number: 0-9 (above 9 is reserved)
-+	 * Accessing the same bits via u16 (wb.lower.lo_dword.hs_rss.pkt_info)
-+	 * is slightly slower than via u32 (wb.lower.lo_dword.data)
-+	 */
-+	return le32_get_bits(rx_desc->wb.lower.lo_dword.data, IGC_RSS_TYPE_MASK);
-+}
-+
- /* Interrupt defines */
- #define IGC_START_ITR			648 /* ~6000 ints/sec */
- #define IGC_4K_ITR			980
+ struct igc_q_vector {
 diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-index 1c4676882082..bfa9768d447f 100644
+index 6a4c7cd706bd..9cb43c0eab73 100644
 --- a/drivers/net/ethernet/intel/igc/igc_main.c
 +++ b/drivers/net/ethernet/intel/igc/igc_main.c
-@@ -1690,14 +1690,36 @@ static void igc_rx_checksum(struct igc_ring *ring,
- 		   le32_to_cpu(rx_desc->wb.upper.status_error));
+@@ -2562,6 +2562,7 @@ static int igc_clean_rx_irq(struct igc_q_vector *q_vector, const int budget)
+ 					 igc_rx_offset(rx_ring) + pkt_offset,
+ 					 size, true);
+ 			xdp_buff_clear_frags_flag(&ctx.xdp);
++			ctx.rx_desc = rx_desc;
+ 
+ 			skb = igc_xdp_run_prog(adapter, &ctx.xdp);
+ 		}
+@@ -2688,6 +2689,15 @@ static void igc_dispatch_skb_zc(struct igc_q_vector *q_vector,
+ 	napi_gro_receive(&q_vector->napi, skb);
  }
  
-+/* Mapping HW RSS Type to enum pkt_hash_types */
-+static const enum pkt_hash_types igc_rss_type_table[IGC_RSS_TYPE_MAX_TABLE] = {
-+	[IGC_RSS_TYPE_NO_HASH]		= PKT_HASH_TYPE_L2,
-+	[IGC_RSS_TYPE_HASH_TCP_IPV4]	= PKT_HASH_TYPE_L4,
-+	[IGC_RSS_TYPE_HASH_IPV4]	= PKT_HASH_TYPE_L3,
-+	[IGC_RSS_TYPE_HASH_TCP_IPV6]	= PKT_HASH_TYPE_L4,
-+	[IGC_RSS_TYPE_HASH_IPV6_EX]	= PKT_HASH_TYPE_L3,
-+	[IGC_RSS_TYPE_HASH_IPV6]	= PKT_HASH_TYPE_L3,
-+	[IGC_RSS_TYPE_HASH_TCP_IPV6_EX] = PKT_HASH_TYPE_L4,
-+	[IGC_RSS_TYPE_HASH_UDP_IPV4]	= PKT_HASH_TYPE_L4,
-+	[IGC_RSS_TYPE_HASH_UDP_IPV6]	= PKT_HASH_TYPE_L4,
-+	[IGC_RSS_TYPE_HASH_UDP_IPV6_EX] = PKT_HASH_TYPE_L4,
-+	[10] = PKT_HASH_TYPE_NONE, /* RSS Type above 9 "Reserved" by HW  */
-+	[11] = PKT_HASH_TYPE_NONE, /* keep array sized for SW bit-mask   */
-+	[12] = PKT_HASH_TYPE_NONE, /* to handle future HW revisons       */
-+	[13] = PKT_HASH_TYPE_NONE,
-+	[14] = PKT_HASH_TYPE_NONE,
-+	[15] = PKT_HASH_TYPE_NONE,
++static struct igc_xdp_buff *xsk_buff_to_igc_ctx(struct xdp_buff *xdp)
++{
++	/* xdp_buff pointer used by ZC code path is alloc as xdp_buff_xsk. The
++	 * igc_xdp_buff shares its layout with xdp_buff_xsk and private
++	 * igc_xdp_buff fields fall into xdp_buff_xsk->cb
++	 */
++       return (struct igc_xdp_buff *)xdp;
++}
++
+ static int igc_clean_rx_irq_zc(struct igc_q_vector *q_vector, const int budget)
+ {
+ 	struct igc_adapter *adapter = q_vector->adapter;
+@@ -2706,6 +2716,7 @@ static int igc_clean_rx_irq_zc(struct igc_q_vector *q_vector, const int budget)
+ 	while (likely(total_packets < budget)) {
+ 		union igc_adv_rx_desc *desc;
+ 		struct igc_rx_buffer *bi;
++		struct igc_xdp_buff *ctx;
+ 		ktime_t timestamp = 0;
+ 		unsigned int size;
+ 		int res;
+@@ -2723,6 +2734,9 @@ static int igc_clean_rx_irq_zc(struct igc_q_vector *q_vector, const int budget)
+ 
+ 		bi = &ring->rx_buffer_info[ntc];
+ 
++		ctx = xsk_buff_to_igc_ctx(bi->xdp);
++		ctx->rx_desc = desc;
++
+ 		if (igc_test_staterr(desc, IGC_RXDADV_STAT_TSIP)) {
+ 			timestamp = igc_ptp_rx_pktstamp(q_vector->adapter,
+ 							bi->xdp->data);
+@@ -6478,6 +6492,44 @@ u32 igc_rd32(struct igc_hw *hw, u32 reg)
+ 	return value;
+ }
+ 
++/* Mapping HW RSS Type to enum xdp_rss_hash_type */
++static enum xdp_rss_hash_type igc_xdp_rss_type[IGC_RSS_TYPE_MAX_TABLE] = {
++	[IGC_RSS_TYPE_NO_HASH]		= XDP_RSS_TYPE_L2,
++	[IGC_RSS_TYPE_HASH_TCP_IPV4]	= XDP_RSS_TYPE_L4_IPV4_TCP,
++	[IGC_RSS_TYPE_HASH_IPV4]	= XDP_RSS_TYPE_L3_IPV4,
++	[IGC_RSS_TYPE_HASH_TCP_IPV6]	= XDP_RSS_TYPE_L4_IPV6_TCP,
++	[IGC_RSS_TYPE_HASH_IPV6_EX]	= XDP_RSS_TYPE_L3_IPV6_EX,
++	[IGC_RSS_TYPE_HASH_IPV6]	= XDP_RSS_TYPE_L3_IPV6,
++	[IGC_RSS_TYPE_HASH_TCP_IPV6_EX] = XDP_RSS_TYPE_L4_IPV6_TCP_EX,
++	[IGC_RSS_TYPE_HASH_UDP_IPV4]	= XDP_RSS_TYPE_L4_IPV4_UDP,
++	[IGC_RSS_TYPE_HASH_UDP_IPV6]	= XDP_RSS_TYPE_L4_IPV6_UDP,
++	[IGC_RSS_TYPE_HASH_UDP_IPV6_EX] = XDP_RSS_TYPE_L4_IPV6_UDP_EX,
++	[10] = XDP_RSS_TYPE_NONE, /* RSS Type above 9 "Reserved" by HW  */
++	[11] = XDP_RSS_TYPE_NONE, /* keep array sized for SW bit-mask   */
++	[12] = XDP_RSS_TYPE_NONE, /* to handle future HW revisons       */
++	[13] = XDP_RSS_TYPE_NONE,
++	[14] = XDP_RSS_TYPE_NONE,
++	[15] = XDP_RSS_TYPE_NONE,
 +};
 +
- static inline void igc_rx_hash(struct igc_ring *ring,
- 			       union igc_adv_rx_desc *rx_desc,
- 			       struct sk_buff *skb)
- {
--	if (ring->netdev->features & NETIF_F_RXHASH)
--		skb_set_hash(skb,
--			     le32_to_cpu(rx_desc->wb.lower.hi_dword.rss),
--			     PKT_HASH_TYPE_L3);
-+	if (ring->netdev->features & NETIF_F_RXHASH) {
-+		u32 rss_hash = le32_to_cpu(rx_desc->wb.lower.hi_dword.rss);
-+		u32 rss_type = igc_rss_type(rx_desc);
++static int igc_xdp_rx_hash(const struct xdp_md *_ctx, u32 *hash,
++			   enum xdp_rss_hash_type *rss_type)
++{
++	const struct igc_xdp_buff *ctx = (void *)_ctx;
 +
-+		skb_set_hash(skb, rss_hash, igc_rss_type_table[rss_type]);
-+	}
- }
++	if (!(ctx->xdp.rxq->dev->features & NETIF_F_RXHASH))
++		return -ENODATA;
++
++	*hash = le32_to_cpu(ctx->rx_desc->wb.lower.hi_dword.rss);
++	*rss_type = igc_xdp_rss_type[igc_rss_type(ctx->rx_desc)];
++
++	return 0;
++}
++
++static const struct xdp_metadata_ops igc_xdp_metadata_ops = {
++	.xmo_rx_hash			= igc_xdp_rx_hash,
++};
++
+ /**
+  * igc_probe - Device Initialization Routine
+  * @pdev: PCI device information struct
+@@ -6551,6 +6603,7 @@ static int igc_probe(struct pci_dev *pdev,
+ 	hw->hw_addr = adapter->io_addr;
  
- static void igc_rx_vlan(struct igc_ring *rx_ring,
-@@ -6554,6 +6576,7 @@ static int igc_probe(struct pci_dev *pdev,
- 	netdev->features |= NETIF_F_TSO;
- 	netdev->features |= NETIF_F_TSO6;
- 	netdev->features |= NETIF_F_TSO_ECN;
-+	netdev->features |= NETIF_F_RXHASH;
- 	netdev->features |= NETIF_F_RXCSUM;
- 	netdev->features |= NETIF_F_HW_CSUM;
- 	netdev->features |= NETIF_F_SCTP_CRC;
+ 	netdev->netdev_ops = &igc_netdev_ops;
++	netdev->xdp_metadata_ops = &igc_xdp_metadata_ops;
+ 	igc_ethtool_set_ops(netdev);
+ 	netdev->watchdog_timeo = 5 * HZ;
+ 
 
 
