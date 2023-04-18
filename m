@@ -2,56 +2,56 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D455C77B76
-	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 01:44:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86E39C77B75
+	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 01:45:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbjDRBoe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Apr 2023 21:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
+        id S231148AbjDRBpK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 Apr 2023 21:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230461AbjDRBnc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 Apr 2023 21:43:32 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BCC6E99
-        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 18:42:15 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id d132-20020a254f8a000000b00b868826cdfeso2898986ybb.0
-        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 18:42:15 -0700 (PDT)
+        with ESMTP id S230393AbjDRBoE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 17 Apr 2023 21:44:04 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CEC8A72
+        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 18:42:21 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-517a6547b0aso1595624a12.1
+        for <bpf@vger.kernel.org>; Mon, 17 Apr 2023 18:42:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681782135; x=1684374135;
+        d=google.com; s=20221208; t=1681782114; x=1684374114;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qi1Po8S34Kt7QbElMTr2iZrr48NSEyGebr4FBWlSvn0=;
-        b=MSsv99K1wdyZt0ehocN3dFGnyuMghLajhZABLr8jg/8pE9UjNyOpDMEfWyojc7bZxL
-         aIdIEzKOVqQM6eAiGt15nHbmio8M/8pFdNUqUKZ2eWJVCzjDh32WmTdHJZ10f5/POWF2
-         pAAEo+YIza9Rwrb6KL2LEkS8NvJFgrwQvEqP9WD4eGIxb87r1fEPbOg58UfyeUZSKVSH
-         sLjYM7/L0kSRcgdwJcbirerE7VCZnsIM4Z5WtlxXaqbbgNOGaNOEVE53+XYyUpwoREZh
-         Y35+i/5dEgBZjBXFGcHvoTytJSDXWndNAxfmRes5d05cuW6DV5UOQZPI/AnztxHlgPeK
-         mLsw==
+        bh=uItCp9dmlSq9K5w/dO5KDhSfWqlCiTpddbyFnUdvY1o=;
+        b=6ZG7MrPplM5M81seOPN0hvXOXCiSEwqx1nO2/dhdDCrhZSmG9COpDr1eX2fxHouiFO
+         e/p0ot7SOR2DqTtejD+ao/RKa21LSQkoUotrF6i4BLWIuTlGH9VzaoyiD599p5QSXw2F
+         bQTC68wutfGQQ0eI74oDjeJVg0AEAToVsf2UFB6NyFGzhg8MljgXOsKeuihOuHCSVDsw
+         XreW21ONO4vhlYTSSmXeQYqGb7nwbDqxO4UByZJQczd+uVUQorJ83f6LfpPcZj+7/PMk
+         2rvlYT4gUyoofHRhNBzeNxQMYk2VT6VUhLo0ZnNohLDKM637Qfr2oAIbXfmiz0imCiDA
+         IFsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681782135; x=1684374135;
+        d=1e100.net; s=20221208; t=1681782114; x=1684374114;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qi1Po8S34Kt7QbElMTr2iZrr48NSEyGebr4FBWlSvn0=;
-        b=BZCkwL3fWAQabFMryrXLXnWcWCrX3/qAnqfHBP581j32bJU7xq42rq2K21k+w5B81R
-         M7yWgxT/2UsOkdFwhGdgh0RU8NHrHtyYBOoXUyrbstiZY17LsaqFc/jUdoLBHqLGna41
-         ifeHgbA4OjFkbW0DCiPCUmAj2inA1F5YEIl5eLKBcVI648uWpow2GDdQWrx6RamTLbCD
-         aIbA8aJpqw+vcmQ5hg6jO0DdR4LWqc8IpEF3Sq6cS6ZE7phctA1kX/Ce4P2QFoNy7hzP
-         dNT1jVNfXqSuk24o1QZUuNripfDH/z015mkSpkJDjn94uaX80IppdV13uxH3wnu+UUBR
-         SGHQ==
-X-Gm-Message-State: AAQBX9fWErM2K+CHXwBYm6u7dYdsc6TJZdsYV+yOsorLhY5Rpp+ABEK2
-        3N7UFskpYsI4J/QFKZvR179kdPjtikU=
-X-Google-Smtp-Source: AKy350abrQ11ASojcePeUYEdiv/KTIkMP9GG/A+eTvQ5myvKQeYGNjXLXkAgj+/aiYds5ZlRZX6RdyULoaA=
+        bh=uItCp9dmlSq9K5w/dO5KDhSfWqlCiTpddbyFnUdvY1o=;
+        b=KILAvu9edkQfrp4CL1EZZpvO13EBOGuxfczwI6vtX56fYCoQFVovNC3O46yIl91Cox
+         1dOwDWOeSJ9YFnc7agCC6ugMNtf//sg3BBkQKfXmFYWz1fHw+u6fqXa+U6uoCNiibJGu
+         uf8oGuiDC3CkWZrxIatCKwppohAcmT+szorgKF3AexiLzZno1WoFuPqnJNs2OYEMGJSd
+         2DuIP4jAJpvkH8kn9xSdAtswFUn6JKKlU3frt89Yloxg++opH6nGafCYIzv3iKqoaxYZ
+         OOzQ4WvPNFDR/WL/G9Jdas5ZNJWL143217Rl/lTnl8xpdNROL0SdNFVpjemOoh4Td+Tp
+         ERnQ==
+X-Gm-Message-State: AAQBX9dooH8X2zXA8GHHJ822LY6i0ggswMRJiHMj598hDBmPjjAFGGEk
+        T+DQqUmJMU2JehH/3If2BmWhRBqUSJk=
+X-Google-Smtp-Source: AKy350ZppNJyCCMUoSVMCNcn1UBo1hOQckQ73RYyKMhi9AzOeJREQF2N4JedMcWfQRQtWg8BteVAlnRCSrQ=
 X-Received: from drosen.mtv.corp.google.com ([2620:15c:211:201:e67a:98b0:942d:86aa])
- (user=drosen job=sendgmr) by 2002:a25:6c41:0:b0:b8f:1d2c:243f with SMTP id
- h62-20020a256c41000000b00b8f1d2c243fmr8371770ybc.1.1681782134824; Mon, 17 Apr
- 2023 18:42:14 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 18:40:37 -0700
+ (user=drosen job=sendgmr) by 2002:a17:903:294c:b0:1a6:898a:41fd with SMTP id
+ li12-20020a170903294c00b001a6898a41fdmr201053plb.6.1681782114402; Mon, 17 Apr
+ 2023 18:41:54 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 18:40:28 -0700
 In-Reply-To: <20230418014037.2412394-1-drosen@google.com>
 Mime-Version: 1.0
 References: <20230418014037.2412394-1-drosen@google.com>
 X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230418014037.2412394-38-drosen@google.com>
-Subject: [RFC PATCH v3 37/37] fuse: Provide easy way to test fuse struct_op call
+Message-ID: <20230418014037.2412394-29-drosen@google.com>
+Subject: [RFC PATCH v3 28/37] WIP: bpf: Add fuse_ops struct_op programs
 From:   Daniel Rosenberg <drosen@google.com>
 To:     Miklos Szeredi <miklos@szeredi.hu>, bpf@vger.kernel.org,
         Alexei Starovoitov <ast@kernel.org>
@@ -75,784 +75,561 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This is useful for quickly testing a struct_op program.
-I've been using this set up to test verifier changes.
+This introduces a new struct_op type: fuse_ops. This program set
+provides pre and post filters to run around fuse-bpf calls that act
+directly on the lower filesystem.
 
-I'll eventually move those sorts of tests to bpf selftests
+The inputs are either fixed structures, or struct fuse_buffer's.
+
+These programs are not permitted to make any changes to these fuse_buffers
+unless they create a dynptr wrapper using the supplied kfunc helpers.
+
+Fuse_buffers maintain additional state information that FUSE uses to
+manage memory and determine if additional set up or checks are needed.
 
 Signed-off-by: Daniel Rosenberg <drosen@google.com>
 ---
- fs/fuse/inode.c                               |  70 ++
- .../selftests/filesystems/fuse/Makefile       |   1 +
- .../filesystems/fuse/struct_op_test.bpf.c     | 642 ++++++++++++++++++
- 3 files changed, 713 insertions(+)
- create mode 100644 tools/testing/selftests/filesystems/fuse/struct_op_test.bpf.c
+ include/linux/bpf_fuse.h          | 189 +++++++++++++++++++++++
+ kernel/bpf/Makefile               |   4 +
+ kernel/bpf/bpf_fuse.c             | 241 ++++++++++++++++++++++++++++++
+ kernel/bpf/bpf_struct_ops_types.h |   4 +
+ kernel/bpf/btf.c                  |   1 +
+ kernel/bpf/verifier.c             |   9 ++
+ 6 files changed, 448 insertions(+)
+ create mode 100644 kernel/bpf/bpf_fuse.c
 
-diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
-index 7fd79efbdac1..d80c7282c91c 100644
---- a/fs/fuse/inode.c
-+++ b/fs/fuse/inode.c
-@@ -2071,16 +2071,83 @@ static void fuse_fs_cleanup(void)
+diff --git a/include/linux/bpf_fuse.h b/include/linux/bpf_fuse.h
+index ce8b1b347496..780a7889aea2 100644
+--- a/include/linux/bpf_fuse.h
++++ b/include/linux/bpf_fuse.h
+@@ -30,6 +30,8 @@ struct fuse_buffer {
+ #define BPF_FUSE_MODIFIED	(1 << 3) // The helper function allowed writes to the buffer
+ #define BPF_FUSE_ALLOCATED	(1 << 4) // The helper function allocated the buffer
  
- static struct kobject *fuse_kobj;
- 
-+static char struct_op_name[BPF_FUSE_NAME_MAX];
-+static struct fuse_ops *fop = NULL;
++extern void *bpf_fuse_get_writeable(struct fuse_buffer *arg, u64 size, bool copy);
 +
-+static ssize_t struct_op_store(struct kobject *kobj,
-+		  struct kobj_attribute *attr,
-+		  const char *buf, size_t count)
-+{
-+	size_t max = count;
-+
-+	if (max > BPF_FUSE_NAME_MAX) max = BPF_FUSE_NAME_MAX;
-+	strncpy(struct_op_name, buf, max);
-+	if (struct_op_name[max-1] == '\n')
-+		struct_op_name[max-1] = 0;
-+	put_fuse_ops(fop);
-+	fop = find_fuse_ops(struct_op_name);
-+	if (!fop)
-+		printk("No struct op named %s found", struct_op_name);
-+
-+	return count;
-+}
-+
-+static ssize_t struct_op_show(struct kobject *kobj,
-+			    struct kobj_attribute *attr, char *buf)
-+{
-+	struct fuse_ops *op;
-+	uint32_t result = 0;
-+	struct bpf_fuse_meta_info meta;
-+	struct fuse_mkdir_in in;
-+	struct fuse_buffer name;
-+	char name_buff[10] = "test";
-+
-+	name.data = &name_buff[0];
-+	name.flags = BPF_FUSE_VARIABLE_SIZE;
-+	name.max_size = 10;
-+	name.size = 5;
-+
-+	op = fop;
-+	if (!op) {
-+		printk("Could not find fuse_op for %s", struct_op_name);
-+		return 0;
-+	}
-+
-+	if (op->mkdir_prefilter)
-+		result = op->mkdir_prefilter(&meta, &in, &name);
-+	else
-+		printk("No func!!");
-+
-+	printk("in->mode:%d, name:%s result:%d", in.mode, (char *)name.data, result);
-+	return sprintf(buf, "%d dyn:%s\n", result, (char *)name.data);
-+}
-+
-+static struct kobj_attribute test_attr = __ATTR_RW(struct_op);
-+
-+static struct attribute *test_attrs[] = {
-+	&test_attr.attr,
-+	NULL,
-+};
-+
-+static const struct attribute_group test_attr_group = {
-+	.attrs = test_attrs,
-+};
-+
- static int fuse_sysfs_init(void)
- {
- 	int err;
- 
-+	memset(struct_op_name, 0, BPF_FUSE_NAME_MAX);
- 	fuse_kobj = kobject_create_and_add("fuse", fs_kobj);
- 	if (!fuse_kobj) {
- 		err = -ENOMEM;
- 		goto out_err;
- 	}
- 
-+	err = sysfs_create_group(fuse_kobj, &test_attr_group);
-+	if (err)
-+		goto tmp;
-+
- 	err = sysfs_create_mount_point(fuse_kobj, "connections");
- 	if (err)
- 		goto out_fuse_unregister;
-@@ -2089,6 +2156,8 @@ static int fuse_sysfs_init(void)
- 
-  out_fuse_unregister:
- 	kobject_put(fuse_kobj);
-+tmp:
-+	sysfs_remove_group(fuse_kobj, &test_attr_group);
-  out_err:
- 	return err;
- }
-@@ -2096,6 +2165,7 @@ static int fuse_sysfs_init(void)
- static void fuse_sysfs_cleanup(void)
- {
- 	sysfs_remove_mount_point(fuse_kobj, "connections");
-+	sysfs_remove_group(fuse_kobj, &test_attr_group);
- 	kobject_put(fuse_kobj);
+ /*
+  * BPF Fuse Args
+  *
+@@ -81,4 +83,191 @@ static inline unsigned bpf_fuse_arg_size(const struct bpf_fuse_arg *arg)
+ 	return arg->is_buffer ? arg->buffer->size : arg->size;
  }
  
-diff --git a/tools/testing/selftests/filesystems/fuse/Makefile b/tools/testing/selftests/filesystems/fuse/Makefile
-index b2df4dec0651..ff28859f3268 100644
---- a/tools/testing/selftests/filesystems/fuse/Makefile
-+++ b/tools/testing/selftests/filesystems/fuse/Makefile
-@@ -52,6 +52,7 @@ SELFTESTS:=$(TOOLSDIR)/testing/selftests/
- LDLIBS := -lpthread -lelf -lz
- TEST_GEN_PROGS := fuse_test fuse_daemon
- TEST_GEN_FILES := \
-+  struct_op_test.bpf.o \
- 	test.skel.h \
- 	fd.sh \
- 
-diff --git a/tools/testing/selftests/filesystems/fuse/struct_op_test.bpf.c b/tools/testing/selftests/filesystems/fuse/struct_op_test.bpf.c
-new file mode 100644
-index 000000000000..2cb178d2fa0c
---- /dev/null
-+++ b/tools/testing/selftests/filesystems/fuse/struct_op_test.bpf.c
-@@ -0,0 +1,642 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+// Copyright (c) 2021 Google LLC
++struct fuse_ops {
++	uint32_t (*open_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_open_in *in);
++	uint32_t (*open_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_open_in *in,
++				struct fuse_open_out *out);
 +
-+#include "vmlinux.h"
-+//#include <uapi/linux/bpf.h>
-+#include <linux/errno.h>
-+#include <linux/types.h>
-+//#include <linux/fuse.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_common.h"
++	uint32_t (*opendir_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_open_in *in);
++	uint32_t (*opendir_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_open_in *in,
++				struct fuse_open_out *out);
 +
-+char _license[] SEC("license") = "GPL";
++	uint32_t (*create_open_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_create_in *in, struct fuse_buffer *name);
++	uint32_t (*create_open_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_create_in *in, const struct fuse_buffer *name,
++				struct fuse_entry_out *entry_out, struct fuse_open_out *out);
 +
-+#define BPF_STRUCT_OPS(type, name, args...)					\
-+SEC("struct_ops/"#name)								\
-+type BPF_PROG(name, ##args)
++	uint32_t (*release_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_release_in *in);
++	uint32_t (*release_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_release_in *in);
 +
-+/*
-+struct test_struct {
-+	uint32_t a;
-+	uint32_t b;
-+};
++	uint32_t (*releasedir_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_release_in *in);
++	uint32_t (*releasedir_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_release_in *in);
 +
++	uint32_t (*flush_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_flush_in *in);
++	uint32_t (*flush_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_flush_in *in);
 +
-+*/
-+//struct fuse_buffer;
-+#define BPF_FUSE_CONTINUE		0
-+/*struct fuse_ops {
-+	uint32_t (*test_func)(void);
-+	uint32_t (*test_func2)(struct test_struct *a);
-+	uint32_t (*test_func3)(struct fuse_name *ptr);
-+	//u32 (*open_prefilter)(struct bpf_fuse_hidden_info meh, struct bpf_fuse_meta_info header, struct fuse_open_in foi);
-+	//u32 (*open_postfilter)(struct bpf_fuse_hidden_info meh, struct bpf_fuse_meta_info header, const struct fuse_open_in foi, struct fuse_open_out foo);
++	uint32_t (*lseek_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_lseek_in *in);
++	uint32_t (*lseek_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_lseek_in *in,
++				struct fuse_lseek_out *out);
++
++	uint32_t (*copy_file_range_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_copy_file_range_in *in);
++	uint32_t (*copy_file_range_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_copy_file_range_in *in,
++				struct fuse_write_out *out);
++
++	uint32_t (*fsync_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_fsync_in *in);
++	uint32_t (*fsync_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_fsync_in *in);
++
++	uint32_t (*dir_fsync_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_fsync_in *in);
++	uint32_t (*dir_fsync_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_fsync_in *in);
++
++	uint32_t (*getxattr_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_getxattr_in *in, struct fuse_buffer *name);
++	// if in->size > 0, use value. If in->size == 0, use out.
++	uint32_t (*getxattr_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_getxattr_in *in, const struct fuse_buffer *name,
++				struct fuse_buffer *value, struct fuse_getxattr_out *out);
++
++	uint32_t (*listxattr_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_getxattr_in *in);
++	// if in->size > 0, use value. If in->size == 0, use out.
++	uint32_t (*listxattr_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_getxattr_in *in,
++				struct fuse_buffer *value, struct fuse_getxattr_out *out);
++
++	uint32_t (*setxattr_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_setxattr_in *in, struct fuse_buffer *name,
++					struct fuse_buffer *value);
++	uint32_t (*setxattr_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_setxattr_in *in, const struct fuse_buffer *name,
++					const struct fuse_buffer *value);
++
++	uint32_t (*removexattr_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_buffer *name);
++	uint32_t (*removexattr_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_buffer *name);
++
++	/* Read and Write iter will likely undergo some sort of change/addition to handle changing
++	 * the data buffer passed in/out. */
++	uint32_t (*read_iter_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_read_in *in);
++	uint32_t (*read_iter_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_read_in *in,
++				struct fuse_read_iter_out *out);
++
++	uint32_t (*write_iter_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_write_in *in);
++	uint32_t (*write_iter_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_write_in *in,
++				struct fuse_write_iter_out *out);
++
++	uint32_t (*file_fallocate_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_fallocate_in *in);
++	uint32_t (*file_fallocate_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_fallocate_in *in);
++
++	uint32_t (*lookup_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_buffer *name);
++	uint32_t (*lookup_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_buffer *name,
++				struct fuse_entry_out *out, struct fuse_buffer *entries);
++
++	uint32_t (*mknod_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_mknod_in *in, struct fuse_buffer *name);
++	uint32_t (*mknod_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_mknod_in *in, const struct fuse_buffer *name);
++
++	uint32_t (*mkdir_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_mkdir_in *in, struct fuse_buffer *name);
++	uint32_t (*mkdir_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_mkdir_in *in, const struct fuse_buffer *name);
++
++	uint32_t (*rmdir_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_buffer *name);
++	uint32_t (*rmdir_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_buffer *name);
++
++	uint32_t (*rename2_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_rename2_in *in, struct fuse_buffer *old_name,
++				struct fuse_buffer *new_name);
++	uint32_t (*rename2_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_rename2_in *in, const struct fuse_buffer *old_name,
++				const struct fuse_buffer *new_name);
++
++	uint32_t (*rename_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_rename_in *in, struct fuse_buffer *old_name,
++				struct fuse_buffer *new_name);
++	uint32_t (*rename_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_rename_in *in, const struct fuse_buffer *old_name,
++				const struct fuse_buffer *new_name);
++
++	uint32_t (*unlink_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_buffer *name);
++	uint32_t (*unlink_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_buffer *name);
++
++	uint32_t (*link_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_link_in *in, struct fuse_buffer *name);
++	uint32_t (*link_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_link_in *in, const struct fuse_buffer *name);
++
++	uint32_t (*getattr_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_getattr_in *in);
++	uint32_t (*getattr_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_getattr_in *in,
++				struct fuse_attr_out *out);
++
++	uint32_t (*setattr_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_setattr_in *in);
++	uint32_t (*setattr_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_setattr_in *in,
++				struct fuse_attr_out *out);
++
++	uint32_t (*statfs_prefilter)(const struct bpf_fuse_meta_info *meta);
++	uint32_t (*statfs_postfilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_statfs_out *out);
++
++	//TODO: This does not allow doing anything with path
++	uint32_t (*get_link_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_buffer *name);
++	uint32_t (*get_link_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_buffer *name);
++
++	uint32_t (*symlink_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_buffer *name, struct fuse_buffer *path);
++	uint32_t (*symlink_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_buffer *name, const struct fuse_buffer *path);
++
++	uint32_t (*readdir_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_read_in *in);
++	uint32_t (*readdir_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_read_in *in,
++				struct fuse_read_out *out, struct fuse_buffer *buffer);
++
++	uint32_t (*access_prefilter)(const struct bpf_fuse_meta_info *meta,
++				struct fuse_access_in *in);
++	uint32_t (*access_postfilter)(const struct bpf_fuse_meta_info *meta,
++				const struct fuse_access_in *in);
++
 +	char name[BPF_FUSE_NAME_MAX];
 +};
-+*/
-+extern uint32_t bpf_fuse_return_len(struct fuse_buffer *ptr) __ksym;
-+extern void bpf_fuse_get_rw_dynptr(struct fuse_buffer *buffer, struct bpf_dynptr *dynptr, u64 size, bool copy) __ksym;
-+extern void bpf_fuse_get_ro_dynptr(const struct fuse_buffer *buffer, struct bpf_dynptr *dynptr) __ksym;
 +
-+//extern struct bpf_key *bpf_lookup_user_key(__u32 serial, __u64 flags) __ksym;
-+//extern struct bpf_key *bpf_lookup_system_key(__u64 id) __ksym;
-+//extern void bpf_key_put(struct bpf_key *key) __ksym;
-+//extern int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_ptr,
-+//				      struct bpf_dynptr *sig_ptr,
-+//				      struct bpf_key *trusted_keyring) __ksym;
+ #endif /* _BPF_FUSE_H */
+diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+index 1d3892168d32..26a2e741ef61 100644
+--- a/kernel/bpf/Makefile
++++ b/kernel/bpf/Makefile
+@@ -45,3 +45,7 @@ obj-$(CONFIG_BPF_PRELOAD) += preload/
+ obj-$(CONFIG_BPF_SYSCALL) += relo_core.o
+ $(obj)/relo_core.o: $(srctree)/tools/lib/bpf/relo_core.c FORCE
+ 	$(call if_changed_rule,cc_o_c)
 +
-+BPF_STRUCT_OPS(uint32_t, test_func, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_mkdir_in *in, struct fuse_buffer *name)
++ifeq ($(CONFIG_FUSE_BPF),y)
++obj-$(CONFIG_BPF_SYSCALL) += bpf_fuse.o
++endif
+diff --git a/kernel/bpf/bpf_fuse.c b/kernel/bpf/bpf_fuse.c
+new file mode 100644
+index 000000000000..35125c1f8eef
+--- /dev/null
++++ b/kernel/bpf/bpf_fuse.c
+@@ -0,0 +1,241 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2021 Google LLC
++
++#include <linux/filter.h>
++#include <linux/bpf.h>
++#include <linux/bpf_fuse.h>
++#include <linux/bpf_verifier.h>
++#include <linux/btf.h>
++
++void *bpf_fuse_get_writeable(struct fuse_buffer *arg, u64 size, bool copy)
 +{
-+	int res = 0;
-+	struct bpf_dynptr name_ptr;
-+	char *name_buf;
-+	//char dummy[7] = {};
++	void *writeable_val;
 +
-+	bpf_fuse_get_ro_dynptr(name, &name_ptr);
-+	name_buf = bpf_dynptr_slice(&name_ptr, 0, NULL, 4);
-+	bpf_printk("Hello test print");
-+	if (!name_buf)
-+		return -ENOMEM;
-+	if (!bpf_strncmp(name_buf, 4, "test"))
-+		return 42;	
++	if (arg->flags & BPF_FUSE_IMMUTABLE)
++		return 0;
 +
-+	//if (bpf_fuse_namecmp(name, "test", 4) == 0)
-+	//	return 42;
++	if (size <= arg->size &&
++			(!(arg->flags & BPF_FUSE_MUST_ALLOCATE) ||
++			  (arg->flags & BPF_FUSE_ALLOCATED))) {
++		if (arg->flags & BPF_FUSE_VARIABLE_SIZE)
++			arg->size = size;
++		arg->flags |= BPF_FUSE_MODIFIED;
++		return arg->data;
++	}
++	/* Variable sized arrays must stay below max size. If the buffer must be fixed size,
++	 * don't change the allocated size. Verifier will enforce requested size for accesses
++	 */
++	if (arg->flags & BPF_FUSE_VARIABLE_SIZE) {
++		if (size > arg->max_size)
++			return 0;
++	} else {
++		if (size > arg->size)
++			return 0;
++		size = arg->size;
++	}
 +
-+	return res;
++	if (size != arg->size && size > arg->max_size)
++		return 0;
++
++	/* If our buffer is big enough, just adjust size */
++	if (size <= arg->alloc_size) {
++		if (!copy)
++			arg->size = size;
++		arg->flags |= BPF_FUSE_MODIFIED;
++		return arg->data;
++	}
++
++	writeable_val = kzalloc(size, GFP_KERNEL);
++	if (!writeable_val)
++		return 0;
++
++	arg->alloc_size = size;
++	/* If we're copying the buffer, assume the same amount is used. If that isn't the case,
++	 * caller must change size. Otherwise, assume entirety of new buffer is used.
++	 */
++	if (copy)
++		memcpy(writeable_val, arg->data, (arg->size > size) ? size : arg->size);
++	else
++		arg->size = size;
++
++	if (arg->flags & BPF_FUSE_ALLOCATED)
++		kfree(arg->data);
++	arg->data = writeable_val;
++
++	arg->flags |= BPF_FUSE_ALLOCATED | BPF_FUSE_MODIFIED;
++
++	return arg->data;
++}
++EXPORT_SYMBOL(bpf_fuse_get_writeable);
++
++__diag_push();
++__diag_ignore_all("-Wmissing-prototypes",
++                  "Global kfuncs as their definitions will be in BTF");
++void bpf_fuse_get_rw_dynptr(struct fuse_buffer *buffer, struct bpf_dynptr_kern *dynptr__uninit, u64 size, bool copy)
++{
++	buffer->data = bpf_fuse_get_writeable(buffer, size, copy);
++	bpf_dynptr_init(dynptr__uninit, buffer->data, BPF_DYNPTR_TYPE_LOCAL, 0, buffer->size);
 +}
 +
-+SEC(".struct_ops")
-+struct fuse_ops test_ops = {
-+	.mkdir_prefilter = (void *)test_func,
-+	.name = "test",
++void bpf_fuse_get_ro_dynptr(const struct fuse_buffer *buffer, struct bpf_dynptr_kern *dynptr__uninit)
++{
++	bpf_dynptr_init(dynptr__uninit, buffer->data, BPF_DYNPTR_TYPE_LOCAL, 0, buffer->size);
++	bpf_dynptr_set_rdonly(dynptr__uninit);
++}
++
++uint32_t bpf_fuse_return_len(struct fuse_buffer *buffer)
++{
++	return buffer->size;
++}
++__diag_pop();
++BTF_SET8_START(fuse_kfunc_set)
++BTF_ID_FLAGS(func, bpf_fuse_get_rw_dynptr)
++BTF_ID_FLAGS(func, bpf_fuse_get_ro_dynptr)
++BTF_ID_FLAGS(func, bpf_fuse_return_len)
++BTF_SET8_END(fuse_kfunc_set)
++
++static const struct btf_kfunc_id_set bpf_fuse_kfunc_set = {
++	.owner = THIS_MODULE,
++	.set = &fuse_kfunc_set,
 +};
 +
-+BPF_STRUCT_OPS(uint32_t, open_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_open_in *in)
++static int __init bpf_fuse_kfuncs_init(void)
 +{
-+	bpf_printk("open_prefilter");
-+	return BPF_FUSE_CONTINUE;
++	return register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS,
++					 &bpf_fuse_kfunc_set);
 +}
 +
-+BPF_STRUCT_OPS(uint32_t, open_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_open_in *in,
-+				struct fuse_open_out *out)
-+{
-+	bpf_printk("open_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, opendir_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_open_in *in)
-+{
-+	bpf_printk("opendir_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, opendir_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_open_in *in,
-+				struct fuse_open_out *out)
-+{
-+	bpf_printk("opendir_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, create_open_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_create_in *in, struct fuse_buffer *name)
-+{
-+	bpf_printk("create_open_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, create_open_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_create_in *in, const struct fuse_buffer *name,
-+				struct fuse_entry_out *entry_out, struct fuse_open_out *out)
-+{
-+	bpf_printk("create_open_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, release_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_release_in *in)
-+{
-+	bpf_printk("release_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, release_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_release_in *in)
-+{
-+	bpf_printk("release_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, releasedir_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_release_in *in)
-+{
-+	bpf_printk("releasedir_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, releasedir_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_release_in *in)
-+{
-+	bpf_printk("releasedir_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, flush_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_flush_in *in)
-+{
-+	bpf_printk("flush_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, flush_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_flush_in *in)
-+{
-+	bpf_printk("flush_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, lseek_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_lseek_in *in)
-+{
-+	bpf_printk("lseek_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, lseek_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_lseek_in *in,
-+				struct fuse_lseek_out *out)
-+{
-+	bpf_printk("lseek_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, copy_file_range_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_copy_file_range_in *in)
-+{
-+	bpf_printk("copy_file_range_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, copy_file_range_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_copy_file_range_in *in,
-+				struct fuse_write_out *out)
-+{
-+	bpf_printk("copy_file_range_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, fsync_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_fsync_in *in)
-+{
-+	bpf_printk("fsync_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, fsync_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_fsync_in *in)
-+{
-+	bpf_printk("fsync_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, dir_fsync_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_fsync_in *in)
-+{
-+	bpf_printk("dir_fsync_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, dir_fsync_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_fsync_in *in)
-+{
-+	bpf_printk("dir_fsync_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, getxattr_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_getxattr_in *in, struct fuse_buffer *name)
-+{
-+	bpf_printk("getxattr_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, getxattr_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_getxattr_in *in, const struct fuse_buffer *name,
-+				struct fuse_buffer *value, struct fuse_getxattr_out *out)
-+{
-+	bpf_printk("getxattr_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, listxattr_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_getxattr_in *in)
-+{
-+	bpf_printk("listxattr_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, listxattr_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_getxattr_in *in,
-+				struct fuse_buffer *value, struct fuse_getxattr_out *out)
-+{
-+	bpf_printk("listxattr_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, setxattr_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_setxattr_in *in, struct fuse_buffer *name,
-+					struct fuse_buffer *value)
-+{
-+	bpf_printk("setxattr_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, setxattr_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_setxattr_in *in, const struct fuse_buffer *name,
-+					const struct fuse_buffer *value)
-+{
-+	bpf_printk("setxattr_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, removexattr_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_buffer *name)
-+{
-+	bpf_printk("removexattr_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, removexattr_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_buffer *name)
-+{
-+	bpf_printk("removexattr_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, read_iter_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_read_in *in)
-+{
-+	bpf_printk("read_iter_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, read_iter_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_read_in *in,
-+				struct fuse_read_iter_out *out)
-+{
-+	bpf_printk("read_iter_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, write_iter_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_write_in *in)
-+{
-+	bpf_printk("write_iter_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, write_iter_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_write_in *in,
-+				struct fuse_write_iter_out *out)
-+{
-+	bpf_printk("write_iter_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, file_fallocate_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_fallocate_in *in)
-+{
-+	bpf_printk("file_fallocate_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, file_fallocate_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_fallocate_in *in)
-+{
-+	bpf_printk("file_fallocate_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, lookup_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_buffer *name)
-+{
-+	bpf_printk("lookup_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, lookup_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_buffer *name,
-+				struct fuse_entry_out *out, struct fuse_buffer *entries)
-+{
-+	bpf_printk("lookup_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
++late_initcall(bpf_fuse_kfuncs_init);
 +
-+BPF_STRUCT_OPS(uint32_t, mknod_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_mknod_in *in, struct fuse_buffer *name)
++static const struct bpf_func_proto *bpf_fuse_get_func_proto(enum bpf_func_id func_id,
++							      const struct bpf_prog *prog)
 +{
-+	bpf_printk("mknod_prefilter");
-+	return BPF_FUSE_CONTINUE;
++	switch (func_id) {
++	default:
++		return bpf_base_func_proto(func_id);
++	}
 +}
 +
-+BPF_STRUCT_OPS(uint32_t, mknod_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_mknod_in *in, const struct fuse_buffer *name)
++static bool bpf_fuse_is_valid_access(int off, int size,
++				    enum bpf_access_type type,
++				    const struct bpf_prog *prog,
++				    struct bpf_insn_access_aux *info)
 +{
-+	bpf_printk("mknod_postfilter");
-+	return BPF_FUSE_CONTINUE;
++	return bpf_tracing_btf_ctx_access(off, size, type, prog, info);
 +}
 +
-+BPF_STRUCT_OPS(uint32_t, mkdir_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_mkdir_in *in, struct fuse_buffer *name)
-+{
-+	bpf_printk("mkdir_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, mkdir_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_mkdir_in *in, const struct fuse_buffer *name)
-+{
-+	bpf_printk("mkdir_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, rmdir_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_buffer *name)
-+{
-+	bpf_printk("rmdir_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, rmdir_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_buffer *name)
-+{
-+	bpf_printk("rmdir_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, rename2_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_rename2_in *in, struct fuse_buffer *old_name,
-+				struct fuse_buffer *new_name)
-+{
-+	bpf_printk("rename2_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, rename2_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_rename2_in *in, const struct fuse_buffer *old_name,
-+				const struct fuse_buffer *new_name)
-+{
-+	bpf_printk("rename2_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, rename_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_rename_in *in, struct fuse_buffer *old_name,
-+				struct fuse_buffer *new_name)
-+{
-+	bpf_printk("rename_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, rename_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_rename_in *in, const struct fuse_buffer *old_name,
-+				const struct fuse_buffer *new_name)
-+{
-+	bpf_printk("rename_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, unlink_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_buffer *name)
-+{
-+	bpf_printk("unlink_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, unlink_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_buffer *name)
-+{
-+	bpf_printk("unlink_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, link_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_link_in *in, struct fuse_buffer *name)
-+{
-+	bpf_printk("link_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, link_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_link_in *in, const struct fuse_buffer *name)
-+{
-+	bpf_printk("link_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, getattr_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_getattr_in *in)
-+{
-+	bpf_printk("getattr_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, getattr_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_getattr_in *in,
-+				struct fuse_attr_out *out)
-+{
-+	bpf_printk("getattr_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, setattr_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_setattr_in *in)
-+{
-+	bpf_printk("setattr_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, setattr_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_setattr_in *in,
-+				struct fuse_attr_out *out)
-+{
-+	bpf_printk("setattr_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, statfs_prefilter, const struct bpf_fuse_meta_info *meta)
-+{
-+	bpf_printk("statfs_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, statfs_postfilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_statfs_out *out)
-+{
-+	bpf_printk("statfs_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, get_link_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_buffer *name)
-+{
-+	bpf_printk("get_link_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, get_link_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_buffer *name)
-+{
-+	bpf_printk("get_link_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, symlink_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_buffer *name, struct fuse_buffer *path)
-+{
-+	bpf_printk("symlink_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, symlink_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_buffer *name, const struct fuse_buffer *path)
-+{
-+	bpf_printk("symlink_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
++const struct btf_type *fuse_buffer_struct_type;
 +
-+BPF_STRUCT_OPS(uint32_t, readdir_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_read_in *in)
++static int bpf_fuse_btf_struct_access(struct bpf_verifier_log *log,
++					const struct bpf_reg_state *reg,
++					int off, int size)
 +{
-+	bpf_printk("readdir_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
-+
-+BPF_STRUCT_OPS(uint32_t, readdir_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_read_in *in,
-+				struct fuse_read_out *out, struct fuse_buffer *buffer)
-+{
-+	bpf_printk("readdir_postfilter");
-+	return BPF_FUSE_CONTINUE;
-+}
++	const struct btf_type *t;
 +
-+BPF_STRUCT_OPS(uint32_t, access_prefilter, const struct bpf_fuse_meta_info *meta,
-+				struct fuse_access_in *in)
-+{
-+	bpf_printk("access_prefilter");
-+	return BPF_FUSE_CONTINUE;
-+}
++	t = btf_type_by_id(reg->btf, reg->btf_id);
++	if (t == fuse_buffer_struct_type) {
++		bpf_log(log,
++			"direct access to fuse_buffer is disallowed\n");
++		return -EACCES;
++	}
 +
-+BPF_STRUCT_OPS(uint32_t, access_postfilter, const struct bpf_fuse_meta_info *meta,
-+				const struct fuse_access_in *in)
-+{
-+	bpf_printk("access_postfilter");
-+	return BPF_FUSE_CONTINUE;
++	return 0;
 +}
-+
-+SEC(".struct_ops")
-+struct fuse_ops trace_ops = {
-+	.open_prefilter = (void *)open_prefilter,
-+	.open_postfilter = (void *)open_postfilter,
-+
-+	.opendir_prefilter = (void *)opendir_prefilter,
-+	.opendir_postfilter = (void *)opendir_postfilter,
-+
-+	.create_open_prefilter = (void *)create_open_prefilter,
-+	.create_open_postfilter = (void *)create_open_postfilter,
-+
-+	.release_prefilter = (void *)release_prefilter,
-+	.release_postfilter = (void *)release_postfilter,
-+
-+	.releasedir_prefilter = (void *)releasedir_prefilter,
-+	.releasedir_postfilter = (void *)releasedir_postfilter,
-+
-+	.flush_prefilter = (void *)flush_prefilter,
-+	.flush_postfilter = (void *)flush_postfilter,
-+
-+	.lseek_prefilter = (void *)lseek_prefilter,
-+	.lseek_postfilter = (void *)lseek_postfilter,
-+
-+	.copy_file_range_prefilter = (void *)copy_file_range_prefilter,
-+	.copy_file_range_postfilter = (void *)copy_file_range_postfilter,
-+
-+	.fsync_prefilter = (void *)fsync_prefilter,
-+	.fsync_postfilter = (void *)fsync_postfilter,
-+
-+	.dir_fsync_prefilter = (void *)dir_fsync_prefilter,
-+	.dir_fsync_postfilter = (void *)dir_fsync_postfilter,
-+
-+	.getxattr_prefilter = (void *)getxattr_prefilter,
-+	.getxattr_postfilter = (void *)getxattr_postfilter,
-+
-+	.listxattr_prefilter = (void *)listxattr_prefilter,
-+	.listxattr_postfilter = (void *)listxattr_postfilter,
-+
-+	.setxattr_prefilter = (void *)setxattr_prefilter,
-+	.setxattr_postfilter = (void *)setxattr_postfilter,
-+
-+	.removexattr_prefilter = (void *)removexattr_prefilter,
-+	.removexattr_postfilter = (void *)removexattr_postfilter,
-+
-+	.read_iter_prefilter = (void *)read_iter_prefilter,
-+	.read_iter_postfilter = (void *)read_iter_postfilter,
-+
-+	.write_iter_prefilter = (void *)write_iter_prefilter,
-+	.write_iter_postfilter = (void *)write_iter_postfilter,
-+
-+	.file_fallocate_prefilter = (void *)file_fallocate_prefilter,
-+	.file_fallocate_postfilter = (void *)file_fallocate_postfilter,
-+
-+	.lookup_prefilter = (void *)lookup_prefilter,
-+	.lookup_postfilter = (void *)lookup_postfilter,
-+
-+	.mknod_prefilter = (void *)mknod_prefilter,
-+	.mknod_postfilter = (void *)mknod_postfilter,
-+
-+	.mkdir_prefilter = (void *)mkdir_prefilter,
-+	.mkdir_postfilter = (void *)mkdir_postfilter,
-+
-+	.rmdir_prefilter = (void *)rmdir_prefilter,
-+	.rmdir_postfilter = (void *)rmdir_postfilter,
-+
-+	.rename2_prefilter = (void *)rename2_prefilter,
-+	.rename2_postfilter = (void *)rename2_postfilter,
-+
-+	.rename_prefilter = (void *)rename_prefilter,
-+	.rename_postfilter = (void *)rename_postfilter,
-+
-+	.unlink_prefilter = (void *)unlink_prefilter,
-+	.unlink_postfilter = (void *)unlink_postfilter,
-+
-+	.link_prefilter = (void *)link_prefilter,
-+	.link_postfilter = (void *)link_postfilter,
-+
-+	.getattr_prefilter = (void *)getattr_prefilter,
-+	.getattr_postfilter = (void *)getattr_postfilter,
-+
-+	.setattr_prefilter = (void *)setattr_prefilter,
-+	.setattr_postfilter = (void *)setattr_postfilter,
-+
-+	.statfs_prefilter = (void *)statfs_prefilter,
-+	.statfs_postfilter = (void *)statfs_postfilter,
-+
-+	.get_link_prefilter = (void *)get_link_prefilter,
-+	.get_link_postfilter = (void *)get_link_postfilter,
-+
-+	.symlink_prefilter = (void *)symlink_prefilter,
-+	.symlink_postfilter = (void *)symlink_postfilter,
-+
-+	.readdir_prefilter = (void *)readdir_prefilter,
-+	.readdir_postfilter = (void *)readdir_postfilter,
-+
-+	.access_prefilter = (void *)access_prefilter,
-+	.access_postfilter = (void *)access_postfilter,
 +
-+	.name = "trace_pre_ops",
++static const struct bpf_verifier_ops bpf_fuse_verifier_ops = {
++	.get_func_proto		= bpf_fuse_get_func_proto,
++	.is_valid_access	= bpf_fuse_is_valid_access,
++	.btf_struct_access	= bpf_fuse_btf_struct_access,
 +};
++
++static int bpf_fuse_check_member(const struct btf_type *t,
++				   const struct btf_member *member,
++				   const struct bpf_prog *prog)
++{
++	//if (is_unsupported(__btf_member_bit_offset(t, member) / 8))
++	//	return -ENOTSUPP;
++	return 0;
++}
++
++static int bpf_fuse_init_member(const struct btf_type *t,
++				  const struct btf_member *member,
++				  void *kdata, const void *udata)
++{
++	const struct fuse_ops *uf_ops;
++	struct fuse_ops *f_ops;
++	u32 moff;
++
++	uf_ops = (const struct fuse_ops *)udata;
++	f_ops = (struct fuse_ops *)kdata;
++
++	moff = __btf_member_bit_offset(t, member) / 8;
++	switch (moff) {
++	case offsetof(struct fuse_ops, name):
++		if (bpf_obj_name_cpy(f_ops->name, uf_ops->name,
++				     sizeof(f_ops->name)) <= 0)
++			return -EINVAL;
++		//if (tcp_ca_find(utcp_ca->name))
++		//	return -EEXIST;
++		return 1;
++	}
++
++	return 0;
++}
++
++static int bpf_fuse_init(struct btf *btf)
++{
++	s32 type_id;
++
++	type_id = btf_find_by_name_kind(btf, "fuse_buffer", BTF_KIND_STRUCT);
++	if (type_id < 0)
++		return -EINVAL;
++	fuse_buffer_struct_type = btf_type_by_id(btf, type_id);
++
++	return 0;
++}
++
++static struct bpf_fuse_ops_attach *fuse_reg = NULL;
++
++static int bpf_fuse_reg(void *kdata)
++{
++	if (fuse_reg)
++		return fuse_reg->fuse_register_bpf(kdata);
++	pr_warn("Cannot register fuse_ops, FUSE not found");
++	return -EOPNOTSUPP;
++}
++
++static void bpf_fuse_unreg(void *kdata)
++{
++	if(fuse_reg)
++		return fuse_reg->fuse_unregister_bpf(kdata);
++}
++
++int register_fuse_bpf(struct bpf_fuse_ops_attach *reg_ops)
++{
++	fuse_reg = reg_ops;
++	return 0;
++}
++EXPORT_SYMBOL_GPL(register_fuse_bpf);
++
++void unregister_fuse_bpf(struct bpf_fuse_ops_attach *reg_ops)
++{
++	if (reg_ops == fuse_reg)
++		fuse_reg = NULL;
++	else
++		pr_warn("Refusing to unregister unregistered FUSE");
++}
++EXPORT_SYMBOL_GPL(unregister_fuse_bpf);
++
++/* "extern" is to avoid sparse warning.  It is only used in bpf_struct_ops.c. */
++extern struct bpf_struct_ops bpf_fuse_ops;
++
++struct bpf_struct_ops bpf_fuse_ops = {
++	.verifier_ops = &bpf_fuse_verifier_ops,
++	.reg = bpf_fuse_reg,
++	.unreg = bpf_fuse_unreg,
++	.check_member = bpf_fuse_check_member,
++	.init_member = bpf_fuse_init_member,
++	.init = bpf_fuse_init,
++	.name = "fuse_ops",
++};
++
+diff --git a/kernel/bpf/bpf_struct_ops_types.h b/kernel/bpf/bpf_struct_ops_types.h
+index 5678a9ddf817..fabb2c1a9482 100644
+--- a/kernel/bpf/bpf_struct_ops_types.h
++++ b/kernel/bpf/bpf_struct_ops_types.h
+@@ -5,6 +5,10 @@
+ #ifdef CONFIG_NET
+ BPF_STRUCT_OPS_TYPE(bpf_dummy_ops)
+ #endif
++#ifdef CONFIG_FUSE_BPF
++#include <linux/bpf_fuse.h>
++BPF_STRUCT_OPS_TYPE(fuse_ops)
++#endif
+ #ifdef CONFIG_INET
+ #include <net/tcp.h>
+ BPF_STRUCT_OPS_TYPE(tcp_congestion_ops)
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 027f9f8a3551..c34fd9e70039 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -25,6 +25,7 @@
+ #include <linux/bsearch.h>
+ #include <linux/kobject.h>
+ #include <linux/sysfs.h>
++#include <linux/bpf_fuse.h>
+ #include <net/sock.h>
+ #include "../tools/lib/bpf/relo_core.h"
+ 
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index fd959824469d..b3bda15283c0 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -9597,6 +9597,8 @@ enum special_kfunc_type {
+ 	KF_bpf_dynptr_from_xdp,
+ 	KF_bpf_dynptr_slice,
+ 	KF_bpf_dynptr_slice_rdwr,
++	KF_bpf_fuse_get_rw_dynptr,
++	KF_bpf_fuse_get_ro_dynptr,
+ };
+ 
+ BTF_SET_START(special_kfunc_set)
+@@ -9616,6 +9618,8 @@ BTF_ID(func, bpf_dynptr_from_skb)
+ BTF_ID(func, bpf_dynptr_from_xdp)
+ BTF_ID(func, bpf_dynptr_slice)
+ BTF_ID(func, bpf_dynptr_slice_rdwr)
++BTF_ID(func, bpf_fuse_get_rw_dynptr)
++BTF_ID(func, bpf_fuse_get_ro_dynptr)
+ BTF_SET_END(special_kfunc_set)
+ 
+ BTF_ID_LIST(special_kfunc_list)
+@@ -9637,6 +9641,8 @@ BTF_ID(func, bpf_dynptr_from_skb)
+ BTF_ID(func, bpf_dynptr_from_xdp)
+ BTF_ID(func, bpf_dynptr_slice)
+ BTF_ID(func, bpf_dynptr_slice_rdwr)
++BTF_ID(func, bpf_fuse_get_rw_dynptr)
++BTF_ID(func, bpf_fuse_get_ro_dynptr)
+ 
+ static bool is_kfunc_bpf_rcu_read_lock(struct bpf_kfunc_call_arg_meta *meta)
+ {
+@@ -10349,6 +10355,9 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+ 				dynptr_arg_type |= DYNPTR_TYPE_SKB;
+ 			else if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_from_xdp])
+ 				dynptr_arg_type |= DYNPTR_TYPE_XDP;
++			else if (meta->func_id == special_kfunc_list[KF_bpf_fuse_get_rw_dynptr] ||
++					meta->func_id == special_kfunc_list[KF_bpf_fuse_get_ro_dynptr])
++				dynptr_arg_type |= DYNPTR_TYPE_LOCAL;
+ 
+ 			ret = process_dynptr_func(env, regno, insn_idx, dynptr_arg_type);
+ 			if (ret < 0)
 -- 
 2.40.0.634.g4ca3ef3211-goog
 
