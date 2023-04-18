@@ -2,140 +2,177 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D73FC77B75
-	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 13:32:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DD10C77B75
+	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 14:02:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbjDRNcL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Apr 2023 09:32:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50478 "EHLO
+        id S232095AbjDROCd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Apr 2023 10:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230311AbjDRNcJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 18 Apr 2023 09:32:09 -0400
+        with ESMTP id S230179AbjDROCb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 18 Apr 2023 10:02:31 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9F315A22
-        for <bpf@vger.kernel.org>; Tue, 18 Apr 2023 06:31:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4151212C9E
+        for <bpf@vger.kernel.org>; Tue, 18 Apr 2023 07:01:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681824677;
+        s=mimecast20190719; t=1681826497;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AK4HrA02Q1v0w9WsJgOrguYhNpSNgBPs/ggkgsLYvjA=;
-        b=d0Z1H4r94J15iC6NqATWFEBInF4nqTvLZD29gIP5QwhQMgutPVLYRK1WHIAVMZx1izTYoM
-        uIIGcBym4GvhBy7ADy2jdLYfv2MY3ddRuoJ9SZpHlse77/j5+fvxVrYathBakOW79ET7/b
-        oYa6eie6Jy1C+aKOmCTvT71t0EA2v4U=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-664-PMQLmTNYOwewXYm-BgBc4g-1; Tue, 18 Apr 2023 09:31:06 -0400
-X-MC-Unique: PMQLmTNYOwewXYm-BgBc4g-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E28DC3850542;
-        Tue, 18 Apr 2023 13:31:03 +0000 (UTC)
-Received: from firesoul.localdomain (unknown [10.45.242.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8B2B51410F21;
-        Tue, 18 Apr 2023 13:30:58 +0000 (UTC)
-Received: from [10.1.1.1] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id EC4FC307372E8;
-        Tue, 18 Apr 2023 15:30:57 +0200 (CEST)
-Subject: [PATCH bpf-next V2 4/5] igc: add XDP hints kfuncs for RX timestamp
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     bpf@vger.kernel.org, Stanislav Fomichev <sdf@google.com>,
-        =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
-        martin.lau@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        alexandr.lobakin@intel.com, larysa.zaremba@intel.com,
-        xdp-hints@xdp-project.net, yoong.siang.song@intel.com,
-        intel-wired-lan@lists.osuosl.org, pabeni@redhat.com,
-        jesse.brandeburg@intel.com, kuba@kernel.org, edumazet@google.com,
-        john.fastabend@gmail.com, hawk@kernel.org, davem@davemloft.net
-Date:   Tue, 18 Apr 2023 15:30:57 +0200
-Message-ID: <168182465791.616355.2583922957423587914.stgit@firesoul>
-In-Reply-To: <168182460362.616355.14591423386485175723.stgit@firesoul>
-References: <168182460362.616355.14591423386485175723.stgit@firesoul>
-User-Agent: StGit/1.4
+        bh=5fONgD5ZI0CkRixaJ2Z/vCiQZM4I6ehW6VIFsC+eLAk=;
+        b=GAvCP9kKmwgXr+9tE/WwAVdnL5/W2kJtIhGwFvgJX00o8aD9ysJBUO1wiWsk5b6YzIzjcR
+        od5jNhTBVV3V1w1MkHkT3WKDol15cXoZn6/VbGMEjiGZfcaJ8PaRaNykGJH8tBugmtTcxU
+        F+ufFLXLFqpp4i7m3oA6ZEXlAWbEcto=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-488-0Wa9yqTvP3u5CoNSFv73Qg-1; Tue, 18 Apr 2023 10:01:34 -0400
+X-MC-Unique: 0Wa9yqTvP3u5CoNSFv73Qg-1
+Received: by mail-ej1-f69.google.com with SMTP id ud12-20020a170907c60c00b0093c44a07ad1so10261626ejc.2
+        for <bpf@vger.kernel.org>; Tue, 18 Apr 2023 07:01:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681826493; x=1684418493;
+        h=content-transfer-encoding:in-reply-to:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5fONgD5ZI0CkRixaJ2Z/vCiQZM4I6ehW6VIFsC+eLAk=;
+        b=e/3gwy1ADyWutE09XxDaOrKZbgEBOimahcICZy/IfqAr+i180+AZZHYJKN/DsX4+UX
+         3kkEyRIEg2TrOcG9svPL/YB72jsV428EQkJvJ1XhLZpSG4ypBSfIijMJFqF5/QM8mCYJ
+         BKR6PRTSeDlK4xUASbrPELYrwTnDC0KtgqmsYNDZEheWjIUx2C8rVifXGbzcm9Pc9t7x
+         5UrBQ3USTF6cDtfov0uoUU3oXdCs8v+IfTVPqyen4fgt+0kLzh8rKdeSyXeU37/fFz64
+         /gwQm6yq2k3GiNyXG4h7TKfl4sCH/38SEE7RlPuvviAnQe2af/aspylTdHf+kXmyuRSy
+         y10w==
+X-Gm-Message-State: AAQBX9dLi8S90wFuVESwOx+iWaWTnalmqCSMerQByPexOh9NqdKwoZ46
+        WBAf9VhTSWJM+Vv6O6J9VUlTNPLw0Rh07wk/sFTQkKaSTjvyBZPVnR5aS5OTNMmAh7fet/6OP16
+        vKuHaf19JrODu
+X-Received: by 2002:a17:907:d689:b0:953:1a7c:51b7 with SMTP id wf9-20020a170907d68900b009531a7c51b7mr1833370ejc.28.1681826493390;
+        Tue, 18 Apr 2023 07:01:33 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aemARlMVPdy8kgJgXVuHzGD4sbX/Gl6p99Go7osU8PHjd+oUCms+1rCgpAgVHjctvdD0LBVw==
+X-Received: by 2002:a17:907:d689:b0:953:1a7c:51b7 with SMTP id wf9-20020a170907d68900b009531a7c51b7mr1833311ejc.28.1681826492813;
+        Tue, 18 Apr 2023 07:01:32 -0700 (PDT)
+Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
+        by smtp.gmail.com with ESMTPSA id qx11-20020a170906fccb00b0094f499257f7sm4053337ejb.151.2023.04.18.07.01.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 07:01:31 -0700 (PDT)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <d805e350-1d59-eb3a-ec27-adaa72cdc20b@redhat.com>
+Date:   Tue, 18 Apr 2023 16:01:30 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Cc:     brouer@redhat.com, netdev@vger.kernel.org, martin.lau@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, alexandr.lobakin@intel.com,
+        larysa.zaremba@intel.com, xdp-hints@xdp-project.net,
+        intel-wired-lan@lists.osuosl.org, pabeni@redhat.com,
+        jesse.brandeburg@intel.com, kuba@kernel.org, bpf@vger.kernel.org,
+        edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
+        davem@davemloft.net, Stanislav Fomichev <sdf@google.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        Pasi Vaananen <pvaanane@redhat.com>
+Subject: Re: [xdp-hints] Re: [PATCH bpf-next V1 5/5] selftests/bpf:
+ xdp_hw_metadata track more timestamps
+Content-Language: en-US
+To:     Kurt Kanzenbach <kurt.kanzenbach@linutronix.de>,
+        yoong.siang.song@intel.com
+References: <168174338054.593471.8312147519616671551.stgit@firesoul>
+ <168174344813.593471.4026230439937368990.stgit@firesoul>
+ <87leiqsexd.fsf@kurt>
+In-Reply-To: <87leiqsexd.fsf@kurt>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The NIC hardware RX timestamping mechanism adds an optional tailored
-header before the MAC header containing packet reception time. Optional
-depending on RX descriptor TSIP status bit (IGC_RXDADV_STAT_TSIP). In
-case this bit is set driver does offset adjustments to packet data start
-and extracts the timestamp.
 
-The timestamp need to be extracted before invoking the XDP bpf_prog,
-because this area just before the packet is also accessible by XDP via
-data_meta context pointer (and helper bpf_xdp_adjust_meta). Thus, an XDP
-bpf_prog can potentially overwrite this and corrupt data that we want to
-extract with the new kfunc for reading the timestamp.
+On 17/04/2023 17.31, Kurt Kanzenbach wrote:
+> On Mon Apr 17 2023, Jesper Dangaard Brouer wrote:
+>> To correlate the hardware RX timestamp with something, add tracking of
+>> two software timestamps both clock source CLOCK_TAI (see description in
+>> man clock_gettime(2)).
+>>
+>> XDP metadata is extended with xdp_timestamp for capturing when XDP
+>> received the packet. Populated with BPF helper bpf_ktime_get_tai_ns(). I
+>> could not find a BPF helper for getting CLOCK_REALTIME, which would have
+>> been preferred. In userspace when AF_XDP sees the packet another
+>> software timestamp is recorded via clock_gettime() also clock source
+>> CLOCK_TAI.
+>>
+>> Example output shortly after loading igc driver:
+>>
+>>    poll: 1 (0) skip=1 fail=0 redir=2
+>>    xsk_ring_cons__peek: 1
+>>    0x12557a8: rx_desc[1]->addr=100000000009000 addr=9100 comp_addr=9000
+>>    rx_hash: 0x82A96531 with RSS type:0x1
+>>    rx_timestamp:  1681740540304898909 (sec:1681740540.3049)
+>>    XDP RX-time:   1681740577304958316 (sec:1681740577.3050) delta sec:37.0001 (37000059.407 usec)
+>>    AF_XDP time:   1681740577305051315 (sec:1681740577.3051) delta sec:0.0001 (92.999 usec)
+>>    0x12557a8: complete idx=9 addr=9000
+>>
+>> The first observation is that the 37 sec difference between RX HW vs XDP
+>> timestamps, which indicate hardware is likely clock source
+>> CLOCK_REALTIME, because (as of this writing) CLOCK_TAI is initialised
+>> with a 37 sec offset.
+> 
+> Maybe I'm missing something here, but in order to compare the hardware
+> with software timestamps (e.g., by using bpf_ktime_get_tai_ns()) the
+> time sources have to be synchronized by using something like
+> phc2sys. That should make them comparable within reasonable range
+> (nanoseconds).
 
-Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
----
- drivers/net/ethernet/intel/igc/igc.h      |    1 +
- drivers/net/ethernet/intel/igc/igc_main.c |   16 ++++++++++++++++
- 2 files changed, 17 insertions(+)
+Precisely, in this test I've not synchronized the clocks.
+The observation is that driver igc clock gets initialized to
+CLOCK_REALTIME wall-clock time, and it slowly drifts as documented in 
+provided link[1].
 
-diff --git a/drivers/net/ethernet/intel/igc/igc.h b/drivers/net/ethernet/intel/igc/igc.h
-index c609a2e648f8..18d4af934d8c 100644
---- a/drivers/net/ethernet/intel/igc/igc.h
-+++ b/drivers/net/ethernet/intel/igc/igc.h
-@@ -503,6 +503,7 @@ struct igc_rx_buffer {
- struct igc_xdp_buff {
- 	struct xdp_buff xdp;
- 	union igc_adv_rx_desc *rx_desc;
-+	ktime_t rx_ts; /* data indication bit IGC_RXDADV_STAT_TSIP */
- };
- 
- struct igc_q_vector {
-diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-index 9cb43c0eab73..38d113b48111 100644
---- a/drivers/net/ethernet/intel/igc/igc_main.c
-+++ b/drivers/net/ethernet/intel/igc/igc_main.c
-@@ -2552,6 +2552,7 @@ static int igc_clean_rx_irq(struct igc_q_vector *q_vector, const int budget)
- 		if (igc_test_staterr(rx_desc, IGC_RXDADV_STAT_TSIP)) {
- 			timestamp = igc_ptp_rx_pktstamp(q_vector->adapter,
- 							pktbuf);
-+			ctx.rx_ts = timestamp;
- 			pkt_offset = IGC_TS_HDR_LEN;
- 			size -= IGC_TS_HDR_LEN;
- 		}
-@@ -2740,6 +2741,7 @@ static int igc_clean_rx_irq_zc(struct igc_q_vector *q_vector, const int budget)
- 		if (igc_test_staterr(desc, IGC_RXDADV_STAT_TSIP)) {
- 			timestamp = igc_ptp_rx_pktstamp(q_vector->adapter,
- 							bi->xdp->data);
-+			ctx->rx_ts = timestamp;
- 
- 			bi->xdp->data += IGC_TS_HDR_LEN;
- 
-@@ -6526,8 +6528,22 @@ static int igc_xdp_rx_hash(const struct xdp_md *_ctx, u32 *hash,
- 	return 0;
- }
- 
-+static int igc_xdp_rx_timestamp(const struct xdp_md *_ctx, u64 *timestamp)
-+{
-+	const struct igc_xdp_buff *ctx = (void *)_ctx;
-+
-+	if (igc_test_staterr(ctx->rx_desc, IGC_RXDADV_STAT_TSIP)) {
-+		*timestamp = ctx->rx_ts;
-+
-+		return 0;
-+	}
-+
-+	return -ENODATA;
-+}
-+
- static const struct xdp_metadata_ops igc_xdp_metadata_ops = {
- 	.xmo_rx_hash			= igc_xdp_rx_hash,
-+	.xmo_rx_timestamp		= igc_xdp_rx_timestamp,
- };
- 
- /**
+  [1] 
+https://github.com/xdp-project/xdp-project/blob/master/areas/hints/xdp_hints_kfuncs02_driver_igc.org#driver-igc-clock-drift-observations
+  [2] 
+https://github.com/xdp-project/xdp-project/blob/master/areas/hints/xdp_hints_kfuncs02_driver_igc.org#quick-time-sync-setup
 
+I've also played with using phc2sys (in same doc[2]) to sync HW clock
+with SW clock. I do *seek input* if I'm using it correctly?!?.
+
+I don't have a PTP clock setup , so I manually: Use phc2sys to
+synchronize the system clock to the PTP hardware clock (PHC) on the
+network card (which driver inited to CLOCK_REALTIME wall-clock).
+
+Stop ntp clock sync and disable most CPU sleep states:
+
+   sudo systemctl stop chronyd
+   sudo tuned-adm profile latency-performance
+   sudo hexdump --format '"%d\n"' /dev/cpu_dma_latency
+   2
+
+Adjust for the 37 sec offset to TAI, such that our BPF-prog using TAI 
+will align:
+
+   sudo phc2sys -s igc1 -O -37 -R 2 -u 10
+
+Result on igc with xdp_hw_metadata:
+
+  poll: 1 (0) skip=1 fail=0 redir=6
+  xsk_ring_cons__peek: 1
+  rx_hash: 0x82A96531 with RSS type:0x1
+  rx_timestamp:  1681825632645744805 (sec:1681825632.6457)
+  XDP RX-time:   1681825632645755858 (sec:1681825632.6458) delta 
+sec:0.0000 (11.053 usec)
+  AF_XDP time:   1681825632645769371 (sec:1681825632.6458) delta 
+sec:0.0000 (13.513 usec)
+
+The log file from phc2sys says:
+
+  phc2sys[1294263]: [86275.140] CLOCK_REALTIME rms    6 max   11 freq 
++13719 +/-   5 delay  1435 +/-   5
+
+Notice the delta between HW and SW timestamps is 11.053 usec.
+Even-though it is small, I don't really trust it, because the phc2sys
+log says frequency offset mean is "+13719" nanosec.
+
+So, it is true that latency/delay between HW to XDP-SW is 11 usec?
+Or is this due to (in)accuracy of phc2sys sync?
+
+--Jesper
 
