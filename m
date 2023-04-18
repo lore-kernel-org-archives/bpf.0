@@ -2,883 +2,203 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78921C7EE23
-	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 19:05:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23C80C77B75
+	for <bpf@archiver.kernel.org>; Tue, 18 Apr 2023 19:09:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232239AbjDRTFQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Apr 2023 15:05:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49716 "EHLO
+        id S232663AbjDRTJA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Apr 2023 15:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232717AbjDRTFO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 18 Apr 2023 15:05:14 -0400
-Received: from mx25lb.world4you.com (mx25lb.world4you.com [81.19.149.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D907127;
-        Tue, 18 Apr 2023 12:05:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=GaLlgFBegYVwkl352FSgT2v+pRG+ObcF7F1aZCA3kwA=; b=fkMrztMbELMYcJ/V2S8S/ApjxG
-        7+psqgDb12ug/9jOPb4LXL/vcQxi6qkkIkh0635X5sOYzHbXwjqDIP3msR0cruhli8uw6KteCOj3R
-        xKaaKFntt871Gvb7H8sFYk2T0GIUOvvCWvmAHNzgqykM2EcYh8dqutwVz3ZHZ2O6or9M=;
-Received: from 88-117-57-231.adsl.highway.telekom.at ([88.117.57.231] helo=hornet.engleder.at)
-        by mx25lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <gerhard@engleder-embedded.com>)
-        id 1poqdY-0002eV-IQ; Tue, 18 Apr 2023 21:05:08 +0200
-From:   Gerhard Engleder <gerhard@engleder-embedded.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
-        pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com,
-        maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com,
-        Gerhard Engleder <gerhard@engleder-embedded.com>
-Subject: [PATCH net-next v3 5/6] tsnep: Add XDP socket zero-copy RX support
-Date:   Tue, 18 Apr 2023 21:04:58 +0200
-Message-Id: <20230418190459.19326-6-gerhard@engleder-embedded.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230418190459.19326-1-gerhard@engleder-embedded.com>
-References: <20230418190459.19326-1-gerhard@engleder-embedded.com>
+        with ESMTP id S231261AbjDRTI7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 18 Apr 2023 15:08:59 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCAB9750;
+        Tue, 18 Apr 2023 12:08:32 -0700 (PDT)
+From:   Kurt Kanzenbach <kurt.kanzenbach@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1681844906;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VOrKFynLGckPk+CYqhbx8+jNQeXYmrsMC2Orct/hMls=;
+        b=Ur0Ke5DZuNUaFjbU1FGowS7C3QoGBwm836/R9d/gzxEYnmiF41jI1FjmBHlRhuBVYw/5nw
+        J/7QQNtG0CMKijupuLR3ptp51FyTjFh8dBEUQmoN8xNPMGZ+YUdLZjqiTrkb4qNoIWIAvd
+        /NNpZZltUdPcakYq6bXQFMt8WoUttrRqgzWqDVKrwylsPSkbXXusxPMdu9MGYNwTM8PhUS
+        Z1DbjsDh69FPU6ECTW23WNh7z6RkOgLpe8/jo3kwPDMpJYRIzBt6IKT3OtXlMtfBSHFYuq
+        1HuO+0mcnueKiMFhdho1mYeSn7lQ37PCIuajxvTn6RV2iXRzEH+TSiEtbYCtmQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1681844906;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VOrKFynLGckPk+CYqhbx8+jNQeXYmrsMC2Orct/hMls=;
+        b=WsReauLGocmtBrm0ZxTvlTCrnrV9WrA1s890zEnWeSMUm/wbZ5BS+b135oYcyIxP9rBIx6
+        /uNDW3uQ8Wt9bbAg==
+To:     Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        yoong.siang.song@intel.com
+Cc:     brouer@redhat.com, netdev@vger.kernel.org, martin.lau@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, alexandr.lobakin@intel.com,
+        larysa.zaremba@intel.com, xdp-hints@xdp-project.net,
+        intel-wired-lan@lists.osuosl.org, pabeni@redhat.com,
+        jesse.brandeburg@intel.com, kuba@kernel.org, bpf@vger.kernel.org,
+        edumazet@google.com, john.fastabend@gmail.com, hawk@kernel.org,
+        davem@davemloft.net, Stanislav Fomichev <sdf@google.com>,
+        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Pasi Vaananen <pvaanane@redhat.com>
+Subject: Re: [xdp-hints] Re: [PATCH bpf-next V1 5/5] selftests/bpf:
+ xdp_hw_metadata track more timestamps
+In-Reply-To: <d805e350-1d59-eb3a-ec27-adaa72cdc20b@redhat.com>
+References: <168174338054.593471.8312147519616671551.stgit@firesoul>
+ <168174344813.593471.4026230439937368990.stgit@firesoul>
+ <87leiqsexd.fsf@kurt> <d805e350-1d59-eb3a-ec27-adaa72cdc20b@redhat.com>
+Date:   Tue, 18 Apr 2023 21:08:23 +0200
+Message-ID: <874jpdatzs.fsf@kurt>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AV-Do-Run: Yes
-X-ACL-Warn: X-W4Y-Internal
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha512; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add support for XSK zero-copy to RX path. The setup of the XSK pool can
-be done at runtime. If the netdev is running, then the queue must be
-disabled and enabled during reconfiguration. This can be done easily
-with functions introduced in previous commits.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-A more important property is that, if the netdev is running, then the
-setup of the XSK pool shall not stop the netdev in case of errors. A
-broken netdev after a failed XSK pool setup is bad behavior. Therefore,
-the allocation and setup of resources during XSK pool setup is done only
-before any queue is disabled. Additionally, freeing and later allocation
-of resources is eliminated in some cases. Page pool entries are kept for
-later use. Two memory models are registered in parallel. As a result,
-the XSK pool setup cannot fail during queue reconfiguration.
+On Tue Apr 18 2023, Jesper Dangaard Brouer wrote:
+> On 17/04/2023 17.31, Kurt Kanzenbach wrote:
+>> On Mon Apr 17 2023, Jesper Dangaard Brouer wrote:
+>>> To correlate the hardware RX timestamp with something, add tracking of
+>>> two software timestamps both clock source CLOCK_TAI (see description in
+>>> man clock_gettime(2)).
+>>>
+>>> XDP metadata is extended with xdp_timestamp for capturing when XDP
+>>> received the packet. Populated with BPF helper bpf_ktime_get_tai_ns(). I
+>>> could not find a BPF helper for getting CLOCK_REALTIME, which would have
+>>> been preferred. In userspace when AF_XDP sees the packet another
+>>> software timestamp is recorded via clock_gettime() also clock source
+>>> CLOCK_TAI.
+>>>
+>>> Example output shortly after loading igc driver:
+>>>
+>>>    poll: 1 (0) skip=3D1 fail=3D0 redir=3D2
+>>>    xsk_ring_cons__peek: 1
+>>>    0x12557a8: rx_desc[1]->addr=3D100000000009000 addr=3D9100 comp_addr=
+=3D9000
+>>>    rx_hash: 0x82A96531 with RSS type:0x1
+>>>    rx_timestamp:  1681740540304898909 (sec:1681740540.3049)
+>>>    XDP RX-time:   1681740577304958316 (sec:1681740577.3050) delta sec:3=
+7.0001 (37000059.407 usec)
+>>>    AF_XDP time:   1681740577305051315 (sec:1681740577.3051) delta sec:0=
+.0001 (92.999 usec)
+>>>    0x12557a8: complete idx=3D9 addr=3D9000
+>>>
+>>> The first observation is that the 37 sec difference between RX HW vs XDP
+>>> timestamps, which indicate hardware is likely clock source
+>>> CLOCK_REALTIME, because (as of this writing) CLOCK_TAI is initialised
+>>> with a 37 sec offset.
+>>=20
+>> Maybe I'm missing something here, but in order to compare the hardware
+>> with software timestamps (e.g., by using bpf_ktime_get_tai_ns()) the
+>> time sources have to be synchronized by using something like
+>> phc2sys. That should make them comparable within reasonable range
+>> (nanoseconds).
+>
+> Precisely, in this test I've not synchronized the clocks.
+> The observation is that driver igc clock gets initialized to
+> CLOCK_REALTIME wall-clock time
 
-In contrast to other drivers, XSK pool setup and XDP BPF program setup
-are separate actions. XSK pool setup can be done without any XDP BPF
-program. The XDP BPF program can be added, removed or changed without
-any reconfiguration of the XSK pool.
+Yes. The igc driver uses ktime_get_real() to initialize the PHC time in
+init() and reset(). However, that's driver specific. PTP is based on
+TAI.
 
-Test results with A53 1.2GHz:
+>, and it slowly drifts as documented in provided link[1].
 
-xdpsock rxdrop copy mode:
-                   pps            pkts           1.00
-rx                 856,054        10,625,775
-Two CPUs with both 100% utilization.
+Yes, it does without proper synchronization. Linux has its own
+independent system clock. Therefore, tools like phc2sys are required.
 
-xdpsock rxdrop zero-copy mode:
-                   pps            pkts           1.00
-rx                 889,388        4,615,284
-Two CPUs with 100% and 20% utilization.
+>
+>   [1]=20
+> https://github.com/xdp-project/xdp-project/blob/master/areas/hints/xdp_hi=
+nts_kfuncs02_driver_igc.org#driver-igc-clock-drift-observations
+>   [2]=20
+> https://github.com/xdp-project/xdp-project/blob/master/areas/hints/xdp_hi=
+nts_kfuncs02_driver_igc.org#quick-time-sync-setup
+>
+> I've also played with using phc2sys (in same doc[2]) to sync HW clock
+> with SW clock. I do *seek input* if I'm using it correctly?!?.
 
-xdpsock l2fwd copy mode:
-                   pps            pkts           1.00
-rx                 248,985        7,315,885
-tx                 248,921        7,315,885
-Two CPUs with 100% and 10% utilization.
+Looks correct.
 
-xdpsock l2fwd zero-copy mode:
-                   pps            pkts           1.00
-rx                 254,735        3,039,456
-tx                 254,735        3,039,456
-Two CPUs with 100% and 4% utilization.
+>
+> I don't have a PTP clock setup , so I manually: Use phc2sys to
+> synchronize the system clock to the PTP hardware clock (PHC) on the
+> network card (which driver inited to CLOCK_REALTIME wall-clock).
+>
+> Stop ntp clock sync and disable most CPU sleep states:
+>
+>    sudo systemctl stop chronyd
+>    sudo tuned-adm profile latency-performance
+>    sudo hexdump --format '"%d\n"' /dev/cpu_dma_latency
+>    2
+>
+> Adjust for the 37 sec offset to TAI, such that our BPF-prog using TAI=20
+> will align:
+>
+>    sudo phc2sys -s igc1 -O -37 -R 2 -u 10
+>
+> Result on igc with xdp_hw_metadata:
+>
+>   poll: 1 (0) skip=3D1 fail=3D0 redir=3D6
+>   xsk_ring_cons__peek: 1
+>   rx_hash: 0x82A96531 with RSS type:0x1
+>   rx_timestamp:  1681825632645744805 (sec:1681825632.6457)
+>   XDP RX-time:   1681825632645755858 (sec:1681825632.6458) delta=20
+> sec:0.0000 (11.053 usec)
+>   AF_XDP time:   1681825632645769371 (sec:1681825632.6458) delta=20
+> sec:0.0000 (13.513 usec)
+>
+> The log file from phc2sys says:
+>
+>   phc2sys[1294263]: [86275.140] CLOCK_REALTIME rms    6 max   11 freq=20
+> +13719 +/-   5 delay  1435 +/-   5
+>
+> Notice the delta between HW and SW timestamps is 11.053 usec.
+> Even-though it is small, I don't really trust it, because the phc2sys
+> log says frequency offset mean is "+13719" nanosec.
 
-Packet rate increases and CPU utilization is reduced in both cases.
-100% CPU load seems to the base load. This load is consumed by ksoftirqd
-just for dropping the generated packets without xdpsock running.
+The offset between the system and PHC clock is 11ns at maximum (and 6ns
+in mean) which is quite good. The frequency offset is displayed in ppb.
 
-Using batch API reduced CPU utilization slightly, but measurements are
-not stable enough to provide meaningful numbers.
+>
+> So, it is true that latency/delay between HW to XDP-SW is 11 usec?
 
-Signed-off-by: Gerhard Engleder <gerhard@engleder-embedded.com>
----
- drivers/net/ethernet/engleder/tsnep.h      |  13 +-
- drivers/net/ethernet/engleder/tsnep_main.c | 494 ++++++++++++++++++++-
- drivers/net/ethernet/engleder/tsnep_xdp.c  |  66 +++
- 3 files changed, 558 insertions(+), 15 deletions(-)
+I think so.
 
-diff --git a/drivers/net/ethernet/engleder/tsnep.h b/drivers/net/ethernet/engleder/tsnep.h
-index 1de26aec78d3..d0bea605a1d1 100644
---- a/drivers/net/ethernet/engleder/tsnep.h
-+++ b/drivers/net/ethernet/engleder/tsnep.h
-@@ -101,7 +101,10 @@ struct tsnep_rx_entry {
- 
- 	u32 properties;
- 
--	struct page *page;
-+	union {
-+		struct page *page;
-+		struct xdp_buff *xdp;
-+	};
- 	size_t len;
- 	dma_addr_t dma;
- };
-@@ -121,6 +124,9 @@ struct tsnep_rx {
- 	u32 owner_counter;
- 	int increment_owner_counter;
- 	struct page_pool *page_pool;
-+	struct page **page_buffer;
-+	struct xsk_buff_pool *xsk_pool;
-+	struct xdp_buff **xdp_batch;
- 
- 	u32 packets;
- 	u32 bytes;
-@@ -129,6 +135,7 @@ struct tsnep_rx {
- 	u32 alloc_failed;
- 
- 	struct xdp_rxq_info xdp_rxq;
-+	struct xdp_rxq_info xdp_rxq_zc;
- };
- 
- struct tsnep_queue {
-@@ -214,6 +221,8 @@ int tsnep_rxnfc_del_rule(struct tsnep_adapter *adapter,
- 
- int tsnep_xdp_setup_prog(struct tsnep_adapter *adapter, struct bpf_prog *prog,
- 			 struct netlink_ext_ack *extack);
-+int tsnep_xdp_setup_pool(struct tsnep_adapter *adapter,
-+			 struct xsk_buff_pool *pool, u16 queue_id);
- 
- #if IS_ENABLED(CONFIG_TSNEP_SELFTESTS)
- int tsnep_ethtool_get_test_count(void);
-@@ -242,5 +251,7 @@ static inline void tsnep_ethtool_self_test(struct net_device *dev,
- void tsnep_get_system_time(struct tsnep_adapter *adapter, u64 *time);
- int tsnep_set_irq_coalesce(struct tsnep_queue *queue, u32 usecs);
- u32 tsnep_get_irq_coalesce(struct tsnep_queue *queue);
-+int tsnep_enable_xsk(struct tsnep_queue *queue, struct xsk_buff_pool *pool);
-+void tsnep_disable_xsk(struct tsnep_queue *queue);
- 
- #endif /* _TSNEP_H */
-diff --git a/drivers/net/ethernet/engleder/tsnep_main.c b/drivers/net/ethernet/engleder/tsnep_main.c
-index 2db94b96a1f0..1793ce7ed404 100644
---- a/drivers/net/ethernet/engleder/tsnep_main.c
-+++ b/drivers/net/ethernet/engleder/tsnep_main.c
-@@ -28,11 +28,16 @@
- #include <linux/iopoll.h>
- #include <linux/bpf.h>
- #include <linux/bpf_trace.h>
-+#include <net/xdp_sock_drv.h>
- 
- #define TSNEP_RX_OFFSET (max(NET_SKB_PAD, XDP_PACKET_HEADROOM) + NET_IP_ALIGN)
- #define TSNEP_HEADROOM ALIGN(TSNEP_RX_OFFSET, 4)
- #define TSNEP_MAX_RX_BUF_SIZE (PAGE_SIZE - TSNEP_HEADROOM - \
- 			       SKB_DATA_ALIGN(sizeof(struct skb_shared_info)))
-+/* XSK buffer shall store at least Q-in-Q frame */
-+#define TSNEP_XSK_RX_BUF_SIZE (ALIGN(TSNEP_RX_INLINE_METADATA_SIZE + \
-+				     ETH_FRAME_LEN + ETH_FCS_LEN + \
-+				     VLAN_HLEN * 2, 4))
- 
- #ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
- #define DMA_ADDR_HIGH(dma_addr) ((u32)(((dma_addr) >> 32) & 0xFFFFFFFF))
-@@ -777,9 +782,12 @@ static void tsnep_rx_ring_cleanup(struct tsnep_rx *rx)
- 
- 	for (i = 0; i < TSNEP_RING_SIZE; i++) {
- 		entry = &rx->entry[i];
--		if (entry->page)
-+		if (!rx->xsk_pool && entry->page)
- 			page_pool_put_full_page(rx->page_pool, entry->page,
- 						false);
-+		if (rx->xsk_pool && entry->xdp)
-+			xsk_buff_free(entry->xdp);
-+		/* xdp is union with page */
- 		entry->page = NULL;
- 	}
- 
-@@ -892,6 +900,40 @@ static int tsnep_rx_desc_available(struct tsnep_rx *rx)
- 		return rx->read - rx->write - 1;
- }
- 
-+static void tsnep_rx_free_page_buffer(struct tsnep_rx *rx)
-+{
-+	struct page **page;
-+
-+	/* last entry of page_buffer is always zero, because ring cannot be
-+	 * filled completely
-+	 */
-+	page = rx->page_buffer;
-+	while (*page) {
-+		page_pool_put_full_page(rx->page_pool, *page, false);
-+		*page = NULL;
-+		page++;
-+	}
-+}
-+
-+static int tsnep_rx_alloc_page_buffer(struct tsnep_rx *rx)
-+{
-+	int i;
-+
-+	/* alloc for all ring entries except the last one, because ring cannot
-+	 * be filled completely
-+	 */
-+	for (i = 0; i < TSNEP_RING_SIZE - 1; i++) {
-+		rx->page_buffer[i] = page_pool_dev_alloc_pages(rx->page_pool);
-+		if (!rx->page_buffer[i]) {
-+			tsnep_rx_free_page_buffer(rx);
-+
-+			return -ENOMEM;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static void tsnep_rx_set_page(struct tsnep_rx *rx, struct tsnep_rx_entry *entry,
- 			      struct page *page)
- {
-@@ -927,7 +969,7 @@ static void tsnep_rx_activate(struct tsnep_rx *rx, int index)
- {
- 	struct tsnep_rx_entry *entry = &rx->entry[index];
- 
--	/* TSNEP_MAX_RX_BUF_SIZE is a multiple of 4 */
-+	/* TSNEP_MAX_RX_BUF_SIZE and TSNEP_XSK_RX_BUF_SIZE are multiple of 4 */
- 	entry->properties = entry->len & TSNEP_DESC_LENGTH_MASK;
- 	entry->properties |= TSNEP_DESC_INTERRUPT_FLAG;
- 	if (index == rx->increment_owner_counter) {
-@@ -989,6 +1031,76 @@ static int tsnep_rx_refill(struct tsnep_rx *rx, int count, bool reuse)
- 	return desc_refilled;
- }
- 
-+static void tsnep_rx_set_xdp(struct tsnep_rx *rx, struct tsnep_rx_entry *entry,
-+			     struct xdp_buff *xdp)
-+{
-+	entry->xdp = xdp;
-+	entry->len = TSNEP_XSK_RX_BUF_SIZE;
-+	entry->dma = xsk_buff_xdp_get_dma(entry->xdp);
-+	entry->desc->rx = __cpu_to_le64(entry->dma);
-+}
-+
-+static void tsnep_rx_reuse_buffer_zc(struct tsnep_rx *rx, int index)
-+{
-+	struct tsnep_rx_entry *entry = &rx->entry[index];
-+	struct tsnep_rx_entry *read = &rx->entry[rx->read];
-+
-+	tsnep_rx_set_xdp(rx, entry, read->xdp);
-+	read->xdp = NULL;
-+}
-+
-+static int tsnep_rx_alloc_zc(struct tsnep_rx *rx, int count, bool reuse)
-+{
-+	u32 allocated;
-+	int i;
-+
-+	allocated = xsk_buff_alloc_batch(rx->xsk_pool, rx->xdp_batch, count);
-+	for (i = 0; i < allocated; i++) {
-+		int index = (rx->write + i) & TSNEP_RING_MASK;
-+		struct tsnep_rx_entry *entry = &rx->entry[index];
-+
-+		tsnep_rx_set_xdp(rx, entry, rx->xdp_batch[i]);
-+		tsnep_rx_activate(rx, index);
-+	}
-+	if (i == 0) {
-+		rx->alloc_failed++;
-+
-+		if (reuse) {
-+			tsnep_rx_reuse_buffer_zc(rx, rx->write);
-+			tsnep_rx_activate(rx, rx->write);
-+		}
-+	}
-+
-+	if (i)
-+		rx->write = (rx->write + i) & TSNEP_RING_MASK;
-+
-+	return i;
-+}
-+
-+static void tsnep_rx_free_zc(struct tsnep_rx *rx)
-+{
-+	int i;
-+
-+	for (i = 0; i < TSNEP_RING_SIZE; i++) {
-+		struct tsnep_rx_entry *entry = &rx->entry[i];
-+
-+		if (entry->xdp)
-+			xsk_buff_free(entry->xdp);
-+		entry->xdp = NULL;
-+	}
-+}
-+
-+static int tsnep_rx_refill_zc(struct tsnep_rx *rx, int count, bool reuse)
-+{
-+	int desc_refilled;
-+
-+	desc_refilled = tsnep_rx_alloc_zc(rx, count, reuse);
-+	if (desc_refilled)
-+		tsnep_rx_enable(rx);
-+
-+	return desc_refilled;
-+}
-+
- static bool tsnep_xdp_run_prog(struct tsnep_rx *rx, struct bpf_prog *prog,
- 			       struct xdp_buff *xdp, int *status,
- 			       struct netdev_queue *tx_nq, struct tsnep_tx *tx)
-@@ -1000,11 +1112,6 @@ static bool tsnep_xdp_run_prog(struct tsnep_rx *rx, struct bpf_prog *prog,
- 	length = xdp->data_end - xdp->data_hard_start - XDP_PACKET_HEADROOM;
- 
- 	act = bpf_prog_run_xdp(prog, xdp);
--
--	/* Due xdp_adjust_tail: DMA sync for_device cover max len CPU touch */
--	sync = xdp->data_end - xdp->data_hard_start - XDP_PACKET_HEADROOM;
--	sync = max(sync, length);
--
- 	switch (act) {
- 	case XDP_PASS:
- 		return false;
-@@ -1026,12 +1133,56 @@ static bool tsnep_xdp_run_prog(struct tsnep_rx *rx, struct bpf_prog *prog,
- 		trace_xdp_exception(rx->adapter->netdev, prog, act);
- 		fallthrough;
- 	case XDP_DROP:
-+		/* Due xdp_adjust_tail: DMA sync for_device cover max len CPU
-+		 * touch
-+		 */
-+		sync = xdp->data_end - xdp->data_hard_start -
-+		       XDP_PACKET_HEADROOM;
-+		sync = max(sync, length);
- 		page_pool_put_page(rx->page_pool, virt_to_head_page(xdp->data),
- 				   sync, true);
- 		return true;
- 	}
- }
- 
-+static bool tsnep_xdp_run_prog_zc(struct tsnep_rx *rx, struct bpf_prog *prog,
-+				  struct xdp_buff *xdp, int *status,
-+				  struct netdev_queue *tx_nq,
-+				  struct tsnep_tx *tx)
-+{
-+	u32 act;
-+
-+	act = bpf_prog_run_xdp(prog, xdp);
-+
-+	/* XDP_REDIRECT is the main action for zero-copy */
-+	if (likely(act == XDP_REDIRECT)) {
-+		if (xdp_do_redirect(rx->adapter->netdev, xdp, prog) < 0)
-+			goto out_failure;
-+		*status |= TSNEP_XDP_REDIRECT;
-+		return true;
-+	}
-+
-+	switch (act) {
-+	case XDP_PASS:
-+		return false;
-+	case XDP_TX:
-+		if (!tsnep_xdp_xmit_back(rx->adapter, xdp, tx_nq, tx))
-+			goto out_failure;
-+		*status |= TSNEP_XDP_TX;
-+		return true;
-+	default:
-+		bpf_warn_invalid_xdp_action(rx->adapter->netdev, prog, act);
-+		fallthrough;
-+	case XDP_ABORTED:
-+out_failure:
-+		trace_xdp_exception(rx->adapter->netdev, prog, act);
-+		fallthrough;
-+	case XDP_DROP:
-+		xsk_buff_free(xdp);
-+		return true;
-+	}
-+}
-+
- static void tsnep_finalize_xdp(struct tsnep_adapter *adapter, int status,
- 			       struct netdev_queue *tx_nq, struct tsnep_tx *tx)
- {
-@@ -1204,6 +1355,124 @@ static int tsnep_rx_poll(struct tsnep_rx *rx, struct napi_struct *napi,
- 	return done;
- }
- 
-+static int tsnep_rx_poll_zc(struct tsnep_rx *rx, struct napi_struct *napi,
-+			    int budget)
-+{
-+	struct tsnep_rx_entry *entry;
-+	struct netdev_queue *tx_nq;
-+	struct bpf_prog *prog;
-+	struct tsnep_tx *tx;
-+	int desc_available;
-+	int xdp_status = 0;
-+	struct page *page;
-+	int done = 0;
-+	int length;
-+
-+	desc_available = tsnep_rx_desc_available(rx);
-+	prog = READ_ONCE(rx->adapter->xdp_prog);
-+	if (prog) {
-+		tx_nq = netdev_get_tx_queue(rx->adapter->netdev,
-+					    rx->tx_queue_index);
-+		tx = &rx->adapter->tx[rx->tx_queue_index];
-+	}
-+
-+	while (likely(done < budget) && (rx->read != rx->write)) {
-+		entry = &rx->entry[rx->read];
-+		if ((__le32_to_cpu(entry->desc_wb->properties) &
-+		     TSNEP_DESC_OWNER_COUNTER_MASK) !=
-+		    (entry->properties & TSNEP_DESC_OWNER_COUNTER_MASK))
-+			break;
-+		done++;
-+
-+		if (desc_available >= TSNEP_RING_RX_REFILL) {
-+			bool reuse = desc_available >= TSNEP_RING_RX_REUSE;
-+
-+			desc_available -= tsnep_rx_refill_zc(rx, desc_available,
-+							     reuse);
-+			if (!entry->xdp) {
-+				/* buffer has been reused for refill to prevent
-+				 * empty RX ring, thus buffer cannot be used for
-+				 * RX processing
-+				 */
-+				rx->read = (rx->read + 1) & TSNEP_RING_MASK;
-+				desc_available++;
-+
-+				rx->dropped++;
-+
-+				continue;
-+			}
-+		}
-+
-+		/* descriptor properties shall be read first, because valid data
-+		 * is signaled there
-+		 */
-+		dma_rmb();
-+
-+		prefetch(entry->xdp->data);
-+		length = __le32_to_cpu(entry->desc_wb->properties) &
-+			 TSNEP_DESC_LENGTH_MASK;
-+		xsk_buff_set_size(entry->xdp, length);
-+		xsk_buff_dma_sync_for_cpu(entry->xdp, rx->xsk_pool);
-+
-+		/* RX metadata with timestamps is in front of actual data,
-+		 * subtract metadata size to get length of actual data and
-+		 * consider metadata size as offset of actual data during RX
-+		 * processing
-+		 */
-+		length -= TSNEP_RX_INLINE_METADATA_SIZE;
-+
-+		rx->read = (rx->read + 1) & TSNEP_RING_MASK;
-+		desc_available++;
-+
-+		if (prog) {
-+			bool consume;
-+
-+			entry->xdp->data += TSNEP_RX_INLINE_METADATA_SIZE;
-+			entry->xdp->data_meta += TSNEP_RX_INLINE_METADATA_SIZE;
-+
-+			consume = tsnep_xdp_run_prog_zc(rx, prog, entry->xdp,
-+							&xdp_status, tx_nq, tx);
-+			if (consume) {
-+				rx->packets++;
-+				rx->bytes += length;
-+
-+				entry->xdp = NULL;
-+
-+				continue;
-+			}
-+		}
-+
-+		page = page_pool_dev_alloc_pages(rx->page_pool);
-+		if (page) {
-+			memcpy(page_address(page) + TSNEP_RX_OFFSET,
-+			       entry->xdp->data - TSNEP_RX_INLINE_METADATA_SIZE,
-+			       length + TSNEP_RX_INLINE_METADATA_SIZE);
-+			tsnep_rx_page(rx, napi, page, length);
-+		} else {
-+			rx->dropped++;
-+		}
-+		xsk_buff_free(entry->xdp);
-+		entry->xdp = NULL;
-+	}
-+
-+	if (xdp_status)
-+		tsnep_finalize_xdp(rx->adapter, xdp_status, tx_nq, tx);
-+
-+	if (desc_available)
-+		desc_available -= tsnep_rx_refill_zc(rx, desc_available, false);
-+
-+	if (xsk_uses_need_wakeup(rx->xsk_pool)) {
-+		if (desc_available)
-+			xsk_set_rx_need_wakeup(rx->xsk_pool);
-+		else
-+			xsk_clear_rx_need_wakeup(rx->xsk_pool);
-+
-+		return done;
-+	}
-+
-+	return desc_available ? budget : done;
-+}
-+
- static bool tsnep_rx_pending(struct tsnep_rx *rx)
- {
- 	struct tsnep_rx_entry *entry;
-@@ -1231,21 +1500,113 @@ static int tsnep_rx_open(struct tsnep_rx *rx)
- 	tsnep_rx_init(rx);
- 
- 	desc_available = tsnep_rx_desc_available(rx);
--	retval = tsnep_rx_alloc(rx, desc_available, false);
-+	if (rx->xsk_pool)
-+		retval = tsnep_rx_alloc_zc(rx, desc_available, false);
-+	else
-+		retval = tsnep_rx_alloc(rx, desc_available, false);
- 	if (retval != desc_available) {
--		tsnep_rx_ring_cleanup(rx);
-+		retval = -ENOMEM;
- 
--		return -ENOMEM;
-+		goto alloc_failed;
-+	}
-+
-+	/* prealloc pages to prevent allocation failures when XSK pool is
-+	 * disabled at runtime
-+	 */
-+	if (rx->xsk_pool) {
-+		retval = tsnep_rx_alloc_page_buffer(rx);
-+		if (retval)
-+			goto alloc_failed;
- 	}
- 
- 	return 0;
-+
-+alloc_failed:
-+	tsnep_rx_ring_cleanup(rx);
-+	return retval;
- }
- 
- static void tsnep_rx_close(struct tsnep_rx *rx)
- {
-+	if (rx->xsk_pool)
-+		tsnep_rx_free_page_buffer(rx);
-+
- 	tsnep_rx_ring_cleanup(rx);
- }
- 
-+static void tsnep_rx_reopen(struct tsnep_rx *rx)
-+{
-+	struct page **page = rx->page_buffer;
-+	int i;
-+
-+	tsnep_rx_init(rx);
-+
-+	for (i = 0; i < TSNEP_RING_SIZE; i++) {
-+		struct tsnep_rx_entry *entry = &rx->entry[i];
-+
-+		/* defined initial values for properties are required for
-+		 * correct owner counter checking
-+		 */
-+		entry->desc->properties = 0;
-+		entry->desc_wb->properties = 0;
-+
-+		/* prevent allocation failures by reusing kept pages */
-+		if (*page) {
-+			tsnep_rx_set_page(rx, entry, *page);
-+			tsnep_rx_activate(rx, rx->write);
-+			rx->write++;
-+
-+			*page = NULL;
-+			page++;
-+		}
-+	}
-+}
-+
-+static void tsnep_rx_reopen_xsk(struct tsnep_rx *rx)
-+{
-+	struct page **page = rx->page_buffer;
-+	u32 allocated;
-+	int i;
-+
-+	tsnep_rx_init(rx);
-+
-+	/* alloc all ring entries except the last one, because ring cannot be
-+	 * filled completely, as many buffers as possible is enough as wakeup is
-+	 * done if new buffers are available
-+	 */
-+	allocated = xsk_buff_alloc_batch(rx->xsk_pool, rx->xdp_batch,
-+					 TSNEP_RING_SIZE - 1);
-+
-+	for (i = 0; i < TSNEP_RING_SIZE; i++) {
-+		struct tsnep_rx_entry *entry = &rx->entry[i];
-+
-+		/* keep pages to prevent allocation failures when xsk is
-+		 * disabled
-+		 */
-+		if (entry->page) {
-+			*page = entry->page;
-+			entry->page = NULL;
-+
-+			page++;
-+		}
-+
-+		/* defined initial values for properties are required for
-+		 * correct owner counter checking
-+		 */
-+		entry->desc->properties = 0;
-+		entry->desc_wb->properties = 0;
-+
-+		if (allocated) {
-+			tsnep_rx_set_xdp(rx, entry,
-+					 rx->xdp_batch[allocated - 1]);
-+			tsnep_rx_activate(rx, rx->write);
-+			rx->write++;
-+
-+			allocated--;
-+		}
-+	}
-+}
-+
- static bool tsnep_pending(struct tsnep_queue *queue)
- {
- 	if (queue->tx && tsnep_tx_pending(queue->tx))
-@@ -1268,7 +1629,9 @@ static int tsnep_poll(struct napi_struct *napi, int budget)
- 		complete = tsnep_tx_poll(queue->tx, budget);
- 
- 	if (queue->rx) {
--		done = tsnep_rx_poll(queue->rx, napi, budget);
-+		done = queue->rx->xsk_pool ?
-+		       tsnep_rx_poll_zc(queue->rx, napi, budget) :
-+		       tsnep_rx_poll(queue->rx, napi, budget);
- 		if (done >= budget)
- 			complete = false;
- 	}
-@@ -1349,8 +1712,12 @@ static void tsnep_queue_close(struct tsnep_queue *queue, bool first)
- 
- 	tsnep_free_irq(queue, first);
- 
--	if (rx && xdp_rxq_info_is_reg(&rx->xdp_rxq))
--		xdp_rxq_info_unreg(&rx->xdp_rxq);
-+	if (rx) {
-+		if (xdp_rxq_info_is_reg(&rx->xdp_rxq))
-+			xdp_rxq_info_unreg(&rx->xdp_rxq);
-+		if (xdp_rxq_info_is_reg(&rx->xdp_rxq_zc))
-+			xdp_rxq_info_unreg(&rx->xdp_rxq_zc);
-+	}
- 
- 	netif_napi_del(&queue->napi);
- }
-@@ -1373,6 +1740,10 @@ static int tsnep_queue_open(struct tsnep_adapter *adapter,
- 		else
- 			rx->tx_queue_index = 0;
- 
-+		/* prepare both memory models to eliminate possible registration
-+		 * errors when memory model is switched between page pool and
-+		 * XSK pool during runtime
-+		 */
- 		retval = xdp_rxq_info_reg(&rx->xdp_rxq, adapter->netdev,
- 					  rx->queue_index, queue->napi.napi_id);
- 		if (retval)
-@@ -1382,6 +1753,17 @@ static int tsnep_queue_open(struct tsnep_adapter *adapter,
- 						    rx->page_pool);
- 		if (retval)
- 			goto failed;
-+		retval = xdp_rxq_info_reg(&rx->xdp_rxq_zc, adapter->netdev,
-+					  rx->queue_index, queue->napi.napi_id);
-+		if (retval)
-+			goto failed;
-+		retval = xdp_rxq_info_reg_mem_model(&rx->xdp_rxq_zc,
-+						    MEM_TYPE_XSK_BUFF_POOL,
-+						    NULL);
-+		if (retval)
-+			goto failed;
-+		if (rx->xsk_pool)
-+			xsk_pool_set_rxq_info(rx->xsk_pool, &rx->xdp_rxq_zc);
- 	}
- 
- 	retval = tsnep_request_irq(queue, first);
-@@ -1497,6 +1879,67 @@ static int tsnep_netdev_close(struct net_device *netdev)
- 	return 0;
- }
- 
-+int tsnep_enable_xsk(struct tsnep_queue *queue, struct xsk_buff_pool *pool)
-+{
-+	bool running = netif_running(queue->adapter->netdev);
-+	u32 frame_size;
-+
-+	frame_size = xsk_pool_get_rx_frame_size(pool);
-+	if (frame_size < TSNEP_XSK_RX_BUF_SIZE)
-+		return -EOPNOTSUPP;
-+
-+	queue->rx->page_buffer = kcalloc(TSNEP_RING_SIZE,
-+					 sizeof(*queue->rx->page_buffer),
-+					 GFP_KERNEL);
-+	if (!queue->rx->page_buffer)
-+		return -ENOMEM;
-+	queue->rx->xdp_batch = kcalloc(TSNEP_RING_SIZE,
-+				       sizeof(*queue->rx->xdp_batch),
-+				       GFP_KERNEL);
-+	if (!queue->rx->xdp_batch) {
-+		kfree(queue->rx->page_buffer);
-+		queue->rx->page_buffer = NULL;
-+
-+		return -ENOMEM;
-+	}
-+
-+	xsk_pool_set_rxq_info(pool, &queue->rx->xdp_rxq_zc);
-+
-+	if (running)
-+		tsnep_queue_disable(queue);
-+
-+	queue->rx->xsk_pool = pool;
-+
-+	if (running) {
-+		tsnep_rx_reopen_xsk(queue->rx);
-+		tsnep_queue_enable(queue);
-+	}
-+
-+	return 0;
-+}
-+
-+void tsnep_disable_xsk(struct tsnep_queue *queue)
-+{
-+	bool running = netif_running(queue->adapter->netdev);
-+
-+	if (running)
-+		tsnep_queue_disable(queue);
-+
-+	tsnep_rx_free_zc(queue->rx);
-+
-+	queue->rx->xsk_pool = NULL;
-+
-+	if (running) {
-+		tsnep_rx_reopen(queue->rx);
-+		tsnep_queue_enable(queue);
-+	}
-+
-+	kfree(queue->rx->xdp_batch);
-+	queue->rx->xdp_batch = NULL;
-+	kfree(queue->rx->page_buffer);
-+	queue->rx->page_buffer = NULL;
-+}
-+
- static netdev_tx_t tsnep_netdev_xmit_frame(struct sk_buff *skb,
- 					   struct net_device *netdev)
- {
-@@ -1646,6 +2089,9 @@ static int tsnep_netdev_bpf(struct net_device *dev, struct netdev_bpf *bpf)
- 	switch (bpf->command) {
- 	case XDP_SETUP_PROG:
- 		return tsnep_xdp_setup_prog(adapter, bpf->prog, bpf->extack);
-+	case XDP_SETUP_XSK_POOL:
-+		return tsnep_xdp_setup_pool(adapter, bpf->xsk.pool,
-+					    bpf->xsk.queue_id);
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -1700,6 +2146,24 @@ static int tsnep_netdev_xdp_xmit(struct net_device *dev, int n,
- 	return nxmit;
- }
- 
-+static int tsnep_netdev_xsk_wakeup(struct net_device *dev, u32 queue_id,
-+				   u32 flags)
-+{
-+	struct tsnep_adapter *adapter = netdev_priv(dev);
-+	struct tsnep_queue *queue;
-+
-+	if (queue_id >= adapter->num_rx_queues ||
-+	    queue_id >= adapter->num_tx_queues)
-+		return -EINVAL;
-+
-+	queue = &adapter->queue[queue_id];
-+
-+	if (!napi_if_scheduled_mark_missed(&queue->napi))
-+		napi_schedule(&queue->napi);
-+
-+	return 0;
-+}
-+
- static const struct net_device_ops tsnep_netdev_ops = {
- 	.ndo_open = tsnep_netdev_open,
- 	.ndo_stop = tsnep_netdev_close,
-@@ -1713,6 +2177,7 @@ static const struct net_device_ops tsnep_netdev_ops = {
- 	.ndo_setup_tc = tsnep_tc_setup,
- 	.ndo_bpf = tsnep_netdev_bpf,
- 	.ndo_xdp_xmit = tsnep_netdev_xdp_xmit,
-+	.ndo_xsk_wakeup = tsnep_netdev_xsk_wakeup,
- };
- 
- static int tsnep_mac_init(struct tsnep_adapter *adapter)
-@@ -1973,7 +2438,8 @@ static int tsnep_probe(struct platform_device *pdev)
- 
- 	netdev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT |
- 			       NETDEV_XDP_ACT_NDO_XMIT |
--			       NETDEV_XDP_ACT_NDO_XMIT_SG;
-+			       NETDEV_XDP_ACT_NDO_XMIT_SG |
-+			       NETDEV_XDP_ACT_XSK_ZEROCOPY;
- 
- 	/* carrier off reporting is important to ethtool even BEFORE open */
- 	netif_carrier_off(netdev);
-diff --git a/drivers/net/ethernet/engleder/tsnep_xdp.c b/drivers/net/ethernet/engleder/tsnep_xdp.c
-index 4d14cb1fd772..c0513848c547 100644
---- a/drivers/net/ethernet/engleder/tsnep_xdp.c
-+++ b/drivers/net/ethernet/engleder/tsnep_xdp.c
-@@ -17,3 +17,69 @@ int tsnep_xdp_setup_prog(struct tsnep_adapter *adapter, struct bpf_prog *prog,
- 
- 	return 0;
- }
-+
-+static int tsnep_xdp_enable_pool(struct tsnep_adapter *adapter,
-+				 struct xsk_buff_pool *pool, u16 queue_id)
-+{
-+	struct tsnep_queue *queue;
-+	int retval;
-+
-+	if (queue_id >= adapter->num_rx_queues ||
-+	    queue_id >= adapter->num_tx_queues)
-+		return -EINVAL;
-+
-+	queue = &adapter->queue[queue_id];
-+	if (queue->rx->queue_index != queue_id ||
-+	    queue->tx->queue_index != queue_id) {
-+		netdev_err(adapter->netdev,
-+			   "XSK support only for TX/RX queue pairs\n");
-+
-+		return -EOPNOTSUPP;
-+	}
-+
-+	retval = xsk_pool_dma_map(pool, adapter->dmadev,
-+				  DMA_ATTR_SKIP_CPU_SYNC);
-+	if (retval) {
-+		netdev_err(adapter->netdev, "failed to map XSK pool\n");
-+
-+		return retval;
-+	}
-+
-+	retval = tsnep_enable_xsk(queue, pool);
-+	if (retval) {
-+		xsk_pool_dma_unmap(pool, DMA_ATTR_SKIP_CPU_SYNC);
-+
-+		return retval;
-+	}
-+
-+	return 0;
-+}
-+
-+static int tsnep_xdp_disable_pool(struct tsnep_adapter *adapter, u16 queue_id)
-+{
-+	struct xsk_buff_pool *pool;
-+	struct tsnep_queue *queue;
-+
-+	if (queue_id >= adapter->num_rx_queues ||
-+	    queue_id >= adapter->num_tx_queues)
-+		return -EINVAL;
-+
-+	pool = xsk_get_pool_from_qid(adapter->netdev, queue_id);
-+	if (!pool)
-+		return -EINVAL;
-+
-+	queue = &adapter->queue[queue_id];
-+
-+	tsnep_disable_xsk(queue);
-+
-+	xsk_pool_dma_unmap(pool, DMA_ATTR_SKIP_CPU_SYNC);
-+
-+	return 0;
-+}
-+
-+int tsnep_xdp_setup_pool(struct tsnep_adapter *adapter,
-+			 struct xsk_buff_pool *pool, u16 queue_id)
-+{
-+	return pool ? tsnep_xdp_enable_pool(adapter, pool, queue_id) :
-+		      tsnep_xdp_disable_pool(adapter, queue_id);
-+}
--- 
-2.30.2
+> Or is this due to (in)accuracy of phc2sys sync?
 
+Nope.
+
+Thanks,
+Kurt
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJSBAEBCgA8FiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmQ+6qceHGt1cnQua2Fu
+emVuYmFjaEBsaW51dHJvbml4LmRlAAoJEMGT0fKqRnOCea0QAKc/SxH158WmCZZF
+SAzioGJ2WQ1qWJkaR8MaIMEwrDUqGKFqYJLXNmzLuGlJQJIl1YI8/9XQmFd1Xq/H
+2sFW50X1nP53OXP01hSKna33xlt5T5MitLD1krlK+6FYC5GlZ9jTGNP8vg2cIvRb
+9t2blNR0J8lMm42uS/8hQgDOoYj+9Mgxs14fG6WZyKzjJEKZPt11U0VfZsh9u98/
+rxuSXytQ+mKgY83AnY59O2Pr7+Da9XjppcBMbLVfrthFX1FDqj0RSGlWPQjbngJe
++hcxANRlQGPUjJQeK51Lb6ZZYY8rB0vTnoNgsNyaMbPlcQgSKwEH5NSwQSwwBzk0
+/ANfBb+hknxkfv/a9LEwJBQGkxSnkIyUTNXg/KztkVNMmjsfy2TwUWqq5zW8eJkb
+foYl3OmOcIl3fC4ifewsFDhy9qsdF0g02geN7hKZMIUuQ7AFZG10EHCEqzIWf+il
+IqP3oy3CjyZxuBbR6TUNWOpgSkfctUWc2bEMwG9w5eoDoZxDypgDQTvtuulsuF7Q
+2qtyst5kgG0pndPay9cSwYC6AVi+lIVCMZ8fQMJG/ZcUNTQUt2UpHtBACpBv75Jk
+doUcszC9/XOqPXw6rDy6IwWwX80Hw1tqKporXCYf2WKtYxB1bqAxE5azz98AnmmL
+b6+rrbfCleWELNhj+AOu0v+M5G2f
+=bJsX
+-----END PGP SIGNATURE-----
+--=-=-=--
