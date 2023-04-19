@@ -2,135 +2,215 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F06AC77B73
-	for <bpf@archiver.kernel.org>; Wed, 19 Apr 2023 13:43:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3938FC6FD18
+	for <bpf@archiver.kernel.org>; Wed, 19 Apr 2023 14:03:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233105AbjDSNnZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Apr 2023 09:43:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49764 "EHLO
+        id S231566AbjDSODt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Apr 2023 10:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231584AbjDSNnW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 19 Apr 2023 09:43:22 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B98713C3B;
-        Wed, 19 Apr 2023 06:43:20 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VgVBGnO_1681911795;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VgVBGnO_1681911795)
-          by smtp.aliyun-inc.com;
-          Wed, 19 Apr 2023 21:43:16 +0800
-Message-ID: <1681911760.8853464-2-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH net-next] xsk: introduce xsk_dma_ops
-Date:   Wed, 19 Apr 2023 21:42:40 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc:     <netdev@vger.kernel.org>,
-        =?utf-8?b?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        <bpf@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>
-References: <20230417032750.7086-1-xuanzhuo@linux.alibaba.com>
- <88d5a2f6-af43-c3f9-615d-701ef01d923d@intel.com>
-In-Reply-To: <88d5a2f6-af43-c3f9-615d-701ef01d923d@intel.com>
+        with ESMTP id S231532AbjDSODs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Apr 2023 10:03:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498852137
+        for <bpf@vger.kernel.org>; Wed, 19 Apr 2023 07:02:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681912977;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RFDw37pMwdEVptX7gUa8oxr5PahPZNxO0OFZFSpe1yY=;
+        b=dU5/idyF7wAK1x9C1rVLcOV8jPt9Mz33ooxhesynAXUCj6UNzQQj8VXIGZtvpXlDpNv1Sh
+        cUkIhUzcFzeK2OoMue0TXemrr2MOONj1XBA+HxOA37vXR2MbbsXKcbDC+7su97h7IMkppm
+        fBbdLqVwgDcnXGHpQ9hO+4whCgFlx9k=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-13-FF-1PvrlO567r5-_teF3jA-1; Wed, 19 Apr 2023 10:02:47 -0400
+X-MC-Unique: FF-1PvrlO567r5-_teF3jA-1
+Received: by mail-ej1-f70.google.com with SMTP id xo7-20020a170907bb8700b009529bd2bf10so2844764ejc.15
+        for <bpf@vger.kernel.org>; Wed, 19 Apr 2023 07:02:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681912963; x=1684504963;
+        h=content-transfer-encoding:in-reply-to:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RFDw37pMwdEVptX7gUa8oxr5PahPZNxO0OFZFSpe1yY=;
+        b=Nyh4hJlgpPOi+C4/qUKWLnBYjTO6t/vHEhkFk5iyqZMKTVHPRpet45CUybcLTzH7EB
+         aHLvPyznfyP9WnYVvn4/a51VLsGgt8oGZuHIR5vDxhrSp2iWeMCqUna6rxLkAloQi6bi
+         EVEfsbhmqMOBNCqHCxrrDBinXMdCxEsF5p2xzThOC5m7J5+nncOsrJSZzhqooKrodXPs
+         5L/4TeT+Oh72BBhmrAiSxW6IR9FQcgn8gZ8ZTOMxUj+QtW8cYZO2oF1fPqyrI0M0LEHO
+         rtvtMAWRVoQR4M+i2qbw9oRjDUNw/FtJymrSr+ecFcSIQh1P0LGK7H4FJXMBf0NASjke
+         x4Kg==
+X-Gm-Message-State: AAQBX9ciWVvFx3v1ZIWcmor1QOrv85E+b+Pv0NaXe+4qHFREtbRabwtL
+        q0tWmyAr7FtiJBMVO2T14AHjPpgC1NIn8TwaeL2q6+Ikfqzfe7hKnLtEyEg1rbKv3xiTDb29F4s
+        H+bfi0Supxzrb
+X-Received: by 2002:a17:906:6bcd:b0:94a:bd17:fc40 with SMTP id t13-20020a1709066bcd00b0094abd17fc40mr15072993ejs.25.1681912963576;
+        Wed, 19 Apr 2023 07:02:43 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Y57ZSH+O6KfQO9ncuqKKK2rj3WB193cJr9NUlWLvKbb2xUg8/Rpc1tsNgyQ0wuDzkJB9UyoQ==
+X-Received: by 2002:a17:906:6bcd:b0:94a:bd17:fc40 with SMTP id t13-20020a1709066bcd00b0094abd17fc40mr15072964ejs.25.1681912963208;
+        Wed, 19 Apr 2023 07:02:43 -0700 (PDT)
+Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
+        by smtp.gmail.com with ESMTPSA id m7-20020a17090679c700b0094a8aa6338dsm9600103ejo.14.2023.04.19.07.02.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 07:02:42 -0700 (PDT)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <ea762132-a6ff-379a-2cc2-6057754425f7@redhat.com>
+Date:   Wed, 19 Apr 2023 16:02:41 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Cc:     brouer@redhat.com, Lorenzo Bianconi <lorenzo@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        hawk@kernel.org, ilias.apalodimas@linaro.org, davem@davemloft.net,
+        pabeni@redhat.com, bpf@vger.kernel.org,
+        lorenzo.bianconi@redhat.com, nbd@nbd.name,
+        Toke Hoiland Jorgensen <toke@redhat.com>
+Subject: Re: issue with inflight pages from page_pool
+Content-Language: en-US
+To:     Eric Dumazet <edumazet@google.com>,
+        Jesper Dangaard Brouer <jbrouer@redhat.com>
+References: <ZD2HjZZSOjtsnQaf@lore-desk>
+ <CANn89iK7P2aONo0EB9o+YiRG+9VfqqVVra4cd14m_Vo4hcGVnQ@mail.gmail.com>
+ <ZD2NSSYFzNeN68NO@lore-desk> <20230417112346.546dbe57@kernel.org>
+ <ZD2TH4PsmSNayhfs@lore-desk> <20230417120837.6f1e0ef6@kernel.org>
+ <ZD26lb2qdsdX16qa@lore-desk> <20230417163210.2433ae40@kernel.org>
+ <ZD5IcgN5s9lCqIgl@lore-desk>
+ <3449df3e-1133-3971-06bb-62dd0357de40@redhat.com>
+ <CANn89iKAVERmJjTyscwjRTjTeWBUgA9COz+8HVH09Q0ehHL9Gw@mail.gmail.com>
+In-Reply-To: <CANn89iKAVERmJjTyscwjRTjTeWBUgA9COz+8HVH09Q0ehHL9Gw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 19 Apr 2023 15:22:39 +0200, Alexander Lobakin <aleksander.lobakin@intel.com> wrote:
-> From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> Date: Mon, 17 Apr 2023 11:27:50 +0800
->
-> > The purpose of this patch is to allow driver pass the own dma_ops to
-> > xsk.
-> >
-> > This is to cope with the scene of virtio-net. If virtio does not have
-> > VIRTIO_F_ACCESS_PLATFORM, then virtio cannot use DMA API. In this case,
-> > XSK cannot use DMA API directly to achieve DMA address. Based on this
-> > scene, we must let XSK support driver to use the driver's dma_ops.
-> >
-> > On the other hand, the implementation of XSK as a highlevel code
-> > should put the underlying operation of DMA to the driver layer.
-> > The driver layer determines the implementation of the final DMA. XSK
-> > should not make such assumptions. Everything will be simplified if DMA
-> > is done at the driver level.
-> >
-> > More is here:
-> >     https://lore.kernel.org/virtualization/1681265026.6082013-1-xuanzhuo@linux.alibaba.com/
-> >
-> > Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
->
-> [...]
->
-> >  struct xsk_buff_pool {
-> >  	/* Members only used in the control path first. */
-> >  	struct device *dev;
-> > @@ -85,6 +102,7 @@ struct xsk_buff_pool {
-> >  	 * sockets share a single cq when the same netdev and queue id is shared.
-> >  	 */
-> >  	spinlock_t cq_lock;
-> > +	struct xsk_dma_ops dma_ops;
->
-> Why full struct, not a const pointer? You'll have indirect calls either
-> way, copying the full struct won't reclaim you much performance.
->
-> >  	struct xdp_buff_xsk *free_heads[];
-> >  };
-> >
->
-> [...]
->
-> > @@ -424,18 +426,29 @@ int xp_dma_map(struct xsk_buff_pool *pool, struct device *dev,
-> >  		return 0;
-> >  	}
-> >
-> > +	if (!dma_ops) {
-> > +		pool->dma_ops.map_page = dma_map_page_attrs;
-> > +		pool->dma_ops.mapping_error = dma_mapping_error;
-> > +		pool->dma_ops.need_sync = dma_need_sync;
-> > +		pool->dma_ops.sync_single_range_for_device = dma_sync_single_range_for_device;
-> > +		pool->dma_ops.sync_single_range_for_cpu = dma_sync_single_range_for_cpu;
-> > +		dma_ops = &pool->dma_ops;
-> > +	} else {
-> > +		pool->dma_ops = *dma_ops;
-> > +	}
->
-> If DMA syncs are not needed on your x86_64 DMA-coherent system, it
-> doesn't mean we all don't need it. Instead of filling pointers with
-> "default" callbacks, you could instead avoid indirect calls at all when
-> no custom DMA ops are specified. Pls see how for example Christoph did
-> that for direct DMA. It would cost only one if-else for case without
-> custom DMA ops here instead of an indirect call each time.
->
-> (I *could* suggest using INDIRECT_CALL_WRAPPER(), but I won't, since
->  it's more expensive than direct checking and I feel like it's more
->  appropriate to check directly here)
 
-OK, I will fix it in next version.
-
-Thanks.
-
-
-
-
+On 19/04/2023 14.09, Eric Dumazet wrote:
+> On Wed, Apr 19, 2023 at 1:08 PM Jesper Dangaard Brouer
+>>
+>>
+>> On 18/04/2023 09.36, Lorenzo Bianconi wrote:
+>>>> On Mon, 17 Apr 2023 23:31:01 +0200 Lorenzo Bianconi wrote:
+>>>>>> If it's that then I'm with Eric. There are many ways to keep the pages
+>>>>>> in use, no point working around one of them and not the rest :(
+>>>>>
+>>>>> I was not clear here, my fault. What I mean is I can see the returned
+>>>>> pages counter increasing from time to time, but during most of tests,
+>>>>> even after 2h the tcp traffic has stopped, page_pool_release_retry()
+>>>>> still complains not all the pages are returned to the pool and so the
+>>>>> pool has not been deallocated yet.
+>>>>> The chunk of code in my first email is just to demonstrate the issue
+>>>>> and I am completely fine to get a better solution :)
+>>>>
+>>>> Your problem is perhaps made worse by threaded NAPI, you have
+>>>> defer-free skbs sprayed across all cores and no NAPI there to
+>>>> flush them :(
+>>>
+>>> yes, exactly :)
+>>>
+>>>>
+>>>>> I guess we just need a way to free the pool in a reasonable amount
+>>>>> of time. Agree?
+>>>>
+>>>> Whether we need to guarantee the release is the real question.
+>>>
+>>> yes, this is the main goal of my email. The defer-free skbs behaviour seems in
+>>> contrast with the page_pool pending pages monitor mechanism or at least they
+>>> do not work well together.
+>>>
+>>> @Jesper, Ilias: any input on it?
+>>>
+>>>> Maybe it's more of a false-positive warning.
+>>>>
+>>>> Flushing the defer list is probably fine as a hack, but it's not
+>>>> a full fix as Eric explained. False positive can still happen.
+>>>
+>>> agree, it was just a way to give an idea of the issue, not a proper solution.
+>>>
+>>> Regards,
+>>> Lorenzo
+>>>
+>>>>
+>>>> I'm ambivalent. My only real request wold be to make the flushing
+>>>> a helper in net/core/dev.c rather than open coded in page_pool.c.
+>>
+>> I agree. We need a central defer_list flushing helper
+>>
+>> It is too easy to say this is a false-positive warning.
+>> IHMO this expose an issue with the sd->defer_list system.
+>>
+>> Lorenzo's test is adding+removing veth devices, which creates and runs
+>> NAPI processing on random CPUs.  After veth netdevices (+NAPI) are
+>> removed, nothing will naturally invoking net_rx_softirq on this CPU.
+>> Thus, we have SKBs waiting on CPUs sd->defer_list.  Further more we will
+>> not create new SKB with this skb->alloc_cpu, to trigger RX softirq IPI
+>> call (trigger_rx_softirq), even if this CPU process and frees SKBs.
+>>
+>> I see two solutions:
+>>
+>>    (1) When netdevice/NAPI unregister happens call defer_list flushing
+>> helper.
+>>
+>>    (2) Use napi_watchdog to detect if defer_list is (many jiffies) old,
+>> and then call defer_list flushing helper.
+>>
+>>
+>>>>
+>>>> Somewhat related - Eric, do we need to handle defer_list in dev_cpu_dead()?
+>>
+>> Looks to me like dev_cpu_dead() also need this flushing helper for
+>> sd->defer_list, or at least moving the sd->defer_list to an sd that will
+>> run eventually.
+> 
+> I think I just considered having a few skbs in per-cpu list would not
+> be an issue,
+> especially considering skbs can sit hours in tcp receive queues.
 >
-> > +
-> >  	dma_map = xp_create_dma_map(dev, pool->netdev, nr_pages, pool->umem);
-> >  	if (!dma_map)
-> >  		return -ENOMEM;
-> [...]
->
-> Thanks,
-> Olek
+
+It was the first thing I said to Lorenzo when he first reported the
+problem to me (over chat): It is likely packets sitting in a TCP queue.
+Then I instructed him to look at output from netstat to see queues and
+look for TIME-WAIT, FIN-WAIT etc.
+
+
+> Do we expect hacing some kind of callback/shrinker to instruct TCP or
+> pipes to release all pages that prevent
+> a page_pool to be freed ?
+> 
+
+This is *not* what I'm asking for.
+
+With TCP sockets (pipes etc) we can take care of closing the sockets
+(and programs etc) to free up the SKBs (and perhaps wait for timeouts)
+to make sure the page_pool shutdown doesn't hang.
+
+The problem arise for all the selftests that uses veth and bpf_test_run
+(using bpf_test_run_xdp_live / xdp_test_run_setup).  For the selftests
+we obviously take care of closing sockets and removing veth interfaces
+again.  Problem: The defer_list corner-case isn't under our control.
+
+
+> Here, we are talking of hundreds of thousands of skbs, compared to at
+> most 32 skbs per cpu.
+> 
+
+It is not a memory usage concern.
+
+> Perhaps sets sysctl_skb_defer_max to zero by default, so that admins
+> can opt-in
+> 
+
+I really like the sd->defer_list system and I think is should be enabled
+by default.  Even if disabled by default, we still need to handle these
+corner cases, as the selftests shouldn't start to cause-issues when this
+gets enabled.
+
+The simple solution is: (1) When netdevice/NAPI unregister happens call
+defer_list flushing helper.  And perhaps we also need to call it in
+xdp_test_run_teardown().  How do you feel about that?
+
+--Jesper
+
