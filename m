@@ -2,62 +2,61 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C482CC77B78
-	for <bpf@archiver.kernel.org>; Thu, 20 Apr 2023 23:24:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCBF0C77B76
+	for <bpf@archiver.kernel.org>; Thu, 20 Apr 2023 23:24:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232852AbjDTXYe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Apr 2023 19:24:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55778 "EHLO
+        id S232942AbjDTXYg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Apr 2023 19:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232354AbjDTXYd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 Apr 2023 19:24:33 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDEED3AB5
-        for <bpf@vger.kernel.org>; Thu, 20 Apr 2023 16:24:31 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4edc114c716so1007103e87.1
-        for <bpf@vger.kernel.org>; Thu, 20 Apr 2023 16:24:31 -0700 (PDT)
+        with ESMTP id S232354AbjDTXYf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Apr 2023 19:24:35 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0DD2697
+        for <bpf@vger.kernel.org>; Thu, 20 Apr 2023 16:24:34 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4ec8149907aso1008193e87.1
+        for <bpf@vger.kernel.org>; Thu, 20 Apr 2023 16:24:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682033070; x=1684625070;
+        d=gmail.com; s=20221208; t=1682033072; x=1684625072;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5g9NI7uSmY9Z7i5CsMM46mgnhfsWo738KkWe3w1sOT0=;
-        b=F56zEiGNSqqREEo3rorROdX961Kzmr9kZqWRWKzfjTWncWJPe9l3SLFoB+43lNNUqt
-         u67/V1Yb9nHC44NFo+vwy0AkZmHZ/xB5DJE4xMFTweFSYx+twB/hWMyU5ibkFfSHeRIU
-         rSreV0E/cG6DlVBDUpDJW/6YpLT5uAY0+Ys1ZVjpm1uxpHzZoVl60TDMPuCyDVJLOJX6
-         qn/d/IkvmTJ5gjW9gtnalX8+iO26ecdzVjlX2Vg7rkbFV0Bj50XKbZ6oS9MDUlFYAFK3
-         klYTRfPhvuhF65/Y06sQGhaApTjqysn4j/nICBTj/rXuZ9yWaboegVZGzw4YdyxCIQNU
-         IEtA==
+        bh=hpLh1YPaAj9o+5fwNYt3O9O1Ii34BKqLkycFi7e+Xos=;
+        b=U2DgZR7lReBFwdPXwVR7okvu/r+vD6Li0gaIdFcKKGiCKeRb3Pv7V4cVUCkGoispX/
+         ciit5J+5NsGx4xIKYpTWf8aPOwQoi3I5Dam0LY8rcugLGJyaDpPbCJCstm/lgIDFiEh3
+         0IqZ+NY4ETonvitd5pwW06mcGSmvriLthlGMj+ZyHRfgdOsIMBgP9rO7prCcrT/mfL6s
+         iP1svJ1kxDof7nkXWxaht3rtU0OGHu4WeffMWLOAvg+xFIzMeCTfSPuB1Bn6ZyO05utT
+         0VKhomY9Cbjcj6nzec5A6qx6ptF4j/9ekfT4tgIzsIdqHLEeypUV4qVcXajfS4sdULMD
+         JQtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682033070; x=1684625070;
+        d=1e100.net; s=20221208; t=1682033072; x=1684625072;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5g9NI7uSmY9Z7i5CsMM46mgnhfsWo738KkWe3w1sOT0=;
-        b=XehRXKf3qfEbVuLsqz092qMlbg6j2nyj91sKt2ssjqe0HUSVF9WtZUhglzOBTbqaHs
-         sm+bg72sxIvbxTfjvpR2eK7bGubZvTWh7gz0dX/UT5tjNchqdRX90PjlMKYbrHapAea0
-         dfDg6I9jaa/YLythcpGuaNgQxMGMLjtC8TobzwjjrmdXCHLJopKV2pSXgwSkvnnAZh4g
-         pLX3OKIDRw1GfLUdeh9eUdJHKIHZQCkUfTKHCm+6E1mrvwLEsNBVMf2zpi076eKvESFl
-         91uBbDsX7cfzR0jXzPLILm4QwI8ozJ2CKjj7D8cF3Sq177naFGknZonTd4pZpkeJlFcX
-         3OBQ==
-X-Gm-Message-State: AAQBX9cANvso6zX7RUHyxwp51Y2FgxkG842ZZlgoMnqNWZy8HvpVIwYG
-        +nkh8Rtnp3BN+JnLd2Ty16XJcuX4v8UoLw==
-X-Google-Smtp-Source: AKy350bSB8P2IgUuRlLiRfRbxk4tyiHG0Y+gVJKKjpVj7CBK4I0plaLDICqVVpaZZK8A1We+2RaWXw==
-X-Received: by 2002:a19:7613:0:b0:4ec:809c:c64c with SMTP id c19-20020a197613000000b004ec809cc64cmr829646lff.20.1682033069826;
-        Thu, 20 Apr 2023 16:24:29 -0700 (PDT)
+        bh=hpLh1YPaAj9o+5fwNYt3O9O1Ii34BKqLkycFi7e+Xos=;
+        b=MzqbfJwi0scsidZh36xRCniXbuf4JD3XVfx/kOawld0uhp1wHKMbqValOcmondLfk/
+         0RU8ZAKIOynQSOwBFgMhUcH3ehue8EfyGWMV20eMcaooHDKyRuB1pEqsOOD0YnC8uHrQ
+         /OomStbFcvyGYXjZWJaahGSeANoqsd56IKc7wbsT6Hk2zjXrBlv9peE9bvoW4RHNZunp
+         pY4tInq7xHrRDnZEyyB9JF3PKggTE8PCTIf2coZuoAjs6zVxfU2QbdED5jB4zfXSF2mw
+         02nCeBES3/U58QNtwnmFfy0sADG2sJhN2vuB6u2wt2RIRoB/qB8LUs+po8dMME7O5UxI
+         GB7w==
+X-Gm-Message-State: AAQBX9de313RbXV2lG9K46Ex9jjoTof1OZvjuxFVlLH5zU9VEKIOVOMW
+        TjJFiYL2GomJ/TIQZsqGE+2/7t0Dn7Q=
+X-Google-Smtp-Source: AKy350YF1njc1OWl1l9mOgleYY9HuNpEyIYUJhFgLmIcwf04fuPhx3Iz4RL6gTu4Cqt4KW3rb7fEkg==
+X-Received: by 2002:ac2:4314:0:b0:4eb:7e:1fa5 with SMTP id l20-20020ac24314000000b004eb007e1fa5mr654815lfh.8.1682033072597;
+        Thu, 20 Apr 2023 16:24:32 -0700 (PDT)
 Received: from bigfoot.. (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id z2-20020ac25de2000000b004ec89c94f04sm360227lfq.155.2023.04.20.16.24.28
+        by smtp.gmail.com with ESMTPSA id z2-20020ac25de2000000b004ec89c94f04sm360227lfq.155.2023.04.20.16.24.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 16:24:29 -0700 (PDT)
+        Thu, 20 Apr 2023 16:24:31 -0700 (PDT)
 From:   Eduard Zingerman <eddyz87@gmail.com>
 To:     bpf@vger.kernel.org, ast@kernel.org
 Cc:     andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
         kernel-team@fb.com, yhs@fb.com,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Florian Westphal <fw@strlen.de>
-Subject: [PATCH bpf-next 1/4] selftests/bpf: disable program test run for progs/refcounted_kptr.c
-Date:   Fri, 21 Apr 2023 02:23:14 +0300
-Message-Id: <20230420232317.2181776-2-eddyz87@gmail.com>
+        Eduard Zingerman <eddyz87@gmail.com>
+Subject: [PATCH bpf-next 3/4] selftests/bpf: add pre bpf_prog_test_run_opts() callback for test_loader
+Date:   Fri, 21 Apr 2023 02:23:16 +0300
+Message-Id: <20230420232317.2181776-4-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230420232317.2181776-1-eddyz87@gmail.com>
 References: <20230420232317.2181776-1-eddyz87@gmail.com>
@@ -67,66 +66,67 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Florian Westphal found a bug in test_loader.c processing of __retval
-tag. Because of this bug the function test_loader.c:do_prog_test_run()
-never executed and all __retval test tags were ignored. This hid an
-issue with progs/refcounted_kptr.c tests.
+When a test case is annotated with __retval tag the test_loader engine
+would use libbpf's bpf_prog_test_run_opts() to do a test run of the
+program and compare retvals.
 
-When __retval tag bug is fixed and refcounted_kptr.c tests are run
-kernel reports various issues and eventually hangs. Shortest reproducer
-is the following command run a few times:
+This commit allows to perform arbitrary actions on bpf object right
+before test loader invokes bpf_prog_test_run_opts(). This could be
+used to setup some state for program execution, e.g. fill some maps.
 
-  $ for i in $(seq 1 4); do (./test_progs --allow=refcounted_kptr &); done
-
-Commenting out __retval tags for these tests until this issue is resolved.
-
-Reported-by: Florian Westphal <fw@strlen.de>
-Link: https://lore.kernel.org/bpf/f4c4aee644425842ee6aa8edf1da68f0a8260e7c.camel@gmail.com/T/
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- tools/testing/selftests/bpf/progs/refcounted_kptr.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/test_loader.c | 8 ++++++++
+ tools/testing/selftests/bpf/test_progs.h  | 9 +++++++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr.c b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-index 1d348a225140..b6b2d4f97b19 100644
---- a/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-+++ b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-@@ -219,7 +219,7 @@ static long __read_from_unstash(int idx)
- #define INSERT_READ_BOTH(rem_tree, rem_list, desc)			\
- SEC("tc")								\
- __description(desc)							\
--__success __retval(579)							\
-+__success /* __retval(579) temporarily disabled */			\
- long insert_and_remove_tree_##rem_tree##_list_##rem_list(void *ctx)	\
- {									\
- 	long err, tree_data, list_data;					\
-@@ -258,7 +258,7 @@ INSERT_READ_BOTH(false, true, "insert_read_both: remove from list");
- #define INSERT_READ_BOTH(rem_tree, rem_list, desc)			\
- SEC("tc")								\
- __description(desc)							\
--__success __retval(579)							\
-+__success /* __retval(579) temporarily disabled */			\
- long insert_and_remove_lf_tree_##rem_tree##_list_##rem_list(void *ctx)	\
- {									\
- 	long err, tree_data, list_data;					\
-@@ -296,7 +296,7 @@ INSERT_READ_BOTH(false, true, "insert_read_both_list_first: remove from list");
- #define INSERT_DOUBLE_READ_AND_DEL(read_fn, read_root, desc)		\
- SEC("tc")								\
- __description(desc)							\
--__success __retval(-1)							\
-+__success /* temporarily __retval(-1) disabled */			\
- long insert_double_##read_fn##_and_del_##read_root(void *ctx)		\
- {									\
- 	long err, list_data;						\
-@@ -329,7 +329,7 @@ INSERT_DOUBLE_READ_AND_DEL(__read_from_list, head, "insert_double_del: 2x read-a
- #define INSERT_STASH_READ(rem_tree, desc)				\
- SEC("tc")								\
- __description(desc)							\
--__success __retval(84)							\
-+__success /* __retval(84) temporarily disabled */			\
- long insert_rbtree_and_stash__del_tree_##rem_tree(void *ctx)		\
- {									\
- 	long err, tree_data, map_data;					\
+diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
+index e2a1bdc5a570..40c9b7d532c4 100644
+--- a/tools/testing/selftests/bpf/test_loader.c
++++ b/tools/testing/selftests/bpf/test_loader.c
+@@ -590,6 +590,14 @@ void run_subtest(struct test_loader *tester,
+ 		if (restore_capabilities(&caps))
+ 			goto tobj_cleanup;
+ 
++		if (tester->pre_execution_cb) {
++			err = tester->pre_execution_cb(tobj);
++			if (err) {
++				PRINT_FAIL("pre_execution_cb failed: %d\n", err);
++				goto tobj_cleanup;
++			}
++		}
++
+ 		do_prog_test_run(bpf_program__fd(tprog), &retval);
+ 		if (retval != subspec->retval && subspec->retval != POINTER_VALUE) {
+ 			PRINT_FAIL("Unexpected retval: %d != %d\n", retval, subspec->retval);
+diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
+index 10ba43250668..0ed3134333d4 100644
+--- a/tools/testing/selftests/bpf/test_progs.h
++++ b/tools/testing/selftests/bpf/test_progs.h
+@@ -424,14 +424,23 @@ int get_bpf_max_tramp_links(void);
+ 
+ #define BPF_TESTMOD_TEST_FILE "/sys/kernel/bpf_testmod"
+ 
++typedef int (*pre_execution_cb)(struct bpf_object *obj);
++
+ struct test_loader {
+ 	char *log_buf;
+ 	size_t log_buf_sz;
+ 	size_t next_match_pos;
++	pre_execution_cb pre_execution_cb;
+ 
+ 	struct bpf_object *obj;
+ };
+ 
++static inline void test_loader__set_pre_execution_cb(struct test_loader *tester,
++						     pre_execution_cb cb)
++{
++	tester->pre_execution_cb = cb;
++}
++
+ typedef const void *(*skel_elf_bytes_fn)(size_t *sz);
+ 
+ extern void test_loader__run_subtests(struct test_loader *tester,
 -- 
 2.40.0
 
