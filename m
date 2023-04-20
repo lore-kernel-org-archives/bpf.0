@@ -2,106 +2,138 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC4D8C77B76
-	for <bpf@archiver.kernel.org>; Thu, 20 Apr 2023 23:24:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98DF7C7618E
+	for <bpf@archiver.kernel.org>; Thu, 20 Apr 2023 23:24:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231672AbjDTXYd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Apr 2023 19:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55770 "EHLO
+        id S230304AbjDTXYf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Apr 2023 19:24:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232852AbjDTXYc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 Apr 2023 19:24:32 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE51E49E3
-        for <bpf@vger.kernel.org>; Thu, 20 Apr 2023 16:24:30 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2a8b082d6feso9375641fa.2
-        for <bpf@vger.kernel.org>; Thu, 20 Apr 2023 16:24:30 -0700 (PDT)
+        with ESMTP id S232942AbjDTXYe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Apr 2023 19:24:34 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415F51BCE
+        for <bpf@vger.kernel.org>; Thu, 20 Apr 2023 16:24:33 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4ec9c7c6986so994546e87.0
+        for <bpf@vger.kernel.org>; Thu, 20 Apr 2023 16:24:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682033069; x=1684625069;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oVEy4aCpefwDhGBvi5NFd2aViH7t98EyWuI++n0gfBE=;
-        b=Uu/VIcxgBR7biY4bHZpGRACv/FvuPCCRgDSxvxVJWUrHst+LYTr4FBbVt079Ge14fd
-         c3LXrHrScnlpT2t1eDGWV6+I9rPxtuZ1o8hCyzcgybYmQ5drVMGgArI8BCo+noIhTJrz
-         eRYJiv9LHSHKACTM+7xvu4Va/eruyxqxI57zncQNjVncEhG6nnwAnNGcicV6zIgT9HRW
-         Hlx1gUXtjUFDCquOPxiumhIBZsH4vaFW2SFKa6urFmQB+Y2qw8Pq/hq+a7h/F31Bvpod
-         MUVtzoUpcaF+z9MbB5DzwemVDGvhAeohHWsrxrgFnCzlfte92ftOpbjutLyOiC2OGpM3
-         GR+w==
+        d=gmail.com; s=20221208; t=1682033071; x=1684625071;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HzWSdXs5P+bPGi5Kwi+OhAIz+8fFAUMm/RT7jUF+fqY=;
+        b=VeTUnl3biuY+gePiCG6fs6Zho5Sk97cyaC4qfMpbZHalUC3zw0oubLEBfzn76rM/HK
+         6wKTu4wORgDOSzJ6csRTJhnEcGjYcVDVMFFLQcBahCDjLZPjnvz9LcL7sP5z/VMfLb79
+         eDRQizwQCkRz57ESBEeMtTKlb193oLldTdJeTYi3dm8+FWvJWYNfqtdnFBFYgndSL86D
+         cEYqbEzY2NLYgR6KOiZ0i5GuII7uYkDDFvWncmsg1a/dkrrFQZJPUfZkGLLxtQO9ASNX
+         bm2fX6qg4jQdP7eLuW4vPHLgOxZtlerco4Xhf8wvuMgaEeTyRVkYiow7p0dui0HbPlIp
+         NvzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682033069; x=1684625069;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oVEy4aCpefwDhGBvi5NFd2aViH7t98EyWuI++n0gfBE=;
-        b=OojmMaT2U/kwGqylh7Q/9cHDCV9sbj0A+esXaZgYDQZSQePuX4xmwXiJN6YvoS5wpY
-         w4w0Fyz/YhFEGhyxfdIrKCOA0WpMu5hjgn8p4ehFv+sv2agNuW46x6q7+2F7VnIn6wCj
-         r74goVPKirmr7igkddnyvudgyWBZn3dN86NHL4JfI6eOycypXBytu5G1kpqhYQViN3mP
-         cD4hJBcki2WFbn+o+T5mM47jldg1LFm1K73Pf83RnLIbGGJGhD/d/HvSGyWJ43w1iaIp
-         fov0FcJTRoKs1i8vuuFFD83W9V5FoeyF1E7NNa5gZPOMvQy9GzXLGzeUBmWKs2cBckgL
-         4o9A==
-X-Gm-Message-State: AAQBX9fhntxPZGX3xyAJz/yJbXqAmENJ7KcObwtgrHnQxxz2FSRLZ5D1
-        pSCof1HTeh5jrz6+pcCHgMnOsmcU3Yk=
-X-Google-Smtp-Source: AKy350ZDQsBCvfp3dAY9w5GLhrT2RbzEkUu/jhqsRjSpKB3rMkQ9tphHatmPPhnRWn+dwruI/HEfDg==
-X-Received: by 2002:a2e:9f4b:0:b0:2a8:d018:c28d with SMTP id v11-20020a2e9f4b000000b002a8d018c28dmr135559ljk.2.1682033068539;
-        Thu, 20 Apr 2023 16:24:28 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682033071; x=1684625071;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HzWSdXs5P+bPGi5Kwi+OhAIz+8fFAUMm/RT7jUF+fqY=;
+        b=HLkPWwuW3/a7eqFcpDJ7X1crcNeuyOUcyE0qG8xQyrfSvFgAarewsE8dNp/TgBSs0q
+         pAarg4RzO0PaBtMgV32tzdgIMmQMm5dOb3TJSJXezPoxGANnGgjhbL7xeLJbDqAUKVJ7
+         UUehXqdcBPZgbcZrvXLthgiBgzmV5ARagISHLU1CNlWj/X+R5qvl9KYqTv51ANHCPr7l
+         DvPrtwswA1JgXtw0rgJTzkQKcBhXxRg4V7v4YhK6Y8uyT8X3I5B6C9DDqND6WdWjH46Q
+         b/Im/bokvLhnjxXNONt3fatMs991NDhCTvAixTB2+16hBqwE/PSaiddX7ud2Mjdln8VQ
+         nFPA==
+X-Gm-Message-State: AAQBX9d8B6GyTs9YblPkpn/Y4lRO2wiIfXXN9FAybBjIP90S38hlWJC/
+        M4eO48SCnfzMQpJufjEf+sOc5BauBn675Q==
+X-Google-Smtp-Source: AKy350Yv4KSoNd7kniMhyZO5myt+SIJdBccj5Kk9SfIzTuhD8veOCQcsYmkyXVcpy2JfGiRYdaJjrw==
+X-Received: by 2002:ac2:5df0:0:b0:4ea:f636:6d02 with SMTP id z16-20020ac25df0000000b004eaf6366d02mr940382lfq.18.1682033071036;
+        Thu, 20 Apr 2023 16:24:31 -0700 (PDT)
 Received: from bigfoot.. (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id z2-20020ac25de2000000b004ec89c94f04sm360227lfq.155.2023.04.20.16.24.27
+        by smtp.gmail.com with ESMTPSA id z2-20020ac25de2000000b004ec89c94f04sm360227lfq.155.2023.04.20.16.24.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 16:24:27 -0700 (PDT)
+        Thu, 20 Apr 2023 16:24:30 -0700 (PDT)
 From:   Eduard Zingerman <eddyz87@gmail.com>
 To:     bpf@vger.kernel.org, ast@kernel.org
 Cc:     andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
         kernel-team@fb.com, yhs@fb.com,
-        Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next 0/4] fix __retval() being always ignored
-Date:   Fri, 21 Apr 2023 02:23:13 +0300
-Message-Id: <20230420232317.2181776-1-eddyz87@gmail.com>
+        Eduard Zingerman <eddyz87@gmail.com>,
+        Florian Westphal <fw@strlen.de>
+Subject: [PATCH bpf-next 2/4] selftests/bpf: fix __retval() being always ignored
+Date:   Fri, 21 Apr 2023 02:23:15 +0300
+Message-Id: <20230420232317.2181776-3-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230420232317.2181776-1-eddyz87@gmail.com>
+References: <20230420232317.2181776-1-eddyz87@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Florian Westphal found a bug in test_loader.c processing of __retval tag.
-Because of this bug the function test_loader.c:do_prog_test_run()
-never executed and all __retval test tags were ignored. See [1].
+Florian Westphal found a bug in and suggested a fix for test_loader.c
+processing of __retval tag. Because of this bug the function
+test_loader.c:do_prog_test_run() never executed and all __retval test
+tags were ignored.
 
-Fix for this bug uncovers two additional bugs:
-- During test_verifier tests migration to inline assembly (see [2])
-  I missed the fact that some tests require maps to contain mock values;
-- Some issue with a new refcounted_kptr test, which causes kernel to
-  produce dead lock and refcount saturation warnings when subject to
-  libbpf's bpf_test_run_opts().
-  
-This series fixes the bug in __retval() processing, and address the
-issue with test maps not being populated. The issue in refcounted_kptr
-is not addressed, __retval tags in those tests are commented out.
+If this bug is fixed a number of test cases from
+progs/verifier_array_access.c fail with retval not matching the
+expected value. This test was recently converted to use test_loader.c
+and inline assembly in [1]. When doing the conversion I missed the
+important detail of test_verifier.c operation: when it creates
+fixup_map_array_ro, fixup_map_array_wo and fixup_map_array_small it
+populates these maps with a dummy record.
 
-I found that the following tests depend on test maps being populated:
-- progs/verifier_array_access.c
-- verifier/value_ptr_arith.c (planned for migration to inline assembly)
+Disabling the __retval checks for the affected verifier_array_access
+in this commit to avoid false-postivies in any potential bisects.
+The issue is addressed in the next patch.
 
-Given the small amount of these tests I decided to opt for simple
-non-generic solution (see patch #4).
+I verified that the __retval tags are now respected by changing
+expected return values for all tests annotated with __retval, and
+checking that these tests started to fail.
 
-[1] https://lore.kernel.org/bpf/f4c4aee644425842ee6aa8edf1da68f0a8260e7c.camel@gmail.com/T/
-[2] https://lore.kernel.org/bpf/20230325025524.144043-1-eddyz87@gmail.com/
+[1] https://lore.kernel.org/bpf/20230325025524.144043-1-eddyz87@gmail.com/
 
-Eduard Zingerman (4):
-  selftests/bpf: disable program test run for progs/refcounted_kptr.c
-  selftests/bpf: fix __retval() being always ignored
-  selftests/bpf: add pre bpf_prog_test_run_opts() callback for
-    test_loader
-  selftests/bpf: populate map_array_ro map for verifier_array_access
-    test
+Fixes: 19a8e06f5f91 ("selftests/bpf: Tests execution support for test_loader.c")
+Reported-by: Florian Westphal <fw@strlen.de>
+Link: https://lore.kernel.org/bpf/f4c4aee644425842ee6aa8edf1da68f0a8260e7c.camel@gmail.com/T/
+Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+---
+ tools/testing/selftests/bpf/progs/verifier_array_access.c | 4 ++--
+ tools/testing/selftests/bpf/test_loader.c                 | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- .../selftests/bpf/prog_tests/verifier.c       | 42 +++++++++++++++++--
- .../selftests/bpf/progs/refcounted_kptr.c     |  8 ++--
- tools/testing/selftests/bpf/test_loader.c     | 10 ++++-
- tools/testing/selftests/bpf/test_progs.h      |  9 ++++
- 4 files changed, 61 insertions(+), 8 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/progs/verifier_array_access.c b/tools/testing/selftests/bpf/progs/verifier_array_access.c
+index 95d7ecc12963..fceeeef78721 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_array_access.c
++++ b/tools/testing/selftests/bpf/progs/verifier_array_access.c
+@@ -330,7 +330,7 @@ l0_%=:	exit;						\
+ 
+ SEC("socket")
+ __description("valid read map access into a read-only array 1")
+-__success __success_unpriv __retval(28)
++__success __success_unpriv /* __retval(28) temporarily disable */
+ __naked void a_read_only_array_1_1(void)
+ {
+ 	asm volatile ("					\
+@@ -351,7 +351,7 @@ l0_%=:	exit;						\
+ 
+ SEC("tc")
+ __description("valid read map access into a read-only array 2")
+-__success __retval(65507)
++__success /* __retval(65507) temporarily disable */
+ __naked void a_read_only_array_2_1(void)
+ {
+ 	asm volatile ("					\
+diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
+index 47e9e076bc8f..e2a1bdc5a570 100644
+--- a/tools/testing/selftests/bpf/test_loader.c
++++ b/tools/testing/selftests/bpf/test_loader.c
+@@ -587,7 +587,7 @@ void run_subtest(struct test_loader *tester,
+ 		/* For some reason test_verifier executes programs
+ 		 * with all capabilities restored. Do the same here.
+ 		 */
+-		if (!restore_capabilities(&caps))
++		if (restore_capabilities(&caps))
+ 			goto tobj_cleanup;
+ 
+ 		do_prog_test_run(bpf_program__fd(tprog), &retval);
 -- 
 2.40.0
 
