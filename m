@@ -2,77 +2,120 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C311C77B75
-	for <bpf@archiver.kernel.org>; Thu, 20 Apr 2023 01:40:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82545C77B73
+	for <bpf@archiver.kernel.org>; Thu, 20 Apr 2023 03:28:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbjDTBkX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Apr 2023 21:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45430 "EHLO
+        id S229767AbjDTD16 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Apr 2023 23:27:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjDTBkU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 19 Apr 2023 21:40:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25708527E;
-        Wed, 19 Apr 2023 18:40:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B224264445;
-        Thu, 20 Apr 2023 01:40:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 19ABCC4339B;
-        Thu, 20 Apr 2023 01:40:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681954819;
-        bh=r7qVX9qGsmOWWLQDayPwGsCzNcTHfczV7tgHUV3+CVQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=vM7e/Bv9pKu0zosM0P9XMMxk16Z3ccp5DvF2lbPHOnfNrQhtcM3AZpKZud7gpuDre
-         As8QnO4J5gGpwBe3OnQbEdVz5VGq99sxm5cvR/5MIHb1TgLAjjnWBOpyRbZfWdKDB9
-         7zVYLOSEVPm0CIapid7DiQEOrWOyuJk9v/MPK6crfpEvzHKxWNyVEKOlcgirw5G5A2
-         07Cg1Q01LUIOzw8Py1KxzNOcViQXCp50UhtLt+xzCD2ksqECiOBRqNXw39Ij3COa2b
-         No9shPBp94MaA1NHt5nWqQoGknfjJ+Aib6qcB52pBx/huyH7RxDqhdJjOVVgV6ObS/
-         vyG95CDaJDTVQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F2FEFE4D033;
-        Thu, 20 Apr 2023 01:40:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S232748AbjDTD16 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Apr 2023 23:27:58 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B4E40D4
+        for <bpf@vger.kernel.org>; Wed, 19 Apr 2023 20:27:56 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-63b620188aeso726468b3a.0
+        for <bpf@vger.kernel.org>; Wed, 19 Apr 2023 20:27:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1681961276; x=1684553276;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hr7bhkX+Epn2YWYx/+oT337obKjgENzwcgRHzhBp9VI=;
+        b=EbJ7DiX0KNLClu6JNpZIDUdsu5ZAfzUcUtofGd3c7gYYeF16zc/59GXJ+AutZPz5w3
+         1ifFTsK5hJK7jS8Yuwo7Jpyx5xPPQBukFkmUdFtOl7Q+AjoYuvx5dbhYnTTITWFdLbT0
+         0yQKRpLKV/NLt/a9TXPz/ywKmiu4fth5/3NewCfewonuQbTDHwV12xSpaKQu3zXBdLTK
+         Wkanbypedh5FCjD5x9rM26Np8iyWJ5A6WTwsT0eUl7SY1+Mb/AXTqtug1T3xcMgQl0nK
+         yW1wBdq39B32F1H77/uS5PhpH+H1TGtEQ217Ncm+uuavogm6WqfJlu1T+jxqmG4+Bqhw
+         b38A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681961276; x=1684553276;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hr7bhkX+Epn2YWYx/+oT337obKjgENzwcgRHzhBp9VI=;
+        b=fDvXQPyVyBCN5uZY2ZK36bEL8VKtIFK8eW7e9A+ACCldtwr7X2M9mvadCjdDiZvaMS
+         15FnAWk1sqVO3UaUBn/FNXviSAYAwi2RZkYAVjYMqa7ywEFJWMuCpdGMqFaR2eEw/tMq
+         Ussomi+RYE/OkQoxLgDdR6RRjX3qN9V5JgmVWLPhb3asxBVWYydkn1F9AMSCMymgl354
+         4zqeiTb4fmYVQlihluJRjOGp2nUPY56EaL25M0ir7BWQJSfp17J5u/OnAd3iLS1aJ72t
+         DOJP2tAJ8RNh0LIH5wuzpdzt1cTYEYd1ARCk9rZLds8pHL2SOqR2Ng4W4vMnAkEVXUv2
+         XPuA==
+X-Gm-Message-State: AAQBX9d6WJwgQFFA0N7oEEdVynymrjsZQKzdXuNzziKsxQpJZygmOFbf
+        eg6cIryic79BuTnn1L3ihoMKQw==
+X-Google-Smtp-Source: AKy350Zzlox3kqFQwaEZJ1yWV/Qr9yqOXqttJ3x49/9gX0Cj/UedEau5H5gSR+U9pHNT8o+cBv2Pjw==
+X-Received: by 2002:a05:6a00:189c:b0:626:2984:8a76 with SMTP id x28-20020a056a00189c00b0062629848a76mr7091693pfh.34.1681961276413;
+        Wed, 19 Apr 2023 20:27:56 -0700 (PDT)
+Received: from C02F52LSML85.bytedance.net ([139.177.225.254])
+        by smtp.gmail.com with ESMTPSA id z15-20020a655a4f000000b00517abaac366sm115231pgs.74.2023.04.19.20.27.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Apr 2023 20:27:56 -0700 (PDT)
+From:   Feng zhou <zhoufeng.zf@bytedance.com>
+To:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        mykolal@fb.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
+        zhouchengming@bytedance.com, zhoufeng.zf@bytedance.com
+Subject: [PATCH bpf-next v2 1/2] bpf: support access variable length array of integer type
+Date:   Thu, 20 Apr 2023 11:27:34 +0800
+Message-Id: <20230420032735.27760-2-zhoufeng.zf@bytedance.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
+In-Reply-To: <20230420032735.27760-1-zhoufeng.zf@bytedance.com>
+References: <20230420032735.27760-1-zhoufeng.zf@bytedance.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: pull-request: bpf 2023-04-19
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168195481898.9323.9043605519254747807.git-patchwork-notify@kernel.org>
-Date:   Thu, 20 Apr 2023 01:40:18 +0000
-References: <20230419195847.27060-1-daniel@iogearbox.net>
-In-Reply-To: <20230419195847.27060-1-daniel@iogearbox.net>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        edumazet@google.com, ast@kernel.org, andrii@kernel.org,
-        martin.lau@linux.dev, netdev@vger.kernel.org, bpf@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+From: Feng Zhou <zhoufeng.zf@bytedance.com>
 
-This pull request was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+After this commit:
+bpf: Support variable length array in tracing programs (9c5f8a1008a1)
+Trace programs can access variable length array, but for structure
+type. This patch adds support for integer type.
 
-On Wed, 19 Apr 2023 21:58:47 +0200 you wrote:
-> Hi David, hi Jakub, hi Paolo, hi Eric,
-> 
-> The following pull-request contains BPF updates for your *net* tree.
-> 
-> We've added 3 non-merge commits during the last 6 day(s) which contain
-> a total of 3 files changed, 34 insertions(+), 9 deletions(-).
-> 
-> [...]
+Example:
+Hook load_balance
+struct sched_domain {
+	...
+	unsigned long span[];
+}
 
-Here is the summary with links:
-  - pull-request: bpf 2023-04-19
-    https://git.kernel.org/netdev/net/c/9d94769081a6
+The access: sd->span[0].
 
-You are awesome, thank you!
+Co-developed-by: Chengming Zhou <zhouchengming@bytedance.com>
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+---
+ kernel/bpf/btf.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 027f9f8a3551..a0887ee44e89 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -6157,11 +6157,13 @@ static int btf_struct_walk(struct bpf_verifier_log *log, const struct btf *btf,
+ 		if (off < moff)
+ 			goto error;
+ 
+-		/* Only allow structure for now, can be relaxed for
+-		 * other types later.
+-		 */
++		/* allow structure and integer */
+ 		t = btf_type_skip_modifiers(btf, array_elem->type,
+ 					    NULL);
++
++		if (btf_type_is_int(t))
++			return WALK_SCALAR;
++
+ 		if (!btf_type_is_struct(t))
+ 			goto error;
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.20.1
 
