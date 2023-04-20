@@ -2,135 +2,178 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EEA14C77B73
-	for <bpf@archiver.kernel.org>; Thu, 20 Apr 2023 06:33:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54DFFC77B72
+	for <bpf@archiver.kernel.org>; Thu, 20 Apr 2023 06:45:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233812AbjDTGdh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Apr 2023 02:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39648 "EHLO
+        id S233820AbjDTGpc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Apr 2023 02:45:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233687AbjDTGdg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 Apr 2023 02:33:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4660246B9
-        for <bpf@vger.kernel.org>; Wed, 19 Apr 2023 23:32:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681972371;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PSt4vJ6JebWC94KoDTMIHxTA6Bf2J+lWbCuixu0az/4=;
-        b=dZiIlYa2/wIPqUP+8AU3HjO9o8YFE1SQVwEGApiXwL68M3njGy2bL5SSif1VVAnwNP8cEn
-        v8aLtaSbeoyVonC6mlDoFM1Z9p2fesw7x3QJk+43wGIWIwPooMs+8E8G3d11TymdPIEPWt
-        uN2Jjo3mhiD2Xy+I5TgX98VJtjSW+Es=
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
- [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-404-ivQZE33INV-KFEA9MoZPTg-1; Thu, 20 Apr 2023 02:32:50 -0400
-X-MC-Unique: ivQZE33INV-KFEA9MoZPTg-1
-Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-38def77dd7fso385521b6e.0
-        for <bpf@vger.kernel.org>; Wed, 19 Apr 2023 23:32:50 -0700 (PDT)
+        with ESMTP id S232606AbjDTGpb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Apr 2023 02:45:31 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BF8272D
+        for <bpf@vger.kernel.org>; Wed, 19 Apr 2023 23:45:28 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id t15so1613128ybb.1
+        for <bpf@vger.kernel.org>; Wed, 19 Apr 2023 23:45:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681973128; x=1684565128;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FjmVOB9Fu0y6ipLQl7qPD5QOgaBMqIWI8n92Ln78HNw=;
+        b=HO6/oknLET6MgmlsusxcUHAL/28gG43/E5bk4uunLtkN87tOslVlw17A9WMN7Sa2Hb
+         dBlNIG5IRHj0PFqWvW/0Uu208ZN7mNTXvI4UrpICxMftfAlrhtiKk+vQYbUWmlnA7yiw
+         s//5rJncBNEauF5JXNCeqPAYjytEMV4oxa8kQDb/Je98g/E6NifOEvkWclA0cG7m4/AN
+         iRVAYY9FiZk+pSrXTodsAVArBR1QSZIuoQ+OUZQgw2fXLoYf+qBgPjzsC7iRQxLRMok3
+         XClnTOGWLELiujHZeTpnIlR0yeoE13i+pJbAge6B2Bz+UmUpeMmCm1VFIJkr01u6ZFGZ
+         dinQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681972370; x=1684564370;
+        d=1e100.net; s=20221208; t=1681973128; x=1684565128;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PSt4vJ6JebWC94KoDTMIHxTA6Bf2J+lWbCuixu0az/4=;
-        b=ZQLNY+4DGctu7MwGcrlUtN3o5+WHuDzc9cYFM8YdBoLAL0k0g14i+MnvUi86hj2hLS
-         3ELpTN79hx7WKnNmrUYUAUmaWj0inOV/O4wQLTcPg68G+r1BagqnT/Y7gmmGbrTmDhzT
-         Gs0EkzH/1RFoqRnv/3GAuZlHekg3+Uas5AYj3PXKDRAXMxxaX7huHCMQdjd9vexm6LmE
-         dcBHU3y62SXR0YeT4zrT0s+HS3pfClPsunxi9+VNbq904vXPiRDWtxjywgZ60sPei/Rs
-         Cn/ljUe8mSbbwrmLfLVnUsVIuAoNySGuNWFfZzDQMjYzvlGq3Nt2zrgmwbiY5B/AVdV1
-         4baA==
-X-Gm-Message-State: AAQBX9edCy2wyLo2dsm+c6UHBV4E8DOpk8LAm6cGPQJHnWwyfA+qbF5P
-        oVawoRdMCMfrRRmEduqOTiD3YGNPWmPo1tspz6ufVr/kZ6fMtaQrxZYKs/gtRpQ/ZMNFIgNz0ZR
-        zUjTyEmh9ho0iTuqOxj3cBAyk1rDu
-X-Received: by 2002:a05:6808:30a2:b0:38e:67d7:9d0e with SMTP id bl34-20020a05680830a200b0038e67d79d0emr328357oib.31.1681972369455;
-        Wed, 19 Apr 2023 23:32:49 -0700 (PDT)
-X-Google-Smtp-Source: AKy350aeHvzKzDJfinP2eZ1Sdj3X4Zpydu2RwxzgLVr1a7/071YWVYaLIeuA0ANa6w9WFB2KKl0o7pvkgAkp4OyBTE4=
-X-Received: by 2002:a05:6808:30a2:b0:38e:67d7:9d0e with SMTP id
- bl34-20020a05680830a200b0038e67d79d0emr328341oib.31.1681972368876; Wed, 19
- Apr 2023 23:32:48 -0700 (PDT)
+        bh=FjmVOB9Fu0y6ipLQl7qPD5QOgaBMqIWI8n92Ln78HNw=;
+        b=R6AUcMN1QVtXreym+zmEgJMMsK8qMr+u85q3NnT3m769+538Q8KLc6Tw0UDjIGtX/E
+         gI69Z7ghAHfzKVPwvHN6md0VjtsDJdRSRuH/Y8mmj5vcdC9HyQE2xhqCUZOQsCWsyLaY
+         JwbSz25zTTaDI0tc/daJlXUGO/hs05xkAQGKeoCj5jYngz8O1BF7D132iB1tH2hwxN1m
+         yJoJrCVXffaHnq7ZJt/ZyT1H397ofw5TUsz89g2GGqRxzhHuvy5RvZ9O/3B3mkiOLMFZ
+         SQPnjpYhqa+WAU3Rti4k5Mmd7zW+rkdUkQIfKCGQLUUgpvCJIc0c126b45DHtP8GSrxV
+         9Pvw==
+X-Gm-Message-State: AAQBX9dRJgG9Fd44MPxbHLvmTCMMAFlyuE3cVdOq6qndA9AiV5HI0ucD
+        mcL3v6DqOM55ja6a1ekM9Adm2ip4GiRcTTkpDmI=
+X-Google-Smtp-Source: AKy350YdChXguDyJWHsSPb7jaAAy8HhC5/QIQc3k14s1nnYUr/YzE1kQny7Vx41bmItM91D7S8u4ZQqqdz/fNXoYe+c=
+X-Received: by 2002:a25:cc57:0:b0:b96:3344:c211 with SMTP id
+ l84-20020a25cc57000000b00b963344c211mr387856ybf.10.1681973128119; Wed, 19 Apr
+ 2023 23:45:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230418065327.72281-1-xuanzhuo@linux.alibaba.com> <20230418065327.72281-14-xuanzhuo@linux.alibaba.com>
-In-Reply-To: <20230418065327.72281-14-xuanzhuo@linux.alibaba.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Thu, 20 Apr 2023 14:32:37 +0800
-Message-ID: <CACGkMEtubJ8ND01J+Arpa4TB5kfdap7t6f9D5qc7-XkeFZYRKQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 13/14] virtio_net: small: optimize code
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     netdev@vger.kernel.org, "Michael S. Tsirkin" <mst@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
+References: <20230409033431.3992432-1-joannelkoong@gmail.com>
+ <20230409033431.3992432-3-joannelkoong@gmail.com> <CAEf4BzahPnJ08-eqh2S_jZ+wca4-DCq5JjFKQOAfgb+oYRqdkg@mail.gmail.com>
+In-Reply-To: <CAEf4BzahPnJ08-eqh2S_jZ+wca4-DCq5JjFKQOAfgb+oYRqdkg@mail.gmail.com>
+From:   Joanne Koong <joannelkoong@gmail.com>
+Date:   Wed, 19 Apr 2023 23:45:17 -0700
+Message-ID: <CAJnrk1bvC6Zp2y=9TVAyz5nmQ=+7CO9PhEfPbwawVid6mcrrEQ@mail.gmail.com>
+Subject: Re: [PATCH v1 bpf-next 2/5] bpf: Add bpf_dynptr_is_null and bpf_dynptr_is_rdonly
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 2:53=E2=80=AFPM Xuan Zhuo <xuanzhuo@linux.alibaba.c=
+On Wed, Apr 12, 2023 at 2:50=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Sat, Apr 8, 2023 at 8:34=E2=80=AFPM Joanne Koong <joannelkoong@gmail.c=
 om> wrote:
+> >
+> > bpf_dynptr_is_null returns true if the dynptr is null / invalid
+> > (determined by whether ptr->data is NULL), else false if
+> > the dynptr is a valid dynptr.
+> >
+> > bpf_dynptr_is_rdonly returns true if the dynptr is read-only,
+> > else false if the dynptr is read-writable.
+> >
+> > Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
+> > ---
+> >  kernel/bpf/helpers.c | 23 +++++++++++++++++++----
+> >  1 file changed, 19 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> > index 51b4c4b5dbed..e4e84e92a4c6 100644
+> > --- a/kernel/bpf/helpers.c
+> > +++ b/kernel/bpf/helpers.c
+> > @@ -1423,7 +1423,7 @@ static const struct bpf_func_proto bpf_kptr_xchg_=
+proto =3D {
+> >  #define DYNPTR_SIZE_MASK       0xFFFFFF
+> >  #define DYNPTR_RDONLY_BIT      BIT(31)
+> >
+> > -static bool bpf_dynptr_is_rdonly(const struct bpf_dynptr_kern *ptr)
+> > +static bool __bpf_dynptr_is_rdonly(const struct bpf_dynptr_kern *ptr)
+> >  {
+> >         return ptr->size & DYNPTR_RDONLY_BIT;
+> >  }
+> > @@ -1570,7 +1570,7 @@ BPF_CALL_5(bpf_dynptr_write, const struct bpf_dyn=
+ptr_kern *, dst, u32, offset, v
+> >         enum bpf_dynptr_type type;
+> >         int err;
+> >
+> > -       if (!dst->data || bpf_dynptr_is_rdonly(dst))
+> > +       if (!dst->data || __bpf_dynptr_is_rdonly(dst))
+> >                 return -EINVAL;
+> >
+> >         err =3D bpf_dynptr_check_off_len(dst, offset, len);
+> > @@ -1626,7 +1626,7 @@ BPF_CALL_3(bpf_dynptr_data, const struct bpf_dynp=
+tr_kern *, ptr, u32, offset, u3
+> >         if (err)
+> >                 return 0;
+> >
+> > -       if (bpf_dynptr_is_rdonly(ptr))
+> > +       if (__bpf_dynptr_is_rdonly(ptr))
+> >                 return 0;
+> >
+> >         type =3D bpf_dynptr_get_type(ptr);
+> > @@ -2254,7 +2254,7 @@ __bpf_kfunc void *bpf_dynptr_slice(const struct b=
+pf_dynptr_kern *ptr, u32 offset
+> >  __bpf_kfunc void *bpf_dynptr_slice_rdwr(const struct bpf_dynptr_kern *=
+ptr, u32 offset,
+> >                                         void *buffer, u32 buffer__szk)
+> >  {
+> > -       if (!ptr->data || bpf_dynptr_is_rdonly(ptr))
+> > +       if (!ptr->data || __bpf_dynptr_is_rdonly(ptr))
 >
-> Avoid the problem that some variables(headroom and so on) will repeat
-> the calculation when process xdp.
+> seems like all the uses of __bpf_dynptr_is_rdonly check !ptr->data
+> explicitly, so maybe move that ptr->data check inside and simplify all
+> the callers?
 
-While at it, if we agree to use separate code paths for building skbs.
+i think combining it gets confusing in the case where ptr->data is
+null, as to how the invoked places interpret the return value. I think
+having the check spelled out more explicitly in the invoked places (eg
+bpf_dynptr_write, bpf_dynptr_data, ...) makes it more clear as well
+where the check for null is happening. for v2 I will leave this as is,
+but also happy to change it if you prefer the two be combined
 
-It would be better to have a helper for building skb for non XDP
-cases, then we can hide those calculation there.
-
-Thanks
-
 >
-> Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> ---
->  drivers/net/virtio_net.c | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
+> Regardless, looks good:
 >
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index f6f5903face2..5a5636178bd3 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -1040,11 +1040,10 @@ static struct sk_buff *receive_small(struct net_d=
-evice *dev,
->         struct sk_buff *skb;
->         struct bpf_prog *xdp_prog;
->         unsigned int xdp_headroom =3D (unsigned long)ctx;
-> -       unsigned int header_offset =3D VIRTNET_RX_PAD + xdp_headroom;
-> -       unsigned int headroom =3D vi->hdr_len + header_offset;
-> -       unsigned int buflen =3D SKB_DATA_ALIGN(GOOD_PACKET_LEN + headroom=
-) +
-> -                             SKB_DATA_ALIGN(sizeof(struct skb_shared_inf=
-o));
->         struct page *page =3D virt_to_head_page(buf);
-> +       unsigned int header_offset;
-> +       unsigned int headroom;
-> +       unsigned int buflen;
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
 >
->         len -=3D vi->hdr_len;
->         stats->bytes +=3D len;
-> @@ -1072,6 +1071,11 @@ static struct sk_buff *receive_small(struct net_de=
-vice *dev,
->         rcu_read_unlock();
->
->  skip_xdp:
-> +       header_offset =3D VIRTNET_RX_PAD + xdp_headroom;
-> +       headroom =3D vi->hdr_len + header_offset;
-> +       buflen =3D SKB_DATA_ALIGN(GOOD_PACKET_LEN + headroom) +
-> +               SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
-> +
->         skb =3D build_skb(buf, buflen);
->         if (!skb)
->                 goto err;
-> --
-> 2.32.0.3.g01195cf9f
->
-
+> >                 return NULL;
+> >
+> >         /* bpf_dynptr_slice_rdwr is the same logic as bpf_dynptr_slice.
+> > @@ -2322,6 +2322,19 @@ __bpf_kfunc int bpf_dynptr_trim(struct bpf_dynpt=
+r_kern *ptr, u32 len)
+> >         return bpf_dynptr_adjust(ptr, 0, len);
+> >  }
+> >
+> > +__bpf_kfunc bool bpf_dynptr_is_null(struct bpf_dynptr_kern *ptr)
+> > +{
+> > +       return !ptr->data;
+> > +}
+> > +
+> > +__bpf_kfunc bool bpf_dynptr_is_rdonly(struct bpf_dynptr_kern *ptr)
+> > +{
+> > +       if (!ptr->data)
+> > +               return false;
+> > +
+> > +       return __bpf_dynptr_is_rdonly(ptr);
+> > +}
+> > +
+> >  __bpf_kfunc void *bpf_cast_to_kern_ctx(void *obj)
+> >  {
+> >         return obj;
+> > @@ -2396,6 +2409,8 @@ BTF_ID_FLAGS(func, bpf_iter_num_next, KF_ITER_NEX=
+T | KF_RET_NULL)
+> >  BTF_ID_FLAGS(func, bpf_iter_num_destroy, KF_ITER_DESTROY)
+> >  BTF_ID_FLAGS(func, bpf_dynptr_trim)
+> >  BTF_ID_FLAGS(func, bpf_dynptr_advance)
+> > +BTF_ID_FLAGS(func, bpf_dynptr_is_null)
+> > +BTF_ID_FLAGS(func, bpf_dynptr_is_rdonly)
+> >  BTF_SET8_END(common_btf_ids)
+> >
+> >  static const struct btf_kfunc_id_set common_kfunc_set =3D {
+> > --
+> > 2.34.1
+> >
