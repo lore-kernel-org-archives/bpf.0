@@ -2,53 +2,52 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9B46C77B73
-	for <bpf@archiver.kernel.org>; Thu, 20 Apr 2023 03:28:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E4A7C77B75
+	for <bpf@archiver.kernel.org>; Thu, 20 Apr 2023 03:28:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbjDTD2P (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Apr 2023 23:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36586 "EHLO
+        id S233134AbjDTD2S (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Apr 2023 23:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233224AbjDTD2I (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 19 Apr 2023 23:28:08 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22DF0423E
-        for <bpf@vger.kernel.org>; Wed, 19 Apr 2023 20:28:05 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-63b60366047so503774b3a.1
-        for <bpf@vger.kernel.org>; Wed, 19 Apr 2023 20:28:05 -0700 (PDT)
+        with ESMTP id S232748AbjDTD2Q (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Apr 2023 23:28:16 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0EAC40FE
+        for <bpf@vger.kernel.org>; Wed, 19 Apr 2023 20:27:48 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-51f6461af24so373023a12.2
+        for <bpf@vger.kernel.org>; Wed, 19 Apr 2023 20:27:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1681961284; x=1684553284;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YDyVsaH4pVJocXiNYxHqnYnlvV9ip3excIUFff8vOpo=;
-        b=bSRgqMnlr0Mkn8uDnOHS9EVNtawNiErGgQ8TMPPeH3fNCfqjgdmHSLBqacH5y2+hjl
-         7+7qYJvFpWiExSjMuHWir+g63IEG3q0vtMbm/Brd3hsIEV93D+pTwjwUgMiyiEASJn8X
-         XdJGYRhLqIGkdcJNy0zEooO+XjsjfV6sD3VDB3WVIBV9H9asO9MaG6KeizaAw6YTl6WR
-         w3aTQQBPA+H5ymbOt9kxjgP33DKA494k0JDkwHoHBp1EN3pitGRKQLCa+BLQRBD85ERj
-         ub6ZsNcBIvLYRZ9gQDBFayBe21LVOlOyYDK/QnoH7rxxetvcRds3Y5FKw3P8bKXWpyAv
-         4dzA==
+        d=bytedance.com; s=google; t=1681961268; x=1684553268;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+tV8crDjofyv0750I49wkl0WcXsLL7eDJ+4zb9fuL8U=;
+        b=U+0vKGQyRzTzOtm6Vwg6IvsfLIs8cE/cGzeNtzx/bOizHJ7DmvCcD5SqTWcXZ3lBG2
+         X5Q4SnbgVn3mM3KKXRrcEk+hkuadH13xYkjRW8+NkOOBf4R3tnIG8xP1HK7ZpXcSeSAv
+         KsQh6BDaa92EkVmqCUis//S7ULVq1/T7nJIeAcivnmkYVQlN/PGIxl7rD1yKFrCW+n18
+         u5/CbN/u0PnvTmUZqaaOnDZelKOMiL4snXvUbf1RiKmuhhFvfnGaJu2h48DrkB4ivmRb
+         rYePZSlLBGn0jt7Xp8hRYCw4igd1jgE9zB5dXzu8APxgZpI/+fc5nAJIJvKMZfbbNNJb
+         zjVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681961284; x=1684553284;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YDyVsaH4pVJocXiNYxHqnYnlvV9ip3excIUFff8vOpo=;
-        b=aYtjnOHDMCCJsoBsQZ5FFU9Nebm5IbzcpPEQOSIr/eei0PzDWsLkZpRKZUTpwNFyhD
-         LoBuRusLEO7pcGjeHRaty8iWyUcVnfbaVhaRYRGX+RcuckjYfSHXm+1AiqD75a6sbd4i
-         sLJBf4gLdRTFzCVff6pFketfsvCE8qhutWGjXNPRPIWfOWWmg9VPHHjDcY10/wxVHUcU
-         228tB5jVXANRf3euKfJpiDKn+mg0zj4lC7hBJn2I0s1Ri+Tue9Dh7I/5rAA4ixUdq+Cf
-         a3gF8JVLGktf5EQkpSyYnhsUHTKbf3KUJ9Nn4cYG0oP0sbjascHFhorEN7JbnsUyd/xN
-         TmxA==
-X-Gm-Message-State: AAQBX9dyT2XV0N0pSTlleQ0wJUhNsi+ffodKipzl+SLRtO30u9O9Eax+
-        x7WHyeSCt8MtE4ND1OXCQRJ/dQ==
-X-Google-Smtp-Source: AKy350ao8p06O+vO1ADPVqJeEMwwoZVuG0RI8jQ8abMA7rOJTOIumxZ2VImkDhIbEssKZPr6IgfoPw==
-X-Received: by 2002:a05:6a20:8f0d:b0:ef:5f:3c15 with SMTP id b13-20020a056a208f0d00b000ef005f3c15mr143865pzk.47.1681961284422;
-        Wed, 19 Apr 2023 20:28:04 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681961268; x=1684553268;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+tV8crDjofyv0750I49wkl0WcXsLL7eDJ+4zb9fuL8U=;
+        b=bt1LlbjJHVVSZRxqmZXpzPN+otOeo2UkVl7Pbl/f+0X4vPeXv52it5PdfBKxxIkOSf
+         jFg78RWjm2KCzFSJxEXwsps99cQrLnoocccbP6T8383oymxneBOLp8j83bPj8wkt/ab0
+         bhY7IGhJssEwFNlMbY020M0hK0xCsTi9EGxCiHfx8zRTsaLLCFBSuBN/mFnpnZtCm/Zy
+         YebJI+95f6lNyA/BA7hdfqJ3bx8bKmcsOT+1dbcqvZfNDavPcig099lfz6PJnQlkVULd
+         Leg33NblHBeQP37PgvA9DF0I2sPhueo7DfJe9Z5vzPoCDSb8ptaaNkMxfuzw39m63/ZB
+         aRJw==
+X-Gm-Message-State: AAQBX9cjQVicC3g3lGqz+D5u5YfdfzWmyVId6tPwu7EQ/733uGg0lNC2
+        9zuG/FHSrGRU+ZP3lcsv7i7sdg==
+X-Google-Smtp-Source: AKy350b11RA/ThCptub+7HGqXeK5nxFLIG8g9zQvW6pVmBjrPR/BPpPduPKtIrxkCPLdy4PmJp7wMQ==
+X-Received: by 2002:a17:90a:5890:b0:246:8497:37c5 with SMTP id j16-20020a17090a589000b00246849737c5mr123367pji.46.1681961268202;
+        Wed, 19 Apr 2023 20:27:48 -0700 (PDT)
 Received: from C02F52LSML85.bytedance.net ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id z15-20020a655a4f000000b00517abaac366sm115231pgs.74.2023.04.19.20.27.56
+        by smtp.gmail.com with ESMTPSA id z15-20020a655a4f000000b00517abaac366sm115231pgs.74.2023.04.19.20.27.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 20:28:04 -0700 (PDT)
+        Wed, 19 Apr 2023 20:27:47 -0700 (PDT)
 From:   Feng zhou <zhoufeng.zf@bytedance.com>
 To:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
         andrii@kernel.org, song@kernel.org, yhs@fb.com,
@@ -60,12 +59,10 @@ Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
         zhouchengming@bytedance.com, zhoufeng.zf@bytedance.com
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Add test to access integer type of variable array
-Date:   Thu, 20 Apr 2023 11:27:35 +0800
-Message-Id: <20230420032735.27760-3-zhoufeng.zf@bytedance.com>
+Subject: [PATCH bpf-next v2 0/2] Access variable length array relaxed for integer type
+Date:   Thu, 20 Apr 2023 11:27:33 +0800
+Message-Id: <20230420032735.27760-1-zhoufeng.zf@bytedance.com>
 X-Mailer: git-send-email 2.39.2 (Apple Git-143)
-In-Reply-To: <20230420032735.27760-1-zhoufeng.zf@bytedance.com>
-References: <20230420032735.27760-1-zhoufeng.zf@bytedance.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -74,172 +71,29 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Feng Zhou <zhoufeng.zf@bytedance.com>
 
-Add prog test for accessing integer type of variable array in tracing
-program.
-In addition, hook load_balance function to access sd->span[0], only
-to confirm whether the load is successful. Because there is no direct
-way to trigger load_balance call.
+Add support for integer type of accessing variable length array.
+Add a selftest to check it.
 
-Co-developed-by: Chengming Zhou <zhouchengming@bytedance.com>
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
----
+Feng Zhou (2):
+  bpf: support access variable length array of integer type
+  selftests/bpf: Add test to access integer type of variable array
+
+Changelog:
+v1->v2: Addressed comments from Alexei Starovoitov
+- Add one more use case.
+Details in here:
+https://lore.kernel.org/bpf/20230417080749.39074-1-zhoufeng.zf@bytedance.com/
+
+ kernel/bpf/btf.c                              |  8 +++++---
  .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 20 +++++++++++++++++++
  .../bpf/prog_tests/access_variable_array.c    | 16 +++++++++++++++
  .../selftests/bpf/prog_tests/tracing_struct.c |  2 ++
  .../bpf/progs/test_access_variable_array.c    | 19 ++++++++++++++++++
  .../selftests/bpf/progs/tracing_struct.c      | 13 ++++++++++++
- 5 files changed, 70 insertions(+)
+ 6 files changed, 75 insertions(+), 3 deletions(-)
  create mode 100644 tools/testing/selftests/bpf/prog_tests/access_variable_array.c
  create mode 100644 tools/testing/selftests/bpf/progs/test_access_variable_array.c
 
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-index fe847ebfb731..52785ba671e6 100644
---- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-@@ -28,6 +28,11 @@ struct bpf_testmod_struct_arg_2 {
- 	long b;
- };
- 
-+struct bpf_testmod_struct_arg_3 {
-+	int a;
-+	int b[];
-+};
-+
- __diag_push();
- __diag_ignore_all("-Wmissing-prototypes",
- 		  "Global functions as their definitions will be in bpf_testmod.ko BTF");
-@@ -63,6 +68,12 @@ bpf_testmod_test_struct_arg_5(void) {
- 	return bpf_testmod_test_struct_arg_result;
- }
- 
-+noinline int
-+bpf_testmod_test_struct_arg_6(struct bpf_testmod_struct_arg_3 *a) {
-+	bpf_testmod_test_struct_arg_result = a->b[0];
-+	return bpf_testmod_test_struct_arg_result;
-+}
-+
- __bpf_kfunc void
- bpf_testmod_test_mod_kfunc(int i)
- {
-@@ -195,6 +206,7 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
- 	};
- 	struct bpf_testmod_struct_arg_1 struct_arg1 = {10};
- 	struct bpf_testmod_struct_arg_2 struct_arg2 = {2, 3};
-+	struct bpf_testmod_struct_arg_3 *struct_arg3;
- 	int i = 1;
- 
- 	while (bpf_testmod_return_ptr(i))
-@@ -206,6 +218,14 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
- 	(void)bpf_testmod_test_struct_arg_4(struct_arg1, 1, 2, 3, struct_arg2);
- 	(void)bpf_testmod_test_struct_arg_5();
- 
-+	struct_arg3 = kmalloc((sizeof(struct bpf_testmod_struct_arg_3) +
-+				sizeof(int)), GFP_KERNEL);
-+	if (struct_arg3 != NULL) {
-+		struct_arg3->b[0] = 1;
-+		(void)bpf_testmod_test_struct_arg_6(struct_arg3);
-+		kfree(struct_arg3);
-+	}
-+
- 	/* This is always true. Use the check to make sure the compiler
- 	 * doesn't remove bpf_testmod_loop_test.
- 	 */
-diff --git a/tools/testing/selftests/bpf/prog_tests/access_variable_array.c b/tools/testing/selftests/bpf/prog_tests/access_variable_array.c
-new file mode 100644
-index 000000000000..08131782437c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/access_variable_array.c
-@@ -0,0 +1,16 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Bytedance */
-+
-+#include <test_progs.h>
-+#include "test_access_variable_array.skel.h"
-+
-+void test_access_variable_array(void)
-+{
-+	struct test_access_variable_array *skel;
-+
-+	skel = test_access_variable_array__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_access_variable_array__open_and_load"))
-+		return;
-+
-+	test_access_variable_array__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-index 48dc9472e160..1c75a32186d6 100644
---- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-@@ -53,6 +53,8 @@ static void test_fentry(void)
- 
- 	ASSERT_EQ(skel->bss->t5_ret, 1, "t5 ret");
- 
-+	ASSERT_EQ(skel->bss->t6, 1, "t6 ret");
-+
- 	tracing_struct__detach(skel);
- destroy_skel:
- 	tracing_struct__destroy(skel);
-diff --git a/tools/testing/selftests/bpf/progs/test_access_variable_array.c b/tools/testing/selftests/bpf/progs/test_access_variable_array.c
-new file mode 100644
-index 000000000000..808c49b79889
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_access_variable_array.c
-@@ -0,0 +1,19 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Bytedance */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+unsigned long span = 0;
-+
-+SEC("fentry/load_balance")
-+int BPF_PROG(fentry_fentry, int this_cpu, struct rq *this_rq,
-+		struct sched_domain *sd)
-+{
-+	span = sd->span[0];
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/tracing_struct.c b/tools/testing/selftests/bpf/progs/tracing_struct.c
-index e718f0ebee7d..c435a3a8328a 100644
---- a/tools/testing/selftests/bpf/progs/tracing_struct.c
-+++ b/tools/testing/selftests/bpf/progs/tracing_struct.c
-@@ -13,12 +13,18 @@ struct bpf_testmod_struct_arg_2 {
- 	long b;
- };
- 
-+struct bpf_testmod_struct_arg_3 {
-+	int a;
-+	int b[];
-+};
-+
- long t1_a_a, t1_a_b, t1_b, t1_c, t1_ret, t1_nregs;
- __u64 t1_reg0, t1_reg1, t1_reg2, t1_reg3;
- long t2_a, t2_b_a, t2_b_b, t2_c, t2_ret;
- long t3_a, t3_b, t3_c_a, t3_c_b, t3_ret;
- long t4_a_a, t4_b, t4_c, t4_d, t4_e_a, t4_e_b, t4_ret;
- long t5_ret;
-+int t6;
- 
- SEC("fentry/bpf_testmod_test_struct_arg_1")
- int BPF_PROG2(test_struct_arg_1, struct bpf_testmod_struct_arg_2, a, int, b, int, c)
-@@ -117,4 +123,11 @@ int BPF_PROG2(test_struct_arg_10, int, ret)
- 	return 0;
- }
- 
-+SEC("fentry/bpf_testmod_test_struct_arg_6")
-+int BPF_PROG2(test_struct_arg_11, struct bpf_testmod_struct_arg_3 *, a)
-+{
-+	t6 = a->b[0];
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
 -- 
 2.20.1
 
