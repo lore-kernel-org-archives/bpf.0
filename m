@@ -2,100 +2,241 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53AADC77B76
-	for <bpf@archiver.kernel.org>; Fri, 21 Apr 2023 16:31:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85EB8C77B61
+	for <bpf@archiver.kernel.org>; Fri, 21 Apr 2023 16:34:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232978AbjDUQbh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 21 Apr 2023 12:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
+        id S232820AbjDUQek (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 21 Apr 2023 12:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232958AbjDUQbe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 21 Apr 2023 12:31:34 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E38413F89
-        for <bpf@vger.kernel.org>; Fri, 21 Apr 2023 09:31:30 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-94a34a14a54so315269066b.1
-        for <bpf@vger.kernel.org>; Fri, 21 Apr 2023 09:31:30 -0700 (PDT)
+        with ESMTP id S231890AbjDUQej (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 21 Apr 2023 12:34:39 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC54126
+        for <bpf@vger.kernel.org>; Fri, 21 Apr 2023 09:34:38 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-504eccc8fc8so2689396a12.2
+        for <bpf@vger.kernel.org>; Fri, 21 Apr 2023 09:34:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682094688; x=1684686688;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1682094876; x=1684686876;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/nCvZ81MQ8C4KsN+w+vU2lanYJxjKn5TCB3KHbYXOxs=;
-        b=hGLjT8S+vZ5GPA6gYuxCtOtR7BNDlqTHhcYCPlEOy/us7PpKAfL+SaoR7vrE+OwCd+
-         lyOAu8kQ8Fxb+u47hvJRi3k5mstrjIb7RIRAcB1VbaW6jXyTB8umC10rSiscoYEF6yJb
-         PVcuS+BN7iyMVFMiDQ83Z1ghRiAx05/t7Y3UkZQvVJUmWNCGheA7AjjdmTOlNb18qgk4
-         8Gz/nBBszbBs2q4ZMX0f1B0azCmt4nSWtgW28LglMYXW0ggA5e6ZWCzeHWdigsos6bgv
-         fKAE7SpE/188xijsJw9rrPcKOscIqlHmMi4iwUzp7OvA5jwFJn/mC9wjdcVBLMBfr4qs
-         HdWg==
+        bh=vCkGPXypsbt8ntcTWt9EMcR27AUSN+LfBpyMiRUTUs8=;
+        b=Dc4oprkOzMRqibOQzVl18bBVLcceJD5AaFaTCTGgoAqcOHd8Pol6E0K77o3Ow4oJWK
+         J9FlGNUCtW+M5nf6MEhcXCywgskcOkcf9tL0O3QDa8MrW8zBiBL9YDyHMrWtgSr2Vlex
+         5JmleiODulrdEIRtUR0XBcFGLOgy/n+82VXi88TpzKm9yGLvOM128uGJnX7wHQQq9XW4
+         NWJB0E4pdY+c8KiL98dV2XQCJBdz+2WOBfHyxRhGCd1hYoRK94wfI60P5uf+XeNJkIFE
+         O7vincBY8ru+snefBaMjvmsPnCPd3oABmoAoAbMGdq4f7s8YOq/TJMIeID5AO5s7KAg3
+         U06w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682094688; x=1684686688;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1682094876; x=1684686876;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/nCvZ81MQ8C4KsN+w+vU2lanYJxjKn5TCB3KHbYXOxs=;
-        b=LKL1dkB7BqYuwHrNZuEnAZXrHivX4MZgAuzykWoOPa0CP23hWgWd/5lSEb999tpR6G
-         EfaU3L44Og86hNPjBt6i4j67ccDc7htvfaY1lmjRBCrNN496LePJFVSrIgU+7zAz2VXU
-         rdpzQ7iTyBjwcVNpND5p7RQ/eJyEqbCR+/kke2xjmlRw6yG/RxVjsILsXoOwRjZo2u86
-         fBOGV3Thtud3JYmPbVHCpOLMXW9h+gtwfe+HNR/5oCNg6vo7OZK2MKkEC0TRRAamckRH
-         KNUSvzXbT2qYIUxWKMeqmdoREEb2y5a3FmYf3RUrgonsWMiZqgHqBrSUSvKV9c1An6ox
-         q3yw==
-X-Gm-Message-State: AAQBX9eWw/HQQdtERqazZLh9V0rvJc9qmqjAlyqEboNyEStyWeW/fJ7Z
-        vDUIlReIrIqmy8OxqBvkJ/PzgVIWQZS69w==
-X-Google-Smtp-Source: AKy350b5akmogJd5oeOIQG3nEfYO7+jOgPblNBW7QbeJW8g13ktrLZIGQbajw8w+qd8Ge0BpDDvifg==
-X-Received: by 2002:a17:907:1c86:b0:94f:81c:725e with SMTP id nb6-20020a1709071c8600b0094f081c725emr3830871ejc.59.1682094688425;
-        Fri, 21 Apr 2023 09:31:28 -0700 (PDT)
-Received: from localhost.localdomain ([2a02:a03f:864b:8201:e534:34f4:1c34:8de7])
-        by smtp.googlemail.com with ESMTPSA id k9-20020a170906970900b009534211cc97sm2248578ejx.159.2023.04.21.09.31.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 09:31:28 -0700 (PDT)
-From:   Daan De Meyer <daan.j.demeyer@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     Daan De Meyer <daan.j.demeyer@gmail.com>, martin.lau@linux.dev,
-        kernel-team@meta.com
-Subject: [PATCH bpf-next v3 10/10] documentation/bpf: Document cgroup unix socket address hooks
-Date:   Fri, 21 Apr 2023 18:27:18 +0200
-Message-Id: <20230421162718.440230-11-daan.j.demeyer@gmail.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230421162718.440230-1-daan.j.demeyer@gmail.com>
-References: <20230421162718.440230-1-daan.j.demeyer@gmail.com>
+        bh=vCkGPXypsbt8ntcTWt9EMcR27AUSN+LfBpyMiRUTUs8=;
+        b=OrcHuto7ek2JV4PotsEwMkOfQnNLGrq21kPmwtN4Vnpdb00+iUHesNy6WcQeRB+iLW
+         XZMkuczP2cZghoY8h69pL/do2d2ZVLTh0s/OPxAZpDtT699nSqy5dfvlJd9BoAVtGPwq
+         sqZBKNOvQN33UvaCagATvaKifWitVsbwvfTxJOX/X8UlCaBI4OINjEOy+/UjJPpwYtf2
+         W4ndPtCRuLo8GScWXEW20K/yTHYUrb2NFWzC56p7B6AwAh5L9GXeyEptFiZUuSkBqr/U
+         mccpWTvw3hUIpljDrlzDol3q3y0kFhiBCf1veORhvx4PuoBY5U9s5UWXuBy9K5frelsK
+         PBXg==
+X-Gm-Message-State: AAQBX9eHK9l/kp02nOSVDIt1yQWKbIgrPGuEhqCDNHnVdv1VdGh4MqEl
+        FrHWr7SJds0ki+/R2iZHqXixFqU4OTcholc/yl3hquybJys=
+X-Google-Smtp-Source: AKy350b7HE03ChmVDTqd4RfgaGnOHARLN1W2RuTV+qLQXdyhgGIXvIaB0hHXV2ADFRpzyzOyk6P4MS8pXiZOCB5nwC4=
+X-Received: by 2002:a05:6402:1849:b0:506:7d34:51d1 with SMTP id
+ v9-20020a056402184900b005067d3451d1mr5763359edy.29.1682094876175; Fri, 21 Apr
+ 2023 09:34:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAGQdkDvyUu2ZDDdRmb4YhDzB96hS1NPW=ju=_Y_C+6nyA6xVGw@mail.gmail.com>
+ <CAEf4BzbauKucsr-e4GigvrdYy2S9XNQQ6YW0xZ3ocJVcGpR7Ow@mail.gmail.com>
+ <CAGQdkDsBb=M+MD=B_MBCt4E0MpnP15Ls7Xja_Ow-5bvUCqe-AQ@mail.gmail.com>
+ <CAEf4Bzbz+oziNGqNbX8MqoHqx+WZnsq9-Q7R9ESqhwjtikCk8g@mail.gmail.com>
+ <CAGQdkDvugsTbN-N6YkvZT5yb2CdicJu8tSEByVPFHnXZyO9jKw@mail.gmail.com> <CAEf4BzaYowLwQs1UkcprUJy8W1Bt8ducOKEjt5K4EUwsNqeOtA@mail.gmail.com>
+In-Reply-To: <CAEf4BzaYowLwQs1UkcprUJy8W1Bt8ducOKEjt5K4EUwsNqeOtA@mail.gmail.com>
+From:   andrea terzolo <andreaterzolo3@gmail.com>
+Date:   Fri, 21 Apr 2023 18:34:24 +0200
+Message-ID: <CAGQdkDsEqG9Lz+R33QgxHCdXVQ6Fu8in=5gKOjooQiPJsKcNBw@mail.gmail.com>
+Subject: Re: [QUESTION] usage of libbpf_probe_bpf_prog_type API
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Update the documentation to mention the new cgroup unix sockaddr
-hooks.
+On Tue, 18 Apr 2023 at 01:48, Andrii Nakryiko <andrii.nakryiko@gmail.com> w=
+rote:
+>
+> On Thu, Apr 13, 2023 at 2:37=E2=80=AFPM andrea terzolo <andreaterzolo3@gm=
+ail.com> wrote:
+> >
+> > On Wed, 12 Apr 2023 at 20:48, Andrii Nakryiko <andrii.nakryiko@gmail.co=
+m> wrote:
+> > >
+> > > On Sat, Apr 8, 2023 at 6:34=E2=80=AFAM andrea terzolo <andreaterzolo3=
+@gmail.com> wrote:
+> > > >
+> > > > Il giorno mer 5 apr 2023 alle ore 00:32 Andrii Nakryiko
+> > > > <andrii.nakryiko@gmail.com> ha scritto:
+> > > > >
+> > > > > On Thu, Mar 30, 2023 at 10:21=E2=80=AFAM andrea terzolo
+> > > > > <andreaterzolo3@gmail.com> wrote:
+> > > > > >
+> > > > > > Hi all!
+> > > > > >
+> > > > > > If I can I would like to ask one question about the
+> > > > > > `libbpf_probe_bpf_prog_type` API. The idea is to use `fentry/fe=
+xit`
+> > > > > > bpf progs only if they are available and fall back to simple `k=
+probes`
+> > > > > > when they are not. Is there a way to probe `BPF_TRACE_FENTRY` s=
+upport
+> > > > > > with `libbpf` APIs? I was looking at `libbpf_probe_bpf_prog_typ=
+e` API
+> > > > > > but it seems to check the `prog_type` rather than the `attach_t=
+ype`,
+> > > > > > when I call it `libbpf_probe_bpf_prog_type(BPF_PROG_TYPE_TRACIN=
+G,
+> > > > > > NULL);` it returns `1` even if `fentry/fexit` progs are not sup=
+ported
+> > > > > > on my machine. Is there a way to probe this feature with other
+> > > > > > `libbpf` APIs?
+> > > > > >
+> > > > >
+> > > > > looking at libbpf probing code, for BPF_PROG_TYPE_TRACING we choo=
+se
+> > > > > BPF_TRACE_FENTRY attach type automatically (because it doesn't re=
+ally
+> > > > > matter whether its BPF_TRACE_FEXIT or BPF_MODIFY_RETURN, they all=
+ are
+> > > > > either supported or none is). We then expect that verifier will
+> > > > > complain with "attach_btf_id 1 is not a function" error. If we do=
+ see
+> > > > > that error, we know that verifier supports fentry/fexit programs =
+*in
+> > > > > principle*, which is what we are checking with
+> > > > > libbpf_probe_bpf_prog_type().
+> > > >
+> > > > Ok got it, thank you. My issue is that in my project I need to use
+> > > > BPF_TRACE_RAW_TP programs that AFAIK don't require the support for =
+bpf
+> > > > trampoline, so they could be supported even if
+> > > > BPF_TRACE_FENTRY/BPF_MODIFY_RETURN are not supported. This is what
+> > > > happens on arm64 kernels where we have BPF_TRACE_RAW_TP but
+> > > > BPF_TRACE_FENTRY/BPF_MODIFY_RETURN are still not supported... Right
+> > > > now I'm using libbpf_probe_bpf_prog_type() to check the support for
+> > > > BPF_TRACE_RAW_TP but this is just an approximation, probably the be=
+st
+> > > > way to do that is to inject a small
+> > > > BPF_TRACE_RAW_TP prog and check that it is correctly loaded. It see=
+ms
+> > > > that libbpf doesn't provide APIs to do that, is it right?
+> > >
+> > > BPF_TRACE_RAW_TP is not a program type, so not sure what you are chec=
+king.
+> > >
+> > > fentry/fexit is BPF_PROG_TYPE_TRACING, while raw tracepoint is
+> > > BPF_PROG_TYPE_RAW_TRACEPOINT, there shouldn't be any problem for you.
+> >
+> > If I understood correctly BPF_PROG_TYPE_TRACING has several attach type=
+s:
+> > * BPF_MODIFY_RETURN
+> > * BPF_TRACE_FENTRY
+> > * BPF_TRACE_FEXIT
+> > * BPF_TRACE_ITER
+> > * BPF_TRACE_RAW_TP
+> >
+> > I'm using the last one so BPF_TRACE_RAW_TP ('tp_btf' elf section
+>
+> ah, so we were talking about BTF-aware raw tracepoint, sorry, I missed
+> that. Was thinking about plain raw tracepoint all along the way.
+>
+> > name). libbpf_probe_bpf_prog_type API allows checking the support for
+> > a specific prog_type like BPF_PROG_TYPE_TRACING but indeed I need a
+> > check on the attach_type support. BPF_TRACE_FENTRY/FEXIT have
+> > different requirements with respect to BPF_TRACE_RAW_TP so I would
+> > like to know if libbpf provides out-of-the-box an API to check the
+> > attach_type support. libbpf_probe_bpf_prog_type doesn't tell if
+> > BPF_TRACE_FENTRY/FEXIT are effectively supported it just tells if
+> > BPF_PROG_TYPE_TRACING is supported, so I was just asking what is the
+> > best way to probe the support for a specific attach_type
+>
+> ok, this sounds like a perfect use case to use that opts argument and
+> allow programs to optionally specify expected_attach_type. see
+> LIBBPF_OPTS, OPTS_GET and other cases of using `struct xxx_opts` in
+> libbpf code base.
+>
+> Would you be interested in contributing such a patch?
 
-Signed-off-by: Daan De Meyer <daan.j.demeyer@gmail.com>
----
- Documentation/bpf/libbpf/program_types.rst | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/Documentation/bpf/libbpf/program_types.rst b/Documentation/bpf/libbpf/program_types.rst
-index ad4d4d5eecb0..06168ad73d5e 100644
---- a/Documentation/bpf/libbpf/program_types.rst
-+++ b/Documentation/bpf/libbpf/program_types.rst
-@@ -56,6 +56,18 @@ described in more detail in the footnotes.
- |                                           | ``BPF_CGROUP_UDP6_RECVMSG``            | ``cgroup/recvmsg6``              |           |
- +                                           +----------------------------------------+----------------------------------+-----------+
- |                                           | ``BPF_CGROUP_UDP6_SENDMSG``            | ``cgroup/sendmsg6``              |           |
-+|                                           +----------------------------------------+----------------------------------+-----------+
-+|                                           | ``BPF_CGROUP_UNIX_BIND``               | ``cgroup/bindun``                |           |
-+|                                           +----------------------------------------+----------------------------------+-----------+
-+|                                           | ``BPF_CGROUP_UNIX_CONNECT``            | ``cgroup/connectun``             |           |
-+|                                           +----------------------------------------+----------------------------------+-----------+
-+|                                           | ``BPF_CGROUP_UNIX_SENDMSG``            | ``cgroup/sendmsgun``             |           |
-+|                                           +----------------------------------------+----------------------------------+-----------+
-+|                                           | ``BPF_CGROUP_UNIX_RECVMSG``            | ``cgroup/recvmsgun``             |           |
-+|                                           +----------------------------------------+----------------------------------+-----------+
-+|                                           | ``BPF_CGROUP_UNIX_GETPEERNAME``        | ``cgroup/getpeernameun``         |           |
-+|                                           +----------------------------------------+----------------------------------+-----------+
-+|                                           | ``BPF_CGROUP_UNIX_GETSOCKNAME``        | ``cgroup/getsocknameun``         |           |
- +-------------------------------------------+----------------------------------------+----------------------------------+-----------+
- | ``BPF_PROG_TYPE_CGROUP_SOCK``             | ``BPF_CGROUP_INET4_POST_BIND``         | ``cgroup/post_bind4``            |           |
- +                                           +----------------------------------------+----------------------------------+-----------+
--- 
-2.40.0
-
+Right now I'm pretty busy but if there is no rush I can try to
+implement it when I have time! BTW thank you for the suggestion, I
+will take a look at `LIBBPF_OPTS, OPTS_GET` constructs!
+> >
+> > >
+> > > >
+> > > > > If kernel doesn't support fentry/fexit attachment for some specif=
+ic
+> > > > > function you'd like to attach to, that's a different matter. This
+> > > > > would be equivalent to BPF_PROG_TYPE_KPROBE check -- we check if
+> > > > > kprobes in general are supported, but not whether kprobing specif=
+ic
+> > > > > kernel function works.
+> > > > >
+> > > > > I assume by "not supported on my machine" you mean that you can't
+> > > > > attach fentry/fexit to some function? If not, let me know, and we=
+'d
+> > > > > have to debug this further.
+> > > >
+> > > > Sorry, probably I was not so clear, with this statement I mean that
+> > > > libbpf_probe_bpf_prog_type() returns 1 even if BPF_TRACE_FENTRY pro=
+gs
+> > > > cannot be attached into the kernel. [0] is an example of what I'm
+> > > > doing.
+> > > > 1. Check fentry support with libbpf_probe_bpf_prog_type
+> > > > 2. Check fentry support with an approach similar to libbpf-tools (a=
+s
+> > > > you suggested)
+> > > > 3. Try to inject my real BPF programs.
+> > > >
+> > > > (2) (libbpf-tool check) is correctly able to detect that
+> > > > BPF_TRACE_FENTRY progs are not supported, when we call
+> > > > `bpf_raw_tracepoint_open` to attach the fentry prog, `524` is retur=
+ned
+> > > > so we understand that this program is not supported. On the other
+> > > > side, (1) is not able to detect that programs are not supported, th=
+e
+> > > > API returns `1` as if they were supported. Now I have to highlight
+> > > > that this API is called libbpf_probe_bpf_prog_type and not
+> > > > libbpf_probe_bpf_attach_type, so 1 could be the right return value
+> > > > since BPF_PROG_TYPE_TRACING progs are effectively supported, for
+> > > > example, attach_type  BPF_TRACE_RAW_TP is supported, but some other
+> > > > attach types like BPF_TRACE_FENTRY/BPF_MODIFY_RETURN  are not. If t=
+his
+> > > > API just checks for BPF_PROG_TYPE_TRACING support, probably the bes=
+t
+> > > > way I have to check if a specific attach type is supported is to
+> > > > directly inject a small prog of this type, as libbpf-tool does. WDY=
+T?
+> > >
+> > > Could it be that you are mixing up enum bpf_prog_type with enum
+> > > bpf_attach_type when calling libbpf_probe_bpf_prog_type()?
+> > >
+> > > >
+> > > > [0]: https://github.com/Andreagit97/BPF-perf-tests/blob/main/templa=
+tes/fentry_attach.c
+> > > >
+> > > > > If you want to know if some function can be traced with fentry/fe=
+xit,
+> > > > > check below helper function from libbpf-tools ([0])
+> > > > >
+> > > > > bool fentry_can_attach(const char *name, const char *mod)
+> > > > >
+> > > > >
+> > > > >   [0] https://github.com/iovisor/bcc/blob/master/libbpf-tools/tra=
+ce_helpers.c#LL1043-L1043C58
+> > > > >
+> > > > Thank you for the pointer!
+> > > > >
+> > > > > > Thank you in advance for your time,
+> > > > > > Andrea
