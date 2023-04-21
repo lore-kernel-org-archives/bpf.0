@@ -2,169 +2,119 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BE7BC77B76
-	for <bpf@archiver.kernel.org>; Fri, 21 Apr 2023 14:45:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86C4FC77B71
+	for <bpf@archiver.kernel.org>; Fri, 21 Apr 2023 14:52:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232946AbjDUOpb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 21 Apr 2023 10:45:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56258 "EHLO
+        id S233041AbjDUOw4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 21 Apr 2023 10:52:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233372AbjDUOp2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 21 Apr 2023 10:45:28 -0400
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A09901444D
-        for <bpf@vger.kernel.org>; Fri, 21 Apr 2023 07:45:00 -0700 (PDT)
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-4ecb7fe8fb8so7014e87.0
-        for <bpf@vger.kernel.org>; Fri, 21 Apr 2023 07:45:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682087938; x=1684679938;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uE8L66mYi61Gg000YX9CaB4PguSbhnlIM05Rg2iq/GU=;
-        b=g3rmUy97ewR5Qob/EIc0qirnHyGan7c3n7pweFBrjd4IKEX1NVaHijC/5eHO4MNEDW
-         Ff3BUAQNyy0m/fGS9YWwhDtiFnB5bLlPAjjH6fTEFwOvUJbkRqH9u3P763jj6of+sfJV
-         eh1paFZ6ywkGWJqWKXSSu3i6LkZ0rb1dLjXid+GjA3s3hyJwVUlPonXyw6Cz30d88pjH
-         TLOU/sY30TqTHGlXm0/qbIZsfLkAThaztVPBD3OR4nmNuVPX6xNzmzb7bGHzouRJKy77
-         iQTEbiCwwv2DBX8+uESfd1BeUMHZ/N3avr3F3IScinfFcGzEoNS/DlIRNt1JSYsaTWTy
-         mWzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682087938; x=1684679938;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uE8L66mYi61Gg000YX9CaB4PguSbhnlIM05Rg2iq/GU=;
-        b=V23QcyA3fdUG+r3Ag6d3B+G3VPwldK6w/TwQnUlQhgGNlUpMbs7IAFisqWch4F5XaX
-         vFCDhcQk4zqXskY0/0qN5M3pATO3JQNmqEkYd2yfI01k7ZHcW0IkeRUaoq0NH0wtXsA1
-         v8dD1eXaRdE5c48Z0pS+2phXfta1Ljes5UlGqhK3r7OGfdiEgeq8u6ssDtKL5C6Oypqq
-         D/yCKB1FW1RKC1tjFQHGDHhMQdX9LW2XAEoB3NOZkmApvsXxNhf1AJ8StHHefvQh9iwQ
-         PcylDjFncnin8MMNySFXh5jL9/Up+KDM0tH/Rimt/ewPU04XzBgvYmadfUuHqxutEzod
-         dHlA==
-X-Gm-Message-State: AAQBX9ets4BRskRVQD2kIrhYj8zlC0SvtX6jp7pPmO3qT0cTB/fZ8hze
-        +t5j+638aW9ZAVCBMA098cy/ceOAjUVsI47sChRoRw==
-X-Google-Smtp-Source: AKy350ZyOfS4dtZ34VvdRpYL23nzMtyNO31vto5RCBtSVg3taplS7QBs38rFKaUmF1n0vGPY0tnESQznqaXNiGiGREk=
-X-Received: by 2002:a05:6512:110a:b0:4ed:af48:f8bb with SMTP id
- l10-20020a056512110a00b004edaf48f8bbmr104792lfg.5.1682087938324; Fri, 21 Apr
- 2023 07:38:58 -0700 (PDT)
+        with ESMTP id S231774AbjDUOwz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 21 Apr 2023 10:52:55 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A35EB771;
+        Fri, 21 Apr 2023 07:52:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=J9qyPU+PVnsNsWzTVs4DoiCRroFoofUuOFvtJinm82Q=; b=YRhhNtQVDz+1hX//XCxHP/YsIP
+        9aAfbEclTj5/QSEk7AnKYOgmGBgADCYIyheaW8eJemBmSlEQ/2vSW5shnHyPr40uhHjhs1Y7yPj9X
+        eXVO44Y187UjR54YHjwaSCNXHsAIAuXvc/nnWXKdvIl/3UoERRRBRJPwwtbfm7zgOPQx762hcbPM7
+        UXTAamIUsT7dwHO32xHlzi6LsFKJbjB7qBtLfmeEt6ArG0mbfx6VDLPTMVKvaS4eP+BC9beqI0aDN
+        eVF1lQCdtwgro4fzD2bBqdEuW7NcLgLmm+r9CLBW23p0KBpf5bgnj6HpICEWibmPRqyWRhzF9J/B5
+        /xXEvWfA==;
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1pps7r-000NGA-SA; Fri, 21 Apr 2023 16:52:39 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1pps7r-000VNF-7l; Fri, 21 Apr 2023 16:52:39 +0200
+Subject: Re: [xdp-hints] Re: [PATCH bpf-next V2 0/5] XDP-hints: XDP kfunc
+ metadata for driver igc
+To:     "Song, Yoong Siang" <yoong.siang.song@intel.com>,
+        "Brouer, Jesper" <brouer@redhat.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vu?= =?UTF-8?Q?sen?= 
+        <toke@redhat.com>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "martin.lau@kernel.org" <martin.lau@kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "Lobakin, Aleksander" <aleksander.lobakin@intel.com>,
+        "Zaremba, Larysa" <larysa.zaremba@intel.com>,
+        "xdp-hints@xdp-project.net" <xdp-hints@xdp-project.net>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "hawk@kernel.org" <hawk@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>
+References: <168182460362.616355.14591423386485175723.stgit@firesoul>
+ <PH0PR11MB583075A0520F8760657FC4BED89D9@PH0PR11MB5830.namprd11.prod.outlook.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <f134a734-c67e-b546-b1ef-53da676acaf4@iogearbox.net>
+Date:   Fri, 21 Apr 2023 16:52:38 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <00000000000058b63f05f9d98811@google.com>
-In-Reply-To: <00000000000058b63f05f9d98811@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 21 Apr 2023 16:38:45 +0200
-Message-ID: <CACT4Y+ZfucZhM60YPphWiCLJr6+SGFhT+jjm8k1P-a_8Kkxsjg@mail.gmail.com>
-Subject: Re: [syzbot] [cgroups?] [mm?] KCSAN: data-race in drain_all_stock /
- drain_obj_stock (4)
-To:     syzbot <syzbot+774c29891415ab0fd29d@syzkaller.appspotmail.com>
-Cc:     akpm@linux-foundation.org, bpf@vger.kernel.org,
-        cgroups@vger.kernel.org, hannes@cmpxchg.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        mhocko@kernel.org, muchun.song@linux.dev, roman.gushchin@linux.dev,
-        shakeelb@google.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <PH0PR11MB583075A0520F8760657FC4BED89D9@PH0PR11MB5830.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26883/Fri Apr 21 09:25:39 2023)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 21 Apr 2023 at 16:33, syzbot
-<syzbot+774c29891415ab0fd29d@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    534293368afa Merge tag 'kbuild-fixes-v6.3' of git://git.ke..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=11a0c26ec80000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=85fa20c996a2e46d
-> dashboard link: https://syzkaller.appspot.com/bug?extid=774c29891415ab0fd29d
-> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
->
-> Unfortunately, I don't have any reproducer for this issue yet.
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/ec0e584af797/disk-53429336.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/423a67f52f94/vmlinux-53429336.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/8409b9716faa/bzImage-53429336.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+774c29891415ab0fd29d@syzkaller.appspotmail.com
+On 4/18/23 4:53 PM, Song, Yoong Siang wrote:
+> On Tuesday, April 18, 2023 9:31 PM, Jesper Dangaard Brouer <brouer@redhat.com> wrote:
+>> Implement both RX hash and RX timestamp XDP hints kfunc metadata for driver
+>> igc.
+>>
+>> First patch fix RX hashing for igc in general.
+>>
+>> Last patch change test program xdp_hw_metadata to track more timestamps,
+>> which helps us correlate the hardware RX timestamp with something.
+>>
+>> ---
+>> To maintainers: I'm uncertain which git tree this should be sent against. This is
+>> primary NIC driver code (net-next), but it's BPF/XDP related (bpf-next) via
+>> xdp_metadata_ops.
+>>
+>> Jesper Dangaard Brouer (5):
+>>       igc: enable and fix RX hash usage by netstack
+>>       igc: add igc_xdp_buff wrapper for xdp_buff in driver
+>>       igc: add XDP hints kfuncs for RX hash
+>>       igc: add XDP hints kfuncs for RX timestamp
+>>       selftests/bpf: xdp_hw_metadata track more timestamps
+>>
+>>
+>> drivers/net/ethernet/intel/igc/igc.h          |  35 ++++++
+>> drivers/net/ethernet/intel/igc/igc_main.c     | 116 ++++++++++++++++--
+>> .../selftests/bpf/progs/xdp_hw_metadata.c     |   4 +-
+>> tools/testing/selftests/bpf/xdp_hw_metadata.c |  47 ++++++-
+>> tools/testing/selftests/bpf/xdp_metadata.h    |   1 +
+>> 5 files changed, 186 insertions(+), 17 deletions(-)
+>>
+>> --
+> 
+> This patchset lgtm.
+> Thanks for the changes.
 
-Here this:
+Siang, can I take this into the patches as your:
 
-stock->cached_objcg = NULL;
+Acked-by: Song Yoong Siang <yoong.siang.song@intel.com>
 
-runs concurrently with:
+?
 
-if (stock->cached_objcg) {
-    memcg = obj_cgroup_memcg(stock->cached_objcg);
-
-If I am reading this correctly, this can cause a NULL deref, if
-cached_objcg is reset between the check and the use.
-
-
-
-> ==================================================================
-> BUG: KCSAN: data-race in drain_all_stock / drain_obj_stock
->
-> write to 0xffff888237c2a2f8 of 8 bytes by task 19625 on cpu 0:
->  drain_obj_stock+0x408/0x4e0 mm/memcontrol.c:3306
->  refill_obj_stock+0x9c/0x1e0 mm/memcontrol.c:3340
->  obj_cgroup_uncharge+0xe/0x10 mm/memcontrol.c:3408
->  memcg_slab_free_hook mm/slab.h:587 [inline]
->  __cache_free mm/slab.c:3373 [inline]
->  __do_kmem_cache_free mm/slab.c:3577 [inline]
->  kmem_cache_free+0x105/0x280 mm/slab.c:3602
->  __d_free fs/dcache.c:298 [inline]
->  dentry_free fs/dcache.c:375 [inline]
->  __dentry_kill+0x422/0x4a0 fs/dcache.c:621
->  dentry_kill+0x8d/0x1e0
->  dput+0x118/0x1f0 fs/dcache.c:913
->  __fput+0x3bf/0x570 fs/file_table.c:329
->  ____fput+0x15/0x20 fs/file_table.c:349
->  task_work_run+0x123/0x160 kernel/task_work.c:179
->  resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
->  exit_to_user_mode_loop+0xcf/0xe0 kernel/entry/common.c:171
->  exit_to_user_mode_prepare+0x6a/0xa0 kernel/entry/common.c:203
->  __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
->  syscall_exit_to_user_mode+0x26/0x140 kernel/entry/common.c:296
->  do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> read to 0xffff888237c2a2f8 of 8 bytes by task 19632 on cpu 1:
->  obj_stock_flush_required mm/memcontrol.c:3319 [inline]
->  drain_all_stock+0x174/0x2a0 mm/memcontrol.c:2361
->  try_charge_memcg+0x6d0/0xd10 mm/memcontrol.c:2703
->  try_charge mm/memcontrol.c:2837 [inline]
->  mem_cgroup_charge_skmem+0x51/0x140 mm/memcontrol.c:7290
->  sock_reserve_memory+0xb1/0x390 net/core/sock.c:1025
->  sk_setsockopt+0x800/0x1e70 net/core/sock.c:1525
->  udp_lib_setsockopt+0x99/0x6c0 net/ipv4/udp.c:2692
->  udp_setsockopt+0x73/0xa0 net/ipv4/udp.c:2817
->  sock_common_setsockopt+0x61/0x70 net/core/sock.c:3668
->  __sys_setsockopt+0x1c3/0x230 net/socket.c:2271
->  __do_sys_setsockopt net/socket.c:2282 [inline]
->  __se_sys_setsockopt net/socket.c:2279 [inline]
->  __x64_sys_setsockopt+0x66/0x80 net/socket.c:2279
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> value changed: 0xffff8881382d52c0 -> 0xffff888138893740
->
-> Reported by Kernel Concurrency Sanitizer on:
-> CPU: 1 PID: 19632 Comm: syz-executor.0 Not tainted 6.3.0-rc2-syzkaller-00387-g534293368afa #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-> ==================================================================
->
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/00000000000058b63f05f9d98811%40google.com.
+Thanks,
+Daniel
