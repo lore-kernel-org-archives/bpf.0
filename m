@@ -2,61 +2,61 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05C86C77B7E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4A7CC7EE21
 	for <bpf@archiver.kernel.org>; Fri, 21 Apr 2023 17:43:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232578AbjDURna (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 21 Apr 2023 13:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41834 "EHLO
+        id S232757AbjDURnb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 21 Apr 2023 13:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjDURnP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 21 Apr 2023 13:43:15 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA9B2696
-        for <bpf@vger.kernel.org>; Fri, 21 Apr 2023 10:43:01 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-2f9b9aa9d75so1301622f8f.0
-        for <bpf@vger.kernel.org>; Fri, 21 Apr 2023 10:43:01 -0700 (PDT)
+        with ESMTP id S229916AbjDURnQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 21 Apr 2023 13:43:16 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A027C10DA
+        for <bpf@vger.kernel.org>; Fri, 21 Apr 2023 10:43:03 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f1957e80a2so18119085e9.1
+        for <bpf@vger.kernel.org>; Fri, 21 Apr 2023 10:43:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682098979; x=1684690979;
+        d=gmail.com; s=20221208; t=1682098982; x=1684690982;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JRBL3rV1B0pyVlX06vjzxhZo31DWIZom/BS3dYyDGt8=;
-        b=MgEE1L43JP9EDZyxUJmro1fpl5nhYxlCkD3TiTYVCa6kAq1iySymaP50xR3rO8euSc
-         gMOtvbMOdV3mR5Emk1O/xbVBo/BqQt9dc/SUg+fEdyYPIJkdCiiNJCvtUTrnDyMTuF4v
-         EdtcJRTPXW7/n5988U+ew420kHNXtqnmxMqyHT/+q6zfGen5dBl1Rj2bs2nLDhzPyH4I
-         37sAlRfo3msDTME4QFgFGAFijMnxpQ0BP3+VSdwXSx5tRYe2E6A6IhzB39WJtmIprlmT
-         AjxXw1mz0pHg2lN8DgLrWLbOlD+OkJA+FJILH1+AVCf8EbDAOME0VPMSxp6evLoQ1zJF
-         gmHQ==
+        bh=0kgxF1UKrycTdLytpfs5pIYh7OKcvU+Rjp0qYx3dSYw=;
+        b=dtL8di2C4bNzL7SAc5EZfsGZw6IxuNG8msmp5WLi+VXqt88g6YmTprUbo5vaurmHUe
+         VZIxXjvF7NDEwpjavsCWj9DJXgdzOwny63jqASIPBcKDu+5d/mVtUsdAMpXVqUw+zaBL
+         d4L77MmfKDRJ4MB2Mep4qk71LTLNly1JX4XHSLzMZ7UaPoY7PHPoegabSyu7ut9L8aYQ
+         XjpuQEZTKqMpO6GjwJiQI82blkZp1DN3RYw9t3wpjafLmR5gl8EZGqqq6mfdoslPgvCq
+         4Hz0Z5yeEFzOfsVhqSsLWUcKIvsV9v+iiT40akT89/ukt8ITzIeyKx+op9Y2ws9QeOfr
+         +I4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682098979; x=1684690979;
+        d=1e100.net; s=20221208; t=1682098982; x=1684690982;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JRBL3rV1B0pyVlX06vjzxhZo31DWIZom/BS3dYyDGt8=;
-        b=jWKK8SFm+XMKUo9L5FNvQLHLik64KrlY8fiAbmsdja729BYdciqS/u/FTp4b959bNu
-         V/e74ecBs+aofvTwQCzxpb2cM/bVLkRXpGVPRIrwZ6RhlwXpgfPVvEwoAj9J/NNrRRJU
-         WAvhmbWJpLGHc62kHuKWTLHWMglH6/7ppKZyDoICsfymUOchzvsmoxPGDpqrmNQho37O
-         t54g0bOo4Ql9w4qkpkNRnV0Xi3Myc3ZIMV9KN10biiuzoK1bVDkDlw7tFwKE+lt/ph3U
-         /PEhBLxMkxYuhTMfP1fn39B9xPX9qFA5Y3jF1wGQW9xTYec/03jDTi1PnjNN2wxlqx8n
-         X91w==
-X-Gm-Message-State: AAQBX9esZm5vrsim3A4Pr6YUVsKEn4WXlg7LI59+d0jiyULoNnkAh3DB
-        X4yLRURZ2luACUhW4hpazNKZ1Fv8FvPHlA==
-X-Google-Smtp-Source: AKy350ZrtifyocN9Dok9rJxyqxA2kG3AVxd3JXPgQaDV8Dr4a4tl8FJcYSB57yBVh5mq67E2gcnkAw==
-X-Received: by 2002:adf:e946:0:b0:2fe:d540:8c8e with SMTP id m6-20020adfe946000000b002fed5408c8emr4389389wrn.19.1682098979474;
-        Fri, 21 Apr 2023 10:42:59 -0700 (PDT)
+        bh=0kgxF1UKrycTdLytpfs5pIYh7OKcvU+Rjp0qYx3dSYw=;
+        b=P1dSINOQCts1q46/hKurtj+rofauHx/da0XlUncLi7KpflVdL8YSb2P9s/ZqBm2QpN
+         +q53TxMPqop4RZYG5MhCC4+huOLwAZ/BHne2B2bO/kU2F67g5fGzNVItrrnwLvDHB+OH
+         CM0XDDCoG9s9HeEbadu5eMmX7bJZLYzw8ITJdP43Bjx1hycbvpIsLF7cfOH6hSB62yLq
+         154Z27M8yjyOygwlv0+ztWcOXT4P1dCEnfo50zam/NRkosi7el38UsO1ax7kZh4PuJgw
+         X4O3CGPHdVBNVe9nhDKT47ypuh4tdFjZacp3950fdNalkTjfiq1iWcULKaYcTDuzxTqz
+         akvw==
+X-Gm-Message-State: AAQBX9cVa2JzAyWG/Z1oE7lvXzc1brdQAhjOcMOw94o0Xq/BrVfIrjvB
+        GhujYGc38nWvKy4G06Prnkz6m90A5mqzJw==
+X-Google-Smtp-Source: AKy350ZFYkg74SvFzkaTnJSWTSM4OZmjfh7+wquyCTKiYTMMcc40IO4Z53ViD35aZNI1L/UO7pniHA==
+X-Received: by 2002:adf:e912:0:b0:2f6:aa71:d5b0 with SMTP id f18-20020adfe912000000b002f6aa71d5b0mr8091627wrm.15.1682098981831;
+        Fri, 21 Apr 2023 10:43:01 -0700 (PDT)
 Received: from bigfoot.. (boundsly.muster.volia.net. [93.72.16.93])
-        by smtp.gmail.com with ESMTPSA id f4-20020a0560001b0400b002ffbf2213d4sm4849933wrz.75.2023.04.21.10.42.58
+        by smtp.gmail.com with ESMTPSA id f4-20020a0560001b0400b002ffbf2213d4sm4849933wrz.75.2023.04.21.10.43.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 10:42:59 -0700 (PDT)
+        Fri, 21 Apr 2023 10:43:01 -0700 (PDT)
 From:   Eduard Zingerman <eddyz87@gmail.com>
 To:     bpf@vger.kernel.org, ast@kernel.org
 Cc:     andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
         kernel-team@fb.com, yhs@fb.com,
         Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next 12/24] selftests/bpf: verifier/map_ptr_mixing converted to inline assembly
-Date:   Fri, 21 Apr 2023 20:42:22 +0300
-Message-Id: <20230421174234.2391278-13-eddyz87@gmail.com>
+Subject: [PATCH bpf-next 14/24] selftests/bpf: verifier/prevent_map_lookup converted to inline assembly
+Date:   Fri, 21 Apr 2023 20:42:24 +0300
+Message-Id: <20230421174234.2391278-15-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230421174234.2391278-1-eddyz87@gmail.com>
 References: <20230421174234.2391278-1-eddyz87@gmail.com>
@@ -66,413 +66,142 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Test verifier/map_ptr_mixing automatically converted to use inline assembly.
+Test verifier/prevent_map_lookup automatically converted to use inline assembly.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../bpf/progs/verifier_map_ptr_mixing.c       | 265 ++++++++++++++++++
- .../selftests/bpf/verifier/map_ptr_mixing.c   | 100 -------
- 3 files changed, 267 insertions(+), 100 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_map_ptr_mixing.c
- delete mode 100644 tools/testing/selftests/bpf/verifier/map_ptr_mixing.c
+ .../selftests/bpf/prog_tests/verifier.c       |  2 +
+ .../bpf/progs/verifier_prevent_map_lookup.c   | 65 +++++++++++++++++++
+ .../bpf/verifier/prevent_map_lookup.c         | 29 ---------
+ 3 files changed, 67 insertions(+), 29 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_prevent_map_lookup.c
+ delete mode 100644 tools/testing/selftests/bpf/verifier/prevent_map_lookup.c
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 95fc9cb231ad..261567230dd0 100644
+index d5ec9054c025..7627893dd849 100644
 --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
 +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -36,6 +36,7 @@
- #include "verifier_lwt.skel.h"
- #include "verifier_map_in_map.skel.h"
- #include "verifier_map_ptr.skel.h"
-+#include "verifier_map_ptr_mixing.skel.h"
- #include "verifier_map_ret_val.skel.h"
+@@ -41,6 +41,7 @@
  #include "verifier_masking.skel.h"
  #include "verifier_meta_access.skel.h"
-@@ -120,6 +121,7 @@ void test_verifier_loops1(void)               { RUN(verifier_loops1); }
- void test_verifier_lwt(void)                  { RUN(verifier_lwt); }
- void test_verifier_map_in_map(void)           { RUN(verifier_map_in_map); }
- void test_verifier_map_ptr(void)              { RUN(verifier_map_ptr); }
-+void test_verifier_map_ptr_mixing(void)       { RUN(verifier_map_ptr_mixing); }
- void test_verifier_map_ret_val(void)          { RUN(verifier_map_ret_val); }
+ #include "verifier_precise.skel.h"
++#include "verifier_prevent_map_lookup.skel.h"
+ #include "verifier_raw_stack.skel.h"
+ #include "verifier_raw_tp_writable.skel.h"
+ #include "verifier_reg_equal.skel.h"
+@@ -127,6 +128,7 @@ void test_verifier_map_ret_val(void)          { RUN(verifier_map_ret_val); }
  void test_verifier_masking(void)              { RUN(verifier_masking); }
  void test_verifier_meta_access(void)          { RUN(verifier_meta_access); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_map_ptr_mixing.c b/tools/testing/selftests/bpf/progs/verifier_map_ptr_mixing.c
+ void test_verifier_precise(void)              { RUN(verifier_precise); }
++void test_verifier_prevent_map_lookup(void)   { RUN(verifier_prevent_map_lookup); }
+ void test_verifier_raw_stack(void)            { RUN(verifier_raw_stack); }
+ void test_verifier_raw_tp_writable(void)      { RUN(verifier_raw_tp_writable); }
+ void test_verifier_reg_equal(void)            { RUN(verifier_reg_equal); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_prevent_map_lookup.c b/tools/testing/selftests/bpf/progs/verifier_prevent_map_lookup.c
 new file mode 100644
-index 000000000000..c5a7c1ddc562
+index 000000000000..e85f5b0d60d7
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_map_ptr_mixing.c
-@@ -0,0 +1,265 @@
++++ b/tools/testing/selftests/bpf/progs/verifier_prevent_map_lookup.c
+@@ -0,0 +1,65 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/* Converted from tools/testing/selftests/bpf/verifier/map_ptr_mixing.c */
++/* Converted from tools/testing/selftests/bpf/verifier/prevent_map_lookup.c */
 +
 +#include <linux/bpf.h>
 +#include <bpf/bpf_helpers.h>
 +#include "bpf_misc.h"
 +
-+#define MAX_ENTRIES 11
-+
-+struct test_val {
-+	unsigned int index;
-+	int foo[MAX_ENTRIES];
-+};
-+
 +struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(type, BPF_MAP_TYPE_STACK_TRACE);
 +	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, struct test_val);
-+} map_array_48b SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 1);
-+	__type(key, long long);
-+	__type(value, struct test_val);
-+} map_hash_48b SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, int);
-+	__array(values, struct {
-+		__uint(type, BPF_MAP_TYPE_ARRAY);
-+		__uint(max_entries, 1);
-+		__type(key, int);
-+		__type(value, int);
-+	});
-+} map_in_map SEC(".maps");
++	__type(key, __u32);
++	__type(value, __u64);
++} map_stacktrace SEC(".maps");
 +
 +void dummy_prog_42_socket(void);
 +void dummy_prog_24_socket(void);
-+void dummy_prog_loop1_socket(void);
 +void dummy_prog_loop2_socket(void);
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 4);
-+	__uint(key_size, sizeof(int));
-+	__array(values, void (void));
-+} map_prog1_socket SEC(".maps") = {
-+	.values = {
-+		[0] = (void *)&dummy_prog_42_socket,
-+		[1] = (void *)&dummy_prog_loop1_socket,
-+		[2] = (void *)&dummy_prog_24_socket,
-+	},
-+};
 +
 +struct {
 +	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
 +	__uint(max_entries, 8);
 +	__uint(key_size, sizeof(int));
 +	__array(values, void (void));
-+} map_prog2_socket SEC(".maps") = {
-+	.values = {
-+		[1] = (void *)&dummy_prog_loop2_socket,
-+		[2] = (void *)&dummy_prog_24_socket,
-+		[7] = (void *)&dummy_prog_42_socket,
-+	},
-+};
++} map_prog2_socket SEC(".maps");
 +
-+SEC("socket")
-+__auxiliary __auxiliary_unpriv
-+__naked void dummy_prog_42_socket(void)
++SEC("perf_event")
++__description("prevent map lookup in stack trace")
++__failure __msg("cannot pass map_type 7 into func bpf_map_lookup_elem")
++__naked void map_lookup_in_stack_trace(void)
 +{
-+	asm volatile ("r0 = 42; exit;");
-+}
-+
-+SEC("socket")
-+__auxiliary __auxiliary_unpriv
-+__naked void dummy_prog_24_socket(void)
-+{
-+	asm volatile ("r0 = 24; exit;");
-+}
-+
-+SEC("socket")
-+__auxiliary __auxiliary_unpriv
-+__naked void dummy_prog_loop1_socket(void)
-+{
-+	asm volatile ("			\
-+	r3 = 1;				\
-+	r2 = %[map_prog1_socket] ll;	\
-+	call %[bpf_tail_call];		\
-+	r0 = 41;			\
-+	exit;				\
++	asm volatile ("					\
++	r1 = 0;						\
++	*(u64*)(r10 - 8) = r1;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = %[map_stacktrace] ll;			\
++	call %[bpf_map_lookup_elem];			\
++	exit;						\
 +"	:
-+	: __imm(bpf_tail_call),
-+	  __imm_addr(map_prog1_socket)
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_stacktrace)
 +	: __clobber_all);
 +}
 +
 +SEC("socket")
-+__auxiliary __auxiliary_unpriv
-+__naked void dummy_prog_loop2_socket(void)
++__description("prevent map lookup in prog array")
++__failure __msg("cannot pass map_type 3 into func bpf_map_lookup_elem")
++__failure_unpriv
++__naked void map_lookup_in_prog_array(void)
 +{
-+	asm volatile ("			\
-+	r3 = 1;				\
-+	r2 = %[map_prog2_socket] ll;	\
-+	call %[bpf_tail_call];		\
-+	r0 = 41;			\
-+	exit;				\
++	asm volatile ("					\
++	r1 = 0;						\
++	*(u64*)(r10 - 8) = r1;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = %[map_prog2_socket] ll;			\
++	call %[bpf_map_lookup_elem];			\
++	exit;						\
 +"	:
-+	: __imm(bpf_tail_call),
++	: __imm(bpf_map_lookup_elem),
 +	  __imm_addr(map_prog2_socket)
 +	: __clobber_all);
 +}
 +
-+SEC("tc")
-+__description("calls: two calls returning different map pointers for lookup (hash, array)")
-+__success __retval(1)
-+__naked void pointers_for_lookup_hash_array(void)
-+{
-+	asm volatile ("					\
-+	/* main prog */					\
-+	if r1 != 0 goto l0_%=;				\
-+	call pointers_for_lookup_hash_array__1;		\
-+	goto l1_%=;					\
-+l0_%=:	call pointers_for_lookup_hash_array__2;		\
-+l1_%=:	r1 = r0;					\
-+	r2 = 0;						\
-+	*(u64*)(r10 - 8) = r2;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	call %[bpf_map_lookup_elem];			\
-+	if r0 == 0 goto l2_%=;				\
-+	r1 = %[test_val_foo];				\
-+	*(u64*)(r0 + 0) = r1;				\
-+	r0 = 1;						\
-+l2_%=:	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_const(test_val_foo, offsetof(struct test_val, foo))
-+	: __clobber_all);
-+}
-+
-+static __naked __noinline __attribute__((used))
-+void pointers_for_lookup_hash_array__1(void)
-+{
-+	asm volatile ("					\
-+	r0 = %[map_hash_48b] ll;			\
-+	exit;						\
-+"	:
-+	: __imm_addr(map_hash_48b)
-+	: __clobber_all);
-+}
-+
-+static __naked __noinline __attribute__((used))
-+void pointers_for_lookup_hash_array__2(void)
-+{
-+	asm volatile ("					\
-+	r0 = %[map_array_48b] ll;			\
-+	exit;						\
-+"	:
-+	: __imm_addr(map_array_48b)
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__description("calls: two calls returning different map pointers for lookup (hash, map in map)")
-+__failure __msg("only read from bpf_array is supported")
-+__naked void lookup_hash_map_in_map(void)
-+{
-+	asm volatile ("					\
-+	/* main prog */					\
-+	if r1 != 0 goto l0_%=;				\
-+	call lookup_hash_map_in_map__1;			\
-+	goto l1_%=;					\
-+l0_%=:	call lookup_hash_map_in_map__2;			\
-+l1_%=:	r1 = r0;					\
-+	r2 = 0;						\
-+	*(u64*)(r10 - 8) = r2;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	call %[bpf_map_lookup_elem];			\
-+	if r0 == 0 goto l2_%=;				\
-+	r1 = %[test_val_foo];				\
-+	*(u64*)(r0 + 0) = r1;				\
-+	r0 = 1;						\
-+l2_%=:	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_const(test_val_foo, offsetof(struct test_val, foo))
-+	: __clobber_all);
-+}
-+
-+static __naked __noinline __attribute__((used))
-+void lookup_hash_map_in_map__1(void)
-+{
-+	asm volatile ("					\
-+	r0 = %[map_array_48b] ll;			\
-+	exit;						\
-+"	:
-+	: __imm_addr(map_array_48b)
-+	: __clobber_all);
-+}
-+
-+static __naked __noinline __attribute__((used))
-+void lookup_hash_map_in_map__2(void)
-+{
-+	asm volatile ("					\
-+	r0 = %[map_in_map] ll;				\
-+	exit;						\
-+"	:
-+	: __imm_addr(map_in_map)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("cond: two branches returning different map pointers for lookup (tail, tail)")
-+__success __failure_unpriv __msg_unpriv("tail_call abusing map_ptr")
-+__retval(42)
-+__naked void pointers_for_lookup_tail_tail_1(void)
-+{
-+	asm volatile ("					\
-+	r6 = *(u32*)(r1 + %[__sk_buff_mark]);		\
-+	if r6 != 0 goto l0_%=;				\
-+	r2 = %[map_prog2_socket] ll;			\
-+	goto l1_%=;					\
-+l0_%=:	r2 = %[map_prog1_socket] ll;			\
-+l1_%=:	r3 = 7;						\
-+	call %[bpf_tail_call];				\
-+	r0 = 1;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_tail_call),
-+	  __imm_addr(map_prog1_socket),
-+	  __imm_addr(map_prog2_socket),
-+	  __imm_const(__sk_buff_mark, offsetof(struct __sk_buff, mark))
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("cond: two branches returning same map pointers for lookup (tail, tail)")
-+__success __success_unpriv __retval(42)
-+__naked void pointers_for_lookup_tail_tail_2(void)
-+{
-+	asm volatile ("					\
-+	r6 = *(u32*)(r1 + %[__sk_buff_mark]);		\
-+	if r6 == 0 goto l0_%=;				\
-+	r2 = %[map_prog2_socket] ll;			\
-+	goto l1_%=;					\
-+l0_%=:	r2 = %[map_prog2_socket] ll;			\
-+l1_%=:	r3 = 7;						\
-+	call %[bpf_tail_call];				\
-+	r0 = 1;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_tail_call),
-+	  __imm_addr(map_prog2_socket),
-+	  __imm_const(__sk_buff_mark, offsetof(struct __sk_buff, mark))
-+	: __clobber_all);
-+}
-+
 +char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/verifier/map_ptr_mixing.c b/tools/testing/selftests/bpf/verifier/map_ptr_mixing.c
+diff --git a/tools/testing/selftests/bpf/verifier/prevent_map_lookup.c b/tools/testing/selftests/bpf/verifier/prevent_map_lookup.c
 deleted file mode 100644
-index 1f2b8c4cb26d..000000000000
---- a/tools/testing/selftests/bpf/verifier/map_ptr_mixing.c
+index fc4e301260f6..000000000000
+--- a/tools/testing/selftests/bpf/verifier/prevent_map_lookup.c
 +++ /dev/null
-@@ -1,100 +0,0 @@
+@@ -1,29 +0,0 @@
 -{
--	"calls: two calls returning different map pointers for lookup (hash, array)",
+-	"prevent map lookup in stack trace",
 -	.insns = {
--	/* main prog */
--	BPF_JMP_IMM(BPF_JNE, BPF_REG_1, 0, 2),
--	BPF_CALL_REL(11),
--	BPF_JMP_IMM(BPF_JA, 0, 0, 1),
--	BPF_CALL_REL(12),
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
 -	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
 -	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
 -	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
+-	BPF_LD_MAP_FD(BPF_REG_1, 0),
 -	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
--	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 2),
--	BPF_ST_MEM(BPF_DW, BPF_REG_0, 0, offsetof(struct test_val, foo)),
--	BPF_MOV64_IMM(BPF_REG_0, 1),
--	BPF_EXIT_INSN(),
--	/* subprog 1 */
--	BPF_LD_MAP_FD(BPF_REG_0, 0),
--	BPF_EXIT_INSN(),
--	/* subprog 2 */
--	BPF_LD_MAP_FD(BPF_REG_0, 0),
 -	BPF_EXIT_INSN(),
 -	},
--	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
--	.fixup_map_hash_48b = { 13 },
--	.fixup_map_array_48b = { 16 },
--	.result = ACCEPT,
--	.retval = 1,
--},
--{
--	"calls: two calls returning different map pointers for lookup (hash, map in map)",
--	.insns = {
--	/* main prog */
--	BPF_JMP_IMM(BPF_JNE, BPF_REG_1, 0, 2),
--	BPF_CALL_REL(11),
--	BPF_JMP_IMM(BPF_JA, 0, 0, 1),
--	BPF_CALL_REL(12),
--	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
--	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
--	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
--	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
--	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
--	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 2),
--	BPF_ST_MEM(BPF_DW, BPF_REG_0, 0, offsetof(struct test_val, foo)),
--	BPF_MOV64_IMM(BPF_REG_0, 1),
--	BPF_EXIT_INSN(),
--	/* subprog 1 */
--	BPF_LD_MAP_FD(BPF_REG_0, 0),
--	BPF_EXIT_INSN(),
--	/* subprog 2 */
--	BPF_LD_MAP_FD(BPF_REG_0, 0),
--	BPF_EXIT_INSN(),
--	},
--	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
--	.fixup_map_in_map = { 16 },
--	.fixup_map_array_48b = { 13 },
+-	.fixup_map_stacktrace = { 3 },
 -	.result = REJECT,
--	.errstr = "only read from bpf_array is supported",
+-	.errstr = "cannot pass map_type 7 into func bpf_map_lookup_elem",
+-	.prog_type = BPF_PROG_TYPE_PERF_EVENT,
 -},
 -{
--	"cond: two branches returning different map pointers for lookup (tail, tail)",
+-	"prevent map lookup in prog array",
 -	.insns = {
--	BPF_LDX_MEM(BPF_W, BPF_REG_6, BPF_REG_1,
--		    offsetof(struct __sk_buff, mark)),
--	BPF_JMP_IMM(BPF_JNE, BPF_REG_6, 0, 3),
--	BPF_LD_MAP_FD(BPF_REG_2, 0),
--	BPF_JMP_IMM(BPF_JA, 0, 0, 2),
--	BPF_LD_MAP_FD(BPF_REG_2, 0),
--	BPF_MOV64_IMM(BPF_REG_3, 7),
--	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_tail_call),
--	BPF_MOV64_IMM(BPF_REG_0, 1),
+-	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
+-	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
+-	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
+-	BPF_LD_MAP_FD(BPF_REG_1, 0),
+-	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
 -	BPF_EXIT_INSN(),
 -	},
--	.fixup_prog1 = { 5 },
--	.fixup_prog2 = { 2 },
--	.result_unpriv = REJECT,
--	.errstr_unpriv = "tail_call abusing map_ptr",
--	.result = ACCEPT,
--	.retval = 42,
--},
--{
--	"cond: two branches returning same map pointers for lookup (tail, tail)",
--	.insns = {
--	BPF_LDX_MEM(BPF_W, BPF_REG_6, BPF_REG_1,
--		    offsetof(struct __sk_buff, mark)),
--	BPF_JMP_IMM(BPF_JEQ, BPF_REG_6, 0, 3),
--	BPF_LD_MAP_FD(BPF_REG_2, 0),
--	BPF_JMP_IMM(BPF_JA, 0, 0, 2),
--	BPF_LD_MAP_FD(BPF_REG_2, 0),
--	BPF_MOV64_IMM(BPF_REG_3, 7),
--	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_tail_call),
--	BPF_MOV64_IMM(BPF_REG_0, 1),
--	BPF_EXIT_INSN(),
--	},
--	.fixup_prog2 = { 2, 5 },
--	.result_unpriv = ACCEPT,
--	.result = ACCEPT,
--	.retval = 42,
+-	.fixup_prog2 = { 3 },
+-	.result = REJECT,
+-	.errstr = "cannot pass map_type 3 into func bpf_map_lookup_elem",
 -},
 -- 
 2.40.0
