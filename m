@@ -2,134 +2,86 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0570C7618E
-	for <bpf@archiver.kernel.org>; Fri, 21 Apr 2023 14:33:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44847C7618E
+	for <bpf@archiver.kernel.org>; Fri, 21 Apr 2023 14:41:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbjDUOdc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 21 Apr 2023 10:33:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41274 "EHLO
+        id S233028AbjDUOli (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 21 Apr 2023 10:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232509AbjDUOdb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 21 Apr 2023 10:33:31 -0400
-Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E1C14452
-        for <bpf@vger.kernel.org>; Fri, 21 Apr 2023 07:32:54 -0700 (PDT)
-Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-329326caa4aso14719405ab.0
-        for <bpf@vger.kernel.org>; Fri, 21 Apr 2023 07:32:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682087574; x=1684679574;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MrFEuF/VNq5g9FqzV/mufM217urn03OllWFFKpr3C0U=;
-        b=OokezTyJ7K8rHEvomeHeqw7t6ZEr3+cH+cbKlaW93S77PfLsX+IgZzMIxuTuTTykwN
-         qjQcEZF34DgHmkXYn7bYo1g/8ziU4PO0jD3+mP6Hcuct8IXtfUqxAxNEmKpaL6HMPaqM
-         MsFc6EGazc6fF326mD3CkhWH+olvneLdcVg9BS5V5NQqkrff4jqMYOFvQPEhSyeNobUe
-         JlDB/BZbVV6lzi9gP1FoQeinU0CgVFH5ky64JKJ0gXkQ1rGpvnjf2HWHncpO7e2ioshE
-         QuKARVow5Knumm5fFuvkQ2+9c/lKGxykNxtrdUzG7ZTon/pcnuLw1ojfjM9zCCq5jbYQ
-         D6GQ==
-X-Gm-Message-State: AAQBX9dkevmJLduuP68NPpQevVajxPuLF89bHrlthHv6/+PFYiLWFTkA
-        vUrCAV0ZniwCXx644tPbXG+qz1Y0darJt8ZxVI4+fd4eLhtM
-X-Google-Smtp-Source: AKy350ZlAsHZRUrWgsrpnW6LYNe4Q395IQtSOVHE70CdCWoO7Ds2bk+VF/Hfu53hvQUp/gFyd/OBHcnpOl5lCXfBIb6rPdoJ2m/9
+        with ESMTP id S233025AbjDUOlY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 21 Apr 2023 10:41:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E559615616
+        for <bpf@vger.kernel.org>; Fri, 21 Apr 2023 07:40:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C41EE6513A
+        for <bpf@vger.kernel.org>; Fri, 21 Apr 2023 14:40:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2A261C4339B;
+        Fri, 21 Apr 2023 14:40:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682088021;
+        bh=D2E5AvRaqZapJU9OzOA5P16raYhzJ7PigAaTtVuarzw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Yt8ysP49PI3NBnpGDx77blRpC25L5rQzZCGrZpCKnCIXH4Ic1atm/u2rxts11lqpy
+         mkoUZcBAwI93mKWUYzy12Ggu3K0Pn1jEJ02vcBaoYXI5Zfrz6MKJaQLtREQcEiGwSa
+         qDeQxDNXvi0lx5Z09H2Y2Ssff3gECzDuDXLFkXO35BtZHZMwn2CMKQib6XwDEUUeUI
+         q0H1OKlKqrkpCHd2XUI+D4e2V2jBSlrTL95dyaVFno/87Sa07J4+7m2rlfmsnA1eWf
+         aDhjpFflsnRzCMu1oEft7ICOxMk5Avu3iWjIL7czKV/wILRvPmOvaDRrJzu/ol2Y4N
+         4e7UlMlGx1y2Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 093DDC395EA;
+        Fri, 21 Apr 2023 14:40:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:6cb:b0:329:654a:1231 with SMTP id
- p11-20020a056e0206cb00b00329654a1231mr2866845ils.5.1682087574284; Fri, 21 Apr
- 2023 07:32:54 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 07:32:54 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000058b63f05f9d98811@google.com>
-Subject: [syzbot] [cgroups?] [mm?] KCSAN: data-race in drain_all_stock /
- drain_obj_stock (4)
-From:   syzbot <syzbot+774c29891415ab0fd29d@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, bpf@vger.kernel.org,
-        cgroups@vger.kernel.org, hannes@cmpxchg.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        mhocko@kernel.org, muchun.song@linux.dev, roman.gushchin@linux.dev,
-        shakeelb@google.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] bpf: Fix bpf_refcount_acquire's refcount_t address
+ calculation
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168208802103.4759.10849441890270501771.git-patchwork-notify@kernel.org>
+Date:   Fri, 21 Apr 2023 14:40:21 +0000
+References: <20230421074431.3548349-1-davemarchevsky@fb.com>
+In-Reply-To: <20230421074431.3548349-1-davemarchevsky@fb.com>
+To:     Dave Marchevsky <davemarchevsky@fb.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@kernel.org, kernel-team@fb.com,
+        fw@strlen.de, eddyz87@gmail.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello,
+Hello:
 
-syzbot found the following issue on:
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-HEAD commit:    534293368afa Merge tag 'kbuild-fixes-v6.3' of git://git.ke..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11a0c26ec80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=85fa20c996a2e46d
-dashboard link: https://syzkaller.appspot.com/bug?extid=774c29891415ab0fd29d
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+On Fri, 21 Apr 2023 00:44:31 -0700 you wrote:
+> When calculating the address of the refcount_t struct within a local
+> kptr, bpf_refcount_acquire_impl should add refcount_off bytes to the
+> address of the local kptr. Due to some missing parens, the function is
+> incorrectly adding sizeof(refcount_t) * refcount_off bytes. This patch
+> fixes the calculation.
+> 
+> Due to the incorrect calculation, bpf_refcount_acquire_impl was trying
+> to refcount_inc some memory well past the end of local kptrs, resulting
+> in kasan and refcount complaints, as reported in [0]. In that thread,
+> Florian and Eduard discovered that bpf selftests written in the new
+> style - with __success and an expected __retval, specifically - were not
+> actually being run. As a result, selftests added in bpf_refcount series
+> weren't really exercising this behavior, and thus didn't unearth the
+> bug.
+> 
+> [...]
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Here is the summary with links:
+  - [bpf-next] bpf: Fix bpf_refcount_acquire's refcount_t address calculation
+    https://git.kernel.org/bpf/bpf-next/c/4ab07209d5cc
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ec0e584af797/disk-53429336.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/423a67f52f94/vmlinux-53429336.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/8409b9716faa/bzImage-53429336.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+774c29891415ab0fd29d@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KCSAN: data-race in drain_all_stock / drain_obj_stock
-
-write to 0xffff888237c2a2f8 of 8 bytes by task 19625 on cpu 0:
- drain_obj_stock+0x408/0x4e0 mm/memcontrol.c:3306
- refill_obj_stock+0x9c/0x1e0 mm/memcontrol.c:3340
- obj_cgroup_uncharge+0xe/0x10 mm/memcontrol.c:3408
- memcg_slab_free_hook mm/slab.h:587 [inline]
- __cache_free mm/slab.c:3373 [inline]
- __do_kmem_cache_free mm/slab.c:3577 [inline]
- kmem_cache_free+0x105/0x280 mm/slab.c:3602
- __d_free fs/dcache.c:298 [inline]
- dentry_free fs/dcache.c:375 [inline]
- __dentry_kill+0x422/0x4a0 fs/dcache.c:621
- dentry_kill+0x8d/0x1e0
- dput+0x118/0x1f0 fs/dcache.c:913
- __fput+0x3bf/0x570 fs/file_table.c:329
- ____fput+0x15/0x20 fs/file_table.c:349
- task_work_run+0x123/0x160 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop+0xcf/0xe0 kernel/entry/common.c:171
- exit_to_user_mode_prepare+0x6a/0xa0 kernel/entry/common.c:203
- __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
- syscall_exit_to_user_mode+0x26/0x140 kernel/entry/common.c:296
- do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-read to 0xffff888237c2a2f8 of 8 bytes by task 19632 on cpu 1:
- obj_stock_flush_required mm/memcontrol.c:3319 [inline]
- drain_all_stock+0x174/0x2a0 mm/memcontrol.c:2361
- try_charge_memcg+0x6d0/0xd10 mm/memcontrol.c:2703
- try_charge mm/memcontrol.c:2837 [inline]
- mem_cgroup_charge_skmem+0x51/0x140 mm/memcontrol.c:7290
- sock_reserve_memory+0xb1/0x390 net/core/sock.c:1025
- sk_setsockopt+0x800/0x1e70 net/core/sock.c:1525
- udp_lib_setsockopt+0x99/0x6c0 net/ipv4/udp.c:2692
- udp_setsockopt+0x73/0xa0 net/ipv4/udp.c:2817
- sock_common_setsockopt+0x61/0x70 net/core/sock.c:3668
- __sys_setsockopt+0x1c3/0x230 net/socket.c:2271
- __do_sys_setsockopt net/socket.c:2282 [inline]
- __se_sys_setsockopt net/socket.c:2279 [inline]
- __x64_sys_setsockopt+0x66/0x80 net/socket.c:2279
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-value changed: 0xffff8881382d52c0 -> 0xffff888138893740
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 1 PID: 19632 Comm: syz-executor.0 Not tainted 6.3.0-rc2-syzkaller-00387-g534293368afa #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-==================================================================
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
