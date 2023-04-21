@@ -2,61 +2,61 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DB08C77B78
-	for <bpf@archiver.kernel.org>; Fri, 21 Apr 2023 17:43:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32616C7618E
+	for <bpf@archiver.kernel.org>; Fri, 21 Apr 2023 17:43:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbjDURnV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 21 Apr 2023 13:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43062 "EHLO
+        id S233250AbjDURnW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 21 Apr 2023 13:43:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233121AbjDURnE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 21 Apr 2023 13:43:04 -0400
+        with ESMTP id S233278AbjDURnF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 21 Apr 2023 13:43:05 -0400
 Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCA930D7
-        for <bpf@vger.kernel.org>; Fri, 21 Apr 2023 10:42:47 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-2fe3fb8e2f7so1280873f8f.0
-        for <bpf@vger.kernel.org>; Fri, 21 Apr 2023 10:42:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031C45BA5
+        for <bpf@vger.kernel.org>; Fri, 21 Apr 2023 10:42:51 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-2f3fe12de15so1274222f8f.3
+        for <bpf@vger.kernel.org>; Fri, 21 Apr 2023 10:42:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682098966; x=1684690966;
+        d=gmail.com; s=20221208; t=1682098969; x=1684690969;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7K9QJLCiWjNf7ZX2dsiP9tDIrrE+yxdZAgYhLTPqVxI=;
-        b=hX73LR5hzpsMbBZ/KJEQ/VgQjT2DWpn1ffTNJTBh2vvpbNGmQEsBAdqZDhCUllCX8W
-         OwISkZ9r7dxLj7tMgCOwNp4YQpkqyflLGw3uuJ7v1TeZBlE1n+sg20urQXTlHRwk0BFn
-         XLMmbOMZBlBQgqHi/pke3b8b0uzn5HDFhlfMjdQsV1awC3Jf6jlE1lV9j+SdbwSG9mfL
-         B3f+/M0aV9YhXil3wKrpXCF9oTu111RzOaAoDmctr/5AVOp7n6DH4au8kD6Zn8BDr7cN
-         vBfHvoOyKR2PMyNyFW40VMEkmHhrhaKyBY66C40NiHXRVyDkY7WS4Bj2ArRL28+6FpDC
-         wQBA==
+        bh=7yDK7Ow/EQo3R038liwVGClD6X8zlhQtk+9SHaz2OOQ=;
+        b=ajMn/F7KnTx5GKlBiHzwuvhMcqG2rcKSE+2RduddiwDUN0R5MWeU/mUJyOT0FjJiJk
+         q4vt2pTz09/volbOnRq9t7H9hwkDarjgEx6VG74inVTGMm9ua+abvG1JDGa2MXorYRq9
+         xcGgeAZW2N/j6A/Yf+as8/4+t8/Up+jZny3Bs9K5UFY6fS/VTvuvywFfdVDMZ8R4QRhM
+         x8iXK9tKv67kaabpiDX48UOpZeJIMOc23bND8xtStdAGQ5q/U4X6qAfX+ZVlS4AR7u8p
+         lRJlUhEEEPyTzqCi6IFuCPgxsXmmgEDScQWgG9nqHQRmjI2ipG2YNWniBQHYlTs412zt
+         sZ+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682098966; x=1684690966;
+        d=1e100.net; s=20221208; t=1682098969; x=1684690969;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7K9QJLCiWjNf7ZX2dsiP9tDIrrE+yxdZAgYhLTPqVxI=;
-        b=lhQC9ZN8+zDhdLjm+rSF8Vf0Ud09WUJE4mco5UjYLNF/DC9GSlXYFpL2rB45AMOGLW
-         iD8KVjM9xd3pHis1fripbkNeWOpoQCOsOaGw7MNV3feRIzgB7V24VkYXepZsJLvY8aKE
-         8iuQMB+5AezLmg3xxyWiiXv7BBvTZUM6YCaL8vGo+T+x+6CAEaaY62C2KV2GGZgN370u
-         JdvE/9fxg4PNOsi11rv9l19Vi5ofb1D44Whzu8tEp50oEFSP7UNxKVgJb8Pd8nE/qN40
-         nM5PNidYBcB3em5yxEpHsZhCOqlcRKR+kUqx2Tx2Cka5Lrsuw8AgYhSjJiMf/pID6b4f
-         LBxw==
-X-Gm-Message-State: AAQBX9eVmB1imnXdF4xgVmUUtK28B/MofrSNIGE7EqqEraPNzhg7R7ZT
-        bEwG3ho4hUOJmAKLzyYfNsCZm1oy0En0xA==
-X-Google-Smtp-Source: AKy350ZcUjNF6ia5iyegWqYpQvIdlWIB+zZB3Xa2CcuU5JvAwf2NSX/eEw+IojsucFUkCU4a3oYT3w==
-X-Received: by 2002:a5d:5226:0:b0:2f8:f144:a22c with SMTP id i6-20020a5d5226000000b002f8f144a22cmr4702582wra.62.1682098965866;
-        Fri, 21 Apr 2023 10:42:45 -0700 (PDT)
+        bh=7yDK7Ow/EQo3R038liwVGClD6X8zlhQtk+9SHaz2OOQ=;
+        b=e3ClP5/mPFF4y0RK3wFRoSOYDEh5bVBIXwNAQ/kzESkOzICaxp+Zvc1PByK8jDqP+K
+         lB8obrV7m1kWcPOS8N2AqqJlOgVUDHOrEBwVHtP6FJSfRVmvHL/Eh411PIpq2Xztrsco
+         JDEtb5Irv9uX7L70PVxmE873hB8QioURoEEYphHkeXI0nrYmWa3x3OwgIlCM8R7sDfpA
+         5Y27VFIDOGd4tj8IhZp4LAFCzdM9eawTdWm9/R22I3vaud+gy32qGCTnJecGKHi90cj1
+         5Y6Y+dPi5veoal5hmx9+HNFXN58TsiZBbTefN7XLNtzBVumM1nVtav8P8RvRtenrej0c
+         UCdQ==
+X-Gm-Message-State: AAQBX9f/H/6MPle40m9FtBvb3r0E4u/CI7nY/oleIPEeAjsxhssIJaOf
+        Rn/AXJ3zY5m9DRwlRyPcD0T80NXn1QrnBg==
+X-Google-Smtp-Source: AKy350ZeFrN2Yu4e2tXbDmwRKWSxl0rfexYgG+37+3AGszM7d3ZxC86kdKNINrtg1xwRlPmvhjNong==
+X-Received: by 2002:a5d:4b91:0:b0:2f9:61d4:1183 with SMTP id b17-20020a5d4b91000000b002f961d41183mr4433399wrt.45.1682098968939;
+        Fri, 21 Apr 2023 10:42:48 -0700 (PDT)
 Received: from bigfoot.. (boundsly.muster.volia.net. [93.72.16.93])
-        by smtp.gmail.com with ESMTPSA id f4-20020a0560001b0400b002ffbf2213d4sm4849933wrz.75.2023.04.21.10.42.44
+        by smtp.gmail.com with ESMTPSA id f4-20020a0560001b0400b002ffbf2213d4sm4849933wrz.75.2023.04.21.10.42.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 10:42:45 -0700 (PDT)
+        Fri, 21 Apr 2023 10:42:48 -0700 (PDT)
 From:   Eduard Zingerman <eddyz87@gmail.com>
 To:     bpf@vger.kernel.org, ast@kernel.org
 Cc:     andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
         kernel-team@fb.com, yhs@fb.com,
         Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next 01/24] selftests/bpf: Add notion of auxiliary programs for test_loader
-Date:   Fri, 21 Apr 2023 20:42:11 +0300
-Message-Id: <20230421174234.2391278-2-eddyz87@gmail.com>
+Subject: [PATCH bpf-next 03/24] selftests/bpf: verifier/bpf_get_stack converted to inline assembly
+Date:   Fri, 21 Apr 2023 20:42:13 +0300
+Message-Id: <20230421174234.2391278-4-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230421174234.2391278-1-eddyz87@gmail.com>
 References: <20230421174234.2391278-1-eddyz87@gmail.com>
@@ -66,255 +66,260 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In order to express test cases that use bpf_tail_call() intrinsic it
-is necessary to have several programs to be loaded at a time.
-This commit adds __auxiliary annotation to the set of annotations
-supported by test_loader.c. Programs marked as auxiliary are always
-loaded but are not treated as a separate test.
-
-For example:
-
-    void dummy_prog1(void);
-
-    struct {
-            __uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-            __uint(max_entries, 4);
-            __uint(key_size, sizeof(int));
-            __array(values, void (void));
-    } prog_map SEC(".maps") = {
-            .values = {
-                    [0] = (void *) &dummy_prog1,
-            },
-    };
-
-    SEC("tc")
-    __auxiliary
-    __naked void dummy_prog1(void) {
-            asm volatile ("r0 = 42; exit;");
-    }
-
-    SEC("tc")
-    __description("reference tracking: check reference or tail call")
-    __success __retval(0)
-    __naked void check_reference_or_tail_call(void)
-    {
-            asm volatile (
-            "r2 = %[prog_map] ll;"
-            "r3 = 0;"
-            "call %[bpf_tail_call];"
-            "r0 = 0;"
-            "exit;"
-            :: __imm(bpf_tail_call),
-            :  __clobber_all);
-    }
+Test verifier/bpf_get_stack automatically converted to use inline assembly.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- tools/testing/selftests/bpf/progs/bpf_misc.h |  6 ++
- tools/testing/selftests/bpf/test_loader.c    | 89 +++++++++++++++-----
- 2 files changed, 73 insertions(+), 22 deletions(-)
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../bpf/progs/verifier_bpf_get_stack.c        | 124 ++++++++++++++++++
+ .../selftests/bpf/verifier/bpf_get_stack.c    |  87 ------------
+ 3 files changed, 126 insertions(+), 87 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_bpf_get_stack.c
+ delete mode 100644 tools/testing/selftests/bpf/verifier/bpf_get_stack.c
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
-index 3b307de8dab9..d3c1217ba79a 100644
---- a/tools/testing/selftests/bpf/progs/bpf_misc.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
-@@ -53,6 +53,10 @@
-  *                   - A numeric value.
-  *                   Multiple __flag attributes could be specified, the final flags
-  *                   value is derived by applying binary "or" to all specified values.
-+ *
-+ * __auxiliary         Annotated program is not a separate test, but used as auxiliary
-+ *                     for some other test cases and should always be loaded.
-+ * __auxiliary_unpriv  Same, but load program in unprivileged mode.
-  */
- #define __msg(msg)		__attribute__((btf_decl_tag("comment:test_expect_msg=" msg)))
- #define __failure		__attribute__((btf_decl_tag("comment:test_expect_failure")))
-@@ -65,6 +69,8 @@
- #define __flag(flag)		__attribute__((btf_decl_tag("comment:test_prog_flags="#flag)))
- #define __retval(val)		__attribute__((btf_decl_tag("comment:test_retval="#val)))
- #define __retval_unpriv(val)	__attribute__((btf_decl_tag("comment:test_retval_unpriv="#val)))
-+#define __auxiliary		__attribute__((btf_decl_tag("comment:test_auxiliary")))
-+#define __auxiliary_unpriv	__attribute__((btf_decl_tag("comment:test_auxiliary_unpriv")))
- 
- /* Convenience macro for use with 'asm volatile' blocks */
- #define __naked __attribute__((naked))
-diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
-index 40c9b7d532c4..b4edd8454934 100644
---- a/tools/testing/selftests/bpf/test_loader.c
-+++ b/tools/testing/selftests/bpf/test_loader.c
-@@ -25,6 +25,8 @@
- #define TEST_TAG_DESCRIPTION_PFX "comment:test_description="
- #define TEST_TAG_RETVAL_PFX "comment:test_retval="
- #define TEST_TAG_RETVAL_PFX_UNPRIV "comment:test_retval_unpriv="
-+#define TEST_TAG_AUXILIARY "comment:test_auxiliary"
-+#define TEST_TAG_AUXILIARY_UNPRIV "comment:test_auxiliary_unpriv"
- 
- /* Warning: duplicated in bpf_misc.h */
- #define POINTER_VALUE	0xcafe4all
-@@ -59,6 +61,8 @@ struct test_spec {
- 	int log_level;
- 	int prog_flags;
- 	int mode_mask;
-+	bool auxiliary;
-+	bool valid;
- };
- 
- static int tester_init(struct test_loader *tester)
-@@ -87,6 +91,11 @@ static void free_test_spec(struct test_spec *spec)
- 	free(spec->unpriv.name);
- 	free(spec->priv.expect_msgs);
- 	free(spec->unpriv.expect_msgs);
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index e61c9120e261..db55d125928c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -10,6 +10,7 @@
+ #include "verifier_bounds_deduction.skel.h"
+ #include "verifier_bounds_deduction_non_const.skel.h"
+ #include "verifier_bounds_mix_sign_unsign.skel.h"
++#include "verifier_bpf_get_stack.skel.h"
+ #include "verifier_cfg.skel.h"
+ #include "verifier_cgroup_inv_retcode.skel.h"
+ #include "verifier_cgroup_skb.skel.h"
+@@ -85,6 +86,7 @@ void test_verifier_bounds(void)               { RUN(verifier_bounds); }
+ void test_verifier_bounds_deduction(void)     { RUN(verifier_bounds_deduction); }
+ void test_verifier_bounds_deduction_non_const(void)     { RUN(verifier_bounds_deduction_non_const); }
+ void test_verifier_bounds_mix_sign_unsign(void) { RUN(verifier_bounds_mix_sign_unsign); }
++void test_verifier_bpf_get_stack(void)        { RUN(verifier_bpf_get_stack); }
+ void test_verifier_cfg(void)                  { RUN(verifier_cfg); }
+ void test_verifier_cgroup_inv_retcode(void)   { RUN(verifier_cgroup_inv_retcode); }
+ void test_verifier_cgroup_skb(void)           { RUN(verifier_cgroup_skb); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bpf_get_stack.c b/tools/testing/selftests/bpf/progs/verifier_bpf_get_stack.c
+new file mode 100644
+index 000000000000..325a2bab4a71
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_bpf_get_stack.c
+@@ -0,0 +1,124 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Converted from tools/testing/selftests/bpf/verifier/bpf_get_stack.c */
 +
-+	spec->priv.name = NULL;
-+	spec->unpriv.name = NULL;
-+	spec->priv.expect_msgs = NULL;
-+	spec->unpriv.expect_msgs = NULL;
- }
- 
- static int push_msg(const char *msg, struct test_subspec *subspec)
-@@ -204,6 +213,12 @@ static int parse_test_spec(struct test_loader *tester,
- 			spec->unpriv.expect_failure = false;
- 			spec->mode_mask |= UNPRIV;
- 			has_unpriv_result = true;
-+		} else if (strcmp(s, TEST_TAG_AUXILIARY) == 0) {
-+			spec->auxiliary = true;
-+			spec->mode_mask |= PRIV;
-+		} else if (strcmp(s, TEST_TAG_AUXILIARY_UNPRIV) == 0) {
-+			spec->auxiliary = true;
-+			spec->mode_mask |= UNPRIV;
- 		} else if (str_has_pfx(s, TEST_TAG_EXPECT_MSG_PFX)) {
- 			msg = s + sizeof(TEST_TAG_EXPECT_MSG_PFX) - 1;
- 			err = push_msg(msg, &spec->priv);
-@@ -314,6 +329,8 @@ static int parse_test_spec(struct test_loader *tester,
- 		}
- 	}
- 
-+	spec->valid = true;
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
 +
- 	return 0;
- 
- cleanup:
-@@ -516,16 +533,18 @@ void run_subtest(struct test_loader *tester,
- 		 struct bpf_object_open_opts *open_opts,
- 		 const void *obj_bytes,
- 		 size_t obj_byte_cnt,
-+		 struct test_spec *specs,
- 		 struct test_spec *spec,
- 		 bool unpriv)
- {
- 	struct test_subspec *subspec = unpriv ? &spec->unpriv : &spec->priv;
-+	struct bpf_program *tprog, *tprog_iter;
-+	struct test_spec *spec_iter;
- 	struct cap_state caps = {};
--	struct bpf_program *tprog;
- 	struct bpf_object *tobj;
- 	struct bpf_map *map;
--	int retval;
--	int err;
-+	int retval, err, i;
-+	bool should_load;
- 
- 	if (!test__start_subtest(subspec->name))
- 		return;
-@@ -546,15 +565,23 @@ void run_subtest(struct test_loader *tester,
- 	if (!ASSERT_OK_PTR(tobj, "obj_open_mem")) /* shouldn't happen */
- 		goto subtest_cleanup;
- 
--	bpf_object__for_each_program(tprog, tobj)
--		bpf_program__set_autoload(tprog, false);
-+	i = 0;
-+	bpf_object__for_each_program(tprog_iter, tobj) {
-+		spec_iter = &specs[i++];
-+		should_load = false;
++#define MAX_ENTRIES 11
 +
-+		if (spec_iter->valid) {
-+			if (strcmp(bpf_program__name(tprog_iter), spec->prog_name) == 0) {
-+				tprog = tprog_iter;
-+				should_load = true;
-+			}
- 
--	bpf_object__for_each_program(tprog, tobj) {
--		/* only load specified program */
--		if (strcmp(bpf_program__name(tprog), spec->prog_name) == 0) {
--			bpf_program__set_autoload(tprog, true);
--			break;
-+			if (spec_iter->auxiliary &&
-+			    spec_iter->mode_mask & (unpriv ? UNPRIV : PRIV))
-+				should_load = true;
- 		}
++struct test_val {
++	unsigned int index;
++	int foo[MAX_ENTRIES];
++};
 +
-+		bpf_program__set_autoload(tprog_iter, should_load);
- 	}
- 
- 	prepare_case(tester, spec, tobj, tprog);
-@@ -617,11 +644,12 @@ static void process_subtest(struct test_loader *tester,
- 			    skel_elf_bytes_fn elf_bytes_factory)
- {
- 	LIBBPF_OPTS(bpf_object_open_opts, open_opts, .object_name = skel_name);
-+	struct test_spec *specs = NULL;
- 	struct bpf_object *obj = NULL;
- 	struct bpf_program *prog;
- 	const void *obj_bytes;
-+	int err, i, nr_progs;
- 	size_t obj_byte_cnt;
--	int err;
- 
- 	if (tester_init(tester) < 0)
- 		return; /* failed to initialize tester */
-@@ -631,25 +659,42 @@ static void process_subtest(struct test_loader *tester,
- 	if (!ASSERT_OK_PTR(obj, "obj_open_mem"))
- 		return;
- 
--	bpf_object__for_each_program(prog, obj) {
--		struct test_spec spec;
-+	nr_progs = 0;
-+	bpf_object__for_each_program(prog, obj)
-+		++nr_progs;
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, struct test_val);
++} map_array_48b SEC(".maps");
 +
-+	specs = calloc(nr_progs, sizeof(struct test_spec));
-+	if (!ASSERT_OK_PTR(specs, "Can't alloc specs array"))
-+		return;
- 
--		/* if we can't derive test specification, go to the next test */
--		err = parse_test_spec(tester, obj, prog, &spec);
--		if (err) {
-+	i = 0;
-+	bpf_object__for_each_program(prog, obj) {
-+		/* ignore tests for which  we can't derive test specification */
-+		err = parse_test_spec(tester, obj, prog, &specs[i++]);
-+		if (err)
- 			PRINT_FAIL("Can't parse test spec for program '%s'\n",
- 				   bpf_program__name(prog));
-+	}
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(max_entries, 1);
++	__type(key, long long);
++	__type(value, struct test_val);
++} map_hash_48b SEC(".maps");
 +
-+	i = 0;
-+	bpf_object__for_each_program(prog, obj) {
-+		struct test_spec *spec = &specs[i++];
++SEC("tracepoint")
++__description("bpf_get_stack return R0 within range")
++__success
++__naked void stack_return_r0_within_range(void)
++{
++	asm volatile ("					\
++	r6 = r1;					\
++	r1 = 0;						\
++	*(u64*)(r10 - 8) = r1;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = %[map_hash_48b] ll;			\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto l0_%=;				\
++	r7 = r0;					\
++	r9 = %[__imm_0];				\
++	r1 = r6;					\
++	r2 = r7;					\
++	r3 = %[__imm_0];				\
++	r4 = 256;					\
++	call %[bpf_get_stack];				\
++	r1 = 0;						\
++	r8 = r0;					\
++	r8 <<= 32;					\
++	r8 s>>= 32;					\
++	if r1 s> r8 goto l0_%=;				\
++	r9 -= r8;					\
++	r2 = r7;					\
++	r2 += r8;					\
++	r1 = r9;					\
++	r1 <<= 32;					\
++	r1 s>>= 32;					\
++	r3 = r2;					\
++	r3 += r1;					\
++	r1 = r7;					\
++	r5 = %[__imm_0];				\
++	r1 += r5;					\
++	if r3 >= r1 goto l0_%=;				\
++	r1 = r6;					\
++	r3 = r9;					\
++	r4 = 0;						\
++	call %[bpf_get_stack];				\
++l0_%=:	exit;						\
++"	:
++	: __imm(bpf_get_stack),
++	  __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_hash_48b),
++	  __imm_const(__imm_0, sizeof(struct test_val) / 2)
++	: __clobber_all);
++}
 +
-+		if (!spec->valid || spec->auxiliary)
- 			continue;
--		}
- 
--		if (spec.mode_mask & PRIV)
--			run_subtest(tester, &open_opts, obj_bytes, obj_byte_cnt, &spec, false);
--		if (spec.mode_mask & UNPRIV)
--			run_subtest(tester, &open_opts, obj_bytes, obj_byte_cnt, &spec, true);
-+		if (spec->mode_mask & PRIV)
-+			run_subtest(tester, &open_opts, obj_bytes, obj_byte_cnt,
-+				    specs, spec, false);
-+		if (spec->mode_mask & UNPRIV)
-+			run_subtest(tester, &open_opts, obj_bytes, obj_byte_cnt,
-+				    specs, spec, true);
- 
--		free_test_spec(&spec);
- 	}
- 
-+	for (i = 0; i < nr_progs; ++i)
-+		free_test_spec(&specs[i]);
-+	free(specs);
- 	bpf_object__close(obj);
- }
- 
++SEC("iter/task")
++__description("bpf_get_task_stack return R0 range is refined")
++__success
++__naked void return_r0_range_is_refined(void)
++{
++	asm volatile ("					\
++	r6 = *(u64*)(r1 + 0);				\
++	r6 = *(u64*)(r6 + 0);		/* ctx->meta->seq */\
++	r7 = *(u64*)(r1 + 8);		/* ctx->task */\
++	r1 = %[map_array_48b] ll;	/* fixup_map_array_48b */\
++	r2 = 0;						\
++	*(u64*)(r10 - 8) = r2;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	call %[bpf_map_lookup_elem];			\
++	if r0 != 0 goto l0_%=;				\
++	r0 = 0;						\
++	exit;						\
++l0_%=:	if r7 != 0 goto l1_%=;				\
++	r0 = 0;						\
++	exit;						\
++l1_%=:	r1 = r7;					\
++	r2 = r0;					\
++	r9 = r0;			/* keep buf for seq_write */\
++	r3 = 48;					\
++	r4 = 0;						\
++	call %[bpf_get_task_stack];			\
++	if r0 s> 0 goto l2_%=;				\
++	r0 = 0;						\
++	exit;						\
++l2_%=:	r1 = r6;					\
++	r2 = r9;					\
++	r3 = r0;					\
++	call %[bpf_seq_write];				\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_task_stack),
++	  __imm(bpf_map_lookup_elem),
++	  __imm(bpf_seq_write),
++	  __imm_addr(map_array_48b)
++	: __clobber_all);
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/verifier/bpf_get_stack.c b/tools/testing/selftests/bpf/verifier/bpf_get_stack.c
+deleted file mode 100644
+index 3e024c891178..000000000000
+--- a/tools/testing/selftests/bpf/verifier/bpf_get_stack.c
++++ /dev/null
+@@ -1,87 +0,0 @@
+-{
+-	"bpf_get_stack return R0 within range",
+-	.insns = {
+-	BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
+-	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
+-	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
+-	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
+-	BPF_LD_MAP_FD(BPF_REG_1, 0),
+-	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
+-	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 28),
+-	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
+-	BPF_MOV64_IMM(BPF_REG_9, sizeof(struct test_val)/2),
+-	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
+-	BPF_MOV64_REG(BPF_REG_2, BPF_REG_7),
+-	BPF_MOV64_IMM(BPF_REG_3, sizeof(struct test_val)/2),
+-	BPF_MOV64_IMM(BPF_REG_4, 256),
+-	BPF_EMIT_CALL(BPF_FUNC_get_stack),
+-	BPF_MOV64_IMM(BPF_REG_1, 0),
+-	BPF_MOV64_REG(BPF_REG_8, BPF_REG_0),
+-	BPF_ALU64_IMM(BPF_LSH, BPF_REG_8, 32),
+-	BPF_ALU64_IMM(BPF_ARSH, BPF_REG_8, 32),
+-	BPF_JMP_REG(BPF_JSGT, BPF_REG_1, BPF_REG_8, 16),
+-	BPF_ALU64_REG(BPF_SUB, BPF_REG_9, BPF_REG_8),
+-	BPF_MOV64_REG(BPF_REG_2, BPF_REG_7),
+-	BPF_ALU64_REG(BPF_ADD, BPF_REG_2, BPF_REG_8),
+-	BPF_MOV64_REG(BPF_REG_1, BPF_REG_9),
+-	BPF_ALU64_IMM(BPF_LSH, BPF_REG_1, 32),
+-	BPF_ALU64_IMM(BPF_ARSH, BPF_REG_1, 32),
+-	BPF_MOV64_REG(BPF_REG_3, BPF_REG_2),
+-	BPF_ALU64_REG(BPF_ADD, BPF_REG_3, BPF_REG_1),
+-	BPF_MOV64_REG(BPF_REG_1, BPF_REG_7),
+-	BPF_MOV64_IMM(BPF_REG_5, sizeof(struct test_val)/2),
+-	BPF_ALU64_REG(BPF_ADD, BPF_REG_1, BPF_REG_5),
+-	BPF_JMP_REG(BPF_JGE, BPF_REG_3, BPF_REG_1, 4),
+-	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
+-	BPF_MOV64_REG(BPF_REG_3, BPF_REG_9),
+-	BPF_MOV64_IMM(BPF_REG_4, 0),
+-	BPF_EMIT_CALL(BPF_FUNC_get_stack),
+-	BPF_EXIT_INSN(),
+-	},
+-	.fixup_map_hash_48b = { 4 },
+-	.result = ACCEPT,
+-	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
+-},
+-{
+-	"bpf_get_task_stack return R0 range is refined",
+-	.insns = {
+-	BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 0),
+-	BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_6, 0), // ctx->meta->seq
+-	BPF_LDX_MEM(BPF_DW, BPF_REG_7, BPF_REG_1, 8), // ctx->task
+-	BPF_LD_MAP_FD(BPF_REG_1, 0), // fixup_map_array_48b
+-	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
+-	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
+-	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
+-	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
+-	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 2),
+-	BPF_MOV64_IMM(BPF_REG_0, 0),
+-	BPF_EXIT_INSN(),
+-	BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0, 2),
+-	BPF_MOV64_IMM(BPF_REG_0, 0),
+-	BPF_EXIT_INSN(),
+-
+-	BPF_MOV64_REG(BPF_REG_1, BPF_REG_7),
+-	BPF_MOV64_REG(BPF_REG_2, BPF_REG_0),
+-	BPF_MOV64_REG(BPF_REG_9, BPF_REG_0), // keep buf for seq_write
+-	BPF_MOV64_IMM(BPF_REG_3, 48),
+-	BPF_MOV64_IMM(BPF_REG_4, 0),
+-	BPF_EMIT_CALL(BPF_FUNC_get_task_stack),
+-	BPF_JMP_IMM(BPF_JSGT, BPF_REG_0, 0, 2),
+-	BPF_MOV64_IMM(BPF_REG_0, 0),
+-	BPF_EXIT_INSN(),
+-
+-	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
+-	BPF_MOV64_REG(BPF_REG_2, BPF_REG_9),
+-	BPF_MOV64_REG(BPF_REG_3, BPF_REG_0),
+-	BPF_EMIT_CALL(BPF_FUNC_seq_write),
+-
+-	BPF_MOV64_IMM(BPF_REG_0, 0),
+-	BPF_EXIT_INSN(),
+-	},
+-	.result = ACCEPT,
+-	.prog_type = BPF_PROG_TYPE_TRACING,
+-	.expected_attach_type = BPF_TRACE_ITER,
+-	.kfunc = "task",
+-	.runs = -1, // Don't run, just load
+-	.fixup_map_array_48b = { 3 },
+-},
 -- 
 2.40.0
 
