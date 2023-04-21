@@ -2,143 +2,74 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E0A4C7618E
-	for <bpf@archiver.kernel.org>; Fri, 21 Apr 2023 18:21:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07FA7C77B76
+	for <bpf@archiver.kernel.org>; Fri, 21 Apr 2023 18:21:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232262AbjDUSVB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 21 Apr 2023 14:21:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37676 "EHLO
+        id S232525AbjDUSVS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 21 Apr 2023 14:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231639AbjDUSU7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 21 Apr 2023 14:20:59 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218A6E5C;
-        Fri, 21 Apr 2023 11:20:59 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-63b7096e2e4so2223917b3a.2;
-        Fri, 21 Apr 2023 11:20:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682101258; x=1684693258;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gYjAZVUAZkx+hJ9DMfGgeXPjn1yZPg0cuZSv04E2x7I=;
-        b=opVL+FyOwnx0VvvEOKDUyxKFCbbWvhICTk0wswSaWXjYPZ9X+mnJ6rIcs3NSJM/pDO
-         OBjfmfsur+3NCjqO5wOmFR7kFDt98teMTtUNydGqavih1WpIwf85M5ewrUqkbDZ+aQVu
-         wZviAhfTqLr+BxhECJC3dVaZO2wWqA1DoaYCM4QL/8oN9/sf1hWAyYjTgSrG1YP/tWGK
-         FmJFfy1/vWSR5ldvwLtEkJ7yu0tecbXXfol7sz0DnBU1INB4DyQ6PAxY6MDJ98CLFlac
-         TQ+xxpRQK9auts/BaCZjzNUDtOHIrK2UTFIwW+UZahIx5D4Fu0/16Ozmg/BNZQljyCJk
-         6WnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682101258; x=1684693258;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gYjAZVUAZkx+hJ9DMfGgeXPjn1yZPg0cuZSv04E2x7I=;
-        b=OTIEFQNa0+Y/GSIT+mkKIIRBCAwSLqw09Kovkqj9yWGlriWyAuYAtuduxcMD9kO7fT
-         6u0sb95JDwNTOYfZNjF9EQYF87ffTX28LeRuyjsQuom389i3HPFHvsqB6x5Fk/0qEpsa
-         SbEN2AQTFY20QDcXb8jH7iYY91Qi4XHHTAYg5CIAiW3HouLe0SB79im/nOB71E2+c1Fp
-         OUL1KVXBoaHzAJ3ApwBYamx351us58X2I6su3lcXydBkcrdMa24lTR4LWwvG8Z8UiZKf
-         OZ+ixm44WAIrNRBjN+DAPlYFA6vfGEzcIfTuK2L82puA6HEDVHVlfWkQevM71SxJEZBa
-         ZTcA==
-X-Gm-Message-State: AAQBX9eLbAF1e6rUVsuVHPVMXQQpTf8JUN9gZkfcKaggxsWvYdMJzZc/
-        Trj3SVeXGM6FTwjfcdvDvDQ=
-X-Google-Smtp-Source: AKy350brB+XC6kH0bv26owrFYJrDFQJiNVzOdTqBi5aNRCmztfTSlv8r6qmfOC7KiXa9XrGSovJ3Jg==
-X-Received: by 2002:a05:6a00:10c9:b0:63b:8b47:453c with SMTP id d9-20020a056a0010c900b0063b8b47453cmr7515216pfu.1.1682101258369;
-        Fri, 21 Apr 2023 11:20:58 -0700 (PDT)
-Received: from dhcp-172-26-102-232.dhcp.thefacebook.com ([2620:10d:c090:400::5:ef5e])
-        by smtp.gmail.com with ESMTPSA id c194-20020a624ecb000000b0062dba4e4706sm3221520pfb.191.2023.04.21.11.20.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 11:20:57 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 11:20:54 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Feng zhou <zhoufeng.zf@bytedance.com>
-Cc:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        mykolal@fb.com, shuah@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, yangzhenze@bytedance.com,
-        wangdongdong.6@bytedance.com
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: Add bpf_task_under_cgroup() kfunc
-Message-ID: <20230421182054.fisbe6dowoif3eta@dhcp-172-26-102-232.dhcp.thefacebook.com>
-References: <20230421090403.15515-1-zhoufeng.zf@bytedance.com>
- <20230421090403.15515-2-zhoufeng.zf@bytedance.com>
+        with ESMTP id S232608AbjDUSVS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 21 Apr 2023 14:21:18 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0354269E
+        for <bpf@vger.kernel.org>; Fri, 21 Apr 2023 11:21:11 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 33LIKDJ5012294
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Apr 2023 14:20:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1682101217; bh=iEkJZNbbn2+rcQzyVVWhPqOsJjmE4U6M5Uh3JgWMgHM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=OQxiIb5vjQ7L+dJq6P+Y8UrvnG49NnZ7b2UJ11crvw/DX36cgH6S5v0OU4swRrLtI
+         oXh96dMteXUJaHkQYMHkiD7gcBdE2yoT53pDj9TzTltUvr8eRqml1piRKEHedSYb74
+         eOCrkpZ+RDUqoeG9RPqVATJvRKQfVJDr2BDqoonZA8r2euA1A9XdrpIkvLqNtHxsv5
+         DnP8g/oNJPx4PlahRzuosmmDXWvcyJw+WKXd0OwE4rBfrl1eVw9NbJsY4MWIrX7Ajw
+         bannYGoP/UZtEdY/gZLuBHw5a6jk6JDVpwhjg0KmNg0k664AuszCdosgl2yehkqaM5
+         c6kB2DSVI0JSA==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 23FCA15C3448; Fri, 21 Apr 2023 14:20:13 -0400 (EDT)
+Date:   Fri, 21 Apr 2023 14:20:13 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Mike Christie <michael.christie@oracle.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        syzbot <syzbot+c2de99a72baaa06d31f3@syzkaller.appspotmail.com>,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, llvm@lists.linux.dev, nathan@kernel.org,
+        ndesaulniers@google.com, syzkaller-bugs@googlegroups.com,
+        trix@redhat.com, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, martin.lau@linux.dev,
+        bpf <bpf@vger.kernel.org>, KP Singh <kpsingh@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [syzbot] [ext4?] [mm?] KCSAN: data-race in strscpy / strscpy (3)
+Message-ID: <20230421182013.GA19035@mit.edu>
+References: <000000000000b9915d05f9d98bdd@google.com>
+ <CACT4Y+a3J0Z2PThebH6UaUWchKLWec8qApuv1ezYGKjf67Xctg@mail.gmail.com>
+ <ZEKko6U2MxfkXgs5@casper.infradead.org>
+ <13d484d3-d573-cd82-fff0-a35e27b8451e@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230421090403.15515-2-zhoufeng.zf@bytedance.com>
+In-Reply-To: <13d484d3-d573-cd82-fff0-a35e27b8451e@oracle.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 05:04:02PM +0800, Feng zhou wrote:
-> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+On Fri, Apr 21, 2023 at 12:40:45PM -0500, Mike Christie wrote:
 > 
-> Add a kfunc that's similar to the bpf_current_task_under_cgroup.
-> The difference is that it is a designated task.
-> 
-> When hook sched related functions, sometimes it is necessary to
-> specify a task instead of the current task.
-> 
-> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
-> ---
->  kernel/bpf/helpers.c | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 00e5fb0682ac..88e3247b5c44 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -2142,6 +2142,24 @@ __bpf_kfunc struct cgroup *bpf_cgroup_from_id(u64 cgid)
->  		return NULL;
->  	return cgrp;
->  }
-> +
-> +/**
-> + * bpf_task_under_cgroup - Check whether the task is a given subset of the
-> + * cgroup2 hierarchy. The cgroup2 to test is assigned by cgrp.
+> I didn't see the beginning of this thread and I think the part of the
+> sysbot report that lists the patches/trees being used got cut off so
+> I'm not 100% sure what's in the kernel.
 
-That doesn't read right.
+Syzbot reported this on commit 76f598ba7d8e which is upstream after v6.3-rc6.
 
-> + * @cgrp: assigned cgrp.
-> + * @task: assigned task.
+Cheers,
 
-This is also wrong.
-Please copy paste from task_under_cgroup_hierarchy.
-
-> + */
-> +__bpf_kfunc int bpf_task_under_cgroup(struct cgroup *cgrp,
-> +				      struct task_struct *task)
-
-return type needs to be 'long'. 'int' might have issues.
-Also the args should be task, cgrp to match task_under_cgroup_hierarchy.
-
-> +{
-> +	if (unlikely(!cgrp))
-> +		return -EAGAIN;
-> +
-> +	if (unlikely(!task))
-> +		return -ENOENT;
-
-Please do
-if (unlikely(!cgrp || !task))
-        return -EINVAL;
-
-> +
-> +	return task_under_cgroup_hierarchy(task, cgrp);
-> +}
->  #endif /* CONFIG_CGROUPS */
->  
->  /**
-> @@ -2341,6 +2359,7 @@ BTF_ID_FLAGS(func, bpf_cgroup_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
->  BTF_ID_FLAGS(func, bpf_cgroup_release, KF_RELEASE)
->  BTF_ID_FLAGS(func, bpf_cgroup_ancestor, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
->  BTF_ID_FLAGS(func, bpf_cgroup_from_id, KF_ACQUIRE | KF_RET_NULL)
-> +BTF_ID_FLAGS(func, bpf_task_under_cgroup, KF_RCU)
->  #endif
->  BTF_ID_FLAGS(func, bpf_task_from_pid, KF_ACQUIRE | KF_RET_NULL)
->  BTF_SET8_END(generic_btf_ids)
-> -- 
-> 2.20.1
-> 
+						- Ted
