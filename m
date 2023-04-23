@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F68BC77B76
-	for <bpf@archiver.kernel.org>; Sun, 23 Apr 2023 10:57:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF41DC7EE20
+	for <bpf@archiver.kernel.org>; Sun, 23 Apr 2023 10:57:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbjDWK5n (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 23 Apr 2023 06:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52988 "EHLO
+        id S229565AbjDWK5q (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 23 Apr 2023 06:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjDWK5n (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 23 Apr 2023 06:57:43 -0400
-Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E24E68;
-        Sun, 23 Apr 2023 03:57:41 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0Vgjkwcz_1682247456;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vgjkwcz_1682247456)
+        with ESMTP id S229621AbjDWK5p (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 23 Apr 2023 06:57:45 -0400
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C36410E9;
+        Sun, 23 Apr 2023 03:57:43 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VgjeM05_1682247459;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VgjeM05_1682247459)
           by smtp.aliyun-inc.com;
-          Sun, 23 Apr 2023 18:57:37 +0800
+          Sun, 23 Apr 2023 18:57:40 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     netdev@vger.kernel.org
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
@@ -31,10 +31,12 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH net-next v3 00/15] virtio_net: refactor xdp codes
-Date:   Sun, 23 Apr 2023 18:57:21 +0800
-Message-Id: <20230423105736.56918-1-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v3 02/15] virtio_net: introduce mergeable_xdp_get_buf()
+Date:   Sun, 23 Apr 2023 18:57:23 +0800
+Message-Id: <20230423105736.56918-3-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
+In-Reply-To: <20230423105736.56918-1-xuanzhuo@linux.alibaba.com>
+References: <20230423105736.56918-1-xuanzhuo@linux.alibaba.com>
 MIME-Version: 1.0
 X-Git-Hash: 3bb17d92efad
 Content-Transfer-Encoding: 8bit
@@ -42,51 +44,182 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Due to historical reasons, the implementation of XDP in virtio-net is relatively
-chaotic. For example, the processing of XDP actions has two copies of similar
-code. Such as page, xdp_page processing, etc.
+Separating the logic of preparation for xdp from receive_mergeable.
 
-The purpose of this patch set is to refactor these code. Reduce the difficulty
-of subsequent maintenance. Subsequent developers will not introduce new bugs
-because of some complex logical relationships.
+The purpose of this is to simplify the logic of execution of XDP.
 
-In addition, the supporting to AF_XDP that I want to submit later will also need
-to reuse the logic of XDP, such as the processing of actions, I don't want to
-introduce a new similar code. In this way, I can reuse these codes in the
-future.
+The main logic here is that when headroom is insufficient, we need to
+allocate a new page and calculate offset. It should be noted that if
+there is new page, the variable page will refer to the new page.
 
-Please review.
+Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
+---
+ drivers/net/virtio_net.c | 135 +++++++++++++++++++++++----------------
+ 1 file changed, 79 insertions(+), 56 deletions(-)
 
-Thanks.
-
-v2:
-    1. re-split to make review more convenient
-
-v1:
-    1. fix some variables are uninitialized
-
-
-Xuan Zhuo (15):
-  virtio_net: mergeable xdp: put old page immediately
-  virtio_net: introduce mergeable_xdp_get_buf()
-  virtio_net: optimize mergeable_xdp_get_buf()
-  virtio_net: introduce virtnet_xdp_handler() to seprate the logic of
-    run xdp
-  virtio_net: separate the logic of freeing xdp shinfo
-  virtio_net: separate the logic of freeing the rest mergeable buf
-  virtio_net: auto release xdp shinfo
-  virtio_net: introduce receive_mergeable_xdp()
-  virtio_net: merge: remove skip_xdp
-  virtio_net: introduce receive_small_xdp()
-  virtio_net: small: optimize code
-  virtio_net: small: optimize code
-  virtio_net: small: remove skip_xdp
-  virtio_net: introduce receive_small_build_xdp
-  virtio_net: introduce virtnet_build_skb()
-
- drivers/net/virtio_net.c | 659 +++++++++++++++++++++++----------------
- 1 file changed, 386 insertions(+), 273 deletions(-)
-
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index 42435e762d72..b8832b0cc215 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -1162,6 +1162,81 @@ static int virtnet_build_xdp_buff_mrg(struct net_device *dev,
+ 	return 0;
+ }
+ 
++static void *mergeable_xdp_get_buf(struct virtnet_info *vi,
++				   struct receive_queue *rq,
++				   struct bpf_prog *xdp_prog,
++				   void *ctx,
++				   unsigned int *frame_sz,
++				   int *num_buf,
++				   struct page **page,
++				   int offset,
++				   unsigned int *len,
++				   struct virtio_net_hdr_mrg_rxbuf *hdr)
++{
++	unsigned int truesize = mergeable_ctx_to_truesize(ctx);
++	unsigned int headroom = mergeable_ctx_to_headroom(ctx);
++	struct page *xdp_page;
++	unsigned int xdp_room;
++
++	/* Transient failure which in theory could occur if
++	 * in-flight packets from before XDP was enabled reach
++	 * the receive path after XDP is loaded.
++	 */
++	if (unlikely(hdr->hdr.gso_type))
++		return NULL;
++
++	/* Now XDP core assumes frag size is PAGE_SIZE, but buffers
++	 * with headroom may add hole in truesize, which
++	 * make their length exceed PAGE_SIZE. So we disabled the
++	 * hole mechanism for xdp. See add_recvbuf_mergeable().
++	 */
++	*frame_sz = truesize;
++
++	/* This happens when headroom is not enough because
++	 * of the buffer was prefilled before XDP is set.
++	 * This should only happen for the first several packets.
++	 * In fact, vq reset can be used here to help us clean up
++	 * the prefilled buffers, but many existing devices do not
++	 * support it, and we don't want to bother users who are
++	 * using xdp normally.
++	 */
++	if (!xdp_prog->aux->xdp_has_frags &&
++	    (*num_buf > 1 || headroom < virtnet_get_headroom(vi))) {
++		/* linearize data for XDP */
++		xdp_page = xdp_linearize_page(rq, num_buf,
++					      *page, offset,
++					      VIRTIO_XDP_HEADROOM,
++					      len);
++		*frame_sz = PAGE_SIZE;
++
++		if (!xdp_page)
++			return NULL;
++		offset = VIRTIO_XDP_HEADROOM;
++
++		put_page(*page);
++		*page = xdp_page;
++	} else if (unlikely(headroom < virtnet_get_headroom(vi))) {
++		xdp_room = SKB_DATA_ALIGN(VIRTIO_XDP_HEADROOM +
++					  sizeof(struct skb_shared_info));
++		if (*len + xdp_room > PAGE_SIZE)
++			return NULL;
++
++		xdp_page = alloc_page(GFP_ATOMIC);
++		if (!xdp_page)
++			return NULL;
++
++		memcpy(page_address(xdp_page) + VIRTIO_XDP_HEADROOM,
++		       page_address(*page) + offset, *len);
++		*frame_sz = PAGE_SIZE;
++		offset = VIRTIO_XDP_HEADROOM;
++
++		put_page(*page);
++		*page = xdp_page;
++	}
++
++	return page_address(*page) + offset;
++}
++
+ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 					 struct virtnet_info *vi,
+ 					 struct receive_queue *rq,
+@@ -1181,7 +1256,7 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 	unsigned int headroom = mergeable_ctx_to_headroom(ctx);
+ 	unsigned int tailroom = headroom ? sizeof(struct skb_shared_info) : 0;
+ 	unsigned int room = SKB_DATA_ALIGN(headroom + tailroom);
+-	unsigned int frame_sz, xdp_room;
++	unsigned int frame_sz;
+ 	int err;
+ 
+ 	head_skb = NULL;
+@@ -1211,63 +1286,11 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 		u32 act;
+ 		int i;
+ 
+-		/* Transient failure which in theory could occur if
+-		 * in-flight packets from before XDP was enabled reach
+-		 * the receive path after XDP is loaded.
+-		 */
+-		if (unlikely(hdr->hdr.gso_type))
++		data = mergeable_xdp_get_buf(vi, rq, xdp_prog, ctx, &frame_sz,
++					     &num_buf, &page, offset, &len, hdr);
++		if (unlikely(!data))
+ 			goto err_xdp;
+ 
+-		/* Now XDP core assumes frag size is PAGE_SIZE, but buffers
+-		 * with headroom may add hole in truesize, which
+-		 * make their length exceed PAGE_SIZE. So we disabled the
+-		 * hole mechanism for xdp. See add_recvbuf_mergeable().
+-		 */
+-		frame_sz = truesize;
+-
+-		/* This happens when headroom is not enough because
+-		 * of the buffer was prefilled before XDP is set.
+-		 * This should only happen for the first several packets.
+-		 * In fact, vq reset can be used here to help us clean up
+-		 * the prefilled buffers, but many existing devices do not
+-		 * support it, and we don't want to bother users who are
+-		 * using xdp normally.
+-		 */
+-		if (!xdp_prog->aux->xdp_has_frags &&
+-		    (num_buf > 1 || headroom < virtnet_get_headroom(vi))) {
+-			/* linearize data for XDP */
+-			xdp_page = xdp_linearize_page(rq, &num_buf,
+-						      page, offset,
+-						      VIRTIO_XDP_HEADROOM,
+-						      &len);
+-			frame_sz = PAGE_SIZE;
+-
+-			if (!xdp_page)
+-				goto err_xdp;
+-			offset = VIRTIO_XDP_HEADROOM;
+-
+-			put_page(page);
+-			page = xdp_page;
+-		} else if (unlikely(headroom < virtnet_get_headroom(vi))) {
+-			xdp_room = SKB_DATA_ALIGN(VIRTIO_XDP_HEADROOM +
+-						  sizeof(struct skb_shared_info));
+-			if (len + xdp_room > PAGE_SIZE)
+-				goto err_xdp;
+-
+-			xdp_page = alloc_page(GFP_ATOMIC);
+-			if (!xdp_page)
+-				goto err_xdp;
+-
+-			memcpy(page_address(xdp_page) + VIRTIO_XDP_HEADROOM,
+-			       page_address(page) + offset, len);
+-			frame_sz = PAGE_SIZE;
+-			offset = VIRTIO_XDP_HEADROOM;
+-
+-			put_page(page);
+-			page = xdp_page;
+-		}
+-
+-		data = page_address(page) + offset;
+ 		err = virtnet_build_xdp_buff_mrg(dev, vi, rq, &xdp, data, len, frame_sz,
+ 						 &num_buf, &xdp_frags_truesz, stats);
+ 		if (unlikely(err))
 -- 
 2.32.0.3.g01195cf9f
 
