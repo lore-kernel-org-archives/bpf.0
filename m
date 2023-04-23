@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78E00C77B7E
-	for <bpf@archiver.kernel.org>; Sun, 23 Apr 2023 10:58:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0067BC77B76
+	for <bpf@archiver.kernel.org>; Sun, 23 Apr 2023 10:58:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbjDWK6i (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 23 Apr 2023 06:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53880 "EHLO
+        id S229585AbjDWK6x (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 23 Apr 2023 06:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjDWK6I (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 23 Apr 2023 06:58:08 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D85830E5;
-        Sun, 23 Apr 2023 03:57:55 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VgjjQaG_1682247471;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VgjjQaG_1682247471)
+        with ESMTP id S229682AbjDWK6K (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 23 Apr 2023 06:58:10 -0400
+Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DBAD268C;
+        Sun, 23 Apr 2023 03:57:58 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VgjkwmZ_1682247473;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VgjkwmZ_1682247473)
           by smtp.aliyun-inc.com;
-          Sun, 23 Apr 2023 18:57:52 +0800
+          Sun, 23 Apr 2023 18:57:54 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     netdev@vger.kernel.org
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
@@ -31,9 +31,9 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH net-next v3 12/15] virtio_net: small: optimize code
-Date:   Sun, 23 Apr 2023 18:57:33 +0800
-Message-Id: <20230423105736.56918-13-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v3 14/15] virtio_net: introduce receive_small_build_xdp
+Date:   Sun, 23 Apr 2023 18:57:35 +0800
+Message-Id: <20230423105736.56918-15-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20230423105736.56918-1-xuanzhuo@linux.alibaba.com>
 References: <20230423105736.56918-1-xuanzhuo@linux.alibaba.com>
@@ -44,45 +44,87 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Avoid the problem that some variables(headroom and so on) will repeat
-the calculation when process xdp.
+Simplifying receive_small() function. Bringing the logic relating to
+build_skb together.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- drivers/net/virtio_net.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ drivers/net/virtio_net.c | 48 ++++++++++++++++++++++++++--------------
+ 1 file changed, 31 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 5bc3dca0f60c..601c0e7fc32b 100644
+index d2973c8fa48c..811cf1046df2 100644
 --- a/drivers/net/virtio_net.c
 +++ b/drivers/net/virtio_net.c
-@@ -1031,11 +1031,10 @@ static struct sk_buff *receive_small(struct net_device *dev,
- 	struct sk_buff *skb;
- 	struct bpf_prog *xdp_prog;
- 	unsigned int xdp_headroom = (unsigned long)ctx;
--	unsigned int header_offset = VIRTNET_RX_PAD + xdp_headroom;
--	unsigned int headroom = vi->hdr_len + header_offset;
--	unsigned int buflen = SKB_DATA_ALIGN(GOOD_PACKET_LEN + headroom) +
--			      SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
- 	struct page *page = virt_to_head_page(buf);
+@@ -931,6 +931,34 @@ static struct page *xdp_linearize_page(struct receive_queue *rq,
+ 	return NULL;
+ }
+ 
++static struct sk_buff *receive_small_build_skb(struct virtnet_info *vi,
++					       unsigned int xdp_headroom,
++					       void *buf,
++					       unsigned int len)
++{
 +	unsigned int header_offset;
 +	unsigned int headroom;
 +	unsigned int buflen;
- 
- 	len -= vi->hdr_len;
- 	stats->bytes += len;
-@@ -1063,6 +1062,11 @@ static struct sk_buff *receive_small(struct net_device *dev,
- 	rcu_read_unlock();
- 
- skip_xdp:
++	struct sk_buff *skb;
++
 +	header_offset = VIRTNET_RX_PAD + xdp_headroom;
 +	headroom = vi->hdr_len + header_offset;
 +	buflen = SKB_DATA_ALIGN(GOOD_PACKET_LEN + headroom) +
 +		SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
 +
- 	skb = build_skb(buf, buflen);
- 	if (!skb)
- 		goto err;
++	skb = build_skb(buf, buflen);
++	if (!skb)
++		return NULL;
++
++	skb_reserve(skb, headroom);
++	skb_put(skb, len);
++
++	buf += header_offset;
++	memcpy(skb_vnet_hdr(skb), buf, vi->hdr_len);
++
++	return skb;
++}
++
+ static struct sk_buff *receive_small_xdp(struct net_device *dev,
+ 					 struct virtnet_info *vi,
+ 					 struct receive_queue *rq,
+@@ -1030,9 +1058,6 @@ static struct sk_buff *receive_small(struct net_device *dev,
+ {
+ 	unsigned int xdp_headroom = (unsigned long)ctx;
+ 	struct page *page = virt_to_head_page(buf);
+-	unsigned int header_offset;
+-	unsigned int headroom;
+-	unsigned int buflen;
+ 	struct sk_buff *skb;
+ 
+ 	len -= vi->hdr_len;
+@@ -1060,20 +1085,9 @@ static struct sk_buff *receive_small(struct net_device *dev,
+ 		rcu_read_unlock();
+ 	}
+ 
+-	header_offset = VIRTNET_RX_PAD + xdp_headroom;
+-	headroom = vi->hdr_len + header_offset;
+-	buflen = SKB_DATA_ALIGN(GOOD_PACKET_LEN + headroom) +
+-		SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+-
+-	skb = build_skb(buf, buflen);
+-	if (!skb)
+-		goto err;
+-	skb_reserve(skb, headroom);
+-	skb_put(skb, len);
+-
+-	buf += header_offset;
+-	memcpy(skb_vnet_hdr(skb), buf, vi->hdr_len);
+-	return skb;
++	skb = receive_small_build_skb(vi, xdp_headroom, buf, len);
++	if (likely(skb))
++		return skb;
+ 
+ err:
+ 	stats->drops++;
 -- 
 2.32.0.3.g01195cf9f
 
