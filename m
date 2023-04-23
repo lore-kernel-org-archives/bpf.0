@@ -2,187 +2,134 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35EE4C77B73
-	for <bpf@archiver.kernel.org>; Sun, 23 Apr 2023 14:51:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA1CBC6FD18
+	for <bpf@archiver.kernel.org>; Sun, 23 Apr 2023 16:15:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbjDWOvY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 23 Apr 2023 10:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
+        id S229606AbjDWQPw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 23 Apr 2023 12:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230507AbjDWOvM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 23 Apr 2023 10:51:12 -0400
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C63271C;
-        Sun, 23 Apr 2023 07:51:07 -0700 (PDT)
-Received: by mail-vs1-xe33.google.com with SMTP id ada2fe7eead31-42ff08ab61dso765420137.1;
-        Sun, 23 Apr 2023 07:51:07 -0700 (PDT)
+        with ESMTP id S229493AbjDWQPw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 23 Apr 2023 12:15:52 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28076E74
+        for <bpf@vger.kernel.org>; Sun, 23 Apr 2023 09:15:51 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-94a34a14a54so634554566b.1
+        for <bpf@vger.kernel.org>; Sun, 23 Apr 2023 09:15:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682261466; x=1684853466;
+        d=gmail.com; s=20221208; t=1682266549; x=1684858549;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Byy5aNIeSbfDla4aJVVFrIzVSy2E3RHqITcEmVo7JRE=;
-        b=RKBXXCzMbPO0c3dNHN4kOwMb50a1vI21F46uM2qNrVGZnxlLgn6ryNiwH1XqALlyv7
-         mZQRQuTDmWR38qNqUA2rrHKP5Uhei0U8KHgtxj0lsz6a2FfEzm3+tYKroNLLgYxBiwKk
-         MLD2rYfWu3b0phFlVaYGkcvgnIFD3jbaMYAPdk5rPRrdzAvXYf7mJJMJ4KGa34iDcPt4
-         5ox0VFI/dPyeyTAhwd0MFh3YbdadxiwI14v1BK4DXfxDmc0mcGoQDdBZXnXi4+2CrscN
-         FyRRXhJW9V/P8Nb0SBdcjBCgwi04HqJfwI20sjH4UMKLdKUutDpCdU1VvKebky04iNnp
-         P9hw==
+        bh=mDxM2/nZgVv5AuzM6A953wR/5pPPA3QiV9tEhmexKvE=;
+        b=d++vfO0cOXmCM9GAkFcVGWkZcilZN1FFL3V6mb61439kFoMXB0+NXOg6NFzqrg3oHJ
+         /U9XJtVijIWhKECQ7MEm0Kz4XIP8BMZNn7Kg4ZMw1QxrRAZe63uUXLHdmW92VnYwcZTQ
+         2CQfLymzHTVefYIJsN9VbjisYaZ0uqt5zKZu/s8vfmJwcdWpFG3GOfylQLYv6DYK9aIm
+         63VWmeXEvdV/3BlCAgGtfBs3kC45ZXb/F6jv+Flz6ITe1k9J/Nu3Jz+luW5+kojKOPdh
+         V38arHiydFIVWyhCeNPOqRwKBFahZQp2fReXjFOOKQSnR7iUWwnNwJ0xsoDfiGMuvaQi
+         UYbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682261466; x=1684853466;
+        d=1e100.net; s=20221208; t=1682266549; x=1684858549;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Byy5aNIeSbfDla4aJVVFrIzVSy2E3RHqITcEmVo7JRE=;
-        b=GzX2wnZG97WGdB1le7spxvoebd1vJqz9duV/KV+vBz6YU0+OYg+eTUSBpGYixvBwAQ
-         A2ukyAt/8/yvW06Rm1+vRIlYFwtxC+/xSl+/gfSJHcdCYEYRwp6ko4laz+cnKuyibza4
-         cCeJF8NwTckjEhzIDHI1HgnNvnbT8NSvQ+6ew95L124ch4WLugOwFSZRwiKSm156JJAa
-         CPZ1ADB3vEAPWcCkWo0FPQZlEVShSg/XbOXeiFU72bzlLbOnYoExAAG2wHyJaCVjSEiK
-         ir9zJYhB7FQ/HuQfpGw/xsq/NSNFmhGeL9GPeyeug/kH25pTeJbl3v7xdEOxP2BIlwpw
-         /m6w==
-X-Gm-Message-State: AAQBX9ds2/4kjJ7PTkuRS51NclIssKzjw6znnCCVBEMafEsxNJsSPKma
-        v7l+6Mg+6KZBhPVKXSAdx9I1bJq8QCkmKKVo950=
-X-Google-Smtp-Source: AKy350Z5gzn4UWfEtW4Wn7+TaHy7dwqZraT/JdO1pegO5CuBK/GTa8ixWUrBAabB5nkoPrMqhSd1EaFai8Vxlw5iCMg=
-X-Received: by 2002:a67:fe97:0:b0:430:23c2:1c05 with SMTP id
- b23-20020a67fe97000000b0043023c21c05mr4275621vsr.4.1682261466002; Sun, 23 Apr
- 2023 07:51:06 -0700 (PDT)
+        bh=mDxM2/nZgVv5AuzM6A953wR/5pPPA3QiV9tEhmexKvE=;
+        b=aw8BB6LdxXo++0bQ+65djpFI9A02sZ/XGesuk7aI0bRvX8DScS3MmffgJ6hpom54XQ
+         /MT3gKPZUyuL9mgSnhdeCihvUGmrld2LVtiQKgBgXdUBGKNTeqWKxh70xEzyBS+DdwYj
+         hUbmpgzW9yMImSU7gmJ5la1xb51ndfhWASHIwQClRc0JEIYNIT+eLvFXQ160yJoKr6nj
+         opJz8xZwwdlxYSlh1Wm6Ca/tM4GCzhFOMoX/k2adeY5oqcAVsElkqWCpjRZH5PIGxw7a
+         Sf5HUYA4RK0yFDzsVdIyQCY2EO25BSZ2ezw2s2SN8VX4e3LC/NR9tckAyKfC1fNMa+HM
+         Ke7Q==
+X-Gm-Message-State: AAQBX9fyvi/WbNQAIMN1KFAb6BRkDoTsHFqMeT/HoKSvsrejv8n3k+dU
+        DZ4bunkuZroJLjdlYMDeegIUOC4SikyCoM6EkoU=
+X-Google-Smtp-Source: AKy350bTYtZldrYti6ZO3iN7RVYiUlTWdwYL/Bxee8vHcplpK2amIqpCVxFZDqQ4K5tKYbj53cePksKUMAHckIBmncM=
+X-Received: by 2002:a17:906:5904:b0:94f:928a:af0f with SMTP id
+ h4-20020a170906590400b0094f928aaf0fmr7362723ejq.47.1682266549219; Sun, 23 Apr
+ 2023 09:15:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230418014037.2412394-1-drosen@google.com> <CAOQ4uxhpFrRVcviQ6bK1ZMtZDSMXRFuqY-d_+uQ1C0YMDtQpLA@mail.gmail.com>
- <CA+PiJmT1wCoGnqtVSfcM-0qKm=Vu-jPf=7Op90vcGo3A7kYr0g@mail.gmail.com>
-In-Reply-To: <CA+PiJmT1wCoGnqtVSfcM-0qKm=Vu-jPf=7Op90vcGo3A7kYr0g@mail.gmail.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Sun, 23 Apr 2023 17:50:53 +0300
-Message-ID: <CAOQ4uxgwmsAA8b1ApmHh9fKuSyy0-NKgpkDSLk-gUWnaGKXtFQ@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next v3 00/37] FUSE BPF: A Stacked Filesystem
- Extension for FUSE
-To:     Daniel Rosenberg <drosen@google.com>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-unionfs@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>, kernel-team@android.com
+References: <xunyjzy64q9b.fsf@redhat.com> <CAADnVQ+JdPGV95Y30PskgdOomU2K0UXsoCydgqaJfJ5j4S8BtQ@mail.gmail.com>
+ <xunyjzy6z3vu.fsf@redhat.com> <CAADnVQK-Dig-5DB6tM_sgggyvqHUXSbBud0R=rAPWT2VRtQ-ZQ@mail.gmail.com>
+ <xunyfs8uz0z1.fsf@redhat.com> <CAADnVQ+ZSTpUvV7fQ-UxCoRBCc8NYfcYHY0K9mKka=vhT6LO=Q@mail.gmail.com>
+ <xunybkjhzdpe.fsf@redhat.com> <CAADnVQKGrSvJHXbsqzEF=QSuePF5KzGUKeC_HWsY56bTTSRWMw@mail.gmail.com>
+ <xunybkjfyno7.fsf@redhat.com>
+In-Reply-To: <xunybkjfyno7.fsf@redhat.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Sun, 23 Apr 2023 09:15:37 -0700
+Message-ID: <CAADnVQKGJNBf4EtG8kE2-xvnvw+=fb6XG3-ce6G3-csy-fd=rw@mail.gmail.com>
+Subject: Re: sys_enter tracepoint ctx structure
+To:     Yauheni Kaliuta <ykaliuta@redhat.com>
+Cc:     Yonghong Song <yhs@fb.com>, bpf <bpf@vger.kernel.org>,
+        Artem Savkov <asavkov@redhat.com>,
+        Viktor Malik <vmalik@redhat.com>,
+        Jerome Marchand <jmarchan@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 4:41=E2=80=AFAM Daniel Rosenberg <drosen@google.com=
-> wrote:
+On Sun, Apr 23, 2023 at 2:04=E2=80=AFAM Yauheni Kaliuta <ykaliuta@redhat.co=
+m> wrote:
 >
-> On Mon, Apr 17, 2023 at 10:33=E2=80=AFPM Amir Goldstein <amir73il@gmail.c=
-om> wrote:
-> >
-> >
-> > Which brings me to my biggest concern.
-> > I still do not see how these patches replace Allesio's
-> > FUSE_DEV_IOC_PASSTHROUGH_OPEN patches.
-> >
-> > Is the idea here that ioctl needs to be done at FUSE_LOOKUP
-> > instead or in addition to the ioctl on FUSE_OPEN to setup the
-> > read/write passthrough on the backing file?
-> >
+> Hi, Alexei!
 >
-> In these patches, the fuse daemon responds to the lookup request via
-> an ioctl, essentially in the same way it would have to the /dev/fuse
-> node. It just flags the write as coming from an ioctl and calls
-> fuse_dev_do_write. An additional block in the lookup response gives
-> the backing file and what bpf_ops to use. The main difference is that
-> fuse-bpf uses backing inodes, while passthrough uses a file.
-
-Ah right. I wonder if there is benefit in both APIs or if backing inode
-is sufficient to impelelent everything the could be interesting to implemen=
-t
-with a backing file.
-
-> Fuse-bpf's read/write support currently isn't complete, but it does
-> allow for direct passthrough. You could set ops to default to
-> userspace in every case that Allesio's passthrough code does and it
-> should have about the same effect.
-
-What are the subtle differences then?
-
-> With the struct_op change, I did
-> notice that doing something like that is more annoying, and am
-> planning to add a default op which only takes the meta info and runs
-> if the opcode specific op is not present.
+> >>>>> On Fri, 21 Apr 2023 09:02:34 -0700, Alexei Starovoitov  wrote:
+>  > On Fri, Apr 21, 2023 at 4:17=E2=80=AFAM Yauheni Kaliuta <ykaliuta@redh=
+at.com> wrote:
+>  >> >>>>> On Thu, 20 Apr 2023 16:12:49 -0700, Alexei Starovoitov  wrote:
+>  >> > On Thu, Apr 20, 2023 at 2:40=E2=80=AFPM Yauheni Kaliuta <ykaliuta@r=
+edhat.com> wrote:
+>  >> >> >>>>> On Thu, 20 Apr 2023 13:54:26 -0700, Alexei Starovoitov  wrot=
+e:
+>  >> >> > On Thu, Apr 20, 2023 at 1:37=E2=80=AFPM Yauheni Kaliuta <ykaliut=
+a@redhat.com> wrote:
+>  >> >> >> >>>>> On Thu, 20 Apr 2023 08:59:09 -0700, Alexei Starovoitov  w=
+rote:
 >
-
-Sounds interesting. I'll wait to see what you propose.
-
+> [...]
 >
-> > I am missing things like the FILESYSTEM_MAX_STACK_DEPTH check that
-> > was added as a result of review on Allesio's patches.
-> >
+>  >> > Let's fix the kernel side too. Something like this should do it:
+>  >>
+>  >> > diff --git a/kernel/trace/trace_syscalls.c b/kernel/trace/trace_sys=
+calls.c
+>  >> > index 942ddbdace4a..7aa1f4299486 100644
+>  >> > --- a/kernel/trace/trace_syscalls.c
+>  >> > +++ b/kernel/trace/trace_syscalls.c
+>  >> > @@ -555,7 +555,7 @@ static int perf_call_bpf_enter(struct
+>  >> > trace_event_call *call, struct pt_regs *re
+>  >> >                                struct syscall_trace_enter *rec)
+>  >> >  {
+>  >> >         struct syscall_tp_t {
+>  >> > -               unsigned long long regs;
+>  >> > +               struct trace_entry ent;
+>  >> >                 unsigned long syscall_nr;
+>  >> >                 unsigned long args[SYSCALL_DEFINE_MAXARGS];
+>  >> >         } param;
+>  >> > @@ -657,7 +657,7 @@ static int perf_call_bpf_exit(struct
+>  >> > trace_event_call *call, struct pt_regs *reg
+>  >> >                               struct syscall_trace_exit *rec)
+>  >> >  {
+>  >> >         struct syscall_tp_t {
+>  >> > -               unsigned long long regs;
+>  >> > +               struct trace_entry ent;
+>  >>
+>  >>
+>  >> > pls add build_bug_on that sizeof(ent) >=3D sizeof(void*).
+>  >>
+>  >> Ok. Should the line *(struct pt_regs **)&param =3D regs; be commented=
+ somehow?
 >
-> I'd definitely want to fix any issues that were fixed there. There's a
-> lot of common code between fuse-bpf and fuse passthrough, so many of
-> the suggestions there will apply here.
+>  > commented out?
 >
-
-That's why I suggested trying to implement the passthough file ioctl
-functionality first to make sure that none of the review comments
-in the first round were missed.
-
-But if we need functionality of both ioctls, we can collaborate the
-work on merging them separately.
-
-> > The reason I am concerned about this is that we are using the
-> > FUSE_DEV_IOC_PASSTHROUGH_OPEN patches and I would like
-> > to upstream their functionality sooner rather than later.
-> > These patches have already been running in production for a while
-> > I believe that they are running in Android as well and there is value
-> > in upsteaming well tested patches.
-> >
-> > The API does not need to stay FUSE_DEV_IOC_PASSTHROUGH_OPEN
-> > it should be an API that is extendable to FUSE-BPF, but it would be
-> > useful if the read/write passthrough could be the goal for first merge.
-> >
-> > Does any of this make sense to you?
-> > Can you draw a roadmap for merging FUSE-BPF that starts with
-> > a first (hopefully short term) phase that adds the read/write passthrou=
-gh
-> > functionality?
-> >
-> > I can help with review and testing of that part if needed.
-> > I was planning to discuss this with you on LSFMM anyway,
-> > but better start the discussion beforehand.
-> >
-> > Thanks,
-> > Amir.
+> No, no :)
 >
-> We've been using an earlier version of fuse-bpf on Android, closer to
-> the V1 patches. They fit our current needs but don't cover everything
-> we intend to. The V3 patches switch to a new style of bpf program,
-> which I'm hoping to get some feedback on before I spend too much time
-> fixing up the details. The backing calls themselves can be reviewed
-> separately from that though.
+>  > No. It's mandatory.
+>  > And the reason for build_bug_on existence... to make sure that there
+>  > is enough space there.
 >
-> Without bpf, we're essentially enabling complete passthrough at a
-> directory or file. By default, once you set a backing file fuse-bpf
-> calls by the backing filesystem by default, with no additional
-> userspace interaction apart from if an installed bpf program says
-> otherwise. If we had some commands without others, we'd have behavior
-> changes as we introduce support for additional calls. We'd need a way
-> to set default behavior. Perhaps something like a u64 flag field
-> extension in FUSE_INIT for indicating which opcodes support backing,
-> and a response for what those should default to doing. If there's a
-> bpf_op present for a given opcode, it would be able to override that
-> default. If we had something like that, we'd be able to add support
-> for a subset of opcodes in a sensible way.
+> Yes, it's clear for sure.
+>
+> It can be not obvious why basically 'ent' is inited with
+> 'regs'. Before it was called 'regs' at least.
 
-So maybe this is something to consider.
-
-Thanks,
-Amir.
+Got it :) Yeah. A comment describing the intent would be nice.
