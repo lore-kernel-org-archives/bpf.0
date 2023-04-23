@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C8CCC77B7C
-	for <bpf@archiver.kernel.org>; Sun, 23 Apr 2023 10:58:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1257AC77B76
+	for <bpf@archiver.kernel.org>; Sun, 23 Apr 2023 10:58:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjDWK6g (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 23 Apr 2023 06:58:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53574 "EHLO
+        id S229917AbjDWK6j (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 23 Apr 2023 06:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbjDWK6B (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 23 Apr 2023 06:58:01 -0400
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7A530D7;
-        Sun, 23 Apr 2023 03:57:54 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VgjhMIc_1682247470;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VgjhMIc_1682247470)
+        with ESMTP id S229913AbjDWK6J (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 23 Apr 2023 06:58:09 -0400
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E982D46;
+        Sun, 23 Apr 2023 03:57:57 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VgjhkjK_1682247472;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VgjhkjK_1682247472)
           by smtp.aliyun-inc.com;
-          Sun, 23 Apr 2023 18:57:50 +0800
+          Sun, 23 Apr 2023 18:57:53 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     netdev@vger.kernel.org
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
@@ -31,9 +31,9 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH net-next v3 11/15] virtio_net: small: optimize code
-Date:   Sun, 23 Apr 2023 18:57:32 +0800
-Message-Id: <20230423105736.56918-12-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v3 13/15] virtio_net: small: remove skip_xdp
+Date:   Sun, 23 Apr 2023 18:57:34 +0800
+Message-Id: <20230423105736.56918-14-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20230423105736.56918-1-xuanzhuo@linux.alibaba.com>
 References: <20230423105736.56918-1-xuanzhuo@linux.alibaba.com>
@@ -44,53 +44,66 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In the case of XDP-PASS, skb_reserve uses the delta to compatible
-non-XDP, now remove this logic.
+now, the process of xdp is simple, we can remove the skip_xdp.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- drivers/net/virtio_net.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ drivers/net/virtio_net.c | 26 ++++++++++++--------------
+ 1 file changed, 12 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 9b5fd2e0d27f..5bc3dca0f60c 100644
+index 601c0e7fc32b..d2973c8fa48c 100644
 --- a/drivers/net/virtio_net.c
 +++ b/drivers/net/virtio_net.c
-@@ -949,9 +949,7 @@ static struct sk_buff *receive_small_xdp(struct net_device *dev,
+@@ -1028,13 +1028,12 @@ static struct sk_buff *receive_small(struct net_device *dev,
+ 				     unsigned int *xdp_xmit,
+ 				     struct virtnet_rq_stats *stats)
+ {
+-	struct sk_buff *skb;
+-	struct bpf_prog *xdp_prog;
+ 	unsigned int xdp_headroom = (unsigned long)ctx;
+ 	struct page *page = virt_to_head_page(buf);
+ 	unsigned int header_offset;
+ 	unsigned int headroom;
  	unsigned int buflen;
- 	struct xdp_buff xdp;
- 	struct sk_buff *skb;
--	unsigned int delta = 0;
- 	unsigned int metasize = 0;
--	void *orig_data;
- 	u32 act;
++	struct sk_buff *skb;
  
- 	if (unlikely(hdr->hdr.gso_type))
-@@ -984,14 +982,12 @@ static struct sk_buff *receive_small_xdp(struct net_device *dev,
- 	xdp_init_buff(&xdp, buflen, &rq->xdp_rxq);
- 	xdp_prepare_buff(&xdp, buf + VIRTNET_RX_PAD + vi->hdr_len,
- 			 xdp_headroom, len, true);
--	orig_data = xdp.data;
- 
- 	act = virtnet_xdp_handler(xdp_prog, &xdp, dev, xdp_xmit, stats);
- 
- 	switch (act) {
- 	case XDP_PASS:
- 		/* Recalculate length in case bpf program changed it */
--		delta = orig_data - xdp.data;
- 		len = xdp.data_end - xdp.data;
- 		metasize = xdp.data - xdp.data_meta;
- 		break;
-@@ -1008,7 +1004,7 @@ static struct sk_buff *receive_small_xdp(struct net_device *dev,
- 	if (!skb)
+ 	len -= vi->hdr_len;
+ 	stats->bytes += len;
+@@ -1046,22 +1045,21 @@ static struct sk_buff *receive_small(struct net_device *dev,
  		goto err;
+ 	}
  
--	skb_reserve(skb, headroom - delta);
-+	skb_reserve(skb, xdp.data - buf);
- 	skb_put(skb, len);
- 	if (metasize)
- 		skb_metadata_set(skb, metasize);
+-	if (likely(!vi->xdp_enabled)) {
+-		xdp_prog = NULL;
+-		goto skip_xdp;
+-	}
++	if (unlikely(vi->xdp_enabled)) {
++		struct bpf_prog *xdp_prog;
+ 
+-	rcu_read_lock();
+-	xdp_prog = rcu_dereference(rq->xdp_prog);
+-	if (xdp_prog) {
+-		skb = receive_small_xdp(dev, vi, rq, xdp_prog, buf, xdp_headroom,
+-					len, xdp_xmit, stats);
++		rcu_read_lock();
++		xdp_prog = rcu_dereference(rq->xdp_prog);
++		if (xdp_prog) {
++			skb = receive_small_xdp(dev, vi, rq, xdp_prog, buf,
++						xdp_headroom, len, xdp_xmit,
++						stats);
++			rcu_read_unlock();
++			return skb;
++		}
+ 		rcu_read_unlock();
+-		return skb;
+ 	}
+-	rcu_read_unlock();
+ 
+-skip_xdp:
+ 	header_offset = VIRTNET_RX_PAD + xdp_headroom;
+ 	headroom = vi->hdr_len + header_offset;
+ 	buflen = SKB_DATA_ALIGN(GOOD_PACKET_LEN + headroom) +
 -- 
 2.32.0.3.g01195cf9f
 
