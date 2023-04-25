@@ -2,207 +2,176 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E4F6C6FD18
-	for <bpf@archiver.kernel.org>; Tue, 25 Apr 2023 08:57:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A286C77B71
+	for <bpf@archiver.kernel.org>; Tue, 25 Apr 2023 09:55:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233238AbjDYI5Y (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 25 Apr 2023 04:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46504 "EHLO
+        id S233255AbjDYJzD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Apr 2023 05:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231741AbjDYI5X (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 25 Apr 2023 04:57:23 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B0B10DE
-        for <bpf@vger.kernel.org>; Tue, 25 Apr 2023 01:57:20 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f1cfed93e2so26670045e9.3
-        for <bpf@vger.kernel.org>; Tue, 25 Apr 2023 01:57:20 -0700 (PDT)
+        with ESMTP id S233717AbjDYJzC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 25 Apr 2023 05:55:02 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B06D65BD
+        for <bpf@vger.kernel.org>; Tue, 25 Apr 2023 02:55:01 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f1957e80a2so107632185e9.1
+        for <bpf@vger.kernel.org>; Tue, 25 Apr 2023 02:55:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1682413039; x=1685005039;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IatPhWkS7kXHNYw/LMRL8AKSu2Xban6SY9XiEQ0UbuE=;
-        b=A4qlge16yFv+9UUBED8DwB3CpwcMvkHy47I9ZPC3tVY2qFmyQkVEAT+Ifre5YvtJt2
-         Xb5SNcrz9qpm4DgOO4DmjrN6dZqkqvbTygoRXDF3YdJHiEDFF0NZd/zySjhHERKg/bWa
-         LNSvaOQvBBl1EOZfh6GywgBChs3CS5MZHtaZ8VS+NeizsM/I/qQFQWkoOpAzI7+qsz7z
-         RmaMhP9x2oqtrrxq3QkmYvqOGyazp0qtrnzpNxQLoRm9e45M2UdYX92KxXIapjz99gHe
-         lPKZxByRISbqo46iqL6ExBUZkjQTJ1RXQQulHAHcW6Hx34ZZoTiMUaeOWhOgncfGlT4h
-         0LQw==
+        d=gmail.com; s=20221208; t=1682416500; x=1685008500;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+liLxnvBjwItkO3vuKY6Kfr9tdx/kDpkknyq1m5SdYQ=;
+        b=PnQO0Y0HXBj3PHMkR0EhVufqe102DLW1bR4rTevh2lApWDNfHISqi1fPg3hWPl3rsf
+         eZJy52cDE9PlvSbJIkZoDeNNBMDuLKuBCplviWtMleKudqFG4p0gM2sTKDkNauo28H/G
+         kTIyurr4vdBSRS1gMW6G13dEjdqCNDoXY+2o7U8O47n9ra4OhPEKvCihLolMVmZmUNfG
+         Pq3vzt42GeikRDClcmTvk6gI9Vp+dtv/4GUW8MoeTe2JAHF4LbYUH7Jhv4Rnt1GW5d6R
+         b0ysBwmEsJ6jjtN6BmX2gugV48xWjDyxR/1a5SWdXeSpn1xPpKF3LZpMHMDjWRcKe3i2
+         r2DQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682413039; x=1685005039;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IatPhWkS7kXHNYw/LMRL8AKSu2Xban6SY9XiEQ0UbuE=;
-        b=P9hh0N6kVMOFeDi3l0UZIwAIzIiEUnBu2tmpRrP9ed0eqKvmwBlrfJv/NcKSEv7Srr
-         yCq4c3PskZdkrbb++WIb2Vhuz8qqt1Qo8qGEeLGAGwbfZyIYkA/ExqEC84eLnCfsbmN3
-         H+m9MJDB2MFjwnqevrfAnp6wMfrOqawZUjs/mcQUFTVQMdPDmU0/vjd9z5FkqgLsGWrF
-         G1SHoAClvmkMRdDNRoRYct0LwMEuNDS8S+1+jebW+YzpMDC9LucjT6U0OrAWSqQ8ou+3
-         ou28wfgebLVOw0z32QyazvCfoJvAlouxfOGQ5hYfrn+3tsQCBokpjlIa3wnP78lqFRqD
-         TGCw==
-X-Gm-Message-State: AAQBX9cWhMu5kfqVP4mCMSfZH7kZ7IzY0eEJJh72O+S5yVkg1C46jqLT
-        MGWd451HfhLF75H6H8Z4eiZi0Q==
-X-Google-Smtp-Source: AKy350ZfqbGzh3y7nA6BysMdjdjoeKVHTAZG8yejEO8cIxrcwf4n7Z9FsaXanJbDCjOudEBOO/ZeMg==
-X-Received: by 2002:a05:600c:24cd:b0:3f1:79ad:f3a8 with SMTP id 13-20020a05600c24cd00b003f179adf3a8mr9037127wmu.16.1682413038872;
-        Tue, 25 Apr 2023 01:57:18 -0700 (PDT)
-Received: from ?IPV6:2a02:8011:e80c:0:fc75:a52a:6ef6:7ac6? ([2a02:8011:e80c:0:fc75:a52a:6ef6:7ac6])
-        by smtp.gmail.com with ESMTPSA id y21-20020a05600c365500b003f182a10106sm14443185wmq.8.2023.04.25.01.57.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Apr 2023 01:57:18 -0700 (PDT)
-Message-ID: <fa14348d-b7ce-2a0e-d0f6-387162621ae8@isovalent.com>
-Date:   Tue, 25 Apr 2023 09:57:17 +0100
+        d=1e100.net; s=20221208; t=1682416500; x=1685008500;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+liLxnvBjwItkO3vuKY6Kfr9tdx/kDpkknyq1m5SdYQ=;
+        b=DLBwOGST3xpKvyP90ni8cytSdEYfcmpdDflpO1OZp1hv1ClGJ+TUGvVuq2+doO3vDv
+         DsW4BZWm12/fVhqbb/6gW7RDm1cQy0sn/kCF2VxSOo3dzxDIo9ndYtzv3Jk8qJ2z4PZK
+         IPRIqP5pc1I2T0WDpB0peFfkwTtQQW/PiDwgtDvx36QROYFwk+0sfRSVi/wNDKp9fcuQ
+         MkZuTnIFu4QymwmbYZMEpeNJCtIHMltvj0U1FX8RYM6Zj7PW/UENQMgXg6q7Ttvq+FL3
+         xBYcTxgphCSM4qh5FoIEJT0TR+p2XN5TpEftAKKYeN15F1eXjGJDZfOXWN+Xp4K5S1XU
+         Yc7A==
+X-Gm-Message-State: AAQBX9fhAztYBUUixoxT3Wxg6jkoDaB0iFPti9i1CTow+ZmJQqc3aJVp
+        cHtQqjNdf3VtRtHRT7lQBuc=
+X-Google-Smtp-Source: AKy350Y81eNuibYw34cIiLTnzfcFBV/CF5oClwaIh2yk9lMbttzTWumtssyZ83k4orqjQgxEJNh3aA==
+X-Received: by 2002:a5d:4c4e:0:b0:2f6:1a6d:a6c3 with SMTP id n14-20020a5d4c4e000000b002f61a6da6c3mr16137161wrt.21.1682416499573;
+        Tue, 25 Apr 2023 02:54:59 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id z4-20020a05600c0a0400b003ef4cd057f5sm18204308wmp.4.2023.04.25.02.54.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Apr 2023 02:54:59 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Tue, 25 Apr 2023 11:54:57 +0200
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Subject: Re: [RFC/PATCH bpf-next 01/20] bpf: Add multi uprobe link
+Message-ID: <ZEejcYDRbxDGebAr@krava>
+References: <20230424160447.2005755-1-jolsa@kernel.org>
+ <20230424160447.2005755-2-jolsa@kernel.org>
+ <20230424221120.h3vdmuehxi33st4n@dhcp-172-26-102-232.dhcp.thefacebook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH bpf-next v2] bpftool: Dump map id instead of value for
- map_of_maps types
-Content-Language: en-GB
-To:     Xueming Feng <kuro@kuroa.me>, yhs@meta.com
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
-        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        martin.lau@linux.dev, sdf@google.com, song@kernel.org, yhs@fb.com
-References: <561b0f03-4a3a-89d3-5793-a0d69535ca0f@meta.com>
- <20230425063750.72642-1-kuro@kuroa.me>
-From:   Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <20230425063750.72642-1-kuro@kuroa.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230424221120.h3vdmuehxi33st4n@dhcp-172-26-102-232.dhcp.thefacebook.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-2023-04-25 14:37 UTC+0800 ~ Xueming Feng <kuro@kuroa.me>
->> On 4/24/23 9:10 PM, Xueming Feng wrote:
->>>> On 4/24/23 2:09 AM, Xueming Feng wrote:
->>>>> When using `bpftool map dump` in plain format, it is usually
->>>>> more convenient to show the inner map id instead of raw value.
->>>>> Changing this behavior would help with quick debugging with
->>>>> `bpftool`, without disrupting scripted behavior. Since user
->>>>> could dump the inner map with id, and need to convert value.
->>>>>
->>>>> Signed-off-by: Xueming Feng <kuro@kuroa.me>
->>>>> ---
->>>>> Changes in v2:
->>>>>     - Fix commit message grammar.
->>>>> 	- Change `print_uint` to only print to stdout, make `arg` const, and rename
->>>>> 	  `n` to `arg_size`.
->>>>>     - Make `print_uint` able to take any size of argument up to `unsigned long`,
->>>>> 		and print it as unsigned decimal.
->>>>>
->>>>> Thanks for the review and suggestions! I have changed my patch accordingly.
->>>>> There is a possibility that `arg_size` is larger than `unsigned long`,
->>>>> but previous review suggested that it should be up to the caller function to
->>>>> set `arg_size` correctly. So I didn't add check for that, should I?
->>>>>
->>>>>    tools/bpf/bpftool/main.c | 15 +++++++++++++++
->>>>>    tools/bpf/bpftool/main.h |  1 +
->>>>>    tools/bpf/bpftool/map.c  |  9 +++++++--
->>>>>    3 files changed, 23 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
->>>>> index 08d0ac543c67..810c0dc10ecb 100644
->>>>> --- a/tools/bpf/bpftool/main.c
->>>>> +++ b/tools/bpf/bpftool/main.c
->>>>> @@ -251,6 +251,21 @@ int detect_common_prefix(const char *arg, ...)
->>>>>    	return 0;
->>>>>    }
->>>>>    
->>>>> +void print_uint(const void *arg, unsigned int arg_size)
->>>>> +{
->>>>> +	const unsigned char *data = arg;
->>>>> +	unsigned long val = 0ul;
->>>>> +
->>>>> +	#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
->>>>> +		memcpy(&val, data, arg_size);
->>>>> +	#else
->>>>> +		memcpy((unsigned char *)&val + sizeof(val) - arg_size,
->>>>> +		       data, arg_size);
->>>>> +	#endif
->>>>> +
->>>>> +	fprintf(stdout, "%lu", val);
->>>>> +}
->>>>> +
->>>>>    void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep)
->>>>>    {
->>>>>    	unsigned char *data = arg;
->>>>> diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
->>>>> index 0ef373cef4c7..0de671423431 100644
->>>>> --- a/tools/bpf/bpftool/main.h
->>>>> +++ b/tools/bpf/bpftool/main.h
->>>>> @@ -90,6 +90,7 @@ void __printf(1, 2) p_info(const char *fmt, ...);
->>>>>    
->>>>>    bool is_prefix(const char *pfx, const char *str);
->>>>>    int detect_common_prefix(const char *arg, ...);
->>>>> +void print_uint(const void *arg, unsigned int arg_size);
->>>>>    void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep);
->>>>>    void usage(void) __noreturn;
->>>>>    
->>>>> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
->>>>> index aaeb8939e137..f5be4c0564cf 100644
->>>>> --- a/tools/bpf/bpftool/map.c
->>>>> +++ b/tools/bpf/bpftool/map.c
->>>>> @@ -259,8 +259,13 @@ static void print_entry_plain(struct bpf_map_info *info, unsigned char *key,
->>>>>    		}
->>>>>    
->>>>>    		if (info->value_size) {
->>>>> -			printf("value:%c", break_names ? '\n' : ' ');
->>>>> -			fprint_hex(stdout, value, info->value_size, " ");
->>>>> +			if (map_is_map_of_maps(info->type)) {
->>>>> +				printf("id:%c", break_names ? '\n' : ' ');
->>>> 1> +				print_uint(value, info->value_size);
->>>
->>> On Mon, 24 Apr 2023 18:07:27 -0700, Yonghong Song wrote:
->>>> For all map_in_map types, the inner map value size is 32bit int which
->>>> represents a fd (for map creation) and a id (for map info), e.g., in
->>>> show_prog_maps() in prog.c. So maybe we can simplify the code as below:
->>>> 	printf("id: %u", *(unsigned int *)value);
->>>
->>> That is true, maybe the "id" could also be changed to "map_id" to follow the
->>> convention. Do you think that `print_uint` could be useful in the future?
->>> If that is the case, should I keep using it here as an example usage, and to
->>> avoid dead code? Or should I just remove it?
+On Mon, Apr 24, 2023 at 03:11:20PM -0700, Alexei Starovoitov wrote:
+> On Mon, Apr 24, 2023 at 06:04:28PM +0200, Jiri Olsa wrote:
+> > +
+> > +static int uprobe_prog_run(struct bpf_uprobe *uprobe,
+> > +			   unsigned long entry_ip,
+> > +			   struct pt_regs *regs)
+> > +{
+> > +	struct bpf_uprobe_multi_link *link = uprobe->link;
+> > +	struct bpf_uprobe_multi_run_ctx run_ctx = {
+> > +		.entry_ip = entry_ip,
+> > +	};
+> > +	struct bpf_run_ctx *old_run_ctx;
+> > +	int err;
+> > +
+> > +	preempt_disable();
+> 
+> preempt_disable? Which year is this? :)
+> Let's allow sleepable from the start.
+> See bpf_prog_run_array_sleepable.
 
-This makes me think we could also have something similar for prog_array
-maps (but not necessarily as part of your patchset).
+ok, we should probably add also 'multi.uprobe.s' section so the program
+gets loaded with the BPF_F_SLEEPABLE flag.. or maybe we can enable that
+by default for 'multi.uprobe' section
 
 > 
-> On Mon, 24 Apr 2023 22:58:10 -0700, Yonghong Song wrote:
->> Maybe, "inner_map_id" is a better choice. For array of maps, some array 
->> element value could be 0, implying "inner_map_id 0", but I think it is
->> okay, people should know a real inner_map_id (or any map_id) should 
->> never be 0.
->>
->> Function "print_uint" is not needed any more. Please remove it.
+> Other than this the set looks great.
 > 
-> Will reflect this in v3.
+> > +
+> > +	if (unlikely(__this_cpu_inc_return(bpf_prog_active) != 1)) {
+> > +		err = 0;
+> > +		goto out;
+> > +	}
+> > +
+> > +	rcu_read_lock();
+> > +	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
+> > +	err = bpf_prog_run(link->link.prog, regs);
+> > +	bpf_reset_run_ctx(old_run_ctx);
+> > +	rcu_read_unlock();
+> > +
+> > + out:
+> > +	__this_cpu_dec(bpf_prog_active);
+> > +	preempt_enable();
+> > +	return err;
+> ...
+> > +			struct path path;
+> > +			char *name;
+> > +
+> > +			name = strndup_user(upath, PATH_MAX);
+> > +			if (IS_ERR(name)) {
+> > +				err = PTR_ERR(name);
+> > +				goto error;
+> > +			}
+> > +			err = kern_path(name, LOOKUP_FOLLOW, &path);
+> > +			kfree(name);
+> > +			if (err)
+> > +				goto error;
+> > +			if (!d_is_reg(path.dentry)) {
+> > +				err = -EINVAL;
+> > +				path_put(&path);
+> > +				goto error;
+> > +			}
+> > +			inode = d_real_inode(path.dentry);
+> > +			path_put(&path);
 > 
->>
->> Please add the command line to dump map values triggering the above 
->> change, also the actual dumps with and without this patch.
+> inode won't disappear between here and its use in uprobe_register_refctr ?
+
+ugh, that's bug.. will fix
+
+thanks,
+jirka
+
 > 
-> $ bpftool map dump id 138
-> Without patch:
-> ```
-> key:
-> fc 00 00 00 00 00 00 00  00 00 00 00 00 00 00 05
-> 27 16 06 00
-> value:
-> 8b 00 00 00
-> Found 1 element
-> ```
-> With patch:
-> ```
-> key:
-> fc 00 00 00 00 00 00 00  00 00 00 00 00 00 00 05
-> 27 16 06 00
-> inner_map_id:
-> 139 
-> Found 1 element
-> ```
-
-Thanks! Please add those sample outputs to the commit description for
-v3. Can you please also add an example with JSON ("-p")?
-
-Quentin
-
+> > +		}
+> > +		old_upath = upath;
+> > +
+> > +		uprobes[i].inode = inode;
+> > +		uprobes[i].offset = offset;
+> > +		uprobes[i].ref_ctr_offset = ref_ctr_offset;
+> > +		uprobes[i].link = link;
+> > +
+> > +		if (flags & BPF_F_UPROBE_MULTI_RETURN)
+> > +			uprobes[i].consumer.ret_handler = uprobe_multi_link_ret_handler;
+> > +		else
+> > +			uprobes[i].consumer.handler = uprobe_multi_link_handler;
+> > +	}
+> > +
+> > +	link->cnt = cnt;
+> > +	link->uprobes = uprobes;
+> > +
+> > +	bpf_link_init(&link->link, BPF_LINK_TYPE_UPROBE_MULTI,
+> > +		      &bpf_uprobe_multi_link_lops, prog);
+> > +
+> > +	err = bpf_link_prime(&link->link, &link_primer);
+> > +	if (err)
+> > +		goto error;
+> > +
+> > +	for (i = 0; i < cnt; i++) {
+> > +		err = uprobe_register_refctr(uprobes[i].inode, uprobes[i].offset,
+> > +					     uprobes[i].ref_ctr_offset,
+> > +					     &uprobes[i].consumer);
