@@ -2,199 +2,151 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 185A6C77B61
-	for <bpf@archiver.kernel.org>; Tue, 25 Apr 2023 09:58:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA1D4C77B71
+	for <bpf@archiver.kernel.org>; Tue, 25 Apr 2023 10:12:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233322AbjDYJ6f (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 25 Apr 2023 05:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51466 "EHLO
+        id S233678AbjDYKMI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Apr 2023 06:12:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233169AbjDYJ6f (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 25 Apr 2023 05:58:35 -0400
-X-Greylist: delayed 336 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 25 Apr 2023 02:58:18 PDT
-Received: from ms11p00im-hyfv17291101.me.com (ms11p00im-hyfv17291101.me.com [17.58.38.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA70CC0C
-        for <bpf@vger.kernel.org>; Tue, 25 Apr 2023 02:58:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuroa.me; s=sig1;
-        t=1682416361; bh=BOZclCrFL8zwBZy00LVQJcyJUAB/39k6Slgpaa2Yfls=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=EIKOR67wtHzOc2RXSaFO9NM8zbl4/gqZ2ljixm0sHFwhri5Xbx7nfDPGtWbfTfkyg
-         2i3Oyt0eW2nfgmi3ImizkYA+oz5Z6pQJp+YyPj0piLZger0/rko7Vru5pQCiBn3lwd
-         xKb1J23Q8BgrkRsjDwgO6kyFuvS/RmexK+rJ3BFsW7LMK9PvCcezewvf5Q9F683ggl
-         lnY3wIFIST0sLeeDxwMmbpoSpg/prj0rJ0v1xktPR/n56b0Qhd7kcyTYKM7gFeS1GN
-         uRNFUBAHv4BF4dlDNM51HkR0AyQ6srIGO7L2h8c2ScoUMu37g2TSYHOdrTR4myfU43
-         CSpzzLq2hAS9A==
-Received: from localhost.localdomain (ms11p00im-dlb-asmtpmailmevip.me.com [17.57.154.19])
-        by ms11p00im-hyfv17291101.me.com (Postfix) with ESMTPSA id E0A02760171;
-        Tue, 25 Apr 2023 09:52:36 +0000 (UTC)
-From:   Xueming Feng <kuro@kuroa.me>
-To:     quentin@isovalent.com
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
-        jolsa@kernel.org, kpsingh@kernel.org, kuro@kuroa.me,
-        linux-kernel@vger.kernel.org, martin.lau@linux.dev, sdf@google.com,
-        song@kernel.org, yhs@fb.com, yhs@meta.com
-Subject: Re: [PATCH bpf-next v2] bpftool: Dump map id instead of value for map_of_maps types
-Date:   Tue, 25 Apr 2023 17:52:21 +0800
-Message-Id: <20230425095221.20805-1-kuro@kuroa.me>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
-In-Reply-To: <fa14348d-b7ce-2a0e-d0f6-387162621ae8@isovalent.com>
-References: <fa14348d-b7ce-2a0e-d0f6-387162621ae8@isovalent.com>
+        with ESMTP id S233615AbjDYKMH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 25 Apr 2023 06:12:07 -0400
+Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044CDC15B;
+        Tue, 25 Apr 2023 03:12:05 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.west.internal (Postfix) with ESMTP id 1B7DD2B0671D;
+        Tue, 25 Apr 2023 06:12:02 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Tue, 25 Apr 2023 06:12:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1682417521; x=
+        1682424721; bh=6ykmRoJ2ViKku45z63OOrhQO86nvESrAdiWG+K7bYwg=; b=c
+        TDVrrJwJKmBSLCZheZhCKbfhHj89iyuDI9vXtVPgz7Ym9svXdHwoke8YmZXCqthh
+        Dw/yM/Yh6/Jv7G+J6l6Hz8flfXI8blB1z1RdOTyprn4atgk5r/DyuW3RMbxU5w5R
+        Si1LutW9YV4Ae12xbcNxhUZ6Z0mRfVihmRIuRAt3clBMGEoo68fwSqrMZtChKUZD
+        vtUDX/Ybm48ar48ml6553kpg21Diy6e3UNUHLcKlx+Wmw0n6bt/9aNBmpO2rsJ2g
+        9jb58e80XBwgakjaHtHw/nkJ0wasVCDg+Kvn6VcIvfTlQ/NiJJyWfBkmhvmETTEj
+        zHTqFHPh2Hhe3XEIN54aw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1682417521; x=1682424721; bh=6ykmRoJ2ViKku
+        45z63OOrhQO86nvESrAdiWG+K7bYwg=; b=WJYj4cV/CB4Wt++zgV0y3XLrBW2V8
+        IdDYNBmyW2TZ1BrHyTSM9xB23HAFhIxnRPIIfMUl4cwi3LitMeI4niSUQDfl9LDx
+        OPYbWpYhJlZmJg03JnqcJmvWCtPqpqA/6HouMN/xIHvYuPM5P5dx0vYavhlOn8Tm
+        5LsAwNBieltv76YqxmRogvh50Xm6vyEAdzjio6lCgUIoZsNnqvgWFgioK8zPaaKw
+        hMhwsBKgdekr/gn033pJNRMzyaELXGIdSWOA4MneADwWnj/xsxdsheSx2jvrh+oG
+        UnZN4Re0NkR2JE7gRX8TD+r9w+ApJAQWuqc3dDXd9mB2rjvlwdtOVKDMw==
+X-ME-Sender: <xms:badHZHZYeUEJENgpRE-Mpgrt1Kvgbk2MbTmcyCjfaBtU_2hp4c4IQA>
+    <xme:badHZGbK4g4wsD9GCgR3WiRiO_Iia6kZTZANxPHNHZF7XueO7yYEp0ernSM95mBun
+    XnNqO-UuaPRKcTMugA>
+X-ME-Received: <xmr:badHZJ8p0BmVMjsWocvSADfdKF8pvgWXCejORpFkadjfYUkLpzXhOisfhMbwrbdPYMUaVw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeduvddgvdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutecurdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrd
+    hnrghmvgeqnecuggftrfgrthhtvghrnhepgfdtveeugeethfffffeklefgkeelgfekfedt
+    heeileetuefhkeefleduvddtkeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:badHZNr-fYgDaMsdl0i06VFTXfz4uwQu1qn-h1U2NkURVghgIOZnjA>
+    <xmx:badHZCoj2YlNzXGd--O7PUdLSPYnUr9pSyEqOofDPvkdLLGnyL_tTA>
+    <xmx:badHZDRRqh6NXkdKb-2c7-BTlI6SRGXQ9rU1uFuPtofbAfFpt2ZXzQ>
+    <xmx:cadHZPqdozY9VQMi-DJd91YwjAyNau4zQj66k-gSVvDIlBKXdE7pyUOlFp8>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 25 Apr 2023 06:11:57 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id F3F9D10BAC9; Tue, 25 Apr 2023 13:11:53 +0300 (+03)
+Date:   Tue, 25 Apr 2023 13:11:53 +0300
+From:   "Kirill A . Shutemov" <kirill@shutemov.name>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Subject: Re: [PATCH v3] mm/gup: disallow GUP writing to file-backed mappings
+ by default
+Message-ID: <20230425101153.xxi4arpwkz7ijnvm@box.shutemov.name>
+References: <23c19e27ef0745f6d3125976e047ee0da62569d4.1682406295.git.lstoakes@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: yvZ7oYU2RTPiIdpNNoooZvCjqegvm5QH
-X-Proofpoint-ORIG-GUID: yvZ7oYU2RTPiIdpNNoooZvCjqegvm5QH
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.425,18.0.572,17.11.62.513.0000000_definitions?=
- =?UTF-8?Q?=3D2022-01-14=5F01:2022-01-14=5F01,2020-02-14=5F11,2021-12-02?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 spamscore=0
- clxscore=1030 malwarescore=0 mlxlogscore=781 phishscore=0 suspectscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2304250088
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <23c19e27ef0745f6d3125976e047ee0da62569d4.1682406295.git.lstoakes@gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
->2023-04-25 14:37 UTC+0800 ~ Xueming Feng <kuro@kuroa.me>
->>> On 4/24/23 9:10 PM, Xueming Feng wrote:
->>>>> On 4/24/23 2:09 AM, Xueming Feng wrote:
->>>>>> When using `bpftool map dump` in plain format, it is usually
->>>>>> more convenient to show the inner map id instead of raw value.
->>>>>> Changing this behavior would help with quick debugging with
->>>>>> `bpftool`, without disrupting scripted behavior. Since user
->>>>>> could dump the inner map with id, and need to convert value.
->>>>>>
->>>>>> Signed-off-by: Xueming Feng <kuro@kuroa.me>
->>>>>> ---
->>>>>> Changes in v2:
->>>>>>     - Fix commit message grammar.
->>>>>> 	- Change `print_uint` to only print to stdout, make `arg` const, and rename
->>>>>> 	  `n` to `arg_size`.
->>>>>>     - Make `print_uint` able to take any size of argument up to `unsigned long`,
->>>>>> 		and print it as unsigned decimal.
->>>>>>
->>>>>> Thanks for the review and suggestions! I have changed my patch accordingly.
->>>>>> There is a possibility that `arg_size` is larger than `unsigned long`,
->>>>>> but previous review suggested that it should be up to the caller function to
->>>>>> set `arg_size` correctly. So I didn't add check for that, should I?
->>>>>>
->>>>>>    tools/bpf/bpftool/main.c | 15 +++++++++++++++
->>>>>>    tools/bpf/bpftool/main.h |  1 +
->>>>>>    tools/bpf/bpftool/map.c  |  9 +++++++--
->>>>>>    3 files changed, 23 insertions(+), 2 deletions(-)
->>>>>>
->>>>>> diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
->>>>>> index 08d0ac543c67..810c0dc10ecb 100644
->>>>>> --- a/tools/bpf/bpftool/main.c
->>>>>> +++ b/tools/bpf/bpftool/main.c
->>>>>> @@ -251,6 +251,21 @@ int detect_common_prefix(const char *arg, ...)
->>>>>>    	return 0;
->>>>>>    }
->>>>>>    
->>>>>> +void print_uint(const void *arg, unsigned int arg_size)
->>>>>> +{
->>>>>> +	const unsigned char *data = arg;
->>>>>> +	unsigned long val = 0ul;
->>>>>> +
->>>>>> +	#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
->>>>>> +		memcpy(&val, data, arg_size);
->>>>>> +	#else
->>>>>> +		memcpy((unsigned char *)&val + sizeof(val) - arg_size,
->>>>>> +		       data, arg_size);
->>>>>> +	#endif
->>>>>> +
->>>>>> +	fprintf(stdout, "%lu", val);
->>>>>> +}
->>>>>> +
->>>>>>    void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep)
->>>>>>    {
->>>>>>    	unsigned char *data = arg;
->>>>>> diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
->>>>>> index 0ef373cef4c7..0de671423431 100644
->>>>>> --- a/tools/bpf/bpftool/main.h
->>>>>> +++ b/tools/bpf/bpftool/main.h
->>>>>> @@ -90,6 +90,7 @@ void __printf(1, 2) p_info(const char *fmt, ...);
->>>>>>    
->>>>>>    bool is_prefix(const char *pfx, const char *str);
->>>>>>    int detect_common_prefix(const char *arg, ...);
->>>>>> +void print_uint(const void *arg, unsigned int arg_size);
->>>>>>    void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep);
->>>>>>    void usage(void) __noreturn;
->>>>>>    
->>>>>> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
->>>>>> index aaeb8939e137..f5be4c0564cf 100644
->>>>>> --- a/tools/bpf/bpftool/map.c
->>>>>> +++ b/tools/bpf/bpftool/map.c
->>>>>> @@ -259,8 +259,13 @@ static void print_entry_plain(struct bpf_map_info *info, unsigned char *key,
->>>>>>    		}
->>>>>>    
->>>>>>    		if (info->value_size) {
->>>>>> -			printf("value:%c", break_names ? '\n' : ' ');
->>>>>> -			fprint_hex(stdout, value, info->value_size, " ");
->>>>>> +			if (map_is_map_of_maps(info->type)) {
->>>>>> +				printf("id:%c", break_names ? '\n' : ' ');
->>>>> 1> +				print_uint(value, info->value_size);
->>>>
->>>> On Mon, 24 Apr 2023 18:07:27 -0700, Yonghong Song wrote:
->>>>> For all map_in_map types, the inner map value size is 32bit int which
->>>>> represents a fd (for map creation) and a id (for map info), e.g., in
->>>>> show_prog_maps() in prog.c. So maybe we can simplify the code as below:
->>>>> 	printf("id: %u", *(unsigned int *)value);
->>>>
->>>> That is true, maybe the "id" could also be changed to "map_id" to follow the
->>>> convention. Do you think that `print_uint` could be useful in the future?
->>>> If that is the case, should I keep using it here as an example usage, and to
->>>> avoid dead code? Or should I just remove it?
+On Tue, Apr 25, 2023 at 08:14:14AM +0100, Lorenzo Stoakes wrote:
+> GUP does not correctly implement write-notify semantics, nor does it
+> guarantee that the underlying pages are correctly dirtied, which could lead
+> to a kernel oops or data corruption when writing to file-backed mappings.
+> 
+> This is only relevant when the mappings are file-backed and the underlying
+> file system requires folio dirty tracking. File systems which do not, such
+> as shmem or hugetlb, are not at risk and therefore can be written to
+> without issue.
+> 
+> Unfortunately this limitation of GUP has been present for some time and
+> requires future rework of the GUP API in order to provide correct write
+> access to such mappings.
+> 
+> In the meantime, we add a check for the most broken GUP case -
+> FOLL_LONGTERM - which really under no circumstances can safely access
+> dirty-tracked file mappings.
+> 
+> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> ---
+> v3:
+> - Rebased on latest mm-unstable as of 24th April 2023.
+> - Explicitly check whether file system requires folio dirtying. Note that
+>   vma_wants_writenotify() could not be used directly as it is very much focused
+>   on determining if the PTE r/w should be set (e.g. assuming private mapping
+>   does not require it as already set, soft dirty considerations).
 
-On Tue, 25 Apr 2023 09:57:17 +0100, Quentin Monnet wrote:
-> This makes me think we could also have something similar for prog_array
-> maps (but not necessarily as part of your patchset).
+Hm. Okay. Have you considered having a common base for your case and
+vma_wants_writenotify()? Code duplication doesn't look good.
 
-Good idea, will take a look at that after finishing v3 patch, and possibly
-make a separate patch for it. (This is my first time contributing, better keep 
-it simple).
 
->> On Mon, 24 Apr 2023 22:58:10 -0700, Yonghong Song wrote:
->>> Maybe, "inner_map_id" is a better choice. For array of maps, some array 
->>> element value could be 0, implying "inner_map_id 0", but I think it is
->>> okay, people should know a real inner_map_id (or any map_id) should 
->>> never be 0.
->>>
->>> Function "print_uint" is not needed any more. Please remove it.
->> 
->> Will reflect this in v3.
->> 
->>>
->>> Please add the command line to dump map values triggering the above 
->>> change, also the actual dumps with and without this patch.
->> 
->> $ bpftool map dump id 138
->> Without patch:
->> ```
->> key:
->> fc 00 00 00 00 00 00 00  00 00 00 00 00 00 00 05
->> 27 16 06 00
->> value:
->> 8b 00 00 00
->> Found 1 element
->> ```
->> With patch:
->> ```
->> key:
->> fc 00 00 00 00 00 00 00  00 00 00 00 00 00 00 05
->> 27 16 06 00
->> inner_map_id:
->> 139 
->> Found 1 element
->> ```
-
-> Thanks! Please add those sample outputs to the commit description for
-> v3. Can you please also add an example with JSON ("-p")?
-
-Sure, will add them in v3! About json output, they are currently not touched
-to avoid breaking scripts. I will add inner_map_id as a new field in v3 like the 
-following patch.
-https://lore.kernel.org/bpf/20230419003651.988865-1-kuifeng@meta.com/
-
-> Quentin
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
