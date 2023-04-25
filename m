@@ -2,365 +2,591 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 079D9C77B7C
-	for <bpf@archiver.kernel.org>; Tue, 25 Apr 2023 23:52:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56EAAC77B7C
+	for <bpf@archiver.kernel.org>; Tue, 25 Apr 2023 23:55:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237254AbjDYXw3 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 25 Apr 2023 19:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33112 "EHLO
+        id S237475AbjDYXz3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Apr 2023 19:55:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237251AbjDYXw2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 25 Apr 2023 19:52:28 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931CEC15F
-        for <bpf@vger.kernel.org>; Tue, 25 Apr 2023 16:52:26 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33PLESC1028401
-        for <bpf@vger.kernel.org>; Tue, 25 Apr 2023 16:52:25 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3q6ek7mr4t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 25 Apr 2023 16:52:25 -0700
-Received: from twshared7331.15.prn3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 25 Apr 2023 16:52:23 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id F00D32F2D8358; Tue, 25 Apr 2023 16:49:22 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@kernel.org>
-CC:     <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next 04/10] bpf: improve precision backtrack logging
-Date:   Tue, 25 Apr 2023 16:49:05 -0700
-Message-ID: <20230425234911.2113352-5-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230425234911.2113352-1-andrii@kernel.org>
-References: <20230425234911.2113352-1-andrii@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: itrzFXlpRtgrEyXw_dHpvfwlENqPzP5H
-X-Proofpoint-GUID: itrzFXlpRtgrEyXw_dHpvfwlENqPzP5H
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-25_10,2023-04-25_01,2023-02-09_01
+        with ESMTP id S237472AbjDYXz2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 25 Apr 2023 19:55:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91994B230;
+        Tue, 25 Apr 2023 16:55:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9A216312B;
+        Tue, 25 Apr 2023 23:55:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46E59C433D2;
+        Tue, 25 Apr 2023 23:55:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682466924;
+        bh=gjPdQcuEwZc+vEhO/bTWc5N9Re+GOhxfS2W3G7tLVyo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mXj9JQbwkOUDaAf6cX5imWQv7PnFgLx4lvIKpzA9e/c7dnr0RUG8gwiuO3W5tyhXI
+         mixL1f0KN2txkuV7Cvwr0/uggC3Nt+EKTTRXZGErzllamatIC+3GYVVMoDCioxW/cr
+         bLEA1n1TwIEB9ywzvGjl/BM4tpxIMuUC3UCB3vhAMN1tBK9IRhwDfV9k4FmPg5Pz90
+         bkGCAgH5+6n51K1rrqqmXFPWzZ285BJOXhRpx8tWjqr6wwjM9fxSXXop6gK4XNpjX8
+         GVva8CybchhT6OhpZq8sazJSZliA98XnjwkqjB378kEZXbPpxcdFMrkixlJGbDav8f
+         Ti8UDCcx2UKEQ==
+Date:   Wed, 26 Apr 2023 08:55:20 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Florent Revest <revest@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
+Subject: Re: [PATCH v6 06/10] tracing/probes: Support function parameters if
+ BTF is available
+Message-Id: <20230426085520.aaba1aea38de253ff3dbd59e@kernel.org>
+In-Reply-To: <d75c3720-29f5-5e83-f5dc-cbdde75a4e82@oracle.com>
+References: <168234755610.2210510.12133559313738141202.stgit@mhiramat.roam.corp.google.com>
+        <168234761528.2210510.7129186956547286829.stgit@mhiramat.roam.corp.google.com>
+        <d75c3720-29f5-5e83-f5dc-cbdde75a4e82@oracle.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add helper to format register and stack masks in more human-readable
-format. Adjust logging a bit during backtrack propagation and especially
-during forcing precision fallback logic to make it clearer what's going
-on (with log_level=2, of course), and also start reporting affected
-frame depth. This is in preparation for having more than one active
-frame later when precision propagation between subprog calls is added.
+On Tue, 25 Apr 2023 17:35:34 +0100
+Alan Maguire <alan.maguire@oracle.com> wrote:
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- include/linux/bpf_verifier.h                  |  13 ++-
- kernel/bpf/verifier.c                         |  72 ++++++++++--
- .../testing/selftests/bpf/verifier/precise.c  | 106 +++++++++---------
- 3 files changed, 128 insertions(+), 63 deletions(-)
+> On 24/04/2023 15:46, Masami Hiramatsu (Google) wrote:
+> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > Support function or tracepoint parameters by name if BTF support is enabled
+> > and the event is for function entry (this feature can be used with kprobe-
+> > events, fprobe-events and tracepoint probe events.)
+> > 
+> > Note that the BTF variable syntax does not require a prefix. If it starts
+> > with an alphabetic character or an underscore ('_') without a prefix like
+> > '$' and '%', it is considered as a BTF variable.
+> > If you specify only the BTF variable name, the argument name will also
+> > be the same name instead of 'arg*'.
+> > 
+> >  # echo 'p vfs_read count pos' >> dynamic_events
+> >  # echo 'f vfs_write count pos' >> dynamic_events
+> >  # echo 't sched_overutilized_tp rd overutilized' >> dynamic_events
+> >  # cat dynamic_events
+> > p:kprobes/p_vfs_read_0 vfs_read count=count pos=pos
+> > f:fprobes/vfs_write__entry vfs_write count=count pos=pos
+> > t:tracepoints/sched_overutilized_tp sched_overutilized_tp rd=rd overutilized=overutilized
+> > 
+> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> A few small things below, but
+> 
+> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+> 
+> Feel free to add a
+> 
+> Tested-by: Alan Maguire <alan.maguire@oracle.com>
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 185bfaf0ec6b..0ca367e13dd8 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -18,8 +18,11 @@
-  * that converting umax_value to int cannot overflow.
-  */
- #define BPF_MAX_VAR_SIZ	(1 << 29)
--/* size of type_str_buf in bpf_verifier. */
--#define TYPE_STR_BUF_LEN 128
-+/* size of tmp_str_buf in bpf_verifier.
-+ * we need at least 306 bytes to fit full stack mask representation
-+ * (in the "-8,-16,...,-512" form)
-+ */
-+#define TMP_STR_BUF_LEN 320
- 
- /* Liveness marks, used for registers and spilled-regs (in stack slots).
-  * Read marks propagate upwards until they find a write mark; they record that
-@@ -621,8 +624,10 @@ struct bpf_verifier_env {
- 	/* Same as scratched_regs but for stack slots */
- 	u64 scratched_stack_slots;
- 	u64 prev_log_pos, prev_insn_print_pos;
--	/* buffer used in reg_type_str() to generate reg_type string */
--	char type_str_buf[TYPE_STR_BUF_LEN];
-+	/* buffer used to generate temporary string representations,
-+	 * e.g., in reg_type_str() to generate reg_type string
-+	 */
-+	char tmp_str_buf[TMP_STR_BUF_LEN];
- };
- 
- __printf(2, 0) void bpf_verifier_vlog(struct bpf_verifier_log *log,
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 1cb89fe00507..8faf9170acf0 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -604,9 +604,9 @@ static const char *reg_type_str(struct bpf_verifier_env *env,
- 		 type & PTR_TRUSTED ? "trusted_" : ""
- 	);
- 
--	snprintf(env->type_str_buf, TYPE_STR_BUF_LEN, "%s%s%s",
-+	snprintf(env->tmp_str_buf, TMP_STR_BUF_LEN, "%s%s%s",
- 		 prefix, str[base_type(type)], postfix);
--	return env->type_str_buf;
-+	return env->tmp_str_buf;
- }
- 
- static char slot_type_char[] = {
-@@ -3275,6 +3275,45 @@ static inline bool bt_is_slot_set(struct backtrack_state *bt, u32 slot)
- 	return bt->stack_masks[bt->frame] & (1ull << slot);
- }
- 
-+/* format registers bitmask, e.g., "r0,r2,r4" for 0x15 mask */
-+static void fmt_reg_mask(char *buf, ssize_t buf_sz, u32 reg_mask)
-+{
-+	DECLARE_BITMAP(mask, 64);
-+	bool first = true;
-+	int i, n;
-+
-+	buf[0] = '\0';
-+
-+	bitmap_from_u64(mask, reg_mask);
-+	for_each_set_bit(i, mask, 32) {
-+		n = snprintf(buf, buf_sz, "%sr%d", first ? "" : ",", i);
-+		first = false;
-+		buf += n;
-+		buf_sz -= n;
-+		if (buf_sz < 0)
-+			break;
-+	}
-+}
-+/* format stack slots bitmask, e.g., "-8,-24,-40" for 0x15 mask */
-+static void fmt_stack_mask(char *buf, ssize_t buf_sz, u64 stack_mask)
-+{
-+	DECLARE_BITMAP(mask, 64);
-+	bool first = true;
-+	int i, n;
-+
-+	buf[0] = '\0';
-+
-+	bitmap_from_u64(mask, stack_mask);
-+	for_each_set_bit(i, mask, 64) {
-+		n = snprintf(buf, buf_sz, "%s%d", first ? "" : ",", -(i + 1) * 8);
-+		first = false;
-+		buf += n;
-+		buf_sz -= n;
-+		if (buf_sz < 0)
-+			break;
-+	}
-+}
-+
- /* For given verifier state backtrack_insn() is called from the last insn to
-  * the first insn. Its purpose is to compute a bitmask of registers and
-  * stack slots that needs precision in the parent verifier state.
-@@ -3298,7 +3337,11 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx,
- 	if (insn->code == 0)
- 		return 0;
- 	if (env->log.level & BPF_LOG_LEVEL2) {
--		verbose(env, "regs=%x stack=%llx before ", bt_reg_mask(bt), bt_stack_mask(bt));
-+		fmt_reg_mask(env->tmp_str_buf, TMP_STR_BUF_LEN, bt_reg_mask(bt));
-+		verbose(env, "mark_precise: frame%d: regs(0x%x)=%s ",
-+			bt->frame, bt_reg_mask(bt), env->tmp_str_buf);
-+		fmt_stack_mask(env->tmp_str_buf, TMP_STR_BUF_LEN, bt_stack_mask(bt));
-+		verbose(env, "stack(0x%llx)=%s before ", bt_stack_mask(bt), env->tmp_str_buf);
- 		verbose(env, "%d: ", idx);
- 		print_bpf_insn(&cbs, insn, env->allow_ptr_leaks);
- 	}
-@@ -3498,6 +3541,11 @@ static void mark_all_scalars_precise(struct bpf_verifier_env *env,
- 	struct bpf_reg_state *reg;
- 	int i, j;
- 
-+	if (env->log.level & BPF_LOG_LEVEL2) {
-+		verbose(env, "mark_precise: frame%d: falling back to forcing all scalars precise\n",
-+			st->curframe);
-+	}
-+
- 	/* big hammer: mark all scalars precise in this path.
- 	 * pop_stack may still get !precise scalars.
- 	 * We also skip current state and go straight to first parent state,
-@@ -3509,17 +3557,25 @@ static void mark_all_scalars_precise(struct bpf_verifier_env *env,
- 			func = st->frame[i];
- 			for (j = 0; j < BPF_REG_FP; j++) {
- 				reg = &func->regs[j];
--				if (reg->type != SCALAR_VALUE)
-+				if (reg->type != SCALAR_VALUE || reg->precise)
- 					continue;
- 				reg->precise = true;
-+				if (env->log.level & BPF_LOG_LEVEL2) {
-+					verbose(env, "force_precise: frame%d: forcing r%d to be precise\n",
-+						i, j);
-+				}
- 			}
- 			for (j = 0; j < func->allocated_stack / BPF_REG_SIZE; j++) {
- 				if (!is_spilled_reg(&func->stack[j]))
- 					continue;
- 				reg = &func->stack[j].spilled_ptr;
--				if (reg->type != SCALAR_VALUE)
-+				if (reg->type != SCALAR_VALUE || reg->precise)
- 					continue;
- 				reg->precise = true;
-+				if (env->log.level & BPF_LOG_LEVEL2) {
-+					verbose(env, "force_precise: frame%d: forcing fp%d to be precise\n",
-+						i, -(j + 1) * 8);
-+				}
- 			}
- 		}
- 	}
-@@ -3683,8 +3739,10 @@ static int __mark_chain_precision(struct bpf_verifier_env *env, int frame, int r
- 		DECLARE_BITMAP(mask, 64);
- 		u32 history = st->jmp_history_cnt;
- 
--		if (env->log.level & BPF_LOG_LEVEL2)
--			verbose(env, "last_idx %d first_idx %d\n", last_idx, first_idx);
-+		if (env->log.level & BPF_LOG_LEVEL2) {
-+			verbose(env, "mark_precise: frame%d: last_idx %d first_idx %d\n",
-+				bt->frame, last_idx, first_idx);
-+		}
- 
- 		if (last_idx < 0) {
- 			/* we are at the entry into subprog, which
-diff --git a/tools/testing/selftests/bpf/verifier/precise.c b/tools/testing/selftests/bpf/verifier/precise.c
-index 6c03a7d805f9..fce831667b06 100644
---- a/tools/testing/selftests/bpf/verifier/precise.c
-+++ b/tools/testing/selftests/bpf/verifier/precise.c
-@@ -38,25 +38,24 @@
- 	.fixup_map_array_48b = { 1 },
- 	.result = VERBOSE_ACCEPT,
- 	.errstr =
--	"26: (85) call bpf_probe_read_kernel#113\
--	last_idx 26 first_idx 20\
--	regs=4 stack=0 before 25\
--	regs=4 stack=0 before 24\
--	regs=4 stack=0 before 23\
--	regs=4 stack=0 before 22\
--	regs=4 stack=0 before 20\
--	parent didn't have regs=4 stack=0 marks\
--	last_idx 19 first_idx 10\
--	regs=4 stack=0 before 19\
--	regs=200 stack=0 before 18\
--	regs=300 stack=0 before 17\
--	regs=201 stack=0 before 15\
--	regs=201 stack=0 before 14\
--	regs=200 stack=0 before 13\
--	regs=200 stack=0 before 12\
--	regs=200 stack=0 before 11\
--	regs=200 stack=0 before 10\
--	parent already had regs=0 stack=0 marks",
-+	"mark_precise: frame0: last_idx 26 first_idx 20\
-+	mark_precise: frame0: regs(0x4)=r2 stack(0x0)= before 25\
-+	mark_precise: frame0: regs(0x4)=r2 stack(0x0)= before 24\
-+	mark_precise: frame0: regs(0x4)=r2 stack(0x0)= before 23\
-+	mark_precise: frame0: regs(0x4)=r2 stack(0x0)= before 22\
-+	mark_precise: frame0: regs(0x4)=r2 stack(0x0)= before 20\
-+	parent didn't have regs=4 stack=0 marks:\
-+	mark_precise: frame0: last_idx 19 first_idx 10\
-+	mark_precise: frame0: regs(0x4)=r2 stack(0x0)= before 19\
-+	mark_precise: frame0: regs(0x200)=r9 stack(0x0)= before 18\
-+	mark_precise: frame0: regs(0x300)=r8,r9 stack(0x0)= before 17\
-+	mark_precise: frame0: regs(0x201)=r0,r9 stack(0x0)= before 15\
-+	mark_precise: frame0: regs(0x201)=r0,r9 stack(0x0)= before 14\
-+	mark_precise: frame0: regs(0x200)=r9 stack(0x0)= before 13\
-+	mark_precise: frame0: regs(0x200)=r9 stack(0x0)= before 12\
-+	mark_precise: frame0: regs(0x200)=r9 stack(0x0)= before 11\
-+	mark_precise: frame0: regs(0x200)=r9 stack(0x0)= before 10\
-+	parent already had regs=0 stack=0 marks:",
- },
- {
- 	"precise: test 2",
-@@ -100,20 +99,20 @@
- 	.flags = BPF_F_TEST_STATE_FREQ,
- 	.errstr =
- 	"26: (85) call bpf_probe_read_kernel#113\
--	last_idx 26 first_idx 22\
--	regs=4 stack=0 before 25\
--	regs=4 stack=0 before 24\
--	regs=4 stack=0 before 23\
--	regs=4 stack=0 before 22\
--	parent didn't have regs=4 stack=0 marks\
--	last_idx 20 first_idx 20\
--	regs=4 stack=0 before 20\
--	parent didn't have regs=4 stack=0 marks\
--	last_idx 19 first_idx 17\
--	regs=4 stack=0 before 19\
--	regs=200 stack=0 before 18\
--	regs=300 stack=0 before 17\
--	parent already had regs=0 stack=0 marks",
-+	mark_precise: frame0: last_idx 26 first_idx 22\
-+	mark_precise: frame0: regs(0x4)=r2 stack(0x0)= before 25\
-+	mark_precise: frame0: regs(0x4)=r2 stack(0x0)= before 24\
-+	mark_precise: frame0: regs(0x4)=r2 stack(0x0)= before 23\
-+	mark_precise: frame0: regs(0x4)=r2 stack(0x0)= before 22\
-+	parent didn't have regs=4 stack=0 marks:\
-+	mark_precise: frame0: last_idx 20 first_idx 20\
-+	mark_precise: frame0: regs(0x4)=r2 stack(0x0)= before 20\
-+	parent didn't have regs=4 stack=0 marks:\
-+	mark_precise: frame0: last_idx 19 first_idx 17\
-+	mark_precise: frame0: regs(0x4)=r2 stack(0x0)= before 19\
-+	mark_precise: frame0: regs(0x200)=r9 stack(0x0)= before 18\
-+	mark_precise: frame0: regs(0x300)=r8,r9 stack(0x0)= before 17\
-+	parent already had regs=0 stack=0 marks:",
- },
- {
- 	"precise: cross frame pruning",
-@@ -153,15 +152,15 @@
- 	},
- 	.prog_type = BPF_PROG_TYPE_XDP,
- 	.flags = BPF_F_TEST_STATE_FREQ,
--	.errstr = "5: (2d) if r4 > r0 goto pc+0\
--	last_idx 5 first_idx 5\
--	parent didn't have regs=10 stack=0 marks\
--	last_idx 4 first_idx 2\
--	regs=10 stack=0 before 4\
--	regs=10 stack=0 before 3\
--	regs=0 stack=1 before 2\
--	last_idx 5 first_idx 5\
--	parent didn't have regs=1 stack=0 marks",
-+	.errstr = "mark_precise: frame0: last_idx 5 first_idx 5\
-+	parent didn't have regs=10 stack=0 marks:\
-+	mark_precise: frame0: last_idx 4 first_idx 2\
-+	mark_precise: frame0: regs(0x10)=r4 stack(0x0)= before 4\
-+	mark_precise: frame0: regs(0x10)=r4 stack(0x0)= before 3\
-+	mark_precise: frame0: regs(0x0)= stack(0x1)=-8 before 2\
-+	mark_precise: frame0: falling back to forcing all scalars precise\
-+	mark_precise: frame0: last_idx 5 first_idx 5\
-+	parent didn't have regs=1 stack=0 marks:",
- 	.result = VERBOSE_ACCEPT,
- 	.retval = -1,
- },
-@@ -179,16 +178,19 @@
- 	},
- 	.prog_type = BPF_PROG_TYPE_XDP,
- 	.flags = BPF_F_TEST_STATE_FREQ,
--	.errstr = "last_idx 6 first_idx 6\
--	parent didn't have regs=10 stack=0 marks\
--	last_idx 5 first_idx 3\
--	regs=10 stack=0 before 5\
--	regs=10 stack=0 before 4\
--	regs=0 stack=1 before 3\
--	last_idx 6 first_idx 6\
--	parent didn't have regs=1 stack=0 marks\
--	last_idx 5 first_idx 3\
--	regs=1 stack=0 before 5",
-+	.errstr = "mark_precise: frame0: last_idx 6 first_idx 6\
-+	parent didn't have regs=10 stack=0 marks:\
-+	mark_precise: frame0: last_idx 5 first_idx 3\
-+	mark_precise: frame0: regs(0x10)=r4 stack(0x0)= before 5\
-+	mark_precise: frame0: regs(0x10)=r4 stack(0x0)= before 4\
-+	mark_precise: frame0: regs(0x0)= stack(0x1)=-8 before 3\
-+	mark_precise: frame0: falling back to forcing all scalars precise\
-+	force_precise: frame0: forcing r0 to be precise\
-+	force_precise: frame0: forcing r0 to be precise\
-+	mark_precise: frame0: last_idx 6 first_idx 6\
-+	parent didn't have regs=1 stack=0 marks:\
-+	mark_precise: frame0: last_idx 5 first_idx 3\
-+	mark_precise: frame0: regs(0x1)=r0 stack(0x0)= before 5",
- 	.result = VERBOSE_ACCEPT,
- 	.retval = -1,
- },
+Thank you for the review! let me see.
+
+> 
+> ...for the series (tested on x86_64; also built on
+> aarch64 but because of (I presume) lack of 
+> DYNAMIC_FTRACE_WITH_REGS, CONFIG_FPROBE could not
+> be selected there.
+> 
+> > ---
+> > Changes in v6:
+> >  - update patch description.
+> >  - use bpf_get_btf_vmlinux() instead of btf_parse_vmlinux().
+> > ---
+> >  kernel/trace/Kconfig        |   11 +++
+> >  kernel/trace/trace.c        |    4 +
+> >  kernel/trace/trace_fprobe.c |   49 +++++++----
+> >  kernel/trace/trace_kprobe.c |   12 +--
+> >  kernel/trace/trace_probe.c  |  184 +++++++++++++++++++++++++++++++++++++++++++
+> >  kernel/trace/trace_probe.h  |    9 ++
+> >  6 files changed, 240 insertions(+), 29 deletions(-)
+> > 
+> > diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+> > index 8e10a9453c96..e2b415b9fcd4 100644
+> > --- a/kernel/trace/Kconfig
+> > +++ b/kernel/trace/Kconfig
+> > @@ -664,6 +664,17 @@ config FPROBE_EVENTS
+> >  	  and the kprobe events on function entry and exit will be
+> >  	  transparently converted to this fprobe events.
+> >  
+> > +config PROBE_EVENTS_BTF_ARGS
+> > +	depends on HAVE_FUNCTION_ARG_ACCESS_API
+> > +	depends on FPROBE_EVENTS || KPROBE_EVENTS
+> > +	depends on DEBUG_INFO_BTF && BPF_SYSCALL
+> > +	bool "Support BTF function arguments for probe events"
+> > +	default y
+> > +	help
+> > +	  The user can specify the arguments of the probe event using the names
+> > +	  of the arguments of the probed function. This feature only works if
+> > +	  the probe location is a kernel function entry or a tracepoint.
+> > +
+> >  config KPROBE_EVENTS
+> >  	depends on KPROBES
+> >  	depends on HAVE_REGS_AND_STACK_ACCESS_API
+> > diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> > index 9da9c979faa3..0d9c48197a5c 100644
+> > --- a/kernel/trace/trace.c
+> > +++ b/kernel/trace/trace.c
+> > @@ -5670,7 +5670,11 @@ static const char readme_msg[] =
+> >  	"\t     args: <name>=fetcharg[:type]\n"
+> >  	"\t fetcharg: (%<register>|$<efield>), @<address>, @<symbol>[+|-<offset>],\n"
+> >  #ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
+> > +#ifdef CONFIG_PROBE_EVENTS_BTF_ARGS
+> > +	"\t           $stack<index>, $stack, $retval, $comm, $arg<N>, <argname>\n"
+> > +#else
+> >  	"\t           $stack<index>, $stack, $retval, $comm, $arg<N>,\n"
+> > +#endif
+> >  #else
+> >  	"\t           $stack<index>, $stack, $retval, $comm,\n"
+> >  #endif
+> > diff --git a/kernel/trace/trace_fprobe.c b/kernel/trace/trace_fprobe.c
+> > index 1dba45dfd234..a34081113fa8 100644
+> > --- a/kernel/trace/trace_fprobe.c
+> > +++ b/kernel/trace/trace_fprobe.c
+> > @@ -367,6 +367,7 @@ static void free_trace_fprobe(struct trace_fprobe *tf)
+> >  static struct trace_fprobe *alloc_trace_fprobe(const char *group,
+> >  					       const char *event,
+> >  					       const char *symbol,
+> > +					       struct tracepoint *tpoint,
+> >  					       int maxactive,
+> >  					       int nargs, bool is_return)
+> >  {
+> > @@ -386,6 +387,7 @@ static struct trace_fprobe *alloc_trace_fprobe(const char *group,
+> >  	else
+> >  		tf->fp.entry_handler = fentry_dispatcher;
+> >  
+> > +	tf->tpoint = tpoint;
+> >  	tf->fp.nr_maxactive = maxactive;
+> >  
+> >  	ret = trace_probe_init(&tf->tp, event, group, false);
+> > @@ -929,8 +931,12 @@ static int __trace_fprobe_create(int argc, const char *argv[])
+> >  	int maxactive = 0;
+> >  	char buf[MAX_EVENT_NAME_LEN];
+> >  	char gbuf[MAX_EVENT_NAME_LEN];
+> > -	unsigned int flags = TPARG_FL_KERNEL;
+> > +	char sbuf[KSYM_NAME_LEN];
+> >  	bool is_tracepoint = false;
+> > +	struct tracepoint *tpoint = NULL;
+> > +	struct traceprobe_parse_context ctx = {
+> > +		.flags = TPARG_FL_KERNEL | TPARG_FL_FENTRY,
+> > +	};
+> >  
+> >  	if ((argv[0][0] != 'f' && argv[0][0] != 't') || argc < 2)
+> >  		return -ECANCELED;
+> > @@ -994,12 +1000,6 @@ static int __trace_fprobe_create(int argc, const char *argv[])
+> >  		goto parse_error;
+> >  	}
+> >  
+> > -	flags |= TPARG_FL_FENTRY;
+> > -	if (is_return)
+> > -		flags |= TPARG_FL_RETURN;
+> > -	if (is_tracepoint)
+> > -		flags |= TPARG_FL_TPOINT;
+> > -
+> >  	trace_probe_log_set_index(0);
+> >  	if (event) {
+> >  		ret = traceprobe_parse_event_name(&event, &group, gbuf,
+> > @@ -1011,7 +1011,8 @@ static int __trace_fprobe_create(int argc, const char *argv[])
+> >  	if (!event) {
+> >  		/* Make a new event name */
+> >  		if (is_tracepoint)
+> > -			strscpy(buf, symbol, MAX_EVENT_NAME_LEN);
+> > +			snprintf(buf, MAX_EVENT_NAME_LEN, "%s%s",
+> > +				 isdigit(*symbol) ? "_" : "", symbol);
+> >  		else
+> >  			snprintf(buf, MAX_EVENT_NAME_LEN, "%s__%s", symbol,
+> >  				 is_return ? "exit" : "entry");
+> > @@ -1019,8 +1020,25 @@ static int __trace_fprobe_create(int argc, const char *argv[])
+> >  		event = buf;
+> >  	}
+> >  
+> > +	if (is_return)
+> > +		ctx.flags |= TPARG_FL_RETURN;
+> > +
+> > +	if (is_tracepoint) {
+> > +		ctx.flags |= TPARG_FL_TPOINT;
+> > +		tpoint = find_tracepoint(symbol);
+> > +		if (!tpoint) {
+> > +			trace_probe_log_set_index(1);
+> > +			trace_probe_log_err(0, NO_TRACEPOINT);
+> > +			goto parse_error;
+> > +		}
+> > +		ctx.funcname = kallsyms_lookup(
+> > +				(unsigned long)tpoint->probestub,
+> > +				NULL, NULL, NULL, sbuf);
+> > +	} else
+> > +		ctx.funcname = symbol;
+> > +
+> >  	/* setup a probe */
+> > -	tf = alloc_trace_fprobe(group, event, symbol, maxactive,
+> > +	tf = alloc_trace_fprobe(group, event, symbol, tpoint, maxactive,
+> >  				argc - 2, is_return);
+> >  	if (IS_ERR(tf)) {
+> >  		ret = PTR_ERR(tf);
+> > @@ -1029,24 +1047,15 @@ static int __trace_fprobe_create(int argc, const char *argv[])
+> >  		goto out;	/* We know tf is not allocated */
+> >  	}
+> >  
+> > -	if (is_tracepoint) {
+> > -		tf->tpoint = find_tracepoint(tf->symbol);
+> > -		if (!tf->tpoint) {
+> > -			trace_probe_log_set_index(1);
+> > -			trace_probe_log_err(0, NO_TRACEPOINT);
+> > -			goto parse_error;
+> > -		}
+> > +	if (is_tracepoint)
+> >  		tf->mod = __module_text_address(
+> >  				(unsigned long)tf->tpoint->probestub);
+> > -	}
+> >  
+> >  	argc -= 2; argv += 2;
+> > -
+> >  	/* parse arguments */
+> >  	for (i = 0; i < argc && i < MAX_TRACE_ARGS; i++) {
+> > -		struct traceprobe_parse_context ctx = { .flags = flags };
+> > -
+> >  		trace_probe_log_set_index(i + 2);
+> > +		ctx.offset = 0;
+> >  		ret = traceprobe_parse_probe_arg(&tf->tp, i, argv[i], &ctx);
+> >  		if (ret)
+> >  			goto error;	/* This can be -ENOMEM */
+> > diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+> > index fd62de2a2f51..aff6c1a5e161 100644
+> > --- a/kernel/trace/trace_kprobe.c
+> > +++ b/kernel/trace/trace_kprobe.c
+> > @@ -742,7 +742,7 @@ static int __trace_kprobe_create(int argc, const char *argv[])
+> >  	void *addr = NULL;
+> >  	char buf[MAX_EVENT_NAME_LEN];
+> >  	char gbuf[MAX_EVENT_NAME_LEN];
+> > -	unsigned int flags = TPARG_FL_KERNEL;
+> > +	struct traceprobe_parse_context ctx = { .flags = TPARG_FL_KERNEL };
+> >  
+> >  	switch (argv[0][0]) {
+> >  	case 'r':
+> > @@ -823,10 +823,10 @@ static int __trace_kprobe_create(int argc, const char *argv[])
+> >  			goto parse_error;
+> >  		}
+> >  		if (is_return)
+> > -			flags |= TPARG_FL_RETURN;
+> > +			ctx.flags |= TPARG_FL_RETURN;
+> >  		ret = kprobe_on_func_entry(NULL, symbol, offset);
+> >  		if (ret == 0)
+> > -			flags |= TPARG_FL_FENTRY;
+> > +			ctx.flags |= TPARG_FL_FENTRY;
+> >  		/* Defer the ENOENT case until register kprobe */
+> >  		if (ret == -EINVAL && is_return) {
+> >  			trace_probe_log_err(0, BAD_RETPROBE);
+> > @@ -856,7 +856,7 @@ static int __trace_kprobe_create(int argc, const char *argv[])
+> >  
+> >  	/* setup a probe */
+> >  	tk = alloc_trace_kprobe(group, event, addr, symbol, offset, maxactive,
+> > -			       argc - 2, is_return);
+> > +				argc - 2, is_return);
+> >  	if (IS_ERR(tk)) {
+> >  		ret = PTR_ERR(tk);
+> >  		/* This must return -ENOMEM, else there is a bug */
+> > @@ -866,10 +866,10 @@ static int __trace_kprobe_create(int argc, const char *argv[])
+> >  	argc -= 2; argv += 2;
+> >  
+> >  	/* parse arguments */
+> > +	ctx.funcname = symbol;
+> >  	for (i = 0; i < argc && i < MAX_TRACE_ARGS; i++) {
+> > -		struct traceprobe_parse_context ctx = { .flags = flags };
+> > -
+> >  		trace_probe_log_set_index(i + 2);
+> > +		ctx.offset = 0;
+> >  		ret = traceprobe_parse_probe_arg(&tk->tp, i, argv[i], &ctx);
+> >  		if (ret)
+> >  			goto error;	/* This can be -ENOMEM */
+> > diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+> > index 84a9f0446390..de30b6add9af 100644
+> > --- a/kernel/trace/trace_probe.c
+> > +++ b/kernel/trace/trace_probe.c
+> > @@ -11,6 +11,8 @@
+> >   */
+> >  #define pr_fmt(fmt)	"trace_probe: " fmt
+> >  
+> > +#include <linux/bpf.h>
+> > +
+> >  #include "trace_probe.h"
+> >  
+> >  #undef C
+> > @@ -300,6 +302,164 @@ static int parse_trace_event_arg(char *arg, struct fetch_insn *code,
+> >  	return -ENOENT;
+> >  }
+> >  
+> > +#ifdef CONFIG_PROBE_EVENTS_BTF_ARGS
+> > +
+> > +static struct btf *traceprobe_get_btf(void)
+> > +{
+> > +	return bpf_get_btf_vmlinux();
+> > +}
+> > +
+> > +static u32 btf_type_int(const struct btf_type *t)
+> > +{
+> > +	return *(u32 *)(t + 1);
+> > +}
+> > +
+> > +static const char *type_from_btf_id(struct btf *btf, s32 id)
+> > +{
+> > +	const struct btf_type *t;
+> > +	u32 intdata;
+> > +	s32 tid;
+> > +
+> > +	/* TODO: const char * could be converted as a string */
+> > +	t = btf_type_skip_modifiers(btf, id, &tid);
+> > +
+> > +	switch (BTF_INFO_KIND(t->info)) {
+> > +	case BTF_KIND_ENUM:
+> > +		/* enum is "int", so convert to "s32" */
+> > +		return "s32";
+> 
+> you could add
+> 	case BTF_KIND_ENUM64:
+> 		return "s64";
+> 
+> ...too I guess.
+
+OK, I'll add it too.
+
+> 
+> > +	case BTF_KIND_PTR:
+> > +		/* pointer will be converted to "x??" */
+> > +		if (IS_ENABLED(CONFIG_64BIT))
+> > +			return "x64";
+> > +		else
+> > +			return "x32";
+> > +	case BTF_KIND_INT:
+> > +		intdata = btf_type_int(t);
+> > +		if (BTF_INT_ENCODING(intdata) & BTF_INT_SIGNED) {
+> > +			switch (BTF_INT_BITS(intdata)) {
+> > +			case 8:
+> > +				return "s8";
+> > +			case 16:
+> > +				return "s16";
+> > +			case 32:
+> > +				return "s32";
+> > +			case 64:
+> > +				return "s64";
+> > +			}
+> > +		} else {	/* unsigned */
+> > +			switch (BTF_INT_BITS(intdata)) {
+> > +			case 8:
+> > +				return "u8";
+> > +			case 16:
+> > +				return "u16";
+> > +			case 32:
+> > +				return "u32";
+> > +			case 64:
+> > +				return "u64";
+> > +			}
+> > +		}
+> > +	}
+> > +	/* TODO: support other types */
+> > +
+> > +	return NULL;
+> > +}
+> > +
+> > +static const struct btf_param *find_btf_func_param(const char *funcname, s32 *nr)
+> > +{
+> > +	struct btf *btf = traceprobe_get_btf();
+> > +	const struct btf_type *t;
+> > +	s32 id;
+> > +
+> > +	if (!btf || !funcname || !nr)
+> 
+> I _think_ you need IS_ERR_OR_NULL(btf) handling for the struct btf * here; 
+> btf_parse_vmlinux() mostly returns ERR_PTR values, while btf_vmlinux
+> can be NULL if BTF isn't present.
+
+Ah, I missed that. To simplify the code, I will handle that in traceprobe_get_btf().
+
+Thank you!
+
+>  
+> > +		return ERR_PTR(-EINVAL);
+> > +
+> > +	id = btf_find_by_name_kind(btf, funcname, BTF_KIND_FUNC);
+> > +	if (id <= 0)
+> > +		return ERR_PTR(-ENOENT);
+> > +
+> > +	/* Get BTF_KIND_FUNC type */
+> > +	t = btf_type_by_id(btf, id);
+> > +	if (!btf_type_is_func(t))
+> > +		return ERR_PTR(-ENOENT);
+> > +
+> > +	/* The type of BTF_KIND_FUNC is BTF_KIND_FUNC_PROTO */
+> > +	t = btf_type_by_id(btf, t->type);
+> > +	if (!btf_type_is_func_proto(t))
+> > +		return ERR_PTR(-ENOENT);
+> > +
+> > +	*nr = btf_type_vlen(t);
+> > +
+> > +	if (*nr)
+> > +		return (const struct btf_param *)(t + 1);
+> > +	else
+> > +		return NULL;
+> > +}
+> > +
+> > +static int parse_btf_arg(const char *varname, struct fetch_insn *code,
+> > +			 struct traceprobe_parse_context *ctx)
+> > +{
+> > +	struct btf *btf = traceprobe_get_btf();
+> > +	const struct btf_param *params;
+> > +	int i;
+> > +
+> > +	if (!btf) {
+> > +		trace_probe_log_err(ctx->offset, NOSUP_BTFARG);
+> > +		return -EOPNOTSUPP;
+> > +	}
+> > +
+> > +	if (WARN_ON_ONCE(!ctx->funcname))
+> > +		return -EINVAL;
+> > +
+> > +	if (!ctx->params) {
+> > +		params = find_btf_func_param(ctx->funcname, &ctx->nr_params);
+> > +		if (IS_ERR(params)) {
+> > +			trace_probe_log_err(ctx->offset, NO_BTF_ENTRY);
+> > +			return PTR_ERR(params);
+> > +		}
+> > +		ctx->params = params;
+> > +	} else
+> > +		params = ctx->params;
+> > +
+> > +	for (i = 0; i < ctx->nr_params; i++) {
+> > +		const char *name = btf_name_by_offset(btf, params[i].name_off);
+> > +
+> > +		if (name && !strcmp(name, varname)) {
+> > +			code->op = FETCH_OP_ARG;
+> > +			code->param = i;
+> > +			return 0;
+> > +		}
+> > +	}
+> > +	trace_probe_log_err(ctx->offset, NO_BTFARG);
+> > +	return -ENOENT;
+> > +}
+> > +
+> > +static const struct fetch_type *parse_btf_arg_type(int arg_idx,
+> > +					struct traceprobe_parse_context *ctx)
+> > +{
+> > +	struct btf *btf = traceprobe_get_btf();
+> > +	const char *typestr = NULL;
+> > +
+> > +	if (btf && ctx->params)
+> > +		typestr = type_from_btf_id(btf, ctx->params[arg_idx].type);
+> > +
+> > +	return find_fetch_type(typestr, ctx->flags);
+> > +}
+> > +#else
+> > +static struct btf *traceprobe_get_btf(void)
+> > +{
+> > +	return NULL;
+> > +}
+> > +
+> > +static int parse_btf_arg(const char *varname, struct fetch_insn *code,
+> > +			 struct traceprobe_parse_context *ctx)
+> > +{
+> > +	trace_probe_log_err(ctx->offset, NOSUP_BTFARG);
+> > +	return -EOPNOTSUPP;
+> > +}
+> > +#define parse_btf_arg_type(idx, ctx)		\
+> > +	find_fetch_type(NULL, ctx->flags)
+> > +#endif
+> > +
+> >  #define PARAM_MAX_STACK (THREAD_SIZE / sizeof(unsigned long))
+> >  
+> >  static int parse_probe_vars(char *arg, const struct fetch_type *t,
+> > @@ -556,6 +716,15 @@ parse_probe_arg(char *arg, const struct fetch_type *type,
+> >  				code->op = FETCH_OP_IMM;
+> >  		}
+> >  		break;
+> > +	default:
+> > +		if (isalpha(arg[0]) || arg[0] == '_') {	/* BTF variable */
+> > +			if (!tparg_is_function_entry(ctx->flags)) {
+> > +				trace_probe_log_err(ctx->offset, NOSUP_BTFARG);
+> > +				return -EINVAL;
+> > +			}
+> > +			ret = parse_btf_arg(arg, code, ctx);
+> > +			break;
+> > +		}
+> >  	}
+> >  	if (!ret && code->op == FETCH_OP_NOP) {
+> >  		/* Parsed, but do not find fetch method */
+> > @@ -704,6 +873,11 @@ static int traceprobe_parse_probe_arg_body(const char *argv, ssize_t *size,
+> >  	if (ret)
+> >  		goto fail;
+> >  
+> > +	/* Update storing type if BTF is available */
+> > +	if (IS_ENABLED(CONFIG_PROBE_EVENTS_BTF_ARGS) &&
+> > +	    !t && code->op == FETCH_OP_ARG)
+> > +		parg->type = parse_btf_arg_type(code->param, ctx);
+> > +
+> >  	ret = -EINVAL;
+> >  	/* Store operation */
+> >  	if (parg->type->is_string) {
+> > @@ -857,8 +1031,14 @@ int traceprobe_parse_probe_arg(struct trace_probe *tp, int i, const char *arg,
+> >  		parg->name = kmemdup_nul(arg, body - arg, GFP_KERNEL);
+> >  		body++;
+> >  	} else {
+> > -		/* If argument name is omitted, set "argN" */
+> > -		parg->name = kasprintf(GFP_KERNEL, "arg%d", i + 1);
+> > +		/*
+> > +		 * If argument name is omitted, try arg as a name (BTF variable)
+> > +		 * or "argN".
+> > +		 */
+> > +		if (is_good_name(arg))
+> > +			parg->name = kstrdup(arg, GFP_KERNEL);
+> > +		else
+> > +			parg->name = kasprintf(GFP_KERNEL, "arg%d", i + 1);
+> >  		body = arg;
+> >  	}
+> >  	if (!parg->name)
+> > diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+> > index 2dc1e5c4c9e8..9ea5c7e8753f 100644
+> > --- a/kernel/trace/trace_probe.h
+> > +++ b/kernel/trace/trace_probe.h
+> > @@ -23,6 +23,7 @@
+> >  #include <linux/limits.h>
+> >  #include <linux/uaccess.h>
+> >  #include <linux/bitops.h>
+> > +#include <linux/btf.h>
+> >  #include <asm/bitsperlong.h>
+> >  
+> >  #include "trace.h"
+> > @@ -376,6 +377,9 @@ static inline bool tparg_is_function_entry(unsigned int flags)
+> >  
+> >  struct traceprobe_parse_context {
+> >  	struct trace_event_call *event;
+> > +	const struct btf_param *params;
+> > +	s32 nr_params;
+> > +	const char *funcname;
+> >  	unsigned int flags;
+> >  	int offset;
+> >  };
+> > @@ -474,7 +478,10 @@ extern int traceprobe_define_arg_fields(struct trace_event_call *event_call,
+> >  	C(NO_EVENT_INFO,	"This requires both group and event name to attach"),\
+> >  	C(BAD_ATTACH_EVENT,	"Attached event does not exist"),\
+> >  	C(BAD_ATTACH_ARG,	"Attached event does not have this field"),\
+> > -	C(NO_EP_FILTER,		"No filter rule after 'if'"),
+> > +	C(NO_EP_FILTER,		"No filter rule after 'if'"),		\
+> > +	C(NOSUP_BTFARG,		"BTF is not available or not supported"),	\
+> > +	C(NO_BTFARG,		"This variable is not found at this probe point"),\
+> > +	C(NO_BTF_ENTRY,		"No BTF entry for this probe point"),
+> >  
+> >  #undef C
+> >  #define C(a, b)		TP_ERR_##a
+> > 
+
+
 -- 
-2.34.1
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
