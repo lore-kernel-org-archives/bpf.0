@@ -2,237 +2,199 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81238C77B61
-	for <bpf@archiver.kernel.org>; Tue, 25 Apr 2023 09:57:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 185A6C77B61
+	for <bpf@archiver.kernel.org>; Tue, 25 Apr 2023 09:58:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233442AbjDYJ5k (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 25 Apr 2023 05:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50338 "EHLO
+        id S233322AbjDYJ6f (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Apr 2023 05:58:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjDYJ5j (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 25 Apr 2023 05:57:39 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0D6C15B;
-        Tue, 25 Apr 2023 02:57:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682416657; x=1713952657;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=DALW662Gclyn9dYy/dn/bAlBAp3cpASSDbbwppPFWqo=;
-  b=Fmfjt86lUssuSk1CFoADIZ0lQZ7fLonkVn9owvTi6VJJMKUR2BbJSfFe
-   zJhejr0F5sUZTdJjJ7AQERloeHS26LZz0Z2TTr+G+jLeOjT91Mt+jk3yv
-   V4dEJI+gUVAEnAcIdCB3TkSKBNBSEBPdq3cLKvkBVRzffBBBCVxnyy3f6
-   Nxy5drkaLC+cbAYCscSoC4xPRldWD9NCDC967FjXJyv9a+k2zkXl2GtL7
-   jkPXvM9xK9jPL5fjZGlHXv3Qi6xland3j0vdgDowEruvQtByr0cP+NyH9
-   rtr8akI5uVi6zpk57ACmVsVzuaEYENKdHyk25Xv6weYd7KZIKhd/KdtV3
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="327023595"
-X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
-   d="scan'208";a="327023595"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 02:57:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="696118773"
-X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
-   d="scan'208";a="696118773"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga007.fm.intel.com with ESMTP; 25 Apr 2023 02:57:37 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 25 Apr 2023 02:57:37 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Tue, 25 Apr 2023 02:57:37 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.177)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Tue, 25 Apr 2023 02:57:12 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Wch4GwQ/z/tg68Z4yYzSMKslOLdMEepeX0Ih+2pmWdQhvA9LXCI/707w9tD/BAg0aRCttaD6BfTvmethMYZq5D/B+bRJVEqchqD42jpRjFam3Irv2dFtaTRl6K3FuFmGPQgnxeIHdp2yIUFzJokUFp3H6UTj+exIp7KKd++PQ6NhSytZxbW3RS95rSBYkMqsS/na7UU0ECzPWm5suEf1nzje8xYOP1q1GLVbJcEw++px81fRdvBTkF3/N7446MAn4V3SGn9t2NVNev3yb8Z59nXiTsFR3bWIY5Fswi4ihYcb3+jD01hwKcKVioo9u1Ls5OkHa3UEDOlhRH4MOlrutw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9h3afZwfW4n7H1yC+vseqk7mLlMQ2hhL7IE4vpRh/bo=;
- b=d+TUSJKu9TxAXW2PSFVJoZZ4KXWdOZM3l2cmFRquS2bvDDAlo2cePr3jZdEXK6oFKcYpFPTvWJChoeY7xdOtdf8ZIK48s/Pnu2ozzKsHuNLmQZMA2HOEi/PkFjpbVIz4a9zp4ffvuPU7NszqTIVcqQDLD9RjKeDSSwdu+X9YoAlEm4xMkipcbm8Ec5rmtXbStfHQ7m5kKIK2kH8TMhhIUYGXWR61tm90OXTP/iS+H0Eo2O2YmtNQ/yP5ExNd2hj3wKEZ9tk6ruqXZhqUC6CgnQu9PFNegs9RRyOq0lpzgXQ76PgAGaFKsvlw5luKIaoJu2pkWsgKOtVs7yj8lk2Bnw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
- CH0PR11MB5252.namprd11.prod.outlook.com (2603:10b6:610:e3::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6319.34; Tue, 25 Apr 2023 09:57:10 +0000
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::9e4f:80cc:e0aa:6809]) by DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::9e4f:80cc:e0aa:6809%3]) with mapi id 15.20.6319.033; Tue, 25 Apr 2023
- 09:57:10 +0000
-Date:   Tue, 25 Apr 2023 11:56:57 +0200
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     Kal Cutter Conley <kal.conley@dectris.com>
-CC:     John Fastabend <john.fastabend@gmail.com>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Alexei Starovoitov" <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "Jesper Dangaard Brouer" <hawk@kernel.org>,
-        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] xsk: Use pool->dma_pages to check for DMA
-Message-ID: <ZEej6ZJVAgzRueyA@boxer>
-References: <20230423075335.92597-1-kal.conley@dectris.com>
- <6446d34f9568_338f220872@john.notmuch>
- <CAHApi-=Vr4VARgoDNB1T906gfDNB5L5_U24zE=ZHQi+qd__e8w@mail.gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAHApi-=Vr4VARgoDNB1T906gfDNB5L5_U24zE=ZHQi+qd__e8w@mail.gmail.com>
-X-ClientProxiedBy: FR0P281CA0191.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:ab::14) To DM4PR11MB6117.namprd11.prod.outlook.com
- (2603:10b6:8:b3::19)
+        with ESMTP id S233169AbjDYJ6f (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 25 Apr 2023 05:58:35 -0400
+X-Greylist: delayed 336 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 25 Apr 2023 02:58:18 PDT
+Received: from ms11p00im-hyfv17291101.me.com (ms11p00im-hyfv17291101.me.com [17.58.38.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA70CC0C
+        for <bpf@vger.kernel.org>; Tue, 25 Apr 2023 02:58:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuroa.me; s=sig1;
+        t=1682416361; bh=BOZclCrFL8zwBZy00LVQJcyJUAB/39k6Slgpaa2Yfls=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=EIKOR67wtHzOc2RXSaFO9NM8zbl4/gqZ2ljixm0sHFwhri5Xbx7nfDPGtWbfTfkyg
+         2i3Oyt0eW2nfgmi3ImizkYA+oz5Z6pQJp+YyPj0piLZger0/rko7Vru5pQCiBn3lwd
+         xKb1J23Q8BgrkRsjDwgO6kyFuvS/RmexK+rJ3BFsW7LMK9PvCcezewvf5Q9F683ggl
+         lnY3wIFIST0sLeeDxwMmbpoSpg/prj0rJ0v1xktPR/n56b0Qhd7kcyTYKM7gFeS1GN
+         uRNFUBAHv4BF4dlDNM51HkR0AyQ6srIGO7L2h8c2ScoUMu37g2TSYHOdrTR4myfU43
+         CSpzzLq2hAS9A==
+Received: from localhost.localdomain (ms11p00im-dlb-asmtpmailmevip.me.com [17.57.154.19])
+        by ms11p00im-hyfv17291101.me.com (Postfix) with ESMTPSA id E0A02760171;
+        Tue, 25 Apr 2023 09:52:36 +0000 (UTC)
+From:   Xueming Feng <kuro@kuroa.me>
+To:     quentin@isovalent.com
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
+        jolsa@kernel.org, kpsingh@kernel.org, kuro@kuroa.me,
+        linux-kernel@vger.kernel.org, martin.lau@linux.dev, sdf@google.com,
+        song@kernel.org, yhs@fb.com, yhs@meta.com
+Subject: Re: [PATCH bpf-next v2] bpftool: Dump map id instead of value for map_of_maps types
+Date:   Tue, 25 Apr 2023 17:52:21 +0800
+Message-Id: <20230425095221.20805-1-kuro@kuroa.me>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+In-Reply-To: <fa14348d-b7ce-2a0e-d0f6-387162621ae8@isovalent.com>
+References: <fa14348d-b7ce-2a0e-d0f6-387162621ae8@isovalent.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|CH0PR11MB5252:EE_
-X-MS-Office365-Filtering-Correlation-Id: bad466d7-0571-4937-c729-08db45736f49
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lAc3jyFAG+m5dKq87MlrYeVkBYdbnTigcgKXQrBWzjNTCkVWn2AUwsoXJgjVpkNeMeSWxxWbS5Vm97t8j5pGb1ijjvTqfb/FMFH3lMyt8IU7A2c6l4p6roLghaSRVODFSjLuVO1jheaRrAUeXze87z/EBENdv26iXG3HsczPlOiSGYNsuA7jIMO48fJLd5NxymqP25iNXJocX4Gu8Y7jnrlQa/eYZFOgjIy8IOpXrjrUapd9GPkmfrfhPA4Lq6xSiQCCYM2k8RDA6w6IOtkdsIXosUtkg56798UkHUtWOiSCcA6S/bQ4mo1Uzb+Juozehk1LGMBvIaUg7ive9iRQG+jeskOHcBIa4IZJi5gbW+y6PRidu22Jg+SoiM02Zxta9EG1j3Wt3Cp/s334oZpCANzvLhyfp1cY5S55KDBticdbOmaGTiy0g/SFxeM6IZuf6xfCipase9NbjCjuppahzUlDb6VIbpTx1l9+ck9X5m1id9yUdV0PePLqjPw1zKi1mgsNqZivS34RTMREtBFVK8lCenFdfS1DVGu5znGlbaw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(136003)(366004)(376002)(396003)(39860400002)(346002)(451199021)(82960400001)(316002)(44832011)(6916009)(4326008)(38100700002)(41300700001)(5660300002)(7416002)(8936002)(8676002)(33716001)(86362001)(2906002)(66476007)(66556008)(966005)(6486002)(6666004)(6512007)(6506007)(26005)(9686003)(478600001)(83380400001)(186003)(54906003)(66946007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5+nrMytWkROLezeC7oxUFcgOtVNottTQgH8CkLAf1tsidTDqxVV9ugNcm/XI?=
- =?us-ascii?Q?LHLuaeRvvSQlhobP2+JY1PR9UukAYGPTDSDX9nUImZtLeQMFKMYBNFt31jQ4?=
- =?us-ascii?Q?c2GTHW1ftBqvPqCAG2nkLGOuG12NoJvZNR8BIgSLpbDhk5TbAzBZogTq1Zhx?=
- =?us-ascii?Q?rPlxjQ39Tp6JZO7K0X1hgEnJP1g9LMNuN+c8v1wBmfJ2terACGx6GGMLUQib?=
- =?us-ascii?Q?Fxf60TnHPgNVfCoOKDtsGQ+afSS1wYWRwxanBqOHXHyrEDoP5chdOMRAfww3?=
- =?us-ascii?Q?5UJ8Pgo0wdVuVQLNgCS3APBRuzW2SXmhp3mWeCdyDXdzZOyj61ATw8hmQVQS?=
- =?us-ascii?Q?EXB3hQyJwtBYDTzUcStm4lS7AEzFeO9yB8X7mCg+z0dM8X3GjL3K2WitVOeP?=
- =?us-ascii?Q?6m2EU3QD63Tr/zkC6h8nXFOCnsutHweYFGBAl6sVfXAP6zkhFx/U+Q58BK0J?=
- =?us-ascii?Q?1xN7pawvNwVv9gLBWuWC3OgfYSCqT3kpoCSfchB86HL/69FRfWCGQtlcyBOP?=
- =?us-ascii?Q?slGkle81yhh7lWIJSZ33RZAH/TqCfzrIpGMoYl7RQbWX8kFA72tTqzOKCcVR?=
- =?us-ascii?Q?JcSf2N0QdU3sF+R7k60b20cHYr1YCjClb+EmRyeFZLSRLpSlx/RpM6mfko2n?=
- =?us-ascii?Q?KgxuB2NZyPf1KkTlzxf9wV/9jlb+HUeTyc3L4Qk0UgTbWGwvSPNyGRUQSZWX?=
- =?us-ascii?Q?2TtpDvC4UK2zdwpAT88ox8N913N+a6YVr0ViVqbXzsqMY9tzjUUfPLIdbRNN?=
- =?us-ascii?Q?Xxa+T+jvclMvRMf5mg3terxG8v+UkLMWVGYr5KjdsPJ5Y6PwYyLN2PpsfrrN?=
- =?us-ascii?Q?l+nIScEx66EKumV2KSvpAxVwkxQ+09ws79B2hOZu0NDWEbKt5rFBGKXzbd30?=
- =?us-ascii?Q?O4FVmHqz83Uk5fToT66R7HQiRawH09wFsPgcCGMwoc87CP6AqRw6O5M00C8H?=
- =?us-ascii?Q?Ru30wETh9LTunWTezP2slGoCtw/jO8jkxe/KrAjjbWjr1Xvp86uM5FjC00/5?=
- =?us-ascii?Q?qqtVu8I6sFzGt6AcSjL9wClkLPN+o/UmrY7FjM8cH81Ek5gc7vUkrOeyxK2v?=
- =?us-ascii?Q?qJ5tP9dXIaxuvdEP+fzyun+k+rwm3MOeBXC+uy/PcE5MNIc74GXAsn0RnOEZ?=
- =?us-ascii?Q?uZfg3s/ixsPQ2TXWI9RT+ONphelpCGXhqcvRzbFZNDi3nbN768KjBGJ34qYX?=
- =?us-ascii?Q?cXCX+FATI9cPDXZTRMXPe9oJwoDa6RR3Ve3g94y2nTdbaeBSRlAC7JZp1p8b?=
- =?us-ascii?Q?DRnBpzYmRRFTL1EJu4LQEr2YA5gEYGlIGeDQ1pairGuwIZe/e5Qg3qBQVC5W?=
- =?us-ascii?Q?KmpnZXCzjPo4OUvefvNaMIXlAHRRHPha2jnKuxEaMPrcBYF9qXKPUfc7YTuo?=
- =?us-ascii?Q?d7Y4CNXD3roLkZiuEcZ80notYf1Mkel/QXv4pk+1/MztQ2Yt8kwYpmqtN7X+?=
- =?us-ascii?Q?OzVuHh4OJbAa9h4F8xh28CK4T8FmS+3nq2qo8iOVT178+NULsja4+882e8yr?=
- =?us-ascii?Q?d+3Nr1xZKhbW8TP+ZUEiYh3/BHxYERFrdA2NrYCIQTyPVnnzgo0mYQWeryvJ?=
- =?us-ascii?Q?oKNz7TSLECombi30327gU/+ielezLkph4eaKk6wo3qNwK6O0J12lPEEjaUqR?=
- =?us-ascii?Q?Bg=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: bad466d7-0571-4937-c729-08db45736f49
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2023 09:57:09.6441
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fWu2OvvBjCKrYPgJAagaZ4eAx57Jf/JH9dC6vDcCpL1MnBZsJW5Yn7N1qeBlmSRz4fMnNA9NBWgssZ/zTVLSKYfvzSgVN9nVl/BVr4FPt60=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5252
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: yvZ7oYU2RTPiIdpNNoooZvCjqegvm5QH
+X-Proofpoint-ORIG-GUID: yvZ7oYU2RTPiIdpNNoooZvCjqegvm5QH
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.425,18.0.572,17.11.62.513.0000000_definitions?=
+ =?UTF-8?Q?=3D2022-01-14=5F01:2022-01-14=5F01,2020-02-14=5F11,2021-12-02?=
+ =?UTF-8?Q?=5F01_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 spamscore=0
+ clxscore=1030 malwarescore=0 mlxlogscore=781 phishscore=0 suspectscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2304250088
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 12:52:53AM +0200, Kal Cutter Conley wrote:
+>2023-04-25 14:37 UTC+0800 ~ Xueming Feng <kuro@kuroa.me>
+>>> On 4/24/23 9:10 PM, Xueming Feng wrote:
+>>>>> On 4/24/23 2:09 AM, Xueming Feng wrote:
+>>>>>> When using `bpftool map dump` in plain format, it is usually
+>>>>>> more convenient to show the inner map id instead of raw value.
+>>>>>> Changing this behavior would help with quick debugging with
+>>>>>> `bpftool`, without disrupting scripted behavior. Since user
+>>>>>> could dump the inner map with id, and need to convert value.
+>>>>>>
+>>>>>> Signed-off-by: Xueming Feng <kuro@kuroa.me>
+>>>>>> ---
+>>>>>> Changes in v2:
+>>>>>>     - Fix commit message grammar.
+>>>>>> 	- Change `print_uint` to only print to stdout, make `arg` const, and rename
+>>>>>> 	  `n` to `arg_size`.
+>>>>>>     - Make `print_uint` able to take any size of argument up to `unsigned long`,
+>>>>>> 		and print it as unsigned decimal.
+>>>>>>
+>>>>>> Thanks for the review and suggestions! I have changed my patch accordingly.
+>>>>>> There is a possibility that `arg_size` is larger than `unsigned long`,
+>>>>>> but previous review suggested that it should be up to the caller function to
+>>>>>> set `arg_size` correctly. So I didn't add check for that, should I?
+>>>>>>
+>>>>>>    tools/bpf/bpftool/main.c | 15 +++++++++++++++
+>>>>>>    tools/bpf/bpftool/main.h |  1 +
+>>>>>>    tools/bpf/bpftool/map.c  |  9 +++++++--
+>>>>>>    3 files changed, 23 insertions(+), 2 deletions(-)
+>>>>>>
+>>>>>> diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
+>>>>>> index 08d0ac543c67..810c0dc10ecb 100644
+>>>>>> --- a/tools/bpf/bpftool/main.c
+>>>>>> +++ b/tools/bpf/bpftool/main.c
+>>>>>> @@ -251,6 +251,21 @@ int detect_common_prefix(const char *arg, ...)
+>>>>>>    	return 0;
+>>>>>>    }
+>>>>>>    
+>>>>>> +void print_uint(const void *arg, unsigned int arg_size)
+>>>>>> +{
+>>>>>> +	const unsigned char *data = arg;
+>>>>>> +	unsigned long val = 0ul;
+>>>>>> +
+>>>>>> +	#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+>>>>>> +		memcpy(&val, data, arg_size);
+>>>>>> +	#else
+>>>>>> +		memcpy((unsigned char *)&val + sizeof(val) - arg_size,
+>>>>>> +		       data, arg_size);
+>>>>>> +	#endif
+>>>>>> +
+>>>>>> +	fprintf(stdout, "%lu", val);
+>>>>>> +}
+>>>>>> +
+>>>>>>    void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep)
+>>>>>>    {
+>>>>>>    	unsigned char *data = arg;
+>>>>>> diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
+>>>>>> index 0ef373cef4c7..0de671423431 100644
+>>>>>> --- a/tools/bpf/bpftool/main.h
+>>>>>> +++ b/tools/bpf/bpftool/main.h
+>>>>>> @@ -90,6 +90,7 @@ void __printf(1, 2) p_info(const char *fmt, ...);
+>>>>>>    
+>>>>>>    bool is_prefix(const char *pfx, const char *str);
+>>>>>>    int detect_common_prefix(const char *arg, ...);
+>>>>>> +void print_uint(const void *arg, unsigned int arg_size);
+>>>>>>    void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep);
+>>>>>>    void usage(void) __noreturn;
+>>>>>>    
+>>>>>> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+>>>>>> index aaeb8939e137..f5be4c0564cf 100644
+>>>>>> --- a/tools/bpf/bpftool/map.c
+>>>>>> +++ b/tools/bpf/bpftool/map.c
+>>>>>> @@ -259,8 +259,13 @@ static void print_entry_plain(struct bpf_map_info *info, unsigned char *key,
+>>>>>>    		}
+>>>>>>    
+>>>>>>    		if (info->value_size) {
+>>>>>> -			printf("value:%c", break_names ? '\n' : ' ');
+>>>>>> -			fprint_hex(stdout, value, info->value_size, " ");
+>>>>>> +			if (map_is_map_of_maps(info->type)) {
+>>>>>> +				printf("id:%c", break_names ? '\n' : ' ');
+>>>>> 1> +				print_uint(value, info->value_size);
+>>>>
+>>>> On Mon, 24 Apr 2023 18:07:27 -0700, Yonghong Song wrote:
+>>>>> For all map_in_map types, the inner map value size is 32bit int which
+>>>>> represents a fd (for map creation) and a id (for map info), e.g., in
+>>>>> show_prog_maps() in prog.c. So maybe we can simplify the code as below:
+>>>>> 	printf("id: %u", *(unsigned int *)value);
+>>>>
+>>>> That is true, maybe the "id" could also be changed to "map_id" to follow the
+>>>> convention. Do you think that `print_uint` could be useful in the future?
+>>>> If that is the case, should I keep using it here as an example usage, and to
+>>>> avoid dead code? Or should I just remove it?
 
-Hey again!
+On Tue, 25 Apr 2023 09:57:17 +0100, Quentin Monnet wrote:
+> This makes me think we could also have something similar for prog_array
+> maps (but not necessarily as part of your patchset).
 
-> > > Compare pool->dma_pages instead of pool->dma_pages_cnt to check for an
-> > > active DMA mapping. pool->dma_pages needs to be read anyway to access
-> > > the map so this compiles to more efficient code.
-> >
-> > Was it noticable in some sort of performance test?
-> 
-> This patch is part of the patchset found at
-> https://lore.kernel.org/all/20230412162114.19389-3-kal.conley@dectris.com/
-> which is being actively discussed and needs to be resubmitted anyway
-> because of a conflict. While the discussion continues, I am submitting
-> this patch by itself because I think it's an improvement on its own
-> (regardless of what happens with the rest of the linked patchset). On
-> one system, I measured a performance regression of 2-3% with xdpsock
-> and the linked changes without the current patch. With the current
-> patch, the performance regression was no longer observed.
+Good idea, will take a look at that after finishing v3 patch, and possibly
+make a separate patch for it. (This is my first time contributing, better keep 
+it simple).
 
-Okay, 2-3% but with what settings? rxdrop for unaligned mode? what chunk
-size etc? We need this kind of info, "compiles to more efficient code"
-from original commit message is too generic and speculative to me. 2-3% of
-perf diff against specific xdpsock setup is real improvement and is a
-strong argument for getting this patch as-is, by its own.
+>> On Mon, 24 Apr 2023 22:58:10 -0700, Yonghong Song wrote:
+>>> Maybe, "inner_map_id" is a better choice. For array of maps, some array 
+>>> element value could be 0, implying "inner_map_id 0", but I think it is
+>>> okay, people should know a real inner_map_id (or any map_id) should 
+>>> never be 0.
+>>>
+>>> Function "print_uint" is not needed any more. Please remove it.
+>> 
+>> Will reflect this in v3.
+>> 
+>>>
+>>> Please add the command line to dump map values triggering the above 
+>>> change, also the actual dumps with and without this patch.
+>> 
+>> $ bpftool map dump id 138
+>> Without patch:
+>> ```
+>> key:
+>> fc 00 00 00 00 00 00 00  00 00 00 00 00 00 00 05
+>> 27 16 06 00
+>> value:
+>> 8b 00 00 00
+>> Found 1 element
+>> ```
+>> With patch:
+>> ```
+>> key:
+>> fc 00 00 00 00 00 00 00  00 00 00 00 00 00 00 05
+>> 27 16 06 00
+>> inner_map_id:
+>> 139 
+>> Found 1 element
+>> ```
 
-> 
-> > > diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
-> > > index d318c769b445..a8d7b8a3688a 100644
-> > > --- a/include/net/xsk_buff_pool.h
-> > > +++ b/include/net/xsk_buff_pool.h
-> > > @@ -180,7 +180,7 @@ static inline bool xp_desc_crosses_non_contig_pg(struct xsk_buff_pool *pool,
-> > >       if (likely(!cross_pg))
-> > >               return false;
-> > >
-> > > -     return pool->dma_pages_cnt &&
-> > > +     return pool->dma_pages &&
-> > >              !(pool->dma_pages[addr >> PAGE_SHIFT] & XSK_NEXT_PG_CONTIG_MASK);
-> > >  }
-> 
-> I would consider the above code part of the "fast path". It may be
-> executed approximately once per frame in unaligned mode.
-> 
-> > This seems to be used in the setup/tear-down paths so your optimizing
-> > a control side. Is there a fast path with this code? I walked the
-> > ice driver. If its just setup code we should do whatever is more
-> > readable.
-> 
-> It is not only used in setup/tear-down paths (see above).
-> Additionally, I believe the code is also _more_ readable with this
-> patch applied. In particular, this patch reduces cognitive complexity
-> since people (and compilers) reading the code don't need to
-> additionally think about pool->dma_pages_cnt.
+> Thanks! Please add those sample outputs to the commit description for
+> v3. Can you please also add an example with JSON ("-p")?
 
-John was referring to xp_dma_unmap() with the comment above which indeed
-is a teardown path, so probably this doesn't matter from performance
-perspective and you could avoid this chunk from your patch.
+Sure, will add them in v3! About json output, they are currently not touched
+to avoid breaking scripts. I will add inner_map_id as a new field in v3 like the 
+following patch.
+https://lore.kernel.org/bpf/20230419003651.988865-1-kuifeng@meta.com/
 
-> 
-> > Both the _alloc_ cases read neighboring free_heads_cnt so your saving a load I guess?
-> > This is so deep into micro-optimizing I'm curious if you could measure it?
-> 
-> It is saving a load which also reduces code size. This will affect
-> other decisions such as what to inline. Also in the linked patchset,
-> dma_pages and dma_pages_cnt do not share a cache line (on x86_64).
-
-Yes I believe that the with your patch on unaligned mode by touching the
-dma_pages you're warming the relevant cache line for your setup.
-
-> 
-> >
-> > >               } else {
-> > >                       xskb = &pool->heads[xp_aligned_extract_idx(pool, addr)];
-> >
-> > I'm not actually against optimizing but maybe another idea. Why do we have to
-> > check at all? Seems if the DMA has been disabled/unmapped the driver shouldn't
-> > be trying to call xsk_buff_alloc_batch? Then you can just drop the 'if' check.
-> >
-> > It feels to me the drivers shouldn't even be calling this after unmapping
-> > the dma. WDYT?
-> 
-> Many of these code paths are used both for ZC and copy modes. You
-> might be right that this particular case is only used with DMA.
-
-Map/unmap is when you do ZC, copy/skb mode work without these internal dma
-mappings.
+> Quentin
