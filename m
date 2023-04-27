@@ -2,144 +2,95 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5DADC77B61
-	for <bpf@archiver.kernel.org>; Thu, 27 Apr 2023 20:18:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA9ABC77B73
+	for <bpf@archiver.kernel.org>; Thu, 27 Apr 2023 20:21:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344165AbjD0USL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 27 Apr 2023 16:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52652 "EHLO
+        id S1344209AbjD0UVc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 27 Apr 2023 16:21:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344045AbjD0USK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 27 Apr 2023 16:18:10 -0400
-X-Greylist: delayed 1121 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Apr 2023 13:18:09 PDT
-Received: from ulthar.dreamlands.azazel.net (wan.azazel.net [81.187.77.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E13B3ABC;
-        Thu, 27 Apr 2023 13:18:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=azazel.net;
-        s=20220717; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=vVMK0DmoTVin8v+RKwMB1x+zt92VjiVf5R1eGxA+9Ks=; b=nH4/jvP+w5LbS4HpcOH1UgI3is
-        /iytLTAfnnvZ/T5RRDqRq4usCneIywBasHitLIVdl6kRp4o3KEhIWUUX2rGkPrBkFLNhYpKvKuTlr
-        56d7zW7RRQl4CKxLOY9fptKbCbgZuFr9hKJbNChLIzhummoEBhFS0b/4yO+ZCE9aBggtzghKEUFpt
-        cESJEjjsUroeFS1XjPgydfgFoOuHF7Td485RW2bt6P1Hsa6+GGlQNht1bB0GAaLEEgRzKU1jLI5JM
-        PE605vx6Z7S8aB6koS6eDY2OcahwIPdkW4gMmb+6+yX9A0emWv264cVcv0OSQ30lmADM0Af9jfKKk
-        ObL+NzsA==;
-Received: from azazel by ulthar.dreamlands.azazel.net with local (Exim 4.96)
-        (envelope-from <azazel@azazel.net>)
-        id 1ps7ks-0021kV-29;
-        Thu, 27 Apr 2023 20:58:14 +0100
-Date:   Thu, 27 Apr 2023 20:58:14 +0100
-From:   Jeremy Sowden <jeremy@azazel.net>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S1344203AbjD0UVZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 27 Apr 2023 16:21:25 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C354E468E
+        for <bpf@vger.kernel.org>; Thu, 27 Apr 2023 13:21:18 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-24b9e5a9a68so3920447a91.3
+        for <bpf@vger.kernel.org>; Thu, 27 Apr 2023 13:21:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682626878; x=1685218878;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ukMDklDWBuGuAbWmJHubtBZ/fye7JmvHk4OOsFIKxzk=;
+        b=wOJHKLOfQMkbKcihLcsc/nXsiMUX44U3M0Cz13oTtzOV+4XJFpqi+BGB22BVSf82SE
+         dpHi0Sach2KSoVqdmZ+nYxvLYfJZpaq0iq6+PeC8oUHzWvAHgkq7jcdPim8pCKICqiZb
+         gZFcqKYA3Ly/Bw2/B/RtxOpsXr49y/5SkEtLL+mrzeR2OpvZlK6dQqHCsPvjtCR2JTH7
+         pXFaSZ6w2xGdH+bBZFYJ+8A//f1YQ2l5dYxfZjLd49LfNJm5XtyGMLPgM1tqdiBCs2W1
+         3qNInzKI3wMW1FYVI/fMXzAHFSvQQD/nRkG+BZI3kuRDkVSRyimeLfn4pr0jsEXy+m+U
+         Gy1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682626878; x=1685218878;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ukMDklDWBuGuAbWmJHubtBZ/fye7JmvHk4OOsFIKxzk=;
+        b=UfJMEvj9aop4g+mnY/xLBAH3OsIOJ2ytVOxXvc2CxLpwRLF3nfXxlo0PHuK5tDbrLx
+         QYdfFmoObzaV9v+gqQ+HyBLFLJAWZNTF/NBvvbjNMTtFQr/vOSXmU83pyJYdTlM3drRF
+         gStXlWodlQnprUtZk3TZYfWQ5znp7ydMUG7RXBtuCrc6IIwDoT94u/L9XYRr5uByD3D1
+         bvTNTJzHNDZXneqaExiqHRpJKhgU35s1yUVQCSkKgWWY+cvthOHMFcQcizjRSX3Dj63l
+         gYlN2UuIW8ydPu4LmdEh29+zMuy5IwxnkTXQuZiJVVc6NabiaLk9rhhmj4UEnUNV/JBl
+         hO9g==
+X-Gm-Message-State: AC+VfDx9iTSfOaeACPwmkQSf+/0eOITjc2pY9GgsaS9wkjOvZJKBMD5e
+        mFPluSjAl+fFtef8Oaipij5kQZRRjG1IITBz4cfF9g==
+X-Google-Smtp-Source: ACHHUZ4sZXSuMQdhPHDmkhCRL/0icr9ZYUEDz5TRaEl1YZf7V1VawWCPx07v3pyF9frjE3L746f3ZldwiJJPqhtJ4go=
+X-Received: by 2002:a17:90a:65c3:b0:23b:3422:e78a with SMTP id
+ i3-20020a17090a65c300b0023b3422e78amr3071364pjs.6.1682626877907; Thu, 27 Apr
+ 2023 13:21:17 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230426155357.4158846-1-sdf@google.com> <CAEf4BzatobESuMtP=ndHuf+imtX1ovM-4+cnV9c=UdsC=teZBQ@mail.gmail.com>
+ <CAKH8qBt4xqBUpXefqPk5AyU1Rr0-h-vCJzS_0Bu-987gL4wi4A@mail.gmail.com> <CAADnVQ+HMtb75JtPSV1oHXoPgxpZuOu0tE6RCZwxtXVKYduYqw@mail.gmail.com>
+In-Reply-To: <CAADnVQ+HMtb75JtPSV1oHXoPgxpZuOu0tE6RCZwxtXVKYduYqw@mail.gmail.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Thu, 27 Apr 2023 13:21:06 -0700
+Message-ID: <CAKH8qBtGkgVYjPbPktY7Kf34yEqQmHHPyTMPKDtZApoTN=6ruQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] bpf: Make bpf_helper_defs.h c++ friendly
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <martin.lau@linux.dev>,
         Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf] selftests/bpf: fix pkg-config call building sign-file
-Message-ID: <20230427195814.GE415348@azazel.net>
-References: <20230426215032.415792-1-jeremy@azazel.net>
- <e1bd99a4ea209277d657f7fb7ccdc26451113fc9.camel@huaweicloud.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mRi/Sh4c9dkl2g8K"
-Content-Disposition: inline
-In-Reply-To: <e1bd99a4ea209277d657f7fb7ccdc26451113fc9.camel@huaweicloud.com>
-X-SA-Exim-Connect-IP: <locally generated>
-X-SA-Exim-Mail-From: azazel@azazel.net
-X-SA-Exim-Scanned: No (on ulthar.dreamlands.azazel.net); SAEximRunCond expanded to false
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Peng Wei <pengweiprc@google.com>,
+        Yonghong Song <yhs@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-
---mRi/Sh4c9dkl2g8K
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 2023-04-27, at 08:52:27 +0200, Roberto Sassu wrote:
-> On Wed, 2023-04-26 at 22:50 +0100, Jeremy Sowden wrote:
-> > When building sign-file, the call to get the CFLAGS for libcrypto is
-> > missing white-space between `pkg-config` and `--cflags`:
-> >=20
-> >   $(shell $(HOSTPKG_CONFIG)--cflags libcrypto 2> /dev/null)
-> >=20
-> > Removing the redirection of stderr, we see:
-> >=20
-> >   $ make -C tools/testing/selftests/bpf sign-file
-> >   make: Entering directory '[...]/tools/testing/selftests/bpf'
-> >   make: pkg-config--cflags: No such file or directory
-> >     SIGN-FILE sign-file
-> >   make: Leaving directory '[...]/tools/testing/selftests/bpf'
-> >=20
-> > Add the missing space.
-> >=20
-> > Fixes: fc97590668ae ("selftests/bpf: Add test for bpf_verify_pkcs7_sign=
-ature() kfunc")
-> > Signed-off-by: Jeremy Sowden <jeremy@azazel.net>
->=20
-> Thanks.
->=20
-> Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
+On Thu, Apr 27, 2023 at 1:15=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> Roberto
+> On Thu, Apr 27, 2023 at 9:59=E2=80=AFAM Stanislav Fomichev <sdf@google.co=
+m> wrote:
+> >
+> > RE unsupported C++: we are not really subscribing to support it here, r=
+ight?
+> > Just making it easier for the folks who want to experiment with it to
+> > try it out.
+>
+> I think short term experiments should be out of tree.
+> The experiments that lead to a long term goal can certainly be in tree.
+> In that sense if your team is really going to invest into making
+> c++ a supported front-end for bpf than this is a good first step.
+> Such c++ flavor will have restrictions (like no virtual calls and
+> exceptions) and it's ok. The basic things like CO-RE has to work though.
+> In other words if there is a draft patch for llvm to enable
+> existing attrs for c++ then this patch would be fine.
+> This patch alone with no effort made on llvm side should stay out of tree=
+.
 
-Thanks.  I was having e-mail problems yesterday when I sent the original
-message with the patch in it, and it didn't reach some of the
-recipients.  I'll send it again with your `Reviewed-by:` attached.
-
-J.
-
-> > ---
-> >  tools/testing/selftests/bpf/Makefile | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selft=
-ests/bpf/Makefile
-> > index b677dcd0b77a..ad01c9e1ff12 100644
-> > --- a/tools/testing/selftests/bpf/Makefile
-> > +++ b/tools/testing/selftests/bpf/Makefile
-> > @@ -197,7 +197,7 @@ $(OUTPUT)/urandom_read: urandom_read.c urandom_read=
-_aux.c $(OUTPUT)/liburandom_r
-> > =20
-> >  $(OUTPUT)/sign-file: ../../../../scripts/sign-file.c
-> >  	$(call msg,SIGN-FILE,,$@)
-> > -	$(Q)$(CC) $(shell $(HOSTPKG_CONFIG)--cflags libcrypto 2> /dev/null) \
-> > +	$(Q)$(CC) $(shell $(HOSTPKG_CONFIG) --cflags libcrypto 2> /dev/null) \
-> >  		  $< -o $@ \
-> >  		  $(shell $(HOSTPKG_CONFIG) --libs libcrypto 2> /dev/null || echo -l=
-crypto)
-> > =20
-
---mRi/Sh4c9dkl2g8K
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEbB20U2PvQDe9VtUXKYasCr3xBA0FAmRK084ACgkQKYasCr3x
-BA3WMw//dtfaKXgeSzYYSiB5uUJ91AnWV5EhEUZhFmgrxl9zATqbS+UimZ2X3JiV
-uuHbQQixkxwB8FNUYmEVGQpIjuJonWnTFhorfWvVTzr4hDNTsycE/FyB9ROYUWBJ
-0+T3aMcm8tBS8hqasPncs33TgEolPlO902kyUaB5NCfZOKNWW88wUOA6EiAILN5L
-nEmOK8BwIt68gO55fAWm/zOObyG17YdYdmI6EBCdxW8UaVUCbO9K4DJDoPsy2e8u
-QauB6vpiGLJAFQEnGaKeecEnBRYJFEGMop/bLEnuThRR9Cc6W8cW2iTo2ltF4ljy
-CwwF6yO11Ua6cGF+0s/gvFnTfHwtOfuIRmQcSQEoaZyTWrE8M1bmK55WCxiaQb4B
-Cpeylu3XnCCRZzHUoxQutc9+4lt87EdgQLRHVv1SbGVMYgJiDdhNMu/ZxXZp4eDN
-VRFklTPVumtH1IUYGwjIfpIl8JCZAE+yOeLmMjE7PgrD3Ay+UB3FYE6irW8+Q/rp
-GG1AdIMlqkq9Tuj6hv+9ymtfBgZBaaS6aCoFqJaEHKVmJwHBRxOA7DpeVh+zkLBd
-Oh+fxnmvxm54Np/EjvyY/D2BvuIu2ZkhHACwozvIwydc51+9f86ksR3zKUWyHSlZ
-UKoV4IlblMs98QvNiw3I91fBPwLCUsMzjI7UyDUMgsVpzCrQTZE=
-=sPuM
------END PGP SIGNATURE-----
-
---mRi/Sh4c9dkl2g8K--
+SG, thanks! I'll relay the message internally.
