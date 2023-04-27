@@ -2,118 +2,122 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A60DC77B73
-	for <bpf@archiver.kernel.org>; Thu, 27 Apr 2023 23:43:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3075FC77B61
+	for <bpf@archiver.kernel.org>; Thu, 27 Apr 2023 23:49:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344440AbjD0XnJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 27 Apr 2023 19:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48334 "EHLO
+        id S1344447AbjD0Xs5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 27 Apr 2023 19:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344436AbjD0XnC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 27 Apr 2023 19:43:02 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6175040FB;
-        Thu, 27 Apr 2023 16:42:54 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9505214c47fso1723030166b.1;
-        Thu, 27 Apr 2023 16:42:54 -0700 (PDT)
+        with ESMTP id S1344235AbjD0Xsj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 27 Apr 2023 19:48:39 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336E61FF5;
+        Thu, 27 Apr 2023 16:48:39 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-63b7b54642cso6491808b3a.0;
+        Thu, 27 Apr 2023 16:48:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682638972; x=1685230972;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1682639318; x=1685231318;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mUlftFMQG/nmWGeOn+1YPkFCl4D5GTil/3fkguZjWM0=;
-        b=pa4d5xwQzC2locTY3gPMPASKVeXayCDl9KcPXWXN+q0pMCEDrVVnA2+MXVP9o/e6NU
-         EUKCojDx/XIxG6ScM4D7khM28ADklUOdokWnHxPGMfIyycx7XhLj7W/oEfT1D3ITSZaF
-         cjbMTxZ7hIlsg+wMwGNLiYn9ckVZWjrvYPmRc/OiLjzsWVmnpWXPhLT7WV023O9i6Chi
-         eQELvGbnN6+nUBnjTl3FRpYxlqgSW0js6lvKvRUXk+sNXIibxH5gMVfxovJOpt/5/dcX
-         ++so/TyIdErONKLHHCz42dCyrYSsx/vmAmuLTrh6gDMqNZqwwP+g7ArxgHQgjONyKsju
-         iFow==
+        bh=ZNOWzjzDN8/IL6kFuuC3MOAdiIjEwK+a4rVMlscXpEU=;
+        b=Dy7KxEsSsT4BcpH9K6b7Bs+cMCFyYE7TTBHgYFYjQ+mDHmmEDEU9IOttf5pPaZ1bJ5
+         z8m5jSGjO573huyo5zG7pA4Q14nWilvb35KzW6HFdRPALYZEnCqpt/YeXb61HwrsWVyR
+         P2LgiH92QNwB5cLsxbzcJb7dQD8oTmqkoSVmjAb4aosfoQP7AvrsHOovgixa6Ui00hRj
+         XhIcXf78a7NBr8mZW4u2pFW35l4UjEkXFuQ1pouT6JzfZmAE0x5QXhWgz38qhLmz2gQN
+         7LpHDF/hjaBqtaPrnESEriRZzn6gawMAkamuNwHq+V3Xw2zc4xPCxJuRqQBqz8su1rbH
+         u5GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682638972; x=1685230972;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mUlftFMQG/nmWGeOn+1YPkFCl4D5GTil/3fkguZjWM0=;
-        b=OEZ/T0S4TuPDhfTQ6GDtVH0RozhGS8ztcVMyKhVr0Qlyuds+gd9u9h/PhbAS5bGBpq
-         OCWdzOMUEeS2QA+cBWnP8J/w3E2ITkDfegbRLqHZ0veYCTl21EK+ifBGeFYtgEy9Neuz
-         ECs0/LXY4WHpuFZrT0FoB3R/sTCZAE2obECqzTEcmWLH74FTXYe1SqA3i+lt+eWigkuF
-         lHjOI1EgOO74408/9/M07ZAiI+ndPAfrwvAq1DiwUEV14I6G2UoHeYnmwoy2FyKfiRU3
-         HmGrsdDAg12XJq2mU2qBKpQR08qNxQ0qclc2H/t7mSm8qopBPbiaoNnBveJpVBPXLFuB
-         UbIA==
-X-Gm-Message-State: AC+VfDz4PWtco94K7ME2O7b8ArHWrir++PXl5hDuo2as3kCn6Yyru+ND
-        QQgMQsQdbqCAiVf8lih4TJKW5IWuzMRxtHn/naA=
-X-Google-Smtp-Source: ACHHUZ5WWMRF8S4mg49Zu1cIc9MR9R9ECYWxvmLB2L87Ad48iPMBZJMLcx2ImZFiGbgqsSIQ0HMrIItnPDBpGz5LB00=
-X-Received: by 2002:a17:907:a089:b0:932:7f5c:4bb2 with SMTP id
- hu9-20020a170907a08900b009327f5c4bb2mr3555970ejc.75.1682638972567; Thu, 27
- Apr 2023 16:42:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230406004018.1439952-1-drosen@google.com> <CAEf4BzZ2zjJKhyUtZKUxbNXJMggcot4MyNEeg6n4Lho-EVbBbg@mail.gmail.com>
- <CA+PiJmTHO3SPM_LvwFYWP+uf_KU4QytBshGzk78CZi8oGJ+rnw@mail.gmail.com>
- <CAEf4BzZ_4kcM5=Jo3JoWQWugS3wkrtoteyM8YqkykFvYywG+kg@mail.gmail.com> <CA+PiJmTsEsUi3c5soodZHxS_PvMPnJG-4bFvdfpLq-kPZ0j4UQ@mail.gmail.com>
-In-Reply-To: <CA+PiJmTsEsUi3c5soodZHxS_PvMPnJG-4bFvdfpLq-kPZ0j4UQ@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 27 Apr 2023 16:42:40 -0700
-Message-ID: <CAEf4BzatBnBH8RHczLerMsW4NvTtx6xj5COjGzVvTkRxfciw4Q@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Dynptr Verifier Adjustments
-To:     Daniel Rosenberg <drosen@google.com>,
-        "Jose E . Marchesi" <jose.marchesi@oracle.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
+        d=1e100.net; s=20221208; t=1682639318; x=1685231318;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ZNOWzjzDN8/IL6kFuuC3MOAdiIjEwK+a4rVMlscXpEU=;
+        b=GgE2b5KOuP2Csv05tVln/FZuO2uh7ayktKswz5m1mD+Ke+JY71/QES+RaJHsF+80JX
+         yG72AbBfbL9JTB0ypbFxLbW9gUvV09jFSHGcmfd9azjYK3AuZO9jsrycP8uWA7k/PCnC
+         lf0k3G5vl2kDZzHvObRNHpgvvOxNU6roLI+m+Hvqyzlc8ObyJEgT3E+pBiH2vMmupVhN
+         dP69X8AWVQ96M4est5v0X8pV8xtDuCcAj5psbS/K7BhG60FzJiVkAQVPvzVEZBMd5nrK
+         or94XVt2ptKAkyxeVeCa2dQ2Xan/CaUSM1m5Easph7FwVJp/n8xaHYaApbj+AEHlqn57
+         W2Zg==
+X-Gm-Message-State: AC+VfDzcU6dFE72FM0+hCuyzZveohXWdKn0aztvJvSJyDs7qlrP/qiGr
+        8GlHmFddqsbAo+dP+H1GtY8=
+X-Google-Smtp-Source: ACHHUZ4loax0r2ryQ/NZLnyN+uRJNYa/sl5VGC+6EMy431qxGiQy5fee6GUa+agQ7duwis9GuJGimA==
+X-Received: by 2002:a05:6a00:24c4:b0:640:f220:d16e with SMTP id d4-20020a056a0024c400b00640f220d16emr5154594pfv.11.1682639318519;
+        Thu, 27 Apr 2023 16:48:38 -0700 (PDT)
+Received: from moohyul.svl.corp.google.com ([2620:15c:2d4:203:55cd:594d:edb:e780])
+        by smtp.gmail.com with ESMTPSA id p5-20020a056a000b4500b0062a56e51fd7sm13769425pfo.188.2023.04.27.16.48.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 16:48:38 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Hao Luo <haoluo@google.com>, Song Liu <song@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Subject: [PATCH 2/2] perf lock contention: Rework offset calculation with BPF CO-RE
+Date:   Thu, 27 Apr 2023 16:48:33 -0700
+Message-ID: <20230427234833.1576130-2-namhyung@kernel.org>
+X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
+In-Reply-To: <20230427234833.1576130-1-namhyung@kernel.org>
+References: <20230427234833.1576130-1-namhyung@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 4:36=E2=80=AFPM Daniel Rosenberg <drosen@google.com=
-> wrote:
->
-> On Wed, Apr 26, 2023 at 4:39=E2=80=AFPM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > Don't know, show the sequence of commands you are running?
-> >
-> > I have linux source in ~/linux, and KBUILD_OUTPUT set to
-> > ~/linux-build/default. And it only takes this:
-> >
-> > $ cd ~/linux
-> > $ make -j90 # build kernel
-> > $ cd tools/testing/selftests/bpf
-> > $ make -j90 # build selftests
-> >
-> > And that's it.
->
-> I've tried the same, modulo some paths. I'm pretty sure it's version
-> related at this point.
-> The current issue I'm seeing is "error: indirect call in function,
-> which are not supported by eBPF" when using GCC-BPF for
-> progs/bind4_prog.c
+It seems BPF CO-RE reloc doesn't work well with the pattern that gets
+the field-offset only.  Use offsetof() to make it explicit so that
+the compiler would generate the correct code.
 
-I don't think GCC-BPF is able to compile selftests properly just yet.
-So I guess the problem is that you do have some version of gcc-bpf in
-the system and selftest's Makefile tries to build gcc variants of
-test_progs? That's bad (I don't have GCC-BPF locally, and everyone
-else apparently as well).
+Fixes: 0c1228486bef ("perf lock contention: Support pre-5.14 kernels")
+Co-developed-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/util/bpf_skel/lock_contention.bpf.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-So for now just `make BPF_GCC=3D` ? CC'ing Jose, we should probably
-agree on some criteria of "GCC-BPF is really capable of building
-selftests" and adjust Makefile to only attempt GCC BPF build in that
-case.
+diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+index 30c193078bdb..8d3cfbb3cc65 100644
+--- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
++++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+@@ -429,21 +429,21 @@ struct rq___new {
+ SEC("raw_tp/bpf_test_finish")
+ int BPF_PROG(collect_lock_syms)
+ {
+-	__u64 lock_addr;
++	__u64 lock_addr, lock_off;
+ 	__u32 lock_flag;
+ 
++	if (bpf_core_field_exists(struct rq___new, __lock))
++		lock_off = offsetof(struct rq___new, __lock);
++	else
++		lock_off = offsetof(struct rq___old, lock);
++
+ 	for (int i = 0; i < MAX_CPUS; i++) {
+ 		struct rq *rq = bpf_per_cpu_ptr(&runqueues, i);
+-		struct rq___new *rq_new = (void *)rq;
+-		struct rq___old *rq_old = (void *)rq;
+ 
+ 		if (rq == NULL)
+ 			break;
+ 
+-		if (bpf_core_field_exists(rq_new->__lock))
+-			lock_addr = (__u64)&rq_new->__lock;
+-		else
+-			lock_addr = (__u64)&rq_old->lock;
++		lock_addr = (__u64)(void *)rq + lock_off;
+ 		lock_flag = LOCK_CLASS_RQLOCK;
+ 		bpf_map_update_elem(&lock_syms, &lock_addr, &lock_flag, BPF_ANY);
+ 	}
+-- 
+2.40.1.495.gc816e09b53d-goog
 
-
->
-> Currently using clang 16.0.0 and gcc 12.2.0-14.
-> I did manage to get it to build by just commenting out TEST_GEN_PROGS
-> +=3D test_progs-bpf_gcc
