@@ -2,310 +2,141 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA5B1C77B73
-	for <bpf@archiver.kernel.org>; Thu, 27 Apr 2023 22:54:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07C9EC77B73
+	for <bpf@archiver.kernel.org>; Thu, 27 Apr 2023 23:28:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344351AbjD0WyA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 27 Apr 2023 18:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54872 "EHLO
+        id S229783AbjD0X2N (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 27 Apr 2023 19:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbjD0WyA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 27 Apr 2023 18:54:00 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E7D26B2
-        for <bpf@vger.kernel.org>; Thu, 27 Apr 2023 15:53:58 -0700 (PDT)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33RIQKMv020989
-        for <bpf@vger.kernel.org>; Thu, 27 Apr 2023 15:53:58 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=0d497Gr2t9y39Hzo9lQuC8vurbCgDT3XSJazx0cjWEE=;
- b=DgmDu1aZUl8F2ICKrT+Af2iXZVouXUo3oM6cpCAW+wzBK1My4G9zxbrKJm0lKDAC5MGc
- JKTl7LIP18zJLeCDvaW0n8TAebI3UX1Bv1zEBGGtx3dawhNlMv+XFv5a/Awv9kSmBUup
- nK0tLJp1LjITEszTCAd4XSrwvBEh5aXfM5/hWcOcGBW63CM5yd3sRuHhMmAqgY8Gr500
- GtxUsnSar/EBCR9Z4/1VHIQoL8shv/O2Up0hkqr84MLcvBXxuNI1MplLCOiN8gK/ASY2
- wvIlsKpHaYuwrZlowSC1tSN4UjnKlR+3wl06ogzOBxh8swWDRrbeNhPpBHmWNK//psUL SQ== 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3q7cst8wrj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 27 Apr 2023 15:53:57 -0700
-Received: from twshared52565.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 27 Apr 2023 15:53:56 -0700
-Received: by devvm5710.vll0.facebook.com (Postfix, from userid 624576)
-        id C89702D1989D; Thu, 27 Apr 2023 15:53:38 -0700 (PDT)
-From:   Stephen Veiss <sveiss@meta.com>
-To:     <bpf@vger.kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>
-CC:     Yonghong Song <yhs@meta.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Stephen Veiss <sveiss@meta.com>
-Subject: [PATCH bpf-next v2 1/2] selftests/bpf: extract insert_test from parse_test_list
-Date:   Thu, 27 Apr 2023 15:53:32 -0700
-Message-ID: <20230427225333.3506052-2-sveiss@meta.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230427225333.3506052-1-sveiss@meta.com>
-References: <20230427225333.3506052-1-sveiss@meta.com>
+        with ESMTP id S1344097AbjD0X2M (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 27 Apr 2023 19:28:12 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F411C272E
+        for <bpf@vger.kernel.org>; Thu, 27 Apr 2023 16:28:10 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-b9a6869dd3cso2692445276.2
+        for <bpf@vger.kernel.org>; Thu, 27 Apr 2023 16:28:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682638090; x=1685230090;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GCNur8ye00lfwuEn8aqgDObynVvMHHHZO3F1ug6RXms=;
+        b=eqilKu2foh+ZS+T8W9A4VyDLeS3SBrTOUZ7cfPK5BuHwK0nGmYOPYb6fNyc5YAwKug
+         aeUV8N45wDdWNqp2/Xl0MtdYBeYVbhtBuuWI61df/RdGun32D1j087ODb5g1k1ILQApE
+         8IploToxkcBFMGetLa4S0rmERG3UMbqGgMEsowdh+N08oUJILJCmWm55+SATGpnPDDvM
+         DBpSZ/440VlaKOZo5ldDZ6bKsJWCyz8A5KP2TBYldtqf6Ycnvju20coHBfXLqPpc8efc
+         KAdrwZa7/g0eDeD4CdGCoKVLc/51r0wgTjptUef74QTz3hzzKKHofjQSfg4A9SgMkxo3
+         FH4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682638090; x=1685230090;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GCNur8ye00lfwuEn8aqgDObynVvMHHHZO3F1ug6RXms=;
+        b=fnX+YyYC5aeUtIxkibAz9HadrE3SgoWxfhLxa7tnua8zlkfUP2WHZA9gv9nk6H2FSB
+         FzXHCNAigR5W/1g12vf2OSNQOId5YrP+1qY22vd7qqklbK4qNgTzyW8JjCNpPtaH27kD
+         17JkgCUSVilpDPZbvfa3+M6nchyQcunSBXfqZmpsxwW9hCm91rEzHjTRDoLWOnTplTGw
+         iFuK383vc+ScBjxLnRCebX0gp0xmHY57ga9H1zOK6HFsOL960+xR3BDnS7z0erzC/Wds
+         yC7Sfoq96udj7YXO0v1Pd0HnR8mHScmIe+Qh0vKG3Rve7bJ1gMFtDuZp/6y1eJwGU8gE
+         ymCA==
+X-Gm-Message-State: AC+VfDzvkUc7XVY7J/lo8gVG+ebAwll8gBUQMCqBS4in5FtxZfVYa93b
+        jONQk+A0OJGzkIRlKeDjtCP6V0rs/p3PHOYKxEI=
+X-Google-Smtp-Source: ACHHUZ7/D4mY0md+2Pdoms2gl7DWZzFxYpmvN+UrYuDuDdadu2RnJ2pFzjePhW75qScD53DXmfWkVrI7t1d6IdFOS4A=
+X-Received: by 2002:a25:19d4:0:b0:b9a:7b56:bcb4 with SMTP id
+ 203-20020a2519d4000000b00b9a7b56bcb4mr2210008ybz.42.1682638090065; Thu, 27
+ Apr 2023 16:28:10 -0700 (PDT)
 MIME-Version: 1.0
+References: <20230427001425.563232-1-namhyung@kernel.org> <CAEf4BzYs6iD+iE4RZnXTKHhBHCOr9r7AdhsBWWDpivy7sshPKw@mail.gmail.com>
+ <CAM9d7ci3xAcnqdkpb-J4rv7yfiB2Trb-e2h7gfj6Wu5N_V7a-Q@mail.gmail.com>
+ <CAEf4BzaZhjgPNaNH2yFxjZ-C+ZaSJRg9EWzOCcMOP-CV7kDHBA@mail.gmail.com>
+ <ZEn/EOnsH2RP//24@google.com> <CAEf4BzZHS5NprN2ya03Re_1hvC0nNyz_qYEhbD=sGou+m=OWHw@mail.gmail.com>
+In-Reply-To: <CAEf4BzZHS5NprN2ya03Re_1hvC0nNyz_qYEhbD=sGou+m=OWHw@mail.gmail.com>
+From:   Namhyung Kim <namhyung@gmail.com>
+Date:   Thu, 27 Apr 2023 16:27:59 -0700
+Message-ID: <CAM9d7chFp42ar3dMmhHxhHR=CVRg64cMvNQDE98M-EuRmU5EfQ@mail.gmail.com>
+Subject: Re: [HELP] failed to resolve CO-RE relocation
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Hao Luo <haoluo@google.com>, Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: OAw91uq3B-g-HIth-XzMMhevBVpBAX6c
-X-Proofpoint-GUID: OAw91uq3B-g-HIth-XzMMhevBVpBAX6c
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-27_09,2023-04-27_01,2023-02-09_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Split the logic to insert new tests into test filter sets out from
-parse_test_list.
+On Thu, Apr 27, 2023 at 3:15=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+> Ok, I didn't manage to force compiler to behave as long as
+> `&rq_old->lock` pattern was used. So I went for a different approach.
+> This works:
 
-Fix the subtest insertion logic to reuse an existing top-level test
-filter, which prevents the creation of duplicate top-level test filters
-each with a single subtest.
+Thanks!  It works for me too!
 
-Signed-off-by: Stephen Veiss <sveiss@meta.com>
----
- .../selftests/bpf/prog_tests/arg_parsing.c    |  13 ++
- tools/testing/selftests/bpf/testing_helpers.c | 178 ++++++++++--------
- 2 files changed, 117 insertions(+), 74 deletions(-)
+Can I use this patch with your Co-developed-by tag ?
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/arg_parsing.c b/tools=
-/testing/selftests/bpf/prog_tests/arg_parsing.c
-index b17bfa0e0aac..3754cd5f8c0a 100644
---- a/tools/testing/selftests/bpf/prog_tests/arg_parsing.c
-+++ b/tools/testing/selftests/bpf/prog_tests/arg_parsing.c
-@@ -96,6 +96,19 @@ static void test_parse_test_list(void)
- 		goto error;
- 	ASSERT_OK(strcmp("*bpf_cookie*", set.tests[0].name), "test name");
- 	ASSERT_OK(strcmp("*trace*", set.tests[0].subtests[0]), "subtest name");
-+	free_test_filter_set(&set);
-+
-+	ASSERT_OK(parse_test_list("t/subtest1,t/subtest2", &set, true),
-+		  "parsing");
-+	if (!ASSERT_EQ(set.cnt, 1, "count of test filters"))
-+		goto error;
-+	if (!ASSERT_OK_PTR(set.tests, "test filters initialized"))
-+		goto error;
-+	if (!ASSERT_EQ(set.tests[0].subtest_cnt, 2, "subtest filters count"))
-+		goto error;
-+	ASSERT_OK(strcmp("t", set.tests[0].name), "test name");
-+	ASSERT_OK(strcmp("subtest1", set.tests[0].subtests[0]), "subtest name")=
-;
-+	ASSERT_OK(strcmp("subtest2", set.tests[0].subtests[1]), "subtest name")=
-;
- error:
- 	free_test_filter_set(&set);
- }
-diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testin=
-g/selftests/bpf/testing_helpers.c
-index 0b5e0829e5be..fca617e87710 100644
---- a/tools/testing/selftests/bpf/testing_helpers.c
-+++ b/tools/testing/selftests/bpf/testing_helpers.c
-@@ -70,92 +70,122 @@ int parse_num_list(const char *s, bool **num_set, in=
-t *num_set_len)
- 	return 0;
- }
-=20
-+static int do_insert_test(struct test_filter_set *set,
-+			  char *test_str,
-+			  char *subtest_str)
-+{
-+	struct test_filter *tmp, *test;
-+	char **ctmp;
-+	int i;
-+
-+	for (i =3D 0; i < set->cnt; i++) {
-+		test =3D &set->tests[i];
-+
-+		if (strcmp(test_str, test->name) =3D=3D 0) {
-+			free(test_str);
-+			goto subtest;
-+		}
-+	}
-+
-+	tmp =3D realloc(set->tests, sizeof(*test) * (set->cnt + 1));
-+	if (!tmp)
-+		return -ENOMEM;
-+
-+	set->tests =3D tmp;
-+	test =3D &set->tests[set->cnt];
-+
-+	test->name =3D test_str;
-+	test->subtests =3D NULL;
-+	test->subtest_cnt =3D 0;
-+
-+	set->cnt++;
-+
-+subtest:
-+	if (!subtest_str)
-+		return 0;
-+
-+	for (i =3D 0; i < test->subtest_cnt; i++) {
-+		if (strcmp(subtest_str, test->subtests[i]) =3D=3D 0) {
-+			free(subtest_str);
-+			return 0;
-+		}
-+	}
-+
-+	ctmp =3D realloc(test->subtests,
-+		       sizeof(*test->subtests) * (test->subtest_cnt + 1));
-+	if (!ctmp)
-+		return -ENOMEM;
-+
-+	test->subtests =3D ctmp;
-+	test->subtests[test->subtest_cnt] =3D subtest_str;
-+
-+	test->subtest_cnt++;
-+
-+	return 0;
-+}
-+
-+static int insert_test(struct test_filter_set *set,
-+		       char *test_spec,
-+		       bool is_glob_pattern)
-+{
-+	char *pattern, *subtest_str, *ext_test_str, *ext_subtest_str =3D NULL;
-+	int glob_chars =3D 0;
-+
-+	if (is_glob_pattern) {
-+		pattern =3D "%s";
-+	} else {
-+		pattern =3D "*%s*";
-+		glob_chars =3D 2;
-+	}
-+
-+	subtest_str =3D strchr(test_spec, '/');
-+	if (subtest_str) {
-+		*subtest_str =3D '\0';
-+		subtest_str +=3D 1;
-+	}
-+
-+	ext_test_str =3D malloc(strlen(test_spec) + glob_chars + 1);
-+	if (!ext_test_str)
-+		goto err;
-+
-+	sprintf(ext_test_str, pattern, test_spec);
-+
-+	if (subtest_str) {
-+		ext_subtest_str =3D malloc(strlen(subtest_str) + glob_chars + 1);
-+		if (!ext_subtest_str)
-+			goto err;
-+
-+		sprintf(ext_subtest_str, pattern, subtest_str);
-+	}
-+
-+	return do_insert_test(set, ext_test_str, ext_subtest_str);
-+
-+err:
-+	free(ext_test_str);
-+	free(ext_subtest_str);
-+
-+	return -ENOMEM;
-+}
-+
- int parse_test_list(const char *s,
- 		    struct test_filter_set *set,
- 		    bool is_glob_pattern)
- {
--	char *input, *state =3D NULL, *next;
--	struct test_filter *tmp, *tests =3D NULL;
--	int i, j, cnt =3D 0;
-+	char *input, *state =3D NULL, *test_spec;
-+	int err =3D 0;
-=20
- 	input =3D strdup(s);
- 	if (!input)
- 		return -ENOMEM;
-=20
--	while ((next =3D strtok_r(state ? NULL : input, ",", &state))) {
--		char *subtest_str =3D strchr(next, '/');
--		char *pattern =3D NULL;
--		int glob_chars =3D 0;
--
--		tmp =3D realloc(tests, sizeof(*tests) * (cnt + 1));
--		if (!tmp)
--			goto err;
--		tests =3D tmp;
--
--		tests[cnt].subtest_cnt =3D 0;
--		tests[cnt].subtests =3D NULL;
--
--		if (is_glob_pattern) {
--			pattern =3D "%s";
--		} else {
--			pattern =3D "*%s*";
--			glob_chars =3D 2;
--		}
--
--		if (subtest_str) {
--			char **tmp_subtests =3D NULL;
--			int subtest_cnt =3D tests[cnt].subtest_cnt;
--
--			*subtest_str =3D '\0';
--			subtest_str +=3D 1;
--			tmp_subtests =3D realloc(tests[cnt].subtests,
--					       sizeof(*tmp_subtests) *
--					       (subtest_cnt + 1));
--			if (!tmp_subtests)
--				goto err;
--			tests[cnt].subtests =3D tmp_subtests;
--
--			tests[cnt].subtests[subtest_cnt] =3D
--				malloc(strlen(subtest_str) + glob_chars + 1);
--			if (!tests[cnt].subtests[subtest_cnt])
--				goto err;
--			sprintf(tests[cnt].subtests[subtest_cnt],
--				pattern,
--				subtest_str);
--
--			tests[cnt].subtest_cnt++;
--		}
--
--		tests[cnt].name =3D malloc(strlen(next) + glob_chars + 1);
--		if (!tests[cnt].name)
--			goto err;
--		sprintf(tests[cnt].name, pattern, next);
--
--		cnt++;
-+	while ((test_spec =3D strtok_r(state ? NULL : input, ",", &state))) {
-+		err =3D insert_test(set, test_spec, is_glob_pattern);
-+		if (err)
-+			break;
- 	}
-=20
--	tmp =3D realloc(set->tests, sizeof(*tests) * (cnt + set->cnt));
--	if (!tmp)
--		goto err;
--
--	memcpy(tmp +  set->cnt, tests, sizeof(*tests) * cnt);
--	set->tests =3D tmp;
--	set->cnt +=3D cnt;
--
--	free(tests);
- 	free(input);
--	return 0;
--
--err:
--	for (i =3D 0; i < cnt; i++) {
--		for (j =3D 0; j < tests[i].subtest_cnt; j++)
--			free(tests[i].subtests[j]);
--
--		free(tests[i].name);
--	}
--	free(tests);
--	free(input);
--	return -ENOMEM;
-+	return err;
- }
-=20
- __u32 link_info_prog_id(const struct bpf_link *link, struct bpf_link_inf=
-o *info)
---=20
-2.34.1
+Thanks,
+Namhyung
 
+
+>
+> $ git diff
+> diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c
+> b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+> index 8911e2a077d8..8d3cfbb3cc65 100644
+> --- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
+> +++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+> @@ -418,32 +418,32 @@ int contention_end(u64 *ctx)
+>
+>  extern struct rq runqueues __ksym;
+>
+> -struct rq__old {
+> +struct rq___old {
+>         raw_spinlock_t lock;
+>  } __attribute__((preserve_access_index));
+>
+> -struct rq__new {
+> +struct rq___new {
+>         raw_spinlock_t __lock;
+>  } __attribute__((preserve_access_index));
+>
+>  SEC("raw_tp/bpf_test_finish")
+>  int BPF_PROG(collect_lock_syms)
+>  {
+> -       __u64 lock_addr;
+> +       __u64 lock_addr, lock_off;
+>         __u32 lock_flag;
+>
+> +       if (bpf_core_field_exists(struct rq___new, __lock))
+> +               lock_off =3D offsetof(struct rq___new, __lock);
+> +       else
+> +               lock_off =3D offsetof(struct rq___old, lock);
+> +
+>         for (int i =3D 0; i < MAX_CPUS; i++) {
+>                 struct rq *rq =3D bpf_per_cpu_ptr(&runqueues, i);
+> -               struct rq__new *rq_new =3D (void *)rq;
+> -               struct rq__old *rq_old =3D (void *)rq;
+>
+>                 if (rq =3D=3D NULL)
+>                         break;
+>
+> -               if (bpf_core_field_exists(rq_new->__lock))
+> -                       lock_addr =3D (__u64)&rq_new->__lock;
+> -               else
+> -                       lock_addr =3D (__u64)&rq_old->lock;
+> +               lock_addr =3D (__u64)(void *)rq + lock_off;
+>                 lock_flag =3D LOCK_CLASS_RQLOCK;
+>                 bpf_map_update_elem(&lock_syms, &lock_addr,
+> &lock_flag, BPF_ANY);
+>         }
+>
+>
+> > Thanks,
+> > Namhyung
+> >
+> >
