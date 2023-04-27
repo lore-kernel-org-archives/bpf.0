@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EDAD7C77B60
-	for <bpf@archiver.kernel.org>; Thu, 27 Apr 2023 03:06:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 546E5C77B7E
+	for <bpf@archiver.kernel.org>; Thu, 27 Apr 2023 03:06:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243008AbjD0DG3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 26 Apr 2023 23:06:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44138 "EHLO
+        id S242987AbjD0DGa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 26 Apr 2023 23:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242976AbjD0DGM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S242985AbjD0DGM (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 26 Apr 2023 23:06:12 -0400
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634564219;
-        Wed, 26 Apr 2023 20:05:47 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0Vh5fnwy_1682564740;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vh5fnwy_1682564740)
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36946422A;
+        Wed, 26 Apr 2023 20:05:49 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R831e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0Vh5XEsG_1682564744;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vh5XEsG_1682564744)
           by smtp.aliyun-inc.com;
-          Thu, 27 Apr 2023 11:05:41 +0800
+          Thu, 27 Apr 2023 11:05:45 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     netdev@vger.kernel.org
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
@@ -31,9 +31,9 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH net-next v4 05/15] virtio_net: separate the logic of freeing xdp shinfo
-Date:   Thu, 27 Apr 2023 11:05:24 +0800
-Message-Id: <20230427030534.115066-6-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v4 09/15] virtio_net: merge: remove skip_xdp
+Date:   Thu, 27 Apr 2023 11:05:28 +0800
+Message-Id: <20230427030534.115066-10-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20230427030534.115066-1-xuanzhuo@linux.alibaba.com>
 References: <20230427030534.115066-1-xuanzhuo@linux.alibaba.com>
@@ -44,70 +44,60 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch introduce a new function that releases the
-xdp shinfo. The subsequent patch will reuse this function.
+Now, the logic of merge xdp process is simple, we can remove the
+skip_xdp.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- drivers/net/virtio_net.c | 27 ++++++++++++++++-----------
- 1 file changed, 16 insertions(+), 11 deletions(-)
+ drivers/net/virtio_net.c | 23 ++++++++++-------------
+ 1 file changed, 10 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 264945dd7a35..b4eb083ebf55 100644
+index 520d48088455..55ecd1ce8a1e 100644
 --- a/drivers/net/virtio_net.c
 +++ b/drivers/net/virtio_net.c
-@@ -789,6 +789,21 @@ static int virtnet_xdp_xmit(struct net_device *dev,
- 	return ret;
- }
- 
-+static void put_xdp_frags(struct xdp_buff *xdp)
-+{
-+	struct skb_shared_info *shinfo;
-+	struct page *xdp_page;
-+	int i;
-+
-+	if (xdp_buff_has_frags(xdp)) {
-+		shinfo = xdp_get_shared_info_from_buff(xdp);
-+		for (i = 0; i < shinfo->nr_frags; i++) {
-+			xdp_page = skb_frag_page(&shinfo->frags[i]);
-+			put_page(xdp_page);
-+		}
-+	}
-+}
-+
- static int virtnet_xdp_handler(struct bpf_prog *xdp_prog, struct xdp_buff *xdp,
- 			       struct net_device *dev,
- 			       unsigned int *xdp_xmit,
-@@ -1304,12 +1319,9 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
- 	xdp_prog = rcu_dereference(rq->xdp_prog);
- 	if (xdp_prog) {
- 		unsigned int xdp_frags_truesz = 0;
--		struct skb_shared_info *shinfo;
--		struct page *xdp_page;
- 		struct xdp_buff xdp;
- 		void *data;
- 		u32 act;
--		int i;
- 
- 		data = mergeable_xdp_get_buf(vi, rq, xdp_prog, ctx, &frame_sz,
- 					     &num_buf, &page, offset, &len, hdr);
-@@ -1339,14 +1351,7 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
- 			break;
- 		}
- err_xdp_frags:
--		if (xdp_buff_has_frags(&xdp)) {
--			shinfo = xdp_get_shared_info_from_buff(&xdp);
--			for (i = 0; i < shinfo->nr_frags; i++) {
--				xdp_page = skb_frag_page(&shinfo->frags[i]);
--				put_page(xdp_page);
--			}
--		}
--
-+		put_xdp_frags(&xdp);
- 		goto err_xdp;
+@@ -1378,7 +1378,6 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 	struct page *page = virt_to_head_page(buf);
+ 	int offset = buf - page_address(page);
+ 	struct sk_buff *head_skb, *curr_skb;
+-	struct bpf_prog *xdp_prog;
+ 	unsigned int truesize = mergeable_ctx_to_truesize(ctx);
+ 	unsigned int headroom = mergeable_ctx_to_headroom(ctx);
+ 	unsigned int tailroom = headroom ? sizeof(struct skb_shared_info) : 0;
+@@ -1394,22 +1393,20 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 		goto err_skb;
  	}
- 	rcu_read_unlock();
+ 
+-	if (likely(!vi->xdp_enabled)) {
+-		xdp_prog = NULL;
+-		goto skip_xdp;
+-	}
++	if (unlikely(vi->xdp_enabled)) {
++		struct bpf_prog *xdp_prog;
+ 
+-	rcu_read_lock();
+-	xdp_prog = rcu_dereference(rq->xdp_prog);
+-	if (xdp_prog) {
+-		head_skb = receive_mergeable_xdp(dev, vi, rq, xdp_prog, buf, ctx,
+-						 len, xdp_xmit, stats);
++		rcu_read_lock();
++		xdp_prog = rcu_dereference(rq->xdp_prog);
++		if (xdp_prog) {
++			head_skb = receive_mergeable_xdp(dev, vi, rq, xdp_prog, buf, ctx,
++							 len, xdp_xmit, stats);
++			rcu_read_unlock();
++			return head_skb;
++		}
+ 		rcu_read_unlock();
+-		return head_skb;
+ 	}
+-	rcu_read_unlock();
+ 
+-skip_xdp:
+ 	head_skb = page_to_skb(vi, rq, page, offset, len, truesize, headroom);
+ 	curr_skb = head_skb;
+ 
 -- 
 2.32.0.3.g01195cf9f
 
