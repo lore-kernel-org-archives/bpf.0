@@ -2,125 +2,93 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1A46C77B61
-	for <bpf@archiver.kernel.org>; Thu, 27 Apr 2023 19:26:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EEFFFC77B61
+	for <bpf@archiver.kernel.org>; Thu, 27 Apr 2023 20:04:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244186AbjD0T0t (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 27 Apr 2023 15:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54944 "EHLO
+        id S229788AbjD0UEN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 27 Apr 2023 16:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244522AbjD0T0R (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 27 Apr 2023 15:26:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD7DE56
-        for <bpf@vger.kernel.org>; Thu, 27 Apr 2023 12:25:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682623523;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wynb7GdU79YYV9ENu+xz5worQ7/3FbOaM+jXoCkc6Vg=;
-        b=C2Arh964tyXZS/NNe7fjqH0yrV+Lf76FwHHZ79s9C1ffPkCwSr6teA3nu6b7ajGPM5Rrgk
-        J7xz3yNbhcSLBY3oLpK/hdcha8pRyD2pzqvaFX+XXlNBDsuGPkJERE6+m/Bz/9vcXDeTWq
-        qej4HHm1gCaZ/8la71KAvFSEoNLgBZ4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-571-kl80mYlSMgig3GF4mRmU3Q-1; Thu, 27 Apr 2023 15:25:18 -0400
-X-MC-Unique: kl80mYlSMgig3GF4mRmU3Q-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7FD86281294A;
-        Thu, 27 Apr 2023 19:25:17 +0000 (UTC)
-Received: from firesoul.localdomain (unknown [10.45.242.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 430DA1121314;
-        Thu, 27 Apr 2023 19:25:17 +0000 (UTC)
-Received: from [10.1.1.1] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 65F7C307372E8;
-        Thu, 27 Apr 2023 21:25:16 +0200 (CEST)
-Subject: [PATCH RFC net-next/mm V2 2/2] mm/page_pool: catch page_pool memory
- leaks
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        netdev@vger.kernel.org, Eric Dumazet <eric.dumazet@gmail.com>,
-        linux-mm@kvack.org, Mel Gorman <mgorman@techsingularity.net>
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, lorenzo@kernel.org,
-        =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        linyunsheng@huawei.com, bpf@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, willy@infradead.org
-Date:   Thu, 27 Apr 2023 21:25:16 +0200
-Message-ID: <168262351637.2036355.17064734185414935239.stgit@firesoul>
-In-Reply-To: <168262348084.2036355.16294550378793036683.stgit@firesoul>
-References: <168262348084.2036355.16294550378793036683.stgit@firesoul>
-User-Agent: StGit/1.4
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+        with ESMTP id S229750AbjD0UEM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 27 Apr 2023 16:04:12 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A280030FC
+        for <bpf@vger.kernel.org>; Thu, 27 Apr 2023 13:04:11 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-247c0ee87aaso5186548a91.0
+        for <bpf@vger.kernel.org>; Thu, 27 Apr 2023 13:04:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682625851; x=1685217851;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=yiyQnJT8xAERESugkKaVw6YWxdx1ItFdxkpRxA9aCPQ=;
+        b=lNhTs1zsOhAbEzgSO/c9lXN1DfT63sv+ZR++XOuMMkwW78FklMqI1BUiTC2WfZyYTf
+         cZDw19M45OwR31fY8M/WLu+c8bN09WgVGeGoxR1zfZZ7nePmrIz/eJ0jrvQoO+15MXi6
+         1dQBDU5r5JFhOEVyx3n/S+Ens4eK/xR33oyh4LdJshOLV6CvwLtVtcx2k8e2c1nY7dtB
+         6/i+iga9d3ztU2wUsd1kBZGx9rFHTSpabMxHdPpxkh6Awyu7/Gf81X4YrXd73lcotI1S
+         Qjya/MJCaktLchOYZ2wjJAgaFh0XzYvdNUfskZi4c2y36wh/oJjhz8jdjNopRsi+nfav
+         HJ4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682625851; x=1685217851;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yiyQnJT8xAERESugkKaVw6YWxdx1ItFdxkpRxA9aCPQ=;
+        b=eCaDDH24He6ZEvf1l49644poFc1gP92zzq0CQ5AtW43mGSt9q4bngQLeCujt2b5nOw
+         if6ersqXYvxpd5+6m03vmaJMJqnftaE9cnh/TAn8/vcMiPtNp55UDXzymZ9dK1Lmtfge
+         NRFdm2TMWuo1c5EfOaz8LOFJYvTyvTrL2eK1WYu/gdLMfCNQjsIBKzcJKCSG7IL4dJPm
+         G1nKYq51gDOeLeuxAIpzbcbT6f5onx5FPZoUskcTTnwF4GVB4Xh7XR0Cc2A16PonAxQK
+         aQhPC6pcTTr39DtLGjzTciHfRLUOha7dGFR1KWzTb2RvPp+fwH7xoqA9FYxTASw4ErjJ
+         8CRQ==
+X-Gm-Message-State: AC+VfDwTpqXWBGVT6ZIE1J1Ke4X3MNu5lkenwEy2QCSSahNM0JVdG+zX
+        K5wmRaCQw+3wn6TS+XDfcHZwfbzUIzlW4EZ+Nr/cow1dCPidn4U/pm72/mnUQvDzrV8EDZSi/gy
+        E0y2+oxgrBiDxcHABLTtF+BQFg/KXRuliGGDAL7jdEsYADxG9ow==
+X-Google-Smtp-Source: ACHHUZ4ok/gtVITncOOj+mITAf5IyEJ7eDwhB5PM2ySlI0plqLEr67VR8FKbcB534FKq+7VMx5H/UjE=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a17:90a:7388:b0:247:3048:58ef with SMTP id
+ j8-20020a17090a738800b00247304858efmr810163pjg.6.1682625850978; Thu, 27 Apr
+ 2023 13:04:10 -0700 (PDT)
+Date:   Thu, 27 Apr 2023 13:04:05 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
+Message-ID: <20230427200409.1785263-1-sdf@google.com>
+Subject: [PATCH bpf-next v2 0/4] bpf: Don't EFAULT for {g,s}setsockopt with
+ wrong optlen
+From:   Stanislav Fomichev <sdf@google.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Pages belonging to a page_pool (PP) instance must be freed through the
-PP APIs in-order to correctly release any DMA mappings and release
-refcnt on the DMA device when freeing PP instance. When PP release a
-page (page_pool_release_page) the page->pp_magic value is cleared.
+optval larger than PAGE_SIZE leads to EFAULT if the BPF program
+isn't careful enough. This is often overlooked and might break
+completely unrelated socket options. Instead of EFAULT,
+let's ignore BPF program buffer changes. See the first patch for
+more info.
 
-This patch detect a leaked PP page in free_page_is_bad() via
-unexpected state of page->pp_magic value being PP_SIGNATURE.
+In addition, clearly document this corner case and reset optlen
+in our selftests (in case somebody copy-pastes from them).
 
-We choose to report and treat it as a bad page. It would be possible
-to release the page via returning it to the PP instance as the
-page->pp pointer is likely still valid.
+Stanislav Fomichev (4):
+  bpf: Don't EFAULT for {g,s}setsockopt with wrong optlen
+  selftests/bpf: Update EFAULT {g,s}etsockopt selftests
+  selftests/bpf: Correctly handle optlen > 4096
+  bpf: Document EFAULT changes for sockopt
 
-Notice this code is only activated when either compiled with
-CONFIG_DEBUG_VM or boot cmdline debug_pagealloc=on, and
-CONFIG_PAGE_POOL.
+ Documentation/bpf/prog_cgroup_sockopt.rst     | 57 ++++++++++++-
+ kernel/bpf/cgroup.c                           | 12 +++
+ .../selftests/bpf/prog_tests/sockopt.c        | 80 +++++++++++++++++--
+ .../progs/cgroup_getset_retval_getsockopt.c   | 12 +++
+ .../progs/cgroup_getset_retval_setsockopt.c   | 16 ++++
+ .../selftests/bpf/progs/sockopt_inherit.c     | 16 +++-
+ .../selftests/bpf/progs/sockopt_multi.c       | 24 +++++-
+ .../selftests/bpf/progs/sockopt_qos_to_cc.c   |  8 +-
+ .../testing/selftests/bpf/progs/sockopt_sk.c  | 25 ++++--
+ 9 files changed, 230 insertions(+), 20 deletions(-)
 
-Reduced example output of leak with PP_SIGNATURE = dead000000000040:
-
- BUG: Bad page state in process swapper/0  pfn:110bbf
- page:000000005bc8cfb8 refcount:0 mapcount:0 mapping:0000000000000000 index:0x110bbf000 pfn:0x110bbf
- flags: 0x2fffff80000000(node=0|zone=2|lastcpupid=0x1fffff)
- raw: 002fffff80000000 dead000000000040 ffff888117255000 0000000000000000
- raw: 0000000110bbf000 000000000000003e 00000000ffffffff 0000000000000000
- page dumped because: page_pool leak
- [...]
-
-Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
----
- mm/page_alloc.c |    7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 8e39705c7bdc..137b72f8ab8b 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -1247,6 +1247,9 @@ static inline bool page_expected_state(struct page *page,
- 			page_ref_count(page) |
- #ifdef CONFIG_MEMCG
- 			page->memcg_data |
-+#endif
-+#ifdef CONFIG_PAGE_POOL
-+			((page->pp_magic & ~0x3UL) == PP_SIGNATURE) |
- #endif
- 			(page->flags & check_flags)))
- 		return false;
-@@ -1273,6 +1276,10 @@ static const char *page_bad_reason(struct page *page, unsigned long flags)
- #ifdef CONFIG_MEMCG
- 	if (unlikely(page->memcg_data))
- 		bad_reason = "page still charged to cgroup";
-+#endif
-+#ifdef CONFIG_PAGE_POOL
-+	if (unlikely((page->pp_magic & ~0x3UL) == PP_SIGNATURE))
-+		bad_reason = "page_pool leak";
- #endif
- 	return bad_reason;
- }
-
+-- 
+2.40.1.495.gc816e09b53d-goog
 
