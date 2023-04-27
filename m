@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BACB9C7EE24
-	for <bpf@archiver.kernel.org>; Thu, 27 Apr 2023 03:05:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4068C77B60
+	for <bpf@archiver.kernel.org>; Thu, 27 Apr 2023 03:05:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242894AbjD0DFq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 26 Apr 2023 23:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43574 "EHLO
+        id S242865AbjD0DFo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 26 Apr 2023 23:05:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242863AbjD0DFn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 26 Apr 2023 23:05:43 -0400
-Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6193AB0;
-        Wed, 26 Apr 2023 20:05:41 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0Vh5XEpn_1682564737;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vh5XEpn_1682564737)
+        with ESMTP id S242859AbjD0DFk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 26 Apr 2023 23:05:40 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27EE140C6;
+        Wed, 26 Apr 2023 20:05:38 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0Vh5egqu_1682564735;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vh5egqu_1682564735)
           by smtp.aliyun-inc.com;
-          Thu, 27 Apr 2023 11:05:38 +0800
+          Thu, 27 Apr 2023 11:05:36 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     netdev@vger.kernel.org
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
@@ -31,9 +31,9 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH net-next v4 03/15] virtio_net: optimize mergeable_xdp_get_buf()
-Date:   Thu, 27 Apr 2023 11:05:22 +0800
-Message-Id: <20230427030534.115066-4-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v4 01/15] virtio_net: mergeable xdp: put old page immediately
+Date:   Thu, 27 Apr 2023 11:05:20 +0800
+Message-Id: <20230427030534.115066-2-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20230427030534.115066-1-xuanzhuo@linux.alibaba.com>
 References: <20230427030534.115066-1-xuanzhuo@linux.alibaba.com>
@@ -44,81 +44,95 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The previous patch, in order to facilitate review, I do not do any
-modification. This patch has made some optimization on the top.
+In the xdp implementation of virtio-net mergeable, it always checks
+whether two page is used and a page is selected to release. This is
+complicated for the processing of action, and be careful.
 
-* remove some repeated logics in this function.
-* add fast check for passing without any alloc.
+In the entire process, we have such principles:
+* If xdp_page is used (PASS, TX, Redirect), then we release the old
+  page.
+* If it is a drop case, we will release two. The old page obtained from
+  buf is release inside err_xdp, and xdp_page needs be relased by us.
+
+But in fact, when we allocate a new page, we can release the old page
+immediately. Then just one is using, we just need to release the new
+page for drop case. On the drop path, err_xdp will release the variable
+"page", so we only need to let "page" point to the new xdp_page in
+advance.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- drivers/net/virtio_net.c | 29 ++++++++++++++---------------
- 1 file changed, 14 insertions(+), 15 deletions(-)
+ drivers/net/virtio_net.c | 19 +++++++------------
+ 1 file changed, 7 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index b8832b0cc215..6f66d73097b4 100644
+index e2560b6f7980..42435e762d72 100644
 --- a/drivers/net/virtio_net.c
 +++ b/drivers/net/virtio_net.c
-@@ -1192,6 +1192,11 @@ static void *mergeable_xdp_get_buf(struct virtnet_info *vi,
- 	 */
- 	*frame_sz = truesize;
- 
-+	if (likely(headroom >= virtnet_get_headroom(vi) &&
-+		   (*num_buf == 1 || xdp_prog->aux->xdp_has_frags))) {
-+		return page_address(*page) + offset;
-+	}
+@@ -1245,6 +1245,9 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 			if (!xdp_page)
+ 				goto err_xdp;
+ 			offset = VIRTIO_XDP_HEADROOM;
 +
- 	/* This happens when headroom is not enough because
- 	 * of the buffer was prefilled before XDP is set.
- 	 * This should only happen for the first several packets.
-@@ -1200,22 +1205,15 @@ static void *mergeable_xdp_get_buf(struct virtnet_info *vi,
- 	 * support it, and we don't want to bother users who are
- 	 * using xdp normally.
- 	 */
--	if (!xdp_prog->aux->xdp_has_frags &&
--	    (*num_buf > 1 || headroom < virtnet_get_headroom(vi))) {
-+	if (!xdp_prog->aux->xdp_has_frags) {
- 		/* linearize data for XDP */
- 		xdp_page = xdp_linearize_page(rq, num_buf,
- 					      *page, offset,
- 					      VIRTIO_XDP_HEADROOM,
- 					      len);
--		*frame_sz = PAGE_SIZE;
++			put_page(page);
++			page = xdp_page;
+ 		} else if (unlikely(headroom < virtnet_get_headroom(vi))) {
+ 			xdp_room = SKB_DATA_ALIGN(VIRTIO_XDP_HEADROOM +
+ 						  sizeof(struct skb_shared_info));
+@@ -1259,11 +1262,12 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 			       page_address(page) + offset, len);
+ 			frame_sz = PAGE_SIZE;
+ 			offset = VIRTIO_XDP_HEADROOM;
+-		} else {
+-			xdp_page = page;
++
++			put_page(page);
++			page = xdp_page;
+ 		}
+ 
+-		data = page_address(xdp_page) + offset;
++		data = page_address(page) + offset;
+ 		err = virtnet_build_xdp_buff_mrg(dev, vi, rq, &xdp, data, len, frame_sz,
+ 						 &num_buf, &xdp_frags_truesz, stats);
+ 		if (unlikely(err))
+@@ -1278,8 +1282,6 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 			if (unlikely(!head_skb))
+ 				goto err_xdp_frags;
+ 
+-			if (unlikely(xdp_page != page))
+-				put_page(page);
+ 			rcu_read_unlock();
+ 			return head_skb;
+ 		case XDP_TX:
+@@ -1297,8 +1299,6 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 				goto err_xdp_frags;
+ 			}
+ 			*xdp_xmit |= VIRTIO_XDP_TX;
+-			if (unlikely(xdp_page != page))
+-				put_page(page);
+ 			rcu_read_unlock();
+ 			goto xdp_xmit;
+ 		case XDP_REDIRECT:
+@@ -1307,8 +1307,6 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 			if (err)
+ 				goto err_xdp_frags;
+ 			*xdp_xmit |= VIRTIO_XDP_REDIR;
+-			if (unlikely(xdp_page != page))
+-				put_page(page);
+ 			rcu_read_unlock();
+ 			goto xdp_xmit;
+ 		default:
+@@ -1321,9 +1319,6 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 			goto err_xdp_frags;
+ 		}
+ err_xdp_frags:
+-		if (unlikely(xdp_page != page))
+-			__free_pages(xdp_page, 0);
 -
- 		if (!xdp_page)
- 			return NULL;
--		offset = VIRTIO_XDP_HEADROOM;
--
--		put_page(*page);
--		*page = xdp_page;
--	} else if (unlikely(headroom < virtnet_get_headroom(vi))) {
-+	} else {
- 		xdp_room = SKB_DATA_ALIGN(VIRTIO_XDP_HEADROOM +
- 					  sizeof(struct skb_shared_info));
- 		if (*len + xdp_room > PAGE_SIZE)
-@@ -1227,14 +1225,15 @@ static void *mergeable_xdp_get_buf(struct virtnet_info *vi,
- 
- 		memcpy(page_address(xdp_page) + VIRTIO_XDP_HEADROOM,
- 		       page_address(*page) + offset, *len);
--		*frame_sz = PAGE_SIZE;
--		offset = VIRTIO_XDP_HEADROOM;
--
--		put_page(*page);
--		*page = xdp_page;
- 	}
- 
--	return page_address(*page) + offset;
-+	*frame_sz = PAGE_SIZE;
-+
-+	put_page(*page);
-+
-+	*page = xdp_page;
-+
-+	return page_address(*page) + VIRTIO_XDP_HEADROOM;
- }
- 
- static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 		if (xdp_buff_has_frags(&xdp)) {
+ 			shinfo = xdp_get_shared_info_from_buff(&xdp);
+ 			for (i = 0; i < shinfo->nr_frags; i++) {
 -- 
 2.32.0.3.g01195cf9f
 
