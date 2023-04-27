@@ -2,40 +2,40 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32612C77B73
-	for <bpf@archiver.kernel.org>; Thu, 27 Apr 2023 22:53:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EED9C77B61
+	for <bpf@archiver.kernel.org>; Thu, 27 Apr 2023 22:53:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344344AbjD0Wx4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 27 Apr 2023 18:53:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54848 "EHLO
+        id S229869AbjD0Wx6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 27 Apr 2023 18:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbjD0Wxz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S229912AbjD0Wxz (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 27 Apr 2023 18:53:55 -0400
 Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A75E76
-        for <bpf@vger.kernel.org>; Thu, 27 Apr 2023 15:53:53 -0700 (PDT)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33RIQKOF020961
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252B11BDC
+        for <bpf@vger.kernel.org>; Thu, 27 Apr 2023 15:53:54 -0700 (PDT)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33RMnD9F006047
         for <bpf@vger.kernel.org>; Thu, 27 Apr 2023 15:53:53 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=s2048-2021-q4;
- bh=TjG936k41tISvL3uf4B6rr2dc3cb09SaaiGhVp1y55A=;
- b=PX7T8qEKkwhav/5GYFR3DUzd8pW8zT2Hb6GGbT4CBOF6UKpFIRta6fZr8XeopuCn7DQt
- fxOtF4KDdDpojrlyXNxq1ibQVJq204t0s0S6SLi9GDjRcyPWyuDoq4C6SjBTIUdfo/B5
- d7K4a5ZBepH1jWCqa+u013mq17hOLJeVc8MnLPm0P27LcvfhgVnjS48CPU4DFx/RLU7B
- 8Igqco4IfhOh2md8VhimRTg6L/LHV2YJS33My1dUqRysbUnvl4bmL+CEzu3GbJrIX0YU
- TXrzP6W5/Yk5jlXJIjgGB30T15ePjXY4JO50iZmZ15q+xfQQ0uRvDK7fjp7+XY/UYTIv rg== 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3q7cst8wr4-2
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=s2048-2021-q4;
+ bh=Tfg/2PoJ1PnlvHzjhmnbVWjloWiIpTXqZiImuElDW44=;
+ b=Xy4bbIIYRyHr+O0ijpRW9mCuZXDDn5IX3cYa5GuedOM/yJJ1SkSmaJmJWfFztYZFDYB6
+ PZHpTBQYB2uIk/501B+pIRBu46I/6xD2tDTjuYwN5qYgm2xQd8wlUqFZDiq7SFiX7w62
+ 1JXB82eH2XvmbdGzvS8i2gT7NLzEkoYmBvU61C3rNRB5l0Yl2nunK6AY8VccgQhWR5f7
+ F4lcpAzirFo/tpfv7Du01R8iHPWFEEk3CqxIJQ2ULWQ+OpP5jqWiFLu0pFHJc/fQiirE
+ ogfo0HKleAvwavJytbWxaYJaROLYrwp51bIF+Q1iW1aDC64k1mBo0m0RqJnd0XhmFhGL gQ== 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3q825ur0wu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Thu, 27 Apr 2023 15:53:53 -0700
-Received: from twshared29091.48.prn1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+Received: from twshared25760.37.frc1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 27 Apr 2023 15:53:51 -0700
+ 15.1.2507.23; Thu, 27 Apr 2023 15:53:52 -0700
 Received: by devvm5710.vll0.facebook.com (Postfix, from userid 624576)
-        id 0D0A92D1987D; Thu, 27 Apr 2023 15:53:38 -0700 (PDT)
+        id 8F1372D198AA; Thu, 27 Apr 2023 15:53:39 -0700 (PDT)
 From:   Stephen Veiss <sveiss@meta.com>
 To:     <bpf@vger.kernel.org>, Mykola Lysenko <mykolal@fb.com>,
         Andrii Nakryiko <andrii@kernel.org>
@@ -43,17 +43,18 @@ CC:     Yonghong Song <yhs@meta.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>,
         Stephen Veiss <sveiss@meta.com>
-Subject: [PATCH bpf-next v2 0/2] selftests/bpf: test_progs can read test lists from file
-Date:   Thu, 27 Apr 2023 15:53:31 -0700
-Message-ID: <20230427225333.3506052-1-sveiss@meta.com>
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: test_progs can read test lists from file
+Date:   Thu, 27 Apr 2023 15:53:33 -0700
+Message-ID: <20230427225333.3506052-3-sveiss@meta.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230427225333.3506052-1-sveiss@meta.com>
+References: <20230427225333.3506052-1-sveiss@meta.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: F4AS03maFxqBgfUDH6DNHXQFh2xdz_0Z
-X-Proofpoint-GUID: F4AS03maFxqBgfUDH6DNHXQFh2xdz_0Z
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-GUID: BEo7QQhlFCnzMbXpVFINszcbLJOSvhk5
+X-Proofpoint-ORIG-GUID: BEo7QQhlFCnzMbXpVFINszcbLJOSvhk5
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-04-27_09,2023-04-27_01,2023-02-09_01
@@ -61,40 +62,263 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-BPF selftests have ALLOWLIST and DENYLIST files, used to control which
-tests are run in CI. These files are currently parsed by a shell
-script. [1]
+Improve test selection logic when using -a/-b/-d/-t options.
+The list of tests to include or exclude can now be read from a file,
+specified as @<filename>.
 
-This patchset allows those files to be specified directly on the
-test_progs command line (eg, as -a @ALLOWLIST).
+The file contains one name (or wildcard pattern) per line, and
+comments beginning with # are ignored.
 
-This also fixes a bug in the existing test filter code causing
-unnecessary duplicate top-level test filter entries to be created.
+These options can be passed multiple times to read more than one file.
 
-[1] https://github.com/kernel-patches/vmtest/blob/57feb460047b69f891cf4afe3=
-cc860794a2ced17/ci/vmtest/run_selftests.sh#L21-L27
-
+Signed-off-by: Stephen Veiss <sveiss@meta.com>
 ---
 
-v2:
- - error handling style changes per reviewer comments
- - fdopen return value checking in test_parse_test_list_file
+Notes:
+    There was a suggestion to replace remove() with close() in
+    test_parse_test_list_file. mkstemp() doesn't unlink the temp file it
+    creates, so this would have left a file behind. I did try to clean up
+    the error logic here slightly instead.
 
-v1:
- https://lore.kernel.org/bpf/20230425225401.1075796-1-sveiss@meta.com/
+ .../selftests/bpf/prog_tests/arg_parsing.c    | 55 +++++++++++++++++++
+ tools/testing/selftests/bpf/test_progs.c      | 37 +++++++++----
+ tools/testing/selftests/bpf/testing_helpers.c | 47 ++++++++++++++++
+ tools/testing/selftests/bpf/testing_helpers.h |  3 +
+ 4 files changed, 132 insertions(+), 10 deletions(-)
 
-Stephen Veiss (2):
-  selftests/bpf: extract insert_test from parse_test_list
-  selftests/bpf: test_progs can read test lists from file
-
- .../selftests/bpf/prog_tests/arg_parsing.c    |  68 ++++++
- tools/testing/selftests/bpf/test_progs.c      |  37 ++-
- tools/testing/selftests/bpf/testing_helpers.c | 225 ++++++++++++------
- tools/testing/selftests/bpf/testing_helpers.h |   3 +
- 4 files changed, 249 insertions(+), 84 deletions(-)
-
-
-base-commit: b580dac290822cfcbe741c0aa59c41c3fda398a8
+diff --git a/tools/testing/selftests/bpf/prog_tests/arg_parsing.c b/tools=
+/testing/selftests/bpf/prog_tests/arg_parsing.c
+index 3754cd5f8c0a..bb143de68875 100644
+--- a/tools/testing/selftests/bpf/prog_tests/arg_parsing.c
++++ b/tools/testing/selftests/bpf/prog_tests/arg_parsing.c
+@@ -113,8 +113,63 @@ static void test_parse_test_list(void)
+ 	free_test_filter_set(&set);
+ }
+=20
++static void test_parse_test_list_file(void)
++{
++	struct test_filter_set set;
++	char tmpfile[80];
++	FILE *fp;
++	int fd;
++
++	snprintf(tmpfile, sizeof(tmpfile), "/tmp/bpf_arg_parsing_test.XXXXXX");
++	fd =3D mkstemp(tmpfile);
++	if (!ASSERT_GE(fd, 0, "create tmp"))
++		return;
++
++	fp =3D fdopen(fd, "w");
++	if (!ASSERT_NEQ(fp, NULL, "fdopen tmp")) {
++		close(fd);
++		goto out_remove;
++	}
++
++	fprintf(fp, "# comment\n");
++	fprintf(fp, "  test_with_spaces    \n");
++	fprintf(fp, "testA/subtest    # comment\n");
++	fprintf(fp, "testB#comment with no space\n");
++	fprintf(fp, "testB # duplicate\n");
++	fprintf(fp, "testA/subtest # subtest duplicate\n");
++	fprintf(fp, "testA/subtest2\n");
++	fprintf(fp, "testC_no_eof_newline");
++	fflush(fp);
++
++	if (!ASSERT_OK(ferror(fp), "prepare tmp"))
++		goto out_fclose;
++
++	init_test_filter_set(&set);
++
++	ASSERT_OK(parse_test_list_file(tmpfile, &set, true), "parse file");
++
++	ASSERT_EQ(set.cnt, 4, "test  count");
++	ASSERT_OK(strcmp("test_with_spaces", set.tests[0].name), "test 0 name")=
+;
++	ASSERT_EQ(set.tests[0].subtest_cnt, 0, "test 0 subtest count");
++	ASSERT_OK(strcmp("testA", set.tests[1].name), "test 1 name");
++	ASSERT_EQ(set.tests[1].subtest_cnt, 2, "test 1 subtest count");
++	ASSERT_OK(strcmp("subtest", set.tests[1].subtests[0]), "test 1 subtest =
+0");
++	ASSERT_OK(strcmp("subtest2", set.tests[1].subtests[1]), "test 1 subtest=
+ 1");
++	ASSERT_OK(strcmp("testB", set.tests[2].name), "test 2 name");
++	ASSERT_OK(strcmp("testC_no_eof_newline", set.tests[3].name), "test 3 na=
+me");
++
++	free_test_filter_set(&set);
++
++out_fclose:
++	fclose(fp);
++out_remove:
++	remove(tmpfile);
++}
++
+ void test_arg_parsing(void)
+ {
+ 	if (test__start_subtest("test_parse_test_list"))
+ 		test_parse_test_list();
++	if (test__start_subtest("test_parse_test_list_file"))
++		test_parse_test_list_file();
+ }
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/sel=
+ftests/bpf/test_progs.c
+index ea82921110da..793689dcc170 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -714,7 +714,13 @@ static struct test_state test_states[ARRAY_SIZE(prog=
+_test_defs)];
+=20
+ const char *argp_program_version =3D "test_progs 0.1";
+ const char *argp_program_bug_address =3D "<bpf@vger.kernel.org>";
+-static const char argp_program_doc[] =3D "BPF selftests test runner";
++static const char argp_program_doc[] =3D
++"BPF selftests test runner\v"
++"Options accepting the NAMES parameter take either a comma-separated lis=
+t\n"
++"of test names, or a filename prefixed with @. The file contains one nam=
+e\n"
++"(or wildcard pattern) per line, and comments beginning with # are ignor=
+ed.\n"
++"\n"
++"These options can be passed repeatedly to read multiple files.\n";
+=20
+ enum ARG_KEYS {
+ 	ARG_TEST_NUM =3D 'n',
+@@ -797,6 +803,7 @@ extern int extra_prog_load_log_flags;
+ static error_t parse_arg(int key, char *arg, struct argp_state *state)
+ {
+ 	struct test_env *env =3D state->input;
++	int err =3D 0;
+=20
+ 	switch (key) {
+ 	case ARG_TEST_NUM: {
+@@ -821,18 +828,28 @@ static error_t parse_arg(int key, char *arg, struct=
+ argp_state *state)
+ 	}
+ 	case ARG_TEST_NAME_GLOB_ALLOWLIST:
+ 	case ARG_TEST_NAME: {
+-		if (parse_test_list(arg,
+-				    &env->test_selector.whitelist,
+-				    key =3D=3D ARG_TEST_NAME_GLOB_ALLOWLIST))
+-			return -ENOMEM;
++		if (arg[0] =3D=3D '@')
++			err =3D parse_test_list_file(arg + 1,
++						   &env->test_selector.whitelist,
++						   key =3D=3D ARG_TEST_NAME_GLOB_ALLOWLIST);
++		else
++			err =3D parse_test_list(arg,
++					      &env->test_selector.whitelist,
++					      key =3D=3D ARG_TEST_NAME_GLOB_ALLOWLIST);
++
+ 		break;
+ 	}
+ 	case ARG_TEST_NAME_GLOB_DENYLIST:
+ 	case ARG_TEST_NAME_BLACKLIST: {
+-		if (parse_test_list(arg,
+-				    &env->test_selector.blacklist,
+-				    key =3D=3D ARG_TEST_NAME_GLOB_DENYLIST))
+-			return -ENOMEM;
++		if (arg[0] =3D=3D '@')
++			err =3D parse_test_list_file(arg + 1,
++						   &env->test_selector.blacklist,
++						   key =3D=3D ARG_TEST_NAME_GLOB_DENYLIST);
++		else
++			err =3D parse_test_list(arg,
++					      &env->test_selector.blacklist,
++					      key =3D=3D ARG_TEST_NAME_GLOB_DENYLIST);
++
+ 		break;
+ 	}
+ 	case ARG_VERIFIER_STATS:
+@@ -900,7 +917,7 @@ static error_t parse_arg(int key, char *arg, struct a=
+rgp_state *state)
+ 	default:
+ 		return ARGP_ERR_UNKNOWN;
+ 	}
+-	return 0;
++	return err;
+ }
+=20
+ /*
+diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testin=
+g/selftests/bpf/testing_helpers.c
+index fca617e87710..dc9595ade8de 100644
+--- a/tools/testing/selftests/bpf/testing_helpers.c
++++ b/tools/testing/selftests/bpf/testing_helpers.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
+ /* Copyright (C) 2019 Netronome Systems, Inc. */
+ /* Copyright (C) 2020 Facebook, Inc. */
++#include <ctype.h>
+ #include <stdlib.h>
+ #include <string.h>
+ #include <errno.h>
+@@ -167,6 +168,52 @@ static int insert_test(struct test_filter_set *set,
+ 	return -ENOMEM;
+ }
+=20
++int parse_test_list_file(const char *path,
++			 struct test_filter_set *set,
++			 bool is_glob_pattern)
++{
++	char *buf =3D NULL, *capture_start, *capture_end, *scan_end;
++	size_t buflen =3D 0;
++	int err =3D 0;
++	FILE *f;
++
++	f =3D fopen(path, "r");
++	if (!f) {
++		err =3D -errno;
++		fprintf(stderr, "Failed to open '%s': %d\n", path, err);
++		return err;
++	}
++
++	while (getline(&buf, &buflen, f) !=3D -1) {
++		capture_start =3D buf;
++
++		while (isspace(*capture_start))
++			++capture_start;
++
++		capture_end =3D capture_start;
++		scan_end =3D capture_start;
++
++		while (*scan_end && *scan_end !=3D '#') {
++			if (!isspace(*scan_end))
++				capture_end =3D scan_end;
++
++			++scan_end;
++		}
++
++		if (capture_end =3D=3D capture_start)
++			continue;
++
++		*(++capture_end) =3D '\0';
++
++		err =3D insert_test(set, capture_start, is_glob_pattern);
++		if (err)
++			break;
++	}
++
++	fclose(f);
++	return err;
++}
++
+ int parse_test_list(const char *s,
+ 		    struct test_filter_set *set,
+ 		    bool is_glob_pattern)
+diff --git a/tools/testing/selftests/bpf/testing_helpers.h b/tools/testin=
+g/selftests/bpf/testing_helpers.h
+index eb8790f928e4..98f09bbae86f 100644
+--- a/tools/testing/selftests/bpf/testing_helpers.h
++++ b/tools/testing/selftests/bpf/testing_helpers.h
+@@ -20,5 +20,8 @@ struct test_filter_set;
+ int parse_test_list(const char *s,
+ 		    struct test_filter_set *test_set,
+ 		    bool is_glob_pattern);
++int parse_test_list_file(const char *path,
++			 struct test_filter_set *test_set,
++			 bool is_glob_pattern);
+=20
+ __u64 read_perf_max_sample_freq(void);
 --=20
 2.34.1
 
