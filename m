@@ -2,53 +2,52 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C388C77B61
-	for <bpf@archiver.kernel.org>; Fri, 28 Apr 2023 07:18:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC4CEC77B61
+	for <bpf@archiver.kernel.org>; Fri, 28 Apr 2023 07:18:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbjD1HSL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 28 Apr 2023 03:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
+        id S1345440AbjD1HSR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 28 Apr 2023 03:18:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345468AbjD1HSJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 28 Apr 2023 03:18:09 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67449448C
-        for <bpf@vger.kernel.org>; Fri, 28 Apr 2023 00:18:06 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-64115eef620so10494924b3a.1
-        for <bpf@vger.kernel.org>; Fri, 28 Apr 2023 00:18:06 -0700 (PDT)
+        with ESMTP id S230002AbjD1HSQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 28 Apr 2023 03:18:16 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3FC2694
+        for <bpf@vger.kernel.org>; Fri, 28 Apr 2023 00:17:50 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-52867360efcso3599054a12.2
+        for <bpf@vger.kernel.org>; Fri, 28 Apr 2023 00:17:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1682666286; x=1685258286;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0BVJHOpXJP2O2nDTKA8p24jt3D3+BhxA0VLRakwV7yc=;
-        b=TK4l8iwoo83rRIEhzs+Tk9Ibi88EuLo/u5UJ75l3+iPRCigxhrfpstyqVgZDBekxpR
-         8kfPMPMikgTGQqxu5wyv+Gv7tqy93I4MPfUtveCZU1vtfXaK+WCRXYJV8UG0xbvtGJDP
-         6qGV3xFWMPCM1B5WFB325Dw2SXNaeLSKVVAg32S7ep+fq2taYlU4PlmtwR4IrgBwNgr2
-         m6hlyP9PlWz60HX5nNh6tNKHx0dp3v22K+XB8xd5AwFCpXMKj3yB7WWRylRzkYk+rOs1
-         qhMTw/YHzlzLmo/t67R10fbsDK2pWdSVq4uGKbELdaBQQBW+kq8AvScGTgnEeiCZpuiY
-         nxfQ==
+        d=bytedance.com; s=google; t=1682666270; x=1685258270;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ukMaBLPXL+Km2GlrH9mAFaejvqqjOkS5iDjlAGQ7GAY=;
+        b=MJsEXN/X56AtbGcdtftxmkDoW4CjqAstmIw63sZCSjxnxfcz4HCr5gfJ0ZcNjsp+aU
+         VomhmzDYHgHGbiDjetF70zrlY0E9U2eXQl/s7fV1KCBy/rZLoSoFhNlrSXdeQ3epjujI
+         33zHwShNStT5XcnHJdLANH2a4UGUlmwFA+bvd35kJmFyZQRDsP+Z/FdPuoLZUUElnmXE
+         2uXO4si4jFYWkDADrJKEFG4DsRYs9/93dP+lNRdzDV4zwCRXMWdbJjI4dfH7ZjGpe9lw
+         +5kf1kH6a4Sx7rCjOwt115A9TXNRtM7jyYyCz+Se9lSmOfk4L3FjQofipcNvOnspEE2q
+         APPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682666286; x=1685258286;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0BVJHOpXJP2O2nDTKA8p24jt3D3+BhxA0VLRakwV7yc=;
-        b=XyAsAE1zDRUUvKBsyf1Uxth4RykGs1wJ4YT3GfIoelaHVdvMkeCecjB8SGpvWmr1RG
-         37hyFO23z+3VRC1/xEeHvUo8quF7yAz+UQKxe6rXiT5eEx7G116dslUeE+cBjByt/hHE
-         CO+nlIzk2Ru8WLWPO6R8drgXyRay1OOk3yFEaua2zmYZFVMMVYOQIfLNN1NYhtlQttSo
-         nLRY/y29g2cGwUahI+nhX8XgTNxjge4XQGukI2kwcJvzeYuwADXSdiGAF7f25vv6TnSh
-         AlqP16+qHaeNJgpP9qo9eTrOTMpGh/dwWAxZQLd4SHNKeNWm1pF4crAqpwZW/dMVHJkj
-         T7jw==
-X-Gm-Message-State: AC+VfDzp2BySfnlauk8Fr+51+NHPOn/eQ4GueEmV17KhtBomWI4YNkLD
-        kszra0goiHZAY347BAYNV0LjUg==
-X-Google-Smtp-Source: ACHHUZ4vXSOjLR384i5gDZpzJ1l8RzqQ9wDu5WvlV4VtpjxyTz7BCc0yRhGjzwLjMf1cG42ZCm45Sg==
-X-Received: by 2002:a17:90a:cb81:b0:249:7ad3:e843 with SMTP id a1-20020a17090acb8100b002497ad3e843mr5541110pju.16.1682666285777;
-        Fri, 28 Apr 2023 00:18:05 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682666270; x=1685258270;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ukMaBLPXL+Km2GlrH9mAFaejvqqjOkS5iDjlAGQ7GAY=;
+        b=G9t/uLsYp4KQgPk1eEaTqCLEdOI9KI1a+62xDXYehgp7FtjrFdVqutP+1JQF+Merfe
+         P25GGRnRZG553YD/emeZWjUtcdoZgtfGOtqwktgqfvcakrZ78Q6YsRXWRsIkrWOyg+LY
+         e6Rx2gVrqqHgc5pmv2e7aGPY+JW3zS3S6Ll4xbEPir1qIDyvehPTeDkLGZsvdlHGkQZ2
+         /hbqqqXJ8FE0+4EA51HWv7aJZ4y97ixSCAQBaNVy0o+xmqW1Wdi/eYAcZWGfTWKGuES2
+         tyAor7sPOeVexCMdUjcQonXQEeKxcus0uxv1EQPfD2y44OQAAXuoGsw/WdE6g8t2hdgx
+         A8cA==
+X-Gm-Message-State: AC+VfDwElJN3E05ksEl7lhOu0CVPuzKVfPp4om5zvoSvRsCNVLjDxLrk
+        VE1c7RKLmUGX5e0lTTcgC1zTIw==
+X-Google-Smtp-Source: ACHHUZ5YsRCK7s1Ipah26XWJmbC2dPQFPOOLy6IpRQ+5lOSJft2l8ZFBG3iszAMzgA9g3+4R4kA+MQ==
+X-Received: by 2002:a17:90b:4a10:b0:237:b5d4:c0cc with SMTP id kk16-20020a17090b4a1000b00237b5d4c0ccmr4730936pjb.39.1682666269807;
+        Fri, 28 Apr 2023 00:17:49 -0700 (PDT)
 Received: from C02F52LSML85.bytedance.net ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id j2-20020a17090a318200b0024739d29252sm14159939pjb.15.2023.04.28.00.17.58
+        by smtp.gmail.com with ESMTPSA id j2-20020a17090a318200b0024739d29252sm14159939pjb.15.2023.04.28.00.17.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Apr 2023 00:18:05 -0700 (PDT)
+        Fri, 28 Apr 2023 00:17:49 -0700 (PDT)
 From:   Feng zhou <zhoufeng.zf@bytedance.com>
 To:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
         andrii@kernel.org, song@kernel.org, yhs@fb.com,
@@ -60,12 +59,10 @@ Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
         zhoufeng.zf@bytedance.com
-Subject: [PATCH bpf-next v4 2/2] selftests/bpf: Add testcase for bpf_task_under_cgroup
-Date:   Fri, 28 Apr 2023 15:17:37 +0800
-Message-Id: <20230428071737.43849-3-zhoufeng.zf@bytedance.com>
+Subject: [PATCH bpf-next v4 0/2] Introduce a new kfunc of bpf_task_under_cgroup
+Date:   Fri, 28 Apr 2023 15:17:35 +0800
+Message-Id: <20230428071737.43849-1-zhoufeng.zf@bytedance.com>
 X-Mailer: git-send-email 2.39.2 (Apple Git-143)
-In-Reply-To: <20230428071737.43849-1-zhoufeng.zf@bytedance.com>
-References: <20230428071737.43849-1-zhoufeng.zf@bytedance.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -74,153 +71,38 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Feng Zhou <zhoufeng.zf@bytedance.com>
 
-test_progs:
-Tests new kfunc bpf_task_under_cgroup().
+Trace sched related functions, such as enqueue_task_fair, it is necessary to
+specify a task instead of the current task which within a given cgroup.
 
-The bpf program saves the new task's pid within a given cgroup to
-the remote_pid, which is convenient for the user-mode program to
-verify the test correctness.
+Feng Zhou (2):
+  bpf: Add bpf_task_under_cgroup() kfunc
+  selftests/bpf: Add testcase for bpf_task_under_cgroup
 
-The user-mode program creates its own mount namespace, and mounts the
-cgroupsv2 hierarchy in there, call the fork syscall, then check if
-remote_pid and local_pid are unequal.
+Changelog:
+v3->v4: Addressed comments from Yonghong Song
+- Modify test cases and test other tasks, not the current task.
+Details in here:
+https://lore.kernel.org/all/20230427023019.73576-1-zhoufeng.zf@bytedance.com/
 
-Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
----
+v2->v3: Addressed comments from Alexei Starovoitov
+- Modify the comment information of the function.
+- Narrow down the testcase's hook point
+Details in here:
+https://lore.kernel.org/all/20230421090403.15515-1-zhoufeng.zf@bytedance.com/
+
+v1->v2: Addressed comments from Alexei Starovoitov
+- Add kfunc instead.
+Details in here:
+https://lore.kernel.org/all/20230420072657.80324-1-zhoufeng.zf@bytedance.com/
+
+ kernel/bpf/helpers.c                          | 20 +++++++
  tools/testing/selftests/bpf/DENYLIST.s390x    |  1 +
  .../bpf/prog_tests/task_under_cgroup.c        | 55 +++++++++++++++++++
  .../bpf/progs/test_task_under_cgroup.c        | 51 +++++++++++++++++
- 3 files changed, 107 insertions(+)
+ 4 files changed, 127 insertions(+)
  create mode 100644 tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
  create mode 100644 tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
 
-diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/testing/selftests/bpf/DENYLIST.s390x
-index c7463f3ec3c0..5061d9e24c16 100644
---- a/tools/testing/selftests/bpf/DENYLIST.s390x
-+++ b/tools/testing/selftests/bpf/DENYLIST.s390x
-@@ -26,3 +26,4 @@ user_ringbuf                             # failed to find kernel BTF type ID of
- verif_stats                              # trace_vprintk__open_and_load unexpected error: -9                           (?)
- xdp_bonding                              # failed to auto-attach program 'trace_on_entry': -524                        (trampoline)
- xdp_metadata                             # JIT does not support calling kernel function                                (kfunc)
-+test_task_under_cgroup                   # JIT does not support calling kernel function                                (kfunc)
-diff --git a/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c b/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
-new file mode 100644
-index 000000000000..5e79dff86dec
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
-@@ -0,0 +1,55 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Bytedance */
-+
-+#include <sys/syscall.h>
-+#include <test_progs.h>
-+#include <cgroup_helpers.h>
-+#include "test_task_under_cgroup.skel.h"
-+
-+#define FOO	"/foo"
-+
-+void test_task_under_cgroup(void)
-+{
-+	struct test_task_under_cgroup *skel;
-+	int ret, foo = -1;
-+	pid_t pid;
-+
-+	foo = test__join_cgroup(FOO);
-+	if (!ASSERT_OK(foo < 0, "cgroup_join_foo"))
-+		return;
-+
-+	skel = test_task_under_cgroup__open();
-+	if (!ASSERT_OK_PTR(skel, "test_task_under_cgroup__open"))
-+		goto cleanup;
-+
-+	skel->rodata->local_pid = getpid();
-+	skel->bss->remote_pid = getpid();
-+	skel->rodata->cgid = get_cgroup_id(FOO);
-+
-+	ret = test_task_under_cgroup__load(skel);
-+	if (!ASSERT_OK(ret, "test_task_under_cgroup__load"))
-+		goto cleanup;
-+
-+	ret = test_task_under_cgroup__attach(skel);
-+	if (!ASSERT_OK(ret, "test_task_under_cgroup__attach"))
-+		goto cleanup;
-+
-+	pid = fork();
-+	if (pid == 0)
-+		exit(0);
-+	else if (pid == -1)
-+		printf("Couldn't fork process!\n");
-+
-+	wait(NULL);
-+
-+	test_task_under_cgroup__detach(skel);
-+
-+	ASSERT_NEQ(skel->bss->remote_pid, skel->rodata->local_pid,
-+		   "test task_under_cgroup");
-+
-+cleanup:
-+	if (foo >= 0)
-+		close(foo);
-+
-+	test_task_under_cgroup__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c b/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
-new file mode 100644
-index 000000000000..5bcb726d6d0a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Bytedance */
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#include "bpf_misc.h"
-+
-+struct cgroup *bpf_cgroup_from_id(u64 cgid) __ksym;
-+long bpf_task_under_cgroup(struct task_struct *task, struct cgroup *ancestor) __ksym;
-+void bpf_cgroup_release(struct cgroup *p) __ksym;
-+struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym;
-+void bpf_task_release(struct task_struct *p) __ksym;
-+
-+const volatile int local_pid;
-+const volatile long cgid;
-+int remote_pid;
-+
-+SEC("tp_btf/task_newtask")
-+int BPF_PROG(handle__task_newtask, struct task_struct *task, u64 clone_flags)
-+{
-+	struct cgroup *cgrp = NULL;
-+	struct task_struct *acquired = NULL;
-+
-+	if (local_pid != (bpf_get_current_pid_tgid() >> 32))
-+		return 0;
-+
-+	acquired = bpf_task_acquire(task);
-+	if (!acquired)
-+		return 0;
-+
-+	if (local_pid == acquired->tgid)
-+		goto out;
-+
-+	cgrp = bpf_cgroup_from_id(cgid);
-+	if (!cgrp)
-+		goto out;
-+
-+	if (bpf_task_under_cgroup(acquired, cgrp))
-+		remote_pid = acquired->tgid;
-+
-+out:
-+	if (acquired)
-+		bpf_task_release(acquired);
-+	if (cgrp)
-+		bpf_cgroup_release(cgrp);
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
 -- 
 2.20.1
 
