@@ -2,199 +2,138 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E339C77B61
-	for <bpf@archiver.kernel.org>; Fri, 28 Apr 2023 01:06:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBD31C77B61
+	for <bpf@archiver.kernel.org>; Fri, 28 Apr 2023 01:08:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344351AbjD1BGR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 27 Apr 2023 21:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47414 "EHLO
+        id S1344155AbjD1BIt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 27 Apr 2023 21:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbjD1BGQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 27 Apr 2023 21:06:16 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EDC2684;
-        Thu, 27 Apr 2023 18:06:14 -0700 (PDT)
-Received: from dggpemm500013.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Q6vWK0LgWzsRF9;
-        Fri, 28 Apr 2023 09:03:57 +0800 (CST)
-Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 28 Apr
- 2023 09:05:36 +0800
-Message-ID: <7e023c28-abe5-25a6-150d-ff8a782992de@huawei.com>
-Date:   Fri, 28 Apr 2023 09:05:32 +0800
+        with ESMTP id S229965AbjD1BIs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 27 Apr 2023 21:08:48 -0400
+Received: from out-56.mta1.migadu.com (out-56.mta1.migadu.com [95.215.58.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3AFD268E
+        for <bpf@vger.kernel.org>; Thu, 27 Apr 2023 18:08:46 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1682644125;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=6+pEUaUKtIGoMuarDI0wyLSMFsoQrrZQFIxQAVVyIzQ=;
+        b=PbyRsamN2hjh49w1/DFGh2JXq78ErWSPzmZ40H+ic6xe+gbu0yZcNueH/wo8OZ9PBZPBeB
+        F+PSOiJYxGBdgnZsiq5o0rf2JtLlO8HBMahJ8nx7taqvnkM1xdjKMkIF1c2ckYtEz1h7IX
+        kaBr+/B5CozQ++pc1KzhnLG7QjoTL9I=
+From:   Martin KaFai Lau <martin.lau@linux.dev>
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@meta.com
+Subject: [PATCH bpf-next] libbpf: btf_dump_type_data_check_overflow needs to consider BTF_MEMBER_BITFIELD_SIZE
+Date:   Thu, 27 Apr 2023 18:08:39 -0700
+Message-Id: <20230428010839.1328507-1-martin.lau@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH] bpf: Unregister fentry when bpf_trampoline_unlink_prog
- fails to update image
-To:     Yonghong Song <yhs@meta.com>, <bpf@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>,
-        <john.fastabend@gmail.com>, <andrii@kernel.org>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <kpsingh@kernel.org>, <sdf@google.com>, <haoluo@google.com>,
-        <jolsa@kernel.org>
-References: <20230426095548.176045-1-chenzhongjin@huawei.com>
- <b594a56f-5e1f-da7f-0ab1-71751bd0c5e2@meta.com>
- <be9efa60-14ec-ba46-91e1-9feb56c40fb8@huawei.com>
- <9e36407a-22fb-0fc1-b147-ebdc12ea0823@meta.com>
-Content-Language: en-US
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-In-Reply-To: <9e36407a-22fb-0fc1-b147-ebdc12ea0823@meta.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+From: Martin KaFai Lau <martin.lau@kernel.org>
 
+The btf_dump/struct_data selftest is failing with:
+test_btf_dump_struct_data:FAIL:unexpected return value dumping fs_context unexpected unexpected return value dumping fs_context: actual -7 != expected 264
 
-On 2023/4/28 2:54, Yonghong Song wrote:
-> 
-> ...
-> 
->>
->>>>
->>>> Fix this when bpf_trampoline_update failed in 
->>>> bpf_trampoline_unlink_prog,
->>>> unregister fentry to disable the trampoline. Then other progs on the
->>>> trampoline can be unlinked safely and finally the trampoline will be
->>>> released.
->>>
->>> Do we still leak tr->cur_image here?
->>>
->> No, bpf_tramp_image_put() will free everything when all progs_cnt 
->> decline to zero in bpf_trampoline_update(). It is a release function, 
->> but called 'put'.
-> 
-> Okay, I see. But it depends on where memory allocation failure
-> happens. For example, see below:
-> 
->      static int bpf_trampoline_update(struct bpf_trampoline *tr,
->      bool lock_direct_mutex)
->      {
->          struct bpf_tramp_image *im;
->          struct bpf_tramp_links *tlinks;
->          u32 orig_flags = tr->flags;
->          bool ip_arg = false;
->          int err, total;
-> 
->          tlinks = bpf_trampoline_get_progs(tr, &total, &ip_arg);
->          if (IS_ERR(tlinks))
->                  return PTR_ERR(tlinks);
-> 
->          if (total == 0) {
->                  err = unregister_fentry(tr, tr->cur_image->image);
->                  bpf_tramp_image_put(tr->cur_image);
->                  tr->cur_image = NULL;
->                  tr->selector = 0;
->                  goto out;
->          }
-> 
->          im = bpf_tramp_image_alloc(tr->key, tr->selector);
->          if (IS_ERR(im)) {
->                  err = PTR_ERR(im);
->                  goto out;
->          }
-> 
->      ...
-> 
-> In bpf_trampoline_get_progs(),
-> 
->      static struct bpf_tramp_links *
->      bpf_trampoline_get_progs(const struct bpf_trampoline *tr, int 
-> *total, bool *ip_arg)
->      {
->          struct bpf_tramp_link *link;
->          struct bpf_tramp_links *tlinks;
->          struct bpf_tramp_link **links;
->          int kind;
-> 
->          *total = 0;
->          tlinks = kcalloc(BPF_TRAMP_MAX, sizeof(*tlinks), GFP_KERNEL);
-> 
-> If we have memory allocation failure, PTR_ERR(tlinks) will be returned
-> and there is no chance to reach 'total == 0' so tr->cur_image will not
-> be freed.
-> 
-> But if the memory allocation failure happens in 
-> bpf_tramp_image_alloc(...), yes, it is possible eventually when
-> all progs are unlinked, 'total' could be 0, unregister_fentry()
-> will be called again (hopefully no side effect) and the image
-> will be freed.
-> 
->>
->>>>
->>>> Fixes: 88fd9e5352fe ("bpf: Refactor trampoline update code")
->>>
->>> If the above is a refactoring patch, you should not use that
->>> as 'Fixes' patch, you should pick one truely introduced the issue.
->>>
->>>> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
->>>> ---
->>>>   kernel/bpf/trampoline.c | 5 ++++-
->>>>   1 file changed, 4 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
->>>> index d0ed7d6f5eec..6daa93b30e81 100644
->>>> --- a/kernel/bpf/trampoline.c
->>>> +++ b/kernel/bpf/trampoline.c
->>>> @@ -604,7 +604,10 @@ static int __bpf_trampoline_unlink_prog(struct 
->>>> bpf_tramp_link *link, struct bpf_
->>>>       }
->>>>       hlist_del_init(&link->tramp_hlist);
->>>>       tr->progs_cnt[kind]--;
->>>> -    return bpf_trampoline_update(tr, true /* lock_direct_mutex */);
->>>> +    err =  bpf_trampoline_update(tr, true /* lock_direct_mutex */);
->>>> +    if (err && tr->cur_image)
->>>> +        unregister_fentry(tr, tr->cur_image->image);
->>>
->>> If error happens for the all subsequent programs,
->>> unregister_fentry() will be called multiple times. Any side effect?
->> It will fail with no side effect. Actually if there is no error, 
->> modify_fentry() will fail in update() as well. The fentry is available 
->> until all progs are unlinked and the broken image is freed by 
->> bpf_tramp_image_put().
-> 
-> This will cause a sudden behavior change if there are other active
-> programs. For example, prog1 and prog2, prog1 unlink triggered
-> memory allocation failure and caused unregister_fentry which restored
-> the original ip. Then prog2 even does not have a chance to run any
-> more even if memory suddenly not an issue any more.
-> 
->>
->> However with an extra state to record this happens, it's possible to 
->> re-register the fentry with new image when the next link/unlink calls 
->> update(). It will generate a new image and replace/free the error one.
->>>
->>> Overall, I think this is an extreme corner case which happens
->>> when kernel memory is extreme tight. If this is the case, not
->>> sure whether it is worthwhile to fix it or not.
->>>
->> Yes, it's a really rare case. I'm just not sure whether it needs some 
->> best-effort to avoid kernel panic at this point.
->>
->> If you think it's not necessary. Just let it go.
-> 
-> At least with current patch, even we could avoid kernel panic, the
-> user expected behavior might change. To handle all error conditions
-> in bpf_trampoline_update() might be a big task. So I suggest to just
-> let it go.
-> 
-You are right. It's difficult to handle all errors, especially when
-problem occurs inside the ftrace process.
-So just keep it as is until there is better solution.
+The reason is in btf_dump_type_data_check_overflow(). It does not use
+BTF_MEMBER_BITFIELD_SIZE from the struct's member (btf_member). Instead,
+it is using the enum size which is 4. It had been working till the recent
+commit 4e04143c869c ("fs_context: drop the unused lsm_flags member")
+removed an integer member which also removed the 4 bytes padding at the end
+of the fs_context. Missing this 4 bytes padding exposed this bug.
+In particular, when btf_dump_type_data_check_overflow() reaches
+the member 'phase', -E2BIG is returned.
 
->>
->> Thanks for your time!
->>
->> Best,
->> Chen
->>>> +    return err;
->>>>   }
->>>>   /* bpf_trampoline_unlink_prog() should never fail. */
+The fix is to pass bit_sz to btf_dump_type_data_check_overflow().
+In btf_dump_type_data_check_overflow(), it does a different size
+check when bit_sz is not zero.
+
+The current fs_context:
+
+[3600] ENUM 'fs_context_purpose' encoding=UNSIGNED size=4 vlen=3
+	'FS_CONTEXT_FOR_MOUNT' val=0
+	'FS_CONTEXT_FOR_SUBMOUNT' val=1
+	'FS_CONTEXT_FOR_RECONFIGURE' val=2
+[3601] ENUM 'fs_context_phase' encoding=UNSIGNED size=4 vlen=7
+	'FS_CONTEXT_CREATE_PARAMS' val=0
+	'FS_CONTEXT_CREATING' val=1
+	'FS_CONTEXT_AWAITING_MOUNT' val=2
+	'FS_CONTEXT_AWAITING_RECONF' val=3
+	'FS_CONTEXT_RECONF_PARAMS' val=4
+	'FS_CONTEXT_RECONFIGURING' val=5
+	'FS_CONTEXT_FAILED' val=6
+[3602] STRUCT 'fs_context' size=264 vlen=21
+	'ops' type_id=3603 bits_offset=0
+	'uapi_mutex' type_id=235 bits_offset=64
+	'fs_type' type_id=872 bits_offset=1216
+	'fs_private' type_id=21 bits_offset=1280
+	'sget_key' type_id=21 bits_offset=1344
+	'root' type_id=781 bits_offset=1408
+	'user_ns' type_id=251 bits_offset=1472
+	'net_ns' type_id=984 bits_offset=1536
+	'cred' type_id=1785 bits_offset=1600
+	'log' type_id=3621 bits_offset=1664
+	'source' type_id=42 bits_offset=1792
+	'security' type_id=21 bits_offset=1856
+	's_fs_info' type_id=21 bits_offset=1920
+	'sb_flags' type_id=20 bits_offset=1984
+	'sb_flags_mask' type_id=20 bits_offset=2016
+	's_iflags' type_id=20 bits_offset=2048
+	'purpose' type_id=3600 bits_offset=2080 bitfield_size=8
+	'phase' type_id=3601 bits_offset=2088 bitfield_size=8
+	'need_free' type_id=67 bits_offset=2096 bitfield_size=1
+	'global' type_id=67 bits_offset=2097 bitfield_size=1
+	'oldapi' type_id=67 bits_offset=2098 bitfield_size=1
+
+Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
+---
+ tools/lib/bpf/btf_dump.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+index 580985ee5545..8f659ec8798d 100644
+--- a/tools/lib/bpf/btf_dump.c
++++ b/tools/lib/bpf/btf_dump.c
+@@ -2250,9 +2250,19 @@ static int btf_dump_type_data_check_overflow(struct btf_dump *d,
+ 					     const struct btf_type *t,
+ 					     __u32 id,
+ 					     const void *data,
+-					     __u8 bits_offset)
++					     __u8 bits_offset,
++					     __u8 bit_sz)
+ {
+-	__s64 size = btf__resolve_size(d->btf, id);
++	__s64 size;
++
++	if (bit_sz) {
++		/* bits_offset is at most 7. bit_sz is at most 128. */
++		__u8 nr_bytes = (bits_offset + bit_sz + 7) / 8;
++
++		return data + nr_bytes > d->typed_dump->data_end ? -E2BIG : 0;
++	}
++
++	size = btf__resolve_size(d->btf, id);
+ 
+ 	if (size < 0 || size >= INT_MAX) {
+ 		pr_warn("unexpected size [%zu] for id [%u]\n",
+@@ -2407,7 +2417,7 @@ static int btf_dump_dump_type_data(struct btf_dump *d,
+ {
+ 	int size, err = 0;
+ 
+-	size = btf_dump_type_data_check_overflow(d, t, id, data, bits_offset);
++	size = btf_dump_type_data_check_overflow(d, t, id, data, bits_offset, bit_sz);
+ 	if (size < 0)
+ 		return size;
+ 	err = btf_dump_type_data_check_zero(d, t, id, data, bits_offset, bit_sz);
+-- 
+2.34.1
+
