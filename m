@@ -2,193 +2,206 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAA1DC77B7E
-	for <bpf@archiver.kernel.org>; Sat, 29 Apr 2023 08:17:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50837C7EE22
+	for <bpf@archiver.kernel.org>; Sat, 29 Apr 2023 09:41:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbjD2IRf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 29 Apr 2023 04:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58328 "EHLO
+        id S230393AbjD2Jlb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 29 Apr 2023 05:41:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjD2IRe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 29 Apr 2023 04:17:34 -0400
-X-Greylist: delayed 1800 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 29 Apr 2023 01:17:33 PDT
-Received: from hall.aurel32.net (hall.aurel32.net [IPv6:2001:bc8:30d7:100::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1003C172A;
-        Sat, 29 Apr 2023 01:17:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
-        ; s=202004.hall; h=In-Reply-To:Content-Type:MIME-Version:References:
-        Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:From:Reply-To:
-        Subject:Content-ID:Content-Description:X-Debbugs-Cc;
-        bh=ncDaDqDwwscytnxZqksS1TxOdUdsbxUd69f/Fut6Lo4=; b=cAYErngPgHPVbC8ryW4Rp8W9/P
-        IVMED0TPs9sVG9KZ9rz1T75JQtLdq+BPoDB0VJUiKaXrRbIbKGK5vnR8LFLDjZOYV5zx/QtpLDztP
-        OUQmRGn5rqgjR0Ae9lNnub8ad2yx2yFtRubTLBdlLXN28kWiIZVgN6XtUX4VVjSDu1XfM1vkocRdw
-        G6JB3RjPJ5g3FZZA80Ys+h+YKuoXl6nVVgMl9xhImAAJLS5e6JMFsuF7FgkoDs+ozdrMwJOxtPsT1
-        yPgglJbWeOHl+FqUpDn3lNuKUpPUz7hfkhkgccVY4beL0I1k8AlsC903Mf1z9tBMmn5HAKae3TzPL
-        bOeKUzLQ==;
-Received: from [2a01:e34:ec5d:a741:8a4c:7c4e:dc4c:1787] (helo=ohm.rr44.fr)
-        by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <aurelien@aurel32.net>)
-        id 1psf1d-00CzBD-UU; Sat, 29 Apr 2023 09:29:45 +0200
-Received: from aurel32 by ohm.rr44.fr with local (Exim 4.96)
-        (envelope-from <aurelien@aurel32.net>)
-        id 1psf1c-009rOz-1w;
-        Sat, 29 Apr 2023 09:29:44 +0200
-Date:   Sat, 29 Apr 2023 09:29:44 +0200
-From:   Aurelien Jarno <aurelien@aurel32.net>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Eduard Zingerman <eddyz87@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
-        <bpf@vger.kernel.org>
-Subject: Re: [PATCH] arm64: remove special treatment for the link order of
- head.o
-Message-ID: <ZEzHaJUP21Ln5XBt@aurel32.net>
-Mail-Followup-To: Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org, Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" <bpf@vger.kernel.org>
-References: <20221012233500.156764-1-masahiroy@kernel.org>
- <ZBovCrMXJk7NPISp@aurel32.net>
- <CAMj1kXHwtb9aY+vd4e69Wg47GpL0sT=dDaCUA1sF7=edzc+Qeg@mail.gmail.com>
- <ZBzAp457rrO52FPy@aurel32.net>
- <CAMj1kXHvfHwQFX1SKbUvpHWOr3+i7Tp5Hod-_jZE4hDHZmmRZg@mail.gmail.com>
- <CAK7LNASdsWMP2jud4niOkrR5+a2jG-Vfo0XEa63bh3L3W6_t0Q@mail.gmail.com>
- <CAK7LNASUbyDV-kMi3fuihUdfnhtzHnk9wosQ0w-fuamDcT2ZBg@mail.gmail.com>
- <2d8f0889da0e3dfa9c1c8fe9da301d54636a2e6d.camel@gmail.com>
- <ZCNFi65T4anhk6hH@kernel.org>
+        with ESMTP id S230321AbjD2Jla (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 29 Apr 2023 05:41:30 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD12173D;
+        Sat, 29 Apr 2023 02:41:28 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Q7kxw5Grgz4f3tPf;
+        Sat, 29 Apr 2023 17:41:24 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP4 (Coremail) with SMTP id gCh0CgD3rLBA5kxkK36NIQ--.13426S6;
+        Sat, 29 Apr 2023 17:41:25 +0800 (CST)
+From:   Hou Tao <houtao@huaweicloud.com>
+To:     bpf@vger.kernel.org, Martin KaFai Lau <martin.lau@linux.dev>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>,
+        Hao Luo <haoluo@google.com>, Yonghong Song <yhs@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        houtao1@huawei.com
+Subject: [RFC bpf-next v3 2/6] bpf: Pass bitwise flags to bpf_mem_alloc_init()
+Date:   Sat, 29 Apr 2023 18:12:11 +0800
+Message-Id: <20230429101215.111262-3-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20230429101215.111262-1-houtao@huaweicloud.com>
+References: <20230429101215.111262-1-houtao@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCNFi65T4anhk6hH@kernel.org>
-User-Agent: Mutt/2.2.7 (2022-08-07)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgD3rLBA5kxkK36NIQ--.13426S6
+X-Coremail-Antispam: 1UD129KBjvJXoWxGr43Gw43ZFykuF13Wry7Awb_yoWrKF1UpF
+        WxGF40yr4qqFs7Ca17Grs7Aa45J340gw1IkayUWryrZry5Wr1DWr4kXry3XFZ09r4qka1f
+        ArnYgrW0934UXaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUB0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+        A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+        Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+        Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
+        vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+        jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2I
+        x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
+        8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
+        0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFa9-UUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2023-03-28 16:52, Arnaldo Carvalho de Melo wrote:
-> Em Tue, Mar 28, 2023 at 01:33:29PM +0300, Eduard Zingerman escreveu:
-> > On Sat, 2023-03-25 at 20:42 +0900, Masahiro Yamada wrote:
-> > [...]
-> > > > Strange.
-> > > > 
-> > > > I used the .config file Aurelien provided, but
-> > > > I still cannot reproduce this issue.
-> > > > 
-> > > > The vmlinux size is small as-is in the current mainline.
-> > > > 
-> > > > [mainline]
-> > > > 
-> > > > masahiro@zoe:~/ref/linux(master)$ git log --oneline -1
-> > > > 65aca32efdcb (HEAD -> master, origin/master, origin/HEAD) Merge tag
-> > > > 'mm-hotfixes-stable-2023-03-24-17-09' of
-> > > > git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-> > > > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-size  vmlinux
-> > > >    text    data     bss     dec     hex filename
-> > > > 24561282 8186912 622032 33370226 1fd3072 vmlinux
-> > > > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-readelf -S
-> > > > vmlinux | grep -A1 BTF
-> > > >   [15] .BTF              PROGBITS         ffff8000091c0708  011d0708
-> > > >        000000000048209c  0000000000000000   A       0     0     1
-> > > >   [16] .BTF_ids          PROGBITS         ffff8000096427a4  016527a4
-> > > >        0000000000000a1c  0000000000000000   A       0     0     1
-> > > > 
-> > > > [mainline + revert 994b7ac]
-> > > > 
-> > > > masahiro@zoe:~/ref/linux2(testing)$ git log --oneline -2
-> > > > 856c80dd789c (HEAD -> testing) Revert "arm64: remove special treatment
-> > > > for the link order of head.o"
-> > > > 65aca32efdcb (origin/master, origin/HEAD, master) Merge tag
-> > > > 'mm-hotfixes-stable-2023-03-24-17-09' of
-> > > > git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-> > > > masahiro@zoe:~/ref/linux2(testing)$ aarch64-linux-gnu-size  vmlinux
-> > > >    text    data     bss     dec     hex filename
-> > > > 24561329 8186912 622032 33370273 1fd30a1 vmlinux
-> > > > masahiro@zoe:~/ref/linux2(testing)$ aarch64-linux-gnu-readelf -S
-> > > > vmlinux | grep -A1 BTF
-> > > >   [15] .BTF              PROGBITS         ffff8000091c0708  011d0708
-> > > >        00000000004820cb  0000000000000000   A       0     0     1
-> > > >   [16] .BTF_ids          PROGBITS         ffff8000096427d4  016527d4
-> > > >        0000000000000a1c  0000000000000000   A       0     0     1
-> > > > 
-> > > > 
-> > > > 
-> > > > I still do not know what affects reproducibility.
-> > > > (compiler version, pahole version, etc. ?)
-> > > > 
-> > > > 
-> > > > 
-> > > > 
-> > > > Aurelien used GCC 12 + binutils 2.40, but
-> > > > my toolchain is a bit older.
-> > > > 
-> > > > FWIW, I tested this on Ubuntu 22.04LTS.
-> > > > 
-> > > > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-gcc --version
-> > > > aarch64-linux-gnu-gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
-> > > > Copyright (C) 2021 Free Software Foundation, Inc.
-> > > > This is free software; see the source for copying conditions.  There is NO
-> > > > warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-> > > > 
-> > > > masahiro@zoe:~/ref/linux(master)$ pahole --version
-> > > > v1.22
-> > > > 
-> > > > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-as --version
-> > > > GNU assembler (GNU Binutils for Ubuntu) 2.38
-> > > > Copyright (C) 2022 Free Software Foundation, Inc.
-> > > > This program is free software; you may redistribute it under the terms of
-> > > > the GNU General Public License version 3 or later.
-> > > > This program has absolutely no warranty.
-> > > > This assembler was configured for a target of `aarch64-linux-gnu'.
-> > > 
-> > > I did the same things in Deiban sid
-> > > in order to use newer versions of tools.
-> > 
-> > 
-> > Hi Masahiro,
-> > 
-> > An upgrade from gcc 11 to gcc 12, BTF section increase and a number of
-> > duplicate IDs reported by resolve_btfids matches the description of
-> > the following thread:
-> > 
-> > https://lore.kernel.org/bpf/Y%2FP1yxAuV6Wj3A0K@google.com/
-> > 
-> > The issue is caused by change in GNU assembler DWARF generation.
-> > I've sent a patch to fix it a few weeks ago and it is merged in
-> > dwarves master:
-> > 
-> > a9498899109d ("dwarf_loader: Fix for BTF id drift caused by adding unspecified types")
-> > 
-> > Could you please grab a fresh version of dwarves from:
-> > 
-> > git@github.com:acmel/dwarves.git
-> > 
-> > compile 'pahole' and try with?
-> 
-> pahole 1.25 is long overdue, so let see if this got fixed with what is
-> in master, please take a look, you can as well get it from:
-> 
-> git://git.kernel.org/pub/scm/devel/pahole/pahole.git
-> 
+From: Hou Tao <houtao1@huawei.com>
 
-pahole 1.25 has been released, so I have tried a kernel build with it,
-and I confirm it fixes the issue. Thanks for the help.
+Extend a boolean argument to a bitwise flags argument for
+bpf_mem_alloc_init(), so more new flags can be added later.
 
-Aurelien
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ include/linux/bpf_mem_alloc.h | 8 +++++++-
+ kernel/bpf/core.c             | 2 +-
+ kernel/bpf/cpumask.c          | 2 +-
+ kernel/bpf/hashtab.c          | 5 +++--
+ kernel/bpf/memalloc.c         | 8 +++++++-
+ 5 files changed, 19 insertions(+), 6 deletions(-)
 
+diff --git a/include/linux/bpf_mem_alloc.h b/include/linux/bpf_mem_alloc.h
+index 3929be5743f4..148347950e16 100644
+--- a/include/linux/bpf_mem_alloc.h
++++ b/include/linux/bpf_mem_alloc.h
+@@ -12,6 +12,12 @@ struct bpf_mem_alloc {
+ 	struct bpf_mem_caches __percpu *caches;
+ 	struct bpf_mem_cache __percpu *cache;
+ 	struct work_struct work;
++	unsigned int flags;
++};
++
++/* flags for bpf_mem_alloc_init() */
++enum {
++	BPF_MA_PERCPU = 1U << 0,
+ };
+ 
+ /* 'size != 0' is for bpf_mem_alloc which manages fixed-size objects.
+@@ -21,7 +27,7 @@ struct bpf_mem_alloc {
+  * Alloc and free are done with bpf_mem_{alloc,free}() and the size of
+  * the returned object is given by the size argument of bpf_mem_alloc().
+  */
+-int bpf_mem_alloc_init(struct bpf_mem_alloc *ma, int size, bool percpu);
++int bpf_mem_alloc_init(struct bpf_mem_alloc *ma, int size, unsigned int flags);
+ void bpf_mem_alloc_destroy(struct bpf_mem_alloc *ma);
+ 
+ /* kmalloc/kfree equivalent: */
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 7421487422d4..5c9622e8ca34 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2773,7 +2773,7 @@ static int __init bpf_global_ma_init(void)
+ {
+ 	int ret;
+ 
+-	ret = bpf_mem_alloc_init(&bpf_global_ma, 0, false);
++	ret = bpf_mem_alloc_init(&bpf_global_ma, 0, 0);
+ 	bpf_global_ma_set = !ret;
+ 	return ret;
+ }
+diff --git a/kernel/bpf/cpumask.c b/kernel/bpf/cpumask.c
+index 7efdf5d770ca..f40636796f75 100644
+--- a/kernel/bpf/cpumask.c
++++ b/kernel/bpf/cpumask.c
+@@ -445,7 +445,7 @@ static int __init cpumask_kfunc_init(void)
+ 		},
+ 	};
+ 
+-	ret = bpf_mem_alloc_init(&bpf_cpumask_ma, sizeof(struct bpf_cpumask), false);
++	ret = bpf_mem_alloc_init(&bpf_cpumask_ma, sizeof(struct bpf_cpumask), 0);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &cpumask_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &cpumask_kfunc_set);
+ 	return  ret ?: register_btf_id_dtor_kfuncs(cpumask_dtors,
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index 00c253b84bf5..93009b94ac9b 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -576,12 +576,13 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
+ 				goto free_prealloc;
+ 		}
+ 	} else {
+-		err = bpf_mem_alloc_init(&htab->ma, htab->elem_size, false);
++		err = bpf_mem_alloc_init(&htab->ma, htab->elem_size, 0);
+ 		if (err)
+ 			goto free_map_locked;
+ 		if (percpu) {
+ 			err = bpf_mem_alloc_init(&htab->pcpu_ma,
+-						 round_up(htab->map.value_size, 8), true);
++						 round_up(htab->map.value_size, 8),
++						 BPF_MA_PERCPU);
+ 			if (err)
+ 				goto free_map_locked;
+ 		}
+diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
+index 0668bcd7c926..072102476019 100644
+--- a/kernel/bpf/memalloc.c
++++ b/kernel/bpf/memalloc.c
+@@ -98,6 +98,7 @@ struct bpf_mem_cache {
+ 	int free_cnt;
+ 	int low_watermark, high_watermark, batch;
+ 	int percpu_size;
++	unsigned int flags;
+ 
+ 	struct rcu_head rcu;
+ 	struct llist_head free_by_rcu;
+@@ -377,13 +378,14 @@ static void prefill_mem_cache(struct bpf_mem_cache *c, int cpu)
+  * kmalloc/kfree. Max allocation size is 4096 in this case.
+  * This is bpf_dynptr and bpf_kptr use case.
+  */
+-int bpf_mem_alloc_init(struct bpf_mem_alloc *ma, int size, bool percpu)
++int bpf_mem_alloc_init(struct bpf_mem_alloc *ma, int size, unsigned int flags)
+ {
+ 	static u16 sizes[NUM_CACHES] = {96, 192, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096};
+ 	struct bpf_mem_caches *cc, __percpu *pcc;
+ 	struct bpf_mem_cache *c, __percpu *pc;
+ 	struct obj_cgroup *objcg = NULL;
+ 	int cpu, i, unit_size, percpu_size = 0;
++	bool percpu = (flags & BPF_MA_PERCPU);
+ 
+ 	if (size) {
+ 		pc = __alloc_percpu_gfp(sizeof(*pc), 8, GFP_KERNEL);
+@@ -406,9 +408,11 @@ int bpf_mem_alloc_init(struct bpf_mem_alloc *ma, int size, bool percpu)
+ 			c->unit_size = unit_size;
+ 			c->objcg = objcg;
+ 			c->percpu_size = percpu_size;
++			c->flags = flags;
+ 			prefill_mem_cache(c, cpu);
+ 		}
+ 		ma->cache = pc;
++		ma->flags = flags;
+ 		return 0;
+ 	}
+ 
+@@ -428,10 +432,12 @@ int bpf_mem_alloc_init(struct bpf_mem_alloc *ma, int size, bool percpu)
+ 			c = &cc->cache[i];
+ 			c->unit_size = sizes[i];
+ 			c->objcg = objcg;
++			c->flags = flags;
+ 			prefill_mem_cache(c, cpu);
+ 		}
+ 	}
+ 	ma->caches = pcc;
++	ma->flags = flags;
+ 	return 0;
+ }
+ 
 -- 
-Aurelien Jarno                          GPG: 4096R/1DDD8C9B
-aurelien@aurel32.net                     http://aurel32.net
+2.29.2
+
