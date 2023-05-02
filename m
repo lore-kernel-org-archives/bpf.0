@@ -2,197 +2,139 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DA1EC7EE21
-	for <bpf@archiver.kernel.org>; Tue,  2 May 2023 00:01:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AF10C7EE21
+	for <bpf@archiver.kernel.org>; Tue,  2 May 2023 00:07:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbjEBABk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 1 May 2023 20:01:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60454 "EHLO
+        id S232790AbjEBAHk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 1 May 2023 20:07:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjEBABj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 May 2023 20:01:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0D51FEE;
-        Mon,  1 May 2023 17:01:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A348A62055;
-        Tue,  2 May 2023 00:01:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 766EAC433D2;
-        Tue,  2 May 2023 00:01:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682985697;
-        bh=BNsRcKYRPV8D42UslfOjNLcHiF0qsYMcQ6gMsgBkLLI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=H9EtGwfBO4NmrZz2PdQU6d9T7GY3CIT16EOOk+Ri+q1lfQa3S6hVS8p+wD30qfRs2
-         UIW9vFEUR4NBQe0U5ws4eEihJ6X7+J1CsfoqRyv7Ouxmcc2hmH6ERdufJ8ea6rCGlO
-         3u+qPYf5ZOcU25XjAN+4FWupBtp3603Wye8Ht9ICe6f++HuR4dK+PUnpBan/u3Pfxp
-         KVqUkwcEbq7VIFc+Rb+3Iic2/FhdY5HW2Jz/vgwzG0vQqTTaxC9Vp5omf8E4+97H2w
-         lty/kZWksxC3rIq7VqbKKFMBrjxrofntJ9E3qJlaI+t0BxfsucYLDc4LdOJUJP07yE
-         O3t5GhA+BTFhA==
-Date:   Tue, 2 May 2023 09:01:33 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Florent Revest <revest@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
-Subject: [v8] Re: [PATCH v9 00/11] tracing: Add fprobe events
-Message-Id: <20230502090133.dcfc898a4bb33205c73fb6ea@kernel.org>
-In-Reply-To: <168295372484.3157983.731333785390494141.stgit@mhiramat.roam.corp.google.com>
-References: <168295372484.3157983.731333785390494141.stgit@mhiramat.roam.corp.google.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        with ESMTP id S232785AbjEBAHk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 May 2023 20:07:40 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB28B3A86
+        for <bpf@vger.kernel.org>; Mon,  1 May 2023 17:07:38 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64115e652eeso30720319b3a.0
+        for <bpf@vger.kernel.org>; Mon, 01 May 2023 17:07:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682986058; x=1685578058;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8vPkxZmjvPrwj9yARID2IcnIbVYQzVlz9N1UD75yWJc=;
+        b=0UfJ7TbcVUadFwEts5kOLmLB4BgJqrRqx9uD+f8LXaQJSMmqYqjD7Fh6Cfn0NPkJb/
+         ioCuz2M50D37KKGuAxc3MgBQE2ral1pGfWy1jNpjDLvM9ZCCgB+c2Zhz2PHLQPL5X38Y
+         zeDMAefPinLcV2aODW6pogWX34Wv3FCrk9tNqECSaF7Y4nuXeg9wsvn54WMT7OlCODv4
+         X1KgshO5erNjMBVLeRz2u7QqdEqwDLsqF4E7mnzNIosJAuV7fqjKx7rpR4DdjwbO543q
+         +aSxmH24oGdBCQHZ1Y/TFhJUSr73YFOl2Y75rLhVvUD1gf7zAFhVJ+UsP8aMwTsfzRib
+         Plhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682986058; x=1685578058;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8vPkxZmjvPrwj9yARID2IcnIbVYQzVlz9N1UD75yWJc=;
+        b=SAUKXeqtQNXamvsm6uI/6LcRq3f46EZkjE+1v9i+a3tI3b7e6Ijq1XizHf0eHwzja8
+         rhlFHOayY/vg6edfFMhfoI9K+QMo0ZJz/4gYSUBFs5h9HpS0n5cl3i+anG4xlsZ+QhQY
+         GFRq0SMiiGgEgjQQXkSXdN2aukD3b6uNihb54hiLzEBheezNGhz5rWLWjcqEil+gdJIx
+         9Cmsm7uSBnz7376yPAjPR9TJKu5KQSPZbr96bFRt8LAMaXdqgbTVn//bHg3FJa1k3Mis
+         2dlb2Og4yNu7oUpyrOl2j1ghTjD+c1Tphw3b3SZd3dzcrIgKEn/uNYP1YHsrqshNWLWD
+         m+/A==
+X-Gm-Message-State: AC+VfDyabUFid9oZYs77i9hqUy8kOiq8Jv8pXVVXgKa1uovkE+J6YqTH
+        t2VqmvlrRVe8/hWjwt1mPslbZZuKsFxlHBl8YhJmSw==
+X-Google-Smtp-Source: ACHHUZ6xDNX4KW7bT3plKK/34ozRFT5NbHGd2w6rUaYtGnNHSc3WkI9OHAF7ScK8I3T2nZpmEkEIGyDN05ShjepR+/s=
+X-Received: by 2002:a17:902:f7c5:b0:19e:2fb0:a5d9 with SMTP id
+ h5-20020a170902f7c500b0019e2fb0a5d9mr17959310plw.32.1682986057925; Mon, 01
+ May 2023 17:07:37 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230418014037.2412394-1-drosen@google.com> <CAJfpegtuNgbZfLiKnpzdEP0sNtCt=83NjGtBnmtvMaon2avv2w@mail.gmail.com>
+In-Reply-To: <CAJfpegtuNgbZfLiKnpzdEP0sNtCt=83NjGtBnmtvMaon2avv2w@mail.gmail.com>
+From:   Daniel Rosenberg <drosen@google.com>
+Date:   Mon, 1 May 2023 17:07:26 -0700
+Message-ID: <CA+PiJmTMs2u=J6ANYqHdGww5SoE_focZGjMRZk5WgoH8fVuCsA@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next v3 00/37] FUSE BPF: A Stacked Filesystem
+ Extension for FUSE
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Amir Goldstein <amir73il@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-unionfs@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Mykola Lysenko <mykolal@fb.com>, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Oops, the title version is wrong, this is 8th version. Hmm, it must be my typo...
+On Mon, Apr 24, 2023 at 8:32=E2=80=AFAM Miklos Szeredi <miklos@szeredi.hu> =
+wrote:
+>
+>
+> The security model needs to be thought about and documented.  Think
+> about this: the fuse server now delegates operations it would itself
+> perform to the passthrough code in fuse.  The permissions that would
+> have been checked in the context of the fuse server are now checked in
+> the context of the task performing the operation.  The server may be
+> able to bypass seccomp restrictions.  Files that are open on the
+> backing filesystem are now hidden (e.g. lsof won't find these), which
+> allows the server to obfuscate accesses to backing files.  Etc.
+>
+> These are not particularly worrying if the server is privileged, but
+> fuse comes with the history of supporting unprivileged servers, so we
+> should look at supporting passthrough with unprivileged servers as
+> well.
+>
 
-On Tue,  2 May 2023 00:08:45 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+This is on my todo list. My current plan is to grab the creds that the
+daemon uses to respond to FUSE_INIT. That should keep behavior fairly
+similar. I'm not sure if there are cases where the fuse server is
+operating under multiple contexts.
+I don't currently have a plan for exposing open files via lsof. Every
+such file should relate to one that will show up though. I haven't dug
+into how that's set up, but I'm open to suggestions.
 
-> Hi,
-> 
-> Here is the 8th version of improve fprobe and add a basic fprobe event
-> support for ftrace (tracefs) and perf. Here is the previous version.
-> 
-> https://lore.kernel.org/all/168255826500.2565678.17719875734305974633.stgit@mhiramat.roam.corp.google.com/
-> 
-> This version is a minor update for fixing wrong indentation [8/11]
-> and update kconfig help message[6/11].
-> 
-> You can also get this series from:
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git topic/fprobe-event-ext
-> 
-> With this fprobe events, we can continue to trace function entry/exit
-> even if the CONFIG_KPROBES_ON_FTRACE is not available. Since
-> CONFIG_KPROBES_ON_FTRACE requires the CONFIG_DYNAMIC_FTRACE_WITH_REGS,
-> it is not available if the architecture only supports
-> CONFIG_DYNAMIC_FTRACE_WITH_ARGS (e.g. arm64). And that means kprobe
-> events can not probe function entry/exit effectively on such architecture.
-> But this problem can be solved if the dynamic events supports fprobe events
-> because fprobe events doesn't use kprobe but ftrace via fprobe.
-> 
-> FPROBE EVENTS
-> =============
-> 
-> Fprobe events allows user to add new events on the entry and exit of kernel
-> functions (which can be ftraced). Unlike kprobe events, the fprobe events
-> can only probe the function entry and exit, and it can only trace the
-> function args, return value, and stacks. (no registers)
-> For probing function body, users can continue to use the kprobe events.
-> 
-> The tracepoint probe events (tprobe events) also allows user to add new
-> events dynamically on the tracepoint. Most of the tracepoint already has
-> trace-events, so this feature is useful if you only want to know a
-> specific parameter, or trace the tracepoints which has no trace-events
-> (e.g. sched_*_tp tracepoints only exposes the tracepoints.)
-> 
-> The fprobe events syntax is;
-> 
->  f[:[GRP/][EVENT]] FUNCTION [FETCHARGS]
->  f[MAXACTIVE][:[GRP/][EVENT]] FUNCTION%return [FETCHARGS]
-> 
-> And tracepoint probe events syntax is;
-> 
->  t[:[GRP/][EVENT]] TRACEPOINT [FETCHARGS]
-> 
-> This series includes BTF argument support for fprobe/tracepoint events,
-> and kprobe events. This allows us to fetch a specific function parameter
-> by name, and all parameters by '$$args'.
-> Note that enabling this feature, you need to enable CONFIG_BPF_SYSCALL and
-> confirm that your arch supports CONFIG_HAVE_FUNCTION_ARG_ACCESS_API.
-> 
-> E.g.
-> 
->  # echo 't kfree ptr' >> dynamic_events
->  # echo 'f kfree object' >> dynamic_events
->  # cat dynamic_events 
-> t:tracepoints/kfree kfree ptr=ptr
-> f:fprobes/kfree__entry kfree object=object
->  # echo 1 > events/fprobes/enable
->  # echo 1 > events/tracepoints/enable
->  # echo > trace
->  # head -n 20 trace | tail
-> #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-> #              | |         |   |||||     |         |
->             tail-84      [000] .....  1324.561958: kfree__entry: (kfree+0x4/0x140) object=0xffff888006383c00
->             tail-84      [000] ...1.  1324.561961: kfree: (__probestub_kfree+0x4/0x10) ptr=0xffff888006383c00
->             tail-84      [000] .....  1324.561988: kfree__entry: (kfree+0x4/0x140) object=0x0
->             tail-84      [000] ...1.  1324.561988: kfree: (__probestub_kfree+0x4/0x10) ptr=0x0
->             tail-84      [000] .....  1324.561989: kfree__entry: (kfree+0x4/0x140) object=0xffff88800671e600
->             tail-84      [000] ...1.  1324.561989: kfree: (__probestub_kfree+0x4/0x10) ptr=0xffff88800671e600
->             tail-84      [000] .....  1324.562368: kfree__entry: (kfree+0x4/0x140) object=0xffff8880065e0580
->             tail-84      [000] ...1.  1324.562369: kfree: (__probestub_kfree+0x4/0x10) ptr=0xffff8880065e0580
-> 
-> 
-> Thank you,
-> 
-> ---
-> 
-> Masami Hiramatsu (Google) (11):
->       fprobe: Pass return address to the handlers
->       tracing/probes: Add fprobe events for tracing function entry and exit.
->       selftests/ftrace: Add fprobe related testcases
->       tracing/probes: Add tracepoint support on fprobe_events
->       tracing/probes: Move event parameter fetching code to common parser
->       tracing/probes: Support function parameters if BTF is available
->       tracing/probes: Add $$args meta argument for all function args
->       tracing/probes: Add BTF retval type support
->       selftests/ftrace: Add tracepoint probe test case
->       selftests/ftrace: Add BTF arguments test cases
->       Documentation: tracing/probes: Add fprobe event tracing document
-> 
-> 
->  Documentation/trace/fprobetrace.rst                |  187 +++
->  Documentation/trace/index.rst                      |    1 
->  include/linux/fprobe.h                             |   11 
->  include/linux/rethook.h                            |    2 
->  include/linux/trace_events.h                       |    3 
->  include/linux/tracepoint-defs.h                    |    1 
->  include/linux/tracepoint.h                         |    5 
->  kernel/kprobes.c                                   |    1 
->  kernel/trace/Kconfig                               |   26 
->  kernel/trace/Makefile                              |    1 
->  kernel/trace/bpf_trace.c                           |    6 
->  kernel/trace/fprobe.c                              |   17 
->  kernel/trace/rethook.c                             |    3 
->  kernel/trace/trace.c                               |   13 
->  kernel/trace/trace.h                               |   11 
->  kernel/trace/trace_eprobe.c                        |   44 -
->  kernel/trace/trace_fprobe.c                        | 1194 ++++++++++++++++++++
->  kernel/trace/trace_kprobe.c                        |   33 -
->  kernel/trace/trace_probe.c                         |  504 +++++++-
->  kernel/trace/trace_probe.h                         |   43 +
->  kernel/trace/trace_uprobe.c                        |    8 
->  lib/test_fprobe.c                                  |   10 
->  samples/fprobe/fprobe_example.c                    |    6 
->  .../ftrace/test.d/dynevent/add_remove_btfarg.tc    |   54 +
->  .../ftrace/test.d/dynevent/add_remove_fprobe.tc    |   26 
->  .../ftrace/test.d/dynevent/add_remove_tprobe.tc    |   27 
->  .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |   99 ++
->  .../ftrace/test.d/dynevent/tprobe_syntax_errors.tc |   82 +
->  .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |   13 
->  29 files changed, 2291 insertions(+), 140 deletions(-)
->  create mode 100644 Documentation/trace/fprobetrace.rst
->  create mode 100644 kernel/trace/trace_fprobe.c
->  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_btfarg.tc
->  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe.tc
->  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_tprobe.tc
->  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
->  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/tprobe_syntax_errors.tc
-> 
-> --
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> My other generic comment is that you should add justification for
+> doing this in the first place.  I guess it's mainly performance.  So
+> how performance can be won in real life cases?   It would also be good
+> to measure the contribution of individual ops to that win.   Is there
+> another reason for this besides performance?
+>
+> Thanks,
+> Miklos
 
+Our main concern with it is performance. We have some preliminary
+numbers looking at the pure passthrough case. We've been testing using
+a ramdrive on a somewhat slow machine, as that should highlight
+differences more. We ran fio for sequential reads, and random
+read/write. For sequential reads, we were seeing libfuse's
+passthrough_hp take about a 50% hit, with fuse-bpf not being
+detectably slower. For random read/write, we were seeing a roughly 90%
+drop in performance from passthrough_hp, while fuse-bpf has about a 7%
+drop in read and write speed. When we use a bpf that traces every
+opcode, that performance hit increases to a roughly 1% drop in
+sequential read performance, and a 20% drop in both read and write
+performance for random read/write. We plan to make more complex bpf
+examples, with fuse daemon equivalents to compare against.
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+We have not looked closely at the impact of individual opcodes yet.
+
+There's also a potential ease of use for fuse-bpf. If you're
+implementing a fuse daemon that is largely mirroring a backing
+filesystem, you only need to write code for the differences in
+behavior. For instance, say you want to remove image metadata like
+location. You could give bpf information on what range of data is
+metadata, and zero out that section without having to handle any other
+operations.
+
+ -Daniel
