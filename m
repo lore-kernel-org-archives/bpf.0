@@ -2,170 +2,135 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E034CC77B73
-	for <bpf@archiver.kernel.org>; Tue,  2 May 2023 02:19:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 229A8C77B7F
+	for <bpf@archiver.kernel.org>; Tue,  2 May 2023 03:38:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233506AbjEBCTu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 1 May 2023 22:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45664 "EHLO
+        id S233294AbjEBDie (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 1 May 2023 23:38:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231915AbjEBCTp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 May 2023 22:19:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB394496;
-        Mon,  1 May 2023 19:19:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CBC6A620DD;
-        Tue,  2 May 2023 02:18:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6751C433EF;
-        Tue,  2 May 2023 02:18:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682993931;
-        bh=Q8X75uxojwl36z/185Vnp5NwxkrdQsauwtqJ820GtUs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h8QItl89kGoy39zLksWOeEpDGjkFuCO38Mt6uBjZMvBB3tqr8qu1t1s/dfE73Vz3w
-         QtLGVQPF1HbB8W/v+VlTeHc7hZbI2gRvzDkkydNcwdh4qGVBnVv09ItUzz/lI5vKXy
-         Fi6/aZQTJoYVhkG/PjB+U9SJay2FjDNxAwbVxAHlF1Xecwiw6DNkRlYJnqdVVnCQeV
-         pPmmqGbOSU4K+2SdDGMt5kDbHm5yfpRmTYulbQUEQo3pluEmnTKqCowPNRZVf1yNh8
-         q3UverX62X2/FHY2TIJVEpNXlGE7E8GMRGo6xEYfpLqEnTauM316s8npTxV55bn2xF
-         y09ACrPKt4c+Q==
-From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To:     linux-trace-kernel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        mhiramat@kernel.org, Florent Revest <revest@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
-Subject: [PATCH v9.1 10/11] selftests/ftrace: Add BTF arguments test cases
-Date:   Tue,  2 May 2023 11:18:47 +0900
-Message-ID:  <168299392783.3242086.1546512576090950143.stgit@mhiramat.roam.corp.google.com>
-X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-In-Reply-To:  <168299383880.3242086.7182498102007986127.stgit@mhiramat.roam.corp.google.com>
-References:  <168299383880.3242086.7182498102007986127.stgit@mhiramat.roam.corp.google.com>
-User-Agent: StGit/0.19
+        with ESMTP id S232790AbjEBDib (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 May 2023 23:38:31 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934053581;
+        Mon,  1 May 2023 20:38:30 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-63b67a26069so3803050b3a.0;
+        Mon, 01 May 2023 20:38:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682998710; x=1685590710;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=w9jeK1WbiwcypTGmla3kWNgoIrfPhM6KWaPpZ6YT+Bk=;
+        b=XsJPAfcFHefELfP+zLqKYwE+euLdjM+gOZ9eOAFebg2yP4yAWVVVJUo8P83IgFURLf
+         9N9J6k7rvDDFBs7rHQrBkE+h8BdPRT8CmImoNyrxoIQCbTk9XgoErMDmvIGIgOScSSgw
+         ACsGCRj3OUZqa3wcWIScaAzruMtubAehdERyfwgtTbslvkuF5CaEcE/nItizOr1psEbV
+         6AtVyN0wed3KM65+K9WuJNi6GzMy0uuvgHN/sZMP4Waj/61mNYfBOS1jj/8qu+zsJLMT
+         RGCmC9yFjbCXRH7PpXmOallFPBEDb0+Gn3u/dyxGyo82YcOpg5yHSxm6bVYF7Hwxt4dR
+         Z0lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682998710; x=1685590710;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w9jeK1WbiwcypTGmla3kWNgoIrfPhM6KWaPpZ6YT+Bk=;
+        b=OcApiRmmG8nCk1vza7NQOqc36fg1P429OhPNadLsSzNp2nFmwWEJ1PU4k6eK8oJgMx
+         9G+MH9cweTYGTaE6ntUFzs1m/KbS/MuMAR9Dwpky6ptmihDuVYTVMbG70gQwoyF0EStH
+         kLfDmgyDIHyzUH4rCrvU3lKsfPuxnGWApsmreOVGFRjUEAirDp5rhQNDjm9vgFn2ZDg4
+         eGsQpEbcEvZ2cwu+d3H7/GY0OfPvFze+0EQoQqDp90peVkodAIMopIfF6kmPQ+CSVjfD
+         D+dO/ZDtrLHnjVWSjrU1ppx2zM6MOmxiGq7VAUOgVuiuGvXKpALXjQ2g7nPKGN3tmBNQ
+         5yNw==
+X-Gm-Message-State: AC+VfDwpodrO3dhDwaP3NYWd6xozeHR2Yl8hnBUNDd24ivy20lf846J1
+        wg0PUyWeKCUBcDjZmPOLAMWnnamPAw4=
+X-Google-Smtp-Source: ACHHUZ68Q+sZJie50x8IkLzjGYZzCLAtUYbmqpoSIQ9PXxasFWP1mYSN3aOVLlxZN7rEd+blBqIflg==
+X-Received: by 2002:a05:6a00:2ea6:b0:63f:24f1:adac with SMTP id fd38-20020a056a002ea600b0063f24f1adacmr24849208pfb.25.1682998709655;
+        Mon, 01 May 2023 20:38:29 -0700 (PDT)
+Received: from dhcp-172-26-102-232.dhcp.thefacebook.com ([2620:10d:c090:400::5:c9f6])
+        by smtp.gmail.com with ESMTPSA id d16-20020a056a00199000b0063f1a27f2c9sm18778284pfl.70.2023.05.01.20.38.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 May 2023 20:38:29 -0700 (PDT)
+Date:   Mon, 1 May 2023 20:38:25 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Daniel Rosenberg <drosen@google.com>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Amir Goldstein <amir73il@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-unionfs@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Mykola Lysenko <mykolal@fb.com>, kernel-team@android.com,
+        Paul Lawrence <paullawrence@google.com>,
+        Alessio Balsini <balsini@google.com>
+Subject: Re: [RFC PATCH v3 08/37] fuse: Add fuse-bpf, a stacked fs extension
+ for FUSE
+Message-ID: <20230502033825.ofcxttuquoanhe7b@dhcp-172-26-102-232.dhcp.thefacebook.com>
+References: <20230418014037.2412394-1-drosen@google.com>
+ <20230418014037.2412394-9-drosen@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230418014037.2412394-9-drosen@google.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On Mon, Apr 17, 2023 at 06:40:08PM -0700, Daniel Rosenberg wrote:
+> Fuse-bpf provides a short circuit path for Fuse implementations that act
+> as a stacked filesystem. For cases that are directly unchanged,
+> operations are passed directly to the backing filesystem. Small
+> adjustments can be handled by bpf prefilters or postfilters, with the
+> option to fall back to userspace as needed.
 
-Add test cases to check the BTF arguments correctly supported.
+Here is my understanding of fuse-bpf design:
+- bpf progs can mostly read-only access fuse_args before and after proper vfs
+  operation on a backing path/file/inode.
+- args are unconditionally prepared for bpf prog consumption, but progs won't
+  be doing anything with them most of the time.
+- progs unfortunately cannot do any real work. they're nothing but simple filters.
+  They can give 'green light' for a fuse_FOO op to be delegated to proper vfs_FOO
+  in backing file. The logic in this patch keeps track of backing_path/file/inode.
+- in other words bpf side is "dumb", but it's telling kernel what to do with
+  real things like path/file/inode and the kernel is doing real work and calling vfs_*.
 
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
-Changes in v7:
- - Add BTF void retval test case
----
- .../ftrace/test.d/dynevent/add_remove_btfarg.tc    |   54 ++++++++++++++++++++
- .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |   11 ++++
- .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |   11 ++++
- 3 files changed, 76 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_btfarg.tc
+This design adds non-negligible overhead to fuse when CONFIG_FUSE_BPF is set.
+Comparing to trip to user space it's close to zero, but the cost of
+initialize_in/out + backing + finalize is not free.
+The patch 33 is especially odd.
+fuse has a traditional mechanism to upcall to user space with fuse_simple_request.
+The patch 33 allows bpf prog to return special return value and trigger two more
+fuse_bpf_simple_request-s to user space. Not clear why.
+It seems to me that the main assumption of the fuse bpf design is that bpf prog
+has to stay short and simple. It cannot do much other than reading and comparing
+strings with the help of dynptr.
+How about we allow bpf attach to fuse_simple_request and nothing else?
+All fuse ops call it anyway and cmd is already encoded in the args.
+Then let bpf prog read fuse_args as-is (without converting them to bpf_fuse_args)
+and avoid doing actual fuse_req to user space.
+Also allow bpf prog acquire and remember path/file/inode.
+The verifier is already smart enough to track that the prog is doing it safely
+without leaking references and what not.
+And, of course, allow bpf prog call vfs_* via kfuncs.
+In other words, instead of hard coding
+ +#define bpf_fuse_backing(inode, io, out,                             \
+ +                      initialize_in, initialize_out,                 \
+ +                      backing, finalize, args...)                    \
+one for each fuse_ops in the kernel let bpf prog do the same but on demand.
+The biggest advantage is that this patch set instead of 95% on fuse side and 5% on bpf
+will become 5% addition to fuse code. All the logic will be handled purely by bpf.
+Right now you're limiting it to one backing_file per fuse_file.
+With bpf prog driving it the prog can keep multiple backing_files and shuffle
+access to them as prog decides.
+Instead of doing 'return BPF_FUSE_CONTINUE' the bpf progs will
+pass 'path' to kfunc bpf_vfs_open, than stash 'struct bpf_file*', etc.
+Probably will be easier to white board this idea during lsfmmbpf.
 
-diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_btfarg.tc b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_btfarg.tc
-new file mode 100644
-index 000000000000..15515f0a8c9a
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_btfarg.tc
-@@ -0,0 +1,54 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: Generic dynamic event - add/remove probes with BTF arguments
-+# requires: dynamic_events "<argname>":README
-+
-+KPROBES=
-+FPROBES=
-+
-+if grep -qF "p[:[<group>/][<event>]] <place> [<args>]" README ; then
-+  KPROBES=yes
-+fi
-+if grep -qF "f[:[<group>/][<event>]] <func-name>[%return] [<args>]" README ; then
-+  FPROBES=yes
-+fi
-+
-+if [ -z "$KPROBES" -a "$FPROBES" ] ; then
-+  exit_unsupported
-+fi
-+
-+echo 0 > events/enable
-+echo > dynamic_events
-+
-+TP=kfree
-+
-+if [ "$FPROBES" ] ; then
-+echo "f:fpevent $TP object" >> dynamic_events
-+echo "t:tpevent $TP ptr" >> dynamic_events
-+
-+grep -q "fpevent.*object=object" dynamic_events
-+grep -q "tpevent.*ptr=ptr" dynamic_events
-+
-+echo > dynamic_events
-+
-+echo "f:fpevent $TP "'$$args' >> dynamic_events
-+echo "t:tpevent $TP "'$$args' >> dynamic_events
-+
-+grep -q "fpevent.*object=object" dynamic_events
-+grep -q "tpevent.*ptr=ptr" dynamic_events
-+! grep -q "tpevent.*_data" dynamic_events
-+fi
-+
-+echo > dynamic_events
-+
-+if [ "$KPROBES" ] ; then
-+echo "p:kpevent $TP object" >> dynamic_events
-+grep -q "kpevent.*object=object" dynamic_events
-+
-+echo > dynamic_events
-+
-+echo "p:kpevent $TP "'$$args' >> dynamic_events
-+grep -q "kpevent.*object=object" dynamic_events
-+fi
-+
-+clear_trace
-diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
-index 549daa162d84..f2d000bf6371 100644
---- a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
-+++ b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
-@@ -85,4 +85,15 @@ fi
- # %return suffix errors
- check_error 'f vfs_read^%hoge'		# BAD_ADDR_SUFFIX
- 
-+# BTF arguments errors
-+if grep -q "<argname>" README; then
-+check_error 'f vfs_read $$args ^$$args'		# DOUBLE_ARGS
-+check_error 'f vfs_read%return ^$$args'		# NOFENTRY_ARGS
-+check_error 'f vfs_read ^hoge'			# NO_BTFARG
-+check_error 'f kfree%return ^$retval'		# NO_RETVAL
-+else
-+check_error 'f vfs_read $$args'			# NOSUP_BTFARG
-+check_error 't kfree $$args'			# NOSUP_BTFARG
-+fi
-+
- exit 0
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-index 97c08867490a..d9add5d408f0 100644
---- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-@@ -103,4 +103,15 @@ check_error 'p vfs_read^%hoge'		# BAD_ADDR_SUFFIX
- check_error 'p ^vfs_read+10%return'	# BAD_RETPROBE
- fi
- 
-+# BTF arguments errors
-+if grep -q "<argname>" README; then
-+check_error 'p vfs_read $$args ^$$args'		# DOUBLE_ARGS
-+check_error 'r vfs_read ^$$args'		# NOFENTRY_ARGS
-+check_error 'p vfs_read+8 ^$$args'		# NOFENTRY_ARGS
-+check_error 'p vfs_read ^hoge'			# NO_BTFARG
-+check_error 'r vfs_read ^$retval'		# NO_RETVAL
-+else
-+check_error 'p vfs_read $$args'			# NOSUP_BTFARG
-+fi
-+
- exit 0
-
+First 3 patches look fine. Thank you for resending them separately.
