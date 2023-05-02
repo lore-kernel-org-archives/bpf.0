@@ -2,45 +2,47 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5E00C19F20
-	for <bpf@archiver.kernel.org>; Tue,  2 May 2023 23:06:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29130C7EE21
+	for <bpf@archiver.kernel.org>; Tue,  2 May 2023 23:09:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbjEBXGc convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 2 May 2023 19:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55406 "EHLO
+        id S229554AbjEBXJO convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 2 May 2023 19:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjEBXGb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 May 2023 19:06:31 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651FEC3
-        for <bpf@vger.kernel.org>; Tue,  2 May 2023 16:06:30 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 342JX2Ic031629
-        for <bpf@vger.kernel.org>; Tue, 2 May 2023 16:06:29 -0700
+        with ESMTP id S229478AbjEBXJN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 May 2023 19:09:13 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6283FC3
+        for <bpf@vger.kernel.org>; Tue,  2 May 2023 16:09:12 -0700 (PDT)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 342JWxVN013777
+        for <bpf@vger.kernel.org>; Tue, 2 May 2023 16:09:12 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qatf9fb4k-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qb7m19y21-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 02 May 2023 16:06:29 -0700
-Received: from twshared25760.37.frc1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 02 May 2023 16:09:12 -0700
+Received: from twshared7331.15.prn3.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 2 May 2023 16:06:28 -0700
+ 15.1.2507.23; Tue, 2 May 2023 16:09:11 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 212FD2FD4BC86; Tue,  2 May 2023 16:06:21 -0700 (PDT)
+        id 4EBCE2FD4BC9D; Tue,  2 May 2023 16:06:25 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC:     <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next 00/10] Centralize BPF permission checks
-Date:   Tue, 2 May 2023 16:06:09 -0700
-Message-ID: <20230502230619.2592406-1-andrii@kernel.org>
+Subject: [PATCH bpf-next 02/10] bpf: inline map creation logic in map_create() function
+Date:   Tue, 2 May 2023 16:06:11 -0700
+Message-ID: <20230502230619.2592406-3-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230502230619.2592406-1-andrii@kernel.org>
+References: <20230502230619.2592406-1-andrii@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: 6Vi5Z1f7LBuEpBjGD0S-B-zHdWUKbWaC
-X-Proofpoint-ORIG-GUID: 6Vi5Z1f7LBuEpBjGD0S-B-zHdWUKbWaC
+X-Proofpoint-GUID: FIQ7Q1uEx-F4mzCxZigne9NiNh24PW61
+X-Proofpoint-ORIG-GUID: FIQ7Q1uEx-F4mzCxZigne9NiNh24PW61
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-02_12,2023-04-27_01,2023-02-09_01
@@ -48,68 +50,102 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch set refactors BPF subsystem permission checks for BPF maps and
-programs, localizes them in one place, and ensures all parts of BPF ecosystem
-(BPF verifier and JITs, and their supporting infra) use recorded effective
-capabilities, stored in respective bpf_map or bpf_prog structs, for further
-decision making.
+Currently find_and_alloc_map() performs two separate functions: some
+argument sanity checking and partial map creation workflow hanling.
+Neither of those functions are self-sufficient and are augmented by
+further checks and initialization logic in the caller (map_create()
+function). So unify all the sanity checks, permission checks, and
+creation and initialization logic in one linear piece of code in
+map_create() instead. This also make it easier to further enhance
+permission checks and keep them located in one place.
 
-This allows for more explicit and centralized handling of BPF-related
-capabilities and makes for simpler further BPF permission model evolution, to
-be proposed and discussed in follow up patch sets.
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ kernel/bpf/syscall.c | 54 ++++++++++++++++++--------------------------
+ 1 file changed, 22 insertions(+), 32 deletions(-)
 
-Andrii Nakryiko (10):
-  bpf: move unprivileged checks into map_create() and bpf_prog_load()
-  bpf: inline map creation logic in map_create() function
-  bpf: centralize permissions checks for all BPF map types
-  bpf: remember if bpf_map was unprivileged and use that consistently
-  bpf: drop unnecessary bpf_capable() check in BPF_MAP_FREEZE command
-  bpf: keep BPF_PROG_LOAD permission checks clear of validations
-  bpf: record effective capabilities at BPF prog load time
-  bpf: use recorded BPF prog effective caps when fetching helper protos
-  bpf: use recorded bpf_capable flag in JIT code
-  bpf: consistenly use program's recorded capabilities in BPF verifier
-
- arch/arm/net/bpf_jit_32.c                     |   2 +-
- arch/arm64/net/bpf_jit_comp.c                 |   2 +-
- arch/loongarch/net/bpf_jit.c                  |   2 +-
- arch/mips/net/bpf_jit_comp.c                  |   2 +-
- arch/powerpc/net/bpf_jit_comp.c               |   2 +-
- arch/riscv/net/bpf_jit_core.c                 |   3 +-
- arch/s390/net/bpf_jit_comp.c                  |   3 +-
- arch/sparc/net/bpf_jit_comp_64.c              |   2 +-
- arch/x86/net/bpf_jit_comp.c                   |   3 +-
- arch/x86/net/bpf_jit_comp32.c                 |   2 +-
- drivers/media/rc/bpf-lirc.c                   |   2 +-
- include/linux/bpf.h                           |  32 ++-
- include/linux/filter.h                        |   8 +-
- kernel/bpf/arraymap.c                         |  59 +++--
- kernel/bpf/bloom_filter.c                     |   3 -
- kernel/bpf/bpf_local_storage.c                |   3 -
- kernel/bpf/bpf_struct_ops.c                   |   3 -
- kernel/bpf/cgroup.c                           |   6 +-
- kernel/bpf/core.c                             |  22 +-
- kernel/bpf/cpumap.c                           |   4 -
- kernel/bpf/devmap.c                           |   3 -
- kernel/bpf/hashtab.c                          |   6 -
- kernel/bpf/helpers.c                          |   6 +-
- kernel/bpf/lpm_trie.c                         |   3 -
- kernel/bpf/map_in_map.c                       |   3 +-
- kernel/bpf/queue_stack_maps.c                 |   4 -
- kernel/bpf/reuseport_array.c                  |   3 -
- kernel/bpf/stackmap.c                         |   3 -
- kernel/bpf/syscall.c                          | 218 ++++++++++++------
- kernel/bpf/trampoline.c                       |   2 +-
- kernel/bpf/verifier.c                         |  23 +-
- kernel/trace/bpf_trace.c                      |   2 +-
- net/core/filter.c                             |  36 +--
- net/core/sock_map.c                           |   4 -
- net/ipv4/bpf_tcp_ca.c                         |   2 +-
- net/netfilter/nf_bpf_link.c                   |   2 +-
- net/xdp/xskmap.c                              |   4 -
- .../bpf/prog_tests/unpriv_bpf_disabled.c      |   6 +-
- 38 files changed, 280 insertions(+), 215 deletions(-)
-
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index d5009fafe0f4..3ab6c0dc241a 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -109,37 +109,6 @@ const struct bpf_map_ops bpf_map_offload_ops = {
+ 	.map_mem_usage = bpf_map_offload_map_mem_usage,
+ };
+ 
+-static struct bpf_map *find_and_alloc_map(union bpf_attr *attr)
+-{
+-	const struct bpf_map_ops *ops;
+-	u32 type = attr->map_type;
+-	struct bpf_map *map;
+-	int err;
+-
+-	if (type >= ARRAY_SIZE(bpf_map_types))
+-		return ERR_PTR(-EINVAL);
+-	type = array_index_nospec(type, ARRAY_SIZE(bpf_map_types));
+-	ops = bpf_map_types[type];
+-	if (!ops)
+-		return ERR_PTR(-EINVAL);
+-
+-	if (ops->map_alloc_check) {
+-		err = ops->map_alloc_check(attr);
+-		if (err)
+-			return ERR_PTR(err);
+-	}
+-	if (attr->map_ifindex)
+-		ops = &bpf_map_offload_ops;
+-	if (!ops->map_mem_usage)
+-		return ERR_PTR(-EINVAL);
+-	map = ops->map_alloc(attr);
+-	if (IS_ERR(map))
+-		return map;
+-	map->ops = ops;
+-	map->map_type = type;
+-	return map;
+-}
+-
+ static void bpf_map_write_active_inc(struct bpf_map *map)
+ {
+ 	atomic64_inc(&map->writecnt);
+@@ -1127,7 +1096,9 @@ static int map_check_btf(struct bpf_map *map, const struct btf *btf,
+ /* called via syscall */
+ static int map_create(union bpf_attr *attr)
+ {
++	const struct bpf_map_ops *ops;
+ 	int numa_node = bpf_map_attr_numa_node(attr);
++	u32 map_type = attr->map_type;
+ 	struct bpf_map *map;
+ 	int f_flags;
+ 	int err;
+@@ -1169,9 +1140,28 @@ static int map_create(union bpf_attr *attr)
+ 		return -EINVAL;
+ 
+ 	/* find map type and init map: hashtable vs rbtree vs bloom vs ... */
+-	map = find_and_alloc_map(attr);
++	map_type = attr->map_type;
++	if (map_type >= ARRAY_SIZE(bpf_map_types))
++		return -EINVAL;
++	map_type = array_index_nospec(map_type, ARRAY_SIZE(bpf_map_types));
++	ops = bpf_map_types[map_type];
++	if (!ops)
++		return -EINVAL;
++
++	if (ops->map_alloc_check) {
++		err = ops->map_alloc_check(attr);
++		if (err)
++			return err;
++	}
++	if (attr->map_ifindex)
++		ops = &bpf_map_offload_ops;
++	if (!ops->map_mem_usage)
++		return -EINVAL;
++	map = ops->map_alloc(attr);
+ 	if (IS_ERR(map))
+ 		return PTR_ERR(map);
++	map->ops = ops;
++	map->map_type = map_type;
+ 
+ 	err = bpf_obj_name_cpy(map->name, attr->map_name,
+ 			       sizeof(attr->map_name));
 -- 
 2.34.1
 
