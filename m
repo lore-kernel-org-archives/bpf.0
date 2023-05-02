@@ -2,58 +2,62 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CF0AC7EE29
-	for <bpf@archiver.kernel.org>; Tue,  2 May 2023 00:52:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B6E5C77B73
+	for <bpf@archiver.kernel.org>; Tue,  2 May 2023 01:12:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232267AbjEBAwc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 1 May 2023 20:52:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47490 "EHLO
+        id S232467AbjEBBMu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 1 May 2023 21:12:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231610AbjEBAw3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 May 2023 20:52:29 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B3D30FD
-        for <bpf@vger.kernel.org>; Mon,  1 May 2023 17:52:26 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-55a1aec6693so35026887b3.1
-        for <bpf@vger.kernel.org>; Mon, 01 May 2023 17:52:26 -0700 (PDT)
+        with ESMTP id S230484AbjEBBMt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 May 2023 21:12:49 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1473A8D
+        for <bpf@vger.kernel.org>; Mon,  1 May 2023 18:12:45 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-24df758db1cso1283981a91.2
+        for <bpf@vger.kernel.org>; Mon, 01 May 2023 18:12:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682988745; x=1685580745;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=PMr9CSFbKkempgdzzQdL7Zwkt6UumLJeT//GgveDKNc=;
-        b=wF/S5NQERpRui8VV7CmlInDtl7fNY4zZ4NWELSVB64eZ+BL3IUzATu4W9rpD+KMOKo
-         Q7LXbK24Ismjhasn2z+IVHaR+2KoENDn8Gva3vlq1ubILJi1yZu+7L+tWrXySiBEPRli
-         TgelUmL8vI0SXx1AFaQ1UDzvcgHvUTFLcJlopgg0trpoWlcNuzQ7z4GVHNrwPLPUBov7
-         xM6vQn+1CItfnsv3iuz9ufdtnR9jlk1xNzhxRa/S2JnPkoieoNlMGjRk1FTBpqc7aEQ+
-         Tjzi/+T3HqlnplQk2XG7rZ7shFmhhhjJAwdUt/5+53H0DlE66LuPAW6Ysp8KZhaxfPE3
-         sDcA==
+        d=google.com; s=20221208; t=1682989965; x=1685581965;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=47MTC43+cqs0cncIRVUMCVwlp631DYCAqlKsiStJTh4=;
+        b=27wJElmW7Qf2QnbHUpeOj5uvR8x9QZPbhuU4EN//QC4lhvOx9HUVgfX7TnrnLX4a74
+         QujhUvNJTBK8c9MrL7GvI/8Qk7uug59q0oddpzfP8ekJOuaxhtwjx0mU+0qx7afaf6EX
+         ehQx4NriLqW1Vzz3XLieSX8ZU7EEt+XzvZwZfCxesgtTgw/3tfK672G/EDuE3fcIYoWf
+         pUO1bqyAlJ2wj71hLlMhUSY9SBOv2ymOo8r1m++3CZbQLWdXYaQUK/6UdB34/kdtUZKZ
+         aJq/22k5TzAH/Fq+Z5z+0+x/HyjVzZ991SuKo1R6R4gL6T7f7g2YIKdZsQHSfUdbxLy9
+         z2KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682988745; x=1685580745;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PMr9CSFbKkempgdzzQdL7Zwkt6UumLJeT//GgveDKNc=;
-        b=LAbog3sNTng5ISK0kU1faSael3LXAmPFo1xHPGsn1MpE2v5dgvcq1MpT6KT7Ok929e
-         o74WuUw2iypRIG5tnnpB01XJWV9W3Q1lLfdxgyghvGyLMDUI0F7cPO9JAMItwJLqkMrz
-         ks7llnZdlBGLALppwSSmJSJc+mXTB7T859AYhELEYYaLdjmd5bGlqt/rOfWw5eciI1HJ
-         Bz4qlsmQS3XCJFtLTx1zEifl1hgToqcz2zNhjTjnU+aOz8bCiLh3grnW10Hr3Pq/6DPb
-         S/XVjZHcqNd0gqppmMYuZHXwdPfMBFkXrYmTrytLEvbehBxJ+zNnL9YiF6k5mCsl/jpz
-         9L/g==
-X-Gm-Message-State: AC+VfDx55phxiYSBQ2cECuubNPcOS2/7R/KAFftBJjXJ2JMBjagVLjdV
-        PEV4Qwe+qndVnCvFDNbAKrMBhmpQhwsYHBPIru9npvxAOnY+bhXOYO4oF4u7Pqj7bLYJmSbgqK+
-        JmG983NFXZRqbPIEOex0eJUKiiSQ+DG12mCHkkQPUuy4jpbNSEXUZP7+EhQ==
-X-Google-Smtp-Source: ACHHUZ7oCobC8owwsaLv8x2B0ByE/cvT1vna7koor91mo0f1BZQzjn+N03CUVl3Zl+vk+UaaiXTYo3b6QIE=
-X-Received: from drosen.mtv.corp.google.com ([2620:15c:211:201:908a:598a:7b5a:d40b])
- (user=drosen job=sendgmr) by 2002:a81:4007:0:b0:545:1d7f:acbf with SMTP id
- l7-20020a814007000000b005451d7facbfmr9025404ywn.10.1682988745369; Mon, 01 May
- 2023 17:52:25 -0700 (PDT)
-Date:   Mon,  1 May 2023 17:52:16 -0700
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Message-ID: <20230502005218.3627530-1-drosen@google.com>
-Subject: [PATCH v2 1/3] bpf: Allow NULL buffers in bpf_dynptr_slice(_rw)
+        d=1e100.net; s=20221208; t=1682989965; x=1685581965;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=47MTC43+cqs0cncIRVUMCVwlp631DYCAqlKsiStJTh4=;
+        b=HuTZ7c91zD8GL/TDgfDMnahosUI1tsx38Pdazm9xRdViZBUuc+r0zdD5u/DdxR5k4H
+         Mvj9FtUrAsPGYrw88vKwztrhyndf5avEgVEXqLu4sDGY7wRwc6taML7z+3ViVLePfrVS
+         y/8oeLf6WIyLAVtAD3EL2KxOSmtLsWZAqFiOywtTXlGHpNy39pRV8kWMppkTmcsIq5Jf
+         zbuttXxjAheyEAay/z/il7rNzg2DfzhqyIVNAB6RWFL7B9Llu6FVDEEm7yjnQQBqSonD
+         Oi5JjHZfhVSb3WOwNujp8JtvB1gGiSANXz/6rTpKAYSHDOIKb+Bg0k7cdT40o63+qJZ6
+         fSug==
+X-Gm-Message-State: AC+VfDwghY9CIZM5leNEfuJzSbUyBYpIVyhUathtb7gMN6ivs60RUgGu
+        2tdLIIlEYYXTCA0QP3H156TUVG0NtvomdAODSdG8QQ==
+X-Google-Smtp-Source: ACHHUZ63MmDcXlqUQU8eyZkTFnid5k643yum7VrgBeVELwK3cTeXsBskvkNr3yGhBKfryeEiik6nw4+nw8x42CwZtMo=
+X-Received: by 2002:a17:90b:4acf:b0:22c:59c3:8694 with SMTP id
+ mh15-20020a17090b4acf00b0022c59c38694mr15946312pjb.44.1682989964612; Mon, 01
+ May 2023 18:12:44 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230406004018.1439952-1-drosen@google.com> <20230406004018.1439952-2-drosen@google.com>
+ <CAEf4BzbyX3i6k5eL6D-5enU+u58nVn_fK28zNBJ4w_Vm-+RiMQ@mail.gmail.com> <CAADnVQ+jQG95kVqkajr=zz2-vs24XedEXcBgSx29oAjqUsFn2g@mail.gmail.com>
+In-Reply-To: <CAADnVQ+jQG95kVqkajr=zz2-vs24XedEXcBgSx29oAjqUsFn2g@mail.gmail.com>
 From:   Daniel Rosenberg <drosen@google.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+Date:   Mon, 1 May 2023 18:12:33 -0700
+Message-ID: <CA+PiJmST4WUH061KaxJ4kRL=fqy3X6+Wgb2E2rrLT5OYjUzxfQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] bpf: verifier: Accept dynptr mem as mem in helpers
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Joanne Koong <joannelkoong@gmail.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         John Fastabend <john.fastabend@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
@@ -64,218 +68,31 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
         Shuah Khan <shuah@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kernel-team@android.com,
-        Daniel Rosenberg <drosen@google.com>
+        Mykola Lysenko <mykolal@fb.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Android Kernel Team <kernel-team@android.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-bpf_dynptr_slice(_rw) uses a user provided buffer if it can not provide
-a pointer to a block of contiguous memory. This buffer is unused in the
-case of local dynptrs, and may be unused in other cases as well. There
-is no need to require the buffer, as the kfunc can just return NULL if
-it was needed and not provided.
+On Thu, Apr 6, 2023 at 3:13=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> +1
+> All of the DYNPTR_TYPE_FLAG_MASK flags cannot appear in type =3D=3D reg->=
+type
+> here.
+> They are either dynamic flags inside bpf_dynptr_kern->size
+> or in arg_type.
+> Like in bpf_dynptr_from_mem_proto.
 
-This adds another kfunc annotation, __opt, which combines with __sz and
-__szk to allow the buffer associated with the size to be NULL. If the
-buffer is NULL, the verifier does not check that the buffer is of
-sufficient size.
-
-Signed-off-by: Daniel Rosenberg <drosen@google.com>
----
- Documentation/bpf/kfuncs.rst | 23 ++++++++++++++++++++++-
- include/linux/skbuff.h       |  2 +-
- kernel/bpf/helpers.c         | 30 ++++++++++++++++++------------
- kernel/bpf/verifier.c        | 17 +++++++++++++----
- 4 files changed, 54 insertions(+), 18 deletions(-)
-
-diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-index ea2516374d92..7a3d9de5f315 100644
---- a/Documentation/bpf/kfuncs.rst
-+++ b/Documentation/bpf/kfuncs.rst
-@@ -100,7 +100,7 @@ Hence, whenever a constant scalar argument is accepted by a kfunc which is not a
- size parameter, and the value of the constant matters for program safety, __k
- suffix should be used.
- 
--2.2.2 __uninit Annotation
-+2.2.3 __uninit Annotation
- -------------------------
- 
- This annotation is used to indicate that the argument will be treated as
-@@ -117,6 +117,27 @@ Here, the dynptr will be treated as an uninitialized dynptr. Without this
- annotation, the verifier will reject the program if the dynptr passed in is
- not initialized.
- 
-+2.2.4 __opt Annotation
-+-------------------------
-+
-+This annotation is used to indicate that the buffer associated with an __sz or __szk
-+argument may be null. If the function is passed a nullptr in place of the buffer,
-+the verifier will not check that length is appropriate for the buffer. The kfunc is
-+responsible for checking if this buffer is null before using it.
-+
-+An example is given below::
-+
-+        __bpf_kfunc void *bpf_dynptr_slice(..., void *buffer__opt, u32 buffer__szk)
-+        {
-+        ...
-+        }
-+
-+Here, the buffer may be null. If buffer is not null, it at least of size buffer_szk.
-+Either way, the returned buffer is either NULL, or of size buffer_szk. Without this
-+annotation, the verifier will reject the program if a null pointer is passed in with
-+a nonzero size.
-+
-+
- .. _BPF_kfunc_nodef:
- 
- 2.3 Using an existing kernel function
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 738776ab8838..8ddb4af1a501 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -4033,7 +4033,7 @@ __skb_header_pointer(const struct sk_buff *skb, int offset, int len,
- 	if (likely(hlen - offset >= len))
- 		return (void *)data + offset;
- 
--	if (!skb || unlikely(skb_copy_bits(skb, offset, buffer, len) < 0))
-+	if (!skb || !buffer || unlikely(skb_copy_bits(skb, offset, buffer, len) < 0))
- 		return NULL;
- 
- 	return buffer;
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 8d368fa353f9..26efb6fbeab2 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2167,13 +2167,15 @@ __bpf_kfunc struct task_struct *bpf_task_from_pid(s32 pid)
-  * bpf_dynptr_slice() - Obtain a read-only pointer to the dynptr data.
-  * @ptr: The dynptr whose data slice to retrieve
-  * @offset: Offset into the dynptr
-- * @buffer: User-provided buffer to copy contents into
-- * @buffer__szk: Size (in bytes) of the buffer. This is the length of the
-- *		 requested slice. This must be a constant.
-+ * @buffer__opt: User-provided buffer to copy contents into.  May be NULL
-+ * @buffer__szk: Size (in bytes) of the buffer if present. This is the
-+ *               length of the requested slice. This must be a constant.
-  *
-  * For non-skb and non-xdp type dynptrs, there is no difference between
-  * bpf_dynptr_slice and bpf_dynptr_data.
-  *
-+ *  If buffer__opt is NULL, the call will fail if buffer_opt was needed.
-+ *
-  * If the intention is to write to the data slice, please use
-  * bpf_dynptr_slice_rdwr.
-  *
-@@ -2190,7 +2192,7 @@ __bpf_kfunc struct task_struct *bpf_task_from_pid(s32 pid)
-  * direct pointer)
-  */
- __bpf_kfunc void *bpf_dynptr_slice(const struct bpf_dynptr_kern *ptr, u32 offset,
--				   void *buffer, u32 buffer__szk)
-+				   void *buffer__opt, u32 buffer__szk)
- {
- 	enum bpf_dynptr_type type;
- 	u32 len = buffer__szk;
-@@ -2210,15 +2212,17 @@ __bpf_kfunc void *bpf_dynptr_slice(const struct bpf_dynptr_kern *ptr, u32 offset
- 	case BPF_DYNPTR_TYPE_RINGBUF:
- 		return ptr->data + ptr->offset + offset;
- 	case BPF_DYNPTR_TYPE_SKB:
--		return skb_header_pointer(ptr->data, ptr->offset + offset, len, buffer);
-+		return skb_header_pointer(ptr->data, ptr->offset + offset, len, buffer__opt);
- 	case BPF_DYNPTR_TYPE_XDP:
- 	{
- 		void *xdp_ptr = bpf_xdp_pointer(ptr->data, ptr->offset + offset, len);
- 		if (xdp_ptr)
- 			return xdp_ptr;
- 
--		bpf_xdp_copy_buf(ptr->data, ptr->offset + offset, buffer, len, false);
--		return buffer;
-+		if (!buffer__opt)
-+			return NULL;
-+		bpf_xdp_copy_buf(ptr->data, ptr->offset + offset, buffer__opt, len, false);
-+		return buffer__opt;
- 	}
- 	default:
- 		WARN_ONCE(true, "unknown dynptr type %d\n", type);
-@@ -2230,13 +2234,15 @@ __bpf_kfunc void *bpf_dynptr_slice(const struct bpf_dynptr_kern *ptr, u32 offset
-  * bpf_dynptr_slice_rdwr() - Obtain a writable pointer to the dynptr data.
-  * @ptr: The dynptr whose data slice to retrieve
-  * @offset: Offset into the dynptr
-- * @buffer: User-provided buffer to copy contents into
-- * @buffer__szk: Size (in bytes) of the buffer. This is the length of the
-- *		 requested slice. This must be a constant.
-+ * @buffer__opt: User-provided buffer to copy contents into. May be NULL
-+ * @buffer__szk: Size (in bytes) of the buffer if present. This is the
-+ *               length of the requested slice. This must be a constant.
-  *
-  * For non-skb and non-xdp type dynptrs, there is no difference between
-  * bpf_dynptr_slice and bpf_dynptr_data.
-  *
-+ * If buffer__opt is NULL, the call will fail if buffer_opt was needed.
-+ *
-  * The returned pointer is writable and may point to either directly the dynptr
-  * data at the requested offset or to the buffer if unable to obtain a direct
-  * data pointer to (example: the requested slice is to the paged area of an skb
-@@ -2267,7 +2273,7 @@ __bpf_kfunc void *bpf_dynptr_slice(const struct bpf_dynptr_kern *ptr, u32 offset
-  * direct pointer)
-  */
- __bpf_kfunc void *bpf_dynptr_slice_rdwr(const struct bpf_dynptr_kern *ptr, u32 offset,
--					void *buffer, u32 buffer__szk)
-+					void *buffer__opt, u32 buffer__szk)
- {
- 	if (!ptr->data || bpf_dynptr_is_rdonly(ptr))
- 		return NULL;
-@@ -2294,7 +2300,7 @@ __bpf_kfunc void *bpf_dynptr_slice_rdwr(const struct bpf_dynptr_kern *ptr, u32 o
- 	 * will be copied out into the buffer and the user will need to call
- 	 * bpf_dynptr_write() to commit changes.
- 	 */
--	return bpf_dynptr_slice(ptr, offset, buffer, buffer__szk);
-+	return bpf_dynptr_slice(ptr, offset, buffer__opt, buffer__szk);
- }
- 
- __bpf_kfunc void *bpf_cast_to_kern_ctx(void *obj)
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index fbcf5a4e2fcd..708ae7bca1fe 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -9398,6 +9398,11 @@ static bool is_kfunc_arg_const_mem_size(const struct btf *btf,
- 	return __kfunc_param_match_suffix(btf, arg, "__szk");
- }
- 
-+static bool is_kfunc_arg_optional(const struct btf *btf, const struct btf_param *arg)
-+{
-+	return __kfunc_param_match_suffix(btf, arg, "__opt");
-+}
-+
- static bool is_kfunc_arg_constant(const struct btf *btf, const struct btf_param *arg)
- {
- 	return __kfunc_param_match_suffix(btf, arg, "__k");
-@@ -10464,13 +10469,17 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 			break;
- 		case KF_ARG_PTR_TO_MEM_SIZE:
- 		{
-+			struct bpf_reg_state *buff_reg = &regs[regno];
-+			const struct btf_param *buff_arg = &args[i];
- 			struct bpf_reg_state *size_reg = &regs[regno + 1];
- 			const struct btf_param *size_arg = &args[i + 1];
- 
--			ret = check_kfunc_mem_size_reg(env, size_reg, regno + 1);
--			if (ret < 0) {
--				verbose(env, "arg#%d arg#%d memory, len pair leads to invalid memory access\n", i, i + 1);
--				return ret;
-+			if (!register_is_null(buff_reg) || !is_kfunc_arg_optional(meta->btf, buff_arg)) {
-+				ret = check_kfunc_mem_size_reg(env, size_reg, regno + 1);
-+				if (ret < 0) {
-+					verbose(env, "arg#%d arg#%d memory, len pair leads to invalid memory access\n", i, i + 1);
-+					return ret;
-+				}
- 			}
- 
- 			if (is_kfunc_arg_const_mem_size(meta->btf, size_arg, size_reg)) {
-
-base-commit: 6e98b09da931a00bf4e0477d0fa52748bf28fcce
--- 
-2.40.1.495.gc816e09b53d-goog
-
+Looking at this a bit more, I believe this is to enforce packet
+restrictions for DYNPTR_TYPE_SKB and DYNPTR_TYPE_XDP. When a helper
+function alters a packet, dynptr slices of it are invalidated. If I
+remove that annotation entirely, then the invalid_data_slice family of
+tests fail. bpf_dynptr_from_mem_proto is fine since that's just local
+dynptrs, which don't have any extra limitations.
