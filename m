@@ -2,170 +2,132 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE750C77B75
-	for <bpf@archiver.kernel.org>; Tue,  2 May 2023 22:55:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A2DAC7EE21
+	for <bpf@archiver.kernel.org>; Tue,  2 May 2023 23:06:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjEBWzb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 May 2023 18:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
+        id S229708AbjEBXGe convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 2 May 2023 19:06:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbjEBWz1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 May 2023 18:55:27 -0400
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706B640DE
-        for <bpf@vger.kernel.org>; Tue,  2 May 2023 15:54:51 -0700 (PDT)
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1aaec9ad820so31539645ad.0
-        for <bpf@vger.kernel.org>; Tue, 02 May 2023 15:54:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1683067954; x=1685659954;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r2pX6kGZYCdJUOyaHXAbCJD9MjqXC+7diD5tQkc+KIY=;
-        b=KCieo0kz0DYFicmTnvJ/wZWMDUAp82OnLNQQwC6x6vYnQBWdNdy+kiNyfef/Chqaki
-         stQyULFiM/TMo2XUweuFtdvf7ej+MsRY4LsYuHyF/s/h1aCzeCdmUiP/yZQPnvVVRu77
-         rSmVoYBTeypM9QYFkPZIg0I3Hr6JXtXYg1smJOsB0hI/z7YEoGgsFw6aH6C6CYY4Vxm2
-         A/5OH1TYp/t+Siq/ZRLEYv7dTUIVkiv7hI3fxS0Pk2zLKYyYRTElrF0sNe3Jq65Qvifc
-         86pfTzLWH4YNCFYBkIjLPE2bMOLgEHGsjOciUlclQxFrJSKHyHAsDgztHN2DnU3H65jN
-         rciw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683067954; x=1685659954;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=r2pX6kGZYCdJUOyaHXAbCJD9MjqXC+7diD5tQkc+KIY=;
-        b=BkI5OMx3P/wbXYAkzZhugxR95pTPjAQGknNxp5Q5865+5F8qMyoY7kmc3oUySTIUOX
-         CfxYW5fEGXbRGGux1a5RG89IV3HHejwfVd3F2v7VaJHWg+tUKz30951wPdGlPNv4F+Nm
-         corBjP9LNsRtpMlCt67Y1AKsgjARcbEcZXFfq5RpCY59rMQsXCJFcWqkszhmm3I5cJKd
-         K6qY6LEdWvKANRh1UF1JINMPI2qB1ft104E/Diqge3MaekiSKGNiYWc0G9UFxxnwsROF
-         CtGkkYnccLLjFn8Qm1dN2MUlVKCvMmgxCHaUqzBeC9onEYlPr+/E44NtKCIdO/x87d8Z
-         p/3Q==
-X-Gm-Message-State: AC+VfDzDv1T8FPGaAEvHF4uEc/u+vabbwjuhbF2V0T3YA1E811YskXKT
-        gA/xftwLwp4zK2GCjZh1fE4olA==
-X-Google-Smtp-Source: ACHHUZ6MtTCURvfqv1NroGmXYAhxbNSz3klbGx8K8MnI8n9e2Pz2VP+mtVI7MATIUrSyhsuY1luZ5w==
-X-Received: by 2002:a17:902:ecc5:b0:1a6:81fc:b585 with SMTP id a5-20020a170902ecc500b001a681fcb585mr65812plh.41.1683067954345;
-        Tue, 02 May 2023 15:52:34 -0700 (PDT)
-Received: from ?IPv6:2601:647:4900:1fbb:ec67:e52b:8070:1b56? ([2601:647:4900:1fbb:ec67:e52b:8070:1b56])
-        by smtp.gmail.com with ESMTPSA id w17-20020a1709027b9100b001a980a23804sm14519192pll.4.2023.05.02.15.52.33
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 02 May 2023 15:52:34 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.7\))
-Subject: Re: [PATCH v6 bpf-next 0/7] bpf: Add socket destroy capability
-From:   Aditi Ghag <aditi.ghag@isovalent.com>
-In-Reply-To: <E6DB96AE-A7FA-4462-A0ED-4C53F3625BB1@isovalent.com>
-Date:   Tue, 2 May 2023 15:52:33 -0700
-Cc:     Stanislav Fomichev <sdf@google.com>, edumazet@google.com,
-        bpf@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <2249BAC9-E23F-42CD-9F33-F09ABE24BAF6@isovalent.com>
-References: <20230418153148.2231644-1-aditi.ghag@isovalent.com>
- <76dcba72-4e52-9ea1-cabd-b4c9f431c556@linux.dev>
- <E6DB96AE-A7FA-4462-A0ED-4C53F3625BB1@isovalent.com>
-To:     Martin KaFai Lau <martin.lau@linux.dev>
-X-Mailer: Apple Mail (2.3608.120.23.2.7)
+        with ESMTP id S229573AbjEBXGd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 May 2023 19:06:33 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30AC6C3
+        for <bpf@vger.kernel.org>; Tue,  2 May 2023 16:06:32 -0700 (PDT)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 342JWwcS013719
+        for <bpf@vger.kernel.org>; Tue, 2 May 2023 16:06:31 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qb7m19xhn-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 02 May 2023 16:06:31 -0700
+Received: from twshared30317.05.prn5.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 2 May 2023 16:06:30 -0700
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id 405632FD4BC96; Tue,  2 May 2023 16:06:23 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <martin.lau@kernel.org>
+CC:     <andrii@kernel.org>, <kernel-team@meta.com>
+Subject: [PATCH bpf-next 01/10] bpf: move unprivileged checks into map_create() and bpf_prog_load()
+Date:   Tue, 2 May 2023 16:06:10 -0700
+Message-ID: <20230502230619.2592406-2-andrii@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230502230619.2592406-1-andrii@kernel.org>
+References: <20230502230619.2592406-1-andrii@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: OkwhP3amrZ2Itglr6e5rZH3xsJ-gUJzB
+X-Proofpoint-ORIG-GUID: OkwhP3amrZ2Itglr6e5rZH3xsJ-gUJzB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-02_12,2023-04-27_01,2023-02-09_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Make each bpf() syscall command a bit more self-contained, making it
+easier to further enhance it. We move sysctl_unprivileged_bpf_disabled
+handling down to map_create() and bpf_prog_load(), two special commands
+in this regard.
 
+Also swap the order of checks, calling bpf_capable() only if
+sysctl_unprivileged_bpf_disabled is true, avoiding unnecessary audit
+messages.
 
-> On May 1, 2023, at 4:32 PM, Aditi Ghag <aditi.ghag@isovalent.com> =
-wrote:
->=20
->=20
->=20
->> On Apr 24, 2023, at 3:15 PM, Martin KaFai Lau <martin.lau@linux.dev> =
-wrote:
->>=20
->> On 4/18/23 8:31 AM, Aditi Ghag wrote:
->>> This patch adds the capability to destroy sockets in BPF. We plan to =
-use
->>> the capability in Cilium to force client sockets to reconnect when =
-their
->>> remote load-balancing backends are deleted. The other use case is
->>> on-the-fly policy enforcement where existing socket connections =
-prevented
->>> by policies need to be terminated.
->>=20
->> If the earlier kfunc filter patch =
-(https://lore.kernel.org/bpf/1ECC8AAA-C2E6-4F8A-B7D3-5E90BDEE7C48@isovalen=
-t.com/) looks fine to you, please include it into the next revision. =
-This patchset needs it. Usual thing to do is to keep my sob (and author =
-if not much has changed) and add your sob. The test needs to be broken =
-out into a separate patch though. It needs to use the '__failure =
-__msg("calling kernel function bpf_sock_destroy is not allowed")'. There =
-are many examples in selftests, eg. the dynptr_fail.c.
->>=20
->=20
-> Yeah, ok. I was waiting for your confirmation. The patch doesn't need =
-my sob though (maybe tested-by).
-> I've created a separate patch for the test.=20
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ kernel/bpf/syscall.c | 37 ++++++++++++++++++++++---------------
+ 1 file changed, 22 insertions(+), 15 deletions(-)
 
-
-Here is the patch diff for the extended test case for your reference. =
-I'm ready to push a new version once I get an ack from you.=20
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/sock_destroy.c =
-b/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-index a889c53e93c7..afed8cad94ee 100644
---- a/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-@@ -3,6 +3,7 @@
- #include <bpf/bpf_endian.h>
-
- #include "sock_destroy_prog.skel.h"
-+#include "sock_destroy_prog_fail.skel.h"
- #include "network_helpers.h"
-
- #define TEST_NS "sock_destroy_netns"
-@@ -207,6 +208,8 @@ void test_sock_destroy(void)
-                test_udp_server(skel);
-
-
-+       RUN_TESTS(sock_destroy_prog_fail);
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 14f39c1e573e..d5009fafe0f4 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1132,6 +1132,17 @@ static int map_create(union bpf_attr *attr)
+ 	int f_flags;
+ 	int err;
+ 
++	/* Intent here is for unprivileged_bpf_disabled to block key object
++	 * creation commands for unprivileged users; other actions depend
++	 * of fd availability and access to bpffs, so are dependent on
++	 * object creation success.  Capabilities are later verified for
++	 * operations such as load and map create, so even with unprivileged
++	 * BPF disabled, capability checks are still carried out for these
++	 * and other operations.
++	 */
++	if (sysctl_unprivileged_bpf_disabled && !bpf_capable())
++		return -EPERM;
 +
- cleanup:
-        if (nstoken)
-                close_netns(nstoken);
-diff --git a/tools/testing/selftests/bpf/progs/sock_destroy_prog_fail.c =
-b/tools/testing/selftests/bpf/progs/sock_destroy_prog_fail.c
-new file mode 100644
-index 000000000000..dd6850b58e25
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/sock_destroy_prog_fail.c
-@@ -0,0 +1,22 @@
-+// SPDX-License-Identifier: GPL-2.0
+ 	err = CHECK_ATTR(BPF_MAP_CREATE);
+ 	if (err)
+ 		return -EINVAL;
+@@ -2504,6 +2515,17 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr, u32 uattr_size)
+ 	char license[128];
+ 	bool is_gpl;
+ 
++	/* Intent here is for unprivileged_bpf_disabled to block key object
++	 * creation commands for unprivileged users; other actions depend
++	 * of fd availability and access to bpffs, so are dependent on
++	 * object creation success.  Capabilities are later verified for
++	 * operations such as load and map create, so even with unprivileged
++	 * BPF disabled, capability checks are still carried out for these
++	 * and other operations.
++	 */
++	if (sysctl_unprivileged_bpf_disabled && !bpf_capable())
++		return -EPERM;
 +
-+#include "vmlinux.h"
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") =3D "GPL";
-+
-+int bpf_sock_destroy(struct sock_common *sk) __ksym;
-+
-+SEC("tp_btf/tcp_destroy_sock")
-+__failure __msg("calling kernel function bpf_sock_destroy is not =
-allowed")
-+int BPF_PROG(trace_tcp_destroy_sock, struct sock *sk)
-+{
-+       /* should not load */
-+       bpf_sock_destroy((struct sock_common *)sk);
-+
-+       return 0;
-+}
-
->=20
->=20
->> Please also fix the subject in the patches. They are all missing the =
-bpf-next and revision tag.
->>=20
->=20
-> Took me a few moments to realize that as I was looking at earlier =
-series. Looks like I forgot to add the tags to subsequent patches in =
-this series. I'll fix it up in the next push.
+ 	if (CHECK_ATTR(BPF_PROG_LOAD))
+ 		return -EINVAL;
+ 
+@@ -5004,23 +5026,8 @@ static int bpf_prog_bind_map(union bpf_attr *attr)
+ static int __sys_bpf(int cmd, bpfptr_t uattr, unsigned int size)
+ {
+ 	union bpf_attr attr;
+-	bool capable;
+ 	int err;
+ 
+-	capable = bpf_capable() || !sysctl_unprivileged_bpf_disabled;
+-
+-	/* Intent here is for unprivileged_bpf_disabled to block key object
+-	 * creation commands for unprivileged users; other actions depend
+-	 * of fd availability and access to bpffs, so are dependent on
+-	 * object creation success.  Capabilities are later verified for
+-	 * operations such as load and map create, so even with unprivileged
+-	 * BPF disabled, capability checks are still carried out for these
+-	 * and other operations.
+-	 */
+-	if (!capable &&
+-	    (cmd == BPF_MAP_CREATE || cmd == BPF_PROG_LOAD))
+-		return -EPERM;
+-
+ 	err = bpf_check_uarg_tail_zero(uattr, sizeof(attr), size);
+ 	if (err)
+ 		return err;
+-- 
+2.34.1
 
