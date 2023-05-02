@@ -2,69 +2,70 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 157CBC77B7E
-	for <bpf@archiver.kernel.org>; Tue,  2 May 2023 13:47:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0105C77B73
+	for <bpf@archiver.kernel.org>; Tue,  2 May 2023 13:48:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233856AbjEBNrV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 May 2023 09:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44676 "EHLO
+        id S233800AbjEBNsz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 May 2023 09:48:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234390AbjEBNrT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 May 2023 09:47:19 -0400
+        with ESMTP id S233978AbjEBNsy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 May 2023 09:48:54 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FBC6A71
-        for <bpf@vger.kernel.org>; Tue,  2 May 2023 06:46:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7269865A9
+        for <bpf@vger.kernel.org>; Tue,  2 May 2023 06:47:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683035163;
+        s=mimecast20190719; t=1683035269;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ChfrC0Na3lwoOCssg8XYm2tZsAjdTOPFW5RxWJ9WF6Q=;
-        b=PJGTRkT/CBCaqiCh1rhzFjy70fVa6ejiL8aC1sgd2o7pqF+jhx+BkOZ3l3VRE3IE21kh5Z
-        QN5iupeIohyG+7Jz4Eevhxl5IbkxG/LiF+Erf4I1FhQDY7BlrqFQfWkRoxZdHT+PxkgSkt
-        OilUkZ0U4z/ZOlzSw9y4QetEzLsl3ZM=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=J3J2uAw/ly+PNbny+QW1yUQ6DEbuSoPG3Zwu6k/I8hM=;
+        b=fozI/mZc92pFL+/0eqXM3yQCfGfxEs2OJ8Ej0lP6qiI7zyeYU2nFSNzP5myYt21CmZ+uws
+        D3VVy/Mqp6z0WQpvHaWNv6ZKXCEfnMswAAwGuiUmb96k3WpdxO+A6pviy+mPMW+TzVfJk8
+        5KTFTf+mh3BLGDDbB/aab3fzHbr0BVI=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-387-8wDun5c8M2KJOOt_us6Dyg-1; Tue, 02 May 2023 09:39:55 -0400
-X-MC-Unique: 8wDun5c8M2KJOOt_us6Dyg-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f1754de18cso23425585e9.1
-        for <bpf@vger.kernel.org>; Tue, 02 May 2023 06:39:54 -0700 (PDT)
+ us-mta-613-YYTZAT95Pl6EI98Du_PV7A-1; Tue, 02 May 2023 09:47:48 -0400
+X-MC-Unique: YYTZAT95Pl6EI98Du_PV7A-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f321e60feaso12548195e9.0
+        for <bpf@vger.kernel.org>; Tue, 02 May 2023 06:47:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683034794; x=1685626794;
+        d=1e100.net; s=20221208; t=1683035267; x=1685627267;
         h=content-transfer-encoding:in-reply-to:organization:from:references
          :cc:to:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ChfrC0Na3lwoOCssg8XYm2tZsAjdTOPFW5RxWJ9WF6Q=;
-        b=LspFfAZDG2G1xV5eJg/TOfobfe+kJAUTA7R+xZi7XVkq3FehE1Rmgm/b66jDUMpOh+
-         jx4R4RzYYiaXChaCpbHLtEa/r8c8bGrbKxuuRYNDEpHk4+TnHbDfujvDsXBoe6G8zAbZ
-         9JltHAnBUjwZYU3UPQ4q3Km+3vDIkX3rb054EctnS2Aprg/Vq2D3elW6NCRpLS8wnB7h
-         6lAbYzAT52lNCWUF7x6nGuShwHeIMxGvn+B7b0AR5DXEMpB8ybfsdIla2DlbtKg/bMcd
-         B3xxWVYQ8KsFzibthcWvyBB0Q9vhhTOwhJfSE5eD0qhLBfLu6JJ/cp8p+D+4yoEYJ4gQ
-         AOVA==
-X-Gm-Message-State: AC+VfDzteKvvREUwdIE7MhI+6JS3zZqU7yhJq+lL5UwEBsWrruesmATh
-        6pm2Q5AQLfJzcVBM0LIKoLveKHWtDrDGBuU84OmsRYxCCQNNWx3AGUIWD5bjPVD6cfYqYGPiWj4
-        D6DjpyUEUESOY
-X-Received: by 2002:a7b:c047:0:b0:3f1:979f:a734 with SMTP id u7-20020a7bc047000000b003f1979fa734mr12143008wmc.11.1683034793777;
-        Tue, 02 May 2023 06:39:53 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6fv9K5Zv09NhPo0iCYbemjYTTJL6PDbk31pGpPsym+SF2XVg6IT3tAZ5IAhu9BYcyhA4qZ7Q==
-X-Received: by 2002:a7b:c047:0:b0:3f1:979f:a734 with SMTP id u7-20020a7bc047000000b003f1979fa734mr12142986wmc.11.1683034793381;
-        Tue, 02 May 2023 06:39:53 -0700 (PDT)
+        bh=J3J2uAw/ly+PNbny+QW1yUQ6DEbuSoPG3Zwu6k/I8hM=;
+        b=h2U0jmoR13PDybJRFfmw4wj3LmjQ4B+XBj9nToMPHiCovEXC6keass1MpUmMWOycQS
+         L8bBKknK/zKDd2GObNKDgcDrBsi8uUscnneGLLvKdFwqfDtix/oqJ8osRxONkgyJAiQN
+         bpZoLz23rdQXSn9VSsNxMn7yvBT5ZWyPWOm2LKoMnynIEl5w4tBfaPZdqIrYiGsjj5Am
+         xuilftah+pSvAV1G4AmIhY5cnVMAu2M4XDCW9cq11LR3oIhf2D+/z+lDm2Fe0UXT0OZz
+         uTTxceKnCv32B0OxITkGtVvncisYzIR0TGsi0j3ypXF8av1H4KsyowQ8CZgw2cm9pejP
+         6GYQ==
+X-Gm-Message-State: AC+VfDyIk9XkUFOwkQ8LkcMRq85L02nVBnWg0LrmzZvhUqWBnIdqLAit
+        Ak8RyfcwhfN/oCLrpwzQnmc9CV2wUgTQcFgfaVO5DgYpTe0jJRZdvQ8n4jyVTEpFeR6EFXPhuPT
+        pRxPOZCOtLRzH
+X-Received: by 2002:a1c:7404:0:b0:3f1:92aa:4eb8 with SMTP id p4-20020a1c7404000000b003f192aa4eb8mr13150676wmc.16.1683035267227;
+        Tue, 02 May 2023 06:47:47 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5erONwJ74D2u4zUQpg0uPdUPwazWaMyXU9Kn1O6BpFG7TQ1T86Oqm9RgmLypMPcZwuJndm2g==
+X-Received: by 2002:a1c:7404:0:b0:3f1:92aa:4eb8 with SMTP id p4-20020a1c7404000000b003f192aa4eb8mr13150657wmc.16.1683035266844;
+        Tue, 02 May 2023 06:47:46 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c700:2400:6b79:2aa:9602:7016? (p200300cbc70024006b7902aa96027016.dip0.t-ipconnect.de. [2003:cb:c700:2400:6b79:2aa:9602:7016])
-        by smtp.gmail.com with ESMTPSA id iz14-20020a05600c554e00b003f175954e71sm38857931wmb.32.2023.05.02.06.39.51
+        by smtp.gmail.com with ESMTPSA id u19-20020a05600c00d300b003f17eaae2c9sm35746626wmm.1.2023.05.02.06.47.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 May 2023 06:39:52 -0700 (PDT)
-Message-ID: <ce3aa7b9-723c-6ad3-3f03-3f1736e1c253@redhat.com>
-Date:   Tue, 2 May 2023 15:39:50 +0200
+        Tue, 02 May 2023 06:47:45 -0700 (PDT)
+Message-ID: <ad60d5d2-cfdf-df9f-aef1-7a0d3facbece@redhat.com>
+Date:   Tue, 2 May 2023 15:47:43 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
 Subject: Re: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing to
  file-backed mappings
 Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
 Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
         Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org,
@@ -107,8 +108,7 @@ Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
         Pavel Begunkov <asml.silence@gmail.com>,
         Mika Penttila <mpenttil@redhat.com>,
         Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>
+        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>
 References: <cover.1682981880.git.lstoakes@gmail.com>
  <dee4f4ad6532b0f94d073da263526de334d5d7e0.1682981880.git.lstoakes@gmail.com>
  <fbad9e18-f727-9703-33cf-545a2d33af76@linux.ibm.com>
@@ -117,45 +117,61 @@ References: <cover.1682981880.git.lstoakes@gmail.com>
  <ZFEL20GQdomXGxko@nvidia.com>
  <c4f790fb-b18a-341a-6965-455163ec06d1@redhat.com>
  <ZFER5ROgCUyywvfe@nvidia.com>
+ <ce3aa7b9-723c-6ad3-3f03-3f1736e1c253@redhat.com>
+ <ff99f2d8-804d-924f-3c60-b342ffc2173c@linux.ibm.com>
 From:   David Hildenbrand <david@redhat.com>
 Organization: Red Hat
-In-Reply-To: <ZFER5ROgCUyywvfe@nvidia.com>
+In-Reply-To: <ff99f2d8-804d-924f-3c60-b342ffc2173c@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 02.05.23 15:36, Jason Gunthorpe wrote:
-> On Tue, May 02, 2023 at 03:28:40PM +0200, David Hildenbrand wrote:
->> On 02.05.23 15:10, Jason Gunthorpe wrote:
->>> On Tue, May 02, 2023 at 03:04:27PM +0200, Christian Borntraeger wrote:
->>> \> > We can reintroduce a flag to permit exceptions if this is really broken, are you
->>>>> able to test? I don't have an s390 sat around :)
+On 02.05.23 15:43, Matthew Rosato wrote:
+> On 5/2/23 9:39 AM, David Hildenbrand wrote:
+>> On 02.05.23 15:36, Jason Gunthorpe wrote:
+>>> On Tue, May 02, 2023 at 03:28:40PM +0200, David Hildenbrand wrote:
+>>>> On 02.05.23 15:10, Jason Gunthorpe wrote:
+>>>>> On Tue, May 02, 2023 at 03:04:27PM +0200, Christian Borntraeger wrote:
+>>>>> \> > We can reintroduce a flag to permit exceptions if this is really broken, are you
+>>>>>>> able to test? I don't have an s390 sat around :)
+>>>>>>
+>>>>>> Matt (Rosato on cc) probably can. In the end, it would mean having
+>>>>>>      <memoryBacking>
+>>>>>>        <source type="file"/>
+>>>>>>      </memoryBacking>
+>>>>>
+>>>>> This s390 code is the least of the problems, after this series VFIO
+>>>>> won't startup at all with this configuration.
 >>>>
->>>> Matt (Rosato on cc) probably can. In the end, it would mean having
->>>>     <memoryBacking>
->>>>       <source type="file"/>
->>>>     </memoryBacking>
+>>>> Good question if the domain would fail to start. I recall that IOMMUs for
+>>>> zPCI are special on s390x. [1]
 >>>
->>> This s390 code is the least of the problems, after this series VFIO
->>> won't startup at all with this configuration.
+>>> Not upstream they aren't.
+>>>
+>>>> Well, zPCI is special. I cannot immediately tell when we would trigger
+>>>> long-term pinning.
+>>>
+>>> zPCI uses the standard IOMMU stuff, so it uses a normal VFIO container
+>>> and the normal pin_user_pages() path.
 >>
->> Good question if the domain would fail to start. I recall that IOMMUs for
->> zPCI are special on s390x. [1]
+>>
+>> @Christian, Matthew: would we pin all guest memory when starting the domain (IIRC, like on x86-64) and fail early, or only when the guest issues rpcit instructions to map individual pages?
+>>
 > 
-> Not upstream they aren't.
+> Eventually we want to implement a mechanism where we can dynamically pin in response to RPCIT.
 > 
->> Well, zPCI is special. I cannot immediately tell when we would trigger
->> long-term pinning.
-> 
-> zPCI uses the standard IOMMU stuff, so it uses a normal VFIO container
-> and the normal pin_user_pages() path.
 
+Okay, so IIRC we'll fail starting the domain early, that's good. And if 
+we pin all guest memory (instead of small pieces dynamically), there is 
+little existing use for file-backed RAM in such zPCI configurations 
+(because memory cannot be reclaimed either way if it's all pinned), so 
+likely there are no real existing users.
 
-@Christian, Matthew: would we pin all guest memory when starting the 
-domain (IIRC, like on x86-64) and fail early, or only when the guest 
-issues rpcit instructions to map individual pages?
+> However, per Jason's prior suggestion, the initial implementation for s390 nesting via iommufd will pin all of guest memory when starting the domain.  I have something already working via iommufd built on top of the nesting infrastructure patches and QEMU iommufd series that are floating around; needs some cleanup, hoping to send an RFC in the coming weeks.  I can CC you if you'd like.
+
+Yes, please.
 
 -- 
 Thanks,
