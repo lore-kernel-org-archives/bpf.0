@@ -2,63 +2,60 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AF10C7EE21
-	for <bpf@archiver.kernel.org>; Tue,  2 May 2023 00:07:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F31E8C7EE24
+	for <bpf@archiver.kernel.org>; Tue,  2 May 2023 00:52:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232790AbjEBAHk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 1 May 2023 20:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34822 "EHLO
+        id S232490AbjEBAwb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 1 May 2023 20:52:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232785AbjEBAHk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 May 2023 20:07:40 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB28B3A86
-        for <bpf@vger.kernel.org>; Mon,  1 May 2023 17:07:38 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64115e652eeso30720319b3a.0
-        for <bpf@vger.kernel.org>; Mon, 01 May 2023 17:07:38 -0700 (PDT)
+        with ESMTP id S232267AbjEBAwa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 May 2023 20:52:30 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8003588
+        for <bpf@vger.kernel.org>; Mon,  1 May 2023 17:52:28 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-559d30ec7fcso66114667b3.2
+        for <bpf@vger.kernel.org>; Mon, 01 May 2023 17:52:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682986058; x=1685578058;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8vPkxZmjvPrwj9yARID2IcnIbVYQzVlz9N1UD75yWJc=;
-        b=0UfJ7TbcVUadFwEts5kOLmLB4BgJqrRqx9uD+f8LXaQJSMmqYqjD7Fh6Cfn0NPkJb/
-         ioCuz2M50D37KKGuAxc3MgBQE2ral1pGfWy1jNpjDLvM9ZCCgB+c2Zhz2PHLQPL5X38Y
-         zeDMAefPinLcV2aODW6pogWX34Wv3FCrk9tNqECSaF7Y4nuXeg9wsvn54WMT7OlCODv4
-         X1KgshO5erNjMBVLeRz2u7QqdEqwDLsqF4E7mnzNIosJAuV7fqjKx7rpR4DdjwbO543q
-         +aSxmH24oGdBCQHZ1Y/TFhJUSr73YFOl2Y75rLhVvUD1gf7zAFhVJ+UsP8aMwTsfzRib
-         Plhw==
+        d=google.com; s=20221208; t=1682988747; x=1685580747;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jcg+ObY0uKE7Plv6+Kj2nIBfbZ7utIjukDPBrr4BYWc=;
+        b=rYQSqPKozvop6FQA27tCKPMMocl2dT4bgtQrMsrykc/YWbzOREznkvJfsptxQWgLxw
+         oO82Zx1edFTqiTXXK/v5aDAXURCmJ09vOhY+vO5I8xtNxt5WFfCp4m5EUphT4ZHKU3Ft
+         VupyzUAvpbAYLoLeLRDy5Y2ZGrbi2CofICiADgLD0ZZ2tipa6AdBZVKxCySj9R6/+Uf+
+         8M3XGSk9xQkov8XEL0PlXN3zdY6R2i+mz4kElqdnEh26AjfBdSb4khtwrKSf2QgJWFSa
+         fs7UWy1gT0U988Ct3W6zTiWBgoi0XDTR/tJcLEWFxiVuuK8bqE/F4nznvKj0C9Zotm+B
+         P5vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682986058; x=1685578058;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8vPkxZmjvPrwj9yARID2IcnIbVYQzVlz9N1UD75yWJc=;
-        b=SAUKXeqtQNXamvsm6uI/6LcRq3f46EZkjE+1v9i+a3tI3b7e6Ijq1XizHf0eHwzja8
-         rhlFHOayY/vg6edfFMhfoI9K+QMo0ZJz/4gYSUBFs5h9HpS0n5cl3i+anG4xlsZ+QhQY
-         GFRq0SMiiGgEgjQQXkSXdN2aukD3b6uNihb54hiLzEBheezNGhz5rWLWjcqEil+gdJIx
-         9Cmsm7uSBnz7376yPAjPR9TJKu5KQSPZbr96bFRt8LAMaXdqgbTVn//bHg3FJa1k3Mis
-         2dlb2Og4yNu7oUpyrOl2j1ghTjD+c1Tphw3b3SZd3dzcrIgKEn/uNYP1YHsrqshNWLWD
-         m+/A==
-X-Gm-Message-State: AC+VfDyabUFid9oZYs77i9hqUy8kOiq8Jv8pXVVXgKa1uovkE+J6YqTH
-        t2VqmvlrRVe8/hWjwt1mPslbZZuKsFxlHBl8YhJmSw==
-X-Google-Smtp-Source: ACHHUZ6xDNX4KW7bT3plKK/34ozRFT5NbHGd2w6rUaYtGnNHSc3WkI9OHAF7ScK8I3T2nZpmEkEIGyDN05ShjepR+/s=
-X-Received: by 2002:a17:902:f7c5:b0:19e:2fb0:a5d9 with SMTP id
- h5-20020a170902f7c500b0019e2fb0a5d9mr17959310plw.32.1682986057925; Mon, 01
- May 2023 17:07:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230418014037.2412394-1-drosen@google.com> <CAJfpegtuNgbZfLiKnpzdEP0sNtCt=83NjGtBnmtvMaon2avv2w@mail.gmail.com>
-In-Reply-To: <CAJfpegtuNgbZfLiKnpzdEP0sNtCt=83NjGtBnmtvMaon2avv2w@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1682988747; x=1685580747;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jcg+ObY0uKE7Plv6+Kj2nIBfbZ7utIjukDPBrr4BYWc=;
+        b=h+/J3FRhRPdw84cQi1WNfTfj/yFY37Ml8b3HMv6GXg5VPMudG4x2CFczLZLyAT/WHl
+         WaLGhuw+0nch476c/mV24boDEePyQ2nvxvyRfsHiH+2NMCJiUQd606G1Uyhs9kW/Y3Py
+         xGTAZUy8O6nnXnzIzy59TsqCEjjkERsKLKeTX6ye+PHMcm5husJ0j+8h3odGnT7mHiV7
+         DBPdRzUEitDWpQ+yuQWAvdkI4U3lbzO9NO3q92rcrx/LC4oOddMvNu0dortF6omEPQtx
+         A/9HMHmhj9XgcK+wekw9peKu666a43aLiVJ2bQMUmfgADoM+uBggk8yfI/tYSLd6E0e4
+         SOfQ==
+X-Gm-Message-State: AC+VfDxDXiG9uW/Pqr5ztMljQYdU0VFbOmjt3h4Uko6CSUOIYa7UyfEz
+        wb6dCdUH3z6sq5Ep05lNoXkg4qSumeeRImLbCbM/jAff9gtUFbB5e3DWkm7XVI1F/WW++OYqctC
+        20ZB0KrFcm71NYZVuM2j1yASbgiRKZ6g3Bcaz1jSuJmhJYsqbTSAlIAaAZQ==
+X-Google-Smtp-Source: ACHHUZ60Cpj1S0W+yNjZ+/1Bv5rIXv4w+qbwVSj8aJJ1+U1DafFfffYkJPJ9kC3zAgNVLJaeYWBqlX/tWOk=
+X-Received: from drosen.mtv.corp.google.com ([2620:15c:211:201:908a:598a:7b5a:d40b])
+ (user=drosen job=sendgmr) by 2002:a05:690c:725:b0:54f:bb71:c7b3 with SMTP id
+ bt5-20020a05690c072500b0054fbb71c7b3mr9297919ywb.9.1682988747604; Mon, 01 May
+ 2023 17:52:27 -0700 (PDT)
+Date:   Mon,  1 May 2023 17:52:17 -0700
+In-Reply-To: <20230502005218.3627530-1-drosen@google.com>
+Mime-Version: 1.0
+References: <20230502005218.3627530-1-drosen@google.com>
+X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
+Message-ID: <20230502005218.3627530-2-drosen@google.com>
+Subject: [PATCH v2 2/3] selftests/bpf: Test allowing NULL buffer in dynptr slice
 From:   Daniel Rosenberg <drosen@google.com>
-Date:   Mon, 1 May 2023 17:07:26 -0700
-Message-ID: <CA+PiJmTMs2u=J6ANYqHdGww5SoE_focZGjMRZk5WgoH8fVuCsA@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next v3 00/37] FUSE BPF: A Stacked Filesystem
- Extension for FUSE
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Amir Goldstein <amir73il@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-unionfs@vger.kernel.org,
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         John Fastabend <john.fastabend@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
@@ -70,71 +67,60 @@ Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Shuah Khan <shuah@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>,
         Joanne Koong <joannelkoong@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>, kernel-team@android.com
+        Mykola Lysenko <mykolal@fb.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com,
+        Daniel Rosenberg <drosen@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 8:32=E2=80=AFAM Miklos Szeredi <miklos@szeredi.hu> =
-wrote:
->
->
-> The security model needs to be thought about and documented.  Think
-> about this: the fuse server now delegates operations it would itself
-> perform to the passthrough code in fuse.  The permissions that would
-> have been checked in the context of the fuse server are now checked in
-> the context of the task performing the operation.  The server may be
-> able to bypass seccomp restrictions.  Files that are open on the
-> backing filesystem are now hidden (e.g. lsof won't find these), which
-> allows the server to obfuscate accesses to backing files.  Etc.
->
-> These are not particularly worrying if the server is privileged, but
-> fuse comes with the history of supporting unprivileged servers, so we
-> should look at supporting passthrough with unprivileged servers as
-> well.
->
+bpf_dynptr_slice(_rw) no longer requires a buffer for verification. If the
+buffer is needed, but not present, the function will return NULL.
 
-This is on my todo list. My current plan is to grab the creds that the
-daemon uses to respond to FUSE_INIT. That should keep behavior fairly
-similar. I'm not sure if there are cases where the fuse server is
-operating under multiple contexts.
-I don't currently have a plan for exposing open files via lsof. Every
-such file should relate to one that will show up though. I haven't dug
-into how that's set up, but I'm open to suggestions.
+Signed-off-by: Daniel Rosenberg <drosen@google.com>
+---
+ tools/testing/selftests/bpf/prog_tests/dynptr.c |  1 +
+ .../selftests/bpf/progs/dynptr_success.c        | 17 +++++++++++++++++
+ 2 files changed, 18 insertions(+)
 
-> My other generic comment is that you should add justification for
-> doing this in the first place.  I guess it's mainly performance.  So
-> how performance can be won in real life cases?   It would also be good
-> to measure the contribution of individual ops to that win.   Is there
-> another reason for this besides performance?
->
-> Thanks,
-> Miklos
+diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+index d176c34a7d2e..ac1fcaddcddf 100644
+--- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
++++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+@@ -20,6 +20,7 @@ static struct {
+ 	{"test_ringbuf", SETUP_SYSCALL_SLEEP},
+ 	{"test_skb_readonly", SETUP_SKB_PROG},
+ 	{"test_dynptr_skb_data", SETUP_SKB_PROG},
++	{"test_dynptr_skb_no_buff", SETUP_SKB_PROG},
+ };
+ 
+ static void verify_success(const char *prog_name, enum test_setup_type setup_type)
+diff --git a/tools/testing/selftests/bpf/progs/dynptr_success.c b/tools/testing/selftests/bpf/progs/dynptr_success.c
+index b2fa6c47ecc0..16636a29242a 100644
+--- a/tools/testing/selftests/bpf/progs/dynptr_success.c
++++ b/tools/testing/selftests/bpf/progs/dynptr_success.c
+@@ -207,3 +207,20 @@ int test_dynptr_skb_data(struct __sk_buff *skb)
+ 
+ 	return 1;
+ }
++
++SEC("?cgroup_skb/egress")
++int test_dynptr_skb_no_buff(struct __sk_buff *skb)
++{
++	struct bpf_dynptr ptr;
++	__u64 *data;
++
++	if (bpf_dynptr_from_skb(skb, 0, &ptr)) {
++		err = 1;
++		return 1;
++	}
++
++	/* This may return NULL. SKB may require a buffer */
++	data = bpf_dynptr_slice(&ptr, 0, NULL, 1);
++
++	return !!data;
++}
+-- 
+2.40.1.495.gc816e09b53d-goog
 
-Our main concern with it is performance. We have some preliminary
-numbers looking at the pure passthrough case. We've been testing using
-a ramdrive on a somewhat slow machine, as that should highlight
-differences more. We ran fio for sequential reads, and random
-read/write. For sequential reads, we were seeing libfuse's
-passthrough_hp take about a 50% hit, with fuse-bpf not being
-detectably slower. For random read/write, we were seeing a roughly 90%
-drop in performance from passthrough_hp, while fuse-bpf has about a 7%
-drop in read and write speed. When we use a bpf that traces every
-opcode, that performance hit increases to a roughly 1% drop in
-sequential read performance, and a 20% drop in both read and write
-performance for random read/write. We plan to make more complex bpf
-examples, with fuse daemon equivalents to compare against.
-
-We have not looked closely at the impact of individual opcodes yet.
-
-There's also a potential ease of use for fuse-bpf. If you're
-implementing a fuse daemon that is largely mirroring a backing
-filesystem, you only need to write code for the differences in
-behavior. For instance, say you want to remove image metadata like
-location. You could give bpf information on what range of data is
-metadata, and zero out that section without having to handle any other
-operations.
-
- -Daniel
