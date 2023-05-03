@@ -2,59 +2,60 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF736C7EE22
-	for <bpf@archiver.kernel.org>; Wed,  3 May 2023 22:54:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07DF6C77B78
+	for <bpf@archiver.kernel.org>; Wed,  3 May 2023 22:54:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbjECWyE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 May 2023 18:54:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47980 "EHLO
+        id S229745AbjECWyI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 May 2023 18:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjECWyB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 May 2023 18:54:01 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E590C44B7
-        for <bpf@vger.kernel.org>; Wed,  3 May 2023 15:53:59 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1ab1ce53ca6so10093095ad.0
-        for <bpf@vger.kernel.org>; Wed, 03 May 2023 15:53:59 -0700 (PDT)
+        with ESMTP id S229639AbjECWyD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 May 2023 18:54:03 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CA346A6
+        for <bpf@vger.kernel.org>; Wed,  3 May 2023 15:54:01 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1aaea3909d1so45634165ad.2
+        for <bpf@vger.kernel.org>; Wed, 03 May 2023 15:54:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1683154439; x=1685746439;
+        d=isovalent.com; s=google; t=1683154441; x=1685746441;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=K2lHDg5QdZkq6ksUKNS1hcQveXASFcJ3fP2NeLwWO4c=;
-        b=fT7Zx8V8aK2LtlLZsqpr/qGLhiVYJDLKSkZmQqWrGn3GMwBKCwI1PPNBR741DiudJ2
-         OZ3tVFKOSSQm7EMFzl5Oro/YHd05m6s+xP5xdM3qXwk7QXo4W9lbXXtYcAMFXGtfiAla
-         ei170g5gLvG6AchcoPIox1JsbZSzksLwX/ps0bp05pWHtb1qSNx6PPOvfxWLOK7E5RbE
-         O+gtNlpQigMHqo9upphEDdH4a/cin6Zyl0Q3A4JwL9zEoByIaG5ZfCcnkf4jxBASbuuO
-         x+KjCwubabbD/9iq0S++bCwVXv64+3Z2ty3+KSqh1GnSr5i9dfSxgVzJeraKlEdn3CMR
-         t4Ng==
+        bh=mi6aaC/8l3i5QxK9tIEa5YGWbVWWHfYetJOJa5yrsp0=;
+        b=QA7c9Gm3zfvDBCcdyrUDRH8Nm2/FN7c+6Gk7FeU/blv/jN6Guwvvw0HNKJWipVEQm1
+         3exG4BD1SOdxqYixeinjntWUx7JF75l/R7BeerYNtUvl1BOmw7pPxdrnUT+J5sv3/S3y
+         4tL2rKJBqa39CQ0KurAYJjzKFXyLw6OlJQNHB+oiwzhgrgO0SIwG5hzRHrjpldX7Y/pc
+         mjes8c72msnKmDDT2K5gGcXOMnkbEeZKHGeJbfv+wIVOPsYYdmq7yI1Dr6JoLob1GD5G
+         9CwMU/oPt+0wui2AJNTEHYnTX/N303TZNKMjevdLXZEvczlbALBDEZGUwcObdU9Wg4OE
+         snDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683154439; x=1685746439;
+        d=1e100.net; s=20221208; t=1683154441; x=1685746441;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=K2lHDg5QdZkq6ksUKNS1hcQveXASFcJ3fP2NeLwWO4c=;
-        b=XOZrajdAjdDCet+PpaHtmIYOR5+WFDQVTtE0rtL/mCJ53Tol13t5tyW88wAz2w6Zqz
-         m10cdm5q2DnSsyvqcok2iy5YieYaZtafIKyJTWIdNximKSlrPWmmI5xVMLLIxZ4svd5/
-         EpMq/kSGeGPmo5aIVIVKasXF64gJUt8Ry8YKk4jl09PUCwIH9VW2niHVhjinKTk2cFIO
-         Y5KLuFrEHYyhH0ojOMGWbW83FXtOg1Yj5HQvgFZpLy5rft/jrVZreOVVMTT8Vdi5ehg/
-         bg42/t7ybkZ2fVGuZ7DwfsQuCZozxyB7oiWB45iN0Utxo6QOe9Db9ihugEBCo7K17C9V
-         FP0A==
-X-Gm-Message-State: AC+VfDyTeXC6u4W26u4KDdcDjsqy8hiOlI/eEEYQ+Hjudam2/b8Szigb
-        Mxi431iQzWGf6y/AO36LzPxW9vhE0rcHyraW28M=
-X-Google-Smtp-Source: ACHHUZ6KRJxwXFkf/mP63c7IqpYNQehYm+kPMThgGS5+WI3OBcQ1JDWJlY77JJ/OPqmk5YdOaEvqog==
-X-Received: by 2002:a17:902:d505:b0:1a9:90bc:c3c6 with SMTP id b5-20020a170902d50500b001a990bcc3c6mr2063954plg.16.1683154438847;
-        Wed, 03 May 2023 15:53:58 -0700 (PDT)
+        bh=mi6aaC/8l3i5QxK9tIEa5YGWbVWWHfYetJOJa5yrsp0=;
+        b=JuTFElVSiR41H07UicBBn7hChPt4g3JMKymeq4voGBUmBOiill/x1xrbo4o7zTDhwN
+         k2Nu5ZFGPXVgGjPdGr+t3QzLdWcS0JtlFnfUGDh8hogqMADS1OLRISAzyEXHltczTl9H
+         FPvOZxzMYnaUBG/QIDAMRoMzZJLZisO6o7qupNYi2Hhduq9me0Cc3xl+gKy5UwGf1AKf
+         ua0PqTMx7ovQLf9TdBv7hFAuSf8i30ksz0AsOWshQ3TQmD7RxAeTPuXoK0W0yeVebP2U
+         q/8rLejejSqLZmTdTdXQmJ+yyVr2zGYxhdkdaaTaDhRYS9zxdXlEChjfc9yZw9tr8MJm
+         hlCQ==
+X-Gm-Message-State: AC+VfDzbezoU7Gc0u6KvSLBSNsBWe76hlWuVpUUpiie44m/I4LB5Eus8
+        e7nbAeHHo9xXd7igxMsU15zRyv3pXtfHHpRUx/M=
+X-Google-Smtp-Source: ACHHUZ4CCzf9G27k/hrZfQVp05Lc6h80vw+GUjHZVhoy0OjYqIWGolTlrQZEhYao6HXcYW6k32b1Yw==
+X-Received: by 2002:a17:903:32c9:b0:1a6:8ed5:428a with SMTP id i9-20020a17090332c900b001a68ed5428amr2146101plr.22.1683154440657;
+        Wed, 03 May 2023 15:54:00 -0700 (PDT)
 Received: from localhost.localdomain ([2604:1380:4611:8100::1])
-        by smtp.gmail.com with ESMTPSA id p2-20020a1709028a8200b001a641e4738asm2200443plo.1.2023.05.03.15.53.58
+        by smtp.gmail.com with ESMTPSA id p2-20020a1709028a8200b001a641e4738asm2200443plo.1.2023.05.03.15.53.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 15:53:58 -0700 (PDT)
+        Wed, 03 May 2023 15:54:00 -0700 (PDT)
 From:   Aditi Ghag <aditi.ghag@isovalent.com>
 To:     bpf@vger.kernel.org
-Cc:     kafai@fb.com, sdf@google.com, aditi.ghag@isovalent.com
-Subject: [PATCH v7 bpf-next 01/10] bpf: tcp: Avoid taking fast sock lock in iterator
-Date:   Wed,  3 May 2023 22:53:42 +0000
-Message-Id: <20230503225351.3700208-2-aditi.ghag@isovalent.com>
+Cc:     kafai@fb.com, sdf@google.com, aditi.ghag@isovalent.com,
+        Martin KaFai Lau <martin.lau@kernel.org>
+Subject: [PATCH v7 bpf-next 03/10] bpf: udp: Encapsulate logic to get udp table
+Date:   Wed,  3 May 2023 22:53:44 +0000
+Message-Id: <20230503225351.3700208-4-aditi.ghag@isovalent.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230503225351.3700208-1-aditi.ghag@isovalent.com>
 References: <20230503225351.3700208-1-aditi.ghag@isovalent.com>
@@ -64,89 +65,96 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Previously, BPF TCP iterator was acquiring fast version of sock lock that
-disables the BH. This introduced a circular dependency with code paths that
-later acquire sockets hash table bucket lock.
-Replace the fast version of sock lock with slow that faciliates BPF
-programs executed from the iterator to destroy TCP listening sockets
-using the bpf_sock_destroy kfunc (implemened in follow-up commits).
+This is a preparatory commit that encapsulates the logic
+to get udp table in iterator inside udp_get_table_afinfo, and
+renames the function to udp_get_table_seq accordingly.
 
-Here is a stack trace that motivated this change:
-
-```
-lock_acquire+0xcd/0x330
-_raw_spin_lock+0x33/0x40
-------> sock lock acquired with BH enabled
-sk_clone_lock+0x146/0x520
-inet_csk_clone_lock+0x1b/0x110
-tcp_create_openreq_child+0x22/0x3f0
-tcp_v6_syn_recv_sock+0x96/0x940
-
-
-lock_acquire+0xcd/0x330
-_raw_spin_lock+0x33/0x40
-------> Acquire (bucket) lhash2.lock (may cause deadlock if interrupted)
-__inet_hash+0x4b/0x210
-inet_csk_listen_start+0xe6/0x100
-inet_listen+0x95/0x1d0
-__sys_listen+0x69/0xb0
-__x64_sys_listen+0x14/0x20
-do_syscall_64+0x3c/0x90
-entry_SYSCALL_64_after_hwframe+0x72/0xdc
-
-
-lock_acquire+0xcd/0x330
-_raw_spin_lock+0x33/0x40
-------> Acquire (bucket) lhash2.lock
-inet_unhash+0x9a/0x110
-tcp_set_state+0x6a/0x210
-tcp_abort+0x10d/0x200
-bpf_prog_6793c5ca50c43c0d_iter_tcp6_server+0xa4/0xa9
-bpf_iter_run_prog+0x1ff/0x340
-------> Release (bucket) lhash2.lock
-bpf_iter_tcp_seq_show+0xca/0x190
-------> Acquire (bucket) lhash2.lock
-------> sock lock acquired with BH disabled
-bpf_seq_read+0x177/0x450
-
-```
-
-Acked-by: Stanislav Fomichev <sdf@google.com>
+Suggested-by: Martin KaFai Lau <martin.lau@kernel.org>
 Signed-off-by: Aditi Ghag <aditi.ghag@isovalent.com>
 ---
- net/ipv4/tcp_ipv4.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ net/ipv4/udp.c | 35 ++++++++++++-----------------------
+ 1 file changed, 12 insertions(+), 23 deletions(-)
 
-diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-index ea370afa70ed..f2d370a9450f 100644
---- a/net/ipv4/tcp_ipv4.c
-+++ b/net/ipv4/tcp_ipv4.c
-@@ -2962,7 +2962,6 @@ static int bpf_iter_tcp_seq_show(struct seq_file *seq, void *v)
- 	struct bpf_iter_meta meta;
- 	struct bpf_prog *prog;
- 	struct sock *sk = v;
--	bool slow;
- 	uid_t uid;
- 	int ret;
- 
-@@ -2970,7 +2969,7 @@ static int bpf_iter_tcp_seq_show(struct seq_file *seq, void *v)
- 		return 0;
- 
- 	if (sk_fullsock(sk))
--		slow = lock_sock_fast(sk);
-+		lock_sock(sk);
- 
- 	if (unlikely(sk_unhashed(sk))) {
- 		ret = SEQ_SKIP;
-@@ -2994,7 +2993,7 @@ static int bpf_iter_tcp_seq_show(struct seq_file *seq, void *v)
- 
- unlock:
- 	if (sk_fullsock(sk))
--		unlock_sock_fast(sk, slow);
-+		release_sock(sk);
- 	return ret;
- 
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index 71e3fef44fd5..c426ebafeb13 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -2993,9 +2993,16 @@ static bool seq_sk_match(struct seq_file *seq, const struct sock *sk)
+ 		net_eq(sock_net(sk), seq_file_net(seq)));
  }
+ 
+-static struct udp_table *udp_get_table_afinfo(struct udp_seq_afinfo *afinfo,
+-					      struct net *net)
++static struct udp_table *udp_get_table_seq(struct seq_file *seq,
++					   struct net *net)
+ {
++	const struct udp_iter_state *state = seq->private;
++	const struct udp_seq_afinfo *afinfo;
++
++	if (state->bpf_seq_afinfo)
++		return net->ipv4.udp_table;
++
++	afinfo = pde_data(file_inode(seq->file));
+ 	return afinfo->udp_table ? : net->ipv4.udp_table;
+ }
+ 
+@@ -3003,16 +3010,10 @@ static struct sock *udp_get_first(struct seq_file *seq, int start)
+ {
+ 	struct udp_iter_state *state = seq->private;
+ 	struct net *net = seq_file_net(seq);
+-	struct udp_seq_afinfo *afinfo;
+ 	struct udp_table *udptable;
+ 	struct sock *sk;
+ 
+-	if (state->bpf_seq_afinfo)
+-		afinfo = state->bpf_seq_afinfo;
+-	else
+-		afinfo = pde_data(file_inode(seq->file));
+-
+-	udptable = udp_get_table_afinfo(afinfo, net);
++	udptable = udp_get_table_seq(seq, net);
+ 
+ 	for (state->bucket = start; state->bucket <= udptable->mask;
+ 	     ++state->bucket) {
+@@ -3037,20 +3038,14 @@ static struct sock *udp_get_next(struct seq_file *seq, struct sock *sk)
+ {
+ 	struct udp_iter_state *state = seq->private;
+ 	struct net *net = seq_file_net(seq);
+-	struct udp_seq_afinfo *afinfo;
+ 	struct udp_table *udptable;
+ 
+-	if (state->bpf_seq_afinfo)
+-		afinfo = state->bpf_seq_afinfo;
+-	else
+-		afinfo = pde_data(file_inode(seq->file));
+-
+ 	do {
+ 		sk = sk_next(sk);
+ 	} while (sk && !seq_sk_match(seq, sk));
+ 
+ 	if (!sk) {
+-		udptable = udp_get_table_afinfo(afinfo, net);
++		udptable = udp_get_table_seq(seq, net);
+ 
+ 		if (state->bucket <= udptable->mask)
+ 			spin_unlock_bh(&udptable->hash[state->bucket].lock);
+@@ -3096,15 +3091,9 @@ EXPORT_SYMBOL(udp_seq_next);
+ void udp_seq_stop(struct seq_file *seq, void *v)
+ {
+ 	struct udp_iter_state *state = seq->private;
+-	struct udp_seq_afinfo *afinfo;
+ 	struct udp_table *udptable;
+ 
+-	if (state->bpf_seq_afinfo)
+-		afinfo = state->bpf_seq_afinfo;
+-	else
+-		afinfo = pde_data(file_inode(seq->file));
+-
+-	udptable = udp_get_table_afinfo(afinfo, seq_file_net(seq));
++	udptable = udp_get_table_seq(seq, seq_file_net(seq));
+ 
+ 	if (state->bucket <= udptable->mask)
+ 		spin_unlock_bh(&udptable->hash[state->bucket].lock);
 -- 
 2.34.1
 
