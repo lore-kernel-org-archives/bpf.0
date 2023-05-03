@@ -2,344 +2,111 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A13E9C77B7F
-	for <bpf@archiver.kernel.org>; Wed,  3 May 2023 22:54:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77906C77B78
+	for <bpf@archiver.kernel.org>; Wed,  3 May 2023 23:06:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbjECWyO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 May 2023 18:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47968 "EHLO
+        id S229502AbjECXGJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 May 2023 19:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbjECWyK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 May 2023 18:54:10 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14B146A6
-        for <bpf@vger.kernel.org>; Wed,  3 May 2023 15:54:07 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1ab01bf474aso29856715ad.1
-        for <bpf@vger.kernel.org>; Wed, 03 May 2023 15:54:07 -0700 (PDT)
+        with ESMTP id S229545AbjECXGI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 May 2023 19:06:08 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760CA5FD9;
+        Wed,  3 May 2023 16:06:07 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-64115eef620so8502903b3a.1;
+        Wed, 03 May 2023 16:06:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1683154447; x=1685746447;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7sG94dNySAdFrxzxkKgsn/Qvw18MkZf4kTSp4kQD6+s=;
-        b=CvnszwoyFxeY+GLEFeiaV7VOPgWpuLDTADtKGy/ZMGNPrC9GSnIrtEXqWntj31H7/K
-         auwB0PX5g42isYwp4By/5bUuRrsjVgecv/7uPFbR11H2scobgL3/bgguij9kfoqr8XfG
-         Z8uzw8rqkgqUh9sawnooV0+trJHfEgDCT9FgiVOJ2Z0pA+yj3KOTBUlSJ/ydL487lJQ8
-         GnFTtiUsxrJqHSs1MAqpg0LqkNo188Ig2qQxoK2cQAYz9CNk0a/BCID9Q9wVPm4Sf7o0
-         xwmScL3qMakak5UuDpxPXvI7jQGUR1faTRxAjTfkMOqUcAu5LwETVN5yHus1nWCvLbN+
-         I0Tg==
+        d=gmail.com; s=20221208; t=1683155167; x=1685747167;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=M47T+MkfXcL+iES+vO37bcdby6t+YHTMo4v4UpuapmA=;
+        b=GyjtyxzzPJIzKLNckzBqhGn6EsHcW13SH4Ki9P94TvYHM/nQ4czEHPAYkzgf+csxqG
+         Fyizd6OJ+I2C09BwSgegy5CjhhFqMyjDHv20WOORrAARntsm+r+RlT1aLs99TYjqt9D/
+         kWpnm4QQ2ZskjjfPwcL0Ve4Rm9orMV2uzI9SKJUx5FBC7OsjuvhbEaA360KgwtDSS7ov
+         q3QsRLMtRGE5hSB56uvSDaQUPy6KE7lfJEVTjBXQn/r8qlc/8x4U/jfrgp033cpS0PWg
+         jwEpFx5ReowWxIfxZ/c5DBSAFOxFdgpFBQBKBhKNOoQWZVTJ+tmXPN4Qj00oxUnQ/Nj5
+         fw4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683154447; x=1685746447;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7sG94dNySAdFrxzxkKgsn/Qvw18MkZf4kTSp4kQD6+s=;
-        b=Ln/LGyKxg8vXxtwq0Sf04D1sJ6A3FS1cVcR+UDwK4uWDuz5pHYFTVy4N5nAUW0oZfn
-         17Sk0zZhpY9L3845BAaMcl7Ih58xtcFYy7oTfjPKa6PGAwSs28lNdpjHJ+c+EDGKDHya
-         J2eOF9bOEaHVRZGtxytvoIM8KNIM40LRCK3rmIroce3t//0XLTfyFC3PDkQh8CKdTpcC
-         cjm5iIjemrAC7O36QGAFpeCjMMN0RWPC9/zs0Mr76+zikUq2gGmgFKHU3iyLWzy5XlGh
-         Ax3w5wJY7d1NBeul/1QiPj9o4KUAjzZ/l9FXjIpk9c0HQ373L6l3xLLLHDnOtkNp+K10
-         xgYg==
-X-Gm-Message-State: AC+VfDxB4PTtPC1aHhAs1LH4ebSXcxhW+5lZgifP9TZH9d6CoctFFoDy
-        hjS+n/GQsJBuf2ldcrJPgUde93P927Jd1/0y8TY=
-X-Google-Smtp-Source: ACHHUZ5G4rXbW+XaTxat5gqK1Rv7+g8Z2YYF4Uldel6zmG+LOwOjtshiiRJBVDh6q6KyWpn1BNc3ew==
-X-Received: by 2002:a17:902:aa02:b0:1a0:50bd:31a8 with SMTP id be2-20020a170902aa0200b001a050bd31a8mr1504206plb.26.1683154446788;
-        Wed, 03 May 2023 15:54:06 -0700 (PDT)
-Received: from localhost.localdomain ([2604:1380:4611:8100::1])
-        by smtp.gmail.com with ESMTPSA id p2-20020a1709028a8200b001a641e4738asm2200443plo.1.2023.05.03.15.54.05
+        d=1e100.net; s=20221208; t=1683155167; x=1685747167;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M47T+MkfXcL+iES+vO37bcdby6t+YHTMo4v4UpuapmA=;
+        b=TsZvS5DWKanVXJ7r37BgotLdLb1yVTTd4fMENjcJpUAj+qbHbk1TXfiWlWyL6fUsVE
+         htnmlz60O6Vdebe62nKU57v/2+l/KjHSZmHcnOpsJmGIZ20xaYovtj7N5+D23j7rsrw/
+         8QTq6W7TgvjdmmrTFDdY3Ycq8tHOZekl2uu8Yeh7rFqBDuF9Yf1SnQop1edwJXEct/kU
+         P45uWiwJjPA/yvabfELUYu/AQo2RbEhwvnDc9POWpnL/aNPFgoGiWMMMLAtvp8dEPFQ8
+         6SMJXRaVFhoo+gp6fduiEg7hsKezaw52EhEs0S1UEliPrPN4zcYCkwGKWpDKpeEvtmyt
+         /pNQ==
+X-Gm-Message-State: AC+VfDyTnMxl4u+uij5xrno8lRA2NH6mxxFhdmxfOtFjSWnDRYAmptyp
+        1iEX66tEpuldteRoZ8CJoW8=
+X-Google-Smtp-Source: ACHHUZ6IdITKuMcPrZQPXVzz8DxHIwMl89ft/AfZdh9W5CLXG7fE4eF57eRLOYAeLuPhJiDTe4faUg==
+X-Received: by 2002:a05:6a00:a28:b0:63b:8dcc:84de with SMTP id p40-20020a056a000a2800b0063b8dcc84demr95158pfh.4.1683155166682;
+        Wed, 03 May 2023 16:06:06 -0700 (PDT)
+Received: from dhcp-172-26-102-232.dhcp.thefacebook.com ([2620:10d:c090:400::5:396f])
+        by smtp.gmail.com with ESMTPSA id a24-20020aa795b8000000b0063d2dae6243sm24051211pfk.115.2023.05.03.16.06.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 15:54:06 -0700 (PDT)
-From:   Aditi Ghag <aditi.ghag@isovalent.com>
-To:     bpf@vger.kernel.org
-Cc:     kafai@fb.com, sdf@google.com, aditi.ghag@isovalent.com,
-        Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH v7 bpf-next 09/10] bpf: Add a kfunc filter function to 'struct btf_kfunc_id_set'
-Date:   Wed,  3 May 2023 22:53:50 +0000
-Message-Id: <20230503225351.3700208-10-aditi.ghag@isovalent.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230503225351.3700208-1-aditi.ghag@isovalent.com>
-References: <20230503225351.3700208-1-aditi.ghag@isovalent.com>
+        Wed, 03 May 2023 16:06:06 -0700 (PDT)
+Date:   Wed, 3 May 2023 16:06:03 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Martin KaFai Lau <martin.lau@linux.dev>
+Cc:     Hou Tao <houtao@huaweicloud.com>, bpf@vger.kernel.org,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Hao Luo <haoluo@google.com>,
+        Yonghong Song <yhs@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        houtao1@huawei.com
+Subject: Re: [RFC bpf-next v3 3/6] bpf: Introduce BPF_MA_REUSE_AFTER_RCU_GP
+Message-ID: <20230503230603.auijigbydnifxah5@dhcp-172-26-102-232.dhcp.thefacebook.com>
+References: <20230429101215.111262-1-houtao@huaweicloud.com>
+ <20230429101215.111262-4-houtao@huaweicloud.com>
+ <20230503184841.6mmvdusr3rxiabmu@MacBook-Pro-6.local>
+ <0fc99af7-fa0d-c5c7-00c4-3f446a5ad77b@linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0fc99af7-fa0d-c5c7-00c4-3f446a5ad77b@linux.dev>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This commit adds the ability to filter kfuncs to certain BPF program
-types, and thereby limits bpf_sock_destroy kfunc to progras with attach
-type 'BPF_TRACE_ITER'.
-Previous patches introduced 'bpf_sock_destroy kfunc' that can only be
-called from BPF (sockets) iterator type programs.  The reason being, the
-kfunc requires lock_sock to be done from the BPF context prior to
-calling the kfunc.
-To that end, the patch adds a callback filter to 'struct
-btf_kfunc_id_set'.  The filter has access to the prog construct
-including other properties of the prog.  For the bpf_sock_destroy case,
-the `expected_attached_type` property of a prog construct is used to
-allow access to the kfunc in the provided callback filter.
+On Wed, May 03, 2023 at 02:57:03PM -0700, Martin KaFai Lau wrote:
+> On 5/3/23 11:48 AM, Alexei Starovoitov wrote:
+> > What it means that sleepable progs using hashmap will be able to avoid uaf with bpf_rcu_read_lock().
+> > Without explicit bpf_rcu_read_lock() it's still safe and equivalent to existing behavior of bpf_mem_alloc.
+> > (while your proposed BPF_MA_FREE_AFTER_RCU_GP flavor is not safe to use in hashtab with sleepable progs)
+> > 
+> > After that we can unconditionally remove rcu_head/call_rcu from bpf_cpumask and improve usability of bpf_obj_drop.
+> > Probably usage of bpf_mem_alloc in local storage can be simplified as well.
+> > Martin wdyt?
+> 
+> If the bpf prog always does a bpf_rcu_read_lock() before accessing the
+> (e.g.) task local storage, it can remove the reuse_now conditions in the
+> bpf_local_storage and directly call the bpf_mem_cache_free().
+> 
+> The only corner use case is when the bpf_prog or syscall does
+> bpf_task_storage_delete() instead of having the task storage stays with the
+> whole lifetime of the task_struct. Using REUSE_AFTER_RCU_GP will be a change
+> of this uaf guarantee to the sleepable program but it is still safe because
+> it is freed after tasks_trace gp. We could take this chance to align this
+> behavior of the local storage map to the other bpf maps.
+> 
+> For BPF_MA_FREE_AFTER_RCU_GP, there are cases that the bpf local storage
+> knows it can be freed without waiting tasks_trace gp. However, only
+> task/cgroup storages are in bpf ma and I don't believe this optimization
+> matter much for them. I would rather focus on the REUSE_AFTER_RCU_GP first.
 
-Signed-off-by: Aditi Ghag <aditi.ghag@isovalent.com>
-Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
----
- include/linux/btf.h   | 18 ++++++++-----
- kernel/bpf/btf.c      | 59 +++++++++++++++++++++++++++++++++++--------
- kernel/bpf/verifier.c |  7 ++---
- net/core/filter.c     |  9 +++++++
- 4 files changed, 73 insertions(+), 20 deletions(-)
+I'm confused which REUSE_AFTER_RCU_GP you meant.
+What I proposed above is REUSE_AFTER_rcu_GP_and_free_after_rcu_tasks_trace
 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index 495250162422..918a0b6379bd 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -99,10 +99,14 @@ struct btf_type;
- union bpf_attr;
- struct btf_show;
- struct btf_id_set;
-+struct bpf_prog;
-+
-+typedef int (*btf_kfunc_filter_t)(const struct bpf_prog *prog, u32 kfunc_id);
- 
- struct btf_kfunc_id_set {
- 	struct module *owner;
- 	struct btf_id_set8 *set;
-+	btf_kfunc_filter_t filter;
- };
- 
- struct btf_id_dtor_kfunc {
-@@ -482,7 +486,6 @@ static inline void *btf_id_set8_contains(const struct btf_id_set8 *set, u32 id)
- 	return bsearch(&id, set->pairs, set->cnt, sizeof(set->pairs[0]), btf_id_cmp_func);
- }
- 
--struct bpf_prog;
- struct bpf_verifier_log;
- 
- #ifdef CONFIG_BPF_SYSCALL
-@@ -490,10 +493,10 @@ const struct btf_type *btf_type_by_id(const struct btf *btf, u32 type_id);
- const char *btf_name_by_offset(const struct btf *btf, u32 offset);
- struct btf *btf_parse_vmlinux(void);
- struct btf *bpf_prog_get_target_btf(const struct bpf_prog *prog);
--u32 *btf_kfunc_id_set_contains(const struct btf *btf,
--			       enum bpf_prog_type prog_type,
--			       u32 kfunc_btf_id);
--u32 *btf_kfunc_is_modify_return(const struct btf *btf, u32 kfunc_btf_id);
-+u32 *btf_kfunc_id_set_contains(const struct btf *btf, u32 kfunc_btf_id,
-+			       const struct bpf_prog *prog);
-+u32 *btf_kfunc_is_modify_return(const struct btf *btf, u32 kfunc_btf_id,
-+				const struct bpf_prog *prog);
- int register_btf_kfunc_id_set(enum bpf_prog_type prog_type,
- 			      const struct btf_kfunc_id_set *s);
- int register_btf_fmodret_id_set(const struct btf_kfunc_id_set *kset);
-@@ -520,8 +523,9 @@ static inline const char *btf_name_by_offset(const struct btf *btf,
- 	return NULL;
- }
- static inline u32 *btf_kfunc_id_set_contains(const struct btf *btf,
--					     enum bpf_prog_type prog_type,
--					     u32 kfunc_btf_id)
-+					     u32 kfunc_btf_id,
-+					     struct bpf_prog *prog)
-+
- {
- 	return NULL;
- }
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 913b9d717a4a..c6dae44e236d 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -218,10 +218,17 @@ enum btf_kfunc_hook {
- enum {
- 	BTF_KFUNC_SET_MAX_CNT = 256,
- 	BTF_DTOR_KFUNC_MAX_CNT = 256,
-+	BTF_KFUNC_FILTER_MAX_CNT = 16,
-+};
-+
-+struct btf_kfunc_hook_filter {
-+	btf_kfunc_filter_t filters[BTF_KFUNC_FILTER_MAX_CNT];
-+	u32 nr_filters;
- };
- 
- struct btf_kfunc_set_tab {
- 	struct btf_id_set8 *sets[BTF_KFUNC_HOOK_MAX];
-+	struct btf_kfunc_hook_filter hook_filters[BTF_KFUNC_HOOK_MAX];
- };
- 
- struct btf_id_dtor_kfunc_tab {
-@@ -7720,9 +7727,12 @@ static int btf_check_kfunc_protos(struct btf *btf, u32 func_id, u32 func_flags)
- /* Kernel Function (kfunc) BTF ID set registration API */
- 
- static int btf_populate_kfunc_set(struct btf *btf, enum btf_kfunc_hook hook,
--				  struct btf_id_set8 *add_set)
-+				  const struct btf_kfunc_id_set *kset)
- {
-+	struct btf_kfunc_hook_filter *hook_filter;
-+	struct btf_id_set8 *add_set = kset->set;
- 	bool vmlinux_set = !btf_is_module(btf);
-+	bool add_filter = !!kset->filter;
- 	struct btf_kfunc_set_tab *tab;
- 	struct btf_id_set8 *set;
- 	u32 set_cnt;
-@@ -7737,6 +7747,20 @@ static int btf_populate_kfunc_set(struct btf *btf, enum btf_kfunc_hook hook,
- 		return 0;
- 
- 	tab = btf->kfunc_set_tab;
-+
-+	if (tab && add_filter) {
-+		int i;
-+
-+		hook_filter = &tab->hook_filters[hook];
-+		for (i = 0; i < hook_filter->nr_filters; i++) {
-+			if (hook_filter->filters[i] == kset->filter)
-+				add_filter = false;
-+		}
-+
-+		if (add_filter && hook_filter->nr_filters == BTF_KFUNC_FILTER_MAX_CNT)
-+			return -E2BIG;
-+	}
-+
- 	if (!tab) {
- 		tab = kzalloc(sizeof(*tab), GFP_KERNEL | __GFP_NOWARN);
- 		if (!tab)
-@@ -7759,7 +7783,7 @@ static int btf_populate_kfunc_set(struct btf *btf, enum btf_kfunc_hook hook,
- 	 */
- 	if (!vmlinux_set) {
- 		tab->sets[hook] = add_set;
--		return 0;
-+		goto do_add_filter;
- 	}
- 
- 	/* In case of vmlinux sets, there may be more than one set being
-@@ -7801,6 +7825,11 @@ static int btf_populate_kfunc_set(struct btf *btf, enum btf_kfunc_hook hook,
- 
- 	sort(set->pairs, set->cnt, sizeof(set->pairs[0]), btf_id_cmp_func, NULL);
- 
-+do_add_filter:
-+	if (add_filter) {
-+		hook_filter = &tab->hook_filters[hook];
-+		hook_filter->filters[hook_filter->nr_filters++] = kset->filter;
-+	}
- 	return 0;
- end:
- 	btf_free_kfunc_set_tab(btf);
-@@ -7809,15 +7838,22 @@ static int btf_populate_kfunc_set(struct btf *btf, enum btf_kfunc_hook hook,
- 
- static u32 *__btf_kfunc_id_set_contains(const struct btf *btf,
- 					enum btf_kfunc_hook hook,
-+					const struct bpf_prog *prog,
- 					u32 kfunc_btf_id)
- {
-+	struct btf_kfunc_hook_filter *hook_filter;
- 	struct btf_id_set8 *set;
--	u32 *id;
-+	u32 *id, i;
- 
- 	if (hook >= BTF_KFUNC_HOOK_MAX)
- 		return NULL;
- 	if (!btf->kfunc_set_tab)
- 		return NULL;
-+	hook_filter = &btf->kfunc_set_tab->hook_filters[hook];
-+	for (i = 0; i < hook_filter->nr_filters; i++) {
-+		if (hook_filter->filters[i](prog, kfunc_btf_id))
-+			return NULL;
-+	}
- 	set = btf->kfunc_set_tab->sets[hook];
- 	if (!set)
- 		return NULL;
-@@ -7870,23 +7906,25 @@ static int bpf_prog_type_to_kfunc_hook(enum bpf_prog_type prog_type)
-  * protection for looking up a well-formed btf->kfunc_set_tab.
-  */
- u32 *btf_kfunc_id_set_contains(const struct btf *btf,
--			       enum bpf_prog_type prog_type,
--			       u32 kfunc_btf_id)
-+			       u32 kfunc_btf_id,
-+			       const struct bpf_prog *prog)
- {
-+	enum bpf_prog_type prog_type = resolve_prog_type(prog);
- 	enum btf_kfunc_hook hook;
- 	u32 *kfunc_flags;
- 
--	kfunc_flags = __btf_kfunc_id_set_contains(btf, BTF_KFUNC_HOOK_COMMON, kfunc_btf_id);
-+	kfunc_flags = __btf_kfunc_id_set_contains(btf, BTF_KFUNC_HOOK_COMMON, prog, kfunc_btf_id);
- 	if (kfunc_flags)
- 		return kfunc_flags;
- 
- 	hook = bpf_prog_type_to_kfunc_hook(prog_type);
--	return __btf_kfunc_id_set_contains(btf, hook, kfunc_btf_id);
-+	return __btf_kfunc_id_set_contains(btf, hook, prog, kfunc_btf_id);
- }
- 
--u32 *btf_kfunc_is_modify_return(const struct btf *btf, u32 kfunc_btf_id)
-+u32 *btf_kfunc_is_modify_return(const struct btf *btf, u32 kfunc_btf_id,
-+				const struct bpf_prog *prog)
- {
--	return __btf_kfunc_id_set_contains(btf, BTF_KFUNC_HOOK_FMODRET, kfunc_btf_id);
-+	return __btf_kfunc_id_set_contains(btf, BTF_KFUNC_HOOK_FMODRET, prog, kfunc_btf_id);
- }
- 
- static int __register_btf_kfunc_id_set(enum btf_kfunc_hook hook,
-@@ -7917,7 +7955,8 @@ static int __register_btf_kfunc_id_set(enum btf_kfunc_hook hook,
- 			goto err_out;
- 	}
- 
--	ret = btf_populate_kfunc_set(btf, hook, kset->set);
-+	ret = btf_populate_kfunc_set(btf, hook, kset);
-+
- err_out:
- 	btf_put(btf);
- 	return ret;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d6db6de3e9ea..8d9519210935 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -10534,7 +10534,7 @@ static int fetch_kfunc_meta(struct bpf_verifier_env *env,
- 		*kfunc_name = func_name;
- 	func_proto = btf_type_by_id(desc_btf, func->type);
- 
--	kfunc_flags = btf_kfunc_id_set_contains(desc_btf, resolve_prog_type(env->prog), func_id);
-+	kfunc_flags = btf_kfunc_id_set_contains(desc_btf, func_id, env->prog);
- 	if (!kfunc_flags) {
- 		return -EACCES;
- 	}
-@@ -18526,7 +18526,8 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 				 * in the fmodret id set with the KF_SLEEPABLE flag.
- 				 */
- 				else {
--					u32 *flags = btf_kfunc_is_modify_return(btf, btf_id);
-+					u32 *flags = btf_kfunc_is_modify_return(btf, btf_id,
-+										prog);
- 
- 					if (flags && (*flags & KF_SLEEPABLE))
- 						ret = 0;
-@@ -18554,7 +18555,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 				return -EINVAL;
- 			}
- 			ret = -EINVAL;
--			if (btf_kfunc_is_modify_return(btf, btf_id) ||
-+			if (btf_kfunc_is_modify_return(btf, btf_id, prog) ||
- 			    !check_attach_modify_return(addr, tname))
- 				ret = 0;
- 			if (ret) {
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 97d70b7959a1..20c603321325 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -11762,9 +11762,18 @@ BTF_SET8_START(sock_destroy_kfunc_set)
- BTF_ID_FLAGS(func, bpf_sock_destroy)
- BTF_SET8_END(sock_destroy_kfunc_set)
- 
-+static int tracing_iter_filter(const struct bpf_prog *prog, u32 kfunc_id)
-+{
-+	if (btf_id_set8_contains(&sock_destroy_kfunc_set, kfunc_id) &&
-+	    prog->expected_attach_type != BPF_TRACE_ITER)
-+		return -EACCES;
-+	return 0;
-+}
-+
- static const struct btf_kfunc_id_set bpf_sock_destroy_kfunc_set = {
- 	.owner = THIS_MODULE,
- 	.set   = &sock_destroy_kfunc_set,
-+	.filter = tracing_iter_filter,
- };
- 
- static int init_subsystem(void)
--- 
-2.34.1
+Hou's proposals: 1. BPF_MA_REUSE_AFTER_two_RCUs_GP 2. BPF_MA_FREE_AFTER_single_RCU_GP
 
+If I'm reading bpf_local_storage correctly it can remove reuse_now logic
+in all conditions with REUSE_AFTER_rcu_GP_and_free_after_rcu_tasks_trace.
+What am I missing?
