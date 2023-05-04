@@ -2,38 +2,37 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 927F8C77B78
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B814FC7EE23
 	for <bpf@archiver.kernel.org>; Thu,  4 May 2023 05:34:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbjEDFd7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 4 May 2023 01:33:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50036 "EHLO
+        id S229514AbjEDFeA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 4 May 2023 01:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjEDFd7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S229522AbjEDFd7 (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 4 May 2023 01:33:59 -0400
 Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9951B1BEB
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04BAF1BF6
         for <bpf@vger.kernel.org>; Wed,  3 May 2023 22:33:57 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3440qRFG023172
-        for <bpf@vger.kernel.org>; Wed, 3 May 2023 22:33:56 -0700
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3440qUDC025492
+        for <bpf@vger.kernel.org>; Wed, 3 May 2023 22:33:57 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=TabE7jwAh6oZYRmGnSUkJ6+20VLHXm/JpOuJLqf7+wE=;
- b=K3gPGid3pgkzome5qKSQt7q7v0yCWQxVnLT34+D9IA22gBe+INobWTAuaPjqcUtlmidH
- Lnw+DkgGpTSdoE0FwpWAR/1tfFjCZn8qJLFtwxAa1+/Gr24dPz5XVZl8K+ACW9Qn++91
- Kyctwn0krDsS6Nt0tbOtp0gq66dBxq3ttQc= 
+ : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=facebook; bh=LrX91rbgr29FilnIogrKh+0zLOTp8S+RSduGsnzERxg=;
+ b=LK6DWaAcslZ/mMfdCajmIM3kU/1mG+kQAHtZjb5Pwhl4kK/8quChFARgNLbmpJm8vbzY
+ /G3uMl9laQAUOhp7jAi/3dhVy4OXLnuvyLQP/5Lo1temKG+NIl/A5uiqB6mc5G065/sd
+ ki2RU8pk20blC/+ORZqkewo8QYG9aF+lpMw= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qbhx28a31-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qbjd080kg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Wed, 03 May 2023 22:33:56 -0700
-Received: from twshared4902.04.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+Received: from twshared17808.08.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 3 May 2023 22:33:55 -0700
+ 15.1.2507.23; Wed, 3 May 2023 22:33:56 -0700
 Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-        id 6CBA91D7BFC5B; Wed,  3 May 2023 22:33:47 -0700 (PDT)
+        id C9D631D7BFC2A; Wed,  3 May 2023 22:33:44 -0700 (PDT)
 From:   Dave Marchevsky <davemarchevsky@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -43,18 +42,17 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Kernel Team <kernel-team@fb.com>,
         Kumar Kartikeya Dwivedi <memxor@gmail.com>,
         Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH v1 bpf-next 3/9] bpf: Fix __bpf_{list,rbtree}_add's beginning-of-node calculation
-Date:   Wed, 3 May 2023 22:33:32 -0700
-Message-ID: <20230504053338.1778690-4-davemarchevsky@fb.com>
+Subject: [PATCH v1 bpf-next 0/9] bpf_refcount followups (part 1)
+Date:   Wed, 3 May 2023 22:33:29 -0700
+Message-ID: <20230504053338.1778690-1-davemarchevsky@fb.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230504053338.1778690-1-davemarchevsky@fb.com>
-References: <20230504053338.1778690-1-davemarchevsky@fb.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: FDJri5Z8EkUiWEqeRkred-cgVCMbiU-7
-X-Proofpoint-GUID: FDJri5Z8EkUiWEqeRkred-cgVCMbiU-7
+X-Proofpoint-GUID: 8_csR3plKbGY47wIgxw-gt2azwHnsUy7
+X-Proofpoint-ORIG-GUID: 8_csR3plKbGY47wIgxw-gt2azwHnsUy7
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-04_02,2023-05-03_01,2023-02-09_01
@@ -62,56 +60,86 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Given the pointer to struct bpf_{rb,list}_node within a local kptr and
-the byte offset of that field within the kptr struct, the calculation cha=
-nged
-by this patch is meant to find the beginning of the kptr so that it can
-be passed to bpf_obj_drop.
+This series is the first of two (or more) followups to address issues in the
+bpf_refcount shared ownership implementation discovered by Kumar.
+Specifically, this series addresses the "bpf_refcount_acquire on non-owning=
+ ref
+in another tree" scenario described in [0], and does _not_ address issues
+raised in [1]. Further followups will address the other issues.
 
-Unfortunately instead of doing
+The series can be applied without re-enabling bpf_refcount_acquire calls, w=
+hich
+were disabled in commit 7deca5eae833 ("bpf: Disable bpf_refcount_acquire kf=
+unc
+calls until race conditions are fixed") until all issues are addressed. Some
+extra patches are included so that BPF CI tests will exercise test changes =
+in
+the series.
 
-  ptr_to_kptr =3D ptr_to_node_field - offset_bytes
+Patch contents:
+  * Patch 1 reverts earlier disabling of bpf_refcount_acquire calls
+    * Selftest added later in the series need to call bpf_refcount_acquire
+    * This patch should not be applied and is included to allow CI to run t=
+he
+      newly-added test and exercise test changes in patch 6
+  * Patches 2 and 3 fix other bugs introduced in bpf_refcount series which =
+were
+    discovered while reproducing the main issue this series addresses
+  * Patch 4 allows KF_DESTRUCTIVE kfuncs to be called when spinlock is held
+  * Patch 5 introduces some destructive bpf_testmod kfuncs which the selfte=
+st
+    added later in the series needs
+    * Marked [RFC] as there's some copying of internal implementation that
+      probably isn't correct. Suggestions needed for how to proceed.
+  * Patch 6 fixes the bpf_refcount_acquire issue by making it fallible for
+    non-owning references
+  * Patch 7 adds a selftest which uses the kfuncs introduced in patch 5 to
+    replicate the exact scenario raised by Kumar
+  * Patch 8 disables the test added in patch 7
+    * This is so the series (aside from DONOTAPPLY patches) can be applied
+      without re-enabling bpf_refcount_acquire yet.
+  * Patch 9 reverts patch 8 so that CI can run the newly-added test
+    * This patch should not be applied
 
-the calculation is erroneously doing
+The first and last patches in the series are included to allow the CI to run
+newly-added tests and should not be applied. First patch reverts earlier
+disabling of bpf_refcount_acquire calls as the test reproducing
+"bpf_refcount_acquire on non-owning ref in another tree" scenario obviously
+needs to be able to call bpf_refcount_acquire.
 
-  ptr_to_ktpr =3D ptr_to_node_field - (offset_bytes * sizeof(struct bpf_r=
-b_node))
+While reproducing the scenario Kumar described in [0], which should cause a
+refcount use-after-free, two unrelated bugs were found and are fixed by this
+series.
 
-or the bpf_list_node equivalent.
+  [0]: https://lore.kernel.org/bpf/atfviesiidev4hu53hzravmtlau3wdodm2vqs7rd=
+7tnwft34e3@xktodqeqevir/
+  [1]: https://lore.kernel.org/bpf/d7hyspcow5wtjcmw4fugdgyp3fwhljwuscp3xyut=
+5qnwivyeru@ysdq543otzv2/
 
-This patch fixes the calculation.
+Dave Marchevsky (9):
+  [DONOTAPPLY] Revert "bpf: Disable bpf_refcount_acquire kfunc calls
+    until race conditions are fixed"
+  bpf: Set kptr_struct_meta for node param to list and rbtree insert
+    funcs
+  bpf: Fix __bpf_{list,rbtree}_add's beginning-of-node calculation
+  bpf: Allow KF_DESTRUCTIVE-flagged kfuncs to be called under spinlock
+  [RFC] selftests/bpf: Add unsafe lock/unlock and refcount_read kfuncs
+    to bpf_testmod
+  bpf: Make bpf_refcount_acquire fallible for non-owning refs
+  selftests/bpf: Add test exercising bpf_refcount_acquire race condition
+  selftests/bpf: Disable newly-added refcounted_kptr_races test
+  [DONOTAPPLY] Revert "selftests/bpf: Disable newly-added
+    refcounted_kptr_races test"
 
-Fixes: d2dcc67df910 ("bpf: Migrate bpf_rbtree_add and bpf_list_push_{fron=
-t,back} to possibly fail")
-Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
----
- kernel/bpf/helpers.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/bpf/helpers.c                          |  12 +-
+ kernel/bpf/verifier.c                         |  70 +++++---
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   |  61 +++++++
+ .../bpf/prog_tests/refcounted_kptr.c          | 106 +++++++++++-
+ .../selftests/bpf/progs/refcounted_kptr.c     | 160 ++++++++++++++++++
+ .../bpf/progs/refcounted_kptr_fail.c          |   4 +-
+ 6 files changed, 388 insertions(+), 25 deletions(-)
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index bb6b4637ebf2..7a8968839e91 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1950,7 +1950,7 @@ static int __bpf_list_add(struct bpf_list_node *nod=
-e, struct bpf_list_head *head
- 		INIT_LIST_HEAD(h);
- 	if (!list_empty(n)) {
- 		/* Only called from BPF prog, no need to migrate_disable */
--		__bpf_obj_drop_impl(n - off, rec);
-+		__bpf_obj_drop_impl((void *)n - off, rec);
- 		return -EINVAL;
- 	}
-=20
-@@ -2032,7 +2032,7 @@ static int __bpf_rbtree_add(struct bpf_rb_root *roo=
-t, struct bpf_rb_node *node,
-=20
- 	if (!RB_EMPTY_NODE(n)) {
- 		/* Only called from BPF prog, no need to migrate_disable */
--		__bpf_obj_drop_impl(n - off, rec);
-+		__bpf_obj_drop_impl((void *)n - off, rec);
- 		return -EINVAL;
- 	}
-=20
 --=20
 2.34.1
+
 
