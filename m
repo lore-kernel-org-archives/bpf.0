@@ -2,142 +2,207 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83BE8C77B7C
-	for <bpf@archiver.kernel.org>; Thu,  4 May 2023 16:56:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA1E6C77B7C
+	for <bpf@archiver.kernel.org>; Thu,  4 May 2023 17:01:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229472AbjEDQ4j (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 4 May 2023 12:56:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
+        id S229522AbjEDRA7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 4 May 2023 13:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjEDQ4i (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 4 May 2023 12:56:38 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9B12705
-        for <bpf@vger.kernel.org>; Thu,  4 May 2023 09:56:36 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-643557840e4so935814b3a.2
-        for <bpf@vger.kernel.org>; Thu, 04 May 2023 09:56:36 -0700 (PDT)
+        with ESMTP id S229482AbjEDRA6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 4 May 2023 13:00:58 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7017030C0
+        for <bpf@vger.kernel.org>; Thu,  4 May 2023 10:00:53 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9659c5b14d8so123310666b.3
+        for <bpf@vger.kernel.org>; Thu, 04 May 2023 10:00:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683219396; x=1685811396;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZWNxqVNpbhilflcozQBNCVWbO1yAtHoJzqL2uLrpMWQ=;
-        b=rWWQjVH3y3yFnu3yxnAZIYhp8EpHZjxHVON0ziVl9w260gnUcvkoCKJPRCotXN3BCD
-         C0BiXqQvQasduZMLy0UqkxuBv3EPJHqfrEUu3sZn/wSgHN0N0gNcJW1HeuA98esF86Xa
-         JozQjjWj+yER6kC0JTyZ/r/RHBseE/gbL1Z31QoIuA2oo8mS/n48RsA4bbRTDgP2lXQg
-         jTvtptYnP8P5xLddeFFfHz/DDzbYdY1JBjvccDPE/uJmtZSXASSuBuoYSCpAVriRmnY/
-         cDU9Ynif6mFIy6vrFcVuodU5sedi1e96H4o6IzmHFIreXm7IjIBBpdPl0yssd/8vk+2f
-         90RQ==
+        d=cloudflare.com; s=google; t=1683219652; x=1685811652;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=qjaODlPi6v4XERHXsi1vzOe64e5c9SqxGMblTgf0hzM=;
+        b=XtNivxu3Rq1nSlFVf9oMdr0PfWMVAFMHG0UpHiyUnCTMbA8ktrSOO8JKMLjr8BITGV
+         fiDSQX2C42CNvV2d5lQhrQOm/kQAja8NT2pLjKOZ0d79af8WoDMGouleYu76NuUlawaE
+         OG2IAx8ZyMvDIbAUZkht93gW9ANqQLL1xOqPQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683219396; x=1685811396;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20221208; t=1683219652; x=1685811652;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZWNxqVNpbhilflcozQBNCVWbO1yAtHoJzqL2uLrpMWQ=;
-        b=UOCQlLaQ+MLqjjQQXLJXgyEFpSUyM7Fxnfas5WCetWM6ucrqPoZ3bzV1hznEfC+f0s
-         Kbr9/YiIMZ13mFMEg14qT+UuyYOO1+g+xiR1bt0yjfTvYJMQrdCNBac5fKLUn9QqBUTe
-         wv5mswP72Wg5Pe4AWdyNmmsYedXtFEJeDePnrMJf+ZI7kdrW2m6fGOMGaaKgi5j1Pnn9
-         f3zCp67xskbep7jHTIjf993AwwMNxKtamOvlIttRzmzV/nmzG+fK4rBBft49oe6A/+M0
-         0+Z+nq1eXMpWGEvrXtUj78/yBJaizmCMJdw+faJWapGPvdx7e8j6jcU5keWkBwBWrjxG
-         mIng==
-X-Gm-Message-State: AC+VfDzu4KU044kSUPdgwsNTXK+6G4RLskw/7b79RcQ2kuXfKpZXLULp
-        XrPwd+Zhy+Px+7SEwI9+Qu0=
-X-Google-Smtp-Source: ACHHUZ5fdvk7mZj21WMh6csC2AVLxUIV/K9DJ8tNx/1SQwJ3n/LuDDXmkFSRm7TPCa1t9hQPDjkssg==
-X-Received: by 2002:a05:6a00:2d0b:b0:641:a6d:46b0 with SMTP id fa11-20020a056a002d0b00b006410a6d46b0mr3835447pfb.22.1683219396185;
-        Thu, 04 May 2023 09:56:36 -0700 (PDT)
-Received: from MacBook-Pro-6.local ([2620:10d:c090:500::6:168f])
-        by smtp.gmail.com with ESMTPSA id c10-20020aa781ca000000b006439ad979cbsm196723pfn.152.2023.05.04.09.56.34
+        bh=qjaODlPi6v4XERHXsi1vzOe64e5c9SqxGMblTgf0hzM=;
+        b=K4Itb6wZztHBMga8toBNXv2e1lLjrwibRupz+VW87BIjvj0Qpz0UJPaVt8aFmVvo2o
+         MfYn7f1nsnwqmuVwCe9IeJwkjBMxKWnHk9p9W9W2xU79WdGDHqtT8Yb0hRJwim0mbDfn
+         G7Aw51gbHq6CiAQN/HyuDAJP1vPDK8Uj0AkJafR/3Yo8C/g7quogYOahS1A6AQ3gI6IK
+         wvH47XNTvkWbK7v2o3zXPTF7WJYtzkGYgb0YgZwQV9zi5gFk5JmRauDd7vvNHla0rjyg
+         vNQCYWj7i1aVwPPMfdpbKFcedDJdQFP5KRzZIXTBrcRT4CHUDB+mKHRUTDYAotVdNfLt
+         /xEg==
+X-Gm-Message-State: AC+VfDxRKr5G8zwkiHyYyal9EtGQxzuWFsRjMm1xGsdJjOUISUDXF3PT
+        kkynVWWQe0uTBcBS80Gx9mv8xA==
+X-Google-Smtp-Source: ACHHUZ5T3XqAsp9qZYStW12DZCevceerSES5BJgR2t3xpunOjYUbQaPsEm3xJX3JQlTTQteps26KnQ==
+X-Received: by 2002:a17:907:628b:b0:957:272d:7b2c with SMTP id nd11-20020a170907628b00b00957272d7b2cmr7679611ejc.41.1683219651628;
+        Thu, 04 May 2023 10:00:51 -0700 (PDT)
+Received: from cloudflare.com (apn-31-0-32-7.dynamic.gprs.plus.pl. [31.0.32.7])
+        by smtp.gmail.com with ESMTPSA id jz17-20020a17090775f100b009603d34cfecsm9843162ejc.164.2023.05.04.10.00.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 09:56:35 -0700 (PDT)
-Date:   Thu, 4 May 2023 09:56:33 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        martin.lau@kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH bpf-next 08/10] bpf: support precision propagation in the
- presence of subprogs
-Message-ID: <20230504165633.mtf3etaof3afscpa@MacBook-Pro-6.local>
-References: <20230425234911.2113352-1-andrii@kernel.org>
- <20230425234911.2113352-9-andrii@kernel.org>
+        Thu, 04 May 2023 10:00:50 -0700 (PDT)
+References: <20230502155159.305437-1-john.fastabend@gmail.com>
+ <20230502155159.305437-5-john.fastabend@gmail.com>
+User-agent: mu4e 1.6.10; emacs 28.2
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     daniel@iogearbox.net, lmb@isovalent.com, edumazet@google.com,
+        bpf@vger.kernel.org, netdev@vger.kernel.org, ast@kernel.org,
+        andrii@kernel.org, will@isovalent.com
+Subject: Re: [PATCH bpf v7 04/13] bpf: sockmap, improved check for empty queue
+Date:   Thu, 04 May 2023 18:53:23 +0200
+In-reply-to: <20230502155159.305437-5-john.fastabend@gmail.com>
+Message-ID: <877cto2fr2.fsf@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230425234911.2113352-9-andrii@kernel.org>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 04:49:09PM -0700, Andrii Nakryiko wrote:
-> Add support precision backtracking in the presence of subprogram frames in
-> jump history.
-> 
-> This means supporting a few different kinds of subprogram invocation
-> situations, all requiring a slightly different handling in precision
-> backtracking handling logic:
->   - static subprogram calls;
->   - global subprogram calls;
->   - callback-calling helpers/kfuncs.
-> 
-> For each of those we need to handle a few precision propagation cases:
->   - what to do with precision of subprog returns (r0);
->   - what to do with precision of input arguments;
->   - for all of them callee-saved registers in caller function should be
->     propagated ignoring subprog/callback part of jump history.
-> 
-> N.B. Async callback-calling helpers (currently only
-> bpf_timer_set_callback()) are transparent to all this because they set
-> a separate async callback environment and thus callback's history is not
-> shared with main program's history. So as far as all the changes in this
-> commit goes, such helper is just a regular helper.
-> 
-> Let's look at all these situation in more details. Let's start with
-> static subprogram being called, using an exxerpt of a simple main
-> program and its static subprog, indenting subprog's frame slightly to
-> make everything clear.
-> 
-> frame 0				frame 1			precision set
-> =======				=======			=============
-> 
->  9: r6 = 456;
-> 10: r1 = 123;						r6
-> 11: call pc+10;						r1, r6
-> 				22: r0 = r1;		r1
-> 				23: exit		r0
-> 12: r1 = <map_pointer>					r0, r6
-> 13: r1 += r0;						r0, r6
-> 14: r1 += r6;						r6;
-> 15: exit
-> 
-> As can be seen above main function is passing 123 as single argument to
-> an identity (`return x;`) subprog. Returned value is used to adjust map
-> pointer offset, which forces r0 to be marked as precise. Then
-> instruction #14 does the same for callee-saved r6, which will have to be
-> backtracked all the way to instruction #9. For brevity, precision sets
-> for instruction #13 and #14 are combined in the diagram above.
-> 
-> First, for subprog calls, r0 returned from subprog (in frame 0) has to
-> go into subprog's frame 1, and should be cleared from frame 0. So we go
-> back into subprog's frame knowing we need to mark r0 precise. We then
-> see that insn #22 sets r0 from r1, so now we care about marking r1
-> precise.  When we pop up from subprog's frame back into caller at
-> insn #11 we keep r1, as it's an argument-passing register, so we eventually
-> find `10: r1 = 123;` and satify precision propagation chain for insn #13.
-> 
-> This example demonstrates two sets of rules:
->   - r0 returned after subprog call has to be moved into subprog's r0 set;
->   - *static* subprog arguments (r1-r5) are moved back to caller precision set.
+On Tue, May 02, 2023 at 08:51 AM -07, John Fastabend wrote:
+> We noticed some rare sk_buffs were stepping past the queue when system was
+> under memory pressure. The general theory is to skip enqueueing
+> sk_buffs when its not necessary which is the normal case with a system
+> that is properly provisioned for the task, no memory pressure and enough
+> cpu assigned.
+>
+> But, if we can't allocate memory due to an ENOMEM error when enqueueing
+> the sk_buff into the sockmap receive queue we push it onto a delayed
+> workqueue to retry later. When a new sk_buff is received we then check
+> if that queue is empty. However, there is a problem with simply checking
+> the queue length. When a sk_buff is being processed from the ingress queue
+> but not yet on the sockmap msg receive queue its possible to also recv
+> a sk_buff through normal path. It will check the ingress queue which is
+> zero and then skip ahead of the pkt being processed.
+>
+> Previously we used sock lock from both contexts which made the problem
+> harder to hit, but not impossible.
+>
+> To fix instead of popping the skb from the queue entirely we peek the
+> skb from the queue and do the copy there. This ensures checks to the
+> queue length are non-zero while skb is being processed. Then finally
+> when the entire skb has been copied to user space queue or another
+> socket we pop it off the queue. This way the queue length check allows
+> bypassing the queue only after the list has been completely processed.
+>
+> To reproduce issue we run NGINX compliance test with sockmap running and
+> observe some flakes in our testing that we attributed to this issue.
+>
+> Fixes: 04919bed948dc ("tcp: Introduce tcp_read_skb()")
+> Tested-by: William Findlay <will@isovalent.com>
+> Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
+> Signed-off-by: John Fastabend <john.fastabend@gmail.com>
+> ---
+>  include/linux/skmsg.h |  1 -
+>  net/core/skmsg.c      | 32 ++++++++------------------------
+>  2 files changed, 8 insertions(+), 25 deletions(-)
+>
+> diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
+> index 904ff9a32ad6..054d7911bfc9 100644
+> --- a/include/linux/skmsg.h
+> +++ b/include/linux/skmsg.h
+> @@ -71,7 +71,6 @@ struct sk_psock_link {
+>  };
+>  
+>  struct sk_psock_work_state {
+> -	struct sk_buff			*skb;
+>  	u32				len;
+>  	u32				off;
+>  };
+> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+> index 3f95c460c261..bc5ca973400c 100644
+> --- a/net/core/skmsg.c
+> +++ b/net/core/skmsg.c
+> @@ -622,16 +622,12 @@ static int sk_psock_handle_skb(struct sk_psock *psock, struct sk_buff *skb,
+>  
+>  static void sk_psock_skb_state(struct sk_psock *psock,
+>  			       struct sk_psock_work_state *state,
+> -			       struct sk_buff *skb,
+>  			       int len, int off)
+>  {
+>  	spin_lock_bh(&psock->ingress_lock);
+>  	if (sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED)) {
+> -		state->skb = skb;
+>  		state->len = len;
+>  		state->off = off;
+> -	} else {
+> -		sock_drop(psock->sk, skb);
+>  	}
+>  	spin_unlock_bh(&psock->ingress_lock);
+>  }
+> @@ -642,23 +638,17 @@ static void sk_psock_backlog(struct work_struct *work)
+>  	struct sk_psock *psock = container_of(dwork, struct sk_psock, work);
+>  	struct sk_psock_work_state *state = &psock->work_state;
+>  	struct sk_buff *skb = NULL;
+> +	u32 len = 0, off = 0;
+>  	bool ingress;
+> -	u32 len, off;
+>  	int ret;
+>  
+>  	mutex_lock(&psock->work_mutex);
+> -	if (unlikely(state->skb)) {
+> -		spin_lock_bh(&psock->ingress_lock);
+> -		skb = state->skb;
+> +	if (unlikely(state->len)) {
+>  		len = state->len;
+>  		off = state->off;
+> -		state->skb = NULL;
+> -		spin_unlock_bh(&psock->ingress_lock);
+>  	}
+> -	if (skb)
+> -		goto start;
+>  
+> -	while ((skb = skb_dequeue(&psock->ingress_skb))) {
+> +	while ((skb = skb_peek(&psock->ingress_skb))) {
+>  		len = skb->len;
+>  		off = 0;
+>  		if (skb_bpf_strparser(skb)) {
+> @@ -667,7 +657,6 @@ static void sk_psock_backlog(struct work_struct *work)
+>  			off = stm->offset;
+>  			len = stm->full_len;
+>  		}
+> -start:
+>  		ingress = skb_bpf_ingress(skb);
+>  		skb_bpf_redirect_clear(skb);
+>  		do {
+> @@ -677,8 +666,7 @@ static void sk_psock_backlog(struct work_struct *work)
+>  							  len, ingress);
+>  			if (ret <= 0) {
+>  				if (ret == -EAGAIN) {
+> -					sk_psock_skb_state(psock, state, skb,
+> -							   len, off);
+> +					sk_psock_skb_state(psock, state, len, off);
+>  
+>  					/* Delay slightly to prioritize any
+>  					 * other work that might be here.
 
-Haven't read the rest. Only commenting on the above...
+I've been staring at this bit and I think it doesn't matter if we update
+psock->work_state when SK_PSOCK_TX_ENABLED has been cleared.
 
-The description of "precision set" combines multiple frames and skips the lower
-which makes it hard to reason.
-I think it should be:
+But what I think we shouldn't be doing here is scheduling
+sk_psock_backlog again if SK_PSOCK_TX_ENABLED got cleared by
+sk_psock_stop.
 
-10: r1 = 123;						fr0: r6
-11: call pc+10;						fr0: r1, r6
-				22: r0 = r1;		fr0: r6; fr1: r1
-				23: exit		fr0: r6; fr1: r0
-12: r1 = <map_pointer>					fr0: r0, r6
-13: r1 += r0;						fr0: r0, r6
-14: r1 += r6;						fr0: r6
-
-Right?
+> @@ -689,15 +677,16 @@ static void sk_psock_backlog(struct work_struct *work)
+>  				/* Hard errors break pipe and stop xmit. */
+>  				sk_psock_report_error(psock, ret ? -ret : EPIPE);
+>  				sk_psock_clear_state(psock, SK_PSOCK_TX_ENABLED);
+> -				sock_drop(psock->sk, skb);
+>  				goto end;
+>  			}
+>  			off += ret;
+>  			len -= ret;
+>  		} while (len);
+>  
+> -		if (!ingress)
+> +		skb = skb_dequeue(&psock->ingress_skb);
+> +		if (!ingress) {
+>  			kfree_skb(skb);
+> +		}
+>  	}
+>  end:
+>  	mutex_unlock(&psock->work_mutex);
