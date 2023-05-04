@@ -1,44 +1,44 @@
-Return-Path: <bpf+bounces-19-bpf=archiver.kernel.org@vger.kernel.org>
+Return-Path: <bpf+bounces-20-bpf=archiver.kernel.org@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50C04C77B78
-	for <bpf@archiver.kernel.org>; Thu,  4 May 2023 20:19:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26B8FC77B78
+	for <bpf@archiver.kernel.org>; Thu,  4 May 2023 20:20:03 +0000 (UTC)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B12091C2126D
-	for <bpf@archiver.kernel.org>; Thu,  4 May 2023 20:19:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9958D1C21581
+	for <bpf@archiver.kernel.org>; Thu,  4 May 2023 20:20:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8D2B19BB7;
-	Thu,  4 May 2023 19:51:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B64219BCF;
+	Thu,  4 May 2023 19:52:10 +0000 (UTC)
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AFEF19BB2
-	for <bpf@vger.kernel.org>; Thu,  4 May 2023 19:51:55 +0000 (UTC)
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18F31891E;
-	Thu,  4 May 2023 12:51:35 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE9719BA8
+	for <bpf@vger.kernel.org>; Thu,  4 May 2023 19:52:10 +0000 (UTC)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB34AD37;
+	Thu,  4 May 2023 12:51:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.source.kernel.org (Postfix) with ESMTPS id 07CFD63789;
-	Thu,  4 May 2023 19:45:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 983A1C433A0;
-	Thu,  4 May 2023 19:45:26 +0000 (UTC)
+	by dfw.source.kernel.org (Postfix) with ESMTPS id 021CE6382A;
+	Thu,  4 May 2023 19:50:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A8FCC433A0;
+	Thu,  4 May 2023 19:50:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1683229527;
-	bh=1B2peXEYSMNCkoc61RSuBI2zOAqfgLGgcQDhB+PqCbw=;
+	s=k20201202; t=1683229816;
+	bh=lOBkcsDzQUuW9Pi45KkisUhzKMdnKzR9v4PV7zWt69I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ZQerGfkJZG3R8mLKJS/I9hVhrjcOekyw+Q8jzVWlB2eqcf30tCLs3AbLd59NQZjDd
-	 OYz/dgYaiGydaIC4QmWrIpzoPHgm6Q1nVp3agdBCCkvZAYN5a0uefZ2inm2tab507G
-	 O4yG2dLNqMtAk0AxJ1lY5mC+39cTJGoRgsIQ68YaILpTUSchpcoCGy9x1J2zQFYo2g
-	 rfnvIXBUmdgPempFqmPJGRbJuDz4s72ydyoWGPlLt/lsf23nvHeVV7tZ96XkH3DC6G
-	 dQ8G1Dp+QEdhXjlJkMQvFWQRiZL4SMUH8wnKbMM0Fe10mUauIGGTAbUXjfFiTzFO15
-	 y68Vd89xNMsuQ==
+	b=uh4Oi4AN3hK3a6ruK3NijplZtWYNhc59Ec3egIyPrYmtIOcVh8waUDNRYEKDi1K3q
+	 TwaPUNX7X+5p/BWrK/8Ua8n4uumexDvlH0ov99qhZ+8G8Y9b6qeO9gSLC8iq+3noAe
+	 fLetfDvcV4kkEfYo+OKEDOL2hH7ONQosuGprqKW84yn1mgZrDVUdjImG5lVuHnfv4G
+	 aRU771N0QD5DHO3Keb8rizAn1hd8JoQQLQoteIf1e1clsiJPjNT+jFnyfkqrMYh3BX
+	 87O0lNC35XW6Q5iedJJkqLCWOTHt91n8kVJb81MTfwWa2nOsw4+AYXZwHZNcEC1glx
+	 bEj3I1DyejcRg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -48,12 +48,12 @@ Cc: Hao Zeng <zenghao@kylinos.cn>,
 	ast@kernel.org,
 	andrii@kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.2 28/53] samples/bpf: Fix fout leak in hbm's run_bpf_prog
-Date: Thu,  4 May 2023 15:43:48 -0400
-Message-Id: <20230504194413.3806354-28-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 16/24] samples/bpf: Fix fout leak in hbm's run_bpf_prog
+Date: Thu,  4 May 2023 15:49:29 -0400
+Message-Id: <20230504194937.3808414-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230504194413.3806354-1-sashal@kernel.org>
-References: <20230504194413.3806354-1-sashal@kernel.org>
+In-Reply-To: <20230504194937.3808414-1-sashal@kernel.org>
+References: <20230504194937.3808414-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -80,10 +80,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/samples/bpf/hbm.c b/samples/bpf/hbm.c
-index 516fbac28b716..7f89700a17b69 100644
+index ff4c533dfac29..8e48489b96ae9 100644
 --- a/samples/bpf/hbm.c
 +++ b/samples/bpf/hbm.c
-@@ -315,6 +315,7 @@ static int run_bpf_prog(char *prog, int cg_id)
+@@ -308,6 +308,7 @@ static int run_bpf_prog(char *prog, int cg_id)
  		fout = fopen(fname, "w");
  		fprintf(fout, "id:%d\n", cg_id);
  		fprintf(fout, "ERROR: Could not lookup queue_stats\n");
