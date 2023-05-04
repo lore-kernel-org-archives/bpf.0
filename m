@@ -2,274 +2,198 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9420C7EE25
-	for <bpf@archiver.kernel.org>; Thu,  4 May 2023 19:04:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D945C7EE29
+	for <bpf@archiver.kernel.org>; Thu,  4 May 2023 19:10:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbjEDTEB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 4 May 2023 15:04:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51286 "EHLO
+        id S229721AbjEDTKm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 4 May 2023 15:10:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbjEDTDU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 4 May 2023 15:03:20 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20769ED1
-        for <bpf@vger.kernel.org>; Thu,  4 May 2023 12:02:40 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50bc25f0c7dso1744603a12.3
-        for <bpf@vger.kernel.org>; Thu, 04 May 2023 12:02:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683226955; x=1685818955;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D1M40+jv/N+PyHIWWv5AM2uJEY4wS/PY6MqmarzFO9Y=;
-        b=DhaonV5E8WMf9HEaRexbMJ1sJ0vtJUphTtZME9z1Bjer3RYxD/f6d/50LiggQEQ1j9
-         Cksq7ZuTe92iWXNUIFT47ao7Gtt87hwFcIGdTmowJHJCzo+btuC1rpGjnCPSmPQ5eImQ
-         QhJVLi19qsXD3TkTuaFPQRYw2lnEt2tLkEiNLi8VBMT5P/ELQVHMcbDVcr/4HtO26p/1
-         cmkVi6xdFeFvLa7NGBLN1o+BhUIPwVRS2/3kikd1FUe2aixMtogFPrUwZIHShbmo++tn
-         2lu5BB0zNVgOZj7MH5yTBcU0vRE+eVIdsWHfK4Y5+kkZs4bSas6XQ+bp/1iN8Q6/p2Bt
-         xcgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683226955; x=1685818955;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D1M40+jv/N+PyHIWWv5AM2uJEY4wS/PY6MqmarzFO9Y=;
-        b=hEgcL+u+gvz7w9w2yhaVfJo2L93+X+CujqzcpNHJThg5jFjNDsqjJGUj6BtU3zfZ9w
-         4h8/g4cOJOYwhqefXfKodB7/n6jNLxsGdmLm6eH/FSSKe+FBImmnj3rVSFln+lUnEqCj
-         LDlKB9MzUoBf6syl4DuI68jW/9Tk5DxP/XwI5zB04cAMcZ5HZwbcMGsllpijLNi4s783
-         Q5yUIdZYV77bfyPjmvogTcS0ljoOOMms01CfBL2ncClDuYN8hdi4BeksOXaDRDt+5xAX
-         w20jl6/owr3oQe/bLqeHjh0ddPCIZ6/v2A9+nCc9W1fYAWlGJbauIuajo2B11czw2ATC
-         Cutg==
-X-Gm-Message-State: AC+VfDwCkeVdX+GDm5NGqkCkoD7IalKjDc3DrdQO3+6LbbYpxyLuxKIR
-        IqS1CbTWl18MG9tLzpr9UY5q3r9agOyFccmB8le88jR7
-X-Google-Smtp-Source: ACHHUZ47BWCT10RuSMFKLIo8v6UGqRLt4ZII2g+2ngh1P52AC8yv/LjVrtJvw8/jEVsmB2cCKbKJxBlBtUVY+LnNXUc=
-X-Received: by 2002:a17:907:960a:b0:94f:3f92:c7b0 with SMTP id
- gb10-20020a170907960a00b0094f3f92c7b0mr7222141ejc.60.1683226953930; Thu, 04
- May 2023 12:02:33 -0700 (PDT)
+        with ESMTP id S230311AbjEDTJo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 4 May 2023 15:09:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C553A26E;
+        Thu,  4 May 2023 12:08:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FECA634F4;
+        Thu,  4 May 2023 19:07:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A30FC433EF;
+        Thu,  4 May 2023 19:07:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683227252;
+        bh=WHS4UOLzsznF3fRKcLws3qoH3ga9wKIXKHJo1Ux7Bfg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bjNnyTKp1n8jUiFOxQ+fWo3LMhDBRDqjblYZTj39OxzgMRZxk9/HzDng3cwqs/4Up
+         FYbe8FP5bq30vEdTkPtklIO2ulSyOv6pucGAno0o31KDojuY3A8nAMmzBog9EXcWXa
+         gPuBuFsi4R4FodQFVOj6A8eE2D+5R1YK8v8F4S10i44fqZnSXwGc/66S8H9ev3hmNQ
+         UJJDAtA+e7qIyHUn6snNAMz9IgSlVEV5aQp9xigZv1f6vRgz8Sy6mJBu3KOtonoLsd
+         ia5eNMHf+34k0b4l3Xy4Z9r3I4ch4VrR8/jrus49jGkIck5Ze1Vp1fiVhlTagQ8+GE
+         PwP3g2fHmIkVw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 5FCB2403B5; Thu,  4 May 2023 16:07:29 -0300 (-03)
+Date:   Thu, 4 May 2023 16:07:29 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Song Liu <song@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Changbin Du <changbin.du@huawei.com>,
+        Hao Luo <haoluo@google.com>, Ian Rogers <irogers@google.com>,
+        James Clark <james.clark@arm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Roman Lozko <lozko.roma@gmail.com>,
+        Stephane Eranian <eranian@google.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        bpf <bpf@vger.kernel.org>
+Subject: Re: BPF skels in perf .Re: [GIT PULL] perf tools changes for v6.4
+Message-ID: <ZFQCccsx6GK+gY0j@kernel.org>
+References: <20230503211801.897735-1-acme@kernel.org>
+ <CAHk-=wjY_3cBELRSLMpqCt6Eb71Qei2agfKSNsrr5KcpdEQCaA@mail.gmail.com>
+ <CAHk-=wgci+OTRacQZcvvapRcWkoiTFJ=VTe_JYtabGgZ9refmg@mail.gmail.com>
+ <ZFOSUab5XEJD0kxj@kernel.org>
+ <CAHk-=wgv1sKTdLWPC7XR1Px=pDNrDPDTKdX-T_2AQOwgkpWB2A@mail.gmail.com>
+ <ZFPw0scDq1eIzfHr@kernel.org>
+ <CAEf4BzaUU9vZU6R_020ru5ct0wh-p1M3ZFet-vYqcHvb9bW1Cw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230425234911.2113352-1-andrii@kernel.org> <20230425234911.2113352-4-andrii@kernel.org>
- <20230504025309.actotyekpawodfar@dhcp-172-26-102-232.dhcp.thefacebook.com>
-In-Reply-To: <20230504025309.actotyekpawodfar@dhcp-172-26-102-232.dhcp.thefacebook.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 4 May 2023 12:02:22 -0700
-Message-ID: <CAEf4BzZ7jbEQ6MSdthOe=bj1eptCft3spJ_KucERi7jGxuSqzw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 03/10] bpf: encapsulate precision backtracking bookkeeping
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, martin.lau@kernel.org,
-        kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzaUU9vZU6R_020ru5ct0wh-p1M3ZFet-vYqcHvb9bW1Cw@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, May 3, 2023 at 7:53=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> Few early comments so far...
->
-> On Tue, Apr 25, 2023 at 04:49:04PM -0700, Andrii Nakryiko wrote:
-> > Add struct backtrack_state and straightforward API around it to keep
-> > track of register and stack masks used and maintained during precision
-> > backtracking process. Having this logic separately allow to keep
-> > high-level backtracking algorithm cleaner, but also it sets us up to
-> > cleanly keep track of register and stack masks per frame, allowing (wit=
-h
-> > some further logic adjustments) to perform precision backpropagation
-> > across multiple frames (i.e., subprog calls).
-> >
-> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> > ---
-> >  include/linux/bpf_verifier.h |  15 ++
-> >  kernel/bpf/verifier.c        | 258 ++++++++++++++++++++++++++---------
-> >  2 files changed, 206 insertions(+), 67 deletions(-)
-> >
-> > diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.=
-h
-> > index 3dd29a53b711..185bfaf0ec6b 100644
-> > --- a/include/linux/bpf_verifier.h
-> > +++ b/include/linux/bpf_verifier.h
-> > @@ -238,6 +238,10 @@ enum bpf_stack_slot_type {
-> >
-> >  #define BPF_REG_SIZE 8       /* size of eBPF register in bytes */
-> >
-> > +#define BPF_REGMASK_ARGS ((1 << BPF_REG_1) | (1 << BPF_REG_2) | \
-> > +                       (1 << BPF_REG_3) | (1 << BPF_REG_4) | \
-> > +                       (1 << BPF_REG_5))
-> > +
-> >  #define BPF_DYNPTR_SIZE              sizeof(struct bpf_dynptr_kern)
-> >  #define BPF_DYNPTR_NR_SLOTS          (BPF_DYNPTR_SIZE / BPF_REG_SIZE)
-> >
-> > @@ -541,6 +545,16 @@ struct bpf_subprog_info {
-> >       bool is_async_cb;
-> >  };
-> >
-> > +struct bpf_verifier_env;
-> > +
-> > +struct backtrack_state {
-> > +     struct bpf_verifier_env *env;
-> > +     u32 frame;
-> > +     u32 bitcnt;
-> > +     u32 reg_masks[MAX_CALL_FRAMES];
-> > +     u64 stack_masks[MAX_CALL_FRAMES];
-> > +};
-> > +
-> >  /* single container for all structs
-> >   * one verifier_env per bpf_check() call
-> >   */
-> > @@ -578,6 +592,7 @@ struct bpf_verifier_env {
-> >               int *insn_stack;
-> >               int cur_stack;
-> >       } cfg;
-> > +     struct backtrack_state bt;
-> >       u32 pass_cnt; /* number of times do_check() was called */
-> >       u32 subprog_cnt;
-> >       /* number of instructions analyzed by the verifier */
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index fea6fe4acba2..1cb89fe00507 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -1254,6 +1254,12 @@ static bool is_spilled_reg(const struct bpf_stac=
-k_state *stack)
-> >       return stack->slot_type[BPF_REG_SIZE - 1] =3D=3D STACK_SPILL;
-> >  }
-> >
-> > +static bool is_spilled_scalar_reg(const struct bpf_stack_state *stack)
-> > +{
-> > +     return stack->slot_type[BPF_REG_SIZE - 1] =3D=3D STACK_SPILL &&
-> > +            stack->spilled_ptr.type =3D=3D SCALAR_VALUE;
-> > +}
-> > +
-> >  static void scrub_spilled_slot(u8 *stype)
-> >  {
-> >       if (*stype !=3D STACK_INVALID)
-> > @@ -3144,12 +3150,137 @@ static const char *disasm_kfunc_name(void *dat=
-a, const struct bpf_insn *insn)
-> >       return btf_name_by_offset(desc_btf, func->name_off);
-> >  }
-> >
-> > +static inline void bt_init(struct backtrack_state *bt, u32 frame)
-> > +{
-> > +     bt->frame =3D frame;
-> > +}
-> > +
-> > +static inline void bt_reset(struct backtrack_state *bt)
-> > +{
-> > +     struct bpf_verifier_env *env =3D bt->env;
-> > +     memset(bt, 0, sizeof(*bt));
-> > +     bt->env =3D env;
-> > +}
-> > +
-> > +static inline u32 bt_bitcnt(struct backtrack_state *bt)
-> > +{
-> > +     return bt->bitcnt;
-> > +}
->
-> I could have missed it, but it doesn't look that any further patch uses
-> the actual number of bits set.
-> All uses are: if (bt_bitcnt(bt) !=3D 0)
->
-> Hence keeping bitcnt as extra 4 bytes and doing ++, -- on it
-> seems wasteful.
-> Maybe rename bt_bitcnt into bt_empty or bt_non_empty that
-> will do !!bt->reg_masks[bt->frame] | !!bt->stack_masks[bt->frame]
+Em Thu, May 04, 2023 at 11:50:07AM -0700, Andrii Nakryiko escreveu:
+> On Thu, May 4, 2023 at 10:52 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> > Andrii, can you add some more information about the usage of vmlinux.h
+> > instead of using kernel headers?
+ 
+> I'll just say that vmlinux.h is not a hard requirement to build BPF
+> programs, it's more a convenience allowing easy access to definitions
+> of both UAPI and kernel-internal structures for tracing needs and
+> marking them relocatable using BPF CO-RE machinery. Lots of real-world
+> applications just check-in pregenerated vmlinux.h to avoid build-time
+> dependency on up-to-date host kernel and such.
+ 
+> If vmlinux.h generation and usage is causing issues, though, given
+> that perf's BPF programs don't seem to be using many different kernel
+> types, it might be a better option to just use UAPI headers for public
+> kernel type definitions, and just define CO-RE-relocatable minimal
+> definitions locally in perf's BPF code for the other types necessary.
+> E.g., if perf needs only pid and tgid from task_struct, this would
+> suffice:
+ 
+> struct task_struct {
+>     int pid;
+>     int tgid;
+> } __attribute__((preserve_access_index));
 
-Yes, number of bits doesn't matter, it's whether there are any or not.
-So I'll rename.
+Yeah, that seems like a way better approach, no vmlinux involved, libbpf
+CO-RE notices that task_struct changed from this two integers version
+(of course) and does the relocation to where it is in the running kernel
+by using /sys/kernel/btf/vmlinux.
 
-As for the counter. I did it to avoid going over all MAX_CALL_FRAMES
-frames to calculate the final mask. So it was a choice of maintaining
-count proactively, or doing a loop each time we need to know if there
-are any bits set:
+I looked and the creation of vmlinux.h was introduced in:
 
-u64 mask =3D 0;
+commit 944138f048f7d7591ec7568c94b21de8df2724d4
+Author: Namhyung Kim <namhyung@kernel.org>
+Date:   Thu Jul 1 14:12:27 2021 -0700
 
-for (i =3D 0; i <=3D bt->frame; i++)
-    mask |=3D bt->reg_masks[i] | bt->stack_masks[i];
+    perf stat: Enable BPF counter with --for-each-cgroup
 
-return mask !=3D 0;
+    Recently bperf was added to use BPF to count perf events for various
+    purposes.  This is an extension for the approach and targetting to
+    cgroup usages.
 
+    Unlike the other bperf, it doesn't share the events with other
+    processes but it'd reduces unnecessary events (and the overhead of
+    multiplexing) for each monitored cgroup within the perf session.
 
-I don't think this one is very expensive either, so I can just switch
-to this, if you prefer that. That will eliminate all the ifs, of
-course.
+    When --for-each-cgroup is used with --bpf-counters, it will open
+    cgroup-switches event per cpu internally and attach the new BPF
+    program to read given perf_events and to aggregate the results for
+    cgroups.  It's only called when task is switched to a task in a
+    different cgroup.
 
+    Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+    Acked-by: Song Liu <songliubraving@fb.com>
+    Cc: Andi Kleen <ak@linux.intel.com>
+    Cc: Ian Rogers <irogers@google.com>
+    Cc: Jiri Olsa <jolsa@redhat.com>
+    Cc: Peter Zijlstra <peterz@infradead.org>
+    Cc: Stephane Eranian <eranian@google.com>
+    Link: http://lore.kernel.org/lkml/20210701211227.1403788-1-namhyung@kernel.org
+    Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 
->
->
-> > +static inline int bt_subprog_enter(struct backtrack_state *bt)
-> > +{
-> > +     if (bt->frame =3D=3D MAX_CALL_FRAMES - 1) {
-> > +             verbose(bt->env, "BUG subprog enter from frame %d\n", bt-=
->frame);
-> > +             WARN_ONCE(1, "verifier backtracking bug");
-> > +             return -EFAULT;
-> > +     }
-> > +     bt->frame++;
-> > +     return 0;
-> > +}
-> > +
-> > +static inline int bt_subprog_exit(struct backtrack_state *bt)
-> > +{
-> > +     if (bt->frame =3D=3D 0) {
-> > +             verbose(bt->env, "BUG subprog exit from frame 0\n");
-> > +             WARN_ONCE(1, "verifier backtracking bug");
-> > +             return -EFAULT;
-> > +     }
-> > +     bt->frame--;
-> > +     return 0;
-> > +}
-> > +
-> > +static inline void bt_set_frame_reg(struct backtrack_state *bt, u32 fr=
-ame, u32 reg)
-> > +{
-> > +     if (bt->reg_masks[frame] & (1 << reg))
-> > +             return;
-> > +
-> > +     bt->reg_masks[frame] |=3D 1 << reg;
-> > +     bt->bitcnt++;
-> > +}
->
-> It doesnt' look that any further patch is using bt_set_frame_reg with exp=
-licit frame.
-> If not, collapse bt_set_frame_reg and bt_set_reg ?
+Which I think was the first BPF skel to access a kernel data structure,
+yeah:
 
-We do later on, in patch #8, e.g., to propagate r1-r5 bits from
-subprog back to caller.
+tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
 
->
-> > +
-> > +static inline void bt_clear_frame_reg(struct backtrack_state *bt, u32 =
-frame, u32 reg)
-> > +{
-> > +     if (!(bt->reg_masks[frame] & (1 << reg)))
-> > +             return;
-> > +
-> > +     bt->reg_masks[frame] &=3D ~(1 << reg);
-> > +     bt->bitcnt--;
-> > +}
->
-> If we remove ++,-- of bitcnt this function will be much shorter and faste=
-r:
-> +static inline void bt_clear_frame_reg(struct backtrack_state *bt, u32 fr=
-ame, u32 reg)
-> +{
-> +       bt->reg_masks[frame] &=3D ~(1 << reg);
-> +}
->
-> Removing runtime conditional has a nice perf benefit. Obviously tiny in a=
- grand scheme, but still.
->
+For things like:
 
-Yep, see above. I did it to avoid doing a loop over up to 8 frame
-levels to OR all reg_masks and stack_masks. Maybe a wrong tradeoff and
-it's best to do one small loop when we need to check if there are any
-bits left to clear?
++static inline int get_cgroup_v1_idx(__u32 *cgrps, int size)
++{
++       struct task_struct *p = (void *)bpf_get_current_task();
++       struct cgroup *cgrp;
++       register int i = 0;
++       __u32 *elem;
++       int level;
++       int cnt;
++
++       cgrp = BPF_CORE_READ(p, cgroups, subsys[perf_event_cgrp_id], cgroup);
++       level = BPF_CORE_READ(cgrp, level);
 
-> Overall it's a nice cleanup.
+So we can completely remove touching vmlinux from the perf building
+process.
 
-Thanks!
+If we can get the revert of the patches making BPF skels to build by
+default for v6.4 then we would do this work, test it thorougly and have
+it available for v6.5.
 
+Linus, would that be a way forward?
 
-will fix missing empty line you mentioned in another reply
+- Arnaldo
+
+For reference, here is the definition for BPF_CORE_READ() from tools/lib/bpf/bpf_core_read.h
+
+/*
+ * BPF_CORE_READ() is used to simplify BPF CO-RE relocatable read, especially
+ * when there are few pointer chasing steps.
+ * E.g., what in non-BPF world (or in BPF w/ BCC) would be something like:
+ *      int x = s->a.b.c->d.e->f->g;
+ * can be succinctly achieved using BPF_CORE_READ as:
+ *      int x = BPF_CORE_READ(s, a.b.c, d.e, f, g);
+ *
+ * BPF_CORE_READ will decompose above statement into 4 bpf_core_read (BPF
+ * CO-RE relocatable bpf_probe_read_kernel() wrapper) calls, logically
+ * equivalent to:
+ * 1. const void *__t = s->a.b.c;
+ * 2. __t = __t->d.e;
+ * 3. __t = __t->f;
+ * 4. return __t->g;
+ *
+ * Equivalence is logical, because there is a heavy type casting/preservation
+ * involved, as well as all the reads are happening through
+ * bpf_probe_read_kernel() calls using __builtin_preserve_access_index() to
+ * emit CO-RE relocations.
+ *
+ * N.B. Only up to 9 "field accessors" are supported, which should be more
+ * than enough for any practical purpose.
+ */
+#define BPF_CORE_READ(src, a, ...) ({                                       \
+        ___type((src), a, ##__VA_ARGS__) __r;                               \
+        BPF_CORE_READ_INTO(&__r, (src), a, ##__VA_ARGS__);                  \
+        __r;                                                                \
+})
