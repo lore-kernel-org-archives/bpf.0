@@ -1,61 +1,56 @@
-Return-Path: <bpf+bounces-4-bpf=archiver.kernel.org@vger.kernel.org>
+Return-Path: <bpf+bounces-5-bpf=archiver.kernel.org@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FFD5C7EE21
-	for <bpf@archiver.kernel.org>; Thu,  4 May 2023 19:46:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A16AC7EE25
+	for <bpf@archiver.kernel.org>; Thu,  4 May 2023 19:48:26 +0000 (UTC)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A720280E63
-	for <bpf@archiver.kernel.org>; Thu,  4 May 2023 19:46:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0BD51C213B0
+	for <bpf@archiver.kernel.org>; Thu,  4 May 2023 19:48:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A140BE7C;
-	Thu,  4 May 2023 19:42:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45EF2F4FC;
+	Thu,  4 May 2023 19:43:33 +0000 (UTC)
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 283B8C12A
-	for <bpf@vger.kernel.org>; Thu,  4 May 2023 19:42:43 +0000 (UTC)
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF5A93FC;
-	Thu,  4 May 2023 12:42:21 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED962C135
+	for <bpf@vger.kernel.org>; Thu,  4 May 2023 19:43:32 +0000 (UTC)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829C39EE4;
+	Thu,  4 May 2023 12:43:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.source.kernel.org (Postfix) with ESMTPS id 18761636FD;
-	Thu,  4 May 2023 19:42:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 359AAC433EF;
-	Thu,  4 May 2023 19:42:12 +0000 (UTC)
+	by dfw.source.kernel.org (Postfix) with ESMTPS id 5664463718;
+	Thu,  4 May 2023 19:43:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0028BC433A1;
+	Thu,  4 May 2023 19:43:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1683229333;
-	bh=yGdU6LmRneX8nmQX8uyT5+6jzBckt9pX6pzjCTeRi0Y=;
+	s=k20201202; t=1683229386;
+	bh=1B2peXEYSMNCkoc61RSuBI2zOAqfgLGgcQDhB+PqCbw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=up5Bk7EF5nRxMm1nEmcOJjDb/HdVhTu9QezQ1272GuQVm+Ha44TZxMMozvP1LgQ3Q
-	 siwMYouvP42rXuzFx4ukC9tODIu0ADWkG2gK3v2sXt7Xyr5ukoX/J2rpC5JyoZWAT5
-	 OHV9JAhS6n7Pdes1LbctROp3BHzGNw+A5SICvIJFxET22gfuB8jLN50hwZ60lVX8Kk
-	 Z90ZUanyA0vWgdYIW4/ib775kfsTgTKIBRrNlNlsIurjTS+ilv9ghkby6VJLodYLRf
-	 Z0h1iHcRkR6/opv+i+/9+7ntOfrSj9y3twLPnjBKgzKCV9XjH6hf1EaBYCXMjtzkp/
-	 YsK2LxxOigbkQ==
+	b=B+LeFGsCTvUBocHy3PM7y7nu91m7cbfU5nGBrM34Yh0tMu0ZCmQ9euJEy0SR2lLPp
+	 SmZXYRT9uy16/6AF2MnASqpxXSJoWkH2aQ/G1IjTpF7/mHkzwlQ4uzv0xxJWT/evbb
+	 YHHSRxpgexgb8db1dBZUAOANK0YQDO60PBc93kWHVYEJ+Q7GoxtOkJ7lb0OLVpmkvb
+	 6EeLuQ4ftJmSArdsZhb2v55LeormIGrlKOdeUcu3+Ym04o/cg1lVIMHTR7cJewuYPp
+	 jKT+VdD9IzaJDpVC8ky0lZWMSauF45LsLwccc+hG3TU7ad5P0fN4ycZF8z/pgkzkYO
+	 u55l/C6vnFbxw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>,
+Cc: Hao Zeng <zenghao@kylinos.cn>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	=?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
-	Johan Almbladh <johan.almbladh@anyfinetworks.com>,
 	Sasha Levin <sashal@kernel.org>,
-	tsbogend@alpha.franken.de,
 	ast@kernel.org,
 	andrii@kernel.org,
-	paulburton@kernel.org,
-	linux-mips@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 08/59] bpf, mips: Implement DADDI workarounds for JIT
-Date: Thu,  4 May 2023 15:40:51 -0400
-Message-Id: <20230504194142.3805425-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.3 31/59] samples/bpf: Fix fout leak in hbm's run_bpf_prog
+Date: Thu,  4 May 2023 15:41:14 -0400
+Message-Id: <20230504194142.3805425-31-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194142.3805425-1-sashal@kernel.org>
 References: <20230504194142.3805425-1-sashal@kernel.org>
@@ -65,61 +60,37 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+From: Hao Zeng <zenghao@kylinos.cn>
 
-[ Upstream commit bbefef2f07080cd502a93cb1c529e1c8a6c4ac8e ]
+[ Upstream commit 23acb14af1914010dd0aae1bbb7fab28bf518b8e ]
 
-For DADDI errata we just workaround by disable immediate operation
-for BPF_ADD / BPF_SUB to avoid generation of DADDIU.
+Fix fout being fopen'ed but then not subsequently fclose'd. In the affected
+branch, fout is otherwise going out of scope.
 
-All other use cases in JIT won't cause overflow thus they are all safe.
-
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Signed-off-by: Hao Zeng <zenghao@kylinos.cn>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
-Acked-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Link: https://lore.kernel.org/bpf/20230228113305.83751-2-jiaxun.yang@flygoat.com
+Link: https://lore.kernel.org/bpf/20230411084349.1999628-1-zenghao@kylinos.cn
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/Kconfig            | 1 -
- arch/mips/net/bpf_jit_comp.c | 4 ++++
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ samples/bpf/hbm.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index e2f3ca73f40d6..edc7d8790f1e8 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -64,7 +64,6 @@ config MIPS
- 	select HAVE_DMA_CONTIGUOUS
- 	select HAVE_DYNAMIC_FTRACE
- 	select HAVE_EBPF_JIT if !CPU_MICROMIPS && \
--				!CPU_DADDI_WORKAROUNDS && \
- 				!CPU_R4000_WORKAROUNDS && \
- 				!CPU_R4400_WORKAROUNDS
- 	select HAVE_EXIT_THREAD
-diff --git a/arch/mips/net/bpf_jit_comp.c b/arch/mips/net/bpf_jit_comp.c
-index b17130d510d49..a40d926b65139 100644
---- a/arch/mips/net/bpf_jit_comp.c
-+++ b/arch/mips/net/bpf_jit_comp.c
-@@ -218,9 +218,13 @@ bool valid_alu_i(u8 op, s32 imm)
- 		/* All legal eBPF values are valid */
- 		return true;
- 	case BPF_ADD:
-+		if (IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS))
-+			return false;
- 		/* imm must be 16 bits */
- 		return imm >= -0x8000 && imm <= 0x7fff;
- 	case BPF_SUB:
-+		if (IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS))
-+			return false;
- 		/* -imm must be 16 bits */
- 		return imm >= -0x7fff && imm <= 0x8000;
- 	case BPF_AND:
+diff --git a/samples/bpf/hbm.c b/samples/bpf/hbm.c
+index 516fbac28b716..7f89700a17b69 100644
+--- a/samples/bpf/hbm.c
++++ b/samples/bpf/hbm.c
+@@ -315,6 +315,7 @@ static int run_bpf_prog(char *prog, int cg_id)
+ 		fout = fopen(fname, "w");
+ 		fprintf(fout, "id:%d\n", cg_id);
+ 		fprintf(fout, "ERROR: Could not lookup queue_stats\n");
++		fclose(fout);
+ 	} else if (stats_flag && qstats.lastPacketTime >
+ 		   qstats.firstPacketTime) {
+ 		long long delta_us = (qstats.lastPacketTime -
 -- 
 2.39.2
 
