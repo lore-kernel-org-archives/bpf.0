@@ -2,94 +2,116 @@ Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45B83C77B7C
-	for <bpf@archiver.kernel.org>; Thu,  4 May 2023 03:55:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 927F8C77B78
+	for <bpf@archiver.kernel.org>; Thu,  4 May 2023 05:34:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjEDDzL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 May 2023 23:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57140 "EHLO
+        id S229564AbjEDFd7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 4 May 2023 01:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjEDDzD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 May 2023 23:55:03 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0BD1FFE
-        for <bpf@vger.kernel.org>; Wed,  3 May 2023 20:54:58 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-51f64817809so743576a12.1
-        for <bpf@vger.kernel.org>; Wed, 03 May 2023 20:54:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683172498; x=1685764498;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Emd2dl1W0iOyWnHWAOzqJ17+WsdlXOxm8TtWVtyd1lI=;
-        b=WguiP0zly07Ko7bkjlrdq6npOk1u1maU2nwH+60W1F8fL/Q+hEZOIyYhm8QcNFaiAe
-         xNw1WcRgCediNO+YZV+I0q2T+YA+2oK/+8cO82IdjC1rl6OFpACTdXZFsESDe0Yzq/tz
-         sV/dHVzC4BUjsSAdeN4I3/pzFsxlo04BbTl0DqiEX7ZAUv98DxX6ygdQgyOpA+fqdAk0
-         EjQ5dBMo+IjuYjma+0M/MZp7OqUcjQfSfcNG3mK0kFLS5pYcXWli3qkXUVlXahz3UexO
-         QC/ALVc3XH6mW7OlH71CTSaasGY695Aj7EAtNG5WGThwnKOoSn2iFtTWOFHnXLB8CG99
-         Y2cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683172498; x=1685764498;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Emd2dl1W0iOyWnHWAOzqJ17+WsdlXOxm8TtWVtyd1lI=;
-        b=YNkCdhvYl24hfKSqXHu8GBYRV9UgeD45qhRoinBJ9os+MQmp9t5PmYeFHH2if3crnS
-         BMG1JqZf+VmA7C6FboYWeUik+ZFWtaVv+JhSLeBOGYoKXt+nV6tHEiCd5tkr9e8805w4
-         5UmRhD61vk/GlYV85X9K8aKapy3jepp0r7bcid8M/VFvldVuHiqKkB4Y03UHnC/bK6d+
-         PqPHH3a3ytPw1EiuZfFf8VVqCRO/MMeSxS/C7xt6WGCxyLAQauUApH0tkyfWkxph6Lm9
-         tg1Ix0SRhetscoYT8KHjJwJj+IjdTNi8SZQ5waSP1+8aIIYD6qcdX39ra38KUm1ds8dT
-         7RqQ==
-X-Gm-Message-State: AC+VfDwQZY6KWqCcZD3MCnFGpx09xHqMkNRuilIJPcZ2POK9bwla5c3f
-        6iP5XQcKbP9NB/awIOwVdV0=
-X-Google-Smtp-Source: ACHHUZ5/zgITduTmoGJOT7dL562XXnd46C1F1/uW4WJgHCCrTEM8sB8CvipTklGIZ7slSmHnb2zMXw==
-X-Received: by 2002:a05:6a00:2e0f:b0:63b:4978:a50a with SMTP id fc15-20020a056a002e0f00b0063b4978a50amr10459727pfb.1.1683172497763;
-        Wed, 03 May 2023 20:54:57 -0700 (PDT)
-Received: from localhost.localdomain ([202.12.244.21])
-        by smtp.gmail.com with ESMTPSA id v6-20020aa78506000000b0063d238b1e4bsm3785867pfn.160.2023.05.03.20.54.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 20:54:57 -0700 (PDT)
-From:   Kenjiro Nakayama <nakayamakenjiro@gmail.com>
-To:     andrii@kernel.org
-Cc:     bpf@vger.kernel.org, Kenjiro Nakayama <nakayamakenjiro@gmail.com>
-Subject: [PATCH v2 bpf-next] libbpf: Fix comment about arc and riscv arch in bpf_tracing.h
-Date:   Thu,  4 May 2023 12:54:43 +0900
-Message-Id: <20230504035443.427927-1-nakayamakenjiro@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        with ESMTP id S229514AbjEDFd7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 4 May 2023 01:33:59 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9951B1BEB
+        for <bpf@vger.kernel.org>; Wed,  3 May 2023 22:33:57 -0700 (PDT)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3440qRFG023172
+        for <bpf@vger.kernel.org>; Wed, 3 May 2023 22:33:56 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=TabE7jwAh6oZYRmGnSUkJ6+20VLHXm/JpOuJLqf7+wE=;
+ b=K3gPGid3pgkzome5qKSQt7q7v0yCWQxVnLT34+D9IA22gBe+INobWTAuaPjqcUtlmidH
+ Lnw+DkgGpTSdoE0FwpWAR/1tfFjCZn8qJLFtwxAa1+/Gr24dPz5XVZl8K+ACW9Qn++91
+ Kyctwn0krDsS6Nt0tbOtp0gq66dBxq3ttQc= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qbhx28a31-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 03 May 2023 22:33:56 -0700
+Received: from twshared4902.04.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 3 May 2023 22:33:55 -0700
+Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
+        id 6CBA91D7BFC5B; Wed,  3 May 2023 22:33:47 -0700 (PDT)
+From:   Dave Marchevsky <davemarchevsky@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        Kernel Team <kernel-team@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>
+Subject: [PATCH v1 bpf-next 3/9] bpf: Fix __bpf_{list,rbtree}_add's beginning-of-node calculation
+Date:   Wed, 3 May 2023 22:33:32 -0700
+Message-ID: <20230504053338.1778690-4-davemarchevsky@fb.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230504053338.1778690-1-davemarchevsky@fb.com>
+References: <20230504053338.1778690-1-davemarchevsky@fb.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: FDJri5Z8EkUiWEqeRkred-cgVCMbiU-7
+X-Proofpoint-GUID: FDJri5Z8EkUiWEqeRkred-cgVCMbiU-7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-04_02,2023-05-03_01,2023-02-09_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To make comments about arc and riscv arch in bpf_tracing.h accurate,
-this patch fixes the comment about arc and adds the comment for riscv.
+Given the pointer to struct bpf_{rb,list}_node within a local kptr and
+the byte offset of that field within the kptr struct, the calculation cha=
+nged
+by this patch is meant to find the beginning of the kptr so that it can
+be passed to bpf_obj_drop.
 
-Signed-off-by: Kenjiro Nakayama <nakayamakenjiro@gmail.com>
+Unfortunately instead of doing
+
+  ptr_to_kptr =3D ptr_to_node_field - offset_bytes
+
+the calculation is erroneously doing
+
+  ptr_to_ktpr =3D ptr_to_node_field - (offset_bytes * sizeof(struct bpf_r=
+b_node))
+
+or the bpf_list_node equivalent.
+
+This patch fixes the calculation.
+
+Fixes: d2dcc67df910 ("bpf: Migrate bpf_rbtree_add and bpf_list_push_{fron=
+t,back} to possibly fail")
+Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
 ---
- tools/lib/bpf/bpf_tracing.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ kernel/bpf/helpers.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
-index 6fb3d0f9af17..be076a4041ab 100644
---- a/tools/lib/bpf/bpf_tracing.h
-+++ b/tools/lib/bpf/bpf_tracing.h
-@@ -351,6 +351,7 @@ struct pt_regs___arm64 {
-  * https://github.com/riscv-non-isa/riscv-elf-psabi-doc/blob/master/riscv-cc.adoc#risc-v-calling-conventions
-  */
- 
-+/* riscv provides struct user_regs_struct instead of struct pt_regs to userspace */
- #define __PT_REGS_CAST(x) ((const struct user_regs_struct *)(x))
- #define __PT_PARM1_REG a0
- #define __PT_PARM2_REG a1
-@@ -383,7 +384,7 @@ struct pt_regs___arm64 {
-  * https://raw.githubusercontent.com/wiki/foss-for-synopsys-dwc-arc-processors/toolchain/files/ARCv2_ABI.pdf
-  */
- 
--/* arc provides struct user_pt_regs instead of struct pt_regs to userspace */
-+/* arc provides struct user_regs_struct instead of struct pt_regs to userspace */
- #define __PT_REGS_CAST(x) ((const struct user_regs_struct *)(x))
- #define __PT_PARM1_REG scratch.r0
- #define __PT_PARM2_REG scratch.r1
--- 
-2.40.1
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index bb6b4637ebf2..7a8968839e91 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1950,7 +1950,7 @@ static int __bpf_list_add(struct bpf_list_node *nod=
+e, struct bpf_list_head *head
+ 		INIT_LIST_HEAD(h);
+ 	if (!list_empty(n)) {
+ 		/* Only called from BPF prog, no need to migrate_disable */
+-		__bpf_obj_drop_impl(n - off, rec);
++		__bpf_obj_drop_impl((void *)n - off, rec);
+ 		return -EINVAL;
+ 	}
+=20
+@@ -2032,7 +2032,7 @@ static int __bpf_rbtree_add(struct bpf_rb_root *roo=
+t, struct bpf_rb_node *node,
+=20
+ 	if (!RB_EMPTY_NODE(n)) {
+ 		/* Only called from BPF prog, no need to migrate_disable */
+-		__bpf_obj_drop_impl(n - off, rec);
++		__bpf_obj_drop_impl((void *)n - off, rec);
+ 		return -EINVAL;
+ 	}
+=20
+--=20
+2.34.1
 
