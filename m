@@ -1,210 +1,148 @@
-Return-Path: <bpf+bounces-2-bpf=archiver.kernel.org@vger.kernel.org>
+Return-Path: <bpf+bounces-3-bpf=archiver.kernel.org@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F023C7EE22
-	for <bpf@archiver.kernel.org>; Thu,  4 May 2023 19:41:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04E6EC7EE22
+	for <bpf@archiver.kernel.org>; Thu,  4 May 2023 19:42:59 +0000 (UTC)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1D81280DEF
-	for <bpf@archiver.kernel.org>; Thu,  4 May 2023 19:41:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2A3D280DE3
+	for <bpf@archiver.kernel.org>; Thu,  4 May 2023 19:42:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F93EEEDB;
-	Thu,  4 May 2023 19:41:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85035EEB1;
+	Thu,  4 May 2023 19:41:54 +0000 (UTC)
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C849FBA4C
-	for <bpf@vger.kernel.org>; Thu,  4 May 2023 19:41:03 +0000 (UTC)
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D1761AF
-	for <bpf@vger.kernel.org>; Thu,  4 May 2023 12:41:02 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64384c6797eso876453b3a.2
-        for <bpf@vger.kernel.org>; Thu, 04 May 2023 12:41:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683229261; x=1685821261;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rq2RV1DzKBKdGYy/LSNXIFoXYQ4nmoz2wuSUSfZtxZU=;
-        b=RPIZyNTc4syZo/ozH+PPG5iQf5PIAA0UW/TMGOFVXh9f6avdG6TAaUNhgW1Sks1uzp
-         eWryRd31l2OytfF9qchWkyJpNq16YbJ+W/sLrl8XKFvv2B6RIURazZmRIBCd4kkXuSt/
-         8RG4FNHFO7Moq5WVCtujUCUcdp/SrY51aOemw2+W63Omc7wQB3o/4oFSQr/keYaAU6Vm
-         NV/O0nKTEgx8ym0rFW0RFJzyntdFIbkWo+dUNEusCmJC960i5WmG7wfgZNr6R71cTN4/
-         8wxMVMMv4R2rxTlUYE0cvxbIyw6zcvAWgk0MjT/t4ETB0uimCVAR9p3soY1qkgkIhzSH
-         QLrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683229261; x=1685821261;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Rq2RV1DzKBKdGYy/LSNXIFoXYQ4nmoz2wuSUSfZtxZU=;
-        b=dT+TXIxSiUv0jthpc5k6n08njiHiUmcncXSVeUtJBgosU0QohBMSAJ9Eb/ndEjiyf/
-         HZM1rSdjK73VBGyq44iLLR3v0EvP4q8VgPBAeyDdJ0vFlz6a4/qW/Hr0oQW45eOvEP5/
-         vfnTIqTsfywNtO0bDY78WUJFVuLQl82cpltfBOTbje8yWUmq6qMxCi1JQpnKEvRu3sqf
-         RiskRJt9BeVkG/JiOGC4OM0w2mEBTsEvvHUQc1uW8NlU7+Gc6j9vX27ASmHLYGwXc/N4
-         r6yf0PpaHP8rHrXMeHUAyocvYbsiokUcUrxHFZXBbHhcThf9En6b1Q+7u0JLk9cLujvx
-         vb4A==
-X-Gm-Message-State: AC+VfDzKt4L850N3jrqMwOOhpX/fgwXtQBejXS/b+sATBHJR8qEmTXKa
-	R4Cqy4skNSkgt/gMHX4qfdU=
-X-Google-Smtp-Source: ACHHUZ7OIG+mbH8V4Ek0zS7HBI1qBLETqcM94br2VYvN5d2ZR3XoHJDkqdzC35JI05tQtfaBVCk0PA==
-X-Received: by 2002:a05:6a00:99d:b0:643:64fb:3b6a with SMTP id u29-20020a056a00099d00b0064364fb3b6amr4098456pfg.13.1683229261216;
-        Thu, 04 May 2023 12:41:01 -0700 (PDT)
-Received: from MacBook-Pro-6.local ([2620:10d:c090:500::6:168f])
-        by smtp.gmail.com with ESMTPSA id a7-20020aa78647000000b005a8bf239f5csm46013pfo.193.2023.05.04.12.40.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 12:41:00 -0700 (PDT)
-Date: Thu, 4 May 2023 12:40:58 -0700
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	martin.lau@kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH bpf-next 08/10] bpf: support precision propagation in the
- presence of subprogs
-Message-ID: <20230504194058.uhnyup7xang5mq5i@MacBook-Pro-6.local>
-References: <20230425234911.2113352-1-andrii@kernel.org>
- <20230425234911.2113352-9-andrii@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DA20F4EF
+	for <bpf@vger.kernel.org>; Thu,  4 May 2023 19:41:54 +0000 (UTC)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B3786A6;
+	Thu,  4 May 2023 12:41:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by dfw.source.kernel.org (Postfix) with ESMTPS id 5185F6346C;
+	Thu,  4 May 2023 19:41:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E1B7C433A4;
+	Thu,  4 May 2023 19:41:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1683229311;
+	bh=aO9wLY9VkyrPWwoLZCy0KVRPNB4O8b8O/bzkxxfOAvs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=mn5cRWFXM3YePiO94GRCBS+Lh7cCLo9La5F1llPIITh6PkFeGF5RFOPLP8LvgoOXi
+	 iZ7aQzNnoeznU8R8fmkqHtSj1UI/Qs1p9luwyo8SaHVkCT+RZAKcPloFOxqJNrUK/n
+	 qZNp+9U+Oc076mvWYqA630YVLsnBq8Tn072K3qfe+LZR4H8HdaoP4PelSfH8bPotQe
+	 Sl/TDKFOtdKzW+EJ170+hKrUOiBlA7jEltfUA72uJkTcqJtUPC6zLfVyKVC9Ykg6Hh
+	 FJy/ZaYfDh9khJinMEV7rSrFMlPCRr1dvWLiMEHKaAVkfrOO+Nm7Jua1h+4RcnvcAc
+	 xl9IYySfHJAQw==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	KP Singh <kpsingh@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	martin.lau@linux.dev,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 04/59] bpf: Annotate data races in bpf_local_storage
+Date: Thu,  4 May 2023 15:40:47 -0400
+Message-Id: <20230504194142.3805425-4-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230504194142.3805425-1-sashal@kernel.org>
+References: <20230504194142.3805425-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230425234911.2113352-9-andrii@kernel.org>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 
-On Tue, Apr 25, 2023 at 04:49:09PM -0700, Andrii Nakryiko wrote:
->  	if (insn->code == 0)
->  		return 0;
-> @@ -3424,14 +3449,72 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx,
->  		if (class == BPF_STX)
->  			bt_set_reg(bt, sreg);
->  	} else if (class == BPF_JMP || class == BPF_JMP32) {
-> -		if (opcode == BPF_CALL) {
-> -			if (insn->src_reg == BPF_PSEUDO_CALL)
-> -				return -ENOTSUPP;
-> -			/* BPF helpers that invoke callback subprogs are
-> -			 * equivalent to BPF_PSEUDO_CALL above
-> +		if (bpf_pseudo_call(insn)) {
-> +			int subprog_insn_idx, subprog;
-> +			bool is_global;
-> +
-> +			subprog_insn_idx = idx + insn->imm + 1;
-> +			subprog = find_subprog(env, subprog_insn_idx);
-> +			if (subprog < 0)
-> +				return -EFAULT;
-> +			is_global = subprog_is_global(env, subprog);
-> +
-> +			if (is_global) {
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-could you add a warn_on here that checks that jmp history doesn't have insns from subprog.
+[ Upstream commit 0a09a2f933c73dc76ab0b72da6855f44342a8903 ]
 
-> +				/* r1-r5 are invalidated after subprog call,
-> +				 * so for global func call it shouldn't be set
-> +				 * anymore
-> +				 */
-> +				if (bt_reg_mask(bt) & BPF_REGMASK_ARGS)
-> +					return -EFAULT;
+There are a few cases where hlist_node is checked to be unhashed without
+holding the lock protecting its modification. In this case, one must use
+hlist_unhashed_lockless to avoid load tearing and KCSAN reports. Fix
+this by using lockless variant in places not protected by the lock.
 
-This shouldn't be happening, but backtracking is delicate.
-Could you add verbose("backtracking bug") here, so we know why the prog got rejected.
-I'd probably do -ENOTSUPP, but EFAULT is ok too.
+Since this is not prompted by any actual KCSAN reports but only from
+code review, I have not included a fixes tag.
 
-> +				/* global subprog always sets R0 */
-> +				bt_clear_reg(bt, BPF_REG_0);
-> +				return 0;
-> +			} else {
-> +				/* static subprog call instruction, which
-> +				 * means that we are exiting current subprog,
-> +				 * so only r1-r5 could be still requested as
-> +				 * precise, r0 and r6-r10 or any stack slot in
-> +				 * the current frame should be zero by now
-> +				 */
-> +				if (bt_reg_mask(bt) & ~BPF_REGMASK_ARGS)
-> +					return -EFAULT;
+Cc: Martin KaFai Lau <martin.lau@kernel.org>
+Cc: KP Singh <kpsingh@kernel.org>
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Link: https://lore.kernel.org/r/20230221200646.2500777-4-memxor@gmail.com
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ kernel/bpf/bpf_local_storage.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-same here.
+diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
+index 35f4138a54dc1..58da17ae51241 100644
+--- a/kernel/bpf/bpf_local_storage.c
++++ b/kernel/bpf/bpf_local_storage.c
+@@ -51,11 +51,21 @@ owner_storage(struct bpf_local_storage_map *smap, void *owner)
+ 	return map->ops->map_owner_storage_ptr(owner);
+ }
+ 
++static bool selem_linked_to_storage_lockless(const struct bpf_local_storage_elem *selem)
++{
++	return !hlist_unhashed_lockless(&selem->snode);
++}
++
+ static bool selem_linked_to_storage(const struct bpf_local_storage_elem *selem)
+ {
+ 	return !hlist_unhashed(&selem->snode);
+ }
+ 
++static bool selem_linked_to_map_lockless(const struct bpf_local_storage_elem *selem)
++{
++	return !hlist_unhashed_lockless(&selem->map_node);
++}
++
+ static bool selem_linked_to_map(const struct bpf_local_storage_elem *selem)
+ {
+ 	return !hlist_unhashed(&selem->map_node);
+@@ -174,7 +184,7 @@ static void __bpf_selem_unlink_storage(struct bpf_local_storage_elem *selem,
+ 	bool free_local_storage = false;
+ 	unsigned long flags;
+ 
+-	if (unlikely(!selem_linked_to_storage(selem)))
++	if (unlikely(!selem_linked_to_storage_lockless(selem)))
+ 		/* selem has already been unlinked from sk */
+ 		return;
+ 
+@@ -208,7 +218,7 @@ void bpf_selem_unlink_map(struct bpf_local_storage_elem *selem)
+ 	struct bpf_local_storage_map_bucket *b;
+ 	unsigned long flags;
+ 
+-	if (unlikely(!selem_linked_to_map(selem)))
++	if (unlikely(!selem_linked_to_map_lockless(selem)))
+ 		/* selem has already be unlinked from smap */
+ 		return;
+ 
+@@ -420,7 +430,7 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+ 		err = check_flags(old_sdata, map_flags);
+ 		if (err)
+ 			return ERR_PTR(err);
+-		if (old_sdata && selem_linked_to_storage(SELEM(old_sdata))) {
++		if (old_sdata && selem_linked_to_storage_lockless(SELEM(old_sdata))) {
+ 			copy_map_value_locked(&smap->map, old_sdata->data,
+ 					      value, false);
+ 			return old_sdata;
+-- 
+2.39.2
 
-> +				/* we don't track register spills perfectly,
-> +				 * so fallback to force-precise instead of failing */
-> +				if (bt_stack_mask(bt) != 0)
-> +					return -ENOTSUPP;
-> +				/* propagate r1-r5 to the caller */
-> +				for (i = BPF_REG_1; i <= BPF_REG_5; i++) {
-> +					if (bt_is_reg_set(bt, i)) {
-> +						bt_clear_reg(bt, i);
-> +						bt_set_frame_reg(bt, bt->frame - 1, i);
-> +					}
-> +				}
-> +				if (bt_subprog_exit(bt))
-> +					return -EFAULT;
-> +				return 0;
-> +			}
-> +		} else if ((bpf_helper_call(insn) &&
-> +			    is_callback_calling_function(insn->imm) &&
-> +			    !is_async_callback_calling_function(insn->imm)) ||
-> +			   (bpf_pseudo_kfunc_call(insn) && is_callback_calling_kfunc(insn->imm))) {
-> +			/* callback-calling helper or kfunc call, which means
-> +			 * we are exiting from subprog, but unlike the subprog
-> +			 * call handling above, we shouldn't propagate
-> +			 * precision of r1-r5 (if any requested), as they are
-> +			 * not actually arguments passed directly to callback
-> +			 * subprogs
->  			 */
-> -			if (insn->src_reg == 0 && is_callback_calling_function(insn->imm))
-> +			if (bt_reg_mask(bt) & ~BPF_REGMASK_ARGS)
-> +				return -EFAULT;
-> +			if (bt_stack_mask(bt) != 0)
->  				return -ENOTSUPP;
-> +			/* clear r1-r5 in callback subprog's mask */
-> +			for (i = BPF_REG_1; i <= BPF_REG_5; i++)
-> +				bt_clear_reg(bt, i);
-> +			if (bt_subprog_exit(bt))
-> +				return -EFAULT;
-> +			return 0;
-
-jmp history will include callback insn, right?
-So skip of jmp history is missing here ?
-
-> +		} else if (opcode == BPF_CALL) {
->  			/* kfunc with imm==0 is invalid and fixup_kfunc_call will
->  			 * catch this error later. Make backtracking conservative
->  			 * with ENOTSUPP.
-> @@ -3449,7 +3532,39 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx,
->  				return -EFAULT;
->  			}
->  		} else if (opcode == BPF_EXIT) {
-> -			return -ENOTSUPP;
-> +			bool r0_precise;
-> +
-> +			if (bt_reg_mask(bt) & BPF_REGMASK_ARGS) {
-> +				/* if backtracing was looking for registers R1-R5
-> +				 * they should have been found already.
-> +				 */
-> +				verbose(env, "BUG regs %x\n", bt_reg_mask(bt));
-> +				WARN_ONCE(1, "verifier backtracking bug");
-> +				return -EFAULT;
-> +			}
-> +
-> +			/* BPF_EXIT in subprog or callback always jump right
-
-I'd say 'subprog always returns right after the call'. 'jump' is a bit confusing here,
-since it doesn't normally used to describe function return address.
-
-> +			 * after the call instruction, so by check whether the
-> +			 * instruction at subseq_idx-1 is subprog call or not we
-> +			 * can distinguish actual exit from *subprog* from
-> +			 * exit from *callback*. In the former case, we need
-> +			 * to propagate r0 precision, if necessary. In the
-> +			 * former we never do that.
-> +			 */
-> +			r0_precise = subseq_idx - 1 >= 0 &&
-> +				     bpf_pseudo_call(&env->prog->insnsi[subseq_idx - 1]) &&
-> +				     bt_is_reg_set(bt, BPF_REG_0);
-> +
-
-The rest all makes sense.
 
