@@ -1,31 +1,31 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B2B5EA1
-	for <bpf@vger.kernel.org>; Fri,  5 May 2023 00:09:44 +0000 (UTC)
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CA51328B
-	for <bpf@vger.kernel.org>; Thu,  4 May 2023 17:09:42 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 344KWgj2010503
-	for <bpf@vger.kernel.org>; Thu, 4 May 2023 17:09:41 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qc1uagcs1-2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1E53110B
+	for <bpf@vger.kernel.org>; Fri,  5 May 2023 00:09:45 +0000 (UTC)
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F32112E90
+	for <bpf@vger.kernel.org>; Thu,  4 May 2023 17:09:44 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 344JjZXF027173
+	for <bpf@vger.kernel.org>; Thu, 4 May 2023 17:09:43 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by m0001303.ppops.net (PPS) with ESMTPS id 3qck50sfvq-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 04 May 2023 17:09:41 -0700
-Received: from twshared35445.38.frc1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Thu, 04 May 2023 17:09:43 -0700
+Received: from twshared38955.16.prn3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 4 May 2023 17:09:25 -0700
+ 15.1.2507.23; Thu, 4 May 2023 17:09:42 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 55AE33002F95A; Thu,  4 May 2023 17:09:20 -0700 (PDT)
+	id 9B51C3002FAAD; Thu,  4 May 2023 17:09:26 -0700 (PDT)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH v2 bpf-next 02/10] bpf: mark relevant stack slots scratched for register read instructions
-Date: Thu, 4 May 2023 17:09:00 -0700
-Message-ID: <20230505000908.1265044-3-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 05/10] bpf: maintain bitmasks across all active frames in __mark_chain_precision
+Date: Thu, 4 May 2023 17:09:03 -0700
+Message-ID: <20230505000908.1265044-6-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230505000908.1265044-1-andrii@kernel.org>
 References: <20230505000908.1265044-1-andrii@kernel.org>
@@ -38,8 +38,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 4Ws40p0x-XhT0DjU1OXOkkfAod4jjo1x
-X-Proofpoint-GUID: 4Ws40p0x-XhT0DjU1OXOkkfAod4jjo1x
+X-Proofpoint-ORIG-GUID: wmJd9CwF0cpNqh25OxNtM_u_upWaPRab
+X-Proofpoint-GUID: wmJd9CwF0cpNqh25OxNtM_u_upWaPRab
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-04_15,2023-05-04_01,2023-02-09_01
@@ -50,39 +50,229 @@ X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-When handling instructions that read register slots, mark relevant stack
-slots as scratched so that verifier log would contain those slots' states=
-, in
-addition to currently emitted registers with stack slot offsets.
+Teach __mark_chain_precision logic to maintain register/stack masks
+across all active frames when going from child state to parent state.
+Currently this should be mostly no-op, as precision backtracking usually
+bails out when encountering subprog entry/exit.
+
+It's not very apparent from the diff due to increased indentation, but
+the logic remains the same, except everything is done on specific `fr`
+frame index. Calls to bt_clear_reg() and bt_clear_slot() are replaced
+with frame-specific bt_clear_frame_reg() and bt_clear_frame_slot(),
+where frame index is passed explicitly, instead of using current frame
+number.
+
+We also adjust logging to emit affected frame number. And we also add
+better logging of human-readable register and stack slot masks, similar
+to previous patch.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/verifier.c | 3 +++
- 1 file changed, 3 insertions(+)
+ kernel/bpf/verifier.c                         | 100 ++++++++++--------
+ .../testing/selftests/bpf/verifier/precise.c  |  18 ++--
+ 2 files changed, 62 insertions(+), 56 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ff4a8ab99f08..da8a5834f2ca 100644
+index 4ede7c9bf477..d373f472406b 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -4109,6 +4109,7 @@ static void mark_reg_stack_read(struct bpf_verifier=
-_env *env,
- 	for (i =3D min_off; i < max_off; i++) {
- 		slot =3D -i - 1;
- 		spi =3D slot / BPF_REG_SIZE;
-+		mark_stack_slot_scratched(env, spi);
- 		stype =3D ptr_state->stack[spi].slot_type;
- 		if (stype[slot % BPF_REG_SIZE] !=3D STACK_ZERO)
+@@ -3752,7 +3752,7 @@ static int __mark_chain_precision(struct bpf_verifi=
+er_env *env, int frame, int r
+ 	struct bpf_func_state *func;
+ 	struct bpf_reg_state *reg;
+ 	bool skip_first =3D true;
+-	int i, err;
++	int i, fr, err;
+=20
+ 	if (!env->bpf_capable)
+ 		return 0;
+@@ -3861,56 +3861,62 @@ static int __mark_chain_precision(struct bpf_veri=
+fier_env *env, int frame, int r
+ 		if (!st)
  			break;
-@@ -4160,6 +4161,8 @@ static int check_stack_read_fixed_off(struct bpf_ve=
-rifier_env *env,
- 	stype =3D reg_state->stack[spi].slot_type;
- 	reg =3D &reg_state->stack[spi].spilled_ptr;
 =20
-+	mark_stack_slot_scratched(env, spi);
-+
- 	if (is_spilled_reg(&reg_state->stack[spi])) {
- 		u8 spill_size =3D 1;
+-		func =3D st->frame[frame];
+-		bitmap_from_u64(mask, bt_reg_mask(bt));
+-		for_each_set_bit(i, mask, 32) {
+-			reg =3D &func->regs[i];
+-			if (reg->type !=3D SCALAR_VALUE) {
+-				bt_clear_reg(bt, i);
+-				continue;
++		for (fr =3D bt->frame; fr >=3D 0; fr--) {
++			func =3D st->frame[fr];
++			bitmap_from_u64(mask, bt_frame_reg_mask(bt, fr));
++			for_each_set_bit(i, mask, 32) {
++				reg =3D &func->regs[i];
++				if (reg->type !=3D SCALAR_VALUE) {
++					bt_clear_frame_reg(bt, fr, i);
++					continue;
++				}
++				if (reg->precise)
++					bt_clear_frame_reg(bt, fr, i);
++				else
++					reg->precise =3D true;
+ 			}
+-			if (reg->precise)
+-				bt_clear_reg(bt, i);
+-			else
+-				reg->precise =3D true;
+-		}
 =20
+-		bitmap_from_u64(mask, bt_stack_mask(bt));
+-		for_each_set_bit(i, mask, 64) {
+-			if (i >=3D func->allocated_stack / BPF_REG_SIZE) {
+-				/* the sequence of instructions:
+-				 * 2: (bf) r3 =3D r10
+-				 * 3: (7b) *(u64 *)(r3 -8) =3D r0
+-				 * 4: (79) r4 =3D *(u64 *)(r10 -8)
+-				 * doesn't contain jmps. It's backtracked
+-				 * as a single block.
+-				 * During backtracking insn 3 is not recognized as
+-				 * stack access, so at the end of backtracking
+-				 * stack slot fp-8 is still marked in stack_mask.
+-				 * However the parent state may not have accessed
+-				 * fp-8 and it's "unallocated" stack space.
+-				 * In such case fallback to conservative.
+-				 */
+-				mark_all_scalars_precise(env, st);
+-				bt_reset(bt);
+-				return 0;
+-			}
++			bitmap_from_u64(mask, bt_frame_stack_mask(bt, fr));
++			for_each_set_bit(i, mask, 64) {
++				if (i >=3D func->allocated_stack / BPF_REG_SIZE) {
++					/* the sequence of instructions:
++					 * 2: (bf) r3 =3D r10
++					 * 3: (7b) *(u64 *)(r3 -8) =3D r0
++					 * 4: (79) r4 =3D *(u64 *)(r10 -8)
++					 * doesn't contain jmps. It's backtracked
++					 * as a single block.
++					 * During backtracking insn 3 is not recognized as
++					 * stack access, so at the end of backtracking
++					 * stack slot fp-8 is still marked in stack_mask.
++					 * However the parent state may not have accessed
++					 * fp-8 and it's "unallocated" stack space.
++					 * In such case fallback to conservative.
++					 */
++					mark_all_scalars_precise(env, st);
++					bt_reset(bt);
++					return 0;
++				}
+=20
+-			if (!is_spilled_scalar_reg(&func->stack[i])) {
+-				bt_clear_slot(bt, i);
+-				continue;
++				if (!is_spilled_scalar_reg(&func->stack[i])) {
++					bt_clear_frame_slot(bt, fr, i);
++					continue;
++				}
++				reg =3D &func->stack[i].spilled_ptr;
++				if (reg->precise)
++					bt_clear_frame_slot(bt, fr, i);
++				else
++					reg->precise =3D true;
++			}
++			if (env->log.level & BPF_LOG_LEVEL2) {
++				fmt_reg_mask(env->tmp_str_buf, TMP_STR_BUF_LEN,
++					     bt_frame_reg_mask(bt, fr));
++				verbose(env, "mark_precise: frame%d: parent state regs=3D%s ",
++					fr, env->tmp_str_buf);
++				fmt_stack_mask(env->tmp_str_buf, TMP_STR_BUF_LEN,
++					       bt_frame_stack_mask(bt, fr));
++				verbose(env, "stack=3D%s: ", env->tmp_str_buf);
++				print_verifier_state(env, func, true);
+ 			}
+-			reg =3D &func->stack[i].spilled_ptr;
+-			if (reg->precise)
+-				bt_clear_slot(bt, i);
+-			else
+-				reg->precise =3D true;
+-		}
+-		if (env->log.level & BPF_LOG_LEVEL2) {
+-			verbose(env, "parent %s regs=3D%x stack=3D%llx marks:",
+-				!bt_empty(bt) ? "didn't have" : "already had",
+-				bt_reg_mask(bt), bt_stack_mask(bt));
+-			print_verifier_state(env, func, true);
+ 		}
+=20
+ 		if (bt_empty(bt))
+diff --git a/tools/testing/selftests/bpf/verifier/precise.c b/tools/testi=
+ng/selftests/bpf/verifier/precise.c
+index a22fabd404ed..77ea018582c5 100644
+--- a/tools/testing/selftests/bpf/verifier/precise.c
++++ b/tools/testing/selftests/bpf/verifier/precise.c
+@@ -44,7 +44,7 @@
+ 	mark_precise: frame0: regs=3Dr2 stack=3D before 23\
+ 	mark_precise: frame0: regs=3Dr2 stack=3D before 22\
+ 	mark_precise: frame0: regs=3Dr2 stack=3D before 20\
+-	parent didn't have regs=3D4 stack=3D0 marks:\
++	mark_precise: frame0: parent state regs=3Dr2 stack=3D:\
+ 	mark_precise: frame0: last_idx 19 first_idx 10\
+ 	mark_precise: frame0: regs=3Dr2 stack=3D before 19\
+ 	mark_precise: frame0: regs=3Dr9 stack=3D before 18\
+@@ -55,7 +55,7 @@
+ 	mark_precise: frame0: regs=3Dr9 stack=3D before 12\
+ 	mark_precise: frame0: regs=3Dr9 stack=3D before 11\
+ 	mark_precise: frame0: regs=3Dr9 stack=3D before 10\
+-	parent already had regs=3D0 stack=3D0 marks:",
++	mark_precise: frame0: parent state regs=3D stack=3D:",
+ },
+ {
+ 	"precise: test 2",
+@@ -104,15 +104,15 @@
+ 	mark_precise: frame0: regs=3Dr2 stack=3D before 24\
+ 	mark_precise: frame0: regs=3Dr2 stack=3D before 23\
+ 	mark_precise: frame0: regs=3Dr2 stack=3D before 22\
+-	parent didn't have regs=3D4 stack=3D0 marks:\
++	mark_precise: frame0: parent state regs=3Dr2 stack=3D:\
+ 	mark_precise: frame0: last_idx 20 first_idx 20\
+ 	mark_precise: frame0: regs=3Dr2 stack=3D before 20\
+-	parent didn't have regs=3D4 stack=3D0 marks:\
++	mark_precise: frame0: parent state regs=3Dr2 stack=3D:\
+ 	mark_precise: frame0: last_idx 19 first_idx 17\
+ 	mark_precise: frame0: regs=3Dr2 stack=3D before 19\
+ 	mark_precise: frame0: regs=3Dr9 stack=3D before 18\
+ 	mark_precise: frame0: regs=3Dr8,r9 stack=3D before 17\
+-	parent already had regs=3D0 stack=3D0 marks:",
++	mark_precise: frame0: parent state regs=3D stack=3D:",
+ },
+ {
+ 	"precise: cross frame pruning",
+@@ -153,14 +153,14 @@
+ 	.prog_type =3D BPF_PROG_TYPE_XDP,
+ 	.flags =3D BPF_F_TEST_STATE_FREQ,
+ 	.errstr =3D "mark_precise: frame0: last_idx 5 first_idx 5\
+-	parent didn't have regs=3D10 stack=3D0 marks:\
++	mark_precise: frame0: parent state regs=3Dr4 stack=3D:\
+ 	mark_precise: frame0: last_idx 4 first_idx 2\
+ 	mark_precise: frame0: regs=3Dr4 stack=3D before 4\
+ 	mark_precise: frame0: regs=3Dr4 stack=3D before 3\
+ 	mark_precise: frame0: regs=3D stack=3D-8 before 2\
+ 	mark_precise: frame0: falling back to forcing all scalars precise\
+ 	mark_precise: frame0: last_idx 5 first_idx 5\
+-	parent didn't have regs=3D1 stack=3D0 marks:",
++	mark_precise: frame0: parent state regs=3Dr0 stack=3D:",
+ 	.result =3D VERBOSE_ACCEPT,
+ 	.retval =3D -1,
+ },
+@@ -179,7 +179,7 @@
+ 	.prog_type =3D BPF_PROG_TYPE_XDP,
+ 	.flags =3D BPF_F_TEST_STATE_FREQ,
+ 	.errstr =3D "mark_precise: frame0: last_idx 6 first_idx 6\
+-	parent didn't have regs=3D10 stack=3D0 marks:\
++	mark_precise: frame0: parent state regs=3Dr4 stack=3D:\
+ 	mark_precise: frame0: last_idx 5 first_idx 3\
+ 	mark_precise: frame0: regs=3Dr4 stack=3D before 5\
+ 	mark_precise: frame0: regs=3Dr4 stack=3D before 4\
+@@ -188,7 +188,7 @@
+ 	force_precise: frame0: forcing r0 to be precise\
+ 	force_precise: frame0: forcing r0 to be precise\
+ 	mark_precise: frame0: last_idx 6 first_idx 6\
+-	parent didn't have regs=3D1 stack=3D0 marks:\
++	mark_precise: frame0: parent state regs=3Dr0 stack=3D:\
+ 	mark_precise: frame0: last_idx 5 first_idx 3\
+ 	mark_precise: frame0: regs=3Dr0 stack=3D before 5",
+ 	.result =3D VERBOSE_ACCEPT,
 --=20
 2.34.1
 
