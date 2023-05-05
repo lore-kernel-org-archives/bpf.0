@@ -1,31 +1,31 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C29CEA1
-	for <bpf@vger.kernel.org>; Fri,  5 May 2023 00:10:20 +0000 (UTC)
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9C112E90
-	for <bpf@vger.kernel.org>; Thu,  4 May 2023 17:10:19 -0700 (PDT)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 344JrwJ4001073
-	for <bpf@vger.kernel.org>; Thu, 4 May 2023 17:10:18 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83A697E3
+	for <bpf@vger.kernel.org>; Fri,  5 May 2023 00:12:11 +0000 (UTC)
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888E411D93
+	for <bpf@vger.kernel.org>; Thu,  4 May 2023 17:12:10 -0700 (PDT)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 344H47YH009423
+	for <bpf@vger.kernel.org>; Thu, 4 May 2023 17:12:10 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qck8rhe7k-1
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qcgs9tnwr-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 04 May 2023 17:10:18 -0700
-Received: from twshared29562.14.frc2.facebook.com (2620:10d:c085:208::f) by
+	for <bpf@vger.kernel.org>; Thu, 04 May 2023 17:12:10 -0700
+Received: from twshared29562.14.frc2.facebook.com (2620:10d:c085:208::11) by
  mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 4 May 2023 17:09:43 -0700
+ 15.1.2507.23; Thu, 4 May 2023 17:12:09 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id A9BBB3002FB28; Thu,  4 May 2023 17:09:28 -0700 (PDT)
+	id 3254D3002FBA5; Thu,  4 May 2023 17:09:36 -0700 (PDT)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH v2 bpf-next 06/10] bpf: fix propagate_precision() logic for inner frames
-Date: Thu, 4 May 2023 17:09:04 -0700
-Message-ID: <20230505000908.1265044-7-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 10/10] selftests/bpf: revert iter test subprog precision workaround
+Date: Thu, 4 May 2023 17:09:08 -0700
+Message-ID: <20230505000908.1265044-11-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230505000908.1265044-1-andrii@kernel.org>
 References: <20230505000908.1265044-1-andrii@kernel.org>
@@ -38,8 +38,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: SjfiqJhezLCzbSKi-OpGpTm0eBKgRddd
-X-Proofpoint-ORIG-GUID: SjfiqJhezLCzbSKi-OpGpTm0eBKgRddd
+X-Proofpoint-GUID: FfiU6M0EubL3_u5eq32QV8ui175v9n-9
+X-Proofpoint-ORIG-GUID: FfiU6M0EubL3_u5eq32QV8ui175v9n-9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-04_15,2023-05-04_01,2023-02-09_01
@@ -50,186 +50,99 @@ X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Fix propagate_precision() logic to perform propagation of all necessary
-registers and stack slots across all active frames *in one batch step*.
+Now that precision propagation is supported fully in the presence of
+subprogs, there is no need to work around iter test. Revert original
+workaround.
 
-Doing this for each register/slot in each individual frame is wasteful,
-but the main problem is that backtracking of instruction in any frame
-except the deepest one just doesn't work. This is due to backtracking
-logic relying on jump history, and available jump history always starts
-(or ends, depending how you view it) in current frame. So, if
-prog A (frame #0) called subprog B (frame #1) and we need to propagate
-precision of, say, register R6 (callee-saved) within frame #0, we
-actually don't even know where jump history that corresponds to prog
-A even starts. We'd need to skip subprog part of jump history first to
-be able to do this.
+This reverts be7dbd275dc6 ("selftests/bpf: avoid mark_all_scalars_precise=
+() trigger in one of iter tests").
 
-Luckily, with struct backtrack_state and __mark_chain_precision()
-handling bitmasks tracking/propagation across all active frames at the
-same time (added in previous patch), propagate_precision() can be both
-fixed and sped up by setting all the necessary bits across all frames
-and then performing one __mark_chain_precision() pass. This makes it
-unnecessary to skip subprog parts of jump history.
-
-We also improve logging along the way, to clearly specify which
-registers' and slots' precision markings are propagated within which
-frame. Each frame will have dedicated line and all registers and stack
-slots from that frame will be reported in format similar to precision
-backtrack regs/stack logging. E.g.:
-
-frame 1: propagating r1,r2,r3,fp-8,fp-16
-frame 0: propagating r3,r9,fp-120
-
-Fixes: 529409ea92d5 ("bpf: propagate precision across all frames, not jus=
-t the last one")
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/verifier.c | 65 +++++++++++++++++++++++--------------------
- 1 file changed, 35 insertions(+), 30 deletions(-)
+ tools/testing/selftests/bpf/progs/iters.c | 26 ++++++++++-------------
+ 1 file changed, 11 insertions(+), 15 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d373f472406b..474966d339b7 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3742,8 +3742,7 @@ static void mark_all_scalars_imprecise(struct bpf_v=
-erifier_env *env, struct bpf_
-  * mark_all_scalars_imprecise() to hopefully get more permissive and gen=
-eric
-  * finalized states which help in short circuiting more future states.
-  */
--static int __mark_chain_precision(struct bpf_verifier_env *env, int fram=
-e, int regno,
--				  int spi)
-+static int __mark_chain_precision(struct bpf_verifier_env *env, int regn=
-o)
- {
- 	struct backtrack_state *bt =3D &env->bt;
- 	struct bpf_verifier_state *st =3D env->cur_state;
-@@ -3758,13 +3757,13 @@ static int __mark_chain_precision(struct bpf_veri=
-fier_env *env, int frame, int r
- 		return 0;
+diff --git a/tools/testing/selftests/bpf/progs/iters.c b/tools/testing/se=
+lftests/bpf/progs/iters.c
+index be16143ae292..6b9b3c56f009 100644
+--- a/tools/testing/selftests/bpf/progs/iters.c
++++ b/tools/testing/selftests/bpf/progs/iters.c
+@@ -651,29 +651,25 @@ int iter_stack_array_loop(const void *ctx)
+ 	return sum;
+ }
 =20
- 	/* set frame number from which we are starting to backtrack */
--	bt_init(bt, frame);
-+	bt_init(bt, env->cur_state->curframe);
-=20
- 	/* Do sanity checks against current state of register and/or stack
- 	 * slot, but don't set precise flag in current state, as precision
- 	 * tracking in the current state is unnecessary.
- 	 */
--	func =3D st->frame[frame];
-+	func =3D st->frame[bt->frame];
- 	if (regno >=3D 0) {
- 		reg =3D &func->regs[regno];
- 		if (reg->type !=3D SCALAR_VALUE) {
-@@ -3774,13 +3773,6 @@ static int __mark_chain_precision(struct bpf_verif=
-ier_env *env, int frame, int r
- 		bt_set_reg(bt, regno);
- 	}
-=20
--	while (spi >=3D 0) {
--		if (!is_spilled_scalar_reg(&func->stack[spi]))
--			break;
--		bt_set_slot(bt, spi);
--		break;
--	}
+-#define ARR_SZ 16
 -
- 	if (bt_empty(bt))
- 		return 0;
-=20
-@@ -3930,17 +3922,15 @@ static int __mark_chain_precision(struct bpf_veri=
-fier_env *env, int frame, int r
-=20
- int mark_chain_precision(struct bpf_verifier_env *env, int regno)
+-static __noinline void fill(struct bpf_iter_num *it, int *arr, int mul)
++static __noinline void fill(struct bpf_iter_num *it, int *arr, __u32 n, =
+int mul)
  {
--	return __mark_chain_precision(env, env->cur_state->curframe, regno, -1)=
-;
--}
--
--static int mark_chain_precision_frame(struct bpf_verifier_env *env, int =
-frame, int regno)
--{
--	return __mark_chain_precision(env, frame, regno, -1);
-+	return __mark_chain_precision(env, regno);
- }
+-	int *t;
+-	__u64 i;
++	int *t, i;
 =20
--static int mark_chain_precision_stack_frame(struct bpf_verifier_env *env=
-, int frame, int spi)
-+/* mark_chain_precision_batch() assumes that env->bt is set in the calle=
-r to
-+ * desired reg and stack masks across all relevant frames
-+ */
-+static int mark_chain_precision_batch(struct bpf_verifier_env *env)
- {
--	return __mark_chain_precision(env, frame, -1, spi);
-+	return __mark_chain_precision(env, -1);
- }
-=20
- static bool is_spillable_regtype(enum bpf_reg_type type)
-@@ -15377,20 +15367,25 @@ static int propagate_precision(struct bpf_verif=
-ier_env *env,
- 	struct bpf_reg_state *state_reg;
- 	struct bpf_func_state *state;
- 	int i, err =3D 0, fr;
-+	bool first;
-=20
- 	for (fr =3D old->curframe; fr >=3D 0; fr--) {
- 		state =3D old->frame[fr];
- 		state_reg =3D state->regs;
-+		first =3D true;
- 		for (i =3D 0; i < BPF_REG_FP; i++, state_reg++) {
- 			if (state_reg->type !=3D SCALAR_VALUE ||
- 			    !state_reg->precise ||
- 			    !(state_reg->live & REG_LIVE_READ))
- 				continue;
--			if (env->log.level & BPF_LOG_LEVEL2)
--				verbose(env, "frame %d: propagating r%d\n", fr, i);
--			err =3D mark_chain_precision_frame(env, fr, i);
--			if (err < 0)
--				return err;
-+			if (env->log.level & BPF_LOG_LEVEL2) {
-+				if (first)
-+					verbose(env, "frame %d: propagating r%d", fr, i);
-+				else
-+					verbose(env, ",r%d", i);
-+			}
-+			bt_set_frame_reg(&env->bt, fr, i);
-+			first =3D false;
- 		}
-=20
- 		for (i =3D 0; i < state->allocated_stack / BPF_REG_SIZE; i++) {
-@@ -15401,14 +15396,24 @@ static int propagate_precision(struct bpf_verif=
-ier_env *env,
- 			    !state_reg->precise ||
- 			    !(state_reg->live & REG_LIVE_READ))
- 				continue;
--			if (env->log.level & BPF_LOG_LEVEL2)
--				verbose(env, "frame %d: propagating fp%d\n",
--					fr, (-i - 1) * BPF_REG_SIZE);
--			err =3D mark_chain_precision_stack_frame(env, fr, i);
--			if (err < 0)
--				return err;
-+			if (env->log.level & BPF_LOG_LEVEL2) {
-+				if (first)
-+					verbose(env, "frame %d: propagating fp%d",
-+						fr, (-i - 1) * BPF_REG_SIZE);
-+				else
-+					verbose(env, ",fp%d", (-i - 1) * BPF_REG_SIZE);
-+			}
-+			bt_set_frame_slot(&env->bt, fr, i);
-+			first =3D false;
- 		}
-+		if (!first)
-+			verbose(env, "\n");
+ 	while ((t =3D bpf_iter_num_next(it))) {
+ 		i =3D *t;
+-		if (i >=3D ARR_SZ)
++		if (i >=3D n)
+ 			break;
+ 		arr[i] =3D  i * mul;
  	}
-+
-+	err =3D mark_chain_precision_batch(env);
-+	if (err < 0)
-+		return err;
-+
- 	return 0;
  }
 =20
+-static __noinline int sum(struct bpf_iter_num *it, int *arr)
++static __noinline int sum(struct bpf_iter_num *it, int *arr, __u32 n)
+ {
+-	int *t, sum =3D 0;;
+-	__u64 i;
++	int *t, i, sum =3D 0;;
+=20
+ 	while ((t =3D bpf_iter_num_next(it))) {
+ 		i =3D *t;
+-		if (i >=3D ARR_SZ)
++		if (i >=3D n)
+ 			break;
+ 		sum +=3D arr[i];
+ 	}
+@@ -685,7 +681,7 @@ SEC("raw_tp")
+ __success
+ int iter_pass_iter_ptr_to_subprog(const void *ctx)
+ {
+-	int arr1[ARR_SZ], arr2[ARR_SZ];
++	int arr1[16], arr2[32];
+ 	struct bpf_iter_num it;
+ 	int n, sum1, sum2;
+=20
+@@ -694,25 +690,25 @@ int iter_pass_iter_ptr_to_subprog(const void *ctx)
+ 	/* fill arr1 */
+ 	n =3D ARRAY_SIZE(arr1);
+ 	bpf_iter_num_new(&it, 0, n);
+-	fill(&it, arr1, 2);
++	fill(&it, arr1, n, 2);
+ 	bpf_iter_num_destroy(&it);
+=20
+ 	/* fill arr2 */
+ 	n =3D ARRAY_SIZE(arr2);
+ 	bpf_iter_num_new(&it, 0, n);
+-	fill(&it, arr2, 10);
++	fill(&it, arr2, n, 10);
+ 	bpf_iter_num_destroy(&it);
+=20
+ 	/* sum arr1 */
+ 	n =3D ARRAY_SIZE(arr1);
+ 	bpf_iter_num_new(&it, 0, n);
+-	sum1 =3D sum(&it, arr1);
++	sum1 =3D sum(&it, arr1, n);
+ 	bpf_iter_num_destroy(&it);
+=20
+ 	/* sum arr2 */
+ 	n =3D ARRAY_SIZE(arr2);
+ 	bpf_iter_num_new(&it, 0, n);
+-	sum2 =3D sum(&it, arr2);
++	sum2 =3D sum(&it, arr2, n);
+ 	bpf_iter_num_destroy(&it);
+=20
+ 	bpf_printk("sum1=3D%d, sum2=3D%d", sum1, sum2);
 --=20
 2.34.1
 
