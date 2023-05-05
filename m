@@ -1,31 +1,31 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84470ED1
-	for <bpf@vger.kernel.org>; Fri,  5 May 2023 00:09:50 +0000 (UTC)
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96F61328B
-	for <bpf@vger.kernel.org>; Thu,  4 May 2023 17:09:47 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 344H0mwV013271
-	for <bpf@vger.kernel.org>; Thu, 4 May 2023 17:09:47 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2FAD621
+	for <bpf@vger.kernel.org>; Fri,  5 May 2023 00:10:04 +0000 (UTC)
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989B54215
+	for <bpf@vger.kernel.org>; Thu,  4 May 2023 17:10:02 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+	by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 344JKZgG013476
+	for <bpf@vger.kernel.org>; Thu, 4 May 2023 17:10:01 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qc8r364ja-1
+	by m0089730.ppops.net (PPS) with ESMTPS id 3qccq04mav-3
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 04 May 2023 17:09:47 -0700
-Received: from twshared35445.38.frc1.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Thu, 04 May 2023 17:10:00 -0700
+Received: from twshared35445.38.frc1.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 4 May 2023 17:09:46 -0700
+ 15.1.2507.23; Thu, 4 May 2023 17:09:36 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id D2DB93002FB85; Thu,  4 May 2023 17:09:34 -0700 (PDT)
+	id 681BA3002F9B4; Thu,  4 May 2023 17:09:22 -0700 (PDT)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH v2 bpf-next 09/10] selftests/bpf: add precision propagation tests in the presence of subprogs
-Date: Thu, 4 May 2023 17:09:07 -0700
-Message-ID: <20230505000908.1265044-10-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 03/10] bpf: encapsulate precision backtracking bookkeeping
+Date: Thu, 4 May 2023 17:09:01 -0700
+Message-ID: <20230505000908.1265044-4-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230505000908.1265044-1-andrii@kernel.org>
 References: <20230505000908.1265044-1-andrii@kernel.org>
@@ -38,8 +38,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: cRudWsAh4axgWYS6JOJGstiIl2saw83u
-X-Proofpoint-GUID: cRudWsAh4axgWYS6JOJGstiIl2saw83u
+X-Proofpoint-ORIG-GUID: ZHv9cklSEsq6NfTW-hiXy1iMYZmzOgg3
+X-Proofpoint-GUID: ZHv9cklSEsq6NfTW-hiXy1iMYZmzOgg3
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-04_15,2023-05-04_01,2023-02-09_01
@@ -50,692 +50,575 @@ X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add a bunch of tests validating verifier's precision backpropagation
-logic in the presence of subprog calls and/or callback-calling
-helpers/kfuncs.
-
-We validate the following conditions:
-  - subprog_result_precise: static subprog r0 result precision handling;
-  - global_subprog_result_precise: global subprog r0 precision
-    shortcutting, similar to BPF helper handling;
-  - callback_result_precise: similarly r0 marking precise for
-    callback-calling helpers;
-  - parent_callee_saved_reg_precise, parent_callee_saved_reg_precise_glob=
-al:
-    propagation of precision for callee-saved registers bypassing
-    static/global subprogs;
-  - parent_callee_saved_reg_precise_with_callback: same as above, but in
-    the presence of callback-calling helper;
-  - parent_stack_slot_precise, parent_stack_slot_precise_global:
-    similar to above, but instead propagating precision of stack slot
-    (spilled SCALAR reg);
-  - parent_stack_slot_precise_with_callback: same as above, but in the
-    presence of callback-calling helper;
-  - subprog_arg_precise: propagation of precision of static subprog's
-    input argument back to caller;
-  - subprog_spill_into_parent_stack_slot_precise: negative test
-    validating that verifier currently can't support backtracking of stac=
-k
-    access with non-r10 register, we validate that we fallback to
-    forcing precision for all SCALARs.
+Add struct backtrack_state and straightforward API around it to keep
+track of register and stack masks used and maintained during precision
+backtracking process. Having this logic separately allow to keep
+high-level backtracking algorithm cleaner, but also it sets us up to
+cleanly keep track of register and stack masks per frame, allowing (with
+some further logic adjustments) to perform precision backpropagation
+across multiple frames (i.e., subprog calls).
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- tools/testing/selftests/bpf/progs/bpf_misc.h  |   4 +
- .../bpf/progs/verifier_subprog_precision.c    | 536 ++++++++++++++++++
- 3 files changed, 542 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_subprog_pr=
-ecision.c
+ include/linux/bpf_verifier.h |  15 ++
+ kernel/bpf/verifier.c        | 265 ++++++++++++++++++++++++++---------
+ 2 files changed, 213 insertions(+), 67 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
-sting/selftests/bpf/prog_tests/verifier.c
-index 2497716ee379..531621adef42 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -55,6 +55,7 @@
- #include "verifier_spill_fill.skel.h"
- #include "verifier_spin_lock.skel.h"
- #include "verifier_stack_ptr.skel.h"
-+#include "verifier_subprog_precision.skel.h"
- #include "verifier_subreg.skel.h"
- #include "verifier_uninit.skel.h"
- #include "verifier_unpriv.skel.h"
-@@ -154,6 +155,7 @@ void test_verifier_sock(void)                 { RUN(v=
-erifier_sock); }
- void test_verifier_spill_fill(void)           { RUN(verifier_spill_fill)=
-; }
- void test_verifier_spin_lock(void)            { RUN(verifier_spin_lock);=
- }
- void test_verifier_stack_ptr(void)            { RUN(verifier_stack_ptr);=
- }
-+void test_verifier_subprog_precision(void)    { RUN(verifier_subprog_pre=
-cision); }
- void test_verifier_subreg(void)               { RUN(verifier_subreg); }
- void test_verifier_uninit(void)               { RUN(verifier_uninit); }
- void test_verifier_unpriv(void)               { RUN(verifier_unpriv); }
-diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing=
-/selftests/bpf/progs/bpf_misc.h
-index d3c1217ba79a..38a57a2e70db 100644
---- a/tools/testing/selftests/bpf/progs/bpf_misc.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
-@@ -86,6 +86,10 @@
- #define POINTER_VALUE	0xcafe4all
- #define TEST_DATA_LEN	64
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 3dd29a53b711..185bfaf0ec6b 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -238,6 +238,10 @@ enum bpf_stack_slot_type {
 =20
-+#ifndef __used
-+#define __used __attribute__((used))
-+#endif
+ #define BPF_REG_SIZE 8	/* size of eBPF register in bytes */
+=20
++#define BPF_REGMASK_ARGS ((1 << BPF_REG_1) | (1 << BPF_REG_2) | \
++			  (1 << BPF_REG_3) | (1 << BPF_REG_4) | \
++			  (1 << BPF_REG_5))
 +
- #if defined(__TARGET_ARCH_x86)
- #define SYSCALL_WRAPPER 1
- #define SYS_PREFIX "__x64_"
-diff --git a/tools/testing/selftests/bpf/progs/verifier_subprog_precision=
-.c b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-new file mode 100644
-index 000000000000..db6b3143338b
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-@@ -0,0 +1,536 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Meta Platforms, Inc. and affiliates. */
+ #define BPF_DYNPTR_SIZE		sizeof(struct bpf_dynptr_kern)
+ #define BPF_DYNPTR_NR_SLOTS		(BPF_DYNPTR_SIZE / BPF_REG_SIZE)
+=20
+@@ -541,6 +545,16 @@ struct bpf_subprog_info {
+ 	bool is_async_cb;
+ };
+=20
++struct bpf_verifier_env;
 +
-+#include <errno.h>
-+#include <string.h>
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
++struct backtrack_state {
++	struct bpf_verifier_env *env;
++	u32 frame;
++	u32 bitcnt;
++	u32 reg_masks[MAX_CALL_FRAMES];
++	u64 stack_masks[MAX_CALL_FRAMES];
++};
 +
-+#define ARRAY_SIZE(x) (sizeof(x) / sizeof(x[0]))
-+
-+int vals[] SEC(".data.vals") =3D {1, 2, 3, 4};
-+
-+__naked __noinline __used
-+static unsigned long identity_subprog()
+ /* single container for all structs
+  * one verifier_env per bpf_check() call
+  */
+@@ -578,6 +592,7 @@ struct bpf_verifier_env {
+ 		int *insn_stack;
+ 		int cur_stack;
+ 	} cfg;
++	struct backtrack_state bt;
+ 	u32 pass_cnt; /* number of times do_check() was called */
+ 	u32 subprog_cnt;
+ 	/* number of instructions analyzed by the verifier */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index da8a5834f2ca..3aa8ec9f1f7c 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1296,6 +1296,12 @@ static bool is_spilled_reg(const struct bpf_stack_=
+state *stack)
+ 	return stack->slot_type[BPF_REG_SIZE - 1] =3D=3D STACK_SPILL;
+ }
+=20
++static bool is_spilled_scalar_reg(const struct bpf_stack_state *stack)
 +{
-+	/* the simplest *static* 64-bit identity function */
-+	asm volatile (
-+		"r0 =3D r1;"
-+		"exit;"
-+	);
++	return stack->slot_type[BPF_REG_SIZE - 1] =3D=3D STACK_SPILL &&
++	       stack->spilled_ptr.type =3D=3D SCALAR_VALUE;
 +}
 +
-+__noinline __used
-+unsigned long global_identity_subprog(__u64 x)
+ static void scrub_spilled_slot(u8 *stype)
+ {
+ 	if (*stype !=3D STACK_INVALID)
+@@ -3186,12 +3192,144 @@ static const char *disasm_kfunc_name(void *data,=
+ const struct bpf_insn *insn)
+ 	return btf_name_by_offset(desc_btf, func->name_off);
+ }
+=20
++static inline void bt_init(struct backtrack_state *bt, u32 frame)
 +{
-+	/* the simplest *global* 64-bit identity function */
-+	return x;
++	bt->frame =3D frame;
 +}
 +
-+__naked __noinline __used
-+static unsigned long callback_subprog()
++static inline void bt_reset(struct backtrack_state *bt)
 +{
-+	/* the simplest callback function */
-+	asm volatile (
-+		"r0 =3D 0;"
-+		"exit;"
-+	);
++	struct bpf_verifier_env *env =3D bt->env;
++
++	memset(bt, 0, sizeof(*bt));
++	bt->env =3D env;
 +}
 +
-+SEC("?raw_tp")
-+__success __log_level(2)
-+__msg("7: (0f) r1 +=3D r0")
-+__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 6: (bf) r1 =3D r7=
-")
-+__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 5: (27) r0 *=3D 4=
-")
-+__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 11: (95) exit")
-+__msg("mark_precise: frame1: regs=3Dr0 stack=3D before 10: (bf) r0 =3D r=
-1")
-+__msg("mark_precise: frame1: regs=3Dr1 stack=3D before 4: (85) call pc+5=
-")
-+__msg("mark_precise: frame0: regs=3Dr1 stack=3D before 3: (bf) r1 =3D r6=
-")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 2: (b7) r6 =3D 3"=
-)
-+__naked int subprog_result_precise(void)
++static inline u32 bt_empty(struct backtrack_state *bt)
 +{
-+	asm volatile (
-+		"r6 =3D 3;"
-+		/* pass r6 through r1 into subprog to get it back as r0;
-+		 * this whole chain will have to be marked as precise later
-+		 */
-+		"r1 =3D r6;"
-+		"call identity_subprog;"
-+		/* now use subprog's returned value (which is a
-+		 * r6 -> r1 -> r0 chain), as index into vals array, forcing
-+		 * all of that to be known precisely
-+		 */
-+		"r0 *=3D 4;"
-+		"r1 =3D %[vals];"
-+		/* here r0->r1->r6 chain is forced to be precise and has to be
-+		 * propagated back to the beginning, including through the
-+		 * subprog call
-+		 */
-+		"r1 +=3D r0;"
-+		"r0 =3D *(u32 *)(r1 + 0);"
-+		"exit;"
-+		:
-+		: __imm_ptr(vals)
-+		: __clobber_common, "r6"
-+	);
++	u64 mask =3D 0;
++	int i;
++
++	for (i =3D 0; i < MAX_CALL_FRAMES; i++)
++		mask |=3D bt->reg_masks[i] | bt->stack_masks[i];
++
++	return mask =3D=3D 0;
 +}
 +
-+SEC("?raw_tp")
-+__success __log_level(2)
-+__msg("9: (0f) r1 +=3D r0")
-+__msg("mark_precise: frame0: last_idx 9 first_idx 0")
-+__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 8: (bf) r1 =3D r7=
-")
-+__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 7: (27) r0 *=3D 4=
-")
-+__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 5: (a5) if r0 < 0=
-x4 goto pc+1")
-+__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 4: (85) call pc+7=
-")
-+__naked int global_subprog_result_precise(void)
++static inline int bt_subprog_enter(struct backtrack_state *bt)
 +{
-+	asm volatile (
-+		"r6 =3D 3;"
-+		/* pass r6 through r1 into subprog to get it back as r0;
-+		 * given global_identity_subprog is global, precision won't
-+		 * propagate all the way back to r6
-+		 */
-+		"r1 =3D r6;"
-+		"call global_identity_subprog;"
-+		/* now use subprog's returned value (which is unknown now, so
-+		 * we need to clamp it), as index into vals array, forcing r0
-+		 * to be marked precise (with no effect on r6, though)
-+		 */
-+		"if r0 < %[vals_arr_sz] goto 1f;"
-+		"r0 =3D %[vals_arr_sz] - 1;"
-+	"1:"
-+		"r0 *=3D 4;"
-+		"r1 =3D %[vals];"
-+		/* here r0 is forced to be precise and has to be
-+		 * propagated back to the global subprog call, but it
-+		 * shouldn't go all the way to mark r6 as precise
-+		 */
-+		"r1 +=3D r0;"
-+		"r0 =3D *(u32 *)(r1 + 0);"
-+		"exit;"
-+		:
-+		: __imm_ptr(vals),
-+		  __imm_const(vals_arr_sz, ARRAY_SIZE(vals))
-+		: __clobber_common, "r6"
-+	);
++	if (bt->frame =3D=3D MAX_CALL_FRAMES - 1) {
++		verbose(bt->env, "BUG subprog enter from frame %d\n", bt->frame);
++		WARN_ONCE(1, "verifier backtracking bug");
++		return -EFAULT;
++	}
++	bt->frame++;
++	return 0;
 +}
 +
-+SEC("?raw_tp")
-+__success __log_level(2)
-+__msg("14: (0f) r1 +=3D r6")
-+__msg("mark_precise: frame0: last_idx 14 first_idx 10")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 13: (bf) r1 =3D r=
-7")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 12: (27) r6 *=3D =
-4")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 11: (25) if r6 > =
-0x3 goto pc+4")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 10: (bf) r6 =3D r=
-0")
-+__msg("mark_precise: frame0: parent state regs=3Dr0 stack=3D:")
-+__msg("mark_precise: frame0: last_idx 18 first_idx 0")
-+__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 18: (95) exit")
-+__naked int callback_result_precise(void)
++static inline int bt_subprog_exit(struct backtrack_state *bt)
 +{
-+	asm volatile (
-+		"r6 =3D 3;"
-+
-+		/* call subprog and use result; r0 shouldn't propagate back to
-+		 * callback_subprog
-+		 */
-+		"r1 =3D r6;"			/* nr_loops */
-+		"r2 =3D %[callback_subprog];"	/* callback_fn */
-+		"r3 =3D 0;"			/* callback_ctx */
-+		"r4 =3D 0;"			/* flags */
-+		"call %[bpf_loop];"
-+
-+		"r6 =3D r0;"
-+		"if r6 > 3 goto 1f;"
-+		"r6 *=3D 4;"
-+		"r1 =3D %[vals];"
-+		/* here r6 is forced to be precise and has to be propagated
-+		 * back to the bpf_loop() call, but not beyond
-+		 */
-+		"r1 +=3D r6;"
-+		"r0 =3D *(u32 *)(r1 + 0);"
-+	"1:"
-+		"exit;"
-+		:
-+		: __imm_ptr(vals),
-+		  __imm_ptr(callback_subprog),
-+		  __imm(bpf_loop)
-+		: __clobber_common, "r6"
-+	);
++	if (bt->frame =3D=3D 0) {
++		verbose(bt->env, "BUG subprog exit from frame 0\n");
++		WARN_ONCE(1, "verifier backtracking bug");
++		return -EFAULT;
++	}
++	bt->frame--;
++	return 0;
 +}
 +
-+SEC("?raw_tp")
-+__success __log_level(2)
-+__msg("7: (0f) r1 +=3D r6")
-+__msg("mark_precise: frame0: last_idx 7 first_idx 0")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 6: (bf) r1 =3D r7=
-")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 5: (27) r6 *=3D 4=
-")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 11: (95) exit")
-+__msg("mark_precise: frame1: regs=3D stack=3D before 10: (bf) r0 =3D r1"=
-)
-+__msg("mark_precise: frame1: regs=3D stack=3D before 4: (85) call pc+5")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 3: (b7) r1 =3D 0"=
-)
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 2: (b7) r6 =3D 3"=
-)
-+__naked int parent_callee_saved_reg_precise(void)
++static inline void bt_set_frame_reg(struct backtrack_state *bt, u32 fram=
+e, u32 reg)
 +{
-+	asm volatile (
-+		"r6 =3D 3;"
++	if (bt->reg_masks[frame] & (1 << reg))
++		return;
 +
-+		/* call subprog and ignore result; we need this call only to
-+		 * complicate jump history
-+		 */
-+		"r1 =3D 0;"
-+		"call identity_subprog;"
-+
-+		"r6 *=3D 4;"
-+		"r1 =3D %[vals];"
-+		/* here r6 is forced to be precise and has to be propagated
-+		 * back to the beginning, handling (and ignoring) subprog call
-+		 */
-+		"r1 +=3D r6;"
-+		"r0 =3D *(u32 *)(r1 + 0);"
-+		"exit;"
-+		:
-+		: __imm_ptr(vals)
-+		: __clobber_common, "r6"
-+	);
++	bt->reg_masks[frame] |=3D 1 << reg;
++	bt->bitcnt++;
 +}
 +
-+SEC("?raw_tp")
-+__success __log_level(2)
-+__msg("7: (0f) r1 +=3D r6")
-+__msg("mark_precise: frame0: last_idx 7 first_idx 0")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 6: (bf) r1 =3D r7=
-")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 5: (27) r6 *=3D 4=
-")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 4: (85) call pc+5=
-")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 3: (b7) r1 =3D 0"=
-)
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 2: (b7) r6 =3D 3"=
-)
-+__naked int parent_callee_saved_reg_precise_global(void)
++static inline void bt_clear_frame_reg(struct backtrack_state *bt, u32 fr=
+ame, u32 reg)
 +{
-+	asm volatile (
-+		"r6 =3D 3;"
++	if (!(bt->reg_masks[frame] & (1 << reg)))
++		return;
 +
-+		/* call subprog and ignore result; we need this call only to
-+		 * complicate jump history
-+		 */
-+		"r1 =3D 0;"
-+		"call global_identity_subprog;"
-+
-+		"r6 *=3D 4;"
-+		"r1 =3D %[vals];"
-+		/* here r6 is forced to be precise and has to be propagated
-+		 * back to the beginning, handling (and ignoring) subprog call
-+		 */
-+		"r1 +=3D r6;"
-+		"r0 =3D *(u32 *)(r1 + 0);"
-+		"exit;"
-+		:
-+		: __imm_ptr(vals)
-+		: __clobber_common, "r6"
-+	);
++	bt->reg_masks[frame] &=3D ~(1 << reg);
++	bt->bitcnt--;
 +}
 +
-+SEC("?raw_tp")
-+__success __log_level(2)
-+__msg("12: (0f) r1 +=3D r6")
-+__msg("mark_precise: frame0: last_idx 12 first_idx 10")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 11: (bf) r1 =3D r=
-7")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 10: (27) r6 *=3D =
-4")
-+__msg("mark_precise: frame0: parent state regs=3Dr6 stack=3D:")
-+__msg("mark_precise: frame0: last_idx 16 first_idx 0")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 16: (95) exit")
-+__msg("mark_precise: frame1: regs=3D stack=3D before 15: (b7) r0 =3D 0")
-+__msg("mark_precise: frame1: regs=3D stack=3D before 9: (85) call bpf_lo=
-op#181")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 8: (b7) r4 =3D 0"=
-)
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 7: (b7) r3 =3D 0"=
-)
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 6: (bf) r2 =3D r8=
-")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 5: (b7) r1 =3D 1"=
-)
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 4: (b7) r6 =3D 3"=
-)
-+__naked int parent_callee_saved_reg_precise_with_callback(void)
++static inline void bt_set_reg(struct backtrack_state *bt, u32 reg)
 +{
-+	asm volatile (
-+		"r6 =3D 3;"
-+
-+		/* call subprog and ignore result; we need this call only to
-+		 * complicate jump history
-+		 */
-+		"r1 =3D 1;"			/* nr_loops */
-+		"r2 =3D %[callback_subprog];"	/* callback_fn */
-+		"r3 =3D 0;"			/* callback_ctx */
-+		"r4 =3D 0;"			/* flags */
-+		"call %[bpf_loop];"
-+
-+		"r6 *=3D 4;"
-+		"r1 =3D %[vals];"
-+		/* here r6 is forced to be precise and has to be propagated
-+		 * back to the beginning, handling (and ignoring) callback call
-+		 */
-+		"r1 +=3D r6;"
-+		"r0 =3D *(u32 *)(r1 + 0);"
-+		"exit;"
-+		:
-+		: __imm_ptr(vals),
-+		  __imm_ptr(callback_subprog),
-+		  __imm(bpf_loop)
-+		: __clobber_common, "r6"
-+	);
++	bt_set_frame_reg(bt, bt->frame, reg);
 +}
 +
-+SEC("?raw_tp")
-+__success __log_level(2)
-+__msg("9: (0f) r1 +=3D r6")
-+__msg("mark_precise: frame0: last_idx 9 first_idx 6")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 8: (bf) r1 =3D r7=
-")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 7: (27) r6 *=3D 4=
-")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 6: (79) r6 =3D *(=
-u64 *)(r10 -8)")
-+__msg("mark_precise: frame0: parent state regs=3D stack=3D-8:")
-+__msg("mark_precise: frame0: last_idx 13 first_idx 0")
-+__msg("mark_precise: frame0: regs=3D stack=3D-8 before 13: (95) exit")
-+__msg("mark_precise: frame1: regs=3D stack=3D before 12: (bf) r0 =3D r1"=
-)
-+__msg("mark_precise: frame1: regs=3D stack=3D before 5: (85) call pc+6")
-+__msg("mark_precise: frame0: regs=3D stack=3D-8 before 4: (b7) r1 =3D 0"=
-)
-+__msg("mark_precise: frame0: regs=3D stack=3D-8 before 3: (7b) *(u64 *)(=
-r10 -8) =3D r6")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 2: (b7) r6 =3D 3"=
-)
-+__naked int parent_stack_slot_precise(void)
++static inline void bt_clear_reg(struct backtrack_state *bt, u32 reg)
 +{
-+	asm volatile (
-+		/* spill reg */
-+		"r6 =3D 3;"
-+		"*(u64 *)(r10 - 8) =3D r6;"
-+
-+		/* call subprog and ignore result; we need this call only to
-+		 * complicate jump history
-+		 */
-+		"r1 =3D 0;"
-+		"call identity_subprog;"
-+
-+		/* restore reg from stack; in this case we'll be carrying
-+		 * stack mask when going back into subprog through jump
-+		 * history
-+		 */
-+		"r6 =3D *(u64 *)(r10 - 8);"
-+
-+		"r6 *=3D 4;"
-+		"r1 =3D %[vals];"
-+		/* here r6 is forced to be precise and has to be propagated
-+		 * back to the beginning, handling (and ignoring) subprog call
-+		 */
-+		"r1 +=3D r6;"
-+		"r0 =3D *(u32 *)(r1 + 0);"
-+		"exit;"
-+		:
-+		: __imm_ptr(vals)
-+		: __clobber_common, "r6"
-+	);
++	bt_clear_frame_reg(bt, bt->frame, reg);
 +}
 +
-+SEC("?raw_tp")
-+__success __log_level(2)
-+__msg("9: (0f) r1 +=3D r6")
-+__msg("mark_precise: frame0: last_idx 9 first_idx 6")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 8: (bf) r1 =3D r7=
-")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 7: (27) r6 *=3D 4=
-")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 6: (79) r6 =3D *(=
-u64 *)(r10 -8)")
-+__msg("mark_precise: frame0: parent state regs=3D stack=3D-8:")
-+__msg("mark_precise: frame0: last_idx 5 first_idx 0")
-+__msg("mark_precise: frame0: regs=3D stack=3D-8 before 5: (85) call pc+6=
-")
-+__msg("mark_precise: frame0: regs=3D stack=3D-8 before 4: (b7) r1 =3D 0"=
-)
-+__msg("mark_precise: frame0: regs=3D stack=3D-8 before 3: (7b) *(u64 *)(=
-r10 -8) =3D r6")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 2: (b7) r6 =3D 3"=
-)
-+__naked int parent_stack_slot_precise_global(void)
++static inline void bt_set_frame_slot(struct backtrack_state *bt, u32 fra=
+me, u32 slot)
 +{
-+	asm volatile (
-+		/* spill reg */
-+		"r6 =3D 3;"
-+		"*(u64 *)(r10 - 8) =3D r6;"
++	if (bt->stack_masks[frame] & (1ull << slot))
++		return;
 +
-+		/* call subprog and ignore result; we need this call only to
-+		 * complicate jump history
-+		 */
-+		"r1 =3D 0;"
-+		"call global_identity_subprog;"
-+
-+		/* restore reg from stack; in this case we'll be carrying
-+		 * stack mask when going back into subprog through jump
-+		 * history
-+		 */
-+		"r6 =3D *(u64 *)(r10 - 8);"
-+
-+		"r6 *=3D 4;"
-+		"r1 =3D %[vals];"
-+		/* here r6 is forced to be precise and has to be propagated
-+		 * back to the beginning, handling (and ignoring) subprog call
-+		 */
-+		"r1 +=3D r6;"
-+		"r0 =3D *(u32 *)(r1 + 0);"
-+		"exit;"
-+		:
-+		: __imm_ptr(vals)
-+		: __clobber_common, "r6"
-+	);
++	bt->stack_masks[frame] |=3D 1ull << slot;
++	bt->bitcnt++;
 +}
 +
-+SEC("?raw_tp")
-+__success __log_level(2)
-+__msg("14: (0f) r1 +=3D r6")
-+__msg("mark_precise: frame0: last_idx 14 first_idx 11")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 13: (bf) r1 =3D r=
-7")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 12: (27) r6 *=3D =
-4")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 11: (79) r6 =3D *=
-(u64 *)(r10 -8)")
-+__msg("mark_precise: frame0: parent state regs=3D stack=3D-8:")
-+__msg("mark_precise: frame0: last_idx 18 first_idx 0")
-+__msg("mark_precise: frame0: regs=3D stack=3D-8 before 18: (95) exit")
-+__msg("mark_precise: frame1: regs=3D stack=3D before 17: (b7) r0 =3D 0")
-+__msg("mark_precise: frame1: regs=3D stack=3D before 10: (85) call bpf_l=
-oop#181")
-+__msg("mark_precise: frame0: regs=3D stack=3D-8 before 9: (b7) r4 =3D 0"=
-)
-+__msg("mark_precise: frame0: regs=3D stack=3D-8 before 8: (b7) r3 =3D 0"=
-)
-+__msg("mark_precise: frame0: regs=3D stack=3D-8 before 7: (bf) r2 =3D r8=
-")
-+__msg("mark_precise: frame0: regs=3D stack=3D-8 before 6: (bf) r1 =3D r6=
-")
-+__msg("mark_precise: frame0: regs=3D stack=3D-8 before 5: (7b) *(u64 *)(=
-r10 -8) =3D r6")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 4: (b7) r6 =3D 3"=
-)
-+__naked int parent_stack_slot_precise_with_callback(void)
++static inline void bt_clear_frame_slot(struct backtrack_state *bt, u32 f=
+rame, u32 slot)
 +{
-+	asm volatile (
-+		/* spill reg */
-+		"r6 =3D 3;"
-+		"*(u64 *)(r10 - 8) =3D r6;"
++	if (!(bt->stack_masks[frame] & (1ull << slot)))
++		return;
 +
-+		/* ensure we have callback frame in jump history */
-+		"r1 =3D r6;"			/* nr_loops */
-+		"r2 =3D %[callback_subprog];"	/* callback_fn */
-+		"r3 =3D 0;"			/* callback_ctx */
-+		"r4 =3D 0;"			/* flags */
-+		"call %[bpf_loop];"
-+
-+		/* restore reg from stack; in this case we'll be carrying
-+		 * stack mask when going back into subprog through jump
-+		 * history
-+		 */
-+		"r6 =3D *(u64 *)(r10 - 8);"
-+
-+		"r6 *=3D 4;"
-+		"r1 =3D %[vals];"
-+		/* here r6 is forced to be precise and has to be propagated
-+		 * back to the beginning, handling (and ignoring) subprog call
-+		 */
-+		"r1 +=3D r6;"
-+		"r0 =3D *(u32 *)(r1 + 0);"
-+		"exit;"
-+		:
-+		: __imm_ptr(vals),
-+		  __imm_ptr(callback_subprog),
-+		  __imm(bpf_loop)
-+		: __clobber_common, "r6"
-+	);
++	bt->stack_masks[frame] &=3D ~(1ull << slot);
++	bt->bitcnt--;
 +}
 +
-+__noinline __used
-+static __u64 subprog_with_precise_arg(__u64 x)
++static inline void bt_set_slot(struct backtrack_state *bt, u32 slot)
 +{
-+	return vals[x]; /* x is forced to be precise */
++	bt_set_frame_slot(bt, bt->frame, slot);
 +}
 +
-+SEC("?raw_tp")
-+__success __log_level(2)
-+__msg("8: (0f) r2 +=3D r1")
-+__msg("mark_precise: frame1: last_idx 8 first_idx 0")
-+__msg("mark_precise: frame1: regs=3Dr1 stack=3D before 6: (18) r2 =3D ")
-+__msg("mark_precise: frame1: regs=3Dr1 stack=3D before 5: (67) r1 <<=3D =
-2")
-+__msg("mark_precise: frame1: regs=3Dr1 stack=3D before 2: (85) call pc+2=
-")
-+__msg("mark_precise: frame0: regs=3Dr1 stack=3D before 1: (bf) r1 =3D r6=
-")
-+__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 0: (b7) r6 =3D 3"=
-)
-+__naked int subprog_arg_precise(void)
++static inline void bt_clear_slot(struct backtrack_state *bt, u32 slot)
 +{
-+	asm volatile (
-+		"r6 =3D 3;"
-+		"r1 =3D r6;"
-+		/* subprog_with_precise_arg expects its argument to be
-+		 * precise, so r1->r6 will be marked precise from inside the
-+		 * subprog
-+		 */
-+		"call subprog_with_precise_arg;"
-+		"r0 +=3D r6;"
-+		"exit;"
-+		:
-+		:
-+		: __clobber_common, "r6"
-+	);
++	bt_clear_frame_slot(bt, bt->frame, slot);
 +}
 +
-+/* r1 is pointer to stack slot;
-+ * r2 is a register to spill into that slot
-+ * subprog also spills r2 into its own stack slot
-+ */
-+__naked __noinline __used
-+static __u64 subprog_spill_reg_precise(void)
++static inline u32 bt_frame_reg_mask(struct backtrack_state *bt, u32 fram=
+e)
 +{
-+	asm volatile (
-+		/* spill to parent stack */
-+		"*(u64 *)(r1 + 0) =3D r2;"
-+		/* spill to subprog stack (we use -16 offset to avoid
-+		 * accidental confusion with parent's -8 stack slot in
-+		 * verifier log output)
-+		 */
-+		"*(u64 *)(r10 - 16) =3D r2;"
-+		/* use both spills as return result to propagete precision everywhere =
-*/
-+		"r0 =3D *(u64 *)(r10 - 16);"
-+		"r2 =3D *(u64 *)(r1 + 0);"
-+		"r0 +=3D r2;"
-+		"exit;"
-+	);
++	return bt->reg_masks[frame];
 +}
 +
-+SEC("?raw_tp")
-+__success __log_level(2)
-+/* precision backtracking can't currently handle stack access not throug=
-h r10,
-+ * so we won't be able to mark stack slot fp-8 as precise, and so will
-+ * fallback to forcing all as precise
-+ */
-+__msg("mark_precise: frame0: falling back to forcing all scalars precise=
-")
-+__naked int subprog_spill_into_parent_stack_slot_precise(void)
++static inline u32 bt_reg_mask(struct backtrack_state *bt)
 +{
-+	asm volatile (
-+		"r6 =3D 1;"
-+
-+		/* pass pointer to stack slot and r6 to subprog;
-+		 * r6 will be marked precise and spilled into fp-8 slot, which
-+		 * also should be marked precise
-+		 */
-+		"r1 =3D r10;"
-+		"r1 +=3D -8;"
-+		"r2 =3D r6;"
-+		"call subprog_spill_reg_precise;"
-+
-+		/* restore reg from stack; in this case we'll be carrying
-+		 * stack mask when going back into subprog through jump
-+		 * history
-+		 */
-+		"r7 =3D *(u64 *)(r10 - 8);"
-+
-+		"r7 *=3D 4;"
-+		"r1 =3D %[vals];"
-+		/* here r7 is forced to be precise and has to be propagated
-+		 * back to the beginning, handling subprog call and logic
-+		 */
-+		"r1 +=3D r7;"
-+		"r0 =3D *(u32 *)(r1 + 0);"
-+		"exit;"
-+		:
-+		: __imm_ptr(vals)
-+		: __clobber_common, "r6", "r7"
-+	);
++	return bt->reg_masks[bt->frame];
 +}
 +
-+__naked __noinline __used
-+static __u64 subprog_with_checkpoint(void)
++static inline u64 bt_frame_stack_mask(struct backtrack_state *bt, u32 fr=
+ame)
 +{
-+	asm volatile (
-+		"r0 =3D 0;"
-+		/* guaranteed checkpoint if BPF_F_TEST_STATE_FREQ is used */
-+		"goto +0;"
-+		"exit;"
-+	);
++	return bt->stack_masks[frame];
 +}
 +
-+char _license[] SEC("license") =3D "GPL";
++static inline u64 bt_stack_mask(struct backtrack_state *bt)
++{
++	return bt->stack_masks[bt->frame];
++}
++
++static inline bool bt_is_reg_set(struct backtrack_state *bt, u32 reg)
++{
++	return bt->reg_masks[bt->frame] & (1 << reg);
++}
++
++static inline bool bt_is_slot_set(struct backtrack_state *bt, u32 slot)
++{
++	return bt->stack_masks[bt->frame] & (1ull << slot);
++}
++
+ /* For given verifier state backtrack_insn() is called from the last ins=
+n to
+  * the first insn. Its purpose is to compute a bitmask of registers and
+  * stack slots that needs precision in the parent verifier state.
+  */
+ static int backtrack_insn(struct bpf_verifier_env *env, int idx,
+-			  u32 *reg_mask, u64 *stack_mask)
++			  struct backtrack_state *bt)
+ {
+ 	const struct bpf_insn_cbs cbs =3D {
+ 		.cb_call	=3D disasm_kfunc_name,
+@@ -3202,20 +3340,20 @@ static int backtrack_insn(struct bpf_verifier_env=
+ *env, int idx,
+ 	u8 class =3D BPF_CLASS(insn->code);
+ 	u8 opcode =3D BPF_OP(insn->code);
+ 	u8 mode =3D BPF_MODE(insn->code);
+-	u32 dreg =3D 1u << insn->dst_reg;
+-	u32 sreg =3D 1u << insn->src_reg;
++	u32 dreg =3D insn->dst_reg;
++	u32 sreg =3D insn->src_reg;
+ 	u32 spi;
+=20
+ 	if (insn->code =3D=3D 0)
+ 		return 0;
+ 	if (env->log.level & BPF_LOG_LEVEL2) {
+-		verbose(env, "regs=3D%x stack=3D%llx before ", *reg_mask, *stack_mask)=
+;
++		verbose(env, "regs=3D%x stack=3D%llx before ", bt_reg_mask(bt), bt_sta=
+ck_mask(bt));
+ 		verbose(env, "%d: ", idx);
+ 		print_bpf_insn(&cbs, insn, env->allow_ptr_leaks);
+ 	}
+=20
+ 	if (class =3D=3D BPF_ALU || class =3D=3D BPF_ALU64) {
+-		if (!(*reg_mask & dreg))
++		if (!bt_is_reg_set(bt, dreg))
+ 			return 0;
+ 		if (opcode =3D=3D BPF_MOV) {
+ 			if (BPF_SRC(insn->code) =3D=3D BPF_X) {
+@@ -3223,8 +3361,8 @@ static int backtrack_insn(struct bpf_verifier_env *=
+env, int idx,
+ 				 * dreg needs precision after this insn
+ 				 * sreg needs precision before this insn
+ 				 */
+-				*reg_mask &=3D ~dreg;
+-				*reg_mask |=3D sreg;
++				bt_clear_reg(bt, dreg);
++				bt_set_reg(bt, sreg);
+ 			} else {
+ 				/* dreg =3D K
+ 				 * dreg needs precision after this insn.
+@@ -3232,7 +3370,7 @@ static int backtrack_insn(struct bpf_verifier_env *=
+env, int idx,
+ 				 * as precise=3Dtrue in this verifier state.
+ 				 * No further markings in parent are necessary
+ 				 */
+-				*reg_mask &=3D ~dreg;
++				bt_clear_reg(bt, dreg);
+ 			}
+ 		} else {
+ 			if (BPF_SRC(insn->code) =3D=3D BPF_X) {
+@@ -3240,15 +3378,15 @@ static int backtrack_insn(struct bpf_verifier_env=
+ *env, int idx,
+ 				 * both dreg and sreg need precision
+ 				 * before this insn
+ 				 */
+-				*reg_mask |=3D sreg;
++				bt_set_reg(bt, sreg);
+ 			} /* else dreg +=3D K
+ 			   * dreg still needs precision before this insn
+ 			   */
+ 		}
+ 	} else if (class =3D=3D BPF_LDX) {
+-		if (!(*reg_mask & dreg))
++		if (!bt_is_reg_set(bt, dreg))
+ 			return 0;
+-		*reg_mask &=3D ~dreg;
++		bt_clear_reg(bt, dreg);
+=20
+ 		/* scalars can only be spilled into stack w/o losing precision.
+ 		 * Load from any other memory can be zero extended.
+@@ -3269,9 +3407,9 @@ static int backtrack_insn(struct bpf_verifier_env *=
+env, int idx,
+ 			WARN_ONCE(1, "verifier backtracking bug");
+ 			return -EFAULT;
+ 		}
+-		*stack_mask |=3D 1ull << spi;
++		bt_set_slot(bt, spi);
+ 	} else if (class =3D=3D BPF_STX || class =3D=3D BPF_ST) {
+-		if (*reg_mask & dreg)
++		if (bt_is_reg_set(bt, dreg))
+ 			/* stx & st shouldn't be using _scalar_ dst_reg
+ 			 * to access memory. It means backtracking
+ 			 * encountered a case of pointer subtraction.
+@@ -3286,11 +3424,11 @@ static int backtrack_insn(struct bpf_verifier_env=
+ *env, int idx,
+ 			WARN_ONCE(1, "verifier backtracking bug");
+ 			return -EFAULT;
+ 		}
+-		if (!(*stack_mask & (1ull << spi)))
++		if (!bt_is_slot_set(bt, spi))
+ 			return 0;
+-		*stack_mask &=3D ~(1ull << spi);
++		bt_clear_slot(bt, spi);
+ 		if (class =3D=3D BPF_STX)
+-			*reg_mask |=3D sreg;
++			bt_set_reg(bt, sreg);
+ 	} else if (class =3D=3D BPF_JMP || class =3D=3D BPF_JMP32) {
+ 		if (opcode =3D=3D BPF_CALL) {
+ 			if (insn->src_reg =3D=3D BPF_PSEUDO_CALL)
+@@ -3307,19 +3445,19 @@ static int backtrack_insn(struct bpf_verifier_env=
+ *env, int idx,
+ 			if (insn->src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL && insn->imm =3D=3D 0)
+ 				return -ENOTSUPP;
+ 			/* regular helper call sets R0 */
+-			*reg_mask &=3D ~1;
+-			if (*reg_mask & 0x3f) {
++			bt_clear_reg(bt, BPF_REG_0);
++			if (bt_reg_mask(bt) & BPF_REGMASK_ARGS) {
+ 				/* if backtracing was looking for registers R1-R5
+ 				 * they should have been found already.
+ 				 */
+-				verbose(env, "BUG regs %x\n", *reg_mask);
++				verbose(env, "BUG regs %x\n", bt_reg_mask(bt));
+ 				WARN_ONCE(1, "verifier backtracking bug");
+ 				return -EFAULT;
+ 			}
+ 		} else if (opcode =3D=3D BPF_EXIT) {
+ 			return -ENOTSUPP;
+ 		} else if (BPF_SRC(insn->code) =3D=3D BPF_X) {
+-			if (!(*reg_mask & (dreg | sreg)))
++			if (!bt_is_reg_set(bt, dreg) && !bt_is_reg_set(bt, sreg))
+ 				return 0;
+ 			/* dreg <cond> sreg
+ 			 * Both dreg and sreg need precision before
+@@ -3327,7 +3465,8 @@ static int backtrack_insn(struct bpf_verifier_env *=
+env, int idx,
+ 			 * before it would be equally necessary to
+ 			 * propagate it to dreg.
+ 			 */
+-			*reg_mask |=3D (sreg | dreg);
++			bt_set_reg(bt, dreg);
++			bt_set_reg(bt, sreg);
+ 			 /* else dreg <cond> K
+ 			  * Only dreg still needs precision before
+ 			  * this insn, so for the K-based conditional
+@@ -3335,9 +3474,9 @@ static int backtrack_insn(struct bpf_verifier_env *=
+env, int idx,
+ 			  */
+ 		}
+ 	} else if (class =3D=3D BPF_LD) {
+-		if (!(*reg_mask & dreg))
++		if (!bt_is_reg_set(bt, dreg))
+ 			return 0;
+-		*reg_mask &=3D ~dreg;
++		bt_clear_reg(bt, dreg);
+ 		/* It's ld_imm64 or ld_abs or ld_ind.
+ 		 * For ld_imm64 no further tracking of precision
+ 		 * into parent is necessary
+@@ -3550,20 +3689,21 @@ static void mark_all_scalars_imprecise(struct bpf=
+_verifier_env *env, struct bpf_
+ static int __mark_chain_precision(struct bpf_verifier_env *env, int fram=
+e, int regno,
+ 				  int spi)
+ {
++	struct backtrack_state *bt =3D &env->bt;
+ 	struct bpf_verifier_state *st =3D env->cur_state;
+ 	int first_idx =3D st->first_insn_idx;
+ 	int last_idx =3D env->insn_idx;
+ 	struct bpf_func_state *func;
+ 	struct bpf_reg_state *reg;
+-	u32 reg_mask =3D regno >=3D 0 ? 1u << regno : 0;
+-	u64 stack_mask =3D spi >=3D 0 ? 1ull << spi : 0;
+ 	bool skip_first =3D true;
+-	bool new_marks =3D false;
+ 	int i, err;
+=20
+ 	if (!env->bpf_capable)
+ 		return 0;
+=20
++	/* set frame number from which we are starting to backtrack */
++	bt_init(bt, frame);
++
+ 	/* Do sanity checks against current state of register and/or stack
+ 	 * slot, but don't set precise flag in current state, as precision
+ 	 * tracking in the current state is unnecessary.
+@@ -3575,26 +3715,17 @@ static int __mark_chain_precision(struct bpf_veri=
+fier_env *env, int frame, int r
+ 			WARN_ONCE(1, "backtracing misuse");
+ 			return -EFAULT;
+ 		}
+-		new_marks =3D true;
++		bt_set_reg(bt, regno);
+ 	}
+=20
+ 	while (spi >=3D 0) {
+-		if (!is_spilled_reg(&func->stack[spi])) {
+-			stack_mask =3D 0;
+-			break;
+-		}
+-		reg =3D &func->stack[spi].spilled_ptr;
+-		if (reg->type !=3D SCALAR_VALUE) {
+-			stack_mask =3D 0;
++		if (!is_spilled_scalar_reg(&func->stack[spi]))
+ 			break;
+-		}
+-		new_marks =3D true;
++		bt_set_slot(bt, spi);
+ 		break;
+ 	}
+=20
+-	if (!new_marks)
+-		return 0;
+-	if (!reg_mask && !stack_mask)
++	if (bt_empty(bt))
+ 		return 0;
+=20
+ 	for (;;) {
+@@ -3613,12 +3744,13 @@ static int __mark_chain_precision(struct bpf_veri=
+fier_env *env, int frame, int r
+ 			if (st->curframe =3D=3D 0 &&
+ 			    st->frame[0]->subprogno > 0 &&
+ 			    st->frame[0]->callsite =3D=3D BPF_MAIN_FUNC &&
+-			    stack_mask =3D=3D 0 && (reg_mask & ~0x3e) =3D=3D 0) {
+-				bitmap_from_u64(mask, reg_mask);
++			    bt_stack_mask(bt) =3D=3D 0 &&
++			    (bt_reg_mask(bt) & ~BPF_REGMASK_ARGS) =3D=3D 0) {
++				bitmap_from_u64(mask, bt_reg_mask(bt));
+ 				for_each_set_bit(i, mask, 32) {
+ 					reg =3D &st->frame[0]->regs[i];
+ 					if (reg->type !=3D SCALAR_VALUE) {
+-						reg_mask &=3D ~(1u << i);
++						bt_clear_reg(bt, i);
+ 						continue;
+ 					}
+ 					reg->precise =3D true;
+@@ -3626,8 +3758,8 @@ static int __mark_chain_precision(struct bpf_verifi=
+er_env *env, int frame, int r
+ 				return 0;
+ 			}
+=20
+-			verbose(env, "BUG backtracing func entry subprog %d reg_mask %x stack=
+_mask %llx\n",
+-				st->frame[0]->subprogno, reg_mask, stack_mask);
++			verbose(env, "BUG backtracking func entry subprog %d reg_mask %x stac=
+k_mask %llx\n",
++				st->frame[0]->subprogno, bt_reg_mask(bt), bt_stack_mask(bt));
+ 			WARN_ONCE(1, "verifier backtracking bug");
+ 			return -EFAULT;
+ 		}
+@@ -3637,15 +3769,16 @@ static int __mark_chain_precision(struct bpf_veri=
+fier_env *env, int frame, int r
+ 				err =3D 0;
+ 				skip_first =3D false;
+ 			} else {
+-				err =3D backtrack_insn(env, i, &reg_mask, &stack_mask);
++				err =3D backtrack_insn(env, i, bt);
+ 			}
+ 			if (err =3D=3D -ENOTSUPP) {
+ 				mark_all_scalars_precise(env, st);
++				bt_reset(bt);
+ 				return 0;
+ 			} else if (err) {
+ 				return err;
+ 			}
+-			if (!reg_mask && !stack_mask)
++			if (bt_empty(bt))
+ 				/* Found assignment(s) into tracked register in this state.
+ 				 * Since this state is already marked, just return.
+ 				 * Nothing to be tracked further in the parent state.
+@@ -3670,21 +3803,21 @@ static int __mark_chain_precision(struct bpf_veri=
+fier_env *env, int frame, int r
+ 		if (!st)
+ 			break;
+=20
+-		new_marks =3D false;
+ 		func =3D st->frame[frame];
+-		bitmap_from_u64(mask, reg_mask);
++		bitmap_from_u64(mask, bt_reg_mask(bt));
+ 		for_each_set_bit(i, mask, 32) {
+ 			reg =3D &func->regs[i];
+ 			if (reg->type !=3D SCALAR_VALUE) {
+-				reg_mask &=3D ~(1u << i);
++				bt_clear_reg(bt, i);
+ 				continue;
+ 			}
+-			if (!reg->precise)
+-				new_marks =3D true;
+-			reg->precise =3D true;
++			if (reg->precise)
++				bt_clear_reg(bt, i);
++			else
++				reg->precise =3D true;
+ 		}
+=20
+-		bitmap_from_u64(mask, stack_mask);
++		bitmap_from_u64(mask, bt_stack_mask(bt));
+ 		for_each_set_bit(i, mask, 64) {
+ 			if (i >=3D func->allocated_stack / BPF_REG_SIZE) {
+ 				/* the sequence of instructions:
+@@ -3701,32 +3834,28 @@ static int __mark_chain_precision(struct bpf_veri=
+fier_env *env, int frame, int r
+ 				 * In such case fallback to conservative.
+ 				 */
+ 				mark_all_scalars_precise(env, st);
++				bt_reset(bt);
+ 				return 0;
+ 			}
+=20
+-			if (!is_spilled_reg(&func->stack[i])) {
+-				stack_mask &=3D ~(1ull << i);
++			if (!is_spilled_scalar_reg(&func->stack[i])) {
++				bt_clear_slot(bt, i);
+ 				continue;
+ 			}
+ 			reg =3D &func->stack[i].spilled_ptr;
+-			if (reg->type !=3D SCALAR_VALUE) {
+-				stack_mask &=3D ~(1ull << i);
+-				continue;
+-			}
+-			if (!reg->precise)
+-				new_marks =3D true;
+-			reg->precise =3D true;
++			if (reg->precise)
++				bt_clear_slot(bt, i);
++			else
++				reg->precise =3D true;
+ 		}
+ 		if (env->log.level & BPF_LOG_LEVEL2) {
+ 			verbose(env, "parent %s regs=3D%x stack=3D%llx marks:",
+-				new_marks ? "didn't have" : "already had",
+-				reg_mask, stack_mask);
++				!bt_empty(bt) ? "didn't have" : "already had",
++				bt_reg_mask(bt), bt_stack_mask(bt));
+ 			print_verifier_state(env, func, true);
+ 		}
+=20
+-		if (!reg_mask && !stack_mask)
+-			break;
+-		if (!new_marks)
++		if (bt_empty(bt))
+ 			break;
+=20
+ 		last_idx =3D st->last_insn_idx;
+@@ -18872,6 +19001,8 @@ int bpf_check(struct bpf_prog **prog, union bpf_a=
+ttr *attr, bpfptr_t uattr, __u3
+ 	if (!env)
+ 		return -ENOMEM;
+=20
++	env->bt.env =3D env;
++
+ 	len =3D (*prog)->len;
+ 	env->insn_aux_data =3D
+ 		vzalloc(array_size(sizeof(struct bpf_insn_aux_data), len));
 --=20
 2.34.1
 
