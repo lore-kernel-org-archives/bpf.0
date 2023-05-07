@@ -1,17 +1,17 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4E9F17CA
-	for <bpf@vger.kernel.org>; Sun,  7 May 2023 03:30:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C2D91C05
+	for <bpf@vger.kernel.org>; Sun,  7 May 2023 03:30:27 +0000 (UTC)
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8B41816A;
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4231816B;
 	Sat,  6 May 2023 20:30:24 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QDVL20hLBz4f3mWc;
-	Sun,  7 May 2023 11:30:18 +0800 (CST)
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QDVL32bfkz4f3wRT;
+	Sun,  7 May 2023 11:30:19 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgAHcLNHG1dkjIawIw--.21328S5;
-	Sun, 07 May 2023 11:30:19 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgAHcLNHG1dkjIawIw--.21328S8;
+	Sun, 07 May 2023 11:30:20 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org
 Cc: linux-fsdevel@vger.kernel.org,
@@ -21,9 +21,9 @@ Cc: linux-fsdevel@vger.kernel.org,
 	Viacheslav Dubeyko <slava@dubeyko.com>,
 	Amir Goldstein <amir73il@gmail.com>,
 	houtao1@huawei.com
-Subject: [RFC PATCH bpf-next 1/4] bpf: Introduce bpf iterator for file-system inode
-Date: Sun,  7 May 2023 12:01:04 +0800
-Message-Id: <20230507040107.3755166-2-houtao@huaweicloud.com>
+Subject: [RFC PATCH bpf-next 4/4] selftests/bpf: Add test cases for bpf file-system iterator
+Date: Sun,  7 May 2023 12:01:07 +0800
+Message-Id: <20230507040107.3755166-5-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20230507040107.3755166-1-houtao@huaweicloud.com>
 References: <20230507040107.3755166-1-houtao@huaweicloud.com>
@@ -34,23 +34,23 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgAHcLNHG1dkjIawIw--.21328S5
-X-Coremail-Antispam: 1UD129KBjvJXoWxKF1rKr47XF4rGFy5urWkXrb_yoWfKFy3pF
-	s5Ar4DCr48X3y7Wr1kJa1UuFnYq3W09a4UKrZ7W3yYyrsFqr1vg3WrKr1IyFyrJrW09r92
-	vFyjka4UGryUArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvGb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
-	A2048vs2IY020Ec7CjxVAFwI0_JFI_Gr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-	Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
-	0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
-	17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
-	C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
-	6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
-	73UjIFyTuYvjxUzl1vUUUUU
+X-CM-TRANSID:gCh0CgAHcLNHG1dkjIawIw--.21328S8
+X-Coremail-Antispam: 1UD129KBjvJXoW3AF1rWF15Gr43Xw4xKw15Jwb_yoWDJr15pa
+	yrX345Cr4fX3y7Wr4ktF43uryYva1UWa4xGrZ7WF1rAr4kZr929F1xKry2vFnxJrZ09a1I
+	v3yaka48Jr18XFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvEb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
+	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
+	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
+	v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
+	1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
+	AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI
+	42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
+	evJa73UjIFyTuYvjxUFgAwUUUUU
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -61,331 +61,340 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 
 From: Hou Tao <houtao1@huawei.com>
 
-The usual way to get information about a fs inode is statx(), but the
-returned information is so limited and sometimes it is impossible to
-get some internal information (e.g., dirty pages of one inode) through
-existed syscalls.
-
-So introduce bpf iterator for fs inode to solve the problem. By passing
-one fd of the specific inode and one bpf program to the bpf file-system
-inode iterator, a bpf iterator fd will be created and reading the
-iterator fd will output the content customized by the provided bpf
-program. Now only the bpf iterator for specific inode is supported, the
-support for all inodes in a file-system could be added later if needed.
-
-Without any inode related bpf helper, only the content of inode itself
-and the typed-pointer in inode (e.g., i_sb) can be printed in a bpf
-program as shown below:
-
-  (struct inode){
-   .i_mode = (umode_t)33188,
-   .i_opflags = (short unsigned int)13,
-   .i_flags = (unsigned int)4096,
-   .i_op = (struct inode_operations *)0x000000004dd45285,
-   .i_sb = (struct super_block *)0x0000000006c11996,
-   .i_mapping = (struct address_space *)0x00000000333cf64b,
-   .i_ino = (long unsigned int)30982996,
-   (union){
-    .i_nlink = ()1,
-    .__i_nlink = (unsigned int)1,
-   },
-   .i_size = (loff_t)4095,
-   ......
-  (struct super_block){
-   .s_list = (struct list_head){
-    .next = (struct list_head *)0x000000008af29511,
-    .prev = (struct list_head *)0x000000003d8c9095,
-   },
-   .s_dev = (dev_t)265289730,
-   .s_blocksize_bits = (unsigned char)12,
-   .s_blocksize = (long unsigned int)4096,
-   .s_maxbytes = (loff_t)9223372036854775807,
-   ......
+Add three test cases to demonstrate the basic functionalities of bpf
+file-system iterator:
+1) dump_raw_inode. Use bpf_seq_printf_btf to dump the content of the
+   passed inode and its super_block
+2) dump_inode. Use bpf_filemap_{cachestat,find_present,get_order} to
+   dump the details of the inode page cache.
+3) dump_mnt. Dump the basic information of the passed mount.
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- include/linux/bpf.h            |   2 +
- include/linux/btf_ids.h        |   5 +-
- include/uapi/linux/bpf.h       |   8 ++
- kernel/bpf/Makefile            |   1 +
- kernel/bpf/fs_iter.c           | 174 +++++++++++++++++++++++++++++++++
- tools/include/uapi/linux/bpf.h |   8 ++
- 6 files changed, 197 insertions(+), 1 deletion(-)
- create mode 100644 kernel/bpf/fs_iter.c
+ .../selftests/bpf/prog_tests/bpf_iter_fs.c    | 184 ++++++++++++++++++
+ .../testing/selftests/bpf/progs/bpf_iter_fs.c | 122 ++++++++++++
+ 2 files changed, 306 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_iter_fs.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_fs.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 456f33b9d205..3b2324269647 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2120,6 +2120,8 @@ struct bpf_iter_aux_info {
- 		enum bpf_iter_task_type	type;
- 		u32 pid;
- 	} task;
-+	/* for fs iter */
-+	void *fs;
- };
- 
- typedef int (*bpf_iter_attach_target_t)(struct bpf_prog *prog,
-diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
-index 00950cc03bff..9e036d1360e7 100644
---- a/include/linux/btf_ids.h
-+++ b/include/linux/btf_ids.h
-@@ -255,7 +255,10 @@ extern u32 btf_sock_ids[];
- #define BTF_TRACING_TYPE_xxx	\
- 	BTF_TRACING_TYPE(BTF_TRACING_TYPE_TASK, task_struct)	\
- 	BTF_TRACING_TYPE(BTF_TRACING_TYPE_FILE, file)		\
--	BTF_TRACING_TYPE(BTF_TRACING_TYPE_VMA, vm_area_struct)
-+	BTF_TRACING_TYPE(BTF_TRACING_TYPE_VMA, vm_area_struct)	\
-+	BTF_TRACING_TYPE(BTF_TRACING_TYPE_INODE, inode)		\
-+	BTF_TRACING_TYPE(BTF_TRACING_TYPE_DENTRY, dentry)
-+
- 
- enum {
- #define BTF_TRACING_TYPE(name, type) name,
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 1bb11a6ee667..099048ba3edc 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -95,6 +95,10 @@ enum bpf_cgroup_iter_order {
- 	BPF_CGROUP_ITER_ANCESTORS_UP,		/* walk ancestors upward. */
- };
- 
-+enum bpf_fs_iter_type {
-+	BPF_FS_ITER_INODE = 0,	/* a specific inode */
-+};
-+
- union bpf_iter_link_info {
- 	struct {
- 		__u32	map_fd;
-@@ -116,6 +120,10 @@ union bpf_iter_link_info {
- 		__u32	pid;
- 		__u32	pid_fd;
- 	} task;
-+	struct {
-+		enum bpf_fs_iter_type type;
-+		__u32 fd;
-+	} fs;
- };
- 
- /* BPF syscall commands, see bpf(2) man-page for more details. */
-diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index 1d3892168d32..e945d6e23eed 100644
---- a/kernel/bpf/Makefile
-+++ b/kernel/bpf/Makefile
-@@ -8,6 +8,7 @@ CFLAGS_core.o += $(call cc-disable-warning, override-init) $(cflags-nogcse-yy)
- 
- obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o log.o
- obj-$(CONFIG_BPF_SYSCALL) += bpf_iter.o map_iter.o task_iter.o prog_iter.o link_iter.o
-+obj-$(CONFIG_BPF_SYSCALL) += fs_iter.o
- obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o bloom_filter.o
- obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o
- obj-$(CONFIG_BPF_SYSCALL) += bpf_local_storage.o bpf_task_storage.o
-diff --git a/kernel/bpf/fs_iter.c b/kernel/bpf/fs_iter.c
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter_fs.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter_fs.c
 new file mode 100644
-index 000000000000..cd7f10ea00ab
+index 000000000000..e26d736001b4
 --- /dev/null
-+++ b/kernel/bpf/fs_iter.c
-@@ -0,0 +1,174 @@
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter_fs.c
+@@ -0,0 +1,184 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2023. Huawei Technologies Co., Ltd
-+ */
-+#include <linux/types.h>
-+#include <linux/fs.h>
-+#include <linux/bpf.h>
-+#include <linux/btf.h>
-+#include <linux/btf_ids.h>
-+#include <linux/seq_file.h>
++/* Copyright (C) 2023. Huawei Technologies Co., Ltd */
++#include <test_progs.h>
++#include "bpf_iter_fs.skel.h"
 +
-+DEFINE_BPF_ITER_FUNC(fs_inode, struct bpf_iter_meta *meta, struct inode *inode, struct dentry *dentry);
-+
-+struct bpf_iter__fs_inode {
-+	__bpf_md_ptr(struct bpf_iter_meta *, meta);
-+	__bpf_md_ptr(struct inode *, inode);
-+	__bpf_md_ptr(struct dentry *, dentry);
-+};
-+
-+struct bpf_fs_iter_aux_info {
-+	atomic_t count;
-+	enum bpf_fs_iter_type type;
-+	struct file *filp;
-+};
-+
-+struct bpf_iter_seq_fs_info {
-+	struct bpf_fs_iter_aux_info *fs;
-+};
-+
-+static inline void bpf_fs_iter_get(struct bpf_fs_iter_aux_info *fs)
++static void test_bpf_iter_raw_inode(void)
 +{
-+	atomic_inc(&fs->count);
++	const char *fpath = "/tmp/raw_inode.test";
++	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
++	union bpf_iter_link_info linfo;
++	int ino_fd, iter_fd, err;
++	struct bpf_iter_fs *skel;
++	struct bpf_link *link;
++	char buf[8192];
++	ssize_t nr;
++
++	ino_fd = open(fpath, O_WRONLY | O_CREAT | O_TRUNC, 0644);
++	if (!ASSERT_GE(ino_fd, 0, "open file"))
++		return;
++	ftruncate(ino_fd, 4095);
++
++	skel = bpf_iter_fs__open();
++	if (!ASSERT_OK_PTR(skel, "open"))
++		goto close_ino;
++
++	bpf_program__set_autoload(skel->progs.dump_raw_inode, true);
++
++	err = bpf_iter_fs__load(skel);
++	if (!ASSERT_OK(err, "load"))
++		goto free_skel;
++
++	memset(&linfo, 0, sizeof(linfo));
++	linfo.fs.type = BPF_FS_ITER_INODE;
++	linfo.fs.fd = ino_fd;
++	opts.link_info = &linfo;
++	opts.link_info_len = sizeof(linfo);
++	link = bpf_program__attach_iter(skel->progs.dump_raw_inode, &opts);
++	if (!ASSERT_OK_PTR(link, "attach iter"))
++		goto free_skel;
++
++	iter_fd = bpf_iter_create(bpf_link__fd(link));
++	if (!ASSERT_GE(iter_fd, 0, "create iter"))
++		goto free_link;
++
++	nr = read(iter_fd, buf, sizeof(buf));
++	if (!ASSERT_GT(nr, 0, "read iter"))
++		goto close_iter;
++
++	buf[nr - 1] = 0;
++	puts(buf);
++
++close_iter:
++	close(iter_fd);
++free_link:
++	bpf_link__destroy(link);
++free_skel:
++	bpf_iter_fs__destroy(skel);
++close_ino:
++	close(ino_fd);
 +}
 +
-+static void bpf_fs_iter_put(struct bpf_fs_iter_aux_info *fs)
++static void test_bpf_iter_inode(void)
 +{
-+	if (!atomic_dec_and_test(&fs->count))
++	const char *fpath = "/tmp/inode.test";
++	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
++	union bpf_iter_link_info linfo;
++	int ino_fd, iter_fd, err;
++	struct bpf_iter_fs *skel;
++	struct bpf_link *link;
++	char buf[8192];
++	ssize_t nr;
++
++	/* Close fd after reading iterator completes */
++	ino_fd = open(fpath, O_WRONLY | O_CREAT | O_TRUNC, 0644);
++	if (!ASSERT_GE(ino_fd, 0, "open file"))
++		return;
++	pwrite(ino_fd, buf, sizeof(buf), 0);
++	pwrite(ino_fd, buf, sizeof(buf), sizeof(buf) * 2);
++
++	skel = bpf_iter_fs__open();
++	if (!ASSERT_OK_PTR(skel, "open"))
++		goto close_ino;
++
++	bpf_program__set_autoload(skel->progs.dump_inode, true);
++
++	err = bpf_iter_fs__load(skel);
++	if (!ASSERT_OK(err, "load"))
++		goto free_skel;
++
++	memset(&linfo, 0, sizeof(linfo));
++	linfo.fs.type = BPF_FS_ITER_INODE;
++	linfo.fs.fd = ino_fd;
++	opts.link_info = &linfo;
++	opts.link_info_len = sizeof(linfo);
++	link = bpf_program__attach_iter(skel->progs.dump_inode, &opts);
++	if (!ASSERT_OK_PTR(link, "attach iter"))
++		goto free_skel;
++
++	iter_fd = bpf_iter_create(bpf_link__fd(link));
++	if (!ASSERT_GE(iter_fd, 0, "create iter"))
++		goto free_link;
++
++	nr = read(iter_fd, buf, sizeof(buf));
++	if (!ASSERT_GT(nr, 0, "read iter"))
++		goto close_iter;
++
++	buf[nr - 1] = 0;
++	puts(buf);
++
++close_iter:
++	close(iter_fd);
++free_link:
++	bpf_link__destroy(link);
++free_skel:
++	bpf_iter_fs__destroy(skel);
++close_ino:
++	close(ino_fd);
++}
++
++static void test_bpf_iter_mnt(void)
++{
++	const char *fpath = "/tmp/mnt.test";
++	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
++	union bpf_iter_link_info linfo;
++	int mnt_fd, iter_fd, err;
++	struct bpf_iter_fs *skel;
++	struct bpf_link *link;
++	char buf[8192];
++	ssize_t nr;
++
++	/* Close fd after reading iterator completes */
++	mnt_fd = open(fpath, O_WRONLY | O_CREAT | O_TRUNC, 0644);
++	if (!ASSERT_GE(mnt_fd, 0, "open file"))
 +		return;
 +
-+	fput(fs->filp);
-+	kfree(fs);
++	skel = bpf_iter_fs__open();
++	if (!ASSERT_OK_PTR(skel, "open"))
++		goto close_ino;
++
++	bpf_program__set_autoload(skel->progs.dump_mnt, true);
++
++	err = bpf_iter_fs__load(skel);
++	if (!ASSERT_OK(err, "load"))
++		goto free_skel;
++
++	memset(&linfo, 0, sizeof(linfo));
++	linfo.fs.type = BPF_FS_ITER_MNT;
++	linfo.fs.fd = mnt_fd;
++	opts.link_info = &linfo;
++	opts.link_info_len = sizeof(linfo);
++	link = bpf_program__attach_iter(skel->progs.dump_mnt, &opts);
++	if (!ASSERT_OK_PTR(link, "attach iter"))
++		goto free_skel;
++
++	iter_fd = bpf_iter_create(bpf_link__fd(link));
++	if (!ASSERT_GE(iter_fd, 0, "create iter"))
++		goto free_link;
++
++	nr = read(iter_fd, buf, sizeof(buf));
++	if (!ASSERT_GT(nr, 0, "read iter"))
++		goto close_iter;
++
++	buf[nr - 1] = 0;
++	puts(buf);
++
++close_iter:
++	close(iter_fd);
++free_link:
++	bpf_link__destroy(link);
++free_skel:
++	bpf_iter_fs__destroy(skel);
++close_ino:
++	close(mnt_fd);
 +}
 +
-+static int bpf_iter_attach_fs(struct bpf_prog *prog, union bpf_iter_link_info *linfo,
-+			      struct bpf_iter_aux_info *aux)
++void test_bpf_iter_fs(void)
 +{
-+	struct bpf_fs_iter_aux_info *fs;
-+	struct file *filp;
++	if (test__start_subtest("dump_raw_inode"))
++		test_bpf_iter_raw_inode();
++	if (test__start_subtest("dump_inode"))
++		test_bpf_iter_inode();
++	if (test__start_subtest("dump_mnt"))
++		test_bpf_iter_mnt();
++}
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_fs.c b/tools/testing/selftests/bpf/progs/bpf_iter_fs.c
+new file mode 100644
+index 000000000000..e238446b6ddf
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_fs.c
+@@ -0,0 +1,122 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (C) 2023. Huawei Technologies Co., Ltd */
++#include "bpf_iter.h"
++#include <string.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_core_read.h>
 +
-+	if (linfo->fs.type > BPF_FS_ITER_INODE)
-+		return -EINVAL;
-+	/* TODO: The file-system is pinned */
-+	filp = fget(linfo->fs.fd);
-+	if (!filp)
-+		return -EINVAL;
++char _license[] SEC("license") = "GPL";
 +
-+	fs = kmalloc(sizeof(*fs), GFP_KERNEL);
-+	if (!fs) {
-+		fput(filp);
-+		return -ENOMEM;
-+	}
++struct dump_ctx {
++	struct seq_file *seq;
++	struct inode *inode;
++	unsigned long from;
++	unsigned long max;
++};
 +
-+	atomic_set(&fs->count, 1);
-+	fs->type = linfo->fs.type;
-+	fs->filp = filp;
-+	aux->fs = fs;
++void bpf_filemap_cachestat(struct inode *inode, unsigned long from, unsigned long last,
++		           struct cachestat *cs) __ksym;
++long bpf_filemap_find_present(struct inode *inode, unsigned long from, unsigned long last) __ksym;
++long bpf_filemap_get_order(struct inode *inode, unsigned long index) __ksym;
 +
-+	return 0;
++static u64 dump_page_order(unsigned int i, void *ctx)
++{
++        struct dump_ctx *dump = ctx;
++	unsigned long index;
++	unsigned int order;
++
++	index = bpf_filemap_find_present(dump->inode, dump->from, dump->max);
++	if (index == -1UL)
++		return 1;
++	order = bpf_filemap_get_order(dump->inode, index);
++
++        BPF_SEQ_PRINTF(dump->seq, "  page offset %lu order %u\n", index, order);
++	dump->from = index + (1 << order);
++        return 0;
 +}
 +
-+static void bpf_iter_detach_fs(struct bpf_iter_aux_info *aux)
++SEC("?iter/fs_inode")
++int dump_raw_inode(struct bpf_iter__fs_inode *ctx)
 +{
-+	bpf_fs_iter_put(aux->fs);
-+}
++	struct seq_file *seq = ctx->meta->seq;
++	struct inode *inode = ctx->inode;
++	struct btf_ptr ptr;
 +
-+static int bpf_iter_init_seq_fs_priv(void *priv, struct bpf_iter_aux_info *aux)
-+{
-+	struct bpf_iter_seq_fs_info *info = priv;
-+	struct bpf_fs_iter_aux_info *fs = aux->fs;
-+
-+	/* link fd is still alive, so it is OK to inc ref-count directly */
-+	bpf_fs_iter_get(fs);
-+	info->fs = fs;
-+
-+	return 0;
-+}
-+
-+static void bpf_iter_fini_seq_fs_priv(void *priv)
-+{
-+	struct bpf_iter_seq_fs_info *info = priv;
-+
-+	bpf_fs_iter_put(info->fs);
-+}
-+
-+static void *fs_iter_seq_start(struct seq_file *m, loff_t *pos)
-+{
-+	struct bpf_iter_seq_fs_info *info = m->private;
-+
-+	if (*pos == 0)
-+		++*pos;
-+
-+	return file_inode(info->fs->filp);
-+}
-+
-+static int __fs_iter_seq_show(struct seq_file *m, void *v, bool stop)
-+{
-+	struct bpf_iter__fs_inode ctx;
-+	struct bpf_iter_meta meta;
-+	struct bpf_prog *prog;
-+	int err;
-+
-+	meta.seq = m;
-+	prog = bpf_iter_get_info(&meta, stop);
-+	if (!prog)
++	if (inode == NULL)
 +		return 0;
 +
-+	ctx.meta = &meta;
-+	ctx.inode = v;
-+	ctx.dentry = v ? d_find_alias(v) : NULL;
-+	err = bpf_iter_run_prog(prog, &ctx);
-+	dput(ctx.dentry);
-+	return err;
++	memset(&ptr, 0, sizeof(ptr));
++	ptr.type_id = bpf_core_type_id_kernel(struct inode);
++	ptr.ptr = inode;
++	bpf_seq_printf_btf(seq, &ptr, sizeof(ptr), 0);
++
++	memset(&ptr, 0, sizeof(ptr));
++	ptr.type_id = bpf_core_type_id_kernel(struct super_block);
++	ptr.ptr = inode->i_sb;
++	bpf_seq_printf_btf(seq, &ptr, sizeof(ptr), 0);
++
++	return 0;
 +}
 +
-+static void fs_iter_seq_stop(struct seq_file *m, void *v)
++SEC("?iter/fs_inode")
++int dump_inode(struct bpf_iter__fs_inode *ctx)
 +{
-+	if (!v)
-+		__fs_iter_seq_show(m, NULL, true);
++	struct seq_file *seq = ctx->meta->seq;
++	struct inode *inode = ctx->inode;
++	struct cachestat cs = {};
++	struct super_block *sb;
++	struct dentry *dentry;
++	struct dump_ctx dump;
++
++	if (inode == NULL)
++		return 0;
++
++	sb = inode->i_sb;
++	BPF_SEQ_PRINTF(seq, "sb: bsize %lu s_op %ps s_type %ps name %s\n",
++		       sb->s_blocksize, sb->s_op, sb->s_type, sb->s_type->name);
++
++	BPF_SEQ_PRINTF(seq, "ino: inode nlink %d inum %lu size %llu",
++			inode->i_nlink, inode->i_ino, inode->i_size);
++	dentry = ctx->dentry;
++	if (dentry)
++		BPF_SEQ_PRINTF(seq, ", name %s\n", dentry->d_name.name);
++	else
++		BPF_SEQ_PRINTF(seq, "\n");
++
++	bpf_filemap_cachestat(inode, 0, ~0UL, &cs);
++	BPF_SEQ_PRINTF(seq, "cache: cached %llu dirty %llu wb %llu evicted %llu\n",
++			cs.nr_cache, cs.nr_dirty, cs.nr_writeback, cs.nr_evicted);
++
++	dump.seq = seq;
++	dump.inode = inode;
++	dump.from = 0;
++	/* TODO: handle BPF_MAX_LOOPS */
++	dump.max = ((unsigned long)inode->i_size + 4095) / 4096;
++	BPF_SEQ_PRINTF(seq, "orders:\n");
++	bpf_loop(dump.max, dump_page_order, &dump, 0);
++
++	return 0;
 +}
 +
-+static void *fs_iter_seq_next(struct seq_file *m, void *v, loff_t *pos)
++SEC("?iter/fs_mnt")
++int dump_mnt(struct bpf_iter__fs_mnt *ctx)
 +{
-+	++*pos;
-+	return NULL;
++	struct seq_file *seq = ctx->meta->seq;
++	struct mount *mnt = ctx->mnt;
++	struct super_block *sb;
++
++	if (mnt == NULL)
++		return 0;
++
++	sb = mnt->mnt.mnt_sb;
++	BPF_SEQ_PRINTF(seq, "dev %u:%u ",
++		       sb->s_dev >> 20, sb->s_dev & ((1 << 20) - 1));
++
++	BPF_SEQ_PRINTF(seq, "id %d parent_id %d mnt_flags 0x%x",
++		       mnt->mnt_id, mnt->mnt_parent->mnt_id, mnt->mnt.mnt_flags);
++	if (mnt->mnt.mnt_flags & 0x1000)
++		BPF_SEQ_PRINTF(seq, " shared:%d", mnt->mnt_group_id);
++	BPF_SEQ_PRINTF(seq, "\n");
++
++	return 0;
 +}
-+
-+static int fs_iter_seq_show(struct seq_file *m, void *v)
-+{
-+	return __fs_iter_seq_show(m, v, false);
-+}
-+
-+static const struct seq_operations fs_iter_seq_ops = {
-+	.start = fs_iter_seq_start,
-+	.stop = fs_iter_seq_stop,
-+	.next = fs_iter_seq_next,
-+	.show = fs_iter_seq_show,
-+};
-+
-+static const struct bpf_iter_seq_info fs_iter_seq_info = {
-+	.seq_ops = &fs_iter_seq_ops,
-+	.init_seq_private = bpf_iter_init_seq_fs_priv,
-+	.fini_seq_private = bpf_iter_fini_seq_fs_priv,
-+	.seq_priv_size = sizeof(struct bpf_iter_seq_fs_info),
-+};
-+
-+static struct bpf_iter_reg fs_inode_reg_info = {
-+	.target = "fs_inode",
-+	.attach_target = bpf_iter_attach_fs,
-+	.detach_target = bpf_iter_detach_fs,
-+	.ctx_arg_info_size = 2,
-+	.ctx_arg_info = {
-+		{ offsetof(struct bpf_iter__fs_inode, inode), PTR_TO_BTF_ID_OR_NULL },
-+		{ offsetof(struct bpf_iter__fs_inode, dentry), PTR_TO_BTF_ID_OR_NULL },
-+	},
-+	.seq_info = &fs_iter_seq_info,
-+};
-+
-+static int __init fs_iter_init(void)
-+{
-+	fs_inode_reg_info.ctx_arg_info[0].btf_id = btf_tracing_ids[BTF_TRACING_TYPE_INODE];
-+	fs_inode_reg_info.ctx_arg_info[1].btf_id = btf_tracing_ids[BTF_TRACING_TYPE_DENTRY];
-+	return bpf_iter_reg_target(&fs_inode_reg_info);
-+}
-+late_initcall(fs_iter_init);
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 1bb11a6ee667..099048ba3edc 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -95,6 +95,10 @@ enum bpf_cgroup_iter_order {
- 	BPF_CGROUP_ITER_ANCESTORS_UP,		/* walk ancestors upward. */
- };
- 
-+enum bpf_fs_iter_type {
-+	BPF_FS_ITER_INODE = 0,	/* a specific inode */
-+};
-+
- union bpf_iter_link_info {
- 	struct {
- 		__u32	map_fd;
-@@ -116,6 +120,10 @@ union bpf_iter_link_info {
- 		__u32	pid;
- 		__u32	pid_fd;
- 	} task;
-+	struct {
-+		enum bpf_fs_iter_type type;
-+		__u32 fd;
-+	} fs;
- };
- 
- /* BPF syscall commands, see bpf(2) man-page for more details. */
 -- 
 2.29.2
 
