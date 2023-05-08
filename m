@@ -1,15 +1,15 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB8E171D9;
-	Mon,  8 May 2023 06:14:36 +0000 (UTC)
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC2111542;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81FFB13AE2;
+	Mon,  8 May 2023 06:14:37 +0000 (UTC)
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E41115EFD;
 	Sun,  7 May 2023 23:14:35 -0700 (PDT)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R301e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0Vi.E88-_1683526471;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vi.E88-_1683526471)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R941e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0Vi.E877_1683526470;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vi.E877_1683526470)
           by smtp.aliyun-inc.com;
-          Mon, 08 May 2023 14:14:32 +0800
+          Mon, 08 May 2023 14:14:31 +0800
 From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To: netdev@vger.kernel.org
 Cc: "Michael S. Tsirkin" <mst@redhat.com>,
@@ -25,9 +25,9 @@ Cc: "Michael S. Tsirkin" <mst@redhat.com>,
 	John Fastabend <john.fastabend@gmail.com>,
 	virtualization@lists.linux-foundation.org,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v5 12/15] virtio_net: small: avoid code duplication in xdp scenarios
-Date: Mon,  8 May 2023 14:14:14 +0800
-Message-Id: <20230508061417.65297-13-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v5 11/15] virtio_net: small: remove the delta
+Date: Mon,  8 May 2023 14:14:13 +0800
+Message-Id: <20230508061417.65297-12-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20230508061417.65297-1-xuanzhuo@linux.alibaba.com>
 References: <20230508061417.65297-1-xuanzhuo@linux.alibaba.com>
@@ -40,52 +40,60 @@ MIME-Version: 1.0
 X-Git-Hash: 847ebbc5df1e
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-	T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-	autolearn=ham autolearn_force=no version=3.4.6
+	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+	SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+	USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Avoid the problem that some variables(headroom and so on) will repeat
-the calculation when process xdp.
+In the case of XDP-PASS, skb_reserve uses the "delta" to compatible
+non-XDP, now that is not shared between xdp and non-xdp, so we can
+remove this logic.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- drivers/net/virtio_net.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ drivers/net/virtio_net.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index abf4ddcb686e..b26d907b5ba5 100644
+index bc3bf190e614..abf4ddcb686e 100644
 --- a/drivers/net/virtio_net.c
 +++ b/drivers/net/virtio_net.c
-@@ -1031,11 +1031,10 @@ static struct sk_buff *receive_small(struct net_device *dev,
+@@ -949,9 +949,7 @@ static struct sk_buff *receive_small_xdp(struct net_device *dev,
+ 	unsigned int buflen;
+ 	struct xdp_buff xdp;
  	struct sk_buff *skb;
- 	struct bpf_prog *xdp_prog;
- 	unsigned int xdp_headroom = (unsigned long)ctx;
--	unsigned int header_offset = VIRTNET_RX_PAD + xdp_headroom;
--	unsigned int headroom = vi->hdr_len + header_offset;
--	unsigned int buflen = SKB_DATA_ALIGN(GOOD_PACKET_LEN + headroom) +
--			      SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
- 	struct page *page = virt_to_head_page(buf);
-+	unsigned int header_offset;
-+	unsigned int headroom;
-+	unsigned int buflen;
+-	unsigned int delta = 0;
+ 	unsigned int metasize = 0;
+-	void *orig_data;
+ 	u32 act;
  
- 	len -= vi->hdr_len;
- 	stats->bytes += len;
-@@ -1063,6 +1062,11 @@ static struct sk_buff *receive_small(struct net_device *dev,
- 	rcu_read_unlock();
+ 	if (unlikely(hdr->hdr.gso_type))
+@@ -984,14 +982,12 @@ static struct sk_buff *receive_small_xdp(struct net_device *dev,
+ 	xdp_init_buff(&xdp, buflen, &rq->xdp_rxq);
+ 	xdp_prepare_buff(&xdp, buf + VIRTNET_RX_PAD + vi->hdr_len,
+ 			 xdp_headroom, len, true);
+-	orig_data = xdp.data;
  
- skip_xdp:
-+	header_offset = VIRTNET_RX_PAD + xdp_headroom;
-+	headroom = vi->hdr_len + header_offset;
-+	buflen = SKB_DATA_ALIGN(GOOD_PACKET_LEN + headroom) +
-+		SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
-+
- 	skb = build_skb(buf, buflen);
+ 	act = virtnet_xdp_handler(xdp_prog, &xdp, dev, xdp_xmit, stats);
+ 
+ 	switch (act) {
+ 	case XDP_PASS:
+ 		/* Recalculate length in case bpf program changed it */
+-		delta = orig_data - xdp.data;
+ 		len = xdp.data_end - xdp.data;
+ 		metasize = xdp.data - xdp.data_meta;
+ 		break;
+@@ -1008,7 +1004,7 @@ static struct sk_buff *receive_small_xdp(struct net_device *dev,
  	if (!skb)
  		goto err;
+ 
+-	skb_reserve(skb, headroom - delta);
++	skb_reserve(skb, xdp.data - buf);
+ 	skb_put(skb, len);
+ 	if (metasize)
+ 		skb_metadata_set(skb, metasize);
 -- 
 2.32.0.3.g01195cf9f
 
