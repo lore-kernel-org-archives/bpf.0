@@ -1,129 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 066F618019
-	for <bpf@vger.kernel.org>; Tue,  9 May 2023 17:43:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0856C433D2
-	for <bpf@vger.kernel.org>; Tue,  9 May 2023 17:43:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1683654191;
-	bh=o8vFoL97YE4HOnp7ussF25AUpcgng/STSBnSbhcPgNE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=hZWeQUZ4T7CEp2Wj98MF+KDqIZR4VwHfglIO41STkBU70CKXjQq9kPe2XI5FSSll+
-	 5h+bdsFOnxVX/C8aTCxZhThN4PBwXXLVFmP3AJTylPu3tAItG5LXtirJiKfVJH9G9x
-	 jGs6pMBuXGkiWgsy42cnU5uXnMPs9gj83NRr3o3a3XrM31g4spWSzK4N70SPthRS98
-	 E+ClaLUtS5K27q1gHpWaQ+Sx2yb0S7/1jkgRi/UpoZGidvpQChdVX9AMT3Lb68zKK+
-	 jpYPbIlTm5CBGquLzh3HQf9WZTSKNZ81qcHXUuxDinkkIMHJjowthNXR1HP0O0jBYB
-	 +QaZ10Nf+DlRg==
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-4eed764a10cso6851779e87.0
-        for <bpf@vger.kernel.org>; Tue, 09 May 2023 10:43:11 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwOD7OR72cOQzZJMg/MsLdK2jCKJoPPVradJJh8s18+tEE4c4zH
-	8SJeLf1Al20o6LEpZoLQiD78snwTvSVjcwb4nww=
-X-Google-Smtp-Source: ACHHUZ7J5UUiTOkZqYusgHzZCThjuNNJTpxZ3xOiAzE0B2hLJrbH/lXP71RQR6TCj+Z1w/9VRpjds/sbBbjCOym870I=
-X-Received: by 2002:ac2:53ae:0:b0:4f1:44c0:a921 with SMTP id
- j14-20020ac253ae000000b004f144c0a921mr1088344lfh.55.1683654189666; Tue, 09
- May 2023 10:43:09 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 405EF17FE0
+	for <bpf@vger.kernel.org>; Tue,  9 May 2023 18:09:07 +0000 (UTC)
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E86F10C2
+	for <bpf@vger.kernel.org>; Tue,  9 May 2023 11:09:06 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1aaff9c93a5so43037785ad.2
+        for <bpf@vger.kernel.org>; Tue, 09 May 2023 11:09:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20221208; t=1683655745; x=1686247745;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DSgPsVL1uYatXDU3irtGbEOCXntD3VQ0CCJ7BZVw2+4=;
+        b=E76ZgsHV+G0oPZWTFpRjWATgGj/UF3rL/TYhIVgMc+0wCX8po7ZLjRbN8WM03H5xai
+         6uaDTfy8MGj2d20T+3G+pYubSNUyl8jLhXkxs6cxf0JgKJJkgPqKPturinslLHgozztx
+         eq8gwFs/+/TsGS7hj3Nxtb/f0B3MW3GxxMt6Sdscos90TUAaD6xQS3S4Sk4rGmdh8RNr
+         A7uojU3aCDLbeBIuvBw1e6Dk/JfuxIspdAc4JqwenUAgiHMEVvVa62GzN3LkpPfzw1HS
+         0Pkys5hnN/3KDT/+LgTAUk4//XxXQzHbG67RbM9kEV4OqSpS+VYMOcuiuOjkOgE7Lzh8
+         r1/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683655745; x=1686247745;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DSgPsVL1uYatXDU3irtGbEOCXntD3VQ0CCJ7BZVw2+4=;
+        b=Tye7seUG+WYg+uqufvllR3/V0V24aHL4VtQRxjB/428A3TbgTDtlY9+yYOO8ppgOfV
+         6UWtwJpS9SwHzMo/Rj8Wf4Ec8fs6VX5xJtRw4Dzoz3OEtEYJF0SpNS3jOyD3B5naKUG9
+         oPflJK7qJE54049xmqQU2cSL3W18QGjCoHAnDZKvTKgnd7CvfUam2jcefPwGT7RKWKBu
+         9CsihlhQjiULD27fGzHCE7huyl/NBdCebzkouqF+zehU0mXMJJ9yxyK7B2ep3isXV4wt
+         q+dehPextzHSQxqCnv8+HIMNFeOKXXG9h8VITq04B7vS8za4vAy05uufhTUQXiOpRV8e
+         R9Jw==
+X-Gm-Message-State: AC+VfDyJqsg+w6QQl1ovR7cNc4HNTk15ef+zr7omf7XUOm+93w3iJzU6
+	i5t86hqFVBBIzyjkfz5Vm0QbfEHXbBCW8Q==
+X-Google-Smtp-Source: ACHHUZ5BQWB+bKwPh10c/UWh6+WhGHTq0Qg9630jyJ5f+lADKMULNQGvNc6Y0iUJM0aKrQPx5KYJZQ==
+X-Received: by 2002:a17:903:2347:b0:1a9:91d7:ba2 with SMTP id c7-20020a170903234700b001a991d70ba2mr18564694plh.48.1683655745149;
+        Tue, 09 May 2023 11:09:05 -0700 (PDT)
+Received: from mariner-vm.. ([72.28.92.214])
+        by smtp.gmail.com with ESMTPSA id t1-20020a170902a5c100b001a9581ed7casm1908494plq.141.2023.05.09.11.09.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 11:09:04 -0700 (PDT)
+From: Dave Thaler <dthaler1968@googlemail.com>
+To: bpf@vger.kernel.org
+Cc: bpf@ietf.org,
+	Dave Thaler <dthaler@microsoft.com>
+Subject: [PATCH bpf-next] Shift operations are defined to use a mask
+Date: Tue,  9 May 2023 18:08:45 +0000
+Message-Id: <20230509180845.1236-1-dthaler1968@googlemail.com>
+X-Mailer: git-send-email 2.33.4
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230509151511.3937-1-laoar.shao@gmail.com> <20230509151511.3937-3-laoar.shao@gmail.com>
-In-Reply-To: <20230509151511.3937-3-laoar.shao@gmail.com>
-From: Song Liu <song@kernel.org>
-Date: Tue, 9 May 2023 10:42:57 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6qXXgGkp1DVvHEQCVHvM=yw8nFFhA8LLHgCazwyaoXhA@mail.gmail.com>
-Message-ID: <CAPhsuW6qXXgGkp1DVvHEQCVHvM=yw8nFFhA8LLHgCazwyaoXhA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] bpf: Show total linked progs cnt instead of
- selector in trampoline ksym
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com, 
-	songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com, 
-	kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+	FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+	T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Tue, May 9, 2023 at 8:15=E2=80=AFAM Yafang Shao <laoar.shao@gmail.com> w=
-rote:
->
-> After commit e21aa341785c ("bpf: Fix fexit trampoline."), the selector
-> is only used to indicate how many times the bpf trampoline image are
-> updated and been displayed in the trampoline ksym name. After the
-> trampoline is freed, the count will start from 0 again.
-> So the count is a useless value to the user, we'd better
-> show a more meaningful value like how many progs are linked to this
-> trampoline. After that change, the selector can be removed eventally.
-> If the user want to check whether the bpf trampoline image has been updat=
-ed
-> or not, the user can also compare the address. Each time the trampoline
-> image is updated, the address will change consequently.
+From: Dave Thaler <dthaler@microsoft.com>
 
-I wonder whether this will cause confusion to some users. Maybe the saving
-doesn't worth the churn.
+Update the documentation regarding shift operations to explain the
+use of a mask, since otherwise shifting by a value out of range
+(like negative) is undefined.
 
-Song
+Signed-off-by: Dave Thaler <dthaler@microsoft.com>
+---
+ Documentation/bpf/instruction-set.rst | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
->
-> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-> ---
->  include/linux/bpf.h     | 1 -
->  kernel/bpf/trampoline.c | 7 ++-----
->  2 files changed, 2 insertions(+), 6 deletions(-)
->
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 456f33b..36e4b2d 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1125,7 +1125,6 @@ struct bpf_trampoline {
->         int progs_cnt[BPF_TRAMP_MAX];
->         /* Executable image of trampoline */
->         struct bpf_tramp_image *cur_image;
-> -       u64 selector;
->         struct module *mod;
->  };
->
-> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> index 7067cdf..be37d87 100644
-> --- a/kernel/bpf/trampoline.c
-> +++ b/kernel/bpf/trampoline.c
-> @@ -410,11 +410,10 @@ static int bpf_trampoline_update(struct bpf_trampol=
-ine *tr, bool lock_direct_mut
->                 err =3D unregister_fentry(tr, tr->cur_image->image);
->                 bpf_tramp_image_put(tr->cur_image);
->                 tr->cur_image =3D NULL;
-> -               tr->selector =3D 0;
->                 goto out;
->         }
->
-> -       im =3D bpf_tramp_image_alloc(tr->key, tr->selector);
-> +       im =3D bpf_tramp_image_alloc(tr->key, total);
->         if (IS_ERR(im)) {
->                 err =3D PTR_ERR(im);
->                 goto out;
-> @@ -451,8 +450,7 @@ static int bpf_trampoline_update(struct bpf_trampolin=
-e *tr, bool lock_direct_mut
->
->         set_memory_rox((long)im->image, 1);
->
-> -       WARN_ON(tr->cur_image && tr->selector =3D=3D 0);
-> -       WARN_ON(!tr->cur_image && tr->selector);
-> +       WARN_ON(tr->cur_image && total =3D=3D 0);
->         if (tr->cur_image)
->                 /* progs already running at this address */
->                 err =3D modify_fentry(tr, tr->cur_image->image, im->image=
-, lock_direct_mutex);
-> @@ -482,7 +480,6 @@ static int bpf_trampoline_update(struct bpf_trampolin=
-e *tr, bool lock_direct_mut
->         if (tr->cur_image)
->                 bpf_tramp_image_put(tr->cur_image);
->         tr->cur_image =3D im;
-> -       tr->selector++;
->  out:
->         /* If any error happens, restore previous flags */
->         if (err)
-> --
-> 1.8.3.1
->
->
+diff --git a/Documentation/bpf/instruction-set.rst b/Documentation/bpf/instruction-set.rst
+index 492980ece1a..6644842cd3e 100644
+--- a/Documentation/bpf/instruction-set.rst
++++ b/Documentation/bpf/instruction-set.rst
+@@ -163,13 +163,13 @@ BPF_MUL   0x20   dst \*= src
+ BPF_DIV   0x30   dst = (src != 0) ? (dst / src) : 0
+ BPF_OR    0x40   dst \|= src
+ BPF_AND   0x50   dst &= src
+-BPF_LSH   0x60   dst <<= src
+-BPF_RSH   0x70   dst >>= src
++BPF_LSH   0x60   dst <<= (src & mask)
++BPF_RSH   0x70   dst >>= (src & mask)
+ BPF_NEG   0x80   dst = ~src
+ BPF_MOD   0x90   dst = (src != 0) ? (dst % src) : dst
+ BPF_XOR   0xa0   dst ^= src
+ BPF_MOV   0xb0   dst = src
+-BPF_ARSH  0xc0   sign extending shift right
++BPF_ARSH  0xc0   sign extending dst >>= (src & mask)
+ BPF_END   0xd0   byte swap operations (see `Byte swap instructions`_ below)
+ ========  =====  ==========================================================
+ 
+@@ -204,6 +204,9 @@ for ``BPF_ALU64``, 'imm' is first sign extended to 64 bits and the result
+ interpreted as an unsigned 64-bit value. There are no instructions for
+ signed division or modulo.
+ 
++Shift operations use a mask of 0x3F (63) for 64-bit operations and 0x1F (31)
++for 32-bit operations.
++
+ Byte swap instructions
+ ~~~~~~~~~~~~~~~~~~~~~~
+ 
+-- 
+2.33.4
+
