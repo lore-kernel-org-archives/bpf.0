@@ -1,837 +1,480 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9739E206B5
-	for <bpf@vger.kernel.org>; Thu, 11 May 2023 15:57:53 +0000 (UTC)
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7D1BD
-	for <bpf@vger.kernel.org>; Thu, 11 May 2023 08:57:50 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-5308f5d8ac9so122691a12.0
-        for <bpf@vger.kernel.org>; Thu, 11 May 2023 08:57:50 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D938469E
+	for <bpf@vger.kernel.org>; Thu, 11 May 2023 16:00:09 +0000 (UTC)
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741DB6188
+	for <bpf@vger.kernel.org>; Thu, 11 May 2023 09:00:06 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-24de3a8bfcfso8290776a91.1
+        for <bpf@vger.kernel.org>; Thu, 11 May 2023 09:00:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683820670; x=1686412670;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QLxaN9ENLbeR+Q95KRBuvS8H3wRNyP3zT94cxQ7OMZI=;
-        b=Q8lTIkGyCME7e4IOa/di8JvYkKHV8UMkuxxmWBYhHXoOWB/kOni6h6QadCIuu+aXLy
-         oIViCgY1qSV4vP0Xc2ts+zZLmcIjHA/K1uXN0GL/RSxG5bCxFB2hEVjAceFaoh6uY6Mv
-         Mk6AeFhHNzcPKDbNIlN9M5WcNeCqm8RN6hlpJe06Zldedu6nL7tAbktgfdSt5cHn1vkw
-         Inaf4EAERvjvCWeFpk9yzSjxgrj5109bHwa8QVHmhbyOdU25xVGG1p4gWgGpf4jFO48R
-         J6IvCia8/IbU/+qEyd5XbUXUr7DYm+moYCPCOVQVthsA1tavojbd5nzlBskBmViBMu1l
-         U3lw==
+        d=google.com; s=20221208; t=1683820805; x=1686412805;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dobW9Z7RORQp9gnWv+e9JXcgTmjHiwqvGBQaSlbLitI=;
+        b=CohC9LBG9PPuTFMiApaO0NTjOk0n5Rjo1hy4G6Vcs3U3jqJlTbx33dJW184ZV9lXdb
+         aYy3Kc1bcDxLx0D2bYgMk9ON4hKvmIUSHzXnVh/xzlr2AjlUzSG+tZxHp8XI2cfblh+b
+         nxTK7QMJVcQ8uPaDx+noOufyYngj/9FESp4jj0OfvwaLl3qKKajEJsb0s+AOuYA1LNEU
+         7cBTJ5tiuIcunDLlVmNsH8pTblwtmGwFBehXzt4Jkj2TGk8QakoYoCX+IBk6rbPdAaxY
+         b2M3AKpEgsGlw7Vwdcpx80Mfhbt+g+OsRtcoHwvBx/rAY6lg2Yh7Y5KUPmnpJ4WFxEHP
+         X1Zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683820670; x=1686412670;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QLxaN9ENLbeR+Q95KRBuvS8H3wRNyP3zT94cxQ7OMZI=;
-        b=MBchkD1M9PvkhEIDl91WRYpIO4un9rcMe4o9ZV2Jvg6GWL3HD9zAtMXNzI5MnXPi3n
-         CQD0zsL2+ACgKnxUN2tcb8Xrnd+cb6DlKhXFRJ327p7nM/Ry8HIqflk5/aLIBo09z0R0
-         CCX7ccB5elgp/noqiXlo7pTipy6PxkLtp9MM42kRBm9uuV8Fgbob8qpz4rs8KcxjGvJZ
-         hNiXhFhsWBknmqaB305JS+8k6UIHVyq6WRM21ufwm/hchZ7kd9RFM1ySrcAbUW67RX6o
-         PFdq5u7ovFFsHjPfvuvWUpT5taFwP2G+GPILoRhaIDZvdBg2zBslhCXO4BpxkDxsb0zL
-         fZNA==
-X-Gm-Message-State: AC+VfDyC17U/sBQ5r/3uAFlheMUF42eJ6S1zfSrJYdnMWyQsYNmdTZx8
-	eSWdjKuVGv82nS9NnQp4KwzVpt8RPY4ut+LZlEw0HePQFlGiihkaQFPghmyF3V7dKumDZjK94U5
-	pEsx3LKVXi297OjVU4GA3RLEy1soyk2yF80DE4Oh6qKqG26g02w==
-X-Google-Smtp-Source: ACHHUZ5iGoYchCwe4UKJy5Sz8wzIp2TOfdcOJYbet/e/lJbXydqcdZC7FbJvuUKCrOPHVv6+CzBe8lM=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a63:6b44:0:b0:50b:dda2:6140 with SMTP id
- g65-20020a636b44000000b0050bdda26140mr5953008pgc.11.1683820670023; Thu, 11
- May 2023 08:57:50 -0700 (PDT)
-Date: Thu, 11 May 2023 08:57:39 -0700
-In-Reply-To: <20230511155740.902548-1-sdf@google.com>
+        d=1e100.net; s=20221208; t=1683820805; x=1686412805;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dobW9Z7RORQp9gnWv+e9JXcgTmjHiwqvGBQaSlbLitI=;
+        b=BQV0IcEc1bKLV1lqpI0Af+jdUE2URlV+fx8O8NSjGt3duHLzGNgRO6Wr+gadyz0Dg/
+         MruBTSMi0hgPTP1EAjqJacNRqyNqPEWK6HmFjlf477ddMeOpdr202CqGZW7GbIOt0lbr
+         7+IWoJAh2oqMnIjNZniwJrp8vUkJOxRJhsQ2WkiQkHERAPhURlpzoTlkbGcO2JtHtDi1
+         Ho0q3QFdZkjVnUdqtKI+HGrvUVAkKM+bo1hnBBNx8jE4e7gj7pgtb7iDa8KBaWQw9HcM
+         EPtxz9YeO9qXKWQXp+MisM4H6aQE6L3w4R2sVdFoJefJLymeXuoelzA7IJBiMaBQ2lhP
+         LjPQ==
+X-Gm-Message-State: AC+VfDxeobTIBDqQZgNTgsvLlxjg6bIQ6eKxcDQHXInzoSD9Kz9SKwiZ
+	YwzLwubPcMKlGehrrLQZYZT6mIg8OoWuy4JLthlis0zjVu842opnwQq9SNX9
+X-Google-Smtp-Source: ACHHUZ4YYDdR8DV+0ureIgPI8JDWFmSPqD94Ehy9Ylt/f6ijp95czvecX82XTSHdensbp6AVjx5OM9x85FHhc6a3eeY=
+X-Received: by 2002:a17:90b:a54:b0:246:681c:71fd with SMTP id
+ gw20-20020a17090b0a5400b00246681c71fdmr22031416pjb.6.1683820805356; Thu, 11
+ May 2023 09:00:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
 References: <20230511155740.902548-1-sdf@google.com>
-X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
-Message-ID: <20230511155740.902548-5-sdf@google.com>
-Subject: [PATCH bpf-next v5 3/4] selftests/bpf: Correctly handle optlen > 4096
+In-Reply-To: <20230511155740.902548-1-sdf@google.com>
 From: Stanislav Fomichev <sdf@google.com>
+Date: Thu, 11 May 2023 08:59:51 -0700
+Message-ID: <CAKH8qBv_phmpvNsO02DYQXmAWD5nYRCW98BnctYzDhBDRdc4sQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] RFC: bpf: query effective progs without cgroup_mutex
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
 	martin.lau@linux.dev, song@kernel.org, yhs@fb.com, john.fastabend@gmail.com, 
-	kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org
+	kpsingh@kernel.org, haoluo@google.com, jolsa@kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-	SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+	T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
 	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Even though it's not relevant in selftests, the people
-might still copy-paste from them. So let's take care
-of optlen > 4096 cases explicitly.
+On Thu, May 11, 2023 at 8:57=E2=80=AFAM Stanislav Fomichev <sdf@google.com>=
+ wrote:
+>
+> We're observing some stalls on the heavily loaded machines
+> in the cgroup_bpf_prog_query path. This is likely due to
+> being blocked on cgroup_mutex.
+>
+> IIUC, the cgroup_mutex is there mostly to protect the non-effective
+> fields (cgrp->bpf.progs) which might be changed by the update path.
+> For the BPF_F_QUERY_EFFECTIVE case, all we need is to rcu_dereference
+> a bunch of pointers (and keep them around for consistency), so
+> let's do it.
+>
+> Sending out as an RFC because it looks a bit ugly. It would also
+> be nice to handle non-effective case locklessly as well, but it
+> might require a larger rework.
 
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
----
- .../bpf/prog_tests/cgroup_getset_retval.c     |  20 ++++
- .../bpf/prog_tests/sockopt_inherit.c          |  59 +++-------
- .../selftests/bpf/prog_tests/sockopt_multi.c  | 108 +++++-------------
- .../bpf/prog_tests/sockopt_qos_to_cc.c        |   2 +
- .../progs/cgroup_getset_retval_getsockopt.c   |  13 +++
- .../progs/cgroup_getset_retval_setsockopt.c   |  17 +++
- .../selftests/bpf/progs/sockopt_inherit.c     |  18 ++-
- .../selftests/bpf/progs/sockopt_multi.c       |  26 ++++-
- .../selftests/bpf/progs/sockopt_qos_to_cc.c   |  10 +-
- .../testing/selftests/bpf/progs/sockopt_sk.c  |  25 ++--
- 10 files changed, 166 insertions(+), 132 deletions(-)
+Oops, please ignore this one. Somehow got into my unrelated sockopt series.=
+.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_getset_retval.c b/tools/testing/selftests/bpf/prog_tests/cgroup_getset_retval.c
-index 4d2fa99273d8..2bb5773d6f99 100644
---- a/tools/testing/selftests/bpf/prog_tests/cgroup_getset_retval.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_getset_retval.c
-@@ -25,6 +25,8 @@ static void test_setsockopt_set(int cgroup_fd, int sock_fd)
- 	if (!ASSERT_OK_PTR(obj, "skel-load"))
- 		return;
- 
-+	obj->bss->page_size = sysconf(_SC_PAGESIZE);
-+
- 	/* Attach setsockopt that sets EUNATCH, assert that
- 	 * we actually get that error when we run setsockopt()
- 	 */
-@@ -59,6 +61,8 @@ static void test_setsockopt_set_and_get(int cgroup_fd, int sock_fd)
- 	if (!ASSERT_OK_PTR(obj, "skel-load"))
- 		return;
- 
-+	obj->bss->page_size = sysconf(_SC_PAGESIZE);
-+
- 	/* Attach setsockopt that sets EUNATCH, and one that gets the
- 	 * previously set errno. Assert that we get the same errno back.
- 	 */
-@@ -100,6 +104,8 @@ static void test_setsockopt_default_zero(int cgroup_fd, int sock_fd)
- 	if (!ASSERT_OK_PTR(obj, "skel-load"))
- 		return;
- 
-+	obj->bss->page_size = sysconf(_SC_PAGESIZE);
-+
- 	/* Attach setsockopt that gets the previously set errno.
- 	 * Assert that, without anything setting one, we get 0.
- 	 */
-@@ -134,6 +140,8 @@ static void test_setsockopt_default_zero_and_set(int cgroup_fd, int sock_fd)
- 	if (!ASSERT_OK_PTR(obj, "skel-load"))
- 		return;
- 
-+	obj->bss->page_size = sysconf(_SC_PAGESIZE);
-+
- 	/* Attach setsockopt that gets the previously set errno, and then
- 	 * one that sets the errno to EUNATCH. Assert that the get does not
- 	 * see EUNATCH set later, and does not prevent EUNATCH from being set.
-@@ -177,6 +185,8 @@ static void test_setsockopt_override(int cgroup_fd, int sock_fd)
- 	if (!ASSERT_OK_PTR(obj, "skel-load"))
- 		return;
- 
-+	obj->bss->page_size = sysconf(_SC_PAGESIZE);
-+
- 	/* Attach setsockopt that sets EUNATCH, then one that sets EISCONN,
- 	 * and then one that gets the exported errno. Assert both the syscall
- 	 * and the helper sees the last set errno.
-@@ -224,6 +234,8 @@ static void test_setsockopt_legacy_eperm(int cgroup_fd, int sock_fd)
- 	if (!ASSERT_OK_PTR(obj, "skel-load"))
- 		return;
- 
-+	obj->bss->page_size = sysconf(_SC_PAGESIZE);
-+
- 	/* Attach setsockopt that return a reject without setting errno
- 	 * (legacy reject), and one that gets the errno. Assert that for
- 	 * backward compatibility the syscall result in EPERM, and this
-@@ -268,6 +280,8 @@ static void test_setsockopt_legacy_no_override(int cgroup_fd, int sock_fd)
- 	if (!ASSERT_OK_PTR(obj, "skel-load"))
- 		return;
- 
-+	obj->bss->page_size = sysconf(_SC_PAGESIZE);
-+
- 	/* Attach setsockopt that sets EUNATCH, then one that return a reject
- 	 * without setting errno, and then one that gets the exported errno.
- 	 * Assert both the syscall and the helper's errno are unaffected by
-@@ -319,6 +333,8 @@ static void test_getsockopt_get(int cgroup_fd, int sock_fd)
- 	if (!ASSERT_OK_PTR(obj, "skel-load"))
- 		return;
- 
-+	obj->bss->page_size = sysconf(_SC_PAGESIZE);
-+
- 	/* Attach getsockopt that gets previously set errno. Assert that the
- 	 * error from kernel is in both ctx_retval_value and retval_value.
- 	 */
-@@ -359,6 +375,8 @@ static void test_getsockopt_override(int cgroup_fd, int sock_fd)
- 	if (!ASSERT_OK_PTR(obj, "skel-load"))
- 		return;
- 
-+	obj->bss->page_size = sysconf(_SC_PAGESIZE);
-+
- 	/* Attach getsockopt that sets retval to -EISCONN. Assert that this
- 	 * overrides the value from kernel.
- 	 */
-@@ -396,6 +414,8 @@ static void test_getsockopt_retval_sync(int cgroup_fd, int sock_fd)
- 	if (!ASSERT_OK_PTR(obj, "skel-load"))
- 		return;
- 
-+	obj->bss->page_size = sysconf(_SC_PAGESIZE);
-+
- 	/* Attach getsockopt that sets retval to -EISCONN, and one that clears
- 	 * ctx retval. Assert that the clearing ctx retval is synced to helper
- 	 * and clears any errors both from kernel and BPF..
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c b/tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c
-index 60c17a8e2789..917f486db826 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockopt_inherit.c
-@@ -2,6 +2,8 @@
- #include <test_progs.h>
- #include "cgroup_helpers.h"
- 
-+#include "sockopt_inherit.skel.h"
-+
- #define SOL_CUSTOM			0xdeadbeef
- #define CUSTOM_INHERIT1			0
- #define CUSTOM_INHERIT2			1
-@@ -132,58 +134,30 @@ static int start_server(void)
- 	return fd;
- }
- 
--static int prog_attach(struct bpf_object *obj, int cgroup_fd, const char *title,
--		       const char *prog_name)
--{
--	enum bpf_attach_type attach_type;
--	enum bpf_prog_type prog_type;
--	struct bpf_program *prog;
--	int err;
--
--	err = libbpf_prog_type_by_name(title, &prog_type, &attach_type);
--	if (err) {
--		log_err("Failed to deduct types for %s BPF program", prog_name);
--		return -1;
--	}
--
--	prog = bpf_object__find_program_by_name(obj, prog_name);
--	if (!prog) {
--		log_err("Failed to find %s BPF program", prog_name);
--		return -1;
--	}
--
--	err = bpf_prog_attach(bpf_program__fd(prog), cgroup_fd,
--			      attach_type, 0);
--	if (err) {
--		log_err("Failed to attach %s BPF program", prog_name);
--		return -1;
--	}
--
--	return 0;
--}
--
- static void run_test(int cgroup_fd)
- {
-+	struct bpf_link *link_getsockopt = NULL;
-+	struct bpf_link *link_setsockopt = NULL;
- 	int server_fd = -1, client_fd;
--	struct bpf_object *obj;
-+	struct sockopt_inherit *obj;
- 	void *server_err;
- 	pthread_t tid;
- 	int err;
- 
--	obj = bpf_object__open_file("sockopt_inherit.bpf.o", NULL);
--	if (!ASSERT_OK_PTR(obj, "obj_open"))
-+	obj = sockopt_inherit__open_and_load();
-+	if (!ASSERT_OK_PTR(obj, "skel-load"))
- 		return;
- 
--	err = bpf_object__load(obj);
--	if (!ASSERT_OK(err, "obj_load"))
--		goto close_bpf_object;
-+	obj->bss->page_size = sysconf(_SC_PAGESIZE);
- 
--	err = prog_attach(obj, cgroup_fd, "cgroup/getsockopt", "_getsockopt");
--	if (!ASSERT_OK(err, "prog_attach _getsockopt"))
-+	link_getsockopt = bpf_program__attach_cgroup(obj->progs._getsockopt,
-+						     cgroup_fd);
-+	if (!ASSERT_OK_PTR(link_getsockopt, "cg-attach-getsockopt"))
- 		goto close_bpf_object;
- 
--	err = prog_attach(obj, cgroup_fd, "cgroup/setsockopt", "_setsockopt");
--	if (!ASSERT_OK(err, "prog_attach _setsockopt"))
-+	link_setsockopt = bpf_program__attach_cgroup(obj->progs._setsockopt,
-+						     cgroup_fd);
-+	if (!ASSERT_OK_PTR(link_setsockopt, "cg-attach-setsockopt"))
- 		goto close_bpf_object;
- 
- 	server_fd = start_server();
-@@ -217,7 +191,10 @@ static void run_test(int cgroup_fd)
- close_server_fd:
- 	close(server_fd);
- close_bpf_object:
--	bpf_object__close(obj);
-+	bpf_link__destroy(link_getsockopt);
-+	bpf_link__destroy(link_setsockopt);
-+
-+	sockopt_inherit__destroy(obj);
- }
- 
- void test_sockopt_inherit(void)
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_multi.c b/tools/testing/selftests/bpf/prog_tests/sockopt_multi.c
-index 7f5659349011..759bbb6f8c5f 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockopt_multi.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockopt_multi.c
-@@ -2,61 +2,13 @@
- #include <test_progs.h>
- #include "cgroup_helpers.h"
- 
--static int prog_attach(struct bpf_object *obj, int cgroup_fd, const char *title, const char *name)
--{
--	enum bpf_attach_type attach_type;
--	enum bpf_prog_type prog_type;
--	struct bpf_program *prog;
--	int err;
--
--	err = libbpf_prog_type_by_name(title, &prog_type, &attach_type);
--	if (err) {
--		log_err("Failed to deduct types for %s BPF program", title);
--		return -1;
--	}
--
--	prog = bpf_object__find_program_by_name(obj, name);
--	if (!prog) {
--		log_err("Failed to find %s BPF program", name);
--		return -1;
--	}
--
--	err = bpf_prog_attach(bpf_program__fd(prog), cgroup_fd,
--			      attach_type, BPF_F_ALLOW_MULTI);
--	if (err) {
--		log_err("Failed to attach %s BPF program", name);
--		return -1;
--	}
--
--	return 0;
--}
-+#include "sockopt_multi.skel.h"
- 
--static int prog_detach(struct bpf_object *obj, int cgroup_fd, const char *title, const char *name)
--{
--	enum bpf_attach_type attach_type;
--	enum bpf_prog_type prog_type;
--	struct bpf_program *prog;
--	int err;
--
--	err = libbpf_prog_type_by_name(title, &prog_type, &attach_type);
--	if (err)
--		return -1;
--
--	prog = bpf_object__find_program_by_name(obj, name);
--	if (!prog)
--		return -1;
--
--	err = bpf_prog_detach2(bpf_program__fd(prog), cgroup_fd,
--			       attach_type);
--	if (err)
--		return -1;
--
--	return 0;
--}
--
--static int run_getsockopt_test(struct bpf_object *obj, int cg_parent,
-+static int run_getsockopt_test(struct sockopt_multi *obj, int cg_parent,
- 			       int cg_child, int sock_fd)
- {
-+	struct bpf_link *link_parent = NULL;
-+	struct bpf_link *link_child = NULL;
- 	socklen_t optlen;
- 	__u8 buf;
- 	int err;
-@@ -89,8 +41,9 @@ static int run_getsockopt_test(struct bpf_object *obj, int cg_parent,
- 	 * - child:  0x80 -> 0x90
- 	 */
- 
--	err = prog_attach(obj, cg_child, "cgroup/getsockopt", "_getsockopt_child");
--	if (err)
-+	link_child = bpf_program__attach_cgroup(obj->progs._getsockopt_child,
-+						cg_child);
-+	if (!ASSERT_OK_PTR(link_child, "cg-attach-getsockopt_child"))
- 		goto detach;
- 
- 	buf = 0x00;
-@@ -113,8 +66,9 @@ static int run_getsockopt_test(struct bpf_object *obj, int cg_parent,
- 	 * - parent: 0x90 -> 0xA0
- 	 */
- 
--	err = prog_attach(obj, cg_parent, "cgroup/getsockopt", "_getsockopt_parent");
--	if (err)
-+	link_parent = bpf_program__attach_cgroup(obj->progs._getsockopt_parent,
-+						 cg_parent);
-+	if (!ASSERT_OK_PTR(link_parent, "cg-attach-getsockopt_parent"))
- 		goto detach;
- 
- 	buf = 0x00;
-@@ -157,11 +111,8 @@ static int run_getsockopt_test(struct bpf_object *obj, int cg_parent,
- 	 * - parent: unexpected 0x40, EPERM
- 	 */
- 
--	err = prog_detach(obj, cg_child, "cgroup/getsockopt", "_getsockopt_child");
--	if (err) {
--		log_err("Failed to detach child program");
--		goto detach;
--	}
-+	bpf_link__destroy(link_child);
-+	link_child = NULL;
- 
- 	buf = 0x00;
- 	optlen = 1;
-@@ -198,15 +149,17 @@ static int run_getsockopt_test(struct bpf_object *obj, int cg_parent,
- 	}
- 
- detach:
--	prog_detach(obj, cg_child, "cgroup/getsockopt", "_getsockopt_child");
--	prog_detach(obj, cg_parent, "cgroup/getsockopt", "_getsockopt_parent");
-+	bpf_link__destroy(link_child);
-+	bpf_link__destroy(link_parent);
- 
- 	return err;
- }
- 
--static int run_setsockopt_test(struct bpf_object *obj, int cg_parent,
-+static int run_setsockopt_test(struct sockopt_multi *obj, int cg_parent,
- 			       int cg_child, int sock_fd)
- {
-+	struct bpf_link *link_parent = NULL;
-+	struct bpf_link *link_child = NULL;
- 	socklen_t optlen;
- 	__u8 buf;
- 	int err;
-@@ -236,8 +189,9 @@ static int run_setsockopt_test(struct bpf_object *obj, int cg_parent,
- 
- 	/* Attach child program and make sure it adds 0x10. */
- 
--	err = prog_attach(obj, cg_child, "cgroup/setsockopt", "_setsockopt");
--	if (err)
-+	link_child = bpf_program__attach_cgroup(obj->progs._setsockopt,
-+						cg_child);
-+	if (!ASSERT_OK_PTR(link_child, "cg-attach-setsockopt_child"))
- 		goto detach;
- 
- 	buf = 0x80;
-@@ -263,8 +217,9 @@ static int run_setsockopt_test(struct bpf_object *obj, int cg_parent,
- 
- 	/* Attach parent program and make sure it adds another 0x10. */
- 
--	err = prog_attach(obj, cg_parent, "cgroup/setsockopt", "_setsockopt");
--	if (err)
-+	link_parent = bpf_program__attach_cgroup(obj->progs._setsockopt,
-+						 cg_parent);
-+	if (!ASSERT_OK_PTR(link_parent, "cg-attach-setsockopt_parent"))
- 		goto detach;
- 
- 	buf = 0x80;
-@@ -289,8 +244,8 @@ static int run_setsockopt_test(struct bpf_object *obj, int cg_parent,
- 	}
- 
- detach:
--	prog_detach(obj, cg_child, "cgroup/setsockopt", "_setsockopt");
--	prog_detach(obj, cg_parent, "cgroup/setsockopt", "_setsockopt");
-+	bpf_link__destroy(link_child);
-+	bpf_link__destroy(link_parent);
- 
- 	return err;
- }
-@@ -298,9 +253,8 @@ static int run_setsockopt_test(struct bpf_object *obj, int cg_parent,
- void test_sockopt_multi(void)
- {
- 	int cg_parent = -1, cg_child = -1;
--	struct bpf_object *obj = NULL;
-+	struct sockopt_multi *obj = NULL;
- 	int sock_fd = -1;
--	int err = -1;
- 
- 	cg_parent = test__join_cgroup("/parent");
- 	if (!ASSERT_GE(cg_parent, 0, "join_cgroup /parent"))
-@@ -310,13 +264,11 @@ void test_sockopt_multi(void)
- 	if (!ASSERT_GE(cg_child, 0, "join_cgroup /parent/child"))
- 		goto out;
- 
--	obj = bpf_object__open_file("sockopt_multi.bpf.o", NULL);
--	if (!ASSERT_OK_PTR(obj, "obj_load"))
-+	obj = sockopt_multi__open_and_load();
-+	if (!ASSERT_OK_PTR(obj, "skel-load"))
- 		goto out;
- 
--	err = bpf_object__load(obj);
--	if (!ASSERT_OK(err, "obj_load"))
--		goto out;
-+	obj->bss->page_size = sysconf(_SC_PAGESIZE);
- 
- 	sock_fd = socket(AF_INET, SOCK_STREAM, 0);
- 	if (!ASSERT_GE(sock_fd, 0, "socket"))
-@@ -327,7 +279,7 @@ void test_sockopt_multi(void)
- 
- out:
- 	close(sock_fd);
--	bpf_object__close(obj);
-+	sockopt_multi__destroy(obj);
- 	close(cg_child);
- 	close(cg_parent);
- }
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_qos_to_cc.c b/tools/testing/selftests/bpf/prog_tests/sockopt_qos_to_cc.c
-index 6b53b3cb8dad..6b2d300e9fd4 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockopt_qos_to_cc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockopt_qos_to_cc.c
-@@ -42,6 +42,8 @@ void test_sockopt_qos_to_cc(void)
- 	if (!ASSERT_OK_PTR(skel, "skel"))
- 		goto done;
- 
-+	skel->bss->page_size = sysconf(_SC_PAGESIZE);
-+
- 	sock_fd = socket(AF_INET6, SOCK_STREAM, 0);
- 	if (!ASSERT_GE(sock_fd, 0, "v6 socket open"))
- 		goto done;
-diff --git a/tools/testing/selftests/bpf/progs/cgroup_getset_retval_getsockopt.c b/tools/testing/selftests/bpf/progs/cgroup_getset_retval_getsockopt.c
-index b2a409e6382a..932b8ecd4ae3 100644
---- a/tools/testing/selftests/bpf/progs/cgroup_getset_retval_getsockopt.c
-+++ b/tools/testing/selftests/bpf/progs/cgroup_getset_retval_getsockopt.c
-@@ -12,6 +12,7 @@ __u32 invocations = 0;
- __u32 assertion_error = 0;
- __u32 retval_value = 0;
- __u32 ctx_retval_value = 0;
-+__u32 page_size = 0;
- 
- SEC("cgroup/getsockopt")
- int get_retval(struct bpf_sockopt *ctx)
-@@ -20,6 +21,10 @@ int get_retval(struct bpf_sockopt *ctx)
- 	ctx_retval_value = ctx->retval;
- 	__sync_fetch_and_add(&invocations, 1);
- 
-+	/* optval larger than PAGE_SIZE use kernel's buffer. */
-+	if (ctx->optlen > page_size)
-+		ctx->optlen = 0;
-+
- 	return 1;
- }
- 
-@@ -31,6 +36,10 @@ int set_eisconn(struct bpf_sockopt *ctx)
- 	if (bpf_set_retval(-EISCONN))
- 		assertion_error = 1;
- 
-+	/* optval larger than PAGE_SIZE use kernel's buffer. */
-+	if (ctx->optlen > page_size)
-+		ctx->optlen = 0;
-+
- 	return 1;
- }
- 
-@@ -41,5 +50,9 @@ int clear_retval(struct bpf_sockopt *ctx)
- 
- 	ctx->retval = 0;
- 
-+	/* optval larger than PAGE_SIZE use kernel's buffer. */
-+	if (ctx->optlen > page_size)
-+		ctx->optlen = 0;
-+
- 	return 1;
- }
-diff --git a/tools/testing/selftests/bpf/progs/cgroup_getset_retval_setsockopt.c b/tools/testing/selftests/bpf/progs/cgroup_getset_retval_setsockopt.c
-index d6e5903e06ba..b7fa8804e19d 100644
---- a/tools/testing/selftests/bpf/progs/cgroup_getset_retval_setsockopt.c
-+++ b/tools/testing/selftests/bpf/progs/cgroup_getset_retval_setsockopt.c
-@@ -11,6 +11,7 @@
- __u32 invocations = 0;
- __u32 assertion_error = 0;
- __u32 retval_value = 0;
-+__u32 page_size = 0;
- 
- SEC("cgroup/setsockopt")
- int get_retval(struct bpf_sockopt *ctx)
-@@ -18,6 +19,10 @@ int get_retval(struct bpf_sockopt *ctx)
- 	retval_value = bpf_get_retval();
- 	__sync_fetch_and_add(&invocations, 1);
- 
-+	/* optval larger than PAGE_SIZE use kernel's buffer. */
-+	if (ctx->optlen > page_size)
-+		ctx->optlen = 0;
-+
- 	return 1;
- }
- 
-@@ -29,6 +34,10 @@ int set_eunatch(struct bpf_sockopt *ctx)
- 	if (bpf_set_retval(-EUNATCH))
- 		assertion_error = 1;
- 
-+	/* optval larger than PAGE_SIZE use kernel's buffer. */
-+	if (ctx->optlen > page_size)
-+		ctx->optlen = 0;
-+
- 	return 0;
- }
- 
-@@ -40,6 +49,10 @@ int set_eisconn(struct bpf_sockopt *ctx)
- 	if (bpf_set_retval(-EISCONN))
- 		assertion_error = 1;
- 
-+	/* optval larger than PAGE_SIZE use kernel's buffer. */
-+	if (ctx->optlen > page_size)
-+		ctx->optlen = 0;
-+
- 	return 0;
- }
- 
-@@ -48,5 +61,9 @@ int legacy_eperm(struct bpf_sockopt *ctx)
- {
- 	__sync_fetch_and_add(&invocations, 1);
- 
-+	/* optval larger than PAGE_SIZE use kernel's buffer. */
-+	if (ctx->optlen > page_size)
-+		ctx->optlen = 0;
-+
- 	return 0;
- }
-diff --git a/tools/testing/selftests/bpf/progs/sockopt_inherit.c b/tools/testing/selftests/bpf/progs/sockopt_inherit.c
-index 9fb241b97291..c8f59caa4639 100644
---- a/tools/testing/selftests/bpf/progs/sockopt_inherit.c
-+++ b/tools/testing/selftests/bpf/progs/sockopt_inherit.c
-@@ -9,6 +9,8 @@ char _license[] SEC("license") = "GPL";
- #define CUSTOM_INHERIT2			1
- #define CUSTOM_LISTENER			2
- 
-+__u32 page_size = 0;
-+
- struct sockopt_inherit {
- 	__u8 val;
- };
-@@ -55,7 +57,7 @@ int _getsockopt(struct bpf_sockopt *ctx)
- 	__u8 *optval = ctx->optval;
- 
- 	if (ctx->level != SOL_CUSTOM)
--		return 1; /* only interested in SOL_CUSTOM */
-+		goto out; /* only interested in SOL_CUSTOM */
- 
- 	if (optval + 1 > optval_end)
- 		return 0; /* EPERM, bounds check */
-@@ -70,6 +72,12 @@ int _getsockopt(struct bpf_sockopt *ctx)
- 	ctx->optlen = 1;
- 
- 	return 1;
-+
-+out:
-+	/* optval larger than PAGE_SIZE use kernel's buffer. */
-+	if (ctx->optlen > page_size)
-+		ctx->optlen = 0;
-+	return 1;
- }
- 
- SEC("cgroup/setsockopt")
-@@ -80,7 +88,7 @@ int _setsockopt(struct bpf_sockopt *ctx)
- 	__u8 *optval = ctx->optval;
- 
- 	if (ctx->level != SOL_CUSTOM)
--		return 1; /* only interested in SOL_CUSTOM */
-+		goto out; /* only interested in SOL_CUSTOM */
- 
- 	if (optval + 1 > optval_end)
- 		return 0; /* EPERM, bounds check */
-@@ -93,4 +101,10 @@ int _setsockopt(struct bpf_sockopt *ctx)
- 	ctx->optlen = -1;
- 
- 	return 1;
-+
-+out:
-+	/* optval larger than PAGE_SIZE use kernel's buffer. */
-+	if (ctx->optlen > page_size)
-+		ctx->optlen = 0;
-+	return 1;
- }
-diff --git a/tools/testing/selftests/bpf/progs/sockopt_multi.c b/tools/testing/selftests/bpf/progs/sockopt_multi.c
-index 177a59069dae..96f29fce050b 100644
---- a/tools/testing/selftests/bpf/progs/sockopt_multi.c
-+++ b/tools/testing/selftests/bpf/progs/sockopt_multi.c
-@@ -5,6 +5,8 @@
- 
- char _license[] SEC("license") = "GPL";
- 
-+__u32 page_size = 0;
-+
- SEC("cgroup/getsockopt")
- int _getsockopt_child(struct bpf_sockopt *ctx)
- {
-@@ -12,7 +14,7 @@ int _getsockopt_child(struct bpf_sockopt *ctx)
- 	__u8 *optval = ctx->optval;
- 
- 	if (ctx->level != SOL_IP || ctx->optname != IP_TOS)
--		return 1;
-+		goto out;
- 
- 	if (optval + 1 > optval_end)
- 		return 0; /* EPERM, bounds check */
-@@ -26,6 +28,12 @@ int _getsockopt_child(struct bpf_sockopt *ctx)
- 	ctx->optlen = 1;
- 
- 	return 1;
-+
-+out:
-+	/* optval larger than PAGE_SIZE use kernel's buffer. */
-+	if (ctx->optlen > page_size)
-+		ctx->optlen = 0;
-+	return 1;
- }
- 
- SEC("cgroup/getsockopt")
-@@ -35,7 +43,7 @@ int _getsockopt_parent(struct bpf_sockopt *ctx)
- 	__u8 *optval = ctx->optval;
- 
- 	if (ctx->level != SOL_IP || ctx->optname != IP_TOS)
--		return 1;
-+		goto out;
- 
- 	if (optval + 1 > optval_end)
- 		return 0; /* EPERM, bounds check */
-@@ -49,6 +57,12 @@ int _getsockopt_parent(struct bpf_sockopt *ctx)
- 	ctx->optlen = 1;
- 
- 	return 1;
-+
-+out:
-+	/* optval larger than PAGE_SIZE use kernel's buffer. */
-+	if (ctx->optlen > page_size)
-+		ctx->optlen = 0;
-+	return 1;
- }
- 
- SEC("cgroup/setsockopt")
-@@ -58,7 +72,7 @@ int _setsockopt(struct bpf_sockopt *ctx)
- 	__u8 *optval = ctx->optval;
- 
- 	if (ctx->level != SOL_IP || ctx->optname != IP_TOS)
--		return 1;
-+		goto out;
- 
- 	if (optval + 1 > optval_end)
- 		return 0; /* EPERM, bounds check */
-@@ -67,4 +81,10 @@ int _setsockopt(struct bpf_sockopt *ctx)
- 	ctx->optlen = 1;
- 
- 	return 1;
-+
-+out:
-+	/* optval larger than PAGE_SIZE use kernel's buffer. */
-+	if (ctx->optlen > page_size)
-+		ctx->optlen = 0;
-+	return 1;
- }
-diff --git a/tools/testing/selftests/bpf/progs/sockopt_qos_to_cc.c b/tools/testing/selftests/bpf/progs/sockopt_qos_to_cc.c
-index 1bce83b6e3a7..dbe235ede7f3 100644
---- a/tools/testing/selftests/bpf/progs/sockopt_qos_to_cc.c
-+++ b/tools/testing/selftests/bpf/progs/sockopt_qos_to_cc.c
-@@ -9,6 +9,8 @@
- 
- char _license[] SEC("license") = "GPL";
- 
-+__u32 page_size = 0;
-+
- SEC("cgroup/setsockopt")
- int sockopt_qos_to_cc(struct bpf_sockopt *ctx)
- {
-@@ -19,7 +21,7 @@ int sockopt_qos_to_cc(struct bpf_sockopt *ctx)
- 	char cc_cubic[TCP_CA_NAME_MAX] = "cubic";
- 
- 	if (ctx->level != SOL_IPV6 || ctx->optname != IPV6_TCLASS)
--		return 1;
-+		goto out;
- 
- 	if (optval + 1 > optval_end)
- 		return 0; /* EPERM, bounds check */
-@@ -36,4 +38,10 @@ int sockopt_qos_to_cc(struct bpf_sockopt *ctx)
- 			return 0;
- 	}
- 	return 1;
-+
-+out:
-+	/* optval larger than PAGE_SIZE use kernel's buffer. */
-+	if (ctx->optlen > page_size)
-+		ctx->optlen = 0;
-+	return 1;
- }
-diff --git a/tools/testing/selftests/bpf/progs/sockopt_sk.c b/tools/testing/selftests/bpf/progs/sockopt_sk.c
-index fe1df4cd206e..cb990a7d3d45 100644
---- a/tools/testing/selftests/bpf/progs/sockopt_sk.c
-+++ b/tools/testing/selftests/bpf/progs/sockopt_sk.c
-@@ -37,7 +37,7 @@ int _getsockopt(struct bpf_sockopt *ctx)
- 	/* Bypass AF_NETLINK. */
- 	sk = ctx->sk;
- 	if (sk && sk->family == AF_NETLINK)
--		return 1;
-+		goto out;
- 
- 	/* Make sure bpf_get_netns_cookie is callable.
- 	 */
-@@ -52,8 +52,7 @@ int _getsockopt(struct bpf_sockopt *ctx)
- 		 * let next BPF program in the cgroup chain or kernel
- 		 * handle it.
- 		 */
--		ctx->optlen = 0; /* bypass optval>PAGE_SIZE */
--		return 1;
-+		goto out;
- 	}
- 
- 	if (ctx->level == SOL_SOCKET && ctx->optname == SO_SNDBUF) {
-@@ -61,7 +60,7 @@ int _getsockopt(struct bpf_sockopt *ctx)
- 		 * let next BPF program in the cgroup chain or kernel
- 		 * handle it.
- 		 */
--		return 1;
-+		goto out;
- 	}
- 
- 	if (ctx->level == SOL_TCP && ctx->optname == TCP_CONGESTION) {
-@@ -69,7 +68,7 @@ int _getsockopt(struct bpf_sockopt *ctx)
- 		 * let next BPF program in the cgroup chain or kernel
- 		 * handle it.
- 		 */
--		return 1;
-+		goto out;
- 	}
- 
- 	if (ctx->level == SOL_TCP && ctx->optname == TCP_ZEROCOPY_RECEIVE) {
-@@ -85,7 +84,7 @@ int _getsockopt(struct bpf_sockopt *ctx)
- 		if (((struct tcp_zerocopy_receive *)optval)->address != 0)
- 			return 0; /* unexpected data */
- 
--		return 1;
-+		goto out;
- 	}
- 
- 	if (ctx->level == SOL_IP && ctx->optname == IP_FREEBIND) {
-@@ -129,6 +128,12 @@ int _getsockopt(struct bpf_sockopt *ctx)
- 	ctx->optlen = 1;
- 
- 	return 1;
-+
-+out:
-+	/* optval larger than PAGE_SIZE use kernel's buffer. */
-+	if (ctx->optlen > page_size)
-+		ctx->optlen = 0;
-+	return 1;
- }
- 
- SEC("cgroup/setsockopt")
-@@ -142,7 +147,7 @@ int _setsockopt(struct bpf_sockopt *ctx)
- 	/* Bypass AF_NETLINK. */
- 	sk = ctx->sk;
- 	if (sk && sk->family == AF_NETLINK)
--		return 1;
-+		goto out;
- 
- 	/* Make sure bpf_get_netns_cookie is callable.
- 	 */
-@@ -224,4 +229,10 @@ int _setsockopt(struct bpf_sockopt *ctx)
- 			   */
- 
- 	return 1;
-+
-+out:
-+	/* optval larger than PAGE_SIZE use kernel's buffer. */
-+	if (ctx->optlen > page_size)
-+		ctx->optlen = 0;
-+	return 1;
- }
--- 
-2.40.1.521.gf1e218fcd8-goog
-
+> Signed-off-by: Stanislav Fomichev <sdf@google.com>
+> ---
+>  include/linux/bpf-cgroup-defs.h |  2 +-
+>  include/linux/bpf-cgroup.h      |  1 +
+>  kernel/bpf/cgroup.c             | 80 +++++++++++++++++----------------
+>  3 files changed, 44 insertions(+), 39 deletions(-)
+>
+> diff --git a/include/linux/bpf-cgroup-defs.h b/include/linux/bpf-cgroup-d=
+efs.h
+> index 7b121bd780eb..df0b8faa1a17 100644
+> --- a/include/linux/bpf-cgroup-defs.h
+> +++ b/include/linux/bpf-cgroup-defs.h
+> @@ -56,7 +56,7 @@ struct cgroup_bpf {
+>          * have either zero or one element
+>          * when BPF_F_ALLOW_MULTI the list can have up to BPF_CGROUP_MAX_=
+PROGS
+>          */
+> -       struct hlist_head progs[MAX_CGROUP_BPF_ATTACH_TYPE];
+> +       struct hlist_head __rcu progs[MAX_CGROUP_BPF_ATTACH_TYPE];
+>         u8 flags[MAX_CGROUP_BPF_ATTACH_TYPE];
+>
+>         /* list of cgroup shared storages */
+> diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+> index 57e9e109257e..555e9cbb3a05 100644
+> --- a/include/linux/bpf-cgroup.h
+> +++ b/include/linux/bpf-cgroup.h
+> @@ -106,6 +106,7 @@ struct bpf_prog_list {
+>         struct bpf_prog *prog;
+>         struct bpf_cgroup_link *link;
+>         struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE];
+> +       struct rcu_head rcu;
+>  };
+>
+>  int cgroup_bpf_inherit(struct cgroup *cgrp);
+> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> index a06e118a9be5..92a1b33dcc06 100644
+> --- a/kernel/bpf/cgroup.c
+> +++ b/kernel/bpf/cgroup.c
+> @@ -285,12 +285,15 @@ static void cgroup_bpf_release(struct work_struct *=
+work)
+>         mutex_lock(&cgroup_mutex);
+>
+>         for (atype =3D 0; atype < ARRAY_SIZE(cgrp->bpf.progs); atype++) {
+> -               struct hlist_head *progs =3D &cgrp->bpf.progs[atype];
+> +               struct hlist_head *progs;
+>                 struct bpf_prog_list *pl;
+>                 struct hlist_node *pltmp;
+>
+> +               progs =3D rcu_dereference_protected(&cgrp->bpf.progs[atyp=
+e],
+> +                                                 lockdep_is_held(&cgroup=
+_mutex));
+> +
+>                 hlist_for_each_entry_safe(pl, pltmp, progs, node) {
+> -                       hlist_del(&pl->node);
+> +                       hlist_del_rcu(&pl->node);
+>                         if (pl->prog) {
+>                                 if (pl->prog->expected_attach_type =3D=3D=
+ BPF_LSM_CGROUP)
+>                                         bpf_trampoline_unlink_cgroup_shim=
+(pl->prog);
+> @@ -301,7 +304,7 @@ static void cgroup_bpf_release(struct work_struct *wo=
+rk)
+>                                         bpf_trampoline_unlink_cgroup_shim=
+(pl->link->link.prog);
+>                                 bpf_cgroup_link_auto_detach(pl->link);
+>                         }
+> -                       kfree(pl);
+> +                       kfree_rcu(pl, rcu);
+>                         static_branch_dec(&cgroup_bpf_enabled_key[atype])=
+;
+>                 }
+>                 old_array =3D rcu_dereference_protected(
+> @@ -352,12 +355,12 @@ static struct bpf_prog *prog_list_prog(struct bpf_p=
+rog_list *pl)
+>  /* count number of elements in the list.
+>   * it's slow but the list cannot be long
+>   */
+> -static u32 prog_list_length(struct hlist_head *head)
+> +static u32 prog_list_length(struct hlist_head __rcu *head)
+>  {
+>         struct bpf_prog_list *pl;
+>         u32 cnt =3D 0;
+>
+> -       hlist_for_each_entry(pl, head, node) {
+> +       hlist_for_each_entry_rcu(pl, head, node) {
+>                 if (!prog_list_prog(pl))
+>                         continue;
+>                 cnt++;
+> @@ -553,7 +556,7 @@ static int update_effective_progs(struct cgroup *cgrp=
+,
+>
+>  #define BPF_CGROUP_MAX_PROGS 64
+>
+> -static struct bpf_prog_list *find_attach_entry(struct hlist_head *progs,
+> +static struct bpf_prog_list *find_attach_entry(struct hlist_head __rcu *=
+progs,
+>                                                struct bpf_prog *prog,
+>                                                struct bpf_cgroup_link *li=
+nk,
+>                                                struct bpf_prog *replace_p=
+rog,
+> @@ -565,10 +568,10 @@ static struct bpf_prog_list *find_attach_entry(stru=
+ct hlist_head *progs,
+>         if (!allow_multi) {
+>                 if (hlist_empty(progs))
+>                         return NULL;
+> -               return hlist_entry(progs->first, typeof(*pl), node);
+> +               return hlist_entry(rcu_dereference_raw(progs)->first, typ=
+eof(*pl), node);
+>         }
+>
+> -       hlist_for_each_entry(pl, progs, node) {
+> +       hlist_for_each_entry_rcu(pl, progs, node) {
+>                 if (prog && pl->prog =3D=3D prog && prog !=3D replace_pro=
+g)
+>                         /* disallow attaching the same prog twice */
+>                         return ERR_PTR(-EINVAL);
+> @@ -579,7 +582,7 @@ static struct bpf_prog_list *find_attach_entry(struct=
+ hlist_head *progs,
+>
+>         /* direct prog multi-attach w/ replacement case */
+>         if (replace_prog) {
+> -               hlist_for_each_entry(pl, progs, node) {
+> +               hlist_for_each_entry_rcu(pl, progs, node) {
+>                         if (pl->prog =3D=3D replace_prog)
+>                                 /* a match found */
+>                                 return pl;
+> @@ -615,8 +618,8 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+>         struct bpf_cgroup_storage *new_storage[MAX_BPF_CGROUP_STORAGE_TYP=
+E] =3D {};
+>         struct bpf_prog *new_prog =3D prog ? : link->link.prog;
+>         enum cgroup_bpf_attach_type atype;
+> +       struct hlist_head __rcu *progs;
+>         struct bpf_prog_list *pl;
+> -       struct hlist_head *progs;
+>         int err;
+>
+>         if (((flags & BPF_F_ALLOW_OVERRIDE) && (flags & BPF_F_ALLOW_MULTI=
+)) ||
+> @@ -658,6 +661,7 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+>                                       prog ? : link->link.prog, cgrp))
+>                 return -ENOMEM;
+>
+> +       WRITE_ONCE(cgrp->bpf.flags[atype], saved_flags);
+>         if (pl) {
+>                 old_prog =3D pl->prog;
+>         } else {
+> @@ -669,12 +673,12 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+>                         return -ENOMEM;
+>                 }
+>                 if (hlist_empty(progs))
+> -                       hlist_add_head(&pl->node, progs);
+> +                       hlist_add_head_rcu(&pl->node, progs);
+>                 else
+> -                       hlist_for_each(last, progs) {
+> +                       __hlist_for_each_rcu(last, progs) {
+>                                 if (last->next)
+>                                         continue;
+> -                               hlist_add_behind(&pl->node, last);
+> +                               hlist_add_behind_rcu(&pl->node, last);
+>                                 break;
+>                         }
+>         }
+> @@ -682,7 +686,6 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+>         pl->prog =3D prog;
+>         pl->link =3D link;
+>         bpf_cgroup_storages_assign(pl->storage, storage);
+> -       cgrp->bpf.flags[atype] =3D saved_flags;
+>
+>         if (type =3D=3D BPF_LSM_CGROUP) {
+>                 err =3D bpf_trampoline_link_cgroup_shim(new_prog, atype);
+> @@ -796,7 +799,7 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
+>         enum cgroup_bpf_attach_type atype;
+>         struct bpf_prog *old_prog;
+>         struct bpf_prog_list *pl;
+> -       struct hlist_head *progs;
+> +       struct hlist_head __rcu *progs;
+>         bool found =3D false;
+>
+>         atype =3D bpf_cgroup_atype_find(link->type, new_prog->aux->attach=
+_btf_id);
+> @@ -808,7 +811,7 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
+>         if (link->link.prog->type !=3D new_prog->type)
+>                 return -EINVAL;
+>
+> -       hlist_for_each_entry(pl, progs, node) {
+> +       hlist_for_each_entry_rcu(pl, progs, node) {
+>                 if (pl->link =3D=3D link) {
+>                         found =3D true;
+>                         break;
+> @@ -847,7 +850,7 @@ static int cgroup_bpf_replace(struct bpf_link *link, =
+struct bpf_prog *new_prog,
+>         return ret;
+>  }
+>
+> -static struct bpf_prog_list *find_detach_entry(struct hlist_head *progs,
+> +static struct bpf_prog_list *find_detach_entry(struct hlist_head __rcu *=
+progs,
+>                                                struct bpf_prog *prog,
+>                                                struct bpf_cgroup_link *li=
+nk,
+>                                                bool allow_multi)
+> @@ -862,7 +865,7 @@ static struct bpf_prog_list *find_detach_entry(struct=
+ hlist_head *progs,
+>                 /* to maintain backward compatibility NONE and OVERRIDE c=
+groups
+>                  * allow detaching with invalid FD (prog=3D=3DNULL) in le=
+gacy mode
+>                  */
+> -               return hlist_entry(progs->first, typeof(*pl), node);
+> +               return hlist_entry(rcu_dereference_raw(progs)->first, typ=
+eof(*pl), node);
+>         }
+>
+>         if (!prog && !link)
+> @@ -872,7 +875,7 @@ static struct bpf_prog_list *find_detach_entry(struct=
+ hlist_head *progs,
+>                 return ERR_PTR(-EINVAL);
+>
+>         /* find the prog or link and detach it */
+> -       hlist_for_each_entry(pl, progs, node) {
+> +       hlist_for_each_entry_rcu(pl, progs, node) {
+>                 if (pl->prog =3D=3D prog && pl->link =3D=3D link)
+>                         return pl;
+>         }
+> @@ -894,9 +897,9 @@ static void purge_effective_progs(struct cgroup *cgrp=
+, struct bpf_prog *prog,
+>                                   enum cgroup_bpf_attach_type atype)
+>  {
+>         struct cgroup_subsys_state *css;
+> +       struct hlist_head __rcu *head;
+>         struct bpf_prog_array *progs;
+>         struct bpf_prog_list *pl;
+> -       struct hlist_head *head;
+>         struct cgroup *cg;
+>         int pos;
+>
+> @@ -913,7 +916,7 @@ static void purge_effective_progs(struct cgroup *cgrp=
+, struct bpf_prog *prog,
+>                                 continue;
+>
+>                         head =3D &cg->bpf.progs[atype];
+> -                       hlist_for_each_entry(pl, head, node) {
+> +                       hlist_for_each_entry_rcu(pl, head, node) {
+>                                 if (!prog_list_prog(pl))
+>                                         continue;
+>                                 if (pl->prog =3D=3D prog && pl->link =3D=
+=3D link)
+> @@ -950,9 +953,9 @@ static int __cgroup_bpf_detach(struct cgroup *cgrp, s=
+truct bpf_prog *prog,
+>                                struct bpf_cgroup_link *link, enum bpf_att=
+ach_type type)
+>  {
+>         enum cgroup_bpf_attach_type atype;
+> +       struct hlist_head __rcu *progs;
+>         struct bpf_prog *old_prog;
+>         struct bpf_prog_list *pl;
+> -       struct hlist_head *progs;
+>         u32 attach_btf_id =3D 0;
+>         u32 flags;
+>
+> @@ -989,12 +992,12 @@ static int __cgroup_bpf_detach(struct cgroup *cgrp,=
+ struct bpf_prog *prog,
+>         }
+>
+>         /* now can actually delete it from this cgroup list */
+> -       hlist_del(&pl->node);
+> +       hlist_del_rcu(&pl->node);
+>
+>         kfree(pl);
+>         if (hlist_empty(progs))
+>                 /* last program was detached, reset flags to zero */
+> -               cgrp->bpf.flags[atype] =3D 0;
+> +               WRITE_ONCE(cgrp->bpf.flags[atype], 0);
+>         if (old_prog) {
+>                 if (type =3D=3D BPF_LSM_CGROUP)
+>                         bpf_trampoline_unlink_cgroup_shim(old_prog);
+> @@ -1022,10 +1025,10 @@ static int __cgroup_bpf_query(struct cgroup *cgrp=
+, const union bpf_attr *attr,
+>         __u32 __user *prog_attach_flags =3D u64_to_user_ptr(attr->query.p=
+rog_attach_flags);
+>         bool effective_query =3D attr->query.query_flags & BPF_F_QUERY_EF=
+FECTIVE;
+>         __u32 __user *prog_ids =3D u64_to_user_ptr(attr->query.prog_ids);
+> +       struct bpf_prog_array *effective[MAX_CGROUP_BPF_ATTACH_TYPE];
+>         enum bpf_attach_type type =3D attr->query.attach_type;
+>         enum cgroup_bpf_attach_type from_atype, to_atype;
+>         enum cgroup_bpf_attach_type atype;
+> -       struct bpf_prog_array *effective;
+>         int cnt, ret =3D 0, i;
+>         int total_cnt =3D 0;
+>         u32 flags;
+> @@ -1046,14 +1049,15 @@ static int __cgroup_bpf_query(struct cgroup *cgrp=
+, const union bpf_attr *attr,
+>                 if (from_atype < 0)
+>                         return -EINVAL;
+>                 to_atype =3D from_atype;
+> -               flags =3D cgrp->bpf.flags[from_atype];
+> +               flags =3D READ_ONCE(cgrp->bpf.flags[from_atype]);
+>         }
+>
+>         for (atype =3D from_atype; atype <=3D to_atype; atype++) {
+>                 if (effective_query) {
+> -                       effective =3D rcu_dereference_protected(cgrp->bpf=
+.effective[atype],
+> -                                                             lockdep_is_=
+held(&cgroup_mutex));
+> -                       total_cnt +=3D bpf_prog_array_length(effective);
+> +                       effective[atype] =3D rcu_dereference_protected(
+> +                                               cgrp->bpf.effective[atype=
+],
+> +                                               lockdep_is_held(&cgroup_m=
+utex));
+> +                       total_cnt +=3D bpf_prog_array_length(effective[at=
+ype]);
+>                 } else {
+>                         total_cnt +=3D prog_list_length(&cgrp->bpf.progs[=
+atype]);
+>                 }
+> @@ -1076,12 +1080,10 @@ static int __cgroup_bpf_query(struct cgroup *cgrp=
+, const union bpf_attr *attr,
+>
+>         for (atype =3D from_atype; atype <=3D to_atype && total_cnt; atyp=
+e++) {
+>                 if (effective_query) {
+> -                       effective =3D rcu_dereference_protected(cgrp->bpf=
+.effective[atype],
+> -                                                             lockdep_is_=
+held(&cgroup_mutex));
+> -                       cnt =3D min_t(int, bpf_prog_array_length(effectiv=
+e), total_cnt);
+> -                       ret =3D bpf_prog_array_copy_to_user(effective, pr=
+og_ids, cnt);
+> +                       cnt =3D min_t(int, bpf_prog_array_length(effectiv=
+e[atype]), total_cnt);
+> +                       ret =3D bpf_prog_array_copy_to_user(effective[aty=
+pe], prog_ids, cnt);
+>                 } else {
+> -                       struct hlist_head *progs;
+> +                       struct hlist_head __rcu *progs;
+>                         struct bpf_prog_list *pl;
+>                         struct bpf_prog *prog;
+>                         u32 id;
+> @@ -1089,7 +1091,7 @@ static int __cgroup_bpf_query(struct cgroup *cgrp, =
+const union bpf_attr *attr,
+>                         progs =3D &cgrp->bpf.progs[atype];
+>                         cnt =3D min_t(int, prog_list_length(progs), total=
+_cnt);
+>                         i =3D 0;
+> -                       hlist_for_each_entry(pl, progs, node) {
+> +                       hlist_for_each_entry_rcu(pl, progs, node) {
+>                                 prog =3D prog_list_prog(pl);
+>                                 id =3D prog->aux->id;
+>                                 if (copy_to_user(prog_ids + i, &id, sizeo=
+f(id)))
+> @@ -1099,7 +1101,7 @@ static int __cgroup_bpf_query(struct cgroup *cgrp, =
+const union bpf_attr *attr,
+>                         }
+>
+>                         if (prog_attach_flags) {
+> -                               flags =3D cgrp->bpf.flags[atype];
+> +                               flags =3D READ_ONCE(cgrp->bpf.flags[atype=
+]);
+>
+>                                 for (i =3D 0; i < cnt; i++)
+>                                         if (copy_to_user(prog_attach_flag=
+s + i,
+> @@ -1112,6 +1114,8 @@ static int __cgroup_bpf_query(struct cgroup *cgrp, =
+const union bpf_attr *attr,
+>                 prog_ids +=3D cnt;
+>                 total_cnt -=3D cnt;
+>         }
+> +       if (total_cnt !=3D 0)
+> +               return -EAGAIN; /* raced with the detach */
+>         return ret;
+>  }
+>
+> @@ -1120,9 +1124,9 @@ static int cgroup_bpf_query(struct cgroup *cgrp, co=
+nst union bpf_attr *attr,
+>  {
+>         int ret;
+>
+> -       mutex_lock(&cgroup_mutex);
+> +       rcu_read_lock();
+>         ret =3D __cgroup_bpf_query(cgrp, attr, uattr);
+> -       mutex_unlock(&cgroup_mutex);
+> +       rcu_read_unlock();
+>         return ret;
+>  }
+>
+> --
+> 2.40.1.521.gf1e218fcd8-goog
+>
