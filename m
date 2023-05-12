@@ -1,23 +1,23 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F98923D4D
-	for <bpf@vger.kernel.org>; Fri, 12 May 2023 19:00:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 17C05C433EF;
-	Fri, 12 May 2023 19:00:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0955B23D43
+	for <bpf@vger.kernel.org>; Fri, 12 May 2023 19:10:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A05A8C4339C;
+	Fri, 12 May 2023 19:10:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1683918020;
-	bh=X0JitWnD4B51LMzqYZL/bmFvqHS/5bZ7uoLy7rUItZU=;
+	s=k20201202; t=1683918620;
+	bh=SQuKwrtt+nEUGJpKjW8c0JPDuqypL113lmTuLJDwKig=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=LXkdysSzQ1Tw/xElzVEPJXWzgo+Y2yYCvPBcoNYc8ng/JKwBZUN7RNgyRwgNxIU+c
-	 f974+UZOfaHzY88nz1iUWaz5o5mBWyBiwQSKJgXRw1olfoPjvL6ooGmoUNI8Mfc8fS
-	 NF6C+clUMEFz96kVNcVpiPwP3s0sPuzWO/bzJpUCwo9KoGnP0jkPWPKN6QFHgrlO8O
-	 eTtoqr3qf7fuRKVL5qo78wps9TsoWat4ImYDqDIbNRxXWjcZRv89oh3zFylnwOjLO8
-	 a6c7+lWu1ac1BodkNPYNJcC8a+6uOGAG1lpTybqaKwJJpbW7HNb7s07VHTftJC9YN6
-	 Pr+2TQUzsEvoQ==
+	b=Pi2yJe/VCf9TkXcmxiiAIKqhLAtZ9mN6kxniCo1NEF+Jxcs9zIIw9ivZs3qn94x41
+	 Y5ad3LWHkhKGijmQNfE6W7w8vcQYhee8Nqh/VqzsmWY6ZDj3MMH/egRQE3+/KGzyHX
+	 fYuhuxXqcOqpR1RAcCl2PaeJIDAY1o/W3zgETSSPfTHWVmjPln0vTGkmcmGgL6266o
+	 4jyx1XlNKZsCXEMsa9DteXbvHoKwFel4IgCsZviA3pcrBjgM7HQfH7zOt0XOTABEwH
+	 mpoKxfnlq3U2+KRuXkjohqoabd1FaYd2xTyXk807NjPIRW5Z2aLtxY/3C9MyFEVZcZ
+	 b2fm4gor2MejQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E5C3EE26D2A;
-	Fri, 12 May 2023 19:00:19 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7C251E4D00E;
+	Fri, 12 May 2023 19:10:20 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -26,38 +26,36 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf: Add --skip_encoding_btf_inconsistent_proto,
- --btf_gen_optimized to pahole flags for v1.25
+Subject: Re: [PATCH bpf-next] bpf: Address KCSAN report on bpf_lru_list
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <168391801993.32766.1241331761103876503.git-patchwork-notify@kernel.org>
-Date: Fri, 12 May 2023 19:00:19 +0000
-References: <20230510130241.1696561-1-alan.maguire@oracle.com>
-In-Reply-To: <20230510130241.1696561-1-alan.maguire@oracle.com>
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, acme@kernel.org,
- jolsa@kernel.org, laoar.shao@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@google.com, haoluo@google.com, bpf@vger.kernel.org
+ <168391862050.6084.8499223588458681634.git-patchwork-notify@kernel.org>
+Date: Fri, 12 May 2023 19:10:20 +0000
+References: <20230511043748.1384166-1-martin.lau@linux.dev>
+In-Reply-To: <20230511043748.1384166-1-martin.lau@linux.dev>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, kernel-team@meta.com,
+ syzbot+ebe648a84e8784763f82@syzkaller.appspotmail.com
 
 Hello:
 
 This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Wed, 10 May 2023 14:02:41 +0100 you wrote:
-> v1.25 of pahole supports filtering out functions with multiple inconsistent
-> function prototypes or optimized-out parameters from the BTF representation.
-> These present problems because there is no additional info in BTF saying which
-> inconsistent prototype matches which function instance to help guide attachment,
-> and functions with optimized-out parameters can lead to incorrect assumptions
-> about register contents.
+On Wed, 10 May 2023 21:37:48 -0700 you wrote:
+> From: Martin KaFai Lau <martin.lau@kernel.org>
+> 
+> KCSAN reported a data-race when accessing node->ref.
+> Although node->ref does not have to be accurate,
+> take this chance to use a more common READ_ONCE() and WRITE_ONCE()
+> pattern instead of data_race().
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next] bpf: Add --skip_encoding_btf_inconsistent_proto, --btf_gen_optimized to pahole flags for v1.25
-    https://git.kernel.org/bpf/bpf-next/c/7b99f75942da
+  - [bpf-next] bpf: Address KCSAN report on bpf_lru_list
+    https://git.kernel.org/bpf/bpf-next/c/ee9fd0ac3017
 
 You are awesome, thank you!
 -- 
