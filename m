@@ -1,38 +1,38 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B2EC2412F;
-	Fri, 12 May 2023 15:22:39 +0000 (UTC)
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C8CD85C;
-	Fri, 12 May 2023 08:22:08 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92D2124126;
+	Fri, 12 May 2023 15:28:33 +0000 (UTC)
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D4812A;
+	Fri, 12 May 2023 08:28:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683904928; x=1715440928;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=0H3Jo5u8syYtrs2oEf4GVK8DWDDlchIpBRUlgLTFGBk=;
-  b=CRhsivDRTnYNdPXzf2Rz5w0vTbn3Tl3P48YL+ztyaatoCgdizmOFOeZ0
-   THFq/q6n89WDx9tSeZww7lPEWyZ4CcGtoItTHFAhuvlJnTshwsKuQNoCm
-   hRLejhGwa7jUoXMYE9lN0hL3QAM6pBTkV2XUKJzEqsmiBC6GB6/Sc55tg
-   M22TD2fGyCMaT5Jb2tUk4cFTLkLBZOwj5Z4HDjrRTSyA1LAXINluJIzeG
-   colmvl2gh3mHewpg6n0T+fjBlIT3gVr0FxWzY24+KkiDMisLiZpj/l6SB
-   XuWv1bYwQJ2HpIxjdEowxqxlbMfjFhnYFi0V3KBh7R7QDHVCrCQT+JT5l
+  t=1683905312; x=1715441312;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=AEHmn3N8eoQi8YuZE7vwKcyyiqTTaYlvbYO6EcoCop8=;
+  b=nNUNzJ7nr5CdvAzQDnBtw2Tb9BHPQ4HTE7oWft9oXHVMHptO+/98sXb6
+   XNskRFcfeMlQy8cZgnJNyci4QiSkYEA9IBwN9XN+Jdnuz2wbUiXQGMpIK
+   HovC9JMoVT+ffaWActPWv7B8mxFscU6vvXbbqi+0qNfsYcnwme4qxceVM
+   8iNOdrTzChIvooNHhOGcMiBa8yVAxOmXtN4s8z6xEy8c7JDYIJGTjQZ4b
+   oLgDPThYtX2IOqrFwB38EGd/bzw9XNCA0OFZk62Ur0GC13qlJluqrp4hw
+   FANT0qaHmmJ1BxKynIijNlrb9mc96yqaUnoOytjTEF8o5AZc7phSPt47a
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="353061295"
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="349653187"
 X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="353061295"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 08:20:57 -0700
+   d="scan'208";a="349653187"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 08:28:31 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="812114649"
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="1030124377"
 X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="812114649"
+   d="scan'208";a="1030124377"
 Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by fmsmga002.fm.intel.com with ESMTP; 12 May 2023 08:20:53 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 12 May 2023 08:28:27 -0700
 Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id 898B636351;
-	Fri, 12 May 2023 16:20:50 +0100 (IST)
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id 4277835FB7;
+	Fri, 12 May 2023 16:28:25 +0100 (IST)
 From: Larysa Zaremba <larysa.zaremba@intel.com>
 To: bpf@vger.kernel.org
 Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
@@ -58,12 +58,10 @@ Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
 	netdev@vger.kernel.org,
 	intel-wired-lan@lists.osuosl.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 15/15] selftests/bpf: Add flags and new hints to xdp_hw_metadata
-Date: Fri, 12 May 2023 17:16:39 +0200
-Message-Id: <20230512151639.992033-16-larysa.zaremba@intel.com>
+Subject: [PATCH RESEND bpf-next 00/15] new kfunc XDP hints and ice implementation
+Date: Fri, 12 May 2023 17:25:52 +0200
+Message-Id: <20230512152607.992209-1-larysa.zaremba@intel.com>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20230512151639.992033-1-larysa.zaremba@intel.com>
-References: <20230512151639.992033-1-larysa.zaremba@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -73,183 +71,71 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-	T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.6
+	SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add hints added in the previous patches (VLAN tags and checksum level)
-to the xdp_hw_metadata program.
+This series introduces XDP hints support into ice driver and adds new kfunc
+hints that utilize hardware capabilities.
 
-Also, to make metadata layout more straightforward, add flags field
-to pass information about validity of every separate hint separately.
+- patches 01-04 refactors driver descriptor to skb fields processing code,
+  making it more reusable without changing any behavior.
 
-Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
----
- .../selftests/bpf/progs/xdp_hw_metadata.c     | 40 ++++++++++++++++---
- tools/testing/selftests/bpf/xdp_hw_metadata.c | 29 +++++++++++---
- tools/testing/selftests/bpf/xdp_metadata.h    | 28 ++++++++++++-
- 3 files changed, 85 insertions(+), 12 deletions(-)
+- patches 05-08 add support add support for existing hints (timestamp and 
+  hash) in ice driver.
 
-diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-index f95f82a8b449..97bad79ce4ca 100644
---- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-@@ -20,6 +20,12 @@ extern int bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx,
- 					 __u64 *timestamp) __ksym;
- extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, __u32 *hash,
- 				    enum xdp_rss_hash_type *rss_type) __ksym;
-+extern int bpf_xdp_metadata_rx_ctag(const struct xdp_md *ctx,
-+				    __u16 *vlan_tag) __ksym;
-+extern int bpf_xdp_metadata_rx_stag(const struct xdp_md *ctx,
-+				    __u16 *vlan_tag) __ksym;
-+extern int bpf_xdp_metadata_rx_csum_lvl(const struct xdp_md *ctx,
-+					__u8 *csum_level) __ksym;
- 
- SEC("xdp")
- int rx(struct xdp_md *ctx)
-@@ -83,15 +89,39 @@ int rx(struct xdp_md *ctx)
- 		return XDP_PASS;
- 	}
- 
-+	meta->hint_valid = 0;
-+
- 	err = bpf_xdp_metadata_rx_timestamp(ctx, &meta->rx_timestamp);
--	if (!err)
-+	if (err) {
-+		meta->rx_timestamp_err = err;
-+	} else {
-+		meta->hint_valid |= XDP_META_FIELD_TS;
- 		meta->xdp_timestamp = bpf_ktime_get_tai_ns();
--	else
--		meta->rx_timestamp = 0; /* Used by AF_XDP as not avail signal */
-+	}
- 
- 	err = bpf_xdp_metadata_rx_hash(ctx, &meta->rx_hash, &meta->rx_hash_type);
--	if (err < 0)
--		meta->rx_hash_err = err; /* Used by AF_XDP as no hash signal */
-+	if (err)
-+		meta->rx_hash_err = err;
-+	else
-+		meta->hint_valid |= XDP_META_FIELD_RSS;
-+
-+	err = bpf_xdp_metadata_rx_ctag(ctx, &meta->rx_ctag);
-+	if (err)
-+		meta->rx_ctag_err = err;
-+	else
-+		meta->hint_valid |= XDP_META_FIELD_CTAG;
-+
-+	err = bpf_xdp_metadata_rx_stag(ctx, &meta->rx_stag);
-+	if (err)
-+		meta->rx_stag_err = err;
-+	else
-+		meta->hint_valid |= XDP_META_FIELD_STAG;
-+
-+	err = bpf_xdp_metadata_rx_csum_lvl(ctx, &meta->rx_csum_lvl);
-+	if (err)
-+		meta->rx_csum_err = err;
-+	else
-+		meta->hint_valid |= XDP_META_FIELD_CSUM_LVL;
- 
- 	__sync_add_and_fetch(&pkts_redir, 1);
- 	return bpf_redirect_map(&xsk, ctx->rx_queue_index, XDP_PASS);
-diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-index 613321eb84c1..efcabe68f64b 100644
---- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
-+++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-@@ -156,15 +156,16 @@ static void verify_xdp_metadata(void *data, clockid_t clock_id)
- 
- 	meta = data - sizeof(*meta);
- 
--	if (meta->rx_hash_err < 0)
--		printf("No rx_hash err=%d\n", meta->rx_hash_err);
--	else
-+	if (meta->hint_valid & XDP_META_FIELD_RSS)
- 		printf("rx_hash: 0x%X with RSS type:0x%X\n",
- 		       meta->rx_hash, meta->rx_hash_type);
-+	else
-+		printf("No rx_hash, err=%d\n", meta->rx_hash_err);
-+
-+	if (meta->hint_valid & XDP_META_FIELD_TS) {
-+		printf("rx_timestamp:  %llu (sec:%0.4f)\n", meta->rx_timestamp,
-+		       (double)meta->rx_timestamp / NANOSEC_PER_SEC);
- 
--	printf("rx_timestamp:  %llu (sec:%0.4f)\n", meta->rx_timestamp,
--	       (double)meta->rx_timestamp / NANOSEC_PER_SEC);
--	if (meta->rx_timestamp) {
- 		__u64 usr_clock = gettime(clock_id);
- 		__u64 xdp_clock = meta->xdp_timestamp;
- 		__s64 delta_X = xdp_clock - meta->rx_timestamp;
-@@ -179,8 +180,24 @@ static void verify_xdp_metadata(void *data, clockid_t clock_id)
- 		       usr_clock, (double)usr_clock / NANOSEC_PER_SEC,
- 		       (double)delta_X2U / NANOSEC_PER_SEC,
- 		       (double)delta_X2U / 1000);
-+	} else {
-+		printf("No rx_timestamp, err=%d\n", meta->rx_timestamp_err);
- 	}
- 
-+	if (meta->hint_valid & XDP_META_FIELD_CTAG)
-+		printf("rx_ctag: %u\n", meta->rx_ctag);
-+	else
-+		printf("No rx_ctag, err=%d\n", meta->rx_ctag_err);
-+
-+	if (meta->hint_valid & XDP_META_FIELD_STAG)
-+		printf("rx_stag: %u\n", meta->rx_stag);
-+	else
-+		printf("No rx_stag, err=%d\n", meta->rx_stag_err);
-+
-+	if (meta->hint_valid & XDP_META_FIELD_CSUM_LVL)
-+		printf("Checksum was checked at level %u\n", meta->rx_csum_lvl);
-+	else
-+		printf("Checksum was not checked, err=%d\n", meta->rx_csum_err);
- }
- 
- static void verify_skb_metadata(int fd)
-diff --git a/tools/testing/selftests/bpf/xdp_metadata.h b/tools/testing/selftests/bpf/xdp_metadata.h
-index 6664893c2c77..7c0267a8918a 100644
---- a/tools/testing/selftests/bpf/xdp_metadata.h
-+++ b/tools/testing/selftests/bpf/xdp_metadata.h
-@@ -17,12 +17,38 @@
- #define ETH_P_8021AD 0x88A8
- #endif
- 
-+#define BIT(nr)			(1 << (nr))
-+
-+enum xdp_meta_field {
-+	XDP_META_FIELD_TS	= BIT(0),
-+	XDP_META_FIELD_RSS	= BIT(1),
-+	XDP_META_FIELD_CTAG	= BIT(2),
-+	XDP_META_FIELD_STAG	= BIT(3),
-+	XDP_META_FIELD_CSUM_LVL	= BIT(4),
-+};
-+
- struct xdp_meta {
--	__u64 rx_timestamp;
-+	union {
-+		__u64 rx_timestamp;
-+		__s32 rx_timestamp_err;
-+	};
- 	__u64 xdp_timestamp;
- 	__u32 rx_hash;
- 	union {
- 		__u32 rx_hash_type;
- 		__s32 rx_hash_err;
- 	};
-+	union {
-+		__u16 rx_ctag;
-+		__s32 rx_ctag_err;
-+	};
-+	union {
-+		__u16 rx_stag;
-+		__s32 rx_stag_err;
-+	};
-+	union {
-+		__u8 rx_csum_lvl;
-+		__s32 rx_csum_err;
-+	};
-+	enum xdp_meta_field hint_valid;
- };
+- patches 09-12 introduce new kfunc hints, namely 2 VLAN tag hints 
+  (ctag & stag separately) and "checksum level", which is basically
+  a CHECKSUM_UNNECESSARY indicator. Then those hints are implemented in
+  ice driver.
+
+- patches 13-15 adjust xdp_hw_metadata to account for new hints.
+
+- in particular, patch 14 lifts the limitation on data_meta size to be
+  32 or lower, because all the information that needs to be passed into
+  AF_XDP from XDP in xdp_hw_metadata no longer fits into 32 bytes.
+
+Aleksander Lobakin (1):
+  net, xdp: allow metadata > 32
+
+Larysa Zaremba (14):
+  ice: make RX hash reading code more reusable
+  ice: make RX HW timestamp reading code more reusable
+  ice: make RX checksum checking code more reusable
+  ice: Make ptype internal to descriptor info processing
+  ice: Introduce ice_xdp_buff
+  ice: Support HW timestamp hint
+  ice: Support RX hash XDP hint
+  ice: Support XDP hints in AF_XDP ZC mode
+  xdp: Add VLAN tag hint
+  ice: Implement VLAN tag hint
+  xdp: Add checksum level hint
+  ice: Implement checksum level hint
+  selftests/bpf: Allow VLAN packets in xdp_hw_metadata
+  selftests/bpf: Add flags and new hints to xdp_hw_metadata
+
+ Documentation/networking/xdp-rx-metadata.rst  |  14 +-
+ drivers/net/ethernet/intel/ice/ice.h          |   2 +
+ .../net/ethernet/intel/ice/ice_lan_tx_rx.h    | 412 +++++++++---------
+ drivers/net/ethernet/intel/ice/ice_main.c     |   1 +
+ drivers/net/ethernet/intel/ice/ice_ptp.c      |  23 +-
+ drivers/net/ethernet/intel/ice/ice_ptp.h      |  18 +-
+ drivers/net/ethernet/intel/ice/ice_txrx.c     |  13 +-
+ drivers/net/ethernet/intel/ice/ice_txrx.h     |  23 +-
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.c | 311 +++++++++++--
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.h |  13 +-
+ drivers/net/ethernet/intel/ice/ice_xsk.c      |  16 +-
+ include/linux/netdevice.h                     |   3 +
+ include/linux/skbuff.h                        |  13 +-
+ include/net/xdp.h                             |  16 +-
+ kernel/bpf/offload.c                          |   6 +
+ net/core/xdp.c                                |  36 ++
+ .../selftests/bpf/progs/xdp_hw_metadata.c     |  49 ++-
+ tools/testing/selftests/bpf/xdp_hw_metadata.c |  29 +-
+ tools/testing/selftests/bpf/xdp_metadata.h    |  36 +-
+ 19 files changed, 738 insertions(+), 296 deletions(-)
+
 -- 
 2.35.3
 
