@@ -1,22 +1,22 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0955B23D43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D7A423D61
 	for <bpf@vger.kernel.org>; Fri, 12 May 2023 19:10:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A05A8C4339C;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8B3E2C4339B;
 	Fri, 12 May 2023 19:10:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1683918620;
-	bh=SQuKwrtt+nEUGJpKjW8c0JPDuqypL113lmTuLJDwKig=;
+	bh=RhQyUl7e9OT+8eL5IJ/vp1UZuRIhYARYQ3jJ9VhYqzs=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Pi2yJe/VCf9TkXcmxiiAIKqhLAtZ9mN6kxniCo1NEF+Jxcs9zIIw9ivZs3qn94x41
-	 Y5ad3LWHkhKGijmQNfE6W7w8vcQYhee8Nqh/VqzsmWY6ZDj3MMH/egRQE3+/KGzyHX
-	 fYuhuxXqcOqpR1RAcCl2PaeJIDAY1o/W3zgETSSPfTHWVmjPln0vTGkmcmGgL6266o
-	 4jyx1XlNKZsCXEMsa9DteXbvHoKwFel4IgCsZviA3pcrBjgM7HQfH7zOt0XOTABEwH
-	 mpoKxfnlq3U2+KRuXkjohqoabd1FaYd2xTyXk807NjPIRW5Z2aLtxY/3C9MyFEVZcZ
-	 b2fm4gor2MejQ==
+	b=Rjl7Mnl0qOk6qRuQhJZvfLWVPEgdn9eFgh1DmN1cVeK+Ytb7Nbd/PGbq5E/I4SZfk
+	 9C3KG4UrDXaGjzxlTOPPlsGvaGN87vLw1cJVB9J6IUH/QgTgkGMvcxJLaB5bUYkW1W
+	 nE0Hc+t+9sVO/fYKq38QJDI/7zhE16dpPapNmb+bG9CtLiU4dF55vDX3KnrXttjUZl
+	 CoAVGqpanhyeFaqRm4q2OIX5R2/TMNiuw+0p00dethc7+pWW/irWGqDh1VmUWy9qHZ
+	 fh0Y1+KQhW2F35nRlasCNyhTRQ6wQIIFhCbz81z9f816kddQfk7wjUhJHKmAxHtZ3h
+	 4zd52p4FaN7fQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7C251E4D00E;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 71E25E26D20;
 	Fri, 12 May 2023 19:10:20 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -26,36 +26,37 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf: Address KCSAN report on bpf_lru_list
+Subject: Re: [PATCH bpf-next] libbpf: fix offsetof() and container_of() to work
+ with CO-RE
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <168391862050.6084.8499223588458681634.git-patchwork-notify@kernel.org>
+ <168391862046.6084.8644595763871154951.git-patchwork-notify@kernel.org>
 Date: Fri, 12 May 2023 19:10:20 +0000
-References: <20230511043748.1384166-1-martin.lau@linux.dev>
-In-Reply-To: <20230511043748.1384166-1-martin.lau@linux.dev>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, kernel-team@meta.com,
- syzbot+ebe648a84e8784763f82@syzkaller.appspotmail.com
+References: <20230509065502.2306180-1-andrii@kernel.org>
+In-Reply-To: <20230509065502.2306180-1-andrii@kernel.org>
+To: Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ martin.lau@kernel.org, kernel-team@meta.com, lennart@poettering.net
 
 Hello:
 
 This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Wed, 10 May 2023 21:37:48 -0700 you wrote:
-> From: Martin KaFai Lau <martin.lau@kernel.org>
+On Mon, 8 May 2023 23:55:02 -0700 you wrote:
+> It seems like __builtin_offset() doesn't preserve CO-RE field
+> relocations properly. So if offsetof() macro is defined through
+> __builtin_offset(), CO-RE-enabled BPF code using container_of() will be
+> subtly and silently broken.
 > 
-> KCSAN reported a data-race when accessing node->ref.
-> Although node->ref does not have to be accurate,
-> take this chance to use a more common READ_ONCE() and WRITE_ONCE()
-> pattern instead of data_race().
+> To avoid this problem, redefine offsetof() and container_of() in the
+> form that works with CO-RE relocations more reliably.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next] bpf: Address KCSAN report on bpf_lru_list
-    https://git.kernel.org/bpf/bpf-next/c/ee9fd0ac3017
+  - [bpf-next] libbpf: fix offsetof() and container_of() to work with CO-RE
+    https://git.kernel.org/bpf/bpf-next/c/bdeeed3498c7
 
 You are awesome, thank you!
 -- 
