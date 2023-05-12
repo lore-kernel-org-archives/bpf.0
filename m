@@ -1,231 +1,243 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCDF1813
-	for <bpf@vger.kernel.org>; Fri, 12 May 2023 14:48:38 +0000 (UTC)
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559536A58
-	for <bpf@vger.kernel.org>; Fri, 12 May 2023 07:48:20 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34C5ACYp005288;
-	Fri, 12 May 2023 07:47:55 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=3mZJD6A7QDSY8FY82xFRHzDBccMkql1ru6abRxG+fd0=;
- b=XbGCwjKsIa61z981cQ9zMVk/nQSyMgK4Rm7TbAyiSyNu2D59yLk4Co5bNLKdx9NAkuSF
- nLQvJWnJes5Y08r8LjtsusDQYXujms4D5w8Wm6x9eLlEZjWW/rKb4pumeTeWB5Q8DQnv
- MSlA0tNbusx6iMqfmkSeUUzIFqMMyUSNFrfIzo0lKBgu0RcD2m6wNIPknZJAnJbFntgj
- uCnv+7mxHaKhST4yDg7/mSoiytY8MnZSboEwnT6re5u0bWp0eCohuFNV/aAwpvR/riEo
- r3WxULjq5KLTBa3vvLsotNkN6adRRVikUZtvhY1dh97mXiuQrjP9+pYkswgLL/uwUrUl Ww== 
-Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2043.outbound.protection.outlook.com [104.47.56.43])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qh991p7p4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 12 May 2023 07:47:55 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26A9224126;
+	Fri, 12 May 2023 15:18:43 +0000 (UTC)
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2068.outbound.protection.outlook.com [40.107.223.68])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECB0FC;
+	Fri, 12 May 2023 08:18:41 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MWgn0rjeHA2FwMG86uirPLtAwvHeJeGSaPYlbTlTrhWwlAiZaitfoIjfZNdSHipZXH5qlRFNf9Y1SMDmTvBprML/GRZCA5BdUku4+uumng3EekGK7isNo4tNhhsLszbQ6tUO0xQKRxZ53qTw5Wv5bV2YjemEpIujuKW3u2PXQsefUHlVKwWrdED8gXpUm2EcPqWe475bdQbudkcNRlBcf8TPTKFQkAYi29SVhxKNu2nXKzFqWfMRKaBOnmUhDoLCfklvuiUeOXa7IiVenags4NjWYuat1iU8tVgVfjXzL2wdbmnA35JorH2UMNc4tdPViRhCxC0keQ8+PcVuWriR7A==
+ b=OGowVkK+U79IOHKlR7uOx+6jixV/W9rtut4QoaUBHT7kRkizfHCFCj3OX7oryAe7nc9hjDbnuVS8igkvhho7VrYf7PT41MTlvKRpqQDRMeEHW8HmuUCqV71rET3F0dQzYPvPvL5/FAMKSBdpHMTpJmGpwGXz78DMQ47LVHYcknXnN/jqkbZ2dtlfChjD/e/4HR79CVnvhDWjqHuncXrEG5CfH0hrR/li6ZCAK9udfgC1Lapt0N1fgkJQoFiNyqsmxnaTCq+nt2OSVtCKAItvq6y7wvGg7BXIRsRHQO+6P1AavHidPSLdqAQdUD38hsHl+Bo0+9jYnSZzoszaRpSB7Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3mZJD6A7QDSY8FY82xFRHzDBccMkql1ru6abRxG+fd0=;
- b=cRE805PmPkVC9R9B/fN7jEHzvKOEFj7HPPYpvxTSqNlqARnfX/DyvHC0asgLMPUZU5nYGwsslG6ufWARzyZM+PUdRqlgDm+eEJsrq2TXJiGUKH/tMb41EXCDVRkLPongJTyHGnbeBxL5QvA/i3v2ew1qPSq6uFLWSvv5cX0IXU9d+x9hM/y7I0+iLwAEqK9up5jSXnSTTABw3Idy24MKLHpofv+4/ICzJ/UwjPREQMhRCCdyXWu+V8Da9q6GIiHFVNMhTUW/N/tmb4Gqt8Gp7V1EZi3rgNPTmZ3l0+qGcHVzP6bU9E+POdcEhczwevzRKo77HEXFulegicYmERu3nA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by MW4PR15MB4412.namprd15.prod.outlook.com (2603:10b6:303:101::19) with
+ bh=FjS8hJirtxE8DujZ9biIWSKVU6I+7HSSRAiwm61m8Ms=;
+ b=DHIIhm2XuUSgs1/VfBL5J01yaZoiIh1oA0rA8vDiZO+Cvn564KF/tKsBsJ5Kx/Y4PQXm8JsLvpaPtZ1Fq87e+QspjVb+zBMog5epTEh8IFH6soyAcvs3P7LO4cD4xfQR9aeEsRf7mozY5MSjLH8HWNvz3PqsD6QQ63THA6lwZjnITCpLDx4S02HRwnycAXWVC9688pBbnH6W1PuDsJ0fs9H+UNLOnyzjwkxr8FXzAfd5rNIh937tlUYf6sDJe92ausoPo1ToL/qAxjt6TdKAHT2pI8ROCmIYbrhbKMWXhWhM1jX0t8S6yvtiZgiao6kzB1H5188AguBYZForeGtdYA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=lists.linux-foundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FjS8hJirtxE8DujZ9biIWSKVU6I+7HSSRAiwm61m8Ms=;
+ b=rRbOefNZNs06QcJEwhvK7nJztcZVSMJdvG9UCqUHpv1w85vBrrr+1ALSCb3ChoR/LL2FMSq9mpSqP7XPaBoIMpemj9Zci9WZ2UAFdoBnuo4zakbBGfy6+hHSvRBdIH6FeF2tgAM+kaF0uWfh4sBLq6yUVBgaQQH+/UFHNQV15nYgpC599wcU/aklw+a+lsDBfnglkfBqO+wYMbHpLPZebxicLJ1YosrA3YU/KgE6IvJBbcWHWpzjHp2IS0SSFy31CV0GqDMY0v70NZ8FbkYsOWdAwgRUPqLJrpFZuQmpxtW9MAuuwOXbFzkbg3dAOlde+swSveDcxhKeXhtmfGWyDQ==
+Received: from BL0PR03CA0026.namprd03.prod.outlook.com (2603:10b6:208:2d::39)
+ by CO6PR12MB5491.namprd12.prod.outlook.com (2603:10b6:303:13b::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.21; Fri, 12 May
- 2023 14:47:52 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::589f:9230:518:7f53]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::589f:9230:518:7f53%6]) with mapi id 15.20.6363.032; Fri, 12 May 2023
- 14:47:52 +0000
-Message-ID: <40817aae-bb4b-31b7-6853-eb4d37ca2518@meta.com>
-Date: Fri, 12 May 2023 07:47:47 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: [PATCH bpf-next 2/4] bpftool: define a local bpf_perf_link to fix
- accessing its fields
-Content-Language: en-US
-To: Quentin Monnet <quentin@isovalent.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-        Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, Alexander Lobakin <aleksander.lobakin@intel.com>,
-        =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>,
-        Alexander Lobakin <alobakin@pm.me>
-References: <20230512103354.48374-1-quentin@isovalent.com>
- <20230512103354.48374-3-quentin@isovalent.com>
-From: Yonghong Song <yhs@meta.com>
-In-Reply-To: <20230512103354.48374-3-quentin@isovalent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY5PR04CA0008.namprd04.prod.outlook.com
- (2603:10b6:a03:1d0::18) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.24; Fri, 12 May
+ 2023 15:18:39 +0000
+Received: from BL02EPF000100D0.namprd05.prod.outlook.com
+ (2603:10b6:208:2d:cafe::5c) by BL0PR03CA0026.outlook.office365.com
+ (2603:10b6:208:2d::39) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.24 via Frontend
+ Transport; Fri, 12 May 2023 15:18:39 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BL02EPF000100D0.mail.protection.outlook.com (10.167.241.204) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6411.11 via Frontend Transport; Fri, 12 May 2023 15:18:37 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 12 May 2023
+ 08:18:19 -0700
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 12 May
+ 2023 08:18:18 -0700
+Received: from vdi.nvidia.com (10.127.8.10) by mail.nvidia.com (10.129.68.9)
+ with Microsoft SMTP Server id 15.2.986.37 via Frontend Transport; Fri, 12 May
+ 2023 08:18:15 -0700
+From: Feng Liu <feliu@nvidia.com>
+To: <virtualization@lists.linux-foundation.org>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+CC: Jason Wang <jasowang@redhat.com>, "Michael S . Tsirkin" <mst@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Simon Horman
+	<simon.horman@corigine.com>, Bodong Wang <bodong@nvidia.com>, Feng Liu
+	<feliu@nvidia.com>, Jiri Pirko <jiri@nvidia.com>, William Tu
+	<witu@nvidia.com>
+Subject: [PATCH net v6] virtio_net: Fix error unwinding of XDP initialization
+Date: Fri, 12 May 2023 11:18:12 -0400
+Message-ID: <20230512151812.1806-1-feliu@nvidia.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|MW4PR15MB4412:EE_
-X-MS-Office365-Filtering-Correlation-Id: cd4f535c-6603-45c6-708b-08db52f7dd4d
-X-FB-Source: Internal
+X-MS-TrafficTypeDiagnostic: BL02EPF000100D0:EE_|CO6PR12MB5491:EE_
+X-MS-Office365-Filtering-Correlation-Id: bcac59ac-fc41-49b7-baa2-08db52fc2927
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	Kkh0cLfKJJgMuDL4H6dPsbJGhLzivF7GfdqrgC5hf3wNapxXNFCe0BcZ+EMRFZzCHEAU7G7vN4rAUrQJjD/vQAiLlfvrsOeJgCEJ1w9DcpIRfeBXyDk0+UpBCqwYRgqg/CME6JIELmf/Hb9Oy6N4JarYCuZYs4spqKhWDHjTIG7eDBYFc3x+muTBWhRlu8ynWdK8k7fj5zLCKZmkqv9sB6OdBq4IpSHdPLW8cVVDqlKIk53abtHJiXj8ZRA1BxBl7bv/1ThzkJI+4Glx9HJU+6lUXnAT4HiRhn1Fg52woDfgEojq86tuylus0jz7uEwPpvxq3byFcJpPGpZr4+eRlPKqg7yq0uorW+Y+mZhGWRA65zFOiuXZhOSpQucwpZug+ju2vhmb7wlkL0BMJJ/GiFdEaSfFhGSBywr7//BUAtQWU4XQGPVj09CxG3KZ+qofjgeXLWD2YrfgvVZSEfvvpjaMHGLoZdaBhr6cV6Xbjgm00DhirpJ+o2q5yX1fN2L3sPSrNXtUZ/ruuXM/HrZRqUtImOiuS2HNERAPf4NztdZx0JX37TxyTWcYtObf5zagfopPmFQQ14fvkVKHDzFVvZM7dTOA0cTGGTT5D8L4UKFDycPXEQUg0EvCDsphb5NeLIvSUnaNy+HAZrAO9GlfoA==
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(136003)(366004)(346002)(396003)(451199021)(6666004)(478600001)(66476007)(31686004)(66556008)(2906002)(66946007)(4326008)(38100700002)(5660300002)(6506007)(53546011)(6512007)(86362001)(6486002)(2616005)(36756003)(41300700001)(31696002)(83380400001)(7416002)(186003)(316002)(110136005)(54906003)(8936002)(8676002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?utf-8?B?TUYvcmx1cWh5dkZ3S0pFRHNKbGRMU1ZSREJ5U3Fobm4rb1Q5ZmsvKzE1b1Ru?=
- =?utf-8?B?Qjc4bFNWT1l3dzZITHUxSEF4TXF3eUg0L0pQNWpuVnNnOGNpZFpyK0kraklD?=
- =?utf-8?B?WDJQS1ZtUmFtdFRSN1JGb0NxOFZFUDdRNCtGMDZhUzFHcm5yWkVNelJDTllu?=
- =?utf-8?B?ci9kenZ6YmYvdnU4ZUxkRkgrNURsSFdhRkMvMGhrUGlyMmFXSDBKdzNDQnJm?=
- =?utf-8?B?b25uM09hRGJzOVREQ2E4dnQ3V1NyT0g2OHRHaUJGNWZHY0trY0RyYzJLVXFF?=
- =?utf-8?B?T1ZRNkZxMDA5NHFWVlJVYzRGNFZYZldpeXJGdlM4SU5GV3JUQTBUcjd2M2NR?=
- =?utf-8?B?ZGs3aUF1Y1NxZUFWR0lKSVZmcXpCR2J4bW4wQTBpanZScnp6cERldkJacklG?=
- =?utf-8?B?eUg1ZWZDaUxoaXExMUVSNnZSWEtmM1ZUNHJRK3RuU1B4YkVKSzllcUlaaDNz?=
- =?utf-8?B?VlV0dmNmektFZHBaY09heVpaakhNQlRpeXRtekM5eDZIU0ZrWm41cVIwK1Rp?=
- =?utf-8?B?Ni91L2RON05jckNtbThzdGsrZzR0dXAzc0pwVUZsK05nMkdMWElnV1lvYU5S?=
- =?utf-8?B?OXJJWndEcmRicTZZTElzSVpCOEE3UGtVOTFnUWVjOEdPbzdYM1ZiaitaRWw2?=
- =?utf-8?B?Um9nUTF0cnNnNlpyUXExbi80ZkJqTzl5ZFRXVnBHb1lLV1NPV2pZTEVpU05Z?=
- =?utf-8?B?WWJadHpDSkJ1UlE0eE5nVzl4NDREU1ZiK3J4ZUsvN3YxcGdOUjRQRU9vL1RI?=
- =?utf-8?B?WmVHQnJteTM4S3l3WkxnakFYcDdvcVBoOVI1VHlNOW1UWERUSHdFRURFS1ZT?=
- =?utf-8?B?VG1oeUxCc1grVDhEYnBScEs1ZFR5eWVPU1RxMmhhbHAzUzlCM1lGSDF2UGhq?=
- =?utf-8?B?ZTc4YnllMmovd3UvQllnaTdtNmhjNDhSa3pHYmV1SFRTQVBHUG44Wi9qN2Y0?=
- =?utf-8?B?dXlTd28rM2hHZFBtV0V3U2RvT2V2dXNjbGh5RHhiTzdhUGRPUmwvaGZVRTNQ?=
- =?utf-8?B?VDJTK0JqblBqR056NkJKdjJZSDQyWFlXSVVVS1l1ei9kYk42VmhmVTQvRkJ4?=
- =?utf-8?B?R0ZJaXRjcEtvOHd0U2dTMGgwNy9mZjBBMGVsSUFYRW5LeWJ1ZjNkbkphdmFM?=
- =?utf-8?B?YXRwT3AvaEpsNUd0MXpvQ05laS9ySHh2SDlTTUxiOUJpMjhzZTQ3VXJHZW1a?=
- =?utf-8?B?c0NUUm5iRlJJMGNsamIwZG5vVERNak95Y0x2SDhGdTk2UFh5YTlHQ1VnekxV?=
- =?utf-8?B?bnNsQ2xPVFhBWFEveUVvTjhZS2xqZGlaZUFtQTkxR0pNZlJPaFJrQzR1aWFk?=
- =?utf-8?B?WWxIenpYeVBmNHlzVU95dlBFUFlWMHpIV3AwSDJrNmZVYVVRcmR1SW5TZWRP?=
- =?utf-8?B?aHl4RmRybFBodS93RWY3MmRudTRoUEIrRkRoUU5aN083RW5KWndTQmpwM3dE?=
- =?utf-8?B?bCsyUEdQQmY1aG1LVmJTVGtUWCtndXd2NzZQOG9Rd29nYXVPYmNWQ25PTWVr?=
- =?utf-8?B?UldYVkVWTDUvcnBDc1pveklEdG5kTjdOMmlYZDZFNVYwMGpTSGVQN0VSMm11?=
- =?utf-8?B?VHQ5ck91bGNpQlJWK1dvbnBWblJQWDhxZTB0RCtMSTRoSHlPYUZQMVloYnhl?=
- =?utf-8?B?Z0tLcjExTWZuV1lHc2lJMlFkdEV1OWo3eGN3Nlk4OXhmM1ZCQ2hudncrWUVH?=
- =?utf-8?B?eGVRVG96c1g5dHBVWTJib0NEcU9OODBNMDFPd2tnWUkvTXV6VEJ5bjB1aWhD?=
- =?utf-8?B?YVZhQzViYitsVDBvRldFREFRSGtjY3hWeGxIVGc2Q1dkWWNIaDhreWVrbDVV?=
- =?utf-8?B?NHJ6RDhtNnVxTVN2bkdOTjNqMVB4ZjYxYU1POGxTQU9ZckNBMFEwQklUZ2tV?=
- =?utf-8?B?RHRyYjJtc0ZacFhvWkRUT3RDRjVUQ0JDWGFxSUJ2b0VjT09DSS82UE5TWlN0?=
- =?utf-8?B?UythaGpmZjN0bnFmcWR2dTJYd1g3VEdEdEFUaGozVERUczJGbURkUXpObEJz?=
- =?utf-8?B?RGxhUG9ad3ZxcjE0RnplbGZYQXBlNFN6L1psczZQV2sxWm53c0F0K3pwc0hG?=
- =?utf-8?B?RzJGd0plN3hrNjlZZlpMWXd2VXdsSGRyK3gwdmk0U0ZLRUhFeTJlbm9MQ1h6?=
- =?utf-8?B?L1FvMTZEekFnM0NJSStGUzJycjBxNFlaWE9ialZxQXpGZGtBTmR4aVA4SGt0?=
- =?utf-8?B?Ync9PQ==?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd4f535c-6603-45c6-708b-08db52f7dd4d
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2023 14:47:52.7924
+X-Microsoft-Antispam-Message-Info:
+	s6Z0yxdX19ClBccAWFgtQAFobpvrTF6kmn0SWkxMIN2OLfxtl8xprAhtMuPBBl0Cx3sr1cRNO2TU5eT/uWFxPFFCUkWuhq5lrGjjrpouFA+v9ihRTeabAwp5iC4D5kr28Iy3Uv76z+1Od3K9zQzFJR1JAYt+QkRxOZz5qvoK2DC7rgA1MWGNWcOjXHXs64j33OaEQxO4JuDUyJRCSNH96zvUgBil9I4q9jdezwohqEGEM9GZcrGLbBX0ts/WWvJEo2ofoL75wECdw+JbzDXETOIknOHC/q4uaicfYoLfxSa/9a29bEYSPO0Q/t4xF9xYno2i4VMVGMz6S9GNzpYcBeK++9l3f1bUsjx1c/Jx1Rv3L87rBUdY9q9n0GJVYWhWkMbdh6Z6glq1ZQDruuWMFYYhPeOfEuOJcw4E+bnxqZJmgFhp7OWTyuxgTVTb2Er7eDAuNVIcX9KbEi9L7+CAPxqcv9PZE90+fgYLCNmEYBlAcnWANt/vzXZAxlv2BCrptyHMFB380eq/10sa8dX4R6IiBXkCJIh2t/Mro0YmtRQMzvGaxiKYvbje4tzVhJf8Ob4uP3sqbgW2DpZGv315HpI/m2/YhcSCBlpkJUsv12lS23fYvyUxJghgAo5bx2aVE9m+FIEMhd+Bz4Sms2R4dYAmTuVAA3OENEee3bUrUNvZzrts6YtMR51Keo7MnhJdjnuxMKcP4vD3Cw8dzJR9SL2hqOgs0Z9dRsT+StdwV3kZu2bjybQKnZyEpsOq5FXq
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(136003)(376002)(396003)(451199021)(36840700001)(46966006)(40470700004)(40460700003)(83380400001)(2616005)(336012)(426003)(186003)(2906002)(47076005)(36756003)(86362001)(82310400005)(7636003)(82740400003)(356005)(36860700001)(40480700001)(316002)(70206006)(70586007)(4326008)(54906003)(7696005)(6666004)(41300700001)(5660300002)(8676002)(8936002)(26005)(1076003)(110136005)(107886003)(478600001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2023 15:18:37.6887
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7XBdSj9nkuSBiYpG4rpr5LbZoS4NO8WTas5CH4q649/W6MmZ0bjlXyI34qXXWnn9
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR15MB4412
-X-Proofpoint-GUID: 6YkcXEjSf1cbvImiSNCz5mkT6zBQkg6R
-X-Proofpoint-ORIG-GUID: 6YkcXEjSf1cbvImiSNCz5mkT6zBQkg6R
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-12_08,2023-05-05_01,2023-02-09_01
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-	T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-MS-Exchange-CrossTenant-Network-Message-Id: bcac59ac-fc41-49b7-baa2-08db52fc2927
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL02EPF000100D0.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5491
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+	RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+	T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
 	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+When initializing XDP in virtnet_open(), some rq xdp initialization
+may hit an error causing net device open failed. However, previous
+rqs have already initialized XDP and enabled NAPI, which is not the
+expected behavior. Need to roll back the previous rq initialization
+to avoid leaks in error unwinding of init code.
 
+Also extract helper functions of disable and enable queue pairs.
+Use newly introduced disable helper function in error unwinding and
+virtnet_close. Use enable helper function in virtnet_open.
 
-On 5/12/23 3:33 AM, Quentin Monnet wrote:
-> From: Alexander Lobakin <alobakin@pm.me>
-> 
-> When building bpftool with !CONFIG_PERF_EVENTS:
-> 
-> skeleton/pid_iter.bpf.c:47:14: error: incomplete definition of type 'struct bpf_perf_link'
->          perf_link = container_of(link, struct bpf_perf_link, link);
->                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> tools/bpf/bpftool/bootstrap/libbpf/include/bpf/bpf_helpers.h:74:22: note: expanded from macro 'container_of'
->                  ((type *)(__mptr - offsetof(type, member)));    \
->                                     ^~~~~~~~~~~~~~~~~~~~~~
-> tools/bpf/bpftool/bootstrap/libbpf/include/bpf/bpf_helpers.h:68:60: note: expanded from macro 'offsetof'
->   #define offsetof(TYPE, MEMBER)  ((unsigned long)&((TYPE *)0)->MEMBER)
->                                                    ~~~~~~~~~~~^
-> skeleton/pid_iter.bpf.c:44:9: note: forward declaration of 'struct bpf_perf_link'
->          struct bpf_perf_link *perf_link;
->                 ^
-> 
-> &bpf_perf_link is being defined and used only under the ifdef.
-> Define struct bpf_perf_link___local with the `preserve_access_index`
-> attribute inside the pid_iter BPF prog to allow compiling on any
-> configs. CO-RE will substitute it with the real struct bpf_perf_link
-> accesses later on.
-> container_of() is not CO-REd, but it is a noop for
+Fixes: 754b8a21a96d ("virtio_net: setup xdp_rxq_info")
+Signed-off-by: Feng Liu <feliu@nvidia.com>
+Reviewed-by: Jiri Pirko <jiri@nvidia.com>
+Reviewed-by: William Tu <witu@nvidia.com>
+---
+v5 -> v6
+feedbacks from Xuan Zhuo
+- add disable_delayed_refill and cancel_delayed_work_sync
 
-'container_of() is not CO-REd' is incorrect.
+v4 -> v5
+feedbacks from Michael S. Tsirkin
+- rename helper as virtnet_disable_queue_pair
+- rename helper as virtnet_enable_queue_pair
 
-#define container_of(ptr, type, member)                         \
-         ({                                                      \
-                 void *__mptr = (void *)(ptr);                   \
-                 ((type *)(__mptr - offsetof(type, member)));    \
-         })
+v3 -> v4
+feedbacks from Jiri Pirko
+- Add symmetric helper function virtnet_enable_qp to enable queues.
+- Error handle:  cleanup current queue pair in virtnet_enable_qp,
+  and complete the reset queue pairs cleanup in virtnet_open.
+- Fix coding style.
+feedbacks from Parav Pandit
+- Remove redundant debug message and white space.
 
+v2 -> v3
+feedbacks from Michael S. Tsirkin
+- Remove redundant comment.
 
-offsetof() will do necessary CO-RE relocation if the field is specified
-with preserve_access_index attribute. So container_of will actually
-do CO-RE relocation as well.
+v1 -> v2
+feedbacks from Michael S. Tsirkin
+- squash two patches together.
 
+---
+ drivers/net/virtio_net.c | 61 +++++++++++++++++++++++++++++-----------
+ 1 file changed, 44 insertions(+), 17 deletions(-)
 
-> bpf_perf_link <-> bpf_link and the local copy is a full mirror of
-> the original structure.
-> 
-> Fixes: cbdaf71f7e65 ("bpftool: Add bpf_cookie to link output")
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
-> Signed-off-by: Quentin Monnet <quentin@isovalent.com>
-> ---
->   tools/bpf/bpftool/skeleton/pid_iter.bpf.c | 9 +++++++--
->   1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/bpf/bpftool/skeleton/pid_iter.bpf.c b/tools/bpf/bpftool/skeleton/pid_iter.bpf.c
-> index e2af8e5fb29e..3a4c4f7d83d8 100644
-> --- a/tools/bpf/bpftool/skeleton/pid_iter.bpf.c
-> +++ b/tools/bpf/bpftool/skeleton/pid_iter.bpf.c
-> @@ -15,6 +15,11 @@ enum bpf_obj_type {
->   	BPF_OBJ_BTF,
->   };
->   
-> +struct bpf_perf_link___local {
-> +	struct bpf_link link;
-> +	struct file *perf_file;
-> +} __attribute__((preserve_access_index));
-> +
->   struct perf_event___local {
->   	u64 bpf_cookie;
->   } __attribute__((preserve_access_index));
-> @@ -45,10 +50,10 @@ static __always_inline __u32 get_obj_id(void *ent, enum bpf_obj_type type)
->   /* could be used only with BPF_LINK_TYPE_PERF_EVENT links */
->   static __u64 get_bpf_cookie(struct bpf_link *link)
->   {
-> +	struct bpf_perf_link___local *perf_link;
->   	struct perf_event___local *event;
-> -	struct bpf_perf_link *perf_link;
->   
-> -	perf_link = container_of(link, struct bpf_perf_link, link);
-> +	perf_link = container_of(link, struct bpf_perf_link___local, link);
->   	event = BPF_CORE_READ(perf_link, perf_file, private_data);
->   	return BPF_CORE_READ(event, bpf_cookie);
->   }
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index a12ae26db0e2..56ca1d270304 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -1868,6 +1868,38 @@ static int virtnet_poll(struct napi_struct *napi, int budget)
+ 	return received;
+ }
+ 
++static void virtnet_disable_queue_pair(struct virtnet_info *vi, int qp_index)
++{
++	virtnet_napi_tx_disable(&vi->sq[qp_index].napi);
++	napi_disable(&vi->rq[qp_index].napi);
++	xdp_rxq_info_unreg(&vi->rq[qp_index].xdp_rxq);
++}
++
++static int virtnet_enable_queue_pair(struct virtnet_info *vi, int qp_index)
++{
++	struct net_device *dev = vi->dev;
++	int err;
++
++	err = xdp_rxq_info_reg(&vi->rq[qp_index].xdp_rxq, dev, qp_index,
++			       vi->rq[qp_index].napi.napi_id);
++	if (err < 0)
++		return err;
++
++	err = xdp_rxq_info_reg_mem_model(&vi->rq[qp_index].xdp_rxq,
++					 MEM_TYPE_PAGE_SHARED, NULL);
++	if (err < 0)
++		goto err_xdp_reg_mem_model;
++
++	virtnet_napi_enable(vi->rq[qp_index].vq, &vi->rq[qp_index].napi);
++	virtnet_napi_tx_enable(vi, vi->sq[qp_index].vq, &vi->sq[qp_index].napi);
++
++	return 0;
++
++err_xdp_reg_mem_model:
++	xdp_rxq_info_unreg(&vi->rq[qp_index].xdp_rxq);
++	return err;
++}
++
+ static int virtnet_open(struct net_device *dev)
+ {
+ 	struct virtnet_info *vi = netdev_priv(dev);
+@@ -1881,22 +1913,20 @@ static int virtnet_open(struct net_device *dev)
+ 			if (!try_fill_recv(vi, &vi->rq[i], GFP_KERNEL))
+ 				schedule_delayed_work(&vi->refill, 0);
+ 
+-		err = xdp_rxq_info_reg(&vi->rq[i].xdp_rxq, dev, i, vi->rq[i].napi.napi_id);
++		err = virtnet_enable_queue_pair(vi, i);
+ 		if (err < 0)
+-			return err;
+-
+-		err = xdp_rxq_info_reg_mem_model(&vi->rq[i].xdp_rxq,
+-						 MEM_TYPE_PAGE_SHARED, NULL);
+-		if (err < 0) {
+-			xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
+-			return err;
+-		}
+-
+-		virtnet_napi_enable(vi->rq[i].vq, &vi->rq[i].napi);
+-		virtnet_napi_tx_enable(vi, vi->sq[i].vq, &vi->sq[i].napi);
++			goto err_enable_qp;
+ 	}
+ 
+ 	return 0;
++
++err_enable_qp:
++	disable_delayed_refill(vi);
++	cancel_delayed_work_sync(&vi->refill);
++
++	for (i--; i >= 0; i--)
++		virtnet_disable_queue_pair(vi, i);
++	return err;
+ }
+ 
+ static int virtnet_poll_tx(struct napi_struct *napi, int budget)
+@@ -2305,11 +2335,8 @@ static int virtnet_close(struct net_device *dev)
+ 	/* Make sure refill_work doesn't re-enable napi! */
+ 	cancel_delayed_work_sync(&vi->refill);
+ 
+-	for (i = 0; i < vi->max_queue_pairs; i++) {
+-		virtnet_napi_tx_disable(&vi->sq[i].napi);
+-		napi_disable(&vi->rq[i].napi);
+-		xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
+-	}
++	for (i = 0; i < vi->max_queue_pairs; i++)
++		virtnet_disable_queue_pair(vi, i);
+ 
+ 	return 0;
+ }
+-- 
+2.37.1 (Apple Git-137.1)
+
