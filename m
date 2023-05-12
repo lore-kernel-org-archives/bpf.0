@@ -1,38 +1,38 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34F132098B;
-	Fri, 12 May 2023 15:29:16 +0000 (UTC)
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791DC12A;
-	Fri, 12 May 2023 08:29:03 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A403B24154;
+	Fri, 12 May 2023 15:29:24 +0000 (UTC)
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14BB106D6;
+	Fri, 12 May 2023 08:29:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683905343; x=1715441343;
+  t=1683905347; x=1715441347;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Ca3C3CN5XD0jYqPpaEXrBQ6QBGcOSKPhdaJMaphgwXU=;
-  b=PQh9pB89PXhnr1uNHS/rreEYL0FBokJLmKvrBgjlhncDlC2z61AUUpwo
-   hETMj22BIRMaZoRbXstbrqM0cxWPmzJm/+eT1nynQK453xPwEeCbf8fjL
-   i9UUZRV6IJc6vBPrTRYvMUwBD94SEzszvPkQ7aWB8qciq0gstUv97KjG0
-   43ZdytZWMlPyVdKeQyK7VkcwFVXSEy46y8xzldxQX4lIgOEi3g5vTDWa6
-   lsU7F31iiz2YvSI05aNuql4VhX/k96oGOS+4EAnYNjYGWnJBWIm6voii9
-   mxtPFCQrrGIADDWT+Um0PEVuHbi49NJMRdJog/b/w0bpt9jky44Tm8UlO
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="349653405"
+  bh=Ju9PvqXqCCJFMNbWyzPaBdJfLC40q1RU30A9+HNOEsU=;
+  b=IhS3ZL2awnnspfK2lAg70D0TMLZsmiGEOt8KQ8vRcPABweAdBjtcOCNL
+   kW2ITWoeG5TzCwdZoDcj5Wrf7OxKBrbwCzy/4sJegwrQwDyDLv+W3BoMf
+   nEOuSsIvvjYaIICV1OnENSQr+BjAWPFpS7qLrinbSkqAgx7ZBP3+lWif6
+   ArHgC3SSye7/oHonYJxrMjnO1Dprttjf/hGZfHbPASdhfAJDSAGcIkkbx
+   cqtJUiRbSSGUERz7fglueBK3u8cPCYrCpFeVk1ZMD5awmf5YvXrX/QbwM
+   hVmhsESqtfU0MxxoRB/uKJXhwXmfqueuCKqgfLQZt+/cTeOB1m5NYvFCi
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="437151072"
 X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="349653405"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 08:28:58 -0700
+   d="scan'208";a="437151072"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 08:29:07 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="1030124568"
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="946665781"
 X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="1030124568"
+   d="scan'208";a="946665781"
 Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by fmsmga005.fm.intel.com with ESMTP; 12 May 2023 08:28:54 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 12 May 2023 08:29:02 -0700
 Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id 1EF1A35FB7;
-	Fri, 12 May 2023 16:28:53 +0100 (IST)
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id C259335FB7;
+	Fri, 12 May 2023 16:29:00 +0100 (IST)
 From: Larysa Zaremba <larysa.zaremba@intel.com>
 To: bpf@vger.kernel.org
 Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
@@ -58,9 +58,9 @@ Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
 	netdev@vger.kernel.org,
 	intel-wired-lan@lists.osuosl.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND bpf-next 10/15] ice: Implement VLAN tag hint
-Date: Fri, 12 May 2023 17:26:02 +0200
-Message-Id: <20230512152607.992209-11-larysa.zaremba@intel.com>
+Subject: [PATCH RESEND bpf-next 13/15] selftests/bpf: Allow VLAN packets in xdp_hw_metadata
+Date: Fri, 12 May 2023 17:26:05 +0200
+Message-Id: <20230512152607.992209-14-larysa.zaremba@intel.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20230512152607.992209-1-larysa.zaremba@intel.com>
 References: <20230512152607.992209-1-larysa.zaremba@intel.com>
@@ -78,70 +78,64 @@ X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Implement .xmo_rx_vlan_tag callback to allow XDP code to read
-packet's VLAN tag.
+Make VLAN c-tag and s-tag XDP hint testing more convenient
+by not skipping VLAN-ed packets.
+
+Allow both 802.1ad and 802.1Q headers.
 
 Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
 ---
- drivers/net/ethernet/intel/ice/ice_txrx_lib.c | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ tools/testing/selftests/bpf/progs/xdp_hw_metadata.c | 9 ++++++++-
+ tools/testing/selftests/bpf/xdp_metadata.h          | 8 ++++++++
+ 2 files changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-index 1caa73644e7b..39547feb6106 100644
---- a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-+++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-@@ -627,7 +627,51 @@ static int ice_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
- 	return 0;
- }
+diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+index b2dfd7066c6e..f95f82a8b449 100644
+--- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
++++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+@@ -26,15 +26,22 @@ int rx(struct xdp_md *ctx)
+ {
+ 	void *data, *data_meta, *data_end;
+ 	struct ipv6hdr *ip6h = NULL;
+-	struct ethhdr *eth = NULL;
+ 	struct udphdr *udp = NULL;
+ 	struct iphdr *iph = NULL;
+ 	struct xdp_meta *meta;
++	struct ethhdr *eth;
+ 	int err;
  
-+/**
-+ * ice_xdp_rx_ctag - VLAN tag XDP hint handler
-+ * @ctx: XDP buff pointer
-+ * @vlan_tag: destination address
-+ *
-+ * Copy VLAN tag (if was stripped) to the destination address.
-+ */
-+static int ice_xdp_rx_ctag(const struct xdp_md *ctx, u16 *vlan_tag)
-+{
-+	const struct ice_xdp_buff *xdp_ext = (void *)ctx;
-+	netdev_features_t features;
+ 	data = (void *)(long)ctx->data;
+ 	data_end = (void *)(long)ctx->data_end;
+ 	eth = data;
 +
-+	features = xdp_ext->rx_ring->netdev->features;
++	if (eth + 1 < data_end && eth->h_proto == bpf_htons(ETH_P_8021AD))
++		eth = (void *)eth + sizeof(struct vlan_hdr);
 +
-+	if (!(features & NETIF_F_HW_VLAN_CTAG_RX))
-+		return -EINVAL;
++	if (eth + 1 < data_end && eth->h_proto == bpf_htons(ETH_P_8021Q))
++		eth = (void *)eth + sizeof(struct vlan_hdr);
 +
-+	*vlan_tag = ice_get_vlan_tag_from_rx_desc(xdp_ext->eop_desc);
-+	return 0;
-+}
+ 	if (eth + 1 < data_end) {
+ 		if (eth->h_proto == bpf_htons(ETH_P_IP)) {
+ 			iph = (void *)(eth + 1);
+diff --git a/tools/testing/selftests/bpf/xdp_metadata.h b/tools/testing/selftests/bpf/xdp_metadata.h
+index 938a729bd307..6664893c2c77 100644
+--- a/tools/testing/selftests/bpf/xdp_metadata.h
++++ b/tools/testing/selftests/bpf/xdp_metadata.h
+@@ -9,6 +9,14 @@
+ #define ETH_P_IPV6 0x86DD
+ #endif
+ 
++#ifndef ETH_P_8021Q
++#define ETH_P_8021Q 0x8100
++#endif
 +
-+/**
-+ * ice_xdp_rx_stag - VLAN s-tag XDP hint handler
-+ * @ctx: XDP buff pointer
-+ * @vlan_tag: destination address
-+ *
-+ * Copy VLAN s-tag (if was stripped) to the destination address.
-+ */
-+static int ice_xdp_rx_stag(const struct xdp_md *ctx, u16 *vlan_tag)
-+{
-+	const struct ice_xdp_buff *xdp_ext = (void *)ctx;
-+	netdev_features_t features;
++#ifndef ETH_P_8021AD
++#define ETH_P_8021AD 0x88A8
++#endif
 +
-+	features = xdp_ext->rx_ring->netdev->features;
-+
-+	if (!(features & NETIF_F_HW_VLAN_STAG_RX))
-+		return -EINVAL;
-+
-+	*vlan_tag = ice_get_vlan_tag_from_rx_desc(xdp_ext->eop_desc);
-+	return 0;
-+}
-+
- const struct xdp_metadata_ops ice_xdp_md_ops = {
- 	.xmo_rx_timestamp		= ice_xdp_rx_hw_ts,
- 	.xmo_rx_hash			= ice_xdp_rx_hash,
-+	.xmo_rx_ctag			= ice_xdp_rx_ctag,
-+	.xmo_rx_stag			= ice_xdp_rx_stag,
- };
+ struct xdp_meta {
+ 	__u64 rx_timestamp;
+ 	__u64 xdp_timestamp;
 -- 
 2.35.3
 
