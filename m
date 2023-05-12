@@ -1,38 +1,38 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A403B24154;
-	Fri, 12 May 2023 15:29:24 +0000 (UTC)
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14BB106D6;
-	Fri, 12 May 2023 08:29:07 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 296961427A;
+	Fri, 12 May 2023 15:29:34 +0000 (UTC)
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769C310A27;
+	Fri, 12 May 2023 08:29:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683905347; x=1715441347;
+  t=1683905352; x=1715441352;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Ju9PvqXqCCJFMNbWyzPaBdJfLC40q1RU30A9+HNOEsU=;
-  b=IhS3ZL2awnnspfK2lAg70D0TMLZsmiGEOt8KQ8vRcPABweAdBjtcOCNL
-   kW2ITWoeG5TzCwdZoDcj5Wrf7OxKBrbwCzy/4sJegwrQwDyDLv+W3BoMf
-   nEOuSsIvvjYaIICV1OnENSQr+BjAWPFpS7qLrinbSkqAgx7ZBP3+lWif6
-   ArHgC3SSye7/oHonYJxrMjnO1Dprttjf/hGZfHbPASdhfAJDSAGcIkkbx
-   cqtJUiRbSSGUERz7fglueBK3u8cPCYrCpFeVk1ZMD5awmf5YvXrX/QbwM
-   hVmhsESqtfU0MxxoRB/uKJXhwXmfqueuCKqgfLQZt+/cTeOB1m5NYvFCi
+  bh=HYcETTLQrd7Q2kE/D+/Vk/4DhcDrCT+MKt7UQ1PXhqI=;
+  b=AtWlfk5Ns/AAFJoaLyGKCklGR+VvhXiduzd7XifJDRjz1KyuRtVfukXR
+   dBPtm9NuY9B+mEzw7UUAw1L99nUHbRlnU1uYIOk2oT+vEGs5yQoTVe+lQ
+   4RME58aPYTUBTUn7wl7xIu5UGYLHZQTEN+WosaPyC6xVUbPIqPGVk5uiK
+   aJKFG97zeHunzrAXAqsiRDABIal0+7LtshFZCMi4fdAbIy5gQ09X/2yOQ
+   ew3yieQp75PGHD3v0BZv7lMtZMzJw8h2+K+Z5un+VHJs79elEKyXj8nqm
+   /+6JKkBz7ufFp4ArCatOZzPMFg1Y+JS1H7AOg5RAq0P76equvfKAan3Cb
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="437151072"
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="349653433"
 X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="437151072"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 08:29:07 -0700
+   d="scan'208";a="349653433"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 08:29:02 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="946665781"
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="1030124584"
 X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="946665781"
+   d="scan'208";a="1030124584"
 Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by fmsmga006.fm.intel.com with ESMTP; 12 May 2023 08:29:02 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 12 May 2023 08:28:57 -0700
 Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id C259335FB7;
-	Fri, 12 May 2023 16:29:00 +0100 (IST)
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id 0596335FB8;
+	Fri, 12 May 2023 16:28:55 +0100 (IST)
 From: Larysa Zaremba <larysa.zaremba@intel.com>
 To: bpf@vger.kernel.org
 Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
@@ -58,9 +58,9 @@ Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
 	netdev@vger.kernel.org,
 	intel-wired-lan@lists.osuosl.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND bpf-next 13/15] selftests/bpf: Allow VLAN packets in xdp_hw_metadata
-Date: Fri, 12 May 2023 17:26:05 +0200
-Message-Id: <20230512152607.992209-14-larysa.zaremba@intel.com>
+Subject: [PATCH RESEND bpf-next 11/15] xdp: Add checksum level hint
+Date: Fri, 12 May 2023 17:26:03 +0200
+Message-Id: <20230512152607.992209-12-larysa.zaremba@intel.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20230512152607.992209-1-larysa.zaremba@intel.com>
 References: <20230512152607.992209-1-larysa.zaremba@intel.com>
@@ -78,64 +78,93 @@ X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Make VLAN c-tag and s-tag XDP hint testing more convenient
-by not skipping VLAN-ed packets.
-
-Allow both 802.1ad and 802.1Q headers.
+Implement functionality that enables drivers to expose to XDP code,
+whether checksums was checked and on what level.
 
 Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
 ---
- tools/testing/selftests/bpf/progs/xdp_hw_metadata.c | 9 ++++++++-
- tools/testing/selftests/bpf/xdp_metadata.h          | 8 ++++++++
- 2 files changed, 16 insertions(+), 1 deletion(-)
+ Documentation/networking/xdp-rx-metadata.rst |  3 +++
+ include/linux/netdevice.h                    |  1 +
+ include/net/xdp.h                            |  2 ++
+ kernel/bpf/offload.c                         |  2 ++
+ net/core/xdp.c                               | 12 ++++++++++++
+ 5 files changed, 20 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-index b2dfd7066c6e..f95f82a8b449 100644
---- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-@@ -26,15 +26,22 @@ int rx(struct xdp_md *ctx)
- {
- 	void *data, *data_meta, *data_end;
- 	struct ipv6hdr *ip6h = NULL;
--	struct ethhdr *eth = NULL;
- 	struct udphdr *udp = NULL;
- 	struct iphdr *iph = NULL;
- 	struct xdp_meta *meta;
-+	struct ethhdr *eth;
- 	int err;
+diff --git a/Documentation/networking/xdp-rx-metadata.rst b/Documentation/networking/xdp-rx-metadata.rst
+index 73a78029c596..f74f0e283097 100644
+--- a/Documentation/networking/xdp-rx-metadata.rst
++++ b/Documentation/networking/xdp-rx-metadata.rst
+@@ -29,6 +29,9 @@ metadata is supported, this set will grow:
+ .. kernel-doc:: net/core/xdp.c
+    :identifiers: bpf_xdp_metadata_rx_stag
  
- 	data = (void *)(long)ctx->data;
- 	data_end = (void *)(long)ctx->data_end;
- 	eth = data;
++.. kernel-doc:: net/core/xdp.c
++   :identifiers: bpf_xdp_metadata_rx_csum_lvl
 +
-+	if (eth + 1 < data_end && eth->h_proto == bpf_htons(ETH_P_8021AD))
-+		eth = (void *)eth + sizeof(struct vlan_hdr);
-+
-+	if (eth + 1 < data_end && eth->h_proto == bpf_htons(ETH_P_8021Q))
-+		eth = (void *)eth + sizeof(struct vlan_hdr);
-+
- 	if (eth + 1 < data_end) {
- 		if (eth->h_proto == bpf_htons(ETH_P_IP)) {
- 			iph = (void *)(eth + 1);
-diff --git a/tools/testing/selftests/bpf/xdp_metadata.h b/tools/testing/selftests/bpf/xdp_metadata.h
-index 938a729bd307..6664893c2c77 100644
---- a/tools/testing/selftests/bpf/xdp_metadata.h
-+++ b/tools/testing/selftests/bpf/xdp_metadata.h
-@@ -9,6 +9,14 @@
- #define ETH_P_IPV6 0x86DD
- #endif
+ An XDP program can use these kfuncs to read the metadata into stack
+ variables for its own consumption. Or, to pass the metadata on to other
+ consumers, an XDP program can store it into the metadata area carried
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index fdae37fe11f5..ddade3a15366 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -1657,6 +1657,7 @@ struct xdp_metadata_ops {
+ 			       enum xdp_rss_hash_type *rss_type);
+ 	int	(*xmo_rx_ctag)(const struct xdp_md *ctx, u16 *vlan_tag);
+ 	int	(*xmo_rx_stag)(const struct xdp_md *ctx, u16 *vlan_tag);
++	int	(*xmo_rx_csum_lvl)(const struct xdp_md *ctx, u8 *csum_level);
+ };
  
-+#ifndef ETH_P_8021Q
-+#define ETH_P_8021Q 0x8100
-+#endif
+ /**
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index 2db7439fc60f..0fbd25616241 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -393,6 +393,8 @@ void xdp_attachment_setup(struct xdp_attachment_info *info,
+ 			   bpf_xdp_metadata_rx_ctag) \
+ 	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_STAG, \
+ 			   bpf_xdp_metadata_rx_stag) \
++	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CSUM_LVL, \
++			   bpf_xdp_metadata_rx_csum_lvl) \
+ 
+ enum {
+ #define XDP_METADATA_KFUNC(name, _) name,
+diff --git a/kernel/bpf/offload.c b/kernel/bpf/offload.c
+index 2c6b6e82cfac..8bd54fb4ac63 100644
+--- a/kernel/bpf/offload.c
++++ b/kernel/bpf/offload.c
+@@ -852,6 +852,8 @@ void *bpf_dev_bound_resolve_kfunc(struct bpf_prog *prog, u32 func_id)
+ 		p = ops->xmo_rx_ctag;
+ 	else if (func_id == bpf_xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_STAG))
+ 		p = ops->xmo_rx_stag;
++	else if (func_id == bpf_xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_CSUM_LVL))
++		p = ops->xmo_rx_csum_lvl;
+ out:
+ 	up_read(&bpf_devs_lock);
+ 
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index eff21501609f..7dd45fd62983 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -762,6 +762,18 @@ __bpf_kfunc int bpf_xdp_metadata_rx_stag(const struct xdp_md *ctx, u16 *vlan_tag
+ 	return -EOPNOTSUPP;
+ }
+ 
++/**
++ * bpf_xdp_metadata_rx_csum_lvl - Get depth at which HW has checked the checksum.
++ * @ctx: XDP context pointer.
++ * @csum_level: Return value pointer.
++ *
++ * Returns 0 on success (HW has checked the checksum) or ``-errno`` on error.
++ */
++__bpf_kfunc int bpf_xdp_metadata_rx_csum_lvl(const struct xdp_md *ctx, u8 *csum_level)
++{
++	return -EOPNOTSUPP;
++}
 +
-+#ifndef ETH_P_8021AD
-+#define ETH_P_8021AD 0x88A8
-+#endif
-+
- struct xdp_meta {
- 	__u64 rx_timestamp;
- 	__u64 xdp_timestamp;
+ __diag_pop();
+ 
+ BTF_SET8_START(xdp_metadata_kfunc_ids)
 -- 
 2.35.3
 
