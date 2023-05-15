@@ -1,23 +1,23 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 928F118C18
-	for <bpf@vger.kernel.org>; Mon, 15 May 2023 19:10:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 549EFC433EF;
-	Mon, 15 May 2023 19:10:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792CC18C39
+	for <bpf@vger.kernel.org>; Mon, 15 May 2023 19:20:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 14312C4339B;
+	Mon, 15 May 2023 19:20:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1684177819;
-	bh=SlEwJNrzW4LBUMaa7nAb9tSaJ/5R4QMO5KZEAy3iggI=;
+	s=k20201202; t=1684178420;
+	bh=LyOJi/qVgBu0+z0V1xOl962sFcB/Su9DjQmlE4QBRNE=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Kv+4iBsI4VIEXWYeeWKkhqbaJTlAV7GU1wd09FPYuIJJgb3mgdwlQQrPOvl3lsSdi
-	 7Dl/nuMdXnC/9F2fny/aYkFtr8+XOCsazWuLB2ackvOEVWifWsc8nYpJRr5ATsX7XV
-	 oNuOSi9uVNDrulbLEJ/ywaDQllRKfPjUBxsbDvpuVgMLbzbDl/NzvvXtYaIBH7is4M
-	 vdWkhZE4vJqS2x6cPBo2FBDR7xgA25q2conzFmX3fB/3C23z/PWJRerULah7Iv8g1W
-	 SbIKU5PBUSqC0x45kBrnDT6tGbIVVVHG4zOD/YTaViKb737kNDw+LbUJ/vzaP1alMG
-	 JXtsWh7aWP76g==
+	b=AyyEcuF/IS+wc6DeMZRZrgihgsbzGj6FAxQ2m2WEgXt2VeG83lsZG1YocmTtX30lm
+	 I9j78XBptRV9G7xoU8ymS5lery2toYEYr1bgpyNgbkGhlYYz8527EhfpFmKQ8Ic6jK
+	 LBQgwzePQy/MBX3RmSGidkXf1fCnC2h2svUJ3kfOAyAkI5slraeIlJHVNrw1659cwU
+	 BwA1N9fQtLRvCdgRIXrPKlL8jKPXLw1uKR7oXagNlvwGzx6wRNhOl20EFNGBKypCCT
+	 BTw1DtjIr+cp4x50kEecpmJn2uccWIRInciojeeSf3K3xk7H4A9qz7nbndP/Y7owjJ
+	 rKdm4V6+RdW/w==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 338BDE49FAA;
-	Mon, 15 May 2023 19:10:19 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DCF01E49FAB;
+	Mon, 15 May 2023 19:20:19 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -26,39 +26,41 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf: fix calculation of subseq_idx during precision
- backtracking
+Subject: Re: [PATCH bpf-next v2] arm64,bpf: Support struct arguments in the BPF
+ trampoline
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <168417781920.28646.15216696634083551111.git-patchwork-notify@kernel.org>
-Date: Mon, 15 May 2023 19:10:19 +0000
-References: <20230515180710.1535018-1-andrii@kernel.org>
-In-Reply-To: <20230515180710.1535018-1-andrii@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- martin.lau@kernel.org, kernel-team@meta.com
+ <168417841990.1340.9887886289072485201.git-patchwork-notify@kernel.org>
+Date: Mon, 15 May 2023 19:20:19 +0000
+References: <20230511140507.514888-1-revest@chromium.org>
+In-Reply-To: <20230511140507.514888-1-revest@chromium.org>
+To: Florent Revest <revest@chromium.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, kpsingh@kernel.org, mark.rutland@arm.com,
+ xukuohai@huaweicloud.com, zlim.lnx@gmail.com, yhs@meta.com, yhs@fb.com
 
 Hello:
 
 This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-On Mon, 15 May 2023 11:07:10 -0700 you wrote:
-> Subsequent instruction index (subseq_idx) is an index of an instruction
-> that was verified/executed by verifier after the currently processed
-> instruction. It is maintained during precision backtracking processing
-> and is used to detect various subprog calling conditions.
+On Thu, 11 May 2023 16:05:07 +0200 you wrote:
+> This extends the BPF trampoline JIT to support attachment to functions
+> that take small structures (up to 128bit) as argument. This is trivially
+> achieved by saving/restoring a number of "argument registers" rather
+> than a number of arguments.
 > 
-> This patch fixes the bug with incorrectly resetting subseq_idx to -1
-> when going from child state to parent state during backtracking. If we
-> don't maintain correct subseq_idx we can misidentify subprog calls
-> leading to precision tracking bugs.
+> The AAPCS64 section 6.8.2 describes the parameter passing ABI.
+> "Composite types" (like C structs) below 16 bytes (as enforced by the
+> BPF verifier) are provided as part of the 8 argument registers as
+> explained in the section C.12.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next] bpf: fix calculation of subseq_idx during precision backtracking
-    https://git.kernel.org/bpf/bpf-next/c/d84b1a6708ee
+  - [bpf-next,v2] arm64,bpf: Support struct arguments in the BPF trampoline
+    https://git.kernel.org/bpf/bpf-next/c/90564f1e3dd6
 
 You are awesome, thank you!
 -- 
