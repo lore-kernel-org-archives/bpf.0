@@ -1,177 +1,286 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6BC5FBF0
-	for <bpf@vger.kernel.org>; Mon, 15 May 2023 16:17:10 +0000 (UTC)
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63D41FDA
-	for <bpf@vger.kernel.org>; Mon, 15 May 2023 09:17:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1684167427;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Y2n8nonK1QjGxCr0VUr93GpzjyMzxVkptj6zYuPWAuE=;
-	b=Qd8WNMtV9wwf4KSPSWrL4pAJKCyENXhaLIAgMRv8fHgjRHA++hKhpGcOFkn9ZANOJrUAwT
-	6QdTAI25rJOfdSV52fWpKD9/ghxIodp2Oiv4UBZ0ORk/mbWsw4gN5KAV68bqMZ5vCmrtRg
-	blf3hEv6OJNf9CoifL5AA5MqAOWrYlk=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-434-SIs1WWgcPUCvLlIFbdZ2jg-1; Mon, 15 May 2023 12:17:06 -0400
-X-MC-Unique: SIs1WWgcPUCvLlIFbdZ2jg-1
-Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-510526d2a5fso8456537a12.0
-        for <bpf@vger.kernel.org>; Mon, 15 May 2023 09:17:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684167425; x=1686759425;
-        h=content-transfer-encoding:in-reply-to:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y2n8nonK1QjGxCr0VUr93GpzjyMzxVkptj6zYuPWAuE=;
-        b=aHeqUuOn9CAhzLr7nlmMXHESPb6WD2drCiN/LqfenJ1q+Lirfwq3Iqp50LTVCc//FY
-         0ANlV+wPnmar8Pwk53HJJd2PPt1ZpupdvXe28oj7KYgDStjkCq8v1bMhA/SxBuvRLhpq
-         5Yvjo9R4XO1/OJQaJ8SoX45VYny6hYXY5E1fI4RhohV8jW3oBmGOa8CrzBioCDTV6wTN
-         n+GXdmnIKuYdDVTXvFWg8AkYlwx/Vc96izLKKFQJ2ABwlH0G5Iul2J5wshHIYAOnNeJW
-         BDKIkqVwUv4QjX3FB5O1Re+TXpHK6JqdzJz0K1dPy22It4xggDvsi9l/ld3jXOj9tfPo
-         tuyQ==
-X-Gm-Message-State: AC+VfDy4ZZVUEkddwYPNzkZMSWGySMG1jtb+APXc8JWoCuHag5eB6E8t
-	kSbnZ+Lb43dYBDStw3UIAsc9LEe/bRLQ3Y1T6YLmIo7S4jU2xHLBMhh1Z22Dez/vTigCkRVusQ5
-	4lpOH+6C9iOjN
-X-Received: by 2002:a17:907:8a08:b0:969:2df9:a0dd with SMTP id sc8-20020a1709078a0800b009692df9a0ddmr24600304ejc.25.1684167425406;
-        Mon, 15 May 2023 09:17:05 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6RQlKd2/JfsFteQEmuUPf/8L4dZ5P2zo1ST2B53RtXrhApGfHpCM2SRHnGguT14dpugsCwvw==
-X-Received: by 2002:a17:907:8a08:b0:969:2df9:a0dd with SMTP id sc8-20020a1709078a0800b009692df9a0ddmr24600277ejc.25.1684167425043;
-        Mon, 15 May 2023 09:17:05 -0700 (PDT)
-Received: from [192.168.41.200] (83-90-141-187-cable.dk.customer.tdc.net. [83.90.141.187])
-        by smtp.gmail.com with ESMTPSA id rq12-20020a17090788cc00b0094f0f0de1bcsm9444386ejc.200.2023.05.15.09.17.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 09:17:04 -0700 (PDT)
-From: Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <ee1ad4f2-34ab-4377-14d5-532cb0687180@redhat.com>
-Date: Mon, 15 May 2023 18:17:02 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16B17156C8
+	for <bpf@vger.kernel.org>; Mon, 15 May 2023 16:31:16 +0000 (UTC)
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2103.outbound.protection.outlook.com [40.107.237.103])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2411810E7;
+	Mon, 15 May 2023 09:31:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=e5kZis4l/ps3egJp7Bo7vGn8NAaxuwlgDEmPiEqKo8RR+x8EO1i7e3aYWeTsiU1kr5R/MiKt9Ni10NNuxuNsmC0eyKgE5z66DuV+zdZ5HfrV+5Y0J0/dpwMWW6aNlC8xHkUa3hmpalDgdjI/mlvFj0HA42LISY6LSjVMHVYXJpJNabTeSyfEYnNlVQexHIzKDAl+Cl4QcUm3w7RNp6HemyOOxPZbfk8KF3FNVmmy0n22YcqXhOna4MO7oJPVhqhIFqdVBLCfvhtJOArMMcVdyUKtsdHTVtu6vEfF0hd6PUS518rYQyBjQKpjcM8WRSy0LjROxMOnzDFGilNMAYhQ0w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OlJTcFBgXigsKPDNmDtdnbWmmH/BbHpWAD6Y99cAoKs=;
+ b=Ec9L+LVAE5tmzC28JdLQ+oPa8KmvS+yPc/j4elmU+cRiGKZZQnvkwNez3zlreIrwCG8bcaDVfXklzAdQbu+D6qnKQ0z+pWOSDqWraBpaMr1DFk+ZjLJgfV4zeko3FhRE//39dLNfelK6nuDPLCE8SxqUqM3J93nm3VqtCRvgERg1v8lNGI758lYr7RIg0CsoGuZy/W4N7txVwJmVKov5LayRrgnRhibc40hufo1G0CSlYYiePyiLORcFAhh898JPNdQZKplMo+X1iUtD+PVuCR/kkPu/uHZquVATWynTWWTHBJ7LZVkFng9XAbWhxcGwGRO4z5xAQXK5s/Q/u1DmMA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OlJTcFBgXigsKPDNmDtdnbWmmH/BbHpWAD6Y99cAoKs=;
+ b=T3s8EOusUf7zLGkLcZjDK9XcSvwqwAUam4GPIdyGum5Yw2kAzjzRV12mKzGSaP0zFnGX05rzhBkBCIBj+vVazye43t85eE5XyjU4Z58HIytP+42UOUhDdemoKphn/7rPLo2eAviETk/ec9VkX/s89Rdu7YrHBR/KCT20RnY24VE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from BY3PR13MB4804.namprd13.prod.outlook.com (2603:10b6:a03:355::13)
+ by BLAPR13MB4755.namprd13.prod.outlook.com (2603:10b6:208:330::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Mon, 15 May
+ 2023 16:31:06 +0000
+Received: from BY3PR13MB4804.namprd13.prod.outlook.com
+ ([fe80::8bfb:3fbb:241f:e41]) by BY3PR13MB4804.namprd13.prod.outlook.com
+ ([fe80::8bfb:3fbb:241f:e41%5]) with mapi id 15.20.6387.030; Mon, 15 May 2023
+ 16:31:05 +0000
+Date: Mon, 15 May 2023 18:30:52 +0200
+From: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@corigine.com>
+To: Larysa Zaremba <larysa.zaremba@intel.com>
+Cc: Quentin Monnet <quentin@isovalent.com>,
+	Stanislav Fomichev <sdf@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next] bpftool: specify XDP Hints ifname when loading
+ program
+Message-ID: <ZGJePGCkfuCITRxn@oden.dyn.berto.se>
+References: <20230511151345.7529-1-larysa.zaremba@intel.com>
+ <dd7a4bec-c0d0-4ffe-3bb8-e4d7ab4a01b8@isovalent.com>
+ <ZF5A752Z4eu8FAw9@lincoln>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZF5A752Z4eu8FAw9@lincoln>
+X-ClientProxiedBy: GVYP280CA0048.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:150:f9::17) To BY3PR13MB4804.namprd13.prod.outlook.com
+ (2603:10b6:a03:355::13)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Cc: brouer@redhat.com, Stanislav Fomichev <sdf@google.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>,
- KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
- Jesse Brandeburg <jesse.brandeburg@intel.com>,
- Tony Nguyen <anthony.l.nguyen@intel.com>,
- Anatoly Burakov <anatoly.burakov@intel.com>,
- Alexander Lobakin <alexandr.lobakin@intel.com>,
- Magnus Karlsson <magnus.karlsson@gmail.com>,
- Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
- netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
- linux-kernel@vger.kernel.org,
- Aleksander Lobakin <aleksander.lobakin@intel.com>
-Subject: Re: [PATCH RESEND bpf-next 14/15] net, xdp: allow metadata > 32
-Content-Language: en-US
-To: Larysa Zaremba <larysa.zaremba@intel.com>, bpf@vger.kernel.org
-References: <20230512152607.992209-1-larysa.zaremba@intel.com>
- <20230512152607.992209-15-larysa.zaremba@intel.com>
-In-Reply-To: <20230512152607.992209-15-larysa.zaremba@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-	RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-	T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-	version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY3PR13MB4804:EE_|BLAPR13MB4755:EE_
+X-MS-Office365-Filtering-Correlation-Id: a5dd2a06-b261-4df5-30a2-08db5561c7a4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	XdK76mwwFrmu3XPgX2wn9RiLh/VpLxhDVUSBgq3+tTwPuykNcrnoTQkdNmnP+5/jS0N1FHh2I4Ph5lBvcBl9pEamNpf1DR9syWrua35Hs+zBrQ4Li+vBn0qWgiCFDdiKKoNMqMicuOWPj7d2W+sk4Vbk8wQMrp/+Y1yN/0a626TxVi1+cjL8yY8LsTHU8Fl72LTvtrNns8e/k7+odNtAZGVrN5tte0iUg4eOpcuL81jLYqblPRn/wn8pT1LlJXkW+LrTo7M7g6z/KutA07pJcVOfPuWh2o5wCRyMiCT6UdoHfuSQU9BNmJatbKQaAShBDKMRUB/Z5kiSG18RYk95rxUJUUp5UMSfBId0HOpCaVx9sAzoELfBRmbLCYFrpSfppCXAiBSpAtzl/1LGuolwgTxJYBzoPwp3YIzteDVXLgBwjj+UCWLnTqrKhIJe51YNKrNDvxrVEVMzmXSe6j5vtgMkmb7eVbi2u6ga1Y0vw481fi6gyswr6kftq2g4OCBHiaFUZLVnnZ0ivaOKiXG3znVtfdNQ03lqPsxsNEevJtg4MdgzrD4xL0jfHqvWf6kjQVnW9Q44ncfbJu1NXRvXq3qaCjV0JglGPY5SUD2vMlAcpPddruOx+soZNrH7QEKK
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR13MB4804.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(396003)(366004)(376002)(39840400004)(451199021)(38350700002)(38100700002)(66574015)(186003)(26005)(83380400001)(9686003)(53546011)(6512007)(2906002)(41300700001)(6506007)(5660300002)(8936002)(8676002)(7416002)(6486002)(478600001)(52116002)(966005)(6666004)(66556008)(66946007)(66476007)(4326008)(86362001)(6916009)(316002)(54906003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?NjZpY3FWVlA3NUdVUDVHNDFFdlFpT3daNk9FenVQVzlzMlBrN0Z1SzlNNmN4?=
+ =?utf-8?B?WFd6RCs2ZTAxNHFwaUx0WE43VkNEa2pQOXZ3czR1WFE2eGhZNHVDQW1JOTZx?=
+ =?utf-8?B?U0F5RlJZbnFrbGg0QTdJYnhEWXRzMEpnTnZGSFpid25CZlB6dndSZ1lrbFlx?=
+ =?utf-8?B?STk2RFVBRTdqdW9QbUxjYWtDdFpXbnJBZ3prZGhFbkVXV1JRNDJGb2M4SjEz?=
+ =?utf-8?B?MnRIYXBueHpZRUpYM29ZUHZCdGRmajdBekNnREhMM3BIU01aWG5uWWs0aGVp?=
+ =?utf-8?B?NXI1Z0xCdGpGTjcvZVFWWmxxWHV0T0RkeFY4OGl2dkdpVW5UdVkzY3ZvQTN4?=
+ =?utf-8?B?NWJRZmljckN1T0J4Z0REWlNyaExEaFF2K3BIazNTRXB1VWFQZk94c0haUFVo?=
+ =?utf-8?B?TksxbWViOHZwOFdvWU4zNTJkQ04weVpwaVUxWFVwOFU0eFk1ZjR1eFRkSWo5?=
+ =?utf-8?B?ZUZlUnIzVk8zQmh5Nlp4REtWL1dCeDR2emRlN0UyK3BybFBRbnZkTzlHYk5j?=
+ =?utf-8?B?cjRhaUJ2WUtqUlhqZ3VDVEYvVzlWazZTUzc3MWJ0TTJQTFk3djQwM21rSXp3?=
+ =?utf-8?B?MWN5emJjbFZYNGRoQkxQclFuWWZWUENCendPTURZeHg3aVI2WlJiUmo0VG0w?=
+ =?utf-8?B?bzZ6VFE1Z3RsamdOeGJNZ1NsdXI5NHN0Yk42d3M1ODV6aTN3eGhrcXdOZHFr?=
+ =?utf-8?B?VXU4eUxXdnBvNVlTVDJiNGhFbjVkTXRtZG8zSjRoWGJRZmZ1T1Ayalh6eXJV?=
+ =?utf-8?B?Y2ZmNmdMbmRyNXVNZjk4U0VGNkhVSjBVMCtReE9OdFJhNDhtbUhBb0FUZ0l0?=
+ =?utf-8?B?NVBtVkkzWjUvSWRSVHBUVFF4Y3NFdGJsQmhLWFcxbit4bVNXbW56Sk1TMHVh?=
+ =?utf-8?B?eCtpNktkZTgzZ2M0MWJncGdiS1J0SFdzSFgxQnFuZU4weThiNENLeTUwZ1lW?=
+ =?utf-8?B?SEJZSW04UVJ0RlRtK0VIdHZSUHQvOVYzVWpEQzBPQzZMYVppTVhsa2ZpaVU1?=
+ =?utf-8?B?bmpMWUt0NzNzTnZ3elRaWDExMDd5QzVnbXpDNWJReFhjK1JPeXVPd2tydTBM?=
+ =?utf-8?B?NHRVZmFhdEtZRTZVUDdwQmhCV0lFOWRTcmtkS3FUWk5tNmQxRlJxRkJTbVRD?=
+ =?utf-8?B?MmU4bHMvTy85RTZDY3BYa2xNYURiSnJzUkd5M25SUnZmM1lCTkZuU1RnV1RY?=
+ =?utf-8?B?TVNqbWJsbkJmZlRPNWIwWCs4Kzl6ZjlJYWtDKzFZV2kxbkNsMlVpTXROMlJY?=
+ =?utf-8?B?Vi9tb1FFcFFxLytKNWJMQ3ZQbVBVWmlxS1Q1cXN5SXNyckEzbzErcXFuamd0?=
+ =?utf-8?B?TUM5RkxreG5vYkV6NGVRZXZWTWVOM3JTcHJRTS9TL3BLand5akliMnB0SnlJ?=
+ =?utf-8?B?ODBnVUpMdk8yV3h5c3pTQTZMM0srK0d3TlJnZGF6Zy9zY1BaL1EyTHhKRVNN?=
+ =?utf-8?B?aGptVWQ2OHl4azhxN244RjM5eDV1ejhwbk53QVpHS2VOMytVMFhhWnZObXBG?=
+ =?utf-8?B?aCsydmZ2Zm1MTkF0ZmVBZXZFa3h4VGhoa3hiK0NVVzF2ZWlJamxad1BYTDV1?=
+ =?utf-8?B?cWh0TGUxVW9MZTIvVnBNTlF3d0NORi9pd0hhckRaQ3F5T0l4K20xUnMxVEhS?=
+ =?utf-8?B?VTVQcjRUYmlWRVFBM0IwQUtSM1p2OGNtYkVuejlmVWdoMThpdlV5b1lPRTFo?=
+ =?utf-8?B?NTBYVExxNlp1UWV6VG5VcHovRE41dUdiTzROVVQwd1kyd2xoQmVmeUlReEE5?=
+ =?utf-8?B?dis3WHZSZ3RBdFJsVmV5M3A5NE9RSVFpNEJxeS9aZ0lOczRaZ0FnMmM3c0NJ?=
+ =?utf-8?B?V2NtdXgzYlVqTjdOeEdBR0xYVmx4QzJPODRiekV2M2NJRjh1bWtoNUllWXlt?=
+ =?utf-8?B?RldrcXJFcmdhTE1WTmF3KzU5ZXl6aFNWd1Nka0srZU1Cd2RBYjdPckpNQUtF?=
+ =?utf-8?B?QWhNeUExajZVM1YyWXlBMUJiSUlFNVN2QURzTmVlK1dzeHJESy9OZ0NCbmtz?=
+ =?utf-8?B?TndTRkY1V3hQY3NoMHhWNlZtRlRNS3E5c3pEWkNVQzhjcGRwK1c1YWFaSmY3?=
+ =?utf-8?B?SCt2d0lNZ1NJMWxaMEVjWmdyem9UVDZLWDdMeUFnVVNqUjBZK2p4NkJNM0E5?=
+ =?utf-8?B?d3RFNlFobXJ5clhDZ2hQY2dSZ1haQ1FDeXVFK2VOTlNNb1dMQTI1RlYyUlJP?=
+ =?utf-8?B?L3c9PQ==?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a5dd2a06-b261-4df5-30a2-08db5561c7a4
+X-MS-Exchange-CrossTenant-AuthSource: BY3PR13MB4804.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2023 16:31:05.5872
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: s4RkiGrXG+elY4C8DRK74RWwrbmgwlgq8ElykadaHBHzrlwxBjUL1UF6OOQq8oTK15Y6TGDsTRKiR+1idv1+mcGsCfOqaUeDwiFrcIQ2AGw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR13MB4755
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+	T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-
-
-On 12/05/2023 17.26, Larysa Zaremba wrote:
-> From: Aleksander Lobakin <aleksander.lobakin@intel.com>
+On 2023-05-12 15:36:47 +0200, Larysa Zaremba wrote:
+> [You don't often get email from larysa.zaremba@intel.com. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification ]
 > 
-> When using XDP hints, metadata sometimes has to be much bigger
-> than 32 bytes. Relax the restriction, allow metadata larger than 32 bytes
-> and make __skb_metadata_differs() work with bigger lengths.
+> On Fri, May 12, 2023 at 11:23:00AM +0100, Quentin Monnet wrote:
+> > 2023-05-11 17:13 UTC+0200 ~ Larysa Zaremba <larysa.zaremba@intel.com>
+> > > Add ability to specify a network interface used to resolve
+> > > XDP Hints kfuncs when loading program through bpftool.
+> > >
+> > > Usage:
+> > > bpftool prog load <bpf_obj_path> <pin_path> dev xdpmeta <ifname>
+> >
+> > Thanks for this patch!
+> >
+> > Regarding the command-line syntax, I'm not a big fan of the optional
+> > sub-keyword for the device for XDP hints. I must admit I had not
+> > anticipated other another use for the "dev" keyword. Instead, have you
+> > considered one of the following:
+> >
+> > 1) Adding a different keyword ("xdpmeta_dev"?) and making it
+> > incompatible with "dev"
+> >
+> > 2) Another alternative would be adding a sub-keyword for offload too:
+> >
+> >     bpftool p l [...] dev <[offload <ifname> | xdpmeta <ifname>]>
+> >
+> > If the ifname is provided with no sub-keyword, we would consider it for
+> > offload for legacy support, possibly warn that the syntax is deprecated.
+> >
+> > What do you think?
+> >
 > 
-> Now size of metadata is only limited by the fact it is stored as u8
-> in skb_shared_info, so maximum possible value is 255. 
+> I think first option would look a little bit nicer, but I like the idea to
+> deprecate "dev <ifname>". In my current version, forgetting to add "xdpmeta"
+> resulted in not very descriptive errors, this may confuse new users. So what
+> about:
 
-I'm confused, IIRC the metadata area isn't stored "in skb_shared_info".
-The maximum possible size is limited by the XDP headroom, which is also
-shared/limited with/by xdp_frame.  I must be reading the sentence wrong,
-somehow.
+I agree the first option looks a little bit nicer, but I think both 
+options would work.
 
-> Other important
-> conditions, such as having enough space for xdp_frame building, are already
-> checked in bpf_xdp_adjust_meta().
 > 
-> The requirement of having its length aligned to 4 bytes is still
-> valid.
+> bpftool prog load [...] xdpmeta_dev/offload_dev <ifname>
 > 
-> Signed-off-by: Aleksander Lobakin <aleksander.lobakin@intel.com>
-> Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
-> ---
->   include/linux/skbuff.h | 13 ++++++++-----
->   include/net/xdp.h      |  7 ++++++-
->   2 files changed, 14 insertions(+), 6 deletions(-)
+> "dev <ifname>" syntax would still work, but with a big warning, like this:
 > 
-> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-> index 8ddb4af1a501..afcd372aecdf 100644
-> --- a/include/linux/skbuff.h
-> +++ b/include/linux/skbuff.h
-> @@ -4219,10 +4219,13 @@ static inline bool __skb_metadata_differs(const struct sk_buff *skb_a,
->   {
->   	const void *a = skb_metadata_end(skb_a);
->   	const void *b = skb_metadata_end(skb_b);
-> -	/* Using more efficient varaiant than plain call to memcmp(). */
-> -#if defined(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) && BITS_PER_LONG == 64
->   	u64 diffs = 0;
->   
-> +	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ||
-> +	    BITS_PER_LONG != 64)
-> +		goto slow;
-> +
-> +	/* Using more efficient variant than plain call to memcmp(). */
->   	switch (meta_len) {
->   #define __it(x, op) (x -= sizeof(u##op))
->   #define __it_diff(a, b, op) (*(u##op *)__it(a, op)) ^ (*(u##op *)__it(b, op))
-> @@ -4242,11 +4245,11 @@ static inline bool __skb_metadata_differs(const struct sk_buff *skb_a,
->   		fallthrough;
->   	case  4: diffs |= __it_diff(a, b, 32);
->   		break;
-> +	default:
-> +slow:
-> +		return memcmp(a - meta_len, b - meta_len, meta_len);
->   	}
->   	return diffs;
-> -#else
-> -	return memcmp(a - meta_len, b - meta_len, meta_len);
-> -#endif
->   }
->   
->   static inline bool skb_metadata_differs(const struct sk_buff *skb_a,
-> diff --git a/include/net/xdp.h b/include/net/xdp.h
-> index 0fbd25616241..f48723250c7c 100644
-> --- a/include/net/xdp.h
-> +++ b/include/net/xdp.h
-> @@ -370,7 +370,12 @@ xdp_data_meta_unsupported(const struct xdp_buff *xdp)
->   
->   static inline bool xdp_metalen_invalid(unsigned long metalen)
->   {
-> -	return (metalen & (sizeof(__u32) - 1)) || (metalen > 32);
-> +	typeof(metalen) meta_max;
-> +
-> +	meta_max = type_max(typeof_member(struct skb_shared_info, meta_len));
-> +	BUILD_BUG_ON(!__builtin_constant_p(meta_max));
-> +
-> +	return !IS_ALIGNED(metalen, sizeof(u32)) || metalen > meta_max;
->   }
->   
->   struct xdp_attachment_info {
+>   'bpftool prog [...] dev <ifname>' syntax is deprecated. Going further, please
+>   use 'offload_dev <ifname>' to offload program to device. For XDP hints
+>   applications, use 'xdpmeta_dev <ifname>'.
+> 
+> > >
+> > > Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
+> > > ---
+> > >  tools/bpf/bpftool/prog.c | 28 +++++++++++++++++++++-------
+> > >  1 file changed, 21 insertions(+), 7 deletions(-)
+> > >
+> > > diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+> > > index 91b6075b2db3..a9cb96d99277 100644
+> > > --- a/tools/bpf/bpftool/prog.c
+> > > +++ b/tools/bpf/bpftool/prog.c
+> > > @@ -1517,12 +1517,13 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+> > >     struct bpf_program *prog = NULL, *pos;
+> > >     unsigned int old_map_fds = 0;
+> > >     const char *pinmaps = NULL;
+> > > +   __u32 offload_ifindex = 0;
+> > >     bool auto_attach = false;
+> > > +   __u32 meta_ifindex = 0;
+> > >     struct bpf_object *obj;
+> > >     struct bpf_map *map;
+> > >     const char *pinfile;
+> > >     unsigned int i, j;
+> > > -   __u32 ifindex = 0;
+> > >     const char *file;
+> > >     int idx, err;
+> > >
+> > > @@ -1614,17 +1615,25 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+> > >                     map_replace[old_map_fds].fd = fd;
+> > >                     old_map_fds++;
+> > >             } else if (is_prefix(*argv, "dev")) {
+> > > +                   __u32 *cur_ifindex;
+> > > +
+> > >                     NEXT_ARG();
+> > >
+> > > -                   if (ifindex) {
+> > > -                           p_err("offload device already specified");
+> > > +                   if (offload_ifindex || meta_ifindex) {
+> > > +                           p_err("device already specified");
+> >
+> > I'd add a note to tell somehow that offload and XDP hints are mutually
+> > exclusive. I suspect not all users understand these well.
+> 
+> Ok, will do.
+> 
+> >
+> > >                             goto err_free_reuse_maps;
+> > >                     }
+> > > +                   if (is_prefix(*argv, "xdpmeta")) {
+> > > +                           cur_ifindex = &meta_ifindex;
+> > > +                           NEXT_ARG();
+> > > +                   } else {
+> > > +                           cur_ifindex = &offload_ifindex;
+> > > +                   }
+> > >                     if (!REQ_ARGS(1))
+> > >                             goto err_free_reuse_maps;
+> > >
+> > > -                   ifindex = if_nametoindex(*argv);
+> > > -                   if (!ifindex) {
+> > > +                   *cur_ifindex = if_nametoindex(*argv);
+> > > +                   if (!(*cur_ifindex)) {
+> > >                             p_err("unrecognized netdevice '%s': %s",
+> > >                                   *argv, strerror(errno));
+> > >                             goto err_free_reuse_maps;
+> > > @@ -1671,7 +1680,12 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+> > >                             goto err_close_obj;
+> > >             }
+> > >
+> > > -           bpf_program__set_ifindex(pos, ifindex);
+> > > +           if (prog_type == BPF_PROG_TYPE_XDP && meta_ifindex) {
+> > > +                   bpf_program__set_flags(pos, BPF_F_XDP_DEV_BOUND_ONLY);
+> > > +                   bpf_program__set_ifindex(pos, meta_ifindex);
+> > > +           } else {
+> > > +                   bpf_program__set_ifindex(pos, offload_ifindex);
+> > > +           }
+> > >             if (bpf_program__type(pos) != prog_type)
+> > >                     bpf_program__set_type(pos, prog_type);
+> > >             bpf_program__set_expected_attach_type(pos, expected_attach_type);
+> > > @@ -1709,7 +1723,7 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+> > >     idx = 0;
+> > >     bpf_object__for_each_map(map, obj) {
+> > >             if (bpf_map__type(map) != BPF_MAP_TYPE_PERF_EVENT_ARRAY)
+> > > -                   bpf_map__set_ifindex(map, ifindex);
+> > > +                   bpf_map__set_ifindex(map, offload_ifindex);
+> > >
+> > >             if (j < old_map_fds && idx == map_replace[j].idx) {
+> > >                     err = bpf_map__reuse_fd(map, map_replace[j++].fd);
+> >
+> > Could you please also update the following items:
+> >
+> > - The usage message for "bpftool prog load" near the end of prog.c
+> >
+> > - The related doc in Documentation/bpftool-prog.rst (command summary
+> > near the top, and detailed description later in the doc)
+> >
+> > - Bash completion (for keyword "dev", look for "_sysfs_get_netdevs" in
+> > bash-completion/bpftool). I'm happy to help with this one if necessary.
+> 
+> Will do all the above in v2.
+> 
+> >
+> > Thanks,
+> > Quentin
 
+-- 
+Kind Regards,
+Niklas Söderlund
