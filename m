@@ -1,168 +1,188 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1502CC8F0
-	for <bpf@vger.kernel.org>; Mon, 15 May 2023 13:09:24 +0000 (UTC)
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCA32706
-	for <bpf@vger.kernel.org>; Mon, 15 May 2023 06:09:03 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-24e2b2a27ebso11843918a91.3
-        for <bpf@vger.kernel.org>; Mon, 15 May 2023 06:09:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684156142; x=1686748142;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o1zxgFA/RYniDFm8rB33KhKyBx/11A9AN1LlDpM6cgs=;
-        b=J3FvBbUK4hwiNEzIybZXWHuVGrN9lHCYMwJTiDP4YOEMOAkVkqz2wV18cy78q6byIh
-         g1qDcji+VBztImF9CYKETOSlhLt6ejg1rgRM+mW1eS84nIFE8QgrDwKMfvb/BQ/8s00L
-         P7JRaLqFNX4nGlXNf+uTRcS5frszTRXJz9XJOHxW/CcS5rL13pxFNa461R/IqXdFarL/
-         ZZq/pvM9QaeTgHZ2RMFH41JzOCcb/5KKbkpHBODeEPyfcC5EtJDWdapNHyfYas1Xo+7/
-         DAK2CVcABKqPA0hAs+pRusPV0odrudrHUNWjMW/5RdAJJHRuigFhJkoFwroBkP9/BcYd
-         hWKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684156142; x=1686748142;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o1zxgFA/RYniDFm8rB33KhKyBx/11A9AN1LlDpM6cgs=;
-        b=WVnpwO6bT657HA9KiTulVDTjNZauCFJpOaaxyiOb28AxV4OjkQ/VcHFkA251jQ5xUA
-         uRY8j4AyqN/RGbNmU3O46xWHhYW9oSCpJX2S1riUoAE63GGBU+ITktnnKOvPew7rYJMl
-         vOOkNI/W4YkhCX8Sx6Tza6ujcCLSME2c35/AJ8oiXwvbfkJdIQDQwD+zFOrKxDEPaJxi
-         jrcJjK8N7GHMM+iNY5/uaf4MsJgqdA0Eq08ySCUBo8IF45B7V9kdyoka5Wb7sKbKg/rw
-         JdULQleD/4g98j11A/PtODBddjVvJQkddE18jkynMPJ4wrMWs2vZ764MRSHjOTAkkQgB
-         C9ow==
-X-Gm-Message-State: AC+VfDz8Fb4fsVM1sAQS5zh2Jf8HwvPZeI71PNVFpL10jfTVHoRg31rK
-	7Qv4ksoYm4bGfVcPA8yz3O4=
-X-Google-Smtp-Source: ACHHUZ6k/fPjLOGfx+8yYH/VY765dpiOneJ4n9Hp7vQA0qbT9D2ztb6+H61I6BIXsrzh2ee63QBYMw==
-X-Received: by 2002:a17:90b:ecd:b0:252:a7b3:c24c with SMTP id gz13-20020a17090b0ecd00b00252a7b3c24cmr12698286pjb.20.1684156142061;
-        Mon, 15 May 2023 06:09:02 -0700 (PDT)
-Received: from vultr.guest ([2001:19f0:ac01:991:5400:4ff:fe70:1e06])
-        by smtp.gmail.com with ESMTPSA id h5-20020a170902748500b001ac2a73dbf2sm13458723pll.291.2023.05.15.06.09.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 06:09:01 -0700 (PDT)
-From: Yafang Shao <laoar.shao@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	kafai@fb.com,
-	songliubraving@fb.com,
-	yhs@fb.com,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org
-Cc: bpf@vger.kernel.org,
-	Yafang Shao <laoar.shao@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Jiri Olsa <olsajiri@gmail.com>
-Subject: [PATCH bpf-next v2 2/3] bpf: Remove bpf trampoline selector
-Date: Mon, 15 May 2023 13:08:48 +0000
-Message-Id: <20230515130849.57502-3-laoar.shao@gmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230515130849.57502-1-laoar.shao@gmail.com>
-References: <20230515130849.57502-1-laoar.shao@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C919679D4;
+	Mon, 15 May 2023 13:11:38 +0000 (UTC)
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D8130FF;
+	Mon, 15 May 2023 06:11:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684156279; x=1715692279;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=ZZeioi8rdQ60LYNBboy0f8d/uLsFvpcOfgARL23AxLs=;
+  b=F0MKPtMsslqGudSOxyvB3oPr+5aCSbv8r1dZdLz6uhmnho9ZBQ0sqRMo
+   Ilujxuz3TCFZ55sDSqDDYIakBpie6uh1zPqV1AGkiOLPY1MwCJOKapp+K
+   9EHVe+Nel+Do6e3yU2jHKQoNQQ1mRVjiE83Hur/1qe2oMX6/uTtzlfXz3
+   VmMxLtLvx8Zrstei9zEXf5OFQBmIreqCVzL/VJ0qc2QZlJj6qXniAAITD
+   RU1+gg3LvI/YlKKFZxIrjbNIu4G7Hx8dPF4xvrE0UxQUqHj3Mra1XjgeN
+   /ZwVHv76QdNi+XMPn4/ZKyKna576Rc21ms+f1g4Y75hw8PUONQ4mqTB5q
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="351229457"
+X-IronPort-AV: E=Sophos;i="5.99,276,1677571200"; 
+   d="scan'208";a="351229457"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 06:11:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="790642283"
+X-IronPort-AV: E=Sophos;i="5.99,276,1677571200"; 
+   d="scan'208";a="790642283"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by FMSMGA003.fm.intel.com with ESMTP; 15 May 2023 06:11:18 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 15 May 2023 06:11:18 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Mon, 15 May 2023 06:11:18 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.40) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Mon, 15 May 2023 06:11:17 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dragWl/ylz6iGtIcV18TkND56WTV3Auz4thdsJyqUn0AIpIj9NjyYTcB4vRAdIaxJG8b86pk6yu3ySK4xi5VurEw81KwPouyaHvLTsdCxs0b0vCsTBUoZX95V2ZF+p9AgbO7X2KhmdpwY1bKGb8arWLytsYBVNuIS+AUjXW9VxSYq8ISsDVz5b4I0WQ3i+GQ5LCqrp8OyPR5PD0DLKDnHoCpxJ6YgzfDN+dRI2Y/P6J7voieSR4H43I69DUx/oO1ACQHj/lkRhZY1U6587HGe0AmjB8saXqljVSVYIA68/AMNxRgZ+IlurQRnzNDMY5gsJKYudWEowA5JyKKbsp9mg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aMSZufySicNoPOMlmBjpLiCxBC5jwQCvM6CjX+3LxT8=;
+ b=YfiSPhrV726rM5qUo5KtqDQeBKZBQKVmxQYoW/zlKQgOauiMEBYIL7whdoRd5+UuPibHxElN86C1OBJm47xu9vPrGu27Wl2PLRKIip3p8J4OhG5E67UBWLropJ66zkJsYYTAM/2CMzhg4MK0jZ6eFJOUc9wugaB7pvzGZQjUDwzZlXDy70VFJnkJLO/c1+ia1bxkJJGHNwxsPwijPJ3s2E8d1+/3eDCJUFDM2Rz4U4MEaKdOElT1Nc2q6IJh8k8ovSzcxh2AcP4nTeT0jY/GU7QM7ln7vnkP3VSiNqLsEV99SephPXzMZPdVl7qyESopusnG+gMeERTqXuoTJoZ9ow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
+ SJ0PR11MB4864.namprd11.prod.outlook.com (2603:10b6:a03:2d4::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Mon, 15 May
+ 2023 13:11:16 +0000
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::9e4f:80cc:e0aa:6809]) by DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::9e4f:80cc:e0aa:6809%2]) with mapi id 15.20.6387.030; Mon, 15 May 2023
+ 13:11:15 +0000
+Date: Mon, 15 May 2023 15:11:09 +0200
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
+CC: Yunsheng Lin <linyunsheng@huawei.com>, Lorenzo Bianconi
+	<lorenzo@kernel.org>, <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+	<pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+	<hawk@kernel.org>, <john.fastabend@gmail.com>
+Subject: Re: [RFC net-next] net: veth: reduce page_pool memory footprint
+ using half page per-buffer
+Message-ID: <ZGIvbfPd46EIVZf/@boxer>
+References: <d3ae6bd3537fbce379382ac6a42f67e22f27ece2.1683896626.git.lorenzo@kernel.org>
+ <62654fa5-d3a2-4b81-af70-59c9e90db842@huawei.com>
+ <ZGIWZHNRvq5DSmeA@lore-desk>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZGIWZHNRvq5DSmeA@lore-desk>
+X-ClientProxiedBy: FR0P281CA0213.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:ac::7) To DM4PR11MB6117.namprd11.prod.outlook.com
+ (2603:10b6:8:b3::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-	autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|SJ0PR11MB4864:EE_
+X-MS-Office365-Filtering-Correlation-Id: 376c11ff-a9cf-4e8a-488f-08db5545dd23
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0WSpuvb9e+zMsQwUhhp4jfpX6u6zwlvtiH8+mWla0RyUGqNPKYKhmGczREsvlm8vmyE2ViKgDYmvl5NSc8dl+BWBelwDIAWDtlW+NAWULZ+EsBalOQSNbykW3cvNdyyKaMO7sUl1FV6q+S2ErZ4Txi5f9h58zAl0jDqhWuVwmfUSk3DxQDjrMBVXTeyyZOgXPPbVfKzAzUFDmv3dJhjcWd372J+r0xoqY02HgnfXFAN6dJNrYpUUNYGAqbxUzYNj3HnbHoDVMY+Uuh0Ja7qmjLBZXamPrFRhgF78a/cEYcTxfioF+i6ZZqQvKdISsTjYeQhbVxrTr3d0mwTr1G2JCFbS2Vmrrt8kbpcqG/zwH/wT6RsdIjOMgdImPT5NQjqWYDU58QStsHMQCPffACDzaeiwTxUXQkdtZKtKIhU9phNfUH/NC5DmBDqw3LbqbNAZzm/DaeLc0AcjJxMI/V5A6omfPjaHNzg4/r6S93wVk+k25719B4Ss1eN+WqtLKu612OaBHv0xLF6H29FP+9fUHsjS7m8TObJW2vWze3Sk5SlQNWxX1c9XCOBy8k6pfGaZ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(136003)(366004)(346002)(39860400002)(396003)(376002)(451199021)(6666004)(4326008)(6916009)(66476007)(316002)(38100700002)(478600001)(54906003)(66556008)(66946007)(33716001)(5660300002)(82960400001)(41300700001)(6486002)(83380400001)(8936002)(9686003)(8676002)(26005)(186003)(7416002)(6512007)(6506007)(44832011)(53546011)(2906002)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LJ1SZZbXBPCUz+88OEvNgjPyxsK+F8vAH/lOobZLds2rgv7+PD5SyD9F2vhV?=
+ =?us-ascii?Q?Wpu7UyNLQ1rGRN6uULixprWuXCZ0XmlMt0KSXKzPlZ5KYckNtRxoWiMeP0Ga?=
+ =?us-ascii?Q?x1P1Gwj65v9CDiinWGyUn+jeehS2jvVT6UG+OV+J++S/klcGsNdY89NYPm1G?=
+ =?us-ascii?Q?bTw59Wh/XXR4tJuDvqF3vw37G91FVW3dqcqp9QZlQ54hlsLKZIVP+qEmStv/?=
+ =?us-ascii?Q?UcKSYRUZwM9m+IR+n/nF/+FkxJkuCP+f5A1oGU18gftmQwhB5jB6AZc4s/Zo?=
+ =?us-ascii?Q?sRSDwtJv8arYdGvsZ69rdR7/mDFcxjCahmvjqabpFvwovt2yDefa0wRrGjTR?=
+ =?us-ascii?Q?WVAnqc81W6PniMLDiYcoZBOWTfYLZT8rxEMNATr2Ui/1ZW9RTsaGMKUy2H+L?=
+ =?us-ascii?Q?OiJnvZSUBw72su5g2GoYWud80wqD54pzm7Za663eXdiazXe/sDJYeGpqMBa0?=
+ =?us-ascii?Q?kgwb6+SQ4GU9z55cSI1DpaOx1qHlEz9NdPJyNC9FmB6x4VRiXBsg8onb21AI?=
+ =?us-ascii?Q?axM/LMcdfXJuKgQclN2OUWBov4P39FMHFPKxcFtfvrvfBM/U4+SeaP/koDRg?=
+ =?us-ascii?Q?6/tAZn5lOLtk/t9fCoVDcKROorkdmFL4n/ftVzmBpX25tTvrvSs4V7M7g/lz?=
+ =?us-ascii?Q?txSCQ8BG5lVorAxQBa94tNiILnrNfWvM/UK/5seABAo0njz43Dl8JUZN0Eva?=
+ =?us-ascii?Q?Hdy41iFjGlab/kg108+62+iwuFAVaN99pLX+KdqDstQ52rr5Qf0mPE8o0tvV?=
+ =?us-ascii?Q?aPZOWi9pQdYyNIEMj5LlQDs47nVwmfP8sLMzGwvFecYrOEnZ2kH+uX7Hd2Jf?=
+ =?us-ascii?Q?DjUlQGSsYBnJO76r6NzWMt5geHbCajhHq2Ml+JsDBpaOFsnbbZpIj6vBdXAy?=
+ =?us-ascii?Q?IiiY1EfH3mj5VmD7DlWdArt97vJ6jbRE6d7EmVz2Sm/FaSe/nVEJJS9sNha2?=
+ =?us-ascii?Q?41UNJFVQ3Xn3dHEwBbGETTJ3KgnM3p1opiqwD8PXsbKH+Zn6EafV1W7g+fEd?=
+ =?us-ascii?Q?CQf71e+g22Q3HnfKjIC6Sf3PgDV1+5nq4CbKUW4HsufeU8mqvJMbQmCny981?=
+ =?us-ascii?Q?JeFgaqPmVTWZ2h/F6UWj72H3BY9su3AmliJPOPu0cccDNGd5qW3WxP/s7oqW?=
+ =?us-ascii?Q?hdfciOCO9kiPcmf2+e/iZJu/47njT/Yku3ggfHZwsIQa/BuOQF3mrL58Jxi2?=
+ =?us-ascii?Q?Sr6U4/yZ9H4vK90xWuyEiQVRFrbW1NevkmZeVzCK8zP7te58sGpLyI+GuYAS?=
+ =?us-ascii?Q?XcQoiV/2lGwJGp6Lylwh01TGuUovVzGjVJdBBABpH2zEm0o6YggR1HNVOJ2F?=
+ =?us-ascii?Q?cebvMjuepbz4Os+wkxMGn9NqOhm/F8XVjC2dJFmAHoLXa+OOqG/nktWA4gjP?=
+ =?us-ascii?Q?+ssYV1VlAiwEyssr2tCG9lI9pwghNIYPTHb78/1ehRUjt6btSiMsnZXTdzKk?=
+ =?us-ascii?Q?yI8qY9sauHqA+C2hoZJX1X0aNMgLwAP+J5to1azRzRIvPUjQUdwpcz9qUOgr?=
+ =?us-ascii?Q?v99vCsfjiYClfsodM7W+4dBoSnuYf+lWG5dSQziF4/49B7na3u1g0K4YflJJ?=
+ =?us-ascii?Q?zQ+uoSHZgaakGTZMfQa+uYjrjU0JxMBdZtiDYsiI9B8+CQqtroS/jC4PXST7?=
+ =?us-ascii?Q?UA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 376c11ff-a9cf-4e8a-488f-08db5545dd23
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2023 13:11:15.6960
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: y6JMI45pv/L7ge1J6Cu/Ph9mNq9tL7QZBNlYQUipvJqf+dImw6aZRZM5kNEp5L2ceSVFaOxMeG2eLYerYYFoYrwQIlvsoK1CNkjtXERTiik=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4864
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+	SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-After commit e21aa341785c ("bpf: Fix fexit trampoline."), the selector
-is only used to indicate how many times the bpf trampoline image are
-updated and been displayed in the trampoline ksym name. After the
-trampoline is freed, the selector will start from 0 again. So the
-selector is a useless value to the user. We can remove it.
-If the user want to check whether the bpf trampoline image has been updated
-or not, the user can compare the address. Each time the trampoline image
-is updated, the address will change consequently.
+On Mon, May 15, 2023 at 01:24:20PM +0200, Lorenzo Bianconi wrote:
+> > On 2023/5/12 21:08, Lorenzo Bianconi wrote:
+> > > In order to reduce page_pool memory footprint, rely on
+> > > page_pool_dev_alloc_frag routine and reduce buffer size
+> > > (VETH_PAGE_POOL_FRAG_SIZE) to PAGE_SIZE / 2 in order to consume one page
+> > 
+> > Is there any performance improvement beside the memory saving? As it
+> > should reduce TLB miss, I wonder if the TLB miss reducing can even
+> > out the cost of the extra frag reference count handling for the
+> > frag support?
+> 
+> reducing the requested headroom to 192 (from 256) we have a nice improvement in
+> the 1500B frame case while it is mostly the same in the case of paged skb
+> (e.g. MTU 8000B).
 
-Jiri pointed out antoher issue that perf is still using the old name
-"bpf_trampoline_%lu", so this change can fix the issue in perf.
+Can you define 'nice improvement' ? ;)
+Show us numbers or improvement in %.
 
-Fixes: e21aa341785c ("bpf: Fix fexit trampoline.")
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-Cc: Song Liu <song@kernel.org>
-Cc: Jiri Olsa <olsajiri@gmail.com>
----
- include/linux/bpf.h     |  1 -
- kernel/bpf/trampoline.c | 11 ++++-------
- 2 files changed, 4 insertions(+), 8 deletions(-)
+> 
+> > 
+> > > for two 1500B frames. Reduce VETH_XDP_PACKET_HEADROOM to 192 from 256
+> > > (XDP_PACKET_HEADROOM) to fit max_head_size in VETH_PAGE_POOL_FRAG_SIZE.
+> > > Please note, using default values (CONFIG_MAX_SKB_FRAGS=17), maximum
+> > > supported MTU is now reduced to 36350B.
+> > 
+> > Maybe we don't need to limit the frag size to VETH_PAGE_POOL_FRAG_SIZE,
+> > and use different frag size depending on the mtu or packet size?
+> > 
+> > Perhaps the page_pool_dev_alloc_frag() can be improved to return non-frag
+> > page if the requested frag size is larger than a specified size too.
+> > I will try to implement it if the above idea makes sense.
+> > 
+> 
+> since there are no significant differences between full page and fragmented page
+> implementation if the MTU is over the page boundary, does it worth to do so?
+> (at least for the veth use-case).
+> 
+> Regards,
+> Lorenzo
+> 
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 456f33b..36e4b2d 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1125,7 +1125,6 @@ struct bpf_trampoline {
- 	int progs_cnt[BPF_TRAMP_MAX];
- 	/* Executable image of trampoline */
- 	struct bpf_tramp_image *cur_image;
--	u64 selector;
- 	struct module *mod;
- };
- 
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 2a3849c..78acf28 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -349,7 +349,7 @@ static void bpf_tramp_image_put(struct bpf_tramp_image *im)
- 	call_rcu_tasks_trace(&im->rcu, __bpf_tramp_image_put_rcu_tasks);
- }
- 
--static struct bpf_tramp_image *bpf_tramp_image_alloc(u64 key, u32 idx)
-+static struct bpf_tramp_image *bpf_tramp_image_alloc(u64 key)
- {
- 	struct bpf_tramp_image *im;
- 	struct bpf_ksym *ksym;
-@@ -376,7 +376,7 @@ static struct bpf_tramp_image *bpf_tramp_image_alloc(u64 key, u32 idx)
- 
- 	ksym = &im->ksym;
- 	INIT_LIST_HEAD_RCU(&ksym->lnode);
--	snprintf(ksym->name, KSYM_NAME_LEN, "bpf_trampoline_%llu_%u", key, idx);
-+	snprintf(ksym->name, KSYM_NAME_LEN, "bpf_trampoline_%llu", key);
- 	bpf_image_ksym_add(image, ksym);
- 	return im;
- 
-@@ -406,11 +406,10 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
- 		err = unregister_fentry(tr, tr->cur_image->image);
- 		bpf_tramp_image_put(tr->cur_image);
- 		tr->cur_image = NULL;
--		tr->selector = 0;
- 		goto out;
- 	}
- 
--	im = bpf_tramp_image_alloc(tr->key, tr->selector);
-+	im = bpf_tramp_image_alloc(tr->key);
- 	if (IS_ERR(im)) {
- 		err = PTR_ERR(im);
- 		goto out;
-@@ -447,8 +446,7 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
- 
- 	set_memory_rox((long)im->image, 1);
- 
--	WARN_ON(tr->cur_image && tr->selector == 0);
--	WARN_ON(!tr->cur_image && tr->selector);
-+	WARN_ON(tr->cur_image && total == 0);
- 	if (tr->cur_image)
- 		/* progs already running at this address */
- 		err = modify_fentry(tr, tr->cur_image->image, im->image, lock_direct_mutex);
-@@ -478,7 +476,6 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
- 	if (tr->cur_image)
- 		bpf_tramp_image_put(tr->cur_image);
- 	tr->cur_image = im;
--	tr->selector++;
- out:
- 	/* If any error happens, restore previous flags */
- 	if (err)
--- 
-1.8.3.1
 
