@@ -1,265 +1,118 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C418A111A1
-	for <bpf@vger.kernel.org>; Wed, 17 May 2023 16:20:33 +0000 (UTC)
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274F5DDAE
-	for <bpf@vger.kernel.org>; Wed, 17 May 2023 09:20:11 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HE4G4N002745;
-	Wed, 17 May 2023 16:19:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=corp-2023-03-30;
- bh=65/ojX8W20BsEMJPLMxOCt3jn0zOEtP1h6ILbVKL14Y=;
- b=PUssdrRTQ9Ovc7hnSkgGMMdPX5N4tQDJbMM+f+x3+PrLogmBWjhjjJXnMPHp7u0+xlUd
- MoapLyjh1r1wkYN8gez0ZrBLgtzrlsQffQ1H+bPcESZ9EcJJ1a/e9/oWUMFDSXHBVaeX
- j3CB5icTZT8f/mJNEutyc4Qc9uCnTm7vrk9aloP0wyEREgs5TifAOOmKsEOZihOjtgmw
- ceGZj/NWiXSPk2VpFsmy8qTKzccnuYZydwkdPWcrm7tLlFJ+sVUZc4wpqdxkycy4t6Jo
- 9g4COZSQq2zyFSD842o5fbZQ9iYhILJo97CF/5g5PEiuMpqvnp6pPWIw6D/efczrJQVS yw== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qj0ye5xum-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 17 May 2023 16:19:13 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34HFKNsM004223;
-	Wed, 17 May 2023 16:19:12 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3qj10bx0yx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 17 May 2023 16:19:12 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34HGHdXH034295;
-	Wed, 17 May 2023 16:19:11 GMT
-Received: from bpf.uk.oracle.com (dhcp-10-175-213-201.vpn.oracle.com [10.175.213.201])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3qj10bwyb5-6;
-	Wed, 17 May 2023 16:19:11 +0000
-From: Alan Maguire <alan.maguire@oracle.com>
-To: acme@kernel.org, ast@kernel.org, jolsa@kernel.org, yhs@fb.com,
-        andrii@kernel.org
-Cc: daniel@iogearbox.net, laoar.shao@gmail.com, martin.lau@linux.dev,
-        song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, bpf@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [RFC dwarves 5/6] btf_encoder: store ELF function representations sorted by name _and_ address
-Date: Wed, 17 May 2023 17:16:47 +0100
-Message-Id: <20230517161648.17582-6-alan.maguire@oracle.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230517161648.17582-1-alan.maguire@oracle.com>
-References: <20230517161648.17582-1-alan.maguire@oracle.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A3B2111A1
+	for <bpf@vger.kernel.org>; Wed, 17 May 2023 16:26:35 +0000 (UTC)
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC391987
+	for <bpf@vger.kernel.org>; Wed, 17 May 2023 09:26:33 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-510b4e488e4so1798687a12.3
+        for <bpf@vger.kernel.org>; Wed, 17 May 2023 09:26:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684340792; x=1686932792;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nPwFirfaRkIyZZAuXKTQpmf9D1tkmkY1cfDYWxRyr8k=;
+        b=n68ErBrNB2rvJLw6hEBjoJoY62J9dsHL/AbWe5nVZNYrrXx7YOJhxEWKrBhusZmK67
+         futOj3x0nX+o9xjjISeEJGOJvuwTnyBW/+zvKyQhtzHqfAxFnKPtXiJOmaC1wH2XxgvX
+         iD1sOOjWEQ6opu5DQrq1ic/kh5YomYYMMxT6w7d/yjkuhIEePBQDBP/M1hv3tz/tJ0l+
+         vMxRAporVy89ylw2iHyPPfb0/ApwHZj8AhZQ4J9dj3yVuoR8X4i5HtsKwUDrkPeUCOGg
+         1vJ8CGgDkR6OhWzaJw7pZQYGmDqbuEND1Kw8TdarQnV2kXBPc86NMB041jG6zjfmxbte
+         8Vjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684340792; x=1686932792;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nPwFirfaRkIyZZAuXKTQpmf9D1tkmkY1cfDYWxRyr8k=;
+        b=giOx052m17+16McXG9ReRMMS2GoFC1Zg4JiKghokRhqsFXp2ek+IGXC2rwYjF5C/LB
+         PIoh9MNtRq6o2oQQFDGtvMM8eQ2kmUruNv3tRMeJYgg/Uf3eXPk8il3Go4YbDCIgvWCB
+         CGeJsDp4SaC+fNsr8L1thm7o9mu0QdNKKK0naXfSkenInldiGsET586MaZH2u4L2gVfi
+         v2HxkeGys3G5M8fSHox685AGvA7bDYANkwCX/XuhrqBYQIjPAQFDyjo/9oMOoZ+3iWdm
+         wb/0HR3rc4zENYBzOC7SDfIFVDnHsw9NpkczHVVip/IpQAb7yg5Fr7ZHIAPnnLlN671N
+         y9Zw==
+X-Gm-Message-State: AC+VfDz6mGgmDDNtwSHWMEOAmuznJ95OMRd3za+YgOeTB/e8x4i+U9AR
+	gsIaAXgV35UI9uxipQ3mA1oafnlWHik1Acsvk2w=
+X-Google-Smtp-Source: ACHHUZ58/EhP3HuDh0vfPYUd5nxlvVS0KWOr79IlewWSzaLcErQbuhi3BO73qHHmfp0ewihAucNodP8ImJknsOtvtJQ=
+X-Received: by 2002:a17:907:7f19:b0:947:335f:5a0d with SMTP id
+ qf25-20020a1709077f1900b00947335f5a0dmr46558124ejc.62.1684340791624; Wed, 17
+ May 2023 09:26:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-17_02,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0
- mlxlogscore=999 malwarescore=0 bulkscore=0 adultscore=0 phishscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305170133
-X-Proofpoint-ORIG-GUID: 10Zt7O1QTFJP2y_cDPSHHWt1QY78yZA7
-X-Proofpoint-GUID: 10Zt7O1QTFJP2y_cDPSHHWt1QY78yZA7
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-	RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230509132433.2FSY_6t7@linutronix.de> <CAEf4BzZcPKsRJDQfdVk9D1Nt6kgT4STpEUrsQ=UD3BDZnNp8eQ@mail.gmail.com>
+ <CAADnVQLzZyZ+cPqBFfrqa8wtQ8ZhWvTSN6oD9z4Y2gtrfs8Vdg@mail.gmail.com>
+In-Reply-To: <CAADnVQLzZyZ+cPqBFfrqa8wtQ8ZhWvTSN6oD9z4Y2gtrfs8Vdg@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 17 May 2023 09:26:19 -0700
+Message-ID: <CAEf4BzY-MRYnzGiZmW7AVJYgYdHW1_jOphbipRrHRTtdfq3_wQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] bpf: Remove in_atomic() from bpf_link_put().
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-By making sorting function for our ELF function list match on
-both name and function, we ensure that the set of ELF functions
-includes multiple copies for functions which have multiple instances
-across CUs.  For example, cpumask_weight has 22 instances in
-System.map/kallsyms:
+On Tue, May 16, 2023 at 10:26=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Wed, May 10, 2023 at 12:19=E2=80=AFAM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Tue, May 9, 2023 at 6:24=E2=80=AFAM Sebastian Andrzej Siewior
+> > <bigeasy@linutronix.de> wrote:
+> > >
+> > > bpf_free_inode() is invoked as a RCU callback. Usually RCU callbacks =
+are
+> > > invoked within softirq context. By setting rcutree.use_softirq=3D0 bo=
+ot
+> > > option the RCU callbacks will be invoked in a per-CPU kthread with
+> > > bottom halves disabled which implies a RCU read section.
+> > >
+> > > On PREEMPT_RT the context remains fully preemptible. The RCU read
+> > > section however does not allow schedule() invocation. The latter happ=
+ens
+> > > in mutex_lock() performed by bpf_trampoline_unlink_prog() originated
+> > > from bpf_link_put().
+> > >
+> > > Remove the context checks and use the workqueue unconditionally.
+> > >
+> > > Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> > > ---
+> >
+> > Please see [0] and corresponding revert commit. We do want
+> > bpf_link_free() to happen synchronously if it's caused by close()
+> > syscall.
+> >
+> > f00f2f7fe860 ("Revert "bpf: Fix potential call bpf_link_free() in
+> > atomic context"")
+> >
+> >   [0] https://lore.kernel.org/bpf/CAEf4BzZ9zwA=3DSrLTx9JT50OeM6fVPg0Py0=
+Gx+K9ah2we8YtCRA@mail.gmail.com/
+>
+> Sebastian,
+>
+> Andrii is correct. We cannot do this unconditionally,
+> but we can do it for IS_ENABLED(CONFIG_PREEMPT_RT)
+> if it's causing issues on RT, but BPF users won't be happy
+> with non deterministic prog detach.
+> Do you see a different way of solving it?
 
-ffffffff8103b530 t cpumask_weight
-ffffffff8103e300 t cpumask_weight
-ffffffff81040d30 t cpumask_weight
-ffffffff8104fa00 t cpumask_weight
-ffffffff81064300 t cpumask_weight
-ffffffff81082ba0 t cpumask_weight
-ffffffff81084f50 t cpumask_weight
-ffffffff810a4ad0 t cpumask_weight
-ffffffff810bb740 t cpumask_weight
-ffffffff8110a6c0 t cpumask_weight
-ffffffff81118ab0 t cpumask_weight
-ffffffff81129b50 t cpumask_weight
-ffffffff81137dc0 t cpumask_weight
-ffffffff811aead0 t cpumask_weight
-ffffffff811d6800 t cpumask_weight
-ffffffff811e1370 t cpumask_weight
-ffffffff812fae80 t cpumask_weight
-ffffffff81375c50 t cpumask_weight
-ffffffff81634b60 t cpumask_weight
-ffffffff817ba540 t cpumask_weight
-ffffffff819abf30 t cpumask_weight
-ffffffff81a7cb60 t cpumask_weight
-
-With ELF representations for each address, and DWARF info about
-addresses (low_pc) we can match DWARF with ELF accurately.
-The result for the BTF representation is that we end up with
-a single de-duped function:
-
-[9287] FUNC 'cpumask_weight' type_id=9286 linkage=static
-
-...and 22 DECL_TAGs for each address that point at it:
-
-9288] DECL_TAG 'address=0xffffffff8103b530' type_id=9287 component_idx=-1
-[9623] DECL_TAG 'address=0xffffffff8103e300' type_id=9287 component_idx=-1
-[9829] DECL_TAG 'address=0xffffffff81040d30' type_id=9287 component_idx=-1
-[11609] DECL_TAG 'address=0xffffffff8104fa00' type_id=9287 component_idx=-1
-[13299] DECL_TAG 'address=0xffffffff81064300' type_id=9287 component_idx=-1
-[15704] DECL_TAG 'address=0xffffffff81082ba0' type_id=9287 component_idx=-1
-[15731] DECL_TAG 'address=0xffffffff81084f50' type_id=9287 component_idx=-1
-[18582] DECL_TAG 'address=0xffffffff810a4ad0' type_id=9287 component_idx=-1
-[20234] DECL_TAG 'address=0xffffffff810bb740' type_id=9287 component_idx=-1
-[25384] DECL_TAG 'address=0xffffffff8110a6c0' type_id=9287 component_idx=-1
-[25798] DECL_TAG 'address=0xffffffff81118ab0' type_id=9287 component_idx=-1
-[26285] DECL_TAG 'address=0xffffffff81129b50' type_id=9287 component_idx=-1
-[27040] DECL_TAG 'address=0xffffffff81137dc0' type_id=9287 component_idx=-1
-[32900] DECL_TAG 'address=0xffffffff811aead0' type_id=9287 component_idx=-1
-[35059] DECL_TAG 'address=0xffffffff811d6800' type_id=9287 component_idx=-1
-[35353] DECL_TAG 'address=0xffffffff811e1370' type_id=9287 component_idx=-1
-[48934] DECL_TAG 'address=0xffffffff812fae80' type_id=9287 component_idx=-1
-[54476] DECL_TAG 'address=0xffffffff81375c50' type_id=9287 component_idx=-1
-[87772] DECL_TAG 'address=0xffffffff81634b60' type_id=9287 component_idx=-1
-[108841] DECL_TAG 'address=0xffffffff817ba540' type_id=9287 component_idx=-1
-[132557] DECL_TAG 'address=0xffffffff819abf30' type_id=9287 component_idx=-1
-[143689] DECL_TAG 'address=0xffffffff81a7cb60' type_id=9287 component_idx=-1
-
-Consider another case where the same name - wakeup_show() - is
-used for two different function signatures:
-
-From kernel/irq/irqdesc.c
-
-static ssize_t wakeup_show(struct kobject *kobj,
- 			   struct kobj_attribute *attr, char *buf)
-
-...and from drivers/base/power/sysfs.c
-
-static ssize_t wakeup_show(struct device *dev, struct device_attribute *attr,
-                           char *buf);
-
-We see both defined in BTF, along with the addresses that
-tell us which is which:
-
-[28472] FUNC 'wakeup_show' type_id=11214 linkage=static
-
-specifies
-
-[11214] FUNC_PROTO '(anon)' ret_type_id=76 vlen=3
-        'kobj' type_id=877
-        'attr' type_id=11200
-        'buf' type_id=56
-
-...and has declaration tag
-
-[28473] DECL_TAG 'address=0xffffffff8115eab0' type_id=28472 component_idx=-1
-
-which identifies
-
-ffffffff8115eab0 t wakeup_show
-
-...as the function with the first signature.
-
-Similarly,
-
-[114375] FUNC 'wakeup_show' type_id=4750 linkage=static
-
-[4750] FUNC_PROTO '(anon)' ret_type_id=76 vlen=3
-        'dev' type_id=1488
-        'attr' type_id=3909
-        'buf' type_id=56
-...and
-
-[114376] DECL_TAG 'address=0xffffffff8181eac0' type_id=114375 component_idx=-1
-
-...tell us that
-
-ffffffff8181eac0 t wakeup_show
-
-...has the second signature.  So we can accommodate multiple
-functions with conflicting signatures in BTF, since we have
-added extra info to map from function description in BTF
-to address.
-
-In total for vmlinux 52006 DECL_TAGs are added, and these add
-2MB to the BTF representation.
-
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- btf_encoder.c | 26 ++++++++++++++++++++------
- 1 file changed, 20 insertions(+), 6 deletions(-)
-
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 3bd0fe0..315053d 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -988,13 +988,25 @@ static int functions_cmp(const void *_a, const void *_b)
- {
- 	const struct elf_function *a = _a;
- 	const struct elf_function *b = _b;
-+	int ret;
- 
- 	/* if search key allows prefix match, verify target has matching
- 	 * prefix len and prefix matches.
- 	 */
- 	if (a->prefixlen && a->prefixlen == b->prefixlen)
--		return strncmp(a->name, b->name, b->prefixlen);
--	return strcmp(a->name, b->name);
-+		ret = strncmp(a->name, b->name, b->prefixlen);
-+	else
-+		ret = strcmp(a->name, b->name);
-+
-+	if (ret || !b->addr)
-+		return ret;
-+
-+	/* secondarily sort/search by address. */
-+	if (a->addr < b->addr)
-+		return -1;
-+	if (a->addr > b->addr)
-+		return 1;
-+	return 0;
- }
- 
- #ifndef max
-@@ -1044,9 +1056,11 @@ static int btf_encoder__collect_function(struct btf_encoder *encoder, GElf_Sym *
- }
- 
- static struct elf_function *btf_encoder__find_function(const struct btf_encoder *encoder,
--						       const char *name, size_t prefixlen)
-+						       struct function *fn, size_t prefixlen)
- {
--	struct elf_function key = { .name = name, .prefixlen = prefixlen };
-+	struct elf_function key = { .name = function__name(fn),
-+				    .addr = fn->low_pc,
-+				    .prefixlen = prefixlen };
- 
- 	return bsearch(&key, encoder->functions.entries, encoder->functions.cnt, sizeof(key), functions_cmp);
- }
-@@ -1846,7 +1860,7 @@ int btf_encoder__encode_cu(struct btf_encoder *encoder, struct cu *cu, struct co
- 				continue;
- 
- 			/* prefer exact function name match... */
--			func = btf_encoder__find_function(encoder, name, 0);
-+			func = btf_encoder__find_function(encoder, fn, 0);
- 			if (func) {
- 				if (func->generated)
- 					continue;
-@@ -1863,7 +1877,7 @@ int btf_encoder__encode_cu(struct btf_encoder *encoder, struct cu *cu, struct co
- 				 * it does not have optimized-out parameters
- 				 * in any cu.
- 				 */
--				func = btf_encoder__find_function(encoder, name,
-+				func = btf_encoder__find_function(encoder, fn,
- 								  strlen(name));
- 				if (func) {
- 					save = true;
--- 
-2.31.1
-
+Is struct file_operations.release() callback guaranteed to be called
+from user context? If yes, then perhaps the most straightforward way
+to guarantee synchronous bpf_link cleanup on close(link_fd) is to have
+a bpf_link_put() variant that will be only called from user-context
+and will just do bpf_link_free(link) directly, without checking
+in_atomic().
