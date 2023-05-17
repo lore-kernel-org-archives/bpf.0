@@ -1,161 +1,130 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08B19442F
-	for <bpf@vger.kernel.org>; Wed, 17 May 2023 16:59:14 +0000 (UTC)
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E04E9033
-	for <bpf@vger.kernel.org>; Wed, 17 May 2023 09:59:12 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-510b154559fso1764284a12.3
-        for <bpf@vger.kernel.org>; Wed, 17 May 2023 09:59:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684342751; x=1686934751;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=90yXXchFd6F6AiWLJ4uGoDYFSlfGCfioZhUcDIY6elc=;
-        b=c/2iVfMZS6dvLZARPuZhBxbNimhn7MLA2Bqb34R+ckoPCvId6AaYBPT0W/atO6HptQ
-         zGpO5XZRldWtjKNkPVdpk4fvJWwa86Wazz2MbXiXNBKvpZeJFCJVmMrvIWHCpUVF7OUn
-         Weebw4yRYuutW02PXeo0MHbLbSUzwhSuiYT/IlLpcKW1K7Ly0slxz48pAuLB3y3NMCo6
-         7L7mhyFPvqjI2vE5b3E2ZU0vXzpujsvzmxStTKZ/1gaIzbpfOnLKljY8UA3MyxsLcseX
-         cmmywB4ajGaEfKjzuhUSZlSEcqSRJUmvm3yTljOl+641/WmlHau14GeRvZeTA4f64DmB
-         I17g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684342751; x=1686934751;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=90yXXchFd6F6AiWLJ4uGoDYFSlfGCfioZhUcDIY6elc=;
-        b=UKJqINc3LRqotN+f5rYFviDWP+ZZFMhoI9PLg1ZMIeZvUSFITZEe+1LeIh787fLy1n
-         DXAxgbETBPbuWuFUZeUwIN0cqAS7j6Bo37ZcafavqTHWyYdGRHIZRnV0P/kIYKmhKMKQ
-         DgUXFlfOm8J4zeTHCxQYk6KMqjuYX2xKb+E5U59Tup5gEI27piwF5+cmYAJhoyv4TpMT
-         MBWxq9oDDfTKnzERqJbqVwgom0F5Uk/+oDSaQp7YAIbUQ+Z7mrFXemx3W1izOlwW8Z+u
-         /2M2avvVOetu2asnCewAaRi+PEeUDuV8m0F/5TBgDKEAocpYBliDBDk82H2aeR+vwu/0
-         I42Q==
-X-Gm-Message-State: AC+VfDxHow+SL8+Ch+u/67X3foUQZTTXFI8EWJMKY9XV+lbzcxGAoZdf
-	o/8AL57fj9FC9eeJwSSjo2V4dXvKxZtRtQSzVmg=
-X-Google-Smtp-Source: ACHHUZ6JJea4We0Ai066bzR4xpdeMAxb35kedBUbrAWFDhryK4gXnOqUVaC5VJv7ju8g1sda5VfeU3XauQrTBcjov3A=
-X-Received: by 2002:a17:906:974b:b0:957:943e:7416 with SMTP id
- o11-20020a170906974b00b00957943e7416mr43876578ejy.15.1684342750569; Wed, 17
- May 2023 09:59:10 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7654E442F
+	for <bpf@vger.kernel.org>; Wed, 17 May 2023 17:06:31 +0000 (UTC)
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465B693F2
+	for <bpf@vger.kernel.org>; Wed, 17 May 2023 10:06:30 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HE4xoN029155;
+	Wed, 17 May 2023 16:17:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2023-03-30; bh=L6c3i3a3qPc57CTZ6BRO7Hwogt/2WMSzmQqj/yOMp1s=;
+ b=y1/2LuE8jH9wN82De3/UKvsPGpmAWpwfWvo2kszcIE1CoWz8yk+LkP018fIW9NR6ttMt
+ mG9dA8Y2Pw7yDjz3lDr+HYEa/ZSI/kRGYTAsf/GGFgZhPBpLUWTHfLm+kGBRLuKktSa7
+ h00ZPSL++GmL6zkOXwP70wDzFXLuAROK/i6dZs0orb0cioAJGnMm59xv4yqysIaQdYYo
+ sOLvt+q8uNOCPnSfo5qNGxi00YWTlESofUJVgisNclBfmUEfUSu0Gu9NFBr+v9lSnhYt
+ 7C4kBip5FZj1gQp9tUrWc19z+3sbNOI1fqBEFiCHGi/eFjqaalLV+USic53qgu93wUXQ hg== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qmxfc0nwp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 17 May 2023 16:17:41 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34HFBcww004227;
+	Wed, 17 May 2023 16:17:40 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3qj10bwyet-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 17 May 2023 16:17:40 +0000
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34HGHdX7034295;
+	Wed, 17 May 2023 16:17:39 GMT
+Received: from bpf.uk.oracle.com (dhcp-10-175-213-201.vpn.oracle.com [10.175.213.201])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3qj10bwyb5-1;
+	Wed, 17 May 2023 16:17:39 +0000
+From: Alan Maguire <alan.maguire@oracle.com>
+To: acme@kernel.org, ast@kernel.org, jolsa@kernel.org, yhs@fb.com,
+        andrii@kernel.org
+Cc: daniel@iogearbox.net, laoar.shao@gmail.com, martin.lau@linux.dev,
+        song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, bpf@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [RFC dwarves 0/6] Encoding function addresses using DECL_TAGs
+Date: Wed, 17 May 2023 17:16:42 +0100
+Message-Id: <20230517161648.17582-1-alan.maguire@oracle.com>
+X-Mailer: git-send-email 2.31.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230512103354.48374-1-quentin@isovalent.com> <20230512103354.48374-5-quentin@isovalent.com>
- <CAEf4BzZ=wp81zdfTTWefiuq2O28aLiHc5Vq88D4hGeb=qy6zJg@mail.gmail.com> <06d1e47a-8ed2-6714-7d2b-da5deb55b1f2@isovalent.com>
-In-Reply-To: <06d1e47a-8ed2-6714-7d2b-da5deb55b1f2@isovalent.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 17 May 2023 09:58:58 -0700
-Message-ID: <CAEf4BzY0w5Ur-hXtXarxoHvWMa7iG=ZTi1wwXDJoqLCmKw9NkA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 4/4] bpftool: use a local bpf_perf_event_value to
- fix accessing its fields
-To: Quentin Monnet <quentin@isovalent.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	bpf@vger.kernel.org, Alexander Lobakin <aleksander.lobakin@intel.com>, 
-	=?UTF-8?Q?Michal_Such=C3=A1nek?= <msuchanek@suse.de>, 
-	Alexander Lobakin <alobakin@pm.me>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-17_02,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0
+ mlxlogscore=999 malwarescore=0 bulkscore=0 adultscore=0 phishscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305170132
+X-Proofpoint-GUID: p0dAn6IyXUO3_53k6zdq2ienRNSyyX0P
+X-Proofpoint-ORIG-GUID: p0dAn6IyXUO3_53k6zdq2ienRNSyyX0P
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+	RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
 	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Wed, May 17, 2023 at 8:02=E2=80=AFAM Quentin Monnet <quentin@isovalent.c=
-om> wrote:
->
-> 2023-05-16 14:30 UTC-0700 ~ Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> > On Fri, May 12, 2023 at 3:34=E2=80=AFAM Quentin Monnet <quentin@isovale=
-nt.com> wrote:
-> >>
-> >> From: Alexander Lobakin <alobakin@pm.me>
-> >>
-> >> Fix the following error when building bpftool:
-> >>
-> >>   CLANG   profiler.bpf.o
-> >>   CLANG   pid_iter.bpf.o
-> >> skeleton/profiler.bpf.c:18:21: error: invalid application of 'sizeof' =
-to an incomplete type 'struct bpf_perf_event_value'
-> >>         __uint(value_size, sizeof(struct bpf_perf_event_value));
-> >>                            ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >> tools/bpf/bpftool/bootstrap/libbpf/include/bpf/bpf_helpers.h:13:39: no=
-te: expanded from macro '__uint'
-> >> tools/bpf/bpftool/bootstrap/libbpf/include/bpf/bpf_helper_defs.h:7:8: =
-note: forward declaration of 'struct bpf_perf_event_value'
-> >> struct bpf_perf_event_value;
-> >>        ^
-> >>
-> >> struct bpf_perf_event_value is being used in the kernel only when
-> >> CONFIG_BPF_EVENTS is enabled, so it misses a BTF entry then.
-> >> Define struct bpf_perf_event_value___local with the
-> >> `preserve_access_index` attribute inside the pid_iter BPF prog to
-> >> allow compiling on any configs. It is a full mirror of a UAPI
-> >> structure, so is compatible both with and w/o CO-RE.
-> >> bpf_perf_event_read_value() requires a pointer of the original type,
-> >> so a cast is needed.
-> >>
-> >> Fixes: 47c09d6a9f67 ("bpftool: Introduce "prog profile" command")
-> >> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> >> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
-> >> Signed-off-by: Quentin Monnet <quentin@isovalent.com>
-> >> ---
-> >
-> > What's the point of using vmlinux.h at all if we redefine every single
-> > type? bpf_perf_event_value is part of BPF UAPI, so if we included
-> > linux/bpf.h header we'd get it.
->
-> I gave a quick try at the UAPI header before posting this patch, but it
-> was an Ubuntu box and I got the "asm/types.h not found" error. If I
-> remember correctly, one way to fix this is to have the gcc-multilib,
-> which I'd rather avoid to add as a dependency; or adding the correct
-> include path for x86_64 at least, which I haven't tried for bpftool yet.
->
-> >
-> > This feels a bit split-brained. We either drop vmlinux.h completely
-> > and use UAPI headers + CO-RE-relocatable definitions of internal
-> > types, or we make sure that vmlinux.h does work (e.g., by pre-checking
-> > in a very small version of it). Both using vmlinux.h and not relying
-> > on it having necessary types seems like the worst of both worlds?...
->
-> Yeah I do feel like I'm missing something in this set and the approach
-> is not optimal. What do you mean exactly by "pre-checking in a very
-> small version of it"? Checking for the availability of a few types and
-> exit early from the functions if they're missing, because we're assuming
-> we won't have support for the feature?
+As a means to continue the discussion in [1], which is
+concerned with finding the best long-term solution to
+having a BPF Type Format (BTF) representation of
+functions that is usable for tracing of edge cases, this
+proof-of-concept series is intended to explore one approach
+to adding information to help make tracing more accurate.
 
-So I was thinking that we'll keep relying on vmlinux BTF and proper
-Kconfig for bpftool build inside kernel repo, no changes there. But
-then we can use `bpftool gen min_core_btf` on resulting .bpf.o files
-to dump only types that are actually used/referenced by bpftool's BPF
-object files, and then we can generate vmlinux.h from that minimized
-BTF.
+A key problem today is that there is no matching from function
+description to the actual instances of a function.
 
-I haven't tried it, and I'm sure there will be some hiccups along the
-way, but that was the idea.
+When that function only has one description, that is
+not an issue, but if we have multiple inconsistent
+static functions in different CUs such as
 
->
-> > Quentin, can you see if you can come up with some simple way to use
-> > vmlinux.h if building from inside kernel repo, but using a minimized
-> > vmlinux.h generated using `bpftool gen min_core_btf` when building
-> > from Github mirror? Sync script could also generate this minimal
-> > vmlinux.h automatically, presumably?
->
-> Sure, I can look into it. But not right now - I'd like to get the
-> current issue, and the (unrelated) LLVM feature detection, sorted before
-> starting on this.
+From kernel/irq/irqdesc.c
+    
+    static ssize_t wakeup_show(struct kobject *kobj,
+                               struct kobj_attribute *attr, char *buf)
+    
+...and from drivers/base/power/sysfs.c
+    
+    static ssize_t wakeup_show(struct device *dev, struct device_attribute *attr,
+                               char *buf);
 
-Sounds good. In general, your patches look good to me, I was hoping we
-can avoid unnecessary definitions of UAPI types, but if that doesn't
-work out of the box, then I'm fine with it.
+...this becomes a problem.  If I am attaching,
+which do I want?  And even if I know which one
+I want, which instance in kallsyms is which?
 
->
-> Thanks for your feedback!
-> Quentin
+This series is a proof-of-concept that supports encoding
+function addresses and associating them with BTF FUNC
+descriptions using BTF declaration tags.
+
+More work would need to be done on the kernel side
+to _use_ this representation, but hopefully having a
+rough approach outlined will help make that more feasible.
+
+[1] https://lore.kernel.org/bpf/ZF61j8WJls25BYTl@krava/
+
+Alan Maguire (6):
+  btf_encoder: record function address and if it is local
+  dwarf_loader: store address in function low_pc if available
+  dwarf_loader: transfer low_pc info from subtroutine to its abstract
+    origin
+  btf_encoder: add "addr=0x<addr>" function declaration tag if
+    --btf_gen_func_addr specified
+  btf_encoder: store ELF function representations sorted by name _and_
+    address
+  pahole: document --btf_gen_func_addr
+
+ btf_encoder.c      | 64 +++++++++++++++++++++++++++++++++++-----------
+ btf_encoder.h      |  4 +--
+ dwarf_loader.c     | 16 +++++++++---
+ dwarves.h          |  3 +++
+ man-pages/pahole.1 |  8 ++++++
+ pahole.c           | 12 +++++++--
+ 6 files changed, 85 insertions(+), 22 deletions(-)
+
+-- 
+2.31.1
+
