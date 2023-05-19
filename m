@@ -1,245 +1,163 @@
-From torvalds@linuxfoundation.org Thu May 18 20:57:30 2023
-Received: by 2002:a05:6520:3804:b0:25f:79bc:6e60 with SMTP id b4csp648748lkx;
-        Thu, 18 May 2023 11:57:31 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5pZjgw7pNK6kn+YpzRebOwbFEFy76vBal9ufZy0PCrriuFyLUKH6nnnaOcUYG0k6yq+OL7
-X-Received: by 2002:a05:6870:9896:b0:192:d723:b261 with SMTP id eg22-20020a056870989600b00192d723b261mr1447132oab.17.1684436250839;
-        Thu, 18 May 2023 11:57:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1684436250; cv=none;
-        d=google.com; s=arc-20160816;
-        b=Gq4Xub04/owFRuE+Ypc5NBMDjjZ0lf/r72iXOWt9M0F0Kiub3FSjQx+eZc+L9mycZC
-         Lr3uJcCjxGw51P3/Waq64POWOYLLsDaNHwPt8Ahqs19jYaakThPzqChP/FHQpTw7SAEG
-         PpTOx7ldRoF1h/HYapcJIfvKVMa6i4+ZAlzMtWQf+xH/ASrMcMQbynUaLtjf/TT53iOK
-         HFlL8gZm7NFriy/PsvBUclMUG+nuiYTw4OIe/tGs8IiN195vtrSzWglh40N72m3HneZ2
-         CE6EKQaQmg8Y0m0DUWmHrDSg2cRkHfoRgTGaq1ojNB851421xGOhTXGNqyGKoBXts2ZT
-         bhaw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature:dmarc-filter:delivered-to;
-        bh=ufxGyUyvgmc9IbeLFwZqpA7R30Z+Lx7wHFt4+tZsdEM=;
-        b=X5Aiq3rn0ImdRRB1/60IcnuzhDueKLwtId9eLfL1ai+O8KQigEtz+gd5HHV3PhR8Rt
-         ZfCVN8lCdvwIaIf36N7F8lxalsz7ObqZh/r2onI8ApIT4ltpAXmdd+FWXweX6JWDxEh8
-         lATLADGs9EGhom+73/MZJcwTZ+w3MdaIpKtK4ds/3pGansTmMfSSwrGtMbKzEYgtiWIx
-         a4uECK3eLla702OLHugdrdpnRwMwGODqWLLignDRRJ//SnFlwRM0bqUxj/ba2XiVlTsb
-         Wn3lhyU+yvMwbUyySemfRzQSiEjdITcSszqgh9agkhV0rlN+EmyJSJiWaIzlNQSl6QjJ
-         2lfw==
-ARC-Authentication-Results: i=1; mx.google.com;
-       dkim=pass header.i=@linux-foundation.org header.s=google header.b=P8SAIWFM;
-       spf=pass (google.com: domain of torvalds@linuxfoundation.org designates 2604:1380:4641:c500::1 as permitted sender) smtp.mailfrom=torvalds@linuxfoundation.org
-Return-Path: <torvalds@linuxfoundation.org>
-Received: from dfw.source.kernel.org (dfw.source.kernel.org. [2604:1380:4641:c500::1])
-        by mx.google.com with ESMTPS id a8-20020a9d5c88000000b006ac7cf7eae1si1389332oti.333.2023.05.18.11.57.30
-        for <christian@brauner.io>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 18 May 2023 11:57:30 -0700 (PDT)
-Received-SPF: pass (google.com: domain of torvalds@linuxfoundation.org designates 2604:1380:4641:c500::1 as permitted sender) client-ip=2604:1380:4641:c500::1;
-Authentication-Results: mx.google.com;
-       dkim=pass header.i=@linux-foundation.org header.s=google header.b=P8SAIWFM;
-       spf=pass (google.com: domain of torvalds@linuxfoundation.org designates 2604:1380:4641:c500::1 as permitted sender) smtp.mailfrom=torvalds@linuxfoundation.org
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.source.kernel.org (Postfix) with ESMTPS id 81927651B6
-	for <christian@brauner.io>; Thu, 18 May 2023 18:57:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix)
-	id 02784C433EF; Thu, 18 May 2023 18:57:30 +0000 (UTC)
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0BAF1C43445
-	for <brauner@kernel.org>; Thu, 18 May 2023 18:57:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0BAF1C43445
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-965b5f3b9ffso2645966b.0
-        for <brauner@kernel.org>; Thu, 18 May 2023 11:57:27 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52A28375
+	for <bpf@vger.kernel.org>; Fri, 19 May 2023 02:43:16 +0000 (UTC)
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66B6E4E;
+	Thu, 18 May 2023 19:43:14 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-96f40c19477so206553766b.1;
+        Thu, 18 May 2023 19:43:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1684436246; x=1687028246;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ufxGyUyvgmc9IbeLFwZqpA7R30Z+Lx7wHFt4+tZsdEM=;
-        b=P8SAIWFMV9QOoW6GW+YU2ae1y4OHJGtm50lsikk5GeUjqgjhkgfljRGmfxNTX+4GBw
-         XPrRixgB9sBBGXzfYrxposTgVsYh6AHa07JNJugUmoj49A1AnD4EEY0/pTd4vbH3UX13
-         shBHgJlLleWkPXk3X8awTnXA0+ufLJUbuUg8Y=
+        d=gmail.com; s=20221208; t=1684464193; x=1687056193;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AqoVCRBHAsCkh7/H8NehRsiMX5fMyD5zSUScfa5DQRE=;
+        b=bLBbamHR8gyk2G3fXirgAdUSHO0UwDucN+gS+zXCxT1ifdERuPR2RVbR5FFgas+qgY
+         Ucu3c5r6R8zr4BrKiAeiZ9QeSdLB7WGQ6abf2c8b9VV9mtOFkcL5DNzKyXBCt0w6pLWz
+         g6il4YFFUdrXQOY0hTkRio7OVmNwQVCTxyQDgrYcBq/oPVDFGNu4FHQhSxbZ73H5JukX
+         p2VbM207wN6GeO01wsO15x6TfVBLBWHFGelW4y4jdnNRCcR3sAqPAhhdf1FTGbqVuHfG
+         RH1k8V0VwKQOfZsXTQFvWJBLYkaeA9oMCdn9QAhb0Eb+LA5psyuoEzni9k1b0hQp2F/S
+         /FdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684436246; x=1687028246;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ufxGyUyvgmc9IbeLFwZqpA7R30Z+Lx7wHFt4+tZsdEM=;
-        b=Od+b253kj8H34kz71Tln7Li5eAJs0oiMGT1imkhaFXBnlGAxoi1Rmk7P0M4YygJI/B
-         a+wlBV9Bm77+iQioW+aoqr2CJXLZFdGsOjvVfztBmF8UGOnJOrbdWYtF0h63YaL8/BgZ
-         uh3VacKwhBBQRvAeE+yr4IGFZNDTQf4ysm7Cbu442pDZqtAHgoxlVa8Icf1bpx/jlNVu
-         wgARBOAnYwtRnKJ0TRee7SNXiIyr9X2g3ixTV+s1f1qm3lCD0CmF/Qk4QTSttDTstaUm
-         q62w+FDWrO6p4MABDZ8ZMEL19J8rb+WXnlN4zpJtnnhYlDWiIORd4L/8EFYxO1PXsMp/
-         +aAQ==
-X-Gm-Message-State: AC+VfDxjtNoOojA7UHbalH9bisfpml/lev9tco6SzrHWWlDtqqqJsQsh
-	6u3zozE3bh5YhFUPqZ9jCqdvicX4RKxb286GGU2sPitm
-X-Received: by 2002:a17:907:1b29:b0:94a:57d1:5539 with SMTP id mp41-20020a1709071b2900b0094a57d15539mr91273ejc.5.1684436245988;
-        Thu, 18 May 2023 11:57:25 -0700 (PDT)
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
-        by smtp.gmail.com with ESMTPSA id s12-20020a170906354c00b009534211cc97sm1301817eja.159.2023.05.18.11.57.24
-        for <brauner@kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 May 2023 11:57:24 -0700 (PDT)
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-510d9218506so3445a12.1
-        for <brauner@kernel.org>; Thu, 18 May 2023 11:57:24 -0700 (PDT)
-X-Received: by 2002:a05:6402:11d1:b0:50d:bd2e:6fe3 with SMTP id
- j17-20020a05640211d100b0050dbd2e6fe3mr6535100edw.14.1684436244109; Thu, 18
- May 2023 11:57:24 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684464193; x=1687056193;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AqoVCRBHAsCkh7/H8NehRsiMX5fMyD5zSUScfa5DQRE=;
+        b=YsgtYXCP/YfvOGW7Wr8Byro/jpFwl2tU0PYsZ5qes8hIwWaksaXt9seVvpb9fBBCB3
+         GbBjBoT07U0xWyjQ+JenRzqw5WNSGmGxIyKfkujLemCVrHU+6USB70b6vPbx0H0DwEcv
+         SsPulVQ5B6bA97auFVHmKET/bkCf2IdAwz0MMbRM2RIdn6iVbt1I+jiMYcdOoz7/ar2a
+         Ybrs147fEAhy+DCWWqjgv3tyyjQL2oRtYTi1REbaeS2xycMS1fF9SMz5FS0BLymQoCeo
+         69za63WWpEQQzt8UZDCZtV/DJnB0kQ4Eu4iJO1wDI2iLHo3cRvjhDjRCS3zw9yn7hf9n
+         h31Q==
+X-Gm-Message-State: AC+VfDxnc2FSFuNmHXRpl5/DRnerK1oXqIJITXqnWsklYBkxUjslhzyx
+	G9DCWM55KGhkYrOejtqJBYI/Cw8QRhOTAD+tYP80uScvBC8=
+X-Google-Smtp-Source: ACHHUZ7z1o1C64DaoCO9ITXhrawbHTDPEMEebA5juOKf4HC5e+P7KmYihzYzfl+ercLyku7s6gGsyMQ7qCHBcwqGxWU=
+X-Received: by 2002:a17:906:9c82:b0:96a:3e7:b592 with SMTP id
+ fj2-20020a1709069c8200b0096a03e7b592mr194315ejc.25.1684464192922; Thu, 18 May
+ 2023 19:43:12 -0700 (PDT)
+Precedence: bulk
+X-Mailing-List: bpf@vger.kernel.org
+List-Id: <bpf.vger.kernel.org>
+List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230516001348.286414-1-andrii@kernel.org> <20230516001348.286414-2-andrii@kernel.org>
- <20230516-briefe-blutzellen-0432957bdd15@brauner> <CAEf4BzafCCeRm9M8pPzpwexadKy5OAEmrYcnVpKmqNJ2tnSVuw@mail.gmail.com>
- <20230517-allabendlich-umgekehrt-8cc81f8313ac@brauner> <20230517120528.GA17087@lst.de>
- <CAADnVQLitLUc1SozzKjBgq6HGTchE1cO+e4j8eDgtE0zFn5VEw@mail.gmail.com>
- <20230518-erdkugel-komprimieren-16548ca2a39c@brauner> <20230518162508.odupqkndqmpdfqnr@MacBook-Pro-8.local>
- <20230518-tierzucht-modewelt-eb6aaf60037e@brauner> <20230518182635.na7vgyysd7fk7eu4@MacBook-Pro-8.local>
-In-Reply-To: <20230518182635.na7vgyysd7fk7eu4@MacBook-Pro-8.local>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 18 May 2023 11:57:14 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whg-ygwrxm3GZ_aNXO=srH9sZ3NmFqu0KkyWw+wgEsi6g@mail.gmail.com>
-Message-ID: <CAHk-=whg-ygwrxm3GZ_aNXO=srH9sZ3NmFqu0KkyWw+wgEsi6g@mail.gmail.com>
-Subject: Re: fd == 0 means AT_FDCWD BPF_OBJ_GET commands
+References: <20230518215444.1418789-2-andrii@kernel.org> <202305190724.nnh1ZV2F-lkp@intel.com>
+ <CAEf4BzYW_OXeF=5L1XU5025-VbWN3M-wOSszXqMD6c5E9bEO9w@mail.gmail.com> <CAADnVQJL3ZAxXrR6nkk=pYbuVS8NhGX19UJpsvSrH4VbPAayhg@mail.gmail.com>
+In-Reply-To: <CAADnVQJL3ZAxXrR6nkk=pYbuVS8NhGX19UJpsvSrH4VbPAayhg@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 18 May 2023 19:42:59 -0700
+Message-ID: <CAEf4BzZ0bsG4JcecNupSc5Srzg9CO4mfX2W6q8XUfGwebdBk3g@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 1/3] bpf: support O_PATH FDs in BPF_OBJ_PIN
+ and BPF_OBJ_GET commands
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Christian Brauner <brauner@kernel.org>, Christoph Hellwig <hch@lst.de>, 
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+Cc: kernel test robot <lkp@intel.com>, Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>, 
-	Lennart Poettering <lennart@poettering.net>, Linux-Fsdevel <linux-fsdevel@vger.kernel.org>, 
-	Al Viro <viro@zeniv.linux.org.uk>
-Content-Type: multipart/alternative; boundary="000000000000fa31b105fbfc5f7e"
-
---000000000000fa31b105fbfc5f7e
+	Martin KaFai Lau <martin.lau@kernel.org>, oe-kbuild-all@lists.linux.dev, 
+	Aleksa Sarai <cyphar@cyphar.com>, Christian Brauner <brauner@kernel.org>, 
+	Lennart Poettering <lennart@poettering.net>, Linux-Fsdevel <linux-fsdevel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-
-[ Out walking for health - sorry for html crud ]
-
-On Thu, May 18, 2023, 11:26 Alexei Starovoitov <alexei.starovoitov@gmail.com>
-wrote:
-
->
-> User space cares what they refer to.
-> Unix made integer FD into broken abstraction.
->
-
-Stop trying to blame anybody else.
-
-The unix people came up with a good abstraction, and you've screwed up.
-That is nobody's fault but your own, and you should just admit it rather
-than trying to double down on being wrong.
-
-Integer file descriptions are fine. Negative ones are invalid, and people
-who wanted to use "root" and "cwd" have already done so using them for
-decades. Look up openat().
-
-You just picked completely the wrong invalid number.
-
-That's on you. Nobody else.
-
-regular files need one set of syscalls to work with such 'integer FDs'.
-> sockets need another set of syscalls.
->
-
-None of that has anything to do with file descriptors, which are a unified
-format.
-
-The reason sockets have extra system calls is that you're can just do extra
-things with them. That's no different from ioctl's, and they could have
-been done that way, but the extra system calls are cleaner.
-
-While user space sees an integer without type and that a root cause of the
-> bugs.
-> And that's particularly bad for integers 0,1,2 where user space assumes
-> that
-> regular files are behind them.
->
-
-Stop making yourself look any more stupid than necessary.
-
-The 0/1/2 file descriptors are not at all special. They are a shell
-pipeline default, nothing more. They are not the argument your think they
-are, and you should stop trying to make them an argument.
-
-It only makes you look bad.
-
-Imagine C++ project where base class is called 'FD' while children
->
-
-Ok, now you've just gone totally off the rails.
-
-Stop this silliness.
-
-You did something bad from ignorance. That's fine. But making excuses for
-it turns ignorance to willful stupidity. Stop digging yourself deeper in
-that hole.
-
-The system call interface is not some C++ object interface. And we should
-all be grateful that it isn't.
-
-        Linus
-
---000000000000fa31b105fbfc5f7e
-Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-<div dir=3D"auto"><div>[ Out walking for health - sorry for html crud ]</di=
-v><div dir=3D"auto"><br><div class=3D"gmail_quote" dir=3D"auto"><div dir=3D=
-"ltr" class=3D"gmail_attr">On Thu, May 18, 2023, 11:26 Alexei Starovoitov &=
-lt;<a href=3D"mailto:alexei.starovoitov@gmail.com">alexei.starovoitov@gmail=
-.com</a>&gt; wrote:</div><blockquote class=3D"gmail_quote" style=3D"margin:=
-0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">
-<br>
-User space cares what they refer to.<br>
-Unix made integer FD into broken abstraction.<br></blockquote></div></div><=
-div dir=3D"auto"><br></div><div dir=3D"auto">Stop trying to blame anybody e=
-lse.</div><div dir=3D"auto"><br></div><div dir=3D"auto">The unix people cam=
-e up with a good abstraction, and you&#39;ve screwed up. That is nobody&#39=
-;s fault but your own, and you should just admit it rather than trying to d=
-ouble down on being wrong.</div><div dir=3D"auto"><br></div><div dir=3D"aut=
-o">Integer file descriptions are fine. Negative ones are invalid, and peopl=
-e who wanted to use &quot;root&quot; and &quot;cwd&quot; have already done =
-so using them for decades. Look up openat().</div><div dir=3D"auto"><br></d=
-iv><div dir=3D"auto">You just picked completely the wrong invalid number.</=
-div><div dir=3D"auto"><br></div><div dir=3D"auto">That&#39;s on you. Nobody=
- else.</div><div dir=3D"auto"><br></div><div dir=3D"auto"><div class=3D"gma=
-il_quote"><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;bord=
-er-left:1px #ccc solid;padding-left:1ex">
-regular files need one set of syscalls to work with such &#39;integer FDs&#=
-39;.<br>
-sockets need another set of syscalls.<br></blockquote></div></div><div dir=
-=3D"auto"><br></div><div dir=3D"auto">None of that has anything to do with =
-file descriptors, which are a unified format.</div><div dir=3D"auto"><br></=
-div><div dir=3D"auto">The reason sockets have extra system calls is that yo=
-u&#39;re can just do extra things with them. That&#39;s no different from i=
-octl&#39;s, and they could have been done that way, but the extra system ca=
-lls are cleaner.</div><div dir=3D"auto"><br></div><div dir=3D"auto"><div cl=
-ass=3D"gmail_quote"><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0=
- .8ex;border-left:1px #ccc solid;padding-left:1ex">
-While user space sees an integer without type and that a root cause of the =
-bugs.<br>
-And that&#39;s particularly bad for integers 0,1,2 where user space assumes=
- that<br>
-regular files are behind them.<br></blockquote></div></div><div dir=3D"auto=
-"><br></div><div dir=3D"auto"><div class=3D"gmail_quote"><blockquote class=
-=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padd=
-ing-left:1ex"></blockquote></div></div><div dir=3D"auto">Stop making yourse=
-lf look any more stupid than necessary.</div><div dir=3D"auto"><br></div><d=
-iv dir=3D"auto">The 0/1/2 file descriptors are not at all special. They are=
- a shell pipeline default, nothing more. They are not the argument your thi=
-nk they are, and you should stop trying to make them an argument.</div><div=
- dir=3D"auto"><br></div><div dir=3D"auto">It only makes you look bad.</div>=
-<div dir=3D"auto"><br></div><div dir=3D"auto"><div class=3D"gmail_quote"><b=
-lockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px =
-#ccc solid;padding-left:1ex">
-Imagine C++ project where base class is called &#39;FD&#39; while children<=
-br></blockquote></div></div><div dir=3D"auto"><br></div><div dir=3D"auto">O=
-k, now you&#39;ve just gone totally off the rails.</div><div dir=3D"auto"><=
-br></div><div dir=3D"auto">Stop this silliness.</div><div dir=3D"auto"><br>=
-</div><div dir=3D"auto">You did something bad from ignorance. That&#39;s fi=
-ne. But making excuses for it turns ignorance to willful stupidity. Stop di=
-gging yourself deeper in that hole.</div><div dir=3D"auto"><br></div><div d=
-ir=3D"auto">The system call interface is not some C++ object interface. And=
- we should all be grateful that it isn&#39;t.</div><div dir=3D"auto"><br></=
-div><div dir=3D"auto">=C2=A0 =C2=A0 =C2=A0 =C2=A0 Linus</div></div>
+On Thu, May 18, 2023 at 5:53=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Thu, May 18, 2023 at 5:19=E2=80=AFPM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Thu, May 18, 2023 at 4:59=E2=80=AFPM kernel test robot <lkp@intel.co=
+m> wrote:
+> > >
+> > > Hi Andrii,
+> > >
+> > > kernel test robot noticed the following build warnings:
+> > >
+> > > [auto build test WARNING on bpf-next/master]
+> > >
+> > > url:    https://github.com/intel-lab-lkp/linux/commits/Andrii-Nakryik=
+o/bpf-support-O_PATH-FDs-in-BPF_OBJ_PIN-and-BPF_OBJ_GET-commands/20230519-0=
+60110
+> > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.=
+git master
+> > > patch link:    https://lore.kernel.org/r/20230518215444.1418789-2-and=
+rii%40kernel.org
+> > > patch subject: [PATCH v2 bpf-next 1/3] bpf: support O_PATH FDs in BPF=
+_OBJ_PIN and BPF_OBJ_GET commands
+> > > config: m68k-allyesconfig
+> > > compiler: m68k-linux-gcc (GCC) 12.1.0
+> > > reproduce (this is a W=3D1 build):
+> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master=
+/sbin/make.cross -O ~/bin/make.cross
+> > >         chmod +x ~/bin/make.cross
+> > >         # https://github.com/intel-lab-lkp/linux/commit/74f08e59c3fcc=
+ac04b3c080831615209e11be4fb
+> > >         git remote add linux-review https://github.com/intel-lab-lkp/=
+linux
+> > >         git fetch --no-tags linux-review Andrii-Nakryiko/bpf-support-=
+O_PATH-FDs-in-BPF_OBJ_PIN-and-BPF_OBJ_GET-commands/20230519-060110
+> > >         git checkout 74f08e59c3fccac04b3c080831615209e11be4fb
+> > >         # save the config file
+> > >         mkdir build_dir && cp config build_dir/.config
+> > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0 make=
+.cross W=3D1 O=3Dbuild_dir ARCH=3Dm68k olddefconfig
+> > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0 make=
+.cross W=3D1 O=3Dbuild_dir ARCH=3Dm68k SHELL=3D/bin/bash kernel/
+> > >
+> > > If you fix the issue, kindly add following tag where applicable
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202305190724.nnh1ZV2F=
+-lkp@intel.com/
+> > >
+> > > All warnings (new ones prefixed by >>):
+> > >
+> > >    kernel/bpf/syscall.c: In function 'bpf_obj_get':
+> > > >> kernel/bpf/syscall.c:2720:13: warning: variable 'path_fd' set but =
+not used [-Wunused-but-set-variable]
+> > >     2720 |         int path_fd;
+> > >          |             ^~~~~~~
+> > >
+> > >
+> > > vim +/path_fd +2720 kernel/bpf/syscall.c
+> > >
+> > >   2717
+> > >   2718  static int bpf_obj_get(const union bpf_attr *attr)
+> > >   2719  {
+> > > > 2720          int path_fd;
+> > >   2721
+> > >   2722          if (CHECK_ATTR(BPF_OBJ) || attr->bpf_fd !=3D 0 ||
+> > >   2723              attr->file_flags & ~(BPF_OBJ_FLAG_MASK | BPF_F_PA=
+TH_FD))
+> > >   2724                  return -EINVAL;
+> > >   2725
+> > >   2726          /* path_fd has to be accompanied by BPF_F_PATH_FD fla=
+g */
+> > >   2727          if (!(attr->file_flags & BPF_F_PATH_FD) && attr->path=
+_fd)
+> > >   2728                  return -EINVAL;
+> > >   2729
+> > >   2730          path_fd =3D attr->file_flags & BPF_F_PATH_FD ? attr->=
+path_fd : AT_FDCWD;
+> > >   2731          return bpf_obj_get_user(attr->path_fd, u64_to_user_pt=
+r(attr->pathname),
+> >
+> > argh.... s/attr->path_fd/path_fd/ here, but it's curious how tests
+> > didn't catch this because we always provide absolute path in
+> > attr->pathname, and from openat() man page:
+> >
+> >   If pathname is absolute, then dirfd is ignored.
+> >
+> > So whatever garbage FD is passed in (in this case 0), the kernel won't
+> > complain. Interesting. I'll send v3 with a fix.
+>
+> because other tests have an absolute path to bpf objs?
 
---000000000000fa31b105fbfc5f7e--
-
+right, I think we always test with absolute path. I'll add more tests
+around pinning to catch something like this in the future.
