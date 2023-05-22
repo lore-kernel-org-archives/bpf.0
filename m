@@ -1,35 +1,33 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F409171C6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 732231773B
 	for <bpf@vger.kernel.org>; Mon, 22 May 2023 23:29:36 +0000 (UTC)
 Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584F7E54
-	for <bpf@vger.kernel.org>; Mon, 22 May 2023 16:29:34 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D38E58
+	for <bpf@vger.kernel.org>; Mon, 22 May 2023 16:29:35 -0700 (PDT)
 Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34MMkxIo019125
-	for <bpf@vger.kernel.org>; Mon, 22 May 2023 16:29:33 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qpur5ydyj-6
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34MMl2CY019259
+	for <bpf@vger.kernel.org>; Mon, 22 May 2023 16:29:34 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qpur5ydwq-13
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Mon, 22 May 2023 16:29:33 -0700
-Received: from twshared1631.42.prn1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Mon, 22 May 2023 16:29:34 -0700
+Received: from twshared58712.02.prn6.facebook.com (2620:10d:c0a8:1b::2d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 22 May 2023 16:29:29 -0700
+ 15.1.2507.23; Mon, 22 May 2023 16:29:32 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 2A9E1312BC074; Mon, 22 May 2023 16:29:23 -0700 (PDT)
+	id 1919D312BC064; Mon, 22 May 2023 16:29:19 -0700 (PDT)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <cyphar@cyphar.com>, <brauner@kernel.org>, <lennart@poettering.net>,
         <linux-fsdevel@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>
-Subject: [PATCH v3 bpf-next 2/4] bpf: support O_PATH FDs in BPF_OBJ_PIN and BPF_OBJ_GET commands
-Date: Mon, 22 May 2023 16:29:15 -0700
-Message-ID: <20230522232917.2454595-3-andrii@kernel.org>
+Subject: [PATCH v3 bpf-next 0/4] Add O_PATH-based BPF_OBJ_PIN and BPF_OBJ_GET support
+Date: Mon, 22 May 2023 16:29:13 -0700
+Message-ID: <20230522232917.2454595-1-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230522232917.2454595-1-andrii@kernel.org>
-References: <20230522232917.2454595-1-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -39,263 +37,62 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: n70GvPFzuscNXMfo4imTJFc4sh8ma4j6
-X-Proofpoint-ORIG-GUID: n70GvPFzuscNXMfo4imTJFc4sh8ma4j6
+X-Proofpoint-GUID: JqugZZk5QaI7v7huVvZLqEOF-4UsS96e
+X-Proofpoint-ORIG-GUID: JqugZZk5QaI7v7huVvZLqEOF-4UsS96e
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
  definitions=2023-05-22_17,2023-05-22_03,2023-05-22_02
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
 	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-	autolearn=ham autolearn_force=no version=3.4.6
+	autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Current UAPI of BPF_OBJ_PIN and BPF_OBJ_GET commands of bpf() syscall
-forces users to specify pinning location as a string-based absolute or
-relative (to current working directory) path. This has various
-implications related to security (e.g., symlink-based attacks), forces
-BPF FS to be exposed in the file system, which can cause races with
-other applications.
+Add ability to specify pinning location within BPF FS using O_PATH-based =
+FDs,
+similar to openat() family of APIs. Patch #2 adds necessary kernel-side
+changes. Patch #3 exposes this through libbpf APIs. Patch #4 uses new mou=
+nt
+APIs (fsopen, fsconfig, fsmount) to demonstrated how now it's possible to=
+ work
+with detach-mounted BPF FS using new BPF_OBJ_PIN and BPF_OBJ_GET
+functionality. We also add few more tests using various combinations of
+path_fd and pathname to validate proper argument propagation in kernel co=
+de.
 
-One of the feedbacks we got from folks working with containers heavily
-was that inability to use purely FD-based location specification was an
-unfortunate limitation and hindrance for BPF_OBJ_PIN and BPF_OBJ_GET
-commands. This patch closes this oversight, adding path_fd field to
-BPF_OBJ_PIN and BPF_OBJ_GET UAPI, following conventions established by
-*at() syscalls for dirfd + pathname combinations.
+This feature is inspired as a result of recent conversations during
+LSF/MM/BPF 2023 conference about shortcomings of being able to perform BP=
+F
+objects pinning only using lookup-based paths.
 
-This now allows interesting possibilities like working with detached BPF
-FS mount (e.g., to perform multiple pinnings without running a risk of
-someone interfering with them), and generally making pinning/getting
-more secure and not prone to any races and/or security attacks.
+v2->v3:
+  - __s32 for path_fd in union bpf_attr (Christian);
+  - added subtest for absolute/relative paths during pinning/getting;
+  - added pre-patch moving LSM hook (security_path_mknod) around (Christi=
+an);
+v1->v2:
+  - add BPF_F_PATH_FD flag that should go along with path FD (Christian).
 
-This is demonstrated by a selftest added in subsequent patch that takes
-advantage of new mount APIs (fsopen, fsconfig, fsmount) to demonstrate
-creating detached BPF FS mount, pinning, and then getting BPF map out of
-it, all while never exposing this private instance of BPF FS to outside
-worlds.
+Andrii Nakryiko (4):
+  bpf: validate BPF object in BPF_OBJ_PIN before calling LSM
+  bpf: support O_PATH FDs in BPF_OBJ_PIN and BPF_OBJ_GET commands
+  libbpf: add opts-based bpf_obj_pin() API and add support for path_fd
+  selftests/bpf: add path_fd-based BPF_OBJ_PIN and BPF_OBJ_GET tests
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- include/linux/bpf.h            |  4 ++--
- include/uapi/linux/bpf.h       | 10 ++++++++++
- kernel/bpf/inode.c             | 16 ++++++++--------
- kernel/bpf/syscall.c           | 25 ++++++++++++++++++++-----
- tools/include/uapi/linux/bpf.h | 10 ++++++++++
- 5 files changed, 50 insertions(+), 15 deletions(-)
+ include/linux/bpf.h                           |   4 +-
+ include/uapi/linux/bpf.h                      |  10 +
+ kernel/bpf/inode.c                            |  27 +-
+ kernel/bpf/syscall.c                          |  25 +-
+ tools/include/uapi/linux/bpf.h                |  10 +
+ tools/lib/bpf/bpf.c                           |  17 +-
+ tools/lib/bpf/bpf.h                           |  18 +-
+ tools/lib/bpf/libbpf.map                      |   1 +
+ .../bpf/prog_tests/bpf_obj_pinning.c          | 268 ++++++++++++++++++
+ 9 files changed, 354 insertions(+), 26 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_obj_pinnin=
+g.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 36e4b2d8cca2..f58895830ada 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2077,8 +2077,8 @@ struct file *bpf_link_new_file(struct bpf_link *lin=
-k, int *reserved_fd);
- struct bpf_link *bpf_link_get_from_fd(u32 ufd);
- struct bpf_link *bpf_link_get_curr_or_next(u32 *id);
-=20
--int bpf_obj_pin_user(u32 ufd, const char __user *pathname);
--int bpf_obj_get_user(const char __user *pathname, int flags);
-+int bpf_obj_pin_user(u32 ufd, int path_fd, const char __user *pathname);
-+int bpf_obj_get_user(int path_fd, const char __user *pathname, int flags=
-);
-=20
- #define BPF_ITER_FUNC_PREFIX "bpf_iter_"
- #define DEFINE_BPF_ITER_FUNC(target, args...)			\
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 1bb11a6ee667..9273c654743c 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1272,6 +1272,9 @@ enum {
-=20
- /* Create a map that will be registered/unregesitered by the backed bpf_=
-link */
- 	BPF_F_LINK		=3D (1U << 13),
-+
-+/* Get path from provided FD in BPF_OBJ_PIN/BPF_OBJ_GET commands */
-+	BPF_F_PATH_FD		=3D (1U << 14),
- };
-=20
- /* Flags for BPF_PROG_QUERY. */
-@@ -1420,6 +1423,13 @@ union bpf_attr {
- 		__aligned_u64	pathname;
- 		__u32		bpf_fd;
- 		__u32		file_flags;
-+		/* Same as dirfd in openat() syscall; see openat(2)
-+		 * manpage for details of path FD and pathname semantics;
-+		 * path_fd should accompanied by BPF_F_PATH_FD flag set in
-+		 * file_flags field, otherwise it should be set to zero;
-+		 * if BPF_F_PATH_FD flag is not set, AT_FDCWD is assumed.
-+		 */
-+		__s32		path_fd;
- 	};
-=20
- 	struct { /* anonymous struct used by BPF_PROG_ATTACH/DETACH commands */
-diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
-index 329f27d5cacf..4174f76133df 100644
---- a/kernel/bpf/inode.c
-+++ b/kernel/bpf/inode.c
-@@ -435,7 +435,7 @@ static int bpf_iter_link_pin_kernel(struct dentry *pa=
-rent,
- 	return ret;
- }
-=20
--static int bpf_obj_do_pin(const char __user *pathname, void *raw,
-+static int bpf_obj_do_pin(int path_fd, const char __user *pathname, void=
- *raw,
- 			  enum bpf_type type)
- {
- 	struct dentry *dentry;
-@@ -444,7 +444,7 @@ static int bpf_obj_do_pin(const char __user *pathname=
-, void *raw,
- 	umode_t mode;
- 	int ret;
-=20
--	dentry =3D user_path_create(AT_FDCWD, pathname, &path, 0);
-+	dentry =3D user_path_create(path_fd, pathname, &path, 0);
- 	if (IS_ERR(dentry))
- 		return PTR_ERR(dentry);
-=20
-@@ -477,7 +477,7 @@ static int bpf_obj_do_pin(const char __user *pathname=
-, void *raw,
- 	return ret;
- }
-=20
--int bpf_obj_pin_user(u32 ufd, const char __user *pathname)
-+int bpf_obj_pin_user(u32 ufd, int path_fd, const char __user *pathname)
- {
- 	enum bpf_type type;
- 	void *raw;
-@@ -487,14 +487,14 @@ int bpf_obj_pin_user(u32 ufd, const char __user *pa=
-thname)
- 	if (IS_ERR(raw))
- 		return PTR_ERR(raw);
-=20
--	ret =3D bpf_obj_do_pin(pathname, raw, type);
-+	ret =3D bpf_obj_do_pin(path_fd, pathname, raw, type);
- 	if (ret !=3D 0)
- 		bpf_any_put(raw, type);
-=20
- 	return ret;
- }
-=20
--static void *bpf_obj_do_get(const char __user *pathname,
-+static void *bpf_obj_do_get(int path_fd, const char __user *pathname,
- 			    enum bpf_type *type, int flags)
- {
- 	struct inode *inode;
-@@ -502,7 +502,7 @@ static void *bpf_obj_do_get(const char __user *pathna=
-me,
- 	void *raw;
- 	int ret;
-=20
--	ret =3D user_path_at(AT_FDCWD, pathname, LOOKUP_FOLLOW, &path);
-+	ret =3D user_path_at(path_fd, pathname, LOOKUP_FOLLOW, &path);
- 	if (ret)
- 		return ERR_PTR(ret);
-=20
-@@ -526,7 +526,7 @@ static void *bpf_obj_do_get(const char __user *pathna=
-me,
- 	return ERR_PTR(ret);
- }
-=20
--int bpf_obj_get_user(const char __user *pathname, int flags)
-+int bpf_obj_get_user(int path_fd, const char __user *pathname, int flags=
-)
- {
- 	enum bpf_type type =3D BPF_TYPE_UNSPEC;
- 	int f_flags;
-@@ -537,7 +537,7 @@ int bpf_obj_get_user(const char __user *pathname, int=
- flags)
- 	if (f_flags < 0)
- 		return f_flags;
-=20
--	raw =3D bpf_obj_do_get(pathname, &type, f_flags);
-+	raw =3D bpf_obj_do_get(path_fd, pathname, &type, f_flags);
- 	if (IS_ERR(raw))
- 		return PTR_ERR(raw);
-=20
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index b2621089904b..c7f6807215e6 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2697,23 +2697,38 @@ static int bpf_prog_load(union bpf_attr *attr, bp=
-fptr_t uattr, u32 uattr_size)
- 	return err;
- }
-=20
--#define BPF_OBJ_LAST_FIELD file_flags
-+#define BPF_OBJ_LAST_FIELD path_fd
-=20
- static int bpf_obj_pin(const union bpf_attr *attr)
- {
--	if (CHECK_ATTR(BPF_OBJ) || attr->file_flags !=3D 0)
-+	int path_fd;
-+
-+	if (CHECK_ATTR(BPF_OBJ) || attr->file_flags & ~BPF_F_PATH_FD)
-+		return -EINVAL;
-+
-+	/* path_fd has to be accompanied by BPF_F_PATH_FD flag */
-+	if (!(attr->file_flags & BPF_F_PATH_FD) && attr->path_fd)
- 		return -EINVAL;
-=20
--	return bpf_obj_pin_user(attr->bpf_fd, u64_to_user_ptr(attr->pathname));
-+	path_fd =3D attr->file_flags & BPF_F_PATH_FD ? attr->path_fd : AT_FDCWD=
-;
-+	return bpf_obj_pin_user(attr->bpf_fd, path_fd,
-+				u64_to_user_ptr(attr->pathname));
- }
-=20
- static int bpf_obj_get(const union bpf_attr *attr)
- {
-+	int path_fd;
-+
- 	if (CHECK_ATTR(BPF_OBJ) || attr->bpf_fd !=3D 0 ||
--	    attr->file_flags & ~BPF_OBJ_FLAG_MASK)
-+	    attr->file_flags & ~(BPF_OBJ_FLAG_MASK | BPF_F_PATH_FD))
-+		return -EINVAL;
-+
-+	/* path_fd has to be accompanied by BPF_F_PATH_FD flag */
-+	if (!(attr->file_flags & BPF_F_PATH_FD) && attr->path_fd)
- 		return -EINVAL;
-=20
--	return bpf_obj_get_user(u64_to_user_ptr(attr->pathname),
-+	path_fd =3D attr->file_flags & BPF_F_PATH_FD ? attr->path_fd : AT_FDCWD=
-;
-+	return bpf_obj_get_user(path_fd, u64_to_user_ptr(attr->pathname),
- 				attr->file_flags);
- }
-=20
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index 1bb11a6ee667..9273c654743c 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1272,6 +1272,9 @@ enum {
-=20
- /* Create a map that will be registered/unregesitered by the backed bpf_=
-link */
- 	BPF_F_LINK		=3D (1U << 13),
-+
-+/* Get path from provided FD in BPF_OBJ_PIN/BPF_OBJ_GET commands */
-+	BPF_F_PATH_FD		=3D (1U << 14),
- };
-=20
- /* Flags for BPF_PROG_QUERY. */
-@@ -1420,6 +1423,13 @@ union bpf_attr {
- 		__aligned_u64	pathname;
- 		__u32		bpf_fd;
- 		__u32		file_flags;
-+		/* Same as dirfd in openat() syscall; see openat(2)
-+		 * manpage for details of path FD and pathname semantics;
-+		 * path_fd should accompanied by BPF_F_PATH_FD flag set in
-+		 * file_flags field, otherwise it should be set to zero;
-+		 * if BPF_F_PATH_FD flag is not set, AT_FDCWD is assumed.
-+		 */
-+		__s32		path_fd;
- 	};
-=20
- 	struct { /* anonymous struct used by BPF_PROG_ATTACH/DETACH commands */
 --=20
 2.34.1
 
