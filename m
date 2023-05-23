@@ -1,77 +1,204 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A781C1F934
-	for <bpf@vger.kernel.org>; Tue, 23 May 2023 19:43:11 +0000 (UTC)
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60CFE5;
-	Tue, 23 May 2023 12:43:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=UK1+XiYEyu4+vDapejBb3ZP/JmaeH6v5xTRHNShZpvI=; b=K8uiWzEwvRaNs1+I0WOKBh5cVI
-	dJJQidJawc69Qeq7ul/Q+/qy5CA4w2vWyQWIab2biCrQ7niIOJWe6seb+5wOal30Czb6qWDzmCZOJ
-	zxR/AM+q/Pk26NTSsy469S3vzZPI+OtSOUFKWFjnzvoKGRlRHl7qspOf5dW1fTn4V5VGoHaZQISY4
-	GibDZHL/rUTfoAs8Op/6IRWXFx/1uBoTMVDfKsY8oui8Lvu3cMN6P97IISYIkaPnaX575H5M/ysPq
-	PP6lNvh9bD9ccr1ot49F7iKIlVdhsE2uOnnXRGAxUra298pdEk3Cde2BwqhbMJ98wPM+xa+U5lHsZ
-	iUejKITQ==;
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1q1XuU-00019c-Rf; Tue, 23 May 2023 21:43:07 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-	by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1q1XuU-000JYH-BJ; Tue, 23 May 2023 21:43:06 +0200
-Subject: Re: [PATCH v4 bpf-next 0/4] Add O_PATH-based BPF_OBJ_PIN and
- BPF_OBJ_GET support
-To: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, ast@kernel.org,
- martin.lau@kernel.org
-Cc: cyphar@cyphar.com, brauner@kernel.org, lennart@poettering.net,
- linux-fsdevel@vger.kernel.org
-References: <20230523170013.728457-1-andrii@kernel.org>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <d881e3a5-2d11-2ad9-14b2-169ccc11f63a@iogearbox.net>
-Date: Tue, 23 May 2023 21:43:05 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A56D1F934
+	for <bpf@vger.kernel.org>; Tue, 23 May 2023 19:47:14 +0000 (UTC)
+Received: from eggs.gnu.org (eggs.gnu.org [IPv6:2001:470:142:3::10])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950FA139
+	for <bpf@vger.kernel.org>; Tue, 23 May 2023 12:47:10 -0700 (PDT)
+Received: from fencepost.gnu.org ([2001:470:142:3::e])
+	by eggs.gnu.org with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.90_1)
+	(envelope-from <jemarch@gnu.org>)
+	id 1q1XyN-0003g7-L4; Tue, 23 May 2023 15:47:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=gnu.org;
+	s=fencepost-gnu-org; h=MIME-Version:Date:References:In-Reply-To:Subject:To:
+	From; bh=DzrZ/h7jcyKJ4mEHXUnBoi307ryxUGh8iTJWX7zqAcQ=; b=nY1OUErRkEqSh0AJ1Auo
+	HvI8hAQxXYaakatRMVW9odnZnuX6fF6NBPZPIo5rm+WNMZaMlRp3ZIl9tYPY1msQkAijNzzHXIFJ1
+	mt4wzn4wQ+KpvIj5sx8dH0sR1MNROWeZQkbIpVQzAFu/lrBv05u2f3h0j4oMzHAa4cxJMYlLtltLd
+	whJg5jpwr7TvTixRfi2aFPtKWwa8ktIsdbLV5WIEQUxDJtLF9sXAcxvXWosC6FzgbwSuSPNB5V4/v
+	waoYSV4cQQhtu6xKy63JkjdO1nVhgHpbsyODI7I1i7R4TcFpnc+YPOCUJPDPMg+fJ3Gm8l5ZZBq0k
+	g+ke9NcMk667Gg==;
+Received: from [141.143.193.79] (helo=termi)
+	by fencepost.gnu.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.90_1)
+	(envelope-from <jemarch@gnu.org>)
+	id 1q1XyN-0001Mx-7R; Tue, 23 May 2023 15:47:07 -0400
+From: "Jose E. Marchesi" <jemarch@gnu.org>
+To: Erik Kline <ek.ietf@gmail.com>
+Cc: David Vernet <void@manifault.com>,  Dave Thaler <dthaler@microsoft.com>,
+  "bpf@ietf.org" <bpf@ietf.org>,  bpf <bpf@vger.kernel.org>,  "Suresh
+ Krishnan (sureshk)" <sureshk@cisco.com>,  Christoph Hellwig
+ <hch@infradead.org>,  Alexei Starovoitov <ast@kernel.org>
+Subject: Re: [Bpf] IETF BPF working group draft charter
+In-Reply-To: <CAMGpriVpc5qdtqAObO1nu64kidt6C4UFp_FJ_Ht+DThMHNX-CQ@mail.gmail.com>
+	(Erik Kline's message of "Tue, 23 May 2023 12:42:03 -0700")
+References: <PH7PR21MB38780769D482CC5F83768D3CA37E9@PH7PR21MB3878.namprd21.prod.outlook.com>
+	<87v8grkn67.fsf@gnu.org>
+	<PH7PR21MB3878BCFA99C1585203982670A37E9@PH7PR21MB3878.namprd21.prod.outlook.com>
+	<87r0rdy26o.fsf@gnu.org>
+	<PH7PR21MB3878B869D69FD35FA718AF5DA37FA@PH7PR21MB3878.namprd21.prod.outlook.com>
+	<20230523163200.GD20100@maniforge>
+	<PH7PR21MB3878A4135C14B318DD43365CA340A@PH7PR21MB3878.namprd21.prod.outlook.com>
+	<20230523171535.GE20100@maniforge> <20230523190814.GA32582@maniforge>
+	<CAMGpriVpc5qdtqAObO1nu64kidt6C4UFp_FJ_Ht+DThMHNX-CQ@mail.gmail.com>
+Date: Tue, 23 May 2023 21:47:03 +0200
+Message-ID: <87leheu8y0.fsf@gnu.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20230523170013.728457-1-andrii@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26916/Tue May 23 09:22:39 2023)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+	SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 5/23/23 7:00 PM, Andrii Nakryiko wrote:
-> Add ability to specify pinning location within BPF FS using O_PATH-based FDs,
-> similar to openat() family of APIs. Patch #2 adds necessary kernel-side
-> changes. Patch #3 exposes this through libbpf APIs. Patch #4 uses new mount
-> APIs (fsopen, fsconfig, fsmount) to demonstrated how now it's possible to work
-> with detach-mounted BPF FS using new BPF_OBJ_PIN and BPF_OBJ_GET
-> functionality. We also add few more tests using various combinations of
-> path_fd and pathname to validate proper argument propagation in kernel code.
-> 
-> This feature is inspired as a result of recent conversations during
-> LSF/MM/BPF 2023 conference about shortcomings of being able to perform BPF
-> objects pinning only using lookup-based paths.
-> 
-> v3->v4:
->    - libbpf v1.3 bump (Daniel);
 
-Looks good, applied 2-4 now. (Patch 1 was already in the tree.) Thanks!
+> how about if we pull ABI but leave ELF?
+
+The ELF architecture-specific configuration and extensions are
+traditionally part of the psABI.  Chapter 4 Object Files.
+
+>
+> On Tue, May 23, 2023 at 12:08=E2=80=AFPM David Vernet <void@manifault.com=
+> wrote:
+>>
+>> On Tue, May 23, 2023 at 12:15:35PM -0500, David Vernet wrote:
+>> > On Tue, May 23, 2023 at 04:50:42PM +0000, Dave Thaler wrote:
+>> > > > -----Original Message-----
+>> > > > From: David Vernet <void@manifault.com>
+>> > > > Sent: Tuesday, May 23, 2023 9:32 AM
+>> > > > To: Dave Thaler <dthaler@microsoft.com>
+>> > > > Cc: Jose E. Marchesi <jemarch@gnu.org>; bpf@ietf.org; bpf
+>> > > > <bpf@vger.kernel.org>; Erik Kline <ek.ietf@gmail.com>; Suresh Kris=
+hnan
+>> > > > (sureshk) <sureshk@cisco.com>; Christoph Hellwig <hch@infradead.or=
+g>;
+>> > > > Alexei Starovoitov <ast@kernel.org>
+>> > > > Subject: Re: [Bpf] IETF BPF working group draft charter
+>> > > >
+>> > > > On Thu, May 18, 2023 at 07:42:11PM +0000, Dave Thaler wrote:
+>> > > > > Jose E. Marchesi <jemarch@gnu.org> wrote:
+>> > > > > > I would think that the way the x86_64, aarch64, risc-v, sparc,=
+ mips,
+>> > > > > > powerpc architectures, along with their variants, handle their=
+ ELF
+>> > > > > > extensions and psABI, ensures interoperability good enough for=
+ the
+>> > > > problem at hand, but ok.
+>> > > > > > I'm definitely not an expert in these matters.
+>> > > > >
+>> > > > > I am not familiar enough with those to make any comment about th=
+at.
+>> > > >
+>> > > > Hi Dave,
+>> > > >
+>> > > > Taking a step back here, perhaps we need to think about all of thi=
+s more
+>> > > > generically as "ABI", rather than ELF "extensions", "bindings", et=
+c.  In my
+>> > > > opinion this would include, at a minimum, the following items from=
+ the current
+>> > > > proposed WG charter:
+>> > > >
+>> > > > * the eBPF bindings for the ELF executable file format,
+>> > > >
+>> > > > * the platform support ABI, including calling convention, linker
+>> > > >   requirements, and relocations,
+>> > > >
+>> > > > As far as I know (please correct me if I'm wrong), there isn't rea=
+lly a precedence
+>> > > > for standardizing ABIs like this. For example, x86 calling convent=
+ions are not
+>> > > > standardized.  Solaris, Linux, FreeBSD, macOS, etc all follow the =
+System V
+>> > > > AMD64 ABI, but Microsoft of course does not. As Jose pointed out, =
+such
+>> > > > standards extensions do not exist for psABI ELF extensions for var=
+ious
+>> > > > architectures either.
+>> > > >
+>> > > > While it may be that we do end up needing to standardize these ABI=
+s for BPF,
+>> > > > I'm beginning to think that we should just remove them from the cu=
+rrent WG
+>> > > > charter, and consider standardizing them at a later time if it's c=
+lear that it's
+>> > > > actually necessary. I think this is especially true given that we =
+don't seem to be
+>> > > > getting any closer to having consensus, and that we're very short =
+on time given
+>> > > > that Erik is going to be proposing the charter to the rest of the =
+ADs in just two
+>> > > > days on 5/25.
+>> > > >
+>> > > > Thanks,
+>> > > > David
+>> > >
+>> > > I can tell you it's very important to those who work on the
+>> > > ebpf-for-windows project that the ELF format is common between
+>> > > Linux and Windows so that tools like
+>> > > llvm-objdump and bpftool and other BPF-specific ELF parsing tools wo=
+rk for both
+>> > > Linux and Windows.   We don't want Windows to diverge.
+>> >
+>> > Be that as it may, as I said before, to my knowledge there's no
+>> > precedence at all for standardizing ABI like this. Is there a reason
+>> > that you think Windows would diverge if we didn't standardize the ABI?
+>> >
+>> > I realize that I'm essentially saying, "Hey, pretend there's a standard
+>> > and don't diverge", but if that's what the entire rest of the industry
+>> > has done up until this point with all other psABIs, then it seems like=
+ a
+>> > reasonable expectation.
+>> >
+>> > > As such, I feel strongly that it is a requirement to be standardized=
+ right away.
+>> >
+>> > I have to respectfully disagree. I think there are much bigger fish to
+>> > fry, such as standardizing the ISA. Unless we really have a good reason
+>> > for diverging from industry norms, standardizing on ABI now feels to me
+>> > like we're putting the cart before the horse.
+>>
+>> Hi Dave et al,
+>>
+>> FYI, I just sent out a GitHub PR to remove these lines from the proposed
+>> WG charter: https://github.com/ekline/bpf/pull/5/files. I thought it was
+>> prudent to go ahead and open the PR now given how close we are to the
+>> 5/25 meeting, and that we don't seem to be any closer to getting
+>> consensus here.
+>>
+>> We can (and should) continue the discussion here, but my two cents is
+>> that unless there's a strong reason to keep ABI standardization within
+>> scope of the WG, that it makes sense to remove these bullets.
+>>
+>> That said, if the discussion dies down and/or doesn't continue, IMHO it
+>> would be prudent to merge the PR. I don't think our default position
+>> should be to deviate from well-established industry-wide precedence,
+>> with the onus being on those advocating for following industry norms to
+>> prove that we don't need to discuss it. Again, I may be missing some
+>> important context here, so apologies if that's the case.
+>>
+>> Thanks,
+>> David
+>>
+>> > Just to be very clear: I could be totally wrong here, and it could be
+>> > very important to deviate from industry norms and standardize ABI as
+>> > part of the initial WG charter. However, IMHO, a positive claim like
+>> > that needs to come with clear substantiation. The reality is that
+>> > deviating from industry norms and standardizing on ABI will have its o=
+wn
+>> > costs and consequences.
+>> >
+>> > > Hence I would not want this removed from the charter unless there's =
+an effort
+>> > > to do it somewhere else right away, which would seem to increase the=
+ coordination
+>> > > burden.
