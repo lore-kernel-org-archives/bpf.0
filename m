@@ -1,412 +1,251 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C45206AA
-	for <bpf@vger.kernel.org>; Tue, 23 May 2023 17:00:38 +0000 (UTC)
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263C3E5
-	for <bpf@vger.kernel.org>; Tue, 23 May 2023 10:00:36 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34NFI9dQ014179
-	for <bpf@vger.kernel.org>; Tue, 23 May 2023 10:00:35 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qrkvvwrhv-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 23 May 2023 10:00:35 -0700
-Received: from twshared40933.03.prn6.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 23 May 2023 10:00:33 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id CE95031365360; Tue, 23 May 2023 10:00:20 -0700 (PDT)
-From: Andrii Nakryiko <andrii@kernel.org>
-To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@kernel.org>
-CC: <cyphar@cyphar.com>, <brauner@kernel.org>, <lennart@poettering.net>,
-        <linux-fsdevel@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>
-Subject: [PATCH v4 bpf-next 3/4] bpf: support O_PATH FDs in BPF_OBJ_PIN and BPF_OBJ_GET commands
-Date: Tue, 23 May 2023 10:00:12 -0700
-Message-ID: <20230523170013.728457-4-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230523170013.728457-1-andrii@kernel.org>
-References: <20230523170013.728457-1-andrii@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B79C04C91
+	for <bpf@vger.kernel.org>; Tue, 23 May 2023 17:05:44 +0000 (UTC)
+Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A31DA
+	for <bpf@vger.kernel.org>; Tue, 23 May 2023 10:05:41 -0700 (PDT)
+Received: from ietfa.amsl.com (localhost [IPv6:::1])
+	by ietfa.amsl.com (Postfix) with ESMTP id 05402C151B2A
+	for <bpf@vger.kernel.org>; Tue, 23 May 2023 10:05:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
+	t=1684861541; bh=LmExfVR+o6SDa4KvFuSs1raJDqHabLrPRelLyAMSvH8=;
+	h=To:CC:Date:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=vfiw4UBygXe4LLgGvSKVxoOqi3yTEv6hI/kMYRjLzS/8lkW2eSGz4zlV6YPaQJq3c
+	 wCXp9V4OtoYMZW44QeyK8jRxhfvi6Kne8Wk/et0cIwNyZz2QRhBD7tjNpXwqBG9G7j
+	 bB2X4c3fvaiLYIPKlbfkcY/SSuphHkbwzNObcDO0=
+Received: from ietfa.amsl.com (localhost [IPv6:::1])
+ by ietfa.amsl.com (Postfix) with ESMTP id CC6FBC151B19;
+ Tue, 23 May 2023 10:05:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
+ t=1684861540; bh=LmExfVR+o6SDa4KvFuSs1raJDqHabLrPRelLyAMSvH8=;
+ h=From:To:CC:Date:References:In-Reply-To:Subject:List-Id:
+ List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
+ b=PPODNrfNwYH4z3w6AN4lRLIhSDadN8uTLbQlA7vlOzIr/NAg6mKlBnJNul2/QDdD2
+ yqLn94gmoPy+CAo2sQy/A/wiO3qiK5XiLD+Z252WcHrkkwKB41MyJtmAIY4cq3MRHp
+ UGBBr8O/fJ8eptxlcjXHpPF9xTOd7BjwfLf3m14U=
+Received: from localhost (localhost [127.0.0.1])
+ by ietfa.amsl.com (Postfix) with ESMTP id BB614C151B01
+ for <bpf@ietfa.amsl.com>; Tue, 23 May 2023 10:05:39 -0700 (PDT)
+X-Virus-Scanned: amavisd-new at amsl.com
+X-Spam-Score: -7.101
+X-Spam-Level: 
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,MAILING_LIST_MULTI,
+	RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (1024-bit key)
+ header.d=microsoft.com
+Received: from mail.ietf.org ([50.223.129.194])
+ by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qavIblx0KnFa for <bpf@ietfa.amsl.com>;
+ Tue, 23 May 2023 10:05:39 -0700 (PDT)
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com
+ (mail-mw2nam12on2071c.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:fe5a::71c])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by ietfa.amsl.com (Postfix) with ESMTPS id 3C1D4C1519BF
+ for <bpf@ietf.org>; Tue, 23 May 2023 10:05:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hbugt4nzizGuwdk6cIrSjHT9YUfKyJjJQ2P9hzSmKM+1U425/yRcSAGXHKQsgYCUZzWNRQTnph63jUN+INPnqmYQOY7gtlRTzXejiTLI0bowTXuRJpCBRzMhbrpdO6tAbgk2t/ejk+J4zn+aeR1xlUEFTpVfAKJCyes97R2/bflFSeK+PKIuMFSjoNuilHgsAgQO3oWvO4tjscH0PBfID8UZ/BYx0omK13ITV6oA/PhGfNabp53/WT37jNXA6EanjgEdBQVvlbo3f7Z35Xn3TcMk8hqvTWMKMXkLKl50F1klqN/Mqv0d9DqIPQpZEERjTR5/6FDcP+UHIJuT9TnR7Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=x6saMxP49ighAjthR62Vg1+0E/Hinw+W5EZkUV8Ot4w=;
+ b=RRn3H/hogLKyJ+iOfDzfsRqR6ooRfO1H4+uCZ8milw4EHYxAUOM60LswBoIGgVCJWmpuNzLGo2TTKHURH1La1zP7U+V4Ra9WPYaL6IqVk3sb9XBLYIwrxPILK77qgVwpfO8pj+anTVzN/umvlJSsYdfIFGa/RB/d3Hhk7Vm6HCxshPohfUrCHwUDtiIP8W1e5HrYh5PNSoUNLtO63sFr1vtH0BeUieB0LTvKyhLKWbIVcmk803BPUeUtBoROEcDpZLOSOr9aYCvsWPo+SM6GGkIxiyoOlz4UiY+6Fu+5OwkuGZwkMQQZ3joCeXFr/Uhx+KfBsmbCTy3XxxMgylh8Yw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=x6saMxP49ighAjthR62Vg1+0E/Hinw+W5EZkUV8Ot4w=;
+ b=hdtQWTTzvQk9gHYyIh64F4Fu9m7z+ugqgB7SnXR5QJvfPoZekYvkWXaLoq5ec0sJGoEZGd5dEcXwHXDL4ge+26JinBjM6p63rlrFe20gM/cV//w09MtRnyXlD0e6C40THcNpXwJj6HGP5+c8rL1/nKCOJNcp+j264XLFFAqakgg=
+Received: from PH7PR21MB3878.namprd21.prod.outlook.com (2603:10b6:510:243::22)
+ by BY1PR21MB3870.namprd21.prod.outlook.com (2603:10b6:a03:525::7)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.6; Tue, 23 May
+ 2023 16:50:42 +0000
+Received: from PH7PR21MB3878.namprd21.prod.outlook.com
+ ([fe80::b892:e1d5:71ec:8149]) by PH7PR21MB3878.namprd21.prod.outlook.com
+ ([fe80::b892:e1d5:71ec:8149%4]) with mapi id 15.20.6433.013; Tue, 23 May 2023
+ 16:50:42 +0000
+To: David Vernet <void@manifault.com>
+CC: "Jose E. Marchesi" <jemarch@gnu.org>, "bpf@ietf.org" <bpf@ietf.org>, bpf
+ <bpf@vger.kernel.org>, Erik Kline <ek.ietf@gmail.com>, "Suresh Krishnan
+ (sureshk)" <sureshk@cisco.com>, Christoph Hellwig <hch@infradead.org>, Alexei
+ Starovoitov <ast@kernel.org>
+Thread-Topic: [Bpf] IETF BPF working group draft charter
+Thread-Index: AdmIWSmp8uIYgrASRIKQXfLbLZQgdgAeO2knAAYWUOAAMSGf+AAD196wAPVwpgAAAInH0A==
+Date: Tue, 23 May 2023 16:50:42 +0000
+Message-ID: <PH7PR21MB3878A4135C14B318DD43365CA340A@PH7PR21MB3878.namprd21.prod.outlook.com>
+References: <PH7PR21MB38780769D482CC5F83768D3CA37E9@PH7PR21MB3878.namprd21.prod.outlook.com>
+ <87v8grkn67.fsf@gnu.org>
+ <PH7PR21MB3878BCFA99C1585203982670A37E9@PH7PR21MB3878.namprd21.prod.outlook.com>
+ <87r0rdy26o.fsf@gnu.org>
+ <PH7PR21MB3878B869D69FD35FA718AF5DA37FA@PH7PR21MB3878.namprd21.prod.outlook.com>
+ <20230523163200.GD20100@maniforge>
+In-Reply-To: <20230523163200.GD20100@maniforge>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=554dac9d-3ca9-4449-a15d-4f43448a0cab;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-05-23T16:47:24Z; 
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH7PR21MB3878:EE_|BY1PR21MB3870:EE_
+x-ms-office365-filtering-correlation-id: 058c9a0a-a262-482a-cf6c-08db5badd8c3
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: K8m4rxpdbnZZUwXOdEX0hHJlqaQSTXZJZJWv37QvHJyEjjzTU3IonFRGD1tdxhib4Sz1q83LMLba7URqZ7iVJN0BdCqfIAgGio1kX0K1GvFVAj4Jz5C7bdB34973vWjIaXYmnGsG544jE/IwitRoXi0BPW/d1d7iX0toNqJUnKG76loxmOknkHQOO11MW0jTi7t3uCCLmR7aBbfFZmpwFk9pBr91z3N2knyghnbCjkE6gAvKJMFkkkn8RSF4vw7yws25Slj7QDqtXQDHZACHk9+dWAYvsEkWZ5LvIpfpaZ1iJ5A+K1Ebks5IH/GtGw89shSakOV9mLczRqGRTlDxe++7Wdqp95jiOXeMz2w9Iindv4fm1g2qqZqhd/iWvHRrO1hxNpy4KYQ0EfsaqWJf7q86mFLtql2P6UlfCnfsqLckCqSx9SrGaL3GrGRMRUopo3FKrNaQuwIcqCR62nenmJOS3W5AHnGKf817AVz/54VuZ2AeZNwRQlvO92EHI7RHTg8vEZUhT16LfgRUHkztxboSD3kdhyrstyrwhBnaSriVZ0o1c0QVwaILhRyMn2/45GXMEjFuDvtMlcuruSy37z724wypA79vKkFxBPTwSU25dq1bCdThnKRW6i0Kcq6pWuwp9g6en/OaTUybO5KFBpcJLzKpyUo3ikCOeuqdYwc=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:; 
+ IPV:NLI; SFV:NSPM;
+ H:PH7PR21MB3878.namprd21.prod.outlook.com; PTR:; CAT:NONE; 
+ SFS:(13230028)(4636009)(39860400002)(136003)(346002)(376002)(396003)(366004)(451199021)(52536014)(5660300002)(8936002)(8676002)(86362001)(2906002)(53546011)(26005)(9686003)(6506007)(83380400001)(8990500004)(186003)(33656002)(55016003)(64756008)(4326008)(6916009)(66446008)(76116006)(66946007)(66476007)(66556008)(82950400001)(82960400001)(122000001)(71200400001)(786003)(316002)(54906003)(38100700002)(10290500003)(38070700005)(478600001)(7696005)(41300700001);
+ DIR:OUT; SFP:1102; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Sr80Ypv0uyEuy0F5UXqJnzFeBKDHYvkgvhuX8JN7KKV9P8QU5Qho64LLaNVC?=
+ =?us-ascii?Q?A24fUjgoW/9FJ+jT9PdLUjolHIC4rHQ/UvT/ghNkczBLlxNQPtT34QWo+pqu?=
+ =?us-ascii?Q?7YlRgM0udabtkzLPyrE6dEq041O3PFH7mcBV+pI2AL/PnfcAC0O0j0e1alR/?=
+ =?us-ascii?Q?ZOqmfuiNSV1XnBhkWBRXhK6aD4MDap47Xg/kPnwVH4cwa8eOHLdiq/R+hCaO?=
+ =?us-ascii?Q?RFN2PmMkp/NhcjraGmvvBfZhMXEEe/ckqXWv2d6JkuS8E3WBG4yC7o21eL5i?=
+ =?us-ascii?Q?koRw6mfKrSGDD2YYdtSbhB9t3Eb9BGUybf+r4w/oKKSnyl7ugi8Ey0yWlfeU?=
+ =?us-ascii?Q?+9zf+xX/ZJigwFVf5uBGXceDzfpxOQ5TMdtmI8+iYJQkZVxzlPTL5QAl7m1F?=
+ =?us-ascii?Q?+vbrAEOKSulivCJ34n8QCQoFy3tuzMoNQF9mjJjFMEjt4LPj7QcD1kdje51+?=
+ =?us-ascii?Q?xuFM4dIBIUW9dF7nv/40t4jl/DuO91DAl3iL0cjrhJSe4nGHG6utl6mw2Rvr?=
+ =?us-ascii?Q?TbEzFIg0fFpdmvRe20RE1xgLHs7/uCJ7AiFz9+WG+QcIODhWU7J0hXPmVhCv?=
+ =?us-ascii?Q?Bb9+Whwy9ijZg6li4e2POO6jQZSiY5TBzpjSK8GMyEkPY0su9fOO6dNroftl?=
+ =?us-ascii?Q?fHpgs7WarJjMjLyZoWEmb2IHw8ZBGouuTH1mMTdZQVp3uki2wuI5EPHRAChU?=
+ =?us-ascii?Q?2uVkYcAFNWkh5CB3aiwhUlzjsWBG+poRxuKYW/kpuXY0pHriPIuEY8EFIovB?=
+ =?us-ascii?Q?8EVbq/9MjleEAFTG2JDTPyGz9NbO/zpcDbI46bsCGJ6Da63o7TlCsOIHLkKo?=
+ =?us-ascii?Q?gaW0j3WW4p0f8lWqbUJIArpPINERiGTeRYrBumCPIndZd4DEi270LTBhwe+t?=
+ =?us-ascii?Q?xzScQjqxel/jD1AcNmG2bmRpLnpPry1LbwLoQfuPEd7/h7KWeMUlAGtMhU8F?=
+ =?us-ascii?Q?T/U9jz6pPG4Di7H+7Sz/vwqle1xGa9/8na4pVOJr1Tov/7VPnzkwifRXAT2I?=
+ =?us-ascii?Q?UTWCccQlSFjKZZpUbvyl8jgpZTRr+/XL3wVK4KxoV5gwoGUwp/yqfS2J8TqU?=
+ =?us-ascii?Q?mAssdmIG16XXv67q5HVPGTNOTMFUVQktTMtC1T8nRKOlfL7DtIWBHFYZMzd4?=
+ =?us-ascii?Q?OTyd0C60X/LViiIxQFhFrM53/t3lEmSroDfU54FNfnEBT78pe2uyn7/yleKK?=
+ =?us-ascii?Q?52bpVb+YoCGUMiV1b+hcxsECzd/D2ngXInXSiRjAlSy2HcOg2HnpesIy00UA?=
+ =?us-ascii?Q?m1HYPmuOBWWyRzaGKeVE6va8yzNzIXyXYjSQDuctLafi3ipu4jvExBkKWNRl?=
+ =?us-ascii?Q?S16WzLT9LtDQNLfnhYikrsa13QNFu1TmW1Je6D+2UCbRXwSkT7peA3zV3QHo?=
+ =?us-ascii?Q?sJ4fQrhODsonjDHHynor32k5jOWhGjtjTGfdUMuzd2Jvw5GGAN3fE+y8f1ZT?=
+ =?us-ascii?Q?LxeQrkVe2r2G07pSSPgwcxkQn5d1Gg9LPvUA76C2xgu5a3hpw+MK3qN+k2e4?=
+ =?us-ascii?Q?A9vmRW4hqT/+SQD9/VFOOMAd3DdMPzDTJYs/wW3oV7JfrhBTGnJPFvT60RNk?=
+ =?us-ascii?Q?XO1C+Ec+G+zpsrdOEyUxCjQy4WnQ1r9AtnhL95HvoSRrIOErj53wW2gqCwT1?=
+ =?us-ascii?Q?Jg=3D=3D?=
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: UVCUSd02tl25i1aSr6ni9h-I2h5Ifzzy
-X-Proofpoint-ORIG-GUID: UVCUSd02tl25i1aSr6ni9h-I2h5Ifzzy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-23_10,2023-05-23_02,2023-05-22_02
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR21MB3878.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 058c9a0a-a262-482a-cf6c-08db5badd8c3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 May 2023 16:50:42.7047 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 07HP8bxSyshPoYtV2/6uyO2DswlNqHhXL4uwr8kRWFzbTdPPMS3K1iVBq6hAA92bKNTryf/a1erDYmPDgndVCT7VEKvgw0NCEteoyl4bv2E=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY1PR21MB3870
+Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/qDfig-4t6HV48kOPEl9wDIRvdnA>
+Subject: Re: [Bpf] IETF BPF working group draft charter
+X-BeenThere: bpf@ietf.org
+X-Mailman-Version: 2.1.39
+Precedence: list
+List-Id: Discussion of BPF/eBPF standardization efforts within the IETF
+ <bpf.ietf.org>
+List-Unsubscribe: <https://www.ietf.org/mailman/options/bpf>,
+ <mailto:bpf-request@ietf.org?subject=unsubscribe>
+List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
+List-Post: <mailto:bpf@ietf.org>
+List-Help: <mailto:bpf-request@ietf.org?subject=help>
+List-Subscribe: <https://www.ietf.org/mailman/listinfo/bpf>,
+ <mailto:bpf-request@ietf.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Errors-To: bpf-bounces@ietf.org
+Sender: "Bpf" <bpf-bounces@ietf.org>
+X-Original-From: Dave Thaler <dthaler@microsoft.com>
+From: Dave Thaler <dthaler=40microsoft.com@dmarc.ietf.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
+Message-ID: <20230523165042.3hP41dJf48dVcTHRGIX2rUs7G1uHx5m01YTbmn-IGeg@z>
 
-Current UAPI of BPF_OBJ_PIN and BPF_OBJ_GET commands of bpf() syscall
-forces users to specify pinning location as a string-based absolute or
-relative (to current working directory) path. This has various
-implications related to security (e.g., symlink-based attacks), forces
-BPF FS to be exposed in the file system, which can cause races with
-other applications.
+> -----Original Message-----
+> From: David Vernet <void@manifault.com>
+> Sent: Tuesday, May 23, 2023 9:32 AM
+> To: Dave Thaler <dthaler@microsoft.com>
+> Cc: Jose E. Marchesi <jemarch@gnu.org>; bpf@ietf.org; bpf
+> <bpf@vger.kernel.org>; Erik Kline <ek.ietf@gmail.com>; Suresh Krishnan
+> (sureshk) <sureshk@cisco.com>; Christoph Hellwig <hch@infradead.org>;
+> Alexei Starovoitov <ast@kernel.org>
+> Subject: Re: [Bpf] IETF BPF working group draft charter
+> 
+> On Thu, May 18, 2023 at 07:42:11PM +0000, Dave Thaler wrote:
+> > Jose E. Marchesi <jemarch@gnu.org> wrote:
+> > > I would think that the way the x86_64, aarch64, risc-v, sparc, mips,
+> > > powerpc architectures, along with their variants, handle their ELF
+> > > extensions and psABI, ensures interoperability good enough for the
+> problem at hand, but ok.
+> > > I'm definitely not an expert in these matters.
+> >
+> > I am not familiar enough with those to make any comment about that.
+> 
+> Hi Dave,
+> 
+> Taking a step back here, perhaps we need to think about all of this more
+> generically as "ABI", rather than ELF "extensions", "bindings", etc.  In my
+> opinion this would include, at a minimum, the following items from the current
+> proposed WG charter:
+> 
+> * the eBPF bindings for the ELF executable file format,
+> 
+> * the platform support ABI, including calling convention, linker
+>   requirements, and relocations,
+> 
+> As far as I know (please correct me if I'm wrong), there isn't really a precedence
+> for standardizing ABIs like this. For example, x86 calling conventions are not
+> standardized.  Solaris, Linux, FreeBSD, macOS, etc all follow the System V
+> AMD64 ABI, but Microsoft of course does not. As Jose pointed out, such
+> standards extensions do not exist for psABI ELF extensions for various
+> architectures either.
+> 
+> While it may be that we do end up needing to standardize these ABIs for BPF,
+> I'm beginning to think that we should just remove them from the current WG
+> charter, and consider standardizing them at a later time if it's clear that it's
+> actually necessary. I think this is especially true given that we don't seem to be
+> getting any closer to having consensus, and that we're very short on time given
+> that Erik is going to be proposing the charter to the rest of the ADs in just two
+> days on 5/25.
+> 
+> Thanks,
+> David
 
-One of the feedbacks we got from folks working with containers heavily
-was that inability to use purely FD-based location specification was an
-unfortunate limitation and hindrance for BPF_OBJ_PIN and BPF_OBJ_GET
-commands. This patch closes this oversight, adding path_fd field to
-BPF_OBJ_PIN and BPF_OBJ_GET UAPI, following conventions established by
-*at() syscalls for dirfd + pathname combinations.
+I can tell you it's very important to those who work on the ebpf-for-windows project that the ELF format is common between Linux and Windows so that tools like
+llvm-objdump and bpftool and other BPF-specific ELF parsing tools work for both
+Linux and Windows.   We don't want Windows to diverge.
 
-This now allows interesting possibilities like working with detached BPF
-FS mount (e.g., to perform multiple pinnings without running a risk of
-someone interfering with them), and generally making pinning/getting
-more secure and not prone to any races and/or security attacks.
+As such, I feel strongly that it is a requirement to be standardized right away.
+Hence I would not want this removed from the charter unless there's an effort
+to do it somewhere else right away, which would seem to increase the coordination
+burden.
 
-This is demonstrated by a selftest added in subsequent patch that takes
-advantage of new mount APIs (fsopen, fsconfig, fsmount) to demonstrate
-creating detached BPF FS mount, pinning, and then getting BPF map out of
-it, all while never exposing this private instance of BPF FS to outside
-worlds.
+Dave
 
-Reviewed-by: Christian Brauner <brauner@kernel.org>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- include/linux/bpf.h            |  4 ++--
- include/uapi/linux/bpf.h       | 10 ++++++++++
- kernel/bpf/inode.c             | 16 ++++++++--------
- kernel/bpf/syscall.c           | 25 ++++++++++++++++++++-----
- tools/include/uapi/linux/bpf.h | 10 ++++++++++
- tools/lib/bpf/bpf.c            | 17 ++++++++++++++---
- tools/lib/bpf/bpf.h            | 18 ++++++++++++++++--
- tools/lib/bpf/libbpf.map       |  2 ++
- 8 files changed, 82 insertions(+), 20 deletions(-)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 36e4b2d8cca2..f58895830ada 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2077,8 +2077,8 @@ struct file *bpf_link_new_file(struct bpf_link *lin=
-k, int *reserved_fd);
- struct bpf_link *bpf_link_get_from_fd(u32 ufd);
- struct bpf_link *bpf_link_get_curr_or_next(u32 *id);
-=20
--int bpf_obj_pin_user(u32 ufd, const char __user *pathname);
--int bpf_obj_get_user(const char __user *pathname, int flags);
-+int bpf_obj_pin_user(u32 ufd, int path_fd, const char __user *pathname);
-+int bpf_obj_get_user(int path_fd, const char __user *pathname, int flags=
-);
-=20
- #define BPF_ITER_FUNC_PREFIX "bpf_iter_"
- #define DEFINE_BPF_ITER_FUNC(target, args...)			\
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 1bb11a6ee667..9273c654743c 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1272,6 +1272,9 @@ enum {
-=20
- /* Create a map that will be registered/unregesitered by the backed bpf_=
-link */
- 	BPF_F_LINK		=3D (1U << 13),
-+
-+/* Get path from provided FD in BPF_OBJ_PIN/BPF_OBJ_GET commands */
-+	BPF_F_PATH_FD		=3D (1U << 14),
- };
-=20
- /* Flags for BPF_PROG_QUERY. */
-@@ -1420,6 +1423,13 @@ union bpf_attr {
- 		__aligned_u64	pathname;
- 		__u32		bpf_fd;
- 		__u32		file_flags;
-+		/* Same as dirfd in openat() syscall; see openat(2)
-+		 * manpage for details of path FD and pathname semantics;
-+		 * path_fd should accompanied by BPF_F_PATH_FD flag set in
-+		 * file_flags field, otherwise it should be set to zero;
-+		 * if BPF_F_PATH_FD flag is not set, AT_FDCWD is assumed.
-+		 */
-+		__s32		path_fd;
- 	};
-=20
- 	struct { /* anonymous struct used by BPF_PROG_ATTACH/DETACH commands */
-diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
-index 329f27d5cacf..4174f76133df 100644
---- a/kernel/bpf/inode.c
-+++ b/kernel/bpf/inode.c
-@@ -435,7 +435,7 @@ static int bpf_iter_link_pin_kernel(struct dentry *pa=
-rent,
- 	return ret;
- }
-=20
--static int bpf_obj_do_pin(const char __user *pathname, void *raw,
-+static int bpf_obj_do_pin(int path_fd, const char __user *pathname, void=
- *raw,
- 			  enum bpf_type type)
- {
- 	struct dentry *dentry;
-@@ -444,7 +444,7 @@ static int bpf_obj_do_pin(const char __user *pathname=
-, void *raw,
- 	umode_t mode;
- 	int ret;
-=20
--	dentry =3D user_path_create(AT_FDCWD, pathname, &path, 0);
-+	dentry =3D user_path_create(path_fd, pathname, &path, 0);
- 	if (IS_ERR(dentry))
- 		return PTR_ERR(dentry);
-=20
-@@ -477,7 +477,7 @@ static int bpf_obj_do_pin(const char __user *pathname=
-, void *raw,
- 	return ret;
- }
-=20
--int bpf_obj_pin_user(u32 ufd, const char __user *pathname)
-+int bpf_obj_pin_user(u32 ufd, int path_fd, const char __user *pathname)
- {
- 	enum bpf_type type;
- 	void *raw;
-@@ -487,14 +487,14 @@ int bpf_obj_pin_user(u32 ufd, const char __user *pa=
-thname)
- 	if (IS_ERR(raw))
- 		return PTR_ERR(raw);
-=20
--	ret =3D bpf_obj_do_pin(pathname, raw, type);
-+	ret =3D bpf_obj_do_pin(path_fd, pathname, raw, type);
- 	if (ret !=3D 0)
- 		bpf_any_put(raw, type);
-=20
- 	return ret;
- }
-=20
--static void *bpf_obj_do_get(const char __user *pathname,
-+static void *bpf_obj_do_get(int path_fd, const char __user *pathname,
- 			    enum bpf_type *type, int flags)
- {
- 	struct inode *inode;
-@@ -502,7 +502,7 @@ static void *bpf_obj_do_get(const char __user *pathna=
-me,
- 	void *raw;
- 	int ret;
-=20
--	ret =3D user_path_at(AT_FDCWD, pathname, LOOKUP_FOLLOW, &path);
-+	ret =3D user_path_at(path_fd, pathname, LOOKUP_FOLLOW, &path);
- 	if (ret)
- 		return ERR_PTR(ret);
-=20
-@@ -526,7 +526,7 @@ static void *bpf_obj_do_get(const char __user *pathna=
-me,
- 	return ERR_PTR(ret);
- }
-=20
--int bpf_obj_get_user(const char __user *pathname, int flags)
-+int bpf_obj_get_user(int path_fd, const char __user *pathname, int flags=
-)
- {
- 	enum bpf_type type =3D BPF_TYPE_UNSPEC;
- 	int f_flags;
-@@ -537,7 +537,7 @@ int bpf_obj_get_user(const char __user *pathname, int=
- flags)
- 	if (f_flags < 0)
- 		return f_flags;
-=20
--	raw =3D bpf_obj_do_get(pathname, &type, f_flags);
-+	raw =3D bpf_obj_do_get(path_fd, pathname, &type, f_flags);
- 	if (IS_ERR(raw))
- 		return PTR_ERR(raw);
-=20
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index b2621089904b..c7f6807215e6 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2697,23 +2697,38 @@ static int bpf_prog_load(union bpf_attr *attr, bp=
-fptr_t uattr, u32 uattr_size)
- 	return err;
- }
-=20
--#define BPF_OBJ_LAST_FIELD file_flags
-+#define BPF_OBJ_LAST_FIELD path_fd
-=20
- static int bpf_obj_pin(const union bpf_attr *attr)
- {
--	if (CHECK_ATTR(BPF_OBJ) || attr->file_flags !=3D 0)
-+	int path_fd;
-+
-+	if (CHECK_ATTR(BPF_OBJ) || attr->file_flags & ~BPF_F_PATH_FD)
-+		return -EINVAL;
-+
-+	/* path_fd has to be accompanied by BPF_F_PATH_FD flag */
-+	if (!(attr->file_flags & BPF_F_PATH_FD) && attr->path_fd)
- 		return -EINVAL;
-=20
--	return bpf_obj_pin_user(attr->bpf_fd, u64_to_user_ptr(attr->pathname));
-+	path_fd =3D attr->file_flags & BPF_F_PATH_FD ? attr->path_fd : AT_FDCWD=
-;
-+	return bpf_obj_pin_user(attr->bpf_fd, path_fd,
-+				u64_to_user_ptr(attr->pathname));
- }
-=20
- static int bpf_obj_get(const union bpf_attr *attr)
- {
-+	int path_fd;
-+
- 	if (CHECK_ATTR(BPF_OBJ) || attr->bpf_fd !=3D 0 ||
--	    attr->file_flags & ~BPF_OBJ_FLAG_MASK)
-+	    attr->file_flags & ~(BPF_OBJ_FLAG_MASK | BPF_F_PATH_FD))
-+		return -EINVAL;
-+
-+	/* path_fd has to be accompanied by BPF_F_PATH_FD flag */
-+	if (!(attr->file_flags & BPF_F_PATH_FD) && attr->path_fd)
- 		return -EINVAL;
-=20
--	return bpf_obj_get_user(u64_to_user_ptr(attr->pathname),
-+	path_fd =3D attr->file_flags & BPF_F_PATH_FD ? attr->path_fd : AT_FDCWD=
-;
-+	return bpf_obj_get_user(path_fd, u64_to_user_ptr(attr->pathname),
- 				attr->file_flags);
- }
-=20
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index 1bb11a6ee667..9273c654743c 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1272,6 +1272,9 @@ enum {
-=20
- /* Create a map that will be registered/unregesitered by the backed bpf_=
-link */
- 	BPF_F_LINK		=3D (1U << 13),
-+
-+/* Get path from provided FD in BPF_OBJ_PIN/BPF_OBJ_GET commands */
-+	BPF_F_PATH_FD		=3D (1U << 14),
- };
-=20
- /* Flags for BPF_PROG_QUERY. */
-@@ -1420,6 +1423,13 @@ union bpf_attr {
- 		__aligned_u64	pathname;
- 		__u32		bpf_fd;
- 		__u32		file_flags;
-+		/* Same as dirfd in openat() syscall; see openat(2)
-+		 * manpage for details of path FD and pathname semantics;
-+		 * path_fd should accompanied by BPF_F_PATH_FD flag set in
-+		 * file_flags field, otherwise it should be set to zero;
-+		 * if BPF_F_PATH_FD flag is not set, AT_FDCWD is assumed.
-+		 */
-+		__s32		path_fd;
- 	};
-=20
- 	struct { /* anonymous struct used by BPF_PROG_ATTACH/DETACH commands */
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 128ac723c4ea..ed86b37d8024 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -572,20 +572,30 @@ int bpf_map_update_batch(int fd, const void *keys, =
-const void *values, __u32 *co
- 				    (void *)keys, (void *)values, count, opts);
- }
-=20
--int bpf_obj_pin(int fd, const char *pathname)
-+int bpf_obj_pin_opts(int fd, const char *pathname, const struct bpf_obj_=
-pin_opts *opts)
- {
--	const size_t attr_sz =3D offsetofend(union bpf_attr, file_flags);
-+	const size_t attr_sz =3D offsetofend(union bpf_attr, path_fd);
- 	union bpf_attr attr;
- 	int ret;
-=20
-+	if (!OPTS_VALID(opts, bpf_obj_pin_opts))
-+		return libbpf_err(-EINVAL);
-+
- 	memset(&attr, 0, attr_sz);
-+	attr.path_fd =3D OPTS_GET(opts, path_fd, 0);
- 	attr.pathname =3D ptr_to_u64((void *)pathname);
-+	attr.file_flags =3D OPTS_GET(opts, file_flags, 0);
- 	attr.bpf_fd =3D fd;
-=20
- 	ret =3D sys_bpf(BPF_OBJ_PIN, &attr, attr_sz);
- 	return libbpf_err_errno(ret);
- }
-=20
-+int bpf_obj_pin(int fd, const char *pathname)
-+{
-+	return bpf_obj_pin_opts(fd, pathname, NULL);
-+}
-+
- int bpf_obj_get(const char *pathname)
- {
- 	return bpf_obj_get_opts(pathname, NULL);
-@@ -593,7 +603,7 @@ int bpf_obj_get(const char *pathname)
-=20
- int bpf_obj_get_opts(const char *pathname, const struct bpf_obj_get_opts=
- *opts)
- {
--	const size_t attr_sz =3D offsetofend(union bpf_attr, file_flags);
-+	const size_t attr_sz =3D offsetofend(union bpf_attr, path_fd);
- 	union bpf_attr attr;
- 	int fd;
-=20
-@@ -601,6 +611,7 @@ int bpf_obj_get_opts(const char *pathname, const stru=
-ct bpf_obj_get_opts *opts)
- 		return libbpf_err(-EINVAL);
-=20
- 	memset(&attr, 0, attr_sz);
-+	attr.path_fd =3D OPTS_GET(opts, path_fd, 0);
- 	attr.pathname =3D ptr_to_u64((void *)pathname);
- 	attr.file_flags =3D OPTS_GET(opts, file_flags, 0);
-=20
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index a2c091389b18..9aa0ee473754 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -284,16 +284,30 @@ LIBBPF_API int bpf_map_update_batch(int fd, const v=
-oid *keys, const void *values
- 				    __u32 *count,
- 				    const struct bpf_map_batch_opts *opts);
-=20
--struct bpf_obj_get_opts {
-+struct bpf_obj_pin_opts {
- 	size_t sz; /* size of this struct for forward/backward compatibility */
-=20
- 	__u32 file_flags;
-+	int path_fd;
-=20
- 	size_t :0;
- };
--#define bpf_obj_get_opts__last_field file_flags
-+#define bpf_obj_pin_opts__last_field path_fd
-=20
- LIBBPF_API int bpf_obj_pin(int fd, const char *pathname);
-+LIBBPF_API int bpf_obj_pin_opts(int fd, const char *pathname,
-+				const struct bpf_obj_pin_opts *opts);
-+
-+struct bpf_obj_get_opts {
-+	size_t sz; /* size of this struct for forward/backward compatibility */
-+
-+	__u32 file_flags;
-+	int path_fd;
-+
-+	size_t :0;
-+};
-+#define bpf_obj_get_opts__last_field path_fd
-+
- LIBBPF_API int bpf_obj_get(const char *pathname);
- LIBBPF_API int bpf_obj_get_opts(const char *pathname,
- 				const struct bpf_obj_get_opts *opts);
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 9171ac89a802..7521a2fb7626 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -393,4 +393,6 @@ LIBBPF_1.2.0 {
- } LIBBPF_1.1.0;
-=20
- LIBBPF_1.3.0 {
-+	global:
-+		bpf_obj_pin_opts;
- } LIBBPF_1.2.0;
---=20
-2.34.1
-
+-- 
+Bpf mailing list
+Bpf@ietf.org
+https://www.ietf.org/mailman/listinfo/bpf
