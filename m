@@ -1,150 +1,168 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA6531F934
-	for <bpf@vger.kernel.org>; Tue, 23 May 2023 19:50:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DB75C433D2;
-	Tue, 23 May 2023 19:49:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1684871402;
-	bh=fBS/TFMmP5wWRy24F52O1gwfStwYk0nNfHkwST2oexI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NG455Tl0vWLpNic92+yDmnydWpWAOAAxtUmp/dTwFggd4/CtMVMKZIqB6o9vFVF7p
-	 8ZDXi/cDVJA+QrAgVNU7tQMV9jCFKsRMWPLtUSJ+xCfIELMXFWu1TRAbynXFmudQgG
-	 aiILmeO+z++iOIYl7sPUdbqKgBD4n1b94lSXjEpFUVd1qahQuPj5FItjnq7Jc3NJF0
-	 zWet0be6sE9jG5K99mRyWsiTFKPy/Nusdokl4atQTRDYWZ+Oy4QZnfzAjR9q/3OKRs
-	 7E/1vAWF3Hx8Eo7hMopeUmge8NDk8zlNHs8cjjORHyVNWUOsZUbb670U8CMOqTpidz
-	 XARRjGUWtsBRw==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Song Liu <song@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	stable@vger.kernel.org,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Dave Marchevsky <davemarchevsky@fb.com>,
-	Joanne Koong <joannelkoong@gmail.com>,
-	Delyan Kratunov <delyank@fb.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: [PATCH 2/2] [v2] bpf: fix bpf_probe_read_kernel prototype mismatch
-Date: Tue, 23 May 2023 21:43:07 +0200
-Message-Id: <20230523194930.2116181-2-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230523194930.2116181-1-arnd@kernel.org>
-References: <20230523194930.2116181-1-arnd@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F6B21F957
+	for <bpf@vger.kernel.org>; Tue, 23 May 2023 20:28:33 +0000 (UTC)
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56AAD129
+	for <bpf@vger.kernel.org>; Tue, 23 May 2023 13:28:31 -0700 (PDT)
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-3f6915ca22eso2230821cf.0
+        for <bpf@vger.kernel.org>; Tue, 23 May 2023 13:28:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684873710; x=1687465710;
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PU/NLuQUlhscdkbhjCJlX82IImb++V3dtI5rcUtW5BU=;
+        b=OvzMMWOfBcQyfLYqsUAHxAf5UKkWx54WvWIBz7dTQGs+lXqs68hRO/dMiwzoXWzGN6
+         PeuDyOReO8YGT9sQqKYlM+hlytHCNztkUiFB5gzGtCYug5fXW58y1XTpoRXph6OUBH16
+         mmXBHL4IJza7wZSgb9/UX0N44O0Beo5AfomTkr7S2ViosxE6b2+j/RUV6TIIW5zoSRgc
+         /655tY/LVr01rj4xJXpBP8dm1akSDyAAGgNueF4SGornVI+cw797pgvMMaaqfFxd9H/s
+         bnVqGeJrbhYiMgK17lQw5ZZfxkSv9wnJY7ImM8dZhUyHVpYnnPLvzutdRi5tYzZW5r9h
+         Plzg==
+X-Gm-Message-State: AC+VfDwHtBm7sHw4XY5mpsZlAkxKhJO5ohW/+Jz7PKCJh44GlWIYkDXb
+	plMIxpL2OtR/nOH3tUKhdh8=
+X-Google-Smtp-Source: ACHHUZ712wC5k92k+wbFQ8O1cQS+W1/eynD0uWjaM69uJohdw9fcuc8acodueq6rSirV7XFBneflHg==
+X-Received: by 2002:ac8:57d3:0:b0:3e4:e801:471c with SMTP id w19-20020ac857d3000000b003e4e801471cmr22908925qta.19.1684873710122;
+        Tue, 23 May 2023 13:28:30 -0700 (PDT)
+Received: from maniforge ([2620:10d:c091:400::5:5c45])
+        by smtp.gmail.com with ESMTPSA id cp11-20020a05622a420b00b003e89e2b3c23sm3163691qtb.58.2023.05.23.13.28.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 13:28:29 -0700 (PDT)
+Date: Tue, 23 May 2023 15:28:27 -0500
+From: David Vernet <void@manifault.com>
+To: Michael Richardson <mcr+ietf@sandelman.ca>
+Cc: "bpf@ietf.org" <bpf@ietf.org>, bpf <bpf@vger.kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	"Jose E. Marchesi" <jemarch@gnu.org>,
+	Erik Kline <ek.ietf@gmail.com>,
+	"Suresh Krishnan (sureshk)" <sureshk@cisco.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Dave Thaler <dthaler@microsoft.com>
+Subject: Re: [Bpf] IETF BPF working group draft charter
+Message-ID: <20230523202827.GA33347@maniforge>
+References: <PH7PR21MB38780769D482CC5F83768D3CA37E9@PH7PR21MB3878.namprd21.prod.outlook.com>
+ <87v8grkn67.fsf@gnu.org>
+ <PH7PR21MB3878BCFA99C1585203982670A37E9@PH7PR21MB3878.namprd21.prod.outlook.com>
+ <87r0rdy26o.fsf@gnu.org>
+ <PH7PR21MB3878B869D69FD35FA718AF5DA37FA@PH7PR21MB3878.namprd21.prod.outlook.com>
+ <20230523163200.GD20100@maniforge>
+ <18272.1684864698@localhost>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <18272.1684864698@localhost>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+	SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Tue, May 23, 2023 at 01:58:18PM -0400, Michael Richardson wrote:
+> 
+> David Vernet <void@manifault.com> wrote:
+>     > As far as I know (please correct me if I'm wrong), there isn't really a
+>     > precedence for standardizing ABIs like this. For example, x86 calling
+> 
+> All of the eBPF work seems unprecedented.
+> I don't see having this in the charter is a problem.
+> 
+> We may fail to get consensus on it, and not make a milestone, but I don't see
+> a reason not to be allowed to talk about this.
+> (and maybe in the end, it's a no-op)
 
-bpf_probe_read_kernel() has a __weak definition in core.c and another
-definition with an incompatible prototype in kernel/trace/bpf_trace.c,
-when CONFIG_BPF_EVENTS is enabled.
+Hi Michael,
 
-Since the two are incompatible, there cannot be a shared declaration
-in a header file, but the lack of a prototype causes a W=1 warning:
+So apologies in advance if my lack of experience with IETF proceedings
+is glaringly obvious, and I'd appreciate clarification in any situation
+in which I'm mistaken.
 
-kernel/bpf/core.c:1638:12: error: no previous prototype for 'bpf_probe_read_kernel' [-Werror=missing-prototypes]
+My understanding based on the conversations that I've had thus far is
+that part of the goal of arriving at the finalized WG charter is to
+determine what's in scope and out of scope. It's a bit of a murky
+proposition because some things that we think _could_ be in scope, such
+as in this case topics related to psABI, may not end up having a
+document if we can't get consensus. In other words, being in the WG
+charter doesn't imply that something is in-scope and will have a
+document written, but _not_ being in the charter does preclude it from
+being discussed in this iteration of the WG because of this line:
 
-Change the core.c file to only reference the inner
-bpf_probe_read_kernel_common() helper and provide a prototype for that.
+> The working group shall not adopt new work until these
+> documents have progressed to working group last call.
 
-Aside from the warning, this addresses a bug on 32-bit architectures
-from incorrect argument passing with the mismatched prototype.
+The implication of this is that it's not necessarily a problem to have
+some false-positives in terms of what we cover, but it can be
+problematic if we leave out something important because we'll have to
+cover all of the other topics first. I'd imagine this would tend to make
+the default behavior for deciding scope in WG charters to be permissive
+rather than dissmive, which makes sense to me.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
---
-v2: rewrite completely to fix the mismatch.
----
- include/linux/bpf.h      | 2 ++
- kernel/bpf/core.c        | 9 ++++++---
- kernel/trace/bpf_trace.c | 3 +--
- 3 files changed, 9 insertions(+), 5 deletions(-)
+Assuming I haven't already gone off the rails in terms of my
+understanding, let me try to clarify why despite all that, I still think
+it's warranted for us to remove psABI as part of the scope of the WG.
+There are really two main reasons:
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 36e4b2d8cca2..6a231ec61a87 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2619,6 +2619,8 @@ static inline void bpf_dynptr_set_rdonly(struct bpf_dynptr_kern *ptr)
- }
- #endif /* CONFIG_BPF_SYSCALL */
- 
-+int bpf_probe_read_kernel_common(void *dst, u32 size, const void *unsafe_ptr);
-+
- void __bpf_free_used_btfs(struct bpf_prog_aux *aux,
- 			  struct btf_mod_pair *used_btfs, u32 len);
- 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 0926714641eb..e7f0d5f146fa 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -35,6 +35,7 @@
- #include <linux/bpf_verifier.h>
- #include <linux/nodemask.h>
- #include <linux/nospec.h>
-+#include <linux/bpf.h>
- #include <linux/bpf_mem_alloc.h>
- #include <linux/memcontrol.h>
- 
-@@ -1635,11 +1636,13 @@ bool bpf_opcode_in_insntable(u8 code)
- }
- 
- #ifndef CONFIG_BPF_JIT_ALWAYS_ON
--u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
-+#ifndef CONFIG_BPF_EVENTS
-+int bpf_probe_read_kernel_common(void * dst, u32 size, const void *unsafe_ptr)
- {
- 	memset(dst, 0, size);
- 	return -EFAULT;
- }
-+#endif
- 
- /**
-  *	___bpf_prog_run - run eBPF program on a given context
-@@ -1931,8 +1934,8 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
- 		DST = *(SIZE *)(unsigned long) (SRC + insn->off);	\
- 		CONT;							\
- 	LDX_PROBE_MEM_##SIZEOP:						\
--		bpf_probe_read_kernel(&DST, sizeof(SIZE),		\
--				      (const void *)(long) (SRC + insn->off));	\
-+		bpf_probe_read_kernel_common(&DST, sizeof(SIZE),	\
-+			      (const void *)(long) (SRC + insn->off));	\
- 		DST = *((SIZE *)&DST);					\
- 		CONT;
- 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 2bc41e6ac9fe..290fdce2ce53 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -223,8 +223,7 @@ const struct bpf_func_proto bpf_probe_read_user_str_proto = {
- 	.arg3_type	= ARG_ANYTHING,
- };
- 
--static __always_inline int
--bpf_probe_read_kernel_common(void *dst, u32 size, const void *unsafe_ptr)
-+int bpf_probe_read_kernel_common(void *dst, u32 size, const void *unsafe_ptr)
- {
- 	int ret;
- 
--- 
-2.39.2
+1. As is hopefully clear at this point, there is a wide and historical
+   industry precedence for not standardizing on psABI. For example, to
+   my knowledge, RISC-V [0] develops and ratifies the RISC-V ISA through
+   the RISC-V International Technical Working Groups, but there is no
+   such ratified standard or specification for RISC-V calling
+   conventions (the operative word of course being "convention"). The
+   same is true (to my knowledge) of _all_ psABI ELF extensions, as Jose
+   pointed out earlier in the conversation.
+
+[0]: https://riscv.org/technical/specifications/
+
+   With all that said, unless there's more context behind why we think we
+   need to standardize psABI which hasn't yet been brought forward, I
+   don't see any way we'd achieve consensus when we discuss it in the
+   WG. And the reason I specifically think that's the case for ABI (ELF
+   or otherwise) is that there's such a well-established precedence
+   already for not standardizing it. I guess it's true that there's no
+   harm in including it and discussing it, but as things currently
+   stand, it also doesn't seem very productive to include it if there's
+   already (IMHO) reasonably clear evidence that it's out of scope. To
+   go back to my claim made in another email, I think the onus is on the
+   folks who think it's in scope to explain why, rather than the folks
+   who think we should follow industry precedence to justify that.
+
+2. Assuming that I'm wrong, and ABI / ELF are in scope for
+   standardization, we would still have to do a lot of premliminary
+   work to determine that. For example, we may end up wanting to
+   standardize that maps are put into .maps sections in an ELF file, but
+   that would only make sense if we created a document standardizing
+   cross-platform map types. The same holds true for cross-platform
+   program types, etc. The dependency DAG for discussing ELF has a depth
+   of at least 2, and given that it's as-yet unclear whether ELF / psABI
+   is an appropriate topic for standardization in the first place, it
+   really feels to me like leaving it out of the WG is the right move.
+
+Thanks,
+David
+
+> 
+> --
+> Michael Richardson <mcr+IETF@sandelman.ca>   . o O ( IPv6 IøT consulting )
+>            Sandelman Software Works Inc, Ottawa and Worldwide
+> 
+> 
+> 
+> 
+
+
+
+> -- 
+> Bpf mailing list
+> Bpf@ietf.org
+> https://www.ietf.org/mailman/listinfo/bpf
 
