@@ -1,98 +1,101 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0F8D1F19E
-	for <bpf@vger.kernel.org>; Tue, 23 May 2023 16:21:28 +0000 (UTC)
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCBFC2;
-	Tue, 23 May 2023 09:21:27 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-510b56724caso2064253a12.1;
-        Tue, 23 May 2023 09:21:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684858886; x=1687450886;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RfNPZTD/p+4V8hQdIpreZULWAY9gpVre83yDlsSvicI=;
-        b=NsYE9fByGmrU3JQR+VXrwDIRrFEijF15j6AbdN+V76aaO60pDuHG4yynLj+PYNjvwn
-         m0kZj/Lg7h8CeUNwvY8GEUzS76lOofO187YQelRhY4GbPfqEbzlYrVTT1li8PiCHSZbg
-         x9mZtePEWwoF4hoIU4zTWKhLGJq+6eF9Ve5ARqvqcXDiLeIIji5jt10aYu1MderrGuhd
-         oU41qRrhQRGwwS+fqFk1whdJjc0WIUUz/1MPAanyjSLatcqu2eXDZ+DG5WAcd2ndt/Ps
-         5uOIK8K21DcaaeaRUvP/RD/OXuKg96KNlHA80jQnHs3RX5f8fvm1jt1MdCu7s6L98/7o
-         4Jvg==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D872069F
+	for <bpf@vger.kernel.org>; Tue, 23 May 2023 16:32:06 +0000 (UTC)
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F45C2
+	for <bpf@vger.kernel.org>; Tue, 23 May 2023 09:32:04 -0700 (PDT)
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-75b00e5f8e4so6799085a.0
+        for <bpf@vger.kernel.org>; Tue, 23 May 2023 09:32:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684858886; x=1687450886;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1684859524; x=1687451524;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RfNPZTD/p+4V8hQdIpreZULWAY9gpVre83yDlsSvicI=;
-        b=FDhhXeBc8gsIF0RjVnO1wIOlAA30/wkDY8z9831jRFHIlD+/1gFV4kkofypJI0RsE7
-         I64Oe2CTYUTDcTKV6EkEOQ62dHcpfF6WpP1OU6Dj+QTbCDkuz4esaj6iWTU8IXY++6sG
-         ZF6hnAOIbatIGYCcwV67j1Q21zDAzQZpGFktcWZPdSIpYSCG8T6Q49RiOO+RUBf8s87J
-         Qbp79Y966gYGLD0xrnqiFLpvElJ4jvTwF989ipkrqETN5kth+gy4pd6+xQMYnJikc1mB
-         106vuvdlf/oEPrW1oZgF9KPw5Zpmh3ztYkqOLB0mJFfBkx7dGr/BKEwl3fXU9thmJxNF
-         +wMA==
-X-Gm-Message-State: AC+VfDyI/kxglnJoeDY8NtUEg+sN7VKuBqsgWA4AReOR3sGbl7jk1ame
-	PgIxzInP/jtxk2X8LfPEJSS/vjQDsX9nlkaLjIhwodVD9aE=
-X-Google-Smtp-Source: ACHHUZ4V74rDmNWdqjXQM2H7VQ2AS/0dzmFJUpdq1WYAxuDS1znGNNM4KKiopcRMTNfc7pU2xFd3pkQ9HXun3aNjazY=
-X-Received: by 2002:a05:6402:1d49:b0:50b:2088:3533 with SMTP id
- dz9-20020a0564021d4900b0050b20883533mr21653795edb.1.1684858885759; Tue, 23
- May 2023 09:21:25 -0700 (PDT)
+        bh=2fxaaxZmnkZ6/IheHqrPi/4FP/lLx6cJmznjM+Jz/cU=;
+        b=j/6H7HPxFGlEDNwMLQPWCxzhZqkpyi9y5NMttax1rkrHQy22v/tE+BobB99x4LtE3p
+         IbciK0NA6hTRNJhEilkUq08sEJmcUR51Ul5lTp8BCnYsTuvkF9dVKm1WZmHNHlYuM8ZQ
+         4fEyz38+SbSYeMIMIm7YGiTTZYgpRU8grzZafnq1QPg20oSFp5OKI3/FpinBRscxRREn
+         i6SpLdPRrbeK51kRd9uQosGoZTD74fVk0gXT9DGAe/Oh0fCIoN0BJp9FV/TdzhVTL95m
+         j88PEOrY1RVrK4NrLKRemBr9+fhzb4Fs62RF7gwPyEIBjoGB3L55ty8eWPSfjbDFMFp8
+         FJPw==
+X-Gm-Message-State: AC+VfDzchga4Qgp0JrAfLdl7fcwso9ARvXUew4q73xGJdKpHWD8Trftk
+	tVClqdLPn7DOtADpUZEpq5I=
+X-Google-Smtp-Source: ACHHUZ5rWPuUauTb5eE9Xh6sGhOy0DHmGAQS2gxUEGH8U/A67JLtx7HbZrPrnbzc1XoQchjZ81IwdQ==
+X-Received: by 2002:a37:c16:0:b0:75b:23a0:d9e2 with SMTP id 22-20020a370c16000000b0075b23a0d9e2mr4226770qkm.56.1684859523560;
+        Tue, 23 May 2023 09:32:03 -0700 (PDT)
+Received: from maniforge ([2620:10d:c091:400::5:5c45])
+        by smtp.gmail.com with ESMTPSA id m6-20020ae9e006000000b0074e4b1fe0aesm2608428qkk.94.2023.05.23.09.32.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 09:32:03 -0700 (PDT)
+Date: Tue, 23 May 2023 11:32:00 -0500
+From: David Vernet <void@manifault.com>
+To: Dave Thaler <dthaler=40microsoft.com@dmarc.ietf.org>
+Cc: "Jose E. Marchesi" <jemarch@gnu.org>, "bpf@ietf.org" <bpf@ietf.org>,
+	bpf <bpf@vger.kernel.org>, Erik Kline <ek.ietf@gmail.com>,
+	"Suresh Krishnan (sureshk)" <sureshk@cisco.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Alexei Starovoitov <ast@kernel.org>
+Subject: Re: [Bpf] IETF BPF working group draft charter
+Message-ID: <20230523163200.GD20100@maniforge>
+References: <PH7PR21MB38780769D482CC5F83768D3CA37E9@PH7PR21MB3878.namprd21.prod.outlook.com>
+ <87v8grkn67.fsf@gnu.org>
+ <PH7PR21MB3878BCFA99C1585203982670A37E9@PH7PR21MB3878.namprd21.prod.outlook.com>
+ <87r0rdy26o.fsf@gnu.org>
+ <PH7PR21MB3878B869D69FD35FA718AF5DA37FA@PH7PR21MB3878.namprd21.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230522232917.2454595-1-andrii@kernel.org> <20230522232917.2454595-4-andrii@kernel.org>
- <383289fa-1036-b569-1ebf-5da8ba41c58d@iogearbox.net>
-In-Reply-To: <383289fa-1036-b569-1ebf-5da8ba41c58d@iogearbox.net>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 23 May 2023 09:21:13 -0700
-Message-ID: <CAEf4BzaPugw_1ktiOcmC6aqRrH503VXcvZaaeBpEWxPht9G1Ww@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next 3/4] libbpf: add opts-based bpf_obj_pin() API
- and add support for path_fd
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, ast@kernel.org, 
-	martin.lau@kernel.org, cyphar@cyphar.com, brauner@kernel.org, 
-	lennart@poettering.net, linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH7PR21MB3878B869D69FD35FA718AF5DA37FA@PH7PR21MB3878.namprd21.prod.outlook.com>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+	T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Tue, May 23, 2023 at 7:38=E2=80=AFAM Daniel Borkmann <daniel@iogearbox.n=
-et> wrote:
->
-> On 5/23/23 1:29 AM, Andrii Nakryiko wrote:
-> [...]
-> > diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> > index a5aa3a383d69..7a4fe80da360 100644
-> > --- a/tools/lib/bpf/libbpf.map
-> > +++ b/tools/lib/bpf/libbpf.map
-> > @@ -389,5 +389,6 @@ LIBBPF_1.2.0 {
-> >               bpf_link__update_map;
-> >               bpf_link_get_info_by_fd;
-> >               bpf_map_get_info_by_fd;
-> > +             bpf_obj_pin_opts;
->
-> Given 1.2.0 went out [0], shouldn't this go into a new LIBBPF_1.3.0 secti=
-on?
+On Thu, May 18, 2023 at 07:42:11PM +0000, Dave Thaler wrote:
+> Jose E. Marchesi <jemarch@gnu.org> wrote:
+> > I would think that the way the x86_64, aarch64, risc-v, sparc, mips, powerpc
+> > architectures, along with their variants, handle their ELF extensions and
+> > psABI, ensures interoperability good enough for the problem at hand, but ok.
+> > I'm definitely not an expert in these matters.
+> 
+> I am not familiar enough with those to make any comment about that.
 
-yep, you are right, this should have gone into a new 1.3.0 sections.
-I'll add "starting v1.3 dev cycle" patch into v4 and resend.
+Hi Dave,
 
->
-> >               bpf_prog_get_info_by_fd;
-> >   } LIBBPF_1.1.0;
->
-> Thanks,
-> Daniel
->
->    [0] https://lore.kernel.org/bpf/CAEf4BzYJhzEDHarRGvidhPd-DRtu4VXxnQ=3D=
-HhOG-LZjkbK-MwQ@mail.gmail.com/
->
+Taking a step back here, perhaps we need to think about all of this more
+generically as "ABI", rather than ELF "extensions", "bindings", etc.  In
+my opinion this would include, at a minimum, the following items from
+the current proposed WG charter:
+
+* the eBPF bindings for the ELF executable file format,
+
+* the platform support ABI, including calling convention, linker
+  requirements, and relocations,
+
+As far as I know (please correct me if I'm wrong), there isn't really a
+precedence for standardizing ABIs like this. For example, x86 calling
+conventions are not standardized.  Solaris, Linux, FreeBSD, macOS, etc
+all follow the System V AMD64 ABI, but Microsoft of course does not. As
+Jose pointed out, such standards extensions do not exist for psABI ELF
+extensions for various architectures either.
+
+While it may be that we do end up needing to standardize these ABIs for
+BPF, I'm beginning to think that we should just remove them from the
+current WG charter, and consider standardizing them at a later time if
+it's clear that it's actually necessary. I think this is especially true
+given that we don't seem to be getting any closer to having consensus,
+and that we're very short on time given that Erik is going to be
+proposing the charter to the rest of the ADs in just two days on 5/25.
+
+Thanks,
+David
