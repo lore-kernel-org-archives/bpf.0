@@ -1,46 +1,46 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E241017721;
-	Tue, 23 May 2023 02:56:39 +0000 (UTC)
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F4E1CA;
-	Mon, 22 May 2023 19:56:35 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-5304d0d1eddso3712685a12.2;
-        Mon, 22 May 2023 19:56:35 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18D4C17721;
+	Tue, 23 May 2023 02:56:42 +0000 (UTC)
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C491E102;
+	Mon, 22 May 2023 19:56:39 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1ae4be0b1f3so47797555ad.0;
+        Mon, 22 May 2023 19:56:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684810594; x=1687402594;
+        d=gmail.com; s=20221208; t=1684810599; x=1687402599;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PKVXOAHKFA789J7ho2XD1RIAcfngnJV04ADcLg/bfiw=;
-        b=PLBOfDxhokrojxBBPJq3NEFU3LJCvjnED+g6f6xZt+A0ZxLxVS01ikoRchkpieKH/g
-         0UlxOz4lHwx4kqc9iYcCzAdvxHj/XKcF9L2zOWSFUxN/kGR+k3XLAVS6H9uySGW6KwvE
-         cEWuB61OeBrWFSXfL0zIcBPFjq2y7XymX5o6zXqLOj8gomqYPgDaaCv43ncGAJG4KU09
-         5cwy20JkMVOlz4LeGojm94Qj8Tc//kZTBwZWpxJ87C1wIayMIwRENBQyXRLPJQA7NdPH
-         BQamzsao93EmVoe7BAkuSSJq5GD4I5msKXgowV3+seebi/uTInGaGsSafzuYHhYHqEu7
-         oV2A==
+        bh=kLga20o0ypa3YZ6F5VBKmdyV1GP+jP4eW2M1n6l95P8=;
+        b=iz1Z8BOw4SQjVkqUOa0mEtRVTlmvHjRabBhc8ncfkkm0safwNfyOCjb64/pvfndCDR
+         SfJQpcxXkjjxpiIz+dpXZyh7jAwGuGzKJohqMjyjX8Bwad/N6aFk2Y7X3wAU5HTPfYAJ
+         zV1LnEYiPWmoq0jxCqtt9Bvq6Qjn0AqessKPVpLVLBMcdzaIINorgE/IabjgV6Ta3X8B
+         9BVhE78sLc6KBEwC98s1ikk9M/haLK1pYLHhK/XdpCCjX/qLjoi7J9BUQGYvPlHkrehO
+         GJ0b6EdNb6aTb2HRAEGshmmhpvFn6DdrJNrm03YTVbTQGuyl/S2JRoChIIECYQvFukEa
+         rARw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684810594; x=1687402594;
+        d=1e100.net; s=20221208; t=1684810599; x=1687402599;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PKVXOAHKFA789J7ho2XD1RIAcfngnJV04ADcLg/bfiw=;
-        b=N9HTbiEjwizMvA2EeP6cWNK6S33jF4H24L/ch9hPYL3JIFcNVCOwKdqtEcAfx+Piu/
-         P1tv5kykksV6hs5Xq9sWrD1emvQX6fmj/nWKFAUwxaDBgl1QNnOiymqn5/jzyrLFgMOV
-         CiPkMDBwem2drEhj2cYUeDW0Js86qxROPBdinhNYgklc6JJ/Y8El3pCFeER6couSyOr9
-         3+u3ZSCMYvlUgN9hlw0tEnR1BoHspJMIfxjrl5cKWBe4Ob0HCZ6Yx6xMN8vsNeXC0SeN
-         JixBB4fLkzXFfMIYl3pHsHSoRz3Pk5wnQzQuZLXO5Zo83ErQtR/0ccDXVVotY/dgqooQ
-         TKyg==
-X-Gm-Message-State: AC+VfDwLNghUb21+GWfK/0ZFboOnYi54DeU6bTiviteQgSJD21Zy/S1i
-	9zYrc7Q+ARAqu9N8+Ixy7as=
-X-Google-Smtp-Source: ACHHUZ7KNoPV7skQ1YdBUPxAlD+7EXy3CMKYU8RVizQgIOSiKmzZcvoKNnaJYdeW0Rlkcl7wysD7xg==
-X-Received: by 2002:a17:902:a589:b0:1ad:dd21:2691 with SMTP id az9-20020a170902a58900b001addd212691mr14232613plb.10.1684810594420;
-        Mon, 22 May 2023 19:56:34 -0700 (PDT)
+        bh=kLga20o0ypa3YZ6F5VBKmdyV1GP+jP4eW2M1n6l95P8=;
+        b=jVCV4LDyPtxlTxO22dtYTIloW94M3UQR8c+4DopXbEchUx2pDXs06z3bEbboi8j9nM
+         D+DMZJ5+7t+8h/hjJjBnCgokKHp3fm0fFgma9Vab9AsVE90GODla185AOJ3Y0FlcgKuJ
+         6G6ngPaH56IZ9vHaks+3FOKbmb+EH7twXhk2FXdv+F4AHd7I9gfzFWNvkyGgM5pa8CSH
+         HjdW6ppLwdcKd80uRt4asTGPqjBhtjeXrZgFJyX/a0O01hVXCLVlgPZLd5Mq29S/tj5O
+         YoVzZTLMF4c4X6aj0420oSZa3KBoOa6j8c0fb/Lfvq9RyPu85DEyHtE3BZVQhZj0zBX1
+         SK3g==
+X-Gm-Message-State: AC+VfDxPyzTeZC3THK3hZQwJs2ComM52sb63nTXMcywbeE+jIwvbn4EV
+	btk5FUl/ALeVJVlorICU388=
+X-Google-Smtp-Source: ACHHUZ7M/mN57jhBOpSgtRaiUaFFihFX2kXuevvGaP/b5u4A1khYyGAU1TmtL2ECL9tIORXSb64zXQ==
+X-Received: by 2002:a17:903:1108:b0:1ad:be4d:5dfe with SMTP id n8-20020a170903110800b001adbe4d5dfemr15054022plh.27.1684810599148;
+        Mon, 22 May 2023 19:56:39 -0700 (PDT)
 Received: from john.lan ([2605:59c8:148:ba10:82a6:5b19:9c99:3aad])
-        by smtp.gmail.com with ESMTPSA id h10-20020a170902748a00b001a67759f9f8sm5508285pll.106.2023.05.22.19.56.32
+        by smtp.gmail.com with ESMTPSA id h10-20020a170902748a00b001a67759f9f8sm5508285pll.106.2023.05.22.19.56.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 19:56:33 -0700 (PDT)
+        Mon, 22 May 2023 19:56:38 -0700 (PDT)
 From: John Fastabend <john.fastabend@gmail.com>
 To: jakub@cloudflare.com,
 	daniel@iogearbox.net
@@ -51,9 +51,9 @@ Cc: john.fastabend@gmail.com,
 	ast@kernel.org,
 	andrii@kernel.org,
 	will@isovalent.com
-Subject: [PATCH bpf v10 08/14] bpf: sockmap, incorrectly handling copied_seq
-Date: Mon, 22 May 2023 19:56:12 -0700
-Message-Id: <20230523025618.113937-9-john.fastabend@gmail.com>
+Subject: [PATCH bpf v10 11/14] bpf: sockmap, test shutdown() correctly exits epoll and recv()=0
+Date: Mon, 22 May 2023 19:56:15 -0700
+Message-Id: <20230523025618.113937-12-john.fastabend@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20230523025618.113937-1-john.fastabend@gmail.com>
 References: <20230523025618.113937-1-john.fastabend@gmail.com>
@@ -66,230 +66,156 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-	autolearn=ham autolearn_force=no version=3.4.6
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-The read_skb() logic is incrementing the tcp->copied_seq which is used for
-among other things calculating how many outstanding bytes can be read by
-the application. This results in application errors, if the application
-does an ioctl(FIONREAD) we return zero because this is calculated from
-the copied_seq value.
+When session gracefully shutdowns epoll needs to wake up and any recv()
+readers should return 0 not the -EAGAIN they previously returned.
 
-To fix this we move tcp->copied_seq accounting into the recv handler so
-that we update these when the recvmsg() hook is called and data is in
-fact copied into user buffers. This gives an accurate FIONREAD value
-as expected and improves ACK handling. Before we were calling the
-tcp_rcv_space_adjust() which would update 'number of bytes copied to
-user in last RTT' which is wrong for programs returning SK_PASS. The
-bytes are only copied to the user when recvmsg is handled.
+Note we use epoll instead of select to test the epoll wake on shutdown
+event as well.
 
-Doing the fix for recvmsg is straightforward, but fixing redirect and
-SK_DROP pkts is a bit tricker. Build a tcp_psock_eat() helper and then
-call this from skmsg handlers. This fixes another issue where a broken
-socket with a BPF program doing a resubmit could hang the receiver. This
-happened because although read_skb() consumed the skb through sock_drop()
-it did not update the copied_seq. Now if a single reccv socket is
-redirecting to many sockets (for example for lb) the receiver sk will be
-hung even though we might expect it to continue. The hang comes from
-not updating the copied_seq numbers and memory pressure resulting from
-that.
-
-We have a slight layer problem of calling tcp_eat_skb even if its not
-a TCP socket. To fix we could refactor and create per type receiver
-handlers. I decided this is more work than we want in the fix and we
-already have some small tweaks depending on caller that use the
-helper skb_bpf_strparser(). So we extend that a bit and always set
-the strparser bit when it is in use and then we can gate the
-seq_copied updates on this.
-
-Fixes: 04919bed948dc ("tcp: Introduce tcp_read_skb()")
 Signed-off-by: John Fastabend <john.fastabend@gmail.com>
 ---
- include/net/tcp.h  | 10 ++++++++++
- net/core/skmsg.c   | 15 +++++++--------
- net/ipv4/tcp.c     | 10 +---------
- net/ipv4/tcp_bpf.c | 28 +++++++++++++++++++++++++++-
- 4 files changed, 45 insertions(+), 18 deletions(-)
+ .../selftests/bpf/prog_tests/sockmap_basic.c  | 62 +++++++++++++++++++
+ .../bpf/progs/test_sockmap_pass_prog.c        | 32 ++++++++++
+ 2 files changed, 94 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
 
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 04a31643cda3..18a038d16434 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -1470,6 +1470,8 @@ static inline void tcp_adjust_rcv_ssthresh(struct sock *sk)
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+index 0ce25a967481..615a8164c8f0 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+@@ -2,6 +2,7 @@
+ // Copyright (c) 2020 Cloudflare
+ #include <error.h>
+ #include <netinet/tcp.h>
++#include <sys/epoll.h>
+ 
+ #include "test_progs.h"
+ #include "test_skmsg_load_helpers.skel.h"
+@@ -9,8 +10,11 @@
+ #include "test_sockmap_invalid_update.skel.h"
+ #include "test_sockmap_skb_verdict_attach.skel.h"
+ #include "test_sockmap_progs_query.skel.h"
++#include "test_sockmap_pass_prog.skel.h"
+ #include "bpf_iter_sockmap.skel.h"
+ 
++#include "sockmap_helpers.h"
++
+ #define TCP_REPAIR		19	/* TCP sock is under repair right now */
+ 
+ #define TCP_REPAIR_ON		1
+@@ -350,6 +354,62 @@ static void test_sockmap_progs_query(enum bpf_attach_type attach_type)
+ 	test_sockmap_progs_query__destroy(skel);
  }
  
- void tcp_cleanup_rbuf(struct sock *sk, int copied);
-+void __tcp_cleanup_rbuf(struct sock *sk, int copied);
-+
- 
- /* We provision sk_rcvbuf around 200% of sk_rcvlowat.
-  * If 87.5 % (7/8) of the space has been consumed, we want to override
-@@ -2326,6 +2328,14 @@ int tcp_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore);
- void tcp_bpf_clone(const struct sock *sk, struct sock *newsk);
- #endif /* CONFIG_BPF_SYSCALL */
- 
-+#ifdef CONFIG_INET
-+void tcp_eat_skb(struct sock *sk, struct sk_buff *skb);
-+#else
-+static inline void tcp_eat_skb(struct sock *sk, struct sk_buff *skb)
++#define MAX_EVENTS 10
++static void test_sockmap_skb_verdict_shutdown(void)
 +{
-+}
-+#endif
++	struct epoll_event ev, events[MAX_EVENTS];
++	int n, err, map, verdict, s, c1, p1;
++	struct test_sockmap_pass_prog *skel;
++	int epollfd;
++	int zero = 0;
++	char b;
 +
- int tcp_bpf_sendmsg_redir(struct sock *sk, bool ingress,
- 			  struct sk_msg *msg, u32 bytes, int flags);
- #endif /* CONFIG_NET_SOCK_MSG */
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 08be5f409fb8..a9060e1f0e43 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -979,10 +979,8 @@ static int sk_psock_verdict_apply(struct sk_psock *psock, struct sk_buff *skb,
- 		err = -EIO;
- 		sk_other = psock->sk;
- 		if (sock_flag(sk_other, SOCK_DEAD) ||
--		    !sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED)) {
--			skb_bpf_redirect_clear(skb);
-+		    !sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED))
- 			goto out_free;
--		}
- 
- 		skb_bpf_set_ingress(skb);
- 
-@@ -1011,18 +1009,19 @@ static int sk_psock_verdict_apply(struct sk_psock *psock, struct sk_buff *skb,
- 				err = 0;
- 			}
- 			spin_unlock_bh(&psock->ingress_lock);
--			if (err < 0) {
--				skb_bpf_redirect_clear(skb);
-+			if (err < 0)
- 				goto out_free;
--			}
- 		}
- 		break;
- 	case __SK_REDIRECT:
-+		tcp_eat_skb(psock->sk, skb);
- 		err = sk_psock_skb_redirect(psock, skb);
- 		break;
- 	case __SK_DROP:
- 	default:
- out_free:
-+		skb_bpf_redirect_clear(skb);
-+		tcp_eat_skb(psock->sk, skb);
- 		sock_drop(psock->sk, skb);
- 	}
- 
-@@ -1067,8 +1066,7 @@ static void sk_psock_strp_read(struct strparser *strp, struct sk_buff *skb)
- 		skb_dst_drop(skb);
- 		skb_bpf_redirect_clear(skb);
- 		ret = bpf_prog_run_pin_on_cpu(prog, skb);
--		if (ret == SK_PASS)
--			skb_bpf_set_strparser(skb);
-+		skb_bpf_set_strparser(skb);
- 		ret = sk_psock_map_verd(ret, skb_bpf_redirect_fetch(skb));
- 		skb->sk = NULL;
- 	}
-@@ -1176,6 +1174,7 @@ static int sk_psock_verdict_recv(struct sock *sk, struct sk_buff *skb)
- 	psock = sk_psock(sk);
- 	if (unlikely(!psock)) {
- 		len = 0;
-+		tcp_eat_skb(sk, skb);
- 		sock_drop(sk, skb);
- 		goto out;
- 	}
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index e914e3446377..a60f6f4e7cd9 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -1571,7 +1571,7 @@ static int tcp_peek_sndq(struct sock *sk, struct msghdr *msg, int len)
-  * calculation of whether or not we must ACK for the sake of
-  * a window update.
-  */
--static void __tcp_cleanup_rbuf(struct sock *sk, int copied)
-+void __tcp_cleanup_rbuf(struct sock *sk, int copied)
++	skel = test_sockmap_pass_prog__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++
++	verdict = bpf_program__fd(skel->progs.prog_skb_verdict);
++	map = bpf_map__fd(skel->maps.sock_map_rx);
++
++	err = bpf_prog_attach(verdict, map, BPF_SK_SKB_STREAM_VERDICT, 0);
++	if (!ASSERT_OK(err, "bpf_prog_attach"))
++		goto out;
++
++	s = socket_loopback(AF_INET, SOCK_STREAM);
++	if (s < 0)
++		goto out;
++	err = create_pair(s, AF_INET, SOCK_STREAM, &c1, &p1);
++	if (err < 0)
++		goto out;
++
++	err = bpf_map_update_elem(map, &zero, &c1, BPF_NOEXIST);
++	if (err < 0)
++		goto out_close;
++
++	shutdown(p1, SHUT_WR);
++
++	ev.events = EPOLLIN;
++	ev.data.fd = c1;
++
++	epollfd = epoll_create1(0);
++	if (!ASSERT_GT(epollfd, -1, "epoll_create(0)"))
++		goto out_close;
++	err = epoll_ctl(epollfd, EPOLL_CTL_ADD, c1, &ev);
++	if (!ASSERT_OK(err, "epoll_ctl(EPOLL_CTL_ADD)"))
++		goto out_close;
++	err = epoll_wait(epollfd, events, MAX_EVENTS, -1);
++	if (!ASSERT_EQ(err, 1, "epoll_wait(fd)"))
++		goto out_close;
++
++	n = recv(c1, &b, 1, SOCK_NONBLOCK);
++	ASSERT_EQ(n, 0, "recv_timeout(fin)");
++out_close:
++	close(c1);
++	close(p1);
++out:
++	test_sockmap_pass_prog__destroy(skel);
++}
++
+ void test_sockmap_basic(void)
  {
- 	struct tcp_sock *tp = tcp_sk(sk);
- 	bool time_to_ack = false;
-@@ -1786,14 +1786,6 @@ int tcp_read_skb(struct sock *sk, skb_read_actor_t recv_actor)
- 			break;
- 		}
- 	}
--	WRITE_ONCE(tp->copied_seq, seq);
--
--	tcp_rcv_space_adjust(sk);
--
--	/* Clean up data we have read: This will do ACK frames. */
--	if (copied > 0)
--		__tcp_cleanup_rbuf(sk, copied);
--
- 	return copied;
+ 	if (test__start_subtest("sockmap create_update_free"))
+@@ -384,4 +444,6 @@ void test_sockmap_basic(void)
+ 		test_sockmap_progs_query(BPF_SK_SKB_STREAM_VERDICT);
+ 	if (test__start_subtest("sockmap skb_verdict progs query"))
+ 		test_sockmap_progs_query(BPF_SK_SKB_VERDICT);
++	if (test__start_subtest("sockmap skb_verdict shutdown"))
++		test_sockmap_skb_verdict_shutdown();
  }
- EXPORT_SYMBOL(tcp_read_skb);
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index 01dd76be1a58..5f93918c063c 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -11,6 +11,24 @@
- #include <net/inet_common.h>
- #include <net/tls.h>
- 
-+void tcp_eat_skb(struct sock *sk, struct sk_buff *skb)
+diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c b/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
+new file mode 100644
+index 000000000000..1d86a717a290
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
+@@ -0,0 +1,32 @@
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_endian.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SOCKMAP);
++	__uint(max_entries, 20);
++	__type(key, int);
++	__type(value, int);
++} sock_map_rx SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SOCKMAP);
++	__uint(max_entries, 20);
++	__type(key, int);
++	__type(value, int);
++} sock_map_tx SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SOCKMAP);
++	__uint(max_entries, 20);
++	__type(key, int);
++	__type(value, int);
++} sock_map_msg SEC(".maps");
++
++SEC("sk_skb")
++int prog_skb_verdict(struct __sk_buff *skb)
 +{
-+	struct tcp_sock *tcp;
-+	int copied;
-+
-+	if (!skb || !skb->len || !sk_is_tcp(sk))
-+		return;
-+
-+	if (skb_bpf_strparser(skb))
-+		return;
-+
-+	tcp = tcp_sk(sk);
-+	copied = tcp->copied_seq + skb->len;
-+	WRITE_ONCE(tcp->copied_seq, copied);
-+	tcp_rcv_space_adjust(sk);
-+	__tcp_cleanup_rbuf(sk, skb->len);
++	return SK_PASS;
 +}
 +
- static int bpf_tcp_ingress(struct sock *sk, struct sk_psock *psock,
- 			   struct sk_msg *msg, u32 apply_bytes, int flags)
- {
-@@ -198,8 +216,10 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
- 				  int flags,
- 				  int *addr_len)
- {
-+	struct tcp_sock *tcp = tcp_sk(sk);
-+	u32 seq = tcp->copied_seq;
- 	struct sk_psock *psock;
--	int copied;
-+	int copied = 0;
- 
- 	if (unlikely(flags & MSG_ERRQUEUE))
- 		return inet_recv_error(sk, msg, len, addr_len);
-@@ -244,9 +264,11 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
- 
- 		if (is_fin) {
- 			copied = 0;
-+			seq++;
- 			goto out;
- 		}
- 	}
-+	seq += copied;
- 	if (!copied) {
- 		long timeo;
- 		int data;
-@@ -284,6 +306,10 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
- 		copied = -EAGAIN;
- 	}
- out:
-+	WRITE_ONCE(tcp->copied_seq, seq);
-+	tcp_rcv_space_adjust(sk);
-+	if (copied > 0)
-+		__tcp_cleanup_rbuf(sk, copied);
- 	release_sock(sk);
- 	sk_psock_put(sk, psock);
- 	return copied;
++char _license[] SEC("license") = "GPL";
 -- 
 2.33.0
 
