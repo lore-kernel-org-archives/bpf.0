@@ -1,44 +1,45 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB8010E6
-	for <bpf@vger.kernel.org>; Wed, 24 May 2023 22:55:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7200F8498
+	for <bpf@vger.kernel.org>; Wed, 24 May 2023 22:55:24 +0000 (UTC)
 Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A5899
-	for <bpf@vger.kernel.org>; Wed, 24 May 2023 15:55:19 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BF990
+	for <bpf@vger.kernel.org>; Wed, 24 May 2023 15:55:22 -0700 (PDT)
 Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34OHRoZr029231
-	for <bpf@vger.kernel.org>; Wed, 24 May 2023 15:55:18 -0700
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34OHRoZu029231
+	for <bpf@vger.kernel.org>; Wed, 24 May 2023 15:55:21 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qsde0e538-1
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qsde0e538-4
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Wed, 24 May 2023 15:55:18 -0700
-Received: from twshared66906.03.prn6.facebook.com (2620:10d:c085:208::f) by
+	for <bpf@vger.kernel.org>; Wed, 24 May 2023 15:55:21 -0700
+Received: from twshared35445.38.frc1.facebook.com (2620:10d:c085:208::11) by
  mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 24 May 2023 15:55:16 -0700
+ 15.1.2507.23; Wed, 24 May 2023 15:55:19 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id C767C3149A79D; Wed, 24 May 2023 15:54:22 -0700 (PDT)
+	id B666F3149A89F; Wed, 24 May 2023 15:55:06 -0700 (PDT)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next 0/3] Relax checks for unprivileged bpf() commands
-Date: Wed, 24 May 2023 15:54:18 -0700
-Message-ID: <20230524225421.1587859-1-andrii@kernel.org>
+Subject: [PATCH bpf-next 3/3] bpf: don't require bpf_capable() for GET_INFO_BY_FD
+Date: Wed, 24 May 2023 15:54:21 -0700
+Message-ID: <20230524225421.1587859-4-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: WqXKST5wnbmIk_uH_J2CBM3ZSV6RXzv3
-X-Proofpoint-ORIG-GUID: WqXKST5wnbmIk_uH_J2CBM3ZSV6RXzv3
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+In-Reply-To: <20230524225421.1587859-1-andrii@kernel.org>
+References: <20230524225421.1587859-1-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: BMI3raIbAdjf7lOOj7w9druVNdTmyLLu
+X-Proofpoint-ORIG-GUID: BMI3raIbAdjf7lOOj7w9druVNdTmyLLu
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
  definitions=2023-05-24_15,2023-05-24_01,2023-05-22_02
@@ -49,43 +50,41 @@ X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-During last relaxation of bpf syscall's capabilities checks ([0]), the model
-of FD-based ownership was established: if process through whatever means got
-FD for some BPF object (map, prog, etc), it should be able to perform
-operations on this object without extra CAP_SYS_ADMIN or CAP_BPF capabiliti=
-es.
+The rest of BPF subsystem follows the rule that if process managed to
+get BPF object FD, then it has an ownership of this object, and thus can
+query any information about it, or update it. Doing something special in
+GET_INFO_BY_FD operation based on bpf_capable() goes against that
+philosophy, so drop the check and unify the approach with the rest of
+bpf() syscall.
 
-It seems like we missed a few cases, though, in which we are still enforcin=
-g extra caps for no good reason, even though operations are not really unsa=
-fe and/or do not require any system-wide capabilities:
-  - BPF_MAP_FREEZE command;
-  - GET_NEXT_ID family of commands;
-  - GET_INFO_BY_FD command has extra bpf_capable()-based sanitization.
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ kernel/bpf/syscall.c | 11 -----------
+ 1 file changed, 11 deletions(-)
 
-This patch set is removing these unnecessary checks. MAP_FREEZE and INFO_BY=
-_FD
-are deviating from the "if you own FD, you can work with BPF object".
-
-GET_NEXT_ID is a completely safe and unprivileged operation that returns ju=
-st
-IDs of BPF objects. One still needs to go through CAP_SYS_ADMIN-guarded
-GET_FD_BY_ID command to get ahold of FD to do any operation on corresponding
-BPF object. As such, it seems completely safe to drop CAP_SYS_ADMIN checks =
-for
-GET_NEXT_ID.
-
-  [0] https://lore.kernel.org/all/1652970334-30510-2-git-send-email-alan.ma=
-guire@oracle.com/
-
-Andrii Nakryiko (3):
-  bpf: drop unnecessary bpf_capable() check in BPF_MAP_FREEZE command
-  bpf: don't require CAP_SYS_ADMIN for getting NEXT_ID
-  bpf: don't require bpf_capable() for GET_INFO_BY_FD
-
- kernel/bpf/syscall.c                          | 23 ++++---------------
- .../bpf/prog_tests/unpriv_bpf_disabled.c      | 15 ++----------
- 2 files changed, 7 insertions(+), 31 deletions(-)
-
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 1d74c0a8d903..b07453ce10e7 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -4022,17 +4022,6 @@ static int bpf_prog_get_info_by_fd(struct file *fi=
+le,
+=20
+ 	info.verified_insns =3D prog->aux->verified_insns;
+=20
+-	if (!bpf_capable()) {
+-		info.jited_prog_len =3D 0;
+-		info.xlated_prog_len =3D 0;
+-		info.nr_jited_ksyms =3D 0;
+-		info.nr_jited_func_lens =3D 0;
+-		info.nr_func_info =3D 0;
+-		info.nr_line_info =3D 0;
+-		info.nr_jited_line_info =3D 0;
+-		goto done;
+-	}
+-
+ 	ulen =3D info.xlated_prog_len;
+ 	info.xlated_prog_len =3D bpf_prog_insn_size(prog);
+ 	if (info.xlated_prog_len && ulen) {
 --=20
 2.34.1
 
