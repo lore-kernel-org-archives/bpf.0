@@ -1,31 +1,31 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7200F8498
-	for <bpf@vger.kernel.org>; Wed, 24 May 2023 22:55:24 +0000 (UTC)
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BF990
-	for <bpf@vger.kernel.org>; Wed, 24 May 2023 15:55:22 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34OHRoZu029231
-	for <bpf@vger.kernel.org>; Wed, 24 May 2023 15:55:21 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qsde0e538-4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 769AD848D
+	for <bpf@vger.kernel.org>; Wed, 24 May 2023 22:55:33 +0000 (UTC)
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F55FA9
+	for <bpf@vger.kernel.org>; Wed, 24 May 2023 15:55:31 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34OHG3qK008390
+	for <bpf@vger.kernel.org>; Wed, 24 May 2023 15:55:31 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qsptc9uk1-3
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Wed, 24 May 2023 15:55:21 -0700
-Received: from twshared35445.38.frc1.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Wed, 24 May 2023 15:55:31 -0700
+Received: from twshared25760.37.frc1.facebook.com (2620:10d:c0a8:1c::11) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 24 May 2023 15:55:19 -0700
+ 15.1.2507.23; Wed, 24 May 2023 15:55:07 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id B666F3149A89F; Wed, 24 May 2023 15:55:06 -0700 (PDT)
+	id 604033149A855; Wed, 24 May 2023 15:54:48 -0700 (PDT)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next 3/3] bpf: don't require bpf_capable() for GET_INFO_BY_FD
-Date: Wed, 24 May 2023 15:54:21 -0700
-Message-ID: <20230524225421.1587859-4-andrii@kernel.org>
+Subject: [PATCH bpf-next 1/3] bpf: drop unnecessary bpf_capable() check in BPF_MAP_FREEZE command
+Date: Wed, 24 May 2023 15:54:19 -0700
+Message-ID: <20230524225421.1587859-2-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230524225421.1587859-1-andrii@kernel.org>
 References: <20230524225421.1587859-1-andrii@kernel.org>
@@ -38,8 +38,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: BMI3raIbAdjf7lOOj7w9druVNdTmyLLu
-X-Proofpoint-ORIG-GUID: BMI3raIbAdjf7lOOj7w9druVNdTmyLLu
+X-Proofpoint-ORIG-GUID: ILNT2UBl_dMbvD_EevcvMlaXGYuv0v_c
+X-Proofpoint-GUID: ILNT2UBl_dMbvD_EevcvMlaXGYuv0v_c
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
  definitions=2023-05-24_15,2023-05-24_01,2023-05-22_02
@@ -50,41 +50,47 @@ X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-The rest of BPF subsystem follows the rule that if process managed to
-get BPF object FD, then it has an ownership of this object, and thus can
-query any information about it, or update it. Doing something special in
-GET_INFO_BY_FD operation based on bpf_capable() goes against that
-philosophy, so drop the check and unify the approach with the rest of
-bpf() syscall.
+Seems like that extra bpf_capable() check in BPF_MAP_FREEZE handler was
+unintentionally left when we switched to a model that all BPF map
+operations should be allowed regardless of CAP_BPF (or any other
+capabilities), as long as process got BPF map FD somehow.
+
+This patch replaces bpf_capable() check in BPF_MAP_FREEZE handler with
+writeable access check, given conceptually freezing the map is modifying
+it: map becomes unmodifiable for subsequent updates.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/syscall.c | 11 -----------
- 1 file changed, 11 deletions(-)
+ kernel/bpf/syscall.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 1d74c0a8d903..b07453ce10e7 100644
+index c7f6807215e6..c9a201e4c457 100644
 --- a/kernel/bpf/syscall.c
 +++ b/kernel/bpf/syscall.c
-@@ -4022,17 +4022,6 @@ static int bpf_prog_get_info_by_fd(struct file *fi=
-le,
+@@ -1931,6 +1931,11 @@ static int map_freeze(const union bpf_attr *attr)
+ 		return -ENOTSUPP;
+ 	}
 =20
- 	info.verified_insns =3D prog->aux->verified_insns;
-=20
++	if (!(map_get_sys_perms(map, f) & FMODE_CAN_WRITE)) {
++		err =3D -EPERM;
++		goto err_put;
++	}
++
+ 	mutex_lock(&map->freeze_mutex);
+ 	if (bpf_map_write_active(map)) {
+ 		err =3D -EBUSY;
+@@ -1940,10 +1945,6 @@ static int map_freeze(const union bpf_attr *attr)
+ 		err =3D -EBUSY;
+ 		goto err_put;
+ 	}
 -	if (!bpf_capable()) {
--		info.jited_prog_len =3D 0;
--		info.xlated_prog_len =3D 0;
--		info.nr_jited_ksyms =3D 0;
--		info.nr_jited_func_lens =3D 0;
--		info.nr_func_info =3D 0;
--		info.nr_line_info =3D 0;
--		info.nr_jited_line_info =3D 0;
--		goto done;
+-		err =3D -EPERM;
+-		goto err_put;
 -	}
--
- 	ulen =3D info.xlated_prog_len;
- 	info.xlated_prog_len =3D bpf_prog_insn_size(prog);
- 	if (info.xlated_prog_len && ulen) {
+=20
+ 	WRITE_ONCE(map->frozen, true);
+ err_put:
 --=20
 2.34.1
 
