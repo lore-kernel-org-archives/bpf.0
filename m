@@ -1,136 +1,154 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 936391F937
-	for <bpf@vger.kernel.org>; Thu, 25 May 2023 17:44:53 +0000 (UTC)
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F24610C7
-	for <bpf@vger.kernel.org>; Thu, 25 May 2023 10:44:25 -0700 (PDT)
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 0DDE5C1782D7
-	for <bpf@vger.kernel.org>; Thu, 25 May 2023 10:43:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1685036620; bh=SyCYsV1H8lZIM+SHh6PXkIPBithsDIpeb9twI4lNm3g=;
-	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=GO0Awf+fhbRFoK0YY3TB+Frh/ITppyohDr3KAxEeUrSEJF/jn8zqhIe3sBmGXON6L
-	 lLJvJg5Wt0n48wE0EfnNb4rDsOW+Y1ho2bXzE6BrWPJTipnuXqbkOMdh64tyIaUUex
-	 L65nnuTKC5HeDXswWwa97EGg9GAvvoPNecUurobU=
-X-Mailbox-Line: From bpf-bounces@ietf.org  Thu May 25 10:43:39 2023
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id B2812C169521;
-	Thu, 25 May 2023 10:43:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1685036619; bh=SyCYsV1H8lZIM+SHh6PXkIPBithsDIpeb9twI4lNm3g=;
-	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=VB4dA7eZK7qXrvjfeBz82QwyenMWtiVsGJGDlKKBOREKJcWWGhqP1laHsREz3OHag
-	 Nh+OULqiUSZ8xr/nK8ODxls3sCZaK1btO68GAWNN0HDyBbY+/JWZxNYQswLp729m3F
-	 CxPNl6ePecMLd6vw9cnatswcnt6vWMCvPu/skw6o=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id 500F6C151545
- for <bpf@ietfa.amsl.com>; Thu, 25 May 2023 00:44:41 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Score: -2.095
-X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,
-	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
- header.d=infradead.org
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eh1njCuMdrCX for <bpf@ietfa.amsl.com>;
- Thu, 25 May 2023 00:44:36 -0700 (PDT)
-Received: from bombadil.infradead.org (bombadil.infradead.org
- [IPv6:2607:7c80:54:3::133])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id 9BB04C151544
- for <bpf@ietf.org>; Thu, 25 May 2023 00:44:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
- :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
- Content-Transfer-Encoding:Content-ID:Content-Description;
- bh=FArhRYBG4hLs81GjlG/1gx4kisZ0PHnJyr4vVmIJfJw=; b=JGUa3wKezXP9h8RJNNZzcpg7wX
- C9k7CSzeVW/g4b88XXJ5brXGMG+30ZgpoGoF56eHy/UvodHCKbHI7sPZgvkoxzuyJCqdvC9qFiCwD
- JEjErKH1Tj51eebhBTYbnXCuvRDT88M6vObI9S8BY6W15u5rItGBB9YTzZd4LAA0H4lS04HkqA9df
- +dZIkjHCh4RuAq22Um/0KNSZVhNGFVoPsX35Zy1VrEgNfaL7Hh7/C+e4/gxEJW04BOKN//BuYXu9y
- CbUGlEUy7yICQvZVQtLORgeOowTI7e6oVW/Q+o/rdTrySrV79SeYYBPmjmNI164/gIQ1us33q497c
- 8bhn01rA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat
- Linux)) id 1q25e8-00FrUy-1s; Thu, 25 May 2023 07:44:28 +0000
-Date: Thu, 25 May 2023 00:44:28 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: David Vernet <void@manifault.com>
-Cc: Michael Richardson <mcr+ietf@sandelman.ca>,
- "bpf@ietf.org" <bpf@ietf.org>, bpf <bpf@vger.kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, "Jose E. Marchesi" <jemarch@gnu.org>,
- Erik Kline <ek.ietf@gmail.com>,
- "Suresh Krishnan (sureshk)" <sureshk@cisco.com>,
- Christoph Hellwig <hch@infradead.org>, Dave Thaler <dthaler@microsoft.com>
-Message-ID: <ZG8R3JgOPHo7xn61@infradead.org>
-References: <PH7PR21MB38780769D482CC5F83768D3CA37E9@PH7PR21MB3878.namprd21.prod.outlook.com>
- <87v8grkn67.fsf@gnu.org>
- <PH7PR21MB3878BCFA99C1585203982670A37E9@PH7PR21MB3878.namprd21.prod.outlook.com>
- <87r0rdy26o.fsf@gnu.org>
- <PH7PR21MB3878B869D69FD35FA718AF5DA37FA@PH7PR21MB3878.namprd21.prod.outlook.com>
- <20230523163200.GD20100@maniforge> <18272.1684864698@localhost>
- <20230523202827.GA33347@maniforge>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2223101DA
+	for <bpf@vger.kernel.org>; Thu, 25 May 2023 17:51:38 +0000 (UTC)
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1486189
+	for <bpf@vger.kernel.org>; Thu, 25 May 2023 10:51:36 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-51426347bd2so3903180a12.2
+        for <bpf@vger.kernel.org>; Thu, 25 May 2023 10:51:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685037095; x=1687629095;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i5kdywFlR1cQZ+Yu2yVG1k3GjkogPB3q0665byUTflo=;
+        b=jkL5j4OvSpsm5I0XmZKmHHA1Q+yTRcHqMkQbt/STtUesQHRx1VZ+C2gh+Y3M/7CeqU
+         GMWDysyqYtvzi4V0d8UYChCcxVWtYYDKEHefPrxsol3y1Dh/OlLlmLoxIpFaV1cEsX32
+         sCDiFBP49ayFPFK5xne3FUZ8LGhNW8JZ8wZhYBW1P7tMRoMTXkOgNp1+GuCZiJaJcVWh
+         G+8Rjh82wXuTgdr/6A3LoAgmPXAmKFO2fWD5kj37/iNbVrk+wwaT3EH36umNjZvfDdoH
+         b+rk4ZpzhvKSUjJeZ3goZrLzrT+eVNhOvzO9NVnSxnpeimfnVQlP1YIzK6p5FgY7/lK8
+         rRkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685037095; x=1687629095;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=i5kdywFlR1cQZ+Yu2yVG1k3GjkogPB3q0665byUTflo=;
+        b=YGgnXwiwlSb+mrMKGN9imrBMkTcLkm0uh8XYRQDdxW0PLGqEgSQgL69+h1DFWatMCB
+         EoHiVsJ/4VnXnV5AAImyV1/bToeOZx/zRTxCXSsPzakbpJdppurPBVUhnhAry86OjFW+
+         r3jxpvH7ZUE0zOHuwfDMHNEhlONgMVuJFHFPdrqz2pOQqRH6+0Z3mOLmycRXtroAhKsy
+         rQ4RqofYF7uxZMmJokpUqDgH6/VXejOWIBFY+eEQtv6clmbJmaubVrOTwezNqP8o25xI
+         VyqDVCtPP2RBf/4ThbwPyM4wA4y/uQS3TlEELxkMNdQVyQdAKPjSiHX75e6AjcBOQXtE
+         kxQA==
+X-Gm-Message-State: AC+VfDzReNslH9k8U61qfve9WPRIRUvt9GZSX2J/7CQ7jVjuQD6JNi8y
+	QFt3uSz0AWhz+fA74ZA6lf5fM79PJRRF8nEDEfg=
+X-Google-Smtp-Source: ACHHUZ7qgoDmxMulofM1KXkZtL9jwK6IAoavLJHtVgq7N9EjkqSlGtHDfSj9bPoa6A4BK93wvEqM1PVkud9xS8OKlWA=
+X-Received: by 2002:a17:907:36c9:b0:953:517a:8f1a with SMTP id
+ bj9-20020a17090736c900b00953517a8f1amr2024432ejc.58.1685037095147; Thu, 25
+ May 2023 10:51:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230523202827.GA33347@maniforge>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by
- bombadil.infradead.org. See http://www.infradead.org/rpr.html
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/AHivtOLnEIjURTa7rEbLxqdMah0>
-X-Mailman-Approved-At: Thu, 25 May 2023 10:43:38 -0700
-Subject: Re: [Bpf] IETF BPF working group draft charter
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Id: Discussion of BPF/eBPF standardization efforts within the IETF
- <bpf.ietf.org>
-List-Unsubscribe: <https://www.ietf.org/mailman/options/bpf>,
- <mailto:bpf-request@ietf.org?subject=unsubscribe>
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-List-Subscribe: <https://www.ietf.org/mailman/listinfo/bpf>,
- <mailto:bpf-request@ietf.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
+References: <20230509132433.2FSY_6t7@linutronix.de> <CAEf4BzZcPKsRJDQfdVk9D1Nt6kgT4STpEUrsQ=UD3BDZnNp8eQ@mail.gmail.com>
+ <CAADnVQLzZyZ+cPqBFfrqa8wtQ8ZhWvTSN6oD9z4Y2gtrfs8Vdg@mail.gmail.com>
+ <CAEf4BzY-MRYnzGiZmW7AVJYgYdHW1_jOphbipRrHRTtdfq3_wQ@mail.gmail.com> <20230525141813.TFZLWM4M@linutronix.de>
+In-Reply-To: <20230525141813.TFZLWM4M@linutronix.de>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 25 May 2023 10:51:23 -0700
+Message-ID: <CAEf4Bzaipoo6X_2Fh5WTV-m0yjP0pvhqi7-FPFtGOrSzNpdGJQ@mail.gmail.com>
+Subject: Re: [PATCH v2] bpf: Remove in_atomic() from bpf_link_put().
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
-Message-ID: <20230525074428.GfeSxFn7RqF3UYI3h2ll2t-8lOBu0EO7ZLfO1EVy72Y@z>
 
-I'm really lost in this discussion.  All aspects of the ABI are
-a required part of interoperability.  And one of the promises of
-this IETF eBPF project is to provide for this interoperability.
+On Thu, May 25, 2023 at 7:18=E2=80=AFAM Sebastian Andrzej Siewior
+<bigeasy@linutronix.de> wrote:
+>
+> bpf_free_inode() is invoked as a RCU callback. Usually RCU callbacks are
+> invoked within softirq context. By setting rcutree.use_softirq=3D0 boot
+> option the RCU callbacks will be invoked in a per-CPU kthread with
+> bottom halves disabled which implies a RCU read section.
+>
+> On PREEMPT_RT the context remains fully preemptible. The RCU read
+> section however does not allow schedule() invocation. The latter happens
+> in mutex_lock() performed by bpf_trampoline_unlink_prog() originated
+> from bpf_link_put().
+>
+> It was pointed out that the bpf_link_put() invocation should not be
+> delayed if originated from close().
+>
+> Remove the context checks and use the workqueue unconditionally. For the
+> close() callback add bpf_link_put_direct() which invokes free function
+> directly.
+>
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> ---
+>
+> v1=E2=80=A6v2:
+>    - Add bpf_link_put_direct() to be used from bpf_link_release() as
+>      suggested.
 
-This is a very different situation from the binary ABI for Linux
-or Windows, which has traditionally never been interoperable between
-vendors, odd examples like iBCS2 [1] notwithstanding.
+Looks good to me, but it's not sufficient. See kernel/bpf/inode.c, we
+need to do bpf_link_put_direct() from bpf_put_any(), which should be
+safe as well because it all is either triggered from bpf() syscall or
+by unlink()'ing BPF FS file. For file deletion we have the same
+requirement to have deterministic release of bpf_link.
 
-I'm fine with watering down the wording in the charter a bit in not
-beeing too specific what documebts we want to work on for the binary
-compatibility, but I think having it is essential.
-
-What do we gain by not having the full binary interface in the working
-group scope?
-
-[1] https://en.wikipedia.org/wiki/Intel_Binary_Compatibility_Standard
-
--- 
-Bpf mailing list
-Bpf@ietf.org
-https://www.ietf.org/mailman/listinfo/bpf
+>
+> On 2023-05-17 09:26:19 [-0700], Andrii Nakryiko wrote:
+> > Is struct file_operations.release() callback guaranteed to be called
+> > from user context? If yes, then perhaps the most straightforward way
+> > to guarantee synchronous bpf_link cleanup on close(link_fd) is to have
+> > a bpf_link_put() variant that will be only called from user-context
+> > and will just do bpf_link_free(link) directly, without checking
+> > in_atomic().
+>
+> Yes. __fput() has a might_sleep() and it invokes
+> file_operations::release.
+>
+>  kernel/bpf/syscall.c | 17 ++++++++++-------
+>  1 file changed, 10 insertions(+), 7 deletions(-)
+>
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 14f39c1e573ee..85159428e5fee 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -2785,20 +2785,23 @@ void bpf_link_put(struct bpf_link *link)
+>         if (!atomic64_dec_and_test(&link->refcnt))
+>                 return;
+>
+> -       if (in_atomic()) {
+> -               INIT_WORK(&link->work, bpf_link_put_deferred);
+> -               schedule_work(&link->work);
+> -       } else {
+> -               bpf_link_free(link);
+> -       }
+> +       INIT_WORK(&link->work, bpf_link_put_deferred);
+> +       schedule_work(&link->work);
+>  }
+>  EXPORT_SYMBOL(bpf_link_put);
+>
+> +static void bpf_link_put_direct(struct bpf_link *link)
+> +{
+> +       if (!atomic64_dec_and_test(&link->refcnt))
+> +               return;
+> +       bpf_link_free(link);
+> +}
+> +
+>  static int bpf_link_release(struct inode *inode, struct file *filp)
+>  {
+>         struct bpf_link *link =3D filp->private_data;
+>
+> -       bpf_link_put(link);
+> +       bpf_link_put_direct(link);
+>         return 0;
+>  }
+>
+> --
+> 2.40.1
+>
