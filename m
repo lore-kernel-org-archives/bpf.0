@@ -1,107 +1,226 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A2D468A
-	for <bpf@vger.kernel.org>; Thu, 25 May 2023 00:03:13 +0000 (UTC)
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6195199;
-	Wed, 24 May 2023 17:03:12 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64d41763796so1151293b3a.2;
-        Wed, 24 May 2023 17:03:12 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBB2F18E
+	for <bpf@vger.kernel.org>; Thu, 25 May 2023 00:13:25 +0000 (UTC)
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383C699;
+	Wed, 24 May 2023 17:13:23 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2af30d10d8fso18724741fa.0;
+        Wed, 24 May 2023 17:13:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684972992; x=1687564992;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=P/sfaSxrjpDVpW6nx9Gv6nwA0nMjU7/ydrxlKetNdAs=;
-        b=LJE1lyDS4tz8fl5KK7DnLYDf6ibmmArWDPYukL3kmmDJKmSbSPBU6oC4kbecjg8NPa
-         Af8rVyeur9e5XJbLTI36UvqhvINzz0EWOK0fjr4W70XXKiLzK+njPsbYeVCA42fZWN+W
-         bQVbZdz+HKzgMqunb2NDd0A2O8fxr4z1cu19NNvgfDWSrljotg4+0LSxVgIP4ppeMlwD
-         afQEWxMzBqqyCJEGhZ+h5kDZ5JVysrtCZlIzmJCoEoyK2AVHEKRuxu9a+MUrC6pfd+Jo
-         KXBeAMp234fJe17M/dUH/Sy1OQX9Hj5kj9kzuN2fvAIZqD9KFY5GIN0Ty816WtIl3L1I
-         rUNQ==
+        d=gmail.com; s=20221208; t=1684973601; x=1687565601;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=QE7Cfa2VCFKJJcihENPedECPunVcflrVmXn8Dojkfv4=;
+        b=QxPXGYDlIzpIyzo1d03zqjjmV8ghT4EzPJp2+uXHJkKT2fxI/mYFE0C6Y36fhP5r+v
+         28JVyQrXUpcniUEuw6GFHfKSqLKvAR2f0/m6/hb12SpIr9neSsG9yuB91It9Szk0Hsk0
+         xkFspkCjGcFxVsn2G9rYojaxOcwyiXhRiWn+GRqHEU/mmOAFnAnOT7Jbp4LQSHB8PcTt
+         6/XomWD6vGTb0fnaXW7rbmv1PHrlawzInpHCNNK8cWFUK0ZhJW9anFrE//iCVfMB2KhG
+         aJ0c+v3jTKeUUk5uYYcHWAcCVKojqLMCqIqPxnWP+8rk2V6iysntEPNpM/siZnHRoAfY
+         BOmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684972992; x=1687564992;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P/sfaSxrjpDVpW6nx9Gv6nwA0nMjU7/ydrxlKetNdAs=;
-        b=SJbcwM1kbyugrDYGqLKnIphyDGBMD8uHsfDkPU1RSR+DMlLdX5wLIXrlvyToRWqIHg
-         kRNdzlOQilsS4qKcGckjrqlRCuMObzdqVKYAyrovIRL6WEfdxMVeOdg58UwKMoM/HUgu
-         rfBUT1n9kw8BYnhBm7FZ6scIqC7WanMnHvBs6X16Ur6mN2nAW1u99+urmlMmyI0AAfUW
-         UcubEPEr1azBuDbrPb2XrgAzSxw8eL5xJ6dBi+1zT+JY+OcJUjzBEl9USAPcp1v5tVns
-         HHkO/31hFIdQDHVI06MM8LCMQ4rIs0PwfrRkA2s5OKZKUXxSAF9z0jTJJIadd48jCgGL
-         spUg==
-X-Gm-Message-State: AC+VfDw6nTXdm0xfGid0fkn1nYMVOrQR29YmVuxV+we2MzcZFlgjHzmy
-	O/GHBUdIi9ljpqX1P8ptwKw=
-X-Google-Smtp-Source: ACHHUZ5jvp151opjVnOUx9o1pqEdym6iwvISEVh98WTz1GiRxLPg7DqkyxKMOdNUkD4mOTcQKpKfBg==
-X-Received: by 2002:a05:6a00:1a53:b0:63d:260d:f9dd with SMTP id h19-20020a056a001a5300b0063d260df9ddmr6068460pfv.33.1684972991630;
-        Wed, 24 May 2023 17:03:11 -0700 (PDT)
-Received: from moohyul.svl.corp.google.com ([2620:15c:2d4:203:121:f908:b42d:c399])
-        by smtp.gmail.com with ESMTPSA id u17-20020aa78491000000b0064cca73d911sm22276pfn.103.2023.05.24.17.03.09
+        d=1e100.net; s=20221208; t=1684973601; x=1687565601;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QE7Cfa2VCFKJJcihENPedECPunVcflrVmXn8Dojkfv4=;
+        b=RdpT+vn6EYiRaXm3lpI44qdGXzMdYGs6hdAGApjm6yWeRqd7imAD+HV567coydCmyp
+         9UWKt4oRDwTGf1QA3Zor9CFKT7L/6js22OYZ4TNtcRbWHk+io0jYSbnjJkE39/+iAVJy
+         p1ylDJKupWgfVFxGfBpGbswHtinFtzQGdzic0N1KC8/iaketZbtd7DxAYO5E5uZdWdG9
+         ss+yLZloN1fIAsfBbEjXJyb0jk6gF3sfcXLkFm7BtqxmyyBxMa4VZr9BLsXeIbFOkmV3
+         /4wWmQP5IBGclMuApSyeJytNoOJdoO0GVtHrjPxHZKzFertCvJ/8WtBkRYt0bRJucYWt
+         xDlQ==
+X-Gm-Message-State: AC+VfDwYSSkNQ/trn/23BIZOpg6l9nNV3vd/I/MFJ0MYTWG5PLSc43o0
+	/y0jZ/9uufcGdg42GHpBSkGMlBr6dIYoyg==
+X-Google-Smtp-Source: ACHHUZ5S+KcQCk5EUKNl3mIsEneNx6lFx+LoaZf4vbDwoikUDUYhdHBXUg/TNSzKt9ZuRdR7CcoTxg==
+X-Received: by 2002:a05:651c:446:b0:2ac:7904:e38f with SMTP id g6-20020a05651c044600b002ac7904e38fmr495808ljg.12.1684973600927;
+        Wed, 24 May 2023 17:13:20 -0700 (PDT)
+Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id w21-20020a2e9bd5000000b002ac7978f0a6sm7425ljj.100.2023.05.24.17.13.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 17:03:10 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From: Namhyung Kim <namhyung@kernel.org>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>
-Cc: Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	linux-perf-users@vger.kernel.org,
-	Song Liu <song@kernel.org>,
-	bpf@vger.kernel.org
-Subject: [PATCH] perf bpf filter: Fix a broken perf sample data naming in BPF
-Date: Wed, 24 May 2023 17:03:07 -0700
-Message-ID: <20230525000307.3202449-1-namhyung@kernel.org>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+        Wed, 24 May 2023 17:13:20 -0700 (PDT)
+Message-ID: <85637acda6983eac1787abbb07ef18c618b4193b.camel@gmail.com>
+Subject: Re: [PATCH v3 dwarves 0/6] Support for new btf_type_tag encoding
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: dwarves@vger.kernel.org, arnaldo.melo@gmail.com
+Cc: bpf@vger.kernel.org, kernel-team@fb.com, ast@kernel.org,
+ daniel@iogearbox.net,  andrii@kernel.org, yhs@fb.com, jemarch@gnu.org,
+ david.faust@oracle.com,  mykolal@fb.com
+Date: Thu, 25 May 2023 03:13:18 +0300
+In-Reply-To: <20230524001825.2688661-1-eddyz87@gmail.com>
+References: <20230524001825.2688661-1-eddyz87@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-	SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-	version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+	FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+	T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-BPF CO-RE requires 3 underscores for the ignored suffix rule but it
-mistakenly used only 2.  Let's fix it.
+On Wed, 2023-05-24 at 03:18 +0300, Eduard Zingerman wrote:
+[...]=20
+>   - gcc       / LLVM-main / pahole-new
+>     - kernel build : ok
+>     - bpf tests    : ok
+>     - btfdiff      : ok but dwarf dump sometimes segfaults
 
-Fixes: 3a8b8fc31748 ("perf bpf filter: Support pre-5.16 kernels where 'mem_hops' isn't in 'union perf_mem_data_src'")
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- tools/perf/util/bpf_skel/sample_filter.bpf.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Regarding this segfault. I can reproduce it using pahole 'next' branch
+if btfdiff is executed several times. So, the proposed patch-set is
+not the cause.
 
-diff --git a/tools/perf/util/bpf_skel/sample_filter.bpf.c b/tools/perf/util/bpf_skel/sample_filter.bpf.c
-index cffe493af1ed..fb94f5280626 100644
---- a/tools/perf/util/bpf_skel/sample_filter.bpf.c
-+++ b/tools/perf/util/bpf_skel/sample_filter.bpf.c
-@@ -25,7 +25,7 @@ struct perf_sample_data___new {
- } __attribute__((preserve_access_index));
- 
- /* new kernel perf_mem_data_src definition */
--union perf_mem_data_src__new {
-+union perf_mem_data_src___new {
- 	__u64 val;
- 	struct {
- 		__u64   mem_op:5,	/* type of opcode */
-@@ -108,7 +108,7 @@ static inline __u64 perf_get_sample(struct bpf_perf_event_data_kern *kctx,
- 		if (entry->part == 7)
- 			return kctx->data->data_src.mem_blk;
- 		if (entry->part == 8) {
--			union perf_mem_data_src__new *data = (void *)&kctx->data->data_src;
-+			union perf_mem_data_src___new *data = (void *)&kctx->data->data_src;
- 
- 			if (bpf_core_field_exists(data->mem_hops))
- 				return data->mem_hops;
--- 
-2.41.0.rc0.172.g3f132b7071-goog
+Specifically, it happens when the following command is executed:
 
+  pahole -F dwarf --flat_arrays --sort ... vmlinux
+
+With the following stack trace:
+
+  Thread 1 "pahole" received signal SIGSEGV, Segmentation fault.
+  0x00007ffff7f819ad in __rb_erase_color (node=3D0x7fffd4045830, parent=3D0=
+x0, root=3D0x5555555672d8 <structures.tree>) at /home/eddy/work/dwarves-for=
+k/rbtree.c:134
+  134			if (parent->rb_left =3D=3D node)
+  (gdb) bt
+  #0  0x00007ffff7f819ad in __rb_erase_color (node=3D0x7fffd4045830, parent=
+=3D0x0, root=3D0x5555555672d8 <structures.tree>) at /home/eddy/work/dwarves=
+-fork/rbtree.c:134
+  #1  0x00007ffff7f82014 in rb_erase (node=3D0x7fff21ae5b80, root=3D0x55555=
+55672d8 <structures.tree>) at /home/eddy/work/dwarves-fork/rbtree.c:275
+  #2  0x0000555555559c3d in __structures__delete () at /home/eddy/work/dwar=
+ves-fork/pahole.c:440
+  #3  0x0000555555559c70 in structures__delete () at /home/eddy/work/dwarve=
+s-fork/pahole.c:448
+  #4  0x0000555555560bb6 in main (argc=3D13, argv=3D0x7fffffffdcd8) at /hom=
+e/eddy/work/dwarves-fork/pahole.c:3584
+
+I tried random testing the rb_tree implementation and can reliably
+reproduce the error using the diff at the end of the email.
+E.g. it happens for test sequence (using add/delete functions adapted
+to work on int values instead of 'struct structure'):
+
+  60 4 24 34 15 2 80 26 82 67 92 77 9.
+
+Will figure out a fix for rb_erase code tomorrow.
+
+--- testing code for rb_erase ---
+
+diff --git a/pahole.c b/pahole.c
+index 6fc4ed6..6c60c9e 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -8,6 +8,7 @@
+=20
+ #include <argp.h>
+ #include <assert.h>
++#include <signal.h>
+ #include <stdio.h>
+ #include <dwarf.h>
+ #include <elfutils/version.h>
+@@ -3408,10 +3409,97 @@ out_free:
+ 	return ret;
+ }
+=20
++struct test_struct {
++	struct rb_node rb_node;
++	int val;
++};
++
++static struct rb_root test_tree =3D RB_ROOT;
++static struct test_struct structs[100] =3D {};
++static int free_struct_idx =3D 0;
++static int num_tries =3D 0;
++
++static void test_add(int val)
++{
++        struct rb_node **p =3D &test_tree.rb_node;
++        struct rb_node *parent =3D NULL;
++	struct test_struct *str;
++
++        while (*p !=3D NULL) {
++		int rc;
++
++                parent =3D *p;
++                str =3D rb_entry(parent, struct test_struct, rb_node);
++		rc =3D str->val - val;
++
++		if (rc > 0)
++                        p =3D &(*p)->rb_left;
++                else if (rc < 0)
++                        p =3D &(*p)->rb_right;
++		else {
++			return;
++		}
++        }
++
++	str =3D &structs[free_struct_idx++];
++	str->val =3D val;
++
++	rb_link_node(&str->rb_node, parent, p);
++        rb_insert_color(&str->rb_node, &test_tree);
++
++	return;
++}
++
++static void test_delete()
++{
++	struct rb_node *next =3D rb_first(&test_tree);
++
++	while (next) {
++		struct test_struct *pos =3D rb_entry(next, struct test_struct, rb_node);
++		next =3D rb_next(&pos->rb_node);
++		rb_erase(&pos->rb_node, &structures__tree);
++	}
++}
++
++void test_erase_once()
++{
++	test_tree =3D RB_ROOT;
++	free_struct_idx =3D 0;
++	bzero(structs, sizeof(structs));
++	int size =3D rand() % 16;
++	for (int i =3D 0; i < size; ++i) {
++		int val =3D rand() % 100;
++		test_add(val);
++	}
++	test_delete();
++	++num_tries;
++}
++
++static void sigsegv_handler(int nSignum, siginfo_t* si, void* vcontext) {
++	fprintf(stderr, "SIGSEGV after %d iters: [%d]", num_tries, free_struct_id=
+x);
++	for (int i =3D 0; i < free_struct_idx; ++i)
++		fprintf(stderr, " %d", structs[i].val);
++	fprintf(stderr, "\n");
++	exit(1);
++}
++
+ int main(int argc, char *argv[])
+ {
+ 	int err, remaining, rc =3D EXIT_FAILURE;
+=20
++	int seed =3D clock();
++	fprintf(stderr, "seed =3D %d\n", seed);
++	srand(seed);
++	struct sigaction action =3D {};
++	action.sa_flags =3D SA_SIGINFO;
++	action.sa_sigaction =3D sigsegv_handler;
++	sigaction(SIGSEGV, &action, NULL);
++	for (int i =3D 0; i < 1000 * 1000; ++i) {
++		test_erase_once();
++	}
++	fprintf(stderr, "done\n");
++	return 0;
++
+ 	if (argp_parse(&pahole__argp, argc, argv, 0, &remaining, NULL)) {
+ 		argp_help(&pahole__argp, stderr, ARGP_HELP_SEE, argv[0]);
+ 		goto out;
