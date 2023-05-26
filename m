@@ -1,98 +1,65 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF9EC261C2
-	for <bpf@vger.kernel.org>; Thu, 25 May 2023 23:42:58 +0000 (UTC)
-Received: from out-58.mta0.migadu.com (out-58.mta0.migadu.com [91.218.175.58])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5833A12F
-	for <bpf@vger.kernel.org>; Thu, 25 May 2023 16:42:57 -0700 (PDT)
-Message-ID: <7188429a-c380-14c8-57bb-9d05d3ba4e5e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1685058175;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cEWHFC+tyHwwjk19PVCSJ1YdwxL9+T4gCvhEfMMt5tI=;
-	b=Hbnh35/ncWfFI5sf/wrM3kOXXVBum+XmbBuy7X03+bbvbaSXBa7oajd2kzFJveRI6famim
-	NP7Jq/gGzFcjlCP59SssUXEh7Bt+liNPx/zQrbjz/lf5TL7QJxgff1KRdDc7irDi9eNgGS
-	x/Ik1cMlCnS9xAjQfxkKx1hWN2dKTsk=
-Date: Thu, 25 May 2023 16:42:46 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B63502F5B
+	for <bpf@vger.kernel.org>; Fri, 26 May 2023 00:00:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5D803C4339B;
+	Fri, 26 May 2023 00:00:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1685059220;
+	bh=oEeVe5xYiOgo83RBB5Yx62y2jD+HP/qJ3yHolwTCQSI=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=EGjvf0ZLRbFWsXOONoXjYepDZISLfKeiuD29rEDmsyslIyiEYSgotKA6mzgdDN+Vq
+	 +EZk2049qQIC+bvfQQ/BanHnqQ41K0Y5kJ0bJUnme2jLePfiRvWFJD/9XRGnAWPUTq
+	 M6BB6gUZU7jOWeWVsK1omb6GIg0u3glc4G2WZcky67hLVEM8nTu77+qmdQV+ESi/Pw
+	 9Ms2Lsc6tidSlOIq3RWG+6jq1jiP7b72usUOMoLxiV/n+4ziLtE5TY7CrbSnGtNujc
+	 PwTD3+pT+BnpQBy0L16q7QboC5gj8BA+xiat3yfn26+Aot7GYPknukcdhtfGDO5fiW
+	 ba3hWbh9uO4yw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 416EEE4D00E;
+	Fri, 26 May 2023 00:00:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 1/2] bpf, net: Support SO_REUSEPORT sockets with
- bpf_sk_assign
-Content-Language: en-US
-To: Lorenz Bauer <lmb@isovalent.com>
-Cc: Joe Stringer <joe@cilium.io>, Martin KaFai Lau <kafai@fb.com>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>,
- Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Joe Stringer <joe@wand.net.nz>
-References: <20230525081923.8596-1-lmb@isovalent.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20230525081923.8596-1-lmb@isovalent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-	T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] selftests/bpf: Check whether to run selftest
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <168505922026.4954.3536458878325504754.git-patchwork-notify@kernel.org>
+Date: Fri, 26 May 2023 00:00:20 +0000
+References: <20230525232248.640465-1-deso@posteo.net>
+In-Reply-To: <20230525232248.640465-1-deso@posteo.net>
+To: =?utf-8?q?Daniel_M=C3=BCller_=3Cdeso=40posteo=2Enet=3E?=@ci.codeaurora.org
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com
 
-On 5/25/23 1:19 AM, Lorenz Bauer wrote:
-> diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
-> index 56f1286583d3..3ba4dc2703da 100644
-> --- a/include/net/inet6_hashtables.h
-> +++ b/include/net/inet6_hashtables.h
-> @@ -48,6 +48,13 @@ struct sock *__inet6_lookup_established(struct net *net,
->   					const u16 hnum, const int dif,
->   					const int sdif);
->   
-> +struct sock *inet6_lookup_reuseport(struct net *net, struct sock *sk,
-> +				    struct sk_buff *skb, int doff,
-> +				    const struct in6_addr *saddr,
-> +				    __be16 sport,
-> +				    const struct in6_addr *daddr,
-> +				    unsigned short hnum);
-> +
->   struct sock *inet6_lookup_listener(struct net *net,
->   				   struct inet_hashinfo *hashinfo,
->   				   struct sk_buff *skb, int doff,
-> @@ -85,14 +92,33 @@ static inline struct sock *__inet6_lookup_skb(struct inet_hashinfo *hashinfo,
->   					      int iif, int sdif,
->   					      bool *refcounted)
->   {
-> -	struct sock *sk = skb_steal_sock(skb, refcounted);
-> -
-> +	bool prefetched;
-> +	struct sock *sk = skb_steal_sock(skb, refcounted, &prefetched);
-> +	struct net *net = dev_net(skb_dst(skb)->dev);
-> +	const struct ipv6hdr *ip6h = ipv6_hdr(skb);
-> +
-> +	if (prefetched) {
-> +		struct sock *reuse_sk = inet6_lookup_reuseport(net, sk, skb, doff,
+Hello:
 
-If sk is TCP_ESTABLISHED, I suspect sk->sk_reuseport is 1 (from sk_clone)?
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-If it is, it should still work other than an extra inet6_ehashfn. Does it worth 
-an extra sk->sk_state check or it is overkill?
+On Thu, 25 May 2023 23:22:48 +0000 you wrote:
+> The sockopt test invokes test__start_subtest and then unconditionally
+> asserts the success. That means that even if deny-listed, any test will
+> still run and potentially fail.
+> Evaluate the return value of test__start_subtest() to achieve the
+> desired behavior, as other tests do.
+> 
+> Signed-off-by: Daniel Müller <deso@posteo.net>
+> 
+> [...]
 
+Here is the summary with links:
+  - [bpf-next] selftests/bpf: Check whether to run selftest
+    https://git.kernel.org/bpf/bpf-next/c/321a64b32815
 
-> +							       &ip6h->saddr, sport,
-> +							       &ip6h->daddr, ntohs(dport));
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
