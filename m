@@ -1,47 +1,46 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76CD2915
-	for <bpf@vger.kernel.org>; Fri, 26 May 2023 05:16:15 +0000 (UTC)
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35BE813A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B0B63C04
+	for <bpf@vger.kernel.org>; Fri, 26 May 2023 05:16:17 +0000 (UTC)
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E7E187
 	for <bpf@vger.kernel.org>; Thu, 25 May 2023 22:16:13 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34PKnwNc009618
-	for <bpf@vger.kernel.org>; Thu, 25 May 2023 22:16:12 -0700
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34PKnHgR028990
+	for <bpf@vger.kernel.org>; Thu, 25 May 2023 22:16:13 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qt3t6q3mp-6
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qt9vqn5mb-4
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 25 May 2023 22:16:12 -0700
-Received: from twshared18891.17.frc2.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Thu, 25 May 2023 22:16:13 -0700
+Received: from twshared24695.38.frc1.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 25 May 2023 22:16:07 -0700
+ 15.1.2507.23; Thu, 25 May 2023 22:16:11 -0700
 Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-	id BA3F71E38AFE9; Thu, 25 May 2023 22:15:54 -0700 (PDT)
+	id 5683B1E38AFFF; Thu, 25 May 2023 22:15:57 -0700 (PDT)
 From: Song Liu <song@kernel.org>
 To: <linux-kernel@vger.kernel.org>
 CC: <bpf@vger.kernel.org>, <mcgrof@kernel.org>, <peterz@infradead.org>,
         <tglx@linutronix.de>, <x86@kernel.org>, <rppt@kernel.org>,
         <kent.overstreet@linux.dev>, Song Liu <song@kernel.org>
-Subject: [PATCH 1/3] module: Introduce module_alloc_type
-Date: Thu, 25 May 2023 22:15:27 -0700
-Message-ID: <20230526051529.3387103-2-song@kernel.org>
+Subject: [PATCH 3/3] x86/module: Use module_alloc_type
+Date: Thu, 25 May 2023 22:15:29 -0700
+Message-ID: <20230526051529.3387103-4-song@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230526051529.3387103-1-song@kernel.org>
 References: <20230526051529.3387103-1-song@kernel.org>
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: Hg4TxwUyLNVtOK7AaiHZxZK2zb0QTYI7
-X-Proofpoint-GUID: Hg4TxwUyLNVtOK7AaiHZxZK2zb0QTYI7
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: exYrmN8aktJDqi54h3R2KrtSHn484w_c
+X-Proofpoint-ORIG-GUID: exYrmN8aktJDqi54h3R2KrtSHn484w_c
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
  definitions=2023-05-26_01,2023-05-25_03,2023-05-22_02
@@ -52,676 +51,621 @@ X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Introduce memory type aware module_alloc_type, which provides a unified
-allocator for all different archs. This work was discussed in [1].
+Enable module_alloc_type to
 
-Each arch can configure the allocator to do the following:
+1. Allocate ROX data for MOD_TEXT and MOD_INIT_TEXT;
+2. Allocate RO data for MOD_RODATA and MOD_INIT_RODATA;
+3. Allocate RW data for other types.
 
-   1. Specify module_vaddr and module_end
-   2. Random module start address for KASLR
-   3. kasan_alloc_module_shadow()
-   4. kasan_reset_tag()
-   5. Preferred and secondary module address ranges
+Also, update users of module_alloc_type (BPF, ftrace, kprobe) to handle
+these restrictions.
 
-enum mod_alloc_params_flags are used to control the behavior of
-module_alloc_type. Specifically: MOD_ALLOC_FALLBACK let module_alloc_type
-fallback to existing module_alloc. MOD_ALLOC_SET_MEMORY let
-module_alloc_type to protect the memory before returning to the user.
-
-module_allocator_init() call is added to start_kernel() to initialize
-module_alloc_type.
+arch_prepare_bpf_trampoline() cannot jit directly into module memory yet,
+so we have to use module_memory_force_[un]protect() in it.
 
 Signed-off-by: Song Liu <song@kernel.org>
-
-[1] https://lore.kernel.org/linux-mm/20221107223921.3451913-1-song@kernel.o=
-rg/
 ---
- include/linux/module.h       |   6 +
- include/linux/moduleloader.h |  75 ++++++++++++
- init/main.c                  |   1 +
- kernel/bpf/bpf_struct_ops.c  |  10 +-
- kernel/bpf/core.c            |  20 ++--
- kernel/bpf/trampoline.c      |   6 +-
- kernel/kprobes.c             |   6 +-
- kernel/module/internal.h     |   3 +
- kernel/module/main.c         | 217 +++++++++++++++++++++++++++++++++--
- kernel/module/strict_rwx.c   |   4 +
- 10 files changed, 319 insertions(+), 29 deletions(-)
+ arch/x86/kernel/alternative.c  |  37 +++++++----
+ arch/x86/kernel/ftrace.c       |  44 +++++++------
+ arch/x86/kernel/kprobes/core.c |   8 +--
+ arch/x86/kernel/module.c       | 114 +++++++++++++++++++++++----------
+ arch/x86/kernel/unwind_orc.c   |  13 ++--
+ arch/x86/net/bpf_jit_comp.c    |  22 +++++--
+ kernel/bpf/core.c              |   6 +-
+ 7 files changed, 160 insertions(+), 84 deletions(-)
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 9e56763dff81..948b8132a742 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -752,6 +752,8 @@ static inline bool is_livepatch_module(struct module *m=
-od)
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.=
+c
+index f615e0cb6d93..bb4e6c3225bf 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -122,6 +122,17 @@ extern struct alt_instr __alt_instructions[], __alt_=
+instructions_end[];
+ extern s32 __smp_locks[], __smp_locks_end[];
+ void text_poke_early(void *addr, const void *opcode, size_t len);
 =20
- void set_module_sig_enforced(void);
-=20
-+void __init module_allocator_init(void);
-+
- #else /* !CONFIG_MODULES... */
-=20
- static inline struct module *__module_address(unsigned long addr)
-@@ -855,6 +857,10 @@ void *dereference_module_function_descriptor(struct mo=
-dule *mod, void *ptr)
- 	return ptr;
- }
-=20
-+static inline void __init module_allocator_init(void)
++static void __init_or_module do_text_poke(void *addr, const void *opcode=
+, size_t len)
 +{
++	if (system_state < SYSTEM_RUNNING) {
++		text_poke_early(addr, opcode, len);
++	} else {
++		mutex_lock(&text_mutex);
++		text_poke(addr, opcode, len);
++		mutex_unlock(&text_mutex);
++	}
 +}
 +
- #endif /* CONFIG_MODULES */
-=20
- #ifdef CONFIG_SYSFS
-diff --git a/include/linux/moduleloader.h b/include/linux/moduleloader.h
-index 03be088fb439..59c7114a7b65 100644
---- a/include/linux/moduleloader.h
-+++ b/include/linux/moduleloader.h
-@@ -32,6 +32,81 @@ void *module_alloc(unsigned long size);
- /* Free memory returned from module_alloc. */
- void module_memfree(void *module_region);
-=20
-+#ifdef CONFIG_MODULES
-+
-+/* For mod_alloc_params.flags */
-+enum mod_alloc_params_flags {
-+	MOD_ALLOC_FALLBACK		=3D (1 << 0),	/* Fallback to module_alloc() */
-+	MOD_ALLOC_KASAN_MODULE_SHADOW	=3D (1 << 1),	/* Calls kasan_alloc_module_s=
-hadow() */
-+	MOD_ALLOC_KASAN_RESET_TAG	=3D (1 << 2),	/* Calls kasan_reset_tag() */
-+	MOD_ALLOC_SET_MEMORY		=3D (1 << 3),	/* The allocator calls set_memory_ on
-+							 * memory before returning it to the
-+							 * caller, so that the caller do not need
-+							 * to call set_memory_* again. This does
-+							 * not work for MOD_RO_AFTER_INIT.
-+							 */
-+};
-+
-+#define MOD_MAX_ADDR_SPACES 2
-+
-+/**
-+ * struct vmalloc_params - Parameters to call __vmalloc_node_range()
-+ * @start:          Address space range start
-+ * @end:            Address space range end
-+ * @gfp_mask:       The gfp_t mask used for this range
-+ * @pgprot:         The page protection for this range
-+ * @vm_flags        The vm_flag used for this range
-+ */
-+struct vmalloc_params {
-+	unsigned long	start;
-+	unsigned long	end;
-+	gfp_t		gfp_mask;
-+	pgprot_t	pgprot;
-+	unsigned long	vm_flags;
-+};
-+
-+/**
-+ * struct mod_alloc_params - Parameters for module allocation type
-+ * @flags:          Properties in mod_alloc_params_flags
-+ * @granularity:    The allocation granularity (PAGE/PMD) in bytes
-+ * @alignment:      The allocation alignment requirement
-+ * @vmp:            Parameters used to call vmalloc
-+ * @fill:           Function to fill allocated space. If NULL, use memcpy()
-+ * @invalidate:     Function to invalidate memory space.
-+ *
-+ * If @granularity > @alignment the allocation can reuse free space in
-+ * previously allocated pages. If they are the same, then fresh pages
-+ * have to be allocated.
-+ */
-+struct mod_alloc_params {
-+	unsigned int		flags;
-+	unsigned int		granularity;
-+	unsigned int		alignment;
-+	struct vmalloc_params	vmp[MOD_MAX_ADDR_SPACES];
-+	void *			(*fill)(void *dst, const void *src, size_t len);
-+	void *			(*invalidate)(void *ptr, size_t len);
-+};
-+
-+struct mod_type_allocator {
-+	struct mod_alloc_params	params;
-+};
-+
-+struct mod_allocators {
-+	struct mod_type_allocator *types[MOD_MEM_NUM_TYPES];
-+};
-+
-+void *module_alloc_type(size_t size, enum mod_mem_type type);
-+void module_memfree_type(void *ptr, enum mod_mem_type type);
-+void module_memory_fill_type(void *dst, void *src, size_t len, enum mod_me=
-m_type type);
-+void module_memory_invalidate_type(void *ptr, size_t len, enum mod_mem_typ=
-e type);
-+void module_memory_protect(void *ptr, size_t len, enum mod_mem_type type);
-+void module_memory_unprotect(void *ptr, size_t len, enum mod_mem_type type=
-);
-+void module_memory_force_protect(void *ptr, size_t len, enum mod_mem_type =
-type);
-+void module_memory_force_unprotect(void *ptr, size_t len, enum mod_mem_typ=
-e type);
-+void module_alloc_type_init(struct mod_allocators *allocators);
-+
-+#endif /* CONFIG_MODULES */
-+
- /* Determines if the section name is an init section (that is only used du=
-ring
-  * module loading).
+ /*
+  * Are we looking at a near JMP with a 1 or 4-byte displacement.
   */
-diff --git a/init/main.c b/init/main.c
-index af50044deed5..e05228cabde8 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -936,6 +936,7 @@ asmlinkage __visible void __init __no_sanitize_address =
-__noreturn start_kernel(v
- 	sort_main_extable();
- 	trap_init();
- 	mm_core_init();
-+	module_allocator_init();
- 	poking_init();
- 	ftrace_init();
+@@ -331,7 +342,7 @@ void __init_or_module noinline apply_alternatives(str=
+uct alt_instr *start,
 =20
-diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-index d3f0a4825fa6..e4ec4be866cc 100644
---- a/kernel/bpf/bpf_struct_ops.c
-+++ b/kernel/bpf/bpf_struct_ops.c
-@@ -12,6 +12,7 @@
- #include <linux/mutex.h>
- #include <linux/btf_ids.h>
- #include <linux/rcupdate_wait.h>
-+#include <linux/moduleloader.h>
+ 		DUMP_BYTES(insn_buff, insn_buff_sz, "%px: final_insn: ", instr);
 =20
- enum bpf_struct_ops_state {
- 	BPF_STRUCT_OPS_STATE_INIT,
-@@ -512,7 +513,8 @@ static long bpf_struct_ops_map_update_elem(struct bpf_m=
-ap *map, void *key,
- 		err =3D st_ops->validate(kdata);
- 		if (err)
- 			goto reset_unlock;
--		set_memory_rox((long)st_map->image, 1);
-+		module_memory_protect(st_map->image, PAGE_SIZE, MOD_TEXT);
-+
- 		/* Let bpf_link handle registration & unregistration.
- 		 *
- 		 * Pair with smp_load_acquire() during lookup_elem().
-@@ -521,7 +523,7 @@ static long bpf_struct_ops_map_update_elem(struct bpf_m=
-ap *map, void *key,
- 		goto unlock;
- 	}
+-		text_poke_early(instr, insn_buff, insn_buff_sz);
++		do_text_poke(instr, insn_buff, insn_buff_sz);
 =20
--	set_memory_rox((long)st_map->image, 1);
-+	module_memory_protect(st_map->image, PAGE_SIZE, MOD_TEXT);
- 	err =3D st_ops->reg(kdata);
- 	if (likely(!err)) {
- 		/* This refcnt increment on the map here after
-@@ -544,8 +546,7 @@ static long bpf_struct_ops_map_update_elem(struct bpf_m=
-ap *map, void *key,
- 	 * there was a race in registering the struct_ops (under the same name) to
- 	 * a sub-system through different struct_ops's maps.
- 	 */
--	set_memory_nx((long)st_map->image, 1);
--	set_memory_rw((long)st_map->image, 1);
-+	module_memory_unprotect(st_map->image, PAGE_SIZE, MOD_TEXT);
-=20
- reset_unlock:
- 	bpf_struct_ops_map_put_progs(st_map);
-@@ -907,4 +908,3 @@ int bpf_struct_ops_link_create(union bpf_attr *attr)
- 	kfree(link);
- 	return err;
- }
--
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 7421487422d4..4c989a8fe8b8 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -860,7 +860,7 @@ static struct bpf_prog_pack *alloc_new_pack(bpf_jit_fil=
-l_hole_t bpf_fill_ill_ins
- 		       GFP_KERNEL);
- 	if (!pack)
- 		return NULL;
--	pack->ptr =3D module_alloc(BPF_PROG_PACK_SIZE);
-+	pack->ptr =3D module_alloc_type(BPF_PROG_PACK_SIZE, MOD_TEXT);
- 	if (!pack->ptr) {
- 		kfree(pack);
- 		return NULL;
-@@ -869,8 +869,7 @@ static struct bpf_prog_pack *alloc_new_pack(bpf_jit_fil=
-l_hole_t bpf_fill_ill_ins
- 	bitmap_zero(pack->bitmap, BPF_PROG_PACK_SIZE / BPF_PROG_CHUNK_SIZE);
- 	list_add_tail(&pack->list, &pack_list);
-=20
--	set_vm_flush_reset_perms(pack->ptr);
--	set_memory_rox((unsigned long)pack->ptr, BPF_PROG_PACK_SIZE / PAGE_SIZE);
-+	module_memory_protect(pack->ptr, BPF_PROG_PACK_SIZE, MOD_TEXT);
- 	return pack;
- }
-=20
-@@ -884,11 +883,10 @@ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole=
-_t bpf_fill_ill_insns)
- 	mutex_lock(&pack_mutex);
- 	if (size > BPF_PROG_PACK_SIZE) {
- 		size =3D round_up(size, PAGE_SIZE);
--		ptr =3D module_alloc(size);
-+		ptr =3D module_alloc_type(size, MOD_TEXT);
- 		if (ptr) {
- 			bpf_fill_ill_insns(ptr, size);
--			set_vm_flush_reset_perms(ptr);
--			set_memory_rox((unsigned long)ptr, size / PAGE_SIZE);
-+			module_memory_protect(ptr, size, MOD_TEXT);
+ next:
+ 		optimize_nops(instr, a->instrlen);
+@@ -564,7 +575,7 @@ void __init_or_module noinline apply_retpolines(s32 *=
+start, s32 *end)
+ 			optimize_nops(bytes, len);
+ 			DUMP_BYTES(((u8*)addr),  len, "%px: orig: ", addr);
+ 			DUMP_BYTES(((u8*)bytes), len, "%px: repl: ", addr);
+-			text_poke_early(addr, bytes, len);
++			do_text_poke(addr, bytes, len);
  		}
- 		goto out;
  	}
-@@ -922,7 +920,8 @@ void bpf_prog_pack_free(struct bpf_binary_header *hdr)
+ }
+@@ -638,7 +649,7 @@ void __init_or_module noinline apply_returns(s32 *sta=
+rt, s32 *end)
+ 		if (len =3D=3D insn.length) {
+ 			DUMP_BYTES(((u8*)addr),  len, "%px: orig: ", addr);
+ 			DUMP_BYTES(((u8*)bytes), len, "%px: repl: ", addr);
+-			text_poke_early(addr, bytes, len);
++			do_text_poke(addr, bytes, len);
+ 		}
+ 	}
+ }
+@@ -674,7 +685,7 @@ static void poison_endbr(void *addr, bool warn)
+ 	 */
+ 	DUMP_BYTES(((u8*)addr), 4, "%px: orig: ", addr);
+ 	DUMP_BYTES(((u8*)&poison), 4, "%px: repl: ", addr);
+-	text_poke_early(addr, &poison, 4);
++	do_text_poke(addr, &poison, 4);
+ }
 =20
- 	mutex_lock(&pack_mutex);
- 	if (hdr->size > BPF_PROG_PACK_SIZE) {
--		module_memfree(hdr);
-+		module_memfree_type(hdr, MOD_TEXT);
-+
- 		goto out;
+ /*
+@@ -869,7 +880,7 @@ static int cfi_disable_callers(s32 *start, s32 *end)
+ 		if (!hash) /* nocfi callers */
+ 			continue;
+=20
+-		text_poke_early(addr, jmp, 2);
++		do_text_poke(addr, jmp, 2);
  	}
 =20
-@@ -946,7 +945,8 @@ void bpf_prog_pack_free(struct bpf_binary_header *hdr)
- 	if (bitmap_find_next_zero_area(pack->bitmap, BPF_PROG_CHUNK_COUNT, 0,
- 				       BPF_PROG_CHUNK_COUNT, 0) =3D=3D 0) {
- 		list_del(&pack->list);
--		module_memfree(pack->ptr);
-+		module_memfree_type(pack->ptr, MOD_TEXT);
-+
- 		kfree(pack);
- 	}
- out:
-@@ -997,12 +997,12 @@ void bpf_jit_uncharge_modmem(u32 size)
+ 	return 0;
+@@ -892,7 +903,7 @@ static int cfi_enable_callers(s32 *start, s32 *end)
+ 		if (!hash) /* nocfi callers */
+ 			continue;
 =20
- void *__weak bpf_jit_alloc_exec(unsigned long size)
+-		text_poke_early(addr, mov, 2);
++		do_text_poke(addr, mov, 2);
+ 	}
+=20
+ 	return 0;
+@@ -913,7 +924,7 @@ static int cfi_rand_preamble(s32 *start, s32 *end)
+ 			return -EINVAL;
+=20
+ 		hash =3D cfi_rehash(hash);
+-		text_poke_early(addr + 1, &hash, 4);
++		do_text_poke(addr + 1, &hash, 4);
+ 	}
+=20
+ 	return 0;
+@@ -932,9 +943,9 @@ static int cfi_rewrite_preamble(s32 *start, s32 *end)
+ 			 addr, addr, 5, addr))
+ 			return -EINVAL;
+=20
+-		text_poke_early(addr, fineibt_preamble_start, fineibt_preamble_size);
++		do_text_poke(addr, fineibt_preamble_start, fineibt_preamble_size);
+ 		WARN_ON(*(u32 *)(addr + fineibt_preamble_hash) !=3D 0x12345678);
+-		text_poke_early(addr + fineibt_preamble_hash, &hash, 4);
++		do_text_poke(addr + fineibt_preamble_hash, &hash, 4);
+ 	}
+=20
+ 	return 0;
+@@ -953,7 +964,7 @@ static int cfi_rand_callers(s32 *start, s32 *end)
+ 		hash =3D decode_caller_hash(addr);
+ 		if (hash) {
+ 			hash =3D -cfi_rehash(hash);
+-			text_poke_early(addr + 2, &hash, 4);
++			do_text_poke(addr + 2, &hash, 4);
+ 		}
+ 	}
+=20
+@@ -971,9 +982,9 @@ static int cfi_rewrite_callers(s32 *start, s32 *end)
+ 		addr -=3D fineibt_caller_size;
+ 		hash =3D decode_caller_hash(addr);
+ 		if (hash) {
+-			text_poke_early(addr, fineibt_caller_start, fineibt_caller_size);
++			do_text_poke(addr, fineibt_caller_start, fineibt_caller_size);
+ 			WARN_ON(*(u32 *)(addr + fineibt_caller_hash) !=3D 0x12345678);
+-			text_poke_early(addr + fineibt_caller_hash, &hash, 4);
++			do_text_poke(addr + fineibt_caller_hash, &hash, 4);
+ 		}
+ 		/* rely on apply_retpolines() */
+ 	}
+@@ -1243,7 +1254,7 @@ void __init_or_module apply_paravirt(struct paravir=
+t_patch_site *start,
+=20
+ 		/* Pad the rest with nops */
+ 		add_nops(insn_buff + used, p->len - used);
+-		text_poke_early(p->instr, insn_buff, p->len);
++		do_text_poke(p->instr, insn_buff, p->len);
+ 	}
+ }
+ extern struct paravirt_patch_site __start_parainstructions[],
+diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+index 5e7ead52cfdb..a41af9e49afb 100644
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -119,8 +119,11 @@ ftrace_modify_code_direct(unsigned long ip, const ch=
+ar *old_code,
+ 	/* replace the text with the new text */
+ 	if (ftrace_poke_late)
+ 		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
+-	else
+-		text_poke_early((void *)ip, new_code, MCOUNT_INSN_SIZE);
++	else {
++		mutex_lock(&text_mutex);
++		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
++		mutex_unlock(&text_mutex);
++	}
+ 	return 0;
+ }
+=20
+@@ -265,11 +268,11 @@ void arch_ftrace_update_code(int command)
+ /* Module allocation simplifies allocating memory for code */
+ static inline void *alloc_tramp(unsigned long size)
  {
 -	return module_alloc(size);
 +	return module_alloc_type(size, MOD_TEXT);
  }
-=20
- void __weak bpf_jit_free_exec(void *addr)
+ static inline void tramp_free(void *tramp)
  {
--	module_memfree(addr);
-+	module_memfree_type(addr, MOD_TEXT);
+-	module_memfree(tramp);
++	module_memfree_type(tramp, MOD_TEXT);
  }
+ #else
+ /* Trampolines can only be created if modules are supported */
+@@ -319,7 +322,6 @@ create_trampoline(struct ftrace_ops *ops, unsigned in=
+t *tramp_size)
+ 	unsigned long call_offset;
+ 	unsigned long jmp_offset;
+ 	unsigned long offset;
+-	unsigned long npages;
+ 	unsigned long size;
+ 	unsigned long *ptr;
+ 	void *trampoline;
+@@ -328,7 +330,6 @@ create_trampoline(struct ftrace_ops *ops, unsigned in=
+t *tramp_size)
+ 	unsigned const char op_ref[] =3D { 0x48, 0x8b, 0x15 };
+ 	unsigned const char retq[] =3D { RET_INSN_OPCODE, INT3_INSN_OPCODE };
+ 	union ftrace_op_code_union op_ptr;
+-	int ret;
 =20
- struct bpf_binary_header *
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index ac021bc43a66..fd2d46c9a295 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -13,6 +13,7 @@
- #include <linux/bpf_verifier.h>
- #include <linux/bpf_lsm.h>
- #include <linux/delay.h>
-+#include <linux/moduleloader.h>
+ 	if (ops->flags & FTRACE_OPS_FL_SAVE_REGS) {
+ 		start_offset =3D (unsigned long)ftrace_regs_caller;
+@@ -356,18 +357,16 @@ create_trampoline(struct ftrace_ops *ops, unsigned =
+int *tramp_size)
+ 		return 0;
 =20
- /* dummy _ops. The verifier will operate on target program's ops. */
- const struct bpf_verifier_ops bpf_extension_verifier_ops =3D {
-@@ -440,7 +441,7 @@ static int bpf_trampoline_update(struct bpf_trampoline =
-*tr, bool lock_direct_mut
- 	if (err < 0)
- 		goto out;
+ 	*tramp_size =3D size + RET_SIZE + sizeof(void *);
+-	npages =3D DIV_ROUND_UP(*tramp_size, PAGE_SIZE);
 =20
--	set_memory_rox((long)im->image, 1);
-+	module_memory_protect(im->image, PAGE_SIZE, MOD_TEXT);
+ 	/* Copy ftrace_caller onto the trampoline memory */
+-	ret =3D copy_from_kernel_nofault(trampoline, (void *)start_offset, size=
+);
+-	if (WARN_ON(ret < 0))
++	if (WARN_ON(text_poke_copy(trampoline, (void *)start_offset, size) =3D=3D=
+ NULL))
+ 		goto fail;
 =20
- 	WARN_ON(tr->cur_image && tr->selector =3D=3D 0);
- 	WARN_ON(!tr->cur_image && tr->selector);
-@@ -462,8 +463,7 @@ static int bpf_trampoline_update(struct bpf_trampoline =
-*tr, bool lock_direct_mut
- 		tr->fops->trampoline =3D 0;
-=20
- 		/* reset im->image memory attr for arch_prepare_bpf_trampoline */
--		set_memory_nx((long)im->image, 1);
--		set_memory_rw((long)im->image, 1);
-+		module_memory_unprotect(im->image, PAGE_SIZE, MOD_TEXT);
- 		goto again;
- 	}
- #endif
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index 00e177de91cc..daf47da3c96e 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -113,17 +113,17 @@ enum kprobe_slot_state {
- void __weak *alloc_insn_page(void)
- {
- 	/*
--	 * Use module_alloc() so this page is within +/- 2GB of where the
-+	 * Use module_alloc_type() so this page is within +/- 2GB of where the
- 	 * kernel image and loaded module images reside. This is required
- 	 * for most of the architectures.
- 	 * (e.g. x86-64 needs this to handle the %rip-relative fixups.)
- 	 */
--	return module_alloc(PAGE_SIZE);
-+	return module_alloc_type(PAGE_SIZE, MOD_TEXT);
- }
-=20
- static void free_insn_page(void *page)
- {
--	module_memfree(page);
-+	module_memfree_type(page, MOD_TEXT);
- }
-=20
- struct kprobe_insn_cache kprobe_insn_slots =3D {
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index dc7b0160c480..b2e136326c4c 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -12,6 +12,7 @@
- #include <linux/mutex.h>
- #include <linux/rculist.h>
- #include <linux/rcupdate.h>
-+#include <linux/moduleloader.h>
- #include <linux/mm.h>
-=20
- #ifndef ARCH_SHF_SMALL
-@@ -392,3 +393,5 @@ static inline int same_magic(const char *amagic, const =
-char *bmagic, bool has_cr
- 	return strcmp(amagic, bmagic) =3D=3D 0;
- }
- #endif /* CONFIG_MODVERSIONS */
-+
-+extern struct mod_allocators module_allocators;
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index ea7d0c7f3e60..0f9183f1ca9f 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -1203,11 +1203,11 @@ static bool mod_mem_use_vmalloc(enum mod_mem_type t=
-ype)
- 		mod_mem_type_is_core_data(type);
- }
-=20
--static void *module_memory_alloc(unsigned int size, enum mod_mem_type type)
-+static void *module_memory_alloc(size_t size, enum mod_mem_type type)
- {
- 	if (mod_mem_use_vmalloc(type))
- 		return vzalloc(size);
--	return module_alloc(size);
-+	return module_alloc_type(size, type);
- }
-=20
- static void module_memory_free(void *ptr, enum mod_mem_type type)
-@@ -1215,7 +1215,7 @@ static void module_memory_free(void *ptr, enum mod_me=
-m_type type)
- 	if (mod_mem_use_vmalloc(type))
- 		vfree(ptr);
+ 	ip =3D trampoline + size;
+ 	if (cpu_feature_enabled(X86_FEATURE_RETHUNK))
+ 		__text_gen_insn(ip, JMP32_INSN_OPCODE, ip, x86_return_thunk, JMP32_INS=
+N_SIZE);
  	else
--		module_memfree(ptr);
-+		module_memfree_type(ptr, type);
- }
+-		memcpy(ip, retq, sizeof(retq));
++		text_poke_copy(ip, retq, sizeof(retq));
 =20
- static void free_mod_mem(struct module *mod)
-@@ -1609,6 +1609,201 @@ void * __weak module_alloc(unsigned long size)
- 			NUMA_NO_NODE, __builtin_return_address(0));
- }
+ 	/* No need to test direct calls on created trampolines */
+ 	if (ops->flags & FTRACE_OPS_FL_SAVE_REGS) {
+@@ -375,8 +374,7 @@ create_trampoline(struct ftrace_ops *ops, unsigned in=
+t *tramp_size)
+ 		ip =3D trampoline + (jmp_offset - start_offset);
+ 		if (WARN_ON(*(char *)ip !=3D 0x75))
+ 			goto fail;
+-		ret =3D copy_from_kernel_nofault(ip, x86_nops[2], 2);
+-		if (ret < 0)
++		if (text_poke_copy(ip, x86_nops[2], 2) =3D=3D NULL)
+ 			goto fail;
+ 	}
 =20
-+struct mod_allocators module_allocators;
+@@ -389,7 +387,7 @@ create_trampoline(struct ftrace_ops *ops, unsigned in=
+t *tramp_size)
+ 	 */
+=20
+ 	ptr =3D (unsigned long *)(trampoline + size + RET_SIZE);
+-	*ptr =3D (unsigned long)ops;
++	text_poke_copy(ptr, &ops, sizeof(unsigned long));
+=20
+ 	op_offset -=3D start_offset;
+ 	memcpy(&op_ptr, trampoline + op_offset, OP_REF_SIZE);
+@@ -405,7 +403,7 @@ create_trampoline(struct ftrace_ops *ops, unsigned in=
+t *tramp_size)
+ 	op_ptr.offset =3D offset;
+=20
+ 	/* put in the new offset to the ftrace_ops */
+-	memcpy(trampoline + op_offset, &op_ptr, OP_REF_SIZE);
++	text_poke_copy(trampoline + op_offset, &op_ptr, OP_REF_SIZE);
+=20
+ 	/* put in the call to the function */
+ 	mutex_lock(&text_mutex);
+@@ -415,15 +413,14 @@ create_trampoline(struct ftrace_ops *ops, unsigned =
+int *tramp_size)
+ 	 * the depth accounting before the call already.
+ 	 */
+ 	dest =3D ftrace_ops_get_func(ops);
+-	memcpy(trampoline + call_offset,
+-	       text_gen_insn(CALL_INSN_OPCODE, trampoline + call_offset, dest),
+-	       CALL_INSN_SIZE);
++	text_poke_copy_locked(trampoline + call_offset,
++	      text_gen_insn(CALL_INSN_OPCODE, trampoline + call_offset, dest),
++	      CALL_INSN_SIZE, false);
+ 	mutex_unlock(&text_mutex);
+=20
+ 	/* ALLOC_TRAMP flags lets us know we created it */
+ 	ops->flags |=3D FTRACE_OPS_FL_ALLOC_TRAMP;
+=20
+-	set_memory_rox((unsigned long)trampoline, npages);
+ 	return (unsigned long)trampoline;
+ fail:
+ 	tramp_free(trampoline);
+@@ -667,4 +664,15 @@ void ftrace_graph_func(unsigned long ip, unsigned lo=
+ng parent_ip,
+ }
+ #endif
+=20
++void ftrace_swap_func(void *a, void *b, int n)
++{
++	unsigned long t;
 +
-+static struct mod_type_allocator default_mod_type_allocator =3D {
++	WARN_ON_ONCE(n !=3D sizeof(t));
++
++	t =3D *((unsigned long *)a);
++	text_poke_copy(a, b, sizeof(t));
++	text_poke_copy(b, &t, sizeof(t));
++}
++
+ #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
+diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/cor=
+e.c
+index f7f6042eb7e6..96f56e663cbe 100644
+--- a/arch/x86/kernel/kprobes/core.c
++++ b/arch/x86/kernel/kprobes/core.c
+@@ -414,16 +414,10 @@ void *alloc_insn_page(void)
+ {
+ 	void *page;
+=20
+-	page =3D module_alloc(PAGE_SIZE);
++	page =3D module_alloc_type(PAGE_SIZE, MOD_TEXT);
+ 	if (!page)
+ 		return NULL;
+=20
+-	/*
+-	 * TODO: Once additional kernel code protection mechanisms are set, ens=
+ure
+-	 * that the page was not maliciously altered and it is still zeroed.
+-	 */
+-	set_memory_rox((unsigned long)page, 1);
+-
+ 	return page;
+ }
+=20
+diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
+index b05f62ee2344..80c2ee1a4f7f 100644
+--- a/arch/x86/kernel/module.c
++++ b/arch/x86/kernel/module.c
+@@ -67,24 +67,82 @@ static unsigned long int get_module_load_offset(void)
+=20
+ void *module_alloc(unsigned long size)
+ {
+-	gfp_t gfp_mask =3D GFP_KERNEL;
+-	void *p;
+-
+-	if (PAGE_ALIGN(size) > MODULES_LEN)
+-		return NULL;
+-
+-	p =3D __vmalloc_node_range(size, MODULE_ALIGN,
+-				 MODULES_VADDR + get_module_load_offset(),
+-				 MODULES_END, gfp_mask, PAGE_KERNEL,
+-				 VM_FLUSH_RESET_PERMS | VM_DEFER_KMEMLEAK,
+-				 NUMA_NO_NODE, __builtin_return_address(0));
++	WARN(true, "x86 should not use module_alloc\n");
++	return NULL;
++}
+=20
+-	if (p && (kasan_alloc_module_shadow(p, size, gfp_mask) < 0)) {
+-		vfree(p);
+-		return NULL;
+-	}
++static void *x86_module_invalidate_text(void *ptr, size_t len)
++{
++	return text_poke_set(ptr, 0xcc, len);
++}
+=20
+-	return p;
++static struct mod_type_allocator x86_mod_allocator_text =3D {
 +	.params =3D {
-+		.flags =3D MOD_ALLOC_FALLBACK,
++		.flags		=3D MOD_ALLOC_KASAN_MODULE_SHADOW | MOD_ALLOC_SET_MEMORY,
++		.granularity	=3D PAGE_SIZE,
++		.alignment	=3D MODULE_ALIGN,
++		.fill		=3D text_poke_copy,
++		.invalidate	=3D x86_module_invalidate_text,
 +	},
 +};
 +
-+void __init __weak module_alloc_type_init(struct mod_allocators *allocator=
-s)
++static struct mod_type_allocator x86_mod_allocator_rw_data =3D {
++	.params =3D {
++		.flags		=3D MOD_ALLOC_KASAN_MODULE_SHADOW,
++		.granularity	=3D PAGE_SIZE,
++		.alignment	=3D MODULE_ALIGN,
++	},
++};
++
++static struct mod_type_allocator x86_mod_allocator_ro_data =3D {
++	.params =3D {
++		.flags		=3D MOD_ALLOC_KASAN_MODULE_SHADOW | MOD_ALLOC_SET_MEMORY,
++		.granularity	=3D PAGE_SIZE,
++		.alignment	=3D MODULE_ALIGN,
++		.fill		=3D text_poke_copy,
++		.invalidate	=3D x86_module_invalidate_text,
++	},
++};
++
++void __init module_alloc_type_init(struct mod_allocators *allocators)
 +{
-+	for_each_mod_mem_type(type)
-+		allocators->types[type] =3D &default_mod_type_allocator;
-+}
++	struct mod_alloc_params *params =3D &x86_mod_allocator_text.params;
++	struct vmalloc_params *vmp =3D &params->vmp[0];
 +
-+static void module_memory_enable_protection(void *ptr, size_t len, enum mo=
-d_mem_type type)
-+{
-+	int npages =3D DIV_ROUND_UP(len, PAGE_SIZE);
++	vmp->start =3D MODULES_VADDR + get_module_load_offset();
++	vmp->end =3D MODULES_END;
++	vmp->gfp_mask =3D GFP_KERNEL;
++	vmp->pgprot =3D PAGE_KERNEL_EXEC;
++	vmp->vm_flags =3D VM_FLUSH_RESET_PERMS | VM_DEFER_KMEMLEAK |
++		VM_ALLOW_HUGE_VMAP;
 +
-+	switch (type) {
-+	case MOD_TEXT:
-+	case MOD_INIT_TEXT:
-+		set_memory_rox((unsigned long)ptr, npages);
-+		break;
-+	case MOD_DATA:
-+	case MOD_INIT_DATA:
-+		set_memory_nx((unsigned long)ptr, npages);
-+		break;
-+	case MOD_RODATA:
-+		set_memory_nx((unsigned long)ptr, npages);
-+		set_memory_ro((unsigned long)ptr, npages);
-+		break;
-+	case MOD_RO_AFTER_INIT:
-+		set_memory_ro((unsigned long)ptr, npages);
-+		break;
-+	default:
-+		WARN_ONCE(true, "Unknown mod_mem_type: %d\n", type);
-+		break;
-+	}
-+}
++	for_class_mod_mem_type(type, text)
++		allocators->types[type] =3D &x86_mod_allocator_text;
 +
-+static void module_memory_disable_protection(void *ptr, size_t len, enum m=
-od_mem_type type)
-+{
-+	int npages =3D DIV_ROUND_UP(len, PAGE_SIZE);
++	params =3D &x86_mod_allocator_rw_data.params;
++	vmp =3D &params->vmp[0];
 +
-+	switch (type) {
-+	case MOD_TEXT:
-+	case MOD_INIT_TEXT:
-+		set_memory_nx((unsigned long)ptr, npages);
-+		set_memory_rw((unsigned long)ptr, npages);
-+		break;
-+	case MOD_RODATA:
-+	case MOD_RO_AFTER_INIT:
-+		set_memory_rw((unsigned long)ptr, npages);
-+		break;
-+	case MOD_DATA:
-+	case MOD_INIT_DATA:
-+		break;
-+	default:
-+		WARN_ONCE(true, "Unknown mod_mem_type: %d\n", type);
-+		break;
-+	}
-+}
++	vmp->start =3D MODULES_VADDR + get_module_load_offset();
++	vmp->end =3D MODULES_END;
++	vmp->gfp_mask =3D GFP_KERNEL;
++	vmp->pgprot =3D PAGE_KERNEL_EXEC;
++	vmp->vm_flags =3D VM_FLUSH_RESET_PERMS | VM_DEFER_KMEMLEAK;
 +
-+void *module_alloc_type(size_t size, enum mod_mem_type type)
-+{
-+	struct mod_type_allocator *allocator;
-+	struct mod_alloc_params *params;
-+	void *ptr =3D NULL;
-+	int i;
++	allocators->types[MOD_DATA] =3D &x86_mod_allocator_rw_data;
++	allocators->types[MOD_INIT_DATA] =3D &x86_mod_allocator_rw_data;
++	allocators->types[MOD_RO_AFTER_INIT] =3D &x86_mod_allocator_rw_data;
 +
-+	if (WARN_ON_ONCE(type >=3D MOD_MEM_NUM_TYPES))
-+		return NULL;
++	params =3D &x86_mod_allocator_ro_data.params;
++	vmp =3D &params->vmp[0];
 +
-+	allocator =3D module_allocators.types[type];
-+	params =3D &allocator->params;
++	vmp->start =3D MODULES_VADDR + get_module_load_offset();
++	vmp->end =3D MODULES_END;
++	vmp->gfp_mask =3D GFP_KERNEL;
++	vmp->pgprot =3D PAGE_KERNEL_EXEC;
++	vmp->vm_flags =3D VM_FLUSH_RESET_PERMS | VM_DEFER_KMEMLEAK;
 +
-+	if (params->flags & MOD_ALLOC_FALLBACK)
-+		return module_alloc(size);
-+
-+	for (i =3D 0; i < MOD_MAX_ADDR_SPACES; i++) {
-+		struct vmalloc_params *vmp =3D &params->vmp[i];
-+
-+		if (vmp->start =3D=3D vmp->end)
-+			continue;
-+
-+		ptr =3D __vmalloc_node_range(size, params->alignment, vmp->start, vmp->e=
-nd,
-+					   vmp->gfp_mask, vmp->pgprot, vmp->vm_flags,
-+					   NUMA_NO_NODE, __builtin_return_address(0));
-+		if (!ptr)
-+			continue;
-+
-+		if (params->flags & MOD_ALLOC_KASAN_MODULE_SHADOW) {
-+			if (ptr && kasan_alloc_module_shadow(ptr, size, vmp->gfp_mask)) {
-+				vfree(ptr);
-+				return NULL;
-+			}
-+		}
-+
-+		/*
-+		 * VM_FLUSH_RESET_PERMS is still needed here. This is
-+		 * because "size" is not available in module_memfree_type
-+		 * at the moment, so we cannot undo set_memory_rox in
-+		 * module_memfree_type. Once a better allocator is used,
-+		 * we can manually undo set_memory_rox, and thus remove
-+		 * VM_FLUSH_RESET_PERMS.
-+		 */
-+		set_vm_flush_reset_perms(ptr);
-+
-+		if (params->flags & MOD_ALLOC_SET_MEMORY)
-+			module_memory_enable_protection(ptr, size, type);
-+
-+		if (params->flags & MOD_ALLOC_KASAN_RESET_TAG)
-+			return kasan_reset_tag(ptr);
-+		return ptr;
-+	}
-+	return NULL;
-+}
-+
-+void module_memfree_type(void *ptr, enum mod_mem_type type)
-+{
-+	module_memfree(ptr);
-+}
-+
-+void module_memory_fill_type(void *dst, void *src, size_t len, enum mod_me=
-m_type type)
-+{
-+	struct mod_type_allocator *allocator;
-+	struct mod_alloc_params *params;
-+
-+	allocator =3D module_allocators.types[type];
-+	params =3D &allocator->params;
-+
-+	if (params->fill)
-+		params->fill(dst, src, len);
-+	else
-+		memcpy(dst, src, len);
-+}
-+
-+void module_memory_invalidate_type(void *dst, size_t len, enum mod_mem_typ=
-e type)
-+{
-+	struct mod_type_allocator *allocator;
-+	struct mod_alloc_params *params;
-+
-+	allocator =3D module_allocators.types[type];
-+	params =3D &allocator->params;
-+
-+	if (params->invalidate)
-+		params->invalidate(dst, len);
-+	else
-+		memset(dst, 0, len);
-+}
-+
-+/*
-+ * Protect memory allocated by module_alloc_type(). Called by users of
-+ * module_alloc_type. This is a no-op with MOD_ALLOC_SET_MEMORY.
-+ */
-+void module_memory_protect(void *ptr, size_t len, enum mod_mem_type type)
-+{
-+	struct mod_alloc_params *params =3D &module_allocators.types[type]->param=
-s;
-+
-+	if (params->flags & MOD_ALLOC_SET_MEMORY)
-+		return;
-+	module_memory_enable_protection(ptr, len, type);
-+}
-+
-+/*
-+ * Unprotect memory allocated by module_alloc_type(). Called by users of
-+ * module_alloc_type. This is a no-op with MOD_ALLOC_SET_MEMORY.
-+ */
-+void module_memory_unprotect(void *ptr, size_t len, enum mod_mem_type type)
-+{
-+	struct mod_alloc_params *params =3D &module_allocators.types[type]->param=
-s;
-+
-+	if (params->flags & MOD_ALLOC_SET_MEMORY)
-+		return;
-+	module_memory_disable_protection(ptr, len, type);
-+}
-+
-+/*
-+ * Should only be used by arch code in cases where text_poke like
-+ * solution is not ready yet
-+ */
-+void module_memory_force_protect(void *ptr, size_t len, enum mod_mem_type =
-type)
-+{
-+	module_memory_enable_protection(ptr, len, type);
-+}
-+
-+/*
-+ * Should only be used by arch code in cases where text_poke like
-+ * solution is not ready yet
-+ */
-+void module_memory_force_unprotect(void *ptr, size_t len, enum mod_mem_typ=
-e type)
-+{
-+	module_memory_disable_protection(ptr, len, type);
-+}
-+
- bool __weak module_init_section(const char *name)
- {
- 	return strstarts(name, ".init");
-@@ -2241,7 +2436,7 @@ static int move_module(struct module *mod, struct loa=
-d_info *info)
- 			t =3D type;
- 			goto out_enomem;
- 		}
--		memset(ptr, 0, mod->mem[type].size);
-+		module_memory_invalidate_type(ptr, mod->mem[type].size, type);
- 		mod->mem[type].base =3D ptr;
- 	}
++	allocators->types[MOD_RODATA] =3D &x86_mod_allocator_ro_data;
++	allocators->types[MOD_INIT_RODATA] =3D &x86_mod_allocator_ro_data;
+ }
 =20
-@@ -2269,7 +2464,8 @@ static int move_module(struct module *mod, struct loa=
-d_info *info)
- 				ret =3D -ENOEXEC;
- 				goto out_enomem;
+ #ifdef CONFIG_X86_32
+@@ -134,7 +192,6 @@ static int __write_relocate_add(Elf64_Shdr *sechdrs,
+ 		   unsigned int symindex,
+ 		   unsigned int relsec,
+ 		   struct module *me,
+-		   void *(*write)(void *dest, const void *src, size_t len),
+ 		   bool apply)
+ {
+ 	unsigned int i;
+@@ -202,14 +259,14 @@ static int __write_relocate_add(Elf64_Shdr *sechdrs=
+,
+ 				       (int)ELF64_R_TYPE(rel[i].r_info), loc, val);
+ 				return -ENOEXEC;
  			}
--			memcpy(dest, (void *)shdr->sh_addr, shdr->sh_size);
-+
-+			module_memory_fill_type(dest, (void *)shdr->sh_addr, shdr->sh_size, typ=
-e);
+-			write(loc, &val, size);
++			text_poke(loc, &val, size);
+ 		} else {
+ 			if (memcmp(loc, &val, size)) {
+ 				pr_warn("x86/modules: Invalid relocation target, existing value does=
+ not match expected value for type %d, loc %p, val %Lx\n",
+ 					(int)ELF64_R_TYPE(rel[i].r_info), loc, val);
+ 				return -ENOEXEC;
+ 			}
+-			write(loc, &zero, size);
++			text_poke(loc, &zero, size);
  		}
- 		/*
- 		 * Update the userspace copy's ELF section address to point to
-@@ -2471,9 +2667,9 @@ static void do_free_init(struct work_struct *w)
-=20
- 	llist_for_each_safe(pos, n, list) {
- 		initfree =3D container_of(pos, struct mod_initfree, node);
--		module_memfree(initfree->init_text);
--		module_memfree(initfree->init_data);
--		module_memfree(initfree->init_rodata);
-+		module_memfree_type(initfree->init_text, MOD_INIT_TEXT);
-+		module_memfree_type(initfree->init_data, MOD_INIT_DATA);
-+		module_memfree_type(initfree->init_rodata, MOD_INIT_RODATA);
- 		kfree(initfree);
  	}
- }
-@@ -3268,3 +3464,8 @@ static int module_debugfs_init(void)
- }
- module_init(module_debugfs_init);
- #endif
-+
-+void __init module_allocator_init(void)
-+{
-+	module_alloc_type_init(&module_allocators);
-+}
-diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
-index a2b656b4e3d2..65ff1b09dc84 100644
---- a/kernel/module/strict_rwx.c
-+++ b/kernel/module/strict_rwx.c
-@@ -16,6 +16,10 @@ static void module_set_memory(const struct module *mod, =
-enum mod_mem_type type,
+ 	return 0;
+@@ -230,22 +287,11 @@ static int write_relocate_add(Elf64_Shdr *sechdrs,
+ 			      bool apply)
  {
- 	const struct module_memory *mod_mem =3D &mod->mem[type];
+ 	int ret;
+-	bool early =3D me->state =3D=3D MODULE_STATE_UNFORMED;
+-	void *(*write)(void *, const void *, size_t) =3D memcpy;
+-
+-	if (!early) {
+-		write =3D text_poke;
+-		mutex_lock(&text_mutex);
+-	}
+-
+-	ret =3D __write_relocate_add(sechdrs, strtab, symindex, relsec, me,
+-				   write, apply);
+-
+-	if (!early) {
+-		text_poke_sync();
+-		mutex_unlock(&text_mutex);
+-	}
 =20
-+	/* The allocator already called set_memory_*, skip here. */
-+	if (module_allocators.types[type]->params.flags & MOD_ALLOC_SET_MEMORY)
-+		return;
-+
- 	set_vm_flush_reset_perms(mod_mem->base);
- 	set_memory((unsigned long)mod_mem->base, mod_mem->size >> PAGE_SHIFT);
++	mutex_lock(&text_mutex);
++	ret =3D __write_relocate_add(sechdrs, strtab, symindex, relsec, me, app=
+ly);
++	text_poke_sync();
++	mutex_unlock(&text_mutex);
+ 	return ret;
  }
+=20
+diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
+index 3ac50b7298d1..264188ec50c9 100644
+--- a/arch/x86/kernel/unwind_orc.c
++++ b/arch/x86/kernel/unwind_orc.c
+@@ -7,6 +7,7 @@
+ #include <asm/unwind.h>
+ #include <asm/orc_types.h>
+ #include <asm/orc_lookup.h>
++#include <asm/text-patching.h>
+=20
+ #define orc_warn(fmt, ...) \
+ 	printk_deferred_once(KERN_WARNING "WARNING: " fmt, ##__VA_ARGS__)
+@@ -222,18 +223,22 @@ static void orc_sort_swap(void *_a, void *_b, int s=
+ize)
+ 	struct orc_entry orc_tmp;
+ 	int *a =3D _a, *b =3D _b, tmp;
+ 	int delta =3D _b - _a;
++	int val;
+=20
+ 	/* Swap the .orc_unwind_ip entries: */
+ 	tmp =3D *a;
+-	*a =3D *b + delta;
+-	*b =3D tmp - delta;
++	val =3D *b + delta;
++	text_poke_copy(a, &val, sizeof(val));
++	val =3D tmp - delta;
++	text_poke_copy(b, &val, sizeof(val));
+=20
+ 	/* Swap the corresponding .orc_unwind entries: */
+ 	orc_a =3D cur_orc_table + (a - cur_orc_ip_table);
+ 	orc_b =3D cur_orc_table + (b - cur_orc_ip_table);
+ 	orc_tmp =3D *orc_a;
+-	*orc_a =3D *orc_b;
+-	*orc_b =3D orc_tmp;
++
++	text_poke_copy(orc_a, orc_b, sizeof(*orc_b));
++	text_poke_copy(orc_b, &orc_tmp, sizeof(orc_tmp));
+ }
+=20
+ static int orc_sort_cmp(const void *_a, const void *_b)
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 1056bbf55b17..846228fb12f2 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -11,6 +11,7 @@
+ #include <linux/bpf.h>
+ #include <linux/memory.h>
+ #include <linux/sort.h>
++#include <linux/moduleloader.h>
+ #include <asm/extable.h>
+ #include <asm/ftrace.h>
+ #include <asm/set_memory.h>
+@@ -226,7 +227,7 @@ static u8 simple_alu_opcodes[] =3D {
+ static void jit_fill_hole(void *area, unsigned int size)
+ {
+ 	/* Fill whole space with INT3 instructions */
+-	memset(area, 0xcc, size);
++	text_poke_set(area, 0xcc, size);
+ }
+=20
+ int bpf_arch_text_invalidate(void *dst, size_t len)
+@@ -2202,6 +2203,8 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_im=
+age *im, void *image, void *i
+ 		orig_call +=3D X86_PATCH_SIZE;
+ 	}
+=20
++	module_memory_force_unprotect((void *)((unsigned long)image & PAGE_MASK=
+),
++				      PAGE_SIZE, MOD_TEXT);
+ 	prog =3D image;
+=20
+ 	EMIT_ENDBR();
+@@ -2238,20 +2241,24 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_=
+image *im, void *image, void *i
+ 		emit_mov_imm64(&prog, BPF_REG_1, (long) im >> 32, (u32) (long) im);
+ 		if (emit_rsb_call(&prog, __bpf_tramp_enter, prog)) {
+ 			ret =3D -EINVAL;
+-			goto cleanup;
++			goto reprotect_memory;
+ 		}
+ 	}
+=20
+ 	if (fentry->nr_links)
+ 		if (invoke_bpf(m, &prog, fentry, regs_off, run_ctx_off,
+-			       flags & BPF_TRAMP_F_RET_FENTRY_RET))
+-			return -EINVAL;
++			       flags & BPF_TRAMP_F_RET_FENTRY_RET)) {
++			ret =3D -EINVAL;
++			goto reprotect_memory;
++		}
+=20
+ 	if (fmod_ret->nr_links) {
+ 		branches =3D kcalloc(fmod_ret->nr_links, sizeof(u8 *),
+ 				   GFP_KERNEL);
+-		if (!branches)
+-			return -ENOMEM;
++		if (!branches) {
++			ret =3D  -ENOMEM;
++			goto reprotect_memory;
++		}
+=20
+ 		if (invoke_bpf_mod_ret(m, &prog, fmod_ret, regs_off,
+ 				       run_ctx_off, branches)) {
+@@ -2336,6 +2343,9 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_im=
+age *im, void *image, void *i
+=20
+ cleanup:
+ 	kfree(branches);
++reprotect_memory:
++	module_memory_force_protect((void *)((unsigned long)image & PAGE_MASK),
++				    PAGE_SIZE, MOD_TEXT);
+ 	return ret;
+ }
+=20
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 4c989a8fe8b8..90f09218d30f 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1092,8 +1092,10 @@ bpf_jit_binary_pack_alloc(unsigned int proglen, u8=
+ **image_ptr,
+ 		return NULL;
+ 	}
+=20
+-	/* Fill space with illegal/arch-dep instructions. */
+-	bpf_fill_ill_insns(*rw_header, size);
++	/* bpf_fill_ill_insns is used to write to RO memory, so we cannot
++	 * use it on rw_header, use memset(0) instead.
++	 */
++	memset(*rw_header, 0, size);
+ 	(*rw_header)->size =3D size;
+=20
+ 	hole =3D min_t(unsigned int, size - (proglen + sizeof(*ro_header)),
 --=20
 2.34.1
 
