@@ -1,46 +1,46 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0E28200C0
-	for <bpf@vger.kernel.org>; Tue, 30 May 2023 17:28:25 +0000 (UTC)
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5C4189
-	for <bpf@vger.kernel.org>; Tue, 30 May 2023 10:27:57 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4effb818c37so5245649e87.3
-        for <bpf@vger.kernel.org>; Tue, 30 May 2023 10:27:57 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3307200C0
+	for <bpf@vger.kernel.org>; Tue, 30 May 2023 17:28:29 +0000 (UTC)
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9535A198
+	for <bpf@vger.kernel.org>; Tue, 30 May 2023 10:28:01 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f4b80bf93aso5337991e87.0
+        for <bpf@vger.kernel.org>; Tue, 30 May 2023 10:28:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685467674; x=1688059674;
+        d=gmail.com; s=20221208; t=1685467677; x=1688059677;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=r9PKakjUPj0VMT0tQBxCfsvh70MN07+QftYbg6wUJhA=;
-        b=ox7KTiJ0X3rT1V464RG4caYopLvKUZILotFcnNXw0GNPOvBaPGJHGh+aYUypLY6zUh
-         uoF1oo8jFb0tyqFJU4cX5CG34agD0b6bGbvKVqdWKHNecml0ORNcUqYzdo1pNRzVvRIF
-         shHAvoSr+xRxD8gvZw9TEr9EAhn1edrjYPTrFESq1ClvpB78fzNtjZWyyDsLtBj9mAlf
-         jr+x+RmwRo5CcOb2MqUrloJIDjqCVfCNQ4d24eDf0f9HGXf3NNrm6lCReRUsAN8ystmx
-         Y8LTANVKH6HeBoI1FYJcewfT5je585sPc0X5AbELD8S67Th4ovOI5yadDtkWAVLpPTVs
-         SHfw==
+        bh=+AzOuRrSlParB9JLCIe2IxndwSw/AxAffv4FvWCBK+8=;
+        b=aQlmvPj6IP96l7B9vG/Mn6N79C9zrEfgBUePm6Dgf7PQjqiht/3vmKFOHjf4cbfyDX
+         HG3jEZhFym2BEh21RYYrlANaZ+nM8i0IUERZfYuyqtxZP2lsH84EwuTc0ClkNPxxKSF7
+         TQ3eMQRxV8G+sbWjMzUXuwcz9z8/unvERsx0xUlt5QGX7fBCtPQxqNDreTzMLDBjW9hA
+         GHvzxwdAFmMJevN/MCVQ3692xeRnkrTkt9hQ388VdeFAfS1MMifbciwzQ4D6cYz8iE5N
+         z1wylVBaJVgK+Yx1qeZTCCh6wRbLDPtdrxFmIIFw5wMqcsgKYs/9zEQOTpnFADrmPrJD
+         NPtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685467674; x=1688059674;
+        d=1e100.net; s=20221208; t=1685467677; x=1688059677;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=r9PKakjUPj0VMT0tQBxCfsvh70MN07+QftYbg6wUJhA=;
-        b=YGSn/pIn1UVu8eFelrwDi/YtmbxFXP2TxhnCNkRZyp0urAHqVasSKs4If7rqmVyrKw
-         v+/hT7nefwthmswOscYkZJZ/+vL0OJQWGgSbSYQTXaRoc+g8vB9w8LD0cIl0GPI0exTH
-         xSSEk5dPKY/G0LrljFhWix2Gi6bXuHi0QI/54ggvD3mgnarXYy8qHOzrojgYR2TedLaY
-         y1CJqEvL/25LO4JriA2DAjR07TP3u/MEdKapP3EYSKeuZejl/ThBas7Kv4thynoBKrv5
-         3XPl81CdmPX6npbzxYjDLSoTl3JMwb4Q4xXsKxfeqYF1FQHHPQaXDRDdzsbZ9pYyRdN4
-         rDzA==
-X-Gm-Message-State: AC+VfDx/cu5AUsAJzlE+2PHXv1Tyzrj8uUVBfnNu8OnjckMUfk34f0Og
-	xU8SXEZldblHS/0Ms6MxRmwSwHPxvxjsJg==
-X-Google-Smtp-Source: ACHHUZ7/ip6XrF/ocypbSgY6mtte6j0kVcE3WozitleA+IknaKk6f0awiKmL0Wz1FYBSYXdLKwO65Q==
-X-Received: by 2002:ac2:4435:0:b0:4f4:b0d0:63fb with SMTP id w21-20020ac24435000000b004f4b0d063fbmr1075820lfl.35.1685467674627;
-        Tue, 30 May 2023 10:27:54 -0700 (PDT)
+        bh=+AzOuRrSlParB9JLCIe2IxndwSw/AxAffv4FvWCBK+8=;
+        b=GTjwPl0zdZoCTREBtLF7TK3G99G1TBCXlHq14nMQEwX6G7vCjQmm6VqrbWS6eqbSQm
+         6+ykQz4FuSa5B+ajwg6JWnx7WC0573Xc53bdAmnyNrn2o7UfSavIgHhGN5aCVd9fGtIv
+         MzcEghio3p5zR0N1lAany7ZU/h+7ZMPgtrXhHG2tF94/iQ4ZEumLBVLVSoMfGQdITp/1
+         RxDoj88hOkL5BQcZA7D2MJuTZnaycN/v9Bt8lVX6e8BID0ltZAHNy5qIQ66aRXPM6pUR
+         n/mUZKwaF/IoPgEK3+sGZcIj6NHasuxjwBBLO1N5rCk0YhPhM2S/SzeY3LOUuHClCM94
+         sdPQ==
+X-Gm-Message-State: AC+VfDwtyAgyQvZSd9b6q5iA2iCNPjL35pTdsHdrmEX38yxVOCtuKmpU
+	LEEMUnADbuyiETtYzPoRd/pMyT4MsqjEkA==
+X-Google-Smtp-Source: ACHHUZ6bHeFsurm7JRcXhBwBm7eSTdRJjywf0NS/Zr73MsuTT4G2I5u6bDBssoqf/HerY+jxxRFAgQ==
+X-Received: by 2002:ac2:43ac:0:b0:4e9:74a8:134c with SMTP id t12-20020ac243ac000000b004e974a8134cmr1125574lfl.43.1685467676779;
+        Tue, 30 May 2023 10:27:56 -0700 (PDT)
 Received: from bigfoot.. (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id a1-20020a056512020100b004f262997496sm405985lfo.76.2023.05.30.10.27.53
+        by smtp.gmail.com with ESMTPSA id a1-20020a056512020100b004f262997496sm405985lfo.76.2023.05.30.10.27.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 10:27:54 -0700 (PDT)
+        Tue, 30 May 2023 10:27:56 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -50,9 +50,9 @@ Cc: andrii@kernel.org,
 	kernel-team@fb.com,
 	yhs@fb.com,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v2 2/4] selftests/bpf: verify that check_ids() is used for scalars in regsafe()
-Date: Tue, 30 May 2023 20:27:37 +0300
-Message-Id: <20230530172739.447290-3-eddyz87@gmail.com>
+Subject: [PATCH bpf-next v2 4/4] selftests/bpf: check env->that range_transfer_ids has effect
+Date: Tue, 30 May 2023 20:27:39 +0300
+Message-Id: <20230530172739.447290-5-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230530172739.447290-1-eddyz87@gmail.com>
 References: <20230530172739.447290-1-eddyz87@gmail.com>
@@ -70,158 +70,135 @@ X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Verify that the following example is rejected by verifier:
+Previous commit adds bpf_verifier_env::range_transfer_ids check to
+verifier.c:regsafe(). This check allows to skip check_ids() for some
+ids in the cached verifier state and thus improves verification
+performance.
 
-r9 = ... some pointer with range X ...
-r6 = ... unbound scalar ID=a ...
-r7 = ... unbound scalar ID=b ...
-if (r6 > r7) goto +1
-r6 = r7
-if (r6 > X) goto exit
-r9 += r7
-*(u64 *)r9 = Y
+This commit adds two test cases:
+- first: showing that check_ids() is indeed skipped as expected;
+- second: modification of first where check_ids() cannot be skipped.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../selftests/bpf/progs/verifier_scalar_ids.c | 108 ++++++++++++++++++
- 2 files changed, 110 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
+ .../selftests/bpf/progs/verifier_scalar_ids.c | 106 ++++++++++++++++++
+ 1 file changed, 106 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 531621adef42..070a13833c3f 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -50,6 +50,7 @@
- #include "verifier_regalloc.skel.h"
- #include "verifier_ringbuf.skel.h"
- #include "verifier_runtime_jit.skel.h"
-+#include "verifier_scalar_ids.skel.h"
- #include "verifier_search_pruning.skel.h"
- #include "verifier_sock.skel.h"
- #include "verifier_spill_fill.skel.h"
-@@ -150,6 +151,7 @@ void test_verifier_ref_tracking(void)         { RUN(verifier_ref_tracking); }
- void test_verifier_regalloc(void)             { RUN(verifier_regalloc); }
- void test_verifier_ringbuf(void)              { RUN(verifier_ringbuf); }
- void test_verifier_runtime_jit(void)          { RUN(verifier_runtime_jit); }
-+void test_verifier_scalar_ids(void)           { RUN(verifier_scalar_ids); }
- void test_verifier_search_pruning(void)       { RUN(verifier_search_pruning); }
- void test_verifier_sock(void)                 { RUN(verifier_sock); }
- void test_verifier_spill_fill(void)           { RUN(verifier_spill_fill); }
 diff --git a/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c b/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
-new file mode 100644
-index 000000000000..0ea9a1f6e1ae
---- /dev/null
+index 0ea9a1f6e1ae..2c5bb72696ce 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
 +++ b/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
-@@ -0,0 +1,108 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+/* Verify that check_ids() is used by regsafe() for scalars.
+@@ -105,4 +105,110 @@ __naked void ids_id_mapping_in_regsafe_2(void)
+ 	: __clobber_all);
+ }
+ 
++/* Label l1 could be reached in two combinations:
 + *
-+ * r9 = ... some pointer with range X ...
-+ * r6 = ... unbound scalar ID=a ...
-+ * r7 = ... unbound scalar ID=b ...
-+ * if (r6 > r7) goto +1
-+ * r6 = r7
-+ * if (r6 > X) goto exit
-+ * r9 += r7
-+ * *(u8 *)r9 = Y
++ *   (1) r6{.id=A}, r7{.id=A}, r8{.id=B}
++ *   (2) r6{.id=B}, r7{.id=A}, r8{.id=B}
 + *
-+ * The memory access is safe only if r7 is bounded,
-+ * which is true for one branch and not true for another.
++ * However neither A nor B are used in find_equal_scalars()
++ * to transfer range information in this test.
++ * Thus states (1) and (2) should be considered identical due
++ * to bpf_verifier_env::range_transfer_ids handling.
++ *
++ * Make sure that this is the case by checking that second jump
++ * to l1 hits cached state.
 + */
 +SEC("socket")
-+__failure __msg("register with unbounded min value")
++__success __log_level(7) __msg("14: safe")
 +__flag(BPF_F_TEST_STATE_FREQ)
-+__naked void ids_id_mapping_in_regsafe(void)
++__naked void no_range_transfer_ids(void)
 +{
 +	asm volatile (
 +	/* Bump allocated stack */
 +	"r1 = 0;"
-+	"*(u64*)(r10 - 8) = r1;"
++	"*(u64*)(r10 - 16) = r1;"
 +	/* r9 = pointer to stack */
 +	"r9 = r10;"
-+	"r9 += -8;"
-+	/* r7 = ktime_get_ns() */
-+	"call %[bpf_ktime_get_ns];"
-+	"r7 = r0;"
-+	/* r6 = ktime_get_ns() */
-+	"call %[bpf_ktime_get_ns];"
-+	"r6 = r0;"
-+	/* if r6 > r7 is an unpredictable jump */
-+	"if r6 > r7 goto l1_%=;"
-+	"r6 = r7;"
-+"l1_%=:"
-+	/* a noop to get to add new parent state */
-+	"r0 = r0;"
-+	/* if r6 > 4 exit(0) */
-+	"if r6 > 4 goto l2_%=;"
-+	/* Access memory at r9[r7] */
-+	"r9 += r7;"
-+	"r0 = *(u8*)(r9 + 0);"
-+"l2_%=:"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_ktime_get_ns)
-+	: __clobber_all);
-+}
-+
-+/* Similar to a previous one, but shows that bpf_reg_state::precise
-+ * could not be used to filter out registers subject to check_ids() in
-+ * verifier.c:regsafe(). At 'l0' register 'r6' does not have 'precise'
-+ * flag set but it is important to have this register in the idmap.
-+ */
-+SEC("socket")
-+__failure __msg("register with unbounded min value")
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__naked void ids_id_mapping_in_regsafe_2(void)
-+{
-+	asm volatile (
-+	/* Bump allocated stack */
-+	"r1 = 0;"
-+	"*(u64*)(r10 - 8) = r1;"
-+	/* r9 = pointer to stack */
-+	"r9 = r10;"
-+	"r9 += -8;"
-+	/* r8 = ktime_get_ns() */
++	"r9 += -16;"
++	/* r7 = ktime_get_ns() & 0b11 */
 +	"call %[bpf_ktime_get_ns];"
 +	"r8 = r0;"
-+	/* r7 = ktime_get_ns() */
++	"r8 &= 3;"
++	/* r6 = ktime_get_ns() & 0b11 */
 +	"call %[bpf_ktime_get_ns];"
 +	"r7 = r0;"
-+	/* r6 = ktime_get_ns() */
-+	"call %[bpf_ktime_get_ns];"
-+	"r6 = r0;"
-+	/* scratch .id from r0 */
-+	"r0 = 0;"
++	"r7 &= 3;"
 +	/* if r6 > r7 is an unpredictable jump */
-+	"if r6 > r7 goto l1_%=;"
-+	/* tie r6 and r7 .id */
++	"if r7 > r8 goto l0_%=;"
 +	"r6 = r7;"
++	"goto l1_%=;"
 +"l0_%=:"
-+	/* if r7 > 4 exit(0) */
-+	"if r7 > 4 goto l2_%=;"
-+	/* Access memory at r9[r7] */
++	"r6 = r8;"
++"l1_%=:"
++	/* insn #14 */
 +	"r9 += r6;"
++	"r9 += r7;"
++	"r9 += r8;"
 +	"r0 = *(u8*)(r9 + 0);"
-+"l2_%=:"
 +	"r0 = 0;"
 +	"exit;"
-+"l1_%=:"
-+	/* tie r6 and r8 .id */
-+	"r6 = r8;"
-+	"goto l0_%=;"
 +	:
 +	: __imm(bpf_ktime_get_ns)
 +	: __clobber_all);
 +}
 +
-+char _license[] SEC("license") = "GPL";
++/* Same as above, but cached state for l1 has id used for
++ * range transfer:
++ *
++ *   (1) r6{.id=A}, r7{.id=A}, r8{.id=B}
++ *   (2) r6{.id=B}, r7{.id=A}, r8{.id=B}
++ *
++ * If (A) is used for range transfer (1) and (2) should not
++ * be considered identical.
++ *
++ * Check this by verifying that instruction immediately following l1
++ * is visited twice.
++ */
++SEC("socket")
++__success __log_level(7) __msg("r9 = r9") __msg("r9 = r9")
++__flag(BPF_F_TEST_STATE_FREQ)
++__naked void has_range_transfer_ids(void)
++{
++	asm volatile (
++	/* Bump allocated stack */
++	"r1 = 0;"
++	"*(u64*)(r10 - 16) = r1;"
++	/* r9 = pointer to stack */
++	"r9 = r10;"
++	"r9 += -16;"
++	/* r7 = ktime_get_ns() & 0b11 */
++	"call %[bpf_ktime_get_ns];"
++	"r8 = r0;"
++	/* r6 = ktime_get_ns() & 0b11 */
++	"call %[bpf_ktime_get_ns];"
++	"r7 = r0;"
++	/* if r6 > r7 is an unpredictable jump */
++	"if r7 > r8 goto l0_%=;"
++	"r6 = r7;"
++	"goto l1_%=;"
++"l0_%=:"
++	"r6 = r8;"
++"l1_%=:"
++	/* just a unique marker, this insn should be verified twice */
++	"r9 = r9;"
++	/* one of the instructions below transfers range for r6 */
++	"if r7 > 2 goto l2_%=;"
++	"if r8 > 2 goto l2_%=;"
++	"r9 += r6;"
++	"r9 += r7;"
++	"r9 += r8;"
++	"r0 = *(u8*)(r9 + 0);"
++"l2_%=:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_ktime_get_ns)
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.40.1
 
