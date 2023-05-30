@@ -1,187 +1,218 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0E69FBED;
-	Tue, 30 May 2023 12:33:06 +0000 (UTC)
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49571A7;
-	Tue, 30 May 2023 05:32:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685449960; x=1716985960;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=wJIsJkCkiX+7Fk0sprrAv2Zsb95lgSdZOFi48+nt/hc=;
-  b=nDOnnwa6jZ5mrqIKHMvHkeWbRqgmP41Z/Gr6EwJHBN7VJ136WHHG08XP
-   x/cnfOeMsT8PJscqnTe3B6kh2Gd43i11P4sxZEniIBTltHIEWYf42jeIm
-   Ifq51SbngF0E7DcescO4SjSZaPyUoiTtIYyipChMdCyDiIQSgZgHcuJu/
-   RncTBBPDumaxTgNMl1co4infNBbyuvWLjYpCjD32r50s7iCUfIHg5+C8R
-   eQvQ6NIAR6Zp+/a1eNvRwHS4QlCUmX4S023WsF3LAW0OMYIhbz7T9AOQj
-   A1f6qIkxv1t/0euOASuGDNK1w5bKpdAZx6t+fUYTe7jasm7hgfLSW5g52
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="334521705"
-X-IronPort-AV: E=Sophos;i="6.00,204,1681196400"; 
-   d="scan'208";a="334521705"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 05:31:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="953114719"
-X-IronPort-AV: E=Sophos;i="6.00,204,1681196400"; 
-   d="scan'208";a="953114719"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga006.fm.intel.com with ESMTP; 30 May 2023 05:31:30 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 30 May 2023 05:31:29 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 30 May 2023 05:31:29 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Tue, 30 May 2023 05:31:29 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.108)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Tue, 30 May 2023 05:31:28 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HZ/AuBXMDE88z/ud8gA2hpM/tIzpTIuGBi1CEa/0iY9eEaHrOuQdQKIlXLZhGUsmJ0/Rshm62l+ajbTygLfQtMhGnyTTDm1jvP9f67iKO46EbtWD7vaNtU6LR1lVyeO/fSxYxng03M+3EFReKDw8PTu+8HqsPYqIYl+7GeDop7s2d1kOJM5EsnZqNlks8h1cVC7CGxbmzWROBx6v890rnsuN7Y84V5gFvpqv8Sl9whfV2NHZ3rXy9fU3V6IJtGN6Hwf1RO8N7PgDg3HAyJh/7fBjjAzt2YaPBsCqlUOkgS3wT3mCDQKKxZFlFPNHVuScM7L8ssUtCCkTThi7ogJBIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OIj/ed3zuUMPi0ePlcValbi+nZG2Krh/chfpGWjY5RU=;
- b=ItdR/w7YFlfaOA7jQxzl+vVWIyI4QTPxx2QrYVQwrdDOpao8FuU/h1zr/jbVQxrXAbLBt0hTSSvkRMqQGggQ8buIc3DCCW8+gwmoH6mPsXLY0NYLWwCjXCOP4JCTiUlLI99BUcN6jryQeWtFngV5uIZycjY/JDdsk16PgTQcLUgqVkIxEthNuH/Bxv01otCcxfPG3bIo0YhLR3iA+2VWbWlg7MooLaNG1ARo8G7LQL8v2xaoqglRhggmMqPm+jGS9v6HOvSqA48sbtlz15wowxrawTDraKQlN/ccLANhBcSdDn7dQOXkWwJb+4sAbHd6GslOspsp8rM2/Qw5bymsmQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
- LV8PR11MB8606.namprd11.prod.outlook.com (2603:10b6:408:1f7::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Tue, 30 May
- 2023 12:31:27 +0000
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::9e4f:80cc:e0aa:6809]) by DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::9e4f:80cc:e0aa:6809%2]) with mapi id 15.20.6433.022; Tue, 30 May 2023
- 12:31:27 +0000
-Date: Tue, 30 May 2023 14:31:20 +0200
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To: Simon Horman <simon.horman@corigine.com>
-CC: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-	<andrii@kernel.org>, <netdev@vger.kernel.org>, <magnus.karlsson@intel.com>,
-	<bjorn@kernel.org>, <tirthendu.sarkar@intel.com>
-Subject: Re: [PATCH v2 bpf-next 13/22] xsk: report ZC multi-buffer capability
- via xdp_features
-Message-ID: <ZHXsmDhfw9hxjUCe@boxer>
-References: <20230529155024.222213-1-maciej.fijalkowski@intel.com>
- <20230529155024.222213-14-maciej.fijalkowski@intel.com>
- <ZHXkQX0uSh8tDFTO@corigine.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZHXkQX0uSh8tDFTO@corigine.com>
-X-ClientProxiedBy: FR0P281CA0141.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:96::12) To DM4PR11MB6117.namprd11.prod.outlook.com
- (2603:10b6:8:b3::19)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF9A619931
+	for <bpf@vger.kernel.org>; Tue, 30 May 2023 12:41:42 +0000 (UTC)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 259B2184
+	for <bpf@vger.kernel.org>; Tue, 30 May 2023 05:41:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1685450430;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NlDkHpuyYdZRAU6Xu+vMgwpbc5BKYdyO1aF+SH6i+JU=;
+	b=JhnGrC+ETZok6wvlyYmxLpADQZiw5QVB5EzPzqi2xWIofeSe603tw+hBpj2nozrasmO3qR
+	mbAZXRsIeXu19R6dTUeyP+eJLEZhYzQmznZPP/pof5nBr3xoTD3bGFhrHFwXYDZ9wheUnZ
+	y35B6AOPXWbZ/mZ3+9m+mQxkAQdY4xY=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-110-NIJFJqT2MpeGBd_3jQTiAw-1; Tue, 30 May 2023 08:40:29 -0400
+X-MC-Unique: NIJFJqT2MpeGBd_3jQTiAw-1
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-94a348facbbso478169566b.1
+        for <bpf@vger.kernel.org>; Tue, 30 May 2023 05:40:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685450428; x=1688042428;
+        h=content-transfer-encoding:in-reply-to:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NlDkHpuyYdZRAU6Xu+vMgwpbc5BKYdyO1aF+SH6i+JU=;
+        b=XAEvT/jkIS70dolHqkHSOimnTam3zBZ72TrrCVAAsp0W3EDkDLjHhrImafO/pmCeqI
+         9XDSeyIuNHTRnH3itUBVpwQLKTLqav+78Hn+ASukj5J6UULeST0UY2iNkOSV1H2w6G1C
+         cYxg8SXbOWuzeJjo0h9ha36+fYm65tZG/ffV4WR4Cv+svNdDtpEqJZJ3xZvKK6XM046H
+         8E82i1jlQ/RGTTWVE+NSKuUHIIggthnmRMsj/snFCLzGOjHsxwGyZrDVBh5VyAIcnDah
+         Fp3d2KgezY9jZ7gg7b3jwgUpVXqkoASzJeRIkig3w9t42BacoCJA8tJyt8ycAIuUoe6v
+         F5dA==
+X-Gm-Message-State: AC+VfDx1vP38ZgpnvxKWN86OjdvaodSBOAGsZZAE2Vrrc7UN9zj8cyEI
+	srfnIUgrFp1RXy3wsR6hPatsJJOzJW3ikaopvarOQP7DB2YCb6jfBxt8LE1GatVqi5wk2lu8IYD
+	mwJHpmpngMQMk
+X-Received: by 2002:a17:907:7e83:b0:973:71c3:8b21 with SMTP id qb3-20020a1709077e8300b0097371c38b21mr2363856ejc.72.1685450428466;
+        Tue, 30 May 2023 05:40:28 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ50tuvD9H/q6gKhuogk02PU1N5E8jEEjy37DBWgpAau0M57imp6ppOLrSl8l7nDdasE3lCsHQ==
+X-Received: by 2002:a17:907:7e83:b0:973:71c3:8b21 with SMTP id qb3-20020a1709077e8300b0097371c38b21mr2363824ejc.72.1685450428110;
+        Tue, 30 May 2023 05:40:28 -0700 (PDT)
+Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
+        by smtp.gmail.com with ESMTPSA id w19-20020a17090652d300b0094f23480619sm7417647ejn.172.2023.05.30.05.40.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 05:40:27 -0700 (PDT)
+From: Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <3168b14c-c9c1-b11b-2500-2ff2451eb81c@redhat.com>
+Date: Tue, 30 May 2023 14:40:26 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|LV8PR11MB8606:EE_
-X-MS-Office365-Filtering-Correlation-Id: fd791f70-2853-47ba-d2ad-08db6109c99b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DDopzqg0lXHWrNUdT9N6DcVMlGF3vdBIz2cFvsghMnTzxQq/ynalbAk84dwzCngAo9bwoRNukm7uE5k6ZIz/OL+djmYPD3ULG51VuqWPXr8wcMV497lszSoMyGYk9TEAoZTo+Dg2nBR5VRbvnCqnUgSH6KpPDQM7i8zjz39pFVpiPItN61xWEFT3UeOiI6JCJ1tC8Ui4iuR/3sfrJQow49LanZXTgUl9OElEIkbdKHXqWmJlFLbdAcWrr+7feez9A+yAr5BSWziMxIltz4ZABSmFrTNCL5CBy4KEKs9/l1RjlkTjTdvSAZxZCH5Kc6u2iJumi0UAbRSKQ1AIUOmTrhdKYGUNT0Hkw8WqvseV0fk0OWsc9pSO/N2DRG3KM/4pOyc8v+HqfRMwCz3xgMp5PDKSNKqcXVCetbWR0UAjoVahdyoOyxFg5FKBKZ97PzLMavwKaYtZ+3MsBvoptO+8E3DyJOppJuv4Yo3xc/yFYHb6aNWwL1vTdJnje2IxZEShA5CuJxlyxlfd15TfeVjY2+DRCnYiq4XEPsubdRvd31xMJE9wZQD+wxZjUDNXBdQj
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(39860400002)(396003)(376002)(346002)(366004)(136003)(451199021)(478600001)(8936002)(8676002)(44832011)(5660300002)(2906002)(33716001)(86362001)(4326008)(6916009)(66556008)(66476007)(66946007)(82960400001)(316002)(38100700002)(41300700001)(186003)(107886003)(6506007)(6512007)(9686003)(26005)(6486002)(6666004)(83380400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nxy+ZBWGtRJLVml2aMbw5ej8ekTwDqINFBb6/wc6EibGDrjPacMHJbr9YLkl?=
- =?us-ascii?Q?q8Bx08pJhD2QXWmvejTZG3Mg0LQNPAIEXe/Q853ww9YSpbs0EyULBIxYErdk?=
- =?us-ascii?Q?z8RzgGixoARhFeYbBE6FIqXWfICdCsV8pn9wIyAgDD98loYMuwigDrmBbED9?=
- =?us-ascii?Q?rsqMe77g6FlDoH+ARP6nR1mpBmedTC38xhPJp83JKbvPlob3VHnE8wLAwK4s?=
- =?us-ascii?Q?0FigHlNKb7IqlrdLyk0+H017GMEgqOa6anF4r12tV6KaDaQQt0bREIGstcxk?=
- =?us-ascii?Q?ga35tVJhLiUY2ZupEp1oZ0V9tP745Ebt/kA4CARPwk8aX1/Ynvg5CfvUZRzJ?=
- =?us-ascii?Q?KUNKjBKgaMAiHTX3PSalpXkUZDbP9iK87cyfKyM4u0apd4x7FP459KeiRwf1?=
- =?us-ascii?Q?bYrnrhyVcu+h8zP0i61v4OAsBtXoiVPPfZwFKlqgqheOJMh01OCVUQymFYDT?=
- =?us-ascii?Q?X02MFcTeCCNcAx3w1BfrIoqy4x2SZYlNF5QSUZ3J4z6NlTT137B2/0+yqBnn?=
- =?us-ascii?Q?B/k7yI6SpNc4sDFx0v96v5lq7h4y5h1HWZ+lulOxttjrf6XKbhVbLRysWPUw?=
- =?us-ascii?Q?nkQYvkO41bX00O7Md9Y9MdIqaof89ojgOyzEZE8yjTgUVR9mRv+AaXA4yVJ+?=
- =?us-ascii?Q?8H73O7x7/b3Br8VtyyeX89wJGmDlwCNiaUpHnWP3vCpALsyFgwTEz6hkjFG1?=
- =?us-ascii?Q?z/+rlUetL3idGwNJ3KIKQwFnmlYkHR/+I5TrkB+oCLHM49ptMXM7w+KqRl7O?=
- =?us-ascii?Q?HGIpNqs+yak5AkT+HznaIT5iBjwDJSXuFeuUxwQryvBf3t/rxBIH143Qc5RX?=
- =?us-ascii?Q?aKkyT0I1wOt/2Jvtm9rj6Rw8F+B67WbriSbkuALiwL5E1JGNIYjZc3uDeBa1?=
- =?us-ascii?Q?gAf4HmfVYtEhqcFxTWuKoN07i4E1qAz5/gS5FDY+k4hccX+wpiDZjutkO+Hc?=
- =?us-ascii?Q?kuzQHqrNcXRPvvhIUlKP+gLh5TqhQZgO4JVSOYrB8YEa3Mn/wq+p54jODCrt?=
- =?us-ascii?Q?/45yZvb0EXq9dYMhoMIDbiUrwEtRvfRGHX7GlzG+TtnSIfJ4+Qk9AC7a+Z+Z?=
- =?us-ascii?Q?OwjYtUjeShVwjQ7Z2pW7cgI+uUKZt+0EFXaD1aZzY6SJ8YgTKyG35Fm7xF5Q?=
- =?us-ascii?Q?ddlORbNrM9g7ON3ZdGHDnx+Fo3zUusZ4MnwVDgv4NQYMiItYcrWd0Z4Ztocm?=
- =?us-ascii?Q?DfATo7RfPALXIdQA4ntrP8pTmu+HRd8bESQw/gqHPE3BVBYxppuWrL7ZBSH1?=
- =?us-ascii?Q?YRomVX5EhTsSarkZjMoJ1a7vYrGq088DmFuttnL2TYNPHum64rDWm48FcNs3?=
- =?us-ascii?Q?fWpPyA53TzQt0Bkl39D8isN9q4StdRumFHgyHEuD7k22mgnJiR3b4WlR+kb/?=
- =?us-ascii?Q?x9HtuYRidCf70LQ/ovftdKt1MW52ogEFi5gV+ImPV+f9H9FLQdtjiLubALY8?=
- =?us-ascii?Q?qFarsm3B8DlneEtGIYUGGNHFmXObZ063+6QTPR8XVkLEzXS6RGVN+Z20nOLs?=
- =?us-ascii?Q?Qu137DXRheFgegtB8HzTLYs6ZN9oMbEJNIoxUX6AVE0Y7eyXeH5mfL7Jm92h?=
- =?us-ascii?Q?tx+7woasgdxGd74rUde/NIuCsmX2S64ff2ss2IDw57MyaU1JZk0womGrKZ5J?=
- =?us-ascii?Q?9A=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: fd791f70-2853-47ba-d2ad-08db6109c99b
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 12:31:26.9512
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yvig4c3zzi8IeTlYQ+nLvyzCfJor2LTfDn9WEagECUGD0ZZRgmVewiccddZVA/p0sO4XfnhUKyJ6s3+Yh772CRGrXtm03yM5LDzlbxnx+7E=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR11MB8606
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-	SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Cc: brouer@redhat.com, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, bpf@vger.kernel.org,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ netdev@vger.kernel.org, Gal Pressman <gal@nvidia.com>,
+ Nimrod Oren <noren@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>,
+ Lorenzo Bianconi <lorenzo.bianconi@redhat.com>, drosen@google.com,
+ Joanne Koong <joannelkoong@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] samples/bpf: fixup xdp_redirect tool to be
+ able to support xdp multibuffer
+Content-Language: en-US
+To: Tariq Toukan <ttoukan.linux@gmail.com>,
+ Jesper Dangaard Brouer <jbrouer@redhat.com>,
+ Alexei Starovoitov <ast@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Jakub Kicinski <kuba@kernel.org>
+References: <20230529110608.597534-1-tariqt@nvidia.com>
+ <20230529110608.597534-2-tariqt@nvidia.com>
+ <63d91da7-4040-a766-dcd7-bccbb4c02ef4@redhat.com>
+ <4ceac69b-d2ae-91b5-1b24-b02c8faa902b@gmail.com>
+In-Reply-To: <4ceac69b-d2ae-91b5-1b24-b02c8faa902b@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
 	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Tue, May 30, 2023 at 01:55:45PM +0200, Simon Horman wrote:
-> On Mon, May 29, 2023 at 05:50:15PM +0200, Maciej Fijalkowski wrote:
-> > Introduce new xdp_feature NETDEV_XDP_ACT_NDO_ZC_SG that will be used to
-> > find out if user space that wants to do ZC multi-buffer will be able to
-> > do so against underlying ZC driver.
-> > 
-> > Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-> > ---
-> >  include/uapi/linux/netdev.h | 4 ++--
-> >  net/xdp/xsk_buff_pool.c     | 6 ++++++
-> >  2 files changed, 8 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
-> > index 639524b59930..bfca07224f7b 100644
-> > --- a/include/uapi/linux/netdev.h
-> > +++ b/include/uapi/linux/netdev.h
-> > @@ -33,8 +33,8 @@ enum netdev_xdp_act {
-> >  	NETDEV_XDP_ACT_HW_OFFLOAD = 16,
-> >  	NETDEV_XDP_ACT_RX_SG = 32,
-> >  	NETDEV_XDP_ACT_NDO_XMIT_SG = 64,
-> > -
-> > -	NETDEV_XDP_ACT_MASK = 127,
-> > +	NETDEV_XDP_ACT_NDO_ZC_SG = 128,
-> 
-> Hi Maciej,
-> 
-> Please consider adding NETDEV_XDP_ACT_NDO_ZC_SG to the Kernel doc
-> a just above netdev_xdp_act.
 
-right, my bad. i'll do this in next rev but i'd like to gather more
-feedback from people. thanks once again for spotting an issue.
 
+On 30/05/2023 14.17, Tariq Toukan wrote:
 > 
-> > +	NETDEV_XDP_ACT_MASK = 255,
-> >  };
-> >  
-> >  enum {
+> On 30/05/2023 14:33, Jesper Dangaard Brouer wrote:
+>>
+>>
+>> On 29/05/2023 13.06, Tariq Toukan wrote:
+>>> Expand the xdp multi-buffer support to xdp_redirect tool.
+>>> Similar to what's done in commit
+>>> 772251742262 ("samples/bpf: fixup some tools to be able to support 
+>>> xdp multibuffer")
+>>> and its fix commit
+>>> 7a698edf954c ("samples/bpf: Fix MAC address swapping in xdp2_kern").
+>>>
+>>
+>> Have you tested if this cause a performance degradation?
+>>
+>> (Also found possible bug below)
+>>
 > 
-> ...
+> Hi Jesper,
+> 
+> This introduces the same known perf degradation we already have in xdp1 
+> and xdp2.
+
+Did a quick test with xdp1, the performance degradation is around 18%.
+
+  Before: 22,917,961 pps
+  After:  18,798,336 pps
+
+  (1-(18798336/22917961))*100 = 17.97%
+
+
+> Unfortunately, this is the API we have today to safely support 
+> multi-buffer.
+> Note that both perf and functional (noted below) degradation should be 
+> eliminated once replacing the load/store operations with dynptr logic 
+> that returns a pointer to the scatter entry instead of copying it.
+> 
+
+Well, should we use dynptr logic in this patch then?
+
+Does it make sense to add sample code that does thing in a way that is 
+sub-optimal and we want to replace?
+... (I fear people will copy paste the sample code).
+
+> I initiated a discussion on this topic a few months ago. dynptr was 
+> accepted since then, but I'm not aware of any in-progress followup work 
+> that addresses this.
+> 
+
+Are you saying some more work is needed on dynptr?
+
+>>> Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
+>>> Reviewed-by: Nimrod Oren <noren@nvidia.com>
+>>> ---
+>>>   samples/bpf/xdp_redirect.bpf.c | 16 ++++++++++++----
+>>>   1 file changed, 12 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/samples/bpf/xdp_redirect.bpf.c 
+>>> b/samples/bpf/xdp_redirect.bpf.c
+>>> index 7c02bacfe96b..620163eb7e19 100644
+>>> --- a/samples/bpf/xdp_redirect.bpf.c
+>>> +++ b/samples/bpf/xdp_redirect.bpf.c
+>>> @@ -16,16 +16,21 @@
+>>>   const volatile int ifindex_out;
+>>> -SEC("xdp")
+>>> +#define XDPBUFSIZE    64
+>>
+>> Pktgen sample scripts will default send with 60 pkt length, because the
+>> 4 bytes FCS (end-frame checksum) is added by hardware.
+>>
+>> Will this result in an error when bpf_xdp_load_bytes() tries to copy 64
+>> bytes from a 60 bytes packet?
+>>
+> 
+> Yes.
+> 
+> This can be resolved by reducing XDPBUFSIZE to 60.
+> Need to check if it's OK to disregard these last 4 bytes without hurting 
+> the XDP program logic.
+> 
+> If so, do you suggest changing xdp1 and xdp2 as well?
+> 
+
+I can take care of reducing XDPBUFSIZE to 60 on xpd1 and xdp2, as I
+already had to make these changes for the above quick bench work ;-)
+I'll send out patches shortly.
+
+
+>>> +SEC("xdp.frags")
+>>>   int xdp_redirect_prog(struct xdp_md *ctx)
+>>>   {
+>>> -    void *data_end = (void *)(long)ctx->data_end;
+>>> -    void *data = (void *)(long)ctx->data;
+>>> +    __u8 pkt[XDPBUFSIZE] = {};
+>>> +    void *data_end = &pkt[XDPBUFSIZE-1];
+>>> +    void *data = pkt;
+>>>       u32 key = bpf_get_smp_processor_id();
+>>>       struct ethhdr *eth = data;
+>>>       struct datarec *rec;
+>>>       u64 nh_off;
+>>> +    if (bpf_xdp_load_bytes(ctx, 0, pkt, sizeof(pkt)))
+>>> +        return XDP_DROP;
+>>
+>> E.g. sizeof(pkt) = 64 bytes here.
+>>
+>>> +
+>>>       nh_off = sizeof(*eth);
+>>>       if (data + nh_off > data_end)
+>>>           return XDP_DROP;
+>>> @@ -36,11 +41,14 @@ int xdp_redirect_prog(struct xdp_md *ctx)
+>>>       NO_TEAR_INC(rec->processed);
+>>>       swap_src_dst_mac(data);
+>>> +    if (bpf_xdp_store_bytes(ctx, 0, pkt, sizeof(pkt)))
+>>> +        return XDP_DROP;
+>>> +
+>>>       return bpf_redirect(ifindex_out, 0);
+>>>   }
+>>>   /* Redirect require an XDP bpf_prog loaded on the TX device */
+>>> -SEC("xdp")
+>>> +SEC("xdp.frags")
+>>>   int xdp_redirect_dummy_prog(struct xdp_md *ctx)
+>>>   {
+>>>       return XDP_PASS;
+>>
+> 
+
