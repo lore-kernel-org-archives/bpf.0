@@ -1,157 +1,134 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B55E805
-	for <bpf@vger.kernel.org>; Wed, 31 May 2023 19:31:01 +0000 (UTC)
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6DED107
-	for <bpf@vger.kernel.org>; Wed, 31 May 2023 12:30:59 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2af30a12e84so758881fa.0
-        for <bpf@vger.kernel.org>; Wed, 31 May 2023 12:30:59 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F39CD34CCB;
+	Wed, 31 May 2023 19:38:54 +0000 (UTC)
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4857135;
+	Wed, 31 May 2023 12:38:52 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id 6a1803df08f44-6260bb94363so980176d6.0;
+        Wed, 31 May 2023 12:38:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685561458; x=1688153458;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=PnlzmCOC+rL5ssGqMcZzFssN3tnZidUP4NqUBdBEfMQ=;
-        b=sxeUg8D/PdJ2lMpAnFWn5fN3ZAo7F4rlCAIFfFGRnDgHyNKfXsBu4AJ2AEghRraice
-         ZhhXWwV97a8BUrb9RSDEGKxBacrFzZCvb1lQbgXs2awrKxaHt8sLdJ2h8j3w+l+Htlul
-         yqkmOBUyb3ViwI1qbAnCaJo1UO7tKvDgkkoX9uMAgqADmxKF3hks1rpKAWLNmzg1Go7B
-         237qkkFjAAihNVv5V+DQFONC/lPbNhhfGq2PMOq/EAyowscSOgsM8u/lDrvkS7U30/23
-         L9aFgoHmaQN/aZZkH78fJIk9Wvqi/XCFd1O+nPVi/rCwHvF9HO9ZC+RFDSn7IZTHfozc
-         hZXA==
+        d=gmail.com; s=20221208; t=1685561932; x=1688153932;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=k1XSVlPtoJ0u6hQGs40U8nTzNUoPpxs4wdnpz7Kdnpk=;
+        b=TqgaTpYHg/uY2I+uLZfTPg1zY4XxWzEmEdDuoWTmj5Gpd85qLFXNZF53sRVFB4CkId
+         UIl6bXbdH6X3NCfwUKJIM/v/+3s6/hDpEUVLDSci5pa5x7WOkUZW0BmdgXMg59fHFBJH
+         0UdN1h907eJ1lCid4jkCBrOrIoPzxyp5PA1xcZNbTOC2S3SiB0BumrfUWv+bJoLCy0za
+         qnGovWsaZsSsKdTS9DwFwTHoSqvzCegvDDs4OesMzNcQuivV5aDBdMX+nfViBAeAgEp2
+         7cTQHmTCGz7PByXLdQkVcUIbx4HcPiDnBhEXhzf1oHCfZdm/aPMTuSJBQnCzkm801r8E
+         sqrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685561458; x=1688153458;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PnlzmCOC+rL5ssGqMcZzFssN3tnZidUP4NqUBdBEfMQ=;
-        b=GUiyeog63DXsw58HwXZ7zTb8GHJ10jnLp+X48xv/h35KGsZZUfPUP0OGFUJmacXh7v
-         7j7eeF+uvfhwgaXWbU0KTI1FfxfNA+/J7x/QWfR3dzYm7eE/obwYBhVabM0hz7C34DEt
-         +jRnTvAghzpuBSELgu+WbMqYCTPpL1so88VhqKkTUjOp8cLeeov9ILm+8zviY2+l/cVi
-         /blDddNKJ4LsCMuREISYWplP1HNLVRX2HoIAJ7cpLD4OPaHU1xN2mMT9Qx1/LDlkLACg
-         woz1Zow0dpE/MAyR2oEROhEvCu93jDbVdD31hSoBaQKa1ihQxn5ipGdbywdMb/aqiYYs
-         20Bg==
-X-Gm-Message-State: AC+VfDwo1w8QPc4aDK+pVuAxJMNYZzadDQSda3lL7hOe9adJuXBB5vn/
-	7VCmmG+q++emJI9HLGPgfVoJsK0X2MYIMw==
-X-Google-Smtp-Source: ACHHUZ62UorK2sI4XBIg98eKahQ5yuze/51EfQ+gLmJQM8mRbwjErsy4G/2On0cEfZqRDOHcSRSSTw==
-X-Received: by 2002:a2e:8502:0:b0:2ad:bedc:9961 with SMTP id j2-20020a2e8502000000b002adbedc9961mr3179990lji.24.1685561457792;
-        Wed, 31 May 2023 12:30:57 -0700 (PDT)
-Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id y14-20020a2e95ce000000b002ad9057fd00sm3459963ljh.85.2023.05.31.12.30.56
+        d=1e100.net; s=20221208; t=1685561932; x=1688153932;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k1XSVlPtoJ0u6hQGs40U8nTzNUoPpxs4wdnpz7Kdnpk=;
+        b=L9ptfXK8OtK0V+Jmcnb+E0X/sHqgtfxNJriCDFxr5nVwEZdtzVfrkryckerbkkJjho
+         g/O32t8bNdFYfl3fSvKL+rS1yWWd9nML1mdbYVc46Yw9GdbqfA8gQqMc3FMDKvMimETn
+         UjysHnaAG7a+VAMze1T902D9H5U/XjUpG+B6iYKgz9/kzY2i7fXJCyCDQ5YCsGOwL6IH
+         FD+dleYEdKztXLAPBpKEm1ANkg2S9RWNYGCWt3ousNgaQdWddEO1Y3yROR3eLYT5DAZA
+         A9xrUdyKYCvDKQMcJemqB4JNQGpLihYhO9D3UvJq8D11trD9g05jqwliEOu9A0dY1w0j
+         WKRg==
+X-Gm-Message-State: AC+VfDwaVEtF58Y/9wq8Tn0aYtv1nKR/X2rrmSJZiY/ACM1c0Gtwvbsp
+	gKQdWu7jfR6vmtHBzuwROLU=
+X-Google-Smtp-Source: ACHHUZ5COr7USqAsPU85CZfk9cJIfiJ3l2KoKPYfkJWMNYJyyG9yyGWNfbUscxjnZOGQNklOUtzImA==
+X-Received: by 2002:a05:6214:5016:b0:623:8494:9945 with SMTP id jo22-20020a056214501600b0062384949945mr16657457qvb.26.1685561931764;
+        Wed, 31 May 2023 12:38:51 -0700 (PDT)
+Received: from localhost (ool-944b8b4f.dyn.optonline.net. [148.75.139.79])
+        by smtp.gmail.com with ESMTPSA id x15-20020a0cfe0f000000b006238f82cde4sm6225439qvr.108.2023.05.31.12.38.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 12:30:57 -0700 (PDT)
-Message-ID: <a13ee48ac037d0dbb6796c7ea5965140ec7ef726.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/4] bpf: verify scalar ids mapping in
- regsafe() using check_ids()
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net,  martin.lau@linux.dev, kernel-team@fb.com, yhs@fb.com
-Date: Wed, 31 May 2023 22:30:55 +0300
-In-Reply-To: <CAEf4BzYjvjbm9g1N9Z04kXV1N3+KH+dZ_sq_0NWuhyuJ+A18UQ@mail.gmail.com>
-References: <20230530172739.447290-1-eddyz87@gmail.com>
-	 <20230530172739.447290-2-eddyz87@gmail.com>
-	 <CAEf4BzYJbzR0f5HyjLMJEmBdHkydQiOjdkk=K4AkXWTwnXsWEg@mail.gmail.com>
-	 <f2abf39bcd4de841a89bb248de9e242a880aaa93.camel@gmail.com>
-	 <CAEf4BzYjvjbm9g1N9Z04kXV1N3+KH+dZ_sq_0NWuhyuJ+A18UQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Wed, 31 May 2023 12:38:51 -0700 (PDT)
+From: Louis DeLosSantos <louis.delos.devel@gmail.com>
+Subject: [PATCH v2 0/2] bpf: utilize table ID in bpf_fib_lookup helper
+Date: Wed, 31 May 2023 15:38:47 -0400
+Message-Id: <20230505-bpf-add-tbid-fib-lookup-v2-0-0a31c22c748c@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-	FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-	T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEeid2QC/4WOQQ6CMBBFr0K6dkwpUsSV9zAspnQKE4WSFomGc
+ HcLF3D5/s/L/6uIFJiiuGWrCLRwZD8mUKdMtD2OHQHbxEJJVchSlmAmB2gtzIYtODbw8v75ngD
+ xoh3K+qplIZJtMBKYgGPb7/6AcaawF1Mgx59j8tEk7jnOPnyPB0u+p//HlhwkOFvXrsq1okrfu
+ wH5dW79IJpt236my1qT1wAAAA==
+To: bpf@vger.kernel.org, netdev@vger.kernel.org
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, 
+ Stanislav Fomichev <sdf@google.com>, razor@blackwall.org, 
+ John Fastabend <john.fastabend@gmail.com>, Yonghong Song <yhs@meta.com>, 
+ Louis DeLosSantos <louis.delos.devel@gmail.com>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Wed, 2023-05-31 at 11:29 -0700, Andrii Nakryiko wrote:
-> On Wed, May 31, 2023 at 10:21=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.=
-com> wrote:
-> >=20
-> > On Tue, 2023-05-30 at 14:37 -0700, Andrii Nakryiko wrote:
-> > [...]
-> > > Also, it might make sense to drop SCALAR register IDs as soon as we
-> > > have only one instance of it left (e.g., if "paired" register was
-> > > overwritten already). I.e., aggressively drop IDs when they become
-> > > useless. WDYT?
-> >=20
-> > I added modification which resets sole scalar IDs to zero before
-> > states comparison, it shows some speedup but is still slow:
-> >=20
-> >   Filter        | Number of programs | Number of programs
-> >                 | patch #1           | patch #1 + sole scalar ID prunin=
-g
-> >   ---------------------------------------------------------------------=
--
-> >   states_pct>10 | 40                 | 40
-> >   states_pct>20 | 20                 | 19
-> >   states_pct>30 | 15                 | 13
-> >   states_pct>40 | 11                 | 8
-> >=20
-> > (Out of 177 programs).
-> >=20
-> > I'll modify mark_chain_precision() to propagate precision marks for
-> > find_equal_scalars(), so that it could be compared to current patch #3
-> > in terms of code complexity and verification performance.
-> >=20
-> > If you have any thoughts regarding my previous email, please share.
-> >=20
->=20
-> Yep, I do. Given SCALAR registers with the same ID are meant to "share
-> the destiny", shouldn't it be required that when we mark r6 as precise
-> we should automatically mark linked r7 as precise at the same point.
-> So in your example:
->=20
-> 7: r9 +=3D r6
->=20
-> should be where we request both r6 and r7 (and whatever other register
-> has the same ID) to be marked as precise. It should be very easy to
-> implement, especially given my recent refactoring with
-> mark_chain_precision_batch.
+This patchset adds the ability to specify a table ID to the
+`bpf_fib_lookup` BPF helper. 
 
-Ok, I'll modify the `struct backtrack_state` as follows:
+A new `tbid` field is added to `struct fib_bpf_lookup`.
+When the `fib_bpf_lookup` helper is called with the `BPF_FIB_LOOKUP_DIRECT` and 
+`BPF_FIB_LOOKUP_TBID' flag the `tbid` field will be interpreted as the table ID 
+to use for the fib lookup.
 
-  struct backtrack_state {
-	struct bpf_verifier_env *env;
-	u32 frame;
-	u32 reg_masks[MAX_CALL_FRAMES];
-+	u32 reg_ids[MAX_CALL_FRAMES];
-	u64 stack_masks[MAX_CALL_FRAMES];
-+	u64 stack_ids[MAX_CALL_FRAMES];
-  };
+If the `tbid` specifies a table that does not exist the lookup fails
+with `BPF_FIB_LKUP_RET_NOT_FWDED`
 
-And add corresponding logic to backtrack_insn().
+This functionality is useful in containerized environments. 
 
-> The question I have (and again, haven't spent any time thinking about
-> any other corner cases, sorry) is whether that alone would be a proper
-> fix?
+For instance, if a CNI wants to dictate the next-hop for traffic leaving
+a container it can create a container-specific routing table and perform
+a fib lookup against this table in a "host-net-namespace-side" TC program.
 
-As far as I understand, in terms of correctness it would be a proper fix.
-In terms of performance, I hope that it would be enough but we will see.
+This functionality also allows `ip rule` like functionality at the TC
+layer, allowing an eBPF program to pick a routing table based on some
+aspect of the sk_buff.
 
-> As for this u32_hashset, it just feels like a big overkill, tbh. If we
-> have to do something like that, wouldn't it be better to, say, set
-> highest bit in reg->id (for all linked registers, of course) to mark
-> it as "used for range checks" instead of maintaining a separate check?
+As a concrete use case, this feature will be used in Cilium's SRv6 L3VPN
+datapath. 
+When egress traffic leaves a Pod an eBPF program attached by Cilium will
+determine which VRF the egress traffic should target, and then perform a
+FIB lookup in a specific table representing this VRF's FIB.
 
-Unfortunately no, because this ID change would have to be propagated
-backwards. It was the first implementation I tried.
+The existing `fib_lookup.c` bpf selftest was appended several test cases
+to ensure this feature works as expected. 
 
-> But just the whole idea of keeping track of some special circumstances
-> under which IDs are meaningful seems wrong... All this logic is
-> complicated, now we are adding another layer of complexity on top. And
-> the complexity is not in the code, it's in thinking about all possible
-> scenarios and their interactions.
+```
+$ sudo ./test_progs -a "*fib*"
 
-I agree that adding more layers is a complication in itself.
-Thank you for your input.
+Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+```
 
-> > [...]
+Signed-off-by: Louis DeLosSantos <louis.delos.devel@gmail.com>
+---
+Changes in v2:
+- Utilize a new flag `BPF_FIB_LOOKUP_TBID` for performing table ID fib
+  lookups.
+- Update fib lookup selftest to reflect new flag usage.
+- Change second commit message subject to `selftests/bpf`.
+- Link to v1: https://lore.kernel.org/r/20230505-bpf-add-tbid-fib-lookup-v1-0-fd99f7162e76@gmail.com
+
+---
+Louis DeLosSantos (2):
+      bpf: add table ID to bpf_fib_lookup BPF helper
+      selftests/bpf: test table ID fib lookup BPF helper
+
+ include/uapi/linux/bpf.h                           | 21 ++++++--
+ net/core/filter.c                                  | 14 ++++-
+ tools/include/uapi/linux/bpf.h                     | 21 ++++++--
+ .../testing/selftests/bpf/prog_tests/fib_lookup.c  | 61 +++++++++++++++++++---
+ 4 files changed, 102 insertions(+), 15 deletions(-)
+---
+base-commit: fbc0b0253001c397a481d258a88ce5f08996574f
+change-id: 20230505-bpf-add-tbid-fib-lookup-aa46fa098603
+
+Best regards,
+-- 
+Louis DeLosSantos <louis.delos.devel@gmail.com>
 
