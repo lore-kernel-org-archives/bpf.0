@@ -1,22 +1,22 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5378C8CB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C324BC8EA;
 	Wed, 31 May 2023 11:10:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 50A5AC4339C;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 68FCFC433AC;
 	Wed, 31 May 2023 11:10:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1685531421;
-	bh=T8Q6n/l1L/+GVFPA0YkBgMJ2AUVa+CCuYBZqfpHD+bs=;
+	bh=FPFcVsxFDHWUA/K7a3KuzDqudNUNFy//Xing6rKzvoQ=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=hSEPmdPrT5pnV3Y5QQlXnyZfPnSRo+aac029iiOHeTCvB6RzcyAoCvjAkcMibUtxd
-	 zvm9dIcbWZbThoCKFfEBUgzhZEg+NFpionTBvVGL9Zbp/6tjXFLYXJocoCe308GtUY
-	 mrm0Vo/61vHXUE54SUhh0ZEsFM0xsOE4gMh2gtWEFcvI1wROp1UQd3eFdUv5sQI/KO
-	 VytsQIHLHfSy2cIWUxB2PO0GO/h5m4217LYP+D0MdA4CyWl+YZ0ljuGx40KVHXREWa
-	 bCbaru3Y8XpH3bk2pF2bvaCGskjpDVTCFzE69V573HZCa5iEnpisx6OpKzqtwXl4Im
-	 zp/fLtsNi2BGg==
+	b=m+DqHJ0zQj8KriiyBfn1TRBjWr08KcVIH4vf2cmjjXqSR0fn/PiWQSHx/9zJ3jfsw
+	 6RmrMLArE7YG+3SNjhHGt2AR9f4caAFND+reU1bugY0KR9PfuBFWSsIfbZmMqGgpeI
+	 1myxhAaorRGbkpQvZKNdtPAQjX00nc0cVUdor8M1NjRKYTE66VLy++5YAiozrT0V4Z
+	 7vwKUT6USkUWoXbAU9FB7B9eXKvrYx9+FgUcwtbVHQwYxrM+Hxcd649GhyGe4cSKHu
+	 STAau6N7M/jGQRijQluWopO5UV56Gqo9uGPdYnfXn93eFKovOIpL380v8Ib9Kt4Glg
+	 Q6hWT4bwdGeGQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2DCA5E52BF3;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 42D93E21EC7;
 	Wed, 31 May 2023 11:10:21 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -26,39 +26,36 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] samples/bpf: xdp1 and xdp2 reduce XDPBUFSIZE to 60
+Subject: Re: [PATCH] net: use umd_cleanup_helper()
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <168553142118.8778.13734140798263621950.git-patchwork-notify@kernel.org>
+ <168553142127.8778.2442831312976659281.git-patchwork-notify@kernel.org>
 Date: Wed, 31 May 2023 11:10:21 +0000
-References: <168545704139.2996228.2516528552939485216.stgit@firesoul>
-In-Reply-To: <168545704139.2996228.2516528552939485216.stgit@firesoul>
-To: Jesper Dangaard Brouer <brouer@redhat.com>
-Cc: ttoukan.linux@gmail.com, borkmann@iogearbox.net, ast@kernel.org,
- andrii.nakryiko@gmail.com, bpf@vger.kernel.org, tariqt@nvidia.com,
- gal@nvidia.com, lorenzo@kernel.org, netdev@vger.kernel.org,
- andrew.gospodarek@broadcom.com
+References: <20230526112104.1044686-1-jarkko@kernel.org>
+In-Reply-To: <20230526112104.1044686-1-jarkko@kernel.org>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: davem@davemloft.net, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org
 
 Hello:
 
 This patch was applied to bpf/bpf-next.git (master)
 by Daniel Borkmann <daniel@iogearbox.net>:
 
-On Tue, 30 May 2023 16:30:41 +0200 you wrote:
-> Default samples/pktgen scripts send 60 byte packets as hardware
-> adds 4-bytes FCS checksum, which fulfils minimum Ethernet 64 bytes
-> frame size.
+On Fri, 26 May 2023 14:21:02 +0300 you wrote:
+> bpfilter_umh_cleanup() is the same function as umd_cleanup_helper().
+> Drop the redundant function.
 > 
-> XDP layer will not necessary have access to the 4-bytes FCS checksum.
-> 
-> This leads to bpf_xdp_load_bytes() failing as it tries to copy
-> 64-bytes from an XDP packet that only have 60-bytes available.
-> 
-> [...]
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> ---
+>  include/linux/bpfilter.h     |  1 -
+>  net/bpfilter/bpfilter_kern.c |  2 +-
+>  net/ipv4/bpfilter/sockopt.c  | 11 +----------
+>  3 files changed, 2 insertions(+), 12 deletions(-)
 
 Here is the summary with links:
-  - [bpf-next] samples/bpf: xdp1 and xdp2 reduce XDPBUFSIZE to 60
-    https://git.kernel.org/bpf/bpf-next/c/60548b825b08
+  - net: use umd_cleanup_helper()
+    https://git.kernel.org/bpf/bpf-next/c/9b68f30b6870
 
 You are awesome, thank you!
 -- 
