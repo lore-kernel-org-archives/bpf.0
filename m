@@ -1,87 +1,90 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 207F919E61
-	for <bpf@vger.kernel.org>; Wed, 31 May 2023 19:53:24 +0000 (UTC)
-X-Greylist: delayed 591 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 May 2023 12:53:23 PDT
-Received: from relay.sandelman.ca (relay.cooperix.net [176.58.120.209])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A489D
-	for <bpf@vger.kernel.org>; Wed, 31 May 2023 12:53:23 -0700 (PDT)
-Received: from dyas.sandelman.ca (ipv6.dyas.sandelman.ca [IPv6:2607:f0b0:f:6::1])
-	by relay.sandelman.ca (Postfix) with ESMTPS id 45973209C2;
-	Wed, 31 May 2023 19:43:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=sandelman.ca; s=mail;
-	t=1685562211; bh=nh/2E7l9Eo6glIkU2giO2kr4x719RGydgBltRjrWVU4=;
-	h=From:To:Subject:In-reply-to:References:Date:From;
-	b=PUKKFULOQP48GVZ6LS1gKTGR97kt8dSGZFEvbQUlZ9mZd5mwkshUXZIFSSuAGOgK/
-	 FgsRDz/1t4x/tgLbLWFt+1pe0F3zg0L9Yp0obXsufhKpKVbA2oM5rZt6T6k12ga6BY
-	 V0XsaIGYInavlBiEWqpqLjsbVA0vZs6fxoUtybzwNCtvruv0wzyblvm/jMeI1+zwMF
-	 IUXAj7okLSW6mnY/oFR0rSX+8sJ/6IrJnbfKMO1YveQjwhETwwxfalSCnTxTmBw/3n
-	 M6Kz70BXK+kobF+QGLD0d+Eneqni67lCYBYcBKN23sanFxtLE0TVzuRHRvPDo67Fkw
-	 8pOi+H1cKryNA==
-Received: by dyas.sandelman.ca (Postfix, from userid 1000)
-	id 9FCAFA63A6; Wed, 31 May 2023 15:38:10 -0400 (EDT)
-Received: from dyas (localhost [127.0.0.1])
-	by dyas.sandelman.ca (Postfix) with ESMTP id 9D9D8A6377;
-	Wed, 31 May 2023 15:38:10 -0400 (EDT)
-From: Michael Richardson <mcr+ietf@sandelman.ca>
-To: "bpf\@ietf.org" <bpf@ietf.org>, bpf <bpf@vger.kernel.org>
-Subject: Re: [Bpf] IETF BPF working group draft charter
-In-reply-to: <ZHbDekB0KderhSTl@infradead.org>
-References: <20230523163200.GD20100@maniforge> <18272.1684864698@localhost> <20230523202827.GA33347@maniforge> <ZG8R3JgOPHo7xn61@infradead.org> <87y1lclnui.fsf@gnu.org> <PH7PR21MB38781A9FBC44A275FDF3D5F6A347A@PH7PR21MB3878.namprd21.prod.outlook.com> <20230526165511.GA1209625@maniforge> <PH7PR21MB3878E80B01C2AA8273131D7CA347A@PH7PR21MB3878.namprd21.prod.outlook.com> <20230526171929.GB1209625@maniforge> <PH7PR21MB3878E4B002049F825DDCD52BA347A@PH7PR21MB3878.namprd21.prod.outlook.com> <ZHbDekB0KderhSTl@infradead.org>
-Comments: In-reply-to Christoph Hellwig <hch@infradead.org>
-   message dated "Tue, 30 May 2023 20:48:10 -0700."
-X-Mailer: MH-E 8.6+git; nmh 1.7+dev; GNU Emacs 26.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11D8419E61
+	for <bpf@vger.kernel.org>; Wed, 31 May 2023 19:54:02 +0000 (UTC)
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA36B9D
+	for <bpf@vger.kernel.org>; Wed, 31 May 2023 12:54:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=Y1k/P7rHRI/uST6OUcO3Wa1vgIm+WpfRF3zuose9b3o=; b=UXuwdfvEPEEQ7NU2BVNk1AtT7V
+	Ku2bZHdm1nJnGEZya9lP5h+VfOrgRRYVDx1NRO01Zz0jbbx/wzmhYOMABHvaEUD13zgRn1VuWDHtf
+	d2Y+heMSefFPp8ZRGFeGeb0itzTQFNzp1cdMmOpVPxTFRsDsYT7Bf66SYEEx/VcvdDdZk/vUHdMLO
+	bSPSvgT0WT1S0dbNpJgdMX7sC+enEaxo6NFsnqomfYPPjl0SW+TcqMzbOta2sgQDrt0W1AJZJAMf5
+	6+C1IQouTTe6ESd43T7de7LnV5BeaDZ8XlIKg0UHvH31EvBPP/n2MDPvR5sOdc7orBVZJhqif9qYr
+	1wX8gj+Q==;
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1q4RtO-0003j6-8D; Wed, 31 May 2023 21:53:58 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+	by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1q4RtN-000J2U-Sw; Wed, 31 May 2023 21:53:57 +0200
+Subject: Re: [PATCH bpf-next] bpf, vmtest: Build test_progs and friends as
+ statically linked
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: andrii@kernel.org, bpf@vger.kernel.org
+References: <05b5dd79465be41ff8cf8b56b694118a0aa7ae12.1685140942.git.daniel@iogearbox.net>
+ <CAEf4BzYZBC_518wLTEXVo4+QyJ=Lsx0BYuVsL38xYdPfGOKHEg@mail.gmail.com>
+From: Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <8005de2d-5e10-9eef-2a0d-6f15aa681c05@iogearbox.net>
+Date: Wed, 31 May 2023 21:53:57 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-	micalg=pgp-sha512; protocol="application/pgp-signature"
-Date: Wed, 31 May 2023 15:38:10 -0400
-Message-ID: <9539.1685561890@dyas>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAEf4BzYZBC_518wLTEXVo4+QyJ=Lsx0BYuVsL38xYdPfGOKHEg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26924/Wed May 31 09:24:56 2023)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
-Message-ID: <20230531193810.PCB5iaIv9ONUtY36ogyc6nBbmgsd7w-7rFAKt62yJho@z>
 
---=-=-=
-Content-Type: text/plain
+On 5/31/23 9:02 PM, Andrii Nakryiko wrote:
+> On Fri, May 26, 2023 at 3:47 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>>
+>> Small fix for vmtest.sh that I've been carrying locally for quite a while
+>> now in order to work around the following linker issue:
+>>
+>>    # ./vmtest.sh -- ./test_progs -t lsm
+>>    [...]
+>>    + ip link set lo up
+>>    + [ -x /etc/rcS.d/S50-startup ]
+>>    + /etc/rcS.d/S50-startup
+>>    ./test_progs -t lsm
+>>    ./test_progs: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by ./test_progs)
+>>    ./test_progs: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.34' not found (required by ./test_progs)
+>>    [    1.356497] ACPI: PM: Preparing to enter system sleep state S5
+>>    [    1.358950] reboot: Power down
+>>    [...]
+>>
+>> With the specified TRUNNER_LDFLAGS out of vmtest to force static linking
+>> runners like test_progs/test_maps/etc work just fine.
+> 
+> Should we make this a command line option to the vmtest.sh script
+> instead? I, for one, can't even successfully build on my machine with
+> this, probably due to missing some -static library package (though I
+> did install libzstd-static). I'm getting:
 
+Interesting, in my case it's the other way round, but yeah that could work
+as well.
 
-I assume that one use cases is where a VM (windows or Linux inside) does a
-eBPF (XDP) load into a virtual network interface, and the hypervisor manages
-to push that down to some engine in a physical card.
-
-In that case, we might have mixes of Windows, Linux and network card
-implementations of eBPF on the same "transaction" path.
-
---
-Michael Richardson <mcr+IETF@sandelman.ca>, Sandelman Software Works
- -= IPv6 IoT consulting =-                      *I*LIKE*TRAINS*
-
-
-
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQGzBAEBCgAdFiEEow/1qDVgAbWL2zxYcAKuwszYgEMFAmR3oiIACgkQcAKuwszY
-gEPNywwApDNYEY1FOZxxA6q+3i2uuLVSgOD5fK7V92DyytX2t7tlWref0mN7EJry
-a/N0GgIuTTKWLa/R8mf5hTdpCRQ3I1cHaOYJiupSiF3Gs7/zhwcEJ2qhIfcU4X9d
-5N/Rzgif41NFyNJX+f9cvV03r3UStpMJeu2RJ0fRsGTq7Xfkc+7RwTNEzhu0pHfg
-PoDitf0w6pSQDKeTBg/hmgpwYQoQ56qAWaeJsUU06baMru6RmfYPedb0g/Maac4o
-T9jF2zfcILhBlJ/DGMFAuFypoXBirIuS+xhPpJzYD7gmY+ULCjayAu16mGdeg2kG
-gwNMIQZdEDYQB5N4aiQINB4I8JFnlJ7G36EJiKhwINgweFpcuIVMTFNpRaLpOoSv
-/9+aaMRnPINYyLixvoiIgZWbWNw5r/5zy2KIIBGqyfVzJFjVqH/9YkYkCrhzLPdN
-4j096l0tDbtmoJk2fxlaBegMCm464ohVFBfiev3XUQUCraV9fTeZLXR7FPZVgM1i
-iNCYd4NE
-=KU0I
------END PGP SIGNATURE-----
---=-=-=--
+Thanks,
+Daniel
