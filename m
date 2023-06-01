@@ -1,86 +1,86 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F40C242501
-	for <bpf@vger.kernel.org>; Thu,  1 Jun 2023 17:36:57 +0000 (UTC)
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7B2189;
-	Thu,  1 Jun 2023 10:36:56 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2af2ef0d0daso16080271fa.2;
-        Thu, 01 Jun 2023 10:36:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685641014; x=1688233014;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8pO4FII0u/eHrLOQ5BkkwHhkIfbGLfpdwLWunl0iT+U=;
-        b=Qdn7iBNNAPRZ7leN6ZIxkznUayUVVTWN1OPCmLtATOnYD//3SmKUOFKJ0UOUYfReU8
-         0vlKMCL9RX9GcFEXexp0N9UAaxAyHWT0Y5V693HLp9Kq4kdDM+yctXptXtscPfd29RxM
-         BV8enV4MFjScfo1CI2ggWvEkD0/ML73ca9GsIx1//ggueTgd0dPbpH2cXWaZtLYcf0mQ
-         y6NXIeR92PSmEPZNB0FU6CXnFLImbDMUgjEwfvEkJDkX0qStDrU6RSHEO5HG7IDpqcd1
-         wiupz8H8XqY2XhqWWK8bsOAIEiicjNyKXgGXuufAu8hVu2wB54WvbWk4COrlIzvRI95u
-         QzpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685641014; x=1688233014;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8pO4FII0u/eHrLOQ5BkkwHhkIfbGLfpdwLWunl0iT+U=;
-        b=bQo6B3Olu7hgIIlFzwZWaLX2cQa7YLxZVXGjfgADNjjxeuoyo34RuL9G8ewFUxYU1v
-         KAgs2cD1YsbGm2tFXCI1TUcSIuKDBhAGrgdgYNohKgrbqF3Dg3kYm1ehZMkxCSYAzlVo
-         Lq9QFOR9kISHeRsi9JUjWPyNJ7pGrq++8Q2GqRS+4nI2qJfLtRG3S7kQmMsQqx3AhqlK
-         B3Zj0z5rTwbJ51xdhfXgvBI/MkUOA8i1ZttWuprTZrwmMasJzUG5A68TJllh+TPvj23n
-         28RSX1t37EXvSi/EjXncYeLcdA7tYI6Zz6lXHVVFWUOeH/3sBYl3/Lh5AD9IsQ/sv+0X
-         tLLA==
-X-Gm-Message-State: AC+VfDyYIDGRQKtpddVMP1dFi5k3lkpksPsu8dL9uj/4JOWqKjaTZuVq
-	cwcq7V+ibzEndxKYMTdeNrYr0eUgp2H1ktI+agQ=
-X-Google-Smtp-Source: ACHHUZ40392VulkDYlINoWA/zAVgog1PROQ2CS8CZgWJopARs7kOjar4mfnmSR6zvulerCdXwmQVniUtve/Mixlt0rs=
-X-Received: by 2002:a2e:8892:0:b0:2a7:6d19:b569 with SMTP id
- k18-20020a2e8892000000b002a76d19b569mr66121lji.53.1685641014220; Thu, 01 Jun
- 2023 10:36:54 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3580F42501
+	for <bpf@vger.kernel.org>; Thu,  1 Jun 2023 17:40:10 +0000 (UTC)
+Received: from relay.sandelman.ca (relay.cooperix.net [176.58.120.209])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C836C1B4
+	for <bpf@vger.kernel.org>; Thu,  1 Jun 2023 10:40:07 -0700 (PDT)
+Received: from dyas.sandelman.ca (unknown [142.169.16.93])
+	by relay.sandelman.ca (Postfix) with ESMTPS id 318AF209C2;
+	Thu,  1 Jun 2023 17:40:06 +0000 (UTC)
+Received: by dyas.sandelman.ca (Postfix, from userid 1000)
+	id DA5D7A63A4; Thu,  1 Jun 2023 13:40:04 -0400 (EDT)
+Received: from dyas (localhost [127.0.0.1])
+	by dyas.sandelman.ca (Postfix) with ESMTP id D76DCA6377;
+	Thu,  1 Jun 2023 13:40:04 -0400 (EDT)
+From: Michael Richardson <mcr+ietf@sandelman.ca>
+To: Dave Thaler <dthaler=40microsoft.com@dmarc.ietf.org>
+cc: "bpf\@ietf.org" <bpf@ietf.org>, bpf <bpf@vger.kernel.org>
+Subject: Re: [Bpf] IETF BPF working group draft charter
+In-reply-to: <PH7PR21MB3878F9FEAF8DAD233E2505B4A348A@PH7PR21MB3878.namprd21.prod.outlook.com>
+References: <20230523163200.GD20100@maniforge> <18272.1684864698@localhost> <20230523202827.GA33347@maniforge> <ZG8R3JgOPHo7xn61@infradead.org> <87y1lclnui.fsf@gnu.org> <PH7PR21MB38781A9FBC44A275FDF3D5F6A347A@PH7PR21MB3878.namprd21.prod.outlook.com> <20230526165511.GA1209625@maniforge> <PH7PR21MB3878E80B01C2AA8273131D7CA347A@PH7PR21MB3878.namprd21.prod.outlook.com> <20230526171929.GB1209625@maniforge> <PH7PR21MB3878E4B002049F825DDCD52BA347A@PH7PR21MB3878.namprd21.prod.outlook.com> <ZHbDekB0KderhSTl@infradead.org> <9539.1685561890@dyas> <PH7PR21MB3878F9FEAF8DAD233E2505B4A348A@PH7PR21MB3878.namprd21.prod.outlook.com>
+Comments: In-reply-to Dave Thaler <dthaler=40microsoft.com@dmarc.ietf.org>
+   message dated "Wed, 31 May 2023 19:44:46 -0000."
+X-Mailer: MH-E 8.6+git; nmh 1.7+dev; GNU Emacs 26.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230429101215.111262-1-houtao@huaweicloud.com>
- <20230429101215.111262-4-houtao@huaweicloud.com> <20230503184841.6mmvdusr3rxiabmu@MacBook-Pro-6.local>
- <986216a3-437a-5219-fd9a-341786e9264b@huaweicloud.com> <20230504020051.xga5y5dj3rxobmea@dhcp-172-26-102-232.dhcp.thefacebook.com>
- <d3169329-1453-e87a-fbb0-e1435f0741dc@huaweicloud.com>
-In-Reply-To: <d3169329-1453-e87a-fbb0-e1435f0741dc@huaweicloud.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 1 Jun 2023 10:36:43 -0700
-Message-ID: <CAADnVQ+yK700YFHBQx5-UpxkqhgK-SyL=b=vCXJb448WvSHkEQ@mail.gmail.com>
-Subject: Re: [RFC bpf-next v3 3/6] bpf: Introduce BPF_MA_REUSE_AFTER_RCU_GP
-To: Hou Tao <houtao@huaweicloud.com>
-Cc: bpf <bpf@vger.kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>, Hao Luo <haoluo@google.com>, 
-	Yonghong Song <yhs@fb.com>, Daniel Borkmann <daniel@iogearbox.net>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, "Paul E . McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org, 
-	Hou Tao <houtao1@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-	autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="=-=-=";
+	micalg=pgp-sha512; protocol="application/pgp-signature"
+Date: Thu, 01 Jun 2023 13:40:04 -0400
+Message-ID: <18718.1685641204@dyas>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+	SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Wed, May 3, 2023 at 7:30=E2=80=AFPM Hou Tao <houtao@huaweicloud.com> wro=
-te:
->
-> > Construct the patch series as:
-> > - prep patches
-> > - benchmark
-> > - unconditional convert of bpf_ma to REUSE_AFTER_rcu_GP_and_free_after_=
-rcu_tasks_trace
-> >   with numbers from bench(s) before and after this patch.
-> Thanks again for the suggestion. Will do in v4.
+--=-=-=
+Content-Type: text/plain
 
 
-It's been a month. Any update?
+Dave Thaler <dthaler=40microsoft.com@dmarc.ietf.org> wrote:
+    >> I assume that one use cases is where a VM (windows or Linux inside)
+    >> does a eBPF (XDP) load into a virtual network interface, and the
+    >> hypervisor manages to push that down to some engine in a physical
+    >> card.
+    >>
+    >> In that case, we might have mixes of Windows, Linux and network card
+    >> implementations of eBPF on the same "transaction" path.
 
-Should we take over this work if you're busy?
+    > Yes, exactly right.
+
+Okay, I'm unclear if that implies that we need all the discussed ELF and ABI issues
+to be compatible all the way down.  Or if each layer can do it's adaptation
+in incompatible ways, and that's okay.
+
+
+--
+Michael Richardson <mcr+IETF@sandelman.ca>, Sandelman Software Works
+ -= IPv6 IoT consulting =-                      *I*LIKE*TRAINS*
+
+
+
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAEBCgAdFiEEow/1qDVgAbWL2zxYcAKuwszYgEMFAmR41/QACgkQcAKuwszY
+gENPPgv/dk7grtwsVPOkgTru+Q3eL8ms9Rf7bQDr5A5HOIDDQ7RPw08McEOTMz7E
+Quqkf1py7mP2Ct0RRzRyStjj4gXGX98IXUopxb4ICYHzl4FtYgkiDhU+8hszZPDe
+VCHPcW6TJF+pwxDFwvtLRGT5AX1K82mNM0RqG/KNPhcXth/q9GKA6GoPO3UA4Iwl
+0CzfPKEbKLKG/MXtfeIr0cw7jxpoMsQ5IpXGNXk+MsSJzUp1SdGA73SMTafDjdTX
+2ipYV8qoitfQS1vZgWyaeZTrGsgxZzs4FlEotCchSw1NoTPBTGsfIZXWU9Q49Fs2
+n6eM7e86Vlc5Cvaqarnyrvj5OArjuL1rmWJUVsxB8kWTGY9vk9NAWcdq66gkiGGY
+8K/n6wwUdeSvtFdoTCCzZbV0dKHFG9cGti2csrQ+6xNG2tAodmYSOtf5fuUU7Yyf
+Z9LsyqlFjsviauSX0CiFlOUCSM5Eh0E+SK8aIu3lgfwW58oryzNi1pRcYdH0nXhi
+NKUQEKw4
+=GjDw
+-----END PGP SIGNATURE-----
+--=-=-=--
