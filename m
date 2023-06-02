@@ -1,156 +1,157 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C0B246AA
-	for <bpf@vger.kernel.org>; Fri,  2 Jun 2023 08:52:56 +0000 (UTC)
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B331713
-	for <bpf@vger.kernel.org>; Fri,  2 Jun 2023 01:52:53 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-565a3cdba71so20018137b3.0
-        for <bpf@vger.kernel.org>; Fri, 02 Jun 2023 01:52:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685695973; x=1688287973;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2vC5VC4yFEIJf6awDHKSY7ygYDdMqF7ISKjmMUJqgZ8=;
-        b=p6ALRpcCoWAYSCUO0S9HG3Dx73tNS7HGqhVFtcdDozhYP6EeuGlp9Szt94Vk6l2LEl
-         OCsYJD/Y6/Ro+lNSZOrQT6M7tOhp2MU3jr5QSCBhm0OiQlFOALzJpio9ctWWJw7HWVBE
-         um1zsbxRFylGSl9WapiC2tOqv/EiavE3u2ok+QRQ69d6zNjldAawQvL0B6fwb8dO41t7
-         bn1jqrqQvVPgonGU7rUYjKl1MK3fSp8DCKDEAk8pYdXu+RO8pr65ns+O4HchJVvFqKgK
-         zVazgNWxBhRqBPH1TpRaS3o9xboRg5bHdy+wr6p89OryaD/0mhDL0M9ATYV5Xjs9Uhyl
-         3gXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685695973; x=1688287973;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2vC5VC4yFEIJf6awDHKSY7ygYDdMqF7ISKjmMUJqgZ8=;
-        b=Ybj4eYtNSCvBxwkcPaImVaDt/4C0BGlAFYSmsxlkI/tiwGW9BtMy9cARnc9TVUKR/M
-         H7JvSPyZevL0WbvBS8fOTJRXKTv37mLDjDoJ4RTo2q5lN3ROLh/I5nQMZTm7yxSfORZa
-         QGpZrsrQnrSFOq3z5sq2xTgDjaHJ2PxMUV1AM010HUFSuwZSzXoG13UmtHqMpaBixDuI
-         Vk+qfdjvJwqZ18K6CggR7UrVOdKGfA7PXt6u1UdndzBdLc4+j3fwW/9J8I6dSRwIm6/z
-         y/0joA3/kjWcaFxvmoz8j29SBbkWNSJkcb7w7UmQT8aAa22upK8vNTtKP/xFS6MUUor9
-         laoQ==
-X-Gm-Message-State: AC+VfDyYAQb8y+4cNB+mdyHYUqCiTWG/Jfstv1vuakiJbIOLSZ+ABGB+
-	hdJEsvK5VZ2EvVKhnUNHAkU=
-X-Google-Smtp-Source: ACHHUZ7SHKrekYblIQYpIcUizpGJ0YWOZqEGgflxdJKOHrZaNQSb5xeFys5KdDw3DcnNYbnh/BSAVA==
-X-Received: by 2002:a81:778b:0:b0:568:bc0b:bf92 with SMTP id s133-20020a81778b000000b00568bc0bbf92mr13348346ywc.34.1685695972769;
-        Fri, 02 Jun 2023 01:52:52 -0700 (PDT)
-Received: from vultr.guest ([2001:19f0:5401:1e90:5400:4ff:fe75:fb5d])
-        by smtp.gmail.com with ESMTPSA id b123-20020a0dd981000000b00565c29cf592sm289828ywe.10.2023.06.02.01.52.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 01:52:52 -0700 (PDT)
-From: Yafang Shao <laoar.shao@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yhs@fb.com,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	quentin@isovalent.com
-Cc: bpf@vger.kernel.org,
-	Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next 6/6] bpftool: Show probed function in perf_event link info
-Date: Fri,  2 Jun 2023 08:52:39 +0000
-Message-Id: <20230602085239.91138-7-laoar.shao@gmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230602085239.91138-1-laoar.shao@gmail.com>
-References: <20230602085239.91138-1-laoar.shao@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C0FAC2E7;
+	Fri,  2 Jun 2023 09:22:15 +0000 (UTC)
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF35E4C;
+	Fri,  2 Jun 2023 02:22:12 -0700 (PDT)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R231e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0Vk9M5pa_1685697727;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vk9M5pa_1685697727)
+          by smtp.aliyun-inc.com;
+          Fri, 02 Jun 2023 17:22:08 +0800
+From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To: virtualization@lists.linux-foundation.org
+Cc: "Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH vhost v10 01/10] virtio_ring: put mapping error check in vring_map_one_sg
+Date: Fri,  2 Jun 2023 17:21:57 +0800
+Message-Id: <20230602092206.50108-2-xuanzhuo@linux.alibaba.com>
+X-Mailer: git-send-email 2.32.0.3.g01195cf9f
+In-Reply-To: <20230602092206.50108-1-xuanzhuo@linux.alibaba.com>
+References: <20230602092206.50108-1-xuanzhuo@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Git-Hash: 3bf1b1dbeb8a
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+	T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
 	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Show the exposed perf_event link info in bpftool. The result as follows,
+This patch put the dma addr error check in vring_map_one_sg().
 
-$ bpftool link show
-1: perf_event  prog 5
-        func kernel_clone  addr ffffffffb40bc310  offset 0
-        bpf_cookie 0
-        pids trace(9726)
-$ bpftool link show -j
-[{"id":1,"type":"perf_event","prog_id":5,"func":"kernel_clone","addr":18446744072435254032,"offset":0,"bpf_cookie":0,"pids":[{"pid":9726,"comm":"trace"}]}]
+The benefits of doing this:
 
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+1. reduce one judgment of vq->use_dma_api.
+2. make vring_map_one_sg more simple, without calling
+   vring_mapping_error to check the return value. simplifies subsequent
+   code
+
+Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- tools/bpf/bpftool/link.c | 21 ++++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
+ drivers/virtio/virtio_ring.c | 37 +++++++++++++++++++++---------------
+ 1 file changed, 22 insertions(+), 15 deletions(-)
 
-diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
-index 3b00c07..045f59f 100644
---- a/tools/bpf/bpftool/link.c
-+++ b/tools/bpf/bpftool/link.c
-@@ -280,6 +280,12 @@ static int show_link_close_json(int fd, struct bpf_link_info *info)
- 			kernel_syms_show(addrs, info->kprobe_multi.count, 0);
- 		jsonw_end_array(json_wtr);
- 		break;
-+	case BPF_LINK_TYPE_PERF_EVENT:
-+		jsonw_string_field(json_wtr, "func",
-+				   u64_to_ptr(info->perf_event.name));
-+		jsonw_uint_field(json_wtr, "addr", info->perf_event.addr);
-+		jsonw_uint_field(json_wtr, "offset", info->perf_event.offset);
-+		break;
- 	default:
- 		break;
- 	}
-@@ -416,7 +422,7 @@ void netfilter_dump_plain(const struct bpf_link_info *info)
- static int show_link_close_plain(int fd, struct bpf_link_info *info)
+diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+index c5310eaf8b46..72ed07a604d4 100644
+--- a/drivers/virtio/virtio_ring.c
++++ b/drivers/virtio/virtio_ring.c
+@@ -355,9 +355,8 @@ static struct device *vring_dma_dev(const struct vring_virtqueue *vq)
+ }
+ 
+ /* Map one sg entry. */
+-static dma_addr_t vring_map_one_sg(const struct vring_virtqueue *vq,
+-				   struct scatterlist *sg,
+-				   enum dma_data_direction direction)
++static int vring_map_one_sg(const struct vring_virtqueue *vq, struct scatterlist *sg,
++			    enum dma_data_direction direction, dma_addr_t *addr)
  {
- 	struct bpf_prog_info prog_info;
--	const char *prog_type_str;
-+	const char *prog_type_str, *buf;
- 	int err;
- 
- 	show_link_header_plain(info);
-@@ -472,6 +478,12 @@ static int show_link_close_plain(int fd, struct bpf_link_info *info)
- 		addrs = (const __u64 *)u64_to_ptr(info->kprobe_multi.addrs);
- 		kernel_syms_show(addrs, cnt, indent);
- 		break;
-+	case BPF_LINK_TYPE_PERF_EVENT:
-+		buf = (const char *)u64_to_ptr(info->perf_event.name);
-+		if (buf[0] != '\0' || info->perf_event.addr)
-+			printf("\n\tfunc %s  addr %llx  offset %d  ", buf,
-+			       info->perf_event.addr, info->perf_event.offset);
-+		break;
- 	default:
- 		break;
+ 	if (!vq->use_dma_api) {
+ 		/*
+@@ -366,7 +365,8 @@ static dma_addr_t vring_map_one_sg(const struct vring_virtqueue *vq,
+ 		 * depending on the direction.
+ 		 */
+ 		kmsan_handle_dma(sg_page(sg), sg->offset, sg->length, direction);
+-		return (dma_addr_t)sg_phys(sg);
++		*addr = (dma_addr_t)sg_phys(sg);
++		return 0;
  	}
-@@ -498,6 +510,7 @@ static int do_show_link(int fd)
- 	int count;
- 	int err;
  
-+	buf[0] = '\0';
- 	memset(&info, 0, sizeof(info));
- again:
- 	err = bpf_link_get_info_by_fd(fd, &info, &len);
-@@ -533,6 +546,12 @@ static int do_show_link(int fd)
- 			goto again;
- 		}
+ 	/*
+@@ -374,9 +374,14 @@ static dma_addr_t vring_map_one_sg(const struct vring_virtqueue *vq,
+ 	 * the way it expects (we don't guarantee that the scatterlist
+ 	 * will exist for the lifetime of the mapping).
+ 	 */
+-	return dma_map_page(vring_dma_dev(vq),
++	*addr = dma_map_page(vring_dma_dev(vq),
+ 			    sg_page(sg), sg->offset, sg->length,
+ 			    direction);
++
++	if (dma_mapping_error(vring_dma_dev(vq), *addr))
++		return -ENOMEM;
++
++	return 0;
+ }
+ 
+ static dma_addr_t vring_map_single(const struct vring_virtqueue *vq,
+@@ -588,8 +593,9 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
+ 
+ 	for (n = 0; n < out_sgs; n++) {
+ 		for (sg = sgs[n]; sg; sg = sg_next(sg)) {
+-			dma_addr_t addr = vring_map_one_sg(vq, sg, DMA_TO_DEVICE);
+-			if (vring_mapping_error(vq, addr))
++			dma_addr_t addr;
++
++			if (vring_map_one_sg(vq, sg, DMA_TO_DEVICE, &addr))
+ 				goto unmap_release;
+ 
+ 			prev = i;
+@@ -603,8 +609,9 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
  	}
-+	if (info.type == BPF_LINK_TYPE_PERF_EVENT &&
-+	    !info.perf_event.name) {
-+		info.perf_event.name = (unsigned long)&buf;
-+		info.perf_event.name_len = sizeof(buf);
-+		goto again;
-+	}
+ 	for (; n < (out_sgs + in_sgs); n++) {
+ 		for (sg = sgs[n]; sg; sg = sg_next(sg)) {
+-			dma_addr_t addr = vring_map_one_sg(vq, sg, DMA_FROM_DEVICE);
+-			if (vring_mapping_error(vq, addr))
++			dma_addr_t addr;
++
++			if (vring_map_one_sg(vq, sg, DMA_FROM_DEVICE, &addr))
+ 				goto unmap_release;
  
- 	if (json_output)
- 		show_link_close_json(fd, &info);
+ 			prev = i;
+@@ -1279,9 +1286,8 @@ static int virtqueue_add_indirect_packed(struct vring_virtqueue *vq,
+ 
+ 	for (n = 0; n < out_sgs + in_sgs; n++) {
+ 		for (sg = sgs[n]; sg; sg = sg_next(sg)) {
+-			addr = vring_map_one_sg(vq, sg, n < out_sgs ?
+-					DMA_TO_DEVICE : DMA_FROM_DEVICE);
+-			if (vring_mapping_error(vq, addr))
++			if (vring_map_one_sg(vq, sg, n < out_sgs ?
++					     DMA_TO_DEVICE : DMA_FROM_DEVICE, &addr))
+ 				goto unmap_release;
+ 
+ 			desc[i].flags = cpu_to_le16(n < out_sgs ?
+@@ -1426,9 +1432,10 @@ static inline int virtqueue_add_packed(struct virtqueue *_vq,
+ 	c = 0;
+ 	for (n = 0; n < out_sgs + in_sgs; n++) {
+ 		for (sg = sgs[n]; sg; sg = sg_next(sg)) {
+-			dma_addr_t addr = vring_map_one_sg(vq, sg, n < out_sgs ?
+-					DMA_TO_DEVICE : DMA_FROM_DEVICE);
+-			if (vring_mapping_error(vq, addr))
++			dma_addr_t addr;
++
++			if (vring_map_one_sg(vq, sg, n < out_sgs ?
++					     DMA_TO_DEVICE : DMA_FROM_DEVICE, &addr))
+ 				goto unmap_release;
+ 
+ 			flags = cpu_to_le16(vq->packed.avail_used_flags |
 -- 
-1.8.3.1
+2.32.0.3.g01195cf9f
 
