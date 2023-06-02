@@ -1,127 +1,160 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C822EA8
-	for <bpf@vger.kernel.org>; Fri,  2 Jun 2023 00:40:25 +0000 (UTC)
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1ED598
-	for <bpf@vger.kernel.org>; Thu,  1 Jun 2023 17:40:23 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f5f728c4aaso1543097e87.0
-        for <bpf@vger.kernel.org>; Thu, 01 Jun 2023 17:40:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685666422; x=1688258422;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dQMTJIvAFBPt09MlJkqvyf/bjWfG6tXJNp9yIk7PCK8=;
-        b=UbzLfnuif+D45QDh6i8QMn2cB2GqhMB46o2TthSxOdKlSueB51NB77iH14oJyYzkMZ
-         WlSFeVWQNvImOOb1H8H9SMjxXCyji1F51EnsWtCdTAkyErUaMtM62Zky2dzH5peLXjwC
-         NXBsJNv0GWE+pv8gqAFmDp4w6OuvX2nZTE/sYJC9OsbA1AgPC5aPppLX/0vgdCSPKzb8
-         Ne+Zs0XE3WNsEv1uLYGHlH579sYPkKOd/+kiN6A03R9p26gGlv9NvPYuviOdNLnmGzax
-         hasQSBLzVZdvQXvHkzXbr7+4kYvLKx4kOpF6E7oMl7o9VtqPikzw8VUsu16PaoiBF0RU
-         X6nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685666422; x=1688258422;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dQMTJIvAFBPt09MlJkqvyf/bjWfG6tXJNp9yIk7PCK8=;
-        b=B7mRMcn68hASaf62yC//u6TJpJ/Z6lAd/TRo49ZtWQOKRGUZRxV8o8/dglscpIKSDy
-         rNDL2PEDoktXoXwGI89siyWust+y8WY7BafB4q5F5kL3Kcv/aRQWleMWqtF8BGGQmOyP
-         4tzkLzhl4UKtVKd50+KDXa7fXhD2rN72/GV0cRYoAPxcJ3xCdBTopZpIffRdROtYAtCB
-         30AW95oVwJGH/UdZ6jV+mLiWS5yg4hsRJRsavonlYfQJ4fuKxN7tVMvYC0MTQeTOWPbb
-         T5LnhiCz8MrZ4POmbB8ITZZ7HyaRAZNm6JoUKJ3pZrhkvWgIMo1T1DpzvXn4ztFXCoiO
-         +Wkg==
-X-Gm-Message-State: AC+VfDxx7u+gksgqYjmKIDUBY3qExbsiFGsmsGuIrCwFZV95Sc21ay6D
-	q0NNuen2VnWdyQ6AdgH31Xuuec4Ub/Af3qhDT6s=
-X-Google-Smtp-Source: ACHHUZ7D8ch92NrvkggFdd+t4SwzeSIrKx5Lw57Qy0NAm/0lSFaMQpa4pPGbp2yOrIpHpgFRTh7w6IcT7H8PYwlZsfQ=
-X-Received: by 2002:ac2:5e75:0:b0:4f4:7a5:e800 with SMTP id
- a21-20020ac25e75000000b004f407a5e800mr346948lfr.10.1685666421480; Thu, 01 Jun
- 2023 17:40:21 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEAC11363
+	for <bpf@vger.kernel.org>; Fri,  2 Jun 2023 02:27:00 +0000 (UTC)
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24B518D
+	for <bpf@vger.kernel.org>; Thu,  1 Jun 2023 19:26:58 -0700 (PDT)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351Nt4ho016162
+	for <bpf@vger.kernel.org>; Thu, 1 Jun 2023 19:26:58 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=UQU9wiJb0Ih5CzkMPhP3koVPPJKeT1ByxWjFlhKEBDQ=;
+ b=I/aoPS/6kuP8gt7/l1p/kTtMjhTCauIZFaRhd90YGrclz6rUIh7lgK8/6nXNYbLWNGtV
+ DjSdq9NrzwjOoNDygywdWpvAnOYS+taAcMPmuSuGSk7lr5SY4hoSssAM+68Ba2L4MRXp
+ 3052kngH+CHN57+J2s5w1QYq3MevzZv19sQ= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qxxb5mffj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Thu, 01 Jun 2023 19:26:58 -0700
+Received: from twshared29819.07.ash9.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 1 Jun 2023 19:26:57 -0700
+Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
+	id E324D1EF7C8D5; Thu,  1 Jun 2023 19:26:54 -0700 (PDT)
+From: Dave Marchevsky <davemarchevsky@fb.com>
+To: <bpf@vger.kernel.org>
+CC: Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann
+	<daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau
+	<martin.lau@kernel.org>,
+        Kernel Team <kernel-team@fb.com>,
+        Dave Marchevsky
+	<davemarchevsky@fb.com>
+Subject: [PATCH v2 bpf-next 5/9] [DONOTAPPLY] bpf: Allow KF_DESTRUCTIVE-flagged kfuncs to be called under spinlock
+Date: Thu, 1 Jun 2023 19:26:43 -0700
+Message-ID: <20230602022647.1571784-6-davemarchevsky@fb.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230602022647.1571784-1-davemarchevsky@fb.com>
+References: <20230602022647.1571784-1-davemarchevsky@fb.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230531110511.64612-1-aspsk@isovalent.com> <20230531110511.64612-2-aspsk@isovalent.com>
- <20230531182429.wb5kti4fvze34qiz@MacBook-Pro-8.local> <ZHhJUN7kQuScZW2e@zh-lab-node-5>
- <CAADnVQ+67FF=JsxTDxoo2XL8zSh5Y3xptGee8vBj8OwP3b=aew@mail.gmail.com>
- <ZHjhBFLLnUcSy9Tt@zh-lab-node-5> <CAADnVQLXFyhACfZP3bze8PUa43Fnc-Nn_PDGYX2vOq3i8FqKbA@mail.gmail.com>
-In-Reply-To: <CAADnVQLXFyhACfZP3bze8PUa43Fnc-Nn_PDGYX2vOq3i8FqKbA@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 1 Jun 2023 17:40:10 -0700
-Message-ID: <CAADnVQ+FzCiQLbFaJihr8tuJXxjFNZqYs75cyhSDjds8nYBj4A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: add new map ops ->map_pressure
-To: Anton Protopopov <aspsk@isovalent.com>, Martin KaFai Lau <martin.lau@kernel.org>
-Cc: bpf <bpf@vger.kernel.org>, Joe Stringer <joe@isovalent.com>, 
-	John Fastabend <john.fastabend@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-	autolearn=ham autolearn_force=no version=3.4.6
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: DRiWprJKdkoMnKj6zDblRwonuacI6aaR
+X-Proofpoint-ORIG-GUID: DRiWprJKdkoMnKj6zDblRwonuacI6aaR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+	SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Thu, Jun 1, 2023 at 11:24=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Thu, Jun 1, 2023 at 11:17=E2=80=AFAM Anton Protopopov <aspsk@isovalent=
-.com> wrote:
-> > >
-> > > LRU logic doesn't kick in until the map is full.
-> >
-> > In fact, it can: a reproducable example is in the self-test from this p=
-atch
-> > series. In the test N threads try to insert random values for keys 1..3=
-000
-> > simultaneously. As the result, the map may contain any number of elemen=
-ts,
-> > typically 100 to 1000 (never full 3000, which is also less than the map=
- size).
-> > So a user can't really even closely estimate the number of elements in =
-the LRU
-> > map based on the number of updates (with unique keys). A per-cpu counte=
-r
-> > inc/dec'ed from the kernel side would solve this.
->
-> That's odd and unexpected.
-> Definitely something to investigate and fix in the LRU map.
->
-> Pls cc Martin in the future.
->
-> > > If your LRU map is not full you shouldn't be using LRU in the first p=
-lace.
-> >
-> > This makes sense, yes, especially that LRU evictions may happen randoml=
-y,
-> > without a map being full. I will step back with this patch until we inv=
-estigate
-> > if we can replace LRUs with hashes.
-> >
-> > Thanks for the comments!
+In order to prevent deadlock the verifier currently disallows any
+function calls under bpf_spin_lock save for a small set of allowlisted
+helpers/kfuncs. A BPF program that calls destructive kfuncs might be
+trying to cause deadlock, and regardless is understood to be capable of
+causing system breakage of similar severity. Per kfuncs.rst:
 
-Thinking about it more...
-since you're proposing to use percpu counter unconditionally for prealloc
-and percpu_counter_add_batch() logic is batched,
-it could actually be acceptable if it's paired with non-api access.
-Like another patch can add generic kfunc to do __percpu_counter_sum()
-and in the 3rd patch kernel/bpf/preload/iterators/iterators.bpf.c
-for maps can be extended to print the element count, so the user can have
-convenient 'cat /sys/fs/bpf/maps.debug' way to debug maps.
+  The KF_DESTRUCTIVE flag is used to indicate functions calling which is
+  destructive to the system. For example such a call can result in system
+  rebooting or panicking. Due to this additional restrictions apply to th=
+ese
+  calls.
 
-But additional logic of percpu_counter_add_batch() might get in the way
-of debugging eventually.
-If we want to have stats then we can have normal per-cpu u32 in basic
-struct bpf_map that most maps, except array, will inc/dec on update/delete.
-kfunc to iterate over percpu is still necessary.
-This way we will be able to see not only number of elements, but detect
-bad usage when one cpu is only adding and another cpu is deleting elements.
-And other cpu misbalance.
+Preventing BPF programs from crashing or otherwise blowing up the system
+is generally the verifier's goal, but destructive kfuncs might have such
+a state be their intended result. Preventing KF_DESTRUCTIVE kfunc calls
+under spinlock with the goal of safety is therefore unnecessarily
+strict. This patch modifies the "function calls are not allowed while
+holding a lock" check to allow calling destructive kfuncs with an
+active_lock.
 
-but debugging and stats is a slippery slope. These simple stats won't be
-enough and people will be tempted to add more and more.
-So I agree that there is a need for bpf map observability,
-but it is not clear whether hard coded stats is the solution.
+The motivating usecase for this change - unsafe locking of
+bpf_spin_locks for easy testing of race conditions - is implemented in
+the next two patches in the series.
+
+Note that the removed insn->off check was rejecting any calls to kfuncs
+defined in non-vmlinux BTF. In order to get the system in a broken or
+otherwise interesting state for inspection, developers might load a
+module implementing destructive kfuncs particular to their usecase. The
+unsafe_spin_{lock, unlock} kfuncs later in this series are a good
+example: there's no clear reason for them to be in vmlinux as they're
+specifically for BPF selftests, so they live in bpf_testmod. The check
+is removed in favor of a newly-added helper function to enable such
+usecases.
+
+Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
+---
+ kernel/bpf/verifier.c | 22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 48c3e2bbcc4a..1bf0e6411feb 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -330,6 +330,11 @@ struct bpf_kfunc_call_arg_meta {
+ 	u64 mem_size;
+ };
+=20
++static int fetch_kfunc_meta(struct bpf_verifier_env *env,
++			    struct bpf_insn *insn,
++			    struct bpf_kfunc_call_arg_meta *meta,
++			    const char **kfunc_name);
++
+ struct btf *btf_vmlinux;
+=20
+ static DEFINE_MUTEX(bpf_verifier_lock);
+@@ -10313,6 +10318,21 @@ static bool is_rbtree_lock_required_kfunc(u32 bt=
+f_id)
+ 	return is_bpf_rbtree_api_kfunc(btf_id);
+ }
+=20
++static bool is_kfunc_callable_in_spinlock(struct bpf_verifier_env *env,
++					  struct bpf_insn *insn)
++{
++	struct bpf_kfunc_call_arg_meta meta;
++
++	/* insn->off is idx into btf fd_array - 0 for vmlinux btf, else nonzero=
+ */
++	if (!insn->off && is_bpf_graph_api_kfunc(insn->imm))
++		return true;
++
++	if (fetch_kfunc_meta(env, insn, &meta, NULL))
++		return false;
++
++	return is_kfunc_destructive(&meta);
++}
++
+ static bool check_kfunc_is_graph_root_api(struct bpf_verifier_env *env,
+ 					  enum btf_field_type head_field_type,
+ 					  u32 kfunc_btf_id)
+@@ -16218,7 +16238,7 @@ static int do_check(struct bpf_verifier_env *env)
+ 					if ((insn->src_reg =3D=3D BPF_REG_0 && insn->imm !=3D BPF_FUNC_spin=
+_unlock) ||
+ 					    (insn->src_reg =3D=3D BPF_PSEUDO_CALL) ||
+ 					    (insn->src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL &&
+-					     (insn->off !=3D 0 || !is_bpf_graph_api_kfunc(insn->imm)))) {
++					     !is_kfunc_callable_in_spinlock(env, insn))) {
+ 						verbose(env, "function calls are not allowed while holding a lock\=
+n");
+ 						return -EINVAL;
+ 					}
+--=20
+2.34.1
+
