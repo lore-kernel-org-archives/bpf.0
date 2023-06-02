@@ -1,32 +1,36 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C9E9258F
-	for <bpf@vger.kernel.org>; Fri,  2 Jun 2023 15:00:48 +0000 (UTC)
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80C9E58
-	for <bpf@vger.kernel.org>; Fri,  2 Jun 2023 08:00:41 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3528jUo1021577
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 444E0258F
+	for <bpf@vger.kernel.org>; Fri,  2 Jun 2023 15:00:49 +0000 (UTC)
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88ECFE77
+	for <bpf@vger.kernel.org>; Fri,  2 Jun 2023 08:00:42 -0700 (PDT)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3528TTI8009056
 	for <bpf@vger.kernel.org>; Fri, 2 Jun 2023 08:00:41 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qyd6ptcbp-3
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qycy8abtt-5
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
 	for <bpf@vger.kernel.org>; Fri, 02 Jun 2023 08:00:41 -0700
-Received: from twshared40933.03.prn6.facebook.com (2620:10d:c0a8:1c::11) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+Received: from ash-exhub204.TheFacebook.com (2620:10d:c0a8:83::4) by
+ ash-exhub203.TheFacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 2 Jun 2023 08:00:39 -0700
+Received: from twshared25760.37.frc1.facebook.com (2620:10d:c0a8:1c::11) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.23; Fri, 2 Jun 2023 08:00:39 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id B9B6D31E049FF; Fri,  2 Jun 2023 08:00:37 -0700 (PDT)
+	id 969CD31E04936; Fri,  2 Jun 2023 08:00:30 -0700 (PDT)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>
 CC: <linux-security-module@vger.kernel.org>, <keescook@chromium.org>,
         <brauner@kernel.org>, <lennart@poettering.net>, <cyphar@cyphar.com>,
         <luto@kernel.org>
-Subject: [PATCH RESEND bpf-next 12/18] selftests/bpf: add BPF token-enabled BPF_BTF_LOAD selftest
-Date: Fri, 2 Jun 2023 08:00:05 -0700
-Message-ID: <20230602150011.1657856-13-andrii@kernel.org>
+Subject: [PATCH RESEND bpf-next 09/18] selftests/bpf: add BPF token-enabled test for BPF_MAP_CREATE command
+Date: Fri, 2 Jun 2023 08:00:02 -0700
+Message-ID: <20230602150011.1657856-10-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230602150011.1657856-1-andrii@kernel.org>
 References: <20230602150011.1657856-1-andrii@kernel.org>
@@ -39,8 +43,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: ofskMqTR_lazv8CEzgq1fPu_w3NQHeV9
-X-Proofpoint-ORIG-GUID: ofskMqTR_lazv8CEzgq1fPu_w3NQHeV9
+X-Proofpoint-ORIG-GUID: uj5Qrsnr-6mioy26WVdWK5wSqbZjTYv8
+X-Proofpoint-GUID: uj5Qrsnr-6mioy26WVdWK5wSqbZjTYv8
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
  definitions=2023-06-02_11,2023-06-02_02,2023-05-22_02
@@ -51,35 +55,46 @@ X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add a simple test validating that BTF loading can be done from
-unprivileged process through delegated BPF token.
+Add test for creating BPF token with support for BPF_MAP_CREATE
+delegation. And validate that its allowed_map_types filter works as
+expected and allows to create privileged BPF maps through delegated
+token, as long as they are allowed by privileged creator of a token.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- .../testing/selftests/bpf/prog_tests/token.c  | 55 +++++++++++++++++++
- 1 file changed, 55 insertions(+)
+ .../testing/selftests/bpf/prog_tests/token.c  | 52 +++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testi=
 ng/selftests/bpf/prog_tests/token.c
-index 0b6e699d2439..b141f722c0c6 100644
+index fe78b558d697..0b6e699d2439 100644
 --- a/tools/testing/selftests/bpf/prog_tests/token.c
 +++ b/tools/testing/selftests/bpf/prog_tests/token.c
-@@ -138,10 +138,65 @@ static void subtest_map_token(void)
+@@ -88,8 +88,60 @@ static void subtest_token_create(void)
  		ASSERT_OK(restore_priv_caps(old_caps), "restore_caps");
  }
 =20
-+static void subtest_btf_token(void)
++static void subtest_map_token(void)
 +{
 +	LIBBPF_OPTS(bpf_token_create_opts, token_opts);
-+	LIBBPF_OPTS(bpf_btf_load_opts, btf_opts);
-+	int token_fd =3D 0, btf_fd =3D 0;
-+	const void *raw_btf_data;
-+	struct btf *btf =3D NULL;
-+	__u32 raw_btf_size;
++	LIBBPF_OPTS(bpf_map_create_opts, map_opts);
++	int token_fd =3D 0, map_fd =3D 0;
 +	__u64 old_caps =3D 0;
 +
-+	/* create BPF token allowing BPF_BTF_LOAD command */
-+	token_opts.allowed_cmds =3D 1ULL << BPF_BTF_LOAD;
++	/* check that IGNORE_UNKNOWN_MAP_TYPES flag is respected */
++	token_opts.flags =3D BPF_F_TOKEN_IGNORE_UNKNOWN_MAP_TYPES;
++	token_opts.allowed_map_types =3D ~0ULL; /* any current and future map t=
+ypes is allowed */
++	token_fd =3D bpf_token_create(&token_opts);
++	if (!ASSERT_GT(token_fd, 0, "token_create_future_proof"))
++		return;
++	close(token_fd);
++
++	/* create BPF token allowing STACK, but not QUEUE map */
++	token_opts.flags =3D 0;
++	token_opts.allowed_cmds =3D 1ULL << BPF_MAP_CREATE;
++	token_opts.allowed_map_types =3D 1ULL << BPF_MAP_TYPE_STACK; /* but not=
+ QUEUE */
 +	token_fd =3D bpf_token_create(&token_opts);
 +	if (!ASSERT_GT(token_fd, 0, "token_create"))
 +		return;
@@ -88,33 +103,27 @@ index 0b6e699d2439..b141f722c0c6 100644
 +	if (!ASSERT_OK(drop_priv_caps(&old_caps), "drop_caps"))
 +		goto cleanup;
 +
-+	btf =3D btf__new_empty();
-+	if (!ASSERT_OK_PTR(btf, "empty_btf"))
++	/* BPF_MAP_TYPE_STACK is privileged, but with given token_fd should suc=
+ceed */
++	map_opts.token_fd =3D token_fd;
++	map_fd =3D bpf_map_create(BPF_MAP_TYPE_STACK, "token_stack", 0, 8, 1, &=
+map_opts);
++	if (!ASSERT_GT(map_fd, 0, "stack_map_fd"))
 +		goto cleanup;
++	close(map_fd);
++	map_fd =3D 0;
 +
-+	ASSERT_GT(btf__add_int(btf, "int", 4, 0), 0, "int_type");
-+
-+	raw_btf_data =3D btf__raw_data(btf, &raw_btf_size);
-+	if (!ASSERT_OK_PTR(raw_btf_data, "raw_btf_data"))
-+		goto cleanup;
-+
-+	/* validate we can successfully load new BTF with token */
-+	btf_opts.token_fd =3D token_fd;
-+	btf_fd =3D bpf_btf_load(raw_btf_data, raw_btf_size, &btf_opts);
-+	if (!ASSERT_GT(btf_fd, 0, "btf_fd"))
-+		goto cleanup;
-+	close(btf_fd);
-+
-+	/* now validate that we *cannot* load BTF without token */
-+	btf_opts.token_fd =3D 0;
-+	btf_fd =3D bpf_btf_load(raw_btf_data, raw_btf_size, &btf_opts);
-+	if (!ASSERT_EQ(btf_fd, -EPERM, "btf_fd_eperm"))
++	/* BPF_MAP_TYPE_QUEUE is privileged, and token doesn't allow it, so sho=
+uld fail */
++	map_opts.token_fd =3D token_fd;
++	map_fd =3D bpf_map_create(BPF_MAP_TYPE_QUEUE, "token_queue", 0, 8, 1, &=
+map_opts);
++	if (!ASSERT_EQ(map_fd, -EPERM, "queue_map_fd"))
 +		goto cleanup;
 +
 +cleanup:
-+	btf__free(btf);
-+	if (btf_fd > 0)
-+		close(btf_fd);
++	if (map_fd > 0)
++		close(map_fd);
 +	if (token_fd)
 +		close(token_fd);
 +	if (old_caps)
@@ -125,10 +134,8 @@ index 0b6e699d2439..b141f722c0c6 100644
  {
  	if (test__start_subtest("token_create"))
  		subtest_token_create();
- 	if (test__start_subtest("map_token"))
- 		subtest_map_token();
-+	if (test__start_subtest("btf_token"))
-+		subtest_btf_token();
++	if (test__start_subtest("map_token"))
++		subtest_map_token();
  }
 --=20
 2.34.1
