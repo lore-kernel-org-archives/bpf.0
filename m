@@ -1,31 +1,30 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEAC11363
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9D5E15A3
 	for <bpf@vger.kernel.org>; Fri,  2 Jun 2023 02:27:00 +0000 (UTC)
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24B518D
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2551192
 	for <bpf@vger.kernel.org>; Thu,  1 Jun 2023 19:26:58 -0700 (PDT)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351Nt4ho016162
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351NtYEm003992
 	for <bpf@vger.kernel.org>; Thu, 1 Jun 2023 19:26:58 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=UQU9wiJb0Ih5CzkMPhP3koVPPJKeT1ByxWjFlhKEBDQ=;
- b=I/aoPS/6kuP8gt7/l1p/kTtMjhTCauIZFaRhd90YGrclz6rUIh7lgK8/6nXNYbLWNGtV
- DjSdq9NrzwjOoNDygywdWpvAnOYS+taAcMPmuSuGSk7lr5SY4hoSssAM+68Ba2L4MRXp
- 3052kngH+CHN57+J2s5w1QYq3MevzZv19sQ= 
+ : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=facebook; bh=UKFC/MvQhBgh3MEqffvJY5B97DVR8hSvVpl0Fg2fhIs=;
+ b=hU5o1V386+YVnt+P1KQLiUO3RxNstefs+Z2zV1w6JBvMSmBip5IkudlKz1V81gEHyC2x
+ LWE+4Tne/eDvMC4RAKCq9MOHIDz61QgZZIVuTRqT75i02O4iAoEIj+RzFTWzTD2ccwRA
+ gSQQrveH0yAv19gOSpVjJFWhsk79Dh9k3wk= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qxxb5mffj-1
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qxw0bd5uf-2
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
 	for <bpf@vger.kernel.org>; Thu, 01 Jun 2023 19:26:58 -0700
-Received: from twshared29819.07.ash9.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+Received: from twshared8528.02.ash9.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.23; Thu, 1 Jun 2023 19:26:57 -0700
 Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-	id E324D1EF7C8D5; Thu,  1 Jun 2023 19:26:54 -0700 (PDT)
+	id CEA7A1EF7C822; Thu,  1 Jun 2023 19:26:48 -0700 (PDT)
 From: Dave Marchevsky <davemarchevsky@fb.com>
 To: <bpf@vger.kernel.org>
 CC: Alexei Starovoitov <ast@kernel.org>,
@@ -37,23 +36,22 @@ CC: Alexei Starovoitov <ast@kernel.org>,
         Kernel Team <kernel-team@fb.com>,
         Dave Marchevsky
 	<davemarchevsky@fb.com>
-Subject: [PATCH v2 bpf-next 5/9] [DONOTAPPLY] bpf: Allow KF_DESTRUCTIVE-flagged kfuncs to be called under spinlock
-Date: Thu, 1 Jun 2023 19:26:43 -0700
-Message-ID: <20230602022647.1571784-6-davemarchevsky@fb.com>
+Subject: [PATCH v2 bpf-next 0/9] bpf_refcount followups (part 1)
+Date: Thu, 1 Jun 2023 19:26:38 -0700
+Message-ID: <20230602022647.1571784-1-davemarchevsky@fb.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230602022647.1571784-1-davemarchevsky@fb.com>
-References: <20230602022647.1571784-1-davemarchevsky@fb.com>
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: KgZCtbSJYAWnnvZcWXc4OGkoWbRjid9C
+X-Proofpoint-ORIG-GUID: KgZCtbSJYAWnnvZcWXc4OGkoWbRjid9C
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: DRiWprJKdkoMnKj6zDblRwonuacI6aaR
-X-Proofpoint-ORIG-GUID: DRiWprJKdkoMnKj6zDblRwonuacI6aaR
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
  definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
@@ -65,96 +63,117 @@ X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-In order to prevent deadlock the verifier currently disallows any
-function calls under bpf_spin_lock save for a small set of allowlisted
-helpers/kfuncs. A BPF program that calls destructive kfuncs might be
-trying to cause deadlock, and regardless is understood to be capable of
-causing system breakage of similar severity. Per kfuncs.rst:
+This series is the first of two (or more) followups to address issues in the
+bpf_refcount shared ownership implementation discovered by Kumar.
+Specifically, this series addresses the "bpf_refcount_acquire on non-owning=
+ ref
+in another tree" scenario described in [0], and does _not_ address issues
+raised in [1]. Further followups will address the other issues.
 
-  The KF_DESTRUCTIVE flag is used to indicate functions calling which is
-  destructive to the system. For example such a call can result in system
-  rebooting or panicking. Due to this additional restrictions apply to th=
-ese
-  calls.
+The series can be applied without re-enabling bpf_refcount_acquire calls, w=
+hich
+were disabled in commit 7deca5eae833 ("bpf: Disable bpf_refcount_acquire kf=
+unc
+calls until race conditions are fixed") until all issues are addressed. Some
+extra patches are included so that BPF CI tests will exercise test changes =
+in
+the series.
 
-Preventing BPF programs from crashing or otherwise blowing up the system
-is generally the verifier's goal, but destructive kfuncs might have such
-a state be their intended result. Preventing KF_DESTRUCTIVE kfunc calls
-under spinlock with the goal of safety is therefore unnecessarily
-strict. This patch modifies the "function calls are not allowed while
-holding a lock" check to allow calling destructive kfuncs with an
-active_lock.
+Patch contents:
+  * Patch 1 reverts earlier disabling of bpf_refcount_acquire calls
+    * Selftest added later in the series need to call bpf_refcount_acquire
+    * This patch should not be applied and is included to allow CI to run t=
+he
+      newly-added test and exercise test changes in patch 6
+  * Patches 2 and 3 fix other bugs introduced in bpf_refcount series which =
+were
+    discovered while reproducing the main issue this series addresses
+  * Patch 4 fixes the bpf_refcount_acquire issue by making it fallible for
+    non-owning references
+  * Patch 5 allows KF_DESTRUCTIVE kfuncs to be called when spinlock is held
+    * This patch, and all patches further in the series, should not be
+    applied
+  * Patch 6 introduces some destructive bpf_testmod kfuncs which the selfte=
+st
+    added later in the series needs
+  * Patch 7 adds a selftest which uses the kfuncs introduced in patch 5 to
+    replicate the exact scenario raised by Kumar
+  * Patch 8 disables the test added in patch 7
+    * This is so the series (aside from DONOTAPPLY patches) can be applied
+      without re-enabling bpf_refcount_acquire yet.
+  * Patch 9 reverts patch 8 so that CI can run the newly-added test
 
-The motivating usecase for this change - unsafe locking of
-bpf_spin_locks for easy testing of race conditions - is implemented in
-the next two patches in the series.
+The first and last patches in the series are included to allow the CI to run
+newly-added tests and should not be applied. First patch reverts earlier
+disabling of bpf_refcount_acquire calls as the test reproducing
+"bpf_refcount_acquire on non-owning ref in another tree" scenario obviously
+needs to be able to call bpf_refcount_acquire.
 
-Note that the removed insn->off check was rejecting any calls to kfuncs
-defined in non-vmlinux BTF. In order to get the system in a broken or
-otherwise interesting state for inspection, developers might load a
-module implementing destructive kfuncs particular to their usecase. The
-unsafe_spin_{lock, unlock} kfuncs later in this series are a good
-example: there's no clear reason for them to be in vmlinux as they're
-specifically for BPF selftests, so they live in bpf_testmod. The check
-is removed in favor of a newly-added helper function to enable such
-usecases.
+While reproducing the scenario Kumar described in [0], which should cause a
+refcount use-after-free, two unrelated bugs were found and are fixed by this
+series.
 
-Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
----
- kernel/bpf/verifier.c | 22 +++++++++++++++++++++-
- 1 file changed, 21 insertions(+), 1 deletion(-)
+  [0]: https://lore.kernel.org/bpf/atfviesiidev4hu53hzravmtlau3wdodm2vqs7rd=
+7tnwft34e3@xktodqeqevir/
+  [1]: https://lore.kernel.org/bpf/d7hyspcow5wtjcmw4fugdgyp3fwhljwuscp3xyut=
+5qnwivyeru@ysdq543otzv2/
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 48c3e2bbcc4a..1bf0e6411feb 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -330,6 +330,11 @@ struct bpf_kfunc_call_arg_meta {
- 	u64 mem_size;
- };
-=20
-+static int fetch_kfunc_meta(struct bpf_verifier_env *env,
-+			    struct bpf_insn *insn,
-+			    struct bpf_kfunc_call_arg_meta *meta,
-+			    const char **kfunc_name);
-+
- struct btf *btf_vmlinux;
-=20
- static DEFINE_MUTEX(bpf_verifier_lock);
-@@ -10313,6 +10318,21 @@ static bool is_rbtree_lock_required_kfunc(u32 bt=
-f_id)
- 	return is_bpf_rbtree_api_kfunc(btf_id);
- }
-=20
-+static bool is_kfunc_callable_in_spinlock(struct bpf_verifier_env *env,
-+					  struct bpf_insn *insn)
-+{
-+	struct bpf_kfunc_call_arg_meta meta;
-+
-+	/* insn->off is idx into btf fd_array - 0 for vmlinux btf, else nonzero=
- */
-+	if (!insn->off && is_bpf_graph_api_kfunc(insn->imm))
-+		return true;
-+
-+	if (fetch_kfunc_meta(env, insn, &meta, NULL))
-+		return false;
-+
-+	return is_kfunc_destructive(&meta);
-+}
-+
- static bool check_kfunc_is_graph_root_api(struct bpf_verifier_env *env,
- 					  enum btf_field_type head_field_type,
- 					  u32 kfunc_btf_id)
-@@ -16218,7 +16238,7 @@ static int do_check(struct bpf_verifier_env *env)
- 					if ((insn->src_reg =3D=3D BPF_REG_0 && insn->imm !=3D BPF_FUNC_spin=
-_unlock) ||
- 					    (insn->src_reg =3D=3D BPF_PSEUDO_CALL) ||
- 					    (insn->src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL &&
--					     (insn->off !=3D 0 || !is_bpf_graph_api_kfunc(insn->imm)))) {
-+					     !is_kfunc_callable_in_spinlock(env, insn))) {
- 						verbose(env, "function calls are not allowed while holding a lock\=
-n");
- 						return -EINVAL;
- 					}
+Changelog:
+
+v1 -> v2: lore.kernel.org/bpf/20230504053338.1778690-1-davemarchevsky@fb.com
+
+Patch #s used below refer to the patch's position in v1 unless otherwise
+specified.
+
+  * General
+    * Rebase onto latest bpf-next
+
+    * All bpf_testmod-related changes (destructive kfuncs, etc) have been
+      marked [DONOTAPPLY] in response to Alexei's comments in v1 and follow=
+up
+      conversations offline. They're still included as part of the series so
+      that CI can exercise the fixed functionality.
+      * v1's Patch 5 - "selftests/bpf: Add unsafe lock/unlock and refcount_=
+read
+        kfuncs to bpf_testmod" - was moved after the patches which are mean=
+t to
+        be applied to make it more obvious that it shouldn't be applied.
+
+    * 4d585f48ee6b ("bpf: Remove anonymous union in bpf_kfunc_call_arg_meta=
+")
+      was shipped separately from this series in response to Alexei's comme=
+nts
+      about the anonymous union in kfunc_call_arg_meta. That patch removes =
+the
+      anonymous union and its members (arg_obj_drop, etc) in favor of the
+      simpler approach suggested by Alexei in v1. This series'
+      kfunc_call_arg_meta changes are modified to follow the new pattern.
+
+Dave Marchevsky (9):
+  [DONOTAPPLY] Revert "bpf: Disable bpf_refcount_acquire kfunc calls
+    until race conditions are fixed"
+  bpf: Set kptr_struct_meta for node param to list and rbtree insert
+    funcs
+  bpf: Fix __bpf_{list,rbtree}_add's beginning-of-node calculation
+  bpf: Make bpf_refcount_acquire fallible for non-owning refs
+  [DONOTAPPLY] bpf: Allow KF_DESTRUCTIVE-flagged kfuncs to be called
+    under spinlock
+  [DONOTAPPLY] selftests/bpf: Add unsafe lock/unlock and refcount_read
+    kfuncs to bpf_testmod
+  [DONOTAPPLY] selftests/bpf: Add test exercising bpf_refcount_acquire
+    race condition
+  [DONOTAPPLY] selftests/bpf: Disable newly-added refcounted_kptr_races
+    test
+  [DONOTAPPLY] Revert "selftests/bpf: Disable newly-added
+    refcounted_kptr_races test"
+
+ kernel/bpf/helpers.c                          |  12 +-
+ kernel/bpf/verifier.c                         |  55 ++++--
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   |  61 +++++++
+ .../bpf/prog_tests/refcounted_kptr.c          | 106 +++++++++++-
+ .../selftests/bpf/progs/refcounted_kptr.c     | 160 ++++++++++++++++++
+ .../bpf/progs/refcounted_kptr_fail.c          |   4 +-
+ 6 files changed, 379 insertions(+), 19 deletions(-)
+
 --=20
 2.34.1
-
