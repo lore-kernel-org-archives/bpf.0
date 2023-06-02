@@ -1,31 +1,31 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 600CD15A3
-	for <bpf@vger.kernel.org>; Fri,  2 Jun 2023 02:27:07 +0000 (UTC)
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E6D195
-	for <bpf@vger.kernel.org>; Thu,  1 Jun 2023 19:27:03 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351NtGeN005118
-	for <bpf@vger.kernel.org>; Thu, 1 Jun 2023 19:27:03 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42DE815A3
+	for <bpf@vger.kernel.org>; Fri,  2 Jun 2023 02:27:11 +0000 (UTC)
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C03192
+	for <bpf@vger.kernel.org>; Thu,  1 Jun 2023 19:27:09 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 351Nt5kx020789
+	for <bpf@vger.kernel.org>; Thu, 1 Jun 2023 19:27:09 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=wEpYHCqmxsS8+kFTO4SOb2VhUOHcTo0DuZ5l1z/dDsk=;
- b=RCbA26toQR7gU5ZPnEctfJWyM2Q5HBErsml2165XikRyn0LAVOFEg2jYxoZ/zGVZMyhz
- hixXKtegcnGMdF41fEGTCf0ae8O5Ppx09Y/aSKm96JOS0sD8CySJ7umGuyhYoqXKg6Qs
- N+/wrLaHoXhpbUwymoY5aukuSVTKXyJvlaA= 
+ bh=MfdQDA9uhS6eEkZuafW+fI3gyC3ZMjiWPTRJzziSk1E=;
+ b=nYjEl2nOY00G5yWQHBg0YZBp11gSOT3HzsLxsmZv/NYBANHQjBxwaJUJ5Xb80US5DeM2
+ 3KvZTs7jI4hcpwnfiOj7cdYWcX3GEolCSE4GwrhToCBCPLB2nNUBTWHL7Pu69F6um/ne
+ PLNCiNTJ02/r5gejqeQMaJGQpJtoCECvka4= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qxt1kpuad-1
+	by m0001303.ppops.net (PPS) with ESMTPS id 3qxawf46ye-2
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 01 Jun 2023 19:27:02 -0700
-Received: from twshared19038.03.ash8.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Thu, 01 Jun 2023 19:27:08 -0700
+Received: from twshared8528.02.ash9.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 1 Jun 2023 19:27:02 -0700
+ 15.1.2507.23; Thu, 1 Jun 2023 19:27:07 -0700
 Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-	id 19C4A1EF7C8B7; Thu,  1 Jun 2023 19:26:53 -0700 (PDT)
+	id 0B8561EF7C8F9; Thu,  1 Jun 2023 19:26:57 -0700 (PDT)
 From: Dave Marchevsky <davemarchevsky@fb.com>
 To: <bpf@vger.kernel.org>
 CC: Alexei Starovoitov <ast@kernel.org>,
@@ -37,9 +37,9 @@ CC: Alexei Starovoitov <ast@kernel.org>,
         Kernel Team <kernel-team@fb.com>,
         Dave Marchevsky
 	<davemarchevsky@fb.com>
-Subject: [PATCH v2 bpf-next 2/9] bpf: Set kptr_struct_meta for node param to list and rbtree insert funcs
-Date: Thu, 1 Jun 2023 19:26:40 -0700
-Message-ID: <20230602022647.1571784-3-davemarchevsky@fb.com>
+Subject: [PATCH v2 bpf-next 9/9] [DONOTAPPLY] Revert "selftests/bpf: Disable newly-added refcounted_kptr_races test"
+Date: Thu, 1 Jun 2023 19:26:47 -0700
+Message-ID: <20230602022647.1571784-10-davemarchevsky@fb.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230602022647.1571784-1-davemarchevsky@fb.com>
 References: <20230602022647.1571784-1-davemarchevsky@fb.com>
@@ -52,8 +52,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: qCB4MmxFU26-GOmJaFUENHPSIfwmMb4Z
-X-Proofpoint-GUID: qCB4MmxFU26-GOmJaFUENHPSIfwmMb4Z
+X-Proofpoint-ORIG-GUID: zsKpKc_I5JoUliv9UHykg7KxBaRcMRrg
+X-Proofpoint-GUID: zsKpKc_I5JoUliv9UHykg7KxBaRcMRrg
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
  definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
@@ -65,61 +65,131 @@ X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-In verifier.c, fixup_kfunc_call uses struct bpf_insn_aux_data's
-kptr_struct_meta field to pass information about local kptr types to
-various helpers and kfuncs at runtime. The recent bpf_refcount series
-added a few functions to the set that need this information:
+This patch reverts the previous patch's disabling of
+refcounted_kptr_races selftest. It is included with the series so that
+BPF CI will be able to run the test. This patch should not be applied -
+followups which fix remaining bpf_refcount issues will re-enable this
+test.
 
-  * bpf_refcount_acquire
-    * Needs to know where the refcount field is in order to increment
-  * Graph collection insert kfuncs: bpf_rbtree_add, bpf_list_push_{front,=
-back}
-    * Were migrated to possibly fail by the bpf_refcount series. If
-      insert fails, the input node is bpf_obj_drop'd. bpf_obj_drop needs
-      the kptr_struct_meta in order to decr refcount and properly free
-      special fields.
-
-Unfortunately the verifier handling of collection insert kfuncs was not
-modified to actually populate kptr_struct_meta. Accordingly, when the
-node input to those kfuncs is passed to bpf_obj_drop, it is done so
-without the information necessary to decr refcount.
-
-This patch fixes the issue by populating kptr_struct_meta for those
-kfuncs.
-
-Fixes: d2dcc67df910 ("bpf: Migrate bpf_rbtree_add and bpf_list_push_{fron=
-t,back} to possibly fail")
 Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
 ---
- kernel/bpf/verifier.c | 3 +++
- 1 file changed, 3 insertions(+)
+ .../bpf/prog_tests/refcounted_kptr.c          | 100 ++++++++++++++++++
+ 1 file changed, 100 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 0f04e7fe4843..43d26b65a3ad 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -10475,6 +10475,8 @@ __process_kf_arg_ptr_to_graph_node(struct bpf_ver=
-ifier_env *env,
- 			node_off, btf_name_by_offset(reg->btf, t->name_off));
- 		return -EINVAL;
- 	}
-+	meta->arg_btf =3D reg->btf;
-+	meta->arg_btf_id =3D reg->btf_id;
-=20
- 	if (node_off !=3D field->graph_root.node_offset) {
- 		verbose(env, "arg#1 offset=3D%d, but expected %s at offset=3D%d in str=
-uct %s\n",
-@@ -11040,6 +11042,7 @@ static int check_kfunc_call(struct bpf_verifier_e=
-nv *env, struct bpf_insn *insn,
- 	    meta.func_id =3D=3D special_kfunc_list[KF_bpf_rbtree_add_impl]) {
- 		release_ref_obj_id =3D regs[BPF_REG_2].ref_obj_id;
- 		insn_aux->insert_off =3D regs[BPF_REG_2].off;
-+		insn_aux->kptr_struct_meta =3D btf_find_struct_meta(meta.arg_btf, meta=
-.arg_btf_id);
- 		err =3D ref_convert_owning_non_owning(env, release_ref_obj_id);
- 		if (err) {
- 			verbose(env, "kfunc %s#%d conversion of owning ref to non-owning fail=
-ed\n",
+diff --git a/tools/testing/selftests/bpf/prog_tests/refcounted_kptr.c b/t=
+ools/testing/selftests/bpf/prog_tests/refcounted_kptr.c
+index 6a53f304f3e4..e7fcc1dd8864 100644
+--- a/tools/testing/selftests/bpf/prog_tests/refcounted_kptr.c
++++ b/tools/testing/selftests/bpf/prog_tests/refcounted_kptr.c
+@@ -18,3 +18,103 @@ void test_refcounted_kptr_fail(void)
+ {
+ 	RUN_TESTS(refcounted_kptr_fail);
+ }
++
++static void force_cpu(pthread_t thread, int cpunum)
++{
++	cpu_set_t cpuset;
++	int err;
++
++	CPU_ZERO(&cpuset);
++	CPU_SET(cpunum, &cpuset);
++	err =3D pthread_setaffinity_np(thread, sizeof(cpuset), &cpuset);
++	if (!ASSERT_OK(err, "pthread_setaffinity_np"))
++		return;
++}
++
++struct refcounted_kptr *skel;
++
++static void *run_unstash_acq_ref(void *unused)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, opts,
++		.data_in =3D &pkt_v4,
++		.data_size_in =3D sizeof(pkt_v4),
++		.repeat =3D 1,
++	);
++	long ret, unstash_acq_ref_fd;
++	force_cpu(pthread_self(), 1);
++
++	unstash_acq_ref_fd =3D bpf_program__fd(skel->progs.unstash_add_and_acqu=
+ire_refcount);
++
++	ret =3D bpf_prog_test_run_opts(unstash_acq_ref_fd, &opts);
++	ASSERT_EQ(opts.retval, 0, "unstash_add_and_acquire_refcount retval");
++	ASSERT_EQ(skel->bss->ref_check_3, 2, "ref_check_3");
++	ASSERT_EQ(skel->bss->ref_check_4, 1, "ref_check_4");
++	ASSERT_EQ(skel->bss->ref_check_5, 0, "ref_check_5");
++	pthread_exit((void *)ret);
++}
++
++void test_refcounted_kptr_races(void)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, opts,
++		.data_in =3D &pkt_v4,
++		.data_size_in =3D sizeof(pkt_v4),
++		.repeat =3D 1,
++	);
++	int ref_acq_lock_fd, ref_acq_unlock_fd, rem_node_lock_fd;
++	int add_stash_fd, remove_tree_fd;
++	pthread_t thread_id;
++	int ret;
++
++	force_cpu(pthread_self(), 0);
++	skel =3D refcounted_kptr__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "refcounted_kptr__open_and_load"))
++		return;
++
++	add_stash_fd =3D bpf_program__fd(skel->progs.add_refcounted_node_to_tre=
+e_and_stash);
++	remove_tree_fd =3D bpf_program__fd(skel->progs.remove_refcounted_node_f=
+rom_tree);
++	ref_acq_lock_fd =3D bpf_program__fd(skel->progs.unsafe_ref_acq_lock);
++	ref_acq_unlock_fd =3D bpf_program__fd(skel->progs.unsafe_ref_acq_unlock=
+);
++	rem_node_lock_fd =3D bpf_program__fd(skel->progs.unsafe_rem_node_lock);
++
++	ret =3D bpf_prog_test_run_opts(rem_node_lock_fd, &opts);
++	if (!ASSERT_OK(ret, "rem_node_lock"))
++		return;
++
++	ret =3D bpf_prog_test_run_opts(ref_acq_lock_fd, &opts);
++	if (!ASSERT_OK(ret, "ref_acq_lock"))
++		return;
++
++	ret =3D bpf_prog_test_run_opts(add_stash_fd, &opts);
++	if (!ASSERT_OK(ret, "add_stash"))
++		return;
++	if (!ASSERT_OK(opts.retval, "add_stash retval"))
++		return;
++
++	ret =3D pthread_create(&thread_id, NULL, &run_unstash_acq_ref, NULL);
++	if (!ASSERT_OK(ret, "pthread_create"))
++		goto cleanup;
++
++	force_cpu(thread_id, 1);
++
++	/* This program will execute before unstash_acq_ref's refcount_acquire,=
+ then
++	 * unstash_acq_ref can proceed after unsafe_unlock
++	 */
++	ret =3D bpf_prog_test_run_opts(remove_tree_fd, &opts);
++	if (!ASSERT_OK(ret, "remove_tree"))
++		goto cleanup;
++
++	ret =3D bpf_prog_test_run_opts(ref_acq_unlock_fd, &opts);
++	if (!ASSERT_OK(ret, "ref_acq_unlock"))
++		goto cleanup;
++
++	ret =3D pthread_join(thread_id, NULL);
++	if (!ASSERT_OK(ret, "pthread_join"))
++		goto cleanup;
++
++	refcounted_kptr__destroy(skel);
++	return;
++cleanup:
++	bpf_prog_test_run_opts(ref_acq_unlock_fd, &opts);
++	refcounted_kptr__destroy(skel);
++	return;
++}
 --=20
 2.34.1
 
