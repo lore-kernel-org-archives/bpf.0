@@ -1,15 +1,15 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3215317744;
-	Fri,  2 Jun 2023 09:22:15 +0000 (UTC)
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFCB1A8;
-	Fri,  2 Jun 2023 02:22:10 -0700 (PDT)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0Vk9LP5-_1685697726;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vk9LP5-_1685697726)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E88D17AD2;
+	Fri,  2 Jun 2023 09:22:17 +0000 (UTC)
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA56E6D;
+	Fri,  2 Jun 2023 02:22:13 -0700 (PDT)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0Vk9OIfj_1685697728;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vk9OIfj_1685697728)
           by smtp.aliyun-inc.com;
-          Fri, 02 Jun 2023 17:22:07 +0800
+          Fri, 02 Jun 2023 17:22:09 +0800
 From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To: virtualization@lists.linux-foundation.org
 Cc: "Michael S. Tsirkin" <mst@redhat.com>,
@@ -25,10 +25,12 @@ Cc: "Michael S. Tsirkin" <mst@redhat.com>,
 	John Fastabend <john.fastabend@gmail.com>,
 	netdev@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH vhost v10 00/10] virtio core prepares for AF_XDP
-Date: Fri,  2 Jun 2023 17:21:56 +0800
-Message-Id: <20230602092206.50108-1-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH vhost v10 02/10] virtio_ring: introduce virtqueue_set_premapped()
+Date: Fri,  2 Jun 2023 17:21:58 +0800
+Message-Id: <20230602092206.50108-3-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
+In-Reply-To: <20230602092206.50108-1-xuanzhuo@linux.alibaba.com>
+References: <20230602092206.50108-1-xuanzhuo@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -44,109 +46,105 @@ X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-## About DMA APIs
+This helper allows the driver change the dma mode to premapped mode.
+Under the premapped mode, the virtio core do not do dma mapping
+internally.
 
-Now, virtio may can not work with DMA APIs when virtio features do not have
-VIRTIO_F_ACCESS_PLATFORM.
+This just work when the use_dma_api is true. If the use_dma_api is false,
+the dma options is not through the DMA APIs, that is not the standard
+way of the linux kernel.
 
-1. I tried to let DMA APIs return phy address by virtio-device. But DMA APIs just
-   work with the "real" devices.
-2. I tried to let xsk support callballs to get phy address from virtio-net
-   driver as the dma address. But the maintainers of xsk may want to use dma-buf
-   to replace the DMA APIs. I think that may be a larger effort. We will wait
-   too long.
+Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+---
+ drivers/virtio/virtio_ring.c | 40 ++++++++++++++++++++++++++++++++++++
+ include/linux/virtio.h       |  2 ++
+ 2 files changed, 42 insertions(+)
 
-So rethinking this, firstly, we can support premapped-dma only for devices with
-VIRTIO_F_ACCESS_PLATFORM. In the case of af-xdp, if the users want to use it,
-they have to update the device to support VIRTIO_F_RING_RESET, and they can also
-enable the device's VIRTIO_F_ACCESS_PLATFORM feature.
-
-Thanks for the help from Christoph.
-
-=================
-
-XDP socket(AF_XDP) is an excellent bypass kernel network framework. The zero
-copy feature of xsk (XDP socket) needs to be supported by the driver. The
-performance of zero copy is very good.
-
-ENV: Qemu with vhost.
-
-                   vhost cpu | Guest APP CPU |Guest Softirq CPU | PPS
------------------------------|---------------|------------------|------------
-xmit by sockperf:     90%    |   100%        |                  |  318967
-xmit by xsk:          100%   |   30%         |   33%            | 1192064
-recv by sockperf:     100%   |   68%         |   100%           |  692288
-recv by xsk:          100%   |   33%         |   43%            |  771670
-
-Before achieving the function of Virtio-Net, we also have to let virtio core
-support these features:
-
-1. virtio core support premapped
-2. virtio core support reset per-queue
-3. introduce DMA APIs to virtio core
-
-Please review.
-
-Thanks.
-
-v10:
- 1. support to set vq to premapped mode, then the vq just handles the premapped request.
- 2. virtio-net support to do dma mapping in advance
-
-v9:
- 1. use flag to distinguish the premapped operations. no do judgment by sg.
-
-v8:
- 1. vring_sg_address: check by sg_page(sg) not dma_address. Because 0 is a valid dma address
- 2. remove unused code from vring_map_one_sg()
-
-v7:
- 1. virtqueue_dma_dev() return NULL when virtio is without DMA API.
-
-v6:
- 1. change the size of the flags to u32.
-
-v5:
- 1. fix for error handler
- 2. add flags to record internal dma mapping
-
-v4:
- 1. rename map_inter to dma_map_internal
- 2. fix: Excess function parameter 'vq' description in 'virtqueue_dma_dev'
-
-v3:
- 1. add map_inter to struct desc state to reocrd whether virtio core do dma map
-
-v2:
- 1. based on sgs[0]->dma_address to judgment is premapped
- 2. based on extra.addr to judgment to do unmap for no-indirect desc
- 3. based on indir_desc to judgment to do unmap for indirect desc
- 4. rename virtqueue_get_dma_dev to virtqueue_dma_dev
-
-v1:
- 1. expose dma device. NO introduce the api for dma and sync
- 2. split some commit for review.
-
-
-
-
-Xuan Zhuo (10):
-  virtio_ring: put mapping error check in vring_map_one_sg
-  virtio_ring: introduce virtqueue_set_premapped()
-  virtio_ring: split: support add premapped buf
-  virtio_ring: packed: support add premapped buf
-  virtio_ring: split-detach: support return dma info to driver
-  virtio_ring: packed-detach: support return dma info to driver
-  virtio_ring: introduce helpers for premapped
-  virtio_ring: introduce virtqueue_dma_dev()
-  virtio_ring: introduce virtqueue_add_sg()
-  virtio_net: support dma premapped
-
- drivers/net/virtio_net.c     | 163 ++++++++++--
- drivers/virtio/virtio_ring.c | 493 +++++++++++++++++++++++++++++++----
- include/linux/virtio.h       |  34 +++
- 3 files changed, 612 insertions(+), 78 deletions(-)
-
---
+diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+index 72ed07a604d4..2afdfb9e3e30 100644
+--- a/drivers/virtio/virtio_ring.c
++++ b/drivers/virtio/virtio_ring.c
+@@ -172,6 +172,9 @@ struct vring_virtqueue {
+ 	/* Host publishes avail event idx */
+ 	bool event;
+ 
++	/* Do DMA mapping by driver */
++	bool premapped;
++
+ 	/* Head of free buffer list. */
+ 	unsigned int free_head;
+ 	/* Number we've added since last sync. */
+@@ -2059,6 +2062,7 @@ static struct virtqueue *vring_create_virtqueue_packed(
+ 	vq->packed_ring = true;
+ 	vq->dma_dev = dma_dev;
+ 	vq->use_dma_api = vring_use_dma_api(vdev);
++	vq->premapped = false;
+ 
+ 	vq->indirect = virtio_has_feature(vdev, VIRTIO_RING_F_INDIRECT_DESC) &&
+ 		!context;
+@@ -2548,6 +2552,7 @@ static struct virtqueue *__vring_new_virtqueue(unsigned int index,
+ #endif
+ 	vq->dma_dev = dma_dev;
+ 	vq->use_dma_api = vring_use_dma_api(vdev);
++	vq->premapped = false;
+ 
+ 	vq->indirect = virtio_has_feature(vdev, VIRTIO_RING_F_INDIRECT_DESC) &&
+ 		!context;
+@@ -2691,6 +2696,41 @@ int virtqueue_resize(struct virtqueue *_vq, u32 num,
+ }
+ EXPORT_SYMBOL_GPL(virtqueue_resize);
+ 
++/**
++ * virtqueue_set_premapped - set the vring premapped mode
++ * @_vq: the struct virtqueue we're talking about.
++ *
++ * Enable the premapped mode of the vq.
++ *
++ * The vring in premapped mode does not do dma internally, so the driver must
++ * do dma mapping in advance. The driver must pass the dma_address through
++ * dma_address of scatterlist. When the driver got a used buffer from
++ * the vring, it has to unmap the dma address. So the driver must call
++ * virtqueue_get_buf_premapped()/virtqueue_detach_unused_buf_premapped().
++ *
++ * This must be called before adding any buf to vring.
++ * So this should be called immediately after init vq or vq reset.
++ *
++ * Caller must ensure we don't call this with other virtqueue operations
++ * at the same time (except where noted).
++ *
++ * Returns zero or a negative error.
++ * 0: success.
++ * -EINVAL: vring does not use the dma api, so we can not enable premapped mode.
++ */
++int virtqueue_set_premapped(struct virtqueue *_vq)
++{
++	struct vring_virtqueue *vq = to_vvq(_vq);
++
++	if (!vq->use_dma_api)
++		return -EINVAL;
++
++	vq->premapped = true;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(virtqueue_set_premapped);
++
+ /* Only available for split ring */
+ struct virtqueue *vring_new_virtqueue(unsigned int index,
+ 				      unsigned int num,
+diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+index b93238db94e3..1fc0e1023bd4 100644
+--- a/include/linux/virtio.h
++++ b/include/linux/virtio.h
+@@ -78,6 +78,8 @@ bool virtqueue_enable_cb(struct virtqueue *vq);
+ 
+ unsigned virtqueue_enable_cb_prepare(struct virtqueue *vq);
+ 
++int virtqueue_set_premapped(struct virtqueue *_vq);
++
+ bool virtqueue_poll(struct virtqueue *vq, unsigned);
+ 
+ bool virtqueue_enable_cb_delayed(struct virtqueue *vq);
+-- 
 2.32.0.3.g01195cf9f
 
