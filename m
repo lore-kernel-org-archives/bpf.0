@@ -1,36 +1,32 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6017A1992C
-	for <bpf@vger.kernel.org>; Fri,  2 Jun 2023 15:00:28 +0000 (UTC)
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A19E53
-	for <bpf@vger.kernel.org>; Fri,  2 Jun 2023 08:00:26 -0700 (PDT)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 3527VDrb028690
-	for <bpf@vger.kernel.org>; Fri, 2 Jun 2023 08:00:25 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4C831992C
+	for <bpf@vger.kernel.org>; Fri,  2 Jun 2023 15:00:29 +0000 (UTC)
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D921E5D
+	for <bpf@vger.kernel.org>; Fri,  2 Jun 2023 08:00:28 -0700 (PDT)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 352Clq2K019621
+	for <bpf@vger.kernel.org>; Fri, 2 Jun 2023 08:00:27 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-	by m0001303.ppops.net (PPS) with ESMTPS id 3qyc3papdv-1
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qxt1sarws-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Fri, 02 Jun 2023 08:00:25 -0700
-Received: from ash-exhub204.TheFacebook.com (2620:10d:c0a8:83::4) by
- ash-exhub203.TheFacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Fri, 02 Jun 2023 08:00:27 -0700
+Received: from twshared4466.29.prn2.facebook.com (2620:10d:c0a8:1c::11) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 2 Jun 2023 08:00:23 -0700
-Received: from twshared40933.03.prn6.facebook.com (2620:10d:c0a8:1c::1b) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 2 Jun 2023 08:00:23 -0700
+ 15.1.2507.23; Fri, 2 Jun 2023 08:00:26 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 3A31B31E04817; Fri,  2 Jun 2023 08:00:18 -0700 (PDT)
+	id 56F3A31E04874; Fri,  2 Jun 2023 08:00:22 -0700 (PDT)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>
 CC: <linux-security-module@vger.kernel.org>, <keescook@chromium.org>,
         <brauner@kernel.org>, <lennart@poettering.net>, <cyphar@cyphar.com>,
         <luto@kernel.org>
-Subject: [PATCH RESEND bpf-next 03/18] selftests/bpf: add BPF_TOKEN_CREATE test
-Date: Fri, 2 Jun 2023 07:59:56 -0700
-Message-ID: <20230602150011.1657856-4-andrii@kernel.org>
+Subject: [PATCH RESEND bpf-next 05/18] bpf: inline map creation logic in map_create() function
+Date: Fri, 2 Jun 2023 07:59:58 -0700
+Message-ID: <20230602150011.1657856-6-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230602150011.1657856-1-andrii@kernel.org>
 References: <20230602150011.1657856-1-andrii@kernel.org>
@@ -43,8 +39,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: oMdfXoCde1uvz1MqhnckvDTu638csp-Q
-X-Proofpoint-ORIG-GUID: oMdfXoCde1uvz1MqhnckvDTu638csp-Q
+X-Proofpoint-ORIG-GUID: ZTGlJq_0tfWXh6pB8EwzHcmWyadkBu_9
+X-Proofpoint-GUID: ZTGlJq_0tfWXh6pB8EwzHcmWyadkBu_9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
  definitions=2023-06-02_11,2023-06-02_02,2023-05-22_02
@@ -55,120 +51,113 @@ X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add a subtest validating BPF_TOKEN_CREATE command, pinning/getting BPF
-token in/from BPF FS, and creating derived BPF tokens using token_fd
-parameter.
+Currently find_and_alloc_map() performs two separate functions: some
+argument sanity checking and partial map creation workflow hanling.
+Neither of those functions are self-sufficient and are augmented by
+further checks and initialization logic in the caller (map_create()
+function). So unify all the sanity checks, permission checks, and
+creation and initialization logic in one linear piece of code in
+map_create() instead. This also make it easier to further enhance
+permission checks and keep them located in one place.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- .../testing/selftests/bpf/prog_tests/token.c  | 95 +++++++++++++++++++
- 1 file changed, 95 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/token.c
+ kernel/bpf/syscall.c | 57 +++++++++++++++++++-------------------------
+ 1 file changed, 24 insertions(+), 33 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testi=
-ng/selftests/bpf/prog_tests/token.c
-new file mode 100644
-index 000000000000..fe78b558d697
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/token.c
-@@ -0,0 +1,95 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Meta Platforms, Inc. and affiliates. */
-+#include "linux/bpf.h"
-+#include <test_progs.h>
-+#include <bpf/btf.h>
-+#include "cap_helpers.h"
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 4c9e79ec40e2..cd68c57c0689 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -109,37 +109,6 @@ const struct bpf_map_ops bpf_map_offload_ops =3D {
+ 	.map_mem_usage =3D bpf_map_offload_map_mem_usage,
+ };
+=20
+-static struct bpf_map *find_and_alloc_map(union bpf_attr *attr)
+-{
+-	const struct bpf_map_ops *ops;
+-	u32 type =3D attr->map_type;
+-	struct bpf_map *map;
+-	int err;
+-
+-	if (type >=3D ARRAY_SIZE(bpf_map_types))
+-		return ERR_PTR(-EINVAL);
+-	type =3D array_index_nospec(type, ARRAY_SIZE(bpf_map_types));
+-	ops =3D bpf_map_types[type];
+-	if (!ops)
+-		return ERR_PTR(-EINVAL);
+-
+-	if (ops->map_alloc_check) {
+-		err =3D ops->map_alloc_check(attr);
+-		if (err)
+-			return ERR_PTR(err);
+-	}
+-	if (attr->map_ifindex)
+-		ops =3D &bpf_map_offload_ops;
+-	if (!ops->map_mem_usage)
+-		return ERR_PTR(-EINVAL);
+-	map =3D ops->map_alloc(attr);
+-	if (IS_ERR(map))
+-		return map;
+-	map->ops =3D ops;
+-	map->map_type =3D type;
+-	return map;
+-}
+-
+ static void bpf_map_write_active_inc(struct bpf_map *map)
+ {
+ 	atomic64_inc(&map->writecnt);
+@@ -1127,7 +1096,9 @@ static int map_check_btf(struct bpf_map *map, const=
+ struct btf *btf,
+ /* called via syscall */
+ static int map_create(union bpf_attr *attr)
+ {
++	const struct bpf_map_ops *ops;
+ 	int numa_node =3D bpf_map_attr_numa_node(attr);
++	u32 map_type =3D attr->map_type;
+ 	struct bpf_map *map;
+ 	int f_flags;
+ 	int err;
+@@ -1157,6 +1128,25 @@ static int map_create(union bpf_attr *attr)
+ 	     !node_online(numa_node)))
+ 		return -EINVAL;
+=20
++	/* find map type and init map: hashtable vs rbtree vs bloom vs ... */
++	map_type =3D attr->map_type;
++	if (map_type >=3D ARRAY_SIZE(bpf_map_types))
++		return -EINVAL;
++	map_type =3D array_index_nospec(map_type, ARRAY_SIZE(bpf_map_types));
++	ops =3D bpf_map_types[map_type];
++	if (!ops)
++		return -EINVAL;
 +
-+static int drop_priv_caps(__u64 *old_caps)
-+{
-+	return cap_disable_effective((1ULL << CAP_BPF) |
-+				     (1ULL << CAP_PERFMON) |
-+				     (1ULL << CAP_NET_ADMIN) |
-+				     (1ULL << CAP_SYS_ADMIN), old_caps);
-+}
++	if (ops->map_alloc_check) {
++		err =3D ops->map_alloc_check(attr);
++		if (err)
++			return err;
++	}
++	if (attr->map_ifindex)
++		ops =3D &bpf_map_offload_ops;
++	if (!ops->map_mem_usage)
++		return -EINVAL;
 +
-+static int restore_priv_caps(__u64 old_caps)
-+{
-+	return cap_enable_effective(old_caps, NULL);
-+}
-+
-+#define TOKEN_PATH "/sys/fs/bpf/test_token"
-+
-+static void subtest_token_create(void)
-+{
-+	LIBBPF_OPTS(bpf_token_create_opts, opts);
-+	int token_fd =3D 0, limited_token_fd =3D 0, tmp_fd =3D 0, err;
-+	__u64 old_caps =3D 0;
-+
-+	/* create BPF token which allows creating derived BPF tokens */
-+	opts.allowed_cmds =3D 1ULL << BPF_TOKEN_CREATE;
-+	token_fd =3D bpf_token_create(&opts);
-+	if (!ASSERT_GT(token_fd, 0, "token_create"))
-+		return;
-+
-+	/* check that IGNORE_UNKNOWN_CMDS flag is respected */
-+	opts.flags =3D BPF_F_TOKEN_IGNORE_UNKNOWN_CMDS;
-+	opts.allowed_cmds =3D ~0ULL; /* any current and future cmd is allowed *=
-/
-+	tmp_fd =3D bpf_token_create(&opts);
-+	if (!ASSERT_GT(token_fd, 0, "token_create_future_proof"))
-+		return;
-+	close(tmp_fd);
-+	tmp_fd =3D 0;
-+
-+	/* validate pinning and getting works as expected */
-+	err =3D bpf_obj_pin(token_fd, TOKEN_PATH);
-+	if (!ASSERT_OK(err, "token_pin"))
-+		goto cleanup;
-+
-+	tmp_fd =3D bpf_obj_get(TOKEN_PATH);
-+	ASSERT_GT(tmp_fd, 0, "token_get");
-+	close(tmp_fd);
-+	tmp_fd =3D 0;
-+	unlink(TOKEN_PATH);
-+
-+	/* drop privileges to test token_fd passing */
-+	if (!ASSERT_OK(drop_priv_caps(&old_caps), "drop_caps"))
-+		goto cleanup;
-+
-+	/* unprivileged BPF_TOKEN_CREATE should fail */
-+	tmp_fd =3D bpf_token_create(NULL);
-+	if (!ASSERT_LT(tmp_fd, 0, "token_create_unpriv_fail"))
-+		goto cleanup;
-+
-+	/* unprivileged BPF_TOKEN_CREATE with associated BPF token succeeds */
-+	opts.flags =3D 0;
-+	opts.allowed_cmds =3D 0; /* ask for BPF token which doesn't allow new t=
-okens */
-+	opts.token_fd =3D token_fd;
-+	limited_token_fd =3D bpf_token_create(&opts);
-+	if (!ASSERT_GT(limited_token_fd, 0, "token_create_limited"))
-+		goto cleanup;
-+
-+	/* creating yet another token using "limited" BPF token should fail */
-+	opts.flags =3D 0;
-+	opts.allowed_cmds =3D 0;
-+	opts.token_fd =3D limited_token_fd;
-+	tmp_fd =3D bpf_token_create(&opts);
-+	if (!ASSERT_LT(tmp_fd, 0, "token_create_from_lim_fail"))
-+		goto cleanup;
-+
-+cleanup:
-+	if (tmp_fd)
-+		close(tmp_fd);
-+	if (token_fd)
-+		close(token_fd);
-+	if (limited_token_fd)
-+		close(limited_token_fd);
-+	if (old_caps)
-+		ASSERT_OK(restore_priv_caps(old_caps), "restore_caps");
-+}
-+
-+void test_token(void)
-+{
-+	if (test__start_subtest("token_create"))
-+		subtest_token_create();
-+}
+ 	/* Intent here is for unprivileged_bpf_disabled to block BPF map
+ 	 * creation for unprivileged users; other actions depend
+ 	 * on fd availability and access to bpffs, so are dependent on
+@@ -1166,10 +1156,11 @@ static int map_create(union bpf_attr *attr)
+ 	if (sysctl_unprivileged_bpf_disabled && !bpf_capable())
+ 		return -EPERM;
+=20
+-	/* find map type and init map: hashtable vs rbtree vs bloom vs ... */
+-	map =3D find_and_alloc_map(attr);
++	map =3D ops->map_alloc(attr);
+ 	if (IS_ERR(map))
+ 		return PTR_ERR(map);
++	map->ops =3D ops;
++	map->map_type =3D map_type;
+=20
+ 	err =3D bpf_obj_name_cpy(map->name, attr->map_name,
+ 			       sizeof(attr->map_name));
 --=20
 2.34.1
 
