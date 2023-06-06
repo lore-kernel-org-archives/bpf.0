@@ -1,177 +1,149 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D64394
-	for <bpf@vger.kernel.org>; Tue,  6 Jun 2023 03:20:48 +0000 (UTC)
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40AC11B
-	for <bpf@vger.kernel.org>; Mon,  5 Jun 2023 20:20:46 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id 46e09a7af769-6af6fe73f11so5252403a34.0
-        for <bpf@vger.kernel.org>; Mon, 05 Jun 2023 20:20:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1686021646; x=1688613646;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7ntz136Kv/Z3zkhnJ6VCfDwRACVjWDfGBtrEKcKvWUw=;
-        b=DqncP1yN7WvbpQmN3FIeaCkq3uY5TqNpLAQQZx+mpFCIDPZvMnxMND6j6piAILHxFZ
-         12jQKJcLNw78VtiWS4VyU11ZsmRDw6Dm9et5QMiEjYJNXlcwuH9TUqH1n1MLaIhSUkTs
-         Y8w0K3I95RBssUjpOT6c8Zsifk7Gma0/7XBfQ1cROortF+wRJO3JkSGKcAbymSdKpDlR
-         ctkPxm3/qZqnPj+G0p4YMdNPBpMYuCeMovBjxu0SX6DztNyyVNBIiJFQGjXpmmifSSjk
-         byeo1qdtYt3G1C80N/sjLfejh1dzK48I6TyppSVCdXCZd55kwmdvI4+0jQUA9jixYidH
-         9z5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686021646; x=1688613646;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7ntz136Kv/Z3zkhnJ6VCfDwRACVjWDfGBtrEKcKvWUw=;
-        b=jPFzj4/CdhJ/62jTHdYCpHg/tVD8CboA+lCa0e985qnfKPmqZye2EFHH8m9EVBZdcA
-         K+NQb0AipT8Ph3ctuwWZsEbqIEAmYKBoHssXhcuPMFZFy1Ll4qeti9ua2o01mH3v+ZwU
-         qfodWbjCUS9dEdFva2TJL9OvymxC19jkj3J3b2/TLPLV8TZtWghkVgNQZtrIHmHzET1I
-         LdN2q1TcVpYfZqlppMCJlrZAZnmuuatR+4NcTSj4wOJ83ZXog2UdgIJFiQ5HLVhS3Cf2
-         N3msbbxkBMrCsATLKwxUgvqKjoVzgZZ0gO8EJqfHGqnFAX1oNJyiJKqcf24AiWHexpwF
-         y7wg==
-X-Gm-Message-State: AC+VfDzj7Y9frUMzMVyx0ExUl6F+E60y1JyR/LKuyjEMT1bO7Ar0HsA2
-	zYLe8GuPcR96dLF6verIrRAVPA==
-X-Google-Smtp-Source: ACHHUZ6YuXJUXGWkdpcGrIlzXzS0Yda3ftDJl98KfFEAf+y0rJ12iMkNK2jsHTija0uGTAdiexMjcw==
-X-Received: by 2002:a9d:67d3:0:b0:6ab:1d99:5dc6 with SMTP id c19-20020a9d67d3000000b006ab1d995dc6mr821640otn.3.1686021646162;
-        Mon, 05 Jun 2023 20:20:46 -0700 (PDT)
-Received: from [10.71.57.173] ([203.208.167.147])
-        by smtp.gmail.com with ESMTPSA id j1-20020aa78d01000000b0065329194416sm5769668pfe.193.2023.06.05.20.20.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 20:20:45 -0700 (PDT)
-Message-ID: <2d138e12-9273-46e6-c219-96c665f38f0f@bytedance.com>
-Date: Tue, 6 Jun 2023 11:20:38 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07C9C633
+	for <bpf@vger.kernel.org>; Tue,  6 Jun 2023 03:20:58 +0000 (UTC)
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15881B6;
+	Mon,  5 Jun 2023 20:20:55 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QZwjH1Hz1z4f3jM9;
+	Tue,  6 Jun 2023 11:20:51 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+	by APP4 (Coremail) with SMTP id gCh0CgBn0LMRpn5kcOYrLA--.7742S5;
+	Tue, 06 Jun 2023 11:20:52 +0800 (CST)
+From: Hou Tao <houtao@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Song Liu <song@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Yonghong Song <yhs@fb.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	rcu@vger.kernel.org,
+	houtao1@huawei.com
+Subject: [RFC PATCH bpf-next v4 1/3] bpf: Factor out a common helper free_all()
+Date: Tue,  6 Jun 2023 11:53:08 +0800
+Message-Id: <20230606035310.4026145-2-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20230606035310.4026145-1-houtao@huaweicloud.com>
+References: <20230606035310.4026145-1-houtao@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: Re: [PATCH bpf-next] bpf: getsockopt hook to get optval without
- checking kernel retval
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- yangzhenze@bytedance.com, wangdongdong.6@bytedance.com, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, song@kernel.org, yhs@fb.com,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
- haoluo@google.com, jolsa@kernel.org
-References: <20230601024900.22902-1-zhoufeng.zf@bytedance.com>
- <5bc1ac0d-cea8-19e5-785a-cd72140d8cdb@linux.dev>
- <20881602-9afc-96b7-3d58-51c31e3f50b7@bytedance.com>
- <d7be9d22-c6aa-da2a-77fc-9638ad1e0f15@linux.dev>
-From: Feng Zhou <zhoufeng.zf@bytedance.com>
-In-Reply-To: <d7be9d22-c6aa-da2a-77fc-9638ad1e0f15@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-	SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID:gCh0CgBn0LMRpn5kcOYrLA--.7742S5
+X-Coremail-Antispam: 1UD129KBjvJXoWxWFW3CrW5ZrW5Aw1DuF1fCrg_yoW5Ww1UpF
+	y3Gry8JF4kZFsrua1xtrn7uwn8Xr1Fqa43K3yUu34Fkr13Zw1DtFZ2kr1IgFy5urW8tw43
+	ArnYgF1xCr48JFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUB0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
+	A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
+	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2I
+	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
+	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
+	0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2mL9UUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+	SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-在 2023/6/1 23:50, Martin KaFai Lau 写道:
-> On 5/31/23 11:05 PM, Feng Zhou wrote:
->> 在 2023/6/1 13:37, Martin KaFai Lau 写道:
->>> On 5/31/23 7:49 PM, Feng zhou wrote:
->>>> From: Feng Zhou <zhoufeng.zf@bytedance.com>
->>>>
->>>> Remove the judgment on retval and pass bpf ctx by default. The
->>>> advantage of this is that it is more flexible. Bpf getsockopt can
->>>> support the new optname without using the module to call the
->>>> nf_register_sockopt to register.
->>>>
->>>> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
->>>> ---
->>>>   kernel/bpf/cgroup.c | 35 +++++++++++++----------------------
->>>>   1 file changed, 13 insertions(+), 22 deletions(-)
->>>>
->>>> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
->>>> index 5b2741aa0d9b..ebad5442d8bb 100644
->>>> --- a/kernel/bpf/cgroup.c
->>>> +++ b/kernel/bpf/cgroup.c
->>>> @@ -1896,30 +1896,21 @@ int 
->>>> __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
->>>>       if (max_optlen < 0)
->>>>           return max_optlen;
->>>> -    if (!retval) {
->>>> -        /* If kernel getsockopt finished successfully,
->>>> -         * copy whatever was returned to the user back
->>>> -         * into our temporary buffer. Set optlen to the
->>>> -         * one that kernel returned as well to let
->>>> -         * BPF programs inspect the value.
->>>> -         */
->>>> -
->>>> -        if (get_user(ctx.optlen, optlen)) {
->>>> -            ret = -EFAULT;
->>>> -            goto out;
->>>> -        }
->>>> +    if (get_user(ctx.optlen, optlen)) {
->>>> +        ret = -EFAULT;
->>>> +        goto out;
->>>> +    }
->>>> -        if (ctx.optlen < 0) {
->>>> -            ret = -EFAULT;
->>>> -            goto out;
->>>> -        }
->>>> -        orig_optlen = ctx.optlen;
->>>> +    if (ctx.optlen < 0) {
->>>> +        ret = -EFAULT;
->>>> +        goto out;
->>>> +    }
->>>> +    orig_optlen = ctx.optlen;
->>>> -        if (copy_from_user(ctx.optval, optval,
->>>> -                   min(ctx.optlen, max_optlen)) != 0) {
->>>> -            ret = -EFAULT;
->>>> -            goto out;
->>>> -        }
->>>> +    if (copy_from_user(ctx.optval, optval,
->>>> +                min(ctx.optlen, max_optlen)) != 0) {
->>> What is in optval that is useful to copy from if the kernel didn't 
->>> handle the optname?
->>
->> For example, if the user customizes a new optname, it will not be 
->> processed if the kernel does not support it. Then the data stored in 
->> optval is the data put 
-> 
-> 
-> 
->> by the user. If this part can be seen by bpf prog, the user can 
->> implement processing logic of the custom optname through bpf prog.
-> 
-> This part does not make sense. It is a (get)sockopt. Why the bpf prog 
-> should expect anything useful in the original __user optval? Other than 
-> unnecessary copy for other common cases, it looks like a bad api, so 
-> consider it a NAK.
-> 
->>
->>>
->>> and there is no selftest also.
->>>
->>
->> Yes, if remove this restriction, everyone thinks it's ok, I'll add it 
->> in the next version.
->>
->>>> +        ret = -EFAULT;
->>>> +        goto out;
->>>>       }
->>>>       lock_sock(sk);
->>>
->>
-> 
+From: Hou Tao <houtao1@huawei.com>
 
-According to my understanding, users will have such requirements, 
-customize an optname, which is not available in the kernel. All logic is 
-completed in bpf prog, and bpf prog needs to obtain the user data passed 
-in by the system call, and then return the data required by the user 
-according to this data.
+Factor out a common helper free_all() to free all normal elements or
+per-cpu elements on a lock-less list.
 
-For optname not in the kernel, the error code is
-#define ENOPROTOOPT 92/* Protocol not available */
-Whether to consider the way of judging with error codes,
-If (! retval | | retval == -ENOPROTOOPT)
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ kernel/bpf/memalloc.c | 31 ++++++++++++++++---------------
+ 1 file changed, 16 insertions(+), 15 deletions(-)
+
+diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
+index 410637c225fb..0668bcd7c926 100644
+--- a/kernel/bpf/memalloc.c
++++ b/kernel/bpf/memalloc.c
+@@ -211,9 +211,9 @@ static void alloc_bulk(struct bpf_mem_cache *c, int cnt, int node)
+ 	mem_cgroup_put(memcg);
+ }
+ 
+-static void free_one(struct bpf_mem_cache *c, void *obj)
++static void free_one(void *obj, bool percpu)
+ {
+-	if (c->percpu_size) {
++	if (percpu) {
+ 		free_percpu(((void **)obj)[1]);
+ 		kfree(obj);
+ 		return;
+@@ -222,14 +222,19 @@ static void free_one(struct bpf_mem_cache *c, void *obj)
+ 	kfree(obj);
+ }
+ 
+-static void __free_rcu(struct rcu_head *head)
++static void free_all(struct llist_node *llnode, bool percpu)
+ {
+-	struct bpf_mem_cache *c = container_of(head, struct bpf_mem_cache, rcu);
+-	struct llist_node *llnode = llist_del_all(&c->waiting_for_gp);
+ 	struct llist_node *pos, *t;
+ 
+ 	llist_for_each_safe(pos, t, llnode)
+-		free_one(c, pos);
++		free_one(pos, percpu);
++}
++
++static void __free_rcu(struct rcu_head *head)
++{
++	struct bpf_mem_cache *c = container_of(head, struct bpf_mem_cache, rcu);
++
++	free_all(llist_del_all(&c->waiting_for_gp), !!c->percpu_size);
+ 	atomic_set(&c->call_rcu_in_progress, 0);
+ }
+ 
+@@ -432,7 +437,7 @@ int bpf_mem_alloc_init(struct bpf_mem_alloc *ma, int size, bool percpu)
+ 
+ static void drain_mem_cache(struct bpf_mem_cache *c)
+ {
+-	struct llist_node *llnode, *t;
++	bool percpu = !!c->percpu_size;
+ 
+ 	/* No progs are using this bpf_mem_cache, but htab_map_free() called
+ 	 * bpf_mem_cache_free() for all remaining elements and they can be in
+@@ -441,14 +446,10 @@ static void drain_mem_cache(struct bpf_mem_cache *c)
+ 	 * Except for waiting_for_gp list, there are no concurrent operations
+ 	 * on these lists, so it is safe to use __llist_del_all().
+ 	 */
+-	llist_for_each_safe(llnode, t, __llist_del_all(&c->free_by_rcu))
+-		free_one(c, llnode);
+-	llist_for_each_safe(llnode, t, llist_del_all(&c->waiting_for_gp))
+-		free_one(c, llnode);
+-	llist_for_each_safe(llnode, t, __llist_del_all(&c->free_llist))
+-		free_one(c, llnode);
+-	llist_for_each_safe(llnode, t, __llist_del_all(&c->free_llist_extra))
+-		free_one(c, llnode);
++	free_all(__llist_del_all(&c->free_by_rcu), percpu);
++	free_all(llist_del_all(&c->waiting_for_gp), percpu);
++	free_all(__llist_del_all(&c->free_llist), percpu);
++	free_all(__llist_del_all(&c->free_llist_extra), percpu);
+ }
+ 
+ static void free_mem_alloc_no_barrier(struct bpf_mem_alloc *ma)
+-- 
+2.29.2
 
