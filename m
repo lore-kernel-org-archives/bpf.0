@@ -1,133 +1,112 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9EF115D5
-	for <bpf@vger.kernel.org>; Wed,  7 Jun 2023 10:42:29 +0000 (UTC)
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7133D2121
-	for <bpf@vger.kernel.org>; Wed,  7 Jun 2023 03:42:19 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f6ffc2b314so3474805e9.0
-        for <bpf@vger.kernel.org>; Wed, 07 Jun 2023 03:42:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2DD128C3D
+	for <bpf@vger.kernel.org>; Wed,  7 Jun 2023 11:55:57 +0000 (UTC)
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5681BCC
+	for <bpf@vger.kernel.org>; Wed,  7 Jun 2023 04:55:46 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f62d93f38aso3879629e87.0
+        for <bpf@vger.kernel.org>; Wed, 07 Jun 2023 04:55:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1686134537; x=1688726537;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=N7LrhNNEdA24khblC9g8MfKa4jeWvLQ+nAT4hRuOUJI=;
-        b=XIPDoVV88MC7ohXtbTc2BCAz536FGMFDcu4rdZ5ndoe8/wbuZh2LJ8yFLgMkgqX5xS
-         vuNtpp04rDMuXb+tEbdw9+7DjSfzqX0KNlkMYA4fpekCV4J/KMpN3DPo1C6Hv7TSNhMC
-         GsiaGDA1rl0Tv2jzQ7g1Ndhrq/QALkjJP+drhZaztLD/jNveiLBziLAsCrH65+ufAN3A
-         2jBNTl3WUaFnzfWdmTs2XxvEcl/tZgfYEWYbejMAJbZ3S4V6hf1xIJyZz5zSJPUoFpDv
-         /08sr83xx/vF3wFWesTcnJ9+s60XwYIm+MESMCKWGv88MeIAFjuKC+ZUAJNBPZbKu2HY
-         SCNg==
+        d=gmail.com; s=20221208; t=1686138945; x=1688730945;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=NX7UaOO/Zy36F/I4Mlc9GyuSRdm8WjFUnFhZPx0ZM3s=;
+        b=pYPQSOC0HGiz2kQMJUrmFmrQERXjZe9Z1UV5Pz75oj1FXbGbIIotOg1YjKPlipE2Jj
+         OpfPChF6Nsh8uAeQsyEjuel0fd3QlUO3oDfNO6avIp3Nj6nwlayO520xEttlMiIljyXG
+         Jjjj5i9RwokkigCT8RNFTE+Lh0i+RVlXVSxGKAD8+JjX89UrBUMy9nlOQwpQXEghJTLI
+         3yFrzFxgKz/348eG4l3/zr2v7vx/u/gpkTZU/8DbBkBR3ty0fQwuSWFsjb5DPb2mJTdy
+         s20IQQAlWvF0RFAbKU8osV/oCuCI50edMiyl31QNaxz3tj1xAW0sw7N4H59WurVOk2br
+         dbHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686134537; x=1688726537;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N7LrhNNEdA24khblC9g8MfKa4jeWvLQ+nAT4hRuOUJI=;
-        b=D3XsMVx1GhrFALHHwenI3AqwQw1Yh8xXSbFwwd8wjvIe4MLhIvP4bnHEDfr+XCoAHB
-         0RyzUSq8/3vKPwsNFxJxGRq+o+SXrN/Pdahm9QannWB+u55vlrPHKgARmZujpTbDIz6A
-         ADl1fUnlFPjKyw82sjMhxAjNirVA7OLtCGj58puopJMgy4x9q6vfrUWNa4WtPebfExx/
-         S0TmxJ61RARrggCXjHWSP5X3bK5TF/bI2m/4zvmXmIFC9nw8bqQgixdOzNoN4wgb4d6C
-         +cUnIFB0RFPsRE8aQvPhkGXpEWwXMU47/zaZJhDvl/fKq4RaC5n7/vGXV3qg6UcE9cpA
-         1rUg==
-X-Gm-Message-State: AC+VfDwate4tCIfzT5xVfjWqItex0JBK2zFCgbBo2bm2hM7RAsus+P6m
-	IAMMcxfeT45kiDxh+OU4ID6cyQ==
-X-Google-Smtp-Source: ACHHUZ4OhWn4Tb9E2A5DqtcylYLUxU5x86bnN3MT2KWvOc7EJ3AmkwX8cONOFSmSpNVgN9Yoho/ljw==
-X-Received: by 2002:a7b:c3d4:0:b0:3f4:1ce0:a606 with SMTP id t20-20020a7bc3d4000000b003f41ce0a606mr4065558wmj.1.1686134537631;
-        Wed, 07 Jun 2023 03:42:17 -0700 (PDT)
-Received: from ?IPV6:2a02:8011:e80c:0:3d52:65d8:7088:94e9? ([2a02:8011:e80c:0:3d52:65d8:7088:94e9])
-        by smtp.gmail.com with ESMTPSA id h18-20020a1ccc12000000b003f74eb308fasm1648829wmb.48.2023.06.07.03.42.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 03:42:17 -0700 (PDT)
-Message-ID: <a5d1512b-2c1b-1713-ae52-84fc148ecb5a@isovalent.com>
-Date: Wed, 7 Jun 2023 11:42:16 +0100
+        d=1e100.net; s=20221208; t=1686138945; x=1688730945;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NX7UaOO/Zy36F/I4Mlc9GyuSRdm8WjFUnFhZPx0ZM3s=;
+        b=csYpxS8AMlAbLtFRP4EY2/97O+LRcre1b4fviMBzON7xVrSC6r6hdofruROFDuFfM9
+         ddgZ4rIBef2577tp2gtaGrgWCT8oHR94xPqJrYkgQF5O4crS4po9GZ525rJEwWOcv0EE
+         n8fcOWU+6Wr75UgKMmHXH+VHC/ivZnD6/LYY99Jui3JJjnu5Y2HZdNm6TICphVIrTvT0
+         kCx0Wx/zhXGceRzmDZO56Xhte4WdWhtEIKIc6urXLSA51WKd21Y/5QUbwwwI6zzLvP+h
+         tjGnXaXmiOmKflButGAsHiTIYLkU0/7s57SRyWaOPScrTLQumsp7WThRgds1P9jK0UdB
+         LNLg==
+X-Gm-Message-State: AC+VfDzQNeubiTxrH06jqEiNiRDJTSoMJjHQegHDu/sl3IdKDkISDcz0
+	q0t9+duFfy08eX7X0iJwchUujyqRj0HAng==
+X-Google-Smtp-Source: ACHHUZ4UW+T59LnuZvLXcjhMeFnHavOVLzhgov4nxCeY0HJei3o9FDILUaJqC7QbcvPFLe1XuY7Oeg==
+X-Received: by 2002:ac2:4c35:0:b0:4eb:1527:e2a7 with SMTP id u21-20020ac24c35000000b004eb1527e2a7mr1919571lfq.45.1686138944409;
+        Wed, 07 Jun 2023 04:55:44 -0700 (PDT)
+Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id l1-20020a19c201000000b004f3ab10016bsm1795898lfc.16.2023.06.07.04.55.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 04:55:43 -0700 (PDT)
+Message-ID: <35e5f70bbe0890f875e0c24aff0453c25f018ea6.camel@gmail.com>
+Subject: Re: [RFC bpf-next 1/8] btf: add kind metadata encoding to UAPI
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Toke =?ISO-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@kernel.org>, Alexei
+ Starovoitov <alexei.starovoitov@gmail.com>, Andrii Nakryiko
+ <andrii.nakryiko@gmail.com>
+Cc: Alan Maguire <alan.maguire@oracle.com>, Alexei Starovoitov
+ <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Arnaldo Carvalho de Melo <acme@kernel.org>, Martin
+ KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+ <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh
+ <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,  Quentin Monnet
+ <quentin@isovalent.com>, Mykola Lysenko <mykolal@fb.com>, bpf
+ <bpf@vger.kernel.org>
+Date: Wed, 07 Jun 2023 14:55:42 +0300
+In-Reply-To: <878rcw3k1o.fsf@toke.dk>
+References: <20230531201936.1992188-1-alan.maguire@oracle.com>
+	 <20230531201936.1992188-2-alan.maguire@oracle.com>
+	 <20230601035354.5u56fwuundu6m7v2@MacBook-Pro-8.local>
+	 <89787945-c06c-1c41-655b-057c1a3d07dd@oracle.com>
+	 <CAADnVQ+2ZuX00MSxAXWcXmyc-dqYtZvGqJ9KzJpstv183nbPEA@mail.gmail.com>
+	 <CAEf4BzZaUEqYnyBs6OqX2_L_X=U4zjrKF9nPeyyKp7tRNVLMww@mail.gmail.com>
+	 <CAADnVQKbmAHTHk5YsH-t42BRz16MvXdRBdFmc5HFyCPijX-oNg@mail.gmail.com>
+	 <CAEf4BzamU4qTjrtoC_9zwx+DHyW26yq_HrevHw2ui-nqr6UF-g@mail.gmail.com>
+	 <CAADnVQ+_YeLZ0kmF+QueH_xE10=b-4m_BMh_-rct6S8TbpL0hw@mail.gmail.com>
+	 <CAEf4Bzbtptc9DUJ8peBU=xyrXxJFK5=rkr3gGRh05wwtnBZ==A@mail.gmail.com>
+	 <CAADnVQJAmYgR91WKJ_Jif6c3ja=OAmkMXoUO9sTnmp-xmnbVJQ@mail.gmail.com>
+	 <878rcw3k1o.fsf@toke.dk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 bpf 03/11] bpftool: use a local bpf_perf_event_value to
- fix accessing its fields
-Content-Language: en-GB
-To: Nick Desaulniers <ndesaulniers@google.com>,
- Alexander Lobakin <alobakin@pm.me>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Song Liu <songliubraving@fb.com>, Kumar Kartikeya Dwivedi
- <memxor@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, tpgxyz@gmail.com,
- Jiri Olsa <olsajiri@gmail.com>
-References: <20220421003152.339542-1-alobakin@pm.me>
- <20220421003152.339542-4-alobakin@pm.me> <ZH+e9IYk+DIZzUFL@google.com>
-From: Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <ZH+e9IYk+DIZzUFL@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-	SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+	FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+	T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-2023-06-06 14:02 UTC-0700 ~ Nick Desaulniers <ndesaulniers@google.com>
-> On Thu, Apr 21, 2022 at 12:39:04AM +0000, Alexander Lobakin wrote:
->> Fix the following error when building bpftool:
->>
->>   CLANG   profiler.bpf.o
->>   CLANG   pid_iter.bpf.o
->> skeleton/profiler.bpf.c:18:21: error: invalid application of 'sizeof' to an incomplete type 'struct bpf_perf_event_value'
->>         __uint(value_size, sizeof(struct bpf_perf_event_value));
->>                            ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> tools/bpf/bpftool/bootstrap/libbpf/include/bpf/bpf_helpers.h:13:39: note: expanded from macro '__uint'
->> tools/bpf/bpftool/bootstrap/libbpf/include/bpf/bpf_helper_defs.h:7:8: note: forward declaration of 'struct bpf_perf_event_value'
->> struct bpf_perf_event_value;
->>        ^
->>
->> struct bpf_perf_event_value is being used in the kernel only when
->> CONFIG_BPF_EVENTS is enabled, so it misses a BTF entry then.
->> Define struct bpf_perf_event_value___local with the
->> `preserve_access_index` attribute inside the pid_iter BPF prog to
->> allow compiling on any configs. It is a full mirror of a UAPI
->> structure, so is compatible both with and w/o CO-RE.
->> bpf_perf_event_read_value() requires a pointer of the original type,
->> so a cast is needed.
->>
-> 
-> Hi Alexander,
-> What's the status of this series? I wasn't able to find a v3 on lore.
-> 
-> We received a report that OpenMandriva is carrying around this patch.
-> https://github.com/ClangBuiltLinux/linux/issues/1805.
-> 
-> + Tomasz
-> 
-> Tomasz, do you have more info which particular configs can reproduce
-> this issue? Is this patch still necessary?
-> 
->> Fixes: 47c09d6a9f67 ("bpftool: Introduce "prog profile" command")
+On Tue, 2023-06-06 at 13:30 +0200, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+[...]
+>=20
+> As for bumping the version number, I don't think it's a good idea to
+> deliberately break compatibility this way unless it's absolutely
+> necessary. With "absolutely necessary" meaning "things will break in
+> subtle ways in any case, so it's better to make the breakage obvious".
+> But it libbpf is not checking the version field anyway, that becomes
+> kind of a moot point, as bumping it doesn't really gain us anything,
+> then...
 
-Hi Nick,
+It seems to me that in terms of backward compatibility, the ability to
+specify the size for each kind entry is more valuable than the
+capability to add new BTF kinds:
+- The former allows for extending kind records in
+  a backward-compatible manner, such as adding a function address to
+  BTF_KIND_FUNC.
+- The latter is much more fragile. Types refer to each other,
+  compatibility is already lost once a new "unknown" tag is introduced
+  in a type chain.
 
-This patch is still necessary if you attempt to compile bpftool with
-skeletons support, on a host with a kernel version lower than 5.15.
-
-I took over on the bpftool patches from this series, and sent a new
-version last month. Given that it only contains the bpftool patches, the
-series has a different title and is not tagged as v3, but you can find
-it here:
-
-https://lore.kernel.org/all/20230512103354.48374-1-quentin@isovalent.com/t/#u
-
-Jiri (+Cc) found an issue with this set when CONFIG_BPF_EVENTS is
-disabled. I need to replicate and investigate, but I've been short on
-time to do that over the last few weeks.
-
-Best,
-Quentin
+However, changing the size of existing BTF kinds is itself a
+backward-incompatible change. Therefore, a version bump may be
+warranted in this regard.
