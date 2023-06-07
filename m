@@ -1,45 +1,46 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 278E58F6C
-	for <bpf@vger.kernel.org>; Wed,  7 Jun 2023 09:18:20 +0000 (UTC)
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D236172E;
-	Wed,  7 Jun 2023 02:18:17 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-30d5931d17aso3426168f8f.3;
-        Wed, 07 Jun 2023 02:18:17 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53F4C9444
+	for <bpf@vger.kernel.org>; Wed,  7 Jun 2023 09:18:22 +0000 (UTC)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7101BC2;
+	Wed,  7 Jun 2023 02:18:18 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-30e5b017176so240054f8f.1;
+        Wed, 07 Jun 2023 02:18:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686129496; x=1688721496;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MtMQ/nGfSguBTH/fnJCG/BZKK2MvsVclTLF6KR44o7Q=;
-        b=mKFNfeE1x5dO0MrHNtPLOQyU9VKLcb/HNfA4YnRbqeZzNQA8nsDiNEg+OY50nVZg3o
-         3SvQlMxskAHYUd7FYwAH4UTN4XPB8HE24EuRKoykKJf/kB4T9o5kBbEJekJYE1khNJXn
-         9bczr0iQlXAIRaW4idjei+5q7LAfmX9ptfZnH4+5Wcol33gAv00rDH8DzpMP/KXdfdxv
-         A1GReP+li1Wm5hawNn6AX2qjWEd4gAeL2oMiR+lbivaDFAljjzHS+9TO7caqZjXIPtR2
-         CYRPeTV8sBAbyS5KupwrTLUruKqKYJuIIRIXbEt0+tbm+2zk22aUGzi+dOzgv5iHEPiK
-         atwQ==
+        d=gmail.com; s=20221208; t=1686129497; x=1688721497;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/lkLOrfbLwxQBuKCgg2v6eUJGy7ljmtUTJaDjGst/PI=;
+        b=ioemZU0vs4s2VNh5psWt9NncrDXdRyMwFpmB2vQSg/pzC5pqoKTYpw0ulo18s7d9Gt
+         M2mtR68XGo+5O++/vXHwI6YEVPmvH9rYSyijzzPdCy2lJj94RwE2OkLwooNLTurj+yhr
+         twTFNtPW7z/sd/vYEslIi3NtEZvFyS78g/lI1WoYmbSzGPIQ9uABsxb1izO+iu01fx0q
+         HmKFipQuLMvRMGILVBVaAts5rP8TjVpvjZJBcr8Jcbh/eEXCyWwuWRVrL2m/m5hoGSy8
+         P5CEIJQX7iHkR09yz1E0kNxF8GiO1FxmkGxfPdw1wBONI8H54093CdH7dz3KCUNXF5+H
+         eD7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686129496; x=1688721496;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MtMQ/nGfSguBTH/fnJCG/BZKK2MvsVclTLF6KR44o7Q=;
-        b=DtPiyihpDlvPF6PJK5WEqzhFfo7Dj8S38ty0n/p2nH4o6vMk5bTYbfEPvNEmrLtcvx
-         gtFsqaAEHWAybFbADBqCPUeL5z/RmTrE6/AKm4M8xaXpRTg+bLsxvQjecN8/6cylJK+u
-         Q9Nr6yKAsI+4alQ0qykOiBZrencH8SiQOw40lypykOd6d/COdxDyZV6ljanKHymJOxpq
-         s5NMZqXCav2caDjaPs73VpOS3T9mJK02OzoKHDrr7T3fZRji4Ys3lJHMeLxRxuBdeTbc
-         ELk+iAvOT8MbsZurTPTliuni2x8MIZ1zauA5p5wP/6wVqOrw8+SbDp3Icl5qikupXYpq
-         ArKg==
-X-Gm-Message-State: AC+VfDy0a08/gw4IaMcSovxZWlBBJxmhNFUPv0erMVhMotXFEb8hgib8
-	6M+OovcALRloR/iiieVtEfo=
-X-Google-Smtp-Source: ACHHUZ725VID59JvCB6v3Gf7AjFernyrsIXI5AhUqGGXgo4gONN4bsPg1xdoDRz0537zlzGqZ8lHsQ==
-X-Received: by 2002:a5d:5092:0:b0:30d:44a1:99a with SMTP id a18-20020a5d5092000000b0030d44a1099amr3690368wrt.54.1686129495590;
-        Wed, 07 Jun 2023 02:18:15 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686129497; x=1688721497;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/lkLOrfbLwxQBuKCgg2v6eUJGy7ljmtUTJaDjGst/PI=;
+        b=KwfiIr5gz8C+hRtyQdo10UJPmBUlJioEUhH9uu1E8qQ47uUM8ybcLAuxRUCLBmlI5p
+         OrKT6Oq4e5sBLrlS/eImdEn6gmvRBGiKFdDJvhAZCv/pfxS3lNZKOUsY6SLw7zEljy0m
+         JYEdktK94/vVwfDVNcWNof0IJLUX1NtMLcwOA84EYyTAkwGcHIRrsXXm7Fkce3/LqRBF
+         pUAgcORz8IyUeGoHSjB2x3u4Npe5d4u22phy88K/yq19mTS07WSUKXsVmbpJa2NTUmGN
+         bTnIkciZcYioafOfKVcZJZoDkXJzzy4zLJDUlkHlFlDAQd8UKR69ev6YGULOqErMFLUl
+         nEhQ==
+X-Gm-Message-State: AC+VfDwr9+mG0xLLMwV7vLvXBh2Xa3tytbsufVdHR1t7XtcOBt4sj/Iu
+	aMcOxRYtE0Mla53UL/FzqBo=
+X-Google-Smtp-Source: ACHHUZ5EnXF/NBVW4zZT1KeJPuaUv9qX/SlLTHEQB20HcWrVNWCm2ugTxoJhyB24jDt8yZY9pGDAxw==
+X-Received: by 2002:a5d:614b:0:b0:306:2b40:1258 with SMTP id y11-20020a5d614b000000b003062b401258mr3249305wrt.21.1686129496853;
+        Wed, 07 Jun 2023 02:18:16 -0700 (PDT)
 Received: from ip-172-31-22-112.eu-west-1.compute.internal (ec2-54-74-169-43.eu-west-1.compute.amazonaws.com. [54.74.169.43])
-        by smtp.gmail.com with ESMTPSA id cx14-20020a056000092e00b003078681a1e8sm15141958wrb.54.2023.06.07.02.18.14
+        by smtp.gmail.com with ESMTPSA id cx14-20020a056000092e00b003078681a1e8sm15141958wrb.54.2023.06.07.02.18.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 02:18:15 -0700 (PDT)
+        Wed, 07 Jun 2023 02:18:16 -0700 (PDT)
 From: Puranjay Mohan <puranjay12@gmail.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -53,10 +54,12 @@ To: ast@kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org
 Cc: puranjay12@gmail.com
-Subject: [PATCH bpf-next v2 0/3] bpf, arm64: use BPF prog pack allocator in BPF JIT
-Date: Wed,  7 Jun 2023 09:18:11 +0000
-Message-Id: <20230607091814.46080-1-puranjay12@gmail.com>
+Subject: [PATCH bpf-next v2 2/3] arm64: patching: Add aarch64_insn_copy()
+Date: Wed,  7 Jun 2023 09:18:13 +0000
+Message-Id: <20230607091814.46080-3-puranjay12@gmail.com>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230607091814.46080-1-puranjay12@gmail.com>
+References: <20230607091814.46080-1-puranjay12@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,108 +70,91 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
 	FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-	T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.6
+	T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-BPF programs currently consume a page each on ARM64. For systems with many BPF
-programs, this adds significant pressure to instruction TLB. High iTLB pressure
-usually causes slow down for the whole system.
+This will be used by BPF JIT compiler to dump JITed binary to a RX huge
+page, and thus allow multiple BPF programs sharing the a huge (2MB)
+page.
 
-Song Liu introduced the BPF prog pack allocator[1] to mitigate the above issue.
-It packs multiple BPF programs into a single huge page. It is currently only
-enabled for the x86_64 BPF JIT.
+The bpf_prog_pack allocator that implements the above feature allocates
+a RX/RW buffer pair. The JITed code is written to the RW buffer and then
+this function will be used to copy the code from RW to RX buffer.
 
-This patch series enables the BPF prog pack allocator for the ARM64 BPF JIT.
-
-====================================================
-Performance Analysis of prog pack allocator on ARM64
-====================================================
-
-To test the performance of the BPF prog pack allocator on ARM64, a stresser
-tool[2] was built. This tool loads 8 BPF programs on the system and triggers
-5 of them in an infinite loop by doing system calls.
-
-The runner script starts 20 instances of the above which loads 8*20=160 BPF
-programs on the system, 5*20=100 of which are being constantly triggered.
-
-In the above environment we try to build Python-3.8.4 and try to find different
-iTLB metrics for the compilation done by gcc-12.2.0.
-
-The source code[3] is  configured with the following command:
-./configure --enable-optimizations --with-ensurepip=install
-
-Then the runner script is executed with the following command:
-./run.sh "perf stat -e ITLB_WALK,L1I_TLB,INST_RETIRED,iTLB-load-misses -a make -j32"
-
-This builds Python while 160 BPF programs are loaded and 100 are being constantly
-triggered and measures iTLB related metrics.
-
-The output of the above command is discussed below before and after enabling the
-BPF prog pack allocator.
-
-The tests were run on qemu-system-aarch64 with 32 cpus, 4G memory, -machine virt,
--cpu host, and -enable-kvm.
-
-Results
--------
-
-Before enabling prog pack allocator:
-------------------------------------
-
-Performance counter stats for 'system wide':
-
-         333278635      ITLB_WALK
-     6762692976558      L1I_TLB
-    25359571423901      INST_RETIRED
-       15824054789      iTLB-load-misses
-
-     189.029769053 seconds time elapsed
-
-After enabling prog pack allocator:
------------------------------------
-
-Performance counter stats for 'system wide':
-
-         190333544      ITLB_WALK
-     6712712386528      L1I_TLB
-    25278233304411      INST_RETIRED
-        5716757866      iTLB-load-misses
-
-     185.392650561 seconds time elapsed
-
-Improvements in metrics
------------------------
-
-Compilation time                             ---> 1.92% faster
-iTLB-load-misses/Sec (Less is better)        ---> 63.16% decrease
-ITLB_WALK/1000 INST_RETIRED (Less is better) ---> 42.71% decrease
-ITLB_Walk/L1I_TLB (Less is better)           ---> 42.47% decrease
-
-[1] https://lore.kernel.org/bpf/20220204185742.271030-1-song@kernel.org/
-[2] https://github.com/puranjaymohan/BPF-Allocator-Bench
-[3] https://www.python.org/ftp/python/3.8.4/Python-3.8.4.tgz
-
+Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+Acked-by: Song Liu <song@kernel.org>
+---
 Changes in v1 => v2:
-1. Make the naming consistent in the 3rd patch:
-   ro_image and image
-   ro_header and header
-   ro_image_ptr and image_ptr
-2. Use names dst/src in place of addr/opcode in second patch.
-3. Add Acked-by: Song Liu <song@kernel.org> in 1st and 2nd patch.
+- Renamed addr/opcode to dst/src.
+- Added Acked-by: Song Liu <song@kernel.org>
 
-Puranjay Mohan (3):
-  bpf: make bpf_prog_pack allocator portable
-  arm64: patching: Add aarch64_insn_copy()
-  bpf, arm64: use bpf_jit_binary_pack_alloc
+ arch/arm64/include/asm/patching.h |  1 +
+ arch/arm64/kernel/patching.c      | 39 +++++++++++++++++++++++++++++++
+ 2 files changed, 40 insertions(+)
 
- arch/arm64/include/asm/patching.h |   1 +
- arch/arm64/kernel/patching.c      |  39 +++++++++
- arch/arm64/net/bpf_jit_comp.c     | 126 ++++++++++++++++++++++++------
- kernel/bpf/core.c                 |   8 +-
- 4 files changed, 147 insertions(+), 27 deletions(-)
-
+diff --git a/arch/arm64/include/asm/patching.h b/arch/arm64/include/asm/patching.h
+index 68908b82b168..f78a0409cbdb 100644
+--- a/arch/arm64/include/asm/patching.h
++++ b/arch/arm64/include/asm/patching.h
+@@ -8,6 +8,7 @@ int aarch64_insn_read(void *addr, u32 *insnp);
+ int aarch64_insn_write(void *addr, u32 insn);
+ 
+ int aarch64_insn_write_literal_u64(void *addr, u64 val);
++void *aarch64_insn_copy(void *dst, const void *src, size_t len);
+ 
+ int aarch64_insn_patch_text_nosync(void *addr, u32 insn);
+ int aarch64_insn_patch_text(void *addrs[], u32 insns[], int cnt);
+diff --git a/arch/arm64/kernel/patching.c b/arch/arm64/kernel/patching.c
+index b4835f6d594b..419a9428402e 100644
+--- a/arch/arm64/kernel/patching.c
++++ b/arch/arm64/kernel/patching.c
+@@ -105,6 +105,45 @@ noinstr int aarch64_insn_write_literal_u64(void *addr, u64 val)
+ 	return ret;
+ }
+ 
++/**
++ * aarch64_insn_copy - Copy instructions into (an unused part of) RX memory
++ * @dst: address to modify
++ * @src: source of the copy
++ * @len: length to copy
++ *
++ * Useful for JITs to dump new code blocks into unused regions of RX memory.
++ */
++noinstr void *aarch64_insn_copy(void *dst, const void *src, size_t len)
++{
++	unsigned long flags;
++	size_t patched = 0;
++	size_t size;
++	void *waddr;
++	void *ptr;
++	int ret;
++
++	raw_spin_lock_irqsave(&patch_lock, flags);
++
++	while (patched < len) {
++		ptr = dst + patched;
++		size = min_t(size_t, PAGE_SIZE - offset_in_page(ptr),
++			     len - patched);
++
++		waddr = patch_map(ptr, FIX_TEXT_POKE0);
++		ret = copy_to_kernel_nofault(waddr, src + patched, size);
++		patch_unmap(FIX_TEXT_POKE0);
++
++		if (ret < 0) {
++			raw_spin_unlock_irqrestore(&patch_lock, flags);
++			return NULL;
++		}
++		patched += size;
++	}
++	raw_spin_unlock_irqrestore(&patch_lock, flags);
++
++	return dst;
++}
++
+ int __kprobes aarch64_insn_patch_text_nosync(void *addr, u32 insn)
+ {
+ 	u32 *tp = addr;
 -- 
 2.39.2
 
