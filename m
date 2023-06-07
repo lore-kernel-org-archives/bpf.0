@@ -1,130 +1,218 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73F6D12B79
-	for <bpf@vger.kernel.org>; Wed,  7 Jun 2023 21:13:41 +0000 (UTC)
-Received: from grey.apple.relay.mailchannels.net (grey.apple.relay.mailchannels.net [23.83.208.78])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4BC173B
-	for <bpf@vger.kernel.org>; Wed,  7 Jun 2023 14:13:39 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-	by relay.mailchannels.net (Postfix) with ESMTP id BB268140F63
-	for <bpf@vger.kernel.org>; Wed,  7 Jun 2023 21:04:18 +0000 (UTC)
-Received: from pdx1-sub0-mail-a233.dreamhost.com (unknown [127.0.0.6])
-	(Authenticated sender: dreamhost)
-	by relay.mailchannels.net (Postfix) with ESMTPA id 42BF0140A56
-	for <bpf@vger.kernel.org>; Wed,  7 Jun 2023 21:04:18 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1686171858; a=rsa-sha256;
-	cv=none;
-	b=2CsGICMfQ98mPl2njCbYZJiNsKSb5zBtk7ffh0ESRqoGkc7p1p1IJZypGp+xVUWrSgskmF
-	1pYN2IADwGm9Nn26uOIrMNpTU3edDsfTH5sxaN05dgpw1PMd9EipkCvc3tL8QfU9k/gZnv
-	7tcsMIjbNh0A1720Tj1JhO1NtDdFjV3+J2N43P5i0gTouFVR4Rz1kYO5U6w2qJO0iI13Ya
-	8TF8ZUAebkRF3V92xiW2bMzB7q7sswP71BbL8SsQU4tfSPxIYJGdaD+C94Onf2P8uhiUqH
-	6nHkbaLHG5yXI2YrYCL93Lvq0LHPV6WF6+Ab4kfA/SdGVWRy96A56Q45CzlikA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-	s=arc-2022; t=1686171858;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 dkim-signature; bh=5/ao13F8CNYp1ZMCVek/NrMErWLjCVRsd7llF9n1i+4=;
-	b=Pd8UFnfohFv3IdPv5HzBH1uB7swPP/1EWuuLabrQdhW7X+xtnLsnj6cRDvnlPOQ4X25rH5
-	h2ZcEYPog6J5yrOCEE+fwr70PKKLlPdSPSHLTXzZc8eoA7ql1Z6DKIxQKT7N5I75rLzZv9
-	/3fzGP3kURezUz0VJ/pNmIP0gu/ru1V8d0Ascy5xSAeotBmNDfTtNaj6PKLG8ElmNMjdWo
-	F6FEYIHKGd7XQLHguiOx0dTcUo5B0KE5B5DBHfIWagLpgXzp/C/0LogVFL+bYbOJ5HjkWr
-	IZOdXJMO/WhShMlisxTasle5+7oKKn+s43qeISYLOnv4eSnmlbxP4+ojkTzVzw==
-ARC-Authentication-Results: i=1;
-	rspamd-6f5cfd578c-c6h9m;
-	auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MC-Relay: Good
-X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MailChannels-Auth-Id: dreamhost
-X-Tank-Bitter: 3ad257c15d1d3ca5_1686171858520_259977073
-X-MC-Loop-Signature: 1686171858520:284595151
-X-MC-Ingress-Time: 1686171858520
-Received: from pdx1-sub0-mail-a233.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-	by 100.127.59.22 (trex/6.8.1);
-	Wed, 07 Jun 2023 21:04:18 +0000
-Received: from kmjvbox (c-73-93-64-36.hsd1.ca.comcast.net [73.93.64.36])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kjlx@templeofstupid.com)
-	by pdx1-sub0-mail-a233.dreamhost.com (Postfix) with ESMTPSA id 4Qc0Fs1d8kzvW
-	for <bpf@vger.kernel.org>; Wed,  7 Jun 2023 14:04:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-	s=dreamhost; t=1686171857;
-	bh=5/ao13F8CNYp1ZMCVek/NrMErWLjCVRsd7llF9n1i+4=;
-	h=Date:From:To:Cc:Subject:Content-Type;
-	b=Ks06xLF7GgKn/OTiw8dmTQO8nej2Brz6p1ADLhr2dsBmEKI2DmGH2E2TYoyVG362f
-	 6xxKjIH2WwcZo10JQ1hxEzYhUGIXIcK3Dp6Nl+m4Alm0omgGG4c49q22t1Obk0kDx6
-	 B6Mik2b4H+v8QyYk1XKNohlCXlCbPSxsXri5V0PY=
-Received: from johansen (uid 1000)
-	(envelope-from kjlx@templeofstupid.com)
-	id e005f
-	by kmjvbox (DragonFly Mail Agent v0.12);
-	Wed, 07 Jun 2023 14:04:16 -0700
-Date: Wed, 7 Jun 2023 14:04:16 -0700
-From: Krister Johansen <kjlx@templeofstupid.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH bpf v2 0/2] bpf: fix NULL dereference during extable search
-Message-ID: <cover.1686166633.git.kjlx@templeofstupid.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF3812B79
+	for <bpf@vger.kernel.org>; Wed,  7 Jun 2023 21:40:31 +0000 (UTC)
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D1E2109
+	for <bpf@vger.kernel.org>; Wed,  7 Jun 2023 14:40:28 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-514859f3ffbso2128209a12.1
+        for <bpf@vger.kernel.org>; Wed, 07 Jun 2023 14:40:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686174026; x=1688766026;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UoP/jWWtShP2f7OWxQBwbrE+OcK9/IhgC/Jp9jkE65A=;
+        b=eavvtwYEvuyX/+9DXUrGT/JqZfIL2+uPJR5zwNBK92oCHxo/sopZeD+A/YuUHGzQol
+         kKHGvT5YABiykDy4nreOChyaT+Ndm5U8nJANZqGoQP4ZI4fKOj1YQWkFSFPlF/9DM5ow
+         3tEMprGkLCcktpyBUOoOUuQjl9ZvmCLIOPH0z5hk/jYjo83vicOY11aGEQZRJGqZWmBV
+         Bxy2RfO26FuiDN7wHKWMDww347jTteOvf7C74BWvrQI80bSShxqC8mVybeFlK9HGDd6d
+         D6eyOgLv+Mry6uCiNbLvwByisrXmBZJ880FASYBcKw8N4jJJXhI2vYjW2vkFnQQV6gRu
+         uZzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686174026; x=1688766026;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UoP/jWWtShP2f7OWxQBwbrE+OcK9/IhgC/Jp9jkE65A=;
+        b=FA3d7CNP4blRmRisVxJ4Y10M9hWsJdj0pXlSkgIZxb2Woy+qx21R/tHiwXz3d66pjd
+         q6zu1VviF4XnbfI52VwpWTTM7KP9CPHiR5ZAyFchET5Isvh2YaCW2xlsvM0WGxXCRsf7
+         1HxMh9AEBLwbw5vOFl07kOAqmrP8bAIPavS9+JNuNCTm9F8qXAOEIw3p2GNwBwlZ1Kbc
+         zUeCI1cwKA2gQfmV2s6ZhmK5fy74RLPYVGU2KcF3VuDaC0bD69Xgt+AARB/HtbYX3QvN
+         siqwjkdAHPKgF4BgnwOwGOdhyzFLBQyXfJ11jN9p3HW2tdjuEC/RaANfahzL+PmPcY7U
+         qAmw==
+X-Gm-Message-State: AC+VfDwNStQ/diP41XHS1z47hZfY8t81DFPBlOlPzUNhOZgI9zrcSba4
+	ZGFVrPcdSZ7YdqDj8rD6vSFEGAT+eSEtdhXZpXM=
+X-Google-Smtp-Source: ACHHUZ5sAc6dehqi1Lyzu9+2dtrFFIhMxmcKrEgh9rNBBAQDFTzx9ONTRsTR4O+ltnZEorcAHeFSuCm+ZjhH0jw8FpI=
+X-Received: by 2002:a05:6402:1a48:b0:516:a009:6fdb with SMTP id
+ bf8-20020a0564021a4800b00516a0096fdbmr1908978edb.22.1686174026138; Wed, 07
+ Jun 2023 14:40:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-	T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.6
+References: <20230606222411.1820404-1-eddyz87@gmail.com> <20230606222411.1820404-5-eddyz87@gmail.com>
+In-Reply-To: <20230606222411.1820404-5-eddyz87@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 7 Jun 2023 14:40:13 -0700
+Message-ID: <CAEf4Bzaam9ayi7z6tmUjX+7JwoSySqqw29XJsHnAHEMgriuCyA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 4/4] selftests/bpf: verify that check_ids() is
+ used for scalars in regsafe()
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hi,
-Enclosed are a pair of patches for an oops that can occur if an exception is
-generated while a bpf subprogram is running.  One of the bpf_prog_aux entries
-for the subprograms are missing an extable.  This can lead to an exception that
-would otherwise be handled turning into a NULL pointer bug.
+On Tue, Jun 6, 2023 at 3:24=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com>=
+ wrote:
+>
+> Verify that the following example is rejected by verifier:
+>
+>   r9 =3D ... some pointer with range X ...
+>   r6 =3D ... unbound scalar ID=3Da ...
+>   r7 =3D ... unbound scalar ID=3Db ...
+>   if (r6 > r7) goto +1
+>   r7 =3D r6
+>   if (r7 > X) goto exit
+>   r9 +=3D r6
+>   *(u64 *)r9 =3D Y
+>
+> Also add test cases to check that check_alu_op() for BPF_MOV instruction =
+does
+> not allocate scalar ID if source register is a constant.
+>
+> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+> ---
+>  .../selftests/bpf/progs/verifier_scalar_ids.c | 184 ++++++++++++++++++
+>  1 file changed, 184 insertions(+)
+>
 
-The bulk of the change here is simply adding a pair of programs for the
-selftest.  The proposed fix in this iteration is a 1-line change.
+[...]
 
-These changes were tested via the verifier and progs selftests and no
-regressions were observed.
+> +/* Similar to check_ids_in_regsafe.
+> + * The l0 could be reached in two states:
+> + *
+> + *   (1) r6{.id=3DA}, r7{.id=3DA}, r8{.id=3DB}
+> + *   (2) r6{.id=3DB}, r7{.id=3DA}, r8{.id=3DB}
+> + *
+> + * Where (2) is not safe, as "r7 > 4" check won't propagate range for it=
+.
+> + * This example would be considered safe without changes to
+> + * mark_chain_precision() to track scalar values with equal IDs.
+> + */
+> +SEC("socket")
+> +__failure __msg("register with unbounded min value")
+> +__flag(BPF_F_TEST_STATE_FREQ)
+> +__naked void check_ids_in_regsafe_2(void)
+> +{
+> +       asm volatile (
+> +       /* Bump allocated stack */
+> +       "r1 =3D 0;"
+> +       "*(u64*)(r10 - 8) =3D r1;"
+> +       /* r9 =3D pointer to stack */
+> +       "r9 =3D r10;"
+> +       "r9 +=3D -8;"
+> +       /* r8 =3D ktime_get_ns() */
+> +       "call %[bpf_ktime_get_ns];"
+> +       "r8 =3D r0;"
+> +       /* r7 =3D ktime_get_ns() */
+> +       "call %[bpf_ktime_get_ns];"
+> +       "r7 =3D r0;"
+> +       /* r6 =3D ktime_get_ns() */
+> +       "call %[bpf_ktime_get_ns];"
+> +       "r6 =3D r0;"
+> +       /* scratch .id from r0 */
+> +       "r0 =3D 0;"
+> +       /* if r6 > r7 is an unpredictable jump */
+> +       "if r6 > r7 goto l1_%=3D;"
+> +       /* tie r6 and r7 .id */
+> +       "r6 =3D r7;"
+> +"l0_%=3D:"
+> +       /* if r7 > 4 exit(0) */
+> +       "if r7 > 4 goto l2_%=3D;"
+> +       /* Access memory at r9[r7] */
+> +       "r9 +=3D r6;"
+> +       "r0 =3D *(u8*)(r9 + 0);"
+> +"l2_%=3D:"
+> +       "r0 =3D 0;"
+> +       "exit;"
+> +"l1_%=3D:"
 
-Changes from v1:
+complete offtopic, feel free to ignore:
 
-- Add a selftest (Feedback From Alexei Starovoitov)
-- Move to a 1-line verifier change instead of searching multiple extables
+I must say that this "l0_%=3D" pattern is so ugly that I instead choose
+to use local labels and specify forward/backward mark:
 
-Krister Johansen (2):
-  Add a selftest for subprogram extables
-  bpf: ensure main program has an extable
+    goto 1f; /* forward */
 
- kernel/bpf/verifier.c                         |  1 +
- .../bpf/prog_tests/subprogs_extable.c         | 35 +++++++++
- .../bpf/progs/test_subprogs_extable.c         | 71 +++++++++++++++++++
- 3 files changed, 107 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_subprogs_extable.c
+1:
+    ...
 
--- 
-2.25.1
+    goto 1b; /* backward */
 
+I can see why _%=3D is good for the code generation approach (and even
+then it probably is not hard to determine this b/f mark during
+codegen), but for manual code I'm not convinced it's worth it :)
+
+> +       /* tie r6 and r8 .id */
+> +       "r6 =3D r8;"
+> +       "goto l0_%=3D;"
+> +       :
+> +       : __imm(bpf_ktime_get_ns)
+> +       : __clobber_all);
+> +}
+> +
+> +/* Check that scalar IDs *are not* generated on register to register
+> + * assignments if source register is a constant.
+> + *
+> + * If such IDs *are* generated the 'l1' below would be reached in
+> + * two states:
+> + *
+> + *   (1) r1{.id=3DA}, r2{.id=3DA}
+> + *   (2) r1{.id=3DC}, r2{.id=3DC}
+> + *
+> + * Thus forcing 'if r1 =3D=3D r2' verification twice.
+> + */
+> +SEC("socket")
+> +__success __log_level(2)
+> +__msg("11: (1d) if r3 =3D=3D r4 goto pc+0")
+> +__msg("frame 0: propagating r3,r4")
+> +__msg("11: safe")
+
+would this detect that `if r1 =3D=3D r2` happens twice, if it did?
+
+maybe we should check the number of verified states instead? We
+control branching and checkpointing, so this should be stable, right?
+
+
+> +__flag(BPF_F_TEST_STATE_FREQ)
+> +__naked void no_scalar_id_for_const(void)
+> +{
+> +       asm volatile (
+> +       "call %[bpf_ktime_get_ns];"
+> +       /* unpredictable jump */
+> +       "if r0 > 7 goto l0_%=3D;"
+> +       /* possibly generate same scalar ids for r3 and r4 */
+> +       "r1 =3D 0;"
+> +       "r1 =3D r1;"
+> +       "r3 =3D r1;"
+> +       "r4 =3D r1;"
+> +       "goto l1_%=3D;"
+> +"l0_%=3D:"
+> +       /* possibly generate different scalar ids for r3 and r4 */
+> +       "r1 =3D 0;"
+> +       "r2 =3D 0;"
+> +       "r3 =3D r1;"
+> +       "r4 =3D r2;"
+> +"l1_%=3D:"
+> +       /* predictable jump, marks r3 and r4 precise */
+> +       "if r3 =3D=3D r4 goto +0;"
+> +       "r0 =3D 0;"
+> +       "exit;"
+> +       :
+> +       : __imm(bpf_ktime_get_ns)
+> +       : __clobber_all);
+> +}
+> +
+
+[...]
