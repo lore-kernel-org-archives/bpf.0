@@ -1,46 +1,46 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 425038495
-	for <bpf@vger.kernel.org>; Thu,  8 Jun 2023 10:35:41 +0000 (UTC)
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C7A2D42
-	for <bpf@vger.kernel.org>; Thu,  8 Jun 2023 03:35:37 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-75d4df773b4so33314885a.0
-        for <bpf@vger.kernel.org>; Thu, 08 Jun 2023 03:35:37 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06B008495
+	for <bpf@vger.kernel.org>; Thu,  8 Jun 2023 10:35:43 +0000 (UTC)
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5186C2D47
+	for <bpf@vger.kernel.org>; Thu,  8 Jun 2023 03:35:39 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-5ed99ebe076so4232436d6.2
+        for <bpf@vger.kernel.org>; Thu, 08 Jun 2023 03:35:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686220536; x=1688812536;
+        d=gmail.com; s=20221208; t=1686220538; x=1688812538;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vi9s8LCdN3bDa4TRCbJie9LePONriO/RiRjf4ffMgD0=;
-        b=imGqHwW2RHxWLqgUMEahhYa23jhf++qtboqZ5wdrj+vWqVQD+0f2MgVB+y9eRFsd/l
-         Q6w82b1TvqU1VsEnnwJEbfbRHUAxYVpLhAnlj8jaV2TTAutAPh86/ELk3Dmke/Y7RntU
-         VrAAO+RChWIu5aOPks5OdJRJ6qjBzyHx7jXZ7+CCffh0hfvWXcUvL3IznLh09VqKyIu4
-         Y/wZfwiBlABCmrIxKaU++TlnNUuR0HPM8846LIN21egA5pvqiKE/m9z7eEtFgviH0u/N
-         5pCyW8b3/j4uFTsxlf4yGCoG6VU5bHCCZ7CgaA+/qdtwmIJ3r3GliyATs8214xoLlvSK
-         Xy9Q==
+        bh=tZK2D3AupHIPEtRDmceJilfcB3T0jwDK/RuBEpK2/zo=;
+        b=QoCfGIZ9IobBvr4RO4QA7eVVNQGA/IpZgfz4mbzVzxDN17gzezrxnFnMsSHSMM2AH8
+         vovSyoLtXVd5pADyGoHcul7OG86b35IH1uNfcyjE78uCpgQ0xM0ppTXWC4AEdVOITalY
+         5kJcqjQ7P/gTwxO26QxltauTxrHMXHCGw8pCriZUCJ4YiWcTW7UNyQSLq025EhlZmDHD
+         b0ukqddUaeGzEtsG3Xz39sifUh3HcZandpIVaSFD1yrosy7WPpjuUHy6mPQxVOxzXA/S
+         fjDqhSAZ1//kWaAWGp8V8RxorVJ53im25gM5OAat37dsrEgbMKKaqoQURcaktEWMSlva
+         Q0AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686220536; x=1688812536;
+        d=1e100.net; s=20221208; t=1686220538; x=1688812538;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vi9s8LCdN3bDa4TRCbJie9LePONriO/RiRjf4ffMgD0=;
-        b=Tn2o/oR1XY0mDxSk0HfcRwxESrRhShf5lHXpt0OXkzOHC/ULoyM93bv4x2QnFNDaMj
-         5JrOmz3JW9OMj8wKEQglGcESdOveeiiezM3u2asNRL4xE4KWIMtaT0ud8bor6nQMNXHG
-         L+OeWmVUZFTMjX0oJt+5smh7Q6XdQ1bQbK99asgjMVKTbe/ZgANQgkifM2TJ6cOqUqPz
-         p3fJ4O4oaSwp33hwVeQyGz6z0wJqP66uRbVkClGx5KhEvJvZfg2A64ma8LHt9iE7o9yw
-         IjIhv6ZIKatphag024ICXmwuW1mWAwgyj0qN4Xop+vnBYI3emmU0/YtREDgvF5KhGE7N
-         +VTg==
-X-Gm-Message-State: AC+VfDydzLoBPmC+7G5fz/lIu/HoCpoAYepKLOqI9bxczuqFYlC2KLFt
-	1oMqIyinabKuzjhdy5TRQCw=
-X-Google-Smtp-Source: ACHHUZ4R2Sk0iyzhEUsjGOlQNR/qVGuY1sHi3Bd53vnEvkWD9mlfoGvJ5gPF2ZWHRuQhE/2h5lboVQ==
-X-Received: by 2002:a05:622a:181e:b0:3f5:ef49:722c with SMTP id t30-20020a05622a181e00b003f5ef49722cmr7370397qtc.2.1686220536568;
-        Thu, 08 Jun 2023 03:35:36 -0700 (PDT)
+        bh=tZK2D3AupHIPEtRDmceJilfcB3T0jwDK/RuBEpK2/zo=;
+        b=NjdTvY+GhPqdeBjQ33NtE+mRVsb9J4jdBfBr7oHW1nA+lZW7nG/Q2stCcnNQqu+lpL
+         TX6iYwks9yDP7nI+Sng8dCD8teaRmN/TOAKkDIGnPIQeALdZsfc3R26HsSBswjgLoGB6
+         oKOXFcLb/c7IF21wZXiWUyXucgr75+sgt3GjOT3gTGQu7IEK6uSlq7j+pjJzrQ5X3u0J
+         VPLNzcFrQjRRgtTtmpGOgdg0mEdXtW1JL+d0Uz3wo8HKhhysKYxl7l4YGORsGs3f/cjH
+         SCGTEF9W5DYnEno1Oe6FlWkWrVr3Xn4YRADjQfUWfKcbf6BPlAZa444vEek1qBLQO3ID
+         Y2Jw==
+X-Gm-Message-State: AC+VfDyMiDlUP++De4X024YzKLGxHDkggUQ4Fog8iz6uyA3nc9saYbUW
+	a+ujgo40BXm1GNQmG0KcS+E=
+X-Google-Smtp-Source: ACHHUZ6vAAzHwkxAiVjmyEQq9t/GdrU9CPQ5mN8EpmQg7crFXpBVYWvXoXYRxt5CMezvu86gP1V38A==
+X-Received: by 2002:a05:6214:f0a:b0:622:199c:c4d0 with SMTP id gw10-20020a0562140f0a00b00622199cc4d0mr1362667qvb.15.1686220538452;
+        Thu, 08 Jun 2023 03:35:38 -0700 (PDT)
 Received: from vultr.guest ([2001:19f0:1000:2418:5400:4ff:fe77:b548])
-        by smtp.gmail.com with ESMTPSA id p16-20020a0cf550000000b0062839fc6e36sm302714qvm.70.2023.06.08.03.35.35
+        by smtp.gmail.com with ESMTPSA id p16-20020a0cf550000000b0062839fc6e36sm302714qvm.70.2023.06.08.03.35.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 03:35:36 -0700 (PDT)
+        Thu, 08 Jun 2023 03:35:38 -0700 (PDT)
 From: Yafang Shao <laoar.shao@gmail.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -56,9 +56,9 @@ To: ast@kernel.org,
 	quentin@isovalent.com
 Cc: bpf@vger.kernel.org,
 	Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH v2 bpf-next 01/11] bpf: Support ->fill_link_info for kprobe_multi
-Date: Thu,  8 Jun 2023 10:35:13 +0000
-Message-Id: <20230608103523.102267-2-laoar.shao@gmail.com>
+Subject: [PATCH v2 bpf-next 03/11] bpftool: Show probed function in kprobe_multi link info
+Date: Thu,  8 Jun 2023 10:35:15 +0000
+Message-Id: <20230608103523.102267-4-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.39.3
 In-Reply-To: <20230608103523.102267-1-laoar.shao@gmail.com>
 References: <20230608103523.102267-1-laoar.shao@gmail.com>
@@ -76,96 +76,168 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-With the addition of support for fill_link_info to the kprobe_multi link,
-users will gain the ability to inspect it conveniently using the
-`bpftool link show` command. This enhancement provides valuable information
-to the user, including the count of probed functions and their respective
-addresses. It's important to note that if the kptr_restrict setting is set
-to 2, the probed addresses will not be exposed, ensuring security.
+Show the already expose kprobe_multi link info in bpftool. The result as
+follows,
+
+$ tools/bpf/bpftool/bpftool link show
+4: kprobe_multi  prog 29
+        retprobe 0  func_cnt 4
+        addrs ffffffffb5d475b0  funcs schedule_timeout_interruptible
+              ffffffffb5d475f0        schedule_timeout_killable
+              ffffffffb5d47630        schedule_timeout_uninterruptible
+              ffffffffb5d47670        schedule_timeout_idle
+        pids trace(276245)
+
+$ tools/bpf/bpftool/bpftool link show -j
+[{"id":4,"type":"kprobe_multi","prog_id":29,"retprobe":0,"func_cnt":4,"funcs":[{"addr":18446744072465184176,"func":"schedule_timeout_interruptible"},{"addr":18446744072465184240,"func":"schedule_timeout_killable"},{"addr":18446744072465184304,"func":"schedule_timeout_uninterruptible"},{"addr":18446744072465184368,"func":"schedule_timeout_idle"}],"pids":[{"pid":276245,"comm":"trace"}]}]
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- include/uapi/linux/bpf.h       |  5 +++++
- kernel/trace/bpf_trace.c       | 30 ++++++++++++++++++++++++++++++
- tools/include/uapi/linux/bpf.h |  5 +++++
- 3 files changed, 40 insertions(+)
+ tools/bpf/bpftool/link.c | 82 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 82 insertions(+)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index a7b5e91..d99cc16 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -6438,6 +6438,11 @@ struct bpf_link_info {
- 			__s32 priority;
- 			__u32 flags;
- 		} netfilter;
-+		struct {
-+			__aligned_u64 addrs; /* in/out: addresses buffer ptr */
-+			__u32 count;
-+			__u8  retprobe;
-+		} kprobe_multi;
- 	};
- } __attribute__((aligned(8)));
+diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
+index 2d78607..c8033c3 100644
+--- a/tools/bpf/bpftool/link.c
++++ b/tools/bpf/bpftool/link.c
+@@ -14,6 +14,7 @@
  
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 2bc41e6..738efcf 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -2548,9 +2548,39 @@ static void bpf_kprobe_multi_link_dealloc(struct bpf_link *link)
- 	kfree(kmulti_link);
+ #include "json_writer.h"
+ #include "main.h"
++#include "xlated_dumper.h"
+ 
+ static struct hashmap *link_table;
+ 
+@@ -166,6 +167,34 @@ static int get_prog_info(int prog_id, struct bpf_prog_info *info)
+ 	return err;
  }
  
-+static int bpf_kprobe_multi_link_fill_link_info(const struct bpf_link *link,
-+						struct bpf_link_info *info)
++static void
++show_kprobe_multi_json(struct bpf_link_info *info, json_writer_t *wtr)
 +{
-+	u64 __user *uaddrs = u64_to_user_ptr(info->kprobe_multi.addrs);
-+	struct bpf_kprobe_multi_link *kmulti_link;
-+	u32 ucount = info->kprobe_multi.count;
++	struct dump_data dd = {};
++	const __u64 *addrs;
++	__u32 i;
++	int err;
 +
-+	if (!uaddrs ^ !ucount)
-+		return -EINVAL;
-+
-+	kmulti_link = container_of(link, struct bpf_kprobe_multi_link, link);
-+	if (!uaddrs) {
-+		info->kprobe_multi.count = kmulti_link->cnt;
-+		return 0;
++	jsonw_uint_field(json_wtr, "retprobe", info->kprobe_multi.retprobe);
++	jsonw_uint_field(json_wtr, "func_cnt", info->kprobe_multi.count);
++	jsonw_name(json_wtr, "funcs");
++	jsonw_start_array(json_wtr);
++	addrs = (const __u64 *)u64_to_ptr(info->kprobe_multi.addrs);
++	err = kernel_syms_load(&dd, addrs, info->kprobe_multi.count);
++	if (err) {
++		jsonw_end_array(json_wtr);
++		return;
 +	}
-+
-+	if (!ucount)
-+		return 0;
-+	if (ucount != kmulti_link->cnt)
-+		return -EINVAL;
-+	info->kprobe_multi.retprobe = kmulti_link->fp.exit_handler ?
-+				      true : false;
-+	if (kptr_restrict == 2)
-+		return 0;
-+	if (copy_to_user(uaddrs, kmulti_link->addrs, ucount * sizeof(u64)))
-+		return -EFAULT;
-+	return 0;
++	for (i = 0; i < dd.sym_count; i++) {
++		jsonw_start_object(json_wtr);
++		jsonw_uint_field(json_wtr, "addr", dd.sym_mapping[i].address);
++		jsonw_string_field(json_wtr, "func", dd.sym_mapping[i].name);
++		jsonw_end_object(json_wtr);
++	}
++	jsonw_end_array(json_wtr);
++	kernel_syms_destroy(&dd);
 +}
 +
- static const struct bpf_link_ops bpf_kprobe_multi_link_lops = {
- 	.release = bpf_kprobe_multi_link_release,
- 	.dealloc = bpf_kprobe_multi_link_dealloc,
-+	.fill_link_info = bpf_kprobe_multi_link_fill_link_info,
- };
+ static int show_link_close_json(int fd, struct bpf_link_info *info)
+ {
+ 	struct bpf_prog_info prog_info;
+@@ -218,6 +247,9 @@ static int show_link_close_json(int fd, struct bpf_link_info *info)
+ 		jsonw_uint_field(json_wtr, "map_id",
+ 				 info->struct_ops.map_id);
+ 		break;
++	case BPF_LINK_TYPE_KPROBE_MULTI:
++		show_kprobe_multi_json(info, json_wtr);
++		break;
+ 	default:
+ 		break;
+ 	}
+@@ -351,6 +383,35 @@ void netfilter_dump_plain(const struct bpf_link_info *info)
+ 		printf(" flags 0x%x", info->netfilter.flags);
+ }
  
- static void bpf_kprobe_multi_cookie_swap(void *a, void *b, int size, const void *priv)
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index a7b5e91..d99cc16 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -6438,6 +6438,11 @@ struct bpf_link_info {
- 			__s32 priority;
- 			__u32 flags;
- 		} netfilter;
-+		struct {
-+			__aligned_u64 addrs; /* in/out: addresses buffer ptr */
-+			__u32 count;
-+			__u8  retprobe;
-+		} kprobe_multi;
- 	};
- } __attribute__((aligned(8)));
++static void show_kprobe_multi_plain(struct bpf_link_info *info)
++{
++	struct dump_data dd = {};
++	const __u64 *addrs;
++	__u32 i;
++	int err;
++
++	if (!info->kprobe_multi.count)
++		return;
++
++	printf("\n\tretprobe %d  func_cnt %u  ",
++	       info->kprobe_multi.retprobe, info->kprobe_multi.count);
++	addrs = (const __u64 *)u64_to_ptr(info->kprobe_multi.addrs);
++	err = kernel_syms_load(&dd, addrs, info->kprobe_multi.count);
++	if (err)
++		return;
++	for (i = 0; i < dd.sym_count; i++) {
++		if (!i)
++			printf("\n\taddrs %016lx  funcs %s  ",
++			       dd.sym_mapping[i].address,
++			       dd.sym_mapping[i].name);
++		else
++			printf("\n\t      %016lx        %s  ",
++			       dd.sym_mapping[i].address,
++			       dd.sym_mapping[i].name);
++	}
++	kernel_syms_destroy(&dd);
++}
++
+ static int show_link_close_plain(int fd, struct bpf_link_info *info)
+ {
+ 	struct bpf_prog_info prog_info;
+@@ -396,6 +457,9 @@ static int show_link_close_plain(int fd, struct bpf_link_info *info)
+ 	case BPF_LINK_TYPE_NETFILTER:
+ 		netfilter_dump_plain(info);
+ 		break;
++	case BPF_LINK_TYPE_KPROBE_MULTI:
++		show_kprobe_multi_plain(info);
++		break;
+ 	default:
+ 		break;
+ 	}
+@@ -417,7 +481,9 @@ static int do_show_link(int fd)
+ {
+ 	struct bpf_link_info info;
+ 	__u32 len = sizeof(info);
++	__u64 *addrs = NULL;
+ 	char buf[256];
++	int count;
+ 	int err;
  
+ 	memset(&info, 0, sizeof(info));
+@@ -441,12 +507,28 @@ static int do_show_link(int fd)
+ 		info.iter.target_name_len = sizeof(buf);
+ 		goto again;
+ 	}
++	if (info.type == BPF_LINK_TYPE_KPROBE_MULTI &&
++	    !info.kprobe_multi.addrs) {
++		count = info.kprobe_multi.count;
++		if (count) {
++			addrs = calloc(count, sizeof(__u64));
++			if (!addrs) {
++				p_err("mem alloc failed");
++				close(fd);
++				return -1;
++			}
++			info.kprobe_multi.addrs = (unsigned long)addrs;
++			goto again;
++		}
++	}
+ 
+ 	if (json_output)
+ 		show_link_close_json(fd, &info);
+ 	else
+ 		show_link_close_plain(fd, &info);
+ 
++	if (addrs)
++		free(addrs);
+ 	close(fd);
+ 	return 0;
+ }
 -- 
 1.8.3.1
 
