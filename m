@@ -1,184 +1,204 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35ACA2D279;
-	Thu,  8 Jun 2023 21:25:02 +0000 (UTC)
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6D82D51;
-	Thu,  8 Jun 2023 14:25:00 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-977c89c47bdso195217266b.2;
-        Thu, 08 Jun 2023 14:25:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686259499; x=1688851499;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M6hC2dHqFlK9hnqWGu/Mm586Qh7RRYwrMorqiQE0m4Y=;
-        b=gVhhBEApIuyqWd5fVVm3w2yNexpC5jMyQj496KgFHBKuCKHTU8M7K+1UYTPSra8wH0
-         d1LCQMO9nguY+coR0zIUbVP3zTq54Wihq0mEpDcJFweTHW80hN+es09ugh0/9sotOlCr
-         39MJlzkZcNgAaizZ7nJAuiryx/V0n7AoPRYL4HPbyBYU1uJztbkgww83UxP3YFXq77Cz
-         282ikGvgbUEMiABBnqzF+Ce9eSkPzOJnDmdhztE4HQEqjZqp7aEQ46q9rrw2iXgg/yro
-         BHWa8KBZ3WeRNlU+28A5D/HXpyc+MisJqV7Qqgqw5YpXfbjQ9zu7/gnokUAAk4sLFk47
-         VS3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686259499; x=1688851499;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M6hC2dHqFlK9hnqWGu/Mm586Qh7RRYwrMorqiQE0m4Y=;
-        b=E38XElyAbqDRAa8A05pDmpQbQa6DIl9Khuvog7Qgd2nDPug6Gq01ZiX96qViJLJohD
-         mvEDkw/LH9V03ij592CZwW6IJADXurkoz6ZNrIBXSgSLNQ4tQ3dBho+FaWpz8TDX1D35
-         XLGhUKYH+fAzBRm8dwr18O8KI+cs6OGoWZb8IG6/+OD+E4HrcqVzy0AUxfYiQQN7yHJv
-         qbmjZlITohF0der8hYwyivgyXancJj/mWwrkcbb8zXBVdJpzyHqTSkXvfIlwRyQ9VOV1
-         hNaLIkvrfWMdSej1hbnlf/znUzQYDttA6/F/bIFbk8ShCywJAGvXtFnYtJoAPiRfUcXu
-         8EGQ==
-X-Gm-Message-State: AC+VfDy8IcsBNBza2c83qFociR5JZLQCGIfoGL7d5SuO37aVez7Eig4l
-	fSXlvCrFzE6plOjXG/lCXG8t/PZyIx6WXF/K280=
-X-Google-Smtp-Source: ACHHUZ6cJxZIqXcfqv48eCQDHxhx3sr3GFRrt0cldq5PK75qKB6W0Wjxs9Q8CstXf6Euj76Yis1Y+FglKy/BRts4YRA=
-X-Received: by 2002:a17:907:3f22:b0:974:6390:40a8 with SMTP id
- hq34-20020a1709073f2200b00974639040a8mr305116ejc.71.1686259499079; Thu, 08
- Jun 2023 14:24:59 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD4461DCDC
+	for <bpf@vger.kernel.org>; Thu,  8 Jun 2023 21:26:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00DCCC433EF;
+	Thu,  8 Jun 2023 21:26:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1686259574;
+	bh=ITtbb2m5joG2PhMvkk68U8ttOkLZ/iKTC5sxkONv3mY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=l+JXQ8Os5oW8XuYO/N7ZWh3xTXCZtjccXlQESFcDSdzmUS19fWjqkYv+SbpGSthy0
+	 3xAvaklhjyYof3kCn7k6ozpzixT3maFiicfTegCQf3uEZyFdsLl8ANpzfVFrm3Yubu
+	 LqMniL3M9n7kbhBvramj1K+q92Qftp29SAHKcf8vV5rMPiSdKlClH4Ej3lqEdOeP3r
+	 RVqwZpTJQJCOLgYMUNVBYpGnlialAFgOowU3+tr5pjZ5Z++szZlxJlqwmSJ9xNMeJT
+	 8daZgIJI/OZka3MEPvAnxq2plHMi0f3qb29mgb7/LJR0P+izRh4bn92n2axCFaLfCJ
+	 YKjuuvdBrqtnw==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>,
+	linux-trace-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+	Jackie Liu <liu.yun@linux.dev>
+Subject: [PATCH RFC] ftrace: Show all functions with addresses in available_filter_functions_addrs
+Date: Thu,  8 Jun 2023 14:26:13 -0700
+Message-Id: <20230608212613.424070-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230607192625.22641-1-daniel@iogearbox.net> <20230607192625.22641-3-daniel@iogearbox.net>
- <CAM0EoMm25tdjxp+7Mq4fowGfCJzFRhbThHhaO7T_46vNJ9y-NQ@mail.gmail.com>
- <fe2e13a6-1fb6-c160-1d6f-31c09264911b@iogearbox.net> <CAM0EoM=FFsTNNKaMbRtuRxc8ieJgDFsBifBmZZ2_67u5=+-3BQ@mail.gmail.com>
-In-Reply-To: <CAM0EoM=FFsTNNKaMbRtuRxc8ieJgDFsBifBmZZ2_67u5=+-3BQ@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 8 Jun 2023 14:24:47 -0700
-Message-ID: <CAEf4BzbuzNw4gRXSSDoHTwGH82moaSWtaX1nvmUAVx4+OgaEyw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/7] bpf: Add fd-based tcx multi-prog infra
- with link support
-To: Jamal Hadi Salim <jhs@mojatatu.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>, ast@kernel.org, andrii@kernel.org, 
-	martin.lau@linux.dev, razor@blackwall.org, sdf@google.com, 
-	john.fastabend@gmail.com, kuba@kernel.org, dxu@dxuuu.xyz, joe@cilium.io, 
-	toke@kernel.org, davem@davemloft.net, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-	autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jun 8, 2023 at 12:46=E2=80=AFPM Jamal Hadi Salim <jhs@mojatatu.com>=
- wrote:
->
-> Hi Daniel,
->
-> On Thu, Jun 8, 2023 at 6:12=E2=80=AFAM Daniel Borkmann <daniel@iogearbox.=
-net> wrote:
-> >
-> > Hi Jamal,
-> >
-> > On 6/8/23 3:25 AM, Jamal Hadi Salim wrote:
-> > [...]
-> > > A general question (which i think i asked last time as well): who
-> > > decides what comes after/before what prog in this setup? And would
-> > > that same entity not have been able to make the same decision using t=
-c
-> > > priorities?
-> >
-> > Back in the first version of the series I initially coded up this optio=
-n
-> > that the tc_run() would basically be a fake 'bpf_prog' and it would hav=
-e,
-> > say, fixed prio 1000. It would get executed via tcx_run() when iteratin=
-g
-> > via bpf_mprog_foreach_prog() where bpf_prog_run() is called, and then u=
-sers
-> > could pick for native BPF prio before or after that. But then the feedb=
-ack
-> > was that sticking to prio is a bad user experience which led to the
-> > development of what is in patch 1 of this series (see the details there=
-).
-> >
->
-> Thanks. I read the commit message in patch 1 and followed the thread
-> back including some of the discussion we had and i am still
-> disagreeing that this couldnt be solved with a smart priority based
-> scheme - but i think we can move on since this is standalone and
-> doesnt affect tc.
->
-> Daniel - i am still curious in the new scheme of things how would
-> cilium vs datadog food fight get resolved without some arbitration
-> entity?
->
-> > > The idea of protecting programs from being unloaded is very welcome
-> > > but feels would have made sense to be a separate patchset (we have
-> > > good need for it). Would it be possible to use that feature in tc and
-> > > xdp?
-> > BPF links are supported for XDP today, just tc BPF is one of the few
-> > remainders where it is not the case, hence the work of this series. Wha=
-t
-> > XDP lacks today however is multi-prog support. With the bpf_mprog conce=
-pt
-> > that could be addressed with that common/uniform api (and Andrii expres=
-sed
-> > interest in integrating this also for cgroup progs), so yes, various ho=
-ok
-> > points/program types could benefit from it.
->
-> Is there some sample XDP related i could look at?  Let me describe our
-> use case: lets say we load an ebpf program foo attached to XDP of a
-> netdev  and then something further upstream in the stack is consuming
-> the results of that ebpf XDP program. For some reason someone, at some
-> point, decides to replace the XDP prog with a different one - and the
-> new prog does a very different thing. Could we stop the replacement
-> with the link mechanism you describe? i.e the program is still loaded
-> but is no longer attached to the netdev.
 
-If you initially attached an XDP program using BPF link api
-(LINK_CREATE command in bpf() syscall), then subsequent attachment to
-the same interface (of a new link or program with BPF_PROG_ATTACH)
-will fail until the current BPF link is detached through closing its
-last fd.
+hi,
+when ftrace based tracers we need to cross check available_filter_functions
+with /proc/kallsyms. For example for kprobe_multi bpf link (based on fprobe)
+we need to make sure that symbol regex resolves to traceable symbols and
+that we get proper addresses for them.
 
-That is, until we allow multiple attachments of XDP programs to the
-same network interface. But even then, no one will be able to
-accidentally replace attached link, unless they have that link FD and
-replace underlying BPF program.
+Looks like on the last last LSF/MM/BPF there was an agreement to add new
+file that will have available_filter_functions symbols plus addresses.
 
->
->
-> > >> +struct tcx_entry {
-> > >> +       struct bpf_mprog_bundle         bundle;
-> > >> +       struct mini_Qdisc __rcu         *miniq;
-> > >> +};
-> > >> +
-> > >
-> > > Can you please move miniq to the front? From where i sit this looks:
-> > > struct tcx_entry {
-> > >          struct bpf_mprog_bundle    bundle
-> > > __attribute__((__aligned__(64))); /*     0  3264 */
-> > >
-> > >          /* XXX last struct has 36 bytes of padding */
-> > >
-> > >          /* --- cacheline 51 boundary (3264 bytes) --- */
-> > >          struct mini_Qdisc *        miniq;                /*  3264   =
-  8 */
-> > >
-> > >          /* size: 3328, cachelines: 52, members: 2 */
-> > >          /* padding: 56 */
-> > >          /* paddings: 1, sum paddings: 36 */
-> > >          /* forced alignments: 1 */
-> > > } __attribute__((__aligned__(64)));
-> > >
-> > > That is a _lot_ of cachelines - at the expense of the status quo
-> > > clsact/ingress qdiscs which access miniq.
-> >
-> > Ah yes, I'll fix this up.
->
-> Thanks.
->
-> cheers,
-> jamal
-> > Thanks,
-> > Daniel
+This RFC is to kick off the discussion, I'm not sure Steven wants to do
+that differently ;-)
+
+thanks,
+jirka
+
+
+---
+Adding new available_filter_functions_addrs file that shows all available
+functions (same as available_filter_functions) together with addresses,
+like:
+
+  # cat available_filter_functions_addrs | head
+  ffffffff81000770 __traceiter_initcall_level
+  ffffffff810007c0 __traceiter_initcall_start
+  ffffffff81000810 __traceiter_initcall_finish
+  ffffffff81000860 trace_initcall_finish_cb
+  ...
+
+It's useful to have address avilable for traceable symbols, so we don't
+need to allways cross check kallsyms with available_filter_functions
+(or the other way around) and have all the data in single file.
+
+For backwards compatibility reasons we can't change the existing
+available_filter_functions file output, but we need to add new file.
+
+Suggested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ include/linux/ftrace.h |  1 +
+ kernel/trace/ftrace.c  | 52 ++++++++++++++++++++++++++++++++++++++----
+ 2 files changed, 48 insertions(+), 5 deletions(-)
+
+diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+index b23bdd414394..6e372575a8e9 100644
+--- a/include/linux/ftrace.h
++++ b/include/linux/ftrace.h
+@@ -633,6 +633,7 @@ enum {
+ 	FTRACE_ITER_MOD		= (1 << 5),
+ 	FTRACE_ITER_ENABLED	= (1 << 6),
+ 	FTRACE_ITER_TOUCHED	= (1 << 7),
++	FTRACE_ITER_ADDRS	= (1 << 8),
+ };
+ 
+ void arch_ftrace_update_code(int command);
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 764668467155..1f33e1f04834 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -3804,7 +3804,7 @@ static int __init ftrace_check_sync(void)
+ late_initcall_sync(ftrace_check_sync);
+ subsys_initcall(ftrace_check_for_weak_functions);
+ 
+-static int print_rec(struct seq_file *m, unsigned long ip)
++static int print_rec(struct seq_file *m, unsigned long ip, bool print_addr)
+ {
+ 	unsigned long offset;
+ 	char str[KSYM_SYMBOL_LEN];
+@@ -3819,7 +3819,11 @@ static int print_rec(struct seq_file *m, unsigned long ip)
+ 		ret = NULL;
+ 	}
+ 
+-	seq_puts(m, str);
++	if (print_addr)
++		seq_printf(m, "%lx %s", ip, str);
++	else
++		seq_puts(m, str);
++
+ 	if (modname)
+ 		seq_printf(m, " [%s]", modname);
+ 	return ret == NULL ? -1 : 0;
+@@ -3830,9 +3834,13 @@ static inline int test_for_valid_rec(struct dyn_ftrace *rec)
+ 	return 1;
+ }
+ 
+-static inline int print_rec(struct seq_file *m, unsigned long ip)
++static inline int print_rec(struct seq_file *m, unsigned long ip, bool print_addr)
+ {
+-	seq_printf(m, "%ps", (void *)ip);
++	if (print_addr)
++		seq_printf(m, "%lx %ps", ip, (void *)ip);
++	else
++		seq_printf(m, "%ps", (void *)ip);
++
+ 	return 0;
+ }
+ #endif
+@@ -3861,7 +3869,7 @@ static int t_show(struct seq_file *m, void *v)
+ 	if (!rec)
+ 		return 0;
+ 
+-	if (print_rec(m, rec->ip)) {
++	if (print_rec(m, rec->ip, iter->flags & FTRACE_ITER_ADDRS)) {
+ 		/* This should only happen when a rec is disabled */
+ 		WARN_ON_ONCE(!(rec->flags & FTRACE_FL_DISABLED));
+ 		seq_putc(m, '\n');
+@@ -3996,6 +4004,30 @@ ftrace_touched_open(struct inode *inode, struct file *file)
+ 	return 0;
+ }
+ 
++static int
++ftrace_avail_addrs_open(struct inode *inode, struct file *file)
++{
++	struct ftrace_iterator *iter;
++	int ret;
++
++	ret = security_locked_down(LOCKDOWN_TRACEFS);
++	if (ret)
++		return ret;
++
++	if (unlikely(ftrace_disabled))
++		return -ENODEV;
++
++	iter = __seq_open_private(file, &show_ftrace_seq_ops, sizeof(*iter));
++	if (!iter)
++		return -ENOMEM;
++
++	iter->pg = ftrace_pages_start;
++	iter->flags = FTRACE_ITER_ADDRS;
++	iter->ops = &global_ops;
++
++	return 0;
++}
++
+ /**
+  * ftrace_regex_open - initialize function tracer filter files
+  * @ops: The ftrace_ops that hold the hash filters
+@@ -5916,6 +5948,13 @@ static const struct file_operations ftrace_touched_fops = {
+ 	.release = seq_release_private,
+ };
+ 
++static const struct file_operations ftrace_avail_addrs_fops = {
++	.open = ftrace_avail_addrs_open,
++	.read = seq_read,
++	.llseek = seq_lseek,
++	.release = seq_release_private,
++};
++
+ static const struct file_operations ftrace_filter_fops = {
+ 	.open = ftrace_filter_open,
+ 	.read = seq_read,
+@@ -6377,6 +6416,9 @@ static __init int ftrace_init_dyn_tracefs(struct dentry *d_tracer)
+ 	trace_create_file("available_filter_functions", TRACE_MODE_READ,
+ 			d_tracer, NULL, &ftrace_avail_fops);
+ 
++	trace_create_file("available_filter_functions_addrs", TRACE_MODE_READ,
++			d_tracer, NULL, &ftrace_avail_addrs_fops);
++
+ 	trace_create_file("enabled_functions", TRACE_MODE_READ,
+ 			d_tracer, NULL, &ftrace_enabled_fops);
+ 
+-- 
+2.40.1
+
