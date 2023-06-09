@@ -1,154 +1,169 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B80B8163
-	for <bpf@vger.kernel.org>; Fri,  9 Jun 2023 00:11:10 +0000 (UTC)
-Received: from cheetah.elm.relay.mailchannels.net (cheetah.elm.relay.mailchannels.net [23.83.212.34])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8701706
-	for <bpf@vger.kernel.org>; Thu,  8 Jun 2023 17:11:05 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-	by relay.mailchannels.net (Postfix) with ESMTP id 261D45C1CE1
-	for <bpf@vger.kernel.org>; Fri,  9 Jun 2023 00:11:00 +0000 (UTC)
-Received: from pdx1-sub0-mail-a313.dreamhost.com (unknown [127.0.0.6])
-	(Authenticated sender: dreamhost)
-	by relay.mailchannels.net (Postfix) with ESMTPA id 9F5EB5C1D50
-	for <bpf@vger.kernel.org>; Fri,  9 Jun 2023 00:10:59 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1686269459; a=rsa-sha256;
-	cv=none;
-	b=c9h1X2vizJyg+kWhdXc961LTZ+RRwHXZexLirDAilTTcVBwsVKVkFLTGAcuJA5I84PUrvO
-	BKGRBfg6Rj/1LJIfUyszAEvqDtvGpqviVBFacDIgsQBSl0YeY1+0m6OncovnLa26fzEwGv
-	RNdtZ3vcw8hFZ3to59VJy/5mP3ewg+g/64TUF5IJTuFBsrde7gXX7JK5KDERsMysNPamjQ
-	m7yOQTq9OSlf5E5gTfCRY2U1BEPIh+J1Zkvif182xLA8EVgvHKiF5Fnpvx7272nmDkrLlT
-	4N2nLS0e+2VEfubG34e9JCFoGbDbdrjqugj1pD6hKfvzamrwVUgTn7emdS41yA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-	s=arc-2022; t=1686269459;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references:dkim-signature;
-	bh=RLbI/q+jNwtC3CHXt0I4xW5xpj8BgznW9VU/aHNxfd0=;
-	b=0DEGGbc6+xH72v5dLTCPijV4T9Kfav5eLiY15x5Yr9cscIAzcmsTbJ3lyNvvyMp7gRRBzH
-	5lu81STwVWD9/AS8du9nQbM2s3Kl/4O+CeIF4h2cIhI10lD6HXMAQ5xk5K017abaPcIflA
-	cZIWXF6fK6CW4doC7Y7Df8YeVF74OIGldYPjVvVOd1DT+CTR9y7wR+DH/4dICLXGKK2x2x
-	m6Wa2d1FVRtT9pMRSVFZ1UILLxsAx2OSLavVRiLZE6WHX7HrKr7+ZJZwiF+1uk+gXxRosx
-	qH5VsAvHlkvYqPKGs7CW40lUTfX5SM5hNvzmTHCx4FqbWEY/gJYwYNZOJl+PVQ==
-ARC-Authentication-Results: i=1;
-	rspamd-6f5cfd578c-c6h9m;
-	auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MC-Relay: Good
-X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MailChannels-Auth-Id: dreamhost
-X-Chemical-Thread: 04394cba36293c9d_1686269459970_2323812822
-X-MC-Loop-Signature: 1686269459970:3390451124
-X-MC-Ingress-Time: 1686269459970
-Received: from pdx1-sub0-mail-a313.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-	by 100.120.163.30 (trex/6.8.1);
-	Fri, 09 Jun 2023 00:10:59 +0000
-Received: from kmjvbox (c-73-93-64-36.hsd1.ca.comcast.net [73.93.64.36])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kjlx@templeofstupid.com)
-	by pdx1-sub0-mail-a313.dreamhost.com (Postfix) with ESMTPSA id 4QchLq2yfSz1m8
-	for <bpf@vger.kernel.org>; Thu,  8 Jun 2023 17:10:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-	s=dreamhost; t=1686269459;
-	bh=RLbI/q+jNwtC3CHXt0I4xW5xpj8BgznW9VU/aHNxfd0=;
-	h=Date:From:To:Cc:Subject:Content-Type;
-	b=ZV0VvWueE8CSb7L2iDzEP4wufwbaN5u4R5zhLLdIi03X5t1BN8Pzu1tuw3tEoZ3f8
-	 77ENKM53Zmq9z1rOh4wgY5Mc22JDFdBNEvO3Tj4bqkCB60f8RfYKgcPhayh1EsGh1V
-	 yyjlFVGp+pigziGilygQhjOMvqfaBlUMXHQbtyrs=
-Received: from johansen (uid 1000)
-	(envelope-from kjlx@templeofstupid.com)
-	id e0042
-	by kmjvbox (DragonFly Mail Agent v0.12);
-	Thu, 08 Jun 2023 17:10:58 -0700
-Date: Thu, 8 Jun 2023 17:10:58 -0700
-From: Krister Johansen <kjlx@templeofstupid.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D683163
+	for <bpf@vger.kernel.org>; Fri,  9 Jun 2023 00:14:03 +0000 (UTC)
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0362D68;
+	Thu,  8 Jun 2023 17:14:02 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b00ecabdf2so2698305ad.2;
+        Thu, 08 Jun 2023 17:14:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686269641; x=1688861641;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=TsTE3qmxIV7pG9azb/NVqbAFzY56xIALD3o7FLY1GW8=;
+        b=XjnlrHuVLqvBaR6lTNTwM/UYSJ4Z0+uyzIaJixshSWSguI3Dx77ZE6c33YZVD7UB//
+         yaXNDXgjPX+uIP8KPtW7Izj/t5NTp78Og9Jzt8TZlT6qjHgoMzxQXYw6U9D53Fr2WZfR
+         w19lMJcknE4ScXne3h44D93yhSXgWfDTjlEiXiiW/qfLqEXxIa3bZ+AmO+mUa7JT/qZ2
+         yoHhYQsNTwgo1TdmJSKwI7vRgl1HpzrwAIFHFyQi518bu9t0L/wfPzfaZGSKCtB2c8P8
+         G8p1y9UQJ+8eBbCkRAiaY5xN5nsm7KuNge+qS186ModIPFBUk+/zfo4ci/2YXmKJBu3w
+         WmIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686269641; x=1688861641;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TsTE3qmxIV7pG9azb/NVqbAFzY56xIALD3o7FLY1GW8=;
+        b=LqApAMJrnsuIlg9HqBsLwNNL0ou1SbtjrIZuIj/tBKeAiz4QpozwMSJYSB5DV1pCF3
+         nJwC00fB4m5z+H60MoCF7yf6hkgc+rLB8GeZ1FhYlkXzmm80Wq+KNL3iMUMbCCYqpdT2
+         /C4t9UpR/o7T4UrEEj24m5PfW1GAvSq5uLvSvAFlsWHPZyl02Q1kVOqG4JGaqzFZKDct
+         LLCp9J0XQxMfbOhgrmAk01MxsCOntJVSgXwtLn9HBBSt+VpoeXrxpb9AEn4bWd8L8BDH
+         1c2PXURXIU7yJNBLxnE+DQeVcfnc71vZWU4sO6T9Xk2T9P0Ns/CwbhqkPzL4s8URlZR2
+         pziQ==
+X-Gm-Message-State: AC+VfDw0SbXURzcQWP2lp0pqVJ9PKn1QuCg0C4q1j8S6dGLmrJW4bli2
+	Lk9wPlC2QoSRftlTaxWUi7c=
+X-Google-Smtp-Source: ACHHUZ4Mh9UGZY5QhTCUEZsaIgVIl2TyYkb9IKjwX68B38is0xZbxtvRI2M8Ce+jngvNWl6Xif3EKw==
+X-Received: by 2002:a17:903:44c:b0:1b2:43a5:a5e5 with SMTP id iw12-20020a170903044c00b001b243a5a5e5mr7407916plb.34.1686269641307;
+        Thu, 08 Jun 2023 17:14:01 -0700 (PDT)
+Received: from krava (c-67-160-222-115.hsd1.ca.comcast.net. [67.160.222.115])
+        by smtp.gmail.com with ESMTPSA id p5-20020a170902bd0500b00186a2274382sm1968478pls.76.2023.06.08.17.14.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 17:14:00 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 8 Jun 2023 17:13:57 -0700
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
 	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v3 1/2] bpf: ensure main program has an extable
-Message-ID: <d0c703a2d47d3368032c65fa70297cdcb5a16da7.1686268304.git.kjlx@templeofstupid.com>
-References: <cover.1686268304.git.kjlx@templeofstupid.com>
+	lkml <linux-kernel@vger.kernel.org>,
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	Jackie Liu <liu.yun@linux.dev>
+Subject: Re: [PATCH RFC] ftrace: Show all functions with addresses in
+ available_filter_functions_addrs
+Message-ID: <ZIJuxc34CBu/zpuN@krava>
+References: <20230608212613.424070-1-jolsa@kernel.org>
+ <CAEf4BzbNakGzcycJJJqLsFwonOmya8=hKLD41TWX2zCJbh=r-Q@mail.gmail.com>
+ <20230608192748.435a1dbf@gandalf.local.home>
+ <CAEf4BzYkNHu7hiMYWQWs_gpYOfHL0FVuf-O0787Si2ze=PFX5w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <cover.1686268304.git.kjlx@templeofstupid.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-	T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzYkNHu7hiMYWQWs_gpYOfHL0FVuf-O0787Si2ze=PFX5w@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-When subprograms are in use, the main program is not jit'd after the
-subprograms because jit_subprogs sets a value for prog->bpf_func upon
-success.  Subsequent calls to the JIT are bypassed when this value is
-non-NULL.  This leads to a situation where the main program and its
-func[0] counterpart are both in the bpf kallsyms tree, but only func[0]
-has an extable.  Extables are only created during JIT.  Now there are
-two nearly identical program ksym entries in the tree, but only one has
-an extable.  Depending upon how the entries are placed, there's a chance
-that a fault will call search_extable on the aux with the NULL entry.
+On Thu, Jun 08, 2023 at 04:55:40PM -0700, Andrii Nakryiko wrote:
+> On Thu, Jun 8, 2023 at 4:27 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+> >
+> > On Thu, 8 Jun 2023 15:43:03 -0700
+> > Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+> >
+> > > On Thu, Jun 8, 2023 at 2:26 PM Jiri Olsa <jolsa@kernel.org> wrote:
+> > > >
+> > > >
+> > > > hi,
+> > > > when ftrace based tracers we need to cross check available_filter_functions
+> > > > with /proc/kallsyms. For example for kprobe_multi bpf link (based on fprobe)
+> > > > we need to make sure that symbol regex resolves to traceable symbols and
+> > > > that we get proper addresses for them.
+> >
+> > I forgot, what was the problem with doing the above?
+> 
+> More code, more memory, more CPU to parse all the text files. Parsing
+> kallsyms is quite expensive, so avoiding this would be great.
 
-Since jit_subprogs already copies state from func[0] to the main
-program, include the extable pointer in this state duplication.
-Additionally, ensure that the copy of the main program in func[0] is not
-added to the bpf_prog_kallsyms table. Instead, let the main program get
-added later in bpf_prog_load().  This ensures there is only a single
-copy of the main program in the kallsyms table, and that its tag matches
-the tag observed by tooling like bpftool.
+yes, reading both kallsyms and available_filter_functions parsing often
+shows up in perf profiles
 
-Cc: stable@vger.kernel.org
-Fixes: 1c2a088a6626 ("bpf: x64: add JIT support for multi-function programs")
-Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
----
- kernel/bpf/verifier.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> >
+> > > >
+> > > > Looks like on the last last LSF/MM/BPF there was an agreement to add new
+> > > > file that will have available_filter_functions symbols plus addresses.
+> > > >
+> > > > This RFC is to kick off the discussion, I'm not sure Steven wants to do
+> > > > that differently ;-)
+> >
+> > I'm not totally against this, but I'd like to know the full issue its
+> > solving. Perhaps I need to know more about what is being done, and what is
+> > needed too.
+> 
+> There are BPF tools that allow user to specify regex/glob of kernel
+> functions to attach to. This regex/glob is checked against
+> available_filter_functions to check which functions are traceable. All
+> good. But then also it's important to have corresponding memory
+> addresses for selected functions (for many reasons, e.g., to have
+> non-ambiguous and fast attachment by address instead of by name, or
+> for some post-processing based on captured IP addresses, etc). And
+> that means that now we need to also parse /proc/kallsyms and
+> cross-join it with data fetched from available_filter_functions.
+> 
+> All this is unnecessary if avalable_filter_functions would just
+> provide function address in the first place. It's a huge
+> simplification. And saves memory and CPU.
+> 
+> >
+> > > >
+> > > > thanks,
+> > > > jirka
+> > > >
+> > > >
+> > > > ---
+> > > > Adding new available_filter_functions_addrs file that shows all available
+> > > > functions (same as available_filter_functions) together with addresses,
+> > > > like:
+> > > >
+> > > >   # cat available_filter_functions_addrs | head
+> > >
+> > > nit: can we have some more succinct name, like "traceable_funcs" or
+> >
+> >
+> > It's to match avaliable_filter_functions
+> 
+> it's minor, I'm fine with whatever name, I'm searching for it in my
+> history every single time anyways :)
+> 
+> >
+> > Another way is to add a tracing option to make the address show up in the
+> > available_filter_functions file. That would be my preferred choice.
+> >
+> >   echo 1 > options/available_filter_addrs
+> >
+> > Or something like that.
+> 
+> This would modify behavior for entire system, right? I think this is
+> very bad. Just because one application is aware of this option and
+> wants to turn this on, doesn't mean that all other applications that
+> might also use available_filter_functions should immediately break on
+> that machine.
+> 
+> Please, let's have a separate file. There is no downside to that.
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 5871aa78d01a..b62d1fc0f92b 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -17214,9 +17214,10 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 	}
- 
- 	/* finally lock prog and jit images for all functions and
--	 * populate kallsysm
-+	 * populate kallsysm. Begin at the first subprogram, since
-+	 * bpf_prog_load will add the kallsyms for the main program.
- 	 */
--	for (i = 0; i < env->subprog_cnt; i++) {
-+	for (i = 1; i < env->subprog_cnt; i++) {
- 		bpf_prog_lock_ro(func[i]);
- 		bpf_prog_kallsyms_add(func[i]);
- 	}
-@@ -17242,6 +17243,7 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 	prog->jited = 1;
- 	prog->bpf_func = func[0]->bpf_func;
- 	prog->jited_len = func[0]->jited_len;
-+	prog->aux->extable = func[0]->aux->extable;
- 	prog->aux->func = func;
- 	prog->aux->func_cnt = env->subprog_cnt;
- 	bpf_prog_jit_attempt_done(prog);
--- 
-2.25.1
++1 for file, AFAIU the option would change that globaly so we could race
+with another app and break each other
 
+jirka
