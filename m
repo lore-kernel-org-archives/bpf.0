@@ -1,160 +1,151 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D5113AE9
-	for <bpf@vger.kernel.org>; Fri,  9 Jun 2023 09:57:33 +0000 (UTC)
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AFB6196
-	for <bpf@vger.kernel.org>; Fri,  9 Jun 2023 02:57:23 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3f9c7665317so13661651cf.3
-        for <bpf@vger.kernel.org>; Fri, 09 Jun 2023 02:57:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686304642; x=1688896642;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VT6KgDR0dz1lsuyKkdxYIc9N1W0KxLO34DSdWueOOy8=;
-        b=Cc6jobO9HVcpigptWLzGC97ahzKJvEELEURiM3qNiVVXKo1wx+WYWWTGWzGf22bsMT
-         gMSQr9swaU2sp3oGkzQ7Qmd4TnkzjhTu027ppg+thRBtt7+c6JQ9bl53YbicztVNvrlw
-         LQ76ETFEUvtAQo/Hg+PsqofHn5yvxkSpQfgdDscwla3cN+Jgo+3U0VP7BU5zIaNdjtE3
-         HUnAEWQjYgEBdB8Iu/ExxD4bT/R0GC9rijAadzWIBEsIKuCOBpVI4rxpejdZvRIQQxQN
-         XnwTUdf+SKOqbdK3vfjH2qMnQYHOrIYMO48aTVEBoYlHCxt2Jml88yKJiox7Nxnmx//f
-         qYyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686304642; x=1688896642;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VT6KgDR0dz1lsuyKkdxYIc9N1W0KxLO34DSdWueOOy8=;
-        b=NWFWRKSOhN1m66ZpyDZ7kbeo6nMpskaWmp/9FXP7D9MokC3gBFsy4FslDiIvwgtMDA
-         UrmyCCs14RO17S8xRLhyjAC11kPSHmZ6lE53tV5z6FFRv310MNM6HI2muJjx+cgMVbwA
-         P4cRW5Z/O9XvRBIh5K6XD/XWL03xKUBHFpGGVSyNfbNmaBgWXzcjYQKsvUwqMm3hITR7
-         vcJLfMibTaCEsqZh4WVVaHMJL9bwXBgE0YpmSVXMVy8xcMHyX1iRURcBDbbR9nttA7kW
-         EP66FCcfttc9PC0ypKumCtO2QvO2mQfeyYPxdzfIh7XpkQIY/3LmGw+V3Nx7KlvVl7oe
-         D8AQ==
-X-Gm-Message-State: AC+VfDzlDitXg6DX0pt5IyS2FT0EC9V905tQ7oA8o1KP7yl/WtxFWk5i
-	ERrHjtfC30m32r+pG3t8/YeRxsl/dCCLxCUswiU=
-X-Google-Smtp-Source: ACHHUZ5B8cmh/oYLAmz733hN/1ztwQf49vaP3DPAOucd8qCi/2UEtn+5eRhgSsPKsOD9xIrsLj3NTnG3WJnRoYDsWg8=
-X-Received: by 2002:a05:6214:27c7:b0:5f1:62d9:3368 with SMTP id
- ge7-20020a05621427c700b005f162d93368mr919646qvb.30.1686304642413; Fri, 09 Jun
- 2023 02:57:22 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00D071640A
+	for <bpf@vger.kernel.org>; Fri,  9 Jun 2023 10:02:47 +0000 (UTC)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451BE421A
+	for <bpf@vger.kernel.org>; Fri,  9 Jun 2023 03:02:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1686304964;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Q9KEcNHQNL0heWM2/AbZS5PCqRXLyTBij/nK3rNCY6c=;
+	b=hMch9RWldFWYhmQspYlnRWgvP8/LGaLuRF1dl6GY1NDjxyWNu4tWGvew1OtMg2J6vIitMs
+	tLoAXhI3JzqdFsKl50kkPkn0X8LGCiBYM1Yz+wM9iYvZX+fxY3wdIVPKRWwmVIf9P8kENJ
+	mROJ1OSwQmXLzICzbrbqA0/Uwq5TZDI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-274-aAfw7x-ZPUWuB_Kb0AVAug-1; Fri, 09 Jun 2023 06:02:39 -0400
+X-MC-Unique: aAfw7x-ZPUWuB_Kb0AVAug-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AB5E680120A;
+	Fri,  9 Jun 2023 10:02:38 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.51])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 582EB145B965;
+	Fri,  9 Jun 2023 10:02:35 +0000 (UTC)
+From: David Howells <dhowells@redhat.com>
+To: netdev@vger.kernel.org
+Cc: David Howells <dhowells@redhat.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	David Ahern <dsahern@kernel.org>,
+	Matthew Wilcox <willy@infradead.org>,
+	Jens Axboe <axboe@kernel.dk>,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	John Fastabend <john.fastabend@gmail.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	bpf@vger.kernel.org
+Subject: [PATCH net-next 4/6] tcp_bpf: Make tcp_bpf_sendpage() go through tcp_bpf_sendmsg(MSG_SPLICE_PAGES)
+Date: Fri,  9 Jun 2023 11:02:19 +0100
+Message-ID: <20230609100221.2620633-5-dhowells@redhat.com>
+In-Reply-To: <20230609100221.2620633-1-dhowells@redhat.com>
+References: <20230609100221.2620633-1-dhowells@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230608103523.102267-1-laoar.shao@gmail.com> <20230608103523.102267-9-laoar.shao@gmail.com>
- <CAEf4BzYEwCZ3J51pFnUfGykEAHtdLwB8Kxi0utvUTVvewz4UCg@mail.gmail.com> <CALOAHbCrRQ2f9y5AKa9hgMLLzqB+yBEZMxLP-FevK+q=YuMS=w@mail.gmail.com>
-In-Reply-To: <CALOAHbCrRQ2f9y5AKa9hgMLLzqB+yBEZMxLP-FevK+q=YuMS=w@mail.gmail.com>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Fri, 9 Jun 2023 17:56:46 +0800
-Message-ID: <CALOAHbBibBh2W8_68oHrwPBygb6GXD7QP=ngPue08x0XFufAWg@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 08/11] bpf: Support ->fill_link_info for perf_event
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	martin.lau@linux.dev, song@kernel.org, yhs@fb.com, john.fastabend@gmail.com, 
-	kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org, 
-	quentin@isovalent.com, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-	autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+	RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+	T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Fri, Jun 9, 2023 at 5:53=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com> w=
-rote:
->
-> On Fri, Jun 9, 2023 at 7:12=E2=80=AFAM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Thu, Jun 8, 2023 at 3:35=E2=80=AFAM Yafang Shao <laoar.shao@gmail.co=
-m> wrote:
-> > >
-> > > By introducing support for ->fill_link_info to the perf_event link, u=
-sers
-> > > gain the ability to inspect it using `bpftool link show`. While the c=
-urrent
-> > > approach involves accessing this information via `bpftool perf show`,
-> > > consolidating link information for all link types in one place offers
-> > > greater convenience. Additionally, this patch extends support to the
-> > > generic perf event, which is not currently accommodated by
-> > > `bpftool perf show`. While only the perf type and config are exposed =
-to
-> > > userspace, other attributes such as sample_period and sample_freq are
-> > > ignored. It's important to note that if kptr_restrict is set to 2, th=
-e
-> > > probed address will not be exposed, maintaining security measures.
-> > >
-> > > Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-> > > ---
-> > >  include/uapi/linux/bpf.h       | 22 ++++++++++
-> > >  kernel/bpf/syscall.c           | 98 ++++++++++++++++++++++++++++++++=
-++++++++++
-> > >  tools/include/uapi/linux/bpf.h | 22 ++++++++++
-> > >  3 files changed, 142 insertions(+)
-> > >
-> > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > > index d99cc16..c3b821d 100644
-> > > --- a/include/uapi/linux/bpf.h
-> > > +++ b/include/uapi/linux/bpf.h
-> > > @@ -6443,6 +6443,28 @@ struct bpf_link_info {
-> > >                         __u32 count;
-> > >                         __u8  retprobe;
-> > >                 } kprobe_multi;
-> > > +               union {
-> > > +                       struct {
-> > > +                               /* The name is:
-> > > +                                * a) uprobe: file name
-> > > +                                * b) kprobe: kernel function
-> > > +                                */
-> > > +                               __aligned_u64 name; /* in/out: name b=
-uffer ptr */
-> > > +                               __u32 name_len;
-> > > +                               __u32 offset;   /* offset from the na=
-me */
-> > > +                               __u64 addr;
-> > > +                               __u8 retprobe;
-> > > +                       } probe; /* uprobe, kprobe */
-> > > +                       struct {
-> > > +                               /* in/out: tracepoint name buffer ptr=
- */
-> > > +                               __aligned_u64 tp_name;
-> > > +                               __u32 name_len;
-> > > +                       } tp; /* tracepoint */
-> > > +                       struct {
-> > > +                               __u64 config;
-> > > +                               __u32 type;
-> > > +                       } event; /* generic perf event */
-> >
-> > how should the user know which of those structs are relevant? we need
-> > some enum to specify what kind of perf_event link it is?
-> >
->
-> Do you mean that we add a new field 'type' into the union perf_event,
-> as follows ?
->     union {
->         __u32 type;
->         struct {} probe;  /* BPF_LINK_TYPE_PERF_EVENT_PROBE */
->         struct {} tp; /* BPF_LINK_TYPE_PERF_EVENT_TP */
->         struct {} event; /* BPF_LINK_TYPE_PERF_EVENT_EVENT */
->     };
->
+Make tcp_bpf_sendpage() a wrapper around tcp_bpf_sendmsg(MSG_SPLICE_PAGES)
+rather than a loop calling tcp_sendpage().  sendpage() will be removed in
+the future.
 
-Correct it:
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: John Fastabend <john.fastabend@gmail.com>
+cc: Jakub Sitnicki <jakub@cloudflare.com>
+cc: "David S. Miller" <davem@davemloft.net>
+cc: Eric Dumazet <edumazet@google.com>
+cc: Jakub Kicinski <kuba@kernel.org>
+cc: Paolo Abeni <pabeni@redhat.com>
+cc: Jens Axboe <axboe@kernel.dk>
+cc: Matthew Wilcox <willy@infradead.org>
+cc: bpf@vger.kernel.org
+cc: netdev@vger.kernel.org
+---
+ net/ipv4/tcp_bpf.c | 49 +++++++++-------------------------------------
+ 1 file changed, 9 insertions(+), 40 deletions(-)
 
-struct {
-    __u32 type;
-    union {
-         struct {} probe;  /* BPF_LINK_TYPE_PERF_EVENT_PROBE */
-         struct {} tp; /* BPF_LINK_TYPE_PERF_EVENT_TP */
-         struct {} event; /* BPF_LINK_TYPE_PERF_EVENT_EVENT */
-     };
-} perf_event;
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index e75023ea052f..5a84053ac62b 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -568,49 +568,18 @@ static int tcp_bpf_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+ static int tcp_bpf_sendpage(struct sock *sk, struct page *page, int offset,
+ 			    size_t size, int flags)
+ {
+-	struct sk_msg tmp, *msg = NULL;
+-	int err = 0, copied = 0;
+-	struct sk_psock *psock;
+-	bool enospc = false;
+-
+-	psock = sk_psock_get(sk);
+-	if (unlikely(!psock))
+-		return tcp_sendpage(sk, page, offset, size, flags);
++	struct bio_vec bvec;
++	struct msghdr msg = {
++		.msg_flags = flags | MSG_SPLICE_PAGES,
++	};
+ 
+-	lock_sock(sk);
+-	if (psock->cork) {
+-		msg = psock->cork;
+-	} else {
+-		msg = &tmp;
+-		sk_msg_init(msg);
+-	}
++	bvec_set_page(&bvec, page, size, offset);
++	iov_iter_bvec(&msg.msg_iter, ITER_SOURCE, &bvec, 1, size);
+ 
+-	/* Catch case where ring is full and sendpage is stalled. */
+-	if (unlikely(sk_msg_full(msg)))
+-		goto out_err;
+-
+-	sk_msg_page_add(msg, page, size, offset);
+-	sk_mem_charge(sk, size);
+-	copied = size;
+-	if (sk_msg_full(msg))
+-		enospc = true;
+-	if (psock->cork_bytes) {
+-		if (size > psock->cork_bytes)
+-			psock->cork_bytes = 0;
+-		else
+-			psock->cork_bytes -= size;
+-		if (psock->cork_bytes && !enospc)
+-			goto out_err;
+-		/* All cork bytes are accounted, rerun the prog. */
+-		psock->eval = __SK_NONE;
+-		psock->cork_bytes = 0;
+-	}
++	if (flags & MSG_SENDPAGE_NOTLAST)
++		msg.msg_flags |= MSG_MORE;
+ 
+-	err = tcp_bpf_send_verdict(sk, psock, msg, &copied, flags);
+-out_err:
+-	release_sock(sk);
+-	sk_psock_put(sk, psock);
+-	return copied ? copied : err;
++	return tcp_bpf_sendmsg(sk, &msg, size);
+ }
+ 
+ enum {
 
---=20
-Regards
-Yafang
