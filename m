@@ -1,166 +1,243 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C2F77E5;
-	Fri,  9 Jun 2023 02:34:45 +0000 (UTC)
-Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F81F1993;
-	Thu,  8 Jun 2023 19:34:44 -0700 (PDT)
-Received: by mail-qt1-x843.google.com with SMTP id d75a77b69052e-3f9c2e3914aso9544051cf.3;
-        Thu, 08 Jun 2023 19:34:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686278083; x=1688870083;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YkLcX6B6WSlNdg/K0cMsRbNItTJ8LTlhdnmPvGk8+4E=;
-        b=iqdVVzSiVHpUjKb/j+Dwp26pCM/IcL7+wiS2XORZFeatoH9ZipAomeJAzWv0URa/Cw
-         1o15Ral2iftlE4iZdwVyY+OkF53jiT8YAXpxzRgQjAoaUXESCj8hCzJyldFaNLbB3lci
-         2QTuoVB9KAB+XYiabxB3I+EEzkWZiXr/PU9O05CwDxjb/ONVIjUqMXIJRgDYG/c2v0wY
-         lQd8rcV0+z3U4yWEseoSf6f9x89vLUll3ZjeIQWFrgva/LWHmvHLkHRVoZv6boK68ucF
-         V1pyb2XUBFNI5siqYqV0q3oZ8Kl/js/LCMenoOBq8JTbuuLVZreRj8hHjK8ccHZ2RdoF
-         NorQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686278083; x=1688870083;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YkLcX6B6WSlNdg/K0cMsRbNItTJ8LTlhdnmPvGk8+4E=;
-        b=hD+SJsewWR5wcNvtwZWHSjxcatJryKxk0zApq1GtpUnUD+IIlZOOTpTgzCoxFvS/Yz
-         cxHRqSoe2AyENjsMgvEzxNvtBk6xfgzeZtK0Yam/mlau2mGPRtVu0YyV1l7RxOEBybJj
-         HAwhUGge4rgaeSV3QSojNz1OY5KKULGu2qoKsBEuiUf9gA3deh2+OYoAnDcknu3NkJEy
-         UBG1oN/3rsqdQIv0LlmhdCjVg7xZ16lG4+idsIiBbQ4a4eslw+zpEsxvv9/wOlQgn+W/
-         tvqxlaFxRHiQ7Ijr9ZhdVFA8xcTkxB8YmgZR6S3xVB9iJkU8WB4OMTPGBKVnMRH9xV8U
-         TWuw==
-X-Gm-Message-State: AC+VfDwr+aqYfOkEWJpzODdA+ar7npVuynXJmGMs9XE0kO3Svb64vkA/
-	gxRZNTzbilHauyg9KFn6mWRhsnSCLBu76nqJ4L+WQXeB19DT8QYa
-X-Google-Smtp-Source: ACHHUZ4KM2xWMmwOMrRL2HoBURxXB8RhziHa5Tlm0Qa5gS6GMsIPAfQDmDiKNbVBLkqdCJZXHomFOF6meU4TlSjxmHk=
-X-Received: by 2002:a05:622a:85:b0:3f5:3851:873f with SMTP id
- o5-20020a05622a008500b003f53851873fmr311290qtw.8.1686278083524; Thu, 08 Jun
- 2023 19:34:43 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 242D11865
+	for <bpf@vger.kernel.org>; Fri,  9 Jun 2023 03:03:08 +0000 (UTC)
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF8430E6;
+	Thu,  8 Jun 2023 20:03:06 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Qcm9L2RDDz4f3pCC;
+	Fri,  9 Jun 2023 11:03:02 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+	by APP3 (Coremail) with SMTP id _Ch0CgDXzhxjloJkHIyvKQ--.49153S2;
+	Fri, 09 Jun 2023 11:03:03 +0800 (CST)
+Subject: Re: [RFC PATCH bpf-next v4 0/3] Handle immediate reuse in bpf memory
+ allocator
+To: paulmck@kernel.org
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ bpf <bpf@vger.kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+ Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>,
+ Hao Luo <haoluo@google.com>, Yonghong Song <yhs@fb.com>,
+ Daniel Borkmann <daniel@iogearbox.net>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, rcu@vger.kernel.org,
+ "houtao1@huawei.com" <houtao1@huawei.com>
+References: <20230606035310.4026145-1-houtao@huaweicloud.com>
+ <f0e77d34-7459-8375-d844-4b0c8d79eb8f@huaweicloud.com>
+ <20230606210429.qziyhz4byqacmso3@MacBook-Pro-8.local>
+ <9d17ed7f-1726-d894-9f74-75ec9702ca7e@huaweicloud.com>
+ <20230607175224.oqezpaztsb5hln2s@MacBook-Pro-8.local>
+ <CAADnVQJMM2ueRoDMmmBsxb_chPFr_WCH34tyiYQiwphnDhyuGw@mail.gmail.com>
+ <1441a69a-a015-8e3c-4c14-a6af767849e3@huaweicloud.com>
+ <1154ba5a-49b2-45c4-8b88-60f1abed6cbf@paulmck-laptop>
+ <f4418d9d-857b-eb96-cbec-ab1652291556@huaweicloud.com>
+ <d5c9bedb-29ea-456d-b66a-d556f781e656@paulmck-laptop>
+From: Hou Tao <houtao@huaweicloud.com>
+Message-ID: <58572036-cb29-340e-fe62-d9091304bf0c@huaweicloud.com>
+Date: Fri, 9 Jun 2023 11:02:59 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230607125911.145345-1-imagedong@tencent.com>
- <20230607125911.145345-2-imagedong@tencent.com> <20230607200905.5tbosnupodvydezq@macbook-pro-8.dhcp.thefacebook.com>
- <CADxym3abYOZ5JVa4FP5R-Vi7HAk=n_0vTmMGveDH8xvFtuaBDw@mail.gmail.com> <2fb8c454-1ae7-27cd-a9fa-0d8dda18a900@meta.com>
-In-Reply-To: <2fb8c454-1ae7-27cd-a9fa-0d8dda18a900@meta.com>
-From: Menglong Dong <menglong8.dong@gmail.com>
-Date: Fri, 9 Jun 2023 10:34:32 +0800
-Message-ID: <CADxym3Y03+n+pDupWbdrFtXU96vsWR6h40PSrVC+jJzwov=A5Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/3] bpf, x86: allow function arguments up to
- 12 for TRACING
-To: Yonghong Song <yhs@meta.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, davem@davemloft.net, dsahern@kernel.org, 
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-	song@kernel.org, yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@google.com, x86@kernel.org, imagedong@tencent.com, benbjiang@tencent.com, 
-	netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d5c9bedb-29ea-456d-b66a-d556f781e656@paulmck-laptop>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID:_Ch0CgDXzhxjloJkHIyvKQ--.49153S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Jw48KF17Cw43ZrWxJr4DXFb_yoWfJrW3pF
+	WrG3W5trWkJryrAw1Iyr18Jryjyay5Jwn8Xry5JFyUCrn0qr12qr12qr4j9Fy5Jr4kCr1j
+	vrWDXry7Zw1UJaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+	e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+	Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
+	6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+	kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
+	67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
+	uYvjxUrR6zUUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+	MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Fri, Jun 9, 2023 at 5:12=E2=80=AFAM Yonghong Song <yhs@meta.com> wrote:
+Hi Paul,
+
+On 6/9/2023 12:18 AM, Paul E. McKenney wrote:
+> On Thu, Jun 08, 2023 at 11:43:54AM +0800, Hou Tao wrote:
+>> Hi Paul,
+>>
+>> On 6/8/2023 10:55 AM, Paul E. McKenney wrote:
+>>> On Thu, Jun 08, 2023 at 09:51:27AM +0800, Hou Tao wrote:
+>>>> Hi,
+>>>>
+>>>> On 6/8/2023 4:50 AM, Alexei Starovoitov wrote:
+>>>>> On Wed, Jun 7, 2023 at 10:52 AM Alexei Starovoitov
+>>>>> <alexei.starovoitov@gmail.com> wrote:
+>>>>>> On Wed, Jun 07, 2023 at 04:42:11PM +0800, Hou Tao wrote:
+>>>>>>> As said in the commit message, the command line for test is
+>>>>>>> "./map_perf_test 4 8 16384", because the default max_entries is 1000. If
+>>>>>>> using default max_entries and the number of CPUs is greater than 15,
+>>>>>>> use_percpu_counter will be false.
+>>>>>> Right. percpu or not depends on number of cpus.
+>> SNIP
+>>>>>>  known, because I had just proposed it in the email yesterday.
+>>>>> Also noticed that the overhead of shared reuse_ready list
+>>>>> comes both from the contended lock and from cache misses
+>>>>> when one cpu pushes to the list after RCU GP and another
+>>>>> cpu removes.
+>>>>>
+>>>>> Also low/batch/high watermark are all wrong in patch 3.
+>>>>> low=32 and high=96 makes no sense when it's not a single list.
+>>>>> I'm experimenting with 32 for all three heuristics.
+>>>>>
+>>>>> Another thing I noticed that per-cpu prepare_reuse and free_by_rcu
+>>>>> are redundant.
+>>>>> unit_free() can push into free_by_rcu directly
+>>>>> then reuse_bulk() can fill it up with free_llist_extra and
+>>>>> move them into waiting_for_gp.
+>>>> Yes. Indeed missing that.
+>>>>> All these _tail optimizations are obscuring the code and make it hard
+>>>>> to notice these issues.
+>>>>>
+>>>>>> For now I still prefer to see v5 with per-bpf-ma and no _tail optimization.
+>>>>>>
+>>>>>> Answering your other email:
+>>>>>>
+>>>>>>> I see your point. I will continue to debug the memory usage difference
+>>>>>>> between v3 and v4.
+>>>>>> imo it's a waste of time to continue analyzing performance based on bench in patch 2.
+>>>> Don't agree with that. I still think the potential memory usage of v4 is
+>>>> a problem and the difference memory usage between v3 and v4 reveals that
+>>>> there is some peculiarity in RCU subsystem, because the difference comes
+>>>> from the duration of RCU grace period. We need to find out why and fix
+>>>> or workaround that.
+>>> A tight loop in the kernel can extend RCU grace periods, especially
+>>> for kernels built with CONFIG_PREEPTION=n.  Placing things like
+>>> cond_resched() in such loops can help.  Of course, if you are in an
+>>> RCU read-side critical section (or holding a spinlock), you will need
+>>> to exit, cond_resched(), then re-enter.  Taking care to ensure that the
+>>> state upon re-entry is valid.  After all, having exited either type of
+>>> critical section, anything might happen.
+>> As said in the help-wanted email just send out, it was weird that the
+>> RCU grace period was extended a lot, up to ~150ms or more. But queue a
+>> dummy kworker periodically which does nothing will help to reduce the
+>> grace period to ~10ms. I have explained the context of the problem in
+>> that email. And hope that we could get some help from you and the RCU
+>> experts in the community.
+> OK, I will bite...  Why do you think this is weird?
 >
->
->
-> On 6/7/23 8:17 PM, Menglong Dong wrote:
-> > On Thu, Jun 8, 2023 at 4:09=E2=80=AFAM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> >>
-> >> On Wed, Jun 07, 2023 at 08:59:09PM +0800, menglong8.dong@gmail.com wro=
-te:
-> >>> From: Menglong Dong <imagedong@tencent.com>
-> >>>
-> >>> For now, the BPF program of type BPF_PROG_TYPE_TRACING can only be us=
-ed
-> >>> on the kernel functions whose arguments count less than 6. This is no=
-t
-> >>> friendly at all, as too many functions have arguments count more than=
- 6.
-> >>>
-> >>> Therefore, let's enhance it by increasing the function arguments coun=
-t
-> >>> allowed in arch_prepare_bpf_trampoline(), for now, only x86_64.
-> >>>
-> >>> For the case that we don't need to call origin function, which means
-> >>> without BPF_TRAMP_F_CALL_ORIG, we need only copy the function argumen=
-ts
-> >>> that stored in the frame of the caller to current frame. The argument=
-s
-> >>> of arg6-argN are stored in "$rbp + 0x18", we need copy them to
-> >>> "$rbp - regs_off + (6 * 8)".
-> >>>
-> >>> For the case with BPF_TRAMP_F_CALL_ORIG, we need prepare the argument=
-s
-> >>> in stack before call origin function, which means we need alloc extra
-> >>> "8 * (arg_count - 6)" memory in the top of the stack. Note, there sho=
-uld
-> >>> not be any data be pushed to the stack before call the origin functio=
-n.
-> >>> Then, we have to store rbx with 'mov' instead of 'push'.
-> >>
-> >> x86-64 psABI requires stack to be 16-byte aligned when args are passed=
- on the stack.
-> >> I don't see this logic in the patch.
-> >
-> > Yeah, it seems I missed this logic......:)
-> >
-> > I have not figure out the rule of the alignment, but after
-> > observing the behavior of the compiler, the stack seems
-> > should be like this:
-> >
-> > ------ stack frame begin
-> > rbp
-> >
-> > xxx   -- this part should be aligned in 16-byte
-> >
-> > ------ end of arguments in stack
-> > xxx
-> > ------ begin of arguments in stack
-> >
-> > So the code should be:
-> >
-> > +       if (nr_regs > 6 && (flags & BPF_TRAMP_F_CALL_ORIG)) {
-> > +                stack_size =3D ALIGN(stack_size, 16);
-> > +                stack_size +=3D (nr_regs - 6) * 8;
-> > +       }
-> >
-> > Am I right?
->
-> This is the stack_size, you should ensure stack pointer is 16-byte aligne=
-d.
+> RCU depends on context switches, among other things.  If you have a
+> long-running in-kernel task, that will naturally extend the grace period.
+> Scheduling the empty worker provided the context switch that RCU needed
+> to make forward progress.
 
-Oh, I see. Considering the begin of the stack frame
-should already be 16-byte aligned, what we should
-do here is to make the size of the current stack frame
-16-byte aligned. Then, rsp will be 16-byte aligned.
+Because the empty kwork trick also works for CONFIG_PREEMPT_VOLUNTARY=y.
+And there is neither implicit or explicit calling of schedule() in the
+kernel space of producer thread when CONFIG_PREEMPT_VOLUNTARY=y.
+And also I don't know how to define a long-running in-kernel task,
+because I have checked the latency of getpgid() syscall in producer
+thread when CONFIG_PREEMPT_VOLUNTARY=y . As shown in the text below,
+there are indeed some outliers, but the most latency is less than 1ms,
+so the producer thread will do contex_switch in at most 1ms. But before
+the empty kwork trick, the latency of RCU callback is about 100ms or
+more, and after the empty kwork trick, the latenct for RCU callback is
+reduced to ~8ms.
 
-Am I right?
+@hist_us:
+[128, 256)            60
+|                                                    |
+[256, 512)        101364
+|@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+[512, 1K)          17580
+|@@@@@@@@@                                           |
+[1K, 2K)              16
+|                                                    |
 
-Which means the code should be:
+@stat_us: count 119020, average 436, total 51957277
 
-+       if (nr_regs > 6 && (flags & BPF_TRAMP_F_CALL_ORIG)) {
-+               stack_size +=3D (nr_regs - 6) * 8;
-+               stack_size =3D ALIGN(stack_size, 16);
-+       }
-
-Then, the size of current stack frame will be:
-stack_size + 8(rbp) + 8(rip)
-
-This is the example that I refer to:
-https://godbolt.org/z/7o9nh4nbc
 
 >
-> >
-> > Thanks!
-> > Menglong Dong
+> So 150 milliseconds is an OK RCU grace period.  A bit long, but not
+> excessively so.  In contrast, by default in mainline, RCU starts seriously
+> complaining if its grace period is extended beyond 21 *seconds*.  This is
+> when the RCU CPU stall warning will appear.  (Yes, some Android configs
+> are tuning this down to 20 milliseconds, but that is a special hardware
+> and software configuration.)
+>
+> But if you want shorter RCU grace periods, what can you do?
+>
+> 1.	Follow Alexei's good advice on one of your early patches.
+>
+> 2.	As an alternative to scheduling an empty kworker, invoke something
+> 	like rcu_momentary_dyntick_idle() periodically.  Note well that
+> 	it is illegal to invoke this in an RCU read-side critical section,
+> 	with preemption disabled, from idle, ...
+>
+> 3.	In non-preemptible kernels, cond_resched() is a much lighter
+> 	weight alternative to rcu_momentary_dyntick_idle().  (Preemptible
+> 	kernels get the same effect by preempting.  In your case, this
+> 	is also true, but it takes 150 milliseconds.)
+>
+> That should do for a start.  ;-)
+>
+> 							Thanx, Paul
+>
+>> Regards,
+>> Tao
+>>> 							Thanx, Paul
+>>>
+>>>>>>> I don't think so. Let's considering the per-cpu list first. Assume the
+>>>>>>> normal RCU grace period is about 30ms and we are tracing the IO latency
+>>>>>>> of a normal SSD. The iops is about 176K per seconds, so before one RCU
+>>>>>>> GP is passed, we will need to allocate about 176 * 30 = 5.2K elements.
+>>>>>>> For the per-ma list, when the number of CPUs increased, it is easy to
+>>>>>>> make the list contain thousands of elements.
+>>>>>> That would be true only if there were no scheduling events in all of 176K ops.
+>>>>>> Which is not the case.
+>>>>>> I'm not sure why you're saying that RCU GP is 30ms.
+>>>> Because these freed elements will be freed after one RCU GP and in v4
+>>>> there is only one RCU callback per-cpu, so before one RCU GP is expired,
+>>>> these freed elements will be accumulated on the list.
+>>>>>> In CONFIG_PREEMPT_NONE rcu_read_lock/unlock are true nops.
+>>>>>> Every sched event is sort-of implicit rcu_read_lock/unlock.
+>>>>>> Network and block IO doesn't process 176K packets without resched.
+>>>>>> Don't know how block does it, but in networking NAPI will process 64 packets and will yield softirq.
+>>>>>>
+>>>>>> For small size buckets low_watermark=32 and high=96.
+>>>>>> We typically move 32 elements at a time from one list to another.
+>>>>>> A bunch of elements maybe sitting in free_by_rcu and moving them to waiting_for_gp
+>>>>>> is not instant, but once __free_rcu_tasks_trace is called we need to take
+>>>>>> elements from waiting_for_gp one at a time and kfree it one at a time.
+>>>>>> So optimizing the move from free_by_rcu into waiting_for_gp is not worth the code complexity.
+>>>>>>
+>>>>>>> Before I post v5, I want to know the reason why per-bpf-ma list is
+>>>>>>> introduced. Previously, I though it was used to handle the case in which
+>>>>>>> allocation and freeing are done on different CPUs.
+>>>>>> Correct. per-bpf-ma list is necessary to avoid OOM-ing due to slow rcu_tasks_trace GP.
+>>>>>>
+>>>>>>> And as we can see
+>>>>>>> from the benchmark result above and in v3, the performance and the
+>>>>>>> memory usage of v4 for add_del_on_diff_cpu is better than v3.
+>>>>>> bench from patch 2 is invalid. Hence no conclusion can be made.
+>>>>>>
+>>>>>> So far the only bench we can trust and analyze is map_perf_test.
+>>>>>> Please make bench in patch 2 yield the cpu after few updates.
+>>>>>> Earlier I suggested to stick to 10, but since NAPI can do 64 at a time.
+>>>>>> 64 updates is realistic too. A thousand is not.
+>>>> Will do that.
+>>>>
+> .
+
