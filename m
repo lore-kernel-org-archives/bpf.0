@@ -1,34 +1,34 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2083538A
-	for <bpf@vger.kernel.org>; Sat, 10 Jun 2023 03:50:59 +0000 (UTC)
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6C7359A;
-	Fri,  9 Jun 2023 20:50:57 -0700 (PDT)
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-75d3f2c9d13so234167385a.1;
-        Fri, 09 Jun 2023 20:50:57 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44D9363D1
+	for <bpf@vger.kernel.org>; Sat, 10 Jun 2023 03:51:02 +0000 (UTC)
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA7D35B6;
+	Fri,  9 Jun 2023 20:51:00 -0700 (PDT)
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6260f03b76dso17869976d6.1;
+        Fri, 09 Jun 2023 20:51:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686369056; x=1688961056;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OjnRZ997c0EJsAweMRpMCDSezCDXyn9PqnhVcCtO5Hk=;
-        b=FPr04JbVwrHpTaO39GfkrOKBcIigZRfyC1eio7izpllyJsuAgMKEwsWKdz+eTFMgXA
-         f9olGDfrXl4H4GQyQJFo+jxjdpOQzhc+6a8mbxNYpx0lYfIzJDFdY+bi0KI/usLZSZj3
-         3KhpCCGay9iGs22JEW3GIlUiBKlzHsvUv4teC6VuXlDH8UyZBvsEOPeccpSVa8MK88F8
-         0SlIYJo7xo01+0/7SoZbDjHv0ZA8fPbEGp+IVMrQr2p2NxWHe2Bmy/F/p8PGe0ZnIhJV
-         WpvUTABR8MfpaXBVfy1UJ7taqkWFpKy9imCPeeghS2qkvWco/b+H313by1vOsVic6cWt
-         wd/Q==
-X-Gm-Message-State: AC+VfDzz41yoDMVCl/4+Ni8FncdE8GcuwHMcBbHxbZDo3FgZgtftnBQM
-	HwggaZTs2f2k+NYXCPeiB8W4YxDDyrEBUTYf
-X-Google-Smtp-Source: ACHHUZ7iApw5Ij1CMbzWxs78e9IRfiI42uBiRIiXx1qqI7WkloIK5QsJ8IYXUSGhVB5bHYFD7S5rYg==
-X-Received: by 2002:ac8:7f50:0:b0:3f9:d590:82ac with SMTP id g16-20020ac87f50000000b003f9d59082acmr3260032qtk.20.1686369056110;
-        Fri, 09 Jun 2023 20:50:56 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686369059; x=1688961059;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3+QjjC2Q6R+F5tehvijFrBV+74kCnxo9UVFUil+fcVI=;
+        b=Mq+DBsf+GXQa0lrFwRYRtzYUZQ9a2Mt5MM/4diyDzXM3BnxavAZzQ9az5obUjv5/Cw
+         leKyOjU43ieRJ7sLes0jhpCS1cr/EP/+8aiCn78m2i8nEBW2kinvijS3bEFT6uFLF+Nh
+         CSEWFcPwwlsRj8ftMywdRo6CoaslzL7g+07C7XLIOL1MUuTWF+p3x5PW787WdEX0MUnR
+         FlJa39Oir7KrbNF6aidAB/i5N70OhE2A1cFfcugNKy6AFtEdP7awP4QmecL54GA9gf2y
+         BLXvJAz9ySL/PdbwrLLOyO7NuoRZeVLAsIl30gQ0AZF76s6N6sXvErFg5/Qa3DA+xqYe
+         XTzA==
+X-Gm-Message-State: AC+VfDyUhsZ0T0kxb5H+REGzoj4PIPsMAJO1+PqH9OuDTSYkINFcN7yC
+	oVxyrrTSRkhrPnhPz6qSEO/XOSsYc0eurCQD
+X-Google-Smtp-Source: ACHHUZ5tYNaIDKICZ6JhsznroPEuzY9A32/9H5uiEEIis//9qoZlNNp5nIk55b8pk9B8onAEg+H8Sg==
+X-Received: by 2002:a05:6214:b68:b0:623:9126:8d7b with SMTP id ey8-20020a0562140b6800b0062391268d7bmr5436418qvb.28.1686369059185;
+        Fri, 09 Jun 2023 20:50:59 -0700 (PDT)
 Received: from localhost ([2620:10d:c091:400::5:81d3])
-        by smtp.gmail.com with ESMTPSA id t2-20020ac87382000000b003f6bdc221e6sm1667873qtp.53.2023.06.09.20.50.55
+        by smtp.gmail.com with ESMTPSA id a18-20020a0ce392000000b005fe4a301350sm1599968qvl.48.2023.06.09.20.50.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 20:50:55 -0700 (PDT)
+        Fri, 09 Jun 2023 20:50:58 -0700 (PDT)
 From: David Vernet <void@manifault.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -45,10 +45,12 @@ Cc: ast@kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com,
 	tj@kernel.org
-Subject: [PATCH bpf-next 1/5] bpf: Add bpf_cpumask_first_and() kfunc
-Date: Fri,  9 Jun 2023 22:50:49 -0500
-Message-Id: <20230610035053.117605-1-void@manifault.com>
+Subject: [PATCH bpf-next 3/5] bpf: Replace bpf_cpumask_any* with bpf_cpumask_any_distribute*
+Date: Fri,  9 Jun 2023 22:50:51 -0500
+Message-Id: <20230610035053.117605-3-void@manifault.com>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230610035053.117605-1-void@manifault.com>
+References: <20230610035053.117605-1-void@manifault.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -63,55 +65,82 @@ X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-We currently provide bpf_cpumask_first(), bpf_cpumask_any(), and
-bpf_cpumask_any_and() kfuncs. bpf_cpumask_any() and
-bpf_cpumask_any_and() are confusing misnomers in that they actually just
-call cpumask_first() and cpumask_first_and() respectively.
+We currently export the bpf_cpumask_any() and bpf_cpumask_any_and()
+kfuncs. Intuitively, one would expect these to choose any CPU in the
+cpumask, but what they actually do is alias to cpumask_first() and
+cpmkas_first_and().
 
-We'll replace them with bpf_cpumask_any_distribute() and
-bpf_cpumask_any_distribute_and() kfuncs in a subsequent patch, so let's
-ensure feature parity by adding a bpf_cpumask_first_and() kfunc to
-account for bpf_cpumask_any_and() being removed.
+This is useless given that we already export bpf_cpumask_first() and
+bpf_cpumask_first_and(), so this patch replaces them with kfuncs that
+call cpumask_any_distribute() and cpumask_any_and_distribute(), which
+actually choose any CPU from the cpumask (or the AND of two cpumasks for
+the latter).
 
 Signed-off-by: David Vernet <void@manifault.com>
 ---
- kernel/bpf/cpumask.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ kernel/bpf/cpumask.c | 22 ++++++++++++----------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
 
 diff --git a/kernel/bpf/cpumask.c b/kernel/bpf/cpumask.c
-index 7efdf5d770ca..9416c8ac8a04 100644
+index 9416c8ac8a04..938a60ff4295 100644
 --- a/kernel/bpf/cpumask.c
 +++ b/kernel/bpf/cpumask.c
-@@ -131,6 +131,21 @@ __bpf_kfunc u32 bpf_cpumask_first_zero(const struct cpumask *cpumask)
- 	return cpumask_first_zero(cpumask);
+@@ -382,7 +382,7 @@ __bpf_kfunc void bpf_cpumask_copy(struct bpf_cpumask *dst, const struct cpumask
  }
  
-+/**
-+ * bpf_cpumask_first_and() - Return the index of the first nonzero bit from the
-+ *			     AND of two cpumasks.
-+ * @src1: The first cpumask.
-+ * @src2: The second cpumask.
-+ *
-+ * Find the index of the first nonzero bit of the AND of two cpumasks.
-+ * struct bpf_cpumask pointers may be safely passed to @src1 and @src2.
-+ */
-+__bpf_kfunc u32 bpf_cpumask_first_and(const struct cpumask *src1,
-+				      const struct cpumask *src2)
-+{
-+	return cpumask_first_and(src1, src2);
-+}
-+
  /**
-  * bpf_cpumask_set_cpu() - Set a bit for a CPU in a BPF cpumask.
-  * @cpu: The CPU to be set in the cpumask.
-@@ -406,6 +421,7 @@ BTF_ID_FLAGS(func, bpf_cpumask_release, KF_RELEASE)
- BTF_ID_FLAGS(func, bpf_cpumask_acquire, KF_ACQUIRE | KF_TRUSTED_ARGS)
- BTF_ID_FLAGS(func, bpf_cpumask_first, KF_RCU)
- BTF_ID_FLAGS(func, bpf_cpumask_first_zero, KF_RCU)
-+BTF_ID_FLAGS(func, bpf_cpumask_first_and, KF_RCU)
- BTF_ID_FLAGS(func, bpf_cpumask_set_cpu, KF_RCU)
- BTF_ID_FLAGS(func, bpf_cpumask_clear_cpu, KF_RCU)
- BTF_ID_FLAGS(func, bpf_cpumask_test_cpu, KF_RCU)
+- * bpf_cpumask_any() - Return a random set CPU from a cpumask.
++ * bpf_cpumask_any_distribute() - Return a random set CPU from a cpumask.
+  * @cpumask: The cpumask being queried.
+  *
+  * Return:
+@@ -391,26 +391,28 @@ __bpf_kfunc void bpf_cpumask_copy(struct bpf_cpumask *dst, const struct cpumask
+  *
+  * A struct bpf_cpumask pointer may be safely passed to @src.
+  */
+-__bpf_kfunc u32 bpf_cpumask_any(const struct cpumask *cpumask)
++__bpf_kfunc u32 bpf_cpumask_any_distribute(const struct cpumask *cpumask)
+ {
+-	return cpumask_any(cpumask);
++	return cpumask_any_distribute(cpumask);
+ }
+ 
+ /**
+- * bpf_cpumask_any_and() - Return a random set CPU from the AND of two
+- *			   cpumasks.
++ * bpf_cpumask_any_and_distribute() - Return a random set CPU from the AND of
++ *				      two cpumasks.
+  * @src1: The first cpumask.
+  * @src2: The second cpumask.
+  *
+  * Return:
+- * * A random set bit within [0, num_cpus) if at least one bit is set.
++ * * A random set bit within [0, num_cpus) from the AND of two cpumasks, if at
++ *   least one bit is set.
+  * * >= num_cpus if no bit is set.
+  *
+  * struct bpf_cpumask pointers may be safely passed to @src1 and @src2.
+  */
+-__bpf_kfunc u32 bpf_cpumask_any_and(const struct cpumask *src1, const struct cpumask *src2)
++__bpf_kfunc u32 bpf_cpumask_any_and_distribute(const struct cpumask *src1,
++					       const struct cpumask *src2)
+ {
+-	return cpumask_any_and(src1, src2);
++	return cpumask_any_and_distribute(src1, src2);
+ }
+ 
+ __diag_pop();
+@@ -438,8 +440,8 @@ BTF_ID_FLAGS(func, bpf_cpumask_subset, KF_RCU)
+ BTF_ID_FLAGS(func, bpf_cpumask_empty, KF_RCU)
+ BTF_ID_FLAGS(func, bpf_cpumask_full, KF_RCU)
+ BTF_ID_FLAGS(func, bpf_cpumask_copy, KF_RCU)
+-BTF_ID_FLAGS(func, bpf_cpumask_any, KF_RCU)
+-BTF_ID_FLAGS(func, bpf_cpumask_any_and, KF_RCU)
++BTF_ID_FLAGS(func, bpf_cpumask_any_distribute, KF_RCU)
++BTF_ID_FLAGS(func, bpf_cpumask_any_and_distribute, KF_RCU)
+ BTF_SET8_END(cpumask_kfunc_btf_ids)
+ 
+ static const struct btf_kfunc_id_set cpumask_kfunc_set = {
 -- 
 2.40.1
 
