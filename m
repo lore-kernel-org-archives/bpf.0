@@ -1,56 +1,57 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53F126FBE
-	for <bpf@vger.kernel.org>; Sat, 10 Jun 2023 06:59:54 +0000 (UTC)
-Received: from mail-yw1-x1141.google.com (mail-yw1-x1141.google.com [IPv6:2607:f8b0:4864:20::1141])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C181F3A9B;
-	Fri,  9 Jun 2023 23:59:51 -0700 (PDT)
-Received: by mail-yw1-x1141.google.com with SMTP id 00721157ae682-5689335d2b6so22661787b3.3;
-        Fri, 09 Jun 2023 23:59:51 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A62CD1878
+	for <bpf@vger.kernel.org>; Sat, 10 Jun 2023 07:01:53 +0000 (UTC)
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08D43AA5;
+	Sat, 10 Jun 2023 00:01:50 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id 3f1490d57ef6-b9e6ec482b3so2458381276.3;
+        Sat, 10 Jun 2023 00:01:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686380391; x=1688972391;
+        d=gmail.com; s=20221208; t=1686380510; x=1688972510;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Jzpp4ZiyZwzNvE4a5WSKnVkb62OYezIbe2zPDss4xsc=;
-        b=MaMcYow4Eh1yNcWLCeusxVUvedanIOrNQWcaSuZUPZVe05mZqwgsRPeTW1l4MmX3uC
-         FjWWtQWWercm17318nYmlZPLgPshyJC2gQJCGsgjTw71Z6Xm1WfmyM9y2xjatfMkGVAi
-         sXqoUNUbaocMxvCLm8vkktiOqXU8p48y9feTgXEUZ7J0/mapvaUxxYdxVFtlRnjhiuwD
-         UgSiDzCgDxgGMsMuhWoSToX/SCwU/RIk82IOW7T7HIvq1Uh8UGar0lyDVmsMt7qdmUH1
-         swCsoPMWa0hHpQCOTPxd49+mlznUl1VaVD0Yv5WYIHru+xP31RSWzmVv5O6PXFWsVb0u
-         1EGA==
+        bh=/xAXJTHgYn8Ldx/+53+yK5kSj7EjdhGs+jf5NNgnKWs=;
+        b=CtcNrC4XUIq1QCD9WPU0QJFfKZ+p67faFld4t/dH2VZ2VdWWZ+CLp4HoghjHckota7
+         9aOX9s61xoTJ1jisUaFmg94mm26+HPSZ/OXrgjk0As2nK4dxFyMhqNHbaVDM6naJF0yy
+         jE+MdW2NcSHRc+Uny8AjNgEQ1z3tVE1YhxUo/4iQ/5DPI00b33qnwSMGArvXaQfA4L1t
+         +o535G8n6Cq6DS65aTeYCeXo8vG2NtUdm1mJnzqCxRyMl/GAQxQocZR7OcNYn8k1Xmuc
+         xTpqQ7R12zagkx0/jxUond6sbinwA8t6LWtCKQFpIKOAPs/NFonjAvobUPh0UDjmn981
+         3MeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686380391; x=1688972391;
+        d=1e100.net; s=20221208; t=1686380510; x=1688972510;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Jzpp4ZiyZwzNvE4a5WSKnVkb62OYezIbe2zPDss4xsc=;
-        b=P25wN1WlgcCGvxv6OHPE+5lvTreXg+1JprejqJkNGIT1Qd+Bw2Z37kcdwj4qbwvprV
-         SuBmOPpJ0QBs8eZ+ZN444ysc0AGfOoYAzvQBVbO7gEdRmiVTErEcypkoovQANkUB/a4W
-         DMvweNQoLLbz0kpLfx70F+a4p7SZfO8Nwdo4y/32UjI214cTEydL28wYMUQIqU+yO0Tj
-         A+1fG30mpNZVyG2jxJUPjn/UqkKzW2fyiMm0ze5wYiR4QXla+Twe1cDqLF9YwdbigIgP
-         3SOM9Fj2B3+nKzTxpzG8Hg9SCUuyxFQj8z81Bd8+D4TutkgehgFnu2OblEE0Vi8lSkyt
-         5AXw==
-X-Gm-Message-State: AC+VfDzyoFZCw3dkdmxGHfHjS1HghMGR91n9FY5xYMyrZpwljOYmCXxi
-	wN2j5wx5Rw88n8aPKYHtxRzR0XF708QordXJxSY=
-X-Google-Smtp-Source: ACHHUZ4XSQXYMtQoA2ZjBUhaVjM/usCR2CjVqZ88J7reifFFr0/iOiqg1FwZb1L+JWrQal6YQDwZxT5Nyeh2gzlIj/I=
-X-Received: by 2002:a81:4896:0:b0:565:efe8:70fc with SMTP id
- v144-20020a814896000000b00565efe870fcmr3574240ywa.35.1686380390950; Fri, 09
- Jun 2023 23:59:50 -0700 (PDT)
+        bh=/xAXJTHgYn8Ldx/+53+yK5kSj7EjdhGs+jf5NNgnKWs=;
+        b=j+qZmbeGclAfp59GDODW1aWSKS3SP/ZFxvuTLiFzLRmH34uZA3zgCyBECF2pHrIQHp
+         siZROLR7AN/Ygg7LxpvcvmiFRSxk0RLpmK9i4JkxvuzzSORo8edtkllGdB1JVKDpkbbZ
+         NgN8QHKj/LcciMv3IX8zj3nFSHWN8rWnb0NvBfR/4Sm3DLOMXH9dEBdz0zndyI/SNZSY
+         cwYN/WzrMDarOXwZXmTTY2SyKK6tzg/EnDR4kwzqqx6NYsnm8Z0DRneAATGN0m8SKsur
+         2J0iPhre3Ui3YsdMCWPVCsYfKvZfjBsSbBkGz627E7CwAL54TF8c8T3HlzBwmHmrL6Fs
+         K0Sg==
+X-Gm-Message-State: AC+VfDxo0RHrQI+x+IvxX5TBaGjLQpZXTp9b9mli4uJzsR+c39S6YmHp
+	uYy7Y4uzz3pwry3V2CQn+bCmjxSwe8+ap9YmBRE=
+X-Google-Smtp-Source: ACHHUZ4mHFQTMPoEncM+OA8Q5aKcDmmrEL+plkeb5wxhv3qwP1nN3QJ//pntgqzOtpCEGRoY/E2btK2dOO2MMFMqaMU=
+X-Received: by 2002:a25:ef12:0:b0:ba8:6e44:616d with SMTP id
+ g18-20020a25ef12000000b00ba86e44616dmr2183478ybd.59.1686380509673; Sat, 10
+ Jun 2023 00:01:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230609095653.1406173-1-imagedong@tencent.com> <68003017-5111-176a-de34-5d576b6e3488@meta.com>
-In-Reply-To: <68003017-5111-176a-de34-5d576b6e3488@meta.com>
+References: <20230609095653.1406173-1-imagedong@tencent.com>
+ <20230609095653.1406173-4-imagedong@tencent.com> <50d29ea7-09b8-9026-e127-8c21a4bb9706@meta.com>
+In-Reply-To: <50d29ea7-09b8-9026-e127-8c21a4bb9706@meta.com>
 From: Menglong Dong <menglong8.dong@gmail.com>
-Date: Sat, 10 Jun 2023 14:59:39 +0800
-Message-ID: <CADxym3bm6tva6e6ahD-pGT=JF=0Ng6051fDcKs0-TZuu4CK-cA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 0/3] bpf, x86: allow function arguments up to
- 12 for TRACING
+Date: Sat, 10 Jun 2023 15:01:38 +0800
+Message-ID: <CADxym3YzHBU6E8dtAucwsZ0MJ_WZzFkRB8anbJHPmYqmNnu+eA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 3/3] selftests/bpf: add testcase for
+ FENTRY/FEXIT with 6+ arguments
 To: Yonghong Song <yhs@meta.com>
 Cc: andrii.nakryiko@gmail.com, alan.maguire@oracle.com, ast@kernel.org, 
 	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
@@ -66,7 +67,7 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Sat, Jun 10, 2023 at 11:51=E2=80=AFAM Yonghong Song <yhs@meta.com> wrote=
+On Sat, Jun 10, 2023 at 11:29=E2=80=AFAM Yonghong Song <yhs@meta.com> wrote=
 :
 >
 >
@@ -74,71 +75,166 @@ On Sat, Jun 10, 2023 at 11:51=E2=80=AFAM Yonghong Song <yhs@meta.com> wrote=
 > On 6/9/23 2:56 AM, menglong8.dong@gmail.com wrote:
 > > From: Menglong Dong <imagedong@tencent.com>
 > >
-> > For now, the BPF program of type BPF_PROG_TYPE_TRACING can only be used
-> > on the kernel functions whose arguments count less than 6. This is not
-> > friendly at all, as too many functions have arguments count more than 6=
-.
-> > According to the current kernel version, below is a statistics of the
-> > function arguments count:
+> > Add test9/test10 in fexit_test.c and fentry_test.c to test the fentry
+> > and fexit whose target function have 7/12 arguments.
 > >
-> > argument count | function count
-> > 7              | 704
-> > 8              | 270
-> > 9              | 84
-> > 10             | 47
-> > 11             | 47
-> > 12             | 27
-> > 13             | 22
-> > 14             | 5
-> > 15             | 0
-> > 16             | 1
+> > Correspondingly, add bpf_testmod_fentry_test7() and
+> > bpf_testmod_fentry_test12() to bpf_testmod.c
 > >
-> > Therefore, let's enhance it by increasing the function arguments count
-> > allowed in arch_prepare_bpf_trampoline(), for now, only x86_64.
+> > And the testcases passed:
 > >
-> > In the 1st patch, we make arch_prepare_bpf_trampoline() support to copy
-> > function arguments in stack for x86 arch. Therefore, the maximum
-> > arguments can be up to MAX_BPF_FUNC_ARGS for FENTRY and FEXIT.
+> > ./test_progs -t fexit
+> > Summary: 5/12 PASSED, 0 SKIPPED, 0 FAILED
 > >
-> > In the 2nd patch, we clean garbage value in upper bytes of the trampoli=
-ne
-> > when we store the arguments from regs or on-stack into stack.
+> > ./test_progs -t fentry
+> > Summary: 3/0 PASSED, 0 SKIPPED, 0 FAILED
 > >
-> > And the 3rd patches are for the testcases of the 1st patch.
-> >
-> > Changes since v3:
-> > - try make the stack pointer 16-byte aligned. Not sure if I'm right :)
-> > - introduce clean_garbage() to clean the grabage when argument count is=
- 7
-> > - use different data type in bpf_testmod_fentry_test{7,12}
+> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> > ---
+> > v4:
+> > - use different type for args in bpf_testmod_fentry_test{7,12}
 > > - add testcase for grabage values in ctx
-> >
-> > Changes since v2:
-> > - keep MAX_BPF_FUNC_ARGS still
-> > - clean garbage value in upper bytes in the 2nd patch
+> > v3:
 > > - move bpf_fentry_test{7,12} to bpf_testmod.c and rename them to
-> >    bpf_testmod_fentry_test{7,12} meanwhile in the 3rd patch
+> >    bpf_testmod_fentry_test{7,12} meanwhile
+> > - get return value by bpf_get_func_ret() in
+> >    "fexit/bpf_testmod_fentry_test12", as we don't change ___bpf_ctx_cas=
+t()
+> >    in this version
+> > ---
+> >   .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 19 ++++++-
+> >   .../selftests/bpf/prog_tests/fentry_fexit.c   |  4 +-
+> >   .../selftests/bpf/prog_tests/fentry_test.c    |  2 +
+> >   .../selftests/bpf/prog_tests/fexit_test.c     |  2 +
+> >   .../testing/selftests/bpf/progs/fentry_test.c | 33 +++++++++++
+> >   .../testing/selftests/bpf/progs/fexit_test.c  | 57 ++++++++++++++++++=
++
+> >   6 files changed, 115 insertions(+), 2 deletions(-)
 > >
-> > Changes since v1:
-> > - change the maximun function arguments to 14 from 12
-> > - add testcases (Jiri Olsa)
-> > - instead EMIT4 with EMIT3_off32 for "lea" to prevent overflow
+> > diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/to=
+ols/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+> > index cf216041876c..66615fdbe3df 100644
+> > --- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+> > +++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+> > @@ -191,6 +191,19 @@ noinline int bpf_testmod_fentry_test3(char a, int =
+b, u64 c)
+> >       return a + b + c;
+> >   }
 > >
-> > Menglong Dong (3):
-> >    bpf, x86: allow function arguments up to 12 for TRACING
-> >    bpf, x86: clean garbage value in the stack of trampoline
-> >    selftests/bpf: add testcase for FENTRY/FEXIT with 6+ arguments
-> >
-> >   arch/x86/net/bpf_jit_comp.c                   | 145 ++++++++++++++++-=
--
-> >   .../selftests/bpf/bpf_testmod/bpf_testmod.c   |  19 ++-
-> >   .../selftests/bpf/prog_tests/fentry_fexit.c   |   4 +-
-> >   .../selftests/bpf/prog_tests/fentry_test.c    |   2 +
-> >   .../selftests/bpf/prog_tests/fexit_test.c     |   2 +
-> >   .../testing/selftests/bpf/progs/fentry_test.c |  33 ++++
-> >   .../testing/selftests/bpf/progs/fexit_test.c  |  57 +++++++
-> >   7 files changed, 245 insertions(+), 17 deletions(-)
+> > +noinline int bpf_testmod_fentry_test7(u64 a, void *b, short c, int d,
+> > +                                   void *e, u64 f, u64 g)
+> > +{
+> > +     return a + (long)b + c + d + (long)e + f + g;
+> > +}
+> > +
+> > +noinline int bpf_testmod_fentry_test12(u64 a, void *b, short c, int d,
+> > +                                    void *e, u64 f, u64 g, u64 h,
+> > +                                    u64 i, u64 j, u64 k, u64 l)
+> > +{
+> > +     return a + (long)b + c + d + (long)e + f + g + h + i + j + k + l;
+> > +}
 >
-> Also replace rebase on top of bpf-next. Patch 3 cannot be applied.
+> It would be great to add a couple cases with struct arguments
+> where each struct has 8 < struct_size <=3D 16.
 
-Okay!
+Good idea. And I'll add extra test cases for the case
+you mentioned before.
+
+> >   __diag_pop();
+> >
+> >   int bpf_testmod_fentry_ok;
+> > @@ -245,7 +258,11 @@ bpf_testmod_test_read(struct file *file, struct ko=
+bject *kobj,
+> >
+> >       if (bpf_testmod_fentry_test1(1) !=3D 2 ||
+> >           bpf_testmod_fentry_test2(2, 3) !=3D 5 ||
+> > -         bpf_testmod_fentry_test3(4, 5, 6) !=3D 15)
+> > +         bpf_testmod_fentry_test3(4, 5, 6) !=3D 15 ||
+> > +         bpf_testmod_fentry_test7(16, (void *)17, 18, 19, (void *)20,
+> > +                                  21, 22) !=3D 133 ||
+> > +         bpf_testmod_fentry_test12(16, (void *)17, 18, 19, (void *)20,
+> > +                                   21, 22, 23, 24, 25, 26, 27) !=3D 25=
+8)
+> >               goto out;
+> >
+> >       bpf_testmod_fentry_ok =3D 1;
+> [...]
+> > diff --git a/tools/testing/selftests/bpf/progs/fexit_test.c b/tools/tes=
+ting/selftests/bpf/progs/fexit_test.c
+> > index 8f1ccb7302e1..a6d8e03ff5b7 100644
+> > --- a/tools/testing/selftests/bpf/progs/fexit_test.c
+> > +++ b/tools/testing/selftests/bpf/progs/fexit_test.c
+> > @@ -78,3 +78,60 @@ int BPF_PROG(test8, struct bpf_fentry_test_t *arg)
+> >               test8_result =3D 1;
+> >       return 0;
+> >   }
+> > +
+> > +__u64 test9_result =3D 0;
+> > +SEC("fexit/bpf_testmod_fentry_test7")
+> > +int BPF_PROG(test9, __u64 a, void *b, short c, int d, void *e, char f,
+> > +          int g, int ret)
+> > +{
+> > +     test9_result =3D a =3D=3D 16 && b =3D=3D (void *)17 && c =3D=3D 1=
+8 && d =3D=3D 19 &&
+> > +             e =3D=3D (void *)20 && f =3D=3D 21 && g =3D=3D 22 && ret =
+=3D=3D 133;
+> > +     return 0;
+> > +}
+> > +
+> > +__u64 test10_result =3D 0;
+> > +SEC("fexit/bpf_testmod_fentry_test12")
+> > +int BPF_PROG(test10, __u64 a, void *b, short c, int d, void *e, char f=
+,
+> > +          int g, unsigned int h, long i, __u64 j, unsigned long k,
+> > +          unsigned char l)
+> > +{
+> > +     __u64 ret;
+> > +     int err;
+> > +
+> > +     /* BPF_PROG() don't support 14 arguments, and ctx[12] can't be
+> > +      * accessed yet. So we get the return value by bpf_get_func_ret()
+> > +      * for now.
+> > +      */
+> > +     err =3D bpf_get_func_ret(ctx, &ret);
+>
+> Maybe just have 11 arguments for this test case?
+>
+> > +     if (err)
+> > +             return 0;
+> > +
+> > +     test10_result =3D a =3D=3D 16 && b =3D=3D (void *)17 && c =3D=3D =
+18 && d =3D=3D 19 &&
+> > +             e =3D=3D (void *)20 && f =3D=3D 21 && g =3D=3D 22 && h =
+=3D=3D 23 &&
+> > +             i =3D=3D 24 && j =3D=3D 25 && k =3D=3D 26 && l =3D=3D 27 =
+&&
+> > +             (int)ret =3D=3D 258;
+> > +     return 0;
+> > +}
+> > +
+> > +__u64 test11_result =3D 0;
+> > +SEC("fexit/bpf_testmod_fentry_test12")
+> > +int BPF_PROG(test11, __u64 a, __u64 b, __u64 c, __u64 d, __u64 e, __u6=
+4 f,
+> > +          __u64 g, __u64 h, __u64 i, __u64 j, __u64 k, __u64 l)
+> > +{
+> > +     __u64 ret;
+> > +     int err;
+> > +
+> > +     /* BPF_PROG() don't support 14 arguments, and ctx[12] can't be
+> > +      * accessed yet. So we get the return value by bpf_get_func_ret()
+> > +      * for now.
+> > +      */
+> > +     err =3D bpf_get_func_ret(ctx, &ret);
+> > +     if (err)
+> > +             return 0;
+> > +
+> > +     test11_result =3D a =3D=3D 16 && b =3D=3D 17 && c =3D=3D 18 && d =
+=3D=3D 19 &&
+> > +             e =3D=3D 20 && f =3D=3D 21 && g =3D=3D 22 && h =3D=3D 23 =
+&&
+> > +             i =3D=3D 24 && j =3D=3D 25 && k =3D=3D 26 && l =3D=3D 27 =
+&&
+> > +             ret =3D=3D 258;
+> > +     return 0;
+> > +}
