@@ -1,284 +1,286 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B73718AE0
-	for <bpf@vger.kernel.org>; Mon, 12 Jun 2023 22:21:57 +0000 (UTC)
-Received: from bird.elm.relay.mailchannels.net (bird.elm.relay.mailchannels.net [23.83.212.17])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE1210B
-	for <bpf@vger.kernel.org>; Mon, 12 Jun 2023 15:21:56 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-	by relay.mailchannels.net (Postfix) with ESMTP id 5143F5C1171
-	for <bpf@vger.kernel.org>; Mon, 12 Jun 2023 22:12:29 +0000 (UTC)
-Received: from pdx1-sub0-mail-a251.dreamhost.com (unknown [127.0.0.6])
-	(Authenticated sender: dreamhost)
-	by relay.mailchannels.net (Postfix) with ESMTPA id DBD455C1367
-	for <bpf@vger.kernel.org>; Mon, 12 Jun 2023 22:12:28 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1686607948; a=rsa-sha256;
-	cv=none;
-	b=Gaaif+AXW6idkeXNA/h61a95chpCi8gjo2v8w+RZt0/KHVynJTkXlEGkAfa1PS/NkcPOdU
-	tnHUChEM+Xb24q2QOVv+J7vAAQL26sTHTPks+g8k5Qs9JxEgZJtm0fgaqegQPDI/Q7mvx5
-	M/qb+tVme0fx12f7dpSFK44fnxXc1t3wWKw32+wC9Syy/KKZEG8gqYsEZ9NgIbgqHsl0Ib
-	nwRMlNhEVBa+Ty4C/PzTEI2hmwxgHzIjSFFcs8zDFPpHIUQ0NtFkAzLTlnODcKVNPjlxbr
-	RhMJ5o60W56qwEgG7AsQeHKcwQuUhPdSx8XDH+DE5thj6eaXct6QCjtTItBX/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-	s=arc-2022; t=1686607948;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:dkim-signature;
-	bh=Uw+jdfJkDSDc1rZ9hM9IyUE6VppD4X6NU4hjQZ4wAUI=;
-	b=dBdR3wFT5ZzgZhO6iRerED2jQ8u7QPgfy1KbhsBGRZWxYD4qUucIR3jeRDfg7ngObEzwPA
-	uoyBuLy1syEeoTbI4mXTG14lMM+YFU9FHaAGT5rGCQLaqf1hCuEw0mwyerdyQd8DXXyHTH
-	K2Pr7rsOVRGGphJfnHnpL5b4VdqL+5++BG4EwRkp6hSbEa3ZMPbYnRQ6DAIYqoNaTQIHE2
-	k1jnHF3XqHsmnq5qU7RFLYzdk0NGMeYQZhaIs8Rf1eC9uxInyLHPRyw8ZzY3E1emknLhah
-	nhXXBFiO7Gbml4U30NJFQ200ntlCIW/bLWwF7ogw56zBqVwdB/E08n6A68A7uQ==
-ARC-Authentication-Results: i=1;
-	rspamd-6c69b8658d-8c2tp;
-	auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MailChannels-Auth-Id: dreamhost
-X-Tank-Share: 77ee227b2b6cb446_1686607949138_2688594381
-X-MC-Loop-Signature: 1686607949138:3683618130
-X-MC-Ingress-Time: 1686607949138
-Received: from pdx1-sub0-mail-a251.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-	by 100.119.120.28 (trex/6.8.1);
-	Mon, 12 Jun 2023 22:12:29 +0000
-Received: from kmjvbox (c-73-93-64-36.hsd1.ca.comcast.net [73.93.64.36])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kjlx@templeofstupid.com)
-	by pdx1-sub0-mail-a251.dreamhost.com (Postfix) with ESMTPSA id 4Qg5XD0Hg7zYv
-	for <bpf@vger.kernel.org>; Mon, 12 Jun 2023 15:12:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-	s=dreamhost; t=1686607948;
-	bh=Uw+jdfJkDSDc1rZ9hM9IyUE6VppD4X6NU4hjQZ4wAUI=;
-	h=Date:From:To:Cc:Subject:Content-Type:Content-Transfer-Encoding;
-	b=oP6zL20uUwr9+8TuQ77C4zC4lKxRJDffnxSj+NkVnjk0dYhMtPpNRlrYcwPVlhJNW
-	 RrZ5ycHfytz5x1E08xVYbxl2ZgM9yRVUDWUy6qeydXghr7YLl+HX5O4rc1zX377e7T
-	 gNUet93sZ7QJHlTUznClPFJ7KSIqyQiLkvfvP8oc=
-Received: from johansen (uid 1000)
-	(envelope-from kjlx@templeofstupid.com)
-	id e0085
-	by kmjvbox (DragonFly Mail Agent v0.12);
-	Mon, 12 Jun 2023 15:12:26 -0700
-Date: Mon, 12 Jun 2023 15:12:26 -0700
-From: Krister Johansen <kjlx@templeofstupid.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Ilya Leoshkevich <iii@linux.ibm.com>,
-	Krister Johansen <kjlx@templeofstupid.com>,
-	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: add a test for subprogram
- extables
-Message-ID: <20230612221226.GA2077@templeofstupid.com>
-References: <cover.1686268304.git.kjlx@templeofstupid.com>
- <9e3041e182a75f558f1132f915ddf2ee7e859c6e.1686268304.git.kjlx@templeofstupid.com>
- <CAADnVQKAmbb2mTNem+3wvCSS44mvmydDCjWj-4V9VZd93vgksQ@mail.gmail.com>
- <ef33f004f1f20c7a4cc7c963eea628df7bec0c53.camel@linux.ibm.com>
- <CAADnVQLWNt0KsXoYVGFD0i089YMivYJ+ZeWmutUiefcdK=eOrw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B4C82342B
+	for <bpf@vger.kernel.org>; Mon, 12 Jun 2023 22:27:44 +0000 (UTC)
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C8F170C;
+	Mon, 12 Jun 2023 15:27:42 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-977cf86aae5so736561766b.0;
+        Mon, 12 Jun 2023 15:27:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686608861; x=1689200861;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LA78BhFipKkzQ30vwjempYhrPvAMhNzRx0ETipbQy3E=;
+        b=SYMNc3iB+qi46wHgoLFxmqyfkwN8mWzlTBzhPReZ68T7cFw/QMKO9p30Kk7sOeOKs5
+         TOISCiXxf87tao7qm2amwFn/c9/hea6bGa7Kg15EaNIxeacf11F3uiWZBFTScofQfDcI
+         /O9FieXh4C5r6j34a/4gqfdJFhSWj2o891bgyknzloNd1LzbjgpqZTS8XuVmCvEjKAgC
+         h8T8Fda5C4oa9pEuzSTJH6cmPwJ9vW0PwmnREQ4tatM3MzAJ98dwe8RSOAfrpRei0177
+         U558+bRHZanxFMMdZC5QP8V6gU73PuEnZgYErdzyaxjKzvhx0X06ujX205DPKU4vsDMf
+         W1HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686608861; x=1689200861;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LA78BhFipKkzQ30vwjempYhrPvAMhNzRx0ETipbQy3E=;
+        b=jLtaJOleIxud50RiZyfQ5leEqAmMAA1X9I7g71oBogMGvQsMV+V6QOJxYq+U1BmPuy
+         A6VU9JR0FmIYgxPQb7HgvoQuTHUG1JivwazNRyenoNu4SXd7juM/cSJT34DAfOZhzdmA
+         4ZqTnOl7Od+58aXaZbZwISSh8Il1uCiTzHOTiJQ4REmcFp7t9qYN+K4XmpwVQ8mjz6Et
+         czIzb/m5tTz0322gea0unUOm9wgY4eFiYt+2N3adpOWwPgTSzJK+KCXhVkyl/n3jJgHK
+         KdtPa6Wk3jlH8UF9tMlr5iJPepuDEI8WdTPn16eipypCCZ4Pq6UZVwXv4F8F9H62OXJU
+         EiFw==
+X-Gm-Message-State: AC+VfDxMfXqcWTnkQ6s0Fa32wGNcy+0uo52eVtbyPZeUP0zO/opKnN8J
+	Jnu404/Sk1DeNkvF7LE97zwcQZuhNK/ogUjXxKE=
+X-Google-Smtp-Source: ACHHUZ4/r3FeV0AZd+6PROUEuJxFJ3wn76aAoCTfdPXqDlqQmWchAx8Y76EPgh2R2sUJtNhgQ1X/puQdmvca37fq4zA=
+X-Received: by 2002:a17:907:a4e:b0:96f:d345:d0f7 with SMTP id
+ be14-20020a1709070a4e00b0096fd345d0f7mr9214184ejc.62.1686608860743; Mon, 12
+ Jun 2023 15:27:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQLWNt0KsXoYVGFD0i089YMivYJ+ZeWmutUiefcdK=eOrw@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-	SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-	autolearn=no autolearn_force=no version=3.4.6
+References: <20230607235352.1723243-1-andrii@kernel.org> <CAEiveUdNrHfVXzF_6ogChifKyje3kA07pd8mpP+s24AEbKD7Cg@mail.gmail.com>
+ <CAEf4BzaDDqfODPS9MM5twXiXdDCAMs2U2-XK+gGPuSpnGFh=pQ@mail.gmail.com> <CAEiveUeDLr00SjyU=SMSc4XbHSA6LTn4U2DHr12760rbo5WqSw@mail.gmail.com>
+In-Reply-To: <CAEiveUeDLr00SjyU=SMSc4XbHSA6LTn4U2DHr12760rbo5WqSw@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 12 Jun 2023 15:27:28 -0700
+Message-ID: <CAEf4BzaQSKBJ_+8HaHdBHa9_guL_QCVgHZHb6jpCqv6CboCniQ@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 00/18] BPF token
+To: Djalal Harouni <tixxdz@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, keescook@chromium.org, 
+	brauner@kernel.org, lennart@poettering.net, cyphar@cyphar.com, 
+	luto@kernel.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Mon, Jun 12, 2023 at 03:07:22PM -0700, Alexei Starovoitov wrote:
-> On Mon, Jun 12, 2023 at 6:46 AM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
+On Mon, Jun 12, 2023 at 5:02=E2=80=AFAM Djalal Harouni <tixxdz@gmail.com> w=
+rote:
+>
+> On Sat, Jun 10, 2023 at 12:57=E2=80=AFAM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
 > >
-> > On Fri, 2023-06-09 at 11:15 -0700, Alexei Starovoitov wrote:
-> > > On Thu, Jun 8, 2023 at 5:11 PM Krister Johansen
-> > > <kjlx@templeofstupid.com> wrote:
+> > On Fri, Jun 9, 2023 at 3:30=E2=80=AFPM Djalal Harouni <tixxdz@gmail.com=
+> wrote:
+> > >
+> > > Hi Andrii,
+> > >
+> > > On Thu, Jun 8, 2023 at 1:54=E2=80=AFAM Andrii Nakryiko <andrii@kernel=
+.org> wrote:
 > > > >
-> > > > In certain situations a program with subprograms may have a NULL
-> > > > extable entry.  This should not happen, and when it does, it turns
-> > > > a
-> > > > single trap into multiple.  Add a test case for further debugging
-> > > > and to
-> > > > prevent regressions.  N.b: without any other patches this can panic
-> > > > or
-> > > > oops a kernel.
-> > > >
-> > > > Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
-> > > > ---
-> > > >  .../bpf/prog_tests/subprogs_extable.c         | 31 +++++++++++++
-> > > >  .../bpf/progs/test_subprogs_extable.c         | 46
-> > > > +++++++++++++++++++
-> > > >  2 files changed, 77 insertions(+)
-> > > >  create mode 100644
-> > > > tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-> > > >  create mode 100644
-> > > > tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-> > > >
-> > > > diff --git
-> > > > a/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-> > > > b/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-> > > > new file mode 100644
-> > > > index 000000000000..2201988274a4
-> > > > --- /dev/null
-> > > > +++ b/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-> > > > @@ -0,0 +1,31 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0
-> > > > +
-> > > > +#include <test_progs.h>
-> > > > +#include "test_subprogs_extable.skel.h"
-> > > > +
-> > > > +void test_subprogs_extable(void)
-> > > > +{
-> > > > +       const int READ_SZ = 456;
-> > > > +       struct test_subprogs_extable *skel;
-> > > > +       int err;
-> > > > +
-> > > > +       skel = test_subprogs_extable__open();
-> > > > +       if (!ASSERT_OK_PTR(skel, "skel_open"))
-> > > > +               return;
-> > > > +
-> > > > +       err = test_subprogs_extable__load(skel);
-> > > > +       if (!ASSERT_OK(err, "skel_load"))
-> > > > +               goto cleanup;
-> > > > +
-> > > > +       err = test_subprogs_extable__attach(skel);
-> > > > +       if (!ASSERT_OK(err, "skel_attach"))
-> > > > +               goto cleanup;
-> > > > +
-> > > > +       /* trigger tracepoint */
-> > > > +       ASSERT_OK(trigger_module_test_read(READ_SZ),
-> > > > "trigger_read");
-> > > > +
-> > > > +       test_subprogs_extable__detach(skel);
-> > > > +
-> > > > +cleanup:
-> > > > +       test_subprogs_extable__destroy(skel);
-> > > > +}
-> > > > diff --git
-> > > > a/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-> > > > b/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-> > > > new file mode 100644
-> > > > index 000000000000..c3ff66bf4cbe
-> > > > --- /dev/null
-> > > > +++ b/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-> > > > @@ -0,0 +1,46 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0
-> > > > +
-> > > > +#include "vmlinux.h"
-> > > > +#include <bpf/bpf_helpers.h>
-> > > > +#include <bpf/bpf_tracing.h>
-> > > > +
-> > > > +struct {
-> > > > +       __uint(type, BPF_MAP_TYPE_ARRAY);
-> > > > +       __uint(max_entries, 8);
-> > > > +       __type(key, __u32);
-> > > > +       __type(value, __u64);
-> > > > +} test_array SEC(".maps");
-> > > > +
-> > > > +static __u64 test_cb(struct bpf_map *map, __u32 *key, __u64 *val,
-> > > > void *data)
-> > > > +{
-> > > > +       return 1;
-> > > > +}
-> > > > +
-> > > > +SEC("fexit/bpf_testmod_return_ptr")
-> > > > +int BPF_PROG(handle_fexit_ret_subprogs, int arg, struct file *ret)
-> > > > +{
-> > > > +       *(volatile long *)ret;
-> > > > +       *(volatile int *)&ret->f_mode;
-> > > > +       bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
-> > > > +       return 0;
-> > > > +}
-> > > > +
-> > > > +SEC("fexit/bpf_testmod_return_ptr")
-> > > > +int BPF_PROG(handle_fexit_ret_subprogs2, int arg, struct file
-> > > > *ret)
-> > > > +{
-> > > > +       *(volatile long *)ret;
-> > > > +       *(volatile int *)&ret->f_mode;
-> > > > +       bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
-> > > > +       return 0;
-> > > > +}
-> > > > +
-> > > > +SEC("fexit/bpf_testmod_return_ptr")
-> > > > +int BPF_PROG(handle_fexit_ret_subprogs3, int arg, struct file
-> > > > *ret)
-> > > > +{
-> > > > +       *(volatile long *)ret;
-> > > > +       *(volatile int *)&ret->f_mode;
-> > > > +       bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
-> > > > +       return 0;
-> > > > +}
+> > > > ...
+> > > > creating new BPF objects like BPF programs, BPF maps, etc.
 > > >
-> > > What is the point of attaching 3 the same progs to the same hook?
-> > > One would be enough to test it, no?
-> > >
-> > > In other news...
-> > > Looks like this test is triggering a bug on s390.
-> > >
-> > > Ilya,
-> > > please take a look:
-> > > https://github.com/kernel-patches/bpf/actions/runs/5216942096/jobs/9416404780
-> > >
-> > > bpf_prog_78c0d4c618ed2df7_handle_fexit_ret_subprogs3
-> > > is crashing the kernel.
-> > > A bug in extable logic on s390?
+> > > Is there a reason for coupling this only with the userns?
 > >
-> > I think we also need this:
-> >
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -17664,6 +17664,7 @@ static int jit_subprogs(struct bpf_verifier_env
-> > *env)
-> >         prog->bpf_func = func[0]->bpf_func;
-> >         prog->jited_len = func[0]->jited_len;
-> >         prog->aux->extable = func[0]->aux->extable;
-> > +       prog->aux->num_exentries = func[0]->aux->num_exentries;
-> >         prog->aux->func = func;
-> >         prog->aux->func_cnt = env->subprog_cnt;
-> >         bpf_prog_jit_attempt_done(prog);
-> >
-> > The reason is that s390 JIT doubles the number of extable entries due
-> > to how the hardware works (some exceptions point to the failing insn,
-> > some point to the next one).
-> >
-> > With that:
-> >
-> > Acked-by: Ilya Leoshkevich <iii@linux.ibm.com>
-> > Tested-by: Ilya Leoshkevich <iii@linux.ibm.com>
-> >
-> > for the v4 series.
-> 
-> Great.
-> 
-> Krister,
-> could you please resubmit v5 adding the above change and Ilya's tags to patch 1?
-> 
-> I'd like to see green BPF CI on all platforms before landing.
+> > There is no coupling. Without userns it is at least possible to grant
+> > CAP_BPF and other capabilities from init ns. With user namespace that
+> > becomes impossible.
+>
+> But these are not the same: delegate full cap vs delegate an fd mask?
 
-Thanks Alexei and Ilya, and yes, absolutely.  I'm hoping to have a v5 out
-a little later this afternoon.
+What FD mask are we talking about here? I don't recall us talking
+about any FD masks, so this one is a bit confusing without more
+context.
 
--K
+>
+> One can argue unprivileged in init userns is the same privileged in
+> nested userns
+> Getting to delegate fd in init userns, then in nested ones seems logical.=
+..
+
+Again, sorry, I'm not following. Can you please elaborate what you mean?
+
+>
+> > > The "trusted unprivileged" assumed by systemd can be in init userns?
+> >
+> > It doesn't have to be systemd, but yes, BPF token can be created only
+> > when you have CAP_SYS_ADMIN in init ns. It's in line with restrictions
+> > on a bunch of other bpf() syscall commands (like GET_FD_BY_ID family
+> > of commands).
+>
+> I'm more into getting fd delegation work also in the first init userns...
+>
+> I can't understand why it's not possible or doable?
+>
+
+I don't know what you are proposing, as I mentioned above, so it's
+hard to answer this question.
+
+> > >
+> > >
+> > > > Previous attempt at addressing this very same problem ([0]) attempt=
+ed to
+> > > > utilize authoritative LSM approach, but was conclusively rejected b=
+y upstream
+> > > > LSM maintainers. BPF token concept is not changing anything about L=
+SM
+> > > > approach, but can be combined with LSM hooks for very fine-grained =
+security
+> > > > policy. Some ideas about making BPF token more convenient to use wi=
+th LSM (in
+> > > > particular custom BPF LSM programs) was briefly described in recent=
+ LSF/MM/BPF
+> > > > 2023 presentation ([1]). E.g., an ability to specify user-provided =
+data
+> > > > (context), which in combination with BPF LSM would allow implementi=
+ng a very
+> > > > dynamic and fine-granular custom security policies on top of BPF to=
+ken. In the
+> > > > interest of minimizing API surface area discussions this is going t=
+o be
+> > > > added in follow up patches, as it's not essential to the fundamenta=
+l concept
+> > > > of delegatable BPF token.
+> > > >
+> > > > It should be noted that BPF token is conceptually quite similar to =
+the idea of
+> > > > /dev/bpf device file, proposed by Song a while ago ([2]). The bigge=
+st
+> > > > difference is the idea of using virtual anon_inode file to hold BPF=
+ token and
+> > > > allowing multiple independent instances of them, each with its own =
+set of
+> > > > restrictions. BPF pinning solves the problem of exposing such BPF t=
+oken
+> > > > through file system (BPF FS, in this case) for cases where transfer=
+ring FDs
+> > > > over Unix domain sockets is not convenient. And also, crucially, BP=
+F token
+> > > > approach is not using any special stateful task-scoped flags. Inste=
+ad, bpf()
+> > >
+> > > What's the use case for transfering over unix domain sockets?
+> >
+> > I'm not sure I understand the question. Unix domain socket
+> > (specifically its SCM_RIGHTS ancillary message) allows to transfer
+> > files between processes, which is one way to pass BPF object (like
+> > prog/map/link, and now token). BPF FS is the other one. In practice
+> > it's usually BPF FS, but there is no presumption about how file
+> > reference is transferred.
+>
+> Got it.
+>
+> IIRC SCM_RIGHTS and SCM_CREDENTIALS are translated into the receiving
+> userns, no ?
+>
+> I assume such which allows to set up things in a hierarchical way...
+>
+> If I set up the environment to lock things down the line, I find it
+> strange if a received fd would allow me to do more things than what
+> was planned when I created the environment: namespaces, mounts, etc
+>
+> I think you have to add the owning userns context to the fd or
+> "token", and on the receiving part if the current userns is the same
+> or a nested one of the current userns hierarchy then allow bpf
+> operation, otherwise fail with -EACCESS or something similar...
+>
+
+I think I mentioned problems with namespacing BPF itself. It's just
+fundamentally impossible due to a system-wide nature of BPF. So we can
+pretend to somehow attach/restrict BPF token to some namespace, but it
+still allows BPF programs to peek at any kernel state or user-space
+process.
+
+So I'd rather us not pretend we can do something that we actually
+cannot enforce.
+
+>
+> > >
+> > > Will BPF token translation happen if you cross the different namespac=
+es?
+> >
+> > What does BPF token translation mean specifically? Currently it's a
+> > very simple kernel object with refcnt and a few flags, so there is
+> > nothing to translate?
+>
+> Please see above comment about the owning userns context
+>
+> > >
+> > > If the token is pinned into different bpffs, will the token share the
+> > > same context?
+> >
+> > So I was planning to allow a user process creating a BPF token to
+> > specify custom user-provided data (context). This is not in this patch
+> > set, but is it what you are asking about?
+>
+> Exactly, define what you can access inside the container... this would
+> align with Andy's suggestion "making BPF behave sensibly in that
+> container seems like it should also be necessary." I do agree on this.
+>
+
+I don't know what Andy's suggestion actually is (as I honestly can't
+make out what your proposal is, sorry; you guys are not making it easy
+on me by being pretty vague and nonspecific). But see above about
+pretending to contain BPF within a container. There is no such thing.
+BPF is system-wide.
+
+> Again I think LSM and bpf+lsm should have the final word on this too...
+>
+
+Yes, I also think that having LSM on top is beneficial. But not a
+strict requirement and more or less orthogonal.
+
+>
+> > Regardless, pinning BPF object in BPF FS is just basically bumping a
+> > refcnt and exposes that object in a way that can be looked up through
+> > file system path (using bpf() syscall's BPF_OBJ_GET command).
+> > Underlying object isn't cloned or copied, it's exactly the same object
+> > with the same shared internal state.
+>
+> This is the part I also find strange, I can understand pinning a bpf
+> program, map, etc, but an fd that gives some access rights should be
+> part of the filesystem from the start, I don't get the extra pinning.
+
+BPF pinning of BPF token is optional. Everything still works without
+any BPF FS mount at all. It's an FD, BPF FS is just one of the means
+to pass FD to another process. I actually don't see why coupling BPF
+FS and BPF token is simpler.
+
+Now, BPF token is a kernel object, with its own state. It has an FD
+associated with it. It can be passed around and provided as an
+argument to bpf() syscall. In that sense it's just like BPF
+prog/map/link, just another BPF object.
+
+> Also it seems bpffs is per superblock mount so why not allow
+> privileged to mount bpffs with the corresponding information, then
+> privileged can open the fd, set it up and pass it down the line when
+> executing the main program?  or even allow unprivileged to open it on
+> bpffs with some restrictive conditions?
+>
+> Then it would be the business of the privileged to bind mount bpffs in
+> some other places, share it, etc
+
+How is this fundamentally different from BPF token pinning by
+*privileged* process? Except we are not conflating BPF FS as a way to
+pin/get many different BPF objects with BPF token itself. In both
+cases it's up to privileged process to set up sharing of BPF token
+appropriately.
+
+>
+> Having the fd or "token" that gives access rights pinned in two
+> separate bpffs mounts seems too much, it crosses namespaces (mount,
+> userns etc), environments setup by privileged...
+
+See above, there is nothing namespaceable about BPF itself, and BPF
+token as well. If some production setup benefits from pinning one BPF
+token in multiple places, I don't see the problem with that.
+
+>
+> I would just make it per bpffs mount and that's it, nothing more. If a
+> program wants to bind mount it somewhere else then it's not a bpf
+> problem.
+
+And if some application wants to pin BPF token, why would that be BPF
+subsystem's problem as well?
