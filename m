@@ -1,244 +1,180 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82C7421CD7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A02822610
 	for <bpf@vger.kernel.org>; Mon, 12 Jun 2023 17:23:17 +0000 (UTC)
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1DA188
-	for <bpf@vger.kernel.org>; Mon, 12 Jun 2023 10:23:16 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-653c16b3093so2590210b3a.3
-        for <bpf@vger.kernel.org>; Mon, 12 Jun 2023 10:23:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686590595; x=1689182595;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PIJi+YaipsBqXx9Jn519PmEfcm6UsBy0hXGpFTQSxa0=;
-        b=Q9gQPtZnpP4Lg8G/Hfh00v+xgId8RFOBZEXFS9J93Xo2PWq2Zamz/qyXckGdQp0T91
-         gzisalXdK2EqtU865ZpLTAPZnQeAdrnzNSjqPSMwTX2gWd1CISUffMMCksHe5D1A9YU6
-         B0Dt7aIIBU7eFDqcXxNk6OpbeCAyu0VohmXMKmqrsJvJggYTykORnZzX11+bEhnazrhZ
-         w5baAROukc7pEV63XRoruQrsk9+e+KLmTZK0uednJonBHoTahirMrRY3fwd3qDIEsJt2
-         MdBesAIm20GZgrCgHtzC7MQLw8ymZ0eYL6Cx50Xt9ufJRnNfQEHoWYLjV97RF1cz52gh
-         U/jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686590595; x=1689182595;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PIJi+YaipsBqXx9Jn519PmEfcm6UsBy0hXGpFTQSxa0=;
-        b=kOx+shwK5SDnW084/ebiGHWpJCGTxOGgNC6NlLvayy0gGhypP2eeg0vNmDAgBxcNy9
-         CIqEZ8z1SyKSddCGtuCiEMen+RVnMSy4SkxugE0eSALirCt85drX3Nz2KQuF8bmh/5q2
-         CXmW1AKWRrkI+ZQwsZjukiD1McbCmHb1a/S5lSNwQQ9DbI+fwJn2bQqTVLl4nGMcQ/gf
-         v/5E39aY4F/AZMjO5cvtt/wyQnRruFoGWxHxSuV0nTIdqaRWHCmfZkgjvk20hM+ZTVNu
-         s+FfTWJTsGUWPE/N8V4uCnkAdDDWTW+LuEFlJ3ki9BPSx5x83bAspGMBWRL0CIsbyAn5
-         17+w==
-X-Gm-Message-State: AC+VfDw0Gk8ZCafWgM0ATDu0xqpwpEmxYePWAnUC1X5y1D1lTLPCWH22
-	vVU+O8EE425TDwmnPba7StBrFCJJECSQSMrtrOgLWXuRftvSc+9YuU516ww1rxilHhJIiWRbSQp
-	eLDWZmmF3mEAnZBA0lOPuPOAiHxc4a02SxzEETTMn8LFUoE9+ew==
-X-Google-Smtp-Source: ACHHUZ5OvXDyWAez+dzRc+UAzo44mIDfjoWrK4ycPztDNKvr+BddKBvufx4U9eLykvv4HGyjeajcvQU=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a05:6a00:18a1:b0:654:8eb9:4607 with SMTP id
- x33-20020a056a0018a100b006548eb94607mr3157117pfh.4.1686590595480; Mon, 12 Jun
- 2023 10:23:15 -0700 (PDT)
-Date: Mon, 12 Jun 2023 10:23:04 -0700
-In-Reply-To: <20230612172307.3923165-1-sdf@google.com>
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63D8DB;
+	Mon, 12 Jun 2023 10:23:15 -0700 (PDT)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35CHFhZE025358;
+	Mon, 12 Jun 2023 10:22:53 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=s2048-2021-q4;
+ bh=P+m83mVO6qJhNQBlK23zTov4anrrqAU1+uIM0ec4dzg=;
+ b=jGU+TzcaKrlK3JvbjVNY7gzNfhQwJQdNugiIW0f0IeWYKhBeS9OdkUQPhvuGeCqH8Vzv
+ CyTccnOmSUWmdsexuclN2Cf+EHZhuRFwHAO3Q1NSPgRky0Fz1fDdlkXoGhr+syhTdC4U
+ znn5Ha2t7U8YyGtRpN7dpJSW0fU/tBLnDCRcV4WOU8CDkb0DS6hU2SQbzVKBL/KLx3Qr
+ yFCPtk6KHK/icb5WwC5xoR4WbxSc8EYi1bPnmkO/KLP/NDzhEdbWMgWtR5SRDOE5AEWW
+ L/+VJ9aZUa2mkJPvsXR81Q+XDrhjTfBYf5Qo6R8As3TnPXa7jIMi4cYjEY91FynftdGA GA== 
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2174.outbound.protection.outlook.com [104.47.59.174])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3r5xdwkm1n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 12 Jun 2023 10:22:53 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PFaL8CHWm8UOCeWhPaCOLH6hSiqPnmghbam09zUvgB1z8bDpQP+NvcfymGadc0ccMj5d0WlbPpeALKEav1qhRxN8p7pU2ryqOWlvOfMvqZioDV+INl4o5lGt4Cxjoo443SPAlQD3UYpRrkfTX3WvTZSf2GLtsG7sQzcsNrV+mNvFHTNxe2mUiZymrXQmaIvIIoxxtCYMLqoqwnQBw5JwQhJ7tAR4XlpI1XyXcYNMzKiHyK/xOkE2ltQJUEzcrSGiorO4IcfCdRC3mlZJ2KPryrTPnX5ALcxV6OSCujPoTbNQvBeYQgiQ2+F889NCk51S0xVzxq7FH5H80EBu9MWj1w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=P+m83mVO6qJhNQBlK23zTov4anrrqAU1+uIM0ec4dzg=;
+ b=H7aeFEUfBY9oLHVbi+9yPeoO2mtW2FYWGdUzD4GlXBp+HYu0kQ2ODyC1TjR9sdYZecR8TcEU6emX3oCPkb1o835IvQithBJF+r/feIcCABxTWsRQFpVC2HOxz9MhS+GUQM2+a6lStHqE5Ln1rofdNcwRjsPkI97dKZz55ilYz/S/iyI2eUiIMcBo649v8dFEy+yh4cJPvUVYB3CxLxP8gjOCDd7IkNE3zpi5eSBgL6/5EIRwZQhlMHJt/MdMBcOL4TUD/O9Ejj/D8pn0hTJ5jhYMF7R78Y4OXknkPflPOP5KeStfJc1sMNolarxZwcnokeJ8i3j8Igkl+w9KIIPxSA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by SA1PR15MB5820.namprd15.prod.outlook.com (2603:10b6:806:330::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Mon, 12 Jun
+ 2023 17:22:51 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::428f:acec:2c1f:c812]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::428f:acec:2c1f:c812%6]) with mapi id 15.20.6455.043; Mon, 12 Jun 2023
+ 17:22:51 +0000
+Message-ID: <80c805d5-8077-74b4-ebc3-7e8fbc8c767f@meta.com>
+Date: Mon, 12 Jun 2023 10:22:47 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH v3 bpf-next 05/10] bpf: Clear the probe_addr for uprobe
+To: Yafang Shao <laoar.shao@gmail.com>, ast@kernel.org, daniel@iogearbox.net,
+        john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, quentin@isovalent.com,
+        rostedt@goodmis.org, mhiramat@kernel.org
+Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+References: <20230612151608.99661-1-laoar.shao@gmail.com>
+ <20230612151608.99661-6-laoar.shao@gmail.com>
+Content-Language: en-US
+From: Yonghong Song <yhs@meta.com>
+In-Reply-To: <20230612151608.99661-6-laoar.shao@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BYAPR05CA0019.namprd05.prod.outlook.com
+ (2603:10b6:a03:c0::32) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20230612172307.3923165-1-sdf@google.com>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <20230612172307.3923165-5-sdf@google.com>
-Subject: [RFC bpf-next 4/7] bpf: implement devtx timestamp kfunc
-From: Stanislav Fomichev <sdf@google.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	martin.lau@linux.dev, song@kernel.org, yhs@fb.com, john.fastabend@gmail.com, 
-	kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org, 
-	netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-	SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-	autolearn=unavailable autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|SA1PR15MB5820:EE_
+X-MS-Office365-Filtering-Correlation-Id: 82735026-ad87-4689-daea-08db6b69a67c
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	tpEu2ABpi+HbyHVy+WlzGOZRppa9UOJCxpkgGehqdqzuss1jrxLxKNFL8yhvC47n7P2paN3nKUCuCafm7snEYk3KYBbsWFNrOFovlesu6/Yyae/YLMST/fGemB1WdXNNhyfcfuMd9Kd3hRcJV6tz5Yl3X4DnTuSyee4uUdME4RVpnX8YBh8YtpG6n/ElzyieDP3E1GXkdbdH3HuvTNF7MyrmpYz1PPUWaqi5R8MHCL0UkZKFfHtumIOEPCD9V2GtqZsfjiNJEkS1qIyvvlfb0XMgYJ9jJ4+hxkwYAmWuhIpVBzaEBta3RGxmdPtvRQJyPFU5RFp6P9kRVmAUbMPeciCakmrxJHkpt1zRgpwTGIb4gkCTV4AcPCQYKYFGIMorQeayoGnR6szNMcylpDrkH6sqO2gRwZbOf+4sAEsBOm3HqRawEtCdzTew7zo6FicPSKig6di0eKkfSqwvnFt6CZPUUtHWfZx4nE/q1pW7TtZWIDtU50qTUAzkypfsI4gCJxwV12mnU0geBqYYwUiIFjvl7DiEUIZQZC/aZvGG7hjcd1xlUXgtu2yqwFGmDTo3in7KPCR3+IGTs+E7MXFzy5FVD3l9h/+2oiC/LysZbFNKllcuyfL9t1X/cBNKFzBNuSZ89QryU9qjYeteJz52fFkEdpRPEAI80EBvVXr3He0=
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(39860400002)(366004)(346002)(376002)(451199021)(478600001)(8936002)(66556008)(7416002)(66476007)(8676002)(36756003)(5660300002)(2906002)(86362001)(31696002)(4326008)(66946007)(921005)(316002)(6506007)(41300700001)(38100700002)(2616005)(6512007)(53546011)(83380400001)(186003)(6486002)(31686004)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?utf-8?B?cVJxakxNUGpIMG1ING9IenBmTFZIY2FMclh6VkJlY3FuWmltenhHbksva0Fn?=
+ =?utf-8?B?MFl4SU13MmdLU3hhZmM3dFlVUlprQVJRODZha3k2c3EweXQwWklHNzFFdmJt?=
+ =?utf-8?B?MG4ycGxWaEprYmFnREd2bzVtcnNIREFBY3lRL2F3NnZ4NjJ6d2FCN3dmSzRr?=
+ =?utf-8?B?Mkd6SHZ3Qjc5ZUExOFUyWWtRN0s2dE54WkdHNWF4bDhLMVQwV1ZaVkduWCsw?=
+ =?utf-8?B?MWlIZmxFTkh6dGd4S2ZWTmVXMDdzM2RhM1N3dkFZM0tkRjR1ZkcyU1creXdQ?=
+ =?utf-8?B?ZnN3K1JKUEF0V0FpSFBiMGIzSitPQ0QvRFNLVzY4blZKT0g2WWtNcVEvTHZx?=
+ =?utf-8?B?OExoczkyZ2FFNmJIRDF6NWUxZnlOb0JQWi84bkpmekNTNnhMVVRqVnE2OXRR?=
+ =?utf-8?B?NkVtVVZaTlVJaElIZDRsc0h5bXZjVXhqbzNodG5rNEREZkE4cGkrdkVZMFZ6?=
+ =?utf-8?B?TkphQlg1N0FBSkQvTGVPTysvM2IvRVhTcFIzcDlPdFBmWU9YZzc5MVNkRkRh?=
+ =?utf-8?B?a3dWb1dld2s1YzF4bVJITDlDZHpRRVM3amcvTk5GUzdDeGtLUEFBWkZOb1pl?=
+ =?utf-8?B?dk1NRFRVK2tFRWFZQmxvYmFRY1JVTXd3U2tvamduUWRYTjhSMm1tSThGVDE0?=
+ =?utf-8?B?Vy9YMERyaUUzcWhGbHE0S1BxV1NtbFUxVXFwNHYxSlV1TnQvblZJbmtmOCt4?=
+ =?utf-8?B?dWpESFZEL2FhaEFQQXRHY1huOGR2UGFMMWJoWjdQdUx3dGdNS0Y5UFUvbE9F?=
+ =?utf-8?B?bnRROGlXM3diT0dmZm8zTHhlNE9uc1B6djV0VmgreGVYYlRaTnA2cWxvK1hv?=
+ =?utf-8?B?dE50a1FPNTRIVTM0d0cvZTBxdUExeFlnRmdmeFlMQURNeHBoQnJubVNGWFVu?=
+ =?utf-8?B?RS8ra21mU0xrRjVaSWpiUFE1L2FQTllMTXhlWSttcU4waUhJNnhwQTAzY0hV?=
+ =?utf-8?B?U2pxdk5UYnRXVnF0ZGpLbFlFcnpMWkhKTXNjTlNzQlUzT2hRVVNhd29tMlE4?=
+ =?utf-8?B?MldLTUg1N1VidGo3dDExN3l3WEdwWWVUV3AwbEtmZGJyNVIySlFWZG1TbmJt?=
+ =?utf-8?B?T2hmeVJSbXllZEZDY2s5ZTJoWktrTEk1UjhubFRjT3lkSllNbmNQWnJBcE1a?=
+ =?utf-8?B?NFpqdzgrdXc4WjRCVFJpM2VDMllYUkFLR0E5T2kzU1RUUmdqU3oxNWxOZjVI?=
+ =?utf-8?B?TmMvL2VzUjBlY1QrY2lxTVFkdlRrQjVYVUNReFhXOWxGd0huNkhIeGhmT3ph?=
+ =?utf-8?B?U2NMSDZnc0orb09lUy9KMkJwSnRvRkhzTTRjNTV2WkNac01OTHowQWZpWTRM?=
+ =?utf-8?B?eDlMMkdHSG5jVXI2UWFQSWpwVG1PM3BRRU9uSnc5aFZQYzRyRmduVmQrbGlL?=
+ =?utf-8?B?SGYxS0UvZTNucDh4bzdDQVlxVFhKM2E2S08wdjVLTGtMNFllcXBpblA4Szg0?=
+ =?utf-8?B?dkNJZU1UVlpXMGJJZ2tmS2kyaVArY0VmRldQTGQ5UXVZS3kzaUFnMEVINFE0?=
+ =?utf-8?B?cGw1bEtSZ0o2SFJUaEdXWTZnQ1I0S0hoWDBvV0dmckZyOXZnRXEwaUN6RXJh?=
+ =?utf-8?B?a1B1cDIyS1kvSTM4UmpQN2tOckVXQmIrcTVIa0N4R3hrS0wwMUtWSTFnbWpv?=
+ =?utf-8?B?dU9YNEZSU0d4OVN5RUFLaEYwUW5vdDYrS292SDZjRk1SaXNIK2NUQ3RuMnBU?=
+ =?utf-8?B?OUNtM3hqMnBhRkU2T09DcWo3d0pCTzc5TU9wd2JsRFl3WFljb0xQbnhhblFw?=
+ =?utf-8?B?V3l6M3AvU0ZJV1U4Mmp5Sm9jL3B1czJUNjVMUW9YdHlPeHk1cVBiZDNIYnM1?=
+ =?utf-8?B?YmdqejdHeGxkSGNML3FhWVU2M3NudE5RUEdnLytVTHRnUVRYK0h5U2RmQTNP?=
+ =?utf-8?B?dkdRVjNJeUxxam1IWCtOZHprOVZRUjBhNXE0VVcwTGVQT0dYZGR6QmFWc1JO?=
+ =?utf-8?B?dmNCTnE3WklyWTNia1JsWkFZVDQ4NjRjT0E5MnB2azNFZWluUDVQcXRod2Nx?=
+ =?utf-8?B?bHM4djIvS2FzbmhGbjNwc1FIZzQyYklTSWx6dmpkVStWbEU2MTF0QkdqRzg0?=
+ =?utf-8?B?bUFrTGorcFFXZHdUemI4MSsvQ0ZTdmRlakFPUmwza09Fb1U5bmdhV2EzZ3pp?=
+ =?utf-8?B?TkYreit5SFNKN0x1NzFud1J2czB4MnV6cnNxdGpOYkJrUlBPNXYzNmJsR05H?=
+ =?utf-8?B?NHc9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 82735026-ad87-4689-daea-08db6b69a67c
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 17:22:51.3646
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GY6UShj3CNG+sU17EDzrsyJtLOKfFqlW0kJnmqxWchPQhTkFnlq36FyFkNgSprnJ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR15MB5820
+X-Proofpoint-ORIG-GUID: _dYahA3Rw4vGeuQ2-JoSm6R8ztsujbGF
+X-Proofpoint-GUID: _dYahA3Rw4vGeuQ2-JoSm6R8ztsujbGF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-12_12,2023-06-12_02,2023-05-22_02
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+	T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Two kfuncs, one per hook point:
 
-1. at submit time - bpf_devtx_sb_request_timestamp - to request HW
-   to put TX timestamp into TX completion descriptors
 
-2. at completion time - bpf_devtx_cp_timestamp - to read out
-   TX timestamp
+On 6/12/23 8:16 AM, Yafang Shao wrote:
+> To avoid returning uninitialized or random values when querying the file
+> descriptor (fd) and accessing probe_addr, it is necessary to clear the
+> variable prior to its use.
+> 
+> Fixes: 41bdc4b40ed6 ("bpf: introduce bpf subcommand BPF_TASK_FD_QUERY")
+> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+> Cc: Yonghong Song <yhs@fb.com>
 
-Cc: netdev@vger.kernel.org
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
----
- include/linux/netdevice.h |  4 +++
- include/net/offload.h     | 10 +++++++
- kernel/bpf/offload.c      |  8 ++++++
- net/core/devtx.c          | 58 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 80 insertions(+)
+Thanks for the fix! LGTM.
 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index e08e3fd39dfc..6e42e62fd1bc 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -1651,10 +1651,14 @@ struct net_device_ops {
- 						  bool cycles);
- };
- 
-+struct devtx_frame;
-+
- struct xdp_metadata_ops {
- 	int	(*xmo_rx_timestamp)(const struct xdp_md *ctx, u64 *timestamp);
- 	int	(*xmo_rx_hash)(const struct xdp_md *ctx, u32 *hash,
- 			       enum xdp_rss_hash_type *rss_type);
-+	int	(*xmo_sb_request_timestamp)(const struct devtx_frame *ctx);
-+	int	(*xmo_cp_timestamp)(const struct devtx_frame *ctx, u64 *timestamp);
- };
- 
- /**
-diff --git a/include/net/offload.h b/include/net/offload.h
-index 264a35881473..36899b64f4c8 100644
---- a/include/net/offload.h
-+++ b/include/net/offload.h
-@@ -10,9 +10,19 @@
- 	NETDEV_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_HASH, \
- 			      bpf_xdp_metadata_rx_hash)
- 
-+#define DEVTX_SB_KFUNC_xxx	\
-+	NETDEV_METADATA_KFUNC(DEVTX_SB_KFUNC_REQUEST_TIMESTAMP, \
-+			      bpf_devtx_sb_request_timestamp)
-+
-+#define DEVTX_CP_KFUNC_xxx	\
-+	NETDEV_METADATA_KFUNC(DEVTX_CP_KFUNC_TIMESTAMP, \
-+			      bpf_devtx_cp_timestamp)
-+
- enum {
- #define NETDEV_METADATA_KFUNC(name, _) name,
- XDP_METADATA_KFUNC_xxx
-+DEVTX_SB_KFUNC_xxx
-+DEVTX_CP_KFUNC_xxx
- #undef NETDEV_METADATA_KFUNC
- MAX_NETDEV_METADATA_KFUNC,
- };
-diff --git a/kernel/bpf/offload.c b/kernel/bpf/offload.c
-index 9cfe96422c80..91dc7b7e3684 100644
---- a/kernel/bpf/offload.c
-+++ b/kernel/bpf/offload.c
-@@ -854,6 +854,10 @@ void *bpf_dev_bound_resolve_kfunc(struct bpf_prog *prog, u32 func_id)
- 		p = ops->xmo_rx_timestamp;
- 	else if (func_id == bpf_dev_bound_kfunc_id(XDP_METADATA_KFUNC_RX_HASH))
- 		p = ops->xmo_rx_hash;
-+	else if (func_id == bpf_dev_bound_kfunc_id(DEVTX_SB_KFUNC_REQUEST_TIMESTAMP))
-+		p = ops->xmo_sb_request_timestamp;
-+	else if (func_id == bpf_dev_bound_kfunc_id(DEVTX_CP_KFUNC_TIMESTAMP))
-+		p = ops->xmo_cp_timestamp;
- out:
- 	up_read(&bpf_devs_lock);
- 
-@@ -863,12 +867,16 @@ void *bpf_dev_bound_resolve_kfunc(struct bpf_prog *prog, u32 func_id)
- BTF_SET_START(dev_bound_kfunc_ids)
- #define NETDEV_METADATA_KFUNC(name, str) BTF_ID(func, str)
- XDP_METADATA_KFUNC_xxx
-+DEVTX_SB_KFUNC_xxx
-+DEVTX_CP_KFUNC_xxx
- #undef NETDEV_METADATA_KFUNC
- BTF_SET_END(dev_bound_kfunc_ids)
- 
- BTF_ID_LIST(dev_bound_kfunc_ids_unsorted)
- #define NETDEV_METADATA_KFUNC(name, str) BTF_ID(func, str)
- XDP_METADATA_KFUNC_xxx
-+DEVTX_SB_KFUNC_xxx
-+DEVTX_CP_KFUNC_xxx
- #undef NETDEV_METADATA_KFUNC
- 
- u32 bpf_dev_bound_kfunc_id(int id)
-diff --git a/net/core/devtx.c b/net/core/devtx.c
-index b7cbc26d1c01..2b37c31f0912 100644
---- a/net/core/devtx.c
-+++ b/net/core/devtx.c
-@@ -162,6 +162,30 @@ __bpf_kfunc int bpf_devtx_cp_attach(int ifindex, int prog_fd)
- 	return ret;
- }
- 
-+/**
-+ * bpf_devtx_sb_request_timestamp - Request TX timestamp on the packet.
-+ * Callable only from the devtx-submit hook.
-+ * @ctx: devtx context pointer.
-+ *
-+ * Returns 0 on success or ``-errno`` on error.
-+ */
-+__bpf_kfunc int bpf_devtx_sb_request_timestamp(const struct devtx_frame *ctx)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+/**
-+ * bpf_devtx_cp_timestamp - Read TX timestamp of the packet. Callable
-+ * only from the devtx-complete hook.
-+ * @ctx: devtx context pointer.
-+ *
-+ * Returns 0 on success or ``-errno`` on error.
-+ */
-+__bpf_kfunc int bpf_devtx_cp_timestamp(const struct devtx_frame *ctx, __u64 *timestamp)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
- __diag_pop();
- 
- bool is_devtx_kfunc(u32 kfunc_id)
-@@ -187,6 +211,28 @@ static const struct btf_kfunc_id_set bpf_devtx_syscall_kfunc_set = {
- 	.set   = &bpf_devtx_syscall_kfunc_ids,
- };
- 
-+BTF_SET8_START(devtx_sb_kfunc_ids)
-+#define NETDEV_METADATA_KFUNC(_, name) BTF_ID_FLAGS(func, name, 0)
-+DEVTX_SB_KFUNC_xxx
-+#undef NETDEV_METADATA_KFUNC
-+BTF_SET8_END(devtx_sb_kfunc_ids)
-+
-+static const struct btf_kfunc_id_set devtx_sb_kfunc_set = {
-+	.owner = THIS_MODULE,
-+	.set   = &devtx_sb_kfunc_ids,
-+};
-+
-+BTF_SET8_START(devtx_cp_kfunc_ids)
-+#define NETDEV_METADATA_KFUNC(_, name) BTF_ID_FLAGS(func, name, 0)
-+DEVTX_CP_KFUNC_xxx
-+#undef NETDEV_METADATA_KFUNC
-+BTF_SET8_END(devtx_cp_kfunc_ids)
-+
-+static const struct btf_kfunc_id_set devtx_cp_kfunc_set = {
-+	.owner = THIS_MODULE,
-+	.set   = &devtx_cp_kfunc_ids,
-+};
-+
- static int __init devtx_init(void)
- {
- 	int ret;
-@@ -197,6 +243,18 @@ static int __init devtx_init(void)
- 		return ret;
- 	}
- 
-+	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &devtx_sb_kfunc_set);
-+	if (ret) {
-+		pr_warn("failed to register devtx_sb kfuncs: %d", ret);
-+		return ret;
-+	}
-+
-+	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &devtx_cp_kfunc_set);
-+	if (ret) {
-+		pr_warn("failed to register devtx_cp completion kfuncs: %d", ret);
-+		return ret;
-+	}
-+
- 	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &bpf_devtx_syscall_kfunc_set);
- 	if (ret) {
- 		pr_warn("failed to register syscall kfuncs: %d", ret);
--- 
-2.41.0.162.gfafddb0af9-goog
+Acked-by: Yonghong Song <yhs@fb.com>
 
+> ---
+>   kernel/trace/bpf_trace.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 742047c..97a5235 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -2372,10 +2372,12 @@ int bpf_get_perf_event_info(const struct perf_event *event, u32 *prog_id,
+>   						  event->attr.type == PERF_TYPE_TRACEPOINT);
+>   #endif
+>   #ifdef CONFIG_UPROBE_EVENTS
+> -		if (flags & TRACE_EVENT_FL_UPROBE)
+> +		if (flags & TRACE_EVENT_FL_UPROBE) {
+>   			err = bpf_get_uprobe_info(event, fd_type, buf,
+>   						  probe_offset,
+>   						  event->attr.type == PERF_TYPE_TRACEPOINT);
+> +			*probe_addr = 0x0;
+> +		}
+>   #endif
+>   	}
+>   
