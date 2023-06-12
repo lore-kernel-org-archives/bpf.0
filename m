@@ -1,185 +1,170 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F5EA17AB7
-	for <bpf@vger.kernel.org>; Mon, 12 Jun 2023 17:04:19 +0000 (UTC)
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E7FE0;
-	Mon, 12 Jun 2023 10:04:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=SEk2oG1exWilLsW4LKsvx0U7x1YxXGFcOLTdiLfMLYs=; b=nVfveCr4tjyjjGfnj5Oa1WEzMg
-	ewhvrHkvj7t/91yelCB//j1zMkOgnODPX+wGcKaZAmfXBBGih1nByqLwH3Neqh4MMPu2SiRpMbL4B
-	+0HnHkBHUS3m9LVag/zDKvxMupWvCEC0JiRtM5GtubX8DXLiSptZRADoOb2pDliYrHBY7oKerdkpI
-	if0jcaAXhYfN30m2jAuUyWFiXn5pYa3Mh0vU0ZP6ehjBg9DiJcYMsE106BWf/lQ7zTLYvbqNfi4SF
-	ff5zy1Nj8YzgmZl5p3CxLGrrclBUr9rDyvVSHcbz1pZcLIkjdz9GGxG0G4duIbhQiK+r/iZlgFuYm
-	YYRcD53Q==;
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1q8kxY-000Muz-6S; Mon, 12 Jun 2023 19:04:04 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-	by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1q8kxX-0003Ok-Aa; Mon, 12 Jun 2023 19:04:03 +0200
-Subject: Re: [PATCH 2/2] [v3] bpf: fix bpf_probe_read_kernel prototype
- mismatch
-To: Arnd Bergmann <arnd@kernel.org>, Yonghong Song <yhs@meta.com>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Song Liu <song@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, stable@vger.kernel.org,
- John Fastabend <john.fastabend@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Yonghong Song <yhs@fb.com>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Dave Marchevsky <davemarchevsky@fb.com>, Delyan Kratunov <delyank@fb.com>,
- Joanne Koong <joannelkoong@gmail.com>, Peter Zijlstra
- <peterz@infradead.org>, "Jason A. Donenfeld" <Jason@zx2c4.com>,
- Roberto Sassu <roberto.sassu@huawei.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-References: <20230602135128.1498362-1-arnd@kernel.org>
- <20230602135128.1498362-2-arnd@kernel.org>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <ac25cb0f-b804-1649-3afb-1dc6138c2716@iogearbox.net>
-Date: Mon, 12 Jun 2023 19:04:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 752341F19A
+	for <bpf@vger.kernel.org>; Mon, 12 Jun 2023 17:23:11 +0000 (UTC)
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF787107
+	for <bpf@vger.kernel.org>; Mon, 12 Jun 2023 10:23:09 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1b3cab3a48dso12109615ad.3
+        for <bpf@vger.kernel.org>; Mon, 12 Jun 2023 10:23:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686590589; x=1689182589;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Qsu3cuq2IPrUKP784jm3315aYb2wdAs7nUpO6qqSXIY=;
+        b=pJTZJIR5hwlrb4l5zjtVD9l2AsadG6lnBL9B0PBqA22CVjILWqG0PmGJhfahZIu4E3
+         p9n/SwWjFjxoBoCAfj+GXZ9gKZoG0j4iZt0tFCnl7nNdjwsBZQfpcWmnpYinAcD54zkZ
+         jSjUE+2Z2Y5TIpR6WYo9cZnkEa1Tulvm9ObTEg+H4Cww2ESI9r0NnLxGhrIR6xJGFiTc
+         9F+XSWXO0REK+O6HACJ0jlnzD4K3Umpw4jKpdGRBWeS1h1csHKdRB3NnNOtRoEPPbiN6
+         2xQ+gsX+9lrh9YFVbJhKt+aC2aIYl4kTW+IVmUVslSeJd/Sb4XU4Y7ku4FZp04WRlDBm
+         cKQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686590589; x=1689182589;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Qsu3cuq2IPrUKP784jm3315aYb2wdAs7nUpO6qqSXIY=;
+        b=O+HQmQadiRq39YZXRSukZ4t2uWm38FOzac68dK8lh+mRM9Kb2fUrsD452GTeDvBLF5
+         AoUFRzKgSQXQhnQP0trTTIYY2em3/0cygWWffrkvNJDC/O/Ay7/AZ0L65J9x/WCuPCKR
+         5kLcIujqCw+nO2/IQ22sbLcVt2Sz/1nO8T3E3IZ2ZrSGDijw0MoIJthXIbnelvIOLe5a
+         13FIHLYbocFqylwYq2RGPLYlbY9yGdRnPS18TXiQHuagWN0+U99GOYcDCS11r29EbC8h
+         +l056vEKUhHFzPo/g5wooYMfZaHZLUOUOZE4LUxQtx60uLzr+ZRnnLFVt4zEZANQn6pY
+         cDeQ==
+X-Gm-Message-State: AC+VfDwpeJQCrC3v+ZfEvkJQ0oyetQH3b6fRok5W40Ub6JK2nnUTFpu4
+	BZygBq3z/+DfVitoLauOOgZfY1HXY5xvuir8aGbdeXeUtLSdlAh1wnlq7RWkmTOWzujSFfJvBuO
+	Tv8KKURPv5VRDpHfRmZPOggjLmuihGYzyR1nJTnm/56EQvHbGgw==
+X-Google-Smtp-Source: ACHHUZ5tauUa8X45Oy6Hq91hlMyhPKNqvCsUmXwv7OmgnvjifZjlTF+xvldBlq/sIhbW+OJ4kr6VGq0=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a17:902:f811:b0:1b3:b84b:900e with SMTP id
+ ix17-20020a170902f81100b001b3b84b900emr1108755plb.2.1686590589065; Mon, 12
+ Jun 2023 10:23:09 -0700 (PDT)
+Date: Mon, 12 Jun 2023 10:23:00 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-In-Reply-To: <20230602135128.1498362-2-arnd@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26937/Mon Jun 12 09:24:05 2023)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-	version=3.4.6
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230612172307.3923165-1-sdf@google.com>
+Subject: [RFC bpf-next 0/7] bpf: netdev TX metadata
+From: Stanislav Fomichev <sdf@google.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	martin.lau@linux.dev, song@kernel.org, yhs@fb.com, john.fastabend@gmail.com, 
+	kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org, 
+	willemb@google.com, dsahern@kernel.org, magnus.karlsson@intel.com, 
+	bjorn@kernel.org, maciej.fijalkowski@intel.com, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+	SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+	autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 6/2/23 3:50 PM, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> bpf_probe_read_kernel() has a __weak definition in core.c and another
-> definition with an incompatible prototype in kernel/trace/bpf_trace.c,
-> when CONFIG_BPF_EVENTS is enabled.
-> 
-> Since the two are incompatible, there cannot be a shared declaration in
-> a header file, but the lack of a prototype causes a W=1 warning:
-> 
-> kernel/bpf/core.c:1638:12: error: no previous prototype for 'bpf_probe_read_kernel' [-Werror=missing-prototypes]
-> 
-> On 32-bit architectures, the local prototype
-> 
-> u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
-> 
-> passes arguments in other registers as the one in bpf_trace.c
-> 
-> BPF_CALL_3(bpf_probe_read_kernel, void *, dst, u32, size,
->              const void *, unsafe_ptr)
-> 
-> which uses 64-bit arguments in pairs of registers.
-> 
-> Change the core.c file to only reference the inner
-> bpf_probe_read_kernel_common() helper and provide a prototype for that,
-> to ensure this is compatible with both definitions.
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+--- Use cases ---
 
-Sorry for the delay. I just took in patch 1/2, thanks!
+The goal of this series is to add two new standard-ish places
+in the transmit path:
 
-Small comment below:
+1. Right before the packet is transmitted (with access to TX
+   descriptors)
+2. Right after the packet is actually transmitted and we've received the
+   completion (again, with access to TX completion descriptors)
 
-> --
-> v3: clarify changelog text further.
-> v2: rewrite completely to fix the mismatch.
-> ---
->   include/linux/bpf.h      | 2 ++
->   kernel/bpf/core.c        | 9 ++++++---
->   kernel/trace/bpf_trace.c | 3 +--
->   3 files changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index f58895830adae..55826398acfba 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -2619,6 +2619,8 @@ static inline void bpf_dynptr_set_rdonly(struct bpf_dynptr_kern *ptr)
->   }
->   #endif /* CONFIG_BPF_SYSCALL */
->   
-> +int bpf_probe_read_kernel_common(void *dst, u32 size, const void *unsafe_ptr);
-> +
->   void __bpf_free_used_btfs(struct bpf_prog_aux *aux,
->   			  struct btf_mod_pair *used_btfs, u32 len);
->   
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 0926714641eb5..565ef6950c7a8 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -35,6 +35,7 @@
->   #include <linux/bpf_verifier.h>
->   #include <linux/nodemask.h>
->   #include <linux/nospec.h>
-> +#include <linux/bpf.h>
->   #include <linux/bpf_mem_alloc.h>
->   #include <linux/memcontrol.h>
->   
-> @@ -1635,11 +1636,13 @@ bool bpf_opcode_in_insntable(u8 code)
->   }
->   
->   #ifndef CONFIG_BPF_JIT_ALWAYS_ON
-> -u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
-> +#ifndef CONFIG_BPF_EVENTS
-> +int bpf_probe_read_kernel_common(void *dst, u32 size, const void *unsafe_ptr)
->   {
->   	memset(dst, 0, size);
->   	return -EFAULT;
->   }
-> +#endif
->   
->   /**
->    *	___bpf_prog_run - run eBPF program on a given context
-> @@ -1931,8 +1934,8 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
->   		DST = *(SIZE *)(unsigned long) (SRC + insn->off);	\
->   		CONT;							\
->   	LDX_PROBE_MEM_##SIZEOP:						\
-> -		bpf_probe_read_kernel(&DST, sizeof(SIZE),		\
-> -				      (const void *)(long) (SRC + insn->off));	\
-> +		bpf_probe_read_kernel_common(&DST, sizeof(SIZE),	\
-> +			      (const void *)(long) (SRC + insn->off));	\
->   		DST = *((SIZE *)&DST);					\
->   		CONT;
->   
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 2bc41e6ac9fe0..290fdce2ce535 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -223,8 +223,7 @@ const struct bpf_func_proto bpf_probe_read_user_str_proto = {
->   	.arg3_type	= ARG_ANYTHING,
->   };
->   
-> -static __always_inline int
-> -bpf_probe_read_kernel_common(void *dst, u32 size, const void *unsafe_ptr)
-> +int bpf_probe_read_kernel_common(void *dst, u32 size, const void *unsafe_ptr)
->   {
->   	int ret;
+Accessing TX descriptors unlocks the following use-cases:
 
-Given this is critical fast-path, please find a solution where we don't need
-to penalize bpf_probe_read_kernel_common.
+- Setting device hints at TX: XDP/AF_XDP might use these new hooks to
+use device offloads. The existing case implements TX timestamp.
+- Observability: global per-netdev hooks can be used for tracing
+the packets and exploring completion descriptors for all sorts of
+device errors.
 
-Thanks,
-Daniel
+Accessing TX descriptors also means that the hooks have to be called
+from the drivers.
+
+The hooks are a light-weight alternative to XDP at egress and currently
+don't provide any packet modification abilities. However, eventually,
+can expose new kfuncs to operate on the packet (or, rather, the actual
+descriptors; for performance sake).
+
+--- UAPI ---
+
+The hooks are implemented in a HID-BPF style. Meaning they don't
+expose any UAPI and are implemented as tracing programs that call
+a bunch of kfuncs. The attach/detach operation happen via BPF syscall
+programs. The series expands device-bound infrastructure to tracing
+programs.
+
+--- skb vs xdp ---
+
+The hooks operate on a new light-weight devtx_frame which contains:
+- data
+- len
+- sinfo
+
+This should allow us to have a unified (from BPF POW) place at TX
+and not be super-taxing (we need to copy 2 pointers + len to the stack
+for each invocation).
+
+--- Multiprog attachment ---
+
+Currently, attach/detach don't expose links and don't support multiple
+programs. I'm planning to use Daniel's bpf_mprog once it lands.
+
+--- TODO ---
+
+Things that I'm planning to do for the non-RFC series:
+- have some real device support to verify xdp_hw_metadata works
+- freplace
+- Documentation/networking/xdp-rx-metadata.rst - like documentation
+
+--- CC ---
+
+CC'ing people only on the cover letter. Hopefully can find the rest via
+lore.
+
+Cc: willemb@google.com
+Cc: dsahern@kernel.org
+Cc: john.fastabend@gmail.com
+Cc: magnus.karlsson@intel.com
+Cc: bjorn@kernel.org
+Cc: maciej.fijalkowski@intel.com
+Cc: netdev@vger.kernel.org
+
+Stanislav Fomichev (7):
+  bpf: rename some xdp-metadata functions into dev-bound
+  bpf: resolve single typedef when walking structs
+  bpf: implement devtx hook points
+  bpf: implement devtx timestamp kfunc
+  net: veth: implement devtx timestamp kfuncs
+  selftests/bpf: extend xdp_metadata with devtx kfuncs
+  selftests/bpf: extend xdp_hw_metadata with devtx kfuncs
+
+ MAINTAINERS                                   |   2 +
+ drivers/net/veth.c                            |  94 ++++++-
+ include/linux/netdevice.h                     |   6 +
+ include/net/devtx.h                           |  76 +++++
+ include/net/offload.h                         |  38 +++
+ include/net/xdp.h                             |  18 +-
+ kernel/bpf/btf.c                              |   2 +
+ kernel/bpf/offload.c                          |  40 ++-
+ kernel/bpf/verifier.c                         |   4 +-
+ net/core/Makefile                             |   1 +
+ net/core/dev.c                                |   2 +
+ net/core/devtx.c                              | 266 ++++++++++++++++++
+ net/core/xdp.c                                |  20 +-
+ .../selftests/bpf/prog_tests/xdp_metadata.c   |  82 +++++-
+ .../selftests/bpf/progs/xdp_hw_metadata.c     |  59 ++++
+ .../selftests/bpf/progs/xdp_metadata.c        | 101 +++++++
+ tools/testing/selftests/bpf/xdp_hw_metadata.c | 160 ++++++++++-
+ tools/testing/selftests/bpf/xdp_metadata.h    |  13 +
+ 18 files changed, 934 insertions(+), 50 deletions(-)
+ create mode 100644 include/net/devtx.h
+ create mode 100644 include/net/offload.h
+ create mode 100644 net/core/devtx.c
+
+-- 
+2.41.0.162.gfafddb0af9-goog
+
