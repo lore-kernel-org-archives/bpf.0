@@ -1,153 +1,220 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FFD338CA4
-	for <bpf@vger.kernel.org>; Tue, 13 Jun 2023 18:25:55 +0000 (UTC)
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A78170C
-	for <bpf@vger.kernel.org>; Tue, 13 Jun 2023 11:25:52 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-97668583210so852789566b.1
-        for <bpf@vger.kernel.org>; Tue, 13 Jun 2023 11:25:52 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8087E136A
+	for <bpf@vger.kernel.org>; Tue, 13 Jun 2023 18:39:16 +0000 (UTC)
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EC81BF3
+	for <bpf@vger.kernel.org>; Tue, 13 Jun 2023 11:39:14 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-54f87d5f1abso1515311a12.0
+        for <bpf@vger.kernel.org>; Tue, 13 Jun 2023 11:39:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google; t=1686680751; x=1689272751;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1686681554; x=1689273554;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ndSkO2qkti4L/SsRIO9nUQau8kKaAI3Sxaq+0HhunWc=;
-        b=ntRa6AW6ValrHAqkuzvskPZkjppT1UiqWn5XgLaJRL+M66yi9z5SuBsJJtsg8gSyVk
-         ZTIikpoielPrbB8yOOTgCPTe0h3G8snlfV3i1tciBEYR0ULVrQlaH6ZlloWRNz123Gp2
-         8aS+0U465JGkaRt7VZb5swDwBi6W5as5+c8JY=
+        bh=QT+fQzSbsB3hqlxQq4ezOUZ9kAZ8c91ieAT3ZrWtoFA=;
+        b=fGJFBgzP7m78qyQUQLVEwT1ooky9W43a0imOgCl47ZWm1NoRo5i18nC+6tisau2W6W
+         b7dsM70tAYWw9NnIl3Q0XlFdISCnBWnW2UCvRXGVb0wdfOMuYcBFU9uj29S9KDXyRLTA
+         LCI+oogJ76epuvoPj196jnEnDyjvXrZhAm2aJ+ebjYQ2xnRO8SXpOA0+eAXJN/93M5KI
+         nJdMTmjT3KjutvOU1QsY4LHnsXhK+jjwHg2WMFeA5MNoGpINuzIJ8Xn1acUbHx0aysbz
+         Wo5pcLkKCLOiwwUeLhTULT7OatG22R3bQwgsSEevY5EM4FJ7G6nl3I7K07qAj1mlzyMa
+         SElg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686680751; x=1689272751;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ndSkO2qkti4L/SsRIO9nUQau8kKaAI3Sxaq+0HhunWc=;
-        b=RZPoe1YbzX7UZnzh6pyhvu89yFJe1isBodd+DY0IW5rbIhHxr1hU5l/yDy0Xs44XPl
-         HYeTCTliSvQWfOLfkPdGKpkuESrhgaiPizfhbO5MZe5ZzQa1t3Z8UvQcf1Xt+9hsHHkg
-         7MgoNGVcrAWbLO97xm0ufgfPTMPZ65MP2+RiR6Op8H5t7bYSToSOqL8ybWkQlri4oG8X
-         OhWObjS/DyH2U4PtWUHywXiBznOXuU82VQ4aBE+oFNErQ1spZf9XC9nRqeWz/Om+8Z9k
-         E1vRqvJe2VA7KTuY3y91ijZyogZ8Y80tRzVNtLIpwOZnztFQt6aRFgR63PKnbPASo84l
-         9dnQ==
-X-Gm-Message-State: AC+VfDyBkwwVIW9fuZbvdZEX6m8VCxIeOyWSD7jhyitdUgxNVFLGRR2I
-	9JbiFXRp6OQmfMnBelcsFpHssw==
-X-Google-Smtp-Source: ACHHUZ6L7PTRLKSYbWQ/tjcT0d/XBC+vGVXO4zTlysaNeyin+mwYf/zWWNDpzlfMXEPA3fN2f50m6A==
-X-Received: by 2002:a17:906:da87:b0:974:1c91:a752 with SMTP id xh7-20020a170906da8700b009741c91a752mr12713028ejb.5.1686680751027;
-        Tue, 13 Jun 2023 11:25:51 -0700 (PDT)
-Received: from cloudflare.com (79.184.146.33.ipv4.supernova.orange.pl. [79.184.146.33])
-        by smtp.gmail.com with ESMTPSA id p20-20020a170906b21400b009767c4235absm6869904ejz.219.2023.06.13.11.25.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 11:25:50 -0700 (PDT)
-References: <20230613084315.62021-1-luojianhong@cdjrlc.com>
- <6228af14241b831be4bae6ebcd63799e@208suo.com>
- <53510828-ee5b-1d91-0f85-b79da4422741@meta.com>
-User-agent: mu4e 1.6.10; emacs 28.2
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Yonghong Song <yhs@meta.com>
-Cc: baomingtong001@208suo.com, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
- haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org,
- Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/bpf: Remove unneeded variable "ret"
-Date: Tue, 13 Jun 2023 20:13:00 +0200
-In-reply-to: <53510828-ee5b-1d91-0f85-b79da4422741@meta.com>
-Message-ID: <87pm5z9q36.fsf@cloudflare.com>
+        d=1e100.net; s=20221208; t=1686681554; x=1689273554;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QT+fQzSbsB3hqlxQq4ezOUZ9kAZ8c91ieAT3ZrWtoFA=;
+        b=kY52JPVj6oQFOmphkJnHb9CjthNA6CxyCmAZQbgxx5Q5uMrJb0e/oa7d2Pb/deWDOo
+         IoDJl/V1PlonrJaowEN0PhKuREc6hpSgtSnNajfyRLgh0wDLgVPAYBp9J8jNnv3TxpSm
+         TQzgN6OlTsz+kuiWX0KP+n8tIMx/bYTDVM0UouCXKb7Vt9qHTlnUv0MMQpIoDUZqdIZt
+         KVUiuSUagRBeT20WnH8seu48Tt4Igf63TEndY4lEEg40eJZsEwFcln57ULjcapp2gk/m
+         y5b2Eh6usNyx2LX5c2vptvO2kepye1qQ92VhF2yF+kAHaVAWKDIaHwI6O0UwoL9dFYbI
+         s8Tw==
+X-Gm-Message-State: AC+VfDwRSHrLYcRZ33qzrbG5AiD2E2GXRs3mTBTEypBhCYAu/81Cl7Ts
+	FL5icQxo+lgSwwBJ5Oo6ga9GZVHDvTrnDHiiqUslnQ==
+X-Google-Smtp-Source: ACHHUZ6UzjLxyWPiRJjnbgASTJNqy2M+mr/+5MHLW4EvJchmkA3n8OlyNncmExxmrOJE9ZRcG6sHIhK+zROeBbHCGWI=
+X-Received: by 2002:a17:90a:1909:b0:253:37a9:178 with SMTP id
+ 9-20020a17090a190900b0025337a90178mr10681963pjg.45.1686681553846; Tue, 13 Jun
+ 2023 11:39:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <20230612172307.3923165-1-sdf@google.com> <87cz20xunt.fsf@toke.dk>
+ <ZIiaHXr9M0LGQ0Ht@google.com> <877cs7xovi.fsf@toke.dk>
+In-Reply-To: <877cs7xovi.fsf@toke.dk>
+From: Stanislav Fomichev <sdf@google.com>
+Date: Tue, 13 Jun 2023 11:39:02 -0700
+Message-ID: <CAKH8qBt5tQ69Zs9kYGc7j-_3Yx9D6+pmS4KCN5G0s9UkX545Mg@mail.gmail.com>
+Subject: Re: [RFC bpf-next 0/7] bpf: netdev TX metadata
+To: =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@kernel.org>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, yhs@fb.com, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, haoluo@google.com, 
+	jolsa@kernel.org, willemb@google.com, dsahern@kernel.org, 
+	magnus.karlsson@intel.com, bjorn@kernel.org, maciej.fijalkowski@intel.com, 
+	netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-	SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+	T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
 	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Tue, Jun 13, 2023 at 06:42 AM -07, Yonghong Song wrote:
-> On 6/13/23 1:50 AM, baomingtong001@208suo.com wrote:
->> Fix the following coccicheck warning:
->> tools/testing/selftests/bpf/progs/tailcall_bpf2bpf6.c:28:14-17: Unneeded
->> variable: "ret".
->> Return "1".
->> Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
->> ---
->>  =C2=A0tools/testing/selftests/bpf/progs/tailcall_bpf2bpf6.c | 3 +--
->>  =C2=A01 file changed, 1 insertion(+), 2 deletions(-)
->> diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf6.c
->> b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf6.c
->> index 4a9f63bea66c..7f0146682577 100644
->> --- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf6.c
->> +++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf6.c
->> @@ -25,10 +25,9 @@ static __noinline
->>  =C2=A0int subprog_tail(struct __sk_buff *skb)
->>  =C2=A0{
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Don't propagate the constant to the ca=
-ller */
->> - =C2=A0=C2=A0=C2=A0volatile int ret =3D 1;
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bpf_tail_call_static(skb, &jmp_table, 0);
->> - =C2=A0=C2=A0=C2=A0return ret;
->> + =C2=A0=C2=A0=C2=A0return 1;
+On Tue, Jun 13, 2023 at 10:18=E2=80=AFAM Toke H=C3=B8iland-J=C3=B8rgensen <=
+toke@kernel.org> wrote:
 >
-> Please pay attention to the comment:
->    /* Don't propagate the constant to the caller */
-> which clearly says 'constant' is not preferred.
+> Stanislav Fomichev <sdf@google.com> writes:
 >
-> The patch introduced this change is:
->     5e0b0a4c52d30   selftests/bpf: Test tail call counting with bpf2bpf a=
-nd data
->    on stack
+> > On 06/12, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+> >> Some immediate thoughts after glancing through this:
+> >>
+> >> > --- Use cases ---
+> >> >
+> >> > The goal of this series is to add two new standard-ish places
+> >> > in the transmit path:
+> >> >
+> >> > 1. Right before the packet is transmitted (with access to TX
+> >> >    descriptors)
+> >> > 2. Right after the packet is actually transmitted and we've received=
+ the
+> >> >    completion (again, with access to TX completion descriptors)
+> >> >
+> >> > Accessing TX descriptors unlocks the following use-cases:
+> >> >
+> >> > - Setting device hints at TX: XDP/AF_XDP might use these new hooks t=
+o
+> >> > use device offloads. The existing case implements TX timestamp.
+> >> > - Observability: global per-netdev hooks can be used for tracing
+> >> > the packets and exploring completion descriptors for all sorts of
+> >> > device errors.
+> >> >
+> >> > Accessing TX descriptors also means that the hooks have to be called
+> >> > from the drivers.
+> >> >
+> >> > The hooks are a light-weight alternative to XDP at egress and curren=
+tly
+> >> > don't provide any packet modification abilities. However, eventually=
+,
+> >> > can expose new kfuncs to operate on the packet (or, rather, the actu=
+al
+> >> > descriptors; for performance sake).
+> >>
+> >> dynptr?
+> >
+> > Haven't considered, let me explore, but not sure what it buys us
+> > here?
 >
-> The test intentionally want to:
->   'Specifically when the size      of data allocated on BPF stack is not a
->  multiple on 8.'
+> API consistency, certainly. Possibly also performance, if using the
+> slice thing that gets you a direct pointer to the pkt data? Not sure
+> about that, though, haven't done extensive benchmarking of dynptr yet...
+
+Same. Let's keep it on the table, I'll try to explore. I was just
+thinking that having less abstraction here might be better
+performance-wise.
+
+> >> > --- UAPI ---
+> >> >
+> >> > The hooks are implemented in a HID-BPF style. Meaning they don't
+> >> > expose any UAPI and are implemented as tracing programs that call
+> >> > a bunch of kfuncs. The attach/detach operation happen via BPF syscal=
+l
+> >> > programs. The series expands device-bound infrastructure to tracing
+> >> > programs.
+> >>
+> >> Not a fan of the "attach from BPF syscall program" thing. These are pa=
+rt
+> >> of the XDP data path API, and I think we should expose them as proper
+> >> bpf_link attachments from userspace with introspection etc. But I gues=
+s
+> >> the bpf_mprog thing will give us that?
+> >
+> > bpf_mprog will just make those attach kfuncs return the link fd. The
+> > syscall program will still stay :-(
 >
-> Note that with volatile and without volatile, the generated
-> code will be different and it will result in different
-> verification path.
+> Why does the attachment have to be done this way, exactly? Couldn't we
+> just use the regular bpf_link attachment from userspace? AFAICT it's not
+> really piggy-backing on the function override thing anyway when the
+> attachment is per-dev? Or am I misunderstanding how all this works?
+
+It's UAPI vs non-UAPI. I'm assuming kfunc makes it non-UAPI and gives
+us an opportunity to fix things.
+We can do it via a regular syscall path if there is a consensus.
+
+> >> > --- skb vs xdp ---
+> >> >
+> >> > The hooks operate on a new light-weight devtx_frame which contains:
+> >> > - data
+> >> > - len
+> >> > - sinfo
+> >> >
+> >> > This should allow us to have a unified (from BPF POW) place at TX
+> >> > and not be super-taxing (we need to copy 2 pointers + len to the sta=
+ck
+> >> > for each invocation).
+> >>
+> >> Not sure what I think about this one. At the very least I think we
+> >> should expose xdp->data_meta as well. I'm not sure what the use case f=
+or
+> >> accessing skbs is? If that *is* indeed useful, probably there will als=
+o
+> >> end up being a use case for accessing the full skb?
+> >
+> > skb_shared_info has meta_len, buf afaik, xdp doesn't use it. Maybe I
+> > a good opportunity to unify? Or probably won't work because if
+> > xdf_frame doesn't have frags, it won't have sinfo?
 >
-> cc Jakub for further clarification.
+> No, it won't. But why do we need this unification between the skb and
+> xdp paths in the first place? Doesn't the skb path already have support
+> for these things? Seems like we could just stick to making this xdp-only
+> and keeping xdp_frame as the ctx argument?
 
-Yonghong is right. We can't replace it like that.
+For skb path, I'm assuming we can read sinfo->meta_len; it feels nice
+to make it work for both cases?
+We can always export metadata len via some kfunc, sure.
 
-Compiler is smart and pull up the constant into subprog_tail() caller.
-
-And it doesn't have the slightest idea that bpf_tail_call_static() is
-actually tail call (destroy frame + jump) and control doesn't return to
-subprog_tail().
-
-(You can read more about BPF tail calls in [1] and [2] if they are not
-familiar.)
-
-IOW, we need an r0 store to happen after a call to BPF tail call helper
-(call 12) to remain in subprog_tail body for the regression test to
-work:
-
-$ llvm-objdump -d --no-show-raw-insn tailcall_bpf2bpf6.bpf.o
-
-tailcall_bpf2bpf6.bpf.o:        file format elf64-bpf
-
-Disassembly of section .text:
-
-0000000000000000 <subprog_tail>:
-       0:       r6 =3D r1
-       1:       w1 =3D 1
-       2:       *(u32 *)(r10 - 4) =3D r1
-       3:       r7 =3D 0 ll
-       5:       r1 =3D r6
-       6:       r2 =3D r7
-       7:       r3 =3D 0
-       8:       call 12
-       9:       r0 =3D *(u32 *)(r10 - 4) <-- this must stay
-      10:       exit
-
-You could take a shot at replacing it with inline asm, if you want.
-
-[1] https://docs.cilium.io/en/stable/bpf/architecture/#bpf-to-bpf-calls
-[2] https://blog.cloudflare.com/assembly-within-bpf-tail-calls-on-x86-and-a=
-rm/
+> >> > --- Multiprog attachment ---
+> >> >
+> >> > Currently, attach/detach don't expose links and don't support multip=
+le
+> >> > programs. I'm planning to use Daniel's bpf_mprog once it lands.
+> >> >
+> >> > --- TODO ---
+> >> >
+> >> > Things that I'm planning to do for the non-RFC series:
+> >> > - have some real device support to verify xdp_hw_metadata works
+> >>
+> >> Would be good to see some performance numbers as well :)
+> >
+> > +1 :-)
+> >
+> >> > - freplace
+> >> > - Documentation/networking/xdp-rx-metadata.rst - like documentation
+> >> >
+> >> > --- CC ---
+> >> >
+> >> > CC'ing people only on the cover letter. Hopefully can find the rest =
+via
+> >> > lore.
+> >>
+> >> Well, I found it there, even though I was apparently left off the Cc
+> >> list :(
+> >>
+> >> -Toke
+> >
+> > Sure, I'll CC you explicitly next time! But I know you diligently follo=
+w bpf
+> > list, so decided to explicitly cc mostly netdev folks that might miss
+> > it otherwise.
+>
+> Haha, fair point! And no big deal, I did obviously see it. I was just
+> feeling a bit left out, that's all ;)
+>
+> -Toke
