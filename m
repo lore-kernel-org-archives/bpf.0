@@ -1,375 +1,232 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFBFE22E3B
-	for <bpf@vger.kernel.org>; Tue, 13 Jun 2023 22:35:57 +0000 (UTC)
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324B719B5
-	for <bpf@vger.kernel.org>; Tue, 13 Jun 2023 15:35:54 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35DMKC1w030716
-	for <bpf@vger.kernel.org>; Tue, 13 Jun 2023 15:35:54 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3r5xb06puf-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 13 Jun 2023 15:35:53 -0700
-Received: from twshared58712.02.prn6.facebook.com (2620:10d:c0a8:1c::11) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 13 Jun 2023 15:35:53 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id CEAF932D46391; Tue, 13 Jun 2023 15:35:40 -0700 (PDT)
-From: Andrii Nakryiko <andrii@kernel.org>
-To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@kernel.org>
-CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next 3/4] bpf: centralize permissions checks for all BPF map types
-Date: Tue, 13 Jun 2023 15:35:32 -0700
-Message-ID: <20230613223533.3689589-4-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230613223533.3689589-1-andrii@kernel.org>
-References: <20230613223533.3689589-1-andrii@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4294522E3B
+	for <bpf@vger.kernel.org>; Tue, 13 Jun 2023 22:36:11 +0000 (UTC)
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F305127;
+	Tue, 13 Jun 2023 15:36:08 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-517ab9a4a13so4226939a12.1;
+        Tue, 13 Jun 2023 15:36:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686695767; x=1689287767;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xAqqAV+ENjmI6SCXfRKgZ8uj6XEGLuGnV0zLgQaihAY=;
+        b=PXqpFiS9HyxAARrrXP23NAgxQpz27h6o0YU4nxWEPeCY1/6N3h7wqaFs9VH7FUFAQm
+         D+j7CSDkMXghnf+GdfBt1fKJyjonHbzuq+pPbnBkkfD+6NTLnh9LiVRK+W2xv66DlNMT
+         o1IBi8SFGtqqKAE0kEqAX6X3COY8niBVGTAtmHBCVHYcSFU7EKn92dZDaFRhhXraDpmS
+         kmGDhOedfd8M6vQ8BC1+0Pnd/p2JK91PF8mvVGuxZrBlynRDsk7yPOCDboQif1MDEkoH
+         Qm6bW5It7VA7uXshzzH5YRDNYctoSLSY/V1VFzWI399gxlfYZ12fngBbr/++oJi6hoeI
+         RAng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686695767; x=1689287767;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xAqqAV+ENjmI6SCXfRKgZ8uj6XEGLuGnV0zLgQaihAY=;
+        b=llHvhNp9js+RBWbzvnrOgWiIGIiHTZLoBrelQMDhbWOu/HypJVUdcZYTnibpqWmDqf
+         WD9lMyh6w8+DDqk+cs0eVw/OJSAt7Yz0+yQ7TsCj5pp9ccscuMXQohJuCWcTCZ+CRYEK
+         15V3vyIMZdth0XforosIKouuryqnlvYn0j4GvjShhO9zKrsjBLeYHQK49NKeBabufjYT
+         6iEbqnuro7rRm/eYifIf3mmKgp+mNFaobm4Htqptiqo+6zTn/9hw6POJRWSof1uTI5+U
+         BSuO0R8O/9bAkxa85kaNKnYDM1Jx/Hbwfe+DhnsO1V9P/B1UrRJvUeGGmigW10kKNXVK
+         Ho7w==
+X-Gm-Message-State: AC+VfDxteH22U0ihDt5Z8tr0dANusw7HIkRhwuQ2tK8A/tWjt81Xz4cd
+	0hoEENXseyFPxIJIlPBPXNA=
+X-Google-Smtp-Source: ACHHUZ5YPstkWINYVefAMOQAsNSMtRGjYuy+ju0q86LfTQYQU+GDjKFmE6s4f+oZ4u7samadgbL3Vw==
+X-Received: by 2002:a17:903:1c3:b0:1b2:f8d:3ef5 with SMTP id e3-20020a17090301c300b001b20f8d3ef5mr12833654plh.38.1686695767340;
+        Tue, 13 Jun 2023 15:36:07 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1156:1:222a:4b8d:6a5d:b39d? ([2620:10d:c090:500::6:1cfe])
+        by smtp.gmail.com with ESMTPSA id s13-20020a170902988d00b001ac937171e4sm10661270plp.254.2023.06.13.15.36.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 15:36:06 -0700 (PDT)
+Message-ID: <06f219e8-9ae5-01a1-f955-25f556ad5077@gmail.com>
+Date: Tue, 13 Jun 2023 15:36:04 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: gOcMudBFziSSJ1BMTN0BUm86u49S2Rdr
-X-Proofpoint-ORIG-GUID: gOcMudBFziSSJ1BMTN0BUm86u49S2Rdr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-13_22,2023-06-12_02,2023-05-22_02
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 bpf-next 03/10] bpftool: Show probed function in
+ kprobe_multi link info
+To: Yafang Shao <laoar.shao@gmail.com>, ast@kernel.org, daniel@iogearbox.net,
+ john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
+ song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
+ haoluo@google.com, jolsa@kernel.org, quentin@isovalent.com,
+ rostedt@goodmis.org, mhiramat@kernel.org
+Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+References: <20230612151608.99661-1-laoar.shao@gmail.com>
+ <20230612151608.99661-4-laoar.shao@gmail.com>
+Content-Language: en-US
+From: Kui-Feng Lee <sinquersw@gmail.com>
+In-Reply-To: <20230612151608.99661-4-laoar.shao@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
 	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-This allows to do more centralized decisions later on, and generally
-makes it very explicit which maps are privileged and which are not
-(e.g., LRU_HASH and LRU_PERCPU_HASH, which are privileged HASH variants,
-as opposed to unprivileged HASH and HASH_PERCPU; now this is explicit
-and easy to verify).
-
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- kernel/bpf/bloom_filter.c                     |  3 --
- kernel/bpf/bpf_local_storage.c                |  3 --
- kernel/bpf/bpf_struct_ops.c                   |  3 --
- kernel/bpf/cpumap.c                           |  4 --
- kernel/bpf/devmap.c                           |  3 --
- kernel/bpf/hashtab.c                          |  6 ---
- kernel/bpf/lpm_trie.c                         |  3 --
- kernel/bpf/queue_stack_maps.c                 |  4 --
- kernel/bpf/reuseport_array.c                  |  3 --
- kernel/bpf/stackmap.c                         |  3 --
- kernel/bpf/syscall.c                          | 47 +++++++++++++++++++
- net/core/sock_map.c                           |  4 --
- net/xdp/xskmap.c                              |  4 --
- .../bpf/prog_tests/unpriv_bpf_disabled.c      |  6 ++-
- 14 files changed, 52 insertions(+), 44 deletions(-)
-
-diff --git a/kernel/bpf/bloom_filter.c b/kernel/bpf/bloom_filter.c
-index 540331b610a9..addf3dd57b59 100644
---- a/kernel/bpf/bloom_filter.c
-+++ b/kernel/bpf/bloom_filter.c
-@@ -86,9 +86,6 @@ static struct bpf_map *bloom_map_alloc(union bpf_attr *=
-attr)
- 	int numa_node =3D bpf_map_attr_numa_node(attr);
- 	struct bpf_bloom_filter *bloom;
-=20
--	if (!bpf_capable())
--		return ERR_PTR(-EPERM);
--
- 	if (attr->key_size !=3D 0 || attr->value_size =3D=3D 0 ||
- 	    attr->max_entries =3D=3D 0 ||
- 	    attr->map_flags & ~BLOOM_CREATE_FLAG_MASK ||
-diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storag=
-e.c
-index 47d9948d768f..b5149cfce7d4 100644
---- a/kernel/bpf/bpf_local_storage.c
-+++ b/kernel/bpf/bpf_local_storage.c
-@@ -723,9 +723,6 @@ int bpf_local_storage_map_alloc_check(union bpf_attr =
-*attr)
- 	    !attr->btf_key_type_id || !attr->btf_value_type_id)
- 		return -EINVAL;
-=20
--	if (!bpf_capable())
--		return -EPERM;
--
- 	if (attr->value_size > BPF_LOCAL_STORAGE_MAX_VALUE_SIZE)
- 		return -E2BIG;
-=20
-diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-index d3f0a4825fa6..116a0ce378ec 100644
---- a/kernel/bpf/bpf_struct_ops.c
-+++ b/kernel/bpf/bpf_struct_ops.c
-@@ -655,9 +655,6 @@ static struct bpf_map *bpf_struct_ops_map_alloc(union=
- bpf_attr *attr)
- 	const struct btf_type *t, *vt;
- 	struct bpf_map *map;
-=20
--	if (!bpf_capable())
--		return ERR_PTR(-EPERM);
--
- 	st_ops =3D bpf_struct_ops_find_value(attr->btf_vmlinux_value_type_id);
- 	if (!st_ops)
- 		return ERR_PTR(-ENOTSUPP);
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index 8ec18faa74ac..8a33e8747a0e 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -28,7 +28,6 @@
- #include <linux/sched.h>
- #include <linux/workqueue.h>
- #include <linux/kthread.h>
--#include <linux/capability.h>
- #include <trace/events/xdp.h>
- #include <linux/btf_ids.h>
-=20
-@@ -89,9 +88,6 @@ static struct bpf_map *cpu_map_alloc(union bpf_attr *at=
-tr)
- 	u32 value_size =3D attr->value_size;
- 	struct bpf_cpu_map *cmap;
-=20
--	if (!bpf_capable())
--		return ERR_PTR(-EPERM);
--
- 	/* check sanity of attributes */
- 	if (attr->max_entries =3D=3D 0 || attr->key_size !=3D 4 ||
- 	    (value_size !=3D offsetofend(struct bpf_cpumap_val, qsize) &&
-diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-index 802692fa3905..49cc0b5671c6 100644
---- a/kernel/bpf/devmap.c
-+++ b/kernel/bpf/devmap.c
-@@ -160,9 +160,6 @@ static struct bpf_map *dev_map_alloc(union bpf_attr *=
-attr)
- 	struct bpf_dtab *dtab;
- 	int err;
-=20
--	if (!capable(CAP_NET_ADMIN))
--		return ERR_PTR(-EPERM);
--
- 	dtab =3D bpf_map_area_alloc(sizeof(*dtab), NUMA_NO_NODE);
- 	if (!dtab)
- 		return ERR_PTR(-ENOMEM);
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 9901efee4339..56d3da7d0bc6 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -422,12 +422,6 @@ static int htab_map_alloc_check(union bpf_attr *attr=
-)
- 	BUILD_BUG_ON(offsetof(struct htab_elem, fnode.next) !=3D
- 		     offsetof(struct htab_elem, hash_node.pprev));
-=20
--	if (lru && !bpf_capable())
--		/* LRU implementation is much complicated than other
--		 * maps.  Hence, limit to CAP_BPF.
--		 */
--		return -EPERM;
--
- 	if (zero_seed && !capable(CAP_SYS_ADMIN))
- 		/* Guard against local DoS, and discourage production use. */
- 		return -EPERM;
-diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index e0d3ddf2037a..17c7e7782a1f 100644
---- a/kernel/bpf/lpm_trie.c
-+++ b/kernel/bpf/lpm_trie.c
-@@ -544,9 +544,6 @@ static struct bpf_map *trie_alloc(union bpf_attr *att=
-r)
- {
- 	struct lpm_trie *trie;
-=20
--	if (!bpf_capable())
--		return ERR_PTR(-EPERM);
--
- 	/* check sanity of attributes */
- 	if (attr->max_entries =3D=3D 0 ||
- 	    !(attr->map_flags & BPF_F_NO_PREALLOC) ||
-diff --git a/kernel/bpf/queue_stack_maps.c b/kernel/bpf/queue_stack_maps.=
-c
-index 601609164ef3..8d2ddcb7566b 100644
---- a/kernel/bpf/queue_stack_maps.c
-+++ b/kernel/bpf/queue_stack_maps.c
-@@ -7,7 +7,6 @@
- #include <linux/bpf.h>
- #include <linux/list.h>
- #include <linux/slab.h>
--#include <linux/capability.h>
- #include <linux/btf_ids.h>
- #include "percpu_freelist.h"
-=20
-@@ -46,9 +45,6 @@ static bool queue_stack_map_is_full(struct bpf_queue_st=
-ack *qs)
- /* Called from syscall */
- static int queue_stack_map_alloc_check(union bpf_attr *attr)
- {
--	if (!bpf_capable())
--		return -EPERM;
--
- 	/* check sanity of attributes */
- 	if (attr->max_entries =3D=3D 0 || attr->key_size !=3D 0 ||
- 	    attr->value_size =3D=3D 0 ||
-diff --git a/kernel/bpf/reuseport_array.c b/kernel/bpf/reuseport_array.c
-index cbf2d8d784b8..4b4f9670f1a9 100644
---- a/kernel/bpf/reuseport_array.c
-+++ b/kernel/bpf/reuseport_array.c
-@@ -151,9 +151,6 @@ static struct bpf_map *reuseport_array_alloc(union bp=
-f_attr *attr)
- 	int numa_node =3D bpf_map_attr_numa_node(attr);
- 	struct reuseport_array *array;
-=20
--	if (!bpf_capable())
--		return ERR_PTR(-EPERM);
--
- 	/* allocate all map elements and zero-initialize them */
- 	array =3D bpf_map_area_alloc(struct_size(array, ptrs, attr->max_entries=
-), numa_node);
- 	if (!array)
-diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-index b25fce425b2c..458bb80b14d5 100644
---- a/kernel/bpf/stackmap.c
-+++ b/kernel/bpf/stackmap.c
-@@ -74,9 +74,6 @@ static struct bpf_map *stack_map_alloc(union bpf_attr *=
-attr)
- 	u64 cost, n_buckets;
- 	int err;
-=20
--	if (!bpf_capable())
--		return ERR_PTR(-EPERM);
--
- 	if (attr->map_flags & ~STACK_CREATE_FLAG_MASK)
- 		return ERR_PTR(-EINVAL);
-=20
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index be885d547cde..8324c64e1e54 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1156,6 +1156,53 @@ static int map_create(union bpf_attr *attr)
- 	if (sysctl_unprivileged_bpf_disabled && !bpf_capable())
- 		return -EPERM;
-=20
-+	/* check privileged map type permissions */
-+	switch (map_type) {
-+	case BPF_MAP_TYPE_ARRAY:
-+	case BPF_MAP_TYPE_PERCPU_ARRAY:
-+	case BPF_MAP_TYPE_PROG_ARRAY:
-+	case BPF_MAP_TYPE_PERF_EVENT_ARRAY:
-+	case BPF_MAP_TYPE_CGROUP_ARRAY:
-+	case BPF_MAP_TYPE_ARRAY_OF_MAPS:
-+	case BPF_MAP_TYPE_HASH:
-+	case BPF_MAP_TYPE_PERCPU_HASH:
-+	case BPF_MAP_TYPE_HASH_OF_MAPS:
-+	case BPF_MAP_TYPE_RINGBUF:
-+	case BPF_MAP_TYPE_USER_RINGBUF:
-+	case BPF_MAP_TYPE_CGROUP_STORAGE:
-+	case BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE:
-+		/* unprivileged */
-+		break;
-+	case BPF_MAP_TYPE_SK_STORAGE:
-+	case BPF_MAP_TYPE_INODE_STORAGE:
-+	case BPF_MAP_TYPE_TASK_STORAGE:
-+	case BPF_MAP_TYPE_CGRP_STORAGE:
-+	case BPF_MAP_TYPE_BLOOM_FILTER:
-+	case BPF_MAP_TYPE_LPM_TRIE:
-+	case BPF_MAP_TYPE_REUSEPORT_SOCKARRAY:
-+	case BPF_MAP_TYPE_STACK_TRACE:
-+	case BPF_MAP_TYPE_QUEUE:
-+	case BPF_MAP_TYPE_STACK:
-+	case BPF_MAP_TYPE_LRU_HASH:
-+	case BPF_MAP_TYPE_LRU_PERCPU_HASH:
-+	case BPF_MAP_TYPE_STRUCT_OPS:
-+	case BPF_MAP_TYPE_CPUMAP:
-+		if (!bpf_capable())
-+			return -EPERM;
-+		break;
-+	case BPF_MAP_TYPE_SOCKMAP:
-+	case BPF_MAP_TYPE_SOCKHASH:
-+	case BPF_MAP_TYPE_DEVMAP:
-+	case BPF_MAP_TYPE_DEVMAP_HASH:
-+	case BPF_MAP_TYPE_XSKMAP:
-+		if (!capable(CAP_NET_ADMIN))
-+			return -EPERM;
-+		break;
-+	default:
-+		WARN(1, "unsupported map type %d", map_type);
-+		return -EPERM;
-+	}
-+
- 	map =3D ops->map_alloc(attr);
- 	if (IS_ERR(map))
- 		return PTR_ERR(map);
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 00afb66cd095..19538d628714 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -32,8 +32,6 @@ static struct bpf_map *sock_map_alloc(union bpf_attr *a=
-ttr)
- {
- 	struct bpf_stab *stab;
-=20
--	if (!capable(CAP_NET_ADMIN))
--		return ERR_PTR(-EPERM);
- 	if (attr->max_entries =3D=3D 0 ||
- 	    attr->key_size    !=3D 4 ||
- 	    (attr->value_size !=3D sizeof(u32) &&
-@@ -1085,8 +1083,6 @@ static struct bpf_map *sock_hash_alloc(union bpf_at=
-tr *attr)
- 	struct bpf_shtab *htab;
- 	int i, err;
-=20
--	if (!capable(CAP_NET_ADMIN))
--		return ERR_PTR(-EPERM);
- 	if (attr->max_entries =3D=3D 0 ||
- 	    attr->key_size    =3D=3D 0 ||
- 	    (attr->value_size !=3D sizeof(u32) &&
-diff --git a/net/xdp/xskmap.c b/net/xdp/xskmap.c
-index 2c1427074a3b..e1c526f97ce3 100644
---- a/net/xdp/xskmap.c
-+++ b/net/xdp/xskmap.c
-@@ -5,7 +5,6 @@
-=20
- #include <linux/bpf.h>
- #include <linux/filter.h>
--#include <linux/capability.h>
- #include <net/xdp_sock.h>
- #include <linux/slab.h>
- #include <linux/sched.h>
-@@ -68,9 +67,6 @@ static struct bpf_map *xsk_map_alloc(union bpf_attr *at=
-tr)
- 	int numa_node;
- 	u64 size;
-=20
--	if (!capable(CAP_NET_ADMIN))
--		return ERR_PTR(-EPERM);
--
- 	if (attr->max_entries =3D=3D 0 || attr->key_size !=3D 4 ||
- 	    attr->value_size !=3D 4 ||
- 	    attr->map_flags & ~(BPF_F_NUMA_NODE | BPF_F_RDONLY | BPF_F_WRONLY))
-diff --git a/tools/testing/selftests/bpf/prog_tests/unpriv_bpf_disabled.c=
- b/tools/testing/selftests/bpf/prog_tests/unpriv_bpf_disabled.c
-index 8383a99f610f..0adf8d9475cb 100644
---- a/tools/testing/selftests/bpf/prog_tests/unpriv_bpf_disabled.c
-+++ b/tools/testing/selftests/bpf/prog_tests/unpriv_bpf_disabled.c
-@@ -171,7 +171,11 @@ static void test_unpriv_bpf_disabled_negative(struct=
- test_unpriv_bpf_disabled *s
- 				prog_insns, prog_insn_cnt, &load_opts),
- 		  -EPERM, "prog_load_fails");
-=20
--	for (i =3D BPF_MAP_TYPE_HASH; i <=3D BPF_MAP_TYPE_BLOOM_FILTER; i++)
-+	/* some map types require particular correct parameters which could be
-+	 * sanity-checked before enforcing -EPERM, so only validate that
-+	 * the simple ARRAY and HASH maps are failing with -EPERM
-+	 */
-+	for (i =3D BPF_MAP_TYPE_HASH; i <=3D BPF_MAP_TYPE_ARRAY; i++)
- 		ASSERT_EQ(bpf_map_create(i, NULL, sizeof(int), sizeof(int), 1, NULL),
- 			  -EPERM, "map_create_fails");
-=20
---=20
-2.34.1
-
+DQoNCk9uIDYvMTIvMjMgMDg6MTYsIFlhZmFuZyBTaGFvIHdyb3RlOg0KPiBTaG93IHRoZSBh
+bHJlYWR5IGV4cG9zZSBrcHJvYmVfbXVsdGkgbGluayBpbmZvIGluIGJwZnRvb2wuIFRoZSBy
+ZXN1bHQgYXMNCj4gZm9sbG93cywNCj4gDQo+IDUyOiBrcHJvYmVfbXVsdGkgIHByb2cgMzgx
+DQo+ICAgICAgICAgIHJldHByb2JlIDAgIGZ1bmNfY250IDcNCj4gICAgICAgICAgYWRkcnMg
+ZmZmZmZmZmY5ZWM0NGYyMCAgZnVuY3Mgc2NoZWR1bGVfdGltZW91dF9pbnRlcnJ1cHRpYmxl
+DQo+ICAgICAgICAgICAgICAgIGZmZmZmZmZmOWVjNDRmNjAgICAgICAgIHNjaGVkdWxlX3Rp
+bWVvdXRfa2lsbGFibGUNCj4gICAgICAgICAgICAgICAgZmZmZmZmZmY5ZWM0NGZhMCAgICAg
+ICAgc2NoZWR1bGVfdGltZW91dF91bmludGVycnVwdGlibGUNCj4gICAgICAgICAgICAgICAg
+ZmZmZmZmZmY5ZWM0NGZlMCAgICAgICAgc2NoZWR1bGVfdGltZW91dF9pZGxlDQo+ICAgICAg
+ICAgICAgICAgIGZmZmZmZmZmYzA5NDY4ZDAgICAgICAgIHhmc190cmFuc19nZXRfZWZkIFt4
+ZnNdDQo+ICAgICAgICAgICAgICAgIGZmZmZmZmZmYzA5NTNhMTAgICAgICAgIHhmc190cmFu
+c19nZXRfYnVmX21hcCBbeGZzXQ0KPiAgICAgICAgICAgICAgICBmZmZmZmZmZmMwOTU3MzIw
+ICAgICAgICB4ZnNfdHJhbnNfZ2V0X2RxdHJ4IFt4ZnNdDQo+ICAgICAgICAgIHBpZHMga3By
+b2JlX211bHRpKDU1OTg2MikNCj4gNTM6IGtwcm9iZV9tdWx0aSAgcHJvZyAzODENCj4gICAg
+ICAgICAgcmV0cHJvYmUgMSAgZnVuY19jbnQgNw0KPiAgICAgICAgICBhZGRycyBmZmZmZmZm
+ZjllYzQ0ZjIwICBmdW5jcyBzY2hlZHVsZV90aW1lb3V0X2ludGVycnVwdGlibGUNCj4gICAg
+ICAgICAgICAgICAgZmZmZmZmZmY5ZWM0NGY2MCAgICAgICAgc2NoZWR1bGVfdGltZW91dF9r
+aWxsYWJsZQ0KPiAgICAgICAgICAgICAgICBmZmZmZmZmZjllYzQ0ZmEwICAgICAgICBzY2hl
+ZHVsZV90aW1lb3V0X3VuaW50ZXJydXB0aWJsZQ0KPiAgICAgICAgICAgICAgICBmZmZmZmZm
+ZjllYzQ0ZmUwICAgICAgICBzY2hlZHVsZV90aW1lb3V0X2lkbGUNCj4gICAgICAgICAgICAg
+ICAgZmZmZmZmZmZjMDk0NjhkMCAgICAgICAgeGZzX3RyYW5zX2dldF9lZmQgW3hmc10NCj4g
+ICAgICAgICAgICAgICAgZmZmZmZmZmZjMDk1M2ExMCAgICAgICAgeGZzX3RyYW5zX2dldF9i
+dWZfbWFwIFt4ZnNdDQo+ICAgICAgICAgICAgICAgIGZmZmZmZmZmYzA5NTczMjAgICAgICAg
+IHhmc190cmFuc19nZXRfZHF0cnggW3hmc10NCj4gICAgICAgICAgcGlkcyBrcHJvYmVfbXVs
+dGkoNTU5ODYyKQ0KPiANCj4gJCB0b29scy9icGYvYnBmdG9vbC9icGZ0b29sIGxpbmsgc2hv
+dyAtag0KPiBbeyJpZCI6NTIsInR5cGUiOiJrcHJvYmVfbXVsdGkiLCJwcm9nX2lkIjozODEs
+InJldHByb2JlIjowLCJmdW5jX2NudCI6NywiZnVuY3MiOlt7ImFkZHIiOjE4NDQ2NzQ0MDcy
+MDc4MjQ5NzYwLCJmdW5jIjoic2NoZWR1bGVfdGltZW91dF9pbnRlcnJ1cHRpYmxlIiwibW9k
+dWxlIjoiIn0seyJhZGRyIjoxODQ0Njc0NDA3MjA3ODI0OTgyNCwiZnVuYyI6InNjaGVkdWxl
+X3RpbWVvdXRfa2lsbGFibGUiLCJtb2R1bGUiOiIifSx7ImFkZHIiOjE4NDQ2NzQ0MDcyMDc4
+MjQ5ODg4LCJmdW5jIjoic2NoZWR1bGVfdGltZW91dF91bmludGVycnVwdGlibGUiLCJtb2R1
+bGUiOiIifSx7ImFkZHIiOjE4NDQ2NzQ0MDcyMDc4MjQ5OTUyLCJmdW5jIjoic2NoZWR1bGVf
+dGltZW91dF9pZGxlIiwibW9kdWxlIjoiIn0seyJhZGRyIjoxODQ0Njc0NDA3MjY0NTUzNTk1
+MiwiZnVuYyI6Inhmc190cmFuc19nZXRfZWZkIiwibW9kdWxlIjoiW3hmc10ifSx7ImFkZHIi
+OjE4NDQ2NzQ0MDcyNjQ1NTg5NTIwLCJmdW5jIjoieGZzX3RyYW5zX2dldF9idWZfbWFwIiwi
+bW9kdWxlIjoiW3hmc10ifSx7ImFkZHIiOjE4NDQ2NzQ0MDcyNjQ1NjA0MTI4LCJmdW5jIjoi
+eGZzX3RyYW5zX2dldF9kcXRyeCIsIm1vZHVsZSI6Ilt4ZnNdIn1dLCJwaWRzIjpbeyJwaWQi
+OjU1OTg2MiwiY29tbSI6Imtwcm9iZV9tdWx0aSJ9XX0seyJpZCI6NTMsInR5cGUiOiJrcHJv
+YmVfbXVsdGkiLCJwcm9nX2lkIjozODEsInJldHByb2JlIjoxLCJmdW5jX2NudCI6NywiZnVu
+Y3MiOlt7ImFkZHIiOjE4NDQ2NzQ0MDcyMDc4MjQ5NzYwLCJmdW5jIjoic2NoZWR1bGVfdGlt
+ZW91dF9pbnRlcnJ1cHRpYmxlIiwibW9kdWxlIjoiIn0seyJhZGRyIjoxODQ0Njc0NDA3MjA3
+ODI0OTgyNCwiZnVuYyI6InNjaGVkdWxlX3RpbWVvdXRfa2lsbGFibGUiLCJtb2R1bGUiOiIi
+fSx7ImFkZHIiOjE4NDQ2NzQ0MDcyMDc4MjQ5ODg4LCJmdW5jIjoic2NoZWR1bGVfdGltZW91
+dF91bmludGVycnVwdGlibGUiLCJtb2R1bGUiOiIifSx7ImFkZHIiOjE4NDQ2NzQ0MDcyMDc4
+MjQ5OTUyLCJmdW5jIjoic2NoZWR1bGVfdGltZW91dF9pZGxlIiwibW9kdWxlIjoiIn0seyJh
+ZGRyIjoxODQ0Njc0NDA3MjY0NTUzNTk1MiwiZnVuYyI6Inhmc190cmFuc19nZXRfZWZkIiwi
+bW9kdWxlIjoiW3hmc10ifSx7ImFkZHIiOjE4NDQ2NzQ0MDcyNjQ1NTg5NTIwLCJmdW5jIjoi
+eGZzX3RyYW5zX2dldF9idWZfbWFwIiwibW9kdWxlIjoiW3hmc10ifSx7ImFkZHIiOjE4NDQ2
+NzQ0MDcyNjQ1NjA0MTI4LCJmdW5jIjoieGZzX3RyYW5zX2dldF9kcXRyeCIsIm1vZHVsZSI6
+Ilt4ZnNdIn1dLCJwaWRzIjpbeyJwaWQiOjU1OTg2MiwiY29tbSI6Imtwcm9iZV9tdWx0aSJ9
+XX1dDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBZYWZhbmcgU2hhbyA8bGFvYXIuc2hhb0BnbWFp
+bC5jb20+DQo+IC0tLQ0KPiAgIHRvb2xzL2JwZi9icGZ0b29sL2xpbmsuYyB8IDEwOSArKysr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLQ0KPiAgIDEgZmls
+ZSBjaGFuZ2VkLCAxMDggaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlm
+ZiAtLWdpdCBhL3Rvb2xzL2JwZi9icGZ0b29sL2xpbmsuYyBiL3Rvb2xzL2JwZi9icGZ0b29s
+L2xpbmsuYw0KPiBpbmRleCAyZDc4NjA3Li4wMDE1NTgyIDEwMDY0NA0KPiAtLS0gYS90b29s
+cy9icGYvYnBmdG9vbC9saW5rLmMNCj4gKysrIGIvdG9vbHMvYnBmL2JwZnRvb2wvbGluay5j
+DQo+IEBAIC0xNCw4ICsxNCwxMCBAQA0KPiAgIA0KPiAgICNpbmNsdWRlICJqc29uX3dyaXRl
+ci5oIg0KPiAgICNpbmNsdWRlICJtYWluLmgiDQo+ICsjaW5jbHVkZSAieGxhdGVkX2R1bXBl
+ci5oIg0KPiAgIA0KPiAgIHN0YXRpYyBzdHJ1Y3QgaGFzaG1hcCAqbGlua190YWJsZTsNCj4g
+K3N0YXRpYyBzdHJ1Y3QgZHVtcF9kYXRhIGRkID0ge307DQo+ICAgDQo+ICAgc3RhdGljIGlu
+dCBsaW5rX3BhcnNlX2ZkKGludCAqYXJnYywgY2hhciAqKiphcmd2KQ0KPiAgIHsNCj4gQEAg
+LTE2Niw2ICsxNjgsNDUgQEAgc3RhdGljIGludCBnZXRfcHJvZ19pbmZvKGludCBwcm9nX2lk
+LCBzdHJ1Y3QgYnBmX3Byb2dfaW5mbyAqaW5mbykNCj4gICAJcmV0dXJuIGVycjsNCj4gICB9
+DQo+ICAgDQo+ICtzdGF0aWMgaW50IGNtcF91NjQoY29uc3Qgdm9pZCAqQSwgY29uc3Qgdm9p
+ZCAqQikNCj4gK3sNCj4gKwljb25zdCBfX3U2NCAqYSA9IEEsICpiID0gQjsNCj4gKw0KPiAr
+CXJldHVybiAqYSAtICpiOw0KPiArfQ0KPiArDQo+ICtzdGF0aWMgdm9pZA0KPiArc2hvd19r
+cHJvYmVfbXVsdGlfanNvbihzdHJ1Y3QgYnBmX2xpbmtfaW5mbyAqaW5mbywganNvbl93cml0
+ZXJfdCAqd3RyKQ0KPiArew0KPiArCV9fdTMyIGksIGogPSAwOw0KPiArCV9fdTY0ICphZGRy
+czsNCj4gKw0KPiArCWpzb253X3VpbnRfZmllbGQoanNvbl93dHIsICJyZXRwcm9iZSIsDQo+
+ICsJCQkgaW5mby0+a3Byb2JlX211bHRpLmZsYWdzICYgQlBGX0ZfS1BST0JFX01VTFRJX1JF
+VFVSTik7DQo+ICsJanNvbndfdWludF9maWVsZChqc29uX3d0ciwgImZ1bmNfY250IiwgaW5m
+by0+a3Byb2JlX211bHRpLmNvdW50KTsNCj4gKwlqc29ud19uYW1lKGpzb25fd3RyLCAiZnVu
+Y3MiKTsNCj4gKwlqc29ud19zdGFydF9hcnJheShqc29uX3d0cik7DQo+ICsJYWRkcnMgPSAo
+X191NjQgKil1NjRfdG9fcHRyKGluZm8tPmtwcm9iZV9tdWx0aS5hZGRycyk7DQo+ICsJcXNv
+cnQoKHZvaWQgKilhZGRycywgaW5mby0+a3Byb2JlX211bHRpLmNvdW50LCBzaXplb2YoX191
+NjQpLCBjbXBfdTY0KTsNCj4gKw0KPiArCS8qIExvYWQgaXQgb25jZSBmb3IgYWxsLiAqLw0K
+PiArCWlmICghZGQuc3ltX2NvdW50KQ0KPiArCQlrZXJuZWxfc3ltc19sb2FkKCZkZCk7DQo+
+ICsJZm9yIChpID0gMDsgaSA8IGRkLnN5bV9jb3VudDsgaSsrKSB7DQo+ICsJCWlmIChkZC5z
+eW1fbWFwcGluZ1tpXS5hZGRyZXNzICE9IGFkZHJzW2pdKQ0KPiArCQkJY29udGludWU7DQo+
+ICsJCWpzb253X3N0YXJ0X29iamVjdChqc29uX3d0cik7DQo+ICsJCWpzb253X3VpbnRfZmll
+bGQoanNvbl93dHIsICJhZGRyIiwgZGQuc3ltX21hcHBpbmdbaV0uYWRkcmVzcyk7DQo+ICsJ
+CWpzb253X3N0cmluZ19maWVsZChqc29uX3d0ciwgImZ1bmMiLCBkZC5zeW1fbWFwcGluZ1tp
+XS5uYW1lKTsNCj4gKwkJLyogUHJpbnQgbm9uZSBpZiBpdCBpcyB2bWxpbnV4ICovDQo+ICsJ
+CWpzb253X3N0cmluZ19maWVsZChqc29uX3d0ciwgIm1vZHVsZSIsIGRkLnN5bV9tYXBwaW5n
+W2ldLm1vZHVsZSk7DQo+ICsJCWpzb253X2VuZF9vYmplY3QoanNvbl93dHIpOw0KPiArCQlp
+ZiAoaisrID09IGluZm8tPmtwcm9iZV9tdWx0aS5jb3VudCkNCj4gKwkJCWJyZWFrOw0KPiAr
+CX0NCj4gKwlqc29ud19lbmRfYXJyYXkoanNvbl93dHIpOw0KPiArfQ0KPiArDQo+ICAgc3Rh
+dGljIGludCBzaG93X2xpbmtfY2xvc2VfanNvbihpbnQgZmQsIHN0cnVjdCBicGZfbGlua19p
+bmZvICppbmZvKQ0KPiAgIHsNCj4gICAJc3RydWN0IGJwZl9wcm9nX2luZm8gcHJvZ19pbmZv
+Ow0KPiBAQCAtMjE4LDYgKzI1OSw5IEBAIHN0YXRpYyBpbnQgc2hvd19saW5rX2Nsb3NlX2pz
+b24oaW50IGZkLCBzdHJ1Y3QgYnBmX2xpbmtfaW5mbyAqaW5mbykNCj4gICAJCWpzb253X3Vp
+bnRfZmllbGQoanNvbl93dHIsICJtYXBfaWQiLA0KPiAgIAkJCQkgaW5mby0+c3RydWN0X29w
+cy5tYXBfaWQpOw0KPiAgIAkJYnJlYWs7DQo+ICsJY2FzZSBCUEZfTElOS19UWVBFX0tQUk9C
+RV9NVUxUSToNCj4gKwkJc2hvd19rcHJvYmVfbXVsdGlfanNvbihpbmZvLCBqc29uX3d0cik7
+DQo+ICsJCWJyZWFrOw0KPiAgIAlkZWZhdWx0Og0KPiAgIAkJYnJlYWs7DQo+ICAgCX0NCj4g
+QEAgLTM1MSw2ICszOTUsNDQgQEAgdm9pZCBuZXRmaWx0ZXJfZHVtcF9wbGFpbihjb25zdCBz
+dHJ1Y3QgYnBmX2xpbmtfaW5mbyAqaW5mbykNCj4gICAJCXByaW50ZigiIGZsYWdzIDB4JXgi
+LCBpbmZvLT5uZXRmaWx0ZXIuZmxhZ3MpOw0KPiAgIH0NCj4gICANCj4gK3N0YXRpYyB2b2lk
+IHNob3dfa3Byb2JlX211bHRpX3BsYWluKHN0cnVjdCBicGZfbGlua19pbmZvICppbmZvKQ0K
+PiArew0KPiArCV9fdTMyIGksIGogPSAwOw0KPiArCV9fdTY0ICphZGRyczsNCj4gKw0KPiAr
+CWlmICghaW5mby0+a3Byb2JlX211bHRpLmNvdW50KQ0KPiArCQlyZXR1cm47DQo+ICsNCj4g
+KwlwcmludGYoIlxuXHRyZXRwcm9iZSAlZCAgZnVuY19jbnQgJXUgICIsDQo+ICsJICAgICAg
+IGluZm8tPmtwcm9iZV9tdWx0aS5mbGFncyAmIEJQRl9GX0tQUk9CRV9NVUxUSV9SRVRVUk4s
+DQo+ICsJICAgICAgIGluZm8tPmtwcm9iZV9tdWx0aS5jb3VudCk7DQo+ICsJYWRkcnMgPSAo
+X191NjQgKil1NjRfdG9fcHRyKGluZm8tPmtwcm9iZV9tdWx0aS5hZGRycyk7DQo+ICsJcXNv
+cnQoKHZvaWQgKilhZGRycywgaW5mby0+a3Byb2JlX211bHRpLmNvdW50LCBzaXplb2YoX191
+NjQpLCBjbXBfdTY0KTsNCj4gKw0KPiArCS8qIExvYWQgaXQgb25jZSBmb3IgYWxsLiAqLw0K
+PiArCWlmICghZGQuc3ltX2NvdW50KQ0KPiArCQlrZXJuZWxfc3ltc19sb2FkKCZkZCk7DQo+
+ICsJZm9yIChpID0gMDsgaSA8IGRkLnN5bV9jb3VudDsgaSsrKSB7DQo+ICsJCWlmIChkZC5z
+eW1fbWFwcGluZ1tpXS5hZGRyZXNzICE9IGFkZHJzW2pdKQ0KPiArCQkJY29udGludWU7DQo+
+ICsJCWlmICghaikNCj4gKwkJCXByaW50ZigiXG5cdGFkZHJzICUwMTZseCAgZnVuY3MgJXMi
+LA0KPiArCQkJICAgICAgIGRkLnN5bV9tYXBwaW5nW2ldLmFkZHJlc3MsDQo+ICsJCQkgICAg
+ICAgZGQuc3ltX21hcHBpbmdbaV0ubmFtZSk7DQo+ICsJCWVsc2UNCj4gKwkJCXByaW50Zigi
+XG5cdCAgICAgICUwMTZseCAgICAgICAgJXMiLA0KPiArCQkJICAgICAgIGRkLnN5bV9tYXBw
+aW5nW2ldLmFkZHJlc3MsDQo+ICsJCQkgICAgICAgZGQuc3ltX21hcHBpbmdbaV0ubmFtZSk7
+DQo+ICsJCWlmIChkZC5zeW1fbWFwcGluZ1tpXS5tb2R1bGVbMF0gIT0gJ1wwJykNCj4gKwkJ
+CXByaW50ZigiICVzICAiLCBkZC5zeW1fbWFwcGluZ1tpXS5tb2R1bGUpOw0KPiArCQllbHNl
+DQo+ICsJCQlwcmludGYoIiAgIik7DQoNCkNvdWxkIHlvdSBleHBsYWluIHdoYXQgdGhlc2Ug
+ZXh0cmEgc3BhY2VzIGFmdGVyIG1vZHVsZSBuYW1lcyBhcmUgZm9yPw0KDQo+ICsNCj4gKwkJ
+aWYgKGorKyA9PSBpbmZvLT5rcHJvYmVfbXVsdGkuY291bnQpDQo+ICsJCQlicmVhazsNCj4g
+Kwl9DQo+ICt9DQo+ICsNCj4gICBzdGF0aWMgaW50IHNob3dfbGlua19jbG9zZV9wbGFpbihp
+bnQgZmQsIHN0cnVjdCBicGZfbGlua19pbmZvICppbmZvKQ0KPiAgIHsNCj4gICAJc3RydWN0
+IGJwZl9wcm9nX2luZm8gcHJvZ19pbmZvOw0KPiBAQCAtMzk2LDYgKzQ3OCw5IEBAIHN0YXRp
+YyBpbnQgc2hvd19saW5rX2Nsb3NlX3BsYWluKGludCBmZCwgc3RydWN0IGJwZl9saW5rX2lu
+Zm8gKmluZm8pDQo+ICAgCWNhc2UgQlBGX0xJTktfVFlQRV9ORVRGSUxURVI6DQo+ICAgCQlu
+ZXRmaWx0ZXJfZHVtcF9wbGFpbihpbmZvKTsNCj4gICAJCWJyZWFrOw0KPiArCWNhc2UgQlBG
+X0xJTktfVFlQRV9LUFJPQkVfTVVMVEk6DQo+ICsJCXNob3dfa3Byb2JlX211bHRpX3BsYWlu
+KGluZm8pOw0KPiArCQlicmVhazsNCj4gICAJZGVmYXVsdDoNCj4gICAJCWJyZWFrOw0KPiAg
+IAl9DQo+IEBAIC00MTcsNyArNTAyLDkgQEAgc3RhdGljIGludCBkb19zaG93X2xpbmsoaW50
+IGZkKQ0KPiAgIHsNCj4gICAJc3RydWN0IGJwZl9saW5rX2luZm8gaW5mbzsNCj4gICAJX191
+MzIgbGVuID0gc2l6ZW9mKGluZm8pOw0KPiArCV9fdTY0ICphZGRycyA9IE5VTEw7DQo+ICAg
+CWNoYXIgYnVmWzI1Nl07DQo+ICsJaW50IGNvdW50Ow0KPiAgIAlpbnQgZXJyOw0KPiAgIA0K
+PiAgIAltZW1zZXQoJmluZm8sIDAsIHNpemVvZihpbmZvKSk7DQo+IEBAIC00NDEsMTIgKzUy
+OCwyOCBAQCBzdGF0aWMgaW50IGRvX3Nob3dfbGluayhpbnQgZmQpDQo+ICAgCQlpbmZvLml0
+ZXIudGFyZ2V0X25hbWVfbGVuID0gc2l6ZW9mKGJ1Zik7DQo+ICAgCQlnb3RvIGFnYWluOw0K
+PiAgIAl9DQo+ICsJaWYgKGluZm8udHlwZSA9PSBCUEZfTElOS19UWVBFX0tQUk9CRV9NVUxU
+SSAmJg0KPiArCSAgICAhaW5mby5rcHJvYmVfbXVsdGkuYWRkcnMpIHsNCj4gKwkJY291bnQg
+PSBpbmZvLmtwcm9iZV9tdWx0aS5jb3VudDsNCj4gKwkJaWYgKGNvdW50KSB7DQo+ICsJCQlh
+ZGRycyA9IGNhbGxvYyhjb3VudCwgc2l6ZW9mKF9fdTY0KSk7DQo+ICsJCQlpZiAoIWFkZHJz
+KSB7DQo+ICsJCQkJcF9lcnIoIm1lbSBhbGxvYyBmYWlsZWQiKTsNCj4gKwkJCQljbG9zZShm
+ZCk7DQo+ICsJCQkJcmV0dXJuIC0xOw0KPiArCQkJfQ0KPiArCQkJaW5mby5rcHJvYmVfbXVs
+dGkuYWRkcnMgPSAodW5zaWduZWQgbG9uZylhZGRyczsNCj4gKwkJCWdvdG8gYWdhaW47DQo+
+ICsJCX0NCj4gKwl9DQo+ICAgDQo+ICAgCWlmIChqc29uX291dHB1dCkNCj4gICAJCXNob3df
+bGlua19jbG9zZV9qc29uKGZkLCAmaW5mbyk7DQo+ICAgCWVsc2UNCj4gICAJCXNob3dfbGlu
+a19jbG9zZV9wbGFpbihmZCwgJmluZm8pOw0KPiAgIA0KPiArCWlmIChhZGRycykNCj4gKwkJ
+ZnJlZShhZGRycyk7DQo+ICAgCWNsb3NlKGZkKTsNCj4gICAJcmV0dXJuIDA7DQo+ICAgfQ0K
+PiBAQCAtNDcxLDcgKzU3NCw4IEBAIHN0YXRpYyBpbnQgZG9fc2hvdyhpbnQgYXJnYywgY2hh
+ciAqKmFyZ3YpDQo+ICAgCQlmZCA9IGxpbmtfcGFyc2VfZmQoJmFyZ2MsICZhcmd2KTsNCj4g
+ICAJCWlmIChmZCA8IDApDQo+ICAgCQkJcmV0dXJuIGZkOw0KPiAtCQlyZXR1cm4gZG9fc2hv
+d19saW5rKGZkKTsNCj4gKwkJZG9fc2hvd19saW5rKGZkKTsNCj4gKwkJZ290byBvdXQ7DQo+
+ICAgCX0NCj4gICANCj4gICAJaWYgKGFyZ2MpDQo+IEBAIC01MTAsNiArNjE0LDkgQEAgc3Rh
+dGljIGludCBkb19zaG93KGludCBhcmdjLCBjaGFyICoqYXJndikNCj4gICAJaWYgKHNob3df
+cGlubmVkKQ0KPiAgIAkJZGVsZXRlX3Bpbm5lZF9vYmpfdGFibGUobGlua190YWJsZSk7DQo+
+ICAgDQo+ICtvdXQ6DQo+ICsJaWYgKGRkLnN5bV9jb3VudCkNCj4gKwkJa2VybmVsX3N5bXNf
+ZGVzdHJveSgmZGQpOw0KPiAgIAlyZXR1cm4gZXJybm8gPT0gRU5PRU5UID8gMCA6IC0xOw0K
+PiAgIH0NCj4gICANCg==
