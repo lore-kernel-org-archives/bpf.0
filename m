@@ -1,166 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1F9433E3;
-	Tue, 13 Jun 2023 17:18:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93485C433F1;
-	Tue, 13 Jun 2023 17:18:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1686676691;
-	bh=YpBE+B+b/1O9SdbiuMOQn+daLcqceK2+RhVSsNdfcPc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=GrS1FZw3U+WByyfcx+rMSw5gyxc7dMzyK7WwKqGBxGiOWkO44LEU+IsCFOPaXqvYF
-	 oWZIWCYfVOPHJuYa8RuoQilSDuH5TsJwo2y0zI7oWpJrtWj8uCYSU/9tY/IXxR9uGI
-	 181fNYKQYtuz9dfNqAhe+tgKWl7EkYZ9xOIiFpSd5SDFHLJxuk9VMbQv+9vFpu+/uz
-	 2gLRM2aj+djkYBajxUUSvfd4q/2fBwAAZjIvosMivZpXa6F5OuPXl9lTv9/Oak7nAy
-	 rtafi5rq49aR+bTAeWb+kascMDaYlkc1OwFvQc2Nn2GpJu9MSGmkcq+73nXAT9EmqZ
-	 hxvtuAT6YfBgg==
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 31114BBEABD; Tue, 13 Jun 2023 19:18:09 +0200 (CEST)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>
-To: Stanislav Fomichev <sdf@google.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
- john.fastabend@gmail.com, kpsingh@kernel.org, haoluo@google.com,
- jolsa@kernel.org, willemb@google.com, dsahern@kernel.org,
- magnus.karlsson@intel.com, bjorn@kernel.org, maciej.fijalkowski@intel.com,
- netdev@vger.kernel.org
-Subject: Re: [RFC bpf-next 0/7] bpf: netdev TX metadata
-In-Reply-To: <ZIiaHXr9M0LGQ0Ht@google.com>
-References: <20230612172307.3923165-1-sdf@google.com>
- <87cz20xunt.fsf@toke.dk> <ZIiaHXr9M0LGQ0Ht@google.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Tue, 13 Jun 2023 19:18:09 +0200
-Message-ID: <877cs7xovi.fsf@toke.dk>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC6E123C74;
+	Tue, 13 Jun 2023 17:29:23 +0000 (UTC)
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C34173C;
+	Tue, 13 Jun 2023 10:28:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686677334; x=1718213334;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SlHj7S5jOOv05K4dEGQA+cB2WN4KQBOtvdjDfWv8PXg=;
+  b=Smfb44NorWLELeCCs+PbsDBnJtYiS4HZssecQw8CamAXLcBsJ6y9HNow
+   niBz/3dmTAgr4E08cbTZ+EvoWthc/EpNPGRUUtuI/Z6YHDycYoAieTrJM
+   Gi1b4ncZ0/IVYL6TUCxnOXtrGAZmg4H6BpwM5yUuiJzLKe5Lco4r2BxAz
+   yHL3AvWSTAaMMQYEr1Ef//BGCJQqA4dSBrhfICNpw2v6HXP8HyjZR/m5M
+   nOedioBMaUz8iXbmFCCVFye+x2HaQYFLbahIPr/hWLjWfk67YIMZjSnAF
+   SKP+9NdJkV8DzMHUbk8i/KxIzuCJRcZQ3uoL5MoFx9nmwpf3PT394sudJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="361774277"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="361774277"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 10:27:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="885923880"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="885923880"
+Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 13 Jun 2023 10:27:12 -0700
+Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1q97nT-0001bK-2i;
+	Tue, 13 Jun 2023 17:27:11 +0000
+Date: Wed, 14 Jun 2023 01:26:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lorenz Bauer <lmb@isovalent.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	David Ahern <dsahern@kernel.org>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Joe Stringer <joe@wand.net.nz>, Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, Hemanth Malla <hemanthmalla@gmail.com>,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Lorenz Bauer <lmb@isovalent.com>
+Subject: Re: [PATCH bpf-next v2 5/6] bpf, net: Support SO_REUSEPORT sockets
+ with bpf_sk_assign
+Message-ID: <202306140012.hLncDFR5-lkp@intel.com>
+References: <20230613-so-reuseport-v2-5-b7c69a342613@isovalent.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230613-so-reuseport-v2-5-b7c69a342613@isovalent.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+	SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-Stanislav Fomichev <sdf@google.com> writes:
+Hi Lorenz,
 
-> On 06/12, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
->> Some immediate thoughts after glancing through this:
->>=20
->> > --- Use cases ---
->> >
->> > The goal of this series is to add two new standard-ish places
->> > in the transmit path:
->> >
->> > 1. Right before the packet is transmitted (with access to TX
->> >    descriptors)
->> > 2. Right after the packet is actually transmitted and we've received t=
-he
->> >    completion (again, with access to TX completion descriptors)
->> >
->> > Accessing TX descriptors unlocks the following use-cases:
->> >
->> > - Setting device hints at TX: XDP/AF_XDP might use these new hooks to
->> > use device offloads. The existing case implements TX timestamp.
->> > - Observability: global per-netdev hooks can be used for tracing
->> > the packets and exploring completion descriptors for all sorts of
->> > device errors.
->> >
->> > Accessing TX descriptors also means that the hooks have to be called
->> > from the drivers.
->> >
->> > The hooks are a light-weight alternative to XDP at egress and currently
->> > don't provide any packet modification abilities. However, eventually,
->> > can expose new kfuncs to operate on the packet (or, rather, the actual
->> > descriptors; for performance sake).
->>=20
->> dynptr?
->
-> Haven't considered, let me explore, but not sure what it buys us
-> here?
+kernel test robot noticed the following build errors:
 
-API consistency, certainly. Possibly also performance, if using the
-slice thing that gets you a direct pointer to the pkt data? Not sure
-about that, though, haven't done extensive benchmarking of dynptr yet...
+[auto build test ERROR on 25085b4e9251c77758964a8e8651338972353642]
 
->> > --- UAPI ---
->> >
->> > The hooks are implemented in a HID-BPF style. Meaning they don't
->> > expose any UAPI and are implemented as tracing programs that call
->> > a bunch of kfuncs. The attach/detach operation happen via BPF syscall
->> > programs. The series expands device-bound infrastructure to tracing
->> > programs.
->>=20
->> Not a fan of the "attach from BPF syscall program" thing. These are part
->> of the XDP data path API, and I think we should expose them as proper
->> bpf_link attachments from userspace with introspection etc. But I guess
->> the bpf_mprog thing will give us that?
->
-> bpf_mprog will just make those attach kfuncs return the link fd. The
-> syscall program will still stay :-(
+url:    https://github.com/intel-lab-lkp/linux/commits/Lorenz-Bauer/net-export-inet_lookup_reuseport-and-inet6_lookup_reuseport/20230613-181619
+base:   25085b4e9251c77758964a8e8651338972353642
+patch link:    https://lore.kernel.org/r/20230613-so-reuseport-v2-5-b7c69a342613%40isovalent.com
+patch subject: [PATCH bpf-next v2 5/6] bpf, net: Support SO_REUSEPORT sockets with bpf_sk_assign
+config: arm-randconfig-r016-20230612 (https://download.01.org/0day-ci/archive/20230614/202306140012.hLncDFR5-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        git checkout 25085b4e9251c77758964a8e8651338972353642
+        b4 shazam https://lore.kernel.org/r/20230613-so-reuseport-v2-5-b7c69a342613@isovalent.com
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Why does the attachment have to be done this way, exactly? Couldn't we
-just use the regular bpf_link attachment from userspace? AFAICT it's not
-really piggy-backing on the function override thing anyway when the
-attachment is per-dev? Or am I misunderstanding how all this works?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306140012.hLncDFR5-lkp@intel.com/
 
->> > --- skb vs xdp ---
->> >
->> > The hooks operate on a new light-weight devtx_frame which contains:
->> > - data
->> > - len
->> > - sinfo
->> >
->> > This should allow us to have a unified (from BPF POW) place at TX
->> > and not be super-taxing (we need to copy 2 pointers + len to the stack
->> > for each invocation).
->>=20
->> Not sure what I think about this one. At the very least I think we
->> should expose xdp->data_meta as well. I'm not sure what the use case for
->> accessing skbs is? If that *is* indeed useful, probably there will also
->> end up being a use case for accessing the full skb?
->
-> skb_shared_info has meta_len, buf afaik, xdp doesn't use it. Maybe I
-> a good opportunity to unify? Or probably won't work because if
-> xdf_frame doesn't have frags, it won't have sinfo?
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-No, it won't. But why do we need this unification between the skb and
-xdp paths in the first place? Doesn't the skb path already have support
-for these things? Seems like we could just stick to making this xdp-only
-and keeping xdp_frame as the ctx argument?
+WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp1 (section: .init.text)
+WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp4 (section: .init.text)
+WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp7 (section: .init.text)
+WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp10 (section: .init.text)
+WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp13 (section: .init.text)
+WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp16 (section: .init.text)
+WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp19 (section: .init.text)
+WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp22 (section: .init.text)
+WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp25 (section: .init.text)
+WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp28 (section: .init.text)
+WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp31 (section: .init.text)
+WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp34 (section: .init.text)
+>> ERROR: modpost: "inet_ehashfn" [net/dccp/dccp_ipv4.ko] undefined!
 
->> > --- Multiprog attachment ---
->> >
->> > Currently, attach/detach don't expose links and don't support multiple
->> > programs. I'm planning to use Daniel's bpf_mprog once it lands.
->> >
->> > --- TODO ---
->> >
->> > Things that I'm planning to do for the non-RFC series:
->> > - have some real device support to verify xdp_hw_metadata works
->>=20
->> Would be good to see some performance numbers as well :)
->
-> +1 :-)
->
->> > - freplace
->> > - Documentation/networking/xdp-rx-metadata.rst - like documentation
->> >
->> > --- CC ---
->> >
->> > CC'ing people only on the cover letter. Hopefully can find the rest via
->> > lore.
->>=20
->> Well, I found it there, even though I was apparently left off the Cc
->> list :(
->>=20
->> -Toke
->
-> Sure, I'll CC you explicitly next time! But I know you diligently follow =
-bpf
-> list, so decided to explicitly cc mostly netdev folks that might miss
-> it otherwise.
-
-Haha, fair point! And no big deal, I did obviously see it. I was just
-feeling a bit left out, that's all ;)
-
--Toke
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
