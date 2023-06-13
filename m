@@ -1,17 +1,17 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A90D15699
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2516A79DC
 	for <bpf@vger.kernel.org>; Tue, 13 Jun 2023 07:37:17 +0000 (UTC)
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCCEE7C;
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC501A5;
 	Tue, 13 Jun 2023 00:37:11 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.153])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QgL3h4p2lz4f3mnB;
-	Tue, 13 Jun 2023 15:37:04 +0800 (CST)
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QgL3l09dFz4f3tPC;
+	Tue, 13 Jun 2023 15:37:07 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgD3X7OdHIhkfcdhLg--.52188S5;
-	Tue, 13 Jun 2023 15:37:06 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgD3X7OdHIhkfcdhLg--.52188S7;
+	Tue, 13 Jun 2023 15:37:07 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org,
 	Martin KaFai Lau <martin.lau@linux.dev>,
@@ -28,9 +28,9 @@ Cc: Andrii Nakryiko <andrii@kernel.org>,
 	"Paul E . McKenney" <paulmck@kernel.org>,
 	rcu@vger.kernel.org,
 	houtao1@huawei.com
-Subject: [PATCH bpf-next v6 1/5] selftests/bpf: Use producer_cnt to allocate local counter array
-Date: Tue, 13 Jun 2023 16:09:17 +0800
-Message-Id: <20230613080921.1623219-2-houtao@huaweicloud.com>
+Subject: [PATCH bpf-next v6 3/5] selftests/bpf: Ensure that next_cpu() returns a valid CPU number
+Date: Tue, 13 Jun 2023 16:09:19 +0800
+Message-Id: <20230613080921.1623219-4-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20230613080921.1623219-1-houtao@huaweicloud.com>
 References: <20230613080921.1623219-1-houtao@huaweicloud.com>
@@ -41,23 +41,23 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgD3X7OdHIhkfcdhLg--.52188S5
-X-Coremail-Antispam: 1UD129KBjvdXoWruFW5Gw48Jw1Uur17Zw13Jwb_yoWfArcEya
-	10qrykXrWUAr9Fyr1DKas8uF13K3WfuryDAwnrJrnxGa1UZ39xtF4kZr15Xa4kW3yDJ3ya
-	g3Z5trZxCry7KjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbfxYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
-	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r18M2
-	8IrcIa0xkI8VCY1x0267AKxVW8JVW5JwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK
-	021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r
-	4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx
-	0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWU
-	JVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwI
-	xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-	Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7
-	IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
-	6cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jn9N3UUUUU=
+X-CM-TRANSID:gCh0CgD3X7OdHIhkfcdhLg--.52188S7
+X-Coremail-Antispam: 1UD129KBjvJXoW7tr1DAFW3ur48ZryfJryrWFg_yoW8Ar18pa
+	97Gw1qyFWftF17t3W8GF409FWSkwn7XrWrtr17Jry3ZFyxJrZ7XF1xKFWrJFsxu39Yqr1f
+	Z397try5u3W8Jw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
+	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2I
+	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAI
+	w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
+	0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1c4S7UUUUU==
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -68,27 +68,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 
 From: Hou Tao <houtao1@huawei.com>
 
-For count-local benchmark, use producer_cnt instead of consumer_cnt when
-allocating local counter array.
+When using option -a without --prod-affinity or --cons-affinity, if the
+number of producers and consumers is greater than the number of online
+CPUs, the benchmark will fail to run as shown below:
+
+  $ getconf _NPROCESSORS_ONLN
+  8
+  $ ./bench bpf-loop -a -p9
+  Setting up benchmark 'bpf-loop'...
+  setting affinity to CPU #8 failed: -22
+
+Fix it by returning the remainder of next_cpu divided by the number of
+online CPUs in next_cpu().
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- tools/testing/selftests/bpf/benchs/bench_count.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/bench.c | 3 ++-
+ tools/testing/selftests/bpf/bench.h | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/benchs/bench_count.c b/tools/testing/selftests/bpf/benchs/bench_count.c
-index 078972ce208e..3768945ad08e 100644
---- a/tools/testing/selftests/bpf/benchs/bench_count.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_count.c
-@@ -40,7 +40,7 @@ static void count_local_setup(void)
- {
- 	struct count_local_ctx *ctx = &count_local_ctx;
- 
--	ctx->hits = calloc(env.consumer_cnt, sizeof(*ctx->hits));
-+	ctx->hits = calloc(env.producer_cnt, sizeof(*ctx->hits));
- 	if (!ctx->hits)
+diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
+index 0b5d2b5303c9..56f1c166a57b 100644
+--- a/tools/testing/selftests/bpf/bench.c
++++ b/tools/testing/selftests/bpf/bench.c
+@@ -469,7 +469,7 @@ static int next_cpu(struct cpu_set *cpu_set)
  		exit(1);
+ 	}
+ 
+-	return cpu_set->next_cpu++;
++	return cpu_set->next_cpu++ % env.nr_cpus;
  }
+ 
+ static struct bench_state {
+@@ -659,6 +659,7 @@ static void collect_measurements(long delta_ns) {
+ 
+ int main(int argc, char **argv)
+ {
++	env.nr_cpus = get_nprocs();
+ 	parse_cmdline_args_init(argc, argv);
+ 
+ 	if (env.list) {
+diff --git a/tools/testing/selftests/bpf/bench.h b/tools/testing/selftests/bpf/bench.h
+index 402729c6a3ac..7ff32be3d730 100644
+--- a/tools/testing/selftests/bpf/bench.h
++++ b/tools/testing/selftests/bpf/bench.h
+@@ -27,6 +27,7 @@ struct env {
+ 	bool quiet;
+ 	int consumer_cnt;
+ 	int producer_cnt;
++	int nr_cpus;
+ 	struct cpu_set prod_cpus;
+ 	struct cpu_set cons_cpus;
+ };
 -- 
 2.29.2
 
