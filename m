@@ -1,135 +1,220 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C30D33924F;
-	Tue, 13 Jun 2023 17:29:40 +0000 (UTC)
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF021BDC;
-	Tue, 13 Jun 2023 10:29:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686677353; x=1718213353;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vHANWv3zEJsC1831jhZqokLdunyn+W4Oc+D4AmUHZ6s=;
-  b=bxLHf/u0SAsdtJqJcPXgt77nmKo4XUUzh+FbR7OBlUvUNuhYGBR0A5lV
-   wDDgrneP8cyQtLr5o9owJ56z5AeZNUQ9flamykmp4W23v/zLtdnnNWli6
-   EPXIg0sUqSJyzxqwcauvZUWVOwdkOQ8lX4g4GE88SX/Xx2hJz80J8HHRd
-   LXZ/q6GUPvV68ehiMf+9NgRjIuuGU2XWaYXhVNZ5ys3YDWqL4InUxphNS
-   uyvUPpYw2cE94nIdoMpD2jopsFJkbIcSBPKt5ucxcTdqR0EiHURxhZggB
-   GGrUY0nym49TlEbFyQMp3bxE4b+xTij5XWd26M/YEeFeA9QTXPypY4eey
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="386805856"
-X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
-   d="scan'208";a="386805856"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 10:27:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="958472728"
-X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
-   d="scan'208";a="958472728"
-Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 13 Jun 2023 10:27:11 -0700
-Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1q97nT-0001bM-2n;
-	Tue, 13 Jun 2023 17:27:11 +0000
-Date: Wed, 14 Jun 2023 01:26:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lorenz Bauer <lmb@isovalent.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	David Ahern <dsahern@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Joe Stringer <joe@wand.net.nz>, Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc: oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
-	Hemanth Malla <hemanthmalla@gmail.com>,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Lorenz Bauer <lmb@isovalent.com>
-Subject: Re: [PATCH bpf-next v2 3/6] net: remove duplicate reuseport_lookup
- functions
-Message-ID: <202306140138.DnwjedJ1-lkp@intel.com>
-References: <20230613-so-reuseport-v2-3-b7c69a342613@isovalent.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 101F238CA4;
+	Tue, 13 Jun 2023 18:15:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28DEAC433F0;
+	Tue, 13 Jun 2023 18:15:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1686680106;
+	bh=vP9sQ/XFTk8yMRjHXZi3SkX7StaiGtOnKUv8pPvNJ4c=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=JZOiMUtmw+VhtyEhw5tIAKUAtayp/jNc2/qrDK+poirp2jvVf702aeihpLojUfbWr
+	 RsiLltxvWn0LVf1iavqJ7q7LEnVzqzab06bnw6PPT5BSCwM9EbnnnvD0u4eMt7N8AT
+	 tCKfDp3pRlPGL4jjmgcMjUOSM0iF8sDjZjFPJmj4BQT6yyzNd83TOAaclzDJnodoWT
+	 Izzd74NZTf9A5J1jtuAo9zQY6i541U/SsjO3FjrtEunEbyskkiB1MWjf0QBkpJP+YB
+	 gFGYFQRWs4N15azgBwuBVtXwJCZUsviRI0TIWCeNaty0sXRklby139HvmknbgHlUfY
+	 VGCsoI4A87UEg==
+Date: Tue, 13 Jun 2023 11:15:05 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: dhowells@redhat.com
+Cc: syzbot <syzbot+d8486855ef44506fd675@syzkaller.appspotmail.com>,
+ bpf@vger.kernel.org, davem@davemloft.net, dsahern@kernel.org,
+ edumazet@google.com, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [net?] KASAN: stack-out-of-bounds Read in
+ skb_splice_from_iter
+Message-ID: <20230613111505.249ccb18@kernel.org>
+In-Reply-To: <000000000000ae4cbf05fdeb8349@google.com>
+References: <000000000000ae4cbf05fdeb8349@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230613-so-reuseport-v2-3-b7c69a342613@isovalent.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-	T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Lorenz,
+Hi David, are you fighting all these fires reported by syzbot?
+I see another one just rolled in from yesterdays KCM changes.
 
-kernel test robot noticed the following build warnings:
+On Mon, 12 Jun 2023 02:40:51 -0700 syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    e7c5433c5aaa tools: ynl: Remove duplicated include in hand..
+> git tree:       net-next
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=109d3d1d280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=526f919910d4a671
+> dashboard link: https://syzkaller.appspot.com/bug?extid=d8486855ef44506fd675
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10f22943280000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13e1363b280000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/13c08af1fd21/disk-e7c5433c.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/35820511752b/vmlinux-e7c5433c.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/6a8cbec0d40f/bzImage-e7c5433c.xz
+> 
+> The issue was bisected to:
+> 
+> commit 2dc334f1a63a8839b88483a3e73c0f27c9c1791c
+> Author: David Howells <dhowells@redhat.com>
+> Date:   Wed Jun 7 18:19:09 2023 +0000
+> 
+>     splice, net: Use sendmsg(MSG_SPLICE_PAGES) rather than ->sendpage()
+> 
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=149e0c8b280000
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=169e0c8b280000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=129e0c8b280000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+d8486855ef44506fd675@syzkaller.appspotmail.com
+> Fixes: 2dc334f1a63a ("splice, net: Use sendmsg(MSG_SPLICE_PAGES) rather than ->sendpage()")
+> 
+> ==================================================================
+> BUG: KASAN: stack-out-of-bounds in skb_splice_from_iter+0xcd6/0xd70 net/core/skbuff.c:6933
+> Read of size 8 at addr ffffc900039bf8f8 by task syz-executor193/5001
+> 
+> CPU: 1 PID: 5001 Comm: syz-executor193 Not tainted 6.4.0-rc5-syzkaller-00915-ge7c5433c5aaa #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+>  print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:351
+>  print_report mm/kasan/report.c:462 [inline]
+>  kasan_report+0x11c/0x130 mm/kasan/report.c:572
+>  skb_splice_from_iter+0xcd6/0xd70 net/core/skbuff.c:6933
+>  __ip_append_data+0x1439/0x3c20 net/ipv4/ip_output.c:1210
+>  ip_append_data net/ipv4/ip_output.c:1350 [inline]
+>  ip_append_data+0x115/0x1a0 net/ipv4/ip_output.c:1329
+>  raw_sendmsg+0xb50/0x30a0 net/ipv4/raw.c:641
+>  inet_sendmsg+0x9d/0xe0 net/ipv4/af_inet.c:829
+>  sock_sendmsg_nosec net/socket.c:724 [inline]
+>  sock_sendmsg+0xde/0x190 net/socket.c:747
+>  splice_to_socket+0x954/0xe30 fs/splice.c:917
+>  do_splice_from fs/splice.c:969 [inline]
+>  do_splice+0xb8c/0x1e50 fs/splice.c:1309
+>  __do_splice+0x14e/0x270 fs/splice.c:1387
+>  __do_sys_splice fs/splice.c:1598 [inline]
+>  __se_sys_splice fs/splice.c:1580 [inline]
+>  __x64_sys_splice+0x19c/0x250 fs/splice.c:1580
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7fba0bf36d29
+> Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007ffe0d4bac38 EFLAGS: 00000246 ORIG_RAX: 0000000000000113
+> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fba0bf36d29
+> RDX: 0000000000000005 RSI: 0000000000000000 RDI: 0000000000000003
+> RBP: 00007fba0befaed0 R08: 000000000004ffdd R09: 000000000000000d
+> R10: 0000000000000000 R11: 0000000000000246 R12: 00007fba0befaf60
+> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+>  </TASK>
+> 
+> The buggy address belongs to stack of task syz-executor193/5001
+>  and is located at offset 408 in frame:
+>  raw_sendmsg+0x0/0x30a0 include/net/sock.h:2733
+> 
+> This frame has 8 objects:
+>  [48, 52) 'hdrincl'
+>  [64, 68) 'err'
+>  [80, 88) 'rt'
+>  [112, 152) 'ipc'
+>  [192, 240) 'state'
+>  [272, 336) 'fl4'
+>  [368, 392) 'rfv'
+>  [432, 504) 'opt_copy'
+> 
+> The buggy address belongs to the virtual mapping at
+>  [ffffc900039b8000, ffffc900039c1000) created by:
+>  kernel_clone+0xeb/0x890 kernel/fork.c:2915
+> 
+> The buggy address belongs to the physical page:
+> page:ffffea0001d6c880 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x75b22
+> flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
+> page_type: 0xffffffff()
+> raw: 00fff00000000000 0000000000000000 dead000000000122 0000000000000000
+> raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
+> page dumped because: kasan: bad access detected
+> page_owner tracks the page as allocated
+> page last allocated via order 0, migratetype Unmovable, gfp_mask 0x2dc2(GFP_KERNEL|__GFP_HIGHMEM|__GFP_NOWARN|__GFP_ZERO), pid 4968, tgid 4968 (dhcpcd-run-hook), ts 47435778840, free_ts 47434086594
+>  set_page_owner include/linux/page_owner.h:31 [inline]
+>  post_alloc_hook+0x2db/0x350 mm/page_alloc.c:1731
+>  prep_new_page mm/page_alloc.c:1738 [inline]
+>  get_page_from_freelist+0xf41/0x2c00 mm/page_alloc.c:3502
+>  __alloc_pages+0x1cb/0x4a0 mm/page_alloc.c:4768
+>  alloc_pages+0x1aa/0x270 mm/mempolicy.c:2279
+>  vm_area_alloc_pages mm/vmalloc.c:3009 [inline]
+>  __vmalloc_area_node mm/vmalloc.c:3085 [inline]
+>  __vmalloc_node_range+0xb1c/0x14a0 mm/vmalloc.c:3257
+>  alloc_thread_stack_node kernel/fork.c:313 [inline]
+>  dup_task_struct kernel/fork.c:1116 [inline]
+>  copy_process+0x13bb/0x75c0 kernel/fork.c:2333
+>  kernel_clone+0xeb/0x890 kernel/fork.c:2915
+>  __do_sys_clone+0xba/0x100 kernel/fork.c:3058
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> page last free stack trace:
+>  reset_page_owner include/linux/page_owner.h:24 [inline]
+>  free_pages_prepare mm/page_alloc.c:1302 [inline]
+>  free_unref_page_prepare+0x62e/0xcb0 mm/page_alloc.c:2564
+>  free_unref_page_list+0xe3/0xa70 mm/page_alloc.c:2705
+>  release_pages+0xcd8/0x1380 mm/swap.c:1042
+>  tlb_batch_pages_flush+0xa8/0x1a0 mm/mmu_gather.c:97
+>  tlb_flush_mmu_free mm/mmu_gather.c:292 [inline]
+>  tlb_flush_mmu mm/mmu_gather.c:299 [inline]
+>  tlb_finish_mmu+0x14b/0x7e0 mm/mmu_gather.c:391
+>  exit_mmap+0x2b2/0x930 mm/mmap.c:3123
+>  __mmput+0x128/0x4c0 kernel/fork.c:1351
+>  mmput+0x60/0x70 kernel/fork.c:1373
+>  exit_mm kernel/exit.c:567 [inline]
+>  do_exit+0x9b0/0x29b0 kernel/exit.c:861
+>  do_group_exit+0xd4/0x2a0 kernel/exit.c:1024
+>  __do_sys_exit_group kernel/exit.c:1035 [inline]
+>  __se_sys_exit_group kernel/exit.c:1033 [inline]
+>  __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1033
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> Memory state around the buggy address:
+>  ffffc900039bf780: f1 f1 04 f2 00 00 00 f2 f2 f2 00 00 00 00 00 f2
+>  ffffc900039bf800: f2 f2 f2 f2 00 00 00 00 00 00 f2 f2 f2 f2 00 00
+> >ffffc900039bf880: 00 00 00 00 00 00 f2 f2 f2 f2 00 00 00 f2 f2 f2  
+>                                                                 ^
+>  ffffc900039bf900: f2 f2 00 00 00 00 00 00 00 00 00 f3 f3 f3 f3 f3
+>  ffffc900039bf980: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> ==================================================================
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> 
+> If the bug is already fixed, let syzbot know by replying with:
+> #syz fix: exact-commit-title
+> 
+> If you want syzbot to run the reproducer, reply with:
+> #syz test: git://repo/address.git branch-or-commit-hash
+> If you attach or paste a git patch, syzbot will apply it before testing.
+> 
+> If you want to change bug's subsystems, reply with:
+> #syz set subsystems: new-subsystem
+> (See the list of subsystem names on the web dashboard)
+> 
+> If the bug is a duplicate of another bug, reply with:
+> #syz dup: exact-subject-of-another-report
+> 
+> If you want to undo deduplication, reply with:
+> #syz undup
 
-[auto build test WARNING on 25085b4e9251c77758964a8e8651338972353642]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lorenz-Bauer/net-export-inet_lookup_reuseport-and-inet6_lookup_reuseport/20230613-181619
-base:   25085b4e9251c77758964a8e8651338972353642
-patch link:    https://lore.kernel.org/r/20230613-so-reuseport-v2-3-b7c69a342613%40isovalent.com
-patch subject: [PATCH bpf-next v2 3/6] net: remove duplicate reuseport_lookup functions
-config: i386-defconfig (https://download.01.org/0day-ci/archive/20230614/202306140138.DnwjedJ1-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build):
-        git checkout 25085b4e9251c77758964a8e8651338972353642
-        b4 shazam https://lore.kernel.org/r/20230613-so-reuseport-v2-3-b7c69a342613@isovalent.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/ipv4/ net/ipv6/
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306140138.DnwjedJ1-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> net/ipv4/udp.c:409:5: warning: no previous prototype for 'udp_ehashfn' [-Wmissing-prototypes]
-     409 | u32 udp_ehashfn(const struct net *net, const __be32 laddr, const __u16 lport,
-         |     ^~~~~~~~~~~
---
->> net/ipv6/udp.c:74:5: warning: no previous prototype for 'udp6_ehashfn' [-Wmissing-prototypes]
-      74 | u32 udp6_ehashfn(const struct net *net,
-         |     ^~~~~~~~~~~~
-
-
-vim +/udp_ehashfn +409 net/ipv4/udp.c
-
-   407	
-   408	INDIRECT_CALLABLE_SCOPE
- > 409	u32 udp_ehashfn(const struct net *net, const __be32 laddr, const __u16 lport,
-   410			const __be32 faddr, const __be16 fport)
-   411	{
-   412		static u32 udp_ehash_secret __read_mostly;
-   413	
-   414		net_get_random_once(&udp_ehash_secret, sizeof(udp_ehash_secret));
-   415	
-   416		return __inet_ehashfn(laddr, lport, faddr, fport,
-   417				      udp_ehash_secret + net_hash_mix(net));
-   418	}
-   419	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
