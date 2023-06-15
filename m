@@ -1,128 +1,101 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A531420E0;
-	Thu, 15 Jun 2023 11:27:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1756C433C0;
-	Thu, 15 Jun 2023 11:27:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21BE312B69
+	for <bpf@vger.kernel.org>; Thu, 15 Jun 2023 11:52:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F06B1C433C8;
+	Thu, 15 Jun 2023 11:52:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1686828474;
-	bh=U9pbntIrNXfG7wu+B1aeTFIpvtosIyr2h3tcLbTgri8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=i+umpez4rTb0T0Gfhbn1Qo6jRT/lDlcLnZC7hndaemOrDSx8FT43ipPhAi8TbNSlz
-	 ko/kbrXg7ZgjMbc3Ww0yJSQS4654qIk6cQm5XGz7rrslKJxFEmXmUqRzE+G7GuH7po
-	 UpVW4AgzAIxJPPiEbyrzMb5QSBY14r0vC2PNNuUsiaXpOr8pt6aDnPBmLE7GSmiyp8
-	 rLDmXJajhvT70ygSb91xjfZeA2s1JwPjvJrxZMdcaGNUKUwcXHyKrRfPXq7XhrUUNk
-	 wucQFjr76cOeHQd03uhwET/usUzGdIi2SIthQpUbPuhz+wSYEbplMPm9euq3gUc9SJ
-	 UKcwpzQ/mOLVw==
-Date: Thu, 15 Jun 2023 13:27:47 +0200
-From: Simon Horman <horms@kernel.org>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andre Guedes <andre.guedes@intel.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Florian Kauer <florian.kauer@linutronix.de>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Jithu Joseph <jithu.joseph@intel.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Vedang Patel <vedang.patel@intel.com>,
-	intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+	s=k20201202; t=1686829960;
+	bh=vzXaLtl6SzbvAGUpSSunsAgBa5POCxudf8Ga0otXJQU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ETYkAhwtp5kNnRtpjzuT4+P3vKvOR2SXhqd4Q8qIpLEGQl6dYfiqvReb117moKwM0
+	 LdRSt8WIYArfD9xxw9VDPZkTSWuHYapMzGO0mAQIHYlfaZalEYEUIxzcXQNxfgplip
+	 HFSkXpe4WVm8vK1ciYLuagzQS77bEkvoRMS9V0DxIqX/IpuS3JOBRhOuDHK1QlOQJh
+	 ZuVKK4rULuoGZdXfT5urJ5l1fOfaOuLe7P14w9PSeSu6nEAocRDhXIdQXNFJTwFShi
+	 /wM/YDUZ9tDa5U3Zf3y+3cTlwxPE9hKOABGrBM2pcfjZYmcgPaBrZrQlZmxvcaKYkJ
+	 pRsGyu2GFtomA==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>
+Cc: lkml <linux-kernel@vger.kernel.org>,
+	linux-trace-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: Re: [PATCH RFC net] igc: Avoid dereference of ptr_err in
- igc_clean_rx_irq()
-Message-ID: <ZIr1s6KHVGh/ZuEj@kernel.org>
-References: <20230615-igc-err-ptr-v1-1-a17145eb8d62@kernel.org>
- <ZIrgEVVQfvJwneLx@boxer>
+Subject: [PATCH] fprobe: Release rethook after the ftrace_ops is unregistered
+Date: Thu, 15 Jun 2023 13:52:36 +0200
+Message-Id: <20230615115236.3476617-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZIrgEVVQfvJwneLx@boxer>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jun 15, 2023 at 11:55:29AM +0200, Maciej Fijalkowski wrote:
-> On Thu, Jun 15, 2023 at 11:45:36AM +0200, Simon Horman wrote:
+While running bpf selftests it's possible to get following fault:
 
-Hi Marciej,
+  general protection fault, probably for non-canonical address \
+  0x6b6b6b6b6b6b6b6b: 0000 [#1] PREEMPT SMP DEBUG_PAGEALLOC NOPTI
+  ...
+  Call Trace:
+   <TASK>
+   fprobe_handler+0xc1/0x270
+   ? __pfx_bpf_testmod_init+0x10/0x10
+   ? __pfx_bpf_testmod_init+0x10/0x10
+   ? bpf_fentry_test1+0x5/0x10
+   ? bpf_fentry_test1+0x5/0x10
+   ? bpf_testmod_init+0x22/0x80
+   ? do_one_initcall+0x63/0x2e0
+   ? rcu_is_watching+0xd/0x40
+   ? kmalloc_trace+0xaf/0xc0
+   ? do_init_module+0x60/0x250
+   ? __do_sys_finit_module+0xac/0x120
+   ? do_syscall_64+0x37/0x90
+   ? entry_SYSCALL_64_after_hwframe+0x72/0xdc
+   </TASK>
 
-> Hi Simon,
-> 
-> > In igc_clean_rx_irq() the result of a call to igc_xdp_run_prog() is assigned
-> > to the skb local variable. This may be an ERR_PTR.
-> > 
-> > A little later the following is executed, which seems to be a
-> > possible dereference of an ERR_PTR.
-> > 
-> > 	total_bytes += skb->len;
-> > 
-> > Avoid this problem by continuing the loop in which all of the
-> > above occurs once the handling of the NULL case completes.
-> > 
-> > This proposed fix is speculative - I do not have deep knowledge of this
-> > driver.  And I am concerned about the effect of skipping the following
-> > logic:
-> > 
-> >   igc_put_rx_buffer(rx_ring, rx_buffer, rx_buffer_pgcnt);
-> >   cleaned_count++;
-> 
-> this will break - you have to recycle the buffer to have it going.
+In unregister_fprobe function we can't release fp->rethook while it's
+possible there are some of its users still running on another cpu.
 
-Thanks. As I said I wasn't sure about the fix: it was a strawman.
+Moving rethook_free call after fp->ops is unregistered with
+unregister_ftrace_function call.
 
-> > Flagged by Smatch as:
-> > 
-> >   .../igc_main.c:2467 igc_xdp_run_prog() warn: passing zero to 'ERR_PTR'
-> 
-> how about PTR_ERR_OR_ZERO() ? this would silence smatch and is not an
-> intrusive change. another way is to get rid of ERR_PTR() around skb/xdp
-> run result but i think the former would be just fine.
+Fixes: 5b0ab78998e3 ("fprobe: Add exit_handler support")
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ kernel/trace/fprobe.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
-Sorry, there were two warnings. And I accidently trimmed the one
-that is more relevant instead of the one that is less relevant.
-I do agree the one above does not appear to be a bug.
+diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+index 18d36842faf5..0121e8c0d54e 100644
+--- a/kernel/trace/fprobe.c
++++ b/kernel/trace/fprobe.c
+@@ -364,19 +364,13 @@ int unregister_fprobe(struct fprobe *fp)
+ 		    fp->ops.saved_func != fprobe_kprobe_handler))
+ 		return -EINVAL;
+ 
+-	/*
+-	 * rethook_free() starts disabling the rethook, but the rethook handlers
+-	 * may be running on other processors at this point. To make sure that all
+-	 * current running handlers are finished, call unregister_ftrace_function()
+-	 * after this.
+-	 */
+-	if (fp->rethook)
+-		rethook_free(fp->rethook);
+-
+ 	ret = unregister_ftrace_function(&fp->ops);
+ 	if (ret < 0)
+ 		return ret;
+ 
++	if (fp->rethook)
++		rethook_free(fp->rethook);
++
+ 	ftrace_free_filter(&fp->ops);
+ 
+ 	return ret;
+-- 
+2.40.1
 
-But I am concerned abut this one:
-
-  .../igc_main.c:2618 igc_clean_rx_irq() error: 'skb' dereferencing possible ERR_PTR()
-
-If skb is an error pointer, e.g. ERR_PTR(-IGC_XDP_PASS), and
-it is dereferenced, that would be a problem, right?
-
-Perhaps I'm missing something obvious and this can't occur.
-But it does seem possible to me.
-
-> 
-> > 
-> > Compile tested only.
-> > 
-> > Fixes: 26575105d6ed ("igc: Add initial XDP support")
-> > Signed-off-by: Simon Horman <horms@kernel.org>
-> > ---
-> >  drivers/net/ethernet/intel/igc/igc_main.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-> > index 88145c30c919..b58c8a674bd1 100644
-> > --- a/drivers/net/ethernet/intel/igc/igc_main.c
-> > +++ b/drivers/net/ethernet/intel/igc/igc_main.c
-> > @@ -2586,6 +2586,7 @@ static int igc_clean_rx_irq(struct igc_q_vector *q_vector, const int budget)
-> >  
-> >  			total_packets++;
-> >  			total_bytes += size;
-> > +			continue;
-> >  		} else if (skb)
-> >  			igc_add_rx_frag(rx_ring, rx_buffer, skb, size);
-> >  		else if (ring_uses_build_skb(rx_ring))
-> > 
-> > 
-> 
