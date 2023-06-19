@@ -1,75 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85F40D539
-	for <bpf@vger.kernel.org>; Mon, 19 Jun 2023 12:10:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 10C2EC433C0;
-	Mon, 19 Jun 2023 12:10:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1687176621;
-	bh=ZocE6lmGQJgAIcjvNlhtHFL+RP9Bh97sqnRM5LgZWtI=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Fz4rgBpGD+HQ9rr3SVYVebhVmZNcUQy3pXI9oaEgQGZZtQcKV4JJq2EZYJ2OCUHGV
-	 aqNzJV3aO2OYyqXKRB/c8INLIvljgQvL80ffEsS1mznvFjtwKa/GCUpCjKTh0wqsET
-	 1IFUGkCrdm9Lu008SuIRrBe0UcQr2n4KfhMdtXsKGZJVveENyMdOwqbF1geIiGfte7
-	 o4IhqJzElEbka+eMBh6g5f4E+XJWtvclvDmk5O+5cvxvTQuACerC3MH+heVs8zuaDh
-	 ZpxyQjxI/brzbFDLVChZGoA04ne7K41QZsBAxrfx2iPLJoGQ+7qiM60PjJ+Nx/lktV
-	 ZBosvMZsgxibg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EAA6BE301F6;
-	Mon, 19 Jun 2023 12:10:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEA4FC14A;
+	Mon, 19 Jun 2023 12:29:43 +0000 (UTC)
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F80DC6;
+	Mon, 19 Jun 2023 05:29:40 -0700 (PDT)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R331e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=hengqi@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VlWNmr1_1687177775;
+Received: from localhost(mailfrom:hengqi@linux.alibaba.com fp:SMTPD_---0VlWNmr1_1687177775)
+          by smtp.aliyun-inc.com;
+          Mon, 19 Jun 2023 20:29:36 +0800
+Date: Mon, 19 Jun 2023 20:29:35 +0800
+From: Heng Qi <hengqi@linux.alibaba.com>
+To: "Michael S. Tsirkin" <mst@redhat.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>
+Subject: Re: [PATCH net-next 2/4] virtio-net: reprobe csum related fields for
+ skb passed by XDP
+Message-ID: <20230619122935.GA74977@h68b04307.sqa.eu95>
+References: <20230619105738.117733-1-hengqi@linux.alibaba.com>
+ <20230619105738.117733-3-hengqi@linux.alibaba.com>
+ <20230619072651-mutt-send-email-mst@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next 0/4] Clean up BPF permissions checks
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <168717662095.5239.16025212755558078216.git-patchwork-notify@kernel.org>
-Date: Mon, 19 Jun 2023 12:10:20 +0000
-References: <20230613223533.3689589-1-andrii@kernel.org>
-In-Reply-To: <20230613223533.3689589-1-andrii@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- martin.lau@kernel.org, kernel-team@meta.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230619072651-mutt-send-email-mst@kernel.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+	T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+	autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
-
-On Tue, 13 Jun 2023 15:35:29 -0700 you wrote:
-> This patch set contains a few refactorings to BPF map and BPF program creation
-> permissions checks, which were originally part of BPF token patch set ([0]),
-> but are logically completely independent and useful in their own right.
+On Mon, Jun 19, 2023 at 07:27:26AM -0400, Michael S. Tsirkin wrote:
+> On Mon, Jun 19, 2023 at 06:57:36PM +0800, Heng Qi wrote:
+> > Currently, the VIRTIO_NET_F_GUEST_CSUM (corresponds to NETIF_F_RXCSUM
+> > for netdev) feature of the virtio-net driver conflicts with the loading
+> > of XDP, which is caused by the problem described in [1][2], that is,
+> > XDP may cause errors in partial csumed-related fields which can lead
+> > to packet dropping.
+> > 
+> > In addition, when communicating between vm and vm on the same host, the
+> > receiving side vm will receive packets marked as
+> > VIRTIO_NET_HDR_F_NEEDS_CSUM, but after these packets are processed by
+> > XDP, the VIRTIO_NET_HDR_F_NEEDS_CSUM and skb CHECKSUM_PARTIAL flags will
+> > be cleared, causing the packet dropping.
+> > 
+> > This patch introduces a helper function, which will try to solve the
+> > above problems in the subsequent patch.
+> > 
+> > [1] commit 18ba58e1c234 ("virtio-net: fail XDP set if guest csum is negotiated")
+> > [2] commit e59ff2c49ae1 ("virtio-net: disable guest csum during XDP set")
+> > 
+> > Signed-off-by: Heng Qi <hengqi@linux.alibaba.com>
+> > Reviewed-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 > 
->   [0] https://patchwork.kernel.org/project/netdevbpf/list/?series=755113&state=*
 > 
-> Andrii Nakryiko (4):
->   bpf: move unprivileged checks into map_create() and bpf_prog_load()
->   bpf: inline map creation logic in map_create() function
->   bpf: centralize permissions checks for all BPF map types
->   bpf: keep BPF_PROG_LOAD permission checks clear of validations
+> squash this and patch 1 into where the helpers are used.
 > 
-> [...]
+> in particular so we don't get warnings with bisect.
 
-Here is the summary with links:
-  - [bpf-next,1/4] bpf: move unprivileged checks into map_create() and bpf_prog_load()
-    https://git.kernel.org/bpf/bpf-next/c/1d28635abcf1
-  - [bpf-next,2/4] bpf: inline map creation logic in map_create() function
-    https://git.kernel.org/bpf/bpf-next/c/22db41226b67
-  - [bpf-next,3/4] bpf: centralize permissions checks for all BPF map types
-    https://git.kernel.org/bpf/bpf-next/c/6c3eba1c5e28
-  - [bpf-next,4/4] bpf: keep BPF_PROG_LOAD permission checks clear of validations
-    https://git.kernel.org/bpf/bpf-next/c/7f6719f7a866
+Ok. Will modify.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thanks.
 
-
+> 
+> > ---
+> >  drivers/net/virtio_net.c | 38 ++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 38 insertions(+)
+> > 
+> > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > index 36cae78f6311..07b4801d689c 100644
+> > --- a/drivers/net/virtio_net.c
+> > +++ b/drivers/net/virtio_net.c
+> > @@ -1663,6 +1663,44 @@ static int virtnet_flow_dissect_udp_tcp(struct virtnet_info *vi, struct sk_buff
+> >  	return 0;
+> >  }
+> >  
+> > +static int virtnet_set_csum_after_xdp(struct virtnet_info *vi,
+> > +				      struct sk_buff *skb,
+> > +				      __u8 flags)
+> > +{
+> > +	int err;
+> > +
+> > +	/* When XDP program is loaded, for example, the vm-vm scenario
+> > +	 * on the same host, packets marked as VIRTIO_NET_HDR_F_NEEDS_CSUM
+> > +	 * will travel. Although these packets are safe from the point of
+> > +	 * view of the vm, to avoid modification by XDP and successful
+> > +	 * forwarding in the upper layer, we re-probe the necessary checksum
+> > +	 * related information: skb->csum_{start, offset}, pseudo-header csum.
+> > +	 *
+> > +	 * This benefits us:
+> > +	 * 1. XDP can be loaded when there's _F_GUEST_CSUM.
+> > +	 * 2. The device verifies the checksum of packets , especially
+> > +	 *    benefiting for large packets.
+> > +	 * 3. In the same-host vm-vm scenario, packets marked as
+> > +	 *    VIRTIO_NET_HDR_F_NEEDS_CSUM are no longer dropped after being
+> > +	 *    processed by XDP.
+> > +	 */
+> > +	if (flags & VIRTIO_NET_HDR_F_NEEDS_CSUM) {
+> > +		err = virtnet_flow_dissect_udp_tcp(vi, skb);
+> > +		if (err < 0)
+> > +			return -EINVAL;
+> > +
+> > +		skb->ip_summed = CHECKSUM_PARTIAL;
+> > +	} else if (flags && VIRTIO_NET_HDR_F_DATA_VALID) {
+> > +		/* We want to benefit from this: XDP guarantees that packets marked
+> > +		 * as VIRTIO_NET_HDR_F_DATA_VALID still have correct csum after they
+> > +		 * are processed.
+> > +		 */
+> > +		skb->ip_summed = CHECKSUM_UNNECESSARY;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  static void receive_buf(struct virtnet_info *vi, struct receive_queue *rq,
+> >  			void *buf, unsigned int len, void **ctx,
+> >  			unsigned int *xdp_xmit,
+> > -- 
+> > 2.19.1.6.gb485710b
