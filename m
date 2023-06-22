@@ -1,279 +1,420 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20B561F18B
-	for <bpf@vger.kernel.org>; Thu, 22 Jun 2023 15:33:53 +0000 (UTC)
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E297219BE;
-	Thu, 22 Jun 2023 08:33:51 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-57028539aadso79708547b3.2;
-        Thu, 22 Jun 2023 08:33:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687448031; x=1690040031;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=z9YxWAFEqb4aZB9la7sp5IBlusGAGgOD1WQIKix2beE=;
-        b=WgXpp27PsTA2f7oImGzQO1HHaL2zDsgBS5U2220/lWFYA335AuUNNaIbaf43YvVS4S
-         Ey7x6iAIgJVfnJYaw4xx+g/t1OF58aQlMJ4hrSSMHxWKlornrDN6xySVX8ol7VfifVl0
-         hd8zHggoy87BXc/vAByXw2y19FvG8bcMSGhdxmAqSm1Q7P7PqvmhIZ7stf3bFlqbC11p
-         YHas+T23Ub9NyXEp4IV+IGqI2u0yZNp37CM3gB+5CmYIQUgRXqYUf3sl9SLBLRRqr1tY
-         iVkbxFspCrcfuDxcDudA5bFPC+Jfs36mRicammnqhTnVc2tNtS17U7lR+jSioEwChBdW
-         8eLQ==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 462E41F18B
+	for <bpf@vger.kernel.org>; Thu, 22 Jun 2023 15:34:38 +0000 (UTC)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065D2135
+	for <bpf@vger.kernel.org>; Thu, 22 Jun 2023 08:34:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1687448076;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YAWCmrAmwCl1N7fCfizEGws+8a3F56UqQiaEh7J5B+E=;
+	b=RRXguSOQgwDPIDwxhrXUe2HLirVwUv1wVm/vfyjOS/KuF991IZD4rHZKLJXZGjSCcJ/q6j
+	DsY09Ndi5KY75S7/RJ+Tj78KU/bN2fbnIDUCGoREz+ZMDLu6BqCbh1/+dAGjKLpbKXB6lA
+	EfH0RcshI4DEtv2wHfzglRrLuKsI8kQ=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-83-eNeor9PnPDKg7Kjxe_GedQ-1; Thu, 22 Jun 2023 11:34:28 -0400
+X-MC-Unique: eNeor9PnPDKg7Kjxe_GedQ-1
+Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-513f337d478so4149980a12.3
+        for <bpf@vger.kernel.org>; Thu, 22 Jun 2023 08:34:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687448031; x=1690040031;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z9YxWAFEqb4aZB9la7sp5IBlusGAGgOD1WQIKix2beE=;
-        b=RTZly2wVLXoIiitvxguxY1w1VMFBjREYTBZPcJaPiW8TJgRWjUk1h7LEMcej84RJ4O
-         GVIfxPyajyXhfFA19FYR3PYlHkkEq04Doq/4RMnGDliFh8N5tnVLnd13fYBjMVTQ/ceX
-         9BZTvjvMdYGfpaFAQxkuh1LLfZQAPHIj9kSSKUDyUvr2WUqeKmGiesz5maIc32wAIchM
-         wUB64SzUnIdWsQcO1XJHIGxaMbXmgHiKNCM1Ibk7F5sq0GB55dhfdAENAWQVMDFeX1VX
-         knF9G6vveU5TN7iwzmfEGYMy3+kiKj4OXfAGFsYLEgk5qm6s9zjfrgYY2dYb0OggD4MH
-         eXLA==
-X-Gm-Message-State: AC+VfDzGqrvaNmRQiViPj8RTtZW6rCAFA2QAeZkrC2rw+VkGjrY2sCzS
-	py2jTm+Jgi1pj87kDYdLAkk=
-X-Google-Smtp-Source: ACHHUZ4LpykQWuRr1yrbo/g4sSuMng8kTi4NSslt/P8nMURwGshMz4hfSHUekExYnxIafxMfxFP/Yw==
-X-Received: by 2002:a81:8007:0:b0:56d:40da:1fc2 with SMTP id q7-20020a818007000000b0056d40da1fc2mr19836528ywf.50.1687448030921;
-        Thu, 22 Jun 2023 08:33:50 -0700 (PDT)
-Received: from ?IPV6:2600:1700:6cf8:1240:9e96:aa3:eeff:a087? ([2600:1700:6cf8:1240:9e96:aa3:eeff:a087])
-        by smtp.gmail.com with ESMTPSA id r188-20020a0de8c5000000b0056d1a2455c1sm1900962ywe.38.2023.06.22.08.33.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 08:33:50 -0700 (PDT)
-Message-ID: <2e51ad4c-c264-9929-4549-669d1025d63b@gmail.com>
-Date: Thu, 22 Jun 2023 08:33:48 -0700
+        d=1e100.net; s=20221208; t=1687448061; x=1690040061;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YAWCmrAmwCl1N7fCfizEGws+8a3F56UqQiaEh7J5B+E=;
+        b=i8GR3atZeQflmbQoBRUH49v2D+LdThv+gkeS0a9VdsAwrWpScEhn8nqeEeqJA9UOy5
+         l9b9YZNZyC5XEny4HDhZ69/8VNmgZG2qoyzDYF6f5Djhv8eZKkxRzAEhneQ4GaUwU9x9
+         EjUCBt5FLINx90S4axXPHWulfJYXx5FPa7YnLvjz5gP7+xNr8Npcd+vJFFFSGupOHh6H
+         lePftrXjefmnwaf5VatKuhn08zcDDZyER4GM7xNcEiT7/GjkDkuOwqKyNfpydNI+1Gxx
+         yCyXVtryEqbXCrPiYZxSVqohDcAu9srvRuGt5l6DKz1LTTheqQUTxT4BfFaS51x/UnEU
+         Yg6Q==
+X-Gm-Message-State: AC+VfDxZTLDMEwJroHZjN2JEQDZ+Urw0t3r7XptiNbTgyjaupnElXnf2
+	D/5RsnMf14/PFHgADhNcQ5oCbHEjZobsxjHHhrs+S0DOK7Nh036+Fqb2gA27RLGUWOaqbIo1qnT
+	j9rTwbWNmz73n
+X-Received: by 2002:a7b:cd16:0:b0:3f9:b119:e42b with SMTP id f22-20020a7bcd16000000b003f9b119e42bmr9403381wmj.30.1687447152465;
+        Thu, 22 Jun 2023 08:19:12 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4UtO+vdPl4TbSBFba6U7sn8uXDPfnnKtHGMCmuC/vX/EQ7I92imvaPRsCck5pPB0+FXg2gyA==
+X-Received: by 2002:a7b:cd16:0:b0:3f9:b119:e42b with SMTP id f22-20020a7bcd16000000b003f9b119e42bmr9403350wmj.30.1687447152070;
+        Thu, 22 Jun 2023 08:19:12 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-11-6-160.retail.telecomitalia.it. [87.11.6.160])
+        by smtp.gmail.com with ESMTPSA id f20-20020a1c6a14000000b003f8f884ebe5sm8051180wmc.2.2023.06.22.08.19.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 08:19:11 -0700 (PDT)
+Date: Thu, 22 Jun 2023 17:19:08 +0200
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: Bobby Eshleman <bobby.eshleman@bytedance.com>
+Cc: Stefan Hajnoczi <stefanha@redhat.com>, 
+	"Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, "K. Y. Srinivasan" <kys@microsoft.com>, 
+	Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, 
+	Bryan Tan <bryantan@vmware.com>, Vishnu Dasa <vdasa@vmware.com>, 
+	VMware PV-Drivers Reviewers <pv-drivers@vmware.com>, Dan Carpenter <dan.carpenter@linaro.org>, 
+	Simon Horman <simon.horman@corigine.com>, Krasnov Arseniy <oxffffaa@gmail.com>, kvm@vger.kernel.org, 
+	virtualization@lists.linux-foundation.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-hyperv@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH RFC net-next v4 3/8] vsock: support multi-transport
+ datagrams
+Message-ID: <tngyeva5by3aldrhlixajjin2hqmcl6uruvuoed7hyrndlesfd@bbv7aphqye2q>
+References: <20230413-b4-vsock-dgram-v4-0-0cebbb2ae899@bytedance.com>
+ <20230413-b4-vsock-dgram-v4-3-0cebbb2ae899@bytedance.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Verify that the cgroup_skb
- filters receive expected packets.
-To: Yonghong Song <yhs@meta.com>, Kui-Feng Lee <thinker.li@gmail.com>,
- bpf@vger.kernel.org, ast@kernel.org, martin.lau@linux.dev, song@kernel.org,
- kernel-team@meta.com, andrii@kernel.org, daniel@iogearbox.net, yhs@fb.com,
- kpsingh@kernel.org, shuah@kernel.org, john.fastabend@gmail.com,
- sdf@google.com, mykolal@fb.com, linux-kselftest@vger.kernel.org,
- jolsa@kernel.org, haoluo@google.com
-Cc: Kui-Feng Lee <kuifeng@meta.com>
-References: <20230620171409.166001-1-kuifeng@meta.com>
- <20230620171409.166001-3-kuifeng@meta.com>
- <bf4d7953-8c85-2de1-7fdc-0968da1767ab@meta.com>
-Content-Language: en-US
-From: Kui-Feng Lee <sinquersw@gmail.com>
-In-Reply-To: <bf4d7953-8c85-2de1-7fdc-0968da1767ab@meta.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-	autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20230413-b4-vsock-dgram-v4-3-0cebbb2ae899@bytedance.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+	RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+	T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+On Sat, Jun 10, 2023 at 12:58:30AM +0000, Bobby Eshleman wrote:
+>This patch adds support for multi-transport datagrams.
+>
+>This includes:
+>- Per-packet lookup of transports when using sendto(sockaddr_vm)
+>- Selecting H2G or G2H transport using VMADDR_FLAG_TO_HOST and CID in
+>  sockaddr_vm
+>
+>To preserve backwards compatibility with VMCI, some important changes
+>were made. The "transport_dgram" / VSOCK_TRANSPORT_F_DGRAM is changed to
+>be used for dgrams iff there is not yet a g2h or h2g transport that has
 
+s/iff/if
 
-On 6/21/23 21:15, Yonghong Song wrote:
-> 
-> 
-> On 6/20/23 10:14 AM, Kui-Feng Lee wrote:
->> This test case includes four scenarios:
->> 1. Connect to the server from outside the cgroup and close the connection
->>     from outside the cgroup.
->> 2. Connect to the server from outside the cgroup and close the connection
->>     from inside the cgroup.
->> 3. Connect to the server from inside the cgroup and close the connection
->>     from outside the cgroup.
->> 4. Connect to the server from inside the cgroup and close the connection
->>     from inside the cgroup.
->>
->> The test case is to verify that cgroup_skb/{egress, ingress} filters
->> receive expected packets including SYN, SYN/ACK, ACK, FIN, and FIN/ACK.
->>
->> Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
->> ---
->>   tools/testing/selftests/bpf/cgroup_helpers.c  |  12 +
->>   tools/testing/selftests/bpf/cgroup_helpers.h  |   1 +
->>   tools/testing/selftests/bpf/cgroup_tcp_skb.h  |  35 ++
->>   .../selftests/bpf/prog_tests/cgroup_tcp_skb.c | 399 ++++++++++++++++++
->>   .../selftests/bpf/progs/cgroup_tcp_skb.c      | 382 +++++++++++++++++
->>   5 files changed, 829 insertions(+)
->>   create mode 100644 tools/testing/selftests/bpf/cgroup_tcp_skb.h
->>   create mode 100644 
->> tools/testing/selftests/bpf/prog_tests/cgroup_tcp_skb.c
->>   create mode 100644 tools/testing/selftests/bpf/progs/cgroup_tcp_skb.c
->>
->> diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c 
->> b/tools/testing/selftests/bpf/cgroup_helpers.c
->> index 9e95b37a7dff..2caee8423ee0 100644
->> --- a/tools/testing/selftests/bpf/cgroup_helpers.c
->> +++ b/tools/testing/selftests/bpf/cgroup_helpers.c
->> @@ -277,6 +277,18 @@ int join_cgroup(const char *relative_path)
->>       return join_cgroup_from_top(cgroup_path);
->>   }
->> +/**
->> + * join_root_cgroup() - Join the root cgroup
->> + *
->> + * This function joins the root cgroup.
->> + *
->> + * On success, it returns 0, otherwise on failure it returns 1.
->> + */
->> +int join_root_cgroup(void)
->> +{
->> +    return join_cgroup_from_top(CGROUP_MOUNT_PATH);
->> +}
->> +
->>   /**
->>    * join_parent_cgroup() - Join a cgroup in the parent process workdir
->>    * @relative_path: The cgroup path, relative to parent process 
->> workdir, to join
->> diff --git a/tools/testing/selftests/bpf/cgroup_helpers.h 
->> b/tools/testing/selftests/bpf/cgroup_helpers.h
->> index f099a166c94d..5c2cb9c8b546 100644
->> --- a/tools/testing/selftests/bpf/cgroup_helpers.h
->> +++ b/tools/testing/selftests/bpf/cgroup_helpers.h
->> @@ -22,6 +22,7 @@ void remove_cgroup(const char *relative_path);
->>   unsigned long long get_cgroup_id(const char *relative_path);
->>   int join_cgroup(const char *relative_path);
->> +int join_root_cgroup(void);
->>   int join_parent_cgroup(const char *relative_path);
->>   int setup_cgroup_environment(void);
->> diff --git a/tools/testing/selftests/bpf/cgroup_tcp_skb.h 
->> b/tools/testing/selftests/bpf/cgroup_tcp_skb.h
->> new file mode 100644
->> index 000000000000..1054b3633983
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/cgroup_tcp_skb.h
->> @@ -0,0 +1,35 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/* Copyright (c) 2023 Facebook */
-> 
-> /* Copyright (c) 2023 Meta Platforms, Inc. and affiliates. */
-> 
->> +
->> +/* Define states of a socket to tracking messages sending to and from 
->> the
->> + * socket.
->> + *
->> + * These states are based on rfc9293 with some modifications to support
->> + * tracking of messages sent out from a socket. For example, when a 
->> SYN is
->> + * received, a new socket is transiting to the SYN_RECV state defined in
->> + * rfc9293. But, we put it in SYN_RECV_SENDING_SYN_ACK state and when
->> + * SYN-ACK is sent out, it moves to SYN_RECV state. With this 
->> modification,
->> + * we can track the message sent out from a socket.
->> + */
->> +
->> +#ifndef __CGROUP_TCP_SKB_H__
->> +#define __CGROUP_TCP_SKB_H__
->> +
->> +enum {
->> +    INIT,
->> +    CLOSED,
->> +    SYN_SENT,
->> +    SYN_RECV_SENDING_SYN_ACK,
->> +    SYN_RECV,
->> +    ESTABLISHED,
->> +    FIN_WAIT1,
->> +    FIN_WAIT2,
->> +    CLOSE_WAIT_SENDING_ACK,
->> +    CLOSE_WAIT,
->> +    CLOSING,
->> +    LAST_ACK,
->> +    TIME_WAIT_SENDING_ACK,
->> +    TIME_WAIT,
->> +};
->> +
->> +#endif /* __CGROUP_TCP_SKB_H__ */
->> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_tcp_skb.c 
->> b/tools/testing/selftests/bpf/prog_tests/cgroup_tcp_skb.c
->> new file mode 100644
->> index 000000000000..1b78e8ab3f02
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_tcp_skb.c
->> @@ -0,0 +1,399 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/* Copyright (c) 2023 Facebook */
->> +#include <test_progs.h>
->> +#include <linux/in6.h>
->> +#include <sys/socket.h>
->> +#include <sched.h>
->> +#include <unistd.h>
->> +#include "cgroup_helpers.h"
->> +#include "testing_helpers.h"
->> +#include "cgroup_tcp_skb.skel.h"
->> +#include "cgroup_tcp_skb.h"
->> +
->> +#define CGROUP_TCP_SKB_PATH "/test_cgroup_tcp_skb"
->> +
->> +static int install_filters(int cgroup_fd,
->> +               struct bpf_link **egress_link,
->> +               struct bpf_link **ingress_link,
->> +               struct bpf_program *egress_prog,
->> +               struct bpf_program *ingress_prog,
->> +               struct cgroup_tcp_skb *skel)
->> +{
->> +    /* Prepare filters */
->> +    skel->bss->g_sock_state = 0;
->> +    skel->bss->g_unexpected = 0;
->> +    *egress_link =
->> +        bpf_program__attach_cgroup(egress_prog,
->> +                       cgroup_fd);
->> +    if (!ASSERT_NEQ(*egress_link, NULL, "egress_link"))
->> +        return -1;
-> 
-> !ASSERT_OK_PTR(...)
+>been registered that can transmit the packet. If there is a g2h/h2g
+>transport for that remote address, then that transport will be used and
+>not "transport_dgram". This essentially makes "transport_dgram" a
+>fallback transport for when h2g/g2h has not yet gone online, which
+>appears to be the exact use case for VMCI.
+>
+>This design makes sense, because there is no reason that the
+>transport_{g2h,h2g} cannot also service datagrams, which makes the role
+>of transport_dgram difficult to understand outside of the VMCI context.
+>
+>The logic around "transport_dgram" had to be retained to prevent
+>breaking VMCI:
+>
+>1) VMCI datagrams appear to function outside of the h2g/g2h
+>   paradigm. When the vmci transport becomes online, it registers itself
+>   with the DGRAM feature, but not H2G/G2H. Only later when the
+>   transport has more information about its environment does it register
+>   H2G or G2H. In the case that a datagram socket becomes active
+>   after DGRAM registration but before G2H/H2G registration, the
+>   "transport_dgram" transport needs to be used.
 
-Sure!
+IIRC we did this, because at that time only VMCI supported DGRAM. Now 
+that there are more transports, maybe DGRAM can follow the h2g/g2h 
+paradigm.
 
-> 
->> +    *ingress_link =
->> +        bpf_program__attach_cgroup(ingress_prog,
->> +                       cgroup_fd);
->> +    if (!ASSERT_NEQ(*ingress_link, NULL, "ingress_link"))
->> +        return -1;
-> 
-> !ASSERT_OK_PTR(...)
-> 
->> +
->> +    return 0;
->> +}
->> +
->> +static void uninstall_filters(struct bpf_link **egress_link,
->> +                  struct bpf_link **ingress_link)
->> +{
->> +    bpf_link__destroy(*egress_link);
->> +    *egress_link = NULL;
->> +    bpf_link__destroy(*ingress_link);
->> +    *ingress_link = NULL;
->> +}
->> +
-> [...]
->> +
->> +static int close_connection(int *closing_fd, int *peer_fd, int 
->> *listen_fd,
->> +                struct cgroup_tcp_skb *skel)
->> +{
->> +    __u32 saved_packet_count = 0;
->> +    int err;
->> +    int i;
->> +
->> +    /* Wait for ACKs to be sent */
->> +    saved_packet_count = skel->bss->g_packet_count;
->> +    usleep(100000);        /* 0.1s */
->> +    while (skel->bss->g_packet_count != saved_packet_count) {
->> +        saved_packet_count = skel->bss->g_packet_count;
->> +        usleep(100000);    /* 0.1s */
->> +    }
-> 
-> Should we put a limitation in the number of loop iterations
-> just in case that something went wrong or too slow?
+>
+>2) VMCI seems to require special message be sent by the transport when a
+>   datagram socket calls bind(). Under the h2g/g2h model, the transport
+>   is selected using the remote_addr which is set by connect(). At
+>   bind time there is no remote_addr because often no connect() has been
+>   called yet: the transport is null. Therefore, with a null transport
+>   there doesn't seem to be any good way for a datagram socket a tell the
+>   VMCI transport that it has just had bind() called upon it.
 
-Sure! It make sense to me.
+@Vishnu, @Bryan do you think we can avoid this in some way?
 
-[...]
+>
+>Only transports with a special datagram fallback use-case such as VMCI
+>need to register VSOCK_TRANSPORT_F_DGRAM.
+
+Maybe we should rename it in VSOCK_TRANSPORT_F_DGRAM_FALLBACK or
+something like that.
+
+In any case, we definitely need to update the comment in 
+include/net/af_vsock.h on top of VSOCK_TRANSPORT_F_DGRAM mentioning
+this.
+
+>
+>Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+>---
+> drivers/vhost/vsock.c                   |  1 -
+> include/linux/virtio_vsock.h            |  2 -
+> net/vmw_vsock/af_vsock.c                | 78 +++++++++++++++++++++++++--------
+> net/vmw_vsock/hyperv_transport.c        |  6 ---
+> net/vmw_vsock/virtio_transport.c        |  1 -
+> net/vmw_vsock/virtio_transport_common.c |  7 ---
+> net/vmw_vsock/vsock_loopback.c          |  1 -
+> 7 files changed, 60 insertions(+), 36 deletions(-)
+>
+>diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
+>index c8201c070b4b..8f0082da5e70 100644
+>--- a/drivers/vhost/vsock.c
+>+++ b/drivers/vhost/vsock.c
+>@@ -410,7 +410,6 @@ static struct virtio_transport vhost_transport = {
+> 		.cancel_pkt               = vhost_transport_cancel_pkt,
+>
+> 		.dgram_enqueue            = virtio_transport_dgram_enqueue,
+>-		.dgram_bind               = virtio_transport_dgram_bind,
+> 		.dgram_allow              = virtio_transport_dgram_allow,
+> 		.dgram_get_cid		  = virtio_transport_dgram_get_cid,
+> 		.dgram_get_port		  = virtio_transport_dgram_get_port,
+>diff --git a/include/linux/virtio_vsock.h b/include/linux/virtio_vsock.h
+>index 23521a318cf0..73afa09f4585 100644
+>--- a/include/linux/virtio_vsock.h
+>+++ b/include/linux/virtio_vsock.h
+>@@ -216,8 +216,6 @@ void virtio_transport_notify_buffer_size(struct vsock_sock *vsk, u64 *val);
+> u64 virtio_transport_stream_rcvhiwat(struct vsock_sock *vsk);
+> bool virtio_transport_stream_is_active(struct vsock_sock *vsk);
+> bool virtio_transport_stream_allow(u32 cid, u32 port);
+>-int virtio_transport_dgram_bind(struct vsock_sock *vsk,
+>-				struct sockaddr_vm *addr);
+> bool virtio_transport_dgram_allow(u32 cid, u32 port);
+> int virtio_transport_dgram_get_cid(struct sk_buff *skb, unsigned int *cid);
+> int virtio_transport_dgram_get_port(struct sk_buff *skb, unsigned int *port);
+>diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>index 74358f0b47fa..ef86765f3765 100644
+>--- a/net/vmw_vsock/af_vsock.c
+>+++ b/net/vmw_vsock/af_vsock.c
+>@@ -438,6 +438,18 @@ vsock_connectible_lookup_transport(unsigned int cid, __u8 flags)
+> 	return transport;
+> }
+>
+>+static const struct vsock_transport *
+>+vsock_dgram_lookup_transport(unsigned int cid, __u8 flags)
+>+{
+>+	const struct vsock_transport *transport;
+>+
+>+	transport = vsock_connectible_lookup_transport(cid, flags);
+>+	if (transport)
+>+		return transport;
+>+
+>+	return transport_dgram;
+>+}
+>+
+> /* Assign a transport to a socket and call the .init transport callback.
+>  *
+>  * Note: for connection oriented socket this must be called when vsk->remote_addr
+>@@ -474,7 +486,8 @@ int vsock_assign_transport(struct vsock_sock *vsk, struct vsock_sock *psk)
+>
+> 	switch (sk->sk_type) {
+> 	case SOCK_DGRAM:
+>-		new_transport = transport_dgram;
+>+		new_transport = vsock_dgram_lookup_transport(remote_cid,
+>+							     remote_flags);
+> 		break;
+> 	case SOCK_STREAM:
+> 	case SOCK_SEQPACKET:
+>@@ -691,6 +704,9 @@ static int __vsock_bind_connectible(struct vsock_sock *vsk,
+> static int __vsock_bind_dgram(struct vsock_sock *vsk,
+> 			      struct sockaddr_vm *addr)
+> {
+>+	if (!vsk->transport || !vsk->transport->dgram_bind)
+>+		return -EINVAL;
+>+
+> 	return vsk->transport->dgram_bind(vsk, addr);
+> }
+>
+>@@ -1172,19 +1188,24 @@ static int vsock_dgram_sendmsg(struct socket *sock, struct msghdr *msg,
+>
+> 	lock_sock(sk);
+>
+>-	transport = vsk->transport;
+>-
+>-	err = vsock_auto_bind(vsk);
+>-	if (err)
+>-		goto out;
+>-
+>-
+> 	/* If the provided message contains an address, use that.  Otherwise
+> 	 * fall back on the socket's remote handle (if it has been connected).
+> 	 */
+> 	if (msg->msg_name &&
+> 	    vsock_addr_cast(msg->msg_name, msg->msg_namelen,
+> 			    &remote_addr) == 0) {
+>+		transport = vsock_dgram_lookup_transport(remote_addr->svm_cid,
+>+							 remote_addr->svm_flags);
+>+		if (!transport) {
+>+			err = -EINVAL;
+>+			goto out;
+>+		}
+>+
+>+		if (!try_module_get(transport->module)) {
+>+			err = -ENODEV;
+>+			goto out;
+>+		}
+>+
+> 		/* Ensure this address is of the right type and is a valid
+> 		 * destination.
+> 		 */
+>@@ -1193,11 +1214,27 @@ static int vsock_dgram_sendmsg(struct socket *sock, struct msghdr *msg,
+> 			remote_addr->svm_cid = transport->get_local_cid();
+>
+
+ From here ...
+
+> 		if (!vsock_addr_bound(remote_addr)) {
+>+			module_put(transport->module);
+>+			err = -EINVAL;
+>+			goto out;
+>+		}
+>+
+>+		if (!transport->dgram_allow(remote_addr->svm_cid,
+>+					    remote_addr->svm_port)) {
+>+			module_put(transport->module);
+> 			err = -EINVAL;
+> 			goto out;
+> 		}
+>+
+>+		err = transport->dgram_enqueue(vsk, remote_addr, msg, len);
+
+... to here, looks like duplicate code, can we get it out of the if 
+block?
+
+>+		module_put(transport->module);
+> 	} else if (sock->state == SS_CONNECTED) {
+> 		remote_addr = &vsk->remote_addr;
+>+		transport = vsk->transport;
+>+
+>+		err = vsock_auto_bind(vsk);
+>+		if (err)
+>+			goto out;
+>
+> 		if (remote_addr->svm_cid == VMADDR_CID_ANY)
+> 			remote_addr->svm_cid = transport->get_local_cid();
+>@@ -1205,23 +1242,23 @@ static int vsock_dgram_sendmsg(struct socket *sock, struct msghdr *msg,
+> 		/* XXX Should connect() or this function ensure remote_addr is
+> 		 * bound?
+> 		 */
+>-		if (!vsock_addr_bound(&vsk->remote_addr)) {
+>+		if (!vsock_addr_bound(remote_addr)) {
+> 			err = -EINVAL;
+> 			goto out;
+> 		}
+>-	} else {
+>-		err = -EINVAL;
+>-		goto out;
+>-	}
+>
+>-	if (!transport->dgram_allow(remote_addr->svm_cid,
+>-				    remote_addr->svm_port)) {
+>+		if (!transport->dgram_allow(remote_addr->svm_cid,
+>+					    remote_addr->svm_port)) {
+>+			err = -EINVAL;
+>+			goto out;
+>+		}
+>+
+>+		err = transport->dgram_enqueue(vsk, remote_addr, msg, len);
+>+	} else {
+> 		err = -EINVAL;
+> 		goto out;
+> 	}
+>
+>-	err = transport->dgram_enqueue(vsk, remote_addr, msg, len);
+>-
+> out:
+> 	release_sock(sk);
+> 	return err;
+>@@ -1255,13 +1292,18 @@ static int vsock_dgram_connect(struct socket *sock,
+> 	if (err)
+> 		goto out;
+>
+>+	memcpy(&vsk->remote_addr, remote_addr, sizeof(vsk->remote_addr));
+>+
+>+	err = vsock_assign_transport(vsk, NULL);
+>+	if (err)
+>+		goto out;
+>+
+> 	if (!vsk->transport->dgram_allow(remote_addr->svm_cid,
+> 					 remote_addr->svm_port)) {
+> 		err = -EINVAL;
+> 		goto out;
+> 	}
+>
+>-	memcpy(&vsk->remote_addr, remote_addr, sizeof(vsk->remote_addr));
+> 	sock->state = SS_CONNECTED;
+>
+> 	/* sock map disallows redirection of non-TCP sockets with sk_state !=
+>diff --git a/net/vmw_vsock/hyperv_transport.c b/net/vmw_vsock/hyperv_transport.c
+>index ff6e87e25fa0..c00bc5da769a 100644
+>--- a/net/vmw_vsock/hyperv_transport.c
+>+++ b/net/vmw_vsock/hyperv_transport.c
+>@@ -551,11 +551,6 @@ static void hvs_destruct(struct vsock_sock *vsk)
+> 	kfree(hvs);
+> }
+>
+>-static int hvs_dgram_bind(struct vsock_sock *vsk, struct sockaddr_vm *addr)
+>-{
+>-	return -EOPNOTSUPP;
+>-}
+>-
+> static int hvs_dgram_get_cid(struct sk_buff *skb, unsigned int *cid)
+> {
+> 	return -EOPNOTSUPP;
+>@@ -841,7 +836,6 @@ static struct vsock_transport hvs_transport = {
+> 	.connect                  = hvs_connect,
+> 	.shutdown                 = hvs_shutdown,
+>
+>-	.dgram_bind               = hvs_dgram_bind,
+> 	.dgram_get_cid		  = hvs_dgram_get_cid,
+> 	.dgram_get_port		  = hvs_dgram_get_port,
+> 	.dgram_get_length	  = hvs_dgram_get_length,
+>diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
+>index 5763cdf13804..1b7843a7779a 100644
+>--- a/net/vmw_vsock/virtio_transport.c
+>+++ b/net/vmw_vsock/virtio_transport.c
+>@@ -428,7 +428,6 @@ static struct virtio_transport virtio_transport = {
+> 		.shutdown                 = virtio_transport_shutdown,
+> 		.cancel_pkt               = virtio_transport_cancel_pkt,
+>
+>-		.dgram_bind               = virtio_transport_dgram_bind,
+> 		.dgram_enqueue            = virtio_transport_dgram_enqueue,
+> 		.dgram_allow              = virtio_transport_dgram_allow,
+> 		.dgram_get_cid		  = virtio_transport_dgram_get_cid,
+>diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+>index e6903c719964..d5a3c8efe84b 100644
+>--- a/net/vmw_vsock/virtio_transport_common.c
+>+++ b/net/vmw_vsock/virtio_transport_common.c
+>@@ -790,13 +790,6 @@ bool virtio_transport_stream_allow(u32 cid, u32 port)
+> }
+> EXPORT_SYMBOL_GPL(virtio_transport_stream_allow);
+>
+>-int virtio_transport_dgram_bind(struct vsock_sock *vsk,
+>-				struct sockaddr_vm *addr)
+>-{
+>-	return -EOPNOTSUPP;
+>-}
+>-EXPORT_SYMBOL_GPL(virtio_transport_dgram_bind);
+>-
+> int virtio_transport_dgram_get_cid(struct sk_buff *skb, unsigned int *cid)
+> {
+> 	return -EOPNOTSUPP;
+>diff --git a/net/vmw_vsock/vsock_loopback.c b/net/vmw_vsock/vsock_loopback.c
+>index 2f3cabc79ee5..e9de45a26fbd 100644
+>--- a/net/vmw_vsock/vsock_loopback.c
+>+++ b/net/vmw_vsock/vsock_loopback.c
+>@@ -61,7 +61,6 @@ static struct virtio_transport loopback_transport = {
+> 		.shutdown                 = virtio_transport_shutdown,
+> 		.cancel_pkt               = vsock_loopback_cancel_pkt,
+>
+>-		.dgram_bind               = virtio_transport_dgram_bind,
+> 		.dgram_enqueue            = virtio_transport_dgram_enqueue,
+> 		.dgram_allow              = virtio_transport_dgram_allow,
+> 		.dgram_get_cid		  = virtio_transport_dgram_get_cid,
+>
+>-- 
+>2.30.2
+>
+
+The rest LGTM!
+
+Stefano
+
