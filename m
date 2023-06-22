@@ -1,105 +1,194 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7D9C1F186
-	for <bpf@vger.kernel.org>; Thu, 22 Jun 2023 15:10:01 +0000 (UTC)
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A280A2;
-	Thu, 22 Jun 2023 08:10:00 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.west.internal (Postfix) with ESMTP id 7B1773200258;
-	Thu, 22 Jun 2023 11:09:56 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 22 Jun 2023 11:09:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm1; t=1687446596; x=1687532996; bh=UF
-	Ik7GqKMTQQbMewPZ3JZd1cKUV2IvhZU7QLYY4nLQk=; b=VqXzuiAnU40BIyTBrS
-	9/SRN8hrv7scO6zI3Wgs3SMHosS7t3TIJr1SBen8U4HVEj75R1HMftaR11UagFuI
-	dQDwOO6WznyWPpjHfiZA/qhgUCvAGQy5BbZaxLT8/yzptS5v9ubV79kwpAGGxQuM
-	DE1SwgGx2/ZH4LHcTmR8+ATYG4+1ChyqonunUcwENZ8WIemWrIms+PVug0q2eEMY
-	TSR/0Lv+VsDmf75Ax2ZUYJHD9iEFh1NOs/D996wZlKS3iocCzmdyaCf0ugaZ8754
-	mkrP5Erd8AZHVvjwPj+SwlMzINCbTf+N7Ax13yVW7pywBRzZV7toq41p/Zg6HRml
-	8+aA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm2; t=1687446596; x=1687532996; bh=UFIk7GqKMTQQb
-	MewPZ3JZd1cKUV2IvhZU7QLYY4nLQk=; b=GDkxVJy0ljSrkyo6YnDKY4pFJLdfF
-	2IiwBq716JjjpA1//mgjXXP5rcXOZixDJgoknebyqw1EqT2D2QU8dP8YL2NcTi1O
-	IcPYk8faxiG7shlcm1dGUo/6sDJPCw3Xx0CSF1UrFWPh0CpWGKFhWKa1eSkHxUvZ
-	hQKxsPVNrue7m49ASD49SHR8b6Ycrxepba23aSdmT5JPYAnwwLCp85qf4tpFV9QC
-	s7uZrWeg6Rcr0aeiWooXqJ01AnWywTF72j+hj2YO3Lel+WKAuW51T7GBsJGC4tEX
-	zBWePkKQBus17YZIOFzKmp68jsxY9m/bGzWsIxe3JfxKnYUSnioOb56VA==
-X-ME-Sender: <xms:QmSUZLkPh6E0UqDs8VS6ZyRN4qZgBuUFafXc6Are0ycgDlrH6NDVqg>
-    <xme:QmSUZO0DJFPef8z4dg0gEklyqcQOteSgU8sjn_ihzdZQGYc5BSSDYBjdql0sceTKV
-    t-Mz_Lh8TLjXlZnyUY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeeguddgkeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:QmSUZBryuN3fCOL33LL87iiMJqMuPdQ374jsU4AyA3x_IUnaAeTNqw>
-    <xmx:QmSUZDndHZJxE8ISniqoZMrjyBRb3ilM9dINXYaxUJ00LFwhgi62PA>
-    <xmx:QmSUZJ0rSKbadaLwaeA2sIbRM2gI4zZSyduBaxYgvlWuucs5KccdXw>
-    <xmx:RGSUZGlj-v19qlVP4kskwEzbSFARUROY_1DQ0zqqUTkr7VMXuaT54Q>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 7DFC4B60089; Thu, 22 Jun 2023 11:09:54 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9019D1F18B
+	for <bpf@vger.kernel.org>; Thu, 22 Jun 2023 15:26:33 +0000 (UTC)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DB5211F
+	for <bpf@vger.kernel.org>; Thu, 22 Jun 2023 08:26:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1687447574;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=s9naFD7gfaMNd05hAGGf5tsGc4tvi4lWlW620oNdE7s=;
+	b=BpLmVPVRueAFlhssDppFrwQz86V9gMK8zNnvDvV73wtd1EGZM04BvpOBveYMt97mWhq5aL
+	Q++BZz5j4ett+CZ2pSxe5c4YHL5WF9TY1zbM6aDPyKd+IuaZtt9kjPOg0K/N1kBmg1EITH
+	Vm1mfWE2mn1hRYstMU/yzXhPtTq+D9A=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-421-yAAdqWd1PNG6-ortOxppxQ-1; Thu, 22 Jun 2023 11:26:10 -0400
+X-MC-Unique: yAAdqWd1PNG6-ortOxppxQ-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f9b5cc7298so16810245e9.3
+        for <bpf@vger.kernel.org>; Thu, 22 Jun 2023 08:26:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687447559; x=1690039559;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s9naFD7gfaMNd05hAGGf5tsGc4tvi4lWlW620oNdE7s=;
+        b=axy8lFEvGzcEpOB43vjbqT8qXcWSEZ579ngsqEKuIxGvtTaKPnKvf3Nqa3yTUTTx9u
+         YNUV/UZ5NJmoJaRlmJLg9JL1tYIf5MBtszLrZUxcsbDdk9Gxhku7DnOjgyxnHpb+8aYh
+         3BdeZdZfSIv7cdQvV/TtKGpBDotSTGaJVtkL/q7VmRNRroQNcp8n/Aci1pt2MVeaTUnc
+         8uIiWFFpiq5MG5PYxGCki70s+HmclbA4vrLmHtlx2NEnkFCfNtPEuqO2KvTmirnrxalO
+         bk7/PuaBKKA2pr5zDBf8lu1deZgb8sSnBUnY96fthMXiXN7KBv80AhIYO7Oz/3wQxn/Q
+         IPZg==
+X-Gm-Message-State: AC+VfDw0s7OOiy4+db1DMrlHr5TGBC53eMIGsLbG/FFtzWS9VUVWuBI6
+	8RSk9TX4KxR2D1yumMOTxQ+BN/bwSfPOcp1O8QF0Pwx69gl9ea4GMJSLf/MathBrvwcMtej7Dfe
+	2njyCmiFQNcv1
+X-Received: by 2002:a7b:cb90:0:b0:3f9:c2f6:335 with SMTP id m16-20020a7bcb90000000b003f9c2f60335mr3570372wmi.36.1687447559670;
+        Thu, 22 Jun 2023 08:25:59 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5yc3YiqgFnTK1MzlExfaEms+r4U/DMqe75/V1PK4F+LuHCCZzMXuAmW0ik7zmWglpxBefjHA==
+X-Received: by 2002:a7b:cb90:0:b0:3f9:c2f6:335 with SMTP id m16-20020a7bcb90000000b003f9c2f60335mr3570346wmi.36.1687447559371;
+        Thu, 22 Jun 2023 08:25:59 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-11-6-160.retail.telecomitalia.it. [87.11.6.160])
+        by smtp.gmail.com with ESMTPSA id n20-20020a1c7214000000b003f8d85b481esm19011755wmc.21.2023.06.22.08.25.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 08:25:58 -0700 (PDT)
+Date: Thu, 22 Jun 2023 17:25:55 +0200
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: Bobby Eshleman <bobby.eshleman@bytedance.com>
+Cc: Stefan Hajnoczi <stefanha@redhat.com>, 
+	"Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, "K. Y. Srinivasan" <kys@microsoft.com>, 
+	Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, 
+	Bryan Tan <bryantan@vmware.com>, Vishnu Dasa <vdasa@vmware.com>, 
+	VMware PV-Drivers Reviewers <pv-drivers@vmware.com>, Dan Carpenter <dan.carpenter@linaro.org>, 
+	Simon Horman <simon.horman@corigine.com>, Krasnov Arseniy <oxffffaa@gmail.com>, kvm@vger.kernel.org, 
+	virtualization@lists.linux-foundation.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-hyperv@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH RFC net-next v4 4/8] vsock: make vsock bind reusable
+Message-ID: <p2tgn3wczd3t3dodyicczetr2nqnqpwcadz6ql5hpvg2cd2dxa@phheksxhxfna>
+References: <20230413-b4-vsock-dgram-v4-0-0cebbb2ae899@bytedance.com>
+ <20230413-b4-vsock-dgram-v4-4-0cebbb2ae899@bytedance.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Message-Id: <1412dbaf-56f4-418b-85ea-681b1c44cc26@app.fastmail.com>
-In-Reply-To: <1687443219-11946-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1687443219-11946-1-git-send-email-yangtiezhu@loongson.cn>
-Date: Thu, 22 Jun 2023 17:09:34 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Tiezhu Yang" <yangtiezhu@loongson.cn>
-Cc: linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org,
- loongarch@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>,
- bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH v3 0/2] Unify uapi bitsperlong.h
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-	SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20230413-b4-vsock-dgram-v4-4-0cebbb2ae899@bytedance.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+	RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+	T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
 	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Thu, Jun 22, 2023, at 16:13, Tiezhu Yang wrote:
-> v3:
->   -- Check the definition of __BITS_PER_LONG first at
->      the beginning of uapi/asm-generic/bitsperlong.h
+On Sat, Jun 10, 2023 at 12:58:31AM +0000, Bobby Eshleman wrote:
+>This commit makes the bind table management functions in vsock usable
+>for different bind tables. For use by datagrams in a future patch.
 >
-> v2:
->   -- Check __CHAR_BIT__ and __SIZEOF_LONG__ rather than
->      __aarch64__, __riscv, __loongarch__, thanks Ruoyao
->   -- Update the code comment and commit message
+>Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+>---
+> net/vmw_vsock/af_vsock.c | 33 ++++++++++++++++++++++++++-------
+> 1 file changed, 26 insertions(+), 7 deletions(-)
 >
-> v1:
->   -- Rebase on 6.4-rc6
->   -- Only unify uapi bitsperlong.h for arm64, riscv and loongarch
->   -- Remove uapi bitsperlong.h of hexagon and microblaze in a new patch
+>diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>index ef86765f3765..7a3ca4270446 100644
+>--- a/net/vmw_vsock/af_vsock.c
+>+++ b/net/vmw_vsock/af_vsock.c
+>@@ -230,11 +230,12 @@ static void __vsock_remove_connected(struct vsock_sock *vsk)
+> 	sock_put(&vsk->sk);
+> }
 >
-> Here is the RFC patch:
-> https://lore.kernel.org/linux-arch/1683615903-10862-1-git-send-email-yangtiezhu@loongson.cn/
+>-static struct sock *__vsock_find_bound_socket(struct sockaddr_vm *addr)
+>+struct sock *vsock_find_bound_socket_common(struct sockaddr_vm *addr,
+>+					    struct list_head *bind_table)
+> {
+> 	struct vsock_sock *vsk;
+>
+>-	list_for_each_entry(vsk, vsock_bound_sockets(addr), bound_table) {
+>+	list_for_each_entry(vsk, bind_table, bound_table) {
+> 		if (vsock_addr_equals_addr(addr, &vsk->local_addr))
+> 			return sk_vsock(vsk);
+>
+>@@ -247,6 +248,11 @@ static struct sock *__vsock_find_bound_socket(struct sockaddr_vm *addr)
+> 	return NULL;
+> }
+>
+>+static struct sock *__vsock_find_bound_socket(struct sockaddr_vm *addr)
+>+{
+>+	return vsock_find_bound_socket_common(addr, vsock_bound_sockets(addr));
+>+}
+>+
+> static struct sock *__vsock_find_connected_socket(struct sockaddr_vm *src,
+> 						  struct sockaddr_vm *dst)
+> {
+>@@ -646,12 +652,17 @@ static void vsock_pending_work(struct work_struct *work)
+>
+> /**** SOCKET OPERATIONS ****/
+>
+>-static int __vsock_bind_connectible(struct vsock_sock *vsk,
+>-				    struct sockaddr_vm *addr)
+>+static int vsock_bind_common(struct vsock_sock *vsk,
+>+			     struct sockaddr_vm *addr,
+>+			     struct list_head *bind_table,
+>+			     size_t table_size)
+> {
+> 	static u32 port;
+> 	struct sockaddr_vm new_addr;
+>
+>+	if (table_size < VSOCK_HASH_SIZE)
+>+		return -1;
 
-I've applied these to the asm-generic tree now
+Why we need this check now?
 
-Thanks,
+>+
+> 	if (!port)
+> 		port = get_random_u32_above(LAST_RESERVED_PORT);
+>
+>@@ -667,7 +678,8 @@ static int __vsock_bind_connectible(struct vsock_sock *vsk,
+>
+> 			new_addr.svm_port = port++;
+>
+>-			if (!__vsock_find_bound_socket(&new_addr)) {
+>+			if (!vsock_find_bound_socket_common(&new_addr,
+>+							    &bind_table[VSOCK_HASH(addr)])) {
+> 				found = true;
+> 				break;
+> 			}
+>@@ -684,7 +696,8 @@ static int __vsock_bind_connectible(struct vsock_sock *vsk,
+> 			return -EACCES;
+> 		}
+>
+>-		if (__vsock_find_bound_socket(&new_addr))
+>+		if (vsock_find_bound_socket_common(&new_addr,
+>+						   &bind_table[VSOCK_HASH(addr)]))
+> 			return -EADDRINUSE;
+> 	}
+>
+>@@ -696,11 +709,17 @@ static int __vsock_bind_connectible(struct vsock_sock *vsk,
+> 	 * by AF_UNIX.
+> 	 */
+> 	__vsock_remove_bound(vsk);
+>-	__vsock_insert_bound(vsock_bound_sockets(&vsk->local_addr), vsk);
+>+	__vsock_insert_bound(&bind_table[VSOCK_HASH(&vsk->local_addr)], vsk);
+>
+> 	return 0;
+> }
+>
+>+static int __vsock_bind_connectible(struct vsock_sock *vsk,
+>+				    struct sockaddr_vm *addr)
+>+{
+>+	return vsock_bind_common(vsk, addr, vsock_bind_table, VSOCK_HASH_SIZE + 1);
+>+}
+>+
+> static int __vsock_bind_dgram(struct vsock_sock *vsk,
+> 			      struct sockaddr_vm *addr)
+> {
+>
+>-- 
+>2.30.2
+>
 
-   Arnd
+The rest seems okay to me, but I agree with Simon's suggestion.
+
+Stefano
+
