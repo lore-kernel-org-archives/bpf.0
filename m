@@ -1,233 +1,233 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FF111F182
-	for <bpf@vger.kernel.org>; Thu, 22 Jun 2023 18:28:32 +0000 (UTC)
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DFC122;
-	Thu, 22 Jun 2023 11:28:30 -0700 (PDT)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35MHQTHF027917;
-	Thu, 22 Jun 2023 11:28:13 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=fntdQ/sEPISpqkGfN107BpkMJoD6859V458GBL6LVcI=;
- b=K64F+CxKP9Qsyn8ODdWzlQN6b3G6R8LkWHlhe7HNxiN0d3ezda1DpDfhb1qR4n3D7OGd
- jTVuGQF4G5uqtIQumsVKokHgWHImFQixy9MlyWGeBUj2hbxlAi0MbIXZIcg6xEZjbHF0
- Xn3XUExYBYTkQegWjzPgvvX3LAhGNHGrdUz2upZJALFJuWhA3y4XjPfDnu6ZYRdE8Ul1
- 4ZF9n5ZH3Na8F9wVFufbcVWdO9By1a/wbxA3VTzOZSOT00pwTTzSEwxs4mWN4jzu3791
- 3fLpNWDPzZTxCzO8cNtOK+r6JvGcI/U1iRCfFDr6JBIHrIKsX8dNZTZQ5neDVMolQg5Q Yg== 
-Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2049.outbound.protection.outlook.com [104.47.73.49])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3rby4cwfv7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 22 Jun 2023 11:28:12 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IH5KqmImMWRP3CtKsTvUAMmdawGImJ6MK4BwodLhINCboczkTcZy/9FmZDgBWX7mvcFTyFwXq6FLisEo9m0j4/IBMdDFjVj1iqqkGDNUiCe0NSh9UQjwzFAgMPPFvgTB+Tz85aKEd6DZITec9MtxABaA/3yUsGKtWcM3PnISlX9w+UN3H61yrnGluOSqdn1s0JWjVpvjw88rofFLtaIfis3NIGe4FZpSHilQEMgzww2WWcwN0ZJuFQJDu7d4r2mQU7Rrx3XfAhTeaZzRhajdYGwWN8DTKIORXbiYTygmnUzYpH6biewFz+FcWzLYY7IoPIEZhXBYOXyptUKDq1wxlA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fntdQ/sEPISpqkGfN107BpkMJoD6859V458GBL6LVcI=;
- b=FIKigpznH5EZvDZK7lUeOAwlMSORqMGM6ORaIFh9oIDM1Jnls5adTR+34OYu/HcMwecJJRIpiKIZSbBeEy/d5aLpAZKbhR0H1y1eeWGAu2Hq4xRr+KQkO3BMnrT1mqVFNKYAYB/LANdfqPVbhz5ycK6ofSLNokIhQWka5Cr93MU77xKEvVe+2wFU43Lug898LH+oS3ibDQS+8Z0JGAg9yPB6rtdC7IoE5mVdR9PfXbWT19+0v459rcN/9dUMj8TTjwinazdc96wMomPqodCK49eRnjc+Gmsfuov8VuDSk1GYp39AwCdsCPvg7TuwBzGG0UHYqFUYtkNugogkJ0qqAA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by IA1PR15MB5775.namprd15.prod.outlook.com (2603:10b6:208:3f1::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Thu, 22 Jun
- 2023 18:28:09 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::428f:acec:2c1f:c812]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::428f:acec:2c1f:c812%7]) with mapi id 15.20.6521.024; Thu, 22 Jun 2023
- 18:28:09 +0000
-Message-ID: <94226479-8d79-cc83-9ecf-6db0b376a7fd@meta.com>
-Date: Thu, 22 Jun 2023 11:28:05 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH bpf-next v3 1/2] net: bpf: Always call BPF cgroup filters
- for egress.
-Content-Language: en-US
-To: Kui-Feng Lee <sinquersw@gmail.com>, Kui-Feng Lee <thinker.li@gmail.com>,
-        bpf@vger.kernel.org, ast@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, kernel-team@meta.com, andrii@kernel.org,
-        daniel@iogearbox.net, yhs@fb.com, kpsingh@kernel.org, shuah@kernel.org,
-        john.fastabend@gmail.com, sdf@google.com, mykolal@fb.com,
-        linux-kselftest@vger.kernel.org, jolsa@kernel.org, haoluo@google.com
-Cc: Kui-Feng Lee <kuifeng@meta.com>
-References: <20230620171409.166001-1-kuifeng@meta.com>
- <20230620171409.166001-2-kuifeng@meta.com>
- <4d46ba3a-61e9-2482-a359-7a8805f1dbc8@meta.com>
- <2693aaa4-eb33-553c-291c-3eb555452ea6@gmail.com>
-From: Yonghong Song <yhs@meta.com>
-In-Reply-To: <2693aaa4-eb33-553c-291c-3eb555452ea6@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-ClientProxiedBy: BY5PR20CA0007.namprd20.prod.outlook.com
- (2603:10b6:a03:1f4::20) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|IA1PR15MB5775:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4e5955f7-1687-47bb-1b25-08db734e6e35
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	z1wUoegug3BQ7ysYihOsThHR7Ae1sNW10HCZNWmVOIMEu3r+fUI/x1d+xctxKbf5vfI2QSlbYB9A2Zx9lPqn8J5Sk7zdnj6IBXHjiaSdCMr+KoRysuQNOVAELTUIEvq+wsYFel4bF9fCozNLTihsSUHNrhfoEKrtN8PD7axI+SyOZ8CGhw+4+RWdF9p8HYhS6J440zp6sg2aWDfL1P/b5Awm4o2TdRL5k336gOZpLZBMj16m0UBRUbv7jgIjBrhnqghno4plbExCIRuL+syVw9CKxzs9DHiRn9+uIFWPjKYUuCV6IKNXV7DALlhNXa+eYR4sFWVUWPX/KCMEoLY/2aA19U96/kFMBPaa8MgdMp/1o/ictUTpnrWvNxZCuSlHTIYrCv2qOeO+5eRCgfDBjxn87sIvV/yJ89pV/psn0pBX2v1yodRtn09Nb1hqOSmeYnMrbadnZ7bGAYVGrB3+lbWXlN4R40OCIomc8jFE2QGIl/kl7fZZRwp+EYl7hTxzCSEV+m1RL6BhzPuXB/Gw76+fZWppqgCLjIA/ukTyCg0dev+qEDhr1dsVcaAksacIhuIR2JL/XLwSj7Yw85z/7hCytAkRwezfUbI/n3nT06HgQ2P/Rx46yPjNGp5Vv63AHgytqzMxilVhQeHOWrUCk/wZ01cOEEQlItraqDX0nsTKYz+aOJg1ioyn200+gBrB
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(39860400002)(346002)(376002)(396003)(451199021)(2616005)(86362001)(110136005)(107886003)(478600001)(6666004)(31696002)(186003)(6486002)(966005)(4326008)(41300700001)(316002)(53546011)(31686004)(66556008)(83380400001)(6506007)(66476007)(6512007)(66946007)(8936002)(8676002)(36756003)(7416002)(5660300002)(38100700002)(2906002)(921005)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?utf-8?B?bVkxbGg3SDFSNEpTcy93cjVkczdnOHFZWkVJVXM1WXA0OVVZb3BFTGh4NjIx?=
- =?utf-8?B?TUZEbWQxeFBRSkZ2SmNVMEZuOVljZEsxMktGMmE3S0RsMy9Wb3ZwQmlscUlw?=
- =?utf-8?B?UlptWXRacThxMW9nSndsL0ZJNlVXNC9vWktTdXVxWDNPUXVoaFhYV21zSHVo?=
- =?utf-8?B?WE8rdEZtd05TZjFpZXdiczNjbGl2ZTBOaWN2SnJqWDdkdHpGelFVM09YaHA3?=
- =?utf-8?B?VzVtREUzMktyRFI5TElIcWpGRnJTNjc4WDB3clh1Q1JUN1Z2NjFCZ0FtK3RZ?=
- =?utf-8?B?OUVUdHJjeVk1ejlhUCtKWG43T1FwTW9ybEEzRG5wbFFUOEZNVC9lUG11Q3lz?=
- =?utf-8?B?UlluNmdLaEhCeVpiUXN1Tk54RWlTR0thVmN6SEh5MG51WVNMYmtxRXlBMkZ2?=
- =?utf-8?B?dnpNd2NTNkxHcE5FSGlvS1RmZEU2Qy8vZkhlWkU4MU5sU2RpR1lIcUtuRWVn?=
- =?utf-8?B?d0hDaGNQZXNsK1lwcW9LV3NIdGpZeGtEOUlTWUZjZ1J4MWRkNUhEZDhzTlpT?=
- =?utf-8?B?ZlUzbHJpUlcrY05IcWszQ1ozOFZUUjB5OVYyODNyaTlaalVtNU5PYkQwRHNj?=
- =?utf-8?B?RFhIekNURUlpZWFvMjZXbFozWStoc1VoTnc0cGROV2FEYkFpUXNIRWZJVHNK?=
- =?utf-8?B?RHQ3VUs4amFMY2hJNVRyVlBUT3FpaWpFNFVyMTZtSU5VczBuK3JWMGZORDVK?=
- =?utf-8?B?N2Z3ckZQUzYwcTJVR2xJR2p2OXRFS3psR203bnJxMVhsTXZad0hMaGZxT1dM?=
- =?utf-8?B?aHZzM0Y2ZEJQN1dDa0QrS0JhdHdMeXJ2aXF2VmdMNVNEbVR3SlYzSkszRWJ0?=
- =?utf-8?B?TnZTT1hXZ3RNcXJKeTVxNW50cnQyNlc2OTBteUljVjJtQi9pelBBUDFFTE0w?=
- =?utf-8?B?RmNHYkJRRUxnYnVnUkZDUlY4WXp3QWlKYU9FZW9RWXpmRFV3OEg1cGltQUg4?=
- =?utf-8?B?NzB3aXNBTXZPSG54Ry80Um13VjdFUXZTbFNIa0FuZk9ZUmhnNk1OYTlvaVk1?=
- =?utf-8?B?VUNnSXphNE01RlJWKzN6c254MFNONVB2YkRIbE9aRTZqRjZTbDBONWpvL2dQ?=
- =?utf-8?B?ZXBVQnBOU3M2ZHAxbWc3WDZ1b1B0dkFqc2FoalRWNndUNnBjbWxudmZqcDhJ?=
- =?utf-8?B?TmtDb1d3ZlorMWJ5eEduZ1dmZmtCN0J5TFQzQVc4S3Q5S3ByQUZSQ1JnRzFY?=
- =?utf-8?B?dWZyeHJEUEwwUVR6NUNPbzZIdkVPd3AxSkxWVFFHenVWV2gvdUxqQ1hWVUgy?=
- =?utf-8?B?WVEwZGtHbldzbjZXU2dlKzR5dHB5bHAyZE9KT0EraEE3N2FvNndEL2RDMzlz?=
- =?utf-8?B?ZGRFckFpRHpGRmp3UzdIT3ZTYnN3UHdYWkdxQm43YTJiSjV2bWFVNllzdHVt?=
- =?utf-8?B?OWgwY0xiZDBlMFZLdWtLRlp1MFNScFZrY3REUTNFNWFwb2FoVXJqYjhsbm4x?=
- =?utf-8?B?RFd1THpCcnNmODBCdkZnUllWanNqMG91eGVWK3hmTVNQMzZuMS9YM3JWZDBw?=
- =?utf-8?B?dGpqVy9Kdi85aklkbDdvRjRLQW5vTWRGQys3Y1hBYmJFcDBkaUc1U09mbFV1?=
- =?utf-8?B?ZUwyK05NbFk3amx6ZjdPd0ozTEhYekQ3VFoxclBlVG42WXRrMzdmTkVQQURm?=
- =?utf-8?B?dFh5bDlWSGJNVlQ5MTYxdVRCbEVuN0RrVitVMC8vT0pmeUhFZmh6S2Vwd3o4?=
- =?utf-8?B?NExUQ1p6RXBuajZhZFUwa3pGTml6WEpnN0FacHZvNWhwKzQwVU1IbnZudTBm?=
- =?utf-8?B?UWtuYldCT2ovRDBKZnJ5c2JKV1FoY1VXWDIxWU9SMVZHeVpJeFIyWlMzOG53?=
- =?utf-8?B?RCt2Z3MxK0xZUFZ3bHU0aCt3ZnlyQTFzdU9QcEttSmZRWkN0NnB1aU1wMytv?=
- =?utf-8?B?bUw3RXVRaytKb2JLalpPbDdBcXRQQWJoNjVzOEt4RVBuUU9YVEg0MXFSaVNx?=
- =?utf-8?B?OWNoaktjS3NyWDFDelNCaGRoT3B2cmJOc1hTTjRTSmZHTEQwOEQycnk2TU1J?=
- =?utf-8?B?QjIvZWZDc0FkUXpKK2pTamdvQlBGOEUwenk2UTBHeXVSZzlGNFVncWxRM0Rt?=
- =?utf-8?B?eHI1VHZFdktiYmZ2dlNiV2xNR2YxZkJoSTVaei9XSUdrcWExWEt6TlJ1V1hL?=
- =?utf-8?B?dldHb0k3SFExTHUxTUZHcW9XTEZkMEx6MkIzd0NJYzBNZG9XZHk1WHpIajdZ?=
- =?utf-8?B?QlE9PQ==?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4e5955f7-1687-47bb-1b25-08db734e6e35
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 18:28:09.7711
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BSPp6Pg7Nk8n0DJzS1zcRIOl5XInYstxOpESyhGH/kk+o9dX3fxP+KcdYDlhSJiU
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR15MB5775
-X-Proofpoint-GUID: tuiRt2roKvIM3pSPg4MD7b0gnH74CoMe
-X-Proofpoint-ORIG-GUID: tuiRt2roKvIM3pSPg4MD7b0gnH74CoMe
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C37021E536
+	for <bpf@vger.kernel.org>; Thu, 22 Jun 2023 18:40:22 +0000 (UTC)
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77681A3;
+	Thu, 22 Jun 2023 11:40:20 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f883420152so5446851e87.1;
+        Thu, 22 Jun 2023 11:40:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687459218; x=1690051218;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pgNOmKn8cKbknqRSul61vlPJmFXW+ZDy44yXXLuHMmE=;
+        b=LF6TIBO++eDh68rTQsEob9ADZkh5vWI4lpWS7p7KkNb8Hwixmd9V8Mh0/6LZ4KIKqJ
+         fc54Yt4ph2fbyZ+CUMZIuwj6R2qS7b8jkhrwodCz33BHYiz0WYSvFltf+ciGZPkPkOUe
+         KHr3IFlsduj4SPkn+Y/G6CmOl3EhmAAiszPuqYSJacSUmFHLINQwZInSw8ONXKenEWqf
+         lWQ5pPr2weaawY2fQlfKOs4Hbzho0hgpSy0ejywVHsy5GsYP/dRAVSI19gfcwvcbawIG
+         XIh7Cw7b/CjkzNw5LXdC25TT0LuYRqAF0hNrNkkj3pa4dkrK9EBmBTtajwUmR6FCUBlj
+         VJpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687459218; x=1690051218;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pgNOmKn8cKbknqRSul61vlPJmFXW+ZDy44yXXLuHMmE=;
+        b=HG/BReE5kR3AViXR5w+fHYBIF4HXf86wmaGpkyvP26Qm44c3pmzSaZKqsDmpkgFh7p
+         VrHUh3Ap22N1N5fcXy+NLKqxtcokiTVze+ALQYeul76sN7NR2K5uO0gHmk/oIIiQvGUd
+         VFIAULwwtDtOWF007iyaRKhca9tZLEJV7ozH26XUQIpERZBbCtDjijlRDmF/Yb89eGmQ
+         FN/iWR87S63DDgN9MRgZ1ySzlzDZIJyIzIWUGrIXz4/BP+BxA9hxtxziwU3jr5FYeSBm
+         kf4N+Um66lwGib61xNQbcqesMDkpt9KqVkzKmWBmWCBzzIOTJC6SQgGFCLg07aCV1XqP
+         SAiw==
+X-Gm-Message-State: AC+VfDw9JzBi/6hk8X6L9yuRXcT7Wo7yHot6NKgIZCLtmQNc3TOuQm6d
+	nRfHPSyAh6znp1tc3/bkvlKewR9BsbRUjb0zPVo=
+X-Google-Smtp-Source: ACHHUZ5Kgc4f77IyAEBBdaI/JojQJUZH5gkn/+Q4Phbs2WDvF3QWBWeVi1Fk61L7EeStDRs5KP8J9WTyrJPxkydbzx0=
+X-Received: by 2002:a19:5e0b:0:b0:4f8:72fd:ed95 with SMTP id
+ s11-20020a195e0b000000b004f872fded95mr7130722lfb.22.1687459218246; Thu, 22
+ Jun 2023 11:40:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-22_14,2023-06-22_02,2023-05-22_02
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-	T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230607235352.1723243-1-andrii@kernel.org> <c1a8d5e8-023b-4ef9-86b3-bdd70efe1340@app.fastmail.com>
+ <CAEf4BzazbMqAh_Nj_geKNLshxT+4NXOCd-LkZ+sRKsbZAJ1tUw@mail.gmail.com>
+ <a73da819-b334-448c-8e5c-50d9f7c28b8f@app.fastmail.com> <CAEf4Bzb__Cmf5us1Dy6zTkbn2O+3GdJQ=khOZ0Ui41tkoE7S0Q@mail.gmail.com>
+ <5eb4264e-d491-a7a2-93c7-928b06ce264d@redhat.com> <bc4f99af-0c46-49b2-9f2d-9a01e6a03af3@app.fastmail.com>
+ <5a75d1f0-4ed9-399c-4851-2df0755de9b5@redhat.com>
+In-Reply-To: <5a75d1f0-4ed9-399c-4851-2df0755de9b5@redhat.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 22 Jun 2023 11:40:06 -0700
+Message-ID: <CAEf4Bza9GvJ0vw2-0M8GKSXmOQ8VQCmeqEiQpMuZBjwqpA03vw@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 00/18] BPF token
+To: Maryam Tahhan <mtahhan@redhat.com>
+Cc: Andy Lutomirski <luto@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, Kees Cook <keescook@chromium.org>, 
+	Christian Brauner <brauner@kernel.org>, lennart@poettering.net, cyphar@cyphar.com, 
+	kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+On Thu, Jun 22, 2023 at 10:38=E2=80=AFAM Maryam Tahhan <mtahhan@redhat.com>=
+ wrote:
+>
+
+Please avoid replying in HTML.
+
+> On 22/06/2023 17:49, Andy Lutomirski wrote:
+>
+> Apologies for being blunt, but  the token approach to me seems to be a
+> work around providing the right level/classification for a pod/container
+> in order to say you support unprivileged containers using eBPF. I think
+> if your container needs to do privileged things it should have and be
+> classified with the right permissions (privileges) to do what it needs
+> to do.
+>
+> Bluntness is great.
+>
+> I think that this whole level/classification thing is utterly wrong.  Rep=
+lace "BPF" with basically anything else, and you'll see how absurd it is.
+>
+> "the token approach to me seems like a work around providing the right le=
+vel/classification for a pod/container in order to say you support unprivil=
+eged containers using files on disk"
+>
+> That's very 1990's.  Maybe 1980's.  Of *course* giving access to a filesy=
+stem has some inherent security exposure.  So we can give containers access=
+ to *different* filesystems.  Or we can use ACLs.  Or MAC policy.  Or whate=
+ver.  We have many solutions, none of which are perfect, and we're doing ok=
+ay.
+>
+> "the token approach to me seems like a work around providing the right le=
+vel/classification for a pod/container in order to say you support unprivil=
+eged containers using the network"
+>
+> The network is a big deal.  For some reason, it's cool these days to trea=
+t TCP as highly privileged.  You can get secrets from your favorite (or lea=
+st favorite) cloud provider with unauthenticated HTTP to a magic IP and por=
+t.  You can bypass a whole lot of authenticating/authorizing proxies with u=
+nauthenticated HTTP (no TLS!) if you're on the right network.
+>
+> This is IMO obnoxious, but we deal with it by having network namespaces a=
+nd firewalls and rather outdated port <=3D 1024 rules.
+>
+> "the token approach to me seems like a work around providing the right le=
+vel/classification for a pod/container in order to say you support unprivil=
+eged containers using BPF"
+>
+> My response is: what's wrong with BPF?  BPF has maps and programs and suc=
+h, and we could easily apply 1990's style ownership and DAC rules to them. =
+ I even *wrote the code*.  But for some reason, the BPF community wants to =
+bury its head in the sand, pretend it's 1980, declare that BPF is too privi=
+leged to have access control, and instead just have a complicated switch to=
+ turn it on and off in different contexts.
+>
+> Please try harder.
+>
+> I'm going to be honest, I can't tell if we are in agreement or not :). I'=
+m also going to use pod and container interchangeably throughout my respons=
+e (bear with me)
+>
+>
+> So just to clarify a few things on my end.  When I said "level/classifica=
+tion" I meant privileges --> A container should have the right level of pri=
+vileges assigned to it for what it's trying to do in the K8s scenario throu=
+gh it's pod spec. To me it seems like BPF token is a way to work around the=
+ permissions assigned to a container in K8s for example: with bpf_token I'm=
+ marking a pod as unprivileged but then under the hood, through another ser=
+vice I'm giving it a token to do more than what it was specified in it's po=
+d spec. Yeah I have a separate service controlling the tokens but something=
+ about it just seems not right (to me). If CAP_BPF is too broad, can we bre=
+ak it down further into something more granular. Something that can be assi=
+gned to the container through the pod spec rather than a separate service t=
+hat seems to be doing things under the hood? This doesn't even start to
+solve the problem I know...
+
+Disclaimer: I don't know anything about Kubernetes, so don't expect me
+reply with correct terminology or detailed understanding of
+configuration of containers.
+
+But on a more generic and conceptual level, it seems like you are
+making some implementation assumptions and arguing based on that.
+
+Like, why container spec cannot have native support for "granted BPF
+functionality"? Why would BPF token have to be granted through some
+separate service and not integrated into whatever Kubernetes'
+"container manager" functionality and just be a natural extension of
+the spec?
+
+For CAP_BPF too broad. It is broad, yes. If you have good ideas how to
+break it down some more -- please propose. But this is all orthogonal,
+because the blocking problem is fundamental incompatibility of user
+namespaces (and their implied isolation and sandboxing of workloads)
+and BPF functionality, which is global by its very nature. The latter
+is unavoidable in principle.
+
+No matter how much you break down CAP_BPF, you can't enforce that BPF
+program won't interfere with applications in other containers. Or that
+it won't "spy" on them. It's just not what BPF can enforce in
+principle.
+
+So that comes back down to a question of trust and then controlled
+delegation of BPF functionality. You trust workload with BPF usage
+because you reviewed the BPF code, workload, testing, etc? Grant BPF
+token and let that container use limited subset of BPF. Employ BPF LSM
+to further restrict it beyond what BPF token can control.
+
+You cannot trust an application to not do something harmful? You
+shouldn't grant it either CAP_BPF in init namespace, nor BPF token in
+user namespace. That's it. Pick your poison.
+
+But all this cannot be mechanically decided or enforced. There has to
+be some humans involved in making these decisions. Kernel's job is to
+provide building blocks to grant and control BPF functionality to the
+extent that it is technically possible.
 
 
-On 6/22/23 10:15 AM, Kui-Feng Lee wrote:
-> 
-> 
-> On 6/21/23 20:37, Yonghong Song wrote:
->>
->>
->> On 6/20/23 10:14 AM, Kui-Feng Lee wrote:
->>> Always call BPF filters if CGROUP BPF is enabled for EGRESS without
->>> checking skb->sk against sk.
->>>
->>> The filters were called only if skb is owned by the sock that the
->>> skb is sent out through.  In another words, skb->sk should point to
->>> the sock that it is sending through its egress.  However, the filters 
->>> would
->>> miss SYNACK skbs that they are owned by a request_sock but sent through
->>> the listening sock, that is the socket listening incoming connections.
->>> This is an unnecessary restrict.
->>
->> The original patch which introduced 'sk == skb->sk' is
->>    3007098494be  cgroup: add support for eBPF programs
->> There are no mentioning in commit message why 'sk == skb->sk'
->> is needed. So it is possible that this is just restricted
->> for use cases at that moment. Now there are use cases
->> where 'sk != skb->sk' so removing this check can enable
->> the new use case. Maybe you can add this into your commit
->> message so people can understand the history of 'sk == skb->sk'.
-> 
-> After checking the code and the Alexei's comment[1] again, this check
-> may be different from what I thought. In another post[2],
-> Daniel Borkmann mentioned
-> 
->      Wouldn't that mean however, when you go through stacked devices that
->      you'd run the same eBPF cgroup program for skb->sk multiple times?
-> 
-> I read this paragraph several times.
-> This check ensures the filters are only called for the device on
-> the top of a stack.  So, I probably should change the check to
-> 
->      sk == skb_to_full_sk(skb)
+>
+> I understand the difficulties with trying to deploy BPF in K8s and the co=
+ncerns around privilege escalation for the containers. I understand not all=
+ use cases are created equally but I think this falls into at least 2 categ=
+ories:
+>
+> - Pods/Containers that need to do privileged BPF ops but not under a CAP_=
+BPF umbrella --> sure we need something for this.
+> - Pods/Containers that don't need to do any privileged BPF ops but still =
+use BPF --> these are happy with a proxy service loading/unloading the bpf =
+progs, creating maps and pinning them... But even in this scenario we need =
+something to isolate the pinned maps/progs by different apps (why not DAC r=
+ules?), even better if the maps are in the container...
 
-I think this should work. It exactly covers your use case:
-   they are owned by a request_sock but sent through
-   the listening sock, that is the socket listening incoming connections
-and sk == skb->sk for non request_sock/listening_sock case.
+The above doesn't make much sense to me, sorry. If the application is
+ok using unprivileged BPF, there is no problem there. They can today
+already and there is no BPF proxy or BPF token involved.
 
-I originally though whether you could do
-   sk == skb->sk || skb->sk->sk_state == TCP_NEW_SYN_RECV
-but obviously your approach is better.
+As for "something to isolate the pinned maps/progs by different apps
+(why not DAC rules?)", there is no such thing, as I've explained
+already.
 
-> 
-> instead of removing it.  If we remove the check, egress filters
-> could be called multiple times for a skb, just like what Daniel said.
-> 
-> Does that make sense?
-> 
-> [1] 
-> https://lore.kernel.org/all/CAADnVQKi0c=Mf3b=z43=b6n2xBVhwPw4QoV_au5+pFE29iLkaQ@mail.gmail.com/
-> [2] https://lore.kernel.org/all/58193E9D.7040201@iogearbox.net/
-> 
->>
->>>
->>> Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
->>> ---
->>>   include/linux/bpf-cgroup.h | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
->>> index 57e9e109257e..e656da531f9f 100644
->>> --- a/include/linux/bpf-cgroup.h
->>> +++ b/include/linux/bpf-cgroup.h
->>> @@ -199,7 +199,7 @@ static inline bool cgroup_bpf_sock_enabled(struct 
->>> sock *sk,
->>>   #define BPF_CGROUP_RUN_PROG_INET_EGRESS(sk, skb)                   \
->>>   ({                                           \
->>>       int __ret = 0;                                   \
->>> -    if (cgroup_bpf_enabled(CGROUP_INET_EGRESS) && sk && sk == 
->>> skb->sk) { \
->>> +    if (cgroup_bpf_enabled(CGROUP_INET_EGRESS) && sk) {               \
->>>           typeof(sk) __sk = sk_to_full_sk(sk);                   \
->>>           if (sk_fullsock(__sk) &&                       \
->>>               cgroup_bpf_sock_enabled(__sk, 
->>> CGROUP_INET_EGRESS))           \
->>
+I can install sched_switch raw_tracepoint BPF program (if I'm allowed
+to), and that program has system-wide observability. It cannot be
+bound to an application. You can't just say "trigger this sched_switch
+program only for scheduler decisions within my container". When you
+actually start thinking about just that one example, even assuming we
+add some per-container filter in the kernel to not trigger your
+program, then what do we do when we switch from process A in container
+X to process B in container Y? Is that event belonging to container X?
+Or container Y? How can you prevent a program from reading a task's
+data that doesn't belong to your container, when both are inputs to
+this single tracepoint event?
+
+Hopefully you can see where I'm going with this. And this is just one
+random tiny example. We can think up tons of other cases to prove BPF
+is not isolatable to any sort of "container".
+
+>
+> Anyway - I hope this clarifies my original intent - which is proxy at lea=
+st starts to solve one part of the puzzle. Whatever approach(es) we take to=
+ solve the rest of these problems the more we can stick to tried and truste=
+d mechanisms the better.
+
+I disagree. BPF proxy complicates logistics, operations, and developer
+experience, without resolving the issue of determining trust and the
+need to delegate or proxy BPF functionality.
