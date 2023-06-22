@@ -1,166 +1,199 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0300320690
-	for <bpf@vger.kernel.org>; Thu, 22 Jun 2023 21:06:15 +0000 (UTC)
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339C1269E
-	for <bpf@vger.kernel.org>; Thu, 22 Jun 2023 14:05:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1687467873;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lX1SvHOIArwqc8jRFEPHXwp7AFuFWsZq7swPt5WqaFA=;
-	b=P+nsKjHZdjGewzshLUJ6evqSjchu/SoV030Cq24Vmo3hE+n8J38oxVVn43hNKiuZvfTK6j
-	oq4NRvTS4pY1MM7WLw1V+4pWUz4/LdRrtVAhhteKPW6o0sYv3hcT+FY5w/irrOM0pY53JA
-	CNftVr0ZKyloPUwLGbwsycruVx8RiuM=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-615-u-QDFg8dNeKEUmc66oIzYA-1; Thu, 22 Jun 2023 17:04:27 -0400
-X-MC-Unique: u-QDFg8dNeKEUmc66oIzYA-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f9068f47ceso115889555e9.3
-        for <bpf@vger.kernel.org>; Thu, 22 Jun 2023 14:04:26 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06BFB20690
+	for <bpf@vger.kernel.org>; Thu, 22 Jun 2023 21:35:54 +0000 (UTC)
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311901FCB
+	for <bpf@vger.kernel.org>; Thu, 22 Jun 2023 14:35:46 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51a200fc3eeso9635502a12.3
+        for <bpf@vger.kernel.org>; Thu, 22 Jun 2023 14:35:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687469744; x=1690061744;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pPZQesVDxmMmKXqVsW4tcHyZp77AxBuILZnaWb8IfNk=;
+        b=DP+/28RH75MZbYOUslTJmQIL3J2QLFUak7RdjfszU64A4zJGV5Z965tgBG5iyeMBUr
+         HHJq3AckhIVqysH1uP2USsPu5jkuMv0BKkfVre24xK6KZPWDPV1j3Lc8nM9/rTsOEi0E
+         kt71LfDqW63GkcAd/+uSdUl1JwHZYlTvp4Uig/ujQVULIZpSclZ448TsgI+skt7A4N1K
+         Egenz5HoBJecNn5MYwBIZR8duDzcZ6wOps6vI0HjaNgCXltcrcykaNSDj3cSiVO2gflZ
+         bpNZbcgAQJDSQFiHHarCvIkD/aXxsn5cQM4QaZ8gq70dJhP4FnxbG7HqJvWe3Vi/xsKL
+         iUMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687467866; x=1690059866;
+        d=1e100.net; s=20221208; t=1687469744; x=1690061744;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lX1SvHOIArwqc8jRFEPHXwp7AFuFWsZq7swPt5WqaFA=;
-        b=dLfZfbnTQaloG1b1VmRTisqwxkWEl/a+CUB5Q9bHAfK5DEYNiXWDvmdNkERjiK/bgW
-         p/Q8k+yzNx2KQhcPaRdj960ZTK84MUqCJM2JX3t9Uqflwrcb8xeCY4bkyCmWMtvZBCzW
-         y/ktzxj1bZTJYngXXVVtay9K0cj2cPIh8BfHOCQaDQH8DMP/9SPKCZQNo0OUG9zeFnrh
-         YwPJOQVKR17ea1i8UQST7KSBRL5uor9pLAhN3eh6VTRZB2eR0RlF6doFBTQB3oIvz+dQ
-         CU8I1b2Y5X7FtXFNeXqIUx4YFqc15YIrXRrl7ARR1IwRqqZCc3UCEqJa4kkjxauvOqgI
-         0Pfw==
-X-Gm-Message-State: AC+VfDwqzvB1wr/zZSy4CmP8iOXYUlVx2cWiE+YE+pSWyjG5hFb2AeSm
-	bKHOiccYwvNVXYXjaNLM5RS2+CQfuWoNiLK0U4gkXPDnFGNVQZY3uMaLyZZXt1r0/NVIZtB2/A/
-	t7dAe7Ua/BcWvzkf7C8F4gQHW2BC7
-X-Received: by 2002:a05:600c:21c6:b0:3fa:7516:baa with SMTP id x6-20020a05600c21c600b003fa75160baamr2687614wmj.13.1687467865846;
-        Thu, 22 Jun 2023 14:04:25 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6ffZnbzGgCIO/encZy3DdfUA7A2BLcol4LKXgTrzNDMV64YSRhKhkBOThfc80Lx6QhLRibI4omWToh2K0k3cY=
-X-Received: by 2002:a05:600c:21c6:b0:3fa:7516:baa with SMTP id
- x6-20020a05600c21c600b003fa75160baamr2687588wmj.13.1687467865462; Thu, 22 Jun
- 2023 14:04:25 -0700 (PDT)
+        bh=pPZQesVDxmMmKXqVsW4tcHyZp77AxBuILZnaWb8IfNk=;
+        b=MnAHmQcxzDknXPMtm+qYIs+or/UmdCOZThpr8eKMOhCIUTszogVS40wtZ/8k6izfqY
+         RS7jlw36pjHqzv7XN1r5B36Wr/Vel4q8WT1AwEIC5hTtWnIhAwd3tiKCyyDs4kZrWbSu
+         OG6LT72wLF9sdzvEHefwd52NeQ2JMZ6A8pNMKwIyGFcF76xme8SlNiUL3+GSJRMAMNQq
+         PX5XRM4DWr9SJyHDsyaH7aNbGIMeGXnJkn2jBb3ZvOuWHBtiiJ43WxWaYMa4NOWLcL/k
+         CbWuwDJVhI+kDQa6Wu48PMSf+3Uj2yFrFXPX5M18fqA7bxSULnrfIjh0ISZCPddysCok
+         QbDg==
+X-Gm-Message-State: AC+VfDza8cUY5xmgcUgqb5u+UyiSsywZdl6M9qWKgZn4gU85j+REKThB
+	+3Qbibh8DKtypP/B/i71BoEsBANxSHWoZZS6FOU=
+X-Google-Smtp-Source: ACHHUZ71N1UQpDro9p5xUjc/LhzLcMDroT0l49BmrXTadOoM28a94FrF6fAlko1ggBDGbCB0KPiCt5gOrSeUod2mn8w=
+X-Received: by 2002:a05:6402:7cd:b0:514:95b1:f0ba with SMTP id
+ u13-20020a05640207cd00b0051495b1f0bamr13822660edy.34.1687469744280; Thu, 22
+ Jun 2023 14:35:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230607235352.1723243-1-andrii@kernel.org> <c1a8d5e8-023b-4ef9-86b3-bdd70efe1340@app.fastmail.com>
- <CAEf4BzazbMqAh_Nj_geKNLshxT+4NXOCd-LkZ+sRKsbZAJ1tUw@mail.gmail.com>
- <a73da819-b334-448c-8e5c-50d9f7c28b8f@app.fastmail.com> <CAEf4Bzb__Cmf5us1Dy6zTkbn2O+3GdJQ=khOZ0Ui41tkoE7S0Q@mail.gmail.com>
- <5eb4264e-d491-a7a2-93c7-928b06ce264d@redhat.com> <bc4f99af-0c46-49b2-9f2d-9a01e6a03af3@app.fastmail.com>
- <5a75d1f0-4ed9-399c-4851-2df0755de9b5@redhat.com> <CAEf4Bza9GvJ0vw2-0M8GKSXmOQ8VQCmeqEiQpMuZBjwqpA03vw@mail.gmail.com>
-In-Reply-To: <CAEf4Bza9GvJ0vw2-0M8GKSXmOQ8VQCmeqEiQpMuZBjwqpA03vw@mail.gmail.com>
-From: Maryam Tahhan <mtahhan@redhat.com>
-Date: Thu, 22 Jun 2023 22:04:14 +0100
-Message-ID: <CAFdtZitYhOK4TzAJVbFPMfup_homxSSu3Q8zjJCCiHCf22eJvQ@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 00/18] BPF token
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Andy Lutomirski <luto@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, Kees Cook <keescook@chromium.org>, 
-	Christian Brauner <brauner@kernel.org>, lennart@poettering.net, cyphar@cyphar.com, 
-	kernel-team@meta.com
+References: <20230615142520.10280-1-eddyz87@gmail.com> <CAEf4Bzb4VJ7h02QAbg77sp9jgVFJBWoXrRuWGxHkXqQdPJ6EPw@mail.gmail.com>
+ <87ttv2f0pw.fsf@gnu.org>
+In-Reply-To: <87ttv2f0pw.fsf@gnu.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 22 Jun 2023 14:35:32 -0700
+Message-ID: <CAADnVQKH6i2D2K4VGAzbxkKifjSEq+0K02-zOKDqQVJtmrfHdw@mail.gmail.com>
+Subject: Re: [RFC bpf-next] bpf: generate 'nomerge' for map helpers in bpf_helper_defs.h
+To: "Jose E. Marchesi" <jemarch@gnu.org>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>, 
+	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Kernel Team <kernel-team@fb.com>, Yonghong Song <yhs@fb.com>, 
+	David Faust <david.faust@oracle.com>, dzq.aishenghu0@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-	RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-	T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Thu, Jun 22, 2023 at 7:40=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
+On Tue, Jun 20, 2023 at 11:27=E2=80=AFAM Jose E. Marchesi <jemarch@gnu.org>=
+ wrote:
 >
-> On Thu, Jun 22, 2023 at 10:38=E2=80=AFAM Maryam Tahhan <mtahhan@redhat.co=
-m> wrote:
+>
+> > On Thu, Jun 15, 2023 at 7:25=E2=80=AFAM Eduard Zingerman <eddyz87@gmail=
+.com> wrote:
+> >>
+> >> Update code generation for bpf_helper_defs.h by adding
+> >> __attribute__((nomerge)) for a set of helper functions to prevent some
+> >> verifier unfriendly compiler optimizations.
+> >>
+> >> This addresses a recent mailing list thread [1].
+> >> There Zhongqiu Duan and Yonghong Song discussed a C program as below:
+> >>
+> >>      if (data_end - data > 1024) {
+> >>          bpf_for_each_map_elem(&map1, cb, &cb_data, 0);
+> >>      } else {
+> >>          bpf_for_each_map_elem(&map2, cb, &cb_data, 0);
+> >>      }
+> >>
+> >> Which was converted by clang to something like this:
+> >>
+> >>      if (data_end - data > 1024)
+> >>        tmp =3D &map1;
+> >>      else
+> >>        tmp =3D &map2;
+> >>      bpf_for_each_map_elem(tmp, cb, &cb_data, 0);
+> >>
+> >> Which in turn triggered verification error, because
+> >> verifier.c:record_func_map() requires a single map address for each
+> >> bpf_for_each_map_elem() call.
+> >>
+> >> In fact, this is a requirement for the following helpers:
+> >> - bpf_tail_call
+> >> - bpf_map_lookup_elem
+> >> - bpf_map_update_elem
+> >> - bpf_map_delete_elem
+> >> - bpf_map_push_elem
+> >> - bpf_map_pop_elem
+> >> - bpf_map_peek_elem
+> >> - bpf_for_each_map_elem
+> >> - bpf_redirect_map
+> >> - bpf_map_lookup_percpu_elem
+> >>
+> >> I had an off-list discussion with Yonghong where we agreed that clang
+> >> attribute 'nomerge' (see [2]) could be used to prevent the
+> >> optimization hitting in [1]. However, currently 'nomerge' applies only
+> >> to functions and statements, hence I submitted change requests [3],
+> >> [4] to allow specifying 'nomerge' for function pointers as well.
+> >>
+> >> The patch below updates bpf_helper_defs.h generation by adding a
+> >> definition of __nomerge macro, and using this macro in definitions of
+> >> relevant helpers.
+> >>
+> >> The generated code looks as follows:
+> >>
+> >>     /* This is auto-generated file. See bpf_doc.py for details. */
+> >>
+> >>     #if __has_attribute(nomerge)
+> >>     #define __nomerge __attribute__((nomerge))
+> >>     #else
+> >>     #define __nomerge
+> >>     #endif
+> >>
+> >>     /* Forward declarations of BPF structs */
+> >>     ...
+> >>     static long (*bpf_for_each_map_elem)(void *map, ...) __nomerge =3D=
+ (void *) 164;
+> >>     ...
+> >>
+> >> (In non-RFC version the macro definition would have to be updated to
+> >>  check for supported clang version).
+> >>
+> >> Does community agree with such approach?
 > >
+> > Makes sense to me. Let's just be very careful to do proper detection
+> > of __nomerge "applicability" to ensure we don't cause compilation
+> > errors for unsupported Clang (which I'm sure you are well aware of)
+> > *and* make it compatible with GCC, so we don't fix it later.
 >
-> Please avoid replying in HTML.
+> GCC doesn't support the "nomerge" attribute at this point.  We will look
+> into adding it or find some other equivalent mechanism that can be
+> abstracted in the __nomerge macro.
 >
+> >>
+> >> [1] https://lore.kernel.org/bpf/03bdf90f-f374-1e67-69d6-76dd9c8318a4@m=
+eta.com/
+> >> [2] https://clang.llvm.org/docs/AttributeReference.html#nomerge
+> >> [3] https://reviews.llvm.org/D152986
+> >> [4] https://reviews.llvm.org/D152987
+> >> ---
+> >>  scripts/bpf_doc.py | 37 ++++++++++++++++++++++++++++++-------
+> >>  1 file changed, 30 insertions(+), 7 deletions(-)
+> >>
+> >> diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
+> >> index eaae2ce78381..dbd4893c793e 100755
+> >> --- a/scripts/bpf_doc.py
+> >> +++ b/scripts/bpf_doc.py
+> >> @@ -777,14 +777,33 @@ class PrinterHelpers(Printer):
+> >>          'bpf_get_socket_cookie',
+> >>          'bpf_sk_assign',
+> >>      ]
+> >> +    # Helpers that need __nomerge attribute
+> >> +    nomerge_helpers =3D set([
+> >> +       "bpf_tail_call",
+> >> +       "bpf_map_lookup_elem",
+> >> +       "bpf_map_update_elem",
+> >> +       "bpf_map_delete_elem",
+> >> +       "bpf_map_push_elem",
+> >> +       "bpf_map_pop_elem",
+> >> +       "bpf_map_peek_elem",
+> >> +       "bpf_for_each_map_elem",
+> >> +       "bpf_redirect_map",
+> >> +       "bpf_map_lookup_percpu_elem"
+> >> +    ])
+> >> +
+> >> +    macros =3D '''\
+> >> +#if __has_attribute(nomerge)
+> >> +#define __nomerge __attribute__((nomerge))
+> >> +#else
+> >> +#define __nomerge
+> >> +#endif'''
 
-Sorry.
-
-[...]
-
->
-> Disclaimer: I don't know anything about Kubernetes, so don't expect me
-> reply with correct terminology or detailed understanding of
-> configuration of containers.
->
-> But on a more generic and conceptual level, it seems like you are
-> making some implementation assumptions and arguing based on that.
->
-
-Firstly, thank you for taking the time to respond and explain. I can see
-where you are coming from.
-
-Yeah, admittedly I did make a few assumptions. I was thrown by the referenc=
-e
-to `unprivileged` processes in the cover letter. It seems like this is a wa=
-y to
-grant namespaced BPF permissions to a process (my gross
-oversimplification - sorry).
-Looking back throughout your responses there's nothing unprivileged here.
-
-[...]
-
-
-> Hopefully you can see where I'm going with this. And this is just one
-> random tiny example. We can think up tons of other cases to prove BPF
-> is not isolatable to any sort of "container".
->
-> >
-> > Anyway - I hope this clarifies my original intent - which is proxy at l=
-east starts to solve one part of the puzzle. Whatever approach(es) we take =
-to solve the rest of these problems the more we can stick to tried and trus=
-ted mechanisms the better.
->
-> I disagree. BPF proxy complicates logistics, operations, and developer
-> experience, without resolving the issue of determining trust and the
-> need to delegate or proxy BPF functionality.
-
-I appreciate your viewpoint. I just don't think that this is a one
-solution fits every
-scenario situation. For example in the case of AF_XDP, I'd like to be
-able to run
-my containers without any additional privileges. I've been working on a dev=
-ice
-plugin for Kubernetes whose job is to provision netdevs with an XDP redirec=
-t
-program (then later there's a CNI that moves the netdev into the pod networ=
-k
-namespace).  Originally I was using bpf locally in the device plugin
-(to load the
-bpf program and get the XSK map fd) and SCM rights to pass the XSK_MAP over
-UDS but honestly it was relatively cumbersome from an app development POV, =
-very
-easy to get wrong, and trying to keep up with the latest bpf api
-changes started to
-become an issue. If I wanted to add more interesting bpf programs I
-had to do a full
-recompile...
-
-I've now moved to using bpfd, for the loading and unloading of the bpf
-program on my behalf,
-it also comes with a bunch of other advantages including being able to
-update my trusted bpf
-program transparently to both the device plugin my application (I
-don't have to respin this either
-when I write/want to add a new bpf prog), but mainly I have a trusted
-proxy managing bpffs, bpf progs and maps for me. There's still more
-work to do here...
-
-I understand this is a much simplified scenario. and I'm sure I can
-think of several more where
-proxy is useful. All I'm trying to say is, I'm not sure there's just a
-one size fits all soln for these issues.
-
-Thanks
-Maryam
-
+Let's add an extensive comment here,
+so that people looking at bpf_helper_defs.h don't need
+to search clang documentation on what this attr is doing.
+I bet even compiler experts won't be able to explain 'why'
+after reading the doc:
+https://clang.llvm.org/docs/AttributeReference.html#nomerge
+The example from the commit log should probably be in the comment too.
+Other than that the approach makes sense to me.
