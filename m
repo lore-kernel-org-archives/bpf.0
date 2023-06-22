@@ -1,145 +1,132 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CC7D1E536;
-	Thu, 22 Jun 2023 18:41:08 +0000 (UTC)
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0562BF1;
-	Thu, 22 Jun 2023 11:41:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687459268; x=1718995268;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=vLFeE5MAtl9eWX0lpvDfmdHFjEW/w4520/nD9Ne+d1E=;
-  b=KVkg/41sGZD0jvWKJWTeCli0wmYg4NjL1cSKUEe5DX40FJuqGHvMsaMH
-   Qe5gidAonsAv3VR6+2XXbUO/x5P1SoUlQdt8mmv0mLtIiN+6u+uQo+LEA
-   CQUQCZdjHvQw6pZjB4Zp6C+kgDYQZF5AH/wP7wJd8B8arPw8NSkUXD7xn
-   hiG2hd4JWxI4gkzW39EVk503z0vzn0S6Bmr+t7IOs6fWPu9Vymfxqq1HC
-   PS0upqqllE90VO71oqYXsLgMXLnYtiZySfu686geXIbOctkud/hMaE4wE
-   Xa2FvIjGq9ZYysdqRkrifvDHQbAeW0d6CF8Q0L9W5gLBC9yvG8oqUX/Dn
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="340917779"
-X-IronPort-AV: E=Sophos;i="6.01,149,1684825200"; 
-   d="scan'208";a="340917779"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 11:41:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="961687001"
-X-IronPort-AV: E=Sophos;i="6.01,149,1684825200"; 
-   d="scan'208";a="961687001"
-Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
-  by fmsmga006.fm.intel.com with ESMTP; 22 Jun 2023 11:41:06 -0700
-From: Tony Nguyen <anthony.l.nguyen@intel.com>
-To: davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	netdev@vger.kernel.org
-Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	anthony.l.nguyen@intel.com,
-	magnus.karlsson@intel.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	bpf@vger.kernel.org,
-	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Chandan Kumar Rout <chandanx.rout@intel.com>
-Subject: [PATCH net-next 2/6] ice: allow hot-swapping XDP programs
-Date: Thu, 22 Jun 2023 11:35:57 -0700
-Message-Id: <20230622183601.2406499-3-anthony.l.nguyen@intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230622183601.2406499-1-anthony.l.nguyen@intel.com>
-References: <20230622183601.2406499-1-anthony.l.nguyen@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8A391F923;
+	Thu, 22 Jun 2023 18:46:37 +0000 (UTC)
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A5B2103;
+	Thu, 22 Jun 2023 11:46:30 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f8fb0e7709so75151545e9.2;
+        Thu, 22 Jun 2023 11:46:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687459589; x=1690051589;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bPXpGa9jfvplqLyUF1fKF2LVSy/7Wa6tdzEbo3m24+4=;
+        b=nuZ6XntxCEqRkeej37RLEv64b5NxPJAhPbyionQG1zuttFqIw4iqd6bAyZS4CvBhM2
+         Tu8VCWPjrufKrBLybTXIJvxFM334JkE0VmLo+bBjlKFAfm31bDOGQOVWlKxE+HJ1VgD6
+         e9xRtbtLnRzoat4eRtyifWvBUcYOkEpTTYLPgRA03cuczlnb80SdUMLD5XJqStD3dtN1
+         8pyrBfNIbnwYaStG6CPLAgNUiHbvyVWI6WB//qTPRSzTSaF38HKsh6YI8Xwag3hh9vOm
+         haMIgsF1a3LR9gpScqWKobKRNUZG5Mm42J3z9HaD0aR6gYqlZZhLJQ6j8LIecle/H8Z+
+         WHvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687459589; x=1690051589;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bPXpGa9jfvplqLyUF1fKF2LVSy/7Wa6tdzEbo3m24+4=;
+        b=O4O0I5XxjyYWFSYwuCCS37L8gzUHKQ7eVX2fmH5b2ew/YUC67GnRg2ekBHk33aqL+K
+         bU8D9+Bw0fEGW1hKU++ecYRalnPUQRlI+xgvAE0XjHuMZ+Pmp+XWUi28Yjjk2C/qdM/q
+         jNycz0nQT5ya8Wm4FVOEcxUS3Wpr95ZgxE/cuYEA3+kigMTVh1LBGvl2ZuCDm6kX42Sh
+         WwTZSDRQTypc54Krxybh8bJ045vU66KVxV9oJku97Yd0oPbqylJXXuBjePJLjRjm06Tr
+         nMzD/651olEg872ZcHXecys+dxtUxTRQVlRJylRsbn/73pinvRlQcXU8lKDiLMAqXgRB
+         DMRA==
+X-Gm-Message-State: AC+VfDypH3nAn71lCNzqlVg9geH3OcFDMkfOOI45HKfwAScnrHglBB50
+	Y3JWVHD0G90o/xk5WI/xn/uPFpNMyb6wqQ==
+X-Google-Smtp-Source: ACHHUZ7wH9qHBX81FAbtBvr0POaf7xSsPESlkJ3r2wQNrXUPW6zbsx0ZYaHHpcBIUBjThvYl1O5Tdw==
+X-Received: by 2002:adf:ef12:0:b0:306:3912:a7f0 with SMTP id e18-20020adfef12000000b003063912a7f0mr14197642wro.50.1687459588851;
+        Thu, 22 Jun 2023 11:46:28 -0700 (PDT)
+Received: from [192.168.0.112] ([77.220.140.242])
+        by smtp.gmail.com with ESMTPSA id x14-20020adfec0e000000b0030aee3da084sm7627849wrn.49.2023.06.22.11.46.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Jun 2023 11:46:28 -0700 (PDT)
+Message-ID: <9f0b6bba-701c-a95d-d326-bb207e319f2a@gmail.com>
+Date: Thu, 22 Jun 2023 21:46:26 +0300
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH RFC net-next v4 6/8] virtio/vsock: support dgrams
+Content-Language: en-US
+To: Stefano Garzarella <sgarzare@redhat.com>
+Cc: Bobby Eshleman <bobby.eshleman@bytedance.com>,
+ Stefan Hajnoczi <stefanha@redhat.com>, "Michael S. Tsirkin"
+ <mst@redhat.com>, Jason Wang <jasowang@redhat.com>,
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ "K. Y. Srinivasan" <kys@microsoft.com>,
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+ Dexuan Cui <decui@microsoft.com>, Bryan Tan <bryantan@vmware.com>,
+ Vishnu Dasa <vdasa@vmware.com>,
+ VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+ Dan Carpenter <dan.carpenter@linaro.org>,
+ Simon Horman <simon.horman@corigine.com>, kvm@vger.kernel.org,
+ virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ bpf@vger.kernel.org
+References: <20230413-b4-vsock-dgram-v4-0-0cebbb2ae899@bytedance.com>
+ <20230413-b4-vsock-dgram-v4-6-0cebbb2ae899@bytedance.com>
+ <92b3a6df-ded3-6470-39d1-fe0939441abc@gmail.com>
+ <ppx75eomyyb354knfkwbwin3il2ot7hf5cefwrt6ztpcbc3pps@q736cq5v4bdh>
+From: Arseniy Krasnov <oxffffaa@gmail.com>
+In-Reply-To: <ppx75eomyyb354knfkwbwin3il2ot7hf5cefwrt6ztpcbc3pps@q736cq5v4bdh>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-	SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-	autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+	HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+	T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-Currently ice driver's .ndo_bpf callback brings interface down and up
-independently of XDP resources' presence. This is only needed when
-either these resources have to be configured or removed. It means that
-if one is switching XDP programs on-the-fly with running traffic,
-packets will be dropped.
 
-To avoid this, compare early on ice_xdp_setup_prog() state of incoming
-bpf_prog pointer vs the bpf_prog pointer that is already assigned to
-VSI. Do the swap in case VSI has bpf_prog and incoming one are non-NULL.
+On 22.06.2023 19:09, Stefano Garzarella wrote:
+> On Sun, Jun 11, 2023 at 11:49:02PM +0300, Arseniy Krasnov wrote:
+>> Hello Bobby!
+>>
+>> On 10.06.2023 03:58, Bobby Eshleman wrote:
+>>> This commit adds support for datagrams over virtio/vsock.
+>>>
+>>> Message boundaries are preserved on a per-skb and per-vq entry basis.
+>>
+>> I'm a little bit confused about the following case: let vhost sends 4097 bytes
+>> datagram to the guest. Guest uses 4096 RX buffers in it's virtio queue, each
+>> buffer has attached empty skb to it. Vhost places first 4096 bytes to the first
+>> buffer of guests RX queue, and 1 last byte to the second buffer. Now IIUC guest
+>> has two skb in it rx queue, and user in guest wants to read data - does it read
+>> 4097 bytes, while guest has two skb - 4096 bytes and 1 bytes? In seqpacket there is
+>> special marker in header which shows where message ends, and how it works here?
+> 
+> I think the main difference is that DGRAM is not connection-oriented, so
+> we don't have a stream and we can't split the packet into 2 (maybe we
+> could, but we have no guarantee that the second one for example will be
+> not discarded because there is no space).
+> 
+> So I think it is acceptable as a restriction to keep it simple.
 
-Lastly, while at it, put old bpf_prog *after* the update of Rx ring's
-bpf_prog pointer. In theory previous code could expose us to a state
-where Rx ring's bpf_prog would still be referring to old_prog that got
-released with earlier bpf_prog_put().
+Ah, I see, idea is that any "corruptions" of data could be considered as
+"DGRAM is not reliable anyway, so that's it" :)
 
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Reviewed-by: Alexander Lobakin <aleksander.lobakin@intel.com>
-Tested-by: Chandan Kumar Rout <chandanx.rout@intel.com> (A Contingent Worker at Intel)
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
----
- drivers/net/ethernet/intel/ice/ice_main.c | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+> 
+> My only doubt is, should we make the RX buffer size configurable,
+> instead of always using 4k?
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index 65bf399a0efc..5dd88611141e 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -2633,11 +2633,11 @@ static void ice_vsi_assign_bpf_prog(struct ice_vsi *vsi, struct bpf_prog *prog)
- 	int i;
- 
- 	old_prog = xchg(&vsi->xdp_prog, prog);
--	if (old_prog)
--		bpf_prog_put(old_prog);
--
- 	ice_for_each_rxq(vsi, i)
- 		WRITE_ONCE(vsi->rx_rings[i]->xdp_prog, vsi->xdp_prog);
-+
-+	if (old_prog)
-+		bpf_prog_put(old_prog);
- }
- 
- /**
-@@ -2922,6 +2922,12 @@ ice_xdp_setup_prog(struct ice_vsi *vsi, struct bpf_prog *prog,
- 		}
- 	}
- 
-+	/* hot swap progs and avoid toggling link */
-+	if (ice_is_xdp_ena_vsi(vsi) == !!prog) {
-+		ice_vsi_assign_bpf_prog(vsi, prog);
-+		return 0;
-+	}
-+
- 	/* need to stop netdev while setting up the program for Rx rings */
- 	if (if_running && !test_and_set_bit(ICE_VSI_DOWN, vsi->state)) {
- 		ret = ice_down(vsi);
-@@ -2954,13 +2960,6 @@ ice_xdp_setup_prog(struct ice_vsi *vsi, struct bpf_prog *prog,
- 		xdp_ring_err = ice_realloc_zc_buf(vsi, false);
- 		if (xdp_ring_err)
- 			NL_SET_ERR_MSG_MOD(extack, "Freeing XDP Rx resources failed");
--	} else {
--		/* safe to call even when prog == vsi->xdp_prog as
--		 * dev_xdp_install in net/core/dev.c incremented prog's
--		 * refcount so corresponding bpf_prog_put won't cause
--		 * underflow
--		 */
--		ice_vsi_assign_bpf_prog(vsi, prog);
- 	}
- 
- 	if (if_running)
--- 
-2.38.1
+I guess this is useful only for DGRAM usage, when we want to tune buffers
+for some specific case - may be for exact length of messages (for example if we have
+4096 buffers, while senders wants to send 5000 bytes always by each 'send()' - I think it
+will be really strange that reader ALWAYS dequeues 4096 and 4 bytes as two packets).
+For stream types of socket I think size of rx buffers is not big deal in most of cases.
 
+Thanks, Arseniy
+
+> 
+> Thanks,
+> Stefano
+> 
