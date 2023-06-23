@@ -1,176 +1,296 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED816100B8
-	for <bpf@vger.kernel.org>; Fri, 23 Jun 2023 17:29:10 +0000 (UTC)
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1EC21993
-	for <bpf@vger.kernel.org>; Fri, 23 Jun 2023 10:29:09 -0700 (PDT)
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 7C882C169512
-	for <bpf@vger.kernel.org>; Fri, 23 Jun 2023 10:29:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1687541349; bh=AEkLB33sOYj7UwGunIEVp3IIDnE7rTkbiKavVrDic2o=;
-	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=kYK+GDR7q4gfHMSwhFa+qfoh0Mahv10n6uqsxYkkYmV9tGCaAJ0pV/yGLXl2azlvI
-	 uNhaAmoLgB66dc0Ja1BBOCFpQQGVVWH+tWdwc1QmoMuYzm2xGg7qjOqtms9z0yq4wI
-	 wdbBBtV9WJJthrq5PYm1fCGYNfF/UhvM7b1MmjGY=
-X-Mailbox-Line: From bpf-bounces@ietf.org  Fri Jun 23 10:29:09 2023
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 485A0C13AE40;
-	Fri, 23 Jun 2023 10:29:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1687541349; bh=AEkLB33sOYj7UwGunIEVp3IIDnE7rTkbiKavVrDic2o=;
-	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=kYK+GDR7q4gfHMSwhFa+qfoh0Mahv10n6uqsxYkkYmV9tGCaAJ0pV/yGLXl2azlvI
-	 uNhaAmoLgB66dc0Ja1BBOCFpQQGVVWH+tWdwc1QmoMuYzm2xGg7qjOqtms9z0yq4wI
-	 wdbBBtV9WJJthrq5PYm1fCGYNfF/UhvM7b1MmjGY=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id 4B493C13AE40
- for <bpf@ietfa.amsl.com>; Fri, 23 Jun 2023 10:29:08 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Score: -6.55
-X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,
-	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p1DvI7eG-Aan for <bpf@ietfa.amsl.com>;
- Fri, 23 Jun 2023 10:29:07 -0700 (PDT)
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com
- [209.85.222.172])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id A00C1C1516E1
- for <bpf@ietf.org>; Fri, 23 Jun 2023 10:29:07 -0700 (PDT)
-Received: by mail-qk1-f172.google.com with SMTP id
- af79cd13be357-763e1a22a68so77586885a.0
- for <bpf@ietf.org>; Fri, 23 Jun 2023 10:29:07 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADACED2FF
+	for <bpf@vger.kernel.org>; Fri, 23 Jun 2023 17:40:47 +0000 (UTC)
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A532A11C
+	for <bpf@vger.kernel.org>; Fri, 23 Jun 2023 10:40:45 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-5440e98616cso1474145a12.0
+        for <bpf@vger.kernel.org>; Fri, 23 Jun 2023 10:40:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687542045; x=1690134045;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SCPznyUQlLVG1j2ms7R2mLf8gMGERmZmpYSON8gxMCw=;
+        b=EDCOUL3+YDeCYRM+qYsLvL7aRJajJKijFVqrscMPDamDb7SENPwOiIJ2LWNjB//Lif
+         UdPrPupGG8sgzJgFKAIHaG84nOZB0vCTDVQVbq1CTn3HcEmoVLLg2GB1O4uQrafxVk5k
+         aN63tPbZAzENP0Joi0zz9XTf7KzsA+9fm9qMlNK378uM/SYowBNH5fD5BoYOnETOumYd
+         tpqQCyt58wKkHODl/RHJFNf4Mmk4bAXKKnt1sfW9n/1msKkFnPDcBU3hF+0R1OMpW0Tq
+         t/B61TPk5AKDRDrqUBTg1YlNK0Fop43PuEoDCuDNHtVF56iF2NNEixb5WPUmXj61IG46
+         pxpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1687541346; x=1690133346;
- h=user-agent:in-reply-to:content-disposition:mime-version:references
- :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=M3JcekgH5UueNtQ04NsuTURZ3aF3QjcmVWOdkwFLDic=;
- b=jBNDeCjRTcsnig3xRcwZ2cJUg1lH/r/I+Wtmf6LsHHCu/0/Ne4kSJvhcLOrzLp2zSX
- RmmN3sw247e/YY78ubuBvpcVb+2bVdiZRLxeO4U9UZaYsRMOVay5XZ8f5fvBIzGvnBnY
- wa+Rtam2mDpj7rirJ42IAsICnXa3cZEzOpZ8BdjUP0LyPS1Rmio7ktsXYBkENhlxgdF+
- /5lVRDDUCokxcFz6XrlkBzlUbTfmib3dsSXPmHhMH9qnAeS0sU3xWWQb6zrkSHfAM8KN
- Djr3eO6NwgtDOPqNfNKWrKJIf24KYzGh3Imj027PbwKDYBACu01Ayqs74/6ZolLMfTWx
- 55yg==
-X-Gm-Message-State: AC+VfDx8aW2NeqeWrM5BHuOcOM8Kh7m2k6QZb1OA0jAcz2jcIfexftwM
- 72lVKNqv7pkwEEUpvJa5JTa6YL0bLp3knA==
-X-Google-Smtp-Source: ACHHUZ70629Sm6QvzJNyHCnj7sXsSWIhlXFihLeVNb2iGVCY22kIWoSFKiWteTSUmdQGvoCgXPqMMg==
-X-Received: by 2002:a05:620a:3e0c:b0:763:df67:5c11 with SMTP id
- tt12-20020a05620a3e0c00b00763df675c11mr6854308qkn.65.1687541346514; 
- Fri, 23 Jun 2023 10:29:06 -0700 (PDT)
-Received: from maniforge ([2620:10d:c091:400::5:d965])
- by smtp.gmail.com with ESMTPSA id
- c24-20020a05620a11b800b00763b7b8f3c4sm600062qkk.98.2023.06.23.10.29.05
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 23 Jun 2023 10:29:06 -0700 (PDT)
-Date: Fri, 23 Jun 2023 12:29:04 -0500
-From: David Vernet <void@manifault.com>
-To: Suresh Krishnan <suresh.krishnan@gmail.com>
-Cc: bpf@ietf.org, Erik Kline <ek.ietf@gmail.com>, bpf@vger.kernel.org
-Message-ID: <20230623172904.GC116849@maniforge>
-References: <5ECFE30A-D708-4F99-9321-CF1FE787D1B8@gmail.com>
- <20230623172513.GB116849@maniforge>
+        d=1e100.net; s=20221208; t=1687542045; x=1690134045;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SCPznyUQlLVG1j2ms7R2mLf8gMGERmZmpYSON8gxMCw=;
+        b=bcNjfuK4oz5vsXRM6o6Glohc0u3v67KUNDNQ+/V13n4c+pFBy0WPp049cFdZzzToVV
+         XhFXhOc5YjY3B4t9qOCxuyeuKEjw95DQJ8RaZ4LOK1HmYi4KiLTk+EOw2OZNiuh7PY+2
+         89ZbNlTSXuGzWVsqXR/V8sclgpQp601Z3dZORPN9pxMYjzL/7w/JizuZr9kO6OzdRoZg
+         B3RkD8LqFv81j6ut41kXFoqDPYfh0wk1Xo37guCQUt3OMslgfpFbBBWHScmlQEJPKLfx
+         zqilzeziKjDu1Ue8Q/oosMpj75BaDAwJaJdCBWc7UIcoI/k5NN5rcy/1YbSYAH1hR9ZV
+         ZKLQ==
+X-Gm-Message-State: AC+VfDyx+OSJ5xyOsjhAiM7jDy2BnQkhds3CFwk8wDLxuviU6gOt7i1O
+	DCPM1iDSgURed+F3jrbS5VYmIbszzKJRe21tGqd30w==
+X-Google-Smtp-Source: ACHHUZ52puql8/XSBHfteIOJ8jEi9P2aihca43xdPuqAY1YFO5uIFWRbIdzIGXKw/6yCd44AjeMmnDkl4+UGcDyG+1o=
+X-Received: by 2002:a17:90a:eb18:b0:25e:c876:26e9 with SMTP id
+ j24-20020a17090aeb1800b0025ec87626e9mr27321235pjz.22.1687542044961; Fri, 23
+ Jun 2023 10:40:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230623172513.GB116849@maniforge>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/bWr64Uuta-9vukoW7eA9iL6OKsE>
-Subject: Re: [Bpf] Call for agenda items
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Id: Discussion of BPF/eBPF standardization efforts within the IETF
- <bpf.ietf.org>
-List-Unsubscribe: <https://www.ietf.org/mailman/options/bpf>,
- <mailto:bpf-request@ietf.org?subject=unsubscribe>
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-List-Subscribe: <https://www.ietf.org/mailman/listinfo/bpf>,
- <mailto:bpf-request@ietf.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
+References: <20230621170244.1283336-1-sdf@google.com> <20230621170244.1283336-10-sdf@google.com>
+ <a50de565-23a7-2ac5-d5cb-e568e3ad77c9@brouer.com>
+In-Reply-To: <a50de565-23a7-2ac5-d5cb-e568e3ad77c9@brouer.com>
+From: Stanislav Fomichev <sdf@google.com>
+Date: Fri, 23 Jun 2023 10:40:33 -0700
+Message-ID: <CAKH8qBvr5ePwSP2fL4z3YPG4cmCFvTYQc8+6awNX9=LKHySKXg@mail.gmail.com>
+Subject: Re: [RFC bpf-next v2 09/11] selftests/bpf: Extend xdp_metadata with
+ devtx kfuncs
+To: "Jesper D. Brouer" <netdev@brouer.com>
+Cc: bpf@vger.kernel.org, brouer@redhat.com, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	song@kernel.org, yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	haoluo@google.com, jolsa@kernel.org, netdev@vger.kernel.org, 
+	"xdp-hints@xdp-project.net" <xdp-hints@xdp-project.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+	T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
-Message-ID: <20230623172904.bi7sxCUyBojS86VOSa685O4RyrTl9GZA3I92u_VZeIQ@z>
 
-On Fri, Jun 23, 2023 at 12:25:13PM -0500, David Vernet wrote:
-> On Thu, Jun 22, 2023 at 09:01:07AM -0400, Suresh Krishnan wrote:
-> > Hi all, 
-> >  The newly formed bpf WG will be holding a meeting at IETF117 in a two
-> >  hour slot. The chairs are in the process of setting the agenda. We
-> >  would like to solicit agenda items that would be of interest to the
-> >  WG participants with a preference to the items that address the
-> >  topics of interest covered by the charter . Please send us your
-> >  request for slots to bpf-chairs@ietf.org
-> >  <mailto:shmoo-chairs@ietf.org> detailing
-> > 
-> > * Topic and presenter info
-> > * Name of associated draft (if any)
-> > * Requested slot duration.
-> 
-> Hi everyone,
-> 
-> Adding the bpf@vger list to this thread as well.
-
-My sincere apologies - I forgot to actually include the bpf@vger list
-despite that being the (intended) point of my last email.  Email copied
-again below for convenience.
-
->  The newly formed bpf WG will be holding a meeting at IETF117 in a two
->  hour slot. The chairs are in the process of setting the agenda. We
->  would like to solicit agenda items that would be of interest to the
->  WG participants with a preference to the items that address the
->  topics of interest covered by the charter . Please send us your
->  request for slots to bpf-chairs@ietf.org
->  <mailto:shmoo-chairs@ietf.org> detailing
+On Fri, Jun 23, 2023 at 4:12=E2=80=AFAM Jesper D. Brouer <netdev@brouer.com=
+> wrote:
 >
-> * Topic and presenter info
-> * Name of associated draft (if any)
-> * Requested slot duration.
+>
+>
+> On 21/06/2023 19.02, Stanislav Fomichev wrote:
+> > Attach kfuncs that request and report TX timestamp via ringbuf.
+> > Confirm on the userspace side that the program has triggered
+> > and the timestamp is non-zero.
+> >
+> > Also make sure devtx_frame has a sensible pointers and data.
+> >
+> [...]
+>
+>
+> > diff --git a/tools/testing/selftests/bpf/progs/xdp_metadata.c b/tools/t=
+esting/selftests/bpf/progs/xdp_metadata.c
+> > index d151d406a123..fc025183d45a 100644
+> > --- a/tools/testing/selftests/bpf/progs/xdp_metadata.c
+> > +++ b/tools/testing/selftests/bpf/progs/xdp_metadata.c
+> [...]
+> > @@ -19,10 +24,25 @@ struct {
+> >       __type(value, __u32);
+> >   } prog_arr SEC(".maps");
+> >
+> > +struct {
+> > +     __uint(type, BPF_MAP_TYPE_RINGBUF);
+> > +     __uint(max_entries, 10);
+> > +} tx_compl_buf SEC(".maps");
+> > +
+> > +__u64 pkts_fail_tx =3D 0;
+> > +
+> > +int ifindex =3D -1;
+> > +__u64 net_cookie =3D -1;
+> > +
+> >   extern int bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx,
+> >                                        __u64 *timestamp) __ksym;
+> >   extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, __u32 *=
+hash,
+> >                                   enum xdp_rss_hash_type *rss_type) __k=
+sym;
+> > +extern int bpf_devtx_sb_request_timestamp(const struct devtx_frame *ct=
+x) __ksym;
+> > +extern int bpf_devtx_cp_timestamp(const struct devtx_frame *ctx, __u64=
+ *timestamp) __ksym;
+> > +
+> > +extern int bpf_devtx_sb_attach(int ifindex, int prog_fd) __ksym;
+> > +extern int bpf_devtx_cp_attach(int ifindex, int prog_fd) __ksym;
+> >
+> >   SEC("xdp")
+> >   int rx(struct xdp_md *ctx)
+> > @@ -61,4 +81,102 @@ int rx(struct xdp_md *ctx)
+> >       return bpf_redirect_map(&xsk, ctx->rx_queue_index, XDP_PASS);
+> >   }
+> >
+> > +static inline int verify_frame(const struct devtx_frame *frame)
+> > +{
+> > +     struct ethhdr eth =3D {};
+> > +
+> > +     /* all the pointers are set up correctly */
+> > +     if (!frame->data)
+> > +             return -1;
+> > +     if (!frame->sinfo)
+> > +             return -1;
+> > +
+> > +     /* can get to the frags */
+> > +     if (frame->sinfo->nr_frags !=3D 0)
+> > +             return -1;
+> > +     if (frame->sinfo->frags[0].bv_page !=3D 0)
+> > +             return -1;
+> > +     if (frame->sinfo->frags[0].bv_len !=3D 0)
+> > +             return -1;
+> > +     if (frame->sinfo->frags[0].bv_offset !=3D 0)
+> > +             return -1;
+> > +
+> > +     /* the data has something that looks like ethernet */
+> > +     if (frame->len !=3D 46)
+> > +             return -1;
+> > +     bpf_probe_read_kernel(&eth, sizeof(eth), frame->data);
+> > +
+> > +     if (eth.h_proto !=3D bpf_htons(ETH_P_IP))
+> > +             return -1;
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +SEC("fentry/veth_devtx_submit")
+> > +int BPF_PROG(tx_submit, const struct devtx_frame *frame)
+> > +{
+> > +     struct xdp_tx_meta meta =3D {};
+> > +     int ret;
+> > +
+> > +     if (frame->netdev->ifindex !=3D ifindex)
+> > +             return 0;
+> > +     if (frame->netdev->nd_net.net->net_cookie !=3D net_cookie)
+> > +             return 0;
+> > +     if (frame->meta_len !=3D TX_META_LEN)
+> > +             return 0;
+> > +
+> > +     bpf_probe_read_kernel(&meta, sizeof(meta), frame->data - TX_META_=
+LEN);
+> > +     if (!meta.request_timestamp)
+> > +             return 0;
+> > +
+> > +     ret =3D verify_frame(frame);
+> > +     if (ret < 0) {
+> > +             __sync_add_and_fetch(&pkts_fail_tx, 1);
+> > +             return 0;
+> > +     }
+> > +
+> > +     ret =3D bpf_devtx_sb_request_timestamp(frame);
+>
+> My original design thoughts were that BPF-progs would write into
+> metadata area, with the intend that at TX-complete we can access this
+> metadata area again.
+>
+> In this case with request_timestamp it would make sense to me, to store
+> a sequence number (+ the TX-queue number), such that program code can
+> correlate on complete event.
 
-Hi everyone,
+Yeah, we can probably follow up on that. I'm trying to start with a
+read-only path for now.
+Can we expose metadata mutating operations via some new kfunc helpers?
+Something that returns a ptr/dynptr to the metadata portion?
 
-As mentioned above, the newly-formed BPF working group will be holding a
-meeting at IETF117 in a two hour slot, and we are in the process of
-soliciting agenda items that would be of interest to the WG
-parcitipants. If there are any agenda items that you would like to
-discuss, please send us your request for slots to bpf-chairs@ietf.org
-detailing:
+> Like xdp_hw_metadata example, I would likely also to add a software
+> timestamp, what I could check at TX complete hook.
+>
+> > +     if (ret < 0) {
+> > +             __sync_add_and_fetch(&pkts_fail_tx, 1);
+> > +             return 0;
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +SEC("fentry/veth_devtx_complete")
+> > +int BPF_PROG(tx_complete, const struct devtx_frame *frame)
+> > +{
+> > +     struct xdp_tx_meta meta =3D {};
+> > +     struct devtx_sample *sample;
+> > +     int ret;
+> > +
+> > +     if (frame->netdev->ifindex !=3D ifindex)
+> > +             return 0;
+> > +     if (frame->netdev->nd_net.net->net_cookie !=3D net_cookie)
+> > +             return 0;
+> > +     if (frame->meta_len !=3D TX_META_LEN)
+> > +             return 0;
+> > +
+> > +     bpf_probe_read_kernel(&meta, sizeof(meta), frame->data - TX_META_=
+LEN);
+> > +     if (!meta.request_timestamp)
+> > +             return 0;
+> > +
+> > +     ret =3D verify_frame(frame);
+> > +     if (ret < 0) {
+> > +             __sync_add_and_fetch(&pkts_fail_tx, 1);
+> > +             return 0;
+> > +     }
+> > +
+> > +     sample =3D bpf_ringbuf_reserve(&tx_compl_buf, sizeof(*sample), 0)=
+;
+> > +     if (!sample)
+> > +             return 0;
+>
+> Sending this via a ringbuffer to userspace, will make it hard to
+> correlate. (For AF_XDP it would help a little to add the TX-queue
+> number, as this hook isn't queue bound but AF_XDP is).
 
-* Topic and presenter info
-* Name of associated draft (if any)
-* Requested slot duration.
+Agreed. I was looking into putting the metadata back into the ring initiall=
+y.
+It's somewhat doable for zero-copy, but needs some special care for copy mo=
+de.
+So I've decided not to over-complicate the series and land the
+read-only hooks at least.
+Does it sound fair? We can allow mutating metadata separately.
 
-Please note that while any agenda item may be requested and discussed,
-there is a preference for agenda items that address topics of interest
-covered by the working group charter [0].
+> > +
+> > +     sample->timestamp_retval =3D bpf_devtx_cp_timestamp(frame, &sampl=
+e->timestamp);
+> > +
+>
+> I were expecting to see, information being written into the metadata
+> area of the frame, such that AF_XDP completion-queue handling can
+> extract this obtained timestamp.
 
-[0]: https://datatracker.ietf.org/doc/charter-ietf-bpf/
+SG, will add!
 
-Thanks,
-Suresh and David
+> > +     bpf_ringbuf_submit(sample, 0);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >   char _license[] SEC("license") =3D "GPL";
+> > diff --git a/tools/testing/selftests/bpf/xdp_metadata.h b/tools/testing=
+/selftests/bpf/xdp_metadata.h
+> > index 938a729bd307..e410f2b95e64 100644
+> > --- a/tools/testing/selftests/bpf/xdp_metadata.h
+> > +++ b/tools/testing/selftests/bpf/xdp_metadata.h
+> > @@ -18,3 +18,17 @@ struct xdp_meta {
+> >               __s32 rx_hash_err;
+> >       };
+> >   };
+> > +
+> > +struct devtx_sample {
+> > +     int timestamp_retval;
+> > +     __u64 timestamp;
+> > +};
+> > +
+> > +#define TX_META_LEN  8
+>
+> Very static design.
+>
+> > +
+> > +struct xdp_tx_meta {
+> > +     __u8 request_timestamp;
+> > +     __u8 padding0;
+> > +     __u16 padding1;
+> > +     __u32 padding2;
+> > +};
+>
+> padding2 could be a btf_id for creating a more flexible design.
 
--- 
-Bpf mailing list
-Bpf@ietf.org
-https://www.ietf.org/mailman/listinfo/bpf
+Right, up to the programs on how to make it more flexible (same as
+rx), will add more on that in your other reply.
