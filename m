@@ -1,460 +1,871 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88C02362
-	for <bpf@vger.kernel.org>; Sat, 24 Jun 2023 00:19:32 +0000 (UTC)
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC942727
-	for <bpf@vger.kernel.org>; Fri, 23 Jun 2023 17:19:28 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5704e551e8bso16087827b3.3
-        for <bpf@vger.kernel.org>; Fri, 23 Jun 2023 17:19:28 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5332360;
+	Sat, 24 Jun 2023 00:21:56 +0000 (UTC)
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1F626A9;
+	Fri, 23 Jun 2023 17:21:53 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-1aa161c3796so1105699fac.1;
+        Fri, 23 Jun 2023 17:21:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687565967; x=1690157967;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=4qbTy8FSXtFnqI4HqubXckR8hyZOqgmYlEpcEMjK7QQ=;
-        b=ymU/U4QnzhkMXNAn4Dl7lwm6exQo7jjjudk1JvxKCqASULHx2IQSNUJY5kfaJ1TM+D
-         J6erLItcZHD8BMIKacKgQZrnR2bWiTDvzyZpmMxzK491hzoZ2SBOvlxcfO10wxbxRmc5
-         BR3RK/LLJB5agMO0u8wjdiz03vzkQe3SJ7ccudrcbJAuVAyQMudBC91yIgaZufxebPrB
-         VcZ7OsWtAwrXnAf827P3pfk3CitgL0x2rkfYDO0Cq7MhA4VguA4ZcDo+7Lusaxuw/jUJ
-         kVNnV5v1ofeV2VaJm3nnqp1ufU9Chljg+gXL1QUcN6D+9SltRoem6bkf1BAWpWHa7tje
-         EQNQ==
+        d=gmail.com; s=20221208; t=1687566113; x=1690158113;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7nIxWzzAz2zWu2DeCfc/a/TqeomNBhcD+cqn1LFLqgk=;
+        b=PWH8Kb2x5SppI9XhWKj0sjI/289eyDSqnKQzJWPnfyliG/32KvRJCys6SFgh/TbG/l
+         LYUVUnHve8QGZ9sILksEWj1J/VcJmrh3RkV8ec9VIBuW4xDickaB2WZgNkqXiDbwQzx3
+         bhYi8D7KDujMTOExX3jJRUPPq4y3Czp3UZ/dwCYsMN++4rd2igFuTMB/cnZSX8daG4vD
+         WsgtJxvyIvCx0NwMclgDC+NXaepUDMrwEYJNiVr3a6yiOQe6fS/2C1uQ5STg2qocKQ47
+         wK5LlLiWChkNKDBn9R/GrkVtcIXJegjHm7+1HyjoaVcwxjWP1v+Vy0hZcG+rWX+jkVjD
+         FcFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687565967; x=1690157967;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4qbTy8FSXtFnqI4HqubXckR8hyZOqgmYlEpcEMjK7QQ=;
-        b=WvEhUxpNhOZKDd6w0QTWYy3CC6qWzjcA5r6qGZ71Dz/RQ+Fkphp1o4euhLi+vVn8yd
-         MbKtl1VaMCWiuSuWgRCm15emNjODwWnf14vPfncLvYhTaEBFBxN6cp7UfJToI72znpp+
-         XsvrEQLxYk6PWmgS2LTXkJI95u8h6/OAV8SBHjFWEck5eMcs1T3jc68Z+EtlnTN2IgJM
-         Y2aozroECg+AANjpqUiSAHYH7fRX/fRVaXtvoP1z5myXK5bd85JYsOAfe7vr377l0cBL
-         wvTiEAjURMmXdSqKO1bBW917xETEVIamnDsrWjEN90zWWnJ8tjeIFIW9HUnZtg94Cp3D
-         TNxQ==
-X-Gm-Message-State: AC+VfDy0sOPOAbdG5/uSElL8sEU0HuZoE7mUbok4ryDuhv4JfnnPqm49
-	VGJs1eOBtK3hp0tF9I3q9QKSr5BBjFjZ
-X-Google-Smtp-Source: ACHHUZ6rRr/NWpRQsKsG2QIDu8mVR7g0vuDKw03+ymT3eluO3AKo8w2iUfbO7WUN573GGjxzISXzDD0veksZ
-X-Received: from meowing-l.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3eba])
- (user=maskray job=sendgmr) by 2002:a81:e703:0:b0:56c:f8b7:d4f7 with SMTP id
- x3-20020a81e703000000b0056cf8b7d4f7mr8960251ywl.6.1687565967175; Fri, 23 Jun
- 2023 17:19:27 -0700 (PDT)
-Date: Sat, 24 Jun 2023 00:18:56 +0000
+        d=1e100.net; s=20221208; t=1687566113; x=1690158113;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7nIxWzzAz2zWu2DeCfc/a/TqeomNBhcD+cqn1LFLqgk=;
+        b=J8VVFti+fbLNfqWGEUTIg0u/khDEw3ll7jnVu8UOGAaVFLtmg6CHuLQACRgczupG3n
+         zKg4ZJyUy2QTHz9l4O/2UCyhDEz3o7Wm4D8d+lPMjZI90/xXQqwRQrankYPqg+1/QZMq
+         RkahxDkzrffbKILxIataCbHiU3UyVsaN0E8hTgnpw2MjxMApj8DdZ4aZ20mLQh12Puu8
+         KveN95s0AUwYP081yAFht60eZJD3IEQWrezp5aqb7jy+5z18JHwt/u6owCHa1SjrEgiL
+         v32iWU82/5h5eK54BP2MX9xdS2q5poHWAhWqpFcVWvWt0dWnRbec2NDB07425dpWaeOy
+         c0kA==
+X-Gm-Message-State: AC+VfDxO4eeB6B47ip4tYhZems/2M1t6oWzNPjs7xXYQOe4P1QR5ql1w
+	41t8ncpeg4LEBoc/vl/k+XM=
+X-Google-Smtp-Source: ACHHUZ5ipNIJ0kr8k9WfYJt5vHeQf71mH6a5rHPE2DqCL0Lyb7pTZb84aXo9gI4WZCP6Tuys6fuKQg==
+X-Received: by 2002:a05:6870:4505:b0:1ac:e6a8:9d60 with SMTP id e5-20020a056870450500b001ace6a89d60mr11697570oao.12.1687566112554;
+        Fri, 23 Jun 2023 17:21:52 -0700 (PDT)
+Received: from localhost (ec2-54-67-115-33.us-west-1.compute.amazonaws.com. [54.67.115.33])
+        by smtp.gmail.com with ESMTPSA id o13-20020a655bcd000000b00534684201b0sm183406pgr.27.2023.06.23.17.21.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 17:21:51 -0700 (PDT)
+Date: Fri, 23 Jun 2023 06:33:54 +0000
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Arseniy Krasnov <oxffffaa@gmail.com>
+Cc: Bobby Eshleman <bobby.eshleman@bytedance.com>,
+	Stefan Hajnoczi <stefanha@redhat.com>,
+	Stefano Garzarella <sgarzare@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Bryan Tan <bryantan@vmware.com>, Vishnu Dasa <vdasa@vmware.com>,
+	VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Simon Horman <simon.horman@corigine.com>, kvm@vger.kernel.org,
+	virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	bpf@vger.kernel.org, Jiang Wang <jiang.wang@bytedance.com>
+Subject: Re: [PATCH RFC net-next v4 8/8] tests: add vsock dgram tests
+Message-ID: <ZJU80s+NARaA4y1i@bullseye>
+References: <20230413-b4-vsock-dgram-v4-0-0cebbb2ae899@bytedance.com>
+ <20230413-b4-vsock-dgram-v4-8-0cebbb2ae899@bytedance.com>
+ <484c7b6f-5ce5-ce43-2dfd-0ae3063f1e47@gmail.com>
+ <ZJTWYRGd95xl+yRE@bullseye>
+ <d0db1e6b-3b9d-3b90-88f8-85aa5bd7ee86@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Message-ID: <20230624001856.1903733-1-maskray@google.com>
-Subject: [PATCH v2] bpf: Replace deprecated -target with --target= for Clang
-From: Fangrui Song <maskray@google.com>
-To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Quentin Monnet <quentin@isovalent.com>, bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Fangrui Song <maskray@google.com>, Yonghong Song <yhs@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-	SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-	version=3.4.6
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d0db1e6b-3b9d-3b90-88f8-85aa5bd7ee86@gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
--target has been deprecated since Clang 3.4 in 2013. Use the preferred
---target=bpf form instead. This matches how we use --target= in
-scripts/Makefile.clang.
+On Fri, Jun 23, 2023 at 09:34:51PM +0300, Arseniy Krasnov wrote:
+> 
+> 
+> On 23.06.2023 02:16, Bobby Eshleman wrote:
+> > On Sun, Jun 11, 2023 at 11:54:57PM +0300, Arseniy Krasnov wrote:
+> >> Hello Bobby!
+> >>
+> >> Sorry, may be I become a little bit annoying:), but I tried to run vsock_test with
+> >> this v4 version, and again get the same crash:
+> > 
+> > Haha not annoying at all. I appreciate the testing!
+> > 
+> >>
+> >> # cat client.sh 
+> >> ./vsock_test  --mode=client --control-host=192.168.1.1 --control-port=12345 --peer-cid=2
+> >> # ./client.sh 
+> >> Control socket connected to 192.168.1.1:12345.
+> >> 0 - SOCK_STREAM connection reset...[   20.065237] BUG: kernel NULL pointer dereference, addre0
+> >> [   20.065895] #PF: supervisor read access in kernel mode
+> >> [   20.065895] #PF: error_code(0x0000) - not-present page
+> >> [   20.065895] PGD 0 P4D 0 
+> >> [   20.065895] Oops: 0000 [#1] PREEMPT SMP PTI
+> >> [   20.065895] CPU: 0 PID: 111 Comm: vsock_test Not tainted 6.4.0-rc3-gefcccba07069 #385
+> >> [   20.065895] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.15.0-0-g2dd44
+> >> [   20.065895] RIP: 0010:static_key_count+0x0/0x20
+> >> [   20.065895] Code: 04 4c 8b 46 08 49 29 c0 4c 01 c8 4c 89 47 08 89 0e 89 56 04 48 89 46 08 f
+> >> [   20.065895] RSP: 0018:ffffbbb000223dc0 EFLAGS: 00010202
+> >> [   20.065895] RAX: ffffffff85709880 RBX: ffffffffc0079140 RCX: 0000000000000000
+> >> [   20.065895] RDX: ffff9f73c2175700 RSI: 0000000000000000 RDI: 0000000000000000
+> >> [   20.065895] RBP: ffff9f73c2385900 R08: ffffbbb000223d30 R09: ffff9f73ff896000
+> >> [   20.065895] R10: 0000000000001000 R11: 0000000000000000 R12: ffffbbb000223e80
+> >> [   20.065895] R13: 0000000000000000 R14: 0000000000000002 R15: ffff9f73c1cfaa80
+> >> [   20.065895] FS:  00007f1ad82f55c0(0000) GS:ffff9f73fe400000(0000) knlGS:0000000000000000
+> >> [   20.065895] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> >> [   20.065895] CR2: 0000000000000000 CR3: 000000003f954000 CR4: 00000000000006f0
+> >> [   20.065895] Call Trace:
+> >> [   20.065895]  <TASK>
+> >> [   20.065895]  once_deferred+0xd/0x30
+> >> [   20.065895]  vsock_assign_transport+0x9a/0x1b0 [vsock]
+> >> [   20.065895]  vsock_connect+0xb4/0x3a0 [vsock]
+> >> [   20.065895]  ? var_wake_function+0x60/0x60
+> >> [   20.065895]  __sys_connect+0x9e/0xd0
+> >> [   20.065895]  ? _raw_spin_unlock_irq+0xe/0x30
+> >> [   20.065895]  ? do_setitimer+0x128/0x1f0
+> >> [   20.065895]  ? alarm_setitimer+0x4c/0x90
+> >> [   20.065895]  ? fpregs_assert_state_consistent+0x1d/0x50
+> >> [   20.065895]  ? exit_to_user_mode_prepare+0x36/0x130
+> >> [   20.065895]  __x64_sys_connect+0x11/0x20
+> >> [   20.065895]  do_syscall_64+0x3b/0xc0
+> >> [   20.065895]  entry_SYSCALL_64_after_hwframe+0x4b/0xb5
+> >> [   20.065895] RIP: 0033:0x7f1ad822dd13
+> >> [   20.065895] Code: 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 64 8
+> >> [   20.065895] RSP: 002b:00007ffc513e3c98 EFLAGS: 00000246 ORIG_RAX: 000000000000002a
+> >> [   20.065895] RAX: ffffffffffffffda RBX: 000055aed298e020 RCX: 00007f1ad822dd13
+> >> [   20.065895] RDX: 0000000000000010 RSI: 00007ffc513e3cb0 RDI: 0000000000000004
+> >> [   20.065895] RBP: 0000000000000004 R08: 000055aed32b2018 R09: 0000000000000000
+> >> [   20.065895] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+> >> [   20.065895] R13: 000055aed298acb1 R14: 00007ffc513e3cb0 R15: 00007ffc513e3d40
+> >> [   20.065895]  </TASK>
+> >> [   20.065895] Modules linked in: vsock_loopback vhost_vsock vmw_vsock_virtio_transport vmw_vb
+> > 
+> > ^ I'm guessing this is the difference between our setups. I have been
+> > going all built-in, let me see if I can reproduce w/ modules...
+> 
+> Ah ok, I think using modules is good practice here, because it could test that Your symbols
+> set is valid to work as modules and 'rmmod' could check problems with the forgotten references
+> for example for socket or skb. I'm working with modules most of the time.
+> 
 
-Link: https://github.com/llvm/llvm-project/commit/274b6f0c87a6a1798de0a68135afc7f95def6277
-Signed-off-by: Fangrui Song <maskray@google.com>
-Acked-by: Yonghong Song <yhs@fb.com>
+Agreed, definitely good practice. I test combinations of 'm' and 'y' for
+the subsystem as part of a more rigorous testing process that I do when
+I feel it is getting closer to losing the RFC tag. I'll definitely test
+it for the rest of this series so you don't run into issues though.  You
+may have just convinced to change my environment around to let me use
+modules by default...
 
----
-Changes from v1:
-* remove two SPDX-License-Identifier: GPL-2.0 to stubs.h
-* remove tools/perf changes (will be in a separate patch to perf subsystem)
+Thanks,
+Bobby
 
-Signed-off-by: Fangrui Song <maskray@google.com>
----
- Documentation/bpf/bpf_devel_QA.rst              | 10 +++++-----
- Documentation/bpf/btf.rst                       |  4 ++--
- Documentation/bpf/llvm_reloc.rst                |  6 +++---
- drivers/hid/bpf/entrypoints/Makefile            |  2 +-
- kernel/bpf/preload/iterators/Makefile           |  2 +-
- samples/bpf/Makefile                            |  6 +++---
- samples/bpf/gnu/stubs.h                         |  2 +-
- samples/bpf/test_lwt_bpf.sh                     |  2 +-
- samples/hid/Makefile                            |  6 +++---
- tools/bpf/bpftool/Documentation/bpftool-gen.rst |  4 ++--
- tools/bpf/bpftool/Makefile                      |  2 +-
- tools/bpf/runqslower/Makefile                   |  2 +-
- tools/build/feature/Makefile                    |  2 +-
- tools/testing/selftests/bpf/Makefile            |  6 +++---
- tools/testing/selftests/bpf/gnu/stubs.h         |  2 +-
- tools/testing/selftests/hid/Makefile            |  6 +++---
- tools/testing/selftests/net/Makefile            |  4 ++--
- tools/testing/selftests/tc-testing/Makefile     |  2 +-
- 18 files changed, 35 insertions(+), 35 deletions(-)
-
-diff --git a/Documentation/bpf/bpf_devel_QA.rst b/Documentation/bpf/bpf_devel_QA.rst
-index 609b71f5747d..de27e1620821 100644
---- a/Documentation/bpf/bpf_devel_QA.rst
-+++ b/Documentation/bpf/bpf_devel_QA.rst
-@@ -635,12 +635,12 @@ test coverage.
- 
- Q: clang flag for target bpf?
- -----------------------------
--Q: In some cases clang flag ``-target bpf`` is used but in other cases the
-+Q: In some cases clang flag ``--target=bpf`` is used but in other cases the
- default clang target, which matches the underlying architecture, is used.
- What is the difference and when I should use which?
- 
- A: Although LLVM IR generation and optimization try to stay architecture
--independent, ``-target <arch>`` still has some impact on generated code:
-+independent, ``--target=<arch>`` still has some impact on generated code:
- 
- - BPF program may recursively include header file(s) with file scope
-   inline assembly codes. The default target can handle this well,
-@@ -658,7 +658,7 @@ independent, ``-target <arch>`` still has some impact on generated code:
-   The clang option ``-fno-jump-tables`` can be used to disable
-   switch table generation.
- 
--- For clang ``-target bpf``, it is guaranteed that pointer or long /
-+- For clang ``--target=bpf``, it is guaranteed that pointer or long /
-   unsigned long types will always have a width of 64 bit, no matter
-   whether underlying clang binary or default target (or kernel) is
-   32 bit. However, when native clang target is used, then it will
-@@ -668,7 +668,7 @@ independent, ``-target <arch>`` still has some impact on generated code:
-   while the BPF LLVM back end still operates in 64 bit. The native
-   target is mostly needed in tracing for the case of walking ``pt_regs``
-   or other kernel structures where CPU's register width matters.
--  Otherwise, ``clang -target bpf`` is generally recommended.
-+  Otherwise, ``clang --target=bpf`` is generally recommended.
- 
- You should use default target when:
- 
-@@ -685,7 +685,7 @@ when:
-   into these structures is verified by the BPF verifier and may result
-   in verification failures if the native architecture is not aligned with
-   the BPF architecture, e.g. 64-bit. An example of this is
--  BPF_PROG_TYPE_SK_MSG require ``-target bpf``
-+  BPF_PROG_TYPE_SK_MSG require ``--target=bpf``
- 
- 
- .. Links
-diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
-index 7cd7c5415a99..f32db1f44ae9 100644
---- a/Documentation/bpf/btf.rst
-+++ b/Documentation/bpf/btf.rst
-@@ -990,7 +990,7 @@ format.::
-     } g2;
-     int main() { return 0; }
-     int test() { return 0; }
--    -bash-4.4$ clang -c -g -O2 -target bpf t2.c
-+    -bash-4.4$ clang -c -g -O2 --target=bpf t2.c
-     -bash-4.4$ readelf -S t2.o
-       ......
-       [ 8] .BTF              PROGBITS         0000000000000000  00000247
-@@ -1000,7 +1000,7 @@ format.::
-       [10] .rel.BTF.ext      REL              0000000000000000  000007e0
-            0000000000000040  0000000000000010          16     9     8
-       ......
--    -bash-4.4$ clang -S -g -O2 -target bpf t2.c
-+    -bash-4.4$ clang -S -g -O2 --target=bpf t2.c
-     -bash-4.4$ cat t2.s
-       ......
-             .section        .BTF,"",@progbits
-diff --git a/Documentation/bpf/llvm_reloc.rst b/Documentation/bpf/llvm_reloc.rst
-index ca8957d5b671..1b2da781e9e2 100644
---- a/Documentation/bpf/llvm_reloc.rst
-+++ b/Documentation/bpf/llvm_reloc.rst
-@@ -28,7 +28,7 @@ For example, for the following code::
-     return g1 + g2 + l1 + l2;
-   }
- 
--Compiled with ``clang -target bpf -O2 -c test.c``, the following is
-+Compiled with ``clang --target=bpf -O2 -c test.c``, the following is
- the code with ``llvm-objdump -dr test.o``::
- 
-        0:       18 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 r1 = 0 ll
-@@ -155,7 +155,7 @@ and ``call`` instructions. For example::
-     return gfunc(a, b) +  lfunc(a, b) + global;
-   }
- 
--Compiled with ``clang -target bpf -O2 -c test.c``, we will have
-+Compiled with ``clang --target=bpf -O2 -c test.c``, we will have
- following code with `llvm-objdump -dr test.o``::
- 
-   Disassembly of section .text:
-@@ -201,7 +201,7 @@ The following is an example to show how R_BPF_64_ABS64 could be generated::
-   int global() { return 0; }
-   struct t { void *g; } gbl = { global };
- 
--Compiled with ``clang -target bpf -O2 -g -c test.c``, we will see a
-+Compiled with ``clang --target=bpf -O2 -g -c test.c``, we will see a
- relocation below in ``.data`` section with command
- ``llvm-readelf -r test.o``::
- 
-diff --git a/drivers/hid/bpf/entrypoints/Makefile b/drivers/hid/bpf/entrypoints/Makefile
-index a12edcfa4fe3..43b99b5575cf 100644
---- a/drivers/hid/bpf/entrypoints/Makefile
-+++ b/drivers/hid/bpf/entrypoints/Makefile
-@@ -58,7 +58,7 @@ entrypoints.lskel.h: $(OUTPUT)/entrypoints.bpf.o | $(BPFTOOL)
- 
- $(OUTPUT)/entrypoints.bpf.o: entrypoints.bpf.c $(OUTPUT)/vmlinux.h $(BPFOBJ) | $(OUTPUT)
- 	$(call msg,BPF,$@)
--	$(Q)$(CLANG) -g -O2 -target bpf $(INCLUDES)			      \
-+	$(Q)$(CLANG) -g -O2 --target=bpf $(INCLUDES)			      \
- 		 -c $(filter %.c,$^) -o $@ &&				      \
- 	$(LLVM_STRIP) -g $@
- 
-diff --git a/kernel/bpf/preload/iterators/Makefile b/kernel/bpf/preload/iterators/Makefile
-index 8937dc6bc8d0..b83c2f5e9be1 100644
---- a/kernel/bpf/preload/iterators/Makefile
-+++ b/kernel/bpf/preload/iterators/Makefile
-@@ -50,7 +50,7 @@ iterators.lskel-%.h: $(OUTPUT)/%/iterators.bpf.o | $(BPFTOOL)
- $(OUTPUT)/%/iterators.bpf.o: iterators.bpf.c $(BPFOBJ) | $(OUTPUT)
- 	$(call msg,BPF,$@)
- 	$(Q)mkdir -p $(@D)
--	$(Q)$(CLANG) -g -O2 -target bpf -m$* $(INCLUDES)		      \
-+	$(Q)$(CLANG) -g -O2 --target=bpf -m$* $(INCLUDES)		      \
- 		 -c $(filter %.c,$^) -o $@ &&				      \
- 	$(LLVM_STRIP) -g $@
- 
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 615f24ebc49c..595b98d825ce 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -248,7 +248,7 @@ BTF_LLC_PROBE := $(shell $(LLC) -march=bpf -mattr=help 2>&1 | grep dwarfris)
- BTF_PAHOLE_PROBE := $(shell $(BTF_PAHOLE) --help 2>&1 | grep BTF)
- BTF_OBJCOPY_PROBE := $(shell $(LLVM_OBJCOPY) --help 2>&1 | grep -i 'usage.*llvm')
- BTF_LLVM_PROBE := $(shell echo "int main() { return 0; }" | \
--			  $(CLANG) -target bpf -O2 -g -c -x c - -o ./llvm_btf_verify.o; \
-+			  $(CLANG) --target=bpf -O2 -g -c -x c - -o ./llvm_btf_verify.o; \
- 			  $(LLVM_READELF) -S ./llvm_btf_verify.o | grep BTF; \
- 			  /bin/rm -f ./llvm_btf_verify.o)
- 
-@@ -370,7 +370,7 @@ endif
- clean-files += vmlinux.h
- 
- # Get Clang's default includes on this system, as opposed to those seen by
--# '-target bpf'. This fixes "missing" files on some architectures/distros,
-+# '--target=bpf'. This fixes "missing" files on some architectures/distros,
- # such as asm/byteorder.h, asm/socket.h, asm/sockios.h, sys/cdefs.h etc.
- #
- # Use '-idirafter': Don't interfere with include mechanics except where the
-@@ -392,7 +392,7 @@ $(obj)/xdp_router_ipv4.bpf.o: $(obj)/xdp_sample.bpf.o
- 
- $(obj)/%.bpf.o: $(src)/%.bpf.c $(obj)/vmlinux.h $(src)/xdp_sample.bpf.h $(src)/xdp_sample_shared.h
- 	@echo "  CLANG-BPF " $@
--	$(Q)$(CLANG) -g -O2 -target bpf -D__TARGET_ARCH_$(SRCARCH) \
-+	$(Q)$(CLANG) -g -O2 --target=bpf -D__TARGET_ARCH_$(SRCARCH) \
- 		-Wno-compare-distinct-pointer-types -I$(srctree)/include \
- 		-I$(srctree)/samples/bpf -I$(srctree)/tools/include \
- 		-I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
-diff --git a/samples/bpf/gnu/stubs.h b/samples/bpf/gnu/stubs.h
-index 719225b16626..1c638d9dce1a 100644
---- a/samples/bpf/gnu/stubs.h
-+++ b/samples/bpf/gnu/stubs.h
-@@ -1 +1 @@
--/* dummy .h to trick /usr/include/features.h to work with 'clang -target bpf' */
-+/* dummy .h to trick /usr/include/features.h to work with 'clang --target=bpf' */
-diff --git a/samples/bpf/test_lwt_bpf.sh b/samples/bpf/test_lwt_bpf.sh
-index 0bf2d0f6bf4b..148e2df6cdce 100755
---- a/samples/bpf/test_lwt_bpf.sh
-+++ b/samples/bpf/test_lwt_bpf.sh
-@@ -376,7 +376,7 @@ DST_MAC=$(lookup_mac $VETH1 $NS1)
- SRC_MAC=$(lookup_mac $VETH0)
- DST_IFINDEX=$(cat /sys/class/net/$VETH0/ifindex)
- 
--CLANG_OPTS="-O2 -target bpf -I ../include/"
-+CLANG_OPTS="-O2 --target=bpf -I ../include/"
- CLANG_OPTS+=" -DSRC_MAC=$SRC_MAC -DDST_MAC=$DST_MAC -DDST_IFINDEX=$DST_IFINDEX"
- clang $CLANG_OPTS -c $PROG_SRC -o $BPF_PROG
- 
-diff --git a/samples/hid/Makefile b/samples/hid/Makefile
-index 026288280a03..9f7fe29dd749 100644
---- a/samples/hid/Makefile
-+++ b/samples/hid/Makefile
-@@ -86,7 +86,7 @@ BTF_LLC_PROBE := $(shell $(LLC) -march=bpf -mattr=help 2>&1 | grep dwarfris)
- BTF_PAHOLE_PROBE := $(shell $(BTF_PAHOLE) --help 2>&1 | grep BTF)
- BTF_OBJCOPY_PROBE := $(shell $(LLVM_OBJCOPY) --help 2>&1 | grep -i 'usage.*llvm')
- BTF_LLVM_PROBE := $(shell echo "int main() { return 0; }" | \
--			  $(CLANG) -target bpf -O2 -g -c -x c - -o ./llvm_btf_verify.o; \
-+			  $(CLANG) --target=bpf -O2 -g -c -x c - -o ./llvm_btf_verify.o; \
- 			  $(LLVM_READELF) -S ./llvm_btf_verify.o | grep BTF; \
- 			  /bin/rm -f ./llvm_btf_verify.o)
- 
-@@ -181,7 +181,7 @@ endif
- clean-files += vmlinux.h
- 
- # Get Clang's default includes on this system, as opposed to those seen by
--# '-target bpf'. This fixes "missing" files on some architectures/distros,
-+# '--target=bpf'. This fixes "missing" files on some architectures/distros,
- # such as asm/byteorder.h, asm/socket.h, asm/sockios.h, sys/cdefs.h etc.
- #
- # Use '-idirafter': Don't interfere with include mechanics except where the
-@@ -198,7 +198,7 @@ EXTRA_BPF_HEADERS_SRC := $(addprefix $(src)/,$(EXTRA_BPF_HEADERS))
- 
- $(obj)/%.bpf.o: $(src)/%.bpf.c $(EXTRA_BPF_HEADERS_SRC) $(obj)/vmlinux.h
- 	@echo "  CLANG-BPF " $@
--	$(Q)$(CLANG) -g -O2 -target bpf -D__TARGET_ARCH_$(SRCARCH) \
-+	$(Q)$(CLANG) -g -O2 --target=bpf -D__TARGET_ARCH_$(SRCARCH) \
- 		-Wno-compare-distinct-pointer-types -I$(srctree)/include \
- 		-I$(srctree)/samples/bpf -I$(srctree)/tools/include \
- 		-I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-gen.rst b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-index 68454ef28f58..5006e724d1bc 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-@@ -260,9 +260,9 @@ EXAMPLES
- This is example BPF application with two BPF programs and a mix of BPF maps
- and global variables. Source code is split across two source code files.
- 
--**$ clang -target bpf -g example1.bpf.c -o example1.bpf.o**
-+**$ clang --target=bpf -g example1.bpf.c -o example1.bpf.o**
- 
--**$ clang -target bpf -g example2.bpf.c -o example2.bpf.o**
-+**$ clang --target=bpf -g example2.bpf.c -o example2.bpf.o**
- 
- **$ bpftool gen object example.bpf.o example1.bpf.o example2.bpf.o**
- 
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index 681fbcc5ed50..e9154ace80ff 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -216,7 +216,7 @@ $(OUTPUT)%.bpf.o: skeleton/%.bpf.c $(OUTPUT)vmlinux.h $(LIBBPF_BOOTSTRAP)
- 		-I$(srctree)/tools/include/uapi/ \
- 		-I$(LIBBPF_BOOTSTRAP_INCLUDE) \
- 		-g -O2 -Wall -fno-stack-protector \
--		-target bpf -c $< -o $@
-+		--target=bpf -c $< -o $@
- 	$(Q)$(LLVM_STRIP) -g $@
- 
- $(OUTPUT)%.skel.h: $(OUTPUT)%.bpf.o $(BPFTOOL_BOOTSTRAP)
-diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
-index 47acf6936516..d8288936c912 100644
---- a/tools/bpf/runqslower/Makefile
-+++ b/tools/bpf/runqslower/Makefile
-@@ -62,7 +62,7 @@ $(OUTPUT)/%.skel.h: $(OUTPUT)/%.bpf.o | $(BPFTOOL)
- 	$(QUIET_GEN)$(BPFTOOL) gen skeleton $< > $@
- 
- $(OUTPUT)/%.bpf.o: %.bpf.c $(BPFOBJ) | $(OUTPUT)
--	$(QUIET_GEN)$(CLANG) -g -O2 -target bpf $(INCLUDES)		      \
-+	$(QUIET_GEN)$(CLANG) -g -O2 --target=bpf $(INCLUDES)		      \
- 		 -c $(filter %.c,$^) -o $@ &&				      \
- 	$(LLVM_STRIP) -g $@
- 
-diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-index 0f0aa9b7d7b5..6654b1a35ab3 100644
---- a/tools/build/feature/Makefile
-+++ b/tools/build/feature/Makefile
-@@ -372,7 +372,7 @@ $(OUTPUT)test-libzstd.bin:
- 	$(BUILD) -lzstd
- 
- $(OUTPUT)test-clang-bpf-co-re.bin:
--	$(CLANG) -S -g -target bpf -o - $(patsubst %.bin,%.c,$(@F)) |	\
-+	$(CLANG) -S -g --target=bpf -o - $(patsubst %.bin,%.c,$(@F)) |	\
- 		grep BTF_KIND_VAR
- 
- $(OUTPUT)test-file-handle.bin:
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 28d2c77262be..ade4db05f338 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -332,7 +332,7 @@ $(RESOLVE_BTFIDS): $(HOST_BPFOBJ) | $(HOST_BUILD_DIR)/resolve_btfids	\
- 		OUTPUT=$(HOST_BUILD_DIR)/resolve_btfids/ BPFOBJ=$(HOST_BPFOBJ)
- 
- # Get Clang's default includes on this system, as opposed to those seen by
--# '-target bpf'. This fixes "missing" files on some architectures/distros,
-+# '--target=bpf'. This fixes "missing" files on some architectures/distros,
- # such as asm/byteorder.h, asm/socket.h, asm/sockios.h, sys/cdefs.h etc.
- #
- # Use '-idirafter': Don't interfere with include mechanics except where the
-@@ -373,12 +373,12 @@ $(OUTPUT)/cgroup_getset_retval_hooks.o: cgroup_getset_retval_hooks.h
- # $3 - CFLAGS
- define CLANG_BPF_BUILD_RULE
- 	$(call msg,CLNG-BPF,$(TRUNNER_BINARY),$2)
--	$(Q)$(CLANG) $3 -O2 -target bpf -c $1 -mcpu=v3 -o $2
-+	$(Q)$(CLANG) $3 -O2 --target=bpf -c $1 -mcpu=v3 -o $2
- endef
- # Similar to CLANG_BPF_BUILD_RULE, but with disabled alu32
- define CLANG_NOALU32_BPF_BUILD_RULE
- 	$(call msg,CLNG-BPF,$(TRUNNER_BINARY),$2)
--	$(Q)$(CLANG) $3 -O2 -target bpf -c $1 -mcpu=v2 -o $2
-+	$(Q)$(CLANG) $3 -O2 --target=bpf -c $1 -mcpu=v2 -o $2
- endef
- # Build BPF object using GCC
- define GCC_BPF_BUILD_RULE
-diff --git a/tools/testing/selftests/bpf/gnu/stubs.h b/tools/testing/selftests/bpf/gnu/stubs.h
-index 719225b16626..1c638d9dce1a 100644
---- a/tools/testing/selftests/bpf/gnu/stubs.h
-+++ b/tools/testing/selftests/bpf/gnu/stubs.h
-@@ -1 +1 @@
--/* dummy .h to trick /usr/include/features.h to work with 'clang -target bpf' */
-+/* dummy .h to trick /usr/include/features.h to work with 'clang --target=bpf' */
-diff --git a/tools/testing/selftests/hid/Makefile b/tools/testing/selftests/hid/Makefile
-index 01c0491d64da..2e986cbf1a46 100644
---- a/tools/testing/selftests/hid/Makefile
-+++ b/tools/testing/selftests/hid/Makefile
-@@ -167,7 +167,7 @@ $(RESOLVE_BTFIDS): $(HOST_BPFOBJ) | $(HOST_BUILD_DIR)/resolve_btfids	\
- 		OUTPUT=$(HOST_BUILD_DIR)/resolve_btfids/ BPFOBJ=$(HOST_BPFOBJ)
- 
- # Get Clang's default includes on this system, as opposed to those seen by
--# '-target bpf'. This fixes "missing" files on some architectures/distros,
-+# '--target=bpf'. This fixes "missing" files on some architectures/distros,
- # such as asm/byteorder.h, asm/socket.h, asm/sockios.h, sys/cdefs.h etc.
- #
- # Use '-idirafter': Don't interfere with include mechanics except where the
-@@ -196,12 +196,12 @@ CLANG_CFLAGS = $(CLANG_SYS_INCLUDES) \
- # $3 - CFLAGS
- define CLANG_BPF_BUILD_RULE
- 	$(call msg,CLNG-BPF,$(TRUNNER_BINARY),$2)
--	$(Q)$(CLANG) $3 -O2 -target bpf -c $1 -mcpu=v3 -o $2
-+	$(Q)$(CLANG) $3 -O2 --target=bpf -c $1 -mcpu=v3 -o $2
- endef
- # Similar to CLANG_BPF_BUILD_RULE, but with disabled alu32
- define CLANG_NOALU32_BPF_BUILD_RULE
- 	$(call msg,CLNG-BPF,$(TRUNNER_BINARY),$2)
--	$(Q)$(CLANG) $3 -O2 -target bpf -c $1 -mcpu=v2 -o $2
-+	$(Q)$(CLANG) $3 -O2 --target=bpf -c $1 -mcpu=v2 -o $2
- endef
- # Build BPF object using GCC
- define GCC_BPF_BUILD_RULE
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index c12df57d5539..359389a66935 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -112,7 +112,7 @@ $(MAKE_DIRS):
- 	mkdir -p $@
- 
- # Get Clang's default includes on this system, as opposed to those seen by
--# '-target bpf'. This fixes "missing" files on some architectures/distros,
-+# '--target=bpf'. This fixes "missing" files on some architectures/distros,
- # such as asm/byteorder.h, asm/socket.h, asm/sockios.h, sys/cdefs.h etc.
- #
- # Use '-idirafter': Don't interfere with include mechanics except where the
-@@ -130,7 +130,7 @@ endif
- CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
- 
- $(OUTPUT)/nat6to4.o: nat6to4.c $(BPFOBJ) | $(MAKE_DIRS)
--	$(CLANG) -O2 -target bpf -c $< $(CCINCLUDE) $(CLANG_SYS_INCLUDES) -o $@
-+	$(CLANG) -O2 --target=bpf -c $< $(CCINCLUDE) $(CLANG_SYS_INCLUDES) -o $@
- 
- $(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)		       \
- 	   $(APIDIR)/linux/bpf.h					       \
-diff --git a/tools/testing/selftests/tc-testing/Makefile b/tools/testing/selftests/tc-testing/Makefile
-index cb553eac9f41..3c4b7fa05075 100644
---- a/tools/testing/selftests/tc-testing/Makefile
-+++ b/tools/testing/selftests/tc-testing/Makefile
-@@ -24,7 +24,7 @@ CLANG_FLAGS = -I. -I$(APIDIR) \
- 
- $(OUTPUT)/%.o: %.c
- 	$(CLANG) $(CLANG_FLAGS) \
--		 -O2 -target bpf -emit-llvm -c $< -o - |      \
-+		 -O2 --target=bpf -emit-llvm -c $< -o - |      \
- 	$(LLC) -march=bpf -mcpu=$(CPU) $(LLC_FLAGS) -filetype=obj -o $@
- 
- TEST_PROGS += ./tdc.sh
--- 
-2.41.0.178.g377b9f9a00-goog
-
+> > 
+> >> [   20.065895] CR2: 0000000000000000
+> >> [   20.154060] ---[ end trace 0000000000000000 ]---
+> >> [   20.155519] RIP: 0010:static_key_count+0x0/0x20
+> >> [   20.156932] Code: 04 4c 8b 46 08 49 29 c0 4c 01 c8 4c 89 47 08 89 0e 89 56 04 48 89 46 08 f
+> >> [   20.161367] RSP: 0018:ffffbbb000223dc0 EFLAGS: 00010202
+> >> [   20.162613] RAX: ffffffff85709880 RBX: ffffffffc0079140 RCX: 0000000000000000
+> >> [   20.164262] RDX: ffff9f73c2175700 RSI: 0000000000000000 RDI: 0000000000000000
+> >> [   20.165934] RBP: ffff9f73c2385900 R08: ffffbbb000223d30 R09: ffff9f73ff896000
+> >> [   20.167684] R10: 0000000000001000 R11: 0000000000000000 R12: ffffbbb000223e80
+> >> [   20.169427] R13: 0000000000000000 R14: 0000000000000002 R15: ffff9f73c1cfaa80
+> >> [   20.171109] FS:  00007f1ad82f55c0(0000) GS:ffff9f73fe400000(0000) knlGS:0000000000000000
+> >> [   20.173000] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> >> [   20.174381] CR2: 0000000000000000 CR3: 000000003f954000 CR4: 00000000000006f0
+> >>
+> >> So, what HEAD do You use? May be You have some specific config (I use x86-64 defconfig + vsock/vhost
+> >> related things) ?
+> >>
+> > 
+> > For this series I used net-next:
+> > 	28cfea989d6f55c3d10608eba2a2bae609c5bf3e
+> > 
+> >> Thanks, Arseniy
+> >>
+> > 
+> > As always, thanks for the bug finding! I'll report back when I
+> > reproduce or with questions if I can't.
+> 
+> Thanks!
+> 
+> Thanks, Arseniy
+> 
+> > 
+> > Best,
+> > Bobby
+> > 
+> >>
+> >> On 10.06.2023 03:58, Bobby Eshleman wrote:
+> >>> From: Jiang Wang <jiang.wang@bytedance.com>
+> >>>
+> >>> This patch adds tests for vsock datagram.
+> >>>
+> >>> Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+> >>> Signed-off-by: Jiang Wang <jiang.wang@bytedance.com>
+> >>> ---
+> >>>  tools/testing/vsock/util.c       | 141 ++++++++++++-
+> >>>  tools/testing/vsock/util.h       |   6 +
+> >>>  tools/testing/vsock/vsock_test.c | 432 +++++++++++++++++++++++++++++++++++++++
+> >>>  3 files changed, 578 insertions(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/tools/testing/vsock/util.c b/tools/testing/vsock/util.c
+> >>> index 01b636d3039a..811e70d7cf1e 100644
+> >>> --- a/tools/testing/vsock/util.c
+> >>> +++ b/tools/testing/vsock/util.c
+> >>> @@ -99,7 +99,8 @@ static int vsock_connect(unsigned int cid, unsigned int port, int type)
+> >>>  	int ret;
+> >>>  	int fd;
+> >>>  
+> >>> -	control_expectln("LISTENING");
+> >>> +	if (type != SOCK_DGRAM)
+> >>> +		control_expectln("LISTENING");
+> >>>  
+> >>>  	fd = socket(AF_VSOCK, type, 0);
+> >>>  
+> >>> @@ -130,6 +131,11 @@ int vsock_seqpacket_connect(unsigned int cid, unsigned int port)
+> >>>  	return vsock_connect(cid, port, SOCK_SEQPACKET);
+> >>>  }
+> >>>  
+> >>> +int vsock_dgram_connect(unsigned int cid, unsigned int port)
+> >>> +{
+> >>> +	return vsock_connect(cid, port, SOCK_DGRAM);
+> >>> +}
+> >>> +
+> >>>  /* Listen on <cid, port> and return the first incoming connection.  The remote
+> >>>   * address is stored to clientaddrp.  clientaddrp may be NULL.
+> >>>   */
+> >>> @@ -211,6 +217,34 @@ int vsock_seqpacket_accept(unsigned int cid, unsigned int port,
+> >>>  	return vsock_accept(cid, port, clientaddrp, SOCK_SEQPACKET);
+> >>>  }
+> >>>  
+> >>> +int vsock_dgram_bind(unsigned int cid, unsigned int port)
+> >>> +{
+> >>> +	union {
+> >>> +		struct sockaddr sa;
+> >>> +		struct sockaddr_vm svm;
+> >>> +	} addr = {
+> >>> +		.svm = {
+> >>> +			.svm_family = AF_VSOCK,
+> >>> +			.svm_port = port,
+> >>> +			.svm_cid = cid,
+> >>> +		},
+> >>> +	};
+> >>> +	int fd;
+> >>> +
+> >>> +	fd = socket(AF_VSOCK, SOCK_DGRAM, 0);
+> >>> +	if (fd < 0) {
+> >>> +		perror("socket");
+> >>> +		exit(EXIT_FAILURE);
+> >>> +	}
+> >>> +
+> >>> +	if (bind(fd, &addr.sa, sizeof(addr.svm)) < 0) {
+> >>> +		perror("bind");
+> >>> +		exit(EXIT_FAILURE);
+> >>> +	}
+> >>> +
+> >>> +	return fd;
+> >>> +}
+> >>> +
+> >>>  /* Transmit one byte and check the return value.
+> >>>   *
+> >>>   * expected_ret:
+> >>> @@ -260,6 +294,57 @@ void send_byte(int fd, int expected_ret, int flags)
+> >>>  	}
+> >>>  }
+> >>>  
+> >>> +/* Transmit one byte and check the return value.
+> >>> + *
+> >>> + * expected_ret:
+> >>> + *  <0 Negative errno (for testing errors)
+> >>> + *   0 End-of-file
+> >>> + *   1 Success
+> >>> + */
+> >>> +void sendto_byte(int fd, const struct sockaddr *dest_addr, int len, int expected_ret,
+> >>> +		 int flags)
+> >>> +{
+> >>> +	const uint8_t byte = 'A';
+> >>> +	ssize_t nwritten;
+> >>> +
+> >>> +	timeout_begin(TIMEOUT);
+> >>> +	do {
+> >>> +		nwritten = sendto(fd, &byte, sizeof(byte), flags, dest_addr,
+> >>> +				  len);
+> >>> +		timeout_check("write");
+> >>> +	} while (nwritten < 0 && errno == EINTR);
+> >>> +	timeout_end();
+> >>> +
+> >>> +	if (expected_ret < 0) {
+> >>> +		if (nwritten != -1) {
+> >>> +			fprintf(stderr, "bogus sendto(2) return value %zd\n",
+> >>> +				nwritten);
+> >>> +			exit(EXIT_FAILURE);
+> >>> +		}
+> >>> +		if (errno != -expected_ret) {
+> >>> +			perror("write");
+> >>> +			exit(EXIT_FAILURE);
+> >>> +		}
+> >>> +		return;
+> >>> +	}
+> >>> +
+> >>> +	if (nwritten < 0) {
+> >>> +		perror("write");
+> >>> +		exit(EXIT_FAILURE);
+> >>> +	}
+> >>> +	if (nwritten == 0) {
+> >>> +		if (expected_ret == 0)
+> >>> +			return;
+> >>> +
+> >>> +		fprintf(stderr, "unexpected EOF while sending byte\n");
+> >>> +		exit(EXIT_FAILURE);
+> >>> +	}
+> >>> +	if (nwritten != sizeof(byte)) {
+> >>> +		fprintf(stderr, "bogus sendto(2) return value %zd\n", nwritten);
+> >>> +		exit(EXIT_FAILURE);
+> >>> +	}
+> >>> +}
+> >>> +
+> >>>  /* Receive one byte and check the return value.
+> >>>   *
+> >>>   * expected_ret:
+> >>> @@ -313,6 +398,60 @@ void recv_byte(int fd, int expected_ret, int flags)
+> >>>  	}
+> >>>  }
+> >>>  
+> >>> +/* Receive one byte and check the return value.
+> >>> + *
+> >>> + * expected_ret:
+> >>> + *  <0 Negative errno (for testing errors)
+> >>> + *   0 End-of-file
+> >>> + *   1 Success
+> >>> + */
+> >>> +void recvfrom_byte(int fd, struct sockaddr *src_addr, socklen_t *addrlen,
+> >>> +		   int expected_ret, int flags)
+> >>> +{
+> >>> +	uint8_t byte;
+> >>> +	ssize_t nread;
+> >>> +
+> >>> +	timeout_begin(TIMEOUT);
+> >>> +	do {
+> >>> +		nread = recvfrom(fd, &byte, sizeof(byte), flags, src_addr, addrlen);
+> >>> +		timeout_check("read");
+> >>> +	} while (nread < 0 && errno == EINTR);
+> >>> +	timeout_end();
+> >>> +
+> >>> +	if (expected_ret < 0) {
+> >>> +		if (nread != -1) {
+> >>> +			fprintf(stderr, "bogus recvfrom(2) return value %zd\n",
+> >>> +				nread);
+> >>> +			exit(EXIT_FAILURE);
+> >>> +		}
+> >>> +		if (errno != -expected_ret) {
+> >>> +			perror("read");
+> >>> +			exit(EXIT_FAILURE);
+> >>> +		}
+> >>> +		return;
+> >>> +	}
+> >>> +
+> >>> +	if (nread < 0) {
+> >>> +		perror("read");
+> >>> +		exit(EXIT_FAILURE);
+> >>> +	}
+> >>> +	if (nread == 0) {
+> >>> +		if (expected_ret == 0)
+> >>> +			return;
+> >>> +
+> >>> +		fprintf(stderr, "unexpected EOF while receiving byte\n");
+> >>> +		exit(EXIT_FAILURE);
+> >>> +	}
+> >>> +	if (nread != sizeof(byte)) {
+> >>> +		fprintf(stderr, "bogus recvfrom(2) return value %zd\n", nread);
+> >>> +		exit(EXIT_FAILURE);
+> >>> +	}
+> >>> +	if (byte != 'A') {
+> >>> +		fprintf(stderr, "unexpected byte read %c\n", byte);
+> >>> +		exit(EXIT_FAILURE);
+> >>> +	}
+> >>> +}
+> >>> +
+> >>>  /* Run test cases.  The program terminates if a failure occurs. */
+> >>>  void run_tests(const struct test_case *test_cases,
+> >>>  	       const struct test_opts *opts)
+> >>> diff --git a/tools/testing/vsock/util.h b/tools/testing/vsock/util.h
+> >>> index fb99208a95ea..a69e128d120c 100644
+> >>> --- a/tools/testing/vsock/util.h
+> >>> +++ b/tools/testing/vsock/util.h
+> >>> @@ -37,13 +37,19 @@ void init_signals(void);
+> >>>  unsigned int parse_cid(const char *str);
+> >>>  int vsock_stream_connect(unsigned int cid, unsigned int port);
+> >>>  int vsock_seqpacket_connect(unsigned int cid, unsigned int port);
+> >>> +int vsock_dgram_connect(unsigned int cid, unsigned int port);
+> >>>  int vsock_stream_accept(unsigned int cid, unsigned int port,
+> >>>  			struct sockaddr_vm *clientaddrp);
+> >>>  int vsock_seqpacket_accept(unsigned int cid, unsigned int port,
+> >>>  			   struct sockaddr_vm *clientaddrp);
+> >>> +int vsock_dgram_bind(unsigned int cid, unsigned int port);
+> >>>  void vsock_wait_remote_close(int fd);
+> >>>  void send_byte(int fd, int expected_ret, int flags);
+> >>> +void sendto_byte(int fd, const struct sockaddr *dest_addr, int len, int expected_ret,
+> >>> +		 int flags);
+> >>>  void recv_byte(int fd, int expected_ret, int flags);
+> >>> +void recvfrom_byte(int fd, struct sockaddr *src_addr, socklen_t *addrlen,
+> >>> +		   int expected_ret, int flags);
+> >>>  void run_tests(const struct test_case *test_cases,
+> >>>  	       const struct test_opts *opts);
+> >>>  void list_tests(const struct test_case *test_cases);
+> >>> diff --git a/tools/testing/vsock/vsock_test.c b/tools/testing/vsock/vsock_test.c
+> >>> index ac1bd3ac1533..ded82d39ee5d 100644
+> >>> --- a/tools/testing/vsock/vsock_test.c
+> >>> +++ b/tools/testing/vsock/vsock_test.c
+> >>> @@ -1053,6 +1053,413 @@ static void test_stream_virtio_skb_merge_server(const struct test_opts *opts)
+> >>>  	close(fd);
+> >>>  }
+> >>>  
+> >>> +static void test_dgram_sendto_client(const struct test_opts *opts)
+> >>> +{
+> >>> +	union {
+> >>> +		struct sockaddr sa;
+> >>> +		struct sockaddr_vm svm;
+> >>> +	} addr = {
+> >>> +		.svm = {
+> >>> +			.svm_family = AF_VSOCK,
+> >>> +			.svm_port = 1234,
+> >>> +			.svm_cid = opts->peer_cid,
+> >>> +		},
+> >>> +	};
+> >>> +	int fd;
+> >>> +
+> >>> +	/* Wait for the server to be ready */
+> >>> +	control_expectln("BIND");
+> >>> +
+> >>> +	fd = socket(AF_VSOCK, SOCK_DGRAM, 0);
+> >>> +	if (fd < 0) {
+> >>> +		perror("socket");
+> >>> +		exit(EXIT_FAILURE);
+> >>> +	}
+> >>> +
+> >>> +	sendto_byte(fd, &addr.sa, sizeof(addr.svm), 1, 0);
+> >>> +
+> >>> +	/* Notify the server that the client has finished */
+> >>> +	control_writeln("DONE");
+> >>> +
+> >>> +	close(fd);
+> >>> +}
+> >>> +
+> >>> +static void test_dgram_sendto_server(const struct test_opts *opts)
+> >>> +{
+> >>> +	union {
+> >>> +		struct sockaddr sa;
+> >>> +		struct sockaddr_vm svm;
+> >>> +	} addr = {
+> >>> +		.svm = {
+> >>> +			.svm_family = AF_VSOCK,
+> >>> +			.svm_port = 1234,
+> >>> +			.svm_cid = VMADDR_CID_ANY,
+> >>> +		},
+> >>> +	};
+> >>> +	int len = sizeof(addr.sa);
+> >>> +	int fd;
+> >>> +
+> >>> +	fd = socket(AF_VSOCK, SOCK_DGRAM, 0);
+> >>> +	if (fd < 0) {
+> >>> +		perror("socket");
+> >>> +		exit(EXIT_FAILURE);
+> >>> +	}
+> >>> +
+> >>> +	if (bind(fd, &addr.sa, sizeof(addr.svm)) < 0) {
+> >>> +		perror("bind");
+> >>> +		exit(EXIT_FAILURE);
+> >>> +	}
+> >>> +
+> >>> +	/* Notify the client that the server is ready */
+> >>> +	control_writeln("BIND");
+> >>> +
+> >>> +	recvfrom_byte(fd, &addr.sa, &len, 1, 0);
+> >>> +
+> >>> +	/* Wait for the client to finish */
+> >>> +	control_expectln("DONE");
+> >>> +
+> >>> +	close(fd);
+> >>> +}
+> >>> +
+> >>> +static void test_dgram_connect_client(const struct test_opts *opts)
+> >>> +{
+> >>> +	union {
+> >>> +		struct sockaddr sa;
+> >>> +		struct sockaddr_vm svm;
+> >>> +	} addr = {
+> >>> +		.svm = {
+> >>> +			.svm_family = AF_VSOCK,
+> >>> +			.svm_port = 1234,
+> >>> +			.svm_cid = opts->peer_cid,
+> >>> +		},
+> >>> +	};
+> >>> +	int ret;
+> >>> +	int fd;
+> >>> +
+> >>> +	/* Wait for the server to be ready */
+> >>> +	control_expectln("BIND");
+> >>> +
+> >>> +	fd = socket(AF_VSOCK, SOCK_DGRAM, 0);
+> >>> +	if (fd < 0) {
+> >>> +		perror("bind");
+> >>> +		exit(EXIT_FAILURE);
+> >>> +	}
+> >>> +
+> >>> +	ret = connect(fd, &addr.sa, sizeof(addr.svm));
+> >>> +	if (ret < 0) {
+> >>> +		perror("connect");
+> >>> +		exit(EXIT_FAILURE);
+> >>> +	}
+> >>> +
+> >>> +	send_byte(fd, 1, 0);
+> >>> +
+> >>> +	/* Notify the server that the client has finished */
+> >>> +	control_writeln("DONE");
+> >>> +
+> >>> +	close(fd);
+> >>> +}
+> >>> +
+> >>> +static void test_dgram_connect_server(const struct test_opts *opts)
+> >>> +{
+> >>> +	test_dgram_sendto_server(opts);
+> >>> +}
+> >>> +
+> >>> +static void test_dgram_multiconn_sendto_client(const struct test_opts *opts)
+> >>> +{
+> >>> +	union {
+> >>> +		struct sockaddr sa;
+> >>> +		struct sockaddr_vm svm;
+> >>> +	} addr = {
+> >>> +		.svm = {
+> >>> +			.svm_family = AF_VSOCK,
+> >>> +			.svm_port = 1234,
+> >>> +			.svm_cid = opts->peer_cid,
+> >>> +		},
+> >>> +	};
+> >>> +	int fds[MULTICONN_NFDS];
+> >>> +	int i;
+> >>> +
+> >>> +	/* Wait for the server to be ready */
+> >>> +	control_expectln("BIND");
+> >>> +
+> >>> +	for (i = 0; i < MULTICONN_NFDS; i++) {
+> >>> +		fds[i] = socket(AF_VSOCK, SOCK_DGRAM, 0);
+> >>> +		if (fds[i] < 0) {
+> >>> +			perror("socket");
+> >>> +			exit(EXIT_FAILURE);
+> >>> +		}
+> >>> +	}
+> >>> +
+> >>> +	for (i = 0; i < MULTICONN_NFDS; i++)
+> >>> +		sendto_byte(fds[i], &addr.sa, sizeof(addr.svm), 1, 0);
+> >>> +
+> >>> +	/* Notify the server that the client has finished */
+> >>> +	control_writeln("DONE");
+> >>> +
+> >>> +	for (i = 0; i < MULTICONN_NFDS; i++)
+> >>> +		close(fds[i]);
+> >>> +}
+> >>> +
+> >>> +static void test_dgram_multiconn_sendto_server(const struct test_opts *opts)
+> >>> +{
+> >>> +	union {
+> >>> +		struct sockaddr sa;
+> >>> +		struct sockaddr_vm svm;
+> >>> +	} addr = {
+> >>> +		.svm = {
+> >>> +			.svm_family = AF_VSOCK,
+> >>> +			.svm_port = 1234,
+> >>> +			.svm_cid = VMADDR_CID_ANY,
+> >>> +		},
+> >>> +	};
+> >>> +	int len = sizeof(addr.sa);
+> >>> +	int fd;
+> >>> +	int i;
+> >>> +
+> >>> +	fd = socket(AF_VSOCK, SOCK_DGRAM, 0);
+> >>> +	if (fd < 0) {
+> >>> +		perror("socket");
+> >>> +		exit(EXIT_FAILURE);
+> >>> +	}
+> >>> +
+> >>> +	if (bind(fd, &addr.sa, sizeof(addr.svm)) < 0) {
+> >>> +		perror("bind");
+> >>> +		exit(EXIT_FAILURE);
+> >>> +	}
+> >>> +
+> >>> +	/* Notify the client that the server is ready */
+> >>> +	control_writeln("BIND");
+> >>> +
+> >>> +	for (i = 0; i < MULTICONN_NFDS; i++)
+> >>> +		recvfrom_byte(fd, &addr.sa, &len, 1, 0);
+> >>> +
+> >>> +	/* Wait for the client to finish */
+> >>> +	control_expectln("DONE");
+> >>> +
+> >>> +	close(fd);
+> >>> +}
+> >>> +
+> >>> +static void test_dgram_multiconn_send_client(const struct test_opts *opts)
+> >>> +{
+> >>> +	int fds[MULTICONN_NFDS];
+> >>> +	int i;
+> >>> +
+> >>> +	/* Wait for the server to be ready */
+> >>> +	control_expectln("BIND");
+> >>> +
+> >>> +	for (i = 0; i < MULTICONN_NFDS; i++) {
+> >>> +		fds[i] = vsock_dgram_connect(opts->peer_cid, 1234);
+> >>> +		if (fds[i] < 0) {
+> >>> +			perror("socket");
+> >>> +			exit(EXIT_FAILURE);
+> >>> +		}
+> >>> +	}
+> >>> +
+> >>> +	for (i = 0; i < MULTICONN_NFDS; i++)
+> >>> +		send_byte(fds[i], 1, 0);
+> >>> +
+> >>> +	/* Notify the server that the client has finished */
+> >>> +	control_writeln("DONE");
+> >>> +
+> >>> +	for (i = 0; i < MULTICONN_NFDS; i++)
+> >>> +		close(fds[i]);
+> >>> +}
+> >>> +
+> >>> +static void test_dgram_multiconn_send_server(const struct test_opts *opts)
+> >>> +{
+> >>> +	union {
+> >>> +		struct sockaddr sa;
+> >>> +		struct sockaddr_vm svm;
+> >>> +	} addr = {
+> >>> +		.svm = {
+> >>> +			.svm_family = AF_VSOCK,
+> >>> +			.svm_port = 1234,
+> >>> +			.svm_cid = VMADDR_CID_ANY,
+> >>> +		},
+> >>> +	};
+> >>> +	int fd;
+> >>> +	int i;
+> >>> +
+> >>> +	fd = socket(AF_VSOCK, SOCK_DGRAM, 0);
+> >>> +	if (fd < 0) {
+> >>> +		perror("socket");
+> >>> +		exit(EXIT_FAILURE);
+> >>> +	}
+> >>> +
+> >>> +	if (bind(fd, &addr.sa, sizeof(addr.svm)) < 0) {
+> >>> +		perror("bind");
+> >>> +		exit(EXIT_FAILURE);
+> >>> +	}
+> >>> +
+> >>> +	/* Notify the client that the server is ready */
+> >>> +	control_writeln("BIND");
+> >>> +
+> >>> +	for (i = 0; i < MULTICONN_NFDS; i++)
+> >>> +		recv_byte(fd, 1, 0);
+> >>> +
+> >>> +	/* Wait for the client to finish */
+> >>> +	control_expectln("DONE");
+> >>> +
+> >>> +	close(fd);
+> >>> +}
+> >>> +
+> >>> +static void test_dgram_msg_bounds_client(const struct test_opts *opts)
+> >>> +{
+> >>> +	unsigned long recv_buf_size;
+> >>> +	int page_size;
+> >>> +	int msg_cnt;
+> >>> +	int fd;
+> >>> +
+> >>> +	fd = vsock_dgram_connect(opts->peer_cid, 1234);
+> >>> +	if (fd < 0) {
+> >>> +		perror("connect");
+> >>> +		exit(EXIT_FAILURE);
+> >>> +	}
+> >>> +
+> >>> +	/* Let the server know the client is ready */
+> >>> +	control_writeln("CLNTREADY");
+> >>> +
+> >>> +	msg_cnt = control_readulong();
+> >>> +	recv_buf_size = control_readulong();
+> >>> +
+> >>> +	/* Wait, until receiver sets buffer size. */
+> >>> +	control_expectln("SRVREADY");
+> >>> +
+> >>> +	page_size = getpagesize();
+> >>> +
+> >>> +	for (int i = 0; i < msg_cnt; i++) {
+> >>> +		unsigned long curr_hash;
+> >>> +		ssize_t send_size;
+> >>> +		size_t buf_size;
+> >>> +		void *buf;
+> >>> +
+> >>> +		/* Use "small" buffers and "big" buffers. */
+> >>> +		if (i & 1)
+> >>> +			buf_size = page_size +
+> >>> +					(rand() % (MAX_MSG_SIZE - page_size));
+> >>> +		else
+> >>> +			buf_size = 1 + (rand() % page_size);
+> >>> +
+> >>> +		buf_size = min(buf_size, recv_buf_size);
+> >>> +
+> >>> +		buf = malloc(buf_size);
+> >>> +
+> >>> +		if (!buf) {
+> >>> +			perror("malloc");
+> >>> +			exit(EXIT_FAILURE);
+> >>> +		}
+> >>> +
+> >>> +		memset(buf, rand() & 0xff, buf_size);
+> >>> +		/* Set at least one MSG_EOR + some random. */
+> >>> +
+> >>> +		send_size = send(fd, buf, buf_size, 0);
+> >>> +
+> >>> +		if (send_size < 0) {
+> >>> +			perror("send");
+> >>> +			exit(EXIT_FAILURE);
+> >>> +		}
+> >>> +
+> >>> +		if (send_size != buf_size) {
+> >>> +			fprintf(stderr, "Invalid send size\n");
+> >>> +			exit(EXIT_FAILURE);
+> >>> +		}
+> >>> +
+> >>> +		/* In theory the implementation isn't required to transmit
+> >>> +		 * these packets in order, so we use this SYNC control message
+> >>> +		 * so that server and client coordinate sending and receiving
+> >>> +		 * one packet at a time. The client sends a packet and waits
+> >>> +		 * until it has been received before sending another.
+> >>> +		 */
+> >>> +		control_writeln("PKTSENT");
+> >>> +		control_expectln("PKTRECV");
+> >>> +
+> >>> +		/* Send the server a hash of the packet */
+> >>> +		curr_hash = hash_djb2(buf, buf_size);
+> >>> +		control_writeulong(curr_hash);
+> >>> +		free(buf);
+> >>> +	}
+> >>> +
+> >>> +	control_writeln("SENDDONE");
+> >>> +	close(fd);
+> >>> +}
+> >>> +
+> >>> +static void test_dgram_msg_bounds_server(const struct test_opts *opts)
+> >>> +{
+> >>> +	const unsigned long msg_cnt = 16;
+> >>> +	unsigned long sock_buf_size;
+> >>> +	struct msghdr msg = {0};
+> >>> +	struct iovec iov = {0};
+> >>> +	char buf[MAX_MSG_SIZE];
+> >>> +	socklen_t len;
+> >>> +	int fd;
+> >>> +	int i;
+> >>> +
+> >>> +	fd = vsock_dgram_bind(VMADDR_CID_ANY, 1234);
+> >>> +
+> >>> +	if (fd < 0) {
+> >>> +		perror("bind");
+> >>> +		exit(EXIT_FAILURE);
+> >>> +	}
+> >>> +
+> >>> +	/* Set receive buffer to maximum */
+> >>> +	sock_buf_size = -1;
+> >>> +	if (setsockopt(fd, SOL_SOCKET, SO_RCVBUF,
+> >>> +		       &sock_buf_size, sizeof(sock_buf_size))) {
+> >>> +		perror("setsockopt(SO_RECVBUF)");
+> >>> +		exit(EXIT_FAILURE);
+> >>> +	}
+> >>> +
+> >>> +	/* Retrieve the receive buffer size */
+> >>> +	len = sizeof(sock_buf_size);
+> >>> +	if (getsockopt(fd, SOL_SOCKET, SO_RCVBUF,
+> >>> +		       &sock_buf_size, &len)) {
+> >>> +		perror("getsockopt(SO_RECVBUF)");
+> >>> +		exit(EXIT_FAILURE);
+> >>> +	}
+> >>> +
+> >>> +	/* Client ready to receive parameters */
+> >>> +	control_expectln("CLNTREADY");
+> >>> +
+> >>> +	control_writeulong(msg_cnt);
+> >>> +	control_writeulong(sock_buf_size);
+> >>> +
+> >>> +	/* Ready to receive data. */
+> >>> +	control_writeln("SRVREADY");
+> >>> +
+> >>> +	iov.iov_base = buf;
+> >>> +	iov.iov_len = sizeof(buf);
+> >>> +	msg.msg_iov = &iov;
+> >>> +	msg.msg_iovlen = 1;
+> >>> +
+> >>> +	for (i = 0; i < msg_cnt; i++) {
+> >>> +		unsigned long remote_hash;
+> >>> +		unsigned long curr_hash;
+> >>> +		ssize_t recv_size;
+> >>> +
+> >>> +		control_expectln("PKTSENT");
+> >>> +		recv_size = recvmsg(fd, &msg, 0);
+> >>> +		control_writeln("PKTRECV");
+> >>> +
+> >>> +		if (!recv_size)
+> >>> +			break;
+> >>> +
+> >>> +		if (recv_size < 0) {
+> >>> +			perror("recvmsg");
+> >>> +			exit(EXIT_FAILURE);
+> >>> +		}
+> >>> +
+> >>> +		curr_hash = hash_djb2(msg.msg_iov[0].iov_base, recv_size);
+> >>> +		remote_hash = control_readulong();
+> >>> +
+> >>> +		if (curr_hash != remote_hash) {
+> >>> +			fprintf(stderr, "Message bounds broken\n");
+> >>> +			exit(EXIT_FAILURE);
+> >>> +		}
+> >>> +	}
+> >>> +
+> >>> +	close(fd);
+> >>> +}
+> >>> +
+> >>>  static struct test_case test_cases[] = {
+> >>>  	{
+> >>>  		.name = "SOCK_STREAM connection reset",
+> >>> @@ -1128,6 +1535,31 @@ static struct test_case test_cases[] = {
+> >>>  		.run_client = test_stream_virtio_skb_merge_client,
+> >>>  		.run_server = test_stream_virtio_skb_merge_server,
+> >>>  	},
+> >>> +	{
+> >>> +		.name = "SOCK_DGRAM client sendto",
+> >>> +		.run_client = test_dgram_sendto_client,
+> >>> +		.run_server = test_dgram_sendto_server,
+> >>> +	},
+> >>> +	{
+> >>> +		.name = "SOCK_DGRAM client connect",
+> >>> +		.run_client = test_dgram_connect_client,
+> >>> +		.run_server = test_dgram_connect_server,
+> >>> +	},
+> >>> +	{
+> >>> +		.name = "SOCK_DGRAM multiple connections using sendto",
+> >>> +		.run_client = test_dgram_multiconn_sendto_client,
+> >>> +		.run_server = test_dgram_multiconn_sendto_server,
+> >>> +	},
+> >>> +	{
+> >>> +		.name = "SOCK_DGRAM multiple connections using send",
+> >>> +		.run_client = test_dgram_multiconn_send_client,
+> >>> +		.run_server = test_dgram_multiconn_send_server,
+> >>> +	},
+> >>> +	{
+> >>> +		.name = "SOCK_DGRAM msg bounds",
+> >>> +		.run_client = test_dgram_msg_bounds_client,
+> >>> +		.run_server = test_dgram_msg_bounds_server,
+> >>> +	},
+> >>>  	{},
+> >>>  };
+> >>>  
+> >>>
