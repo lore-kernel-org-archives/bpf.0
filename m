@@ -1,324 +1,455 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0C3411C80
-	for <bpf@vger.kernel.org>; Fri, 23 Jun 2023 20:41:24 +0000 (UTC)
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196A730DA
-	for <bpf@vger.kernel.org>; Fri, 23 Jun 2023 13:40:55 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f883420152so1376332e87.1
-        for <bpf@vger.kernel.org>; Fri, 23 Jun 2023 13:40:54 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 592BB125A0;
+	Fri, 23 Jun 2023 20:46:31 +0000 (UTC)
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240D2269F;
+	Fri, 23 Jun 2023 13:46:09 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-25eb3db3004so581765a91.0;
+        Fri, 23 Jun 2023 13:46:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687552840; x=1690144840;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T9GSl7BGNkipSVlyQ1RnpLvPoBbTZROZPSRrEIltL9g=;
-        b=ICZAqZBjtYjtrhmRk//ZgeV4yfgPJbdoEWNUrxJ6YjMjnOSenLWX7kQmS0x55ZPa/l
-         HWnuL6IDbJepcpKpGUNU1Vgi4skXxgevaHHMvsJD/mkijFlXydVhYIQsXrmHmYI7lxlw
-         A4rwrWHzvmKLpU6Tyzq7NXjsJk+4sl1+pEp7idKhncZlEzVP2a3KUzDQXmr2oIFJkwN7
-         ++DfSsm6TleEEOhDov4hS/Pm4Zez5rTwZcClm/bu19yUrVKC12SHuj2zaT2kdV0Oqlc4
-         3IpSaijX4UqoLIMSJGcr5a5dxfOlfVgl7p3+xJGVJ3NyksJwvsuKDOUwD9sW+vVrGMsN
-         JsMg==
+        d=gmail.com; s=20221208; t=1687553166; x=1690145166;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MqtXAI+GLLnmMoFplI8FBOa7S4md/3B3tS2XXiqiaPc=;
+        b=IWLoPaiByeeVz95pFswuN4iG50HcJHGbYYCRZUwJ48ZZ7+mFKLqj0IlX6r3/sG39D+
+         cw9Qawl/KAuFBSowgsFamwBkHyEWWAzbpsvBtJSesyZjuxieX/+yOmRquRNGA2dgT/Wh
+         TR9Zh+zS14ugiORsm7RDmm4q9/HHLQ9coq2gPZDC+hz+dPCKw8gVdql0O5G21qEXZEPm
+         e8EyIMUQVkkp1Knsn+eWPwCctn63t0YL/mwoduRvF2k1GFU/EOjMdjnaRrvO7wmXph8G
+         481e4/VP6BH2qdFoKTsKwd0NGngd/m0d4OcOOTn8pD2a4zmVHwgF9q8xUDr1fEq1vOOj
+         unjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687552840; x=1690144840;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T9GSl7BGNkipSVlyQ1RnpLvPoBbTZROZPSRrEIltL9g=;
-        b=TkKRKM9gyrrH5VXitLgL0HTX7MMYoYRP2B07r+L+rxyNiCesKMKkJ+lscYUlMjfF64
-         NcxwWXK+yDm/b0qAQ5LmbtMweeQI2U4dVNite2KyyPyeBmM8qlUtJaVjCQTwiL120tAC
-         kB55nAK4e3wndfhJfJHC/7OemKOYUEUuMPopSr4NmmunDhb4w9ajZyvbu4W9Z0+HbT03
-         xOv6XxWqJW2s5j/eVqqMit77g/YAyDqlur+Uneb6ZdlLOzaVsW3jWzDNTSUE0BiIZNrr
-         ZZBuw+uRKNXZZ9UXMe+bCsj1lUw+Zs5B1NZ0lPYb31qfBk05pKfU4UYpDBaRacM+ZJCJ
-         GYtA==
-X-Gm-Message-State: AC+VfDzOQnW+g+OLoszIEDUFnO2k/pMjmeT7c5k7WUJwGmj0TzZKtWiW
-	3dqf4XjJblHTZg5kV3suC53CuMcp3uGOi2sdHuw=
-X-Google-Smtp-Source: ACHHUZ7Qw7J1iHVVFLPnyVEXet3ykGgmah6XHhbXwrdt9ToEhsfd195cRmcGchHo4rz1F1Y/i7upXl4cnCL/zsHZp7g=
-X-Received: by 2002:ac2:5d28:0:b0:4f8:4255:16ca with SMTP id
- i8-20020ac25d28000000b004f8425516camr13339101lfb.38.1687552839658; Fri, 23
- Jun 2023 13:40:39 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687553166; x=1690145166;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MqtXAI+GLLnmMoFplI8FBOa7S4md/3B3tS2XXiqiaPc=;
+        b=ltKBVTtkVcEXApk/BvXvXmApOHPp3spBRupQX4HMO19nwadzPQxKyfYk4ull6RVyUG
+         H6+ZvbYir8bbgq3tGKHIOawpMuvuQ5AwY45DYug+ThiYp9oJ0kK4G1aK+H8EiJfWOdCY
+         xx1lgCXKxtJJvPj2BXpptRRZTs//GvVezyfrvhLRMgidNNWDEkAarpWmh1ic1I52CsQk
+         rlsmdggG7Ai8R9nsKkdOUnwA+fVWUAd0UPYyWeOfbrI1wsph/PV7CsUwmOKR6EhfRfBi
+         4GHSAm/4XYnO5HnuCEQBYiSXfiTpqSrXvZpp3c43rb9pQjbUGBEEIxYO/eoKK8ACmDiG
+         FdUg==
+X-Gm-Message-State: AC+VfDzGjh5BeRF/EZFr3xAJ2E/7TkRe6qG838qObVbxfWMk3kXm6FxS
+	3+crFTzxQkgvtWGJLfPTD7A=
+X-Google-Smtp-Source: ACHHUZ4/Pc655NL2Fp6bHunoF7dUR87TDP+T/gP/n+JQCxoHIkKqbBoVCpZ03aiZjWHUKLYEUoalQw==
+X-Received: by 2002:a17:90a:d583:b0:262:c414:e0af with SMTP id v3-20020a17090ad58300b00262c414e0afmr240306pju.31.1687553166226;
+        Fri, 23 Jun 2023 13:46:06 -0700 (PDT)
+Received: from localhost (ec2-54-67-115-33.us-west-1.compute.amazonaws.com. [54.67.115.33])
+        by smtp.gmail.com with ESMTPSA id 19-20020a17090a1a1300b0023fcece8067sm155310pjk.2.2023.06.23.13.46.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 13:46:05 -0700 (PDT)
+Date: Fri, 23 Jun 2023 02:59:23 +0000
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Stefano Garzarella <sgarzare@redhat.com>
+Cc: Bobby Eshleman <bobby.eshleman@bytedance.com>,
+	linux-hyperv@vger.kernel.org, Stefan Hajnoczi <stefanha@redhat.com>,
+	kvm@vger.kernel.org, "Michael S. Tsirkin" <mst@redhat.com>,
+	VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+	Simon Horman <simon.horman@corigine.com>,
+	virtualization@lists.linux-foundation.org,
+	Eric Dumazet <edumazet@google.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Bryan Tan <bryantan@vmware.com>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Krasnov Arseniy <oxffffaa@gmail.com>,
+	Vishnu Dasa <vdasa@vmware.com>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	"David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH RFC net-next v4 3/8] vsock: support multi-transport
+ datagrams
+Message-ID: <ZJUKi+NtOajbplQg@bullseye>
+References: <20230413-b4-vsock-dgram-v4-0-0cebbb2ae899@bytedance.com>
+ <20230413-b4-vsock-dgram-v4-3-0cebbb2ae899@bytedance.com>
+ <tngyeva5by3aldrhlixajjin2hqmcl6uruvuoed7hyrndlesfd@bbv7aphqye2q>
+ <ZJUIWcgg13F7DNBm@bullseye>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230620083550.690426-1-jolsa@kernel.org> <20230620083550.690426-15-jolsa@kernel.org>
-In-Reply-To: <20230620083550.690426-15-jolsa@kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 23 Jun 2023 13:40:27 -0700
-Message-ID: <CAEf4Bza6=rxq8R3WGyqVf_KT3hX_SEKXZ5usk-QiCTRr=UgU5w@mail.gmail.com>
-Subject: Re: [PATCHv2 bpf-next 14/24] libbpf: Add uprobe multi link support to bpf_program__attach_usdt
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>, 
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@chromium.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZJUIWcgg13F7DNBm@bullseye>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
 	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-	autolearn=ham autolearn_force=no version=3.4.6
+	autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Tue, Jun 20, 2023 at 1:38=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
->
-> Adding support for usdt_manager_attach_usdt to use uprobe_multi
-> link to attach to usdt probes.
->
-> The uprobe_multi support is detected before the usdt program is
-> loaded and its expected_attach_type is set accordingly.
->
-> If uprobe_multi support is detected the usdt_manager_attach_usdt
-> gathers uprobes info and calls bpf_program__attach_uprobe_opts to
-> create all needed uprobes.
->
-> If uprobe_multi support is not detected the old behaviour stays.
->
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  tools/lib/bpf/libbpf.c |  12 ++++-
->  tools/lib/bpf/usdt.c   | 120 ++++++++++++++++++++++++++++++-----------
->  2 files changed, 99 insertions(+), 33 deletions(-)
->
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 3d570898459e..9c7a67c5cbe8 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -363,6 +363,8 @@ enum sec_def_flags {
->         SEC_SLEEPABLE =3D 8,
->         /* BPF program support non-linear XDP buffer */
->         SEC_XDP_FRAGS =3D 16,
-> +       /* Setup proper attach type for usdt probes. */
-> +       SEC_USDT =3D 32,
->  };
->
->  struct bpf_sec_def {
-> @@ -6799,6 +6801,10 @@ static int libbpf_prepare_prog_load(struct bpf_pro=
-gram *prog,
->         if (prog->type =3D=3D BPF_PROG_TYPE_XDP && (def & SEC_XDP_FRAGS))
->                 opts->prog_flags |=3D BPF_F_XDP_HAS_FRAGS;
->
-> +       /* special check for usdt to use uprobe_multi link */
-> +       if ((def & SEC_USDT) && kernel_supports(NULL, FEAT_UPROBE_LINK))
-> +               prog->expected_attach_type =3D BPF_TRACE_UPROBE_MULTI;
+On Fri, Jun 23, 2023 at 02:50:01AM +0000, Bobby Eshleman wrote:
+> On Thu, Jun 22, 2023 at 05:19:08PM +0200, Stefano Garzarella wrote:
+> > On Sat, Jun 10, 2023 at 12:58:30AM +0000, Bobby Eshleman wrote:
+> > > This patch adds support for multi-transport datagrams.
+> > > 
+> > > This includes:
+> > > - Per-packet lookup of transports when using sendto(sockaddr_vm)
+> > > - Selecting H2G or G2H transport using VMADDR_FLAG_TO_HOST and CID in
+> > >  sockaddr_vm
+> > > 
+> > > To preserve backwards compatibility with VMCI, some important changes
+> > > were made. The "transport_dgram" / VSOCK_TRANSPORT_F_DGRAM is changed to
+> > > be used for dgrams iff there is not yet a g2h or h2g transport that has
+> > 
+> > s/iff/if
+> > 
+> > > been registered that can transmit the packet. If there is a g2h/h2g
+> > > transport for that remote address, then that transport will be used and
+> > > not "transport_dgram". This essentially makes "transport_dgram" a
+> > > fallback transport for when h2g/g2h has not yet gone online, which
+> > > appears to be the exact use case for VMCI.
+> > > 
+> > > This design makes sense, because there is no reason that the
+> > > transport_{g2h,h2g} cannot also service datagrams, which makes the role
+> > > of transport_dgram difficult to understand outside of the VMCI context.
+> > > 
+> > > The logic around "transport_dgram" had to be retained to prevent
+> > > breaking VMCI:
+> > > 
+> > > 1) VMCI datagrams appear to function outside of the h2g/g2h
+> > >   paradigm. When the vmci transport becomes online, it registers itself
+> > >   with the DGRAM feature, but not H2G/G2H. Only later when the
+> > >   transport has more information about its environment does it register
+> > >   H2G or G2H. In the case that a datagram socket becomes active
+> > >   after DGRAM registration but before G2H/H2G registration, the
+> > >   "transport_dgram" transport needs to be used.
+> > 
+> > IIRC we did this, because at that time only VMCI supported DGRAM. Now that
+> > there are more transports, maybe DGRAM can follow the h2g/g2h paradigm.
+> > 
+> 
+> Totally makes sense. I'll add the detail above that the prior design was
+> a result of chronology.
+> 
+> > > 
+> > > 2) VMCI seems to require special message be sent by the transport when a
+> > >   datagram socket calls bind(). Under the h2g/g2h model, the transport
+> > >   is selected using the remote_addr which is set by connect(). At
+> > >   bind time there is no remote_addr because often no connect() has been
+> > >   called yet: the transport is null. Therefore, with a null transport
+> > >   there doesn't seem to be any good way for a datagram socket a tell the
+> > >   VMCI transport that it has just had bind() called upon it.
+> > 
+> > @Vishnu, @Bryan do you think we can avoid this in some way?
+> > 
+> > > 
+> > > Only transports with a special datagram fallback use-case such as VMCI
+> > > need to register VSOCK_TRANSPORT_F_DGRAM.
+> > 
+> > Maybe we should rename it in VSOCK_TRANSPORT_F_DGRAM_FALLBACK or
+> > something like that.
+> > 
+> > In any case, we definitely need to update the comment in
+> > include/net/af_vsock.h on top of VSOCK_TRANSPORT_F_DGRAM mentioning
+> > this.
+> > 
+> 
+> Agreed. I'll rename to VSOCK_TRANSPORT_F_DGRAM_FALLBACK, unless we find
+> there is a better way altogether.
+> 
+> > > 
+> > > Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+> > > ---
+> > > drivers/vhost/vsock.c                   |  1 -
+> > > include/linux/virtio_vsock.h            |  2 -
+> > > net/vmw_vsock/af_vsock.c                | 78 +++++++++++++++++++++++++--------
+> > > net/vmw_vsock/hyperv_transport.c        |  6 ---
+> > > net/vmw_vsock/virtio_transport.c        |  1 -
+> > > net/vmw_vsock/virtio_transport_common.c |  7 ---
+> > > net/vmw_vsock/vsock_loopback.c          |  1 -
+> > > 7 files changed, 60 insertions(+), 36 deletions(-)
+> > > 
+> > > diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
+> > > index c8201c070b4b..8f0082da5e70 100644
+> > > --- a/drivers/vhost/vsock.c
+> > > +++ b/drivers/vhost/vsock.c
+> > > @@ -410,7 +410,6 @@ static struct virtio_transport vhost_transport = {
+> > > 		.cancel_pkt               = vhost_transport_cancel_pkt,
+> > > 
+> > > 		.dgram_enqueue            = virtio_transport_dgram_enqueue,
+> > > -		.dgram_bind               = virtio_transport_dgram_bind,
+> > > 		.dgram_allow              = virtio_transport_dgram_allow,
+> > > 		.dgram_get_cid		  = virtio_transport_dgram_get_cid,
+> > > 		.dgram_get_port		  = virtio_transport_dgram_get_port,
+> > > diff --git a/include/linux/virtio_vsock.h b/include/linux/virtio_vsock.h
+> > > index 23521a318cf0..73afa09f4585 100644
+> > > --- a/include/linux/virtio_vsock.h
+> > > +++ b/include/linux/virtio_vsock.h
+> > > @@ -216,8 +216,6 @@ void virtio_transport_notify_buffer_size(struct vsock_sock *vsk, u64 *val);
+> > > u64 virtio_transport_stream_rcvhiwat(struct vsock_sock *vsk);
+> > > bool virtio_transport_stream_is_active(struct vsock_sock *vsk);
+> > > bool virtio_transport_stream_allow(u32 cid, u32 port);
+> > > -int virtio_transport_dgram_bind(struct vsock_sock *vsk,
+> > > -				struct sockaddr_vm *addr);
+> > > bool virtio_transport_dgram_allow(u32 cid, u32 port);
+> > > int virtio_transport_dgram_get_cid(struct sk_buff *skb, unsigned int *cid);
+> > > int virtio_transport_dgram_get_port(struct sk_buff *skb, unsigned int *port);
+> > > diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+> > > index 74358f0b47fa..ef86765f3765 100644
+> > > --- a/net/vmw_vsock/af_vsock.c
+> > > +++ b/net/vmw_vsock/af_vsock.c
+> > > @@ -438,6 +438,18 @@ vsock_connectible_lookup_transport(unsigned int cid, __u8 flags)
+> > > 	return transport;
+> > > }
+> > > 
+> > > +static const struct vsock_transport *
+> > > +vsock_dgram_lookup_transport(unsigned int cid, __u8 flags)
+> > > +{
+> > > +	const struct vsock_transport *transport;
+> > > +
+> > > +	transport = vsock_connectible_lookup_transport(cid, flags);
+> > > +	if (transport)
+> > > +		return transport;
+> > > +
+> > > +	return transport_dgram;
+> > > +}
+> > > +
+> > > /* Assign a transport to a socket and call the .init transport callback.
+> > >  *
+> > >  * Note: for connection oriented socket this must be called when vsk->remote_addr
+> > > @@ -474,7 +486,8 @@ int vsock_assign_transport(struct vsock_sock *vsk, struct vsock_sock *psk)
+> > > 
+> > > 	switch (sk->sk_type) {
+> > > 	case SOCK_DGRAM:
+> > > -		new_transport = transport_dgram;
+> > > +		new_transport = vsock_dgram_lookup_transport(remote_cid,
+> > > +							     remote_flags);
+> > > 		break;
+> > > 	case SOCK_STREAM:
+> > > 	case SOCK_SEQPACKET:
+> > > @@ -691,6 +704,9 @@ static int __vsock_bind_connectible(struct vsock_sock *vsk,
+> > > static int __vsock_bind_dgram(struct vsock_sock *vsk,
+> > > 			      struct sockaddr_vm *addr)
+> > > {
+> > > +	if (!vsk->transport || !vsk->transport->dgram_bind)
+> > > +		return -EINVAL;
+> > > +
+> > > 	return vsk->transport->dgram_bind(vsk, addr);
+> > > }
+> > > 
+> > > @@ -1172,19 +1188,24 @@ static int vsock_dgram_sendmsg(struct socket *sock, struct msghdr *msg,
+> > > 
+> > > 	lock_sock(sk);
+> > > 
+> > > -	transport = vsk->transport;
+> > > -
+> > > -	err = vsock_auto_bind(vsk);
+> > > -	if (err)
+> > > -		goto out;
+> > > -
+> > > -
+> > > 	/* If the provided message contains an address, use that.  Otherwise
+> > > 	 * fall back on the socket's remote handle (if it has been connected).
+> > > 	 */
+> > > 	if (msg->msg_name &&
+> > > 	    vsock_addr_cast(msg->msg_name, msg->msg_namelen,
+> > > 			    &remote_addr) == 0) {
+> > > +		transport = vsock_dgram_lookup_transport(remote_addr->svm_cid,
+> > > +							 remote_addr->svm_flags);
+> > > +		if (!transport) {
+> > > +			err = -EINVAL;
+> > > +			goto out;
+> > > +		}
+> > > +
+> > > +		if (!try_module_get(transport->module)) {
+> > > +			err = -ENODEV;
+> > > +			goto out;
+> > > +		}
+> > > +
+> > > 		/* Ensure this address is of the right type and is a valid
+> > > 		 * destination.
+> > > 		 */
+> > > @@ -1193,11 +1214,27 @@ static int vsock_dgram_sendmsg(struct socket *sock, struct msghdr *msg,
+> > > 			remote_addr->svm_cid = transport->get_local_cid();
+> > > 
+> > 
+> > From here ...
+> > 
+> > > 		if (!vsock_addr_bound(remote_addr)) {
+> > > +			module_put(transport->module);
+> > > +			err = -EINVAL;
+> > > +			goto out;
+> > > +		}
+> > > +
+> > > +		if (!transport->dgram_allow(remote_addr->svm_cid,
+> > > +					    remote_addr->svm_port)) {
+> > > +			module_put(transport->module);
+> > > 			err = -EINVAL;
+> > > 			goto out;
+> > > 		}
+> > > +
+> > > +		err = transport->dgram_enqueue(vsk, remote_addr, msg, len);
+> > 
+> > ... to here, looks like duplicate code, can we get it out of the if block?
+> > 
+> 
+> Yes, I think using something like this:
+> 
+> [...]
+> 	bool module_got = false;
+> 
+> [...]
+> 		if (!try_module_get(transport->module)) {
+> 			err = -ENODEV;
+> 			goto out;
+> 		}
+> 		module_got = true;
+> 
+> [...]
+> 
+> out:
+> 	if (likely(transport && !err && module_got))
 
-this is quite ugly. I think KPROBE programs do not have enforcement
-for expected_attach_type during BPF_PROG_LOAD, so we can set
-BPF_TRACE_UPROBE_MULTI unconditionally, right?
+Actually, just...
 
-> +
->         if ((def & SEC_ATTACH_BTF) && !prog->attach_btf_id) {
->                 int btf_obj_fd =3D 0, btf_type_id =3D 0, err;
->                 const char *attach_name;
-> @@ -6867,7 +6873,6 @@ static int bpf_object_load_prog(struct bpf_object *=
-obj, struct bpf_program *prog
->         if (!insns || !insns_cnt)
->                 return -EINVAL;
->
-> -       load_attr.expected_attach_type =3D prog->expected_attach_type;
->         if (kernel_supports(obj, FEAT_PROG_NAME))
->                 prog_name =3D prog->name;
->         load_attr.attach_prog_fd =3D prog->attach_prog_fd;
-> @@ -6903,6 +6908,9 @@ static int bpf_object_load_prog(struct bpf_object *=
-obj, struct bpf_program *prog
->                 insns_cnt =3D prog->insns_cnt;
->         }
->
-> +       /* allow prog_prepare_load_fn to change expected_attach_type */
-> +       load_attr.expected_attach_type =3D prog->expected_attach_type;
-> +
->         if (obj->gen_loader) {
->                 bpf_gen__prog_load(obj->gen_loader, prog->type, prog->nam=
-e,
->                                    license, insns, insns_cnt, &load_attr,
-> @@ -8703,7 +8711,7 @@ static const struct bpf_sec_def section_defs[] =3D =
-{
->         SEC_DEF("uretprobe.multi.s+",   KPROBE, BPF_TRACE_UPROBE_MULTI, S=
-EC_SLEEPABLE, attach_uprobe_multi),
->         SEC_DEF("ksyscall+",            KPROBE, 0, SEC_NONE, attach_ksysc=
-all),
->         SEC_DEF("kretsyscall+",         KPROBE, 0, SEC_NONE, attach_ksysc=
-all),
-> -       SEC_DEF("usdt+",                KPROBE, 0, SEC_NONE, attach_usdt)=
-,
-> +       SEC_DEF("usdt+",                KPROBE, 0, SEC_USDT, attach_usdt)=
-,
+	if (module_got)
 
-btw, given you are touching USDT stuff, can you please also add
-sleepable USDT (usdt.s+) ?
-
-
->         SEC_DEF("tc",                   SCHED_CLS, 0, SEC_NONE),
->         SEC_DEF("classifier",           SCHED_CLS, 0, SEC_NONE),
->         SEC_DEF("action",               SCHED_ACT, 0, SEC_NONE),
-> diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
-> index f1a141555f08..33f0a2b4cc1c 100644
-> --- a/tools/lib/bpf/usdt.c
-> +++ b/tools/lib/bpf/usdt.c
-> @@ -808,6 +808,16 @@ struct bpf_link_usdt {
->                 long abs_ip;
->                 struct bpf_link *link;
->         } *uprobes;
-> +
-> +       bool has_uprobe_multi;
-> +
-> +       struct {
-> +               char *path;
-> +               unsigned long *offsets;
-> +               unsigned long *ref_ctr_offsets;
-> +               __u64 *cookies;
-
-you shouldn't need to persist this, this can be allocated and freed
-inside usdt_manager_attach_usdt(), you only need the link pointer
-
-
-> +               struct bpf_link *link;
-> +       } uprobe_multi;
->  };
->
->  static int bpf_link_usdt_detach(struct bpf_link *link)
-> @@ -816,19 +826,23 @@ static int bpf_link_usdt_detach(struct bpf_link *li=
-nk)
->         struct usdt_manager *man =3D usdt_link->usdt_man;
->         int i;
->
-> -       for (i =3D 0; i < usdt_link->uprobe_cnt; i++) {
-> -               /* detach underlying uprobe link */
-> -               bpf_link__destroy(usdt_link->uprobes[i].link);
-> -               /* there is no need to update specs map because it will b=
-e
-> -                * unconditionally overwritten on subsequent USDT attache=
-s,
-> -                * but if BPF cookies are not used we need to remove entr=
-y
-> -                * from ip_to_spec_id map, otherwise we'll run into false
-> -                * conflicting IP errors
-> -                */
-> -               if (!man->has_bpf_cookie) {
-> -                       /* not much we can do about errors here */
-> -                       (void)bpf_map_delete_elem(bpf_map__fd(man->ip_to_=
-spec_id_map),
-> -                                                 &usdt_link->uprobes[i].=
-abs_ip);
-> +       if (usdt_link->has_uprobe_multi) {
-> +               bpf_link__destroy(usdt_link->uprobe_multi.link);
-> +       } else {
-> +               for (i =3D 0; i < usdt_link->uprobe_cnt; i++) {
-> +                       /* detach underlying uprobe link */
-> +                       bpf_link__destroy(usdt_link->uprobes[i].link);
-> +                       /* there is no need to update specs map because i=
-t will be
-> +                        * unconditionally overwritten on subsequent USDT=
- attaches,
-> +                        * but if BPF cookies are not used we need to rem=
-ove entry
-> +                        * from ip_to_spec_id map, otherwise we'll run in=
-to false
-> +                        * conflicting IP errors
-> +                        */
-> +                       if (!man->has_bpf_cookie) {
-> +                               /* not much we can do about errors here *=
-/
-> +                               (void)bpf_map_delete_elem(bpf_map__fd(man=
-->ip_to_spec_id_map),
-> +                                                         &usdt_link->upr=
-obes[i].abs_ip);
-> +                       }
->                 }
-
-you can avoid shifting all this by keeping uprobe_cnt to zero
-
-bpf_link__destory(usdt_link->uprobe_multi.link) will work fine for NULL
-
-so just do both clean ups sequentially, knowing that only one of them
-will actually do anything
-
->         }
->
-> @@ -868,9 +882,15 @@ static void bpf_link_usdt_dealloc(struct bpf_link *l=
-ink)
->  {
->         struct bpf_link_usdt *usdt_link =3D container_of(link, struct bpf=
-_link_usdt, link);
->
-> -       free(usdt_link->spec_ids);
-> -       free(usdt_link->uprobes);
-> -       free(usdt_link);
-> +       if (usdt_link->has_uprobe_multi) {
-> +               free(usdt_link->uprobe_multi.offsets);
-> +               free(usdt_link->uprobe_multi.ref_ctr_offsets);
-> +               free(usdt_link->uprobe_multi.cookies);
-> +       } else {
-> +               free(usdt_link->spec_ids);
-> +               free(usdt_link->uprobes);
-> +               free(usdt_link);
-> +       }
-
-similar to the above, just do *all* the clean up unconditionally and
-rely on free() handling NULLs just fine
-
->  }
->
->  static size_t specs_hash_fn(long key, void *ctx)
-> @@ -943,11 +963,13 @@ struct bpf_link *usdt_manager_attach_usdt(struct us=
-dt_manager *man, const struct
->                                           const char *usdt_provider, cons=
-t char *usdt_name,
->                                           __u64 usdt_cookie)
->  {
-> +       LIBBPF_OPTS(bpf_uprobe_multi_opts, opts_multi);
->         int i, fd, err, spec_map_fd, ip_map_fd;
->         LIBBPF_OPTS(bpf_uprobe_opts, opts);
->         struct hashmap *specs_hash =3D NULL;
->         struct bpf_link_usdt *link =3D NULL;
->         struct usdt_target *targets =3D NULL;
-> +       struct bpf_link *uprobe_link;
->         size_t target_cnt;
->         Elf *elf;
->
-> @@ -1003,16 +1025,29 @@ struct bpf_link *usdt_manager_attach_usdt(struct =
-usdt_manager *man, const struct
->         link->usdt_man =3D man;
->         link->link.detach =3D &bpf_link_usdt_detach;
->         link->link.dealloc =3D &bpf_link_usdt_dealloc;
-> +       link->has_uprobe_multi =3D bpf_program__expected_attach_type(prog=
-) =3D=3D BPF_TRACE_UPROBE_MULTI;
-
-just use kernel_supports(), it's cleaner (and result is cached, so
-it's not less efficient)
-
->
-> -       link->uprobes =3D calloc(target_cnt, sizeof(*link->uprobes));
-> -       if (!link->uprobes) {
-> -               err =3D -ENOMEM;
-> -               goto err_out;
-> +       if (link->has_uprobe_multi) {
-> +               link->uprobe_multi.offsets =3D calloc(target_cnt, sizeof(=
-*link->uprobe_multi.offsets));
-> +               link->uprobe_multi.ref_ctr_offsets =3D calloc(target_cnt,=
- sizeof(*link->uprobe_multi.ref_ctr_offsets));
-> +               link->uprobe_multi.cookies =3D calloc(target_cnt, sizeof(=
-*link->uprobe_multi.cookies));
-> +
-> +               if (!link->uprobe_multi.offsets ||
-> +                   !link->uprobe_multi.ref_ctr_offsets ||
-> +                   !link->uprobe_multi.cookies) {
-> +                       err =3D -ENOMEM;
-> +                       goto err_out;
-> +               }
-> +       } else {
-> +               link->uprobes =3D calloc(target_cnt, sizeof(*link->uprobe=
-s));
-> +               if (!link->uprobes) {
-> +                       err =3D -ENOMEM;
-> +                       goto err_out;
-> +               }
->         }
->
-
-[...]
+> 		module_put(transport->module)
+> 
+> > > +		module_put(transport->module);
+> > > 	} else if (sock->state == SS_CONNECTED) {
+> > > 		remote_addr = &vsk->remote_addr;
+> > > +		transport = vsk->transport;
+> > > +
+> > > +		err = vsock_auto_bind(vsk);
+> > > +		if (err)
+> > > +			goto out;
+> > > 
+> > > 		if (remote_addr->svm_cid == VMADDR_CID_ANY)
+> > > 			remote_addr->svm_cid = transport->get_local_cid();
+> > > @@ -1205,23 +1242,23 @@ static int vsock_dgram_sendmsg(struct socket *sock, struct msghdr *msg,
+> > > 		/* XXX Should connect() or this function ensure remote_addr is
+> > > 		 * bound?
+> > > 		 */
+> > > -		if (!vsock_addr_bound(&vsk->remote_addr)) {
+> > > +		if (!vsock_addr_bound(remote_addr)) {
+> > > 			err = -EINVAL;
+> > > 			goto out;
+> > > 		}
+> > > -	} else {
+> > > -		err = -EINVAL;
+> > > -		goto out;
+> > > -	}
+> > > 
+> > > -	if (!transport->dgram_allow(remote_addr->svm_cid,
+> > > -				    remote_addr->svm_port)) {
+> > > +		if (!transport->dgram_allow(remote_addr->svm_cid,
+> > > +					    remote_addr->svm_port)) {
+> > > +			err = -EINVAL;
+> > > +			goto out;
+> > > +		}
+> > > +
+> > > +		err = transport->dgram_enqueue(vsk, remote_addr, msg, len);
+> > > +	} else {
+> > > 		err = -EINVAL;
+> > > 		goto out;
+> > > 	}
+> > > 
+> > > -	err = transport->dgram_enqueue(vsk, remote_addr, msg, len);
+> > > -
+> > > out:
+> > > 	release_sock(sk);
+> > > 	return err;
+> > > @@ -1255,13 +1292,18 @@ static int vsock_dgram_connect(struct socket *sock,
+> > > 	if (err)
+> > > 		goto out;
+> > > 
+> > > +	memcpy(&vsk->remote_addr, remote_addr, sizeof(vsk->remote_addr));
+> > > +
+> > > +	err = vsock_assign_transport(vsk, NULL);
+> > > +	if (err)
+> > > +		goto out;
+> > > +
+> > > 	if (!vsk->transport->dgram_allow(remote_addr->svm_cid,
+> > > 					 remote_addr->svm_port)) {
+> > > 		err = -EINVAL;
+> > > 		goto out;
+> > > 	}
+> > > 
+> > > -	memcpy(&vsk->remote_addr, remote_addr, sizeof(vsk->remote_addr));
+> > > 	sock->state = SS_CONNECTED;
+> > > 
+> > > 	/* sock map disallows redirection of non-TCP sockets with sk_state !=
+> > > diff --git a/net/vmw_vsock/hyperv_transport.c b/net/vmw_vsock/hyperv_transport.c
+> > > index ff6e87e25fa0..c00bc5da769a 100644
+> > > --- a/net/vmw_vsock/hyperv_transport.c
+> > > +++ b/net/vmw_vsock/hyperv_transport.c
+> > > @@ -551,11 +551,6 @@ static void hvs_destruct(struct vsock_sock *vsk)
+> > > 	kfree(hvs);
+> > > }
+> > > 
+> > > -static int hvs_dgram_bind(struct vsock_sock *vsk, struct sockaddr_vm *addr)
+> > > -{
+> > > -	return -EOPNOTSUPP;
+> > > -}
+> > > -
+> > > static int hvs_dgram_get_cid(struct sk_buff *skb, unsigned int *cid)
+> > > {
+> > > 	return -EOPNOTSUPP;
+> > > @@ -841,7 +836,6 @@ static struct vsock_transport hvs_transport = {
+> > > 	.connect                  = hvs_connect,
+> > > 	.shutdown                 = hvs_shutdown,
+> > > 
+> > > -	.dgram_bind               = hvs_dgram_bind,
+> > > 	.dgram_get_cid		  = hvs_dgram_get_cid,
+> > > 	.dgram_get_port		  = hvs_dgram_get_port,
+> > > 	.dgram_get_length	  = hvs_dgram_get_length,
+> > > diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
+> > > index 5763cdf13804..1b7843a7779a 100644
+> > > --- a/net/vmw_vsock/virtio_transport.c
+> > > +++ b/net/vmw_vsock/virtio_transport.c
+> > > @@ -428,7 +428,6 @@ static struct virtio_transport virtio_transport = {
+> > > 		.shutdown                 = virtio_transport_shutdown,
+> > > 		.cancel_pkt               = virtio_transport_cancel_pkt,
+> > > 
+> > > -		.dgram_bind               = virtio_transport_dgram_bind,
+> > > 		.dgram_enqueue            = virtio_transport_dgram_enqueue,
+> > > 		.dgram_allow              = virtio_transport_dgram_allow,
+> > > 		.dgram_get_cid		  = virtio_transport_dgram_get_cid,
+> > > diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+> > > index e6903c719964..d5a3c8efe84b 100644
+> > > --- a/net/vmw_vsock/virtio_transport_common.c
+> > > +++ b/net/vmw_vsock/virtio_transport_common.c
+> > > @@ -790,13 +790,6 @@ bool virtio_transport_stream_allow(u32 cid, u32 port)
+> > > }
+> > > EXPORT_SYMBOL_GPL(virtio_transport_stream_allow);
+> > > 
+> > > -int virtio_transport_dgram_bind(struct vsock_sock *vsk,
+> > > -				struct sockaddr_vm *addr)
+> > > -{
+> > > -	return -EOPNOTSUPP;
+> > > -}
+> > > -EXPORT_SYMBOL_GPL(virtio_transport_dgram_bind);
+> > > -
+> > > int virtio_transport_dgram_get_cid(struct sk_buff *skb, unsigned int *cid)
+> > > {
+> > > 	return -EOPNOTSUPP;
+> > > diff --git a/net/vmw_vsock/vsock_loopback.c b/net/vmw_vsock/vsock_loopback.c
+> > > index 2f3cabc79ee5..e9de45a26fbd 100644
+> > > --- a/net/vmw_vsock/vsock_loopback.c
+> > > +++ b/net/vmw_vsock/vsock_loopback.c
+> > > @@ -61,7 +61,6 @@ static struct virtio_transport loopback_transport = {
+> > > 		.shutdown                 = virtio_transport_shutdown,
+> > > 		.cancel_pkt               = vsock_loopback_cancel_pkt,
+> > > 
+> > > -		.dgram_bind               = virtio_transport_dgram_bind,
+> > > 		.dgram_enqueue            = virtio_transport_dgram_enqueue,
+> > > 		.dgram_allow              = virtio_transport_dgram_allow,
+> > > 		.dgram_get_cid		  = virtio_transport_dgram_get_cid,
+> > > 
+> > > -- 
+> > > 2.30.2
+> > > 
+> > 
+> > The rest LGTM!
+> > 
+> > Stefano
+> 
+> Thanks,
+> Bobby
