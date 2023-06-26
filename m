@@ -1,155 +1,149 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8CC41841
-	for <bpf@vger.kernel.org>; Mon, 26 Jun 2023 09:03:49 +0000 (UTC)
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF534208
-	for <bpf@vger.kernel.org>; Mon, 26 Jun 2023 02:03:42 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4faaaa476a9so1669450e87.2
-        for <bpf@vger.kernel.org>; Mon, 26 Jun 2023 02:03:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1687770220; x=1690362220;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iBtvdyg3zPGmDTEDFgfwW8EkoCJT54ipAPsex1tB6pY=;
-        b=Ch01q1nycQLv4qbgUZej9DL+CNVp2IBIcH15X/TZFlb7e+L8+LJxswcHRRqU3wiHZC
-         auVFwf4j0Us7fJA7XVFSC3sOEdbJWObR7/mF63Qcn4xWnMfzZJK9gtkGvPWvDz6yogGL
-         u/vd87asULKVevsgUzq0tPHtOkIlOX5Fjy2kIDZaWDOs0m7OVioRGMTacF0g/sGjs/L2
-         XgM13Iakqa0Hcnh/IVjWsOy1dCJCBPs6K4IFjP6catJ9m5BCVI0kax5CVcAvLcJumHPY
-         9GWlBXIWFpVtdJWE16W5TzfpJFEQKSSLZszykHNtrY62kcYtoX+JMzjNYVRX8a+Ew6Zk
-         k1vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687770220; x=1690362220;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iBtvdyg3zPGmDTEDFgfwW8EkoCJT54ipAPsex1tB6pY=;
-        b=R9TikMzKQZHPWHnm5xcCNMJSGZt6G5z+r2rUBV7aBNKPUdBUxDYFQJnRR1JVs9k73L
-         zfNoLh8foxj9+Ju99MUE+MWDQ/V5yr6ZrSVZE4wgEU0VuCLUG4nLz1BKIivPJjeKO0YB
-         FVGfv31lynOltQvgNBNQv4XYHze6PW9QbAcCFE1EKHh5grhPg6yTry9p/tFKH5M7+ZPV
-         Riumot2zAZsOqAeXCS35+3T1w1VCS+/zq+CYvkbeqFOBQYz+Ar0XUMqL5EsESgfU2JEd
-         TVvMNx2mHNFoCDr9QztAccqEDENhB9yJfKUfOtFiNH1Jykqo/PF71wpN/9G/YvgnBVSs
-         uJ6A==
-X-Gm-Message-State: AC+VfDz6NsAkWXJUNHohfS47Bc9JlJVhh5kNt/eLvYR1nnccZgNc3g0+
-	GBffOr1eEhZcaEgnmidLn4liqQ==
-X-Google-Smtp-Source: ACHHUZ5w0hp4mnWZXJ8kfFD2rbwHISXlWAk8s9fce2zv3Gv/aCxy6IeBh13DWs26De5D+rjokJ2msg==
-X-Received: by 2002:a19:4353:0:b0:4f9:586b:dba6 with SMTP id m19-20020a194353000000b004f9586bdba6mr8099792lfj.10.1687770220302;
-        Mon, 26 Jun 2023 02:03:40 -0700 (PDT)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id u19-20020a4ad0d3000000b0054fe8b73314sm631887oor.22.2023.06.26.02.03.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 02:03:39 -0700 (PDT)
-From: Matthieu Baerts <matthieu.baerts@tessares.net>
-To: dhowells@redhat.com
-Cc: acme@kernel.org,
-	adrian.hunter@intel.com,
-	alexander.shishkin@linux.intel.com,
-	bpf@vger.kernel.org,
-	davem@davemloft.net,
-	irogers@google.com,
-	jolsa@kernel.org,
-	kuba@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-next@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	mark.rutland@arm.com,
-	mingo@redhat.com,
-	namhyung@kernel.org,
-	netdev@vger.kernel.org,
-	peterz@infradead.org,
-	sfr@canb.auug.org.au,
-	Matthieu Baerts <matthieu.baerts@tessares.net>,
-	Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH net-next] perf trace: fix MSG_SPLICE_PAGES build error
-Date: Mon, 26 Jun 2023 11:02:39 +0200
-Message-Id: <20230626090239.899672-1-matthieu.baerts@tessares.net>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <2947430.1687765706@warthog.procyon.org.uk>
-References: <2947430.1687765706@warthog.procyon.org.uk>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 411D26FA1
+	for <bpf@vger.kernel.org>; Mon, 26 Jun 2023 09:18:03 +0000 (UTC)
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECE210A
+	for <bpf@vger.kernel.org>; Mon, 26 Jun 2023 02:17:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=cvb4frNkseBOVIDTxtJeG40HES00pLaGfdwPvWFWuG0=; b=Vtk5eumYtB7ahg18+1fWS97rpb
+	24ux6CoICpUJdi5hDcEl+rdI6fAmy5BtioDZUIfyjYUjPE/I6DF1ectmQpHuZEwp2amBlwZRTd++Y
+	SBz/m5Lwuau8sWWvNdv5d2buYgSwiyhDM4Am6FT7pYTrE76T4p3OwTWC07l33omJpM37PYKHNiLAF
+	3o9rjCtMBqqcUkFUVkWvkhI4DPwQhGsiKdVBNSH0JbK1uS20rGeSB26aabjCFTfR89sHcwYVFd8WG
+	CORyq+1pxcDlBEQ6YpSaj+ZaqhXVE5GsHyhcHUVQzil0thmw6wCKqjQsAtRny1wpmB1dbNy5cv9h6
+	VqP5JaQw==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1qDhvI-000Jsm-2v; Mon, 26 Jun 2023 10:50:12 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+	by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1qDhvH-000Eim-6b; Mon, 26 Jun 2023 10:50:11 +0200
+Subject: Re: [RFC v2 PATCH bpf-next 0/4] bpf: add percpu stats for bpf_map
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Anton Protopopov <aspsk@isovalent.com>,
+ Alexei Starovoitov <ast@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>
+References: <20230622095330.1023453-1-aspsk@isovalent.com>
+ <d981e123-43a1-4d91-8b52-0097087656b2@iogearbox.net>
+ <CAADnVQ+mdh=Wu0=wmkP+GowoJ1zt6MO1yKk=wuSCAQA=3gkRRg@mail.gmail.com>
+From: Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <1745b10f-8f76-efe7-3ca3-8f1cea0e0112@iogearbox.net>
+Date: Mon, 26 Jun 2023 10:50:09 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2321; i=matthieu.baerts@tessares.net;
- h=from:subject; bh=sxG8xrhdK31/co0Ub/5kGgaE5z4tmRlqcKfVFKr3vdg=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkmVQvPws0wIwv8RrKWRoYg8xng7wy3W2AYbR3U
- Dg5nRJiEmSJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZJlULwAKCRD2t4JPQmmg
- c4Y3D/4pt5+NOQTMEBuLpy0Qs1pmmByxefhcjQqCzSLmUzbXXs1eoijTEp9MEOcp0G4dkiktEmn
- xwITEZDORpziIlAktNX3B/f30qVyONF06Y7+pfGoYbReuL5heqzqWeI0Zv/oOtpP0cgI5dTQiUM
- yKzQ41AIFbNK51cQFwxJuEDwlwblDEmGAR2985PtwOsiJ5PKQT4ESCxEz6EpKU12wL0eSlJBSZj
- 2rrb/+yGn5BOAEREd3Gnp8418+f+TTR/HMcpUEUsEb/+pfnKRI5FO1rRAuSoWK8calMXHHE5Ji2
- HhTUQsDdUqzZOGFvbm+JroUh0vihUnZNKm56RlZcieBm8xXJqs31kngBGzt/yqzau4p0Z6xZy3b
- 0DWPt/1l5JTKMIHymZBiSy5/GLhSk4AB2Y4n+skUSi7rJOda1g3QzkuAti+0E2Bi+9K7AkCiY2A
- icsVVgH8u9e9bv2SQDfmIli2HaM6bVp0J2FNAeREQP/zuy/OWDl9ezgQJDxHFC/5eGOXcovFVJL
- SbGDNlbDqYYZarMGWLi7Gjh18W8fS3WKmdGIBfB1skxrwm1orlpx9adAdLcFr6TQVqsl71xeab2
- u2KH28JxLSkPD7Zy9SNVKyJG9AQpPcICghi5tbOaWYpViXcDT+90hy+2EYei9NRXt2j28YUOus8 BzeysYSKbjZCKIg==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp; fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+In-Reply-To: <CAADnVQ+mdh=Wu0=wmkP+GowoJ1zt6MO1yKk=wuSCAQA=3gkRRg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-	SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-	autolearn_force=no version=3.4.6
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26951/Mon Jun 26 09:29:31 2023)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Our MPTCP CI and Stephen got this error:
+On 6/24/23 2:17 AM, Alexei Starovoitov wrote:
+> On Fri, Jun 23, 2023 at 2:53 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>> On 6/22/23 11:53 AM, Anton Protopopov wrote:
+>>> This series adds a mechanism for maps to populate per-cpu counters of elements
+>>> on insertions/deletions. The sum of these counters can be accessed by a new
+>>> kfunc from a map iterator program.
+>>>
+>>> The following patches are present in the series:
+>>>
+>>>     * Patch 1 adds a generic per-cpu counter to struct bpf_map
+>>>     * Patch 2 utilizes this mechanism for hash-based maps
+>>>     * Patch 3 extends the preloaded map iterator to dump the sum
+>>>     * Patch 4 adds a self-test for the change
+>>>
+>>> The reason for adding this functionality in our case (Cilium) is to get
+>>> signals about how full some heavy-used maps are and what the actual dynamic
+>>> profile of map capacity is. In the case of LRU maps this is impossible to get
+>>> this information anyhow else. See also [1].
+>>>
+>>> This is a v2 for the https://lore.kernel.org/bpf/20230531110511.64612-1-aspsk@isovalent.com/T/#t
+>>> It was rewritten according to previous comments.  I've turned this series into
+>>> an RFC for two reasons:
+>>>
+>>> 1) This patch only works on systems where this_cpu_{inc,dec} is atomic for s64.
+>>> For systems which might write s64 non-atomically this would be required to use
+>>> some locking mechanism to prevent readers from reading trash via the
+>>> bpf_map_sum_elements_counter() kfunc (see patch 1)
+>>>
+>>> 2) In comparison with the v1, we're adding extra instructions per map operation
+>>> (for preallocated maps, as well as for non-preallocated maps). The only
+>>> functionality we're interested at the moment is the number of elements present
+>>> in a map, not a per-cpu statistics. This could be better achieved by using
+>>> the v1 version, which only adds computations for preallocated maps.
+>>>
+>>> So, the question is: won't it be fine to do the changes in the following way:
+>>>
+>>>     * extend the preallocated hash maps to populate percpu batch counters as in v1
+>>>     * add a kfunc as in v2 to get the current sum
+>>>
+>>> This works as
+>>>
+>>>     * nobody at the moment actually requires the per-cpu statistcs
+>>>     * this implementation can be transparently turned into per-cpu statistics, if
+>>>       such a need occurs on practice (the only thing to change would be to
+>>>       re-implement the kfunc and, maybe, add more kfuncs to get per-cpu stats)
+>>>     * the "v1 way" is the least intrusive: it only affects preallocated maps, as
+>>>       other maps already provide the required functionality
+>>>
+>>>     [1] https://lpc.events/event/16/contributions/1368/
+>>>
+>>> v1 -> v2:
+>>> - make the counters generic part of struct bpf_map
+>>> - don't use map_info and /proc/self/fdinfo in favor of a kfunc
+>>
+>> Tbh, I did like v1 approach a bit better. We are trying to bend over backwards just
+>> so that we don't add things to uapi, but in the end we are also adding it to the
+>> maps.debug, etc (yes, it has .debug in the name and all) ...
+> 
+> I think we should keep bending even more backwards to avoid uapi burden.
+> All new features should be non-uapi no matter how many people
+> say "I'll definitely use it".
+> 
+>> or as an extensible bpf_map_info stats extension in case there is some agreement?
+> 
+> I'd rather not.
+> bpf_map_info returns what user space sent to the kernel earlier.
+> stats or anything that user space didn't explicitly give earlier
+> is quite different.
+> Same goes for bpf_prog_info.
+> We only added verified_insns there that doesn't fit the above definition
+> and it was a mistake. After almost 2 years it is still unused
+> and cannot be removed.
 
-    In file included from builtin-trace.c:907:
-    trace/beauty/msg_flags.c: In function 'syscall_arg__scnprintf_msg_flags':
-    trace/beauty/msg_flags.c:28:21: error: 'MSG_SPLICE_PAGES' undeclared (first use in this function)
-       28 |         if (flags & MSG_##n) {           |                     ^~~~
-    trace/beauty/msg_flags.c:50:9: note: in expansion of macro 'P_MSG_FLAG'
-       50 |         P_MSG_FLAG(SPLICE_PAGES);
-          |         ^~~~~~~~~~
-    trace/beauty/msg_flags.c:28:21: note: each undeclared identifier is reported only once for each function it appears in
-       28 |         if (flags & MSG_##n) {           |                     ^~~~
-    trace/beauty/msg_flags.c:50:9: note: in expansion of macro 'P_MSG_FLAG'
-       50 |         P_MSG_FLAG(SPLICE_PAGES);
-          |         ^~~~~~~~~~
+Right, hence my question also on how others observe maps in production to see
+if there are similar use cases and approaches as we have.
 
-The fix is similar to what was done with MSG_FASTOPEN: the new macro is
-defined if it is not defined in the system headers.
+> veristat is parsing non-uapi verifier log.
+> Tooling can live with non-uapi map stats just fine.
 
-Fixes: b848b26c6672 ("net: Kill MSG_SENDPAGE_NOTLAST")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Closes: https://lore.kernel.org/r/20230626112847.2ef3d422@canb.auug.org.au/
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
----
+Sure, that's okay.
 
-Notes:
-    @David: I solved it like that in MPTCP tree. Does it work for you too?
-
-    I guess tools/perf/trace/beauty/include/linux/socket.h file still needs
-    to be updated, not just to add MSG_SPLICE_PAGES but also other
-    modifications done in this file. Maybe best to sync with Arnaldo because
-    he might do it soon during the coming merge window I guess.
-
-Cc: David Howells <dhowells@redhat.com>
-Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
-
- tools/perf/trace/beauty/msg_flags.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/tools/perf/trace/beauty/msg_flags.c b/tools/perf/trace/beauty/msg_flags.c
-index 5cdebd7ece7e..aa9934020232 100644
---- a/tools/perf/trace/beauty/msg_flags.c
-+++ b/tools/perf/trace/beauty/msg_flags.c
-@@ -8,6 +8,9 @@
- #ifndef MSG_WAITFORONE
- #define MSG_WAITFORONE		   0x10000
- #endif
-+#ifndef MSG_SPLICE_PAGES
-+#define MSG_SPLICE_PAGES	0x8000000
-+#endif
- #ifndef MSG_FASTOPEN
- #define MSG_FASTOPEN		0x20000000
- #endif
-
-base-commit: 9ae440b8fdd6772b6c007fa3d3766530a09c9045
--- 
-2.40.1
-
+Thanks,
+Daniel
