@@ -1,101 +1,144 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D1ED46A0;
-	Mon, 26 Jun 2023 08:12:42 +0000 (UTC)
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D63E76;
-	Mon, 26 Jun 2023 01:12:35 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4QqLDc5xCyz4wZr;
-	Mon, 26 Jun 2023 18:12:32 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1687767154;
-	bh=YL4WtG8LHm8HUihCvX1m65X1iguc/Lla+C+qJnkgHSU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=l/0v/jqK+E4RhCKLhMKi2A2cfLf7MEG/IjT47KrFbvNwUcc/ak2DcL4RwaSXDX5HU
-	 32GcpNT4wkfyYrOboPEi/MBWW99W9Hs4wuyupj1wBRh9zSyX1B4QhqA96VXrhyfuG9
-	 wZANibg/LWtdko5+N4iG4gJ8/GrLEK186mgGG4z3akt2rQTtTq5Xw3tUOGoIsuO+Ub
-	 4JIZZmUIHPUjc4KZoHW2y8iin8mA5M4WHvkRIW0+vcWGxPxQOqKrG37PR8lxBH/Mq7
-	 DpOn27+D47aUPU6eNxX6RONJ2cLF8/RpY47ESCplSGpmtbCldGCdPLzG+wWdHUteUZ
-	 tqaKUnDV2rudw==
-Date: Mon, 26 Jun 2023 18:12:31 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: David Howells <dhowells@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland
- <mark.rutland@arm.com>, Alexander Shishkin
- <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, Adrian
- Hunter <adrian.hunter@intel.com>, David Miller <davem@davemloft.net>,
- Networking <netdev@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>,
- linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
- linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: linux-next: build failure after merge of the net-next tree
-Message-ID: <20230626181231.70405c1f@canb.auug.org.au>
-In-Reply-To: <2947430.1687765706@warthog.procyon.org.uk>
-References: <20230626112847.2ef3d422@canb.auug.org.au>
-	<2947430.1687765706@warthog.procyon.org.uk>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7781F46BD
+	for <bpf@vger.kernel.org>; Mon, 26 Jun 2023 08:58:16 +0000 (UTC)
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2742720;
+	Mon, 26 Jun 2023 01:58:14 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-311367a3e12so4213471f8f.2;
+        Mon, 26 Jun 2023 01:58:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687769893; x=1690361893;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VXoqBJ5SjwaazwPupYLAmCHlcx6sG+m6SwqgWeDfHJg=;
+        b=g4dDFsuLrP/kq6wjidgxCVSZBWexLlLfzozRLHF4rlKHxPrUkNxO67SrjoZCrESpdQ
+         aJ2Cmd5YUbLlw8pzUsKV6d7mq6F1Ezl61pbT7nLBjfXhrL7kiOO05uDTYYlz5VKc6TKz
+         MIjAcqUe2Qlu1VdxLUEhJ2h7eT1qJwLnfYQoUR00XBFUGz6TMBWsQ88/JJWSYusRGkB4
+         +nFCOiA2zsix3xJzeq14eqep7tG8m21EwDS4MGMT272sTncmfoSbKv6FAjcrd9TK2hYB
+         cU+gfQIrPje7lhB+A4xggWp9smrQ992zaJaUmEBTjsCfRhJayX+epU8BfX6jsLbdC2VW
+         LPFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687769893; x=1690361893;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VXoqBJ5SjwaazwPupYLAmCHlcx6sG+m6SwqgWeDfHJg=;
+        b=Pq0gZeFyUY01vZnul3B/+kqlL2Wh5giRE0zOYIDTGRECD7ln4T6GhpmOSU6+5GMDj5
+         c4mDkzuP0owIrUqYpW7aereLXnEr2XtmSaw594gxyhaEcsHJxPfzYzy1i8SZWkO+Cxir
+         ZfECj7R+i6voezIuLW44qxA+bWW8Hw9QT5Vmt/ZBLAetGEaWr4A7o/A7NzrFoFzfXrvj
+         kD3oWr7DNrCOLFJMibWOUyadn5d2xnxS4LxWrNM+dHcPjfKFYjjUJ41Mc/qHm/cpUV8n
+         icdikSrt2cxPNmcupsAQeN7SL0EimkMeRDwAjo4OEw4/KiLF1tsxWZqH5qIQ3IxRLBJw
+         2hDA==
+X-Gm-Message-State: AC+VfDxxo4fZJCRgJN7JdEacDNpZG4VKByvMYiswYQGNQIaZWsGBPFJH
+	avvj30hI5NwR/H2sssbxGpc=
+X-Google-Smtp-Source: ACHHUZ5Amc/Osho99Kkutqafky4CNCXZK+MTntk6OuGOjVXPalxm7R230LqvZchQ4XpX7VlwKr3csQ==
+X-Received: by 2002:a5d:480c:0:b0:309:3e77:6cac with SMTP id l12-20020a5d480c000000b003093e776cacmr24739369wrq.0.1687769893315;
+        Mon, 26 Jun 2023 01:58:13 -0700 (PDT)
+Received: from ip-172-31-22-112.eu-west-1.compute.internal (ec2-34-242-96-229.eu-west-1.compute.amazonaws.com. [34.242.96.229])
+        by smtp.gmail.com with ESMTPSA id h10-20020a5d504a000000b00313e8dc7facsm4883533wrt.116.2023.06.26.01.58.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 01:58:13 -0700 (PDT)
+From: Puranjay Mohan <puranjay12@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	catalin.marinas@arm.com,
+	mark.rutland@arm.com,
+	bpf@vger.kernel.org,
+	kpsingh@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Cc: puranjay12@gmail.com
+Subject: [PATCH bpf-next v4 1/3] bpf: make bpf_prog_pack allocator portable
+Date: Mon, 26 Jun 2023 08:58:09 +0000
+Message-Id: <20230626085811.3192402-2-puranjay12@gmail.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230626085811.3192402-1-puranjay12@gmail.com>
+References: <20230626085811.3192402-1-puranjay12@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1Ge+Wr0ku4FcBxMax3jOKWi";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-	autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+	FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+	T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
---Sig_/1Ge+Wr0ku4FcBxMax3jOKWi
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The bpf_prog_pack allocator currently uses module_alloc() and
+module_memfree() to allocate and free memory. This is not portable
+because different architectures use different methods for allocating
+memory for BPF programs. Like ARM64 uses vmalloc()/vfree().
 
-Hi David,
+Use bpf_jit_alloc_exec() and bpf_jit_free_exec() for memory management
+in bpf_prog_pack allocator. Other architectures can override these with
+their implementation and will be able to use bpf_prog_pack directly.
 
-On Mon, 26 Jun 2023 08:48:26 +0100 David Howells <dhowells@redhat.com> wrot=
-e:
->
-> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->=20
-> > After merging the net-next tree, today's linux-next build (native perf)
-> > failed like this:
-> >=20
-> > In file included from builtin-trace.c:907:
-> > trace/beauty/msg_flags.c: In function 'syscall_arg__scnprintf_msg_flags=
-':
-> > trace/beauty/msg_flags.c:28:21: error: 'MSG_SPLICE_PAGES' undeclared (f=
-irst use in this function) =20
->=20
-> I tried applying the attached patch, but it doesn't make any difference.
+Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+Acked-by: Song Liu <song@kernel.org>
+---
+Changes in V3 => v4
+- No changes
 
-I wonder if it is using the system headers?  Or depends on "make headers-in=
-stall"?
+Changes in V2 => V3:
+- No changes
 
---=20
-Cheers,
-Stephen Rothwell
+Changes in v1 => v2:
+- No code changes.
+- Added Acked-by: Song Liu <song@kernel.org>
 
---Sig_/1Ge+Wr0ku4FcBxMax3jOKWi
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+ kernel/bpf/core.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index dc85240a0134..599136cb5096 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -860,7 +860,7 @@ static struct bpf_prog_pack *alloc_new_pack(bpf_jit_fill_hole_t bpf_fill_ill_ins
+ 		       GFP_KERNEL);
+ 	if (!pack)
+ 		return NULL;
+-	pack->ptr = module_alloc(BPF_PROG_PACK_SIZE);
++	pack->ptr = bpf_jit_alloc_exec(BPF_PROG_PACK_SIZE);
+ 	if (!pack->ptr) {
+ 		kfree(pack);
+ 		return NULL;
+@@ -884,7 +884,7 @@ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insns)
+ 	mutex_lock(&pack_mutex);
+ 	if (size > BPF_PROG_PACK_SIZE) {
+ 		size = round_up(size, PAGE_SIZE);
+-		ptr = module_alloc(size);
++		ptr = bpf_jit_alloc_exec(size);
+ 		if (ptr) {
+ 			bpf_fill_ill_insns(ptr, size);
+ 			set_vm_flush_reset_perms(ptr);
+@@ -922,7 +922,7 @@ void bpf_prog_pack_free(struct bpf_binary_header *hdr)
+ 
+ 	mutex_lock(&pack_mutex);
+ 	if (hdr->size > BPF_PROG_PACK_SIZE) {
+-		module_memfree(hdr);
++		bpf_jit_free_exec(hdr);
+ 		goto out;
+ 	}
+ 
+@@ -946,7 +946,7 @@ void bpf_prog_pack_free(struct bpf_binary_header *hdr)
+ 	if (bitmap_find_next_zero_area(pack->bitmap, BPF_PROG_CHUNK_COUNT, 0,
+ 				       BPF_PROG_CHUNK_COUNT, 0) == 0) {
+ 		list_del(&pack->list);
+-		module_memfree(pack->ptr);
++		bpf_jit_free_exec(pack->ptr);
+ 		kfree(pack);
+ 	}
+ out:
+-- 
+2.40.1
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSZSG8ACgkQAVBC80lX
-0Gxg/ggAkTZ+/82QjJe4wJrDgQ+zyJhq4vhN3TFH56b9I64FB9blMUZicISKfQte
-O/y63r6wPVD5Tsjc8v81egJO+i4/jXd/jp4i+ce7xSNDk0uSIjeRoXr8wMD3R793
-Z0925rEhClPbyGwjhNZulvAOEcNZOyN/2A8z+zFSN/3ie6bTNxWNrVXkN1P25RTd
-FAQYiT+YtY5taSmAnmO+O7ckJl69o3K8xUPct4a0oeEWxgNnjrXfKlhAUyFZzLzv
-TjYK7Vk3KfGKJ2rGrLEw2RlgaIMMJ5/3NupwFqbpa6UMHtyMfv+5Z2EzHVs8BqFJ
-G9IHURBU29V9G16Lrjo2uPr0UBOIaw==
-=IP/A
------END PGP SIGNATURE-----
-
---Sig_/1Ge+Wr0ku4FcBxMax3jOKWi--
