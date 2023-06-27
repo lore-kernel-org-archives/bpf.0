@@ -1,168 +1,97 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D161713064;
-	Tue, 27 Jun 2023 17:25:19 +0000 (UTC)
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2A326BF;
-	Tue, 27 Jun 2023 10:25:17 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-666edfc50deso66937b3a.0;
-        Tue, 27 Jun 2023 10:25:17 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C6E01990D
+	for <bpf@vger.kernel.org>; Tue, 27 Jun 2023 18:10:44 +0000 (UTC)
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A9C2D53
+	for <bpf@vger.kernel.org>; Tue, 27 Jun 2023 11:10:42 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-67e3c6c4624so453085b3a.3
+        for <bpf@vger.kernel.org>; Tue, 27 Jun 2023 11:10:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687886717; x=1690478717;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tAy3BdEspJlPeDmEFZs9sE+/cUDTXl7LmDXHAzonOMU=;
-        b=sa7cziA981RYM/ui/S3lmxnf2XasU2ILz8wt9ERWgRTOfDc8m10TTwaKH7tB67XbCH
-         7rsYn6l2vUVOJI8DO/5zIUA7bjt1BkIBwIlVBWeHDk1kLA4bo5oFXyYJZvhzsuFPwVSy
-         oXOGIeJqge+hH5kCXtLNrR+10jqJiDozwyrh9KOvi6GzHFisaFpXGzPPIB3USUZKV6vF
-         WlMT0Hdi5TTsTBtBwE5sUqvglm6w6aDskYJN9dYEAUld5giNWs9PpI97ONnvUQc4ZPu8
-         yeB5G3lkyNtOSOCv5DMaGCx/cINWeGtp4fD2IDF2Y5+K792vy+cAl7n5TOfyTH/rM3VR
-         7rMw==
+        d=google.com; s=20221208; t=1687889441; x=1690481441;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=2Xopb4bdl/ldlCNcPlk1SBW3U6rHNjvHDq0o2AtiFJI=;
+        b=LdeB8wUNlVIVV2gUpS55NLo9+v10Wb9Y0ceqjwzkT1yVBKxdnlhfogJAz+yevuVglS
+         p2qYBwVh+8EtpHmOCT/vL8Oi1vglidxQ8F07mByDY+YTsQn18CZ7JM0m792WbQGeEiPh
+         +5eiou41/39HNI9eSkKwLKKP8IGe5gRDTjOu7COs0HebGo00V1OePY87Xe/fIW5GCPVv
+         B0MPWAWG7lxqKViXNWxhlF6ydOEX0jNxAFqauCpLipTVbm5Nu7Dvi4WXaaRwYmFWFade
+         7qaZ2xOogFo1gAzQeuXNuf7Qk00QnDArWjBqzcEAiH7Z2G1BoPO7OaX7Bp8xoSxssXjr
+         6bsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687886717; x=1690478717;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tAy3BdEspJlPeDmEFZs9sE+/cUDTXl7LmDXHAzonOMU=;
-        b=jw+S+2djQ9gPIUj1MeRTCtypl/t7/1Bkj+Y81iN95L1z5H8j1rsTEB48/TBTmzTSUW
-         qD+V64OB+d6VIac1Tah9vPJL+e+/c2v8xS3OdECwH8h3rRueFpXaiQ5TOk8xGMkpWOJz
-         u2Us4q8Y2xHtuLRDBwdfvW2KUxN+VkvdPisPVrUZbcWjb7mFUREXVJBR+wYzyt2UbYlL
-         sEEaoJIvYmDiD3FzcIgTwuyk5ChUzcQQzB9JVSaJNoYsosE15TOjru8SAGSDp8XeSyw1
-         dgoh3x6gyAod8lgcySX0uwVtOErG7HdAGflJVMo8PJWCD6uQX8ut/TRLC4v3OmlA80vu
-         odgQ==
-X-Gm-Message-State: AC+VfDzg7TzdDWmTNwYWdH9w235os9CsDjWd1bUqWq9cpZVALzBl1aEG
-	kwSjPMGeFvOq0j8Hfqc98Bg=
-X-Google-Smtp-Source: ACHHUZ7obCo50dBOrmWezxMqSsQT++fExXVdK6D/0djOUDPgv8ohuvHhxmDfmFkzxBZ//Y/o/SZ8ZQ==
-X-Received: by 2002:a05:6a00:b4e:b0:67f:d5e7:4604 with SMTP id p14-20020a056a000b4e00b0067fd5e74604mr744066pfo.13.1687886716976;
-        Tue, 27 Jun 2023 10:25:16 -0700 (PDT)
-Received: from localhost (ec2-54-67-115-33.us-west-1.compute.amazonaws.com. [54.67.115.33])
-        by smtp.gmail.com with ESMTPSA id x21-20020aa793b5000000b00673e652985esm4265097pff.44.2023.06.27.10.25.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 10:25:16 -0700 (PDT)
-Date: Tue, 27 Jun 2023 01:19:43 +0000
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: linux-hyperv@vger.kernel.org,
-	Bobby Eshleman <bobby.eshleman@bytedance.com>, kvm@vger.kernel.org,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-	Simon Horman <simon.horman@corigine.com>,
-	Stefan Hajnoczi <stefanha@redhat.com>,
-	virtualization@lists.linux-foundation.org,
-	Eric Dumazet <edumazet@google.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Bryan Tan <bryantan@vmware.com>, Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Arseniy Krasnov <oxffffaa@gmail.com>,
-	Vishnu Dasa <vdasa@vmware.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	"David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH RFC net-next v4 6/8] virtio/vsock: support dgrams
-Message-ID: <ZJo5L+IM1P3kFAhe@bullseye>
-References: <20230413-b4-vsock-dgram-v4-0-0cebbb2ae899@bytedance.com>
- <20230413-b4-vsock-dgram-v4-6-0cebbb2ae899@bytedance.com>
- <92b3a6df-ded3-6470-39d1-fe0939441abc@gmail.com>
- <ppx75eomyyb354knfkwbwin3il2ot7hf5cefwrt6ztpcbc3pps@q736cq5v4bdh>
- <ZJUho6NbpCgGatap@bullseye>
- <d53tgo4igvz34pycgs36xikjosrncejlzuvh47bszk55milq52@whcyextsxfka>
+        d=1e100.net; s=20221208; t=1687889441; x=1690481441;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2Xopb4bdl/ldlCNcPlk1SBW3U6rHNjvHDq0o2AtiFJI=;
+        b=GIx7t4QH9x8NXOIMSWEu1tkKf1QRzNLaIJbQXzY4unRAjUDjLgAg/WfRLHR6rIzoAe
+         MGuBvEuiNYohIPGESXXkQAx58bK7p/vuaGsi/88/B4AMxFAiB7++WBgz8WybyfVGVAGR
+         nmUvhKAFi56qTgFUzuCfi4bM0v88Lb+Jd26gocTYu0I5jf9fsl/cuHbp93gt4vDrmkMy
+         R1USlmJAw85XBUOyvoqPltGYxbHUxpluebGYsG9JOFOMEPgkuxlpQNYxiQJzyUo3FCUq
+         xiSz1fmJaN7OBeXuWhxxX8ghPU7lc/JwiBBMpINOAxf/L9K6bWXkISf+Kh/63R5qZQBa
+         ClIg==
+X-Gm-Message-State: AC+VfDxPM4+GCEc9crprjeklFPddj8Hoij8Td5WKZR9uvQ1vg68829TU
+	tydBekB49FAlV5ppZ73AgVuzZ0/FZxho
+X-Google-Smtp-Source: ACHHUZ6mT7X33BJiMUALcShfZoreYBIp2S3yS1Fc11hkbkfbrYxBsrXZVfgvcRxWjNGVzhcAy+ARaJSHoftN
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:a518:9a69:cf62:b4d9])
+ (user=irogers job=sendgmr) by 2002:a05:6a00:2d9d:b0:668:6eed:7c1f with SMTP
+ id fb29-20020a056a002d9d00b006686eed7c1fmr7849031pfb.3.1687889441460; Tue, 27
+ Jun 2023 11:10:41 -0700 (PDT)
+Date: Tue, 27 Jun 2023 11:10:17 -0700
+Message-Id: <20230627181030.95608-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d53tgo4igvz34pycgs36xikjosrncejlzuvh47bszk55milq52@whcyextsxfka>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Subject: [PATCH v2 00/13] parse-events clean up
+From: Ian Rogers <irogers@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+	SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Mon, Jun 26, 2023 at 05:03:15PM +0200, Stefano Garzarella wrote:
-> On Fri, Jun 23, 2023 at 04:37:55AM +0000, Bobby Eshleman wrote:
-> > On Thu, Jun 22, 2023 at 06:09:12PM +0200, Stefano Garzarella wrote:
-> > > On Sun, Jun 11, 2023 at 11:49:02PM +0300, Arseniy Krasnov wrote:
-> > > > Hello Bobby!
-> > > >
-> > > > On 10.06.2023 03:58, Bobby Eshleman wrote:
-> > > > > This commit adds support for datagrams over virtio/vsock.
-> > > > >
-> > > > > Message boundaries are preserved on a per-skb and per-vq entry basis.
-> > > >
-> > > > I'm a little bit confused about the following case: let vhost sends 4097 bytes
-> > > > datagram to the guest. Guest uses 4096 RX buffers in it's virtio queue, each
-> > > > buffer has attached empty skb to it. Vhost places first 4096 bytes to the first
-> > > > buffer of guests RX queue, and 1 last byte to the second buffer. Now IIUC guest
-> > > > has two skb in it rx queue, and user in guest wants to read data - does it read
-> > > > 4097 bytes, while guest has two skb - 4096 bytes and 1 bytes? In seqpacket there is
-> > > > special marker in header which shows where message ends, and how it works here?
-> > > 
-> > > I think the main difference is that DGRAM is not connection-oriented, so
-> > > we don't have a stream and we can't split the packet into 2 (maybe we
-> > > could, but we have no guarantee that the second one for example will be
-> > > not discarded because there is no space).
-> > > 
-> > > So I think it is acceptable as a restriction to keep it simple.
-> > > 
-> > > My only doubt is, should we make the RX buffer size configurable,
-> > > instead of always using 4k?
-> > > 
-> > I think that is a really good idea. What mechanism do you imagine?
-> 
-> Some parameter in sysfs?
-> 
+Remove some tokens the lexer never produces. Ensure abort paths set an
+error. Previously scanning all PMUs meant bad events could fail with
+an invalid token, detect this at the point parsing for a PMU fails and
+add error strings. Try to be consistent in using YYNOMEM for memory
+failures and YYABORT for bad input.
 
-I comment more on this below.
+v2. Fix build error when building without libtraceevent.
 
-> > 
-> > For sendmsg() with buflen > VQ_BUF_SIZE, I think I'd like -ENOBUFS
-> 
-> For the guest it should be easy since it allocates the buffers, but for
-> the host?
-> 
-> Maybe we should add a field in the configuration space that reports some
-> sort of MTU.
-> 
-> Something in addition to what Laura had proposed here:
-> https://markmail.org/message/ymhz7wllutdxji3e
-> 
+Ian Rogers (13):
+  perf parse-events: Remove unused PE_PMU_EVENT_FAKE token
+  perf parse-events: Remove unused PE_KERNEL_PMU_EVENT token
+  perf parse-events: Remove two unused tokens
+  perf parse-events: Add more comments to parse_events_state
+  perf parse-events: Avoid regrouped warning for wild card events
+  perf parse-event: Add memory allocation test for name terms
+  perf parse-events: Separate YYABORT and YYNOMEM cases
+  perf parse-events: Move instances of YYABORT to YYNOMEM
+  perf parse-events: Separate ENOMEM memory handling
+  perf parse-events: Additional error reporting
+  perf parse-events: Populate error column for BPF/tracepoint events
+  perf parse-events: Improve location for add pmu
+  perf parse-events: Remove ABORT_ON
 
-That sounds good to me.
+ tools/perf/tests/bpf.c         |   2 +-
+ tools/perf/util/parse-events.c |  98 +++++----
+ tools/perf/util/parse-events.h |  20 +-
+ tools/perf/util/parse-events.y | 351 +++++++++++++++++----------------
+ 4 files changed, 258 insertions(+), 213 deletions(-)
 
-IIUC vhost exposes the limit via the configuration space, and the guest
-can configure the RX buffer size up to that limit via sysfs?
+-- 
+2.41.0.162.gfafddb0af9-goog
 
-> > returned even though it is uncharacteristic of Linux sockets.
-> > Alternatively, silently dropping is okay... but seems needlessly
-> > unhelpful.
-> 
-> UDP takes advantage of IP fragmentation, right?
-> But what happens if a fragment is lost?
-> 
-> We should try to behave in a similar way.
-> 
-
-AFAICT in UDP the sending socket will see EHOSTUNREACH on its error
-queue and the packet will be dropped.
-
-For more details:
-- the IP defragmenter will emit an ICMP_TIME_EXCEEDED from ip_expire()
-  if the fragment queue is not completed within time.
-- Upon seeing ICMP_TIME_EXCEEDED, the sending stack will then add
-  EHOSTUNREACH to the socket's error queue, as seen in __udp4_lib_err().
-
-Given some updated man pages I think enqueuing EHOSTUNREACH is okay for
-vsock too. This also reserves ENOBUFS/ENOMEM only for shortage on local
-buffers / mem.
-
-What do you think?
-
-Thanks,
-Bobby
