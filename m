@@ -1,246 +1,285 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB3FC110B
-	for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 18:32:20 +0000 (UTC)
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823C31FCB
-	for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 11:32:18 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1b84c7a26c9so1112445ad.0
-        for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 11:32:18 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 985BAA923
+	for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 18:49:41 +0000 (UTC)
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3133F3AB5
+	for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 11:49:39 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-55b22f82ac8so916931a12.1
+        for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 11:49:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687977138; x=1690569138;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=H5dRF2ngGvran1+nvkZlG3MKu7frym6gfaq2LVMIlec=;
-        b=w5mEujA1wnu0hxpBvWuFNNlhZoJMnVw2kYrPbCWttF/E1Mzb9EpE7wceiaI19FDvCL
-         s4IYASYy1q3x1y5fYCkk2i4Q47UIltBevIQabLw+eGIIKQAJ+O8TaaSQwBKOUPO+SP2E
-         q0BtFn5wLb64saQy21KjOalZ1iVkxJLIMPzHUCXuirYeFkBxCE6lSj83ZcZVW9uLgeB9
-         D5b2jRQKvkjeCA6bgQJ/Y5FcWSViiBMsB2AbI5v4sPHfA//rc6h8sw3Drsxjr+NZKdOK
-         rzgqY+sC7FsK34xO96WH3L8VoVmVN+6blfQPGvzFK/iqpBpQbr+vU3THiX5x663W6amn
-         8Cuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687977138; x=1690569138;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1687978178; x=1690570178;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=H5dRF2ngGvran1+nvkZlG3MKu7frym6gfaq2LVMIlec=;
-        b=ZsWdvlprjqlcrwGzgckXe/iiRLLbZlrbO7LHPo6UHHNQ+2RRKlE5KyLecoWzzHPs3z
-         u9avc3jfw4a7D9lm9CXT5++gyN+CzlE22sViRFwM6FA66VCA8IEithack2WWHZxEZrO3
-         KlDBafeBEWmQwikQaQFBtcpszJPDNuLKjWr9EHsKce9uDLRBkkvGoHHRKHGn6oCEYAUW
-         Y2geDaCR2B7YfQdXi6wxwwAlQa/1yOcpUOTnYLf7+avvDcZ4Y/l0S/DqU8uCDVXA21jb
-         4KoprDEHTmrOeXE6Vfx0zn5yEOfc69GFYnf7LauH57sWj1EDNmQDb3Ffd70L3SUvB3fT
-         4PEg==
-X-Gm-Message-State: AC+VfDws9xj/SwxYwoQxCIMIuqEb42V5Y7a4T36bsCwjIzfxkerb+rIB
-	nHDaGxFWKq2ZMncFNlvvY7cs7A0DcZELcIf878eMrm42q1MdsvjCTwNXZsjJXiVEJSdFwKI8pID
-	4R0yblacqWbums5tqDsbjRL7FCd7CPHX9Rcc4v3xgXLxEgaSKNw==
-X-Google-Smtp-Source: ACHHUZ6zaeSfeCi91SbG53LBJMFtkGRI6rH5yZVDH+rt0JJON+lWSxIifM5rsPGH36RbvqmLb+W5iIg=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a17:902:ef96:b0:1b0:46ae:ff83 with SMTP id
- iz22-20020a170902ef9600b001b046aeff83mr368532plb.1.1687977137868; Wed, 28 Jun
- 2023 11:32:17 -0700 (PDT)
-Date: Wed, 28 Jun 2023 11:32:16 -0700
+        bh=KgaN56lEm0ZmpqNHWkSOtd80x9mkubEd8uoaFEqBMgs=;
+        b=bFxxvi0NVv6rMtyYu10FMUz8qfbPjlLsR52jO6dscEReVBu0cHa9NHSVZMYpiAl3hL
+         uULfGznVRWlMq/329brqNqXHhsOyoKW+ro8eFEUHIU11Z/BwJ2mhxUjbKrzBJKXnaqeX
+         VEMhwUczUiIwvDohMnwisAtbxVRJYIrkLlMV7/tbK9Y/wwxIHZBo/JlLTYk2bD2kUH4l
+         CEUVPt7uKuFBekT/NewzmPw/zef2YPscEElJqst9ZADiFV0zEPuFKYWGesiC3ht1DEkf
+         Lj6PWndVmVfilwHcCL2CtrBq5smyWForJhp2boT4GqfUDM67j0HSAeVoZsvPm94jH4NO
+         DPBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687978178; x=1690570178;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KgaN56lEm0ZmpqNHWkSOtd80x9mkubEd8uoaFEqBMgs=;
+        b=baj4gXQgF12vaJ/g5HUyRX57hOs3ccd8lnftEAMP3VoHejfgg1O7rAtBYyXdIm1m9i
+         DAzcIqUu0Ylm+hOUMEAuT2HeXyqfqjYThnb71Zk7bLqjCaRbaR7XiIHVborzEVR6j71/
+         Hfw+aqH0TLLMyqYFznOERJ8z27OPf+CPkEE3vPEM3vgy91XqBciCompuc/7638bqbkVV
+         3JJMnCARpfBy05NAeS8zdPgFbzfOFuh7aTyRzX7raMgYT8S7a9QcTN60Jj+xOCn7KCJJ
+         hBImRzfLKs2bn+u4hhIwWL+ayK6YLc+ZXYTg75ZuvLFNJTq1pMvHwMYXH68W7t4Ri0JM
+         0DVg==
+X-Gm-Message-State: AC+VfDyvvKGFcUkLx7r39+JK2sAIqJbJ08YKndAf/6/UyYIXd0B6cF42
+	OAmT0OG0vVYaHSPL7nltV3UiCurOVtCEMhtD7cR0vw==
+X-Google-Smtp-Source: ACHHUZ4IbfKMVHThMuQt9NsFrggAFQx4Rv5qpBGTG3h+eAy6ncxooyhJNA3gaLLBdOgPONwb5i0/LZYb5dES96URox4=
+X-Received: by 2002:a17:90b:2d8d:b0:262:fe4b:b45 with SMTP id
+ sj13-20020a17090b2d8d00b00262fe4b0b45mr2600575pjb.19.1687978178329; Wed, 28
+ Jun 2023 11:49:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Message-ID: <ZJx8sBW/QPOBswNF@google.com>
-Subject: [ANN] bpf development stats for 6.5
+MIME-Version: 1.0
+References: <20230621170244.1283336-1-sdf@google.com> <20230621170244.1283336-4-sdf@google.com>
+ <57b9fc14-c02e-f0e5-148d-a549ebab6cf6@brouer.com> <CAKH8qBsk3MDbx2PyU-_+tDV4C0R6J_wzxi9Co6ekHv_tWzp7Tw@mail.gmail.com>
+ <c936bd6c-7060-47da-d522-747b49bee8a0@redhat.com> <CAKH8qBsqdE7=4JC8LfkL4gV9eQHEZjMpBSen2a+4q2Y7DpiOow@mail.gmail.com>
+ <435d1630-c3f4-97fb-b6fe-9795d1f0bf33@redhat.com> <CAKH8qBtdKHCnFWUiz8H_5miPF82nqKhG4Dfx9GbQYgWbYfERjg@mail.gmail.com>
+ <CAJ8uoz0MuXYJE_a58PCtCypscZfevE2tgheC32e=zqEdNPgbnw@mail.gmail.com>
+In-Reply-To: <CAJ8uoz0MuXYJE_a58PCtCypscZfevE2tgheC32e=zqEdNPgbnw@mail.gmail.com>
 From: Stanislav Fomichev <sdf@google.com>
-To: bpf@vger.kernel.org
-Cc: Jakub Kicinski <kuba@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+Date: Wed, 28 Jun 2023 11:49:25 -0700
+Message-ID: <CAKH8qBui6gieETYzDugG0=nmBR-QnhhhyqaF3px0sjG7-BKLhQ@mail.gmail.com>
+Subject: Re: [RFC bpf-next v2 03/11] xsk: Support XDP_TX_METADATA_LEN
+To: Magnus Karlsson <magnus.karlsson@gmail.com>
+Cc: Jesper Dangaard Brouer <jbrouer@redhat.com>, brouer@redhat.com, bpf@vger.kernel.org, 
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	song@kernel.org, yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	haoluo@google.com, jolsa@kernel.org, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
+	"Karlsson, Magnus" <magnus.karlsson@intel.com>, 
+	"xdp-hints@xdp-project.net" <xdp-hints@xdp-project.net>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-	SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+	T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Same as last time, running Jakub's scripts against bpf tree, see netdev
-posting for more info on the methodology:
-https://lore.kernel.org/netdev/20230627163832.75f3a340@kernel.org/T/#u
+On Wed, Jun 28, 2023 at 1:09=E2=80=AFAM Magnus Karlsson
+<magnus.karlsson@gmail.com> wrote:
+>
+> On Mon, 26 Jun 2023 at 19:06, Stanislav Fomichev <sdf@google.com> wrote:
+> >
+> > On Sat, Jun 24, 2023 at 2:02=E2=80=AFAM Jesper Dangaard Brouer
+> > <jbrouer@redhat.com> wrote:
+> > >
+> > >
+> > >
+> > > On 23/06/2023 19.41, Stanislav Fomichev wrote:
+> > > > On Fri, Jun 23, 2023 at 3:24=E2=80=AFAM Jesper Dangaard Brouer
+> > > > <jbrouer@redhat.com> wrote:
+> > > >>
+> > > >>
+> > > >>
+> > > >> On 22/06/2023 19.55, Stanislav Fomichev wrote:
+> > > >>> On Thu, Jun 22, 2023 at 2:11=E2=80=AFAM Jesper D. Brouer <netdev@=
+brouer.com> wrote:
+> > > >>>>
+> > > >>>>
+> > > >>>> This needs to be reviewed by AF_XDP maintainers Magnus and Bj=C3=
+=B8rn (Cc)
+> > > >>>>
+> > > >>>> On 21/06/2023 19.02, Stanislav Fomichev wrote:
+> > > >>>>> For zerocopy mode, tx_desc->addr can point to the arbitrary off=
+set
+> > > >>>>> and carry some TX metadata in the headroom. For copy mode, ther=
+e
+> > > >>>>> is no way currently to populate skb metadata.
+> > > >>>>>
+> > > >>>>> Introduce new XDP_TX_METADATA_LEN that indicates how many bytes
+> > > >>>>> to treat as metadata. Metadata bytes come prior to tx_desc addr=
+ess
+> > > >>>>> (same as in RX case).
+> > > >>>>
+> > > >>>>    From looking at the code, this introduces a socket option for=
+ this TX
+> > > >>>> metadata length (tx_metadata_len).
+> > > >>>> This implies the same fixed TX metadata size is used for all pac=
+kets.
+> > > >>>> Maybe describe this in patch desc.
+> > > >>>
+> > > >>> I was planning to do a proper documentation page once we settle o=
+n all
+> > > >>> the details (similar to the one we have for rx).
+> > > >>>
+> > > >>>> What is the plan for dealing with cases that doesn't populate sa=
+me/full
+> > > >>>> TX metadata size ?
+> > > >>>
+> > > >>> Do we need to support that? I was assuming that the TX layout wou=
+ld be
+> > > >>> fixed between the userspace and BPF.
+> > > >>
+> > > >> I hope you don't mean fixed layout, as the whole point is adding
+> > > >> flexibility and extensibility.
+> > > >
+> > > > I do mean a fixed layout between the userspace (af_xdp) and devtx p=
+rogram.
+> > > > At least fixed max size of the metadata. The userspace and the bpf
+> > > > prog can then use this fixed space to implement some flexibility
+> > > > (btf_ids, versioned structs, bitmasks, tlv, etc).
+> > > > If we were to make the metalen vary per packet, we'd have to signal
+> > > > its size per packet. Probably not worth it?
+> > >
+> > > Existing XDP metadata implementation also expand in a fixed/limited
+> > > sized memory area, but communicate size per packet in this area (also
+> > > for validation purposes).  BUT for AF_XDP we don't have room for anot=
+her
+> > > pointer or size in the AF_XDP descriptor (see struct xdp_desc).
+> > >
+> > >
+> > > >
+> > > >>> If every packet would have a different metadata length, it seems =
+like
+> > > >>> a nightmare to parse?
+> > > >>>
+> > > >>
+> > > >> No parsing is really needed.  We can simply use BTF IDs and type c=
+ast in
+> > > >> BPF-prog. Both BPF-prog and userspace have access to the local BTF=
+ ids,
+> > > >> see [1] and [2].
+> > > >>
+> > > >> It seems we are talking slightly past each-other(?).  Let me rephr=
+ase
+> > > >> and reframe the question, what is your *plan* for dealing with dif=
+ferent
+> > > >> *types* of TX metadata.  The different struct *types* will of-caus=
+e have
+> > > >> different sizes, but that is okay as long as they fit into the max=
+imum
+> > > >> size set by this new socket option XDP_TX_METADATA_LEN.
+> > > >> Thus, in principle I'm fine with XSK having configured a fixed hea=
+droom
+> > > >> for metadata, but we need a plan for handling more than one type a=
+nd
+> > > >> perhaps a xsk desc indicator/flag for knowing TX metadata isn't ra=
+ndom
+> > > >> data ("leftover" since last time this mem was used).
+> > > >
+> > > > Yeah, I think the above correctly catches my expectation here. Some
+> > > > headroom is reserved via XDP_TX_METADATA_LEN and the flexibility is
+> > > > offloaded to the bpf program via btf_id/tlv/etc.
+> > > >
+> > > > Regarding leftover metadata: can we assume the userspace will take
+> > > > care of setting it up?
+> > > >
+> > > >> With this kfunc approach, then things in-principle, becomes a cont=
+ract
+> > > >> between the "local" TX-hook BPF-prog and AF_XDP userspace.   These=
+ two
+> > > >> components can as illustrated here [1]+[2] can coordinate based on=
+ local
+> > > >> BPF-prog BTF IDs.  This approach works as-is today, but patchset
+> > > >> selftests examples don't use this and instead have a very static
+> > > >> approach (that people will copy-paste).
+> > > >>
+> > > >> An unsolved problem with TX-hook is that it can also get packets f=
+rom
+> > > >> XDP_REDIRECT and even normal SKBs gets processed (right?).  How do=
+es the
+> > > >> BPF-prog know if metadata is valid and intended to be used for e.g=
+.
+> > > >> requesting the timestamp? (imagine metadata size happen to match)
+> > > >
+> > > > My assumption was the bpf program can do ifindex/netns filtering. P=
+lus
+> > > > maybe check that the meta_len is the one that's expected.
+> > > > Will that be enough to handle XDP_REDIRECT?
+> > >
+> > > I don't think so, using the meta_len (+ ifindex/netns) to communicate
+> > > activation of TX hardware hints is too weak and not enough.  This is =
+an
+> > > implicit API for BPF-programmers to understand and can lead to implic=
+it
+> > > activation.
+> > >
+> > > Think about what will happen for your AF_XDP send use-case.  For
+> > > performance reasons AF_XDP don't zero out frame memory.  Thus, meta_l=
+en
+> > > is fixed even if not used (and can contain garbage), it can by accide=
+nt
+> > > create hard-to-debug situations.  As discussed with Magnus+Maryam
+> > > before, we found it was practical (and faster than mem zero) to exten=
+d
+> > > AF_XDP descriptor (see struct xdp_desc) with some flags to
+> > > indicate/communicate this frame comes with TX metadata hints.
+> >
+> > What is that "if not used" situation? Can the metadata itself have
+> > is_used bit? The userspace has to initialize at least that bit.
+> > We can definitely add that extra "has_metadata" bit to the descriptor,
+> > but I'm trying to understand whether we can do without it.
+>
+> To me, this "has_metadata" bit in the descriptor is just an
+> optimization. If it is 0, then there is no need to go and check the
+> metadata field and you save some performance. Regardless of this bit,
+> you need some way to say "is_used" for each metadata entry (at least
+> when the number of metadata entries is >1). Three options come to mind
+> each with their pros and cons.
+>
+> #1: Let each metadata entry have an invalid state. Not possible for
+> every metadata and requires the user/kernel to go scan through every
+> entry for every packet.
+>
+> #2: Have a field of bits at the start of the metadata section (closest
+> to packet data) that signifies if a metadata entry is valid or not. If
+> there are N metadata entries in the metadata area, then N bits in this
+> field would be used to signify if the corresponding metadata is used
+> or not. Only requires the user/kernel to scan the valid entries plus
+> one access for the "is_used" bits.
+>
+> #3: Have N bits in the AF_XDP descriptor options field instead of the
+> N bits in the metadata area of #2. Faster but would consume many
+> precious bits in the fixed descriptor and cap the number of metadata
+> entries possible at around 8. E.g., 8 for Rx, 8 for Tx, 1 for the
+> multi-buffer work, and 15 for some future use. Depends on how daring
+> we are.
+>
+> The "has_metadata" bit suggestion can be combined with 1 or 2.
+> Approach 3 is just a fine grained extension of the idea itself.
+>
+> IMO, the best approach unfortunately depends on the metadata itself.
+> If it is rarely valid, you want something like the "has_metadata" bit.
+> If it is nearly always valid and used, approach #1 (if possible for
+> the metadata) should be the fastest. The decision also depends on the
+> number of metadata entries you have per packet. Sorry that I do not
+> have a good answer. My feeling is that we need something like #1 or
+> #2, or maybe both, then if needed we can add the "has_metadata" bit or
+> bits (#3) optimization. Can we do this encoding and choice (#1, #2, or
+> a combo) in the eBPF program itself? Would provide us with the
+> flexibility, if possible.
 
-He also shared with me bpf stats for the previous cycle (a lot of
-work went into the scripts in these past two months, so my data
-was completely irrelevant), so we can have some comparisons!
+Here is my take on it, lmk if I'm missing something:
 
-As last time, I'm presenting raw stats without any evaluation. I'm
-also trying to present the same data as we have in netdev email
-so you can follow Jakub's comments about script changes/etc. One thing
-to note maybe is that we have a lot of cross-pollination with netdev list,
-so our stats change quite a bit depending on netdev activity :-)
+af_xdp users call this new setsockopt(XDP_TX_METADATA_LEN) when they
+plan to use metadata on tx.
+This essentially requires allocating a fixed headroom to carry the metadata=
+.
+af_xdp machinery exports this fixed len into the bpf programs somehow
+(devtx_frame.meta_len in this series).
+Then it's up to the userspace and bpf program to agree on the layout.
+If not every packet is expected to carry the metadata, there might be
+some bitmask in the metadata area to indicate that.
 
-Previous cycle:
-21 Feb to 26 Apr: 5362 mailing list messages, 64 days, 86 messages per day
-438 repo commits (7 commits/day)=20
+Iow, the metadata isn't interpreted by the kernel. It's up to the prog
+to interpret it and call appropriate kfunc to enable some offload.
 
-Current cycle:
-27 Apr to 28 Jun: 4234 mailing list messages, 62 days, 68 messages per day
-664 repo commits (11 commits/day)
-
-6.4 stats: https://lore.kernel.org/bpf/ZFAOojsT93ZxwNu3@google.com/
-
-Rankings
---------
-
-Top reviewers (thr):                 Top reviewers (msg):               =20
-   1 (+13) [7] Yonghong Song            1 ( +1) [16] Andrii Nakryiko    =20
-   2 ( -1) [7] Alexei Starovoitov       2 ( -1) [15] Alexei Starovoitov =20
-   3 ( -1) [6] Andrii Nakryiko          3 (+17) [13] Yonghong Song      =20
-   4 ( +1) [4] Daniel Borkmann          4 (***) [ 5] David Hildenbrand  =20
-   5 ( +3) [3] Jiri Olsa                5 (+11) [ 5] Jiri Olsa          =20
-   6 (+14) [3] Simon Horman             6 ( +3) [ 5] Daniel Borkmann    =20
-   7 ( -4) [2] Stanislav Fomichev       7 ( -4) [ 5] Stanislav Fomichev =20
-   8 ( -4) [2] Martin KaFai Lau         8 (***) [ 5] Song Liu           =20
-   9 ( -3) [2] Jakub Kicinski           9 (+21) [ 4] Steven Rostedt     =20
-  10 (+32) [2] Steven Rostedt          10 ( -6) [ 4] Martin KaFai Lau   =20
-  11 ( +5) [2] Toke H=C3=B8iland-J=C3=B8rgensen   11 (+15) [ 4] Simon Horma=
-n       =20
-  12 ( -3) [2] Quentin Monnet          12 ( -2) [ 4] Toke H=C3=B8iland-J=C3=
-=B8rgensen
-
-Top authors (thr):                   Top authors (msg):                 =20
-   1 (   ) [2] Andrii Nakryiko          1 (   ) [14] Andrii Nakryiko    =20
-   2 (+11) [2] Yafang Shao              2 ( +4) [11] Yafang Shao        =20
-   3 (+36) [1] Aditi Ghag               3 (***) [10] Maciej Fijalkowski =20
-   4 (+14) [1] Jiri Olsa                4 (+27) [ 9] Masami Hiramatsu (Goog=
-le)
-   5 (+40) [1] Stanislav Fomichev       5 ( +2) [ 6] John Fastabend     =20
-   6 ( +3) [1] Eduard Zingerman         6 ( +5) [ 6] Jiri Olsa          =20
-   7 (***) [1] Masami Hiramatsu (Google)    7 (+40) [ 6] Stanislav Fomichev=
- =20
-   8 (***) [1] Menglong Dong            8 (***) [ 5] Ian Rogers         =20
-   9 ( +1) [1] Daniel Borkmann          9 ( -1) [ 5] Alexei Starovoitov =20
-  10 ( +6) [1] Yonghong Song           10 ( -5) [ 4] Eduard Zingerman   =20
-
-Company rankings
-----------------
-
-Top reviewers (thr):                 Top reviewers (msg):               =20
-   1 (   ) [17] Meta                    1 (   ) [50] Meta               =20
-   2 (   ) [ 7] Isovalent               2 ( +3) [19] RedHat             =20
-   3 ( +1) [ 5] Google                  3 (   ) [13] Isovalent          =20
-   4 ( +1) [ 5] RedHat                  4 ( -2) [11] Google             =20
-   5 ( -2) [ 3] Intel                   5 ( -1) [ 6] Intel              =20
-   6 ( +5) [ 3] Corigine                6 ( +8) [ 4] Corigine           =20
-   7 ( +6) [ 1] Microsoft               7 ( +2) [ 4] nVidia             =20
-
-Top authors (thr):                   Top authors (msg):                 =20
-   1 (   ) [7] Meta                     1 (   ) [28] Meta               =20
-   2 (   ) [6] Isovalent                2 ( +3) [24] Google             =20
-   3 ( +2) [5] Google                   3 ( -1) [23] Isovalent          =20
-   4 ( -1) [2] RedHat                   4 ( +3) [18] Intel              =20
-   5 ( +1) [2] Huawei                   5 ( +3) [11] Yafang Shao        =20
-   6 ( -2) [2] Intel                    6 ( +3) [ 6] Huawei             =20
-   7 ( +6) [2] Yafang Shao              7 ( -3) [ 6] Alibaba            =20
-   8 (***) [1] nVidia                   8 ( -5) [ 4] RedHat             =20
-   9 ( +2) [1] Eduard Zingerman         9 ( -3) [ 4] Eduard Zingerman   =20
-
-Yafang/Eduard, if you'd like to share you company with me, feel free
-to drop a private email.
-
-New formula rankings
---------------------
-
-Top scores (positive):               Top scores (negative):             =20
-   1 (   ) [156] Meta                   1 ( +2) [38] Yafang Shao        =20
-   2 ( +3) [ 68] RedHat                 2 (***) [25] Intel              =20
-   3 ( +5) [ 35] Corigine               3 (***) [25] Google             =20
-   4 (+11) [ 15] IBM                    4 ( -3) [20] Alibaba            =20
-   5 (+34) [ 13] Microsoft              5 (***) [14] Menglong Dong      =20
-   6 ( +1) [ 10] nVidia                 6 (***) [11] Oracle             =20
-   7 (***) [  9] Linux Foundation       7 (***) [10] Mike Rapoport      =20
-   8 (***) [  8] Kent Overstreet        8 ( -4) [10] Bytedance          =20
-   9 ( +8) [  8] Amazon                 9 ( +5) [ 8] Lorenzo Stoakes    =20
-  10 (+11) [  7] Christoph Hellwig     10 ( +3) [ 7] Gilad Sever        =20
-  11 ( +2) [  7] SUSE                  11 (***) [ 7] Tessares           =20
-  12 (+10) [  7] CloudFlare            12 (***) [ 7] Eduard Zingerman   =20
-
-How top authors rank in scores:
-  1   p0 [155]  Meta
-  2  p97 [-25]  Google
-  3   p8 [  6]  Isovalent
-  4  p98 [-26]  Intel
-  5  p99 [-39]  Yafang Shao <laoar.shao@gmail.com>
-  6  p89 [ -7]  Huawei
-  7  p96 [-21]  Alibaba
-  8   p0 [ 68]  RedHat
-  9  p90 [ -7]  Eduard Zingerman <eddyz87@gmail.com>
- 10  p96 [-15]  Menglong Dong <menglong8.dong@gmail.com>
- 11  p95 [-11]  Oracle
- 12  p94 [-11]  Mike Rapoport <rppt@kernel.org>
- 13  p93 [-10]  Bytedance
- 14   p3 [ 10]  nVidia
- 15  p91 [ -7]  Tessares
-
-How to reproduce
-----------------
-
-This is mostly for myself so I don't forget how to do it next time.
-
-$ SINCE=3D04/26/2023
-$ UNTIL=3D06/27/2023
-
-$ cd bpf-0.git
-
-$ git log --oneline --until $UNTIL | head -n1
-a73e0498abf2 Re: [PATCH RFC net-next v4 6/8] virtio/vsock: support dgrams
-
-$ git log --oneline --since $SINCE | tail -n 1
-83eb87892df6 Re: [PATCH bpf-next 3/6] bpf: Don't EFAULT for {g,s}setsockopt=
- with wrong optlen
-
-$ git rev-list --count 83eb87892df6..a73e0498abf2
-4234
-
-$ git checkout a73e0498abf2
-$ cd ..
-
-$ ./ml-stat.py --linux ~/bpf-next --repo bpf --db db.json --email-count 423=
-4 --json-out bpf-6.5.json
-
-$ cd bpf-next
-
-$ git log --oneline --until $UNTIL | head -n1
-771ca3de2502 Merge branch 'sfc-next'
-
-$ git log --oneline --since $SINCE | tail -n 1
-3ee23096add5 doc:it_IT: fix some typos
-
-$ ./git-stat.py --linux ~/bpf-next/ \
-	--db db.json \
-	--json-out bpf-6.5.json \
-        --start-commit 3ee23096add5 --end-commit 771ca3de2502 \
-	--maintainers ast@kernel.org \
-		daniel@iogearbox.net \
-		andrii@kernel.org \
-		martin.lau@kernel.org
-
-$ ./stat-print.py --ml-stats bpf-6.4.json bpf-6.5.json
-
-More raw stats
---------------
-
-Prev: start: Tue, 21 Feb 2023 17:10:17 +0000
-	end: Wed, 26 Apr 2023 16:39:19 -0700
-Prev: messages: 5362 days: 64 (84 msg/day)
-Prev: direct commits: 438 (7 commits/day)
-Prev: people/aliases: 255  {'author': 95, 'commenter': 105, 'both': 55}
-Prev: review pct: 10.73%  x-corp pct: 9.82%
-
-Curr: start: Thu, 27 Apr 2023 08:55:55 +0200
-	end: Wed, 28 Jun 2023 17:27:38 +0200
-Curr: messages: 4234 days: 62 (68 msg/day)
-Curr: direct commits: 664 (11 commits/day)
-Curr: people/aliases: 241  {'author': 89, 'commenter': 103, 'both': 49}
-Curr: review pct: 12.95%  x-corp pct: 12.05%
-
-Diff: -18.5% msg/day
-Diff: +56.5% commits/day
-Diff: -2.4% people/day
-Diff: review pct: +2.2%
-      x-corp pct: +2.2%
+Jesper raises a valid point with "what about redirected packets?". But
+I'm not sure we need to care? Presumably the programs that do
+xdp_redirect will have to conform to the same metadata layout?
