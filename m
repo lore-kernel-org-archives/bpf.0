@@ -1,25 +1,35 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B7C4D2E3;
-	Wed, 28 Jun 2023 15:28:02 +0000 (UTC)
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:237:300::1])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC707268E;
-	Wed, 28 Jun 2023 08:28:00 -0700 (PDT)
-Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
-	(envelope-from <fw@breakpoint.cc>)
-	id 1qEX5L-00082H-J5; Wed, 28 Jun 2023 17:27:59 +0200
-From: Florian Westphal <fw@strlen.de>
-To: <bpf@vger.kernel.org>
-Cc: "ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, dxu@dxuuu.xyz"@breakpoint.cc,
-	<netdev@vger.kernel.org>,
-	Florian Westphal <fw@strlen.de>
-Subject: [PATCH bpf-next v4 2/2] selftests/bpf: Add bpf_program__attach_netfilter helper test
-Date: Wed, 28 Jun 2023 17:27:38 +0200
-Message-Id: <20230628152738.22765-3-fw@strlen.de>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20230628152738.22765-1-fw@strlen.de>
-References: <20230628152738.22765-1-fw@strlen.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 823C1322E
+	for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 16:46:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DF24C433C9;
+	Wed, 28 Jun 2023 16:46:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1687970773;
+	bh=Anh7J4kRhla0M1qr85cZBcy7HHbIz4mqCgOTHfAu7b4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=jjWMAEUDSlBwfrfqiCEyfcuBYUqTlz/wwd8ni3Lu7xzaEwKOtQ9FP/L9et5oyjVVJ
+	 ZgEmyFeNGrWs84CYZANfS8F0unnD0CWsQyPUjzVlxc9S5ZYyGA0QdYyBCdbdGDIgL5
+	 NBszENm6/4vgSOv2dcK4+mWK0RCdyO8ikAxKJkL30Pc+LmNCAY4oKzF+wvoUMv4TJN
+	 vFemQWAni9uVer6e2IFtc9+0Bn3sNFbxbPEj5I1GzKjXhc6rhin82rZeUfQ8IHbyUx
+	 uk/s4bO9MhQ6bHDAlW4WUzKyjOXZeUwVRTX99QLpk4jtEoVuBmN2SR6blmjERdOiyY
+	 9WFcjPJKmXOiA==
+From: SeongJae Park <sj@kernel.org>
+To: martin.lau@linux.dev
+Cc: SeongJae Park <sj@kernel.org>,
+	Alexander.Egorenkov@ibm.com,
+	ast@kernel.org,
+	memxor@gmail.com,
+	olsajiri@gmail.com,
+	bpf@vger.kernel.org,
+	stable@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jiri Olsa <jolsa@kernel.org>
+Subject: [PATCH v2] btf: warn but return no error for NULL btf from __register_btf_kfunc_id_set()
+Date: Wed, 28 Jun 2023 16:46:11 +0000
+Message-Id: <20230628164611.83038-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -27,151 +37,60 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=ANY_BOUNCE_MESSAGE,BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-	T_SCC_BODY_TEXT_LINE,VBOUNCE_MESSAGE autolearn=ham autolearn_force=no
-	version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
 
-Call bpf_program__attach_netfilter() with different
-protocol/hook/priority combinations.
+__register_btf_kfunc_id_set() assumes .BTF to be part of the module's
+.ko file if CONFIG_DEBUG_INFO_BTF is enabled.  If that's not the case,
+the function prints an error message and return an error.  As a result,
+such modules cannot be loaded.
 
-Test fails if supposedly-illegal attachments work
-(e.g., bogus protocol family, illegal priority and so on) or if a
-should-work attachment fails.  Expected output:
+However, the section could be stripped out during a build process.  It
+would be better to let the modules loaded, because their basic
+functionalities have no problem[1], though the BTF functionalities will
+not be supported.  Make the function to lower the level of the message
+from error to warn, and return no error.
 
- ./test_progs -t netfilter_link_attach
- #145/1   netfilter_link_attach/allzero:OK
- #145/2   netfilter_link_attach/invalid-pf:OK
- #145/3   netfilter_link_attach/invalid-hooknum:OK
- #145/4   netfilter_link_attach/invalid-priority-min:OK
- #145/5   netfilter_link_attach/invalid-priority-max:OK
- #145/6   netfilter_link_attach/invalid-flags:OK
- #145/7   netfilter_link_attach/invalid-inet-not-supported:OK
- #145/8   netfilter_link_attach/attach ipv4:OK
- #145/9   netfilter_link_attach/attach ipv6:OK
+[1] https://lore.kernel.org/bpf/20220219082037.ow2kbq5brktf4f2u@apollo.legion/
 
-Signed-off-by: Florian Westphal <fw@strlen.de>
+Reported-by: Alexander Egorenkov <Alexander.Egorenkov@ibm.com>
+Link: https://lore.kernel.org/bpf/87y228q66f.fsf@oc8242746057.ibm.com/
+Suggested-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Link: https://lore.kernel.org/bpf/20220219082037.ow2kbq5brktf4f2u@apollo.legion/
+Fixes: c446fdacb10d ("bpf: fix register_btf_kfunc_id_set for !CONFIG_DEBUG_INFO_BTF")
+Cc: <stable@vger.kernel.org> # 5.18.x
+Signed-off-by: SeongJae Park <sj@kernel.org>
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 ---
- .../bpf/prog_tests/netfilter_link_attach.c    | 86 +++++++++++++++++++
- .../bpf/progs/test_netfilter_link_attach.c    | 14 +++
- 2 files changed, 100 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/netfilter_link_attach.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_netfilter_link_attach.c
+Changes from v1
+(https://lore.kernel.org/all/20230626181120.7086-1-sj@kernel.org/)
+- Fix Fixes: tag (Jiri Olsa)
+- Add 'Acked-by: ' from Jiri Olsa
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/netfilter_link_attach.c b/tools/testing/selftests/bpf/prog_tests/netfilter_link_attach.c
-new file mode 100644
-index 000000000000..4297a2a4cb11
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/netfilter_link_attach.c
-@@ -0,0 +1,86 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+
-+#include <netinet/in.h>
-+#include <linux/netfilter.h>
-+
-+#include "test_progs.h"
-+#include "test_netfilter_link_attach.skel.h"
-+
-+struct nf_link_test {
-+	__u32 pf;
-+	__u32 hooknum;
-+	__s32 priority;
-+	__u32 flags;
-+
-+	bool expect_success;
-+	const char * const name;
-+};
-+
-+static const struct nf_link_test nf_hook_link_tests[] = {
-+	{ .name = "allzero", },
-+	{ .pf = NFPROTO_NUMPROTO, .name = "invalid-pf", },
-+	{ .pf = NFPROTO_IPV4, .hooknum = 42, .name = "invalid-hooknum", },
-+	{ .pf = NFPROTO_IPV4, .priority = INT_MIN, .name = "invalid-priority-min", },
-+	{ .pf = NFPROTO_IPV4, .priority = INT_MAX, .name = "invalid-priority-max", },
-+	{ .pf = NFPROTO_IPV4, .flags = UINT_MAX, .name = "invalid-flags", },
-+
-+	{ .pf = NFPROTO_INET, .priority = 1, .name = "invalid-inet-not-supported", },
-+
-+	{ .pf = NFPROTO_IPV4, .priority = -10000, .expect_success = true, .name = "attach ipv4", },
-+	{ .pf = NFPROTO_IPV6, .priority =  10001, .expect_success = true, .name = "attach ipv6", },
-+};
-+
-+void test_netfilter_link_attach(void)
-+{
-+	struct test_netfilter_link_attach *skel;
-+	struct bpf_program *prog;
-+	LIBBPF_OPTS(bpf_netfilter_opts, opts);
-+	int i;
-+
-+	skel = test_netfilter_link_attach__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_netfilter_link_attach__open_and_load"))
-+		goto out;
-+
-+	prog = skel->progs.nf_link_attach_test;
-+	if (!ASSERT_OK_PTR(prog, "attach program"))
-+		goto out;
-+
-+	for (i = 0; i < ARRAY_SIZE(nf_hook_link_tests); i++) {
-+		struct bpf_link *link;
-+
-+		if (!test__start_subtest(nf_hook_link_tests[i].name))
-+			continue;
-+
-+#define X(opts, m, i)	opts.m = nf_hook_link_tests[(i)].m
-+		X(opts, pf, i);
-+		X(opts, hooknum, i);
-+		X(opts, priority, i);
-+		X(opts, flags, i);
-+#undef X
-+		link = bpf_program__attach_netfilter(prog, &opts);
-+		if (nf_hook_link_tests[i].expect_success) {
-+			struct bpf_link *link2;
-+
-+			if (!ASSERT_OK_PTR(link, "program attach successful"))
-+				continue;
-+
-+			link2 = bpf_program__attach_netfilter(prog, &opts);
-+			ASSERT_ERR_PTR(link2, "attach program with same pf/hook/priority");
-+
-+			if (!ASSERT_OK(bpf_link__destroy(link), "link destroy"))
-+				break;
-+
-+			link2 = bpf_program__attach_netfilter(prog, &opts);
-+			if (!ASSERT_OK_PTR(link2, "program reattach successful"))
-+				continue;
-+			if (!ASSERT_OK(bpf_link__destroy(link2), "link destroy"))
-+				break;
-+		} else {
-+			ASSERT_ERR_PTR(link, "program load failure");
-+		}
-+	}
-+
-+out:
-+	test_netfilter_link_attach__destroy(skel);
-+}
-+
-diff --git a/tools/testing/selftests/bpf/progs/test_netfilter_link_attach.c b/tools/testing/selftests/bpf/progs/test_netfilter_link_attach.c
-new file mode 100644
-index 000000000000..03a475160abe
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_netfilter_link_attach.c
-@@ -0,0 +1,14 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+#define NF_ACCEPT 1
-+
-+SEC("netfilter")
-+int nf_link_attach_test(struct bpf_nf_ctx *ctx)
-+{
-+	return NF_ACCEPT;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+ kernel/bpf/btf.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
+
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 6b682b8e4b50..d683f034996f 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -7848,14 +7848,10 @@ static int __register_btf_kfunc_id_set(enum btf_kfunc_hook hook,
+ 
+ 	btf = btf_get_module_btf(kset->owner);
+ 	if (!btf) {
+-		if (!kset->owner && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) {
+-			pr_err("missing vmlinux BTF, cannot register kfuncs\n");
+-			return -ENOENT;
+-		}
+-		if (kset->owner && IS_ENABLED(CONFIG_DEBUG_INFO_BTF_MODULES)) {
+-			pr_err("missing module BTF, cannot register kfuncs\n");
+-			return -ENOENT;
+-		}
++		if (!kset->owner && IS_ENABLED(CONFIG_DEBUG_INFO_BTF))
++			pr_warn("missing vmlinux BTF, cannot register kfuncs\n");
++		if (kset->owner && IS_ENABLED(CONFIG_DEBUG_INFO_BTF_MODULES))
++			pr_warn("missing module BTF, cannot register kfuncs\n");
+ 		return 0;
+ 	}
+ 	if (IS_ERR(btf))
 -- 
-2.39.3
+2.25.1
 
