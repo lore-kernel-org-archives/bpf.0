@@ -1,76 +1,86 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92FE0A923;
-	Wed, 28 Jun 2023 18:52:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D745C433C0;
-	Wed, 28 Jun 2023 18:52:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1687978326;
-	bh=gXKn5JYE56vUXL4So05eMKIhT6YmD5oAVfdokIcwQKw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=jQUGa3JQBYAvNBRmP3/C0Eh/RBiRYubbVd2zfTYOPyr1poAD7xlsoKvLl8cdN7DRM
-	 cDpjZe1xEdwG8CH6jk/+av8/8ONZXQkZ1mxljWbc2ACmEerDneL2HC0myc+fffpQJS
-	 ms2XiwXC8qXlzVjfUOihA4BHJUAeECFQSuBcUmCy5WerKxdLEHjJBQpSaTV/70brXt
-	 Sx4Xw1jdwc5v7LACcjHPMpldgxMTPrBrqFdqWjbvK6OzIF200Kt88Nb1xaWBWoyc6U
-	 BDgTjZpPD5Z3X0N6OK5ORsVsXxYQq7qOGjdZeMgwgkMoRfJ/apae39NReEQWVzP9DM
-	 wF+0fC4avKOLg==
-Date: Wed, 28 Jun 2023 11:52:04 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: John Fastabend <john.fastabend@gmail.com>
-Cc: Stanislav Fomichev <sdf@google.com>, Alexei Starovoitov
- <alexei.starovoitov@gmail.com>, Donald Hunter <donald.hunter@gmail.com>,
- bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Network Development
- <netdev@vger.kernel.org>
-Subject: Re: [RFC bpf-next v2 11/11] net/mlx5e: Support TX timestamp
- metadata
-Message-ID: <20230628115204.595dea8c@kernel.org>
-In-Reply-To: <649b581ded8c1_75d8a208c@john.notmuch>
-References: <20230622195757.kmxqagulvu4mwhp6@macbook-pro-8.dhcp.thefacebook.com>
-	<CAKH8qBvJmKwgdrLkeT9EPnCiTu01UAOKvPKrY_oHWySiYyp4nQ@mail.gmail.com>
-	<CAADnVQKfcGT9UaHtAmWKywtuyP9+_NX0_mMaR0m9D0-a=Ymf5Q@mail.gmail.com>
-	<CAKH8qBuJpybiTFz9vx+M+5DoGuK-pPq6HapMKq7rZGsngsuwkw@mail.gmail.com>
-	<CAADnVQ+611dOqVFuoffbM_cnOf62n6h+jaB1LwD2HWxS5if2CA@mail.gmail.com>
-	<m2bkh69fcp.fsf@gmail.com>
-	<649637e91a709_7bea820894@john.notmuch>
-	<CAADnVQKUVDEg12jOc=5iKmfN-aHvFEtvFKVEDBFsmZizwkXT4w@mail.gmail.com>
-	<20230624143834.26c5b5e8@kernel.org>
-	<ZJeUlv/omsyXdO/R@google.com>
-	<ZJoExxIaa97JGPqM@google.com>
-	<CAADnVQKePtxk6Nn=M6in6TTKaDNnMZm-g+iYzQ=mPoOh8peoZQ@mail.gmail.com>
-	<CAKH8qBv-jU6TUcWrze5VeiVhiJ-HUcpHX7rMJzN5o2tXFkS8kA@mail.gmail.com>
-	<649b581ded8c1_75d8a208c@john.notmuch>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 248E9D53A;
+	Wed, 28 Jun 2023 18:58:38 +0000 (UTC)
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE34294E;
+	Wed, 28 Jun 2023 11:58:37 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b69e6cce7dso2341521fa.2;
+        Wed, 28 Jun 2023 11:58:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687978716; x=1690570716;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7Pp3/6WHOX3IhCc8i+jwBDxBIWCrCEEZYNsbdhw2Vzw=;
+        b=kgOuC/NLgkBG5JldvkeV+tBAlM+B9NFfIH9O4aGGaoBZOE7oc66SQJLaHj4ERhZmPh
+         wZkOTTHK4PUL3fItkOi/fSIL8JsWCynhWfUwNY8HAPdwPGwQjSf+ZCYAalC+PGFBx67I
+         c782945YUvOPTn4d3EbeDqip024QyN/U0c7GUwuIlmkYIELt8P8NTExxXd0wG0RN2ZPS
+         Ui12zouCNxytvV4F2ii6kbh0JxyC/VKLle2p9QjFc0nweyHbZUpFNCCUjL3gOlu8BsSM
+         lcNh4Q8N3gTbq+dvcIa/ProtpWjm3QbOXLXepNI0Uqa+DKDju3SgcBwvXLdVScQYWE1k
+         ESyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687978716; x=1690570716;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7Pp3/6WHOX3IhCc8i+jwBDxBIWCrCEEZYNsbdhw2Vzw=;
+        b=ckoHKplD25HvgYMRpiMst9E6LxhmkB2rGA6JDXlnKrlkx9CpcAMCROEWz0+kDGWr6W
+         PLyS3oXmVlTo48GdGV2AdXTXQp7NX+qxNcDjlaFOV9Ir+OUij2dSKqzhS45sTXeky5yO
+         jmLgAVfADptKKhPCy5xRj+XcrX/ycwICxkgMgE8g8DsWr8jX8rNyyw6HmPJV6LYqCeKm
+         zuP+SxM9BnVW+gJWZqiMMSVnfqiC29lr+SLqPSYePhOT9BH+tlkaFkMJzrXYTxjFYRjo
+         2k0/kkKkky+hyJ5TTUTBExBz0efoMGiIvW8e7ESAhN8rNxz+gUuTqSRb8xL3/SW0rrlg
+         FFBw==
+X-Gm-Message-State: AC+VfDwDfXha6uqh8HD5K9ZyDQN5juiIWcVlBxAw32O2X4nbkm7ZT28c
+	olb0I4LwJerGPVk6boJchLwrp0WvpkKE5x4xrz4Plm+k
+X-Google-Smtp-Source: ACHHUZ7MgzQGhT0lFe9/3LXZJAkDu1+MCARStQWQGqvkRxaBkspbafFeITgCyHqIpUd1CzkmIcfYTn4jCt/lmfkPKu0=
+X-Received: by 2002:a2e:8443:0:b0:2b1:edfe:8171 with SMTP id
+ u3-20020a2e8443000000b002b1edfe8171mr21883013ljh.36.1687978715441; Wed, 28
+ Jun 2023 11:58:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20230628015634.33193-1-alexei.starovoitov@gmail.com>
+ <20230628015634.33193-7-alexei.starovoitov@gmail.com> <ZJxWR9SZ5lya+MN+@corigine.com>
+In-Reply-To: <ZJxWR9SZ5lya+MN+@corigine.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 28 Jun 2023 11:58:23 -0700
+Message-ID: <CAADnVQJcQif0ZvOeF4YD+KzR3Vp85qL=K=eyKkUvFhc4G_pgoA@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next 06/13] bpf: Further refactor alloc_bulk().
+To: Simon Horman <simon.horman@corigine.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	David Vernet <void@manifault.com>, Hou Tao <houtao@huaweicloud.com>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Tejun Heo <tj@kernel.org>, rcu@vger.kernel.org, 
+	Network Development <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+	autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Tue, 27 Jun 2023 14:43:57 -0700 John Fastabend wrote:
-> What I think would be the most straight-forward thing and most flexible
-> is to create a <drvname>_devtx_submit_skb(<drivname>descriptor, sk_buff)
-> and <drvname>_devtx_submit_xdp(<drvname>descriptor, xdp_frame) and then
-> corresponding calls for <drvname>_devtx_complete_{skb|xdp}() Then you
-> don't spend any cycles building the metadata thing or have to even
-> worry about read kfuncs. The BPF program has read access to any
-> fields they need. And with the skb, xdp pointer we have the context
-> that created the descriptor and generate meaningful metrics.
+On Wed, Jun 28, 2023 at 8:48=E2=80=AFAM Simon Horman <simon.horman@corigine=
+.com> wrote:
+>
+> On Tue, Jun 27, 2023 at 06:56:27PM -0700, Alexei Starovoitov wrote:
+> > From: Alexei Starovoitov <ast@kernel.org>
+> >
+> > In certain scenarios alloc_bulk() migth be taking free objects mainly f=
+rom
+>
+> Hi Alexi,
+>
+> checkpatch --codespell flags: 'migth' -> 'might'
+> It also flags some typos in several other patches in this series.
+> But it seems silly to flag them individually. So I'll leave this topic he=
+re.
 
-Sorry but this is not going to happen without my nack. DPDK was a much
-cleaner bifurcation point than trying to write datapath drivers in BPF.
-Users having to learn how to render descriptors for all the NICs
-and queue formats out there is not reasonable. Isovalent hired
-a lot of former driver developers so you may feel like it's a good
-idea, as a middleware provider. But for the rest of us the matrix
-of HW x queue format x people writing BPF is too large. If we can
-write some poor man's DPDK / common BPF driver library to be selected
-at linking time - we can as well provide a generic interface in
-the kernel itself. Again, we never merged explicit DPDK support, 
-your idea is strictly worse.
+Thanks for flagging.
+Did you find this manually? bpf/netdev CI doesn't report such things.
