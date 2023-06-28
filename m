@@ -1,45 +1,46 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC0E8BE47
-	for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 11:52:11 +0000 (UTC)
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21244FF
-	for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 04:52:09 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1b80b343178so20981295ad.0
-        for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 04:52:09 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21CE9BE47
+	for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 11:52:13 +0000 (UTC)
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B174FF
+	for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 04:52:12 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b7f223994fso34125135ad.3
+        for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 04:52:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687953128; x=1690545128;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=juoQiVr0aY5LbgdzJ8Knoi0ZZjFwuTVW3cNmVIAHLZk=;
-        b=WUkCnYyW9OYDNUxh7/rkcRGCNm6jqK7P2WMmGIc/U+GlDQbNAYVpItmC9VnFEVa0E4
-         mUmWENQFGK7SP0rCVtQeGk1NMf+BiWQZ5k/TZRMIE91WIEVIVK3DyjlBuj0/fegh/4dx
-         F/t8qkb21nsQLU2/qAso5Yv7IjuW2D6H/B7NP49eWrUz67Ta+MQAbfi66HLdgWtct6Y4
-         twIA8E57QdsFb56gMNQAqgboYkvyLN7HTf1RaIa8Cgu0CdUpqSgdzeaTxVJcLug+gS91
-         TK4SVThdkpRDci4Ld/gCppiufbvgPFtyB9AkFczqfJX3iUyUdKC/kRL7f5nN/kraTMI+
-         O6hQ==
+        d=gmail.com; s=20221208; t=1687953131; x=1690545131;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bLlpd+9cq+iVzEW7RWjKZweEWG5U9g9cyOtRfBdjXm0=;
+        b=grmGUCqDbelAoaeDKc9z6xfMNrAPgN0B4GziQ5WrBQTzhv4RYYWwXbkTtyRNiZK9/7
+         75OPLcFDVHxMAdsjZ+7UNud61else7/4X01+mhQS9q/m656zK7DWnTj0OxC5o6OVHQge
+         ijtMBcNBKCY0iqi+U7Ss7bmdMt5bIFKEvYvNGOlLh8ngcI8JGhD1oe01Jc/YjDci/XS8
+         JgmNCsNRAWjGc9PpKO1XtChiKQi8w9jihTAwaCEz86ti+PCgd7sPqdC+m0b4qucP3TrF
+         67jioTlZQu+XUMEMBn5feGbgyVkC4+pFe4yEWwoSdOUk61SNz5mNCi3EDqxuCGC73Pkh
+         qMIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687953128; x=1690545128;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=juoQiVr0aY5LbgdzJ8Knoi0ZZjFwuTVW3cNmVIAHLZk=;
-        b=LvAiaQaPdphaq72dGhkkDpiubxbqkSyJp+jk5xIUl2YE9nsycHqYzvRFwR3O3qiuWO
-         GMTPb289vODiyq7MT015Xj2fuyGzB5qDFqgZvBYqKe2vNlm/1KZvcKTg2V3PO2Gg+9uI
-         qOcNdWRmIGLndLsIT8pk6OIVsHcN8CRAuH5jO2Lj6ODWdM1+H8U+IVGzSi3kUzhAvpX1
-         xTUVbyqg4mqmId+bXxnmrf9I6bFvYoZS3aBjHbAuEIGZj22GtOplO7ku5bBOgCbMHxxP
-         DTPzvmh13NfVIJquLoRr9BdzJIlMHy1NWDsya+U966C0QrGRNSerhV6A5vh80TOHqlbH
-         1T5w==
-X-Gm-Message-State: AC+VfDzX68kc064B0dkb5O6dyfV/0Tm6DUe8sNmNAif4xkhyRPO9IOLU
-	aTBrxuxgwCwATsWqcUmxwVw=
-X-Google-Smtp-Source: ACHHUZ4+T46qNZZ/hmVtf+Ak9G6wxCgjPhsWrGwo2TilxaP0CNCHSL6hWxSqfqg342TOQXM5wYtzJA==
-X-Received: by 2002:a17:902:db03:b0:1b6:c552:b73b with SMTP id m3-20020a170902db0300b001b6c552b73bmr12369108plx.2.1687953128489;
-        Wed, 28 Jun 2023 04:52:08 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687953131; x=1690545131;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bLlpd+9cq+iVzEW7RWjKZweEWG5U9g9cyOtRfBdjXm0=;
+        b=SR8FD5d6ZlJkssFD1lsgak7+kEXmE3kDrrHoM7ag4cQTHBT7Gd9xqHlw4cFMPnkusF
+         P46mpLc+ixnvNe1eaIxTp84FKt1OwShAKNVj0UcZlvAT2iJad8YPsAUXPd+dVf1Q62NJ
+         7i/4zt7iQKOVqGZAiVe1BUsDDgvnlirbOrMVCjV3Qwb3hPxzARwCFeS4PsOjr3L96KGE
+         za7HDKdOF6cqJvAM8t+PL6DN1cEMaVb7e359oFl1sv0IHHdufr10352Ht1sBmdPXkrzn
+         HNlf/JfORTKFHqWwwqWvMQOuqfYRTk5YuHZ217/rK2t/sDy1U+q3yiOX+vTAtA4p0L1r
+         WTXg==
+X-Gm-Message-State: AC+VfDxSpUM6+Y6llRW9/vGSdONwWPP3CF+cW3eERf47PoyibAhRuAnr
+	IdmUQqwCFSF0Qgg34SHhA4E=
+X-Google-Smtp-Source: ACHHUZ4RFlcbd/wOCqbjqAQt3FukodJmDAx60kgQzYYEc/NwSlm5P6CgNjSSFDVlFr8Gap/x+npWLA==
+X-Received: by 2002:a17:902:ce88:b0:1b6:68bb:6ad0 with SMTP id f8-20020a170902ce8800b001b668bb6ad0mr16921772plg.55.1687953131331;
+        Wed, 28 Jun 2023 04:52:11 -0700 (PDT)
 Received: from vultr.guest ([2001:19f0:ac02:b79:5400:4ff:fe7d:3e26])
-        by smtp.gmail.com with ESMTPSA id jf5-20020a170903268500b001b7eeffbdbfsm6607133plb.261.2023.06.28.04.52.07
+        by smtp.gmail.com with ESMTPSA id jf5-20020a170903268500b001b7eeffbdbfsm6607133plb.261.2023.06.28.04.52.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 04:52:08 -0700 (PDT)
+        Wed, 28 Jun 2023 04:52:10 -0700 (PDT)
 From: Yafang Shao <laoar.shao@gmail.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -54,10 +55,12 @@ To: ast@kernel.org,
 	jolsa@kernel.org
 Cc: bpf@vger.kernel.org,
 	Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next 0/2] bpf: Fix errors in verifying a union 
-Date: Wed, 28 Jun 2023 11:52:03 +0000
-Message-Id: <20230628115205.248395-1-laoar.shao@gmail.com>
+Subject: [PATCH bpf-next 2/2] bpf: Fix an error in verifying a field in a union
+Date: Wed, 28 Jun 2023 11:52:05 +0000
+Message-Id: <20230628115205.248395-3-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.39.3
+In-Reply-To: <20230628115205.248395-1-laoar.shao@gmail.com>
+References: <20230628115205.248395-1-laoar.shao@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -72,16 +75,71 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Patch #1: Fix an issue found in code review
-Patch #2: Fix an issue found in our dev server
+We are utilizing BPF LSM to monitor BPF operations within our container
+environment. When we add support for raw_tracepoint, it hits below
+error.
 
-Yafang Shao (2):
-  bpf: Fix an error around PTR_UNTRUSTED
-  bpf: Fix an error in verifying a field in a union
+; (const void *)attr->raw_tracepoint.name);
+27: (79) r3 = *(u64 *)(r2 +0)
+access beyond the end of member map_type (mend:4) in struct (anon) with off 0 size 8
 
- kernel/bpf/btf.c | 22 ++++++++++------------
- 1 file changed, 10 insertions(+), 12 deletions(-)
+It can be reproduced with below BPF prog.
 
+SEC("lsm/bpf")
+int BPF_PROG(bpf_audit, int cmd, union bpf_attr *attr, unsigned int size)
+{
+	switch (cmd) {
+	case BPF_RAW_TRACEPOINT_OPEN:
+		bpf_printk("raw_tracepoint is %s", attr->raw_tracepoint.name);
+		break;
+	default:
+		break;
+	}
+	return 0;
+}
+
+The reason is that when accessing a field in a union, such as bpf_attr,
+if the field is located within a nested struct that is not the first
+member of the union, it can result in incorrect field verification.
+
+  union bpf_attr {
+      struct {
+          __u32 map_type; <<<< Actually it will find that field.
+          __u32 key_size;
+          __u32 value_size;
+         ...
+      };
+      ...
+      struct {
+          __u64 name;    <<<< We want to verify this field.
+          __u32 prog_fd;
+      } raw_tracepoint;
+  };
+
+Considering the potential deep nesting levels, finding a perfect
+solution to address this issue has proven challenging. Therefore, I
+propose a solution where we simply skip the verification process if the
+field in question is located within a union.
+
+Fixes: 7e3617a72df3 ("bpf: Add array support to btf_struct_access")
+Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+---
+ kernel/bpf/btf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index e0a493230727..8ad27b16bc8b 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -6366,7 +6366,7 @@ static int btf_struct_walk(struct bpf_verifier_log *log, const struct btf *btf,
+ 		 * that also allows using an array of int as a scratch
+ 		 * space. e.g. skb->cb[].
+ 		 */
+-		if (off + size > mtrue_end) {
++		if (off + size > mtrue_end && !(*flag & PTR_UNTRUSTED)) {
+ 			bpf_log(log,
+ 				"access beyond the end of member %s (mend:%u) in struct %s with off %u size %u\n",
+ 				mname, mtrue_end, tname, off, size);
 -- 
 2.39.3
 
