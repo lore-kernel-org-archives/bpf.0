@@ -1,48 +1,48 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B3B41096A
-	for <bpf@vger.kernel.org>; Thu, 29 Jun 2023 13:40:57 +0000 (UTC)
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C4230F7
-	for <bpf@vger.kernel.org>; Thu, 29 Jun 2023 06:40:56 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-313e09a5b19so582510f8f.0
-        for <bpf@vger.kernel.org>; Thu, 29 Jun 2023 06:40:56 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DE9C125A9
+	for <bpf@vger.kernel.org>; Thu, 29 Jun 2023 13:46:37 +0000 (UTC)
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE3F30F1
+	for <bpf@vger.kernel.org>; Thu, 29 Jun 2023 06:46:36 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3fa93d61d48so7385125e9.0
+        for <bpf@vger.kernel.org>; Thu, 29 Jun 2023 06:46:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1688046054; x=1690638054;
+        d=isovalent.com; s=google; t=1688046395; x=1690638395;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=cGXK3C74QJuocmmCvr9+ftQeIaLnPFI8vnaWY2A8whc=;
-        b=i9SfxqWHjUp/WXLt1WJ2bmxBsACWRUAk0rc+V4t4bXJqrRLDp5ae8ea4vJjVjUtaCc
-         mRsTi6+2uDtnKCnGs2Dl+jKyV4CiBkGpBDRR7mBIo4HbDbLrs71NrdEFYnkewf17R6BM
-         E+vGOhOdG7VGFvSXeCAx/+pP/5x17yrsCSkjLHFJnVR3xBo+8teD+D1UBRg2ujWeEkde
-         BWA9Ygce/DcyLo9lom39b60W2aIgOYdp+ErSnuxp0QB92mtVgyCJ4oPpvnfi69xw+4aC
-         XOEK0QuZtgIgOEreL822AsNcoUWiYBOaKqve1WcHPVJW3v1PIWWFUv5YcLAe4BOPqLgY
-         lxlg==
+        bh=yZsl8N+iQhKsIOsKT4bOEhED89h7DOOL2ijQX1JXlvM=;
+        b=VEiixseM0P5V7v02CJFneYpijvx9SKlFreI31SM1UDp0Ceg9n5lxkz3TBCvceeqbOl
+         CGWVQyXcB3aYDjyseZVs+R+kuUGR1OplM520KZUAl2VvQBGbswOvYpXSKU2LEMQf55QV
+         phQABZ/H3UWcVWc43zbY7Pig4EK46BHYCU/GyHI7yz7WZdvd5vquzY4QmCHtSBQ9IgM2
+         qbx3JH+1pmWH61BOXJH0QRqbkjozLnEArQzUo6X53kUes9ODHTtmy9+KF18btvMONgpR
+         gaMsuLsQYuJFFXBQrn7eRvpX4DTlhplkZFnZf+0tbcHYA2/i70V2OzSdUIF6HhVnfqeq
+         0Cjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688046054; x=1690638054;
+        d=1e100.net; s=20221208; t=1688046395; x=1690638395;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cGXK3C74QJuocmmCvr9+ftQeIaLnPFI8vnaWY2A8whc=;
-        b=cdO7i+nQU1KYrkp0R6QxaMwxVEcebU1/TiE+HL+2go74x08PomDYTmOkopAh8xo7nE
-         9hKeiC525GLSuBQakXvS/ASOtYhhYQ2wcSYMag41YiJLhDFByck3FI0bcK4ZhPVMUATv
-         OXCuLQZS4B8asaqdCfGJnsae0Tpccy+K3e1gO6R3GT0ZJAtYqqkXhpg3MLn1qTjt3dSw
-         p/YAA8aqIEUS5p80OpCbXGDBSZGC7fXrymT5vERhOHVV10RLCysJvdyorI2V45oIsAOo
-         hkC9sCN5g2sszbqW8IhTIdrDn406SIAWUvd4lwWN5kbrd63u8Sa/PJ9bPzkyiucNmpzF
-         QoVA==
-X-Gm-Message-State: ABy/qLZPe7OdhFKEBMKhh2EGjVVEFoq17O5DOKZEkqUNC/qwcXTe2tPA
-	tAKNpofz257fMUMfOW2f6s6YXg==
-X-Google-Smtp-Source: APBJJlGotcoLWANjsEy3iSZbDwVbvoXo/ZN4D3rSkJn1WhYaYLlTFvVKgS8hGYILgrkTNRiMSERfgA==
-X-Received: by 2002:a5d:440f:0:b0:314:11da:7c73 with SMTP id z15-20020a5d440f000000b0031411da7c73mr3210307wrq.11.1688046053981;
-        Thu, 29 Jun 2023 06:40:53 -0700 (PDT)
+        bh=yZsl8N+iQhKsIOsKT4bOEhED89h7DOOL2ijQX1JXlvM=;
+        b=Kxx6GokLB070PJPkt/oe+TXdAo7AOOXmKI4C17cDNz+AHhfPgIFSjP5D5222iO9vwo
+         vB5x5dzO0WuiSSa5W951zpROGNJWNktz75AbPKnnKaDw6dMthMDPZC54q3fz963QpZDl
+         X77dSoL1xOd7LpaeetMwV7MG9i5auJvCnJ2UyVLwPBh+u7ONU/+j2cOP+fAHvefRWKuV
+         zS4D6LJPB3SjHPaskHhNGQEp9AT5Dy2WloZ9JW+cjkbEqKZH8V/orItKSsGELflY2gSJ
+         3u1T3P+Potf0TsyN4FXIZpArrqEXDfwwJhBM6zo/cwXYLdUqQv3dvCmsGlgm5bij7xn2
+         S3jw==
+X-Gm-Message-State: AC+VfDxYkNdJkqtdIJZQXaJHioZZX3saykF/2LoAdAPjTZQQVqEuMSca
+	Lui1fFz4D2UbrkfNtW6dBiD7MQ==
+X-Google-Smtp-Source: ACHHUZ4ykR0aC8ipskXrfleWK1VpP1ySR2rPo8RtiZjGjbTNbOYq1LXPxBwFvwYApocWQDJzR2fHCQ==
+X-Received: by 2002:a05:600c:29a:b0:3fb:a8ef:edfe with SMTP id 26-20020a05600c029a00b003fba8efedfemr6067924wmk.18.1688046394807;
+        Thu, 29 Jun 2023 06:46:34 -0700 (PDT)
 Received: from ?IPV6:2a02:8011:e80c:0:48c4:4b87:cc05:b4fb? ([2a02:8011:e80c:0:48c4:4b87:cc05:b4fb])
-        by smtp.gmail.com with ESMTPSA id k9-20020adff5c9000000b0031411b7087dsm2902402wrp.20.2023.06.29.06.40.53
+        by smtp.gmail.com with ESMTPSA id m5-20020a05600c238500b003f900678815sm16575276wma.39.2023.06.29.06.46.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jun 2023 06:40:53 -0700 (PDT)
-Message-ID: <ebb24b2d-e7f4-a726-a03d-a89dc483efac@isovalent.com>
-Date: Thu, 29 Jun 2023 14:40:52 +0100
+        Thu, 29 Jun 2023 06:46:34 -0700 (PDT)
+Message-ID: <4892a56a-44f8-c45e-c119-503d63ce0fd2@isovalent.com>
+Date: Thu, 29 Jun 2023 14:46:33 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -51,7 +51,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v6 bpf-next 11/11] bpftool: Show perf link info
+Subject: Re: [PATCH v6 bpf-next 02/11] bpftool: Dump the kernel symbol's
+ module name
 Content-Language: en-GB
 To: Yafang Shao <laoar.shao@gmail.com>, ast@kernel.org, daniel@iogearbox.net,
  john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
@@ -59,11 +60,11 @@ To: Yafang Shao <laoar.shao@gmail.com>, ast@kernel.org, daniel@iogearbox.net,
  haoluo@google.com, jolsa@kernel.org, rostedt@goodmis.org, mhiramat@kernel.org
 Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org
 References: <20230628115329.248450-1-laoar.shao@gmail.com>
- <20230628115329.248450-12-laoar.shao@gmail.com>
+ <20230628115329.248450-3-laoar.shao@gmail.com>
 From: Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <20230628115329.248450-12-laoar.shao@gmail.com>
+In-Reply-To: <20230628115329.248450-3-laoar.shao@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
 	SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -72,94 +73,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
 2023-06-28 11:53 UTC+0000 ~ Yafang Shao <laoar.shao@gmail.com>
-> Enhance bpftool to display comprehensive information about exposed
-> perf_event links, covering uprobe, kprobe, tracepoint, and generic perf=
-
-> event. The resulting output will include the following details:
->=20
-> $ tools/bpf/bpftool/bpftool link show
-> 3: perf_event  prog 14
->         event software:cpu-clock
->         bpf_cookie 0
->         pids perf_event(19483)
-> 4: perf_event  prog 14
->         event hw-cache:LLC-load-misses
->         bpf_cookie 0
->         pids perf_event(19483)
-> 5: perf_event  prog 14
->         event hardware:cpu-cycles
->         bpf_cookie 0
->         pids perf_event(19483)
-> 6: perf_event  prog 19
->         tracepoint sched_switch
->         bpf_cookie 0
->         pids tracepoint(20947)
-> 7: perf_event  prog 26
->         uprobe /home/dev/waken/bpf/uprobe/a.out+0x1338
->         bpf_cookie 0
->         pids uprobe(21973)
-> 8: perf_event  prog 27
->         uretprobe /home/dev/waken/bpf/uprobe/a.out+0x1338
->         bpf_cookie 0
->         pids uprobe(21973)
-> 10: perf_event  prog 43
->         kprobe ffffffffb70a9660 kernel_clone
->         bpf_cookie 0
->         pids kprobe(35275)
-> 11: perf_event  prog 41
->         kretprobe ffffffffb70a9660 kernel_clone
->         bpf_cookie 0
->         pids kprobe(35275)
->=20
-> $ tools/bpf/bpftool/bpftool link show -j
-> [{"id":3,"type":"perf_event","prog_id":14,"event_type":"software","even=
-t_config":"cpu-clock","bpf_cookie":0,"pids":[{"pid":19483,"comm":"perf_ev=
-ent"}]},{"id":4,"type":"perf_event","prog_id":14,"event_type":"hw-cache",=
-"event_config":"LLC-load-misses","bpf_cookie":0,"pids":[{"pid":19483,"com=
-m":"perf_event"}]},{"id":5,"type":"perf_event","prog_id":14,"event_type":=
-"hardware","event_config":"cpu-cycles","bpf_cookie":0,"pids":[{"pid":1948=
-3,"comm":"perf_event"}]},{"id":6,"type":"perf_event","prog_id":19,"tracep=
-oint":"sched_switch","bpf_cookie":0,"pids":[{"pid":20947,"comm":"tracepoi=
-nt"}]},{"id":7,"type":"perf_event","prog_id":26,"retprobe":false,"file":"=
-/home/dev/waken/bpf/uprobe/a.out","offset":4920,"bpf_cookie":0,"pids":[{"=
-pid":21973,"comm":"uprobe"}]},{"id":8,"type":"perf_event","prog_id":27,"r=
-etprobe":true,"file":"/home/dev/waken/bpf/uprobe/a.out","offset":4920,"bp=
-f_cookie":0,"pids":[{"pid":21973,"comm":"uprobe"}]},{"id":10,"type":"perf=
-_event","prog_id":43,"retprobe":false,"addr":18446744072485508704,"func":=
-"kernel_clone","offset":0,"bpf_cookie":0,"pids":[{"pid":35275,"comm":"kpr=
-obe"}]},{"id":11,"type":"perf_event","prog_id":41,"retprobe":true,"addr":=
-18446744072485508704,"func":"kernel_clone","offset":0,"bpf_cookie":0,"pid=
-s":[{"pid":35275,"comm":"kprobe"}]}]
->=20
-> For generic perf events, the displayed information in bpftool is limite=
-d to
-> the type and configuration, while other attributes such as sample_perio=
-d,
-> sample_freq, etc., are not included.
->=20
-> The kernel function address won't be exposed if it is not permitted by
-> kptr_restrict. The result as follows when kptr_restrict is 2.
->=20
-> $ tools/bpf/bpftool/bpftool link show
-> 3: perf_event  prog 14
->         event software:cpu-clock
-> 4: perf_event  prog 14
->         event hw-cache:LLC-load-misses
-> 5: perf_event  prog 14
->         event hardware:cpu-cycles
-> 6: perf_event  prog 19
->         tracepoint sched_switch
-> 7: perf_event  prog 26
->         uprobe /home/dev/waken/bpf/uprobe/a.out+0x1338
-> 8: perf_event  prog 27
->         uretprobe /home/dev/waken/bpf/uprobe/a.out+0x1338
-> 10: perf_event  prog 43
->         kprobe kernel_clone
-> 11: perf_event  prog 41
->         kretprobe kernel_clone
->=20
+> If the kernel symbol is in a module, we will dump the module name as
+> well. The square brackets around the module name are trimmed.
+> 
 > Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+> Reviewed-by: Quentin Monnet <quentin@isovalent.com>
+> ---
+>  tools/bpf/bpftool/xlated_dumper.c | 6 +++++-
+>  tools/bpf/bpftool/xlated_dumper.h | 2 ++
+>  2 files changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/bpf/bpftool/xlated_dumper.c b/tools/bpf/bpftool/xlated_dumper.c
+> index da608e10c843..567f56dfd9f1 100644
+> --- a/tools/bpf/bpftool/xlated_dumper.c
+> +++ b/tools/bpf/bpftool/xlated_dumper.c
+> @@ -46,7 +46,11 @@ void kernel_syms_load(struct dump_data *dd)
+>  		}
+>  		dd->sym_mapping = tmp;
+>  		sym = &dd->sym_mapping[dd->sym_count];
+> -		if (sscanf(buff, "%p %*c %s", &address, sym->name) != 2)
+> +
+> +		/* module is optional */
+> +		sym->module[0] = '\0';
+> +		/* trim the square brackets around the module name */
+> +		if (sscanf(buff, "%p %*c %s [%[^]]s", &address, sym->name, sym->module) < 2)
 
-Reviewed-by: Quentin Monnet <quentin@isovalent.com>
+Looking again at this patch, we should be good for parsing the module
+name with the sscanf() because I don't expect a module name longer than
+MODULE_MAX_NAME to show up, but I wonder what guarantee we have about
+symbols names staying under SYM_MAX_NAME? Maybe we should specify the
+max length to read, to remain on the safe side (or in case these limits
+change in the future). But it doesn't have to be part of your set, I can
+send a follow-up after that.
 
-Thank you!
+>  			continue;
+>  		sym->address = (unsigned long)address;
+>  		if (!strcmp(sym->name, "__bpf_call_base")) {
+> diff --git a/tools/bpf/bpftool/xlated_dumper.h b/tools/bpf/bpftool/xlated_dumper.h
+> index 9a946377b0e6..db3ba0671501 100644
+> --- a/tools/bpf/bpftool/xlated_dumper.h
+> +++ b/tools/bpf/bpftool/xlated_dumper.h
+> @@ -5,12 +5,14 @@
+>  #define __BPF_TOOL_XLATED_DUMPER_H
+>  
+>  #define SYM_MAX_NAME	256
+> +#define MODULE_MAX_NAME	64
+>  
+>  struct bpf_prog_linfo;
+>  
+>  struct kernel_sym {
+>  	unsigned long address;
+>  	char name[SYM_MAX_NAME];
+> +	char module[MODULE_MAX_NAME];
+>  };
+>  
+>  struct dump_data {
+
