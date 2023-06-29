@@ -1,39 +1,39 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90D9A1FA1
-	for <bpf@vger.kernel.org>; Thu, 29 Jun 2023 06:38:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 310A315D2
+	for <bpf@vger.kernel.org>; Thu, 29 Jun 2023 06:40:12 +0000 (UTC)
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A152705
-	for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 23:38:50 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35T0jYDc021594
-	for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 23:38:50 -0700
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6793C38
+	for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 23:40:10 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35T0P8Ir007189
+	for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 23:40:10 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=yozRRfXJhBk5ULKn51AOVrF9AD9DoE6tS2Ef4akPf6Y=;
- b=kgXgqshJ/0VOZPO+YCRbNrUyle9vOnakYnMUgyVyfFyWY0FVMotBJubKy19zr37Wf+6e
- bfdwAPG+TcsVhBUY+IlhLcVhgYmD1nDgdmX8ktn66Ldk5zob16LnW4oVmDI1tapnwQdf
- bFeD3P1spYzzFuzLkWWSDsKMKTF2kb7WcRU= 
+ bh=WCy8uU4McvYHXTI/bp8RY462DEcP+nk9AIqQ2PVADVY=;
+ b=g637XlbhwBt5n6xrn8PovxGFBgF5N6Agoogqio3RMAUKJwc1xNmiNea4xiVpSSInGbDj
+ eVatX8bGODaHODkboeNc/12np7y34S3u2GZnYEF4UTvaq3KXZrKV8uLG8TP7vUo2u2/M
+ 4W8tnGXTp476mVcTdXrUjBa/hIN9dDoY1p8= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3rgypq29w7-3
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3rgycyjbmv-2
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 23:38:49 -0700
-Received: from twshared29562.14.frc2.facebook.com (2620:10d:c0a8:1c::11) by
+	for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 23:40:09 -0700
+Received: from twshared32300.07.ash9.facebook.com (2620:10d:c0a8:1c::1b) by
  mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 28 Jun 2023 23:38:48 -0700
+ 15.1.2507.23; Wed, 28 Jun 2023 23:40:08 -0700
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id CA50C221E7F79; Wed, 28 Jun 2023 23:38:33 -0700 (PDT)
+	id DB91B221E7C39; Wed, 28 Jun 2023 23:37:39 -0700 (PDT)
 From: Yonghong Song <yhs@fb.com>
 To: <bpf@vger.kernel.org>
 CC: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Fangrui Song <maskray@google.com>, <kernel-team@fb.com>
-Subject: [RFC PATCH bpf-next 13/13] selftests/bpf: Add a cpuv4 test runner for cpu=v4 testing
-Date: Wed, 28 Jun 2023 23:38:33 -0700
-Message-ID: <20230629063833.1659088-1-yhs@fb.com>
+Subject: [RFC PATCH bpf-next 04/13] bpf: Support new unconditional bswap instruction
+Date: Wed, 28 Jun 2023 23:37:39 -0700
+Message-ID: <20230629063739.1650262-1-yhs@fb.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230629063715.1646832-1-yhs@fb.com>
 References: <20230629063715.1646832-1-yhs@fb.com>
@@ -46,8 +46,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: VgTFWXQ1SoL9kWQHoEc3LvfAz6gN45eJ
-X-Proofpoint-ORIG-GUID: VgTFWXQ1SoL9kWQHoEc3LvfAz6gN45eJ
+X-Proofpoint-ORIG-GUID: u-DG0ByzQUs8Bf0sdC6YVwu2I6nD08_M
+X-Proofpoint-GUID: u-DG0ByzQUs8Bf0sdC6YVwu2I6nD08_M
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-06-28_14,2023-06-27_01,2023-05-22_02
@@ -59,114 +59,78 @@ X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Similar to no-alu32 runner, a cpuv4 runner is created to test
-bpf programs compiled with -mcpu=3Dv4.
-
-The following are some num-of-insn statistics for each newer
-instructions, excluding naked asm (verifier_*) tests:
-   insn pattern                # of instructions
-   reg =3D (s8)reg               4
-   reg =3D (s16)reg              2
-   reg =3D (s32)reg              26
-   reg =3D *(s8 *)(reg + off)    11
-   reg =3D *(s16 *)(reg + off)   14
-   reg =3D *(s32 *)(reg + off)   15214
-   reg =3D bswap16 reg           133
-   reg =3D bswap32 reg           38
-   reg =3D bswap64 reg           14
-   reg s/=3D reg                 0
-   reg s%=3D reg                 0
-   gotol <offset>              58
-
-Note that in llvm -mcpu=3Dv4 implementation, the compiler is a little
-bit conservative about generating 'gotol' insn (32-bit branch offset)
-as it didn't precise count the number of insns (e.g., some insns are
-debug insns, etc.). Compared to old 'goto' insn, newer 'gotol' insn
-should have comparable verification states to 'goto' insn.
-
-I did not collect verifier stats now since I have not really
-started to do proper range bound estimation with these
-instructions.
-
-With current patch set, all selftests passed with -mcpu=3Dv4
-when running test_progs-cpuv4 binary.
+The existing 'be' and 'le' insns will do conditional bswap
+depends on host endianness. This patch implements
+unconditional bswap insns.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- tools/testing/selftests/bpf/Makefile | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ arch/x86/net/bpf_jit_comp.c |  1 +
+ kernel/bpf/core.c           | 14 ++++++++++++++
+ kernel/bpf/verifier.c       |  2 +-
+ 3 files changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-index 538df8fb8c42..5f901cb0df59 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -40,7 +40,7 @@ TEST_GEN_PROGS =3D test_verifier test_tag test_maps tes=
-t_lru_map test_lpm_map test
- 	test_sock test_sockmap get_cgroup_id_user \
- 	test_cgroup_storage \
- 	test_tcpnotify_user test_sysctl \
--	test_progs-no_alu32
-+	test_progs-no_alu32 test_progs-cpuv4
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 7c85d1b01931..6385a8d740b0 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -1322,6 +1322,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *a=
+ddrs, u8 *image, u8 *rw_image
+ 			break;
 =20
- # Also test bpf-gcc, if present
- ifneq ($(BPF_GCC),)
-@@ -379,6 +379,11 @@ define CLANG_NOALU32_BPF_BUILD_RULE
- 	$(call msg,CLNG-BPF,$(TRUNNER_BINARY),$2)
- 	$(Q)$(CLANG) $3 -O2 -target bpf -c $1 -mcpu=3Dv2 -o $2
- endef
-+# Similar to CLANG_BPF_BUILD_RULE, but with cpu-v4
-+define CLANG_CPUV4_BPF_BUILD_RULE
-+	$(call msg,CLNG-BPF,$(TRUNNER_BINARY),$2)
-+	$(Q)$(CLANG) $3 -O2 -target bpf -c $1 -mcpu=3Dv4 -o $2
-+endef
- # Build BPF object using GCC
- define GCC_BPF_BUILD_RULE
- 	$(call msg,GCC-BPF,$(TRUNNER_BINARY),$2)
-@@ -421,7 +426,7 @@ LINKED_BPF_SRCS :=3D $(patsubst %.bpf.o,%.c,$(foreach=
- skel,$(LINKED_SKELS),$($(ske
- # $eval()) and pass control to DEFINE_TEST_RUNNER_RULES.
- # Parameters:
- # $1 - test runner base binary name (e.g., test_progs)
--# $2 - test runner extra "flavor" (e.g., no_alu32, gcc-bpf, etc)
-+# $2 - test runner extra "flavor" (e.g., no_alu32, cpuv4, gcc-bpf, etc)
- define DEFINE_TEST_RUNNER
+ 		case BPF_ALU | BPF_END | BPF_FROM_BE:
++		case BPF_ALU64 | BPF_END | BPF_FROM_LE:
+ 			switch (imm32) {
+ 			case 16:
+ 				/* Emit 'ror %ax, 8' to swap lower 2 bytes */
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 72ee246ac3af..b59b41a3d07c 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1524,6 +1524,7 @@ EXPORT_SYMBOL_GPL(__bpf_call_base);
+ 	INSN_3(ALU64, DIV,  X),			\
+ 	INSN_3(ALU64, MOD,  X),			\
+ 	INSN_2(ALU64, NEG),			\
++	INSN_3(ALU64, END, TO_LE),		\
+ 	/*   Immediate based. */		\
+ 	INSN_3(ALU64, ADD,  K),			\
+ 	INSN_3(ALU64, SUB,  K),			\
+@@ -1845,6 +1846,19 @@ static u64 ___bpf_prog_run(u64 *regs, const struct=
+ bpf_insn *insn)
+ 			break;
+ 		}
+ 		CONT;
++	ALU64_END_TO_LE:
++		switch (IMM) {
++		case 16:
++			DST =3D (__force u16) __swab16(DST);
++			break;
++		case 32:
++			DST =3D (__force u32) __swab32(DST);
++			break;
++		case 64:
++			DST =3D (__force u64) __swab64(DST);
++			break;
++		}
++		CONT;
 =20
- TRUNNER_OUTPUT :=3D $(OUTPUT)$(if $2,/)$2
-@@ -449,7 +454,7 @@ endef
- # Using TRUNNER_XXX variables, provided by callers of DEFINE_TEST_RUNNER=
- and
- # set up by DEFINE_TEST_RUNNER itself, create test runner build rules wi=
-th:
- # $1 - test runner base binary name (e.g., test_progs)
--# $2 - test runner extra "flavor" (e.g., no_alu32, gcc-bpf, etc)
-+# $2 - test runner extra "flavor" (e.g., no_alu32, cpuv4, gcc-bpf, etc)
- define DEFINE_TEST_RUNNER_RULES
-=20
- ifeq ($($(TRUNNER_OUTPUT)-dir),)
-@@ -580,6 +585,11 @@ TRUNNER_BPF_BUILD_RULE :=3D CLANG_NOALU32_BPF_BUILD_=
-RULE
- TRUNNER_BPF_CFLAGS :=3D $(BPF_CFLAGS) $(CLANG_CFLAGS)
- $(eval $(call DEFINE_TEST_RUNNER,test_progs,no_alu32))
-=20
-+# Define test_progs-cpuv4 test runner.
-+TRUNNER_BPF_BUILD_RULE :=3D CLANG_CPUV4_BPF_BUILD_RULE
-+TRUNNER_BPF_CFLAGS :=3D $(BPF_CFLAGS) $(CLANG_CFLAGS)
-+$(eval $(call DEFINE_TEST_RUNNER,test_progs,cpuv4))
-+
- # Define test_progs BPF-GCC-flavored test runner.
- ifneq ($(BPF_GCC),)
- TRUNNER_BPF_BUILD_RULE :=3D GCC_BPF_BUILD_RULE
-@@ -674,7 +684,7 @@ EXTRA_CLEAN :=3D $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR) =
-$(HOST_SCRATCH_DIR)	\
- 	prog_tests/tests.h map_tests/tests.h verifier/tests.h		\
- 	feature bpftool							\
- 	$(addprefix $(OUTPUT)/,*.o *.skel.h *.lskel.h *.subskel.h	\
--			       no_alu32 bpf_gcc bpf_testmod.ko		\
-+			       no_alu32 cpuv4 bpf_gcc bpf_testmod.ko	\
- 			       liburandom_read.so)
-=20
- .PHONY: docs docs-clean
+ 	/* CALL */
+ 	JMP_CALL:
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 5c5b37b6b39a..d515bfee1a8f 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -12901,7 +12901,7 @@ static int check_alu_op(struct bpf_verifier_env *=
+env, struct bpf_insn *insn)
+ 		} else {
+ 			if (insn->src_reg !=3D BPF_REG_0 || insn->off !=3D 0 ||
+ 			    (insn->imm !=3D 16 && insn->imm !=3D 32 && insn->imm !=3D 64) ||
+-			    BPF_CLASS(insn->code) =3D=3D BPF_ALU64) {
++			    (BPF_CLASS(insn->code) =3D=3D BPF_ALU64 && BPF_SRC(insn->code) !=3D=
+ BPF_K)) {
+ 				verbose(env, "BPF_END uses reserved fields\n");
+ 				return -EINVAL;
+ 			}
 --=20
 2.34.1
 
