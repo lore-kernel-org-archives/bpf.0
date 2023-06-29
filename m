@@ -1,32 +1,32 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF11D7497
-	for <bpf@vger.kernel.org>; Thu, 29 Jun 2023 05:19:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6267079DF
+	for <bpf@vger.kernel.org>; Thu, 29 Jun 2023 05:19:11 +0000 (UTC)
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2BE3294C
-	for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 22:19:08 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35T17Nea006407
-	for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 22:19:08 -0700
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2924198E
+	for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 22:19:09 -0700 (PDT)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35T0S7GL019120
+	for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 22:19:09 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3rgycyhr9a-1
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3rgye41srp-4
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 22:19:08 -0700
-Received: from twshared4466.29.prn2.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Wed, 28 Jun 2023 22:19:09 -0700
+Received: from twshared4466.29.prn2.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.23; Wed, 28 Jun 2023 22:19:07 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 2A4C633AFB64B; Wed, 28 Jun 2023 22:18:57 -0700 (PDT)
+	id 3561E33AFB73D; Wed, 28 Jun 2023 22:19:03 -0700 (PDT)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>
 CC: <linux-security-module@vger.kernel.org>, <keescook@chromium.org>,
         <brauner@kernel.org>, <lennart@poettering.net>, <cyphar@cyphar.com>,
         <luto@kernel.org>, <kernel-team@meta.com>, <sargun@sargun.me>
-Subject: [PATCH RESEND v3 bpf-next 12/14] bpf: consistenly use BPF token throughout BPF verifier logic
-Date: Wed, 28 Jun 2023 22:18:30 -0700
-Message-ID: <20230629051832.897119-13-andrii@kernel.org>
+Subject: [PATCH RESEND v3 bpf-next 14/14] selftests/bpf: add BPF token-enabled BPF_PROG_LOAD tests
+Date: Wed, 28 Jun 2023 22:18:32 -0700
+Message-ID: <20230629051832.897119-15-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230629051832.897119-1-andrii@kernel.org>
 References: <20230629051832.897119-1-andrii@kernel.org>
@@ -39,8 +39,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: Qbg20ke-Y3-ZdyO-GcUk_c37RHs9tlxI
-X-Proofpoint-GUID: Qbg20ke-Y3-ZdyO-GcUk_c37RHs9tlxI
+X-Proofpoint-GUID: mbyuRNU9CpTIb3NVwW31J_Qb9ek91iPi
+X-Proofpoint-ORIG-GUID: mbyuRNU9CpTIb3NVwW31J_Qb9ek91iPi
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-06-28_14,2023-06-27_01,2023-05-22_02
@@ -51,162 +51,105 @@ X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Remove remaining direct queries to perfmon_capable() and bpf_capable()
-in BPF verifier logic and instead use BPF token (if available) to make
-decisions about privileges.
+Add a test validating that BPF token can be used to load privileged BPF
+program using privileged BPF helpers through delegated BPF token created
+by privileged process.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- include/linux/bpf.h    | 18 ++++++++++--------
- include/linux/filter.h |  2 +-
- kernel/bpf/arraymap.c  |  2 +-
- kernel/bpf/core.c      |  2 +-
- kernel/bpf/verifier.c  | 13 ++++++-------
- net/core/filter.c      |  4 ++--
- 6 files changed, 21 insertions(+), 20 deletions(-)
+ .../testing/selftests/bpf/prog_tests/token.c  | 66 +++++++++++++++++++
+ 1 file changed, 66 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 0e8680e639cb..af9f7dc60f21 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2059,24 +2059,26 @@ bpf_map_alloc_percpu(const struct bpf_map *map, s=
-ize_t size, size_t align,
+diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testi=
+ng/selftests/bpf/prog_tests/token.c
+index 113cd4786a70..415d49eacd4f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/token.c
++++ b/tools/testing/selftests/bpf/prog_tests/token.c
+@@ -4,6 +4,7 @@
+ #include <test_progs.h>
+ #include <bpf/btf.h>
+ #include "cap_helpers.h"
++#include <linux/filter.h>
 =20
- extern int sysctl_unprivileged_bpf_disabled;
+ static int drop_priv_caps(__u64 *old_caps)
+ {
+@@ -200,6 +201,69 @@ static void subtest_btf_token(void)
+ 		ASSERT_OK(restore_priv_caps(old_caps), "restore_caps");
+ }
 =20
--static inline bool bpf_allow_ptr_leaks(void)
-+bool bpf_token_capable(const struct bpf_token *token, int cap);
++static void subtest_prog_token(void)
++{
++	LIBBPF_OPTS(bpf_token_create_opts, token_opts);
++	LIBBPF_OPTS(bpf_prog_load_opts, prog_opts);
++	int token_fd =3D 0, prog_fd =3D 0, err;
++	__u64 old_caps =3D 0;
++	struct bpf_insn insns[] =3D {
++		/* bpf_jiffies64() requires CAP_BPF */
++		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_jiffies64),
++		/* bpf_get_current_task() requires CAP_PERFMON */
++		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_current_task),
++		/* r0 =3D 0; exit; */
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
++	size_t insn_cnt =3D ARRAY_SIZE(insns);
 +
-+static inline bool bpf_allow_ptr_leaks(const struct bpf_token *token)
- {
--	return perfmon_capable();
-+	return bpf_token_capable(token, CAP_PERFMON);
- }
-=20
--static inline bool bpf_allow_uninit_stack(void)
-+static inline bool bpf_allow_uninit_stack(const struct bpf_token *token)
- {
--	return perfmon_capable();
-+	return bpf_token_capable(token, CAP_PERFMON);
- }
-=20
--static inline bool bpf_bypass_spec_v1(void)
-+static inline bool bpf_bypass_spec_v1(const struct bpf_token *token)
- {
--	return perfmon_capable();
-+	return bpf_token_capable(token, CAP_PERFMON);
- }
-=20
--static inline bool bpf_bypass_spec_v4(void)
-+static inline bool bpf_bypass_spec_v4(const struct bpf_token *token)
- {
--	return perfmon_capable();
-+	return bpf_token_capable(token, CAP_PERFMON);
- }
-=20
- int bpf_map_new_fd(struct bpf_map *map, int flags);
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index f69114083ec7..2391a9025ffd 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -1109,7 +1109,7 @@ static inline bool bpf_jit_blinding_enabled(struct =
-bpf_prog *prog)
- 		return false;
- 	if (!bpf_jit_harden)
- 		return false;
--	if (bpf_jit_harden =3D=3D 1 && bpf_capable())
-+	if (bpf_jit_harden =3D=3D 1 && bpf_token_capable(prog->aux->token, CAP_=
-BPF))
- 		return false;
-=20
- 	return true;
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 2058e89b5ddd..f0c64df6b6ff 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -82,7 +82,7 @@ static struct bpf_map *array_map_alloc(union bpf_attr *=
-attr)
- 	bool percpu =3D attr->map_type =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY;
- 	int numa_node =3D bpf_map_attr_numa_node(attr);
- 	u32 elem_size, index_mask, max_entries;
--	bool bypass_spec_v1 =3D bpf_bypass_spec_v1();
-+	bool bypass_spec_v1 =3D bpf_bypass_spec_v1(NULL);
- 	u64 array_size, mask64;
- 	struct bpf_array *array;
-=20
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 2ed54d1ed32a..979c10b9399d 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -661,7 +661,7 @@ static bool bpf_prog_kallsyms_candidate(const struct =
-bpf_prog *fp)
- void bpf_prog_kallsyms_add(struct bpf_prog *fp)
- {
- 	if (!bpf_prog_kallsyms_candidate(fp) ||
--	    !bpf_capable())
-+	    !bpf_token_capable(fp->aux->token, CAP_BPF))
- 		return;
-=20
- 	bpf_prog_ksym_set_addr(fp);
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 11e54dd8b6dd..9d89ba98f8d8 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19403,7 +19403,12 @@ int bpf_check(struct bpf_prog **prog, union bpf_=
-attr *attr, bpfptr_t uattr, __u3
- 	env->prog =3D *prog;
- 	env->ops =3D bpf_verifier_ops[env->prog->type];
- 	env->fd_array =3D make_bpfptr(attr->fd_array, uattr.is_kernel);
--	is_priv =3D bpf_capable();
++	/* create BPF token allowing BPF_PROG_LOAD command */
++	token_opts.allowed_cmds =3D 1ULL << BPF_PROG_LOAD;
++	token_opts.allowed_prog_types =3D 1ULL << BPF_PROG_TYPE_XDP;
++	token_opts.allowed_attach_types =3D 1ULL << BPF_XDP;
++	err =3D bpf_token_create(-EBADF, TOKEN_PATH, &token_opts);
++	if (!ASSERT_OK(err, "token_create"))
++		return;
 +
-+	env->allow_ptr_leaks =3D bpf_allow_ptr_leaks(env->prog->aux->token);
-+	env->allow_uninit_stack =3D bpf_allow_uninit_stack(env->prog->aux->toke=
-n);
-+	env->bypass_spec_v1 =3D bpf_bypass_spec_v1(env->prog->aux->token);
-+	env->bypass_spec_v4 =3D bpf_bypass_spec_v4(env->prog->aux->token);
-+	env->bpf_capable =3D is_priv =3D bpf_token_capable(env->prog->aux->toke=
-n, CAP_BPF);
-=20
- 	bpf_get_btf_vmlinux();
-=20
-@@ -19435,12 +19440,6 @@ int bpf_check(struct bpf_prog **prog, union bpf_=
-attr *attr, bpfptr_t uattr, __u3
- 	if (attr->prog_flags & BPF_F_ANY_ALIGNMENT)
- 		env->strict_alignment =3D false;
-=20
--	env->allow_ptr_leaks =3D bpf_allow_ptr_leaks();
--	env->allow_uninit_stack =3D bpf_allow_uninit_stack();
--	env->bypass_spec_v1 =3D bpf_bypass_spec_v1();
--	env->bypass_spec_v4 =3D bpf_bypass_spec_v4();
--	env->bpf_capable =3D bpf_capable();
--
- 	if (is_priv)
- 		env->test_state_freq =3D attr->prog_flags & BPF_F_TEST_STATE_FREQ;
-=20
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 03c411dc1e80..a58e6d5608ba 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -8525,7 +8525,7 @@ static bool cg_skb_is_valid_access(int off, int siz=
-e,
- 		return false;
- 	case bpf_ctx_range(struct __sk_buff, data):
- 	case bpf_ctx_range(struct __sk_buff, data_end):
--		if (!bpf_capable())
-+		if (!bpf_token_capable(prog->aux->token, CAP_BPF))
- 			return false;
- 		break;
- 	}
-@@ -8537,7 +8537,7 @@ static bool cg_skb_is_valid_access(int off, int siz=
-e,
- 		case bpf_ctx_range_till(struct __sk_buff, cb[0], cb[4]):
- 			break;
- 		case bpf_ctx_range(struct __sk_buff, tstamp):
--			if (!bpf_capable())
-+			if (!bpf_token_capable(prog->aux->token, CAP_BPF))
- 				return false;
- 			break;
- 		default:
++	/* drop privileges to test token_fd passing */
++	if (!ASSERT_OK(drop_priv_caps(&old_caps), "drop_caps"))
++		goto cleanup;
++
++	token_fd =3D bpf_obj_get(TOKEN_PATH);
++	if (!ASSERT_GT(token_fd, 0, "token_get"))
++		goto cleanup;
++
++	/* validate we can successfully load BPF program with token; this
++	 * being XDP program (CAP_NET_ADMIN) using bpf_jiffies64() (CAP_BPF)
++	 * and bpf_get_current_task() (CAP_PERFMON) helpers validates we have
++	 * BPF token wired properly in a bunch of places in the kernel
++	 */
++	prog_opts.token_fd =3D token_fd;
++	prog_opts.expected_attach_type =3D BPF_XDP;
++	prog_fd =3D bpf_prog_load(BPF_PROG_TYPE_XDP, "token_prog", "GPL",
++				insns, insn_cnt, &prog_opts);
++	if (!ASSERT_GT(prog_fd, 0, "prog_fd"))
++		goto cleanup;
++	close(prog_fd);
++
++	/* now validate that we *cannot* load BPF program without token */
++	prog_opts.token_fd =3D 0;
++	prog_fd =3D bpf_prog_load(BPF_PROG_TYPE_XDP, "token_prog", "GPL",
++				insns, insn_cnt, &prog_opts);
++	if (!ASSERT_EQ(prog_fd, -EPERM, "prog_fd_eperm"))
++		goto cleanup;
++
++cleanup:
++	if (prog_fd > 0)
++		close(prog_fd);
++	if (token_fd)
++		close(token_fd);
++	unlink(TOKEN_PATH);
++	if (old_caps)
++		ASSERT_OK(restore_priv_caps(old_caps), "restore_caps");
++}
++
+ void test_token(void)
+ {
+ 	if (test__start_subtest("token_create"))
+@@ -208,4 +272,6 @@ void test_token(void)
+ 		subtest_map_token();
+ 	if (test__start_subtest("btf_token"))
+ 		subtest_btf_token();
++	if (test__start_subtest("prog_token"))
++		subtest_prog_token();
+ }
 --=20
 2.34.1
 
