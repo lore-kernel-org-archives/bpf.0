@@ -1,56 +1,55 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CD6914ABE
-	for <bpf@vger.kernel.org>; Fri, 30 Jun 2023 17:05:35 +0000 (UTC)
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3C4183
-	for <bpf@vger.kernel.org>; Fri, 30 Jun 2023 10:05:34 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-40345bf4875so14131cf.0
-        for <bpf@vger.kernel.org>; Fri, 30 Jun 2023 10:05:34 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF78171A4
+	for <bpf@vger.kernel.org>; Fri, 30 Jun 2023 17:06:45 +0000 (UTC)
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2910D35A5
+	for <bpf@vger.kernel.org>; Fri, 30 Jun 2023 10:06:33 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-40345bf4875so14631cf.0
+        for <bpf@vger.kernel.org>; Fri, 30 Jun 2023 10:06:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688144734; x=1690736734;
+        d=google.com; s=20221208; t=1688144792; x=1690736792;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3D1NO22NTJu1MOBGY7tF3xo48poE1uDp3veIeBVnBlI=;
-        b=GYacckAkcPnWUplTlaekkOtdSFaf+lNU/SG0cw+5dp7yjaMMg9+c4+ymm4dQCO38Dz
-         PdeHc8X6R5JAfcDF9pEpC+6ajTif3DHmMt3oQ1pnGmB4z6t4fZVtcvQDOywzhYQjNY4N
-         ZrsLZi88nhs+AOGpef+VHTEBPVP+iJGc7S8ob7082O/VQlMOcC/mPJNjmHtq7Uxhg12+
-         y1/8ti9u6rVypzIy6UFRV8AuNWz4nuRxB/b4IEi4uWs6Sj6ETn2sFI+QWnZNX9r+PsIY
-         BgyRUFrSoyM296nO3MvEJ1qKgV7N6SlOdXyMnqVHJ9ROIGBfM5BXuc6Z2zFdnGTqm3As
-         OZZQ==
+        bh=bVASgTbCR4LtAtuJDvbzQqcVGfEYiy6r88JHy3o1xnM=;
+        b=sRPUrGc9oB3Ibx7b/YzR9zN1h4GcsCtdB2wPN9i2xCzo+C72hWz7E+S79AFvhELUXK
+         WT5lbrV1eH7BnRBwtfu4x4nJqK8FXOGykFCm62qvLNqfcM0IX3tT0ottt4U9mJS0ujXG
+         ok3WBjbbowT3gqGBb5uyVDA7jzQEOezX8AQ5feg+/c6kOz1ZcFJS4wT7zPYaPogOWRS4
+         wkgW6D7yqK7Dcztm/cEkDOHB5nzTQnQOFZdAE4DxBGn8KpY+g32ARYs+IabA4YVIPMUb
+         xksSUOtEBJY38SV1cV938+lQnctdlcTd3W4pvDateJ6xEwnTv9exq5ebBdWU1QdP8wNy
+         hs1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688144734; x=1690736734;
+        d=1e100.net; s=20221208; t=1688144792; x=1690736792;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3D1NO22NTJu1MOBGY7tF3xo48poE1uDp3veIeBVnBlI=;
-        b=gQg65uaz3y3+krdOgK+CjLPz/UMRoyDjmBebTntUXKu1PYxYxcnCzZTPm+o+rUQqai
-         ihmGCo4aZCcTAs7cet4h/gB3usCUHsLRolpR3DvIexqOujw+BOwGK0kDMtGq5VPqMPz+
-         Ek8rcfXuuK0S4/YqStd7dXn2MpJA5lbFMMGI2yNCEJgSc0bO4As/+itsz09ImnVFQOEq
-         4QPkS/NEXZyfycEms+ziFQNbKhfapLMlUTCC4Scs+H0XQyN3NnW3A2KMHGrgwmUOKw2k
-         V3HWQ6qfT3bVxjlQWMLRF2l+KK5wZuMd2tYCn1ehGjdsvyan2PzrgwcMtCYeZfeU9aQL
-         gj0A==
-X-Gm-Message-State: ABy/qLbHDu81AWiakJIfdr6IbBIMqbkXjaTSlW11PeVt9tvKimI4i3+x
-	5ys9MSrEb8Hqvgh96Ll0vT+A/1Bw4LBnYTjnV2KGYQ==
-X-Google-Smtp-Source: APBJJlGFZH6uDfeEmQHjFg3l+Gr3kdJYkA2pz6Pf7n9i4u6wu+eAR+6jecdfSxzaXV6WzHsdQukovl+kgImmO77aQTU=
-X-Received: by 2002:a05:622a:208:b0:3f7:ff4a:eae5 with SMTP id
- b8-20020a05622a020800b003f7ff4aeae5mr3290qtx.12.1688144733661; Fri, 30 Jun
- 2023 10:05:33 -0700 (PDT)
+        bh=bVASgTbCR4LtAtuJDvbzQqcVGfEYiy6r88JHy3o1xnM=;
+        b=B6zYBTFTUPL/ScD5EBZpyzwtR1DwNNCk3bDjvYxKcXbdSmknAl3dLJHPT2hbuk2lKZ
+         gr0kwrLc8f412cmUtJKFB3bvSLmKeJvC9Unx54wBaovvry5uKKc/H54zMYlY5NTOqvLm
+         s3esO45StNjO2N1A9kMJMABYaBJ5Y/JAVIp9LIJ7mPOLZz4c/1mr1seNmjHD399tJr68
+         FYD/PHoy6tOXb4RIFRqzGW8ZVfllGJvRniIZat1yVEKdeUxXxTwa620F1l1UPuzGWmlj
+         mh1iz/LC00uomWTLN+Ug0DmqXsOhbihBwKnpIX8PBq6TYZFjbneWmNe+wN8Z8rngym4Y
+         bcog==
+X-Gm-Message-State: AC+VfDy3Kes4fAIDBrFqBdpFxyvA3W3TudReAfk3AUDuhlZcyTLBcOV2
+	Dz76qEM/lMgj6citonHFiMF1gm+o5qzNGPa3j/qiVQ==
+X-Google-Smtp-Source: ACHHUZ5cxfnrUBwwr53QuYLI3sStCvIc1DXzuyCXs6zKME22fD1QxLFlksDAe2Lqzr/0juxAp5RWE8ZplNuk+Qp80UI=
+X-Received: by 2002:ac8:5b46:0:b0:3f7:ffc8:2f6f with SMTP id
+ n6-20020ac85b46000000b003f7ffc82f6fmr1044117qtw.28.1688144792039; Fri, 30 Jun
+ 2023 10:06:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230627181030.95608-2-irogers@google.com> <8dab7522-31de-2137-7474-991885932308@web.de>
-In-Reply-To: <8dab7522-31de-2137-7474-991885932308@web.de>
+References: <20230627181030.95608-14-irogers@google.com> <ea39aaf0-0314-1780-c1cd-7c3661fa3e7c@web.de>
+In-Reply-To: <ea39aaf0-0314-1780-c1cd-7c3661fa3e7c@web.de>
 From: Ian Rogers <irogers@google.com>
-Date: Fri, 30 Jun 2023 10:05:22 -0700
-Message-ID: <CAP-5=fVxTYpiXgxDKX1q7ELoAPnAisajWcNOhAp19TZDwnA0oA@mail.gmail.com>
-Subject: Re: [PATCH v2 01/13] perf parse-events: Remove unused
- PE_PMU_EVENT_FAKE token
+Date: Fri, 30 Jun 2023 10:06:20 -0700
+Message-ID: <CAP-5=fX+kdRujgNAq8SVkkNwgnB383r38+AEmvon1k01R4X=kg@mail.gmail.com>
+Subject: Re: [PATCH v2 13/13] perf parse-events: Remove ABORT_ON
 To: Markus Elfring <Markus.Elfring@web.de>
 Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, 
 	kernel-janitors@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>, 
@@ -65,27 +64,28 @@ X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
 	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
 	T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-	autolearn=ham autolearn_force=no version=3.4.6
+	autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Fri, Jun 30, 2023 at 9:35=E2=80=AFAM Markus Elfring <Markus.Elfring@web.=
+On Fri, Jun 30, 2023 at 9:56=E2=80=AFAM Markus Elfring <Markus.Elfring@web.=
 de> wrote:
 >
-> > Removed by commit 70c90e4a6b2f ("perf parse-events: Avoid scanning
-> > PMUs before parsing").
+> > Prefer informative messages rather than none with ABORT_ON. Document
+> > one failure mode and add an error message for another.
 >
-> Will the chances ever grow to add another imperative change suggestion?
+> Does such a wording really fit to the known requirement =E2=80=9CSolve on=
+ly one problem per patch.=E2=80=9D?
 >
 > See also:
 > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/D=
-ocumentation/process/submitting-patches.rst?h=3Dv6.4#n94
+ocumentation/process/submitting-patches.rst?h=3Dv6.4#n81
 
-
-Sorry, I can't parse this.
+Sorry your explanation isn't clear. Please can you elaborate.
 
 Thanks,
 Ian
 
+>
 > Regards,
 > Markus
