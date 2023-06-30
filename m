@@ -1,46 +1,46 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD2C1E55E
-	for <bpf@vger.kernel.org>; Fri, 30 Jun 2023 08:24:23 +0000 (UTC)
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC303583
-	for <bpf@vger.kernel.org>; Fri, 30 Jun 2023 01:24:21 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3fa9850bfebso16780805e9.1
-        for <bpf@vger.kernel.org>; Fri, 30 Jun 2023 01:24:21 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B260FE55E
+	for <bpf@vger.kernel.org>; Fri, 30 Jun 2023 08:24:25 +0000 (UTC)
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F421FCD
+	for <bpf@vger.kernel.org>; Fri, 30 Jun 2023 01:24:23 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4fb761efa7aso2515542e87.0
+        for <bpf@vger.kernel.org>; Fri, 30 Jun 2023 01:24:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1688113459; x=1690705459;
+        d=isovalent.com; s=google; t=1688113462; x=1690705462;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=amlpCgJzx5rSxoJN7QUz28WPyqibs0iWhYHEZ64qSgg=;
-        b=fHCd6xxAEz3x1dXerVdDYkCGe06eSZg8rzUQ11MnrqzcQxROmmS5kcpyxhgv19keWW
-         vcDaUVQ9eYX+6GkVzaB2zQ1Kgs8vzywM9iwl+oLxfUbG364uv4/heP8TsAUoOkzRvzld
-         AHCaQy/IuRPsTOeEkV0gdaKXJTkPmv7eNXElySWdsjBH0hfZdolj9fZsiqlGfVXuxYh0
-         HMllsYtEL1NqLGPnPVSFxbAYVrlM4g6NaBJt+hyOYwqQXKGk+3NscwVZ40ZaupDBG0a3
-         OyfUI9TWUanb4h8FVesFGKmYuH8a3BGSlqdX2D1imwJsKR7TovsIQ2UbHLCvUy1WT916
-         j5dA==
+        bh=rDc1FTRDVGYw5a33Pd5hFkkT4/NFWZzka9LVMABeRdI=;
+        b=R/mObQrSNIszkpuJkHrHS3aD6CWJExj/7dvyADy+kfUYxtY6C5TAr3GMB8SQovvQo6
+         5ciPNL4MpfVPcy0DEB01iWNwGnQxpMRZxwv89JdBRgW44mWJ4DUgm9yVUrYZthsinlJj
+         gJv+evZdwfea8WWw8MWsuQhkJ7QwOUmE3KSQZrZJlbvAAzu2Y6uCC4sgEnNnsHE1CCp5
+         eS+mQv90Gz/cpeGE7YTRWyzDI7mEwijsNWS8mOhXE5e1g9tHAB4xLaBZ+ctFk1WCww2O
+         tF0KxqebWXxaeuv/D9l8UVq2iFJzaUbKDXnaJj75EBR/Ft0C/J7sHksMWxtymUjTc7UF
+         3fvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688113459; x=1690705459;
+        d=1e100.net; s=20221208; t=1688113462; x=1690705462;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=amlpCgJzx5rSxoJN7QUz28WPyqibs0iWhYHEZ64qSgg=;
-        b=XqZVvkc1dYl8mOAqfSwpPz+UcKwZfXTPeQedgt49WJuV9wrWgiLgtOzlD+huKMJlUg
-         I9rJjDIeXuv2cXwRJC4ZXNV8sJGaG2vDzrsWgobkU+w+6QFeYNyLBOjPr7DhaF98zYqP
-         mXTQEg5hfY1VrjrWKdPk90BBLvgrIbP+L85V/iZJadg4IGvSHDBOfiTyuM5hCuz9HB66
-         VpVvNRU2wtmdH9zlKcjd0JYUc52lL7Pjmf7+BY4yyzaEQx1PidFLf+Rt0YB9QZynz7pf
-         9xkv5g38NdFPPyzZfO6oAi6UNEl9+1jUcsFQxDiq0J/YHl1el3gs5AS2nQ5a0wYr+acF
-         mFog==
-X-Gm-Message-State: AC+VfDxqmBQlSlK0RyUQX4f0dgMyU6SAwEWc/0TLtjUX1aUzmQFDbN1Z
-	njww67LN0AtcOUL36gsi6dPoUg==
-X-Google-Smtp-Source: ACHHUZ7A6uBWBo1UOVDd890fh/GpokZvYrO9turGwEQv3IaLEKJzjVbLlUudYOdzJqtqlbvzIDewgg==
-X-Received: by 2002:a05:600c:2114:b0:3fa:8874:fe69 with SMTP id u20-20020a05600c211400b003fa8874fe69mr1537273wml.29.1688113459727;
-        Fri, 30 Jun 2023 01:24:19 -0700 (PDT)
+        bh=rDc1FTRDVGYw5a33Pd5hFkkT4/NFWZzka9LVMABeRdI=;
+        b=kmrNEbK/F1v+sdobZ6I9961oKgYWiT/1dB2FZpv5YcdGxTmQonVqvTgj4b66Yy8qjd
+         7NV0Ko4/pZ7/Xb3FeHlEaJuh/rsedzQCi6ODHlU9ydpeVMc6D1vUsdqgJEU5AvJhlBbR
+         jjIY7fuw4JemvgtNJr/2rHYXJt8+CVajN8Y6cRWw5rEU9xDQuvy12JCpz4+n4Pbfyyju
+         Qku6EMMI54iIgcTZsv5qPDlAwHdoUwfITOC41e8huwVMxrrEZAtB5i5GdFYkWFWdtsAZ
+         xaX5EtSsJS4EkhNuoRKvLvRBZsPhA8hodhXy/FM7lGfEZMYsSqfndiZXWiYRGCuJ6cKn
+         aCMw==
+X-Gm-Message-State: ABy/qLZfwNG78GFm7dcRxN8KGUMh7aLxKjG+gnRAW9F6WzEyEKHycAjb
+	EwkUdOviX6paahshafcg0jF4xA==
+X-Google-Smtp-Source: APBJJlGMuc7B7paEZlmwZ/4HZVaK+X/jB5qkkCQin8ILehsK/TFIXyCYMU8eGB0hj7shuZT+s1UhNg==
+X-Received: by 2002:a19:8c1d:0:b0:4f4:b13a:d683 with SMTP id o29-20020a198c1d000000b004f4b13ad683mr1553542lfd.69.1688113461692;
+        Fri, 30 Jun 2023 01:24:21 -0700 (PDT)
 Received: from zh-lab-node-5.home ([2a02:168:f656:0:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id h2-20020a1ccc02000000b003fa74bff02asm18189941wmb.26.2023.06.30.01.24.18
+        by smtp.gmail.com with ESMTPSA id h2-20020a1ccc02000000b003fa74bff02asm18189941wmb.26.2023.06.30.01.24.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 01:24:19 -0700 (PDT)
+        Fri, 30 Jun 2023 01:24:21 -0700 (PDT)
 From: Anton Protopopov <aspsk@isovalent.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -55,9 +55,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	Jiri Olsa <jolsa@kernel.org>,
 	bpf@vger.kernel.org
 Cc: Anton Protopopov <aspsk@isovalent.com>
-Subject: [v3 PATCH bpf-next 3/6] bpf: populate the per-cpu insertions/deletions counters for hashmaps
-Date: Fri, 30 Jun 2023 08:25:13 +0000
-Message-Id: <20230630082516.16286-4-aspsk@isovalent.com>
+Subject: [v3 PATCH bpf-next 5/6] selftests/bpf: test map percpu stats
+Date: Fri, 30 Jun 2023 08:25:15 +0000
+Message-Id: <20230630082516.16286-6-aspsk@isovalent.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230630082516.16286-1-aspsk@isovalent.com>
 References: <20230630082516.16286-1-aspsk@isovalent.com>
@@ -75,121 +75,400 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Initialize and utilize the per-cpu insertions/deletions counters for hash-based
-maps. Non-trivial changes only apply to the preallocated maps for which the
-{inc,dec}_elem_count functions are not called, as there's no need in counting
-elements to sustain proper map operations.
+Add a new map test, map_percpu_stats.c, which is checking the correctness of
+map's percpu elements counters.  For supported maps the test upserts a number
+of elements, checks the correctness of the counters, then deletes all the
+elements and checks again that the counters sum drops down to zero.
 
-To increase/decrease percpu counters for preallocated maps we add raw calls to
-the bpf_map_{inc,dec}_elem_count functions so that the impact is minimal. For
-dynamically allocated maps we add corresponding calls to the existing
-{inc,dec}_elem_count functions.
+The following map types are tested:
+
+    * BPF_MAP_TYPE_HASH, BPF_F_NO_PREALLOC
+    * BPF_MAP_TYPE_PERCPU_HASH, BPF_F_NO_PREALLOC
+    * BPF_MAP_TYPE_HASH,
+    * BPF_MAP_TYPE_PERCPU_HASH,
+    * BPF_MAP_TYPE_LRU_HASH
+    * BPF_MAP_TYPE_LRU_PERCPU_HASH
 
 Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
 ---
- kernel/bpf/hashtab.c | 23 ++++++++++++++++++++---
- 1 file changed, 20 insertions(+), 3 deletions(-)
+ .../bpf/map_tests/map_percpu_stats.c          | 336 ++++++++++++++++++
+ .../selftests/bpf/progs/map_percpu_stats.c    |  24 ++
+ 2 files changed, 360 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/map_tests/map_percpu_stats.c
+ create mode 100644 tools/testing/selftests/bpf/progs/map_percpu_stats.c
 
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 56d3da7d0bc6..faaef4fd3df0 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -581,8 +581,14 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
- 		}
- 	}
- 
-+	err = bpf_map_init_elem_count(&htab->map);
-+	if (err)
-+		goto free_extra_elements;
+diff --git a/tools/testing/selftests/bpf/map_tests/map_percpu_stats.c b/tools/testing/selftests/bpf/map_tests/map_percpu_stats.c
+new file mode 100644
+index 000000000000..5b45af230368
+--- /dev/null
++++ b/tools/testing/selftests/bpf/map_tests/map_percpu_stats.c
+@@ -0,0 +1,336 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2023 Isovalent */
 +
- 	return &htab->map;
- 
-+free_extra_elements:
-+	free_percpu(htab->extra_elems);
- free_prealloc:
- 	prealloc_destroy(htab);
- free_map_locked:
-@@ -804,6 +810,7 @@ static bool htab_lru_map_delete_node(void *arg, struct bpf_lru_node *node)
- 		if (l == tgt_l) {
- 			hlist_nulls_del_rcu(&l->hash_node);
- 			check_and_free_fields(htab, l);
-+			bpf_map_dec_elem_count(&htab->map);
- 			break;
- 		}
- 
-@@ -900,6 +907,8 @@ static bool is_map_full(struct bpf_htab *htab)
- 
- static void inc_elem_count(struct bpf_htab *htab)
- {
-+	bpf_map_inc_elem_count(&htab->map);
++#include <errno.h>
++#include <unistd.h>
++#include <pthread.h>
 +
- 	if (htab->use_percpu_counter)
- 		percpu_counter_add_batch(&htab->pcount, 1, PERCPU_COUNTER_BATCH);
- 	else
-@@ -908,6 +917,8 @@ static void inc_elem_count(struct bpf_htab *htab)
- 
- static void dec_elem_count(struct bpf_htab *htab)
- {
-+	bpf_map_dec_elem_count(&htab->map);
++#include <bpf/bpf.h>
++#include <bpf/libbpf.h>
 +
- 	if (htab->use_percpu_counter)
- 		percpu_counter_add_batch(&htab->pcount, -1, PERCPU_COUNTER_BATCH);
- 	else
-@@ -920,6 +931,7 @@ static void free_htab_elem(struct bpf_htab *htab, struct htab_elem *l)
- 	htab_put_fd_value(htab, l);
- 
- 	if (htab_is_prealloc(htab)) {
-+		bpf_map_dec_elem_count(&htab->map);
- 		check_and_free_fields(htab, l);
- 		__pcpu_freelist_push(&htab->freelist, &l->fnode);
- 	} else {
-@@ -1000,6 +1012,7 @@ static struct htab_elem *alloc_htab_elem(struct bpf_htab *htab, void *key,
- 			if (!l)
- 				return ERR_PTR(-E2BIG);
- 			l_new = container_of(l, struct htab_elem, fnode);
-+			bpf_map_inc_elem_count(&htab->map);
- 		}
- 	} else {
- 		if (is_map_full(htab))
-@@ -1224,7 +1237,8 @@ static long htab_lru_map_update_elem(struct bpf_map *map, void *key, void *value
- 	if (l_old) {
- 		bpf_lru_node_set_ref(&l_new->lru_node);
- 		hlist_nulls_del_rcu(&l_old->hash_node);
--	}
-+	} else
-+		bpf_map_inc_elem_count(&htab->map);
- 	ret = 0;
- 
- err:
-@@ -1351,6 +1365,7 @@ static long __htab_lru_percpu_map_update_elem(struct bpf_map *map, void *key,
- 		pcpu_init_value(htab, htab_elem_get_ptr(l_new, key_size),
- 				value, onallcpus);
- 		hlist_nulls_add_head_rcu(&l_new->hash_node, head);
-+		bpf_map_inc_elem_count(&htab->map);
- 		l_new = NULL;
- 	}
- 	ret = 0;
-@@ -1437,9 +1452,10 @@ static long htab_lru_map_delete_elem(struct bpf_map *map, void *key)
- 
- 	l = lookup_elem_raw(head, hash, key, key_size);
- 
--	if (l)
-+	if (l) {
-+		bpf_map_dec_elem_count(&htab->map);
- 		hlist_nulls_del_rcu(&l->hash_node);
--	else
-+	} else
- 		ret = -ENOENT;
- 
- 	htab_unlock_bucket(htab, b, hash, flags);
-@@ -1523,6 +1539,7 @@ static void htab_map_free(struct bpf_map *map)
- 		prealloc_destroy(htab);
- 	}
- 
-+	bpf_map_free_elem_count(map);
- 	free_percpu(htab->extra_elems);
- 	bpf_map_area_free(htab->buckets);
- 	bpf_mem_alloc_destroy(&htab->pcpu_ma);
++#include <bpf_util.h>
++#include <test_maps.h>
++
++#include "map_percpu_stats.skel.h"
++
++#define MAX_ENTRIES 16384
++#define N_THREADS 37
++
++#define MAX_MAP_KEY_SIZE 4
++
++static void map_info(int map_fd, struct bpf_map_info *info)
++{
++	__u32 len = sizeof(*info);
++	int ret;
++
++	memset(info, 0, sizeof(*info));
++
++	ret = bpf_obj_get_info_by_fd(map_fd, info, &len);
++	CHECK(ret < 0, "bpf_obj_get_info_by_fd", "error: %s\n", strerror(errno));
++}
++
++static const char *map_type_to_s(__u32 type)
++{
++	switch (type) {
++	case BPF_MAP_TYPE_HASH:
++		return "HASH";
++	case BPF_MAP_TYPE_PERCPU_HASH:
++		return "PERCPU_HASH";
++	case BPF_MAP_TYPE_LRU_HASH:
++		return "LRU_HASH";
++	case BPF_MAP_TYPE_LRU_PERCPU_HASH:
++		return "LRU_PERCPU_HASH";
++	default:
++		return "<define-me>";
++	}
++}
++
++/* Map i -> map-type-specific-key */
++static void *map_key(__u32 type, __u32 i)
++{
++	static __thread __u8 key[MAX_MAP_KEY_SIZE];
++
++	*(__u32 *)key = i;
++	return key;
++}
++
++static __u32 map_count_elements(__u32 type, int map_fd)
++{
++	void *key = map_key(type, -1);
++	int n = 0;
++
++	while (!bpf_map_get_next_key(map_fd, key, key))
++		n++;
++	return n;
++}
++
++static void delete_all_elements(__u32 type, int map_fd)
++{
++	void *key = map_key(type, -1);
++	void *keys;
++	int n = 0;
++	int ret;
++
++	keys = calloc(MAX_MAP_KEY_SIZE, MAX_ENTRIES);
++	CHECK(!keys, "calloc", "error: %s\n", strerror(errno));
++
++	for (; !bpf_map_get_next_key(map_fd, key, key); n++)
++		memcpy(keys + n*MAX_MAP_KEY_SIZE, key, MAX_MAP_KEY_SIZE);
++
++	while (--n >= 0) {
++		ret = bpf_map_delete_elem(map_fd, keys + n*MAX_MAP_KEY_SIZE);
++		CHECK(ret < 0, "bpf_map_delete_elem", "error: %s\n", strerror(errno));
++	}
++}
++
++static bool is_lru(__u32 map_type)
++{
++	return map_type == BPF_MAP_TYPE_LRU_HASH ||
++	       map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH;
++}
++
++struct upsert_opts {
++	__u32 map_type;
++	int map_fd;
++	__u32 n;
++};
++
++static void *patch_map_thread(void *arg)
++{
++	struct upsert_opts *opts = arg;
++	void *key;
++	int val;
++	int ret;
++	int i;
++
++	for (i = 0; i < opts->n; i++) {
++		key = map_key(opts->map_type, i);
++		val = rand();
++		ret = bpf_map_update_elem(opts->map_fd, key, &val, 0);
++		CHECK(ret < 0, "bpf_map_update_elem", "error: %s\n", strerror(errno));
++	}
++	return NULL;
++}
++
++static void upsert_elements(struct upsert_opts *opts)
++{
++	pthread_t threads[N_THREADS];
++	int ret;
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(threads); i++) {
++		ret = pthread_create(&i[threads], NULL, patch_map_thread, opts);
++		CHECK(ret != 0, "pthread_create", "error: %s\n", strerror(ret));
++	}
++
++	for (i = 0; i < ARRAY_SIZE(threads); i++) {
++		ret = pthread_join(i[threads], NULL);
++		CHECK(ret != 0, "pthread_join", "error: %s\n", strerror(ret));
++	}
++}
++
++static __u32 read_cur_elements(int iter_fd)
++{
++	char buf[64];
++	ssize_t n;
++	__u32 ret;
++
++	n = read(iter_fd, buf, sizeof(buf)-1);
++	CHECK(n <= 0, "read", "error: %s\n", strerror(errno));
++	buf[n] = '\0';
++
++	errno = 0;
++	ret = (__u32)strtol(buf, NULL, 10);
++	CHECK(errno != 0, "strtol", "error: %s\n", strerror(errno));
++
++	return ret;
++}
++
++static __u32 get_cur_elements(int map_id)
++{
++	LIBBPF_OPTS(bpf_iter_attach_opts, opts);
++	union bpf_iter_link_info linfo;
++	struct map_percpu_stats *skel;
++	struct bpf_link *link;
++	int iter_fd;
++	int ret;
++
++	opts.link_info = &linfo;
++	opts.link_info_len = sizeof(linfo);
++
++	skel = map_percpu_stats__open();
++	CHECK(skel == NULL, "map_percpu_stats__open", "error: %s", strerror(errno));
++
++	skel->bss->target_id = map_id;
++
++	ret = map_percpu_stats__load(skel);
++	CHECK(ret != 0, "map_percpu_stats__load", "error: %s", strerror(errno));
++
++	link = bpf_program__attach_iter(skel->progs.dump_bpf_map, &opts);
++	CHECK(!link, "bpf_program__attach_iter", "error: %s\n", strerror(errno));
++
++	iter_fd = bpf_iter_create(bpf_link__fd(link));
++	CHECK(iter_fd < 0, "bpf_iter_create", "error: %s\n", strerror(errno));
++
++	return read_cur_elements(iter_fd);
++}
++
++static void __test(int map_fd)
++{
++	__u32 n = MAX_ENTRIES - 1000;
++	__u32 real_current_elements;
++	__u32 iter_current_elements;
++	struct upsert_opts opts = {
++		.map_fd = map_fd,
++		.n = n,
++	};
++	struct bpf_map_info info;
++
++	map_info(map_fd, &info);
++	opts.map_type = info.type;
++
++	/*
++	 * Upsert keys [0, n) under some competition: with random values from
++	 * N_THREADS threads
++	 */
++	upsert_elements(&opts);
++
++	/*
++	 * The sum of percpu elements counters for all hashtable-based maps
++	 * should be equal to the number of elements present in the map. For
++	 * non-lru maps this number should be the number n of upserted
++	 * elements. For lru maps some elements might have been evicted. Check
++	 * that all numbers make sense
++	 */
++	map_info(map_fd, &info);
++	real_current_elements = map_count_elements(info.type, map_fd);
++	if (!is_lru(info.type))
++		CHECK(n != real_current_elements, "map_count_elements",
++		      "real_current_elements(%u) != expected(%u)\n", real_current_elements, n);
++
++	iter_current_elements = get_cur_elements(info.id);
++	CHECK(iter_current_elements != real_current_elements, "get_cur_elements",
++	      "iter_current_elements=%u, expected %u (map_type=%s,map_flags=%08x)\n",
++	      iter_current_elements, real_current_elements, map_type_to_s(info.type), info.map_flags);
++
++	/*
++	 * Cleanup the map and check that all elements are actually gone and
++	 * that the sum of percpu elements counters is back to 0 as well
++	 */
++	delete_all_elements(info.type, map_fd);
++	map_info(map_fd, &info);
++	real_current_elements = map_count_elements(info.type, map_fd);
++	CHECK(real_current_elements, "map_count_elements",
++	      "expected real_current_elements=0, got %u", real_current_elements);
++
++	iter_current_elements = get_cur_elements(info.id);
++	CHECK(iter_current_elements != 0, "get_cur_elements",
++	      "iter_current_elements=%u, expected 0 (map_type=%s,map_flags=%08x)\n",
++	      iter_current_elements, map_type_to_s(info.type), info.map_flags);
++
++	close(map_fd);
++}
++
++static int map_create_opts(__u32 type, const char *name,
++			   struct bpf_map_create_opts *map_opts,
++			   __u32 key_size, __u32 val_size)
++{
++	int map_fd;
++
++	map_fd = bpf_map_create(type, name, key_size, val_size, MAX_ENTRIES, map_opts);
++	CHECK(map_fd < 0, "bpf_map_create()", "error:%s (name=%s)\n",
++			strerror(errno), name);
++
++	return map_fd;
++}
++
++static int map_create(__u32 type, const char *name, struct bpf_map_create_opts *map_opts)
++{
++	return map_create_opts(type, name, map_opts, sizeof(int), sizeof(int));
++}
++
++static int create_hash(void)
++{
++	struct bpf_map_create_opts map_opts = {
++		.sz = sizeof(map_opts),
++		.map_flags = BPF_F_NO_PREALLOC,
++	};
++
++	return map_create(BPF_MAP_TYPE_HASH, "hash", &map_opts);
++}
++
++static int create_percpu_hash(void)
++{
++	struct bpf_map_create_opts map_opts = {
++		.sz = sizeof(map_opts),
++		.map_flags = BPF_F_NO_PREALLOC,
++	};
++
++	return map_create(BPF_MAP_TYPE_PERCPU_HASH, "percpu_hash", &map_opts);
++}
++
++static int create_hash_prealloc(void)
++{
++	return map_create(BPF_MAP_TYPE_HASH, "hash", NULL);
++}
++
++static int create_percpu_hash_prealloc(void)
++{
++	return map_create(BPF_MAP_TYPE_PERCPU_HASH, "percpu_hash_prealloc", NULL);
++}
++
++static int create_lru_hash(void)
++{
++	return map_create(BPF_MAP_TYPE_LRU_HASH, "lru_hash", NULL);
++}
++
++static int create_percpu_lru_hash(void)
++{
++	return map_create(BPF_MAP_TYPE_LRU_PERCPU_HASH, "lru_hash_percpu", NULL);
++}
++
++static void map_percpu_stats_hash(void)
++{
++	__test(create_hash());
++	printf("test_%s:PASS\n", __func__);
++}
++
++static void map_percpu_stats_percpu_hash(void)
++{
++	__test(create_percpu_hash());
++	printf("test_%s:PASS\n", __func__);
++}
++
++static void map_percpu_stats_hash_prealloc(void)
++{
++	__test(create_hash_prealloc());
++	printf("test_%s:PASS\n", __func__);
++}
++
++static void map_percpu_stats_percpu_hash_prealloc(void)
++{
++	__test(create_percpu_hash_prealloc());
++	printf("test_%s:PASS\n", __func__);
++}
++
++static void map_percpu_stats_lru_hash(void)
++{
++	__test(create_lru_hash());
++	printf("test_%s:PASS\n", __func__);
++}
++
++static void map_percpu_stats_percpu_lru_hash(void)
++{
++	__test(create_percpu_lru_hash());
++	printf("test_%s:PASS\n", __func__);
++}
++
++void test_map_percpu_stats(void)
++{
++	map_percpu_stats_hash();
++	map_percpu_stats_percpu_hash();
++	map_percpu_stats_hash_prealloc();
++	map_percpu_stats_percpu_hash_prealloc();
++	map_percpu_stats_lru_hash();
++	map_percpu_stats_percpu_lru_hash();
++}
+diff --git a/tools/testing/selftests/bpf/progs/map_percpu_stats.c b/tools/testing/selftests/bpf/progs/map_percpu_stats.c
+new file mode 100644
+index 000000000000..10b2325c1720
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/map_percpu_stats.c
+@@ -0,0 +1,24 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2023 Isovalent */
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++__u32 target_id;
++
++__s64 bpf_map_sum_elem_count(struct bpf_map *map) __ksym;
++
++SEC("iter/bpf_map")
++int dump_bpf_map(struct bpf_iter__bpf_map *ctx)
++{
++	struct seq_file *seq = ctx->meta->seq;
++	struct bpf_map *map = ctx->map;
++
++	if (map && map->id == target_id)
++		BPF_SEQ_PRINTF(seq, "%lld", bpf_map_sum_elem_count(map));
++
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.34.1
 
