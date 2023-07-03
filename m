@@ -1,128 +1,98 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E323F9DE
-	for <bpf@vger.kernel.org>; Mon,  3 Jul 2023 13:46:44 +0000 (UTC)
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4DDE5D
-	for <bpf@vger.kernel.org>; Mon,  3 Jul 2023 06:46:43 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QvnJr0mZpz4f3xbM
-	for <bpf@vger.kernel.org>; Mon,  3 Jul 2023 21:46:36 +0800 (CST)
-Received: from [10.174.176.117] (unknown [10.174.176.117])
-	by APP2 (Coremail) with SMTP id Syh0CgCXheM50aJk7L0jNA--.61114S2;
-	Mon, 03 Jul 2023 21:46:36 +0800 (CST)
-Subject: Re: [bug report] bpf: Enforce BPF ringbuf size to be the power of 2
-To: Dan Carpenter <dan.carpenter@linaro.org>, andriin@fb.com
-Cc: bpf@vger.kernel.org
-References: <9c636a63-1f3d-442d-9223-96c2dccb9469@moroto.mountain>
-From: Hou Tao <houtao@huaweicloud.com>
-Message-ID: <61cb2c19-5f09-4f0a-baf1-adc69c3031f4@huaweicloud.com>
-Date: Mon, 3 Jul 2023 21:46:33 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AF683FDF
+	for <bpf@vger.kernel.org>; Mon,  3 Jul 2023 14:42:51 +0000 (UTC)
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5A010E4
+	for <bpf@vger.kernel.org>; Mon,  3 Jul 2023 07:42:42 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-54290603887so2303988a12.1
+        for <bpf@vger.kernel.org>; Mon, 03 Jul 2023 07:42:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1688395362; x=1690987362;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DrA308we96oVwz/kgmxRDcKXJtyEBbepsNUANAmoIY0=;
+        b=Ipef32BA2RNaBK8hQFCP5rn7/iZ5F+7/2ITqgBNoT//Pyxpw5oJDZHImVjcaj/f9cr
+         oBov6aTuCU/uWiIANJI0IGAVCGW2NceXrknYsmfRXoEStDWuLTlj0WO1coDT98FpDZpd
+         OoSbiBIH1+0SnVorEzx6R15ihrj8UvThvWlRA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688395362; x=1690987362;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DrA308we96oVwz/kgmxRDcKXJtyEBbepsNUANAmoIY0=;
+        b=j6VUBV+9M+K/W4IFDYNPeLtb2dK6cKCjSZhhcr8k8NhEjBg+SCQG8PmihLzR3mpTUu
+         VR+pHjA0Rz+hFixSNHogSe0VVxG6IXD9Iubyolb9qjlE189MRr+my1MEl/Ypdivl/Hhe
+         YG8BYhwe/uUkzN740m9mvRaKrT7mL/pQTDBCbG7wy2TKwoT+TI98kRJmZ8mXao62Nr2s
+         wGGwe5tMM6azDxCjjcNMucSR/RQqGw7rFFwUjW3Xq4qHhko+RIXku46nnWH1gxSmeanZ
+         MqYgpozyWS73TMaBRf2n4eDnxL1M41cSgMwLrGNhYroNbw2INjqaKxG4MvKiwRhES/P7
+         hKYg==
+X-Gm-Message-State: ABy/qLao3IB3UcQ5W7Srts+dmBoEUUFzyOmNwU7e0p026aSd8IU3Uv5x
+	Xh2CHSuGKwAihag1ZQ6fRnVow+6jjRKi/JQUejnG3Q==
+X-Google-Smtp-Source: ACHHUZ5mTAPpxbNhYNSgpszF3WnuYH2PV51tm62xSaVgy4bpo+CAIhriuYCoo7xWSfATi1JfQBwW7sG7ccxjqSs1lls=
+X-Received: by 2002:a05:6a20:a128:b0:11a:c623:7849 with SMTP id
+ q40-20020a056a20a12800b0011ac6237849mr10155512pzk.48.1688395361920; Mon, 03
+ Jul 2023 07:42:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <9c636a63-1f3d-442d-9223-96c2dccb9469@moroto.mountain>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-CM-TRANSID:Syh0CgCXheM50aJk7L0jNA--.61114S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7WFW8AF4DKF48XrWDAr4UXFb_yoW8trWrpF
-	4jyr10va9xJr1DZ348Za48JryrA39ay34Y9Fn8Xws29Fy3WFy2qr9F9FyS9rn8Ar4DtF15
-	tFW7KFyrAa97A37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
-	wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-	80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jrv_JF1lIxkGc2Ij64vIr41lIxAIcVC0
-	I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04
-	k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-	c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UE-erUUUUU=
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-	MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-	autolearn=ham autolearn_force=no version=3.4.6
+References: <20230615152918.3484699-1-revest@chromium.org> <ZJFIy+oJS+vTGJer@calendula>
+ <CABRcYmJjv-JoadtzZwU5A+SZwbmbgnzWb27UNZ-UC+9r+JnVxg@mail.gmail.com>
+ <20230621111454.GB24035@breakpoint.cc> <CABRcYmKeo6A+3dmZd9bRp8W3tO9M5cHDpQ13b8aeMkhYr4L64Q@mail.gmail.com>
+ <20230621184738.GG24035@breakpoint.cc>
+In-Reply-To: <20230621184738.GG24035@breakpoint.cc>
+From: Florent Revest <revest@chromium.org>
+Date: Mon, 3 Jul 2023 16:42:30 +0200
+Message-ID: <CABRcYmKkDyMBqe0C5AGZVihGQhXzCjsQrg5fBhtTX3qjxe7jOA@mail.gmail.com>
+Subject: Re: [PATCH nf] netfilter: conntrack: Avoid nf_ct_helper_hash uses
+ after free
+To: Florian Westphal <fw@strlen.de>
+Cc: Pablo Neira Ayuso <pablo@netfilter.org>, netfilter-devel@vger.kernel.org, 
+	coreteam@netfilter.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, kadlec@netfilter.org, davem@davemloft.net, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, lirongqing@baidu.com, 
+	daniel@iogearbox.net, ast@kernel.org, kpsingh@kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+	SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hi,
+On Wed, Jun 21, 2023 at 8:47=E2=80=AFPM Florian Westphal <fw@strlen.de> wro=
+te:
+>
+> Florent Revest <revest@chromium.org> wrote:
+> > > in this case an initcall is failing and I think panic is preferrable
+> > > to a kernel that behaves like NF_CONNTRACK_FTP=3Dn.
+> >
+> > In that case, it seems like what you'd want is
+> > nf_conntrack_standalone_init() to BUG() instead of returning an error
+> > then ? (so you'd never get to NF_CONNTRACK_FTP or any other if
+> > nf_conntrack failed to initialize) If this is the prefered behavior,
+> > then sure, why not.
+> >
+> > > AFAICS this problem is specific to NF_CONNTRACK_FTP=3Dy
+> > > (or any other helper module, for that matter).
+> >
+> > Even with NF_CONNTRACK_FTP=3Dm, the initialization failure in
+> > nf_conntrack_standalone_init() still happens. Therefore, the helper
+> > hashtable gets freed and when the nf_conntrack_ftp.ko module gets
+> > insmod-ed, it calls nf_conntrack_helpers_register() and this still
+> > causes a use-after-free.
+>
+> Can you send a v2 with a slightly reworded changelog?
+>
+> It should mention that one needs NF_CONNTRACK=3Dy, so that when
+> the failure happens during the initcall (as oposed to module insertion),
+> nf_conntrack_helpers_register() can fail cleanly without followup splat?
 
-On 6/30/2023 6:35 PM, Dan Carpenter wrote:
-> Hello Andrii Nakryiko,
->
-> The patch 517bbe1994a3: "bpf: Enforce BPF ringbuf size to be the
-> power of 2" from Jun 29, 2020, leads to the following Smatch static
-> checker warning:
->
-> 	kernel/bpf/ringbuf.c:198 ringbuf_map_alloc()
-> 	warn: impossible condition '(attr->max_entries > 68719464448)'
->
-> Also Clang warns:
->
-> kernel/bpf/ringbuf.c:198:24: warning: result of comparison of constant
-> 68719464448 with expression of type '__u32' (aka 'unsigned int') is
-> always false [-Wtautological-constant-out-of-range-compare]
->         if (attr->max_entries > RINGBUF_MAX_DATA_SZ)
->             ~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~
->
-> kernel/bpf/ringbuf.c
->     184 static struct bpf_map *ringbuf_map_alloc(union bpf_attr *attr)
->     185 {
->     186         struct bpf_ringbuf_map *rb_map;
->     187 
->     188         if (attr->map_flags & ~RINGBUF_CREATE_FLAG_MASK)
->     189                 return ERR_PTR(-EINVAL);
->     190 
->     191         if (attr->key_size || attr->value_size ||
->     192             !is_power_of_2(attr->max_entries) ||
->     193             !PAGE_ALIGNED(attr->max_entries))
->     194                 return ERR_PTR(-EINVAL);
->     195 
->     196 #ifdef CONFIG_64BIT
->     197         /* on 32-bit arch, it's impossible to overflow record's hdr->pgoff */
-> --> 198         if (attr->max_entries > RINGBUF_MAX_DATA_SZ)
->
-> This check used to be inside bpf_ringbuf_alloc() and it used be:
->
-> 	if (data_sz > RINGBUF_MAX_DATA_SZ)
->
-> In that context where data_sz is a size_t the condition and the
-> #ifdef CONFIG_64BIT made sense but here it doesn't.  Probably just
-> delete the check.
-It seems the check before 517bbe1994a3 is only used for future
-extension. Considering the type of max_entries is u32, I think it is OK
-to remove the check and the macro definition.
->
->     199                 return ERR_PTR(-E2BIG);
->     200 #endif
->     201 
->     202         rb_map = bpf_map_area_alloc(sizeof(*rb_map), NUMA_NO_NODE);
->     203         if (!rb_map)
->     204                 return ERR_PTR(-ENOMEM);
->     205 
->     206         bpf_map_init_from_attr(&rb_map->map, attr);
->     207 
->     208         rb_map->rb = bpf_ringbuf_alloc(attr->max_entries, rb_map->map.numa_node);
->     209         if (!rb_map->rb) {
->     210                 bpf_map_area_free(rb_map);
->     211                 return ERR_PTR(-ENOMEM);
->     212         }
->     213 
->     214         return &rb_map->map;
->     215 }
->
-> regards,
-> dan carpenter
->
-> .
-
+Sure! :) On it.
