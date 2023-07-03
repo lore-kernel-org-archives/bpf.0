@@ -1,772 +1,369 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17BBDEAD0
-	for <bpf@vger.kernel.org>; Mon,  3 Jul 2023 13:41:32 +0000 (UTC)
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C025E54;
-	Mon,  3 Jul 2023 06:41:28 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QvnBm4qt6z4f3kj5;
-	Mon,  3 Jul 2023 21:41:20 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgD3mp7+z6Jk58B1NA--.28926S4;
-	Mon, 03 Jul 2023 21:41:20 +0800 (CST)
-From: Hou Tao <houtao@huaweicloud.com>
-To: bpf@vger.kernel.org,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Song Liu <song@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Yonghong Song <yhs@fb.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	rcu@vger.kernel.org,
-	houtao1@huawei.com
-Subject: [PATCH bpf-next v8] selftests/bpf: Add benchmark for bpf memory allocator
-Date: Mon,  3 Jul 2023 22:13:32 +0800
-Message-Id: <20230703141332.3319271-1-houtao@huaweicloud.com>
-X-Mailer: git-send-email 2.29.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCD42F9C4
+	for <bpf@vger.kernel.org>; Mon,  3 Jul 2023 13:43:05 +0000 (UTC)
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A756FF
+	for <bpf@vger.kernel.org>; Mon,  3 Jul 2023 06:43:04 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 363DTT3u011690;
+	Mon, 3 Jul 2023 13:42:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2023-03-30;
+ bh=7J0fU6G1s3UqCucO9KSxNY5IWJPZN7UetKXAq3RnrYk=;
+ b=OZXM+NvQT9rUP853IV2otO0NGCGgTuDhbQ+eIZeqrZggzOKAqOUskhkHLLHrSavcXb/o
+ I1qTlG7I4ZRP9G24JcqMBEr+v/lSwfaIMd4drgWr/CI6ifpEsLff8mA4Rj2FdhB9Jj+I
+ 45TkmFSbjZA4gxp8DAFISTKm8Qt+rACEcrYm2jWZQK2N7vt+2qVJ+Vnlg0iNR8huoId9
+ 4JM2WqBK8XB1XxO3uu8HGNyiv2CIxrhWJ1HicO/n2H2Fk4IICHX5iEQMN4UFVx2GYiP4
+ W6q5QD6meieHqEwSsgwxvkPBWpkNcdpWbcQZmIIStIhxYkJm2m4WgrSoY2HgN4kZKe6+ XA== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rjcpuamgh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 03 Jul 2023 13:42:41 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 363DgEcx009032;
+	Mon, 3 Jul 2023 13:42:39 GMT
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2046.outbound.protection.outlook.com [104.47.73.46])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3rjak93ftv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 03 Jul 2023 13:42:39 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iKovWQV+Xo8mNkZobygq1Dc2YUwad5yNBfpF+ROW5IQIqKbeBts8UFLoQ2SMTlD5hb1RzfqITNtdn6m2+JAIrobGmw4tasfVO52hy5WAmIy3SHRZxHVnUYfUgCLr3LcroAXDJT9WdciuqfXkgXTkhIxRvIeaIvg/l71pywcSDXndN2MdFtcdZ6rco6zQMGZKsIi89z+GTtMjzXndSy4ZTTb+6Xos4E+q32VxwKnorgN69O/9gk2jlnBSJ2a1zs72RzsyThCsfmCPCB3cmCOmNVRmCRSc/NBDVieEDjctUp9PUhKHpOuRx5Xc+asCu/ON6rDz3Ud+FLge5VmTMXGLbQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7J0fU6G1s3UqCucO9KSxNY5IWJPZN7UetKXAq3RnrYk=;
+ b=QUZlshKSR9kKlSBjykCamNh1pd7Gj2hb/ukm5W0jm3nipOSu49RZTTkrNaw/jr7FGeNLlD8rMznCBha7OJsk1Fr5bAFSdD8OsFsSOdFxf3XH9OIybINDgqCB/xSh/yJ/FpbG9trDoMH8QAvgoMpas81yQHY6BYt2GzN/5RJievjagNxBbgUkIs23kXNTo9Ia5laQ/BX4urhXYP/jdGyM5QtGsfgQOMNH0AIEbh3EcCmMb43x+hmWqTMQM/g4EyPOG36seeMd486eHk/eme9Ms7WyR/qlba9thgJij/oEqej8DovsFirnpbLkSNb1EHcbK7rZ1OCjfH8EAtxezVqvww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7J0fU6G1s3UqCucO9KSxNY5IWJPZN7UetKXAq3RnrYk=;
+ b=cdVL9tdv8N2nTfle1oBmbRFQNpTAKndYNrQbGEa7cSDXDniq3SZu0y9pfGywS7il9WCPo/ukgK1uDTeLVHX4jMQav0vtM5+Txc9+w4jgAemveuFnS4Q1rcgljiq/fr78eK0/FN7FMv1Ppgdd0R52YIuk9nE3Mf+flqqZZQp2ZMU=
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
+ by SJ0PR10MB4655.namprd10.prod.outlook.com (2603:10b6:a03:2df::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Mon, 3 Jul
+ 2023 13:42:37 +0000
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::1740:1ef6:ace8:c6e9]) by BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::1740:1ef6:ace8:c6e9%7]) with mapi id 15.20.6544.024; Mon, 3 Jul 2023
+ 13:42:37 +0000
+Message-ID: <b972e451-3a1f-4f29-b03a-68ce3ac765f1@oracle.com>
+Date: Mon, 3 Jul 2023 14:42:31 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 bpf-next 1/9] btf: add kind layout encoding, crcs to
+ UAPI
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: acme@kernel.org, ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+        quentin@isovalent.com, jolsa@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com, mykolal@fb.com,
+        bpf@vger.kernel.org
+References: <20230616171728.530116-1-alan.maguire@oracle.com>
+ <20230616171728.530116-2-alan.maguire@oracle.com>
+ <CAEf4BzapHdQb=gXq9xLRGfRFBC=3xcQ=OSdV1o=+5nvgDwT4HA@mail.gmail.com>
+Content-Language: en-GB
+From: Alan Maguire <alan.maguire@oracle.com>
+In-Reply-To: <CAEf4BzapHdQb=gXq9xLRGfRFBC=3xcQ=OSdV1o=+5nvgDwT4HA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: LO4P265CA0070.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2af::10) To BLAPR10MB5267.namprd10.prod.outlook.com
+ (2603:10b6:208:30e::22)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgD3mp7+z6Jk58B1NA--.28926S4
-X-Coremail-Antispam: 1UD129KBjvAXoWfCFWxCF1rCw1kAw18XF4kCrg_yoW8tryxto
-	Z3CFs8Jr18Jr1vq3ykCF1kJ3Z3uF1q9ryUXryUt3Z8ZFy8Cr1rurWxCw4fZryxXFWfK3y7
-	WFZ2y347ZrWkJF93n29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UjIYCTnIWjp_UUUY17kC6x804xWl14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK
-	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
-	AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF
-	7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
-	cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-	IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
-	42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
-	IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
-	87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-	SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-	version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BLAPR10MB5267:EE_|SJ0PR10MB4655:EE_
+X-MS-Office365-Filtering-Correlation-Id: 22535c4a-c1de-4ffd-1d14-08db7bcb5c9d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	JtrrtYVPW1c/LVq0uJUnilwCdc+ilADhm2BtK5ba4cWS4aXKz0pBUTYp9KM+Ah/KJZuf2nrs7b8/JKyB0LmY6tgNw2YOVOlORc6Zs5LMCsxvwS2Sw+HFg0hujpN1Uz7DoqsZZ2fdho/ptSueijpJt+vjdt/pfc0vZWtUmvaGCo4OtM977YSUGwGURXYbNWDCmocYsIVfVoauJN2zJ3hwCvWHHLmAyjukaYBCNn/wmropNlAzr6GQNUV9OsQNdV43dmaG/kTtN9pNzTSmL7Y+I4Rv0RyXzo4L6xdJgHUvJm8dnf6MQTT6jLLj0VviVEtzbwXDvNZyp5GmnLhGysQ/47Qf/xxjh2iVJmPa1aw/JSOaT39KfXPr1HJPRIeGKnqXsmbfbkoq7URoSD3Sy2HOSMMzCzWcf1mxG+jp+lVpP0FdT0jftdC4UBXVSmrK3jGJPPlESrHju9og6gSzQYaaxAt9gSlZ3N19ikzCsHu6il/Z41Fg3BAMDizh7jTM1QVuPevVovm7zvJBq8srzeCjo27JIOFEBKJ/4cpDhl5QqOMoF6WJ5r3hMPsxt662yOteDuR6gsAjuPHe6Xg3c56dqirXuc12zcFwBullZB0QiT0VzGE4uSMaAFwrWLunUQcZfSuj5WmGs9bcEU8WWpzwX/biokSW+xYY/KQHwvRXk4usJgksrC/YK9ksVM4gFznq
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(346002)(376002)(396003)(136003)(366004)(451199021)(31686004)(478600001)(6666004)(6512007)(966005)(6506007)(31696002)(86362001)(2616005)(186003)(38100700002)(6916009)(4326008)(66556008)(66946007)(66476007)(53546011)(6486002)(316002)(5660300002)(8676002)(8936002)(44832011)(7416002)(41300700001)(2906002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?utf-8?B?SEp4TXM2UCt0UVhJTWhOaVFTZmd4K0xvOHhMV1JpV3lZZHpZWmFqcjUwbWRT?=
+ =?utf-8?B?VTRoUkp6c2pQN2QyaE00a1ZDRDZNVGR5azVndFVhbWl6ckhkckNzZFNkMm51?=
+ =?utf-8?B?VXduUS9pc000bGZQS1djMENjMHVNK0F0S2tjVjJjTjFJRHFHUE14a0lIRDhj?=
+ =?utf-8?B?ZFdacThNMVQwZ3IrOGllYzZEYTdFTU9vcVJKM0llbE0vTGNKdGw0UFBMNWxP?=
+ =?utf-8?B?MDdGamcrQk9FNTNLMGw1cTN4MkV2K3k5M2dTL1YvejFqM0RkZENQRWdtb1dh?=
+ =?utf-8?B?bWVodG9hNVJSUEoxN3RVNWpDNWt5UXlLQkFFV2NuMUxRWjFwK2VESDNCTGZN?=
+ =?utf-8?B?b1JJaStwWVgzZ3BwdCtYOUdGYnJnNFhLZGV5aWRLTzArM0t5bDBmY1U0eGox?=
+ =?utf-8?B?R2xvaTBicXpnNmpmd0sycFozd24wZW5QaVNFWW9IdWcrOENIdm11Y1lpREhh?=
+ =?utf-8?B?emJZRTAyOE1DemlUa2FGcFI3U25zNWRxUzduRGR4VlRzdE50TmExUEV2WTUz?=
+ =?utf-8?B?N3YxbUNmNlR5WTNIaXhQV3lhdDdvUDhhTnJ4VlpnazIyMlgvd3V6L0laakJW?=
+ =?utf-8?B?NUIzWnh3elFENGhXK2dOOUJ3bTE4bHFENjhhT1g2dlpBa1pjd1l2N3J6ODRL?=
+ =?utf-8?B?MW1VQTZrYjlwSDBkdWlMQjFrRXBTaVNoTnlRcTVvTmZsbXhHTjZRcTRpOFpD?=
+ =?utf-8?B?ejJZTlQwUzRIL3dQWGR5MFNnbkRLT08ySmJvVFdDTzM4R3BtcGxralRGOFQ2?=
+ =?utf-8?B?UWVka3d0dVVLeFlYcEVSZDlpVWxFUGdFNXAvRGZaNWtsSHNlMXRzVCtlallD?=
+ =?utf-8?B?bFlsMWp2VE1FcSs5WERVSGZhSjNoTGNJdldzOGhCdkVPSlA0M2NpMzhjUlgz?=
+ =?utf-8?B?S1RLc3ErbExDcWFQR1d6K3dONHBwamNUZ091NFNsNkRwMTdLeWs5QkhkbEdz?=
+ =?utf-8?B?b2RIeU0ybHRLVndneVZKTU9ocmpXZW1uZ25sSXluL3BWUlBYTnVBQUZiZWFp?=
+ =?utf-8?B?M3FSYmUwSlJtSmFxMW4wa2Z4QWhlN3dLZmxSaE43OGl2TlMvNEdIaHBnZ2d0?=
+ =?utf-8?B?b1BWSFB5cWs5MTJIN250OWhySndJb1BZWEtnMUZtMmFrUWJ3c0lqSjdxNWxK?=
+ =?utf-8?B?S2tKTGJ3WW1aQlBHalFaaXVFcWVwRzJ3MGh0NElLUW54VjN6YWFnSXRHMXhW?=
+ =?utf-8?B?R1UvV3UzRWF5RjB5MlU5M04xdy9DMVQxZURmYWUrR2MvL2RCNnRyVUM1Zkhv?=
+ =?utf-8?B?SEc1QnRmeCthOVNXKzRyRlo2RG1QWnV3YXNScHpvMkh1aittS1pmYXU4d0Jo?=
+ =?utf-8?B?a2NuN0hoWDNUY283b21GcHpxMThBSWk5R1BLRkJEa3ZIaVVXeGgvZnJTSWZr?=
+ =?utf-8?B?aTRHVkhmUkJmV0J3bkF2eDdhRWs2Rm12V0FkdU4vek9adk9zYUVCcWZENVVp?=
+ =?utf-8?B?THB2NzdCUnNYelhURjJsUkVSQXQ2YVNWR1VpOTN0R0Ftb0NCSElPdmlTVVJM?=
+ =?utf-8?B?MmVyZWx2ZTBid2pKdGsvUnhlT0JOajBaN3FNaDNhRnJyT3BYT05kZFVkcjVC?=
+ =?utf-8?B?emxjNzNVN01YdnE5SXFRRGt5MFBnRWxFNmJVTXloQ0Y4UVkrQWxjRmt4V3FN?=
+ =?utf-8?B?QUJJdmxhbVpUSFBNVWxlc3BqMkF1THZhQ0dBWXN2WHExNG84TlFEdVZQV2Jt?=
+ =?utf-8?B?NnRucTRldDBiOEdUTzlwa1NCczJWR1ZWbjVEWk8zUGVBV2h3dUlBRzQ2aVdY?=
+ =?utf-8?B?all4MUhUbjJMWDR6SURrcVZmemloaysvMk5Uc2VHVDZ4RkUrSXcvRUhkOFZO?=
+ =?utf-8?B?MXJkVlNWRVpjUUxDd2tiSXhzVmVrcHpaZ2VrMDZtVmxVU1NRR2tzcWR4Qk11?=
+ =?utf-8?B?cVdOSVZKMGs5VUZnbzJWWHFzSCtFWVcwMjZoV0NLU1hrekVHWW9lTTFlams1?=
+ =?utf-8?B?eUtPeE9GLzdaNnBiL01GSlQyMUFudEtNS1ltOSt2RTZXYk5RVTJYU0s0N2NV?=
+ =?utf-8?B?Wno0OGxMNW84S016Ym1BbVB0Q1hCaXUwYWVUVGt2eVRISnRYY3FZdlFQVkR5?=
+ =?utf-8?B?dVlKZE5BdlZoRFNLU3JTTjV3cWtzUGovVFJDT3JPaUg4citSb05RN3NtSHJJ?=
+ =?utf-8?B?am9wODdxcm4vR01pWitOZFFCU2JkTHowMDFMeEFSQkNJQitkdmtXWFIzZHhO?=
+ =?utf-8?Q?H7pXMg0G+HGWLsYkImaaygk=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	=?utf-8?B?NkVhRGdsdGRDdE5tcktBb3R3bjNxQXJJeUEvTDU1QTVGeFRYRUs1NnRXRUtR?=
+ =?utf-8?B?N3JzN1VjVXcrL1UxME5HaGpKZkpBbjBlVnVDSFZsV201WTc4WVQyOHNMR2hz?=
+ =?utf-8?B?TDFrMmlLeFVGSndHLzArQnhzT0IxanZMZG9hMlJQVHg3NFlFblVGVXJwUk1J?=
+ =?utf-8?B?NHJXNEJqS1l3Q0IvTlBZT1VxWDlQeW9FWFFBRS9USU5hZkFNY2crU0w4NjhE?=
+ =?utf-8?B?MFFHUjNyTWhpWjlBUnk5TUZVNGpkbDkycFJ4bXYxTFNzNkQrNzFHaE9ZSXhs?=
+ =?utf-8?B?K0UyZ3kvRTA0MkptcjZ6d1ZubGVwZUVUS1JtM01iZDgrUlU4cFFwWmdYWith?=
+ =?utf-8?B?MWpHV0FNNy9zSVdLUnNBMzJIaWFxT3h3SVQrMXBnNlBpeFZXdEc3TVk1THg5?=
+ =?utf-8?B?NU1YQ1haa0JUaStieGVHSk9xMythMGRlajBUbDhUL0pXbHo1bW13Q2M0RDFw?=
+ =?utf-8?B?blo0ci93R0h0aHUxRkNKa2RQTTBweXh5TUluckE3UmozRDZOWU9hdWdla2NY?=
+ =?utf-8?B?VnpDb0tPSGxTb2hWTCtUaDcyVnQya1djSk5RSTBYT08rUWFtUU9JOHFtcEhH?=
+ =?utf-8?B?UjVoTm5zdWV3TXhrTFo0UE9QQ2RlZ1Z4N09jSkY1azRvaHNCbUd0dHlWNFZa?=
+ =?utf-8?B?WksvbHR6QlFUcUxSNVJmcVN1MERhaXhWZFIyWkRVYjJPY0IzZzZER2FLV01G?=
+ =?utf-8?B?enNaUzhHMXlwbEY1S2U0bjJjb3gySFMrVlN3NllnZStacUxhcnVKYnhXRTBk?=
+ =?utf-8?B?ZE1UV3F3V1NoQjRhMk1CVkZqbzBPSFo0RW9pNngrbGQwcjZkdFdqTTROUDlv?=
+ =?utf-8?B?NEV4b2RtWkphbVBtZHZaOXVFcG90V1l6NmhGQ0QzYklrV1hJb1lMRWk5aC9y?=
+ =?utf-8?B?cTdTTnk3eDE1bXJBT2RvNDgrbnRvMzVKb0s0TFFGK0I2cStIYVVJZ2ozWGVn?=
+ =?utf-8?B?TlZxcll0OFNSUnl3N0V0SlMxbU13OVVnUU9KSGF5N2p5TFBWZGU4blRwQS91?=
+ =?utf-8?B?c1VGYnJVOHptWWU0S3BPWDZwckNuaE1aNG1tMVlrVEcyWWdYa0tuMzZFd08r?=
+ =?utf-8?B?S094c2ZneEVoSUJGS0JzalJ0NXZVd25HaUNYVStlbVYrQlp5U2dST3FkTlBO?=
+ =?utf-8?B?TlNiNUtwb2hpeU4xWWFZemJ3SVZYa3dvcEpCR1phbGkxUForRTBTNGdtRGFx?=
+ =?utf-8?B?SUc2R1RlL0FDZjJCWXpQRWtTUVRVaVc2TlFtZGNMWDZyeFppMmpYMkVJMHdx?=
+ =?utf-8?B?WEUzK0gwT001d2grdnVLYkg4WThVZ2pReW8wOGd6NllVd0o5Zz09?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 22535c4a-c1de-4ffd-1d14-08db7bcb5c9d
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2023 13:42:37.0401
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: REZfln9nhv6pxQyPNmIeR4Aw3ZdbP7TL5Ml/TlliUb3YnDTD9Wmbs99iKzpsRIX241KX2O6jOBCV+EBlghsXGw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4655
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-03_11,2023-06-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxlogscore=999
+ suspectscore=0 bulkscore=0 spamscore=0 mlxscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307030123
+X-Proofpoint-ORIG-GUID: cU_bpk6o0arB9LJ_8XroQM40Mv6MWN08
+X-Proofpoint-GUID: cU_bpk6o0arB9LJ_8XroQM40Mv6MWN08
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+	RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+	T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-From: Hou Tao <houtao1@huawei.com>
+On 22/06/2023 23:02, Andrii Nakryiko wrote:
+> On Fri, Jun 16, 2023 at 10:17 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+>>
+>> BTF kind layouts provide information to parse BTF kinds.
+>> By separating parsing BTF from using all the information
+>> it provides, we allow BTF to encode new features even if
+>> they cannot be used.  This is helpful in particular for
+>> cases where newer tools for BTF generation run on an
+>> older kernel; BTF kinds may be present that the kernel
+>> cannot yet use, but at least it can parse the BTF
+>> provided.  Meanwhile userspace tools with newer libbpf
+>> may be able to use the newer information.
+>>
+>> The intent is to support encoding of kind layouts
+>> optionally so that tools like pahole can add this
+>> information.  So for each kind we record
+>>
+>> - kind-related flags
+>> - length of singular element following struct btf_type
+>> - length of each of the btf_vlen() elements following
+>>
+>> In addition we make space in the BTF header for
+>> CRC32s computed over the BTF along with a CRC for
+>> the base BTF; this allows split BTF to identify
+>> a mismatch explicitly.
+>>
+>> The ideas here were discussed at [1], [2]; hence
+>>
+>> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+>> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+>>
+>> [1] https://lore.kernel.org/bpf/CAEf4BzYjWHRdNNw4B=eOXOs_ONrDwrgX4bn=Nuc1g8JPFC34MA@mail.gmail.com/
+>> [2] https://lore.kernel.org/bpf/20230531201936.1992188-1-alan.maguire@oracle.com/
+>> ---
+>>  include/uapi/linux/btf.h       | 24 ++++++++++++++++++++++++
+>>  tools/include/uapi/linux/btf.h | 24 ++++++++++++++++++++++++
+>>  2 files changed, 48 insertions(+)
+>>
+>> diff --git a/include/uapi/linux/btf.h b/include/uapi/linux/btf.h
+>> index ec1798b6d3ff..cea9125ed953 100644
+>> --- a/include/uapi/linux/btf.h
+>> +++ b/include/uapi/linux/btf.h
+>> @@ -8,6 +8,22 @@
+>>  #define BTF_MAGIC      0xeB9F
+>>  #define BTF_VERSION    1
+>>
+>> +/* is this information required? If so it cannot be sanitized safely. */
+>> +#define BTF_KIND_LAYOUT_OPTIONAL               (1 << 0)
+> 
+> hm.. I thought we agreed to not have OPTIONAL flag last time, no? From
+> kernel's perspective nothing is optional. From libbpf perspective
+> everything should be optional, unless we get type_id reference to
+> something that we don't recognize. So why the flag and extra code to
+> handle it?
+> 
+> We can always add it later, if necessary.
+>
 
-The benchmark could be used to compare the performance of hash map
-operations and the memory usage between different flavors of bpf memory
-allocator (e.g., no bpf ma vs bpf ma vs reuse-after-gp bpf ma). It also
-could be used to check the performance improvement or the memory saving
-provided by optimization.
+I totally agree we need to reject any BTF that contains references
+to unknown objects if these references are made via known ones;
+so for example an enum64 in a struct (in the case we didn't know
+about an enum64). However, it's possible a BTF kind could point
+_at_ other BTF kinds but not be pointed _to_ by any known kinds;
+in such a case wouldn't optional make sense even for the kernel
+to say "ignore any kinds that we don't know about that aren't
+participating in any known BTF relationships"? Default assumption
+without the optional flag would be to reject such BTF.
 
-The benchmark creates a non-preallocated hash map which uses bpf memory
-allocator and shows the operation performance and the memory usage of
-the hash map under different use cases:
-(1) overwrite
-Each CPU overwrites nonoverlapping part of hash map. When each CPU
-completes overwriting of 64 elements in hash map, it increases the
-op_count.
-(2) batch_add_batch_del
-Each CPU adds then deletes nonoverlapping part of hash map in batch.
-When each CPU adds and deletes 64 elements in hash map, it increases
-the op_count twice.
-(3) add_del_on_diff_cpu
-Each two-CPUs pair adds and deletes nonoverlapping part of map
-cooperatively. When each CPU adds or deletes 64 elements in hash map,
-it will increase the op_count.
+>> +
+>> +/* kind layout section consists of a struct btf_kind_layout for each known
+>> + * kind at BTF encoding time.
+>> + */
+>> +struct btf_kind_layout {
+>> +       __u16 flags;            /* see BTF_KIND_LAYOUT_* values above */
+>> +       __u8 info_sz;           /* size of singular element after btf_type */
+>> +       __u8 elem_sz;           /* size of each of btf_vlen(t) elements */
+>> +};
+>> +
+>> +/* for CRCs for BTF, base BTF to be considered usable, flags must be set. */
+>> +#define BTF_FLAG_CRC_SET               (1 << 0)
+>> +#define BTF_FLAG_BASE_CRC_SET          (1 << 1)
+>> +
+>>  struct btf_header {
+>>         __u16   magic;
+>>         __u8    version;
+>> @@ -19,8 +35,16 @@ struct btf_header {
+>>         __u32   type_len;       /* length of type section       */
+>>         __u32   str_off;        /* offset of string section     */
+>>         __u32   str_len;        /* length of string section     */
+>> +       __u32   kind_layout_off;/* offset of kind layout section */
+>> +       __u32   kind_layout_len;/* length of kind layout section */
+>> +
+>> +       __u32   crc;            /* crc of BTF; used if flags set BTF_FLAG_CRC_VALID */
+>> +       __u32   base_crc;       /* crc of base BTF; used if flags set BTF_FLAG_BASE_CRC_VALID */
+>>  };
+>>
+>> +/* required minimum BTF header length */
+>> +#define BTF_HEADER_MIN_LEN     (sizeof(struct btf_header) - 16)
+> 
+> offsetof(struct btf_header, kind_layout_off) ?
+> 
+> but actually why this needs to be a part of UAPI?
+> 
 
-The following is the benchmark results when comparing between different
-flavors of bpf memory allocator. These tests are conducted on a KVM guest
-with 8 CPUs and 16 GB memory. The command line below is used to do all
-the following benchmarks:
+no not really. I was trying to come up with a more elegant
+way of differentiating between the old and new header formats
+on the basis of size and eventually just gave up and added
+a #define. It can absolutely be removed.
 
-  ./bench htab-mem --use-case $name ${OPTS} -w3 -d10 -a -p8
+>> +
+>>  /* Max # of type identifier */
+>>  #define BTF_MAX_TYPE   0x000fffff
+>>  /* Max offset into the string section */
+>> diff --git a/tools/include/uapi/linux/btf.h b/tools/include/uapi/linux/btf.h
+>> index ec1798b6d3ff..cea9125ed953 100644
+>> --- a/tools/include/uapi/linux/btf.h
+>> +++ b/tools/include/uapi/linux/btf.h
+>> @@ -8,6 +8,22 @@
+>>  #define BTF_MAGIC      0xeB9F
+>>  #define BTF_VERSION    1
+>>
+>> +/* is this information required? If so it cannot be sanitized safely. */
+>> +#define BTF_KIND_LAYOUT_OPTIONAL               (1 << 0)
+>> +
+>> +/* kind layout section consists of a struct btf_kind_layout for each known
+>> + * kind at BTF encoding time.
+>> + */
+>> +struct btf_kind_layout {
+>> +       __u16 flags;            /* see BTF_KIND_LAYOUT_* values above */
+>> +       __u8 info_sz;           /* size of singular element after btf_type */
+>> +       __u8 elem_sz;           /* size of each of btf_vlen(t) elements */
+>> +};
+>> +
+>> +/* for CRCs for BTF, base BTF to be considered usable, flags must be set. */
+>> +#define BTF_FLAG_CRC_SET               (1 << 0)
+>> +#define BTF_FLAG_BASE_CRC_SET          (1 << 1)
+>> +
+>>  struct btf_header {
+>>         __u16   magic;
+>>         __u8    version;
+>> @@ -19,8 +35,16 @@ struct btf_header {
+>>         __u32   type_len;       /* length of type section       */
+>>         __u32   str_off;        /* offset of string section     */
+>>         __u32   str_len;        /* length of string section     */
+>> +       __u32   kind_layout_off;/* offset of kind layout section */
+>> +       __u32   kind_layout_len;/* length of kind layout section */
+>> +
+>> +       __u32   crc;            /* crc of BTF; used if flags set BTF_FLAG_CRC_VALID */
+> 
+> why are we making crc optional? shouldn't we just say that crc is
+> always filled out?
+> 
 
-These results show that preallocated hash map has both better performance
-and smaller memory footprint.
+The approach I took was to have libbpf/pahole be flexible about
+specification of crcs and kind layout; neither, one of these or both
+are supported. When neither are specified we'll still generate
+a larger header, but it will be zeros for the new fields so parseable
+by older libbpf/kernel. I think we probably need to make it optional
+for a while to support new pahole on older kernels.
 
-(1) non-preallocated + no bpf memory allocator (v6.0.19)
-use kmalloc() + call_rcu
 
-overwrite            per-prod-op: 11.24 ± 0.07k/s, avg mem: 82.64 ± 26.32MiB, peak mem: 119.18MiB
-batch_add_batch_del  per-prod-op: 18.45 ± 0.10k/s, avg mem: 50.47 ± 14.51MiB, peak mem: 94.96MiB
-add_del_on_diff_cpu  per-prod-op: 14.50 ± 0.03k/s, avg mem: 4.64 ± 0.73MiB, peak mem: 7.20MiB
+>> +       __u32   base_crc;       /* crc of base BTF; used if flags set BTF_FLAG_BASE_CRC_VALID */
+> 
+> here it would be nice if we could just rely on zero meaning not set,
+> but I suspect not everyone will be happy about this, as technically
+> crc 0 is a valid crc :(
+>
 
-(2) preallocated
-OPTS=--preallocated
+Right, I think we're stuck with the flags unfortunately.
+Thanks for the review (and apologies for the belated response!)
 
-overwrite            per-prod-op: 191.92 ± 0.07k/s, avg mem: 1.23 ± 0.00MiB, peak mem: 1.49MiB
-batch_add_batch_del  per-prod-op: 218.10 ± 0.25k/s, avg mem: 1.23 ± 0.00MiB, peak mem: 1.49MiB
-add_del_on_diff_cpu  per-prod-op: 39.59 ± 0.41k/s, avg mem: 1.48 ± 0.11MiB, peak mem: 1.74MiB
+Alan
 
-(3) normal bpf memory allocator
-
-overwrite            per-prod-op: 134.81 ± 0.22k/s, avg mem: 1.67 ± 0.12MiB, peak mem: 2.74MiB
-batch_add_batch_del  per-prod-op: 90.44 ± 0.34k/s, avg mem: 2.27 ± 0.00MiB, peak mem: 2.74MiB
-add_del_on_diff_cpu  per-prod-op: 28.20 ± 0.15k/s, avg mem: 1.73 ± 0.17MiB, peak mem: 2.06MiB
-
-Signed-off-by: Hou Tao <houtao1@huawei.com>
----
-Hi,
-
-After hacking htab to use bpf_mem_cache_free_rcu() [0], the htab-mem
-benchmark result is as follows:
-
-htab-mem:
-
-overwrite            per-prod-op: 69.37 ± 0.83k/s, avg mem: 137.00 ± 30.10MiB, peak mem: 201.45MiB
-batch_add_batch_del  per-prod-op: 76.26 ± 0.54k/s, avg mem: 45.88 ± 2.19MiB, peak mem: 56.27MiB
-add_del_on_diff_cpu  per-prod-op: 30.58 ± 0.13k/s, avg mem: 20.06 ± 2.31MiB, peak mem: 28.54MiB
-
-For reference, hash_map_perf benchmark results are shown below. The
-command line for the benchmark is "./map_perf_test 4 8 16384".
-
-htab-with-bpf_mem_cache_free()
-2:hash_map_perf kmalloc 496369 events per sec
-0:hash_map_perf kmalloc 250241 events per sec
-1:hash_map_perf kmalloc 248366 events per sec
-3:hash_map_perf kmalloc 240521 events per sec
-6:hash_map_perf kmalloc 250032 events per sec
-7:hash_map_perf kmalloc 250798 events per sec
-4:hash_map_perf kmalloc 152847 events per sec
-5:hash_map_perf kmalloc 150083 events per sec
-
-htab-with-bpf_mem_cache_free_rc()
-2:hash_map_perf kmalloc 294190 events per sec
-3:hash_map_perf kmalloc 172039 events per sec
-0:hash_map_perf kmalloc 170092 events per sec
-5:hash_map_perf kmalloc 170396 events per sec
-6:hash_map_perf kmalloc 170030 events per sec
-7:hash_map_perf kmalloc 167629 events per sec
-1:hash_map_perf kmalloc 162975 events per sec
-4:hash_map_perf kmalloc 162673 events per sec
-
-[0]: https://lore.kernel.org/bpf/20230628015634.33193-1-alexei.starovoitov@gmail.com/
-
-Change Log:
-
-v8:
- * use MAX() from sys/param.h instead of redefining it
- * remove unnecessary patch which adds min() & max() in bpf_util.h
-
-v7: https://lore.kernel.org/rcu/20230628115910.3817966-1-houtao@huaweicloud.com/
- * Rename name of producer threads to avoid confusion
- * Make the comments in producer threads more clear
- * Remove unnecessary check of ctx->from in bpf program
- * Split add_del_on_diff bpf program to two bpf program for clarity
-
-v6: https://lore.kernel.org/bpf/20230613080921.1623219-1-houtao@huaweicloud.com/
-  * add fix patches for benchmark framework
-  * updates for htab-mem benchmark (Most of updates are suggested by Alexei)
-    * remove --full and --max-entries and use a fixed 8k size for htab
-    * remove op_factor and increase op_cnt correctly
-    * use -a instead of --prod-affinity in run_bench_htab_mem.sh
-    * use $RUN_BENCH in run_bench_htab_mem.sh
-    * call cleanup_cgroup_environment() at the end of htab_mem_report_final()
-
-v5: https://lore.kernel.org/bpf/ff4b2396-48aa-28f1-c91b-7c8a4b9510bb@huaweicloud.com/
- * send the benchmark patch alone (suggested by Alexei)
- * limit the max number of touched elements per-bpf-program call to 64 (from Alexei)
- * show per-producer performance (from Alexei)
- * handle the return value of read() (from BPF CI)
- * do cleanup_cgroup_environment() in htab_mem_report_final()
-
-v4: https://lore.kernel.org/bpf/20230606035310.4026145-1-houtao@huaweicloud.com/
-
- tools/testing/selftests/bpf/Makefile          |   3 +
- tools/testing/selftests/bpf/bench.c           |   4 +
- .../selftests/bpf/benchs/bench_htab_mem.c     | 346 ++++++++++++++++++
- .../bpf/benchs/run_bench_htab_mem.sh          |  40 ++
- .../selftests/bpf/progs/htab_mem_bench.c      | 105 ++++++
- 5 files changed, 498 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/benchs/bench_htab_mem.c
- create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_htab_mem.sh
- create mode 100644 tools/testing/selftests/bpf/progs/htab_mem_bench.c
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 28d2c77262be..e49234bba02e 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -645,11 +645,13 @@ $(OUTPUT)/bench_local_storage.o: $(OUTPUT)/local_storage_bench.skel.h
- $(OUTPUT)/bench_local_storage_rcu_tasks_trace.o: $(OUTPUT)/local_storage_rcu_tasks_trace_bench.skel.h
- $(OUTPUT)/bench_local_storage_create.o: $(OUTPUT)/bench_local_storage_create.skel.h
- $(OUTPUT)/bench_bpf_hashmap_lookup.o: $(OUTPUT)/bpf_hashmap_lookup.skel.h
-+$(OUTPUT)/bench_htab_mem.o: $(OUTPUT)/htab_mem_bench.skel.h
- $(OUTPUT)/bench.o: bench.h testing_helpers.h $(BPFOBJ)
- $(OUTPUT)/bench: LDLIBS += -lm
- $(OUTPUT)/bench: $(OUTPUT)/bench.o \
- 		 $(TESTING_HELPERS) \
- 		 $(TRACE_HELPERS) \
-+		 $(CGROUP_HELPERS) \
- 		 $(OUTPUT)/bench_count.o \
- 		 $(OUTPUT)/bench_rename.o \
- 		 $(OUTPUT)/bench_trigger.o \
-@@ -662,6 +664,7 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
- 		 $(OUTPUT)/bench_local_storage_rcu_tasks_trace.o \
- 		 $(OUTPUT)/bench_bpf_hashmap_lookup.o \
- 		 $(OUTPUT)/bench_local_storage_create.o \
-+		 $(OUTPUT)/bench_htab_mem.o \
- 		 #
- 	$(call msg,BINARY,,$@)
- 	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.a %.o,$^) $(LDLIBS) -o $@
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
-index 41fe5a82b88b..73ce11b0547d 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -279,6 +279,7 @@ extern struct argp bench_local_storage_rcu_tasks_trace_argp;
- extern struct argp bench_strncmp_argp;
- extern struct argp bench_hashmap_lookup_argp;
- extern struct argp bench_local_storage_create_argp;
-+extern struct argp bench_htab_mem_argp;
- 
- static const struct argp_child bench_parsers[] = {
- 	{ &bench_ringbufs_argp, 0, "Ring buffers benchmark", 0 },
-@@ -290,6 +291,7 @@ static const struct argp_child bench_parsers[] = {
- 		"local_storage RCU Tasks Trace slowdown benchmark", 0 },
- 	{ &bench_hashmap_lookup_argp, 0, "Hashmap lookup benchmark", 0 },
- 	{ &bench_local_storage_create_argp, 0, "local-storage-create benchmark", 0 },
-+	{ &bench_htab_mem_argp, 0, "hash map memory benchmark", 0 },
- 	{},
- };
- 
-@@ -520,6 +522,7 @@ extern const struct bench bench_local_storage_cache_hashmap_control;
- extern const struct bench bench_local_storage_tasks_trace;
- extern const struct bench bench_bpf_hashmap_lookup;
- extern const struct bench bench_local_storage_create;
-+extern const struct bench bench_htab_mem;
- 
- static const struct bench *benchs[] = {
- 	&bench_count_global,
-@@ -561,6 +564,7 @@ static const struct bench *benchs[] = {
- 	&bench_local_storage_tasks_trace,
- 	&bench_bpf_hashmap_lookup,
- 	&bench_local_storage_create,
-+	&bench_htab_mem,
- };
- 
- static void find_benchmark(void)
-diff --git a/tools/testing/selftests/bpf/benchs/bench_htab_mem.c b/tools/testing/selftests/bpf/benchs/bench_htab_mem.c
-new file mode 100644
-index 000000000000..96172bffd91f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/benchs/bench_htab_mem.c
-@@ -0,0 +1,346 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2023. Huawei Technologies Co., Ltd */
-+#include <argp.h>
-+#include <stdbool.h>
-+#include <pthread.h>
-+#include <sys/types.h>
-+#include <sys/stat.h>
-+#include <sys/param.h>
-+#include <fcntl.h>
-+
-+#include "bench.h"
-+#include "bpf_util.h"
-+#include "cgroup_helpers.h"
-+#include "htab_mem_bench.skel.h"
-+
-+struct htab_mem_use_case {
-+	const char *name;
-+	const char **progs;
-+	/* Do synchronization between addition thread and deletion thread */
-+	bool need_sync;
-+};
-+
-+static struct htab_mem_ctx {
-+	const struct htab_mem_use_case *uc;
-+	struct htab_mem_bench *skel;
-+	pthread_barrier_t *notify;
-+	int fd;
-+} ctx;
-+
-+const char *ow_progs[] = {"overwrite", NULL};
-+const char *batch_progs[] = {"batch_add_batch_del", NULL};
-+const char *add_del_progs[] = {"add_only", "del_only", NULL};
-+const static struct htab_mem_use_case use_cases[] = {
-+	{ .name = "overwrite", .progs = ow_progs },
-+	{ .name = "batch_add_batch_del", .progs = batch_progs },
-+	{ .name = "add_del_on_diff_cpu", .progs = add_del_progs, .need_sync = true },
-+};
-+
-+static struct htab_mem_args {
-+	u32 value_size;
-+	const char *use_case;
-+	bool preallocated;
-+} args = {
-+	.value_size = 8,
-+	.use_case = use_cases[0].name,
-+	.preallocated = false,
-+};
-+
-+enum {
-+	ARG_VALUE_SIZE = 10000,
-+	ARG_USE_CASE = 10001,
-+	ARG_PREALLOCATED = 10002,
-+};
-+
-+static const struct argp_option opts[] = {
-+	{ "value-size", ARG_VALUE_SIZE, "VALUE_SIZE", 0,
-+	  "Set the value size of hash map (default 8)" },
-+	{ "use-case", ARG_USE_CASE, "USE_CASE", 0,
-+	  "Set the use case of hash map: overwrite|batch_add_batch_del|add_del_on_diff_cpu" },
-+	{ "preallocated", ARG_PREALLOCATED, NULL, 0, "use preallocated hash map" },
-+	{},
-+};
-+
-+static error_t htab_mem_parse_arg(int key, char *arg, struct argp_state *state)
-+{
-+	switch (key) {
-+	case ARG_VALUE_SIZE:
-+		args.value_size = strtoul(arg, NULL, 10);
-+		if (args.value_size > 4096) {
-+			fprintf(stderr, "too big value size %u\n", args.value_size);
-+			argp_usage(state);
-+		}
-+		break;
-+	case ARG_USE_CASE:
-+		args.use_case = strdup(arg);
-+		break;
-+	case ARG_PREALLOCATED:
-+		args.preallocated = true;
-+		break;
-+	default:
-+		return ARGP_ERR_UNKNOWN;
-+	}
-+
-+	return 0;
-+}
-+
-+const struct argp bench_htab_mem_argp = {
-+	.options = opts,
-+	.parser = htab_mem_parse_arg,
-+};
-+
-+static void htab_mem_validate(void)
-+{
-+	if (!strcmp(use_cases[2].name, args.use_case) && env.producer_cnt % 2) {
-+		fprintf(stderr, "%s needs an even number of producers\n", args.use_case);
-+		exit(1);
-+	}
-+}
-+
-+static int htab_mem_bench_init_barriers(void)
-+{
-+	pthread_barrier_t *barriers;
-+	unsigned int i, nr;
-+
-+	if (!ctx.uc->need_sync)
-+		return 0;
-+
-+	nr = (env.producer_cnt + 1) / 2;
-+	barriers = calloc(nr, sizeof(*barriers));
-+	if (!barriers)
-+		return -1;
-+
-+	/* Used for synchronization between two threads */
-+	for (i = 0; i < nr; i++)
-+		pthread_barrier_init(&barriers[i], NULL, 2);
-+
-+	ctx.notify = barriers;
-+	return 0;
-+}
-+
-+static void htab_mem_bench_exit_barriers(void)
-+{
-+	unsigned int i, nr;
-+
-+	if (!ctx.notify)
-+		return;
-+
-+	nr = (env.producer_cnt + 1) / 2;
-+	for (i = 0; i < nr; i++)
-+		pthread_barrier_destroy(&ctx.notify[i]);
-+	free(ctx.notify);
-+}
-+
-+static const struct htab_mem_use_case *htab_mem_find_use_case_or_exit(const char *name)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(use_cases); i++) {
-+		if (!strcmp(name, use_cases[i].name))
-+			return &use_cases[i];
-+	}
-+
-+	fprintf(stderr, "no such use-case: %s\n", name);
-+	fprintf(stderr, "available use case:");
-+	for (i = 0; i < ARRAY_SIZE(use_cases); i++)
-+		fprintf(stderr, " %s", use_cases[i].name);
-+	fprintf(stderr, "\n");
-+	exit(1);
-+}
-+
-+static void htab_mem_setup(void)
-+{
-+	struct bpf_map *map;
-+	const char **names;
-+	int err;
-+
-+	setup_libbpf();
-+
-+	ctx.uc = htab_mem_find_use_case_or_exit(args.use_case);
-+	err = htab_mem_bench_init_barriers();
-+	if (err) {
-+		fprintf(stderr, "failed to init barrier\n");
-+		exit(1);
-+	}
-+
-+	ctx.fd = cgroup_setup_and_join("/htab_mem");
-+	if (ctx.fd < 0)
-+		goto cleanup;
-+
-+	ctx.skel = htab_mem_bench__open();
-+	if (!ctx.skel) {
-+		fprintf(stderr, "failed to open skeleton\n");
-+		goto cleanup;
-+	}
-+
-+	map = ctx.skel->maps.htab;
-+	bpf_map__set_value_size(map, args.value_size);
-+	/* Ensure that different CPUs can operate on different subset */
-+	bpf_map__set_max_entries(map, MAX(8192, 64 * env.nr_cpus));
-+	if (args.preallocated)
-+		bpf_map__set_map_flags(map, bpf_map__map_flags(map) & ~BPF_F_NO_PREALLOC);
-+
-+	names = ctx.uc->progs;
-+	while (*names) {
-+		struct bpf_program *prog;
-+
-+		prog = bpf_object__find_program_by_name(ctx.skel->obj, *names);
-+		if (!prog) {
-+			fprintf(stderr, "no such program %s\n", *names);
-+			goto cleanup;
-+		}
-+		bpf_program__set_autoload(prog, true);
-+		names++;
-+	}
-+	ctx.skel->bss->nr_thread = env.producer_cnt;
-+
-+	err = htab_mem_bench__load(ctx.skel);
-+	if (err) {
-+		fprintf(stderr, "failed to load skeleton\n");
-+		goto cleanup;
-+	}
-+	err = htab_mem_bench__attach(ctx.skel);
-+	if (err) {
-+		fprintf(stderr, "failed to attach skeleton\n");
-+		goto cleanup;
-+	}
-+	return;
-+
-+cleanup:
-+	htab_mem_bench__destroy(ctx.skel);
-+	htab_mem_bench_exit_barriers();
-+	if (ctx.fd >= 0) {
-+		close(ctx.fd);
-+		cleanup_cgroup_environment();
-+	}
-+	exit(1);
-+}
-+
-+static void htab_mem_add_fn(pthread_barrier_t *notify)
-+{
-+	while (true) {
-+		/* Do addition */
-+		(void)syscall(__NR_getpgid, 0);
-+		/* Notify deletion thread to do deletion */
-+		pthread_barrier_wait(notify);
-+		/* Wait for deletion to complete */
-+		pthread_barrier_wait(notify);
-+	}
-+}
-+
-+static void htab_mem_delete_fn(pthread_barrier_t *notify)
-+{
-+	while (true) {
-+		/* Wait for addition to complete */
-+		pthread_barrier_wait(notify);
-+		/* Do deletion */
-+		(void)syscall(__NR_getppid);
-+		/* Notify addition thread to do addition */
-+		pthread_barrier_wait(notify);
-+	}
-+}
-+
-+static void *htab_mem_producer(void *arg)
-+{
-+	pthread_barrier_t *notify;
-+	int seq;
-+
-+	if (!ctx.uc->need_sync) {
-+		while (true)
-+			(void)syscall(__NR_getpgid, 0);
-+		return NULL;
-+	}
-+
-+	seq = (long)arg;
-+	notify = &ctx.notify[seq / 2];
-+	if (seq & 1)
-+		htab_mem_delete_fn(notify);
-+	else
-+		htab_mem_add_fn(notify);
-+	return NULL;
-+}
-+
-+static void htab_mem_read_mem_cgrp_file(const char *name, unsigned long *value)
-+{
-+	char buf[32];
-+	ssize_t got;
-+	int fd;
-+
-+	fd = openat(ctx.fd, name, O_RDONLY);
-+	if (fd < 0) {
-+		/* cgroup v1 ? */
-+		fprintf(stderr, "no %s\n", name);
-+		*value = 0;
-+		return;
-+	}
-+
-+	got = read(fd, buf, sizeof(buf) - 1);
-+	if (got <= 0) {
-+		*value = 0;
-+		return;
-+	}
-+	buf[got] = 0;
-+
-+	*value = strtoull(buf, NULL, 0);
-+
-+	close(fd);
-+}
-+
-+static void htab_mem_measure(struct bench_res *res)
-+{
-+	res->hits = atomic_swap(&ctx.skel->bss->op_cnt, 0) / env.producer_cnt;
-+	htab_mem_read_mem_cgrp_file("memory.current", &res->gp_ct);
-+}
-+
-+static void htab_mem_report_progress(int iter, struct bench_res *res, long delta_ns)
-+{
-+	double loop, mem;
-+
-+	loop = res->hits / 1000.0 / (delta_ns / 1000000000.0);
-+	mem = res->gp_ct / 1048576.0;
-+	printf("Iter %3d (%7.3lfus): ", iter, (delta_ns - 1000000000) / 1000.0);
-+	printf("per-prod-op %7.2lfk/s, memory usage %7.2lfMiB\n", loop, mem);
-+}
-+
-+static void htab_mem_report_final(struct bench_res res[], int res_cnt)
-+{
-+	double mem_mean = 0.0, mem_stddev = 0.0;
-+	double loop_mean = 0.0, loop_stddev = 0.0;
-+	unsigned long peak_mem;
-+	int i;
-+
-+	for (i = 0; i < res_cnt; i++) {
-+		loop_mean += res[i].hits / 1000.0 / (0.0 + res_cnt);
-+		mem_mean += res[i].gp_ct / 1048576.0 / (0.0 + res_cnt);
-+	}
-+	if (res_cnt > 1)  {
-+		for (i = 0; i < res_cnt; i++) {
-+			loop_stddev += (loop_mean - res[i].hits / 1000.0) *
-+				       (loop_mean - res[i].hits / 1000.0) /
-+				       (res_cnt - 1.0);
-+			mem_stddev += (mem_mean - res[i].gp_ct / 1048576.0) *
-+				      (mem_mean - res[i].gp_ct / 1048576.0) /
-+				      (res_cnt - 1.0);
-+		}
-+		loop_stddev = sqrt(loop_stddev);
-+		mem_stddev = sqrt(mem_stddev);
-+	}
-+
-+	htab_mem_read_mem_cgrp_file("memory.peak", &peak_mem);
-+	printf("Summary: per-prod-op %7.2lf \u00B1 %7.2lfk/s, memory usage %7.2lf \u00B1 %7.2lfMiB,"
-+	       " peak memory usage %7.2lfMiB\n",
-+	       loop_mean, loop_stddev, mem_mean, mem_stddev, peak_mem / 1048576.0);
-+
-+	cleanup_cgroup_environment();
-+}
-+
-+const struct bench bench_htab_mem = {
-+	.name = "htab-mem",
-+	.argp = &bench_htab_mem_argp,
-+	.validate = htab_mem_validate,
-+	.setup = htab_mem_setup,
-+	.producer_thread = htab_mem_producer,
-+	.measure = htab_mem_measure,
-+	.report_progress = htab_mem_report_progress,
-+	.report_final = htab_mem_report_final,
-+};
-diff --git a/tools/testing/selftests/bpf/benchs/run_bench_htab_mem.sh b/tools/testing/selftests/bpf/benchs/run_bench_htab_mem.sh
-new file mode 100755
-index 000000000000..9ff5832463a2
---- /dev/null
-+++ b/tools/testing/selftests/bpf/benchs/run_bench_htab_mem.sh
-@@ -0,0 +1,40 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source ./benchs/run_common.sh
-+
-+set -eufo pipefail
-+
-+htab_mem()
-+{
-+	echo -n "per-prod-op: "
-+	echo -n "$*" | sed -E "s/.* per-prod-op\s+([0-9]+\.[0-9]+ ± [0-9]+\.[0-9]+k\/s).*/\1/"
-+	echo -n -e ", avg mem: "
-+	echo -n "$*" | sed -E "s/.* memory usage\s+([0-9]+\.[0-9]+ ± [0-9]+\.[0-9]+MiB).*/\1/"
-+	echo -n ", peak mem: "
-+	echo "$*" | sed -E "s/.* peak memory usage\s+([0-9]+\.[0-9]+MiB).*/\1/"
-+}
-+
-+summarize_htab_mem()
-+{
-+	local bench="$1"
-+	local summary=$(echo $2 | tail -n1)
-+
-+	printf "%-20s %s\n" "$bench" "$(htab_mem $summary)"
-+}
-+
-+htab_mem_bench()
-+{
-+	local name
-+
-+	for name in overwrite batch_add_batch_del add_del_on_diff_cpu
-+	do
-+		summarize_htab_mem "$name" "$($RUN_BENCH htab-mem --use-case $name -p8 "$@")"
-+	done
-+}
-+
-+header "preallocated"
-+htab_mem_bench "--preallocated"
-+
-+header "normal bpf ma"
-+htab_mem_bench
-diff --git a/tools/testing/selftests/bpf/progs/htab_mem_bench.c b/tools/testing/selftests/bpf/progs/htab_mem_bench.c
-new file mode 100644
-index 000000000000..b1b721b14d67
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/htab_mem_bench.c
-@@ -0,0 +1,105 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2023. Huawei Technologies Co., Ltd */
-+#include <stdbool.h>
-+#include <errno.h>
-+#include <linux/types.h>
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+#define OP_BATCH 64
-+
-+struct update_ctx {
-+	unsigned int from;
-+	unsigned int step;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(key_size, 4);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+} htab SEC(".maps");
-+
-+char _license[] SEC("license") = "GPL";
-+
-+unsigned char zeroed_value[4096];
-+unsigned int nr_thread = 0;
-+long op_cnt = 0;
-+
-+static int write_htab(unsigned int i, struct update_ctx *ctx, unsigned int flags)
-+{
-+	bpf_map_update_elem(&htab, &ctx->from, zeroed_value, flags);
-+	ctx->from += ctx->step;
-+
-+	return 0;
-+}
-+
-+static int overwrite_htab(unsigned int i, struct update_ctx *ctx)
-+{
-+	return write_htab(i, ctx, 0);
-+}
-+
-+static int newwrite_htab(unsigned int i, struct update_ctx *ctx)
-+{
-+	return write_htab(i, ctx, BPF_NOEXIST);
-+}
-+
-+static int del_htab(unsigned int i, struct update_ctx *ctx)
-+{
-+	bpf_map_delete_elem(&htab, &ctx->from);
-+	ctx->from += ctx->step;
-+
-+	return 0;
-+}
-+
-+SEC("?tp/syscalls/sys_enter_getpgid")
-+int overwrite(void *ctx)
-+{
-+	struct update_ctx update;
-+
-+	update.from = bpf_get_smp_processor_id();
-+	update.step = nr_thread;
-+	bpf_loop(OP_BATCH, overwrite_htab, &update, 0);
-+	__sync_fetch_and_add(&op_cnt, 1);
-+	return 0;
-+}
-+
-+SEC("?tp/syscalls/sys_enter_getpgid")
-+int batch_add_batch_del(void *ctx)
-+{
-+	struct update_ctx update;
-+
-+	update.from = bpf_get_smp_processor_id();
-+	update.step = nr_thread;
-+	bpf_loop(OP_BATCH, overwrite_htab, &update, 0);
-+
-+	update.from = bpf_get_smp_processor_id();
-+	bpf_loop(OP_BATCH, del_htab, &update, 0);
-+
-+	__sync_fetch_and_add(&op_cnt, 2);
-+	return 0;
-+}
-+
-+SEC("?tp/syscalls/sys_enter_getpgid")
-+int add_only(void *ctx)
-+{
-+	struct update_ctx update;
-+
-+	update.from = bpf_get_smp_processor_id() / 2;
-+	update.step = nr_thread / 2;
-+	bpf_loop(OP_BATCH, newwrite_htab, &update, 0);
-+	__sync_fetch_and_add(&op_cnt, 1);
-+	return 0;
-+}
-+
-+SEC("?tp/syscalls/sys_enter_getppid")
-+int del_only(void *ctx)
-+{
-+	struct update_ctx update;
-+
-+	update.from = bpf_get_smp_processor_id() / 2;
-+	update.step = nr_thread / 2;
-+	bpf_loop(OP_BATCH, del_htab, &update, 0);
-+	__sync_fetch_and_add(&op_cnt, 1);
-+	return 0;
-+}
--- 
-2.29.2
-
+> 
+>>  };
+>>
+>> +/* required minimum BTF header length */
+>> +#define BTF_HEADER_MIN_LEN     (sizeof(struct btf_header) - 16)
+>> +
+>>  /* Max # of type identifier */
+>>  #define BTF_MAX_TYPE   0x000fffff
+>>  /* Max offset into the string section */
+>> --
+>> 2.39.3
+>>
