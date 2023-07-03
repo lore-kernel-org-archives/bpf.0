@@ -1,38 +1,38 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7241E17728;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA3B617AAF;
 	Mon,  3 Jul 2023 18:17:33 +0000 (UTC)
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D51CE6C;
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6890B10C1;
 	Mon,  3 Jul 2023 11:17:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1688408248; x=1719944248;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=gGI29uOb3UM/dXOEKzS5YeyvDh3jQuPSX5vmRZhGCBc=;
-  b=WKXB870MDXSoejylGZkjRkMCp9txgOSRHomrF23Y4DezOpa8Qc+2HHX/
-   YvD7nhdrxj8NlxnBfvHbK8Pnu/OAGrbEXcKSgAb7tW4vZ/hvf04k96wJ8
-   l290wIx0WuIyspUrX4/B4RQCDhLsFuw5VtzvkmEHO+unMkWV/r/7IxUmQ
-   Jt7MHp1GraT0GfR05Obt6cuhGG8trlljpIJNGDtTIdO5cxbbcUpczinap
-   v3jtVhcA5UkLM6klnzI4o9kS4oP3qyOFMRLVmgs24CDSGs3eu9VvTZd5O
-   abb3GlSiasL3qmkF8p5Ispp6ef5DdAu3ww/FnKFcoc9xFVT+/pWDamuu6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="393682713"
+  bh=VVfvPZk07eYXOKS3obL93Fx2WtN98r9PPSTw/tJOPIo=;
+  b=UOWeScYBOkPyyluz2Z+9bsjFPoqIa84oZgIhfU9HXE/N2U33XAyaDwVG
+   zvn6llNiRzSR37q0dzehmnlEjdqwcF4attDjvEg9hXncudR1NuPZ9XMNj
+   XbRiYLlpY8j1+DHpp6hWSEPObxb8QsA0eHt/3sPZcsqUW+QcX426mIn1y
+   zSr/pvBpjkgDdHNAd9HK92oVgXMfQ+m9DI7NBgz1HfJq/tL7RN36nr4ll
+   EmFmirFxprQ6wXShoHy5IWh+O0/hmVVUwZuGtolFV0qKO1EnuDs+XgpPe
+   BReSmoX5SgCr41b0oL3Tg6smpFan+J/xbx9Ir5RUrsZfOgcxowCTAmuJz
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="428982930"
 X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="393682713"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 11:17:17 -0700
+   d="scan'208";a="428982930"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 11:16:52 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="892615152"
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="753816414"
 X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="892615152"
+   d="scan'208";a="753816414"
 Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by orsmga005.jf.intel.com with ESMTP; 03 Jul 2023 11:17:11 -0700
+  by orsmga001.jf.intel.com with ESMTP; 03 Jul 2023 11:16:47 -0700
 Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id 1CDCC3580F;
-	Mon,  3 Jul 2023 19:17:10 +0100 (IST)
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id 96C6C35804;
+	Mon,  3 Jul 2023 19:16:45 +0100 (IST)
 From: Larysa Zaremba <larysa.zaremba@intel.com>
 To: bpf@vger.kernel.org
 Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
@@ -56,11 +56,10 @@ Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
 	Magnus Karlsson <magnus.karlsson@gmail.com>,
 	Maryam Tahhan <mtahhan@redhat.com>,
 	xdp-hints@xdp-project.net,
-	netdev@vger.kernel.org,
-	Aleksander Lobakin <aleksander.lobakin@intel.com>
-Subject: [PATCH bpf-next v2 15/20] net, xdp: allow metadata > 32
-Date: Mon,  3 Jul 2023 20:12:21 +0200
-Message-ID: <20230703181226.19380-16-larysa.zaremba@intel.com>
+	netdev@vger.kernel.org
+Subject: [PATCH bpf-next v2 06/20] ice: Support HW timestamp hint
+Date: Mon,  3 Jul 2023 20:12:12 +0200
+Message-ID: <20230703181226.19380-7-larysa.zaremba@intel.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230703181226.19380-1-larysa.zaremba@intel.com>
 References: <20230703181226.19380-1-larysa.zaremba@intel.com>
@@ -73,85 +72,145 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-	T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+	SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-From: Aleksander Lobakin <aleksander.lobakin@intel.com>
+Use previously refactored code and create a function
+that allows XDP code to read HW timestamp.
 
-When using XDP hints, metadata sometimes has to be much bigger
-than 32 bytes. Relax the restriction, allow metadata larger than 32 bytes
-and make __skb_metadata_differs() work with bigger lengths.
+Also, move cached_phctime into packet context, this way this data still
+stays in the ring structure, just at the different address.
 
-Now size of metadata is only limited by the fact it is stored as u8
-in skb_shared_info, so maximum possible value is 255. Other important
-conditions, such as having enough space for xdp_frame building, are already
-checked in bpf_xdp_adjust_meta().
+HW timestamp is the first supported hint in the driver,
+so also add xdp_metadata_ops.
 
-The requirement of having its length aligned to 4 bytes is still
-valid.
-
-Signed-off-by: Aleksander Lobakin <aleksander.lobakin@intel.com>
 Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
 ---
- include/linux/skbuff.h | 13 ++++++++-----
- include/net/xdp.h      |  7 ++++++-
- 2 files changed, 14 insertions(+), 6 deletions(-)
+ drivers/net/ethernet/intel/ice/ice.h          |  2 ++
+ drivers/net/ethernet/intel/ice/ice_ethtool.c  |  2 +-
+ drivers/net/ethernet/intel/ice/ice_lib.c      |  2 +-
+ drivers/net/ethernet/intel/ice/ice_main.c     |  1 +
+ drivers/net/ethernet/intel/ice/ice_ptp.c      |  2 +-
+ drivers/net/ethernet/intel/ice/ice_txrx.h     |  2 +-
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.c | 24 +++++++++++++++++++
+ 7 files changed, 31 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 91ed66952580..cd49cdd71019 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -4209,10 +4209,13 @@ static inline bool __skb_metadata_differs(const struct sk_buff *skb_a,
- {
- 	const void *a = skb_metadata_end(skb_a);
- 	const void *b = skb_metadata_end(skb_b);
--	/* Using more efficient varaiant than plain call to memcmp(). */
--#if defined(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) && BITS_PER_LONG == 64
- 	u64 diffs = 0;
- 
-+	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ||
-+	    BITS_PER_LONG != 64)
-+		goto slow;
+diff --git a/drivers/net/ethernet/intel/ice/ice.h b/drivers/net/ethernet/intel/ice/ice.h
+index 4ba3d99439a0..7a973a2229f1 100644
+--- a/drivers/net/ethernet/intel/ice/ice.h
++++ b/drivers/net/ethernet/intel/ice/ice.h
+@@ -943,4 +943,6 @@ static inline void ice_clear_rdma_cap(struct ice_pf *pf)
+ 	set_bit(ICE_FLAG_UNPLUG_AUX_DEV, pf->flags);
+ 	clear_bit(ICE_FLAG_RDMA_ENA, pf->flags);
+ }
 +
-+	/* Using more efficient variant than plain call to memcmp(). */
- 	switch (meta_len) {
- #define __it(x, op) (x -= sizeof(u##op))
- #define __it_diff(a, b, op) (*(u##op *)__it(a, op)) ^ (*(u##op *)__it(b, op))
-@@ -4232,11 +4235,11 @@ static inline bool __skb_metadata_differs(const struct sk_buff *skb_a,
- 		fallthrough;
- 	case  4: diffs |= __it_diff(a, b, 32);
- 		break;
-+	default:
-+slow:
-+		return memcmp(a - meta_len, b - meta_len, meta_len);
++extern const struct xdp_metadata_ops ice_xdp_md_ops;
+ #endif /* _ICE_H_ */
+diff --git a/drivers/net/ethernet/intel/ice/ice_ethtool.c b/drivers/net/ethernet/intel/ice/ice_ethtool.c
+index 8d5cbbd0b3d5..3c3b9cbfbcd3 100644
+--- a/drivers/net/ethernet/intel/ice/ice_ethtool.c
++++ b/drivers/net/ethernet/intel/ice/ice_ethtool.c
+@@ -2837,7 +2837,7 @@ ice_set_ringparam(struct net_device *netdev, struct ethtool_ringparam *ring,
+ 		/* clone ring and setup updated count */
+ 		rx_rings[i] = *vsi->rx_rings[i];
+ 		rx_rings[i].count = new_rx_cnt;
+-		rx_rings[i].cached_phctime = pf->ptp.cached_phc_time;
++		rx_rings[i].pkt_ctx.cached_phctime = pf->ptp.cached_phc_time;
+ 		rx_rings[i].desc = NULL;
+ 		rx_rings[i].rx_buf = NULL;
+ 		/* this is to allow wr32 to have something to write to
+diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c b/drivers/net/ethernet/intel/ice/ice_lib.c
+index 00e3afd507a4..eb69b0ac7956 100644
+--- a/drivers/net/ethernet/intel/ice/ice_lib.c
++++ b/drivers/net/ethernet/intel/ice/ice_lib.c
+@@ -1445,7 +1445,7 @@ static int ice_vsi_alloc_rings(struct ice_vsi *vsi)
+ 		ring->netdev = vsi->netdev;
+ 		ring->dev = dev;
+ 		ring->count = vsi->num_rx_desc;
+-		ring->cached_phctime = pf->ptp.cached_phc_time;
++		ring->pkt_ctx.cached_phctime = pf->ptp.cached_phc_time;
+ 		WRITE_ONCE(vsi->rx_rings[i], ring);
  	}
- 	return diffs;
--#else
--	return memcmp(a - meta_len, b - meta_len, meta_len);
--#endif
+ 
+diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
+index 93979ab18bc1..f21996b812ea 100644
+--- a/drivers/net/ethernet/intel/ice/ice_main.c
++++ b/drivers/net/ethernet/intel/ice/ice_main.c
+@@ -3384,6 +3384,7 @@ static void ice_set_ops(struct ice_vsi *vsi)
+ 
+ 	netdev->netdev_ops = &ice_netdev_ops;
+ 	netdev->udp_tunnel_nic_info = &pf->hw.udp_tunnel_nic;
++	netdev->xdp_metadata_ops = &ice_xdp_md_ops;
+ 	ice_set_ethtool_ops(netdev);
+ 
+ 	if (vsi->type != ICE_VSI_PF)
+diff --git a/drivers/net/ethernet/intel/ice/ice_ptp.c b/drivers/net/ethernet/intel/ice/ice_ptp.c
+index a31333972c68..70697e4829dd 100644
+--- a/drivers/net/ethernet/intel/ice/ice_ptp.c
++++ b/drivers/net/ethernet/intel/ice/ice_ptp.c
+@@ -1038,7 +1038,7 @@ static int ice_ptp_update_cached_phctime(struct ice_pf *pf)
+ 		ice_for_each_rxq(vsi, j) {
+ 			if (!vsi->rx_rings[j])
+ 				continue;
+-			WRITE_ONCE(vsi->rx_rings[j]->cached_phctime, systime);
++			WRITE_ONCE(vsi->rx_rings[j]->pkt_ctx.cached_phctime, systime);
+ 		}
+ 	}
+ 	clear_bit(ICE_CFG_BUSY, pf->state);
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.h b/drivers/net/ethernet/intel/ice/ice_txrx.h
+index d0ab2c4c0c91..4237702a58a9 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx.h
++++ b/drivers/net/ethernet/intel/ice/ice_txrx.h
+@@ -259,6 +259,7 @@ enum ice_rx_dtype {
+ 
+ struct ice_pkt_ctx {
+ 	const union ice_32b_rx_flex_desc *eop_desc;
++	u64 cached_phctime;
+ };
+ 
+ struct ice_xdp_buff {
+@@ -354,7 +355,6 @@ struct ice_rx_ring {
+ 	struct ice_tx_ring *xdp_ring;
+ 	struct xsk_buff_pool *xsk_pool;
+ 	dma_addr_t dma;			/* physical address of ring */
+-	u64 cached_phctime;
+ 	u16 rx_buf_len;
+ 	u8 dcb_tc;			/* Traffic class of ring */
+ 	u8 ptp_rx;
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
+index beb1c5bb392a..463d9e5cbe05 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
++++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
+@@ -546,3 +546,27 @@ void ice_finalize_xdp_rx(struct ice_tx_ring *xdp_ring, unsigned int xdp_res,
+ 			spin_unlock(&xdp_ring->tx_lock);
+ 	}
  }
- 
- static inline bool skb_metadata_differs(const struct sk_buff *skb_a,
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 61ed38fa79d1..3008042a00e3 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -370,7 +370,12 @@ xdp_data_meta_unsupported(const struct xdp_buff *xdp)
- 
- static inline bool xdp_metalen_invalid(unsigned long metalen)
- {
--	return (metalen & (sizeof(__u32) - 1)) || (metalen > 32);
-+	typeof(metalen) meta_max;
 +
-+	meta_max = type_max(typeof_member(struct skb_shared_info, meta_len));
-+	BUILD_BUG_ON(!__builtin_constant_p(meta_max));
++/**
++ * ice_xdp_rx_hw_ts - HW timestamp XDP hint handler
++ * @ctx: XDP buff pointer
++ * @ts_ns: destination address
++ *
++ * Copy HW timestamp (if available) to the destination address.
++ */
++static int ice_xdp_rx_hw_ts(const struct xdp_md *ctx, u64 *ts_ns)
++{
++	const struct ice_xdp_buff *xdp_ext = (void *)ctx;
++	u64 cached_time;
 +
-+	return !IS_ALIGNED(metalen, sizeof(u32)) || metalen > meta_max;
- }
- 
- struct xdp_attachment_info {
++	cached_time = READ_ONCE(xdp_ext->pkt_ctx.cached_phctime);
++	*ts_ns = ice_ptp_get_rx_hwts(xdp_ext->pkt_ctx.eop_desc, cached_time);
++	if (!*ts_ns)
++		return -ENODATA;
++
++	return 0;
++}
++
++const struct xdp_metadata_ops ice_xdp_md_ops = {
++	.xmo_rx_timestamp		= ice_xdp_rx_hw_ts,
++};
 -- 
 2.41.0
 
