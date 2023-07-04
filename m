@@ -1,112 +1,112 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1291468B
-	for <bpf@vger.kernel.org>; Tue,  4 Jul 2023 08:55:39 +0000 (UTC)
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCCC136;
-	Tue,  4 Jul 2023 01:55:38 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id d2e1a72fcca58-666eec46206so4374563b3a.3;
-        Tue, 04 Jul 2023 01:55:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688460937; x=1691052937;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qaOalho3nqRwTHuUgTDLzMxibsA/eLeaCFoxfQgxC3g=;
-        b=Lf8Z0jR9X+Mp/jKqeetxppnVfQtNHdOZ9ErjuTJQ8jvNfPwWsgHViNqq4SpVghiAIn
-         PxjnNr43TbIU3qwrjPi03ww8KUe7HRan68O4qX4YI8sMI81bom61e+F5JDE2ptQrAbCV
-         6vdFhsUj28XXBp5JIP5Qxgbw3r95MkZFtZgIRyx2/Y8yMwls8Etixib7w7aGRlUkMyRU
-         /Fw1WIoxdJH+HbKh4g6AFwNxawG/d13BmrSHCyMwoiTsPd4DelegI8MXkdZMPLZcAjkP
-         Bo2JWkQBVmhXSDDEWOtoUMTGXnljk5yQ+iCuLvZTJkbnPxswz+BrvSbXvBfjbnMa8irM
-         GlGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688460937; x=1691052937;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qaOalho3nqRwTHuUgTDLzMxibsA/eLeaCFoxfQgxC3g=;
-        b=daRafbJGoYte71r7e9ecWrfiZ/ViHVtmZMWVH+U8oNFPMN1yQzIV1px3WYsdWmEr9Z
-         2trxnY2hswwovWLpqSQB8JYRu0msQ214saJ+EoKWu6KjyK71wUV7qsd8C3cNGdld8Ty/
-         p3RxOmfXnqiRt65eBugbF6xmnd+xGFsuhLhF/XFZFn38FyQ1dT5EMvsrCf8lmXmR7k85
-         6Hdmzsacki081ui9iLPQHIluLuiaBW7MxnT3K+VQ2Q3AAS6L0XgmtOp18pKyG5O3/GNc
-         1p/AKryALTuw4GcBkWZmTuvY/EN9T/wIacHPgWrg9l6/ywHibM8ogU56fYyPmPDvh4Eg
-         +Hqw==
-X-Gm-Message-State: AC+VfDyHcH86TXx4wh1GQovGPi+VYOSn+u3tOAOhKFIRf+GYAcEq3vt7
-	ybnYzEelsqI0wtp3mVbx/ac=
-X-Google-Smtp-Source: ACHHUZ4S70dsmZu1O+752LEEMqHpgjwxNkRfPkOI+GALKcmWQmEo9altAEg7roJBXXQa7RVdTpZukQ==
-X-Received: by 2002:a05:6a20:3c92:b0:12c:6268:cd31 with SMTP id b18-20020a056a203c9200b0012c6268cd31mr17011918pzj.47.1688460937461;
-        Tue, 04 Jul 2023 01:55:37 -0700 (PDT)
-Received: from localhost ([2409:8a3c:3609:db21:fbac:2cf0:59be:e1b8])
-        by smtp.gmail.com with ESMTPSA id fe21-20020a056a002f1500b0066ebaeb149dsm14443282pfb.88.2023.07.04.01.55.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 01:55:37 -0700 (PDT)
-From: John Sanpe <sanpeqf@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org
-Cc: martin.lau@linux.dev,
-	song@kernel.org,
-	yhs@fb.com,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	John Sanpe <sanpeqf@gmail.com>
-Subject: [PATCH] libbpf: fix some typo of hashmap init
-Date: Tue,  4 Jul 2023 16:54:29 +0800
-Message-Id: <20230704085429.3110340-1-sanpeqf@gmail.com>
-X-Mailer: git-send-email 2.40.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E420746A2;
+	Tue,  4 Jul 2023 09:16:21 +0000 (UTC)
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4DECB3;
+	Tue,  4 Jul 2023 02:16:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=V3G3llqyqDYpZVEogHvFY85hMe7xLSqrYXDqBNV0Ifs=; b=YOEZTrYis9yeXxQwXE2+AuiBuP
+	nsYIAeD+Z5uLOr8jOdbUCC12XGdcCNWm0bhk2TXTByQbEsVpeyiIp2HkrbB1AaQonEc38tfAQWXE2
+	zqtUJqOwxb2ec0nkn34x41V/qyiYJecWXcOGW6HbSdy0mtvNqk63x0kdVbnGMQ20vuiXh3rYLwEpf
+	5UoO5w52Pd5CEV0FtZLLnr4rwqF0MM+xxDvqAyvvYutxjdP2vrLl+DtLC+adgECInJPD9SndYT/cZ
+	1UtUDwI7kZkLydcOHTepdLLDwZk24wWCaQq4fJLOvCv1pt+YzH3YS8GUhZknh0pNiVH4vyaUOwNtv
+	9ZC+lZMw==;
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1qGc8o-000MaJ-Oi; Tue, 04 Jul 2023 11:16:10 +0200
+Received: from [81.6.34.132] (helo=localhost.localdomain)
+	by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1qGc8o-0003b8-5f; Tue, 04 Jul 2023 11:16:10 +0200
+Subject: Re: [PATCH bpf-next] xsk: honor SO_BINDTODEVICE on bind
+To: Jason Wang <jasowang@redhat.com>, Ilya Maximets <i.maximets@ovn.org>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
+ =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+ Magnus Karlsson <magnus.karlsson@intel.com>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Stefan Hajnoczi <stefanha@redhat.com>
+References: <20230703175329.3259672-1-i.maximets@ovn.org>
+ <CACGkMEs1WyKwSuE2H0bkYigjhqHYJy6pPGnQLjWgOFt9+89hJA@mail.gmail.com>
+From: Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <94b00e51-aaac-5e7c-d447-f45af408e389@iogearbox.net>
+Date: Tue, 4 Jul 2023 11:16:09 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <CACGkMEs1WyKwSuE2H0bkYigjhqHYJy6pPGnQLjWgOFt9+89hJA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-	autolearn=ham autolearn_force=no version=3.4.6
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26959/Tue Jul  4 09:29:23 2023)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-rename macro parameters to prevent replacing struct members of hashmap
+On 7/4/23 4:31 AM, Jason Wang wrote:
+> On Tue, Jul 4, 2023 at 1:53 AM Ilya Maximets <i.maximets@ovn.org> wrote:
+>>
+>> Initial creation of an AF_XDP socket requires CAP_NET_RAW capability.
+>> A privileged process might create the socket and pass it to a
+>> non-privileged process for later use.  However, that process will be
+>> able to bind the socket to any network interface.  Even though it will
+>> not be able to receive any traffic without modification of the BPF map,
+>> the situation is not ideal.
+>>
+>> Sockets already have a mechanism that can be used to restrict what
+>> interface they can be attached to.  That is SO_BINDTODEVICE.
+>>
+>> To change the SO_BINDTODEVICE binding the process will need CAP_NET_RAW.
+>>
+>> Make xsk_bind() honor the SO_BINDTODEVICE in order to allow safer
+>> workflow when non-privileged process is using AF_XDP.
+>>
+>> The intended workflow is following:
+>>
+>>    1. First process creates a bare socket with socket(AF_XDP, ...).
+>>    2. First process loads the XSK program to the interface.
+>>    3. First process adds the socket fd to a BPF map.
+>>    4. First process ties socket fd to a particular interface using
+>>       SO_BINDTODEVICE.
+>>    5. First process sends socket fd to a second process.
+>>    6. Second process allocates UMEM.
+>>    7. Second process binds socket to the interface with bind(...).
+>>    8. Second process sends/receives the traffic.
+>>
+>> All the steps above are possible today if the first process is
+>> privileged and the second one has sufficient RLIMIT_MEMLOCK and no
+>> capabilities.  However, the second process will be able to bind the
+>> socket to any interface it wants on step 7 and send traffic from it.
+>> With the proposed change, the second process will be able to bind
+>> the socket only to a specific interface chosen by the first process
+>> at step 4.
+>>
+>> Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
+>> Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+> 
+> Acked-by: Jason Wang <jasowang@redhat.com>
+> 
+> Is this a stable material or not?
 
-Signed-off-by: John Sanpe <sanpeqf@gmail.com>
----
- tools/lib/bpf/hashmap.h | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/tools/lib/bpf/hashmap.h b/tools/lib/bpf/hashmap.h
-index 0a5bf1937a7c..bae3feaf29d0 100644
---- a/tools/lib/bpf/hashmap.h
-+++ b/tools/lib/bpf/hashmap.h
-@@ -80,14 +80,14 @@ struct hashmap {
- 	size_t sz;
- };
- 
--#define HASHMAP_INIT(hash_fn, equal_fn, ctx) {	\
--	.hash_fn = (hash_fn),			\
--	.equal_fn = (equal_fn),			\
--	.ctx = (ctx),				\
--	.buckets = NULL,			\
--	.cap = 0,				\
--	.cap_bits = 0,				\
--	.sz = 0,				\
-+#define HASHMAP_INIT(_hash_fn, _equal_fn, _ctx) {	\
-+	.hash_fn = (_hash_fn),				\
-+	.equal_fn = (_equal_fn),			\
-+	.ctx = (_ctx),					\
-+	.buckets = NULL,				\
-+	.cap = 0,					\
-+	.cap_bits = 0,					\
-+	.sz = 0,					\
- }
- 
- void hashmap__init(struct hashmap *map, hashmap_hash_fn hash_fn,
--- 
-2.40.1
-
+To me this is a bug rather than 'feature', so I applied it to bpf tree and
+also added Fixes tag. Thanks everyone!
