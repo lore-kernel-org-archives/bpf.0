@@ -1,206 +1,124 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E9E2109;
-	Tue,  4 Jul 2023 08:36:16 +0000 (UTC)
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2040.outbound.protection.outlook.com [40.107.13.40])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9511E6D;
-	Tue,  4 Jul 2023 01:36:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Hb8TePXrNloDZf4lFHA0T7o3aQbEbBiRy1Sk6uOdJJB1fcJG+Yv7YY/6uG0Ysqq+5XBW0qibwbvoZc8sd0b87AbqOYig7Qe2E9LqECRZiRLOtvl02RrOBueadNkpoxDAgOPanWPjD3erHX3SgPGSx4AMYFzW+OH0fRN73iAYVAwewhNpmInyfr0krsnbfYAI2sM8s4YIjRUk9J3f721CeBSNKCKHhocDsxwcq/QkCSQN64LjbBWxOQSKXaM+fyMb7AAFN9HI6Jge+OmuAOhTJRL5KK8UXqmgYjhj0NHcRV8jYQ/jcYBmsSF6s7EyT2XzOsk260iAREaeyrtiKJ0puQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8TWwRRQcHEQ7tvYFsKYoBGP06TNaHnyF++a8BaZNPbU=;
- b=lwVo93rE4Yh58xAQgiCZzqv9yoiVLJG14lxzrz2UWQc1cpVnQrIeqsYEK599572tVlQA1S52LAqqzU7P7ABiVP/R+epPL50cFbgCx5M0RVEtIbLtjPz73kb/Z6Hjrq9Aruiu9S4lKDhyYR7meePFy5+Vn0nQ02prX+Qn0ZxxDkijyCM0JHvkY8H5XgQfX4s3hZKWmmFs7InEphsB9r4kUvJzlobi7QHTIV1nSh2SiCLpyeQGYMOG8Y6xQ5qV1x9Lo1w+5jXL5A3NQG1rENHX4LTqUaCmhKWFCzFES7uFIPxvrTBNGBFJ7xj22vreueTYbDWbRfqALK+zt7Sw1fibCQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8TWwRRQcHEQ7tvYFsKYoBGP06TNaHnyF++a8BaZNPbU=;
- b=MiVJqOLnxnzngr/jn+Csq6hTHbKaPZ+C9q3en2lxHAD3hV8ayItrEUyMZGPRvAEFCgflFbRv0m+m8bPZbAcpQwYxG8eVtxbH3UKos8LN8kAOGT3dDz3Mo2XlvSxHNBhFE6XLXFV5QMNUUksvht1enurdy7t9AxSHMopbwhOrAHs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM5PR04MB3139.eurprd04.prod.outlook.com (2603:10a6:206:8::20)
- by DB8PR04MB7081.eurprd04.prod.outlook.com (2603:10a6:10:fe::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Tue, 4 Jul
- 2023 08:36:11 +0000
-Received: from AM5PR04MB3139.eurprd04.prod.outlook.com
- ([fe80::1edd:68cb:85d0:29e0]) by AM5PR04MB3139.eurprd04.prod.outlook.com
- ([fe80::1edd:68cb:85d0:29e0%7]) with mapi id 15.20.6544.024; Tue, 4 Jul 2023
- 08:36:11 +0000
-From: wei.fang@nxp.com
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	shenwei.wang@nxp.com,
-	xiaoning.wang@nxp.com,
-	netdev@vger.kernel.org
-Cc: linux-imx@nxp.com,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH net 3/3] net: fec: increase the size of tx ring and update thresholds of tx ring
-Date: Tue,  4 Jul 2023 16:29:16 +0800
-Message-Id: <20230704082916.2135501-4-wei.fang@nxp.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230704082916.2135501-1-wei.fang@nxp.com>
-References: <20230704082916.2135501-1-wei.fang@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR01CA0168.apcprd01.prod.exchangelabs.com
- (2603:1096:4:28::24) To AM5PR04MB3139.eurprd04.prod.outlook.com
- (2603:10a6:206:8::20)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 505C6468B
+	for <bpf@vger.kernel.org>; Tue,  4 Jul 2023 08:55:14 +0000 (UTC)
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FD0115;
+	Tue,  4 Jul 2023 01:55:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688460913; x=1719996913;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/i2oSBocuVBzuMPrP1+dQUATQqxsM/cZlogRxGtMF7g=;
+  b=SWGLExA39sviPVKSZqHYSVaVe1kOS/nGGX4JLsHl3CxiHBPE4UmKpX6O
+   HRIvStzSvTkxc3SFafUphy+FG0OK9JniGQtFeri5p9xzQQSwibPHLJK/P
+   EZAmN2Sq0x9fKbzNomMPzecDBdp2JNMeoJrmuCcXxzoJtHDH+plS55UVz
+   M1SaT+ws72f2/8Z7ZQbLg1gZZN4l8KJ2/na3dUiHSG/3dkGxFrdv99PB+
+   8lKeaDH/X31Ai4JNh/mNPsDvyKs4V8ZGWZp098C+TlS5PStO2Hxo9vj2w
+   WlCwhXFgJ1x9VvPeIXv4ANyJftfHE/OqmjHfEbVLEK/aGGVmfNine4Djw
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="365645432"
+X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
+   d="scan'208";a="365645432"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 01:55:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="808862255"
+X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
+   d="scan'208";a="808862255"
+Received: from guoqingz-mobl1.ger.corp.intel.com (HELO [10.252.42.140]) ([10.252.42.140])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 01:55:06 -0700
+Message-ID: <2901d37a-6b5a-9076-1423-0db95b4c12d3@linux.intel.com>
+Date: Tue, 4 Jul 2023 11:55:03 +0300
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM5PR04MB3139:EE_|DB8PR04MB7081:EE_
-X-MS-Office365-Filtering-Correlation-Id: e74ae782-50f9-465b-1f20-08db7c69b8ca
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	ONEYQpDOAA/ZtLHExvvzJ5EyWkJf1AuFICdWkPdCTjxcv5EpxBKZMoQyN9RUhB4TrrNZb2XRbvSrXKigbXPXwHKnjhsP7QU0sVTZ0BSlxUjXyD5wQR3yqKN7QwR2oqdyY8LXqbIXFu28WvWQ8v6rCLl3a/CM0y/h6jKli+BClQMkC8b9FNQXOjEF31djDBhW6r8S/ZA2HxePZKBwQanYawCZWBWjT1DECrll1seh7DHD/NnjwfTQDv9X4SlbZ4SSqaQEK2EQhzyDvVA3DwKajqY9z9ZtMr1MObDH6FN7jUzjpYnB3DnWemChctCrlUx/NOVcBwdAw+BYkIJzy2GI2/QwQPbzXlDJ/d7jCNs27OTltKOrKC85VMH1kelJsO86AoXQBS8KSUaBqT0aYHMacQhOPRB2u709HngPjUKhPvBXq5iKGwSJV60Of+x1eeeiRj+PPxqWA3sIiR3pc0AtZjtrAjTbZ4oBxPVaAB0Iy7om9qd+jyvYtXaPx3gvRkMwcPJpP736MfEaV93Gjqcnyn3tcPv2WXZ8hTy4IculL5favyweAD2jUi8gMaK9CWs90cEqQq+0EPHqj9j/vjECyjeU+m0CbcTn9exr6kHG9Qk14rR+D6heZSwXf/ANlJbL
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM5PR04MB3139.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(39860400002)(376002)(346002)(136003)(451199021)(316002)(41300700001)(6486002)(6512007)(52116002)(26005)(83380400001)(186003)(9686003)(1076003)(6506007)(2616005)(38350700002)(478600001)(921005)(38100700002)(66556008)(66946007)(66476007)(4326008)(5660300002)(7416002)(15650500001)(86362001)(2906002)(8676002)(8936002)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?iBvaE2AoEFD/xTYfghkPrDO0bwSUs4BLeQV8bN9NpSvvjZ5Xs2bwJO7PlZUx?=
- =?us-ascii?Q?Gi8hU0f+fprUkXrZ6/QXkExV78EaSuEyk3Rhagm7vvpJt7Ub12IkhYALmdEW?=
- =?us-ascii?Q?bmCZxkMf41hWrIELpUYMh/NELVnevR3gaGBI9bxZM5YggbRhyoyC1iiadzG+?=
- =?us-ascii?Q?A3rk9HY0YzT1v0jRB4fpHxdhQX5HcCMIRGJ9o9CuqFbb56x74e/k3pXQilw4?=
- =?us-ascii?Q?B7Inw7FL17NpnlIh4Z4dBJzrLbbhude5bp1nL+Oom9lXD77k8AdU7LdYp2Kx?=
- =?us-ascii?Q?M1SxsqesnEvhTboIq5g2Yfc/aLvvkWiL090ZeujPd3ZcIHb2f/skDheUEVeJ?=
- =?us-ascii?Q?22mZHaeW2FG4qHT1qOCAw8ROPA285iGFa2tPNRgFxVzyu2WMlhJujUKRN+W9?=
- =?us-ascii?Q?bxdglhr9o4SsSEhZvXA/2aKJPT0O+SwHPlbTBT+zxTTy9pocMvcDY4V+xrUM?=
- =?us-ascii?Q?vSg05MzQlyvwFA/Sde85WYFLbtkr+9jqMBTnVqpOU1Phgp+m+Hp0GNTQzR3n?=
- =?us-ascii?Q?fvaTaemSn2aPGZx+eN7a9GnYSjUU6MXJdc42w3C+4zx8usnJdvDDzYdX17M6?=
- =?us-ascii?Q?kfkdq8O9LUoJwTWw/CU75s2lTaJzLJm3cTkDShOIGPPu6rSzSr5qviS0wwnA?=
- =?us-ascii?Q?d7kVXbcsvh7Fc4UIEuZSlDIgC4wanVNjY6Fis+n1ydTr6qhhkB5OU0FbsWwr?=
- =?us-ascii?Q?Y6MWvLfiOhILMxiHjTFzrggL6kMZJVwArXIMTroKGDiTqfaaTnrXQUcm3r8D?=
- =?us-ascii?Q?UbJMPLCFaNVnkJk2IO73JgR4WXCMAPAn1TDBWoKnk6QazVDQgG4rHo7tfL05?=
- =?us-ascii?Q?g16EUMKRK5VmiX3+1ZLCB6LaMxKjd5vThYno90oo03nhCPAfHAxfJrgXz7+b?=
- =?us-ascii?Q?6F+/t8AVBJpH+YXgPqAiuWqhszw3ieaP6q/1wAHZhVHgZrU/D/y7GTA7RvNI?=
- =?us-ascii?Q?ERSNKDLoFeffBtWMzcilGYjGGIySvM40i9hFfibkeDC4lkQxbPvDhCtXPJE0?=
- =?us-ascii?Q?gbT28sDZE5mkZdYoqlytur4fzOJDxhQZJUc68TAO/XL8iVWnyPBIz5asRoRT?=
- =?us-ascii?Q?q8J12v5wkzybD5CvtN/VrIg8eTKWPDe6K8HZ00/LjQe6AwRmkLiBgGsiEG5Y?=
- =?us-ascii?Q?jbGWR+tJ2bkdcdvy6HVn+AYNTur0pjeC1Xc3BNMYt/9gtfJ7jesU65IFV7Pr?=
- =?us-ascii?Q?5wKXE7JGlBbePjjNOPVXu19y9ZjlPoqea4/3tPjYqU0mLEEooUjgABUaABON?=
- =?us-ascii?Q?VUiXK5f23v/mZe5oHAstwzbImxHHW948Kjp8A5DSgw+85bYX01J7PASL7ZUI?=
- =?us-ascii?Q?vomYl1waf+4FPHtrItuDo89Wo97yc4jtF/sLuzr9Ffel0QN3FoE2S8gSCkKc?=
- =?us-ascii?Q?BPDQv1XO1ws3kDJ/j0nNUUA1wPLo55i8rqXEH1IGYqVZuoWSAvMmTLm2XNQz?=
- =?us-ascii?Q?LscCpq2yYIkSSwuxrlhG6eiHiMKM8OM+zaV69ZuDqwsXl2E6lLHG8+VOKwya?=
- =?us-ascii?Q?hyRK1R6eG538D0MDOoo3i+SR5uQiqwxXui6/UaiQGObzMM9m7Zsa7+9J0uTw?=
- =?us-ascii?Q?GQFVdgLU4xeZFMEMihcgWb3rUIPZ8js/QzuGYBza?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e74ae782-50f9-465b-1f20-08db7c69b8ca
-X-MS-Exchange-CrossTenant-AuthSource: AM5PR04MB3139.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 08:36:11.8740
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YcvOK+JsauLRIkJ3FBlrZuj18+/KuVtxZQDaMPCRl+O4Lq/BTM73hHxCKDa2PUdCCZMBVRKWVKmgF3ShGo7aKA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7081
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-	RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 2/2] selftests/bpf: Add test for bpf_rdtsc
+Content-Language: en-US
+To: John Fastabend <john.fastabend@gmail.com>, shuah@kernel.org,
+ tglx@linutronix.de, x86@kernel.org, bp@alien8.de,
+ dave.hansen@linux.intel.com, mingo@redhat.com
+Cc: ast@kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ bpf@vger.kernel.org
+References: <20230703105745.1314475-1-tero.kristo@linux.intel.com>
+ <20230703105745.1314475-3-tero.kristo@linux.intel.com>
+ <64a3450a2a062_65205208a9@john.notmuch>
+From: Tero Kristo <tero.kristo@linux.intel.com>
+In-Reply-To: <64a3450a2a062_65205208a9@john.notmuch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+	T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-From: Wei Fang <wei.fang@nxp.com>
 
-When the XDP feature is enabled and with heavy XDP frames to be
-transmitted, there is a considerable probability that available
-tx BDs are insufficient. This will lead to some XDP frames to be
-discarded and the "NOT enough BD for SG!" error log will appear
-in the console (as shown below).
+On 04/07/2023 01:00, John Fastabend wrote:
+> Tero Kristo wrote:
+>> Add selftest for bpf_rdtsc() which reads the TSC (Time Stamp Counter) on
+>> x86_64 architectures. The test reads the TSC from both userspace and the
+>> BPF program, and verifies the TSC values are in incremental order as
+>> expected. The test is automatically skipped on architectures that do not
+>> support the feature.
+>>
+>> Signed-off-by: Tero Kristo <tero.kristo@linux.intel.com>
+>> ---
+>>   .../selftests/bpf/prog_tests/test_rdtsc.c     | 67 +++++++++++++++++++
+>>   .../testing/selftests/bpf/progs/test_rdtsc.c  | 21 ++++++
+>>   2 files changed, 88 insertions(+)
+>>   create mode 100644 tools/testing/selftests/bpf/prog_tests/test_rdtsc.c
+>>   create mode 100644 tools/testing/selftests/bpf/progs/test_rdtsc.c
+>>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/test_rdtsc.c b/tools/testing/selftests/bpf/prog_tests/test_rdtsc.c
+>> new file mode 100644
+>> index 000000000000..2b26deb5b35a
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/prog_tests/test_rdtsc.c
+>> @@ -0,0 +1,67 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/* Copyright(c) 2023 Intel Corporation */
+>> +
+>> +#include "test_progs.h"
+>> +#include "test_rdtsc.skel.h"
+>> +
+>> +#ifdef __x86_64__
+>> +
+>> +static inline u64 _rdtsc(void)
+>> +{
+>> +	u32 low, high;
+>> +
+>> +	__asm__ __volatile__("rdtscp" : "=a" (low), "=d" (high));
+> I think its ok but note this could fail if user doesn't have
+> access to rdtscp and iirc that can be restricted?
 
-[  160.013112] fec 30be0000.ethernet eth0: NOT enough BD for SG!
-[  160.023116] fec 30be0000.ethernet eth0: NOT enough BD for SG!
-[  160.028926] fec 30be0000.ethernet eth0: NOT enough BD for SG!
-[  160.038946] fec 30be0000.ethernet eth0: NOT enough BD for SG!
-[  160.044758] fec 30be0000.ethernet eth0: NOT enough BD for SG!
+It is possible to restrict RDTSC access from userspace by enabling the 
+TSD bit in CR4 register, and it will cause the userspace process to trap 
+with general protection fault.
 
-In the case of heavy XDP traffic, sometimes the speed of recycling
-tx BDs may be slower than the speed of sending XDP frames. There
-may be several specific reasons, such as the interrupt is not
-responsed in time, the efficiency of the NAPI callback function is
-too low due to all the queues (tx queues and rx queues) share the
-same NAPI, and so on.
+However, the usage of RDTSC appears to be built-in to C standard 
+libraries (probably some timer routines) and enabling the CR4 TSD makes 
+the system near unusable. Things like sshd + systemd also start 
+generating the same general protection faults if RDTSC is blocked. Also, 
+attempting to run anything at all with the BPF selftest suite causes the 
+same general protection fault; not only the rdtsc test.
 
-After trying various methods, I think that increase the size of tx
-BD ring is simple and effective. Maybe the best resolution is that
-allocate NAPI for each queue to improve the efficiency of the NAPI
-callback, but this change is a bit big and I didn't try this method.
-Perheps this method will be implemented in a future patch.
+I tried this with couple of setups, one system running a minimalistic 
+buildroot and another one running a fedora37 installation and the 
+results were similar.
 
-In addtion, this patch also updates the tx_stop_threshold and the
-tx_wake_threshold of the tx ring. In previous logic, the value of
-tx_stop_threshold is 217, however, the value of tx_wake_threshold
-is 147, it does not make sense that tx_wake_threshold is less than
-tx_stop_threshold. Besides, both XDP path and 'slow path' share the
-tx BD rings. So if tx_stop_threshold is 217, in the case of heavy
-XDP traffic, the slow path is easily to be stopped, this will have
-a serious impact on the slow path.
+-Tero
 
-Fixes: 6d6b39f180b8 ("net: fec: add initial XDP support")
-Signed-off-by: Wei Fang <wei.fang@nxp.com>
----
- drivers/net/ethernet/freescale/fec.h      | 2 +-
- drivers/net/ethernet/freescale/fec_main.c | 7 +++----
- 2 files changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/net/ethernet/freescale/fec.h b/drivers/net/ethernet/freescale/fec.h
-index 8c0226d061fe..63a053dea819 100644
---- a/drivers/net/ethernet/freescale/fec.h
-+++ b/drivers/net/ethernet/freescale/fec.h
-@@ -355,7 +355,7 @@ struct bufdesc_ex {
- #define RX_RING_SIZE		(FEC_ENET_RX_FRPPG * FEC_ENET_RX_PAGES)
- #define FEC_ENET_TX_FRSIZE	2048
- #define FEC_ENET_TX_FRPPG	(PAGE_SIZE / FEC_ENET_TX_FRSIZE)
--#define TX_RING_SIZE		512	/* Must be power of two */
-+#define TX_RING_SIZE		1024	/* Must be power of two */
- #define TX_RING_MOD_MASK	511	/*   for this to work */
- 
- #define BD_ENET_RX_INT		0x00800000
-diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-index 940d3afe1d24..6c255c0d6f41 100644
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -3348,9 +3348,8 @@ static int fec_enet_alloc_queue(struct net_device *ndev)
- 		txq->bd.ring_size = TX_RING_SIZE;
- 		fep->total_tx_ring_size += fep->tx_queue[i]->bd.ring_size;
- 
--		txq->tx_stop_threshold = FEC_MAX_SKB_DESCS;
--		txq->tx_wake_threshold =
--			(txq->bd.ring_size - txq->tx_stop_threshold) / 2;
-+		txq->tx_stop_threshold = MAX_SKB_FRAGS;
-+		txq->tx_wake_threshold = MAX_SKB_FRAGS + 1;
- 
- 		txq->tso_hdrs = dma_alloc_coherent(&fep->pdev->dev,
- 					txq->bd.ring_size * TSO_HEADER_SIZE,
-@@ -3837,7 +3836,7 @@ static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
- 
- 	entries_free = fec_enet_get_free_txdesc_num(txq);
- 	if (entries_free < MAX_SKB_FRAGS + 1) {
--		netdev_err(fep->netdev, "NOT enough BD for SG!\n");
-+		netdev_err_once(fep->netdev, "NOT enough BD for SG!\n");
- 		return -EBUSY;
- 	}
- 
--- 
-2.25.1
-
+>
+>> +	return ((u64)high << 32) | low;
+>> +}
