@@ -1,269 +1,180 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95756A52;
-	Tue,  4 Jul 2023 09:28:49 +0000 (UTC)
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3867138;
-	Tue,  4 Jul 2023 02:28:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688462927; x=1719998927;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=kfcwQb7aZ2VFPJYNgPKP+erYqoOT12ur9gd/SfjqodU=;
-  b=lHIoEBvr2xee6GoKcikABdPlKav57e2ZR/FduBi8VTPiOW/1ZBv7v3Cj
-   8L+Hax+d6ZCe+OxIx32x6UyDEvAO+y6+/IrIDncqmwpdOIllp3ZWhqenT
-   6eWuaN9dtRo/JguAzUbazbJ7MCjjZvqPamWJIZwIINQWsShPANVkrZ9K5
-   oLsFHSYGfzQm0ZqgREO/BjZKo4aa5hZF7KyoCdodgFGOQRyXXDK63jADH
-   L+goIYo60CZNlLKROW1ve0zSKXEHKYf181k1Nhdu/qyZGCTFShmAEeZD9
-   vprSMo5IoIkeGkAhqXGlAlod0BYy8yCCv5s27OzSfAggJSeEaQxU5bCJs
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="366562840"
-X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
-   d="scan'208";a="366562840"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 02:28:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="808870931"
-X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
-   d="scan'208";a="808870931"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by FMSMGA003.fm.intel.com with ESMTP; 04 Jul 2023 02:28:46 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 4 Jul 2023 02:28:46 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 4 Jul 2023 02:28:45 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Tue, 4 Jul 2023 02:28:45 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.171)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Tue, 4 Jul 2023 02:28:45 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Hw7/GdJVkWQqsQwx3X9vZ4UdJzljKKV6NCRiLqvrSN7ozf6jTru1XRkDCIrLo3dcRNuFPekiTOD3Tg7cBUnefEXtyPtKhXwkTkTIbAzmczFaJb0mJBoaSTBMjG3wejtUjaA3LEb0vDWRy9jd67nQhaiNBMT6vxioZkLUoKmhKF/lX2OOjV6LL5AkIro1dhJ5O3tSR0Ikcf9Yw34iwOYYl4TrtiW1l4SM9CgnGaEqykUsahPfD16VGUzJA1IDeIfBv5X+7XfcTrdPdsKX2RPsGRNhi/KiJ9JMoxJBAOY51KbN3PwKCILd6dmuc55OQIT1a/FvAmaZbTvBjHLSe6vVAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wnYiFjeMMacTsqcDu+Ikp+ifaAr5zzEqNFNZFC0nrpA=;
- b=MfXfJ7UAQ/cxyQJrTfsjUp5vTUDNkn4AzaudO1qgm8ZTneDY+wQ9TPvVwqpBexGXgPHjV0sssfhOc83A4T+xW57QLtVLODhRNb0/J7GnhidLD2zAKrcvSv7aJ/buXUCeuYauBwXmJQUvh1EBwdy0ZWEPiUTLifujfh0N/3w57O+RIs0dsCMrDlwPqlgIkHg1AjJ60zamYLfQEoQllNntg+4vAh63MUTqCKtILV/t/gyfyHnDFvuy5OUYAmsUSyotrljBZFvv8hL5IbvOmtH43apj/n5mqYEgaI56Yqk4rKdCBh7Ju5LL6SkfHu9KiCkf+eLutYEWXDedCSrEaIGRxw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SN7PR11MB7540.namprd11.prod.outlook.com (2603:10b6:806:340::7)
- by BN9PR11MB5323.namprd11.prod.outlook.com (2603:10b6:408:118::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Tue, 4 Jul
- 2023 09:28:37 +0000
-Received: from SN7PR11MB7540.namprd11.prod.outlook.com
- ([fe80::9376:9c9d:424a:a0fe]) by SN7PR11MB7540.namprd11.prod.outlook.com
- ([fe80::9376:9c9d:424a:a0fe%6]) with mapi id 15.20.6544.024; Tue, 4 Jul 2023
- 09:28:37 +0000
-Date: Tue, 4 Jul 2023 11:24:55 +0200
-From: Larysa Zaremba <larysa.zaremba@intel.com>
-To: John Fastabend <john.fastabend@gmail.com>
-CC: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-	<andrii@kernel.org>, <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-	<kpsingh@kernel.org>, <sdf@google.com>, <haoluo@google.com>,
-	<jolsa@kernel.org>, David Ahern <dsahern@gmail.com>, Jakub Kicinski
-	<kuba@kernel.org>, Willem de Bruijn <willemb@google.com>, "Jesper Dangaard
- Brouer" <brouer@redhat.com>, Anatoly Burakov <anatoly.burakov@intel.com>,
-	Alexander Lobakin <alexandr.lobakin@intel.com>, Magnus Karlsson
-	<magnus.karlsson@gmail.com>, Maryam Tahhan <mtahhan@redhat.com>,
-	<xdp-hints@xdp-project.net>, <netdev@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v2 12/20] xdp: Add checksum level hint
-Message-ID: <ZKPlZ6Z8ni5+ZJCK@lincoln>
-References: <20230703181226.19380-1-larysa.zaremba@intel.com>
- <20230703181226.19380-13-larysa.zaremba@intel.com>
- <64a331c338a5a_628d3208cb@john.notmuch>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <64a331c338a5a_628d3208cb@john.notmuch>
-X-ClientProxiedBy: BE1P281CA0244.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:8b::14) To SN7PR11MB7540.namprd11.prod.outlook.com
- (2603:10b6:806:340::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60900539F
+	for <bpf@vger.kernel.org>; Tue,  4 Jul 2023 09:38:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70BD0C433C8;
+	Tue,  4 Jul 2023 09:38:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1688463523;
+	bh=MjijfA5rbAdH4++U85ZPif8qBdhLaly4RtVren1Uees=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ryMmgVkA4jCx5pK/UQwRipK269ZgAuwp+k9/LZQ6rtFjpTX2jw/XEarKzXHYlLx9L
+	 QZDkVj38z4yRPziIWWb3fzunMYOXpo3lEjsPJ8ec2PVImco115HTJtdHl5MjyDKQQN
+	 6Tb4HLp21tQFC1zP/f5J5PICdrB5g+n+1BRES5gFXXGaGOV5Nv5/dfx3F6WhLMYal/
+	 Oqd1G6CymfDIUQjLiVhjGUkWJJLak0VNvZy9BkLEVqIg9JFQMCr5H5FBpGTGPyuVfE
+	 Xr/bOrjbStyQvmAno+E2f5tlKQSVzvFO/I5dDApkNb+mWSCnalz1b40zuDv6R648Au
+	 5hrIClVaOcVLw==
+Date: Tue, 4 Jul 2023 11:38:38 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	linux-security-module@vger.kernel.org, keescook@chromium.org,
+	lennart@poettering.net, cyphar@cyphar.com, luto@kernel.org,
+	kernel-team@meta.com, sargun@sargun.me
+Subject: Re: [PATCH RESEND v3 bpf-next 00/14] BPF token
+Message-ID: <20230704-pumpwerk-festakt-a8313d3ae90e@brauner>
+References: <20230629051832.897119-1-andrii@kernel.org>
+ <87sfa9eu70.fsf@toke.dk>
+ <CAEf4Bzb0bVD_fuU4Oz1oXKdwLpG1t=7d5MV3OhniHUUiysWE8g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN7PR11MB7540:EE_|BN9PR11MB5323:EE_
-X-MS-Office365-Filtering-Correlation-Id: 91c00aba-fd12-4052-88ea-08db7c710ac8
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qmIhP8sPOPWCvk4ZGEdQEOEVAYHQP83wMIbBecDJ1lZNIq5adAZTJPSwpIb/mAdJOtPm2eizVuTMPluJLTFXoQ0PXL9ln0z7jPZOiLrasAb2ST16pNp2FCJjmqpEfmnpo2hqk9hhwkg7fNRUEKe45o/ZSJMHQIeH3f8gt6hzNVf39lllebAlcM6dcOntgG5jgC1Wv8qe0qemYkVGUnZBzzH5ZMtYGpbV8Z+AAT1dhRZZHJttarNynojh1KS3qEl7UDsqf5c2DabaSkP0vJGwrRyr504rS+WJlDPgg5N+Avcqbv4WNCD9jHXM+DTcdUYqayKc97qxWwnRJW6MI2tpDEo4dCzzVNYnLnyf9vcAvWCYG6kQwOzu4XE0iObAcNJbcUKMn8XiQ5Du2Mxnxnvtzz9H2fiG7kARa6+0wiasUcvvk0afpKdS1FIuqGeetBkfHZtyebm8xBnFiAuh0eeYi3ZKf3KQAgU2RYR+0ZUCDvt3q16XuFxKHo/bx/fhRZeoqnjUI4WkbnRgifLPuCdLcP+fkJIgS5O0fviuGJ5jF1p+j28R3uLHKJDPOLHdPjgNqXfcvv+g6YbS95vuc0mTSOp+0S3x7yMR8qY7hMHuwBE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR11MB7540.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(39860400002)(376002)(136003)(366004)(346002)(396003)(451199021)(6512007)(82960400001)(6506007)(66476007)(316002)(38100700002)(4326008)(66946007)(66556008)(6916009)(33716001)(83380400001)(186003)(26005)(9686003)(478600001)(54906003)(2906002)(8936002)(8676002)(44832011)(5660300002)(7416002)(86362001)(6486002)(6666004)(41300700001)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MI9nzHWfyCD4IN2viwsnf5rN7OuGhhVdtld6QUFYU2BVxZbwYAz5Rjri1r1D?=
- =?us-ascii?Q?hi0hqHmQXCODb0lA7118BeEmkTcqWpttyKA1tvqpscdZdyG9r19t01uC04gw?=
- =?us-ascii?Q?ENG/XQ8Y+GkADyIUuI3nDarvVM43QdvD+Y32bPoR4pJAWRt0x1fVzSAP6TK5?=
- =?us-ascii?Q?NfHQyrubTSF1Bpf9cc/hhYYrJCXkEuzbciC28KAfCkWKIVn/TrXlnzsBrHFN?=
- =?us-ascii?Q?ivAwsr8RAA9TKeCKi9azOUUdUV67s4zmFX5V5wlo1rpxXPHETgbWH7fIM2Pw?=
- =?us-ascii?Q?2YFuFIL0sV81CdwYbEZ4ZctSvaKwGjVyNALPXfUM5JVp80cESVXJje6xj23q?=
- =?us-ascii?Q?XiJR6yxnlSyG+/g0DfPU4nP8acLZ9nCQWYwVS4puYNJZSyImaHdlyUP6maEv?=
- =?us-ascii?Q?JKEM2xk/X9yYYaMFzXST+VwWMWPe+1Ure6aOphPOFzHivCj5lhQiYisibTMJ?=
- =?us-ascii?Q?j2ZHRs7G1zxSUJFHjQqYiVMnly5vHIgGMamMMW2POOToTGxVmXj9Ol1SYBQN?=
- =?us-ascii?Q?ZVAniw95qriSLkPVifGozq+I1fZX62evBITTTBxS8QF9ea4KnusjnECRwxLe?=
- =?us-ascii?Q?Ew+qmWiYtpi+OITb0+LokcaYcHGvhvNyq1crP0Vv/Gjqw+qSp0vnUMgS/NCI?=
- =?us-ascii?Q?kmU4Br9AFJRqfCYhpcMNSP8mOIY/zDjQGaSYgmoobs0W6IBGxbWw9b1sj2xO?=
- =?us-ascii?Q?d14Ru85YnueX9m2Nwet7Q8EYsnPUs6FHK9g4jlFlV97f4dhTr/ZnwdodUXP9?=
- =?us-ascii?Q?3eww+WSAL9+xWj/CFRn0XyOuyJTq2myFYEQkb8HxH1wzU55bTtIWeFvrr46m?=
- =?us-ascii?Q?zNYPK5CthqZIGqXiqs+DbQ5OGHjdrwOaJM0122Z7LWzBzLP2c70nlobwcIts?=
- =?us-ascii?Q?zp7KR/6dyaao/EnNa6swPcaeAd8ZyMn2qeoflpo+C7E9VZlTmEW9ozttHmr6?=
- =?us-ascii?Q?ww9R37dD3+KT2DHPScbD+CRWMxTP0AmBiT6NzPC8IpR6uGi7hNCYWQwpUii5?=
- =?us-ascii?Q?vvsfGwvM5MmityUE0jEnNKwHe0u0qtqug8VPp75zo57/0wzABKBpohACETkz?=
- =?us-ascii?Q?1bYQbPN4Nx8SHCOxkkGeWlkkNBTWApIt6wwgcJKB4+git65Kshnje7rBa5v6?=
- =?us-ascii?Q?hdiCtqlWyhaqgSntjE5cykuMKjkBUwJtyP21p3uSXQNJpbRLaPTPTQB5cfIx?=
- =?us-ascii?Q?zpr7IEdJ/gCuCrp1a6F/rkZS9VP/tQZ/lXNRW7ojrzJoJPZwtbasNUgRpDLf?=
- =?us-ascii?Q?yKVn4+VlyQiSoORpepw/m6z8Yrm9ek4MR4aqAasyXzQhtBMcYW08FB4yJMyN?=
- =?us-ascii?Q?BwfNTwfrxMwxlllet3l+uOYHEOpjumlNaJ5PIEk0QBFkvDOcywzQfsR8Vd/9?=
- =?us-ascii?Q?IW2Rn8Ha69aOL7TdKRLoKI+RHDU8pFCqkgUPtTdXYSu9m2KbS139kqiT9Bsi?=
- =?us-ascii?Q?wz4Cah+EBIRC4OBZ9vTRIzOwTc0NS4urhFLgtZJGHinxFQjApaWk4eaqjfG6?=
- =?us-ascii?Q?LVGQ7wZHcjkORLSR8sjw+zSUyGSyW0eA8IX5t3I041rlepI1NUg0GpQnbECq?=
- =?us-ascii?Q?XPlbdYVAXZmXxdBi/5GLVMDNt8D3hWYavBOlmcXGBm33cWKEeymvq62hwxbJ?=
- =?us-ascii?Q?kw=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 91c00aba-fd12-4052-88ea-08db7c710ac8
-X-MS-Exchange-CrossTenant-AuthSource: SN7PR11MB7540.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 09:28:36.8725
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FtGJkgXbTeUIBCmmq+IP73qJs3lOAscVTi4MSBwbU+kMVdXlIsx6EIj4LRyBIMvmQCJujebKYjnhisReI0t/UusBG1OSVa54eJ4BB8c2vI8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5323
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-	SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4Bzb0bVD_fuU4Oz1oXKdwLpG1t=7d5MV3OhniHUUiysWE8g@mail.gmail.com>
 
-On Mon, Jul 03, 2023 at 01:38:27PM -0700, John Fastabend wrote:
-> Larysa Zaremba wrote:
-> > Implement functionality that enables drivers to expose to XDP code,
-> > whether checksums was checked and on what level.
-> > 
-> > Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
-> > ---
-> >  Documentation/networking/xdp-rx-metadata.rst |  3 +++
-> >  include/linux/netdevice.h                    |  1 +
-> >  include/net/xdp.h                            |  2 ++
-> >  kernel/bpf/offload.c                         |  2 ++
-> >  net/core/xdp.c                               | 21 ++++++++++++++++++++
-> >  5 files changed, 29 insertions(+)
-> > 
-> > diff --git a/Documentation/networking/xdp-rx-metadata.rst b/Documentation/networking/xdp-rx-metadata.rst
-> > index ea6dd79a21d3..4ec6ddfd2a52 100644
-> > --- a/Documentation/networking/xdp-rx-metadata.rst
-> > +++ b/Documentation/networking/xdp-rx-metadata.rst
-> > @@ -26,6 +26,9 @@ metadata is supported, this set will grow:
-> >  .. kernel-doc:: net/core/xdp.c
-> >     :identifiers: bpf_xdp_metadata_rx_vlan_tag
-> >  
-> > +.. kernel-doc:: net/core/xdp.c
-> > +   :identifiers: bpf_xdp_metadata_rx_csum_lvl
-> > +
-> >  An XDP program can use these kfuncs to read the metadata into stack
-> >  variables for its own consumption. Or, to pass the metadata on to other
-> >  consumers, an XDP program can store it into the metadata area carried
-> > diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> > index 4fa4380e6d89..569563687172 100644
-> > --- a/include/linux/netdevice.h
-> > +++ b/include/linux/netdevice.h
-> > @@ -1660,6 +1660,7 @@ struct xdp_metadata_ops {
-> >  			       enum xdp_rss_hash_type *rss_type);
-> >  	int	(*xmo_rx_vlan_tag)(const struct xdp_md *ctx, u16 *vlan_tag,
-> >  				   __be16 *vlan_proto);
-> > +	int	(*xmo_rx_csum_lvl)(const struct xdp_md *ctx, u8 *csum_level);
-> >  };
-> >  
-> >  /**
-> > diff --git a/include/net/xdp.h b/include/net/xdp.h
-> > index 89c58f56ffc6..61ed38fa79d1 100644
-> > --- a/include/net/xdp.h
-> > +++ b/include/net/xdp.h
-> > @@ -391,6 +391,8 @@ void xdp_attachment_setup(struct xdp_attachment_info *info,
-> >  			   bpf_xdp_metadata_rx_hash) \
-> >  	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_VLAN_TAG, \
-> >  			   bpf_xdp_metadata_rx_vlan_tag) \
-> > +	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CSUM_LVL, \
-> > +			   bpf_xdp_metadata_rx_csum_lvl) \
-> >  
-> >  enum {
-> >  #define XDP_METADATA_KFUNC(name, _) name,
-> > diff --git a/kernel/bpf/offload.c b/kernel/bpf/offload.c
-> > index 986e7becfd42..a133fb775f49 100644
-> > --- a/kernel/bpf/offload.c
-> > +++ b/kernel/bpf/offload.c
-> > @@ -850,6 +850,8 @@ void *bpf_dev_bound_resolve_kfunc(struct bpf_prog *prog, u32 func_id)
-> >  		p = ops->xmo_rx_hash;
-> >  	else if (func_id == bpf_xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_VLAN_TAG))
-> >  		p = ops->xmo_rx_vlan_tag;
-> > +	else if (func_id == bpf_xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_CSUM_LVL))
-> > +		p = ops->xmo_rx_csum_lvl;
-> >  out:
-> >  	up_read(&bpf_devs_lock);
-> >  
-> > diff --git a/net/core/xdp.c b/net/core/xdp.c
-> > index f6262c90e45f..c666d3e0a26c 100644
-> > --- a/net/core/xdp.c
-> > +++ b/net/core/xdp.c
-> > @@ -758,6 +758,27 @@ __bpf_kfunc int bpf_xdp_metadata_rx_vlan_tag(const struct xdp_md *ctx, u16 *vlan
-> >  	return -EOPNOTSUPP;
-> >  }
-> >  
-> > +/**
-> > + * bpf_xdp_metadata_rx_csum_lvl - Get depth at which HW has checked the checksum.
-> > + * @ctx: XDP context pointer.
-> > + * @csum_level: Return value pointer.
-> > + *
-> > + * In case of success, csum_level contains depth of the last verified checksum.
-> > + * If only the outermost checksum was verified, csum_level is 0, if both
-> > + * encapsulation and inner transport checksums were verified, csum_level is 1,
-> > + * and so on.
-> > + * For more details, refer to csum_level field in sk_buff.
-> > + *
-> > + * Return:
-> > + * * Returns 0 on success or ``-errno`` on error.
-> > + * * ``-EOPNOTSUPP`` : device driver doesn't implement kfunc
-> > + * * ``-ENODATA``    : Checksum was not validated
-> > + */
-> > +__bpf_kfunc int bpf_xdp_metadata_rx_csum_lvl(const struct xdp_md *ctx, u8 *csum_level)
+On Fri, Jun 30, 2023 at 11:25:57AM -0700, Andrii Nakryiko wrote:
+> On Thu, Jun 29, 2023 at 4:15 PM Toke Høiland-Jørgensen <toke@redhat.com> wrote:
+> >
+> > Andrii Nakryiko <andrii@kernel.org> writes:
+> >
+> > > This patch set introduces new BPF object, BPF token, which allows to delegate
+> > > a subset of BPF functionality from privileged system-wide daemon (e.g.,
+> > > systemd or any other container manager) to a *trusted* unprivileged
+> > > application. Trust is the key here. This functionality is not about allowing
+> > > unconditional unprivileged BPF usage. Establishing trust, though, is
+> > > completely up to the discretion of respective privileged application that
+> > > would create a BPF token, as different production setups can and do achieve it
+> > > through a combination of different means (signing, LSM, code reviews, etc),
+> > > and it's undesirable and infeasible for kernel to enforce any particular way
+> > > of validating trustworthiness of particular process.
+> > >
+> > > The main motivation for BPF token is a desire to enable containerized
+> > > BPF applications to be used together with user namespaces. This is currently
+> > > impossible, as CAP_BPF, required for BPF subsystem usage, cannot be namespaced
+> > > or sandboxed, as a general rule. E.g., tracing BPF programs, thanks to BPF
+> > > helpers like bpf_probe_read_kernel() and bpf_probe_read_user() can safely read
+> > > arbitrary memory, and it's impossible to ensure that they only read memory of
+> > > processes belonging to any given namespace. This means that it's impossible to
+> > > have namespace-aware CAP_BPF capability, and as such another mechanism to
+> > > allow safe usage of BPF functionality is necessary. BPF token and delegation
+> > > of it to a trusted unprivileged applications is such mechanism. Kernel makes
+> > > no assumption about what "trusted" constitutes in any particular case, and
+> > > it's up to specific privileged applications and their surrounding
+> > > infrastructure to decide that. What kernel provides is a set of APIs to create
+> > > and tune BPF token, and pass it around to privileged BPF commands that are
+> > > creating new BPF objects like BPF programs, BPF maps, etc.
+> >
+> > So a colleague pointed out today that the Seccomp Notify functionality
+> > would be a way to achieve your stated goal of allowing unprivileged
+> > containers to (selectively) perform bpf() syscall operations. Christian
+> > Brauner has a pretty nice writeup of the functionality here:
+> > https://people.kernel.org/brauner/the-seccomp-notifier-new-frontiers-in-unprivileged-container-development
+> >
+> > In fact he even mentions allowing unprivileged access to bpf() as a
+> > possible use case (in the second-to-last paragraph).
+> >
+> > AFAICT this would enable your use case without adding any new kernel
+> > functionality or changing the BPF-using applications, while allowing the
+> > privileged userspace daemon to make case-by-case decisions on each
+> > operation instead of granting blanket capabilities (which is my main
+> > objection to the token proposal, as we discussed on the last iteration
+> > of the series).
 > 
-> Istead of ENODATA should we return what would be put in the ip_summed field
-> CHECKSUM_{NONE, UNNECESSARY, COMPLETE, PARTIAL}? Then sig would be,
+> It's not "blanket" capabilities. You control types or maps and
+> programs that could be created. And again, CAP_SYS_ADMIN guarded.
+> Please, don't give CAP_SYS_ADMIN/root permissions to applications you
+> can't be sure won't do something stupid and blame kernel API for it.
 > 
->  bpf_xdp_metadata_rx_csum_lvl(const struct xdp_md *ctx, u8 *type, u8 *lvl);
+> After all, the root process can setuid() any file and make it run with
+> elevated permissions, right? Doesn't get more "blanket" than that.
 > 
-> or something like that? Or is the thought that its not really necessary?
-> I don't have a strong preference but figured it was worth asking.
->
+> >
+> > So I'm curious whether you considered this as an alternative to
+> > BPF_TOKEN? And if so, what your reason was for rejecting it?
+> >
+> 
+> Yes, I'm aware, Christian has a follow up short blog post specifically
+> for using this for proxying BPF from privileged process ([0]).
+> 
+> So, in short, I think it's not a good generic solution. It's very
+> fragile and high-maintenance. It's still proxying BPF UAPI (except
+> application does preserve illusion of using BPF syscall, yes, that
+> part is good) with all the implications: needing to replicate all of
+> UAPI (fetching all those FDs from another process, following all the
+> pointers from another process' memory, etc), and also writing back all
+> the correct things (into another process' memory): log content,
+> log_true_size (out param), any other output parameters. What do we do
+> when an application uses a newer version of bpf_attr that is supported
+> by proxy? And honestly, I'm like 99% sure there are lots of less
+> obvious issues one runs into when starting implementing something like
+> this.
+> 
+> This sounds like a hack and nightmare to implement and support.
+> Perhaps that indirectly is supported by the fact that even Christian
+> half-jokingly calls this a crazy approach. That code basically is
+> unchanged for the last three years, with only one fix from Christian
+> one year after initial introduction ([1]) to fix a quirky issue
+> related to the limitation of pidfd working only for thread group
+> leaders. It also still supports only BPF_PROG_TYPE_CGROUP_DEVICE
+> program loading, it doesn't support a bunch of newer BPF_PROG_LOAD
+> fields and functionality, etc, etc.
+> 
+> So as a technical curiosity it's pretty cool and perhaps is the right
+> tool for the job for very narrow specific use cases. But as a
+> realistic generic approach that could be used by industry at large for
+> safe BPF usage from namespaced containers -- not so much.
 
-I see no value in returning CHECKSUM_COMPLETE without the actual checksum value. 
-Same with CHECKSUM_PARTIAL and csum_start. Returning those values too would 
-overcomplicate the function signature.
- 
-> > +{
-> > +	return -EOPNOTSUPP;
-> > +}
-> > +
-> >  __diag_pop();
-> >  
-> >  BTF_SET8_START(xdp_metadata_kfunc_ids)
-> > -- 
-> > 2.41.0
-> > 
+Some background... When BPF & cgroup moved the devices cgroup from a
+file-based cgroup controller into a BPF program it was technically an
+immediate widespread regression.
+
+The cgroup v1 controller was file based and supported seemlessly
+switching between allow- and denylists. Whether that was ever sensible
+is a separate question.
+
+But what this meant was that any container runtime that used a simple
+file-based mechanism now had to generate a BPF device program that
+mirrored the cgroup v1 semantic such that the old syntax of the cgroup
+v1 device controller would be correctly translated into a BPF devices
+program.
+
+In addition, this broke some nesting scenarios. So intercepting bpf()
+via seccomp was specifically done to avoid devices cgroup regressions.
+It was never meant to be a generic solution.
+
+It also doesn't work for all cases as the seccomp notifier's supervision
+mechanism isn't really a clean solution.
+
+It's a pipe dream that you can transparently proxy system calls for
+another process via seccomp for sufficiently complex system calls. We
+did it for specific use-cases where we could sufficiently guarantee that
+they could be safe. But to make this work it would involve way more
+invasive changes:
+
+* nesting/stacking of seccomp notifiers
+* clean handling of pointer arguments in-kernel such that you can safely
+  continue system calls being sure that they haven't been modified. This
+  is currently only possible in scenarios where safety is guaranteed by
+  the kernel refusing nonsensical or unsafe arguments
+* correct privilege handling
+  The seccomp notifier emulates system calls in userspace and thus has
+  to mimick the privilege context of the task it is emulating the system
+  call for in such a way that (i) it allows it to succeed by avoiding the
+  privilege limitations of why the given system call was supposed to be
+  proxied in the first place, (ii) it doesn't allow to circumvent other,
+  generic restrictions that would otherwise cause the system call to
+  fail. It's like saying e.g., "execute with most of the proxied task's
+  creds but let it have a few more privileges". That's frail as Linux
+  creds aren't really composable. That's why we have override_creds()
+  not "add_creds()" and "subtract_creds()" which would probably be
+  nicer.
+
+Or it would have to be a generic first class kernel proxy which begs the
+question why not change the subsystems itself to do this cleanly.
