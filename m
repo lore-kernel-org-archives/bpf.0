@@ -1,54 +1,58 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5264EBC;
-	Tue,  4 Jul 2023 11:05:56 +0000 (UTC)
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5BAA3;
-	Tue,  4 Jul 2023 04:05:55 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27061566B;
+	Tue,  4 Jul 2023 11:08:12 +0000 (UTC)
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11997E76;
+	Tue,  4 Jul 2023 04:08:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688468755; x=1720004755;
+  t=1688468891; x=1720004891;
   h=date:from:to:cc:subject:message-id:references:
    in-reply-to:mime-version;
-  bh=hT/A2TMge2QjE3MiBFSlD5bjoBNGNEhYWLLK3ZlahtM=;
-  b=NX2KU3/Jpb6sAtBScCBwZL6PdIin4Badfg6g6zJPE/HsTbEdCORg4TBJ
-   vWC3TiMddjfT9EazSSS/3A0NY9O8gK8iqqcXC6sqKcDKvXqId6evCk5H5
-   BajhpQrr/RGg8zFDWZkHVA7uDk1xhA/9IKAc4lSsbO4BZvskgHKCKXVu+
-   fjsLBm5L/igYbnZKjwAVugBQRn7HoK6Qu3Q5Rnu1idpbrNMdsosSStVs/
-   lvrDczQwObX3z5YeFOfYvtSRTMFC0Jsi7f7jtPbsXI3H5oRIOFxh2qH8h
-   ZUgboSW1Upfx9C+uANrPphhFP9OcqWm25BGEOzdlorlVUHDk8Z+IxT1hk
+  bh=Ce2mAEI/e9+UqKg3uJadAovEGTYAPynqm/f3LpxateQ=;
+  b=gtctl/bBISFFUVclAhqjbvi+ZpS/2DukjPfy/gGclRyc5UwdnDx6DTbP
+   lq0KZzdi3dRNKIpgx6a2/TS8dUABYYhe8K8ha3NkPczGqCI6vJ9b99RNN
+   PGQKdkjTM4brHnVp4kpfeJWsWYaqxEUlYhrLGs2/JfkWesOljnaS4w2Cz
+   FCvz72IEWFaP/aP+y1JERxnR/bDwNIvD8i83stKaOcHblIb7yz23MDo0k
+   rlKKoeOu8USdP0T8KP4v01VhM07hTvevn+bQs3dzfHvIFzvJZUZnwOQ/s
+   MEXhFUFOj7nHczEhD3YhduK39Dsn2d4hl6GrZADEKYQdHXPuOJ5wD68tb
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="393842450"
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="347891143"
 X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
-   d="scan'208";a="393842450"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 04:05:52 -0700
+   d="scan'208";a="347891143"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 04:08:10 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="788827358"
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="832141713"
 X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
-   d="scan'208";a="788827358"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga004.fm.intel.com with ESMTP; 04 Jul 2023 04:05:50 -0700
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+   d="scan'208";a="832141713"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmsmga002.fm.intel.com with ESMTP; 04 Jul 2023 04:08:10 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 4 Jul 2023 04:05:48 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ 15.1.2507.27; Tue, 4 Jul 2023 04:08:09 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Tue, 4 Jul 2023 04:05:48 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ 15.1.2507.27; Tue, 4 Jul 2023 04:08:08 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Tue, 4 Jul 2023 04:08:08 -0700
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.175)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Tue, 4 Jul 2023 04:05:48 -0700
+ 15.1.2507.27; Tue, 4 Jul 2023 04:08:08 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kgW6mv131WsobjeLFgZ7lgFwLiqUagb1NlsT2TIKON0Vc8DQWdtbW7usuyCzh04BChjA5grwdV1/8Fn8GWKr/vbeJn+bEp+KHDGCB4wZXxgtcCUkyV0+n1Bjtk+/q9MWibMJGhtfnLEIbteXjaXORgy48PgUuiOu3ctSoEm/korOZTPd7l9pdbz4xEkO51TwD2MNqXoONxaw/qjRjWBKymYOBSTBuvu7wLUCqvTFYSeJaPlk1WI5sQxbuPWvuW/PCQhUyNdqjM6Mioa2juc/77kbYeexaT4McHTFmM3t2XZwmQQyO9mAbSgIXlSDgsm3gbnYLvMbbnQmlepJMdcWIg==
+ b=NNA4fX6RSyjIjRL1+BCJCuGDcNJvklhDPPWmikq5N64wjimfYQ/wzh03/XC7F72/T3KJ4PwO8N8DWww70o/di02uJNPKcpmDgzbRgRJ8rvNPonmiDzmmle9TdV4Jf/K/W4u4NmEtENUBWUEF9bbA7hrTGyw7unQqRXdxPhbGjTryonMM3oe+H1wIXt7GgEY6VIKS9e0TYEr0aE9p+WYHQOJWiKG6TwMruHozCCuCvX5pL4N7PsYSrYvYygZulfJziD9YO6YD7OzRunbXaMJhylbTOjd0EUIRbqm4+qxgbyxWJcB1h1XHRZKHJ8iG3pKg53SlQGLLi/16NYNMCzq9lA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fQWs7izG4bxyFtEeZXmqwPfKWDNgpepew4Z9cJVHZf8=;
- b=m3gRXt0AV3TlNsEf0SksoSVK+lQC8WdBe3hxJPqQ9JuyLISl6AilRahHZADV01S56pEPWPsqgVlzh2SKz6pVm+thx01YHu4MCnVCXHK8szPAIgZcz3ZjGOfCco7A1ZPoz68cUi+WWwBR9SSTd9ah1UNnlqNtW3Q+xz3mK6b2FzzqpSHef/SE/oa+XrKp4OG83ktyl8xifZfw/YQH0TotswLi5HEK/1uNvsxb4yPeFi1UdMIyqJPkoND4BOQPrTrS/nllTgNpvUtv1ZXpjBhePD4vge6Eg7/u38/kR9Eps6b2qPD4sTaxkBdWfgtXzlinVz20YitysELSpDxtyscFeg==
+ bh=Ybgvj8+vypkP278uICKz1xdOar4UZG5CZd5LZhEMP4o=;
+ b=hwZc5cI465xOnvCoJxIUmmZ47LTkC8mtVCSF4slcQ9unIQDtZf7HiUwx4ePJ0FxVH8xy6QTAQvUunaYqwqWuM9LEA3+sDIe5ywO3Gfmy/yYxkB6QySD3/3Ji3QGi8RzwgqnSoP2CXx3rMhtMAaYlawpedu046Nu3YPBsx98SGpQb5mCEFm8fuOE3T0I5kiwdMEtrXlGT5snCFEAZm5Jr0EEDHmPewO/gf1eI1/bIw5ZvM9BZyn0J/NyrP3gUKLX2FIbh4h2ef2zPX7MyH8qHtugxfe2DipuBVXWCHef7i0OVlLwFTrflK1vt0nhOR7yFwGXmNXnIIEfvWSUmX7EVMQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
@@ -58,36 +62,34 @@ Received: from SN7PR11MB7540.namprd11.prod.outlook.com (2603:10b6:806:340::7)
  by PH7PR11MB7097.namprd11.prod.outlook.com (2603:10b6:510:20c::6) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Tue, 4 Jul
- 2023 11:05:44 +0000
+ 2023 11:08:01 +0000
 Received: from SN7PR11MB7540.namprd11.prod.outlook.com
  ([fe80::9376:9c9d:424a:a0fe]) by SN7PR11MB7540.namprd11.prod.outlook.com
  ([fe80::9376:9c9d:424a:a0fe%6]) with mapi id 15.20.6544.024; Tue, 4 Jul 2023
- 11:05:43 +0000
-Date: Tue, 4 Jul 2023 13:02:01 +0200
+ 11:08:01 +0000
+Date: Tue, 4 Jul 2023 13:04:22 +0200
 From: Larysa Zaremba <larysa.zaremba@intel.com>
 To: Jesper Dangaard Brouer <jbrouer@redhat.com>
-CC: John Fastabend <john.fastabend@gmail.com>, <brouer@redhat.com>,
-	<bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-	<andrii@kernel.org>, <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+CC: <bpf@vger.kernel.org>, <brouer@redhat.com>, <ast@kernel.org>,
+	<daniel@iogearbox.net>, <andrii@kernel.org>, <martin.lau@linux.dev>,
+	<song@kernel.org>, <yhs@fb.com>, <john.fastabend@gmail.com>,
 	<kpsingh@kernel.org>, <sdf@google.com>, <haoluo@google.com>,
 	<jolsa@kernel.org>, David Ahern <dsahern@gmail.com>, Jakub Kicinski
 	<kuba@kernel.org>, Willem de Bruijn <willemb@google.com>, Anatoly Burakov
 	<anatoly.burakov@intel.com>, Alexander Lobakin <alexandr.lobakin@intel.com>,
 	Magnus Karlsson <magnus.karlsson@gmail.com>, Maryam Tahhan
-	<mtahhan@redhat.com>, <xdp-hints@xdp-project.net>, <netdev@vger.kernel.org>,
-	Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH bpf-next v2 09/20] xdp: Add VLAN tag hint
-Message-ID: <ZKP8KRy04IqyHXuI@lincoln>
+	<mtahhan@redhat.com>, <xdp-hints@xdp-project.net>, <netdev@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v2 16/20] selftests/bpf: Add flags and new hints
+ to xdp_hw_metadata
+Message-ID: <ZKP8tsdN3Kzokbf1@lincoln>
 References: <20230703181226.19380-1-larysa.zaremba@intel.com>
- <20230703181226.19380-10-larysa.zaremba@intel.com>
- <64a32c661648e_628d32085f@john.notmuch>
- <ZKPW6azl0Ak27wSO@lincoln>
- <f7aa7eb6-4600-cebf-bd09-d05fc627fd0d@redhat.com>
+ <20230703181226.19380-17-larysa.zaremba@intel.com>
+ <8c4da3c2-bc18-5fe9-2189-4b22cc910a25@redhat.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <f7aa7eb6-4600-cebf-bd09-d05fc627fd0d@redhat.com>
-X-ClientProxiedBy: BE1P281CA0223.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:88::6) To SN7PR11MB7540.namprd11.prod.outlook.com
+In-Reply-To: <8c4da3c2-bc18-5fe9-2189-4b22cc910a25@redhat.com>
+X-ClientProxiedBy: BE0P281CA0036.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:14::23) To SN7PR11MB7540.namprd11.prod.outlook.com
  (2603:10b6:806:340::7)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -97,211 +99,100 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SN7PR11MB7540:EE_|PH7PR11MB7097:EE_
-X-MS-Office365-Filtering-Correlation-Id: e85be7f1-1d31-4b72-7686-08db7c7e9c36
+X-MS-Office365-Filtering-Correlation-Id: 709f1b50-c200-4dbf-c006-08db7c7eee4d
 X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DXDl2WRNKXyL1IPGUtJcOikKNRwJo3AkWl+N02kVJ1/1D7Duo1dgaLHkag3bMS2bCI9CEpd9T0n03jf+HaLF8plBLbROBBahMRt6bNU3xcBoeJC4CSwak83Q7aRPXWf37rtfzDVtqk9GTDHjeLx6aWHqG3S5FDF8t3rRP1krxRh1WoI6jNAUCK0BHhhO4Vi/rPUO4U8iRk+MN2ErCFjMV1MJhUjclzQpw71pk1ADbseE4TxbgI4zs0cr/NoHlFcGGtkfB/rnSl0tDWyssHgs3wOPBMWvbUOv96XNUfyg3D4tq6wAMpC8khQGZf+XUwHabbBToVCSD+lOEEMR+2kOf63ds5W+uxDgydGqOxrbo5CXLSH3vJcBfVCx9Fymqd7gwUFxZqrSgZBpfoD8ooE6ktae+7TkbCF7bDJaHqcPq+NJWbouGHopjWxZG+UkSTRpI+CSDNWlqgWCtct/g0q89W8a2Q3BR2YOO5WYVTQHhOXthponVsDr7kkJfQsuD0WgVm/hgSarS0FRCcnDyKL9xGQN0x7J76AipK01v6nlF+fCae8s1hseNZmMW10tArqe2Mp7GuL3QJuPjixwkGZUmA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR11MB7540.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(376002)(346002)(136003)(39860400002)(396003)(366004)(451199021)(26005)(478600001)(9686003)(82960400001)(6666004)(6512007)(966005)(6506007)(86362001)(186003)(38100700002)(54906003)(66476007)(6916009)(66556008)(4326008)(66946007)(83380400001)(6486002)(316002)(8676002)(8936002)(44832011)(7416002)(41300700001)(2906002)(5660300002)(33716001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: JtC7WN7D/9x3Tzvhzd/58EViSnLlwfFOBy/DAAP/pL0sz5Y9R6bHLO5txHT7tsKZJMGlpoJqNW9+nNSQQSOwRduWBzBt/y8N/1I+r0HV3jvIZq66WsX6xVUpEvBvPHZpnmiDdsEMmdZbFrsZivYxAYI5Y3Ise+9gvdjk75uXqoBRNJ5zr72ZGy2h9awxOW3FdMJDcCA2oXpNaZ+dp5IY0FPr1nK0QIU8EnIOSYHc+4Yr/1pmxB7Qb2Naj4/+n6eD3WZfhFfzsTnGcBvyVqYlsF0TagRYgjZpw1uvvJDRdcocEvCLVHtRqBYO3fyJ4ZLJiOUOD3DIahZvlnPMKb571JdhvGI1vf0LXsw3PCaiM00zOjoAe0KTD4sC6SKKXSr72/7N8MmmEGDRiFqMtHxgaveejfKyHsYS3zszWwaHgB3m/cf/jwCW1CFwg8edjusmZTDprel3BNf2KdmnXewAWhGSW7onou9nw3TtODPWAECwlGfzEwQ+V0LZhVfqqtl+0MsLLnNjR/HnuOnKRxqIR7lMMGMZ+nYpHQfeqzXcrLiq3hcFg58uU5GI3SWI6ciY
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR11MB7540.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(376002)(346002)(136003)(39860400002)(396003)(366004)(451199021)(26005)(478600001)(9686003)(82960400001)(6666004)(6512007)(6506007)(86362001)(186003)(38100700002)(54906003)(66476007)(6916009)(66556008)(4326008)(66946007)(83380400001)(6486002)(316002)(8676002)(8936002)(44832011)(7416002)(41300700001)(2906002)(5660300002)(33716001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4Mz4M1n9iWNAs4oyHWBbL1JY2JAX8PCmX+PiYdgSrTwZjsgL7l2Fq39gu6BU?=
- =?us-ascii?Q?So7x1AE8vvSq/elmvRi2+/RrPQbUrFSanAfSDkKtrq2TOCllxoNXBQyLg+mJ?=
- =?us-ascii?Q?dmNES+jWvDnoDmQOpuyaDo1QvP++2WJt9J6718IFxlvdkHTRPuzBe0Iga6kP?=
- =?us-ascii?Q?ngR6gMmmiMUAKQQh62mktEAUH2kblDF8X70Bs6vmfeSyMWZnL5o8s/GmXg3t?=
- =?us-ascii?Q?kAy/l73udryGubC/+o94UbjtR+VoYp0/GvIjw8XefTGwmjyGzwcInu9ONLbf?=
- =?us-ascii?Q?9LAYBCWqslO5WyDkMqUKSuY91Vr6kKnjG13QUxisPT5vgUDqi6Ki39yE4KEh?=
- =?us-ascii?Q?aQKDnVcde1NekicYsb3r6dVMNiVqmyRynI/t/RumSXboqp0otxfref3pOXj/?=
- =?us-ascii?Q?JtZomSuqNW0UXK0SUVFnkU3eS0Rfgb75rSI9na2A7yWKyWJItX/GewdDRBRz?=
- =?us-ascii?Q?zxyGhK1X2LYrGnJFOYVlETymrbbbFEsgv1Yj8JxcxLOMfLK7mDfQtL4uT98v?=
- =?us-ascii?Q?Vk7kTOGVCr0biH4SzomJXpGZFoQeAhvAiSzMc9vaBNfXksppxHwZJejmczGP?=
- =?us-ascii?Q?zazYNPY6GzOnIV45AzRuse6+GZO7K+aTYvz9blctfBWAOXwrcaX2aB0UrG3O?=
- =?us-ascii?Q?aKWElDEW3OosFOv3HZFWKFgBNqiQFPxtzTGaNA+K4COA+UzhikRXxygXiBzR?=
- =?us-ascii?Q?w6n3epmMekWNc1PQU99AFPSM0b6O8F1Sy07X0cwixXhrzcDuwm6QgxiBN0OL?=
- =?us-ascii?Q?SFmmlp+MU30MYNP+4DnpQokPwhPbVvyeG7WzUogm21z/CBBC75xyj+isYYE/?=
- =?us-ascii?Q?tkJLhkOs1jAhY9GVp4toeOzhByJHyO3BNs4rs4slcMd1GjjYTn7g1dBnW1EM?=
- =?us-ascii?Q?JH9rPkn0xWIkTml2UsH4LGrV26girjslv+wKqS6C6gZnUL9Tjws+T6HDKEe6?=
- =?us-ascii?Q?CkvTTdfoiqcnL2qS6dWNgLKOmSrq7Ebca7kQOzIwfHj0Lr4OG0VWZRTRwziJ?=
- =?us-ascii?Q?pzEmxvzDkUQOJSr9f8DIq3CqBiXRjMVAnn+Onaw1QZ3ksRPy203ndyOVzm8/?=
- =?us-ascii?Q?3ovHYmudSaVuf9n7zikty7CwSDrTrgo+dXz8L+2AN7q/pLVxLsAaRcBFEfud?=
- =?us-ascii?Q?JDe8gd6V23uCwz+6bv9i073r4T8wjJ6KNdWKJj//xSpsWS9oMXyutl0+OWAn?=
- =?us-ascii?Q?92A/DI0te1Ts2eegH54jhcoX2LG9FM3x01UprOEdOQMJKKAN4aUnAvsp8aWY?=
- =?us-ascii?Q?Ks5WBGdeKo4CA15Yw+tf3UOGsFx4or8dvLgHjJvc361vIpaePE6+PjYIiAjh?=
- =?us-ascii?Q?nuAfm7FN64NLdCQMlr4KUNSKTG4Frz1nJ1ZItcNozeI/+qXABqeGgbAQbla2?=
- =?us-ascii?Q?Ye7lw4SHARy+wqmuWRlMnYzvnH5C2lo6v1vxix4l90ijTfu1Sa7YcnBzyRg2?=
- =?us-ascii?Q?H1kReKd9ganPnrrzO8LvVBZwU0y9DojHYzFmHSVJLOM7qKT33zMPQbu8Pusn?=
- =?us-ascii?Q?I5Kw4+h+8hyKk+8W0iKs8bnLeh4m4xAVcacuNjy3DN5TavE9gRYgHWRzAOqe?=
- =?us-ascii?Q?zaZVyxGZzfiSGSfD6s8s6O6pa6YAOwXoPfoz4Pri3mTvcv3iIxkfeV8Mp13j?=
- =?us-ascii?Q?uw=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: e85be7f1-1d31-4b72-7686-08db7c7e9c36
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cGr7mrKGCCjQHZEprjNEDG1dAlB6/wGpz6jNsnQ04HVhO25TYW2tUSu+VgLF?=
+ =?us-ascii?Q?1GzAouBiReclNKQ/XQcrFx+UJnayN7Vojav8Oai7b9aP4ioRMG0vjvgeCzr1?=
+ =?us-ascii?Q?cFCjGwV9n2o6XlpSZE5dk5bOCtD5uq/itN8uzesMcoKO1OrrJ5bR8zu0HLC8?=
+ =?us-ascii?Q?Do8QpW+Kx3CrB0rOYGlgRsvjA4YhQfQ45gpGUq9M9u5h/E0bP5bWjrRKEQ+c?=
+ =?us-ascii?Q?FVurNvapRNo6AzV8h/LD7IT7VhTq2jZSolN3Y4ODwCJ/3pUgnSx+irMTIu9T?=
+ =?us-ascii?Q?ttaEL6N/k7Vm6nsSXX3j3lVg/MHdDXyBBZTeYtK597yi53uKvIui2ccgbt86?=
+ =?us-ascii?Q?26fPpNSVT55Wi6WW3dvPwdDAgGL6MXiwDT1OznjOUjt2BNesf7FMmHenE3bN?=
+ =?us-ascii?Q?0sJ03ear+CYcIEhmbp6v5nwpV91Tp5hiQMkzkv8h5riT1ym/gQQXW1yj7JBe?=
+ =?us-ascii?Q?dtrwbtOsY5QxsItpy9GXa91t8sp0P1a+tV9DDlPbk/NzDgQ9NLLNbYNEJFGe?=
+ =?us-ascii?Q?7w4JXI+LmiwMmlCbAf6mVuxfDdjO3MzCcd9ZtRZu9VJJSqextuYBkxvYfArT?=
+ =?us-ascii?Q?SEyJj+jCQw3bMBJ+PaEt0QG/BxhtPuLOMCsFfHBHLf1hbtN8D+2mXLA1oMLW?=
+ =?us-ascii?Q?pAZZhFbnCIeq94qCJv8qSIjuvmoZJR+C9R9Ke8CwykLBSiAXVh5skoNq4X46?=
+ =?us-ascii?Q?oE1P1ZJ5J2Xg4VVspBJvqWesXDehC2UstIQqsYOHTuptL8A4ETbI+ktUsAan?=
+ =?us-ascii?Q?TxMaeZJGZhpO6VuAjxjsRC7hB5QhNNvBmQGH/TqjryAqI6K4IlEqrPjhf0qt?=
+ =?us-ascii?Q?XVsFw7QMk2Rtk0UcW8CyK+SUPZMBL0cQ2mxFaVyFjc/7FyGZ6b4bkbdudp+c?=
+ =?us-ascii?Q?f+Koy0R1CpiZ9czTgheK+vpqRVqxaM/6evomawGqW/Wen44bpBrBlL/EYnv9?=
+ =?us-ascii?Q?SnO9RIYjKfbImcjRWpkCWLOoBsk6G4XqTtIHtHdHTRPeLwwFoXOHLYMaT7vM?=
+ =?us-ascii?Q?ohZ/W1FeFpP0WqSgLLVjoUzmCALP1RCTIjTqDuein9aYzqLP+yZY7bbAl/Od?=
+ =?us-ascii?Q?e0cCWTX497sq1reH3PhSSGuE2f8EYsQy87JvyaaUM7yopSmddUHPzA6KuXxe?=
+ =?us-ascii?Q?CPgSe/BbBe1Gs5YE2042bV7auliWX4k9DgPrZ8fWpBbqW4+8FMO91n++QINJ?=
+ =?us-ascii?Q?Y2UUjYSt/d7vqxRiPcDKDReD27Tzk16zpXXfUp/g5jIopBDkrBD//zgMkzID?=
+ =?us-ascii?Q?vOYA8O87vBOqbCoD9y3PyNFHH8GVgNKkalvKbZFBHmE/4u9bePF93CA/NqNt?=
+ =?us-ascii?Q?4ZVVoCr74EBjbdeQIEUE0lF6ChSG7vGlYVC5J2Eoz1tytDZENowWUO6eNG45?=
+ =?us-ascii?Q?r8c7jHFlbSSGnhXl5AA4566hXYAluEQWUUW7wjuQeK/ZQZPKPxnLai98ZbMx?=
+ =?us-ascii?Q?d9Rrz0Wa51S1k0RhsneK6hkxzvtYVnVyrDSbo7j++CJ2E8c0L8aw3LOeHi/p?=
+ =?us-ascii?Q?8Uu1D69pMw28n7wlH3TEEBdLkByBUT1a1YAHezblFsUE1h+3dctLzL2vgZEG?=
+ =?us-ascii?Q?3CKyfHWOpBjAiS0D5WgJ2yU5CAgO98NCJ7iFONBUo9yNGc2AHmSB1ApjVfsS?=
+ =?us-ascii?Q?QQ=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 709f1b50-c200-4dbf-c006-08db7c7eee4d
 X-MS-Exchange-CrossTenant-AuthSource: SN7PR11MB7540.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 11:05:43.3083
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 11:08:01.0960
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9OzyerWSTwZW820YzjTkWbJLZ/ytkEHVyQz4m20EQC26OoD9hR/rIkecxUUVVXaLJNkvnnnwBahTC1PWw+W2wek/9Cr95IMnTUX4Q6lvt5s=
+X-MS-Exchange-CrossTenant-UserPrincipalName: ie12qevwSeQ6aVdVvVopxyZ3bGZ4ymvTBewhYxhdViuDcbTx1mieyg7r51n4zZ5c+6jSxCujeRY4Mf34KwORZoY2O6jdm6H33aN+/XlTNPQ=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB7097
 X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-	T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+	SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Tue, Jul 04, 2023 at 12:23:45PM +0200, Jesper Dangaard Brouer wrote:
+On Tue, Jul 04, 2023 at 01:03:37PM +0200, Jesper Dangaard Brouer wrote:
 > 
+> On 03/07/2023 20.12, Larysa Zaremba wrote:
+> > diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+> > index 613321eb84c1..d234cbcc9103 100644
+> > --- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
+> > +++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+> > @@ -19,6 +19,9 @@
+> >   #include "xsk.h"
+> >   #include <error.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/bits.h>
+> > +#include <linux/bitfield.h>
+> >   #include <linux/errqueue.h>
+> >   #include <linux/if_link.h>
+> >   #include <linux/net_tstamp.h>
+> > @@ -150,21 +153,34 @@ static __u64 gettime(clockid_t clock_id)
+> >   	return (__u64) t.tv_sec * NANOSEC_PER_SEC + t.tv_nsec;
+> >   }
+> > +#define VLAN_PRIO_MASK		GENMASK(15, 13) /* Priority Code Point */
+> > +#define VLAN_CFI_MASK		GENMASK(12, 12) /* Canonical Format / Drop Eligible Indicator */
+> > +#define VLAN_VID_MASK		GENMASK(11, 0)	/* VLAN Identifier */
+> > +static void print_vlan_tag(__u16 tag)
+> > +{
+> > +	__u16 vlan_id = FIELD_GET(VLAN_VID_MASK, tag);
+> > +	__u8 pcp = FIELD_GET(VLAN_PRIO_MASK, tag);
+> > +	bool cfi = FIELD_GET(VLAN_CFI_MASK, tag);
+> > +
+> > +	printf("PCP=%u, CFI=%d, VID=0x%X\n", pcp, cfi, vlan_id);
+> > +}
+> > +
 > 
-> On 04/07/2023 10.23, Larysa Zaremba wrote:
-> > On Mon, Jul 03, 2023 at 01:15:34PM -0700, John Fastabend wrote:
-> > > Larysa Zaremba wrote:
-> > > > Implement functionality that enables drivers to expose VLAN tag
-> > > > to XDP code.
-> > > > 
-> > > > Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
-> > > > ---
-> > > >   Documentation/networking/xdp-rx-metadata.rst |  8 +++++++-
-> > > >   include/linux/netdevice.h                    |  2 ++
-> > > >   include/net/xdp.h                            |  2 ++
-> > > >   kernel/bpf/offload.c                         |  2 ++
-> > > >   net/core/xdp.c                               | 20 ++++++++++++++++++++
-> > > >   5 files changed, 33 insertions(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/Documentation/networking/xdp-rx-metadata.rst b/Documentation/networking/xdp-rx-metadata.rst
-> > > > index 25ce72af81c2..ea6dd79a21d3 100644
-> > > > --- a/Documentation/networking/xdp-rx-metadata.rst
-> > > > +++ b/Documentation/networking/xdp-rx-metadata.rst
-> > > > @@ -18,7 +18,13 @@ Currently, the following kfuncs are supported. In the future, as more
-> > > >   metadata is supported, this set will grow:
-> > > >   .. kernel-doc:: net/core/xdp.c
-> > > > -   :identifiers: bpf_xdp_metadata_rx_timestamp bpf_xdp_metadata_rx_hash
-> > > > +   :identifiers: bpf_xdp_metadata_rx_timestamp
-> > > > +
-> > > > +.. kernel-doc:: net/core/xdp.c
-> > > > +   :identifiers: bpf_xdp_metadata_rx_hash
-> > > > +
-> > > > +.. kernel-doc:: net/core/xdp.c
-> > > > +   :identifiers: bpf_xdp_metadata_rx_vlan_tag
-> > > >   An XDP program can use these kfuncs to read the metadata into stack
-> > > >   variables for its own consumption. Or, to pass the metadata on to other
-> [...]
-> > > > diff --git a/net/core/xdp.c b/net/core/xdp.c
-> > > > index 41e5ca8643ec..f6262c90e45f 100644
-> > > > --- a/net/core/xdp.c
-> > > > +++ b/net/core/xdp.c
-> > > > @@ -738,6 +738,26 @@ __bpf_kfunc int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, u32 *hash,
-> > > >   	return -EOPNOTSUPP;
-> > > >   }
-> > > > +/**
-> > > > + * bpf_xdp_metadata_rx_vlan_tag - Get XDP packet outermost VLAN tag with protocol
-> > > > + * @ctx: XDP context pointer.
-> > > > + * @vlan_tag: Destination pointer for VLAN tag
-> > > > + * @vlan_proto: Destination pointer for VLAN protocol identifier in network byte order.
-> > > > + *
-> > > > + * In case of success, vlan_tag contains VLAN tag, including 12 least significant bytes
-> > > > + * containing VLAN ID, vlan_proto contains protocol identifier.
-> > > 
-> > > Above is a bit confusing to me at least.
-> > > 
-> > > The vlan tag would be both the 16bit TPID and 16bit TCI. What fields
-> > > are to be included here? The VlanID or the full 16bit TCI meaning the
-> > > PCP+DEI+VID?
-> > 
-> > It contains PCP+DEI+VID, in patch 16 ("selftests/bpf: Add flags and new hints to
-> > xdp_hw_metadata") this is more clear, because the tag is parsed.
-> > 
+> Shouldn't we use DEI instead of CFI ?
 > 
-> Do we really care about the "EtherType" proto (in VLAN speak TPID = Tag
-> Protocol IDentifier)?
-> I mean, it can basically only have two values[1], and we just wanted to
-> know if it is a VLAN (that hardware offloaded/removed for us):
+> This is new code, and CFI have been deprecated (it was only relevant for
+> IEEE 802.5 Token Ring LAN).
 
-If we assume everyone follows the standard, this would be correct.
-But apparently, some applications use some ambiguous value as a TPID [0].
-
-So it is not hard to imagine, some NICs could alllow you to configure your 
-custom TPID. I am not sure if any in-tree drivers actually do this, but I think 
-it's nice to provide some flexibility on XDP level, especially considering 
-network stack stores full vlan_proto.
-
-[0] 
-https://techhub.hpe.com/eginfolib/networking/docs/switches/7500/5200-1938a_l2-lan_cg/content/495503472.htm
+You are right, should be DEI.
 
 > 
->  static __always_inline int proto_is_vlan(__u16 h_proto)
->  {
-> 	return !!(h_proto == bpf_htons(ETH_P_8021Q) ||
-> 		  h_proto == bpf_htons(ETH_P_8021AD));
->  }
-> 
-> [1] https://github.com/xdp-project/bpf-examples/blob/master/include/xdp/parsing_helpers.h#L75-L79
-> 
-> Cc. Andrew Lunn, as I notice DSA have a fake VLAN define ETH_P_DSA_8021Q
-> (in file include/uapi/linux/if_ether.h)
-> Is this actually in use?
-> Maybe some hardware can "VLAN" offload this?
-> 
-> 
-> > What about rephrasing it this way:
-> > 
-> > In case of success, vlan_proto contains VLAN protocol identifier (TPID),
-> > vlan_tag contains the remaining 16 bits of a 802.1Q tag (PCP+DEI+VID).
-> > 
-> 
-> Hmm, I think we can improve this further. This text becomes part of the
-> documentation for end-users (target audience).  Thus, I think it is
-> worth being more verbose and even mention the existing defines that we
-> are expecting end-users to take advantage of.
-> 
-> What about:
-> 
-> In case of success. The VLAN EtherType is stored in vlan_proto (usually
-> either ETH_P_8021Q or ETH_P_8021AD) also known as TPID (Tag Protocol
-> IDentifier). The VLAN tag is stored in vlan_tag, which is a 16-bit field
-> containing sub-fields (PCP+DEI+VID). The VLAN ID (VID) is 12-bits
-> commonly extracted using mask VLAN_VID_MASK (0x0fff).  For the meaning
-> of the sub-fields Priority Code Point (PCP) and Drop Eligible Indicator
-> (DEI) (formerly CFI) please reference other documentation. Remember
-> these 16-bit fields are stored in network-byte. Thus, transformation
-> with byte-order helper functions like bpf_ntohs() are needed.
-> 
-
-AFAIK, vlan_tag is stored in host byte order, this is how it is in skb.
-In ice, we receive VLAN tag in descriptor already in LE.
-Only protocol is BE (network byte order). So I would replace the last 2 
-sentences with the following:
-
-vlan_tag is stored in host byte order, so no byte order conversion is needed.
-vlan_proto is stored in network byte order, the suggested way to use this value:
-
-vlan_proto == bpf_htons(ETH_P_8021Q)
-
-> 
-> 
-> > > I think by "including 12 least significant bytes" you
-> > > mean bits,
-> > 
-> > Yes, my bad.
-> > 
-> > > but also not clear about those 4 other bits.
-> > > 
-> > > I can likely figure it out in next patches from implementation but
-> > > would be nice to clean up docs.
-> > > 
-> > > > + *
-> > > > + * Return:
-> > > > + * * Returns 0 on success or ``-errno`` on error.
-> > > > + * * ``-EOPNOTSUPP`` : device driver doesn't implement kfunc
-> > > > + * * ``-ENODATA``    : VLAN tag was not stripped or is not available
-> > > > + */
-> > > > +__bpf_kfunc int bpf_xdp_metadata_rx_vlan_tag(const struct xdp_md *ctx, u16 *vlan_tag,
-> > > > +					     __be16 *vlan_proto)
-> > > > +{
-> > > > +	return -EOPNOTSUPP;
-> > > > +}
-> > > > +
+> --Jesper
 > 
 > 
