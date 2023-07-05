@@ -1,293 +1,322 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C393420F4
-	for <bpf@vger.kernel.org>; Wed,  5 Jul 2023 10:02:50 +0000 (UTC)
-X-Greylist: delayed 2556 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 05 Jul 2023 03:02:44 PDT
-Received: from www.kot-begemot.co.uk (ns1.kot-begemot.co.uk [217.160.28.25])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080BB173F
-	for <bpf@vger.kernel.org>; Wed,  5 Jul 2023 03:02:43 -0700 (PDT)
-Received: from [192.168.17.6] (helo=jain.kot-begemot.co.uk)
-	by www.kot-begemot.co.uk with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <anton.ivanov@cambridgegreys.com>)
-	id 1qGyg7-00GIrV-WD
-	for bpf@vger.kernel.org; Wed, 05 Jul 2023 09:20:06 +0000
-Received: from jain.kot-begemot.co.uk ([192.168.3.3])
-	by jain.kot-begemot.co.uk with esmtp (Exim 4.94.2)
-	(envelope-from <anton.ivanov@cambridgegreys.com>)
-	id 1qGyg5-00CNIz-4N; Wed, 05 Jul 2023 10:20:03 +0100
-From: anton.ivanov@cambridgegreys.com
-To: bpf@vger.kernel.org
-Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Subject: [PATCH] bpf: make ringbuf available to modules
-Date: Wed,  5 Jul 2023 10:19:58 +0100
-Message-Id: <20230705091958.2949447-1-anton.ivanov@cambridgegreys.com>
-X-Mailer: git-send-email 2.30.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62B324C8F
+	for <bpf@vger.kernel.org>; Wed,  5 Jul 2023 10:09:18 +0000 (UTC)
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5736E10A;
+	Wed,  5 Jul 2023 03:09:15 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id 6a1803df08f44-635f293884cso39101656d6.3;
+        Wed, 05 Jul 2023 03:09:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688551754; x=1691143754;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AUieIrFSQeaCUCCf5YNql2a5kikqQNM5mywYU08iHu8=;
+        b=hQTJqKzG0Uvka8W9lk6zkyVvlz3m4d8kh4l1yfRfj8PBVja5wROgDmkj+87MZ1pgcB
+         rMCqqF6LyKAefgIfX4ireN3aQDjnM37iC6lZU3q8/FSkq6oJrXKPprRJ+ErYtUARc2Lf
+         1wTsxsQZ5k0SJ4Gk/slevtqp5VQFIbQnW4U+GJB1GqbRKqL/29/O2cnQDQlV0WLalYh9
+         vsaISYPo0v/5nDGH8zx6smQZ6AvlGp2W0PI/MOzK0f06WJQOhWAKEbRnY3R9CmKaxONR
+         Sv9/wt/BuSCsbz37TId68WvbBbwG7+PNxm/fbyTIgR0xhFYrKW0OgYOQKgqWYaL2Ij3m
+         4emQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688551754; x=1691143754;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AUieIrFSQeaCUCCf5YNql2a5kikqQNM5mywYU08iHu8=;
+        b=Wd16mdOqtZqTvbrLz8RMleNz04lDeDpPDjQo/zKOq+/n+ilbkwJrhSGg1kuA72pSma
+         K8hIPn2cjEzApJO4Q8x48oVkGHiDPAAXJIgfZeJTA3hGkOTbt+NS+VjlXQjf9Ca1nVH+
+         tpRlGWK3lJuCp30ehgte2rLtOFPSwjv1LegOSQcpQuBNX/8CcNA4lbjblWudX+EXY09d
+         j22FxWnEgAwLKzzx76JiZI96J3Sma7n7Wp6VwWMFe5yKMH7H6Q65oL/WL4vPiZtyChlB
+         xnjlzOX8URk6jpN9tNdUp8IHjyU9Q/jg8YW/T/voBI5j+/iO0DSKIMPdtuK5HAqACJYc
+         Uc6Q==
+X-Gm-Message-State: ABy/qLYqUbwEBhCfHpFPuV/C/NOHZ3YDEugnXntKKCipwPFIhr5VQ2Wi
+	SX8rgxzUX0etvYY9Qy/ODGp1pQGbyJtk/ABUv2tzZYBE9zz13Q==
+X-Google-Smtp-Source: APBJJlGPy8xi05WsISfUyZWYoLyLNFHHUB7DdYGcHlCGwkKHaX8G2y3o0K803DT89gPn7DOY60+WFQMmOfNkfyFyDpk=
+X-Received: by 2002:a05:6214:21ab:b0:626:3a5a:f8dc with SMTP id
+ t11-20020a05621421ab00b006263a5af8dcmr17653655qvc.57.1688551754342; Wed, 05
+ Jul 2023 03:09:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0
-X-Spam-Score: -1.0
-X-Clacks-Overhead: GNU Terry Pratchett
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-	SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-	version=3.4.6
+References: <20230628115329.248450-1-laoar.shao@gmail.com> <20230628115329.248450-10-laoar.shao@gmail.com>
+ <e06b149e-2bcc-6a83-ef23-6216c7267632@iogearbox.net>
+In-Reply-To: <e06b149e-2bcc-6a83-ef23-6216c7267632@iogearbox.net>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Wed, 5 Jul 2023 18:08:38 +0800
+Message-ID: <CALOAHbBhxF8S2x8h1b-2otu31u-eg3BuUHyMW3VWBezy6AgMtg@mail.gmail.com>
+Subject: Re: [PATCH v6 bpf-next 09/11] bpf: Support ->fill_link_info for perf_event
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: ast@kernel.org, john.fastabend@gmail.com, andrii@kernel.org, 
+	martin.lau@linux.dev, song@kernel.org, yhs@fb.com, kpsingh@kernel.org, 
+	sdf@google.com, haoluo@google.com, jolsa@kernel.org, quentin@isovalent.com, 
+	rostedt@goodmis.org, mhiramat@kernel.org, bpf@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-From: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+On Wed, Jul 5, 2023 at 4:47=E2=80=AFPM Daniel Borkmann <daniel@iogearbox.ne=
+t> wrote:
+>
+> On 6/28/23 1:53 PM, Yafang Shao wrote:
+> > By introducing support for ->fill_link_info to the perf_event link, use=
+rs
+> > gain the ability to inspect it using `bpftool link show`. While the cur=
+rent
+> > approach involves accessing this information via `bpftool perf show`,
+> > consolidating link information for all link types in one place offers
+> > greater convenience. Additionally, this patch extends support to the
+> > generic perf event, which is not currently accommodated by
+> > `bpftool perf show`. While only the perf type and config are exposed to
+> > userspace, other attributes such as sample_period and sample_freq are
+> > ignored. It's important to note that if kptr_restrict is not permitted,=
+ the
+> > probed address will not be exposed, maintaining security measures.
+> >
+> > A new enum bpf_perf_event_type is introduced to help the user understan=
+d
+> > which struct is relevant.
+> >
+> > Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+> > ---
+> >   include/uapi/linux/bpf.h       |  35 ++++++++++
+> >   kernel/bpf/syscall.c           | 117 ++++++++++++++++++++++++++++++++=
++
+> >   tools/include/uapi/linux/bpf.h |  35 ++++++++++
+> >   3 files changed, 187 insertions(+)
+>
+> For ease of review this should be squashed with the prior one which adds
+> bpf_perf_link_fill_common().
 
-Ringbuf which was developed as a part of BPF infrastructure is
-a very nice, clean, simple and consise API to relay information
-from the kernel to userspace. It can be used in critical sections,
-interrupt handlers, etc.
+Sure. Will do it.
 
-This patch exports ringbuf functionality to make it available to
-kernel modules.
+>
+> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > index 512ba3ba2ed3..7efe51672c15 100644
+> > --- a/include/uapi/linux/bpf.h
+> > +++ b/include/uapi/linux/bpf.h
+> > @@ -1057,6 +1057,16 @@ enum bpf_link_type {
+> >       MAX_BPF_LINK_TYPE,
+> >   };
+> >
+> > +enum bpf_perf_event_type {
+> > +     BPF_PERF_EVENT_UNSPEC =3D 0,
+> > +     BPF_PERF_EVENT_UPROBE =3D 1,
+> > +     BPF_PERF_EVENT_URETPROBE =3D 2,
+> > +     BPF_PERF_EVENT_KPROBE =3D 3,
+> > +     BPF_PERF_EVENT_KRETPROBE =3D 4,
+> > +     BPF_PERF_EVENT_TRACEPOINT =3D 5,
+> > +     BPF_PERF_EVENT_EVENT =3D 6,
+>
+> Why explicitly defining the values of the enum?
 
-Demo: https://github.com/kot-begemot-uk/bpfnic-ng
+With these newly introduced enums, the user can easily identify what
+kind of perf_event link it is
+See also the discussion:
+https://lore.kernel.org/bpf/CAEf4BzYEwCZ3J51pFnUfGykEAHtdLwB8Kxi0utvUTVvewz=
+4UCg@mail.gmail.com/
 
-The demo ships to userspace hardware offload notifications
-without any mallocs, any workqueue and/or delayed work which
-is normally needed to handle these. As a result it is ~ 150
-lines of code instead of the 500+ usually needed to achieve the
-same result.
+>
+> > +};
+> > +
+> >   /* cgroup-bpf attach flags used in BPF_PROG_ATTACH command
+> >    *
+> >    * NONE(default): No further bpf programs allowed in the subtree.
+> > @@ -6444,6 +6454,31 @@ struct bpf_link_info {
+> >                       __u32 count;
+> >                       __u32 flags;
+> >               } kprobe_multi;
+> > +             struct {
+> > +                     __u32 type; /* enum bpf_perf_event_type */
+> > +                     __u32 :32;
+> > +                     union {
+> > +                             struct {
+> > +                                     __aligned_u64 file_name; /* in/ou=
+t */
+> > +                                     __u32 name_len;
+> > +                                     __u32 offset;/* offset from file_=
+name */
+>
+> nit: spacing wrt comment, also same further below
 
-Signed-off-by: Anton Ivanov <anton.ivanov@cambridgegreys.com>
----
- include/linux/bpf.h  | 16 ++++++++++++
- kernel/bpf/inode.c   | 43 ++++++++++++++++++++++++++++++
- kernel/bpf/ringbuf.c | 62 ++++++++++++++++++++++++++++++++++++++------
- 3 files changed, 113 insertions(+), 8 deletions(-)
+Will change it.
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index f58895830ada..0882ba4a44dd 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2004,6 +2004,20 @@ int  generic_map_delete_batch(struct bpf_map *map,
- struct bpf_map *bpf_map_get_curr_or_next(u32 *id);
- struct bpf_prog *bpf_prog_get_curr_or_next(u32 *id);
- 
-+void *_bpf_ringbuf_reserve(struct bpf_map *map,
-+				 u64 size, u64 flags);
-+void _bpf_ringbuf_commit(void *sample, u64 flags);
-+void _bpf_ringbuf_discard(void *sample, u64 flags);
-+int _bpf_ringbuf_output(struct bpf_map *map,
-+			      void *data, u64 size, u64 flags);
-+int _bpf_ringbuf_query(struct bpf_map *map, u64 flags);
-+int _bpf_user_ringbuf_drain(struct bpf_map *map,
-+				  void *callback_fn,
-+				  void *callback_ctx,
-+				  u64 flags);
-+
-+
-+
- #ifdef CONFIG_MEMCG_KMEM
- void *bpf_map_kmalloc_node(const struct bpf_map *map, size_t size, gfp_t flags,
- 			   int node);
-@@ -2245,6 +2259,8 @@ static inline int bpf_map_attr_numa_node(const union bpf_attr *attr)
- }
- 
- struct bpf_prog *bpf_prog_get_type_path(const char *name, enum bpf_prog_type type);
-+struct bpf_map *bpf_map_get_path(const char *name, fmode_t fmod);
-+
- int array_map_alloc_check(union bpf_attr *attr);
- 
- int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
-diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
-index 4174f76133df..0518f122df68 100644
---- a/kernel/bpf/inode.c
-+++ b/kernel/bpf/inode.c
-@@ -597,6 +597,49 @@ struct bpf_prog *bpf_prog_get_type_path(const char *name, enum bpf_prog_type typ
- }
- EXPORT_SYMBOL(bpf_prog_get_type_path);
- 
-+static struct bpf_map *__get_map_inode(struct inode *inode, fmode_t fmode)
-+{
-+	struct bpf_map *map;
-+	int ret = inode_permission(&nop_mnt_idmap, inode, MAY_READ);
-+
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	if (inode->i_op == &bpf_prog_iops)
-+		return ERR_PTR(-EINVAL);
-+	if (inode->i_op == &bpf_link_iops)
-+		return ERR_PTR(-EINVAL);
-+	if (inode->i_op != &bpf_map_iops)
-+		return ERR_PTR(-EPERM);
-+
-+	map = inode->i_private;
-+
-+	ret = security_bpf_map(map, fmode);
-+
-+	if (ret < 0)
-+		return ERR_PTR(ret);
-+
-+	bpf_map_inc(map);
-+	return map;
-+}
-+
-+struct bpf_map *bpf_map_get_path(const char *name, fmode_t fmode)
-+{
-+	struct bpf_map *map;
-+	struct path path;
-+	int ret = kern_path(name, LOOKUP_FOLLOW, &path);
-+
-+	if (ret)
-+		return ERR_PTR(ret);
-+	map = __get_map_inode(d_backing_inode(path.dentry), fmode);
-+	if (!IS_ERR(map))
-+		touch_atime(&path);
-+	path_put(&path);
-+	return map;
-+}
-+EXPORT_SYMBOL(bpf_map_get_path);
-+
-+
- /*
-  * Display the mount options in /proc/mounts.
-  */
-diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
-index 875ac9b698d9..4d4750b9f963 100644
---- a/kernel/bpf/ringbuf.c
-+++ b/kernel/bpf/ringbuf.c
-@@ -452,15 +452,21 @@ static void *__bpf_ringbuf_reserve(struct bpf_ringbuf *rb, u64 size)
- 	return (void *)hdr + BPF_RINGBUF_HDR_SZ;
- }
- 
--BPF_CALL_3(bpf_ringbuf_reserve, struct bpf_map *, map, u64, size, u64, flags)
-+void *_bpf_ringbuf_reserve(struct bpf_map *map, u64 size, u64 flags)
- {
- 	struct bpf_ringbuf_map *rb_map;
- 
- 	if (unlikely(flags))
--		return 0;
-+		return NULL;
- 
- 	rb_map = container_of(map, struct bpf_ringbuf_map, map);
--	return (unsigned long)__bpf_ringbuf_reserve(rb_map->rb, size);
-+	return __bpf_ringbuf_reserve(rb_map->rb, size);
-+}
-+EXPORT_SYMBOL(_bpf_ringbuf_reserve);
-+
-+BPF_CALL_3(bpf_ringbuf_reserve, struct bpf_map *, map, u64, size, u64, flags)
-+{
-+	return (unsigned long)_bpf_ringbuf_reserve(map, size, flags);
- }
- 
- const struct bpf_func_proto bpf_ringbuf_reserve_proto = {
-@@ -499,6 +505,12 @@ static void bpf_ringbuf_commit(void *sample, u64 flags, bool discard)
- 		irq_work_queue(&rb->work);
- }
- 
-+void _bpf_ringbuf_commit(void *sample, u64 flags)
-+{
-+	bpf_ringbuf_commit(sample, flags, false);
-+}
-+EXPORT_SYMBOL(_bpf_ringbuf_commit);
-+
- BPF_CALL_2(bpf_ringbuf_submit, void *, sample, u64, flags)
- {
- 	bpf_ringbuf_commit(sample, flags, false /* discard */);
-@@ -512,6 +524,12 @@ const struct bpf_func_proto bpf_ringbuf_submit_proto = {
- 	.arg2_type	= ARG_ANYTHING,
- };
- 
-+void _bpf_ringbuf_discard(void *sample, u64 flags)
-+{
-+	bpf_ringbuf_commit(sample, flags, true);
-+}
-+EXPORT_SYMBOL(_bpf_ringbuf_discard);
-+
- BPF_CALL_2(bpf_ringbuf_discard, void *, sample, u64, flags)
- {
- 	bpf_ringbuf_commit(sample, flags, true /* discard */);
-@@ -525,8 +543,8 @@ const struct bpf_func_proto bpf_ringbuf_discard_proto = {
- 	.arg2_type	= ARG_ANYTHING,
- };
- 
--BPF_CALL_4(bpf_ringbuf_output, struct bpf_map *, map, void *, data, u64, size,
--	   u64, flags)
-+int _bpf_ringbuf_output(struct bpf_map *map, void *data, u64 size,
-+	   u64 flags)
- {
- 	struct bpf_ringbuf_map *rb_map;
- 	void *rec;
-@@ -543,6 +561,13 @@ BPF_CALL_4(bpf_ringbuf_output, struct bpf_map *, map, void *, data, u64, size,
- 	bpf_ringbuf_commit(rec, flags, false /* discard */);
- 	return 0;
- }
-+EXPORT_SYMBOL(_bpf_ringbuf_output);
-+
-+BPF_CALL_4(bpf_ringbuf_output, struct bpf_map *, map, void *, data, u64, size,
-+	   u64, flags)
-+{
-+	return _bpf_ringbuf_output(map, data, size, flags);
-+}
- 
- const struct bpf_func_proto bpf_ringbuf_output_proto = {
- 	.func		= bpf_ringbuf_output,
-@@ -553,7 +578,7 @@ const struct bpf_func_proto bpf_ringbuf_output_proto = {
- 	.arg4_type	= ARG_ANYTHING,
- };
- 
--BPF_CALL_2(bpf_ringbuf_query, struct bpf_map *, map, u64, flags)
-+int _bpf_ringbuf_query(struct bpf_map *map, u64 flags)
- {
- 	struct bpf_ringbuf *rb;
- 
-@@ -572,6 +597,12 @@ BPF_CALL_2(bpf_ringbuf_query, struct bpf_map *, map, u64, flags)
- 		return 0;
- 	}
- }
-+EXPORT_SYMBOL(_bpf_ringbuf_query);
-+
-+BPF_CALL_2(bpf_ringbuf_query, struct bpf_map *, map, u64, flags)
-+{
-+	return _bpf_ringbuf_query(map, flags);
-+}
- 
- const struct bpf_func_proto bpf_ringbuf_query_proto = {
- 	.func		= bpf_ringbuf_query,
-@@ -727,8 +758,8 @@ static void __bpf_user_ringbuf_sample_release(struct bpf_ringbuf *rb, size_t siz
- 	smp_store_release(&rb->consumer_pos, consumer_pos + rounded_size);
- }
- 
--BPF_CALL_4(bpf_user_ringbuf_drain, struct bpf_map *, map,
--	   void *, callback_fn, void *, callback_ctx, u64, flags)
-+int __bpf_user_ringbuf_drain(struct bpf_map *map,
-+	   void *callback_fn, void *callback_ctx, u64 flags)
- {
- 	struct bpf_ringbuf *rb;
- 	long samples, discarded_samples = 0, ret = 0;
-@@ -784,6 +815,21 @@ BPF_CALL_4(bpf_user_ringbuf_drain, struct bpf_map *, map,
- 	return ret;
- }
- 
-+BPF_CALL_4(bpf_user_ringbuf_drain, struct bpf_map *, map,
-+	   void *, callback_fn, void *, callback_ctx, u64, flags)
-+{
-+	return __bpf_user_ringbuf_drain(map, callback_fn, callback_ctx, flags);
-+}
-+
-+
-+int _bpf_user_ringbuf_drain(struct bpf_map *map,
-+	   void *callback_fn, void *callback_ctx, u64 flags)
-+{
-+	return __bpf_user_ringbuf_drain(map, callback_fn, callback_ctx, flags);
-+}
-+EXPORT_SYMBOL(bpf_user_ringbuf_drain);
-+
-+
- const struct bpf_func_proto bpf_user_ringbuf_drain_proto = {
- 	.func		= bpf_user_ringbuf_drain,
- 	.ret_type	= RET_INTEGER,
--- 
-2.30.2
+>
+> > +                             } uprobe; /* BPF_PERF_EVENT_UPROBE, BPF_P=
+ERF_EVENT_URETPROBE */
+> > +                             struct {
+> > +                                     __aligned_u64 func_name; /* in/ou=
+t */
+> > +                                     __u32 name_len;
+> > +                                     __u32 offset;/* offset from func_=
+name */
+> > +                                     __u64 addr;
+> > +                             } kprobe; /* BPF_PERF_EVENT_KPROBE, BPF_P=
+ERF_EVENT_KRETPROBE */
+> > +                             struct {
+> > +                                     __aligned_u64 tp_name;   /* in/ou=
+t */
+> > +                                     __u32 name_len;
+> > +                             } tracepoint; /* BPF_PERF_EVENT_TRACEPOIN=
+T */
+> > +                             struct {
+> > +                                     __u64 config;
+> > +                                     __u32 type;
+> > +                             } event; /* BPF_PERF_EVENT_EVENT */
+> > +                     };
+> > +             } perf_event;
+> >       };
+> >   } __attribute__((aligned(8)));
+> >
+> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> > index 72de91beabbc..05ff0a560f1a 100644
+> > --- a/kernel/bpf/syscall.c
+> > +++ b/kernel/bpf/syscall.c
+> > @@ -3398,9 +3398,126 @@ static int bpf_perf_link_fill_common(const stru=
+ct perf_event *event,
+> >       return 0;
+> >   }
+> >
+> > +#ifdef CONFIG_KPROBE_EVENTS
+> > +static int bpf_perf_link_fill_kprobe(const struct perf_event *event,
+> > +                                  struct bpf_link_info *info)
+> > +{
+> > +     char __user *uname;
+> > +     u64 addr, offset;
+> > +     u32 ulen, type;
+> > +     int err;
+> > +
+> > +     uname =3D u64_to_user_ptr(info->perf_event.kprobe.func_name);
+> > +     ulen =3D info->perf_event.kprobe.name_len;
+> > +     err =3D bpf_perf_link_fill_common(event, uname, ulen, &offset, &a=
+ddr,
+> > +                                     &type);
+> > +     if (err)
+> > +             return err;
+> > +     if (type =3D=3D BPF_FD_TYPE_KRETPROBE)
+> > +             info->perf_event.type =3D BPF_PERF_EVENT_KRETPROBE;
+> > +     else
+> > +             info->perf_event.type =3D BPF_PERF_EVENT_KPROBE;
+> > +
+> > +     info->perf_event.kprobe.offset =3D offset;
+> > +     if (!kallsyms_show_value(current_cred()))
+> > +             addr =3D 0;
+> > +     info->perf_event.kprobe.addr =3D addr;
+> > +     return 0;
+> > +}
+> > +#endif
+> > +
+> > +#ifdef CONFIG_UPROBE_EVENTS
+> > +static int bpf_perf_link_fill_uprobe(const struct perf_event *event,
+> > +                                  struct bpf_link_info *info)
+> > +{
+> > +     char __user *uname;
+> > +     u64 addr, offset;
+> > +     u32 ulen, type;
+> > +     int err;
+> > +
+> > +     uname =3D u64_to_user_ptr(info->perf_event.uprobe.file_name);
+> > +     ulen =3D info->perf_event.uprobe.name_len;
+> > +     err =3D bpf_perf_link_fill_common(event, uname, ulen, &offset, &a=
+ddr,
+> > +                                     &type);
+> > +     if (err)
+> > +             return err;
+> > +
+> > +     if (type =3D=3D BPF_FD_TYPE_URETPROBE)
+> > +             info->perf_event.type =3D BPF_PERF_EVENT_URETPROBE;
+> > +     else
+> > +             info->perf_event.type =3D BPF_PERF_EVENT_UPROBE;
+> > +     info->perf_event.uprobe.offset =3D offset;
+> > +     return 0;
+> > +}
+> > +#endif
+> > +
+> > +static int bpf_perf_link_fill_probe(const struct perf_event *event,
+> > +                                 struct bpf_link_info *info)
+> > +{
+> > +#ifdef CONFIG_KPROBE_EVENTS
+> > +     if (event->tp_event->flags & TRACE_EVENT_FL_KPROBE)
+> > +             return bpf_perf_link_fill_kprobe(event, info);
+> > +#endif
+> > +#ifdef CONFIG_UPROBE_EVENTS
+> > +     if (event->tp_event->flags & TRACE_EVENT_FL_UPROBE)
+> > +             return bpf_perf_link_fill_uprobe(event, info);
+> > +#endif
+> > +     return -EOPNOTSUPP;
+> > +}
+> > +
+> > +static int bpf_perf_link_fill_tracepoint(const struct perf_event *even=
+t,
+> > +                                      struct bpf_link_info *info)
+> > +{
+> > +     char __user *uname;
+> > +     u64 addr, offset;
+> > +     u32 ulen, type;
+> > +
+> > +     uname =3D u64_to_user_ptr(info->perf_event.tracepoint.tp_name);
+> > +     ulen =3D info->perf_event.tracepoint.name_len;
+> > +     info->perf_event.type =3D BPF_PERF_EVENT_TRACEPOINT;
+> > +     return bpf_perf_link_fill_common(event, uname, ulen, &offset, &ad=
+dr,
+> > +                                      &type);
+>
+> Perhaps for data we don't care about in these cases, passing NULL would b=
+e
+> more obvious and letting bpf_perf_link_fill_common() handle NULL inputs.
 
+Agree. That would be better.
+We should let bpf_get_perf_event_info() handle NULL inputs.  As the
+change in bpf_get_perf_event_info() is small, I will change it in the
+same patch.
+
+>
+> > +}
+> > +
+> > +static int bpf_perf_link_fill_perf_event(const struct perf_event *even=
+t,
+> > +                                      struct bpf_link_info *info)
+> > +{
+> > +     info->perf_event.event.type =3D event->attr.type;
+> > +     info->perf_event.event.config =3D event->attr.config;
+> > +     info->perf_event.type =3D BPF_PERF_EVENT_EVENT;
+> > +     return 0;
+> > +}
+> > +
+> > +static int bpf_perf_link_fill_link_info(const struct bpf_link *link,
+> > +                                     struct bpf_link_info *info)
+> > +{
+> > +     struct bpf_perf_link *perf_link;
+> > +     const struct perf_event *event;
+> > +
+> > +     perf_link =3D container_of(link, struct bpf_perf_link, link);
+> > +     event =3D perf_get_event(perf_link->perf_file);
+> > +     if (IS_ERR(event))
+> > +             return PTR_ERR(event);
+> > +
+> > +     if (!event->prog)
+> > +             return -EINVAL;
+>
+> nit: In which situations do we run into this, would ENOENT be better erro=
+r code
+> here given it's not an invalid arg that user passed to kernel for filling=
+ link
+> info.
+
+In practice there should be no situations. I think we can remove this
+judgement directly.
+
+--=20
+Regards
+Yafang
