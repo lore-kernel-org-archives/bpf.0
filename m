@@ -1,64 +1,73 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C513C125AB
-	for <bpf@vger.kernel.org>; Wed,  5 Jul 2023 16:00:37 +0000 (UTC)
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9C51BC7
-	for <bpf@vger.kernel.org>; Wed,  5 Jul 2023 09:00:13 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-bd0a359ca35so6454553276.3
-        for <bpf@vger.kernel.org>; Wed, 05 Jul 2023 09:00:13 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AF77125AB
+	for <bpf@vger.kernel.org>; Wed,  5 Jul 2023 16:01:12 +0000 (UTC)
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 771761FD6
+	for <bpf@vger.kernel.org>; Wed,  5 Jul 2023 09:00:41 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3fbc0609cd6so69243605e9.1
+        for <bpf@vger.kernel.org>; Wed, 05 Jul 2023 09:00:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1688572811; x=1691164811;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=isovalent.com; s=google; t=1688572839; x=1691164839;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Jb1GF7/QFy5DLYOoe3kcil6ESsrsreq6TCkS9MwOoaw=;
-        b=Mz1utFwn7KVwoaC+nhwhg+E8n0bIozNEDOo1LzmGPiyFmD4is7pYhe1Jn1tuEEHyI6
-         8DsQxVd2GEsHjBoOZyInJsfCPxbss9qx9VTkdy8qm4/cHkR1P8GNV1q98yQpZyMHHHQC
-         ZbQVZwX54kOdLIa9Uw5G2bTBwYyUvV8LayD5GDnEojDBBlsvlDRsPQVHgpOC8avgDnpI
-         e5k9Z/v4OR1jXEwvfVVaJZbQm8CEyjndtT+dIt54XzY9Cub1z1Z2DhxEFeNy24+/JLM+
-         wUK/9pA/qsHmJia4dk1tPQ8O7j5vqIFF96hpv0jU8p6oc13ae45njwmLsN+AyYaLsVk0
-         clnw==
+        bh=P8KYxGujweYLCYh8YYyQ0jA4DubxHjifs++dZAbkdWU=;
+        b=bVo30utd90jGmX26Asrl19Hh3WB2whZwlLMBoaGLEhNrmcz/5H47ooBCqFM09bbQ1D
+         GY2e22hr9q+O7uQ+jhHte9FdbfyErMwR0eQe0oXt/BVnWt2eIgPvb5AkvmScbwCt7vkQ
+         iXKrgtP/AQ4G1h7Ds89lro1JsirvD7uWcO5uuXSNJBRje5fc3alhRF/3D0/VUh6PEh1O
+         ol93n2gjfGFtKyFjR7Fm7SF/mUw2UKes+gRYA/puo89GfyDq1sHGwid8V2PRp0LiiiYN
+         ghns4YupM/Q2zGi3PezkrHxnboJsUE+G+3jmlvszZsPcc9gM+wCggkpxiyCOsMFDUQFz
+         4QMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688572811; x=1691164811;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1688572839; x=1691164839;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Jb1GF7/QFy5DLYOoe3kcil6ESsrsreq6TCkS9MwOoaw=;
-        b=QFX0NSRpnv/d0KDlmcG0kSUj7kdb2Klxe3b7ecgdrs+f1fNJvwfuQg1i/opqTigDm/
-         MnCZpXjome8jXK2bfEC7mcvBjwY8TbzWiYHQ+dPf+Iq44urgrNbBdtXnH2qoSynU/fiK
-         PTyqSyPWtM8Y+adrkkhGz0ep79Ur6zKjSt7jKl/5RKZAkO4jXlgzAt/1jIxhK65YI4my
-         +ObFRM3TMgmXkwWpc7CqqccxVveVZihKU3yWkSPV7uGFvd6iIyhZXwh+gklXeGLkKPEO
-         6z2/AfbYky8RVhEIw1Y3zsqqY53xaR5Kg31TiFDrSbLFcUcCWuqdWnxr3xfDGm7/58LS
-         vT0g==
-X-Gm-Message-State: ABy/qLbK+qoMcOuMhSvcG12YBMMTpMnYCOFSKbwWQ7+M36uuFZ8CBPuP
-	wcUgy4j+tnN8UtyB//La6Z+eOBm/QCGHWxOm0Shv
-X-Google-Smtp-Source: APBJJlGhXDS/0EzVNGCoiJVcvbujQTAbAR64Dm89krmLzUStttkQhJYfcAsgf7DVM+GiQVhB7wTHpgDQ6Ufi5mKn094=
-X-Received: by 2002:a25:48b:0:b0:c3a:d19c:4ad7 with SMTP id
- 133-20020a25048b000000b00c3ad19c4ad7mr13917131ybe.62.1688572811037; Wed, 05
- Jul 2023 09:00:11 -0700 (PDT)
+        bh=P8KYxGujweYLCYh8YYyQ0jA4DubxHjifs++dZAbkdWU=;
+        b=doz/zi/PDhH2nosXZYjwLzp/WPUFjubLMXqr9Z8lBbE2WUZO/tWMxoV84Yh0pMXMeP
+         DQfkA+Gm6J2yfXzRzJw/39eGxI5xembP6AlJZRjRF7pbiuTHLUPer8SBzJv0TVJO/1b4
+         OyvB6UQ98PMgDZH9BVVXhVskiSjpxwa1zILtqjrOhDmy5dZyGSHTSv+7gUC6RR/nfKlK
+         hU9+hE6jycXHya2C7WoygkPBRbvLMWxezzSPiaPPVP35tsc6Rdp4qkZbf7OvLZZqxbSa
+         LYup3Tx4sajNTByVICGQMeQ/dDNlvOEe3iBdQBvXbZ8vR+YYGIMWi7/fT9ZI3RJ+/ERp
+         SH7g==
+X-Gm-Message-State: AC+VfDz94CwP/f0Vw+WZGhz80IwbZ024IUVtq219DqWBzOs/sP54oNr8
+	gixZREkARSQtTkHjguwgRNWIqiXWAP8aRmkwAvTvxA==
+X-Google-Smtp-Source: ACHHUZ4Um/reDbbXCC1XxkmzvHLi2wXkfnENgb3F/Q6tjYHordK+Ml9xsGS1+msI1SpuCCbbtAphFw==
+X-Received: by 2002:a7b:c353:0:b0:3fb:b70f:fc21 with SMTP id l19-20020a7bc353000000b003fbb70ffc21mr13725965wmj.35.1688572839442;
+        Wed, 05 Jul 2023 09:00:39 -0700 (PDT)
+Received: from zh-lab-node-5.home ([2a02:168:f656:0:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id w10-20020adfec4a000000b00314172ba213sm16861950wrn.108.2023.07.05.09.00.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 09:00:39 -0700 (PDT)
+From: Anton Protopopov <aspsk@isovalent.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	bpf@vger.kernel.org
+Cc: Anton Protopopov <aspsk@isovalent.com>
+Subject: [PATCH v4 bpf-next 1/6] bpf: add percpu stats for bpf_map elements insertions/deletions
+Date: Wed,  5 Jul 2023 16:01:34 +0000
+Message-Id: <20230705160139.19967-2-aspsk@isovalent.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230705160139.19967-1-aspsk@isovalent.com>
+References: <20230705160139.19967-1-aspsk@isovalent.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230629051832.897119-1-andrii@kernel.org> <20230629051832.897119-2-andrii@kernel.org>
- <20230704-hochverdient-lehne-eeb9eeef785e@brauner> <CAHC9VhTDocBCpNjdz1CoWM2DA76GYZmg31338DHePFGq_-ie-g@mail.gmail.com>
- <20230705-zyklen-exorbitant-4d54d2f220ad@brauner>
-In-Reply-To: <20230705-zyklen-exorbitant-4d54d2f220ad@brauner>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 5 Jul 2023 12:00:00 -0400
-Message-ID: <CAHC9VhTHjR_auRtOa_oOMd317g=2iFLamssX28AXz+UnyCqpNQ@mail.gmail.com>
-Subject: Re: [PATCH RESEND v3 bpf-next 01/14] bpf: introduce BPF token object
-To: Christian Brauner <brauner@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, keescook@chromium.org, 
-	lennart@poettering.net, cyphar@cyphar.com, luto@kernel.org, 
-	kernel-team@meta.com, sargun@sargun.me
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
 	SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -66,137 +75,67 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Wed, Jul 5, 2023 at 10:42=E2=80=AFAM Christian Brauner <brauner@kernel.o=
-rg> wrote:
-> On Wed, Jul 05, 2023 at 10:16:13AM -0400, Paul Moore wrote:
-> > On Tue, Jul 4, 2023 at 8:44=E2=80=AFAM Christian Brauner <brauner@kerne=
-l.org> wrote:
-> > > On Wed, Jun 28, 2023 at 10:18:19PM -0700, Andrii Nakryiko wrote:
-> > > > Add new kind of BPF kernel object, BPF token. BPF token is meant to=
- to
-> > > > allow delegating privileged BPF functionality, like loading a BPF
-> > > > program or creating a BPF map, from privileged process to a *truste=
-d*
-> > > > unprivileged process, all while have a good amount of control over =
-which
-> > > > privileged operations could be performed using provided BPF token.
-> > > >
-> > > > This patch adds new BPF_TOKEN_CREATE command to bpf() syscall, whic=
-h
-> > > > allows to create a new BPF token object along with a set of allowed
-> > > > commands that such BPF token allows to unprivileged applications.
-> > > > Currently only BPF_TOKEN_CREATE command itself can be
-> > > > delegated, but other patches gradually add ability to delegate
-> > > > BPF_MAP_CREATE, BPF_BTF_LOAD, and BPF_PROG_LOAD commands.
-> > > >
-> > > > The above means that new BPF tokens can be created using existing B=
-PF
-> > > > token, if original privileged creator allowed BPF_TOKEN_CREATE comm=
-and.
-> > > > New derived BPF token cannot be more powerful than the original BPF
-> > > > token.
-> > > >
-> > > > Importantly, BPF token is automatically pinned at the specified loc=
-ation
-> > > > inside an instance of BPF FS and cannot be repinned using BPF_OBJ_P=
-IN
-> > > > command, unlike BPF prog/map/btf/link. This provides more control o=
-ver
-> > > > unintended sharing of BPF tokens through pinning it in another BPF =
-FS
-> > > > instances.
-> > > >
-> > > > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> > > > ---
-> > >
-> > > The main issue I have with the token approach is that it is a complet=
-ely
-> > > separate delegation vector on top of user namespaces. We mentioned th=
-is
-> > > duringthe conf and this was brought up on the thread here again as we=
-ll.
-> > > Imho, that's a problem both security-wise and complexity-wise.
-> > >
-> > > It's not great if each subsystem gets its own custom delegation
-> > > mechanism. This imposes such a taxing complexity on both kernel- and
-> > > userspace that it will quickly become a huge liability. So I would
-> > > really strongly encourage you to explore another direction.
-> > >
-> > > I do think the spirit of your proposal is workable and that it can
-> > > mostly be kept in tact.
-> > >
-> > > As mentioned before, bpffs has all the means to be taught delegation:
-> > >
-> > >         // In container's user namespace
-> > >         fd_fs =3D fsopen("bpffs");
-> > >
-> > >         // Delegating task in host userns (systemd-bpfd whatever you =
-want)
-> > >         ret =3D fsconfig(fd_fs, FSCONFIG_SET_FLAG, "delegate", ...);
-> > >
-> > >         // In container's user namespace
-> > >         fd_mnt =3D fsmount(fd_fs, 0);
-> > >
-> > >         ret =3D move_mount(fd_fs, "", -EBADF, "/my/fav/location", MOV=
-E_MOUNT_F_EMPTY_PATH)
-> > >
-> > > Roughly, this would mean:
-> > >
-> > > (i) raise FS_USERNS_MOUNT on bpffs but guard it behind the "delegate"
-> > >     mount option. IOW, it's only possibly to mount bpffs as an
-> > >     unprivileged user if a delegating process like systemd-bpfd with
-> > >     system-level privileges has marked it as delegatable.
-> > > (ii) add fine-grained delegation options that you want this
-> > >      bpffs instance to allow via new mount options. Idk,
-> > >
-> > >      // allow usage of foo
-> > >      fsconfig(fd_fs, FSCONFIG_SET_STRING, "abilities", "foo");
-> > >
-> > >      // also allow usage of bar
-> > >      fsconfig(fd_fs, FSCONFIG_SET_STRING, "abilities", "bar");
-> > >
-> > >      // reset allowed options
-> > >      fsconfig(fd_fs, FSCONFIG_SET_STRING, "");
-> > >
-> > >      // allow usage of schmoo
-> > >      fsconfig(fd_fs, FSCONFIG_SET_STRING, "abilities", "schmoo");
-> > >
-> > > This all seems more intuitive and integrates with user and mount
-> > > namespaces of the container. This can also work for restricting
-> > > non-userns bpf instances fwiw. You can also share instances via
-> > > bind-mount and so on. The userns of the bpffs instance can also be us=
-ed
-> > > for permission checking provided a given functionality has been
-> > > delegated by e.g., systemd-bpfd or whatever.
-> >
-> > I have no arguments against any of the above, and would prefer to see
-> > something like this over a token-based mechanism.  However we do want
-> > to make sure we have the proper LSM control points for either approach
-> > so that admins who rely on LSM-based security policies can manage
-> > delegation via their policies.
-> >
-> > Using the fsconfig() approach described by Christian above, I believe
-> > we should have the necessary hooks already in
-> > security_fs_context_parse_param() and security_sb_mnt_opts() but I'm
-> > basing that on a quick look this morning, some additional checking
-> > would need to be done.
->
-> I think what I outlined is even unnecessarily complicated. You don't
-> need that pointless "delegate" mount option at all actually. Permission
-> to delegate shouldn't be checked when the mount option is set. The
-> permissions should be checked when the superblock is created.
+Add a generic percpu stats for bpf_map elements insertions/deletions in order
+to keep track of both, the current (approximate) number of elements in a map
+and per-cpu statistics on update/delete operations.
 
-From a LSM perspective I think we would want to have policy
-enforcement points both when task A enables delegation and when task B
-makes use of the delegation.  We would likely also want to be able to
-add some additional delegation state to the superblock if delegation
-was enabled in the first enforcement point.
+To expose these stats a particular map implementation should initialize the
+counter and adjust it as needed using the 'bpf_map_*_elem_count' helpers
+provided by this commit.
 
-I'm not too bothered by how that ends up looking from a userspace
-perspective, but it seems like requiring an explicit "this fs can be
-delegated" step would be a positive from a security perspective.  In
-other words, just because a task *could* delegated a filesystem, may
-not mean it *wants* to delegate a filesystem.
+Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
+---
+ include/linux/bpf.h | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
---=20
-paul-moore.com
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index f58895830ada..360433f14496 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -275,6 +275,7 @@ struct bpf_map {
+ 	} owner;
+ 	bool bypass_spec_v1;
+ 	bool frozen; /* write-once; write-protected by freeze_mutex */
++	s64 __percpu *elem_count;
+ };
+ 
+ static inline const char *btf_field_type_name(enum btf_field_type type)
+@@ -2040,6 +2041,35 @@ bpf_map_alloc_percpu(const struct bpf_map *map, size_t size, size_t align,
+ }
+ #endif
+ 
++static inline int
++bpf_map_init_elem_count(struct bpf_map *map)
++{
++	size_t size = sizeof(*map->elem_count), align = size;
++	gfp_t flags = GFP_USER | __GFP_NOWARN;
++
++	map->elem_count = bpf_map_alloc_percpu(map, size, align, flags);
++	if (!map->elem_count)
++		return -ENOMEM;
++
++	return 0;
++}
++
++static inline void
++bpf_map_free_elem_count(struct bpf_map *map)
++{
++	free_percpu(map->elem_count);
++}
++
++static inline void bpf_map_inc_elem_count(struct bpf_map *map)
++{
++	this_cpu_inc(*map->elem_count);
++}
++
++static inline void bpf_map_dec_elem_count(struct bpf_map *map)
++{
++	this_cpu_dec(*map->elem_count);
++}
++
+ extern int sysctl_unprivileged_bpf_disabled;
+ 
+ static inline bool bpf_allow_ptr_leaks(void)
+-- 
+2.34.1
+
