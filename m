@@ -1,11 +1,11 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 210F2125AC
-	for <bpf@vger.kernel.org>; Wed,  5 Jul 2023 19:00:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD2C4C433C8;
-	Wed,  5 Jul 2023 19:00:14 +0000 (UTC)
-Date: Wed, 5 Jul 2023 15:00:13 -0400
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E53D7620
+	for <bpf@vger.kernel.org>; Wed,  5 Jul 2023 19:03:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E719DC433C9;
+	Wed,  5 Jul 2023 19:03:29 +0000 (UTC)
+Date: Wed, 5 Jul 2023 15:03:28 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: Valentin Schneider <vschneid@redhat.com>
 Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
@@ -34,12 +34,11 @@ Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
  <linux@weissschuh.net>, Juri Lelli <juri.lelli@redhat.com>, Daniel Bristot
  de Oliveira <bristot@redhat.com>, Marcelo Tosatti <mtosatti@redhat.com>,
  Yair Podemsky <ypodemsk@redhat.com>
-Subject: Re: [RFC PATCH 03/14] tracing/filters: Enable filtering a scalar
- field by a cpumask
-Message-ID: <20230705150013.5ba7ddb8@gandalf.local.home>
-In-Reply-To: <20230705181256.3539027-4-vschneid@redhat.com>
+Subject: Re: [RFC PATCH 00/14] context_tracking,x86: Defer some IPIs until a
+ user->kernel transition
+Message-ID: <20230705150328.16791f25@gandalf.local.home>
+In-Reply-To: <20230705181256.3539027-1-vschneid@redhat.com>
 References: <20230705181256.3539027-1-vschneid@redhat.com>
-	<20230705181256.3539027-4-vschneid@redhat.com>
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -50,34 +49,16 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Wed,  5 Jul 2023 19:12:45 +0100
+On Wed,  5 Jul 2023 19:12:42 +0100
 Valentin Schneider <vschneid@redhat.com> wrote:
 
-> +/* Optimisation of do_filter_cpumask() for scalar values */
-> +static inline int
-> +do_filter_cpumask_scalar(int op, unsigned int cpu, const struct cpumask *mask)
-> +{
-> +	switch (op) {
-> +	case OP_EQ:
-> +		return cpumask_equal(mask, cpumask_of(cpu));
-> +	case OP_NE:
-> +		return !cpumask_equal(mask, cpumask_of(cpu));
+> o Patches 1-5 have been submitted previously and are included for the sake of
+>   testing
 
-The above two can be optimized much more if the cpu is a scalar. If mask is
-anything but a single CPU, then EQ will always be false, and NE will always
-be true. If the mask contains a single CPU, then we should convert the mask
-into the scalar CPU and just do:
+I should have commented on the previous set, but I did my review on this set ;-)
 
-	case OP_EQ:
-		return mask_cpu == cpu;
-	case op_NE:
-		return maks_cpu != cpu;
+Anyway, I'm all for the patches. Care to send a new version covering my input?
+
+Thanks,
 
 -- Steve
-
-> +	case OP_BAND:
-> +		return cpumask_test_cpu(cpu, mask);
-> +	default:
-> +		return 0;
-> +	}
-> +}
