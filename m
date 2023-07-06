@@ -1,55 +1,55 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0443D1872
-	for <bpf@vger.kernel.org>; Thu,  6 Jul 2023 22:00:34 +0000 (UTC)
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB2E1BEE;
-	Thu,  6 Jul 2023 15:00:32 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-3142970df44so1163309f8f.3;
-        Thu, 06 Jul 2023 15:00:32 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDA901872
+	for <bpf@vger.kernel.org>; Thu,  6 Jul 2023 22:00:37 +0000 (UTC)
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B4B1BF0;
+	Thu,  6 Jul 2023 15:00:36 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fbef8ad9bbso13908345e9.0;
+        Thu, 06 Jul 2023 15:00:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688680831; x=1691272831;
+        d=gmail.com; s=20221208; t=1688680834; x=1691272834;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ofkXSNxaVeUztYNS4iAgszyKuwsa3AELRmpeWgWX0MU=;
-        b=FydFxMlkfbDJpw9uSXj2co7p1yUa4PIJ4bOo/AMSkmJEzClIhXf9+n58rG+52Bq3GA
-         t6DQ8isi/f0YjbLa5IS9ag33DXFKVCzbeSQwDbbWF0k674bQY757BKuVwhJ9R2LRt9Kn
-         y8/HvJUbz5kF4eD3KqtcR+Rb/iATOQz8UD0+LlNG4TLnrhU0CSlWRPbk7SsN7FQ+wBwI
-         t6B6IGRMFeIoK3Ja8XXR6/HeGXQnp2Pczbqc8SeV8D1ik5CJ52MnQCYclUA5vnnJXXYt
-         cXR8TS9wAmIPbqEoKD5sNHMlzSigHhLbjw9+cxhYsHRHPAnO7rGS3+j6mHZCpAHV6tKQ
-         NAQA==
+        bh=JTNk28msNnXIhTeY8JE4dqW9N4O9yyFjR9BGrXnP200=;
+        b=qxbUnkkzv6bYgldbUdVSx64dCN+a1fGjMNyoyYxfT6vheyOutcdDzDkvu87T1WFXgh
+         o1hXLuyXOtTPwI3fmvnpS35BNGqOrcN7illBn2gg/vCH6+S8lSZKAb9gaww7Pwab1Hr3
+         QXTpwfojJqroUbO8tW+zEsxRIwDbvCN9BWr9CY3QzAquCcgvwyDcjR/rmMXkuJ3c32mx
+         yhedXe/vVi98JJ+MqwsihN5Ba3EDAVbcqPk6iLfrKxkvHmRjEi4PTzfFtfPXbvxqn36f
+         HgrW+N4tfHXsHnRGwT/weet/useDuQWkDXm1t0/JgmZ1caQgS5WNZFHK2G/DmJG9bLLY
+         S70A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688680831; x=1691272831;
+        d=1e100.net; s=20221208; t=1688680834; x=1691272834;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ofkXSNxaVeUztYNS4iAgszyKuwsa3AELRmpeWgWX0MU=;
-        b=XHYl2gDHtsS8OGyXeQl3NbRg6yFZSSHeqYTqytcwAjpqlaNLTwAHV6kwlrkhRTm8P4
-         w5LybR4xGTva6L6tDeSjzMqFOo0j1ioopfKRW8UPtckP8aufXlwOn6aeqOw2fkuMKMQe
-         Gec7SIODb2W46rBF5xcIGO2HZl1vO6PpjkYpxmr+xIAKr2MdzE7bStQ/Xwt0yYBRF44D
-         yh7T+oMEKJHdxWvjTFP9J99iMRl3euids2IqgjaGqWLI4+3TzooJs8+ciTNTNObm9zrn
-         AZJcdsdOvl1qUf8LXOqzzgXZn+F49OvIFXr/TPjR22ZmhaMoMMnyLBQvFFvn95zGYONT
-         rWJw==
-X-Gm-Message-State: ABy/qLYlrVlvo8kUIk3nFMyvJYHXMMX2XaXW1ZqRyPTVE+mEGtHnZTrS
-	YQZiQzDdFvqU2QiPBLRFQfoYXCoRapgyc7+XMEE=
-X-Google-Smtp-Source: APBJJlG6/Pfuwktu0Iahkltj0GLNaNBKjYfOqT98k0bgUn8B0Dx6reROJHvT4kalyIVaMuDhjRTPVaIv2mrHfJu3W7o=
-X-Received: by 2002:a5d:4f86:0:b0:311:162a:ce2a with SMTP id
- d6-20020a5d4f86000000b00311162ace2amr2294237wru.29.1688680830401; Thu, 06 Jul
- 2023 15:00:30 -0700 (PDT)
+        bh=JTNk28msNnXIhTeY8JE4dqW9N4O9yyFjR9BGrXnP200=;
+        b=aIHZtIw/5Pw8RJxU1w018Hdpnk+mhOAfMp/XTOJxwKXqDBbvcc5JBrAfqiJ+jvFwWc
+         gaGb9Lvc8Q7hdqKXhvItgAZOti8yspc7mToAAYsJEYXjPnyKWdb5pDSl8rCcB8vq5Brk
+         6blvZA1JNZGoWX11OSmY6IGoesbA0hgTSkTBx20WBiutyDb4VCa0tEQzIbZCgrz+sSku
+         kcXQsM1dB9hgktWsP10IVFBvhuTWd9NySHdE1pw5xfyXQyhMQw+2unLSBfMgTBuryGRu
+         CASm8Q6K49NHBqBpfVUzpFkNAO1r6PCRLzordMGKQBauVTcBL9CZRa2IVsYc7ZdO5MqN
+         Ooyg==
+X-Gm-Message-State: ABy/qLaCbDDx8IIGCyNBfv8WmgrSxzEQW1TNix6wyB8YHd/9JQtIGVgH
+	hXypiwRPCVAZkdIxIWaLGkagXH4ch7QnA+sKduQ=
+X-Google-Smtp-Source: APBJJlG4lwvNTYTkGbY0TRb3l6im4mSUjRUhOEgAGWRY9n5406M40rOUd95bdN20mH5cQHi4VZboDKZahcVcoPvNqho=
+X-Received: by 2002:a1c:6a03:0:b0:3fb:a576:3212 with SMTP id
+ f3-20020a1c6a03000000b003fba5763212mr2170453wmc.39.1688680834407; Thu, 06 Jul
+ 2023 15:00:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230628115329.248450-1-laoar.shao@gmail.com> <20230628115329.248450-2-laoar.shao@gmail.com>
-In-Reply-To: <20230628115329.248450-2-laoar.shao@gmail.com>
+References: <20230628115329.248450-1-laoar.shao@gmail.com> <20230628115329.248450-8-laoar.shao@gmail.com>
+In-Reply-To: <20230628115329.248450-8-laoar.shao@gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 6 Jul 2023 15:00:17 -0700
-Message-ID: <CAEf4BzZzuPvyhUPnq8eGugRhCAbQVyQ7wfDDe4sUpUQa4cKFWw@mail.gmail.com>
-Subject: Re: [PATCH v6 bpf-next 01/11] bpf: Support ->fill_link_info for kprobe_multi
+Date: Thu, 6 Jul 2023 15:00:22 -0700
+Message-ID: <CAEf4BzYGVuvZznF+_7cNJ1PRtPsoXop5r4m9WChkfMNnCkj5Nw@mail.gmail.com>
+Subject: Re: [PATCH v6 bpf-next 07/11] bpf: Add a common helper bpf_copy_to_user()
 To: Yafang Shao <laoar.shao@gmail.com>
 Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
 	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, yhs@fb.com, 
@@ -68,75 +68,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 On Wed, Jun 28, 2023 at 4:53=E2=80=AFAM Yafang Shao <laoar.shao@gmail.com> =
 wrote:
 >
-> With the addition of support for fill_link_info to the kprobe_multi link,
-> users will gain the ability to inspect it conveniently using the
-> `bpftool link show`. This enhancement provides valuable information to th=
-e
-> user, including the count of probed functions and their respective
-> addresses. It's important to note that if the kptr_restrict setting is no=
-t
-> permitted, the probed address will not be exposed, ensuring security.
+> Add a common helper bpf_copy_to_user(), which will be used at multiple
+> places.
+> No functional change.
 >
 > Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 > ---
-
-documentation nit, but otherwise LGTM
-
-Also, looking at other patch where you introduce bpf_copy_user(),
-seems like we return -ENOSPC when user-provided memory is not big
-enough. So let's change E2BIG in this patch to ENOSPC?
-
+>  kernel/bpf/syscall.c | 34 ++++++++++++++++++++--------------
+>  1 file changed, 20 insertions(+), 14 deletions(-)
+>
 
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
->  include/uapi/linux/bpf.h       |  5 +++++
->  kernel/trace/bpf_trace.c       | 37 ++++++++++++++++++++++++++++++++++
->  tools/include/uapi/linux/bpf.h |  5 +++++
->  3 files changed, 47 insertions(+)
->
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 60a9d59beeab..512ba3ba2ed3 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -6439,6 +6439,11 @@ struct bpf_link_info {
->                         __s32 priority;
->                         __u32 flags;
->                 } netfilter;
-> +               struct {
-> +                       __aligned_u64 addrs; /* in/out: addresses buffer =
-ptr */
-
-addrs field itself is not modified, the memory it points to is
-modified, so it's not really in/out per se, it is just a pointer to
-memory where kernel stores output data
-
-> +                       __u32 count;
-
-but count field itself is in/out, so please add a comment explicitly
-stating this
 
 
-> +                       __u32 flags;
-> +               } kprobe_multi;
->         };
->  } __attribute__((aligned(8)));
->
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 03b7f6b8e4f0..1f9f78e1992f 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -2469,6 +2469,7 @@ struct bpf_kprobe_multi_link {
->         u32 cnt;
->         u32 mods_cnt;
->         struct module **mods;
-> +       u32 flags;
->  };
->
->  struct bpf_kprobe_multi_run_ctx {
-> @@ -2558,9 +2559,44 @@ static void bpf_kprobe_multi_link_dealloc(struct b=
-pf_link *link)
->         kfree(kmulti_link);
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index a2aef900519c..4aa6e5776a04 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -3295,6 +3295,25 @@ static void bpf_raw_tp_link_show_fdinfo(const stru=
+ct bpf_link *link,
+>                    raw_tp_link->btp->tp->name);
 >  }
 >
-
-[...]
+> +static int bpf_copy_to_user(char __user *ubuf, const char *buf, u32 ulen=
+,
+> +                           u32 len)
+> +{
+> +       if (ulen >=3D len + 1) {
+> +               if (copy_to_user(ubuf, buf, len + 1))
+> +                       return -EFAULT;
+> +       } else {
+> +               char zero =3D '\0';
+> +
+> +               if (copy_to_user(ubuf, buf, ulen - 1))
+> +                       return -EFAULT;
+> +               if (put_user(zero, ubuf + ulen - 1))
+> +                       return -EFAULT;
+> +               return -ENOSPC;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+>  static int bpf_raw_tp_link_fill_link_info(const struct bpf_link *link,
+>                                           struct bpf_link_info *info)
+>  {
+> @@ -3313,20 +3332,7 @@ static int bpf_raw_tp_link_fill_link_info(const st=
+ruct bpf_link *link,
+>         if (!ubuf)
+>                 return 0;
+>
+> -       if (ulen >=3D tp_len + 1) {
+> -               if (copy_to_user(ubuf, tp_name, tp_len + 1))
+> -                       return -EFAULT;
+> -       } else {
+> -               char zero =3D '\0';
+> -
+> -               if (copy_to_user(ubuf, tp_name, ulen - 1))
+> -                       return -EFAULT;
+> -               if (put_user(zero, ubuf + ulen - 1))
+> -                       return -EFAULT;
+> -               return -ENOSPC;
+> -       }
+> -
+> -       return 0;
+> +       return bpf_copy_to_user(ubuf, tp_name, ulen, tp_len);
+>  }
+>
+>  static const struct bpf_link_ops bpf_raw_tp_link_lops =3D {
+> --
+> 2.39.3
+>
