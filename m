@@ -1,79 +1,59 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B41FD2E9
-	for <bpf@vger.kernel.org>; Thu,  6 Jul 2023 23:27:52 +0000 (UTC)
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9D42139;
-	Thu,  6 Jul 2023 16:27:29 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-262e839647eso998832a91.2;
-        Thu, 06 Jul 2023 16:27:29 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9413ED2E9
+	for <bpf@vger.kernel.org>; Thu,  6 Jul 2023 23:32:05 +0000 (UTC)
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A666DC
+	for <bpf@vger.kernel.org>; Thu,  6 Jul 2023 16:32:04 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b5c2433134so16091951fa.0
+        for <bpf@vger.kernel.org>; Thu, 06 Jul 2023 16:32:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688686035; x=1691278035;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bshFgcOle4AtCEA8BTrEZy72fJQG+YZaemfgC6JBXtM=;
-        b=IOWiwnyWZ8b/Gees9+bG/u0x39WWkdTCEFwE5s22SnFW0XqC5rvrUBYyTAMCmPKnJI
-         4qgrjSpARX+HgWz9r6G2mSEL12oNVjQzOzkJqh3SzPGRq+dOdz2w69HGJqAgtWs3B+FF
-         T6HW7smfo85Kiy1q9wyrh5thmF1HeIclKjwIH6EhYa02ctmARHBhKmOapagUI9oe+V7q
-         uoPvVu9uynFN4Sr5hgnBSuTuO3OcHkSwGSiZFHxXBsK82s4HjycRFyZstD5Yw4wGvRYw
-         1QoXQABJKLn0yVKHJ9xKaDeEnTkTKYmmzeS96+jpOAiqhUnv1SaL0yR9rZHub1JRR4EU
-         /sYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688686035; x=1691278035;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1688686322; x=1691278322;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bshFgcOle4AtCEA8BTrEZy72fJQG+YZaemfgC6JBXtM=;
-        b=MHWeUiwqxpYZcakCqf3PvdRNUg2pOpaY9zc2APg1NoPf24mmi9AqGRy1VHiNAPmZtO
-         ePgx1UUD7oAudjizDx0voVDY/zA5uTlRknqncr8F0THC9W8BUz08hPhUzotm+3p6sfjA
-         6oCjD9cZJT+/xfKVWQdSG490UQwXs6JvpyxnScyhqJugb7MSCDs74A1iX+aYPEmPk7OJ
-         HapNR2d6mGYJ4t6CnXJalznW48KQxkgYHMMWcl7dMXhlb2DXdMHFiru4jVcITms6jJYN
-         Tp1ttSmGRh4sSD/EJjlgHVvOSyrXcdiFcJVqk6p6Ug6RfGVH2TS1QP13QvQsnXdEY7mb
-         Z1QQ==
-X-Gm-Message-State: ABy/qLZRDiZ/qHwVbRXiF0Xg8NMMjNqaRGNNxKG4NuPgm1vmYgLE57n5
-	tHllK1GWlUMhiYDsPgRJH2s=
-X-Google-Smtp-Source: APBJJlFvuQWESuYnnmEsR9Q/RlJxwVOHx3CZ7iqj95A72EuTZBpzNQR7aSAdAsIzLqTLdZ3dQSY+iQ==
-X-Received: by 2002:a17:90a:bb84:b0:25b:e07f:4c43 with SMTP id v4-20020a17090abb8400b0025be07f4c43mr3123081pjr.10.1688686035098;
-        Thu, 06 Jul 2023 16:27:15 -0700 (PDT)
-Received: from macbook-pro-8.dhcp.thefacebook.com ([2620:10d:c090:400::5:9b44])
-        by smtp.gmail.com with ESMTPSA id bk15-20020a17090b080f00b0025bf1ea918asm270552pjb.55.2023.07.06.16.27.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 16:27:14 -0700 (PDT)
-Date: Thu, 6 Jul 2023 16:27:09 -0700
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc: dhowells@redhat.com, dwmw2@infradead.org, herbert@gondor.apana.org.au,
-	davem@davemloft.net, jarkko@kernel.org, song@kernel.org,
-	jolsa@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, martin.lau@linux.dev, yhs@fb.com,
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-	haoluo@google.com, rostedt@goodmis.org, mhiramat@kernel.org,
-	mykolal@fb.com, shuah@kernel.org, linux-kernel@vger.kernel.org,
-	keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-	bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, pbrobinson@gmail.com,
-	zbyszek@in.waw.pl, zohar@linux.ibm.com,
-	linux-integrity@vger.kernel.org, paul@paul-moore.com,
-	linux-security-module@vger.kernel.org, wiktor@metacode.biz,
-	devel@lists.sequoia-pgp.org, gnupg-devel@gnupg.org,
-	ebiggers@kernel.org, Jason@zx2c4.com, mail@maciej.szmigiero.name,
-	antony@vennard.ch, konstantin@linuxfoundation.org,
-	James.Bottomley@hansenpartnership.com,
-	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [RFC][PATCH 00/10] KEYS: Introduce user asymmetric keys and
- signatures
-Message-ID: <20230706232709.t6imkh3q234b3dlm@macbook-pro-8.dhcp.thefacebook.com>
-References: <20230706144225.1046544-1-roberto.sassu@huaweicloud.com>
+        bh=B6HGx3BBK3e6NncirqzjfehqKmV8RLD2m05P7jQfvq4=;
+        b=T63ZYqhdM8qR/Vsyta6go+eAeIyr6N4yUrP30azBb7axy5Iusz6QvzS9GrcdoxidG9
+         BPqzPy7BPs4feaFwNEYhhJv04covUWpjlR/Vrz1h0D+NWjCYC3TkGF4e265jfF0TQImY
+         NsZxGAlVSyPJZyGmJxSmTvCYK03pFljjHMqt7XqEAZpwtkCL37tIeV2vrq5Wfu6vqg7y
+         a+NznAPFhsSmQiyi+K0P2IH9/WTaliBOeCMmkeU0K3QlS1StN+nNilqZkCRbIHYLcGQw
+         Wmk5N3ldacWxAb6nDb5trXcp+1+jAh5QlA8Sr+pcTTmK2iKeP4pD/z+QVJNAkvY54pBU
+         rXsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688686322; x=1691278322;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=B6HGx3BBK3e6NncirqzjfehqKmV8RLD2m05P7jQfvq4=;
+        b=fjH1Z2NVTxoRHBuwXZq/z3O3MC2NA8nYImT8tOBA5ME57xANvg+opdeM5RE4Sg8EQr
+         Y0/co0RbdxV4Yd2xRLhDnpJX5DOMJYd5AcP1yF5WlGKNSUfFQBxEZy1qngYWNCPZCYrs
+         8Yn0CXgdbH7XJGBpHKmGt+Q2lks0VliuZ9o+nZLduc/dUf7GnXhHZuGgZ5Y8oYaBw/Ma
+         M7ONq55fEIERjx1k5GZqnnAJSrkG2ZR+q5tu4Y78MGVGAJg4YJfWqUqGkBD+884INy9B
+         xebEm6NZh9JOSubQ5Sv8cXZrVs4NVmpsOXK3zlT6g4UFRD62Knr4EcV7f3ZkLcYJ/8CJ
+         2SDA==
+X-Gm-Message-State: ABy/qLam0Zvy5AbymsBmIdCTBvPDwFfwpJ1s/Cdn1zFJqt6RiZsWGox5
+	gNfjkUUAwRKfocWMLWxaYZu1uhP8wSm4I1BU/hnPVAqKA9s=
+X-Google-Smtp-Source: APBJJlEFFF7M+y06+VP2GGB4Fq3B08az07f0fRoWhnGEqrWxhCs6cKkZl1kBcjsx1Nx50cvsRrjmslgeO26pG6LDSqs=
+X-Received: by 2002:a2e:81c8:0:b0:2b7:118:a1bc with SMTP id
+ s8-20020a2e81c8000000b002b70118a1bcmr1142457ljg.25.1688686321990; Thu, 06 Jul
+ 2023 16:32:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230706144225.1046544-1-roberto.sassu@huaweicloud.com>
+References: <20230706222020.268136-1-hawkinsw@obs.cr> <20230706222020.268136-2-hawkinsw@obs.cr>
+In-Reply-To: <20230706222020.268136-2-hawkinsw@obs.cr>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 6 Jul 2023 16:31:50 -0700
+Message-ID: <CAADnVQ+kfTPYE1kbUuxsaoEZBCHKG2SLDkcs62RXqEo8Jhi9+Q@mail.gmail.com>
+Subject: Re: [Bpf] [PATCH 1/1] bpf, docs: Describe stack contents of function calls
+To: Will Hawkins <hawkinsw@obs.cr>
+Cc: bpf <bpf@vger.kernel.org>, bpf@ietf.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
 	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -81,74 +61,36 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Thu, Jul 06, 2023 at 04:42:13PM +0200, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Define a new TLV-based format for keys and signatures, aiming to store and
-> use in the kernel the crypto material from other unsupported formats
-> (e.g. PGP).
-> 
-> TLV fields have been defined to fill the corresponding kernel structures
-> public_key, public_key_signature and key_preparsed_payload.
-> 
-> Keys:
->                 struct public_key {     struct key_preparsed_payload {
-> KEY_PUB       -->  void *key;
->                    u32 keylen;         --> prep->payload.data[asym_crypto]
-> KEY_ALGO      -->  const char *pkey_algo;
-> KEY_KID0
-> KEY_KID1                               --> prep->payload.data[asym_key_ids]
-> KEY_KID2  
-> KEY_DESC                               --> prep->description
-> 
-> 
-> Signatures:
->                 struct public_key_signature {
-> SIG_S         -->  u8 *s;
->                    u32 s_size;
-> SIG_KEY_ALGO  -->  const char *pkey_algo;
-> SIG_HASH_ALGO -->  const char *hash_algo;
->                    u32 digest_size;
-> SIG_ENC       -->  const char *encoding;   
-> SIG_KID0
-> SIG_KID1      -->  struct asymmetric_key_id *auth_ids[3];
-> SIG_KID2  
-> 
-> 
-> For keys, since the format conversion has to be done in user space, user
-> space is assumed to be trusted, in this proposal. Without this assumption,
-> a malicious conversion tool could make a user load to the kernel a
-> different key than the one expected.
-> 
-> That should not be a particular problem for keys that are embedded in the
-> kernel image and loaded at boot, since the conversion happens in a trusted
-> environment such as the building infrastructure of the Linux distribution
-> vendor.
-> 
-> In the other cases, such as enrolling a key through the Machine Owner Key
-> (MOK) mechanism, the user is responsible to ensure that the crypto material
-> carried in the original format remains the same after the conversion.
-> 
-> For signatures, assuming the strength of the crypto algorithms, altering
-> the crypto material is simply a Denial-of-Service (DoS), as data can be
-> validated only with the right signature.
-> 
-> 
-> This patch set also offers the following contributions:
-> 
-> - An API similar to the PKCS#7 one, to verify the authenticity of system
->   data through user asymmetric keys and signatures
-> 
-> - A mechanism to store a keyring blob in the kernel image and to extract
->   and load the keys at system boot
->   
-> - eBPF binding, so that data authenticity verification with user asymmetric
->   keys and signatures can be carried out also with eBPF programs
+On Thu, Jul 6, 2023 at 3:20=E2=80=AFPM Will Hawkins <hawkinsw@obs.cr> wrote=
+:
+>
+> The execution of every function proceeds as if it has access to its own
+> stack space.
+>
+> Signed-off-by: Will Hawkins <hawkinsw@obs.cr>
+> ---
+>  Documentation/bpf/instruction-set.rst | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/Documentation/bpf/instruction-set.rst b/Documentation/bpf/in=
+struction-set.rst
+> index 751e657973f0..717259767a41 100644
+> --- a/Documentation/bpf/instruction-set.rst
+> +++ b/Documentation/bpf/instruction-set.rst
+> @@ -30,6 +30,11 @@ The eBPF calling convention is defined as:
+>  R0 - R5 are scratch registers and eBPF programs needs to spill/fill them=
+ if
+>  necessary across calls.
+>
+> +Every function invocation proceeds as if it has exclusive access to an
+> +implementation-defined amount of stack space. R10 is a pointer to the by=
+te of
+> +memory with the highest address in that stack space. The contents
+> +of a function invocation's stack space do not persist between invocation=
+s.
 
-Nack to bpf bits.
-You've convinced us that bpf_verify_pkcs7_signature() is what you need.
-Yet, 9 month later there are no users of it and you came back with this new
-bpf_verify_uasym_signature() helper that practically not much different.
-
-Instead of brand new "public key info" format sign your rpms via
-existing pkcs7 mechanism and verify with bpf_verify_pkcs7_signature().
+Such description belongs in a future psABI doc.
+instruction-set.rst is not a place to describe how registers are used.
+For example x86-64 JIT maps BPF R10 to RBP.
+Yet there is -fomit-frame-pointer.
+So we might very well do something like that in the future.
