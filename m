@@ -1,267 +1,394 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B17C363BA
-	for <bpf@vger.kernel.org>; Thu,  6 Jul 2023 23:14:21 +0000 (UTC)
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79E819B2
-	for <bpf@vger.kernel.org>; Thu,  6 Jul 2023 16:14:19 -0700 (PDT)
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 929E9C13AE4F
-	for <bpf@vger.kernel.org>; Thu,  6 Jul 2023 16:14:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1688685259; bh=SsbvdhVVOyHZyaWV7h4m2xm+UlNfzLfXi+ssLXe2AbU=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=wt9HYxT5nxuKWl2XhQCEgPJigxJdQsW3Pz5ESBFDjlZuED5ZG3Uf877/T74erfLBL
-	 BjM3N7D7IoJEnbE6Jf+O5JUi5eWueqez/QK+h80c0fguvR2w51ek57IWISsrLpWzk7
-	 lkXbDSYstVZTrrSS2g/9yZbHgs35PAiewPbE7I00=
-X-Mailbox-Line: From bpf-bounces@ietf.org  Thu Jul  6 16:14:19 2023
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 73E55C151525;
-	Thu,  6 Jul 2023 16:14:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1688685259; bh=SsbvdhVVOyHZyaWV7h4m2xm+UlNfzLfXi+ssLXe2AbU=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=wt9HYxT5nxuKWl2XhQCEgPJigxJdQsW3Pz5ESBFDjlZuED5ZG3Uf877/T74erfLBL
-	 BjM3N7D7IoJEnbE6Jf+O5JUi5eWueqez/QK+h80c0fguvR2w51ek57IWISsrLpWzk7
-	 lkXbDSYstVZTrrSS2g/9yZbHgs35PAiewPbE7I00=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id AFC72C151091
- for <bpf@ietfa.amsl.com>; Thu,  6 Jul 2023 16:14:18 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Score: -7.096
-X-Spam-Level: 
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-	SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-	version=3.4.6
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
- header.d=gmail.com
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EQAiqeCrIpY8 for <bpf@ietfa.amsl.com>;
- Thu,  6 Jul 2023 16:14:18 -0700 (PDT)
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com
- [IPv6:2a00:1450:4864:20::22c])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id 00151C151082
- for <bpf@ietf.org>; Thu,  6 Jul 2023 16:14:17 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id
- 38308e7fff4ca-2b6a16254a4so18822931fa.0
- for <bpf@ietf.org>; Thu, 06 Jul 2023 16:14:17 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A19A563BA
+	for <bpf@vger.kernel.org>; Thu,  6 Jul 2023 23:25:04 +0000 (UTC)
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521CA1BC9
+	for <bpf@vger.kernel.org>; Thu,  6 Jul 2023 16:25:02 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3fbc5d5746cso14145365e9.2
+        for <bpf@vger.kernel.org>; Thu, 06 Jul 2023 16:25:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1688685256; x=1691277256;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=VxB9JuP2WVlEJH2kCW8mIXA6VO88USDyMaG1Y1/Q4t0=;
- b=ZTtCgYCNyojtR5MN7KzcFTTTRUw1P/qNmoRXNugD+XCeL1WTgCoaTrZ0R1X3CiTumy
- EXt2OpQIVARrMkkxVYicQO2ulKiRrXdJoyM4eYLjL+3+ZhS/TJij8EA8NCY2NS/5Y7+Q
- tc7yYF2F1hT+58gEt0EW5ZGe+R18tf+7qbD0MXkQ6AO4d6lK1I4o61sA8wLt7uEhOSa5
- oU3aHhUSHnYea5Nz5TV0HS0Wnd1TGhjSqaPOXb5ZrLU2+okyuC50JXHxhgg5FORuDJzl
- 9bKbFdRSOeSmcqyh7dhc9SlBjr6SEhOanGpWRs4J+AO7dViO4UVh83tsyXx8ZiCB/DgZ
- rmTQ==
+        d=gmail.com; s=20221208; t=1688685901; x=1691277901;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rDieQayRjWDTLBouv2Kea+tZJ6HRN9976SIWKshktZg=;
+        b=D1V/8OWnzRjRRXP1XtT8Nv+hNJpqcAZtnnozbDz2egw0D3W9YYVRVjo4wn2Y6EPCms
+         K59s6NMhOWt4+GFDr6O5rAXTJUhiIJtIa2n/0UCt5aPLo1ZShkIca+kayLR78hWtsECU
+         UyUIW2cWos9nouxqUgE3sEPWwF1p0oQnwKxjdiZx0CIZX0tVvMsbfqqK0nM85xG01Ifp
+         quJJqtyd289I1Jckm7Pp6w5MlCT2nKp+G3DCnRM8ZAoiGUEVdxcyJwAqp69nPfumMxC6
+         lVJ4lBrdwynB8MeB/bpeNfcKSDAKuzLH7kUXe4h7Z9IiW/eDx4vWG8BV1fquqcA3yr6h
+         iTKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1688685256; x=1691277256;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=VxB9JuP2WVlEJH2kCW8mIXA6VO88USDyMaG1Y1/Q4t0=;
- b=Rbq8FCLvpYQzeqEQdgzO3/ajmbzI4zYbIW0rjhkt5fAJESvQbzx9ACwH1EVsKGmqOK
- AkpVqT5FK1JY29547k3PPp5FzY0Tdyviu0S///H3qdFJGDUKrBmf6M5/cswSq/UNU3HP
- 92V/kgo5xJOUegNw3zjHrtKfeUv5Z7scHg1t2nXN7q/cLUwl3vxT8gyXgvir3GCURMiv
- ztHJ61RSxaut8rT+GEdTJ09MvWkP756AQufTMeJRJOCdRWy0mbW/xQly4tj8vusZgHRq
- L+T63GezyvngwCTfp2wGWShF+0N4zc6tQRKRjFmpoEJQcR+SaAvUOEbbimM6zEgpI7gt
- uAHQ==
-X-Gm-Message-State: ABy/qLaa2JW33CSPmog7/djA0OkZCxrBjvadkt2YRofr+2xgH2M0L8or
- xPQuq14EiGtbDM2NXdLi7tbi6dhf9pAXdQ1T1kE=
-X-Google-Smtp-Source: APBJJlHfcS/fXyytdaBG/ynEG/P+T19cxdqgrZHur5B4fd47ojEFQUBcT126qdjL0lxRPTW+R9bgTgILOb5ktXJV9gU=
-X-Received: by 2002:a2e:9104:0:b0:2b6:cdfb:d06a with SMTP id
- m4-20020a2e9104000000b002b6cdfbd06amr2426704ljg.22.1688685255508; Thu, 06 Jul
- 2023 16:14:15 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688685901; x=1691277901;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rDieQayRjWDTLBouv2Kea+tZJ6HRN9976SIWKshktZg=;
+        b=PjZ74beIzjj1WVD1aByToNjY4uj9pszVhwBsq0MlAv1bzXMZ2NH2yU8m9WgWQCR6fy
+         JZbfEVgnaAa9b4sgtC8c5u64O/OjI9Py/AGtoAlR2wFn0uLnGjuXtBmJlh+Mqz0OMNj5
+         vUrLBu3HK3nJtjzXjhE8/P4KFm+lSso7ek39gSQ4KUcZfZI7zNUGX4RDq9Gjqz3zxWRb
+         wlWKz6yQ5L0ubbPlY5c26S9RT/Pspr6Ovy3rPO+1oCa/umzNvhBSACFuAQaK245m3f6e
+         78VDQ3uuY1/NmmCxWBiUfgNSWJaEfOgbmNi8d8/yGOFNaPJl9FNrWw+vYx8gzLo1ZM71
+         NnHQ==
+X-Gm-Message-State: ABy/qLa3d/J40egdCB9tmFBcjqjm7kkTsZmqRI82tTGEZL2TZqBlak8E
+	NCWAlbgh+czrj5SVphwzOOZc5dMg1/by6eNQ3Zg=
+X-Google-Smtp-Source: APBJJlEmzu7ebXrwK0gfgDgkLHE07bzlIXAy3nvC20qtCwqxqOJOlHdSaNZDvzr+0JsyHnIfWwN4/xyTa6t1hV91KEA=
+X-Received: by 2002:adf:e9d1:0:b0:313:e88d:e6cf with SMTP id
+ l17-20020adfe9d1000000b00313e88de6cfmr2635353wrn.69.1688685900607; Thu, 06
+ Jul 2023 16:25:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230706160537.1309-1-dthaler1968@googlemail.com>
- <20230706204159.7tzacql7wdk3yszc@macbook-pro-8.dhcp.thefacebook.com>
- <PH7PR21MB3878EA22602A94F1C308CF33A32CA@PH7PR21MB3878.namprd21.prod.outlook.com>
-In-Reply-To: <PH7PR21MB3878EA22602A94F1C308CF33A32CA@PH7PR21MB3878.namprd21.prod.outlook.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 6 Jul 2023 16:14:04 -0700
-Message-ID: <CAADnVQ+gLnsOVj9s4zpAP6+U6nFHYm6GVZ1FteRac=ZaJvpfDg@mail.gmail.com>
-To: Dave Thaler <dthaler@microsoft.com>,
- "Jose E. Marchesi" <jose.marchesi@oracle.com>
-Cc: Dave Thaler <dthaler1968@googlemail.com>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>, "bpf@ietf.org" <bpf@ietf.org>
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/-NrwjA_6EHQ8y83cMZZGzbT8-wc>
-Subject: Re: [Bpf] [PATCH bpf-next v2] bpf, docs: Improve English readability
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Id: Discussion of BPF/eBPF standardization efforts within the IETF
- <bpf.ietf.org>
-List-Unsubscribe: <https://www.ietf.org/mailman/options/bpf>,
- <mailto:bpf-request@ietf.org?subject=unsubscribe>
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-List-Subscribe: <https://www.ietf.org/mailman/listinfo/bpf>,
- <mailto:bpf-request@ietf.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
+References: <20230630083344.984305-1-jolsa@kernel.org> <20230630083344.984305-10-jolsa@kernel.org>
+In-Reply-To: <20230630083344.984305-10-jolsa@kernel.org>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 6 Jul 2023 16:24:48 -0700
+Message-ID: <CAEf4BzbeyXniXfYoE6e8=3wLJ+ikN+pMrByJqwjjTzkHwebp6w@mail.gmail.com>
+Subject: Re: [PATCHv3 bpf-next 09/26] libbpf: Add elf symbol iterator
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>, 
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@chromium.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,
+	T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
-Message-ID: <20230706231404.xIDbzB8NltyqsY-IAMFYgYkef7F3kpl-5Wm-uVkqOQY@z>
 
-T24gVGh1LCBKdWwgNiwgMjAyMyBhdCAzOjA04oCvUE0gRGF2ZSBUaGFsZXIgPGR0aGFsZXJAbWlj
-cm9zb2Z0LmNvbT4gd3JvdGU6Cj4KPiA+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tCj4gPiBG
-cm9tOiBBbGV4ZWkgU3Rhcm92b2l0b3YgPGFsZXhlaS5zdGFyb3ZvaXRvdkBnbWFpbC5jb20+Cj4g
-PiBTZW50OiBUaHVyc2RheSwgSnVseSA2LCAyMDIzIDE6NDIgUE0KPiA+IFRvOiBEYXZlIFRoYWxl
-ciA8ZHRoYWxlcjE5NjhAZ29vZ2xlbWFpbC5jb20+Cj4gPiBDYzogYnBmQHZnZXIua2VybmVsLm9y
-ZzsgYnBmQGlldGYub3JnOyBEYXZlIFRoYWxlcgo+ID4gPGR0aGFsZXJAbWljcm9zb2Z0LmNvbT4K
-PiA+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggYnBmLW5leHQgdjJdIGJwZiwgZG9jczogSW1wcm92ZSBF
-bmdsaXNoIHJlYWRhYmlsaXR5Cj4gPgo+ID4gT24gVGh1LCBKdWwgMDYsIDIwMjMgYXQgMDQ6MDU6
-MzdQTSArMDAwMCwgRGF2ZSBUaGFsZXIgd3JvdGU6Cj4gPiA+IEZyb206IERhdmUgVGhhbGVyIDxk
-dGhhbGVyQG1pY3Jvc29mdC5jb20+Cj4gPiA+Cj4gPiA+IFNpZ25lZC1vZmYtYnk6IERhdmUgVGhh
-bGVyIDxkdGhhbGVyQG1pY3Jvc29mdC5jb20+Cj4gPiA+IC0tCj4gPiA+IFYxIC0+IFYyOiBhZGRy
-ZXNzZWQgY29tbWVudHMgZnJvbSBBbGV4ZWkKPiA+ID4gLS0tCj4gPiA+ICBEb2N1bWVudGF0aW9u
-L2JwZi9pbnN0cnVjdGlvbi1zZXQucnN0IHwgNTkgKysrKysrKysrKysrKysrKysrKystLS0tLS0t
-Cj4gPiA+ICBEb2N1bWVudGF0aW9uL2JwZi9saW51eC1ub3Rlcy5yc3QgICAgIHwgIDUgKysrCj4g
-PiA+ICAyIGZpbGVzIGNoYW5nZWQsIDUwIGluc2VydGlvbnMoKyksIDE0IGRlbGV0aW9ucygtKQo+
-ID4gPgo+ID4gPiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9icGYvaW5zdHJ1Y3Rpb24tc2V0
-LnJzdAo+ID4gPiBiL0RvY3VtZW50YXRpb24vYnBmL2luc3RydWN0aW9uLXNldC5yc3QKPiA+ID4g
-aW5kZXggNzUxZTY1Nzk3M2YuLjc0MDk4OWY0YzFlIDEwMDY0NAo+ID4gPiAtLS0gYS9Eb2N1bWVu
-dGF0aW9uL2JwZi9pbnN0cnVjdGlvbi1zZXQucnN0Cj4gPiA+ICsrKyBiL0RvY3VtZW50YXRpb24v
-YnBmL2luc3RydWN0aW9uLXNldC5yc3QKPiA+ID4gQEAgLTcsNiArNyw5IEBAIGVCUEYgSW5zdHJ1
-Y3Rpb24gU2V0IFNwZWNpZmljYXRpb24sIHYxLjAKPiA+ID4KPiA+ID4gIFRoaXMgZG9jdW1lbnQg
-c3BlY2lmaWVzIHZlcnNpb24gMS4wIG9mIHRoZSBlQlBGIGluc3RydWN0aW9uIHNldC4KPiA+ID4K
-PiA+ID4gK1RoZSBlQlBGIGluc3RydWN0aW9uIHNldCBjb25zaXN0cyBvZiBlbGV2ZW4gNjQgYml0
-IHJlZ2lzdGVycywgYQo+ID4gPiArcHJvZ3JhbSBjb3VudGVyLCBhbmQgYW4gaW1wbGVtZW50YXRp
-b24tc3BlY2lmaWMgYW1vdW50IChlLmcuLCA1MTIgYnl0ZXMpCj4gPiBvZiBzdGFjayBzcGFjZS4K
-PiA+ID4gKwo+ID4gPiAgRG9jdW1lbnRhdGlvbiBjb252ZW50aW9ucwo+ID4gPiAgPT09PT09PT09
-PT09PT09PT09PT09PT09PQo+ID4gPgo+ID4gPiBAQCAtMjcsMTIgKzMwLDI0IEBAIFRoZSBlQlBG
-IGNhbGxpbmcgY29udmVudGlvbiBpcyBkZWZpbmVkIGFzOgo+ID4gPiAgKiBSNiAtIFI5OiBjYWxs
-ZWUgc2F2ZWQgcmVnaXN0ZXJzIHRoYXQgZnVuY3Rpb24gY2FsbHMgd2lsbCBwcmVzZXJ2ZQo+ID4g
-PiAgKiBSMTA6IHJlYWQtb25seSBmcmFtZSBwb2ludGVyIHRvIGFjY2VzcyBzdGFjawo+ID4gPgo+
-ID4gPiAtUjAgLSBSNSBhcmUgc2NyYXRjaCByZWdpc3RlcnMgYW5kIGVCUEYgcHJvZ3JhbXMgbmVl
-ZHMgdG8gc3BpbGwvZmlsbAo+ID4gPiB0aGVtIGlmIC1uZWNlc3NhcnkgYWNyb3NzIGNhbGxzLgo+
-ID4gPiArUmVnaXN0ZXJzIFIwIC0gUjUgYXJlIGNhbGxlci1zYXZlZCByZWdpc3RlcnMsIG1lYW5p
-bmcgdGhlIEJQRiBwcm9ncmFtCj4gPiA+ICtuZWVkcyB0byBlaXRoZXIgc3BpbGwgdGhlbSB0byB0
-aGUgQlBGIHN0YWNrIG9yIG1vdmUgdGhlbSB0byBjYWxsZWUKPiA+ID4gK3NhdmVkIHJlZ2lzdGVy
-cyBpZiB0aGVzZSBhcmd1bWVudHMgYXJlIHRvIGJlIHJldXNlZCBhY3Jvc3MgbXVsdGlwbGUKPiA+
-ID4gK2Z1bmN0aW9uIGNhbGxzLiBTcGlsbGluZyBtZWFucyB0aGF0IHRoZSB2YWx1ZSBpbiB0aGUg
-cmVnaXN0ZXIgaXMKPiA+ID4gK21vdmVkIHRvIHRoZSBCUEYgc3RhY2suIFRoZSByZXZlcnNlIG9w
-ZXJhdGlvbiBvZiBtb3ZpbmcgdGhlIHZhcmlhYmxlCj4gPiBmcm9tIHRoZSBCUEYgc3RhY2sgdG8g
-dGhlIHJlZ2lzdGVyIGlzIGNhbGxlZCBmaWxsaW5nLgo+ID4gPiArVGhlIHJlYXNvbiBmb3Igc3Bp
-bGxpbmcvZmlsbGluZyBpcyBkdWUgdG8gdGhlIGxpbWl0ZWQgbnVtYmVyIG9mIHJlZ2lzdGVycy4K
-PiA+Cj4gPiBpbW8gdGhpcyBleHRlbmRlZCBleHBsYW5hdGlvbiBnb2VzIHRvbyBmYXIuCj4gPiBJ
-dCdzIGFsc28gbm90IGVudGlyZWx5IGNvcnJlY3QuIFdlIGNvdWxkIGhhdmUgYW4gSVNBIHdpdGgg
-bGltaXRlZCBudW1iZXIgb2YKPiA+IHJlZ2lzdGVycyB3aGVyZSBldmVyeSByZWdpc3RlciBpcyBj
-YWxsZWUgc2F2ZWQuIEEgYml0IGFic3VyZCwgYnV0IHBvc3NpYmxlLgo+ID4gT3Igd2VudCB3aXRo
-IFNQQVJDIHN0eWxlIHJlZ2lzdGVyIHdpbmRvd3MuCj4KPiBBdCBodHRwczovL2xvcmUua2VybmVs
-Lm9yZy9icGYvMjAyMjA5MzAyMjE2MjQubXFqcnptZHhjNmV0a2FkbUBtYWNib29rLXByby00LmRo
-Y3AudGhlZmFjZWJvb2suY29tLyB5b3Ugc2FpZCBhYm91dCB0aGUgYWJvdmUKPiAiSSBsaWtlIGFi
-b3ZlIGNsYXJpZmljYXRpb24gdGhvdWdoLiIKClRoYXQgd2FzIG9uICIzMCBTZXAgMjAyMiIuCkkg
-bGlrZSB0byBjaGFuZ2UgbXkgbWluZCBvZnRlbiBlbm91Z2ggdG8gY29uZnVzZSBldmVyeW9uZSA6
-KQoKPiBJIHRoaW5rIGl0J3MgaW1wb3J0YW50IGZvciBpbnRlcm9wZXJhYmlsaXR5IHRvIGRlZmlu
-ZSB3aGljaCByZWdpc3RlcnMgYXJlIGNhbGxlci1zYXZlZAo+IGFuZCB3aGljaCBhcmUgbm90LCBz
-byBhIGNvbXBpbGVyIChvciBldmVuIHZlcmlmaWVyKSBjYW4gYmUgdXNlZCBmb3IgbXVsdGlwbGUg
-cnVudGltZXMuCgpidXQgaXQgcmVhbGx5IGRvZXNuJ3QgYmVsb25nIGluIHRoZSBJU0EgZG9jLgpX
-ZSd2ZSBkaXNjdXNzZWQgaXQgYXQgbGVuZ3RoLgpXZSBuZWVkIHRoZSBwc0FCSSBkb2MuCklTQSBk
-b2MgaXMgYSBkZXNjcmlwdGlvbiBvZiBpbnN0cnVjdGlvbnMgYW5kIF9ub3RfIGhvdyB0aGV5IHNo
-YXBlCmludG8gZnVuY3Rpb25zIGFuZCBwcm9ncmFtcy4KTW9yZSBiZWxvdy4KCj4KPiA+ID4gKwo+
-ID4gPiArVXBvbiBlbnRlcmluZyBleGVjdXRpb24gb2YgYW4gZUJQRiBwcm9ncmFtLCByZWdpc3Rl
-cnMgUjEgLSBSNQo+ID4gPiAraW5pdGlhbGx5IGNhbiBjb250YWluIHRoZSBpbnB1dCBhcmd1bWVu
-dHMgZm9yIHRoZSBwcm9ncmFtIChzaW1pbGFyIHRvIHRoZQo+ID4gYXJnYy9hcmd2IHBhaXIgZm9y
-IGEgdHlwaWNhbCBDIHByb2dyYW0pLgo+ID4KPiA+IGFyZ2MvYXJndiBpcyBvbmx5IGZvciBtYWlu
-KCkuIFdlIGRvbid0IGhhdmUgbWFpbigpIGNvbmNlcHQgaW4gQlBGIElTQS4KPiA+IGFyZ2MvYXJn
-diBpcyBhbHNvIG5vdCBhIHByb3BlcnR5IG9mIElTQS4KPgo+IFRoYXQncyB3aHkgaXQncyAic2lt
-aWxhciB0byIuICBJIHRoaW5rIHRoZSBhbmFsb2d5IGhlbHBzIHVuZGVyc3RhbmRpbmcgZm9yIG5l
-dyByZWFkZXJzLgoKYXJnYyBpcyBhIEsmUiBDIHRoaW5nLiBOb3QgZXZlbiBhIGNhbGxpbmcgY29u
-dmVudGlvbi4KVGhhdCBzZW50ZW5jZSBpcyBhIGNvbWJpbmF0aW9uIG9mIGFuYWxvZ2llcyBmcm9t
-IGRpZmZlcmVudCBhcmVhcy4KYXJnYyBjb3VsZCBiZSBpbnRlcnByZXRlZCB0aGF0IHRoZSBmaXJz
-dCBhcmd1bWVudCBpcyBhIGNvdW50CmFuZCBhIHNlY29uZCBhcmd1bWVudCBpcyBhbiBhcnJheS4K
-U2VlIHRoZSBjb25mdXNpb24gaXQgbWlnaHQgY2F1c2U/Cgo+Cj4gPiA+ICtUaGUgYWN0dWFsIG51
-bWJlciBvZiByZWdpc3RlcnMgdXNlZCwgYW5kIHRoZWlyIG1lYW5pbmcsIGlzIGRlZmluZWQgYnkK
-PiA+ID4gK3RoZSBwcm9ncmFtIHR5cGU7IGZvciBleGFtcGxlLCBhIG5ldHdvcmtpbmcgcHJvZ3Jh
-bSBtaWdodCBoYXZlIGFuCj4gPiA+ICthcmd1bWVudCB0aGF0IGluY2x1ZGVzIG5ldHdvcmsgcGFj
-a2V0IGRhdGEgYW5kL29yIG1ldGFkYXRhLgo+ID4KPiA+IHRoYXQgbWFrZXMgdGhpbmdzIGV2ZW4g
-bW9yZSBjb25mdXNpbmcuCj4gPgo+ID4gdGJoIG5vbmUgb2YgdGhlIGFib3ZlIGNoYW5nZXMgbWFr
-ZSB0aGUgZG9jIGVhc2llciB0byByZWFkLgo+Cj4gVGhlIHByb2dyYW0gdHlwZSBkZWZpbmVzIHRo
-ZSBudW1iZXIgYW5kIG1lYW5pbmcgb2YgYW55IGFyZ3VtZW50cyBwYXNzZWQKPiB0byB0aGUgcHJv
-Z3JhbS4gIEluIHRoZSBJU0EgdGhhdCBtZWFucyB0aGUgbnVtYmVyIG9mIHJlZ2lzdGVyZWQgdXNl
-ZCB0bwo+IHBhc3MgaW5wdXRzLCBhbmQgdGhlaXIgY29udGVudHMuCgpOb3QgYXQgYWxsLiBJU0Eg
-aXMgYW4gaW5zdHJ1Y3Rpb24gc2V0IG9ubHkgYW5kIHRoaXMgZG9jIGlzIGZvciBJU0EuCldoYXQg
-ZGlmZmVyZW50IHByb2dyYW0gdHlwZXMgc2hvdWxkIGFjY2VwdCBiZWxvbmdzIGluIGEgZGlmZmVy
-ZW50IGRvYy4KQW5kIGl0J3Mgbm90IGEgcHNBQkkgZG9jLgpNb3JlIGJlbG93LgoKPgo+ID4gPiAg
-SW5zdHJ1Y3Rpb24gZW5jb2RpbmcKPiA+ID4gID09PT09PT09PT09PT09PT09PT09Cj4gPiA+Cj4g
-PiA+ICtBbiBlQlBGIHByb2dyYW0gaXMgYSBzZXF1ZW5jZSBvZiBpbnN0cnVjdGlvbnMuCj4gPgo+
-ID4gS2luZGEgdHJ1ZSwgYnV0IGl0IG9wZW5zIHRoZSBkb29yIGZvciBwbGVudHkgb2YgYmlrZSBz
-aGVkZGluZy4KPiA+IElzIGl0IGNvbnRpZ3VvdXMgc2VxdWVuY2U/IHdoYXQgYWJvdXQgc3VicHJv
-Z3JhbXM/Cj4gPiBJcyBCUEYgcHJvZ3JhbSBhIG9uZSBmdW5jdGlvbiBvciBtdWx0aXBsZSBmdW5j
-dGlvbnM/Cj4KPiBUaGUgdGVybSAic3VicHJvZ3JhbSIgaXMgbm90IGN1cnJlbnRseSBwYXJ0IG9m
-IHRoZQo+IGluc3RydWN0aW9uLXNldC5yc3QgZG9jLiAgICJQcm9ncmFtLWxvY2FsIGZ1bmN0aW9u
-cyIKPiBhcmUsIGFuZCB0aGUgdGV4dCBzYXlzIHRoZXkncmUgcGFydCBvZiB0aGUgc2FtZSBCUEYg
-cHJvZ3JhbS4KPiBIZW5jZSB0aGUgZG9jIGFscmVhZHkgc2F5cyBhIEJQRiBwcm9ncmFtIGNhbiBo
-YXZlIG11bHRpcGxlCj4gZnVuY3Rpb25zLgoKWWVzLiBJdCdzIGEgbWVzcywgYnV0IHdlIG11c3Qg
-bm90IG1ha2UgaXQgd29yc2UuCmluc3RydWN0aW9uLXNldC5yc3QgaXMgZm9yIGluc3RydWN0aW9u
-cy4KRGVmaW5pdGlvbiBvZiBCUEYgcHJvZ3JhbSBiZWxvbmdzIHRvIGEgZGlmZmVyZW50IGRvYy4K
-Cj4gPiBldGMuCj4gPiBKdXN0IG5vdCB3b3J0aCBpdC4KPiA+IFRoaXMgaXMgSVNBIGRvYy4KPiA+
-Cj4gPiA+ICsKPiA+ID4gIGVCUEYgaGFzIHR3byBpbnN0cnVjdGlvbiBlbmNvZGluZ3M6Cj4gPiA+
-Cj4gPiA+ICAqIHRoZSBiYXNpYyBpbnN0cnVjdGlvbiBlbmNvZGluZywgd2hpY2ggdXNlcyA2NCBi
-aXRzIHRvIGVuY29kZSBhbgo+ID4gPiBpbnN0cnVjdGlvbiBAQCAtNzQsNyArODksNyBAQCBGb3Ig
-ZXhhbXBsZTo6Cj4gPiA+ICAgIDA3ICAgICAxICAgICAgIDAgICAgICAgIDAwIDAwICAxMSAyMiAz
-MyA0NCAgcjEgKz0gMHgxMTIyMzM0NCAvLyBiaWcKPiA+ID4KPiA+ID4gIE5vdGUgdGhhdCBtb3N0
-IGluc3RydWN0aW9ucyBkbyBub3QgdXNlIGFsbCBvZiB0aGUgZmllbGRzLgo+ID4gPiAtVW51c2Vk
-IGZpZWxkcyBzaGFsbCBiZSBjbGVhcmVkIHRvIHplcm8uCj4gPiA+ICtVbnVzZWQgZmllbGRzIG11
-c3QgYmUgc2V0IHRvIHplcm8uCj4gPgo+ID4gSG93IGlzIHRoaXMgYmV0dGVyPwo+Cj4gSXQgdXNl
-cyB0aGUgbGFuZ3VhZ2UgY29tbW9uIGluIFJGQ3MuCj4KPiA+ID4gIEFzIGRpc2N1c3NlZCBiZWxv
-dyBpbiBgNjQtYml0IGltbWVkaWF0ZSBpbnN0cnVjdGlvbnNgXywgYSA2NC1iaXQKPiA+ID4gaW1t
-ZWRpYXRlICBpbnN0cnVjdGlvbiB1c2VzIGEgNjQtYml0IGltbWVkaWF0ZSB2YWx1ZSB0aGF0IGlz
-IGNvbnN0cnVjdGVkIGFzCj4gPiBmb2xsb3dzLgo+ID4gPiBAQCAtMTAzLDcgKzExOCw5IEBAIGlu
-c3RydWN0aW9uIGFyZSByZXNlcnZlZCBhbmQgc2hhbGwgYmUgY2xlYXJlZCB0bwo+ID4gemVyby4K
-PiA+ID4gIEluc3RydWN0aW9uIGNsYXNzZXMKPiA+ID4gIC0tLS0tLS0tLS0tLS0tLS0tLS0KPiA+
-ID4KPiA+ID4gLVRoZSB0aHJlZSBMU0IgYml0cyBvZiB0aGUgJ29wY29kZScgZmllbGQgc3RvcmUg
-dGhlIGluc3RydWN0aW9uIGNsYXNzOgo+ID4gPiArVGhlIGVuY29kaW5nIG9mIHRoZSAnb3Bjb2Rl
-JyBmaWVsZCB2YXJpZXMgYW5kIGNhbiBiZSBkZXRlcm1pbmVkIGZyb20KPiA+ID4gK3RoZSB0aHJl
-ZSBsZWFzdCBzaWduaWZpY2FudCBiaXRzIChMU0IpIG9mIHRoZSAnb3Bjb2RlJyBmaWVsZCB3aGlj
-aAo+ID4gPiAraG9sZHMgdGhlICJpbnN0cnVjdGlvbiBjbGFzcyIsIGFzIGZvbGxvd3M6Cj4gPgo+
-ID4gc2FtZSBxdWVzdGlvbi4gRG9uJ3Qgc2VlIGFuIGltcHJvdmVtZW50IGluIHdvcmRpbmcuCj4K
-PiAxLiBUaGUgYWNyb255bSBMU0Igd2FzIG5vdCBkZWZpbmVkIGFuZCBkb2VzIG5vdCBoYXZlIGFu
-IGFzdGVyaXNrIGJ5IGl0IGluCj4gdGhlIGh0dHBzOi8vd3d3LnJmYy1lZGl0b3Iub3JnL21hdGVy
-aWFscy9hYmJyZXYuZXhwYW5zaW9uLnR4dCBsaXN0Lgo+Cj4gMi4gIkxTQiBiaXRzIiBpcyByZWR1
-bmRhbnQuCj4KPiAzLiBQdXR0aW5nICJpbnN0cnVjdGlvbiBjbGFzcyIgaW4gcXVvdGVzIGlzIGNv
-bW1vbiB3aGVuIGRlZmluaW5nIGJ5IHVzZQo+IHRoZSBmaXJzdCB0aW1lLgoKb2suIGZhaXIgZW5v
-dWdoLgoKPgo+IGxpbnV4LW5vdGVzLnJzdCBpcyBub3QgaW4gdGhlIElTQSBkb2MuICAgVGhlIElT
-QSBkb2Mgc2F5cyB0aGUgdmFsdWUgaXMgaW1wbGVtZW50YXRpb24KPiBkZWZpbmVkLiAgbGludXgt
-bm90ZXMucnN0IHNheXMgd2hhdCBMaW51eCBkb2VzIGZvciB0aGluZ3MgdGhlIElTQSBkb2MgbGVh
-dmVzIHVwCj4gdG8gdGhlIGltcGxlbWVudGF0aW9uLgoKSSBzZWUgbm8gdmFsdWUgaW4gIkxpbnV4
-IGN1cnJlbnRseSBzdXBwb3J0cyA1MTIgYnl0ZXMgb2Ygc3RhY2sgc3BhY2UiIHNlbnRlbmNlLgpJ
-dCdzIHRvbyBhbWJpZ3VvdXMgdG8gYmUgdXNlZnVsLgoKaW5zdHJ1Y3Rpb24tc2V0LnJzdCBpcyBh
-IGRlc2NyaXB0aW9uIG9mIElTQS4gV2Ugc2hvdWxkIHJlbW92ZSB0aGluZ3MKZnJvbSBpdCB0aGF0
-IGRvbid0IGJlbG9uZyBpbnN0ZWFkIG9mIGRvdWJsaW5nIGRvd24gb24gdGhlIGN1cnJlbnQgbWVz
-cy4KCndlIG5lZWQgdGhlIHBzQUJJIGRvYyB0aGF0IHdpbGwgbm90IGJlIHN0YW5kYXJkaXplZCBh
-cyBKb3NlIHJlY29tbWVuZGVkLgpUaGF0IGRvYyB3aWxsIGRlc2NyaWJlIHJlY29tbWVuZGVkIGNh
-bGxpbmcgY29udmVudGlvbiwgYXJndW1lbnQKcHJvbW90aW9uLCBzdGFjayB1c2FnZSwgcmVsb2Nh
-dGlvbiwgZnVuY3Rpb24vc3VicHJvZ3JhbSBkZWZpbml0aW9uLCBldGMKcHNBQkkgcHJvYmFibHkg
-c2hvdWxkIGluY2x1ZGUgQlRGLmV4dCBkZXNjcmlwdGlvbiwgYnV0IEknbSBvcGVuIHRvIGFsdGVy
-bmF0aXZlcy4KCkJQRiBwcm9ncmFtIHR5cGVzIHN1cHBvcnRlZCBieSB0aGUga2VybmVsIGlzIGEg
-M3JkIGRvY3VtZW50LgpUaGVyZSB3ZSBjYW4gZXhwbGFpbiB0aGF0IFhEUCBwcm9nIHRha2VzIGEg
-c2luZ2xlIGN0eCBhcmd1bWVudCBhbmQgaXQncwphIHBvaW50ZXIgdG8gLi4uClN1Y2ggaW5mbyBp
-cyBsaW51eCBzcGVjaWZpYy4gQmFzZWQgb24gSVNBIGFuZCBwc0FCSSBvbmUgY2FuIGNvbWUgdXAK
-d2l0aCBkaWZmZXJlbnQgcHJvZ3JhbS9tYXAgdHlwZXMgYW5kIHNlbWFudGljcyBvZiB0aGVpciBh
-cmd1bWVudHMKd2hpbGUgYmVpbmcgZnVsbHkgY29tcGxpYW50IHdpdGggSVNBIGFuZCBwc0FCSSBk
-b2NzLgpTdWNoIGRvYyBjYW4gc3RhcnQgaXRzIGpvdXJuZXkgaW4gbGludXgtbm90ZXMucnN0IGFu
-ZCB0aGVuIHNwbGl0LCBpZiBuZWNlc3NhcnkuCgotLSAKQnBmIG1haWxpbmcgbGlzdApCcGZAaWV0
-Zi5vcmcKaHR0cHM6Ly93d3cuaWV0Zi5vcmcvbWFpbG1hbi9saXN0aW5mby9icGYK
+On Fri, Jun 30, 2023 at 1:35=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> Adding elf symbol iterator object (and some functions) that follow
+> open-coded iterator pattern and some functions to ease up iterating
+> elf object symbols.
+>
+> The idea is to iterate single symbol section with:
+>
+>   struct elf_sym_iter iter;
+>   struct elf_sym *sym;
+>
+>   if (elf_sym_iter_new(&iter, elf, binary_path, SHT_DYNSYM))
+>         goto error;
+>
+>   while ((sym =3D elf_sym_iter_next(&iter))) {
+>         ...
+>   }
+>
+> I considered opening the elf inside the iterator and iterate all symbol
+> sections, but then it gets more complicated wrt user checks for when
+> the next section is processed.
+>
+> Plus side is the we don't need 'exit' function, because caller/user is
+> in charge of that.
+>
+> The returned iterated symbol object from elf_sym_iter_next function
+> is placed inside the struct elf_sym_iter, so no extra allocation or
+> argument is needed.
+>
+> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  tools/lib/bpf/elf.c | 178 +++++++++++++++++++++++++++++---------------
+>  1 file changed, 117 insertions(+), 61 deletions(-)
+>
+
+A bunch of nits, but overall looks good. Please address nits, and add my ac=
+k
+
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+
+> diff --git a/tools/lib/bpf/elf.c b/tools/lib/bpf/elf.c
+> index 74e35071d22e..fcce4bd2478f 100644
+> --- a/tools/lib/bpf/elf.c
+> +++ b/tools/lib/bpf/elf.c
+> @@ -59,6 +59,108 @@ static Elf_Scn *elf_find_next_scn_by_type(Elf *elf, i=
+nt sh_type, Elf_Scn *scn)
+>         return NULL;
+>  }
+>
+> +struct elf_sym {
+> +       const char *name;
+> +       GElf_Sym sym;
+> +       GElf_Shdr sh;
+> +};
+> +
+
+if we want to use elf_sym_iter outside of elf.c, this should be in
+libbpf_internal.h?
+
+> +struct elf_sym_iter {
+> +       Elf *elf;
+> +       Elf_Data *syms;
+> +       size_t nr_syms;
+> +       size_t strtabidx;
+> +       size_t next_sym_idx;
+> +       struct elf_sym sym;
+> +       int st_type;
+> +};
+> +
+> +static int elf_sym_iter_new(struct elf_sym_iter *iter,
+> +                           Elf *elf, const char *binary_path,
+> +                           int sh_type, int st_type)
+> +{
+> +       Elf_Scn *scn =3D NULL;
+> +       GElf_Ehdr ehdr;
+> +       GElf_Shdr sh;
+> +
+> +       memset(iter, 0, sizeof(*iter));
+> +
+> +       if (!gelf_getehdr(elf, &ehdr)) {
+> +               pr_warn("elf: failed to get ehdr from %s: %s\n", binary_p=
+ath, elf_errmsg(-1));
+> +               return -EINVAL;
+> +       }
+> +
+> +       scn =3D elf_find_next_scn_by_type(elf, sh_type, NULL);
+> +       if (!scn) {
+> +               pr_debug("elf: failed to find symbol table ELF sections i=
+n '%s'\n",
+> +                        binary_path);
+> +               return -ENOENT;
+> +       }
+> +
+> +       if (!gelf_getshdr(scn, &sh))
+> +               return -EINVAL;
+> +
+> +       iter->strtabidx =3D sh.sh_link;
+> +       iter->syms =3D elf_getdata(scn, 0);
+> +       if (!iter->syms) {
+> +               pr_warn("elf: failed to get symbols for symtab section in=
+ '%s': %s\n",
+> +                       binary_path, elf_errmsg(-1));
+> +               return -EINVAL;
+> +       }
+> +       iter->nr_syms =3D iter->syms->d_size / sh.sh_entsize;
+> +       iter->elf =3D elf;
+> +       iter->st_type =3D st_type;
+> +       return 0;
+> +}
+> +
+> +static struct elf_sym *elf_sym_iter_next(struct elf_sym_iter *iter)
+> +{
+> +       struct elf_sym *ret =3D &iter->sym;
+> +       GElf_Sym *sym =3D &ret->sym;
+> +       const char *name =3D NULL;
+> +       Elf_Scn *sym_scn;
+> +       size_t idx;
+> +
+> +       for (idx =3D iter->next_sym_idx; idx < iter->nr_syms; idx++) {
+> +               if (!gelf_getsym(iter->syms, idx, sym))
+> +                       continue;
+> +               if (GELF_ST_TYPE(sym->st_info) !=3D iter->st_type)
+> +                       continue;
+> +               name =3D elf_strptr(iter->elf, iter->strtabidx, sym->st_n=
+ame);
+> +               if (!name)
+> +                       continue;
+> +
+> +               /* Transform symbol's virtual address (absolute for
+> +                * binaries and relative for shared libs) into file
+> +                * offset, which is what kernel is expecting for
+> +                * uprobe/uretprobe attachment.
+> +                * See Documentation/trace/uprobetracer.rst for more
+> +                * details.
+> +                * This is done by looking up symbol's containing
+> +                * section's header and using iter's virtual address
+> +                * (sh_addr) and corresponding file offset (sh_offset)
+> +                * to transform sym.st_value (virtual address) into
+> +                * desired final file offset.
+> +                */
+
+this comment is misplaced? we don't do the translation here
+
+> +               sym_scn =3D elf_getscn(iter->elf, sym->st_shndx);
+> +               if (!sym_scn)
+> +                       continue;
+> +               if (!gelf_getshdr(sym_scn, &ret->sh))
+> +                       continue;
+> +
+> +               iter->next_sym_idx =3D idx + 1;
+> +               ret->name =3D name;
+> +               return ret;
+> +       }
+> +
+> +       return NULL;
+> +}
+> +
+> +static unsigned long elf_sym_offset(struct elf_sym *sym)
+> +{
+> +       return sym->sym.st_value - sym->sh.sh_addr + sym->sh.sh_offset;
+> +}
+> +
+>  /* Find offset of function name in the provided ELF object. "binary_path=
+" is
+>   * the path to the ELF binary represented by "elf", and only used for er=
+ror
+>   * reporting matters. "name" matches symbol name or name@@LIB for librar=
+y
+> @@ -90,64 +192,36 @@ long elf_find_func_offset(Elf *elf, const char *bina=
+ry_path, const char *name)
+>          * reported as a warning/error.
+>          */
+>         for (i =3D 0; i < ARRAY_SIZE(sh_types); i++) {
+> -               size_t nr_syms, strtabidx, idx;
+> -               Elf_Data *symbols =3D NULL;
+> -               Elf_Scn *scn =3D NULL;
+> +               struct elf_sym_iter iter;
+> +               struct elf_sym *sym;
+>                 int last_bind =3D -1;
+> -               const char *sname;
+> -               GElf_Shdr sh;
+> +               int curr_bind;
+
+OCD nit:
+
+$ rg 'curr(_|\b)' | wc -l
+8
+$ rg 'cur(_|\b)' | wc -l
+148
+
+and those 8 I consider an unfortunate accident ;) let's standardize on
+using "cur" consistently
+
+>
+> -               scn =3D elf_find_next_scn_by_type(elf, sh_types[i], NULL)=
+;
+> -               if (!scn) {
+> -                       pr_debug("elf: failed to find symbol table ELF se=
+ctions in '%s'\n",
+> -                                binary_path);
+> -                       continue;
+> -               }
+> -               if (!gelf_getshdr(scn, &sh))
+> -                       continue;
+> -               strtabidx =3D sh.sh_link;
+> -               symbols =3D elf_getdata(scn, 0);
+> -               if (!symbols) {
+> -                       pr_warn("elf: failed to get symbols for symtab se=
+ction in '%s': %s\n",
+> -                               binary_path, elf_errmsg(-1));
+> -                       ret =3D -LIBBPF_ERRNO__FORMAT;
+> +               ret =3D elf_sym_iter_new(&iter, elf, binary_path, sh_type=
+s[i], STT_FUNC);
+> +               if (ret) {
+> +                       if (ret =3D=3D -ENOENT)
+> +                               continue;
+>                         goto out;
+
+another styling nit: let's avoid unnecessary nesting of ifs:
+
+if (ret =3D=3D -ENOENT)
+    continue;
+if (ret)
+    goto out;
+
+simple and clean
+
+
+>                 }
+> -               nr_syms =3D symbols->d_size / sh.sh_entsize;
+> -
+> -               for (idx =3D 0; idx < nr_syms; idx++) {
+> -                       int curr_bind;
+> -                       GElf_Sym sym;
+> -                       Elf_Scn *sym_scn;
+> -                       GElf_Shdr sym_sh;
+> -
+> -                       if (!gelf_getsym(symbols, idx, &sym))
+> -                               continue;
+> -
+> -                       if (GELF_ST_TYPE(sym.st_info) !=3D STT_FUNC)
+> -                               continue;
+> -
+> -                       sname =3D elf_strptr(elf, strtabidx, sym.st_name)=
+;
+> -                       if (!sname)
+> -                               continue;
+> -
+> -                       curr_bind =3D GELF_ST_BIND(sym.st_info);
+>
+> +               while ((sym =3D elf_sym_iter_next(&iter))) {
+>                         /* User can specify func, func@@LIB or func@@LIB_=
+VERSION. */
+> -                       if (strncmp(sname, name, name_len) !=3D 0)
+> +                       if (strncmp(sym->name, name, name_len) !=3D 0)
+>                                 continue;
+>                         /* ...but we don't want a search for "foo" to mat=
+ch 'foo2" also, so any
+>                          * additional characters in sname should be of th=
+e form "@@LIB".
+>                          */
+> -                       if (!is_name_qualified && sname[name_len] !=3D '\=
+0' && sname[name_len] !=3D '@')
+> +                       if (!is_name_qualified && sym->name[name_len] !=
+=3D '\0' && sym->name[name_len] !=3D '@')
+>                                 continue;
+>
+> -                       if (ret >=3D 0) {
+> +                       curr_bind =3D GELF_ST_BIND(sym->sym.st_info);
+> +
+> +                       if (ret > 0) {
+
+used to be >=3D, why the change?
+
+>                                 /* handle multiple matches */
+>                                 if (last_bind !=3D STB_WEAK && curr_bind =
+!=3D STB_WEAK) {
+>                                         /* Only accept one non-weak bind.=
+ */
+>                                         pr_warn("elf: ambiguous match for=
+ '%s', '%s' in '%s'\n",
+> -                                               sname, name, binary_path)=
+;
+> +                                               sym->name, name, binary_p=
+ath);
+>                                         ret =3D -LIBBPF_ERRNO__FORMAT;
+>                                         goto out;
+>                                 } else if (curr_bind =3D=3D STB_WEAK) {
+> @@ -158,25 +232,7 @@ long elf_find_func_offset(Elf *elf, const char *bina=
+ry_path, const char *name)
+>                                 }
+>                         }
+>
+> -                       /* Transform symbol's virtual address (absolute f=
+or
+> -                        * binaries and relative for shared libs) into fi=
+le
+> -                        * offset, which is what kernel is expecting for
+> -                        * uprobe/uretprobe attachment.
+> -                        * See Documentation/trace/uprobetracer.rst for m=
+ore
+> -                        * details.
+> -                        * This is done by looking up symbol's containing
+> -                        * section's header and using it's virtual addres=
+s
+> -                        * (sh_addr) and corresponding file offset (sh_of=
+fset)
+> -                        * to transform sym.st_value (virtual address) in=
+to
+> -                        * desired final file offset.
+> -                        */
+> -                       sym_scn =3D elf_getscn(elf, sym.st_shndx);
+> -                       if (!sym_scn)
+> -                               continue;
+> -                       if (!gelf_getshdr(sym_scn, &sym_sh))
+> -                               continue;
+> -
+> -                       ret =3D sym.st_value - sym_sh.sh_addr + sym_sh.sh=
+_offset;
+> +                       ret =3D elf_sym_offset(sym);
+>                         last_bind =3D curr_bind;
+>                 }
+>                 if (ret > 0)
+> --
+> 2.41.0
+>
