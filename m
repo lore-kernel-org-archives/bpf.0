@@ -1,175 +1,135 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E95288F40
-	for <bpf@vger.kernel.org>; Thu,  6 Jul 2023 17:27:51 +0000 (UTC)
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CA01BE9
-	for <bpf@vger.kernel.org>; Thu,  6 Jul 2023 10:27:50 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id 5614622812f47-3a3790a0a48so865458b6e.1
-        for <bpf@vger.kernel.org>; Thu, 06 Jul 2023 10:27:50 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43A849460
+	for <bpf@vger.kernel.org>; Thu,  6 Jul 2023 17:42:35 +0000 (UTC)
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A341210F5
+	for <bpf@vger.kernel.org>; Thu,  6 Jul 2023 10:42:33 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fbc587febfso10308595e9.2
+        for <bpf@vger.kernel.org>; Thu, 06 Jul 2023 10:42:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688664470; x=1691256470;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7QHS/VR07ajDiBHiAQaH4sBwoJmZUdR5Oe/340tdBJA=;
-        b=jR014TIBx34PqhIfwNlZl/SjjekJltkMg1drpzGydi51tnvz8hKLC0v7cExjUF6690
-         r1nfr5OFVUlR360Lp/b7zv0149q5k/u9hxoGqjUM2PoTKGjx/LXI1pbTzGiA6ZcEG4bl
-         8PjBab5Kqi322RN7XLEJ2mRCI7lkGtnrSgnqiaOXIzvU6ydAg5xFIHyir+SCS3jXPLDT
-         Ph7AyZ3gTQwEei/p4ocdb9TXokOwem4IXuF6UMqnaGkJJYOCWJSN5foqwVybokuZL0rq
-         lVUAJgqEyIavAvWEKKInA/LQfJABHaxaQC50tRt5vrfZn/j6QXMwCBghC2cdCP+mqfnc
-         qPAw==
+        d=isovalent.com; s=google; t=1688665352; x=1691257352;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=tBMsdSZRAeT2RYt6RA7mHG2O68RNBhZpjcNxrjBNGUY=;
+        b=IT7sRqOlQZEImsrALaQB7cG4zG1RP9Y4mVJ2LdZLpHLMCUzaocUoHucl1jRjTooKwN
+         Hdh54OLTDYTGiY8nBj3aNDQa84FG7O89V4NBblqKkz/dODRJniDgaH4hERyLpwGyleRx
+         wDpz0MG8P7KXS8goSlJ2Bp1ZeBUbYBASfAN7QEpbDC/ATFjVvA7UX5YdF5s1M23RiIVz
+         JODCAJofI/WlBamds/iwQgZkdfHo1xtAA+eCCmVIWTXNrjQLk9+T/gcHnYCJgB+UP3Cb
+         XZWmMqUWBRnzerN9ZXxKl7hgPmdQmVDnNN+JhQRBGbsKaLp2UG6aYuPBVtJY1qlXQxvP
+         YgUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688664470; x=1691256470;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7QHS/VR07ajDiBHiAQaH4sBwoJmZUdR5Oe/340tdBJA=;
-        b=FzI33np10uvHzhQqeBK85LgJNK3YQ1qtSlQrk+Pj+ryPjwXhgSCwkv8LhAX439AbpV
-         8YTVibHOdnkXW91b67B6gzK4ZTQZ/7dTaQH5s3myx4CR0b9ssq64HwAWnO3+QlRQbjS/
-         MOPmXxPIxU36PX86SX4y6rK3LQellzgjqueJr/DJ5WlYD2vO9IqaP9Oa6VVVqnCQZ+lN
-         ZfsFdvZZ4tcxksC63eLdPty+BkKUufS6fFLWzv/kHZqPt8o0cD2s306st4wReji2qa8z
-         v4M2xMJRkzI25acEW2xCWq48DYgacMeMmca3jgL1Gy2sHGyFOA0QWxPAW7wQIV4YmDjA
-         oaKQ==
-X-Gm-Message-State: ABy/qLbtFqUjak3FAva0AuD3tun/O7WBqvT/uEEKDpMU+eGUdl5+naO6
-	rfE2XpicAwYlNCg/hSsMZNLS2IXBqwrpDEJ/+8T/ataghLDGC0BQX9U=
-X-Google-Smtp-Source: APBJJlFIBlvITdvF2gXEv0dJNHSb23rnclHLcMLWJSjHrRYlj43avwfou8Ov/vAFOC9XZxqGtvSsG97E0OPBUAdYH1U=
-X-Received: by 2002:a05:6808:b0a:b0:3a3:9f5a:c308 with SMTP id
- s10-20020a0568080b0a00b003a39f5ac308mr1965956oij.20.1688664469737; Thu, 06
- Jul 2023 10:27:49 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688665352; x=1691257352;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tBMsdSZRAeT2RYt6RA7mHG2O68RNBhZpjcNxrjBNGUY=;
+        b=YXCZA3IPlXBDf0MXKNs8B5UOmhkG+UgqEUQfgzf7qcOaWOh7duF+GCqiDrNHJqNim0
+         lRzrLCJMgLO/ZneW0oVSzAfCQklZNjx4S2xewDNMfg3IH4Mg7A/C/aVuoFUSsnDvStDm
+         wZhLn6s19clM0mqJjdWX8/Zpt3JbJV1T+4zkP3+nu2kIufGzfNQHiG6wKtJQ4ECKwSzy
+         RVB1X/XRYgvUVFcQwip4L7PAymGwLBShX9U28X12O9K9gbrVuoPsj13IjCC5PRCZO8wR
+         UT9sgiNpHam+Ps2t8f7XkwmNsn1nLT6BczTxYe5R3i/pw8eNqpoKp8eRiu/m+gneYcQu
+         ViFA==
+X-Gm-Message-State: ABy/qLY9bpXXtFVR34z75cA0xChNgraC5C+rzJ7gEuna6+3Cb3S8o+Q1
+	Bn0dEocJLBah7pmyZHpb+Kbhqw==
+X-Google-Smtp-Source: APBJJlFIWU5EnXMhICco8eD6LO3mJ6Hk0TrXsXTs/oNiFWYZeU8obldrmzkzt8LbOkEeOAhRpA9FiQ==
+X-Received: by 2002:a05:600c:230d:b0:3fb:a616:76b6 with SMTP id 13-20020a05600c230d00b003fba61676b6mr1819706wmo.40.1688665351982;
+        Thu, 06 Jul 2023 10:42:31 -0700 (PDT)
+Received: from zh-lab-node-5 ([2a02:168:f656:0:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id i14-20020adffdce000000b003141f96ed36sm2460670wrs.0.2023.07.06.10.42.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jul 2023 10:42:31 -0700 (PDT)
+Date: Thu, 6 Jul 2023 17:43:42 +0000
+From: Anton Protopopov <aspsk@isovalent.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH v4 bpf-next 6/6] selftests/bpf: check that ->elem_count
+ is non-zero for the hash map
+Message-ID: <ZKb9TjHX3GV35Yol@zh-lab-node-5>
+References: <20230705160139.19967-1-aspsk@isovalent.com>
+ <20230705160139.19967-7-aspsk@isovalent.com>
+ <CAADnVQLZMb3XqJFp8Oaz-83RzVHTV3EwJymKC817ekC57CNMBg@mail.gmail.com>
+ <ZKZUpW5QeOviHCne@zh-lab-node-5>
+ <CAADnVQJ4-j6bD9vicVi245cRMWijbW=jQhK5ioczBC-7FCi06A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230703181226.19380-1-larysa.zaremba@intel.com>
- <20230703181226.19380-19-larysa.zaremba@intel.com> <ZKWq142tp/tI6NI3@google.com>
- <ZKbLd8brydTvSocG@lincoln>
-In-Reply-To: <ZKbLd8brydTvSocG@lincoln>
-From: Stanislav Fomichev <sdf@google.com>
-Date: Thu, 6 Jul 2023 10:27:38 -0700
-Message-ID: <CAKH8qBv9Mj6xmC9ru7oVAamaT+PLO62m4NAkOg=YS2vGpWntGQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 18/20] selftests/bpf: Use AF_INET for TX in xdp_metadata
-To: Larysa Zaremba <larysa.zaremba@intel.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, yhs@fb.com, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, haoluo@google.com, 
-	jolsa@kernel.org, David Ahern <dsahern@gmail.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Willem de Bruijn <willemb@google.com>, Jesper Dangaard Brouer <brouer@redhat.com>, 
-	Anatoly Burakov <anatoly.burakov@intel.com>, Alexander Lobakin <alexandr.lobakin@intel.com>, 
-	Magnus Karlsson <magnus.karlsson@gmail.com>, Maryam Tahhan <mtahhan@redhat.com>, 
-	xdp-hints@xdp-project.net, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-	T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-	autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQJ4-j6bD9vicVi245cRMWijbW=jQhK5ioczBC-7FCi06A@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+	SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Thu, Jul 6, 2023 at 7:15=E2=80=AFAM Larysa Zaremba <larysa.zaremba@intel=
-.com> wrote:
->
-> On Wed, Jul 05, 2023 at 10:39:35AM -0700, Stanislav Fomichev wrote:
-> > On 07/03, Larysa Zaremba wrote:
-> > > The easiest way to simulate stripped VLAN tag in veth is to send a pa=
-cket
-> > > from VLAN interface, attached to veth. Unfortunately, this approach i=
-s
-> > > incompatible with AF_XDP on TX side, because VLAN interfaces do not h=
-ave
-> > > such feature.
-> > >
-> > > Replace AF_XDP packet generation with sending the same datagram via
-> > > AF_INET socket.
-> > >
-> > > This does not change the packet contents or hints values with one not=
-able
-> > > exception: rx_hash_type, which previously was expected to be 0, now i=
-s
-> > > expected be at least XDP_RSS_TYPE_L4.
-> > >
-> > > Also, usage of AF_INET requires a little more complicated namespace s=
-etup,
-> > > therefore open_netns() helper function is divided into smaller reusab=
-le
-> > > pieces.
+On Thu, Jul 06, 2023 at 10:03:30AM -0700, Alexei Starovoitov wrote:
+> On Wed, Jul 5, 2023 at 10:42 PM Anton Protopopov <aspsk@isovalent.com> wrote:
 > >
-> > Ack, it's probably OK for now, but, FYI, I'm trying to extend this part
-> > with TX metadata:
-> > https://lore.kernel.org/bpf/20230621170244.1283336-10-sdf@google.com/
-> >
-> > So probably long-term I'll switch it back to AF_XDP but will add
-> > support for requesting vlan TX "offload" from the veth.
-> >
->
-> My bad for not reading your series. Amazing work as always!
->
-> So, 'requesting vlan TX "offload"' with new hints capabilities? This woul=
-d be
-> pretty neat.
->
-> But you think AF_INET TX is worth keeping for now, until TX hints are mat=
-ure?
->
-> > > Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
-> > > ---
-> > >  tools/testing/selftests/bpf/network_helpers.c |  37 +++-
-> > >  tools/testing/selftests/bpf/network_helpers.h |   3 +
-> > >  .../selftests/bpf/prog_tests/xdp_metadata.c   | 175 +++++++---------=
---
-> > >  3 files changed, 98 insertions(+), 117 deletions(-)
+> > On Wed, Jul 05, 2023 at 06:26:25PM -0700, Alexei Starovoitov wrote:
+> > > On Wed, Jul 5, 2023 at 9:00 AM Anton Protopopov <aspsk@isovalent.com> wrote:
+> > > >
+> > > > Previous commits populated the ->elem_count per-cpu pointer for hash maps.
+> > > > Check that this pointer is non-NULL in an existing map.
+> > > >
+> > > > Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
+> > > > ---
+> > > >  tools/testing/selftests/bpf/progs/map_ptr_kern.c | 3 +++
+> > > >  1 file changed, 3 insertions(+)
+> > > >
+> > > > diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+> > > > index db388f593d0a..d6e234a37ccb 100644
+> > > > --- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+> > > > +++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+> > > > @@ -33,6 +33,7 @@ struct bpf_map {
+> > > >         __u32 value_size;
+> > > >         __u32 max_entries;
+> > > >         __u32 id;
+> > > > +       __s64 *elem_count;
+> > > >  } __attribute__((preserve_access_index));
+> > > >
+> > > >  static inline int check_bpf_map_fields(struct bpf_map *map, __u32 key_size,
+> > > > @@ -111,6 +112,8 @@ static inline int check_hash(void)
+> > > >
+> > > >         VERIFY(check_default_noinline(&hash->map, map));
+> > > >
+> > > > +       VERIFY(map->elem_count != NULL);
+> > > > +
 > > >
-> > > diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/te=
-sting/selftests/bpf/network_helpers.c
-> > > index a105c0cd008a..19463230ece5 100644
-> > > --- a/tools/testing/selftests/bpf/network_helpers.c
-> > > +++ b/tools/testing/selftests/bpf/network_helpers.c
-> > > @@ -386,28 +386,51 @@ char *ping_command(int family)
-> > >     return "ping";
-> > >  }
-> > >
-> > > +int get_cur_netns(void)
-> > > +{
-> > > +   int nsfd;
-> > > +
-> > > +   nsfd =3D open("/proc/self/ns/net", O_RDONLY);
-> > > +   ASSERT_GE(nsfd, 0, "open /proc/self/ns/net");
-> > > +   return nsfd;
-> > > +}
-> > > +
-> > > +int get_netns(const char *name)
-> > > +{
-> > > +   char nspath[PATH_MAX];
-> > > +   int nsfd;
-> > > +
-> > > +   snprintf(nspath, sizeof(nspath), "%s/%s", "/var/run/netns", name)=
-;
-> > > +   nsfd =3D open(nspath, O_RDONLY | O_CLOEXEC);
-> > > +   ASSERT_GE(nsfd, 0, "open /proc/self/ns/net");
-> > > +   return nsfd;
-> > > +}
-> > > +
-> > > +int set_netns(int netns_fd)
-> > > +{
-> > > +   return setns(netns_fd, CLONE_NEWNET);
-> > > +}
+> > > imo that's worse than no test.
+> > > Just use kfunc here and get the real count?
 > >
-> > We have open_netns/close_netns in network_helpers.h that provide simila=
-r
-> > functionality, let's use them instead?
-> >
->
-> I have divided open_netns() into smaller pieces (see below), because the =
-code I
-> have added into xdp_metadata looked better with those smaller pieces (I h=
-ad to
-> switch namespace several times).
+> > Then, as I mentioned in the previous version, I will have to teach kfuncs to
+> > recognize const_ptr_to_map args just for the sake of this selftest, while we
+> > already testing all functionality in the new selftest for test_maps. So I would
+> > just omit this one. Or am I missing something?
+> 
+> 
+> Don't you want to do:
+>  val = bpf_map_lookup_elem(map, ...);
+>  cnt = bpf_map_sum_elem_count(map);
+> 
+> and that's the main use case ?
 
-Forgot to reply to this part. I missed the fact that you're extending
-network_helpers, sorry.
-But why do we need extra namespaces at all?
+Not sure I understand what this ^ use case is...
+
+Our primary use case is to [periodically] get the number of elements from the
+user space. We can do this using an iterator as you've suggested and what is
+tested in the added selftest.
+
+> So teaching the verifier to understand that const_ptr_to_map matches
+> BTF 'struct bpf_map *' is essential ?
