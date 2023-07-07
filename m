@@ -1,27 +1,27 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DBF5D511;
-	Fri,  7 Jul 2023 17:26:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 425F415AC1;
+	Fri,  7 Jul 2023 17:26:03 +0000 (UTC)
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D567B2721;
-	Fri,  7 Jul 2023 10:25:36 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CEE2722;
+	Fri,  7 Jul 2023 10:25:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=9OFTQy4da+FlURtx0iFj28PyB3bRtjOk5A+cfFSliqk=; b=Nb3+tjHkZzgVDrc9ANe3xJgExP
-	bdLw90P2bmR2x3jrRLUyLj4rQl5AT8O0lp05550iiJo5tOLHn1TfoIWgRjUEW2Z2Uf1mld5K8kwAb
-	WOHtCD7iKubqgBGzlkCwy6DENDp6St18SJ0pZ6wYsnt9EKD94AaUxJ4yLDNkjV/yfBNTVL3wrCE/J
-	H4KXhmwAmYPOCTu5TKfrYCnIMliqgKiD+L6bfyja8FyF4w0FqCucLbe9pIZBKdXdYLIqlBrZ6kUvd
-	PBvH3Xj3xSFike5HzWzAu3GiJeOiagFqYKxmhEMZAjYt1fEwLHYAYdve8zgW+gtyC8GA6rVJoNNr6
-	izY2sjZA==;
+	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=eZyrRNN1+SgBteE1cWRJ+w2gUBu9LiFA5b8EU7xvEAg=; b=RbZuc1oVK7jq8w9VWqWzamU4mL
+	bo4KBgBCly2tgIreIlGj7zvnyQaRMDN7QZDIaslOLw2ooYWRVRjJl6RtzhYcxcThPljcUYJmHHTnk
+	7LAW6C3M8evSZEJ2uKQGlpTO2Z2P6YQlZNj3lp+0251TM+cg7Tth2fpJts45awXzLIn0XSZlsXW6b
+	/dLOkqdRrjrEPm9ay/bO/aE1nbO6SLAv+GrLJpaLtC71uxCsWW8Z3CaLFWsGk2swAvqOkHyi7i9gg
+	kpxVWBf8lnR7+MuR5sTZVOLYvJSoV+VpqRvuqkVDEg9lMyk+ZFapU95XTnH5pYmaMLq3HTaFXVEj4
+	KBs7y2hw==;
 Received: from 226.206.1.85.dynamic.wline.res.cust.swisscom.ch ([85.1.206.226] helo=localhost)
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1qHpCc-000AwK-K3; Fri, 07 Jul 2023 19:25:06 +0200
+	id 1qHpCf-000Ax6-HO; Fri, 07 Jul 2023 19:25:09 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: ast@kernel.org
 Cc: andrii@kernel.org,
@@ -37,10 +37,12 @@ Cc: andrii@kernel.org,
 	bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
 	Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next v3 0/8] BPF link support for tc BPF programs
-Date: Fri,  7 Jul 2023 19:24:47 +0200
-Message-Id: <20230707172455.7634-1-daniel@iogearbox.net>
+Subject: [PATCH bpf-next v3 4/8] libbpf: Add link-based API for tcx
+Date: Fri,  7 Jul 2023 19:24:51 +0200
+Message-Id: <20230707172455.7634-5-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20230707172455.7634-1-daniel@iogearbox.net>
+References: <20230707172455.7634-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -57,93 +59,236 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-This series adds BPF link support for tc BPF programs. We initially
-presented the motivation, related work and design at last year's LPC
-conference in the networking & BPF track [0], and a recent update on
-our progress of the rework during this year's LSF/MM/BPF summit [1].
-The main changes are in first two patches and the last two have an
-extensive batch of test cases we developed along with it, please see
-individual patches for details. We tested this series with tc-testing
-selftest suite as well as BPF CI/selftests. Thanks!
+Implement tcx BPF link support for libbpf.
 
-v2 -> v3:
-  - Removal of BPF_F_FIRST/BPF_F_LAST from control UAPI (Toke, Stan)
-  - Along with that full rework of bpf_mprog internals to simplify
-    dependency management, looks much nicer now imho
-  - Just single bpf_mprog_cp instead of two (Andrii)
-  - atomic64_t for revision counter (Andrii)
-  - Evaluate target position and reject on conflicts (Andrii)
-  - Keep track of actual count in bpf_mprob_bundle (Andrii)
-  - Make combo of REPLACE and BEFORE/AFTER work (Andrii)
-  - Moved miniq as first struct member (Jamal)
-  - Rework tcx_link_attach with regards to rtnl (Jakub, Andrii)
-  - Moved wrappers after bpf_prog_detach_ops (Andrii)
-  - Removed union for relative_fd and friends for opts and link in
-    libbpf (Andrii)
-  - Add doc comments to attach/detach/query libbpf APIs (Andrii)
-  - Dropped SEC_ATTACHABLE_OPT (Andrii)
-  - Add an OPTS_ZEROED check to bpf_link_create (Andrii)
-  - Keep opts as the last argument in bpf_program_attach_fd (Andrii)
-  - Rework bpf_program_attach_fd (Andrii)
-  - Remove OPTS_GET before we checked OPTS_VALID in
-    bpf_program__attach_tcx (Andrii)
-  - Add `size_t :0;` to prevent compiler from leaving garbage (Andrii)
-  - Add helper macro to clear opts structs which I found useful
-    when writing tests
-  - Rework of both opts and link test cases to accommodate for changes
+The bpf_program__attach_fd() API has been refactored slightly in order to pass
+bpf_link_create_opts pointer as input.
 
-  [0] https://lpc.events/event/16/contributions/1353/
-  [1] http://vger.kernel.org/bpfconf2023_material/tcx_meta_netdev_borkmann.pdf
+A new bpf_program__attach_tcx() has been added on top of this which allows for
+passing all relevant data via extensible struct bpf_tcx_opts.
 
-Daniel Borkmann (8):
-  bpf: Add generic attach/detach/query API for multi-progs
-  bpf: Add fd-based tcx multi-prog infra with link support
-  libbpf: Add opts-based attach/detach/query API for tcx
-  libbpf: Add link-based API for tcx
-  libbpf: Add helper macro to clear opts structs
-  bpftool: Extend net dump with tcx progs
-  selftests/bpf: Add mprog API tests for BPF tcx opts
-  selftests/bpf: Add mprog API tests for BPF tcx links
+The program sections tcx/ingress and tcx/egress correspond to the hook locations
+for tc ingress and egress, respectively.
 
- MAINTAINERS                                   |    5 +-
- include/linux/bpf_mprog.h                     |  242 ++
- include/linux/netdevice.h                     |   15 +-
- include/linux/skbuff.h                        |    4 +-
- include/net/sch_generic.h                     |    2 +-
- include/net/tcx.h                             |  183 ++
- include/uapi/linux/bpf.h                      |   70 +-
- kernel/bpf/Kconfig                            |    1 +
- kernel/bpf/Makefile                           |    3 +-
- kernel/bpf/mprog.c                            |  429 ++++
- kernel/bpf/syscall.c                          |   83 +-
- kernel/bpf/tcx.c                              |  351 +++
- net/Kconfig                                   |    5 +
- net/core/dev.c                                |  267 +-
- net/core/filter.c                             |    4 +-
- net/sched/Kconfig                             |    4 +-
- net/sched/sch_ingress.c                       |   61 +-
- tools/bpf/bpftool/net.c                       |   86 +-
- tools/include/uapi/linux/bpf.h                |   70 +-
- tools/lib/bpf/bpf.c                           |  124 +-
- tools/lib/bpf/bpf.h                           |   97 +-
- tools/lib/bpf/libbpf.c                        |   74 +-
- tools/lib/bpf/libbpf.h                        |   16 +
- tools/lib/bpf/libbpf.map                      |    2 +
- tools/lib/bpf/libbpf_common.h                 |   11 +
- .../selftests/bpf/prog_tests/tc_helpers.h     |   72 +
- .../selftests/bpf/prog_tests/tc_links.c       | 1604 ++++++++++++
- .../selftests/bpf/prog_tests/tc_opts.c        | 2182 +++++++++++++++++
- .../selftests/bpf/progs/test_tc_link.c        |   40 +
- 29 files changed, 5878 insertions(+), 229 deletions(-)
- create mode 100644 include/linux/bpf_mprog.h
- create mode 100644 include/net/tcx.h
- create mode 100644 kernel/bpf/mprog.c
- create mode 100644 kernel/bpf/tcx.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_helpers.h
- create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_links.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_opts.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_tc_link.c
+For concrete usage examples, see the extensive selftests that have been
+developed as part of this series.
 
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+---
+ tools/lib/bpf/bpf.c      | 19 ++++++++++--
+ tools/lib/bpf/bpf.h      |  5 ++++
+ tools/lib/bpf/libbpf.c   | 62 ++++++++++++++++++++++++++++++++++------
+ tools/lib/bpf/libbpf.h   | 16 +++++++++++
+ tools/lib/bpf/libbpf.map |  1 +
+ 5 files changed, 92 insertions(+), 11 deletions(-)
+
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 3dfc43b477c3..d513c226b9aa 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -717,9 +717,9 @@ int bpf_link_create(int prog_fd, int target_fd,
+ 		    const struct bpf_link_create_opts *opts)
+ {
+ 	const size_t attr_sz = offsetofend(union bpf_attr, link_create);
+-	__u32 target_btf_id, iter_info_len;
++	__u32 target_btf_id, iter_info_len, relative_id;
++	int fd, err, relative;
+ 	union bpf_attr attr;
+-	int fd, err;
+ 
+ 	if (!OPTS_VALID(opts, bpf_link_create_opts))
+ 		return libbpf_err(-EINVAL);
+@@ -781,6 +781,21 @@ int bpf_link_create(int prog_fd, int target_fd,
+ 		if (!OPTS_ZEROED(opts, netfilter))
+ 			return libbpf_err(-EINVAL);
+ 		break;
++	case BPF_TCX_INGRESS:
++	case BPF_TCX_EGRESS:
++		relative = OPTS_GET(opts, tcx.relative_fd, 0);
++		relative_id = OPTS_GET(opts, tcx.relative_id, 0);
++		if (relative > 0 && relative_id)
++			return libbpf_err(-EINVAL);
++		if (relative_id) {
++			relative = relative_id;
++			attr.link_create.flags |= BPF_F_ID;
++		}
++		attr.link_create.tcx.relative_fd = relative;
++		attr.link_create.tcx.expected_revision = OPTS_GET(opts, tcx.expected_revision, 0);
++		if (!OPTS_ZEROED(opts, tcx))
++			return libbpf_err(-EINVAL);
++		break;
+ 	default:
+ 		if (!OPTS_ZEROED(opts, flags))
+ 			return libbpf_err(-EINVAL);
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 49e9d88fd9cf..044a74ffc38a 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -401,6 +401,11 @@ struct bpf_link_create_opts {
+ 			__s32 priority;
+ 			__u32 flags;
+ 		} netfilter;
++		struct {
++			__u32 relative_fd;
++			__u32 relative_id;
++			__u64 expected_revision;
++		} tcx;
+ 	};
+ 	size_t :0;
+ };
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 208aeee31823..7d4f4091dacf 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -134,6 +134,7 @@ static const char * const link_type_name[] = {
+ 	[BPF_LINK_TYPE_KPROBE_MULTI]		= "kprobe_multi",
+ 	[BPF_LINK_TYPE_STRUCT_OPS]		= "struct_ops",
+ 	[BPF_LINK_TYPE_NETFILTER]		= "netfilter",
++	[BPF_LINK_TYPE_TCX]			= "tcx",
+ };
+ 
+ static const char * const map_type_name[] = {
+@@ -11690,11 +11691,10 @@ static int attach_lsm(const struct bpf_program *prog, long cookie, struct bpf_li
+ }
+ 
+ static struct bpf_link *
+-bpf_program__attach_fd(const struct bpf_program *prog, int target_fd, int btf_id,
+-		       const char *target_name)
++bpf_program_attach_fd(const struct bpf_program *prog,
++		      int target_fd, const char *target_name,
++		      const struct bpf_link_create_opts *opts)
+ {
+-	DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts,
+-			    .target_btf_id = btf_id);
+ 	enum bpf_attach_type attach_type;
+ 	char errmsg[STRERR_BUFSIZE];
+ 	struct bpf_link *link;
+@@ -11712,7 +11712,7 @@ bpf_program__attach_fd(const struct bpf_program *prog, int target_fd, int btf_id
+ 	link->detach = &bpf_link__detach_fd;
+ 
+ 	attach_type = bpf_program__expected_attach_type(prog);
+-	link_fd = bpf_link_create(prog_fd, target_fd, attach_type, &opts);
++	link_fd = bpf_link_create(prog_fd, target_fd, attach_type, opts);
+ 	if (link_fd < 0) {
+ 		link_fd = -errno;
+ 		free(link);
+@@ -11728,19 +11728,58 @@ bpf_program__attach_fd(const struct bpf_program *prog, int target_fd, int btf_id
+ struct bpf_link *
+ bpf_program__attach_cgroup(const struct bpf_program *prog, int cgroup_fd)
+ {
+-	return bpf_program__attach_fd(prog, cgroup_fd, 0, "cgroup");
++	return bpf_program_attach_fd(prog, cgroup_fd, "cgroup", NULL);
+ }
+ 
+ struct bpf_link *
+ bpf_program__attach_netns(const struct bpf_program *prog, int netns_fd)
+ {
+-	return bpf_program__attach_fd(prog, netns_fd, 0, "netns");
++	return bpf_program_attach_fd(prog, netns_fd, "netns", NULL);
+ }
+ 
+ struct bpf_link *bpf_program__attach_xdp(const struct bpf_program *prog, int ifindex)
+ {
+ 	/* target_fd/target_ifindex use the same field in LINK_CREATE */
+-	return bpf_program__attach_fd(prog, ifindex, 0, "xdp");
++	return bpf_program_attach_fd(prog, ifindex, "xdp", NULL);
++}
++
++struct bpf_link *
++bpf_program__attach_tcx(const struct bpf_program *prog,
++			const struct bpf_tcx_opts *opts)
++{
++	LIBBPF_OPTS(bpf_link_create_opts, link_create_opts);
++	__u32 relative_id, flags;
++	int ifindex, relative_fd;
++
++	if (!OPTS_VALID(opts, bpf_tcx_opts))
++		return libbpf_err_ptr(-EINVAL);
++
++	relative_id = OPTS_GET(opts, relative_id, 0);
++	relative_fd = OPTS_GET(opts, relative_fd, 0);
++	flags = OPTS_GET(opts, flags, 0);
++	ifindex = OPTS_GET(opts, ifindex, 0);
++
++	/* validate we don't have unexpected combinations of non-zero fields */
++	if (!ifindex) {
++		pr_warn("prog '%s': target netdevice ifindex cannot be zero\n",
++			prog->name);
++		return libbpf_err_ptr(-EINVAL);
++	}
++	if (relative_fd > 0 && relative_id) {
++		pr_warn("prog '%s': relative_fd and relative_id cannot be set at the same time\n",
++			prog->name);
++		return libbpf_err_ptr(-EINVAL);
++	}
++	if (relative_id)
++		flags |= BPF_F_ID;
++
++	link_create_opts.tcx.expected_revision = OPTS_GET(opts, expected_revision, 0);
++	link_create_opts.tcx.relative_fd = relative_fd;
++	link_create_opts.tcx.relative_id = relative_id;
++	link_create_opts.flags = flags;
++
++	/* target_fd/target_ifindex use the same field in LINK_CREATE */
++	return bpf_program_attach_fd(prog, ifindex, "tc", &link_create_opts);
+ }
+ 
+ struct bpf_link *bpf_program__attach_freplace(const struct bpf_program *prog,
+@@ -11762,11 +11801,16 @@ struct bpf_link *bpf_program__attach_freplace(const struct bpf_program *prog,
+ 	}
+ 
+ 	if (target_fd) {
++		LIBBPF_OPTS(bpf_link_create_opts, target_opts);
++
+ 		btf_id = libbpf_find_prog_btf_id(attach_func_name, target_fd);
+ 		if (btf_id < 0)
+ 			return libbpf_err_ptr(btf_id);
+ 
+-		return bpf_program__attach_fd(prog, target_fd, btf_id, "freplace");
++		target_opts.target_btf_id = btf_id;
++
++		return bpf_program_attach_fd(prog, target_fd, "freplace",
++					     &target_opts);
+ 	} else {
+ 		/* no target, so use raw_tracepoint_open for compatibility
+ 		 * with old kernels
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 10642ad69d76..33f60a318e81 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -733,6 +733,22 @@ LIBBPF_API struct bpf_link *
+ bpf_program__attach_netfilter(const struct bpf_program *prog,
+ 			      const struct bpf_netfilter_opts *opts);
+ 
++struct bpf_tcx_opts {
++	/* size of this struct, for forward/backward compatibility */
++	size_t sz;
++	int ifindex;
++	__u32 flags;
++	__u32 relative_fd;
++	__u32 relative_id;
++	__u64 expected_revision;
++	size_t :0;
++};
++#define bpf_tcx_opts__last_field expected_revision
++
++LIBBPF_API struct bpf_link *
++bpf_program__attach_tcx(const struct bpf_program *prog,
++			const struct bpf_tcx_opts *opts);
++
+ struct bpf_map;
+ 
+ LIBBPF_API struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map);
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index a95d39bbef90..2a2db5c78048 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -397,4 +397,5 @@ LIBBPF_1.3.0 {
+ 		bpf_obj_pin_opts;
+ 		bpf_program__attach_netfilter;
+ 		bpf_prog_detach_opts;
++		bpf_program__attach_tcx;
+ } LIBBPF_1.2.0;
 -- 
 2.34.1
 
