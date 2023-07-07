@@ -1,193 +1,154 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F3E4D511
-	for <bpf@vger.kernel.org>; Fri,  7 Jul 2023 16:54:37 +0000 (UTC)
-Received: from sonic314-26.consmr.mail.ne1.yahoo.com (sonic314-26.consmr.mail.ne1.yahoo.com [66.163.189.152])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CE82736
-	for <bpf@vger.kernel.org>; Fri,  7 Jul 2023 09:54:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1688748848; bh=7dUG/tEyuCsnWvgTF+ykPusSsDtzDF4QTHRG8+l4fWM=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=k33JwQsSTksi1u+D4jg0dnnvzQuJoiIQuMELZK73bYM19E5jrrEVHxkKBATJ3CIQy4agP2hErjjpbFK76q7HdCYIMzMFXwxR7fAl1kg39dx1afZXa8eKMkvl9J4gBbWgVUT9ovyjCxIIgtauM7BidhyVu39YfW4acPysfAEXVYvuZl7B3sCiA131t6GRwKBU0juqrfNQMbtFlzBuWxz/ZEvEaCXXZ9tBx8wxwd4WHAQqDikU1cyFjooBiQyDkM3iMsb9y4e8QOgU6U25gxxleIijzzeJbZiiOKHYfAQxY/f70pXWSBHRz3+yS1xQrsrB+5ZRALrb4aTXkI2a4cwxWw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1688748848; bh=tx9k0TN1T8vin8wdHwO2nG4qX/v/r09tkKCH6Un2w5v=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=emeh3ncUq7JgNSue0N0j/Fgm2DlP2UHlUPyz3SHcLXk7/4WXmnygV/tkPu/tzU5Pdhk1HmJ3HhbQvuf3ujiGDlVD+MSsnbUanpaym0EOWXUuOF7lKHQPZNOEovV8mO3Ptziljka2f9Wa3cs3iITZTrxWwEBmFjqX7z1Pv83lss9PkL6FRrn6OPHVkgyUDIpGowNv3zInoCvxakXnwdq31asOYiQ4u+GsrLPNpjVl7FTpHSfqdgObppaIBzwISsVq7C8fiK9pHUJuR7DF1AKM6EJW7T1L38YCdEPKGq73+BF4nvP9IWUYhp+bKOQlMxOJRPoqEXJ9BSVNBFT0LOVvoA==
-X-YMail-OSG: 3cMWPXEVM1ksAsW6ExbAWo3xHajlrtgcL1H_yMZEUdZajHEEbDWayzDJl9unhFx
- V2I46457HBKjxa8YP9y9f1u7E2dRKrSawhO23vd.M4HcGojwyiRn6BEPRWf97aLuC1mflAnCm6tM
- WlczvkiigYXMFAWN3M2lpUd3aqyPu8u1pdBLbQsbWZ_zgEO3JXhcbAoVt0hz4_tuLMXFJZwbS5dq
- Q3lCh_w3aoC4DEytKBscnH5l_D_U5GAQG.hmNekYBnKtlQZN5V0GxmLcvqFBnmMIOaFl1g9oDXGg
- nOrtwRP61KHzW2nnxz0PVeW1qfevQ76WEKtjmFLMz8qjipv7oAG25p0iv1yqrnF9lzwyWWT8ycbq
- zcmilJsaDYje5auB6zVrV4YZcmxW0bEkHhOvupWVMZwvzyZKIMxGfofOVldwWz4yoaC1Hn7u72YR
- JtTz_aWAB6OFYHfjz8Uho0tT5dN2lLbmlS7t8Djh0kcyEZi.IjLlIsVJAvUfGg.TWWZl_95AyaJZ
- ObS9vycfzaNh0yNu1S1GeUoBkFQ1ep.bQq.OJscU9mjajdkcKE4kM7ZeiaaGrgH6_93_I_RfFj1I
- pWZ1mwpcWl0k.00tbVj4LFpBqlXg9ebnsDrSo8isUeecWGnetLsbKhXJT2jI5Hw6XgnAWLqo6mSW
- TOeKXX5ev0XF23DHQCj6tfN9TqAbmrHOXyEqjicTRaCOhQTztTSv3lvVSIxHH1EV0I8R1Q0tNMgF
- N1GsjrBW6AY6ds5Kgz_gBzPq8mpz.G3QX_lYEUf5hz5vEpvJ3qSnrUpOas_3Ahnnr5s_CWxLWG9V
- INjKYK4zVW84Me_kGJGqTp1NHHd_8AMvFCm_SktAmH7MddZnt6J6.jW0g11rjp7DSw_CqHNVdxs.
- efsQ_I6gtbLE6KLDw1s86Ky8WWT8.I6qQQIoBNT1czh8JumJb_Q9ALfGk2cm4FD2x0FVmmMQXYOy
- 1vptlrjZjD4A9KFEUDi.a2Sij2cUpwT3dDCvPevmhfwB55fYUXW9oBG9p6KLDXWQbpO._S4N25Mo
- Pa9dIiWCcSqhNZJlCRUFVCfK8ZNxJl.szRY6aYZfQmIOwmdorJQICm2KyjS0PRUxlfzXGHZZNMfO
- 4_hNr0d1HaRuprP9dz5rdIs8SO8X4FuAOPFBgKX.AG_6ei9y675CSr1dnhjDUWPWjEzwOSR6E31n
- eHrQM3hqPVOcMl3ILksF3a9poPzgwHE76Kf44UBZMCUNbZZhX7fcLvudutA25XNmxIx4iU8WUwTV
- 22mVXAZ3KFkOnNuBybve7TeQ82xSbgsC1qszhx4q2.3ygpDXhGRVeB4cuOC7omxDJJl472esmlLK
- 6OWWOkksKlawCNnw2ZfdSxnzHLNr6fXZw5Fy3hKPBQHjiegdLrb3vOaQWNFfKxeztI1UOMFqAgb1
- QveMIRWGYJwnd19GzrCkm20G2QQgzCJ5weBGd7TtxJ.RMAl.9mOnnF8z9GmNkZ8M7.Ql4K1zHxCS
- 5ILM49RYVmo9mEKRR9bQq5P.g3Hl2OjbCRKj0Rkoi23a0FsdA_enxgTUrwZAwg2VVClPLjU9lWw0
- eGwf9I9yecWmm.hnZ2Nhqc4Dxh7OisHW.GnBhxV7FbVuRDfqOU6G76wKBu9ElqHb62ZtaX0ati1F
- rwcGJbxMYgttxxvVOYa1Vf01GtMGZF4SDriwYiGdF2UiKU40GXZqHKHzKCkGXYd8vPEXp4b0twqk
- jj3TUHl6L.5zYYjjGo6b5UVUEMyyFbNSI.2t5XaRmq57Mo9N8mUbFxYZkMa4_eQvJ5isj4rDayPl
- W82bKlmpH_K3MXQVIlo6uKVnOrXkJDT1LHHLV75zNiSL_CoKoealpTCQRoX89LWDuemeKSKchEtD
- Z70z9z6TdKdFBCe7520rZCD_9pfY1EVwWzA28celp3YG.y0WmrysXXF9oXrzwU.M8i6LDKpuqT33
- .OzOUOLKgLmjD4RHP39pFa5uwWJYDLuGr_55ipZLcVUU9UJ1iE6rly3dbQDqyKVkxGgZ7QArEGQQ
- 6g5LHA8dDXtRjG4z3B7vGht8zmpVxM_H3nJUCpo4VontlqyNDXnN9b5_WllLCj1Sa3T9CM1rOB2d
- AtkiisZnRZjay67spOW1b2wib6ERZECTBRS.MNbmxRsLcZQd4rh0BoKAU9Nqy7Lt13.mTIbdExOy
- M8BtBJofjnnuIv21rHyKUwqDktBEXsv9O6ZfaEVPdWLe2f2hwdVJO0MfV7G5g.QmYeUCUUjQjkCo
- E5WGcnNmqH9xhqf9z2RMo9YzdRv0R.ccKma_5yP3jm4fOO6u2Cx9zYXrQKXzZIojrsNOSJqa8NhA
- cN5yEA_XMQQ3W
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 8a7232ca-1467-48de-b49b-55042b582814
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.ne1.yahoo.com with HTTP; Fri, 7 Jul 2023 16:54:08 +0000
-Received: by hermes--production-bf1-5d96b4b9f-2ghnc (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 74f4f2705c6e8c4c65d3815b934ef2a1;
-          Fri, 07 Jul 2023 16:54:02 +0000 (UTC)
-Message-ID: <a28c8fce-741b-e088-af5e-8a83daa7e25d@schaufler-ca.com>
-Date: Fri, 7 Jul 2023 09:53:57 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 183A5D511
+	for <bpf@vger.kernel.org>; Fri,  7 Jul 2023 16:55:57 +0000 (UTC)
+Received: from DM6FTOPR00CU001.outbound.protection.outlook.com (mail-centralusazon11020025.outbound.protection.outlook.com [52.101.61.25])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8533EB2
+	for <bpf@vger.kernel.org>; Fri,  7 Jul 2023 09:55:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=X8YESlRty3vEKjy2L/mpC7Tk2xKtqR1C/yLb7i4ZjWlxcx4y6RQhaAailJxCgC3grGw/BE4zoRTwPSCwGpaBTL3RrBNfV9RWUrgoPafhEoCXZNc8qzn+JRLbSHOO0CKLepKtopZgAaDKC8BoGdrMmycyEY+V8IuFgWp7yvXKwdtqmjp3kqpyy4PsbImaTcBSI0qACCrHglVBYCmab3aWscPswomtg2wQTpFweeIbzOxEIQEck7etuS7FiO7Nco87/7WRhFf3sJ7RYpDLj1tfu4dOAUQj7a8KFMg8VaKKPCbyEoH/D08WwWIFWSSXIkGLYGArzjaijm2eL3us7A8lQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gJfB+UhE3Y9PZTYsHsrIXux32cU4JOCsrGCYnRxZPeI=;
+ b=T75b+R39DPtOwl4WwZ8aiJqfYFoGta+mUfchsvWkFw4Rv1O7RNEbZTZSpMSs0vV6ExVzdvvQ5k0+MfMWgKahxPCWdO1eHulNsiUSUCDhwO3UUIKpe5a05OJiuYXIZUL1PchMQpRn+A8RXIRyizWszq2JoEzLbpcj63QlsMQfMAVyJp5ZwDHJ83g/xPVlomJaZiVmilUlbx69kpXLblB5vifb1SQFn8r/gnCxUlaWTVz7XXAADzFHzkqvetPtpdnAe3ykh8dBHeMWQKqtRR6fLLndg/gfxx99owJPD7RAW3Tfks1Jp2IQzlcVJ9OvmPEnHMPd7cyomYl+Vu3DRP4cdA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gJfB+UhE3Y9PZTYsHsrIXux32cU4JOCsrGCYnRxZPeI=;
+ b=VGCErMZrI3oszIMAxlfAj+gGzpwvH1yPlNWTNwODK8QQrUPk8rFrw2YlhNbZfKlFM2VhpzJFmukv5FfnIy+fkBexobQKiYEMmkrt54Ym5J8xwEbi+00p+c3+JZrT5Q/kSQxGgFOcgexKB23zAxnrhJvXj9Q5MUv9zvGDhJpLIAQ=
+Received: from PH7PR21MB3878.namprd21.prod.outlook.com (2603:10b6:510:243::22)
+ by MN2PR21MB1534.namprd21.prod.outlook.com (2603:10b6:208:202::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.13; Fri, 7 Jul
+ 2023 16:55:53 +0000
+Received: from PH7PR21MB3878.namprd21.prod.outlook.com
+ ([fe80::8708:6828:fb9f:7bd5]) by PH7PR21MB3878.namprd21.prod.outlook.com
+ ([fe80::8708:6828:fb9f:7bd5%4]) with mapi id 15.20.6544.010; Fri, 7 Jul 2023
+ 16:55:53 +0000
+From: Dave Thaler <dthaler@microsoft.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+CC: "bpf@ietf.org" <bpf@ietf.org>, bpf <bpf@vger.kernel.org>, Will Hawkins
+	<hawkinsw@obs.cr>
+Subject: RE: [Bpf] Instruction set extension policy
+Thread-Topic: [Bpf] Instruction set extension policy
+Thread-Index: AdmwKdCg+G2TzllJT+2ICM2r0nWi5AAR1CgAAABLvuAAHnesgAAAP1QAAAFmaSA=
+Date: Fri, 7 Jul 2023 16:55:53 +0000
+Message-ID:
+ <PH7PR21MB3878B1E6B39D36CBB5C65181A32DA@PH7PR21MB3878.namprd21.prod.outlook.com>
+References:
+ <PH7PR21MB387813A79D0094E47914C5A8A32CA@PH7PR21MB3878.namprd21.prod.outlook.com>
+ <CAADnVQJhfa+g227BX=3LijoXwgh7h3Z5V_ZF8tMeMWNZguAp5g@mail.gmail.com>
+ <PH7PR21MB3878DEA7280C274A8A18D082A32DA@PH7PR21MB3878.namprd21.prod.outlook.com>
+ <CAADnVQ+ogOVdwZSX4315hHe8bxP-yoYEacNPCP6CTHqn=Xp-uQ@mail.gmail.com>
+ <CADx9qWjUj5YP6Dr9g2GY6Yrf4-1K+5-v6wE6gYV_R9e3OjBnLw@mail.gmail.com>
+In-Reply-To:
+ <CADx9qWjUj5YP6Dr9g2GY6Yrf4-1K+5-v6wE6gYV_R9e3OjBnLw@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=537a9fa0-a6bd-41be-ac12-84577e2da1ad;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-07-07T16:47:53Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH7PR21MB3878:EE_|MN2PR21MB1534:EE_
+x-ms-office365-filtering-correlation-id: e79be928-f662-4af2-7244-08db7f0b0656
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ sK/KEmW8ELm6nZizoLOvshJp9VkmgHT1h7z+1EdHSOMY1d0EHUjOiYRUHRpFTauFUJYRQaTcE/1gpuDTHPtZq4WfK5W9q3uzanYW0NGm3Ms4OvEwCzAWn80N2EodBX95QCwPbdO/li8aIf7Y34PEDLnP6WLol3PVnTWHQx5avvn30m8yC5Eh+71OsX1QZGInA2OLXcm1p232iZG1JkF0n68e7UB8VTdxOui4E52QxcBQFNOEGMWl3RxK3odGHKQgRbFIScTRjODSSFYU5T9WaMPvxKJc/bFw+Z2El5QTyEIJGRJTbRL1gEir3UXu4ANn7ETaOvbdMPgoe3Qr/LB4uRyHJ22yXq7mqjBEGVQn8uSwGaPe/nrZhTJTEApcbzNSvA+ciJpTKsgE6fRM6bXVqaSgMbvsfLT1AiwT6jjn6QA8VHd/88UgEFk7C0IFG2Ksro/H371nNHBUfboYbKQ6Ihz9PN6bUeo04wxo/RDsvH/mPlDdODEMwXIOex7h6ciz1MmEDr/oxta3+xYQQ6rV4DVwRkaaWf1WXFCSj9OIv/u4vr7JJtbC1Cqdt+G/w+K+Y5EGdxV6Gp1i8ADptp3gUmBBjuzWuBGG0iNKbVqZ0uSjeGj/dBNsqSIybUbPYbO9SapAvHCuay/ko1QEiOmaceutSblohcXrx0BNXQjH14o=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR21MB3878.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(366004)(396003)(136003)(376002)(451199021)(55016003)(41300700001)(83380400001)(2906002)(66574015)(86362001)(52536014)(478600001)(10290500003)(71200400001)(7696005)(186003)(9686003)(26005)(33656002)(38070700005)(6506007)(53546011)(8676002)(5660300002)(8936002)(54906003)(122000001)(76116006)(82960400001)(82950400001)(8990500004)(38100700002)(64756008)(316002)(66446008)(66556008)(66476007)(66946007)(4326008)(6916009);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?eXNrY3gvVjBmeS81QkxBYzB4UFk1VFQ4Vlg5elhOUzNpTFN1Vmk5OHlsb3pV?=
+ =?utf-8?B?ajM2TXZQMEpOSHdOQnZQdW1pcmFIK0ttcFVVTnVtcVFLTTZncGo0QlBDQWxU?=
+ =?utf-8?B?RUNKYncrNFV3SHdKMHgzcXk1MTQ1Q0hIdGRxUG5nTU8yNjdudnFLa2szb2dC?=
+ =?utf-8?B?bFA4T1JwNWthSkcvSXFabTRMMHB0WHpUbWtNT3NMQ3ZNd1FKV1NwZkxhenRj?=
+ =?utf-8?B?UUN4RUZKcWxQRnlBeWJsQTVPQTN2MHdtY00vYXdZQnNkbDY1OVA5SnBjenN6?=
+ =?utf-8?B?UzcwZ1Z1b3ZnSnZ0Q2FJaTI4Z3FCVm1lUXVrOUw1SS9qcnFNa04xUndQSkJE?=
+ =?utf-8?B?WldyS3lEZnhaSVRiWG4ycldmTGNMczJMNE4yQVM0YnJyeTRFWHgySzdYcUZT?=
+ =?utf-8?B?QVdDUFVqQ3BqRXJva0YxZlIxclFpTjl4RjQ1MCsyUHk3RDVmQUY1OUI0VStp?=
+ =?utf-8?B?TkVRRU1qOW9tamJOMFIyRzN2dnBOVnNvM2pGNlFhUDNrMG5td3VmK1hPejNH?=
+ =?utf-8?B?K2w1dHFxazU2TThkNVdUQklwZG1mUlZWV0ppY0ZVendlcERWQVVWZTBSSUd2?=
+ =?utf-8?B?ZFR4bEl6c0xQTTAzQVdNdXNnS2FDdnIvakpYWjlYdFRKNEZwYXpoUVU2bmVy?=
+ =?utf-8?B?dEh5NlhGKy9UZkM2NlZRTzVxQTdDZEZaemtCOUdscVBWYkJBYzZtbGNsYzRB?=
+ =?utf-8?B?bmpab3lHSk96dG9mOXJFQlk2b1JMVFcwRXJwWnFyYkgyaDFRZEUvTndOSWlX?=
+ =?utf-8?B?NXdCcWRGdG92bWZ0ZjZrT21scGIyL1UrZ3B1VlpLR1dZU1BmbjV5WWM4L0ty?=
+ =?utf-8?B?Vm9BVzlic3I5TjdPa3RUYUY5dlM3eUlKNTFUekNoZ3NER3J0ZzRuYkhrbXVu?=
+ =?utf-8?B?N3N2QjJ5SUZ4c1hlWndBN1V2M0R5dDIyQ3crU2xUallyb3FSdm1mazZpdGEw?=
+ =?utf-8?B?ZGxvVmg4U25CT21obVNYYWNMdjdLMHhhKzJCQkROUGRxZ1RLcE1HM2hDZ28r?=
+ =?utf-8?B?Zk5OSkwyY3FXNUtYcXc5cnBRMmFObUYyTERUZVl5L3NoS2dUUndsbGszQzVB?=
+ =?utf-8?B?MnlhMlo0SW1lSVBPY3JtNmozWEZBa0xlajRMMmFJbGFuVjhUd0hUZDJiQ2RV?=
+ =?utf-8?B?Z25PTlpWalcrZG54ZklvVHdkbENBdlEwYUR6UHlaT1dVU1hYcmlRQTZpbHZn?=
+ =?utf-8?B?V1EvbkdzM1c0b0pFaktCVXE5S1NvM1NOYkFYcmRqWFB2TFpzeEx2eFFDcXRN?=
+ =?utf-8?B?RnFDejJ5TlVqOXFzQkZPcThwUVQ4YktBQktJTHE0QWNaRzk5RmswSHBpY1JM?=
+ =?utf-8?B?bmFueTNZRStNWkwvQzVqRFRLYTl4QkRuUnJ1L3BrOUhaQXlCRFdyVjFLc3Y4?=
+ =?utf-8?B?aGhoWGtuYVdYc3V2bDVDNG1DT1JKZFBhRGpHL296R2xOMDJMRTNSMmdDbjg3?=
+ =?utf-8?B?RjNjaHN6bWRuQnBpQ0ZmNVMxc3ZjZjhNZjBYSmVRaUtKdUVxcmxxUTBYK040?=
+ =?utf-8?B?dFZDbGR4OUN0R2x5NXpCWE9NSU5oNkR0N3I0dVJXU3lQMC9UM1dHc01DV1Q3?=
+ =?utf-8?B?aitCNXBnU3cwWmV4bWFYRHpGZmtZTWdEV1Z0YXc5elk2UG9TcHM0cktQanV3?=
+ =?utf-8?B?L0dWd0JnaTViZzR4c3drcWpQazdPaTNTMFpTOTRmSXpKblcyaUJNU3V5UmlU?=
+ =?utf-8?B?UWxneWVPVDBVdE5ZV2QzbHZMVjUwb2k3bmpOTmxkUGpEMnBRamdVQjRWdlVo?=
+ =?utf-8?B?dVpDUi9RRWErZEE3cDhTeXBZanYrdHlRazJCdFhUZmIvOTh2QVU2U0RuVSti?=
+ =?utf-8?B?M2twWFVvUzdTWnlVOGxZcThDckVsaW9NRk16aUViVkRQNGZiWUhXWEtNY0Y2?=
+ =?utf-8?B?UUZXcXA5d3duSGp0cWU5d2pxTHhiYWdSR2NYZHN0c1cyZ0ZIMDFTeS9XamFW?=
+ =?utf-8?B?dUhJNUNscGxMeFdaaGY5cFlUeDFUbW0yRXZqQU04TmpHYzhuUkFTQWZNZnl4?=
+ =?utf-8?B?RG5LNm5iUWxtS0lvblhiSE9SRlAzNW5ub0R4ZjM4Y0k1U0o4TkVBVTJNODFx?=
+ =?utf-8?B?Q243SlVwa1kvS2MyY0FHQnRtTjNuNWdqMHo2NDViczdiZnpZYjJlU2NPcDBt?=
+ =?utf-8?B?d0MyTHdOdEZXL1FoZ24xdmdlMEZPNnBocjRjZUY5VEtNZnFFWld1WjFqTnBY?=
+ =?utf-8?B?c2c9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v12 1/4] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-Content-Language: en-US
-To: Paul Moore <paul@paul-moore.com>,
- Roberto Sassu <roberto.sassu@huaweicloud.com>, zohar@linux.ibm.com,
- dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
- stephen.smalley.work@gmail.com, eparis@parisplace.org
-Cc: linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
- linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
- bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
- nicolas.bouchinet@clip-os.org, Roberto Sassu <roberto.sassu@huawei.com>,
- Casey Schaufler <casey@schaufler-ca.com>
-References: <20230610075738.3273764-2-roberto.sassu@huaweicloud.com>
- <1c8c612d99e202a61e6a6ecf50d4cace.paul@paul-moore.com>
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <1c8c612d99e202a61e6a6ecf50d4cace.paul@paul-moore.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.21638 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-	T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR21MB3878.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e79be928-f662-4af2-7244-08db7f0b0656
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2023 16:55:53.0523
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Jqgkn8ucn9QP3wlY3q0PxchkEGOiZraYcj0U0g3iYrkgjUYCvI7/kHYHunfWq/rKTV0rX+OWm06OsHwdFipD47mctnz8aperu1Ir2F3qFSU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR21MB1534
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+	RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+	T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 7/6/2023 6:43 PM, Paul Moore wrote:
-> On Jun 10, 2023 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
->> Currently, the LSM infrastructure supports only one LSM providing an xattr
->> and EVM calculating the HMAC on that xattr, plus other inode metadata.
->>
->> Allow all LSMs to provide one or multiple xattrs, by extending the security
->> blob reservation mechanism. Introduce the new lbs_xattr_count field of the
->> lsm_blob_sizes structure, so that each LSM can specify how many xattrs it
->> needs, and the LSM infrastructure knows how many xattr slots it should
->> allocate.
->>
->> Modify the inode_init_security hook definition, by passing the full
->> xattr array allocated in security_inode_init_security(), and the current
->> number of xattr slots in that array filled by LSMs. The first parameter
->> would allow EVM to access and calculate the HMAC on xattrs supplied by
->> other LSMs, the second to not leave gaps in the xattr array, when an LSM
->> requested but did not provide xattrs (e.g. if it is not initialized).
->>
->> Introduce lsm_get_xattr_slot(), which LSMs can call as many times as the
->> number specified in the lbs_xattr_count field of the lsm_blob_sizes
->> structure. During each call, lsm_get_xattr_slot() increments the number of
->> filled xattrs, so that at the next invocation it returns the next xattr
->> slot to fill.
->>
->> Cleanup security_inode_init_security(). Unify the !initxattrs and
->> initxattrs case by simply not allocating the new_xattrs array in the
->> former. Update the documentation to reflect the changes, and fix the
->> description of the xattr name, as it is not allocated anymore.
->>
->> Adapt both SELinux and Smack to use the new definition of the
->> inode_init_security hook, and to call lsm_get_xattr_slot() to obtain and
->> fill the reserved slots in the xattr array.
->>
->> Move the xattr->name assignment after the xattr->value one, so that it is
->> done only in case of successful memory allocation.
->>
->> Finally, change the default return value of the inode_init_security hook
->> from zero to -EOPNOTSUPP, so that BPF LSM correctly follows the hook
->> conventions.
->>
->> Reported-by: Nicolas Bouchinet <nicolas.bouchinet@clip-os.org>
->> Link: https://lore.kernel.org/linux-integrity/Y1FTSIo+1x+4X0LS@archlinux/
->> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
->> ---
->>  include/linux/lsm_hook_defs.h |  6 +--
->>  include/linux/lsm_hooks.h     | 20 ++++++++++
->>  security/security.c           | 71 +++++++++++++++++++++++------------
->>  security/selinux/hooks.c      | 17 +++++----
->>  security/smack/smack_lsm.c    | 25 ++++++------
->>  5 files changed, 92 insertions(+), 47 deletions(-)
-> Two *very* small suggestions below, but I can make those during the
-> merge if you are okay with that Roberto?
->
-> I'm also going to assume that Casey is okay with the Smack portion of
-> this patchset?  It looks fine to me, and considering his ACK on the
-> other Smack patch in this patchset I'm assuming he is okay with this
-> one as well ... ?
-
-Yes, please feel free to add my Acked-by as needed.
-
->
->> diff --git a/security/security.c b/security/security.c
->> index ee4f1cc4902..d5ef7df1ce4 100644
->> --- a/security/security.c
->> +++ b/security/security.c
->> @@ -1591,11 +1592,15 @@ EXPORT_SYMBOL(security_dentry_create_files_as);
->>   * created inode and set up the incore security field for the new inode.  This
->>   * hook is called by the fs code as part of the inode creation transaction and
->>   * provides for atomic labeling of the inode, unlike the post_create/mkdir/...
->> - * hooks called by the VFS.  The hook function is expected to allocate the name
->> - * and value via kmalloc, with the caller being responsible for calling kfree
->> - * after using them.  If the security module does not use security attributes
->> - * or does not wish to put a security attribute on this particular inode, then
->> - * it should return -EOPNOTSUPP to skip this processing.
->> + * hooks called by the VFS.  The hook function is expected to populate the
->> + * @xattrs array, by calling lsm_get_xattr_slot() to retrieve the slots
-> I think we want to change "@xattrs array" to just "xattrs array" as
-> there is no function parameter named "xattrs" in the LSM/security_XXX
-> hook itself, just in the 'inode_init_security' hook implementation.
->
-> I might also break the new text describing the hook implementation
-> into a new paragraph.
->
->> + * reserved by the security module with the lbs_xattr_count field of the
->> + * lsm_blob_sizes structure.  For each slot, the hook function should set ->name
->> + * to the attribute name suffix (e.g. selinux), to allocate ->value (will be
->> + * freed by the caller) and set it to the attribute value, to set ->value_len to
->> + * the length of the value.  If the security module does not use security
->> + * attributes or does not wish to put a security attribute on this particular
->> + * inode, then it should return -EOPNOTSUPP to skip this processing.
->>   *
->>   * Return: Returns 0 on success, -EOPNOTSUPP if no security attribute is
->>   * needed, or -ENOMEM on memory allocation failure.
->> @@ -1604,33 +1609,51 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
->>  				 const struct qstr *qstr,
->>  				 const initxattrs initxattrs, void *fs_data)
->>  {
->> -	struct xattr new_xattrs[MAX_LSM_EVM_XATTR + 1];
->> -	struct xattr *lsm_xattr, *evm_xattr, *xattr;
->> -	int ret;
->> +	struct security_hook_list *P;
-> The above comments were nitpicky, this one is even more so ...
-> convention within security/security.c is to call the
-> security_hook_list pointer "hp", not "P" (although I recognize P is
-> used in the macro).
->
->> +	struct xattr *new_xattrs = NULL;
->> +	int ret = -EOPNOTSUPP, xattr_count = 0;
-> --
-> paul-moore.com
+QWxleGVpIFN0YXJvdm9pdG92IDxhbGV4ZWkuc3Rhcm92b2l0b3ZAZ21haWwuY29tPiB3cm90ZToN
+Cj4gPiBPbiBUaHUsIEp1bCA2LCAyMDIzIGF0IDY6MzXigK9QTSBEYXZlIFRoYWxlciA8ZHRoYWxl
+ckBtaWNyb3NvZnQuY29tPg0KPiB3cm90ZToNCj4gPiA+DQo+ID4gPiBJIGRvbid0IHNlZSBhbnkg
+cHJvYmxlbSB3aXRoIGRlZmluaW5nIGFuIElBTkEgcmVnaXN0cnkgd2l0aCBtdWx0aXBsZQ0KPiA+
+ID4gImtleSIgZmllbGRzIChvcGNvZGUrc3JjK2ltbSkuICBBbGwgZXhpc3RpbmcgaW5zdHJ1Y3Rp
+b25zIGNhbiBiZSBkb25lIGFzDQo+IHN1Y2guDQo+ID4gPg0KPiA+ID4gQmVsb3cgaXMgc3RyYXdt
+YW4gdGV4dCB0aGF0IEkgdGhpbmsgZm9sbG93cyBJQU5BJ3MgcmVxdWlyZW1lbnRzDQo+ID4gPiBv
+dXRsaW5lZCBpbiBSRkMgODEyNi4uLg0KWy4uXQ0KPiA+IEkgdGhpbmsgdGhhdCBtaWdodCB3b3Jr
+LiBXaGF0IGlzIHRoZSBuZXh0IHN0ZXAgdGhlbj8NCj4gPiBXaG8gaXMgZ29pbmcgdG8gZ2VuZXJh
+dGUgc3VjaCBhIGhleCBkYXRhYmFzZT8NCj4gDQo+IEkgd291bGQgYmUgbW9yZSB0aGFuIGhhcHB5
+IHRvIGRvIHRoYXQhDQo+IFdpbGwNCg0KUkZDIDgxMjYgcmVxdWlyZXMgc3BlY2lmeWluZyB0aGUg
+aW5pdGlhbCBzZXQgb2YgaXRlbXMgaW4gdGhlIGRyYWZ0LCB3aGljaA0KdXBvbiBwdWJsaWNhdGlv
+biwgSUFOQSB3aWxsIHVzZSBhcyB0aGUgc2VlZCBsaXN0IGFuZCB0aGVuIGJlIHRoZSBvZmZpY2lh
+bA0KbGlzdCBvZiB3aGF0IGlzIHJlZ2lzdGVyZWQuICBJIGFscmVhZHkgaGFkIGEgbGlzdCBpbiB0
+aGUgQXBwZW5kaXggb2YgdGhlIGRyYWZ0DQp3aGljaCBjYW4gYmUgdXNlZC91cGRhdGVkIHRvIGJl
+IHRoYXQgbGlzdC4NCg0KSSBub3cgaGF2ZSB0aGUgSUFOQSBDb25zaWRlcmF0aW9ucyB0ZXh0IGFi
+b3ZlIGluIGEgY2hhbmdlIHRvIHRoZSBJbnRlcm5ldA0KRHJhZnQgYm9pbGVycGxhdGUgdGhhdCBz
+dXJyb3VuZHMgdGhlIGluc3RydWN0aW9uLXNldC5yc3QuICBTaW5jZSB0aGUgZGVhZGxpbmUNCmZv
+ciBJLUQgc3VibWlzc2lvbiBpcyBNb25kYXksIEkgcGxhbiB0byBtYWtlIHRoZSBjaGFuZ2UgYW5k
+IHBvc3QgaXQgb24NCk1vbmRheSBhZnRlciBtYWtpbmcgc3VyZSBhbnkgb3RoZXIgaW5zdHJ1Y3Rp
+b24tc2V0LnJzdCBjaGFuZ2VzIGdldCBwaWNrZWQNCnVwLg0KDQpEYXZlDQo=
