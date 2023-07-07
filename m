@@ -1,168 +1,140 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB34011181
-	for <bpf@vger.kernel.org>; Fri,  7 Jul 2023 17:58:21 +0000 (UTC)
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13ACE2108;
-	Fri,  7 Jul 2023 10:58:19 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fbc5d5742bso24036655e9.2;
-        Fri, 07 Jul 2023 10:58:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688752697; x=1691344697;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hk068Nxcv+Fpb+4P5bvL3hcI9mjOk06ChPeSbklSE5o=;
-        b=izs4M121YqcnTik7wekJ7P14S1RdvCsHRkwmNPsZY9wNO7VJpp5hAGLOB/V/9aaDxt
-         n+g0wgkf/Ncyul1W6ji0pPYApoMiI+0e7yyYcweYytI4B1/lTwcL+kzXoULhqzkGq/hg
-         0IOh4svdbN5GTJfF7thaihAM4RqHzo3tMMzLBvC4yUOXO5ju7bwoSGQgiLD7A+9ch6dP
-         RWrOvpwertuRce1TcSf0VKOrF6/388xKlY+wN9VHLLko2RSuWi13r/aEPwxg3Cy/hKBm
-         +oUNwtK5+B7XzhjHCf0KpE3rhpXsauih6WwMamqw5Cx+DabqL1QNWXUuEdIg95IMfeiN
-         I8UQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688752697; x=1691344697;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hk068Nxcv+Fpb+4P5bvL3hcI9mjOk06ChPeSbklSE5o=;
-        b=YK3U/PO4Lvla6OfyjbKZAXglUhjI2wSNNjoqtFNdU6DxlZLeFHdHBMpvu4/drcwRV5
-         welXdGIrOnN6Y3NzgxeJyfOeAaMYpjmFxVYNPDZU1Aecul+kh5fCqRc46TLlsYULUVXi
-         Mz4y5DZSLAOF2YN6A90unk0EhvcO+6/Ud+2l94/Z66gYCdAojP/fnkn79WRPEQbfEDI9
-         buMV+w0z8+6vBEans+LepwjVh3ZeElgdJudGb6UMGQ0j/9Q++5uzqGqBxB01gbCg26He
-         PNYJQMLFMVNqUaDuOL3ldv40k0K7plRhPvAP+xfg0qeiG/riaIYsHjCqrlFjx4OjD6b7
-         XUQw==
-X-Gm-Message-State: ABy/qLYKl9Dwo43KyxHnRP0Es4LB2FBkcPILRfEmPh7avjTxGwXHbMIA
-	FfliUki5KAFjn/pJcr59+FEH3gG63ukDb+mA12fAZeCDwzg=
-X-Google-Smtp-Source: APBJJlEcxLHkFQFfwJ93YiRQ8OAl/zmxbgDQ6Z/oJtQODdfCxiUngFKHrvpaQ489C0IIBDajGCI0BIi8/z5dLi5bCjw=
-X-Received: by 2002:a7b:c5d4:0:b0:3fa:9e61:19ed with SMTP id
- n20-20020a7bc5d4000000b003fa9e6119edmr4231571wmk.23.1688752697298; Fri, 07
- Jul 2023 10:58:17 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4B7C11181
+	for <bpf@vger.kernel.org>; Fri,  7 Jul 2023 18:02:58 +0000 (UTC)
+X-Greylist: delayed 377 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 07 Jul 2023 11:02:57 PDT
+Received: from tuna.sandelman.ca (tuna.sandelman.ca [209.87.249.19])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1781B2110
+	for <bpf@vger.kernel.org>; Fri,  7 Jul 2023 11:02:56 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+	by tuna.sandelman.ca (Postfix) with ESMTP id 2E15238994;
+	Fri,  7 Jul 2023 13:56:37 -0400 (EDT)
+Received: from tuna.sandelman.ca ([127.0.0.1])
+	by localhost (localhost [127.0.0.1]) (amavisd-new, port 10024)
+	with LMTP id SVy8pFdCOld2; Fri,  7 Jul 2023 13:56:36 -0400 (EDT)
+Received: from sandelman.ca (unknown [IPv6:2607:f0b0:f:2:40a:34ff:fe10:f571])
+	by tuna.sandelman.ca (Postfix) with ESMTP id 675E93898D;
+	Fri,  7 Jul 2023 13:56:36 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sandelman.ca;
+	s=mail; t=1688752596;
+	bh=nqpELVn9tuVPMbDJwkHplUo+RFhg6qY7mk023MF0Cr8=;
+	h=From:To:Subject:In-Reply-To:References:Date:From;
+	b=c1c2s4tGNKjVMo3iCt4k3luoFCAZ6lleHVW8fRq0/eFFiXierWA9+w3pyZX+5KWo5
+	 lgX3l2obwpnsWSN86te57yTqXjouyj46P1HkpbktcsN+PYCH70EVkn78INW4hXznrw
+	 vLlfJaD6Jncdx5OFDPOf9TrqNhHB25p0Gj8Ucuo5/ObKdhAg0SMOpSXr5KbhxTrChG
+	 RIcdCDCNV56KQdKoP7AotZZU+n8kF6cg0RlkyrZ3QqAwZnOhkqH+FP7b+v1zwdQ+oq
+	 89h0W8BWwe8mftsQf5ujhnB8wFzF2jWESz79yH+DxIIPyBEDUe+AotJjIaXDkKoHF9
+	 at0i8JkaE5jng==
+Received: from localhost (localhost [IPv6:::1])
+	by sandelman.ca (Postfix) with ESMTP id 4360D9A;
+	Fri,  7 Jul 2023 13:56:36 -0400 (EDT)
+From: Michael Richardson <mcr+ietf@sandelman.ca>
+To: Dave Thaler <dthaler=40microsoft.com@dmarc.ietf.org>,
+    "bpf@ietf.org" <bpf@ietf.org>, bpf <bpf@vger.kernel.org>
+Subject: Re: [Bpf] Instruction set extension policy
+In-Reply-To: <PH7PR21MB387813A79D0094E47914C5A8A32CA@PH7PR21MB3878.namprd21.prod.outlook.com>
+References: <PH7PR21MB387813A79D0094E47914C5A8A32CA@PH7PR21MB3878.namprd21.prod.outlook.com>
+X-Mailer: MH-E 8.6+git; nmh 1.7+dev; GNU Emacs 27.1
+X-Face: $\n1pF)h^`}$H>Hk{L"x@)JS7<%Az}5RyS@k9X%29-lHB$Ti.V>2bi.~ehC0;<'$9xN5Ub#
+ z!G,p`nR&p7Fz@^UXIn156S8.~^@MJ*mMsD7=QFeq%AL4m<nPbLgmtKK-5dC@#:k
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230629051832.897119-1-andrii@kernel.org> <20230629051832.897119-2-andrii@kernel.org>
- <20230704-hochverdient-lehne-eeb9eeef785e@brauner> <CAHC9VhTDocBCpNjdz1CoWM2DA76GYZmg31338DHePFGq_-ie-g@mail.gmail.com>
- <20230705-zyklen-exorbitant-4d54d2f220ad@brauner> <CAEf4Bza5mUou8nw1zjqFaCPPvfUNq-jpNp+y4DhMhhcXc5HwGg@mail.gmail.com>
- <87a5w9s2at.fsf@toke.dk> <CAEf4Bzaox7Q+ZVfuVnuia-=zPeBMYBG3-HT=bajT0OTMp6SQzg@mail.gmail.com>
- <87lefrhnyk.fsf@toke.dk>
-In-Reply-To: <87lefrhnyk.fsf@toke.dk>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 7 Jul 2023 10:58:04 -0700
-Message-ID: <CAEf4BzZAeSKYOgHq5UTgPp+=z7bm6Fr5=OFC9Efr0aj4uVbaAQ@mail.gmail.com>
-Subject: Re: [PATCH RESEND v3 bpf-next 01/14] bpf: introduce BPF token object
-To: =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc: Christian Brauner <brauner@kernel.org>, Paul Moore <paul@paul-moore.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, keescook@chromium.org, 
-	lennart@poettering.net, cyphar@cyphar.com, luto@kernel.org, 
-	kernel-team@meta.com, sargun@sargun.me
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-	autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="=-=-=";
+	micalg=pgp-sha512; protocol="application/pgp-signature"
+Date: Fri, 07 Jul 2023 13:56:36 -0400
+Message-ID: <23460.1688752596@localhost>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+	SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
+Message-ID: <20230707175636.e8_zkoNFKejxNfPeroLsxT39wo92Zhwh7AfAWS-pv5Q@z>
 
-On Fri, Jul 7, 2023 at 6:04=E2=80=AFAM Toke H=C3=B8iland-J=C3=B8rgensen <to=
-ke@redhat.com> wrote:
->
-> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
->
-> > On Thu, Jul 6, 2023 at 4:32=E2=80=AFAM Toke H=C3=B8iland-J=C3=B8rgensen=
- <toke@redhat.com> wrote:
-> >>
-> >> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
-> >>
-> >> > Having it as a separate single-purpose FS seems cleaner, because we
-> >> > have use cases where we'd have one BPF FS instance created for a
-> >> > container by our container manager, and then exposing a few separate
-> >> > tokens with different sets of allowed functionality. E.g., one for
-> >> > main intended workload, another for some BPF-based observability
-> >> > tools, maybe yet another for more heavy-weight tools like bpftrace f=
-or
-> >> > extra debugging. In the debugging case our container infrastructure
-> >> > will be "evacuating" any other workloads on the same host to avoid
-> >> > unnecessary consequences. The point is to not disturb
-> >> > workload-under-human-debugging as much as possible, so we'd like to
-> >> > keep userns intact, which is why mounting extra (more permissive) BP=
-F
-> >> > token inside already running containers is an important consideratio=
-n.
-> >>
-> >> This example (as well as Yafang's in the sibling subthread) makes it
-> >> even more apparent to me that it would be better with a model where th=
-e
-> >> userspace policy daemon can just make decisions on each call directly,
-> >> instead of mucking about with different tokens with different embedded
-> >> permissions. Why not go that route (see my other reply for details on
-> >> what I mean)?
-> >
-> > I don't know how you arrived at this conclusion,
->
-> Because it makes it apparent that you're basically building a policy
-> engine in the kernel with this...
+--=-=-=
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-I disagree that this is a policy engine in the kernel. It's a building
-block for delegation and enforcement. The policy itself is implemented
-in user-space by a privileged process that decides when to issue BPF
-tokens and of which configuration. And, optionally and if necessary,
-further restricting using BPF LSM in a more fine-grained and dynamic
-way.
 
->
-> > but we've debated BPF proxying and separate service at length, there
-> > is no point in going on another round here.
->
-> You had some objections to explicit proxying via RPC calls; I suggested
-> a way of avoiding that by keeping the kernel in the loop, which you have
+Dave Thaler <dthaler=3D40microsoft.com@dmarc.ietf.org> wrote:
+    > Once the BPF ISA is published in an RFC, we expect more instructions
+    > may be added over time.  It seems undesirable to delay use such
+    > additions until another RFC can be published, although having them
+    > appear in an RFC would be a good thing in my view.
 
-I thought we settled the seccomp notify proposal?
+agreed.
 
-> not responded to. If you're just going to go ahead with your solution
-> over any objections you could just have stated so from the beginning and
-> saved us all a lot of time :/
+    > Personally, I envision such additions to appear in an RFC per extensi=
+on
+    > (i.e., set of additions) rather than obsoleting the original ISA RFC.
+    > So I would propose the ability to reference another document (e.g., o=
+ne
+    > in the Linux kernel tree) in the meantime.
 
-It would also be good to understand that yours is but one of the
-opinions. If you read the thread carefully you'll see that other
-people have differing opinions. And yours doesn't necessarily have to
-be the deciding one.
+That seems like a really good plan.
+They won't have to be long documents either.
+It would be nice if there could be sufficient template so that they don't
+need a lot of cross-area review to publish.
 
-I appreciate the feedback, but I don't appreciate the expectation that
-your feedback is binding in any way.
+There is also a thought that there is simply a "yearly" wrap up of all
+allocations.
 
->
-> Can we at least put this thing behind a kconfig option, so we can turn
-> it off in distro kernels?
+    > Similarly, I would propose as a strawman using an IANA registry (as
+    > most IETF standards do) that requires say an IETF Standards Track RFC
+    > for "Permanent" status, and "Specification required" (a public
+    > specification reviewed by a designated expert) for "Provisional"
+    > registrations.  So updating a document in say the Linux kernel tree
+    > would be sufficient for Provisional registration, and the status of an
+    > instruction would change to Permanent once it appears in an RFC.
 
-Why can't distro disable this in some more dynamic way, though? With
-existing LSM mechanism, sysctl, whatever? I think it would be useful
-to let users have control over this and decide for themselves without
-having to rebuild a custom kernel.
+    > Thoughts?
 
->
-> > Per-call decisions can be achieved nicely by employing BPF LSM in a
-> > restrictive manner on top of BPF token (or no token, if you are ok
-> > without user namespaces).
->
-> Building a deficient security delegation mechanism and saying "you can
-> patch things up using an LSM" is a terrible design, though. Also, this
+I think it important to distinguish for the group between
+experimental/private-use space and provisional.
 
-A bunch of people disagree with you.
+I don't think you want to renumber an instruction when it goes to Permanent
+status.  I also think that you want to run this as Early Allocations, so th=
+at
+they have a sunset clause, and the process for sunsetting such an allocation
+should be clear.
 
-> still means you have to implement all the policy checks in the kernel
-> (just in BPF) which is awkward at best.
+You may also need to written policy (in the Linux kernel Documentation) abo=
+ut
+back-patching of Provisional numbers into vendor branches and/or LTS
+branches.
 
-"Patch things up using an LSM", if necessary, in a restrictive manner
-is what LSM folks prefer. You are also assuming that it's always
-necessary, and I'm saying that in lots of practical contexts LSM won't
-be even necessary.
+Can there be subtle semantic changes to Provisional allocations?
+(Such as what happens when invalid data occurs?  The divide-by-zero
+equivalent)
 
->
-> -Toke
->
+
+
+=2D-
+Michael Richardson <mcr+IETF@sandelman.ca>   . o O ( IPv6 I=C3=B8T consulti=
+ng )
+           Sandelman Software Works Inc, Ottawa and Worldwide
+
+
+
+
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFKBAEBCgA0FiEEbsyLEzg/qUTA43uogItw+93Q3WUFAmSoUdQWHG1jcitpZXRm
+QHNhbmRlbG1hbi5jYQAKCRCAi3D73dDdZTpYB/9DziNKcDHyibQyEXUdcJIi7OzW
+kUoZu6jPVHLhiRKsm5xSf65UBz5/qJBk76PI/XVRmRMvGDLm5miy37886W1kpU1a
+r4iWYwB+FCwNCTSrU3h41x7D/8jAUBQvecC+LksQFT78wJMSQJ+8cTWIW1dl8YxM
+JvFF+iwLOz78n8v5wAX6YcvdJg6m8zOJjBxbu3XPkDoqAT70INtqBHlk7yQd9zFE
+SND4Tks39YH27ACtoagaGhcSabP2M7IuJuDtT8Kx+K6BNfAFi+1sHEgUQ4qWylPr
+8U+fX1+miIh6/TlK+/bAN8KYjHy7hEdCTPBdXUfYAP/tWhCIwjL+7qO2cwaq
+=DZ14
+-----END PGP SIGNATURE-----
+--=-=-=--
