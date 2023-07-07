@@ -1,160 +1,154 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D02911FA7
-	for <bpf@vger.kernel.org>; Fri,  7 Jul 2023 16:08:06 +0000 (UTC)
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C227E1FE7
-	for <bpf@vger.kernel.org>; Fri,  7 Jul 2023 09:08:04 -0700 (PDT)
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 9C396C151984
-	for <bpf@vger.kernel.org>; Fri,  7 Jul 2023 09:08:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1688746084; bh=2xUsHivFilZqCCGjidyc7aCwdZ/VcaNTxhxAaLK+ZWk=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=fRV53rUK7ab5PStYwQsq+PiBn7q3hqlaZRk0eJZ9BulqfBhDnNEXb8KJY9GV72RlT
-	 pcffuI6DwN26y/BCKCto6TzVxnHedXq62qU1CpAp2h7pUArmNB4+FCost0xPedIZpy
-	 2yky/eYK30SAV4YmnNA/CXfheFedaA3trHnpfm1o=
-X-Mailbox-Line: From bpf-bounces@ietf.org  Fri Jul  7 09:08:04 2023
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 45A87C1516E1;
-	Fri,  7 Jul 2023 09:08:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1688746084; bh=2xUsHivFilZqCCGjidyc7aCwdZ/VcaNTxhxAaLK+ZWk=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=fRV53rUK7ab5PStYwQsq+PiBn7q3hqlaZRk0eJZ9BulqfBhDnNEXb8KJY9GV72RlT
-	 pcffuI6DwN26y/BCKCto6TzVxnHedXq62qU1CpAp2h7pUArmNB4+FCost0xPedIZpy
-	 2yky/eYK30SAV4YmnNA/CXfheFedaA3trHnpfm1o=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id 648D5C1516E1
- for <bpf@ietfa.amsl.com>; Fri,  7 Jul 2023 09:08:02 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Score: -1.894
-X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,
-	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
- header.d=obs-cr.20221208.gappssmtp.com
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tQadF3bv1H0B for <bpf@ietfa.amsl.com>;
- Fri,  7 Jul 2023 09:08:00 -0700 (PDT)
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com
- [IPv6:2607:f8b0:4864:20::f34])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id 3ADEDC15155C
- for <bpf@ietf.org>; Fri,  7 Jul 2023 09:08:00 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id
- 6a1803df08f44-635de03a85bso12268996d6.3
- for <bpf@ietf.org>; Fri, 07 Jul 2023 09:08:00 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BFA9107AD;
+	Fri,  7 Jul 2023 16:11:49 +0000 (UTC)
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF6B2105;
+	Fri,  7 Jul 2023 09:11:35 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b703c900e3so32320431fa.1;
+        Fri, 07 Jul 2023 09:11:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=obs-cr.20221208.gappssmtp.com; s=20221208; t=1688746079; x=1691338079;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=xWM0laKU80a42A/voRGaDlLTH+dN0QntMFG+DQux1v8=;
- b=Fafnh3WXK8/J6hqhkU4urJnRZCboyP2SkMD1CqUZ8p/k1nhNupKjF3Ee49qoDRo7Ut
- WCbrsJE7nHTvhus0g0lRIKpUXtpKRMA1pP2DVAJJls6OXEHbTqyPDo6RUN45TnTHp8IN
- ZnPKwETx60jZ+q86v7T9s5PcqPOdTpdvBnSboP33rKDECUjBPTCoJm+W4mMlFsNi/+KL
- 6IAwZXumwMnumlq85TEJQwVs1EIvyVJuRCcyjNY9ro2qcNepV2DiVPmMPybApD2uVJ09
- IhFUKgmzfRf1dYzGOR1G7qiY17hutm+1op7p7vCrHryszkbFZFrJHJrruKPdp8TGurH/
- g+3w==
+        d=gmail.com; s=20221208; t=1688746294; x=1691338294;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6pf5dnyrXQEda2yB2QUPvv6NwuWjzgPzEHR6aZnBBoI=;
+        b=cdVhKwZUfPiXWP69XMDCI6Bi2Exp1T0y7P7EVJYBQ62InMEESI+wq1gQFtgZrbhAcf
+         ZXmv4tj9SMi7mK1yQVN1VY532JCGPfr5ahfNCYz3qTFAehOWMOLEdpIp/xBW6abW7W3d
+         N3vaRdD78aqiVZUsLol6VZ3WwJaBLo+dHZPbN7emV+har8ya4e8Tkl65zcjoq40h6do6
+         7AZJRemxb1ml7mvBq83Jg4YDiefQw6yFt3REhoagAhxRLoB5gbFR/8q51sPV2rw/Jh/u
+         4RWjiMMDUsYmB/wy7GoG40fZUou05ffPheW5ih9VcaEYUw2bpLQPZvN34/37seIfOjsM
+         vrKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1688746079; x=1691338079;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=xWM0laKU80a42A/voRGaDlLTH+dN0QntMFG+DQux1v8=;
- b=FLdM5J01x7rSXw5sQqOT3LelbdCM1c1h/YHRmfsPZzPxw0+eWmpliTEW8SkbPebsAP
- wQ+FN40sFkaj5CVG5zvwtV+vE6lKcg26ykA89RqkpvwPodMe4PPK0nEVG9rE8iGy2HQo
- S767DNW59P55DtDR/x/46JJ+oilCb715rWgUHsux4lI+4ATedN80ZFfh1u2/tbAUSP/U
- jpFpujuYHc+bK+Xd1F3ufkTLkLV81ZA865wxEGyhFQNQOGYV4xOrch0RLByTU46XSwfR
- qF08o9MkmWB0MaQua3E+YtbOdGe5Udw31dt9tM9nlim9C8shxcmCXe502Dx1PsxnDmDt
- tRCg==
-X-Gm-Message-State: ABy/qLZD5jduZ0N3NTDo+4mjTPCmhtp8TtZNqh/MUTB/XQ3CcOlJYPev
- Cntq2fMdXANqrprLOgfVELIjQapYRiymmSiPG5q0LQ==
-X-Google-Smtp-Source: APBJJlF9hwu/9AwIb6dn0bq9nl9llGXQ1RQJ4cmdTWdHnoR0qV3DOtzTpeyISMnSATqCOmyaDpPHAX8GnrXYAJYK9nk=
-X-Received: by 2002:a0c:8b8a:0:b0:635:de52:8383 with SMTP id
- r10-20020a0c8b8a000000b00635de528383mr3902296qva.59.1688746079123; Fri, 07
- Jul 2023 09:07:59 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688746294; x=1691338294;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6pf5dnyrXQEda2yB2QUPvv6NwuWjzgPzEHR6aZnBBoI=;
+        b=d9h1M2lYESZOBELr3nnrs+XGeI3hoM0hOHZ8rIjxAOo4DLI2A7n6yDHI1y/H4+0QCL
+         v2wVhdVslX/hx/iIDt+dY7khyVnwszvewD3p/JHOk674ygot+4/l5EOnGs7FslLlTRdO
+         Z8oOM9dggXHMygRd5QAKjlOc7EoDcNRuyXhCr4azTyhOy0JR2L9LnDdBxdyTlY9PMKLR
+         RtRFWPzO0+Kbrt5uEwvYgwVmQ0qNN+QYwwBbFRsLPPmTZBOa1FwHybyr5m/b0RML4ZqZ
+         ja+GeumZNGMlismR5ttTOb5COE9C1LjTHlYkdFlCCT2MqkiyLeNFOmlvF2sZW7cl4D/9
+         X9mQ==
+X-Gm-Message-State: ABy/qLYe0Lq2IrEdT28sJtYUND9ShQPXoYj9+/0ox+tZntEKnfQNcW/5
+	kTb0Leujs1k3xS0mw8BHNWowBQci8lscIkA72P0=
+X-Google-Smtp-Source: APBJJlHIhhYIDDRcZFjdoEd3CK4wQXFWlTIhkaiipMXKjU/w9eDVUaF0RKUngfEmkJCjmtbmj4YEw7V6JxBDksC3lnw=
+X-Received: by 2002:a2e:9250:0:b0:2b6:fe3c:c3c1 with SMTP id
+ v16-20020a2e9250000000b002b6fe3cc3c1mr4167361ljg.4.1688746293623; Fri, 07 Jul
+ 2023 09:11:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <PH7PR21MB387813A79D0094E47914C5A8A32CA@PH7PR21MB3878.namprd21.prod.outlook.com>
- <CAADnVQJhfa+g227BX=3LijoXwgh7h3Z5V_ZF8tMeMWNZguAp5g@mail.gmail.com>
- <PH7PR21MB3878DEA7280C274A8A18D082A32DA@PH7PR21MB3878.namprd21.prod.outlook.com>
- <CAADnVQ+ogOVdwZSX4315hHe8bxP-yoYEacNPCP6CTHqn=Xp-uQ@mail.gmail.com>
-In-Reply-To: <CAADnVQ+ogOVdwZSX4315hHe8bxP-yoYEacNPCP6CTHqn=Xp-uQ@mail.gmail.com>
-From: Will Hawkins <hawkinsw@obs.cr>
-Date: Fri, 7 Jul 2023 12:07:48 -0400
-Message-ID: <CADx9qWjUj5YP6Dr9g2GY6Yrf4-1K+5-v6wE6gYV_R9e3OjBnLw@mail.gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Dave Thaler <dthaler@microsoft.com>, "bpf@ietf.org" <bpf@ietf.org>,
- bpf <bpf@vger.kernel.org>
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/HxW224Z72NVVcZGoeVu42RDwkWQ>
-Subject: Re: [Bpf] Instruction set extension policy
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Id: Discussion of BPF/eBPF standardization efforts within the IETF
- <bpf.ietf.org>
-List-Unsubscribe: <https://www.ietf.org/mailman/options/bpf>,
- <mailto:bpf-request@ietf.org?subject=unsubscribe>
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-List-Subscribe: <https://www.ietf.org/mailman/listinfo/bpf>,
- <mailto:bpf-request@ietf.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
+References: <20230706033447.54696-1-alexei.starovoitov@gmail.com>
+ <20230706033447.54696-10-alexei.starovoitov@gmail.com> <fe733a7b-3775-947a-23c0-0dadacabdca2@huaweicloud.com>
+ <CAADnVQJ3mNnzKEohRhYfAhBtB6R2Gh9dHAyqSJ5BU5ke+NTVuw@mail.gmail.com>
+ <4e0765b7-9054-a33d-8b1e-c986df353848@huaweicloud.com> <CAADnVQJhrbTtuBfexE6NPA6q=cdh1vVxfVQ73ZR2u8ZZWRb+wA@mail.gmail.com>
+ <224322d6-28d3-f3b7-fcac-463e5329a082@huaweicloud.com>
+In-Reply-To: <224322d6-28d3-f3b7-fcac-463e5329a082@huaweicloud.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 7 Jul 2023 09:11:22 -0700
+Message-ID: <CAADnVQL5O5uzy=sewNJ=NFSGV7JTb3ONHR=V2kWiT1YdN=ax8g@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next 09/14] bpf: Allow reuse from
+ waiting_for_gp_ttrace list.
+To: Hou Tao <houtao@huaweicloud.com>
+Cc: Tejun Heo <tj@kernel.org>, rcu@vger.kernel.org, 
+	Network Development <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Kernel Team <kernel-team@fb.com>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, David Vernet <void@manifault.com>, 
+	"Paul E. McKenney" <paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
-Message-ID: <20230707160748.JbmZLjCB6RpKhoHa7dhiELWZkT1a_bEU5cENfPxiYuo@z>
 
-T24gRnJpLCBKdWwgNywgMjAyMyBhdCAxMjowMeKAr1BNIEFsZXhlaSBTdGFyb3ZvaXRvdgo8YWxl
-eGVpLnN0YXJvdm9pdG92QGdtYWlsLmNvbT4gd3JvdGU6Cj4KPiBPbiBUaHUsIEp1bCA2LCAyMDIz
-IGF0IDY6MzXigK9QTSBEYXZlIFRoYWxlciA8ZHRoYWxlckBtaWNyb3NvZnQuY29tPiB3cm90ZToK
-PiA+Cj4gPiBJIGRvbid0IHNlZSBhbnkgcHJvYmxlbSB3aXRoIGRlZmluaW5nIGFuIElBTkEgcmVn
-aXN0cnkgd2l0aCBtdWx0aXBsZSAia2V5IiBmaWVsZHMKPiA+IChvcGNvZGUrc3JjK2ltbSkuICBB
-bGwgZXhpc3RpbmcgaW5zdHJ1Y3Rpb25zIGNhbiBiZSBkb25lIGFzIHN1Y2guCj4gPgo+ID4gQmVs
-b3cgaXMgc3RyYXdtYW4gdGV4dCB0aGF0IEkgdGhpbmsgZm9sbG93cyBJQU5BJ3MgcmVxdWlyZW1l
-bnRzIG91dGxpbmVkCj4gPiBpbiBSRkMgODEyNi4uLgo+ID4KPiA+IC1EYXZlCj4gPgo+ID4gLS0t
-IHNuaXAgLS0tCj4gPiBJQU5BIENvbnNpZGVyYXRpb25zCj4gPiA9PT09PT09PT09PT09PT09PT09
-Cj4gPgo+ID4gVGhpcyBkb2N1bWVudCBwcm9wb3NlcyBhIG5ldyBJQU5BIHJlZ2lzdHJ5IGZvciBC
-UEYgaW5zdHJ1Y3Rpb25zLCBhcyBmb2xsb3dzOgo+ID4KPiA+ICogTmFtZSBvZiB0aGUgcmVnaXN0
-cnk6IEJQRiBJbnN0cnVjdGlvbiBTZXQKPiA+ICogTmFtZSBvZiB0aGUgcmVnaXN0cnkgZ3JvdXA6
-IHNhbWUgYXMgcmVnaXN0cnkgbmFtZQo+ID4gKiBSZXF1aXJlZCBpbmZvcm1hdGlvbiBmb3IgcmVn
-aXN0cmF0aW9uczogVGhlIHZhbHVlcyB0byBhcHBlYXIgaW4gdGhlIGVudHJ5IGZpZWxkcy4KPiA+
-ICogU3ludGF4IG9mIHJlZ2lzdHJ5IGVudHJpZXM6IEVhY2ggZW50cnkgaGFzIHRoZSBmb2xsb3dp
-bmcgZmllbGRzOgo+ID4gICAqIG9wY29kZTogYSAxLWJ5dGUgdmFsdWUgaW4gaGV4IGZvcm1hdCBp
-bmRpY2F0aW5nIHRoZSB2YWx1ZSBvZiB0aGUgb3Bjb2RlIGZpZWxkCj4gPiAgICogc3JjOiBhIDQt
-Yml0IHZhbHVlIGluIGhleCBmb3JtYXQgaW5kaWNhdGluZyB0aGUgdmFsdWUgb2YgdGhlIHNyYyBm
-aWVsZCwgb3IgImFueSIKPiA+ICAgKiBpbW06IGVpdGhlciBhIHZhbHVlIGluIGhleCBmb3JtYXQg
-aW5kaWNhdGluZyB0aGUgdmFsdWUgb2YgdGhlIGltbSBmaWVsZCwgb3IgImFueSIKPiA+ICAgKiBk
-ZXNjcmlwdGlvbjogZGVzY3JpcHRpb24gb2Ygd2hhdCB0aGUgaW5zdHJ1Y3Rpb24gZG9lcywgdHlw
-aWNhbGx5IGluIHBzZXVkb2NvZGUKPiA+ICAgKiByZWZlcmVuY2U6IGEgcmVmZXJlbmNlIHRvIHRo
-ZSBkZWZpbmluZyBzcGVjaWZpY2F0aW9uCj4gPiAgICogc3RhdHVzOiBQZXJtYW5lbnQsIFByb3Zp
-c2lvbmFsLCBvciBIaXN0b3JpY2FsCj4gPiAqIFJlZ2lzdHJhdGlvbiBwb2xpY3kgKHNlZSBSRkMg
-ODEyNiBzZWN0aW9uIDQgZm9yIGRldGFpbHMpOgo+ID4gICAqIFBlcm1hbmVudDogU3RhbmRhcmRz
-IGFjdGlvbgo+ID4gICAqIFByb3Zpc2lvbmFsOiBTcGVjaWZpY2F0aW9uIHJlcXVpcmVkCj4gPiAg
-ICogSGlzdG9yaWNhbDogU3BlY2lmaWNhdGlvbiByZXF1aXJlZAo+ID4gKiBJbml0aWFsIHJlZ2lz
-dHJhdGlvbnM6IFNlZSB0aGUgQXBwZW5kaXguIEluc3RydWN0aW9ucyBvdGhlciB0aGFuIHRob3Nl
-IGxpc3RlZAo+ID4gICBhcyBkZXByZWNhdGVkIGFyZSBQZXJtYW5lbnQuIEFueSBsaXN0ZWQgYXMg
-ZGVwcmVjYXRlZCBhcmUgSGlzdG9yaWNhbC4KPgo+IEkgdGhpbmsgdGhhdCBtaWdodCB3b3JrLiBX
-aGF0IGlzIHRoZSBuZXh0IHN0ZXAgdGhlbj8KPiBXaG8gaXMgZ29pbmcgdG8gZ2VuZXJhdGUgc3Vj
-aCBhIGhleCBkYXRhYmFzZT8KCkkgd291bGQgYmUgbW9yZSB0aGFuIGhhcHB5IHRvIGRvIHRoYXQh
-CldpbGwKCj4KPiAtLQo+IEJwZiBtYWlsaW5nIGxpc3QKPiBCcGZAaWV0Zi5vcmcKPiBodHRwczov
-L3d3dy5pZXRmLm9yZy9tYWlsbWFuL2xpc3RpbmZvL2JwZgoKLS0gCkJwZiBtYWlsaW5nIGxpc3QK
-QnBmQGlldGYub3JnCmh0dHBzOi8vd3d3LmlldGYub3JnL21haWxtYW4vbGlzdGluZm8vYnBmCg==
+On Thu, Jul 6, 2023 at 9:37=E2=80=AFPM Hou Tao <houtao@huaweicloud.com> wro=
+te:
+>
+> Hi,
+>
+> On 7/7/2023 12:16 PM, Alexei Starovoitov wrote:
+> > On Thu, Jul 6, 2023 at 8:39=E2=80=AFPM Hou Tao <houtao@huaweicloud.com>=
+ wrote:
+> >> Hi,
+> >>
+> >> On 7/7/2023 10:12 AM, Alexei Starovoitov wrote:
+> >>> On Thu, Jul 6, 2023 at 7:07=E2=80=AFPM Hou Tao <houtao@huaweicloud.co=
+m> wrote:
+> >>>> Hi,
+> >>>>
+> >>>> On 7/6/2023 11:34 AM, Alexei Starovoitov wrote:
+> >>>>
+> SNIP
+> >>> and it's not just waiting_for_gp_ttrace. free_by_rcu_ttrace is simila=
+r.
+> >> I think free_by_rcu_ttrace is different, because the reuse is only
+> >> possible after one tasks trace RCU grace period as shown below, and th=
+e
+> >> concurrent llist_del_first() must have been completed when the head is
+> >> reused and re-added into free_by_rcu_ttrace again.
+> >>
+> >> // c0->free_by_rcu_ttrace
+> >> A -> B -> C -> nil
+> >>
+> >> P1:
+> >> alloc_bulk()
+> >>     llist_del_first(&c->free_by_rcu_ttrace)
+> >>         entry =3D A
+> >>         next =3D B
+> >>
+> >> P2:
+> >> do_call_rcu_ttrace()
+> >>     // c->free_by_rcu_ttrace->first =3D NULL
+> >>     llist_del_all(&c->free_by_rcu_ttrace)
+> >>         move to c->waiting_for_gp_ttrace
+> >>
+> >> P1:
+> >> llist_del_first()
+> >>     return NULL
+> >>
+> >> // A is only reusable after one task trace RCU grace
+> >> // llist_del_first() must have been completed
+> > "must have been completed" ?
+> >
+> > I guess you're assuming that alloc_bulk() from irq_work
+> > is running within rcu_tasks_trace critical section,
+> > so __free_rcu_tasks_trace() callback will execute after
+> > irq work completed?
+> > I don't think that's the case.
+>
+> Yes. The following is my original thoughts. Correct me if I was wrong:
+>
+> 1. llist_del_first() must be running concurrently with llist_del_all().
+> If llist_del_first() runs after llist_del_all(), it will return NULL
+> directly.
+> 2. call_rcu_tasks_trace() must happen after llist_del_all(), else the
+> elements in free_by_rcu_ttrace will not be freed back to slab.
+> 3. call_rcu_tasks_trace() will wait for one tasks trace RCU grace period
+> to call __free_rcu_tasks_trace()
+> 4. llist_del_first() in running in an context with irq-disabled, so the
+> tasks trace RCU grace period will wait for the end of llist_del_first()
+>
+> It seems you thought step 4) is not true, right ?
+
+Yes. I think so. For two reasons:
+
+1.
+I believe irq disabled region isn't considered equivalent
+to rcu_read_lock_trace() region.
+
+Paul,
+could you clarify ?
+
+2.
+Even if 1 is incorrect, in RT llist_del_first() from alloc_bulk()
+runs "in a per-CPU thread in preemptible context."
+See irq_work_run_list.
