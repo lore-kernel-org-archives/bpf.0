@@ -1,87 +1,115 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DE1B7F
-	for <bpf@vger.kernel.org>; Fri,  7 Jul 2023 00:31:31 +0000 (UTC)
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3656B1992;
-	Thu,  6 Jul 2023 17:31:30 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-262c42d3fafso920951a91.0;
-        Thu, 06 Jul 2023 17:31:30 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B8117F
+	for <bpf@vger.kernel.org>; Fri,  7 Jul 2023 00:46:19 +0000 (UTC)
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F40E6E
+	for <bpf@vger.kernel.org>; Thu,  6 Jul 2023 17:46:18 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-7659924cd9bso135754385a.1
+        for <bpf@vger.kernel.org>; Thu, 06 Jul 2023 17:46:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688689889; x=1691281889;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wsL+nUW+0v3XUtpK8KNcb9gGGFha081JmYpkCXmvvAE=;
-        b=GXpjwIAvLMq+kyUKw50MZNRwCy+1QvDyjCIT9Vj8bKNYT+3xxDCf34QJQJ4R6cLDap
-         I2xZXGYFmyvjSHNE6TFqHbs0KRe9aaFRKNkRXIUUJZ5zzZ12hFb4Vp1gB+DEjcu1qi9i
-         j/y7Bjq2SZJTlV6HQFeg78uDrEa2n//VYQTAeeES7sOMoZ0/ECG6Jv3ealK2BAp026/7
-         ua5ptOsk1KNNCmKd6zxlFNd4pGVt3TgVf/ANIKMtyPt4cHK9mQqfGBztgHwIFymoq3xV
-         wo3jQjh3xphu0RhSBGxDF508bajnYQtaie1/Y4N5PCz9l2Yw10xYS8Kb6W4df4iefmnT
-         q+6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688689889; x=1691281889;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=obs-cr.20221208.gappssmtp.com; s=20221208; t=1688690777; x=1691282777;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wsL+nUW+0v3XUtpK8KNcb9gGGFha081JmYpkCXmvvAE=;
-        b=WNpxQlTH9+HDLuEVEojCelgz8quZ/Vqr1xyFxYAVwC+4uCya9LKnWq/ffVEVPQvt5o
-         ZomuhySUwvP29z08WoR/klP8ADmj4NI+DbTWz13CPZ2L9GZ4AfqZTvK7P4qrW684L99C
-         Le5Ff0sEP6dh44TTP+yp8/aV/mz4F7nd6luASvBcwRaHYncMytPtMM5R+OhYXegexT89
-         blnX2BsDwf9Vrh+M3Qd9f9vm/OMRIlbc0LGYCc4ZwpU0dW0Z3IpByM/3v1qTvqswqtbk
-         JvKeKSB3UrmBwWY6gYrAn1huO/Un2JdwV9mQ+p6NuFgzYt499xHjK9Hajcrvb3m8BnuM
-         ONTg==
-X-Gm-Message-State: ABy/qLaUUVtTepzTVoa74l9LKf+Qr/h4FZVr455aTLncgqMyeg1yAR0Q
-	Sy+VElVLhX3bVQz97kDT9Zs=
-X-Google-Smtp-Source: APBJJlHmGmp/kMMoWIXZOfL5JEIX/ee7sbk/t6Qa4o1H88DgMkVuUNPnFWkk+WVjC8P3Fl0BcPXt9w==
-X-Received: by 2002:a17:90a:fe07:b0:262:ca9c:edcb with SMTP id ck7-20020a17090afe0700b00262ca9cedcbmr5574821pjb.9.1688689889483;
-        Thu, 06 Jul 2023 17:31:29 -0700 (PDT)
-Received: from macbook-pro-8.dhcp.thefacebook.com ([2620:10d:c090:400::5:9b44])
-        by smtp.gmail.com with ESMTPSA id gm13-20020a17090b100d00b00259e553f59bsm329275pjb.20.2023.07.06.17.31.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 17:31:28 -0700 (PDT)
-Date: Thu, 6 Jul 2023 17:31:25 -0700
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: Daniel Xu <dxu@dxuuu.xyz>
-Cc: andrii@kernel.org, ast@kernel.org, shuah@kernel.org,
-	daniel@iogearbox.net, fw@strlen.de, martin.lau@linux.dev,
-	song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-	kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-	jolsa@kernel.org, mykolal@fb.com, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	netfilter-devel@vger.kernel.org, dsahern@kernel.org
-Subject: Re: [PATCH bpf-next v2 6/6] bpf: selftests: Add defrag selftests
-Message-ID: <20230707003125.6cxwqev7f5ybjcom@macbook-pro-8.dhcp.thefacebook.com>
-References: <cover.1688685338.git.dxu@dxuuu.xyz>
- <deb1c4c5003892997dfb6f628e185b124e590472.1688685338.git.dxu@dxuuu.xyz>
+        bh=QYVwt83WbqMvn4f2pxzshe+36GeTFxuSw4Vys39lq2Y=;
+        b=gA9v5HwyNsM6qpNxgT0sqFmBJJdk+LqfBb7wdfi4Wh5Z6kjy1KgndtIUTQEjl1EN8/
+         8hR787z4rHFdIHFntCeK0lwk4dF1iJrOVZ3G9b91AtrKWIlAviNyAqXiBEkwtwL6KteY
+         PmoXO9UstLU8w5rJleqc/np+c/iGpNbNj+yydqSodetc/rDEZMhSJ2M25t7kOwtUjBm1
+         jgoY4xETYP4KMVxQvQ8j2lts49hzFqaSM+oKzDoFCcqduq6tnmVQHIqfMPnqi6zhUSex
+         yCAO/j/Qcc+HZF9g21YM0fzw59SUyONMUDtcnLCsu4CpfDSCSnXJhNhcAmTh6yEInAX0
+         vd7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688690777; x=1691282777;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QYVwt83WbqMvn4f2pxzshe+36GeTFxuSw4Vys39lq2Y=;
+        b=GB+O3NpQnZ5sMz4FsUgznf0l92O5sxhjpu6tYs1j7QzNMrruSzjwRZ5D4B5mhFJ4ip
+         LhQOL0GELfLRL0Defri00EFnM6pvBKx+x1yipvmNP60LDN07ASf3nHvym8VwZwuJqBPA
+         XV5vNGegoYmr5jC+MyJ9DvlGjx6wAaaH5EpNqdyWGCGD3e8mJnLzp9XZfyfSvNmrN4j5
+         +6fXzqdaYeq4JAlgeFK3ZdbABNE7qU9sriIuLnk0MrZbBhL1kX59JEi3CtwdD2ZEY4VK
+         7tUdvKbU2Pzj38wYV6PMTGSX0NoCrKJOOC4Emx+1emClnghZC1zcTEi0vykOBvkdu2Vi
+         TCXw==
+X-Gm-Message-State: ABy/qLaKB5QWLRJk3eU4ZPP3xFQ5VpOz0y/ef1yUuSYMa4r/o1lorUi6
+	Octbigy4n15kHHIhGmxhNiFhfr+U7lEQJloVCdFxIWQ8CUUerDuD7BU=
+X-Google-Smtp-Source: APBJJlHF9SDSuxVzrP+u2/S10pfwf9cQ1t7T+f3WID3qleaW9iqAVJ+mADSmggSfzPI6zhFGugP4B1tnRhpL7d6vccE=
+X-Received: by 2002:a05:620a:2450:b0:767:4cb2:3145 with SMTP id
+ h16-20020a05620a245000b007674cb23145mr5172885qkn.41.1688690777396; Thu, 06
+ Jul 2023 17:46:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <deb1c4c5003892997dfb6f628e185b124e590472.1688685338.git.dxu@dxuuu.xyz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-	autolearn=ham autolearn_force=no version=3.4.6
+References: <20230706222020.268136-1-hawkinsw@obs.cr> <20230706222020.268136-2-hawkinsw@obs.cr>
+ <CAADnVQ+kfTPYE1kbUuxsaoEZBCHKG2SLDkcs62RXqEo8Jhi9+Q@mail.gmail.com>
+In-Reply-To: <CAADnVQ+kfTPYE1kbUuxsaoEZBCHKG2SLDkcs62RXqEo8Jhi9+Q@mail.gmail.com>
+From: Will Hawkins <hawkinsw@obs.cr>
+Date: Thu, 6 Jul 2023 20:46:06 -0400
+Message-ID: <CADx9qWjPir2wsRUNJopeT=daQz7rz=hhTJCM=FwCcLo96vY84A@mail.gmail.com>
+Subject: Re: [Bpf] [PATCH 1/1] bpf, docs: Describe stack contents of function calls
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, bpf@ietf.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+	T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Thu, Jul 06, 2023 at 05:25:53PM -0600, Daniel Xu wrote:
-> +static int attach(struct ip_check_defrag *skel, bool ipv6)
-> +{
-> +	LIBBPF_OPTS(bpf_netfilter_opts, opts,
-> +		    .pf = ipv6 ? NFPROTO_IPV6 : NFPROTO_IPV4,
-> +		    .priority = 42,
-> +		    .flags = BPF_F_NETFILTER_IP_DEFRAG);
+On Thu, Jul 6, 2023 at 7:32=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Thu, Jul 6, 2023 at 3:20=E2=80=AFPM Will Hawkins <hawkinsw@obs.cr> wro=
+te:
+> >
+> > The execution of every function proceeds as if it has access to its own
+> > stack space.
+> >
+> > Signed-off-by: Will Hawkins <hawkinsw@obs.cr>
+> > ---
+> >  Documentation/bpf/instruction-set.rst | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/Documentation/bpf/instruction-set.rst b/Documentation/bpf/=
+instruction-set.rst
+> > index 751e657973f0..717259767a41 100644
+> > --- a/Documentation/bpf/instruction-set.rst
+> > +++ b/Documentation/bpf/instruction-set.rst
+> > @@ -30,6 +30,11 @@ The eBPF calling convention is defined as:
+> >  R0 - R5 are scratch registers and eBPF programs needs to spill/fill th=
+em if
+> >  necessary across calls.
+> >
+> > +Every function invocation proceeds as if it has exclusive access to an
+> > +implementation-defined amount of stack space. R10 is a pointer to the =
+byte of
+> > +memory with the highest address in that stack space. The contents
+> > +of a function invocation's stack space do not persist between invocati=
+ons.
+>
+> Such description belongs in a future psABI doc.
+> instruction-set.rst is not a place to describe how registers are used.
 
-imo the end results is pretty neat. The users would just add this flag and
-netfilter bpf prog will see reassembled packets.
+Thank you for the feedback!
 
-The patches look good to me.
+How does your comment square with the immediately preceding
+description in the document that says:
 
-Florian,
-could you please review/ack, so we can pull them in?
+R10: read-only frame pointer to access stack
+
+(among the description of how other registers are used during function call=
+s).
+
+Sorry if I am being dense and/or naive.
+
+Sincerely,
+Will
+
+> For example x86-64 JIT maps BPF R10 to RBP.
+> Yet there is -fomit-frame-pointer.
+> So we might very well do something like that in the future.
