@@ -1,27 +1,27 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FCD423CC;
-	Mon, 10 Jul 2023 20:12:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8C7D154B4;
+	Mon, 10 Jul 2023 20:12:30 +0000 (UTC)
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7EEEBB;
-	Mon, 10 Jul 2023 13:12:26 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774BA12F;
+	Mon, 10 Jul 2023 13:12:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=69n6LDb5XRAMx+wapwbSO3DwQt+OxxZALsW2iH04xAA=; b=achuNBhLPEtazRfwOTSt9OUh6h
-	qhmVJjRwanpAJ1pHZg9EFFFUJqjLLYnvautTxaxFiS2Ya0p6OqzYWTI0CDkLKEN+Q3YyaYRiZey0q
-	AhlWpSxc/HbJFazE9Fa7V3k529q9H4NY6+F8ByBSz/TpWxiFtxb7BAANBzqXiRdQWy0eUP2XzOlCQ
-	CfBbmMkXe9G4BERSjAxpgsMD2mdpnajjH7w91DveLIHfsX8atQD9PO9QuZdoLl3XkbfggIYvJ8DoW
-	99RDTWb9tNgmtIbv+hEeKduAJEbBh6FRQSLnENN/KBA8nGFfLn3Pu2qPZWJJL0SMBmZfvfhYJQm9U
-	WHb4/qAg==;
+	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=nt3QrzbiaeAOQmpJ9A8MEC2Kwm6fcxII60hdZBP2blw=; b=XC54eClTpkzdCG5zQaoQT2rtsk
+	M523/KFIrvGOV9MBV48WJl1ilm9Cghhjo8+M4td8FhrBXjFkjs2+IlzbThiFSx7c4BqIO613KHtps
+	A4Lg7POEJM8PJaSHc+7TYYpHWyc/LgcmeG6mjkafyMn7o5yuqCVK517MrR3u8+HyilCwBjt4aDET0
+	heLBRq9ehlanxiYyz5fyeZJhojpedUI5k1suPtiIb6vSGp9zbjtQ7s9KlU5p26cviV/NfKOP+Nn8l
+	nifcNv1JcsMWiZih1vEH9A9iiAsSLS7pPLHAFhvYMdqZ0a9nRfNcz/b1OJp6u6g8JUDliwmx1hIst
+	kQ0EQZIg==;
 Received: from 12.248.197.178.dynamic.dsl-lte-bonding.zhbmb00p-msn.res.cust.swisscom.ch ([178.197.248.12] helo=localhost)
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1qIxFA-000E33-D0; Mon, 10 Jul 2023 22:12:24 +0200
+	id 1qIxFC-000E4H-Mr; Mon, 10 Jul 2023 22:12:26 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: ast@kernel.org
 Cc: andrii@kernel.org,
@@ -37,10 +37,12 @@ Cc: andrii@kernel.org,
 	bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
 	Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next v4 0/8] BPF link support for tc BPF programs
-Date: Mon, 10 Jul 2023 22:12:10 +0200
-Message-Id: <20230710201218.19460-1-daniel@iogearbox.net>
+Subject: [PATCH bpf-next v4 3/8] libbpf: Add opts-based attach/detach/query API for tcx
+Date: Mon, 10 Jul 2023 22:12:13 +0200
+Message-Id: <20230710201218.19460-4-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20230710201218.19460-1-daniel@iogearbox.net>
+References: <20230710201218.19460-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -58,108 +60,341 @@ X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-This series adds BPF link support for tc BPF programs. We initially
-presented the motivation, related work and design at last year's LPC
-conference in the networking & BPF track [0], and a recent update on
-our progress of the rework during this year's LSF/MM/BPF summit [1].
-The main changes are in first two patches and the last two have an
-extensive batch of test cases we developed along with it, please see
-individual patches for details. We tested this series with tc-testing
-selftest suite as well as BPF CI/selftests. Thanks!
+Extend libbpf attach opts and add a new detach opts API so this can be used
+to add/remove fd-based tcx BPF programs. The old-style bpf_prog_detach() and
+bpf_prog_detach2() APIs are refactored to reuse the new bpf_prog_detach_opts()
+internally.
 
-v3 -> v4:
-  - Fix bpftool output to display tcx/{ingress,egress} (Stan)
-  - Documentation around API, BPF_MPROG_* return codes and locking
-    expectations (Stan, Alexei)
-  - Change _after and _before to have the same semantics for return
-    value (Alexei)
-  - Rework mprog initialization and move allocation/free one layer
-    up into tcx to simplify the code (Stan)
-  - Add comment on synchronize_rcu and parent->ref (Stan)
-  - Add comment on bpf_mprog_pos_() helpers wrt target position (Stan)
-v2 -> v3:
-  - Removal of BPF_F_FIRST/BPF_F_LAST from control UAPI (Toke, Stan)
-  - Along with that full rework of bpf_mprog internals to simplify
-    dependency management, looks much nicer now imho
-  - Just single bpf_mprog_cp instead of two (Andrii)
-  - atomic64_t for revision counter (Andrii)
-  - Evaluate target position and reject on conflicts (Andrii)
-  - Keep track of actual count in bpf_mprob_bundle (Andrii)
-  - Make combo of REPLACE and BEFORE/AFTER work (Andrii)
-  - Moved miniq as first struct member (Jamal)
-  - Rework tcx_link_attach with regards to rtnl (Jakub, Andrii)
-  - Moved wrappers after bpf_prog_detach_ops (Andrii)
-  - Removed union for relative_fd and friends for opts and link in
-    libbpf (Andrii)
-  - Add doc comments to attach/detach/query libbpf APIs (Andrii)
-  - Dropped SEC_ATTACHABLE_OPT (Andrii)
-  - Add an OPTS_ZEROED check to bpf_link_create (Andrii)
-  - Keep opts as the last argument in bpf_program_attach_fd (Andrii)
-  - Rework bpf_program_attach_fd (Andrii)
-  - Remove OPTS_GET before we checked OPTS_VALID in
-    bpf_program__attach_tcx (Andrii)
-  - Add `size_t :0;` to prevent compiler from leaving garbage (Andrii)
-  - Add helper macro to clear opts structs which I found useful
-    when writing tests
-  - Rework of both opts and link test cases to accommodate for changes
-v1 -> v2:
-  - Rework of almost entire series to remove prio from UAPI and switch
-    to better control directives BPF_F_FIRST/BPF_F_LAST/BPF_F_BEFORE/
-    BPF_F_AFTER (Alexei, Toke, Stan, Andrii)
-  - Addition of big test suite to cover all corner cases
+The bpf_prog_query_opts() API got extended to be able to handle the new
+link_ids, link_attach_flags and revision fields.
 
-  [0] https://lpc.events/event/16/contributions/1353/
-  [1] http://vger.kernel.org/bpfconf2023_material/tcx_meta_netdev_borkmann.pdf
+For concrete usage examples, see the extensive selftests that have been
+developed as part of this series.
 
-Daniel Borkmann (8):
-  bpf: Add generic attach/detach/query API for multi-progs
-  bpf: Add fd-based tcx multi-prog infra with link support
-  libbpf: Add opts-based attach/detach/query API for tcx
-  libbpf: Add link-based API for tcx
-  libbpf: Add helper macro to clear opts structs
-  bpftool: Extend net dump with tcx progs
-  selftests/bpf: Add mprog API tests for BPF tcx opts
-  selftests/bpf: Add mprog API tests for BPF tcx links
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+---
+ tools/lib/bpf/bpf.c      | 105 +++++++++++++++++++++++++--------------
+ tools/lib/bpf/bpf.h      |  92 ++++++++++++++++++++++++++++------
+ tools/lib/bpf/libbpf.c   |  12 +++--
+ tools/lib/bpf/libbpf.map |   1 +
+ 4 files changed, 157 insertions(+), 53 deletions(-)
 
- MAINTAINERS                                   |    5 +-
- include/linux/bpf_mprog.h                     |  352 +++
- include/linux/netdevice.h                     |   15 +-
- include/linux/skbuff.h                        |    4 +-
- include/net/sch_generic.h                     |    2 +-
- include/net/tcx.h                             |  199 ++
- include/uapi/linux/bpf.h                      |   70 +-
- kernel/bpf/Kconfig                            |    1 +
- kernel/bpf/Makefile                           |    3 +-
- kernel/bpf/mprog.c                            |  427 ++++
- kernel/bpf/syscall.c                          |   83 +-
- kernel/bpf/tcx.c                              |  351 +++
- net/Kconfig                                   |    5 +
- net/core/dev.c                                |  267 +-
- net/core/filter.c                             |    4 +-
- net/sched/Kconfig                             |    4 +-
- net/sched/sch_ingress.c                       |   61 +-
- tools/bpf/bpftool/net.c                       |   86 +-
- tools/include/uapi/linux/bpf.h                |   70 +-
- tools/lib/bpf/bpf.c                           |  124 +-
- tools/lib/bpf/bpf.h                           |   97 +-
- tools/lib/bpf/libbpf.c                        |   74 +-
- tools/lib/bpf/libbpf.h                        |   16 +
- tools/lib/bpf/libbpf.map                      |    2 +
- tools/lib/bpf/libbpf_common.h                 |   11 +
- .../selftests/bpf/prog_tests/tc_helpers.h     |   72 +
- .../selftests/bpf/prog_tests/tc_links.c       | 1604 ++++++++++++
- .../selftests/bpf/prog_tests/tc_opts.c        | 2182 +++++++++++++++++
- .../selftests/bpf/progs/test_tc_link.c        |   40 +
- 29 files changed, 6002 insertions(+), 229 deletions(-)
- create mode 100644 include/linux/bpf_mprog.h
- create mode 100644 include/net/tcx.h
- create mode 100644 kernel/bpf/mprog.c
- create mode 100644 kernel/bpf/tcx.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_helpers.h
- create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_links.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_opts.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_tc_link.c
-
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 3b0da19715e1..3dfc43b477c3 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -629,55 +629,87 @@ int bpf_prog_attach(int prog_fd, int target_fd, enum bpf_attach_type type,
+ 	return bpf_prog_attach_opts(prog_fd, target_fd, type, &opts);
+ }
+ 
+-int bpf_prog_attach_opts(int prog_fd, int target_fd,
+-			  enum bpf_attach_type type,
+-			  const struct bpf_prog_attach_opts *opts)
++int bpf_prog_attach_opts(int prog_fd, int target,
++			 enum bpf_attach_type type,
++			 const struct bpf_prog_attach_opts *opts)
+ {
+-	const size_t attr_sz = offsetofend(union bpf_attr, replace_bpf_fd);
++	const size_t attr_sz = offsetofend(union bpf_attr, expected_revision);
++	__u32 relative_id, flags;
+ 	union bpf_attr attr;
+-	int ret;
++	int ret, relative;
+ 
+ 	if (!OPTS_VALID(opts, bpf_prog_attach_opts))
+ 		return libbpf_err(-EINVAL);
+ 
++	relative_id = OPTS_GET(opts, relative_id, 0);
++	relative = OPTS_GET(opts, relative_fd, 0);
++	flags = OPTS_GET(opts, flags, 0);
++
++	/* validate we don't have unexpected combinations of non-zero fields */
++	if (relative > 0 && relative_id)
++		return libbpf_err(-EINVAL);
++	if (relative_id) {
++		relative = relative_id;
++		flags |= BPF_F_ID;
++	}
++
+ 	memset(&attr, 0, attr_sz);
+-	attr.target_fd	   = target_fd;
+-	attr.attach_bpf_fd = prog_fd;
+-	attr.attach_type   = type;
+-	attr.attach_flags  = OPTS_GET(opts, flags, 0);
+-	attr.replace_bpf_fd = OPTS_GET(opts, replace_prog_fd, 0);
++	attr.target_fd		= target;
++	attr.attach_bpf_fd	= prog_fd;
++	attr.attach_type	= type;
++	attr.attach_flags	= flags;
++	attr.relative_fd	= relative;
++	attr.replace_bpf_fd	= OPTS_GET(opts, replace_fd, 0);
++	attr.expected_revision	= OPTS_GET(opts, expected_revision, 0);
+ 
+ 	ret = sys_bpf(BPF_PROG_ATTACH, &attr, attr_sz);
+ 	return libbpf_err_errno(ret);
+ }
+ 
+-int bpf_prog_detach(int target_fd, enum bpf_attach_type type)
++int bpf_prog_detach_opts(int prog_fd, int target,
++			 enum bpf_attach_type type,
++			 const struct bpf_prog_detach_opts *opts)
+ {
+-	const size_t attr_sz = offsetofend(union bpf_attr, replace_bpf_fd);
++	const size_t attr_sz = offsetofend(union bpf_attr, expected_revision);
++	__u32 relative_id, flags;
+ 	union bpf_attr attr;
+-	int ret;
++	int ret, relative;
++
++	if (!OPTS_VALID(opts, bpf_prog_detach_opts))
++		return libbpf_err(-EINVAL);
++
++	relative_id = OPTS_GET(opts, relative_id, 0);
++	relative = OPTS_GET(opts, relative_fd, 0);
++	flags = OPTS_GET(opts, flags, 0);
++
++	/* validate we don't have unexpected combinations of non-zero fields */
++	if (relative > 0 && relative_id)
++		return libbpf_err(-EINVAL);
++	if (relative_id) {
++		relative = relative_id;
++		flags |= BPF_F_ID;
++	}
+ 
+ 	memset(&attr, 0, attr_sz);
+-	attr.target_fd	 = target_fd;
+-	attr.attach_type = type;
++	attr.target_fd		= target;
++	attr.attach_bpf_fd	= prog_fd;
++	attr.attach_type	= type;
++	attr.attach_flags	= flags;
++	attr.relative_fd	= relative;
++	attr.expected_revision	= OPTS_GET(opts, expected_revision, 0);
+ 
+ 	ret = sys_bpf(BPF_PROG_DETACH, &attr, attr_sz);
+ 	return libbpf_err_errno(ret);
+ }
+ 
+-int bpf_prog_detach2(int prog_fd, int target_fd, enum bpf_attach_type type)
++int bpf_prog_detach(int target_fd, enum bpf_attach_type type)
+ {
+-	const size_t attr_sz = offsetofend(union bpf_attr, replace_bpf_fd);
+-	union bpf_attr attr;
+-	int ret;
+-
+-	memset(&attr, 0, attr_sz);
+-	attr.target_fd	 = target_fd;
+-	attr.attach_bpf_fd = prog_fd;
+-	attr.attach_type = type;
++	return bpf_prog_detach_opts(0, target_fd, type, NULL);
++}
+ 
+-	ret = sys_bpf(BPF_PROG_DETACH, &attr, attr_sz);
+-	return libbpf_err_errno(ret);
++int bpf_prog_detach2(int prog_fd, int target_fd, enum bpf_attach_type type)
++{
++	return bpf_prog_detach_opts(prog_fd, target_fd, type, NULL);
+ }
+ 
+ int bpf_link_create(int prog_fd, int target_fd,
+@@ -841,8 +873,7 @@ int bpf_iter_create(int link_fd)
+ 	return libbpf_err_errno(fd);
+ }
+ 
+-int bpf_prog_query_opts(int target_fd,
+-			enum bpf_attach_type type,
++int bpf_prog_query_opts(int target, enum bpf_attach_type type,
+ 			struct bpf_prog_query_opts *opts)
+ {
+ 	const size_t attr_sz = offsetofend(union bpf_attr, query);
+@@ -853,18 +884,20 @@ int bpf_prog_query_opts(int target_fd,
+ 		return libbpf_err(-EINVAL);
+ 
+ 	memset(&attr, 0, attr_sz);
+-
+-	attr.query.target_fd	= target_fd;
+-	attr.query.attach_type	= type;
+-	attr.query.query_flags	= OPTS_GET(opts, query_flags, 0);
+-	attr.query.prog_cnt	= OPTS_GET(opts, prog_cnt, 0);
+-	attr.query.prog_ids	= ptr_to_u64(OPTS_GET(opts, prog_ids, NULL));
+-	attr.query.prog_attach_flags = ptr_to_u64(OPTS_GET(opts, prog_attach_flags, NULL));
++	attr.query.target_fd		= target;
++	attr.query.attach_type		= type;
++	attr.query.query_flags		= OPTS_GET(opts, query_flags, 0);
++	attr.query.count		= OPTS_GET(opts, count, 0);
++	attr.query.prog_ids		= ptr_to_u64(OPTS_GET(opts, prog_ids, NULL));
++	attr.query.link_ids		= ptr_to_u64(OPTS_GET(opts, link_ids, NULL));
++	attr.query.prog_attach_flags	= ptr_to_u64(OPTS_GET(opts, prog_attach_flags, NULL));
++	attr.query.link_attach_flags	= ptr_to_u64(OPTS_GET(opts, link_attach_flags, NULL));
+ 
+ 	ret = sys_bpf(BPF_PROG_QUERY, &attr, attr_sz);
+ 
+ 	OPTS_SET(opts, attach_flags, attr.query.attach_flags);
+-	OPTS_SET(opts, prog_cnt, attr.query.prog_cnt);
++	OPTS_SET(opts, revision, attr.query.revision);
++	OPTS_SET(opts, count, attr.query.count);
+ 
+ 	return libbpf_err_errno(ret);
+ }
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index c676295ab9bf..49e9d88fd9cf 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -312,22 +312,68 @@ LIBBPF_API int bpf_obj_get(const char *pathname);
+ LIBBPF_API int bpf_obj_get_opts(const char *pathname,
+ 				const struct bpf_obj_get_opts *opts);
+ 
+-struct bpf_prog_attach_opts {
+-	size_t sz; /* size of this struct for forward/backward compatibility */
+-	unsigned int flags;
+-	int replace_prog_fd;
+-};
+-#define bpf_prog_attach_opts__last_field replace_prog_fd
+-
+ LIBBPF_API int bpf_prog_attach(int prog_fd, int attachable_fd,
+ 			       enum bpf_attach_type type, unsigned int flags);
+-LIBBPF_API int bpf_prog_attach_opts(int prog_fd, int attachable_fd,
+-				     enum bpf_attach_type type,
+-				     const struct bpf_prog_attach_opts *opts);
+ LIBBPF_API int bpf_prog_detach(int attachable_fd, enum bpf_attach_type type);
+ LIBBPF_API int bpf_prog_detach2(int prog_fd, int attachable_fd,
+ 				enum bpf_attach_type type);
+ 
++struct bpf_prog_attach_opts {
++	size_t sz; /* size of this struct for forward/backward compatibility */
++	__u32 flags;
++	union {
++		int replace_prog_fd;
++		int replace_fd;
++	};
++	int relative_fd;
++	__u32 relative_id;
++	__u64 expected_revision;
++	size_t :0;
++};
++#define bpf_prog_attach_opts__last_field expected_revision
++
++struct bpf_prog_detach_opts {
++	size_t sz; /* size of this struct for forward/backward compatibility */
++	__u32 flags;
++	int relative_fd;
++	__u32 relative_id;
++	__u64 expected_revision;
++	size_t :0;
++};
++#define bpf_prog_detach_opts__last_field expected_revision
++
++/**
++ * @brief **bpf_prog_attach_opts()** attaches the BPF program corresponding to
++ * *prog_fd* to a *target* which can represent a file descriptor or netdevice
++ * ifindex.
++ *
++ * @param prog_fd BPF program file descriptor
++ * @param target attach location file descriptor or ifindex
++ * @param type attach type for the BPF program
++ * @param opts options for configuring the attachment
++ * @return 0, on success; negative error code, otherwise (errno is also set to
++ * the error code)
++ */
++LIBBPF_API int bpf_prog_attach_opts(int prog_fd, int target,
++				    enum bpf_attach_type type,
++				    const struct bpf_prog_attach_opts *opts);
++
++/**
++ * @brief **bpf_prog_detach_opts()** detaches the BPF program corresponding to
++ * *prog_fd* from a *target* which can represent a file descriptor or netdevice
++ * ifindex.
++ *
++ * @param prog_fd BPF program file descriptor
++ * @param target detach location file descriptor or ifindex
++ * @param type detach type for the BPF program
++ * @param opts options for configuring the detachment
++ * @return 0, on success; negative error code, otherwise (errno is also set to
++ * the error code)
++ */
++LIBBPF_API int bpf_prog_detach_opts(int prog_fd, int target,
++				    enum bpf_attach_type type,
++				    const struct bpf_prog_detach_opts *opts);
++
+ union bpf_iter_link_info; /* defined in up-to-date linux/bpf.h */
+ struct bpf_link_create_opts {
+ 	size_t sz; /* size of this struct for forward/backward compatibility */
+@@ -495,13 +541,31 @@ struct bpf_prog_query_opts {
+ 	__u32 query_flags;
+ 	__u32 attach_flags; /* output argument */
+ 	__u32 *prog_ids;
+-	__u32 prog_cnt; /* input+output argument */
++	union {
++		/* input+output argument */
++		__u32 prog_cnt;
++		__u32 count;
++	};
+ 	__u32 *prog_attach_flags;
++	__u32 *link_ids;
++	__u32 *link_attach_flags;
++	__u64 revision;
++	size_t :0;
+ };
+-#define bpf_prog_query_opts__last_field prog_attach_flags
++#define bpf_prog_query_opts__last_field revision
+ 
+-LIBBPF_API int bpf_prog_query_opts(int target_fd,
+-				   enum bpf_attach_type type,
++/**
++ * @brief **bpf_prog_query_opts()** queries the BPF programs and BPF links
++ * which are attached to *target* which can represent a file descriptor or
++ * netdevice ifindex.
++ *
++ * @param target query location file descriptor or ifindex
++ * @param type attach type for the BPF program
++ * @param opts options for configuring the query
++ * @return 0, on success; negative error code, otherwise (errno is also set to
++ * the error code)
++ */
++LIBBPF_API int bpf_prog_query_opts(int target, enum bpf_attach_type type,
+ 				   struct bpf_prog_query_opts *opts);
+ LIBBPF_API int bpf_prog_query(int target_fd, enum bpf_attach_type type,
+ 			      __u32 query_flags, __u32 *attach_flags,
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 78635feb1946..bd621c916783 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -118,6 +118,8 @@ static const char * const attach_type_name[] = {
+ 	[BPF_TRACE_KPROBE_MULTI]	= "trace_kprobe_multi",
+ 	[BPF_STRUCT_OPS]		= "struct_ops",
+ 	[BPF_NETFILTER]			= "netfilter",
++	[BPF_TCX_INGRESS]		= "tcx_ingress",
++	[BPF_TCX_EGRESS]		= "tcx_egress",
+ };
+ 
+ static const char * const link_type_name[] = {
+@@ -8691,9 +8693,13 @@ static const struct bpf_sec_def section_defs[] = {
+ 	SEC_DEF("ksyscall+",		KPROBE,	0, SEC_NONE, attach_ksyscall),
+ 	SEC_DEF("kretsyscall+",		KPROBE, 0, SEC_NONE, attach_ksyscall),
+ 	SEC_DEF("usdt+",		KPROBE,	0, SEC_NONE, attach_usdt),
+-	SEC_DEF("tc",			SCHED_CLS, 0, SEC_NONE),
+-	SEC_DEF("classifier",		SCHED_CLS, 0, SEC_NONE),
+-	SEC_DEF("action",		SCHED_ACT, 0, SEC_NONE),
++	SEC_DEF("tc/ingress",		SCHED_CLS, BPF_TCX_INGRESS, SEC_NONE), /* alias for tcx */
++	SEC_DEF("tc/egress",		SCHED_CLS, BPF_TCX_EGRESS, SEC_NONE),  /* alias for tcx */
++	SEC_DEF("tcx/ingress",		SCHED_CLS, BPF_TCX_INGRESS, SEC_NONE),
++	SEC_DEF("tcx/egress",		SCHED_CLS, BPF_TCX_EGRESS, SEC_NONE),
++	SEC_DEF("tc",			SCHED_CLS, 0, SEC_NONE), /* deprecated / legacy, use tcx */
++	SEC_DEF("classifier",		SCHED_CLS, 0, SEC_NONE), /* deprecated / legacy, use tcx */
++	SEC_DEF("action",		SCHED_ACT, 0, SEC_NONE), /* deprecated / legacy, use tcx */
+ 	SEC_DEF("tracepoint+",		TRACEPOINT, 0, SEC_NONE, attach_tp),
+ 	SEC_DEF("tp+",			TRACEPOINT, 0, SEC_NONE, attach_tp),
+ 	SEC_DEF("raw_tracepoint+",	RAW_TRACEPOINT, 0, SEC_NONE, attach_raw_tp),
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index d9ec4407befa..a95d39bbef90 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -396,4 +396,5 @@ LIBBPF_1.3.0 {
+ 	global:
+ 		bpf_obj_pin_opts;
+ 		bpf_program__attach_netfilter;
++		bpf_prog_detach_opts;
+ } LIBBPF_1.2.0;
 -- 
 2.34.1
 
