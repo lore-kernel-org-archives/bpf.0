@@ -1,18 +1,18 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5E410954;
-	Mon, 10 Jul 2023 10:00:11 +0000 (UTC)
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2053.outbound.protection.outlook.com [40.107.93.53])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6F5170C;
-	Mon, 10 Jul 2023 02:59:48 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 399EA11198;
+	Mon, 10 Jul 2023 10:00:15 +0000 (UTC)
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2062e.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5a::62e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB901738;
+	Mon, 10 Jul 2023 02:59:52 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k3we+FhqjQXn+HbpCqb43yEkd1/NNYftExOaVuvGa/epsIFwH2GBh1k5NDcG/CK6GU3Enu5jR5fk+5CWEFUg3h0Dl9tOd00XkiNIdKXHUpPXHGal2hurvc7WXyIYh3JVfwf9iQeeYMbuV3WiIhdikl4ztCPNKaztN/JRUM/gN7hSXkGMPdRTrR+0YsaiLfDcMgDbkzLYdl9m5sZ3nvwQjI0WacVpA+4d0620ET7bweeDSZtdXE3dxaH0cA2j6wVcvZqtsp2bxOHwh89X+ps1vK3tTmC9P5mTh986pp1CrPldhZvKcnGY7PhlACrDgEEFsS4GMLGH+W0mGJQKSgcWFw==
+ b=mcy9u7UJpcw1Wcc8AYztjwbq04at+4bQFWdfcJTa1IYukGAV8pEhVSgNVD9iW19u54h+zXO0z1VeO/tmQ7ZNehwJhCqkSrJapVBPyzCY1CiTVtuDlgsAT0dH/hVFMHf7TLMiV/0/TZd+VoMfeG0Qlqt1q3S5xFziNX/U6saj6e1vtRKz1IXj6h7Q27eUqcmbVNPLDiRrd9VQRTHISh8kCP07qNAMEhobfQ2o/tDQGGnEbu6DCkQzGsDO2K68nAkrc2MhO21Y/l+gaBpY4HkGL/l1D2RLL30yh5+3DFNSrWheiH1F4Lo8/Ut/tlfuJ+KIt7Y3gmf5uILzrB64Oigi2A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tnwAzz5ZvOGHhKN+xXy7unvd0kcKuNmiauGFOL0S3gM=;
- b=jI9JOnSqPcxeFzAYpBfzcxwproGpp07UwfIzmZ+RJgKCw91ngZ2UUuGB4IMq1/oWUA9Ooj5VCb/9GK2HcAwXTH5v+pzusgqj3MNCYDXT0GBkCi0/TaliDpz3bT6Q9UIeG9euEPfBMUq5kSstk7UKW8pW9O0jL9CMR/2Ugnrtyx0cduilZrq8qW6l0FdiRLQcnQYrYWBwKXOOCu8fRmpCWUReL0NDEAGVKrTe+9UQWrgqTFHhwMBDx5EebGMa119d3rGkqBUM0hXuJcnj1IkZRXiNYy7puO8zYmKWXDvrVqKkCR6Iws+z7+EoFTaup9du60oiRVJqPXDAHFsW6aEyrQ==
+ bh=d0oHsOuXgvTMjpbxKtqjrGPAMf2I/9i3elpw5czoUwE=;
+ b=YHkUWHC82zNvHxVBG/0IMvfr+Y5lmf6gAg/A3japYniUF/b+wXHPX01KDxgDYeRQQvQNC9mkairnBi+6mq5Gwm7vY2ElzL6R6CbCc5YGq6dqPTws8uL5mPpy4hBOOb+O00s67g3l5E4ae7Mx/iws5rA/9O5DoClayCbltjQTokV/dRNbfL/WmPc9FFOPNG54yl/TZdE39viUknIA55IWoG4ooQfAaEuCkPJqBXKsWpZ5/OOCs1pC8Ty0OLAgrxjq2hFpwBx1XhLwijnq+AvX89zKI+ul5FFqCZXl8PyrzUQ3j+JD/gK/fjawkuo/2LChTV1KFrPgzO0C9LtXWN2gzA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -20,18 +20,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tnwAzz5ZvOGHhKN+xXy7unvd0kcKuNmiauGFOL0S3gM=;
- b=ofaPq/4V0uJ7LgRLEWkZCXN1qtP9jqr0MO7aw7nQ5/9achAMlHry95eZcAfN7/Tl9o75jQDRSwg0rky3r7nKtgNlo8ZacHsBr6en8xsSATkJCoeNRySKnqLZuvs4WrrLzDfbFqLMn5y5XKBIQ3hgHiKaE55aEAkss68i7Fw+bCNoz1QPu5vMoJZDAAHAQylmuze5Lp4Cby8lGspXR9o3BTxt0ARcBlXWuN0ogne8K9PzjnbbkslG5pq3Uis8FDH7qqYAoIdYeEUboGj6VfrP/lTxeIUlhdDHPP8Ol+whYOWSZ5k4+8LVNaBh8jvvyDaDZFNAcavDD24EgGnBRh+NuQ==
-Received: from SJ0PR13CA0148.namprd13.prod.outlook.com (2603:10b6:a03:2c6::33)
- by DM4PR12MB6229.namprd12.prod.outlook.com (2603:10b6:8:a8::16) with
+ bh=d0oHsOuXgvTMjpbxKtqjrGPAMf2I/9i3elpw5czoUwE=;
+ b=nBF++mE5KTaUyulgXHjJ3gfyrnm8Xzr4309190Dv/bTtV3aCrKaeUNeFmiwdXtBzELbvof/87EgQExxsR8LOqJPS1uTAR5dRjoq/dzPqcJag89hMpVzr0yXvM4ZA87ojB/z69exyfoZqXdJTy+QyPKJs9ubA3bdfYuP7cFNVphmZUAU6SKLT1k8KnDX0uCdjsXRaeD0Z3K6FnByp7cfdzYtQhICxNE2gBDrWVVnBhnWPDFsks+ZCdjOSko8Mij0v+3o1yg04ioJichkQDJ29nsaKdVGWEjjDjEKdgyjrnCsNLhkoDtHGAMAsKXSNY5ZkQWO2fkHd5U42T7l/xSVdOw==
+Received: from DM6PR02CA0113.namprd02.prod.outlook.com (2603:10b6:5:1b4::15)
+ by CH3PR12MB7764.namprd12.prod.outlook.com (2603:10b6:610:14e::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.31; Mon, 10 Jul
- 2023 09:59:34 +0000
-Received: from DM6NAM11FT112.eop-nam11.prod.protection.outlook.com
- (2603:10b6:a03:2c6:cafe::8a) by SJ0PR13CA0148.outlook.office365.com
- (2603:10b6:a03:2c6::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.18 via Frontend
- Transport; Mon, 10 Jul 2023 09:59:34 +0000
+ 2023 09:59:41 +0000
+Received: from DM6NAM11FT090.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:1b4:cafe::9f) by DM6PR02CA0113.outlook.office365.com
+ (2603:10b6:5:1b4::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.31 via Frontend
+ Transport; Mon, 10 Jul 2023 09:59:41 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -39,17 +39,17 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
  216.228.117.161 as permitted sender) receiver=protection.outlook.com;
  client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
 Received: from mail.nvidia.com (216.228.117.161) by
- DM6NAM11FT112.mail.protection.outlook.com (10.13.173.77) with Microsoft SMTP
+ DM6NAM11FT090.mail.protection.outlook.com (10.13.172.184) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6588.18 via Frontend Transport; Mon, 10 Jul 2023 09:59:33 +0000
+ 15.20.6588.18 via Frontend Transport; Mon, 10 Jul 2023 09:59:40 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
  (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 10 Jul 2023
- 02:59:19 -0700
+ 02:59:28 -0700
 Received: from nvidia.com (10.126.231.35) by rnnvmail201.nvidia.com
  (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 10 Jul
- 2023 02:59:15 -0700
+ 2023 02:59:24 -0700
 From: Gavin Li <gavinl@nvidia.com>
 To: <mst@redhat.com>, <jasowang@redhat.com>, <xuanzhuo@linux.alibaba.com>,
 	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
@@ -58,9 +58,9 @@ To: <mst@redhat.com>, <jasowang@redhat.com>, <xuanzhuo@linux.alibaba.com>,
 	<dtatulea@nvidia.com>
 CC: <virtualization@lists.linux-foundation.org>, <netdev@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
-Subject: [RESEND PATCH net-next-mlx5 V1 2/4] virtio_net: extract get/set interrupt coalesce to a function
-Date: Mon, 10 Jul 2023 12:58:48 +0300
-Message-ID: <20230710095850.2853-3-gavinl@nvidia.com>
+Subject: [RESEND PATCH net-next-mlx5 V1 4/4] virtio_net: enable per queue interrupt coalesce feature
+Date: Mon, 10 Jul 2023 12:58:50 +0300
+Message-ID: <20230710095850.2853-5-gavinl@nvidia.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230710095850.2853-1-gavinl@nvidia.com>
 References: <20230710095850.2853-1-gavinl@nvidia.com>
@@ -77,93 +77,64 @@ X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT112:EE_|DM4PR12MB6229:EE_
-X-MS-Office365-Filtering-Correlation-Id: dddc8930-185d-45ee-4355-08db812c5cf8
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT090:EE_|CH3PR12MB7764:EE_
+X-MS-Office365-Filtering-Correlation-Id: d53efa6a-d020-429a-f737-08db812c6110
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	Pm1rERezufsNL4fBnaNBlh86lThhrCOaUzS+9Pr43dVw+7lBZDMzOj5qd8MUemdvBlbntgmtCZaR2B+L7eBKQGp97wOAdRuUK5pCB8L1s6xmp2tG8ozYkoSXBYKFbf1l8PIhWjFW9m+OUTWnJQ5ImdRYnnBrk7WsTq2I7TuedRyIikbq2q/G4DIo3wFnJqkIn73WnjymYwDyy+m4yCUkkSgy8si3EB+Juqela2OCwMqiR5wzFh/Xzxz+Qxd7Z9Z0HLn1IIauKi8jYPyCd/7bxaYpneaywmP0iitbbtcqmDxszoexGzJvHXBFDiva8WztbRlFQujhz6nOpBJ54va985LWvi/+VFYuHj9eqeD/d8wiXA8Rw1QYGoyKT0BdRwC6whBDjnfRC4iMuZslpMAvrAWjI0nTD9rDPWCacWnWJAisUz1f78lNN8jLT6lVulDEVNdY3Gnt9vRG3xqzhU6ThLOUrn0oZMSKH3U1z89xif8qwQ/O4+59w0QcSfp1aC3A0GzzpWLdiH3fyN5gYAOnh9AsG3revPkC/1GXh6+988Nei3VPi5rHy29RgI0b6VmGde11vl6ilC0ipghrPl3HYFMLB4dH9eWTNgAKZ+0bE07DkJWxjDdjWj5lDVVJ6Kxs7dui4iFgP9BXQqEAuVCXKZY5LffkPIrHh4Nk01RDseQQOc6YhrPsKpLQbAHltBcYtJkcqlmpXu++gI12lY24adQwojyU8jCstEBI7zlzakzEbyNrh4oZd06a69sAyKEFPa832AqdNpmUFevUfYWxDNG4r8itpvlgx7guWtUtkk8nxUqQw212CjoqOHzGS0wE
+	JbT08VsOq4mFyX9jfxHQ25yNawu71OEfVbEXK6WbjFJRoOdTyr3tahV5ES8B9tKI4wtBwXynC27usQDGWZZsnxQYiDorIDeS+78wcAe5WZqGa7VSw2vf+Wi5IFEJEiMBOnCtpV9lz4pcn8wxf0S4faNgnEfUVZPJdPJ9W88YWL1CIGuUHgnO6Or7shE2NXrt6ZdhfHNG9YFu1CDNPhT7JmPPk+SEKJ+8a3iI7Fmz1OfP72V0uK7ftutONw7vJu+b/rpBEKkcAPnD9+pDRTqjYrUJvHRnJtvjUwn3mMcRPhVfUikicmCdEQifUw1A0I2JF4/CCfLPJdQt6RX+VARTwXx4ATNm4WCrw7r4g0TDN+0ixz6fGY0wngcUVDDha1ow80x9/cxHTWwKEAZ8oiFj2L1zmMV6ytsdLYRYW/IMEzV8XjwyW8Ng+090YUG17Ah32anGlog264KCW7g3z03FJjq47H+du3XCI4S/J69eNEEk58ad9nIEmNsGZfrMFrYMwUVVWgfAZ3uaoLFinKma+n2rt+v/Q3r/VqsuyzxGmffPEtuJrlVBAXnftpk9zzkcHkC4fkHfnEr0UnMo0h2n5MwNx8OVXxGNgJwWAgkJ8r9ps7AJ4XnUXeWAytC0+TUzXtJG6JgmPvLRguZB12ZJd25iDy5E1l7O9Ee8rtYEGy8JfLKDtl76wV30noMW4GfZz6dT/GYT9QIfRJCYh03zDpd1tYnQMHJT2akDgLYonjVvajWwZu2dcS42xxQQd5g/Um6nyMDak1yLumygzeaeQ520KeRHpVoiAFabywSNB6Yp0BshHiA5wvUXHAd4ejci
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(136003)(376002)(346002)(451199021)(40470700004)(46966006)(36840700001)(6666004)(478600001)(7696005)(83380400001)(47076005)(26005)(1076003)(2616005)(16526019)(6286002)(186003)(36756003)(40480700001)(55016003)(336012)(426003)(40460700003)(36860700001)(316002)(82310400005)(2906002)(41300700001)(356005)(921005)(7636003)(82740400003)(70586007)(70206006)(6636002)(4326008)(86362001)(7416002)(8936002)(8676002)(5660300002)(110136005)(54906003)(83996005)(2101003);DIR:OUT;SFP:1101;
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(376002)(136003)(346002)(451199021)(46966006)(40470700004)(36840700001)(7416002)(5660300002)(8676002)(70586007)(70206006)(8936002)(2906002)(316002)(6636002)(4326008)(54906003)(6666004)(7696005)(1076003)(26005)(47076005)(186003)(16526019)(83380400001)(6286002)(41300700001)(2616005)(336012)(426003)(36860700001)(40460700003)(478600001)(110136005)(82740400003)(921005)(356005)(7636003)(82310400005)(36756003)(55016003)(86362001)(40480700001)(83996005)(2101003);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2023 09:59:33.9344
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2023 09:59:40.8540
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: dddc8930-185d-45ee-4355-08db812c5cf8
+X-MS-Exchange-CrossTenant-Network-Message-Id: d53efa6a-d020-429a-f737-08db812c6110
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	DM6NAM11FT112.eop-nam11.prod.protection.outlook.com
+	DM6NAM11FT090.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6229
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7764
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-	T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+	autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Extract get/set interrupt coalesce to a function to be reused by global
-and per queue config.
+Enable per queue interrupt coalesce feature bit in driver and validate its
+dependency with control queue.
 
 Signed-off-by: Gavin Li <gavinl@nvidia.com>
 Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
 Reviewed-by: Jiri Pirko <jiri@nvidia.com>
 ---
- drivers/net/virtio_net.c | 22 +++++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
+ drivers/net/virtio_net.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index dd5fec073a27..802ed21453f5 100644
+index 333a38e1941f..81bac3597a2b 100644
 --- a/drivers/net/virtio_net.c
 +++ b/drivers/net/virtio_net.c
-@@ -3093,10 +3093,8 @@ static int virtnet_coal_params_supported(struct ethtool_coalesce *ec)
- 	return 0;
- }
+@@ -4060,6 +4060,8 @@ static bool virtnet_validate_features(struct virtio_device *vdev)
+ 	     VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_HASH_REPORT,
+ 			     "VIRTIO_NET_F_CTRL_VQ") ||
+ 	     VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_NOTF_COAL,
++			     "VIRTIO_NET_F_CTRL_VQ") ||
++	     VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_VQ_NOTF_COAL,
+ 			     "VIRTIO_NET_F_CTRL_VQ"))) {
+ 		return false;
+ 	}
+@@ -4484,6 +4486,7 @@ static struct virtio_device_id id_table[] = {
+ 	VIRTIO_NET_F_MTU, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS, \
+ 	VIRTIO_NET_F_SPEED_DUPLEX, VIRTIO_NET_F_STANDBY, \
+ 	VIRTIO_NET_F_RSS, VIRTIO_NET_F_HASH_REPORT, VIRTIO_NET_F_NOTF_COAL, \
++	VIRTIO_NET_F_VQ_NOTF_COAL, \
+ 	VIRTIO_NET_F_GUEST_HDRLEN
  
--static int virtnet_set_coalesce(struct net_device *dev,
--				struct ethtool_coalesce *ec,
--				struct kernel_ethtool_coalesce *kernel_coal,
--				struct netlink_ext_ack *extack)
-+static int virtnet_set_coalesce_one(struct net_device *dev,
-+				    struct ethtool_coalesce *ec)
- {
- 	struct virtnet_info *vi = netdev_priv(dev);
- 	int ret, i, napi_weight;
-@@ -3127,10 +3125,16 @@ static int virtnet_set_coalesce(struct net_device *dev,
- 	return ret;
- }
- 
--static int virtnet_get_coalesce(struct net_device *dev,
-+static int virtnet_set_coalesce(struct net_device *dev,
- 				struct ethtool_coalesce *ec,
- 				struct kernel_ethtool_coalesce *kernel_coal,
- 				struct netlink_ext_ack *extack)
-+{
-+	return virtnet_set_coalesce_one(dev, ec);
-+}
-+
-+static int virtnet_get_coalesce_one(struct net_device *dev,
-+				    struct ethtool_coalesce *ec)
- {
- 	struct virtnet_info *vi = netdev_priv(dev);
- 
-@@ -3149,6 +3153,14 @@ static int virtnet_get_coalesce(struct net_device *dev,
- 	return 0;
- }
- 
-+static int virtnet_get_coalesce(struct net_device *dev,
-+				struct ethtool_coalesce *ec,
-+				struct kernel_ethtool_coalesce *kernel_coal,
-+				struct netlink_ext_ack *extack)
-+{
-+	return virtnet_get_coalesce_one(dev, ec);
-+}
-+
- static void virtnet_init_settings(struct net_device *dev)
- {
- 	struct virtnet_info *vi = netdev_priv(dev);
+ static unsigned int features[] = {
 -- 
 2.39.1
 
