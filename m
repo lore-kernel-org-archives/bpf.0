@@ -1,99 +1,106 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C4BF16428
-	for <bpf@vger.kernel.org>; Mon, 10 Jul 2023 18:31:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43ACA12B9E
+	for <bpf@vger.kernel.org>; Mon, 10 Jul 2023 18:37:17 +0000 (UTC)
 Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E0BC3
-	for <bpf@vger.kernel.org>; Mon, 10 Jul 2023 11:31:53 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A711BC
+	for <bpf@vger.kernel.org>; Mon, 10 Jul 2023 11:36:49 -0700 (PDT)
 Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 5D479C16B5AE
-	for <bpf@vger.kernel.org>; Mon, 10 Jul 2023 11:31:53 -0700 (PDT)
+	by ietfa.amsl.com (Postfix) with ESMTP id B28BAC169538
+	for <bpf@vger.kernel.org>; Mon, 10 Jul 2023 11:36:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1689013913; bh=uzq1TBOaR54PUAY+kQMzPg/RwXrX30NmNmoFdL3sLaY=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe;
-	b=RRGm6vio9QZmoURr+HcJwadGw2L2w0tKuSZ1uwUgeluzhNHKmOumlwJrHmrvQa90d
-	 9A2NZ6DzLB652AjJ+CluDP8EWGLV++MTmesfHF07Cp+DKyWbkfmZCK3EoPlKG64gUp
-	 eIg1Ji4MZV/qbOiJibU/rxFHI5D1InxicqWt/bsg=
-X-Mailbox-Line: From bpf-bounces@ietf.org  Mon Jul 10 11:31:53 2023
+	t=1689014195; bh=/UHmnkU1B7LFkPmzNlbwutUa4PdnrFbX1KUihyncDXY=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=QvB433xW9OXz5h/n46j9wVD7wFVvlkqtHTqALQSQhpGElWEbeCFfy/ighyAeqwket
+	 b3Q0RbX048p67wlm8FKWfPCC4LeVOJAqF5ndtL/PrDWCDMGi5l4OcG3GAFUUYuZN0S
+	 TMKsdiO7YQMqUNh48Vfpz0B8mW9OIz030VFxeC7E=
 Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 0F15FC169510;
-	Mon, 10 Jul 2023 11:31:53 -0700 (PDT)
+ by ietfa.amsl.com (Postfix) with ESMTP id A264AC169527;
+ Mon, 10 Jul 2023 11:36:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1689013913; bh=uzq1TBOaR54PUAY+kQMzPg/RwXrX30NmNmoFdL3sLaY=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe;
-	b=RRGm6vio9QZmoURr+HcJwadGw2L2w0tKuSZ1uwUgeluzhNHKmOumlwJrHmrvQa90d
-	 9A2NZ6DzLB652AjJ+CluDP8EWGLV++MTmesfHF07Cp+DKyWbkfmZCK3EoPlKG64gUp
-	 eIg1Ji4MZV/qbOiJibU/rxFHI5D1InxicqWt/bsg=
+ t=1689014195; bh=/UHmnkU1B7LFkPmzNlbwutUa4PdnrFbX1KUihyncDXY=;
+ h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+ List-Post:List-Help:List-Subscribe;
+ b=c6gys/q7qNJLZ6+hvZdzyqKyM9rGAOzU++AX1lHDyoWvXKWLBWFIKrTlJk+/+x1aO
+ nf06sVf/hLlAfpsv9xEluU2/wd9vL67aEbnJKIEQXHEWraf4tjiev1a10QL2DunTPU
+ niy4JZf8ZxZ6+ekrxT73E7Wu3AqYfPVg3ohIis8g=
 Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id 18280C169510
- for <bpf@ietfa.amsl.com>; Mon, 10 Jul 2023 11:31:52 -0700 (PDT)
+ by ietfa.amsl.com (Postfix) with ESMTP id E5BBAC16950E
+ for <bpf@ietfa.amsl.com>; Mon, 10 Jul 2023 11:36:33 -0700 (PDT)
 X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Score: -6.547
+X-Spam-Score: -6.845
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,
-	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-	autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,MAILING_LIST_MULTI,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+	SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+	autolearn_force=no version=3.4.6
+Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
+ header.d=googlemail.com
 Received: from mail.ietf.org ([50.223.129.194])
  by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1hr0TNJNaTKY for <bpf@ietfa.amsl.com>;
- Mon, 10 Jul 2023 11:31:48 -0700 (PDT)
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com
- [209.85.160.178])
+ with ESMTP id pj8gWgme5A3s for <bpf@ietfa.amsl.com>;
+ Mon, 10 Jul 2023 11:36:29 -0700 (PDT)
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com
+ [IPv6:2607:f8b0:4864:20::431])
  (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
  key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
  (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id 4F1FCC151094
- for <bpf@ietf.org>; Mon, 10 Jul 2023 11:31:48 -0700 (PDT)
-Received: by mail-qt1-f178.google.com with SMTP id
- d75a77b69052e-403a85eb723so20375861cf.1
- for <bpf@ietf.org>; Mon, 10 Jul 2023 11:31:48 -0700 (PDT)
+ by ietfa.amsl.com (Postfix) with ESMTPS id 61918C169527
+ for <bpf@ietf.org>; Mon, 10 Jul 2023 11:36:29 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id
+ d2e1a72fcca58-668711086f4so3078154b3a.1
+ for <bpf@ietf.org>; Mon, 10 Jul 2023 11:36:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=googlemail.com; s=20221208; t=1689014188; x=1691606188;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=XVA1uSFinkIrDQM5y/4V1pT0CBrG8xSRD0wqPRcdPVg=;
+ b=kcQjgxmgDSE4oExxyiKqAm8buGiio2rwdfWOmmV2Kp6gtJ6LNfG6mxw1qvSk/ZLnl1
+ gGAkQi0P5B70BLznW10sIgs+IF3x54WlLh8abEcGhn29rF1dhvEiAmeTfbuGFQLYTeqc
+ YI0UU/Oird3UgdOjKNR/XO8vOYmAzNyWnm7DUiJWDtfNdQsvks9KRqXa1zde6FPd/pIB
+ Pz811fnNITFPhhKM6DzPvba6oKbaRZKHqxwl4JVm2DWFChNNM6R2FEIzfGNCXya2qrxX
+ R0fq9k/mQAF31fc8lfMU8DSygoo+0taSTB4oBuq6w56IfVqce0ZLFSY5UOxQlM16EBS3
+ K8SQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1689013907; x=1691605907;
+ d=1e100.net; s=20221208; t=1689014188; x=1691606188;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=FFg6es6MnkESIGeku/OXeP7kXEnpRz2XkgXfhzN59IQ=;
- b=Vu7mDQN2vOocgmDkQbFJMA98TVOiguWhPSb/Mhh/O35XuG4cogzX3AytuegPd/GIkU
- YSwFs//PJhRyP1w0+DAunmziZbsQRSNown1rafohw21/y8SPwJGdO/r2p1aiajGSf00C
- CDYoIUPeth07YvTd4X+8IDp7mvSNkGQtSyNwdKxJKVGWCRvyKHs23Am7P4sf5WnyQFVh
- w625KaUs0H4Iv3hlnKX9ynrKMClcKTXP2Fj2vZtiFzIwMOwMUrpaWWjuoAZmjYgLXI3R
- Dwsb5D3Btw0bIG/sl6dH18uVl3uQWYlwTeNz2sxkXfCGkX3loIv2lh1BS31W87W1bU1d
- /skQ==
-X-Gm-Message-State: ABy/qLZjuihbCFf2vesIg/+PYogFK7FWQa/7D0fRM0uA4/2cWrlLufyN
- jGNtbLfiBRoiv7vhP8dk4v0=
-X-Google-Smtp-Source: APBJJlFnJy56MSvI7hBVrDADp6aJ5NB+E7GR4tyisl4jvg/ekNRgWT9+E1wpViPcJoyO6CTGRqMzyA==
-X-Received: by 2002:ac8:7d43:0:b0:403:a7de:ae36 with SMTP id
- h3-20020ac87d43000000b00403a7deae36mr8725658qtb.67.1689013906996; 
- Mon, 10 Jul 2023 11:31:46 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:4850])
- by smtp.gmail.com with ESMTPSA id
- z4-20020ac87f84000000b00403a2e88d01sm180690qtj.40.2023.07.10.11.31.46
+ bh=XVA1uSFinkIrDQM5y/4V1pT0CBrG8xSRD0wqPRcdPVg=;
+ b=cuaEdqeEWtH3JSv8R1begminZgm5xJ8wMgAEEkK/r6YCL6i4Fga9RPELjc51+BITqB
+ hQ/Jt+prduS6lBBI9Zmmc281CagM/R4s9BeyCh/1921ZQ/0KYuiytlvTj70UmP29pr78
+ N5zzzv6j8YdQem/lzx0ShowkTm9ft/ajZfL7FzKpsa6dlEUxSchnNxgsfmo+IPNbO400
+ XdLu3kBWHQ/f0IUX4R4lL9KRIcTbPLIcC0Q5vulDryGDJqjE0HB3vRJEOBIy56snVrDu
+ 2ICUZnTs7pWSv+mzKzeuMnqZbw3NZKDruvndkT/0yF+MCkryiKOnvZBUxep6v7pgT60E
+ 8TPA==
+X-Gm-Message-State: ABy/qLb1hsc+dXWQSrEBsUsfizLtVq0xAZgS+jiCSYf5PNKvDrJ4smfN
+ WO15CYHVg3XdTkJ/sqE76/Oim1k2dHY=
+X-Google-Smtp-Source: APBJJlHb725uW0TZZ1aLxhAk4SH0vKO6bLp5ur7xXBm2kcNMXnBLQMbzKZ9TjfLIGJJqstEd7exy+Q==
+X-Received: by 2002:a05:6a00:3a0a:b0:678:7744:31fd with SMTP id
+ fj10-20020a056a003a0a00b00678774431fdmr26427913pfb.0.1689014188502; 
+ Mon, 10 Jul 2023 11:36:28 -0700 (PDT)
+Received: from mariner-vm.. (c-71-197-160-159.hsd1.wa.comcast.net.
+ [71.197.160.159]) by smtp.gmail.com with ESMTPSA id
+ u18-20020aa78392000000b006827c26f147sm101778pfm.138.2023.07.10.11.36.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 10 Jul 2023 11:31:46 -0700 (PDT)
-From: David Vernet <void@manifault.com>
+ Mon, 10 Jul 2023 11:36:28 -0700 (PDT)
 To: bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
- haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
- kernel-team@meta.com, bpf@ietf.org
-Date: Mon, 10 Jul 2023 13:30:27 -0500
-Message-ID: <20230710183027.15132-1-void@manifault.com>
-X-Mailer: git-send-email 2.40.1
+Cc: bpf@ietf.org,
+	Dave Thaler <dthaler@microsoft.com>
+Date: Mon, 10 Jul 2023 18:36:22 +0000
+Message-Id: <20230710183622.1401-1-dthaler1968@googlemail.com>
+X-Mailer: git-send-email 2.33.4
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/Jqf7RKUggFbwjzwBdMm_eKB41eU>
-Subject: [Bpf] [PATCH bpf-next] bpf,
- docs: Create new standardization subdirectory
+Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/UgswQbSeud23Htz1crgybulLl50>
+Subject: [Bpf] [PATCH bpf-next v3] bpf, docs: Improve English readability
 X-BeenThere: bpf@ietf.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -110,131 +117,150 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: bpf-bounces@ietf.org
 Sender: "Bpf" <bpf-bounces@ietf.org>
+X-Original-From: Dave Thaler <dthaler1968@googlemail.com>
+From: Dave Thaler <dthaler1968=40googlemail.com@dmarc.ietf.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
-Message-ID: <20230710183027.aCE2Z8GJJSM7n10M_XbAt1NKIbVGcUPISimUPz7-SEo@z>
 
-The BPF standardization effort is actively underway with the IETF. As
-described in the BPF Working Group (WG) charter in [0], there are a
-number of proposed documents, some informational and some proposed
-standards, that will be drafted as part of the standardization effort.
+From: Dave Thaler <dthaler@microsoft.com>
 
-[0]: https://datatracker.ietf.org/wg/bpf/about/
+Minor changes to improve English readability. For example:
 
-Though the specific documents that will formally be standardized will
-exist as Internet Drafts (I-D) and WG documents in the BPF WG
-datatracker page, the source of truth from where those documents will be
-generated will reside in the kernel documentation tree (originating in
-the bpf-next tree).
+* Use "must be set to zero" phrasing as typical in IETF RFCs.
+* Expand LSB on first use, per RFC editor requirements.
+* Define htole and htobe
+* Define PC
 
-Because these documents will be used to generate the I-D and WG
-documents which will be standardized with the IETF, they are a bit
-special as far as kernel-tree documentation goes:
+--
+V1 -> V2: addressed comments from Alexei
+V2 -> V3: removed changeds Alexei didn't like
 
-- They will be dual licensed with LGPL-2.1 OR BSD-2-Clause
-- IETF I-D and WG documents (the documents which will actually be
-  standardized) will be auto-generated from these documents.
-
-In order to keep things clearly organized in the BPF documentation tree,
-and to make it abundantly clear where standards-related documentation
-needs to go, we should move standards-relevant documents into a separate
-standardization/ subdirectory.
-
-Signed-off-by: David Vernet <void@manifault.com>
+Signed-off-by: Dave Thaler <dthaler@microsoft.com>
 ---
- Documentation/bpf/index.rst                    |  3 +--
- Documentation/bpf/standardization/index.rst    | 18 ++++++++++++++++++
- .../{ => standardization}/instruction-set.rst  |  0
- .../bpf/{ => standardization}/linux-notes.rst  |  3 ++-
- MAINTAINERS                                    |  2 +-
- 5 files changed, 22 insertions(+), 4 deletions(-)
- create mode 100644 Documentation/bpf/standardization/index.rst
- rename Documentation/bpf/{ => standardization}/instruction-set.rst (100%)
- rename Documentation/bpf/{ => standardization}/linux-notes.rst (96%)
+ Documentation/bpf/instruction-set.rst | 37 +++++++++++++++++++--------
+ 1 file changed, 26 insertions(+), 11 deletions(-)
 
-diff --git a/Documentation/bpf/index.rst b/Documentation/bpf/index.rst
-index dbb39e8f9889..1ff177b89d66 100644
---- a/Documentation/bpf/index.rst
-+++ b/Documentation/bpf/index.rst
-@@ -12,9 +12,9 @@ that goes into great technical depth about the BPF Architecture.
- .. toctree::
-    :maxdepth: 1
+diff --git a/Documentation/bpf/instruction-set.rst b/Documentation/bpf/instruction-set.rst
+index 751e657973f..17edf268ed8 100644
+--- a/Documentation/bpf/instruction-set.rst
++++ b/Documentation/bpf/instruction-set.rst
+@@ -74,7 +74,7 @@ For example::
+   07     1       0        00 00  11 22 33 44  r1 += 0x11223344 // big
  
--   instruction-set
-    verifier
-    libbpf/index
-+   standardization/index
-    btf
-    faq
-    syscall_api
-@@ -29,7 +29,6 @@ that goes into great technical depth about the BPF Architecture.
-    bpf_licensing
-    test_debug
-    clang-notes
--   linux-notes
-    other
-    redirect
+ Note that most instructions do not use all of the fields.
+-Unused fields shall be cleared to zero.
++Unused fields must be set to zero.
  
-diff --git a/Documentation/bpf/standardization/index.rst b/Documentation/bpf/standardization/index.rst
-new file mode 100644
-index 000000000000..09c6ba055fd7
---- /dev/null
-+++ b/Documentation/bpf/standardization/index.rst
-@@ -0,0 +1,18 @@
-+.. SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-+
-+===================
-+BPF Standardization
-+===================
-+
-+This directory contains documents that are being iterated on as part of the BPF
-+standardization effort with the IETF. See the `IETF BPF Working Group`_ page
-+for the working group charter, documents, and more.
-+
-+.. toctree::
-+   :maxdepth: 1
-+
-+   instruction-set
-+   linux-notes
-+
-+.. Links:
-+.. _IETF BPF Working Group: https://datatracker.ietf.org/wg/bpf/about/
-diff --git a/Documentation/bpf/instruction-set.rst b/Documentation/bpf/standardization/instruction-set.rst
-similarity index 100%
-rename from Documentation/bpf/instruction-set.rst
-rename to Documentation/bpf/standardization/instruction-set.rst
-diff --git a/Documentation/bpf/linux-notes.rst b/Documentation/bpf/standardization/linux-notes.rst
-similarity index 96%
-rename from Documentation/bpf/linux-notes.rst
-rename to Documentation/bpf/standardization/linux-notes.rst
-index 508d009d3bed..00d2693de025 100644
---- a/Documentation/bpf/linux-notes.rst
-+++ b/Documentation/bpf/standardization/linux-notes.rst
-@@ -45,7 +45,8 @@ On Linux, this integer is a BTF ID.
- Legacy BPF Packet access instructions
- =====================================
+ As discussed below in `64-bit immediate instructions`_, a 64-bit immediate
+ instruction uses a 64-bit immediate value that is constructed as follows.
+@@ -103,7 +103,9 @@ instruction are reserved and shall be cleared to zero.
+ Instruction classes
+ -------------------
  
--As mentioned in the `ISA standard documentation <instruction-set.rst#legacy-bpf-packet-access-instructions>`_,
-+As mentioned in the `ISA standard documentation
-+<instruction-set.html#legacy-bpf-packet-access-instructions>`_,
- Linux has special eBPF instructions for access to packet data that have been
- carried over from classic BPF to retain the performance of legacy socket
- filters running in the eBPF interpreter.
-diff --git a/MAINTAINERS b/MAINTAINERS
-index acbe54087d1c..99d8dc9b2850 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3746,7 +3746,7 @@ R:	David Vernet <void@manifault.com>
- L:	bpf@vger.kernel.org
- L:	bpf@ietf.org
- S:	Maintained
--F:	Documentation/bpf/instruction-set.rst
-+F:	Documentation/bpf/standardization/
+-The three LSB bits of the 'opcode' field store the instruction class:
++The encoding of the 'opcode' field varies and can be determined 
++from the three least significant bits (LSB) of the 'opcode' field 
++which holds the "instruction class", as follows:
  
- BPF [GENERAL] (Safe Dynamic Programs and Tools)
- M:	Alexei Starovoitov <ast@kernel.org>
+ =========  =====  ===============================  ===================================
+ class      value  description                      reference
+@@ -216,8 +218,9 @@ The byte swap instructions use an instruction class of ``BPF_ALU`` and a 4-bit
+ The byte swap instructions operate on the destination register
+ only and do not use a separate source register or immediate value.
+ 
+-The 1-bit source operand field in the opcode is used to select what byte
+-order the operation convert from or to:
++Byte swap instructions use the 1-bit 'source' field in the 'opcode' 
++field as follows.  Instead of indicating the source operator, it is 
++instead used to select what byte order the operation converts from or to:
+ 
+ =========  =====  =================================================
+ source     value  description
+@@ -235,16 +238,21 @@ Examples:
+ 
+   dst = htole16(dst)
+ 
++where 'htole16()' indicates converting a 16-bit value from host byte order to little-endian byte order.
++
+ ``BPF_ALU | BPF_TO_BE | BPF_END`` with imm = 64 means::
+ 
+   dst = htobe64(dst)
+ 
++where 'htobe64()' indicates converting a 64-bit value from host byte order to big-endian byte order.
++
+ Jump instructions
+ -----------------
+ 
+-``BPF_JMP32`` uses 32-bit wide operands while ``BPF_JMP`` uses 64-bit wide operands for
++Instruction class ``BPF_JMP32`` uses 32-bit wide operands while ``BPF_JMP`` uses 64-bit wide operands for
+ otherwise identical operations.
+-The 'code' field encodes the operation as below:
++
++The 4-bit 'code' field encodes the operation as below, where PC is the program counter:
+ 
+ ========  =====  ===  ===========================================  =========================================
+ code      value  src  description                                  notes
+@@ -311,7 +319,8 @@ For load and store instructions (``BPF_LD``, ``BPF_LDX``, ``BPF_ST``, and ``BPF_
+ mode          size    instruction class
+ ============  ======  =================
+ 
+-The mode modifier is one of:
++mode
++  one of:
+ 
+   =============  =====  ====================================  =============
+   mode modifier  value  description                           reference
+@@ -323,7 +332,8 @@ The mode modifier is one of:
+   BPF_ATOMIC     0xc0   atomic operations                     `Atomic operations`_
+   =============  =====  ====================================  =============
+ 
+-The size modifier is one of:
++size
++  one of:
+ 
+   =============  =====  =====================
+   size modifier  value  description
+@@ -334,6 +344,9 @@ The size modifier is one of:
+   BPF_DW         0x18   double word (8 bytes)
+   =============  =====  =====================
+ 
++instruction class
++  the instruction class (see `Instruction classes`_)
++
+ Regular load and store operations
+ ---------------------------------
+ 
+@@ -352,7 +365,7 @@ instructions that transfer data between a register and memory.
+ 
+   dst = *(size *) (src + offset)
+ 
+-Where size is one of: ``BPF_B``, ``BPF_H``, ``BPF_W``, or ``BPF_DW``.
++where size is one of: ``BPF_B``, ``BPF_H``, ``BPF_W``, or ``BPF_DW``.
+ 
+ Atomic operations
+ -----------------
+@@ -366,7 +379,9 @@ that use the ``BPF_ATOMIC`` mode modifier as follows:
+ 
+ * ``BPF_ATOMIC | BPF_W | BPF_STX`` for 32-bit operations
+ * ``BPF_ATOMIC | BPF_DW | BPF_STX`` for 64-bit operations
+-* 8-bit and 16-bit wide atomic operations are not supported.
++
++Note that 8-bit (``BPF_B``) and 16-bit (``BPF_H``) wide atomic 
++operations are not currently supported, nor is ``BPF_ATOMIC | <size> | BPF_ST``.
+ 
+ The 'imm' field is used to encode the actual atomic operation.
+ Simple atomic operation use a subset of the values defined to encode
+@@ -390,7 +405,7 @@ BPF_XOR   0xa0   atomic xor
+ 
+   *(u64 *)(dst + offset) += src
+ 
+-In addition to the simple atomic operations, there also is a modifier and
++In addition to the simple atomic operations above, there also is a modifier and
+ two complex atomic operations:
+ 
+ ===========  ================  ===========================
 -- 
-2.40.1
+2.33.4
 
 -- 
 Bpf mailing list
