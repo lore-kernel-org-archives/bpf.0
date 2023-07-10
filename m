@@ -1,338 +1,200 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5567FA933;
-	Mon, 10 Jul 2023 07:42:30 +0000 (UTC)
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E1BE1;
-	Mon, 10 Jul 2023 00:42:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=fPHyly7OUR2mlkHw64bAiHJrG25yCGMobXVh3DN1OvA=; b=kIViraSzy/7l7bN1EZ7Bzoh2rB
-	FLwy+g9lvRdId8NbVNOU9m9gYsCGzmEOsH3syRhhXIYHQ0sZLrd4GFaMI4bdJPkcnAc/lDrOuC1xx
-	2dcgjBXpWPq1M2ahajw1mGBnlk/tZqzBhqTAd5kyvIE0oE0QLWybKmVZ0cUaY9l0hSHUVfMsgNoBD
-	Cb5rzE8OxDU123WZ9Sangu8jv1+3obaRz3jihj1uu8q+AtOAIgCuDXflqy3v0Mro1+boN+hjYrJk0
-	kyOqcqEfcsZSGbdS0f59/LK7PWNqAEfbEk6WTz5K3AEstjR90hSrJU67hvU7BimeQ4b/l4aQC2L4X
-	yjIEWnnw==;
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1qIlXJ-0009J9-6O; Mon, 10 Jul 2023 09:42:21 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-	by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1qIlXI-0004O2-NU; Mon, 10 Jul 2023 09:42:20 +0200
-Subject: Re: [PATCH bpf-next v3 1/8] bpf: Add generic attach/detach/query API
- for multi-progs
-To: Stanislav Fomichev <sdf@google.com>
-Cc: ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
- razor@blackwall.org, john.fastabend@gmail.com, kuba@kernel.org,
- dxu@dxuuu.xyz, joe@cilium.io, toke@kernel.org, davem@davemloft.net,
- bpf@vger.kernel.org, netdev@vger.kernel.org
-References: <20230707172455.7634-1-daniel@iogearbox.net>
- <20230707172455.7634-2-daniel@iogearbox.net> <ZKiDKuoovyikz8Mm@google.com>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <d67ca0f4-4753-e86f-f8ca-dd515f941ea5@iogearbox.net>
-Date: Mon, 10 Jul 2023 09:42:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 930E3C8C9;
+	Mon, 10 Jul 2023 09:21:11 +0000 (UTC)
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2057.outbound.protection.outlook.com [40.107.244.57])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297318E;
+	Mon, 10 Jul 2023 02:21:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=G6y/Y/d/q73UlUiSAUGzoy2RzcYa/2e16E4pNgDBhG+P8bmXsQLR7FBCbhQGH/xfshuglYWMCOT60ZED08BW8OxuQ9eIwr1DSq/6+L0L3tuLuFSRvG+xDp/v9ZMbLQSRqWWn+Kl8ps8WSyP2zt4mi7qX/MFQTP099thjvy6DprdykwJZuQ0GWQfSXb2k/qbZ0bOBZxKBzqtvJoFGGrUQyjAT/2GStpNCEC7dTkzkR5BFvYQ739qCSAOCk0cLPyEv8W9TSOGz8R3RVQFLubU5t5pqgYRkQ6/ch41BmcOMmOSVhqTB6+qU2hWvqC+M0HJlrxQCZEFGZoYYCzaKMpSqvA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9T7xFue66UabcZ5Lt5gTbUtfirJ4UZ7HQaMClC0DXU0=;
+ b=LDWhAEtfYeCfJ1+AEGgspsBuooHnkUY2kxVIg2hAkU4YWmbH3jbYL9VXh+FlxK/LqAoKH36tcOcfo5zOZiewYYwp4P6m95MYtud0JVU1mkrsk8rOFgV8eVL1QaeaDgadrgJInfkdnYc20dRWMSv9SRDspqwacdTjn7Q1Xbm70hFoiu+/zsc88mDnKLhK5KS2plXd9zTRU8YwhnUTI/N0hUeUEJDArOvlFNmgldHSLMFS0n5MWjdAdu5R+thW5u09J/3p9atQY2cu2LXi8VnIfklcdCDzwky8hxpCLsyeuMtVi3GYclFwCbEzR5BvxsoAhRyyuOGmv0D88zuztDOhQQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9T7xFue66UabcZ5Lt5gTbUtfirJ4UZ7HQaMClC0DXU0=;
+ b=qZPJoZUHVBuklFy+TI9Q6wfqSNB2lu2iR9oiSLSH6ggKROdByzX+WsBuTuQmyraSABOKWGZZ+I56Iy12JbQUf0atrgZaeDZMPOUg4xI037/PlTllEhAd6tOXjZZvKJPPsv6apoLo/blN/3pJ+6JhnBQXek6Wo8N/1+MsqW3D7pjdWSs4ruXsOysgcXh9Ta/Bg4hkXp9kYekksJlCUhQ4uK6lRxvhv+6bCsVr24pFGloDxsKxEFMSbu88PQ2s1wEsCjP0BjEI9Z8eGBaOywgGslWSdZ4VBZuG+hgSmVgZHb91zTKlH/l8IzQ/rw0oohYjFVvMkRR8ee+vaMxX4Mu74Q==
+Received: from MW4P221CA0015.NAMP221.PROD.OUTLOOK.COM (2603:10b6:303:8b::20)
+ by SJ0PR12MB6734.namprd12.prod.outlook.com (2603:10b6:a03:478::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.30; Mon, 10 Jul
+ 2023 09:21:01 +0000
+Received: from CO1NAM11FT037.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8b:cafe::24) by MW4P221CA0015.outlook.office365.com
+ (2603:10b6:303:8b::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.31 via Frontend
+ Transport; Mon, 10 Jul 2023 09:21:01 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CO1NAM11FT037.mail.protection.outlook.com (10.13.174.91) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6521.44 via Frontend Transport; Mon, 10 Jul 2023 09:21:01 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 10 Jul 2023
+ 02:20:53 -0700
+Received: from nvidia.com (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 10 Jul
+ 2023 02:20:48 -0700
+From: Gavin Li <gavinl@nvidia.com>
+To: <mst@redhat.com>, <jasowang@redhat.com>, <xuanzhuo@linux.alibaba.com>,
+	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+	<pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+	<hawk@kernel.org>, <john.fastabend@gmail.com>, <jiri@nvidia.com>,
+	<dtatulea@nvidia.com>
+CC: <virtualization@lists.linux-foundation.org>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+Subject: [PATCH net-next V1 1/4] virtio_net: extract interrupt coalescing settings to a structure
+Date: Mon, 10 Jul 2023 12:20:02 +0300
+Message-ID: <20230710092005.5062-2-gavinl@nvidia.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230710092005.5062-1-gavinl@nvidia.com>
+References: <20230710092005.5062-1-gavinl@nvidia.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <ZKiDKuoovyikz8Mm@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26964/Sun Jul  9 09:27:43 2023)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-	autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT037:EE_|SJ0PR12MB6734:EE_
+X-MS-Office365-Filtering-Correlation-Id: 90d1cd04-fa29-4ffe-9840-08db8126fa60
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	XT9WnnlzTMj3qE/5owCKt2GquHRU96qeZJE1ZR4jv32g8kw8gvJLKoo17MMsNWzC/UoENQpoOEPxhoLoAQIyfWLRFzGU/Uhvjwsh/CjapxvQUPXwK2WYxvxX8iICXiwxdXVpy4rpODC3OaQxT3bFQ9Ge1EQDNAW8oWPsMtZ/kKez2wHCwvWh75wCPuOcqyuJ7Kao2vrqUB070fFyvn94/OPx6Jm509Oed9+63XYtIyrFH++dsnbYtR18NmZC07kWRpUQnTlIwdASBOd+Y8Bk+VXE8/RogsIgY2YtsbqFVv3e21xlak8kq+bYkuyGHImB88+WOOPTgPTAa9GhMblLVjQ7Viy9A1pLJ4QigWrKxW4Jv7ysJ5c84dTw27ME8TZ9U6cqX4x5Iro4Jie/FOC/4sv0Nbphl+puEKrlErjVPSZszv/1ycqiFZ9E3RSIn+xvEvXxqUDtmfC9ug1m9o6Z5tkrRLwaZ3HGAmG1W25HRq7WWi1/B4LtPFjzznPJq1BKomrVcYvQKUPa4lSZdU+Q/1JC8WbLbCChYTcNmf8Jj7woBf7kqia4IpDa99ijKQ1733z/pMDc5R+bG9BS7gvEgadAuNWOzryGBYi1x0UkRqmp3txG3wXvseqxvQmVo5Q0MgRSoBcU/tZfvVQLEVkRr19grO9CZ4pdOAkb3MBFQbhoW3m66Db6g08NQnUVCqVdsnRroqFR2wClsIj2LJeqzvCLbQDi8lrlbRDy+cLC/DoVflMZe/muWXTjUYPkEqkxalHBB2ByeL633XRhloHkq2VHV+cXfavBKhnu0yvz51mRtmohsCcpXFyg26Aydi+D
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(39860400002)(396003)(376002)(451199021)(40470700004)(36840700001)(46966006)(6666004)(7696005)(478600001)(110136005)(54906003)(6286002)(1076003)(26005)(186003)(36756003)(16526019)(2906002)(82310400005)(70586007)(70206006)(41300700001)(6636002)(4326008)(5660300002)(7416002)(8936002)(316002)(921005)(82740400003)(8676002)(7636003)(356005)(2616005)(40460700003)(86362001)(36860700001)(83380400001)(47076005)(336012)(426003)(40480700001)(55016003)(2101003)(83996005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2023 09:21:01.1338
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 90d1cd04-fa29-4ffe-9840-08db8126fa60
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CO1NAM11FT037.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6734
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+	T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 7/7/23 11:27 PM, Stanislav Fomichev wrote:
-> On 07/07, Daniel Borkmann wrote:
-[...]
->> +static inline struct bpf_mprog_entry *
->> +bpf_mprog_create(const size_t size, const off_t off)
->> +{
->> +	struct bpf_mprog_bundle *bundle;
->> +	void *ptr;
->> +
->> +	BUILD_BUG_ON(size < sizeof(*bundle) + off);
->> +	BUILD_BUG_ON(sizeof(bundle->a.fp_items[0]) > sizeof(u64));
->> +	BUILD_BUG_ON(ARRAY_SIZE(bundle->a.fp_items) !=
->> +		     ARRAY_SIZE(bundle->cp_items));
->> +
->> +	ptr = kzalloc(size, GFP_KERNEL);
->> +	if (ptr) {
->> +		bundle = ptr + off;
->> +		atomic64_set(&bundle->revision, 1);
->> +		bundle->off = off;
->> +		bundle->a.parent = bundle;
->> +		bundle->b.parent = bundle;
->> +		return &bundle->a;
->> +	}
->> +	return NULL;
->> +}
->> +
->> +void bpf_mprog_free_rcu(struct rcu_head *rcu);
->> +
->> +static inline void bpf_mprog_free(struct bpf_mprog_entry *entry)
->> +{
->> +	struct bpf_mprog_bundle *bundle = entry->parent;
->> +
->> +	call_rcu(&bundle->rcu, bpf_mprog_free_rcu);
->> +}
-> 
-> Any reason we're doing allocation here? Why not do
-> bpf_mprog_init(struct bpf_mprog_bundle *) instead that simply initializes
-> the fields? Then we can move allocation/free part to the caller (tcx) along
-> with rcu_head.
-> Feels like it would be a bit more conventional/readable? bpf_mprog_free{,_rcu}
-> will also become tcx_free{,_rcu}..
-> 
-> I guess current approach works, but it took me awhile to figure it out..
-> (maybe it's just me)
+Extract interrupt coalescing settings to a structure so that it could be
+reused in other data structures.
 
-I found this approach quite useful for tcx case since we only fetch the
-bpf_mprog_entry for tcx_link_prog_attach et al, but I can take a look to
-see if this looks better and if it does I'll include it.
+Signed-off-by: Gavin Li <gavinl@nvidia.com>
+Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
+Reviewed-by: Jiri Pirko <jiri@nvidia.com>
+---
+ drivers/net/virtio_net.c | 35 +++++++++++++++++++----------------
+ 1 file changed, 19 insertions(+), 16 deletions(-)
 
->> +static inline void bpf_mprog_mark_ref(struct bpf_mprog_entry *entry,
->> +				      struct bpf_tuple *tuple)
->> +{
->> +	WARN_ON_ONCE(entry->parent->ref);
->> +	if (!tuple->link)
->> +		entry->parent->ref = tuple->prog;
->> +}
->> +
->> +static inline void bpf_mprog_inc(struct bpf_mprog_entry *entry)
->> +{
->> +	entry->parent->count++;
->> +}
->> +
->> +static inline void bpf_mprog_dec(struct bpf_mprog_entry *entry)
->> +{
->> +	entry->parent->count--;
->> +}
->> +
->> +static inline int bpf_mprog_max(void)
->> +{
->> +	return ARRAY_SIZE(((struct bpf_mprog_entry *)NULL)->fp_items) - 1;
->> +}
->> +
->> +static inline int bpf_mprog_total(struct bpf_mprog_entry *entry)
->> +{
->> +	int total = entry->parent->count;
->> +
->> +	WARN_ON_ONCE(total > bpf_mprog_max());
->> +	return total;
->> +}
->> +
->> +static inline bool bpf_mprog_exists(struct bpf_mprog_entry *entry,
->> +				    struct bpf_prog *prog)
->> +{
->> +	const struct bpf_mprog_fp *fp;
->> +	const struct bpf_prog *tmp;
->> +
->> +	bpf_mprog_foreach_prog(entry, fp, tmp) {
->> +		if (tmp == prog)
->> +			return true;
->> +	}
->> +	return false;
->> +}
->> +
->> +static inline bool bpf_mprog_swap_entries(const int code)
->> +{
->> +	return code == BPF_MPROG_SWAP ||
->> +	       code == BPF_MPROG_FREE;
->> +}
->> +
->> +static inline void bpf_mprog_commit(struct bpf_mprog_entry *entry)
->> +{
->> +	atomic64_inc(&entry->parent->revision);
->> +	synchronize_rcu();
-> 
-> Maybe add a comment on why we need to synchronize_rcu here? In general,
-> I don't think I have a good grasp of that ->ref member.
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index 0db14f6b87d3..dd5fec073a27 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -126,6 +126,11 @@ static const struct virtnet_stat_desc virtnet_rq_stats_desc[] = {
+ #define VIRTNET_SQ_STATS_LEN	ARRAY_SIZE(virtnet_sq_stats_desc)
+ #define VIRTNET_RQ_STATS_LEN	ARRAY_SIZE(virtnet_rq_stats_desc)
+ 
++struct virtnet_interrupt_coalesce {
++	u32 max_packets;
++	u32 max_usecs;
++};
++
+ /* Internal representation of a send virtqueue */
+ struct send_queue {
+ 	/* Virtqueue associated with this send _queue */
+@@ -281,10 +286,8 @@ struct virtnet_info {
+ 	u32 speed;
+ 
+ 	/* Interrupt coalescing settings */
+-	u32 tx_usecs;
+-	u32 rx_usecs;
+-	u32 tx_max_packets;
+-	u32 rx_max_packets;
++	struct virtnet_interrupt_coalesce intr_coal_tx;
++	struct virtnet_interrupt_coalesce intr_coal_rx;
+ 
+ 	unsigned long guest_offloads;
+ 	unsigned long guest_offloads_capable;
+@@ -3056,8 +3059,8 @@ static int virtnet_send_notf_coal_cmds(struct virtnet_info *vi,
+ 		return -EINVAL;
+ 
+ 	/* Save parameters */
+-	vi->tx_usecs = ec->tx_coalesce_usecs;
+-	vi->tx_max_packets = ec->tx_max_coalesced_frames;
++	vi->intr_coal_tx.max_usecs = ec->tx_coalesce_usecs;
++	vi->intr_coal_tx.max_packets = ec->tx_max_coalesced_frames;
+ 
+ 	vi->ctrl->coal_rx.rx_usecs = cpu_to_le32(ec->rx_coalesce_usecs);
+ 	vi->ctrl->coal_rx.rx_max_packets = cpu_to_le32(ec->rx_max_coalesced_frames);
+@@ -3069,8 +3072,8 @@ static int virtnet_send_notf_coal_cmds(struct virtnet_info *vi,
+ 		return -EINVAL;
+ 
+ 	/* Save parameters */
+-	vi->rx_usecs = ec->rx_coalesce_usecs;
+-	vi->rx_max_packets = ec->rx_max_coalesced_frames;
++	vi->intr_coal_rx.max_usecs = ec->rx_coalesce_usecs;
++	vi->intr_coal_rx.max_packets = ec->rx_max_coalesced_frames;
+ 
+ 	return 0;
+ }
+@@ -3132,10 +3135,10 @@ static int virtnet_get_coalesce(struct net_device *dev,
+ 	struct virtnet_info *vi = netdev_priv(dev);
+ 
+ 	if (virtio_has_feature(vi->vdev, VIRTIO_NET_F_NOTF_COAL)) {
+-		ec->rx_coalesce_usecs = vi->rx_usecs;
+-		ec->tx_coalesce_usecs = vi->tx_usecs;
+-		ec->tx_max_coalesced_frames = vi->tx_max_packets;
+-		ec->rx_max_coalesced_frames = vi->rx_max_packets;
++		ec->rx_coalesce_usecs = vi->intr_coal_rx.max_usecs;
++		ec->tx_coalesce_usecs = vi->intr_coal_tx.max_usecs;
++		ec->tx_max_coalesced_frames = vi->intr_coal_tx.max_packets;
++		ec->rx_max_coalesced_frames = vi->intr_coal_rx.max_packets;
+ 	} else {
+ 		ec->rx_max_coalesced_frames = 1;
+ 
+@@ -4119,10 +4122,10 @@ static int virtnet_probe(struct virtio_device *vdev)
+ 	}
+ 
+ 	if (virtio_has_feature(vi->vdev, VIRTIO_NET_F_NOTF_COAL)) {
+-		vi->rx_usecs = 0;
+-		vi->tx_usecs = 0;
+-		vi->tx_max_packets = 0;
+-		vi->rx_max_packets = 0;
++		vi->intr_coal_rx.max_usecs = 0;
++		vi->intr_coal_tx.max_usecs = 0;
++		vi->intr_coal_tx.max_packets = 0;
++		vi->intr_coal_rx.max_packets = 0;
+ 	}
+ 
+ 	if (virtio_has_feature(vdev, VIRTIO_NET_F_HASH_REPORT))
+-- 
+2.39.1
 
-Yeap, will add a comment. For the case where we delete the prog, we mark
-it in bpf_mprog_detach, but we can only drop the reference once the user
-swapped the bpf_mprog_entry and ensured that there are no in-flight users
-hence both in bpf_mprog_commit.
-
-[...]
->> +static int bpf_mprog_prog(struct bpf_tuple *tuple,
->> +			  u32 object, u32 flags,
->> +			  enum bpf_prog_type type)
->> +{
->> +	bool id = flags & BPF_F_ID;
->> +	struct bpf_prog *prog;
->> +
->> +	if (id)
->> +		prog = bpf_prog_by_id(object);
->> +	else
->> +		prog = bpf_prog_get(object);
->> +	if (IS_ERR(prog)) {
-> 
-> [..]
-> 
->> +		if (!object && !id)
->> +			return 0;
-> 
-> What's the reason behind this?
-
-If an fd was passed which is 0 and this was not a program fd, then we don't error
-out and treat it as if no fd was passed.
-
->> +		return PTR_ERR(prog);
->> +	}
->> +	if (type && prog->type != type) {
->> +		bpf_prog_put(prog);
->> +		return -EINVAL;
->> +	}
->> +
->> +	tuple->link = NULL;
->> +	tuple->prog = prog;
->> +	return 0;
->> +}
-[...]
->> +static int bpf_mprog_pos_before(struct bpf_mprog_entry *entry,
->> +				struct bpf_tuple *tuple)
->> +{
->> +	struct bpf_mprog_fp *fp;
->> +	struct bpf_mprog_cp *cp;
->> +	int i;
->> +
->> +	for (i = 0; i < bpf_mprog_total(entry); i++) {
->> +		bpf_mprog_read(entry, i, &fp, &cp);
->> +		if (tuple->prog == READ_ONCE(fp->prog) &&
-> 
-> Both attach/detach happen under rtnl, why do need READ_ONCE? I'm assuming
-> even going forwrad, attach/detach from non-tcx places will happen
-> under lock?
-> 
-> (same for bpf_mprog_pos_before/bpf_mprog_pos_after)
-> 
-> Feels like the only place where we need WRITE_ONCE is the replace (in-place)
-> and READ_ONCE during fast-path. Why do we need the rest?
-
-Yes, the replace case is via WRITE_ONCE, hence the READ_ONCE annotations. You
-are saying that for the cases where we are under lock we should just drop the
-READ_ONCE annotations? I can do that ofc, I thought the general convention was
-to do the {READ,WRITE}_ONCE consistently for the purpose of documenting fp->prog
-access.
-
->> +		    (!tuple->link || tuple->link == cp->link))
->> +			return i - 1;
->> +	}
->> +	return tuple->prog ? -ENOENT : -1;
->> +}
->> +
->> +static int bpf_mprog_pos_after(struct bpf_mprog_entry *entry,
->> +			       struct bpf_tuple *tuple)
->> +{
->> +	struct bpf_mprog_fp *fp;
->> +	struct bpf_mprog_cp *cp;
->> +	int i;
->> +
->> +	for (i = 0; i < bpf_mprog_total(entry); i++) {
->> +		bpf_mprog_read(entry, i, &fp, &cp);
->> +		if (tuple->prog == READ_ONCE(fp->prog) &&
->> +		    (!tuple->link || tuple->link == cp->link))
->> +			return i + 1;
->> +	}
->> +	return tuple->prog ? -ENOENT : bpf_mprog_total(entry);
->> +}
->> +
->> +int bpf_mprog_attach(struct bpf_mprog_entry *entry, struct bpf_prog *prog_new,
->> +		     struct bpf_link *link, struct bpf_prog *prog_old,
->> +		     u32 flags, u32 object, u64 revision)
->> +{
->> +	struct bpf_tuple rtuple, ntuple = {
->> +		.prog = prog_new,
->> +		.link = link,
->> +	}, otuple = {
->> +		.prog = prog_old,
->> +		.link = link,
->> +	};
->> +	int ret, idx = -2, tidx;
->> +
->> +	if (revision && revision != bpf_mprog_revision(entry))
->> +		return -ESTALE;
->> +	if (bpf_mprog_exists(entry, prog_new))
->> +		return -EEXIST;
->> +	ret = bpf_mprog_tuple_relative(&rtuple, object,
->> +				       flags & ~BPF_F_REPLACE,
->> +				       prog_new->type);
->> +	if (ret)
->> +		return ret;
->> +	if (flags & BPF_F_REPLACE) {
->> +		tidx = bpf_mprog_pos_exact(entry, &otuple);
->> +		if (tidx < 0) {
->> +			ret = tidx;
->> +			goto out;
->> +		}
->> +		idx = tidx;
->> +	}
-> 
-> [..]
-> 
->> +	if (flags & BPF_F_BEFORE) {
->> +		tidx = bpf_mprog_pos_before(entry, &rtuple);
->> +		if (tidx < -1 || (idx >= -1 && tidx != idx)) {
->> +			ret = tidx < -1 ? tidx : -EDOM;
->> +			goto out;
->> +		}
->> +		idx = tidx;
->> +	}
->> +	if (flags & BPF_F_AFTER) {
->> +		tidx = bpf_mprog_pos_after(entry, &rtuple);
->> +		if (tidx < 0 || (idx >= -1 && tidx != idx)) {
->> +			ret = tidx < 0 ? tidx : -EDOM;
->> +			goto out;
->> +		}
->> +		idx = tidx;
->> +	}
-> 
-> There still seems to be some inter-dependency between F_BEFORE and F_AFTER?
-> IOW, looks like I can pass F_BEFORE|F_AFTER|F_REPLACE. Do we need that?
-> Why not exclusive cases?
-
-I reworked this as per Andrii's suggestion/preference from v2 [0], iow, to calculate
-target index and bail out if the request cannot be resolved into a common index.
-
-   [0] https://lore.kernel.org/bpf/CAEf4BzbsUMnP7WMm3OmJznvD2b03B1qASFRNiDoVAU6XvvTZNA@mail.gmail.com/
-
->> +	if (idx < -1) {
->> +		if (rtuple.prog || flags) {
->> +			ret = -EINVAL;
->> +			goto out;
->> +		}
->> +		idx = bpf_mprog_total(entry);
->> +		flags = BPF_F_AFTER;
->> +	}
->> +	if (idx >= bpf_mprog_max()) {
->> +		ret = -EDOM;
->> +		goto out;
->> +	}
->> +	if (flags & BPF_F_REPLACE)
->> +		ret = bpf_mprog_replace(entry, &ntuple, idx);
->> +	else
->> +		ret = bpf_mprog_insert(entry, &ntuple, idx, flags);
->> +out:
->> +	bpf_mprog_tuple_put(&rtuple);
->> +	return ret;
->> +}
->> +
