@@ -1,169 +1,260 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BED23440F
-	for <bpf@vger.kernel.org>; Tue, 11 Jul 2023 03:28:29 +0000 (UTC)
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D40CE2
-	for <bpf@vger.kernel.org>; Mon, 10 Jul 2023 20:28:28 -0700 (PDT)
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 218ADC19E0FE
-	for <bpf@vger.kernel.org>; Mon, 10 Jul 2023 20:28:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1689046108; bh=IkldAMY02qquUuDBeoCFj42kaHEqUYGk+7+yr4rFUww=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=GqLXNetZ2jD0l2upvC6VKAAln3altYcuJXQ52KODC3D3f4VQ4bmeTYliq1uz0mJDg
-	 KsINQzRjD36RSptYapi7Kl2rUer23q50BGjuxLD55rJgsYNZzwhVp62PR34n2aC3Vi
-	 11Su0GN++bmG9dyuxokcCD1Okv7+exAAvPucLakE=
-X-Mailbox-Line: From bpf-bounces@ietf.org  Mon Jul 10 20:28:28 2023
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id ED513C151087;
-	Mon, 10 Jul 2023 20:28:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1689046107; bh=IkldAMY02qquUuDBeoCFj42kaHEqUYGk+7+yr4rFUww=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=ko5vn+vu7+KDpIepgh3uzFtXg+ngl/JezcXUM5S5mXXfvJ9y4wyIDUVWv5xdZjIDt
-	 tx/JvqvJTeBgahC7OtDXqBX4/wvSLjls5DGFoycCDxNv+meZFs6ucwLz3nkSzxu/g+
-	 +XLXVd1GNU2ryu5JIwsAM67ywqy4nns5HEV2NlXs=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id ED3B1C151087
- for <bpf@ietfa.amsl.com>; Mon, 10 Jul 2023 20:28:26 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Score: -6.895
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,
-	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
- header.d=obs-cr.20221208.gappssmtp.com
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SOaAw_g3Xzww for <bpf@ietfa.amsl.com>;
- Mon, 10 Jul 2023 20:28:22 -0700 (PDT)
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com
- [IPv6:2607:f8b0:4864:20::f2e])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id C50B4C14CE30
- for <bpf@ietf.org>; Mon, 10 Jul 2023 20:28:22 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id
- 6a1803df08f44-635dccdf17dso35801536d6.3
- for <bpf@ietf.org>; Mon, 10 Jul 2023 20:28:22 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5878B3D6E;
+	Tue, 11 Jul 2023 04:00:43 +0000 (UTC)
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B5D12A;
+	Mon, 10 Jul 2023 21:00:40 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51e48e1f6d1so3577747a12.1;
+        Mon, 10 Jul 2023 21:00:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=obs-cr.20221208.gappssmtp.com; s=20221208; t=1689046102; x=1691638102;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=YPHOpuG0nRzVKLS8XM9h0fEa3eKyMGT7EzxN/swJKAg=;
- b=YznUrHIE3/38DzxSIOJ9dWHnQFG+V4OnoQMkNosYGc0VxdfcZw59gx8EfN9KNZNhDa
- 01Ijn3EfEufWMDwr2CYb3YcVdW9At5ueHsTbS8ro5RN9PdagEOMUNjCoeslO72J1nuUu
- R3Uj+ihMjv/mqh/K2PvN3kWcfHn+GPgaRxjqkN7w5pOyn05APkOgmTXvbcgaYa3zggwC
- UyS1rp+nT0U8iRkgjpDv0fm36TjP7QKwdWwlP4ilw7zDsijBToItbEPHoIBfRIs7bTcj
- YxoipDIsbXV/pIkohdvZ0KEncOO3b5/tJ/pSfe8ffVGZzUto60d6v3PwUMryby5soxsp
- w64Q==
+        d=gmail.com; s=20221208; t=1689048038; x=1691640038;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fOryFyqClcuZHD0bAntKnO0NvSim7Crvrdqffvbgo3s=;
+        b=XTwc6oo2L3c5i3cYbPpzyUBu4CHWyUOu3LxZ87fAmfnTsk5FKVZLJrx5Ua0RKXu3Zz
+         Nlh2RB5Sh1gC64fYBKvSbgIA24WhNJOPlbXWMIBgVuVgURQbJqopYuNz7oRKiYlhOjP2
+         bx4WTADAmhSK6Y/Bjh0XzAwkzTFagIbFvfdB7wpjyWf0IpygwDelf9B9yyFgZ88jLWAX
+         najWqUtuHVQWnC4N1ijMNIJdPVqhKMPNLvty/DrO9lPzrLGY1XVJS6otPRjEdLJ0i6Yy
+         OzhJhbhRfeW5gky/sxmMJvanYQmClZHITxHQ269PstXyhCOthDMISVHL213BGCEN81pp
+         4Dxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1689046102; x=1691638102;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=YPHOpuG0nRzVKLS8XM9h0fEa3eKyMGT7EzxN/swJKAg=;
- b=M1oKQkll7GLtr+FAsIdLatOTSzCfnVwaTO4XuIGqG1ib48WTegbmJ3ZMHTqO8JE9F8
- wdH34eQ86u2KNnKOOHjkxFsXlh922WOxklTRg6x3MJowJPxzQ19GKXlA/1mftWkcP3Rm
- BcyjFmYeGTKyAmVq7fdAy0Vd82KoAd0HpaWxALRK/64YYuvJhLzj5XUe2tolNKuGCDJF
- dDFSOHbqvZ9SxX4zg1aCEE4vAwrPUbOeDCzPTZR+aOvhneXhpdSx4iwoX+sQvVkHo4x6
- mYjC6JvpCxrSvoxsMkvhdG7EYKwANhNQ7OiKQrbwXGQLWyZjasq53nXylkn1CZUoMct9
- a5pQ==
-X-Gm-Message-State: ABy/qLbEB2Pp9iq6UVtArg+rS9x0WO0rdjos+CcjZKxIP6VoAg7K0NKE
- 5VXsaGjsIzXoF3U60uEZQJjNNr3NOkglFRKw1hn8jQ==
-X-Google-Smtp-Source: APBJJlEwd9lWr+uix9pe2kGV82O3+oRMScTHHFLH7LePg9HDjgBqMdeuKiotMgVio1VW9WAL52hDDxwXAFSbC7tvXbQ=
-X-Received: by 2002:a0c:f0d3:0:b0:637:398f:83be with SMTP id
- d19-20020a0cf0d3000000b00637398f83bemr12649425qvl.14.1689046101931; Mon, 10
- Jul 2023 20:28:21 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689048038; x=1691640038;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fOryFyqClcuZHD0bAntKnO0NvSim7Crvrdqffvbgo3s=;
+        b=Woo/5O94QENNvy32wZ7CJksW5Uewv8LXoWVlLItrrAAOt4a8UZusKjKH38pWJ0uraR
+         OeSlAuJ46eFMFWVryFV+itiSqHERLgd+AUt9DlnWI6tkzPeIAJcUuiKMR84Z26bOrEHc
+         cESF6pDYtq5pLAX4Id2xzjdBZaWb7vCObVo0pnrrDrYwd1Iqe3tH7tWPRRoKilm04GnI
+         qbixKErdDy3U2ED0gH5KNQcuaJM7TDV7QjY0d9Y/waF7SEwjSuR3lSmm/zc6u4EwF1Tc
+         Mxi1oLNaNx7L9a2ShBeK5QP36lgocgOEVcWb1Yg+La1EqPRNzD85ubqBXBKhkJUxbZrz
+         j/xg==
+X-Gm-Message-State: ABy/qLaZXff3YenUsmfoalxGhxqGTdbk6ixSh36QQurTEhIG+2L0eQZ6
+	Iz9nL2X1GXMFslawD0e6gQ67WHOHS0IrkLCtiY0=
+X-Google-Smtp-Source: APBJJlEYwmo9bQXtCez6GGDlHVPbByJT8EmIfvGkS0KcfwmlqJmzzKlyxI+C6pRmgnHImLzT6jAhTnHvkVuJ2wP3DvE=
+X-Received: by 2002:a05:6402:8d0:b0:51e:f23:5555 with SMTP id
+ d16-20020a05640208d000b0051e0f235555mr12778871edz.33.1689048038211; Mon, 10
+ Jul 2023 21:00:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230710215819.723550-1-hawkinsw@obs.cr>
- <20230710215819.723550-2-hawkinsw@obs.cr>
- <CAADnVQ+F5VT72LzONEo79ksqaRj=c7mJDd_Ebb87767v01Nosw@mail.gmail.com>
- <CADx9qWgmYu_LVVFtR0R7pcqM_270kQFzvmiSZ-2Umn2pE6qn=g@mail.gmail.com>
- <CADx9qWhTi+NetbqbBpMTEAFRsbQQbn3CXRvhC8wyzqQQviy0kA@mail.gmail.com>
-In-Reply-To: <CADx9qWhTi+NetbqbBpMTEAFRsbQQbn3CXRvhC8wyzqQQviy0kA@mail.gmail.com>
-From: Will Hawkins <hawkinsw@obs.cr>
-Date: Mon, 10 Jul 2023 23:28:11 -0400
-Message-ID: <CADx9qWjCpHpdRup306JkUNDypQdOOuUduvmRwA3c1uRzS3Xo1w@mail.gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, bpf@ietf.org
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/JEBBYmoZcVou_vCx_E6yW6x8tL4>
-Subject: Re: [Bpf] [PATCH 1/1] bpf,
- docs: Specify twos complement as format for signed integers
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Id: Discussion of BPF/eBPF standardization efforts within the IETF
- <bpf.ietf.org>
-List-Unsubscribe: <https://www.ietf.org/mailman/options/bpf>,
- <mailto:bpf-request@ietf.org?subject=unsubscribe>
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-List-Subscribe: <https://www.ietf.org/mailman/listinfo/bpf>,
- <mailto:bpf-request@ietf.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
+References: <20230710201218.19460-1-daniel@iogearbox.net> <20230710201218.19460-4-daniel@iogearbox.net>
+In-Reply-To: <20230710201218.19460-4-daniel@iogearbox.net>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 10 Jul 2023 21:00:25 -0700
+Message-ID: <CAEf4BzaGbVe3ip_cDxV0u8bBUEVExdqHXOFBorHWZ0tpDBLLnw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 3/8] libbpf: Add opts-based
+ attach/detach/query API for tcx
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev, 
+	razor@blackwall.org, sdf@google.com, john.fastabend@gmail.com, 
+	kuba@kernel.org, dxu@dxuuu.xyz, joe@cilium.io, toke@kernel.org, 
+	davem@davemloft.net, bpf@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
-Message-ID: <20230711032811.O7MnOBDxZtvqOyR9JW8N4GXw2Im953yDbYsvsmBGSnY@z>
 
-T24gTW9uLCBKdWwgMTAsIDIwMjMgYXQgMTE6MjTigK9QTSBXaWxsIEhhd2tpbnMgPGhhd2tpbnN3
-QG9icy5jcj4gd3JvdGU6Cj4KPiBPbiBNb24sIEp1bCAxMCwgMjAyMyBhdCAxMToxOeKAr1BNIFdp
-bGwgSGF3a2lucyA8aGF3a2luc3dAb2JzLmNyPiB3cm90ZToKPiA+Cj4gPiBPbiBNb24sIEp1bCAx
-MCwgMjAyMyBhdCAxMTowMOKAr1BNIEFsZXhlaSBTdGFyb3ZvaXRvdgo+ID4gPGFsZXhlaS5zdGFy
-b3ZvaXRvdkBnbWFpbC5jb20+IHdyb3RlOgo+ID4gPgo+ID4gPiBPbiBNb24sIEp1bCAxMCwgMjAy
-MyBhdCAyOjU44oCvUE0gV2lsbCBIYXdraW5zIDxoYXdraW5zd0BvYnMuY3I+IHdyb3RlOgo+ID4g
-PiA+Cj4gPiA+ID4gSW4gdGhlIGRvY3VtZW50YXRpb24gb2YgdGhlIGVCUEYgSVNBIGl0IGlzIHVu
-c3BlY2lmaWVkIGhvdyBpbnRlZ2VycyBhcmUKPiA+ID4gPiByZXByZXNlbnRlZC4gU3BlY2lmeSB0
-aGF0IHR3b3MgY29tcGxlbWVudCBpcyB1c2VkLgo+ID4gPiA+Cj4gPiA+ID4gU2lnbmVkLW9mZi1i
-eTogV2lsbCBIYXdraW5zIDxoYXdraW5zd0BvYnMuY3I+Cj4gPiA+ID4gLS0tCj4gPiA+ID4gIERv
-Y3VtZW50YXRpb24vYnBmL2luc3RydWN0aW9uLXNldC5yc3QgfCA1ICsrKysrCj4gPiA+ID4gIDEg
-ZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKykKPiA+ID4gPgo+ID4gPiA+IGRpZmYgLS1naXQg
-YS9Eb2N1bWVudGF0aW9uL2JwZi9pbnN0cnVjdGlvbi1zZXQucnN0IGIvRG9jdW1lbnRhdGlvbi9i
-cGYvaW5zdHJ1Y3Rpb24tc2V0LnJzdAo+ID4gPiA+IGluZGV4IDc1MWU2NTc5NzNmMC4uNjNkZmNi
-YTVlYjlhIDEwMDY0NAo+ID4gPiA+IC0tLSBhL0RvY3VtZW50YXRpb24vYnBmL2luc3RydWN0aW9u
-LXNldC5yc3QKPiA+ID4gPiArKysgYi9Eb2N1bWVudGF0aW9uL2JwZi9pbnN0cnVjdGlvbi1zZXQu
-cnN0Cj4gPiA+ID4gQEAgLTE3Myw2ICsxNzMsMTEgQEAgQlBGX0FSU0ggIDB4YzAgICBzaWduIGV4
-dGVuZGluZyBkc3QgPj49IChzcmMgJiBtYXNrKQo+ID4gPiA+ICBCUEZfRU5EICAgMHhkMCAgIGJ5
-dGUgc3dhcCBvcGVyYXRpb25zIChzZWUgYEJ5dGUgc3dhcCBpbnN0cnVjdGlvbnNgXyBiZWxvdykK
-PiA+ID4gPiAgPT09PT09PT0gID09PT09ICA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09Cj4gPiA+ID4KPiA+ID4gPiArZUJQRiBzdXBwb3J0
-cyAzMi0gYW5kIDY0LWJpdCBzaWduZWQgYW5kIHVuc2lnbmVkIGludGVnZXJzLiBJdCBkb2VzCj4g
-PiA+ID4gK25vdCBzdXBwb3J0IGZsb2F0aW5nLXBvaW50IGRhdGEgdHlwZXMuIEFsbCBzaWduZWQg
-aW50ZWdlcnMgYXJlIHJlcHJlc2VudGVkIGluCj4gPiA+ID4gK3R3b3MtY29tcGxlbWVudCBmb3Jt
-YXQgd2hlcmUgdGhlIHNpZ24gYml0IGlzIHN0b3JlZCBpbiB0aGUgbW9zdC1zaWduaWZpY2FudAo+
-ID4gPiA+ICtiaXQuCj4gPiA+Cj4gPiA+IENvdWxkIHlvdSBwb2ludCB0byBhbm90aGVyIElTQSBk
-b2N1bWVudCAobGlrZSB4ODYsIGFybSwgLi4uKSB0aGF0Cj4gPiA+IHRhbGtzIGFib3V0IHNpZ25l
-ZCBhbmQgdW5zaWduZWQgaW50ZWdlcnM/Cj4gPgo+ID4gVGhhbmsgeW91IGZvciB0aGUgcmVwbHku
-IEkgaG9wZSB0aGF0IHRoaXMgY2hhbmdlIGlzIHVzZWZ1bC4gSSBwcm9wb3NlZAo+ID4gdGhpcyBj
-aGFuZ2UgdG8gbWltaWMgdGhlIGRvY3VtZW50YXRpb24gb2YgIk51bWVyaWMgRGF0YSBUeXBlcyIg
-aW4KPiA+IFZvbHVtZSAxLCBDaGFwdGVyIDQgb2YgIkludGVswq4gNjQgYW5kIElBLTMyIEFyY2hp
-dGVjdHVyZXMgU29mdHdhcmUKPiA+IERldmVsb3BlcuKAmXMgTWFudWFsIiBbMV0uCj4gPgo+ID4g
-WzFdIGh0dHBzOi8vd3d3LmludGVsLmNvbS9jb250ZW50L3d3dy91cy9lbi9kZXZlbG9wZXIvYXJ0
-aWNsZXMvdGVjaG5pY2FsL2ludGVsLXNkbS5odG1sCgooQXBvbG9naWVzIGZvciBhIHN0cmluZyBv
-ZiByZXNwb25zZXMpCgpUaGUgUklTQy1WIElTQSBzcGVjaWZpZXMgaW50ZWdlciByZXByZXNlbnRh
-dGlvbiBbMV0uCgpbMV0gaHR0cHM6Ly9yaXNjdi5vcmcvdGVjaG5pY2FsL3NwZWNpZmljYXRpb25z
-LwoKPgo+IFBlcmhhcHMgeW91IHdvdWxkIHByZWZlciB0aGF0IHRoaXMgaW5mb3JtYXRpb24gZ29l
-cyAoYWdhaW4pIGluIGEgcHNBQkkKPiBkb2N1bWVudD8gSWYgc28sIHRoYXQncyBncmVhdCAtLSBJ
-IGFtIHdvcmtpbmcgb24gYSBzdHJhd21hbiB2ZXJzaW9uIG9mCj4gb25lIGFzIHdlIHNwZWFrLCBp
-biBmYWN0Lgo+Cj4gV2hhdGV2ZXIgeW91IHRoaW5rIGlzIGJlc3QgaXMgZ3JlYXQgLS0geW91IGFy
-ZSB0aGUgZXhwZXJ0IEkgYW0ganVzdAo+IHRyeWluZyB0byBoZWxwIQo+Cj4gU2luY2VyZWx5LAo+
-IFdpbGwKCi0tIApCcGYgbWFpbGluZyBsaXN0CkJwZkBpZXRmLm9yZwpodHRwczovL3d3dy5pZXRm
-Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2JwZgo=
+On Mon, Jul 10, 2023 at 1:12=E2=80=AFPM Daniel Borkmann <daniel@iogearbox.n=
+et> wrote:
+>
+> Extend libbpf attach opts and add a new detach opts API so this can be us=
+ed
+> to add/remove fd-based tcx BPF programs. The old-style bpf_prog_detach() =
+and
+> bpf_prog_detach2() APIs are refactored to reuse the new bpf_prog_detach_o=
+pts()
+> internally.
+>
+> The bpf_prog_query_opts() API got extended to be able to handle the new
+> link_ids, link_attach_flags and revision fields.
+>
+> For concrete usage examples, see the extensive selftests that have been
+> developed as part of this series.
+>
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> ---
+>  tools/lib/bpf/bpf.c      | 105 +++++++++++++++++++++++++--------------
+>  tools/lib/bpf/bpf.h      |  92 ++++++++++++++++++++++++++++------
+>  tools/lib/bpf/libbpf.c   |  12 +++--
+>  tools/lib/bpf/libbpf.map |   1 +
+>  4 files changed, 157 insertions(+), 53 deletions(-)
+>
+
+Thanks for doc comments! Looks good, left a few nits with suggestions
+for simplifying code, but it's minor.
+
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+
+> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+> index 3b0da19715e1..3dfc43b477c3 100644
+> --- a/tools/lib/bpf/bpf.c
+> +++ b/tools/lib/bpf/bpf.c
+> @@ -629,55 +629,87 @@ int bpf_prog_attach(int prog_fd, int target_fd, enu=
+m bpf_attach_type type,
+>         return bpf_prog_attach_opts(prog_fd, target_fd, type, &opts);
+>  }
+>
+> -int bpf_prog_attach_opts(int prog_fd, int target_fd,
+> -                         enum bpf_attach_type type,
+> -                         const struct bpf_prog_attach_opts *opts)
+> +int bpf_prog_attach_opts(int prog_fd, int target,
+> +                        enum bpf_attach_type type,
+> +                        const struct bpf_prog_attach_opts *opts)
+>  {
+> -       const size_t attr_sz =3D offsetofend(union bpf_attr, replace_bpf_=
+fd);
+> +       const size_t attr_sz =3D offsetofend(union bpf_attr, expected_rev=
+ision);
+> +       __u32 relative_id, flags;
+>         union bpf_attr attr;
+> -       int ret;
+> +       int ret, relative;
+>
+>         if (!OPTS_VALID(opts, bpf_prog_attach_opts))
+>                 return libbpf_err(-EINVAL);
+>
+> +       relative_id =3D OPTS_GET(opts, relative_id, 0);
+> +       relative =3D OPTS_GET(opts, relative_fd, 0);
+> +       flags =3D OPTS_GET(opts, flags, 0);
+> +
+> +       /* validate we don't have unexpected combinations of non-zero fie=
+lds */
+> +       if (relative > 0 && relative_id)
+> +               return libbpf_err(-EINVAL);
+
+I left a comment in the next patch about this, I think it should be
+simple `if (relative_fd && relative_id) { /* bad */ }`. But see the
+next patch for why.
+
+> +       if (relative_id) {
+> +               relative =3D relative_id;
+> +               flags |=3D BPF_F_ID;
+> +       }
+
+it's a bit hard to follow as written (to me at least). How about a
+slight variation that has less in-place state update
+
+
+int relative_fd, relative_id;
+
+relative_fd =3D OPTS_GET(opts, relative_fd, 0);
+relative_id =3D OPTS_GET(opts, relative_id, 0);
+
+/* only one of fd or id can be specified */
+if (relative_fd && relative_id > 0)
+    return libbpf_err(-EINVAL);
+
+... then see further below
+
+> +
+>         memset(&attr, 0, attr_sz);
+> -       attr.target_fd     =3D target_fd;
+> -       attr.attach_bpf_fd =3D prog_fd;
+> -       attr.attach_type   =3D type;
+> -       attr.attach_flags  =3D OPTS_GET(opts, flags, 0);
+> -       attr.replace_bpf_fd =3D OPTS_GET(opts, replace_prog_fd, 0);
+> +       attr.target_fd          =3D target;
+> +       attr.attach_bpf_fd      =3D prog_fd;
+> +       attr.attach_type        =3D type;
+> +       attr.attach_flags       =3D flags;
+> +       attr.relative_fd        =3D relative;
+
+instead of two lines above, have simple if/else
+
+if (relative_if) {
+    attr.relative_id =3D relative_id;
+    attr.attach_flags =3D flags | BPF_F_ID;
+} else {
+    attr.relative_fd =3D relative_fd;
+    attr.attach_flags =3D flags;
+}
+
+This combined with the piece above seems very straightforward in terms
+of what is checked and what's passed into attr. WDYT?
+
+> +       attr.replace_bpf_fd     =3D OPTS_GET(opts, replace_fd, 0);
+> +       attr.expected_revision  =3D OPTS_GET(opts, expected_revision, 0);
+>
+>         ret =3D sys_bpf(BPF_PROG_ATTACH, &attr, attr_sz);
+>         return libbpf_err_errno(ret);
+>  }
+>
+> -int bpf_prog_detach(int target_fd, enum bpf_attach_type type)
+> +int bpf_prog_detach_opts(int prog_fd, int target,
+> +                        enum bpf_attach_type type,
+> +                        const struct bpf_prog_detach_opts *opts)
+>  {
+> -       const size_t attr_sz =3D offsetofend(union bpf_attr, replace_bpf_=
+fd);
+> +       const size_t attr_sz =3D offsetofend(union bpf_attr, expected_rev=
+ision);
+> +       __u32 relative_id, flags;
+>         union bpf_attr attr;
+> -       int ret;
+> +       int ret, relative;
+> +
+> +       if (!OPTS_VALID(opts, bpf_prog_detach_opts))
+> +               return libbpf_err(-EINVAL);
+> +
+> +       relative_id =3D OPTS_GET(opts, relative_id, 0);
+> +       relative =3D OPTS_GET(opts, relative_fd, 0);
+> +       flags =3D OPTS_GET(opts, flags, 0);
+> +
+> +       /* validate we don't have unexpected combinations of non-zero fie=
+lds */
+> +       if (relative > 0 && relative_id)
+> +               return libbpf_err(-EINVAL);
+> +       if (relative_id) {
+> +               relative =3D relative_id;
+> +               flags |=3D BPF_F_ID;
+> +       }
+
+see above, I think the same data flow simplification can be done
+
+>
+>         memset(&attr, 0, attr_sz);
+> -       attr.target_fd   =3D target_fd;
+> -       attr.attach_type =3D type;
+> +       attr.target_fd          =3D target;
+> +       attr.attach_bpf_fd      =3D prog_fd;
+> +       attr.attach_type        =3D type;
+> +       attr.attach_flags       =3D flags;
+> +       attr.relative_fd        =3D relative;
+> +       attr.expected_revision  =3D OPTS_GET(opts, expected_revision, 0);
+>
+>         ret =3D sys_bpf(BPF_PROG_DETACH, &attr, attr_sz);
+>         return libbpf_err_errno(ret);
+>  }
+>
+
+[...]
+
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index d9ec4407befa..a95d39bbef90 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -396,4 +396,5 @@ LIBBPF_1.3.0 {
+>         global:
+>                 bpf_obj_pin_opts;
+>                 bpf_program__attach_netfilter;
+> +               bpf_prog_detach_opts;
+
+I think it sorts before bpf_program__attach_netfilter?
+
+>  } LIBBPF_1.2.0;
+
+
+> --
+> 2.34.1
+>
