@@ -1,133 +1,279 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0294418C3E
-	for <bpf@vger.kernel.org>; Tue, 11 Jul 2023 14:04:25 +0000 (UTC)
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C096E10FC
-	for <bpf@vger.kernel.org>; Tue, 11 Jul 2023 07:04:22 -0700 (PDT)
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 76066C151701
-	for <bpf@vger.kernel.org>; Tue, 11 Jul 2023 07:04:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1689084262; bh=cvmM77Ip+PEWOj2eIDhC2DDOE6LqmyW2Q78fQ6wb9xY=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=U1WZAdt718NgItcM5GZfAaP5PS85/LvTnIxurvdyK/CvDUQAP5t4SFnN32lf9q3h8
-	 9p9kMPv2quLi8SvW5zAgGbJgwccIHv2WG6uTjdq99sCRw/FUMWUTqBO/yzeQDRMR/F
-	 uLl1XmNTDOc3eN5V1AlO7zHbCI6UEeQbvFqG5B6w=
-X-Mailbox-Line: From bpf-bounces@ietf.org  Tue Jul 11 07:04:22 2023
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 3BF60C151090;
-	Tue, 11 Jul 2023 07:04:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1689084262; bh=cvmM77Ip+PEWOj2eIDhC2DDOE6LqmyW2Q78fQ6wb9xY=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=U1WZAdt718NgItcM5GZfAaP5PS85/LvTnIxurvdyK/CvDUQAP5t4SFnN32lf9q3h8
-	 9p9kMPv2quLi8SvW5zAgGbJgwccIHv2WG6uTjdq99sCRw/FUMWUTqBO/yzeQDRMR/F
-	 uLl1XmNTDOc3eN5V1AlO7zHbCI6UEeQbvFqG5B6w=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id E62B0C151090
- for <bpf@ietfa.amsl.com>; Tue, 11 Jul 2023 07:04:20 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Score: -2.098
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,
-	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
- header.d=gnu.org
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mPGm7WVoYIDt for <bpf@ietfa.amsl.com>;
- Tue, 11 Jul 2023 07:04:17 -0700 (PDT)
-Received: from eggs.gnu.org (eggs.gnu.org [IPv6:2001:470:142:3::10])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id 10C08C15106A
- for <bpf@ietf.org>; Tue, 11 Jul 2023 07:04:16 -0700 (PDT)
-Received: from fencepost.gnu.org ([2001:470:142:3::e])
- by eggs.gnu.org with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
- (Exim 4.90_1) (envelope-from <jemarch@gnu.org>)
- id 1qJDyQ-00006L-GR; Tue, 11 Jul 2023 10:04:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=gnu.org;
- s=fencepost-gnu-org; h=MIME-Version:Date:References:In-Reply-To:Subject:To:
- From; bh=NpaSxipqmX9poXsWhpR4q+yVnkTQK1VtwmJHQsc4V+4=; b=kDM2+rc6xNCwgr3roFyT
- PMNMjRFLZmusqaYHjXxSGSz++Umfqnx7TkydDsvYFqd+uoEJn0qxk1al/MDPg5+SOBlua9iU9rqs4
- WYW04kpTVkdQy7afgsuwyF4ofHnT3hFvF1/FClLSQ6eCipy0Lm8MmubqxeckAFVuAoVWBGjqnoAn7
- 4L836Xd8jtNP7HeOMhL+A5xyN4LEXZUm49z9w1auWcKAX7Vwq57AZKreSw2UxAMC5y0OguEFgehxd
- tgMtDQo8IVZZdFKQYKXc8FuH5IJXLOu0WGEL/TdeMsKS2K2NJT29+AB43TgXzcuCOnzDA/+Fn9aF1
- wHKsaiwD0Dh6fg==;
-Received: from [141.143.193.69] (helo=termi)
- by fencepost.gnu.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
- (Exim 4.90_1) (envelope-from <jemarch@gnu.org>)
- id 1qJDyQ-0000RG-4q; Tue, 11 Jul 2023 10:04:14 -0400
-From: "Jose E. Marchesi" <jemarch@gnu.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Will Hawkins <hawkinsw@obs.cr>,  bpf <bpf@vger.kernel.org>,  bpf@ietf.org
-In-Reply-To: <CAADnVQ+F5VT72LzONEo79ksqaRj=c7mJDd_Ebb87767v01Nosw@mail.gmail.com>
- (Alexei Starovoitov's message of "Mon, 10 Jul 2023 20:00:31 -0700")
-References: <20230710215819.723550-1-hawkinsw@obs.cr>
- <20230710215819.723550-2-hawkinsw@obs.cr>
- <CAADnVQ+F5VT72LzONEo79ksqaRj=c7mJDd_Ebb87767v01Nosw@mail.gmail.com>
-Date: Tue, 11 Jul 2023 16:04:11 +0200
-Message-ID: <871qhe7des.fsf@gnu.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F130914AB5;
+	Tue, 11 Jul 2023 14:08:55 +0000 (UTC)
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6828A1718;
+	Tue, 11 Jul 2023 07:08:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=KvskEr1+W018J0txnL09dpVdxdmlYOmO19RB1YOkiX4=; b=QzzxCCWiGG/VQxMp0cx8ETfcYe
+	ee9q511MvrIs6KEeFeXKl9Q2Ab8xIVQIj9sxOsDxAeWwx1OBTvYuGPgtlZpa8ID81ZlSN+SHcev4i
+	kxUk6BU6T25lL1ujp3sz2yPkbm19g6v7qtrfT9SxTfcWgd5PC0XFXhBJdn476WJzoUPPi5H9Dsz6c
+	nl6/xsvq367h3aRnl51pfqKmZv0js4zblg88EMKBfOyCp4tAoXQF4f3ZV5TnZazAOX34Ft5IRpDw2
+	MapqoAOPu0wn0Kt4tk5APqsOrr3v2UefrmXVHTBQdBZbqJvhthK/4IgdGh3E7gKKTcaWNuQuMYSip
+	BkRX6wKQ==;
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1qJE2G-0000Zl-8q; Tue, 11 Jul 2023 16:08:12 +0200
+Received: from [81.6.34.132] (helo=localhost.localdomain)
+	by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1qJE2F-000FCG-PN; Tue, 11 Jul 2023 16:08:11 +0200
+Subject: Re: [PATCH bpf-next v4 4/8] libbpf: Add link-based API for tcx
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
+ razor@blackwall.org, sdf@google.com, john.fastabend@gmail.com,
+ kuba@kernel.org, dxu@dxuuu.xyz, joe@cilium.io, toke@kernel.org,
+ davem@davemloft.net, bpf@vger.kernel.org, netdev@vger.kernel.org
+References: <20230710201218.19460-1-daniel@iogearbox.net>
+ <20230710201218.19460-5-daniel@iogearbox.net>
+ <CAEf4Bzb_qyd9KbNU6=vs=H3Nbqt6QNNo++JVRCUrQ9aFW4psMA@mail.gmail.com>
+From: Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <a98f7531-b8a9-909b-0eb3-38bf26d79115@iogearbox.net>
+Date: Tue, 11 Jul 2023 16:08:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/evzH_PJcUv48xDRRC0wtxf1zuWw>
-Subject: Re: [Bpf] [PATCH 1/1] bpf,
- docs: Specify twos complement as format for signed integers
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Id: Discussion of BPF/eBPF standardization efforts within the IETF
- <bpf.ietf.org>
-List-Unsubscribe: <https://www.ietf.org/mailman/options/bpf>,
- <mailto:bpf-request@ietf.org?subject=unsubscribe>
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-List-Subscribe: <https://www.ietf.org/mailman/listinfo/bpf>,
- <mailto:bpf-request@ietf.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
+In-Reply-To: <CAEf4Bzb_qyd9KbNU6=vs=H3Nbqt6QNNo++JVRCUrQ9aFW4psMA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26966/Tue Jul 11 09:28:31 2023)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
-Message-ID: <20230711140411.S25BdFwF2w1A2SYlG-stWL6nnMJ6QeQE825cCMHZL40@z>
 
-Cj4gT24gTW9uLCBKdWwgMTAsIDIwMjMgYXQgMjo1OOKAr1BNIFdpbGwgSGF3a2lucyA8aGF3a2lu
-c3dAb2JzLmNyPiB3cm90ZToKPj4KPj4gSW4gdGhlIGRvY3VtZW50YXRpb24gb2YgdGhlIGVCUEYg
-SVNBIGl0IGlzIHVuc3BlY2lmaWVkIGhvdyBpbnRlZ2VycyBhcmUKPj4gcmVwcmVzZW50ZWQuIFNw
-ZWNpZnkgdGhhdCB0d29zIGNvbXBsZW1lbnQgaXMgdXNlZC4KPj4KPj4gU2lnbmVkLW9mZi1ieTog
-V2lsbCBIYXdraW5zIDxoYXdraW5zd0BvYnMuY3I+Cj4+IC0tLQo+PiAgRG9jdW1lbnRhdGlvbi9i
-cGYvaW5zdHJ1Y3Rpb24tc2V0LnJzdCB8IDUgKysrKysKPj4gIDEgZmlsZSBjaGFuZ2VkLCA1IGlu
-c2VydGlvbnMoKykKPj4KPj4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vYnBmL2luc3RydWN0
-aW9uLXNldC5yc3QgYi9Eb2N1bWVudGF0aW9uL2JwZi9pbnN0cnVjdGlvbi1zZXQucnN0Cj4+IGlu
-ZGV4IDc1MWU2NTc5NzNmMC4uNjNkZmNiYTVlYjlhIDEwMDY0NAo+PiAtLS0gYS9Eb2N1bWVudGF0
-aW9uL2JwZi9pbnN0cnVjdGlvbi1zZXQucnN0Cj4+ICsrKyBiL0RvY3VtZW50YXRpb24vYnBmL2lu
-c3RydWN0aW9uLXNldC5yc3QKPj4gQEAgLTE3Myw2ICsxNzMsMTEgQEAgQlBGX0FSU0ggIDB4YzAg
-ICBzaWduIGV4dGVuZGluZyBkc3QgPj49IChzcmMgJiBtYXNrKQo+PiAgQlBGX0VORCAgIDB4ZDAg
-ICBieXRlIHN3YXAgb3BlcmF0aW9ucyAoc2VlIGBCeXRlIHN3YXAgaW5zdHJ1Y3Rpb25zYF8gYmVs
-b3cpCj4+ICA9PT09PT09PSAgPT09PT0gID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT0KPj4KPj4gK2VCUEYgc3VwcG9ydHMgMzItIGFuZCA2
-NC1iaXQgc2lnbmVkIGFuZCB1bnNpZ25lZCBpbnRlZ2Vycy4gSXQgZG9lcwo+PiArbm90IHN1cHBv
-cnQgZmxvYXRpbmctcG9pbnQgZGF0YSB0eXBlcy4gQWxsIHNpZ25lZCBpbnRlZ2VycyBhcmUgcmVw
-cmVzZW50ZWQgaW4KPj4gK3R3b3MtY29tcGxlbWVudCBmb3JtYXQgd2hlcmUgdGhlIHNpZ24gYml0
-IGlzIHN0b3JlZCBpbiB0aGUgbW9zdC1zaWduaWZpY2FudAo+PiArYml0Lgo+Cj4gQ291bGQgeW91
-IHBvaW50IHRvIGFub3RoZXIgSVNBIGRvY3VtZW50IChsaWtlIHg4NiwgYXJtLCAuLi4pIHRoYXQK
-PiB0YWxrcyBhYm91dCBzaWduZWQgYW5kIHVuc2lnbmVkIGludGVnZXJzPwoKQUZBSUsgdGhlIG9u
-bHkgc2lnbmVkbmVzcyBlbmNvZGluZyBhc3BlY3QgdGhhdCBpcyBhbHdheXMgZm91bmQgaW4gSVNB
-CnNwZWNpZmljYXRpb25zIGFuZCBzaG91bGQgYmUgc3BlY2lmaWVkIGlzIGhvdyBudW1lcmljYWwg
-aW1tZWRpYXRlcyBhcmUKZW5jb2RlZCBpbiBzdG9yZWQgaW5zdHJ1Y3Rpb25zLgoKQnV0IHRoYXQg
-aGFzIG5vdGhpbmcgdG8gZG8gd2l0aCAiZGF0YSB0eXBlcyIuCgotLSAKQnBmIG1haWxpbmcgbGlz
-dApCcGZAaWV0Zi5vcmcKaHR0cHM6Ly93d3cuaWV0Zi5vcmcvbWFpbG1hbi9saXN0aW5mby9icGYK
+On 7/11/23 6:00 AM, Andrii Nakryiko wrote:
+> On Mon, Jul 10, 2023 at 1:12 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>>
+>> Implement tcx BPF link support for libbpf.
+>>
+>> The bpf_program__attach_fd() API has been refactored slightly in order to pass
+>> bpf_link_create_opts pointer as input.
+>>
+>> A new bpf_program__attach_tcx() has been added on top of this which allows for
+>> passing all relevant data via extensible struct bpf_tcx_opts.
+>>
+>> The program sections tcx/ingress and tcx/egress correspond to the hook locations
+>> for tc ingress and egress, respectively.
+>>
+>> For concrete usage examples, see the extensive selftests that have been
+>> developed as part of this series.
+>>
+>> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+>> ---
+>>   tools/lib/bpf/bpf.c      | 19 ++++++++++--
+>>   tools/lib/bpf/bpf.h      |  5 ++++
+>>   tools/lib/bpf/libbpf.c   | 62 ++++++++++++++++++++++++++++++++++------
+>>   tools/lib/bpf/libbpf.h   | 16 +++++++++++
+>>   tools/lib/bpf/libbpf.map |  1 +
+>>   5 files changed, 92 insertions(+), 11 deletions(-)
+>>
+> 
+> Pretty minor nits, I think ifindex move to be mandatory argument is
+> the most consequential, as it's an API. With that addressed, please
+> add my ack for next rev
+> 
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> 
+>> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+>> index 3dfc43b477c3..d513c226b9aa 100644
+>> --- a/tools/lib/bpf/bpf.c
+>> +++ b/tools/lib/bpf/bpf.c
+>> @@ -717,9 +717,9 @@ int bpf_link_create(int prog_fd, int target_fd,
+>>                      const struct bpf_link_create_opts *opts)
+>>   {
+>>          const size_t attr_sz = offsetofend(union bpf_attr, link_create);
+>> -       __u32 target_btf_id, iter_info_len;
+>> +       __u32 target_btf_id, iter_info_len, relative_id;
+>> +       int fd, err, relative;
+> 
+> nit: maybe make these new vars local to the TCX cases branch below?
+> 
+>>          union bpf_attr attr;
+>> -       int fd, err;
+>>
+>>          if (!OPTS_VALID(opts, bpf_link_create_opts))
+>>                  return libbpf_err(-EINVAL);
+>> @@ -781,6 +781,21 @@ int bpf_link_create(int prog_fd, int target_fd,
+>>                  if (!OPTS_ZEROED(opts, netfilter))
+>>                          return libbpf_err(-EINVAL);
+>>                  break;
+>> +       case BPF_TCX_INGRESS:
+>> +       case BPF_TCX_EGRESS:
+>> +               relative = OPTS_GET(opts, tcx.relative_fd, 0);
+>> +               relative_id = OPTS_GET(opts, tcx.relative_id, 0);
+>> +               if (relative > 0 && relative_id)
+>> +                       return libbpf_err(-EINVAL);
+>> +               if (relative_id) {
+>> +                       relative = relative_id;
+>> +                       attr.link_create.flags |= BPF_F_ID;
+>> +               }
+> 
+> Well, I have the same nit as in the previous patch, this "relative =
+> relative_id" is both confusing because of naming asymmetry (no
+> relative_fd throws me off), and also unnecessary updating of the
+> state. link_create.flags |= BPF_F_ID is inevitable, but the rest can
+> be more straightforward, IMO
+> 
+>> +               attr.link_create.tcx.relative_fd = relative;
+>> +               attr.link_create.tcx.expected_revision = OPTS_GET(opts, tcx.expected_revision, 0);
+>> +               if (!OPTS_ZEROED(opts, tcx))
+>> +                       return libbpf_err(-EINVAL);
+>> +               break;
+>>          default:
+>>                  if (!OPTS_ZEROED(opts, flags))
+>>                          return libbpf_err(-EINVAL);
+> 
+> [...]
+> 
+>> +struct bpf_link *
+>> +bpf_program__attach_tcx(const struct bpf_program *prog,
+>> +                       const struct bpf_tcx_opts *opts)
+>> +{
+>> +       LIBBPF_OPTS(bpf_link_create_opts, link_create_opts);
+>> +       __u32 relative_id, flags;
+>> +       int ifindex, relative_fd;
+>> +
+>> +       if (!OPTS_VALID(opts, bpf_tcx_opts))
+>> +               return libbpf_err_ptr(-EINVAL);
+>> +
+>> +       relative_id = OPTS_GET(opts, relative_id, 0);
+>> +       relative_fd = OPTS_GET(opts, relative_fd, 0);
+>> +       flags = OPTS_GET(opts, flags, 0);
+>> +       ifindex = OPTS_GET(opts, ifindex, 0);
+>> +
+>> +       /* validate we don't have unexpected combinations of non-zero fields */
+>> +       if (!ifindex) {
+>> +               pr_warn("prog '%s': target netdevice ifindex cannot be zero\n",
+>> +                       prog->name);
+>> +               return libbpf_err_ptr(-EINVAL);
+>> +       }
+> 
+> given ifindex is non-optional, then it makes more sense to have it as
+> a mandatory argument between prog and opts in
+> bpf_program__attach_tcx(), instead of as a field of an opts struct
+
+Agree, and it will also be more in line with bpf_program__attach_xdp() one
+which has ifindex as 2nd param too.
+
+I also implemented the rest of the suggestions in here for v5, thanks!
+
+>> +       if (relative_fd > 0 && relative_id) {
+> 
+> this asymmetrical check is a bit distracting. And also, if someone
+> specifies negative FD and positive ID, that's also a bad combo and we
+> shouldn't just ignore invalid FD, right? So I'd have a nice and clean
+> 
+> if (relative_fd && relative_id) { /* bad */ }
+> 
+>> +               pr_warn("prog '%s': relative_fd and relative_id cannot be set at the same time\n",
+>> +                       prog->name);
+>> +               return libbpf_err_ptr(-EINVAL);
+>> +       }
+>> +       if (relative_id)
+>> +               flags |= BPF_F_ID;
+> 
+> I think bpf_link_create() will add this flag anyways, so can drop this
+> adjustment logic here?
+> 
+>> +
+>> +       link_create_opts.tcx.expected_revision = OPTS_GET(opts, expected_revision, 0);
+>> +       link_create_opts.tcx.relative_fd = relative_fd;
+>> +       link_create_opts.tcx.relative_id = relative_id;
+>> +       link_create_opts.flags = flags;
+>> +
+>> +       /* target_fd/target_ifindex use the same field in LINK_CREATE */
+>> +       return bpf_program_attach_fd(prog, ifindex, "tc", &link_create_opts);
+> 
+> s/tc/tcx/ ?
+> 
+>>   }
+>>
+>>   struct bpf_link *bpf_program__attach_freplace(const struct bpf_program *prog,
+>> @@ -11917,11 +11956,16 @@ struct bpf_link *bpf_program__attach_freplace(const struct bpf_program *prog,
+>>          }
+>>
+>>          if (target_fd) {
+>> +               LIBBPF_OPTS(bpf_link_create_opts, target_opts);
+>> +
+>>                  btf_id = libbpf_find_prog_btf_id(attach_func_name, target_fd);
+>>                  if (btf_id < 0)
+>>                          return libbpf_err_ptr(btf_id);
+>>
+>> -               return bpf_program__attach_fd(prog, target_fd, btf_id, "freplace");
+>> +               target_opts.target_btf_id = btf_id;
+>> +
+>> +               return bpf_program_attach_fd(prog, target_fd, "freplace",
+>> +                                            &target_opts);
+>>          } else {
+>>                  /* no target, so use raw_tracepoint_open for compatibility
+>>                   * with old kernels
+>> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+>> index 10642ad69d76..33f60a318e81 100644
+>> --- a/tools/lib/bpf/libbpf.h
+>> +++ b/tools/lib/bpf/libbpf.h
+>> @@ -733,6 +733,22 @@ LIBBPF_API struct bpf_link *
+>>   bpf_program__attach_netfilter(const struct bpf_program *prog,
+>>                                const struct bpf_netfilter_opts *opts);
+>>
+>> +struct bpf_tcx_opts {
+>> +       /* size of this struct, for forward/backward compatibility */
+>> +       size_t sz;
+>> +       int ifindex;
+> 
+> is ifindex optional or it's expected to always be specified? If the
+> latter, then I'd move ifindex out of opts and make it second arg of
+> bpf_program__attach_tcx, between prog and opts
+> 
+>> +       __u32 flags;
+>> +       __u32 relative_fd;
+>> +       __u32 relative_id;
+>> +       __u64 expected_revision;
+>> +       size_t :0;
+>> +};
+>> +#define bpf_tcx_opts__last_field expected_revision
+>> +
+>> +LIBBPF_API struct bpf_link *
+>> +bpf_program__attach_tcx(const struct bpf_program *prog,
+>> +                       const struct bpf_tcx_opts *opts);
+>> +
+>>   struct bpf_map;
+>>
+>>   LIBBPF_API struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map);
+>> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+>> index a95d39bbef90..2a2db5c78048 100644
+>> --- a/tools/lib/bpf/libbpf.map
+>> +++ b/tools/lib/bpf/libbpf.map
+>> @@ -397,4 +397,5 @@ LIBBPF_1.3.0 {
+>>                  bpf_obj_pin_opts;
+>>                  bpf_program__attach_netfilter;
+>>                  bpf_prog_detach_opts;
+>> +               bpf_program__attach_tcx;
+> 
+> heh, now we definitely screwed up sorting ;)
+> 
+>>   } LIBBPF_1.2.0;
+> 
+>> --
+>> 2.34.1
+>>
+> 
+
