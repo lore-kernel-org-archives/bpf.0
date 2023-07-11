@@ -1,136 +1,299 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D039037E
-	for <bpf@vger.kernel.org>; Tue, 11 Jul 2023 01:12:53 +0000 (UTC)
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7082DE46
-	for <bpf@vger.kernel.org>; Mon, 10 Jul 2023 18:12:30 -0700 (PDT)
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 2E3C0C19E0FE
-	for <bpf@vger.kernel.org>; Mon, 10 Jul 2023 18:12:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1689037950; bh=ArOAJFZkQ9vEQiGPs1nOn7py3ueWbIslb08qPh824v8=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=oh1cvLOK2o52A0Z3cKH6fle9pXbKo3iX3A3/IP8Iju7yK+eBGr9u6FWA9oN9UZIpr
-	 P3hYhrWTui1pVfbxvGdNaMZ72JJAssnRfcw1Cxuc5pBhg96OH9++0idr3oAv/hhftt
-	 MaxToDRF/F2aylM6XXQvzqXysnHlnK39fa3IHkHo=
-X-Mailbox-Line: From bpf-bounces@ietf.org  Mon Jul 10 18:12:30 2023
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 03317C151099;
-	Mon, 10 Jul 2023 18:12:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1689037950; bh=ArOAJFZkQ9vEQiGPs1nOn7py3ueWbIslb08qPh824v8=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=oh1cvLOK2o52A0Z3cKH6fle9pXbKo3iX3A3/IP8Iju7yK+eBGr9u6FWA9oN9UZIpr
-	 P3hYhrWTui1pVfbxvGdNaMZ72JJAssnRfcw1Cxuc5pBhg96OH9++0idr3oAv/hhftt
-	 MaxToDRF/F2aylM6XXQvzqXysnHlnK39fa3IHkHo=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id A48C2C151099
- for <bpf@ietfa.amsl.com>; Mon, 10 Jul 2023 18:12:29 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Score: -7.097
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-	SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.6
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
- header.d=gmail.com
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JXEoi3T4LDPY for <bpf@ietfa.amsl.com>;
- Mon, 10 Jul 2023 18:12:25 -0700 (PDT)
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com
- [IPv6:2a00:1450:4864:20::231])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id 9856CC151096
- for <bpf@ietf.org>; Mon, 10 Jul 2023 18:12:25 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id
- 38308e7fff4ca-2b703caf344so77380831fa.1
- for <bpf@ietf.org>; Mon, 10 Jul 2023 18:12:25 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 616C337E
+	for <bpf@vger.kernel.org>; Tue, 11 Jul 2023 01:14:20 +0000 (UTC)
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01127106;
+	Mon, 10 Jul 2023 18:14:18 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-666e6ecb52dso2819494b3a.2;
+        Mon, 10 Jul 2023 18:14:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1689037943; x=1691629943;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=Pex3OXnO+EOM0lLTq/CM4rL/UluIcTGfOZlbj7zTj6I=;
- b=XGk3u5Tmo+EYlpt1Qfu3/ixZ1p9CmSyTZXM9nPs4sHgd8JF0BrcUsfwCKiTdPyv0fh
- 5Nm6VbULLqvq46feHjNShV/O+iqzPhLvBjtu9C92+wNM2MnE4m2kBt6v7Mo7MvvOYUCq
- Ti77jV5xXpQDReAOanTur3xQ7/Adz9eIVeA7GJHU4Rb48oDvZTQyoEBk8GXp9K6jJsmO
- 1J+jtjCk6Iy8K5UVQRz6+U17WshhgDk3rabbpcOQOn8dwH0Xc7FfOW1Cgu9oqJY5lWPL
- M4lC/4GKoVdXw1Z12E7ts8kikjRuERnsA7itkQZSWL9MNggNTrFNCv+fGJ3gjj70ghhj
- bA4Q==
+        d=gmail.com; s=20221208; t=1689038058; x=1691630058;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m01QlMbPsmHe+hL9CZfrqpQzRrLlm6KCDzWm4xR0A9c=;
+        b=k5ol8NWNvuZBmimlcX1li9+43KDMLpHAgFA5nNZuU/U6u0PxVxmkfpOFv6cfD0eCQn
+         3Bzl03TWZqjvw5ZsfDgbTjLmmHWk5Ui4Omx0IlCO6kPXCkcQBa5JZNCls/gXLFd8Kqmh
+         8KFH6O8cVQG6bDeY7Jdrg7DU6iUnLoAs3Mn1UTcMNNZ/UORWFU/qaF4dq3/eDPgGjzk5
+         9HQRd/0YEiFKod6M/jo+0t3Y0wEePxv4RKUAf+JUjPKcpuhJ1Ax4V6GGi+p0+4z7NyFH
+         RlbE8TIvRXYY8Uz9c44I7OLh6ELTuNB9AJ7n/cCC81v9tA62fS7bzEdKAQ2X3W8PtVax
+         2+Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1689037943; x=1691629943;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=Pex3OXnO+EOM0lLTq/CM4rL/UluIcTGfOZlbj7zTj6I=;
- b=bfggev0SKYOQb+u/QVC5vd4zAcWij5C1f1ENB2u4adFp6+vPRte+akjlJaDnFSF0gE
- XZ4T4nz/zbct3GNmmAsgUaci88HkHndBoPY4V+RgWNNrOklIf5ZiofxADRFpoX4Oi+J0
- Yky4RCpMI/1ucUCoaCsSBrJfYVOqIa+qvYOvkQ2VA5qumm9RcWfpDIuL2p/DE1wRVyGq
- OKx72UbCUFim5BxPNtXGCBwBZsWPQuafpz6Rgy3W3xMr1o40JVyMX+Ez3ExiHj6U7MdU
- iA89aLsCnQxoNf1XrW2++khAw8RSL3P9cn9o6aMZmpxgBIE1lmOBfDQ7GgMcB5WZhlwq
- 5O7w==
-X-Gm-Message-State: ABy/qLYNDA7RTjRk+JGCyIYpAGjABGilakfZtJq4GVUZjqcVup65nlRr
- 01Y8eat95EuMQM8HWOZjRGVUkALuL0Whatr7Id0=
-X-Google-Smtp-Source: APBJJlG/vTWX5lu60jp5eKOQVbHSm2ZmTT39myj8gt9u/9jh77aLQqQjNkUzDJb42F+gfR/wJIzK4SC7aXwHZ5BlIWs=
-X-Received: by 2002:a2e:a311:0:b0:2b6:fa42:1b1d with SMTP id
- l17-20020a2ea311000000b002b6fa421b1dmr11980850lje.29.1689037943157; Mon, 10
- Jul 2023 18:12:23 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689038058; x=1691630058;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=m01QlMbPsmHe+hL9CZfrqpQzRrLlm6KCDzWm4xR0A9c=;
+        b=Fc86dY6cjdbIeJhsD47Iy1rLxxOMM5Iv9J8EInyrF1kPmuLjoVnqW1MZO9Blb+h+L7
+         0/DCQZRTZ1c/TjQumkVnLZHFWz1M5HEyBLEI3CFQD44hHdJ4h6jus/A+jz8v/+oiQn/T
+         ZDawvk5d1JCoojFfgvf289nxLT8fUi7TsR86ol8gTd6BKpe+fSi4exOMQurwHhLG23KL
+         RlS9LoKG/s+89UY1EoXK2dqBFqF/qhFzKg5cPoo7olBw0SnJtibEa0xC9rLYcq28Hb4I
+         aDm7VHMq/n+28rvngZ8NY7O73cVZewXXaW8K3a1i90sY5O0ZiqlRBo+is96b3XoTBwC0
+         m9FQ==
+X-Gm-Message-State: ABy/qLa/iSUocxyL2wq24G8GH1DlzWZPkib2ctdb2iaq9EfawHjhOWFw
+	tV4mQGT/on9EYVioLKwWfl4=
+X-Google-Smtp-Source: APBJJlHf9BOtEyoZelKGnLacx0b+VoLE978a9+DoHUGprbhCPpgXPDN9J05bxH0D8Ij7RwP9dTyqZg==
+X-Received: by 2002:a05:6a20:3d90:b0:126:9f02:da6f with SMTP id s16-20020a056a203d9000b001269f02da6fmr13480508pzi.14.1689038058124;
+        Mon, 10 Jul 2023 18:14:18 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:e2fe])
+        by smtp.gmail.com with ESMTPSA id g16-20020a170902869000b001b54dcd84e2sm491772plo.240.2023.07.10.18.14.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 18:14:17 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+From: Tejun Heo <tj@kernel.org>
+To: torvalds@linux-foundation.org,
+	mingo@redhat.com,
+	peterz@infradead.org,
+	juri.lelli@redhat.com,
+	vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com,
+	rostedt@goodmis.org,
+	bsegall@google.com,
+	mgorman@suse.de,
+	bristot@redhat.com,
+	vschneid@redhat.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@kernel.org,
+	joshdon@google.com,
+	brho@google.com,
+	pjt@google.com,
+	derkling@google.com,
+	haoluo@google.com,
+	dvernet@meta.com,
+	dschatzberg@meta.com,
+	dskarlat@cs.cmu.edu,
+	riel@surriel.com
+Cc: linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	kernel-team@meta.com,
+	Tejun Heo <tj@kernel.org>
+Subject: [PATCH 01/34] cgroup: Implement cgroup_show_cftypes()
+Date: Mon, 10 Jul 2023 15:13:19 -1000
+Message-ID: <20230711011412.100319-2-tj@kernel.org>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230711011412.100319-1-tj@kernel.org>
+References: <20230711011412.100319-1-tj@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230710183622.1401-1-dthaler1968@googlemail.com>
-In-Reply-To: <20230710183622.1401-1-dthaler1968@googlemail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 10 Jul 2023 18:12:11 -0700
-Message-ID: <CAADnVQKjugok8G1ymHC1TgZbTeB=-wvYSU49YgerrLi=F_fP6g@mail.gmail.com>
-To: Dave Thaler <dthaler1968=40googlemail.com@dmarc.ietf.org>
-Cc: bpf <bpf@vger.kernel.org>, bpf@ietf.org,
- Dave Thaler <dthaler@microsoft.com>
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/R-33Z0QtF9udFK3q6rcwJSWOBSY>
-Subject: Re: [Bpf] [PATCH bpf-next v3] bpf, docs: Improve English readability
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Id: Discussion of BPF/eBPF standardization efforts within the IETF
- <bpf.ietf.org>
-List-Unsubscribe: <https://www.ietf.org/mailman/options/bpf>,
- <mailto:bpf-request@ietf.org?subject=unsubscribe>
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-List-Subscribe: <https://www.ietf.org/mailman/listinfo/bpf>,
- <mailto:bpf-request@ietf.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+	SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
-Message-ID: <20230711011211.avGG3aLqS4Js0Zfcy7XtFrDAkAs7hDFkKJLLVQm7dhA@z>
 
-T24gTW9uLCBKdWwgMTAsIDIwMjMgYXQgMTE6MzbigK9BTSBEYXZlIFRoYWxlcgo8ZHRoYWxlcjE5
-Njg9NDBnb29nbGVtYWlsLmNvbUBkbWFyYy5pZXRmLm9yZz4gd3JvdGU6Cj4KPgo+IC1UaGUgdGhy
-ZWUgTFNCIGJpdHMgb2YgdGhlICdvcGNvZGUnIGZpZWxkIHN0b3JlIHRoZSBpbnN0cnVjdGlvbiBj
-bGFzczoKPiArVGhlIGVuY29kaW5nIG9mIHRoZSAnb3Bjb2RlJyBmaWVsZCB2YXJpZXMgYW5kIGNh
-biBiZSBkZXRlcm1pbmVkCj4gK2Zyb20gdGhlIHRocmVlIGxlYXN0IHNpZ25pZmljYW50IGJpdHMg
-KExTQikgb2YgdGhlICdvcGNvZGUnIGZpZWxkCj4gK3doaWNoIGhvbGRzIHRoZSAiaW5zdHJ1Y3Rp
-b24gY2xhc3MiLCBhcyBmb2xsb3dzOgoKRVJST1I6IHRyYWlsaW5nIHdoaXRlc3BhY2UKIzM2OiBG
-SUxFOiBEb2N1bWVudGF0aW9uL2JwZi9pbnN0cnVjdGlvbi1zZXQucnN0OjEwNjoKK1RoZSBlbmNv
-ZGluZyBvZiB0aGUgJ29wY29kZScgZmllbGQgdmFyaWVzIGFuZCBjYW4gYmUgZGV0ZXJtaW5lZCAk
-CgphbmQgaW4gb3RoZXIgcGxhY2VzLgoKU2VlIEJQRiBDSToKaHR0cHM6Ly9wYXRjaHdvcmsuaG9w
-dG8ub3JnL3N0YXRpYy9uaXBhLzc2NDEyNi8xMzMwNzQ3OS9jaGVja3BhdGNoL3N0ZG91dAoKLS0g
-CkJwZiBtYWlsaW5nIGxpc3QKQnBmQGlldGYub3JnCmh0dHBzOi8vd3d3LmlldGYub3JnL21haWxt
-YW4vbGlzdGluZm8vYnBmCg==
+Implement cgroup_show_cftypes() which shows and hides all cgroup files
+associated with the specified set of cgroup file types. CFTYPE_HIDDEN flag
+is added so that files can be created hidden from the get-go.
+
+cgroup_show_cftypes() can be used whether the cftypes are added or not. It
+also combines with cgroup_show_file() so that a given file is visible iff
+both its cftype and cfile are visible.
+
+This will be used by a new sched_class to selectively show and hide CPU
+controller interface files depending on whether they're supported.
+
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Reviewed-by: David Vernet <dvernet@meta.com>
+Acked-by: Josh Don <joshdon@google.com>
+Acked-by: Hao Luo <haoluo@google.com>
+Acked-by: Barret Rhoden <brho@google.com>
+---
+ include/linux/cgroup-defs.h |  8 +++
+ include/linux/cgroup.h      |  1 +
+ kernel/cgroup/cgroup.c      | 97 ++++++++++++++++++++++++++++++++++---
+ 3 files changed, 99 insertions(+), 7 deletions(-)
+
+diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
+index 8a0d5466c7be..8af1e7d487cb 100644
+--- a/include/linux/cgroup-defs.h
++++ b/include/linux/cgroup-defs.h
+@@ -127,12 +127,18 @@ enum {
+ 	CFTYPE_WORLD_WRITABLE	= (1 << 4),	/* (DON'T USE FOR NEW FILES) S_IWUGO */
+ 	CFTYPE_DEBUG		= (1 << 5),	/* create when cgroup_debug */
+ 
++	CFTYPE_HIDDEN		= (1 << 6),	/* file type hidden, see cgroup_show_cftypes() */
++
+ 	/* internal flags, do not use outside cgroup core proper */
+ 	__CFTYPE_ONLY_ON_DFL	= (1 << 16),	/* only on default hierarchy */
+ 	__CFTYPE_NOT_ON_DFL	= (1 << 17),	/* not on default hierarchy */
+ 	__CFTYPE_ADDED		= (1 << 18),
+ };
+ 
++enum cfile_flags {
++	CFILE_HIDDEN		= (1 << 0),	/* file instance hidden */
++};
++
+ /*
+  * cgroup_file is the handle for a file instance created in a cgroup which
+  * is used, for example, to generate file changed notifications.  This can
+@@ -140,7 +146,9 @@ enum {
+  */
+ struct cgroup_file {
+ 	/* do not access any fields from outside cgroup core */
++	struct cftype *cft;
+ 	struct kernfs_node *kn;
++	unsigned int flags;
+ 	unsigned long notified_at;
+ 	struct timer_list notify_timer;
+ };
+diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
+index 885f5395fcd0..5d1e8432d9af 100644
+--- a/include/linux/cgroup.h
++++ b/include/linux/cgroup.h
+@@ -115,6 +115,7 @@ int cgroup_transfer_tasks(struct cgroup *to, struct cgroup *from);
+ int cgroup_add_dfl_cftypes(struct cgroup_subsys *ss, struct cftype *cfts);
+ int cgroup_add_legacy_cftypes(struct cgroup_subsys *ss, struct cftype *cfts);
+ int cgroup_rm_cftypes(struct cftype *cfts);
++void cgroup_show_cftype(struct cftype *cft, bool show);
+ void cgroup_file_notify(struct cgroup_file *cfile);
+ void cgroup_file_show(struct cgroup_file *cfile, bool show);
+ 
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 625d7483951c..bd04bdd5caeb 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -4206,10 +4206,13 @@ static int cgroup_add_file(struct cgroup_subsys_state *css, struct cgroup *cgrp,
+ 		return ret;
+ 	}
+ 
++	kernfs_show(kn, !(cft->flags & CFTYPE_HIDDEN));
++
+ 	if (cft->file_offset) {
+ 		struct cgroup_file *cfile = (void *)css + cft->file_offset;
+ 
+ 		timer_setup(&cfile->notify_timer, cgroup_file_notify_timer, 0);
++		cfile->cft = cft;
+ 
+ 		spin_lock_irq(&cgroup_file_kn_lock);
+ 		cfile->kn = kn;
+@@ -4488,6 +4491,24 @@ void cgroup_file_notify(struct cgroup_file *cfile)
+ 	spin_unlock_irqrestore(&cgroup_file_kn_lock, flags);
+ }
+ 
++static struct kernfs_node *cfile_kn_get(struct cgroup_file *cfile)
++{
++	struct kernfs_node *kn;
++
++	spin_lock_irq(&cgroup_file_kn_lock);
++	kn = cfile->kn;
++	kernfs_get(kn);
++	spin_unlock_irq(&cgroup_file_kn_lock);
++
++	return kn;
++}
++
++static bool cfile_visible(struct cgroup_file *cfile)
++{
++	return !(cfile->cft->flags & CFTYPE_HIDDEN) &&
++		!(cfile->flags & CFILE_HIDDEN);
++}
++
+ /**
+  * cgroup_file_show - show or hide a hidden cgroup file
+  * @cfile: target cgroup_file obtained by setting cftype->file_offset
+@@ -4497,15 +4518,20 @@ void cgroup_file_show(struct cgroup_file *cfile, bool show)
+ {
+ 	struct kernfs_node *kn;
+ 
+-	spin_lock_irq(&cgroup_file_kn_lock);
+-	kn = cfile->kn;
+-	kernfs_get(kn);
+-	spin_unlock_irq(&cgroup_file_kn_lock);
++	mutex_lock(&cgroup_mutex);
+ 
+-	if (kn)
+-		kernfs_show(kn, show);
++	if (show)
++		cfile->flags &= ~CFILE_HIDDEN;
++	else
++		cfile->flags |= CFILE_HIDDEN;
+ 
+-	kernfs_put(kn);
++	kn = cfile_kn_get(cfile);
++	if (kn) {
++		kernfs_show(kn, cfile_visible(cfile));
++		kernfs_put(kn);
++	}
++
++	mutex_unlock(&cgroup_mutex);
+ }
+ 
+ /**
+@@ -5519,6 +5545,63 @@ static void offline_css(struct cgroup_subsys_state *css)
+ 	wake_up_all(&css->cgroup->offline_waitq);
+ }
+ 
++/**
++ * cgroup_show_cftype - show or hide a cgroup file type
++ * @cft: cftype to show or hide
++ * @show: whether to show or hide
++ *
++ * Sets %CFTYPE_HIDDEN and shows/hides the matching files according to @show.
++ * @cft may or may not be added at the time of this call. After hiding, it's
++ * guaranteed that there are no in-flight operations on the hidden files.
++ */
++void cgroup_show_cftype(struct cftype *cft, bool show)
++{
++	struct cgroup_subsys *ss = cft->ss;
++	struct cgroup *root = ss ? &ss->root->cgrp : &cgrp_dfl_root.cgrp;
++	struct cgroup_subsys_state *css;
++
++	mutex_lock(&cgroup_mutex);
++
++	if (show)
++		cft->flags &= ~CFTYPE_HIDDEN;
++	else
++		cft->flags |= CFTYPE_HIDDEN;
++
++	if (!(cft->flags & __CFTYPE_ADDED))
++		goto out_unlock;
++
++	css_for_each_descendant_pre(css, cgroup_css(root, ss)) {
++		struct cgroup *cgrp = css->cgroup;
++		struct kernfs_node *kn;
++
++		if (!(css->flags & CSS_VISIBLE))
++			continue;
++
++		if (cft->file_offset) {
++			struct cgroup_file *cfile =
++				(void *)css + cft->file_offset;
++
++			kn = cfile_kn_get(cfile);
++			if (kn) {
++				kernfs_show(kn, cfile_visible(cfile));
++				kernfs_put(kn);
++			}
++		} else {
++			char buf[CGROUP_FILE_NAME_MAX];
++
++			kn = kernfs_find_and_get(cgrp->kn,
++					cgroup_file_name(cgrp, cft, buf));
++			if (kn) {
++				kernfs_show(kn, show);
++				kernfs_put(kn);
++			}
++		}
++	}
++
++out_unlock:
++	mutex_unlock(&cgroup_mutex);
++}
++
+ /**
+  * css_create - create a cgroup_subsys_state
+  * @cgrp: the cgroup new css will be associated with
+-- 
+2.41.0
+
