@@ -1,145 +1,90 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C36A7EC
-	for <bpf@vger.kernel.org>; Sat, 15 Jul 2023 00:23:25 +0000 (UTC)
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1FF3A96
-	for <bpf@vger.kernel.org>; Fri, 14 Jul 2023 17:23:24 -0700 (PDT)
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 8B17EC151099
-	for <bpf@vger.kernel.org>; Fri, 14 Jul 2023 17:23:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1689380604; bh=OpD6uOGlKQy7dNQebp3nOkPcHR+p0QkeQPVaPfVw+Ng=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=t0PxGt5XRGTy6QxvLRgGgxwjEYM8euoIe1eRrp5EnmemERhR+QYb0iPZY7c11wmJd
-	 bDUVdevu3yMO4UAx6Ral/hVaSN7npgCLuuFM36RZxuJroomS7KqJbrebqNVOJDxhxl
-	 OgCijzgvzHjajA1zyuWFcZiYOMRDZ6+5alsvYONA=
-X-Mailbox-Line: From bpf-bounces@ietf.org  Fri Jul 14 17:23:24 2023
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 5B8D7C14CE52;
-	Fri, 14 Jul 2023 17:23:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1689380604; bh=OpD6uOGlKQy7dNQebp3nOkPcHR+p0QkeQPVaPfVw+Ng=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=t0PxGt5XRGTy6QxvLRgGgxwjEYM8euoIe1eRrp5EnmemERhR+QYb0iPZY7c11wmJd
-	 bDUVdevu3yMO4UAx6Ral/hVaSN7npgCLuuFM36RZxuJroomS7KqJbrebqNVOJDxhxl
-	 OgCijzgvzHjajA1zyuWFcZiYOMRDZ6+5alsvYONA=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id E5182C14CE52
- for <bpf@ietfa.amsl.com>; Fri, 14 Jul 2023 17:23:22 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Score: -2.098
-X-Spam-Level: 
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-	SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.6
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
- header.d=gmail.com
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5EyWo73NaYNK for <bpf@ietfa.amsl.com>;
- Fri, 14 Jul 2023 17:23:22 -0700 (PDT)
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com
- [IPv6:2a00:1450:4864:20::236])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id 94DCDC14CEF9
- for <bpf@ietf.org>; Fri, 14 Jul 2023 17:23:22 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id
- 38308e7fff4ca-2b6ff1a637bso37560501fa.3
- for <bpf@ietf.org>; Fri, 14 Jul 2023 17:23:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1689380601; x=1691972601;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=mN4ioxzNj7bQxuk2vBcEGRf0mcVVJXxZupsQurmYKog=;
- b=bmu1dgzks5b1IPzM3Zu8n8SO5LpdJ9OLkQFVN9TEV5c/fWH/QGC00L74cPWG59TDje
- c3dFhqAWEv+p2rlbnDfWifPiFi17PajSmWelMRaN1AgjB7lsKv3Ut8FWqUMMj37+J1s5
- 6/V0+ae+1j6VgyqVzTUYWhVo0YKebYzSPemST0+H28ZkcC7GHWnuAsV+cyIOJny38Pk7
- VMeqG/pp7WkrCfrVw/96EqXH8APwVoEItzG73fJNUnjg+7bM1x+rTCFqBsb3ONX5IRnF
- tefybUyxU169ibrEBV6b3wHy5F/sqOI6e2MhAYDsEVAwT+u/mp21AWHbJA+z7ahfy38A
- CzXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1689380601; x=1691972601;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=mN4ioxzNj7bQxuk2vBcEGRf0mcVVJXxZupsQurmYKog=;
- b=eadxKc5QthoDf7r6VycewjIJakAOMUm2WAUrNP03JTZ1FNp78s5knBJKu6dUWmh5fW
- V7RvlQuiRZGc6QqJeROVPTOCJhyfvQETFOluSY0lzsNF6qCNuJYhrmVep1gjrrcumIml
- 8F/05n229z4baWnac1FrTkHlog4uMm3XcQRtPx5IzSHHKQmrXFy7KDlrzLm+E0X9lMyV
- HiizDTyd0rLEpcj+H1T45jjXrcAGyMNXLSiwSs6Vyk4FnGwLccK8vRXJt8M/AnOKU/Ay
- q9Fd9dPUb4fFSApc2DSvJqk2rOXQL/7/PTgByG4xzsAZI5asm4+DTZ9CfDV8n9HQdybl
- UG0A==
-X-Gm-Message-State: ABy/qLbUF9oUajKxcxDSsdqD3QhgdGA2kv02GJ16ZrHkXd/+P/KE8yJO
- G3TaxadRY9iQt5kXQnG0dgMkRxdg26PHLMz2g0E=
-X-Google-Smtp-Source: APBJJlEtR/O/OebWr2HyF/l3RYvR2nM4QYSQy8wHK+OL/YC5/YE5TwmPzsgwR0sjL/68FjEeyJcmrCwYOR0SGaRj9Rc=
-X-Received: by 2002:a2e:9c02:0:b0:2b4:83c3:d285 with SMTP id
- s2-20020a2e9c02000000b002b483c3d285mr5582655lji.38.1689380600507; Fri, 14 Jul
- 2023 17:23:20 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BF1C7FA;
+	Sat, 15 Jul 2023 08:57:57 +0000 (UTC)
+Received: from mout.web.de (mout.web.de [212.227.17.11])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BB62D66;
+	Sat, 15 Jul 2023 01:57:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
+ s=s29768273; t=1689411439; x=1690016239; i=markus.elfring@web.de;
+ bh=+sOiwBbw8n2XX5b30W6O8rVVhZs/3noaZW9jkV0s7Ls=;
+ h=X-UI-Sender-Class:Date:To:Cc:References:Subject:From:In-Reply-To;
+ b=qzCKQjoU7WaHh95jCOcjeiorX+1MY1D5IVyHso1ZMS00+ogDfAEAOQgmxH/kPXQDvXjkXot
+ clvWW8bsr7DodmZvFXuxRJxNSy7P4CNTPRrQ+U2osMFFLs6ZfPYd7lHbHK8d5jpJzJwQsWKnh
+ SwM0GyyD5sSLRrlEfHNwlBaJYYnwbealVUt+aeWyeujA/9EZiMqNtNrUxt1ewQPwFsdV/84eX
+ AMZQa9OPdxmsNhWTOzYeQglgVrwMnU6ucSP+g1NzadbtcRA8X08qiRpp3Dc1bepGprX0N24gn
+ dur5zdRalMMAP5HgRc///cSF4N6Hi/b7K7pxEtrZOmGy7qrpZ1KA==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.90.83]) by smtp.web.de (mrweb105
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MT7aP-1qWN2820IZ-00UQPn; Sat, 15
+ Jul 2023 10:57:19 +0200
+Message-ID: <c659c7e5-f9ba-ca77-5ec4-10b6d664f4a5@web.de>
+Date: Sat, 15 Jul 2023 10:57:15 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230713060718.388258-1-yhs@fb.com>
- <20230713060847.397969-1-yhs@fb.com>
- <PH7PR21MB38788F07F700A549DEB96F9BA334A@PH7PR21MB3878.namprd21.prod.outlook.com>
-In-Reply-To: <PH7PR21MB38788F07F700A549DEB96F9BA334A@PH7PR21MB3878.namprd21.prod.outlook.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 14 Jul 2023 17:23:09 -0700
-Message-ID: <CAADnVQLtdMw_xk84tTOgXvat9NRi7eceRDbiim21rJeR=LDdrA@mail.gmail.com>
-To: Dave Thaler <dthaler@microsoft.com>
-Cc: Yonghong Song <yhs@fb.com>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- "bpf@ietf.org" <bpf@ietf.org>, 
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Fangrui Song <maskray@google.com>, 
- "kernel-team@fb.com" <kernel-team@fb.com>
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/ibjN22siZXd6G1BOQhXViQ-J5kM>
-Subject: Re: [Bpf] [PATCH bpf-next v2 15/15] docs/bpf: Add documentation for
- new instructions
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Id: Discussion of BPF/eBPF standardization efforts within the IETF
- <bpf.ietf.org>
-List-Unsubscribe: <https://www.ietf.org/mailman/options/bpf>,
- <mailto:bpf-request@ietf.org?subject=unsubscribe>
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-List-Subscribe: <https://www.ietf.org/mailman/listinfo/bpf>,
- <mailto:bpf-request@ietf.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+To: Leesoo Ahn <lsahn@ooseel.net>, netdev@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
+ kernel-janitors@vger.kernel.org
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Giuseppe Cavallaro <peppe.cavallaro@st.com>, Jakub Kicinski
+ <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Jose Abreu
+ <joabreu@synopsys.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <simon.horman@corigine.com>
+References: <e75d2a42-4154-e469-bbd7-9409471ab724@ooseel.net>
+Subject: Re: [PATCH net-next] net: stmmac: call stmmac_finalize_xdp_rx() on a
+ condition
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <e75d2a42-4154-e469-bbd7-9409471ab724@ooseel.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:9pSdoaxreuVjT+rwlLPsZns9ytK0sUm3up92tGth8Lcyq7v5kdc
+ kWAJQ9hyl/QzvrHYg0T9waC3ecSHXdkCZsRahgP7j110qIu6f2H67SReOdH3zTxM6YD9yfE
+ vPIZIQYHELW3VrAM83LWm1ZUSSsCKdbaCBFvKljgcvmU/Dutp1zpOszTQUmHEoJWs89Xx3F
+ znnEzixhvLuCILwIm0pFQ==
+UI-OutboundReport: notjunk:1;M01:P0:5hkCjdxvU20=;h2m4glRhfzCGl/yIjYXTOu7hb/6
+ os5wwMBwFC7mvlMsX46Z9tEIcLLQrh8kKs5iAgfwjvrVx7iWBydyf6/N1AZYATqOo8o6BQW3S
+ RyQprZT5hb3hDVNp/JjHDySdiggi/mPaztB217zc1i8nP4AbW4FsFXP/jSBN7F0SOv/yYpODN
+ NChzvlfz5ZGHdVuAt8Cpmi7/HNWksITIybFSDzvS2rVKh/EGVZj7s5hM8FkL6NXzfkxZV8Gz1
+ 3n2thLeC1cUmMsjVPSPcVQ546k2Ot44GKRX25fQxZupk42ZcGPkszWTnKolKLKhIMgLV2Wn9P
+ gWoJvrPXyCffeR9W3Wb8Chly7CVBnjvRlETvMaih1+5ctW1LH+PIlEPpDS3lsbtSfgSXPCQ3K
+ z10JGrSKD4c8xdF0Ksmakb3Iar6GD+jQQUK4m/bhaGscq0uUj6Kq1jJ6rG810FYNjDu4l/6ab
+ levrguqTP9THD6ixDR8TQRApWwT8YjVPXq8ill0coUtHlWcAJqdqPuBXvmbDvWMnUMCVADeo3
+ xteJUt46kL6etHNZGslkVV+SmTNO02uGTlttSR7/DAPrm/VnndkRFmZz8j0w5nc2sveZmbim9
+ 3t4a0PixZ4SCIcJ4ajxgqQ+Ws3ukBvdRwwDtZqCzlOmMQnShEortaeKfkoC308HtekwA5NofO
+ 4SVtGqgdNNL1GUs1DU3nBmihovnW4ToZiqubN7V5yP2jXajWzN0GWK6N3DLq+qAeKE6deOpiz
+ X47FeSEUuckYFJIfLtFFC+kDy6YSrowgMPh/YQ4R6EwE3Tbgcy35r0u0QI0OikCTVes2TvWC8
+ EmHmJbdrCoYEbD8hrTIXs5qeBSPJ9gYJ5OxcW/qQYEo1wioq4HzjRtIzp6mzutBvjQJsc/bzp
+ aTPBKxoZplwUbtgdLQM6pAe/un+WsVPftGnmbUefSJcRLETYqJAJRVJr8LAcw7hO4e18EtBzp
+ w7nI+w==
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+	SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
-Message-ID: <20230715002309.ZaB6DurKiXwF54YgfF-MmMvRuY43A3wShxPvCo6PM_Y@z>
 
-T24gRnJpLCBKdWwgMTQsIDIwMjMgYXQgNDozM+KAr1BNIERhdmUgVGhhbGVyIDxkdGhhbGVyQG1p
-Y3Jvc29mdC5jb20+IHdyb3RlOgo+Cj4gWW9uZ2hvbmcgU29uZyA8eWhzQGZiLmNvbT4gd3JvdGU6
-Cj4gPiBBZGQgZG9jdW1lbnRhdGlvbiBpbiBpbnN0cnVjdGlvbi1zZXQucnN0IGZvciBuZXcgaW5z
-dHJ1Y3Rpb24gZW5jb2RpbmcgYW5kCj4gPiB0aGVpciBjb3JyZXNwb25kaW5nIG9wZXJhdGlvbnMu
-IEFsc28gcmVtb3ZlZCB0aGUgcXVlc3Rpb24gcmVsYXRlZCB0byAnbm8KPiA+IEJQRl9TRElWJyBp
-biBicGZfZGVzaWduX1FBLnJzdCBzaW5jZSB3ZSBoYXZlIEJQRl9TRElWIGluc24gbm93Lgo+Cj4g
-V2h5IGRpZCB5b3UgY2hvb3NlIHRvIGRpZmZlcmVudGlhdGUgdGhlIGluc3RydWN0aW9uIGJ5IG9m
-ZnNldCBpbnN0ZWFkIG9mIHVzaW5nIGEgc2VwYXJhdGUKPiBvcGNvZGUgdmFsdWU/ICBJIGRvbid0
-IHRoaW5rIHRoZXJlJ3MgYW55IG90aGVyIGluc3RydWN0aW9ucyB0aGF0IGRvIHNvLCBhbmQgdGhl
-cmUncyBzcGFyZQo+IG9wY29kZSB2YWx1ZXMgYXMgZmFyIGFzIEkgY2FuIHNlZS4KPgo+IFVzaW5n
-IGEgc2VwYXJhdGUgb2Zmc2V0IHdvcmtzIGJ1dCB3b3VsZCBlbmQgdXAgcmVxdWlyaW5nIGFub3Ro
-ZXIgY29sdW1uIGluIHRoZSBJQU5BCj4gcmVnaXN0cnkgYXNzdW1pbmcgd2UgaGF2ZSBvbmUuICBT
-byB3aHkgdGhlIGV4dHJhIGNvbXBsZXhpdHkgYW5kIGluY29uc2lzdGVuY3kKPiBpbnRyb2R1Y2Vk
-IG5vdz8KCiJhbm90aGVyIGNvbHVtbiBpbiBJQU5BIiBpcyB0aGUgbGFzdCB0aGluZyB0byB3b3Jy
-eSBhYm91dC4KCi0tIApCcGYgbWFpbGluZyBsaXN0CkJwZkBpZXRmLm9yZwpodHRwczovL3d3dy5p
-ZXRmLm9yZy9tYWlsbWFuL2xpc3RpbmZvL2JwZgo=
+> The function must be called for only XDP_TX or XDP_REDIRECT cases.
+
+Which constraints should be taken better into account for the discussed function call?
+
+
+> I will edit the message and post v2 soon.
+
+Did the improvement idea evolve further in the meantime?
+
+Regards,
+Markus
