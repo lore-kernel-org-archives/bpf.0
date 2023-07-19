@@ -1,138 +1,147 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD75518E
-	for <bpf@vger.kernel.org>; Wed, 19 Jul 2023 02:44:26 +0000 (UTC)
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD3C1BC3
-	for <bpf@vger.kernel.org>; Tue, 18 Jul 2023 19:44:25 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b701dee4bfso100929211fa.0
-        for <bpf@vger.kernel.org>; Tue, 18 Jul 2023 19:44:25 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 656B13D61
+	for <bpf@vger.kernel.org>; Wed, 19 Jul 2023 03:21:56 +0000 (UTC)
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168BC1BF3
+	for <bpf@vger.kernel.org>; Tue, 18 Jul 2023 20:21:54 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-5216f713f8bso6679588a12.2
+        for <bpf@vger.kernel.org>; Tue, 18 Jul 2023 20:21:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689734663; x=1692326663;
+        d=cloudflare.com; s=google; t=1689736912; x=1692328912;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hGybBNtaN90OXDNavf/2NzzTFkKAYuYOkz8qJob9tGM=;
-        b=A8WhcfBbEkYcM1S+yJ9Lt1W90LmWDPHra4IprZPjS8wo7Q/0WlpN1b+zY2Y3PXHSkB
-         Ugcu081gyf3tbnIvJ4yDDmm2X5vBRnvuwkvT2F9MwAOp6zO6QSzEKiJOUNqhUxb+3FrU
-         USDFuFKdkINYqqdU9rqWTSWWFnzkldpj5DReQEIfk0PKaCI4K/owEgu/Rn5v/0OKaYaL
-         RHHr2jfiliCXdu5VYCroaGhZxjID5lddM1b/GRYcL6KmbQElBq+PhjavQJ+AF86jDF6w
-         /moQVNmCKm7RwebepvgFs+50Oq09LCJHcGR8dH+oxaGJ2yWyzVhMhOSotQ+SUuvLOdVZ
-         27NQ==
+        bh=N6nGe3/14lsIlAFKvEfl97Na5N58gbsjqham6f34LTI=;
+        b=Wv+4+oXQl7HjDsiJtgHXbRji7FkiAndbYjBdgI+lOTSTnCWTHSki+QPrxMg/vtOvSh
+         r0iVYBxIjy3Wga8epsor/VmNiFFJfTXP91/upI7QJ6eJAQP/0Hw1HIJ0gpgAlpCrutQS
+         sDkFj3Jo4/KxP8goc1v6ulCxpyCWDxYCc/Do0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689734663; x=1692326663;
+        d=1e100.net; s=20221208; t=1689736912; x=1692328912;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hGybBNtaN90OXDNavf/2NzzTFkKAYuYOkz8qJob9tGM=;
-        b=JvOKfFK5a0/nl/5U2olqutNKcnIfihoU2LBXyleT8y5+W73WHHI9yTaIEpdTsW2899
-         mzvR8nJjBQCMdZOlAZMFZ2S7/ct7n8V9FdzeE8cOT7T9c8AR4fuWfzdb9tFeVu4wLwLF
-         qIkad2YE64aZVcceHTXw73ENZATUs75gyBRnUF2ABBnfZXjeaiQFpNb4Z5G71tyObjRK
-         vbIHHfTCGoIH1SOpzsEiaxsF2UE1Ito/rBRISM6wYuca1ZTLsVgx0+9T1Mvxfi2QLZOL
-         rrT1kcq52dbnMQU8GnHGbWNoZASDANv09lJuVFGza/8Rfhv9xkjuZk1tdIVvFUAFiECA
-         TVUQ==
-X-Gm-Message-State: ABy/qLaqzE6y4ejpu6bs5r7rAxOm+PjzA3Pdg6VdnHWR/uwQ7ffazn1l
-	W5X9W7WYpF/x7rhpBFEJ70ZFfsc8fayNLvdjGoE=
-X-Google-Smtp-Source: APBJJlE6PE72hAB5r3TGyXU21BJWLqCPjt1S+w/45IQmqBbLGkV5ZswhM+WlNPsYxzPdptMA0YSK9/EC0cPjnXLVY64=
-X-Received: by 2002:a2e:700b:0:b0:2b6:cff1:cd1c with SMTP id
- l11-20020a2e700b000000b002b6cff1cd1cmr11748235ljc.34.1689734663165; Tue, 18
- Jul 2023 19:44:23 -0700 (PDT)
+        bh=N6nGe3/14lsIlAFKvEfl97Na5N58gbsjqham6f34LTI=;
+        b=MHD9WhyzbfnJrN30soNO0qO5g5+sq92R6XKhF4kE9SJ4GZzydatR7Vmksk3H8bbPFz
+         UFv6TqCljChRTErz+oq0RDFrbRKy6uPNagTvuzeboTBSfZmAuW7J6/SJaUdt1/lr77bF
+         mmNv9eFigmjeYJYiVe2rf/Gf+x2DJ+qadfLII3vPHsZMmmnWbWdG+VCJwr3HjmbrmEEp
+         WsWqeeIrC+h1iQWWGw7Rk91gDf/xio9m3SwPbmM2Ntdyz9dVOfTnoezYPFRvA0pQuqbU
+         lb3MVOKUgsTZzkcpePmpaRr99+NXGlOBxjIlrbH8Sph9K5CFw9SRln9bnEQloluaWX1Z
+         aPVA==
+X-Gm-Message-State: ABy/qLYkUyvvFpnlbL8MlCNAjBBoA15ZByeiZA5rYN8qvxf2w52KkaA/
+	xonNYMPnkp2m6qiGv8odkDm/9K4MBCjEtwaX+qy2/A==
+X-Google-Smtp-Source: APBJJlFF1zPR6RZhoXb9k5Shx2JBKFy+oeMXucMQtDZCRUaNOkXMNH9jV9AG0eGzaVc4G/xOkyyTsTlw1zqedF1qjZE=
+X-Received: by 2002:aa7:d384:0:b0:51e:309:2e11 with SMTP id
+ x4-20020aa7d384000000b0051e03092e11mr1453872edq.36.1689736912402; Tue, 18 Jul
+ 2023 20:21:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230713060718.388258-1-yhs@fb.com> <20230713060744.390929-1-yhs@fb.com>
- <b8a16850c0482bf64f30b41c7dcb8b33ea6a6f61.camel@gmail.com> <5cdd79d3-d4c7-b119-ebcb-b8b143c79a01@meta.com>
-In-Reply-To: <5cdd79d3-d4c7-b119-ebcb-b8b143c79a01@meta.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 18 Jul 2023 19:44:11 -0700
-Message-ID: <CAADnVQJr+PWxBJSima_wJY1iqWaA51DRo32ct07W9BzOh1HoHw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 05/15] bpf: Support new signed div/mod instructions.
-To: Yonghong Song <yhs@meta.com>
-Cc: Eduard Zingerman <eddyz87@gmail.com>, Yonghong Song <yhs@fb.com>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Fangrui Song <maskray@google.com>, 
-	Kernel Team <kernel-team@fb.com>
+References: <ZLbYdpWC8zt9EJtq@debian.debian> <CAKH8qBsZeqchfcYm-pNKjafYwFzGnwzcXDgHfj3Omkm0yWd31A@mail.gmail.com>
+In-Reply-To: <CAKH8qBsZeqchfcYm-pNKjafYwFzGnwzcXDgHfj3Omkm0yWd31A@mail.gmail.com>
+From: Yan Zhai <yan@cloudflare.com>
+Date: Tue, 18 Jul 2023 22:21:41 -0500
+Message-ID: <CAO3-PbqF_JMyHK2hE=MH9cF3i2xVQ-vpQhdZ7HG4uVM7jan4xw@mail.gmail.com>
+Subject: Re: [PATCH] bpf: lwt: do not return NET_XMIT_xxx values on bpf_redirect
+To: Stanislav Fomichev <sdf@google.com>
+Cc: "open list:BPF [NETWORKING] (tc BPF, sock_addr)" <bpf@vger.kernel.org>, kernel-team@cloudflare.com, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>, 
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	"open list:BPF [NETWORKING] (tc BPF, sock_addr)" <netdev@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
+	Jordan Griege <jgriege@cloudflare.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Tue, Jul 18, 2023 at 7:31=E2=80=AFPM Yonghong Song <yhs@meta.com> wrote:
+On Tue, Jul 18, 2023 at 3:29=E2=80=AFPM Stanislav Fomichev <sdf@google.com>=
+ wrote:
 >
->
->
-> On 7/18/23 4:00 PM, Eduard Zingerman wrote:
-> > On Wed, 2023-07-12 at 23:07 -0700, Yonghong Song wrote:
-> >> Add interpreter/jit support for new signed div/mod insns.
-> >> The new signed div/mod instructions are encoded with
-> >> unsigned div/mod instructions plus insn->off =3D=3D 1.
-> >> Also add basic verifier support to ensure new insns get
-> >> accepted.
-> >>
-> >> Signed-off-by: Yonghong Song <yhs@fb.com>
-> >> ---
-> >>   arch/x86/net/bpf_jit_comp.c | 27 +++++++----
-> >>   kernel/bpf/core.c           | 96 ++++++++++++++++++++++++++++++-----=
---
-> >>   kernel/bpf/verifier.c       |  6 ++-
-> >>   3 files changed, 103 insertions(+), 26 deletions(-)
-> >>
-> >> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> >> index adda5e7626b4..3176b60d25c7 100644
-> >> --- a/arch/x86/net/bpf_jit_comp.c
-> >> +++ b/arch/x86/net/bpf_jit_comp.c
-> >> @@ -1194,15 +1194,26 @@ static int do_jit(struct bpf_prog *bpf_prog, i=
-nt *addrs, u8 *image, u8 *rw_image
-> >>                              /* mov rax, dst_reg */
-> >>                              emit_mov_reg(&prog, is64, BPF_REG_0, dst_=
-reg);
-> >>
-> >> -                    /*
-> >> -                     * xor edx, edx
-> >> -                     * equivalent to 'xor rdx, rdx', but one byte les=
-s
-> >> -                     */
-> >> -                    EMIT2(0x31, 0xd2);
-> >> +                    if (insn->off =3D=3D 0) {
-> >> +                            /*
-> >> +                             * xor edx, edx
-> >> +                             * equivalent to 'xor rdx, rdx', but one =
-byte less
-> >> +                             */
-> >> +                            EMIT2(0x31, 0xd2);
-> >>
-> >> -                    /* div src_reg */
-> >> -                    maybe_emit_1mod(&prog, src_reg, is64);
-> >> -                    EMIT2(0xF7, add_1reg(0xF0, src_reg));
-> >> +                            /* div src_reg */
-> >> +                            maybe_emit_1mod(&prog, src_reg, is64);
-> >> +                            EMIT2(0xF7, add_1reg(0xF0, src_reg));
-> >> +                    } else {
-> >> +                            if (BPF_CLASS(insn->code) =3D=3D BPF_ALU)
-> >> +                                    EMIT1(0x99); /* cltd */
-> >> +                            else
-> >> +                                    EMIT2(0x48, 0x99); /* cqto */
+> On Tue, Jul 18, 2023 at 11:22=E2=80=AFAM Yan Zhai <yan@cloudflare.com> wr=
+ote:
 > >
-> > Nitpick: I can't find names cltd/cqto in the Intel instruction manual,
-> >           instead it uses names cdq/cqo for these instructions.
-> >           (See Vol. 2A pages 3-315 and 3-497)
+> > skb_do_redirect handles returns error code from both rx and tx path.
+> > The tx path codes are special, e.g. NET_XMIT_CN: they are
+> > non-negative, and can conflict with LWTUNNEL_XMIT_xxx values. Directly
+> > returning such code can cause unexpected behavior. We found at least
+> > one bug that will panic the kernel through KASAN report when we
+> > accidentally redirect packets to a down or carrier-down device at lwt
+> > xmit hook:
+> >
+> > https://gist.github.com/zhaiyan920/8fbac245b261fe316a7ef04c9b1eba48
+> >
+> > Above bug is hit because NET_XMIT_CN is returned by noop_qdisc of the
+> > down device, and it propagates from dev_queue_xmit all way to the lwt
+> > logic. Although skb has been freed by the qdisc, it still continues to
+> > neighbor subsystem and triggers the bug.
+> >
+> > This change converts the tx code to proper errors that lwt can consume.
+> >
+> > Reported-by: Jordan Griege <jgriege@cloudflare.com>
+> > Signed-off-by: Yan Zhai <yan@cloudflare.com>
+> > ---
+> >  net/core/filter.c | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/net/core/filter.c b/net/core/filter.c
+> > index 06ba0e56e369..c9cc501ecdc0 100644
+> > --- a/net/core/filter.c
+> > +++ b/net/core/filter.c
+> > @@ -2129,6 +2129,11 @@ static inline int __bpf_tx_skb(struct net_device=
+ *dev, struct sk_buff *skb)
+> >         ret =3D dev_queue_xmit(skb);
+> >         dev_xmit_recursion_dec();
+> >
+> > +       // We should not return NET_XMIT_xxx here since it will conflic=
+t with
+> > +       // LWTUNNEL_XMIT_xxx values. Convert the return value to errno =
+instead.
 >
-> I got these asm names from
->    https://defuse.ca/online-x86-assembler.htm
-> I will check the Intel insn manual and make the change
-> accordingly.
+> C++ comments; should be /* */. But, also, maybe they are not really neede=
+d?
+>
+*facepalm* yes I think we can remove them since the commit message
+already covers it...
 
-Heh. I've been using the same.
-Most of the comments in the x86 JIT code are from there :)
+> ret =3D dev_queue_xmit(skb);
+> if (ret)
+>         ret =3D net_xmit_errno(ret);
+>
+> We have a bunch of places with the pattern like this, so probably can
+> do the same here?
+>
+Personally I like an explicit name better, since not all the return
+codes use 0 to signal success, e.g. XDP_PASS, TC_ACT_PIPE. But I'd
+leave that for future improvements now that all other places use 0 on
+this.
 
-and it actually returns 99 -> cdq, 4899 -> cqo
+thanks
+Yan
 
-cltd/cqto must be aliases ?
+> > +       if (unlikely(ret !=3D NET_XMIT_SUCCESS))
+> > +               ret =3D net_xmit_errno(ret);
+> > +
+> >         return ret;
+> >  }
+> >
+> > --
+> > 2.30.2
+> >
+
+
+
+--=20
+
+Yan
