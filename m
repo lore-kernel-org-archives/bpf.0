@@ -1,35 +1,35 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D9A23BF8;
-	Wed, 19 Jul 2023 13:25:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5F9E2AB28;
+	Wed, 19 Jul 2023 13:25:28 +0000 (UTC)
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF48125;
-	Wed, 19 Jul 2023 06:25:23 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DE7A123;
+	Wed, 19 Jul 2023 06:25:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689773123; x=1721309123;
+  t=1689773127; x=1721309127;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=TTkBDhyBMaGtPqnbB7xm4pcqp9kUCuhNiRsR2PRqJ48=;
-  b=Mcn6Ez12yDpgDYlRnI94wIDs4CFnwSj2tBMiEumB9sLDoW1LJa1j80ZA
-   BlFLiSSIBOcU8cjsG9PLc9zDe00RN0V+syoScaQilRpyNCxXVIIzQVoo5
-   JTMXCSK02+yu1QcTPmm2VuP+QlSZ/6BM63nRt6b45dU+kH2VDHoxJIU+O
-   F/sogp+CLDDohujBS5BcRzfnpPtBv+Kqc3inb8F0eicwm5o/o4nRxh+C1
-   IvFcP5QS3rse9/cfVIVKEGqVluF9R7lirgt/D4uhVeKireTPQirs7FgFj
-   n0MeiFtHg9NmQws6oNQPx3YmOD3FShSnM+UCiuVzot493Hj4CigCZ5Nwg
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="363920672"
+  bh=QLQBzLrcYQPdbonMuu2ayX26EMjvvCfPmpXHTAHrx6c=;
+  b=Nu6MZGc2fX9B/VH1Kxt7ijy54jugg6EyaaWZeer48EsZ1rqwuXpCl6Ty
+   xPP9hSvVxzjSKqdaUqAUvYHFcyaozo3DL3Y50El2AqHi9sllHlzX9u1dA
+   sRflPInQu9Yjjx3epECp9vH9Wqy1EYjckzUfMAehjexk7wEpGBwErqYk7
+   uyLrzNIfJHzS4UgSYm/OKy755uGS8SfQ9vHc0qi7f65LKPeXbC2NG9E05
+   95jy8hJAUQUCb+K9EfRlWu7NnLTn8TUos+i9sLK/NW1i/SfjeO6OHvTAT
+   3j53NxhPgxt7/6fxN+zy23/J6MGdohD2sJrws6rpRy5ICgHYuAQhr46Nb
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="363920700"
 X-IronPort-AV: E=Sophos;i="6.01,216,1684825200"; 
-   d="scan'208";a="363920672"
+   d="scan'208";a="363920700"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2023 06:25:13 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2023 06:25:19 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="717978154"
+X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="717978164"
 X-IronPort-AV: E=Sophos;i="6.01,216,1684825200"; 
-   d="scan'208";a="717978154"
+   d="scan'208";a="717978164"
 Received: from boxer.igk.intel.com ([10.102.20.173])
-  by orsmga007.jf.intel.com with ESMTP; 19 Jul 2023 06:25:10 -0700
+  by orsmga007.jf.intel.com with ESMTP; 19 Jul 2023 06:25:16 -0700
 From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -41,10 +41,11 @@ Cc: netdev@vger.kernel.org,
 	toke@kernel.org,
 	kuba@kernel.org,
 	horms@kernel.org,
-	tirthendu.sarkar@intel.com
-Subject: [PATCH v7 bpf-next 13/24] i40e: xsk: add RX multi-buffer support
-Date: Wed, 19 Jul 2023 15:24:10 +0200
-Message-Id: <20230719132421.584801-14-maciej.fijalkowski@intel.com>
+	tirthendu.sarkar@intel.com,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: [PATCH v7 bpf-next 15/24] ice: xsk: Tx multi-buffer support
+Date: Wed, 19 Jul 2023 15:24:12 +0200
+Message-Id: <20230719132421.584801-16-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20230719132421.584801-1-maciej.fijalkowski@intel.com>
 References: <20230719132421.584801-1-maciej.fijalkowski@intel.com>
@@ -62,261 +63,175 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-From: Tirthendu Sarkar <tirthendu.sarkar@intel.com>
+Most of this patch is about actually supporting XDP_TX action. Pure Tx
+ZC support is only about looking at XDP_PKT_CONTD presence at options
+field and based on that generating EOP bit on Tx HW descriptor. This is
+that simple due to the implementation on
+xsk_tx_peek_release_desc_batch() where we are making sure that last
+produced descriptor is an EOP one.
 
-This patch is inspired from the multi-buffer support in non-zc path for
-i40e as well as from the patch to support zc on ice. Each subsequent
-frag is added to skb_shared_info of the first frag for possible xdp_prog
-use as well to xsk buffer list for accessing the buffers in af_xdp.
+Overwrite xdp_zc_max_segs with a value that defines max scatter-gatter
+count on Tx side that HW can handle.
 
-For XDP_PASS, new pages are allocated for frags and contents are copied
-from memory backed by xsk_buff_pool.
-
-Replace next_to_clean with next_to_process as done in non-zc path and
-advance it for every buffer and change the semantics of next_to_clean to
-point to the first buffer of a packet. Driver will use next_to_process
-in the same way next_to_clean was used previously.
-
-For the non multi-buffer case, next_to_process and next_to_clean will
-always be the same since each packet consists of a single buffer.
-
-Signed-off-by: Tirthendu Sarkar <tirthendu.sarkar@intel.com>
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- drivers/net/ethernet/intel/i40e/i40e_main.c |  5 --
- drivers/net/ethernet/intel/i40e/i40e_txrx.c |  4 +-
- drivers/net/ethernet/intel/i40e/i40e_txrx.h |  2 +
- drivers/net/ethernet/intel/i40e/i40e_xsk.c  | 91 ++++++++++++++++++---
- 4 files changed, 84 insertions(+), 18 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_main.c |  1 +
+ drivers/net/ethernet/intel/ice/ice_xsk.c  | 83 ++++++++++++++++-------
+ 2 files changed, 61 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
-index 29ad1797adce..1bd72cdedc8a 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-@@ -3585,11 +3585,6 @@ static int i40e_configure_rx_ring(struct i40e_ring *ring)
- 	if (ring->xsk_pool) {
- 		ring->rx_buf_len =
- 		  xsk_pool_get_rx_frame_size(ring->xsk_pool);
--		/* For AF_XDP ZC, we disallow packets to span on
--		 * multiple buffers, thus letting us skip that
--		 * handling in the fast-path.
--		 */
--		chain_len = 1;
- 		ret = xdp_rxq_info_reg_mem_model(&ring->xdp_rxq,
- 						 MEM_TYPE_XSK_BUFF_POOL,
- 						 NULL);
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.c b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-index 8b8bf4880faa..0b3a27f118fb 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-@@ -2284,8 +2284,8 @@ static struct sk_buff *i40e_build_skb(struct i40e_ring *rx_ring,
-  * If the buffer is an EOP buffer, this function exits returning false,
-  * otherwise return true indicating that this is in fact a non-EOP buffer.
-  */
--static bool i40e_is_non_eop(struct i40e_ring *rx_ring,
--			    union i40e_rx_desc *rx_desc)
-+bool i40e_is_non_eop(struct i40e_ring *rx_ring,
-+		     union i40e_rx_desc *rx_desc)
- {
- 	/* if we are the last buffer then there is nothing else to do */
- #define I40E_RXD_EOF BIT(I40E_RX_DESC_STATUS_EOF_SHIFT)
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.h b/drivers/net/ethernet/intel/i40e/i40e_txrx.h
-index 8c3d24012c54..900b0d9ede9f 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_txrx.h
-+++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.h
-@@ -473,6 +473,8 @@ int __i40e_maybe_stop_tx(struct i40e_ring *tx_ring, int size);
- bool __i40e_chk_linearize(struct sk_buff *skb);
- int i40e_xdp_xmit(struct net_device *dev, int n, struct xdp_frame **frames,
- 		  u32 flags);
-+bool i40e_is_non_eop(struct i40e_ring *rx_ring,
-+		     union i40e_rx_desc *rx_desc);
+diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
+index 19a5e7f3a075..ca83379b2de1 100644
+--- a/drivers/net/ethernet/intel/ice/ice_main.c
++++ b/drivers/net/ethernet/intel/ice/ice_main.c
+@@ -3392,6 +3392,7 @@ static void ice_set_ops(struct ice_vsi *vsi)
+ 	netdev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT |
+ 			       NETDEV_XDP_ACT_XSK_ZEROCOPY |
+ 			       NETDEV_XDP_ACT_RX_SG;
++	netdev->xdp_zc_max_segs = ICE_MAX_BUF_TXD;
+ }
  
  /**
-  * i40e_get_head - Retrieve head from head writeback
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-index 05ec1181471e..89a8aca1153e 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-@@ -294,8 +294,14 @@ static struct sk_buff *i40e_construct_skb_zc(struct i40e_ring *rx_ring,
+diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
+index 91cdd5e4790d..2a3f0834e139 100644
+--- a/drivers/net/ethernet/intel/ice/ice_xsk.c
++++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
+@@ -613,7 +613,7 @@ ice_construct_skb_zc(struct ice_rx_ring *rx_ring, struct xdp_buff *xdp)
+  * ice_clean_xdp_irq_zc - produce AF_XDP descriptors to CQ
+  * @xdp_ring: XDP Tx ring
+  */
+-static void ice_clean_xdp_irq_zc(struct ice_tx_ring *xdp_ring)
++static u32 ice_clean_xdp_irq_zc(struct ice_tx_ring *xdp_ring)
  {
- 	unsigned int totalsize = xdp->data_end - xdp->data_meta;
- 	unsigned int metasize = xdp->data - xdp->data_meta;
-+	struct skb_shared_info *sinfo = NULL;
- 	struct sk_buff *skb;
-+	u32 nr_frags = 0;
+ 	u16 ntc = xdp_ring->next_to_clean;
+ 	struct ice_tx_desc *tx_desc;
+@@ -635,7 +635,7 @@ static void ice_clean_xdp_irq_zc(struct ice_tx_ring *xdp_ring)
+ 	}
  
+ 	if (!completed_frames)
+-		return;
++		return 0;
+ 
+ 	if (likely(!xdp_ring->xdp_tx_active)) {
+ 		xsk_frames = completed_frames;
+@@ -665,6 +665,8 @@ static void ice_clean_xdp_irq_zc(struct ice_tx_ring *xdp_ring)
+ 		xdp_ring->next_to_clean -= cnt;
+ 	if (xsk_frames)
+ 		xsk_tx_completed(xdp_ring->xsk_pool, xsk_frames);
++
++	return completed_frames;
+ }
+ 
+ /**
+@@ -682,37 +684,72 @@ static void ice_clean_xdp_irq_zc(struct ice_tx_ring *xdp_ring)
+ static int ice_xmit_xdp_tx_zc(struct xdp_buff *xdp,
+ 			      struct ice_tx_ring *xdp_ring)
+ {
++	struct skb_shared_info *sinfo = NULL;
+ 	u32 size = xdp->data_end - xdp->data;
+ 	u32 ntu = xdp_ring->next_to_use;
+ 	struct ice_tx_desc *tx_desc;
+ 	struct ice_tx_buf *tx_buf;
+-	dma_addr_t dma;
++	struct xdp_buff *head;
++	u32 nr_frags = 0;
++	u32 free_space;
++	u32 frag = 0;
+ 
+-	if (ICE_DESC_UNUSED(xdp_ring) < ICE_RING_QUARTER(xdp_ring)) {
+-		ice_clean_xdp_irq_zc(xdp_ring);
+-		if (!ICE_DESC_UNUSED(xdp_ring)) {
+-			xdp_ring->ring_stats->tx_stats.tx_busy++;
+-			return ICE_XDP_CONSUMED;
+-		}
+-	}
++	free_space = ICE_DESC_UNUSED(xdp_ring);
++	if (free_space < ICE_RING_QUARTER(xdp_ring))
++		free_space += ice_clean_xdp_irq_zc(xdp_ring);
+ 
+-	dma = xsk_buff_xdp_get_dma(xdp);
+-	xsk_buff_raw_dma_sync_for_device(xdp_ring->xsk_pool, dma, size);
++	if (unlikely(!free_space))
++		goto busy;
++
 +	if (unlikely(xdp_buff_has_frags(xdp))) {
 +		sinfo = xdp_get_shared_info_from_buff(xdp);
 +		nr_frags = sinfo->nr_frags;
++		if (free_space < nr_frags + 1)
++			goto busy;
 +	}
- 	net_prefetch(xdp->data_meta);
  
- 	/* allocate a skb to store the frags */
-@@ -312,6 +318,28 @@ static struct sk_buff *i40e_construct_skb_zc(struct i40e_ring *rx_ring,
- 		__skb_pull(skb, metasize);
- 	}
- 
-+	if (likely(!xdp_buff_has_frags(xdp)))
-+		goto out;
+-	tx_buf = &xdp_ring->tx_buf[ntu];
+-	tx_buf->xdp = xdp;
+-	tx_buf->type = ICE_TX_BUF_XSK_TX;
+ 	tx_desc = ICE_TX_DESC(xdp_ring, ntu);
+-	tx_desc->buf_addr = cpu_to_le64(dma);
+-	tx_desc->cmd_type_offset_bsz = ice_build_ctob(ICE_TX_DESC_CMD_EOP,
+-						      0, size, 0);
+-	xdp_ring->xdp_tx_active++;
++	tx_buf = &xdp_ring->tx_buf[ntu];
++	head = xdp;
 +
-+	for (int i = 0; i < nr_frags; i++) {
-+		struct skb_shared_info *skinfo = skb_shinfo(skb);
-+		skb_frag_t *frag = &sinfo->frags[i];
-+		struct page *page;
-+		void *addr;
++	for (;;) {
++		dma_addr_t dma;
 +
-+		page = dev_alloc_page();
-+		if (!page) {
-+			dev_kfree_skb(skb);
-+			return NULL;
-+		}
-+		addr = page_to_virt(page);
++		dma = xsk_buff_xdp_get_dma(xdp);
++		xsk_buff_raw_dma_sync_for_device(xdp_ring->xsk_pool, dma, size);
 +
-+		memcpy(addr, skb_frag_page(frag), skb_frag_size(frag));
++		tx_buf->xdp = xdp;
++		tx_buf->type = ICE_TX_BUF_XSK_TX;
++		tx_desc->buf_addr = cpu_to_le64(dma);
++		tx_desc->cmd_type_offset_bsz = ice_build_ctob(0, 0, size, 0);
++		/* account for each xdp_buff from xsk_buff_pool */
++		xdp_ring->xdp_tx_active++;
 +
-+		__skb_fill_page_desc_noacc(skinfo, skinfo->nr_frags++,
-+					   addr, 0, skb_frag_size(frag));
-+	}
++		if (++ntu == xdp_ring->count)
++			ntu = 0;
 +
- out:
- 	xsk_buff_free(xdp);
- 	return skb;
-@@ -322,14 +350,13 @@ static void i40e_handle_xdp_result_zc(struct i40e_ring *rx_ring,
- 				      union i40e_rx_desc *rx_desc,
- 				      unsigned int *rx_packets,
- 				      unsigned int *rx_bytes,
--				      unsigned int size,
- 				      unsigned int xdp_res,
- 				      bool *failure)
- {
- 	struct sk_buff *skb;
- 
- 	*rx_packets = 1;
--	*rx_bytes = size;
-+	*rx_bytes = xdp_get_buff_len(xdp_buff);
- 
- 	if (likely(xdp_res == I40E_XDP_REDIR) || xdp_res == I40E_XDP_TX)
- 		return;
-@@ -363,7 +390,6 @@ static void i40e_handle_xdp_result_zc(struct i40e_ring *rx_ring,
- 			return;
- 		}
- 
--		*rx_bytes = skb->len;
- 		i40e_process_skb_fields(rx_ring, rx_desc, skb);
- 		napi_gro_receive(&rx_ring->q_vector->napi, skb);
- 		return;
-@@ -374,6 +400,31 @@ static void i40e_handle_xdp_result_zc(struct i40e_ring *rx_ring,
- 	WARN_ON_ONCE(1);
- }
- 
-+static int
-+i40e_add_xsk_frag(struct i40e_ring *rx_ring, struct xdp_buff *first,
-+		  struct xdp_buff *xdp, const unsigned int size)
-+{
-+	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(first);
-+
-+	if (!xdp_buff_has_frags(first)) {
-+		sinfo->nr_frags = 0;
-+		sinfo->xdp_frags_size = 0;
-+		xdp_buff_set_frags_flag(first);
-+	}
-+
-+	if (unlikely(sinfo->nr_frags == MAX_SKB_FRAGS)) {
-+		xsk_buff_free(first);
-+		return -ENOMEM;
-+	}
-+
-+	__skb_fill_page_desc_noacc(sinfo, sinfo->nr_frags++,
-+				   virt_to_page(xdp->data_hard_start), 0, size);
-+	sinfo->xdp_frags_size += size;
-+	xsk_buff_add_frag(xdp);
-+
-+	return 0;
-+}
-+
- /**
-  * i40e_clean_rx_irq_zc - Consumes Rx packets from the hardware ring
-  * @rx_ring: Rx ring
-@@ -384,13 +435,18 @@ static void i40e_handle_xdp_result_zc(struct i40e_ring *rx_ring,
- int i40e_clean_rx_irq_zc(struct i40e_ring *rx_ring, int budget)
- {
- 	unsigned int total_rx_bytes = 0, total_rx_packets = 0;
-+	u16 next_to_process = rx_ring->next_to_process;
- 	u16 next_to_clean = rx_ring->next_to_clean;
- 	u16 count_mask = rx_ring->count - 1;
- 	unsigned int xdp_res, xdp_xmit = 0;
-+	struct xdp_buff *first = NULL;
- 	struct bpf_prog *xdp_prog;
- 	bool failure = false;
- 	u16 cleaned_count;
- 
-+	if (next_to_process != next_to_clean)
-+		first = *i40e_rx_bi(rx_ring, next_to_clean);
-+
- 	/* NB! xdp_prog will always be !NULL, due to the fact that
- 	 * this path is enabled by setting an XDP program.
- 	 */
-@@ -404,7 +460,7 @@ int i40e_clean_rx_irq_zc(struct i40e_ring *rx_ring, int budget)
- 		unsigned int size;
- 		u64 qword;
- 
--		rx_desc = I40E_RX_DESC(rx_ring, next_to_clean);
-+		rx_desc = I40E_RX_DESC(rx_ring, next_to_process);
- 		qword = le64_to_cpu(rx_desc->wb.qword1.status_error_len);
- 
- 		/* This memory barrier is needed to keep us from reading
-@@ -417,9 +473,9 @@ int i40e_clean_rx_irq_zc(struct i40e_ring *rx_ring, int budget)
- 			i40e_clean_programming_status(rx_ring,
- 						      rx_desc->raw.qword[0],
- 						      qword);
--			bi = *i40e_rx_bi(rx_ring, next_to_clean);
-+			bi = *i40e_rx_bi(rx_ring, next_to_process);
- 			xsk_buff_free(bi);
--			next_to_clean = (next_to_clean + 1) & count_mask;
-+			next_to_process = (next_to_process + 1) & count_mask;
- 			continue;
- 		}
- 
-@@ -428,22 +484,35 @@ int i40e_clean_rx_irq_zc(struct i40e_ring *rx_ring, int budget)
- 		if (!size)
- 			break;
- 
--		bi = *i40e_rx_bi(rx_ring, next_to_clean);
-+		bi = *i40e_rx_bi(rx_ring, next_to_process);
- 		xsk_buff_set_size(bi, size);
- 		xsk_buff_dma_sync_for_cpu(bi, rx_ring->xsk_pool);
- 
--		xdp_res = i40e_run_xdp_zc(rx_ring, bi, xdp_prog);
--		i40e_handle_xdp_result_zc(rx_ring, bi, rx_desc, &rx_packets,
--					  &rx_bytes, size, xdp_res, &failure);
-+		if (!first)
-+			first = bi;
-+		else if (i40e_add_xsk_frag(rx_ring, first, bi, size))
++		if (frag == nr_frags)
 +			break;
 +
-+		next_to_process = (next_to_process + 1) & count_mask;
++		tx_desc = ICE_TX_DESC(xdp_ring, ntu);
++		tx_buf = &xdp_ring->tx_buf[ntu];
 +
-+		if (i40e_is_non_eop(rx_ring, rx_desc))
-+			continue;
++		xdp = xsk_buff_get_frag(head);
++		size = skb_frag_size(&sinfo->frags[frag]);
++		frag++;
++	}
+ 
+-	if (++ntu == xdp_ring->count)
+-		ntu = 0;
+ 	xdp_ring->next_to_use = ntu;
++	/* update last descriptor from a frame with EOP */
++	tx_desc->cmd_type_offset_bsz |=
++		cpu_to_le64(ICE_TX_DESC_CMD_EOP << ICE_TXD_QW1_CMD_S);
+ 
+ 	return ICE_XDP_TX;
 +
-+		xdp_res = i40e_run_xdp_zc(rx_ring, first, xdp_prog);
-+		i40e_handle_xdp_result_zc(rx_ring, first, rx_desc, &rx_packets,
-+					  &rx_bytes, xdp_res, &failure);
-+		first->flags = 0;
-+		next_to_clean = next_to_process;
- 		if (failure)
- 			break;
- 		total_rx_packets += rx_packets;
- 		total_rx_bytes += rx_bytes;
- 		xdp_xmit |= xdp_res & (I40E_XDP_TX | I40E_XDP_REDIR);
--		next_to_clean = (next_to_clean + 1) & count_mask;
-+		first = NULL;
- 	}
++busy:
++	xdp_ring->ring_stats->tx_stats.tx_busy++;
++
++	return ICE_XDP_CONSUMED;
+ }
  
- 	rx_ring->next_to_clean = next_to_clean;
-+	rx_ring->next_to_process = next_to_process;
- 	cleaned_count = (next_to_clean - rx_ring->next_to_use - 1) & count_mask;
+ /**
+@@ -960,7 +997,7 @@ static void ice_xmit_pkt(struct ice_tx_ring *xdp_ring, struct xdp_desc *desc,
  
- 	if (cleaned_count >= I40E_RX_BUFFER_WRITE)
+ 	tx_desc = ICE_TX_DESC(xdp_ring, xdp_ring->next_to_use++);
+ 	tx_desc->buf_addr = cpu_to_le64(dma);
+-	tx_desc->cmd_type_offset_bsz = ice_build_ctob(ICE_TX_DESC_CMD_EOP,
++	tx_desc->cmd_type_offset_bsz = ice_build_ctob(xsk_is_eop_desc(desc),
+ 						      0, desc->len, 0);
+ 
+ 	*total_bytes += desc->len;
+@@ -987,7 +1024,7 @@ static void ice_xmit_pkt_batch(struct ice_tx_ring *xdp_ring, struct xdp_desc *de
+ 
+ 		tx_desc = ICE_TX_DESC(xdp_ring, ntu++);
+ 		tx_desc->buf_addr = cpu_to_le64(dma);
+-		tx_desc->cmd_type_offset_bsz = ice_build_ctob(ICE_TX_DESC_CMD_EOP,
++		tx_desc->cmd_type_offset_bsz = ice_build_ctob(xsk_is_eop_desc(&descs[i]),
+ 							      0, descs[i].len, 0);
+ 
+ 		*total_bytes += descs[i].len;
 -- 
 2.34.1
 
