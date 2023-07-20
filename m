@@ -1,34 +1,34 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44E872FA20
-	for <bpf@vger.kernel.org>; Thu, 20 Jul 2023 16:36:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 141302FA20
+	for <bpf@vger.kernel.org>; Thu, 20 Jul 2023 16:38:53 +0000 (UTC)
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFEE13591
-	for <bpf@vger.kernel.org>; Thu, 20 Jul 2023 09:35:46 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319A82D61
+	for <bpf@vger.kernel.org>; Thu, 20 Jul 2023 09:38:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1689870888;
+	s=mimecast20190719; t=1689871059;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=amrP88Jqmb7M02bSDE9mFh1MFKi+V3yBx6dizqUgPII=;
-	b=D6bP34pwyMiKPG4698h3gE7JYYWxFCOIqZR9NYJul4riCaRH7eVxI9tBtyiI153PaB8aZn
-	dw8Cr+9D8VARo/30vDsVZpkY7VLY+9nhAsQxyyBYiDmIdJ34KYNYdKp4LDIgqS06ZKTtF7
-	ILeJek8arwuDRfs3lYScLgKxTgAs+zY=
+	bh=QESi3DN0fC8QnZsNV/N4VXfEg//bCfMhfN1lMbJjDRM=;
+	b=bPpCrKvzF3Ud8VD8f5W4JkgmMuoUKjfuID5Hni6ZKILU+Tws7r+PGkDaBSrDJvxGm/Ha1E
+	YLRUb3bR/sAfZq2nxuhZ0krRFY1qcsWx/OO8lIE3KwDi0VBdNJely5Uae5rgO24+dxRmwm
+	Dv9xZxnnM6GS1IVdZq7Y+DDhR+v0eLg=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-613-tiaKu1LnPgWKO7yNg3Rgug-1; Thu, 20 Jul 2023 12:34:43 -0400
-X-MC-Unique: tiaKu1LnPgWKO7yNg3Rgug-1
+ us-mta-183-lKQNgwDjNBmDn1pKucKVhA-1; Thu, 20 Jul 2023 12:34:27 -0400
+X-MC-Unique: lKQNgwDjNBmDn1pKucKVhA-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BF946800B35;
-	Thu, 20 Jul 2023 16:34:40 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BF85A936D34;
+	Thu, 20 Jul 2023 16:34:24 +0000 (UTC)
 Received: from vschneid.remote.csb (unknown [10.42.28.48])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id C55AF40C206F;
-	Thu, 20 Jul 2023 16:34:32 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id BFF9140C2070;
+	Thu, 20 Jul 2023 16:34:16 +0000 (UTC)
 From: Valentin Schneider <vschneid@redhat.com>
 To: linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
@@ -39,7 +39,9 @@ To: linux-kernel@vger.kernel.org,
 	x86@kernel.org,
 	rcu@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Cc: Steven Rostedt <rostedt@goodmis.org>,
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
 	Masami Hiramatsu <mhiramat@kernel.org>,
 	Jonathan Corbet <corbet@lwn.net>,
 	Thomas Gleixner <tglx@linutronix.de>,
@@ -51,7 +53,6 @@ Cc: Steven Rostedt <rostedt@goodmis.org>,
 	Wanpeng Li <wanpengli@tencent.com>,
 	Vitaly Kuznetsov <vkuznets@redhat.com>,
 	Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
 	Frederic Weisbecker <frederic@kernel.org>,
 	"Paul E. McKenney" <paulmck@kernel.org>,
 	Neeraj Upadhyay <quic_neeraju@quicinc.com>,
@@ -89,9 +90,9 @@ Cc: Steven Rostedt <rostedt@goodmis.org>,
 	Daniel Bristot de Oliveira <bristot@redhat.com>,
 	Marcelo Tosatti <mtosatti@redhat.com>,
 	Yair Podemsky <ypodemsk@redhat.com>
-Subject: [RFC PATCH v2 20/20] x86/mm, mm/vmalloc: Defer flush_tlb_kernel_range() targeting NOHZ_FULL CPUs
-Date: Thu, 20 Jul 2023 17:30:56 +0100
-Message-Id: <20230720163056.2564824-21-vschneid@redhat.com>
+Subject: [RFC PATCH v2 18/20] context_tracking,x86: Defer kernel text patching IPIs
+Date: Thu, 20 Jul 2023 17:30:54 +0100
+Message-Id: <20230720163056.2564824-19-vschneid@redhat.com>
 In-Reply-To: <20230720163056.2564824-1-vschneid@redhat.com>
 References: <20230720163056.2564824-1-vschneid@redhat.com>
 Precedence: bulk
@@ -110,180 +111,220 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-vunmap()'s issued from housekeeping CPUs are a relatively common source of
-interference for isolated NOHZ_FULL CPUs, as they are hit by the
-flush_tlb_kernel_range() IPIs.
+text_poke_bp_batch() sends IPIs to all online CPUs to synchronize
+them vs the newly patched instruction. CPUs that are executing in userspace
+do not need this synchronization to happen immediately, and this is
+actually harmful interference for NOHZ_FULL CPUs.
 
-Given that CPUs executing in userspace do not access data in the vmalloc
-range, these IPIs could be deferred until their next kernel entry.
+As the synchronization IPIs are sent using a blocking call, returning from
+text_poke_bp_batch() implies all CPUs will observe the patched
+instruction(s), and this should be preserved even if the IPI is deferred.
+In other words, to safely defer this synchronization, any kernel
+instruction leading to the execution of the deferred instruction
+sync (ct_work_flush()) must *not* be mutable (patchable) at runtime.
 
-This does require a guarantee that nothing in the vmalloc range can be
-accessed in early entry code. vmalloc'd kernel stacks (VMAP_STACK) are
-AFAICT a safe exception, as a task running in userspace needs to enter
-kernelspace to execute do_exit() before its stack can be vfree'd.
+This means we must pay attention to mutable instructions in the early entry
+code:
+- alternatives
+- static keys
+- all sorts of probes (kprobes/ftrace/bpf/???)
 
-XXX: Validation that nothing in the vmalloc range is accessed in .noinstr or
-  somesuch?
+The early entry code leading to ct_work_flush() is noinstr, which gets rid
+of the probes.
 
-Blindly deferring any and all flush of the kernel mappings is a risky move,
-so introduce a variant of flush_tlb_kernel_range() that explicitly allows
-deferral. Use it for vunmap flushes.
+Alternatives are safe, because it's boot-time patching (before SMP is
+even brought up) which is before any IPI deferral can happen.
 
-Note that while flush_tlb_kernel_range() may end up issuing a full
-flush (including user mappings), this only happens when reaching a
-invalidation range threshold where it is cheaper to do a full flush than to
-individually invalidate each page in the range via INVLPG. IOW, it doesn't
-*require* invalidating user mappings, and thus remains safe to defer until
-a later kernel entry.
+This leaves us with static keys. Any static key used in early entry code
+should be only forever-enabled at boot time, IOW __ro_after_init (pretty
+much like alternatives). Objtool is now able to point at static keys that
+don't respect this, and all static keys used in early entry code have now
+been verified as behaving like so.
 
+Leverage the new context_tracking infrastructure to defer sync_core() IPIs
+to a target CPU's next kernel entry.
+
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
 Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 ---
- arch/x86/include/asm/tlbflush.h |  1 +
- arch/x86/mm/tlb.c               | 23 ++++++++++++++++++++---
- mm/vmalloc.c                    | 19 ++++++++++++++-----
- 3 files changed, 35 insertions(+), 8 deletions(-)
+ arch/x86/include/asm/context_tracking_work.h |  6 +++--
+ arch/x86/include/asm/text-patching.h         |  1 +
+ arch/x86/kernel/alternative.c                | 24 ++++++++++++++++----
+ arch/x86/kernel/kprobes/core.c               |  4 ++--
+ arch/x86/kernel/kprobes/opt.c                |  4 ++--
+ arch/x86/kernel/module.c                     |  2 +-
+ include/linux/context_tracking_work.h        |  4 ++--
+ 7 files changed, 32 insertions(+), 13 deletions(-)
 
-diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
-index 323b971987af7..0b9b1f040c476 100644
---- a/arch/x86/include/asm/tlbflush.h
-+++ b/arch/x86/include/asm/tlbflush.h
-@@ -248,6 +248,7 @@ extern void flush_tlb_mm_range(struct mm_struct *mm, unsigned long start,
- 				unsigned long end, unsigned int stride_shift,
- 				bool freed_tables);
- extern void flush_tlb_kernel_range(unsigned long start, unsigned long end);
-+extern void flush_tlb_kernel_range_deferrable(unsigned long start, unsigned long end);
+diff --git a/arch/x86/include/asm/context_tracking_work.h b/arch/x86/include/asm/context_tracking_work.h
+index 5bc29e6b2ed38..2c66687ce00e2 100644
+--- a/arch/x86/include/asm/context_tracking_work.h
++++ b/arch/x86/include/asm/context_tracking_work.h
+@@ -2,11 +2,13 @@
+ #ifndef _ASM_X86_CONTEXT_TRACKING_WORK_H
+ #define _ASM_X86_CONTEXT_TRACKING_WORK_H
  
- static inline void flush_tlb_page(struct vm_area_struct *vma, unsigned long a)
- {
-diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
-index 631df9189ded4..bb18b35e61b4a 100644
---- a/arch/x86/mm/tlb.c
-+++ b/arch/x86/mm/tlb.c
-@@ -10,6 +10,7 @@
- #include <linux/debugfs.h>
- #include <linux/sched/smt.h>
- #include <linux/task_work.h>
-+#include <linux/context_tracking.h>
- 
- #include <asm/tlbflush.h>
- #include <asm/mmu_context.h>
-@@ -1045,6 +1046,11 @@ static void do_flush_tlb_all(void *info)
- 	__flush_tlb_all();
- }
- 
-+static bool do_kernel_flush_defer_cond(int cpu, void *info)
-+{
-+	return !ct_set_cpu_work(cpu, CONTEXT_WORK_TLBI);
-+}
++#include <asm/sync_core.h>
 +
- void flush_tlb_all(void)
+ static __always_inline void arch_context_tracking_work(int work)
  {
- 	count_vm_tlb_event(NR_TLB_REMOTE_FLUSH);
-@@ -1061,12 +1067,13 @@ static void do_kernel_range_flush(void *info)
- 		flush_tlb_one_kernel(addr);
- }
- 
--void flush_tlb_kernel_range(unsigned long start, unsigned long end)
-+static inline void
-+__flush_tlb_kernel_range(smp_cond_func_t cond_func, unsigned long start, unsigned long end)
- {
- 	/* Balance as user space task's flush, a bit conservative */
- 	if (end == TLB_FLUSH_ALL ||
- 	    (end - start) > tlb_single_page_flush_ceiling << PAGE_SHIFT) {
--		on_each_cpu(do_flush_tlb_all, NULL, 1);
-+		on_each_cpu_cond(cond_func, do_flush_tlb_all, NULL, 1);
- 	} else {
- 		struct flush_tlb_info *info;
- 
-@@ -1074,13 +1081,23 @@ void flush_tlb_kernel_range(unsigned long start, unsigned long end)
- 		info = get_flush_tlb_info(NULL, start, end, 0, false,
- 					  TLB_GENERATION_INVALID);
- 
--		on_each_cpu(do_kernel_range_flush, info, 1);
-+		on_each_cpu_cond(cond_func, do_kernel_range_flush, info, 1);
- 
- 		put_flush_tlb_info();
- 		preempt_enable();
+ 	switch (work) {
+-	case CONTEXT_WORK_n:
+-		// Do work...
++	case CONTEXT_WORK_SYNC:
++		sync_core();
+ 		break;
  	}
  }
- 
-+void flush_tlb_kernel_range(unsigned long start, unsigned long end)
-+{
-+	__flush_tlb_kernel_range(NULL, start, end);
-+}
-+
-+void flush_tlb_kernel_range_deferrable(unsigned long start, unsigned long end)
-+{
-+	__flush_tlb_kernel_range(do_kernel_flush_defer_cond, start, end);
-+}
-+
- /*
-  * This can be used from process context to figure out what the value of
-  * CR3 is without needing to do a (slow) __read_cr3().
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 93cf99aba335b..e08b6c7d22fb6 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -439,6 +439,15 @@ void vunmap_range_noflush(unsigned long start, unsigned long end)
- 	__vunmap_range_noflush(start, end);
+diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
+index 29832c338cdc5..b6939e965e69d 100644
+--- a/arch/x86/include/asm/text-patching.h
++++ b/arch/x86/include/asm/text-patching.h
+@@ -43,6 +43,7 @@ extern void text_poke_early(void *addr, const void *opcode, size_t len);
+  */
+ extern void *text_poke(void *addr, const void *opcode, size_t len);
+ extern void text_poke_sync(void);
++extern void text_poke_sync_deferrable(void);
+ extern void *text_poke_kgdb(void *addr, const void *opcode, size_t len);
+ extern void *text_poke_copy(void *addr, const void *opcode, size_t len);
+ extern void *text_poke_copy_locked(void *addr, const void *opcode, size_t len, bool core_ok);
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index 72646d75b6ffe..fcce480e1919e 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -18,6 +18,7 @@
+ #include <linux/mmu_context.h>
+ #include <linux/bsearch.h>
+ #include <linux/sync_core.h>
++#include <linux/context_tracking.h>
+ #include <asm/text-patching.h>
+ #include <asm/alternative.h>
+ #include <asm/sections.h>
+@@ -1933,9 +1934,24 @@ static void do_sync_core(void *info)
+ 	sync_core();
  }
  
-+#ifdef CONFIG_CONTEXT_TRACKING_WORK
-+void __weak flush_tlb_kernel_range_deferrable(unsigned long start, unsigned long end)
++static bool do_sync_core_defer_cond(int cpu, void *info)
 +{
-+	flush_tlb_kernel_range(start, end);
++	return !ct_set_cpu_work(cpu, CONTEXT_WORK_SYNC);
 +}
-+#else
-+#define flush_tlb_kernel_range_deferrable(start, end) flush_tlb_kernel_range(start, end)
-+#endif
 +
- /**
-  * vunmap_range - unmap kernel virtual addresses
-  * @addr: start of the VM area to unmap
-@@ -452,7 +461,7 @@ void vunmap_range(unsigned long addr, unsigned long end)
++static void __text_poke_sync(smp_cond_func_t cond_func)
++{
++	on_each_cpu_cond(cond_func, do_sync_core, NULL, 1);
++}
++
+ void text_poke_sync(void)
  {
- 	flush_cache_vunmap(addr, end);
- 	vunmap_range_noflush(addr, end);
--	flush_tlb_kernel_range(addr, end);
-+	flush_tlb_kernel_range_deferrable(addr, end);
+-	on_each_cpu(do_sync_core, NULL, 1);
++	__text_poke_sync(NULL);
++}
++
++void text_poke_sync_deferrable(void)
++{
++	__text_poke_sync(do_sync_core_defer_cond);
  }
  
- static int vmap_pages_pte_range(pmd_t *pmd, unsigned long addr,
-@@ -1746,7 +1755,7 @@ static bool __purge_vmap_area_lazy(unsigned long start, unsigned long end)
- 		list_last_entry(&local_purge_list,
- 			struct vmap_area, list)->va_end);
+ /*
+@@ -2145,7 +2161,7 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
+ 		text_poke(text_poke_addr(&tp[i]), &int3, INT3_INSN_SIZE);
+ 	}
  
--	flush_tlb_kernel_range(start, end);
-+	flush_tlb_kernel_range_deferrable(start, end);
- 	resched_threshold = lazy_max_pages() << 1;
+-	text_poke_sync();
++	text_poke_sync_deferrable();
  
- 	spin_lock(&free_vmap_area_lock);
-@@ -1849,7 +1858,7 @@ static void free_unmap_vmap_area(struct vmap_area *va)
- 	flush_cache_vunmap(va->va_start, va->va_end);
- 	vunmap_range_noflush(va->va_start, va->va_end);
- 	if (debug_pagealloc_enabled_static())
--		flush_tlb_kernel_range(va->va_start, va->va_end);
-+		flush_tlb_kernel_range_deferrable(va->va_start, va->va_end);
+ 	/*
+ 	 * Second step: update all but the first byte of the patched range.
+@@ -2207,7 +2223,7 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
+ 		 * not necessary and we'd be safe even without it. But
+ 		 * better safe than sorry (plus there's not only Intel).
+ 		 */
+-		text_poke_sync();
++		text_poke_sync_deferrable();
+ 	}
  
- 	free_vmap_area_noflush(va);
+ 	/*
+@@ -2228,7 +2244,7 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
+ 	}
+ 
+ 	if (do_sync)
+-		text_poke_sync();
++		text_poke_sync_deferrable();
+ 
+ 	/*
+ 	 * Remove and wait for refs to be zero.
+diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
+index f7f6042eb7e6c..a38c914753397 100644
+--- a/arch/x86/kernel/kprobes/core.c
++++ b/arch/x86/kernel/kprobes/core.c
+@@ -735,7 +735,7 @@ void arch_arm_kprobe(struct kprobe *p)
+ 	u8 int3 = INT3_INSN_OPCODE;
+ 
+ 	text_poke(p->addr, &int3, 1);
+-	text_poke_sync();
++	text_poke_sync_deferrable();
+ 	perf_event_text_poke(p->addr, &p->opcode, 1, &int3, 1);
  }
-@@ -2239,7 +2248,7 @@ static void vb_free(unsigned long addr, unsigned long size)
- 	vunmap_range_noflush(addr, addr + size);
  
- 	if (debug_pagealloc_enabled_static())
--		flush_tlb_kernel_range(addr, addr + size);
-+		flush_tlb_kernel_range_deferrable(addr, addr + size);
+@@ -745,7 +745,7 @@ void arch_disarm_kprobe(struct kprobe *p)
  
- 	spin_lock(&vb->lock);
- 
-@@ -2304,7 +2313,7 @@ static void _vm_unmap_aliases(unsigned long start, unsigned long end, int flush)
- 	free_purged_blocks(&purge_list);
- 
- 	if (!__purge_vmap_area_lazy(start, end) && flush)
--		flush_tlb_kernel_range(start, end);
-+		flush_tlb_kernel_range_deferrable(start, end);
- 	mutex_unlock(&vmap_purge_lock);
+ 	perf_event_text_poke(p->addr, &int3, 1, &p->opcode, 1);
+ 	text_poke(p->addr, &p->opcode, 1);
+-	text_poke_sync();
++	text_poke_sync_deferrable();
  }
+ 
+ void arch_remove_kprobe(struct kprobe *p)
+diff --git a/arch/x86/kernel/kprobes/opt.c b/arch/x86/kernel/kprobes/opt.c
+index 57b0037d0a996..88451a744ceda 100644
+--- a/arch/x86/kernel/kprobes/opt.c
++++ b/arch/x86/kernel/kprobes/opt.c
+@@ -521,11 +521,11 @@ void arch_unoptimize_kprobe(struct optimized_kprobe *op)
+ 	       JMP32_INSN_SIZE - INT3_INSN_SIZE);
+ 
+ 	text_poke(addr, new, INT3_INSN_SIZE);
+-	text_poke_sync();
++	text_poke_sync_deferrable();
+ 	text_poke(addr + INT3_INSN_SIZE,
+ 		  new + INT3_INSN_SIZE,
+ 		  JMP32_INSN_SIZE - INT3_INSN_SIZE);
+-	text_poke_sync();
++	text_poke_sync_deferrable();
+ 
+ 	perf_event_text_poke(op->kp.addr, old, JMP32_INSN_SIZE, new, JMP32_INSN_SIZE);
+ }
+diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
+index b05f62ee2344b..8b4542dc51b6d 100644
+--- a/arch/x86/kernel/module.c
++++ b/arch/x86/kernel/module.c
+@@ -242,7 +242,7 @@ static int write_relocate_add(Elf64_Shdr *sechdrs,
+ 				   write, apply);
+ 
+ 	if (!early) {
+-		text_poke_sync();
++		text_poke_sync_deferrable();
+ 		mutex_unlock(&text_mutex);
+ 	}
+ 
+diff --git a/include/linux/context_tracking_work.h b/include/linux/context_tracking_work.h
+index fb74db8876dd2..13fc97b395030 100644
+--- a/include/linux/context_tracking_work.h
++++ b/include/linux/context_tracking_work.h
+@@ -5,12 +5,12 @@
+ #include <linux/bitops.h>
+ 
+ enum {
+-	CONTEXT_WORK_n_OFFSET,
++	CONTEXT_WORK_SYNC_OFFSET,
+ 	CONTEXT_WORK_MAX_OFFSET
+ };
+ 
+ enum ct_work {
+-	CONTEXT_WORK_n        = BIT(CONTEXT_WORK_n_OFFSET),
++	CONTEXT_WORK_SYNC     = BIT(CONTEXT_WORK_SYNC_OFFSET),
+ 	CONTEXT_WORK_MAX      = BIT(CONTEXT_WORK_MAX_OFFSET)
+ };
  
 -- 
 2.31.1
