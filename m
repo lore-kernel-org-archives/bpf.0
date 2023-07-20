@@ -1,104 +1,73 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BACB2168AA
-	for <bpf@vger.kernel.org>; Thu, 20 Jul 2023 07:52:40 +0000 (UTC)
-X-Greylist: delayed 1367 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 20 Jul 2023 00:52:37 PDT
-Received: from bjm7-spam02.kuaishou.com (smtpcn03.kuaishou.com [103.107.217.217])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FA52135;
-	Thu, 20 Jul 2023 00:52:37 -0700 (PDT)
-Received: from bjm7-spam02.kuaishou.com (localhost [127.0.0.2] (may be forged))
-	by bjm7-spam02.kuaishou.com with ESMTP id 36K7TohW080274;
-	Thu, 20 Jul 2023 15:29:50 +0800 (GMT-8)
-	(envelope-from yangyifei03@kuaishou.com)
-Received: from bjm7-pm-mail12.kuaishou.com ([172.28.1.94])
-	by bjm7-spam02.kuaishou.com with ESMTPS id 36K7RmOj078771
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 20 Jul 2023 15:27:54 +0800 (GMT-8)
-	(envelope-from yangyifei03@kuaishou.com)
-DKIM-Signature: v=1; a=rsa-sha256; d=kuaishou.com; s=dkim; c=relaxed/relaxed;
-	t=1689838068; h=from:subject:to:date:message-id;
-	bh=2hvt2nAb9FQGc8JWV2zRVOy7HcAR3TW4z5ZsrMla/mw=;
-	b=Ov9ON0jOMvPY7tYxtSF27RXIYX5/ESwleAfyzbMcRkfahhvPD8+vCRgUolm4nuFAX7xrxXLLqLP
-	VC0ugqxGe1jauqIjydi7S9YH2M2vjCjTteErwqG546qEglqgQx2dxnNycFZVOCvZX9fbPRgt69Um7
-	2ew2dB1E6Kom/DkdCz0=
-Received: from public-bjmt-d51.idcyz.hb1.kwaidc.com (172.28.1.32) by
- bjm7-pm-mail12.kuaishou.com (172.28.1.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.20; Thu, 20 Jul 2023 15:27:48 +0800
-From: Efly Young <yangyifei03@kuaishou.com>
-To: <hannes@cmpxchg.org>
-CC: <cgroups@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
-Subject: [PATCH] mm:vmscan: fix inaccurate reclaim during proactive reclaim
-Date: Thu, 20 Jul 2023 15:27:08 +0800
-Message-ID: <20230720072708.55067-1-yangyifei03@kuaishou.com>
-X-Mailer: git-send-email 2.35.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D63C174C0;
+	Thu, 20 Jul 2023 08:21:53 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F2E2110;
+	Thu, 20 Jul 2023 01:21:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=NqLEMJC7fYxhCSn83KJr6oToHsj8izdq9tSB9Ugi6bU=; b=2d/fYZrKqw67I24WjJ5lvu/zoc
+	dul2IKATOMlxqldTLbyOVLkP9BV4xjJCJVylu8pcxCXCLllrbpy2Sb0q0ajxJ5xW6U+Urc6uBhx7J
+	W9iV5FEMmaabUufPI+NoOw2c2SDi/JQ73YFg2l8V15JzLVKteaSXww2eHlj6tzh3oa72XEJEto/3o
+	xJRhQtdkTQJPVqy4Wo2g64rdSg/gmbUCsTToZ60C7EALMZk99rsLZNLLMqChUkmWdXyQIg1Mulxyr
+	jBCLilzUwsIeC4O9IswurY59ogK8VJ8vJJkgn9DXtp4CdhMGY1OoC7QAdys/EZ/XnCr4l1UGmYClk
+	ydD/Hqhg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+	id 1qMOut-00AHtv-3C;
+	Thu, 20 Jul 2023 08:21:43 +0000
+Date: Thu, 20 Jul 2023 01:21:43 -0700
+From: Christoph Hellwig <hch@infradead.org>
+To: Jason Wang <jasowang@redhat.com>
+Cc: Christoph Hellwig <hch@infradead.org>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	virtualization@lists.linux-foundation.org,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>, netdev@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH vhost v11 10/10] virtio_net: merge dma operation for one
+ page
+Message-ID: <ZLjul7mYcMujUfxQ@infradead.org>
+References: <20230710034237.12391-1-xuanzhuo@linux.alibaba.com>
+ <20230710034237.12391-11-xuanzhuo@linux.alibaba.com>
+ <CACGkMEtoiHXese1sNJELeidmFc6nFR8rE1aA8MooaEKKUSw_eg@mail.gmail.com>
+ <1689231087.0744615-2-xuanzhuo@linux.alibaba.com>
+ <CACGkMEsf4+56veqem1HMWiqYhiW5LVw-1CbWX-cQSN6Z0zYMRQ@mail.gmail.com>
+ <ZLjS4D7urgIK1MxV@infradead.org>
+ <CACGkMEsbzWU3+pA1kLNwGEmwYjP9riRANpUtsmE-YXJmnFAuhw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.28.1.32]
-X-ClientProxiedBy: bjxm-pm-mail02.kuaishou.com (172.28.128.2) To
- bjm7-pm-mail12.kuaishou.com (172.28.1.94)
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL:bjm7-spam02.kuaishou.com 36K7TohW080274
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-	T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACGkMEsbzWU3+pA1kLNwGEmwYjP9riRANpUtsmE-YXJmnFAuhw@mail.gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+	SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Before commit f53af4285d77 ("mm: vmscan: fix extreme overreclaim and
-swap floods"), proactive reclaim will extreme overreclaim sometimes.
-But proactive reclaim still inaccurate and some extent overreclaim.
+On Thu, Jul 20, 2023 at 03:41:56PM +0800, Jason Wang wrote:
+> > Did you actually check that it works though?
+> > Looks like with swiotlb you need to synch to trigger a copy
+> > before unmap, and I don't see where it's done in the current
+> > patch.
+> 
+> And this is needed for XDP_REDIRECT as well.
 
-Problematic case is easy to construct. Allocate lots of anonymous
-memory (e.g., 20G) in a memcg, then swapping by writing memory.recalim
-and there is a certain probability of overreclaim. For example, request
-1G by writing memory.reclaim will eventually reclaim 1.7G or other
-values more than 1G.
-
-The reason is that reclaimer may have already reclaimed part of requested
-memory in one loop, but before adjust sc->nr_to_reclaim in outer loop,
-call shrink_lruvec() again will still follow the current sc->nr_to_reclaim
-to work. It will eventually lead to overreclaim. In theory, the amount
-of reclaimed would be in [request, 2 * request).
-
-Reclaimer usually tends to reclaim more than request. But either direct
-or kswapd reclaim have much smaller nr_to_reclaim targets, so it is
-less noticeable and not have much impact.
-
-Proactive reclaim can usually come in with a larger value, so the error
-is difficult to ignore. Considering proactive reclaim is usually low
-frequency, handle the batching into smaller chunks is a better approach.
-
-Signed-off-by: Efly Young <yangyifei03@kuaishou.com>
-Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
----
- mm/memcontrol.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 4b27e24..d36cf88 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -6741,8 +6741,8 @@ static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
- 			lru_add_drain_all();
- 
- 		reclaimed = try_to_free_mem_cgroup_pages(memcg,
--						nr_to_reclaim - nr_reclaimed,
--						GFP_KERNEL, reclaim_options);
-+					min(nr_to_reclaim - nr_reclaimed, SWAP_CLUSTER_MAX),
-+					GFP_KERNEL, reclaim_options);
- 
- 		if (!reclaimed && !nr_retries--)
- 			return -EAGAIN;
--- 
-1.8.3.1
-
+DMA always needs proper syncs, be that for swiotlb or for cache
+maintainance, yes.
