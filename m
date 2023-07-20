@@ -1,40 +1,40 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9011B523A
-	for <bpf@vger.kernel.org>; Thu, 20 Jul 2023 00:02:40 +0000 (UTC)
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0688A1FD2
-	for <bpf@vger.kernel.org>; Wed, 19 Jul 2023 17:02:38 -0700 (PDT)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 36JMLqLO032388
-	for <bpf@vger.kernel.org>; Wed, 19 Jul 2023 17:02:38 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56398380
+	for <bpf@vger.kernel.org>; Thu, 20 Jul 2023 00:02:55 +0000 (UTC)
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9182F1FDC
+	for <bpf@vger.kernel.org>; Wed, 19 Jul 2023 17:02:53 -0700 (PDT)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36JMM6JU002267
+	for <bpf@vger.kernel.org>; Wed, 19 Jul 2023 17:02:53 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=pCkFCZFcP0A682NeYRbIxLgkQ8VsBjPjod9Ar64soYQ=;
- b=YtUxY6an1ngaVNJ7nZzQo4Xtm00gmGHmLsWvfmfXo8P4Y5KL21k2htDSBJjiV1AW/gV0
- qW+44XoaNK3xgSzb+tk5WrIKT6VSVC3tYhWQdsKPtcquOA4baWk4Rk6HakBeJvB9TUSf
- x1BQc6/F8RSS71nRu0vyJC7OzKbuRe15gkk= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by m0001303.ppops.net (PPS) with ESMTPS id 3rxbxuxryp-2
+ bh=gBWHgHv9nBYn2KEzPDrNky6hwmQgPcZjXQqq79msBUA=;
+ b=EgR708yT5AhocHi3sihwTCOUm2+PyFqZRUxt5cm3uId2Kv7koCqWpINIAt7J2VbLR/hj
+ TdeCreM9vscsKcP10weN9d5bO2l9bEdqF2NNJAQQz0CsC46j1W8BicTE4IUftedFu5vq
+ eUB4Klkt9RUVRaIrpccu8PyaVTIV2cFqWj4= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3rxjpcku7f-2
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Wed, 19 Jul 2023 17:02:38 -0700
-Received: from twshared16559.02.ash9.facebook.com (2620:10d:c0a8:1b::30) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Wed, 19 Jul 2023 17:02:53 -0700
+Received: from twshared10975.09.ash9.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 19 Jul 2023 17:02:36 -0700
+ 15.1.2507.27; Wed, 19 Jul 2023 17:02:21 -0700
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 96C482354EAD3; Wed, 19 Jul 2023 17:02:33 -0700 (PDT)
+	id 955542354EA1B; Wed, 19 Jul 2023 17:02:07 -0700 (PDT)
 From: Yonghong Song <yhs@fb.com>
 To: <bpf@vger.kernel.org>
 CC: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
         <bpf@ietf.org>, Daniel Borkmann <daniel@iogearbox.net>,
         Fangrui Song
 	<maskray@google.com>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next v3 17/17] docs/bpf: Add documentation for new instructions
-Date: Wed, 19 Jul 2023 17:02:33 -0700
-Message-ID: <20230720000233.113068-1-yhs@fb.com>
+Subject: [PATCH bpf-next v3 12/17] selftests/bpf: Add unit tests for new sign-extension mov insns
+Date: Wed, 19 Jul 2023 17:02:07 -0700
+Message-ID: <20230720000207.110612-1-yhs@fb.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230720000103.99949-1-yhs@fb.com>
 References: <20230720000103.99949-1-yhs@fb.com>
@@ -47,8 +47,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: qXGBr02vctblsasm8d_gjRlF2W-7uy_y
-X-Proofpoint-GUID: qXGBr02vctblsasm8d_gjRlF2W-7uy_y
+X-Proofpoint-GUID: yvIZw2ILF_zd6I6nm85O6GGnD_6Gm2ku
+X-Proofpoint-ORIG-GUID: yvIZw2ILF_zd6I6nm85O6GGnD_6Gm2ku
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-07-19_16,2023-07-19_01,2023-05-22_02
@@ -60,282 +60,248 @@ X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add documentation in instruction-set.rst for new instruction encoding
-and their corresponding operations. Also removed the question
-related to 'no BPF_SDIV' in bpf_design_QA.rst since we have
-BPF_SDIV insn now.
+Add unit tests for movsx insns.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- Documentation/bpf/bpf_design_QA.rst           |   5 -
- .../bpf/standardization/instruction-set.rst   | 105 ++++++++++++------
- 2 files changed, 70 insertions(+), 40 deletions(-)
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../selftests/bpf/progs/verifier_movsx.c      | 199 ++++++++++++++++++
+ 2 files changed, 201 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_movsx.c
 
-diff --git a/Documentation/bpf/bpf_design_QA.rst b/Documentation/bpf/bpf_=
-design_QA.rst
-index 38372a956d65..eb19c945f4d5 100644
---- a/Documentation/bpf/bpf_design_QA.rst
-+++ b/Documentation/bpf/bpf_design_QA.rst
-@@ -140,11 +140,6 @@ A: Because if we picked one-to-one relationship to x=
-64 it would have made
- it more complicated to support on arm64 and other archs. Also it
- needs div-by-zero runtime check.
-=20
--Q: Why there is no BPF_SDIV for signed divide operation?
--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
--A: Because it would be rarely used. llvm errors in such case and
--prints a suggestion to use unsigned divide instead.
--
- Q: Why BPF has implicit prologue and epilogue?
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- A: Because architectures like sparc have register windows and in general
-diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Docu=
-mentation/bpf/standardization/instruction-set.rst
-index 751e657973f0..88c5b9f39af2 100644
---- a/Documentation/bpf/standardization/instruction-set.rst
-+++ b/Documentation/bpf/standardization/instruction-set.rst
-@@ -154,24 +154,27 @@ otherwise identical operations.
- The 'code' field encodes the operation as below, where 'src' and 'dst' r=
-efer
- to the values of the source and destination registers, respectively.
-=20
--=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
--code      value  description
--=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
--BPF_ADD   0x00   dst +=3D src
--BPF_SUB   0x10   dst -=3D src
--BPF_MUL   0x20   dst \*=3D src
--BPF_DIV   0x30   dst =3D (src !=3D 0) ? (dst / src) : 0
--BPF_OR    0x40   dst \|=3D src
--BPF_AND   0x50   dst &=3D src
--BPF_LSH   0x60   dst <<=3D (src & mask)
--BPF_RSH   0x70   dst >>=3D (src & mask)
--BPF_NEG   0x80   dst =3D -src
--BPF_MOD   0x90   dst =3D (src !=3D 0) ? (dst % src) : dst
--BPF_XOR   0xa0   dst ^=3D src
--BPF_MOV   0xb0   dst =3D src
--BPF_ARSH  0xc0   sign extending dst >>=3D (src & mask)
--BPF_END   0xd0   byte swap operations (see `Byte swap instructions`_ bel=
-ow)
--=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D  =3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
-+code      value  offset   description
-+=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D  =3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
-+BPF_ADD   0x00   0        dst +=3D src
-+BPF_SUB   0x10   0        dst -=3D src
-+BPF_MUL   0x20   0        dst \*=3D src
-+BPF_DIV   0x30   0        dst =3D (src !=3D 0) ? (dst / src) : 0
-+BPF_SDIV  0x30   1        dst =3D (src !=3D 0) ? (dst s/ src) : 0
-+BPF_OR    0x40   0        dst \|=3D src
-+BPF_AND   0x50   0        dst &=3D src
-+BPF_LSH   0x60   0        dst <<=3D (src & mask)
-+BPF_RSH   0x70   0        dst >>=3D (src & mask)
-+BPF_NEG   0x80   0        dst =3D -src
-+BPF_MOD   0x90   0        dst =3D (src !=3D 0) ? (dst % src) : dst
-+BPF_SMOD  0x90   1        dst =3D (src !=3D 0) ? (dst s% src) : dst
-+BPF_XOR   0xa0   0        dst ^=3D src
-+BPF_MOV   0xb0   0        dst =3D src
-+BPF_MOVSX 0xb0   8/16/32  dst =3D (s8,16,s32)src
-+BPF_ARSH  0xc0   0        sign extending dst >>=3D (src & mask)
-+BPF_END   0xd0   0        byte swap operations (see `Byte swap instructi=
-ons`_ below)
-+=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
- Underflow and overflow are allowed during arithmetic operations, meaning
- the 64-bit or 32-bit value will wrap. If eBPF program execution would
-@@ -198,11 +201,20 @@ where '(u32)' indicates that the upper 32 bits are =
-zeroed.
-=20
-   dst =3D dst ^ imm32
-=20
--Also note that the division and modulo operations are unsigned. Thus, fo=
-r
--``BPF_ALU``, 'imm' is first interpreted as an unsigned 32-bit value, whe=
-reas
--for ``BPF_ALU64``, 'imm' is first sign extended to 64 bits and the resul=
-t
--interpreted as an unsigned 64-bit value. There are no instructions for
--signed division or modulo.
-+Note that most instructions have instruction offset of 0. But three inst=
-ructions
-+(BPF_SDIV, BPF_SMOD, BPF_MOVSX) have non-zero offset.
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
+sting/selftests/bpf/prog_tests/verifier.c
+index 6eec6a9463c8..037af7799cdf 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -41,6 +41,7 @@
+ #include "verifier_map_ret_val.skel.h"
+ #include "verifier_masking.skel.h"
+ #include "verifier_meta_access.skel.h"
++#include "verifier_movsx.skel.h"
+ #include "verifier_netfilter_ctx.skel.h"
+ #include "verifier_netfilter_retcode.skel.h"
+ #include "verifier_prevent_map_lookup.skel.h"
+@@ -144,6 +145,7 @@ void test_verifier_map_ptr_mixing(void)       { RUN(v=
+erifier_map_ptr_mixing); }
+ void test_verifier_map_ret_val(void)          { RUN(verifier_map_ret_val=
+); }
+ void test_verifier_masking(void)              { RUN(verifier_masking); }
+ void test_verifier_meta_access(void)          { RUN(verifier_meta_access=
+); }
++void test_verifier_movsx(void)                 { RUN(verifier_movsx); }
+ void test_verifier_netfilter_ctx(void)        { RUN(verifier_netfilter_c=
+tx); }
+ void test_verifier_netfilter_retcode(void)    { RUN(verifier_netfilter_r=
+etcode); }
+ void test_verifier_prevent_map_lookup(void)   { RUN(verifier_prevent_map=
+_lookup); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_movsx.c b/tools/t=
+esting/selftests/bpf/progs/verifier_movsx.c
+new file mode 100644
+index 000000000000..5ee7d004f8ba
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_movsx.c
+@@ -0,0 +1,199 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+The devision and modulo operations support both unsigned and signed flav=
-ors.
-+For unsigned operation (BPF_DIV and BPF_MOD), for ``BPF_ALU``, 'imm' is =
-first
-+interpreted as an unsigned 32-bit value, whereas for ``BPF_ALU64``, 'imm=
-' is
-+first sign extended to 64 bits and the result interpreted as an unsigned=
- 64-bit
-+value.  For signed operation (BPF_SDIV and BPF_SMOD), for ``BPF_ALU``, '=
-imm' is
-+interpreted as a signed value. For ``BPF_ALU64``, the 'imm' is sign exte=
-nded
-+from 32 to 64 and interpreted as a signed 64-bit value.
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
 +
-+Instruction BPF_MOVSX does move operation with sign extension.
-+``BPF_ALU | MOVSX`` sign extendes 8-bit and 16-bit into 32-bit and upper=
- 32-bit are zeroed.
-+``BPF_ALU64 | MOVSX`` sign extends 8-bit, 16-bit and 32-bit into 64-bit.
-=20
- Shift operations use a mask of 0x3F (63) for 64-bit operations and 0x1F =
-(31)
- for 32-bit operations.
-@@ -210,21 +222,23 @@ for 32-bit operations.
- Byte swap instructions
- ~~~~~~~~~~~~~~~~~~~~~~
-=20
--The byte swap instructions use an instruction class of ``BPF_ALU`` and a=
- 4-bit
--'code' field of ``BPF_END``.
-+The byte swap instructions use instruction classes of ``BPF_ALU`` and ``=
-BPF_ALU64``
-+and a 4-bit 'code' field of ``BPF_END``.
-=20
- The byte swap instructions operate on the destination register
- only and do not use a separate source register or immediate value.
-=20
--The 1-bit source operand field in the opcode is used to select what byte
--order the operation convert from or to:
-+For ``BPF_ALU``, the 1-bit source operand field in the opcode is used to=
- select what byte
-+order the operation convert from or to. For ``BPF_ALU64``, the 1-bit sou=
-rce operand
-+field in the opcode is not used.
-=20
--=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
--source     value  description
--=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
--BPF_TO_LE  0x00   convert between host byte order and little endian
--BPF_TO_BE  0x08   convert between host byte order and big endian
--=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=
-  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+class      source     value  description
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=
-  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+BPF_ALU    BPF_TO_LE  0x00   convert between host byte order and little =
-endian
-+BPF_ALU    BPF_TO_BE  0x08   convert between host byte order and big end=
-ian
-+BPF_ALU64  BPF_TO_LE  0x00   do byte swap unconditionally
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=
-  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
- The 'imm' field encodes the width of the swap operations.  The following=
- widths
- are supported: 16, 32 and 64.
-@@ -239,6 +253,12 @@ Examples:
-=20
-   dst =3D htobe64(dst)
-=20
-+``BPF_ALU64 | BPF_TO_LE | BPF_END`` with imm =3D 16/32/64 means::
++SEC("socket")
++__description("MOV32SX, S8")
++__success __success_unpriv __retval(0x23)
++__naked void mov32sx_s8(void)
++{
++	asm volatile ("					\
++	w0 =3D 0xff23;					\
++	w0 =3D (s8)w0;					\
++	exit;						\
++"	::: __clobber_all);
++}
 +
-+  dst =3D bswap16(dst)
-+  dst =3D bswap32(dst)
-+  dst =3D bswap64(dst)
++SEC("socket")
++__description("MOV32SX, S16")
++__success __success_unpriv __retval(0xFFFFff23)
++__naked void mov32sx_s16(void)
++{
++	asm volatile ("					\
++	w0 =3D 0xff23;					\
++	w0 =3D (s16)w0;					\
++	exit;						\
++"	::: __clobber_all);
++}
 +
- Jump instructions
- -----------------
-=20
-@@ -249,7 +269,8 @@ The 'code' field encodes the operation as below:
- =3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D  =3D=3D=3D  =3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
- code      value  src  description                                  notes
- =3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D  =3D=3D=3D  =3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
--BPF_JA    0x0    0x0  PC +=3D offset                                 BPF=
-_JMP only
-+BPF_JA    0x0    0x0  PC +=3D offset                                 BPF=
-_JMP class
-+BPF_JA    0x0    0x0  PC +=3D imm                                    BPF=
-_JMP32 class
- BPF_JEQ   0x1    any  PC +=3D offset if dst =3D=3D src
- BPF_JGT   0x2    any  PC +=3D offset if dst > src                    uns=
-igned
- BPF_JGE   0x3    any  PC +=3D offset if dst >=3D src                   u=
-nsigned
-@@ -278,6 +299,10 @@ Example:
-=20
- where 's>=3D' indicates a signed '>=3D' comparison.
-=20
-+Note there are two flavors of BPF_JA instrions. BPF_JMP class permits 16=
--bit jump offset while
-+BPF_JMP32 permits 32-bit jump offset. A >16bit conditional jmp can be co=
-nverted to a <16bit
-+conditional jmp plus a 32-bit unconditional jump.
++SEC("socket")
++__description("MOV64SX, S8")
++__success __success_unpriv __retval(-2)
++__naked void mov64sx_s8(void)
++{
++	asm volatile ("					\
++	r0 =3D 0x1fe;					\
++	r0 =3D (s8)r0;					\
++	exit;						\
++"	::: __clobber_all);
++}
 +
- Helper functions
- ~~~~~~~~~~~~~~~~
-=20
-@@ -320,6 +345,7 @@ The mode modifier is one of:
-   BPF_ABS        0x20   legacy BPF packet access (absolute)   `Legacy BP=
-F Packet access instructions`_
-   BPF_IND        0x40   legacy BPF packet access (indirect)   `Legacy BP=
-F Packet access instructions`_
-   BPF_MEM        0x60   regular load and store operations     `Regular l=
-oad and store operations`_
-+  BPF_MEMSX      0x80   sign-extension load operations        `Sign-exte=
-nsion load operations`_
-   BPF_ATOMIC     0xc0   atomic operations                     `Atomic op=
-erations`_
-   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D  =3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
-@@ -350,10 +376,19 @@ instructions that transfer data between a register =
-and memory.
-=20
- ``BPF_MEM | <size> | BPF_LDX`` means::
-=20
--  dst =3D *(size *) (src + offset)
-+  dst =3D *(unsigned size *) (src + offset)
-=20
- Where size is one of: ``BPF_B``, ``BPF_H``, ``BPF_W``, or ``BPF_DW``.
-=20
-+The ``BPF_MEMSX`` mode modifier is used to encode sign-extension load
-+instructions that transfer data between a register and memory.
++SEC("socket")
++__description("MOV64SX, S16")
++__success __success_unpriv __retval(0xf23)
++__naked void mov64sx_s16(void)
++{
++	asm volatile ("					\
++	r0 =3D 0xf0f23;					\
++	r0 =3D (s16)r0;					\
++	exit;						\
++"	::: __clobber_all);
++}
 +
-+``BPF_MEMSX | <size> | BPF_LDX`` means::
++SEC("socket")
++__description("MOV64SX, S32")
++__success __success_unpriv __retval(-1)
++__naked void mov64sx_s32(void)
++{
++	asm volatile ("					\
++	r0 =3D 0xfffffffe;				\
++	r0 =3D (s32)w0;					\
++	r0 >>=3D 1;					\
++	exit;						\
++"	::: __clobber_all);
++}
 +
-+  dst =3D *(signed size *) (src + offset)
++SEC("socket")
++__description("MOV32SX, S8, range_check")
++__success __success_unpriv __retval(1)
++__naked void mov32sx_s8_range(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	w1 =3D (s8)w0;					\
++	/* w1 with s8 range */				\
++	if w1 s> 0x7f goto l0_%=3D;			\
++	if w1 s< -0x80 goto l0_%=3D;			\
++	r0 =3D 1;						\
++l1_%=3D:							\
++	exit;						\
++l0_%=3D:							\
++	r0 =3D 2;						\
++	goto l1_%=3D;					\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
 +
-+Where size is one of: ``BPF_B``, ``BPF_H`` or ``BPF_W``.
++SEC("socket")
++__description("MOV32SX, S16, range_check")
++__success __success_unpriv __retval(1)
++__naked void mov32sx_s16_range(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	w1 =3D (s16)w0;					\
++	/* w1 with s16 range */				\
++	if w1 s> 0x7fff goto l0_%=3D;			\
++	if w1 s< -0x80ff goto l0_%=3D;			\
++	r0 =3D 1;						\
++l1_%=3D:							\
++	exit;						\
++l0_%=3D:							\
++	r0 =3D 2;						\
++	goto l1_%=3D;					\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
 +
- Atomic operations
- -----------------
-=20
++SEC("socket")
++__description("MOV32SX, S16, range_check 2")
++__success __success_unpriv __retval(1)
++__naked void mov32sx_s16_range_2(void)
++{
++	asm volatile ("					\
++	r1 =3D 65535;					\
++	w2 =3D (s16)w1;					\
++	r2 >>=3D 1;					\
++	if r2 !=3D 0x7fffFFFF goto l0_%=3D;			\
++	r0 =3D 1;						\
++l1_%=3D:							\
++	exit;						\
++l0_%=3D:							\
++	r0 =3D 0;						\
++	goto l1_%=3D;					\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("MOV64SX, S8, range_check")
++__success __success_unpriv __retval(1)
++__naked void mov64sx_s8_range(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r1 =3D (s8)r0;					\
++	/* r1 with s8 range */				\
++	if r1 s> 0x7f goto l0_%=3D;			\
++	if r1 s< -0x80 goto l0_%=3D;			\
++	r0 =3D 1;						\
++l1_%=3D:							\
++	exit;						\
++l0_%=3D:							\
++	r0 =3D 2;						\
++	goto l1_%=3D;					\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("MOV64SX, S16, range_check")
++__success __success_unpriv __retval(1)
++__naked void mov64sx_s16_range(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r1 =3D (s16)r0;					\
++	/* r1 with s16 range */				\
++	if r1 s> 0x7fff goto l0_%=3D;			\
++	if r1 s< -0x8000 goto l0_%=3D;			\
++	r0 =3D 1;						\
++l1_%=3D:							\
++	exit;						\
++l0_%=3D:							\
++	r0 =3D 2;						\
++	goto l1_%=3D;					\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("MOV64SX, S32, range_check")
++__success __success_unpriv __retval(1)
++__naked void mov64sx_s32_range(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r1 =3D (s32)w0;					\
++	/* r1 with s32 range */				\
++	if r1 s> 0x7fffffff goto l0_%=3D;			\
++	if r1 s< -0x80000000 goto l0_%=3D;		\
++	r0 =3D 1;						\
++l1_%=3D:							\
++	exit;						\
++l0_%=3D:							\
++	r0 =3D 2;						\
++	goto l1_%=3D;					\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++char _license[] SEC("license") =3D "GPL";
 --=20
 2.34.1
 
