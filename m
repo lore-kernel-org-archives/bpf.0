@@ -1,40 +1,40 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E7E83FDC
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96C5C4434
 	for <bpf@vger.kernel.org>; Thu, 20 Jul 2023 00:02:34 +0000 (UTC)
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC20172D
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7492819B2
 	for <bpf@vger.kernel.org>; Wed, 19 Jul 2023 17:02:33 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36JMZwWD031335
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36JMM8Ys002332
 	for <bpf@vger.kernel.org>; Wed, 19 Jul 2023 17:02:33 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=dCNFxCMda+TMYapX30mkHwrZCZ4/rQW5RLYkdhRn5Yk=;
- b=NtUW96AE/iK1GWtKtDHTAk+M7EF+cUgcoi5Yj0dn03itrDicybqmyow3QRMJE0r878Ts
- 05FC0WV3UnQExhQvyadZEDjImr0ynluiotFN0c8lckjuEekFt33hQDeHKRjJTRVJ+MMq
- nZtoRCGlzOWU/gWA+6O09OuhuKSv2UWwMr8= 
+ bh=txDEwgegHeiAN04McoM/wyxhAYcvhGp9QbbyR7Ij3mw=;
+ b=qN9Pojw3ZWVfsjjAJklHLzyDfvhR9CR4wS++/klyJCX60JTUwRYIbDIfnTCZhEe0qr8m
+ hEHLA11fcH5logv4z0js1pYQUDVFe83AfL9rqpLwPY5aQh7vX6boJ1Z09jNOb1rHPKvQ
+ WQhjoO2hOZnrva8C8lwk+V0PVhh0ZsaTctw= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3rxbc6q1c5-7
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3rxjpcku4y-4
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Wed, 19 Jul 2023 17:02:32 -0700
-Received: from twshared29562.14.frc2.facebook.com (2620:10d:c0a8:1b::30) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Wed, 19 Jul 2023 17:02:33 -0700
+Received: from twshared25760.37.frc1.facebook.com (2620:10d:c0a8:1b::30) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 19 Jul 2023 17:02:03 -0700
+ 15.1.2507.27; Wed, 19 Jul 2023 17:02:32 -0700
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 2B99B2354E915; Wed, 19 Jul 2023 17:01:52 -0700 (PDT)
+	id 0A3CC2354EA88; Wed, 19 Jul 2023 17:02:23 -0700 (PDT)
 From: Yonghong Song <yhs@fb.com>
 To: <bpf@vger.kernel.org>
 CC: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
         <bpf@ietf.org>, Daniel Borkmann <daniel@iogearbox.net>,
         Fangrui Song
 	<maskray@google.com>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next v3 09/17] selftests/bpf: Fix a test_verifier failure
-Date: Wed, 19 Jul 2023 17:01:52 -0700
-Message-ID: <20230720000152.107378-1-yhs@fb.com>
+Subject: [PATCH bpf-next v3 15/17] selftests/bpf: Add unit tests for new gotol insn
+Date: Wed, 19 Jul 2023 17:02:23 -0700
+Message-ID: <20230720000223.112169-1-yhs@fb.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230720000103.99949-1-yhs@fb.com>
 References: <20230720000103.99949-1-yhs@fb.com>
@@ -47,8 +47,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: cl9D4wa5ICJRVt4_sU2lfrWQ7MAfCHbl
-X-Proofpoint-ORIG-GUID: cl9D4wa5ICJRVt4_sU2lfrWQ7MAfCHbl
+X-Proofpoint-GUID: MmSWi_ooYT76vFxztxwvV2V3OH_TCoOC
+X-Proofpoint-ORIG-GUID: MmSWi_ooYT76vFxztxwvV2V3OH_TCoOC
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-07-19_16,2023-07-19_01,2023-05-22_02
@@ -60,59 +60,79 @@ X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-The following test_verifier subtest failed due to
-new encoding for BSWAP.
-
-  $ ./test_verifier
-  ...
-  #99/u invalid 64-bit BPF_END FAIL
-  Unexpected success to load!
-  verification time 215 usec
-  stack depth 0
-  processed 3 insns (limit 1000000) max_states_per_insn 0 total_states 0 =
-peak_states 0 mark_read 0
-  #99/p invalid 64-bit BPF_END FAIL
-  Unexpected success to load!
-  verification time 198 usec
-  stack depth 0
-  processed 3 insns (limit 1000000) max_states_per_insn 0 total_states 0 =
-peak_states 0 mark_read 0
-
-Tighten the test so it still reports a failure.
+Add unit tests for gotol insn.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- tools/testing/selftests/bpf/verifier/basic_instr.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../selftests/bpf/prog_tests/verifier.c       |  2 ++
+ .../selftests/bpf/progs/verifier_gotol.c      | 30 +++++++++++++++++++
+ 2 files changed, 32 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_gotol.c
 
-diff --git a/tools/testing/selftests/bpf/verifier/basic_instr.c b/tools/t=
-esting/selftests/bpf/verifier/basic_instr.c
-index 071dbc889e8c..bd928a72ad73 100644
---- a/tools/testing/selftests/bpf/verifier/basic_instr.c
-+++ b/tools/testing/selftests/bpf/verifier/basic_instr.c
-@@ -176,11 +176,11 @@
- 	.retval =3D 1,
- },
- {
--	"invalid 64-bit BPF_END",
-+	"invalid 64-bit BPF_END with BPF_TO_BE",
- 	.insns =3D {
- 	BPF_MOV32_IMM(BPF_REG_0, 0),
- 	{
--		.code  =3D BPF_ALU64 | BPF_END | BPF_TO_LE,
-+		.code  =3D BPF_ALU64 | BPF_END | BPF_TO_BE,
- 		.dst_reg =3D BPF_REG_0,
- 		.src_reg =3D 0,
- 		.off   =3D 0,
-@@ -188,7 +188,7 @@
- 	},
- 	BPF_EXIT_INSN(),
- 	},
--	.errstr =3D "unknown opcode d7",
-+	.errstr =3D "unknown opcode df",
- 	.result =3D REJECT,
- },
- {
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
+sting/selftests/bpf/prog_tests/verifier.c
+index a591d7b673f1..e3e68c97b40c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -25,6 +25,7 @@
+ #include "verifier_direct_stack_access_wraparound.skel.h"
+ #include "verifier_div0.skel.h"
+ #include "verifier_div_overflow.skel.h"
++#include "verifier_gotol.skel.h"
+ #include "verifier_helper_access_var_len.skel.h"
+ #include "verifier_helper_packet_access.skel.h"
+ #include "verifier_helper_restricted.skel.h"
+@@ -131,6 +132,7 @@ void test_verifier_direct_packet_access(void) { RUN(v=
+erifier_direct_packet_acces
+ void test_verifier_direct_stack_access_wraparound(void) { RUN(verifier_d=
+irect_stack_access_wraparound); }
+ void test_verifier_div0(void)                 { RUN(verifier_div0); }
+ void test_verifier_div_overflow(void)         { RUN(verifier_div_overflo=
+w); }
++void test_verifier_gotol(void)                { RUN(verifier_gotol); }
+ void test_verifier_helper_access_var_len(void) { RUN(verifier_helper_acc=
+ess_var_len); }
+ void test_verifier_helper_packet_access(void) { RUN(verifier_helper_pack=
+et_access); }
+ void test_verifier_helper_restricted(void)    { RUN(verifier_helper_rest=
+ricted); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_gotol.c b/tools/t=
+esting/selftests/bpf/progs/verifier_gotol.c
+new file mode 100644
+index 000000000000..78870ea4d468
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_gotol.c
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++SEC("socket")
++__description("gotol, small_imm")
++__success __success_unpriv __retval(1)
++__naked void gotol_small_imm(void)
++{
++	asm volatile ("					\
++	call %[bpf_ktime_get_ns];			\
++	if r0 =3D=3D 0 goto l0_%=3D;				\
++	gotol l1_%=3D;					\
++l2_%=3D:							\
++	gotol l3_%=3D;					\
++l1_%=3D:							\
++	r0 =3D 1;						\
++	gotol l2_%=3D;					\
++l0_%=3D:							\
++	r0 =3D 2;						\
++l3_%=3D:							\
++	exit;						\
++"	:
++	: __imm(bpf_ktime_get_ns)
++	: __clobber_all);
++}
++
++char _license[] SEC("license") =3D "GPL";
 --=20
 2.34.1
 
