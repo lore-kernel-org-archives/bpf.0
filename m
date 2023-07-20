@@ -1,40 +1,40 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 711A463E
-	for <bpf@vger.kernel.org>; Thu, 20 Jul 2023 00:03:19 +0000 (UTC)
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B2A172D
-	for <bpf@vger.kernel.org>; Wed, 19 Jul 2023 17:03:18 -0700 (PDT)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 36JMLstR032580
-	for <bpf@vger.kernel.org>; Wed, 19 Jul 2023 17:03:17 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D1AA7F
+	for <bpf@vger.kernel.org>; Thu, 20 Jul 2023 00:03:51 +0000 (UTC)
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41EC219B2
+	for <bpf@vger.kernel.org>; Wed, 19 Jul 2023 17:03:50 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36JMZx56031409
+	for <bpf@vger.kernel.org>; Wed, 19 Jul 2023 17:03:50 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=q2RaT9AL5miH0TRCcooSdNzTfM3hrrmVOtynZ9nDt3A=;
- b=TpIhzUXz6fDgzKWYum/7hZ55a1DoDG+mr1stOcV9VG2k4xu50zLaD2hwSBDDD+Sx4V+R
- 7+sObsooHZIYnvuzusetovoPQjNlV77NAb6dEgKrfZ7p2iHdZMkiZEkeJPnLR+lR7vTD
- IwLKb6k4aMQcsCxoKHqbiGPXZmIS+WN//Qo= 
+ bh=lMRncoQZ/s/VGBSffPBLb5lVgDSrTdsVQsa5Wx1aEXE=;
+ b=kcl3wNdX4j9F5sklA+CD0+JlVDO5qYGkCeMadT8zCEXyfx4T/20giugr2WMbJW+foZY3
+ hHWj7/G1sN0RZXmIQbvryo4TQKEru/5PvH8etubNJZrtWBmp29CTXsLBPNQBPyKVM0U3
+ JLLzoJYsgDfPahthBfy22cQmjvagGausOPI= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by m0001303.ppops.net (PPS) with ESMTPS id 3rxbxuxs1a-1
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3rxbc6q1kj-7
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Wed, 19 Jul 2023 17:03:17 -0700
-Received: from twshared37136.03.ash8.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Wed, 19 Jul 2023 17:03:49 -0700
+Received: from twshared24695.38.frc1.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 19 Jul 2023 17:02:21 -0700
+ 15.1.2507.27; Wed, 19 Jul 2023 17:03:48 -0700
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id B81032354EA41; Wed, 19 Jul 2023 17:02:12 -0700 (PDT)
+	id 928872354E821; Wed, 19 Jul 2023 17:01:24 -0700 (PDT)
 From: Yonghong Song <yhs@fb.com>
 To: <bpf@vger.kernel.org>
 CC: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
         <bpf@ietf.org>, Daniel Borkmann <daniel@iogearbox.net>,
         Fangrui Song
 	<maskray@google.com>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next v3 13/17] selftests/bpf: Add unit tests for new bswap insns
-Date: Wed, 19 Jul 2023 17:02:12 -0700
-Message-ID: <20230720000212.110855-1-yhs@fb.com>
+Subject: [PATCH bpf-next v3 04/17] bpf: Support new unconditional bswap instruction
+Date: Wed, 19 Jul 2023 17:01:24 -0700
+Message-ID: <20230720000124.104276-1-yhs@fb.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230720000103.99949-1-yhs@fb.com>
 References: <20230720000103.99949-1-yhs@fb.com>
@@ -47,8 +47,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: Z40HO3bYS6IxL8RFR-M4shJCz51qvynt
-X-Proofpoint-GUID: Z40HO3bYS6IxL8RFR-M4shJCz51qvynt
+X-Proofpoint-GUID: 70i8qdSVJ_TpalYHyJTJpdJ-cfRrlhuY
+X-Proofpoint-ORIG-GUID: 70i8qdSVJ_TpalYHyJTJpdJ-cfRrlhuY
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-07-19_16,2023-07-19_01,2023-05-22_02
@@ -60,94 +60,92 @@ X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add unit tests for bswap insns.
+The existing 'be' and 'le' insns will do conditional bswap
+depends on host endianness. This patch implements
+unconditional bswap insns.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- .../selftests/bpf/prog_tests/verifier.c       |  2 +
- .../selftests/bpf/progs/verifier_bswap.c      | 45 +++++++++++++++++++
- 2 files changed, 47 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_bswap.c
+ arch/x86/net/bpf_jit_comp.c |  1 +
+ kernel/bpf/core.c           | 14 ++++++++++++++
+ kernel/bpf/verifier.c       |  7 +++++--
+ 3 files changed, 20 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
-sting/selftests/bpf/prog_tests/verifier.c
-index 037af7799cdf..885532540bc3 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -11,6 +11,7 @@
- #include "verifier_bounds_deduction_non_const.skel.h"
- #include "verifier_bounds_mix_sign_unsign.skel.h"
- #include "verifier_bpf_get_stack.skel.h"
-+#include "verifier_bswap.skel.h"
- #include "verifier_btf_ctx_access.skel.h"
- #include "verifier_cfg.skel.h"
- #include "verifier_cgroup_inv_retcode.skel.h"
-@@ -115,6 +116,7 @@ void test_verifier_bounds_deduction(void)     { RUN(v=
-erifier_bounds_deduction);
- void test_verifier_bounds_deduction_non_const(void)     { RUN(verifier_b=
-ounds_deduction_non_const); }
- void test_verifier_bounds_mix_sign_unsign(void) { RUN(verifier_bounds_mi=
-x_sign_unsign); }
- void test_verifier_bpf_get_stack(void)        { RUN(verifier_bpf_get_sta=
-ck); }
-+void test_verifier_bswap(void)                { RUN(verifier_bswap); }
- void test_verifier_btf_ctx_access(void)       { RUN(verifier_btf_ctx_acc=
-ess); }
- void test_verifier_cfg(void)                  { RUN(verifier_cfg); }
- void test_verifier_cgroup_inv_retcode(void)   { RUN(verifier_cgroup_inv_=
-retcode); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bswap.c b/tools/t=
-esting/selftests/bpf/progs/verifier_bswap.c
-new file mode 100644
-index 000000000000..b85474a46296
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_bswap.c
-@@ -0,0 +1,45 @@
-+// SPDX-License-Identifier: GPL-2.0
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 031ef3c4185d..4942a4c188b9 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -1322,6 +1322,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *a=
+ddrs, u8 *image, u8 *rw_image
+ 			break;
+=20
+ 		case BPF_ALU | BPF_END | BPF_FROM_BE:
++		case BPF_ALU64 | BPF_END | BPF_FROM_LE:
+ 			switch (imm32) {
+ 			case 16:
+ 				/* Emit 'ror %ax, 8' to swap lower 2 bytes */
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index c37c454b09eb..ad58697cec4b 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1524,6 +1524,7 @@ EXPORT_SYMBOL_GPL(__bpf_call_base);
+ 	INSN_3(ALU64, DIV,  X),			\
+ 	INSN_3(ALU64, MOD,  X),			\
+ 	INSN_2(ALU64, NEG),			\
++	INSN_3(ALU64, END, TO_LE),		\
+ 	/*   Immediate based. */		\
+ 	INSN_3(ALU64, ADD,  K),			\
+ 	INSN_3(ALU64, SUB,  K),			\
+@@ -1848,6 +1849,19 @@ static u64 ___bpf_prog_run(u64 *regs, const struct=
+ bpf_insn *insn)
+ 			break;
+ 		}
+ 		CONT;
++	ALU64_END_TO_LE:
++		switch (IMM) {
++		case 16:
++			DST =3D (__force u16) __swab16(DST);
++			break;
++		case 32:
++			DST =3D (__force u32) __swab32(DST);
++			break;
++		case 64:
++			DST =3D (__force u64) __swab64(DST);
++			break;
++		}
++		CONT;
+=20
+ 	/* CALL */
+ 	JMP_CALL:
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index b9be8706bf48..b305f88c2569 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3012,8 +3012,10 @@ static bool is_reg64(struct bpf_verifier_env *env,=
+ struct bpf_insn *insn,
+ 		}
+ 	}
+=20
++	if (class =3D=3D BPF_ALU64 && op =3D=3D BPF_END && (insn->imm =3D=3D 16=
+ || insn->imm =3D=3D 32))
++		return false;
 +
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+SEC("socket")
-+__description("BSWAP, 16")
-+__success __success_unpriv __retval(0x23ff)
-+__naked void bswap_16(void)
-+{
-+	asm volatile ("					\
-+	r0 =3D 0xff23;					\
-+	r0 =3D bswap16 r0;				\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("BSWAP, 32")
-+__success __success_unpriv __retval(0x23ff0000)
-+__naked void bswap_32(void)
-+{
-+	asm volatile ("					\
-+	r0 =3D 0xff23;					\
-+	r0 =3D bswap32 r0;				\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("BSWAP, 64")
-+__success __success_unpriv __retval(0x34ff12ff)
-+__naked void bswap_64(void)
-+{
-+	asm volatile ("					\
-+	r0 =3D %[u64_val] ll;					\
-+	r0 =3D bswap64 r0;				\
-+	exit;						\
-+"	:
-+	: [u64_val]"i"(0xff12ff34ff56ff78ull)
-+	: __clobber_all);
-+}
-+
-+char _license[] SEC("license") =3D "GPL";
+ 	if (class =3D=3D BPF_ALU64 || class =3D=3D BPF_JMP ||
+-	    /* BPF_END always use BPF_ALU class. */
+ 	    (class =3D=3D BPF_ALU && op =3D=3D BPF_END && insn->imm =3D=3D 64))
+ 		return true;
+=20
+@@ -13076,7 +13078,8 @@ static int check_alu_op(struct bpf_verifier_env *=
+env, struct bpf_insn *insn)
+ 		} else {
+ 			if (insn->src_reg !=3D BPF_REG_0 || insn->off !=3D 0 ||
+ 			    (insn->imm !=3D 16 && insn->imm !=3D 32 && insn->imm !=3D 64) ||
+-			    BPF_CLASS(insn->code) =3D=3D BPF_ALU64) {
++			    (BPF_CLASS(insn->code) =3D=3D BPF_ALU64 &&
++			     BPF_SRC(insn->code) !=3D BPF_TO_LE)) {
+ 				verbose(env, "BPF_END uses reserved fields\n");
+ 				return -EINVAL;
+ 			}
 --=20
 2.34.1
 
