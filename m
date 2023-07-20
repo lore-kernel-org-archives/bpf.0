@@ -1,40 +1,40 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 440B1523A
-	for <bpf@vger.kernel.org>; Thu, 20 Jul 2023 00:01:56 +0000 (UTC)
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB3219B2
-	for <bpf@vger.kernel.org>; Wed, 19 Jul 2023 17:01:54 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36JMME3D003116
-	for <bpf@vger.kernel.org>; Wed, 19 Jul 2023 17:01:54 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F098160
+	for <bpf@vger.kernel.org>; Thu, 20 Jul 2023 00:02:11 +0000 (UTC)
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0C2172D
+	for <bpf@vger.kernel.org>; Wed, 19 Jul 2023 17:02:10 -0700 (PDT)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36JMLs2E024175
+	for <bpf@vger.kernel.org>; Wed, 19 Jul 2023 17:02:09 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=CLU2fL6rvEaeOjigwpF7wI0EggPNoVg49yHPALt1350=;
- b=VtlRSAZV+mXYtjS3w39K5qdz4vl7aevLMm/FrECzVoEBKvVUonntreJW3kuzzNpvmGzY
- pt/VQwCaGouEa4u4vUAFK8ZwOthDBZkDWYfi3oDLcTMQgICbf/lbX9ywrLLPoDjAg84Z
- VTlH/2XDhZ9RMZtGWFTL7AsJmkaiczOadVg= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3rxjpcku1c-5
+ bh=duew0+7MDXqASo6vQ9tKGsZ9MkaoJ4yhuSCyjcW0CgI=;
+ b=cKsCJ7YhG4Miz2uTmMtNSdmPhfm10b6SwBgaXfnd7ijHdYmvGj4Dj7wbWrXGLJadphd6
+ E+5l63nNDkiAR03qSkOIb8TEwK2eQwTNdphitNPl17HpioBamRhARZcg1V1Pkpx0uXv4
+ w+klxhZM67SzGKnPFB+6zjQZXI7ddQ+GOng= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3rx7na8kbn-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Wed, 19 Jul 2023 17:01:54 -0700
-Received: from twshared52232.38.frc1.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Wed, 19 Jul 2023 17:02:09 -0700
+Received: from twshared25760.37.frc1.facebook.com (2620:10d:c0a8:1b::30) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 19 Jul 2023 17:01:21 -0700
+ 15.1.2507.27; Wed, 19 Jul 2023 17:02:08 -0700
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 443BB2354E7BB; Wed, 19 Jul 2023 17:01:14 -0700 (PDT)
+	id 500CC2354E975; Wed, 19 Jul 2023 17:01:57 -0700 (PDT)
 From: Yonghong Song <yhs@fb.com>
 To: <bpf@vger.kernel.org>
 CC: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
         <bpf@ietf.org>, Daniel Borkmann <daniel@iogearbox.net>,
         Fangrui Song
 	<maskray@google.com>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next v3 02/17] bpf: Support new sign-extension mov insns
-Date: Wed, 19 Jul 2023 17:01:14 -0700
-Message-ID: <20230720000114.102508-1-yhs@fb.com>
+Subject: [PATCH bpf-next v3 10/17] selftests/bpf: Add a cpuv4 test runner for cpu=v4 testing
+Date: Wed, 19 Jul 2023 17:01:57 -0700
+Message-ID: <20230720000157.108411-1-yhs@fb.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230720000103.99949-1-yhs@fb.com>
 References: <20230720000103.99949-1-yhs@fb.com>
@@ -47,8 +47,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: uhtxC5e5JxnfIQosFxIE62PmqcIP2ci_
-X-Proofpoint-ORIG-GUID: uhtxC5e5JxnfIQosFxIE62PmqcIP2ci_
+X-Proofpoint-ORIG-GUID: DSzo29LHBkEuGq9iUTFZVMXlsMVJ4ZXN
+X-Proofpoint-GUID: DSzo29LHBkEuGq9iUTFZVMXlsMVJ4ZXN
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-07-19_16,2023-07-19_01,2023-05-22_02
@@ -60,354 +60,135 @@ X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add interpreter/jit support for new sign-extension mov insns.
-The original 'MOV' insn is extended to support reg-to-reg
-signed version for both ALU and ALU64 operations. For ALU mode,
-the insn->off value of 8 or 16 indicates sign-extension
-from 8- or 16-bit value to 32-bit value. For ALU64 mode,
-the insn->off value of 8/16/32 indicates sign-extension
-from 8-, 16- or 32-bit value to 64-bit value.
+Similar to no-alu32 runner, a cpuv4 runner is created to test
+bpf programs compiled with -mcpu=3Dv4.
+
+The following are some num-of-insn statistics for each newer
+instructions based on existing selftests, excluding subsequent
+cpuv4 insn specific tests.
+
+   insn pattern                # of instructions
+   reg =3D (s8)reg               4
+   reg =3D (s16)reg              4
+   reg =3D (s32)reg              144
+   reg =3D *(s8 *)(reg + off)    13
+   reg =3D *(s16 *)(reg + off)   14
+   reg =3D *(s32 *)(reg + off)   15215
+   reg =3D bswap16 reg           142
+   reg =3D bswap32 reg           38
+   reg =3D bswap64 reg           14
+   reg s/=3D reg                 0
+   reg s%=3D reg                 0
+   gotol <offset>              58
+
+Note that in llvm -mcpu=3Dv4 implementation, the compiler is a little
+bit conservative about generating 'gotol' insn (32-bit branch offset)
+as it didn't precise count the number of insns (e.g., some insns are
+debug insns, etc.). Compared to old 'goto' insn, newer 'gotol' insn
+should have comparable verification states to 'goto' insn.
+
+With current patch set, all selftests passed with -mcpu=3Dv4
+when running test_progs-cpuv4 binary. The -mcpu=3Dv3 and -mcpu=3Dv2 run
+are also successful.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- arch/x86/net/bpf_jit_comp.c |  43 +++++++++-
- kernel/bpf/core.c           |  28 +++++-
- kernel/bpf/verifier.c       | 165 ++++++++++++++++++++++++++++++------
- 3 files changed, 205 insertions(+), 31 deletions(-)
+ tools/testing/selftests/bpf/.gitignore |  2 ++
+ tools/testing/selftests/bpf/Makefile   | 18 ++++++++++++++----
+ 2 files changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 54478a9c93e1..031ef3c4185d 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -701,6 +701,38 @@ static void emit_mov_reg(u8 **pprog, bool is64, u32 =
-dst_reg, u32 src_reg)
- 	*pprog =3D prog;
- }
+diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selft=
+ests/bpf/.gitignore
+index 116fecf80ca1..110518ba4804 100644
+--- a/tools/testing/selftests/bpf/.gitignore
++++ b/tools/testing/selftests/bpf/.gitignore
+@@ -13,6 +13,7 @@ test_dev_cgroup
+ /test_progs
+ /test_progs-no_alu32
+ /test_progs-bpf_gcc
++/test_progs-cpuv4
+ test_verifier_log
+ feature
+ test_sock
+@@ -36,6 +37,7 @@ test_cpp
+ *.lskel.h
+ /no_alu32
+ /bpf_gcc
++/cpuv4
+ /host-tools
+ /tools
+ /runqslower
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
+ts/bpf/Makefile
+index 882be03b179f..e14da9a4705b 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -44,7 +44,7 @@ TEST_GEN_PROGS =3D test_verifier test_tag test_maps tes=
+t_lru_map test_lpm_map test
+ 	test_sock test_sockmap get_cgroup_id_user \
+ 	test_cgroup_storage \
+ 	test_tcpnotify_user test_sysctl \
+-	test_progs-no_alu32
++	test_progs-no_alu32 test_progs-cpuv4
 =20
-+static void emit_movsx_reg(u8 **pprog, int num_bits, bool is64, u32 dst_=
-reg,
-+			   u32 src_reg)
-+{
-+	u8 *prog =3D *pprog;
-+
-+	if (is64) {
-+		/* movs[b,w,l]q dst, src */
-+		if (num_bits =3D=3D 8)
-+			EMIT4(add_2mod(0x48, src_reg, dst_reg), 0x0f, 0xbe,
-+			      add_2reg(0xC0, src_reg, dst_reg));
-+		else if (num_bits =3D=3D 16)
-+			EMIT4(add_2mod(0x48, src_reg, dst_reg), 0x0f, 0xbf,
-+			      add_2reg(0xC0, src_reg, dst_reg));
-+		else if (num_bits =3D=3D 32)
-+			EMIT3(add_2mod(0x48, src_reg, dst_reg), 0x63,
-+			      add_2reg(0xC0, src_reg, dst_reg));
-+	} else {
-+		/* movs[b,w]l dst, src */
-+		if (num_bits =3D=3D 8) {
-+			EMIT4(add_2mod(0x40, src_reg, dst_reg), 0x0f, 0xbe,
-+			      add_2reg(0xC0, src_reg, dst_reg));
-+		} else if (num_bits =3D=3D 16) {
-+			if (is_ereg(dst_reg) || is_ereg(src_reg))
-+				EMIT1(add_2mod(0x40, src_reg, dst_reg));
-+			EMIT3(add_2mod(0x0f, src_reg, dst_reg), 0xbf,
-+			      add_2reg(0xC0, src_reg, dst_reg));
-+		}
-+	}
-+
-+	*pprog =3D prog;
-+}
-+
- /* Emit the suffix (ModR/M etc) for addressing *(ptr_reg + off) and val_=
-reg */
- static void emit_insn_suffix(u8 **pprog, u32 ptr_reg, u32 val_reg, int o=
-ff)
- {
-@@ -1051,9 +1083,14 @@ static int do_jit(struct bpf_prog *bpf_prog, int *=
-addrs, u8 *image, u8 *rw_image
+ # Also test bpf-gcc, if present
+ ifneq ($(BPF_GCC),)
+@@ -383,6 +383,11 @@ define CLANG_NOALU32_BPF_BUILD_RULE
+ 	$(call msg,CLNG-BPF,$(TRUNNER_BINARY),$2)
+ 	$(Q)$(CLANG) $3 -O2 --target=3Dbpf -c $1 -mcpu=3Dv2 -o $2
+ endef
++# Similar to CLANG_BPF_BUILD_RULE, but with cpu-v4
++define CLANG_CPUV4_BPF_BUILD_RULE
++	$(call msg,CLNG-BPF,$(TRUNNER_BINARY),$2)
++	$(Q)$(CLANG) $3 -O2 --target=3Dbpf -c $1 -mcpu=3Dv4 -o $2
++endef
+ # Build BPF object using GCC
+ define GCC_BPF_BUILD_RULE
+ 	$(call msg,GCC-BPF,$(TRUNNER_BINARY),$2)
+@@ -425,7 +430,7 @@ LINKED_BPF_SRCS :=3D $(patsubst %.bpf.o,%.c,$(foreach=
+ skel,$(LINKED_SKELS),$($(ske
+ # $eval()) and pass control to DEFINE_TEST_RUNNER_RULES.
+ # Parameters:
+ # $1 - test runner base binary name (e.g., test_progs)
+-# $2 - test runner extra "flavor" (e.g., no_alu32, gcc-bpf, etc)
++# $2 - test runner extra "flavor" (e.g., no_alu32, cpuv4, gcc-bpf, etc)
+ define DEFINE_TEST_RUNNER
 =20
- 		case BPF_ALU64 | BPF_MOV | BPF_X:
- 		case BPF_ALU | BPF_MOV | BPF_X:
--			emit_mov_reg(&prog,
--				     BPF_CLASS(insn->code) =3D=3D BPF_ALU64,
--				     dst_reg, src_reg);
-+			if (insn->off =3D=3D 0)
-+				emit_mov_reg(&prog,
-+					     BPF_CLASS(insn->code) =3D=3D BPF_ALU64,
-+					     dst_reg, src_reg);
-+			else
-+				emit_movsx_reg(&prog, insn->off,
-+					       BPF_CLASS(insn->code) =3D=3D BPF_ALU64,
-+					       dst_reg, src_reg);
- 			break;
+ TRUNNER_OUTPUT :=3D $(OUTPUT)$(if $2,/)$2
+@@ -453,7 +458,7 @@ endef
+ # Using TRUNNER_XXX variables, provided by callers of DEFINE_TEST_RUNNER=
+ and
+ # set up by DEFINE_TEST_RUNNER itself, create test runner build rules wi=
+th:
+ # $1 - test runner base binary name (e.g., test_progs)
+-# $2 - test runner extra "flavor" (e.g., no_alu32, gcc-bpf, etc)
++# $2 - test runner extra "flavor" (e.g., no_alu32, cpuv4, gcc-bpf, etc)
+ define DEFINE_TEST_RUNNER_RULES
 =20
- 			/* neg dst */
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 01b72fc001f6..c37c454b09eb 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -61,6 +61,7 @@
- #define AX	regs[BPF_REG_AX]
- #define ARG1	regs[BPF_REG_ARG1]
- #define CTX	regs[BPF_REG_CTX]
-+#define OFF	insn->off
- #define IMM	insn->imm
+ ifeq ($($(TRUNNER_OUTPUT)-dir),)
+@@ -584,6 +589,11 @@ TRUNNER_BPF_BUILD_RULE :=3D CLANG_NOALU32_BPF_BUILD_=
+RULE
+ TRUNNER_BPF_CFLAGS :=3D $(BPF_CFLAGS) $(CLANG_CFLAGS)
+ $(eval $(call DEFINE_TEST_RUNNER,test_progs,no_alu32))
 =20
- struct bpf_mem_alloc bpf_global_ma;
-@@ -1739,13 +1740,36 @@ static u64 ___bpf_prog_run(u64 *regs, const struc=
-t bpf_insn *insn)
- 		DST =3D -DST;
- 		CONT;
- 	ALU_MOV_X:
--		DST =3D (u32) SRC;
-+		switch (OFF) {
-+		case 0:
-+			DST =3D (u32) SRC;
-+			break;
-+		case 8:
-+			DST =3D (u32)(s8) SRC;
-+			break;
-+		case 16:
-+			DST =3D (u32)(s16) SRC;
-+			break;
-+		}
- 		CONT;
- 	ALU_MOV_K:
- 		DST =3D (u32) IMM;
- 		CONT;
- 	ALU64_MOV_X:
--		DST =3D SRC;
-+		switch (OFF) {
-+		case 0:
-+			DST =3D SRC;
-+			break;
-+		case 8:
-+			DST =3D (s8) SRC;
-+			break;
-+		case 16:
-+			DST =3D (s16) SRC;
-+			break;
-+		case 32:
-+			DST =3D (s32) SRC;
-+			break;
-+		}
- 		CONT;
- 	ALU64_MOV_K:
- 		DST =3D IMM;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 79c0cd50ec59..fc82b5e77cbe 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3421,7 +3421,7 @@ static int backtrack_insn(struct bpf_verifier_env *=
-env, int idx, int subseq_idx,
- 			return 0;
- 		if (opcode =3D=3D BPF_MOV) {
- 			if (BPF_SRC(insn->code) =3D=3D BPF_X) {
--				/* dreg =3D sreg
-+				/* dreg =3D sreg or dreg =3D (s8, s16, s32)sreg
- 				 * dreg needs precision after this insn
- 				 * sreg needs precision before this insn
- 				 */
-@@ -5897,6 +5897,77 @@ static void coerce_reg_to_size_sx(struct bpf_reg_s=
-tate *reg, int size)
- 	set_sext64_default_val(reg, size);
- }
++# Define test_progs-cpuv4 test runner.
++TRUNNER_BPF_BUILD_RULE :=3D CLANG_CPUV4_BPF_BUILD_RULE
++TRUNNER_BPF_CFLAGS :=3D $(BPF_CFLAGS) $(CLANG_CFLAGS)
++$(eval $(call DEFINE_TEST_RUNNER,test_progs,cpuv4))
++
+ # Define test_progs BPF-GCC-flavored test runner.
+ ifneq ($(BPF_GCC),)
+ TRUNNER_BPF_BUILD_RULE :=3D GCC_BPF_BUILD_RULE
+@@ -681,7 +691,7 @@ EXTRA_CLEAN :=3D $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR) =
+$(HOST_SCRATCH_DIR)	\
+ 	prog_tests/tests.h map_tests/tests.h verifier/tests.h		\
+ 	feature bpftool							\
+ 	$(addprefix $(OUTPUT)/,*.o *.skel.h *.lskel.h *.subskel.h	\
+-			       no_alu32 bpf_gcc bpf_testmod.ko		\
++			       no_alu32 cpuv4 bpf_gcc bpf_testmod.ko	\
+ 			       liburandom_read.so)
 =20
-+static void set_sext32_default_val(struct bpf_reg_state *reg, int size)
-+{
-+	if (size =3D=3D 1) {
-+		reg->s32_min_value =3D S8_MIN;
-+		reg->s32_max_value =3D S8_MAX;
-+	} else {
-+		/* size =3D=3D 2 */
-+		reg->s32_min_value =3D S16_MIN;
-+		reg->s32_max_value =3D S16_MAX;
-+	}
-+	reg->u32_min_value =3D 0;
-+	reg->u32_max_value =3D U32_MAX;
-+}
-+
-+static void coerce_subreg_to_size_sx(struct bpf_reg_state *reg, int size=
-)
-+{
-+	s32 init_s32_max, init_s32_min, s32_max, s32_min, u32_val;
-+	u32 top_smax_value, top_smin_value;
-+	u32 num_bits =3D size * 8;
-+
-+	if (tnum_is_const(reg->var_off)) {
-+		u32_val =3D reg->var_off.value;
-+		if (size =3D=3D 1)
-+			reg->var_off =3D tnum_const((s8)u32_val);
-+		else
-+			reg->var_off =3D tnum_const((s16)u32_val);
-+
-+		u32_val =3D reg->var_off.value;
-+		reg->s32_min_value =3D reg->s32_max_value =3D u32_val;
-+		reg->u32_min_value =3D reg->u32_max_value =3D u32_val;
-+		return;
-+	}
-+
-+	top_smax_value =3D ((u32)reg->s32_max_value >> num_bits) << num_bits;
-+	top_smin_value =3D ((u32)reg->s32_min_value >> num_bits) << num_bits;
-+
-+	if (top_smax_value !=3D top_smin_value)
-+		goto out;
-+
-+	/* find the s32_min and s32_min after sign extension */
-+	if (size =3D=3D 1) {
-+		init_s32_max =3D (s8)reg->s32_max_value;
-+		init_s32_min =3D (s8)reg->s32_min_value;
-+	} else {
-+		/* size =3D=3D 2 */
-+		init_s32_max =3D (s16)reg->s32_max_value;
-+		init_s32_min =3D (s16)reg->s32_min_value;
-+	}
-+	s32_max =3D max(init_s32_max, init_s32_min);
-+	s32_min =3D min(init_s32_max, init_s32_min);
-+
-+	if (s32_min >=3D 0 && s32_max >=3D 0) {
-+		reg->s32_min_value =3D s32_min;
-+		reg->s32_max_value =3D s32_max;
-+		reg->u32_min_value =3D 0;
-+		reg->u32_max_value =3D U32_MAX;
-+		return;
-+	}
-+
-+	if (s32_min < 0 && s32_max < 0) {
-+		reg->s32_min_value =3D s32_min;
-+		reg->s32_max_value =3D s32_max;
-+		reg->u32_min_value =3D (u32)s32_min;
-+		reg->u32_max_value =3D (u32)s32_max;
-+		return;
-+	}
-+
-+out:
-+	set_sext32_default_val(reg, size);
-+}
-+
- static bool bpf_map_is_rdonly(const struct bpf_map *map)
- {
- 	/* A map is considered read-only if the following condition are true:
-@@ -13030,11 +13101,24 @@ static int check_alu_op(struct bpf_verifier_env=
- *env, struct bpf_insn *insn)
- 	} else if (opcode =3D=3D BPF_MOV) {
-=20
- 		if (BPF_SRC(insn->code) =3D=3D BPF_X) {
--			if (insn->imm !=3D 0 || insn->off !=3D 0) {
-+			if (insn->imm !=3D 0) {
- 				verbose(env, "BPF_MOV uses reserved fields\n");
- 				return -EINVAL;
- 			}
-=20
-+			if (BPF_CLASS(insn->code) =3D=3D BPF_ALU) {
-+				if (insn->off !=3D 0 && insn->off !=3D 8 && insn->off !=3D 16) {
-+					verbose(env, "BPF_MOV uses reserved fields\n");
-+					return -EINVAL;
-+				}
-+			} else {
-+				if (insn->off !=3D 0 && insn->off !=3D 8 && insn->off !=3D 16 &&
-+				    insn->off !=3D 32) {
-+					verbose(env, "BPF_MOV uses reserved fields\n");
-+					return -EINVAL;
-+				}
-+			}
-+
- 			/* check src operand */
- 			err =3D check_reg_arg(env, insn->src_reg, SRC_OP);
- 			if (err)
-@@ -13058,18 +13142,33 @@ static int check_alu_op(struct bpf_verifier_env=
- *env, struct bpf_insn *insn)
- 				       !tnum_is_const(src_reg->var_off);
-=20
- 			if (BPF_CLASS(insn->code) =3D=3D BPF_ALU64) {
--				/* case: R1 =3D R2
--				 * copy register state to dest reg
--				 */
--				if (need_id)
--					/* Assign src and dst registers the same ID
--					 * that will be used by find_equal_scalars()
--					 * to propagate min/max range.
-+				if (insn->off =3D=3D 0) {
-+					/* case: R1 =3D R2
-+					 * copy register state to dest reg
- 					 */
--					src_reg->id =3D ++env->id_gen;
--				copy_register_state(dst_reg, src_reg);
--				dst_reg->live |=3D REG_LIVE_WRITTEN;
--				dst_reg->subreg_def =3D DEF_NOT_SUBREG;
-+					if (need_id)
-+						/* Assign src and dst registers the same ID
-+						 * that will be used by find_equal_scalars()
-+						 * to propagate min/max range.
-+						 */
-+						src_reg->id =3D ++env->id_gen;
-+					copy_register_state(dst_reg, src_reg);
-+					dst_reg->live |=3D REG_LIVE_WRITTEN;
-+					dst_reg->subreg_def =3D DEF_NOT_SUBREG;
-+				} else {
-+					/* case: R1 =3D (s8, s16 s32)R2 */
-+					bool no_sext;
-+
-+					no_sext =3D src_reg->umax_value < (1ULL << (insn->off - 1));
-+					if (no_sext && need_id)
-+						src_reg->id =3D ++env->id_gen;
-+					copy_register_state(dst_reg, src_reg);
-+					if (!no_sext)
-+						dst_reg->id =3D 0;
-+					coerce_reg_to_size_sx(dst_reg, insn->off >> 3);
-+					dst_reg->live |=3D REG_LIVE_WRITTEN;
-+					dst_reg->subreg_def =3D DEF_NOT_SUBREG;
-+				}
- 			} else {
- 				/* R1 =3D (u32) R2 */
- 				if (is_pointer_value(env, insn->src_reg)) {
-@@ -13078,19 +13177,33 @@ static int check_alu_op(struct bpf_verifier_env=
- *env, struct bpf_insn *insn)
- 						insn->src_reg);
- 					return -EACCES;
- 				} else if (src_reg->type =3D=3D SCALAR_VALUE) {
--					bool is_src_reg_u32 =3D src_reg->umax_value <=3D U32_MAX;
--
--					if (is_src_reg_u32 && need_id)
--						src_reg->id =3D ++env->id_gen;
--					copy_register_state(dst_reg, src_reg);
--					/* Make sure ID is cleared if src_reg is not in u32 range otherwise
--					 * dst_reg min/max could be incorrectly
--					 * propagated into src_reg by find_equal_scalars()
--					 */
--					if (!is_src_reg_u32)
--						dst_reg->id =3D 0;
--					dst_reg->live |=3D REG_LIVE_WRITTEN;
--					dst_reg->subreg_def =3D env->insn_idx + 1;
-+					if (insn->off =3D=3D 0) {
-+						bool is_src_reg_u32 =3D src_reg->umax_value <=3D U32_MAX;
-+
-+						if (is_src_reg_u32 && need_id)
-+							src_reg->id =3D ++env->id_gen;
-+						copy_register_state(dst_reg, src_reg);
-+						/* Make sure ID is cleared if src_reg is not in u32
-+						 * range otherwise dst_reg min/max could be incorrectly
-+						 * propagated into src_reg by find_equal_scalars()
-+						 */
-+						if (!is_src_reg_u32)
-+							dst_reg->id =3D 0;
-+						dst_reg->live |=3D REG_LIVE_WRITTEN;
-+						dst_reg->subreg_def =3D env->insn_idx + 1;
-+					} else {
-+						/* case: W1 =3D (s8, s16)W2 */
-+						bool no_sext =3D src_reg->umax_value < (1ULL << (insn->off - 1));
-+
-+						if (no_sext && need_id)
-+							src_reg->id =3D ++env->id_gen;
-+						copy_register_state(dst_reg, src_reg);
-+						if (!no_sext)
-+							dst_reg->id =3D 0;
-+						dst_reg->live |=3D REG_LIVE_WRITTEN;
-+						dst_reg->subreg_def =3D env->insn_idx + 1;
-+						coerce_subreg_to_size_sx(dst_reg, insn->off >> 3);
-+					}
- 				} else {
- 					mark_reg_unknown(env, regs,
- 							 insn->dst_reg);
+ .PHONY: docs docs-clean
 --=20
 2.34.1
 
