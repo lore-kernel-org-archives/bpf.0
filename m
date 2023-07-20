@@ -1,111 +1,104 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A4CA5E
-	for <bpf@vger.kernel.org>; Thu, 20 Jul 2023 07:42:13 +0000 (UTC)
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F2C2118
-	for <bpf@vger.kernel.org>; Thu, 20 Jul 2023 00:42:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1689838931;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wJtpCG9zhhGX7NtLxzTudWbkt/DuRh61nie9AceVl2I=;
-	b=g12sMbNC9EmjBQe7cUbwWqv391x8cEp1re1RCWVN/yI1sa8/c+pfCAdweBwe7UWYBhRku6
-	Ez3MONLo0HfPEGYJuOBfymvMWobEywfceVMKDU26gvP0udLCc3YCOGattDb0chk2LrGJ//
-	+oNTqi2ExWwpCuiw9MQhv2XWpkSFn3I=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-251-XCjAIhihMWaWnIXUKpfgZw-1; Thu, 20 Jul 2023 03:42:09 -0400
-X-MC-Unique: XCjAIhihMWaWnIXUKpfgZw-1
-Received: by mail-lj1-f200.google.com with SMTP id 38308e7fff4ca-2b703a076ceso4633331fa.1
-        for <bpf@vger.kernel.org>; Thu, 20 Jul 2023 00:42:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689838928; x=1692430928;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wJtpCG9zhhGX7NtLxzTudWbkt/DuRh61nie9AceVl2I=;
-        b=ctjF+R0Y2aZvhVigrofPZUt6AmqZUowioj/H/zwd8padvjwIdC4mHKEVik+QJaCbLD
-         WoYPa2/nIDKsDtR/EHoBD3WsmrOTW0HjuZZ1T5rjNt8c5Qc6xDbg6+m9gY4u6g3P7oG3
-         YY0bTM9jKvwelMsjDl7XpHwDM31e4y0cp5BuNYVOel4zvCJnXNcQtwtrg9j7wfxtCcW5
-         CTh4zhCR25vdWumknAzBt4pSc7+80kCobMnhcO3n+bKQt4YpGiuvIrJXPmvqMZLGck2R
-         F6ijpJxtBcS/Iq6g0VFT/enkgr9fzLm3Wb12+cIdA1E7iNjSnepmXoVwwFvEYnFNi7Q9
-         VRTw==
-X-Gm-Message-State: ABy/qLbEIXuY/hfN/gAOVLA/fF5KUfocYs9lqFDyiZH7XRUvg+AXnchy
-	qlRIwODO8ywBjeIV+Tt7Kk3+WiX3QPxvhqXbyofGr4lIWx7DPZ/aoHHWZm3mKsuq8c/OMYcR7s7
-	XsiAMO0+58DZ/ulua55SBuvLhW0cG
-X-Received: by 2002:a2e:b705:0:b0:2b9:5fd2:763a with SMTP id j5-20020a2eb705000000b002b95fd2763amr1615012ljo.35.1689838928242;
-        Thu, 20 Jul 2023 00:42:08 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFu+k5ZrMkQd2anF8aWE9EZzH1m96rLrkmjQzi71csOsVj3MZfM8zyG9H1kdd7cZfq4E2nEHoiz7btC/Za/LcQ=
-X-Received: by 2002:a2e:b705:0:b0:2b9:5fd2:763a with SMTP id
- j5-20020a2eb705000000b002b95fd2763amr1614992ljo.35.1689838927964; Thu, 20 Jul
- 2023 00:42:07 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BACB2168AA
+	for <bpf@vger.kernel.org>; Thu, 20 Jul 2023 07:52:40 +0000 (UTC)
+X-Greylist: delayed 1367 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 20 Jul 2023 00:52:37 PDT
+Received: from bjm7-spam02.kuaishou.com (smtpcn03.kuaishou.com [103.107.217.217])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FA52135;
+	Thu, 20 Jul 2023 00:52:37 -0700 (PDT)
+Received: from bjm7-spam02.kuaishou.com (localhost [127.0.0.2] (may be forged))
+	by bjm7-spam02.kuaishou.com with ESMTP id 36K7TohW080274;
+	Thu, 20 Jul 2023 15:29:50 +0800 (GMT-8)
+	(envelope-from yangyifei03@kuaishou.com)
+Received: from bjm7-pm-mail12.kuaishou.com ([172.28.1.94])
+	by bjm7-spam02.kuaishou.com with ESMTPS id 36K7RmOj078771
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 20 Jul 2023 15:27:54 +0800 (GMT-8)
+	(envelope-from yangyifei03@kuaishou.com)
+DKIM-Signature: v=1; a=rsa-sha256; d=kuaishou.com; s=dkim; c=relaxed/relaxed;
+	t=1689838068; h=from:subject:to:date:message-id;
+	bh=2hvt2nAb9FQGc8JWV2zRVOy7HcAR3TW4z5ZsrMla/mw=;
+	b=Ov9ON0jOMvPY7tYxtSF27RXIYX5/ESwleAfyzbMcRkfahhvPD8+vCRgUolm4nuFAX7xrxXLLqLP
+	VC0ugqxGe1jauqIjydi7S9YH2M2vjCjTteErwqG546qEglqgQx2dxnNycFZVOCvZX9fbPRgt69Um7
+	2ew2dB1E6Kom/DkdCz0=
+Received: from public-bjmt-d51.idcyz.hb1.kwaidc.com (172.28.1.32) by
+ bjm7-pm-mail12.kuaishou.com (172.28.1.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.20; Thu, 20 Jul 2023 15:27:48 +0800
+From: Efly Young <yangyifei03@kuaishou.com>
+To: <hannes@cmpxchg.org>
+CC: <cgroups@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+Subject: [PATCH] mm:vmscan: fix inaccurate reclaim during proactive reclaim
+Date: Thu, 20 Jul 2023 15:27:08 +0800
+Message-ID: <20230720072708.55067-1-yangyifei03@kuaishou.com>
+X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230710034237.12391-1-xuanzhuo@linux.alibaba.com>
- <20230710034237.12391-11-xuanzhuo@linux.alibaba.com> <CACGkMEtoiHXese1sNJELeidmFc6nFR8rE1aA8MooaEKKUSw_eg@mail.gmail.com>
- <1689231087.0744615-2-xuanzhuo@linux.alibaba.com> <CACGkMEsf4+56veqem1HMWiqYhiW5LVw-1CbWX-cQSN6Z0zYMRQ@mail.gmail.com>
- <ZLjS4D7urgIK1MxV@infradead.org>
-In-Reply-To: <ZLjS4D7urgIK1MxV@infradead.org>
-From: Jason Wang <jasowang@redhat.com>
-Date: Thu, 20 Jul 2023 15:41:56 +0800
-Message-ID: <CACGkMEsbzWU3+pA1kLNwGEmwYjP9riRANpUtsmE-YXJmnFAuhw@mail.gmail.com>
-Subject: Re: [PATCH vhost v11 10/10] virtio_net: merge dma operation for one page
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Xuan Zhuo <xuanzhuo@linux.alibaba.com>, virtualization@lists.linux-foundation.org, 
-	"Michael S. Tsirkin" <mst@redhat.com>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, netdev@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-	SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-	autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.28.1.32]
+X-ClientProxiedBy: bjxm-pm-mail02.kuaishou.com (172.28.128.2) To
+ bjm7-pm-mail12.kuaishou.com (172.28.1.94)
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL:bjm7-spam02.kuaishou.com 36K7TohW080274
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+	T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Thu, Jul 20, 2023 at 2:23=E2=80=AFPM Christoph Hellwig <hch@infradead.or=
-g> wrote:
->
-> Hi Jason,
->
-> can you please resend your reply with proper quoting?  I had to give
-> up after multiple pages of scrolling without finding anything that
-> you added to the full quote.
+Before commit f53af4285d77 ("mm: vmscan: fix extreme overreclaim and
+swap floods"), proactive reclaim will extreme overreclaim sometimes.
+But proactive reclaim still inaccurate and some extent overreclaim.
 
-I guess it's this part?
+Problematic case is easy to construct. Allocate lots of anonymous
+memory (e.g., 20G) in a memcg, then swapping by writing memory.recalim
+and there is a certain probability of overreclaim. For example, request
+1G by writing memory.reclaim will eventually reclaim 1.7G or other
+values more than 1G.
 
-> > > You should also test without iommu but with swiotlb=3Dforce
-> >
-> >
-> > For swiotlb, merge DMA has no benefit, because we still need to copy da=
-ta from
-> > swiotlb buffer to the origin buffer.
-> > The benefit of the merge DMA is to reduce the operate to the iommu devi=
-ce.
-> >
-> > I did some test for this. The result is same.
-> >
-> > Thanks.
-> >
->
-> Did you actually check that it works though?
-> Looks like with swiotlb you need to synch to trigger a copy
-> before unmap, and I don't see where it's done in the current
-> patch.
+The reason is that reclaimer may have already reclaimed part of requested
+memory in one loop, but before adjust sc->nr_to_reclaim in outer loop,
+call shrink_lruvec() again will still follow the current sc->nr_to_reclaim
+to work. It will eventually lead to overreclaim. In theory, the amount
+of reclaimed would be in [request, 2 * request).
 
-And this is needed for XDP_REDIRECT as well.
+Reclaimer usually tends to reclaim more than request. But either direct
+or kswapd reclaim have much smaller nr_to_reclaim targets, so it is
+less noticeable and not have much impact.
 
-Thanks
+Proactive reclaim can usually come in with a larger value, so the error
+is difficult to ignore. Considering proactive reclaim is usually low
+frequency, handle the batching into smaller chunks is a better approach.
+
+Signed-off-by: Efly Young <yangyifei03@kuaishou.com>
+Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+---
+ mm/memcontrol.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 4b27e24..d36cf88 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -6741,8 +6741,8 @@ static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
+ 			lru_add_drain_all();
+ 
+ 		reclaimed = try_to_free_mem_cgroup_pages(memcg,
+-						nr_to_reclaim - nr_reclaimed,
+-						GFP_KERNEL, reclaim_options);
++					min(nr_to_reclaim - nr_reclaimed, SWAP_CLUSTER_MAX),
++					GFP_KERNEL, reclaim_options);
+ 
+ 		if (!reclaimed && !nr_retries--)
+ 			return -EAGAIN;
+-- 
+1.8.3.1
 
