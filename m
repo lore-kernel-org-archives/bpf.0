@@ -1,202 +1,346 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A51312FA20
-	for <bpf@vger.kernel.org>; Thu, 20 Jul 2023 16:42:12 +0000 (UTC)
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39277173A
-	for <bpf@vger.kernel.org>; Thu, 20 Jul 2023 09:41:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1689871310;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gPdSzcTTJlOeO2aEdgyECLhQy37txJLWdi6TDmez9kY=;
-	b=dDQ9jRel6c+3ynZZwrrqt0rMUiGVYheKJzLJNdP9P+OU52V1AaOoLcIVJPILTzonZ3SZ1b
-	1vxqyWFh6mIQKhRoSe3zMvq85wyO4JzczgqFcLO73DTB4WtJ3I+rhqIDGkV5ZUMsj4niSO
-	pL4yerGoKa8BuYfFwf067Vwsc6h5rzY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-230-kFK-c7oyNgC289gF1X8KZw-1; Thu, 20 Jul 2023 12:34:11 -0400
-X-MC-Unique: kFK-c7oyNgC289gF1X8KZw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4FA07101A54E;
-	Thu, 20 Jul 2023 16:34:08 +0000 (UTC)
-Received: from vschneid.remote.csb (unknown [10.42.28.48])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id 29A9240C206F;
-	Thu, 20 Jul 2023 16:33:59 +0000 (UTC)
-From: Valentin Schneider <vschneid@redhat.com>
-To: linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	kvm@vger.kernel.org,
-	linux-mm@kvack.org,
-	bpf@vger.kernel.org,
-	x86@kernel.org,
-	rcu@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: "Paul E . McKenney" <paulmck@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Wanpeng Li <wanpengli@tencent.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang1211@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Lorenzo Stoakes <lstoakes@gmail.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jason Baron <jbaron@akamai.com>,
-	Kees Cook <keescook@chromium.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Juerg Haefliger <juerg.haefliger@canonical.com>,
-	Nicolas Saenz Julienne <nsaenz@kernel.org>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Nadav Amit <namit@vmware.com>,
-	Dan Carpenter <error27@gmail.com>,
-	Chuang Wang <nashuiliang@gmail.com>,
-	Yang Jihong <yangjihong1@huawei.com>,
-	Petr Mladek <pmladek@suse.com>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Song Liu <song@kernel.org>,
-	Julian Pidancet <julian.pidancet@oracle.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Daniel Bristot de Oliveira <bristot@redhat.com>,
-	Marcelo Tosatti <mtosatti@redhat.com>,
-	Yair Podemsky <ypodemsk@redhat.com>
-Subject: [RFC PATCH v2 16/20] rcu: Make RCU dynticks counter size configurable
-Date: Thu, 20 Jul 2023 17:30:52 +0100
-Message-Id: <20230720163056.2564824-17-vschneid@redhat.com>
-In-Reply-To: <20230720163056.2564824-1-vschneid@redhat.com>
-References: <20230720163056.2564824-1-vschneid@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35E651773D
+	for <bpf@vger.kernel.org>; Thu, 20 Jul 2023 17:05:58 +0000 (UTC)
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C37186
+	for <bpf@vger.kernel.org>; Thu, 20 Jul 2023 10:05:56 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id 98e67ed59e1d1-262d33fa37cso537869a91.3
+        for <bpf@vger.kernel.org>; Thu, 20 Jul 2023 10:05:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689872756; x=1690477556;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Fpptkd/Mdhg6c/eFiSNq82DPLgdaQ475OsYSI7hvFi4=;
+        b=zS13WslXEZUV6mX8ftP70EqAc40IfiOzs5BUIHWW+aML7Wb7dKbRUdtTk8vJbIUjtp
+         K40iGhvluR6xSaDaRjBpQvxh16uWLsT6TC4Waa3bVyTYkPaDQG3W9YaKM23JtbTu5+bM
+         Xz5lSCf/u3JOL7m8B92620xDNsaOZBMfQqQHCxnOJzknNs+ecYz4y3+AABcAkLstYHbk
+         6nYnR7EzwY5O92Y5+f1LgTkUF0VBimsmD9mEG+u6EpAIOLhcWuSJkmKtYFNSTyX6wR9v
+         4zeh+28kvRHdos81K8jkQ98SJECYfpa4zubVJwbDCLSMRTMsW/2YfEgpNWCpYUZ94pnm
+         ChGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689872756; x=1690477556;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Fpptkd/Mdhg6c/eFiSNq82DPLgdaQ475OsYSI7hvFi4=;
+        b=c2PQd9XYur+j0SVWELw/HJUtla0o8w4xWUZ3eOxiP+dM5ITHoBwcmqHLjXyiXeZgYi
+         lik1OkixU398e9ws7anKnX6VAw97pU0mCGuVC9wRh8XPf91QEgRorGETTLyEj+tBN9gj
+         RdiXbNVyINIPiYTadwOJ+n9G33yucvl6eNMh/+ESfA0ReKQQ1Rh5WMPQEPcU/lJcihLl
+         c0SBxkLA7igwrhTPkLEFN3bOZvmgGjTrO5+0sHwPuKW3pEWgwixsW6tt55Qf1b+Mq53p
+         r/aUtbQ7f1ROJuRAn8S0U2/05uxv3ExvyEQS5IHFq1OI7+OGwg9S1tC3OoRJhYsPEWkB
+         rEIQ==
+X-Gm-Message-State: ABy/qLYlPT9RmOpsnDXc8kM5QDS/NAPlPYY2L12hsSljEUEGjj1ZfIHX
+	N5oBkkcNG0gavepX6iMZtDylH+D9ICOq8ED9OBCiuA==
+X-Google-Smtp-Source: APBJJlERF86l1BleiPxJMxRPbY6N2ixpdQhn08HHi50hhIDfvR1PzSC2ZrEUxePC1AAbm0ho228R34dpBowI1s05z7w=
+X-Received: by 2002:a17:90a:3ec2:b0:263:6a7e:c239 with SMTP id
+ k60-20020a17090a3ec200b002636a7ec239mr37883pjc.37.1689872755655; Thu, 20 Jul
+ 2023 10:05:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-	RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-	T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-	version=3.4.6
+References: <67bec6a9-af59-d6f9-2630-17280479a1f7@gmail.com>
+ <ZKcDdIYOUQuPP5Px@google.com> <51aa1dd7-86d0-ed08-1142-f229513ad316@gmail.com>
+ <ZKhC9G5ouGOviSOG@google.com> <2b48be65-5f63-4658-38cb-03c00c10fdf3@gmail.com>
+ <ZKw9XQGOza6qGDLf@google.com> <32972dd6-1c6c-d59f-3f13-d90dd6e4b400@gmail.com>
+ <CAKH8qBspx+7ZsCWZVxFzdPaMWWQem3+Thpa65973-H3sphGoSA@mail.gmail.com> <dfe68d18-d031-b6ef-ef96-97f7a119d3e1@gmail.com>
+In-Reply-To: <dfe68d18-d031-b6ef-ef96-97f7a119d3e1@gmail.com>
+From: Stanislav Fomichev <sdf@google.com>
+Date: Thu, 20 Jul 2023 10:05:44 -0700
+Message-ID: <CAKH8qBtTvTnWYQwyHp9RWzJG8oO3FjW+AQvr+rjxTNeAxtNvxQ@mail.gmail.com>
+Subject: Re: [PATCH v1] samples/bpf: Fix build out of source tree
+To: Anh Tuan Phan <tuananhlfc@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, martin.lau@linux.dev, 
+	linux-kernel-mentees@lists.linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+	USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-CONTEXT_TRACKING_WORK reduces the size of the dynticks counter to free up
-some bits for work deferral. Paul suggested making the actual counter size
-configurable for rcutorture to poke at, so do that.
+On Wed, Jul 19, 2023 at 9:13=E2=80=AFAM Anh Tuan Phan <tuananhlfc@gmail.com=
+> wrote:
+>
+>
+>
+> On 7/17/23 23:46, Stanislav Fomichev wrote:
+> > On Sun, Jul 16, 2023 at 2:42=E2=80=AFAM Anh Tuan Phan <tuananhlfc@gmail=
+.com> wrote:
+> >>
+> >>
+> >>
+> >> On 7/11/23 00:18, Stanislav Fomichev wrote:
+> >>> On 07/09, Anh Tuan Phan wrote:
+> >>>> I updated the patch to reflect your suggestion. Thank you!
+> >>>
+> >>> In the future, can you please post a new one with v+1 instead of repl=
+ying
+> >>> to the old one? Thx!
+> >>
+> >> Will do in the next version.
+> >>
+> >>>
+> >>>> On 7/7/23 23:53, Stanislav Fomichev wrote:
+> >>>>> On 07/07, Anh Tuan Phan wrote:
+> >>>>>>
+> >>>>>>
+> >>>>>> On 7/7/23 01:09, Stanislav Fomichev wrote:
+> >>>>>>> On 07/06, Anh Tuan Phan wrote:
+> >>>>>>>> This commit fixes a few compilation issues when building out of =
+source
+> >>>>>>>> tree. The command that I used to build samples/bpf:
+> >>>>>>>>
+> >>>>>>>> export KBUILD_OUTPUT=3D/tmp
+> >>>>>>>> make V=3D1 M=3Dsamples/bpf
+> >>>>>>>>
+> >>>>>>>> The compilation failed since it tried to find the header files i=
+n the
+> >>>>>>>> wrong places between output directory and source tree directory
+> >>>>>>>>
+> >>>>>>>> Signed-off-by: Anh Tuan Phan <tuananhlfc@gmail.com>
+> >>>>>>>> ---
+> >>>>>>>>  samples/bpf/Makefile        | 8 ++++----
+> >>>>>>>>  samples/bpf/Makefile.target | 2 +-
+> >>>>>>>>  2 files changed, 5 insertions(+), 5 deletions(-)
+> >>>>>>>>
+> >>>>>>>> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+> >>>>>>>> index 615f24ebc49c..32469aaa82d5 100644
+> >>>>>>>> --- a/samples/bpf/Makefile
+> >>>>>>>> +++ b/samples/bpf/Makefile
+> >>>>>>>> @@ -341,10 +341,10 @@ $(obj)/hbm_edt_kern.o: $(src)/hbm.h $(src)=
+/hbm_kern.h
+> >>>>>>>>  # Override includes for xdp_sample_user.o because $(srctree)/us=
+r/include in
+> >>>>>>>>  # TPROGS_CFLAGS causes conflicts
+> >>>>>>>>  XDP_SAMPLE_CFLAGS +=3D -Wall -O2 \
+> >>>>>>>> -                     -I$(src)/../../tools/include \
+> >>>>>>>> +                     -I$(srctree)/tools/include \
+> >>>>>>>
+> >>>>>>> [..]
+> >>>>>>>
+> >>>>>>>>                       -I$(src)/../../tools/include/uapi \
+> >>>>>>>
+> >>>>>>> Does this $(src) need to be changed as well?
+> >>>>>>
+> >>>>>> I think this line doesn't affect the build. I removed it and it st=
+ill
+> >>>>>> compiles (after "make -C samples/bpf clean"). I guess xdp_sample_u=
+ser.c
+> >>>>>> doesn't include any file in tools/include/uapi. Am I missing somet=
+hing
+> >>>>>> or should I remove this line?
+> >>>>>
+> >>>>> You might have these headers installed on your system already if
+> >>>>> it compiles without this part. So I'd keep this part but do
+> >>>>> s/src/srctree/ (and remove ../..).
+> >>>>>
+> >>>>>>>
+> >>>>>>>
+> >>>>>>>>                       -I$(LIBBPF_INCLUDE) \
+> >>>>>>>> -                     -I$(src)/../../tools/testing/selftests/bpf
+> >>>>>>>> +                     -I$(srctree)/tools/testing/selftests/bpf
+> >>>>>>>>
+> >>>>>>>>  $(obj)/$(XDP_SAMPLE): TPROGS_CFLAGS =3D $(XDP_SAMPLE_CFLAGS)
+> >>>>>>>>  $(obj)/$(XDP_SAMPLE): $(src)/xdp_sample_user.h $(src)/xdp_sampl=
+e_shared.h
+> >>>>>>>> @@ -393,7 +393,7 @@ $(obj)/xdp_router_ipv4.bpf.o: $(obj)/xdp_sam=
+ple.bpf.o
+> >>>>>>>>  $(obj)/%.bpf.o: $(src)/%.bpf.c $(obj)/vmlinux.h $(src)/xdp_samp=
+le.bpf.h
+> >>>>>>>> $(src)/xdp_sample_shared.h
+> >>>>>>>>          @echo "  CLANG-BPF " $@
+> >>>>>>>>          $(Q)$(CLANG) -g -O2 -target bpf -D__TARGET_ARCH_$(SRCAR=
+CH) \
+> >>>>>>>> -                -Wno-compare-distinct-pointer-types -I$(srctree=
+)/include \
+> >>>>>>>> +                -Wno-compare-distinct-pointer-types -I$(obj) -I=
+$(srctree)/include \
+> >>>>>>>>                  -I$(srctree)/samples/bpf -I$(srctree)/tools/inc=
+lude \
+> >>>>>>>>                  -I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
+> >>>>>>>>                  -c $(filter %.bpf.c,$^) -o $@
+> >>>>>>>> @@ -412,7 +412,7 @@ xdp_router_ipv4.skel.h-deps :=3D xdp_router_=
+ipv4.bpf.o
+> >>>>>>>> xdp_sample.bpf.o
+> >>>>>>>>
+> >>>>>>>>  LINKED_BPF_SRCS :=3D $(patsubst %.bpf.o,%.bpf.c,$(foreach
+> >>>>>>>> skel,$(LINKED_SKELS),$($(skel)-deps)))
+> >>>>>>>>
+> >>>>>>>> -BPF_SRCS_LINKED :=3D $(notdir $(wildcard $(src)/*.bpf.c))
+> >>>>>>>> +BPF_SRCS_LINKED :=3D $(notdir $(wildcard $(srctree)/$(src)/*.bp=
+f.c))
+> >>>>>>>>  BPF_OBJS_LINKED :=3D $(patsubst %.bpf.c,$(obj)/%.bpf.o, $(BPF_S=
+RCS_LINKED))
+> >>>>>>>>  BPF_SKELS_LINKED :=3D $(addprefix $(obj)/,$(LINKED_SKELS))
+> >>>>>>>>
+> >>>>>>>> diff --git a/samples/bpf/Makefile.target b/samples/bpf/Makefile.=
+target
+> >>>>>>>> index 7621f55e2947..86a454cfb080 100644
+> >>>>>>>> --- a/samples/bpf/Makefile.target
+> >>>>>>>> +++ b/samples/bpf/Makefile.target
+> >>>>>>>> @@ -41,7 +41,7 @@ _tprogc_flags   =3D $(TPROGS_CFLAGS) \
+> >>>>>>>>                   $(TPROGCFLAGS_$(basetarget).o)
+> >>>>>>>>
+> >>>>>>>>  # $(objtree)/$(obj) for including generated headers from checki=
+n source
+> >>>>>>>> files
+> >>>>>>>
+> >>>>>>> [..]
+> >>>>>>>
+> >>>>>>>> -ifeq ($(KBUILD_EXTMOD),)
+> >>>>>>>> +ifneq ($(KBUILD_EXTMOD),)
+> >>>>>>>
+> >>>>>>> This parts seems to be copy-pasted all over the place in its 'ife=
+q'
+> >>>>>>> form. What is it doing and why is it needed?
+> >>>>>>>
+> >>>>>>>>  ifdef building_out_of_srctree
+> >>>>>>>>  _tprogc_flags   +=3D -I $(objtree)/$(obj)
+> >>>>>>>>  endif
+> >>>>>>>> --
+> >>>>>>>> 2.34.1
+> >>>>
+> >>>> Signed-off-by: Anh Tuan Phan <tuananhlfc@gmail.com>
+> >>>> ---
+> >>>>
+> >>>> Change from the original patch
+> >>>>
+> >>>> - Change "-I$(src)/../../tools/include/uapi" to
+> >>>> "-I$(srctree)/tools/include/uapi"
+> >>>>
+> >>>>  samples/bpf/Makefile        | 10 +++++-----
+> >>>>  samples/bpf/Makefile.target |  2 +-
+> >>>>  2 files changed, 6 insertions(+), 6 deletions(-)
+> >>>>
+> >>>> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+> >>>> index 615f24ebc49c..cfc960b3713a 100644
+> >>>> --- a/samples/bpf/Makefile
+> >>>> +++ b/samples/bpf/Makefile
+> >>>> @@ -341,10 +341,10 @@ $(obj)/hbm_edt_kern.o: $(src)/hbm.h $(src)/hbm=
+_kern.h
+> >>>>  # Override includes for xdp_sample_user.o because $(srctree)/usr/in=
+clude in
+> >>>>  # TPROGS_CFLAGS causes conflicts
+> >>>>  XDP_SAMPLE_CFLAGS +=3D -Wall -O2 \
+> >>>> -                 -I$(src)/../../tools/include \
+> >>>> -                 -I$(src)/../../tools/include/uapi \
+> >>>> +                 -I$(srctree)/tools/include \
+> >>>> +                 -I$(srctree)/tools/include/uapi \
+> >>>>                   -I$(LIBBPF_INCLUDE) \
+> >>>> -                 -I$(src)/../../tools/testing/selftests/bpf
+> >>>> +                 -I$(srctree)/tools/testing/selftests/bpf
+> >>>>
+> >>>>  $(obj)/$(XDP_SAMPLE): TPROGS_CFLAGS =3D $(XDP_SAMPLE_CFLAGS)
+> >>>>  $(obj)/$(XDP_SAMPLE): $(src)/xdp_sample_user.h $(src)/xdp_sample_sh=
+ared.h
+> >>>> @@ -393,7 +393,7 @@ $(obj)/xdp_router_ipv4.bpf.o: $(obj)/xdp_sample.=
+bpf.o
+> >>>>  $(obj)/%.bpf.o: $(src)/%.bpf.c $(obj)/vmlinux.h $(src)/xdp_sample.b=
+pf.h
+> >>>> $(src)/xdp_sample_shared.h
+> >>>>      @echo "  CLANG-BPF " $@
+> >>>>      $(Q)$(CLANG) -g -O2 -target bpf -D__TARGET_ARCH_$(SRCARCH) \
+> >>>> -            -Wno-compare-distinct-pointer-types -I$(srctree)/includ=
+e \
+> >>>> +            -Wno-compare-distinct-pointer-types -I$(obj) -I$(srctre=
+e)/include \
+> >>>>              -I$(srctree)/samples/bpf -I$(srctree)/tools/include \
+> >>>>              -I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
+> >>>>              -c $(filter %.bpf.c,$^) -o $@
+> >>>> @@ -412,7 +412,7 @@ xdp_router_ipv4.skel.h-deps :=3D xdp_router_ipv4=
+.bpf.o
+> >>>> xdp_sample.bpf.o
+> >>>>
+> >>>>  LINKED_BPF_SRCS :=3D $(patsubst %.bpf.o,%.bpf.c,$(foreach
+> >>>> skel,$(LINKED_SKELS),$($(skel)-deps)))
+> >>>>
+> >>>> -BPF_SRCS_LINKED :=3D $(notdir $(wildcard $(src)/*.bpf.c))
+> >>>> +BPF_SRCS_LINKED :=3D $(notdir $(wildcard $(srctree)/$(src)/*.bpf.c)=
+)
+> >>>>  BPF_OBJS_LINKED :=3D $(patsubst %.bpf.c,$(obj)/%.bpf.o, $(BPF_SRCS_=
+LINKED))
+> >>>>  BPF_SKELS_LINKED :=3D $(addprefix $(obj)/,$(LINKED_SKELS))
+> >>>>
+> >>>> diff --git a/samples/bpf/Makefile.target b/samples/bpf/Makefile.targ=
+et
+> >>>> index 7621f55e2947..86a454cfb080 100644
+> >>>> --- a/samples/bpf/Makefile.target
+> >>>> +++ b/samples/bpf/Makefile.target
+> >>>> @@ -41,7 +41,7 @@ _tprogc_flags   =3D $(TPROGS_CFLAGS) \
+> >>>>                   $(TPROGCFLAGS_$(basetarget).o)
+> >>>>
+> >>>>  # $(objtree)/$(obj) for including generated headers from checkin so=
+urce
+> >>>> files
+> >>>
+> >>> [..]
+> >>>
+> >>>> -ifeq ($(KBUILD_EXTMOD),)
+> >>>> +ifneq ($(KBUILD_EXTMOD),)
+> >>>>  ifdef building_out_of_srctree
+> >>>>  _tprogc_flags   +=3D -I $(objtree)/$(obj)
+> >>>>  endif
+> >>>
+> >>> This question left undressed. Can you share more on why this change
+> >>> is needed? Because it looks like it's actually needed for M=3D'' case=
+.
+> >>> IOW, maybe we should add $(objtree)/$(obj) somewhere else?
+> >>
+> >> If it's needed for both cases M=3D'' and M !=3D '', is it better to ju=
+st
+> >> remove the condition with $(KBUILD_EXTMOD)? FMPOV, -I $(objtree)/$(obj=
+)
+> >> is only needed in case of building_out_of_srctree, no matter what
+> >> KBUILD_EXTMOD.
+> >
+> > My guess is that we're missing -I $(objtree)/$(obj) somewhere else.
+> > Depending on what/where it fails, we probably need to add $(objtree)
+> > to some of the $(obj)s?
+> > I'm mostly speculating here, because I see that "ifeq
+> > ($(KBUILD_EXTMOD),) + ifdef building_out_of_srctree" pattern being
+> > used in the other places.
+>
+> It turns out that your guess is right. "-I $(objtree)/$(obj)" is only
+> needed for the following objects: xdp_redirect_map_multi_user,
+> xdp_redirect_cpu_user, xdp_redirect_map_user, xdp_redirect_user,
+> xdp_monitor_user and xdp_router_ipv4_user. There is a variable to add
+> flags for gcc named $(TPROGCFLAGS_$(basetarget).o) but it has not been
+> set. My proposed fix is to set the following variables:
 
-Make it only configurable under RCU_EXPERT. Previous commits have added
-build-time checks that ensure a kernel with problematic dynticks counter
-width can't be built.
+Looks like these are the tests that use bpf skeleton.
 
-Link: http://lore.kernel.org/r/4c2cb573-168f-4806-b1d9-164e8276e66a@paulmck-laptop
-Suggested-by: Paul E. McKenney <paulmck@kernel.org>
-Signed-off-by: Valentin Schneider <vschneid@redhat.com>
----
- include/linux/context_tracking.h       |  3 ++-
- include/linux/context_tracking_state.h |  3 +--
- kernel/rcu/Kconfig                     | 33 ++++++++++++++++++++++++++
- 3 files changed, 36 insertions(+), 3 deletions(-)
+> +TPROGCFLAGS_xdp_redirect_map_multi_user.o +=3D -I$(objtree)/$(obj)
+> +TPROGCFLAGS_xdp_redirect_cpu_user.o +=3D -I$(objtree)/$(obj)
+> +TPROGCFLAGS_xdp_redirect_map_user.o +=3D -I$(objtree)/$(obj)
+> +TPROGCFLAGS_xdp_redirect_user.o +=3D -I$(objtree)/$(obj)
+> +TPROGCFLAGS_xdp_monitor_user.o +=3D -I$(objtree)/$(obj)
+> +TPROGCFLAGS_xdp_router_ipv4_user.o +=3D -I$(objtree)/$(obj)
+>
+> It works with the original "ifeq
+> > ($(KBUILD_EXTMOD),) + ifdef building_out_of_srctree" pattern. What do
+> you think about my proposed fix?
 
-diff --git a/include/linux/context_tracking.h b/include/linux/context_tracking.h
-index 8aee086d0a25f..9c0c622bc27bb 100644
---- a/include/linux/context_tracking.h
-+++ b/include/linux/context_tracking.h
-@@ -12,7 +12,8 @@
- 
- #ifdef CONFIG_CONTEXT_TRACKING_WORK
- static_assert(CONTEXT_WORK_MAX_OFFSET <= CONTEXT_WORK_END + 1 - CONTEXT_WORK_START,
--	      "Not enough bits for CONTEXT_WORK");
-+	      "Not enough bits for CONTEXT_WORK, "
-+	      "CONFIG_RCU_DYNTICKS_BITS might be too high");
- #endif
- 
- #ifdef CONFIG_CONTEXT_TRACKING_USER
-diff --git a/include/linux/context_tracking_state.h b/include/linux/context_tracking_state.h
-index 828fcdb801f73..292a0b7c06948 100644
---- a/include/linux/context_tracking_state.h
-+++ b/include/linux/context_tracking_state.h
-@@ -58,8 +58,7 @@ enum ctx_state {
- #define CONTEXT_STATE_START 0
- #define CONTEXT_STATE_END   (bits_per(CONTEXT_MAX - 1) - 1)
- 
--#define RCU_DYNTICKS_BITS  (IS_ENABLED(CONFIG_CONTEXT_TRACKING_WORK) ? 16 : 31)
--#define RCU_DYNTICKS_START (CT_STATE_SIZE - RCU_DYNTICKS_BITS)
-+#define RCU_DYNTICKS_START (CT_STATE_SIZE - CONFIG_RCU_DYNTICKS_BITS)
- #define RCU_DYNTICKS_END   (CT_STATE_SIZE - 1)
- #define RCU_DYNTICKS_IDX   BIT(RCU_DYNTICKS_START)
- 
-diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-index bdd7eadb33d8f..1ff2aab24e964 100644
---- a/kernel/rcu/Kconfig
-+++ b/kernel/rcu/Kconfig
-@@ -332,4 +332,37 @@ config RCU_DOUBLE_CHECK_CB_TIME
- 	  Say Y here if you need tighter callback-limit enforcement.
- 	  Say N here if you are unsure.
- 
-+config RCU_DYNTICKS_RANGE_BEGIN
-+	int
-+	depends on !RCU_EXPERT
-+	default 31 if !CONTEXT_TRACKING_WORK
-+	default 16 if CONTEXT_TRACKING_WORK
-+
-+config RCU_DYNTICKS_RANGE_BEGIN
-+	int
-+	depends on RCU_EXPERT
-+	default 2
-+
-+config RCU_DYNTICKS_RANGE_END
-+	int
-+	default 31 if !CONTEXT_TRACKING_WORK
-+	default 16 if CONTEXT_TRACKING_WORK
-+
-+config RCU_DYNTICKS_BITS_DEFAULT
-+       int
-+       default 31 if !CONTEXT_TRACKING_WORK
-+       default 16 if CONTEXT_TRACKING_WORK
-+
-+config RCU_DYNTICKS_BITS
-+	int "Dynticks counter width" if CONTEXT_TRACKING_WORK
-+	range RCU_DYNTICKS_RANGE_BEGIN RCU_DYNTICKS_RANGE_END
-+	default RCU_DYNTICKS_BITS_DEFAULT
-+	help
-+	  This option controls the width of the dynticks counter.
-+
-+	  Lower values will make overflows more frequent, which will increase
-+	  the likelihood of extending grace-periods.
-+
-+	  Don't touch this unless you are running some tests.
-+
- endmenu # "RCU Subsystem"
--- 
-2.31.1
+Maybe we should just unconditionally add "-I $(objtree)/$(obj)" to
+_tprogc_flags ?
 
+And then we can drop that whole part:
+ifeq ($(KBUILD_EXTMOD),)
+ifdef building_out_of_srctree
+_tprogc_flags   +=3D -I $(objtree)/$(obj)
+endif
+endif
+
+IOW, replace that $(TPROGCFLAGS_$(basetarget).o) part with -I
+$(objtree)/$(obj) and call it a day?
+I honestly have no clue why it's this complicated and I doubt anybody
+at this point remembers...
