@@ -1,209 +1,260 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC6C200A4
-	for <bpf@vger.kernel.org>; Fri, 21 Jul 2023 16:44:39 +0000 (UTC)
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD4010E
-	for <bpf@vger.kernel.org>; Fri, 21 Jul 2023 09:44:29 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id ca18e2360f4ac-783698a37beso97323239f.0
-        for <bpf@vger.kernel.org>; Fri, 21 Jul 2023 09:44:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689957869; x=1690562669;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V4OProLwa1HBsCbSYEasskJSriVq6OZzQbg8GckWVaw=;
-        b=mPrQK5Y3TwhUK0ThN4Jk2VHYg6uJxld5kkrt77HnmDbGjnA/6+yVY1PMnYBViHNexJ
-         yBcdUFmia72m/UkL0qM2PuGiK6/tNarHCQ88f138vL1b6HdiC9T0kKFzKtblVMjcQJ6F
-         aSTJj/So3ncOWlKabQiDB3Z2M0OFnse0LemYP+nGIUb1F/bNryeQmVVsZg/KBDVuJvNS
-         n7LwAGwSUGyaTJDy0ikdvFhFKevCNonJDgiiFTDrvAIMnbGbAPRVFcVWTvJFzNPF3XQn
-         yuFkjhSIWWfJOyov7ztZg4apNm8mclf9Qhz41oK80SaLFOh+khEaCjpeTjQHv2nLzb7K
-         v3Ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689957869; x=1690562669;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V4OProLwa1HBsCbSYEasskJSriVq6OZzQbg8GckWVaw=;
-        b=Uev7wFjLyQVZiQ/tzMulTW7ljY0o7p6ei8l/O4RZQhdj7nYvXvq1yrtxuqoteQovC5
-         URr+sIAhFYICPhqYFLpnjQ1TXP5cpuM4OhynJ1QMnQDOC0t6/ibx8p55dVFfjn706SGT
-         M2trIsj/sYNScWr4inBjJh+Xuve2eQnj8zbl48iiDSrEWJ29Wp6fO0+z8Mr8UUwiWbE6
-         l95rlk5cAnyMCZQzKXqt+Zy1ToXUkB+AgcvmCNuSy8yc5HC1x/VuPr4DaDkerjDq9Xvu
-         wclBBj7m8OKsA8ZaDceF3xSwOdFtcl/WQcq4/W0s5GUcuchC1sDrGPAEPrK4cJbgt2SB
-         JMDQ==
-X-Gm-Message-State: ABy/qLYTM+b4vbn4Yffc36YCBKI1jqvavRUMOw0lOLS8GGF0Ljdf6dWC
-	y9s26m7DkvRtCKegreuFjHVWpYFcj1tb01GgUy2Cvg==
-X-Google-Smtp-Source: APBJJlHiHToCKJWM9rth8/IfAfW5ySm0aJOdUu3O0OXip58+wsj8VD+/EygYvpU+NnZ1V7pWWzJXxib5ErH3P1cA63Q=
-X-Received: by 2002:a05:6e02:1d88:b0:348:90c2:ba0a with SMTP id
- h8-20020a056e021d8800b0034890c2ba0amr502473ila.32.1689957868798; Fri, 21 Jul
- 2023 09:44:28 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C22B727F00
+	for <bpf@vger.kernel.org>; Fri, 21 Jul 2023 16:53:36 +0000 (UTC)
+Received: from frasgout11.his.huawei.com (unknown [14.137.139.23])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1283A2727;
+	Fri, 21 Jul 2023 09:53:35 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4R6vx72s5wz9xFQJ;
+	Sat, 22 Jul 2023 00:23:07 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwC3hl1bs7pkcDDSBA--.22409S5;
+	Fri, 21 Jul 2023 17:34:02 +0100 (CET)
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: zohar@linux.ibm.com,
+	dmitry.kasatkin@gmail.com,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	bpf@vger.kernel.org,
+	jarkko@kernel.org,
+	pbrobinson@gmail.com,
+	zbyszek@in.waw.pl,
+	hch@lst.de,
+	mjg59@srcf.ucam.org,
+	Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [RFC][PATCH 03/12] integrity/digest_cache: Add functions to populate and search
+Date: Fri, 21 Jul 2023 18:33:17 +0200
+Message-Id: <20230721163326.4106089-4-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230721163326.4106089-1-roberto.sassu@huaweicloud.com>
+References: <20230721163326.4106089-1-roberto.sassu@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230719183734.21681-1-larysa.zaremba@intel.com>
- <20230719183734.21681-21-larysa.zaremba@intel.com> <ZLmxt3744Q1e42pT@google.com>
- <ZLo29C1kpx99+u6G@lincoln>
-In-Reply-To: <ZLo29C1kpx99+u6G@lincoln>
-From: Stanislav Fomichev <sdf@google.com>
-Date: Fri, 21 Jul 2023 09:44:17 -0700
-Message-ID: <CAKH8qBtqCnewzcn_rfgNYPYD3oWSaDbf0ws6bDKL3H6gK7x6cg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 20/21] selftests/bpf: Check VLAN tag and proto
- in xdp_metadata
-To: "Zaremba, Larysa" <larysa.zaremba@intel.com>
-Cc: "bpf@vger.kernel.org" <bpf@vger.kernel.org>, "ast@kernel.org" <ast@kernel.org>, 
-	"daniel@iogearbox.net" <daniel@iogearbox.net>, "andrii@kernel.org" <andrii@kernel.org>, 
-	"martin.lau@linux.dev" <martin.lau@linux.dev>, "song@kernel.org" <song@kernel.org>, "yhs@fb.com" <yhs@fb.com>, 
-	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "kpsingh@kernel.org" <kpsingh@kernel.org>, 
-	"haoluo@google.com" <haoluo@google.com>, "jolsa@kernel.org" <jolsa@kernel.org>, David Ahern <dsahern@gmail.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Willem de Bruijn <willemb@google.com>, 
-	"Brouer, Jesper" <brouer@redhat.com>, "Burakov, Anatoly" <anatoly.burakov@intel.com>, 
-	"Lobakin, Aleksander" <aleksander.lobakin@intel.com>, Magnus Karlsson <magnus.karlsson@gmail.com>, 
-	"Tahhan, Maryam" <mtahhan@redhat.com>, 
-	"xdp-hints@xdp-project.net" <xdp-hints@xdp-project.net>, 
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-	T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-	autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:GxC2BwC3hl1bs7pkcDDSBA--.22409S5
+X-Coremail-Antispam: 1UD129KBjvJXoWxtr43Cr1DWFyUtFWUKw4kJFb_yoWxJw1kpa
+	s7Cr1Utr4rZF13Gw1xAF1ayr1FvrWqqF47Jw45Wr1ayr4DXr1jy3W8Aw1UXFy5Jr48Wa17
+	tF4jgr1Uur1UXaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
+	WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkE
+	bVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7
+	AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
+	F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GF
+	ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
+	0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x
+	07jzE__UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAFBF1jj5DJQAAAso
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,RDNS_DYNAMIC,
+	SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Fri, Jul 21, 2023 at 12:47=E2=80=AFAM Zaremba, Larysa
-<larysa.zaremba@intel.com> wrote:
->
-> On Thu, Jul 20, 2023 at 03:14:15PM -0700, Stanislav Fomichev wrote:
-> > On 07/19, Larysa Zaremba wrote:
-> > > Verify, whether VLAN tag and proto are set correctly.
-> > >
-> > > To simulate "stripped" VLAN tag on veth, send test packet from VLAN
-> > > interface.
-> > >
-> > > Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
-> >
-> > Acked-by: Stanislav Fomichev <sdf@google.com>
-> >
-> > > ---
-> > >  .../selftests/bpf/prog_tests/xdp_metadata.c   | 22 +++++++++++++++++=
---
-> > >  .../selftests/bpf/progs/xdp_metadata.c        |  4 ++++
-> > >  2 files changed, 24 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c b/=
-tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-> > > index 1877e5c6d6c7..6665cf0c59cc 100644
-> > > --- a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-> > > +++ b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-> > > @@ -38,7 +38,15 @@
-> > >  #define TX_MAC "00:00:00:00:00:01"
-> > >  #define RX_MAC "00:00:00:00:00:02"
-> > >
-> > > +#define VLAN_ID 59
-> > > +#define VLAN_ID_STR "59"
-> >
-> > I was looking whether we have some str(x) macro in the selftests,
-> > but doesn't look like we have any...
-> >
->
-> I could add one, if you could hint me at the file, where it would need to=
- go.
-> Or just add it locally for now?
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Up to you. I feel like it's fine as is.
+Add digest_cache_init_htable(), to size a hash table depending on the
+number of digests to be added to the cache.
 
-I was expecting to find something like the following in
-tools/testing/selftests/bpf/testing_helpers.h:
+Add digest_cache_add() and digest_cache_lookup() to respectively add and
+lookup a digest in the digest cache.
 
-#define __TO_STR(x) #x
-#define TO_STR(x) __TO_STR(x)
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ security/integrity/digest_cache.c | 124 ++++++++++++++++++++++++++++++
+ security/integrity/digest_cache.h |  24 ++++++
+ 2 files changed, 148 insertions(+)
 
-We have similar patterns in:
-tools/testing/selftests/bpf/sdt.h (_SDT_ARG_CONSTRAINT_STRING)
-tools/testing/selftests/kvm/x86_64/smm_test.c (XSTR)
-tools/tracing/rtla/src/utils.c (STR)
+diff --git a/security/integrity/digest_cache.c b/security/integrity/digest_cache.c
+index 66c2c4088e9..7537c7232db 100644
+--- a/security/integrity/digest_cache.c
++++ b/security/integrity/digest_cache.c
+@@ -298,3 +298,127 @@ void digest_cache_put(struct digest_cache *digest_cache,
+ 	pr_debug("Put cache, algo: %s, digest list: %s",
+ 		 hash_algo_name[digest_cache->algo], digest_cache->path_str);
+ }
++
++/**
++ * digest_cache_init_htable - Allocate and initialize the hash table
++ * @digest_cache: Digest cache
++ * @num_digests: Number of digests to add to the digest cache
++ *
++ * This function allocates and initializes the hash table. Its size is
++ * determined by the number of digests to add to the digest cache, known
++ * at this point by the parser calling this function.
++ *
++ * Return: Zero on success, a negative value otherwise.
++ */
++int digest_cache_init_htable(struct digest_cache *digest_cache,
++			     u64 num_digests)
++{
++	int i;
++
++	if (!digest_cache)
++		return 0;
++
++	digest_cache->num_slots = num_digests / DIGEST_CACHE_HTABLE_DEPTH;
++	if (!digest_cache->num_slots)
++		digest_cache->num_slots = 1;
++
++	digest_cache->slots = kmalloc_array(num_digests,
++					    sizeof(*digest_cache->slots),
++					    GFP_KERNEL);
++	if (!digest_cache->slots)
++		return -ENOMEM;
++
++	for (i = 0; i < digest_cache->num_slots; i++)
++		INIT_HLIST_HEAD(&digest_cache->slots[i]);
++
++	pr_debug("Initialized %d hash table slots for digest list %s\n",
++		 digest_cache->num_slots, digest_cache->path_str);
++	return 0;
++}
++
++/**
++ * digest_cache_add - Add a new digest to the digest cache
++ * @digest_cache: Digest cache
++ * @digest: Digest to add
++ *
++ * This function, invoked by a digest list parser, adds a digest extracted
++ * from a digest list to the digest cache.
++ *
++ * Return: Zero on success, a negative value on error.
++ */
++int digest_cache_add(struct digest_cache *digest_cache, u8 *digest)
++{
++	struct digest_cache_entry *entry;
++	unsigned int key;
++	int digest_len;
++
++	if (!digest_cache)
++		return 0;
++
++	digest_len = hash_digest_size[digest_cache->algo];
++
++	entry = kmalloc(sizeof(*entry) + digest_len, GFP_KERNEL);
++	if (!entry)
++		return -ENOMEM;
++
++	memcpy(entry->digest, digest, digest_len);
++
++	key = digest_cache_hash_key(digest, digest_cache->num_slots);
++	hlist_add_head(&entry->hnext, &digest_cache->slots[key]);
++	pr_debug("Add digest %s:%*phN from digest list %s\n",
++		 hash_algo_name[digest_cache->algo], digest_len, digest,
++		 digest_cache->path_str);
++	return 0;
++}
++
++/**
++ * digest_cache_lookup - Searches a digest in the digest cache
++ * @digest_cache: Digest cache
++ * @digest: Digest to search
++ * @algo: Algorithm of the digest to search
++ *
++ * This function, invoked by IMA or EVM, searches the calculated digest of
++ * a file or file metadata in the digest cache acquired with
++ * digest_cache_get().
++ *
++ * Return: Zero if the digest is found, a negative value if not.
++ */
++int digest_cache_lookup(struct digest_cache *digest_cache, u8 *digest,
++			enum hash_algo algo, const char *pathname)
++{
++	struct digest_cache_entry *entry;
++	unsigned int key;
++	int digest_len;
++	int search_depth = 0;
++
++	if (!digest_cache)
++		return -ENOENT;
++
++	digest_len = hash_digest_size[digest_cache->algo];
++
++	if (algo != digest_cache->algo) {
++		pr_debug("Algo mismatch for file %s, digest %s:%*phN in digest list %s (*%s)\n",
++			 pathname, hash_algo_name[algo], digest_len, digest,
++			 digest_cache->path_str,
++			 hash_algo_name[digest_cache->algo]);
++		return -ENOENT;
++	}
++
++	key = digest_cache_hash_key(digest, digest_cache->num_slots);
++
++	hlist_for_each_entry_rcu(entry, &digest_cache->slots[key], hnext) {
++		if (!memcmp(entry->digest, digest, digest_len)) {
++			pr_debug("Cache hit at depth %d for file %s, digest %s:%*phN in digest list %s\n",
++				 search_depth, pathname, hash_algo_name[algo], digest_len,
++				 digest, digest_cache->path_str);
++			return 0;
++		}
++
++		search_depth++;
++	}
++
++	pr_debug("Cache miss for file %s, digest %s:%*phN in digest list %s\n",
++		 pathname, hash_algo_name[algo], digest_len, digest,
++		 digest_cache->path_str);
++	return -ENOENT;
++}
+diff --git a/security/integrity/digest_cache.h b/security/integrity/digest_cache.h
+index fa4a716df65..5e3997b2723 100644
+--- a/security/integrity/digest_cache.h
++++ b/security/integrity/digest_cache.h
+@@ -64,6 +64,11 @@ struct digest_cache *digest_cache_get(struct dentry *dentry,
+ 				      struct path *digest_list_path);
+ void digest_cache_put(struct digest_cache *digest_cache,
+ 		      struct path *digest_list_path);
++int digest_cache_init_htable(struct digest_cache *digest_cache,
++			     u64 num_digests);
++int digest_cache_add(struct digest_cache *digest_cache, u8 *digest);
++int digest_cache_lookup(struct digest_cache *digest_cache, u8 *digest,
++			enum hash_algo algo, const char *pathname);
+ #else
+ static inline void digest_cache_free(struct digest_cache *digest_cache)
+ {
+@@ -80,5 +85,24 @@ static inline void digest_cache_put(struct digest_cache *digest_cache,
+ {
+ }
+ 
++static inline int digest_cache_init_htable(struct digest_cache *digest_cache,
++					   u64 num_digests)
++{
++	return -EOPNOTSUPP;
++}
++
++static inline int digest_cache_add(struct digest_cache *digest_cache,
++				   u8 *digest)
++{
++	return -EOPNOTSUPP;
++}
++
++static inline int digest_cache_lookup(struct digest_cache *digest_cache,
++				      u8 *digest, enum hash_algo algo,
++				      const char *pathname)
++{
++	return -ENOENT;
++}
++
+ #endif /* CONFIG_INTEGRITY_DIGEST_CACHE */
+ #endif /* _DIGEST_CACHE_H */
+-- 
+2.34.1
 
-But nothing "generic" it seems...
-
-> > > +#define VLAN_PROTO "802.1Q"
-> > > +#define VLAN_PID htons(ETH_P_8021Q)
-> > > +#define TX_NAME_VLAN TX_NAME "." VLAN_ID_STR
-> > > +#define RX_NAME_VLAN RX_NAME "." VLAN_ID_STR
-> > > +
-> > >  #define XDP_RSS_TYPE_L4 BIT(3)
-> > > +#define VLAN_VID_MASK 0xfff
-> > >
-> > >  struct xsk {
-> > >     void *umem_area;
-> > > @@ -215,6 +223,12 @@ static int verify_xsk_metadata(struct xsk *xsk)
-> > >     if (!ASSERT_NEQ(meta->rx_hash_type & XDP_RSS_TYPE_L4, 0, "rx_hash=
-_type"))
-> > >             return -1;
-> > >
-> > > +   if (!ASSERT_EQ(meta->rx_vlan_tci & VLAN_VID_MASK, VLAN_ID, "rx_vl=
-an_tci"))
-> > > +           return -1;
-> > > +
-> > > +   if (!ASSERT_EQ(meta->rx_vlan_proto, VLAN_PID, "rx_vlan_proto"))
-> > > +           return -1;
-> > > +
-> > >     xsk_ring_cons__release(&xsk->rx, 1);
-> > >     refill_rx(xsk, comp_addr);
-> > >
-> > > @@ -248,10 +262,14 @@ void test_xdp_metadata(void)
-> > >
-> > >     SYS(out, "ip link set dev " TX_NAME " address " TX_MAC);
-> > >     SYS(out, "ip link set dev " TX_NAME " up");
-> > > -   SYS(out, "ip addr add " TX_ADDR "/" PREFIX_LEN " dev " TX_NAME);
-> > > +
-> > > +   SYS(out, "ip link add link " TX_NAME " " TX_NAME_VLAN
-> > > +            " type vlan proto " VLAN_PROTO " id " VLAN_ID_STR);
-> > > +   SYS(out, "ip link set dev " TX_NAME_VLAN " up");
-> > > +   SYS(out, "ip addr add " TX_ADDR "/" PREFIX_LEN " dev " TX_NAME_VL=
-AN);
-> > >
-> > >     /* Avoid ARP calls */
-> > > -   SYS(out, "ip -4 neigh add " RX_ADDR " lladdr " RX_MAC " dev " TX_=
-NAME);
-> > > +   SYS(out, "ip -4 neigh add " RX_ADDR " lladdr " RX_MAC " dev " TX_=
-NAME_VLAN);
-> > >     close_netns(tok);
-> > >
-> > >     tok =3D open_netns(RX_NETNS_NAME);
-> > > diff --git a/tools/testing/selftests/bpf/progs/xdp_metadata.c b/tools=
-/testing/selftests/bpf/progs/xdp_metadata.c
-> > > index d151d406a123..d3111649170e 100644
-> > > --- a/tools/testing/selftests/bpf/progs/xdp_metadata.c
-> > > +++ b/tools/testing/selftests/bpf/progs/xdp_metadata.c
-> > > @@ -23,6 +23,9 @@ extern int bpf_xdp_metadata_rx_timestamp(const stru=
-ct xdp_md *ctx,
-> > >                                      __u64 *timestamp) __ksym;
-> > >  extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, __u32 =
-*hash,
-> > >                                 enum xdp_rss_hash_type *rss_type) __k=
-sym;
-> > > +extern int bpf_xdp_metadata_rx_vlan_tag(const struct xdp_md *ctx,
-> > > +                                   __u16 *vlan_tci,
-> > > +                                   __be16 *vlan_proto) __ksym;
-> > >
-> > >  SEC("xdp")
-> > >  int rx(struct xdp_md *ctx)
-> > > @@ -57,6 +60,7 @@ int rx(struct xdp_md *ctx)
-> > >             meta->rx_timestamp =3D 1;
-> > >
-> > >     bpf_xdp_metadata_rx_hash(ctx, &meta->rx_hash, &meta->rx_hash_type=
-);
-> > > +   bpf_xdp_metadata_rx_vlan_tag(ctx, &meta->rx_vlan_tci, &meta->rx_v=
-lan_proto);
-> > >
-> > >     return bpf_redirect_map(&xsk, ctx->rx_queue_index, XDP_PASS);
-> > >  }
-> > > --
-> > > 2.41.0
-> > >
-> >
