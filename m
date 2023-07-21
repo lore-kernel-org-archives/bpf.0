@@ -1,98 +1,63 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C262102
-	for <bpf@vger.kernel.org>; Fri, 21 Jul 2023 07:49:58 +0000 (UTC)
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4B119AD;
-	Fri, 21 Jul 2023 00:49:54 -0700 (PDT)
-X-UUID: ff14eda7f0934741a23db9006c625495-20230721
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.28,REQID:089c6898-c99c-4694-97ea-33c64382b269,IP:15,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-	ON:release,TS:0
-X-CID-INFO: VERSION:1.1.28,REQID:089c6898-c99c-4694-97ea-33c64382b269,IP:15,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:0
-X-CID-META: VersionHash:176cd25,CLOUDID:2e61e187-44fb-401c-8de7-6a5572f1f5d5,B
-	ulkID:2307211549211PU76SGO,BulkQuantity:1,Recheck:0,SF:38|24|17|19|44|102,
-	TC:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0,
-	OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
-X-UUID: ff14eda7f0934741a23db9006c625495-20230721
-X-User: guodongtai@kylinos.cn
-Received: from localhost.localdomain [(39.156.73.12)] by mailgw
-	(envelope-from <guodongtai@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1614632383; Fri, 21 Jul 2023 15:49:40 +0800
-From: George Guo <guodongtai@kylinos.cn>
-To: masahiroy@kernel.org,
-	nathan@kernel.org,
-	martin.lau@linux.dev,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org
-Subject: [PATCH] btf: Remove unnecessary header file inclusions
-Date: Fri, 21 Jul 2023 15:50:07 +0800
-Message-Id: <20230721075007.4100863-1-guodongtai@kylinos.cn>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D5D720E4
+	for <bpf@vger.kernel.org>; Fri, 21 Jul 2023 07:55:05 +0000 (UTC)
+X-Greylist: delayed 518 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 21 Jul 2023 00:55:03 PDT
+Received: from mail.raportygospodarcze.pl (mail.raportygospodarcze.pl [51.195.117.175])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B90113
+	for <bpf@vger.kernel.org>; Fri, 21 Jul 2023 00:55:03 -0700 (PDT)
+Received: by mail.raportygospodarcze.pl (Postfix, from userid 1002)
+	id B8E12A343C; Fri, 21 Jul 2023 07:45:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=raportygospodarcze.pl; s=mail; t=1689925540;
+	bh=Q0zAfWX5XKMVnDsK0SPiKvkUfR45PbYP0IQhlCcCksA=;
+	h=Date:From:To:Subject:From;
+	b=Sppaum3v13sf8E73LpjEIwC0s7VubcNDP/7ElC+ZOyONG7CWPJWxi2gaBmdQMqRzE
+	 4K/42pUtj0wCF0UzJ7pj+Dv9pjuCUYfaO3uBl10jp6LpaX9X2KzOohpYA5WIParHbx
+	 gGiBpbM3oZlhdEPpUg4Ak0D8ek9jpMX8aY8+2eQvAwakJUg2nXM0a75meLUATIAyd9
+	 afAt02WtUu3zFwFMjDvq5VigO9wpaxdQlk9KrsX9vYwSJbX9YKToxTv0sG8JV5RzpK
+	 r+qpBPE/KhdRI4vUqiW9oPrVqc3b9Sus2pYL5v7bL0XDRuzHDykTM6TphmM87tlPCY
+	 wNN4P0IluRcdQ==
+Received: by raportygospodarcze.pl for <bpf@vger.kernel.org>; Fri, 21 Jul 2023 07:45:30 GMT
+Message-ID: <20230721063020-0.1.9y.1a4g2.0.n51ai9ypq4@raportygospodarcze.pl>
+Date: Fri, 21 Jul 2023 07:45:30 GMT
+From: "Monika Dutko" <monika.dutko@raportygospodarcze.pl>
+To: <bpf@vger.kernel.org>
+Subject: =?UTF-8?Q?Roz=C5=82o=C5=BCenie_zobowi=C4=85zania_na_raty_?=
+X-Mailer: mail.raportygospodarcze.pl
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-	UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Remove unnecessary header file inclusions in btf.c
+Dzie=C5=84 dobry,
 
-Signed-off-by: George Guo <guodongtai@kylinos.cn>
----
- kernel/bpf/btf.c | 16 ----------------
- 1 file changed, 16 deletions(-)
+czy zobowi=C4=85zania Pa=C5=84stwa firmy przekraczaj=C4=85 warto=C5=9B=C4=
+=87 maj=C4=85tku?
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 817204d53372..e5ea729ba6b8 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -1,20 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (c) 2018 Facebook */
- 
--#include <uapi/linux/btf.h>
--#include <uapi/linux/bpf.h>
--#include <uapi/linux/bpf_perf_event.h>
--#include <uapi/linux/types.h>
--#include <linux/seq_file.h>
--#include <linux/compiler.h>
--#include <linux/ctype.h>
--#include <linux/errno.h>
--#include <linux/slab.h>
- #include <linux/anon_inodes.h>
--#include <linux/file.h>
--#include <linux/uaccess.h>
--#include <linux/kernel.h>
--#include <linux/idr.h>
- #include <linux/sort.h>
- #include <linux/bpf_verifier.h>
- #include <linux/btf.h>
-@@ -22,9 +9,6 @@
- #include <linux/bpf_lsm.h>
- #include <linux/skmsg.h>
- #include <linux/perf_event.h>
--#include <linux/bsearch.h>
--#include <linux/kobject.h>
--#include <linux/sysfs.h>
- 
- #include <net/netfilter/nf_bpf_link.h>
- 
--- 
-2.34.1
+Je=C5=9Bli tak, to chcia=C5=82abym zaprezentowa=C4=87 rozwi=C4=85zania, k=
+t=C3=B3re pozwol=C4=85 Pa=C5=84stwu umorzy=C4=87 ich cz=C4=99=C5=9B=C4=87=
+=2E
 
+Prowadz=C4=99 kancelari=C4=99, kt=C3=B3ra wspiera przedsi=C4=99biorc=C3=B3=
+w w ca=C5=82ym procesie restrukturyzacji, odpowiadaj=C4=85c za przygotowa=
+nie dokumentacji, podj=C4=99cie odpowiednich krok=C3=B3w i  kontakt w Pa=C5=
+=84stwa imieniu z organami.=20
+
+Czy mog=C4=99 przedstawi=C4=87, co mo=C5=BCemy dla Pa=C5=84stwa zrobi=C4=87=
+?
+
+
+Pozdrawiam
+Monika Dutko
