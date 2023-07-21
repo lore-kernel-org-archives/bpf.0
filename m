@@ -1,325 +1,135 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6A72363
-	for <bpf@vger.kernel.org>; Fri, 21 Jul 2023 01:05:39 +0000 (UTC)
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBDBE75
-	for <bpf@vger.kernel.org>; Thu, 20 Jul 2023 18:05:37 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b8ad356f03so9138695ad.1
-        for <bpf@vger.kernel.org>; Thu, 20 Jul 2023 18:05:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689901537; x=1690506337;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jBAln2M+sLrf4Xhwd6957idGEUES9XiV8hz/o+kpEDs=;
-        b=brYgMpcZpm28L3U/pq8FNSrxos1dhibF0qp2oWCKCoSmiSCrCVU+pVpJZHD98VlmJN
-         MWIuDSaSGcfAp9xK8iLUSxBsS+IuA1vbkAxqI/jiJi+bqCgmpMc7nhB0rFun1anZYM0c
-         5KpfJc9jmPmCvCP79+2JkHahsHP3yPXZtlooP1qhw0/cCc1BeOzSnwZSEIZJwKjyBBtT
-         cjA7RLLPbvwfxGMLv3EGVzmKFlmqYlkZuo5BjIOowilnvziwUmczFmJx3iPTUJ0opAgh
-         YwZbk+nZJd1X0R6uHI2NebFJgR6t/jkrPZ12fP83ZPkMQmtz5lV9fy55wW7qJpVIZkVP
-         HBvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689901537; x=1690506337;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jBAln2M+sLrf4Xhwd6957idGEUES9XiV8hz/o+kpEDs=;
-        b=MIuJ8Uq4OR7zsipsgg6AZ9sewCfTRM2HHGdnmzkUrCjR+7+vkI0Dj9/mEEFLXzUPYf
-         pGBQbe8USDaFV+vZGqW72UW1PC02wGgxd6QW9bsdqhO9XjvuITS61NgkX4+coiLF/wnX
-         Hx5o3VYdGsHyUDavybXxO9Rmk/X7WOF8iS+InCiV3W9lv0deyU3OuSoaeRqxrUWXRfwO
-         lv25aChaDx0cIKnyH30k/yCpr4rjt8B0lmeXmKN7HSLRJBbXHf+SlE84aKruPD996/ik
-         KYL1pgfLlBuNE19vVZ5W4sJ77oxMcj9fLxjEvgyiNjPBgS+GIBg/Pk+lb8XBOVoA1KvO
-         fluA==
-X-Gm-Message-State: ABy/qLa7huxOQKYcZU9ntLipcdGPy7Tu+JhiFstr8BKZS2egoLQUuzur
-	hsuMTv+xd2+V0U/9tDK3Tsw=
-X-Google-Smtp-Source: APBJJlHP01bYvhYvdwbqtY6HXZlEIOofcUQjH+ijCP84ccziqW+x9Lwss59Ti/Ve+wr3dLYmANDSwA==
-X-Received: by 2002:a17:902:ba88:b0:1b8:944a:a932 with SMTP id k8-20020a170902ba8800b001b8944aa932mr521773pls.2.1689901536599;
-        Thu, 20 Jul 2023 18:05:36 -0700 (PDT)
-Received: from [192.168.1.9] ([222.252.65.171])
-        by smtp.gmail.com with ESMTPSA id x14-20020a170902ec8e00b001ab39cd875csm2039011plg.133.2023.07.20.18.05.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jul 2023 18:05:36 -0700 (PDT)
-Message-ID: <0fac0326-ffd0-98a7-a1b9-7f0bead6ec58@gmail.com>
-Date: Fri, 21 Jul 2023 08:05:32 +0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14AF8363
+	for <bpf@vger.kernel.org>; Fri, 21 Jul 2023 01:42:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 458C4C433C9;
+	Fri, 21 Jul 2023 01:42:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1689903725;
+	bh=dw1xMty5sUx55lKWIHCKf4qU6fRTTDgNxFDurgYRD1o=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=LTGUIWNwZCt1pvkrukTY07XnEQ3xswAAwgdRew4atcUyeBGtLAvFf5Umec9wZj+AI
+	 JdPeGtUCroBGjn0H/wVOegulnEJOYmNBACd1LCKdDO3sf8z+Ag/79dQhp2bt194Qvk
+	 g2G2A+JNUE6yNltck6xY/Dj2RORG584hKY3IghbWUoThzBjUtzjLGR00BCLycUD42Z
+	 jm4lqjPX5e3D+SiQMc5RQTWLhvt/3gDo2q8LbHYqgFt6nOkEdESWgRV7AFga1HufWR
+	 6vhlgA/YSc959/OcEykI0a6cgsJ4/rKmb68/tS+knEIwFuRXjH56we7ZwINrbxJdNS
+	 ++IxAlVxujtGQ==
+Date: Fri, 21 Jul 2023 10:42:00 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org, Steven
+ Rostedt <rostedt@goodmis.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+ bpf@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>, Alexei
+ Starovoitov <ast@kernel.org>
+Subject: Re: [PATCH v2 8/9] selftests/ftrace: Add BTF fields access
+ testcases
+Message-Id: <20230721104200.92655ae661532475134cf004@kernel.org>
+In-Reply-To: <18605821-d4f1-c8e2-74eb-a91fc06d53b7@oracle.com>
+References: <168960739768.34107.15145201749042174448.stgit@devnote2>
+	<168960747750.34107.6104527579648222887.stgit@devnote2>
+	<18605821-d4f1-c8e2-74eb-a91fc06d53b7@oracle.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v1] samples/bpf: Fix build out of source tree
-To: Stanislav Fomichev <sdf@google.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev,
- linux-kernel-mentees@lists.linuxfoundation.org
-References: <67bec6a9-af59-d6f9-2630-17280479a1f7@gmail.com>
- <ZKcDdIYOUQuPP5Px@google.com>
- <51aa1dd7-86d0-ed08-1142-f229513ad316@gmail.com>
- <ZKhC9G5ouGOviSOG@google.com>
- <2b48be65-5f63-4658-38cb-03c00c10fdf3@gmail.com>
- <ZKw9XQGOza6qGDLf@google.com>
- <32972dd6-1c6c-d59f-3f13-d90dd6e4b400@gmail.com>
- <CAKH8qBspx+7ZsCWZVxFzdPaMWWQem3+Thpa65973-H3sphGoSA@mail.gmail.com>
- <dfe68d18-d031-b6ef-ef96-97f7a119d3e1@gmail.com>
- <CAKH8qBtTvTnWYQwyHp9RWzJG8oO3FjW+AQvr+rjxTNeAxtNvxQ@mail.gmail.com>
-Content-Language: en-US
-From: Anh Tuan Phan <tuananhlfc@gmail.com>
-In-Reply-To: <CAKH8qBtTvTnWYQwyHp9RWzJG8oO3FjW+AQvr+rjxTNeAxtNvxQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+
+On Fri, 21 Jul 2023 00:00:32 +0100
+Alan Maguire <alan.maguire@oracle.com> wrote:
+
+> 
+> On 17/07/2023 16:24, Masami Hiramatsu (Google) wrote:
+> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > Add test cases for accessing the data structure fields using BTF info.
+> > This includes the field access from parameters and retval, and accessing
+> > string information.
+> > 
+> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> One suggestion below, but
+> 
+> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+
+Thanks
+
+> 
+> > ---
+> > Changes in v2:
+> >  - Use '$retval' instead of 'retval'.
+> >  - Add a test that use both '$retval' and '$arg1' for fprobe.
+> > ---
+> >  .../ftrace/test.d/dynevent/add_remove_btfarg.tc    |   11 +++++++++++
+> >  .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |    4 ++++
+> >  2 files changed, 15 insertions(+)
+> > 
+> > diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_btfarg.tc b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_btfarg.tc
+> > index b89de1771655..93b94468967b 100644
+> > --- a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_btfarg.tc
+> > +++ b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_btfarg.tc
+> > @@ -21,6 +21,8 @@ echo 0 > events/enable
+> >  echo > dynamic_events
+> >  
+> >  TP=kfree
+> > +TP2=kmem_cache_alloc
+> > +TP3=getname_flags
+> >  
+> >  if [ "$FPROBES" ] ; then
+> >  echo "f:fpevent $TP object" >> dynamic_events
+> > @@ -33,6 +35,7 @@ echo > dynamic_events
+> >  
+> >  echo "f:fpevent $TP "'$arg1' >> dynamic_events
+> >  grep -q "fpevent.*object=object" dynamic_events
+> > +
+> >  echo > dynamic_events
+> >  
+> >  echo "f:fpevent $TP "'$arg*' >> dynamic_events
+> > @@ -45,6 +48,14 @@ fi
+> >  
+> >  echo > dynamic_events
+> >  
+> > +echo "t:tpevent $TP2 name=s->name:string" >> dynamic_events
+> > +echo "f:fpevent ${TP3}%return path=\$retval->name:string" >> dynamic_events
+> > +
+> 
+> could we test a numeric value like kmem_cache_alloc object size?
+> also if combos of -> and . are allowed, would be good to test one of
+> those too.
+
+OK, that's a good point! I'll add it.
+
+> 
+> > +grep -q "tpevent.*name=s->name:string" dynamic_events
+> > +grep -q "fpevent.*path=\$retval->name:string" dynamic_events
+> > +
+> > +echo > dynamic_events
+> > +
+> >  if [ "$KPROBES" ] ; then
+> >  echo "p:kpevent $TP object" >> dynamic_events
+> >  grep -q "kpevent.*object=object" dynamic_events
+> > diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
+> > index 72563b2e0812..49758f77c923 100644
+> > --- a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
+> > +++ b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
+> > @@ -103,6 +103,10 @@ check_error 'f vfs_read%return ^$arg*'		# NOFENTRY_ARGS
+> >  check_error 'f vfs_read ^hoge'			# NO_BTFARG
+> >  check_error 'f kfree ^$arg10'			# NO_BTFARG (exceed the number of parameters)
+> >  check_error 'f kfree%return ^$retval'		# NO_RETVAL
+> > +check_error 'f vfs_read%return $retval->^foo'	# NO_PTR_STRCT
+> > +check_error 'f vfs_read file->^foo'		# NO_BTF_FIELD
+> > +check_error 'f vfs_read file^-.foo'		# BAD_HYPHEN
+> > +check_error 'f vfs_read ^file:string'		# BAD_TYPE4STR
+> >  else
+> >  check_error 'f vfs_read ^$arg*'			# NOSUP_BTFARG
+> >  check_error 't kfree ^$arg*'			# NOSUP_BTFARG
+> > 
+> > 
 
 
-
-On 7/21/23 00:05, Stanislav Fomichev wrote:
-> On Wed, Jul 19, 2023 at 9:13 AM Anh Tuan Phan <tuananhlfc@gmail.com> wrote:
->>
->>
->>
->> On 7/17/23 23:46, Stanislav Fomichev wrote:
->>> On Sun, Jul 16, 2023 at 2:42 AM Anh Tuan Phan <tuananhlfc@gmail.com> wrote:
->>>>
->>>>
->>>>
->>>> On 7/11/23 00:18, Stanislav Fomichev wrote:
->>>>> On 07/09, Anh Tuan Phan wrote:
->>>>>> I updated the patch to reflect your suggestion. Thank you!
->>>>>
->>>>> In the future, can you please post a new one with v+1 instead of replying
->>>>> to the old one? Thx!
->>>>
->>>> Will do in the next version.
->>>>
->>>>>
->>>>>> On 7/7/23 23:53, Stanislav Fomichev wrote:
->>>>>>> On 07/07, Anh Tuan Phan wrote:
->>>>>>>>
->>>>>>>>
->>>>>>>> On 7/7/23 01:09, Stanislav Fomichev wrote:
->>>>>>>>> On 07/06, Anh Tuan Phan wrote:
->>>>>>>>>> This commit fixes a few compilation issues when building out of source
->>>>>>>>>> tree. The command that I used to build samples/bpf:
->>>>>>>>>>
->>>>>>>>>> export KBUILD_OUTPUT=/tmp
->>>>>>>>>> make V=1 M=samples/bpf
->>>>>>>>>>
->>>>>>>>>> The compilation failed since it tried to find the header files in the
->>>>>>>>>> wrong places between output directory and source tree directory
->>>>>>>>>>
->>>>>>>>>> Signed-off-by: Anh Tuan Phan <tuananhlfc@gmail.com>
->>>>>>>>>> ---
->>>>>>>>>>  samples/bpf/Makefile        | 8 ++++----
->>>>>>>>>>  samples/bpf/Makefile.target | 2 +-
->>>>>>>>>>  2 files changed, 5 insertions(+), 5 deletions(-)
->>>>>>>>>>
->>>>>>>>>> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
->>>>>>>>>> index 615f24ebc49c..32469aaa82d5 100644
->>>>>>>>>> --- a/samples/bpf/Makefile
->>>>>>>>>> +++ b/samples/bpf/Makefile
->>>>>>>>>> @@ -341,10 +341,10 @@ $(obj)/hbm_edt_kern.o: $(src)/hbm.h $(src)/hbm_kern.h
->>>>>>>>>>  # Override includes for xdp_sample_user.o because $(srctree)/usr/include in
->>>>>>>>>>  # TPROGS_CFLAGS causes conflicts
->>>>>>>>>>  XDP_SAMPLE_CFLAGS += -Wall -O2 \
->>>>>>>>>> -                     -I$(src)/../../tools/include \
->>>>>>>>>> +                     -I$(srctree)/tools/include \
->>>>>>>>>
->>>>>>>>> [..]
->>>>>>>>>
->>>>>>>>>>                       -I$(src)/../../tools/include/uapi \
->>>>>>>>>
->>>>>>>>> Does this $(src) need to be changed as well?
->>>>>>>>
->>>>>>>> I think this line doesn't affect the build. I removed it and it still
->>>>>>>> compiles (after "make -C samples/bpf clean"). I guess xdp_sample_user.c
->>>>>>>> doesn't include any file in tools/include/uapi. Am I missing something
->>>>>>>> or should I remove this line?
->>>>>>>
->>>>>>> You might have these headers installed on your system already if
->>>>>>> it compiles without this part. So I'd keep this part but do
->>>>>>> s/src/srctree/ (and remove ../..).
->>>>>>>
->>>>>>>>>
->>>>>>>>>
->>>>>>>>>>                       -I$(LIBBPF_INCLUDE) \
->>>>>>>>>> -                     -I$(src)/../../tools/testing/selftests/bpf
->>>>>>>>>> +                     -I$(srctree)/tools/testing/selftests/bpf
->>>>>>>>>>
->>>>>>>>>>  $(obj)/$(XDP_SAMPLE): TPROGS_CFLAGS = $(XDP_SAMPLE_CFLAGS)
->>>>>>>>>>  $(obj)/$(XDP_SAMPLE): $(src)/xdp_sample_user.h $(src)/xdp_sample_shared.h
->>>>>>>>>> @@ -393,7 +393,7 @@ $(obj)/xdp_router_ipv4.bpf.o: $(obj)/xdp_sample.bpf.o
->>>>>>>>>>  $(obj)/%.bpf.o: $(src)/%.bpf.c $(obj)/vmlinux.h $(src)/xdp_sample.bpf.h
->>>>>>>>>> $(src)/xdp_sample_shared.h
->>>>>>>>>>          @echo "  CLANG-BPF " $@
->>>>>>>>>>          $(Q)$(CLANG) -g -O2 -target bpf -D__TARGET_ARCH_$(SRCARCH) \
->>>>>>>>>> -                -Wno-compare-distinct-pointer-types -I$(srctree)/include \
->>>>>>>>>> +                -Wno-compare-distinct-pointer-types -I$(obj) -I$(srctree)/include \
->>>>>>>>>>                  -I$(srctree)/samples/bpf -I$(srctree)/tools/include \
->>>>>>>>>>                  -I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
->>>>>>>>>>                  -c $(filter %.bpf.c,$^) -o $@
->>>>>>>>>> @@ -412,7 +412,7 @@ xdp_router_ipv4.skel.h-deps := xdp_router_ipv4.bpf.o
->>>>>>>>>> xdp_sample.bpf.o
->>>>>>>>>>
->>>>>>>>>>  LINKED_BPF_SRCS := $(patsubst %.bpf.o,%.bpf.c,$(foreach
->>>>>>>>>> skel,$(LINKED_SKELS),$($(skel)-deps)))
->>>>>>>>>>
->>>>>>>>>> -BPF_SRCS_LINKED := $(notdir $(wildcard $(src)/*.bpf.c))
->>>>>>>>>> +BPF_SRCS_LINKED := $(notdir $(wildcard $(srctree)/$(src)/*.bpf.c))
->>>>>>>>>>  BPF_OBJS_LINKED := $(patsubst %.bpf.c,$(obj)/%.bpf.o, $(BPF_SRCS_LINKED))
->>>>>>>>>>  BPF_SKELS_LINKED := $(addprefix $(obj)/,$(LINKED_SKELS))
->>>>>>>>>>
->>>>>>>>>> diff --git a/samples/bpf/Makefile.target b/samples/bpf/Makefile.target
->>>>>>>>>> index 7621f55e2947..86a454cfb080 100644
->>>>>>>>>> --- a/samples/bpf/Makefile.target
->>>>>>>>>> +++ b/samples/bpf/Makefile.target
->>>>>>>>>> @@ -41,7 +41,7 @@ _tprogc_flags   = $(TPROGS_CFLAGS) \
->>>>>>>>>>                   $(TPROGCFLAGS_$(basetarget).o)
->>>>>>>>>>
->>>>>>>>>>  # $(objtree)/$(obj) for including generated headers from checkin source
->>>>>>>>>> files
->>>>>>>>>
->>>>>>>>> [..]
->>>>>>>>>
->>>>>>>>>> -ifeq ($(KBUILD_EXTMOD),)
->>>>>>>>>> +ifneq ($(KBUILD_EXTMOD),)
->>>>>>>>>
->>>>>>>>> This parts seems to be copy-pasted all over the place in its 'ifeq'
->>>>>>>>> form. What is it doing and why is it needed?
->>>>>>>>>
->>>>>>>>>>  ifdef building_out_of_srctree
->>>>>>>>>>  _tprogc_flags   += -I $(objtree)/$(obj)
->>>>>>>>>>  endif
->>>>>>>>>> --
->>>>>>>>>> 2.34.1
->>>>>>
->>>>>> Signed-off-by: Anh Tuan Phan <tuananhlfc@gmail.com>
->>>>>> ---
->>>>>>
->>>>>> Change from the original patch
->>>>>>
->>>>>> - Change "-I$(src)/../../tools/include/uapi" to
->>>>>> "-I$(srctree)/tools/include/uapi"
->>>>>>
->>>>>>  samples/bpf/Makefile        | 10 +++++-----
->>>>>>  samples/bpf/Makefile.target |  2 +-
->>>>>>  2 files changed, 6 insertions(+), 6 deletions(-)
->>>>>>
->>>>>> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
->>>>>> index 615f24ebc49c..cfc960b3713a 100644
->>>>>> --- a/samples/bpf/Makefile
->>>>>> +++ b/samples/bpf/Makefile
->>>>>> @@ -341,10 +341,10 @@ $(obj)/hbm_edt_kern.o: $(src)/hbm.h $(src)/hbm_kern.h
->>>>>>  # Override includes for xdp_sample_user.o because $(srctree)/usr/include in
->>>>>>  # TPROGS_CFLAGS causes conflicts
->>>>>>  XDP_SAMPLE_CFLAGS += -Wall -O2 \
->>>>>> -                 -I$(src)/../../tools/include \
->>>>>> -                 -I$(src)/../../tools/include/uapi \
->>>>>> +                 -I$(srctree)/tools/include \
->>>>>> +                 -I$(srctree)/tools/include/uapi \
->>>>>>                   -I$(LIBBPF_INCLUDE) \
->>>>>> -                 -I$(src)/../../tools/testing/selftests/bpf
->>>>>> +                 -I$(srctree)/tools/testing/selftests/bpf
->>>>>>
->>>>>>  $(obj)/$(XDP_SAMPLE): TPROGS_CFLAGS = $(XDP_SAMPLE_CFLAGS)
->>>>>>  $(obj)/$(XDP_SAMPLE): $(src)/xdp_sample_user.h $(src)/xdp_sample_shared.h
->>>>>> @@ -393,7 +393,7 @@ $(obj)/xdp_router_ipv4.bpf.o: $(obj)/xdp_sample.bpf.o
->>>>>>  $(obj)/%.bpf.o: $(src)/%.bpf.c $(obj)/vmlinux.h $(src)/xdp_sample.bpf.h
->>>>>> $(src)/xdp_sample_shared.h
->>>>>>      @echo "  CLANG-BPF " $@
->>>>>>      $(Q)$(CLANG) -g -O2 -target bpf -D__TARGET_ARCH_$(SRCARCH) \
->>>>>> -            -Wno-compare-distinct-pointer-types -I$(srctree)/include \
->>>>>> +            -Wno-compare-distinct-pointer-types -I$(obj) -I$(srctree)/include \
->>>>>>              -I$(srctree)/samples/bpf -I$(srctree)/tools/include \
->>>>>>              -I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
->>>>>>              -c $(filter %.bpf.c,$^) -o $@
->>>>>> @@ -412,7 +412,7 @@ xdp_router_ipv4.skel.h-deps := xdp_router_ipv4.bpf.o
->>>>>> xdp_sample.bpf.o
->>>>>>
->>>>>>  LINKED_BPF_SRCS := $(patsubst %.bpf.o,%.bpf.c,$(foreach
->>>>>> skel,$(LINKED_SKELS),$($(skel)-deps)))
->>>>>>
->>>>>> -BPF_SRCS_LINKED := $(notdir $(wildcard $(src)/*.bpf.c))
->>>>>> +BPF_SRCS_LINKED := $(notdir $(wildcard $(srctree)/$(src)/*.bpf.c))
->>>>>>  BPF_OBJS_LINKED := $(patsubst %.bpf.c,$(obj)/%.bpf.o, $(BPF_SRCS_LINKED))
->>>>>>  BPF_SKELS_LINKED := $(addprefix $(obj)/,$(LINKED_SKELS))
->>>>>>
->>>>>> diff --git a/samples/bpf/Makefile.target b/samples/bpf/Makefile.target
->>>>>> index 7621f55e2947..86a454cfb080 100644
->>>>>> --- a/samples/bpf/Makefile.target
->>>>>> +++ b/samples/bpf/Makefile.target
->>>>>> @@ -41,7 +41,7 @@ _tprogc_flags   = $(TPROGS_CFLAGS) \
->>>>>>                   $(TPROGCFLAGS_$(basetarget).o)
->>>>>>
->>>>>>  # $(objtree)/$(obj) for including generated headers from checkin source
->>>>>> files
->>>>>
->>>>> [..]
->>>>>
->>>>>> -ifeq ($(KBUILD_EXTMOD),)
->>>>>> +ifneq ($(KBUILD_EXTMOD),)
->>>>>>  ifdef building_out_of_srctree
->>>>>>  _tprogc_flags   += -I $(objtree)/$(obj)
->>>>>>  endif
->>>>>
->>>>> This question left undressed. Can you share more on why this change
->>>>> is needed? Because it looks like it's actually needed for M='' case.
->>>>> IOW, maybe we should add $(objtree)/$(obj) somewhere else?
->>>>
->>>> If it's needed for both cases M='' and M != '', is it better to just
->>>> remove the condition with $(KBUILD_EXTMOD)? FMPOV, -I $(objtree)/$(obj)
->>>> is only needed in case of building_out_of_srctree, no matter what
->>>> KBUILD_EXTMOD.
->>>
->>> My guess is that we're missing -I $(objtree)/$(obj) somewhere else.
->>> Depending on what/where it fails, we probably need to add $(objtree)
->>> to some of the $(obj)s?
->>> I'm mostly speculating here, because I see that "ifeq
->>> ($(KBUILD_EXTMOD),) + ifdef building_out_of_srctree" pattern being
->>> used in the other places.
->>
->> It turns out that your guess is right. "-I $(objtree)/$(obj)" is only
->> needed for the following objects: xdp_redirect_map_multi_user,
->> xdp_redirect_cpu_user, xdp_redirect_map_user, xdp_redirect_user,
->> xdp_monitor_user and xdp_router_ipv4_user. There is a variable to add
->> flags for gcc named $(TPROGCFLAGS_$(basetarget).o) but it has not been
->> set. My proposed fix is to set the following variables:
-> 
-> Looks like these are the tests that use bpf skeleton.
-> 
->> +TPROGCFLAGS_xdp_redirect_map_multi_user.o += -I$(objtree)/$(obj)
->> +TPROGCFLAGS_xdp_redirect_cpu_user.o += -I$(objtree)/$(obj)
->> +TPROGCFLAGS_xdp_redirect_map_user.o += -I$(objtree)/$(obj)
->> +TPROGCFLAGS_xdp_redirect_user.o += -I$(objtree)/$(obj)
->> +TPROGCFLAGS_xdp_monitor_user.o += -I$(objtree)/$(obj)
->> +TPROGCFLAGS_xdp_router_ipv4_user.o += -I$(objtree)/$(obj)
->>
->> It works with the original "ifeq
->>> ($(KBUILD_EXTMOD),) + ifdef building_out_of_srctree" pattern. What do
->> you think about my proposed fix?
-> 
-> Maybe we should just unconditionally add "-I $(objtree)/$(obj)" to
-> _tprogc_flags ?
-> 
-> And then we can drop that whole part:
-> ifeq ($(KBUILD_EXTMOD),)
-> ifdef building_out_of_srctree
-> _tprogc_flags   += -I $(objtree)/$(obj)
-> endif
-> endif
-> 
-> IOW, replace that $(TPROGCFLAGS_$(basetarget).o) part with -I
-> $(objtree)/$(obj) and call it a day?
-> I honestly have no clue why it's this complicated and I doubt anybody
-> at this point remembers...
-
-That is the simplest way. I intended to do it but I didn't as I think
-the condition is there for some reasons that I haven't understood yet.
-
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
