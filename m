@@ -1,34 +1,34 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CAB78BEC
-	for <bpf@vger.kernel.org>; Sat, 22 Jul 2023 05:23:01 +0000 (UTC)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E3A35A1
-	for <bpf@vger.kernel.org>; Fri, 21 Jul 2023 22:22:58 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-579ed2829a8so31253017b3.1
-        for <bpf@vger.kernel.org>; Fri, 21 Jul 2023 22:22:58 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E2678BEC
+	for <bpf@vger.kernel.org>; Sat, 22 Jul 2023 05:23:03 +0000 (UTC)
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3FD1FF9
+	for <bpf@vger.kernel.org>; Fri, 21 Jul 2023 22:22:59 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-5768a7e3adbso55277177b3.0
+        for <bpf@vger.kernel.org>; Fri, 21 Jul 2023 22:22:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690003377; x=1690608177;
+        d=1e100.net; s=20221208; t=1690003378; x=1690608178;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ju8JzguvwWcZgvT0E7BFe/QexbaqNyjWoGuuz+JUBIo=;
-        b=H1uYtD/UvhQf7vame9qGVmgvmXGXlik5jHXfN+WFmMU5VSAteTd/KowVBm68Ns+iGx
-         tdhThx8dGX6fTsKfYZWreWnvQ25W0kjc5Kfe61jMPoCP2TyghhtTjk+Bl6iLQ2UQwK7Z
-         IEJuRbVVBWCGxLdFT8XCEFbKrQPEEf/0MjpzLy3IB/2T6LKVjCrfkWEQFi3/75qkGs2F
-         +R/RbW5PS3zM1RaVhmsx07mJJW0OATcKrzy9L77b6pyRa1w4TJpox+Qvu97WPWhE84BG
-         FzKNGmRrhA+yAFK9KkS96tIU7N4TiZJfuNDTX22L7VnhSalq9baJ2cvYPi0Za5iS4v6M
-         h2MA==
-X-Gm-Message-State: ABy/qLZmzUPvypNMxk5rKjW4yMLZ9XNtIddGWmT6wgI1kxVyL9LpWR0x
-	XhTyhKrcs4lLIe3Ph4zFUWndMZSCwMhBPA==
-X-Google-Smtp-Source: APBJJlGWwFs6An5LRgvTmlTzpo70AZ39GG0usBEEf2vZAVCrlqYAg44F9V0DnK3vppkcRgNl0GdJzw==
-X-Received: by 2002:a81:bf53:0:b0:577:606b:735e with SMTP id s19-20020a81bf53000000b00577606b735emr1884120ywk.37.1690003375294;
-        Fri, 21 Jul 2023 22:22:55 -0700 (PDT)
+        bh=Xk8iTGdwbd8Zsy4PoAcL/n6Hjgl6tK37/ejooBk7GLQ=;
+        b=YTGiI3zKn4i96GZ09izHY0UcHWTvhfDpwBuUkucI+f7o2q+L9B9PTYmJu6HI5/xfeo
+         H8Jw/4mMUFhRVQZ3BAes5k2SNzezgBDXKlny9zamfrL/kLjWvPNEwXFlFnpyihA5RlKe
+         YJgMg6USssjI2fvlYm6gto0wISGZOvHMdAaSd1biroOmuzZ7gEzSHnuR490Ndq3LGo+I
+         GvSEzI3K9v4l3ck0NVyxTO5HxMMaizMScHK0ZVfjeJEw/GC7VyW6BItnUomjePq+5aMQ
+         ZuC83G8loVjnGL/ngHER6yqS6EC00MYcbpkJyxNzUvXPd4mSIdu+pmtngan19FdvLlba
+         poFg==
+X-Gm-Message-State: ABy/qLZ4YVEXKouj0cK7X/XbaZL0mlX+AwDyjvIgR45YdEl1h6H2noPq
+	z4HrNXsUaW2xFmOexkyjDmHzeeob8p/tXw==
+X-Google-Smtp-Source: APBJJlEhp8aQRjNYzMF5VEv/C4pIh6ISOkPsAKksqvrpJ49axEBwhU8plY3sbRWunzrKNlysj2Fhtg==
+X-Received: by 2002:a0d:cccc:0:b0:56c:e5a3:3e09 with SMTP id o195-20020a0dcccc000000b0056ce5a33e09mr1456668ywd.15.1690003377592;
+        Fri, 21 Jul 2023 22:22:57 -0700 (PDT)
 Received: from kickker.attlocal.net ([2600:1700:6cf8:1240:c289:3eeb:eb78:fe3b])
-        by smtp.gmail.com with ESMTPSA id y191-20020a0dd6c8000000b00577335ea38csm1397829ywd.121.2023.07.21.22.22.54
+        by smtp.gmail.com with ESMTPSA id y191-20020a0dd6c8000000b00577335ea38csm1397829ywd.121.2023.07.21.22.22.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jul 2023 22:22:55 -0700 (PDT)
+        Fri, 21 Jul 2023 22:22:57 -0700 (PDT)
 From: kuifeng@meta.com
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -38,9 +38,9 @@ To: bpf@vger.kernel.org,
 	andrii@kernel.org
 Cc: sinquersw@gmail.com,
 	Kui-Feng Lee <kuifeng@meta.com>
-Subject: [RFC bpf-next 3/5] bpf: Add a new dynptr type for CGRUP_SOCKOPT.
-Date: Fri, 21 Jul 2023 22:22:46 -0700
-Message-Id: <20230722052248.1062582-4-kuifeng@meta.com>
+Subject: [RFC bpf-next 5/5] bpf: Add test cases for sleepable BPF programs of the CGROUP_SOCKOPT type.
+Date: Fri, 21 Jul 2023 22:22:48 -0700
+Message-Id: <20230722052248.1062582-6-kuifeng@meta.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230722052248.1062582-1-kuifeng@meta.com>
 References: <20230722052248.1062582-1-kuifeng@meta.com>
@@ -60,356 +60,498 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 
 From: Kui-Feng Lee <kuifeng@meta.com>
 
-The new dynptr type (BPF_DYNPTR_TYPE_CGROUP_SOCKOPT) will be used by BPF
-programs to create a buffer that can be installed on ctx to replace
-exisiting optval or user_optval.
-
-This feature is only allowed if ctx->flags & BPF_SOCKOPT_FLAG_OPTVAL_ALLOC
-is true. It is enabled only for sleepable programs on the cgroup/setsockopt
-hook.  BPF programs can install a new buffer holding by a dynptr to
-increase the size of optval passed to setsockopt().
-
-It is not enabled for cgroup/getsockopt since you can not increased a
-buffer created, by user program, to return data from getsockopt().
+Do the same test as non-sleepable ones.
 
 Signed-off-by: Kui-Feng Lee <kuifeng@meta.com>
 ---
- include/linux/bpf.h            |  7 +++-
- include/uapi/linux/bpf.h       |  2 +
- kernel/bpf/btf.c               |  3 ++
- kernel/bpf/cgroup.c            |  3 +-
- kernel/bpf/helpers.c           | 73 ++++++++++++++++++++++++++++++++++
- kernel/bpf/verifier.c          | 43 +++++++++++++++++++-
- tools/include/uapi/linux/bpf.h |  2 +
- 7 files changed, 129 insertions(+), 4 deletions(-)
+ .../testing/selftests/bpf/bpf_experimental.h  |  27 ++
+ tools/testing/selftests/bpf/bpf_kfuncs.h      |  30 ++
+ .../selftests/bpf/prog_tests/sockopt_sk.c     |  34 +-
+ .../testing/selftests/bpf/progs/sockopt_sk.c  | 299 ++++++++++++++++++
+ .../selftests/bpf/verifier/sleepable.c        |   2 +-
+ 5 files changed, 389 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index ceaa8c23287f..40eede696ac5 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -663,12 +663,15 @@ enum bpf_type_flag {
- 	/* DYNPTR points to xdp_buff */
- 	DYNPTR_TYPE_XDP		= BIT(16 + BPF_BASE_TYPE_BITS),
+diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
+index 209811b1993a..80b82858b50c 100644
+--- a/tools/testing/selftests/bpf/bpf_experimental.h
++++ b/tools/testing/selftests/bpf/bpf_experimental.h
+@@ -131,4 +131,31 @@ extern int bpf_rbtree_add_impl(struct bpf_rb_root *root, struct bpf_rb_node *nod
+  */
+ extern struct bpf_rb_node *bpf_rbtree_first(struct bpf_rb_root *root) __ksym;
  
-+	/* DYNPTR points to optval buffer of bpf_sockopt */
-+	DYNPTR_TYPE_CGROUP_SOCKOPT = BIT(17 + BPF_BASE_TYPE_BITS),
++/* Description
++ *	Allocate a buffer of 'size' bytes for being installed as optval.
++ * Returns
++ *	> 0 on success, the size of the allocated buffer
++ *	-ENOMEM or -EINVAL on failure
++ */
++extern int bpf_sockopt_alloc_optval(struct bpf_sockopt *sopt, int size,
++				    struct bpf_dynptr *ptr__uninit) __ksym;
 +
- 	__BPF_TYPE_FLAG_MAX,
- 	__BPF_TYPE_LAST_FLAG	= __BPF_TYPE_FLAG_MAX - 1,
- };
++/* Description
++ *	Install the buffer pointed to by 'ptr' as optval.
++ * Returns
++ *	0 on success
++ *	-EINVAL if the buffer is too small
++ */
++extern int bpf_sockopt_install_optval(struct bpf_sockopt *sopt,
++				      struct bpf_dynptr *ptr) __ksym;
++
++/* Description
++ *	Release the buffer allocated by bpf_sockopt_alloc_optval.
++ * Returns
++ *	0 on success
++ *	-EINVAL if the buffer was not allocated by bpf_sockopt_alloc_optval
++ */
++extern int bpf_sockopt_release_optval(struct bpf_sockopt *sopt,
++				      struct bpf_dynptr *ptr) __ksym;
++
+ #endif
+diff --git a/tools/testing/selftests/bpf/bpf_kfuncs.h b/tools/testing/selftests/bpf/bpf_kfuncs.h
+index 642dda0e758a..a77a1851865e 100644
+--- a/tools/testing/selftests/bpf/bpf_kfuncs.h
++++ b/tools/testing/selftests/bpf/bpf_kfuncs.h
+@@ -41,4 +41,34 @@ extern bool bpf_dynptr_is_rdonly(const struct bpf_dynptr *ptr) __ksym;
+ extern __u32 bpf_dynptr_size(const struct bpf_dynptr *ptr) __ksym;
+ extern int bpf_dynptr_clone(const struct bpf_dynptr *ptr, struct bpf_dynptr *clone__init) __ksym;
  
- #define DYNPTR_TYPE_FLAG_MASK	(DYNPTR_TYPE_LOCAL | DYNPTR_TYPE_RINGBUF | DYNPTR_TYPE_SKB \
--				 | DYNPTR_TYPE_XDP)
-+				 | DYNPTR_TYPE_XDP | DYNPTR_TYPE_CGROUP_SOCKOPT)
- 
- /* Max number of base types. */
- #define BPF_BASE_TYPE_LIMIT	(1UL << BPF_BASE_TYPE_BITS)
-@@ -1206,6 +1209,8 @@ enum bpf_dynptr_type {
- 	BPF_DYNPTR_TYPE_SKB,
- 	/* Underlying data is a xdp_buff */
- 	BPF_DYNPTR_TYPE_XDP,
-+	/* Underlying data is for the optval of a cgroup sock */
-+	BPF_DYNPTR_TYPE_CGROUP_SOCKOPT,
- };
- 
- int bpf_dynptr_check_size(u32 size);
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index b2f81193f97b..13bdf8e78d01 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -7144,6 +7144,8 @@ struct bpf_sockopt {
- enum bpf_sockopt_flags {
- 	/* optval is a pointer to user space memory */
- 	BPF_SOCKOPT_FLAG_OPTVAL_USER	= (1U << 0),
-+	/* able to allocate and install new optval */
-+	BPF_SOCKOPT_FLAG_OPTVAL_ALLOC	= (1U << 1),
- };
- 
- struct bpf_pidns_info {
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index ef9581a580e2..718494edbfc6 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -216,6 +216,7 @@ enum btf_kfunc_hook {
- 	BTF_KFUNC_HOOK_SOCKET_FILTER,
- 	BTF_KFUNC_HOOK_LWT,
- 	BTF_KFUNC_HOOK_NETFILTER,
-+	BTF_KFUNC_HOOK_CGROUP_SOCKOPT,
- 	BTF_KFUNC_HOOK_MAX,
- };
- 
-@@ -7845,6 +7846,8 @@ static int bpf_prog_type_to_kfunc_hook(enum bpf_prog_type prog_type)
- 		return BTF_KFUNC_HOOK_LWT;
- 	case BPF_PROG_TYPE_NETFILTER:
- 		return BTF_KFUNC_HOOK_NETFILTER;
-+	case BPF_PROG_TYPE_CGROUP_SOCKOPT:
-+		return BTF_KFUNC_HOOK_CGROUP_SOCKOPT;
- 	default:
- 		return BTF_KFUNC_HOOK_MAX;
++extern int bpf_copy_to_user(void *dst__uninit, __u32 dst__sz,
++			    const void *src_ign) __ksym;
++
++/* Description
++ *	Allocate a buffer of 'size' bytes for being installed as optval.
++ * Returns
++ *	> 0 on success, the size of the allocated buffer
++ *	-ENOMEM or -EINVAL on failure
++ */
++extern int bpf_sockopt_alloc_optval(struct bpf_sockopt *sopt, int size,
++				    struct bpf_dynptr *ptr__uninit) __ksym;
++
++/* Description
++ *	Install the buffer pointed to by 'ptr' as optval.
++ * Returns
++ *	0 on success
++ *	-EINVAL if the buffer is too small
++ */
++extern int bpf_sockopt_install_optval(struct bpf_sockopt *sopt,
++				      struct bpf_dynptr *ptr) __ksym;
++
++/* Description
++ *	Release the buffer allocated by bpf_sockopt_alloc_optval.
++ * Returns
++ *	0 on success
++ *	-EINVAL if the buffer was not allocated by bpf_sockopt_alloc_optval
++ */
++extern int bpf_sockopt_release_optval(struct bpf_sockopt *sopt,
++				      struct bpf_dynptr *ptr) __ksym;
++
+ #endif
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
+index 05d0e07da394..e18a40d89860 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
+@@ -92,6 +92,7 @@ static int getsetsockopt(void)
  	}
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 8e3a615f3fc8..f42e76501e1c 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -1847,7 +1847,8 @@ int __cgroup_bpf_run_filter_setsockopt(struct sock *sk, int *level,
- 		ctx.optlen = *optlen;
- 		ctx.user_optval = optval;
- 		ctx.user_optval_end = optval + *optlen;
--		ctx.flags = BPF_SOCKOPT_FLAG_OPTVAL_USER;
-+		ctx.flags = BPF_SOCKOPT_FLAG_OPTVAL_USER |
-+			BPF_SOCKOPT_FLAG_OPTVAL_ALLOC;
- 	} else {
- 		/* Allocate a bit more than the initial user buffer for
- 		 * BPF program. The canonical use case is overriding
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 5b1a62c20bb8..92ec80e3a5d3 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1557,6 +1557,7 @@ BPF_CALL_5(bpf_dynptr_read, void *, dst, u32, len, const struct bpf_dynptr_kern
- 	switch (type) {
- 	case BPF_DYNPTR_TYPE_LOCAL:
- 	case BPF_DYNPTR_TYPE_RINGBUF:
-+	case BPF_DYNPTR_TYPE_CGROUP_SOCKOPT:
- 		/* Source and destination may possibly overlap, hence use memmove to
- 		 * copy the data. E.g. bpf_dynptr_from_mem may create two dynptr
- 		 * pointing to overlapping PTR_TO_MAP_VALUE regions.
-@@ -1602,6 +1603,7 @@ BPF_CALL_5(bpf_dynptr_write, const struct bpf_dynptr_kern *, dst, u32, offset, v
- 	switch (type) {
- 	case BPF_DYNPTR_TYPE_LOCAL:
- 	case BPF_DYNPTR_TYPE_RINGBUF:
-+	case BPF_DYNPTR_TYPE_CGROUP_SOCKOPT:
- 		if (flags)
- 			return -EINVAL;
- 		/* Source and destination may possibly overlap, hence use memmove to
-@@ -1654,6 +1656,7 @@ BPF_CALL_3(bpf_dynptr_data, const struct bpf_dynptr_kern *, ptr, u32, offset, u3
- 	switch (type) {
- 	case BPF_DYNPTR_TYPE_LOCAL:
- 	case BPF_DYNPTR_TYPE_RINGBUF:
-+	case BPF_DYNPTR_TYPE_CGROUP_SOCKOPT:
- 		return (unsigned long)(ptr->data + ptr->offset + offset);
- 	case BPF_DYNPTR_TYPE_SKB:
- 	case BPF_DYNPTR_TYPE_XDP:
-@@ -2281,6 +2284,7 @@ __bpf_kfunc void *bpf_dynptr_slice(const struct bpf_dynptr_kern *ptr, u32 offset
- 	switch (type) {
- 	case BPF_DYNPTR_TYPE_LOCAL:
- 	case BPF_DYNPTR_TYPE_RINGBUF:
-+	case BPF_DYNPTR_TYPE_CGROUP_SOCKOPT:
- 		return ptr->data + ptr->offset + offset;
- 	case BPF_DYNPTR_TYPE_SKB:
- 		if (buffer__opt)
-@@ -2449,6 +2453,72 @@ __bpf_kfunc void bpf_rcu_read_unlock(void)
- 	rcu_read_unlock();
+ 	if (buf.u8[0] != 0x01) {
+ 		log_err("Unexpected buf[0] 0x%02x != 0x01", buf.u8[0]);
++		log_err("optlen %d", optlen);
+ 		goto err;
+ 	}
+ 
+@@ -220,7 +221,7 @@ static int getsetsockopt(void)
+ 	return -1;
  }
  
-+__bpf_kfunc int bpf_sockopt_alloc_optval(struct bpf_sockopt *sopt, int size,
-+					 struct bpf_dynptr_kern *ptr__uninit)
+-static void run_test(int cgroup_fd)
++static void run_test_nonsleepable(int cgroup_fd)
+ {
+ 	struct sockopt_sk *skel;
+ 
+@@ -246,6 +247,32 @@ static void run_test(int cgroup_fd)
+ 	sockopt_sk__destroy(skel);
+ }
+ 
++static void run_test_sleepable(int cgroup_fd)
 +{
-+	struct bpf_sockopt_kern *sopt_kern = (struct bpf_sockopt_kern *)sopt;
-+	void *optval;
-+	int err;
++	struct sockopt_sk *skel;
 +
-+	if (!(sopt_kern->flags & BPF_SOCKOPT_FLAG_OPTVAL_ALLOC))
-+		return -EINVAL;
++	skel = sockopt_sk__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_load"))
++		goto cleanup;
 +
-+	err = bpf_dynptr_check_size(size);
-+	if (err)
-+		return err;
++	skel->bss->page_size = getpagesize();
 +
-+	optval = kzalloc(size, GFP_KERNEL);
-+	if (!optval)
-+		return -ENOMEM;
++	skel->links._setsockopt_s =
++		bpf_program__attach_cgroup(skel->progs._setsockopt_s, cgroup_fd);
++	if (!ASSERT_OK_PTR(skel->links._setsockopt_s, "setsockopt_link"))
++		goto cleanup;
 +
-+	bpf_dynptr_init(ptr__uninit, optval,
-+			BPF_DYNPTR_TYPE_CGROUP_SOCKOPT, 0, size);
++	skel->links._getsockopt_s =
++		bpf_program__attach_cgroup(skel->progs._getsockopt_s, cgroup_fd);
++	if (!ASSERT_OK_PTR(skel->links._getsockopt_s, "getsockopt_link"))
++		goto cleanup;
 +
-+	return size;
++	ASSERT_OK(getsetsockopt(), "getsetsockopt");
++
++cleanup:
++	sockopt_sk__destroy(skel);
 +}
 +
-+__bpf_kfunc int bpf_sockopt_install_optval(struct bpf_sockopt *sopt,
-+					   struct bpf_dynptr_kern *ptr)
+ void test_sockopt_sk(void)
+ {
+ 	int cgroup_fd;
+@@ -254,6 +281,9 @@ void test_sockopt_sk(void)
+ 	if (!ASSERT_GE(cgroup_fd, 0, "join_cgroup /sockopt_sk"))
+ 		return;
+ 
+-	run_test(cgroup_fd);
++	if (test__start_subtest("nonsleepable"))
++		run_test_nonsleepable(cgroup_fd);
++	if (test__start_subtest("sleepable"))
++		run_test_sleepable(cgroup_fd);
+ 	close(cgroup_fd);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/sockopt_sk.c b/tools/testing/selftests/bpf/progs/sockopt_sk.c
+index cb990a7d3d45..33ac89c562a2 100644
+--- a/tools/testing/selftests/bpf/progs/sockopt_sk.c
++++ b/tools/testing/selftests/bpf/progs/sockopt_sk.c
+@@ -5,6 +5,9 @@
+ #include <netinet/in.h>
+ #include <bpf/bpf_helpers.h>
+ 
++typedef int bool;
++#include "bpf_kfuncs.h"
++
+ char _license[] SEC("license") = "GPL";
+ 
+ int page_size = 0; /* userspace should set it */
+@@ -26,6 +29,53 @@ struct {
+ 	__type(value, struct sockopt_sk);
+ } socket_storage_map SEC(".maps");
+ 
++/* Copy optval data to destinate even if optval is in user space. */
++static inline int cp_from_optval(struct bpf_sockopt *ctx,
++			void *dst, int len)
 +{
-+	struct bpf_sockopt_kern *sopt_kern = (struct bpf_sockopt_kern *)sopt;
++	if (ctx->flags & BPF_SOCKOPT_FLAG_OPTVAL_USER) {
++		if (len < 0 ||
++		    ctx->user_optval + len > ctx->user_optval_end)
++			return -1;
++		return bpf_copy_from_user(dst, len, ctx->user_optval);
++	}
 +
-+	if (!(sopt_kern->flags & BPF_SOCKOPT_FLAG_OPTVAL_ALLOC) ||
-+	    bpf_dynptr_get_type(ptr) != BPF_DYNPTR_TYPE_CGROUP_SOCKOPT ||
-+	    !ptr->data)
-+		return -EINVAL;
-+
-+	if (sopt_kern->optval &&
-+	    !(sopt_kern->flags & BPF_SOCKOPT_FLAG_OPTVAL_USER))
-+		kfree(sopt_kern->optval);
-+
-+	sopt_kern->optval = ptr->data;
-+	sopt_kern->optval_end = ptr->data + __bpf_dynptr_size(ptr);
-+	sopt_kern->user_optval = NULL;
-+	sopt_kern->user_optval_end = NULL;
-+	sopt_kern->optlen = __bpf_dynptr_size(ptr);
-+	sopt_kern->flags &= ~BPF_SOCKOPT_FLAG_OPTVAL_USER;
-+
-+	bpf_dynptr_set_null(ptr);
++	if (len < 0 ||
++	    ctx->optval + len > ctx->optval_end)
++		return -1;
++	memcpy(dst, ctx->optval, len);
 +
 +	return 0;
 +}
 +
-+__bpf_kfunc int bpf_sockopt_release_optval(struct bpf_sockopt *sopt,
-+					   struct bpf_dynptr_kern *ptr)
++/* Copy source data to optval even if optval is in user space. */
++static inline int cp_to_optval(struct bpf_sockopt *ctx,
++			       const void *src, int len)
 +{
-+	struct bpf_sockopt_kern *sopt_kern = (struct bpf_sockopt_kern *)sopt;
++	if (ctx->flags & BPF_SOCKOPT_FLAG_OPTVAL_USER) {
++		if (len < 0 ||
++		    ctx->user_optval + len > ctx->user_optval_end)
++			return -1;
++		return bpf_copy_to_user(ctx->user_optval, len, src);
++	}
 +
-+	if (!(sopt_kern->flags & BPF_SOCKOPT_FLAG_OPTVAL_ALLOC) ||
-+	    bpf_dynptr_get_type(ptr) != BPF_DYNPTR_TYPE_CGROUP_SOCKOPT ||
-+	    !ptr->data)
-+		return -EINVAL;
-+
-+	kfree(ptr->data);
-+	bpf_dynptr_set_null(ptr);
++	#if 0
++	/* Somehow, this doesn't work.
++	 *
++	 * clang version 17.0.0
++	 *
++	 * progs/sockopt_sk.c:65:2: error: A call to built-in function
++	 * 'memcpy' is not supported.
++	 */
++	if (len < 0 ||
++	    ctx->optval + len > ctx->optval_end)
++		return -1;
++	memcpy(ctx->optval, src, len);
++	#endif
 +
 +	return 0;
 +}
 +
- __diag_pop();
- 
- BTF_SET8_START(generic_btf_ids)
-@@ -2517,6 +2587,9 @@ static const struct btf_kfunc_id_set common_kfunc_set = {
- 
- BTF_SET8_START(cgroup_common_btf_ids)
- BTF_ID_FLAGS(func, bpf_copy_to_user, KF_SLEEPABLE)
-+BTF_ID_FLAGS(func, bpf_sockopt_alloc_optval)
-+BTF_ID_FLAGS(func, bpf_sockopt_install_optval)
-+BTF_ID_FLAGS(func, bpf_sockopt_release_optval)
- BTF_SET8_END(cgroup_common_btf_ids)
- 
- static const struct btf_kfunc_id_set cgroup_kfunc_set = {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 8cb25a775119..53e133525dc1 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -744,6 +744,8 @@ static const char *dynptr_type_str(enum bpf_dynptr_type type)
- 		return "skb";
- 	case BPF_DYNPTR_TYPE_XDP:
- 		return "xdp";
-+	case BPF_DYNPTR_TYPE_CGROUP_SOCKOPT:
-+		return "cgroup_sockopt";
- 	case BPF_DYNPTR_TYPE_INVALID:
- 		return "<invalid>";
- 	default:
-@@ -825,6 +827,8 @@ static enum bpf_dynptr_type arg_to_dynptr_type(enum bpf_arg_type arg_type)
- 		return BPF_DYNPTR_TYPE_SKB;
- 	case DYNPTR_TYPE_XDP:
- 		return BPF_DYNPTR_TYPE_XDP;
-+	case DYNPTR_TYPE_CGROUP_SOCKOPT:
-+		return BPF_DYNPTR_TYPE_CGROUP_SOCKOPT;
- 	default:
- 		return BPF_DYNPTR_TYPE_INVALID;
- 	}
-@@ -841,6 +845,8 @@ static enum bpf_type_flag get_dynptr_type_flag(enum bpf_dynptr_type type)
- 		return DYNPTR_TYPE_SKB;
- 	case BPF_DYNPTR_TYPE_XDP:
- 		return DYNPTR_TYPE_XDP;
-+	case BPF_DYNPTR_TYPE_CGROUP_SOCKOPT:
-+		return DYNPTR_TYPE_CGROUP_SOCKOPT;
- 	default:
- 		return 0;
- 	}
-@@ -848,7 +854,8 @@ static enum bpf_type_flag get_dynptr_type_flag(enum bpf_dynptr_type type)
- 
- static bool dynptr_type_refcounted(enum bpf_dynptr_type type)
+ SEC("cgroup/getsockopt")
+ int _getsockopt(struct bpf_sockopt *ctx)
  {
--	return type == BPF_DYNPTR_TYPE_RINGBUF;
-+	return type == BPF_DYNPTR_TYPE_RINGBUF ||
-+		type == BPF_DYNPTR_TYPE_CGROUP_SOCKOPT;
+@@ -136,6 +186,133 @@ int _getsockopt(struct bpf_sockopt *ctx)
+ 	return 1;
  }
  
- static void __mark_dynptr_reg(struct bpf_reg_state *reg,
-@@ -10101,6 +10108,9 @@ enum special_kfunc_type {
- 	KF_bpf_dynptr_slice,
- 	KF_bpf_dynptr_slice_rdwr,
- 	KF_bpf_dynptr_clone,
-+	KF_bpf_sockopt_alloc_optval,
-+	KF_bpf_sockopt_install_optval,
-+	KF_bpf_sockopt_release_optval,
- };
- 
- BTF_SET_START(special_kfunc_set)
-@@ -10121,6 +10131,9 @@ BTF_ID(func, bpf_dynptr_from_xdp)
- BTF_ID(func, bpf_dynptr_slice)
- BTF_ID(func, bpf_dynptr_slice_rdwr)
- BTF_ID(func, bpf_dynptr_clone)
-+BTF_ID(func, bpf_sockopt_alloc_optval)
-+BTF_ID(func, bpf_sockopt_install_optval)
-+BTF_ID(func, bpf_sockopt_release_optval)
- BTF_SET_END(special_kfunc_set)
- 
- BTF_ID_LIST(special_kfunc_list)
-@@ -10143,6 +10156,9 @@ BTF_ID(func, bpf_dynptr_from_xdp)
- BTF_ID(func, bpf_dynptr_slice)
- BTF_ID(func, bpf_dynptr_slice_rdwr)
- BTF_ID(func, bpf_dynptr_clone)
-+BTF_ID(func, bpf_sockopt_alloc_optval)
-+BTF_ID(func, bpf_sockopt_install_optval)
-+BTF_ID(func, bpf_sockopt_release_optval)
- 
- static bool is_kfunc_ret_null(struct bpf_kfunc_call_arg_meta *meta)
++SEC("cgroup/getsockopt.s")
++int _getsockopt_s(struct bpf_sockopt *ctx)
++{
++	__u8 *optval_end = ctx->optval_end;
++	__u8 *optval = ctx->optval;
++	struct sockopt_sk *storage;
++	struct bpf_sock *sk;
++	struct tcp_zerocopy_receive zcvr;
++	char buf[1];
++	int ret;
++
++	if (ctx->flags & BPF_SOCKOPT_FLAG_OPTVAL_USER) {
++		optval_end = ctx->user_optval_end;
++		optval = ctx->user_optval;
++	}
++
++	/* Bypass AF_NETLINK. */
++	sk = ctx->sk;
++	if (sk && sk->family == AF_NETLINK)
++		goto out;
++
++	/* Make sure bpf_get_netns_cookie is callable.
++	 */
++	if (bpf_get_netns_cookie(NULL) == 0)
++		return 0;
++
++	if (bpf_get_netns_cookie(ctx) == 0)
++		return 0;
++
++	if (ctx->level == SOL_IP && ctx->optname == IP_TOS) {
++		/* Not interested in SOL_IP:IP_TOS;
++		 * let next BPF program in the cgroup chain or kernel
++		 * handle it.
++		 */
++		goto out;
++	}
++
++	if (ctx->level == SOL_SOCKET && ctx->optname == SO_SNDBUF) {
++		/* Not interested in SOL_SOCKET:SO_SNDBUF;
++		 * let next BPF program in the cgroup chain or kernel
++		 * handle it.
++		 */
++		goto out;
++	}
++
++	if (ctx->level == SOL_TCP && ctx->optname == TCP_CONGESTION) {
++		/* Not interested in SOL_TCP:TCP_CONGESTION;
++		 * let next BPF program in the cgroup chain or kernel
++		 * handle it.
++		 */
++		goto out;
++	}
++
++	if (ctx->level == SOL_TCP && ctx->optname == TCP_ZEROCOPY_RECEIVE) {
++		/* Verify that TCP_ZEROCOPY_RECEIVE triggers.
++		 * It has a custom implementation for performance
++		 * reasons.
++		 */
++
++		/* Check that optval contains address (__u64) */
++		if (optval + sizeof(zcvr) > optval_end)
++			return 0; /* bounds check */
++
++		ret = cp_from_optval(ctx, &zcvr, sizeof(zcvr));
++		if (ret < 0)
++			return 0;
++		if (zcvr.address != 0)
++			return 0; /* unexpected data */
++
++		goto out;
++	}
++
++	if (ctx->level == SOL_IP && ctx->optname == IP_FREEBIND) {
++		if (optval + 1 > optval_end)
++			return 0; /* bounds check */
++
++		ctx->retval = 0; /* Reset system call return value to zero */
++
++		/* Always export 0x55 */
++		buf[0] = 0x55;
++		ret = cp_to_optval(ctx, buf, 1);
++		if (ret < 0)
++			return 0;
++		ctx->optlen = 1;
++
++		/* Userspace buffer is PAGE_SIZE * 2, but BPF
++		 * program can only see the first PAGE_SIZE
++		 * bytes of data.
++		 */
++		if (optval_end - optval != page_size && 0)
++			return 0; /* unexpected data size */
++
++		return 1;
++	}
++
++	if (ctx->level != SOL_CUSTOM)
++		return 0; /* deny everything except custom level */
++
++	if (optval + 1 > optval_end)
++		return 0; /* bounds check */
++
++	storage = bpf_sk_storage_get(&socket_storage_map, ctx->sk, 0,
++				     BPF_SK_STORAGE_GET_F_CREATE);
++	if (!storage)
++		return 0; /* couldn't get sk storage */
++
++	if (!ctx->retval)
++		return 0; /* kernel should not have handled
++			   * SOL_CUSTOM, something is wrong!
++			   */
++	ctx->retval = 0; /* Reset system call return value to zero */
++
++	buf[0] = storage->val;
++	ret = cp_to_optval(ctx, buf, 1);
++	if (ret < 0)
++		return 0;
++	ctx->optlen = 1;
++
++	return 1;
++
++out:
++	/* optval larger than PAGE_SIZE use kernel's buffer. */
++	if (ctx->optlen > page_size)
++		ctx->optlen = 0;
++	return 1;
++}
++
+ SEC("cgroup/setsockopt")
+ int _setsockopt(struct bpf_sockopt *ctx)
  {
-@@ -10796,6 +10812,20 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 			arg_type |= OBJ_RELEASE;
- 			break;
- 		case KF_ARG_PTR_TO_DYNPTR:
-+			if (meta->func_id == special_kfunc_list[KF_bpf_sockopt_install_optval] ||
-+			    meta->func_id == special_kfunc_list[KF_bpf_sockopt_release_optval]) {
-+				int ref_obj_id = dynptr_ref_obj_id(env, reg);
+@@ -236,3 +413,125 @@ int _setsockopt(struct bpf_sockopt *ctx)
+ 		ctx->optlen = 0;
+ 	return 1;
+ }
 +
-+				if (ref_obj_id < 0) {
-+					verbose(env, "R%d is not a valid dynptr\n", regno);
-+					return -EINVAL;
-+				}
++SEC("cgroup/setsockopt.s")
++int _setsockopt_s(struct bpf_sockopt *ctx)
++{
++	__u8 *optval_end = ctx->optval_end;
++	struct bpf_dynptr optval_buf;
++	__u8 *optval = ctx->optval;
++	struct sockopt_sk *storage;
++	struct bpf_sock *sk;
++	__u8 tmp_u8;
++	__u32 tmp;
++	int ret;
 +
-+				/* Required by check_func_arg_reg_off() */
-+				arg_type |= ARG_PTR_TO_DYNPTR | OBJ_RELEASE;
-+				meta->release_regno = regno;
-+			}
-+			break;
- 		case KF_ARG_PTR_TO_ITER:
- 		case KF_ARG_PTR_TO_LIST_HEAD:
- 		case KF_ARG_PTR_TO_LIST_NODE:
-@@ -10883,6 +10913,9 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 					verbose(env, "verifier internal error: missing ref obj id for parent of clone\n");
- 					return -EFAULT;
- 				}
-+			} else if (meta->func_id == special_kfunc_list[KF_bpf_sockopt_alloc_optval] &&
-+				   (dynptr_arg_type & MEM_UNINIT)) {
-+				dynptr_arg_type |= DYNPTR_TYPE_CGROUP_SOCKOPT;
- 			}
- 
- 			ret = process_dynptr_func(env, regno, insn_idx, dynptr_arg_type, clone_ref_obj_id);
-@@ -11191,7 +11224,13 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	 * PTR_TO_BTF_ID in bpf_kfunc_arg_meta, do the release now.
- 	 */
- 	if (meta.release_regno) {
--		err = release_reference(env, regs[meta.release_regno].ref_obj_id);
-+		verbose(env, "release refcounted PTR_TO_BTF_ID %s\n",
-+			meta.func_name);
-+		if (meta.func_id == special_kfunc_list[KF_bpf_sockopt_install_optval] ||
-+		    meta.func_id == special_kfunc_list[KF_bpf_sockopt_release_optval])
-+			err = unmark_stack_slots_dynptr(env, &regs[meta.release_regno]);
-+		else
-+			err = release_reference(env, regs[meta.release_regno].ref_obj_id);
- 		if (err) {
- 			verbose(env, "kfunc %s#%d reference has not been acquired before\n",
- 				func_name, meta.func_id);
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index b2f81193f97b..13bdf8e78d01 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -7144,6 +7144,8 @@ struct bpf_sockopt {
- enum bpf_sockopt_flags {
- 	/* optval is a pointer to user space memory */
- 	BPF_SOCKOPT_FLAG_OPTVAL_USER	= (1U << 0),
-+	/* able to allocate and install new optval */
-+	BPF_SOCKOPT_FLAG_OPTVAL_ALLOC	= (1U << 1),
- };
- 
- struct bpf_pidns_info {
++	if (!(ctx->flags & BPF_SOCKOPT_FLAG_OPTVAL_ALLOC))
++		return 0;
++
++	if (ctx->flags & BPF_SOCKOPT_FLAG_OPTVAL_USER) {
++		optval_end = ctx->user_optval_end;
++		optval = ctx->user_optval;
++	}
++
++	/* Bypass AF_NETLINK. */
++	sk = ctx->sk;
++	if (sk && sk->family == AF_NETLINK)
++		goto out;
++
++	/* Make sure bpf_get_netns_cookie is callable.
++	 */
++	if (bpf_get_netns_cookie(NULL) == 0)
++		return 0;
++
++	if (bpf_get_netns_cookie(ctx) == 0)
++		return 0;
++
++	if (ctx->level == SOL_IP && ctx->optname == IP_TOS) {
++		/* Not interested in SOL_IP:IP_TOS;
++		 * let next BPF program in the cgroup chain or kernel
++		 * handle it.
++		 */
++		ctx->optlen = 0; /* bypass optval>PAGE_SIZE */
++		return 1;
++	}
++
++	if (ctx->level == SOL_SOCKET && ctx->optname == SO_SNDBUF) {
++		/* Overwrite SO_SNDBUF value */
++
++		if (optval + sizeof(__u32) > optval_end)
++			return 0; /* bounds check */
++
++		tmp = 0x55AA;
++		ret = cp_to_optval(ctx, &tmp, sizeof(tmp));
++		if (ret < 0)
++			return 0;
++		ctx->optlen = 4;
++
++		return 1;
++	}
++
++	if (ctx->level == SOL_TCP && ctx->optname == TCP_CONGESTION) {
++		/* Always use cubic */
++
++		ret = bpf_sockopt_alloc_optval(ctx, 5, &optval_buf);
++		if (ret < 0) {
++			bpf_sockopt_release_optval(ctx, &optval_buf);
++			return 0;
++		}
++		bpf_dynptr_write(&optval_buf, 0, "cubic", 5, 0);
++		ret = bpf_sockopt_install_optval(ctx, &optval_buf);
++		if (ret < 0)
++			return 0;
++		ctx->optlen = 5;
++
++		return 1;
++	}
++
++	if (ctx->level == SOL_IP && ctx->optname == IP_FREEBIND) {
++		/* Original optlen is larger than PAGE_SIZE. */
++		if (ctx->optlen != page_size * 2)
++			return 0; /* unexpected data size */
++
++		ret = bpf_sockopt_alloc_optval(ctx, 1, &optval_buf);
++		if (ret < 0) {
++			bpf_sockopt_release_optval(ctx, &optval_buf);
++			return 0;
++		}
++		tmp_u8 = 0;
++		bpf_dynptr_write(&optval_buf, 0, &tmp_u8, 1, 0);
++		ret = bpf_sockopt_install_optval(ctx, &optval_buf);
++		if (ret < 0)
++			return 0;
++		ctx->optlen = 1;
++
++		return 1;
++	}
++
++	if (ctx->level != SOL_CUSTOM)
++		return 0; /* deny everything except custom level */
++
++	if (optval + 1 > optval_end)
++		return 0; /* bounds check */
++
++	storage = bpf_sk_storage_get(&socket_storage_map, ctx->sk, 0,
++				     BPF_SK_STORAGE_GET_F_CREATE);
++	if (!storage)
++		return 0; /* couldn't get sk storage */
++
++	ret = cp_from_optval(ctx, &storage->val, 1);
++	if (ret < 0)
++		return 0;
++	ctx->optlen = -1; /* BPF has consumed this option, don't call kernel
++			   * setsockopt handler.
++			   */
++
++	return 1;
++
++out:
++	/* optval larger than PAGE_SIZE use kernel's buffer. */
++	if (ctx->optlen > page_size)
++		ctx->optlen = 0;
++	return 1;
++}
++
+diff --git a/tools/testing/selftests/bpf/verifier/sleepable.c b/tools/testing/selftests/bpf/verifier/sleepable.c
+index 1f0d2bdc673f..4b6c1117ec9f 100644
+--- a/tools/testing/selftests/bpf/verifier/sleepable.c
++++ b/tools/testing/selftests/bpf/verifier/sleepable.c
+@@ -85,7 +85,7 @@
+ 	.expected_attach_type = BPF_TRACE_RAW_TP,
+ 	.kfunc = "sched_switch",
+ 	.result = REJECT,
+-	.errstr = "Only fentry/fexit/fmod_ret, lsm, iter, uprobe, and struct_ops programs can be sleepable",
++	.errstr = "Only fentry/fexit/fmod_ret, lsm, iter, uprobe, cgroup, and struct_ops programs can be sleepable",
+ 	.flags = BPF_F_SLEEPABLE,
+ 	.runs = -1,
+ },
 -- 
 2.34.1
 
