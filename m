@@ -1,63 +1,33 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 637ED5395
-	for <bpf@vger.kernel.org>; Tue, 25 Jul 2023 04:14:19 +0000 (UTC)
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163FBE67
-	for <bpf@vger.kernel.org>; Mon, 24 Jul 2023 21:14:17 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-7653bd3ff2fso542931285a.3
-        for <bpf@vger.kernel.org>; Mon, 24 Jul 2023 21:14:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google; t=1690258456; x=1690863256;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=H5Unmq6oikn4ADho9QqUfzK7Esqr6kPDSC3udHTdE3Y=;
-        b=NYN0m+yAt2wJGCDAMDqxtGwqkhER+qdoiasNFvcMRY6AJ9xHz+uNsWy7LHtHbxdhKD
-         7p0tNZHJLH7liKIqfK+uPjQLy+CuRMhGGDD24qWesU9Khtm29yuDaFiGOagASZ+AyVeq
-         WY2OmMSy+9SEcr2SBwZSgXaoH1b7XHWmDoy7Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690258456; x=1690863256;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H5Unmq6oikn4ADho9QqUfzK7Esqr6kPDSC3udHTdE3Y=;
-        b=imqP/lIiFaMwBIyKbKsNGbUpSkJshL2hfP715kF3Dcb9NhsUFSFOrzrb1WtjxV75TR
-         m7hhhKeSHnt+GthJt3pQo0L+CAjYaD736fLdvO6WQZGN2PzTdbO/Q/sDTxsfpadFJxmZ
-         849ZE1ums5jMsVn5qoLsubzUGbakIGAtWxWiKqA3Ygct0iDkehydV9XJInrSMEmD9NGH
-         DOiZ8+A1ArLJaZBs4pm79E7DpCMDJQSKZEci9hkN2wnURHB1OcqYhunif91vZH5rmRPt
-         03oGBICb2Eo6g3XkE8GPvSCQ1C4iIGZsY9loL328lPYbZpHTAOGKbR60xY7qPCthlOzG
-         v9GA==
-X-Gm-Message-State: ABy/qLb221KkdLizwdvewu5r6E/4xXZvsepYBZHFnd6kaibXWjsUowrT
-	7/HgdXv/57kY4HaWAAUeI+bt3eM20iab9i8blCy4QA==
-X-Google-Smtp-Source: APBJJlF0iw2TioJNhnLh5aH7gbpQD5xjZTA6a9XppFsKqUhXdSSEouvHkSCMUBU2JRB7L24/N0z61Q==
-X-Received: by 2002:a05:620a:3906:b0:765:a633:43f2 with SMTP id qr6-20020a05620a390600b00765a63343f2mr2162337qkn.12.1690258455789;
-        Mon, 24 Jul 2023 21:14:15 -0700 (PDT)
-Received: from debian.debian ([140.141.197.139])
-        by smtp.gmail.com with ESMTPSA id u12-20020a0cb40c000000b0061a68b5a8c4sm4111455qve.134.2023.07.24.21.14.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jul 2023 21:14:15 -0700 (PDT)
-Date: Mon, 24 Jul 2023 21:14:12 -0700
-From: Yan Zhai <yan@cloudflare.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-	Yan Zhai <yan@cloudflare.com>, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kernel-team@cloudflare.com, Jordan Griege <jgriege@cloudflare.com>
-Subject: [PATCH v3 bpf 2/2] selftests/bpf: test lwt redirect error handling
-Message-ID: <25c13cb89412b120616f4e31a31c3108e45bc6af.1690255889.git.yan@cloudflare.com>
-References: <cover.1690255889.git.yan@cloudflare.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1E69186F;
+	Tue, 25 Jul 2023 04:44:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C42BC433C7;
+	Tue, 25 Jul 2023 04:44:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1690260254;
+	bh=+ACqNdes4jmCi8Obnif4i7hbEQJMXGCeCk+pRu6qhsg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hOgwA36ZJTCd8ep9foyK0Ml6RVutpQV8FWOfYn7vpM+S6O0aWLUKjFZoTDm3u8Y+3
+	 jWWWu6hOO00usmnVc/wGuEbZzZPEU+i/cSm9N+l1uUXJuZxV4w3P2VDzq1Kmf8tHyo
+	 yXf8qsQwLVFfEN8rE39M9L8iCe/FQkzOUAtzuUNwe/cDH4lUNlPCbzjEiOumg+WgNu
+	 jVDPn8W+a3poZOXFm/5eQgf+iAD1JmZyuMbnhIGf+OqKlbb+LANjw6lxOVUWFU/yRB
+	 nBnE73BheMbhgboucKa9fjeYxDfvkbwhVJeo23Pmj1EzCgbxVinfshWVOw8bGU0Bf3
+	 8xrmZxrTB2KTA==
+Date: Tue, 25 Jul 2023 07:44:09 +0300
+From: Leon Romanovsky <leon@kernel.org>
+To: Lin Ma <linma@zju.edu.cn>, kuba@kernel.org
+Cc: davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+	ast@kernel.org, martin.lau@kernel.org, yhs@fb.com,
+	void@manifault.com, andrii@kernel.org, houtao1@huawei.com,
+	inwardvessel@gmail.com, kuniyu@amazon.com, songliubraving@fb.com,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH v2] bpf: Add length check for
+ SK_DIAG_BPF_STORAGE_REQ_MAP_FD parsing
+Message-ID: <20230725044409.GF11388@unreal>
+References: <20230725023330.422856-1-linma@zju.edu.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,283 +36,52 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1690255889.git.yan@cloudflare.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-	SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+In-Reply-To: <20230725023330.422856-1-linma@zju.edu.cn>
 
-Tests BPF redirect at the lwt xmit hook to ensure error handling are
-safe, i.e. won't panic the kernel.
+On Tue, Jul 25, 2023 at 10:33:30AM +0800, Lin Ma wrote:
+> The nla_for_each_nested parsing in function bpf_sk_storage_diag_alloc
+> does not check the length of the nested attribute. This can lead to an
+> out-of-attribute read and allow a malformed nlattr (e.g., length 0) to
+> be viewed as a 4 byte integer.
+> 
+> This patch adds an additional check when the nlattr is getting counted.
+> This makes sure the latter nla_get_u32 can access the attributes with
+> the correct length.
+> 
+> Fixes: 1ed4d92458a9 ("bpf: INET_DIAG support in bpf_sk_storage")
+> Suggested-by: Jakub Kicinski <kuba@kernel.org>
+> Signed-off-by: Lin Ma <linma@zju.edu.cn>
+> ---
+> V1 -> V2: moves the check to the counting loop as Jakub suggested,
+>           alters the commit message accordingly.
+> 
+>  net/core/bpf_sk_storage.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+> index d4172534dfa8..cca7594be92e 100644
+> --- a/net/core/bpf_sk_storage.c
+> +++ b/net/core/bpf_sk_storage.c
+> @@ -496,8 +496,11 @@ bpf_sk_storage_diag_alloc(const struct nlattr *nla_stgs)
+>  		return ERR_PTR(-EPERM);
+>  
+>  	nla_for_each_nested(nla, nla_stgs, rem) {
+> -		if (nla_type(nla) == SK_DIAG_BPF_STORAGE_REQ_MAP_FD)
+> +		if (nla_type(nla) == SK_DIAG_BPF_STORAGE_REQ_MAP_FD) {
+> +			if (nla_len(nla) != sizeof(u32))
 
-Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Signed-off-by: Yan Zhai <yan@cloudflare.com>
----
- tools/testing/selftests/bpf/Makefile          |   1 +
- .../selftests/bpf/progs/test_lwt_redirect.c   |  67 +++++++
- .../selftests/bpf/test_lwt_redirect.sh        | 165 ++++++++++++++++++
- 3 files changed, 233 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_lwt_redirect.c
- create mode 100755 tools/testing/selftests/bpf/test_lwt_redirect.sh
+Jakub, it seems like Lin adds this check to all nla_for_each_nested() loops.
+IMHO, the better change will be to change nla_for_each_nested() skip empty/not valid NLAs.
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 538df8fb8c42..e3a24d053793 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -66,6 +66,7 @@ TEST_PROGS := test_kmod.sh \
- 	test_xdp_vlan_mode_generic.sh \
- 	test_xdp_vlan_mode_native.sh \
- 	test_lwt_ip_encap.sh \
-+	test_lwt_redirect.sh \
- 	test_tcp_check_syncookie.sh \
- 	test_tc_tunnel.sh \
- 	test_tc_edt.sh \
-diff --git a/tools/testing/selftests/bpf/progs/test_lwt_redirect.c b/tools/testing/selftests/bpf/progs/test_lwt_redirect.c
-new file mode 100644
-index 000000000000..622c6b1e7128
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_lwt_redirect.c
-@@ -0,0 +1,67 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#define ETH_LEN 14
-+
-+/* We don't care about whether the packet can be received by network stack.
-+ * Just care if the packet is sent to the correct device at correct direction
-+ * and not panic the kernel.
-+ */
-+static __always_inline int prepend_dummy_mac(struct __sk_buff *skb)
-+{
-+	char mac[] = {0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0xf,
-+		      0xe, 0xd, 0xc, 0xb, 0xa, 0x08, 0x00};
-+
-+	if (bpf_skb_change_head(skb, ETH_LEN, 0)) {
-+		bpf_printk("%s: fail to change head", __func__);
-+		return -1;
-+	}
-+
-+	if (bpf_skb_store_bytes(skb, 0, mac, sizeof(mac), 0)) {
-+		bpf_printk("%s: fail to update mac", __func__);
-+		return -1;
-+	}
-+
-+	return 0;
-+}
-+
-+SEC("redir_ingress")
-+int test_lwt_redirect_in(struct __sk_buff *skb)
-+{
-+	if (prepend_dummy_mac(skb))
-+		return BPF_DROP;
-+
-+	bpf_printk("Redirect skb to link %d ingress", skb->mark);
-+	return bpf_redirect(skb->mark, BPF_F_INGRESS);
-+}
-+
-+SEC("redir_egress")
-+int test_lwt_redirect_out(struct __sk_buff *skb)
-+{
-+	if (prepend_dummy_mac(skb))
-+		return BPF_DROP;
-+
-+	bpf_printk("Redirect skb to link %d egress", skb->mark);
-+	return bpf_redirect(skb->mark, 0);
-+}
-+
-+SEC("redir_egress_nomac")
-+int test_lwt_redirect_out_nomac(struct __sk_buff *skb)
-+{
-+	int ret = bpf_redirect(skb->mark, 0);
-+
-+	bpf_printk("Redirect skb to link %d egress nomac: %d", skb->mark, ret);
-+	return ret;
-+}
-+
-+SEC("redir_ingress_nomac")
-+int test_lwt_redirect_in_nomac(struct __sk_buff *skb)
-+{
-+	int ret = bpf_redirect(skb->mark, BPF_F_INGRESS);
-+
-+	bpf_printk("Redirect skb to link %d ingress nomac: %d", skb->mark, ret);
-+	return ret;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/test_lwt_redirect.sh b/tools/testing/selftests/bpf/test_lwt_redirect.sh
-new file mode 100755
-index 000000000000..fe97cbc40ee8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/test_lwt_redirect.sh
-@@ -0,0 +1,165 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# This regression test checks basic lwt redirect functionality,
-+# making sure the kernel would not crash when redirecting packets
-+# to a device, regardless its administration state:
-+#
-+# 1. redirect to a device egress/ingress should work normally
-+# 2. redirect to a device egress/ingress should not panic when target is down
-+# 3. redirect to a device egress/ingress should not panic when target carrier is down
-+#
-+# All test setup are simple: redirect ping packet via lwt xmit to cover above
-+# situations. We do not worry about specific device type, except for the two
-+# categories of devices that require MAC header and not require MAC header. For
-+# carrier down situation, we use a vlan device as upper link, and bring down its
-+# lower device.
-+#
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+BPF_FILE="test_lwt_redirect.bpf.o"
-+INGRESS_REDIR_IP=2.2.2.2
-+EGRESS_REDIR_IP=3.3.3.3
-+INGRESS_REDIR_IP_NOMAC=4.4.4.4
-+EGRESS_REDIR_IP_NOMAC=5.5.5.5
-+PASS=0
-+FAIL=0
-+
-+readonly NS1="ns1-$(mktemp -u XXXXXX)"
-+
-+msg="skip all tests:"
-+if [ $UID != 0 ]; then
-+	echo $msg please run this as root >&2
-+	exit $ksft_skip
-+fi
-+
-+get_ip_direction() {
-+	case $1 in
-+		$INGRESS_REDIR_IP|$INGRESS_REDIR_IP_NOMAC)
-+			echo ingress
-+			;;
-+		$EGRESS_REDIR_IP|$EGRESS_REDIR_IP_NOMAC)
-+			echo egress
-+			;;
-+		*)
-+			echo bug
-+			;;
-+	esac
-+}
-+
-+test_pass()
-+{
-+	local testname=$1
-+	local direction=`get_ip_direction $2`
-+	shift 2
-+	echo "Pass: $testname $direction $@"
-+	PASS=$((PASS + 1))
-+}
-+
-+test_fail()
-+{
-+	local testname=$1
-+	local direction=`get_ip_direction $2`
-+	shift 2
-+	echo "Fail: $testname $direction $@"
-+	FAIL=$((FAIL + 1))
-+}
-+
-+setup() {
-+	ip netns add $NS1
-+
-+	ip -n $NS1 link set lo up
-+	ip -n $NS1 link add link_err type dummy
-+	ip -n $NS1 link add link_w_mac type dummy
-+	ip -n $NS1 link add link link_w_mac link_upper type vlan id 1
-+	ip -n $NS1 link add link_wo_mac type gre remote 4.3.2.1 local 1.2.3.4
-+	ip -n $NS1 link set link_err up
-+	ip -n $NS1 link set link_w_mac up
-+	ip -n $NS1 link set link_upper up
-+	ip -n $NS1 link set link_wo_mac up
-+
-+	ip -n $NS1 addr add dev lo 1.1.1.1/32
-+	ip -n $NS1 route add $INGRESS_REDIR_IP encap bpf xmit \
-+		obj $BPF_FILE sec redir_ingress dev link_err
-+	ip -n $NS1 route add $EGRESS_REDIR_IP encap bpf xmit \
-+		obj $BPF_FILE sec redir_egress dev link_err
-+	ip -n $NS1 route add $INGRESS_REDIR_IP_NOMAC encap bpf xmit \
-+		obj $BPF_FILE sec redir_ingress_nomac dev link_err
-+	ip -n $NS1 route add $EGRESS_REDIR_IP_NOMAC encap bpf xmit \
-+		obj $BPF_FILE sec redir_egress_nomac dev link_err
-+}
-+
-+cleanup_and_summary() {
-+	ip netns del $NS1
-+	echo PASSED:$PASS FAILED:$FAIL
-+	if [ $FAIL -ne 0 ]; then
-+		exit 1
-+	else
-+		exit 0
-+	fi
-+}
-+
-+test_redirect_normal() {
-+	local test_name=${FUNCNAME[0]}
-+	local link_name=$1
-+	local link_id=`ip netns exec $NS1 cat /sys/class/net/${link_name}/ifindex`
-+	local dest=$2
-+
-+	ip netns exec $NS1 timeout 2 tcpdump -i ${link_name} -c 1 -n -p icmp >/dev/null 2>&1 &
-+	local jobid=$!
-+	sleep 1
-+
-+	# hack: mark indicates the link to redirect to
-+	ip netns exec $NS1 ping -m $link_id $dest -c 1 -w 1  > /dev/null 2>&1
-+	wait $jobid
-+
-+	if [ $? -ne 0 ]; then
-+		test_fail $test_name $dest $link_name
-+	else
-+		test_pass $test_name $dest $link_name
-+	fi
-+}
-+
-+test_redirect_no_panic_on_link_down() {
-+	local test_name=${FUNCNAME[0]}
-+	local link_name=$1
-+	local link_id=`ip netns exec $NS1 cat /sys/class/net/${link_name}/ifindex`
-+	local dest=$2
-+
-+	ip -n $NS1 link set $link_name down
-+	# hack: mark indicates the link to redirect to
-+	ip netns exec $NS1 ping -m $link_id $dest -c 1 -w 1 >/dev/null 2>&1
-+
-+	test_pass $test_name $dest to $link_name
-+	ip -n $NS1 link set $link_name up
-+}
-+
-+test_redirect_no_panic_on_link_carrier_down() {
-+	local test_name=${FUNCNAME[0]}
-+	local link_id=`ip netns exec $NS1 cat /sys/class/net/link_upper/ifindex`
-+	local dest=$1
-+
-+	ip -n $NS1 link set link_w_mac down
-+	# hack: mark indicates the link to redirect to
-+	ip netns exec $NS1 ping -m $link_id $dest -c 1 -w 1 >/dev/null 2>&1
-+
-+	test_pass $test_name $dest to link_upper
-+	ip -n $NS1 link set link_w_mac up
-+}
-+
-+setup
-+
-+echo "Testing lwt redirect to devices requiring MAC header"
-+for dest in $INGRESS_REDIR_IP $EGRESS_REDIR_IP; do
-+	test_redirect_normal link_w_mac $dest
-+	test_redirect_no_panic_on_link_down link_w_mac $dest
-+	test_redirect_no_panic_on_link_carrier_down $dest
-+done
-+
-+echo "Testing lwt redirect to devices not requiring MAC header"
-+for dest in $INGRESS_REDIR_IP_NOMAC $EGRESS_REDIR_IP_NOMAC; do
-+	test_redirect_normal link_wo_mac $dest
-+	test_redirect_no_panic_on_link_down link_wo_mac $dest
-+done
-+
-+cleanup_and_summary
--- 
-2.30.2
+Thanks
 
+> +				return ERR_PTR(-EINVAL);
+>  			nr_maps++;
+> +		}
+>  	}
+>  
+>  	diag = kzalloc(struct_size(diag, maps, nr_maps), GFP_KERNEL);
+> -- 
+> 2.17.1
+> 
+> 
