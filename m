@@ -1,230 +1,145 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA9B4A930
-	for <bpf@vger.kernel.org>; Wed, 26 Jul 2023 22:33:37 +0000 (UTC)
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2D1273B
-	for <bpf@vger.kernel.org>; Wed, 26 Jul 2023 15:33:16 -0700 (PDT)
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 3897323B7A060; Wed, 26 Jul 2023 15:08:27 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	bpf@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A9141BF1F
+	for <bpf@vger.kernel.org>; Wed, 26 Jul 2023 22:43:21 +0000 (UTC)
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4052719
+	for <bpf@vger.kernel.org>; Wed, 26 Jul 2023 15:43:19 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1bbc64f9a91so2639695ad.0
+        for <bpf@vger.kernel.org>; Wed, 26 Jul 2023 15:43:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1690411398; x=1691016198;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MaG/2UBeePq8inaENT+NwKjpjU5MiahEk7iN9th9S0Y=;
+        b=ko8WGR+/taNUp8J6OqypMcS4PobhQCefoY9ZnAMyqN+swRHLtYzA3J3I6EFZHH5JLf
+         2ScAKum79L0DXHoNKzy90xTh8rpFYEVm3NZAzExvQsBq6s4uVgOCVHJVgTmMPpxSLI4p
+         6/R7YD7r11qvwTQRy55tAwQB/oLhjaO8JkmQA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690411398; x=1691016198;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MaG/2UBeePq8inaENT+NwKjpjU5MiahEk7iN9th9S0Y=;
+        b=G3aTjYXBggJyxLH/9c1CPiQuTz9ocUFqXDofYKrsJNDigr4eYHjDgCyOLYntIz1G2F
+         VbVrsvZaqGuUvRrSOAeYgXj1OWwfVWLrc9ITpobG+GjQlgZmTqm2J679M3AMHRSaH+NC
+         CR3nQBleQqQEJD7H5N8vJuNj5C+cJnklMgpgNo/4TGrfgdEOGwZ6s92tHA/FOiicb4wW
+         6orqdacHDYQtGvv6aN5siFVju7Wd19B2zlBuisLecAWhqjq6pNUZ9IyprJHo9zkbOGYv
+         uAKqgtuVlTWu1byk9Xt7vJs+xtbI7fhP0O7Ke/p+nYvBqvwCnDo86KHPyzrRp10Vk0VA
+         qygw==
+X-Gm-Message-State: ABy/qLarR0hSTF8CPLxfKcgr45hc7vExTlMqtFTOTGzoJoGT0n6BE35i
+	bUUvW0Nwcqnoj5tIJJVPcp92IA==
+X-Google-Smtp-Source: APBJJlGmY/8Zc8HCO/n+aNXSXQHmPYUwpxTdy/8NUuT8Ni2Oa94ClFZfeWl7lqC5TYAI00z5wRGgcQ==
+X-Received: by 2002:a17:903:442:b0:1bb:98de:251e with SMTP id iw2-20020a170903044200b001bb98de251emr3120883plb.56.1690411398639;
+        Wed, 26 Jul 2023 15:43:18 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id n15-20020a170902d2cf00b001b54a88e6adsm39153plc.309.2023.07.26.15.43.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jul 2023 15:43:18 -0700 (PDT)
+Date: Wed, 26 Jul 2023 15:43:17 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Cc: David Faust <david.faust@oracle.com>,
-	Fangrui Song <maskray@google.com>,
-	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
-	kernel-team@fb.com
-Subject: [PATCH bpf-next v4 11/17] selftests/bpf: Add unit tests for new sign-extension load insns
-Date: Wed, 26 Jul 2023 15:08:27 -0700
-Message-Id: <20230726220827.1100979-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230726220726.1089817-1-yonghong.song@linux.dev>
-References: <20230726220726.1089817-1-yonghong.song@linux.dev>
+	Andrii Nakryiko <andrii@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>, Petr Mladek <pmladek@suse.com>,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH] [v3] kallsyms: rework symbol lookup return codes
+Message-ID: <202307261536.797610DC@keescook>
+References: <20230726141333.3992790-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
-	SPF_HELO_PASS,SPF_SOFTFAIL,TVD_RCVD_IP,T_SCC_BODY_TEXT_LINE
-	autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230726141333.3992790-1-arnd@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+	SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add unit tests for new ldsx insns. The test includes sign-extension
-with a single value or with a value range.
+On Wed, Jul 26, 2023 at 04:12:23PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Building with W=1 in some configurations produces a false positive
+> warning for kallsyms:
+> 
+> kernel/kallsyms.c: In function '__sprint_symbol.isra':
+> kernel/kallsyms.c:503:17: error: 'strcpy' source argument is the same as destination [-Werror=restrict]
+>   503 |                 strcpy(buffer, name);
+>       |                 ^~~~~~~~~~~~~~~~~~~~
+> 
+> This originally showed up while building with -O3, but later started
+> happening in other configurations as well, depending on inlining
+> decisions. The underlying issue is that the local 'name' variable is
+> always initialized to the be the same as 'buffer' in the called functions
+> that fill the buffer, which gcc notices while inlining, though it could
+> see that the address check always skips the copy.
+> 
+> The calling conventions here are rather unusual, as all of the internal
+> lookup functions (bpf_address_lookup, ftrace_mod_address_lookup,
+> ftrace_func_address_lookup, module_address_lookup and
+> kallsyms_lookup_buildid) already use the provided buffer and either return
+> the address of that buffer to indicate success, or NULL for failure,
+> but the callers are written to also expect an arbitrary other buffer
+> to be returned.
+> 
+> Rework the calling conventions to return the length of the filled buffer
+> instead of its address, which is simpler and easier to follow as well
+> as avoiding the warning. Leave only the kallsyms_lookup() calling conventions
+> unchanged, since that is called from 16 different functions and
+> adapting this would be a much bigger change.
+> 
+> Link: https://lore.kernel.org/all/20200107214042.855757-1-arnd@arndb.de/
+> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> v3: use strscpy() instead of strlcpy()
 
-If cpuv4 is not supported due to
-  (1) older compiler, e.g., less than clang version 18, or
-  (2) test runner test_progs and test_progs-no_alu32 which tests
-      cpu v2 and v3, or
-  (3) non-x86_64 arch not supporting new insns in jit yet,
-a dummy program is added with below output:
-  #318/1   verifier_ldsx/cpuv4 is not supported by compiler or jit, use a=
- dummy test:OK
-  #318     verifier_ldsx:OK
-to indicate the test passed with a dummy test instead of actually
-testing cpuv4. I am using a dummy prog to avoid changing the
-verifier testing infrastructure. Once clang 18 is widely available
-and other architectures support cpuv4, at least for CI run,
-the dummy program can be removed.
+Thank you! :) (Though see my notes below...)
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../selftests/bpf/progs/verifier_ldsx.c       | 131 ++++++++++++++++++
- 2 files changed, 133 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_ldsx.c
+> [...]
+> @@ -344,13 +345,12 @@ const char *module_address_lookup(unsigned long addr,
+>  #endif
+>  		}
+>  
+> -		ret = find_kallsyms_symbol(mod, addr, size, offset);
+> -	}
+> -	/* Make a copy in here where it's safe */
+> -	if (ret) {
+> -		strncpy(namebuf, ret, KSYM_NAME_LEN - 1);
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
-sting/selftests/bpf/prog_tests/verifier.c
-index c375e59ff28d..6eec6a9463c8 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -31,6 +31,7 @@
- #include "verifier_int_ptr.skel.h"
- #include "verifier_jeq_infer_not_null.skel.h"
- #include "verifier_ld_ind.skel.h"
-+#include "verifier_ldsx.skel.h"
- #include "verifier_leak_ptr.skel.h"
- #include "verifier_loops1.skel.h"
- #include "verifier_lwt.skel.h"
-@@ -133,6 +134,7 @@ void test_verifier_helper_value_access(void)  { RUN(v=
-erifier_helper_value_access
- void test_verifier_int_ptr(void)              { RUN(verifier_int_ptr); }
- void test_verifier_jeq_infer_not_null(void)   { RUN(verifier_jeq_infer_n=
-ot_null); }
- void test_verifier_ld_ind(void)               { RUN(verifier_ld_ind); }
-+void test_verifier_ldsx(void)                  { RUN(verifier_ldsx); }
- void test_verifier_leak_ptr(void)             { RUN(verifier_leak_ptr); =
-}
- void test_verifier_loops1(void)               { RUN(verifier_loops1); }
- void test_verifier_lwt(void)                  { RUN(verifier_lwt); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_ldsx.c b/tools/te=
-sting/selftests/bpf/progs/verifier_ldsx.c
-new file mode 100644
-index 000000000000..3c3d1bddd67f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-@@ -0,0 +1,131 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+#if defined(__TARGET_ARCH_x86) && __clang_major__ >=3D 18
-+
-+SEC("socket")
-+__description("LDSX, S8")
-+__success __success_unpriv __retval(-2)
-+__naked void ldsx_s8(void)
-+{
-+	asm volatile ("					\
-+	r1 =3D 0x3fe;					\
-+	*(u64 *)(r10 - 8) =3D r1;				\
-+	r0 =3D *(s8 *)(r10 - 8);				\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("LDSX, S16")
-+__success __success_unpriv __retval(-2)
-+__naked void ldsx_s16(void)
-+{
-+	asm volatile ("					\
-+	r1 =3D 0x3fffe;					\
-+	*(u64 *)(r10 - 8) =3D r1;				\
-+	r0 =3D *(s16 *)(r10 - 8);				\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("LDSX, S32")
-+__success __success_unpriv __retval(-1)
-+__naked void ldsx_s32(void)
-+{
-+	asm volatile ("					\
-+	r1 =3D 0xfffffffe;				\
-+	*(u64 *)(r10 - 8) =3D r1;				\
-+	r0 =3D *(s32 *)(r10 - 8);				\
-+	r0 >>=3D 1;					\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("LDSX, S8 range checking, privileged")
-+__log_level(2) __success __retval(1)
-+__msg("R1_w=3Dscalar(smin=3D-128,smax=3D127)")
-+__naked void ldsx_s8_range_priv(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	*(u64 *)(r10 - 8) =3D r0;				\
-+	r1 =3D *(s8 *)(r10 - 8);				\
-+	/* r1 with s8 range */				\
-+	if r1 s> 0x7f goto l0_%=3D;			\
-+	if r1 s< -0x80 goto l0_%=3D;			\
-+	r0 =3D 1;						\
-+l1_%=3D:							\
-+	exit;						\
-+l0_%=3D:							\
-+	r0 =3D 2;						\
-+	goto l1_%=3D;					\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("LDSX, S16 range checking")
-+__success __success_unpriv __retval(1)
-+__naked void ldsx_s16_range(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	*(u64 *)(r10 - 8) =3D r0;				\
-+	r1 =3D *(s16 *)(r10 - 8);				\
-+	/* r1 with s16 range */				\
-+	if r1 s> 0x7fff goto l0_%=3D;			\
-+	if r1 s< -0x8000 goto l0_%=3D;			\
-+	r0 =3D 1;						\
-+l1_%=3D:							\
-+	exit;						\
-+l0_%=3D:							\
-+	r0 =3D 2;						\
-+	goto l1_%=3D;					\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("LDSX, S32 range checking")
-+__success __success_unpriv __retval(1)
-+__naked void ldsx_s32_range(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	*(u64 *)(r10 - 8) =3D r0;				\
-+	r1 =3D *(s32 *)(r10 - 8);				\
-+	/* r1 with s16 range */				\
-+	if r1 s> 0x7fffFFFF goto l0_%=3D;			\
-+	if r1 s< -0x80000000 goto l0_%=3D;		\
-+	r0 =3D 1;						\
-+l1_%=3D:							\
-+	exit;						\
-+l0_%=3D:							\
-+	r0 =3D 2;						\
-+	goto l1_%=3D;					\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+#else
-+
-+SEC("socket")
-+__description("cpuv4 is not supported by compiler or jit, use a dummy te=
-st")
-+__success
-+int dummy_test(void)
-+{
-+	return 0;
-+}
-+
-+#endif
-+
-+char _license[] SEC("license") =3D "GPL";
---=20
-2.34.1
+This -1 was to keep the buffer NUL-terminated.
 
+> -		ret = namebuf;
+> +		sym = find_kallsyms_symbol(mod, addr, size, offset);
+> +
+> +		if (sym)
+> +			ret = strscpy(namebuf, sym, KSYM_NAME_LEN - 1);
+
+This strscpy should use KSYM_NAME_LEN without the "- 1".
+
+>  	}
+> +
+>  	preempt_enable();
+>  
+
+-Kees
+
+-- 
+Kees Cook
