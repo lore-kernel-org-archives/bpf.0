@@ -1,130 +1,107 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AB3615C4
-	for <bpf@vger.kernel.org>; Wed, 26 Jul 2023 07:10:03 +0000 (UTC)
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06CC559E;
-	Wed, 26 Jul 2023 00:09:49 -0700 (PDT)
-X-UUID: 48d18b7fbb5e4399a646d23469c1a346-20230726
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.28,REQID:308e6581-c474-4014-b1a3-53283994d9aa,IP:15,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-	ON:release,TS:0
-X-CID-INFO: VERSION:1.1.28,REQID:308e6581-c474-4014-b1a3-53283994d9aa,IP:15,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:0
-X-CID-META: VersionHash:176cd25,CLOUDID:2dd756d2-cd77-4e67-bbfd-aa4eaace762f,B
-	ulkID:230726150927DGBQ9DXH,BulkQuantity:0,Recheck:0,SF:38|24|17|19|44|102,
-	TC:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-	,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_FSI,TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
-X-UUID: 48d18b7fbb5e4399a646d23469c1a346-20230726
-X-User: guodongtai@kylinos.cn
-Received: from localhost.localdomain [(39.156.73.12)] by mailgw
-	(envelope-from <guodongtai@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 586468305; Wed, 26 Jul 2023 15:09:24 +0800
-From: George Guo <guodongtai@kylinos.cn>
-To: masahiroy@kernel.org,
-	ndesaulniers@google.com,
-	nathan@kernel.org,
-	nicolas@fjasle.eu
-Cc: linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH] samples/bpf: Update sockex2: get the expected output results
-Date: Wed, 26 Jul 2023 15:09:55 +0800
-Message-Id: <20230726070955.178288-1-guodongtai@kylinos.cn>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5E9F8801
+	for <bpf@vger.kernel.org>; Wed, 26 Jul 2023 07:34:00 +0000 (UTC)
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C807230E5;
+	Wed, 26 Jul 2023 00:33:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+	t=1690356834; bh=XcZL0UiYpctgNqxRKPIYWTpapEbyjnHQl0vSOz4L+S8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=sOFrT84lpq+9LFYaPO2jYEMW81bGQf13vrHET4eYePr+RwYlbrJSUcH9eaexSChJQ
+	 4wSQirGWca2fWQHRgQJEUVD5B45iQFYUA2hbyUXlbRRpH++ZHJyzMejXyP2QkjprAj
+	 Egqz3rcEluWWukUlPtXMQj1BRiwDvlHYga7QDbVw=
+Received: from [100.100.34.13] (unknown [220.248.53.61])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 2B45D60112;
+	Wed, 26 Jul 2023 15:33:54 +0800 (CST)
+Message-ID: <504c5fc7-57d3-f36a-b9e7-801d7e40bc60@xen0n.name>
+Date: Wed, 26 Jul 2023 15:33:53 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-	SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.13.0
+Subject: Re: [PATCH] LoongArch: eBPF: Restrict bpf_probe_read{, str}() only to
+ archs where they work
+Content-Language: en-US
+To: zhaochenguang <zhaochenguang@kylinos.cn>, chenhuacai@kernel.org
+Cc: loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+References: <20230726062902.566312-1-zhaochenguang@kylinos.cn>
+From: WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <20230726062902.566312-1-zhaochenguang@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Running "ping -4 -c5 localhost" only shows 4 times prints not 5:
+On 2023/7/26 14:29, zhaochenguang wrote:
+> When we run nettrace on LoongArch, there is a problem that
+> ERROR: failed to load kprobe-based eBPF
+> ERROR: failed to load kprobe-based bpf
+> 
+> Because ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE dose not exist,
+> so we enable it.
+> 
+> The patch reference upstream id 0ebeea8ca8a4d1d453ad299aef0507dab04f6e8d.
 
-$ sudo ./samples/bpf/sockex2
-ip 127.0.0.1 bytes 392 packets 4
-ip 127.0.0.1 bytes 784 packets 8
-ip 127.0.0.1 bytes 1176 packets 12
-ip 127.0.0.1 bytes 1568 packets 16
+The description is a bit hard to follow. Rephrasing a bit:
 
-debug it with num prints:
-$ sudo ./samples/bpf/sockex2
-num = 1: ip 127.0.0.1 bytes 392 packets 4
-num = 2: ip 127.0.0.1 bytes 784 packets 8
-num = 3: ip 127.0.0.1 bytes 1176 packets 12
-num = 4: ip 127.0.0.1 bytes 1568 packets 16
+"Currently nettrace does not work on LoongArch due to missing 
+bpf_probe_read{,str}() support, with the error message:
 
-The reason is that we check it faster, just put sleep(1) before check
-while(bpf_map_get_next_key(map_fd, &key, &next_key) == 0).
-Now we get the expected results:
+     ERROR: failed to load kprobe-based eBPF
+     ERROR: failed to load kprobe-based bpf
 
-$ sudo ./samples/bpf/sockex2
-num = 0: ip 127.0.0.1 bytes 392 packets 4
-num = 1: ip 127.0.0.1 bytes 784 packets 8
-num = 2: ip 127.0.0.1 bytes 1176 packets 12
-num = 3: ip 127.0.0.1 bytes 1568 packets 16
-num = 4: ip 127.0.0.1 bytes 1960 packets 20
+According to commit 0ebeea8ca8a4d ("bpf: Restrict bpf_probe_read{, 
+str}() only to archs where they work"), we only need to select 
+CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE to add said support, 
+because LoongArch does have non-overlapping address ranges for kernel 
+and userspace."
 
-Signed-off-by: George Guo <guodongtai@kylinos.cn>
----
- samples/bpf/sockex2_user.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+Also, the patch subject does not make sense. Looking at precedents such 
+as commit 66633abd0642f ("MIPS/bpf: Enable bpf_probe_read{, str}() on 
+MIPS again") and commit d195b1d1d1196 ("powerpc/bpf: Enable 
+bpf_probe_read{, str}() on powerpc again"), we can instead re-title the 
+commit as "LoongArch/bpf: Enable bpf_probe_read{, str}() on LoongArch". 
+(No "again" because commit 0ebeea8ca8a4d actually predated the LoongArch 
+port.)
 
-diff --git a/samples/bpf/sockex2_user.c b/samples/bpf/sockex2_user.c
-index 2c18471336f0..84bf1ab77649 100644
---- a/samples/bpf/sockex2_user.c
-+++ b/samples/bpf/sockex2_user.c
-@@ -18,8 +18,8 @@ int main(int ac, char **argv)
- 	struct bpf_program *prog;
- 	struct bpf_object *obj;
- 	int map_fd, prog_fd;
--	char filename[256];
--	int i, sock, err;
-+	char filename[256], command[64];
-+	int i, sock, err, num = 5;
- 	FILE *f;
- 
- 	snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
-@@ -42,21 +42,22 @@ int main(int ac, char **argv)
- 	assert(setsockopt(sock, SOL_SOCKET, SO_ATTACH_BPF, &prog_fd,
- 			  sizeof(prog_fd)) == 0);
- 
--	f = popen("ping -4 -c5 localhost", "r");
-+	snprintf(command, sizeof(command), "ping -4 -c%d localhost", num);
-+	f = popen(command, "r");
- 	(void) f;
- 
--	for (i = 0; i < 5; i++) {
-+	for (i = 0; i < num; i++) {
- 		int key = 0, next_key;
- 		struct pair value;
- 
-+		sleep(1);
- 		while (bpf_map_get_next_key(map_fd, &key, &next_key) == 0) {
- 			bpf_map_lookup_elem(map_fd, &next_key, &value);
--			printf("ip %s bytes %lld packets %lld\n",
-+			printf("num = %d: ip %s bytes %lld packets %lld\n", i,
- 			       inet_ntoa((struct in_addr){htonl(next_key)}),
- 			       value.bytes, value.packets);
- 			key = next_key;
- 		}
--		sleep(1);
- 	}
- 	return 0;
- }
+> 
+> Signed-off-by: zhaochenguang <zhaochenguang@kylinos.cn>
+> ---
+>   arch/loongarch/Kconfig | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index 903096bd87f8..4a156875e9cc 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -11,6 +11,7 @@ config LOONGARCH
+>   	select ARCH_ENABLE_MEMORY_HOTREMOVE
+>   	select ARCH_HAS_ACPI_TABLE_UPGRADE	if ACPI
+>   	select ARCH_HAS_PTE_SPECIAL
+> +	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+
+Please keep the list in alphabetical order by moving this one line above.
+
+>   	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
+>   	select ARCH_INLINE_READ_LOCK if !PREEMPTION
+>   	select ARCH_INLINE_READ_LOCK_BH if !PREEMPTION
+
 -- 
-2.34.1
+WANG "xen0n" Xuerui
+
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
 
