@@ -1,13 +1,13 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91601379A5
-	for <bpf@vger.kernel.org>; Wed, 26 Jul 2023 22:31:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA9B4A930
+	for <bpf@vger.kernel.org>; Wed, 26 Jul 2023 22:33:37 +0000 (UTC)
 Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED36C1FFA
-	for <bpf@vger.kernel.org>; Wed, 26 Jul 2023 15:31:45 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2D1273B
+	for <bpf@vger.kernel.org>; Wed, 26 Jul 2023 15:33:16 -0700 (PDT)
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 2403023B79C99; Wed, 26 Jul 2023 15:07:42 -0700 (PDT)
+	id 3897323B7A060; Wed, 26 Jul 2023 15:08:27 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -17,11 +17,10 @@ To: Alexei Starovoitov <ast@kernel.org>,
 Cc: David Faust <david.faust@oracle.com>,
 	Fangrui Song <maskray@google.com>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
-	kernel-team@fb.com,
-	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v4 03/17] bpf: Handle sign-extenstin ctx member accesses
-Date: Wed, 26 Jul 2023 15:07:42 -0700
-Message-Id: <20230726220742.1092332-1-yonghong.song@linux.dev>
+	kernel-team@fb.com
+Subject: [PATCH bpf-next v4 11/17] selftests/bpf: Add unit tests for new sign-extension load insns
+Date: Wed, 26 Jul 2023 15:08:27 -0700
+Message-Id: <20230726220827.1100979-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230726220726.1089817-1-yonghong.song@linux.dev>
 References: <20230726220726.1089817-1-yonghong.song@linux.dev>
@@ -38,55 +37,194 @@ X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Currently, if user accesses a ctx member with signed types,
-the compiler will generate an unsigned load followed by
-necessary left and right shifts.
+Add unit tests for new ldsx insns. The test includes sign-extension
+with a single value or with a value range.
 
-With the introduction of sign-extension load, compiler may
-just emit a ldsx insn instead. Let us do a final movsx sign
-extension to the final unsigned ctx load result to
-satisfy original sign extension requirement.
+If cpuv4 is not supported due to
+  (1) older compiler, e.g., less than clang version 18, or
+  (2) test runner test_progs and test_progs-no_alu32 which tests
+      cpu v2 and v3, or
+  (3) non-x86_64 arch not supporting new insns in jit yet,
+a dummy program is added with below output:
+  #318/1   verifier_ldsx/cpuv4 is not supported by compiler or jit, use a=
+ dummy test:OK
+  #318     verifier_ldsx:OK
+to indicate the test passed with a dummy test instead of actually
+testing cpuv4. I am using a dummy prog to avoid changing the
+verifier testing infrastructure. Once clang 18 is widely available
+and other architectures support cpuv4, at least for CI run,
+the dummy program can be removed.
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/verifier.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../selftests/bpf/progs/verifier_ldsx.c       | 131 ++++++++++++++++++
+ 2 files changed, 133 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_ldsx.c
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2f3eebcd962f..7a6945be07e3 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -17716,6 +17716,7 @@ static int convert_ctx_accesses(struct bpf_verifi=
-er_env *env)
-=20
- 	for (i =3D 0; i < insn_cnt; i++, insn++) {
- 		bpf_convert_ctx_access_t convert_ctx_access;
-+		u8 mode;
-=20
- 		if (insn->code =3D=3D (BPF_LDX | BPF_MEM | BPF_B) ||
- 		    insn->code =3D=3D (BPF_LDX | BPF_MEM | BPF_H) ||
-@@ -17797,6 +17798,7 @@ static int convert_ctx_accesses(struct bpf_verifi=
-er_env *env)
-=20
- 		ctx_field_size =3D env->insn_aux_data[i + delta].ctx_field_size;
- 		size =3D BPF_LDST_BYTES(insn);
-+		mode =3D BPF_MODE(insn->code);
-=20
- 		/* If the read access is a narrower load of the field,
- 		 * convert to a 4/8-byte load, to minimum program type specific
-@@ -17856,6 +17858,10 @@ static int convert_ctx_accesses(struct bpf_verif=
-ier_env *env)
- 								(1ULL << size * 8) - 1);
- 			}
- 		}
-+		if (mode =3D=3D BPF_MEMSX)
-+			insn_buf[cnt++] =3D BPF_RAW_INSN(BPF_ALU64 | BPF_MOV | BPF_X,
-+						       insn->dst_reg, insn->dst_reg,
-+						       size * 8, 0);
-=20
- 		new_prog =3D bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 		if (!new_prog)
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
+sting/selftests/bpf/prog_tests/verifier.c
+index c375e59ff28d..6eec6a9463c8 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -31,6 +31,7 @@
+ #include "verifier_int_ptr.skel.h"
+ #include "verifier_jeq_infer_not_null.skel.h"
+ #include "verifier_ld_ind.skel.h"
++#include "verifier_ldsx.skel.h"
+ #include "verifier_leak_ptr.skel.h"
+ #include "verifier_loops1.skel.h"
+ #include "verifier_lwt.skel.h"
+@@ -133,6 +134,7 @@ void test_verifier_helper_value_access(void)  { RUN(v=
+erifier_helper_value_access
+ void test_verifier_int_ptr(void)              { RUN(verifier_int_ptr); }
+ void test_verifier_jeq_infer_not_null(void)   { RUN(verifier_jeq_infer_n=
+ot_null); }
+ void test_verifier_ld_ind(void)               { RUN(verifier_ld_ind); }
++void test_verifier_ldsx(void)                  { RUN(verifier_ldsx); }
+ void test_verifier_leak_ptr(void)             { RUN(verifier_leak_ptr); =
+}
+ void test_verifier_loops1(void)               { RUN(verifier_loops1); }
+ void test_verifier_lwt(void)                  { RUN(verifier_lwt); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_ldsx.c b/tools/te=
+sting/selftests/bpf/progs/verifier_ldsx.c
+new file mode 100644
+index 000000000000..3c3d1bddd67f
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
+@@ -0,0 +1,131 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++#if defined(__TARGET_ARCH_x86) && __clang_major__ >=3D 18
++
++SEC("socket")
++__description("LDSX, S8")
++__success __success_unpriv __retval(-2)
++__naked void ldsx_s8(void)
++{
++	asm volatile ("					\
++	r1 =3D 0x3fe;					\
++	*(u64 *)(r10 - 8) =3D r1;				\
++	r0 =3D *(s8 *)(r10 - 8);				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("LDSX, S16")
++__success __success_unpriv __retval(-2)
++__naked void ldsx_s16(void)
++{
++	asm volatile ("					\
++	r1 =3D 0x3fffe;					\
++	*(u64 *)(r10 - 8) =3D r1;				\
++	r0 =3D *(s16 *)(r10 - 8);				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("LDSX, S32")
++__success __success_unpriv __retval(-1)
++__naked void ldsx_s32(void)
++{
++	asm volatile ("					\
++	r1 =3D 0xfffffffe;				\
++	*(u64 *)(r10 - 8) =3D r1;				\
++	r0 =3D *(s32 *)(r10 - 8);				\
++	r0 >>=3D 1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("LDSX, S8 range checking, privileged")
++__log_level(2) __success __retval(1)
++__msg("R1_w=3Dscalar(smin=3D-128,smax=3D127)")
++__naked void ldsx_s8_range_priv(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	*(u64 *)(r10 - 8) =3D r0;				\
++	r1 =3D *(s8 *)(r10 - 8);				\
++	/* r1 with s8 range */				\
++	if r1 s> 0x7f goto l0_%=3D;			\
++	if r1 s< -0x80 goto l0_%=3D;			\
++	r0 =3D 1;						\
++l1_%=3D:							\
++	exit;						\
++l0_%=3D:							\
++	r0 =3D 2;						\
++	goto l1_%=3D;					\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("LDSX, S16 range checking")
++__success __success_unpriv __retval(1)
++__naked void ldsx_s16_range(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	*(u64 *)(r10 - 8) =3D r0;				\
++	r1 =3D *(s16 *)(r10 - 8);				\
++	/* r1 with s16 range */				\
++	if r1 s> 0x7fff goto l0_%=3D;			\
++	if r1 s< -0x8000 goto l0_%=3D;			\
++	r0 =3D 1;						\
++l1_%=3D:							\
++	exit;						\
++l0_%=3D:							\
++	r0 =3D 2;						\
++	goto l1_%=3D;					\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("LDSX, S32 range checking")
++__success __success_unpriv __retval(1)
++__naked void ldsx_s32_range(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	*(u64 *)(r10 - 8) =3D r0;				\
++	r1 =3D *(s32 *)(r10 - 8);				\
++	/* r1 with s16 range */				\
++	if r1 s> 0x7fffFFFF goto l0_%=3D;			\
++	if r1 s< -0x80000000 goto l0_%=3D;		\
++	r0 =3D 1;						\
++l1_%=3D:							\
++	exit;						\
++l0_%=3D:							\
++	r0 =3D 2;						\
++	goto l1_%=3D;					\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++#else
++
++SEC("socket")
++__description("cpuv4 is not supported by compiler or jit, use a dummy te=
+st")
++__success
++int dummy_test(void)
++{
++	return 0;
++}
++
++#endif
++
++char _license[] SEC("license") =3D "GPL";
 --=20
 2.34.1
 
