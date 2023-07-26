@@ -1,143 +1,99 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAA94C151
-	for <bpf@vger.kernel.org>; Wed, 26 Jul 2023 13:29:02 +0000 (UTC)
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32EB4AC
-	for <bpf@vger.kernel.org>; Wed, 26 Jul 2023 06:29:01 -0700 (PDT)
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id CFF28C169531
-	for <bpf@vger.kernel.org>; Wed, 26 Jul 2023 06:29:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1690378140; bh=vGoi+oIBhSNxLjVx4DZW5GJrQ4cCbO5Kj47X+jgPq+g=;
-	h=To:CC:Date:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=lE88KJ2eqYBfTdGXAloRDMI4aQefFGW5t0JjFDjToJBDlVYh/vdXIOPOFaIdPfaxC
-	 oi7hej2j/2wnUDUuTJB17W7Ug8u4oPgngjPubKFjodBICP+ry+3c2ocaAOUgrSXqhf
-	 gIuP3uQxmktPuiGQfsGyNoN0PDUDQnVdvKxN7Mfs=
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
- by ietfa.amsl.com (Postfix) with ESMTP id 9C347C16950E;
- Wed, 26 Jul 2023 06:29:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
- t=1690378140; bh=vGoi+oIBhSNxLjVx4DZW5GJrQ4cCbO5Kj47X+jgPq+g=;
- h=From:To:CC:Date:References:In-Reply-To:Subject:List-Id:
- List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
- b=wbc5HhbbH1DCyP98sGoOJqqwDLN5av5zExrSy+90PWrCXj+k77vR+2Qf0qZhEFb//
- 5XtakMSk6Rpc2kBOzcQxaEFuHOXJZ+ucIIWbCF/ZN52rc3Z98TwuCKvpi64r1WSdJk
- El2zm7SDhR/8Wh0Cbcpo6CuySuAsuMtrKFYv1WY8=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id 48E7BC16950E
- for <bpf@ietfa.amsl.com>; Wed, 26 Jul 2023 06:28:59 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Score: -7.111
-X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,MAILING_LIST_MULTI,
-	RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-	SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.6
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (1024-bit key)
- header.d=microsoft.com
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RhTId1O1elh7 for <bpf@ietfa.amsl.com>;
- Wed, 26 Jul 2023 06:28:57 -0700 (PDT)
-Received: from DM5PR00CU002.outbound.protection.outlook.com
- (mail-centralusazon11021020.outbound.protection.outlook.com [52.101.62.20])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id 10EB0C16950D
- for <bpf@ietf.org>; Wed, 26 Jul 2023 06:28:56 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC192C141
+	for <bpf@vger.kernel.org>; Wed, 26 Jul 2023 13:30:26 +0000 (UTC)
+Received: from DM5PR00CU002.outbound.protection.outlook.com (mail-centralusazon11021019.outbound.protection.outlook.com [52.101.62.19])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CD1BC
+	for <bpf@vger.kernel.org>; Wed, 26 Jul 2023 06:30:25 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AYxY89rFaCqgDZuZxUfwM7/hJuViZoDgyV/eV7T32eGex9EzQXXBS6pHHku9DmqJ71562wiTaqUf6P8WFdrT65AKF6X7qte5M/yG367MXHeye6uzNhU2ls8DNXXM15pleqe5eDhgvEHlqOGOGXLTZC7c9F1RRF4N/Vv0mdd5X6AFic9Eaquf22b8qh0DaWb3gpyIEVX+oy3jKxi6oq9/LHQe2I4ZVfvbCWt6uVwH3Bg6O1r1Ly34iJfqG8C33iXvvYlSbO5anwIlf/8uKKOWSZiY1/u/A3qKmVuRkF4wKhMOF4i2qmzV03fq22cbst9uQlObQO65X2SQWPumRc9Xww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ b=UPMff0nXh6ZPeALBnnntuSCrqdrpKHYyfPdcgKJqZCmWx1JwG2+QTLsZ1riT3Xb1M991WMYjrFPpHWLPNaCMWfpNyw9QZ0sYu+FOzZjge9guTp2aTtudSYRA+xyp+/GIsIKpzzi5FVYK6738Phmq8HRD7pPLyZx4cNf2j6AWqUaJ7UBXYizRXoKb2bzt9K76GOPhvLVQcjHHKiii6JMdcQf0iivC8pTZCJ7ieYDgRqBtYHgdZgJKcVDvQjX4JEWUa7Q2TwoBJHvNkL+W5U8rVKi/MooUPyl4sWsaILOdRCWqx+TwNNzFz4QBWo0QPL2pnbjL+2D+EmxVZzsc3VC+tQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zBi3ooOVGlGYSeNPKpQT0+B7DjSu7mjl1bWiTaa9OgM=;
- b=kBG0M4l0FZu5zVSSBGbd+jREih7tkAgQ8Ldjd0ynQTD5VMe74wdRE7VImsqYdtVMx1KlSYJY9Qwb6cIp/J+pFh6QS4oiltKu0LNNOP7g2JWdPzdzxaXQeg/Qz84occpVWiFWHOI06DLpgQ3U9LN4Zc3uC6xz7DQ+sRH/l7Fb32LbTMYl8wW9qodh+kfrQmV7pqM10xYJmLodSaDvFBEZsw8gZ/stYpnG5D0e10QP5olJf7QXOXW5E2o+z41O/AYevCYc0NvGsNNzuOxnAVrvSeN76RujjNnFkM4PhjhloerdVk9HneNhlS3cMf+pqMdu09AkB6AgHY2O6HUhYrvm6w==
+ bh=a7xr/JEE2seYh7QAf+uJqREqJ9jOykw9aQAGaGcMVU8=;
+ b=n16V7PqBvWHxE40FIKX0ZgHVC5xVHRrlN5vsoGlJIPm9FKOzj1d+lAR2YqcCrWI7MMs0X7O9dia9bwrIz9gXKyO3YdC+9SQZX+qHDYDKv9sWnhFJW4KhV6CSAr1b5gh9wnsUOT2YbIheo5a7zy5bBFDnlF2h1SDrfn1Hce0e6WIHF3ZhOJvxMdx1UH/iZRmmrPds0mhFccu6IByACw+q6B4JFEQB8BAwo+X3XZOcOxsaAQGytsZ0sAESY89V2A4uZ4Ybf4rkHc46HpqATr0FST6yq7lH5mNV2YhLLnDj1ekqR2lhOVTutVv/p/hrkN0j2N1mUEoiBrlyVdmvOAqODw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=microsoft.com; dmarc=pass action=none
  header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zBi3ooOVGlGYSeNPKpQT0+B7DjSu7mjl1bWiTaa9OgM=;
- b=EyKmshsnCFoJGH+8iDN4HDGMk/rXBlviTr8NaO0b3UE2bCBTDgv4tAZpi8qt1fYmdRTxfyIvFjfEtx7dSKCnC7XEWr3us71Bj4Mj/bySdqIggod5o5Qro3vVzTkd6Zh0EO34dAkKQshS/tcnM+7tOlvWyFxtyvjfWDIoCNynjao=
+ bh=a7xr/JEE2seYh7QAf+uJqREqJ9jOykw9aQAGaGcMVU8=;
+ b=dJ0unbe5kI3ZDScS9bNIdy2KMc0PBZmNZhgZzObWcS+pCO4RUOlPy8xH7B25m0mAizagdQNZqjy3AGj8S4nZ5nroAkpHKwQeHJmPYPkB/fPOL1xCK+we4ertubyTU2Hm9MxfL2Ak8nMLE+Rf7bligR5PwKAfvlX9CXLNeHButwg=
 Received: from PH7PR21MB3878.namprd21.prod.outlook.com (2603:10b6:510:243::22)
- by SJ0PR21MB1951.namprd21.prod.outlook.com (2603:10b6:a03:295::21)
- with Microsoft SMTP Server (version=TLS1_2,
+ by SJ0PR21MB1951.namprd21.prod.outlook.com (2603:10b6:a03:295::21) with
+ Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.5; Wed, 26 Jul
- 2023 13:28:54 +0000
+ 2023 13:30:20 +0000
 Received: from PH7PR21MB3878.namprd21.prod.outlook.com
  ([fe80::3cfe:3743:361a:d95b]) by PH7PR21MB3878.namprd21.prod.outlook.com
  ([fe80::3cfe:3743:361a:d95b%3]) with mapi id 15.20.6652.002; Wed, 26 Jul 2023
- 13:28:53 +0000
+ 13:30:20 +0000
+From: Dave Thaler <dthaler@microsoft.com>
 To: "Jose E. Marchesi" <jose.marchesi@oracle.com>, "bpf@vger.kernel.org"
- <bpf@vger.kernel.org>
-CC: "bpf@ietf.org" <bpf@ietf.org>
-Thread-Topic: [PATCH] bpf, docs: fix BPF_NEG entry in instruction-set.rst
-Thread-Index: AQHZv6MzE6eRJcWIfEigDp5ZlTaSuK/MCpzA
-Date: Wed, 26 Jul 2023 13:28:53 +0000
-Message-ID: <PH7PR21MB3878287822C8A1F5994A8E9FA300A@PH7PR21MB3878.namprd21.prod.outlook.com>
-References: <20230726092543.6362-1-jose.marchesi@oracle.com>
-In-Reply-To: <20230726092543.6362-1-jose.marchesi@oracle.com>
+	<bpf@vger.kernel.org>, "bpf@ietf.org" <bpf@ietf.org>
+CC: Yonghong Song <yonghong.song@linux.dev>, Eduard Zingerman
+	<eddyz87@gmail.com>
+Subject: RE: Register constraint in NEG instructions
+Thread-Topic: Register constraint in NEG instructions
+Thread-Index: AQHZv5wBBWkxWbz+G0+wUnH4/7J2Ha/LxMYGgABGUKA=
+Date: Wed, 26 Jul 2023 13:30:20 +0000
+Message-ID:
+ <PH7PR21MB38781B2B296EF741290F8685A300A@PH7PR21MB3878.namprd21.prod.outlook.com>
+References: <878rb3842z.fsf@oracle.com> <87y1j36nhz.fsf@oracle.com>
+In-Reply-To: <87y1j36nhz.fsf@oracle.com>
 Accept-Language: en-US
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=04b39e72-ec51-4282-9831-827ef74cba26;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-07-26T13:27:37Z; 
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=b066f623-aa83-4eba-a3c6-3acc560854e1;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-07-26T13:29:07Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=microsoft.com;
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: PH7PR21MB3878:EE_|SJ0PR21MB1951:EE_
-x-ms-office365-filtering-correlation-id: 097f3d50-8938-4279-b2cc-08db8ddc4166
+x-ms-office365-filtering-correlation-id: a8b74412-9d83-4455-047b-08db8ddc754f
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: GMenmjzlOCn+2KkUj/9Ld5TRIiPIZDO0u+JjbStTLXTjE+eOTewzg8GC5/m6RBqfWmpsbYZdkOJG2x2yKHDSR3TeS0t2A+EKQgjRrmmYVyDkXzgqSkrboHP5G7+Nw95mlHlZyG+Cc97nXHZ+kI3gJUmUcDPijtHE60qubBRx61ZIV5gYTQSAsdtWgqR9nRhxlf+QiN8TBW2KCWOgJWZ1uwmRqp6HXNzyMawyTZHrBJLYVqcLPjQnAWsZRaH5eykM2eBDel6Pz1ypeajDbw8AAH/aSSOvbC0HwlaaJPba8Z1ltvo4jpB8a+1cJKr7Y1PaWBFMZNozKIYs/UYslpqbz7tBLfoyQMS7axTCBUD4Ghd2oglQzrwYluvd8Saej2nOGFQyFIchdnDEzbRCxvDg/+n5tdL7rQhXFqzWtliJEztf+ilmqRYEbFeJjklsVzjl2GmYuBiXRmD+D0R7OgxGNJxZZBovnorl6WTptdpgutNeEvMypBDntAi5KXZrLmnBpFlQ4FEC0Ujgw6D8arwnujJmvRwX287ooVJUlVk5xk9j2voaekBSuQ8y7pXgSrbnphBUeV5cECm1BbOrFTn5ycgWpkQ+fcHwG13BPwtzWbndJDszyk2XTuffQhfFABBVweCu5rMd9PWku7+Yx2UZjn+jKgD3o8gWU/VSIW4fiAI=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:; 
- IPV:NLI; SFV:NSPM;
- H:PH7PR21MB3878.namprd21.prod.outlook.com; PTR:; CAT:NONE; 
- SFS:(13230028)(4636009)(136003)(396003)(346002)(366004)(376002)(39860400002)(451199021)(6506007)(53546011)(52536014)(110136005)(8676002)(41300700001)(8936002)(5660300002)(76116006)(66946007)(4326008)(66446008)(66556008)(66476007)(64756008)(83380400001)(316002)(9686003)(186003)(71200400001)(7696005)(10290500003)(478600001)(55016003)(2906002)(8990500004)(33656002)(86362001)(122000001)(38100700002)(38070700005)(82950400001)(82960400001);
- DIR:OUT; SFP:1102; 
+x-microsoft-antispam-message-info:
+ PG2FbrXqKkeEjHO53wI4AaK6H/WXAxdn2PmydHYlmBWFV8p6dkwcYty863ZiVBRfFMCNOv5h+rpEamLg8NR9ZXhdAqqaStGCQAaOQpOugPGySo/ELLuetaU8XvAae1QFyosBBdBtbvA+3kCLrFEzcPyt6r5XYsFLjcxVkdOO2RzVeDVC/Rk2BmvElXrBrt+dpVWmltWyHnvWexmoeg4mSgVA8yqlrEdWnBIB3vERWcTi8KYL95uZEEqC5NAA44wUUAZqyHAZFe+G5009hpYCk+akwq/7tz3vbTnAtbwbUKzuhc4SGmHXEUO7u5nZhuAa1SZAITBXaYMFd4R6b4GPpd1PhrZo6mefk/hdYmwG6pjPQPOiqiAfraD8UyBSympUW1eQIU4vShh0GGfW890RcmWJETwMUMNqEf+rUhw1T957BbwmoPEYdOs0fyjLH8Fc2rqQUObhHh2RfhiQFFnl8Hfckchkbdd+oFJ0qaBgrwoxtsGbp351rF6y4vTRYXqN6RAhaFUMAn+EWEzOl04/S9P1E73clI+zQrxEquFsol41z8RZaTthj0tCip0M9aWJi6RV+Tm38v/qoZLECt1+e51U8xFFUl/OFlOJPDkO0AocpbcX0kbnMPH5SaTXwjWhri8i4bs+jwEKMAVucebX+fSeLIqzLy7QxOiB6eyTKVo=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR21MB3878.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(346002)(366004)(376002)(39860400002)(451199021)(6506007)(53546011)(52536014)(54906003)(110136005)(8676002)(41300700001)(8936002)(5660300002)(76116006)(66946007)(4326008)(66446008)(66556008)(66476007)(64756008)(83380400001)(316002)(9686003)(186003)(71200400001)(7696005)(10290500003)(478600001)(55016003)(2906002)(8990500004)(33656002)(86362001)(122000001)(38100700002)(38070700005)(82950400001)(82960400001);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?xaSXdBXZw2iEpKfWa+KnQo/5Kdp5JtVMFvjuwUdPJEa7eG+iGFrT+7T5qkb7?=
- =?us-ascii?Q?d6hUZUqkF1QGqF/BVitLt15jnY2X5SRe1rJfBCFqiyoi5243iEpG8KtrZyZ4?=
- =?us-ascii?Q?0r3LfMdzgwcUtwVj3C8hd8oguoZEemTj+hZlMd/dmS0P7NV/SClQ1EzzLJHK?=
- =?us-ascii?Q?bJQYBVB2+diibpTdbrFwmAIDt4sUl+DmvJM21n+k7UJQ3af2abDU+wAA8tpo?=
- =?us-ascii?Q?zXDX6IOXFlIl0nmTEHUo0YWEB6YfOKwv/Lve6+WTirP7bdC9L3ezrkNiBINk?=
- =?us-ascii?Q?7sNZmmyQSv+1yTO6tAyPkCruFwY/Qb7UH7xPU+x+Xk9ntl3tDOlb/849M+d4?=
- =?us-ascii?Q?ga1XcAKuZcSx0aUHCQUUpx5slKzyC0LjBYbjchck3y2W301lCzhqLLeHhGPQ?=
- =?us-ascii?Q?GKI9bfAs0UiNrZnxbkAiBU6I4Qj67jSVjSE77OHJyq+e04rQ58TxvaS4WlxQ?=
- =?us-ascii?Q?FHC+M47/o81nbZnng3pN9ybloFn0RuSXQd3NqEQxdRomdu8u+D0eJyxqoeEM?=
- =?us-ascii?Q?hBzd3xLEpEfQ9LRwshiU5ewHPSFKiNTOgMpUv6KvQoZjXk8PQAzdHCitGthY?=
- =?us-ascii?Q?rLWushIMhBP/Uc5B1Y5d3Zk86PkRRHk0szBH4AeSDhd6xW8qzQelWss10DnM?=
- =?us-ascii?Q?R4k7Z+ZOw2L7Q0+HLxK+SdZfQ+MWNte6ovg3hcgV61Ui7GOJNpZnaEPLo9wm?=
- =?us-ascii?Q?c5fpdTR+kDAMwm9NaQiThPsRklZHwVhvmOL5QH8O3AlnGxstlk+nCyG6gQlk?=
- =?us-ascii?Q?HHx3JPtu7rqgvio9vbRgdJ6/uFPaI/8/F9iAZyd33EYaaCHHpJwXb1bt4iHR?=
- =?us-ascii?Q?JVNRzMMhUnVd43jxqjNljdcIUUtsSvvOVYPPvD/kgHAY172bnmWAs16RGncQ?=
- =?us-ascii?Q?LJhhAm++VNn/vR2fo1GIcJR29AhJKCLtB4YddQ9HA3GpEM1KlQsXlLrbJ7HD?=
- =?us-ascii?Q?FGiFTMmaZk7fJjsLZ+OqSKTqVbmxo5OkBcnxn09cE3U1Gsy2dRxLWOF0T0jK?=
- =?us-ascii?Q?W452SM5Td0rDoOjPt7Eo9DM+61cKdy1y53njXDshr8XLmFNvEf/WLHjQiQlZ?=
- =?us-ascii?Q?L28m5gZsiMtIRRELbRIPh7cHcYcZ5lcBibII2dybAD1+Tp/+4YatfOGC+3lq?=
- =?us-ascii?Q?WOkiAhfRmirtvOGf95vykW9t+eJzmbmMPLsFaxNfVlOrCaaFr0muqa0CqlOr?=
- =?us-ascii?Q?PjG5thjeQccdw1mCcWL91NiKZ2uoTOVMiJ6ZT4u6c7F6liIcNBMchYlNKDcx?=
- =?us-ascii?Q?uKblq+sVqmaqD3pVUS6tzeR8Ynvfhp237kGJ5VRNZHcEpITqMLtH/8POnIdD?=
- =?us-ascii?Q?YOQxAXbgeYNhF5pKFklZrT1pgpJE05LFyg1aOMAeknX6NcDjBV8yMe8qWmOn?=
- =?us-ascii?Q?/DTFqKaov/FUKnJ0unky+6BgREUGd3vmI+Gw6Lua4eeCa41DuQvQsiqk4DHO?=
- =?us-ascii?Q?k+/yau7Bd3vqHQsKrjn0IGdVrJn5Fj8S4/6MVQh4+Ff+JMcdov7e4bZ/tqnU?=
- =?us-ascii?Q?Bb7g7IwuFCSPdW24Ssli7igdh58H48+UR97m76/fC4LfAElt738IKd24WUFd?=
- =?us-ascii?Q?nx0hXeT+9rMdY40SEohpquYnSOG6M4EhAf0osSYqs9t6Q5C5b7bpIzbCOb2m?=
- =?us-ascii?Q?0ilY6pcw96hZgcGRYyx+m/EIFkuOJyojn6fmE4WhcytoC/1UfgKduG1x7UCQ?=
- =?us-ascii?Q?XPEX1Q=3D=3D?=
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?aX6FsVF12YFr6BwzvooGQSxTHCVzjTvUxWMa+c9pt0D7ePrJV+RhtVnrnfUh?=
+ =?us-ascii?Q?6cWrhtzs2IP4++jhvJQn6yZfBW80jEXxN6NDvym6I17pJuLuM4XE/0ABWco6?=
+ =?us-ascii?Q?7lUgwb3L408eL2Chr3D9RhfDpMEfdp/jOuzEV4vuT7PnGUL4xN0T+vAJiSay?=
+ =?us-ascii?Q?DEHv2Aa3Pg4bzrdCTsCbFMev+tRWgn5WmtbquIjHDmaim82VrFCzX3y8QZ6v?=
+ =?us-ascii?Q?ScNvnHNVJMXKm8JqLdHsGoalBuvs6RRWu3KsxDHiMA9CoQTNtalnZOGplv31?=
+ =?us-ascii?Q?B3LsC5TQqShSw+tTXHISpYEawxODr5zC3S0yjGQS+7hT9KG7f2g7npa3PoHJ?=
+ =?us-ascii?Q?y6NSbdiBBSALRMpbUVD2l+5YFCL27enWsem5j/TWIqhy/anrnnqE2Vezl2pk?=
+ =?us-ascii?Q?MzZmSAfUdSnmIRRXGIrhr7cMh5FqBl8sBnJ5TLHx4PB414wGB7iLqsS0XtQB?=
+ =?us-ascii?Q?SHc9uhcK8aRcuj7/pjXG7/Hqn7AbWLwv/kq6PVjyekSnQg6ksrwVOpoVl9DW?=
+ =?us-ascii?Q?Ag1HX1wr7q6NceMcI5+qR7FFAzXFBCqFCk6qyRY14XJ/6chXrBiXQBQpUvbQ?=
+ =?us-ascii?Q?MHIzse48z2vxEDqj13/HdckV7I5oaSCokTFlrCrIDrfoBEoZ3geDQeXfoFet?=
+ =?us-ascii?Q?LCU/Fz0X17Orb1xbjVKxVLHDfp2FGGmCgMFakEhXc2Dzh/IMUk/GBUVkZ8Da?=
+ =?us-ascii?Q?QoDwfy7YVUHBgyc+ct40N1+c4qTbF7IGRLIhU8pLVpnqnjQub3qYNArhIgbw?=
+ =?us-ascii?Q?B4yRbkc0u6mnhVIVzf/GGrCPhkIvZBGU6csFQgjbvzT8upu5M7v1gcFw5qq0?=
+ =?us-ascii?Q?IDpCIvQ1/8JAq+CsxdU1SFTZytndl19fFDvvYimJlebDdIfSBi46ofdbwwTV?=
+ =?us-ascii?Q?im10nE6kfbWJE3VmpKtL2pkJ/J7DjzjGdpQrqMkG2BpY2Mepaq4HnDiEpSCx?=
+ =?us-ascii?Q?8hJ2fJS+vXZL/Jn+kP5ugUnpt5zU7bBXjSDtGIi+QPBLOdHl4gPSRxZHXoXa?=
+ =?us-ascii?Q?zjKx/JOH0iMQpbX6nSJqaMtOeXW1FKZeV25Q2db8aRnTpUMZg2cddGOL81tT?=
+ =?us-ascii?Q?WLCxcewdsBzZtUft7Lcz+Qlj5cdgE1JkYOnylRbFKxhVhkCkG24MevuwchOc?=
+ =?us-ascii?Q?ZELJsd6CrQ3TveQaqeUolQXJrg2A6XwFbpSKXS+HHXv5C2n9UiIOyzXkIU9t?=
+ =?us-ascii?Q?cebQLJ28XP1aZlyfdnWIkurSle++G+YMQbWjqb1cZ7Mjt0O6/Pt0smwoTfv2?=
+ =?us-ascii?Q?MO39HmhaeUErZ/Jrsj+SSuWAbsXS7K8Pfm69TcVZo0UcFfp3+XPiKJSQvRmY?=
+ =?us-ascii?Q?w8nevDEiLfXmQuhEnrtBzFD/dqAxJVPLO0dELPUpM3OX6aQgXwS5SxAwBvnw?=
+ =?us-ascii?Q?4wN10XzOF6oamTpgobGxL+5aKkz7qTd8pZn0q+Pqv7e9Tt/OHKgst5DFPRgU?=
+ =?us-ascii?Q?5Tpu3/S0IcXVavwXy7hnkUzJdBjIRkRhwllNM/7q5SmlWchWyuBLs6deJmnc?=
+ =?us-ascii?Q?Qk5KEZV/HG+JZLmsscw6kDzHPWEx5nfAHpHN2DLmyjiZkHp+qykgMwiEOCHY?=
+ =?us-ascii?Q?pADWiIv52sTISBsab1L48cP5AcKx934pZCf2uXMhU+Vi7d0Ae7ywKicmAMl8?=
+ =?us-ascii?Q?kSizzERMH9BrKqbOwYK5l8rw3p9b7pL4br1s5Wq8qkb986b+c5q54IpWa3uA?=
+ =?us-ascii?Q?PtCkHA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -147,76 +103,72 @@ MIME-Version: 1.0
 X-OriginatorOrg: microsoft.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: PH7PR21MB3878.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 097f3d50-8938-4279-b2cc-08db8ddc4166
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jul 2023 13:28:53.2544 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a8b74412-9d83-4455-047b-08db8ddc754f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jul 2023 13:30:20.3484
+ (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: h+WRHufNpS4JDFpTwpsjGbw7DNX8rHP1Bx8I+4WA4Hbig93KPglQTGsvh3ODnv3xkzeQNER9sqLjD7lQft/U1HAT53vJNNKrK5bEuEfjByo=
+X-MS-Exchange-CrossTenant-userprincipalname: 1AlBcyw1bl7+6xGyPRujIPDHMrzkX6hHbAJ78YAQlY0APwEYTQf6hR1H9z5kwbSCYZse76ACZPVq5o57idr6hKxHB6Nk0ap4Um2A02uqqW8=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR21MB1951
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/Lnj1KId_Lh6frFPTH6xuR8ygLVU>
-Subject: Re: [Bpf] [PATCH] bpf, docs: fix BPF_NEG entry in instruction-set.rst
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Id: Discussion of BPF/eBPF standardization efforts within the IETF
- <bpf.ietf.org>
-List-Unsubscribe: <https://www.ietf.org/mailman/options/bpf>,
- <mailto:bpf-request@ietf.org?subject=unsubscribe>
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-List-Subscribe: <https://www.ietf.org/mailman/listinfo/bpf>,
- <mailto:bpf-request@ietf.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
-X-Original-From: Dave Thaler <dthaler@microsoft.com>
-From: Dave Thaler <dthaler=40microsoft.com@dmarc.ietf.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+	RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
-Message-ID: <20230726132853._PRha1QNWyW34ENoZXnRm69YcCfWlDGHSM0n117ITu4@z>
 
 > -----Original Message-----
 > From: Jose E. Marchesi <jose.marchesi@oracle.com>
-> Sent: Wednesday, July 26, 2023 2:26 AM
+> Sent: Wednesday, July 26, 2023 2:17 AM
 > To: bpf@vger.kernel.org
-> Subject: [PATCH] bpf, docs: fix BPF_NEG entry in instruction-set.rst
-> 
-> This patch fixes the documentation of the BPF_NEG instruction to denote
-> that it does not use the source register operand.
-> 
-> Signed-off-by: Jose E. Marchesi <jose.marchesi@oracle.com>
-> ---
->  Documentation/bpf/standardization/instruction-set.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/bpf/standardization/instruction-set.rst
-> b/Documentation/bpf/standardization/instruction-set.rst
-> index 751e657973f0..6ef5534b410a 100644
-> --- a/Documentation/bpf/standardization/instruction-set.rst
-> +++ b/Documentation/bpf/standardization/instruction-set.rst
-> @@ -165,7 +165,7 @@ BPF_OR    0x40   dst \|= src
->  BPF_AND   0x50   dst &= src
->  BPF_LSH   0x60   dst <<= (src & mask)
->  BPF_RSH   0x70   dst >>= (src & mask)
-> -BPF_NEG   0x80   dst = -src
-> +BPF_NEG   0x80   dst = -dst
->  BPF_MOD   0x90   dst = (src != 0) ? (dst % src) : dst
->  BPF_XOR   0xa0   dst ^= src
->  BPF_MOV   0xb0   dst = src
-> --
-> 2.30.2
+> Cc: Yonghong Song <yonghong.song@linux.dev>; Eduard Zingerman
+> <eddyz87@gmail.com>
+> Subject: Re: Register constraint in NEG instructions
+>=20
+>=20
+> I see this in the verifier (bpf-next):
+>=20
+>    if (opcode =3D=3D BPF_NEG) {
+> 	if (BPF_SRC(insn->code) !=3D BPF_K ||
+> 	    insn->src_reg !=3D BPF_REG_0 ||
+> 	    insn->off !=3D 0 || insn->imm !=3D 0) {
+> 		verbose(env, "BPF_NEG uses reserved fields\n");
+> 	return -EINVAL;
+>    }
+>=20
+> And along this llvm assembler test:
+>=20
+>                |
+>                v
+>   // CHECK: 84 01 00 00 00 00 00 00	w1 =3D -w1
+>   w1 =3D -w1
+>=20
+> Is enough evidence that NEG is supposed to use only dst and not src.  I a=
+m
+> sending a fix for standarization/instruction-set.rst.
+>=20
+> > Hello.
+> >
+> > The neg (and neg32) instructions are documented to use (and encode)
+> > both src and dst register operands in standarization/instruction-set.rs=
+t:
+> >
+> >   BPF_NEG   0x80   dst =3D -src
+> >
+> > However, in llvm's BPFAsmParser::PreMatchCheck, it is checked that
+> > both source and destination registers refer to the same register.  If
+> > they are not, an error is raised.
+> >
+> > Is this to speed up JIT to different architectures, some like x86
+> > featuring `NEG reg' and others like aarch64 featuring `NEG reg1,reg2'?
+> >
+> > Should I send a patch for instruction-set.rst documenting the
+> > requirement?
+> >
+> > Thanks.
 
-Acked-by: Dave Thaler <dthaler@microsoft.com>
-
-Also, all changes to files in the standardization directory should also be cc'ed
-to bpf@ietf.org, which I am doing on this email.
+I am adding bpf@ietf.org to this thread, for context.
 
 Dave
 
--- 
-Bpf mailing list
-Bpf@ietf.org
-https://www.ietf.org/mailman/listinfo/bpf
