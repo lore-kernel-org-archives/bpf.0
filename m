@@ -1,184 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B83F18829;
-	Wed, 26 Jul 2023 07:38:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78A88C433C8;
-	Wed, 26 Jul 2023 07:38:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1690357101;
-	bh=MxlSMvIY/Wra0hNDTsfaKX0G5b7LTUom63ialjShl6I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LuiBQXryh8/svbI1KdFVu88IjU8h2tqCaglsN/L4+IGNTMlHinFJlZ8gw7yonPpBP
-	 qmE0DUQduHa5S5rI4NG0h4IigDqItxH54iB9ZBfHCzvf9J5RddZVuHbTs12c69vygk
-	 ysEWENyYD8Ee/MXCMv9Xr6Vlm2MESdK6sIBnNfntdnMC2ehh+sovSCq5uV3JOBptWO
-	 HdBzRkpIBS5ALfrxyigoa+8O1LmIR7jDWMTCD4StHhOh8uMW3dWMhpLdqGf38btmcW
-	 HPlJ0PN4EgdKvP+479zpbLCbZUPjp37pZkZOO20CdxvxhDKjzhwtoAEUwfeEubgnHP
-	 wBpOv0cYkZxHQ==
-Date: Wed, 26 Jul 2023 10:12:54 +0300
-From: Leon Romanovsky <leon@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: syzbot <syzbot+14736e249bce46091c18@syzkaller.appspotmail.com>,
-	andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-	haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org,
-	kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-	martin.lau@linux.dev, netdev@vger.kernel.org, sdf@google.com,
-	song@kernel.org, syzkaller-bugs@googlegroups.com, yhs@fb.com,
-	Gal Pressman <gal@nvidia.com>
-Subject: Re: [syzbot] [bpf?] WARNING: ODEBUG bug in tcx_uninstall
-Message-ID: <20230726071254.GA1380402@unreal>
-References: <000000000000ee69e80600ec7cc7@google.com>
- <91396dc0-23e4-6c81-f8d8-f6427eaa52b0@iogearbox.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 118729456;
+	Wed, 26 Jul 2023 07:43:13 +0000 (UTC)
+Received: from mout.web.de (mout.web.de [212.227.15.14])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCB01FCB;
+	Wed, 26 Jul 2023 00:43:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
+ s=s29768273; t=1690357359; x=1690962159; i=markus.elfring@web.de;
+ bh=/Cba7IENj/1PiZrrNfL6I9qy31acwecgijBrnKGStl0=;
+ h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=Tq2dfqQk5fZMnGR3QKI2c7p3hYAhBd6CnyAT1O0VeuZjJ4XqjDulczaXwdtvLK8iXHF5PKS
+ Ol5BWIwfFwVIUH3x5e2xkTSRqxr5E0merXwifwYFuWeNlxUqBIAAZ7X/V6FLzH6KoWX61Iapz
+ 2iIt3TYXhdUpYdrVT1uCnN4op8RDeVHBzNvu49dI0/KhyvGl51d9kONbotxV3UuPZiqy1hmlU
+ VxZwFSvZaLJN5vr8nVete0gSVisqscFw3VbjCoVBdihSAGBfMaQU6ShfKx0twu01UXN6nqbfZ
+ w8PHMG8onWnNA3BVvMV7DJ0ns/OjiO2rZkqFw4SszNcU/zCmbgSw==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.90.83]) by smtp.web.de (mrweb006
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MNOVK-1qE3Qj0ITC-00P0gn; Wed, 26
+ Jul 2023 09:42:39 +0200
+Message-ID: <484551aa-8336-fded-cc0c-0611c29aa4f8@web.de>
+Date: Wed, 26 Jul 2023 09:42:28 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.1
+Subject: Re: [PATCH v4 bpf 1/2] bpf: fix skb_do_redirect return values
+Content-Language: en-GB
+To: Yan Zhai <yan@cloudflare.com>, bpf@vger.kernel.org,
+ kernel-janitors@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-team@cloudflare.com
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+ Jordan Griege <jgriege@cloudflare.com>, Jakub Sitnicki
+ <jakub@cloudflare.com>, LKML <linux-kernel@vger.kernel.org>
+References: <cover.1690332693.git.yan@cloudflare.com>
+ <e5d05e56bf41de82f10d33229b8a8f6b49290e98.1690332693.git.yan@cloudflare.com>
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <e5d05e56bf41de82f10d33229b8a8f6b49290e98.1690332693.git.yan@cloudflare.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <91396dc0-23e4-6c81-f8d8-f6427eaa52b0@iogearbox.net>
+X-Provags-ID: V03:K1:KPHvQziJWcP9XK4+FXuSjQUE0NW9jwQbMWhFKVMyXUB+48F7KnF
+ Dz0bhEwRf0Ozl40OoWGwggab23uiP5vwAICYoLd8GhSsP3bae0Dben6dc8suoyQ8V6ofa0L
+ XkemI/VVeQWweHKC9/HKTumdeUzcqw4loJChhvYOA5+oLyi2Uqwy6FlvlbdYUPWZOVV/UF1
+ EhMPqEVrXo+9y/CkkFAOw==
+UI-OutboundReport: notjunk:1;M01:P0:bnQolJ42oqo=;ySfKGMmo+h02GjM49Sxv6G1NKPq
+ ZS/PqY2Xhuk5fiAhwW9uMixb2QQqIWlQAegXlQd/8njRLZrH7JC2dxMV7kOB1auu5Px+EtcfJ
+ rakdgR+w0RN7DeucYRG1yKx5+07VHd88m1q2jpe1DwOI6Z53OUsHMrfDBJplZLOsYNQrpUG3T
+ 2xEZpnYvHhwNNhiy/ExNCLysftZXgAOhcdaJ/bABCM3caLAn1qghslj6erIP5gMYKlZuIP9Pi
+ x9HPoeCbZQsQF69SOOC3nR0/9iKlRKnk3B/CXPoL0RtesNjddwx0wQIlzP07s+qjkqglyBJlV
+ kYynNPnKGKsSPiBs2YrSWFO10KdkownxkmpTg5ub+5q0jACho8kbObK/DrXJtsYGpx9PdefwD
+ Fv76vcYsM83AJlV8hj3SNvDfhA7FVhFoCn0wDntb66voKSrhKgeISx9f7V09rbdOdu07OoArM
+ cWOKSyN6zeloDnZLdMqOwjdi3PVzLsSXTHs33ZonZqJ9NKHi48BMMiiUSbVGapF8i1xA92Lhx
+ Y6lyG/WR8tEXj1ykNGGuBpCcjHbD+mpCnx7jG8dn8ChMZFXpeumKqVqALN8AS9J1sN/KkHTV4
+ NuuG5QVjUc47IFEnmI8+U3qZSBl8F7YfvcaVXH8gAQwyGjdZLeGadZkee/C7dab8c7zyn5npI
+ QepHD9TqjrB/WZrQdPfQIeYg8kNshaMNj1+Z5peIH5XM9kTGl4HjSC03sr8BU6PYEHaX15u8H
+ JADHoJtjQOWFzwSQ5rmokMLNT1dQgVPWlbLStOLP/D5Vj/w20ohYDkdM3BlP/i2qKtgognDsX
+ Z1xFKtV26WQcxpre0IkthPhxxHCeFV5p1wR7c0PL2PPzex2Yv+mhJN4/6d0v+/Axxy5wHzYHm
+ 0BFxzB7nnciwskWpjfhR7yqt2PIU2/V+FemShhp4YTtXOnvda1zNwaxxTydx9LWr46enSzJou
+ F6oHb6ivxU79LprHGBYe0YdvF0k=
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+	RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+	SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+	version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Fri, Jul 21, 2023 at 02:52:14AM +0200, Daniel Borkmann wrote:
-> On 7/20/23 5:06 PM, syzbot wrote:
-> > Hello,
-> >=20
-> > syzbot found the following issue on:
-> >=20
-> > HEAD commit:    03b123debcbc tcp: tcp_enter_quickack_mode() should be s=
-tatic
-> > git tree:       net-next
-> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=3D17ac9ffaa80=
-000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D32e3dcc11fd=
-0d297
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=3D14736e249bce4=
-6091c18
-> > compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for=
- Debian) 2.40
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D133f36c6a=
-80000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D11a8e73aa80=
-000
-> >=20
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/348462fb61fa/d=
-isk-03b123de.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/33375730f77f/vmli=
-nux-03b123de.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/b6882fbac041=
-/bzImage-03b123de.xz
-> >=20
-> > IMPORTANT: if you fix the issue, please add the following tag to the co=
-mmit:
-> > Reported-by: syzbot+14736e249bce46091c18@syzkaller.appspotmail.com
->=20
-> Thanks, I'll take a look this evening.
+> skb_do_redirect returns various of values: error code (negative),
+> 0 (success), and some positive status code, e.g. NET_XMIT_CN,
 
-Did anybody post a fix for that?
+How do you think about to use a wording variant (like the following)?
 
-We are experiencing the following kernel panic in netdev commit
-b57e0d48b300 (net-next/main) Merge branch '100GbE' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/tnguy/next-queue
+  skb_do_redirect() returns different value kinds so far:
 
- [  935.131864] ------------[ cut here ]------------
- [  935.133223] WARNING: CPU: 7 PID: 32248 at kernel/bpf/tcx.c:114 tcx_unin=
-stall+0x158/0x1a0
- [  935.135408] Modules linked in: act_tunnel_key vxlan act_mirred act_skbe=
-dit cls_matchall nfnetlink_cttimeout act_gact cls_flower sch_ingress bondin=
-g mlx5_vfio_pci vfio_pci vfio_pci_core vfio_iommu_type1 vfio mlx5_ib mlx5_c=
-ore ip6_gre ib_ipoib nf_tables rdma_ucm ib_uverbs geneve ip_gre gre ip6_tun=
-nel tunnel6 ipip tunnel4 ib_umad iptable_raw openvswitch nsh xt_conntrack x=
-t_MASQUERADE nf_conntrack_netlink nfnetlink xt_addrtype iptable_nat nf_nat =
-br_netfilter rpcrdma ib_iser libiscsi scsi_transport_iscsi rdma_cm iw_cm ib=
-_cm rpcsec_gss_krb5 auth_rpcgss oid_registry ib_core overlay zram zsmalloc =
-fuse [last unloaded: ib_uverbs]
- [  935.141679] CPU: 7 PID: 32248 Comm: devlink Not tainted 6.5.0-rc2_net_n=
-ext_mlx5_89edf40 #1
- [  935.142577] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS re=
-l-1.13.0-0-gf21b5a4aeb02-prebuilt.qemu.org 04/01/2014
- [  935.143758] RIP: 0010:tcx_uninstall+0x158/0x1a0
- [  935.144297] Code: f0 fe ff ff ba 4c 00 00 00 48 c7 c6 e7 33 27 82 48 c7=
- c7 c0 32 27 82 c6 05 5c 0a 3d 01 01 e8 4f a7 e8 ff 0f 0b e9 ca fe ff ff <0=
-f> 0b eb 9d 44 0f b6 35 45 0a 3d 01 41 80 fe 01 0f 87 f6 8b 91 00
- [  935.146192] RSP: 0018:ffff8881eb853928 EFLAGS: 00010202
- [  935.146789] RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000=
-000000
- [  935.147548] RDX: ffff8881066f2808 RSI: ffff888106c40000 RDI: 0000000000=
-000000
- [  935.148328] RBP: ffff8881066f2808 R08: 0000000000000001 R09: 0000000000=
-0003fe
- [  935.149081] R10: 0000000000000001 R11: 00000000fa83b2da R12: 0000000000=
-000001
- [  935.149847] R13: ffff8881066f2808 R14: dead000000000122 R15: dead000000=
-000100
- [  935.150490] FS:  00007fa48de38800(0000) GS:ffff88852cb80000(0000) knlGS=
-:0000000000000000
- [  935.151213] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- [  935.151753] CR2: 00007fa48dd7b1e0 CR3: 0000000125f06002 CR4: 0000000000=
-370ea0
- [  935.152378] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000=
-000000
- [  935.153000] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000=
-000400
- [  935.153620] Call Trace:
- [  935.153918]  <TASK>
- [  935.154194]  ? __warn+0x79/0x120
- [  935.154545]  ? tcx_uninstall+0x158/0x1a0
- [  935.154936]  ? report_bug+0x17c/0x190
- [  935.155320]  ? handle_bug+0x3c/0x60
- [  935.155686]  ? exc_invalid_op+0x14/0x70
- [  935.156088]  ? asm_exc_invalid_op+0x16/0x20
- [  935.156499]  ? tcx_uninstall+0x158/0x1a0
- [  935.156896]  ? tcx_uninstall+0x57/0x1a0
- [  935.157287]  unregister_netdevice_many_notify+0x32f/0x960
- [  935.157790]  unregister_netdevice_queue+0x8d/0xe0
- [  935.158236]  unregister_netdev+0x18/0x20
- [  935.158630]  mlx5e_vport_rep_unload+0x30/0x90 [mlx5_core]
- [  935.159221]  esw_offloads_unload_rep+0x24/0x40 [mlx5_core]
- [  935.159777]  mlx5_eswitch_unload_vf_vports+0x7a/0xc0 [mlx5_core]
- [  935.160358]  mlx5_eswitch_disable_pf_vf_vports+0x15/0xa0 [mlx5_core]
- [  935.160953]  esw_offloads_disable+0xe/0x60 [mlx5_core]
- [  935.161469]  mlx5_eswitch_disable_locked+0x15a/0x180 [mlx5_core]
- [  935.162058]  mlx5_devlink_eswitch_mode_set+0xad/0x380 [mlx5_core]
- [  935.162637]  ? devlink_get_from_attrs_lock+0x9e/0x110
- [  935.163108]  devlink_nl_cmd_eswitch_set_doit+0x60/0xe0
- [  935.163579]  genl_family_rcv_msg_doit.isra.0+0xc2/0x110
- [  935.164086]  genl_rcv_msg+0x17d/0x2b0
- [  935.164460]  ? devlink_get_from_attrs_lock+0x110/0x110
- [  935.164936]  ? devlink_nl_cmd_eswitch_get_doit+0x290/0x290
- [  935.165436]  ? devlink_pernet_pre_exit+0xf0/0xf0
- [  935.165880]  ? genl_family_rcv_msg_doit.isra.0+0x110/0x110
- [  935.166381]  netlink_rcv_skb+0x54/0x100
- [  935.166769]  genl_rcv+0x24/0x40
- [  935.167109]  netlink_unicast+0x1f6/0x2c0
- [  935.167496]  netlink_sendmsg+0x239/0x4b0
- [  935.167901]  sock_sendmsg+0x38/0x60
- [  935.168265]  ? _copy_from_user+0x2a/0x60
- [  935.168654]  __sys_sendto+0x110/0x160
- [  935.169023]  ? handle_mm_fault+0xe4/0x270
- [  935.169422]  ? do_user_addr_fault+0x270/0x620
- [  935.169849]  __x64_sys_sendto+0x20/0x30
- [  935.170232]  do_syscall_64+0x3d/0x90
- [  935.170600]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
- [  935.171075] RIP: 0033:0x7fa48dd1340a
- [  935.171438] Code: d8 64 89 02 48 c7 c0 ff ff ff ff eb b8 0f 1f 00 f3 0f=
- 1e fa 41 89 ca 64 8b 04 25 18 00 00 00 85 c0 75 15 b8 2c 00 00 00 0f 05 <4=
-8> 3d 00 f0 ff ff 77 7e c3 0f 1f 44 00 00 41 54 48 83 ec 30 44 89
- [  935.172982] RSP: 002b:00007ffcd3a8a498 EFLAGS: 00000246 ORIG_RAX: 00000=
-0000000002c
- [  935.173683] RAX: ffffffffffffffda RBX: 00000000008eeb00 RCX: 00007fa48d=
-d1340a
- [  935.174296] RDX: 0000000000000038 RSI: 00000000008eeb00 RDI: 0000000000=
-000003
- [  935.174913] RBP: 00000000008ee910 R08: 00007fa48df37200 R09: 0000000000=
-00000c
- [  935.175532] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000=
-000000
- [  935.176166] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000=
-000001
- [  935.176790]  </TASK>
- [  935.177060] ---[ end trace 0000000000000000 ]---
 
-Thanks
+Can it be nicer to use a multi-line enumeration here?
+
+
+> NET_RX_DROP. Commit 3a0af8fd61f9 ("bpf: BPF for lightweight tunnel
+
+I suggest to start this sentence on a separate line.
+Can the commit specification fit into the same line then?
+
+
+=E2=80=A6
+> https://gist.github.com/zhaiyan920/8fbac245b261fe316a7ef04c9b1eba48
+
+Can it help to mention here that you would like to refer to
+a complete KASAN report (which contains 89 text lines then)?
+
+
+> Convert positive statuses from skb_do_redirect eliminates this issue.
+
+Would you like to avoid another wording weakness in this sentence?
+How do you think about to use the following wording variant?
+
+  Thus convert positive status values from the execution of
+  the function =E2=80=9Cskb_do_redirect=E2=80=9D into special error codes.
+
+
+=E2=80=A6
+> Suggested-by: Markus Elfring
+=E2=80=A6
+
+I dare to point review concerns out for various software components.
+But I did not get the impression that I suggested the patch idea.
+
+See also:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
+cumentation/process/submitting-patches.rst?h=3Dv6.5-rc3#n584
+
+Thus I find this tag inappropriate here.
+Would any information become more relevant for related version description=
+s?
+
+Regards,
+Markus
