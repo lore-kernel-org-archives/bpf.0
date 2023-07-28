@@ -1,105 +1,199 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E7C1426E
-	for <bpf@vger.kernel.org>; Fri, 28 Jul 2023 18:49:41 +0000 (UTC)
-X-Greylist: delayed 426 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 28 Jul 2023 11:49:40 PDT
-Received: from out-97.mta1.migadu.com (out-97.mta1.migadu.com [IPv6:2001:41d0:203:375::61])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13AC311D
-	for <bpf@vger.kernel.org>; Fri, 28 Jul 2023 11:49:40 -0700 (PDT)
-Date: Fri, 28 Jul 2023 11:42:27 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1690569752;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TEBfReHkumv+ijKaHru3+PQiXRd/5c56MSyCUuc5ebs=;
-	b=jtrGMOIySUXUV2fpE2d6Fh3hrGt+uTlJOJCevCNvunPhAh9g5AsiryeyyYVgR3fcvLlw/r
-	SAfoHjvjwcxgaF7vO4axYLjV1xaOtZSf3BravKtArxuKuhC7Yrv4NGtoLxL/41fuj4WBvS
-	phpIDtZkG2DU2l3uJf6Q0TsyO+xmCio=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Roman Gushchin <roman.gushchin@linux.dev>
-To: Michal Hocko <mhocko@suse.com>
-Cc: Chuyi Zhou <zhouchuyi@bytedance.com>, hannes@cmpxchg.org,
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	wuyun.abel@bytedance.com, robin.lu@bytedance.com
-Subject: Re: [RFC PATCH 0/5] mm: Select victim memcg using BPF_OOM_POLICY
-Message-ID: <ZMQME4f9Okp8Rl7N@P9FQF9L96D>
-References: <20230727073632.44983-1-zhouchuyi@bytedance.com>
- <ZMInlGaW90Uw1hSo@dhcp22.suse.cz>
- <ZMNESaE/tWgRd4FI@P9FQF9L96D>
- <ZMN3Do86cxsXyD84@dhcp22.suse.cz>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B84B423B8
+	for <bpf@vger.kernel.org>; Fri, 28 Jul 2023 18:59:08 +0000 (UTC)
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEEC130F5
+	for <bpf@vger.kernel.org>; Fri, 28 Jul 2023 11:59:06 -0700 (PDT)
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+	id E451723D27EB4; Fri, 28 Jul 2023 11:58:52 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	bpf@ietf.org,
+	David Vernet <void@manifault.com>
+Subject: [PATCH bpf-next] docs/bpf: Improve documentation for cpu=v4 instructions
+Date: Fri, 28 Jul 2023 11:58:52 -0700
+Message-Id: <20230728185852.3572290-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZMN3Do86cxsXyD84@dhcp22.suse.cz>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-	T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,
+	RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_PASS,SPF_SOFTFAIL,
+	TVD_RCVD_IP,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Fri, Jul 28, 2023 at 10:06:38AM +0200, Michal Hocko wrote:
-> On Thu 27-07-23 21:30:01, Roman Gushchin wrote:
-> > On Thu, Jul 27, 2023 at 10:15:16AM +0200, Michal Hocko wrote:
-> > > On Thu 27-07-23 15:36:27, Chuyi Zhou wrote:
-> > > > This patchset tries to add a new bpf prog type and use it to select
-> > > > a victim memcg when global OOM is invoked. The mainly motivation is
-> > > > the need to customizable OOM victim selection functionality so that
-> > > > we can protect more important app from OOM killer.
-> > > 
-> > > This is rather modest to give an idea how the whole thing is supposed to
-> > > work. I have looked through patches very quickly but there is no overall
-> > > design described anywhere either.
-> > > 
-> > > Please could you give us a high level design description and reasoning
-> > > why certain decisions have been made? e.g. why is this limited to the
-> > > global oom sitation, why is the BPF program forced to operate on memcgs
-> > > as entities etc...
-> > > Also it would be very helpful to call out limitations of the BPF
-> > > program, if there are any.
-> > 
-> > One thing I realized recently: we don't have to make a victim selection
-> > during the OOM, we [almost always] can do it in advance.
-> > 
-> > Kernel OOM's must guarantee the forward progress under heavy memory pressure
-> > and it creates a lot of limitations on what can and what can't be done in
-> > these circumstances.
-> > 
-> > But in practice most policies except maybe those which aim to catch very fast
-> > memory spikes rely on things which are fairly static: a logical importance of
-> > several workloads in comparison to some other workloads, "age", memory footprint
-> > etc.
-> > 
-> > So I wonder if the right path is to create a kernel interface which allows
-> > to define a OOM victim (maybe several victims, also depending on if it's
-> > a global or a memcg oom) and update it periodically from an userspace.
-> 
-> We already have that interface. Just echo OOM_SCORE_ADJ_MAX to any tasks
-> that are to be killed with a priority...
-> Not a great interface but still something available.
-> 
-> > In fact, the second part is already implemented by tools like oomd, systemd-oomd etc.
-> > Someone might say that the first part is also implemented by the oom_score
-> > interface, but I don't think it's an example of a convenient interface.
-> > It's also not a memcg-level interface.
-> 
-> What do you mean by not memcg-level interface? What kind of interface
-> would you propose instead?
+Improve documentation for cpu=3Dv4 instructions based on
+David's suggestions.
 
-Something like memory.oom.priority, which is 0 by default, but if set to 1,
-the memory cgroup is considered a good oom victim. Idk if we need priorities
-or just fine with a binary thing.
+Cc: bpf@ietf.org
+Suggested-by: David Vernet <void@manifault.com>
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ .../bpf/standardization/instruction-set.rst   | 54 +++++++++++--------
+ 1 file changed, 32 insertions(+), 22 deletions(-)
 
-Under oom conditions the kernel can look if we have a pre-selected oom target
-and if not fallback to the current behavior.
+diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Docu=
+mentation/bpf/standardization/instruction-set.rst
+index 23e880a83a1f..95079a53a35b 100644
+--- a/Documentation/bpf/standardization/instruction-set.rst
++++ b/Documentation/bpf/standardization/instruction-set.rst
+@@ -174,7 +174,7 @@ BPF_MOV   0xb0   0        dst =3D src
+ BPF_MOVSX 0xb0   8/16/32  dst =3D (s8,s16,s32)src
+ BPF_ARSH  0xc0   0        sign extending dst >>=3D (src & mask)
+ BPF_END   0xd0   0        byte swap operations (see `Byte swap instructi=
+ons`_ below)
+-=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D  =3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+=20
+ Underflow and overflow are allowed during arithmetic operations, meaning
+ the 64-bit or 32-bit value will wrap. If eBPF program execution would
+@@ -201,26 +201,32 @@ where '(u32)' indicates that the upper 32 bits are =
+zeroed.
+=20
+   dst =3D dst ^ imm32
+=20
+-Note that most instructions have instruction offset of 0. But three inst=
+ructions
+-(BPF_SDIV, BPF_SMOD, BPF_MOVSX) have non-zero offset.
++Note that most instructions have instruction offset of 0. Only three ins=
+tructions
++(``BPF_SDIV``, ``BPF_SMOD``, ``BPF_MOVSX``) have a non-zero offset.
+=20
+ The devision and modulo operations support both unsigned and signed flav=
+ors.
+-For unsigned operation (BPF_DIV and BPF_MOD), for ``BPF_ALU``, 'imm' is =
+first
+-interpreted as an unsigned 32-bit value, whereas for ``BPF_ALU64``, 'imm=
+' is
+-first sign extended to 64 bits and the result interpreted as an unsigned=
+ 64-bit
+-value.  For signed operation (BPF_SDIV and BPF_SMOD), for ``BPF_ALU``, '=
+imm' is
+-interpreted as a signed value. For ``BPF_ALU64``, the 'imm' is sign exte=
+nded
+-from 32 to 64 and interpreted as a signed 64-bit value.
+=20
+-Instruction BPF_MOVSX does move operation with sign extension.
+-``BPF_ALU | MOVSX`` sign extendes 8-bit and 16-bit into 32-bit and upper=
+ 32-bit are zeroed.
+-``BPF_ALU64 | MOVSX`` sign extends 8-bit, 16-bit and 32-bit into 64-bit.
++For unsigned operations (``BPF_DIV`` and ``BPF_MOD``), for ``BPF_ALU``,
++'imm' is interpreted as a 32-bit unsigned value. For ``BPF_ALU64``,
++'imm' is first sign extended from 32 to 64 bits, and then interpreted as
++a 64-bit unsigned value.
++
++For signed operations (``BPF_SDIV`` and ``BPF_SMOD``), for ``BPF_ALU``,
++'imm' is interpreted as a 32-bit signed value. For ``BPF_ALU64``, 'imm'
++is first sign extended from 32 to 64 bits, and then interpreted as a
++64-bit signed value.
++
++The ``BPF_MOVSX`` instruction does a move operation with sign extension.
++``BPF_ALU | BPF_MOVSX`` sign extends 8-bit and 16-bit operands into 32
++bit operands, and zeroes the remaining upper 32 bits.
++``BPF_ALU64 | BPF_MOVSX`` sign extends 8-bit, 16-bit, and 32-bit
++operands into 64 bit operands.
+=20
+ Shift operations use a mask of 0x3F (63) for 64-bit operations and 0x1F =
+(31)
+ for 32-bit operations.
+=20
+ Byte swap instructions
+-~~~~~~~~~~~~~~~~~~~~~~
++----------------------
+=20
+ The byte swap instructions use instruction classes of ``BPF_ALU`` and ``=
+BPF_ALU64``
+ and a 4-bit 'code' field of ``BPF_END``.
+@@ -228,16 +234,17 @@ and a 4-bit 'code' field of ``BPF_END``.
+ The byte swap instructions operate on the destination register
+ only and do not use a separate source register or immediate value.
+=20
+-For ``BPF_ALU``, the 1-bit source operand field in the opcode is used to=
+ select what byte
+-order the operation convert from or to. For ``BPF_ALU64``, the 1-bit sou=
+rce operand
+-field in the opcode is not used and must be 0.
++For ``BPF_ALU``, the 1-bit source operand field in the opcode is used to
++select what byte order the operation converts from or to. For
++``BPF_ALU64``, the 1-bit source operand field in the opcode is reserved
++and must be set to 0.
+=20
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=
+  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ class      source     value  description
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=
+  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ BPF_ALU    BPF_TO_LE  0x00   convert between host byte order and little =
+endian
+ BPF_ALU    BPF_TO_BE  0x08   convert between host byte order and big end=
+ian
+-BPF_ALU64  BPF_TO_LE  0x00   do byte swap unconditionally
++BPF_ALU64  Reserved   0x00   do byte swap unconditionally
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=
+  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+ The 'imm' field encodes the width of the swap operations.  The following=
+ widths
+@@ -305,9 +312,12 @@ where 's>=3D' indicates a signed '>=3D' comparison.
+=20
+ where 'imm' means the branch offset comes from insn 'imm' field.
+=20
+-Note there are two flavors of BPF_JA instrions. BPF_JMP class permits 16=
+-bit jump offset while
+-BPF_JMP32 permits 32-bit jump offset. A >16bit conditional jmp can be co=
+nverted to a <16bit
+-conditional jmp plus a 32-bit unconditional jump.
++Note that there are two flavors of ``BPF_JA`` instructions. The
++``BPF_JMP`` class permits a 16-bit jump offset specified by 'offset'
++field, whereas the ``BPF_JMP32`` class permits a 32-bit jump offset
++specified by the 'imm' field. A > 16-bit conditional jump may be
++converted to a < 16-bit conditional jump plus a 32-bit unconditional
++jump.
+=20
+ Helper functions
+ ~~~~~~~~~~~~~~~~
+@@ -385,7 +395,7 @@ instructions that transfer data between a register an=
+d memory.
+   dst =3D *(unsigned size *) (src + offset)
+=20
+ Where size is one of: ``BPF_B``, ``BPF_H``, ``BPF_W``, or ``BPF_DW`` and
+-'unsigned size' is one of u8, u16, u32 and u64.
++'unsigned size' is one of u8, u16, u32 or u64.
+=20
+ The ``BPF_MEMSX`` mode modifier is used to encode sign-extension load
+ instructions that transfer data between a register and memory.
+@@ -395,7 +405,7 @@ instructions that transfer data between a register an=
+d memory.
+   dst =3D *(signed size *) (src + offset)
+=20
+ Where size is one of: ``BPF_B``, ``BPF_H`` or ``BPF_W``, and
+-'signed size' is one of s8, s16 and s32.
++'signed size' is one of s8, s16 or s32.
+=20
+ Atomic operations
+ -----------------
+--=20
+2.34.1
 
-Thanks!
