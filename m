@@ -1,157 +1,126 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F1527C
-	for <bpf@vger.kernel.org>; Fri, 28 Jul 2023 01:42:16 +0000 (UTC)
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DD53584
-	for <bpf@vger.kernel.org>; Thu, 27 Jul 2023 18:42:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1690508534;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+B8/dh9FxUlYlsfj6c2Az3RVvE6Mk5Zpo699JVAL0Us=;
-	b=UCrkxbwTTj/NOaU+mujwbU4bv7w4azAAj/C59hBh27WyxcysgBHUHSyRfaLsD3OuoIZwwH
-	WSc6nro4Z7msCDddyTazjNwrr2lXBpgsMi/nevq+AfnBNHr9UqQ0HMt40nudfm1fg9RIQ4
-	AQU8Qm2qNYQShi4eKJ0VtgU+lskOwhM=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-600-hIvt1f5DORS9qEQL5Jn3FA-1; Thu, 27 Jul 2023 21:42:12 -0400
-X-MC-Unique: hIvt1f5DORS9qEQL5Jn3FA-1
-Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-4fb76659d44so1396252e87.3
-        for <bpf@vger.kernel.org>; Thu, 27 Jul 2023 18:42:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690508531; x=1691113331;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+B8/dh9FxUlYlsfj6c2Az3RVvE6Mk5Zpo699JVAL0Us=;
-        b=WJyHWSu37bMYgcPx2Cc4kTylxp3kmT4j19uUs+pdndJLxrumDLE0A9mac2f7CWatsM
-         d6IvVZRfRg/p5Dtf9hsB0j6MvTNT1E/CMD7OTaq4xZH7NMmj6gygERP/6fj0VpY7/2xf
-         uOobXx5+UA/2yIJNdWpByQzhwuF6Go22xxbHspMI53GB05PDqY8bLr15rR8Evks8EiG7
-         fA6ozkkh5194PnyCYauS6tVYODS10Mfpm6uK/sya7WgvNwxPthRKGXdYhTgytEapJDbt
-         /63szOPwaOM/JgWLialFn8aLZn1ihpSwV2cZ8i52QeskRLNq0WvtGiIkRFlqZERYoI0o
-         vSsQ==
-X-Gm-Message-State: ABy/qLaYdcuGm+jEH0E+pwVS2Puthh4RjsXd26OKTkhnLnLQXqKOLZkp
-	06Tnyc9U9W/FG6N9a73ON8O54Uea+igw40rIiRktGiNX8tun7APHAreLLbUf3OhJ47j4jV4zIgV
-	7ITIU4Ut6MMmb1tjAICOsR3wL7mrh
-X-Received: by 2002:a05:6512:1591:b0:4fb:893e:8ffc with SMTP id bp17-20020a056512159100b004fb893e8ffcmr676872lfb.17.1690508531485;
-        Thu, 27 Jul 2023 18:42:11 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlHY6/ERBGZV6AEAlBJS5xI4dIRaHz1bMCv6qrVkYLdcfZ1S0GvRrifqu9u3Yc1vreyW0L0NNEbcznbuvGQrl6o=
-X-Received: by 2002:a05:6512:1591:b0:4fb:893e:8ffc with SMTP id
- bp17-20020a056512159100b004fb893e8ffcmr676854lfb.17.1690508531188; Thu, 27
- Jul 2023 18:42:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E21717D0;
+	Fri, 28 Jul 2023 01:58:31 +0000 (UTC)
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47D3273D;
+	Thu, 27 Jul 2023 18:58:29 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4RBrQ82rscz4f3nqZ;
+	Fri, 28 Jul 2023 09:58:24 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+	by APP4 (Coremail) with SMTP id gCh0CgCX_7K_IMNkBXLmOw--.17170S6;
+	Fri, 28 Jul 2023 09:58:26 +0800 (CST)
+From: Hou Tao <houtao@huaweicloud.com>
+To: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Song Liu <song@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	houtao1@huawei.com
+Subject: [RFC PATCH bpf-next 2/2] bpf, cpumap: Clean up bpf_cpu_map_entry directly in cpu_map_free
+Date: Fri, 28 Jul 2023 10:30:30 +0800
+Message-Id: <20230728023030.1906124-3-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20230728023030.1906124-1-houtao@huaweicloud.com>
+References: <20230728023030.1906124-1-houtao@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230725130709.58207-1-gavinl@nvidia.com> <20230725130709.58207-3-gavinl@nvidia.com>
- <f5823996fffad2f3c1862917772c182df74c74e7.camel@redhat.com>
-In-Reply-To: <f5823996fffad2f3c1862917772c182df74c74e7.camel@redhat.com>
-From: Jason Wang <jasowang@redhat.com>
-Date: Fri, 28 Jul 2023 09:42:00 +0800
-Message-ID: <CACGkMEs4wUh0TydcXSMR2GdBSTk+H-Tkbhn53BywEeiK9cA9Gg@mail.gmail.com>
-Subject: Re: [PATCH net-next V4 2/3] virtio_net: support per queue interrupt
- coalesce command
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: Gavin Li <gavinl@nvidia.com>, mst@redhat.com, xuanzhuo@linux.alibaba.com, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, 
-	jiri@nvidia.com, dtatulea@nvidia.com, gavi@nvidia.com, 
-	virtualization@lists.linux-foundation.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	Heng Qi <hengqi@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-	RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-	T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-	version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgCX_7K_IMNkBXLmOw--.17170S6
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZrWDZry7GryxWF4DWF1Dtrb_yoW8Zw48pF
+	y3GryUGw48XrsFk3yrXw48A342qws2ga4UJ34Fk34rA3ZrJr97JFWrKFZ7Cry3ursagr45
+	uF12gFWqkay7ArDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
+	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2I
+	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAI
+	w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
+	0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UC9aPUUUUU=
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+	MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Thu, Jul 27, 2023 at 9:28=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> wro=
-te:
->
-> On Tue, 2023-07-25 at 16:07 +0300, Gavin Li wrote:
-> > Add interrupt_coalesce config in send_queue and receive_queue to cache =
-user
-> > config.
-> >
-> > Send per virtqueue interrupt moderation config to underlying device in
-> > order to have more efficient interrupt moderation and cpu utilization o=
-f
-> > guest VM.
-> >
-> > Additionally, address all the VQs when updating the global configuratio=
-n,
-> > as now the individual VQs configuration can diverge from the global
-> > configuration.
-> >
-> > Signed-off-by: Gavin Li <gavinl@nvidia.com>
-> > Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
-> > Reviewed-by: Jiri Pirko <jiri@nvidia.com>
-> > Acked-by: Michael S. Tsirkin <mst@redhat.com>
->
-> FTR, this patch is significantly different from the version previously
-> acked/reviewed, I'm unsure if all the reviewers are ok with the new
-> one.
+From: Hou Tao <houtao1@huawei.com>
 
-Good point, and I plan to review this no later than next Monday and
-offer my ack if necessary. Please hold this series now.
+After synchronize_rcu(), both the dettached XDP program and
+xdp_do_flush() are completed, and the only user of bpf_cpu_map_entry
+will be cpu_map_kthread_run(), so instead of calling
+__cpu_map_entry_replace() to empty queue and do cleanup after a RCU
+grace period, do these things directly.
 
-Thanks
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ kernel/bpf/cpumap.c | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
->
-> [...]
->
-> >  static int virtnet_set_coalesce(struct net_device *dev,
-> >                               struct ethtool_coalesce *ec,
-> >                               struct kernel_ethtool_coalesce *kernel_co=
-al,
-> >                               struct netlink_ext_ack *extack)
-> >  {
-> >       struct virtnet_info *vi =3D netdev_priv(dev);
-> > -     int ret, i, napi_weight;
-> > +     int ret, queue_number, napi_weight;
-> >       bool update_napi =3D false;
-> >
-> >       /* Can't change NAPI weight if the link is up */
-> >       napi_weight =3D ec->tx_max_coalesced_frames ? NAPI_POLL_WEIGHT : =
-0;
-> > -     if (napi_weight ^ vi->sq[0].napi.weight) {
-> > -             if (dev->flags & IFF_UP)
-> > -                     return -EBUSY;
-> > -             else
-> > -                     update_napi =3D true;
-> > +     for (queue_number =3D 0; queue_number < vi->max_queue_pairs; queu=
-e_number++) {
-> > +             ret =3D virtnet_should_update_vq_weight(dev->flags, napi_=
-weight,
-> > +                                                   vi->sq[queue_number=
-].napi.weight,
-> > +                                                   &update_napi);
-> > +             if (ret)
-> > +                     return ret;
-> > +
-> > +             if (update_napi) {
-> > +                     /* All queues that belong to [queue_number, queue=
-_count] will be
-> > +                      * updated for the sake of simplicity, which migh=
-t not be necessary
->
-> It looks like the comment above still refers to the old code. Should
-> be:
->         [queue_number, vi->max_queue_pairs]
->
-> Otherwise LGTM, thanks!
->
-> Paolo
->
+diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+index 24f39c37526f..f8e2b24320c0 100644
+--- a/kernel/bpf/cpumap.c
++++ b/kernel/bpf/cpumap.c
+@@ -554,16 +554,15 @@ static void cpu_map_free(struct bpf_map *map)
+ 	/* At this point bpf_prog->aux->refcnt == 0 and this map->refcnt == 0,
+ 	 * so the bpf programs (can be more than one that used this map) were
+ 	 * disconnected from events. Wait for outstanding critical sections in
+-	 * these programs to complete. The rcu critical section only guarantees
+-	 * no further "XDP/bpf-side" reads against bpf_cpu_map->cpu_map.
+-	 * It does __not__ ensure pending flush operations (if any) are
+-	 * complete.
++	 * these programs to complete. synchronize_rcu() below not only
++	 * guarantees no further "XDP/bpf-side" reads against
++	 * bpf_cpu_map->cpu_map, but also ensure pending flush operations
++	 * (if any) are complete.
+ 	 */
+-
+ 	synchronize_rcu();
+ 
+-	/* For cpu_map the remote CPUs can still be using the entries
+-	 * (struct bpf_cpu_map_entry).
++	/* The only possible user of bpf_cpu_map_entry is
++	 * cpu_map_kthread_run().
+ 	 */
+ 	for (i = 0; i < cmap->map.max_entries; i++) {
+ 		struct bpf_cpu_map_entry *rcpu;
+@@ -572,8 +571,8 @@ static void cpu_map_free(struct bpf_map *map)
+ 		if (!rcpu)
+ 			continue;
+ 
+-		/* bq flush and cleanup happens after RCU grace-period */
+-		__cpu_map_entry_replace(cmap, i, NULL); /* call_rcu */
++		/* Empty queue and do cleanup directly */
++		__cpu_map_entry_free(&rcpu->free_work.work);
+ 	}
+ 	bpf_map_area_free(cmap->cpu_map);
+ 	bpf_map_area_free(cmap);
+-- 
+2.29.2
 
