@@ -1,13 +1,13 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E15957C
-	for <bpf@vger.kernel.org>; Fri, 28 Jul 2023 01:13:30 +0000 (UTC)
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFFC30E1
-	for <bpf@vger.kernel.org>; Thu, 27 Jul 2023 18:13:29 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC2E57C
+	for <bpf@vger.kernel.org>; Fri, 28 Jul 2023 01:13:46 +0000 (UTC)
+Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF7030F4
+	for <bpf@vger.kernel.org>; Thu, 27 Jul 2023 18:13:45 -0700 (PDT)
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 0619A23C74A9F; Thu, 27 Jul 2023 18:13:15 -0700 (PDT)
+	id E1F2C23C74B37; Thu, 27 Jul 2023 18:13:29 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -18,9 +18,9 @@ Cc: David Faust <david.faust@oracle.com>,
 	Fangrui Song <maskray@google.com>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v5 13/17] selftests/bpf: Add unit tests for new bswap insns
-Date: Thu, 27 Jul 2023 18:13:14 -0700
-Message-Id: <20230728011314.3720109-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v5 15/17] selftests/bpf: Add unit tests for new gotol insn
+Date: Thu, 27 Jul 2023 18:13:29 -0700
+Message-Id: <20230728011329.3721881-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230728011143.3710005-1-yonghong.song@linux.dev>
 References: <20230728011143.3710005-1-yonghong.song@linux.dev>
@@ -37,49 +37,49 @@ X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add unit tests for bswap insns.
+Add unit tests for gotol insn.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
  .../selftests/bpf/prog_tests/verifier.c       |  2 +
- .../selftests/bpf/progs/verifier_bswap.c      | 59 +++++++++++++++++++
- 2 files changed, 61 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_bswap.c
+ .../selftests/bpf/progs/verifier_gotol.c      | 44 +++++++++++++++++++
+ 2 files changed, 46 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_gotol.c
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
 sting/selftests/bpf/prog_tests/verifier.c
-index 037af7799cdf..885532540bc3 100644
+index a591d7b673f1..e3e68c97b40c 100644
 --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
 +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -11,6 +11,7 @@
- #include "verifier_bounds_deduction_non_const.skel.h"
- #include "verifier_bounds_mix_sign_unsign.skel.h"
- #include "verifier_bpf_get_stack.skel.h"
-+#include "verifier_bswap.skel.h"
- #include "verifier_btf_ctx_access.skel.h"
- #include "verifier_cfg.skel.h"
- #include "verifier_cgroup_inv_retcode.skel.h"
-@@ -115,6 +116,7 @@ void test_verifier_bounds_deduction(void)     { RUN(v=
-erifier_bounds_deduction);
- void test_verifier_bounds_deduction_non_const(void)     { RUN(verifier_b=
-ounds_deduction_non_const); }
- void test_verifier_bounds_mix_sign_unsign(void) { RUN(verifier_bounds_mi=
-x_sign_unsign); }
- void test_verifier_bpf_get_stack(void)        { RUN(verifier_bpf_get_sta=
-ck); }
-+void test_verifier_bswap(void)                { RUN(verifier_bswap); }
- void test_verifier_btf_ctx_access(void)       { RUN(verifier_btf_ctx_acc=
-ess); }
- void test_verifier_cfg(void)                  { RUN(verifier_cfg); }
- void test_verifier_cgroup_inv_retcode(void)   { RUN(verifier_cgroup_inv_=
-retcode); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bswap.c b/tools/t=
-esting/selftests/bpf/progs/verifier_bswap.c
+@@ -25,6 +25,7 @@
+ #include "verifier_direct_stack_access_wraparound.skel.h"
+ #include "verifier_div0.skel.h"
+ #include "verifier_div_overflow.skel.h"
++#include "verifier_gotol.skel.h"
+ #include "verifier_helper_access_var_len.skel.h"
+ #include "verifier_helper_packet_access.skel.h"
+ #include "verifier_helper_restricted.skel.h"
+@@ -131,6 +132,7 @@ void test_verifier_direct_packet_access(void) { RUN(v=
+erifier_direct_packet_acces
+ void test_verifier_direct_stack_access_wraparound(void) { RUN(verifier_d=
+irect_stack_access_wraparound); }
+ void test_verifier_div0(void)                 { RUN(verifier_div0); }
+ void test_verifier_div_overflow(void)         { RUN(verifier_div_overflo=
+w); }
++void test_verifier_gotol(void)                { RUN(verifier_gotol); }
+ void test_verifier_helper_access_var_len(void) { RUN(verifier_helper_acc=
+ess_var_len); }
+ void test_verifier_helper_packet_access(void) { RUN(verifier_helper_pack=
+et_access); }
+ void test_verifier_helper_restricted(void)    { RUN(verifier_helper_rest=
+ricted); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_gotol.c b/tools/t=
+esting/selftests/bpf/progs/verifier_gotol.c
 new file mode 100644
-index 000000000000..724bb38988b5
+index 000000000000..ce48f7757db2
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_bswap.c
-@@ -0,0 +1,59 @@
++++ b/tools/testing/selftests/bpf/progs/verifier_gotol.c
+@@ -0,0 +1,44 @@
 +// SPDX-License-Identifier: GPL-2.0
 +
 +#include <linux/bpf.h>
@@ -89,40 +89,25 @@ index 000000000000..724bb38988b5
 +#if defined(__TARGET_ARCH_x86) && __clang_major__ >=3D 18
 +
 +SEC("socket")
-+__description("BSWAP, 16")
-+__success __success_unpriv __retval(0x23ff)
-+__naked void bswap_16(void)
++__description("gotol, small_imm")
++__success __success_unpriv __retval(1)
++__naked void gotol_small_imm(void)
 +{
 +	asm volatile ("					\
-+	r0 =3D 0xff23;					\
-+	r0 =3D bswap16 r0;				\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("BSWAP, 32")
-+__success __success_unpriv __retval(0x23ff0000)
-+__naked void bswap_32(void)
-+{
-+	asm volatile ("					\
-+	r0 =3D 0xff23;					\
-+	r0 =3D bswap32 r0;				\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("BSWAP, 64")
-+__success __success_unpriv __retval(0x34ff12ff)
-+__naked void bswap_64(void)
-+{
-+	asm volatile ("					\
-+	r0 =3D %[u64_val] ll;					\
-+	r0 =3D bswap64 r0;				\
++	call %[bpf_ktime_get_ns];			\
++	if r0 =3D=3D 0 goto l0_%=3D;				\
++	gotol l1_%=3D;					\
++l2_%=3D:							\
++	gotol l3_%=3D;					\
++l1_%=3D:							\
++	r0 =3D 1;						\
++	gotol l2_%=3D;					\
++l0_%=3D:							\
++	r0 =3D 2;						\
++l3_%=3D:							\
 +	exit;						\
 +"	:
-+	: [u64_val]"i"(0xff12ff34ff56ff78ull)
++	: __imm(bpf_ktime_get_ns)
 +	: __clobber_all);
 +}
 +
