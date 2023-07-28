@@ -1,23 +1,23 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 975BE17AC4;
-	Fri, 28 Jul 2023 18:10:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98FD6C433C8;
-	Fri, 28 Jul 2023 18:10:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B0DB1426E;
+	Fri, 28 Jul 2023 18:43:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95535C433C7;
+	Fri, 28 Jul 2023 18:43:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1690567808;
-	bh=3LeMZELp4m+1YYGFtSrMAlQqThQJj6GMObRyyGm7lGs=;
+	s=k20201202; t=1690569796;
+	bh=EtSfBpi27VvgA4ooHcYUqNF5uegw1JHfetF61N9a7HQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RzYn+nxk5BM8Wz7vV7nTjftpnfIwmtyxP6J4GzJeLEQhZr2RLcF+z0Ds8EbGpPAHQ
-	 h2L2cjymJ524g3DzF/y8/NXSiwhm7AJ2zt6ITJwRY6i5O0O8DX5VOBB3SJa9cIuk4m
-	 4tHzJX2ywbDPnRr4ZPoy/jHG39RxguJ1AdH4+ODNzIBeh0zXQQv79N3z8owiGz61Zh
-	 yNJB4uj0PS3/2i5/+BygJi3E6gvFAuUo/ZdhyCKzaRY82vXVf+4hLZTrrYzL1/cmBk
-	 9YBIuVdMjoNIA+7q6HZ63s8+6iW6NAnaSVEUBGB9tueXB7k7kYAgqA5t7XDZ1kf4Df
-	 ZTClkQFSrd/cQ==
+	b=FPG1l3xH1ifeG6nhuOiFu05xMcBxSGuWRwPUrh+Bm9KyctZ30P3wuw5Id1XXMksEE
+	 Zl/qm8Qnc8BNtkx/1HPlt1ZbQtYXI16Ay8ILYVzEBlC6lsGDcDHZSppyl2kN+vfk32
+	 rUbUfZHt+FAe3adEZHdQqB3vnV+gseOSPZyc7aF/fMAIXQ6/9WASxu9QRh1SP6bFGY
+	 +toq7o+GxDROIm/8cSot0XyXUzy5CJMY9/DDWs2eE+7Oijp47bHC7gzZiNO8fxhEuC
+	 WayJTloYrIp3+kdAhpenXfRufIA5L/wurp7eUwXk+GrfRY9d5DRSGy7AVknzMgE0zt
+	 p5qzC56zCUpOw==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-	id 08C7740096; Fri, 28 Jul 2023 15:10:05 -0300 (-03)
-Date: Fri, 28 Jul 2023 15:10:04 -0300
+	id 6EF2E40096; Fri, 28 Jul 2023 15:43:14 -0300 (-03)
+Date: Fri, 28 Jul 2023 15:43:14 -0300
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Ian Rogers <irogers@google.com>
 Cc: James Clark <james.clark@arm.com>,
@@ -36,13 +36,14 @@ Cc: James Clark <james.clark@arm.com>,
 	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
 	llvm@lists.linux.dev
 Subject: Re: [PATCH v1 4/6] perf build: Disable fewer flex warnings
-Message-ID: <ZMQEfIi/BYwpDIEB@kernel.org>
+Message-ID: <ZMQMQoCtBytgwB4i@kernel.org>
 References: <20230728064917.767761-1-irogers@google.com>
  <20230728064917.767761-5-irogers@google.com>
  <a8833945-3f0a-7651-39ff-a01e7edc2b3a@arm.com>
  <ZMPJym7DnCkFH7aA@kernel.org>
  <ZMPKekDl+g5PeiH8@kernel.org>
  <CAP-5=fX2LOdd_34ysAYYB5zq5tr7dMje35Nw6hrLXTPLsOHoaw@mail.gmail.com>
+ <ZMQEfIi/BYwpDIEB@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,98 +53,70 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fX2LOdd_34ysAYYB5zq5tr7dMje35Nw6hrLXTPLsOHoaw@mail.gmail.com>
+In-Reply-To: <ZMQEfIi/BYwpDIEB@kernel.org>
 X-Url: http://acmel.wordpress.com
 
-Em Fri, Jul 28, 2023 at 08:26:54AM -0700, Ian Rogers escreveu:
-> On Fri, Jul 28, 2023 at 7:02 AM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
-> >
-> > Em Fri, Jul 28, 2023 at 10:59:38AM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > Em Fri, Jul 28, 2023 at 09:50:59AM +0100, James Clark escreveu:
-> > > >
-> > > >
-> > > > On 28/07/2023 07:49, Ian Rogers wrote:
-> > > > > If flex is version 2.6.4, reduce the number of flex C warnings
-> > > > > disabled. Earlier flex versions have all C warnings disabled.
-> > > >
-> > > > Hi Ian,
-> > > >
-> > > > I get a build error with either this one or the bison warning change:
-> > > >
-> > > >   $ make LLVM=1 -C tools/perf NO_BPF_SKEL=1 DEBUG=1
-> > > >
-> > > >   util/pmu-bison.c:855:9: error: variable 'perf_pmu_nerrs' set but not
-> > > > used [-Werror,-Wunused-but-set-variable]
-> > > >     int yynerrs = 0;
-> > > >
-> > > > I tried a clean build which normally fixes these kind of bison errors.
-> > > > Let me know if you need any version info.
+Em Fri, Jul 28, 2023 at 03:10:05PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Fri, Jul 28, 2023 at 08:26:54AM -0700, Ian Rogers escreveu:
+> > On Fri, Jul 28, 2023 at 7:02 AM Arnaldo Carvalho de Melo
+> > > I added this to the patch to get it moving:
 > > >
-> > > Trying to build it with the command line above I get:
+> > > make: Leaving directory '/var/home/acme/git/perf-tools-next/tools/perf'
+> > > ⬢[acme@toolbox perf-tools-next]$ git diff
+> > > diff --git a/tools/perf/util/Build b/tools/perf/util/Build
+> > > index 32239c4b0393c319..afa93eff495811cf 100644
+> > > --- a/tools/perf/util/Build
+> > > +++ b/tools/perf/util/Build
+> > > @@ -281,7 +281,7 @@ $(OUTPUT)util/bpf-filter-bison.c $(OUTPUT)util/bpf-filter-bison.h: util/bpf-filt
 > > >
-> > >   CC      util/expr.o
-> > >   CC      util/parse-events.o
-> > >   CC      util/parse-events-flex.o
-> > > util/parse-events-flex.c:7503:13: error: misleading indentation; statement is not part of the previous 'if' [-Werror,-Wmisleading-indentation]
-> > >             if ( ! yyg->yy_state_buf )
-> > >             ^
-> > > util/parse-events-flex.c:7501:9: note: previous statement is here
-> > >         if ( ! yyg->yy_state_buf )
-> > >         ^
-> >
-> > I added this to the patch to get it moving:
-> >
-> > make: Leaving directory '/var/home/acme/git/perf-tools-next/tools/perf'
-> > ⬢[acme@toolbox perf-tools-next]$ git diff
-> > diff --git a/tools/perf/util/Build b/tools/perf/util/Build
-> > index 32239c4b0393c319..afa93eff495811cf 100644
-> > --- a/tools/perf/util/Build
-> > +++ b/tools/perf/util/Build
-> > @@ -281,7 +281,7 @@ $(OUTPUT)util/bpf-filter-bison.c $(OUTPUT)util/bpf-filter-bison.h: util/bpf-filt
-> >
-> >  FLEX_GE_264 := $(shell expr $(shell $(FLEX) --version | sed -e  's/flex \([0-9]\+\).\([0-9]\+\).\([0-9]\+\)/\1\2\3/g') \>\= 264)
-> >  ifeq ($(FLEX_GE_264),1)
-> > -  flex_flags := -Wno-redundant-decls -Wno-switch-default -Wno-unused-function
-> > +  flex_flags := -Wno-redundant-decls -Wno-switch-default -Wno-unused-function -Wno-misleading-indentation
-> >  else
-> >    flex_flags := -w
-> >  endif
-> > ⬢[acme@toolbox perf-tools-next]$
-> >
-> >
-> > > 1 error generated.
-> > > make[4]: *** [/var/home/acme/git/perf-tools-next/tools/build/Makefile.build:97: util/parse-events-flex.o] Error 1
-> > > make[4]: *** Waiting for unfinished jobs....
-> > >   LD      util/scripting-engines/perf-in.o
-> > > make[3]: *** [/var/home/acme/git/perf-tools-next/tools/build/Makefile.build:140: util] Error 2
-> > > make[2]: *** [Makefile.perf:682: perf-in.o] Error 2
-> > > make[2]: *** Waiting for unfinished jobs....
-> > >   CC      pmu-events/pmu-events.o
-> > >   LD      pmu-events/pmu-events-in.o
-> > > make[1]: *** [Makefile.perf:242: sub-make] Error 2
-> > > make: *** [Makefile:70: all] Error 2
-> > >
-> > > ⬢[acme@toolbox perf-tools-next]$ clang --version
-> > > clang version 14.0.5 (Fedora 14.0.5-2.fc36)
-> > > Target: x86_64-redhat-linux-gnu
-> > > Thread model: posix
-> > > InstalledDir: /usr/bin
+> > >  FLEX_GE_264 := $(shell expr $(shell $(FLEX) --version | sed -e  's/flex \([0-9]\+\).\([0-9]\+\).\([0-9]\+\)/\1\2\3/g') \>\= 264)
+> > >  ifeq ($(FLEX_GE_264),1)
+> > > -  flex_flags := -Wno-redundant-decls -Wno-switch-default -Wno-unused-function
+> > > +  flex_flags := -Wno-redundant-decls -Wno-switch-default -Wno-unused-function -Wno-misleading-indentation
+> > >  else
+> > >    flex_flags := -w
+> > >  endif
 > > > ⬢[acme@toolbox perf-tools-next]$
+> > >
+> > >
+> > > > 1 error generated.
+> > > > make[4]: *** [/var/home/acme/git/perf-tools-next/tools/build/Makefile.build:97: util/parse-events-flex.o] Error 1
+> > > > make[4]: *** Waiting for unfinished jobs....
+> > > >   LD      util/scripting-engines/perf-in.o
+> > > > make[3]: *** [/var/home/acme/git/perf-tools-next/tools/build/Makefile.build:140: util] Error 2
+> > > > make[2]: *** [Makefile.perf:682: perf-in.o] Error 2
+> > > > make[2]: *** Waiting for unfinished jobs....
+> > > >   CC      pmu-events/pmu-events.o
+> > > >   LD      pmu-events/pmu-events-in.o
+> > > > make[1]: *** [Makefile.perf:242: sub-make] Error 2
+> > > > make: *** [Makefile:70: all] Error 2
+> > > >
+> > > > ⬢[acme@toolbox perf-tools-next]$ clang --version
+> > > > clang version 14.0.5 (Fedora 14.0.5-2.fc36)
+> > > > Target: x86_64-redhat-linux-gnu
+> > > > Thread model: posix
+> > > > InstalledDir: /usr/bin
+> > > > ⬢[acme@toolbox perf-tools-next]$
+> > 
+> > Thanks James/Arnaldo, I was trying to be aggressive in having more
+> > flags, but it seems too aggressive. We should probably bring back the
+> > logic to make this flag only added if it is supported:
+> >   CC_HASNT_MISLEADING_INDENTATION := $(shell echo "int main(void) {
+> > return 0 }" | $(CC) -Werror -Wno-misleading-indentation -o /dev/null
+> > -xc - 2>&1 | grep -q -- -Wno-misleading-indentation ; echo $$?)
+> >   ifeq ($(CC_HASNT_MISLEADING_INDENTATION), 1)
+> >     flex_flags += -Wno-misleading-indentation
+> >   endif
+> > Arnaldo, is the misleading indentation in the bison generated code or
+> > something copy-pasted from the parse-events.l ? If the latter we may
+> > be able to fix the .l file to keep the warning.
 > 
-> Thanks James/Arnaldo, I was trying to be aggressive in having more
-> flags, but it seems too aggressive. We should probably bring back the
-> logic to make this flag only added if it is supported:
->   CC_HASNT_MISLEADING_INDENTATION := $(shell echo "int main(void) {
-> return 0 }" | $(CC) -Werror -Wno-misleading-indentation -o /dev/null
-> -xc - 2>&1 | grep -q -- -Wno-misleading-indentation ; echo $$?)
->   ifeq ($(CC_HASNT_MISLEADING_INDENTATION), 1)
->     flex_flags += -Wno-misleading-indentation
->   endif
-> Arnaldo, is the misleading indentation in the bison generated code or
-> something copy-pasted from the parse-events.l ? If the latter we may
-> be able to fix the .l file to keep the warning.
+> I haven't checked, lemme do it now.
 
-I haven't checked, lemme do it now.
+It comes directly from flex's m4 files:
+
+https://github.com/westes/flex/blob/master/src/c99-flex.skl#L2044
+
+So I'll keep the -Wno-misleading-indentation, ok?
 
 - Arnaldo
