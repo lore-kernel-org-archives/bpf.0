@@ -1,170 +1,866 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 623E27C;
-	Fri, 28 Jul 2023 01:16:27 +0000 (UTC)
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D937930E1;
-	Thu, 27 Jul 2023 18:16:25 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-686e0213c0bso1209471b3a.1;
-        Thu, 27 Jul 2023 18:16:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690506985; x=1691111785;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lvFN6hiDGiGK7bLL2rKPH9uniCD9C1RLgo5XQErJ7mg=;
-        b=WNQS724lJFU/8U7drNhRHsl4iM2XrqT1FV0aKjC/uhLfIHNHYairlvvM4qE3F86Wz5
-         2ofxJTR69We2Aa+KTi7ZjWWdO9rlbsxRpprU15XR4VGBQPeEO0A2swgBYpCKCRf2TOGa
-         j04xrvr/6HijktwqrhB0OFBn3cNuEXqU1/Ke69+Fvqg0KfNy6HwXo+V6SmfMvshXIIDZ
-         WwB1UKt0Nu1Se8jQgcVtpap7it47yJ1kHLaI70TjXU3YlPc9fWTK9F4wP57YZgxPnjAZ
-         E0vtX/SW+5brPenb8z32j5N1dxxOPQQmp6Mvvj93HBng/fDfxFbNt6oZP3Wnn0MdY+HY
-         UbAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690506985; x=1691111785;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lvFN6hiDGiGK7bLL2rKPH9uniCD9C1RLgo5XQErJ7mg=;
-        b=e9vpB4b2zjiBaILAacr6oyfNhjMg2SkHPvUun4rExIqlW7B4ejFKgEUzAnRUWf7p9D
-         Sq4FNHKz4GJ9wa188V7M+arL5/0nEwFzCIwaz7qsydAgf5uZHDs1/4szed0sScdrjFU8
-         pUJkIhlN+EcuxxQnYCek4NIldX7fOJCAUMyjCI16Eb78NiLCAUsfpZ+Od4gEsqYd1ry+
-         OfZKaZ1ZHtRMyNu/qvpR9J708GSUv4sI4H2NzNXBmufkqwmRIG5nFK0Fx37Wqp4kWpYw
-         TQG62XAkIFZZH2RPXFuBPPZiuYYMQdpJrOqbZ3LPm9psenypr1cICK4g0czKMkknInbV
-         iBHA==
-X-Gm-Message-State: ABy/qLYDXE2Xgm9dfvyL1UZ6US1K22r2SHYa2ug9PkPMaX4lWl/aZfMi
-	r11uQeP3vb2K98suKuZ021I=
-X-Google-Smtp-Source: APBJJlEQxj3AXhexx+T1jcS0M1kRwMJQ/M8+DVCgVJU2/umqW4WqnvR5Hudlmguh8vmRTEe8M90YPQ==
-X-Received: by 2002:a05:6a20:9494:b0:137:a08b:8c04 with SMTP id hs20-20020a056a20949400b00137a08b8c04mr263393pzb.48.1690506985206;
-        Thu, 27 Jul 2023 18:16:25 -0700 (PDT)
-Received: from macbook-pro-8.dhcp.thefacebook.com ([2620:10d:c090:400::5:6cea])
-        by smtp.gmail.com with ESMTPSA id y15-20020a637d0f000000b00563b36264besm2187863pgc.85.2023.07.27.18.16.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jul 2023 18:16:24 -0700 (PDT)
-Date: Thu, 27 Jul 2023 18:16:20 -0700
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: Daniel Xu <dxu@dxuuu.xyz>
-Cc: daniel@iogearbox.net, kadlec@netfilter.org, edumazet@google.com,
-	ast@kernel.org, fw@strlen.de, kuba@kernel.org, pabeni@redhat.com,
-	pablo@netfilter.org, andrii@kernel.org, davem@davemloft.net,
-	martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-	haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org, netdev@vger.kernel.org, dsahern@kernel.org
-Subject: Re: [PATCH bpf-next v6 2/5] netfilter: bpf: Support
- BPF_F_NETFILTER_IP_DEFRAG in netfilter link
-Message-ID: <20230728011620.psvselzqdm7ku5e4@macbook-pro-8.dhcp.thefacebook.com>
-References: <cover.1689970773.git.dxu@dxuuu.xyz>
- <5cff26f97e55161b7d56b09ddcf5f8888a5add1d.1689970773.git.dxu@dxuuu.xyz>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24A9C7C
+	for <bpf@vger.kernel.org>; Fri, 28 Jul 2023 01:16:29 +0000 (UTC)
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ABA230EB
+	for <bpf@vger.kernel.org>; Thu, 27 Jul 2023 18:16:26 -0700 (PDT)
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+	id A1A6723C74AE1; Thu, 27 Jul 2023 18:13:21 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	bpf@vger.kernel.org,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@kernel.org>
+Cc: David Faust <david.faust@oracle.com>,
+	Fangrui Song <maskray@google.com>,
+	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
+	kernel-team@fb.com
+Subject: [PATCH bpf-next v5 14/17] selftests/bpf: Add unit tests for new sdiv/smod insns
+Date: Thu, 27 Jul 2023 18:13:21 -0700
+Message-Id: <20230728011321.3720500-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230728011143.3710005-1-yonghong.song@linux.dev>
+References: <20230728011143.3710005-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5cff26f97e55161b7d56b09ddcf5f8888a5add1d.1689970773.git.dxu@dxuuu.xyz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-	autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
+	SPF_HELO_PASS,SPF_SOFTFAIL,TVD_RCVD_IP,T_SCC_BODY_TEXT_LINE
+	autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Fri, Jul 21, 2023 at 02:22:46PM -0600, Daniel Xu wrote:
-> This commit adds support for enabling IP defrag using pre-existing
-> netfilter defrag support. Basically all the flag does is bump a refcnt
-> while the link the active. Checks are also added to ensure the prog
-> requesting defrag support is run _after_ netfilter defrag hooks.
-> 
-> We also take care to avoid any issues w.r.t. module unloading -- while
-> defrag is active on a link, the module is prevented from unloading.
-> 
-> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> ---
->  include/uapi/linux/bpf.h       |   5 ++
->  net/netfilter/nf_bpf_link.c    | 123 +++++++++++++++++++++++++++++----
->  tools/include/uapi/linux/bpf.h |   5 ++
->  3 files changed, 118 insertions(+), 15 deletions(-)
-> 
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 739c15906a65..12a5480314a2 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -1187,6 +1187,11 @@ enum bpf_perf_event_type {
->   */
->  #define BPF_F_KPROBE_MULTI_RETURN	(1U << 0)
->  
-> +/* link_create.netfilter.flags used in LINK_CREATE command for
-> + * BPF_PROG_TYPE_NETFILTER to enable IP packet defragmentation.
-> + */
-> +#define BPF_F_NETFILTER_IP_DEFRAG (1U << 0)
-> +
->  /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
->   * the following extensions:
->   *
-> diff --git a/net/netfilter/nf_bpf_link.c b/net/netfilter/nf_bpf_link.c
-> index c36da56d756f..8fe594bbc7e2 100644
-> --- a/net/netfilter/nf_bpf_link.c
-> +++ b/net/netfilter/nf_bpf_link.c
-> @@ -1,6 +1,8 @@
->  // SPDX-License-Identifier: GPL-2.0
->  #include <linux/bpf.h>
->  #include <linux/filter.h>
-> +#include <linux/kmod.h>
-> +#include <linux/module.h>
->  #include <linux/netfilter.h>
->  
->  #include <net/netfilter/nf_bpf_link.h>
-> @@ -23,8 +25,88 @@ struct bpf_nf_link {
->  	struct nf_hook_ops hook_ops;
->  	struct net *net;
->  	u32 dead;
-> +	const struct nf_defrag_hook *defrag_hook;
->  };
->  
-> +static const struct nf_defrag_hook *
-> +get_proto_defrag_hook(struct bpf_nf_link *link,
-> +		      const struct nf_defrag_hook __rcu *global_hook,
-> +		      const char *mod)
-> +{
-> +	const struct nf_defrag_hook *hook;
-> +	int err;
-> +
-> +	/* RCU protects us from races against module unloading */
-> +	rcu_read_lock();
-> +	hook = rcu_dereference(global_hook);
-> +	if (!hook) {
-> +		rcu_read_unlock();
-> +		err = request_module(mod);
-> +		if (err)
-> +			return ERR_PTR(err < 0 ? err : -EINVAL);
-> +
-> +		rcu_read_lock();
-> +		hook = rcu_dereference(global_hook);
-> +	}
-> +
-> +	if (hook && try_module_get(hook->owner)) {
-> +		/* Once we have a refcnt on the module, we no longer need RCU */
-> +		hook = rcu_pointer_handoff(hook);
-> +	} else {
-> +		WARN_ONCE(!hook, "%s has bad registration", mod);
-> +		hook = ERR_PTR(-ENOENT);
-> +	}
-> +	rcu_read_unlock();
-> +
-> +	if (!IS_ERR(hook)) {
-> +		err = hook->enable(link->net);
-> +		if (err) {
-> +			module_put(hook->owner);
-> +			hook = ERR_PTR(err);
-> +		}
-> +	}
-> +
-> +	return hook;
+Add unit tests for sdiv/smod insns.
 
-The rcu + module_get logic looks correct to me, but you've dropped all Florian's acks.
-What's going on?
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../selftests/bpf/progs/verifier_sdiv.c       | 781 ++++++++++++++++++
+ 2 files changed, 783 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_sdiv.c
 
-We need explicit acks to merge this through bpf-next.
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
+sting/selftests/bpf/prog_tests/verifier.c
+index 885532540bc3..a591d7b673f1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -54,6 +54,7 @@
+ #include "verifier_ringbuf.skel.h"
+ #include "verifier_runtime_jit.skel.h"
+ #include "verifier_scalar_ids.skel.h"
++#include "verifier_sdiv.skel.h"
+ #include "verifier_search_pruning.skel.h"
+ #include "verifier_sock.skel.h"
+ #include "verifier_spill_fill.skel.h"
+@@ -159,6 +160,7 @@ void test_verifier_regalloc(void)             { RUN(v=
+erifier_regalloc); }
+ void test_verifier_ringbuf(void)              { RUN(verifier_ringbuf); }
+ void test_verifier_runtime_jit(void)          { RUN(verifier_runtime_jit=
+); }
+ void test_verifier_scalar_ids(void)           { RUN(verifier_scalar_ids)=
+; }
++void test_verifier_sdiv(void)                 { RUN(verifier_sdiv); }
+ void test_verifier_search_pruning(void)       { RUN(verifier_search_prun=
+ing); }
+ void test_verifier_sock(void)                 { RUN(verifier_sock); }
+ void test_verifier_spill_fill(void)           { RUN(verifier_spill_fill)=
+; }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_sdiv.c b/tools/te=
+sting/selftests/bpf/progs/verifier_sdiv.c
+new file mode 100644
+index 000000000000..f61a9a1058c8
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
+@@ -0,0 +1,781 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++#if defined(__TARGET_ARCH_x86) && __clang_major__ >=3D 18
++
++SEC("socket")
++__description("SDIV32, non-zero imm divisor, check 1")
++__success __success_unpriv __retval(-20)
++__naked void sdiv32_non_zero_imm_1(void)
++{
++	asm volatile ("					\
++	w0 =3D -41;					\
++	w0 s/=3D 2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV32, non-zero imm divisor, check 2")
++__success __success_unpriv __retval(-20)
++__naked void sdiv32_non_zero_imm_2(void)
++{
++	asm volatile ("					\
++	w0 =3D 41;					\
++	w0 s/=3D -2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV32, non-zero imm divisor, check 3")
++__success __success_unpriv __retval(20)
++__naked void sdiv32_non_zero_imm_3(void)
++{
++	asm volatile ("					\
++	w0 =3D -41;					\
++	w0 s/=3D -2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV32, non-zero imm divisor, check 4")
++__success __success_unpriv __retval(-21)
++__naked void sdiv32_non_zero_imm_4(void)
++{
++	asm volatile ("					\
++	w0 =3D -42;					\
++	w0 s/=3D 2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV32, non-zero imm divisor, check 5")
++__success __success_unpriv __retval(-21)
++__naked void sdiv32_non_zero_imm_5(void)
++{
++	asm volatile ("					\
++	w0 =3D 42;					\
++	w0 s/=3D -2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV32, non-zero imm divisor, check 6")
++__success __success_unpriv __retval(21)
++__naked void sdiv32_non_zero_imm_6(void)
++{
++	asm volatile ("					\
++	w0 =3D -42;					\
++	w0 s/=3D -2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV32, non-zero imm divisor, check 7")
++__success __success_unpriv __retval(21)
++__naked void sdiv32_non_zero_imm_7(void)
++{
++	asm volatile ("					\
++	w0 =3D 42;					\
++	w0 s/=3D 2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV32, non-zero imm divisor, check 8")
++__success __success_unpriv __retval(20)
++__naked void sdiv32_non_zero_imm_8(void)
++{
++	asm volatile ("					\
++	w0 =3D 41;					\
++	w0 s/=3D 2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV32, non-zero reg divisor, check 1")
++__success __success_unpriv __retval(-20)
++__naked void sdiv32_non_zero_reg_1(void)
++{
++	asm volatile ("					\
++	w0 =3D -41;					\
++	w1 =3D 2;						\
++	w0 s/=3D w1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV32, non-zero reg divisor, check 2")
++__success __success_unpriv __retval(-20)
++__naked void sdiv32_non_zero_reg_2(void)
++{
++	asm volatile ("					\
++	w0 =3D 41;					\
++	w1 =3D -2;					\
++	w0 s/=3D w1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV32, non-zero reg divisor, check 3")
++__success __success_unpriv __retval(20)
++__naked void sdiv32_non_zero_reg_3(void)
++{
++	asm volatile ("					\
++	w0 =3D -41;					\
++	w1 =3D -2;					\
++	w0 s/=3D w1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV32, non-zero reg divisor, check 4")
++__success __success_unpriv __retval(-21)
++__naked void sdiv32_non_zero_reg_4(void)
++{
++	asm volatile ("					\
++	w0 =3D -42;					\
++	w1 =3D 2;						\
++	w0 s/=3D w1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV32, non-zero reg divisor, check 5")
++__success __success_unpriv __retval(-21)
++__naked void sdiv32_non_zero_reg_5(void)
++{
++	asm volatile ("					\
++	w0 =3D 42;					\
++	w1 =3D -2;					\
++	w0 s/=3D w1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV32, non-zero reg divisor, check 6")
++__success __success_unpriv __retval(21)
++__naked void sdiv32_non_zero_reg_6(void)
++{
++	asm volatile ("					\
++	w0 =3D -42;					\
++	w1 =3D -2;					\
++	w0 s/=3D w1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV32, non-zero reg divisor, check 7")
++__success __success_unpriv __retval(21)
++__naked void sdiv32_non_zero_reg_7(void)
++{
++	asm volatile ("					\
++	w0 =3D 42;					\
++	w1 =3D 2;						\
++	w0 s/=3D w1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV32, non-zero reg divisor, check 8")
++__success __success_unpriv __retval(20)
++__naked void sdiv32_non_zero_reg_8(void)
++{
++	asm volatile ("					\
++	w0 =3D 41;					\
++	w1 =3D 2;						\
++	w0 s/=3D w1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV64, non-zero imm divisor, check 1")
++__success __success_unpriv __retval(-20)
++__naked void sdiv64_non_zero_imm_1(void)
++{
++	asm volatile ("					\
++	r0 =3D -41;					\
++	r0 s/=3D 2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV64, non-zero imm divisor, check 2")
++__success __success_unpriv __retval(-20)
++__naked void sdiv64_non_zero_imm_2(void)
++{
++	asm volatile ("					\
++	r0 =3D 41;					\
++	r0 s/=3D -2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV64, non-zero imm divisor, check 3")
++__success __success_unpriv __retval(20)
++__naked void sdiv64_non_zero_imm_3(void)
++{
++	asm volatile ("					\
++	r0 =3D -41;					\
++	r0 s/=3D -2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV64, non-zero imm divisor, check 4")
++__success __success_unpriv __retval(-21)
++__naked void sdiv64_non_zero_imm_4(void)
++{
++	asm volatile ("					\
++	r0 =3D -42;					\
++	r0 s/=3D 2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV64, non-zero imm divisor, check 5")
++__success __success_unpriv __retval(-21)
++__naked void sdiv64_non_zero_imm_5(void)
++{
++	asm volatile ("					\
++	r0 =3D 42;					\
++	r0 s/=3D -2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV64, non-zero imm divisor, check 6")
++__success __success_unpriv __retval(21)
++__naked void sdiv64_non_zero_imm_6(void)
++{
++	asm volatile ("					\
++	r0 =3D -42;					\
++	r0 s/=3D -2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV64, non-zero reg divisor, check 1")
++__success __success_unpriv __retval(-20)
++__naked void sdiv64_non_zero_reg_1(void)
++{
++	asm volatile ("					\
++	r0 =3D -41;					\
++	r1 =3D 2;						\
++	r0 s/=3D r1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV64, non-zero reg divisor, check 2")
++__success __success_unpriv __retval(-20)
++__naked void sdiv64_non_zero_reg_2(void)
++{
++	asm volatile ("					\
++	r0 =3D 41;					\
++	r1 =3D -2;					\
++	r0 s/=3D r1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV64, non-zero reg divisor, check 3")
++__success __success_unpriv __retval(20)
++__naked void sdiv64_non_zero_reg_3(void)
++{
++	asm volatile ("					\
++	r0 =3D -41;					\
++	r1 =3D -2;					\
++	r0 s/=3D r1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV64, non-zero reg divisor, check 4")
++__success __success_unpriv __retval(-21)
++__naked void sdiv64_non_zero_reg_4(void)
++{
++	asm volatile ("					\
++	r0 =3D -42;					\
++	r1 =3D 2;						\
++	r0 s/=3D r1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV64, non-zero reg divisor, check 5")
++__success __success_unpriv __retval(-21)
++__naked void sdiv64_non_zero_reg_5(void)
++{
++	asm volatile ("					\
++	r0 =3D 42;					\
++	r1 =3D -2;					\
++	r0 s/=3D r1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV64, non-zero reg divisor, check 6")
++__success __success_unpriv __retval(21)
++__naked void sdiv64_non_zero_reg_6(void)
++{
++	asm volatile ("					\
++	r0 =3D -42;					\
++	r1 =3D -2;					\
++	r0 s/=3D r1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD32, non-zero imm divisor, check 1")
++__success __success_unpriv __retval(-1)
++__naked void smod32_non_zero_imm_1(void)
++{
++	asm volatile ("					\
++	w0 =3D -41;					\
++	w0 s%%=3D 2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD32, non-zero imm divisor, check 2")
++__success __success_unpriv __retval(1)
++__naked void smod32_non_zero_imm_2(void)
++{
++	asm volatile ("					\
++	w0 =3D 41;					\
++	w0 s%%=3D -2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD32, non-zero imm divisor, check 3")
++__success __success_unpriv __retval(-1)
++__naked void smod32_non_zero_imm_3(void)
++{
++	asm volatile ("					\
++	w0 =3D -41;					\
++	w0 s%%=3D -2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD32, non-zero imm divisor, check 4")
++__success __success_unpriv __retval(0)
++__naked void smod32_non_zero_imm_4(void)
++{
++	asm volatile ("					\
++	w0 =3D -42;					\
++	w0 s%%=3D 2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD32, non-zero imm divisor, check 5")
++__success __success_unpriv __retval(0)
++__naked void smod32_non_zero_imm_5(void)
++{
++	asm volatile ("					\
++	w0 =3D 42;					\
++	w0 s%%=3D -2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD32, non-zero imm divisor, check 6")
++__success __success_unpriv __retval(0)
++__naked void smod32_non_zero_imm_6(void)
++{
++	asm volatile ("					\
++	w0 =3D -42;					\
++	w0 s%%=3D -2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD32, non-zero reg divisor, check 1")
++__success __success_unpriv __retval(-1)
++__naked void smod32_non_zero_reg_1(void)
++{
++	asm volatile ("					\
++	w0 =3D -41;					\
++	w1 =3D 2;						\
++	w0 s%%=3D w1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD32, non-zero reg divisor, check 2")
++__success __success_unpriv __retval(1)
++__naked void smod32_non_zero_reg_2(void)
++{
++	asm volatile ("					\
++	w0 =3D 41;					\
++	w1 =3D -2;					\
++	w0 s%%=3D w1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD32, non-zero reg divisor, check 3")
++__success __success_unpriv __retval(-1)
++__naked void smod32_non_zero_reg_3(void)
++{
++	asm volatile ("					\
++	w0 =3D -41;					\
++	w1 =3D -2;					\
++	w0 s%%=3D w1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD32, non-zero reg divisor, check 4")
++__success __success_unpriv __retval(0)
++__naked void smod32_non_zero_reg_4(void)
++{
++	asm volatile ("					\
++	w0 =3D -42;					\
++	w1 =3D 2;						\
++	w0 s%%=3D w1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD32, non-zero reg divisor, check 5")
++__success __success_unpriv __retval(0)
++__naked void smod32_non_zero_reg_5(void)
++{
++	asm volatile ("					\
++	w0 =3D 42;					\
++	w1 =3D -2;					\
++	w0 s%%=3D w1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD32, non-zero reg divisor, check 6")
++__success __success_unpriv __retval(0)
++__naked void smod32_non_zero_reg_6(void)
++{
++	asm volatile ("					\
++	w0 =3D -42;					\
++	w1 =3D -2;					\
++	w0 s%%=3D w1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD64, non-zero imm divisor, check 1")
++__success __success_unpriv __retval(-1)
++__naked void smod64_non_zero_imm_1(void)
++{
++	asm volatile ("					\
++	r0 =3D -41;					\
++	r0 s%%=3D 2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD64, non-zero imm divisor, check 2")
++__success __success_unpriv __retval(1)
++__naked void smod64_non_zero_imm_2(void)
++{
++	asm volatile ("					\
++	r0 =3D 41;					\
++	r0 s%%=3D -2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD64, non-zero imm divisor, check 3")
++__success __success_unpriv __retval(-1)
++__naked void smod64_non_zero_imm_3(void)
++{
++	asm volatile ("					\
++	r0 =3D -41;					\
++	r0 s%%=3D -2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD64, non-zero imm divisor, check 4")
++__success __success_unpriv __retval(0)
++__naked void smod64_non_zero_imm_4(void)
++{
++	asm volatile ("					\
++	r0 =3D -42;					\
++	r0 s%%=3D 2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD64, non-zero imm divisor, check 5")
++__success __success_unpriv __retval(-0)
++__naked void smod64_non_zero_imm_5(void)
++{
++	asm volatile ("					\
++	r0 =3D 42;					\
++	r0 s%%=3D -2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD64, non-zero imm divisor, check 6")
++__success __success_unpriv __retval(0)
++__naked void smod64_non_zero_imm_6(void)
++{
++	asm volatile ("					\
++	r0 =3D -42;					\
++	r0 s%%=3D -2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD64, non-zero imm divisor, check 7")
++__success __success_unpriv __retval(0)
++__naked void smod64_non_zero_imm_7(void)
++{
++	asm volatile ("					\
++	r0 =3D 42;					\
++	r0 s%%=3D 2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD64, non-zero imm divisor, check 8")
++__success __success_unpriv __retval(1)
++__naked void smod64_non_zero_imm_8(void)
++{
++	asm volatile ("					\
++	r0 =3D 41;					\
++	r0 s%%=3D 2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD64, non-zero reg divisor, check 1")
++__success __success_unpriv __retval(-1)
++__naked void smod64_non_zero_reg_1(void)
++{
++	asm volatile ("					\
++	r0 =3D -41;					\
++	r1 =3D 2;						\
++	r0 s%%=3D r1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD64, non-zero reg divisor, check 2")
++__success __success_unpriv __retval(1)
++__naked void smod64_non_zero_reg_2(void)
++{
++	asm volatile ("					\
++	r0 =3D 41;					\
++	r1 =3D -2;					\
++	r0 s%%=3D r1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD64, non-zero reg divisor, check 3")
++__success __success_unpriv __retval(-1)
++__naked void smod64_non_zero_reg_3(void)
++{
++	asm volatile ("					\
++	r0 =3D -41;					\
++	r1 =3D -2;					\
++	r0 s%%=3D r1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD64, non-zero reg divisor, check 4")
++__success __success_unpriv __retval(0)
++__naked void smod64_non_zero_reg_4(void)
++{
++	asm volatile ("					\
++	r0 =3D -42;					\
++	r1 =3D 2;						\
++	r0 s%%=3D r1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD64, non-zero reg divisor, check 5")
++__success __success_unpriv __retval(0)
++__naked void smod64_non_zero_reg_5(void)
++{
++	asm volatile ("					\
++	r0 =3D 42;					\
++	r1 =3D -2;					\
++	r0 s%%=3D r1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD64, non-zero reg divisor, check 6")
++__success __success_unpriv __retval(0)
++__naked void smod64_non_zero_reg_6(void)
++{
++	asm volatile ("					\
++	r0 =3D -42;					\
++	r1 =3D -2;					\
++	r0 s%%=3D r1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD64, non-zero reg divisor, check 7")
++__success __success_unpriv __retval(0)
++__naked void smod64_non_zero_reg_7(void)
++{
++	asm volatile ("					\
++	r0 =3D 42;					\
++	r1 =3D 2;						\
++	r0 s%%=3D r1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD64, non-zero reg divisor, check 8")
++__success __success_unpriv __retval(1)
++__naked void smod64_non_zero_reg_8(void)
++{
++	asm volatile ("					\
++	r0 =3D 41;					\
++	r1 =3D 2;						\
++	r0 s%%=3D r1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV32, zero divisor")
++__success __success_unpriv __retval(0)
++__naked void sdiv32_zero_divisor(void)
++{
++	asm volatile ("					\
++	w0 =3D 42;					\
++	w1 =3D 0;						\
++	w2 =3D -1;					\
++	w2 s/=3D w1;					\
++	w0 =3D w2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SDIV64, zero divisor")
++__success __success_unpriv __retval(0)
++__naked void sdiv64_zero_divisor(void)
++{
++	asm volatile ("					\
++	r0 =3D 42;					\
++	r1 =3D 0;						\
++	r2 =3D -1;					\
++	r2 s/=3D r1;					\
++	r0 =3D r2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD32, zero divisor")
++__success __success_unpriv __retval(-1)
++__naked void smod32_zero_divisor(void)
++{
++	asm volatile ("					\
++	w0 =3D 42;					\
++	w1 =3D 0;						\
++	w2 =3D -1;					\
++	w2 s%%=3D w1;					\
++	w0 =3D w2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("SMOD64, zero divisor")
++__success __success_unpriv __retval(-1)
++__naked void smod64_zero_divisor(void)
++{
++	asm volatile ("					\
++	r0 =3D 42;					\
++	r1 =3D 0;						\
++	r2 =3D -1;					\
++	r2 s%%=3D r1;					\
++	r0 =3D r2;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++#else
++
++SEC("socket")
++__description("cpuv4 is not supported by compiler or jit, use a dummy te=
+st")
++__success
++int dummy_test(void)
++{
++	return 0;
++}
++
++#endif
++
++char _license[] SEC("license") =3D "GPL";
+--=20
+2.34.1
+
