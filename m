@@ -1,38 +1,38 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 159F8214FA;
-	Fri, 28 Jul 2023 17:44:42 +0000 (UTC)
-Received: from mgamail.intel.com (unknown [192.55.52.120])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171F219B;
-	Fri, 28 Jul 2023 10:44:41 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 992B4214FA;
+	Fri, 28 Jul 2023 17:44:43 +0000 (UTC)
+Received: from mgamail.intel.com (unknown [192.55.52.93])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ABF219B;
+	Fri, 28 Jul 2023 10:44:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690566281; x=1722102281;
+  t=1690566282; x=1722102282;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=8YTfdeqcjCJS41pEMSuVe0ylSk5t2u9bbO2vjcFEEz8=;
-  b=G7jso07/7CwpCMFXjtBpJmobaAsbawnKor1BZFbLuPs9ExwaIvyEsLGW
-   drxr0TDGiEsIiQEoerI6XjCS5dDEr2V99syqIh0+J/BKpjZuWhy9TmDX/
-   BSfwj/O+KUwj5uIHBSeEGhLIvVYn5O+8keNqx5/9Vkv3k4G8y3RBclEYE
-   EjZS6vQQR17lt6BYLD/v7y6RBTEW2xnDSrIW7DFfx+W/55UZ+/3yns/1f
-   OfzzgAkz7vMt0xVpazNnXsxQ3MTZhFJo135EnF3vK39Eb4ZbhoPgAEtqN
-   X/9b44YXvnO3r7IV1Mw3GRnij0vmmZ9cyc+kBkg9E4XZ7+bvCiq5k1Sp6
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="367530903"
+  bh=ilvtgIUqJ5hEp3FeBkpAW9MohoyE2wINrHeApnNuVy8=;
+  b=TQpie49mhhUoRDOLbR8dxmdzXmOSQWnOmlfTU8C6Ox/Wk5fN8ShrNC2n
+   YdjqvOF44No5YKNga24n5b6b4iYiWdhP2XaW1ZzBGqq0qTtyApdA2mgw3
+   TOsNB244yacxqwPXey8HguiXFkloQU2cSVCeSAhKjfIPVQroSIwtHOUhl
+   zs9+PY+IUMiLb9ltCxAyfyCBubOyHas35X0tz7hb2NhcWDFjDKQpQCiY0
+   K5I8QIfTXSEbFqNd1WfnDgA4WOXY+Ldeq9u/5s5pxo+WmVRwFwfFB/HTG
+   l4haVz9xTqb9jN/kSYwx0cmFDlkcLU3S+8fpLiYsDBAmjDSO4NlkRK3O2
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="366117456"
 X-IronPort-AV: E=Sophos;i="6.01,238,1684825200"; 
-   d="scan'208";a="367530903"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2023 10:44:40 -0700
+   d="scan'208";a="366117456"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2023 10:44:42 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="757254501"
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="851294678"
 X-IronPort-AV: E=Sophos;i="6.01,238,1684825200"; 
-   d="scan'208";a="757254501"
+   d="scan'208";a="851294678"
 Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by orsmga008.jf.intel.com with ESMTP; 28 Jul 2023 10:44:34 -0700
+  by orsmga004.jf.intel.com with ESMTP; 28 Jul 2023 10:44:30 -0700
 Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id E27AF386A5;
-	Fri, 28 Jul 2023 18:44:32 +0100 (IST)
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id C0E51386B4;
+	Fri, 28 Jul 2023 18:44:28 +0100 (IST)
 From: Larysa Zaremba <larysa.zaremba@intel.com>
 To: bpf@vger.kernel.org
 Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
@@ -59,11 +59,10 @@ Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
 	netdev@vger.kernel.org,
 	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
 	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Simon Horman <simon.horman@corigine.com>,
-	Aleksander Lobakin <aleksander.lobakin@intel.com>
-Subject: [PATCH bpf-next v4 15/21] net, xdp: allow metadata > 32
-Date: Fri, 28 Jul 2023 19:39:17 +0200
-Message-ID: <20230728173923.1318596-16-larysa.zaremba@intel.com>
+	Simon Horman <simon.horman@corigine.com>
+Subject: [PATCH bpf-next v4 13/21] ice: Implement checksum hint
+Date: Fri, 28 Jul 2023 19:39:15 +0200
+Message-ID: <20230728173923.1318596-14-larysa.zaremba@intel.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230728173923.1318596-1-larysa.zaremba@intel.com>
 References: <20230728173923.1318596-1-larysa.zaremba@intel.com>
@@ -74,87 +73,63 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+	SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-From: Aleksander Lobakin <aleksander.lobakin@intel.com>
+Implement .xmo_rx_csum callback to allow XDP code to determine,
+whether HW has validated any checksums.
 
-When using XDP hints, metadata sometimes has to be much bigger
-than 32 bytes. Relax the restriction, allow metadata larger than 32 bytes
-and make __skb_metadata_differs() work with bigger lengths.
-
-Now size of metadata is only limited by the fact it is stored as u8
-in skb_shared_info, so maximum possible value is 255. Other important
-conditions, such as having enough space for xdp_frame building, are already
-checked in bpf_xdp_adjust_meta().
-
-The requirement of having its length aligned to 4 bytes is still
-valid.
-
-Signed-off-by: Aleksander Lobakin <aleksander.lobakin@intel.com>
 Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
 ---
- include/linux/skbuff.h | 13 ++++++++-----
- include/net/xdp.h      |  7 ++++++-
- 2 files changed, 14 insertions(+), 6 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.c | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index faaba050f843..5d553dcc1ceb 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -4217,10 +4217,13 @@ static inline bool __skb_metadata_differs(const struct sk_buff *skb_a,
- {
- 	const void *a = skb_metadata_end(skb_a);
- 	const void *b = skb_metadata_end(skb_b);
--	/* Using more efficient varaiant than plain call to memcmp(). */
--#if defined(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) && BITS_PER_LONG == 64
- 	u64 diffs = 0;
- 
-+	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ||
-+	    BITS_PER_LONG != 64)
-+		goto slow;
-+
-+	/* Using more efficient variant than plain call to memcmp(). */
- 	switch (meta_len) {
- #define __it(x, op) (x -= sizeof(u##op))
- #define __it_diff(a, b, op) (*(u##op *)__it(a, op)) ^ (*(u##op *)__it(b, op))
-@@ -4240,11 +4243,11 @@ static inline bool __skb_metadata_differs(const struct sk_buff *skb_a,
- 		fallthrough;
- 	case  4: diffs |= __it_diff(a, b, 32);
- 		break;
-+	default:
-+slow:
-+		return memcmp(a - meta_len, b - meta_len, meta_len);
- 	}
- 	return diffs;
--#else
--	return memcmp(a - meta_len, b - meta_len, meta_len);
--#endif
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
+index 6ae57a98a4d8..e7a7c8e536b2 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
++++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
+@@ -660,8 +660,37 @@ static int ice_xdp_rx_vlan_tag(const struct xdp_md *ctx, u16 *vlan_tci,
+ 	return 0;
  }
  
- static inline bool skb_metadata_differs(const struct sk_buff *skb_a,
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 7e6163e5002a..84667da5e7e7 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -370,7 +370,12 @@ xdp_data_meta_unsupported(const struct xdp_buff *xdp)
- 
- static inline bool xdp_metalen_invalid(unsigned long metalen)
- {
--	return (metalen & (sizeof(__u32) - 1)) || (metalen > 32);
-+	typeof(metalen) meta_max;
++/**
++ * ice_xdp_rx_csum_lvl - Get level, at which HW has checked the checksum
++ * @ctx: XDP buff pointer
++ * @csum_status: destination address
++ * @csum_info: destination address
++ *
++ * Copy HW checksum level (if was checked) to the destination address.
++ */
++static int ice_xdp_rx_csum(const struct xdp_md *ctx,
++			   enum xdp_csum_status *csum_status,
++			   union xdp_csum_info *csum_info)
++{
++	const struct ice_xdp_buff *xdp_ext = (void *)ctx;
++	const union ice_32b_rx_flex_desc *eop_desc;
++	enum ice_rx_csum_status status;
++	u16 ptype;
 +
-+	meta_max = type_max(typeof_member(struct skb_shared_info, meta_len));
-+	BUILD_BUG_ON(!__builtin_constant_p(meta_max));
++	eop_desc = xdp_ext->pkt_ctx.eop_desc;
++	ptype = ice_get_ptype(eop_desc);
 +
-+	return !IS_ALIGNED(metalen, sizeof(u32)) || metalen > meta_max;
- }
- 
- struct xdp_attachment_info {
++	status = ice_get_rx_csum_status(eop_desc, ptype);
++	if (status & ICE_RX_CSUM_NONE)
++		return -ENODATA;
++
++	*csum_status = XDP_CHECKSUM_VALID_LVL0 + ice_rx_csum_lvl(status);
++	return 0;
++}
++
+ const struct xdp_metadata_ops ice_xdp_md_ops = {
+ 	.xmo_rx_timestamp		= ice_xdp_rx_hw_ts,
+ 	.xmo_rx_hash			= ice_xdp_rx_hash,
+ 	.xmo_rx_vlan_tag		= ice_xdp_rx_vlan_tag,
++	.xmo_rx_csum			= ice_xdp_rx_csum,
+ };
 -- 
 2.41.0
 
