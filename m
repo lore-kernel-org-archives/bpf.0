@@ -1,11 +1,11 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B1E97C
-	for <bpf@vger.kernel.org>; Sat, 29 Jul 2023 19:34:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27432C433C8;
-	Sat, 29 Jul 2023 19:34:38 +0000 (UTC)
-Date: Sat, 29 Jul 2023 15:34:36 -0400
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 892507C
+	for <bpf@vger.kernel.org>; Sat, 29 Jul 2023 19:55:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA441C433C7;
+	Sat, 29 Jul 2023 19:55:48 +0000 (UTC)
+Date: Sat, 29 Jul 2023 15:55:47 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: Valentin Schneider <vschneid@redhat.com>
 Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
@@ -39,12 +39,12 @@ Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
  <linux@weissschuh.net>, Juri Lelli <juri.lelli@redhat.com>, Daniel Bristot
  de Oliveira <bristot@redhat.com>, Marcelo Tosatti <mtosatti@redhat.com>,
  Yair Podemsky <ypodemsk@redhat.com>
-Subject: Re: [RFC PATCH v2 05/20] tracing/filters: Optimise cpumask vs
- cpumask filtering when user mask is a single CPU
-Message-ID: <20230729153436.1e07bfa6@rorschach.local.home>
-In-Reply-To: <20230720163056.2564824-6-vschneid@redhat.com>
+Subject: Re: [RFC PATCH v2 06/20] tracing/filters: Optimise scalar vs
+ cpumask filtering when the user mask is a single CPU
+Message-ID: <20230729155547.35719a1f@rorschach.local.home>
+In-Reply-To: <20230720163056.2564824-7-vschneid@redhat.com>
 References: <20230720163056.2564824-1-vschneid@redhat.com>
-	<20230720163056.2564824-6-vschneid@redhat.com>
+	<20230720163056.2564824-7-vschneid@redhat.com>
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -55,27 +55,53 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu, 20 Jul 2023 17:30:41 +0100
+On Thu, 20 Jul 2023 17:30:42 +0100
 Valentin Schneider <vschneid@redhat.com> wrote:
 
->  		/* Move along */
->  		i++;
-> +
-> +		/*
-> +		 * Optimisation: if the user-provided mask has a weight of one
-> +		 * then we can treat it as a scalar input.
-> +		 */
-> +		single = cpumask_weight(pred->mask) == 1;
-> +		if (single && field->filter_type == FILTER_CPUMASK) {
-> +			pred->val = cpumask_first(pred->mask);
-> +			kfree(pred->mask);
+> Steven noted that when the user-provided cpumask contains a single CPU,
+> then the filtering function can use a scalar as input instead of a
+> full-fledged cpumask.
+> 
+> When the mask contains a single CPU, directly re-use the unsigned field
+> predicate functions. Transform '&' into '==' beforehand.
+> 
+> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+> ---
+>  kernel/trace/trace_events_filter.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
+> index 2fe65ddeb34ef..54d642fabb7f1 100644
+> --- a/kernel/trace/trace_events_filter.c
+> +++ b/kernel/trace/trace_events_filter.c
+> @@ -1750,7 +1750,7 @@ static int parse_pred(const char *str, void *data,
+>  		 * then we can treat it as a scalar input.
+>  		 */
+>  		single = cpumask_weight(pred->mask) == 1;
+> -		if (single && field->filter_type == FILTER_CPUMASK) {
+> +		if (single && field->filter_type != FILTER_CPU) {
+>  			pred->val = cpumask_first(pred->mask);
+>  			kfree(pred->mask);
+>  		}
+> @@ -1761,6 +1761,11 @@ static int parse_pred(const char *str, void *data,
+>  				FILTER_PRED_FN_CPUMASK;
+>  		} else if (field->filter_type == FILTER_CPU) {
+>  			pred->fn_num = FILTER_PRED_FN_CPU_CPUMASK;
+> +		} else if (single) {
+> +			pred->op = pred->op == OP_BAND ? OP_EQ : pred->op;
 
-Don't we need:
-			pred->mask = NULL;
+Nit, the above can be written as:
 
-here, or the free_predicate() will cause a double free?
+			pred->op = pret->op != OP_BAND ? : OP_EQ;
 
 -- Steve
 
-> +		}
-> +
+
+> +			pred->fn_num = select_comparison_fn(pred->op, field->size, false);
+> +			if (pred->op == OP_NE)
+> +				pred->not = 1;
+>  		} else {
+>  			switch (field->size) {
+>  			case 8:
+
