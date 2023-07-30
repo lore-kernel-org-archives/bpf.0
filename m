@@ -1,163 +1,149 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBE28375
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 124C77F9
 	for <bpf@vger.kernel.org>; Sun, 30 Jul 2023 03:52:13 +0000 (UTC)
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B818D1BC9
-	for <bpf@vger.kernel.org>; Sat, 29 Jul 2023 20:52:08 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-63d3583d0efso23714336d6.1
-        for <bpf@vger.kernel.org>; Sat, 29 Jul 2023 20:52:08 -0700 (PDT)
+Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B893F172D
+	for <bpf@vger.kernel.org>; Sat, 29 Jul 2023 20:52:09 -0700 (PDT)
+Received: from ietfa.amsl.com (localhost [IPv6:::1])
+	by ietfa.amsl.com (Postfix) with ESMTP id 4E7E0C15155C
+	for <bpf@vger.kernel.org>; Sat, 29 Jul 2023 20:52:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
+	t=1690689129; bh=vau6NKtfMr/K676k146MnpVmB01OabnO1dS9XP8f/Bk=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe;
+	b=gaULp2MxvctsUYYQWMubAH1ru7qps78xJZyCNaNmaf+trjiy/X1pSY6nB0F9b+MUu
+	 L3bWXpgNwF1XZpClxBy5Qoi/FGI5Q4M3ZDv44/HAB9q+V7hl0RkwECYa1pajHcdLXA
+	 n4pCcwnvaURlOgXVu8IAz/QHM6/K7emwa9GePjzI=
+X-Mailbox-Line: From bpf-bounces@ietf.org  Sat Jul 29 20:52:09 2023
+Received: from ietfa.amsl.com (localhost [IPv6:::1])
+	by ietfa.amsl.com (Postfix) with ESMTP id 0F73CC151077;
+	Sat, 29 Jul 2023 20:52:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
+	t=1690689129; bh=vau6NKtfMr/K676k146MnpVmB01OabnO1dS9XP8f/Bk=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe;
+	b=gaULp2MxvctsUYYQWMubAH1ru7qps78xJZyCNaNmaf+trjiy/X1pSY6nB0F9b+MUu
+	 L3bWXpgNwF1XZpClxBy5Qoi/FGI5Q4M3ZDv44/HAB9q+V7hl0RkwECYa1pajHcdLXA
+	 n4pCcwnvaURlOgXVu8IAz/QHM6/K7emwa9GePjzI=
+Received: from localhost (localhost [127.0.0.1])
+ by ietfa.amsl.com (Postfix) with ESMTP id 3C49BC151074
+ for <bpf@ietfa.amsl.com>; Sat, 29 Jul 2023 20:52:08 -0700 (PDT)
+X-Virus-Scanned: amavisd-new at amsl.com
+X-Spam-Score: -1.907
+X-Spam-Level: 
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,
+	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+	autolearn=ham autolearn_force=no version=3.4.6
+Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
+ header.d=obs-cr.20221208.gappssmtp.com
+Received: from mail.ietf.org ([50.223.129.194])
+ by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zXyfRKbIFMNR for <bpf@ietfa.amsl.com>;
+ Sat, 29 Jul 2023 20:52:07 -0700 (PDT)
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com
+ [IPv6:2607:f8b0:4864:20::32f])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by ietfa.amsl.com (Postfix) with ESMTPS id C0C5AC151069
+ for <bpf@ietf.org>; Sat, 29 Jul 2023 20:52:07 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id
+ 46e09a7af769-6b9ec15e014so3106818a34.0
+ for <bpf@ietf.org>; Sat, 29 Jul 2023 20:52:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=obs-cr.20221208.gappssmtp.com; s=20221208; t=1690689127; x=1691293927;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IS0QrEAfMrnmUr8EFr5pq11r0uil3VUG1QUtldLkrFg=;
-        b=lZa0TlNoaXOPEq/WCVCbhwA9jZz3K1KoJ2pL22ZgEbcmC4i1s4bZ8fx4DbmxNbtnwP
-         qnv+9oHDWvQ/QoazOOW08gGIkNdCoTHl+oVowqI9wH3XvAdl6ZmS/FKmEAgawzBug47a
-         cdUobfcGlGBAAWL5GZVKZKvN13/Cp/PVL55H5EN5LIW7VhVlswfT46Ril4P6n8T6TPjQ
-         rs0QEbKL1YDc9mibho5quexdD+mnf8j7E/elpARNAJ5+hrIZjIxfFi8QY3GM2am4ksUr
-         7BJhkd0BmqmC6P+CUGYIrX328VcneLSQzMok2n5aSL8nCR4Kqmkp0RqFAgV29cIP8fef
-         XmSQ==
+ d=obs-cr.20221208.gappssmtp.com; s=20221208; t=1690689126; x=1691293926;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=hSSBGKcVR/Xy/Y5UaBj7CsgSJakQRT3q15ljgDsccIM=;
+ b=vFIEma1gJXyvi6Sybnpui3q6sPWdEvE9Jo+rh9tP55Zdn+d0wiXlbwcLY+GMZfxZbH
+ fMIbOTMcGykJLMzvMwJX8J5PcoR1bbVtAVF9ddw6HMGEpy9TK68dgV90UzcoYnlhy28X
+ ziEkmlXfmbcESU+fONsq2XyJpMjvbewGcSzmPiZdJqxr7yg6LTAdW0dzFvGaD+CLJ+3V
+ sdec5VLsmbeSAgtjN1T/hTdqN9b5BdGXFakS+cr3+4xq5bLSxvwg8BZpyLXwybcepwW0
+ WZW4Xwmqir2P9CDnN/AvviyBR/2xtv0yzX251EGjGFGovQTsCygzhUMy5TY1kWD/fGij
+ G3EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690689127; x=1691293927;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IS0QrEAfMrnmUr8EFr5pq11r0uil3VUG1QUtldLkrFg=;
-        b=cnxsLRaoqod5UPUYI5mzO0jd2HRzWXQDcdJLGz0KciIMXFt1dPCwMxo/VtCcfF6aVM
-         ePcqMoZ7vlEOVErMv+vSxvBOuWE0C/iGmkLHjeQ9nRQVv+ls/mutL8DLrk9rxnIVj2zp
-         cKtoZG5AkZUvw4aTlAFh5wzKrZ29OaoMrBnGEleAk9sfxeoa/YgyR/8rZG/XsMxtQc0g
-         7xrJnTcAtD1wYQYHzR58QNFFGVvgS97OfzUjmgpR9156liBikFdKH1iHO1vjPjV1zk+s
-         UV6WnFpg42xVGLTrXPOYiCoXLxXbddTgohYlzsgUxpdMH4SCMsl+MACFQ2kT9jWF9fgK
-         6aXA==
-X-Gm-Message-State: ABy/qLYmfibW/eYxmM0JGOLmFH+nYsteYsqohPZOpP4Szyeq0zrD/23w
-	rGA1Etb+gTykaNNKOrE/GfyBCKtDG9/fngBPyQ4=
-X-Google-Smtp-Source: APBJJlEpOO0nPtxzSQBzLUrFBiHirSX6APD1rFeDY/AgeSlTcpEcHRslbWKuGu7XaEMfEd42Ha3SbA==
-X-Received: by 2002:a0c:e290:0:b0:636:1722:8300 with SMTP id r16-20020a0ce290000000b0063617228300mr7379735qvl.1.1690689127735;
-        Sat, 29 Jul 2023 20:52:07 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1690689126; x=1691293926;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=hSSBGKcVR/Xy/Y5UaBj7CsgSJakQRT3q15ljgDsccIM=;
+ b=OHcejMhAQiXEBfg5tEzLRMi73hIEp713fEMjNcVPJ2buoJ1ElqQTwuYJNMJm2rcnhm
+ Op0hKV7qiHaedLbmccma5m4YFZ0uBCIhgfTlqphcmY2lqtzx03nh/I2jYl/4y7dOQZYd
+ GLG0juJEhsEicSJhlxjtpQhiNqKGG/iEhzk2nkK/mGUtz0sSqaGhfosb4a7DLsoFcXGY
+ ksO/L2GZf2TpCeU8FFeBi7iNLkcKUevk9SxWOZ6ew/yqIIVEOjwvfhRxuy4WUA5MdDiX
+ OhxO29kWGK0NpxJEzSTFCnj5caqwpXFY4bK+tHrVTTi8QO7eEXthBc2YWnHSy6ToVQKl
+ 14qw==
+X-Gm-Message-State: ABy/qLa1LHdcxcbbhod8G20LbgHJWbNJKNH5R5OlbjbqFoZ8FrxbLMMH
+ NbySafzEvmDTWALPtqkLUwlAwQ==
+X-Google-Smtp-Source: APBJJlHlOgfV6KunwS2tzSfkLdPPWsEVc5I3C7O3M6ieJjQiXNkHMiEDgoTlRUuTOqBjazskV5to9Q==
+X-Received: by 2002:a9d:6205:0:b0:6af:9b42:9794 with SMTP id
+ g5-20020a9d6205000000b006af9b429794mr6350900otj.35.1690689126435; 
+ Sat, 29 Jul 2023 20:52:06 -0700 (PDT)
 Received: from borderland.rhod.uc.edu ([129.137.96.2])
-        by smtp.gmail.com with ESMTPSA id i11-20020a0cf48b000000b0063cf9478fddsm2583073qvm.128.2023.07.29.20.52.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Jul 2023 20:52:07 -0700 (PDT)
+ by smtp.gmail.com with ESMTPSA id
+ i11-20020a0cf48b000000b0063cf9478fddsm2583073qvm.128.2023.07.29.20.52.06
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 29 Jul 2023 20:52:06 -0700 (PDT)
 From: Will Hawkins <hawkinsw@obs.cr>
 To: bpf@vger.kernel.org,
 	bpf@ietf.org
 Cc: Will Hawkins <hawkinsw@obs.cr>
-Subject: [PATCH 1/1] bpf, docs: Formalize type notation and function semantics in ISA standard
-Date: Sat, 29 Jul 2023 23:51:56 -0400
-Message-Id: <20230730035156.2728106-2-hawkinsw@obs.cr>
+Date: Sat, 29 Jul 2023 23:51:55 -0400
+Message-ID: <20230730035156.2728106-1-hawkinsw@obs.cr>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230730035156.2728106-1-hawkinsw@obs.cr>
-References: <20230730035156.2728106-1-hawkinsw@obs.cr>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-	T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/oJ6j7TVzHxFUgP5hUMLo0m_M-vo>
+Subject: [Bpf] [PATCH 0/1] Formalize type notation and function semantics in
+ ISA standard
+X-BeenThere: bpf@ietf.org
+X-Mailman-Version: 2.1.39
+Precedence: list
+List-Id: Discussion of BPF/eBPF standardization efforts within the IETF
+ <bpf.ietf.org>
+List-Unsubscribe: <https://www.ietf.org/mailman/options/bpf>,
+ <mailto:bpf-request@ietf.org?subject=unsubscribe>
+List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
+List-Post: <mailto:bpf@ietf.org>
+List-Help: <mailto:bpf-request@ietf.org?subject=help>
+List-Subscribe: <https://www.ietf.org/mailman/listinfo/bpf>,
+ <mailto:bpf-request@ietf.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Errors-To: bpf-bounces@ietf.org
+Sender: "Bpf" <bpf-bounces@ietf.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
+Message-ID: <20230730035155.lK99lY19F4QNcIX84WsRdU0Ztd3AefeMNeqeqBkxUHs@z>
 
-Give a single place where the shorthand for types are defined and the
-semantics of helper functions are described.
+Based on a conversation with Alexei, here is an attempt at condensing
+all the definitions of helper functions and type shorthands in a single
+place.
 
-Signed-off-by: Will Hawkins <hawkinsw@obs.cr>
----
+I hope that this is helpful!
+Will
+
+
+Will Hawkins (1):
+  bpf, docs: Formalize type notation and function semantics in ISA
+    standard
+
  .../bpf/standardization/instruction-set.rst   | 65 ++++++++++++++++++-
  Documentation/sphinx/requirements.txt         |  2 +-
  2 files changed, 63 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Documentation/bpf/standardization/instruction-set.rst
-index fb8154cedd84..97378388e20b 100644
---- a/Documentation/bpf/standardization/instruction-set.rst
-+++ b/Documentation/bpf/standardization/instruction-set.rst
-@@ -10,9 +10,68 @@ This document specifies version 1.0 of the eBPF instruction set.
- Documentation conventions
- =========================
- 
--For brevity, this document uses the type notion "u64", "u32", etc.
--to mean an unsigned integer whose width is the specified number of bits,
--and "s32", etc. to mean a signed integer of the specified number of bits.
-+For brevity and consistency, this document refers to families
-+of types using a shorthand syntax and refers to several helper
-+functions when explaining the semantics of opcodes. The range
-+of valid values for those types and the semantics of those functions
-+are defined in the following subsections.
-+
-+Types
-+-----
-+This document refers to integer types with a notation of the form `SX`
-+that succinctly defines whether their values are signed or unsigned
-+numbers and the bit widths:
-+
-+=== =======
-+`S` Meaning
-+=== =======
-+`u` unsigned
-+`s` signed
-+=== =======
-+
-+===== =========
-+`X`   Bit width
-+===== =========
-+`8`   8 bits
-+`16`  16 bits
-+`32`  32 bits
-+`64`  64 bits
-+`128` 128 bits
-+===== =========
-+
-+For example, `u32` is a type whose valid values are all the 32-bit unsigned
-+numbers and `s16` is a types whose valid values are all the 16-bit signed
-+numbers.
-+
-+Functions
-+---------
-+* `htobe16`: Takes an unsigned 16-bit number in host-endian format and
-+  returns the equivalent number as an unsigned 16-bit number in big-endian
-+  format.
-+* `htobe32`: Takes an unsigned 32-bit number in host-endian format and
-+  returns the equivalent number as an unsigned 32-bit number in big-endian
-+  format.
-+* `htobe64`: Takes an unsigned 64-bit number in host-endian format and
-+  returns the equivalent number as an unsigned 64-bit number in big-endian
-+  format.
-+* `htole16`: Takes an unsigned 16-bit number in host-endian format and
-+  returns the equivalent number as an unsigned 16-bit number in little-endian
-+  format.
-+* `htole32`: Takes an unsigned 32-bit number in host-endian format and
-+  returns the equivalent number as an unsigned 32-bit number in little-endian
-+  format.
-+* `htole64`: Takes an unsigned 64-bit number in host-endian format and
-+  returns the equivalent number as an unsigned 64-bit number in little-endian
-+  format.
-+* `bswap16`: Takes an unsigned 16-bit number in either big- or little-endian
-+  format and returns the equivalent number with the same bit width but
-+  opposite endianness.
-+* `bswap32`: Takes an unsigned 32-bit number in either big- or little-endian
-+  format and returns the equivalent number with the same bit width but
-+  opposite endianness.
-+* `bswap64`: Takes an unsigned 64-bit number in either big- or little-endian
-+  format and returns the equivalent number with the same bit width but
-+  opposite endianness.
- 
- Registers and calling convention
- ================================
-diff --git a/Documentation/sphinx/requirements.txt b/Documentation/sphinx/requirements.txt
-index 335b53df35e2..9479c5c2e338 100644
---- a/Documentation/sphinx/requirements.txt
-+++ b/Documentation/sphinx/requirements.txt
-@@ -1,3 +1,3 @@
- # jinja2>=3.1 is not compatible with Sphinx<4.0
- jinja2<3.1
--Sphinx==2.4.4
-+Sphinx==7.1.1
 -- 
 2.40.1
 
+-- 
+Bpf mailing list
+Bpf@ietf.org
+https://www.ietf.org/mailman/listinfo/bpf
