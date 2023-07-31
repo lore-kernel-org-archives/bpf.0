@@ -1,50 +1,51 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 470801FA4
-	for <bpf@vger.kernel.org>; Mon, 31 Jul 2023 07:24:53 +0000 (UTC)
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744042121
-	for <bpf@vger.kernel.org>; Mon, 31 Jul 2023 00:24:24 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-317798b359aso3692673f8f.1
-        for <bpf@vger.kernel.org>; Mon, 31 Jul 2023 00:24:24 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EBF01FDA
+	for <bpf@vger.kernel.org>; Mon, 31 Jul 2023 07:27:24 +0000 (UTC)
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16D2558A
+	for <bpf@vger.kernel.org>; Mon, 31 Jul 2023 00:27:21 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4fe07f0636bso6642990e87.1
+        for <bpf@vger.kernel.org>; Mon, 31 Jul 2023 00:27:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690788236; x=1691393036;
+        d=linaro.org; s=google; t=1690788439; x=1691393239;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=oGkyugvrEM6xlunfW9YYWZ5ucwxLmuDUqkGX4b2iOh8=;
-        b=qQK5xiVbHQ0s49w3n8GJnkrT+3BNDrv+1HVHaLxPSwxHtCZAEfQYw+OgMfdSGXiHcV
-         3kGJ3LhFbKOVG7gmi4w3mNVasWYu9gtPFele8Y70ujr3lSpHxcaOqKbn0jGI7W6YHnTB
-         xlf9xULjx5FNoZHA2ah3Kr4EGDFz60q7uVHSyDmHTZRm6xISfMN27p5ya+3y5YWVg8pH
-         WpfYV/lDXiJauCX6QAQcpEqH8Qay/sBTox0T5zutMQuAjY62y87uqfPSxJFuA09poU8c
-         nI15zNaJKxbtxPow9GtaYcvGeTZG51TqRyeq/eHvgMikcTClaBggGZlgN3NZR3WI7vwm
-         yrFw==
+        bh=x6jxr+Paf/a8UqAyEVDhqQSHA5jQ+PC3SvxEo5GaFhM=;
+        b=AB8O1HDJ9Cx3twLOTmJ6TUlyrJyTZFp7TIxybg7qc1rniE8GpbcoL4m9lFcZyurDHC
+         WAZofQhz+/+Z+5oPWFlMxiMRbdT9n6M3cL4VLgCEy7jn5tjuarX98qfl7s05E6q0T3Ce
+         up+bENO6WgnuxxXp9uUgWpPJouuQkEK6ClpSvD6sdvmX1fU/0VQul/j2JAJqNc6LXlKx
+         +cyJYAWIZBCFiLQ4l5nDtaF31yFShCGF/0M9a54O8Febdqap1xSipp9LO+59yuoCbZx2
+         tR5CLgYIq9c7y5yiewyNsdyTCu+yPpffdeqn6H3tWrmjQbSjk5duAOImOKK0ZT3orMsX
+         KasA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690788236; x=1691393036;
+        d=1e100.net; s=20221208; t=1690788439; x=1691393239;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oGkyugvrEM6xlunfW9YYWZ5ucwxLmuDUqkGX4b2iOh8=;
-        b=T9Hb4gaAg0VRVHmuIT+KZRV8jBNbjpEaDDnifOvlMGG3/Ic6p5lRJ0M+ZzSQNAuyLQ
-         18eVi1JIbrv8AnscqHfT56Az2YlHmWM6Mxj/B5AFD5WmCHZXBMxRkB07EqZBMWX0QKfh
-         iezbURlFvndN6cSHmUt4D5HS/4/HiQf+DkXXcq6YHluf18GA07BYlEo9992XD7s0ZfZs
-         wuLuVT1m4CMRDCuqypEBa/wCLSn34xqHojPYFtbI2FAp7N5XlDJLXkI/fieiKNnJEKNW
-         UAaeTN3/ccAdQ9V/JcyJAWaeWn+PlZJHB9Z6d7Fx5ulj7yjoQNjMJgImJAmwV01kxPq1
-         owmA==
-X-Gm-Message-State: ABy/qLZPPdMDJPegvkMDlEcuoXnMIGxPWxnpSxX2d6wiZPpJUKiMdRxO
-	dpPhmW7l3ueuAxe6MjxpZYHc07kD5utK0wP+0cI=
-X-Google-Smtp-Source: APBJJlGGefjSfRLzDqfy6n0xkLrVkZTQJkZ0wt1xsiiqKwJWdNvqxpkai+L6mhbxu9yl4OJwmAtKQw==
-X-Received: by 2002:adf:d092:0:b0:314:3b02:a8a8 with SMTP id y18-20020adfd092000000b003143b02a8a8mr4035110wrh.55.1690788236048;
-        Mon, 31 Jul 2023 00:23:56 -0700 (PDT)
+        bh=x6jxr+Paf/a8UqAyEVDhqQSHA5jQ+PC3SvxEo5GaFhM=;
+        b=ZrEZXtG/LffQcu/WFa5luO/U51FPT0iC1MnD2zxmgKTgaFvFeD02r+2Dm9quMLuCS2
+         TSwzpQT3E0zCjwYAzFOckUFuqR3d9lwV3lSCTwhBiBLjFpfuW+SKMLf5EWEyTbPTR0i2
+         5ghNJ4Zyp9Zo6i5Q4S9YQWSDTbdLp2JikvNBRdXO0Sqo2jpSljfoPWNULPKWu4rzI7f2
+         VKEXAkCsUkfjxl1RwYU/WnNInXuqGNLwqNtR3/cmjpbjQwFg41Bl5dan2U2yjgG3eTmr
+         6NP4OQRSeCpU0sTHSHSDFoVNSQcKwYEbuYkMhP0L5e9t0HTrVoUIJvKdcFgRlnRotlS7
+         cgpg==
+X-Gm-Message-State: ABy/qLbvmkE4UHHjjDlgFxRUUNlc6+bqdWgWY3EAbZ3u9N36fPUfNn2h
+	9lhaHskblzCyQ238VzJVGcTyEA==
+X-Google-Smtp-Source: APBJJlFZhomd8eV604yZpQyZKiQJi8OGu69Xu9Z05CLBmr3gbQEakkyIwpAUsCMiXZtuPjzSCulqXg==
+X-Received: by 2002:a2e:3e17:0:b0:2b6:e2cd:20f5 with SMTP id l23-20020a2e3e17000000b002b6e2cd20f5mr6366662lja.9.1690788439102;
+        Mon, 31 Jul 2023 00:27:19 -0700 (PDT)
 Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id t18-20020adfdc12000000b003143c9beeaesm12127892wri.44.2023.07.31.00.23.55
+        by smtp.gmail.com with ESMTPSA id x20-20020a1c7c14000000b003fc01f7b415sm13355283wmc.39.2023.07.31.00.27.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jul 2023 00:23:55 -0700 (PDT)
-Date: Mon, 31 Jul 2023 09:29:02 +0300
+        Mon, 31 Jul 2023 00:27:18 -0700 (PDT)
+Date: Mon, 31 Jul 2023 10:27:15 +0300
 From: Dan Carpenter <dan.carpenter@linaro.org>
-To: joannelkoong@gmail.com
+To: thinker.li@gmail.com
 Cc: bpf@vger.kernel.org
-Subject: [bug report] bpf: Add bpf_dynptr_slice and bpf_dynptr_slice_rdwr
-Message-ID: <d1360219-85c3-4a03-9449-253ea905f9d1@moroto.mountain>
+Subject: [bug report] selftests/bpf: Verify that the cgroup_skb filters
+ receive expected packets.
+Message-ID: <cafd6585-d5a2-4096-b94f-7556f5aa7737@moroto.mountain>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,49 +55,46 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
 	SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hello Joanne Koong,
+Hello Kui-Feng Lee,
 
-The patch 66e3a13e7c2c: "bpf: Add bpf_dynptr_slice and
-bpf_dynptr_slice_rdwr" from Mar 1, 2023 (linux-next), leads to the
-following Smatch static checker warning:
+The patch 539c7e67aa4a: "selftests/bpf: Verify that the cgroup_skb
+filters receive expected packets." from Jun 23, 2023 (linux-next),
+leads to the following Smatch static checker warning:
 
-	tools/testing/selftests/bpf/progs/test_cls_redirect_dynptr.c:403 forward_with_gre()
-	error: 'encap_gre' dereferencing possible ERR_PTR()
+	./tools/testing/selftests/bpf/prog_tests/cgroup_tcp_skb.c:116 connect_client_server_v6()
+	warn: unsigned 'addr.sin6_port' is never less than zero.
 
-tools/testing/selftests/bpf/progs/test_cls_redirect_dynptr.c
-    396 
-    397         encap_gre = bpf_dynptr_slice_rdwr(dynptr, 0, encap_buffer, sizeof(encap_buffer));
-    398         if (!encap_gre) {
-    399                 metrics->errors_total_encap_buffer_too_small++;
-    400                 return TC_ACT_SHOT;
-    401         }
-    402 
---> 403         encap_gre->ip.protocol = IPPROTO_GRE;
-                ^^^^^^^^^^^
+./tools/testing/selftests/bpf/prog_tests/cgroup_tcp_skb.c
+    107 static int connect_client_server_v6(int client_fd, int listen_fd)
+    108 {
+    109         struct sockaddr_in6 addr = {
+    110                 .sin6_family = AF_INET6,
+    111                 .sin6_addr = IN6ADDR_LOOPBACK_INIT,
+    112         };
+    113         int err;
+    114 
+    115         addr.sin6_port = htons(get_sock_port_v6(listen_fd));
+--> 116         if (addr.sin6_port < 0)
+                    ^^^^^^^^^^^^^^^^^^
+Impossible and also it doesn't make sense to compare network endian data
+with < 0.
 
-The bpf_dynptr_slice() function accidentally propagates error pointers
-from bpf_xdp_pointer() so it would crash here.
-
-
-    404         encap_gre->ip.daddr = next_hop->s_addr;
-    405         encap_gre->ip.saddr = ENCAPSULATION_IP;
-    406         encap_gre->ip.tot_len =
-    407                 bpf_htons(bpf_ntohs(encap_gre->ip.tot_len) + delta);
-    408         encap_gre->gre.flags = 0;
-    409         encap_gre->gre.protocol = bpf_htons(proto);
-    410         pkt_ipv4_checksum((void *)&encap_gre->ip);
-    411 
-    412         if (encap_gre == encap_buffer)
-    413                 bpf_dynptr_write(dynptr, 0, encap_buffer, sizeof(encap_buffer), 0);
-    414 
-    415         return bpf_redirect(skb->ifindex, 0);
-    416 }
+    117                 return -1;
+    118 
+    119         err = connect(client_fd, (struct sockaddr *)&addr, sizeof(addr));
+    120         if (err < 0) {
+    121                 perror("connect");
+    122                 return -1;
+    123         }
+    124 
+    125         return 0;
+    126 }
 
 regards,
 dan carpenter
