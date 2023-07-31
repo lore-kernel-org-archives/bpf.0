@@ -1,142 +1,175 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2321917ADF
-	for <bpf@vger.kernel.org>; Mon, 31 Jul 2023 09:53:27 +0000 (UTC)
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867B610CC
-	for <bpf@vger.kernel.org>; Mon, 31 Jul 2023 02:52:55 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b703a0453fso63244401fa.3
-        for <bpf@vger.kernel.org>; Mon, 31 Jul 2023 02:52:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google; t=1690797172; x=1691401972;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=iS9ynVL/SnopVJ2vw9YOzxEVqWQLoL/quqMJip/rlSE=;
-        b=TJGih8nCWL5gxD2BWkapKv6qzLQgYlt7Dn6tUvA7zsBBkj0NosBGxU6y4wTEHIMu9b
-         QNhfWKg5PLY3Lopd3sj6iaUhOmghM4XdsG0krJt7pnnvs8nkdNgFXco002qJe6S1WLjL
-         4D5feAhqvaQ0OrqYsnoNvfQpn+ks1/c6mkHzU=
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A30017744
+	for <bpf@vger.kernel.org>; Mon, 31 Jul 2023 10:10:23 +0000 (UTC)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730B6E3
+	for <bpf@vger.kernel.org>; Mon, 31 Jul 2023 03:10:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1690798221;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5xKuqYOqmlVZDJvMolVVhkUwvpv3MXvZb5ujWB1Ho20=;
+	b=VnxOu1GCUy4IDpVPIEByr8C2wLfA9NvKuTh5fyaIkbLfkE7l5+N6NvV7UoBJZ4NDIaXouO
+	kbwtnVb88NsbpB++qQQhc+KuLcb20FtMFvXYlCCNYItF4HX35o9fYd5RZhIhQ5AhHw/uI2
+	K9Xr8d3+V/9tPcoLL8bm7QVzbxmtb5c=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-363-jbKCUeW-PN6_Vt3KLbB_-w-1; Mon, 31 Jul 2023 06:09:50 -0400
+X-MC-Unique: jbKCUeW-PN6_Vt3KLbB_-w-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-94a34a0b75eso298043566b.1
+        for <bpf@vger.kernel.org>; Mon, 31 Jul 2023 03:09:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690797172; x=1691401972;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iS9ynVL/SnopVJ2vw9YOzxEVqWQLoL/quqMJip/rlSE=;
-        b=IsiKwIlL29LyhIj4Ow40+ES1fb2OGP4Wtal6Cu8adRLknAgrTXOYw6RfliLSpbGTGa
-         WU4lSdX+1WKz4iRUKkG4CM+jv8vuOzoN5i5uxCedQxURn8a8s95Qhd1uBkX+XdrexG5L
-         lbNXm8EEWlW14mIu6DMlgRRXwXq3tS8ZZn5C9s3Re/Xsd5p4lj2XXRqfTlmwziPg90m/
-         h++0CiuteL18S6uLFV0/fWT5ad5iO5gBLQDrlH/0ujSuyGc6tintG1XyKCdygxdQ9r7m
-         eYoYSyz9rxFUur4vq7oL4h+h9TiXrKL2uPnl8A0JF1NgGLSBhdg5dZ83VrB8Bsqc45GE
-         aWRQ==
-X-Gm-Message-State: ABy/qLZaxAgzqCLvVu/NqZvBZ77mT6aiSwwhCtd87jPxL8mK86ODrGhf
-	mjeLtqxW7CfiFR0wvIiN17KdHw==
-X-Google-Smtp-Source: APBJJlFIqs6ieNOIG6CV6VOvY4r1Ja1rFjHMIrHJIuZjzIq57jXM6bn1exmD7gtibtpDJrxd12r9Rg==
-X-Received: by 2002:a2e:8557:0:b0:2b9:4821:22b6 with SMTP id u23-20020a2e8557000000b002b9482122b6mr6184560ljj.10.1690797172186;
-        Mon, 31 Jul 2023 02:52:52 -0700 (PDT)
-Received: from cloudflare.com (79.184.136.135.ipv4.supernova.orange.pl. [79.184.136.135])
-        by smtp.gmail.com with ESMTPSA id q24-20020a17090622d800b0098d2f703408sm5858343eja.118.2023.07.31.02.52.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jul 2023 02:52:51 -0700 (PDT)
-References: <cover.1690332693.git.yan@cloudflare.com>
- <9c4896b109a39c3fa088844addaa1737a84bbbb5.1690332693.git.yan@cloudflare.com>
- <791b919c-de82-6dc8-905a-520543f975cd@linux.dev>
-User-agent: mu4e 1.6.10; emacs 28.2
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Yan Zhai <yan@cloudflare.com>, bpf@vger.kernel.org, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Song Liu <song@kernel.org>, Yonghong Song
- <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh
- <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
- <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Mykola Lysenko
- <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-team@cloudflare.com, Jordan Griege
- <jgriege@cloudflare.com>, Markus Elfring <Markus.Elfring@web.de>
-Subject: Re: [PATCH v4 bpf 2/2] bpf: selftests: add lwt redirect regression
- test cases
-Date: Mon, 31 Jul 2023 11:48:40 +0200
-In-reply-to: <791b919c-de82-6dc8-905a-520543f975cd@linux.dev>
-Message-ID: <87edkoflvx.fsf@cloudflare.com>
+        d=1e100.net; s=20221208; t=1690798188; x=1691402988;
+        h=content-transfer-encoding:in-reply-to:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5xKuqYOqmlVZDJvMolVVhkUwvpv3MXvZb5ujWB1Ho20=;
+        b=KpSss+NB+Q4vKeIGjz/F4APQY6VUrSKY+75ZbH+tzaiNnZ4noC1t+/Bqptv7E42NDj
+         +7GcFT0ix3BJtzwQ76M9uXEJeidU1broASeLFwfnz3rNtOmm9asxxr2br/6xaBOJy0XC
+         2VWXgT6eIeo//W3sftEnurUFqpc7Fn6rUDA4aCiUIAeBV2Dl0pkI+NWjsvUyAs+i6mAT
+         vTubzQeduOPtHYe1a+7fpn13FhRPJChJQp1ai7DdnazBEW9psRr7SwwMna0cVXXCXcNR
+         zpmsMIaB/ygQNUqecIh2eKQHG+CGughnYOsA8tdD5KyEVssH5djYzq/ZoN0qeD5SW1NS
+         b4lA==
+X-Gm-Message-State: ABy/qLblyIl1jD1lC6PCr6kBD6DdLYiTRoqIK7AJay4UMueJDWjd1W2/
+	dGfi2WVWrTI9t7i1Xg74u4Hz3EXJ6DAw/Kry1vxjC17LIkg5GSu9SwL+sNplMpSuv92WGJvL7yr
+	vxLK6MNBwekmI
+X-Received: by 2002:a17:907:a072:b0:99b:efc8:51d with SMTP id ia18-20020a170907a07200b0099befc8051dmr5478321ejc.21.1690798188396;
+        Mon, 31 Jul 2023 03:09:48 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFwwLkrWqLwBDKAZavwRn+ex00l9mHmODZ3T+ZMCcOof8Bri8pSKq+DYoIIVJlmKt3NEvOJuA==
+X-Received: by 2002:a17:907:a072:b0:99b:efc8:51d with SMTP id ia18-20020a170907a07200b0099befc8051dmr5478291ejc.21.1690798187986;
+        Mon, 31 Jul 2023 03:09:47 -0700 (PDT)
+Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
+        by smtp.gmail.com with ESMTPSA id pw3-20020a17090720a300b00987e2f84768sm5899913ejb.0.2023.07.31.03.09.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jul 2023 03:09:47 -0700 (PDT)
+From: Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <6e55ab8c-0b84-4de7-0f92-c8789732dbdb@redhat.com>
+Date: Mon, 31 Jul 2023 12:09:45 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Cc: brouer@redhat.com, netdev@vger.kernel.org,
+ "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+ =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>,
+ Hao Luo <haoluo@google.com>, Yonghong Song <yonghong.song@linux.dev>,
+ Daniel Borkmann <daniel@iogearbox.net>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Pu Lehui <pulehui@huawei.com>, houtao1@huawei.com
+Subject: Re: [PATCH bpf 2/2] bpf, cpumap: Handle skb as well when clean up
+ ptr_ring
+Content-Language: en-US
+To: Hou Tao <houtao@huaweicloud.com>, bpf@vger.kernel.org
+References: <20230729095107.1722450-1-houtao@huaweicloud.com>
+ <20230729095107.1722450-3-houtao@huaweicloud.com>
+In-Reply-To: <20230729095107.1722450-3-houtao@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
 	SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Fri, Jul 28, 2023 at 03:47 PM -07, Martin KaFai Lau wrote:
-> On 7/25/23 6:09 PM, Yan Zhai wrote:
 
-[...]
+On 29/07/2023 11.51, Hou Tao wrote:
+> From: Hou Tao <houtao1@huawei.com>
+> 
+> The following warning was reported when running xdp_redirect_cpu with
+> both skb-mode and stress-mode enabled:
+> 
+>    ------------[ cut here ]------------
+>    Incorrect XDP memory type (-2128176192) usage
 
->> diff --git a/tools/testing/selftests/bpf/test_lwt_redirect.sh
->> b/tools/testing/selftests/bpf/test_lwt_redirect.sh
->> new file mode 100755
->> index 000000000000..1b7b78b48174
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/test_lwt_redirect.sh
->
-> This has to be written in the test_progs infrastructure in C. Only test_progs is
-> run by the BPF CI. Take a look at other tests in prog_tests/. For example,
-> tc_redirect.c and xdp_metadata.c which are having setup in netns/link/...etc. It
-> currently has helpers to add tc qdisc and filter but not adding route yet which
-> could be a useful addition.
+I'm happy to see that WARN "Incorrect XDP memory type" caught this.
 
-Can we help make the BPF CI better so that it also runs other tests in
-addition test_progs?
+>    WARNING: CPU: 7 PID: 1442 at net/core/xdp.c:405
+>    Modules linked in:
+>    CPU: 7 PID: 1442 Comm: kworker/7:0 Tainted: G  6.5.0-rc2+ #1
+>    Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+>    Workqueue: events __cpu_map_entry_free
+>    RIP: 0010:__xdp_return+0x1e4/0x4a0
+>    ......
+>    Call Trace:
+>     <TASK>
+>     ? show_regs+0x65/0x70
+>     ? __warn+0xa5/0x240
+>     ? __xdp_return+0x1e4/0x4a0
+>     ......
+>     xdp_return_frame+0x4d/0x150
+>     __cpu_map_entry_free+0xf9/0x230
+>     process_one_work+0x6b0/0xb80
+>     worker_thread+0x96/0x720
+>     kthread+0x1a5/0x1f0
+>     ret_from_fork+0x3a/0x70
+>     ret_from_fork_asm+0x1b/0x30
+>     </TASK>
+> 
+> The reason for the warning is twofold. One is due to the kthread
+> cpu_map_kthread_run() is stopped prematurely. Another one is
+> __cpu_map_ring_cleanup() doesn't handle skb mode and treats skbs in
+> ptr_ring as XDP frames.
+> 
+> Prematurely-stopped kthread will be fixed by the preceding patch and
+> ptr_ring will be empty when __cpu_map_ring_cleanup() is called. But
+> as the comments in __cpu_map_ring_cleanup() said, handling and freeing
+> skbs in ptr_ring as well to "catch any broken behaviour gracefully".
+> 
+> Fixes: 11941f8a8536 ("bpf: cpumap: Implement generic cpumap")
+> Signed-off-by: Hou Tao <houtao1@huawei.com>
+> ---
 
-We have bpf selftests written in shell and even Python. These are
-sometimes the right tools for the job and make adding tests easier,
-IMHO. Network setup from C is verbose and tedious. Not to mention, hard
-to read through.
+Acked-by: Jesper Dangaard Brouer <hawk@kernel.org>
 
-# ./run_kselftest.sh --list
-bpf:test_verifier
-bpf:test_tag
-bpf:test_maps
-bpf:test_lru_map
-bpf:test_lpm_map
-bpf:test_progs
-bpf:test_dev_cgroup
-bpf:test_sock
-bpf:test_sockmap
-bpf:get_cgroup_id_user
-bpf:test_cgroup_storage
-bpf:test_tcpnotify_user
-bpf:test_sysctl
-bpf:test_progs-no_alu32
-bpf:test_kmod.sh
-bpf:test_xdp_redirect.sh
-bpf:test_xdp_redirect_multi.sh
-bpf:test_xdp_meta.sh
-bpf:test_xdp_veth.sh
-bpf:test_offload.py
-bpf:test_sock_addr.sh
-bpf:test_tunnel.sh
-bpf:test_lwt_seg6local.sh
-bpf:test_lirc_mode2.sh
-bpf:test_skb_cgroup_id.sh
-bpf:test_flow_dissector.sh
-bpf:test_xdp_vlan_mode_generic.sh
-bpf:test_xdp_vlan_mode_native.sh
-bpf:test_lwt_ip_encap.sh
-bpf:test_tcp_check_syncookie.sh
-bpf:test_tc_tunnel.sh
-bpf:test_tc_edt.sh
-bpf:test_xdping.sh
-bpf:test_bpftool_build.sh
-bpf:test_bpftool.sh
-bpf:test_bpftool_metadata.sh
-bpf:test_doc_build.sh
-bpf:test_xsk.sh
-bpf:test_xdp_features.sh
+I think we should fix this code, even-though patch 1 have made it harder
+to trigger.
+
+
+>   kernel/bpf/cpumap.c | 14 ++++++++++----
+>   1 file changed, 10 insertions(+), 4 deletions(-)
+> 
+> diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+> index 08351e0863e5..ef28c64f1eb1 100644
+> --- a/kernel/bpf/cpumap.c
+> +++ b/kernel/bpf/cpumap.c
+> @@ -129,11 +129,17 @@ static void __cpu_map_ring_cleanup(struct ptr_ring *ring)
+>   	 * invoked cpu_map_kthread_stop(). Catch any broken behaviour
+>   	 * gracefully and warn once.
+>   	 */
+> -	struct xdp_frame *xdpf;
+> +	void *ptr;
+>   
+> -	while ((xdpf = ptr_ring_consume(ring)))
+> -		if (WARN_ON_ONCE(xdpf))
+> -			xdp_return_frame(xdpf);
+> +	while ((ptr = ptr_ring_consume(ring))) {
+> +		WARN_ON_ONCE(1);
+> +		if (unlikely(__ptr_test_bit(0, &ptr))) {
+> +			__ptr_clear_bit(0, &ptr);
+> +			kfree_skb(ptr);
+> +			continue;
+> +		}
+> +		xdp_return_frame(ptr);
+> +	}
+>   }
+>   
+>   static void put_cpu_map_entry(struct bpf_cpu_map_entry *rcpu)
+
