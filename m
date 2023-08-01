@@ -1,30 +1,31 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744954DC94
-	for <bpf@vger.kernel.org>; Tue,  1 Aug 2023 20:36:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D6F84DC94
+	for <bpf@vger.kernel.org>; Tue,  1 Aug 2023 20:36:49 +0000 (UTC)
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631A0210A
-	for <bpf@vger.kernel.org>; Tue,  1 Aug 2023 13:36:45 -0700 (PDT)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 371H5wGU014768
-	for <bpf@vger.kernel.org>; Tue, 1 Aug 2023 13:36:45 -0700
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436B71FFD
+	for <bpf@vger.kernel.org>; Tue,  1 Aug 2023 13:36:48 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 371H6cRL024014
+	for <bpf@vger.kernel.org>; Tue, 1 Aug 2023 13:36:47 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=facebook; bh=ZZNzWf1GcGYE0TX4c3ETTa33gMTq9fUocvNzEBzZMmQ=;
- b=Ym1iNo/aUxezNNDaN6RwZc30gNcfYvx9yTcZrS+mGW/bI+7OsCeXOD8rhVo5VWedhTGg
- EsD+ZzxAn3ojrcOKRPiMOZpw64xcTAqrJzTEs4Vdm5h+hSfOsvIqx+HyFKShvNJmhRK/
- Fax56F0Ju3bVnFX2P7a6PodFwklcJEoZWQU= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=gq3qeW8i/pQqHijuqVBTvf8gSC8BcsZj+hC64FNjS+Y=;
+ b=oSYQPGr5rHvACrJIjQ7JwBeSPHGUWETIbYR8g7U4sUan136S9RAe98iu5r31QzpJeYwu
+ DeQqc1Hxf5wGzZo5cIJUM1tCmkh3s9Lh17nEIS7OzsAZmpsOcndgutXyG/8sWnTR0dYc
+ iquxggYwjBsxNQWAn4d7J9q3+rHdyfjmdeA= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3s6yfm5310-2
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3s6uyyehgw-2
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 01 Aug 2023 13:36:45 -0700
-Received: from twshared18891.17.frc2.facebook.com (2620:10d:c085:108::8) by
+	for <bpf@vger.kernel.org>; Tue, 01 Aug 2023 13:36:47 -0700
+Received: from twshared10970.08.ash8.facebook.com (2620:10d:c085:108::4) by
  mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 1 Aug 2023 13:36:44 -0700
+ 15.1.2507.27; Tue, 1 Aug 2023 13:36:46 -0700
 Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-	id EEA162204866D; Tue,  1 Aug 2023 13:36:32 -0700 (PDT)
+	id 5BD4322048679; Tue,  1 Aug 2023 13:36:34 -0700 (PDT)
 From: Dave Marchevsky <davemarchevsky@fb.com>
 To: <bpf@vger.kernel.org>
 CC: Alexei Starovoitov <ast@kernel.org>,
@@ -36,22 +37,23 @@ CC: Alexei Starovoitov <ast@kernel.org>,
         Kernel Team <kernel-team@fb.com>,
         Dave Marchevsky
 	<davemarchevsky@fb.com>
-Subject: [PATCH v1 bpf-next 0/7] BPF Refcount followups 3: bpf_mem_free_rcu refcounted nodes
-Date: Tue, 1 Aug 2023 13:36:23 -0700
-Message-ID: <20230801203630.3581291-1-davemarchevsky@fb.com>
+Subject: [PATCH v1 bpf-next 3/7] bpf: Use bpf_mem_free_rcu when bpf_obj_dropping refcounted nodes
+Date: Tue, 1 Aug 2023 13:36:26 -0700
+Message-ID: <20230801203630.3581291-4-davemarchevsky@fb.com>
 X-Mailer: git-send-email 2.34.1
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: lAFHgm_dFYM8oGkWOCHOMtnvj-ALxHq5
-X-Proofpoint-ORIG-GUID: lAFHgm_dFYM8oGkWOCHOMtnvj-ALxHq5
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+In-Reply-To: <20230801203630.3581291-1-davemarchevsky@fb.com>
+References: <20230801203630.3581291-1-davemarchevsky@fb.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: tOZwt_hA64arAYFDbod6fmnx_GaHUZ1T
+X-Proofpoint-GUID: tOZwt_hA64arAYFDbod6fmnx_GaHUZ1T
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-08-01_19,2023-08-01_01,2023-05-22_02
@@ -63,130 +65,44 @@ X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-This series is the third of three (or more) followups to address issues
-in the bpf_refcount shared ownership implementation discovered by Kumar.
-This series addresses the use-after-free scenario described in [0]. The
-first followup series ([1]) also attempted to address the same
-use-after-free, but only got rid of the splat without addressing the
-underlying issue. After this series the underyling issue is fixed and
-bpf_refcount_acquire can be re-enabled.
+This is the final fix for the use-after-free scenario described in
+commit 7793fc3babe9 ("bpf: Make bpf_refcount_acquire fallible for
+non-owning refs"). That commit, by virtue of changing
+bpf_refcount_acquire's refcount_inc to a refcount_inc_not_zero, fixed
+the "refcount incr on 0" splat. The not_zero check in
+refcount_inc_not_zero, though, still occurs on memory that could have
+been free'd and reused, so the commit didn't properly fix the root
+cause.
 
-The main fix here is migration of bpf_obj_drop to use
-bpf_mem_free_rcu. To understand why this fixes the issue, let us consider
-the example interleaving provided by Kumar in [0]:
+This patch actually fixes the issue by free'ing using the recently-added
+bpf_mem_free_rcu, which ensures that the memory is not reused until
+RCU Tasks Trace grace period has elapsed. If that has happened then
+there are no non-owning references alive that point to the
+recently-free'd memory, so it can be safely reused.
 
-CPU 0                                   CPU 1
-n =3D bpf_obj_new
-lock(lock1)
-bpf_rbtree_add(rbtree1, n)
-m =3D bpf_rbtree_acquire(n)
-unlock(lock1)
+Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
+---
+ kernel/bpf/helpers.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-kptr_xchg(map, m) // move to map
-// at this point, refcount =3D 2
-					m =3D kptr_xchg(map, NULL)
-					lock(lock2)
-lock(lock1)				bpf_rbtree_add(rbtree2, m)
-p =3D bpf_rbtree_first(rbtree1)			if (!RB_EMPTY_NODE) bpf_obj_drop_impl(m) =
-// A
-bpf_rbtree_remove(rbtree1, p)
-unlock(lock1)
-bpf_obj_drop(p) // B
-					bpf_refcount_acquire(m) // use-after-free
-					...
-
-Before this series, bpf_obj_drop returns memory to the allocator using
-bpf_mem_free. At this point (B in the example) there might be some
-non-owning references to that memory which the verifier believes are valid,
-but where the underlying memory was reused for some other allocation.
-Commit 7793fc3babe9 ("bpf: Make bpf_refcount_acquire fallible for
-non-owning refs") attempted to fix this by doing refcount_inc_non_zero
-on refcount_acquire in instead of refcount_inc under the assumption that
-preventing erroneous incr-on-0 would be sufficient. This isn't true,
-though: refcount_inc_non_zero must *check* if the refcount is zero, and
-the memory it's checking could have been reused, so the check may look
-at and incr random reused bytes.
-
-If we wait to reuse this memory until all non-owning refs that could
-point to it are gone, there is no possibility of this scenario
-happening. Migrating bpf_obj_drop to use bpf_mem_free_rcu for refcounted
-nodes accomplishes this.
-
-For such nodes, the validity of their underlying memory is now tied to
-RCU Tasks Trace critical section. This matches MEM_RCU trustedness
-expectations, so the series takes the opportunity to more explicitly=20
-mark this trustedness state.
-
-The functional effects of trustedness changes here are rather small.
-This is largely due to local kptrs having separate verifier handling -
-with implicit trustedness assumptions - than arbitrary kptrs.
-Regardless, let's take the opportunity to move towards a world where
-trustedness is more explictly handled.
-
-Summary of patch contents, with sub-bullets being leading questions and
-comments I think are worth reviewer attention:
-
-  * Patches 1 and 2 are moreso documententation - and
-    enforcement, in patch 1's case - of existing semantics / expectations
-
-  * Patch 3 changes bpf_obj_drop behavior for refcounted nodes such that
-    their underlying memory is not reused until RCU grace period elapses
-    * Perhaps it makes sense to move to mem_free_rcu for _all_
-      non-owning refs in the future, not just refcounted. This might
-      allow custom non-owning ref lifetime + invalidation logic to be
-      entirely subsumed by MEM_RCU handling. IMO this needs a bit more
-      thought and should be tackled outside of a fix series, so it's not
-      attempted here.
-
-  * Patch 4 re-enables bpf_refcount_acquire as changes in patch 3 fix
-    the remaining use-after-free
-    * One might expect this patch to be last in the series, or last
-      before selftest changes. Patches 5 and 6 don't change
-      verification or runtime behavior for existing BPF progs, though.
-
-  * Patch 5 brings the verifier's understanding of refcounted node
-    trustedness in line with Patch 4's changes
-
-  * Patch 6 allows some bpf_spin_{lock, unlock} calls in sleepable
-    progs. Marked RFC for a few reasons:
-    * bpf_spin_{lock,unlock} haven't been usable in sleepable progs
-      since before the introduction of bpf linked list and rbtree. As
-      such this feels more like a new feature that may not belong in
-      this fixes series.
-    * If we do want to allow bpf_spin_{lock,unlock} in sleepable progs,
-      Alexei has expressed a preference for that do be done as part of a
-      broader set of changes to verifier determination of where those
-      helpers can be called, and what can be called inside the spin_lock
-      CS.
-    * I'm unsure whether preemption needs to be disabled in this patch
-      as well.
-
-  * Patch 7 adds tests
-
-  [0]: https://lore.kernel.org/bpf/atfviesiidev4hu53hzravmtlau3wdodm2vqs7rd=
-7tnwft34e3@xktodqeqevir/
-  [1]: https://lore.kernel.org/bpf/20230602022647.1571784-1-davemarchevsky@=
-fb.com/
-
-Dave Marchevsky (7):
-  bpf: Ensure kptr_struct_meta is non-NULL for collection insert and
-    refcount_acquire
-  bpf: Consider non-owning refs trusted
-  bpf: Use bpf_mem_free_rcu when bpf_obj_dropping refcounted nodes
-  bpf: Reenable bpf_refcount_acquire
-  bpf: Consider non-owning refs to refcounted nodes RCU protected
-  [RFC] bpf: Allow bpf_spin_{lock,unlock} in sleepable prog's RCU CS
-  selftests/bpf: Add tests for rbtree API interaction in sleepable progs
-
- include/linux/bpf.h                           |  3 +-
- include/linux/bpf_verifier.h                  |  2 +-
- kernel/bpf/helpers.c                          |  6 ++-
- kernel/bpf/verifier.c                         | 45 ++++++++++++-----
- .../bpf/prog_tests/refcounted_kptr.c          | 26 ++++++++++
- .../selftests/bpf/progs/refcounted_kptr.c     | 37 ++++++++++++++
- .../bpf/progs/refcounted_kptr_fail.c          | 48 +++++++++++++++++++
- 7 files changed, 153 insertions(+), 14 deletions(-)
-
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 56ce5008aedd..7702f657fa3f 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1913,7 +1913,11 @@ void __bpf_obj_drop_impl(void *p, const struct btf=
+_record *rec)
+=20
+ 	if (rec)
+ 		bpf_obj_free_fields(rec, p);
+-	bpf_mem_free(&bpf_global_ma, p);
++
++	if (rec && rec->refcount_off >=3D 0)
++		bpf_mem_free_rcu(&bpf_global_ma, p);
++	else
++		bpf_mem_free(&bpf_global_ma, p);
+ }
+=20
+ __bpf_kfunc void bpf_obj_drop_impl(void *p__alloc, void *meta__ign)
 --=20
 2.34.1
 
