@@ -1,72 +1,81 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B86647E;
-	Tue,  1 Aug 2023 01:58:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1DB95C433C8;
-	Tue,  1 Aug 2023 01:58:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1690855132;
-	bh=/YKmEXb0/vW9TocEcNGoTalJ2qkpZWR+jmhHZQny6G0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=GYVDLxh4Lma3f+d0kdq4ciAHK6NlnRMEL6ke8fA4MveQmUI//i0u4pGKiFJSb4QVI
-	 sCkmeR2XU1kB7awO4yQzNZ+1bLgVtgHgUTKlfWG2TZ9YTNod4RdzK8tzuD0SgAxLeY
-	 u8VIlb9H6vq2d25mv9b5OToBdf9rM39U7iAOEYYUIU0DwHYaUNTsqGsvpVtNBWJ+bt
-	 Sy43NWeLpDrKWMCqch+cB8NvWRIW0c5I8sM827RmxUgDcDICr8YzXWgCL7klQrntxU
-	 qcT0uRotv3gcdQb3rKRAmzhEX5+hWToeOR/myBKg4ujfRWcJGkrJJwxO+tzFdgHqrJ
-	 bL2eAXQEVKodA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 011E7C595C0;
-	Tue,  1 Aug 2023 01:58:52 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2D07E;
+	Tue,  1 Aug 2023 02:24:28 +0000 (UTC)
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657071BEB;
+	Mon, 31 Jul 2023 19:24:27 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4RFJpF4d3Bz4f4K1L;
+	Tue,  1 Aug 2023 10:24:21 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP1 (Coremail) with SMTP id cCh0CgB32SPXbMhk0Yj0OQ--.17894S2;
+	Tue, 01 Aug 2023 10:24:24 +0800 (CST)
+Message-ID: <6965ceb9-0b96-ce21-cc72-7d29b42544bd@huaweicloud.com>
+Date: Tue, 1 Aug 2023 10:24:23 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next 0/2] Remove unused fields in cpumap & devmap
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <169085513200.17783.16957076223549181701.git-patchwork-notify@kernel.org>
-Date: Tue, 01 Aug 2023 01:58:52 +0000
-References: <20230728014942.892272-1-houtao@huaweicloud.com>
-In-Reply-To: <20230728014942.892272-1-houtao@huaweicloud.com>
-To: Hou Tao <houtao@huaweicloud.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, davem@davemloft.net,
- kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
- bjorn.topel@gmail.com, martin.lau@linux.dev, alexei.starovoitov@gmail.com,
- andrii@kernel.org, song@kernel.org, haoluo@google.com,
- yonghong.song@linux.dev, daniel@iogearbox.net, kpsingh@kernel.org,
- sdf@google.com, jolsa@kernel.org, houtao1@huawei.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH bpf] bpf, sockmap: Fix map type error in sock_map_del_link
+Content-Language: en-US
+To: Martin KaFai Lau <martin.lau@linux.dev>,
+ Xu Kuohai <xukuohai@huaweicloud.com>,
+ John Fastabend <john.fastabend@gmail.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
+ Jakub Sitnicki <jakub@cloudflare.com>, "David S . Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Daniel Borkmann <daniel@iogearbox.net>
+References: <20230728105649.3978774-1-xukuohai@huaweicloud.com>
+ <e2d06c78-1434-8322-1089-ba6355bb4c83@linux.dev>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <e2d06c78-1434-8322-1089-ba6355bb4c83@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:cCh0CgB32SPXbMhk0Yj0OQ--.17894S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+	VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYy7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+	6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+	kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8I
+	cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
+	Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
+	6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72
+	CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4II
+	rI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr4
+	1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK
+	67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI
+	8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAv
+	wI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+	autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (master)
-by Martin KaFai Lau <martin.lau@kernel.org>:
-
-On Fri, 28 Jul 2023 09:49:40 +0800 you wrote:
-> From: Hou Tao <houtao1@huawei.com>
+On 8/1/2023 9:19 AM, Martin KaFai Lau wrote:
+> On 7/28/23 3:56 AM, Xu Kuohai wrote:
+>> sock_map_del_link() operates on both SOCKMAP and SOCKHASH, although
+>> both types have member named "progs", the offset of "progs" member in
+>> these two types is different, so "progs" should be accessed with the
+>> real map type.
 > 
-> Hi,
+> The patch makes sense to me. Can a test be written to trigger it?
 > 
-> Patchset "Simplify xdp_do_redirect_map()/xdp_do_flush_map() and XDP
-> maps" [0] changed per-map flush list to global per-cpu flush list
-> for cpumap, devmap and xskmap, but it forgot to remove these unused
-> fields from cpumap and devmap. So just remove these unused fields.
+
+Thank you for the review. I have a messy prog that triggers memleak
+caused by this issue. I'll try to simplify it to a test.
+
+> John, please review.
 > 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,1/2] bpf, cpumap: Remove unused cmap field from bpf_cpu_map_entry
-    https://git.kernel.org/bpf/bpf-next/c/2d20bfc315eb
-  - [bpf-next,2/2] bpf, devmap: Remove unused dtab field from bpf_dtab_netdev
-    https://git.kernel.org/bpf/bpf-next/c/1ea66e89f68c
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+> 
+> .
 
