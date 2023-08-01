@@ -1,31 +1,31 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C26C4DC94
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0FEE4DC94
 	for <bpf@vger.kernel.org>; Tue,  1 Aug 2023 20:36:42 +0000 (UTC)
 Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B601FFE
-	for <bpf@vger.kernel.org>; Tue,  1 Aug 2023 13:36:40 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E322106
+	for <bpf@vger.kernel.org>; Tue,  1 Aug 2023 13:36:41 -0700 (PDT)
 Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 371H5wvF023654
+	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 371H5w1t023661
 	for <bpf@vger.kernel.org>; Tue, 1 Aug 2023 13:36:40 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=66lP6+DoUx0vWWYrSLKyi1jcooczLlbUqeze/fBecXs=;
- b=CEjgvuN0+wk7x/askdIm0xnML3HuUxDc+LikeVz0HCfecXYg0KubovpyPQy0g7jkOLWX
- Nym5cvhFW5lvrev5nCjDzWanPADkhuwgz06lM7rDNcngUnYHv35pdb7k5cSoZ/GnVGPc
- n/0z2XCKmMHmB1+wLoeVVgH8JaO4zr3zPAk= 
+ bh=UYjCpGlp2WdTzKY/HBP+jLoXVGfp9zIigCSc6wdSQw8=;
+ b=bV7xoL0CWjpfcmzQFt+s9DLcV7MaaPXwKIDoD3HrCutN1LFOMBfwNshpmF94/WcAUFSv
+ +L5Qix2fW/eyoMWNaaNmJzv8/aGP8youP9fEccUflQ0t9YPX25MTuvnAncfpWXqwUkUV
+ JKGw+mfIm22b/wcPu/qHZjBovLS4A80Z+zg= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-	by m0001303.ppops.net (PPS) with ESMTPS id 3s6wjknqtm-2
+	by m0001303.ppops.net (PPS) with ESMTPS id 3s6wjknqtj-3
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 01 Aug 2023 13:36:39 -0700
-Received: from twshared6136.05.ash9.facebook.com (2620:10d:c0a8:1c::1b) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Tue, 01 Aug 2023 13:36:40 -0700
+Received: from twshared6136.05.ash9.facebook.com (2620:10d:c0a8:1c::11) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.27; Tue, 1 Aug 2023 13:36:38 -0700
 Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-	id 065EB22048677; Tue,  1 Aug 2023 13:36:33 -0700 (PDT)
+	id 90BD622048673; Tue,  1 Aug 2023 13:36:33 -0700 (PDT)
 From: Dave Marchevsky <davemarchevsky@fb.com>
 To: <bpf@vger.kernel.org>
 CC: Alexei Starovoitov <ast@kernel.org>,
@@ -37,9 +37,9 @@ CC: Alexei Starovoitov <ast@kernel.org>,
         Kernel Team <kernel-team@fb.com>,
         Dave Marchevsky
 	<davemarchevsky@fb.com>
-Subject: [PATCH v1 bpf-next 2/7] bpf: Consider non-owning refs trusted
-Date: Tue, 1 Aug 2023 13:36:25 -0700
-Message-ID: <20230801203630.3581291-3-davemarchevsky@fb.com>
+Subject: [PATCH v1 bpf-next 1/7] bpf: Ensure kptr_struct_meta is non-NULL for collection insert and refcount_acquire
+Date: Tue, 1 Aug 2023 13:36:24 -0700
+Message-ID: <20230801203630.3581291-2-davemarchevsky@fb.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230801203630.3581291-1-davemarchevsky@fb.com>
 References: <20230801203630.3581291-1-davemarchevsky@fb.com>
@@ -52,8 +52,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: w2WSpMzzjvPbnE377q7TQbUdMNmeD_uz
-X-Proofpoint-GUID: w2WSpMzzjvPbnE377q7TQbUdMNmeD_uz
+X-Proofpoint-ORIG-GUID: nl5QsguhX9q3Jdt0zriyqk5s38H3yP8U
+X-Proofpoint-GUID: nl5QsguhX9q3Jdt0zriyqk5s38H3yP8U
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-08-01_18,2023-08-01_01,2023-05-22_02
@@ -65,63 +65,97 @@ X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Recent discussions around default kptr "trustedness" led to changes such
-as commit 6fcd486b3a0a ("bpf: Refactor RCU enforcement in the
-verifier."). One of the conclusions of those discussions, as expressed
-in code and comments in that patch, is that we'd like to move away from
-'raw' PTR_TO_BTF_ID without some type flag or other register state
-indicating trustedness. Although PTR_TRUSTED and PTR_UNTRUSTED flags mark
-this state explicitly, the verifier currently considers trustedness
-implied by other register state. For example, owning refs to graph
-collection nodes must have a nonzero ref_obj_id, so they pass the
-is_trusted_reg check despite having no explicit PTR_{UN}TRUSTED flag.
-This patch makes trustedness of non-owning refs to graph collection
-nodes explicit as well.
+It's straightforward to prove that kptr_struct_meta must be non-NULL for
+any valid call to these kfuncs:
 
-By definition, non-owning refs are currently trusted. Although the ref
-has no control over pointee lifetime, due to non-owning ref clobbering
-rules (see invalidate_non_owning_refs) dereferencing a non-owning ref is
-safe in the critical section controlled by bpf_spin_lock associated with
-its owning collection.
+  * btf_parse_struct_metas in btf.c creates a btf_struct_meta for any
+    struct in user BTF with a special field (e.g. bpf_refcount,
+    {rb,list}_node). These are stored in that BTF's struct_meta_tab.
 
-Note that the previous statement does not hold true for nodes with shared
-ownership due to the use-after-free issue that this series is
-addressing. True shared ownership was disabled by commit 7deca5eae833
-("bpf: Disable bpf_refcount_acquire kfunc calls until race conditions are=
- fixed"),
-though, so the statement holds for now. Further patches in the series wil=
-l change
-the trustedness state of non-owning refs before re-enabling
-bpf_refcount_acquire.
+  * __process_kf_arg_ptr_to_graph_node in verifier.c ensures that nodes
+    have {rb,list}_node field and that it's at the correct offset.
+    Similarly, check_kfunc_args ensures bpf_refcount field existence for
+    node param to bpf_refcount_acquire.
 
-Let's add NON_OWN_REF type flag to BPF_REG_TRUSTED_MODIFIERS such that a
-non-owning ref reg state would pass is_trusted_reg check. Somewhat
-surprisingly, this doesn't result in any change to user-visible
-functionality elsewhere in the verifier: graph collection nodes are all
-marked MEM_ALLOC, which tends to be handled in separate codepaths from
-"raw" PTR_TO_BTF_ID. Regardless, let's be explicit here and document the
-current state of things before changing it elsewhere in the series.
+  * So a btf_struct_meta must have been created for the struct type of
+    node param to these kfuncs
+
+  * That BTF and its struct_meta_tab are guaranteed to still be around.
+    Any arbitrary {rb,list} node the BPF program interacts with either:
+    came from bpf_obj_new or a collection removal kfunc in the same
+    program, in which case the BTF is associated with the program and
+    still around; or came from bpf_kptr_xchg, in which case the BTF was
+    associated with the map and is still around
+
+Instead of silently continuing with NULL struct_meta, which caused
+confusing bugs such as those addressed by commit 2140a6e3422d ("bpf: Set
+kptr_struct_meta for node param to list and rbtree insert funcs"), let's
+error out. Then, at runtime, we can confidently say that the
+implementations of these kfuncs were given a non-NULL kptr_struct_meta,
+meaning that special-field-specific functionality like
+bpf_obj_free_fields and the bpf_obj_drop change introduced later in this
+series are guaranteed to execute.
+
+This patch doesn't change functionality, just makes it easier to reason
+about existing functionality.
 
 Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
 ---
- include/linux/bpf_verifier.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/bpf/verifier.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index f70f9ac884d2..b6e58dab8e27 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -745,7 +745,7 @@ static inline bool bpf_prog_check_recur(const struct =
-bpf_prog *prog)
- 	}
- }
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index e7b1af016841..ec37e84a11c6 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -18271,6 +18271,13 @@ static int fixup_kfunc_call(struct bpf_verifier_=
+env *env, struct bpf_insn *insn,
+ 		struct btf_struct_meta *kptr_struct_meta =3D env->insn_aux_data[insn_i=
+dx].kptr_struct_meta;
+ 		struct bpf_insn addr[2] =3D { BPF_LD_IMM64(BPF_REG_2, (long)kptr_struc=
+t_meta) };
 =20
--#define BPF_REG_TRUSTED_MODIFIERS (MEM_ALLOC | PTR_TRUSTED)
-+#define BPF_REG_TRUSTED_MODIFIERS (MEM_ALLOC | PTR_TRUSTED | NON_OWN_REF=
-)
++		if (desc->func_id =3D=3D special_kfunc_list[KF_bpf_refcount_acquire_im=
+pl] &&
++		    !kptr_struct_meta) {
++			verbose(env, "verifier internal error: kptr_struct_meta expected at i=
+nsn_idx %d\n",
++				insn_idx);
++			return -EFAULT;
++		}
++
+ 		insn_buf[0] =3D addr[0];
+ 		insn_buf[1] =3D addr[1];
+ 		insn_buf[2] =3D *insn;
+@@ -18278,6 +18285,7 @@ static int fixup_kfunc_call(struct bpf_verifier_e=
+nv *env, struct bpf_insn *insn,
+ 	} else if (desc->func_id =3D=3D special_kfunc_list[KF_bpf_list_push_bac=
+k_impl] ||
+ 		   desc->func_id =3D=3D special_kfunc_list[KF_bpf_list_push_front_impl=
+] ||
+ 		   desc->func_id =3D=3D special_kfunc_list[KF_bpf_rbtree_add_impl]) {
++		struct btf_struct_meta *kptr_struct_meta =3D env->insn_aux_data[insn_i=
+dx].kptr_struct_meta;
+ 		int struct_meta_reg =3D BPF_REG_3;
+ 		int node_offset_reg =3D BPF_REG_4;
 =20
- static inline bool bpf_type_has_unsafe_modifiers(u32 type)
- {
+@@ -18287,6 +18295,12 @@ static int fixup_kfunc_call(struct bpf_verifier_=
+env *env, struct bpf_insn *insn,
+ 			node_offset_reg =3D BPF_REG_5;
+ 		}
+=20
++		if (!kptr_struct_meta) {
++			verbose(env, "verifier internal error: kptr_struct_meta expected at i=
+nsn_idx %d\n",
++				insn_idx);
++			return -EFAULT;
++		}
++
+ 		__fixup_collection_insert_kfunc(&env->insn_aux_data[insn_idx], struct_=
+meta_reg,
+ 						node_offset_reg, insn, insn_buf, cnt);
+ 	} else if (desc->func_id =3D=3D special_kfunc_list[KF_bpf_cast_to_kern_=
+ctx] ||
 --=20
 2.34.1
 
