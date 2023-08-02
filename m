@@ -1,86 +1,104 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FE9611C9C
-	for <bpf@vger.kernel.org>; Wed,  2 Aug 2023 19:40:26 +0000 (UTC)
-X-Greylist: delayed 3591 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 02 Aug 2023 12:40:24 PDT
-Received: from mx09lb.world4you.com (mx09lb.world4you.com [81.19.149.119])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CEA4D9;
-	Wed,  2 Aug 2023 12:40:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=+IumxvxKi+iMawNAaFtZK2UTAxlSL2j77qZ9xPuW9H8=; b=CroP3RA+k/rOE7AQbNo4oTgRJa
-	34GSZMOuq76KLSYV52p0p+qQ9JYfD4HhTOcwk0hjF8Lu4mCdtOrFcdlrp/lcn6PEWevT8zJtHwv14
-	CPU4HT54usIODNpBFKQROn9PXoxvQYqYsogrXC809Fyzc+tkSVCnTsnDZjx2k8cJr+3s=;
-Received: from [88.117.54.85] (helo=[10.0.0.160])
-	by mx09lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <gerhard@engleder-embedded.com>)
-	id 1qRGEv-00028k-0j;
-	Wed, 02 Aug 2023 20:06:29 +0200
-Message-ID: <58b4f563-5bfc-65ed-c213-ae17724e5a33@engleder-embedded.com>
-Date: Wed, 2 Aug 2023 20:06:28 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E734100D1
+	for <bpf@vger.kernel.org>; Wed,  2 Aug 2023 19:48:29 +0000 (UTC)
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0EF19AD;
+	Wed,  2 Aug 2023 12:48:27 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b9f0b7af65so2496621fa.1;
+        Wed, 02 Aug 2023 12:48:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691005706; x=1691610506;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fXpNsLUTVNX9sFjFzmjiCCJcWZd1K7Cg3XGCsj2KKNo=;
+        b=sQ2U1U8IIoBh/ny1VCsSidkVurHcchk62vCBvykv+inOZa8u3oRLhx2yX8U/YL+cEF
+         salGgBTvsOgGURhMCOzlTCrSJ6i9k3vpu1blDlBgh5UbWsFbEjyKXwVBPbGvGwwMj0SX
+         hjv2IYhdV9H42t4qX2SRiJWKkil4pmkqRZsAFDybxmgEHzbWKkIg8cauv29JByaj0Dkz
+         RXy42dGSiHmvzUa1ZKA5uvXzbr61ddy4GPW91NSl+eTtaxl7kaKBAXMMaopirhZI6GuG
+         L3BWtI/x9AryBODOIZMJfcuRkW7hTj5+h8LnefyB1RuVzHTIkQeEqPpFoylN6brBMVby
+         votA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691005706; x=1691610506;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fXpNsLUTVNX9sFjFzmjiCCJcWZd1K7Cg3XGCsj2KKNo=;
+        b=FhAIhHRG+MNNpAfre+a0P2AzWfVHw8KwmUJVW1yBLt8PPq27Wq47jAy2yUaG5kD77B
+         QmHU8IEXPiRfQQAcwh/Q1zUsqKWYMxgtN1LXT5/f56Qb9nl7HTsUVn48+3YBACbUYveh
+         y+JxY9Umeqa7cBQcoS6Ab3RAn8yI8D6wKPINBQ4aLWemAFn3h/Rer2rg0KbeVFxP5xbP
+         TQPRRMT8NsHeTzbW5P8SUYHt+7bE/pcv9OqR4XuxqE4Hfd4R6bIU4Vugt3FzcGQBeLSD
+         L/iw+GxjTf7IBYQLbGJVOMxHSfactsQakMULWxzn5hcqXhR1MSeYkA6AcdH8Sx+aumUf
+         E9Ng==
+X-Gm-Message-State: ABy/qLbxssHI+IQJhTqu5gl7Yh0iiP2c5VuRxdHaw1Pr4jLpd5yb4y1o
+	syWcj/2ap4tJlCNSSSVKlVHlNmz2Mv9hqSLln30=
+X-Google-Smtp-Source: APBJJlHlxMdggwopQssuoCt8lzP5bNn6ZIJV546T5xLie+1ywQnrCL0NC/a+gB3Z1wkMD2n3cccZnZeaIMW6H4G6OS0=
+X-Received: by 2002:a05:651c:201:b0:2b6:dd9a:e1d3 with SMTP id
+ y1-20020a05651c020100b002b6dd9ae1d3mr6025265ljn.44.1691005705801; Wed, 02 Aug
+ 2023 12:48:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH bpf-next 1/3] eth: add missing xdp.h includes in drivers
-To: Jakub Kicinski <kuba@kernel.org>, ast@kernel.org
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, hawk@kernel.org,
- amritha.nambiar@intel.com, aleksander.lobakin@intel.com,
- j.vosburgh@gmail.com, andy@greyhouse.net, shayagr@amazon.com,
- akiyano@amazon.com, ioana.ciornei@nxp.com, claudiu.manoil@nxp.com,
- vladimir.oltean@nxp.com, wei.fang@nxp.com, shenwei.wang@nxp.com,
- xiaoning.wang@nxp.com, linux-imx@nxp.com, dmichail@fungible.com,
- jeroendb@google.com, pkaligineedi@google.com, shailend@google.com,
- jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
- horatiu.vultur@microchip.com, UNGLinuxDriver@microchip.com,
- kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
- decui@microsoft.com, peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
- joabreu@synopsys.com, mcoquelin.stm32@gmail.com, grygorii.strashko@ti.com,
- longli@microsoft.com, sharmaajay@microsoft.com, daniel@iogearbox.net,
- john.fastabend@gmail.com, simon.horman@corigine.com, leon@kernel.org,
- linux-hyperv@vger.kernel.org
-References: <20230802003246.2153774-1-kuba@kernel.org>
- <20230802003246.2153774-2-kuba@kernel.org>
-Content-Language: en-US
-From: Gerhard Engleder <gerhard@engleder-embedded.com>
-In-Reply-To: <20230802003246.2153774-2-kuba@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AV-Do-Run: Yes
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H3,
-	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+References: <169078860386.173706.3091034523220945605.stgit@devnote2>
+ <169078863449.173706.2322042687021909241.stgit@devnote2> <CAADnVQ+C64_C1w1kqScZ6C5tr6_juaWFaQdAp9Mt3uzaQp2KOw@mail.gmail.com>
+ <20230801085724.9bb07d2c82e5b6c6a6606848@kernel.org> <CAADnVQLaFpd2OhqP7W3xWB1b9P2GAKgrVQU1FU2yeNYKbCkT=Q@mail.gmail.com>
+ <20230802000228.158f1bd605e497351611739e@kernel.org> <20230801112036.0d4ee60d@gandalf.local.home>
+ <20230801113240.4e625020@gandalf.local.home> <CAADnVQ+N7b8_0UhndjwW9-5Vx2wUVvojujFLOCFr648DUv-Y2Q@mail.gmail.com>
+ <20230801190920.7a1abfd5@gandalf.local.home> <20230802092146.9bda5e49528e6988ab97899c@kernel.org>
+ <20230801204054.3884688e@rorschach.local.home> <20230802225634.f520080cd9de759d687a2b0a@kernel.org>
+ <CAADnVQLqXjJvCcuQLVz8HxF050jDHaSa2D7cehoYtjXdp3wGLQ@mail.gmail.com> <20230802143845.3ce6ed61@gandalf.local.home>
+In-Reply-To: <20230802143845.3ce6ed61@gandalf.local.home>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 2 Aug 2023 12:48:14 -0700
+Message-ID: <CAADnVQKrL3LZaRcgoTdGN-csPt=eyujPbw9qoxgv9tPYPmZiZA@mail.gmail.com>
+Subject: Re: [PATCH v4 3/9] bpf/btf: Add a function to search a member of a struct/union
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, linux-trace-kernel@vger.kernel.org, 
+	LKML <linux-kernel@vger.kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	bpf <bpf@vger.kernel.org>, Sven Schnelle <svens@linux.ibm.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Alan Maguire <alan.maguire@oracle.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Florent Revest <revest@chromium.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 02.08.23 02:32, Jakub Kicinski wrote:
-> Handful of drivers currently expect to get xdp.h by virtue
-> of including netdevice.h. This will soon no longer be the case
-> so add explicit includes.
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+On Wed, Aug 2, 2023 at 11:38=E2=80=AFAM Steven Rostedt <rostedt@goodmis.org=
+> wrote:
+>
+> On Wed, 2 Aug 2023 11:24:12 -0700
+> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+>
+> > This is a non starter.
+> > bpf progs expect arch dependent 'struct pt_regs *' and we cannot change=
+ that.
+>
+> If the progs are compiled into native code, isn't there optimizations tha=
+t
+> could be done? That is, if ftrace_regs is available, and the bpf program =
+is
+> just using the subset of pt_regs, is it possible that it could be compile=
+d
+> to use ftrace_regs?
+>
+> Forgive my ignorance on how BPF programs turn into executables when runni=
+ng
+> in the kernel.
 
-(...)
-
-> diff --git a/drivers/net/ethernet/engleder/tsnep.h b/drivers/net/ethernet/engleder/tsnep.h
-> index 11b29f56aaf9..6e14c918e3fb 100644
-> --- a/drivers/net/ethernet/engleder/tsnep.h
-> +++ b/drivers/net/ethernet/engleder/tsnep.h
-> @@ -14,6 +14,7 @@
->   #include <linux/net_tstamp.h>
->   #include <linux/ptp_clock_kernel.h>
->   #include <linux/miscdevice.h>
-> +#include <net/xdp.h>
-
-Reviewed-by: Gerhard Engleder <gerhard@engleder-embedded.com>
+Right. It's possible for the verifier to do an offset rewrite,
+forbid certain access, always return 0 on load from certain offset,
+and so on.
+It's all non trivial amount of work.
+ftrace_partial_regs() from ftrace_regs into pt_regs is so much simpler.
