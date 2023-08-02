@@ -1,117 +1,148 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2239A3D
-	for <bpf@vger.kernel.org>; Wed,  2 Aug 2023 02:46:13 +0000 (UTC)
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37ECB1BFD
-	for <bpf@vger.kernel.org>; Tue,  1 Aug 2023 19:46:11 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b9cdba1228so81525361fa.2
-        for <bpf@vger.kernel.org>; Tue, 01 Aug 2023 19:46:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ECDCA3D
+	for <bpf@vger.kernel.org>; Wed,  2 Aug 2023 02:55:32 +0000 (UTC)
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7C62695
+	for <bpf@vger.kernel.org>; Tue,  1 Aug 2023 19:55:30 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b962535808so98239151fa.0
+        for <bpf@vger.kernel.org>; Tue, 01 Aug 2023 19:55:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690944369; x=1691549169;
+        d=gmail.com; s=20221208; t=1690944928; x=1691549728;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3pQYaecfVLGZ+Li6T9igKR8xZ9yuYVsnZtcXmVSUnAY=;
-        b=G8+vjwue/Mjj/Rb6MkAqIbIAgrY3KtAstvwe0d4Gs2Ru8ce4HZt+0HkrS9eohtiCZW
-         JSe+P+G7Y1zWn6sDYZhVpnbGogqV0qGmqv9MMure+ZGr4IW2KE6nt4e2gIc0yU+5Jsi5
-         1J/yMnDvaGie3Zzxvcd25vaRLl6NKYWqLkDLTTq4JwUmCtp3i3FdA9M8n65GIM1S9DGK
-         kZrwU0c8PXkCWrCHSW5YMM2EPS6arbnsK20CvNM9Ig3oAUaT2gNQJcSfG4DOOKhrh5po
-         q7CgdaWD+V7x8NctvS+UQpqKrdbTAyFbzrEXNJ8vDl9BmVpXvKqI8ADfSPKYolguMle5
-         uaZA==
+        bh=W3KawIIdSZsZuxgabCo6IdJKUkHbfL/F//FMoh+PB+w=;
+        b=YsdBTrSTbcZxqWcZVhQZumdMuDYewrHBF6URjWoGOp+wigQX+n4shOSxlf5t3VoZVQ
+         2VjLF845hq/DM10BQVjzXhrAVkfOjaPuRR0v/PjkeRY6ZKGLFYKHgqkUrm4XvII14L5d
+         b2J2VmEIMEOGbPEgVj75lO8M5nxI1qQ5VKTW52crU3xx1eFN/IHIYH7k94+kir+YPNID
+         kzRF5Pnq402MuA1AZ/e6ed39Q7jknecVkOrazDo4E7W/SAPNQ/Gj7Hj8RK6tF/IbRjpl
+         P4j8MFWMkw1ry144bfLLZodMswwkjI4Ke5iUuKKkbsCpSRwUwRS15eLanPHWJaStgcQU
+         p3ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690944369; x=1691549169;
+        d=1e100.net; s=20221208; t=1690944928; x=1691549728;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3pQYaecfVLGZ+Li6T9igKR8xZ9yuYVsnZtcXmVSUnAY=;
-        b=Y89kpcUTITuALitTBtMn2WO3LJPzw85Qxm62FQPuY2MuIcqPXDzVvFg/T9ZnBu8Kub
-         HL6Lzgo/AVj9gAmQ4+9nQlY1W49hBL2QNqbRPPpZ6o4/42nVGAWLzwn9+7KoBnbovwcX
-         jPdzTEBwB406gbD4qc8/BBnpu5MAFm9QonsmMY9Ubzovpvd3Exi6FZOM5yJvQm0aaKd6
-         1BvV3VdwSRohknjTtBRyf+uhDgdujpwEnLhIhmmIVdGVig/6knIdT7z5QgsiB4HXQnYH
-         XxFq/ksBy2Zul40E111OvQGdvbffIhbw2x8av96J67zUxS0GXcbWnsK6DJ478ZJ3pFoe
-         K0QQ==
-X-Gm-Message-State: ABy/qLbX+bPQVa6panb40FszxpOLraUdDOe6IcJzzHZ93QyWddUZcPNH
-	KrP490e7s3Y8kNwn2hnNSqZ203+Q5QdWN72g0Og=
-X-Google-Smtp-Source: APBJJlECKEZDUQNTcYgOvAnjg9MBf5Ee5cQOfmiQ6vUd7WztPZxhk1cdRGddpZNQNhGqJjv7h/wGpUacHVqatza4jQg=
-X-Received: by 2002:a2e:92c8:0:b0:2b7:2ea:33c9 with SMTP id
- k8-20020a2e92c8000000b002b702ea33c9mr4034204ljh.20.1690944368989; Tue, 01 Aug
- 2023 19:46:08 -0700 (PDT)
+        bh=W3KawIIdSZsZuxgabCo6IdJKUkHbfL/F//FMoh+PB+w=;
+        b=aM+tP2W1EGPQaUln0ZRIbdQU9TwR4s6wl6t3bj7jiBsv/X5mMv/6UKqrn1bNmQjeNJ
+         MoYxb1Hz1dztWHD4RiDVT+RgczR5sle/ecZOVYz7ZyTl6jiWYSquddh2Y++93FgyrBaz
+         K0QMCle0DinQgyZnAkqWUwXmSbQfURuNlzDkPWwk87ocTf3nN/v3DsSAvZrVoZBs1Bpv
+         AAIzAi0lWuPEQxxKPObQowXwV/huG82EG/v4Pt0JuySopAf/ENIdvqa22I2tHghKLsuK
+         COakaC1A/KRICt1UndUK8Xz8xMaV9FyD02ODVfjrYt7KU9E15nMtStINFgDuECCyUBhB
+         DpjQ==
+X-Gm-Message-State: ABy/qLZfogP6vVlbtSfaxOydMG6lco6Onr9KcrFuYt8z4J0CY2M2tie8
+	iRkql3g8sk7m2NJ9eUSgSPuDM0e4Jvs6+PGQefk=
+X-Google-Smtp-Source: APBJJlFWHBWllQEsFDmzblSk1xOzJc9L/1BTLjjsGWOcJdSOCSZkLqFKUPChM57tbfYnTFoD+2k/w5ehEQvXz7Ot71A=
+X-Received: by 2002:a2e:3c0e:0:b0:2b6:cdfb:d06a with SMTP id
+ j14-20020a2e3c0e000000b002b6cdfbd06amr3776757lja.22.1690944928377; Tue, 01
+ Aug 2023 19:55:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230801142912.55078-1-laoar.shao@gmail.com> <3f56b3b3-9b71-f0d3-ace1-406a8eeb64c0@linux.dev>
- <CALOAHbAnyorNdYAp1FretQcqEp_j6mQ93ATwx02auLTYnL_0KQ@mail.gmail.com>
-In-Reply-To: <CALOAHbAnyorNdYAp1FretQcqEp_j6mQ93ATwx02auLTYnL_0KQ@mail.gmail.com>
+References: <CACsn0ckZO+b5bRgMZhOvx+Jn-sa0g8cBD+ug1CJEdtYxSm_hgA@mail.gmail.com>
+ <PH7PR21MB3878D8DCEF24A5F8E52BA59DA303A@PH7PR21MB3878.namprd21.prod.outlook.com>
+ <CAADnVQJ1fKXcsTXdCijwQzf0OVF0md-ATN5RbB3g10geyofNzA@mail.gmail.com>
+ <CACsn0cmf22zEN9AduiRiFnQ7XhY1ABRL=SwAwmmFgxJvVZAOsg@mail.gmail.com>
+ <CAADnVQ+O0CZQ1-5+dBiPWgZig3MVRX92PWPwNCrL7rG+4Xrbag@mail.gmail.com> <CACsn0cmvuGBKd3erDQKugygZfhT-Cu8xYBJ3hCETp6a-1HNbYw@mail.gmail.com>
+In-Reply-To: <CACsn0cmvuGBKd3erDQKugygZfhT-Cu8xYBJ3hCETp6a-1HNbYw@mail.gmail.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 1 Aug 2023 19:45:57 -0700
-Message-ID: <CAADnVQKwY+j6JrxJ4dc1M7yhkSf958ubSH=WB7dKmHt9Ac9gQQ@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 0/3] bpf: Add new bpf helper bpf_for_each_cpu
-To: Yafang Shao <laoar.shao@gmail.com>, David Vernet <void@manifault.com>
-Cc: Yonghong Song <yonghong.song@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, 
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>
+Date: Tue, 1 Aug 2023 19:55:17 -0700
+Message-ID: <CAADnVQK8sGGA8dwFDH6bJMWv56_s8gzj0yUY5OvMQKiL6d8YHA@mail.gmail.com>
+Subject: Re: [Bpf] Review of draft-thaler-bpf-isa-01
+To: Watson Ladd <watsonbladd@gmail.com>
+Cc: Dave Thaler <dthaler@microsoft.com>, "bpf@ietf.org" <bpf@ietf.org>, bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-	autolearn=ham autolearn_force=no version=3.4.6
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Tue, Aug 1, 2023 at 7:34=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com> w=
-rote:
+On Tue, Aug 1, 2023 at 7:34=E2=80=AFPM Watson Ladd <watsonbladd@gmail.com> =
+wrote:
 >
+> In reply to a long conversation:
+> <snip>
 > >
-> > In kernel, we have a global variable
-> >     nr_cpu_ids (also in kernel/bpf/helpers.c)
-> > which is used in numerous places for per cpu data struct access.
+> > Could you please be specific which instruction in table 4 is not obviou=
+s?
+>
+> The question isn't obvious, the question is unambigious, and C is not
+> great for this. Maybe with a reference and some text it would get
+> better.
 > >
-> > I am wondering whether we could have bpf code like
-> >     int nr_cpu_ids __ksym;
+> > > >
+> > > > > > The good news is I think this is very fixable although tedious.
+> > > > > >
+> > > > > > The other thornier issues are memory model etc. But the overall=
+ structure seems good
+> > > > > > and the document overall makes sense.
+> > > >
+> > > > What do you mean by "memory model" ?
+> > > > Do you see a reference to it ? Please be specific.
+> > >
+> > > No, and that's the problem. Section 5.2 talks about atomic operations=
+.
+> > > I'd expect that to be paired with a description of barriers so that
+> > > these work, or a big warning about when you need to use them.
 > >
-> >     struct bpf_iter_num it;
-> >     int i =3D 0;
+> > That's a good suggestion.
+> > A warning paragraph that BPF ISA does not have barrier instructions
+> > is necessary.
 > >
-> >     // nr_cpu_ids is special, we can give it a range [1, CONFIG_NR_CPUS=
-].
-> >     bpf_iter_num_new(&it, 1, nr_cpu_ids);
-> >     while ((v =3D bpf_iter_num_next(&it))) {
-> >            /* access cpu i data */
-> >            i++;
-> >     }
-> >     bpf_iter_num_destroy(&it);
+> > > For
+> > > clarity I'm pretty unfamiliar with bpf as a technology, and it's
+> > > possible that with more knowledge this would make sense. On looking
+> > > back on that I don't even know if the memory space is flat, or
+> > > segmented: can I access maps through a value set to dst+offset, or
+> > > must I always used index? I'm just very confused.
 > >
-> >  From all existing open coded iterator loops, looks like
-> > upper bound has to be a constant. We might need to extend support
-> > to bounded scalar upper bound if not there.
+> > flat vs segmented is an orthogonal topic.
+> > We definitely need to cover it in the architecture doc.
+> > BPF WG charter requires us to produce it as Informational doc eventuall=
+y.
 >
-> Currently the upper bound is required by both the open-coded for-loop
-> and the bpf_loop. I think we can extend it.
->
-> It can't handle the cpumask case either.
->
->     for_each_cpu(cpu, mask)
->
-> In the 'mask', the CPU IDs might not be continuous. In our container
-> environment, we always use the cpuset cgroup for some critical tasks,
-> but it is not so convenient to traverse the percpu data of this cpuset
-> cgroup.  We have to do it as follows for this case :
->
-> That's why we prefer to introduce a bpf_for_each_cpu helper. It is
-> fine if it can be implemented as a kfunc.
+> Huh? If you access memory through specialized descriptors+offsets
+> that's very different from arbitrary computations with addresses, even
+> if they do trap. A little explanation might orient the reader to
+> understand what is going on. As is I thought "ok, it's flat" and then
+> saw the maps and really got thrown for a loop.
 
-I think open-coded-iterators is the only acceptable path forward here.
-Since existing bpf_iter_num doesn't fit due to sparse cpumask,
-let's introduce bpf_iter_cpumask and few additional kfuncs
-that return cpu_possible_mask and others.
+It's flat.
 
-We already have some cpumask support in kernel/bpf/cpumask.c
-bpf_iter_cpumask will be a natural follow up.
+> >
+> > As far as memory model BPF adopts LKMM (Linux Kernel Memory Model).
+> > https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0124r7.html
+> >
+> > We can add a reference to it from BPF ISA doc, but since
+> > there are no barrier instructions at the moment the memory model
+> > statement would be premature.
+> > The work on "BPF Memory Model" have been ongoing for quite some time.
+> > For example see:
+> > https://lpc.events/event/11/contributions/941/attachments/859/1667/bpf-=
+memory-model.2020.09.22a.pdf
+> >
+> > BPF Memory Model is certainly an important topic, but out of scope for =
+ISA.
+>
+> I expect that an ISA defines the semantics of the instructions. Which
+> absolutely includes the memory model.  Now maybe we're envisioning a
+> different splitting of this information, but I don't see how it can't
+> be at a different level if you want to give the instructions
+> semantics.
+
+Please read the links above.
+BPF ISA is not going to define TSO, dictate weak ordering or anything
+like that. It follows Linux Kernel Memory Model which is closer to
+C memory model than to what HW CPUs see as memory model.
+It's unlikely that we will ever introduce explicit memory barrier
+instructions. More likely they will be kfuncs that will map to smp_mb(),
+dma_wmb(), and friends in kernel Documentation/memory-barriers.txt.
+Analogies with HW ISAs are not applicable here.
