@@ -1,56 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C9B7E6
-	for <bpf@vger.kernel.org>; Wed,  2 Aug 2023 02:32:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 453BBC433C7;
-	Wed,  2 Aug 2023 02:32:43 +0000 (UTC)
-Date: Tue, 1 Aug 2023 22:32:40 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
- linux-trace-kernel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>, Sven
- Schnelle <svens@linux.ibm.com>, Alexei Starovoitov <ast@kernel.org>, Jiri
- Olsa <jolsa@kernel.org>, Arnaldo Carvalho de Melo <acme@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Alan Maguire <alan.maguire@oracle.com>,
- Mark Rutland <mark.rutland@arm.com>, Florent Revest <revest@chromium.org>,
- Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v4 3/9] bpf/btf: Add a function to search a member of a
- struct/union
-Message-ID: <20230801223240.1df5ea3b@gandalf.local.home>
-In-Reply-To: <CAADnVQLkVatr5BTScpuKaKAO+Cp=0KVxhqXwsjZoGhJPu3G4jA@mail.gmail.com>
-References: <169078860386.173706.3091034523220945605.stgit@devnote2>
-	<169078863449.173706.2322042687021909241.stgit@devnote2>
-	<CAADnVQ+C64_C1w1kqScZ6C5tr6_juaWFaQdAp9Mt3uzaQp2KOw@mail.gmail.com>
-	<20230801085724.9bb07d2c82e5b6c6a6606848@kernel.org>
-	<CAADnVQLaFpd2OhqP7W3xWB1b9P2GAKgrVQU1FU2yeNYKbCkT=Q@mail.gmail.com>
-	<20230802000228.158f1bd605e497351611739e@kernel.org>
-	<20230801112036.0d4ee60d@gandalf.local.home>
-	<20230801113240.4e625020@gandalf.local.home>
-	<CAADnVQ+N7b8_0UhndjwW9-5Vx2wUVvojujFLOCFr648DUv-Y2Q@mail.gmail.com>
-	<20230801190920.7a1abfd5@gandalf.local.home>
-	<20230802092146.9bda5e49528e6988ab97899c@kernel.org>
-	<20230801204054.3884688e@rorschach.local.home>
-	<20230801204407.7b284b00@rorschach.local.home>
-	<CAADnVQLkVatr5BTScpuKaKAO+Cp=0KVxhqXwsjZoGhJPu3G4jA@mail.gmail.com>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92BDA7E6
+	for <bpf@vger.kernel.org>; Wed,  2 Aug 2023 02:34:13 +0000 (UTC)
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8116D1728
+	for <bpf@vger.kernel.org>; Tue,  1 Aug 2023 19:34:11 -0700 (PDT)
+Received: by mail-oo1-xc2b.google.com with SMTP id 006d021491bc7-56ca4171cb9so321556eaf.0
+        for <bpf@vger.kernel.org>; Tue, 01 Aug 2023 19:34:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690943650; x=1691548450;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NmebHOtXlZgHQwI3hcOIMEjHaYQnEDiBuPQ8ahygC6Q=;
+        b=AHTZUae2aqA5w3llG3TMs+2YGLmJP6qkUlzSoseE24un71Z2nPKOBva4ImYpNp8Knt
+         AS4SDDPnduWwLgwp5zZ9UflhJW8YtJhCYR7BHLQ00m3LlWlZnhQnwi4bDgbd4FczKqa/
+         cJt1yg0cR1QF9MEsRgKjWNt6n+/qjwc8KDC/yYQ4lmcvHPPBFtdN70quXqLYGcgro4s8
+         cUwc2YGta8V40lKr69HY0l+GFq4zCoEC+7xkqV0cVnEzfSY+HoRMjrMGnA1z9ILXxhKJ
+         hyySWpoeU+rTFasv4cXElYMF4qZYfAis8F/AW2chDNnda5SUxMdRhcZ22+W0nKJqd/Dk
+         NUgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690943650; x=1691548450;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NmebHOtXlZgHQwI3hcOIMEjHaYQnEDiBuPQ8ahygC6Q=;
+        b=KmhCP/IypTBu7e2FJgYYAKs7hqAktqxeALp5EBP19H2EfGEbPvq3fJTcZAqp6A+fnN
+         0Vx/eukzxWwV+44woaPLyqs4ThbeFux26iji0SS73K9uz/gNDNKYljeFhwenD5+LwGP/
+         GjEvVcNyOrqRhflGhxVGtJ4ySKvGtn8uoQQHCI8QJfoHW0tYYyq9WwHi3LMHCJvuzeMd
+         6CyqJmSdcRF/Krcc2dzZ8pevuJBphR4dX5AWCKPaI0Zh32RyROWVTFqVIi0qOChdAucY
+         U7KGmairs46o3A51pp/2RxICIgB6iHk0smlYkYB50MIZKGnhGCnz7i4g3HeyCI5xy3HA
+         woMw==
+X-Gm-Message-State: ABy/qLYvTEFdPxmRPkFF4zOeEMos6E99Hux6WOVEYV4otOr5W/o8ywwl
+	JtykcBK2SHf8ao5fHdNV/hkkO1UPezculq3T7rMdDLJg
+X-Google-Smtp-Source: APBJJlHJIKaVyPwnRlcXpSJpebRp130dDAfFDW3pcZ0xkVR+sM78ddMaA6feaqLyeOPO7DnewjxLgfA7BnjF+m56qwo=
+X-Received: by 2002:a4a:e9b5:0:b0:56c:cbb1:b6c7 with SMTP id
+ t21-20020a4ae9b5000000b0056ccbb1b6c7mr5751194ood.1.1690943650442; Tue, 01 Aug
+ 2023 19:34:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <CACsn0ckZO+b5bRgMZhOvx+Jn-sa0g8cBD+ug1CJEdtYxSm_hgA@mail.gmail.com>
+ <PH7PR21MB3878D8DCEF24A5F8E52BA59DA303A@PH7PR21MB3878.namprd21.prod.outlook.com>
+ <CAADnVQJ1fKXcsTXdCijwQzf0OVF0md-ATN5RbB3g10geyofNzA@mail.gmail.com>
+ <CACsn0cmf22zEN9AduiRiFnQ7XhY1ABRL=SwAwmmFgxJvVZAOsg@mail.gmail.com> <CAADnVQ+O0CZQ1-5+dBiPWgZig3MVRX92PWPwNCrL7rG+4Xrbag@mail.gmail.com>
+In-Reply-To: <CAADnVQ+O0CZQ1-5+dBiPWgZig3MVRX92PWPwNCrL7rG+4Xrbag@mail.gmail.com>
+From: Watson Ladd <watsonbladd@gmail.com>
+Date: Tue, 1 Aug 2023 19:33:59 -0700
+Message-ID: <CACsn0cmvuGBKd3erDQKugygZfhT-Cu8xYBJ3hCETp6a-1HNbYw@mail.gmail.com>
+Subject: Re: [Bpf] Review of draft-thaler-bpf-isa-01
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Dave Thaler <dthaler@microsoft.com>, "bpf@ietf.org" <bpf@ietf.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Tue, 1 Aug 2023 19:22:01 -0700
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+In reply to a long conversation:
+<snip>
+>
+> Could you please be specific which instruction in table 4 is not obvious?
 
-> >   void ftrace_partial_regs(const struct ftrace_regs *fregs, struct pt_regs regs);  
-> 
-> Copy works, but why did you pick a different layout?
+The question isn't obvious, the question is unambigious, and C is not
+great for this. Maybe with a reference and some text it would get
+better.
+>
+> > >
+> > > > > The good news is I think this is very fixable although tedious.
+> > > > >
+> > > > > The other thornier issues are memory model etc. But the overall structure seems good
+> > > > > and the document overall makes sense.
+> > >
+> > > What do you mean by "memory model" ?
+> > > Do you see a reference to it ? Please be specific.
+> >
+> > No, and that's the problem. Section 5.2 talks about atomic operations.
+> > I'd expect that to be paired with a description of barriers so that
+> > these work, or a big warning about when you need to use them.
+>
+> That's a good suggestion.
+> A warning paragraph that BPF ISA does not have barrier instructions
+> is necessary.
+>
+> > For
+> > clarity I'm pretty unfamiliar with bpf as a technology, and it's
+> > possible that with more knowledge this would make sense. On looking
+> > back on that I don't even know if the memory space is flat, or
+> > segmented: can I access maps through a value set to dst+offset, or
+> > must I always used index? I'm just very confused.
+>
+> flat vs segmented is an orthogonal topic.
+> We definitely need to cover it in the architecture doc.
+> BPF WG charter requires us to produce it as Informational doc eventually.
 
-I didn't. That code was written by the arm64 maintainers.
+Huh? If you access memory through specialized descriptors+offsets
+that's very different from arbitrary computations with addresses, even
+if they do trap. A little explanation might orient the reader to
+understand what is going on. As is I thought "ok, it's flat" and then
+saw the maps and really got thrown for a loop.
 
--- Steve
+>
+> As far as memory model BPF adopts LKMM (Linux Kernel Memory Model).
+> https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0124r7.html
+>
+> We can add a reference to it from BPF ISA doc, but since
+> there are no barrier instructions at the moment the memory model
+> statement would be premature.
+> The work on "BPF Memory Model" have been ongoing for quite some time.
+> For example see:
+> https://lpc.events/event/11/contributions/941/attachments/859/1667/bpf-memory-model.2020.09.22a.pdf
+>
+> BPF Memory Model is certainly an important topic, but out of scope for ISA.
+
+I expect that an ISA defines the semantics of the instructions. Which
+absolutely includes the memory model.  Now maybe we're envisioning a
+different splitting of this information, but I don't see how it can't
+be at a different level if you want to give the instructions
+semantics.
+
+Sincerely,
+Watson Ladd
+
+
+--
+Astra mortemque praestare gradatim
