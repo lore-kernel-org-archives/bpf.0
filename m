@@ -1,206 +1,93 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6C2F6ADF
-	for <bpf@vger.kernel.org>; Fri,  4 Aug 2023 07:04:33 +0000 (UTC)
-Received: from out-64.mta0.migadu.com (out-64.mta0.migadu.com [IPv6:2001:41d0:1004:224b::40])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9722E1724
-	for <bpf@vger.kernel.org>; Fri,  4 Aug 2023 00:04:31 -0700 (PDT)
-Message-ID: <cd3bb76b-0097-958c-4a01-565081f37833@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1691132129;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7il9Qei2ohMQiBJAKQcEkPl4CzToPctwdNkaO14OJKc=;
-	b=Ac3Y6Jjw64hQuTmGqvMCvn+Awxmf/vtRCDF1MWiI/greEybcvYO+37QxkTG82zLaqKGYGu
-	cXtAdjzwtzg/lyzz2Tomj9MPJvUXZmTWVZVh1E8bcW/c2vXKWi9xvgUM/cnsRKE3gxfFHP
-	fYq6VUC4nKfyBk53NsrxsKkEqIwOh7Y=
-Date: Fri, 4 Aug 2023 02:55:25 -0400
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5536A6ADF;
+	Fri,  4 Aug 2023 07:16:37 +0000 (UTC)
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E623588;
+	Fri,  4 Aug 2023 00:16:35 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4RHH7w4vTMz4f3jMm;
+	Fri,  4 Aug 2023 15:16:28 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+	by APP2 (Coremail) with SMTP id Syh0CgAHF+jMpcxkm1vaPQ--.64994S2;
+	Fri, 04 Aug 2023 15:16:29 +0800 (CST)
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	John Fastabend <john.fastabend@gmail.com>,
+	Bobby Eshleman <bobby.eshleman@bytedance.com>
+Cc: Jakub Sitnicki <jakub@cloudflare.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Cong Wang <cong.wang@bytedance.com>
+Subject: [PATCH bpf v3 0/4] bug fixes for sockmap
+Date: Fri,  4 Aug 2023 03:37:36 -0400
+Message-Id: <20230804073740.194770-1-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v1 bpf-next 5/7] bpf: Consider non-owning refs to
- refcounted nodes RCU protected
-Content-Language: en-US
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Dave Marchevsky <davemarchevsky@fb.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@kernel.org>, Kernel Team <kernel-team@fb.com>
-References: <20230801203630.3581291-1-davemarchevsky@fb.com>
- <20230801203630.3581291-6-davemarchevsky@fb.com>
- <20230802225054.ee6oadjgm6g2bdsl@MacBook-Pro-8.local>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: David Marchevsky <david.marchevsky@linux.dev>
-In-Reply-To: <20230802225054.ee6oadjgm6g2bdsl@MacBook-Pro-8.local>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-	T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:Syh0CgAHF+jMpcxkm1vaPQ--.64994S2
+X-Coremail-Antispam: 1UD129KBjvdXoWruFyfJryDtr1rZrWfGF4Uurg_yoWftFg_uw
+	4UKr95Xr1xXFnxGFWruFs3JFWkKFZ7Jr1rAFZ8t347Gw1xZw18WFsYkFyrJa4UWay0qryx
+	KFn5W3y0qr13XjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUb28YFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
+	67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+	c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+	026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
+	0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
+	vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+	jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 8/2/23 6:50 PM, Alexei Starovoitov wrote:
-> On Tue, Aug 01, 2023 at 01:36:28PM -0700, Dave Marchevsky wrote:
->> The previous patch in the series ensures that the underlying memory of
->> nodes with bpf_refcount - which can have multiple owners - is not reused
->> until RCU Tasks Trace grace period has elapsed. This prevents
-> 
-> Here and in the cover letter... above should probably be "RCU grace period"
-> and not "RCU tasks trace grace period".
-> bpf progs will reuse objects after normal RCU.
-> We're waiting for RCU tasks trace GP to free into slab.
-> 
+From: Xu Kuohai <xukuohai@huawei.com>
 
-Will fix.
+bug fixes and a new test case for sockmap.
 
->> use-after-free with non-owning references that may point to
->> recently-freed memory. While RCU read lock is held, it's safe to
->> dereference such a non-owning ref, as by definition RCU GP couldn't have
->> elapsed and therefore underlying memory couldn't have been reused.
->>
->> From the perspective of verifier "trustedness" non-owning refs to
->> refcounted nodes are now trusted only in RCU CS and therefore should no
->> longer pass is_trusted_reg, but rather is_rcu_reg. Let's mark them
->> MEM_RCU in order to reflect this new state.
->>
->> Similarly to bpf_spin_unlock being a non-owning ref invalidation point,
->> where non-owning ref reg states are clobbered so that they cannot be
->> used outside of the critical section, currently all MEM_RCU regs are
->> marked untrusted after bpf_rcu_read_unlock. This patch makes
->> bpf_rcu_read_unlock a non-owning ref invalidation point as well,
->> clobbering the non-owning refs instead of marking untrusted. In the
->> future we may want to allow untrusted non-owning refs in which case we
->> can remove this custom logic without breaking BPF programs as it's more
->> restrictive than the default. That's a big change in semantics, though,
->> and this series is focused on fixing the use-after-free in most
->> straightforward way.
->>
->> Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
->> ---
->>  include/linux/bpf.h   |  3 ++-
->>  kernel/bpf/verifier.c | 17 +++++++++++++++--
->>  2 files changed, 17 insertions(+), 3 deletions(-)
->>
->> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
->> index ceaa8c23287f..37fba01b061a 100644
->> --- a/include/linux/bpf.h
->> +++ b/include/linux/bpf.h
->> @@ -653,7 +653,8 @@ enum bpf_type_flag {
->>  	MEM_RCU			= BIT(13 + BPF_BASE_TYPE_BITS),
->>  
->>  	/* Used to tag PTR_TO_BTF_ID | MEM_ALLOC references which are non-owning.
->> -	 * Currently only valid for linked-list and rbtree nodes.
->> +	 * Currently only valid for linked-list and rbtree nodes. If the nodes
->> +	 * have a bpf_refcount_field, they must be tagged MEM_RCU as well.
->>  	 */
->>  	NON_OWN_REF		= BIT(14 + BPF_BASE_TYPE_BITS),
->>  
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 9014b469dd9d..4bda365000d3 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -469,7 +469,8 @@ static bool type_is_ptr_alloc_obj(u32 type)
->>  
->>  static bool type_is_non_owning_ref(u32 type)
->>  {
->> -	return type_is_ptr_alloc_obj(type) && type_flag(type) & NON_OWN_REF;
->> +	return type_is_ptr_alloc_obj(type) &&
->> +		type_flag(type) & NON_OWN_REF;
->>  }
->>  
->>  static struct btf_record *reg_btf_record(const struct bpf_reg_state *reg)
->> @@ -8012,6 +8013,7 @@ int check_func_arg_reg_off(struct bpf_verifier_env *env,
->>  	case PTR_TO_BTF_ID | PTR_TRUSTED:
->>  	case PTR_TO_BTF_ID | MEM_RCU:
->>  	case PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF:
->> +	case PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU:
->>  		/* When referenced PTR_TO_BTF_ID is passed to release function,
->>  		 * its fixed offset must be 0. In the other cases, fixed offset
->>  		 * can be non-zero. This was already checked above. So pass
->> @@ -10478,6 +10480,7 @@ static int process_kf_arg_ptr_to_btf_id(struct bpf_verifier_env *env,
->>  static int ref_set_non_owning(struct bpf_verifier_env *env, struct bpf_reg_state *reg)
->>  {
->>  	struct bpf_verifier_state *state = env->cur_state;
->> +	struct btf_record *rec = reg_btf_record(reg);
->>  
->>  	if (!state->active_lock.ptr) {
->>  		verbose(env, "verifier internal error: ref_set_non_owning w/o active lock\n");
->> @@ -10490,6 +10493,9 @@ static int ref_set_non_owning(struct bpf_verifier_env *env, struct bpf_reg_state
->>  	}
->>  
->>  	reg->type |= NON_OWN_REF;
->> +	if (rec->refcount_off >= 0)
->> +		reg->type |= MEM_RCU;
->> +
->>  	return 0;
->>  }
->>  
->> @@ -11327,10 +11333,16 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->>  		struct bpf_func_state *state;
->>  		struct bpf_reg_state *reg;
->>  
->> +		if (in_rbtree_lock_required_cb(env) && (rcu_lock || rcu_unlock)) {
->> +			verbose(env, "can't rcu read {lock,unlock} in rbtree cb\n");
->> +			return -EACCES;
->> +		}
-> 
-> I guess it's ok to prevent cb from calling bpf_rcu_read_lock(), since it's unnecessary,
-> but pls make the message more verbose. Like:
->  verbose(env, "Calling bpf_rcu_read_{lock,unlock} in unnecessary rbtree callback\n");
-> 
-> so that users know why the verifier complains.
-> Technically it's ok to do so. Unnecessary is not a safety issue.
-> 
+v3:
+fix bpf ci failure
 
-Well, for rcu_read_unlock it would be a safety issue, no?
-Feels easier to reason about if we can just say "RCU lock is
-held for the duration of the callback".
+v2: https://lore.kernel.org/bpf/20230803064838.108784-1-xukuohai@huaweicloud.com
+add a test case
 
->> +
->>  		if (rcu_lock) {
->>  			verbose(env, "nested rcu read lock (kernel function %s)\n", func_name);
->>  			return -EINVAL;
->>  		} else if (rcu_unlock) {
->> +			invalidate_non_owning_refs(env);
-> 
-> I agree with Yonghong. It probably doesn't belong here.
-> rcu lock/unlock and spin_lock/unlock are separate critical sections.
-> Since ref_set_non_owning() adds extra MEM_RCU flag nothing extra needs to be done here.
-> Below code will make the pointers untrusted.
-> 
+v1:
+https://lore.kernel.org/bpf/20230728105649.3978774-1-xukuohai@huaweicloud.com
+https://lore.kernel.org/bpf/20230728105717.3978849-1-xukuohai@huaweicloud.com
 
-Will change. The desire here was to not loosen constraints
-on non-owning ref lifetime in this series. As I mention in
-my thoughts on Patch 3 in the cover letter, I do think we can
-loosen that in the future, but would like to avoid doing so in this
-fixes series. Regardless, because bpf_spin_unlock will
-happen before this executes, this line can be removed.
+Xu Kuohai (4):
+  bpf, sockmap: Fix map type error in sock_map_del_link
+  bpf, sockmap: Fix bug that strp_done cannot be called
+  selftests/bpf: fix a CI failure caused by vsock sockmap test
+  selftests/bpf: Add sockmap test for redirecting partial skb data
 
->>  			bpf_for_each_reg_in_vstate(env->cur_state, state, reg, ({
->>  				if (reg->type & MEM_RCU) {
->>  					reg->type &= ~(MEM_RCU | PTR_MAYBE_NULL);
->> @@ -16679,7 +16691,8 @@ static int do_check(struct bpf_verifier_env *env)
->>  					return -EINVAL;
->>  				}
->>  
->> -				if (env->cur_state->active_rcu_lock) {
->> +				if (env->cur_state->active_rcu_lock &&
->> +				    !in_rbtree_lock_required_cb(env)) {
-> 
-> I'm not following here.
-> Didn't you want to prevent bpf_rcu_read_lock/unlock inside cb? Why this change?
-> >>  					verbose(env, "bpf_rcu_read_unlock is missing\n");
->>  					return -EINVAL;
->>  				}
->> -- 
->> 2.34.1
->>
+ include/linux/skmsg.h                         |  1 +
+ net/core/skmsg.c                              | 10 ++-
+ net/core/sock_map.c                           | 10 +--
+ .../selftests/bpf/prog_tests/sockmap_listen.c | 74 ++++++++++++++++++-
+ .../selftests/bpf/progs/test_sockmap_listen.c | 14 ++++
+ 5 files changed, 101 insertions(+), 8 deletions(-)
+
+-- 
+2.30.2
+
