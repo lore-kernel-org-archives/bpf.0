@@ -1,71 +1,137 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 798C379C3
-	for <bpf@vger.kernel.org>; Fri,  4 Aug 2023 07:32:48 +0000 (UTC)
-Received: from out199-5.us.a.mail.aliyun.com (out199-5.us.a.mail.aliyun.com [47.90.199.5])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCCC59F8;
-	Fri,  4 Aug 2023 00:32:32 -0700 (PDT)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0Vp.c2HC_1691134188;
-Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0Vp.c2HC_1691134188)
-          by smtp.aliyun-inc.com;
-          Fri, 04 Aug 2023 15:29:53 +0800
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-To: alexander.shishkin@linux.intel.com,
-	peterz@infradead.org,
-	james.clark@arm.com,
-	leo.yan@linaro.org
-Cc: mingo@redhat.com,
-	baolin.wang@linux.alibaba.com,
-	acme@kernel.org,
-	mark.rutland@arm.com,
-	jolsa@kernel.org,
-	namhyung@kernel.org,
-	irogers@google.com,
-	adrian.hunter@intel.com,
-	linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	nathan@kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH v4 0/2] perf/core: Bail out early if the request AUX area is out of bound
-Date: Fri,  4 Aug 2023 15:29:43 +0800
-Message-Id: <20230804072945.85731-1-xueshuai@linux.alibaba.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A7192F33
+	for <bpf@vger.kernel.org>; Fri,  4 Aug 2023 08:00:25 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3BA1704;
+	Fri,  4 Aug 2023 01:00:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1691136023; x=1722672023;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mozKuYzJnKHA2aKr3eiYDtSGyCx3d+I7fkTRCyvB7W0=;
+  b=S9meV5hrPUbBWAY9o6CBbP4zp+xjTUOqzEz4V6ZlpD8H2B8tHo8L1nwn
+   J+cxYIHYcDIgWTY2rLLlG3UhfVIB554mdIApG5n6sVzQMbMid3158CjkH
+   v/rNMykvOYsJ49x2MXBs1YjEVpZlQTA+Li9qoAZJVc86SfwWzIp/+RIHq
+   C0o7scN3tX+VkKR/L+J5S+dFJK5K7cDvlqF3d42Pk4MR0XiKzXV6bm8hK
+   W6ISf0f/5EQPsoIdmAlr3tcyz+F72jnKDnepDDHxGslQ76uyFlcoyIogo
+   H8xoAXe/MiIZPQ1mhshb9FWdRwKYEmZwvCbhM0ZHqoAGTLBeefzP/VehU
+   g==;
+X-IronPort-AV: E=Sophos;i="6.01,254,1684825200"; 
+   d="asc'?scan'208";a="164824311"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Aug 2023 01:00:21 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 4 Aug 2023 01:00:06 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Fri, 4 Aug 2023 01:00:01 -0700
+Date: Fri, 4 Aug 2023 08:59:24 +0100
+From: Conor Dooley <conor.dooley@microchip.com>
+To: Charlie Jenkins <charlie@rivosinc.com>
+CC: <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<kvm@vger.kernel.org>, <kvm-riscv@lists.infradead.org>,
+	<bpf@vger.kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>, Palmer
+ Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Peter
+ Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, Jason
+ Baron <jbaron@akamai.com>, Steven Rostedt <rostedt@goodmis.org>, Ard
+ Biesheuvel <ardb@kernel.org>, Anup Patel <anup@brainfault.org>, Atish Patra
+	<atishp@atishpatra.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+	<martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+	<yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh
+	<kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>, Luke Nelson
+	<luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, Nam Cao
+	<namcaov@gmail.com>
+Subject: Re: [PATCH 01/10] RISC-V: Expand instruction definitions
+Message-ID: <20230804-barterer-heritage-ed191081bc47@wendy>
+References: <20230803-master-refactor-instructions-v4-v1-0-2128e61fa4ff@rivosinc.com>
+ <20230803-master-refactor-instructions-v4-v1-1-2128e61fa4ff@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="giltLFM/xoeS/K8e"
+Content-Disposition: inline
+In-Reply-To: <20230803-master-refactor-instructions-v4-v1-1-2128e61fa4ff@rivosinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+	SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-changes since v3 (per James):
-- change to return with existing value -ENOMEM
-- split doc part to a separate patch since they are going to be merged through
-  separate trees.
+--giltLFM/xoeS/K8e
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-changes since v2:
-- remove unnecessary overflow check (per Peter)
+On Thu, Aug 03, 2023 at 07:10:26PM -0700, Charlie Jenkins wrote:
+> There are many systems across the kernel that rely on directly creating
+> and modifying instructions. In order to unify them, create shared
+> definitions for instructions and registers.
+>=20
+> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> ---
+>  arch/riscv/include/asm/insn.h            | 2742 ++++++++++++++++++++++++=
++++---
 
-changes since v1:
-- drop out patch2 because it has been fixed on upstream (Thanks James for reminding)
-- move sanity check into rb_alloc_aux (per Leo)
-- add overflow check (per James)
+"I did a lot of copy-pasting from the RISC-V spec"
 
-Shuai Xue (2):
-  perf/core: Bail out early if the request AUX area is out of bound
-  perf record: Update docs regarding the maximum limitation of AUX area
+How is anyone supposed to cross check this when there's 1000s of lines
+of a diff here? We've had some subtle bugs in some of the definitions in
+the past, so I would like to be able to check at this opportune moment
+that things are correct.
 
- kernel/events/ring_buffer.c              | 3 +++
- tools/perf/Documentation/perf-record.txt | 3 +++
- 2 files changed, 6 insertions(+)
+>  arch/riscv/include/asm/reg.h             |   88 +
+>  arch/riscv/kernel/kgdb.c                 |    4 +-
+>  arch/riscv/kernel/probes/simulate-insn.c |   39 +-
+>  arch/riscv/kernel/vector.c               |    2 +-
 
--- 
-2.39.3
+You need to at least split this up. I doubt a 2742 change diff for
+insn.h was required to make the changes in these 4 files.
 
+Then after that, it would be so much easier to reason about these
+changes if the additions to insn.h happened at the same time as the
+removals from the affected locations.
+
+I would probably split this so that things are done in more stages,
+with the larger patches split between changes that require no new
+definitions and changes that require moving things to insn.h
+
+>  5 files changed, 2629 insertions(+), 246 deletions(-)
+
+What you would want to see if this arrived in your inbox as a reviewer?
+
+Don't get me wrong, I do like what you are doing here, the BPF JIT
+especially is filled with "uhh okay, I guess those offsets are right",
+so I don't mean to be discouraging.
+
+Thanks,
+Conor.
+
+--giltLFM/xoeS/K8e
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZMyvzwAKCRB4tDGHoIJi
+0gQYAP0UlvSWYX6mB67CAGmIVZwnT0CwyiNPOEXW+G0t9GnWngD+PxdgtapB+DMY
+MPJ1zDp8mSYyzU+MKQ++56q8pPpFyQg=
+=yGw/
+-----END PGP SIGNATURE-----
+
+--giltLFM/xoeS/K8e--
