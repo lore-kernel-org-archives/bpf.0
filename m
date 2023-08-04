@@ -1,21 +1,21 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 710381DA21;
-	Fri,  4 Aug 2023 20:42:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CCC3C433C8;
-	Fri,  4 Aug 2023 20:42:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A1CC1AA95;
+	Fri,  4 Aug 2023 20:45:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC365C433C8;
+	Fri,  4 Aug 2023 20:45:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691181766;
-	bh=h38XqAf/cJuAIlpBpr4KFvmbr9bN/47iqdte68UwsFA=;
+	s=k20201202; t=1691181905;
+	bh=8ywDJqkGVQloG5UrT53vJCwzkueyvL2Zdl1L+cadkP4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Eir7av81r/doV7BE+4HwQFpwwtTYplldGx/4AWT4vOhTRbOI0yFoD3TvFECqE86Qr
-	 22pjN3cW2OUBfeeaTUSGfG6R+aebkt4+TpCYUGq2ahP2c7L2yw+ANcRUVTE1Lbh2G+
-	 fRW2lTYdPFJekqGBV/z3r2MQsT5ni690118tow1ghkzYie2sXMTP1f+Z+CROaqMHkv
-	 mr4nXnYSHdxlNDqgsrM2gJ/rD5Q0y54IGvXsVGC4N1YV3SBeRV//7qUKTz50NUBN66
-	 UkX6ithIAj+PzhLVKUEniqcQoqNRgtH2DnINfoI+2NdAPa9v9VoaUpTqv1eZLUF6pn
-	 7khrR6hFrEXtA==
-Date: Fri, 4 Aug 2023 22:42:41 +0200
+	b=RMwCQ3Vnw71xzrZuJ/jJ94o18ySfq5CXdxO1zj2Uwkwmzuuh5dSZoPMbRPleTSsVr
+	 QqirqQcnS7O3+eFxn+npGzlKeiueik5fE5S48AJJ/u5GlXUEeAXzagw0ms3ZtVt+Ip
+	 6FakjKhPwGAYikmH6Ba+/1XW5JlnjElhXooIHPyBom3rSgNij/74pHAVMOT7azjwXG
+	 XH//lz4B//oNKeQZ+EGKHLHu9vxS3vSZS4uAmtxKMZ1+5qKZ0LPPXFAEy7oDhCqfY+
+	 NdmkaDMvD4hjBCH9dIfhW6xHL5tLnZILsVTWXytFTzkLdiPjS3JovqEjaN02okZZ8y
+	 eZksZXtoEPR/g==
+Date: Fri, 4 Aug 2023 22:44:59 +0200
 From: Simon Horman <horms@kernel.org>
 To: "huangjie.albert" <huangjie.albert@bytedance.com>
 Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
@@ -28,18 +28,17 @@ Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
 	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
 	Jonathan Lemon <jonathan.lemon@gmail.com>,
 	Pavel Begunkov <asml.silence@gmail.com>,
-	Shmulik Ladkani <shmulik.ladkani@gmail.com>,
 	Kees Cook <keescook@chromium.org>,
 	Richard Gobert <richardbgobert@gmail.com>,
 	Yunsheng Lin <linyunsheng@huawei.com>,
 	"open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
 	open list <linux-kernel@vger.kernel.org>,
 	"open list:XDP (eXpress Data Path)" <bpf@vger.kernel.org>
-Subject: Re: [RFC Optimizing veth xsk performance 02/10] xsk: add
- dma_check_skip for  skipping dma check
-Message-ID: <ZM1iwWnQ+derTtfS@vergenet.net>
+Subject: Re: [RFC Optimizing veth xsk performance 03/10] veth: add support
+ for send queue
+Message-ID: <ZM1jS2ndLNS+AjIv@vergenet.net>
 References: <20230803140441.53596-1-huangjie.albert@bytedance.com>
- <20230803140441.53596-3-huangjie.albert@bytedance.com>
+ <20230803140441.53596-4-huangjie.albert@bytedance.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,13 +47,30 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230803140441.53596-3-huangjie.albert@bytedance.com>
+In-Reply-To: <20230803140441.53596-4-huangjie.albert@bytedance.com>
 
-On Thu, Aug 03, 2023 at 10:04:28PM +0800, huangjie.albert wrote:
-> for the virtual net device such as veth, there is
-> no need to do dma check if we support zero copy.
-> 
-> add this flag after unaligned. beacause there are 4 bytes hole
+On Thu, Aug 03, 2023 at 10:04:29PM +0800, huangjie.albert wrote:
 
-nit: beacause there are 4 bytes hole
-  -> Because there is a 4 byte hole.
+...
+
+> @@ -69,11 +74,25 @@ struct veth_rq {
+>  	struct page_pool	*page_pool;
+>  };
+>  
+> +struct veth_sq {
+> +	struct napi_struct	xdp_napi;
+> +	struct net_device	*dev;
+> +	struct xdp_mem_info	xdp_mem;
+> +	struct veth_sq_stats	stats;
+> +	u32 queue_index;
+> +	/* this is for xsk */
+> +	struct {
+> +		struct xsk_buff_pool __rcu *pool;
+> +		u32 last_cpu;
+> +	}xsk;
+
+nit: '}xsk;' -> '} xsk;'
+
+Please consider running checkpatch.pl
+
+...
