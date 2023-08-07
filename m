@@ -1,365 +1,111 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57DC4256A;
-	Mon,  7 Aug 2023 01:21:18 +0000 (UTC)
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7FB171E;
-	Sun,  6 Aug 2023 18:21:16 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
-	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RJz3R2JHHz1Z1X6;
-	Mon,  7 Aug 2023 09:18:27 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 7 Aug
- 2023 09:21:14 +0800
-From: Zhengchao Shao <shaozhengchao@huawei.com>
-To: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>, <davem@davemloft.net>,
-	<edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>
-CC: <jiri@resnulli.us>, <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
-	<shaozhengchao@huawei.com>
-Subject: [PATCH net-next,v3 4/5] team: change the getter function in the team_option structure to void
-Date: Mon, 7 Aug 2023 09:25:55 +0800
-Message-ID: <20230807012556.3146071-5-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230807012556.3146071-1-shaozhengchao@huawei.com>
-References: <20230807012556.3146071-1-shaozhengchao@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E31B392
+	for <bpf@vger.kernel.org>; Mon,  7 Aug 2023 02:21:16 +0000 (UTC)
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747271709
+	for <bpf@vger.kernel.org>; Sun,  6 Aug 2023 19:21:14 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1bbd03cb7c1so24989895ad.3
+        for <bpf@vger.kernel.org>; Sun, 06 Aug 2023 19:21:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1691374874; x=1691979674;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dpfBoE9Y590w/Sf+Dz/Le636FBNjqDAu8TPrvM1o1jQ=;
+        b=IsiyqTVDpnFsGxkGGtd9mPI4j9dDCr8HtUmQl/O5Y+/h3Q387L9jARgAMHQx8keKIQ
+         jNnF3fs2cPSI2voNKdrnUdH+q0ZUJ73HCLveN3x5CvahdowTzMzrAseNDIc4n1vJLi1X
+         cMo8+jLmUZQqHd5GfMA9R4W33GOKcND52FQMgrrkMW03KpymaUotXs5kvVsOqicjzXi9
+         4QNB3thQdacEU6Sg4aOnsRjx4Ahf+b+efIVvjM5qPqQw1RLprLmtIZtTrk0pLzN54WUn
+         WSTFULU5KwhfEUceEncA7l7Yif6T0sWzsbaswU5VvUO6updvur/kedBQZiCE0cSYf29S
+         MJJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691374874; x=1691979674;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=dpfBoE9Y590w/Sf+Dz/Le636FBNjqDAu8TPrvM1o1jQ=;
+        b=lqQ13NwA1Y6afX5M2uYPyZ+qabOwD1pS2nvCEZVBu12RMzpysFr9EzrBKU2l/Wrwvj
+         Dgn/sRaWVA940hTffssIdrzBflOp0rPj2Ngr+A8obDBTPNY0nnztmUzWwfzFMQkvSQYT
+         mpkSRN3w+SFQtylWTO7LETVf3rmkCMTJC/0GENhVBMdolPWkBz8ovmqp4mZyln7ef/ZG
+         wsENT9BnvRmUPUtlzai3mRrYELSTGGAGan4hcEWIlB++IYgQcSAcXDBylK7fwKFzEfgf
+         Ayw34xE60FwwK3EkIsR51lxNThme0oPQ6TNtGBcfVPW59sSlTPZY914OGXJMu9d6PDPj
+         icKw==
+X-Gm-Message-State: AOJu0Yx3CXqp5kzfX7UrQ7RM7z+k5O3ZudZFxZRE6wOn/Pth5OlRL5wW
+	cjaXdLbsk62F4hLw/ECUSG6zRw==
+X-Google-Smtp-Source: AGHT+IGXf1jXu+iFSbvQC0e3gpDtxmxqpYliUoFhZtb1FgsrjGnia6rlH1z2J9bd4to0NexKFX7gHg==
+X-Received: by 2002:a17:902:a505:b0:1b9:ebf4:5d2 with SMTP id s5-20020a170902a50500b001b9ebf405d2mr6181704plq.33.1691374873796;
+        Sun, 06 Aug 2023 19:21:13 -0700 (PDT)
+Received: from ?IPV6:fdbd:ff1:ce00:11b8:85a:5d8b:9c7a:fbf2? ([240e:694:e21:b::2])
+        by smtp.gmail.com with ESMTPSA id a13-20020a170902b58d00b001bb04755212sm5482892pls.228.2023.08.06.19.21.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 06 Aug 2023 19:21:13 -0700 (PDT)
+Message-ID: <866462cf-6045-6239-6e27-45a733aa7daa@bytedance.com>
+Date: Mon, 7 Aug 2023 10:21:09 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.13.0
+Subject: Re: [RFC PATCH 1/2] mm, oom: Introduce bpf_select_task
+To: Michal Hocko <mhocko@suse.com>
+Cc: hannes@cmpxchg.org, roman.gushchin@linux.dev, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, muchun.song@linux.dev,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, wuyun.abel@bytedance.com,
+ robin.lu@bytedance.com
+References: <20230804093804.47039-1-zhouchuyi@bytedance.com>
+ <20230804093804.47039-2-zhouchuyi@bytedance.com>
+ <ZMzhDFhvol2VQBE4@dhcp22.suse.cz>
+ <dfbf05d1-daff-e855-f4fd-e802614b79c4@bytedance.com>
+ <ZMz+aBHFvfcr0oIe@dhcp22.suse.cz>
+From: Chuyi Zhou <zhouchuyi@bytedance.com>
+In-Reply-To: <ZMz+aBHFvfcr0oIe@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Because the getter function in the team_option structure always returns 0,
-so change the getter function to void and remove redundant code.
 
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
----
- drivers/net/team/team.c                   | 52 ++++++++++-------------
- drivers/net/team/team_mode_activebackup.c |  3 +-
- drivers/net/team/team_mode_loadbalance.c  | 24 ++++-------
- include/linux/if_team.h                   |  2 +-
- 4 files changed, 33 insertions(+), 48 deletions(-)
 
-diff --git a/drivers/net/team/team.c b/drivers/net/team/team.c
-index b88e1c451e07..8243563a40f0 100644
---- a/drivers/net/team/team.c
-+++ b/drivers/net/team/team.c
-@@ -358,7 +358,9 @@ static int team_option_get(struct team *team,
- {
- 	if (!opt_inst->option->getter)
- 		return -EOPNOTSUPP;
--	return opt_inst->option->getter(team, ctx);
-+
-+	opt_inst->option->getter(team, ctx);
-+	return 0;
- }
- 
- static int team_option_set(struct team *team,
-@@ -1373,10 +1375,9 @@ static int team_port_del(struct team *team, struct net_device *port_dev)
-  * Net device ops
-  *****************/
- 
--static int team_mode_option_get(struct team *team, struct team_gsetter_ctx *ctx)
-+static void team_mode_option_get(struct team *team, struct team_gsetter_ctx *ctx)
- {
- 	ctx->data.str_val = team->mode->kind;
--	return 0;
- }
- 
- static int team_mode_option_set(struct team *team, struct team_gsetter_ctx *ctx)
-@@ -1384,11 +1385,10 @@ static int team_mode_option_set(struct team *team, struct team_gsetter_ctx *ctx)
- 	return team_change_mode(team, ctx->data.str_val);
- }
- 
--static int team_notify_peers_count_get(struct team *team,
--				       struct team_gsetter_ctx *ctx)
-+static void team_notify_peers_count_get(struct team *team,
-+					struct team_gsetter_ctx *ctx)
- {
- 	ctx->data.u32_val = team->notify_peers.count;
--	return 0;
- }
- 
- static int team_notify_peers_count_set(struct team *team,
-@@ -1398,11 +1398,10 @@ static int team_notify_peers_count_set(struct team *team,
- 	return 0;
- }
- 
--static int team_notify_peers_interval_get(struct team *team,
--					  struct team_gsetter_ctx *ctx)
-+static void team_notify_peers_interval_get(struct team *team,
-+					   struct team_gsetter_ctx *ctx)
- {
- 	ctx->data.u32_val = team->notify_peers.interval;
--	return 0;
- }
- 
- static int team_notify_peers_interval_set(struct team *team,
-@@ -1412,11 +1411,10 @@ static int team_notify_peers_interval_set(struct team *team,
- 	return 0;
- }
- 
--static int team_mcast_rejoin_count_get(struct team *team,
--				       struct team_gsetter_ctx *ctx)
-+static void team_mcast_rejoin_count_get(struct team *team,
-+					struct team_gsetter_ctx *ctx)
- {
- 	ctx->data.u32_val = team->mcast_rejoin.count;
--	return 0;
- }
- 
- static int team_mcast_rejoin_count_set(struct team *team,
-@@ -1426,11 +1424,10 @@ static int team_mcast_rejoin_count_set(struct team *team,
- 	return 0;
- }
- 
--static int team_mcast_rejoin_interval_get(struct team *team,
--					  struct team_gsetter_ctx *ctx)
-+static void team_mcast_rejoin_interval_get(struct team *team,
-+					   struct team_gsetter_ctx *ctx)
- {
- 	ctx->data.u32_val = team->mcast_rejoin.interval;
--	return 0;
- }
- 
- static int team_mcast_rejoin_interval_set(struct team *team,
-@@ -1440,13 +1437,12 @@ static int team_mcast_rejoin_interval_set(struct team *team,
- 	return 0;
- }
- 
--static int team_port_en_option_get(struct team *team,
--				   struct team_gsetter_ctx *ctx)
-+static void team_port_en_option_get(struct team *team,
-+				    struct team_gsetter_ctx *ctx)
- {
- 	struct team_port *port = ctx->info->port;
- 
- 	ctx->data.bool_val = team_port_enabled(port);
--	return 0;
- }
- 
- static int team_port_en_option_set(struct team *team,
-@@ -1461,13 +1457,12 @@ static int team_port_en_option_set(struct team *team,
- 	return 0;
- }
- 
--static int team_user_linkup_option_get(struct team *team,
--				       struct team_gsetter_ctx *ctx)
-+static void team_user_linkup_option_get(struct team *team,
-+					struct team_gsetter_ctx *ctx)
- {
- 	struct team_port *port = ctx->info->port;
- 
- 	ctx->data.bool_val = port->user.linkup;
--	return 0;
- }
- 
- static void __team_carrier_check(struct team *team);
-@@ -1483,13 +1478,12 @@ static int team_user_linkup_option_set(struct team *team,
- 	return 0;
- }
- 
--static int team_user_linkup_en_option_get(struct team *team,
--					  struct team_gsetter_ctx *ctx)
-+static void team_user_linkup_en_option_get(struct team *team,
-+					   struct team_gsetter_ctx *ctx)
- {
- 	struct team_port *port = ctx->info->port;
- 
- 	ctx->data.bool_val = port->user.linkup_enabled;
--	return 0;
- }
- 
- static int team_user_linkup_en_option_set(struct team *team,
-@@ -1503,13 +1497,12 @@ static int team_user_linkup_en_option_set(struct team *team,
- 	return 0;
- }
- 
--static int team_priority_option_get(struct team *team,
--				    struct team_gsetter_ctx *ctx)
-+static void team_priority_option_get(struct team *team,
-+				     struct team_gsetter_ctx *ctx)
- {
- 	struct team_port *port = ctx->info->port;
- 
- 	ctx->data.s32_val = port->priority;
--	return 0;
- }
- 
- static int team_priority_option_set(struct team *team,
-@@ -1525,13 +1518,12 @@ static int team_priority_option_set(struct team *team,
- 	return 0;
- }
- 
--static int team_queue_id_option_get(struct team *team,
--				    struct team_gsetter_ctx *ctx)
-+static void team_queue_id_option_get(struct team *team,
-+				     struct team_gsetter_ctx *ctx)
- {
- 	struct team_port *port = ctx->info->port;
- 
- 	ctx->data.u32_val = port->queue_id;
--	return 0;
- }
- 
- static int team_queue_id_option_set(struct team *team,
-diff --git a/drivers/net/team/team_mode_activebackup.c b/drivers/net/team/team_mode_activebackup.c
-index 44d604f1c512..e0f599e2a51d 100644
---- a/drivers/net/team/team_mode_activebackup.c
-+++ b/drivers/net/team/team_mode_activebackup.c
-@@ -63,7 +63,7 @@ static void ab_active_port_init(struct team *team,
- 	ab_priv(team)->ap_opt_inst_info = info;
- }
- 
--static int ab_active_port_get(struct team *team, struct team_gsetter_ctx *ctx)
-+static void ab_active_port_get(struct team *team, struct team_gsetter_ctx *ctx)
- {
- 	struct team_port *active_port;
- 
-@@ -73,7 +73,6 @@ static int ab_active_port_get(struct team *team, struct team_gsetter_ctx *ctx)
- 		ctx->data.u32_val = active_port->dev->ifindex;
- 	else
- 		ctx->data.u32_val = 0;
--	return 0;
- }
- 
- static int ab_active_port_set(struct team *team, struct team_gsetter_ctx *ctx)
-diff --git a/drivers/net/team/team_mode_loadbalance.c b/drivers/net/team/team_mode_loadbalance.c
-index 50c015cd0682..2f1573f253ec 100644
---- a/drivers/net/team/team_mode_loadbalance.c
-+++ b/drivers/net/team/team_mode_loadbalance.c
-@@ -242,19 +242,18 @@ static bool lb_transmit(struct team *team, struct sk_buff *skb)
- 	return false;
- }
- 
--static int lb_bpf_func_get(struct team *team, struct team_gsetter_ctx *ctx)
-+static void lb_bpf_func_get(struct team *team, struct team_gsetter_ctx *ctx)
- {
- 	struct lb_priv *lb_priv = get_lb_priv(team);
- 
- 	if (!lb_priv->ex->orig_fprog) {
- 		ctx->data.bin_val.len = 0;
- 		ctx->data.bin_val.ptr = NULL;
--		return 0;
-+		return;
- 	}
- 	ctx->data.bin_val.len = lb_priv->ex->orig_fprog->len *
- 				sizeof(struct sock_filter);
- 	ctx->data.bin_val.ptr = lb_priv->ex->orig_fprog->filter;
--	return 0;
- }
- 
- static int __fprog_create(struct sock_fprog_kern **pfprog, u32 data_len,
-@@ -335,7 +334,7 @@ static void lb_bpf_func_free(struct team *team)
- 	bpf_prog_destroy(fp);
- }
- 
--static int lb_tx_method_get(struct team *team, struct team_gsetter_ctx *ctx)
-+static void lb_tx_method_get(struct team *team, struct team_gsetter_ctx *ctx)
- {
- 	struct lb_priv *lb_priv = get_lb_priv(team);
- 	lb_select_tx_port_func_t *func;
-@@ -346,7 +345,6 @@ static int lb_tx_method_get(struct team *team, struct team_gsetter_ctx *ctx)
- 	name = lb_select_tx_port_get_name(func);
- 	BUG_ON(!name);
- 	ctx->data.str_val = name;
--	return 0;
- }
- 
- static int lb_tx_method_set(struct team *team, struct team_gsetter_ctx *ctx)
-@@ -370,8 +368,8 @@ static void lb_tx_hash_to_port_mapping_init(struct team *team,
- 	LB_HTPM_OPT_INST_INFO_BY_HASH(lb_priv, hash) = info;
- }
- 
--static int lb_tx_hash_to_port_mapping_get(struct team *team,
--					  struct team_gsetter_ctx *ctx)
-+static void lb_tx_hash_to_port_mapping_get(struct team *team,
-+					   struct team_gsetter_ctx *ctx)
- {
- 	struct lb_priv *lb_priv = get_lb_priv(team);
- 	struct team_port *port;
-@@ -379,7 +377,6 @@ static int lb_tx_hash_to_port_mapping_get(struct team *team,
- 
- 	port = LB_HTPM_PORT_BY_HASH(lb_priv, hash);
- 	ctx->data.u32_val = port ? port->dev->ifindex : 0;
--	return 0;
- }
- 
- static int lb_tx_hash_to_port_mapping_set(struct team *team,
-@@ -409,14 +406,13 @@ static void lb_hash_stats_init(struct team *team,
- 	lb_priv->ex->stats.info[hash].opt_inst_info = info;
- }
- 
--static int lb_hash_stats_get(struct team *team, struct team_gsetter_ctx *ctx)
-+static void lb_hash_stats_get(struct team *team, struct team_gsetter_ctx *ctx)
- {
- 	struct lb_priv *lb_priv = get_lb_priv(team);
- 	unsigned char hash = ctx->info->array_index;
- 
- 	ctx->data.bin_val.ptr = &lb_priv->ex->stats.info[hash].stats;
- 	ctx->data.bin_val.len = sizeof(struct lb_stats);
--	return 0;
- }
- 
- static void lb_port_stats_init(struct team *team,
-@@ -428,14 +424,13 @@ static void lb_port_stats_init(struct team *team,
- 	lb_port_priv->stats_info.opt_inst_info = info;
- }
- 
--static int lb_port_stats_get(struct team *team, struct team_gsetter_ctx *ctx)
-+static void lb_port_stats_get(struct team *team, struct team_gsetter_ctx *ctx)
- {
- 	struct team_port *port = ctx->info->port;
- 	struct lb_port_priv *lb_port_priv = get_lb_port_priv(port);
- 
- 	ctx->data.bin_val.ptr = &lb_port_priv->stats_info.stats;
- 	ctx->data.bin_val.len = sizeof(struct lb_stats);
--	return 0;
- }
- 
- static void __lb_stats_info_refresh_prepare(struct lb_stats_info *s_info)
-@@ -528,13 +523,12 @@ static void lb_stats_refresh(struct work_struct *work)
- 	mutex_unlock(&team->lock);
- }
- 
--static int lb_stats_refresh_interval_get(struct team *team,
--					 struct team_gsetter_ctx *ctx)
-+static void lb_stats_refresh_interval_get(struct team *team,
-+					  struct team_gsetter_ctx *ctx)
- {
- 	struct lb_priv *lb_priv = get_lb_priv(team);
- 
- 	ctx->data.u32_val = lb_priv->ex->stats.refresh_interval;
--	return 0;
- }
- 
- static int lb_stats_refresh_interval_set(struct team *team,
-diff --git a/include/linux/if_team.h b/include/linux/if_team.h
-index fc01c3cfe86d..1b9b15a492fa 100644
---- a/include/linux/if_team.h
-+++ b/include/linux/if_team.h
-@@ -163,7 +163,7 @@ struct team_option {
- 	unsigned int array_size; /* != 0 means the option is array */
- 	enum team_option_type type;
- 	void (*init)(struct team *team, struct team_option_inst_info *info);
--	int (*getter)(struct team *team, struct team_gsetter_ctx *ctx);
-+	void (*getter)(struct team *team, struct team_gsetter_ctx *ctx);
- 	int (*setter)(struct team *team, struct team_gsetter_ctx *ctx);
- };
- 
--- 
-2.34.1
+在 2023/8/4 21:34, Michal Hocko 写道:
+> On Fri 04-08-23 21:15:57, Chuyi Zhou wrote:
+> [...]
+>>> +	switch (bpf_oom_evaluate_task(task, oc, &points)) {
+>>> +		case -EOPNOTSUPP: break; /* No BPF policy */
+>>> +		case -EBUSY: goto abort; /* abort search process */
+>>> +		case 0: goto next; /* ignore process */
+>>> +		default: goto select; /* note the task */
+>>> +	}
+>>
+>> Why we need to change the *points* value if we do not care about oom_badness
+>> ? Is it used to record some state? If so, we could record it through bpf
+>> map.
+> 
+> Strictly speaking we do not need to. That would require BPF to keep the
+> state internally. Many will do I suppose but we have to keep track of
+> the victim so that the oom killer knows what to kill so I thought that
+> it doesn't hurt to keep track of an abstract concept of points as well.
+> If you think this is not needed then oc->points could be always 0 for
+> bpf selected victims. The value is not used anyway in the proposed
+> scheme.
+> 
+> Btw. we will need another hook or metadata for the reporting side of
+> things. Generally dump_header() to know what has been the selection
+> policy.
+> 
+OK. Maybe a integer like policy_type is enough to distinguish different 
+policies and the default method is zero. Or we can let BPF return a 
+string like policy_name.
 
+Which one should I start implementing in next version? Do you have a 
+better idea?
+
+Thanks.
