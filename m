@@ -1,95 +1,196 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2F7FA20;
-	Mon,  7 Aug 2023 02:55:29 +0000 (UTC)
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F291719B9;
-	Sun,  6 Aug 2023 19:55:01 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-563f752774fso2109717a12.1;
-        Sun, 06 Aug 2023 19:55:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691376901; x=1691981701;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rw6YeYl+42W56ILPnRQdhw7vhzVVQwbtgdY6eZmvNZw=;
-        b=cn9LcF3ol6PAZxQoqmiPolR82kUUQhImtdThUZovGfuVTbKx9psxYZsYUlQ1ngrobH
-         xwaieKOp/Hj051ym29wuirEV48FdFVdMaIvyAgDqNE+U91HqNmJHhXArWk9ALXO50ZFy
-         3QkN1cwJt+9w46jkEwGUb3qBLZPOxVvcyonVsOyfpxviKJct75A+pzoNI8WioPIZnF+d
-         MdnPgnPsR9ak8k+0u/PgB+FIs8Azqw6cofRIInncuD7S759AVI34Ri4QCCMJg3dcStN9
-         4XFiRwchChAgOXCfBHv9DQPZ9haxU8Jz9huu8PEgmwiYt/U+nktCYZ1WBVzlH1EOFfCT
-         lhKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691376901; x=1691981701;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Rw6YeYl+42W56ILPnRQdhw7vhzVVQwbtgdY6eZmvNZw=;
-        b=btFff97E6dX2u8Tem1KTjiDitlzgOZfGE9Dj8zj7Afb1RxkQM3AB1pLOM15fsJ3bBD
-         MhvRTrz+D6p3ry3mPxxTRRkcUqEEgcxlLP60CbSdw1lF6zRU7jpi4AgwWk249F4Lb2kQ
-         ngOOOTDLAiCoJ7eywx+HfGKel7tuUQwoo9uMaDNCTTjOcVMJrUWRvk/ZciUrbJgs5cqN
-         3q4pd7H8+nQFY6tEXZsi+H0xuMs7XjeznZ3s8+DD24CDGD7bkuEUyVRetMxxNip+xG3M
-         NB6m9WZ9oyMiJKyEocj+IIjT4/5szVNvFkShcdPgk5Ou7ryS/bZZCDri0Xea/zkUYLG1
-         crvQ==
-X-Gm-Message-State: AOJu0Yxs2dQyhJf6Wa6Lk92gNjomuF4NAjeJANSzosLyaLQV0qKRWJEb
-	xBuEFirb4V31PB5QFxVihq0=
-X-Google-Smtp-Source: AGHT+IFnT58N7fr1rNnDjidG3fPkT5mRWlaMMiglYC/Lq4axiZ5fNQU+u0IJxl6JfRCkqBzCg5wu2Q==
-X-Received: by 2002:a05:6a21:71c7:b0:137:514a:984f with SMTP id ay7-20020a056a2171c700b00137514a984fmr6140301pzc.35.1691376900876;
-        Sun, 06 Aug 2023 19:55:00 -0700 (PDT)
-Received: from Laptop-X1 ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id ju18-20020a170903429200b001b86e17ecacsm5538891plb.131.2023.08.06.19.54.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Aug 2023 19:55:00 -0700 (PDT)
-Date: Mon, 7 Aug 2023 10:54:55 +0800
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Zhengchao Shao <shaozhengchao@huawei.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	jiri@resnulli.us, weiyongjun1@huawei.com, yuehaibing@huawei.com
-Subject: Re: [PATCH net-next,v3 0/5] team: do some cleanups in team driver
-Message-ID: <ZNBc/4Os0y9j0nc7@Laptop-X1>
-References: <20230807012556.3146071-1-shaozhengchao@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 519051388
+	for <bpf@vger.kernel.org>; Mon,  7 Aug 2023 02:55:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58C84C433CC;
+	Mon,  7 Aug 2023 02:55:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1691376933;
+	bh=nbJctgHoWt1eNQqxV3NpXqVI8hkS5eFFrSto2wUxsec=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=TLg6CDNpqCyPp5VkNpDaLZ8nPaquE5ZOqUnkPfqTk1uuYaOXr5OK0kEqrYFhnkAR1
+	 VHD0Uj6qkaNhALIJx7T0046QO2hW12Rw1JOWboIr5KkZRKD8KJ3cAe5FlOH54K7pEu
+	 EV5UFE08w0CJoL0c7+34CM0V/00xlKyEOG7W+2kdoZNTNdmxAMM8ZkCEg4HXedNcqP
+	 q9vpybnkxwgIOOPAAsvGYxoSvCfcQBJ0aMLUma5f8Qy/PAr6jGvcvkDRbaeeft82OU
+	 Wqt+hZVEvSVIl/a5Z5DcMBkm+c0DUx3AjmBGVsv789u2F+kxK0x1y3TziCU5aXjGTk
+	 exEZ4sjOd/k6Q==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: linux-trace-kernel@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Steven Rostedt <rostedt@goodmis.org>,
+	mhiramat@kernel.org,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	bpf@vger.kernel.org,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Alexei Starovoitov <ast@kernel.org>
+Subject: [PATCH v5 6/9] tracing/probes: Add string type check with BTF
+Date: Mon,  7 Aug 2023 11:55:28 +0900
+Message-Id: <169137692859.271367.1246073860610569505.stgit@devnote2>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <169137686814.271367.11218568219311636206.stgit@devnote2>
+References: <169137686814.271367.11218568219311636206.stgit@devnote2>
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230807012556.3146071-1-shaozhengchao@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Mon, Aug 07, 2023 at 09:25:51AM +0800, Zhengchao Shao wrote:
-> Do some cleanups in team driver.
-> 
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Reviewed-by: Hangbin Liu <liuhangbin@gmail.com>
-> ---
-> v3: add header file back to team_mode_activebackup.c
-> v2: combine patch 5/6 and patch 6/6 into patch 5/5
-> ---
-> Zhengchao Shao (5):
->   team: add __exit modifier to team_nl_fini()
->   team: remove unreferenced header in broadcast and roundrobin files
->   team: change the init function in the team_option structure to void
->   team: change the getter function in the team_option structure to void
->   team: remove unused input parameters in lb_htpm_select_tx_port and
->     lb_hash_select_tx_port
-> 
->  drivers/net/team/team.c                   | 62 +++++++++--------------
->  drivers/net/team/team_mode_activebackup.c |  8 ++-
->  drivers/net/team/team_mode_broadcast.c    |  1 -
->  drivers/net/team/team_mode_loadbalance.c  | 50 +++++++-----------
->  drivers/net/team/team_mode_roundrobin.c   |  1 -
->  include/linux/if_team.h                   |  4 +-
->  6 files changed, 48 insertions(+), 78 deletions(-)
-> 
-> -- 
-> 2.34.1
-> 
+Add a string type checking with BTF information if possible.
+This will check whether the given BTF argument (and field) is
+signed char array or pointer to signed char. If not, it reject
+the 'string' type. If it is pointer to signed char, it adds
+a dereference opration so that it can correctly fetch the
+string data from memory.
+
+ # echo 'f getname_flags%return retval->name:string' >> dynamic_events
+ # echo 't sched_switch next->comm:string' >> dynamic_events
+
+The above cases, 'struct filename::name' is 'char *' and
+'struct task_struct::comm' is 'char []'. But in both case,
+user can specify ':string' to fetch the string data.
+
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+---
+ Changes in v3:
+  - Use ctx->btf instead of traceprobe_get_btf().
+---
+ kernel/trace/trace_probe.c |   89 +++++++++++++++++++++++++++++++++++++++++++-
+ kernel/trace/trace_probe.h |    3 +
+ 2 files changed, 89 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+index 7345e1af4db2..4dc74d73fc1d 100644
+--- a/kernel/trace/trace_probe.c
++++ b/kernel/trace/trace_probe.c
+@@ -310,6 +310,77 @@ static u32 btf_type_int(const struct btf_type *t)
+ 	return *(u32 *)(t + 1);
+ }
+ 
++static bool btf_type_is_char_ptr(struct btf *btf, const struct btf_type *type)
++{
++	const struct btf_type *real_type;
++	u32 intdata;
++	s32 tid;
++
++	real_type = btf_type_skip_modifiers(btf, type->type, &tid);
++	if (!real_type)
++		return false;
++
++	if (BTF_INFO_KIND(real_type->info) != BTF_KIND_INT)
++		return false;
++
++	intdata = btf_type_int(real_type);
++	return !(BTF_INT_ENCODING(intdata) & BTF_INT_SIGNED)
++		&& BTF_INT_BITS(intdata) == 8;
++}
++
++static bool btf_type_is_char_array(struct btf *btf, const struct btf_type *type)
++{
++	const struct btf_type *real_type;
++	const struct btf_array *array;
++	u32 intdata;
++	s32 tid;
++
++	if (BTF_INFO_KIND(type->info) != BTF_KIND_ARRAY)
++		return false;
++
++	array = (const struct btf_array *)(type + 1);
++
++	real_type = btf_type_skip_modifiers(btf, array->type, &tid);
++
++	intdata = btf_type_int(real_type);
++	return !(BTF_INT_ENCODING(intdata) & BTF_INT_SIGNED)
++		&& BTF_INT_BITS(intdata) == 8;
++}
++
++static int check_prepare_btf_string_fetch(char *typename,
++				struct fetch_insn **pcode,
++				struct traceprobe_parse_context *ctx)
++{
++	struct btf *btf = ctx->btf;
++
++	if (!btf || !ctx->last_type)
++		return 0;
++
++	/* char [] does not need any change. */
++	if (btf_type_is_char_array(btf, ctx->last_type))
++		return 0;
++
++	/* char * requires dereference the pointer. */
++	if (btf_type_is_char_ptr(btf, ctx->last_type)) {
++		struct fetch_insn *code = *pcode + 1;
++
++		if (code->op == FETCH_OP_END) {
++			trace_probe_log_err(ctx->offset, TOO_MANY_OPS);
++			return -E2BIG;
++		}
++		if (typename[0] == 'u')
++			code->op = FETCH_OP_UDEREF;
++		else
++			code->op = FETCH_OP_DEREF;
++		code->offset = 0;
++		*pcode = code;
++		return 0;
++	}
++	/* Other types are not available for string */
++	trace_probe_log_err(ctx->offset, BAD_TYPE4STR);
++	return -EINVAL;
++}
++
+ static const char *fetch_type_from_btf_type(struct btf *btf,
+ 					const struct btf_type *type,
+ 					struct traceprobe_parse_context *ctx)
+@@ -675,6 +746,13 @@ static int parse_btf_bitfield(struct fetch_insn **pcode,
+ #define find_fetch_type_from_btf_type(ctx)		\
+ 	find_fetch_type(NULL, ctx->flags)
+ 
++static int check_prepare_btf_string_fetch(char *typename,
++				struct fetch_insn **pcode,
++				struct traceprobe_parse_context *ctx)
++{
++	return 0;
++}
++
+ #endif
+ 
+ #define PARAM_MAX_STACK (THREAD_SIZE / sizeof(unsigned long))
+@@ -1117,8 +1195,15 @@ static int traceprobe_parse_probe_arg_body(const char *argv, ssize_t *size,
+ 
+ 	/* Update storing type if BTF is available */
+ 	if (IS_ENABLED(CONFIG_PROBE_EVENTS_BTF_ARGS) &&
+-	    !t && ctx->last_type)
+-		parg->type = find_fetch_type_from_btf_type(ctx);
++	    ctx->last_type) {
++		if (!t) {
++			parg->type = find_fetch_type_from_btf_type(ctx);
++		} else if (strstr(t, "string")) {
++			ret = check_prepare_btf_string_fetch(t, &code, ctx);
++			if (ret)
++				goto fail;
++		}
++	}
+ 
+ 	ret = -EINVAL;
+ 	/* Store operation */
+diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+index 9184c84833f8..7f929482e8d4 100644
+--- a/kernel/trace/trace_probe.h
++++ b/kernel/trace/trace_probe.h
+@@ -513,7 +513,8 @@ extern int traceprobe_define_arg_fields(struct trace_event_call *event_call,
+ 	C(NOSUP_DAT_ARG,	"Non pointer structure/union argument is not supported."),\
+ 	C(BAD_HYPHEN,		"Failed to parse single hyphen. Forgot '>'?"),	\
+ 	C(NO_BTF_FIELD,		"This field is not found."),	\
+-	C(BAD_BTF_TID,		"Failed to get BTF type info."),
++	C(BAD_BTF_TID,		"Failed to get BTF type info."),\
++	C(BAD_TYPE4STR,		"This type does not fit for string."),
+ 
+ #undef C
+ #define C(a, b)		TP_ERR_##a
+
