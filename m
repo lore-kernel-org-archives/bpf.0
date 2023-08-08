@@ -1,153 +1,109 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32374134C3;
-	Tue,  8 Aug 2023 15:41:38 +0000 (UTC)
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6E83C3A;
-	Tue,  8 Aug 2023 08:41:02 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id B749B5C0090;
-	Tue,  8 Aug 2023 00:50:54 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Tue, 08 Aug 2023 00:50:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjusaka.me; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-	1691470254; x=1691556654; bh=Wm7vgVpyNkBovEIVcDALXg67wDGyu9eYENE
-	6yQjh/qo=; b=lFQJQ6nVziMDKcES6RNB32k3lPEozvdgM/igCLTgkXuwis+6A0j
-	exxvtzVnnBL+dwILAC3txSK8K/fL5hBvHiyC9+Tr/xwaH/PYHx8cgXJ8AnRvVBp0
-	TSBS6QpkI9LCAG3gXBcsy21msfdLvP4/mvrlJ8BTIVIAgQsJwEW1WpHE0tIOEd6L
-	ugoqUUP99A+NomxQw6jPYKEZon1/yAiKbbT8igdEKdP1eyPbQZYd3RJQ+q61juoa
-	avXqO/zmcZIAzZOniWL33aoY+mBjy7B0mWv8YLW1N1qihqLr4PmHRIZsA9ySjwxZ
-	esiz/Axtdhoq7DTIztcHikKwZ87SvWaS8hA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1691470254; x=1691556654; bh=Wm7vgVpyNkBovEIVcDALXg67wDGyu9eYENE
-	6yQjh/qo=; b=f7g+IaoQM35PVL4ZEAIZqC7dTkKJe4xNoVSrGFjX/mN+JWQDU/n
-	OlA2aV9ipoq9wOA+a7W2siWpATxORIHGqvsVoBrWKnV/ZgMFjKfii59WeANNOgtX
-	HVyHTgZt/qKHHJW7xFGWtPc1KBXVRWANyySyeYP8e1QltIXVgoXitevHDeZgwhxd
-	S6Thnjb2NfagG2giJR15QANlvu8wEKYo7hqVMetv9hIjCmvStZhpZuzuTcmGEcAa
-	nVqGCSU324EPhk1LRoGQUXqOiCpc8hT/I3Ni+PcZcneORDHZJCP9u8e8KHlA3ta2
-	bIU3Q1d+BOyjysaTWm4Q47NJRNZ7e69JpJA==
-X-ME-Sender: <xms:rsnRZPqzCPiltoXrMJVOEvTvBKVw0UJwTTW8LR0HwQIGVKfcs6hWiQ>
-    <xme:rsnRZJpZ1WurPRRg5wbbQaT1ikGKR05gZ3okxMXavsDN6URBUAHX2wsysGIEgwnnF
-    DfhGRQH2bgfzAzoB6s>
-X-ME-Received: <xmr:rsnRZMPar7XO1sd0erjYWhwv94iatwhv_KADYrWRf_4YmN9fgkYHAxoNUnoyL_YSPYY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrledugdekhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfuvfevfhfhjggtgfesthekredttddvjeenucfhrhhomhepofgrnhhj
-    uhhsrghkrgcuoehmvgesmhgrnhhjuhhsrghkrgdrmhgvqeenucggtffrrghtthgvrhhnpe
-    duveevjefhjedvgeevvdeutdeukeeljeelhfeftdehkefhfeeivdfgudekueeileenucev
-    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmvgesmhgrnh
-    hjuhhsrghkrgdrmhgv
-X-ME-Proxy: <xmx:rsnRZC7DEmVths1EIvkBWslzaioYWGokQcRJ_Q7uWKKBnWCBfqibdA>
-    <xmx:rsnRZO4yBPMXyFzMsUIJNs9oQkvbZ3pL2dVOMS-rBgJx3u-v6C3vFw>
-    <xmx:rsnRZKgf2ha_cT9-NXG4H6EA9l0IUErBJRjj73ltnqsKJEMUHNqJAw>
-    <xmx:rsnRZLxctaBqUo9HUQTfcWSzmim_koKGN-5S-bnsbps7n8mGxr6wOA>
-Feedback-ID: i3ea9498d:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 8 Aug 2023 00:50:50 -0400 (EDT)
-Message-ID: <517d5988-2e71-4ba5-9588-15218eebc8ef@manjusaka.me>
-Date: Tue, 8 Aug 2023 12:50:46 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91919134BC;
+	Tue,  8 Aug 2023 15:42:36 +0000 (UTC)
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF371FCD;
+	Tue,  8 Aug 2023 08:42:07 -0700 (PDT)
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5232d593646so4480642a12.0;
+        Tue, 08 Aug 2023 08:42:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691509275; x=1692114075;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ChPT/lHzXHpKHyXlCB2W1LoY3mnd1UwLMSxiYiQjKmg=;
+        b=Aq0HpdvkekfQbw+pkrnpkt0EUqI2o9wYwT779VYgsIebtZ323pxA6fUaihE2No2Ojq
+         W+eHddT/Cjqr7KndK6kk7jMXK25ESTvHK3ysjzsCh5Jtf2p9o0Uw6ITaTpWtPuAUtejm
+         1B4K776/QDeS5jATJ6wdyf9Ec5ZGmqxHCm+OS/hojhjIrwCqo/B4HS9erRyY/HYjeuea
+         Sa6P0gFa3Fbm1EBj6eJf1d+/5txs1pLbAIZKAMAz80zPvwZXSgT8V2B0bLagraQxyGbF
+         FTyiJ8vobs7KBmAV/Ybuwklvhx9wquFj3MrPO2J3nl48A7j9flOZc0B4ty6gnOfz+u4C
+         HT2g==
+X-Gm-Message-State: AOJu0Yw8iWUPcnIcnQoeBnZc5XwHH7eX3ZwUHposQ6766q/FczVlOHWH
+	ERLrGmt4N6zSeBnJSY87Rf/50b+YRNQ=
+X-Google-Smtp-Source: AGHT+IEtMdELcO0r2mho0d8dPID1Lr2S9Ywk3n1aEbs+vzrbTUu1jEy7bEX0QBvnj23d6IU/jIcNYQ==
+X-Received: by 2002:a17:907:770b:b0:99b:ce9c:a94a with SMTP id kw11-20020a170907770b00b0099bce9ca94amr12488319ejc.4.1691502063751;
+        Tue, 08 Aug 2023 06:41:03 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-018.fbsv.net. [2a03:2880:31ff:12::face:b00c])
+        by smtp.gmail.com with ESMTPSA id h23-20020a1709067cd700b00992f309cfe8sm6775236ejp.178.2023.08.08.06.41.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Aug 2023 06:41:03 -0700 (PDT)
+From: Breno Leitao <leitao@debian.org>
+To: sdf@google.com,
+	axboe@kernel.dk,
+	asml.silence@gmail.com,
+	willemdebruijn.kernel@gmail.com,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	io-uring@vger.kernel.org
+Subject: [PATCH v2 1/8] net: expose sock_use_custom_sol_socket
+Date: Tue,  8 Aug 2023 06:40:41 -0700
+Message-Id: <20230808134049.1407498-2-leitao@debian.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230808134049.1407498-1-leitao@debian.org>
+References: <20230808134049.1407498-1-leitao@debian.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] tracepoint: add new `tcp:tcp_ca_event_set` trace event
-Content-Language: en-US
-To: Neal Cardwell <ncardwell@google.com>
-Cc: edumazet@google.com, mhiramat@kernel.org, rostedt@goodmis.org,
- davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-References: <20230807183308.9015-1-me@manjusaka.me>
- <CADVnQyn3UMa3Qx6cC1Rx97xLjQdG0eKsiF7oY9UR=b9vU4R-yA@mail.gmail.com>
-From: Manjusaka <me@manjusaka.me>
-In-Reply-To: <CADVnQyn3UMa3Qx6cC1Rx97xLjQdG0eKsiF7oY9UR=b9vU4R-yA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+Exposing function sock_use_custom_sol_socket(), so it could be used by
+io_uring subsystem.
 
+This function will be used in the function io_uring_cmd_setsockopt() in
+the coming patch, so, let's move it to the socket.h header file.
 
-On 2023/8/8 04:00, Neal Cardwell wrote:
-> On Mon, Aug 7, 2023 at 2:33 PM Manjusaka <me@manjusaka.me> wrote:
->>
->> In normal use case, the tcp_ca_event would be changed in high frequency.
->>
->> It's a good indicator to represent the network quanlity.
->>
->> So I propose to add a `tcp:tcp_ca_event_set` trace event
->> like `tcp:tcp_cong_state_set` to help the people to
->> trace the TCP connection status
->>
->> Signed-off-by: Manjusaka <me@manjusaka.me>
->> ---
->>  include/net/tcp.h          |  9 ++------
->>  include/trace/events/tcp.h | 45 ++++++++++++++++++++++++++++++++++++++
->>  net/ipv4/tcp_cong.c        | 10 +++++++++
->>  3 files changed, 57 insertions(+), 7 deletions(-)
->>
->> diff --git a/include/net/tcp.h b/include/net/tcp.h
->> index 0ca972ebd3dd..a68c5b61889c 100644
->> --- a/include/net/tcp.h
->> +++ b/include/net/tcp.h
->> @@ -1154,13 +1154,8 @@ static inline bool tcp_ca_needs_ecn(const struct sock *sk)
->>         return icsk->icsk_ca_ops->flags & TCP_CONG_NEEDS_ECN;
->>  }
->>
->> -static inline void tcp_ca_event(struct sock *sk, const enum tcp_ca_event event)
->> -{
->> -       const struct inet_connection_sock *icsk = inet_csk(sk);
->> -
->> -       if (icsk->icsk_ca_ops->cwnd_event)
->> -               icsk->icsk_ca_ops->cwnd_event(sk, event);
->> -}
->> +/* from tcp_cong.c */
->> +void tcp_ca_event(struct sock *sk, const enum tcp_ca_event event);
->>
->>  /* From tcp_cong.c */
->>  void tcp_set_ca_state(struct sock *sk, const u8 ca_state);
->> diff --git a/include/trace/events/tcp.h b/include/trace/events/tcp.h
->> index bf06db8d2046..38415c5f1d52 100644
->> --- a/include/trace/events/tcp.h
->> +++ b/include/trace/events/tcp.h
->> @@ -416,6 +416,51 @@ TRACE_EVENT(tcp_cong_state_set,
->>                   __entry->cong_state)
->>  );
->>
->> +TRACE_EVENT(tcp_ca_event_set,
-> 
-> Regarding the proposed name, "tcp_ca_event_set"... including "set" in
-> the name is confusing, since the tcp_ca_event() function is not really
-> setting anything. :-)
-> 
-> The trace_tcp_cong_state_set() call you are using as a model has "set"
-> in the name because the function it is tracing, tcp_set_ca_state(),
-> has "set" in the name. :-)
-> 
-> Would it work to use something like:
->   TRACE_EVENT(tcp_ca_event,
-> 
-> thanks,
-> neal
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ include/linux/net.h | 5 +++++
+ net/socket.c        | 5 -----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Emmmm, sorry about the confusing var name and thanks for the review. I will update my patch ASAP.
+diff --git a/include/linux/net.h b/include/linux/net.h
+index 41c608c1b02c..14a956e4530e 100644
+--- a/include/linux/net.h
++++ b/include/linux/net.h
+@@ -355,4 +355,9 @@ u32 kernel_sock_ip_overhead(struct sock *sk);
+ #define MODULE_ALIAS_NET_PF_PROTO_NAME(pf, proto, name) \
+ 	MODULE_ALIAS("net-pf-" __stringify(pf) "-proto-" __stringify(proto) \
+ 		     name)
++
++static inline bool sock_use_custom_sol_socket(const struct socket *sock)
++{
++	return test_bit(SOCK_CUSTOM_SOCKOPT, &sock->flags);
++}
+ #endif	/* _LINUX_NET_H */
+diff --git a/net/socket.c b/net/socket.c
+index 1dc23f5298ba..8df54352af83 100644
+--- a/net/socket.c
++++ b/net/socket.c
+@@ -2216,11 +2216,6 @@ SYSCALL_DEFINE4(recv, int, fd, void __user *, ubuf, size_t, size,
+ 	return __sys_recvfrom(fd, ubuf, size, flags, NULL, NULL);
+ }
+ 
+-static bool sock_use_custom_sol_socket(const struct socket *sock)
+-{
+-	return test_bit(SOCK_CUSTOM_SOCKOPT, &sock->flags);
+-}
+-
+ /*
+  *	Set a socket option. Because we don't know the option lengths we have
+  *	to pass the user mode parameter for the protocols to sort out.
+-- 
+2.34.1
 
-best regards
-Manjusaka
