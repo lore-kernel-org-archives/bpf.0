@@ -1,135 +1,148 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D092E569
-	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 21:26:03 +0000 (UTC)
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0DEA94
-	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 14:26:02 -0700 (PDT)
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 97865C13AE27
-	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 14:26:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1691529962; bh=U0NYaEpVFtXw/76MOBkDFDZN+fZ3mdsWvjILAvrO5ik=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=ajdy+GQDksR6WUL0MZe+3Bbs+j2WLTU+wdFhNdBQlPh9DSj7RjqF+Y6Ho1nTlHWv5
-	 KrZIZbQyka6GMb+sEU30nqb83dHTW6foh3LhSxqCNQDE67Y4uRJEQ6gpthU5Q3j13S
-	 oPmJrK4R/mLMSeps2lKn9+aby9YpTqOCxy22d5p0=
-X-Mailbox-Line: From bpf-bounces@ietf.org  Tue Aug  8 14:26:02 2023
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 778EFC15C509;
-	Tue,  8 Aug 2023 14:26:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1691529962; bh=U0NYaEpVFtXw/76MOBkDFDZN+fZ3mdsWvjILAvrO5ik=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=ajdy+GQDksR6WUL0MZe+3Bbs+j2WLTU+wdFhNdBQlPh9DSj7RjqF+Y6Ho1nTlHWv5
-	 KrZIZbQyka6GMb+sEU30nqb83dHTW6foh3LhSxqCNQDE67Y4uRJEQ6gpthU5Q3j13S
-	 oPmJrK4R/mLMSeps2lKn9+aby9YpTqOCxy22d5p0=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id 382C2C15C509
- for <bpf@ietfa.amsl.com>; Tue,  8 Aug 2023 14:26:01 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Score: -1.907
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,
-	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.6
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
- header.d=obs-cr.20221208.gappssmtp.com
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Wq63BwHGZVJ3 for <bpf@ietfa.amsl.com>;
- Tue,  8 Aug 2023 14:25:56 -0700 (PDT)
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com
- [IPv6:2607:f8b0:4864:20::32c])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id AC325C151530
- for <bpf@ietf.org>; Tue,  8 Aug 2023 14:25:56 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id
- 46e09a7af769-6b9e478e122so5096448a34.1
- for <bpf@ietf.org>; Tue, 08 Aug 2023 14:25:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=obs-cr.20221208.gappssmtp.com; s=20221208; t=1691529956; x=1692134756;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=MZdMVUIy7CoMr0jl//wKKkqgHFqN85zKy17qlq02oZI=;
- b=ttepeYR137ozRSfCx9dSRikZ14KF4yKqxIHFiRfIyqSbYlA0TkCEurIi3UHy4f0pZv
- t7yCNilX3DdI3iwQ/KWCfaW6hI00cJMplUj40j27emLAs+fU7qnntXCDENWxFAoC8d+A
- +IH7r82ZZu4VXlIW2UtZiEf81LpLLDJpKGvTNIJINoSP5OEVhRSRM+eaZ0OXmRdzCdUx
- ETtG+tH3TyikJmRr9zZcN7bJVd+nuSYM5dtpGst/xQ0gTmbN+9a83PWFLgS53foCP+c8
- mj3cvNEp152OfT4cCpPY7FxqHxeC5Ty1z69GCMWtb9wq5sGYgnkrjvDKpGaa2D6N/j0V
- 1L8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1691529956; x=1692134756;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=MZdMVUIy7CoMr0jl//wKKkqgHFqN85zKy17qlq02oZI=;
- b=CT8iT+UMnCy1YX7rJCvkOL35OAkML613etiL32jSYnVwY0hjs0xReqT2tjiosFk7uS
- x+9e3Ggyt1dr/vTNw9QSDe9BnxRuT0qieaRGshhUKqUj15DYOMZ3x/6B+5LxDmjokMM+
- aRaREvYx3lkGUlxGgT53GY6vFtdc1/IX9rZsNEGhthIYyhWgBKRAj4WtSUT+3QH8/Fzl
- lHA3Lpy0fLQgs/gKa8mtRFLQYs2b57ZXsKp48wVUYAeSfOXl7g/Q1AVZJ1xliTYvXiZL
- AV3cxCEQJlGZG5nZF3V1C167Mea4HoPxUS5zhRwocjg/54q65ILGM8Q/+Ko/3uRUpcmN
- k2fQ==
-X-Gm-Message-State: AOJu0YwwCiBAJ/3XsHYUimENsUv8mBGx3xVjqRRBVmF982a+xOYulpNb
- i5Bh+3qakyia4nfeVmxFfqIfRJI9fZcpqx63GfXuAQ==
-X-Google-Smtp-Source: AGHT+IEIMOk3jp3ssexrPXM0NGdY7AZpMJ8274d7SgaWz8eQRDqoAESq7fISvhhDYWR85E6WIUA1BoKelvkKuA1cOcs=
-X-Received: by 2002:a05:6358:98a9:b0:134:c4dc:9e28 with SMTP id
- q41-20020a05635898a900b00134c4dc9e28mr584432rwa.17.1691529955942; Tue, 08 Aug
- 2023 14:25:55 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 570DCE569
+	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 21:41:25 +0000 (UTC)
+Received: from out-70.mta1.migadu.com (out-70.mta1.migadu.com [IPv6:2001:41d0:203:375::46])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CDF10C
+	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 14:41:24 -0700 (PDT)
+Date: Tue, 8 Aug 2023 14:41:17 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1691530882;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AeZ7s6x1uY9uLLgPEKePTpY7Hc8NdT1d3h6FH62iSdU=;
+	b=Q8FfEmQrr6r1Emfrl4MzABCnQMHP5x/GtRz5z6fxBN6ZH41i5Jrd0/qiMiYHDDXV90213G
+	yZ4eTOwIZwhA6LoXPoF+zhR7S0872dQBt+L3Z0AURGFl9zS52+uJK2CO22NoyyqKKvZDkp
+	U8qF2DeyvCL6E8aCVGzVF0rJrjcg5y0=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Roman Gushchin <roman.gushchin@linux.dev>
+To: Michal Hocko <mhocko@suse.com>
+Cc: Chuyi Zhou <zhouchuyi@bytedance.com>, hannes@cmpxchg.org,
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	muchun.song@linux.dev, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, wuyun.abel@bytedance.com,
+	robin.lu@bytedance.com
+Subject: Re: [RFC PATCH 1/2] mm, oom: Introduce bpf_select_task
+Message-ID: <ZNK2fUmIfawlhuEY@P9FQF9L96D>
+References: <20230804093804.47039-1-zhouchuyi@bytedance.com>
+ <20230804093804.47039-2-zhouchuyi@bytedance.com>
+ <ZMzhDFhvol2VQBE4@dhcp22.suse.cz>
+ <dfbf05d1-daff-e855-f4fd-e802614b79c4@bytedance.com>
+ <ZMz+aBHFvfcr0oIe@dhcp22.suse.cz>
+ <866462cf-6045-6239-6e27-45a733aa7daa@bytedance.com>
+ <ZNCXgsZL7bKsCEBM@dhcp22.suse.cz>
+ <ZNEpsUFgKFIAAgrp@P9FQF9L96D.lan>
+ <ZNH6X/2ZZ0quKSI6@dhcp22.suse.cz>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230808052736.182587-1-hawkinsw@obs.cr>
- <20230808182444.GA1158877@maniforge>
-In-Reply-To: <20230808182444.GA1158877@maniforge>
-From: Will Hawkins <hawkinsw@obs.cr>
-Date: Tue, 8 Aug 2023 17:25:45 -0400
-Message-ID: <CADx9qWjUFL-019oA9d-W78i2+Wt8MbO5HPMX-x=TJPu5kz1_Xw@mail.gmail.com>
-To: David Vernet <void@manifault.com>
-Cc: bpf@vger.kernel.org, bpf@ietf.org
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/6zT9lkJT8oNqqbQCTTmjrxQKy24>
-Subject: Re: [Bpf] [PATCH] bpf,
- docs: Fix small typo and define semantics of sign extension
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Id: Discussion of BPF/eBPF standardization efforts within the IETF
- <bpf.ietf.org>
-List-Unsubscribe: <https://www.ietf.org/mailman/options/bpf>,
- <mailto:bpf-request@ietf.org?subject=unsubscribe>
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-List-Subscribe: <https://www.ietf.org/mailman/listinfo/bpf>,
- <mailto:bpf-request@ietf.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZNH6X/2ZZ0quKSI6@dhcp22.suse.cz>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
-Message-ID: <20230808212545.rChpMKxvgNrt6e01kSHkXsNS6h0pMUE98iwAcPqWZ_c@z>
 
-T24gVHVlLCBBdWcgOCwgMjAyMyBhdCAyOjI04oCvUE0gRGF2aWQgVmVybmV0IDx2b2lkQG1hbmlm
-YXVsdC5jb20+IHdyb3RlOgo+Cj4gT24gVHVlLCBBdWcgMDgsIDIwMjMgYXQgMDE6Mjc6MzJBTSAt
-MDQwMCwgV2lsbCBIYXdraW5zIHdyb3RlOgo+Cj4gSGkgV2lsbCwKPgo+IFRoaXMgbG9va3MgZ3Jl
-YXQsIHRoYW5rcyEKPgo+IEFja2VkLWJ5OiBEYXZpZCBWZXJuZXQgPHZvaWRAbWFuaWZhdWx0LmNv
-bT4KPgo+ID4gQWRkIGFkZGl0aW9uYWwgcHJlY2lzaW9uIG9uIHRoZSBzZW1hbnRpY3Mgb2YgdGhl
-IHNpZ24gZXh0ZW5zaW9uCj4gPiBvcGVyYXRpb25zIGluIGVCUEYuIEluIGFkZGl0aW9uLCBmaXgg
-YSB2ZXJ5IG1pbm9yIHR5cG8uCj4KPiBKdXN0IGZvciBmdXR1cmUgcmVmZXJlbmNlIHNvIHdlIGNh
-biBoYXZlIGNvbnNpc3RlbnQgbm9tZW5jbGF0dXJlOgo+Cj4gcy9lQlBGL0JQRgoKU2VudCBhIHYy
-IGp1c3QgdG8gbWFrZSBpdCBlYXNpZXIgZm9yIG1haW50YWluZXJzIHRvIGFwcGx5IHRoZSBwYXRj
-aC4gSQppbmNsdWRlZCB5b3VyIGFjayAtLSB0aGFuayB5b3UgZm9yIHRoZSByZXZpZXchCldJbGwK
-Ci0tIApCcGYgbWFpbGluZyBsaXN0CkJwZkBpZXRmLm9yZwpodHRwczovL3d3dy5pZXRmLm9yZy9t
-YWlsbWFuL2xpc3RpbmZvL2JwZgo=
+On Tue, Aug 08, 2023 at 10:18:39AM +0200, Michal Hocko wrote:
+> On Mon 07-08-23 10:28:17, Roman Gushchin wrote:
+> > On Mon, Aug 07, 2023 at 09:04:34AM +0200, Michal Hocko wrote:
+> > > On Mon 07-08-23 10:21:09, Chuyi Zhou wrote:
+> > > > 
+> > > > 
+> > > > 在 2023/8/4 21:34, Michal Hocko 写道:
+> > > > > On Fri 04-08-23 21:15:57, Chuyi Zhou wrote:
+> > > > > [...]
+> > > > > > > +	switch (bpf_oom_evaluate_task(task, oc, &points)) {
+> > > > > > > +		case -EOPNOTSUPP: break; /* No BPF policy */
+> > > > > > > +		case -EBUSY: goto abort; /* abort search process */
+> > > > > > > +		case 0: goto next; /* ignore process */
+> > > > > > > +		default: goto select; /* note the task */
+> > > > > > > +	}
+> > 
+> > To be honest, I can't say I like it. IMO it's not really using the full bpf
+> > potential and is too attached to the current oom implementation.
+> 
+> TBH I am not sure we are able to come up with an interface that would
+> ise the full BPF potential at this stage and I strongly believe that we
+> should start by something that is good enough.
+> 
+> > First, I'm a bit concerned about implicit restrictions we apply to bpf programs
+> > which will be executed potentially thousands times under a very heavy memory
+> > pressure. We will need to make sure that they don't allocate (much) memory, don't
+> > take any locks which might deadlock with other memory allocations etc.
+> > It will potentially require hard restrictions on what these programs can and can't
+> > do and this is something that the bpf community will have to maintain long-term.
+> 
+> Right, BPF callbacks operating under OOM situations will be really
+> constrained but this is more or less by definition. Isn't it?
+
+What do you mean?
+In general, the bpf community is trying to make it as generic as possible and
+adding new and new features. Bpf programs are not as constrained as they were
+when it's all started.
+
+> 
+> > Second, if we're introducing bpf here (which I'm not yet convinced),
+> > IMO we should use it in a more generic and expressive way.
+> > Instead of adding hooks into the existing oom killer implementation, we can call
+> > a bpf program before invoking the in-kernel oom killer and let it do whatever
+> > it takes to free some memory. E.g. we can provide it with an API to kill individual
+> > tasks as well as all tasks in a cgroup.
+> > This approach is more generic and will allow to solve certain problems which
+> > can't be solved by the current oom killer, e.g. deleting files from a tmpfs
+> > instead of killing tasks.
+> 
+> The aim of this proposal is to lift any heavy lifting steming from
+> iterating tasks or cgroups which those BPF might need to make a
+> decision. There are other ways of course and provide this iteration
+> functionality as library functions but my BPF experience is very limited
+> to say how easy is that.
+> 
+> > So I think the alternative approach is to provide some sort of an interface to
+> > pre-select oom victims in advance. E.g. on memcg level it can look like:
+> > 
+> > echo PID >> memory.oom.victim_proc
+> 
+> this is just a terrible interface TBH. Pids are very volatile objects.
+> At the time oom killer reads this pid it might be a completely different
+> process.
+
+Well, we already have cgroup.procs interface, which works ok.
+Obviously if the task is dead (or is actually killed in a result of oom),
+it's pid is removed from the list.
+
+> 
+> > If the list is empty, the default oom killer is invoked.
+> > If there are tasks, the first one is killed on OOM.
+> > A similar interface can exist to choose between sibling cgroups:
+> > 
+> > echo CGROUP_NAME >> memory.oom.victim_cgroup
+> 
+> Slightly less volatile but not much better either.
+> 
+> > This is just a rough idea.
+> 
+> I am pretty sure that both policies could be implemetd by the proposed
+> BPF interface though if you want something like that.
+
+As I said, I'm pretty concerned about how reliable (and effective) it will be.
+I'm not convinced that executing a generic bpf program from the oom context
+is safe (and we're talking about executing it potentially thousands of times).
+If we're going this way, we need an explicit acknowledge from the bpf
+community and a long-term agreement on how we'll keep thing safe.
+
+It would be also nice to come up with some practical examples of bpf programs.
+What are meaningful scenarios which can be covered with the proposed approach
+and are not covered now with oom_score_adj.
+
+Thanks!
