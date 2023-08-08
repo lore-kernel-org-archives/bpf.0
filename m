@@ -1,215 +1,265 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1097E13AC7
-	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 15:52:25 +0000 (UTC)
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48FA1FF3
-	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 08:52:08 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1bc0075ab7aso135685ad.1
-        for <bpf@vger.kernel.org>; Tue, 08 Aug 2023 08:52:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691509924; x=1692114724;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kCOXJYzxETCH/0UcvxLQeHGSMM7DSEXKUT9P3Dlmymo=;
-        b=rUrkDjslp3GvFKzWKQbveeKj+rhblEPqNC3vGULuYZekoOdWJotIaWqf/4VJKWKFsu
-         bpTFoiaG0d0oAo+shShaW66RBgpNyq7ZxH5YTVzXU3rqFRGlFnrxSuy0aL+kSsm96CXd
-         VBOzCkDT0MxcQGr00yFl7vhWlgTuZtZoOj+2xQ9zMwRA2mP53MpQ6sOo5C/4ChFg1ILC
-         EO5M1HK8GnMXRfcPrS6tn9lz2Gyo7bB9iLC0k6o9iLvQR06uxekgg9n7nxQG4NIXj6tC
-         4Xer1MH5ohALnTAj81+gDniwiKG4QXRb5Z5Sek1ZT2MqdwJ3AQshnbep9ynhgSnqwiXz
-         VbTw==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E426E1549A
+	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 15:52:50 +0000 (UTC)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E276790A9
+	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 08:52:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1691509917;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MwOfpaMivjlVT9pjwrG/H0BICQpgMmoEERyGjmBXqDY=;
+	b=MQ+Bb4HKyAotOFcWMs9J+3JeeWOTgQNKqZrIizxVJraj919l4JH8AIy/pvhO5/CZgWe/OB
+	WyARytKwhnsZJV4KEcGCnEATURuQ9ShZ7Yo4WtnFfm/p0rLn3ttlkdnGvUITZxfocKVDR2
+	5TC7PrzWvZLbGimW5dJNHm3AwAgE3dc=
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
+ [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-657-rYKjMV8FM1q6BwX94J4fgg-1; Mon, 07 Aug 2023 23:49:24 -0400
+X-MC-Unique: rYKjMV8FM1q6BwX94J4fgg-1
+Received: by mail-lj1-f200.google.com with SMTP id 38308e7fff4ca-2b9c5cba6d1so52373401fa.1
+        for <bpf@vger.kernel.org>; Mon, 07 Aug 2023 20:49:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691509924; x=1692114724;
+        d=1e100.net; s=20221208; t=1691466563; x=1692071363;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kCOXJYzxETCH/0UcvxLQeHGSMM7DSEXKUT9P3Dlmymo=;
-        b=jtVvq3oOYNV88cSnpfLslGr21GhsiULhdy3WIMKrnvYSsOqcf0M+G6r/88+MYsAA+2
-         kDbVM0PD6vLPyT06ysz9OwReXL8HbHl9sO3ubKxcghM5LpMQWsP9jn+9u5b5nyZd2HS9
-         dadICXDeAr4V1BabDn7p+M30ZRTNSnHY8ElEL8m5kNAUsCIQz+/WDi/OCw8NCJTca4F8
-         B+o2zN3qEjO7beNy9Gy6I8YWt3ExSgEdk2zWp1JbejHuTBycWSWnNFzNT7BCuUGfog/C
-         nyYigQ856cQM+j3u2wVcVWbYFnh9FfWwmuuOvwz3E5FUVnTIN8ggn6XgI18Tr96Jr6lH
-         gfCw==
-X-Gm-Message-State: AOJu0Yyfg3of7hpJ8UZCpeuVopFSY/k8KhAU6XG/1xOsYC19VVQHQAhB
-	OBN2R85axHa42vrKdikpDNkxsSsYDYr5QxvnlbGfS9O3fXCc8heqNVg=
-X-Google-Smtp-Source: AGHT+IEfM3zZpi2A8IEkcUU11DnAyYRP6HYaBR73Q/AKzK2pHMPvaVHfkSYylHJ4uhb2VI1kTwpMv6BetR8BNyyQJjc=
-X-Received: by 2002:ac8:5951:0:b0:403:96e3:4745 with SMTP id
- 17-20020ac85951000000b0040396e34745mr749543qtz.20.1691484513351; Tue, 08 Aug
- 2023 01:48:33 -0700 (PDT)
+        bh=MwOfpaMivjlVT9pjwrG/H0BICQpgMmoEERyGjmBXqDY=;
+        b=cNL6WdRYFq9O0Zk+DJtzHKALDRZ1WCvOxPSMOzRMRXNfCAD9D9UWAL/sPjY4/szCv1
+         vNMeMZcqBtI1GKYuTWJfTTpUgtpJjOd0KYQSH+rwMcdVEJRCQusDKUZyXvvY90UKs+8z
+         VMbG7685y8VroyOiw/6oLx0GaVZnMN4QGavDomkv0m6EzUwDpAhSwr5NRDoxdjonu7g/
+         yTTipiZIvO5CPd3hVSMlI3tDZ8shurjn+XSiuFoaS0a6+GRjyZhCwaeLRQeHQ1eD9GcO
+         lbEPVf4HXMmjbF52aK5cWUlcnuF5rJEkHjuIMRENnCDHyjb3furYoiJ6Tk0Wjkq2/lAa
+         CabQ==
+X-Gm-Message-State: AOJu0YwAqnx78PIwr2ZkuI1eeyDRlldvhSP6kS7hXQ6rpxQwe8iLUW3g
+	KYbLbmd9qlHpWbEGTWmf7ukYtlD45VEt8YmaZGkrKDn4+YDsAvShMJcGUvF0IzqPsFKF6OjBN4Y
+	PcDASCA3cP9XwLxcHNUhnaC7jIqdO
+X-Received: by 2002:a2e:7a0f:0:b0:2b9:c046:8617 with SMTP id v15-20020a2e7a0f000000b002b9c0468617mr7247334ljc.5.1691466563350;
+        Mon, 07 Aug 2023 20:49:23 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEHf3NaTvpEKqdFmEjZFFevb9rA74T4ua1YzugN83Ckq49vACctmgXCYQ6hViq6x2aQYUDJb/zbm+8H3hsMulM=
+X-Received: by 2002:a2e:7a0f:0:b0:2b9:c046:8617 with SMTP id
+ v15-20020a2e7a0f000000b002b9c0468617mr7247321ljc.5.1691466563000; Mon, 07 Aug
+ 2023 20:49:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CADVnQyn3UMa3Qx6cC1Rx97xLjQdG0eKsiF7oY9UR=b9vU4R-yA@mail.gmail.com>
- <20230808055817.3979-1-me@manjusaka.me> <CANn89iKxJThy4ZVq4do6Z1bOZsRptfN6N8ydPaHQAmYKCjtOnw@mail.gmail.com>
- <af02d2a9-4655-45a1-8c3a-d9921bfdbc35@manjusaka.me>
-In-Reply-To: <af02d2a9-4655-45a1-8c3a-d9921bfdbc35@manjusaka.me>
-From: Eric Dumazet <edumazet@google.com>
-Date: Tue, 8 Aug 2023 10:48:21 +0200
-Message-ID: <CANn89iKQXhqgOTkSchH6Bz-xH--pAoSyEORBtawqBTvgG+dFig@mail.gmail.com>
-Subject: Re: [PATCH v2] tracepoint: add new `tcp:tcp_ca_event` trace event
-To: Manjusaka <me@manjusaka.me>
-Cc: ncardwell@google.com, bpf@vger.kernel.org, davem@davemloft.net, 
-	dsahern@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, mhiramat@kernel.org, 
-	netdev@vger.kernel.org, pabeni@redhat.com, rostedt@goodmis.org
+References: <20230710034237.12391-1-xuanzhuo@linux.alibaba.com>
+ <20230710034237.12391-6-xuanzhuo@linux.alibaba.com> <ZK/cxNHzI23I6efc@infradead.org>
+ <20230713104805-mutt-send-email-mst@kernel.org> <ZLjSsmTfcpaL6H/I@infradead.org>
+ <20230720131928-mutt-send-email-mst@kernel.org> <ZL6qPvd6X1CgUD4S@infradead.org>
+ <1690251228.3455179-1-xuanzhuo@linux.alibaba.com> <20230725033321-mutt-send-email-mst@kernel.org>
+ <1690283243.4048996-1-xuanzhuo@linux.alibaba.com> <1690524153.3603117-1-xuanzhuo@linux.alibaba.com>
+ <20230801121543-mutt-send-email-mst@kernel.org> <1690940971.9409487-2-xuanzhuo@linux.alibaba.com>
+ <1691388845.9121156-1-xuanzhuo@linux.alibaba.com> <CACGkMEsoivXfBV75whjyB0yreUNh7HeucGLw3Bq9Zvu1NGnj_g@mail.gmail.com>
+ <1691462837.6043541-2-xuanzhuo@linux.alibaba.com> <CACGkMEsM4cPaMHz-XowU+qpKZL2atZUwYzcUMUfr7N-GN+J2nQ@mail.gmail.com>
+ <1691464183.5436294-1-xuanzhuo@linux.alibaba.com>
+In-Reply-To: <1691464183.5436294-1-xuanzhuo@linux.alibaba.com>
+From: Jason Wang <jasowang@redhat.com>
+Date: Tue, 8 Aug 2023 11:49:08 +0800
+Message-ID: <CACGkMEvUJ+GhhfkOB4Ux7-bDaPHvkA3xnvnMMQ+dYfWE4ZzFyw@mail.gmail.com>
+Subject: Re: [PATCH vhost v11 05/10] virtio_ring: introduce virtqueue_dma_dev()
+To: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc: "Michael S. Tsirkin" <mst@redhat.com>, Christoph Hellwig <hch@infradead.org>, 
+	virtualization@lists.linux-foundation.org, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, netdev@vger.kernel.org, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-16.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-	DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-	USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+	SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
 	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Tue, Aug 8, 2023 at 10:46=E2=80=AFAM Manjusaka <me@manjusaka.me> wrote:
+On Tue, Aug 8, 2023 at 11:12=E2=80=AFAM Xuan Zhuo <xuanzhuo@linux.alibaba.c=
+om> wrote:
+>
+> On Tue, 8 Aug 2023 11:08:09 +0800, Jason Wang <jasowang@redhat.com> wrote=
+:
+> > On Tue, Aug 8, 2023 at 10:52=E2=80=AFAM Xuan Zhuo <xuanzhuo@linux.aliba=
+ba.com> wrote:
+> > >
+> > > On Tue, 8 Aug 2023 10:26:04 +0800, Jason Wang <jasowang@redhat.com> w=
+rote:
+> > > > On Mon, Aug 7, 2023 at 2:15=E2=80=AFPM Xuan Zhuo <xuanzhuo@linux.al=
+ibaba.com> wrote:
+> > > > >
+> > > > > On Wed, 2 Aug 2023 09:49:31 +0800, Xuan Zhuo <xuanzhuo@linux.alib=
+aba.com> wrote:
+> > > > > > On Tue, 1 Aug 2023 12:17:47 -0400, "Michael S. Tsirkin" <mst@re=
+dhat.com> wrote:
+> > > > > > > On Fri, Jul 28, 2023 at 02:02:33PM +0800, Xuan Zhuo wrote:
+> > > > > > > > On Tue, 25 Jul 2023 19:07:23 +0800, Xuan Zhuo <xuanzhuo@lin=
+ux.alibaba.com> wrote:
+> > > > > > > > > On Tue, 25 Jul 2023 03:34:34 -0400, "Michael S. Tsirkin" =
+<mst@redhat.com> wrote:
+> > > > > > > > > > On Tue, Jul 25, 2023 at 10:13:48AM +0800, Xuan Zhuo wro=
+te:
+> > > > > > > > > > > On Mon, 24 Jul 2023 09:43:42 -0700, Christoph Hellwig=
+ <hch@infradead.org> wrote:
+> > > > > > > > > > > > On Thu, Jul 20, 2023 at 01:21:07PM -0400, Michael S=
+. Tsirkin wrote:
+> > > > > > > > > > > > > Well I think we can add wrappers like virtio_dma_=
+sync and so on.
+> > > > > > > > > > > > > There are NOP for non-dma so passing the dma devi=
+ce is harmless.
+> > > > > > > > > > > >
+> > > > > > > > > > > > Yes, please.
+> > > > > > > > > > >
+> > > > > > > > > > >
+> > > > > > > > > > > I am not sure I got this fully.
+> > > > > > > > > > >
+> > > > > > > > > > > Are you mean this:
+> > > > > > > > > > > https://lore.kernel.org/all/20230214072704.126660-8-x=
+uanzhuo@linux.alibaba.com/
+> > > > > > > > > > > https://lore.kernel.org/all/20230214072704.126660-9-x=
+uanzhuo@linux.alibaba.com/
+> > > > > > > > > > >
+> > > > > > > > > > > Then the driver must do dma operation(map and sync) b=
+y these virtio_dma_* APIs.
+> > > > > > > > > > > No care the device is non-dma device or dma device.
+> > > > > > > > > >
+> > > > > > > > > > yes
+> > > > > > > > > >
+> > > > > > > > > > > Then the AF_XDP must use these virtio_dma_* APIs for =
+virtio device.
+> > > > > > > > > >
+> > > > > > > > > > We'll worry about AF_XDP when the patch is posted.
+> > > > > > > > >
+> > > > > > > > > YES.
+> > > > > > > > >
+> > > > > > > > > We discussed it. They voted 'no'.
+> > > > > > > > >
+> > > > > > > > > http://lore.kernel.org/all/20230424082856.15c1e593@kernel=
+.org
+> > > > > > > >
+> > > > > > > >
+> > > > > > > > Hi guys, this topic is stuck again. How should I proceed wi=
+th this work?
+> > > > > > > >
+> > > > > > > > Let me briefly summarize:
+> > > > > > > > 1. The problem with adding virtio_dma_{map, sync} api is th=
+at, for AF_XDP and
+> > > > > > > > the driver layer, we need to support these APIs. The curren=
+t conclusion of
+> > > > > > > > AF_XDP is no.
+> > > > > > > >
+> > > > > > > > 2. Set dma_set_mask_and_coherent, then we can use DMA API u=
+niformly inside
+> > > > > > > > driver. This idea seems to be inconsistent with the framewo=
+rk design of DMA. The
+> > > > > > > > conclusion is no.
+> > > > > > > >
+> > > > > > > > 3. We noticed that if the virtio device supports VIRTIO_F_A=
+CCESS_PLATFORM, it
+> > > > > > > > uses DMA API. And this type of device is the future directi=
+on, so we only
+> > > > > > > > support DMA premapped for this type of virtio device. The p=
+roblem with this
+> > > > > > > > solution is that virtqueue_dma_dev() only returns dev in so=
+me cases, because
+> > > > > > > > VIRTIO_F_ACCESS_PLATFORM is supported in such cases.
+> > > >
+> > > > Could you explain the issue a little bit more?
+> > > >
+> > > > E.g if we limit AF_XDP to ACESS_PLATFROM only, why does
+> > > > virtqueue_dma_dev() only return dev in some cases?
+> > >
+> > > The behavior of virtqueue_dma_dev() is not related to AF_XDP.
+> > >
+> > > The return value of virtqueue_dma_dev() is used for the DMA APIs. So =
+it can
+> > > return dma dev when the virtio is with ACCESS_PLATFORM. If virtio is =
+without
+> > > ACCESS_PLATFORM then it MUST return NULL.
+> > >
+> > > In the virtio-net driver, if the virtqueue_dma_dev() returns dma dev,
+> > > we can enable AF_XDP. If not, we return error to AF_XDP.
+> >
+> > Yes, as discussed, just having wrappers in the virtio_ring and doing
+> > the switch there. Then can virtio-net use them without worrying about
+> > DMA details?
 >
 >
+> Yes. In the virtio drivers, we can use the wrappers. That is ok.
 >
-> On 2023/8/8 16:26, Eric Dumazet wrote:
-> > On Tue, Aug 8, 2023 at 7:59=E2=80=AFAM Manjusaka <me@manjusaka.me> wrot=
-e:
-> >>
-> >> In normal use case, the tcp_ca_event would be changed in high frequenc=
-y.
-> >>
-> >> It's a good indicator to represent the network quanlity.
-> >
-> > quality ?
-> >
-> > Honestly, it is more about TCP stack tracing than 'network quality'
-> >
-> >>
-> >> So I propose to add a `tcp:tcp_ca_event` trace event
-> >> like `tcp:tcp_cong_state_set` to help the people to
-> >> trace the TCP connection status
-> >>
-> >> Signed-off-by: Manjusaka <me@manjusaka.me>
-> >> ---
-> >>  include/net/tcp.h          |  9 ++------
-> >>  include/trace/events/tcp.h | 45 +++++++++++++++++++++++++++++++++++++=
-+
-> >>  net/ipv4/tcp_cong.c        | 10 +++++++++
-> >>  3 files changed, 57 insertions(+), 7 deletions(-)
-> >>
-> >> diff --git a/include/net/tcp.h b/include/net/tcp.h
-> >> index 0ca972ebd3dd..a68c5b61889c 100644
-> >> --- a/include/net/tcp.h
-> >> +++ b/include/net/tcp.h
-> >> @@ -1154,13 +1154,8 @@ static inline bool tcp_ca_needs_ecn(const struc=
-t sock *sk)
-> >>         return icsk->icsk_ca_ops->flags & TCP_CONG_NEEDS_ECN;
-> >>  }
-> >>
-> >> -static inline void tcp_ca_event(struct sock *sk, const enum tcp_ca_ev=
-ent event)
-> >> -{
-> >> -       const struct inet_connection_sock *icsk =3D inet_csk(sk);
-> >> -
-> >> -       if (icsk->icsk_ca_ops->cwnd_event)
-> >> -               icsk->icsk_ca_ops->cwnd_event(sk, event);
-> >> -}
-> >> +/* from tcp_cong.c */
-> >> +void tcp_ca_event(struct sock *sk, const enum tcp_ca_event event);
-> >>
-> >>  /* From tcp_cong.c */
-> >>  void tcp_set_ca_state(struct sock *sk, const u8 ca_state);
-> >> diff --git a/include/trace/events/tcp.h b/include/trace/events/tcp.h
-> >> index bf06db8d2046..b374eb636af9 100644
-> >> --- a/include/trace/events/tcp.h
-> >> +++ b/include/trace/events/tcp.h
-> >> @@ -416,6 +416,51 @@ TRACE_EVENT(tcp_cong_state_set,
-> >>                   __entry->cong_state)
-> >>  );
-> >>
-> >> +TRACE_EVENT(tcp_ca_event,
-> >> +
-> >> +       TP_PROTO(struct sock *sk, const u8 ca_event),
-> >> +
-> >> +       TP_ARGS(sk, ca_event),
-> >> +
-> >> +       TP_STRUCT__entry(
-> >> +               __field(const void *, skaddr)
-> >> +               __field(__u16, sport)
-> >> +               __field(__u16, dport)
-> >> +               __array(__u8, saddr, 4)
-> >> +               __array(__u8, daddr, 4)
-> >> +               __array(__u8, saddr_v6, 16)
-> >> +               __array(__u8, daddr_v6, 16)
-> >> +               __field(__u8, ca_event)
-> >> +       ),
-> >> +
-> >
-> > Please add the family (look at commit 3dd344ea84e1 ("net: tracepoint:
-> > exposing sk_family in all tcp:tracepoints"))
-> >
-> >
-> >
-> >> +       TP_fast_assign(
-> >> +               struct inet_sock *inet =3D inet_sk(sk);
-> >> +               __be32 *p32;
-> >> +
-> >> +               __entry->skaddr =3D sk;
-> >> +
-> >> +               __entry->sport =3D ntohs(inet->inet_sport);
-> >> +               __entry->dport =3D ntohs(inet->inet_dport);
-> >> +
-> >> +               p32 =3D (__be32 *) __entry->saddr;
-> >> +               *p32 =3D inet->inet_saddr;
-> >> +
-> >> +               p32 =3D (__be32 *) __entry->daddr;
-> >> +               *p32 =3D  inet->inet_daddr;
-> >
-> > We keep copying IPv4 addresses that might contain garbage for IPv6 sock=
-ets :/
-> >
-> >> +
-> >> +               TP_STORE_ADDRS(__entry, inet->inet_saddr, inet->inet_d=
-addr,
-> >> +                          sk->sk_v6_rcv_saddr, sk->sk_v6_daddr);
-> >
-> > I will send a cleanup, because IP_STORE_ADDRS() should really take
-> > care of all details.
-> >
-> >
-> >> +
-> >> +               __entry->ca_event =3D ca_event;
-> >> +       ),
-> >> +
-> >> +       TP_printk("sport=3D%hu dport=3D%hu saddr=3D%pI4 daddr=3D%pI4 s=
-addrv6=3D%pI6c daddrv6=3D%pI6c ca_event=3D%u",
-> >> +                 __entry->sport, __entry->dport,
-> >> +                 __entry->saddr, __entry->daddr,
-> >> +                 __entry->saddr_v6, __entry->daddr_v6,
-> >> +                 __entry->ca_event)
-> >
-> > Please print the symbol instead of numeric ca_event.
-> >
-> > Look at show_tcp_state_name() for instance.
+> But we also need to support virtqueue_dma_dev() for AF_XDP, because that =
+the
+> AF_XDP will not use the wrappers.
+
+You mean AF_XDP core or other? Could you give me an example?
+
+Thanks
+
 >
-> Thanks for the kindness code review, I still get some issue here(Sorry fo=
-r the first time to contribute):
+> So that is ok for you?
 >
-> 1. > We keep copying IPv4 addresses that might contain garbage for IPv6 s=
-ockets :/
+> Thanks.
 >
-> I'm not getting your means, would you mean that we should only save the I=
-Pv4 Address here?
->
-> 2. > I will send a cleanup, because IP_STORE_ADDRS() should really take c=
-are of all details.
->
-> I think you will make the address assignment code in TP_fast_assign as a =
-new function.
->
-> Should I submit the new change until you send the cleanup patch or I can =
-make this in my patch(cleanup the address assignment)
+> >
+> > Thanks
+> >
+> > >
+> > > Thanks
+> > >
+> > >
+> > >
+> > >
+> > > >
+> > > > Thanks
+> > > >
+> > > > >Otherwise NULL is returned.
+> > > > > > > > This option is currently NO.
+> > > > > > > >
+> > > > > > > > So I'm wondering what should I do, from a DMA point of view=
+, is there any
+> > > > > > > > solution in case of using DMA API?
+> > > > > > > >
+> > > > > > > > Thank you
+> > > > > > >
+> > > > > > >
+> > > > > > > I think it's ok at this point, Christoph just asked you
+> > > > > > > to add wrappers for map/unmap for use in virtio code.
+> > > > > > > Seems like a cosmetic change, shouldn't be hard.
+> > > > > >
+> > > > > > Yes, that is not hard, I has this code.
+> > > > > >
+> > > > > > But, you mean that the wrappers is just used for the virtio dri=
+ver code?
+> > > > > > And we also offer the  API virtqueue_dma_dev() at the same time=
+?
+> > > > > > Then the driver will has two chooses to do DMA.
+> > > > > >
+> > > > > > Is that so?
+> > > > >
+> > > > > Ping.
+> > > > >
+> > > > > Thanks
+> > > > >
+> > > > > >
+> > > > > >
+> > > > > > > Otherwise I haven't seen significant comments.
+> > > > > > >
+> > > > > > >
+> > > > > > > Christoph do I summarize what you are saying correctly?
+> > > > > > > --
+> > > > > > > MST
+> > > > > > >
+> > > > > >
+> > > > >
+> > > >
+> > >
+> >
 >
 
-Wait a bit, I am sending fixes today, so that no more copy/paste
-duplicates the issues.
