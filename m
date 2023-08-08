@@ -1,240 +1,87 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E98CC13AF9
-	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 16:29:48 +0000 (UTC)
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A486132CA
-	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 09:29:36 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-585ff234cd1so63347837b3.3
-        for <bpf@vger.kernel.org>; Tue, 08 Aug 2023 09:29:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691512150; x=1692116950;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zOkDp4+qp4bVUstm5eUqxLh9Hrp9/tswtsyOZpInDnY=;
-        b=qApj0ncbEkWhMO4bJIOJEBR9GdIm82uIiXmPNn4AVthuI+DPad1G9GGE3IDzO/+hxV
-         0ExP2ABvqQzGp7PJU9r0rbSIKWaSaGUxYom6nb5yWOEOcApGPJ3hRDXNypwWu0szKWqR
-         AEM60QCy2rrnY/tdsEditW9UOjI34lSBdq1MNySNnoHRlqerNSVNMQHTLi42sarmMevy
-         Fmj4ZGgCLYqU/sfOH1sriggBYM/Hdr8NBLsu6lxOI9ejZkwsVOM+b7zGDZjJNr48P+U6
-         8Ccx13cVmArpGdVt9JfB3o2+zL/I3fLyGfNLowFZKQDDAmHTpMmMj3tadTsotbx+56ku
-         CuLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691512150; x=1692116950;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zOkDp4+qp4bVUstm5eUqxLh9Hrp9/tswtsyOZpInDnY=;
-        b=d8w+OnaQrv4IRovKeNSjDaYwr6j0B2+hr3BZkf9wYoAaZRoXCKxWAE/fgM+Ff3JJ5V
-         G66/535LHBmaYuw/sm+RP603m7AfGS54fqK4RCAWl2lxu2jitmMyAyrbKl57m97TUFDD
-         rGqHTp2dRsvikoT7bypZACSRqoRKhwl2BCnWomuhKaaS65PnC5KbCqb9x8iInoRSGinJ
-         eGqT8VIZF8yzZw/d+rYiTeeT5WZpVXMlSkwDdqvBX1JHr9WZQvgKAvRk4Z5ufrJKlR+I
-         eLeAVnfU4fqUKPktTnOAl4tPBvaGyS34hFgYWsCXxrii6JqKbEm6FCAooTHRpH3OokOA
-         fj1Q==
-X-Gm-Message-State: AOJu0Yw0x53/k19ozqr3xqH4Nv9Dqb/u9MUHKoOu6wPth0U5fgjdIkaA
-	fmbKwugwW+wgKIejbLNcvcmslrptB+k=
-X-Google-Smtp-Source: AGHT+IGJ6S6rfEthjAqNpY8FTgYmXk66PAtMPAAmm/QV9V3o65UZiDSK7Zvvn+ysBG2OZdiKqDxrgg==
-X-Received: by 2002:a0d:de04:0:b0:585:edc6:c73e with SMTP id h4-20020a0dde04000000b00585edc6c73emr261571ywe.28.1691512149781;
-        Tue, 08 Aug 2023 09:29:09 -0700 (PDT)
-Received: from kickker.attlocal.net ([2600:1700:6cf8:1240:791:e1e6:ba74:485a])
-        by smtp.gmail.com with ESMTPSA id z133-20020a81658b000000b005772e9388cdsm3416687ywb.62.2023.08.08.09.29.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Aug 2023 09:29:09 -0700 (PDT)
-From: thinker.li@gmail.com
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	kernel-team@meta.com,
-	andrii@kernel.org
-Cc: sinquersw@gmail.com,
-	kuifeng@meta.com,
-	Kui-Feng Lee <thinker.li@gmail.com>
-Subject: [PATCH bpf-next v2] selftests/bpf: remove duplicated functions
-Date: Tue,  8 Aug 2023 09:28:58 -0700
-Message-Id: <20230808162858.326871-1-thinker.li@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2D581DA36;
+	Tue,  8 Aug 2023 16:32:04 +0000 (UTC)
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A19530A49;
+	Tue,  8 Aug 2023 09:31:51 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RKvyB3v3szrSP3;
+	Tue,  8 Aug 2023 22:02:10 +0800 (CST)
+Received: from [10.174.176.93] (10.174.176.93) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Tue, 8 Aug 2023 22:03:20 +0800
+Message-ID: <1f172347-4ed1-a571-18e9-9c5d951f213c@huawei.com>
+Date: Tue, 8 Aug 2023 22:02:58 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH bpf-next] bpf, sockmap: add BPF_F_PERMANENTLY flag for
+ skmsg redirect
+To: Jakub Sitnicki <jakub@cloudflare.com>
+CC: <john.fastabend@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+	<andrii@kernel.org>, <martin.lau@linux.dev>, <song@kernel.org>,
+	<yonghong.song@linux.dev>, <kpsingh@kernel.org>, <sdf@google.com>,
+	<haoluo@google.com>, <jolsa@kernel.org>, <davem@davemloft.net>,
+	<edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+	<dsahern@kernel.org>, <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
+References: <20230805094254.1082999-1-liujian56@huawei.com>
+ <87sf8xwslw.fsf@cloudflare.com>
+From: "liujian (CE)" <liujian56@huawei.com>
+In-Reply-To: <87sf8xwslw.fsf@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.176.93]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-From: Kui-Feng Lee <thinker.li@gmail.com>
 
-The file cgroup_tcp_skb.c contains redundant implementations of the similar
-functions (create_server_sock_v6(), connect_client_server_v6() and
-get_sock_port_v6()) found in network_helpers.c. Let's eliminate these
-duplicated functions.
 
-Changes from v1:
-
- - Remove get_sock_port_v6() as well.
-
-v1: https://lore.kernel.org/all/20230807193840.567962-1-thinker.li@gmail.com/
-
-Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
----
- .../selftests/bpf/prog_tests/cgroup_tcp_skb.c | 93 ++++---------------
- 1 file changed, 17 insertions(+), 76 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_tcp_skb.c b/tools/testing/selftests/bpf/prog_tests/cgroup_tcp_skb.c
-index d686ef19f705..3353c42bc2be 100644
---- a/tools/testing/selftests/bpf/prog_tests/cgroup_tcp_skb.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_tcp_skb.c
-@@ -9,6 +9,7 @@
- #include "testing_helpers.h"
- #include "cgroup_tcp_skb.skel.h"
- #include "cgroup_tcp_skb.h"
-+#include "network_helpers.h"
- 
- #define CGROUP_TCP_SKB_PATH "/test_cgroup_tcp_skb"
- 
-@@ -58,80 +59,13 @@ static int create_client_sock_v6(void)
- 	return fd;
- }
- 
--static int create_server_sock_v6(void)
--{
--	struct sockaddr_in6 addr = {
--		.sin6_family = AF_INET6,
--		.sin6_port = htons(0),
--		.sin6_addr = IN6ADDR_LOOPBACK_INIT,
--	};
--	int fd, err;
--
--	fd = socket(AF_INET6, SOCK_STREAM, 0);
--	if (fd < 0) {
--		perror("socket");
--		return -1;
--	}
--
--	err = bind(fd, (struct sockaddr *)&addr, sizeof(addr));
--	if (err < 0) {
--		perror("bind");
--		return -1;
--	}
--
--	err = listen(fd, 1);
--	if (err < 0) {
--		perror("listen");
--		return -1;
--	}
--
--	return fd;
--}
--
--static int get_sock_port_v6(int fd)
--{
--	struct sockaddr_in6 addr;
--	socklen_t len;
--	int err;
--
--	len = sizeof(addr);
--	err = getsockname(fd, (struct sockaddr *)&addr, &len);
--	if (err < 0) {
--		perror("getsockname");
--		return -1;
--	}
--
--	return ntohs(addr.sin6_port);
--}
--
--static int connect_client_server_v6(int client_fd, int listen_fd)
--{
--	struct sockaddr_in6 addr = {
--		.sin6_family = AF_INET6,
--		.sin6_addr = IN6ADDR_LOOPBACK_INIT,
--	};
--	int err, port;
--
--	port = get_sock_port_v6(listen_fd);
--	if (port < 0)
--		return -1;
--	addr.sin6_port = htons(port);
--
--	err = connect(client_fd, (struct sockaddr *)&addr, sizeof(addr));
--	if (err < 0) {
--		perror("connect");
--		return -1;
--	}
--
--	return 0;
--}
--
- /* Connect to the server in a cgroup from the outside of the cgroup. */
- static int talk_to_cgroup(int *client_fd, int *listen_fd, int *service_fd,
- 			  struct cgroup_tcp_skb *skel)
- {
- 	int err, cp;
- 	char buf[5];
-+	int port;
- 
- 	/* Create client & server socket */
- 	err = join_root_cgroup();
-@@ -143,14 +77,17 @@ static int talk_to_cgroup(int *client_fd, int *listen_fd, int *service_fd,
- 	err = join_cgroup(CGROUP_TCP_SKB_PATH);
- 	if (!ASSERT_OK(err, "join_cgroup"))
- 		return -1;
--	*listen_fd = create_server_sock_v6();
-+	*listen_fd = start_server(AF_INET6, SOCK_STREAM, NULL, 0, 2000);
- 	if (!ASSERT_GE(*listen_fd, 0, "listen_fd"))
- 		return -1;
--	skel->bss->g_sock_port = get_sock_port_v6(*listen_fd);
-+	port = get_socket_local_port(*listen_fd);
-+	if (!ASSERT_GE(port, 0, "get_socket_local_port"))
-+		return -1;
-+	skel->bss->g_sock_port = ntohs(port);
- 
- 	/* Connect client to server */
--	err = connect_client_server_v6(*client_fd, *listen_fd);
--	if (!ASSERT_OK(err, "connect_client_server_v6"))
-+	err = connect_fd_to_fd(*client_fd, *listen_fd, 500);
-+	if (!ASSERT_OK(err, "connect_fd_to_fd"))
- 		return -1;
- 	*service_fd = accept(*listen_fd, NULL, NULL);
- 	if (!ASSERT_GE(*service_fd, 0, "service_fd"))
-@@ -175,12 +112,13 @@ static int talk_to_outside(int *client_fd, int *listen_fd, int *service_fd,
- {
- 	int err, cp;
- 	char buf[5];
-+	int port;
- 
- 	/* Create client & server socket */
- 	err = join_root_cgroup();
- 	if (!ASSERT_OK(err, "join_root_cgroup"))
- 		return -1;
--	*listen_fd = create_server_sock_v6();
-+	*listen_fd = start_server(AF_INET6, SOCK_STREAM, NULL, 0, 2000);
- 	if (!ASSERT_GE(*listen_fd, 0, "listen_fd"))
- 		return -1;
- 	err = join_cgroup(CGROUP_TCP_SKB_PATH);
-@@ -192,11 +130,14 @@ static int talk_to_outside(int *client_fd, int *listen_fd, int *service_fd,
- 	err = join_root_cgroup();
- 	if (!ASSERT_OK(err, "join_root_cgroup"))
- 		return -1;
--	skel->bss->g_sock_port = get_sock_port_v6(*listen_fd);
-+	port = get_socket_local_port(*listen_fd);
-+	if (!ASSERT_GE(port, 0, "get_socket_local_port"))
-+		return -1;
-+	skel->bss->g_sock_port = ntohs(port);
- 
- 	/* Connect client to server */
--	err = connect_client_server_v6(*client_fd, *listen_fd);
--	if (!ASSERT_OK(err, "connect_client_server_v6"))
-+	err = connect_fd_to_fd(*client_fd, *listen_fd, 500);
-+	if (!ASSERT_OK(err, "connect_fd_to_fd"))
- 		return -1;
- 	*service_fd = accept(*listen_fd, NULL, NULL);
- 	if (!ASSERT_GE(*service_fd, 0, "service_fd"))
--- 
-2.34.1
-
+On 2023/8/5 20:51, Jakub Sitnicki wrote:
+> On Sat, Aug 05, 2023 at 05:42 PM +08, Liu Jian wrote:
+>> If the sockmap msg redirection function is used only to forward packets
+>> and no other operation, the execution result of the BPF_SK_MSG_VERDICT
+>> program is the same each time. In this case, the BPF program only needs to
+>> be run once. Add BPF_F_PERMANENTLY flag to bpf_msg_redirect_map() and
+>> bpf_msg_redirect_hash() to implement this ability.
+>>
+>> Then we can enable this function in the bpf program as follows:
+>> bpf_msg_redirect_hash(xx, xx, xx, BPF_F_INGRESS | BPF_F_PERMANENTLY);
+>>
+>> Test results using netperf  TCP_STREAM mode:
+>> for i in 1 64 128 512 1k 2k 32k 64k 100k 500k 1m;then
+>> netperf -T 1,2 -t TCP_STREAM -H 127.0.0.1 -l 20 -- -m $i -s 100m,100m -S 100m,100m
+>> done
+>>
+>> before:
+>> 3.84 246.52 496.89 1885.03 3415.29 6375.03 40749.09 48764.40 51611.34 55678.26 55992.78
+>> after:
+>> 4.43 279.20 555.82 2080.79 3870.70 7105.44 41836.41 49709.75 51861.56 55211.00 54566.85
+>>
+>> Signed-off-by: Liu Jian <liujian56@huawei.com>
+>> ---
+> 
+> Interesting idea. Potentially opens up the way to redirect without
+> fallback to backlog thread in the future. If we know the target, then we
+> can propagate backpressure.
+> 
+> If we go this route, we will need tests. selftests/test_sockmap would
+> need to be extended, and we will also need some unit tests in test_progs
+> for corner cases. Corner cases to cover that come to mind: redirect to
+> self, redirect target socket closed.
+Thanks. I will add some tests in v2.
+> 
+> I'm out next week, so won't be able to give it a proper review.
