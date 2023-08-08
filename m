@@ -1,140 +1,120 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D44F26B73
-	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 16:38:07 +0000 (UTC)
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A7147DF;
-	Tue,  8 Aug 2023 09:37:50 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 31FC621B9B;
-	Tue,  8 Aug 2023 08:18:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1691482721; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sOStBsStITHb4ZpK/5yby6Wy7QLtGEurMTFf3fXVmi4=;
-	b=TPZRoAVJGjm1dIR07dj+Ft1G0Wth/H+wEDfJL9wvwICEsnVxu2vM2NemfWX0arTkAsyq7q
-	qjtvXVbHOwmj4khviWaGRqAshne9nnwh5l7mb3ai5de8Ptf1DV0Am8ILz5NNlfgDMdY4DP
-	TC4Lafcb4gmZ3MyVdiSBB/ZWlnef0iM=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 04B9E139D1;
-	Tue,  8 Aug 2023 08:18:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id OXTZOWD60WQadgAAMHmgww
-	(envelope-from <mhocko@suse.com>); Tue, 08 Aug 2023 08:18:40 +0000
-Date: Tue, 8 Aug 2023 10:18:39 +0200
-From: Michal Hocko <mhocko@suse.com>
-To: Roman Gushchin <roman.gushchin@linux.dev>
-Cc: Chuyi Zhou <zhouchuyi@bytedance.com>, hannes@cmpxchg.org,
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	muchun.song@linux.dev, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, wuyun.abel@bytedance.com,
-	robin.lu@bytedance.com
-Subject: Re: [RFC PATCH 1/2] mm, oom: Introduce bpf_select_task
-Message-ID: <ZNH6X/2ZZ0quKSI6@dhcp22.suse.cz>
-References: <20230804093804.47039-1-zhouchuyi@bytedance.com>
- <20230804093804.47039-2-zhouchuyi@bytedance.com>
- <ZMzhDFhvol2VQBE4@dhcp22.suse.cz>
- <dfbf05d1-daff-e855-f4fd-e802614b79c4@bytedance.com>
- <ZMz+aBHFvfcr0oIe@dhcp22.suse.cz>
- <866462cf-6045-6239-6e27-45a733aa7daa@bytedance.com>
- <ZNCXgsZL7bKsCEBM@dhcp22.suse.cz>
- <ZNEpsUFgKFIAAgrp@P9FQF9L96D.lan>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 481CC15486;
+	Tue,  8 Aug 2023 16:39:26 +0000 (UTC)
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB227F8397;
+	Tue,  8 Aug 2023 09:39:13 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2b9b9f0387dso91904961fa.0;
+        Tue, 08 Aug 2023 09:39:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691512449; x=1692117249;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kJKYbjr1Hb9WHuWOPFqDpGQyS7eVaxQ0WI1Ze6xYIuI=;
+        b=IdbhSqHeOKswzkca5dluhYktrPp8i3K2kABdafIB0YCr22D+8AOEVhSPSP3fGPGALT
+         FQb1E33gANLCwK5rk1smFLTU/c2kau6oLb1SLgvtqVKWshiEPRYJ8btoFhDTjImDCtKa
+         o/XDpULcAZzTmvYhVZRsPUhhUih70si+6sxmYmyvjWBikCuweB+BLG318AjShkPdnqNG
+         iJHh8lSrgOcDvmw2aY7uiHmYU4ATDfdnqoFEUzetQ4aZve4ojynHiygUW5iY2KPhyajj
+         dFiD1DDWRLSBS7wl/JUZQrQtWVRoJNo7PyNVhYrHFieDp96nf5z9KLP9WvhvefAEPYZP
+         HzxQ==
+X-Gm-Message-State: AOJu0YxhFGLUp4AM3WVUQ7K0Oc9o5z6zt4oErMQmJPEzvSIMjaV/yDUJ
+	Al39XtyUR7CuuYkidfQZ3uSZBTBtq5Q=
+X-Google-Smtp-Source: AGHT+IHG80o/f8oaKNOhKd6kp2JtfXZl2uTVt4PvEONnauM2jHioMJyp37dG+uFfwEgRQxRkt9dZ1A==
+X-Received: by 2002:a17:906:535d:b0:99c:db8d:f9a with SMTP id j29-20020a170906535d00b0099cdb8d0f9amr3999486ejo.58.1691502062242;
+        Tue, 08 Aug 2023 06:41:02 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-010.fbsv.net. [2a03:2880:31ff:a::face:b00c])
+        by smtp.gmail.com with ESMTPSA id g4-20020a170906520400b0099bd7b26639sm6774937ejm.6.2023.08.08.06.41.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Aug 2023 06:41:01 -0700 (PDT)
+From: Breno Leitao <leitao@debian.org>
+To: sdf@google.com,
+	axboe@kernel.dk,
+	asml.silence@gmail.com,
+	willemdebruijn.kernel@gmail.com
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	io-uring@vger.kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com
+Subject: [PATCH v2 0/8] io_uring: Initial support for {s,g}etsockopt commands
+Date: Tue,  8 Aug 2023 06:40:40 -0700
+Message-Id: <20230808134049.1407498-1-leitao@debian.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZNEpsUFgKFIAAgrp@P9FQF9L96D.lan>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Mon 07-08-23 10:28:17, Roman Gushchin wrote:
-> On Mon, Aug 07, 2023 at 09:04:34AM +0200, Michal Hocko wrote:
-> > On Mon 07-08-23 10:21:09, Chuyi Zhou wrote:
-> > > 
-> > > 
-> > > 在 2023/8/4 21:34, Michal Hocko 写道:
-> > > > On Fri 04-08-23 21:15:57, Chuyi Zhou wrote:
-> > > > [...]
-> > > > > > +	switch (bpf_oom_evaluate_task(task, oc, &points)) {
-> > > > > > +		case -EOPNOTSUPP: break; /* No BPF policy */
-> > > > > > +		case -EBUSY: goto abort; /* abort search process */
-> > > > > > +		case 0: goto next; /* ignore process */
-> > > > > > +		default: goto select; /* note the task */
-> > > > > > +	}
-> 
-> To be honest, I can't say I like it. IMO it's not really using the full bpf
-> potential and is too attached to the current oom implementation.
+This patchset adds support for getsockopt (SOCKET_URING_OP_GETSOCKOPT)
+and setsockopt (SOCKET_URING_OP_SETSOCKOPT) in io_uring commands.
+SOCKET_URING_OP_SETSOCKOPT implements generic case, covering all levels
+nad optnames. On the other hand, SOCKET_URING_OP_GETSOCKOPT just
+implements level SOL_SOCKET case, which seems to be the
+most common level parameter for get/setsockopt(2).
 
-TBH I am not sure we are able to come up with an interface that would
-ise the full BPF potential at this stage and I strongly believe that we
-should start by something that is good enough.
+struct proto_ops->setsockopt() uses sockptr instead of userspace
+pointers, which makes it easy to bind to io_uring. Unfortunately
+proto_ops->getsockopt() callback uses userspace pointers, except for
+SOL_SOCKET, which is handled by sk_getsockopt(). Thus, this patchset
+leverages sk_getsockopt() to imlpement the SOCKET_URING_OP_GETSOCKOPT
+case.
 
-> First, I'm a bit concerned about implicit restrictions we apply to bpf programs
-> which will be executed potentially thousands times under a very heavy memory
-> pressure. We will need to make sure that they don't allocate (much) memory, don't
-> take any locks which might deadlock with other memory allocations etc.
-> It will potentially require hard restrictions on what these programs can and can't
-> do and this is something that the bpf community will have to maintain long-term.
+In order to support BPF hooks, I modified the hooks to use  sockptr, so,
+it is flexible enough to accept user or kernel pointers for
+optval/optlen.
 
-Right, BPF callbacks operating under OOM situations will be really
-constrained but this is more or less by definition. Isn't it?
+PS1: For getsockopt command, the optlen field is not a userspace
+pointers, but an absolute value, so this is slightly different from
+getsockopt(2) behaviour. The new optlen value is returned in cqe->res.
 
-> Second, if we're introducing bpf here (which I'm not yet convinced),
-> IMO we should use it in a more generic and expressive way.
-> Instead of adding hooks into the existing oom killer implementation, we can call
-> a bpf program before invoking the in-kernel oom killer and let it do whatever
-> it takes to free some memory. E.g. we can provide it with an API to kill individual
-> tasks as well as all tasks in a cgroup.
-> This approach is more generic and will allow to solve certain problems which
-> can't be solved by the current oom killer, e.g. deleting files from a tmpfs
-> instead of killing tasks.
+PS2: The userspace pointers need to be alive until the operation is
+completed.
 
-The aim of this proposal is to lift any heavy lifting steming from
-iterating tasks or cgroups which those BPF might need to make a
-decision. There are other ways of course and provide this iteration
-functionality as library functions but my BPF experience is very limited
-to say how easy is that.
+These changes were tested with a new test[1] in liburing. On the BPF
+side, I tested that no regression was introduced by running "test_progs"
+self test using "sockopt" test case.
 
-> So I think the alternative approach is to provide some sort of an interface to
-> pre-select oom victims in advance. E.g. on memcg level it can look like:
-> 
-> echo PID >> memory.oom.victim_proc
+[1] Link: https://github.com/leitao/liburing/blob/getsock/test/socket-getsetsock-cmd.c
 
-this is just a terrible interface TBH. Pids are very volatile objects.
-At the time oom killer reads this pid it might be a completely different
-process.
+RFC -> V1:
+	* Copy user memory at io_uring subsystem, and call proto_ops
+	  callbacks using kernel memory
+	* Implement all the cases for SOCKET_URING_OP_SETSOCKOPT
+V1 -> V2
+	* Implemented the BPF part
+	* Using user pointers from optval to avoid kmalloc in io_uring part.
 
-> If the list is empty, the default oom killer is invoked.
-> If there are tasks, the first one is killed on OOM.
-> A similar interface can exist to choose between sibling cgroups:
-> 
-> echo CGROUP_NAME >> memory.oom.victim_cgroup
+Breno Leitao (8):
+  net: expose sock_use_custom_sol_socket
+  io_uring/cmd: Introduce SOCKET_URING_OP_GETSOCKOPT
+  io_uring/cmd: Introduce SOCKET_URING_OP_SETSOCKOPT
+  io_uring/cmd: Extend support beyond SOL_SOCKET
+  bpf: Leverage sockptr_t in BPF getsockopt hook
+  bpf: Leverage sockptr_t in BPF setsockopt hook
+  io_uring/cmd: BPF hook for getsockopt cmd
+  io_uring/cmd: BPF hook for setsockopt cmd
 
-Slightly less volatile but not much better either.
+ include/linux/bpf-cgroup.h    |  7 +--
+ include/linux/net.h           |  5 +++
+ include/uapi/linux/io_uring.h |  8 ++++
+ io_uring/uring_cmd.c          | 82 +++++++++++++++++++++++++++++++++++
+ kernel/bpf/cgroup.c           | 25 ++++++-----
+ net/socket.c                  | 12 ++---
+ 6 files changed, 117 insertions(+), 22 deletions(-)
 
-> This is just a rough idea.
-
-I am pretty sure that both policies could be implemetd by the proposed
-BPF interface though if you want something like that.
 -- 
-Michal Hocko
-SUSE Labs
+2.34.1
+
