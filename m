@@ -1,101 +1,107 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 151303C37
-	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 16:12:03 +0000 (UTC)
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88496EB94
-	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 09:11:47 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id af79cd13be357-76cded293e8so417546085a.2
-        for <bpf@vger.kernel.org>; Tue, 08 Aug 2023 09:11:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1691511073; x=1692115873;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bR2OPalgZgFVCbBNZrCKIT8XHg7hgxmL/4fBXTDwklA=;
-        b=fXr+ejJphcnh++slQIYsqptA9CaCLGCl/4XqJbNMmgHV4gVxEk9SSEZRphLAMU8IVI
-         FdAP1719a4GBb3sBWoZXwZFmcnkoof5/xxMh91huH+bTL5T7Wpf9cV0G1Ym9tSLnQTOn
-         hlLPlFDbAoznJTrpKXw4a7RItEZobfeX5fgus=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691511073; x=1692115873;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bR2OPalgZgFVCbBNZrCKIT8XHg7hgxmL/4fBXTDwklA=;
-        b=FIN1m1XkDi0bkgfk2B8o+ZwFrEyOCPEw7Z1u0LTrUPV1jMEOjUkOCmWdKvj3L/kNji
-         oWayf+r6jh3WUwXTlPQj6qQWub3DjpLBybKWIcfbhquK8/VCMlQ7PYjBees6Qlc6wrmg
-         SXZNWgHCzw0oDIE12tNBk6RT2KSofsVGIJsJfrAuco6bxpidoKEDykQxxhEH4xRI95YN
-         b6FoqwU8PyE5MoRuqZ+mHSXT2twzAXYpLgh6TdCc/AjXbOed5a9RPeeI6Xb710mscBA9
-         qzRFzsJys4uppNrkIvoMlDjf58xb2sctQAJ4qL8/IzVHuznZFpmUIGGbowYJoinQBzEL
-         uvrw==
-X-Gm-Message-State: AOJu0Yzuid/hFzRPqFdWruAKmcpS7f55/SQ3TCRZH9VNslqimvTegNEg
-	Vz/7TC2EmBANFrTfhRvRA1DSneSfjIgXLF2MTCmbm/m7lIYSAGMqtvY=
-X-Google-Smtp-Source: AGHT+IGwh0ywunatAy5MeeHk5SP91VnhUNy/5ce/vmlO7FYlLbSHZH+fvMcUcYsWZGLmPuJjjJUiwXexkRhSyiHdIdI=
-X-Received: by 2002:a17:90a:d50d:b0:268:ee6:6bdf with SMTP id
- t13-20020a17090ad50d00b002680ee66bdfmr9968391pju.47.1691504978388; Tue, 08
- Aug 2023 07:29:38 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE5323C37;
+	Tue,  8 Aug 2023 16:14:26 +0000 (UTC)
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F0FFF9A0;
+	Tue,  8 Aug 2023 09:14:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+	; s=x; h=Subject:Content-Transfer-Encoding:Mime-Version:Message-Id:Cc:To:From
+	:Date:subject:date:message-id:reply-to;
+	bh=oVjNdEpzZx0zgptzt6k7F+8X6mMIVOg3jSHvHicMgSs=; b=Lfi5oGJt92TrKiMkSKnj86OinS
+	+2NhXXYIWmzJSO0UeZ3PNgNuIpJ5+9NRa7eG0PCO/lJdQfwxUt2xx/vRhWH14aJR7Zi3DsVcGlYSg
+	4Re5W0tus87tNrarUoWozS2cyEX5CieZtJZ5HI5r4xZ229FkXIVmiG58p2T40oTpV57Q=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:35240 helo=pettiford)
+	by mail.hugovil.com with esmtpa (Exim 4.92)
+	(envelope-from <hugo@hugovil.com>)
+	id 1qTPKm-0007qt-G1; Tue, 08 Aug 2023 12:13:25 -0400
+Date: Tue, 8 Aug 2023 12:13:23 -0400
+From: Hugo Villeneuve <hugo@hugovil.com>
+To: Breno Leitao <leitao@debian.org>
+Cc: sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
+ willemdebruijn.kernel@gmail.com, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
+ Abeni <pabeni@redhat.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ io-uring@vger.kernel.org
+Message-Id: <20230808121323.bc144c719eba5979e161aac6@hugovil.com>
+In-Reply-To: <20230808134049.1407498-2-leitao@debian.org>
+References: <20230808134049.1407498-1-leitao@debian.org>
+	<20230808134049.1407498-2-leitao@debian.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <169139090386.324433.6412259486776991296.stgit@devnote2>
-In-Reply-To: <169139090386.324433.6412259486776991296.stgit@devnote2>
-From: Florent Revest <revest@chromium.org>
-Date: Tue, 8 Aug 2023 16:29:27 +0200
-Message-ID: <CABRcYmLYyohzVBzg-maoAwaFwj6VanWiAiv5GQnpagn2-ZDoRQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 0/6] bpf: fprobe: rethook: Use ftrace_regs instead
- of pt_regs
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	linux-trace-kernel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>, 
-	Sven Schnelle <svens@linux.ibm.com>, Alexei Starovoitov <ast@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Alan Maguire <alan.maguire@oracle.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.6
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 1/8] net: expose sock_use_custom_sol_socket
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 
-On Mon, Aug 7, 2023 at 8:48=E2=80=AFAM Masami Hiramatsu (Google)
-<mhiramat@kernel.org> wrote:
->
-> Florent, feel free to add your rethook for arm64, but please do not remov=
-e
-> kretprobe trampoline yet. It is another discussion point. We may be possi=
-ble
-> to use ftrace_regs for kretprobe by ftrace_partial_regs() but kretprobe
-> allows nest probe. (maybe we can skip that case?)
+On Tue,  8 Aug 2023 06:40:41 -0700
+Breno Leitao <leitao@debian.org> wrote:
 
-Ack :)
+> Exposing function sock_use_custom_sol_socket(), so it could be used by
+> io_uring subsystem.
+> 
+> This function will be used in the function io_uring_cmd_setsockopt() in
+> the coming patch, so, let's move it to the socket.h header file.
 
->  arch/Kconfig                    |    1 +
->  arch/arm64/include/asm/ftrace.h |   11 ++++++
->  arch/loongarch/Kconfig          |    1 +
->  arch/s390/Kconfig               |    1 +
->  arch/x86/Kconfig                |    1 +
->  arch/x86/kernel/rethook.c       |    9 +++--
->  include/linux/fprobe.h          |    4 +-
->  include/linux/ftrace.h          |   56 ++++++++++++++++++-----------
->  include/linux/rethook.h         |   11 +++---
->  kernel/kprobes.c                |    9 ++++-
->  kernel/trace/Kconfig            |    9 ++++-
->  kernel/trace/bpf_trace.c        |   14 +++++--
->  kernel/trace/fprobe.c           |    8 ++--
->  kernel/trace/rethook.c          |   16 ++++----
->  kernel/trace/trace_fprobe.c     |   76 ++++++++++++++++++++++++---------=
-------
->  kernel/trace/trace_probe_tmpl.h |    2 +
->  lib/test_fprobe.c               |   10 +++--
->  samples/fprobe/fprobe_example.c |    4 +-
+Hi,
+this description doesn't seem to match the code change below...
 
-I believe that Documentation/trace/fprobe.rst should also be modified
-following the API change
+Hugo Villeneuve.
+
+
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> ---
+>  include/linux/net.h | 5 +++++
+>  net/socket.c        | 5 -----
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/linux/net.h b/include/linux/net.h
+> index 41c608c1b02c..14a956e4530e 100644
+> --- a/include/linux/net.h
+> +++ b/include/linux/net.h
+> @@ -355,4 +355,9 @@ u32 kernel_sock_ip_overhead(struct sock *sk);
+>  #define MODULE_ALIAS_NET_PF_PROTO_NAME(pf, proto, name) \
+>  	MODULE_ALIAS("net-pf-" __stringify(pf) "-proto-" __stringify(proto) \
+>  		     name)
+> +
+> +static inline bool sock_use_custom_sol_socket(const struct socket *sock)
+> +{
+> +	return test_bit(SOCK_CUSTOM_SOCKOPT, &sock->flags);
+> +}
+>  #endif	/* _LINUX_NET_H */
+> diff --git a/net/socket.c b/net/socket.c
+> index 1dc23f5298ba..8df54352af83 100644
+> --- a/net/socket.c
+> +++ b/net/socket.c
+> @@ -2216,11 +2216,6 @@ SYSCALL_DEFINE4(recv, int, fd, void __user *, ubuf, size_t, size,
+>  	return __sys_recvfrom(fd, ubuf, size, flags, NULL, NULL);
+>  }
+>  
+> -static bool sock_use_custom_sol_socket(const struct socket *sock)
+> -{
+> -	return test_bit(SOCK_CUSTOM_SOCKOPT, &sock->flags);
+> -}
+> -
+>  /*
+>   *	Set a socket option. Because we don't know the option lengths we have
+>   *	to pass the user mode parameter for the protocols to sort out.
+> -- 
+> 2.34.1
+> 
