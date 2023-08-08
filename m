@@ -1,172 +1,195 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 349AF18B1F;
-	Tue,  8 Aug 2023 15:47:16 +0000 (UTC)
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB267EC1;
-	Tue,  8 Aug 2023 08:47:00 -0700 (PDT)
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2b9e6cc93d8so93815801fa.0;
-        Tue, 08 Aug 2023 08:47:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691509614; x=1692114414;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=r9Qw/F0brYOmpW9rwZop//d4heqX4w4nP09GhRsKIik=;
-        b=T4BQwXpXdsCuYvtifYD93c+gJl9rrz++/mR+4CynnqIvkUphBdDQ+lCgTW1D5Bi+Pd
-         VzU5S/44j9RzUIScS4QKgvxAIEgjOrRy8tDji1l921ZgNNxUFqrtES9Ziv9X6D3dHBib
-         G7vP+ZDfprdS+SwSUuLv58BN+BeGptCqziUtKUOPiyKKG+ub3vTum+zI2bk9IZ7ZIcAE
-         iSuXNg9/rEwuUhXUCKN7a5MpHlyfMeNolQIQE3qUpI2Py1QozWcyrh4m/mjELJrfeoB+
-         nLeM6ywoACfu+zpBe7U8v+g8pnpYv0x5wwMHOJx4MIrMUzz8K2294mNLzrRmA+yMxSJu
-         R+/A==
-X-Gm-Message-State: AOJu0Yw68NILxUrlrTB/SJ1JZ9iclpb5ZGtyYQEOzYatsri3G6neoxCe
-	+OsiLVGqovmnCRwfei7OonbnVu78xjE=
-X-Google-Smtp-Source: AGHT+IEqhkwYaYSGAbqiw/LtPf5oEi+RgNvatwnvbRraW5eX4hKHlnSYlRuneFBiMukqQzpmDTlkmg==
-X-Received: by 2002:aa7:dad0:0:b0:51d:9ddf:f0f6 with SMTP id x16-20020aa7dad0000000b0051d9ddff0f6mr10088298eds.36.1691502065220;
-        Tue, 08 Aug 2023 06:41:05 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-012.fbsv.net. [2a03:2880:31ff:c::face:b00c])
-        by smtp.gmail.com with ESMTPSA id bc5-20020a056402204500b005230f06de15sm6767707edb.78.2023.08.08.06.41.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Aug 2023 06:41:04 -0700 (PDT)
-From: Breno Leitao <leitao@debian.org>
-To: sdf@google.com,
-	axboe@kernel.dk,
-	asml.silence@gmail.com,
-	willemdebruijn.kernel@gmail.com
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	io-uring@vger.kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com
-Subject: [PATCH v2 2/8] io_uring/cmd: Introduce SOCKET_URING_OP_GETSOCKOPT
-Date: Tue,  8 Aug 2023 06:40:42 -0700
-Message-Id: <20230808134049.1407498-3-leitao@debian.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230808134049.1407498-1-leitao@debian.org>
-References: <20230808134049.1407498-1-leitao@debian.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603E813AC7
+	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 15:48:11 +0000 (UTC)
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D48E62;
+	Tue,  8 Aug 2023 08:48:07 -0700 (PDT)
+X-UUID: e0ad852e35c511ee9cb5633481061a41-20230808
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=3bTI4ezWT0dRlseV1XH1auN5umDiuiT9sp0ElLkplnk=;
+	b=qyrZII5nSYfDgdidaw0URf4ZofwG1EVXxfgB82I25iLr1fGG5VBErD7TvzBhg96A9B5+kb/ogGfTQ4OCbf6AoR+58kbRMDd7K0JiOR/BAjneLgRzr2OohbVyf9EijJM8VpITHX4ggUNOukzOB5mkO2uy5lmhSBaUbapqtcfdldM=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.31,REQID:7ff864a1-1a3f-46a3-8abc-b4524e19721c,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:95
+X-CID-INFO: VERSION:1.1.31,REQID:7ff864a1-1a3f-46a3-8abc-b4524e19721c,IP:0,URL
+	:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+	:quarantine,TS:95
+X-CID-META: VersionHash:0ad78a4,CLOUDID:59b6f042-d291-4e62-b539-43d7d78362ba,B
+	ulkID:230808163051S0PE58AX,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+	C:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,CO
+	L:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_SDM,TF_CID_SPAM_ASC,TF_CID_SPAM_FAS,
+	TF_CID_SPAM_FSD,TF_CID_SPAM_ULN
+X-UUID: e0ad852e35c511ee9cb5633481061a41-20230808
+Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw01.mediatek.com
+	(envelope-from <kuan-ying.lee@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 996264844; Tue, 08 Aug 2023 16:30:48 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Tue, 8 Aug 2023 16:30:47 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Tue, 8 Aug 2023 16:30:47 +0800
+From: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
+To: Jan Kiszka <jan.kiszka@siemens.com>, Kieran Bingham <kbingham@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>
+CC: <chinwen.chang@mediatek.com>, <qun-wei.lin@mediatek.com>,
+	<linux-mm@kvack.org>, <linux-modules@vger.kernel.org>,
+	<casper.li@mediatek.com>, <akpm@linux-foundation.org>,
+	<linux-arm-kernel@lists.infradead.org>, Kuan-Ying Lee
+	<Kuan-Ying.Lee@mediatek.com>, <linux-kernel@vger.kernel.org>,
+	<linux-mediatek@lists.infradead.org>, <bpf@vger.kernel.org>
+Subject: [PATCH v2 8/8] scripts/gdb/vmalloc: add vmallocinfo support
+Date: Tue, 8 Aug 2023 16:30:18 +0800
+Message-ID: <20230808083020.22254-9-Kuan-Ying.Lee@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20230808083020.22254-1-Kuan-Ying.Lee@mediatek.com>
+References: <20230808083020.22254-1-Kuan-Ying.Lee@mediatek.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK: N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+	UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add support for getsockopt command (SOCKET_URING_OP_GETSOCKOPT), where
-level is SOL_SOCKET. This is leveraging the sockptr_t infrastructure,
-where a sockptr_t is either userspace or kernel space, and handled as
-such.
+This GDB script shows the vmallocinfo for user to
+analyze the vmalloc memory usage.
 
-Function io_uring_cmd_getsockopt() is inspired by __sys_getsockopt().
+Example output:
+0xffff800008000000-0xffff800008009000      36864 <start_kernel+372> pages=8 vmalloc
+0xffff800008009000-0xffff80000800b000       8192 <gicv2m_init_one+400> phys=0x8020000 ioremap
+0xffff80000800b000-0xffff80000800d000       8192 <bpf_prog_alloc_no_stats+72> pages=1 vmalloc
+0xffff80000800d000-0xffff80000800f000       8192 <bpf_jit_alloc_exec+16> pages=1 vmalloc
+0xffff800008010000-0xffff80000ad30000   47316992 <paging_init+452> phys=0x40210000 vmap
+0xffff80000ad30000-0xffff80000c1c0000   21561344 <paging_init+556> phys=0x42f30000 vmap
+0xffff80000c1c0000-0xffff80000c370000    1769472 <paging_init+592> phys=0x443c0000 vmap
+0xffff80000c370000-0xffff80000de90000   28442624 <paging_init+692> phys=0x44570000 vmap
+0xffff80000de90000-0xffff80000f4c1000   23269376 <paging_init+788> phys=0x46090000 vmap
+0xffff80000f4c1000-0xffff80000f4c3000       8192 <gen_pool_add_owner+112> pages=1 vmalloc
+0xffff80000f4c3000-0xffff80000f4c5000       8192 <gen_pool_add_owner+112> pages=1 vmalloc
+0xffff80000f4c5000-0xffff80000f4c7000       8192 <gen_pool_add_owner+112> pages=1 vmalloc
 
-Differently from the getsockopt(2), the optlen field is not a userspace
-pointers. In getsockopt(2), userspace provides optlen pointer, which is
-overwritten by the kernel.  In this implementation, userspace passes a
-u32, and the new value is returned in cqe->res. I.e., optlen is not a
-pointer.
-
-Important to say that userspace needs to keep the pointer alive until
-the CQE is completed.
-
-Signed-off-by: Breno Leitao <leitao@debian.org>
+Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
 ---
- include/uapi/linux/io_uring.h |  7 +++++++
- io_uring/uring_cmd.c          | 28 ++++++++++++++++++++++++++++
- 2 files changed, 35 insertions(+)
+ scripts/gdb/linux/constants.py.in |  8 +++++
+ scripts/gdb/linux/vmalloc.py      | 56 +++++++++++++++++++++++++++++++
+ scripts/gdb/vmlinux-gdb.py        |  1 +
+ 3 files changed, 65 insertions(+)
+ create mode 100644 scripts/gdb/linux/vmalloc.py
 
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index 9fc7195f25df..8152151080db 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -43,6 +43,10 @@ struct io_uring_sqe {
- 	union {
- 		__u64	addr;	/* pointer to buffer or iovecs */
- 		__u64	splice_off_in;
-+		struct {
-+			__u32	level;
-+			__u32	optname;
-+		};
- 	};
- 	__u32	len;		/* buffer size or number of iovecs */
- 	union {
-@@ -79,6 +83,7 @@ struct io_uring_sqe {
- 	union {
- 		__s32	splice_fd_in;
- 		__u32	file_index;
-+		__u32	optlen;
- 		struct {
- 			__u16	addr_len;
- 			__u16	__pad3[1];
-@@ -89,6 +94,7 @@ struct io_uring_sqe {
- 			__u64	addr3;
- 			__u64	__pad2[1];
- 		};
-+		__u64	optval;
- 		/*
- 		 * If the ring is initialized with IORING_SETUP_SQE128, then
- 		 * this field is used for 80 bytes of arbitrary command data
-@@ -729,6 +735,7 @@ struct io_uring_recvmsg_out {
- enum {
- 	SOCKET_URING_OP_SIOCINQ		= 0,
- 	SOCKET_URING_OP_SIOCOUTQ,
-+	SOCKET_URING_OP_GETSOCKOPT,
- };
+diff --git a/scripts/gdb/linux/constants.py.in b/scripts/gdb/linux/constants.py.in
+index 03fa6d2cfe01..e3517d4ab8ec 100644
+--- a/scripts/gdb/linux/constants.py.in
++++ b/scripts/gdb/linux/constants.py.in
+@@ -22,6 +22,7 @@
+ #include <linux/radix-tree.h>
+ #include <linux/slab.h>
+ #include <linux/threads.h>
++#include <linux/vmalloc.h>
  
- #ifdef __cplusplus
-diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-index 8e7a03c1b20e..582931879482 100644
---- a/io_uring/uring_cmd.c
-+++ b/io_uring/uring_cmd.c
-@@ -166,6 +166,32 @@ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
- }
- EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed);
+ /* We need to stringify expanded macros so that they can be parsed */
  
-+static inline int io_uring_cmd_getsockopt(struct socket *sock,
-+					  struct io_uring_cmd *cmd)
-+{
-+	void __user *optval = u64_to_user_ptr(READ_ONCE(cmd->sqe->optval));
-+	int optname = READ_ONCE(cmd->sqe->optname);
-+	int optlen = READ_ONCE(cmd->sqe->optlen);
-+	int level = READ_ONCE(cmd->sqe->level);
-+	int err;
+@@ -91,6 +92,13 @@ LX_GDBPARSED(RADIX_TREE_MAP_SIZE)
+ LX_GDBPARSED(RADIX_TREE_MAP_SHIFT)
+ LX_GDBPARSED(RADIX_TREE_MAP_MASK)
+ 
++/* linux/vmalloc.h */
++LX_VALUE(VM_IOREMAP)
++LX_VALUE(VM_ALLOC)
++LX_VALUE(VM_MAP)
++LX_VALUE(VM_USERMAP)
++LX_VALUE(VM_DMA_COHERENT)
 +
-+	err = security_socket_getsockopt(sock, level, optname);
-+	if (err)
-+		return err;
+ /* linux/page_ext.h */
+ if IS_BUILTIN(CONFIG_PAGE_OWNER):
+     LX_GDBPARSED(PAGE_EXT_OWNER)
+diff --git a/scripts/gdb/linux/vmalloc.py b/scripts/gdb/linux/vmalloc.py
+new file mode 100644
+index 000000000000..48e4a4fae7bb
+--- /dev/null
++++ b/scripts/gdb/linux/vmalloc.py
+@@ -0,0 +1,56 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# Copyright (c) 2023 MediaTek Inc.
++#
++# Authors:
++#  Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
++#
 +
-+	if (level == SOL_SOCKET) {
-+		err = sk_getsockopt(sock->sk, level, optname,
-+				    USER_SOCKPTR(optval),
-+				    KERNEL_SOCKPTR(&optlen));
-+		if (err)
-+			return err;
++import gdb
++import re
++from linux import lists, utils, stackdepot, constants, mm
 +
-+		return optlen;
-+	}
++vmap_area_type = utils.CachedType('struct vmap_area')
++vmap_area_ptr_type = vmap_area_type.get_type().pointer()
 +
-+	return -EOPNOTSUPP;
-+}
++def is_vmalloc_addr(x):
++    pg_ops = mm.page_ops().ops
++    addr = pg_ops.kasan_reset_tag(x)
++    return addr >= pg_ops.VMALLOC_START and addr < pg_ops.VMALLOC_END
 +
- int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
- {
- 	struct socket *sock = cmd->file->private_data;
-@@ -187,6 +213,8 @@ int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
- 		if (ret)
- 			return ret;
- 		return arg;
-+	case SOCKET_URING_OP_GETSOCKOPT:
-+		return io_uring_cmd_getsockopt(sock, cmd);
- 	default:
- 		return -EOPNOTSUPP;
- 	}
++class LxVmallocInfo(gdb.Command):
++    """Show vmallocinfo"""
++
++    def __init__(self):
++        super(LxVmallocInfo, self).__init__("lx-vmallocinfo", gdb.COMMAND_DATA)
++
++    def invoke(self, arg, from_tty):
++        vmap_area_list = gdb.parse_and_eval('vmap_area_list')
++        for vmap_area in lists.list_for_each_entry(vmap_area_list, vmap_area_ptr_type, "list"):
++            if not vmap_area['vm']:
++                gdb.write("0x%x-0x%x %10d vm_map_ram\n" % (vmap_area['va_start'], vmap_area['va_end'],
++                    vmap_area['va_end'] - vmap_area['va_start']))
++                continue
++            v = vmap_area['vm']
++            gdb.write("0x%x-0x%x %10d" % (v['addr'], v['addr'] + v['size'], v['size']))
++            if v['caller']:
++                gdb.write(" %s" % str(v['caller']).split(' ')[-1])
++            if v['nr_pages']:
++                gdb.write(" pages=%d" % v['nr_pages'])
++            if v['phys_addr']:
++                gdb.write(" phys=0x%x" % v['phys_addr'])
++            if v['flags'] & constants.LX_VM_IOREMAP:
++                gdb.write(" ioremap")
++            if v['flags'] & constants.LX_VM_ALLOC:
++                gdb.write(" vmalloc")
++            if v['flags'] & constants.LX_VM_MAP:
++                gdb.write(" vmap")
++            if v['flags'] & constants.LX_VM_USERMAP:
++                gdb.write(" user")
++            if v['flags'] & constants.LX_VM_DMA_COHERENT:
++                gdb.write(" dma-coherent")
++            if is_vmalloc_addr(v['pages']):
++                gdb.write(" vpages")
++            gdb.write("\n")
++
++LxVmallocInfo()
+diff --git a/scripts/gdb/vmlinux-gdb.py b/scripts/gdb/vmlinux-gdb.py
+index 2526364f31fd..fc53cdf286f1 100644
+--- a/scripts/gdb/vmlinux-gdb.py
++++ b/scripts/gdb/vmlinux-gdb.py
+@@ -48,3 +48,4 @@ else:
+     import linux.stackdepot
+     import linux.page_owner
+     import linux.slab
++    import linux.vmalloc
 -- 
-2.34.1
+2.18.0
 
