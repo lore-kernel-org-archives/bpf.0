@@ -1,134 +1,63 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B47411B7C9;
-	Tue,  8 Aug 2023 16:49:34 +0000 (UTC)
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B78116AFF;
-	Tue,  8 Aug 2023 09:49:33 -0700 (PDT)
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2b9d3dacb33so95357021fa.1;
-        Tue, 08 Aug 2023 09:49:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691513371; x=1692118171;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o+9mxu8b+EhzS+5yoGnjlhzry4jkjQ5Q19ANuPNesrY=;
-        b=l+J8ftwOUHMt2R84TGYZQ0G1AyQ5zfkFhgjdQq3p9CwjDoGfVT0ysWkD4m4cTgcsrz
-         VnSiC+kxrEl2uMHN/bL/TWpw3x/mq6elkVx75+/P3kKsTIglIOftRjuzOuvoaACqXp5r
-         ymAK9h6w30XQZ1yTTXBX14Rsgdaq0/Tnz3ManZ2HMz/vrr9bX9l3o4rk6dp7jIHxFxK0
-         81K3x0pf3DSIIlzuWGkGhAedjyFcksBQFrZWjqx6gZIEINC08DeLtTyLKyvCNAy6YSiQ
-         Wy5ry/WBQUcvIamvkyq2r9r86dOB12CigvoxmhcZt1udmO7m48wgpDKTtKoZb+qTtnL/
-         OQ2w==
-X-Gm-Message-State: AOJu0YzXUznEAgznzLGg5rUubd3OEPwCcoK9CwyNaiwAWf5suWi4nRWW
-	836OXhYYY1oNvNd2OR8qzhldv0OOJBs=
-X-Google-Smtp-Source: AGHT+IFaiSD6la9EEN/hiA8ab/8s4dP7Ut5NjsQn3lAyBLxiI8Mq1SO2WnI7EtR5m+sRlgD67JjEaA==
-X-Received: by 2002:aa7:dc07:0:b0:522:37f1:5fd0 with SMTP id b7-20020aa7dc07000000b0052237f15fd0mr11327506edu.5.1691502066712;
-        Tue, 08 Aug 2023 06:41:06 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-018.fbsv.net. [2a03:2880:31ff:12::face:b00c])
-        by smtp.gmail.com with ESMTPSA id p8-20020a05640210c800b005231e1780aasm6116955edu.91.2023.08.08.06.41.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Aug 2023 06:41:06 -0700 (PDT)
-From: Breno Leitao <leitao@debian.org>
-To: sdf@google.com,
-	axboe@kernel.dk,
-	asml.silence@gmail.com,
-	willemdebruijn.kernel@gmail.com
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	io-uring@vger.kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com
-Subject: [PATCH v2 3/8] io_uring/cmd: Introduce SOCKET_URING_OP_SETSOCKOPT
-Date: Tue,  8 Aug 2023 06:40:43 -0700
-Message-Id: <20230808134049.1407498-4-leitao@debian.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230808134049.1407498-1-leitao@debian.org>
-References: <20230808134049.1407498-1-leitao@debian.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06AC714F6D
+	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 17:38:10 +0000 (UTC)
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDEFB205D1
+	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 10:26:20 -0700 (PDT)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.55])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RKx6P6FBMzrSKm;
+	Tue,  8 Aug 2023 22:54:21 +0800 (CST)
+Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
+ (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 8 Aug
+ 2023 22:55:32 +0800
+From: Yue Haibing <yuehaibing@huawei.com>
+To: <martin.lau@linux.dev>, <ast@kernel.org>, <daniel@iogearbox.net>,
+	<andrii@kernel.org>, <song@kernel.org>, <yonghong.song@linux.dev>,
+	<john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+	<haoluo@google.com>, <jolsa@kernel.org>
+CC: <bpf@vger.kernel.org>, <yuehaibing@huawei.com>
+Subject: [PATCH bpf-next] bpf: lru: Remove unused declaration bpf_lru_promote()
+Date: Tue, 8 Aug 2023 22:55:31 +0800
+Message-ID: <20230808145531.19692-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+	RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add initial support for SOCKET_URING_OP_SETSOCKOPT. This new command is
-similar to setsockopt. This initial implementation just cares about
-SOL_SOCKET level for now. The next patch implements the generic case.
+Commit 3a08c2fd7634 ("bpf: LRU List") declared but never implemented this.
 
-Function io_uring_cmd_setsockopt() is inspired by the function
-__sys_setsockopt().
-
-Important to say that userspace needs to keep the pointer's memory alive
-until the operation is completed.
-
-Signed-off-by: Breno Leitao <leitao@debian.org>
+Signed-off-by: Yue Haibing <yuehaibing@huawei.com>
 ---
- include/uapi/linux/io_uring.h |  1 +
- io_uring/uring_cmd.c          | 23 +++++++++++++++++++++++
- 2 files changed, 24 insertions(+)
+ kernel/bpf/bpf_lru_list.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index 8152151080db..3fe82df06abf 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -736,6 +736,7 @@ enum {
- 	SOCKET_URING_OP_SIOCINQ		= 0,
- 	SOCKET_URING_OP_SIOCOUTQ,
- 	SOCKET_URING_OP_GETSOCKOPT,
-+	SOCKET_URING_OP_SETSOCKOPT,
- };
+diff --git a/kernel/bpf/bpf_lru_list.h b/kernel/bpf/bpf_lru_list.h
+index 8f3c8b2b4490..cbd8d3720c2b 100644
+--- a/kernel/bpf/bpf_lru_list.h
++++ b/kernel/bpf/bpf_lru_list.h
+@@ -75,6 +75,5 @@ void bpf_lru_populate(struct bpf_lru *lru, void *buf, u32 node_offset,
+ void bpf_lru_destroy(struct bpf_lru *lru);
+ struct bpf_lru_node *bpf_lru_pop_free(struct bpf_lru *lru, u32 hash);
+ void bpf_lru_push_free(struct bpf_lru *lru, struct bpf_lru_node *node);
+-void bpf_lru_promote(struct bpf_lru *lru, struct bpf_lru_node *node);
  
- #ifdef __cplusplus
-diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-index 582931879482..5404b788ca14 100644
---- a/io_uring/uring_cmd.c
-+++ b/io_uring/uring_cmd.c
-@@ -192,6 +192,27 @@ static inline int io_uring_cmd_getsockopt(struct socket *sock,
- 	return -EOPNOTSUPP;
- }
- 
-+static inline int io_uring_cmd_setsockopt(struct socket *sock,
-+					  struct io_uring_cmd *cmd)
-+{
-+	void __user *optval = u64_to_user_ptr(READ_ONCE(cmd->sqe->optval));
-+	int optname = READ_ONCE(cmd->sqe->optname);
-+	int optlen = READ_ONCE(cmd->sqe->optlen);
-+	int level = READ_ONCE(cmd->sqe->level);
-+	int err;
-+
-+	err = security_socket_setsockopt(sock, level, optname);
-+	if (err)
-+		return err;
-+
-+	err = -EOPNOTSUPP;
-+	if (level == SOL_SOCKET && !sock_use_custom_sol_socket(sock))
-+		err = sock_setsockopt(sock, level, optname,
-+				      USER_SOCKPTR(optval), optlen);
-+
-+	return err;
-+}
-+
- int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
- {
- 	struct socket *sock = cmd->file->private_data;
-@@ -215,6 +236,8 @@ int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
- 		return arg;
- 	case SOCKET_URING_OP_GETSOCKOPT:
- 		return io_uring_cmd_getsockopt(sock, cmd);
-+	case SOCKET_URING_OP_SETSOCKOPT:
-+		return io_uring_cmd_setsockopt(sock, cmd);
- 	default:
- 		return -EOPNOTSUPP;
- 	}
+ #endif
 -- 
 2.34.1
 
