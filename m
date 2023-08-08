@@ -1,107 +1,140 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE5323C37;
-	Tue,  8 Aug 2023 16:14:26 +0000 (UTC)
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F0FFF9A0;
-	Tue,  8 Aug 2023 09:14:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-	; s=x; h=Subject:Content-Transfer-Encoding:Mime-Version:Message-Id:Cc:To:From
-	:Date:subject:date:message-id:reply-to;
-	bh=oVjNdEpzZx0zgptzt6k7F+8X6mMIVOg3jSHvHicMgSs=; b=Lfi5oGJt92TrKiMkSKnj86OinS
-	+2NhXXYIWmzJSO0UeZ3PNgNuIpJ5+9NRa7eG0PCO/lJdQfwxUt2xx/vRhWH14aJR7Zi3DsVcGlYSg
-	4Re5W0tus87tNrarUoWozS2cyEX5CieZtJZ5HI5r4xZ229FkXIVmiG58p2T40oTpV57Q=;
-Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:35240 helo=pettiford)
-	by mail.hugovil.com with esmtpa (Exim 4.92)
-	(envelope-from <hugo@hugovil.com>)
-	id 1qTPKm-0007qt-G1; Tue, 08 Aug 2023 12:13:25 -0400
-Date: Tue, 8 Aug 2023 12:13:23 -0400
-From: Hugo Villeneuve <hugo@hugovil.com>
-To: Breno Leitao <leitao@debian.org>
-Cc: sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
- willemdebruijn.kernel@gmail.com, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- io-uring@vger.kernel.org
-Message-Id: <20230808121323.bc144c719eba5979e161aac6@hugovil.com>
-In-Reply-To: <20230808134049.1407498-2-leitao@debian.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54C611427B;
+	Tue,  8 Aug 2023 16:23:51 +0000 (UTC)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D780429B5D;
+	Tue,  8 Aug 2023 09:23:36 -0700 (PDT)
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-31765aee31bso4407799f8f.1;
+        Tue, 08 Aug 2023 09:23:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691511776; x=1692116576;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Evi9zaaIocUJUljhUqjZf7aG4nW/p3HKqWc5e4qc1/c=;
+        b=lD9mAXwki50v5R4shgAO1eWV6+duHpa3z72W63T7UURzzxtw3HoaFXmxhgceq6d7FT
+         q7QMebiG8AHcS1p6i/B0zGbry6Gp/YEFrtKAUzPdclXOfk8h/tgW1VQ+8x4o7J0GHXve
+         LXGmBh8JBE8yAkCwAQcIno4ShJJtcF26kmLq1bVkwv4vxQE368eYHIJywEd9IR3x0SdV
+         AiJq2ikEthR2wECttUhEjMf1mX5dUuWOYpVXPzFfwE/iWv6amFPW9/XBVgzsYAHzEon4
+         ZWW/+sWxUHHyxlOr7NwDHktMHE/brgKXLPb09e+epZo32UBm1yqYlHCa5o7AUyHW4OAG
+         8zgQ==
+X-Gm-Message-State: AOJu0Yx4BO3TxX9eF4R6aGXjrCgpMirBYdzlwbS2IyPskoPDLucjHL7f
+	p4FLyEKCFx2cGKEhc3OpbJith4rK6nMObA==
+X-Google-Smtp-Source: AGHT+IF+kwB5pVAkz6onSyAIl+T5+1+ttJMPZ4G+vAb/sWRvLXfUO1y6Zyhx90T3HXmclZ/857Yrnw==
+X-Received: by 2002:a17:906:3046:b0:992:6064:f32b with SMTP id d6-20020a170906304600b009926064f32bmr11160819ejd.46.1691502071224;
+        Tue, 08 Aug 2023 06:41:11 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-020.fbsv.net. [2a03:2880:31ff:14::face:b00c])
+        by smtp.gmail.com with ESMTPSA id d11-20020a170906c20b00b00992d70f8078sm6731416ejz.106.2023.08.08.06.41.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Aug 2023 06:41:10 -0700 (PDT)
+From: Breno Leitao <leitao@debian.org>
+To: sdf@google.com,
+	axboe@kernel.dk,
+	asml.silence@gmail.com,
+	willemdebruijn.kernel@gmail.com,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	io-uring@vger.kernel.org
+Subject: [PATCH v2 6/8] bpf: Leverage sockptr_t in BPF setsockopt hook
+Date: Tue,  8 Aug 2023 06:40:46 -0700
+Message-Id: <20230808134049.1407498-7-leitao@debian.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230808134049.1407498-1-leitao@debian.org>
 References: <20230808134049.1407498-1-leitao@debian.org>
-	<20230808134049.1407498-2-leitao@debian.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 184.161.19.61
-X-SA-Exim-Mail-From: hugo@hugovil.com
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v2 1/8] net: expose sock_use_custom_sol_socket
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 
-On Tue,  8 Aug 2023 06:40:41 -0700
-Breno Leitao <leitao@debian.org> wrote:
+Move BPF setsockopt hook (__cgroup_bpf_run_filter_setsockopt()) to use
+sockptr instead of user pointers. This brings flexibility to the
+function, since it could be called with userspace or kernel pointers.
 
-> Exposing function sock_use_custom_sol_socket(), so it could be used by
-> io_uring subsystem.
-> 
-> This function will be used in the function io_uring_cmd_setsockopt() in
-> the coming patch, so, let's move it to the socket.h header file.
+This also aligns with the getsockopt() counterpart, which is now using
+sockptr_t types.
 
-Hi,
-this description doesn't seem to match the code change below...
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ include/linux/bpf-cgroup.h | 2 +-
+ kernel/bpf/cgroup.c        | 5 +++--
+ net/socket.c               | 2 +-
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-Hugo Villeneuve.
+diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+index d16cb99fd4f1..5e3419eb267a 100644
+--- a/include/linux/bpf-cgroup.h
++++ b/include/linux/bpf-cgroup.h
+@@ -137,7 +137,7 @@ int __cgroup_bpf_run_filter_sysctl(struct ctl_table_header *head,
+ 				   enum cgroup_bpf_attach_type atype);
+ 
+ int __cgroup_bpf_run_filter_setsockopt(struct sock *sock, int *level,
+-				       int *optname, char __user *optval,
++				       int *optname, sockptr_t optval,
+ 				       int *optlen, char **kernel_optval);
+ 
+ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index ebc8c58f7e46..f0dedd4f7f2e 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -1785,7 +1785,7 @@ static bool sockopt_buf_allocated(struct bpf_sockopt_kern *ctx,
+ }
+ 
+ int __cgroup_bpf_run_filter_setsockopt(struct sock *sk, int *level,
+-				       int *optname, char __user *optval,
++				       int *optname, sockptr_t optval,
+ 				       int *optlen, char **kernel_optval)
+ {
+ 	struct cgroup *cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
+@@ -1808,7 +1808,8 @@ int __cgroup_bpf_run_filter_setsockopt(struct sock *sk, int *level,
+ 
+ 	ctx.optlen = *optlen;
+ 
+-	if (copy_from_user(ctx.optval, optval, min(*optlen, max_optlen)) != 0) {
++	if (copy_from_sockptr(ctx.optval, optval,
++			      min(*optlen, max_optlen))) {
+ 		ret = -EFAULT;
+ 		goto out;
+ 	}
+diff --git a/net/socket.c b/net/socket.c
+index c686c6e89441..b7d22633995a 100644
+--- a/net/socket.c
++++ b/net/socket.c
+@@ -2241,7 +2241,7 @@ int __sys_setsockopt(int fd, int level, int optname, char __user *user_optval,
+ 
+ 	if (!in_compat_syscall())
+ 		err = BPF_CGROUP_RUN_PROG_SETSOCKOPT(sock->sk, &level, &optname,
+-						     user_optval, &optlen,
++						     optval, &optlen,
+ 						     &kernel_optval);
+ 	if (err < 0)
+ 		goto out_put;
+-- 
+2.34.1
 
-
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> ---
->  include/linux/net.h | 5 +++++
->  net/socket.c        | 5 -----
->  2 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/include/linux/net.h b/include/linux/net.h
-> index 41c608c1b02c..14a956e4530e 100644
-> --- a/include/linux/net.h
-> +++ b/include/linux/net.h
-> @@ -355,4 +355,9 @@ u32 kernel_sock_ip_overhead(struct sock *sk);
->  #define MODULE_ALIAS_NET_PF_PROTO_NAME(pf, proto, name) \
->  	MODULE_ALIAS("net-pf-" __stringify(pf) "-proto-" __stringify(proto) \
->  		     name)
-> +
-> +static inline bool sock_use_custom_sol_socket(const struct socket *sock)
-> +{
-> +	return test_bit(SOCK_CUSTOM_SOCKOPT, &sock->flags);
-> +}
->  #endif	/* _LINUX_NET_H */
-> diff --git a/net/socket.c b/net/socket.c
-> index 1dc23f5298ba..8df54352af83 100644
-> --- a/net/socket.c
-> +++ b/net/socket.c
-> @@ -2216,11 +2216,6 @@ SYSCALL_DEFINE4(recv, int, fd, void __user *, ubuf, size_t, size,
->  	return __sys_recvfrom(fd, ubuf, size, flags, NULL, NULL);
->  }
->  
-> -static bool sock_use_custom_sol_socket(const struct socket *sock)
-> -{
-> -	return test_bit(SOCK_CUSTOM_SOCKOPT, &sock->flags);
-> -}
-> -
->  /*
->   *	Set a socket option. Because we don't know the option lengths we have
->   *	to pass the user mode parameter for the protocols to sort out.
-> -- 
-> 2.34.1
-> 
