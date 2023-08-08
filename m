@@ -1,78 +1,51 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31A4614F6B;
-	Tue,  8 Aug 2023 15:42:56 +0000 (UTC)
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338C94C38;
-	Tue,  8 Aug 2023 08:42:34 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 044825C01BA;
-	Tue,  8 Aug 2023 01:59:23 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Tue, 08 Aug 2023 01:59:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjusaka.me; h=
-	cc:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to; s=fm3; t=1691474362; x=
-	1691560762; bh=DViu5+0VvFfaGHH4bzT/NrPHRN0WXpyoHKoK6Q4aOkI=; b=k
-	5wQGPWUw4F7d0kNcULOsKRRvNERd+x8S3N/Gzh/ouKapiXE8gTWvy6iPORO0R1ho
-	8Vk5IeLuF6xTYi+QAIZXJFf2j9a9ygFnOVGnVAn+WgEfNwlSVXfgo39kJEjvf5Xa
-	jCdqj306zdf1JecU7gm5Htq93lNVnhpEUCQBL4CWiRAf2d7s3g9FAQXh5BJXpUJn
-	MMVo1l+yk4KBUF+Qfcl2i0a3ELjijJQKd1fOPdQjplLRm2vnvAmER9MBZjnMq2+2
-	I69EJmofA4RDgcOpatHODOn6zMgK33Mvd3cGZWRsO+ElIR7REV8GNXFPEdM2SmUY
-	e5IbrVupJpClUXi1KIiQw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1691474362; x=
-	1691560762; bh=DViu5+0VvFfaGHH4bzT/NrPHRN0WXpyoHKoK6Q4aOkI=; b=k
-	Ovmb2E8ZAuPC+h1pMiB3lK4QJ5WhxflTLs+Ad4JUxasXzZQzvrteJzw60xPyZncT
-	lSLiiaFsz3A/0fOVEupPP/mgpuQNzPWVuVMkUGYzUGDp8GN/o0SyOwYepo8K5XQ+
-	lFFQFDaNmlJtd8KUUeGrIi6d0866WigMF339l/i5jM3Bkt9nToQwQJRcfCBr6RCN
-	e01tOKfudxUsxf7qfAGPiCakk3sx5cdTLneCUs5zfqEUZ8fIMz3W454TaMXag0CW
-	1ZCzE2D61SC/xrfb/DhcUtbR4jzzRblGmM7vZ27ruEBt/7FaZzJH/4xpzcOZbGxt
-	N0lqpl13oBdHlMQVKz7zw==
-X-ME-Sender: <xms:utnRZBmAiPKwNTgpZEZiHeDu_knbVl_F6AxC-nV0NzKcqdkprMbEJw>
-    <xme:utnRZM0cN_Q8uiG3EhaEoVjnGMwULTzlUJtBz1sbste0oH5l2ZWy-0fKYS3Mb2hnb
-    v51mPxpVf3H_ExfpHY>
-X-ME-Received: <xmr:utnRZHrJs8luwdOd8P7K-5CamtmRUWj5Iv2eR_voaHWFGOeITBw3StjPVH4gbMHhT4qFgO0mcw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrledugdellecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgjfhgggfestdekre
-    dtredttdenucfhrhhomhepofgrnhhjuhhsrghkrgcuoehmvgesmhgrnhhjuhhsrghkrgdr
-    mhgvqeenucggtffrrghtthgvrhhnpeeuhfejieefgedvvdeuhffhvedvjeegkeejveeihf
-    egueethfevfeeikedvvdffgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhep
-    mhgrihhlfhhrohhmpehmvgesmhgrnhhjuhhsrghkrgdrmhgv
-X-ME-Proxy: <xmx:utnRZBnR6zWGVBJ4I24iveAG8ubLjxMsI3XVUxTs3XefEuuAHefDNw>
-    <xmx:utnRZP1BlID-dPisFNsBApjThwf_hUZxY68W-YYJfs5Dkqs8YguGOg>
-    <xmx:utnRZAsDjK6aOnLmSFgAzG0tBG0dB5LNeWFmAdebYyBXY27SE5z8Yw>
-    <xmx:utnRZIvuJCkm_lRvHB9jIqSW6ohjUnYcqHiqmOOdkPh_E8atcK-0JQ>
-Feedback-ID: i3ea9498d:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 8 Aug 2023 01:59:18 -0400 (EDT)
-From: Manjusaka <me@manjusaka.me>
-To: ncardwell@google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 349AF18B1F;
+	Tue,  8 Aug 2023 15:47:16 +0000 (UTC)
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB267EC1;
+	Tue,  8 Aug 2023 08:47:00 -0700 (PDT)
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2b9e6cc93d8so93815801fa.0;
+        Tue, 08 Aug 2023 08:47:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691509614; x=1692114414;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=r9Qw/F0brYOmpW9rwZop//d4heqX4w4nP09GhRsKIik=;
+        b=T4BQwXpXdsCuYvtifYD93c+gJl9rrz++/mR+4CynnqIvkUphBdDQ+lCgTW1D5Bi+Pd
+         VzU5S/44j9RzUIScS4QKgvxAIEgjOrRy8tDji1l921ZgNNxUFqrtES9Ziv9X6D3dHBib
+         G7vP+ZDfprdS+SwSUuLv58BN+BeGptCqziUtKUOPiyKKG+ub3vTum+zI2bk9IZ7ZIcAE
+         iSuXNg9/rEwuUhXUCKN7a5MpHlyfMeNolQIQE3qUpI2Py1QozWcyrh4m/mjELJrfeoB+
+         nLeM6ywoACfu+zpBe7U8v+g8pnpYv0x5wwMHOJx4MIrMUzz8K2294mNLzrRmA+yMxSJu
+         R+/A==
+X-Gm-Message-State: AOJu0Yw68NILxUrlrTB/SJ1JZ9iclpb5ZGtyYQEOzYatsri3G6neoxCe
+	+OsiLVGqovmnCRwfei7OonbnVu78xjE=
+X-Google-Smtp-Source: AGHT+IEqhkwYaYSGAbqiw/LtPf5oEi+RgNvatwnvbRraW5eX4hKHlnSYlRuneFBiMukqQzpmDTlkmg==
+X-Received: by 2002:aa7:dad0:0:b0:51d:9ddf:f0f6 with SMTP id x16-20020aa7dad0000000b0051d9ddff0f6mr10088298eds.36.1691502065220;
+        Tue, 08 Aug 2023 06:41:05 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-012.fbsv.net. [2a03:2880:31ff:c::face:b00c])
+        by smtp.gmail.com with ESMTPSA id bc5-20020a056402204500b005230f06de15sm6767707edb.78.2023.08.08.06.41.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Aug 2023 06:41:04 -0700 (PDT)
+From: Breno Leitao <leitao@debian.org>
+To: sdf@google.com,
+	axboe@kernel.dk,
+	asml.silence@gmail.com,
+	willemdebruijn.kernel@gmail.com
 Cc: bpf@vger.kernel.org,
-	davem@davemloft.net,
-	dsahern@kernel.org,
-	edumazet@google.com,
-	kuba@kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	me@manjusaka.me,
-	mhiramat@kernel.org,
 	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	rostedt@goodmis.org
-Subject: [PATCH v2] tracepoint: add new `tcp:tcp_ca_event` trace event
-Date: Tue,  8 Aug 2023 05:58:18 +0000
-Message-Id: <20230808055817.3979-1-me@manjusaka.me>
+	io-uring@vger.kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com
+Subject: [PATCH v2 2/8] io_uring/cmd: Introduce SOCKET_URING_OP_GETSOCKOPT
+Date: Tue,  8 Aug 2023 06:40:42 -0700
+Message-Id: <20230808134049.1407498-3-leitao@debian.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <CADVnQyn3UMa3Qx6cC1Rx97xLjQdG0eKsiF7oY9UR=b9vU4R-yA@mail.gmail.com>
-References: <CADVnQyn3UMa3Qx6cC1Rx97xLjQdG0eKsiF7oY9UR=b9vU4R-yA@mail.gmail.com>
+In-Reply-To: <20230808134049.1407498-1-leitao@debian.org>
+References: <20230808134049.1407498-1-leitao@debian.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -80,125 +53,120 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-In normal use case, the tcp_ca_event would be changed in high frequency.
+Add support for getsockopt command (SOCKET_URING_OP_GETSOCKOPT), where
+level is SOL_SOCKET. This is leveraging the sockptr_t infrastructure,
+where a sockptr_t is either userspace or kernel space, and handled as
+such.
 
-It's a good indicator to represent the network quanlity.
+Function io_uring_cmd_getsockopt() is inspired by __sys_getsockopt().
 
-So I propose to add a `tcp:tcp_ca_event` trace event
-like `tcp:tcp_cong_state_set` to help the people to
-trace the TCP connection status
+Differently from the getsockopt(2), the optlen field is not a userspace
+pointers. In getsockopt(2), userspace provides optlen pointer, which is
+overwritten by the kernel.  In this implementation, userspace passes a
+u32, and the new value is returned in cqe->res. I.e., optlen is not a
+pointer.
 
-Signed-off-by: Manjusaka <me@manjusaka.me>
+Important to say that userspace needs to keep the pointer alive until
+the CQE is completed.
+
+Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- include/net/tcp.h          |  9 ++------
- include/trace/events/tcp.h | 45 ++++++++++++++++++++++++++++++++++++++
- net/ipv4/tcp_cong.c        | 10 +++++++++
- 3 files changed, 57 insertions(+), 7 deletions(-)
+ include/uapi/linux/io_uring.h |  7 +++++++
+ io_uring/uring_cmd.c          | 28 ++++++++++++++++++++++++++++
+ 2 files changed, 35 insertions(+)
 
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 0ca972ebd3dd..a68c5b61889c 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -1154,13 +1154,8 @@ static inline bool tcp_ca_needs_ecn(const struct sock *sk)
- 	return icsk->icsk_ca_ops->flags & TCP_CONG_NEEDS_ECN;
+diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+index 9fc7195f25df..8152151080db 100644
+--- a/include/uapi/linux/io_uring.h
++++ b/include/uapi/linux/io_uring.h
+@@ -43,6 +43,10 @@ struct io_uring_sqe {
+ 	union {
+ 		__u64	addr;	/* pointer to buffer or iovecs */
+ 		__u64	splice_off_in;
++		struct {
++			__u32	level;
++			__u32	optname;
++		};
+ 	};
+ 	__u32	len;		/* buffer size or number of iovecs */
+ 	union {
+@@ -79,6 +83,7 @@ struct io_uring_sqe {
+ 	union {
+ 		__s32	splice_fd_in;
+ 		__u32	file_index;
++		__u32	optlen;
+ 		struct {
+ 			__u16	addr_len;
+ 			__u16	__pad3[1];
+@@ -89,6 +94,7 @@ struct io_uring_sqe {
+ 			__u64	addr3;
+ 			__u64	__pad2[1];
+ 		};
++		__u64	optval;
+ 		/*
+ 		 * If the ring is initialized with IORING_SETUP_SQE128, then
+ 		 * this field is used for 80 bytes of arbitrary command data
+@@ -729,6 +735,7 @@ struct io_uring_recvmsg_out {
+ enum {
+ 	SOCKET_URING_OP_SIOCINQ		= 0,
+ 	SOCKET_URING_OP_SIOCOUTQ,
++	SOCKET_URING_OP_GETSOCKOPT,
+ };
+ 
+ #ifdef __cplusplus
+diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+index 8e7a03c1b20e..582931879482 100644
+--- a/io_uring/uring_cmd.c
++++ b/io_uring/uring_cmd.c
+@@ -166,6 +166,32 @@ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
  }
+ EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed);
  
--static inline void tcp_ca_event(struct sock *sk, const enum tcp_ca_event event)
--{
--	const struct inet_connection_sock *icsk = inet_csk(sk);
--
--	if (icsk->icsk_ca_ops->cwnd_event)
--		icsk->icsk_ca_ops->cwnd_event(sk, event);
--}
-+/* from tcp_cong.c */
-+void tcp_ca_event(struct sock *sk, const enum tcp_ca_event event);
- 
- /* From tcp_cong.c */
- void tcp_set_ca_state(struct sock *sk, const u8 ca_state);
-diff --git a/include/trace/events/tcp.h b/include/trace/events/tcp.h
-index bf06db8d2046..b374eb636af9 100644
---- a/include/trace/events/tcp.h
-+++ b/include/trace/events/tcp.h
-@@ -416,6 +416,51 @@ TRACE_EVENT(tcp_cong_state_set,
- 		  __entry->cong_state)
- );
- 
-+TRACE_EVENT(tcp_ca_event,
-+
-+	TP_PROTO(struct sock *sk, const u8 ca_event),
-+
-+	TP_ARGS(sk, ca_event),
-+
-+	TP_STRUCT__entry(
-+		__field(const void *, skaddr)
-+		__field(__u16, sport)
-+		__field(__u16, dport)
-+		__array(__u8, saddr, 4)
-+		__array(__u8, daddr, 4)
-+		__array(__u8, saddr_v6, 16)
-+		__array(__u8, daddr_v6, 16)
-+		__field(__u8, ca_event)
-+	),
-+
-+	TP_fast_assign(
-+		struct inet_sock *inet = inet_sk(sk);
-+		__be32 *p32;
-+
-+		__entry->skaddr = sk;
-+
-+		__entry->sport = ntohs(inet->inet_sport);
-+		__entry->dport = ntohs(inet->inet_dport);
-+
-+		p32 = (__be32 *) __entry->saddr;
-+		*p32 = inet->inet_saddr;
-+
-+		p32 = (__be32 *) __entry->daddr;
-+		*p32 =  inet->inet_daddr;
-+
-+		TP_STORE_ADDRS(__entry, inet->inet_saddr, inet->inet_daddr,
-+			   sk->sk_v6_rcv_saddr, sk->sk_v6_daddr);
-+
-+		__entry->ca_event = ca_event;
-+	),
-+
-+	TP_printk("sport=%hu dport=%hu saddr=%pI4 daddr=%pI4 saddrv6=%pI6c daddrv6=%pI6c ca_event=%u",
-+		  __entry->sport, __entry->dport,
-+		  __entry->saddr, __entry->daddr,
-+		  __entry->saddr_v6, __entry->daddr_v6,
-+		  __entry->ca_event)
-+);
-+
- #endif /* _TRACE_TCP_H */
- 
- /* This part must be outside protection */
-diff --git a/net/ipv4/tcp_cong.c b/net/ipv4/tcp_cong.c
-index 1b34050a7538..fb7ec6ebbbd0 100644
---- a/net/ipv4/tcp_cong.c
-+++ b/net/ipv4/tcp_cong.c
-@@ -34,6 +34,16 @@ struct tcp_congestion_ops *tcp_ca_find(const char *name)
- 	return NULL;
- }
- 
-+void tcp_ca_event(struct sock *sk, const enum tcp_ca_event event)
++static inline int io_uring_cmd_getsockopt(struct socket *sock,
++					  struct io_uring_cmd *cmd)
 +{
-+	const struct inet_connection_sock *icsk = inet_csk(sk);
++	void __user *optval = u64_to_user_ptr(READ_ONCE(cmd->sqe->optval));
++	int optname = READ_ONCE(cmd->sqe->optname);
++	int optlen = READ_ONCE(cmd->sqe->optlen);
++	int level = READ_ONCE(cmd->sqe->level);
++	int err;
 +
-+	trace_tcp_ca_event(sk, (u8)event);
++	err = security_socket_getsockopt(sock, level, optname);
++	if (err)
++		return err;
 +
-+	if (icsk->icsk_ca_ops->cwnd_event)
-+		icsk->icsk_ca_ops->cwnd_event(sk, event);
++	if (level == SOL_SOCKET) {
++		err = sk_getsockopt(sock->sk, level, optname,
++				    USER_SOCKPTR(optval),
++				    KERNEL_SOCKPTR(&optlen));
++		if (err)
++			return err;
++
++		return optlen;
++	}
++
++	return -EOPNOTSUPP;
 +}
 +
- void tcp_set_ca_state(struct sock *sk, const u8 ca_state)
+ int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
  {
- 	struct inet_connection_sock *icsk = inet_csk(sk);
+ 	struct socket *sock = cmd->file->private_data;
+@@ -187,6 +213,8 @@ int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
+ 		if (ret)
+ 			return ret;
+ 		return arg;
++	case SOCKET_URING_OP_GETSOCKOPT:
++		return io_uring_cmd_getsockopt(sock, cmd);
+ 	default:
+ 		return -EOPNOTSUPP;
+ 	}
 -- 
 2.34.1
 
