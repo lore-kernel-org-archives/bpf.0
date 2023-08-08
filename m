@@ -1,109 +1,159 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3B4B168DE
-	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 18:02:43 +0000 (UTC)
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467AC7EE1
-	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 10:35:11 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-56477c00ef8so6007847a12.3
-        for <bpf@vger.kernel.org>; Tue, 08 Aug 2023 10:35:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24CC15AD2
+	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 18:02:44 +0000 (UTC)
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52FF16A5F
+	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 10:43:37 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1bc65360648so26143685ad.1
+        for <bpf@vger.kernel.org>; Tue, 08 Aug 2023 10:43:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691516111; x=1692120911;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CbNixERlHqS43p9WnetIfE1bwp3ZFaI202y6cxjDISk=;
-        b=BtYnibgAq7g0L/okVpcz1sm6OulXBZOLXW68YAi0kE94x5HCN7bWDWiYRWfi91svGo
-         Xc79qQ233j8gXgGltAV/J8/uXgNtnFjybeQZD1f/61BdCanNXGvF03sIBuo0PLfw2n8V
-         M74JpyhSFxtW15aRUBl8P3VcNB0wjFg/9n39VGQsWXzGFLdytSDGhhjl7u1Z6CtvJuZN
-         /eAqJk8ulH9QCYWJViD5t8z1c0a8y4LlJj9wtw/p4CWVORUdKTqp/wxHXBJvv2h+a/vL
-         8rWrgpPqCe+14Q5CE8cj3cirPO2rMueXgtfqCD0+VzHSYfmiNnwNXQhCV4TlIpQyV+Ie
-         Hl0w==
+        d=obs-cr.20221208.gappssmtp.com; s=20221208; t=1691516617; x=1692121417;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0EGKCZDiJ4NloB/y09AGL84/WyHzdyCqQmvg2p6jph0=;
+        b=zpTFgE2fHPa+4E7FR5rcHzxNaBukxXTxdRHe1EKBoBIBern9vYPW3tzPXTbLlux/C2
+         BHxSP0y3BmFNGotv2KRtJsQ/m82dvWVrnRUY6VweDuYAHgpiGNjbP6KE9ijKBLt83xrg
+         oSZNwc/4wHbXhUBrE/3xPc7Z7dwB5gq56ZY5PofdnVDyHQC8aVctLYD45VeSLVfj0hre
+         bJewKdo77YgBD0i6PuleB13SSxqIRYSHUSNR07Y6SPpHPDm9zNAYFDaASr75B1SzvuXM
+         khCvWoJuS8ouo8KkDRiQN2bB2UEc57RZ5jqJrHWDrIErOANowQT2B0KfpSEzZ0Ggo5en
+         Tmfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691516111; x=1692120911;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CbNixERlHqS43p9WnetIfE1bwp3ZFaI202y6cxjDISk=;
-        b=lMZD19vTMOnSpDtWCbd/+bQMjuZequrqM5k9MdIP9Y4lBxhQMxGROYg01yq1HXmkPq
-         TdPcJ6dxaO0osdPpi5BAgE+y3ZPDpJ4VImNQgy3m8FeuT98m3oGbIO9PAuD0Yyt1nSu9
-         RlTmLAC23AOWZ8kO/JvzOuJagyH/xzS4+7MjS4q7yTF9v8KANSrgDcvjZtv2OjNdBf9F
-         j2FnfdHBBVWxSK12Yh+rka+QgHgBebhSt0txeSa2lXVWBgKMnm4gbnMpie+UinVUwFK8
-         47j5ZflG63F0TXLd0N6DWM//zl8dZwQAg048wUXLT8vh1NjkEVgHH1RJke8Tu4R3vEVx
-         T15w==
-X-Gm-Message-State: AOJu0Yw7GPS/CommBlQ5yu5RlVsnuh6zlCYaNi9wHQNwlFUEQzKwwd6f
-	o/Tm8DA6iSo2AUJtOffpa9tbqmk=
-X-Google-Smtp-Source: AGHT+IHneZnuNzdmec4p8IMznIadt3gvRYK8ETNwHwQuhWBeUw0E2l7zTwuivbDYUrt8/txQeEEsw9g=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a63:3443:0:b0:564:41a2:8d5a with SMTP id
- b64-20020a633443000000b0056441a28d5amr732pga.11.1691516110738; Tue, 08 Aug
- 2023 10:35:10 -0700 (PDT)
-Date: Tue, 8 Aug 2023 10:35:08 -0700
-In-Reply-To: <20230808134049.1407498-1-leitao@debian.org>
+        d=1e100.net; s=20221208; t=1691516617; x=1692121417;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0EGKCZDiJ4NloB/y09AGL84/WyHzdyCqQmvg2p6jph0=;
+        b=YOu7LzW/V+lZXKSzktc7K++/9HBwVKOHhKypaM7e7WROg7vl5rmPxHTXRLWbQXFDDm
+         5foOKB9z2Y4Oe/q/L8/hD1B3mPba34z5hsS/SQ+yzbXR5PqeP9AvC3crDF18adTtr8Zv
+         A8xK2eyLCiPJCpjfI+wcVR1KXu7STAP6VfbCFZTdD69jgQ0fFLKB2+8hRzdcGAoCCu/e
+         QvbpaqsvSjRa4vdYTbchdOT6WmZVwlVrjotEG0Do74DmS3sRyGWZm2f/HFpVEeiVRdDC
+         G+6sb8kJHu1VtMz/zBARwERP0vWeiTcWK1D1CuXw7d8SCVTafm88gQSsHuAoEA1JLRUg
+         WVTA==
+X-Gm-Message-State: AOJu0Yxbtrr+pA6TkRBugYFBdNsvhTmFEBl+Trl2HqraAR02yCcXLDun
+	PyX1YyoL3KntUj0acZR884aTSrsnF8Du/292juM=
+X-Google-Smtp-Source: AGHT+IEkjCajoCyK/YJSybiGl+0sajLbVjFQGBIgAkqqZ34FP2KU31RJr/WUCkU3reXpydGUSyAhng==
+X-Received: by 2002:ac8:5f08:0:b0:405:50b8:dc1d with SMTP id x8-20020ac85f08000000b0040550b8dc1dmr14718265qta.48.1691472463721;
+        Mon, 07 Aug 2023 22:27:43 -0700 (PDT)
+Received: from borderland.rhod.uc.edu ([129.137.96.2])
+        by smtp.gmail.com with ESMTPSA id x4-20020ac81204000000b003f9efa2ddb4sm3102304qti.66.2023.08.07.22.27.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Aug 2023 22:27:43 -0700 (PDT)
+From: Will Hawkins <hawkinsw@obs.cr>
+To: bpf@vger.kernel.org,
+	bpf@ietf.org
+Cc: Will Hawkins <hawkinsw@obs.cr>
+Subject: [PATCH] bpf, docs: Fix small typo and define semantics of sign extension
+Date: Tue,  8 Aug 2023 01:27:32 -0400
+Message-ID: <20230808052736.182587-1-hawkinsw@obs.cr>
+X-Mailer: git-send-email 2.41.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20230808134049.1407498-1-leitao@debian.org>
-Message-ID: <ZNJ8zGcYClv/VCwG@google.com>
-Subject: Re: [PATCH v2 0/8] io_uring: Initial support for {s,g}etsockopt commands
-From: Stanislav Fomichev <sdf@google.com>
-To: Breno Leitao <leitao@debian.org>
-Cc: axboe@kernel.dk, asml.silence@gmail.com, willemdebruijn.kernel@gmail.com, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	io-uring@vger.kernel.org, kuba@kernel.org, pabeni@redhat.com
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-	autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+	autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
+Message-ID: <20230808052732.WVuzrVzVMApW89PaBQMTTjwBjc5O4_GEf3nHf11cd7k@z>
 
-On 08/08, Breno Leitao wrote:
-> This patchset adds support for getsockopt (SOCKET_URING_OP_GETSOCKOPT)
-> and setsockopt (SOCKET_URING_OP_SETSOCKOPT) in io_uring commands.
-> SOCKET_URING_OP_SETSOCKOPT implements generic case, covering all levels
-> nad optnames. On the other hand, SOCKET_URING_OP_GETSOCKOPT just
-> implements level SOL_SOCKET case, which seems to be the
-> most common level parameter for get/setsockopt(2).
-> 
-> struct proto_ops->setsockopt() uses sockptr instead of userspace
-> pointers, which makes it easy to bind to io_uring. Unfortunately
-> proto_ops->getsockopt() callback uses userspace pointers, except for
-> SOL_SOCKET, which is handled by sk_getsockopt(). Thus, this patchset
-> leverages sk_getsockopt() to imlpement the SOCKET_URING_OP_GETSOCKOPT
-> case.
-> 
-> In order to support BPF hooks, I modified the hooks to use  sockptr, so,
-> it is flexible enough to accept user or kernel pointers for
-> optval/optlen.
-> 
-> PS1: For getsockopt command, the optlen field is not a userspace
-> pointers, but an absolute value, so this is slightly different from
-> getsockopt(2) behaviour. The new optlen value is returned in cqe->res.
-> 
-> PS2: The userspace pointers need to be alive until the operation is
-> completed.
-> 
-> These changes were tested with a new test[1] in liburing. On the BPF
-> side, I tested that no regression was introduced by running "test_progs"
-> self test using "sockopt" test case.
-> 
-> [1] Link: https://github.com/leitao/liburing/blob/getsock/test/socket-getsetsock-cmd.c
-> 
-> RFC -> V1:
-> 	* Copy user memory at io_uring subsystem, and call proto_ops
-> 	  callbacks using kernel memory
-> 	* Implement all the cases for SOCKET_URING_OP_SETSOCKOPT
+Add additional precision on the semantics of the sign extension
+operations in eBPF. In addition, fix a very minor typo.
 
-I did a quick pass, will take a close look later today. So far everything makes
-sense to me.
+Signed-off-by: Will Hawkins <hawkinsw@obs.cr>
+---
+ .../bpf/standardization/instruction-set.rst   | 39 ++++++++++++++-----
+ 1 file changed, 30 insertions(+), 9 deletions(-)
 
-Should we properly test it as well?
-We have tools/testing/selftests/bpf/prog_tests/sockopt.c which does
-most of the sanity checks, but it uses regular socket/{g,s}etsockopt
-syscalls. Seems like it should be pretty easy to extend this with
-io_uring path? tools/testing/selftests/net/io_uring_zerocopy_tx.c
-already implements minimal wrappers which we can most likely borrow.
+ Changelog:
+   v0 -> v1:
+     - Separated from an earlier patch -- fly free, patch!
+
+diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Documentation/bpf/standardization/instruction-set.rst
+index 25be958130dc..4f73e9dc8d9e 100644
+--- a/Documentation/bpf/standardization/instruction-set.rst
++++ b/Documentation/bpf/standardization/instruction-set.rst
+@@ -76,6 +76,27 @@ Functions
+   format and returns the equivalent number with the same bit width but
+   opposite endianness.
+ 
++
++Definitions
++-----------
++
++.. glossary::
++
++  Sign Extend
++    To `sign extend an` ``X`` `-bit number, A, to a` ``Y`` `-bit number, B  ,` means to
++
++    #. Copy all ``X`` bits from `A` to the lower ``X`` bits of `B`.
++    #. Set the value of the remaining ``Y`` - ``X`` bits of `B` to the value of
++       the  most-significant bit of `A`.
++
++.. admonition:: Example
++
++  Sign extend an 8-bit number ``A`` to a 16-bit number ``B`` on a big-endian platform:
++  ::
++
++    A:          10000110
++    B: 11111111 10000110
++
+ Registers and calling convention
+ ================================
+ 
+@@ -234,7 +255,7 @@ BPF_SMOD   0x90   1        dst = (src != 0) ? (dst s% src) : dst
+ BPF_XOR    0xa0   0        dst ^= src
+ BPF_MOV    0xb0   0        dst = src
+ BPF_MOVSX  0xb0   8/16/32  dst = (s8,s16,s32)src
+-BPF_ARSH   0xc0   0        sign extending dst >>= (src & mask)
++BPF_ARSH   0xc0   0        :term:`sign extending<Sign Extend>` dst >>= (src & mask)
+ BPF_END    0xd0   0        byte swap operations (see `Byte swap instructions`_ below)
+ =========  =====  =======  ==========================================================
+ 
+@@ -266,22 +287,22 @@ where '(u32)' indicates that the upper 32 bits are zeroed.
+ Note that most instructions have instruction offset of 0. Only three instructions
+ (``BPF_SDIV``, ``BPF_SMOD``, ``BPF_MOVSX``) have a non-zero offset.
+ 
+-The devision and modulo operations support both unsigned and signed flavors.
++The division and modulo operations support both unsigned and signed flavors.
+ 
+ For unsigned operations (``BPF_DIV`` and ``BPF_MOD``), for ``BPF_ALU``,
+ 'imm' is interpreted as a 32-bit unsigned value. For ``BPF_ALU64``,
+-'imm' is first sign extended from 32 to 64 bits, and then interpreted as
+-a 64-bit unsigned value.
++'imm' is first :term:`sign extended<Sign Extend>` from 32 to 64 bits, and then
++interpreted as a 64-bit unsigned value.
+ 
+ For signed operations (``BPF_SDIV`` and ``BPF_SMOD``), for ``BPF_ALU``,
+ 'imm' is interpreted as a 32-bit signed value. For ``BPF_ALU64``, 'imm'
+-is first sign extended from 32 to 64 bits, and then interpreted as a
+-64-bit signed value.
++is first :term:`sign extended<Sign Extend>` from 32 to 64 bits, and then
++interpreted as a 64-bit signed value.
+ 
+ The ``BPF_MOVSX`` instruction does a move operation with sign extension.
+-``BPF_ALU | BPF_MOVSX`` sign extends 8-bit and 16-bit operands into 32
++``BPF_ALU | BPF_MOVSX`` :term:`sign extends<Sign Extend>` 8-bit and 16-bit operands into 32
+ bit operands, and zeroes the remaining upper 32 bits.
+-``BPF_ALU64 | BPF_MOVSX`` sign extends 8-bit, 16-bit, and 32-bit
++``BPF_ALU64 | BPF_MOVSX`` :term:`sign extends<Sign Extend>` 8-bit, 16-bit, and 32-bit
+ operands into 64 bit operands.
+ 
+ Shift operations use a mask of 0x3F (63) for 64-bit operations and 0x1F (31)
+@@ -466,7 +487,7 @@ Where size is one of: ``BPF_B``, ``BPF_H``, ``BPF_W``, or ``BPF_DW`` and
+ Sign-extension load operations
+ ------------------------------
+ 
+-The ``BPF_MEMSX`` mode modifier is used to encode sign-extension load
++The ``BPF_MEMSX`` mode modifier is used to encode :term:`sign-extension<Sign Extend>` load
+ instructions that transfer data between a register and memory.
+ 
+ ``BPF_MEMSX | <size> | BPF_LDX`` means::
+-- 
+2.41.0
+
