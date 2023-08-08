@@ -1,34 +1,34 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19D6029DFC;
-	Tue,  8 Aug 2023 16:39:27 +0000 (UTC)
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61302F839C;
-	Tue,  8 Aug 2023 09:39:15 -0700 (PDT)
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-4fe48d0ab0fso9142016e87.1;
-        Tue, 08 Aug 2023 09:39:15 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B47411B7C9;
+	Tue,  8 Aug 2023 16:49:34 +0000 (UTC)
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B78116AFF;
+	Tue,  8 Aug 2023 09:49:33 -0700 (PDT)
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2b9d3dacb33so95357021fa.1;
+        Tue, 08 Aug 2023 09:49:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691512724; x=1692117524;
+        d=1e100.net; s=20221208; t=1691513371; x=1692118171;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=D1FImuotzzVQ6nA+cw3aWKU2TeJBwRAYe/LnZXkkaFw=;
-        b=EkCA40kxooti6uJfoNlssQSr4NVwrGflalP+OqK6jMNA3ijjWS+eZs4M6eyBQVVYyI
-         P3kHuvn9LiAnPomnRuO7ZHip+S52gzRIikunEID3OL7n7HeIdUT5PhF4xsmZ2oRinjvf
-         hI9EDM5uZ10nKb5k70YeyEcWgKGdYOqMwJWqYWa6MPUnDk8e85F1A74l1R4jl6+I0Loj
-         bsza1vqK10MbxmFz0x56knIi3keDR+l1SS98hIerkHxa27MgvqqWxnw8z51imILB3cOy
-         e4hdzFvoGcN9QFehT/WvdSMqGVYKQckTSmdtAz7S91690wrq3TmUCCrrVAhqmGaDDRZW
-         yOEA==
-X-Gm-Message-State: AOJu0Yxl9tj8oc6OXXvZgkWKC0MKrNfxqj53h9M+IjPt/ox4OyBb8DX/
-	LNnmSJHzDprRO/nUSjbjiN6TPpNHYjo=
-X-Google-Smtp-Source: AGHT+IFbk39aiWdQs43VmDbGnkeQcAnhXwYUlno2wMsVnKErCw/KqJgXvGi+kwIrhmeCXX2f4IKflA==
-X-Received: by 2002:a2e:3307:0:b0:2b6:fe3c:c3c1 with SMTP id d7-20020a2e3307000000b002b6fe3cc3c1mr9358880ljc.4.1691502072628;
-        Tue, 08 Aug 2023 06:41:12 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-003.fbsv.net. [2a03:2880:31ff:3::face:b00c])
-        by smtp.gmail.com with ESMTPSA id s15-20020a170906284f00b00992e265495csm6650549ejc.212.2023.08.08.06.41.12
+        bh=o+9mxu8b+EhzS+5yoGnjlhzry4jkjQ5Q19ANuPNesrY=;
+        b=l+J8ftwOUHMt2R84TGYZQ0G1AyQ5zfkFhgjdQq3p9CwjDoGfVT0ysWkD4m4cTgcsrz
+         VnSiC+kxrEl2uMHN/bL/TWpw3x/mq6elkVx75+/P3kKsTIglIOftRjuzOuvoaACqXp5r
+         ymAK9h6w30XQZ1yTTXBX14Rsgdaq0/Tnz3ManZ2HMz/vrr9bX9l3o4rk6dp7jIHxFxK0
+         81K3x0pf3DSIIlzuWGkGhAedjyFcksBQFrZWjqx6gZIEINC08DeLtTyLKyvCNAy6YSiQ
+         Wy5ry/WBQUcvIamvkyq2r9r86dOB12CigvoxmhcZt1udmO7m48wgpDKTtKoZb+qTtnL/
+         OQ2w==
+X-Gm-Message-State: AOJu0YzXUznEAgznzLGg5rUubd3OEPwCcoK9CwyNaiwAWf5suWi4nRWW
+	836OXhYYY1oNvNd2OR8qzhldv0OOJBs=
+X-Google-Smtp-Source: AGHT+IFaiSD6la9EEN/hiA8ab/8s4dP7Ut5NjsQn3lAyBLxiI8Mq1SO2WnI7EtR5m+sRlgD67JjEaA==
+X-Received: by 2002:aa7:dc07:0:b0:522:37f1:5fd0 with SMTP id b7-20020aa7dc07000000b0052237f15fd0mr11327506edu.5.1691502066712;
+        Tue, 08 Aug 2023 06:41:06 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-018.fbsv.net. [2a03:2880:31ff:12::face:b00c])
+        by smtp.gmail.com with ESMTPSA id p8-20020a05640210c800b005231e1780aasm6116955edu.91.2023.08.08.06.41.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Aug 2023 06:41:12 -0700 (PDT)
+        Tue, 08 Aug 2023 06:41:06 -0700 (PDT)
 From: Breno Leitao <leitao@debian.org>
 To: sdf@google.com,
 	axboe@kernel.dk,
@@ -40,9 +40,9 @@ Cc: bpf@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	kuba@kernel.org,
 	pabeni@redhat.com
-Subject: [PATCH v2 7/8] io_uring/cmd: BPF hook for getsockopt cmd
-Date: Tue,  8 Aug 2023 06:40:47 -0700
-Message-Id: <20230808134049.1407498-8-leitao@debian.org>
+Subject: [PATCH v2 3/8] io_uring/cmd: Introduce SOCKET_URING_OP_SETSOCKOPT
+Date: Tue,  8 Aug 2023 06:40:43 -0700
+Message-Id: <20230808134049.1407498-4-leitao@debian.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230808134049.1407498-1-leitao@debian.org>
 References: <20230808134049.1407498-1-leitao@debian.org>
@@ -55,65 +55,80 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
 	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
 	autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add BPF hooks support for getsockopts io_uring command. So, bpf cgroups
-programs can run when SOCKET_URING_OP_GETSOCKOPT command is called.
+Add initial support for SOCKET_URING_OP_SETSOCKOPT. This new command is
+similar to setsockopt. This initial implementation just cares about
+SOL_SOCKET level for now. The next patch implements the generic case.
 
-This implementation follows a similar approach to what
-__sys_getsockopt() does, but, using USER_SOCKPTR() for optval instead of
-kernel pointer.
+Function io_uring_cmd_setsockopt() is inspired by the function
+__sys_setsockopt().
+
+Important to say that userspace needs to keep the pointer's memory alive
+until the operation is completed.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- io_uring/uring_cmd.c | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
+ include/uapi/linux/io_uring.h |  1 +
+ io_uring/uring_cmd.c          | 23 +++++++++++++++++++++++
+ 2 files changed, 24 insertions(+)
 
+diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+index 8152151080db..3fe82df06abf 100644
+--- a/include/uapi/linux/io_uring.h
++++ b/include/uapi/linux/io_uring.h
+@@ -736,6 +736,7 @@ enum {
+ 	SOCKET_URING_OP_SIOCINQ		= 0,
+ 	SOCKET_URING_OP_SIOCOUTQ,
+ 	SOCKET_URING_OP_GETSOCKOPT,
++	SOCKET_URING_OP_SETSOCKOPT,
+ };
+ 
+ #ifdef __cplusplus
 diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-index dbba005a7290..3693e5779229 100644
+index 582931879482..5404b788ca14 100644
 --- a/io_uring/uring_cmd.c
 +++ b/io_uring/uring_cmd.c
-@@ -5,6 +5,8 @@
- #include <linux/io_uring.h>
- #include <linux/security.h>
- #include <linux/nospec.h>
-+#include <linux/compat.h>
-+#include <linux/bpf-cgroup.h>
- 
- #include <uapi/linux/io_uring.h>
- #include <uapi/asm-generic/ioctls.h>
-@@ -179,17 +181,23 @@ static inline int io_uring_cmd_getsockopt(struct socket *sock,
- 	if (err)
- 		return err;
- 
--	if (level == SOL_SOCKET) {
-+	err = -EOPNOTSUPP;
-+	if (level == SOL_SOCKET)
- 		err = sk_getsockopt(sock->sk, level, optname,
- 				    USER_SOCKPTR(optval),
- 				    KERNEL_SOCKPTR(&optlen));
--		if (err)
--			return err;
- 
-+	if (!in_compat_syscall())
-+		err = BPF_CGROUP_RUN_PROG_GETSOCKOPT(sock->sk, level,
-+						     optname,
-+						     USER_SOCKPTR(optval),
-+						     KERNEL_SOCKPTR(&optlen),
-+						     optlen, err);
-+
-+	if (!err)
- 		return optlen;
--	}
- 
--	return -EOPNOTSUPP;
-+	return err;
+@@ -192,6 +192,27 @@ static inline int io_uring_cmd_getsockopt(struct socket *sock,
+ 	return -EOPNOTSUPP;
  }
  
- static inline int io_uring_cmd_setsockopt(struct socket *sock,
++static inline int io_uring_cmd_setsockopt(struct socket *sock,
++					  struct io_uring_cmd *cmd)
++{
++	void __user *optval = u64_to_user_ptr(READ_ONCE(cmd->sqe->optval));
++	int optname = READ_ONCE(cmd->sqe->optname);
++	int optlen = READ_ONCE(cmd->sqe->optlen);
++	int level = READ_ONCE(cmd->sqe->level);
++	int err;
++
++	err = security_socket_setsockopt(sock, level, optname);
++	if (err)
++		return err;
++
++	err = -EOPNOTSUPP;
++	if (level == SOL_SOCKET && !sock_use_custom_sol_socket(sock))
++		err = sock_setsockopt(sock, level, optname,
++				      USER_SOCKPTR(optval), optlen);
++
++	return err;
++}
++
+ int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
+ {
+ 	struct socket *sock = cmd->file->private_data;
+@@ -215,6 +236,8 @@ int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
+ 		return arg;
+ 	case SOCKET_URING_OP_GETSOCKOPT:
+ 		return io_uring_cmd_getsockopt(sock, cmd);
++	case SOCKET_URING_OP_SETSOCKOPT:
++		return io_uring_cmd_setsockopt(sock, cmd);
+ 	default:
+ 		return -EOPNOTSUPP;
+ 	}
 -- 
 2.34.1
 
