@@ -1,89 +1,187 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E9E914A97
-	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 16:37:04 +0000 (UTC)
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBB0F1DBC
-	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 09:36:49 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-997c4107d62so818330266b.0
-        for <bpf@vger.kernel.org>; Tue, 08 Aug 2023 09:36:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1691512570; x=1692117370;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7bw2MRgpkFm1vILiE0Y5MYyZNNxscMVN+eqSvqqHwK4=;
-        b=EePW+ss015g11YgFFHMy90Z5WBj/PCKy6a/lhF3ExOntSwvl8wOFfJQ1JbeQoQrrOx
-         xGv9mUGakIoi++O8fmZPptc9lYFC2bKDg9uXW/+1Mxi9bbiHs3cBrG5MKCqPjOigSNk/
-         6O3T2Scei8koWcY2M/Eaj3ZH5HH0kvS2OwUipqKRF44XHNPvdm7NRKse4GbRIsRU3CNw
-         MHRQ4gStC0CIZh/3TmsijzYoIO2grgcREPRoC80135uNlMXE9RheTTzhehwkkqfMOILw
-         IG+BZkUNI0ZVxYlQC6LMviOYgjd4hQSn16di8r9dqB6kv/iUsDpTXsLNS+LLy0b/jFrX
-         XBlQ==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F9B14AAF;
+	Tue,  8 Aug 2023 16:37:36 +0000 (UTC)
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E266537C90;
+	Tue,  8 Aug 2023 09:37:20 -0700 (PDT)
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-4fe44955decso28257e87.1;
+        Tue, 08 Aug 2023 09:37:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691512570; x=1692117370;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1691512594; x=1692117394;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7bw2MRgpkFm1vILiE0Y5MYyZNNxscMVN+eqSvqqHwK4=;
-        b=UHssbm3XWaML6IUELu7Ad8XE9aaieMfPGD0OUkpj7LR2BArXZQmV5yuUpux12eoz2M
-         eBOnFHwk4zGnbitTsizlM7DUzGY8PwT/ufaKJuIQhGupqjZfpFfbPYW2l/gGQV7ibzKO
-         Ymr3d8oAbJCBmn06r/uRc2zGPAVC/jQLEdYClTwdvfanYs5jfUs4u7GqZAe2LdYZ8Dob
-         0hnBbhC27LvpbMIlACBw0XGL0KV9Q2wArS4gFs1wStO3Proc7Q6TIq/KquPiREACxWRG
-         w5unJUZxr2onEjbzgG1S/yXc7LDQjVfAzJGMxeqpTqREXdFBZaqWd1AR/qZC35z5fzLk
-         SvPQ==
-X-Gm-Message-State: AOJu0YzJN+wuKvDU3GHdi8ZCkbtI5yA/PszsI39s7EemWMLenBJIgN7d
-	5AjsyY5E+cBnxeQfUmx5DCjd+a2JEhq/6jdjexuO+g==
-X-Google-Smtp-Source: AGHT+IGyc5YFMEUdUm3mgxMUbhzIYZxUjCAeYEgPYwAXs5W80a27H3BIhOB0Da8QtwlqT/aZI8FmyxUNTteHqh8I214=
-X-Received: by 2002:a17:906:217:b0:98d:4000:1bf9 with SMTP id
- 23-20020a170906021700b0098d40001bf9mr85402ejd.65.1691512570147; Tue, 08 Aug
- 2023 09:36:10 -0700 (PDT)
+        bh=WLStaBoTlMXtsHG0LLCYkbddKzfAcQ5BShqSRpjotqI=;
+        b=cAsypFqqvS+Y1at9eJ3zijNrYf0ExbU767ArQWvaTpHunW+EjPLYRZ68jJ9Fq6bmlQ
+         iKE9VwwR9tXTPRipPom8syovBPjxiwW02P0SMW1DGE4J1AQZhSbX0O0OTWYLg4DuWCj8
+         KXKZZCaf0uczTvDIkX8wAXkAPhVBoaLQ5WPQTNcGvnNY1yuJhbaNoba+ev0wxXSCYbfP
+         KycSjnQmfGq0kiXgIJIpn86msevJGZ63S61ckWBcLijETXUO9zgVophEF/pDr2J8WZDg
+         FwmXajkv+yXcLCq2LbOAud0c9V7h8aIormKQf+aSmxP2NQR+sWRuNZvl2pCuWzvBHc3j
+         fuhQ==
+X-Gm-Message-State: AOJu0YxVEv+LATBsrqAmNCgTsgVDZKzg17PzZdKp9ameNPyhiKujq3D8
+	aET8o3K9vk8NRXEj6wAIclRAehcTsLpAVw==
+X-Google-Smtp-Source: AGHT+IF4pL/BbT9L+kSVOMCx71cAwnol6Gbk2yOMizfp6UByrTTgxHgBZXsIOIp5AcahLoyQBhIXHQ==
+X-Received: by 2002:a17:906:8a66:b0:99b:4210:cc76 with SMTP id hy6-20020a1709068a6600b0099b4210cc76mr10279182ejc.28.1691502069666;
+        Tue, 08 Aug 2023 06:41:09 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-002.fbsv.net. [2a03:2880:31ff:2::face:b00c])
+        by smtp.gmail.com with ESMTPSA id o17-20020a17090611d100b0099bd0b5a2bcsm6750611eja.101.2023.08.08.06.41.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Aug 2023 06:41:09 -0700 (PDT)
+From: Breno Leitao <leitao@debian.org>
+To: sdf@google.com,
+	axboe@kernel.dk,
+	asml.silence@gmail.com,
+	willemdebruijn.kernel@gmail.com,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	io-uring@vger.kernel.org
+Subject: [PATCH v2 5/8] bpf: Leverage sockptr_t in BPF getsockopt hook
+Date: Tue,  8 Aug 2023 06:40:45 -0700
+Message-Id: <20230808134049.1407498-6-leitao@debian.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230808134049.1407498-1-leitao@debian.org>
+References: <20230808134049.1407498-1-leitao@debian.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230720-so-reuseport-v6-0-7021b683cdae@isovalent.com>
- <20230720-so-reuseport-v6-7-7021b683cdae@isovalent.com> <CAP01T76fZhrELGxsm5-u85AL5994mS0NGZd6gw-RYaHE8vKfTA@mail.gmail.com>
-In-Reply-To: <CAP01T76fZhrELGxsm5-u85AL5994mS0NGZd6gw-RYaHE8vKfTA@mail.gmail.com>
-From: Lorenz Bauer <lmb@isovalent.com>
-Date: Tue, 8 Aug 2023 17:35:59 +0100
-Message-ID: <CAN+4W8j7Lyh4Zm1neabe2f+DJWbP4zRrATM4rwD3=EBS0s1CjA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 7/8] bpf, net: Support SO_REUSEPORT sockets
- with bpf_sk_assign
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Joe Stringer <joe@wand.net.nz>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	Kuniyuki Iwashima <kuniyu@amazon.com>, Hemanth Malla <hemanthmalla@gmail.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Joe Stringer <joe@cilium.io>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Tue, Aug 8, 2023 at 5:23=E2=80=AFAM Kumar Kartikeya Dwivedi <memxor@gmai=
-l.com> wrote:
->
-> Hi Lorenz, Kuniyuki, Martin,
->
-> I am getting a KASAN (inline mode) splat on bpf-next when I run
-> ./test_progs -t btf_skc_cls_ingress, and I bisected it to this commit:
-> 9c02bec95954 ("bpf, net: Support SO_REUSEPORT sockets with bpf_sk_assign"=
-)
+Leverage sockptr_t structure to have an argument that is either an
+userspace pointer, or, a kernel pointer.
 
-Thanks for the report. I forgot about struct request_sock again...
-I'll have a fix shortly, I hope.
+This makes this function flexible, so, we can mix and match user and
+kernel space pointers. The main motivation for this change is to use it
+in the io_uring {g,s}etsockopt(), which will use a userspace pointer for
+*optval, but, a kernel value for optlen.
 
-Lorenz
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ include/linux/bpf-cgroup.h |  5 +++--
+ kernel/bpf/cgroup.c        | 20 +++++++++++---------
+ net/socket.c               |  5 +++--
+ 3 files changed, 17 insertions(+), 13 deletions(-)
+
+diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+index 57e9e109257e..d16cb99fd4f1 100644
+--- a/include/linux/bpf-cgroup.h
++++ b/include/linux/bpf-cgroup.h
+@@ -139,9 +139,10 @@ int __cgroup_bpf_run_filter_sysctl(struct ctl_table_header *head,
+ int __cgroup_bpf_run_filter_setsockopt(struct sock *sock, int *level,
+ 				       int *optname, char __user *optval,
+ 				       int *optlen, char **kernel_optval);
++
+ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
+-				       int optname, char __user *optval,
+-				       int __user *optlen, int max_optlen,
++				       int optname, sockptr_t optval,
++				       sockptr_t optlen, int max_optlen,
+ 				       int retval);
+ 
+ int __cgroup_bpf_run_filter_getsockopt_kern(struct sock *sk, int level,
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 5b2741aa0d9b..ebc8c58f7e46 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -1875,8 +1875,8 @@ int __cgroup_bpf_run_filter_setsockopt(struct sock *sk, int *level,
+ }
+ 
+ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
+-				       int optname, char __user *optval,
+-				       int __user *optlen, int max_optlen,
++				       int optname, sockptr_t optval,
++				       sockptr_t optlen, int max_optlen,
+ 				       int retval)
+ {
+ 	struct cgroup *cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
+@@ -1903,8 +1903,8 @@ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
+ 		 * one that kernel returned as well to let
+ 		 * BPF programs inspect the value.
+ 		 */
+-
+-		if (get_user(ctx.optlen, optlen)) {
++		if (copy_from_sockptr(&ctx.optlen, optlen,
++				      sizeof(ctx.optlen))) {
+ 			ret = -EFAULT;
+ 			goto out;
+ 		}
+@@ -1915,8 +1915,8 @@ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
+ 		}
+ 		orig_optlen = ctx.optlen;
+ 
+-		if (copy_from_user(ctx.optval, optval,
+-				   min(ctx.optlen, max_optlen)) != 0) {
++		if (copy_from_sockptr(ctx.optval, optval,
++				      min(ctx.optlen, max_optlen))) {
+ 			ret = -EFAULT;
+ 			goto out;
+ 		}
+@@ -1930,7 +1930,8 @@ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
+ 	if (ret < 0)
+ 		goto out;
+ 
+-	if (optval && (ctx.optlen > max_optlen || ctx.optlen < 0)) {
++	if (!sockptr_is_null(optval) &&
++	    (ctx.optlen > max_optlen || ctx.optlen < 0)) {
+ 		if (orig_optlen > PAGE_SIZE && ctx.optlen >= 0) {
+ 			pr_info_once("bpf getsockopt: ignoring program buffer with optlen=%d (max_optlen=%d)\n",
+ 				     ctx.optlen, max_optlen);
+@@ -1942,11 +1943,12 @@ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
+ 	}
+ 
+ 	if (ctx.optlen != 0) {
+-		if (optval && copy_to_user(optval, ctx.optval, ctx.optlen)) {
++		if (!sockptr_is_null(optval) &&
++		    copy_to_sockptr(optval, ctx.optval, ctx.optlen)) {
+ 			ret = -EFAULT;
+ 			goto out;
+ 		}
+-		if (put_user(ctx.optlen, optlen)) {
++		if (copy_to_sockptr(optlen, &ctx.optlen, sizeof(ctx.optlen))) {
+ 			ret = -EFAULT;
+ 			goto out;
+ 		}
+diff --git a/net/socket.c b/net/socket.c
+index 8df54352af83..c686c6e89441 100644
+--- a/net/socket.c
++++ b/net/socket.c
+@@ -2306,8 +2306,9 @@ int __sys_getsockopt(int fd, int level, int optname, char __user *optval,
+ 
+ 	if (!in_compat_syscall())
+ 		err = BPF_CGROUP_RUN_PROG_GETSOCKOPT(sock->sk, level, optname,
+-						     optval, optlen, max_optlen,
+-						     err);
++						     USER_SOCKPTR(optval),
++						     USER_SOCKPTR(optlen),
++						     max_optlen, err);
+ out_put:
+ 	fput_light(sock->file, fput_needed);
+ 	return err;
+-- 
+2.34.1
+
