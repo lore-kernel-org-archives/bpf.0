@@ -1,34 +1,34 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 481CC15486;
-	Tue,  8 Aug 2023 16:39:26 +0000 (UTC)
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB227F8397;
-	Tue,  8 Aug 2023 09:39:13 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2b9b9f0387dso91904961fa.0;
-        Tue, 08 Aug 2023 09:39:13 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19D6029DFC;
+	Tue,  8 Aug 2023 16:39:27 +0000 (UTC)
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61302F839C;
+	Tue,  8 Aug 2023 09:39:15 -0700 (PDT)
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-4fe48d0ab0fso9142016e87.1;
+        Tue, 08 Aug 2023 09:39:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691512449; x=1692117249;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kJKYbjr1Hb9WHuWOPFqDpGQyS7eVaxQ0WI1Ze6xYIuI=;
-        b=IdbhSqHeOKswzkca5dluhYktrPp8i3K2kABdafIB0YCr22D+8AOEVhSPSP3fGPGALT
-         FQb1E33gANLCwK5rk1smFLTU/c2kau6oLb1SLgvtqVKWshiEPRYJ8btoFhDTjImDCtKa
-         o/XDpULcAZzTmvYhVZRsPUhhUih70si+6sxmYmyvjWBikCuweB+BLG318AjShkPdnqNG
-         iJHh8lSrgOcDvmw2aY7uiHmYU4ATDfdnqoFEUzetQ4aZve4ojynHiygUW5iY2KPhyajj
-         dFiD1DDWRLSBS7wl/JUZQrQtWVRoJNo7PyNVhYrHFieDp96nf5z9KLP9WvhvefAEPYZP
-         HzxQ==
-X-Gm-Message-State: AOJu0YxhFGLUp4AM3WVUQ7K0Oc9o5z6zt4oErMQmJPEzvSIMjaV/yDUJ
-	Al39XtyUR7CuuYkidfQZ3uSZBTBtq5Q=
-X-Google-Smtp-Source: AGHT+IHG80o/f8oaKNOhKd6kp2JtfXZl2uTVt4PvEONnauM2jHioMJyp37dG+uFfwEgRQxRkt9dZ1A==
-X-Received: by 2002:a17:906:535d:b0:99c:db8d:f9a with SMTP id j29-20020a170906535d00b0099cdb8d0f9amr3999486ejo.58.1691502062242;
-        Tue, 08 Aug 2023 06:41:02 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-010.fbsv.net. [2a03:2880:31ff:a::face:b00c])
-        by smtp.gmail.com with ESMTPSA id g4-20020a170906520400b0099bd7b26639sm6774937ejm.6.2023.08.08.06.41.01
+        d=1e100.net; s=20221208; t=1691512724; x=1692117524;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=D1FImuotzzVQ6nA+cw3aWKU2TeJBwRAYe/LnZXkkaFw=;
+        b=EkCA40kxooti6uJfoNlssQSr4NVwrGflalP+OqK6jMNA3ijjWS+eZs4M6eyBQVVYyI
+         P3kHuvn9LiAnPomnRuO7ZHip+S52gzRIikunEID3OL7n7HeIdUT5PhF4xsmZ2oRinjvf
+         hI9EDM5uZ10nKb5k70YeyEcWgKGdYOqMwJWqYWa6MPUnDk8e85F1A74l1R4jl6+I0Loj
+         bsza1vqK10MbxmFz0x56knIi3keDR+l1SS98hIerkHxa27MgvqqWxnw8z51imILB3cOy
+         e4hdzFvoGcN9QFehT/WvdSMqGVYKQckTSmdtAz7S91690wrq3TmUCCrrVAhqmGaDDRZW
+         yOEA==
+X-Gm-Message-State: AOJu0Yxl9tj8oc6OXXvZgkWKC0MKrNfxqj53h9M+IjPt/ox4OyBb8DX/
+	LNnmSJHzDprRO/nUSjbjiN6TPpNHYjo=
+X-Google-Smtp-Source: AGHT+IFbk39aiWdQs43VmDbGnkeQcAnhXwYUlno2wMsVnKErCw/KqJgXvGi+kwIrhmeCXX2f4IKflA==
+X-Received: by 2002:a2e:3307:0:b0:2b6:fe3c:c3c1 with SMTP id d7-20020a2e3307000000b002b6fe3cc3c1mr9358880ljc.4.1691502072628;
+        Tue, 08 Aug 2023 06:41:12 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-003.fbsv.net. [2a03:2880:31ff:3::face:b00c])
+        by smtp.gmail.com with ESMTPSA id s15-20020a170906284f00b00992e265495csm6650549ejc.212.2023.08.08.06.41.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Aug 2023 06:41:01 -0700 (PDT)
+        Tue, 08 Aug 2023 06:41:12 -0700 (PDT)
 From: Breno Leitao <leitao@debian.org>
 To: sdf@google.com,
 	axboe@kernel.dk,
@@ -40,10 +40,12 @@ Cc: bpf@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	kuba@kernel.org,
 	pabeni@redhat.com
-Subject: [PATCH v2 0/8] io_uring: Initial support for {s,g}etsockopt commands
-Date: Tue,  8 Aug 2023 06:40:40 -0700
-Message-Id: <20230808134049.1407498-1-leitao@debian.org>
+Subject: [PATCH v2 7/8] io_uring/cmd: BPF hook for getsockopt cmd
+Date: Tue,  8 Aug 2023 06:40:47 -0700
+Message-Id: <20230808134049.1407498-8-leitao@debian.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230808134049.1407498-1-leitao@debian.org>
+References: <20230808134049.1407498-1-leitao@debian.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,68 +55,65 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
 	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.6
+	RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-This patchset adds support for getsockopt (SOCKET_URING_OP_GETSOCKOPT)
-and setsockopt (SOCKET_URING_OP_SETSOCKOPT) in io_uring commands.
-SOCKET_URING_OP_SETSOCKOPT implements generic case, covering all levels
-nad optnames. On the other hand, SOCKET_URING_OP_GETSOCKOPT just
-implements level SOL_SOCKET case, which seems to be the
-most common level parameter for get/setsockopt(2).
+Add BPF hooks support for getsockopts io_uring command. So, bpf cgroups
+programs can run when SOCKET_URING_OP_GETSOCKOPT command is called.
 
-struct proto_ops->setsockopt() uses sockptr instead of userspace
-pointers, which makes it easy to bind to io_uring. Unfortunately
-proto_ops->getsockopt() callback uses userspace pointers, except for
-SOL_SOCKET, which is handled by sk_getsockopt(). Thus, this patchset
-leverages sk_getsockopt() to imlpement the SOCKET_URING_OP_GETSOCKOPT
-case.
+This implementation follows a similar approach to what
+__sys_getsockopt() does, but, using USER_SOCKPTR() for optval instead of
+kernel pointer.
 
-In order to support BPF hooks, I modified the hooks to use  sockptr, so,
-it is flexible enough to accept user or kernel pointers for
-optval/optlen.
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ io_uring/uring_cmd.c | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
 
-PS1: For getsockopt command, the optlen field is not a userspace
-pointers, but an absolute value, so this is slightly different from
-getsockopt(2) behaviour. The new optlen value is returned in cqe->res.
-
-PS2: The userspace pointers need to be alive until the operation is
-completed.
-
-These changes were tested with a new test[1] in liburing. On the BPF
-side, I tested that no regression was introduced by running "test_progs"
-self test using "sockopt" test case.
-
-[1] Link: https://github.com/leitao/liburing/blob/getsock/test/socket-getsetsock-cmd.c
-
-RFC -> V1:
-	* Copy user memory at io_uring subsystem, and call proto_ops
-	  callbacks using kernel memory
-	* Implement all the cases for SOCKET_URING_OP_SETSOCKOPT
-V1 -> V2
-	* Implemented the BPF part
-	* Using user pointers from optval to avoid kmalloc in io_uring part.
-
-Breno Leitao (8):
-  net: expose sock_use_custom_sol_socket
-  io_uring/cmd: Introduce SOCKET_URING_OP_GETSOCKOPT
-  io_uring/cmd: Introduce SOCKET_URING_OP_SETSOCKOPT
-  io_uring/cmd: Extend support beyond SOL_SOCKET
-  bpf: Leverage sockptr_t in BPF getsockopt hook
-  bpf: Leverage sockptr_t in BPF setsockopt hook
-  io_uring/cmd: BPF hook for getsockopt cmd
-  io_uring/cmd: BPF hook for setsockopt cmd
-
- include/linux/bpf-cgroup.h    |  7 +--
- include/linux/net.h           |  5 +++
- include/uapi/linux/io_uring.h |  8 ++++
- io_uring/uring_cmd.c          | 82 +++++++++++++++++++++++++++++++++++
- kernel/bpf/cgroup.c           | 25 ++++++-----
- net/socket.c                  | 12 ++---
- 6 files changed, 117 insertions(+), 22 deletions(-)
-
+diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+index dbba005a7290..3693e5779229 100644
+--- a/io_uring/uring_cmd.c
++++ b/io_uring/uring_cmd.c
+@@ -5,6 +5,8 @@
+ #include <linux/io_uring.h>
+ #include <linux/security.h>
+ #include <linux/nospec.h>
++#include <linux/compat.h>
++#include <linux/bpf-cgroup.h>
+ 
+ #include <uapi/linux/io_uring.h>
+ #include <uapi/asm-generic/ioctls.h>
+@@ -179,17 +181,23 @@ static inline int io_uring_cmd_getsockopt(struct socket *sock,
+ 	if (err)
+ 		return err;
+ 
+-	if (level == SOL_SOCKET) {
++	err = -EOPNOTSUPP;
++	if (level == SOL_SOCKET)
+ 		err = sk_getsockopt(sock->sk, level, optname,
+ 				    USER_SOCKPTR(optval),
+ 				    KERNEL_SOCKPTR(&optlen));
+-		if (err)
+-			return err;
+ 
++	if (!in_compat_syscall())
++		err = BPF_CGROUP_RUN_PROG_GETSOCKOPT(sock->sk, level,
++						     optname,
++						     USER_SOCKPTR(optval),
++						     KERNEL_SOCKPTR(&optlen),
++						     optlen, err);
++
++	if (!err)
+ 		return optlen;
+-	}
+ 
+-	return -EOPNOTSUPP;
++	return err;
+ }
+ 
+ static inline int io_uring_cmd_setsockopt(struct socket *sock,
 -- 
 2.34.1
 
