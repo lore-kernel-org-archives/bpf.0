@@ -1,195 +1,215 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603E813AC7
-	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 15:48:11 +0000 (UTC)
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D48E62;
-	Tue,  8 Aug 2023 08:48:07 -0700 (PDT)
-X-UUID: e0ad852e35c511ee9cb5633481061a41-20230808
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=3bTI4ezWT0dRlseV1XH1auN5umDiuiT9sp0ElLkplnk=;
-	b=qyrZII5nSYfDgdidaw0URf4ZofwG1EVXxfgB82I25iLr1fGG5VBErD7TvzBhg96A9B5+kb/ogGfTQ4OCbf6AoR+58kbRMDd7K0JiOR/BAjneLgRzr2OohbVyf9EijJM8VpITHX4ggUNOukzOB5mkO2uy5lmhSBaUbapqtcfdldM=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.31,REQID:7ff864a1-1a3f-46a3-8abc-b4524e19721c,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:95
-X-CID-INFO: VERSION:1.1.31,REQID:7ff864a1-1a3f-46a3-8abc-b4524e19721c,IP:0,URL
-	:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-	:quarantine,TS:95
-X-CID-META: VersionHash:0ad78a4,CLOUDID:59b6f042-d291-4e62-b539-43d7d78362ba,B
-	ulkID:230808163051S0PE58AX,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
-	C:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,CO
-	L:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_SDM,TF_CID_SPAM_ASC,TF_CID_SPAM_FAS,
-	TF_CID_SPAM_FSD,TF_CID_SPAM_ULN
-X-UUID: e0ad852e35c511ee9cb5633481061a41-20230808
-Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw01.mediatek.com
-	(envelope-from <kuan-ying.lee@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 996264844; Tue, 08 Aug 2023 16:30:48 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 8 Aug 2023 16:30:47 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 8 Aug 2023 16:30:47 +0800
-From: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
-To: Jan Kiszka <jan.kiszka@siemens.com>, Kieran Bingham <kbingham@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>
-CC: <chinwen.chang@mediatek.com>, <qun-wei.lin@mediatek.com>,
-	<linux-mm@kvack.org>, <linux-modules@vger.kernel.org>,
-	<casper.li@mediatek.com>, <akpm@linux-foundation.org>,
-	<linux-arm-kernel@lists.infradead.org>, Kuan-Ying Lee
-	<Kuan-Ying.Lee@mediatek.com>, <linux-kernel@vger.kernel.org>,
-	<linux-mediatek@lists.infradead.org>, <bpf@vger.kernel.org>
-Subject: [PATCH v2 8/8] scripts/gdb/vmalloc: add vmallocinfo support
-Date: Tue, 8 Aug 2023 16:30:18 +0800
-Message-ID: <20230808083020.22254-9-Kuan-Ying.Lee@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230808083020.22254-1-Kuan-Ying.Lee@mediatek.com>
-References: <20230808083020.22254-1-Kuan-Ying.Lee@mediatek.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1097E13AC7
+	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 15:52:25 +0000 (UTC)
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48FA1FF3
+	for <bpf@vger.kernel.org>; Tue,  8 Aug 2023 08:52:08 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1bc0075ab7aso135685ad.1
+        for <bpf@vger.kernel.org>; Tue, 08 Aug 2023 08:52:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691509924; x=1692114724;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kCOXJYzxETCH/0UcvxLQeHGSMM7DSEXKUT9P3Dlmymo=;
+        b=rUrkDjslp3GvFKzWKQbveeKj+rhblEPqNC3vGULuYZekoOdWJotIaWqf/4VJKWKFsu
+         bpTFoiaG0d0oAo+shShaW66RBgpNyq7ZxH5YTVzXU3rqFRGlFnrxSuy0aL+kSsm96CXd
+         VBOzCkDT0MxcQGr00yFl7vhWlgTuZtZoOj+2xQ9zMwRA2mP53MpQ6sOo5C/4ChFg1ILC
+         EO5M1HK8GnMXRfcPrS6tn9lz2Gyo7bB9iLC0k6o9iLvQR06uxekgg9n7nxQG4NIXj6tC
+         4Xer1MH5ohALnTAj81+gDniwiKG4QXRb5Z5Sek1ZT2MqdwJ3AQshnbep9ynhgSnqwiXz
+         VbTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691509924; x=1692114724;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kCOXJYzxETCH/0UcvxLQeHGSMM7DSEXKUT9P3Dlmymo=;
+        b=jtVvq3oOYNV88cSnpfLslGr21GhsiULhdy3WIMKrnvYSsOqcf0M+G6r/88+MYsAA+2
+         kDbVM0PD6vLPyT06ysz9OwReXL8HbHl9sO3ubKxcghM5LpMQWsP9jn+9u5b5nyZd2HS9
+         dadICXDeAr4V1BabDn7p+M30ZRTNSnHY8ElEL8m5kNAUsCIQz+/WDi/OCw8NCJTca4F8
+         B+o2zN3qEjO7beNy9Gy6I8YWt3ExSgEdk2zWp1JbejHuTBycWSWnNFzNT7BCuUGfog/C
+         nyYigQ856cQM+j3u2wVcVWbYFnh9FfWwmuuOvwz3E5FUVnTIN8ggn6XgI18Tr96Jr6lH
+         gfCw==
+X-Gm-Message-State: AOJu0Yyfg3of7hpJ8UZCpeuVopFSY/k8KhAU6XG/1xOsYC19VVQHQAhB
+	OBN2R85axHa42vrKdikpDNkxsSsYDYr5QxvnlbGfS9O3fXCc8heqNVg=
+X-Google-Smtp-Source: AGHT+IEfM3zZpi2A8IEkcUU11DnAyYRP6HYaBR73Q/AKzK2pHMPvaVHfkSYylHJ4uhb2VI1kTwpMv6BetR8BNyyQJjc=
+X-Received: by 2002:ac8:5951:0:b0:403:96e3:4745 with SMTP id
+ 17-20020ac85951000000b0040396e34745mr749543qtz.20.1691484513351; Tue, 08 Aug
+ 2023 01:48:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK: N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham autolearn_force=no
+References: <CADVnQyn3UMa3Qx6cC1Rx97xLjQdG0eKsiF7oY9UR=b9vU4R-yA@mail.gmail.com>
+ <20230808055817.3979-1-me@manjusaka.me> <CANn89iKxJThy4ZVq4do6Z1bOZsRptfN6N8ydPaHQAmYKCjtOnw@mail.gmail.com>
+ <af02d2a9-4655-45a1-8c3a-d9921bfdbc35@manjusaka.me>
+In-Reply-To: <af02d2a9-4655-45a1-8c3a-d9921bfdbc35@manjusaka.me>
+From: Eric Dumazet <edumazet@google.com>
+Date: Tue, 8 Aug 2023 10:48:21 +0200
+Message-ID: <CANn89iKQXhqgOTkSchH6Bz-xH--pAoSyEORBtawqBTvgG+dFig@mail.gmail.com>
+Subject: Re: [PATCH v2] tracepoint: add new `tcp:tcp_ca_event` trace event
+To: Manjusaka <me@manjusaka.me>
+Cc: ncardwell@google.com, bpf@vger.kernel.org, davem@davemloft.net, 
+	dsahern@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, mhiramat@kernel.org, 
+	netdev@vger.kernel.org, pabeni@redhat.com, rostedt@goodmis.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-16.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+	DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
 	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-This GDB script shows the vmallocinfo for user to
-analyze the vmalloc memory usage.
+On Tue, Aug 8, 2023 at 10:46=E2=80=AFAM Manjusaka <me@manjusaka.me> wrote:
+>
+>
+>
+> On 2023/8/8 16:26, Eric Dumazet wrote:
+> > On Tue, Aug 8, 2023 at 7:59=E2=80=AFAM Manjusaka <me@manjusaka.me> wrot=
+e:
+> >>
+> >> In normal use case, the tcp_ca_event would be changed in high frequenc=
+y.
+> >>
+> >> It's a good indicator to represent the network quanlity.
+> >
+> > quality ?
+> >
+> > Honestly, it is more about TCP stack tracing than 'network quality'
+> >
+> >>
+> >> So I propose to add a `tcp:tcp_ca_event` trace event
+> >> like `tcp:tcp_cong_state_set` to help the people to
+> >> trace the TCP connection status
+> >>
+> >> Signed-off-by: Manjusaka <me@manjusaka.me>
+> >> ---
+> >>  include/net/tcp.h          |  9 ++------
+> >>  include/trace/events/tcp.h | 45 +++++++++++++++++++++++++++++++++++++=
++
+> >>  net/ipv4/tcp_cong.c        | 10 +++++++++
+> >>  3 files changed, 57 insertions(+), 7 deletions(-)
+> >>
+> >> diff --git a/include/net/tcp.h b/include/net/tcp.h
+> >> index 0ca972ebd3dd..a68c5b61889c 100644
+> >> --- a/include/net/tcp.h
+> >> +++ b/include/net/tcp.h
+> >> @@ -1154,13 +1154,8 @@ static inline bool tcp_ca_needs_ecn(const struc=
+t sock *sk)
+> >>         return icsk->icsk_ca_ops->flags & TCP_CONG_NEEDS_ECN;
+> >>  }
+> >>
+> >> -static inline void tcp_ca_event(struct sock *sk, const enum tcp_ca_ev=
+ent event)
+> >> -{
+> >> -       const struct inet_connection_sock *icsk =3D inet_csk(sk);
+> >> -
+> >> -       if (icsk->icsk_ca_ops->cwnd_event)
+> >> -               icsk->icsk_ca_ops->cwnd_event(sk, event);
+> >> -}
+> >> +/* from tcp_cong.c */
+> >> +void tcp_ca_event(struct sock *sk, const enum tcp_ca_event event);
+> >>
+> >>  /* From tcp_cong.c */
+> >>  void tcp_set_ca_state(struct sock *sk, const u8 ca_state);
+> >> diff --git a/include/trace/events/tcp.h b/include/trace/events/tcp.h
+> >> index bf06db8d2046..b374eb636af9 100644
+> >> --- a/include/trace/events/tcp.h
+> >> +++ b/include/trace/events/tcp.h
+> >> @@ -416,6 +416,51 @@ TRACE_EVENT(tcp_cong_state_set,
+> >>                   __entry->cong_state)
+> >>  );
+> >>
+> >> +TRACE_EVENT(tcp_ca_event,
+> >> +
+> >> +       TP_PROTO(struct sock *sk, const u8 ca_event),
+> >> +
+> >> +       TP_ARGS(sk, ca_event),
+> >> +
+> >> +       TP_STRUCT__entry(
+> >> +               __field(const void *, skaddr)
+> >> +               __field(__u16, sport)
+> >> +               __field(__u16, dport)
+> >> +               __array(__u8, saddr, 4)
+> >> +               __array(__u8, daddr, 4)
+> >> +               __array(__u8, saddr_v6, 16)
+> >> +               __array(__u8, daddr_v6, 16)
+> >> +               __field(__u8, ca_event)
+> >> +       ),
+> >> +
+> >
+> > Please add the family (look at commit 3dd344ea84e1 ("net: tracepoint:
+> > exposing sk_family in all tcp:tracepoints"))
+> >
+> >
+> >
+> >> +       TP_fast_assign(
+> >> +               struct inet_sock *inet =3D inet_sk(sk);
+> >> +               __be32 *p32;
+> >> +
+> >> +               __entry->skaddr =3D sk;
+> >> +
+> >> +               __entry->sport =3D ntohs(inet->inet_sport);
+> >> +               __entry->dport =3D ntohs(inet->inet_dport);
+> >> +
+> >> +               p32 =3D (__be32 *) __entry->saddr;
+> >> +               *p32 =3D inet->inet_saddr;
+> >> +
+> >> +               p32 =3D (__be32 *) __entry->daddr;
+> >> +               *p32 =3D  inet->inet_daddr;
+> >
+> > We keep copying IPv4 addresses that might contain garbage for IPv6 sock=
+ets :/
+> >
+> >> +
+> >> +               TP_STORE_ADDRS(__entry, inet->inet_saddr, inet->inet_d=
+addr,
+> >> +                          sk->sk_v6_rcv_saddr, sk->sk_v6_daddr);
+> >
+> > I will send a cleanup, because IP_STORE_ADDRS() should really take
+> > care of all details.
+> >
+> >
+> >> +
+> >> +               __entry->ca_event =3D ca_event;
+> >> +       ),
+> >> +
+> >> +       TP_printk("sport=3D%hu dport=3D%hu saddr=3D%pI4 daddr=3D%pI4 s=
+addrv6=3D%pI6c daddrv6=3D%pI6c ca_event=3D%u",
+> >> +                 __entry->sport, __entry->dport,
+> >> +                 __entry->saddr, __entry->daddr,
+> >> +                 __entry->saddr_v6, __entry->daddr_v6,
+> >> +                 __entry->ca_event)
+> >
+> > Please print the symbol instead of numeric ca_event.
+> >
+> > Look at show_tcp_state_name() for instance.
+>
+> Thanks for the kindness code review, I still get some issue here(Sorry fo=
+r the first time to contribute):
+>
+> 1. > We keep copying IPv4 addresses that might contain garbage for IPv6 s=
+ockets :/
+>
+> I'm not getting your means, would you mean that we should only save the I=
+Pv4 Address here?
+>
+> 2. > I will send a cleanup, because IP_STORE_ADDRS() should really take c=
+are of all details.
+>
+> I think you will make the address assignment code in TP_fast_assign as a =
+new function.
+>
+> Should I submit the new change until you send the cleanup patch or I can =
+make this in my patch(cleanup the address assignment)
+>
 
-Example output:
-0xffff800008000000-0xffff800008009000      36864 <start_kernel+372> pages=8 vmalloc
-0xffff800008009000-0xffff80000800b000       8192 <gicv2m_init_one+400> phys=0x8020000 ioremap
-0xffff80000800b000-0xffff80000800d000       8192 <bpf_prog_alloc_no_stats+72> pages=1 vmalloc
-0xffff80000800d000-0xffff80000800f000       8192 <bpf_jit_alloc_exec+16> pages=1 vmalloc
-0xffff800008010000-0xffff80000ad30000   47316992 <paging_init+452> phys=0x40210000 vmap
-0xffff80000ad30000-0xffff80000c1c0000   21561344 <paging_init+556> phys=0x42f30000 vmap
-0xffff80000c1c0000-0xffff80000c370000    1769472 <paging_init+592> phys=0x443c0000 vmap
-0xffff80000c370000-0xffff80000de90000   28442624 <paging_init+692> phys=0x44570000 vmap
-0xffff80000de90000-0xffff80000f4c1000   23269376 <paging_init+788> phys=0x46090000 vmap
-0xffff80000f4c1000-0xffff80000f4c3000       8192 <gen_pool_add_owner+112> pages=1 vmalloc
-0xffff80000f4c3000-0xffff80000f4c5000       8192 <gen_pool_add_owner+112> pages=1 vmalloc
-0xffff80000f4c5000-0xffff80000f4c7000       8192 <gen_pool_add_owner+112> pages=1 vmalloc
-
-Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
----
- scripts/gdb/linux/constants.py.in |  8 +++++
- scripts/gdb/linux/vmalloc.py      | 56 +++++++++++++++++++++++++++++++
- scripts/gdb/vmlinux-gdb.py        |  1 +
- 3 files changed, 65 insertions(+)
- create mode 100644 scripts/gdb/linux/vmalloc.py
-
-diff --git a/scripts/gdb/linux/constants.py.in b/scripts/gdb/linux/constants.py.in
-index 03fa6d2cfe01..e3517d4ab8ec 100644
---- a/scripts/gdb/linux/constants.py.in
-+++ b/scripts/gdb/linux/constants.py.in
-@@ -22,6 +22,7 @@
- #include <linux/radix-tree.h>
- #include <linux/slab.h>
- #include <linux/threads.h>
-+#include <linux/vmalloc.h>
- 
- /* We need to stringify expanded macros so that they can be parsed */
- 
-@@ -91,6 +92,13 @@ LX_GDBPARSED(RADIX_TREE_MAP_SIZE)
- LX_GDBPARSED(RADIX_TREE_MAP_SHIFT)
- LX_GDBPARSED(RADIX_TREE_MAP_MASK)
- 
-+/* linux/vmalloc.h */
-+LX_VALUE(VM_IOREMAP)
-+LX_VALUE(VM_ALLOC)
-+LX_VALUE(VM_MAP)
-+LX_VALUE(VM_USERMAP)
-+LX_VALUE(VM_DMA_COHERENT)
-+
- /* linux/page_ext.h */
- if IS_BUILTIN(CONFIG_PAGE_OWNER):
-     LX_GDBPARSED(PAGE_EXT_OWNER)
-diff --git a/scripts/gdb/linux/vmalloc.py b/scripts/gdb/linux/vmalloc.py
-new file mode 100644
-index 000000000000..48e4a4fae7bb
---- /dev/null
-+++ b/scripts/gdb/linux/vmalloc.py
-@@ -0,0 +1,56 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright (c) 2023 MediaTek Inc.
-+#
-+# Authors:
-+#  Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
-+#
-+
-+import gdb
-+import re
-+from linux import lists, utils, stackdepot, constants, mm
-+
-+vmap_area_type = utils.CachedType('struct vmap_area')
-+vmap_area_ptr_type = vmap_area_type.get_type().pointer()
-+
-+def is_vmalloc_addr(x):
-+    pg_ops = mm.page_ops().ops
-+    addr = pg_ops.kasan_reset_tag(x)
-+    return addr >= pg_ops.VMALLOC_START and addr < pg_ops.VMALLOC_END
-+
-+class LxVmallocInfo(gdb.Command):
-+    """Show vmallocinfo"""
-+
-+    def __init__(self):
-+        super(LxVmallocInfo, self).__init__("lx-vmallocinfo", gdb.COMMAND_DATA)
-+
-+    def invoke(self, arg, from_tty):
-+        vmap_area_list = gdb.parse_and_eval('vmap_area_list')
-+        for vmap_area in lists.list_for_each_entry(vmap_area_list, vmap_area_ptr_type, "list"):
-+            if not vmap_area['vm']:
-+                gdb.write("0x%x-0x%x %10d vm_map_ram\n" % (vmap_area['va_start'], vmap_area['va_end'],
-+                    vmap_area['va_end'] - vmap_area['va_start']))
-+                continue
-+            v = vmap_area['vm']
-+            gdb.write("0x%x-0x%x %10d" % (v['addr'], v['addr'] + v['size'], v['size']))
-+            if v['caller']:
-+                gdb.write(" %s" % str(v['caller']).split(' ')[-1])
-+            if v['nr_pages']:
-+                gdb.write(" pages=%d" % v['nr_pages'])
-+            if v['phys_addr']:
-+                gdb.write(" phys=0x%x" % v['phys_addr'])
-+            if v['flags'] & constants.LX_VM_IOREMAP:
-+                gdb.write(" ioremap")
-+            if v['flags'] & constants.LX_VM_ALLOC:
-+                gdb.write(" vmalloc")
-+            if v['flags'] & constants.LX_VM_MAP:
-+                gdb.write(" vmap")
-+            if v['flags'] & constants.LX_VM_USERMAP:
-+                gdb.write(" user")
-+            if v['flags'] & constants.LX_VM_DMA_COHERENT:
-+                gdb.write(" dma-coherent")
-+            if is_vmalloc_addr(v['pages']):
-+                gdb.write(" vpages")
-+            gdb.write("\n")
-+
-+LxVmallocInfo()
-diff --git a/scripts/gdb/vmlinux-gdb.py b/scripts/gdb/vmlinux-gdb.py
-index 2526364f31fd..fc53cdf286f1 100644
---- a/scripts/gdb/vmlinux-gdb.py
-+++ b/scripts/gdb/vmlinux-gdb.py
-@@ -48,3 +48,4 @@ else:
-     import linux.stackdepot
-     import linux.page_owner
-     import linux.slab
-+    import linux.vmalloc
--- 
-2.18.0
-
+Wait a bit, I am sending fixes today, so that no more copy/paste
+duplicates the issues.
