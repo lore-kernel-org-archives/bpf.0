@@ -1,331 +1,181 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5095ED1
-	for <bpf@vger.kernel.org>; Thu, 10 Aug 2023 18:35:32 +0000 (UTC)
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E742703
-	for <bpf@vger.kernel.org>; Thu, 10 Aug 2023 11:35:31 -0700 (PDT)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-	by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 37AIXpiD025592
-	for <bpf@vger.kernel.org>; Thu, 10 Aug 2023 11:35:30 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=YezOoMvhV1b87yBgm7+c4SWo+qqvz5J7+uXcvO2/lHQ=;
- b=Y1xhMhthK71BE3ZL78gmayToi6Whnu8L8FBSEnmeDDOesfnyvc68uc0ikcHb+78y66k5
- zKxpE3kuemRflJykUDUsbLQG3mUsUbxqwcCWI1dbw8YDo31ugVhSmKXaZ9Ja0TPx5u2V
- ahME/fboy2FKZgsIQd14tm+TQsQdYE4QV9I= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by m0089730.ppops.net (PPS) with ESMTPS id 3sd06hura5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 10 Aug 2023 11:35:30 -0700
-Received: from twshared24695.38.frc1.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 10 Aug 2023 11:35:29 -0700
-Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-	id 945772274BE4F; Thu, 10 Aug 2023 11:35:16 -0700 (PDT)
-From: Dave Marchevsky <davemarchevsky@fb.com>
-To: <bpf@vger.kernel.org>
-CC: Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann
-	<daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau
-	<martin.lau@kernel.org>,
-        Kernel Team <kernel-team@fb.com>,
-        Dave Marchevsky
-	<davemarchevsky@fb.com>,
-        Nathan Slingerland <slinger@meta.com>
-Subject: [PATCH bpf-next 2/3] bpf: Introduce task_vma open-coded iterator kfuncs
-Date: Thu, 10 Aug 2023 11:35:12 -0700
-Message-ID: <20230810183513.684836-3-davemarchevsky@fb.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230810183513.684836-1-davemarchevsky@fb.com>
-References: <20230810183513.684836-1-davemarchevsky@fb.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11CCB20C91
+	for <bpf@vger.kernel.org>; Thu, 10 Aug 2023 18:49:04 +0000 (UTC)
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33CF626B8
+	for <bpf@vger.kernel.org>; Thu, 10 Aug 2023 11:49:03 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5868992ddd4so16442397b3.0
+        for <bpf@vger.kernel.org>; Thu, 10 Aug 2023 11:49:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691693342; x=1692298142;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=2WWD5RZ7txT2y+bELeSkVRhqrv7guu+AZxZ+/B7ig64=;
+        b=o6wAtGQZ+EMExEpuZahj/6wsFfkHVecrBuxbrUbdt4kWtVVWlsOch4CjsXbTwhXhxH
+         zxl0RCAPlpLOCS/l8jd8aiJFY1P8RgMKDRhXUzHclXHUuM+GygFj1DEKAOeIRB29b1kv
+         oSeQOZkYAoO6O808GInBOzO56yOKAMbzQf+rjffwfV5gfWwSX32XkyriMgY3psluxqNV
+         X9novVdNaiywNUONa6PhYsD787KsL9D2WtcSr+O3ajPI/SXxFqoYCiE8Zd5o782PqCaL
+         ALWFZ6CXNi2XIkKbUQHNSTnO6EGNfwEFqaEi04rZCxhtRHiWuOOQOkp/5m+co1mjQcXY
+         ttqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691693342; x=1692298142;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2WWD5RZ7txT2y+bELeSkVRhqrv7guu+AZxZ+/B7ig64=;
+        b=b7w4KeC+M1K4k29bFojXWgTUg2pziHJ4zn8mGYImO9zlw0/pYyNj4Ffcvn0OkjG6uc
+         yhPSbAklBTtqJRKfcoFrVIjNOWKDxQZFaos10RdRK90rHkhMIXtZLqaJi902S+b5Rz3n
+         a769VGUb3z6ly0UEtksEUb6xunvlp6WjgcuhNFl5zlqwnz40lDVENckY60IkwpMuvKYZ
+         ABgAsDntwUgb2/kIin7dB2IGcAqRIP0nDvFQK0X54yT69GGycq8jtafBe4prdgAyjJpy
+         SvJ/aPw1HlgPvBdJ0r0WdtnNCnFy7p8IDFJWV8CU8oNHwkyMg9diAJqtSbODLbxpRm91
+         03MA==
+X-Gm-Message-State: AOJu0YytlVwTfooSabVaAuc8fMlz0ozqddFw8Q3QTVdwK8JeKuBTCbXY
+	600XCBpAJKDWcm3/DmiWa+Z76w4sTJRl
+X-Google-Smtp-Source: AGHT+IFE9EYsPE6iA3GxYy5BS/jQkuwPyiISjc4pFGXsdQlHdsFatosLNj3Mf8IlBuDHO64S2yFQbFam0TmK
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:797f:302e:992f:97f2])
+ (user=irogers job=sendgmr) by 2002:a81:af06:0:b0:581:7b58:5e70 with SMTP id
+ n6-20020a81af06000000b005817b585e70mr68906ywh.5.1691693342432; Thu, 10 Aug
+ 2023 11:49:02 -0700 (PDT)
+Date: Thu, 10 Aug 2023 11:48:49 -0700
+Message-Id: <20230810184853.2860737-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: JYcu0aJxz7D7LUBg9FqlycYLId3ffDfl
-X-Proofpoint-GUID: JYcu0aJxz7D7LUBg9FqlycYLId3ffDfl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-10_14,2023-08-10_01,2023-05-22_02
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-	SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.640.ga95def55d0-goog
+Subject: [PATCH v1 0/4] Remove BPF event support
+From: Ian Rogers <irogers@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Fangrui Song <maskray@google.com>, Anshuman Khandual <anshuman.khandual@arm.com>, 
+	Andi Kleen <ak@linux.intel.com>, Leo Yan <leo.yan@linaro.org>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Carsten Haitzler <carsten.haitzler@arm.com>, 
+	Ravi Bangoria <ravi.bangoria@amd.com>, "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>, 
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>, Kan Liang <kan.liang@linux.intel.com>, 
+	Yang Jihong <yangjihong1@huawei.com>, James Clark <james.clark@arm.com>, 
+	Tiezhu Yang <yangtiezhu@loongson.cn>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Yonghong Song <yhs@fb.com>, Rob Herring <robh@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	bpf@vger.kernel.org, llvm@lists.linux.dev, Wang Nan <wangnan0@huawei.com>, 
+	Wang ShaoBo <bobo.shaobowang@huawei.com>, YueHaibing <yuehaibing@huawei.com>, 
+	He Kuang <hekuang@huawei.com>, Brendan Gregg <brendan.d.gregg@gmail.com>
+Cc: Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-This patch adds kfuncs bpf_iter_task_vma_{new,next,destroy} which allow
-creation and manipulation of struct bpf_iter_task_vma in open-coded
-iterator style. BPF programs can use these kfuncs directly or through
-bpf_for_each macro for natural-looking iteration of all task vmas.
+The patch series removes BPF event support as past commits have shown
+the support has bit rotten:
+https://lore.kernel.org/lkml/20230728001212.457900-1-irogers@google.com/
 
-The implementation borrows heavily from bpf_find_vma helper's locking -
-differing only in that it holds the mmap_read lock for all iterations
-while the helper only executes its provided callback on a maximum of 1
-vma. Aside from locking, struct vma_iterator and vma_next do all the
-heavy lifting.
+Similar functionality is now available via the --filter option, that
+uses a BPF skeleton, and is therefore more compact and simpler to
+use. The simplicity coming from not having to build BPF object files.
 
-The newly-added struct bpf_iter_task_vma has a name collision with a
-selftest for the seq_file task_vma iter's bpf skel, so the selftests/bpf/=
-progs
-file is renamed in order to avoid the collision.
+A different use case for the events was for syscall augmentation in
+perf trace. So that this isn't broken, and to make its use
+significantly simpler, the support is migrated to use a BPF
+skeleton. This means perf trace is much more likely to augment
+syscalls for users.
 
-Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
-Cc: Nathan Slingerland <slinger@meta.com>
----
- include/uapi/linux/bpf.h                      |  5 ++
- kernel/bpf/helpers.c                          |  3 +
- kernel/bpf/task_iter.c                        | 56 +++++++++++++++++++
- tools/include/uapi/linux/bpf.h                |  5 ++
- tools/lib/bpf/bpf_helpers.h                   |  8 +++
- .../selftests/bpf/prog_tests/bpf_iter.c       | 26 ++++-----
- ...f_iter_task_vma.c =3D> bpf_iter_task_vmas.c} |  0
- 7 files changed, 90 insertions(+), 13 deletions(-)
- rename tools/testing/selftests/bpf/progs/{bpf_iter_task_vma.c =3D> bpf_i=
-ter_task_vmas.c} (100%)
+Removal of BPF events was raised on LKML two weeks ago with the
+original authors cc-ed:
+https://lore.kernel.org/lkml/CAP-5=fXxGimJRXKf7bcaPqfjxxGcn1k3CspY_iSjQnpAKs3uFQ@mail.gmail.com/
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index d21deb46f49f..c4a65968f9f5 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -7291,4 +7291,9 @@ struct bpf_iter_num {
- 	__u64 __opaque[1];
- } __attribute__((aligned(8)));
-=20
-+struct bpf_iter_task_vma {
-+	__u64 __opaque[9]; /* See bpf_iter_num comment above */
-+	char __opaque_c[3];
-+} __attribute__((aligned(8)));
-+
- #endif /* _UAPI__LINUX_BPF_H__ */
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index eb91cae0612a..7a06dea749f1 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2482,6 +2482,9 @@ BTF_ID_FLAGS(func, bpf_dynptr_slice_rdwr, KF_RET_NU=
-LL)
- BTF_ID_FLAGS(func, bpf_iter_num_new, KF_ITER_NEW)
- BTF_ID_FLAGS(func, bpf_iter_num_next, KF_ITER_NEXT | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_iter_num_destroy, KF_ITER_DESTROY)
-+BTF_ID_FLAGS(func, bpf_iter_task_vma_new, KF_ITER_NEW)
-+BTF_ID_FLAGS(func, bpf_iter_task_vma_next, KF_ITER_NEXT | KF_RET_NULL)
-+BTF_ID_FLAGS(func, bpf_iter_task_vma_destroy, KF_ITER_DESTROY)
- BTF_ID_FLAGS(func, bpf_dynptr_adjust)
- BTF_ID_FLAGS(func, bpf_dynptr_is_null)
- BTF_ID_FLAGS(func, bpf_dynptr_is_rdonly)
-diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-index c4ab9d6cdbe9..76be9998a65a 100644
---- a/kernel/bpf/task_iter.c
-+++ b/kernel/bpf/task_iter.c
-@@ -8,6 +8,7 @@
- #include <linux/fdtable.h>
- #include <linux/filter.h>
- #include <linux/btf_ids.h>
-+#include <linux/mm_types.h>
- #include "mmap_unlock_work.h"
-=20
- static const char * const iter_task_type_names[] =3D {
-@@ -823,6 +824,61 @@ const struct bpf_func_proto bpf_find_vma_proto =3D {
- 	.arg5_type	=3D ARG_ANYTHING,
- };
-=20
-+struct bpf_iter_task_vma_kern {
-+	struct mm_struct *mm;
-+	struct mmap_unlock_irq_work *work;
-+	struct vma_iterator vmi;
-+} __attribute__((aligned(8)));
-+
-+__bpf_kfunc int bpf_iter_task_vma_new(struct bpf_iter_task_vma *it,
-+				      struct task_struct *task, u64 addr)
-+{
-+	struct bpf_iter_task_vma_kern *i =3D (void *)it;
-+	bool irq_work_busy =3D false;
-+
-+	BUILD_BUG_ON(sizeof(struct bpf_iter_task_vma_kern) !=3D sizeof(struct b=
-pf_iter_task_vma));
-+	BUILD_BUG_ON(__alignof__(struct bpf_iter_task_vma_kern) !=3D __alignof_=
-_(struct bpf_iter_task_vma));
-+
-+	BTF_TYPE_EMIT(struct bpf_iter_task_vma);
-+
-+	/* NULL i->mm signals failed bpf_iter_task_vma initialization.
-+	 * i->work =3D=3D NULL is valid.
-+	 */
-+	i->mm =3D NULL;
-+	if (!task)
-+		return -ENOENT;
-+
-+	i->mm =3D task->mm;
-+	if (!i->mm)
-+		return -ENOENT;
-+
-+	irq_work_busy =3D bpf_mmap_unlock_get_irq_work(&i->work);
-+	if (irq_work_busy || !mmap_read_trylock(i->mm)) {
-+		i->mm =3D NULL;
-+		return -EBUSY;
-+	}
-+
-+	vma_iter_init(&i->vmi, i->mm, addr);
-+	return 0;
-+}
-+
-+__bpf_kfunc struct vm_area_struct *bpf_iter_task_vma_next(struct bpf_ite=
-r_task_vma *it)
-+{
-+	struct bpf_iter_task_vma_kern *i =3D (void *)it;
-+
-+	if (!i->mm) /* bpf_iter_task_vma_new failed */
-+		return NULL;
-+	return vma_next(&i->vmi);
-+}
-+
-+__bpf_kfunc void bpf_iter_task_vma_destroy(struct bpf_iter_task_vma *it)
-+{
-+	struct bpf_iter_task_vma_kern *i =3D (void *)it;
-+
-+	if (i->mm)
-+		bpf_mmap_unlock_mm(i->work, i->mm);
-+}
-+
- DEFINE_PER_CPU(struct mmap_unlock_irq_work, mmap_unlock_work);
-=20
- static void do_mmap_read_unlock(struct irq_work *entry)
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index d21deb46f49f..c4a65968f9f5 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -7291,4 +7291,9 @@ struct bpf_iter_num {
- 	__u64 __opaque[1];
- } __attribute__((aligned(8)));
-=20
-+struct bpf_iter_task_vma {
-+	__u64 __opaque[9]; /* See bpf_iter_num comment above */
-+	char __opaque_c[3];
-+} __attribute__((aligned(8)));
-+
- #endif /* _UAPI__LINUX_BPF_H__ */
-diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-index bbab9ad9dc5a..d885ffee4d88 100644
---- a/tools/lib/bpf/bpf_helpers.h
-+++ b/tools/lib/bpf/bpf_helpers.h
-@@ -302,6 +302,14 @@ extern int bpf_iter_num_new(struct bpf_iter_num *it,=
- int start, int end) __weak
- extern int *bpf_iter_num_next(struct bpf_iter_num *it) __weak __ksym;
- extern void bpf_iter_num_destroy(struct bpf_iter_num *it) __weak __ksym;
-=20
-+struct bpf_iter_task_vma;
-+
-+extern int bpf_iter_task_vma_new(struct bpf_iter_task_vma *it,
-+				 struct task_struct *task,
-+				 unsigned long addr) __weak __ksym;
-+extern struct vm_area_struct *bpf_iter_task_vma_next(struct bpf_iter_tas=
-k_vma *it) __weak __ksym;
-+extern void bpf_iter_task_vma_destroy(struct bpf_iter_task_vma *it) __we=
-ak __ksym;
-+
- #ifndef bpf_for_each
- /* bpf_for_each(iter_type, cur_elem, args...) provides generic construct=
- for
-  * using BPF open-coded iterators without having to write mundane explic=
-it
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/te=
-sting/selftests/bpf/prog_tests/bpf_iter.c
-index 1f02168103dd..41aba139b20b 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-@@ -10,7 +10,7 @@
- #include "bpf_iter_task.skel.h"
- #include "bpf_iter_task_stack.skel.h"
- #include "bpf_iter_task_file.skel.h"
--#include "bpf_iter_task_vma.skel.h"
-+#include "bpf_iter_task_vmas.skel.h"
- #include "bpf_iter_task_btf.skel.h"
- #include "bpf_iter_tcp4.skel.h"
- #include "bpf_iter_tcp6.skel.h"
-@@ -1399,19 +1399,19 @@ static void str_strip_first_line(char *str)
- static void test_task_vma_common(struct bpf_iter_attach_opts *opts)
- {
- 	int err, iter_fd =3D -1, proc_maps_fd =3D -1;
--	struct bpf_iter_task_vma *skel;
-+	struct bpf_iter_task_vmas *skel;
- 	int len, read_size =3D 4;
- 	char maps_path[64];
-=20
--	skel =3D bpf_iter_task_vma__open();
--	if (!ASSERT_OK_PTR(skel, "bpf_iter_task_vma__open"))
-+	skel =3D bpf_iter_task_vmas__open();
-+	if (!ASSERT_OK_PTR(skel, "bpf_iter_task_vmas__open"))
- 		return;
-=20
- 	skel->bss->pid =3D getpid();
- 	skel->bss->one_task =3D opts ? 1 : 0;
-=20
--	err =3D bpf_iter_task_vma__load(skel);
--	if (!ASSERT_OK(err, "bpf_iter_task_vma__load"))
-+	err =3D bpf_iter_task_vmas__load(skel);
-+	if (!ASSERT_OK(err, "bpf_iter_task_vmas__load"))
- 		goto out;
-=20
- 	skel->links.proc_maps =3D bpf_program__attach_iter(
-@@ -1462,25 +1462,25 @@ static void test_task_vma_common(struct bpf_iter_=
-attach_opts *opts)
- out:
- 	close(proc_maps_fd);
- 	close(iter_fd);
--	bpf_iter_task_vma__destroy(skel);
-+	bpf_iter_task_vmas__destroy(skel);
- }
-=20
- static void test_task_vma_dead_task(void)
- {
--	struct bpf_iter_task_vma *skel;
-+	struct bpf_iter_task_vmas *skel;
- 	int wstatus, child_pid =3D -1;
- 	time_t start_tm, cur_tm;
- 	int err, iter_fd =3D -1;
- 	int wait_sec =3D 3;
-=20
--	skel =3D bpf_iter_task_vma__open();
--	if (!ASSERT_OK_PTR(skel, "bpf_iter_task_vma__open"))
-+	skel =3D bpf_iter_task_vmas__open();
-+	if (!ASSERT_OK_PTR(skel, "bpf_iter_task_vmas__open"))
- 		return;
-=20
- 	skel->bss->pid =3D getpid();
-=20
--	err =3D bpf_iter_task_vma__load(skel);
--	if (!ASSERT_OK(err, "bpf_iter_task_vma__load"))
-+	err =3D bpf_iter_task_vmas__load(skel);
-+	if (!ASSERT_OK(err, "bpf_iter_task_vmas__load"))
- 		goto out;
-=20
- 	skel->links.proc_maps =3D bpf_program__attach_iter(
-@@ -1533,7 +1533,7 @@ static void test_task_vma_dead_task(void)
- out:
- 	waitpid(child_pid, &wstatus, 0);
- 	close(iter_fd);
--	bpf_iter_task_vma__destroy(skel);
-+	bpf_iter_task_vmas__destroy(skel);
- }
-=20
- void test_bpf_sockmap_map_iter_fd(void)
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_task_vma.c b/tool=
-s/testing/selftests/bpf/progs/bpf_iter_task_vmas.c
-similarity index 100%
-rename from tools/testing/selftests/bpf/progs/bpf_iter_task_vma.c
-rename to tools/testing/selftests/bpf/progs/bpf_iter_task_vmas.c
---=20
-2.34.1
+BPF events are described publicly in very few places but one is:
+https://www.brendangregg.com/perf.html#eBPF
+"eBPF is currently a little restricted and difficult to use from
+perf. It's getting better all the time. A different and currently
+easier way to access eBPF is via the bcc Python interface, which is
+described on my eBPF Tools page. On this page, I'll discuss perf."
+
+I don't think the "getting better all the time" is any longer true as
+BPF features are being added to perf primarily by using BPF
+skeletons. The given example is a filter and would be better supported
+via "perf record --filter".
+
+Ian Rogers (4):
+  perf parse-events: Remove BPF event support
+  perf trace: Migrate BPF augmentation to use a skeleton
+  perf bpf examples: With no BPF events remove examples
+  perf trace: Tidy comments
+
+ tools/perf/Documentation/perf-config.txt      |   33 -
+ tools/perf/Documentation/perf-record.txt      |   22 -
+ tools/perf/Makefile.config                    |   43 -
+ tools/perf/Makefile.perf                      |   19 +-
+ tools/perf/builtin-record.c                   |   45 -
+ tools/perf/builtin-trace.c                    |  310 +--
+ tools/perf/examples/bpf/5sec.c                |   53 -
+ tools/perf/examples/bpf/empty.c               |   12 -
+ tools/perf/examples/bpf/hello.c               |   27 -
+ tools/perf/examples/bpf/sys_enter_openat.c    |   33 -
+ tools/perf/perf.c                             |    2 -
+ tools/perf/tests/.gitignore                   |    5 -
+ tools/perf/tests/Build                        |   31 -
+ tools/perf/tests/bpf-script-example.c         |   60 -
+ tools/perf/tests/bpf-script-test-kbuild.c     |   21 -
+ tools/perf/tests/bpf-script-test-prologue.c   |   49 -
+ tools/perf/tests/bpf-script-test-relocation.c |   51 -
+ tools/perf/tests/bpf.c                        |  390 ----
+ tools/perf/tests/builtin-test.c               |    3 -
+ tools/perf/tests/clang.c                      |   32 -
+ tools/perf/tests/llvm.c                       |  219 --
+ tools/perf/tests/llvm.h                       |   31 -
+ tools/perf/tests/make                         |    2 -
+ tools/perf/tests/tests.h                      |    2 -
+ tools/perf/trace/beauty/beauty.h              |   15 +-
+ tools/perf/util/Build                         |    8 +-
+ tools/perf/util/bpf-loader.c                  | 2006 -----------------
+ tools/perf/util/bpf-loader.h                  |  216 --
+ .../bpf_skel/augmented_raw_syscalls.bpf.c}    |   35 +-
+ tools/perf/util/c++/Build                     |    5 -
+ tools/perf/util/c++/clang-c.h                 |   43 -
+ tools/perf/util/c++/clang-test.cpp            |   67 -
+ tools/perf/util/c++/clang.cpp                 |  225 --
+ tools/perf/util/c++/clang.h                   |   27 -
+ tools/perf/util/config.c                      |    4 -
+ tools/perf/util/llvm-utils.c                  |  612 -----
+ tools/perf/util/llvm-utils.h                  |   69 -
+ tools/perf/util/parse-events.c                |  268 ---
+ tools/perf/util/parse-events.h                |   15 -
+ tools/perf/util/parse-events.l                |   31 -
+ tools/perf/util/parse-events.y                |   44 +-
+ 41 files changed, 133 insertions(+), 5052 deletions(-)
+ delete mode 100644 tools/perf/examples/bpf/5sec.c
+ delete mode 100644 tools/perf/examples/bpf/empty.c
+ delete mode 100644 tools/perf/examples/bpf/hello.c
+ delete mode 100644 tools/perf/examples/bpf/sys_enter_openat.c
+ delete mode 100644 tools/perf/tests/.gitignore
+ delete mode 100644 tools/perf/tests/bpf-script-example.c
+ delete mode 100644 tools/perf/tests/bpf-script-test-kbuild.c
+ delete mode 100644 tools/perf/tests/bpf-script-test-prologue.c
+ delete mode 100644 tools/perf/tests/bpf-script-test-relocation.c
+ delete mode 100644 tools/perf/tests/bpf.c
+ delete mode 100644 tools/perf/tests/clang.c
+ delete mode 100644 tools/perf/tests/llvm.c
+ delete mode 100644 tools/perf/tests/llvm.h
+ delete mode 100644 tools/perf/util/bpf-loader.c
+ delete mode 100644 tools/perf/util/bpf-loader.h
+ rename tools/perf/{examples/bpf/augmented_raw_syscalls.c => util/bpf_skel/augmented_raw_syscalls.bpf.c} (93%)
+ delete mode 100644 tools/perf/util/c++/Build
+ delete mode 100644 tools/perf/util/c++/clang-c.h
+ delete mode 100644 tools/perf/util/c++/clang-test.cpp
+ delete mode 100644 tools/perf/util/c++/clang.cpp
+ delete mode 100644 tools/perf/util/c++/clang.h
+ delete mode 100644 tools/perf/util/llvm-utils.c
+ delete mode 100644 tools/perf/util/llvm-utils.h
+
+-- 
+2.41.0.640.ga95def55d0-goog
 
