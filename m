@@ -1,98 +1,84 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18D5722F02
-	for <bpf@vger.kernel.org>; Thu, 10 Aug 2023 22:22:48 +0000 (UTC)
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84392717
-	for <bpf@vger.kernel.org>; Thu, 10 Aug 2023 15:22:47 -0700 (PDT)
-Received: from pps.filterd (m0354653.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 37AIxtMQ016096;
-	Thu, 10 Aug 2023 21:45:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=from:to:cc:subject:date:message-id:mime-version
-	:content-transfer-encoding:content-type; s=default; bh=vRl8VUDqK
-	+kxu1qqP1KTRlJIk3Qeh/ckZJFSE82UaUo=; b=VfpVl4ez0iK6YvMT3bD9MXOyR
-	BwwDrx6dLQwL8OD68z6zEHZCkUkXcKbh3nHO4MGXlc0LPY3dhwF9Hxqy73n2br0a
-	G/P0lK4HSK8lNWObz0KSAPGYWou/2XBhqplX3ngMD00wtBJM9QioP2fVf00keawp
-	LLqDv4dRU1MBK361fnMmLulsiA0GFfcDmWwcKHdqNcOumyP3LADdNuQPIfQ/d9d4
-	U5hsFpTWJm3XR8awgzm7bc7gZwnED8U3aAT6HFZEO0b08ithKQ4gbSvlxaJ4668K
-	t72owpJG7gbhArhJrsKbTk90A9Ge5mF+M2Yri+l9t3T8iDA0vjt1j0/XUXimQ==
-Received: from 04wpexch06.crowdstrike.sys (dragosx.crowdstrike.com [208.42.231.60])
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 3sbx1adj68-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 10 Aug 2023 21:45:50 +0000 (GMT)
-Received: from LL-556NGK3.crowdstrike.sys (10.100.11.122) by
- 04wpexch06.crowdstrike.sys (10.100.11.99) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.16; Thu, 10 Aug 2023 21:45:48 +0000
-From: Martin Kelly <martin.kelly@crowdstrike.com>
-To: <bpf@vger.kernel.org>
-CC: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Martin Kelly <martin.kelly@crowdstrike.com>,
-        Marco Vedovati
-	<marco.vedovati@crowdstrike.com>
-Subject: [PATCH bpf-next] libbpf: set close-on-exec flag on gzopen
-Date: Thu, 10 Aug 2023 14:43:53 -0700
-Message-ID: <20230810214350.106301-1-martin.kelly@crowdstrike.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC2F01877
+	for <bpf@vger.kernel.org>; Thu, 10 Aug 2023 22:46:21 +0000 (UTC)
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BABB02D40
+	for <bpf@vger.kernel.org>; Thu, 10 Aug 2023 15:46:20 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5867fe87d16so18047097b3.2
+        for <bpf@vger.kernel.org>; Thu, 10 Aug 2023 15:46:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691707580; x=1692312380;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xjd4vkpdCNZjHu9BtGW8X6WGb20e5wp6H/aYsqXsyEQ=;
+        b=vuxVUQS/Rd+IBKBm1b7ikeBESL4jyxpR8mKK8cQmpQ+hmVJHXNQjOsb5p6NReTCEhM
+         igBaQaVx6ysaNlCaP8vRvg3YEouXmY7Y+9yOdNEpgrMyk9kUzP5kQzNIgv5xJHtJdlwc
+         kpW63jCiWVKAiyvbhJi6fXJZbABZguB1XML+0jfYC3kd5xeiOvQDwXMnUyyOFwJDmFfA
+         DS7IVEibz0kQAN8dXFuPkmgDa8GIR7fHDANa362Jmqzwt01IxSo8b+kNKWy7wNCj1zNT
+         Po/ySyBdBUGf2JhqrHxzwxht/rjqP0vn2uXGS0PtjW89+U8p9q35C+Oim+S6FawDN2Qq
+         ze0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691707580; x=1692312380;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xjd4vkpdCNZjHu9BtGW8X6WGb20e5wp6H/aYsqXsyEQ=;
+        b=YS5cEPVdNzkKuQjeAHRtJ8GqDbWIdcGi6lG4I903UAwGv9GCF22Ob6UxkzhQf8MbDU
+         kLPpOksf7n60D+ecc+K88UlXDoZX/ErionpfiwTAPj7xK9fEmSIg0S0AVfR9KSO9hpa1
+         KFUTqZc1GFxwc+Ozg8cDWpG7jE039cSY1iAWCRLXA5kXIimQepkfOCh2ABqcFpKe3C/C
+         hUPFZwJI+0tTUEuZDnGebbqmaDI1a5YwxtUnjJ/1SPsvOPueaR6GjwIW3QaBnq75ofG6
+         8psiHIR6vEgIkfM4Q+iuNBZUd0G76V1kTnmwPy0Pa5z2GspRD4nCEH0dZ0CIssYedQoM
+         kkJw==
+X-Gm-Message-State: AOJu0YyiEEdgTjR+UH20grpi1Rqclh1BJm7ww1ExMqVskK1l26idG0J8
+	x3Quh4lamxJf2oYTZlpRKEsWZTw=
+X-Google-Smtp-Source: AGHT+IGL0cU/OgNlmX6HF6UNubkpMQKosZNdhYWpVGifdB9x5uIbsl02rc0lbeMuVFPl9CKTW9Er8qg=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a81:b654:0:b0:586:a6e3:88cd with SMTP id
+ h20-20020a81b654000000b00586a6e388cdmr6521ywk.5.1691707580066; Thu, 10 Aug
+ 2023 15:46:20 -0700 (PDT)
+Date: Thu, 10 Aug 2023 15:46:18 -0700
+In-Reply-To: <20230810220456.521517-1-void@manifault.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.100.11.122]
-X-ClientProxiedBy: 04WPEXCH10.crowdstrike.sys (10.100.11.114) To
- 04wpexch06.crowdstrike.sys (10.100.11.99)
-X-Disclaimer: USA
-X-Proofpoint-ORIG-GUID: tqf7gHNHzwnhE0Arr1uK0kDhFVfiLtPX
-X-Proofpoint-GUID: tqf7gHNHzwnhE0Arr1uK0kDhFVfiLtPX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-10_16,2023-08-10_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=834
- suspectscore=0 mlxscore=0 bulkscore=0 impostorscore=0 phishscore=0
- lowpriorityscore=0 priorityscore=1501 spamscore=0 malwarescore=0
- adultscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2306200000 definitions=main-2308100187
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Mime-Version: 1.0
+References: <20230810220456.521517-1-void@manifault.com>
+Message-ID: <ZNVousfpuRFgfuAo@google.com>
+Subject: Re: [PATCH bpf-next] bpf: Support default .validate() and .update()
+ behavior for struct_ops links
+From: Stanislav Fomichev <sdf@google.com>
+To: David Vernet <void@manifault.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, yhs@fb.com, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, haoluo@google.com, 
+	jolsa@kernel.org, linux-kernel@vger.kernel.org, kernel-team@meta.com, 
+	tj@kernel.org, clm@meta.com, thinker.li@gmail.com
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-From: Marco Vedovati <marco.vedovati@crowdstrike.com>
+On 08/10, David Vernet wrote:
+> Currently, if a struct_ops map is loaded with BPF_F_LINK, it must also
+> define the .validate() and .update() callbacks in its corresponding
+> struct bpf_struct_ops in the kernel. Enabling struct_ops link is useful
+> in its own right to ensure that the map is unloaded if an application
+> crashes. For example, with sched_ext, we want to automatically unload
+> the host-wide scheduler if the application crashes. We would likely
+> never support updating elements of a sched_ext struct_ops map, so we'd
+> have to implement these callbacks showing that they _can't_ support
+> element updates just to benefit from the basic lifetime management of
+> struct_ops links.
+> 
+> Let's enable struct_ops maps to work with BPF_F_LINK even if they
+> haven't defined these callbacks, by assuming that a struct_ops map
+> element cannot be updated by default.
 
-Enable the close-on-exec flag when using gzopen
-
-This is especially important for multithreaded programs making use of
-libbpf, where a fork + exec could race with libbpf library calls,
-potentially resulting in a file descriptor leaked to the new process.
-
-Signed-off-by: Marco Vedovati <marco.vedovati@crowdstrike.com>
----
- tools/lib/bpf/libbpf.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 17883f5a44b9..b14a4376a86e 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -1978,9 +1978,9 @@ static int bpf_object__read_kconfig_file(struct bpf_object *obj, void *data)
- 		return -ENAMETOOLONG;
- 
- 	/* gzopen also accepts uncompressed files. */
--	file = gzopen(buf, "r");
-+	file = gzopen(buf, "re");
- 	if (!file)
--		file = gzopen("/proc/config.gz", "r");
-+		file = gzopen("/proc/config.gz", "re");
- 
- 	if (!file) {
- 		pr_warn("failed to open system Kconfig\n");
--- 
-2.34.1
-
+Any reason this is not part of sched_ext series? As you mention,
+we don't seem to have such users in the three?
