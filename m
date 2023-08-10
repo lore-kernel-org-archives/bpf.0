@@ -1,24 +1,40 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F9C322F02;
-	Thu, 10 Aug 2023 21:40:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A2DCBC433C8;
-	Thu, 10 Aug 2023 21:40:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1691703651;
-	bh=jt/NUvha+AYuETQysbUBUq/dMQaLn0OJNT63dU0S4O4=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=CRiK0Vu2oY6CBNly+YV8KfDusbwR8fqYoLyGRqLu2df24sdtBxlqLD28VxhQSUBpX
-	 jsSKIEnimRCYbf48JL3/vydWN+hDMKWEltmuQ3vEyDvVJ2wTbfVsYlxvrYFLoefhGt
-	 dS3GyeuAGCb3c7qme3d75n8IRNUYkjldAgupWvf8AGqwpnL+ZHF+dnsDP/1m1lLuZ4
-	 IQsHgb4oQ7Am3tNbBY+hGKZZzv3uA0+ncQYZpg8AprGOBfieG/4PITNcDBnc8NMQMv
-	 iP8UGDM3lEsMCPXy9aC/5Jls9c55d4fw7PTfVjzDO9FojZkBKHcrSEYZOvzI6rdCs7
-	 d7arnJTGBBDhA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6E756C595D0;
-	Thu, 10 Aug 2023 21:40:51 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB0322F0C
+	for <bpf@vger.kernel.org>; Thu, 10 Aug 2023 21:50:16 +0000 (UTC)
+X-Greylist: delayed 2410 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Aug 2023 14:50:14 PDT
+Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CDF2D4D
+	for <bpf@vger.kernel.org>; Thu, 10 Aug 2023 14:50:14 -0700 (PDT)
+Received: from pps.filterd (m0354652.ppops.net [127.0.0.1])
+	by mx0a-00206402.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 37AJBp9V019346;
+	Thu, 10 Aug 2023 21:10:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=default; bh=vRl8VUDqK
+	+kxu1qqP1KTRlJIk3Qeh/ckZJFSE82UaUo=; b=Ct3N48n5DsSvpsl/BetFK8hMQ
+	JRnAlvuXnUOAnH8nqH73VD4eGGZOI/chvYp8VnJY4pa6u1H6UGcwPkgwgUMx7DMc
+	DGGDKA+UYJqQdx2QfI6NwP31JBqHS4Yvj0Q6CpFLPg8NFR7TxUWiyDYsXnHs4nK0
+	iZ41y5EHLTwiadKRGYTLEUK7E6LfJ9L9uxNdLMvE+JkUc0FR++W6Uyt+DtAQbocN
+	L1IzstH7qUyWBQP16MQ0VSvTQS0rAehyeW8awcJ9Iq4AM9ic2Ot3Ytxqx7VEFRcL
+	uHJdqd48FN8UL7ynUcr79oWyQCacCpfA4vFd60zMbRLpp73iWKIq4eStZ0IZA==
+Received: from 04wpexch06.crowdstrike.sys (dragosx.crowdstrike.com [208.42.231.60])
+	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 3sd5uc87h6-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 10 Aug 2023 21:10:01 +0000 (GMT)
+Received: from LL-556NGK3.crowdstrike.sys (10.100.11.122) by
+ 04wpexch06.crowdstrike.sys (10.100.11.99) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.16; Thu, 10 Aug 2023 21:09:59 +0000
+From: Martin Kelly <martin.kelly@crowdstrike.com>
+To: <bpf@vger.kernel.org>
+CC: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Marco Vedovati <marco.vedovati@crowdstrike.com>
+Subject: [PATCH] libbpf: set close-on-exec flag on gzopen
+Date: Thu, 10 Aug 2023 14:09:45 -0700
+Message-ID: <20230810210945.100430-1-martin.kelly@crowdstrike.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -26,40 +42,56 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: pull-request: bpf-next 2023-08-09
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <169170365144.3628.7011774572938196429.git-patchwork-notify@kernel.org>
-Date: Thu, 10 Aug 2023 21:40:51 +0000
-References: <20230810055123.109578-1-martin.lau@linux.dev>
-In-Reply-To: <20230810055123.109578-1-martin.lau@linux.dev>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
- pabeni@redhat.com, daniel@iogearbox.net, andrii@kernel.org, ast@kernel.org,
- netdev@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain
+X-Originating-IP: [10.100.11.122]
+X-ClientProxiedBy: 04WPEXCH10.crowdstrike.sys (10.100.11.114) To
+ 04wpexch06.crowdstrike.sys (10.100.11.99)
+X-Disclaimer: USA
+X-Proofpoint-GUID: hJHAs87P-nKVbdLWHBPp4LoLwiQLrYCJ
+X-Proofpoint-ORIG-GUID: hJHAs87P-nKVbdLWHBPp4LoLwiQLrYCJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-10_16,2023-08-10_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1011
+ spamscore=0 priorityscore=1501 impostorscore=0 adultscore=0 bulkscore=0
+ malwarescore=0 mlxlogscore=855 mlxscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2306200000 definitions=main-2308100182
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-Hello:
+From: Marco Vedovati <marco.vedovati@crowdstrike.com>
 
-This pull request was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Enable the close-on-exec flag when using gzopen
 
-On Wed,  9 Aug 2023 22:51:23 -0700 you wrote:
-> Hi David, hi Jakub, hi Paolo, hi Eric,
-> 
-> The following pull-request contains BPF updates for your *net-next* tree.
-> 
-> We've added 19 non-merge commits during the last 6 day(s) which contain
-> a total of 25 files changed, 369 insertions(+), 141 deletions(-).
-> 
-> [...]
+This is especially important for multithreaded programs making use of
+libbpf, where a fork + exec could race with libbpf library calls,
+potentially resulting in a file descriptor leaked to the new process.
 
-Here is the summary with links:
-  - pull-request: bpf-next 2023-08-09
-    https://git.kernel.org/netdev/net-next/c/6a1ed1430daa
+Signed-off-by: Marco Vedovati <marco.vedovati@crowdstrike.com>
+---
+ tools/lib/bpf/libbpf.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-You are awesome, thank you!
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 17883f5a44b9..b14a4376a86e 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -1978,9 +1978,9 @@ static int bpf_object__read_kconfig_file(struct bpf_object *obj, void *data)
+ 		return -ENAMETOOLONG;
+ 
+ 	/* gzopen also accepts uncompressed files. */
+-	file = gzopen(buf, "r");
++	file = gzopen(buf, "re");
+ 	if (!file)
+-		file = gzopen("/proc/config.gz", "r");
++		file = gzopen("/proc/config.gz", "re");
+ 
+ 	if (!file) {
+ 		pr_warn("failed to open system Kconfig\n");
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 
