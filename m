@@ -1,128 +1,175 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AA7A8468
-	for <bpf@vger.kernel.org>; Fri, 11 Aug 2023 20:07:24 +0000 (UTC)
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A1D30F8
-	for <bpf@vger.kernel.org>; Fri, 11 Aug 2023 13:07:23 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-99d6d5054bcso389547866b.1
-        for <bpf@vger.kernel.org>; Fri, 11 Aug 2023 13:07:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691784441; x=1692389241;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=j5bVPexHHjNHhXkTKv/bwA8jIfx9jWk4EMMUpVoveDM=;
-        b=aavooXLighW6qc8kBYbxtxfsmmyTe7kcaM0Sfy61Bf7IEekYrlHdRp1/cMHRUW0W7S
-         yCVrPYEoQ1MVK5nNbZAiatSIFo8G35WMLGC+8jO1pENI0B0N+xsNtdbEZ7i81G1835TH
-         EzZhz2trmlGXyNgy9AULzqvmq1j/NB5tA4W3yW06Dy4W22hbcQt2xYLeE3jfsTZHpC0m
-         LOWCTyqEhyV3U6lOQe84DiZDXfiDOsEbf38jYwy4xjk0ubbPmLWGMXR15Zyi1C7Qiqjl
-         O+wJMA9qBthRBbdbpuaM8XgPWhIAsxIMWIzkl6RcfBlK7rE95zc1ulBko8uJWRKGYYKH
-         EJTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691784441; x=1692389241;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j5bVPexHHjNHhXkTKv/bwA8jIfx9jWk4EMMUpVoveDM=;
-        b=jR3FFXRjuocpDBVp46wVwqm8csllFIaQIYnQ9ujyK9Hik7tUT3D4ua4YNhlYraOoDe
-         IRuiMB6//hv6vTXddmgUvhLBFmEeTIpszJdALFwHtIfASy5VL4t2VRKAUJKh2C0Eptrn
-         7MV80HzkkNkNYJ0L5R7OnGt+T1Pm+eVF/cBfycavLkDmngy90q8n/x/Q9/oQeOu+Qcsj
-         iNij6n0DWca4mPmu3XSnme7Pha6dbrKitM2nEZ2A8MQgxgb9r5/XmYgJYOnp7eLlsk31
-         2Sb/byNJyeTdjX6XQPUBc1D/MxdcZsLq3JB2BH0BkELGjyfU/aQFwHQ1cxTEzcuoHPNn
-         Jcmw==
-X-Gm-Message-State: AOJu0YwvMe8nRsEhfCtxxB5A0QE703WYlB17C7R0t2jrPFC4FQ26xgY5
-	0R553ShB05Rgon+qSFCrbXI=
-X-Google-Smtp-Source: AGHT+IGWQqAnC+vi5JPmL4exiyYqLExoMajHj6cWi/ZVQYr4VeSU9JbU+a2tcFedc9TdAHt4Z3ktAw==
-X-Received: by 2002:a17:907:d8f:b0:98e:738c:6d39 with SMTP id go15-20020a1709070d8f00b0098e738c6d39mr6714376ejc.36.1691784441407;
-        Fri, 11 Aug 2023 13:07:21 -0700 (PDT)
-Received: from krava (ip-94-113-247-30.net.vodafone.cz. [94.113.247.30])
-        by smtp.gmail.com with ESMTPSA id b16-20020a170906039000b00993470682e5sm2615808eja.32.2023.08.11.13.07.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Aug 2023 13:07:20 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Fri, 11 Aug 2023 22:07:18 +0200
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
-	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-	yonghong.song@linux.dev, kpsingh@kernel.org, sdf@google.com,
-	haoluo@google.com, bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next v5 2/2] selftests/bpf: Add selftest for
- fill_link_info
-Message-ID: <ZNaU9rE6NH9T+O39@krava>
-References: <20230811023647.3711-1-laoar.shao@gmail.com>
- <20230811023647.3711-3-laoar.shao@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D99D78468
+	for <bpf@vger.kernel.org>; Fri, 11 Aug 2023 20:14:07 +0000 (UTC)
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6B130ED
+	for <bpf@vger.kernel.org>; Fri, 11 Aug 2023 13:14:06 -0700 (PDT)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37BGMsZk016723
+	for <bpf@vger.kernel.org>; Fri, 11 Aug 2023 13:14:06 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=/IXfMgkPIbhY1b/mlUShV7LNHaq0AH2p4dmr3OLHeyA=;
+ b=Tz7t+G0geHKLKKReVoctDkLYB9jyrncvk4iI7AjfQJFWCIWllTFMDzgK14ORZcFIgIOw
+ OJHHpkjNsl2Gue/0pHKwyZr/JiT2DoZdGTTkIWlZodj1qmtu4HiFN2ovDBlHQY3JutrJ
+ GQ+py/StVO8MjR0+hH749pIRtfvnTwUgaXQ= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3sd909huny-4
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Fri, 11 Aug 2023 13:14:05 -0700
+Received: from twshared6713.09.ash9.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Fri, 11 Aug 2023 13:14:03 -0700
+Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
+	id CE8C02282EDF3; Fri, 11 Aug 2023 13:13:57 -0700 (PDT)
+From: Dave Marchevsky <davemarchevsky@fb.com>
+To: <bpf@vger.kernel.org>
+CC: Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann
+	<daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau
+	<martin.lau@kernel.org>,
+        Kernel Team <kernel-team@fb.com>, Tejun Heo
+	<tj@kernel.org>,
+        <dvernet@meta.com>, Dave Marchevsky <davemarchevsky@fb.com>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Add CO-RE relocs kfunc flavors tests
+Date: Fri, 11 Aug 2023 13:13:46 -0700
+Message-ID: <20230811201346.3240403-2-davemarchevsky@fb.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230811201346.3240403-1-davemarchevsky@fb.com>
+References: <20230811201346.3240403-1-davemarchevsky@fb.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230811023647.3711-3-laoar.shao@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: NOq8gPCPVhwRDLI9Q-QsymkJ6LxqBy10
+X-Proofpoint-ORIG-GUID: NOq8gPCPVhwRDLI9Q-QsymkJ6LxqBy10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-11_12,2023-08-10_01,2023-05-22_02
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+	SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Fri, Aug 11, 2023 at 02:36:47AM +0000, Yafang Shao wrote:
+This patch adds selftests that exercise kfunc flavor relocation
+functionality added in the previous patch. The actual kfunc defined in
+kernel/bpf/helpers.c is
 
-SNIP
+  struct task_struct *bpf_task_acquire(struct task_struct *p)
 
-> +void test_fill_link_info(void)
-> +{
-> +	struct test_fill_link_info *skel;
-> +	int i;
-> +
-> +	skel = test_fill_link_info__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "skel_open"))
-> +		return;
-> +
-> +	/* load kallsyms to compare the addr */
-> +	if (!ASSERT_OK(load_kallsyms_refresh(), "load_kallsyms_refresh"))
-> +		goto cleanup;
-> +
-> +	kprobe_addr = ksym_get_addr(KPROBE_FUNC);
-> +	if (test__start_subtest("kprobe_link_info"))
-> +		test_kprobe_fill_link_info(skel, BPF_PERF_EVENT_KPROBE, false);
-> +	if (test__start_subtest("kretprobe_link_info"))
-> +		test_kprobe_fill_link_info(skel, BPF_PERF_EVENT_KRETPROBE, false);
-> +	if (test__start_subtest("kprobe_invalid_ubuff"))
-> +		test_kprobe_fill_link_info(skel, BPF_PERF_EVENT_KPROBE, true);
-> +	if (test__start_subtest("tracepoint_link_info"))
-> +		test_tp_fill_link_info(skel);
-> +
-> +	uprobe_offset = get_uprobe_offset(&uprobe_func);
-> +	if (test__start_subtest("uprobe_link_info"))
-> +		test_uprobe_fill_link_info(skel, BPF_PERF_EVENT_UPROBE);
-> +	if (test__start_subtest("uretprobe_link_info"))
-> +		test_uprobe_fill_link_info(skel, BPF_PERF_EVENT_URETPROBE);
-> +
-> +	qsort(kmulti_syms, KMULTI_CNT, sizeof(kmulti_syms[0]), symbols_cmp_r);
+The following relocation behaviors are checked:
 
-hum, what's the reason for sorting the symbols?
+  struct task_struct *bpf_task_acquire___one(struct task_struct *name)
+    * Should succeed despite differing param name
 
-other than that it looks good to me
+  struct task_struct *bpf_task_acquire___two(struct task_struct *p, void =
+*ctx)
+    * Should fail because there is no two-param bpf_task_acquire
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+  struct task_struct *bpf_task_acquire___three(void *ctx)
+    * Should fail because, despite vmlinux's bpf_task_acquire having one =
+param,
+      the types don't match
 
-jirka
+Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
+---
+ .../selftests/bpf/prog_tests/task_kfunc.c     |  1 +
+ .../selftests/bpf/progs/task_kfunc_success.c  | 41 +++++++++++++++++++
+ 2 files changed, 42 insertions(+)
 
-> +	for (i = 0; i < KMULTI_CNT; i++)
-> +		kmulti_addrs[i] = ksym_get_addr(kmulti_syms[i]);
-> +	if (test__start_subtest("kprobe_multi_link_info"))
-> +		test_kprobe_multi_fill_link_info(skel, false, false);
-> +	if (test__start_subtest("kretprobe_multi_link_info"))
-> +		test_kprobe_multi_fill_link_info(skel, true, false);
-> +	if (test__start_subtest("kprobe_multi_invalid_ubuff"))
-> +		test_kprobe_multi_fill_link_info(skel, true, true);
-> +
-> +cleanup:
-> +	test_fill_link_info__destroy(skel);
-> +}
+diff --git a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c b/tools/=
+testing/selftests/bpf/prog_tests/task_kfunc.c
+index 740d5f644b40..99abb0350154 100644
+--- a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
++++ b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
+@@ -79,6 +79,7 @@ static const char * const success_tests[] =3D {
+ 	"test_task_from_pid_current",
+ 	"test_task_from_pid_invalid",
+ 	"task_kfunc_acquire_trusted_walked",
++	"test_task_kfunc_flavor_relo",
+ };
+=20
+ void test_task_kfunc(void)
+diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_success.c b/too=
+ls/testing/selftests/bpf/progs/task_kfunc_success.c
+index b09371bba204..33e1eb88874f 100644
+--- a/tools/testing/selftests/bpf/progs/task_kfunc_success.c
++++ b/tools/testing/selftests/bpf/progs/task_kfunc_success.c
+@@ -18,6 +18,13 @@ int err, pid;
+  */
+=20
+ struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym __wea=
+k;
++
++struct task_struct *bpf_task_acquire___one(struct task_struct *task) __k=
+sym __weak;
++/* The two-param bpf_task_acquire doesn't exist */
++struct task_struct *bpf_task_acquire___two(struct task_struct *p, void *=
+ctx) __ksym __weak;
++/* Incorrect type for first param */
++struct task_struct *bpf_task_acquire___three(void *ctx) __ksym __weak;
++
+ void invalid_kfunc(void) __ksym __weak;
+ void bpf_testmod_test_mod_kfunc(int i) __ksym __weak;
+=20
+@@ -55,6 +62,40 @@ static int test_acquire_release(struct task_struct *ta=
+sk)
+ 	return 0;
+ }
+=20
++SEC("tp_btf/task_newtask")
++int BPF_PROG(test_task_kfunc_flavor_relo, struct task_struct *task, u64 =
+clone_flags)
++{
++	struct task_struct *acquired =3D NULL;
++	int fake_ctx =3D 42;
++
++	if (bpf_ksym_exists(bpf_task_acquire___one)) {
++		acquired =3D bpf_task_acquire___one(task);
++	} else if (bpf_ksym_exists(bpf_task_acquire___two)) {
++		/* if verifier's dead code elimination doesn't remove this,
++		 * verification should fail due to return w/o bpf_task_release
++		 */
++		acquired =3D bpf_task_acquire___two(task, &fake_ctx);
++		err =3D 3;
++		return 0;
++	} else if (bpf_ksym_exists(bpf_task_acquire___three)) {
++		/* Here, bpf_object__resolve_ksym_func_btf_id's find_ksym_btf_id
++		 * call will find vmlinux's bpf_task_acquire, but subsequent
++		 * bpf_core_types_are_compat will fail
++		 *
++		 * Should be removed by dead code elimination similar to ___two
++		 */
++		acquired =3D bpf_task_acquire___three(&fake_ctx);
++		err =3D 4;
++		return 0;
++	}
++
++	if (acquired)
++		bpf_task_release(acquired);
++	else
++		err =3D 5;
++	return 0;
++}
++
+ SEC("tp_btf/task_newtask")
+ int BPF_PROG(test_task_acquire_release_argument, struct task_struct *tas=
+k, u64 clone_flags)
+ {
+--=20
+2.34.1
 
-SNIP
