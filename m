@@ -1,38 +1,38 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66121360C0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 998D011729;
 	Fri, 11 Aug 2023 16:20:44 +0000 (UTC)
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEE926A2;
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAFC792;
 	Fri, 11 Aug 2023 09:20:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1691770843; x=1723306843;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=h/LoVeU9MwFyVOuQuEJeVQ0WN2WsBdzG519CSrAsYi0=;
-  b=DPXN5HXGbRu9QVYqbsbLtT6vHpRSSWl+VuesSdPZGKqZCuQ65+k5qA4K
-   djbpzX2SHs31MwCwaNExP5T2uRRf1+SQ3jMuswzRv8/IiACckXG3Joit5
-   +jseAw1hsvApSLXYgrJOhTqdA+8JgnyETPcQg5EGSTMoJhEiAmrVxIo1P
-   RA4WSVZJAljscVjxYC0OBeHvX9X3L1tlyaBOnYJIG3k5i3qpKrnszxnt3
-   i+ZhIypUxahfg09yvLk50ykFXsfrXQVWnF2PuftyZrLAEG4mnKJHY+sjo
-   WmplX7CDNdyQ2cMmi2wN5y9wMBIqXuZwJMLto9vwm3dCUP4xt6bPBBZs0
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="356672097"
+  bh=MrzRG4al62OiD9VEbOJ+kaeSZbDEICc4yRM2zQdS+Vw=;
+  b=Zzt+Hpd7lRXAp9tRDRizvt60zcUd86GIqhgrig/MnR3zf3fH+UOs7qC9
+   EIzEirv7GXgV+QnoeBkAG4MrupdKw/yZZ+kNnoyiWt1R31cwq/V7eeNWH
+   VZKbCs3fGgliQz72WRkT+uV/TCUrKz3yt0Av3XNfUgtDJE8OJTkOpn04W
+   ui7EqWzLYxJz6pdB09n7FpNx++zjJv9/kF8w4k49SbWCAsDiqYG1kTLjf
+   QO5McSSxM+w0N4U24XzyvXCKZBgAM3nQ5Wv9W/zhJAFe8i9f82zvKrQao
+   5Cre5OlNHZTXtF2XYvL79mDSVUMoJLO6MnGyckhE1WoGvj0uKwAAzFdmT
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="356672119"
 X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="356672097"
+   d="scan'208";a="356672119"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 09:20:35 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 09:20:39 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="1063363813"
+X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="1063363821"
 X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="1063363813"
+   d="scan'208";a="1063363821"
 Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by fmsmga005.fm.intel.com with ESMTP; 11 Aug 2023 09:20:29 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 11 Aug 2023 09:20:34 -0700
 Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id 43916333CD;
-	Fri, 11 Aug 2023 17:20:28 +0100 (IST)
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id A824533BC2;
+	Fri, 11 Aug 2023 17:20:32 +0100 (IST)
 From: Larysa Zaremba <larysa.zaremba@intel.com>
 To: bpf@vger.kernel.org
 Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
@@ -60,9 +60,9 @@ Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
 	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
 	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
 	Simon Horman <simon.horman@corigine.com>
-Subject: [PATCH bpf-next v5 11/21] ice: use VLAN proto from ring packet context in skb path
-Date: Fri, 11 Aug 2023 18:14:59 +0200
-Message-ID: <20230811161509.19722-12-larysa.zaremba@intel.com>
+Subject: [PATCH bpf-next v5 13/21] ice: Implement checksum hint
+Date: Fri, 11 Aug 2023 18:15:01 +0200
+Message-ID: <20230811161509.19722-14-larysa.zaremba@intel.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230811161509.19722-1-larysa.zaremba@intel.com>
 References: <20230811161509.19722-1-larysa.zaremba@intel.com>
@@ -80,63 +80,53 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-VLAN proto, used in ice XDP hints implementation is stored in ring packet
-context. Utilize this value in skb VLAN processing too instead of checking
-netdev features.
-
-At the same time, use vlan_tci instead of vlan_tag in touched code,
-because vlan_tag is misleading.
+Implement .xmo_rx_csum callback to allow XDP code to determine,
+whether HW has validated any checksums.
 
 Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
 ---
- drivers/net/ethernet/intel/ice/ice_txrx_lib.c | 14 +++++---------
- drivers/net/ethernet/intel/ice/ice_txrx_lib.h |  2 +-
- 2 files changed, 6 insertions(+), 10 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.c | 26 +++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
 diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-index 10e7ec51f4ef..6ae57a98a4d8 100644
+index 6ae57a98a4d8..f11a245705bc 100644
 --- a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
 +++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-@@ -283,21 +283,17 @@ ice_process_skb_fields(struct ice_rx_ring *rx_ring,
-  * ice_receive_skb - Send a completed packet up the stack
-  * @rx_ring: Rx ring in play
-  * @skb: packet to send up
-- * @vlan_tag: VLAN tag for packet
-+ * @vlan_tci: VLAN TCI for packet
-  *
-  * This function sends the completed packet (via. skb) up the stack using
-  * gro receive functions (with/without VLAN tag)
-  */
- void
--ice_receive_skb(struct ice_rx_ring *rx_ring, struct sk_buff *skb, u16 vlan_tag)
-+ice_receive_skb(struct ice_rx_ring *rx_ring, struct sk_buff *skb, u16 vlan_tci)
- {
--	netdev_features_t features = rx_ring->netdev->features;
--	bool non_zero_vlan = !!(vlan_tag & VLAN_VID_MASK);
--
--	if ((features & NETIF_F_HW_VLAN_CTAG_RX) && non_zero_vlan)
--		__vlan_hwaccel_put_tag(skb, htons(ETH_P_8021Q), vlan_tag);
--	else if ((features & NETIF_F_HW_VLAN_STAG_RX) && non_zero_vlan)
--		__vlan_hwaccel_put_tag(skb, htons(ETH_P_8021AD), vlan_tag);
-+	if (vlan_tci & VLAN_VID_MASK && rx_ring->pkt_ctx.vlan_proto)
-+		__vlan_hwaccel_put_tag(skb, rx_ring->pkt_ctx.vlan_proto,
-+				       vlan_tci);
- 
- 	napi_gro_receive(&rx_ring->q_vector->napi, skb);
+@@ -660,8 +660,34 @@ static int ice_xdp_rx_vlan_tag(const struct xdp_md *ctx, u16 *vlan_tci,
+ 	return 0;
  }
-diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib.h b/drivers/net/ethernet/intel/ice/ice_txrx_lib.h
-index b7205826fea8..8487884bf5c4 100644
---- a/drivers/net/ethernet/intel/ice/ice_txrx_lib.h
-+++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib.h
-@@ -150,7 +150,7 @@ ice_process_skb_fields(struct ice_rx_ring *rx_ring,
- 		       union ice_32b_rx_flex_desc *rx_desc,
- 		       struct sk_buff *skb);
- void
--ice_receive_skb(struct ice_rx_ring *rx_ring, struct sk_buff *skb, u16 vlan_tag);
-+ice_receive_skb(struct ice_rx_ring *rx_ring, struct sk_buff *skb, u16 vlan_tci);
  
- static inline void
- ice_xdp_meta_set_desc(struct xdp_buff *xdp,
++/**
++ * ice_xdp_rx_csum - RX checksum XDP hint handler
++ * @ctx: XDP buff pointer
++ * @csum_status: status destination address
++ * @csum: not used
++ */
++static int ice_xdp_rx_csum(const struct xdp_md *ctx,
++			   enum xdp_csum_status *csum_status, __wsum *csum)
++{
++	const struct ice_xdp_buff *xdp_ext = (void *)ctx;
++	const union ice_32b_rx_flex_desc *eop_desc;
++	enum ice_rx_csum_status status;
++	u16 ptype;
++
++	eop_desc = xdp_ext->pkt_ctx.eop_desc;
++	ptype = ice_get_ptype(eop_desc);
++
++	status = ice_get_rx_csum_status(eop_desc, ptype);
++	if (status & ICE_RX_CSUM_FAIL)
++		return -ENODATA;
++
++	*csum_status = XDP_CHECKSUM_VERIFIED;
++	return 0;
++}
++
+ const struct xdp_metadata_ops ice_xdp_md_ops = {
+ 	.xmo_rx_timestamp		= ice_xdp_rx_hw_ts,
+ 	.xmo_rx_hash			= ice_xdp_rx_hash,
+ 	.xmo_rx_vlan_tag		= ice_xdp_rx_vlan_tag,
++	.xmo_rx_csum			= ice_xdp_rx_csum,
+ };
 -- 
 2.41.0
 
