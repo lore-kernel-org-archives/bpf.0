@@ -1,38 +1,38 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 998D011729;
-	Fri, 11 Aug 2023 16:20:44 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAFC792;
-	Fri, 11 Aug 2023 09:20:43 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FBF0360D0;
+	Fri, 11 Aug 2023 16:20:46 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE8992;
+	Fri, 11 Aug 2023 09:20:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691770843; x=1723306843;
+  t=1691770845; x=1723306845;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=MrzRG4al62OiD9VEbOJ+kaeSZbDEICc4yRM2zQdS+Vw=;
-  b=Zzt+Hpd7lRXAp9tRDRizvt60zcUd86GIqhgrig/MnR3zf3fH+UOs7qC9
-   EIzEirv7GXgV+QnoeBkAG4MrupdKw/yZZ+kNnoyiWt1R31cwq/V7eeNWH
-   VZKbCs3fGgliQz72WRkT+uV/TCUrKz3yt0Av3XNfUgtDJE8OJTkOpn04W
-   ui7EqWzLYxJz6pdB09n7FpNx++zjJv9/kF8w4k49SbWCAsDiqYG1kTLjf
-   QO5McSSxM+w0N4U24XzyvXCKZBgAM3nQ5Wv9W/zhJAFe8i9f82zvKrQao
-   5Cre5OlNHZTXtF2XYvL79mDSVUMoJLO6MnGyckhE1WoGvj0uKwAAzFdmT
+  bh=5p/6LrkVhD1srZ1C0shnBPSltvtTeK9faThdhrldm0U=;
+  b=bb8ZY56dVy+lk5CQHIPPzzcvgPnIcue5KO5YwnQXfrpPW4JT7b4xVCkY
+   1DvkHqJiqstSsZf3H0aXx7m3Z4bTwJ/nH1pIGkUAgxuHSPgq2bsePjERq
+   spuIVLt9OfMoBmdLpKu9nIjEyoUy1vosVLHb2WbCw9YSerEJtG2J06s0Z
+   kzHSpdhOOldogXHS6TZvszXcOIAZBrmr5MgnuOHKakSoxxcQm88JBTmca
+   PAaUU9Ym51mFP1X05udKQACNeykQ4UQvvMoM6poKKS1svO9+O1vLX4XRt
+   M0yfLdpkZqWq8hCvxU93XlRZvny1gwIVYi4SVCd6JVTrLwimWssJjMbuv
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="356672119"
+X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="351314757"
 X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="356672119"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 09:20:39 -0700
+   d="scan'208";a="351314757"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 09:20:45 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="1063363821"
+X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="906501038"
 X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="1063363821"
+   d="scan'208";a="906501038"
 Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by fmsmga005.fm.intel.com with ESMTP; 11 Aug 2023 09:20:34 -0700
+  by orsmga005.jf.intel.com with ESMTP; 11 Aug 2023 09:20:38 -0700
 Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id A824533BC2;
-	Fri, 11 Aug 2023 17:20:32 +0100 (IST)
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id 7480533BD0;
+	Fri, 11 Aug 2023 17:20:37 +0100 (IST)
 From: Larysa Zaremba <larysa.zaremba@intel.com>
 To: bpf@vger.kernel.org
 Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
@@ -59,10 +59,11 @@ Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
 	netdev@vger.kernel.org,
 	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
 	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Simon Horman <simon.horman@corigine.com>
-Subject: [PATCH bpf-next v5 13/21] ice: Implement checksum hint
-Date: Fri, 11 Aug 2023 18:15:01 +0200
-Message-ID: <20230811161509.19722-14-larysa.zaremba@intel.com>
+	Simon Horman <simon.horman@corigine.com>,
+	Aleksander Lobakin <aleksander.lobakin@intel.com>
+Subject: [PATCH bpf-next v5 15/21] net, xdp: allow metadata > 32
+Date: Fri, 11 Aug 2023 18:15:03 +0200
+Message-ID: <20230811161509.19722-16-larysa.zaremba@intel.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230811161509.19722-1-larysa.zaremba@intel.com>
 References: <20230811161509.19722-1-larysa.zaremba@intel.com>
@@ -80,53 +81,80 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Implement .xmo_rx_csum callback to allow XDP code to determine,
-whether HW has validated any checksums.
+From: Aleksander Lobakin <aleksander.lobakin@intel.com>
 
+When using XDP hints, metadata sometimes has to be much bigger
+than 32 bytes. Relax the restriction, allow metadata larger than 32 bytes
+and make __skb_metadata_differs() work with bigger lengths.
+
+Now size of metadata is only limited by the fact it is stored as u8
+in skb_shared_info, so maximum possible value is 255. Other important
+conditions, such as having enough space for xdp_frame building, are already
+checked in bpf_xdp_adjust_meta().
+
+The requirement of having its length aligned to 4 bytes is still
+valid.
+
+Signed-off-by: Aleksander Lobakin <aleksander.lobakin@intel.com>
 Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
 ---
- drivers/net/ethernet/intel/ice/ice_txrx_lib.c | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ include/linux/skbuff.h | 13 ++++++++-----
+ include/net/xdp.h      |  7 ++++++-
+ 2 files changed, 14 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-index 6ae57a98a4d8..f11a245705bc 100644
---- a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-+++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-@@ -660,8 +660,34 @@ static int ice_xdp_rx_vlan_tag(const struct xdp_md *ctx, u16 *vlan_tci,
- 	return 0;
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index aa57e2eca33b..0e455678cb8a 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -4216,10 +4216,13 @@ static inline bool __skb_metadata_differs(const struct sk_buff *skb_a,
+ {
+ 	const void *a = skb_metadata_end(skb_a);
+ 	const void *b = skb_metadata_end(skb_b);
+-	/* Using more efficient varaiant than plain call to memcmp(). */
+-#if defined(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) && BITS_PER_LONG == 64
+ 	u64 diffs = 0;
+ 
++	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ||
++	    BITS_PER_LONG != 64)
++		goto slow;
++
++	/* Using more efficient variant than plain call to memcmp(). */
+ 	switch (meta_len) {
+ #define __it(x, op) (x -= sizeof(u##op))
+ #define __it_diff(a, b, op) (*(u##op *)__it(a, op)) ^ (*(u##op *)__it(b, op))
+@@ -4239,11 +4242,11 @@ static inline bool __skb_metadata_differs(const struct sk_buff *skb_a,
+ 		fallthrough;
+ 	case  4: diffs |= __it_diff(a, b, 32);
+ 		break;
++	default:
++slow:
++		return memcmp(a - meta_len, b - meta_len, meta_len);
+ 	}
+ 	return diffs;
+-#else
+-	return memcmp(a - meta_len, b - meta_len, meta_len);
+-#endif
  }
  
-+/**
-+ * ice_xdp_rx_csum - RX checksum XDP hint handler
-+ * @ctx: XDP buff pointer
-+ * @csum_status: status destination address
-+ * @csum: not used
-+ */
-+static int ice_xdp_rx_csum(const struct xdp_md *ctx,
-+			   enum xdp_csum_status *csum_status, __wsum *csum)
-+{
-+	const struct ice_xdp_buff *xdp_ext = (void *)ctx;
-+	const union ice_32b_rx_flex_desc *eop_desc;
-+	enum ice_rx_csum_status status;
-+	u16 ptype;
+ static inline bool skb_metadata_differs(const struct sk_buff *skb_a,
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index 495c4d2a2c50..05234f156a73 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -369,7 +369,12 @@ xdp_data_meta_unsupported(const struct xdp_buff *xdp)
+ 
+ static inline bool xdp_metalen_invalid(unsigned long metalen)
+ {
+-	return (metalen & (sizeof(__u32) - 1)) || (metalen > 32);
++	typeof(metalen) meta_max;
 +
-+	eop_desc = xdp_ext->pkt_ctx.eop_desc;
-+	ptype = ice_get_ptype(eop_desc);
++	meta_max = type_max(typeof_member(struct skb_shared_info, meta_len));
++	BUILD_BUG_ON(!__builtin_constant_p(meta_max));
 +
-+	status = ice_get_rx_csum_status(eop_desc, ptype);
-+	if (status & ICE_RX_CSUM_FAIL)
-+		return -ENODATA;
-+
-+	*csum_status = XDP_CHECKSUM_VERIFIED;
-+	return 0;
-+}
-+
- const struct xdp_metadata_ops ice_xdp_md_ops = {
- 	.xmo_rx_timestamp		= ice_xdp_rx_hw_ts,
- 	.xmo_rx_hash			= ice_xdp_rx_hash,
- 	.xmo_rx_vlan_tag		= ice_xdp_rx_vlan_tag,
-+	.xmo_rx_csum			= ice_xdp_rx_csum,
- };
++	return !IS_ALIGNED(metalen, sizeof(u32)) || metalen > meta_max;
+ }
+ 
+ struct xdp_attachment_info {
 -- 
 2.41.0
 
