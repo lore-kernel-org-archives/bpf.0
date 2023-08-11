@@ -1,185 +1,153 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 662D08468
-	for <bpf@vger.kernel.org>; Fri, 11 Aug 2023 20:14:12 +0000 (UTC)
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9487F30E8
-	for <bpf@vger.kernel.org>; Fri, 11 Aug 2023 13:14:11 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37BGN7xA004463
-	for <bpf@vger.kernel.org>; Fri, 11 Aug 2023 13:14:11 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=hZyH/LvR/wQp6Tg0ZCMFFaJxjz1kxuDjxmCbnADVC0Y=;
- b=lM+QJoXk/nSoJsYrIV+a/R42m9Us1MetHs7c0aTB+0q+bY9lrVgGozOYy5YCy+Gf6x4b
- i7Ilk5MiDG/d8XrkQM4GV/avcUg9JvsrTEYfcbwX7yhuzLwLKp8OeSnBhJNOTHDJbYII
- oPpTaRbmzlg9N8VqrKoQEiXtnUrWBe7waVc= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3sd8yd9vrr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Fri, 11 Aug 2023 13:14:11 -0700
-Received: from twshared7236.08.ash8.facebook.com (2620:10d:c0a8:1b::30) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Fri, 11 Aug 2023 13:14:09 -0700
-Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-	id 138922282EDE6; Fri, 11 Aug 2023 13:13:54 -0700 (PDT)
-From: Dave Marchevsky <davemarchevsky@fb.com>
-To: <bpf@vger.kernel.org>
-CC: Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann
-	<daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau
-	<martin.lau@kernel.org>,
-        Kernel Team <kernel-team@fb.com>, Tejun Heo
-	<tj@kernel.org>,
-        <dvernet@meta.com>, Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH bpf-next 1/2] libbpf: Support triple-underscore flavors for kfunc relocation
-Date: Fri, 11 Aug 2023 13:13:45 -0700
-Message-ID: <20230811201346.3240403-1-davemarchevsky@fb.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2C918468
+	for <bpf@vger.kernel.org>; Fri, 11 Aug 2023 20:19:19 +0000 (UTC)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176B2D3;
+	Fri, 11 Aug 2023 13:19:18 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-58969d4f1b6so26205737b3.2;
+        Fri, 11 Aug 2023 13:19:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691785157; x=1692389957;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EZDJSm9RNf/nSpvAQ4JhrwLKn9yLiHfE3C0QiPzYPb8=;
+        b=ghumX5DjOChmU9HHpGgBLOKoEiGR+J3aOeBIFbEVQuaykUZDuzjUZT4ZslHE16VIud
+         QAR2NfTk2gS2BFtuJIPu9aekyDv3iDGFlVTGwgaYxippwIK4GSqwYrf/YncZbNwExTku
+         J7HVkSMRG9FXQvWgmklAY2HZSKlVMv1ZpyysjO0rWUdsZa62fJdOXlPyLdfiP3kEhHtm
+         PP4L47xBIKhIkOAK7zsX5MpTDtKjgZYHmkE7o8r0NUOD/dBvbbWur8ZMUuVSbLLFaZ4f
+         FOsONDZvJIZBQq6AB1CO1w/4mNGvLj2ZXhZ0buWSCpxM5Ia52tSB1zS6UIWl+UfQbYSK
+         DRRg==
+X-Gm-Message-State: AOJu0Yw6iIJHVHIf9T3NXnHkLStYcxYZjqL/p6/He4R3+6iq8LIuj1+7
+	tsQeBclZnugAvRQg5TogUFM=
+X-Google-Smtp-Source: AGHT+IEJP0i/MsbqW/Ls0XJo2q92GFLKjBpom7LnCeGJEMwcGbrl//1iF+MhKB1Qiw0iAeYdco0crg==
+X-Received: by 2002:a81:4f94:0:b0:561:429e:acd2 with SMTP id d142-20020a814f94000000b00561429eacd2mr2733067ywb.35.1691785157084;
+        Fri, 11 Aug 2023 13:19:17 -0700 (PDT)
+Received: from maniforge ([24.1.27.177])
+        by smtp.gmail.com with ESMTPSA id p139-20020a0de691000000b00583b144fe51sm1195843ywe.118.2023.08.11.13.19.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Aug 2023 13:19:16 -0700 (PDT)
+Date: Fri, 11 Aug 2023 15:19:14 -0500
+From: David Vernet <void@manifault.com>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org, song@kernel.org, yhs@fb.com,
+	john.fastabend@gmail.com, kpsingh@kernel.org, haoluo@google.com,
+	jolsa@kernel.org, linux-kernel@vger.kernel.org,
+	kernel-team@meta.com, tj@kernel.org, clm@meta.com,
+	thinker.li@gmail.com, Stanislav Fomichev <sdf@google.com>
+Subject: Re: [PATCH bpf-next] bpf: Support default .validate() and .update()
+ behavior for struct_ops links
+Message-ID: <20230811201914.GD542801@maniforge>
+References: <20230810220456.521517-1-void@manifault.com>
+ <ZNVousfpuRFgfuAo@google.com>
+ <20230810230141.GA529552@maniforge>
+ <ZNVvfYEsLyotn+G1@google.com>
+ <fe388d79-bdfc-0480-5f4b-1a40016fd53d@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: DcGcniHZ0F8L-h5TvurmO2TV4T7D1qd3
-X-Proofpoint-GUID: DcGcniHZ0F8L-h5TvurmO2TV4T7D1qd3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-11_12,2023-08-10_01,2023-05-22_02
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-	SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fe388d79-bdfc-0480-5f4b-1a40016fd53d@linux.dev>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-The function signature of kfuncs can change at any time due to their
-intentional lack of stability guarantees. As kfuncs become more widely
-used, BPF program writers will need facilities to support calling
-different versions of a kfunc from a single BPF object. Consider this
-simplified example based on a real scenario we ran into at Meta:
+On Fri, Aug 11, 2023 at 10:35:03AM -0700, Martin KaFai Lau wrote:
+> On 8/10/23 4:15 PM, Stanislav Fomichev wrote:
+> > On 08/10, David Vernet wrote:
+> > > On Thu, Aug 10, 2023 at 03:46:18PM -0700, Stanislav Fomichev wrote:
+> > > > On 08/10, David Vernet wrote:
+> > > > > Currently, if a struct_ops map is loaded with BPF_F_LINK, it must also
+> > > > > define the .validate() and .update() callbacks in its corresponding
+> > > > > struct bpf_struct_ops in the kernel. Enabling struct_ops link is useful
+> > > > > in its own right to ensure that the map is unloaded if an application
+> > > > > crashes. For example, with sched_ext, we want to automatically unload
+> > > > > the host-wide scheduler if the application crashes. We would likely
+> > > > > never support updating elements of a sched_ext struct_ops map, so we'd
+> > > > > have to implement these callbacks showing that they _can't_ support
+> > > > > element updates just to benefit from the basic lifetime management of
+> > > > > struct_ops links.
+> > > > > 
+> > > > > Let's enable struct_ops maps to work with BPF_F_LINK even if they
+> > > > > haven't defined these callbacks, by assuming that a struct_ops map
+> > > > > element cannot be updated by default.
+> > > > 
+> > > > Any reason this is not part of sched_ext series? As you mention,
+> > > > we don't seem to have such users in the three?
+> > > 
+> > > Hi Stanislav,
+> > > 
+> > > The sched_ext series [0] implements these callbacks. See
+> > > bpf_scx_update() and bpf_scx_validate().
+> > > 
+> > > [0]: https://lore.kernel.org/all/20230711011412.100319-13-tj@kernel.org/
+> > > 
+> > > We could add this into that series and remove those callbacks, but this
+> > > patch is fixing a UX / API issue with struct_ops links that's not really
+> > > relevant to sched_ext. I don't think there's any reason to couple
+> > > updating struct_ops map elements with allowing the kernel to manage the
+> > > lifetime of struct_ops maps -- just because we only have 1 (non-test)
+> 
+> Agree the link-update does not necessarily couple with link-creation, so
+> removing 'link' update function enforcement is ok. The intention was to
+> avoid the struct_ops link inconsistent experience (one struct_ops link
+> support update and another struct_ops link does not) because consistency was
+> one of the reason for the true kernel backed link support that Kui-Feng did.
+> tcp-cc is the only one for now in struct_ops and it can support update, so
+> the enforcement is here. I can see Stan's point that removing it now looks
+> immature before a struct_ops landed in the kernel showing it does not make
+> sense or very hard to support 'link' update. However, the scx patch set has
+> shown this point, so I think it is good enough.
 
-  /* initial kfunc signature */
-  int some_kfunc(void *ptr)
+Sorry for sending v2 of the patch a bit prematurely. Should have let you
+weigh in first.
 
-  /* Oops, we need to add some flag to modify behavior. No problem,
-    change the kfunc. flags =3D 0 retains original behavior */
-  int some_kfunc(void *ptr, long flags)
+> For 'validate', it is not related a 'link' update. It is for the struct_ops
+> 'map' update. If the loaded struct_ops map is invalid, it will end up having
+> a useless struct_ops map and no link can be created from it. I can see some
 
-If the initial version of the kfunc is deployed on some portion of the
-fleet and the new version on the rest, a fleetwide service that uses
-some_kfunc will currently need to load different BPF programs depending
-on which some_kfunc is available.
+To be honest I'm actually not sure I understand why .validate() is only
+called for when BPF_F_LINK is specified. Is it because it could break
+existing programs if they defined a struct_ops map that wasn't valid
+_without_ using BPF_F_LINK? Whether or not a map is valid should inform
+whether we can load it regardless of whether there's a link, no? It
+seems like .init_member() was already doing this as well. That's why I
+got confused and conflated the two.
 
-Luckily CO-RE provides a facility to solve a very similar problem,
-struct definition changes, by allowing program writers to declare
-my_struct___old and my_struct___new, with ___suffix being considered a
-'flavor' of the non-suffixed name and being ignored by
-bpf_core_type_exists and similar calls.
+> struct_ops subsystem check all the 'ops' function for NULL before calling
+> (like the FUSE RFC). I can also see some future struct_ops will prefer not
+> to check NULL at all and prefer to assume a subset of the ops is always
+> valid. Does having a 'validate' enforcement is blocking the scx patchset in
+> some way? If not, I would like to keep this for now. Once it is removed,
 
-This patch extends the 'flavor' facility to the kfunc extern
-relocation process. BPF program writers can now declare
+No, it's not blocking scx at all. scx, as with any other struct_ops
+implementation, could and does just implement these callbacks. As
+Kui-Feng said in [0], this is really just about enabling a sane default
+to improve usability. If a struct_ops implementation actually should
+have implemented some validation but neglected to, that would be a bug
+in exactly the same manner as if it had implemented .validate(), but
+neglected to check some corner case that makes the map invalid.
 
-  extern int some_kfunc___old(void *ptr)
-  extern int some_kfunc___new(void *ptr, int flags)
+[0]: https://lore.kernel.org/lkml/887699ea-f837-6ed7-50bd-48720cea581c@gmail.com/
 
-then test which version of the kfunc exists with bpf_ksym_exists.
-Relocation and verifier's dead code elimination will work in concert as
-expected, allowing this pattern:
+> there is no turning back.
 
-  if (bpf_ksym_exists(some_kfunc___old))
-    some_kfunc___old(ptr);
-  else
-    some_kfunc___new(ptr, 0);
-
-Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
----
- tools/lib/bpf/libbpf.c | 21 ++++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
-
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 17883f5a44b9..8949d489a35f 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -550,6 +550,7 @@ struct extern_desc {
- 	int btf_id;
- 	int sec_btf_id;
- 	const char *name;
-+	char *essent_name;
- 	bool is_set;
- 	bool is_weak;
- 	union {
-@@ -3770,6 +3771,7 @@ static int bpf_object__collect_externs(struct bpf_o=
-bject *obj)
- 	struct extern_desc *ext;
- 	int i, n, off, dummy_var_btf_id;
- 	const char *ext_name, *sec_name;
-+	size_t ext_essent_len;
- 	Elf_Scn *scn;
- 	Elf64_Shdr *sh;
-=20
-@@ -3819,6 +3821,14 @@ static int bpf_object__collect_externs(struct bpf_=
-object *obj)
- 		ext->sym_idx =3D i;
- 		ext->is_weak =3D ELF64_ST_BIND(sym->st_info) =3D=3D STB_WEAK;
-=20
-+		ext_essent_len =3D bpf_core_essential_name_len(ext->name);
-+		ext->essent_name =3D NULL;
-+		if (ext_essent_len !=3D strlen(ext->name)) {
-+			ext->essent_name =3D malloc(ext_essent_len + 1);
-+			memcpy(ext->essent_name, ext->name, ext_essent_len);
-+			ext->essent_name[ext_essent_len] =3D '\0';
-+		}
-+
- 		ext->sec_btf_id =3D find_extern_sec_btf_id(obj->btf, ext->btf_id);
- 		if (ext->sec_btf_id <=3D 0) {
- 			pr_warn("failed to find BTF for extern '%s' [%d] section: %d\n",
-@@ -7624,7 +7634,8 @@ static int bpf_object__resolve_ksym_func_btf_id(str=
-uct bpf_object *obj,
-=20
- 	local_func_proto_id =3D ext->ksym.type_id;
-=20
--	kfunc_id =3D find_ksym_btf_id(obj, ext->name, BTF_KIND_FUNC, &kern_btf,=
- &mod_btf);
-+	kfunc_id =3D find_ksym_btf_id(obj, ext->essent_name ?: ext->name, BTF_K=
-IND_FUNC, &kern_btf,
-+				    &mod_btf);
- 	if (kfunc_id < 0) {
- 		if (kfunc_id =3D=3D -ESRCH && ext->is_weak)
- 			return 0;
-@@ -7642,6 +7653,9 @@ static int bpf_object__resolve_ksym_func_btf_id(str=
-uct bpf_object *obj,
- 		pr_warn("extern (func ksym) '%s': func_proto [%d] incompatible with %s=
- [%d]\n",
- 			ext->name, local_func_proto_id,
- 			mod_btf ? mod_btf->name : "vmlinux", kfunc_proto_id);
-+
-+		if (ext->is_weak)
-+			return 0;
- 		return -EINVAL;
- 	}
-=20
-@@ -8370,6 +8384,11 @@ void bpf_object__close(struct bpf_object *obj)
-=20
- 	zfree(&obj->btf_custom_path);
- 	zfree(&obj->kconfig);
-+
-+	for (i =3D 0; i < obj->nr_extern; i++)
-+		if (obj->externs[i].essent_name)
-+			zfree(&obj->externs[i].essent_name);
-+
- 	zfree(&obj->externs);
- 	obj->nr_extern =3D 0;
-=20
---=20
-2.34.1
-
+Hmm, why there would be no turning back from this? This isn't a UAPI
+concern, is it? Whether or not a struct_ops implementation needs to
+implement .validate() or can just rely on the default behavior of "no
+.validate() callback implies the map is valid" is 100% an implementation
+detail that's hidden from the end user. This is meant to be a UX
+improvement for a developr defining a struct bpf_struct_ops instance in
+the main kernel, not someone defining an instance of that struct_ops
+(e.g. struct tcp_congestion_ops) in a BPF prog.
