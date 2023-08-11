@@ -1,38 +1,38 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DFF134CED;
-	Fri, 11 Aug 2023 16:20:41 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57EC592;
-	Fri, 11 Aug 2023 09:20:40 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8746360C0;
+	Fri, 11 Aug 2023 16:20:43 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C2B92;
+	Fri, 11 Aug 2023 09:20:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691770840; x=1723306840;
+  t=1691770842; x=1723306842;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ne/1/PTsQPHRdIJLnqaFI8aCCDNKyBxVh54JWoxv9yU=;
-  b=gKhJByxe6S6pzE77pgd9l/sBP+uUYbaDskT5gxzmiWFKFeKx7QtlSl+u
-   +GRgdWHoHAnHPMAsAqT/adZpwgYeBUj+OnBOkbCW9zbvJpdikqB2DAp5n
-   D0xE5BvXbgJRCvNPWF8vBtqByC45Rjk99WfWVeALr4DPzPu5gMiJ3qrN0
-   NzgpuOMeKnbSToXq7qZCkZspiqXyON7E+JfSaIf/hENpeGpdc2yoeocNf
-   9eFVVGxbT5ISoD0ndztG8S3IXRibIa2cf+wjy3qyDEyw8wKdFmaGmtpN4
-   bLX8hIiJ43iM5RM7FEiNE4/SsniTsSGhAdUlwQRMO1YZGFfcyonhDBYlB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="351314719"
+  bh=69SLNieOMYH9CALkb/az9AtO+g5KYeF9MrPXL3ZVWcI=;
+  b=O/B2FNnJnChBtURl/0qzbL7nnKfDxpXNJ+RKIJiJ1WhF2MWLqLVKtEre
+   4N2jBfgHz2toJu6zbYnRcICW3kz1qL4HYKiuHgx7eoEkX6k0uxI5GqIme
+   SYIAgA8s+glmMvc0J1IyQC8M3cbGYW8j9Cpo70WoIhuxIXqk5d2wezYem
+   33vlxpoN4e7bTIKwUinLAYRCUdLrdno+bIdK1jNeKGo7h8/suFIelJ3QO
+   BzM1WH4Ph01EP0Rl4I2uC/C07XaloIxFwHuW57MK6CnGKabeBruYbZO6n
+   4SWjXe6sZKVsvqfJsksXRl2hjZP7+FG+fMwda3DhyeY4DUHSQaJf2ZTdU
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="356672083"
 X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="351314719"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 09:20:37 -0700
+   d="scan'208";a="356672083"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 09:20:33 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="906501022"
+X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="1063363809"
 X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="906501022"
+   d="scan'208";a="1063363809"
 Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by orsmga005.jf.intel.com with ESMTP; 11 Aug 2023 09:20:32 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 11 Aug 2023 09:20:27 -0700
 Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id 80AE7333E2;
-	Fri, 11 Aug 2023 17:20:30 +0100 (IST)
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id DE133332D6;
+	Fri, 11 Aug 2023 17:20:25 +0100 (IST)
 From: Larysa Zaremba <larysa.zaremba@intel.com>
 To: bpf@vger.kernel.org
 Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
@@ -60,9 +60,9 @@ Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
 	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
 	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
 	Simon Horman <simon.horman@corigine.com>
-Subject: [PATCH bpf-next v5 12/21] xdp: Add checksum hint
-Date: Fri, 11 Aug 2023 18:15:00 +0200
-Message-ID: <20230811161509.19722-13-larysa.zaremba@intel.com>
+Subject: [PATCH bpf-next v5 10/21] ice: Implement VLAN tag hint
+Date: Fri, 11 Aug 2023 18:14:58 +0200
+Message-ID: <20230811161509.19722-11-larysa.zaremba@intel.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230811161509.19722-1-larysa.zaremba@intel.com>
 References: <20230811161509.19722-1-larysa.zaremba@intel.com>
@@ -80,125 +80,191 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Implement functionality that enables drivers to expose to XDP code checksum
-information that consists of:
+Implement .xmo_rx_vlan_tag callback to allow XDP code to read
+packet's VLAN tag.
 
-- Checksum status - 2 non-exlusive flags:
-  - XDP_CHECKSUM_VERIFIED indicating HW has validated the checksum
-    (corresponding to CHECKSUM_UNNECESSARY in sk_buff)
-  - XDP_CHECKSUM_COMPLETE signifies the validity of the second argument
-    (corresponding to CHECKSUM_COMPLETE in sk_buff)
-- Checksum, calculated over the entire packet, valid if the second flag is
-  set
+At the same time, use vlan_tci instead of vlan_tag in touched code,
+because vlan_tag is misleading.
 
 Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
 ---
- Documentation/networking/xdp-rx-metadata.rst |  3 +++
- include/net/xdp.h                            | 15 +++++++++++++
- kernel/bpf/offload.c                         |  2 ++
- net/core/xdp.c                               | 23 ++++++++++++++++++++
- 4 files changed, 43 insertions(+)
+ drivers/net/ethernet/intel/ice/ice_main.c     | 22 ++++++++++++++++
+ drivers/net/ethernet/intel/ice/ice_txrx.c     |  6 ++---
+ drivers/net/ethernet/intel/ice/ice_txrx.h     |  1 +
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.c | 26 +++++++++++++++++++
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.h |  4 +--
+ drivers/net/ethernet/intel/ice/ice_xsk.c      |  6 ++---
+ 6 files changed, 57 insertions(+), 8 deletions(-)
 
-diff --git a/Documentation/networking/xdp-rx-metadata.rst b/Documentation/networking/xdp-rx-metadata.rst
-index ea6dd79a21d3..7f056a44f682 100644
---- a/Documentation/networking/xdp-rx-metadata.rst
-+++ b/Documentation/networking/xdp-rx-metadata.rst
-@@ -26,6 +26,9 @@ metadata is supported, this set will grow:
- .. kernel-doc:: net/core/xdp.c
-    :identifiers: bpf_xdp_metadata_rx_vlan_tag
- 
-+.. kernel-doc:: net/core/xdp.c
-+   :identifiers: bpf_xdp_metadata_rx_csum
-+
- An XDP program can use these kfuncs to read the metadata into stack
- variables for its own consumption. Or, to pass the metadata on to other
- consumers, an XDP program can store it into the metadata area carried
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 8bb64fc76498..495c4d2a2c50 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -390,6 +390,8 @@ void xdp_attachment_setup(struct xdp_attachment_info *info,
- 			   bpf_xdp_metadata_rx_hash) \
- 	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_VLAN_TAG, \
- 			   bpf_xdp_metadata_rx_vlan_tag) \
-+	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CSUM, \
-+			   bpf_xdp_metadata_rx_csum) \
- 
- enum {
- #define XDP_METADATA_KFUNC(name, _) name,
-@@ -447,12 +449,25 @@ enum xdp_rss_hash_type {
- 	XDP_RSS_TYPE_L4_IPV6_SCTP_EX = XDP_RSS_TYPE_L4_IPV6_SCTP | XDP_RSS_L3_DYNHDR,
- };
- 
-+enum xdp_csum_status {
-+	/* HW had parsed headers and validated the outermost checksum,
-+	 * same as ``CHECKSUM_UNNECESSARY`` in ``sk_buff``.
-+	 */
-+	XDP_CHECKSUM_VERIFIED		= BIT(0),
-+
-+	/* Checksum, calculated over the entire packet is provided */
-+	XDP_CHECKSUM_COMPLETE		= BIT(1),
-+};
-+
- struct xdp_metadata_ops {
- 	int	(*xmo_rx_timestamp)(const struct xdp_md *ctx, u64 *timestamp);
- 	int	(*xmo_rx_hash)(const struct xdp_md *ctx, u32 *hash,
- 			       enum xdp_rss_hash_type *rss_type);
- 	int	(*xmo_rx_vlan_tag)(const struct xdp_md *ctx, u16 *vlan_tci,
- 				   __be16 *vlan_proto);
-+	int	(*xmo_rx_csum)(const struct xdp_md *ctx,
-+			       enum xdp_csum_status *csum_status,
-+			       __wsum *csum);
- };
- 
- #ifdef CONFIG_NET
-diff --git a/kernel/bpf/offload.c b/kernel/bpf/offload.c
-index 8be340cf06f9..ee35f33a96d1 100644
---- a/kernel/bpf/offload.c
-+++ b/kernel/bpf/offload.c
-@@ -851,6 +851,8 @@ void *bpf_dev_bound_resolve_kfunc(struct bpf_prog *prog, u32 func_id)
- 		p = ops->xmo_rx_hash;
- 	else if (func_id == bpf_xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_VLAN_TAG))
- 		p = ops->xmo_rx_vlan_tag;
-+	else if (func_id == bpf_xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_CSUM))
-+		p = ops->xmo_rx_csum;
- out:
- 	up_read(&bpf_devs_lock);
- 
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 856e02bb4ce6..b197287d7196 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -772,6 +772,29 @@ __bpf_kfunc int bpf_xdp_metadata_rx_vlan_tag(const struct xdp_md *ctx,
- 	return -EOPNOTSUPP;
+diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
+index 557c6326ff87..aff4fa1a75f8 100644
+--- a/drivers/net/ethernet/intel/ice/ice_main.c
++++ b/drivers/net/ethernet/intel/ice/ice_main.c
+@@ -6007,6 +6007,23 @@ ice_fix_features(struct net_device *netdev, netdev_features_t features)
+ 	return features;
  }
  
 +/**
-+ * bpf_xdp_metadata_rx_csum - Get checksum status with additional info.
-+ * @ctx: XDP context pointer.
-+ * @csum_status: Destination for checksum status.
-+ * @csum: Destination for complete checksum.
++ * ice_set_rx_rings_vlan_proto - update rings with new stripped VLAN proto
++ * @vsi: PF's VSI
++ * @vlan_ethertype: VLAN ethertype (802.1Q or 802.1ad) in network byte order
 + *
-+ * Status (@csum_status) is a bitfield that informs, what checksum
-+ * processing was performed. If ``XDP_CHECKSUM_COMPLETE`` in status is set,
-+ * second argument (@csum) contains a checksum, calculated over the entire
-+ * packet.
-+ *
-+ * Return:
-+ * * Returns 0 on success or ``-errno`` on error.
-+ * * ``-EOPNOTSUPP`` : device driver doesn't implement kfunc
-+ * * ``-ENODATA``    : Checksum status is unknown
++ * Store current stripped VLAN proto in ring packet context,
++ * so it can be accessed more efficiently by packet processing code.
 + */
-+__bpf_kfunc int bpf_xdp_metadata_rx_csum(const struct xdp_md *ctx,
-+					 enum xdp_csum_status *csum_status,
-+					 __wsum *csum)
++static void
++ice_set_rx_rings_vlan_proto(struct ice_vsi *vsi, __be16 vlan_ethertype)
 +{
-+	return -EOPNOTSUPP;
++	u16 i;
++
++	ice_for_each_alloc_rxq(vsi, i)
++		vsi->rx_rings[i]->pkt_ctx.vlan_proto = vlan_ethertype;
 +}
 +
- __diag_pop();
+ /**
+  * ice_set_vlan_offload_features - set VLAN offload features for the PF VSI
+  * @vsi: PF's VSI
+@@ -6049,6 +6066,11 @@ ice_set_vlan_offload_features(struct ice_vsi *vsi, netdev_features_t features)
+ 	if (strip_err || insert_err)
+ 		return -EIO;
  
- BTF_SET8_START(xdp_metadata_kfunc_ids)
++	if (enable_stripping)
++		ice_set_rx_rings_vlan_proto(vsi, htons(vlan_ethertype));
++	else
++		ice_set_rx_rings_vlan_proto(vsi, 0);
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.c b/drivers/net/ethernet/intel/ice/ice_txrx.c
+index 4e6546d9cf85..4fd7614f243d 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx.c
++++ b/drivers/net/ethernet/intel/ice/ice_txrx.c
+@@ -1183,7 +1183,7 @@ int ice_clean_rx_irq(struct ice_rx_ring *rx_ring, int budget)
+ 		struct sk_buff *skb;
+ 		unsigned int size;
+ 		u16 stat_err_bits;
+-		u16 vlan_tag = 0;
++		u16 vlan_tci;
+ 
+ 		/* get the Rx desc from Rx ring based on 'next_to_clean' */
+ 		rx_desc = ICE_RX_DESC(rx_ring, ntc);
+@@ -1278,7 +1278,7 @@ int ice_clean_rx_irq(struct ice_rx_ring *rx_ring, int budget)
+ 			continue;
+ 		}
+ 
+-		vlan_tag = ice_get_vlan_tag_from_rx_desc(rx_desc);
++		vlan_tci = ice_get_vlan_tci(rx_desc);
+ 
+ 		/* pad the skb if needed, to make a valid ethernet frame */
+ 		if (eth_skb_pad(skb))
+@@ -1292,7 +1292,7 @@ int ice_clean_rx_irq(struct ice_rx_ring *rx_ring, int budget)
+ 
+ 		ice_trace(clean_rx_irq_indicate, rx_ring, rx_desc, skb);
+ 		/* send completed skb up the stack */
+-		ice_receive_skb(rx_ring, skb, vlan_tag);
++		ice_receive_skb(rx_ring, skb, vlan_tci);
+ 
+ 		/* update budget accounting */
+ 		total_rx_pkts++;
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.h b/drivers/net/ethernet/intel/ice/ice_txrx.h
+index 4237702a58a9..41e0b14e6643 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx.h
++++ b/drivers/net/ethernet/intel/ice/ice_txrx.h
+@@ -260,6 +260,7 @@ enum ice_rx_dtype {
+ struct ice_pkt_ctx {
+ 	const union ice_32b_rx_flex_desc *eop_desc;
+ 	u64 cached_phctime;
++	__be16 vlan_proto;
+ };
+ 
+ struct ice_xdp_buff {
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
+index b11cfaedb81c..10e7ec51f4ef 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
++++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
+@@ -639,7 +639,33 @@ static int ice_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
+ 	return 0;
+ }
+ 
++/**
++ * ice_xdp_rx_vlan_tag - VLAN tag XDP hint handler
++ * @ctx: XDP buff pointer
++ * @vlan_tci: destination address for VLAN tag
++ * @vlan_proto: destination address for VLAN protocol
++ *
++ * Copy VLAN tag (if was stripped) and corresponding protocol
++ * to the destination address.
++ */
++static int ice_xdp_rx_vlan_tag(const struct xdp_md *ctx, u16 *vlan_tci,
++			       __be16 *vlan_proto)
++{
++	const struct ice_xdp_buff *xdp_ext = (void *)ctx;
++
++	*vlan_proto = xdp_ext->pkt_ctx.vlan_proto;
++	if (!*vlan_proto)
++		return -ENODATA;
++
++	*vlan_tci = ice_get_vlan_tci(xdp_ext->pkt_ctx.eop_desc);
++	if (!*vlan_tci)
++		return -ENODATA;
++
++	return 0;
++}
++
+ const struct xdp_metadata_ops ice_xdp_md_ops = {
+ 	.xmo_rx_timestamp		= ice_xdp_rx_hw_ts,
+ 	.xmo_rx_hash			= ice_xdp_rx_hash,
++	.xmo_rx_vlan_tag		= ice_xdp_rx_vlan_tag,
+ };
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib.h b/drivers/net/ethernet/intel/ice/ice_txrx_lib.h
+index 145883eec129..b7205826fea8 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx_lib.h
++++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib.h
+@@ -84,7 +84,7 @@ ice_build_ctob(u64 td_cmd, u64 td_offset, unsigned int size, u64 td_tag)
+ }
+ 
+ /**
+- * ice_get_vlan_tag_from_rx_desc - get VLAN from Rx flex descriptor
++ * ice_get_vlan_tci - get VLAN TCI from Rx flex descriptor
+  * @rx_desc: Rx 32b flex descriptor with RXDID=2
+  *
+  * The OS and current PF implementation only support stripping a single VLAN tag
+@@ -92,7 +92,7 @@ ice_build_ctob(u64 td_cmd, u64 td_offset, unsigned int size, u64 td_tag)
+  * one is found return the tag, else return 0 to mean no VLAN tag was found.
+  */
+ static inline u16
+-ice_get_vlan_tag_from_rx_desc(union ice_32b_rx_flex_desc *rx_desc)
++ice_get_vlan_tci(const union ice_32b_rx_flex_desc *rx_desc)
+ {
+ 	u16 stat_err_bits;
+ 
+diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
+index fdeddad9b639..eeb02f76b4a6 100644
+--- a/drivers/net/ethernet/intel/ice/ice_xsk.c
++++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
+@@ -878,7 +878,7 @@ int ice_clean_rx_irq_zc(struct ice_rx_ring *rx_ring, int budget)
+ 		struct xdp_buff *xdp;
+ 		struct sk_buff *skb;
+ 		u16 stat_err_bits;
+-		u16 vlan_tag = 0;
++		u16 vlan_tci;
+ 
+ 		rx_desc = ICE_RX_DESC(rx_ring, ntc);
+ 
+@@ -957,10 +957,10 @@ int ice_clean_rx_irq_zc(struct ice_rx_ring *rx_ring, int budget)
+ 		total_rx_bytes += skb->len;
+ 		total_rx_packets++;
+ 
+-		vlan_tag = ice_get_vlan_tag_from_rx_desc(rx_desc);
++		vlan_tci = ice_get_vlan_tci(rx_desc);
+ 
+ 		ice_process_skb_fields(rx_ring, rx_desc, skb);
+-		ice_receive_skb(rx_ring, skb, vlan_tag);
++		ice_receive_skb(rx_ring, skb, vlan_tci);
+ 	}
+ 
+ 	rx_ring->next_to_clean = ntc;
 -- 
 2.41.0
 
