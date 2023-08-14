@@ -1,13 +1,13 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22015C8F1
-	for <bpf@vger.kernel.org>; Mon, 14 Aug 2023 17:28:52 +0000 (UTC)
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D969D10DD
-	for <bpf@vger.kernel.org>; Mon, 14 Aug 2023 10:28:50 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A777C8F1
+	for <bpf@vger.kernel.org>; Mon, 14 Aug 2023 17:29:00 +0000 (UTC)
+Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2846133
+	for <bpf@vger.kernel.org>; Mon, 14 Aug 2023 10:28:58 -0700 (PDT)
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 695BE24C21FF8; Mon, 14 Aug 2023 10:28:35 -0700 (PDT)
+	id B6BFA24C22026; Mon, 14 Aug 2023 10:28:46 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -15,9 +15,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next 05/15] selftests/bpf: Update error message in negative linked_list test
-Date: Mon, 14 Aug 2023 10:28:35 -0700
-Message-Id: <20230814172835.1364448-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next 07/15] selftests/bpf: Add bpf_percpu_obj_{new,drop}() macro in bpf_experimental.h
+Date: Mon, 14 Aug 2023 10:28:46 -0700
+Message-Id: <20230814172846.1365407-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230814172809.1361446-1-yonghong.song@linux.dev>
 References: <20230814172809.1361446-1-yonghong.song@linux.dev>
@@ -34,39 +34,64 @@ X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Some error messages are changed due to the addition of
-percpu kptr support. Fix linked_list test with changed
-error messages.
+The new macro bpf_percpu_obj_{new/drop}() is very similar to bpf_obj_{new=
+,drop}()
+as they both take a type as the argument.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- tools/testing/selftests/bpf/prog_tests/linked_list.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../testing/selftests/bpf/bpf_experimental.h  | 31 +++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/linked_list.c b/tools=
-/testing/selftests/bpf/prog_tests/linked_list.c
-index 18cf7b17463d..db3bf6bbe01a 100644
---- a/tools/testing/selftests/bpf/prog_tests/linked_list.c
-+++ b/tools/testing/selftests/bpf/prog_tests/linked_list.c
-@@ -65,8 +65,8 @@ static struct {
- 	{ "map_compat_raw_tp", "tracing progs cannot use bpf_{list_head,rb_root=
-} yet" },
- 	{ "map_compat_raw_tp_w", "tracing progs cannot use bpf_{list_head,rb_ro=
-ot} yet" },
- 	{ "obj_type_id_oor", "local type ID argument must be in range [0, U32_M=
-AX]" },
--	{ "obj_new_no_composite", "bpf_obj_new type ID argument must be of a st=
-ruct" },
--	{ "obj_new_no_struct", "bpf_obj_new type ID argument must be of a struc=
-t" },
-+	{ "obj_new_no_composite", "bpf_obj_new/bpf_percpu_obj_new type ID argum=
-ent must be of a struct" },
-+	{ "obj_new_no_struct", "bpf_obj_new/bpf_percpu_obj_new type ID argument=
- must be of a struct" },
- 	{ "obj_drop_non_zero_off", "R1 must have zero offset when passed to rel=
-ease func" },
- 	{ "new_null_ret", "R0 invalid mem access 'ptr_or_null_'" },
- 	{ "obj_new_acq", "Unreleased reference id=3D" },
+diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testi=
+ng/selftests/bpf/bpf_experimental.h
+index 209811b1993a..9c5fe11520ae 100644
+--- a/tools/testing/selftests/bpf/bpf_experimental.h
++++ b/tools/testing/selftests/bpf/bpf_experimental.h
+@@ -131,4 +131,35 @@ extern int bpf_rbtree_add_impl(struct bpf_rb_root *r=
+oot, struct bpf_rb_node *nod
+  */
+ extern struct bpf_rb_node *bpf_rbtree_first(struct bpf_rb_root *root) __=
+ksym;
+=20
++/* Description
++ *	Allocates a percpu object of the type represented by 'local_type_id' =
+in
++ *	program BTF. User may use the bpf_core_type_id_local macro to pass th=
+e
++ *	type ID of a struct in program BTF.
++ *
++ *	The 'local_type_id' parameter must be a known constant.
++ *	The 'meta' parameter is rewritten by the verifier, no need for BPF
++ *	program to set it.
++ * Returns
++ *	A pointer to a percpu object of the type corresponding to the passed =
+in
++ *	'local_type_id', or NULL on failure.
++ */
++extern void *bpf_percpu_obj_new_impl(__u64 local_type_id, void *meta) __=
+ksym;
++
++/* Convenience macro to wrap over bpf_percpu_obj_new_impl */
++#define bpf_percpu_obj_new(type) ((type __percpu *)bpf_percpu_obj_new_im=
+pl(bpf_core_type_id_local(type), NULL))
++
++/* Description
++ *	Free an allocated percpu object. All fields of the object that requir=
+e
++ *	destruction will be destructed before the storage is freed.
++ *
++ *	The 'meta' parameter is rewritten by the verifier, no need for BPF
++ *	program to set it.
++ * Returns
++ *	Void.
++ */
++extern void bpf_percpu_obj_drop_impl(void *kptr, void *meta) __ksym;
++
++/* Convenience macro to wrap over bpf_obj_drop_impl */
++#define bpf_percpu_obj_drop(kptr) bpf_percpu_obj_drop_impl(kptr, NULL)
++
+ #endif
 --=20
 2.34.1
 
