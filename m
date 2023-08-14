@@ -1,13 +1,13 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64FB6CA4A
-	for <bpf@vger.kernel.org>; Mon, 14 Aug 2023 17:28:46 +0000 (UTC)
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A7DB10D5
-	for <bpf@vger.kernel.org>; Mon, 14 Aug 2023 10:28:45 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22015C8F1
+	for <bpf@vger.kernel.org>; Mon, 14 Aug 2023 17:28:52 +0000 (UTC)
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D969D10DD
+	for <bpf@vger.kernel.org>; Mon, 14 Aug 2023 10:28:50 -0700 (PDT)
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 9019824C22008; Mon, 14 Aug 2023 10:28:41 -0700 (PDT)
+	id 695BE24C21FF8; Mon, 14 Aug 2023 10:28:35 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -15,9 +15,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next 06/15] libbpf: Add __percpu macro definition
-Date: Mon, 14 Aug 2023 10:28:41 -0700
-Message-Id: <20230814172841.1364680-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next 05/15] selftests/bpf: Update error message in negative linked_list test
+Date: Mon, 14 Aug 2023 10:28:35 -0700
+Message-Id: <20230814172835.1364448-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230814172809.1361446-1-yonghong.song@linux.dev>
 References: <20230814172809.1361446-1-yonghong.song@linux.dev>
@@ -34,26 +34,39 @@ X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add __percpu macro definition in bpf_helpers.h.
+Some error messages are changed due to the addition of
+percpu kptr support. Fix linked_list test with changed
+error messages.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- tools/lib/bpf/bpf_helpers.h | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/bpf/prog_tests/linked_list.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-index bbab9ad9dc5a..30f050c6b106 100644
---- a/tools/lib/bpf/bpf_helpers.h
-+++ b/tools/lib/bpf/bpf_helpers.h
-@@ -181,6 +181,7 @@ enum libbpf_tristate {
- #define __ksym __attribute__((section(".ksyms")))
- #define __kptr_untrusted __attribute__((btf_type_tag("kptr_untrusted")))
- #define __kptr __attribute__((btf_type_tag("kptr")))
-+#define __percpu __attribute__((btf_type_tag("percpu")))
-=20
- #define bpf_ksym_exists(sym) ({									\
- 	_Static_assert(!__builtin_constant_p(!!sym), #sym " should be marked as=
- __weak");	\
+diff --git a/tools/testing/selftests/bpf/prog_tests/linked_list.c b/tools=
+/testing/selftests/bpf/prog_tests/linked_list.c
+index 18cf7b17463d..db3bf6bbe01a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/linked_list.c
++++ b/tools/testing/selftests/bpf/prog_tests/linked_list.c
+@@ -65,8 +65,8 @@ static struct {
+ 	{ "map_compat_raw_tp", "tracing progs cannot use bpf_{list_head,rb_root=
+} yet" },
+ 	{ "map_compat_raw_tp_w", "tracing progs cannot use bpf_{list_head,rb_ro=
+ot} yet" },
+ 	{ "obj_type_id_oor", "local type ID argument must be in range [0, U32_M=
+AX]" },
+-	{ "obj_new_no_composite", "bpf_obj_new type ID argument must be of a st=
+ruct" },
+-	{ "obj_new_no_struct", "bpf_obj_new type ID argument must be of a struc=
+t" },
++	{ "obj_new_no_composite", "bpf_obj_new/bpf_percpu_obj_new type ID argum=
+ent must be of a struct" },
++	{ "obj_new_no_struct", "bpf_obj_new/bpf_percpu_obj_new type ID argument=
+ must be of a struct" },
+ 	{ "obj_drop_non_zero_off", "R1 must have zero offset when passed to rel=
+ease func" },
+ 	{ "new_null_ret", "R0 invalid mem access 'ptr_or_null_'" },
+ 	{ "obj_new_acq", "Unreleased reference id=3D" },
 --=20
 2.34.1
 
