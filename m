@@ -1,18 +1,18 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC03ABE71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D112BE71
 	for <bpf@vger.kernel.org>; Mon, 14 Aug 2023 14:26:44 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4A9B2;
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8F0E4;
 	Mon, 14 Aug 2023 07:26:40 -0700 (PDT)
 Received: from [127.0.1.1] ([91.67.199.65]) by mrelayeu.kundenserver.de
  (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MwjO6-1pXnAR2Gdu-00yAHm; Mon, 14 Aug 2023 16:26:17 +0200
+ 1MBBCI-1qcfXN31gM-00Ci0I; Mon, 14 Aug 2023 16:26:15 +0200
 From: =?utf-8?q?Michael_Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
-Date: Mon, 14 Aug 2023 16:26:12 +0200
-Subject: [PATCH RFC 4/4] fs: allow mknod in non-initial userns using cgroup
- device guard
+Date: Mon, 14 Aug 2023 16:26:09 +0200
+Subject: [PATCH RFC 1/4] bpf: add cgroup device guard to flag a cgroup
+ device prog
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -21,7 +21,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230814-devcg_guard-v1-4-654971ab88b1@aisec.fraunhofer.de>
+Message-Id: <20230814-devcg_guard-v1-1-654971ab88b1@aisec.fraunhofer.de>
 References: <20230814-devcg_guard-v1-0-654971ab88b1@aisec.fraunhofer.de>
 In-Reply-To: <20230814-devcg_guard-v1-0-654971ab88b1@aisec.fraunhofer.de>
 To: Alexander Mikhalitsyn <alexander@mihalicyn.com>, 
@@ -37,94 +37,181 @@ Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-fsdevel@vger.kernel.org, gyroidos@aisec.fraunhofer.de, 
  =?utf-8?q?Michael_Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
 X-Mailer: b4 0.12.3
-X-Provags-ID: V03:K1:KnYIKMx55P6NK3c2PuhV1Jjt7cPFGO+HnnkYu53YVAgcVZCfr3h
- 4Z2EvDbitfpN9SHiCXEva3v7Eaf1aqh0jCzx/Pl3/T06bVjGJ4ocF2ilWIUhc+nmNzH/FRG
- ou/GAwoz57HLmMHB4NUbU2EhXSeSHNSfOPLl/Yz9JRTO7gOXJqqlGq8PpaoO75Z8t0B5ue2
- 51GzcyHexLZZdjbOwbofw==
-UI-OutboundReport: notjunk:1;M01:P0:ZC+KimZeN+Q=;hFy3WtlerHgRnIyCK1FgNycDelT
- tSlbU/EinBU2IgWv2cHad0g4tD/fF+XI/Ihofiat1cpCrsjndEekjM+UPJV6aFTt1lpByeW1z
- 6KuNn22ma5Ca1BEgu8H3jQP3Gx+AsouUS4uCllJIzlUodx5Ol9Zkty4Dd/KFGMvwg7SRbrxgN
- FU+G38weWulGB2RPunAeLAdu8vGaW01v30ucduy9O1NVgUCJ/F2OaEt9fv7s29Gq4SOk4EGXk
- qWaYLp+8+2xE6evTly40GIDQ4QZILo8i7I8sTTaXQ8rFA6t2INpG90HiAE6PAFQLK0M58O6RA
- Iwnzyv/3jmubBV12eNR8ROfaRJsmvjf8NMpfnt6zfHv+5tNLaN7/9m37Ns4l7ZNEpwX/eenHY
- 23WDlsZ+DRIsb52kTAReNlXdwA/0ES+Oyo2BymranLj8I8G6D+1sXuos5YMscRESK8eD6p98m
- OKxr6ZcFfRVc+DwxdinnZHasr/E5/6M877674vSsw4zIt9bS3a4/lsvuNsJjyjmiqX3sHGEV7
- 0XK7xE0Zu9ypCA7h4QUoPp2fzZydhdah/rGsPlCOckNd2g3eHqQ/fdyrE0epm4Nz/zI8V3hJR
- EqiwS8lFuhC6ktKVHRWmKKOf7h8eO4A3nzIJjdvB/NlZsS/8tWnyFlLaaI6YWWmDgGUCbwfXN
- rfKhbqAd7FDeN7v1fbDPRbeco1Ra9PRlkgs1sHgq5nzTzdL45llUn+YPndRWpDtcf8NMA+KXC
- ghNRnOwuIIstzPpWoX6EZhh/J9n2J12FzG3WYQ4nijD+rm062r3S/dczEUtHfx8crJUCWNPLL
- LSDhQXheZ+/esG2G4p7domdRczsbff0xcNCW4ts4NZjhW80v2BpneNCL4jfWQPZqDEK2X0/ec
- LGbvzftt1FUL72Q==
+X-Provags-ID: V03:K1:0cXxcmdgmClBD4GPMdMTPagr2itnvAUiDtQcsv8MxFS6hE07CYQ
+ BeojX5oXPIPVsWXg8FGVsg2nAXIeCSqU70B8yFYo2t841na+NM2vD4GebfRs3ESXUqOyxfq
+ iWSfseZ18CHeWFu1Izn2mMmrccgCe52Gq7OkjltVIt49/NlPPe2K2h0XDJsfCl0ESt//0M5
+ 8QTkixGVHRT2s3YuaM21A==
+UI-OutboundReport: notjunk:1;M01:P0:NddmDHLVZyw=;qsT8AXUoHtD7PW1/NyA4rUt3YMp
+ ylwjpt+PAIzcM283QbCvuzZ72TtkhK80xTbNCQskNMQHFG/Rp9D7eF6lgrWhxRB0fLTBRpvT9
+ 5ThI+pXRVs2ox2KhrINecSUftwLyWEPiKtdjn6sb4YqxeSntR/LOfQGFkE1prO98O/ssOP/Z7
+ jcXSdLwaLWoVbCV79jx6S4J82GhE2H9fxLs44O/Nm0Hu4xNnWkL0ocy6uZ2sSILuqZPTl8+Bl
+ 9RUjQA0aoCwBl3F4aK1MCMq14UZ6cQ6qtoSlXzYmbS7J6mLPLNMe28F9AoijWh+tYnNFaITfb
+ jSLkvpuSEPMDeGyWtiDdXC+0sV0lKJ4mDWMARx/dh5U84Hxcs7VYZKMh9UiXHTlSENH1/Jwhz
+ SR5mbvzVMJPRdgwbt2HaFw5ybajmbicIUtBLdXQVlAUCUQ/IqjQJQzM6k0NB86bUDLNMwt4eT
+ Vf9QXTluSMDI+KNXDMpTr3DDq9qcp+93IN8qFx+sKV2n3WbvQypKo+5k+islmLIr9sZEmZrwy
+ kxS5GhrQgfu0lIIYwJJyMV9f8aUBbnyAZCP1De0/K6u4lgVrilWV7KpD2g1oTEcKgF2gLH8E2
+ gPQOjI0lI6AInRUBEPem+ajayq9+2Nt7Rd8VeKzLNyjwCKito0tBhAj/n6/RgJYipe59mFx5Z
+ Nng32yZyfnFrPpSQt2d2JcF5MRrMVYffJr9wmihm22xDahO2a/AHumdOwv9S+X6fdnvRiShZU
+ NjS95U+RK78Jjg3SWz7FYCXeoQ3DPsvHsb3fTvP5jpAtErAn3tTEVm8Z65kClEBpAE/QPPlhg
+ giQI9xP/dcNUXdYzBl5pqT0DbM7Wsvg48PGhZNuzUk3kG2TPC9TQ8KwSs0L9SMguv9Yrw2N48
+ rpx7BIZEIK8Jf+xqIc2Y8VEb2YoC2C/fQf/c=
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
 	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_SOFTFAIL
 	autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-If a container manager restricts its unprivileged (user namespaced)
-children by a device cgroup, it is not necessary to deny mknod
-anymore. Thus, user space applications may map devices on different
-locations in the file system by using mknod() inside the container.
-
-A use case for this, we also use in GyroidOS, is to run virsh for
-VMs inside an unprivileged container. virsh creates device nodes,
-e.g., "/var/run/libvirt/qemu/11-fgfg.dev/null" which currently fails
-in a non-initial userns, even if a cgroup device white list with the
-corresponding major, minor of /dev/null exists. Thus, in this case
-the usual bind mounts or pre populated device nodes under /dev are
-not sufficient.
-
-To circumvent this limitation, we allow mknod() in fs/namei.c if a
-bpf cgroup device guard is enabeld for the current task using
-devcgroup_task_is_guarded() and check CAP_MKNOD for the current user
-namespace by ns_capable() instead of the global CAP_MKNOD.
-
-To avoid unusable device nodes on file systems mounted in
-non-initial user namespace, may_open_dev() ignores the SB_I_NODEV
-for cgroup device guarded tasks.
+Introduce the BPF_F_CGROUP_DEVICE_GUARD flag for BPF_PROG_LOAD
+which allows to set a cgroup device program to be a device guard.
+Later this may be used to guard actions on device nodes in
+non-initial userns. For this reason we provide the helper function
+cgroup_bpf_device_guard_enabled() to check if a task has a cgroups
+device program which is a device guard in its effective set of bpf
+programs.
 
 Signed-off-by: Michael Weiß <michael.weiss@aisec.fraunhofer.de>
 ---
- fs/namei.c | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
+ include/linux/bpf-cgroup.h     |  7 +++++++
+ include/linux/bpf.h            |  1 +
+ include/uapi/linux/bpf.h       |  5 +++++
+ kernel/bpf/cgroup.c            | 30 ++++++++++++++++++++++++++++++
+ kernel/bpf/syscall.c           |  5 ++++-
+ tools/include/uapi/linux/bpf.h |  5 +++++
+ 6 files changed, 52 insertions(+), 1 deletion(-)
 
-diff --git a/fs/namei.c b/fs/namei.c
-index e56ff39a79bc..ef4f22b9575c 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -3221,6 +3221,9 @@ EXPORT_SYMBOL(vfs_mkobj);
- 
- bool may_open_dev(const struct path *path)
- {
-+	if (devcgroup_task_is_guarded(current))
-+		return !(path->mnt->mnt_flags & MNT_NODEV);
-+
- 	return !(path->mnt->mnt_flags & MNT_NODEV) &&
- 		!(path->mnt->mnt_sb->s_iflags & SB_I_NODEV);
+diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+index 57e9e109257e..112b6093f9fd 100644
+--- a/include/linux/bpf-cgroup.h
++++ b/include/linux/bpf-cgroup.h
+@@ -184,6 +184,8 @@ static inline bool cgroup_bpf_sock_enabled(struct sock *sk,
+ 	return array != &bpf_empty_prog_array.hdr;
  }
-@@ -3976,9 +3979,19 @@ int vfs_mknod(struct mnt_idmap *idmap, struct inode *dir,
- 	if (error)
- 		return error;
  
--	if ((S_ISCHR(mode) || S_ISBLK(mode)) && !is_whiteout &&
--	    !capable(CAP_MKNOD))
--		return -EPERM;
-+	/*
-+	 * In case of a device cgroup restirction allow mknod in user
-+	 * namespace. Otherwise just check global capability; thus,
-+	 * mknod is also disabled for user namespace other than the
-+	 * initial one.
-+	 */
-+	if ((S_ISCHR(mode) || S_ISBLK(mode)) && !is_whiteout) {
-+		if (devcgroup_task_is_guarded(current)) {
-+			if (!ns_capable(current_user_ns(), CAP_MKNOD))
-+				return -EPERM;
-+		} else if (!capable(CAP_MKNOD))
-+			return -EPERM;
++bool cgroup_bpf_device_guard_enabled(struct task_struct *task);
++
+ /* Wrappers for __cgroup_bpf_run_filter_skb() guarded by cgroup_bpf_enabled. */
+ #define BPF_CGROUP_RUN_PROG_INET_INGRESS(sk, skb)			      \
+ ({									      \
+@@ -476,6 +478,11 @@ static inline int bpf_percpu_cgroup_storage_update(struct bpf_map *map,
+ 	return 0;
+ }
+ 
++static bool cgroup_bpf_device_guard_enabled(struct task_struct *task)
++{
++	return false;
++}
++
+ #define cgroup_bpf_enabled(atype) (0)
+ #define BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, atype, t_ctx) ({ 0; })
+ #define BPF_CGROUP_RUN_SA_PROG(sk, uaddr, atype) ({ 0; })
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index f58895830ada..313cce8aee05 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1384,6 +1384,7 @@ struct bpf_prog_aux {
+ 	bool sleepable;
+ 	bool tail_call_reachable;
+ 	bool xdp_has_frags;
++	bool cgroup_device_guard;
+ 	/* BTF_KIND_FUNC_PROTO for valid attach_btf_id */
+ 	const struct btf_type *attach_func_proto;
+ 	/* function name for valid attach_btf_id */
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 60a9d59beeab..3be57f7957b1 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1165,6 +1165,11 @@ enum bpf_link_type {
+  */
+ #define BPF_F_XDP_DEV_BOUND_ONLY	(1U << 6)
+ 
++/* If BPF_F_CGROUP_DEVICE_GUARD is used in BPF_PROG_LOAD command, the loaded
++ * program will be allowed to guard device access inside user namespaces.
++ */
++#define BPF_F_CGROUP_DEVICE_GUARD	(1U << 7)
++
+ /* link_create.kprobe_multi.flags used in LINK_CREATE command for
+  * BPF_TRACE_KPROBE_MULTI attach type to create return probe.
+  */
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 5b2741aa0d9b..230693ca4cdb 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -2505,6 +2505,36 @@ const struct bpf_verifier_ops cg_sockopt_verifier_ops = {
+ const struct bpf_prog_ops cg_sockopt_prog_ops = {
+ };
+ 
++bool
++cgroup_bpf_device_guard_enabled(struct task_struct *task)
++{
++	bool ret;
++	const struct bpf_prog_array *array;
++	const struct bpf_prog_array_item *item;
++	const struct bpf_prog *prog;
++	struct cgroup *cgrp = task_dfl_cgroup(task);
++
++	ret = false;
++
++	array = rcu_access_pointer(cgrp->bpf.effective[CGROUP_DEVICE]);
++	if (array == &bpf_empty_prog_array.hdr)
++		return ret;
++
++	mutex_lock(&cgroup_mutex);
++	array = rcu_dereference_protected(cgrp->bpf.effective[CGROUP_DEVICE],
++					      lockdep_is_held(&cgroup_mutex));
++	item = &array->items[0];
++	while ((prog = READ_ONCE(item->prog))) {
++		if (prog->aux->cgroup_device_guard) {
++			ret = true;
++			break;
++		}
++		item++;
 +	}
++	mutex_unlock(&cgroup_mutex);
++	return ret;
++}
++
+ /* Common helpers for cgroup hooks. */
+ const struct bpf_func_proto *
+ cgroup_common_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index a2aef900519c..33ea67c702c1 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2564,7 +2564,8 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr, u32 uattr_size)
+ 				 BPF_F_SLEEPABLE |
+ 				 BPF_F_TEST_RND_HI32 |
+ 				 BPF_F_XDP_HAS_FRAGS |
+-				 BPF_F_XDP_DEV_BOUND_ONLY))
++				 BPF_F_XDP_DEV_BOUND_ONLY |
++				 BPF_F_CGROUP_DEVICE_GUARD))
+ 		return -EINVAL;
  
- 	if (!dir->i_op->mknod)
- 		return -EPERM;
+ 	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) &&
+@@ -2651,6 +2652,8 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr, u32 uattr_size)
+ 	prog->aux->dev_bound = !!attr->prog_ifindex;
+ 	prog->aux->sleepable = attr->prog_flags & BPF_F_SLEEPABLE;
+ 	prog->aux->xdp_has_frags = attr->prog_flags & BPF_F_XDP_HAS_FRAGS;
++	prog->aux->cgroup_device_guard =
++		attr->prog_flags & BPF_F_CGROUP_DEVICE_GUARD;
+ 
+ 	err = security_bpf_prog_alloc(prog->aux);
+ 	if (err)
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 60a9d59beeab..3be57f7957b1 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1165,6 +1165,11 @@ enum bpf_link_type {
+  */
+ #define BPF_F_XDP_DEV_BOUND_ONLY	(1U << 6)
+ 
++/* If BPF_F_CGROUP_DEVICE_GUARD is used in BPF_PROG_LOAD command, the loaded
++ * program will be allowed to guard device access inside user namespaces.
++ */
++#define BPF_F_CGROUP_DEVICE_GUARD	(1U << 7)
++
+ /* link_create.kprobe_multi.flags used in LINK_CREATE command for
+  * BPF_TRACE_KPROBE_MULTI attach type to create return probe.
+  */
 
 -- 
 2.30.2
