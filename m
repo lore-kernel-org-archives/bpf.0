@@ -1,224 +1,146 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEB7DBA34
-	for <bpf@vger.kernel.org>; Mon, 14 Aug 2023 14:33:58 +0000 (UTC)
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3ABAE4
-	for <bpf@vger.kernel.org>; Mon, 14 Aug 2023 07:33:57 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1bdb7b0c8afso15579645ad.3
-        for <bpf@vger.kernel.org>; Mon, 14 Aug 2023 07:33:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692023637; x=1692628437;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Vv4yUrMyWBhLHqAH2ovg1Sj3+silqXptyM0b5G7vsNI=;
-        b=kGUe+mJFGFg9aC/s8merWTnWNun1P0VmxQ/LRkfNSvUQ0uUuDuEolcDXuqcHeWfziC
-         D8rrmnR6x7jeoTyVP1H0orcQdmDU3ZnFBeu7KfabJKFghZQyCtg94EQn0KAmjAaJYsJe
-         EiX6QNpT/+4GNyfD5gATADfzcJbwLICnYbgUuxmsTT8WrsTFvYOoOVx7F3r89bjL9EXZ
-         IfY27oXcYjsYYzNqkxaMI1U8Z6/pH87jn/rQDJKKvbC6gHMJvI47e49fSlPc80t4hwGC
-         mRlk12kdux/nO/5hJjh6+4QUtC967+exEfxSWE5QOllttf3MrKsWh0uzXMObRtF/Iz/R
-         4KPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692023637; x=1692628437;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vv4yUrMyWBhLHqAH2ovg1Sj3+silqXptyM0b5G7vsNI=;
-        b=Kt4D132tBMCKKjrYjP4lyMplaqHHsa2NIpWBLoF7I5FoaffKM7g+zaHSDcN3kR9HKx
-         8WOA+ZTffRAHdxOqUhonCmYFxqV1sCgUWk6L1Bw69tI3wHl9IKiCF7AtMYgugTl3JsVb
-         FaB6E+UWVCfXjeRv1TVZPaeJpg3/x1yi/B0COWfk7zycXnOw31WOUSN5t6Q6VX0qz1Ok
-         QM/STxKBTOgUb+PjlSl1IUrdpys2TdrrZjO0ep6NVUetBJekz+8rWZzidPmEtUIpyXqr
-         s2aGEE3FSUUtRrVcYfad8ePxCK3ar7YCz7aM5weucGjw55Ze2PKEvFqzofeIXfs37LBt
-         gEUQ==
-X-Gm-Message-State: AOJu0YwwR2OHwmFJUo0Hs1ePUhWpAy1N8ngioDhel0PepnajjWc1MYDo
-	b6jJ1iYJtVe43q8+3XEdGrvXa0rjgbZh0s6+
-X-Google-Smtp-Source: AGHT+IH7dsJH26H/nkFXa68jzmQQIpzL3bo9qMkvtmk9p2dGcKieaMc1ZD8WOQj8ic0AzNh0KMx/CQ==
-X-Received: by 2002:a17:90a:9ee:b0:267:c21f:ce0d with SMTP id 101-20020a17090a09ee00b00267c21fce0dmr6655310pjo.27.1692023636965;
-        Mon, 14 Aug 2023 07:33:56 -0700 (PDT)
-Received: from vultr.guest ([149.28.193.116])
-        by smtp.gmail.com with ESMTPSA id 19-20020a17090a031300b002677739860fsm8640390pje.34.2023.08.14.07.33.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Aug 2023 07:33:56 -0700 (PDT)
-From: Yafang Shao <laoar.shao@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org
-Cc: bpf@vger.kernel.org,
-	Yafang Shao <laoar.shao@gmail.com>
-Subject: [RFC PATCH bpf-next 2/2] selftests/bpf: Add selftest for bpf_current_capable
-Date: Mon, 14 Aug 2023 14:33:41 +0000
-Message-Id: <20230814143341.3767-3-laoar.shao@gmail.com>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20230814143341.3767-1-laoar.shao@gmail.com>
-References: <20230814143341.3767-1-laoar.shao@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B426BA45
+	for <bpf@vger.kernel.org>; Mon, 14 Aug 2023 14:40:19 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F7CF5;
+	Mon, 14 Aug 2023 07:40:17 -0700 (PDT)
+Received: from [127.0.1.1] ([91.67.199.65]) by mrelayeu.kundenserver.de
+ (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1N5UoU-1pgYbq1NVa-016zzS; Mon, 14 Aug 2023 16:26:16 +0200
+From: =?utf-8?q?Michael_Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
+Date: Mon, 14 Aug 2023 16:26:10 +0200
+Subject: [PATCH RFC 2/4] bpf: provide cgroup_device_guard in bpf_prog_info
+ to user space
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+Message-Id: <20230814-devcg_guard-v1-2-654971ab88b1@aisec.fraunhofer.de>
+References: <20230814-devcg_guard-v1-0-654971ab88b1@aisec.fraunhofer.de>
+In-Reply-To: <20230814-devcg_guard-v1-0-654971ab88b1@aisec.fraunhofer.de>
+To: Alexander Mikhalitsyn <alexander@mihalicyn.com>, 
+ Christian Brauner <brauner@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, 
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, 
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+ Quentin Monnet <quentin@isovalent.com>, 
+ Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-fsdevel@vger.kernel.org, gyroidos@aisec.fraunhofer.de, 
+ =?utf-8?q?Michael_Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
+X-Mailer: b4 0.12.3
+X-Provags-ID: V03:K1:o8/eibR0KEBv814SkAfdQUcPXonJ4/KKrEByU28jqQCeZFziDrX
+ Jh/nBbMV0+Pqqx0ZAhoiwrS6qeOne5dKIiuY7ocFyLjGOOWLJVKoYkYM6ll2MwgWWbd02yC
+ 8gLOxL4UU8xYYbb9wkiOmLprQj5Y48d6pl6OAUe6EJRZhNRbc3c8LTgWhkdNLxUdooHCahG
+ lW5Zf1nZFvO/RPdhxsTPQ==
+UI-OutboundReport: notjunk:1;M01:P0:xxe2lkYlnOU=;2D+cFgrrWAhPUaEiBJb1W4nqw5v
+ 3u/N/KWFj85CjLC09xRjrG2hLIM0DQUtynr3J216+IVA2UgW+Y5TDtMW75Gxn0CMBofS0XDes
+ gXHA2Tz6feEpXNk1cHRhuz7zH+JkhGEsdiY7b80qufCZMBYS9Hfd3A9gz4SKlTxe4HHUQLB+/
+ dgicc6X9CLgVR7MTx5LVKf9hYCkJsZTfsnKV6cK76o+xd+TBiliKO7LB8/M9iIxVjbmtJS44o
+ u81FLIfYqPqJK45u8frJxbmKWMnC1rVCX4G+DomMJzlgDel407Ji6diLlt9XJaYMsho+24DBj
+ m43tSSFi/rdECLXDsBlN+j3G3UuikprxUn14hmIp9a0R9Kv6TREnZQ5bNfw9byEhBmP28zRCr
+ qPcT6O1BRAwUJxYGQ40FmwWewhqkEkr3nz3ptN8UT7ssfxNPOH2YF48XdFh9q3NEVuGHVHSp2
+ GTWp+nkuXL3DlCq4dym8HWXUdSP0rwb/qM3XKK1eOeR4q0x0Ss+DBPyBXxHLMwH8rhnhfjPT5
+ BHPWBUICqzNmKlNgjwoDUEpAkOkaHa2SRHVJ3d/s1BE5EC/zddh4DmbbrmNjNFVkYuBNob1gL
+ P8fEDFqOSXvTeLgOM3MYVVZZfrbNyhjDRu8JfMaKArd9YLj1isYZ+35IHArukCuqTKGJty4Cq
+ 6lr7apRBTqCs2zhsY87i4WD6Jse/95ZZlXNGZRehGMWpEL9Yevy04REwOJzYw0zBUIY2GlzVq
+ cAwGxAF8ezlsgk/Z8GRT+pvwxDNtzahwUag95krLReBFhNLRjmGDjAsQra8TxhECiTWBh/4Fo
+ zTqks+EEDiPxxQHClhD9T7Ehrzgq2FrfRjG8cJ952TEvV0Kzoz2yThdZcH5Ozu53lzs9tArf2
+ 3yCavtTKp+73glg==
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_SOFTFAIL
+	autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add testcase for the newly added bpf_current_capable.
+To allow user space tools to check if a device guard is active,
+we extend the struct bpf_prog_info by a cgroup_device_guard field.
+This is then used by the bpftool in print_prog_header_*() functions.
 
-The result:
-  $ tools/testing/selftests/bpf/test_progs --name=bpf_current_cap
-  #13      bpf_current_cap:OK
-  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+Output of bpftool, here for the bpf prog of a GyroidOS container:
 
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+ # ./bpftool prog show id 37
+ 37: cgroup_device  tag 1824c08482acee1b  gpl  cgdev_guard
+ 	loaded_at 2023-08-14T13:47:10+0200  uid 0
+ 	xlated 456B  jited 311B  memlock 4096B
+
+Signed-off-by: Michael Weiß <michael.weiss@aisec.fraunhofer.de>
 ---
- .../selftests/bpf/prog_tests/bpf_current_cap.c     | 80 ++++++++++++++++++++++
- .../selftests/bpf/progs/test_bpf_current_cap.c     | 37 ++++++++++
- 2 files changed, 117 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_current_cap.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_bpf_current_cap.c
+ include/uapi/linux/bpf.h       | 3 ++-
+ kernel/bpf/syscall.c           | 1 +
+ tools/bpf/bpftool/prog.c       | 2 ++
+ tools/include/uapi/linux/bpf.h | 3 ++-
+ 4 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_current_cap.c b/tools/testing/selftests/bpf/prog_tests/bpf_current_cap.c
-new file mode 100644
-index 0000000..6952908
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_current_cap.c
-@@ -0,0 +1,80 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2023 Yafang Shao <laoar.shao@gmail.com> */
-+
-+#include <linux/perf_event.h>
-+#include <linux/bpf.h>
-+#include <test_progs.h>
-+#include "cap_helpers.h"
-+#include "test_bpf_current_cap.skel.h"
-+
-+void serial_test_bpf_current_cap(void)
-+{
-+	struct test_bpf_current_cap *skel;
-+	struct perf_event_attr attr = {};
-+	int pfd, link_fd, err;
-+	__u64 caps = 0;
-+
-+	skel = test_bpf_current_cap__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	attr.size = sizeof(attr);
-+	attr.type = PERF_TYPE_SOFTWARE;
-+	attr.config = PERF_COUNT_SW_CPU_CLOCK;
-+	attr.freq = 1;
-+	attr.sample_freq = 1000;
-+	pfd = syscall(__NR_perf_event_open, &attr, -1, 0, -1, PERF_FLAG_FD_CLOEXEC);
-+	if (!ASSERT_GE(pfd, 0, "perf_event_open"))
-+		goto cleanup;
-+
-+	/* In case CAP_BPF and CAP_PERFMON is not set */
-+	err = cap_enable_effective(1ULL << CAP_BPF | 1ULL << CAP_PERFMON, &caps);
-+	if (!ASSERT_OK(err, "set_cap_bpf_perfmon"))
-+		goto close_perf;
-+
-+	err = cap_disable_effective(1ULL << CAP_SYS_ADMIN, NULL);
-+	if (!ASSERT_OK(err, "disable_cap_sys_admin"))
-+		goto restore_cap;
-+
-+	link_fd = bpf_link_create(bpf_program__fd(skel->progs.perf_event_run), pfd,
-+				  BPF_PERF_EVENT, NULL);
-+	if (!ASSERT_GE(link_fd, 0, "link_create_without_lsm"))
-+		goto restore_cap;
-+	close(link_fd);
-+	ASSERT_EQ(skel->bss->cap_sys_admin, false, "cap_sys_admin_init_value");
-+	ASSERT_EQ(skel->bss->cap_bpf, false, "cap_bpf_init_value");
-+	ASSERT_EQ(skel->bss->cap_perfmon, false, "cap_perfmon_init_value");
-+
-+	skel->links.lsm_run = bpf_program__attach_lsm(skel->progs.lsm_run);
-+	if (!ASSERT_OK_PTR(skel->links.lsm_run, "lsm_attach"))
-+		goto restore_cap;
-+
-+	link_fd = bpf_link_create(bpf_program__fd(skel->progs.perf_event_run), pfd,
-+				  BPF_PERF_EVENT, NULL);
-+	if (!ASSERT_LE(link_fd, 0, "link_create_without_sys_admin"))
-+		goto restore_cap;
-+	ASSERT_EQ(skel->bss->cap_sys_admin, false, "cap_sys_admin_disable");
-+	ASSERT_EQ(skel->bss->cap_bpf, true, "cap_bpf_enable");
-+	ASSERT_EQ(skel->bss->cap_perfmon, true, "cap_perfmon_enable");
-+
-+	err = cap_enable_effective(1ULL << CAP_SYS_ADMIN, NULL);
-+	if (!ASSERT_OK(err, "enable_cap_sys_admin"))
-+		goto restore_cap;
-+
-+	link_fd = bpf_link_create(bpf_program__fd(skel->progs.perf_event_run), pfd,
-+				  BPF_PERF_EVENT, NULL);
-+	if (!ASSERT_GE(link_fd, 0, "link_create_with_sys_admin"))
-+		goto restore_cap;
-+	close(link_fd);
-+	ASSERT_EQ(skel->bss->cap_sys_admin, true, "cap_sys_admin_enable");
-+	ASSERT_EQ(skel->bss->cap_bpf, true, "cap_bpf_enable");
-+	ASSERT_EQ(skel->bss->cap_perfmon, true, "cap_perfmon_enable");
-+
-+restore_cap:
-+	if (caps)
-+		cap_enable_effective(caps, NULL);
-+close_perf:
-+	close(pfd);
-+cleanup:
-+	test_bpf_current_cap__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_bpf_current_cap.c b/tools/testing/selftests/bpf/progs/test_bpf_current_cap.c
-new file mode 100644
-index 0000000..6dd97a1
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_bpf_current_cap.c
-@@ -0,0 +1,37 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2023 Yafang Shao <laoar.shao@gmail.com> */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+#define CAP_SYS_ADMIN	21
-+#define CAP_PERFMON	38
-+#define CAP_BPF		39
-+
-+extern bool bpf_current_capable(int cap) __ksym;
-+bool cap_sys_admin, cap_bpf, cap_perfmon;
-+
-+int link_create_audit(union bpf_attr *attr)
-+{
-+	cap_bpf = bpf_current_capable(CAP_BPF);
-+	cap_perfmon = bpf_current_capable(CAP_PERFMON);
-+	cap_sys_admin = bpf_current_capable(CAP_SYS_ADMIN);
-+	return cap_sys_admin ? 0 : -1;
-+}
-+
-+SEC("lsm/bpf")
-+int BPF_PROG(lsm_run, int cmd, union bpf_attr *attr, unsigned int size)
-+{
-+	if (cmd != BPF_LINK_CREATE)
-+		return 0;
-+	return link_create_audit(attr);
-+}
-+
-+SEC("perf_event")
-+int BPF_PROG(perf_event_run)
-+{
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 3be57f7957b1..7b383665d5f4 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -6331,7 +6331,8 @@ struct bpf_prog_info {
+ 	char name[BPF_OBJ_NAME_LEN];
+ 	__u32 ifindex;
+ 	__u32 gpl_compatible:1;
+-	__u32 :31; /* alignment pad */
++	__u32 cgroup_device_guard:1;
++	__u32 :30; /* alignment pad */
+ 	__u64 netns_dev;
+ 	__u64 netns_ino;
+ 	__u32 nr_jited_ksyms;
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 33ea67c702c1..9bc6d5dd2e90 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -4062,6 +4062,7 @@ static int bpf_prog_get_info_by_fd(struct file *file,
+ 	info.created_by_uid = from_kuid_munged(current_user_ns(),
+ 					       prog->aux->user->uid);
+ 	info.gpl_compatible = prog->gpl_compatible;
++	info.cgroup_device_guard = prog->aux->cgroup_device_guard;
+ 
+ 	memcpy(info.tag, prog->tag, sizeof(prog->tag));
+ 	memcpy(info.name, prog->aux->name, sizeof(prog->aux->name));
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index 8443a149dd17..66d21794b641 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -434,6 +434,7 @@ static void print_prog_header_json(struct bpf_prog_info *info, int fd)
+ 		     info->tag[4], info->tag[5], info->tag[6], info->tag[7]);
+ 
+ 	jsonw_bool_field(json_wtr, "gpl_compatible", info->gpl_compatible);
++	jsonw_bool_field(json_wtr, "cgroup_device_guard", info->cgroup_device_guard);
+ 	if (info->run_time_ns) {
+ 		jsonw_uint_field(json_wtr, "run_time_ns", info->run_time_ns);
+ 		jsonw_uint_field(json_wtr, "run_cnt", info->run_cnt);
+@@ -519,6 +520,7 @@ static void print_prog_header_plain(struct bpf_prog_info *info, int fd)
+ 	fprint_hex(stdout, info->tag, BPF_TAG_SIZE, "");
+ 	print_dev_plain(info->ifindex, info->netns_dev, info->netns_ino);
+ 	printf("%s", info->gpl_compatible ? "  gpl" : "");
++	printf("%s", info->cgroup_device_guard ? "  cgdev_guard" : "");
+ 	if (info->run_time_ns)
+ 		printf(" run_time_ns %lld run_cnt %lld",
+ 		       info->run_time_ns, info->run_cnt);
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 3be57f7957b1..7b383665d5f4 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -6331,7 +6331,8 @@ struct bpf_prog_info {
+ 	char name[BPF_OBJ_NAME_LEN];
+ 	__u32 ifindex;
+ 	__u32 gpl_compatible:1;
+-	__u32 :31; /* alignment pad */
++	__u32 cgroup_device_guard:1;
++	__u32 :30; /* alignment pad */
+ 	__u64 netns_dev;
+ 	__u64 netns_ino;
+ 	__u32 nr_jited_ksyms;
+
 -- 
-1.8.3.1
+2.30.2
 
