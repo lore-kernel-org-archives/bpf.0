@@ -1,146 +1,142 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B426BA45
-	for <bpf@vger.kernel.org>; Mon, 14 Aug 2023 14:40:19 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F7CF5;
-	Mon, 14 Aug 2023 07:40:17 -0700 (PDT)
-Received: from [127.0.1.1] ([91.67.199.65]) by mrelayeu.kundenserver.de
- (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1N5UoU-1pgYbq1NVa-016zzS; Mon, 14 Aug 2023 16:26:16 +0200
-From: =?utf-8?q?Michael_Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
-Date: Mon, 14 Aug 2023 16:26:10 +0200
-Subject: [PATCH RFC 2/4] bpf: provide cgroup_device_guard in bpf_prog_info
- to user space
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4C60C2C6
+	for <bpf@vger.kernel.org>; Mon, 14 Aug 2023 15:24:48 +0000 (UTC)
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB5DE7E
+	for <bpf@vger.kernel.org>; Mon, 14 Aug 2023 08:24:46 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4fe1e7440f1so1326088e87.0
+        for <bpf@vger.kernel.org>; Mon, 14 Aug 2023 08:24:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mihalicyn.com; s=mihalicyn; t=1692026685; x=1692631485;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6Ziw3r3Tja22DqMHkyIjj75Auq4FVBkHVssPtrJPa9M=;
+        b=M4xjxW1e/fZPcoLMcHB5mqTpLyc8P97Cwp0PNoQ5QHbNxHlZjpjwVZ2popwEFDtpxf
+         U5Ul0NNV0zQj+zAeghcawTCMiNcV8jaHf8Dc06XeIjlDfkLHGyLSUJdxnvwloecVMliq
+         5gJKkB4paIGj4gkGU6+wcAG54AO1g6LOfL5DY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692026685; x=1692631485;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6Ziw3r3Tja22DqMHkyIjj75Auq4FVBkHVssPtrJPa9M=;
+        b=bxG7q5vpiHI+oqIvuQVMt+CPFFZKzGPyOPaXW3qEf8+4bpi65F3UxtYcSsNOtfspIK
+         eQ5HsZfPWQVZ2pQJcUs1e6QKqnyRaN2KsxYMc1k+i7GKI4FjUx5npZB9dviRC+R9ZMZl
+         ILisbnrwhRnBRjOG+tYLvqA+6H1FSZcGPqmo9G0lmpFfTvYkO1hgSxe+inNEAIqcHd/k
+         052YMgWIU5nMKRK2isoEpXkHzngagrqof1zGzbmwQDpNz9aS7fTgHYt3ZBUSRLQXPYbU
+         Y9sCqlgl3BCjdv2Q4oThvg7m6QRrX8ZHun1k/yMd5503F5KOi1CRv9kQd2j+IrK/Dwk1
+         8e7A==
+X-Gm-Message-State: AOJu0YypgJbZU1WQJdwU/9OHYonDVi24KVxi7r9CP1JZsdrSj8f3n1ak
+	ot5jz0BCjyVuO5/SuJIAb60kDfKfqntG2d5/fuq7sA==
+X-Google-Smtp-Source: AGHT+IFn8sdfqQhKIdKAAladZMLCbd6oLeRv8zsgX68V2UY+4U1l5/lbKnQBzr49lekz0v7RK+2H2fint5J5svOfdqk=
+X-Received: by 2002:ac2:5f16:0:b0:4fe:5f0c:9db6 with SMTP id
+ 22-20020ac25f16000000b004fe5f0c9db6mr5252512lfq.5.1692026685009; Mon, 14 Aug
+ 2023 08:24:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230814-devcg_guard-v1-2-654971ab88b1@aisec.fraunhofer.de>
-References: <20230814-devcg_guard-v1-0-654971ab88b1@aisec.fraunhofer.de>
-In-Reply-To: <20230814-devcg_guard-v1-0-654971ab88b1@aisec.fraunhofer.de>
-To: Alexander Mikhalitsyn <alexander@mihalicyn.com>, 
- Christian Brauner <brauner@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, 
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, 
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
- Quentin Monnet <quentin@isovalent.com>, 
- Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-fsdevel@vger.kernel.org, gyroidos@aisec.fraunhofer.de, 
- =?utf-8?q?Michael_Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
-X-Mailer: b4 0.12.3
-X-Provags-ID: V03:K1:o8/eibR0KEBv814SkAfdQUcPXonJ4/KKrEByU28jqQCeZFziDrX
- Jh/nBbMV0+Pqqx0ZAhoiwrS6qeOne5dKIiuY7ocFyLjGOOWLJVKoYkYM6ll2MwgWWbd02yC
- 8gLOxL4UU8xYYbb9wkiOmLprQj5Y48d6pl6OAUe6EJRZhNRbc3c8LTgWhkdNLxUdooHCahG
- lW5Zf1nZFvO/RPdhxsTPQ==
-UI-OutboundReport: notjunk:1;M01:P0:xxe2lkYlnOU=;2D+cFgrrWAhPUaEiBJb1W4nqw5v
- 3u/N/KWFj85CjLC09xRjrG2hLIM0DQUtynr3J216+IVA2UgW+Y5TDtMW75Gxn0CMBofS0XDes
- gXHA2Tz6feEpXNk1cHRhuz7zH+JkhGEsdiY7b80qufCZMBYS9Hfd3A9gz4SKlTxe4HHUQLB+/
- dgicc6X9CLgVR7MTx5LVKf9hYCkJsZTfsnKV6cK76o+xd+TBiliKO7LB8/M9iIxVjbmtJS44o
- u81FLIfYqPqJK45u8frJxbmKWMnC1rVCX4G+DomMJzlgDel407Ji6diLlt9XJaYMsho+24DBj
- m43tSSFi/rdECLXDsBlN+j3G3UuikprxUn14hmIp9a0R9Kv6TREnZQ5bNfw9byEhBmP28zRCr
- qPcT6O1BRAwUJxYGQ40FmwWewhqkEkr3nz3ptN8UT7ssfxNPOH2YF48XdFh9q3NEVuGHVHSp2
- GTWp+nkuXL3DlCq4dym8HWXUdSP0rwb/qM3XKK1eOeR4q0x0Ss+DBPyBXxHLMwH8rhnhfjPT5
- BHPWBUICqzNmKlNgjwoDUEpAkOkaHa2SRHVJ3d/s1BE5EC/zddh4DmbbrmNjNFVkYuBNob1gL
- P8fEDFqOSXvTeLgOM3MYVVZZfrbNyhjDRu8JfMaKArd9YLj1isYZ+35IHArukCuqTKGJty4Cq
- 6lr7apRBTqCs2zhsY87i4WD6Jse/95ZZlXNGZRehGMWpEL9Yevy04REwOJzYw0zBUIY2GlzVq
- cAwGxAF8ezlsgk/Z8GRT+pvwxDNtzahwUag95krLReBFhNLRjmGDjAsQra8TxhECiTWBh/4Fo
- zTqks+EEDiPxxQHClhD9T7Ehrzgq2FrfRjG8cJ952TEvV0Kzoz2yThdZcH5Ozu53lzs9tArf2
- 3yCavtTKp+73glg==
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_SOFTFAIL
-	autolearn=no autolearn_force=no version=3.4.6
+References: <20230814-devcg_guard-v1-0-654971ab88b1@aisec.fraunhofer.de> <20230814-devcg_guard-v1-4-654971ab88b1@aisec.fraunhofer.de>
+In-Reply-To: <20230814-devcg_guard-v1-4-654971ab88b1@aisec.fraunhofer.de>
+From: Alexander Mikhalitsyn <alexander@mihalicyn.com>
+Date: Mon, 14 Aug 2023 17:24:33 +0200
+Message-ID: <CAJqdLroV3uPnDOhTjVRiYHHFFXoj+fK0Na+mSac7zPYxkwbAsg@mail.gmail.com>
+Subject: Re: [PATCH RFC 4/4] fs: allow mknod in non-initial userns using
+ cgroup device guard
+To: =?UTF-8?Q?Michael_Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
+Cc: Christian Brauner <brauner@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Quentin Monnet <quentin@isovalent.com>, Alexander Viro <viro@zeniv.linux.org.uk>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	gyroidos@aisec.fraunhofer.de, stgraber@ubuntu.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-To allow user space tools to check if a device guard is active,
-we extend the struct bpf_prog_info by a cgroup_device_guard field.
-This is then used by the bpftool in print_prog_header_*() functions.
++CC St=C3=A9phane Graber <stgraber@ubuntu.com>
 
-Output of bpftool, here for the bpf prog of a GyroidOS container:
 
- # ./bpftool prog show id 37
- 37: cgroup_device  tag 1824c08482acee1b  gpl  cgdev_guard
- 	loaded_at 2023-08-14T13:47:10+0200  uid 0
- 	xlated 456B  jited 311B  memlock 4096B
-
-Signed-off-by: Michael Weiß <michael.weiss@aisec.fraunhofer.de>
----
- include/uapi/linux/bpf.h       | 3 ++-
- kernel/bpf/syscall.c           | 1 +
- tools/bpf/bpftool/prog.c       | 2 ++
- tools/include/uapi/linux/bpf.h | 3 ++-
- 4 files changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 3be57f7957b1..7b383665d5f4 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -6331,7 +6331,8 @@ struct bpf_prog_info {
- 	char name[BPF_OBJ_NAME_LEN];
- 	__u32 ifindex;
- 	__u32 gpl_compatible:1;
--	__u32 :31; /* alignment pad */
-+	__u32 cgroup_device_guard:1;
-+	__u32 :30; /* alignment pad */
- 	__u64 netns_dev;
- 	__u64 netns_ino;
- 	__u32 nr_jited_ksyms;
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 33ea67c702c1..9bc6d5dd2e90 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -4062,6 +4062,7 @@ static int bpf_prog_get_info_by_fd(struct file *file,
- 	info.created_by_uid = from_kuid_munged(current_user_ns(),
- 					       prog->aux->user->uid);
- 	info.gpl_compatible = prog->gpl_compatible;
-+	info.cgroup_device_guard = prog->aux->cgroup_device_guard;
- 
- 	memcpy(info.tag, prog->tag, sizeof(prog->tag));
- 	memcpy(info.name, prog->aux->name, sizeof(prog->aux->name));
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 8443a149dd17..66d21794b641 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -434,6 +434,7 @@ static void print_prog_header_json(struct bpf_prog_info *info, int fd)
- 		     info->tag[4], info->tag[5], info->tag[6], info->tag[7]);
- 
- 	jsonw_bool_field(json_wtr, "gpl_compatible", info->gpl_compatible);
-+	jsonw_bool_field(json_wtr, "cgroup_device_guard", info->cgroup_device_guard);
- 	if (info->run_time_ns) {
- 		jsonw_uint_field(json_wtr, "run_time_ns", info->run_time_ns);
- 		jsonw_uint_field(json_wtr, "run_cnt", info->run_cnt);
-@@ -519,6 +520,7 @@ static void print_prog_header_plain(struct bpf_prog_info *info, int fd)
- 	fprint_hex(stdout, info->tag, BPF_TAG_SIZE, "");
- 	print_dev_plain(info->ifindex, info->netns_dev, info->netns_ino);
- 	printf("%s", info->gpl_compatible ? "  gpl" : "");
-+	printf("%s", info->cgroup_device_guard ? "  cgdev_guard" : "");
- 	if (info->run_time_ns)
- 		printf(" run_time_ns %lld run_cnt %lld",
- 		       info->run_time_ns, info->run_cnt);
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 3be57f7957b1..7b383665d5f4 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -6331,7 +6331,8 @@ struct bpf_prog_info {
- 	char name[BPF_OBJ_NAME_LEN];
- 	__u32 ifindex;
- 	__u32 gpl_compatible:1;
--	__u32 :31; /* alignment pad */
-+	__u32 cgroup_device_guard:1;
-+	__u32 :30; /* alignment pad */
- 	__u64 netns_dev;
- 	__u64 netns_ino;
- 	__u32 nr_jited_ksyms;
-
--- 
-2.30.2
-
+On Mon, Aug 14, 2023 at 4:26=E2=80=AFPM Michael Wei=C3=9F
+<michael.weiss@aisec.fraunhofer.de> wrote:
+>
+> If a container manager restricts its unprivileged (user namespaced)
+> children by a device cgroup, it is not necessary to deny mknod
+> anymore. Thus, user space applications may map devices on different
+> locations in the file system by using mknod() inside the container.
+>
+> A use case for this, we also use in GyroidOS, is to run virsh for
+> VMs inside an unprivileged container. virsh creates device nodes,
+> e.g., "/var/run/libvirt/qemu/11-fgfg.dev/null" which currently fails
+> in a non-initial userns, even if a cgroup device white list with the
+> corresponding major, minor of /dev/null exists. Thus, in this case
+> the usual bind mounts or pre populated device nodes under /dev are
+> not sufficient.
+>
+> To circumvent this limitation, we allow mknod() in fs/namei.c if a
+> bpf cgroup device guard is enabeld for the current task using
+> devcgroup_task_is_guarded() and check CAP_MKNOD for the current user
+> namespace by ns_capable() instead of the global CAP_MKNOD.
+>
+> To avoid unusable device nodes on file systems mounted in
+> non-initial user namespace, may_open_dev() ignores the SB_I_NODEV
+> for cgroup device guarded tasks.
+>
+> Signed-off-by: Michael Wei=C3=9F <michael.weiss@aisec.fraunhofer.de>
+> ---
+>  fs/namei.c | 19 ++++++++++++++++---
+>  1 file changed, 16 insertions(+), 3 deletions(-)
+>
+> diff --git a/fs/namei.c b/fs/namei.c
+> index e56ff39a79bc..ef4f22b9575c 100644
+> --- a/fs/namei.c
+> +++ b/fs/namei.c
+> @@ -3221,6 +3221,9 @@ EXPORT_SYMBOL(vfs_mkobj);
+>
+>  bool may_open_dev(const struct path *path)
+>  {
+> +       if (devcgroup_task_is_guarded(current))
+> +               return !(path->mnt->mnt_flags & MNT_NODEV);
+> +
+>         return !(path->mnt->mnt_flags & MNT_NODEV) &&
+>                 !(path->mnt->mnt_sb->s_iflags & SB_I_NODEV);
+>  }
+> @@ -3976,9 +3979,19 @@ int vfs_mknod(struct mnt_idmap *idmap, struct inod=
+e *dir,
+>         if (error)
+>                 return error;
+>
+> -       if ((S_ISCHR(mode) || S_ISBLK(mode)) && !is_whiteout &&
+> -           !capable(CAP_MKNOD))
+> -               return -EPERM;
+> +       /*
+> +        * In case of a device cgroup restirction allow mknod in user
+> +        * namespace. Otherwise just check global capability; thus,
+> +        * mknod is also disabled for user namespace other than the
+> +        * initial one.
+> +        */
+> +       if ((S_ISCHR(mode) || S_ISBLK(mode)) && !is_whiteout) {
+> +               if (devcgroup_task_is_guarded(current)) {
+> +                       if (!ns_capable(current_user_ns(), CAP_MKNOD))
+> +                               return -EPERM;
+> +               } else if (!capable(CAP_MKNOD))
+> +                       return -EPERM;
+> +       }
+>
+>         if (!dir->i_op->mknod)
+>                 return -EPERM;
+>
+> --
+> 2.30.2
+>
