@@ -1,228 +1,118 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D7FAC2FF
-	for <bpf@vger.kernel.org>; Mon, 14 Aug 2023 17:32:05 +0000 (UTC)
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C030133
-	for <bpf@vger.kernel.org>; Mon, 14 Aug 2023 10:32:03 -0700 (PDT)
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id B92CE24C22097; Mon, 14 Aug 2023 10:29:07 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next 11/15] selftests/bpf: Add tests for cgrp_local_storage with local percpu kptr
-Date: Mon, 14 Aug 2023 10:29:07 -0700
-Message-Id: <20230814172907.1367077-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230814172809.1361446-1-yonghong.song@linux.dev>
-References: <20230814172809.1361446-1-yonghong.song@linux.dev>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA43DBE6B
+	for <bpf@vger.kernel.org>; Mon, 14 Aug 2023 17:45:31 +0000 (UTC)
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F6F10D0;
+	Mon, 14 Aug 2023 10:45:30 -0700 (PDT)
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-7679ea01e16so367205585a.2;
+        Mon, 14 Aug 2023 10:45:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692035130; x=1692639930;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Lv7tIQWP+kGGB4aOTB1TlmerpQoccXTqXY8tDL5x1UQ=;
+        b=M981JYOJqz5OZ9JrOXuUGs6a009aOHEYb9wiWsVsQDFoBP6wEqgMSvPbUtkctjj6ej
+         DCY+29eFrma9DCs2+DLytVK4udY69aWUE43q8On3xL/iuP5Jcymb7ohLXFnhUiTx6aXa
+         kgwbkAQkruwEtzQUpjio0BNlaZLaDJh9OZEU1KTnlJlx01DhBZqhMAAk26klmFDVdK+E
+         b2h/uKpohzk7A9SMpLA04MnSaI7Px77066VzHl4roCZ6Z/2BXM31D/bKm1ChpJe2rBB8
+         7SKZom2rDi9UuQwuhdxhlAI5Rj56zLexFihgoCpPhttKSc1isqNFC4YSzp7gQYKCVMe8
+         XngA==
+X-Gm-Message-State: AOJu0YwN/fZvF1hCB2h3ZxNrz/2B2K7JfwDJ7FwYX1iSL/onKfa/IH3Z
+	rVxpDIIY5yRkvx0B9Yn3jcKqtNMKQH4JIh6N
+X-Google-Smtp-Source: AGHT+IHr5c0jzj5Zo0iM7YjbKgSz5YEjhoMSt5LRFJbKufYRkY8Bb2w5YzFejx80GMstoaJpL1XNog==
+X-Received: by 2002:a05:620a:f13:b0:76a:eee2:cd09 with SMTP id v19-20020a05620a0f1300b0076aeee2cd09mr12220539qkl.9.1692035129653;
+        Mon, 14 Aug 2023 10:45:29 -0700 (PDT)
+Received: from maniforge ([2620:10d:c091:400::5:93a1])
+        by smtp.gmail.com with ESMTPSA id j7-20020a37c247000000b0076cc4610d0asm3166903qkm.85.2023.08.14.10.45.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Aug 2023 10:45:29 -0700 (PDT)
+Date: Mon, 14 Aug 2023 12:45:26 -0500
+From: David Vernet <void@manifault.com>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org, song@kernel.org, yhs@fb.com,
+	john.fastabend@gmail.com, kpsingh@kernel.org, haoluo@google.com,
+	jolsa@kernel.org, linux-kernel@vger.kernel.org,
+	kernel-team@meta.com, tj@kernel.org, clm@meta.com,
+	thinker.li@gmail.com, Stanislav Fomichev <sdf@google.com>
+Subject: Re: [PATCH bpf-next] bpf: Support default .validate() and .update()
+ behavior for struct_ops links
+Message-ID: <20230814174526.GG542801@maniforge>
+References: <20230810220456.521517-1-void@manifault.com>
+ <ZNVousfpuRFgfuAo@google.com>
+ <20230810230141.GA529552@maniforge>
+ <ZNVvfYEsLyotn+G1@google.com>
+ <fe388d79-bdfc-0480-5f4b-1a40016fd53d@linux.dev>
+ <20230811201914.GD542801@maniforge>
+ <d1fa5eff-b0d2-4388-0513-eaead8542b9f@linux.dev>
+ <20230811233616.GE542801@maniforge>
+ <f10dd9ba-de75-c2b1-a7e9-fd71bdc2f0fe@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,
-	RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_PASS,SPF_SOFTFAIL,
-	TVD_RCVD_IP autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f10dd9ba-de75-c2b1-a7e9-fd71bdc2f0fe@linux.dev>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add a non-sleepable cgrp_local_storage test with percpu kptr. The
-test does allocation of percpu data, assigning values to percpu
-data and retrieval of percpu data. The de-allocation of percpu
-data is done when the map is freed.
+On Mon, Aug 14, 2023 at 09:55:37AM -0700, Martin KaFai Lau wrote:
+> On 8/11/23 4:36 PM, David Vernet wrote:
+> > I see, thanks for explaining. This is why sched_ext doesn't really work
+> > with the BPF_F_LINK version of map update. We can't guarantee that a map
+> > can be updated if we can't succeed in ->reg(), because we can also race
+> > with e.g. sysrq unloading the scheduler between ->validate() and
+> > ->reg(). In a sense, it feels like ->reg() in "updateable" struct_ops
+> > implementations should be void, whereas in other struct_ops
+> > implementations like scx() it has to be int *. If validate() is meant to
+> > prevent the scenario you outlined, can you help me understand why we
+> > still check the return value of ->reg() in bpf_struct_ops_link_create()?
+> > Or at the very least it seems like we should WARN_ON()?
+> 
+> ->regs() can fail if another struct_ops under the same
+> name has already been loaded to the subsystem. If another
+> subsystem needs another return value to support .update, I
+> believe it can be done if that is blocking scx to support
+> "updateable" link.
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- .../selftests/bpf/prog_tests/percpu_alloc.c   |  40 +++++++
- .../progs/percpu_alloc_cgrp_local_storage.c   | 105 ++++++++++++++++++
- 2 files changed, 145 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/percpu_alloc_cgrp_l=
-ocal_storage.c
+Ok, so ->validate() is a static check that should either always succeed
+or always fail, and ->reg() may fail due to runtime circumstances. So a
+map that passes ->validate() could e.g. retry to create the link in a
+loop or something. Or create a series of validated struct_ops maps and
+then have a management layer that destroys and creates links for the map
+you want to actually use. Thanks for explaining.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c b/tool=
-s/testing/selftests/bpf/prog_tests/percpu_alloc.c
-index 0fb536822f14..41bf784a4bb3 100644
---- a/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
- #include "percpu_alloc_array.skel.h"
-+#include "percpu_alloc_cgrp_local_storage.skel.h"
-=20
- static void test_array(void)
- {
-@@ -69,10 +70,49 @@ static void test_array_sleepable(void)
- 	percpu_alloc_array__destroy(skel);
- }
-=20
-+static void test_cgrp_local_storage(void)
-+{
-+	struct percpu_alloc_cgrp_local_storage *skel;
-+	int err, cgroup_fd, prog_fd;
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+
-+	cgroup_fd =3D test__join_cgroup("/percpu_alloc");
-+	if (!ASSERT_GE(cgroup_fd, 0, "join_cgroup /percpu_alloc"))
-+		return;
-+
-+	skel =3D percpu_alloc_cgrp_local_storage__open();
-+	if (!ASSERT_OK_PTR(skel, "percpu_alloc_cgrp_local_storage__open"))
-+		goto close_fd;
-+
-+	skel->rodata->nr_cpus =3D libbpf_num_possible_cpus();
-+
-+	err =3D percpu_alloc_cgrp_local_storage__load(skel);
-+	if (!ASSERT_OK(err, "percpu_alloc_cgrp_local_storage__load"))
-+		goto destroy_skel;
-+
-+	err =3D percpu_alloc_cgrp_local_storage__attach(skel);
-+	if (!ASSERT_OK(err, "percpu_alloc_cgrp_local_storage__attach"))
-+		goto destroy_skel;
-+
-+	prog_fd =3D bpf_program__fd(skel->progs.test_cgrp_local_storage_1);
-+	err =3D bpf_prog_test_run_opts(prog_fd, &topts);
-+	ASSERT_OK(err, "test_run cgrp_local_storage 1-3");
-+	ASSERT_EQ(topts.retval, 0, "test_run cgrp_local_storage 1-3");
-+	ASSERT_EQ(skel->bss->cpu0_field_d, 2, "cpu0_field_d");
-+	ASSERT_EQ(skel->bss->sum_field_c, 1, "sum_field_c");
-+
-+destroy_skel:
-+	percpu_alloc_cgrp_local_storage__destroy(skel);
-+close_fd:
-+	close(cgroup_fd);
-+}
-+
- void test_percpu_alloc(void)
- {
- 	if (test__start_subtest("array"))
- 		test_array();
- 	if (test__start_subtest("array_sleepable"))
- 		test_array_sleepable();
-+	if (test__start_subtest("cgrp_local_storage"))
-+		test_cgrp_local_storage();
- }
-diff --git a/tools/testing/selftests/bpf/progs/percpu_alloc_cgrp_local_st=
-orage.c b/tools/testing/selftests/bpf/progs/percpu_alloc_cgrp_local_stora=
-ge.c
-new file mode 100644
-index 000000000000..b79285ac770e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/percpu_alloc_cgrp_local_storage.c
-@@ -0,0 +1,105 @@
-+#include "bpf_experimental.h"
-+
-+struct val_t {
-+	long b, c, d;
-+};
-+
-+struct elem {
-+	long sum;
-+	struct val_t __percpu *pc;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_CGRP_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, int);
-+	__type(value, struct elem);
-+} cgrp SEC(".maps");
-+
-+const volatile int nr_cpus;
-+
-+/* Initialize the percpu object */
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG(test_cgrp_local_storage_1)
-+{
-+	struct task_struct *task;
-+	struct val_t __percpu *p;
-+	struct elem *e;
-+
-+	task =3D bpf_get_current_task_btf();
-+	e =3D bpf_cgrp_storage_get(&cgrp, task->cgroups->dfl_cgrp, 0,
-+				 BPF_LOCAL_STORAGE_GET_F_CREATE);
-+	if (!e)
-+		return 0;
-+
-+	p =3D bpf_percpu_obj_new(struct val_t);
-+	if (!p)
-+		return 0;
-+
-+	p =3D bpf_kptr_xchg(&e->pc, p);
-+	if (p)
-+		bpf_percpu_obj_drop(p);
-+
-+	return 0;
-+}
-+
-+/* Percpu data collection */
-+SEC("fentry/bpf_fentry_test2")
-+int BPF_PROG(test_cgrp_local_storage_2)
-+{
-+	struct task_struct *task;
-+	struct val_t __percpu *p;
-+	struct val_t *v;
-+	struct elem *e;
-+
-+	task =3D bpf_get_current_task_btf();
-+	e =3D bpf_cgrp_storage_get(&cgrp, task->cgroups->dfl_cgrp, 0, 0);
-+	if (!e)
-+		return 0;
-+
-+	p =3D e->pc;
-+	if (!p)
-+		return 0;
-+
-+	v =3D bpf_per_cpu_ptr(p, 0);
-+	if (!v)
-+		return 0;
-+	v->c =3D 1;
-+	v->d =3D 2;
-+	return 0;
-+}
-+
-+int cpu0_field_d, sum_field_c;
-+
-+/* Summarize percpu data collection */
-+SEC("fentry/bpf_fentry_test3")
-+int BPF_PROG(test_cgrp_local_storage_3)
-+{
-+	struct task_struct *task;
-+	struct val_t __percpu *p;
-+	struct val_t *v;
-+	struct elem *e;
-+	int i;
-+
-+	task =3D bpf_get_current_task_btf();
-+	e =3D bpf_cgrp_storage_get(&cgrp, task->cgroups->dfl_cgrp, 0, 0);
-+	if (!e)
-+		return 0;
-+
-+	p =3D e->pc;
-+	if (!p)
-+		return 0;
-+
-+	bpf_for(i, 0, nr_cpus) {
-+		v =3D bpf_per_cpu_ptr(p, i);
-+		if (v) {
-+			if (i =3D=3D 0)
-+				cpu0_field_d =3D v->d;
-+			sum_field_c +=3D v->c;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") =3D "GPL";
---=20
-2.34.1
+> > > If it needs to validate struct_ops as a while,
+> 
+> There was a typo: as a /whole/.
+> 
+> > > 
+> > > 1. it must be implemented in .validate instead of .reg. Otherwise, it may
+> > > end up having an unusable map.
+> > 
+> > Some clarity on this point (why we check ->reg() on the ->validate()
+> > path) would help me write this comment more clearly.
+> 
+> 
+> hmm... where does it check ->reg() on the ->validate() now?
+> 
+> I was meaning the struct_ops supported subsystem should
+> validate the struct_ops map in '.validate' instead of in
+> the '.reg'.
+> 
+> or I misunderstood the question?
 
+I just meant that I wasn't understanding why we had to check the return
+value of ->reg() in bpf_struct_ops_link_create(). Now that I understand
+the semantics, I can document them.
