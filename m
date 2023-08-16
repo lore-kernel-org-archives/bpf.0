@@ -1,159 +1,177 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C002156E8
-	for <bpf@vger.kernel.org>; Wed, 16 Aug 2023 16:18:26 +0000 (UTC)
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54FA2704;
-	Wed, 16 Aug 2023 09:18:24 -0700 (PDT)
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37GFoXWS021488;
-	Wed, 16 Aug 2023 16:18:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=m05c/qLPzxh89HW5MXXsDJFf1NWFW8gLAgWmwTK3mQc=;
- b=etqhHAoVHFN9gCVk6sZFWx46Q2gfWu6MTchrQZKypONnQLZfBv2bOZ8DklOrtAYmwVPo
- ScIHjz3w9kwpVdCvx5Bz3I58Cbn4U/wMuLAdC161jpMDGqrgXnI1O2nMCwdqxa2pPzGK
- FZZYTLQDowXzgbb6GpayoqtkF2C1WQ8PeAW6+HEcMv0C4Y0XytmBmPlhVNc/eMsO49l3
- 255cgeDPFpDvjbNYndnQyhoKzouSg4Cchhl+P5C70l10f4mw1TRLeqmBmbvKy2qk1X9U
- YGWqa1JIGeGJki5xfrjDvuEQHgwxoEWk6ie1k1dM87BxZf3e4u+5Gszt0kDhw28YXvLQ Fg== 
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sh1eurt7r-4
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 16 Aug 2023 16:18:20 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 37GFeOe4003459;
-	Wed, 16 Aug 2023 15:49:48 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3semdsphh7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 16 Aug 2023 15:49:48 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 37GFnkpT26936036
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 16 Aug 2023 15:49:46 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 46FCB2004F;
-	Wed, 16 Aug 2023 15:49:46 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3394C2004E;
-	Wed, 16 Aug 2023 15:49:46 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Wed, 16 Aug 2023 15:49:46 +0000 (GMT)
-Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 55390)
-	id D63C0E012C; Wed, 16 Aug 2023 17:49:45 +0200 (CEST)
-From: Sven Schnelle <svens@linux.ibm.com>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: linux-kernel@vger.kernel.org, Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH RESEND v3 2/3] tracing/synthetic: skip first entry for stack traces
-Date: Wed, 16 Aug 2023 17:49:27 +0200
-Message-Id: <20230816154928.4171614-3-svens@linux.ibm.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230816154928.4171614-1-svens@linux.ibm.com>
-References: <20230816154928.4171614-1-svens@linux.ibm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BF37156E8
+	for <bpf@vger.kernel.org>; Wed, 16 Aug 2023 16:22:18 +0000 (UTC)
+Received: from out-30.mta0.migadu.com (out-30.mta0.migadu.com [91.218.175.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057642711
+	for <bpf@vger.kernel.org>; Wed, 16 Aug 2023 09:22:16 -0700 (PDT)
+Message-ID: <bbd86b4e-89ea-8e60-883e-f348117483b4@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1692202933; h=from:from:reply-to:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pe266H6yLoZFPljTbXhxvPbLZcJenRDQ7MYvn3RPzL8=;
+	b=OJUcKpHlMNTfKEyOrzJZyK2AiNdJ8Lur50Zi6qK4cl5teKPYBdncLbuS/keif1DpLFi7rD
+	A7fE5s8z2+UL8wtxblG141xy7G7mDbLdqGb9aaJkjpvd3qmh8kPii658X0g46dWl52/5/N
+	DonJk5PkOdZxrVFEgLv9JX3THwDNgwQ=
+Date: Wed, 16 Aug 2023 09:22:09 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: EuPMFYJ89KLizs5WJYxpGi2ZxcmHwTbA
-X-Proofpoint-ORIG-GUID: EuPMFYJ89KLizs5WJYxpGi2ZxcmHwTbA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-08-16_16,2023-08-15_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
- impostorscore=0 mlxscore=0 clxscore=1015 suspectscore=0 spamscore=0
- malwarescore=0 adultscore=0 priorityscore=1501 lowpriorityscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2308160140
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Reply-To: yonghong.song@linux.dev
+Subject: Re: Masks and overflow of signed immediates in BPF instructions
+Content-Language: en-US
+To: "Jose E. Marchesi" <jose.marchesi@oracle.com>
+Cc: bpf@vger.kernel.org, david.faust@oracle.com, cupertino.miranda@oracle.com
+References: <877cpwgzgh.fsf@oracle.com>
+ <ab4264da-7c73-e7c5-334d-ed61c9fdd241@linux.dev> <87leec44v1.fsf@oracle.com>
+ <87wmxv2ut4.fsf@oracle.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <87wmxv2ut4.fsf@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-While debugging another issue i noticed that the stack trace output
-contains the number of entries on top:
 
-         <idle>-0       [000] d..4.   203.322502: wake_lat: pid=0 delta=2268270616 stack=STACK:
-=> 0x10
-=> __schedule+0xac6/0x1a98
-=> schedule+0x126/0x2c0
-=> schedule_timeout+0x242/0x2c0
-=> __wait_for_common+0x434/0x680
-=> __wait_rcu_gp+0x198/0x3e0
-=> synchronize_rcu+0x112/0x138
-=> ring_buffer_reset_online_cpus+0x140/0x2e0
-=> tracing_reset_online_cpus+0x15c/0x1d0
-=> tracing_set_clock+0x180/0x1d8
-=> hist_register_trigger+0x486/0x670
-=> event_hist_trigger_parse+0x494/0x1318
-=> trigger_process_regex+0x1d4/0x258
-=> event_trigger_write+0xb4/0x170
-=> vfs_write+0x210/0xad0
-=> ksys_write+0x122/0x208
 
-Fix this by skipping the first element. Also replace the pointer
-logic with an index variable which is easier to read.
+On 8/16/23 2:36 AM, Jose E. Marchesi wrote:
+> 
+>>> On 8/15/23 7:19 AM, Jose E. Marchesi wrote:
+>>>> Hello.
+>>>> The selftest progs/verifier_masking.c contains inline assembly code
+>>>> like:
+>>>>     	w1 = 0xffffffff;
+>>>> The 32-bit immediate of that instruction is signed.  Therefore, GAS
+>>>> complains that the above instruction overflows its field:
+>>>>     /tmp/ccNOXFQy.s:46: Error: signed immediate out of range, shall
+>>>> fit in 32 bits
+>>>> The llvm assembler is likely relying on signed overflow for the
+>>>> above to
+>>>> work.
+>>>
+>>> Not really.
+>>>
+>>>    def _ri_32 : ALU_RI<BPF_ALU, Opc, off,
+>>>                     (outs GPR32:$dst),
+>>>                     (ins GPR32:$src2, i32imm:$imm),
+>>>                     "$dst "#OpcodeStr#" $imm",
+>>>                     [(set GPR32:$dst, (OpNode GPR32:$src2,
+>>>                     i32immSExt32:$imm))]>;
+>>>
+>>>
+>>> If generating from source, the pattern [(set GPR32:$dst, (OpNode
+>>> GPR32:$src2, i32immSExt32:$imm))] so value 0xffffffff is not SExt32
+>>> and it won't match and eventually a LDimm_64 insn will be generated.
+>>
+>> If by "generating from source" you mean compiling from C, then sure, I
+>> wasn't implying clang was generating `r1 = 0xffffffff' for assigning
+>> that positive value to a register.
+>>
+>>> But for inline asm, we will have
+>>>    (outs GPR32:$dst)
+>>>    (ins GPR32:$src2, i32imm:$imm)
+>>>
+>>> and i32imm is defined as
+>>>    def i32imm : Operand<i32>;
+>>> which is a unsigned 32bit value, so it is recognized properly
+>>> and the insn is encoded properly.
+>>
+>> We thought the imm32 operand in ALU instructions is signed, not
+>> unsigned.  Is it really unsigned??
+> 
+> I am going through all the BPF instructions that get 32-bit, 16-bit and
+> 64-bit immediates, because it seems to me that we may need to
+> distinguish between two different levels:
+> 
+> - Value encoded in the instruction immediate: interpreted as signed or
+>    as unsigned.
 
-Fixes: 00cf3d672a9d ("tracing: Allow synthetic events to pass around stacktraces")
-Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
----
- kernel/trace/trace_events_synth.c | 17 ++++-------------
- 1 file changed, 4 insertions(+), 13 deletions(-)
+The 'imm' in the instruction is a 32-bit signed insn.
+I think we have no dispute here.
 
-diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
-index 7fff8235075f..80a2a832f857 100644
---- a/kernel/trace/trace_events_synth.c
-+++ b/kernel/trace/trace_events_synth.c
-@@ -350,7 +350,7 @@ static enum print_line_t print_synth_event(struct trace_iterator *iter,
- 	struct trace_seq *s = &iter->seq;
- 	struct synth_trace_event *entry;
- 	struct synth_event *se;
--	unsigned int i, n_u64;
-+	unsigned int i, j, n_u64;
- 	char print_fmt[32];
- 	const char *fmt;
- 
-@@ -389,18 +389,13 @@ static enum print_line_t print_synth_event(struct trace_iterator *iter,
- 				n_u64 += STR_VAR_LEN_MAX / sizeof(u64);
- 			}
- 		} else if (se->fields[i]->is_stack) {
--			unsigned long *p, *end;
- 			union trace_synth_field *data = &entry->fields[n_u64];
--
--			p = (void *)entry + data->as_dynamic.offset;
--			end = (void *)p + data->as_dynamic.len - (sizeof(long) - 1);
-+			unsigned long *p = (void *)entry + data->as_dynamic.offset;
- 
- 			trace_seq_printf(s, "%s=STACK:\n", se->fields[i]->name);
--
--			for (; *p && p < end; p++)
--				trace_seq_printf(s, "=> %pS\n", (void *)*p);
-+			for (j = 1; j < data->as_dynamic.len / sizeof(long); j++)
-+				trace_seq_printf(s, "=> %pS\n", (void *)p[j]);
- 			n_u64++;
--
- 		} else {
- 			struct trace_print_flags __flags[] = {
- 			    __def_gfpflag_names, {-1, NULL} };
-@@ -490,10 +485,6 @@ static unsigned int trace_stack(struct synth_trace_event *entry,
- 			break;
- 	}
- 
--	/* Include the zero'd element if it fits */
--	if (len < HIST_STACKTRACE_DEPTH)
--		len++;
--
- 	len *= sizeof(long);
- 
- 	/* Find the dynamic section to copy the stack into. */
--- 
-2.39.2
+> 
+> - How the assembler interprets a written number for the corresponding
+>    instruction operand: for example, for which instructions the assemler
+>    shall accept 0xfffffffe and 4294967294 and -2 all to denote the same
+>    value, what value is it (negative or positive) or shall it emit an
+>    overflow error.
 
+In llvm, for inline asm, 0xfffffffe, 4294967294 and -2 have the same
+4-byte bit-wise encoding, so they will be all encoded the same
+0xfffffffe in the actual insn.
+
+The following is an example for x86 target in llvm:
+
+$ cat t.c
+int foo() {
+   int a, b;
+
+   asm volatile("movl $0xfffffffe, %0" : "=r"(a) :);
+   asm volatile("movl $-2, %0" : "=r"(b) :);
+   return a + b;
+}
+$ clang -O2 -c t.c
+$ llvm-objdump -d t.o
+
+t.o:    file format elf64-x86-64
+
+Disassembly of section .text:
+
+0000000000000000 <foo>:
+        0: b9 fe ff ff ff                movl    $0xfffffffe, %ecx 
+# imm = 0xFFFFFFFE
+        5: b8 fe ff ff ff                movl    $0xfffffffe, %eax 
+# imm = 0xFFFFFFFE
+        a: 01 c8                         addl    %ecx, %eax
+        c: c3                            retq
+$
+
+Whether it is 0xfffffffe or -2, the insn encoding is the same
+and disasm prints out 0xfffffffe.
+
+> 
+> Will follow up with a summary that hopefully will serve to clarify this.
+> 
+>>>> Using negative numbers to denote masks is ugly and obfuscating (for
+>>>> non-obvious cases like -1/0xffffffff) so I suggest we introduce a
+>>>> pseudo-op so we can do:
+>>>>      w1 = %mask(0xffffffff)
+>>>
+>>> I changed above
+>>>    w1 = 0xffffffff;
+>>> to
+>>>    w1 = %mask(0xffffffff)
+>>> and hit the following compilation failure.
+>>>
+>>> progs/verifier_masking.c:54:9: error: invalid % escape in inline
+>>> assembly string
+>>>     53 |         asm volatile ("                                 \
+>>>        |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>>     54 |         w1 = %mask(0xffffffff);                         \
+>>>        |                ^
+>>> 1 error generated.
+>>>
+>>> Do you have documentation what is '%mask' thing?
+>>
+>> It doesn't exist.
+>>
+>> I am suggesting to add support for that pseudo-op to the BPF assemblers:
+>> both GAS and the llvm BPF assembler.
+>>
+>>>> allowing the assembler to do the right thing (TM) converting and
+>>>> checking that the mask is valid and not relying on UB.
+>>>> Thoughts?
+>>>>
