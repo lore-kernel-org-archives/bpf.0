@@ -1,17 +1,17 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A950A3D92;
-	Wed, 16 Aug 2023 04:28:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 784FAC2D5;
+	Wed, 16 Aug 2023 04:28:08 +0000 (UTC)
 Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC1E2110;
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB89E2117;
 	Tue, 15 Aug 2023 21:28:05 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.169])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4RQZqy56vLz4f3kF8;
-	Wed, 16 Aug 2023 12:27:58 +0800 (CST)
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4RQZr006gvz4f3lw5;
+	Wed, 16 Aug 2023 12:28:00 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgD3hqlMUNxkOZhKAw--.35043S4;
-	Wed, 16 Aug 2023 12:27:58 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgD3hqlMUNxkOZhKAw--.35043S6;
+	Wed, 16 Aug 2023 12:28:02 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
@@ -32,10 +32,12 @@ Cc: "David S . Miller" <davem@davemloft.net>,
 	Stanislav Fomichev <sdf@google.com>,
 	Jiri Olsa <jolsa@kernel.org>,
 	houtao1@huawei.com
-Subject: [PATCH bpf-next 0/2] Remove unnecessary synchronizations in cpumap
-Date: Wed, 16 Aug 2023 12:59:56 +0800
-Message-Id: <20230816045959.358059-1-houtao@huaweicloud.com>
+Subject: [PATCH bpf-next 2/2] bpf, cpumask: Clean up bpf_cpu_map_entry directly in cpu_map_free
+Date: Wed, 16 Aug 2023 12:59:58 +0800
+Message-Id: <20230816045959.358059-3-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20230816045959.358059-1-houtao@huaweicloud.com>
+References: <20230816045959.358059-1-houtao@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -44,22 +46,23 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgD3hqlMUNxkOZhKAw--.35043S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7Gry7Jry8ZF4UJw48Zw1DKFg_yoW8Jr47pF
-	y3CrySkr1kGrW7G3yfAr47Ar1rtwn5Kw1xJr13K3s5ZFn8urykWr10kFyfGFy5Wr9ak3WD
-	Kr42vws5Kr1UZ37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
-	c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
-	026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF
-	0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
-	vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-	jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-TRANSID:gCh0CgD3hqlMUNxkOZhKAw--.35043S6
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZrWDZry7GryxWry3GF1kGrg_yoW8uF45pF
+	W3G348Gr4xXrsF93yrXw48Ary2qrs2ga45J34Fk34rA3ZrJr9rJFWrKFZ7Gry5ursa9r15
+	uF1jgFWvkay7ArDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
+	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2I
+	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAI
+	w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
+	0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1sa9DUUUUU==
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -69,34 +72,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 
 From: Hou Tao <houtao1@huawei.com>
 
-Hi,
+After synchronous_rcu(), both the dettached XDP program and
+xdp_do_flush() are completed, and the only user of bpf_cpu_map_entry
+will be cpu_map_kthread_run(), so instead of calling
+__cpu_map_entry_replace() to stop kthread and cleanup entry after a RCU
+grace period, do these things directly.
 
-This is the formal patchset to remove unnecessary synchronizations in
-cpu-map after address comments and collect Rvb tags from Toke
-Høiland-Jørgensen (Big thanks to Toke). Patch #1 removes the unnecessary
-rcu_barrier() when freeing bpf_cpu_map_entry and replaces it by
-queue_rcu_work(). Patch #2 removes the unnecessary call_rcu() and
-queue_work() when destroying cpu-map and does the freeing directly.
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
+---
+ kernel/bpf/cpumap.c | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
-Test the patchset by using xdp_redirect_cpu and virtio-net. Both
-xdp-mode and skb-mode have been exercised and no issues were reported.
-As ususal, comments and suggestions are always welcome.
-
-Change Log:
-v1:
-  * address comments from Toke Høiland-Jørgensen
-  * add Rvb tags from Toke Høiland-Jørgensen
-  * update outdated comment in cpu_map_delete_elem()
-
-RFC: https://lore.kernel.org/bpf/20230728023030.1906124-1-houtao@huaweicloud.com
-
-Hou Tao (2):
-  bpf, cpumap: Use queue_rcu_work() to remove unnecessary rcu_barrier()
-  bpf, cpumask: Clean up bpf_cpu_map_entry directly in cpu_map_free
-
- kernel/bpf/cpumap.c | 113 ++++++++++++++------------------------------
- 1 file changed, 35 insertions(+), 78 deletions(-)
-
+diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+index 93fbd3e5079e..e42a1bdb7f53 100644
+--- a/kernel/bpf/cpumap.c
++++ b/kernel/bpf/cpumap.c
+@@ -566,16 +566,15 @@ static void cpu_map_free(struct bpf_map *map)
+ 	/* At this point bpf_prog->aux->refcnt == 0 and this map->refcnt == 0,
+ 	 * so the bpf programs (can be more than one that used this map) were
+ 	 * disconnected from events. Wait for outstanding critical sections in
+-	 * these programs to complete. The rcu critical section only guarantees
+-	 * no further "XDP/bpf-side" reads against bpf_cpu_map->cpu_map.
+-	 * It does __not__ ensure pending flush operations (if any) are
+-	 * complete.
++	 * these programs to complete. synchronize_rcu() below not only
++	 * guarantees no further "XDP/bpf-side" reads against
++	 * bpf_cpu_map->cpu_map, but also ensure pending flush operations
++	 * (if any) are completed.
+ 	 */
+-
+ 	synchronize_rcu();
+ 
+-	/* For cpu_map the remote CPUs can still be using the entries
+-	 * (struct bpf_cpu_map_entry).
++	/* The only possible user of bpf_cpu_map_entry is
++	 * cpu_map_kthread_run().
+ 	 */
+ 	for (i = 0; i < cmap->map.max_entries; i++) {
+ 		struct bpf_cpu_map_entry *rcpu;
+@@ -584,8 +583,8 @@ static void cpu_map_free(struct bpf_map *map)
+ 		if (!rcpu)
+ 			continue;
+ 
+-		/* bq flush and cleanup happens after RCU grace-period */
+-		__cpu_map_entry_replace(cmap, i, NULL); /* call_rcu */
++		/* Stop kthread and cleanup entry directly */
++		__cpu_map_entry_free(&rcpu->free_work.work);
+ 	}
+ 	bpf_map_area_free(cmap->cpu_map);
+ 	bpf_map_area_free(cmap);
 -- 
 2.29.2
 
