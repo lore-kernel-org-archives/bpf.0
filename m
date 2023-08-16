@@ -1,220 +1,375 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6E80C8FF
-	for <bpf@vger.kernel.org>; Wed, 16 Aug 2023 16:24:27 +0000 (UTC)
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02733198C
-	for <bpf@vger.kernel.org>; Wed, 16 Aug 2023 09:24:25 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-58419517920so71980567b3.0
-        for <bpf@vger.kernel.org>; Wed, 16 Aug 2023 09:24:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692203065; x=1692807865;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PnywXpHlI6ay7Ck0Rlvm7S9jZvim3Y/ZQMiOdbgHj3A=;
-        b=mifFKGImVtBOZ29dtIlB+s6qMEvoQu7RqhL9y0tITJm03OcElMUBazinOspBvHup5I
-         Hc8MYi7z7RmndPf2cWWzqN6xNf90EKnAMfJKIPlTTasXTa8RKI9wEmSfqgwyWdHUulBK
-         Dh5uJq70pIUc35u63owMRG64MhHz+wpotmNdID8q6JqUNojyegsOdPpa/8fPLofo5MLK
-         nGeVj6jLm0yvlmiY8cfycsThbkxkiQFP8i8TdJYNvEpsDfPxcTdR1oqxVQiOLAgAD5gy
-         IYDzaXxjUeRQG6PcW7IGMLGOKSopT3gS/4qDviCpMoL+e8iX0vE0gGUEf/axSlDLgnvB
-         3WXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692203065; x=1692807865;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PnywXpHlI6ay7Ck0Rlvm7S9jZvim3Y/ZQMiOdbgHj3A=;
-        b=OUJ730y1dahfraLxwSmEFH0PussqLDEZDUDYySxAmAcsUqiFq+NBVR0IsM7RKF2D+A
-         fTtY6j8v9ag9k7q8jK/eYz/QRsuoQa5jQnn30+jNGY7bZyBQrxry2pA2Ykup/KW7Vtuz
-         vdGxaHrCtfVtfGdFoxeUoZENndFsGLFwxOXaeOLxUVurtjOF35Nt3W7iBOktnh/Q3p21
-         MQpJSuA/A4Anz7Sk4c2vfoyAlrjX3zTnewAGQBoehHHX98UWsrfSYr6rCDqS30mRnS5G
-         6TjZRLdI9xb1Y7awS+FPJzbq9VGAcuuoo7AQ4t9NpMf/rNGUUcdVB0EkdZh+jFq8MujW
-         TOeA==
-X-Gm-Message-State: AOJu0YySUcr2gLdm5Dcysn7/4kLE6eUQ5Z1xo+n5/WmTaZcWAmNfc9ja
-	BArW6bSQ+jeTptVCkZcyAi9rpIvnCdAv+315Whhv/gCcfd27Bw==
-X-Google-Smtp-Source: AGHT+IH2YTE3GDkUJROPdPqZBiQDJXMSOb14qPaRfvWfb99lx/hvZm+aTcvVq3DmjEro/XggnTqt7Tx+8GFX2+40aUk=
-X-Received: by 2002:a67:e3c6:0:b0:430:e0:ac2e with SMTP id k6-20020a67e3c6000000b0043000e0ac2emr2419624vsm.15.1692203044669;
- Wed, 16 Aug 2023 09:24:04 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7298C8FF
+	for <bpf@vger.kernel.org>; Wed, 16 Aug 2023 16:26:10 +0000 (UTC)
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47FF41990;
+	Wed, 16 Aug 2023 09:26:07 -0700 (PDT)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37GGOuHl032633;
+	Wed, 16 Aug 2023 16:25:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=Wij6D2h2w36Wi4sdC7IYHNf84PoVmJCs6l/6oA+6jsU=;
+ b=pC3y8YmZUOgg1ouqbHsg8FR8rUxBTWbj8YL8MCoaFLgeqlGlVPJEjOjWezrR/qvo5TE5
+ V12LEFT8yK0X1h+8q6y7rXxHpWgnZtczILCOV8nfa7/CgSSyrIn0Sf/obuHxpODCOIaJ
+ zLeNyelrDOo8W6m1+9ieGVxwM4q5Y3Ne+Y89935KD59/Lb979Z0pHWW3llZ0Qa+z/NRU
+ 1ZCyn3G7qpf/27CWv2BkrTaRhjz2kt71QoJgd8l+OaE0+AfuDNbuyrlOh2CbEXn2s3zK
+ kKgs7waBTgHvFrwfcbDTestgX8/lxJSxKzmPz+xBmKg+1Xc0xqpB8a1xdq+HgDUoeCuW TA== 
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sh1y5019n-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 16 Aug 2023 16:25:58 +0000
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 37GEdw5Z018920;
+	Wed, 16 Aug 2023 15:49:47 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3seq41netn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 16 Aug 2023 15:49:47 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 37GFnjQX57475502
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 16 Aug 2023 15:49:45 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 874E820043;
+	Wed, 16 Aug 2023 15:49:45 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 685AF20040;
+	Wed, 16 Aug 2023 15:49:45 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Wed, 16 Aug 2023 15:49:45 +0000 (GMT)
+Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 55390)
+	id 2EB49E012C; Wed, 16 Aug 2023 17:49:45 +0200 (CEST)
+From: Sven Schnelle <svens@linux.ibm.com>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: linux-kernel@vger.kernel.org, Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH RESEND v3 1/3] tracing/synthetic: use union instead of casts
+Date: Wed, 16 Aug 2023 17:49:26 +0200
+Message-Id: <20230816154928.4171614-2-svens@linux.ibm.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230816154928.4171614-1-svens@linux.ibm.com>
+References: <20230816154928.4171614-1-svens@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230816095651.10014-1-daniel@iogearbox.net> <CALOAHbDtmTPV6enF1M0RnZr4pPyWkr1bZ7afcFchfNYRGVKu7w@mail.gmail.com>
- <d25d1dc0-d4fc-eb0c-e9cf-ee3d4783e07a@iogearbox.net>
-In-Reply-To: <d25d1dc0-d4fc-eb0c-e9cf-ee3d4783e07a@iogearbox.net>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Thu, 17 Aug 2023 00:23:26 +0800
-Message-ID: <CALOAHbBxBgtLP=4mxJRF3w3XkbZKDRB=1kkQ290Jw6-8SZZSRQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpftool: Implement link show support for tcx
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: martin.lau@linux.dev, bpf@vger.kernel.org, 
-	Quentin Monnet <quentin@isovalent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: MXR9ODk57Y86LoI3tMebgPMoBz1-IISF
+X-Proofpoint-ORIG-GUID: MXR9ODk57Y86LoI3tMebgPMoBz1-IISF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-16_16,2023-08-15_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ mlxlogscore=999 lowpriorityscore=0 adultscore=0 malwarescore=0 mlxscore=0
+ impostorscore=0 priorityscore=1501 spamscore=0 phishscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
+ definitions=main-2308160140
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,
+	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Wed, Aug 16, 2023 at 11:11=E2=80=AFPM Daniel Borkmann <daniel@iogearbox.=
-net> wrote:
->
-> On 8/16/23 4:23 PM, Yafang Shao wrote:
-> > On Wed, Aug 16, 2023 at 5:56=E2=80=AFPM Daniel Borkmann <daniel@iogearb=
-ox.net> wrote:
-> >>
-> >> Add support to dump tcx link information to bpftool. This adds a
-> >> common helper show_link_ifindex_{plain,json}() which can be reused
-> >> also for other link types. The plain text and json device output is
-> >> the same format as in bpftool net dump.
-> >>
-> >> Below shows an example link dump output along with a cgroup link
-> >> for comparison:
-> >>
-> >>    # bpftool link
-> >>    [...]
-> >>    10: cgroup  prog 1977
-> >>          cgroup_id 1  attach_type cgroup_inet6_post_bind
-> >>    [...]
-> >>    13: tcx  prog 2053
-> >>          ifindex enp5s0(3)  attach_type tcx_ingress
-> >>    14: tcx  prog 2080
-> >>          ifindex enp5s0(3)  attach_type tcx_egress
-> >>    [...]
-> >>
-> >> Equivalent json output:
-> >>
-> >>    # bpftool link --json
-> >>    [...]
-> >>    {
-> >>      "id": 10,
-> >>      "type": "cgroup",
-> >>      "prog_id": 1977,
-> >>      "cgroup_id": 1,
-> >>      "attach_type": "cgroup_inet6_post_bind"
-> >>    },
-> >>    [...]
-> >>    {
-> >>      "id": 13,
-> >>      "type": "tcx",
-> >>      "prog_id": 2053,
-> >>      "devname": "enp5s0",
-> >>      "ifindex": 3,
-> >>      "attach_type": "tcx_ingress"
-> >>    },
-> >>    {
-> >>      "id": 14,
-> >>      "type": "tcx",
-> >>      "prog_id": 2080,
-> >>      "devname": "enp5s0",
-> >>      "ifindex": 3,
-> >>      "attach_type": "tcx_egress"
-> >>    }
-> >>    [...]
-> >>
-> >> Suggested-by: Yafang Shao <laoar.shao@gmail.com>
-> >> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> >> Reviewed-by: Quentin Monnet <quentin@isovalent.com>
-> >
-> > Thanks for your work. This patch looks good to me.
-> > A minor nit below.
-> >
-> >> ---
-> >>   tools/bpf/bpftool/link.c | 37 +++++++++++++++++++++++++++++++++++++
-> >>   1 file changed, 37 insertions(+)
-> >>
-> >> diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
-> >> index 65a168df63bc..a3774594f154 100644
-> >> --- a/tools/bpf/bpftool/link.c
-> >> +++ b/tools/bpf/bpftool/link.c
-> >> @@ -150,6 +150,18 @@ static void show_link_attach_type_json(__u32 atta=
-ch_type, json_writer_t *wtr)
-> >>                  jsonw_uint_field(wtr, "attach_type", attach_type);
-> >>   }
-> >>
-> >> +static void show_link_ifindex_json(__u32 ifindex, json_writer_t *wtr)
-> >> +{
-> >> +       char devname[IF_NAMESIZE] =3D "(unknown)";
-> >> +
-> >> +       if (ifindex)
-> >> +               if_indextoname(ifindex, devname);
-> >> +       else
-> >> +               snprintf(devname, sizeof(devname), "(detached)");
-> >> +       jsonw_string_field(wtr, "devname", devname);
-> >> +       jsonw_uint_field(wtr, "ifindex", ifindex);
-> >> +}
-> >> +
-> >>   static bool is_iter_map_target(const char *target_name)
-> >>   {
-> >>          return strcmp(target_name, "bpf_map_elem") =3D=3D 0 ||
-> >> @@ -433,6 +445,10 @@ static int show_link_close_json(int fd, struct bp=
-f_link_info *info)
-> >>          case BPF_LINK_TYPE_NETFILTER:
-> >>                  netfilter_dump_json(info, json_wtr);
-> >>                  break;
-> >> +       case BPF_LINK_TYPE_TCX:
-> >> +               show_link_ifindex_json(info->tcx.ifindex, json_wtr);
-> >> +               show_link_attach_type_json(info->tcx.attach_type, json=
-_wtr);
-> >> +               break;
-> >>          case BPF_LINK_TYPE_STRUCT_OPS:
-> >>                  jsonw_uint_field(json_wtr, "map_id",
-> >>                                   info->struct_ops.map_id);
-> >> @@ -509,6 +525,22 @@ static void show_link_attach_type_plain(__u32 att=
-ach_type)
-> >>                  printf("attach_type %u  ", attach_type);
-> >>   }
-> >>
-> >> +static void show_link_ifindex_plain(__u32 ifindex)
-> >> +{
-> >> +       char devname[IF_NAMESIZE * 2] =3D "(unknown)";
-> >> +       char tmpname[IF_NAMESIZE];
-> >> +       char *ret =3D NULL;
-> >> +
-> >> +       if (ifindex)
-> >> +               ret =3D if_indextoname(ifindex, tmpname);
-> >> +       else
-> >> +               snprintf(devname, sizeof(devname), "(detached)");
-> >> +       if (ret)
-> >> +               snprintf(devname, sizeof(devname), "%s(%d)",
-> >> +                        tmpname, ifindex);
-> >> +       printf("ifindex %s  ", devname);
-> >> +}
-> >
-> > This function looks a little strange to me. What about the change below=
-?
-> >
-> > static void show_link_ifindex_plain(__u32 ifindex)
-> > {
-> >          char devname[IF_NAMESIZE] =3D "(unknown)";
-> >
-> >          if (ifindex) {
-> >                  if_indextoname(ifindex, devname);
-> >                  printf("ifindex %s(%d)  ", devname, ifindex);
-> >          } else {
-> >                  printf("ifindex (detached)  ");
-> >          }
-> > }
->
-> Arguably, it's a corner case (and should never happen), but for the case
-> where the if_indextoname call fails, I only intended to print `ifindex (u=
-nknown)`
-> for the plain mode hence the check for if_indextoname success so that thi=
-s
-> looks similar as `ifindex (detached)` situation.
->
+The current code uses a lot of casts to access the fields
+member in struct synth_trace_events with different sizes.
+This makes the code hard to read, and had already introduced
+an endianness bug. Use a union and struct instead.
 
-Fair enough.
+Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+---
+ include/linux/trace_events.h      | 11 ++++
+ kernel/trace/trace.h              |  8 +++
+ kernel/trace/trace_events_synth.c | 87 +++++++++++++------------------
+ 3 files changed, 56 insertions(+), 50 deletions(-)
 
-Then fail free to add :
-Acked-by: Yafang Shao <laoar.shao@gmail.com>
+diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
+index 3930e676436c..1e8bbdb8da90 100644
+--- a/include/linux/trace_events.h
++++ b/include/linux/trace_events.h
+@@ -59,6 +59,17 @@ int trace_raw_output_prep(struct trace_iterator *iter,
+ extern __printf(2, 3)
+ void trace_event_printf(struct trace_iterator *iter, const char *fmt, ...);
+ 
++/* Used to find the offset and length of dynamic fields in trace events */
++struct trace_dynamic_info {
++#ifdef CONFIG_CPU_BIG_ENDIAN
++	u16	offset;
++	u16	len;
++#else
++	u16	len;
++	u16	offset;
++#endif
++};
++
+ /*
+  * The trace entry - the most basic unit of tracing. This is what
+  * is printed in the end as a single line in the trace output, such as:
+diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
+index e1edc2197fc8..95956f75bea5 100644
+--- a/kernel/trace/trace.h
++++ b/kernel/trace/trace.h
+@@ -1295,6 +1295,14 @@ static inline void trace_branch_disable(void)
+ /* set ring buffers to default size if not already done so */
+ int tracing_update_buffers(void);
+ 
++union trace_synth_field {
++	u8				as_u8;
++	u16				as_u16;
++	u32				as_u32;
++	u64				as_u64;
++	struct trace_dynamic_info	as_dynamic;
++};
++
+ struct ftrace_event_field {
+ 	struct list_head	link;
+ 	const char		*name;
+diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
+index dd398afc8e25..7fff8235075f 100644
+--- a/kernel/trace/trace_events_synth.c
++++ b/kernel/trace/trace_events_synth.c
+@@ -127,7 +127,7 @@ static bool synth_event_match(const char *system, const char *event,
+ 
+ struct synth_trace_event {
+ 	struct trace_entry	ent;
+-	u64			fields[];
++	union trace_synth_field	fields[];
+ };
+ 
+ static int synth_event_define_fields(struct trace_event_call *call)
+@@ -321,19 +321,19 @@ static const char *synth_field_fmt(char *type)
+ 
+ static void print_synth_event_num_val(struct trace_seq *s,
+ 				      char *print_fmt, char *name,
+-				      int size, u64 val, char *space)
++				      int size, union trace_synth_field *val, char *space)
+ {
+ 	switch (size) {
+ 	case 1:
+-		trace_seq_printf(s, print_fmt, name, (u8)val, space);
++		trace_seq_printf(s, print_fmt, name, val->as_u8, space);
+ 		break;
+ 
+ 	case 2:
+-		trace_seq_printf(s, print_fmt, name, (u16)val, space);
++		trace_seq_printf(s, print_fmt, name, val->as_u16, space);
+ 		break;
+ 
+ 	case 4:
+-		trace_seq_printf(s, print_fmt, name, (u32)val, space);
++		trace_seq_printf(s, print_fmt, name, val->as_u32, space);
+ 		break;
+ 
+ 	default:
+@@ -374,36 +374,26 @@ static enum print_line_t print_synth_event(struct trace_iterator *iter,
+ 		/* parameter values */
+ 		if (se->fields[i]->is_string) {
+ 			if (se->fields[i]->is_dynamic) {
+-				u32 offset, data_offset;
+-				char *str_field;
+-
+-				offset = (u32)entry->fields[n_u64];
+-				data_offset = offset & 0xffff;
+-
+-				str_field = (char *)entry + data_offset;
++				union trace_synth_field *data = &entry->fields[n_u64];
+ 
+ 				trace_seq_printf(s, print_fmt, se->fields[i]->name,
+ 						 STR_VAR_LEN_MAX,
+-						 str_field,
++						 (char *)entry + data->as_dynamic.offset,
+ 						 i == se->n_fields - 1 ? "" : " ");
+ 				n_u64++;
+ 			} else {
+ 				trace_seq_printf(s, print_fmt, se->fields[i]->name,
+ 						 STR_VAR_LEN_MAX,
+-						 (char *)&entry->fields[n_u64],
++						 (char *)&entry->fields[n_u64].as_u64,
+ 						 i == se->n_fields - 1 ? "" : " ");
+ 				n_u64 += STR_VAR_LEN_MAX / sizeof(u64);
+ 			}
+ 		} else if (se->fields[i]->is_stack) {
+-			u32 offset, data_offset, len;
+ 			unsigned long *p, *end;
++			union trace_synth_field *data = &entry->fields[n_u64];
+ 
+-			offset = (u32)entry->fields[n_u64];
+-			data_offset = offset & 0xffff;
+-			len = offset >> 16;
+-
+-			p = (void *)entry + data_offset;
+-			end = (void *)p + len - (sizeof(long) - 1);
++			p = (void *)entry + data->as_dynamic.offset;
++			end = (void *)p + data->as_dynamic.len - (sizeof(long) - 1);
+ 
+ 			trace_seq_printf(s, "%s=STACK:\n", se->fields[i]->name);
+ 
+@@ -419,13 +409,13 @@ static enum print_line_t print_synth_event(struct trace_iterator *iter,
+ 			print_synth_event_num_val(s, print_fmt,
+ 						  se->fields[i]->name,
+ 						  se->fields[i]->size,
+-						  entry->fields[n_u64],
++						  &entry->fields[n_u64],
+ 						  space);
+ 
+ 			if (strcmp(se->fields[i]->type, "gfp_t") == 0) {
+ 				trace_seq_puts(s, " (");
+ 				trace_print_flags_seq(s, "|",
+-						      entry->fields[n_u64],
++						      entry->fields[n_u64].as_u64,
+ 						      __flags);
+ 				trace_seq_putc(s, ')');
+ 			}
+@@ -454,21 +444,16 @@ static unsigned int trace_string(struct synth_trace_event *entry,
+ 	int ret;
+ 
+ 	if (is_dynamic) {
+-		u32 data_offset;
++		union trace_synth_field *data = &entry->fields[*n_u64];
+ 
+-		data_offset = struct_size(entry, fields, event->n_u64);
+-		data_offset += data_size;
+-
+-		len = fetch_store_strlen((unsigned long)str_val);
+-
+-		data_offset |= len << 16;
+-		*(u32 *)&entry->fields[*n_u64] = data_offset;
++		data->as_dynamic.offset = struct_size(entry, fields, event->n_u64) + data_size;
++		data->as_dynamic.len = fetch_store_strlen((unsigned long)str_val);
+ 
+ 		ret = fetch_store_string((unsigned long)str_val, &entry->fields[*n_u64], entry);
+ 
+ 		(*n_u64)++;
+ 	} else {
+-		str_field = (char *)&entry->fields[*n_u64];
++		str_field = (char *)&entry->fields[*n_u64].as_u64;
+ 
+ #ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+ 		if ((unsigned long)str_val < TASK_SIZE)
+@@ -492,6 +477,7 @@ static unsigned int trace_stack(struct synth_trace_event *entry,
+ 				 unsigned int data_size,
+ 				 unsigned int *n_u64)
+ {
++	union trace_synth_field *data = &entry->fields[*n_u64];
+ 	unsigned int len;
+ 	u32 data_offset;
+ 	void *data_loc;
+@@ -515,8 +501,9 @@ static unsigned int trace_stack(struct synth_trace_event *entry,
+ 	memcpy(data_loc, stack, len);
+ 
+ 	/* Fill in the field that holds the offset/len combo */
+-	data_offset |= len << 16;
+-	*(u32 *)&entry->fields[*n_u64] = data_offset;
++
++	data->as_dynamic.offset = data_offset;
++	data->as_dynamic.len = len;
+ 
+ 	(*n_u64)++;
+ 
+@@ -592,19 +579,19 @@ static notrace void trace_event_raw_event_synth(void *__data,
+ 
+ 			switch (field->size) {
+ 			case 1:
+-				*(u8 *)&entry->fields[n_u64] = (u8)val;
++				entry->fields[n_u64].as_u8 = (u8)val;
+ 				break;
+ 
+ 			case 2:
+-				*(u16 *)&entry->fields[n_u64] = (u16)val;
++				entry->fields[n_u64].as_u16 = (u16)val;
+ 				break;
+ 
+ 			case 4:
+-				*(u32 *)&entry->fields[n_u64] = (u32)val;
++				entry->fields[n_u64].as_u32 = (u32)val;
+ 				break;
+ 
+ 			default:
+-				entry->fields[n_u64] = val;
++				entry->fields[n_u64].as_u64 = val;
+ 				break;
+ 			}
+ 			n_u64++;
+@@ -1791,19 +1778,19 @@ int synth_event_trace(struct trace_event_file *file, unsigned int n_vals, ...)
+ 
+ 			switch (field->size) {
+ 			case 1:
+-				*(u8 *)&state.entry->fields[n_u64] = (u8)val;
++				state.entry->fields[n_u64].as_u8 = (u8)val;
+ 				break;
+ 
+ 			case 2:
+-				*(u16 *)&state.entry->fields[n_u64] = (u16)val;
++				state.entry->fields[n_u64].as_u16 = (u16)val;
+ 				break;
+ 
+ 			case 4:
+-				*(u32 *)&state.entry->fields[n_u64] = (u32)val;
++				state.entry->fields[n_u64].as_u32 = (u32)val;
+ 				break;
+ 
+ 			default:
+-				state.entry->fields[n_u64] = val;
++				state.entry->fields[n_u64].as_u64 = val;
+ 				break;
+ 			}
+ 			n_u64++;
+@@ -1884,19 +1871,19 @@ int synth_event_trace_array(struct trace_event_file *file, u64 *vals,
+ 
+ 			switch (field->size) {
+ 			case 1:
+-				*(u8 *)&state.entry->fields[n_u64] = (u8)val;
++				state.entry->fields[n_u64].as_u8 = (u8)val;
+ 				break;
+ 
+ 			case 2:
+-				*(u16 *)&state.entry->fields[n_u64] = (u16)val;
++				state.entry->fields[n_u64].as_u16 = (u16)val;
+ 				break;
+ 
+ 			case 4:
+-				*(u32 *)&state.entry->fields[n_u64] = (u32)val;
++				state.entry->fields[n_u64].as_u32 = (u32)val;
+ 				break;
+ 
+ 			default:
+-				state.entry->fields[n_u64] = val;
++				state.entry->fields[n_u64].as_u64 = val;
+ 				break;
+ 			}
+ 			n_u64++;
+@@ -2031,19 +2018,19 @@ static int __synth_event_add_val(const char *field_name, u64 val,
+ 	} else {
+ 		switch (field->size) {
+ 		case 1:
+-			*(u8 *)&trace_state->entry->fields[field->offset] = (u8)val;
++			trace_state->entry->fields[field->offset].as_u8 = (u8)val;
+ 			break;
+ 
+ 		case 2:
+-			*(u16 *)&trace_state->entry->fields[field->offset] = (u16)val;
++			trace_state->entry->fields[field->offset].as_u16 = (u16)val;
+ 			break;
+ 
+ 		case 4:
+-			*(u32 *)&trace_state->entry->fields[field->offset] = (u32)val;
++			trace_state->entry->fields[field->offset].as_u32 = (u32)val;
+ 			break;
+ 
+ 		default:
+-			trace_state->entry->fields[field->offset] = val;
++			trace_state->entry->fields[field->offset].as_u64 = val;
+ 			break;
+ 		}
+ 	}
+-- 
+2.39.2
 
---=20
-Regards
-Yafang
