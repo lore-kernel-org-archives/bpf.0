@@ -1,34 +1,34 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E99115496;
-	Thu, 17 Aug 2023 14:56:39 +0000 (UTC)
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8735D3A97;
-	Thu, 17 Aug 2023 07:56:15 -0700 (PDT)
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-4fe28f92d8eso12187734e87.1;
-        Thu, 17 Aug 2023 07:56:15 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42D69156FE;
+	Thu, 17 Aug 2023 14:56:45 +0000 (UTC)
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D89E2711;
+	Thu, 17 Aug 2023 07:56:27 -0700 (PDT)
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-4ff9bbc83a5so1172221e87.1;
+        Thu, 17 Aug 2023 07:56:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692284173; x=1692888973;
+        d=1e100.net; s=20221208; t=1692284185; x=1692888985;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BZB7zodArDhWbuVqBQO5jZlDc1cl4dj72Y3+CgGSOBM=;
-        b=B3TCKNGJ/H8/9j1l0709nsRCR57AsXAfsqQvDVHfmHrIq7Gl04KZnOl0XHveK/q3x9
-         XNZzWUNHnkWCC4ndHBMW8J5hU3Vi0+U2G24OjFdUPj/VfGIJJwIW33q8nNBTHX43SlJS
-         DnACohA2NKT/TeJNavr4XyoAOWU/loMps/1EZbbkaddeVyBve1qKjpb3oibq0W7dfS6b
-         cFLDIt4Ilqxmrew0LEO4BWINN7kZfoVXN6u6DSn7DrK/+3Oq1bdj4sEg1QT9X+eXt9OK
-         7yagysII9bUReSqzIFReAh+rJWKSwP3pCISvSQ176+rhQarGUCppPMgKEfHik26g3Z3O
-         cMWQ==
-X-Gm-Message-State: AOJu0Yw1DCwFIb2nO4eGf5KXMg0ECWrhWC5ouu4eucCIoHAuMrhHTWo+
-	q2YuBNTQhSIluNqpyQZKWN4=
-X-Google-Smtp-Source: AGHT+IHkFtWdt13rVSZyph83D2DvyT4aJpO+ylqoJpkWBio3b0LJQDIihgMYn0enN+UH1BA82JADqg==
-X-Received: by 2002:a05:6512:3b8d:b0:4ff:8c9e:eb0d with SMTP id g13-20020a0565123b8d00b004ff8c9eeb0dmr5941971lfv.0.1692284173282;
-        Thu, 17 Aug 2023 07:56:13 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-119.fbsv.net. [2a03:2880:31ff:77::face:b00c])
-        by smtp.gmail.com with ESMTPSA id t8-20020a056402020800b005236b47116asm9911547edv.70.2023.08.17.07.56.12
+        bh=1zsiVk5fOq/xRYSBgy8waxMhVPUrHepcvkTYmhSMbvQ=;
+        b=HxHlsb/k1TJ1T2giGWOMMKVLGCrvhkBFVagfZOq5mMo3XYgpzma5On/iDIqgO9VoaJ
+         kHTcFPP1Lyjz6x6HGqZTo8FBXqlHu43pKClyOmmxSrNEMqWUn7wCbGbbAjIE2ms35+sy
+         KCwlkemrgPvyz3AVqunVKhWr3LFdTLcQdwLIwykA6MzlSP1tvFvtrN3cT9MEHkcaDutb
+         91TKxzW4ZboeptQ+Y1lhjiaGggUUioEnsdqa+vFyA3HVZ0Uo7W6qe5QJy8H+NcoPQlo2
+         Y+4UgcmTx3ETbWF+GZAkFE5C3O6vsFDdzZ7AWAAKASadwrrCIaVTeKBrqO2uDoMdJXC0
+         DeEQ==
+X-Gm-Message-State: AOJu0YwHi5vug7dvfQjjJpVeyrYJBSaEJVAsMCLS/MjHzAXsRsB90OAN
+	+2Qr/6+/VgFrKYqED6xuHx2QWuZJuzc=
+X-Google-Smtp-Source: AGHT+IHXQDkzLphQZrs8p1+383d4Zsu9MU09SBJmIQm0eNZXILoDP/CuV7WCev740FE2T6uKjVLeoA==
+X-Received: by 2002:ac2:5938:0:b0:4fe:c4e:709f with SMTP id v24-20020ac25938000000b004fe0c4e709fmr3647259lfi.20.1692284185184;
+        Thu, 17 Aug 2023 07:56:25 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-006.fbsv.net. [2a03:2880:31ff:6::face:b00c])
+        by smtp.gmail.com with ESMTPSA id ck9-20020a170906c44900b00993664a9987sm10251897ejb.103.2023.08.17.07.56.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Aug 2023 07:56:12 -0700 (PDT)
+        Thu, 17 Aug 2023 07:56:24 -0700 (PDT)
 From: Breno Leitao <leitao@debian.org>
 To: sdf@google.com,
 	axboe@kernel.dk,
@@ -42,9 +42,9 @@ Cc: bpf@vger.kernel.org,
 	kuba@kernel.org,
 	pabeni@redhat.com,
 	krisman@suse.de
-Subject: [PATCH v3 4/9] io_uring/cmd: Pass compat mode in issue_flags
-Date: Thu, 17 Aug 2023 07:55:49 -0700
-Message-Id: <20230817145554.892543-5-leitao@debian.org>
+Subject: [PATCH v3 7/9] io_uring/cmd: Introduce SOCKET_URING_OP_SETSOCKOPT
+Date: Thu, 17 Aug 2023 07:55:52 -0700
+Message-Id: <20230817145554.892543-8-leitao@debian.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230817145554.892543-1-leitao@debian.org>
 References: <20230817145554.892543-1-leitao@debian.org>
@@ -62,41 +62,67 @@ X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Create a new flag to track if the operation is running compat mode.
-This basically check the context->compat and pass it to the issue_flags,
-so, it could be queried later in the callbacks.
+Add initial support for SOCKET_URING_OP_SETSOCKOPT. This new command is
+similar to setsockopt. This implementation leverages the function
+do_sock_setsockopt(), which is shared with the setsockopt() system call
+path.
+
+Important to say that userspace needs to keep the pointer's memory alive
+until the operation is completed. I.e, the memory could not be
+deallocated before the CQE is returned to userspace.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- include/linux/io_uring.h | 1 +
- io_uring/uring_cmd.c     | 2 ++
- 2 files changed, 3 insertions(+)
+ include/uapi/linux/io_uring.h |  1 +
+ io_uring/uring_cmd.c          | 16 ++++++++++++++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
-index 106cdc55ff3b..bc53b35966ed 100644
---- a/include/linux/io_uring.h
-+++ b/include/linux/io_uring.h
-@@ -20,6 +20,7 @@ enum io_uring_cmd_flags {
- 	IO_URING_F_SQE128		= (1 << 8),
- 	IO_URING_F_CQE32		= (1 << 9),
- 	IO_URING_F_IOPOLL		= (1 << 10),
-+	IO_URING_F_COMPAT		= (1 << 11),
+diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+index 8152151080db..3fe82df06abf 100644
+--- a/include/uapi/linux/io_uring.h
++++ b/include/uapi/linux/io_uring.h
+@@ -736,6 +736,7 @@ enum {
+ 	SOCKET_URING_OP_SIOCINQ		= 0,
+ 	SOCKET_URING_OP_SIOCOUTQ,
+ 	SOCKET_URING_OP_GETSOCKOPT,
++	SOCKET_URING_OP_SETSOCKOPT,
  };
  
- struct io_uring_cmd {
+ #ifdef __cplusplus
 diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-index 8e7a03c1b20e..5f32083bd0a5 100644
+index 7b768f1bf4df..a567dd32df00 100644
 --- a/io_uring/uring_cmd.c
 +++ b/io_uring/uring_cmd.c
-@@ -129,6 +129,8 @@ int io_uring_cmd(struct io_kiocb *req, unsigned int issue_flags)
- 		issue_flags |= IO_URING_F_SQE128;
- 	if (ctx->flags & IORING_SETUP_CQE32)
- 		issue_flags |= IO_URING_F_CQE32;
-+	if (ctx->compat)
-+		issue_flags |= IO_URING_F_COMPAT;
- 	if (ctx->flags & IORING_SETUP_IOPOLL) {
- 		if (!file->f_op->uring_cmd_iopoll)
- 			return -EOPNOTSUPP;
+@@ -197,6 +197,20 @@ static inline int io_uring_cmd_getsockopt(struct socket *sock,
+ 	return -EOPNOTSUPP;
+ }
+ 
++static inline int io_uring_cmd_setsockopt(struct socket *sock,
++					  struct io_uring_cmd *cmd,
++					  unsigned int issue_flags)
++{
++	void __user *optval = u64_to_user_ptr(READ_ONCE(cmd->sqe->optval));
++	bool compat = !!(issue_flags & IO_URING_F_COMPAT);
++	int optname = READ_ONCE(cmd->sqe->optname);
++	sockptr_t optval_s = USER_SOCKPTR(optval);
++	int optlen = READ_ONCE(cmd->sqe->optlen);
++	int level = READ_ONCE(cmd->sqe->level);
++
++	return do_sock_setsockopt(sock, compat, level, optname, optval_s, optlen);
++}
++
+ #if defined(CONFIG_NET)
+ int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
+ {
+@@ -221,6 +235,8 @@ int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
+ 		return arg;
+ 	case SOCKET_URING_OP_GETSOCKOPT:
+ 		return io_uring_cmd_getsockopt(sock, cmd, issue_flags);
++	case SOCKET_URING_OP_SETSOCKOPT:
++		return io_uring_cmd_setsockopt(sock, cmd, issue_flags);
+ 	default:
+ 		return -EOPNOTSUPP;
+ 	}
 -- 
 2.34.1
 
