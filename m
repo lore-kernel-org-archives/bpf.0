@@ -1,46 +1,46 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0917CED6
-	for <bpf@vger.kernel.org>; Sat, 19 Aug 2023 03:01:54 +0000 (UTC)
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184063C34
-	for <bpf@vger.kernel.org>; Fri, 18 Aug 2023 20:01:51 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-5862a6ae535so16972827b3.0
-        for <bpf@vger.kernel.org>; Fri, 18 Aug 2023 20:01:51 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0CCB1368
+	for <bpf@vger.kernel.org>; Sat, 19 Aug 2023 03:01:55 +0000 (UTC)
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C7E4224
+	for <bpf@vger.kernel.org>; Fri, 18 Aug 2023 20:01:53 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-d72fca0043aso1514137276.1
+        for <bpf@vger.kernel.org>; Fri, 18 Aug 2023 20:01:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692414110; x=1693018910;
+        d=gmail.com; s=20221208; t=1692414112; x=1693018912;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hMESTIaOOhtXyQmaR7/FQPoLIoycmuOBN1bLlwXabHE=;
-        b=gWvCUCN70wIkpOuc9KspX7fvvmVJKDRYrTkDr9aa/TXscN8c9D/wNunKrTiFEmNDRC
-         qscx+q2UWH58fv839nrRXvfRCaeQStzLLyjIKN9rXSUjZ1gCNUjztNEQQ5C3MgN/MCKH
-         jHiHKzzAoIt9zhZ7uZ1ybazJUGXkYXKQa9ybCJz1VwgF0pSqFTE3UhUd+wOiKBm2ZecZ
-         +ny84b6NVRSZk/6VBVxbDP+H0L6okJ52N65lNztjO7uz5AMJ3oRfyJfxo6ygrDUDE3ki
-         KIZsHlRedqH7QJ34o+SsyySFmozUIi34GxHHIx8Q43pmp0AmBPjodc08YCZT22beonh/
-         suqQ==
+        bh=5pDKeioD9VkAqH4669Dt/WS61Ku2CiWURjTuSdp81L0=;
+        b=ZmAPOmoKUjaA4V/nSoGU6l2nXgpGjZYQM9od6NA6n5outo7FFVCmSQ33kX5r2KmFqk
+         9DpHuANJD5E3XdF7fKDkXDHnMhcogAb0sz2iHaySqKodtAI+R6Ae79afNaxHXVUuLCjl
+         PYMR10q5ZGwbczbjU3hJJMG7zlnMXUx1aE/S3NLNLcLMQouxpycJ45d2aVvEz+a3SUWQ
+         02A+h5ojCKZGTxyUX69GLzjs+a1h/KtmxAXxuN8ujcUt/O0wEqsAceN/lbT5jeZGsWIW
+         Qw2mhGpSVN69dAkT4kZIzEwlNRbNTdvaHEfFCqD51b1c36Xn4hTdD0sXRWvQ/tGZhr/5
+         SPsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692414110; x=1693018910;
+        d=1e100.net; s=20221208; t=1692414112; x=1693018912;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hMESTIaOOhtXyQmaR7/FQPoLIoycmuOBN1bLlwXabHE=;
-        b=cAatNliZqfpzDx15hN9BuWJehXhAiUBajx+QDFHYTPH40Lf0bnPtwL6rxa8m3CsOhB
-         nkztNd7uvfJdtyFN+AW4Pslv6Odnm8RHk+0FPyaHE50TrTlQ1NSxAmTAX6OjCCqr91+s
-         wBGbmmCQuUh1pc1gbTVWJ1HNTEa6h+y6SY2bKzezkbTtdbIfwSmwEhaOqRKRRJv8xkqi
-         xGW6zc9RNfzBh+RwIn5S5FryXIy2fpbe6lUWLz5SJxyipG62oxas3FomIISRHV4x8HSk
-         kZErGaDOIe95j1ehF5SeKrjipTHWLf8lG3XFrRDaoE+mv0wTFY9V5w5UlaJFvIof5I1t
-         Pf6A==
-X-Gm-Message-State: AOJu0Yxxbf2Su9XAZhxYVYUpvQMV9Y3w08EjKhu/gwOMe2kOdZcwqWDG
-	VnSDhJf3doGLov+OHblfdI7C7PEvGcpHRQ==
-X-Google-Smtp-Source: AGHT+IFUmwNVFDvaHFG5GnHAZM7CyiD8R95FR2PbaJtiXiCh6Hcmum+dcsIpC/YBKmIPjDr6Q+ua5Q==
-X-Received: by 2002:a81:7b89:0:b0:586:93d5:bbf9 with SMTP id w131-20020a817b89000000b0058693d5bbf9mr937315ywc.48.1692414109943;
-        Fri, 18 Aug 2023 20:01:49 -0700 (PDT)
+        bh=5pDKeioD9VkAqH4669Dt/WS61Ku2CiWURjTuSdp81L0=;
+        b=Gshg0g7ly9fPWMkUMx7zxgSpAUVRhH+dDjJxrNIcy/tGEottKDJ0ehYmohZm540WBJ
+         gG1EcB4Xnp14aeNv8JrCLbLNGkT0tCI9DJDLNpjngmkbJtt3lmuoIakJYvGRau2BrZNo
+         5ERN2J4OdUg6c0sMQhDQaOwLWeZdWERYnIaFYHBc+U5F6oqKbF9t1EP7Q/NlmSlE4u1a
+         Crr0Ky35PJ2I5en6k6egDs0TmKd06OD607OOydd8aSb0VmYLAg4DHc0SHMilnYcTTYAV
+         buMn4UOoLQ4DpvFAqQntl07ruvKBHNMAUNzok98HfQX6zvBefVWsfzkmXCvwE9le03Gr
+         M+vg==
+X-Gm-Message-State: AOJu0YzWjnzvT4pPI4f/BY6FrdGIzbyjhP1pX2fm0o7sGCstDPO3jMy4
+	HnX0gyWg66ZZRVmYVoxuqM9q/eJY+ohIaA==
+X-Google-Smtp-Source: AGHT+IG5reTqG8Yvq4CMQgUdziEFDLVEbh1UdwfiU1QQ/mDNeCIBW3ysY/4DCD+MVXyZwQKOd4xmTw==
+X-Received: by 2002:a0d:dd8d:0:b0:589:fb3b:9e67 with SMTP id g135-20020a0ddd8d000000b00589fb3b9e67mr1073351ywe.5.1692414112405;
+        Fri, 18 Aug 2023 20:01:52 -0700 (PDT)
 Received: from kickker.attlocal.net ([2600:1700:6cf8:1240:a059:9262:e315:4c20])
-        by smtp.gmail.com with ESMTPSA id o199-20020a0dccd0000000b005704c4d3579sm903897ywd.40.2023.08.18.20.01.48
+        by smtp.gmail.com with ESMTPSA id o199-20020a0dccd0000000b005704c4d3579sm903897ywd.40.2023.08.18.20.01.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Aug 2023 20:01:49 -0700 (PDT)
+        Fri, 18 Aug 2023 20:01:52 -0700 (PDT)
 From: thinker.li@gmail.com
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -53,9 +53,9 @@ To: bpf@vger.kernel.org,
 Cc: sinquersw@gmail.com,
 	kuifeng@meta.com,
 	Kui-Feng Lee <thinker.li@gmail.com>
-Subject: [RFC bpf-next v4 3/6] Add PTR_TO_AUX
-Date: Fri, 18 Aug 2023 20:01:40 -0700
-Message-Id: <20230819030143.419729-4-thinker.li@gmail.com>
+Subject: [RFC bpf-next v4 5/6] bpf: Add a new dynptr type for CGRUP_SOCKOPT.
+Date: Fri, 18 Aug 2023 20:01:42 -0700
+Message-Id: <20230819030143.419729-6-thinker.li@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230819030143.419729-1-thinker.li@gmail.com>
 References: <20230819030143.419729-1-thinker.li@gmail.com>
@@ -75,573 +75,431 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 
 From: Kui-Feng Lee <thinker.li@gmail.com>
 
+The new dynptr type (BPF_DYNPTR_TYPE_CGROUP_SOCKOPT) will be used by BPF
+programs to create a buffer that can be installed on ctx to replace
+exisiting optval or user_optval.
+
+Installation is only allowed if ctx->flags &
+BPF_SOCKOPT_FLAG_OPTVAL_REPLACE is true. It is enabled only for sleepable
+programs on the cgroup/setsockopt hook.  BPF programs can install a new
+buffer holding by a dynptr to increase the size of optval passed to
+setsockopt().
+
+Installation is not enabled for cgroup/getsockopt since you can not
+increased a buffer created, by user program, to return data from
+getsockopt().
+
+Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
 ---
- include/linux/bpf.h          |   2 +
- include/linux/bpf_verifier.h |   6 +-
- kernel/bpf/verifier.c        | 195 ++++++++++++++++++++++-------------
- 3 files changed, 127 insertions(+), 76 deletions(-)
+ include/linux/bpf.h    |   7 ++-
+ include/linux/filter.h |   4 ++
+ kernel/bpf/btf.c       |   3 +
+ kernel/bpf/cgroup.c    |   5 +-
+ kernel/bpf/helpers.c   | 140 +++++++++++++++++++++++++++++++++++++++++
+ kernel/bpf/verifier.c  |  38 ++++++++++-
+ 6 files changed, 193 insertions(+), 4 deletions(-)
 
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index edb35bcfa548..40a3d392b7f1 100644
+index 40a3d392b7f1..aad34298bfd3 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -865,6 +865,8 @@ enum bpf_reg_type {
- 	PTR_TO_BUF,		 /* reg points to a read/write buffer */
- 	PTR_TO_FUNC,		 /* reg points to a bpf program function */
- 	CONST_PTR_TO_DYNPTR,	 /* reg points to a const struct bpf_dynptr */
-+	PTR_TO_AUX,		 /* reg points to context aux memory */
-+	PTR_TO_AUX_END,		 /* aux + len */
- 	__BPF_REG_TYPE_MAX,
+@@ -663,12 +663,15 @@ enum bpf_type_flag {
+ 	/* DYNPTR points to xdp_buff */
+ 	DYNPTR_TYPE_XDP		= BIT(16 + BPF_BASE_TYPE_BITS),
  
- 	/* Extended reg_types. */
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index f70f9ac884d2..eb1f9e18bc8d 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -76,7 +76,7 @@ struct bpf_reg_state {
- 	/* Fixed part of pointer offset, pointer types only */
- 	s32 off;
- 	union {
--		/* valid when type == PTR_TO_PACKET */
-+		/* valid when type == PTR_TO_PACKET or PTR_TO_AUX */
- 		int range;
++	/* DYNPTR points to optval buffer of bpf_sockopt */
++	DYNPTR_TYPE_CGROUP_SOCKOPT = BIT(17 + BPF_BASE_TYPE_BITS),
++
+ 	__BPF_TYPE_FLAG_MAX,
+ 	__BPF_TYPE_LAST_FLAG	= __BPF_TYPE_FLAG_MAX - 1,
+ };
  
- 		/* valid when type == CONST_PTR_TO_MAP | PTR_TO_MAP_VALUE |
-@@ -154,8 +154,8 @@ struct bpf_reg_state {
- 	s32 s32_max_value; /* maximum possible (s32)value */
- 	u32 u32_min_value; /* minimum possible (u32)value */
- 	u32 u32_max_value; /* maximum possible (u32)value */
--	/* For PTR_TO_PACKET, used to find other pointers with the same variable
--	 * offset, so they can share range knowledge.
-+	/* For PTR_TO_PACKET and PTR_TO_AUX, used to find other pointers
-+	 * with the same variable offset, so they can share range knowledge.
- 	 * For PTR_TO_MAP_VALUE_OR_NULL this is used to share which map value we
- 	 * came from, when one is tested for != NULL.
- 	 * For PTR_TO_MEM_OR_NULL this is used to identify memory allocation
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 61be432b9420..05ab2c7f8798 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -432,6 +432,14 @@ static bool type_is_pkt_pointer(enum bpf_reg_type type)
- 	       type == PTR_TO_PACKET_META;
- }
+ #define DYNPTR_TYPE_FLAG_MASK	(DYNPTR_TYPE_LOCAL | DYNPTR_TYPE_RINGBUF | DYNPTR_TYPE_SKB \
+-				 | DYNPTR_TYPE_XDP)
++				 | DYNPTR_TYPE_XDP | DYNPTR_TYPE_CGROUP_SOCKOPT)
  
-+static bool type_is_pkt_aux_pointer(enum bpf_reg_type type)
+ /* Max number of base types. */
+ #define BPF_BASE_TYPE_LIMIT	(1UL << BPF_BASE_TYPE_BITS)
+@@ -1208,6 +1211,8 @@ enum bpf_dynptr_type {
+ 	BPF_DYNPTR_TYPE_SKB,
+ 	/* Underlying data is a xdp_buff */
+ 	BPF_DYNPTR_TYPE_XDP,
++	/* Underlying data is for the optval of a cgroup sock */
++	BPF_DYNPTR_TYPE_CGROUP_SOCKOPT,
+ };
+ 
+ int bpf_dynptr_check_size(u32 size);
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 2aa2a96526de..df12fddd2f21 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1347,6 +1347,10 @@ struct bpf_sockopt_kern {
+ enum bpf_sockopt_kern_flags {
+ 	/* optval is a pointer to user space memory */
+ 	BPF_SOCKOPT_FLAG_OPTVAL_USER    = (1U << 0),
++	/* able to install new optval */
++	BPF_SOCKOPT_FLAG_OPTVAL_REPLACE	= (1U << 1),
++	/* optval is referenced by a dynptr */
++	BPF_SOCKOPT_FLAG_OPTVAL_DYNPTR	= (1U << 2),
+ };
+ 
+ int copy_bpf_fprog_from_user(struct sock_fprog *dst, sockptr_t src, int len);
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 249657c466dd..6d6a040688be 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -217,6 +217,7 @@ enum btf_kfunc_hook {
+ 	BTF_KFUNC_HOOK_SOCKET_FILTER,
+ 	BTF_KFUNC_HOOK_LWT,
+ 	BTF_KFUNC_HOOK_NETFILTER,
++	BTF_KFUNC_HOOK_CGROUP_SOCKOPT,
+ 	BTF_KFUNC_HOOK_MAX,
+ };
+ 
+@@ -7846,6 +7847,8 @@ static int bpf_prog_type_to_kfunc_hook(enum bpf_prog_type prog_type)
+ 		return BTF_KFUNC_HOOK_LWT;
+ 	case BPF_PROG_TYPE_NETFILTER:
+ 		return BTF_KFUNC_HOOK_NETFILTER;
++	case BPF_PROG_TYPE_CGROUP_SOCKOPT:
++		return BTF_KFUNC_HOOK_CGROUP_SOCKOPT;
+ 	default:
+ 		return BTF_KFUNC_HOOK_MAX;
+ 	}
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 1b2006dac4d5..b27a4fbc6ffe 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -1866,6 +1866,8 @@ static int filter_setsockopt_progs_cb(void *arg,
+ 	if (max_optlen < 0)
+ 		return max_optlen;
+ 
++	ctx->flags = BPF_SOCKOPT_FLAG_OPTVAL_REPLACE;
++
+ 	if (copy_from_user(ctx->optval, optval,
+ 			   min(ctx->optlen, max_optlen)) != 0)
+ 		return -EFAULT;
+@@ -1894,7 +1896,8 @@ int __cgroup_bpf_run_filter_setsockopt(struct sock *sk, int *level,
+ 	ctx.optlen = *optlen;
+ 	ctx.optval = optval;
+ 	ctx.optval_end = optval + *optlen;
+-	ctx.flags = BPF_SOCKOPT_FLAG_OPTVAL_USER;
++	ctx.flags = BPF_SOCKOPT_FLAG_OPTVAL_USER |
++		BPF_SOCKOPT_FLAG_OPTVAL_REPLACE;
+ 
+ 	lock_sock(sk);
+ 	ret = bpf_prog_run_array_cg_cb(&cgrp->bpf, CGROUP_SETSOCKOPT,
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index eb91cae0612a..5be1fd9e64f3 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1519,6 +1519,51 @@ static const struct bpf_func_proto bpf_dynptr_from_mem_proto = {
+ 	.arg4_type	= ARG_PTR_TO_DYNPTR | DYNPTR_TYPE_LOCAL | MEM_UNINIT,
+ };
+ 
++static int __bpf_sockopt_store_bytes(struct bpf_sockopt_kern *sopt, u32 offset,
++				     void *src, u32 len)
 +{
-+	type = base_type(type);
-+	return type == PTR_TO_PACKET ||
-+	       type == PTR_TO_PACKET_META ||
-+	       type == PTR_TO_AUX;
++	int buf_len, err;
++	void *buf;
++
++	if (!src)
++		return 0;
++
++	if (sopt->flags & BPF_SOCKOPT_FLAG_OPTVAL_USER) {
++		if (!(sopt->flags & BPF_SOCKOPT_FLAG_OPTVAL_REPLACE))
++			return copy_to_user(sopt->optval + offset, src, len) ?
++				-EFAULT : 0;
++		buf_len = sopt->optval_end - sopt->optval;
++		buf = kmalloc(buf_len, GFP_KERNEL);
++		if (!buf)
++			return -ENOMEM;
++		err = copy_from_user(buf, sopt->optval, buf_len) ? -EFAULT : 0;
++		if (err < 0) {
++			kfree(buf);
++			return err;
++		}
++		sopt->optval = buf;
++		sopt->optval_end = buf + len;
++		sopt->flags &= ~BPF_SOCKOPT_FLAG_OPTVAL_USER;
++		memcpy(buf + offset, src, len);
++	}
++
++	memcpy(sopt->optval + offset, src, len);
++
++	return 0;
 +}
 +
- static bool type_is_sk_pointer(enum bpf_reg_type type)
++static int __bpf_sockopt_load_bytes(struct bpf_sockopt_kern *sopt, u32 offset,
++				    void *dst, u32 len)
++{
++	if (sopt->flags & BPF_SOCKOPT_FLAG_OPTVAL_USER)
++		return copy_from_user(dst, sopt->optval + offset, len) ?
++			-EFAULT : 0;
++
++	memcpy(dst, sopt->optval + offset, len);
++
++	return 0;
++}
++
+ BPF_CALL_5(bpf_dynptr_read, void *, dst, u32, len, const struct bpf_dynptr_kern *, src,
+ 	   u32, offset, u64, flags)
  {
- 	return type == PTR_TO_SOCKET ||
-@@ -619,6 +627,8 @@ static const char *reg_type_str(struct bpf_verifier_env *env,
- 		[PTR_TO_FUNC]		= "func",
- 		[PTR_TO_MAP_KEY]	= "map_key",
- 		[CONST_PTR_TO_DYNPTR]	= "dynptr_ptr",
-+		[PTR_TO_AUX]		= "aux",
-+		[PTR_TO_AUX_END]	= "aux_end",
- 	};
- 
- 	if (type & PTR_MAYBE_NULL) {
-@@ -1389,7 +1399,7 @@ static void print_verifier_state(struct bpf_verifier_env *env,
- 				verbose_a("%s", "non_own_ref");
- 			if (t != SCALAR_VALUE)
- 				verbose_a("off=%d", reg->off);
--			if (type_is_pkt_pointer(t))
-+			if (type_is_pkt_aux_pointer(t))
- 				verbose_a("r=%d", reg->range);
- 			else if (base_type(t) == CONST_PTR_TO_MAP ||
- 				 base_type(t) == PTR_TO_MAP_KEY ||
-@@ -1992,21 +2002,23 @@ static void mark_reg_graph_node(struct bpf_reg_state *regs, u32 regno,
- 	regs[regno].off = ds_head->node_offset;
- }
- 
--static bool reg_is_pkt_pointer(const struct bpf_reg_state *reg)
-+static bool reg_is_pkt_aux_pointer(const struct bpf_reg_state *reg)
- {
--	return type_is_pkt_pointer(reg->type);
-+	return type_is_pkt_aux_pointer(reg->type);
- }
- 
--static bool reg_is_pkt_pointer_any(const struct bpf_reg_state *reg)
-+static bool reg_is_pkt_aux_pointer_any(const struct bpf_reg_state *reg)
- {
--	return reg_is_pkt_pointer(reg) ||
--	       reg->type == PTR_TO_PACKET_END;
-+	return reg_is_pkt_aux_pointer(reg) ||
-+	       reg->type == PTR_TO_PACKET_END ||
-+	       reg->type == PTR_TO_AUX_END;
- }
- 
--static bool reg_is_dynptr_slice_pkt(const struct bpf_reg_state *reg)
-+static bool reg_is_dynptr_slice_pkt_aux(const struct bpf_reg_state *reg)
- {
- 	return base_type(reg->type) == PTR_TO_MEM &&
--		(reg->type & DYNPTR_TYPE_SKB || reg->type & DYNPTR_TYPE_XDP);
-+		(reg->type & DYNPTR_TYPE_SKB || reg->type & DYNPTR_TYPE_XDP ||
-+		 reg->type & DYNPTR_TYPE_CGROUP_SOCKOPT);
- }
- 
- /* Unmodified PTR_TO_PACKET[_META,_END] register from ctx access. */
-@@ -4213,6 +4225,8 @@ static bool is_spillable_regtype(enum bpf_reg_type type)
- 	case PTR_TO_MEM:
- 	case PTR_TO_FUNC:
- 	case PTR_TO_MAP_KEY:
-+	case PTR_TO_AUX:
-+	case PTR_TO_AUX_END:
- 		return true;
+@@ -1547,6 +1592,8 @@ BPF_CALL_5(bpf_dynptr_read, void *, dst, u32, len, const struct bpf_dynptr_kern
+ 		return __bpf_skb_load_bytes(src->data, src->offset + offset, dst, len);
+ 	case BPF_DYNPTR_TYPE_XDP:
+ 		return __bpf_xdp_load_bytes(src->data, src->offset + offset, dst, len);
++	case BPF_DYNPTR_TYPE_CGROUP_SOCKOPT:
++		return __bpf_sockopt_load_bytes(src->data, src->offset + offset, dst, len);
  	default:
- 		return false;
-@@ -4882,6 +4896,11 @@ static int __check_mem_access(struct bpf_verifier_env *env, int regno,
- 		verbose(env, "invalid access to packet, off=%d size=%d, R%d(id=%d,off=%d,r=%d)\n",
- 			off, size, regno, reg->id, off, mem_size);
- 		break;
-+	case PTR_TO_AUX:
-+	case PTR_TO_AUX_END:
-+		verbose(env, "invalid access to aux memory, off=%d size=%d, R%d(id=%d,off=%d,r=%d)\n",
-+			off, size, regno, reg->id, off, mem_size);
-+		break;
- 	case PTR_TO_MEM:
+ 		WARN_ONCE(true, "bpf_dynptr_read: unknown dynptr type %d\n", type);
+ 		return -EFAULT;
+@@ -1597,6 +1644,10 @@ BPF_CALL_5(bpf_dynptr_write, const struct bpf_dynptr_kern *, dst, u32, offset, v
+ 		if (flags)
+ 			return -EINVAL;
+ 		return __bpf_xdp_store_bytes(dst->data, dst->offset + offset, src, len);
++	case BPF_DYNPTR_TYPE_CGROUP_SOCKOPT:
++		return __bpf_sockopt_store_bytes(dst->data,
++						 dst->offset + offset,
++						 src, len);
  	default:
- 		verbose(env, "invalid access to memory, mem_size=%u off=%d size=%d\n",
-@@ -5208,9 +5227,9 @@ static int check_map_access(struct bpf_verifier_env *env, u32 regno,
- 
- #define MAX_PACKET_OFF 0xffff
- 
--static bool may_access_direct_pkt_data(struct bpf_verifier_env *env,
--				       const struct bpf_call_arg_meta *meta,
--				       enum bpf_access_type t)
-+static bool may_access_direct_pkt_aux_data(struct bpf_verifier_env *env,
-+					   const struct bpf_call_arg_meta *meta,
-+					   enum bpf_access_type t)
- {
- 	enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
- 
-@@ -5240,6 +5259,8 @@ static bool may_access_direct_pkt_data(struct bpf_verifier_env *env,
- 		return true;
- 
- 	case BPF_PROG_TYPE_CGROUP_SOCKOPT:
-+		if (env->prog->aux->sleepable)
-+			return false;
- 		if (t == BPF_WRITE)
- 			env->seen_direct_write = true;
- 
-@@ -5250,8 +5271,8 @@ static bool may_access_direct_pkt_data(struct bpf_verifier_env *env,
+ 		WARN_ONCE(true, "bpf_dynptr_write: unknown dynptr type %d\n", type);
+ 		return -EFAULT;
+@@ -1634,6 +1685,7 @@ BPF_CALL_3(bpf_dynptr_data, const struct bpf_dynptr_kern *, ptr, u32, offset, u3
+ 	switch (type) {
+ 	case BPF_DYNPTR_TYPE_LOCAL:
+ 	case BPF_DYNPTR_TYPE_RINGBUF:
++	case BPF_DYNPTR_TYPE_CGROUP_SOCKOPT:
+ 		return (unsigned long)(ptr->data + ptr->offset + offset);
+ 	case BPF_DYNPTR_TYPE_SKB:
+ 	case BPF_DYNPTR_TYPE_XDP:
+@@ -2278,6 +2330,8 @@ __bpf_kfunc void *bpf_dynptr_slice(const struct bpf_dynptr_kern *ptr, u32 offset
+ 		bpf_xdp_copy_buf(ptr->data, ptr->offset + offset, buffer__opt, len, false);
+ 		return buffer__opt;
  	}
++	case BPF_DYNPTR_TYPE_CGROUP_SOCKOPT:
++		return NULL;
+ 	default:
+ 		WARN_ONCE(true, "unknown dynptr type %d\n", type);
+ 		return NULL;
+@@ -2429,6 +2483,80 @@ __bpf_kfunc void bpf_rcu_read_unlock(void)
+ 	rcu_read_unlock();
  }
  
--static int check_packet_access(struct bpf_verifier_env *env, u32 regno, int off,
--			       int size, bool zero_size_allowed)
-+static int check_packet_aux_access(struct bpf_verifier_env *env, u32 regno, int off,
-+				   int size, bool zero_size_allowed)
- {
- 	struct bpf_reg_state *regs = cur_regs(env);
- 	struct bpf_reg_state *reg = &regs[regno];
-@@ -5281,7 +5302,7 @@ static int check_packet_access(struct bpf_verifier_env *env, u32 regno, int off,
++__bpf_kfunc int bpf_sockopt_dynptr_release(struct bpf_sockopt *sopt,
++					   struct bpf_dynptr_kern *ptr)
++{
++	bpf_dynptr_set_null(ptr);
++	return 0;
++}
++
++/* Initialize a sockopt dynptr from a user or installed optval pointer.
++ *
++ * sopt->optval can be a user pointer or a kernel pointer. A kernel pointer
++ * can be a buffer allocated by the caller of the BPF program or a buffer
++ * installed by other BPF programs through bpf_sockopt_dynptr_install().
++ *
++ * Atmost one dynptr shall be created by this function at any moment, or
++ * it will return -EINVAL. You can create another dypptr by this function
++ * after release the previous one by bpf_sockopt_dynptr_release().
++ *
++ * A dynptr that is initialized when optval is a user pointer is an
++ * exception. In this case, the dynptr will point to a kernel buffer with
++ * the same content as the user buffer. To simplify the code, users should
++ * always make sure having only one dynptr initialized by this function at
++ * any moment.
++ */
++__bpf_kfunc int bpf_dynptr_from_sockopt(struct bpf_sockopt *sopt,
++					struct bpf_dynptr_kern *ptr__uninit)
++{
++	struct bpf_sockopt_kern *sopt_kern = (struct bpf_sockopt_kern *)sopt;
++	unsigned int size;
++
++	size = sopt_kern->optval_end - sopt_kern->optval;
++
++	bpf_dynptr_init(ptr__uninit, sopt,
++			BPF_DYNPTR_TYPE_CGROUP_SOCKOPT, 0,
++			size);
++
++	return size;
++}
++
++__bpf_kfunc int bpf_sockopt_grow_to(struct bpf_sockopt *sopt,
++				    u32 newsize)
++{
++	struct bpf_sockopt_kern *sopt_kern = (struct bpf_sockopt_kern *)sopt;
++	void *newoptval;
++	int err;
++
++	if (newsize > DYNPTR_MAX_SIZE)
++		return -EINVAL;
++
++	if (newsize <= sopt_kern->optlen)
++		return 0;
++
++	if (sopt_kern->flags & BPF_SOCKOPT_FLAG_OPTVAL_USER) {
++		newoptval = kmalloc(newsize, GFP_KERNEL);
++		if (!newoptval)
++			return -ENOMEM;
++		err = copy_from_user(newoptval, sopt_kern->optval,
++				     sopt_kern->optval_end - sopt_kern->optval);
++		if (err < 0) {
++			kfree(newoptval);
++			return err;
++		}
++		sopt_kern->flags &= ~BPF_SOCKOPT_FLAG_OPTVAL_USER;
++	} else {
++		newoptval = krealloc(sopt_kern->optval, newsize, GFP_KERNEL);
++		if (!newoptval)
++			return -ENOMEM;
++	}
++
++	sopt_kern->optval = newoptval;
++	sopt_kern->optval_end = newoptval + newsize;
++
++	return 0;
++}
++
+ __diag_pop();
  
- 	/* __check_mem_access has made sure "off + size - 1" is within u16.
- 	 * reg->umax_value can't be bigger than MAX_PACKET_OFF which is 0xffff,
--	 * otherwise find_good_pkt_pointers would have refused to set range info
-+	 * otherwise find_good_pkt_aux_pointers would have refused to set range info
- 	 * that __check_mem_access would have rejected this pkt access.
- 	 * Therefore, "off + reg->umax_value + size - 1" won't overflow u32.
+ BTF_SET8_START(generic_btf_ids)
+@@ -2494,6 +2622,17 @@ static const struct btf_kfunc_id_set common_kfunc_set = {
+ 	.set   = &common_btf_ids,
+ };
+ 
++BTF_SET8_START(cgroup_common_btf_ids)
++BTF_ID_FLAGS(func, bpf_sockopt_dynptr_release, KF_SLEEPABLE)
++BTF_ID_FLAGS(func, bpf_dynptr_from_sockopt, KF_SLEEPABLE)
++BTF_ID_FLAGS(func, bpf_sockopt_grow_to, KF_SLEEPABLE)
++BTF_SET8_END(cgroup_common_btf_ids)
++
++static const struct btf_kfunc_id_set cgroup_kfunc_set = {
++	.owner	= THIS_MODULE,
++	.set	= &cgroup_common_btf_ids,
++};
++
+ static int __init kfunc_init(void)
+ {
+ 	int ret;
+@@ -2513,6 +2652,7 @@ static int __init kfunc_init(void)
+ 	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &generic_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &generic_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &generic_kfunc_set);
++	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_CGROUP_SOCKOPT, &cgroup_kfunc_set);
+ 	ret = ret ?: register_btf_id_dtor_kfuncs(generic_dtors,
+ 						  ARRAY_SIZE(generic_dtors),
+ 						  THIS_MODULE);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 83731e998b09..15119ff90bff 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -755,6 +755,8 @@ static const char *dynptr_type_str(enum bpf_dynptr_type type)
+ 		return "skb";
+ 	case BPF_DYNPTR_TYPE_XDP:
+ 		return "xdp";
++	case BPF_DYNPTR_TYPE_CGROUP_SOCKOPT:
++		return "cgroup_sockopt";
+ 	case BPF_DYNPTR_TYPE_INVALID:
+ 		return "<invalid>";
+ 	default:
+@@ -836,6 +838,8 @@ static enum bpf_dynptr_type arg_to_dynptr_type(enum bpf_arg_type arg_type)
+ 		return BPF_DYNPTR_TYPE_SKB;
+ 	case DYNPTR_TYPE_XDP:
+ 		return BPF_DYNPTR_TYPE_XDP;
++	case DYNPTR_TYPE_CGROUP_SOCKOPT:
++		return BPF_DYNPTR_TYPE_CGROUP_SOCKOPT;
+ 	default:
+ 		return BPF_DYNPTR_TYPE_INVALID;
+ 	}
+@@ -852,6 +856,8 @@ static enum bpf_type_flag get_dynptr_type_flag(enum bpf_dynptr_type type)
+ 		return DYNPTR_TYPE_SKB;
+ 	case BPF_DYNPTR_TYPE_XDP:
+ 		return DYNPTR_TYPE_XDP;
++	case BPF_DYNPTR_TYPE_CGROUP_SOCKOPT:
++		return DYNPTR_TYPE_CGROUP_SOCKOPT;
+ 	default:
+ 		return 0;
+ 	}
+@@ -859,7 +865,8 @@ static enum bpf_type_flag get_dynptr_type_flag(enum bpf_dynptr_type type)
+ 
+ static bool dynptr_type_refcounted(enum bpf_dynptr_type type)
+ {
+-	return type == BPF_DYNPTR_TYPE_RINGBUF;
++	return type == BPF_DYNPTR_TYPE_RINGBUF ||
++		type == BPF_DYNPTR_TYPE_CGROUP_SOCKOPT;
+ }
+ 
+ static void __mark_dynptr_reg(struct bpf_reg_state *reg,
+@@ -10300,6 +10307,8 @@ enum special_kfunc_type {
+ 	KF_bpf_dynptr_slice,
+ 	KF_bpf_dynptr_slice_rdwr,
+ 	KF_bpf_dynptr_clone,
++	KF_bpf_sockopt_dynptr_release,
++	KF_bpf_dynptr_from_sockopt,
+ };
+ 
+ BTF_SET_START(special_kfunc_set)
+@@ -10320,6 +10329,8 @@ BTF_ID(func, bpf_dynptr_from_xdp)
+ BTF_ID(func, bpf_dynptr_slice)
+ BTF_ID(func, bpf_dynptr_slice_rdwr)
+ BTF_ID(func, bpf_dynptr_clone)
++BTF_ID(func, bpf_sockopt_dynptr_release)
++BTF_ID(func, bpf_dynptr_from_sockopt)
+ BTF_SET_END(special_kfunc_set)
+ 
+ BTF_ID_LIST(special_kfunc_list)
+@@ -10342,6 +10353,8 @@ BTF_ID(func, bpf_dynptr_from_xdp)
+ BTF_ID(func, bpf_dynptr_slice)
+ BTF_ID(func, bpf_dynptr_slice_rdwr)
+ BTF_ID(func, bpf_dynptr_clone)
++BTF_ID(func, bpf_sockopt_dynptr_release)
++BTF_ID(func, bpf_dynptr_from_sockopt)
+ 
+ static bool is_kfunc_ret_null(struct bpf_kfunc_call_arg_meta *meta)
+ {
+@@ -10995,6 +11008,19 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+ 			arg_type |= OBJ_RELEASE;
+ 			break;
+ 		case KF_ARG_PTR_TO_DYNPTR:
++			if (meta->func_id == special_kfunc_list[KF_bpf_sockopt_dynptr_release]) {
++				int ref_obj_id = dynptr_ref_obj_id(env, reg);
++
++				if (ref_obj_id < 0) {
++					verbose(env, "R%d is not a valid dynptr\n", regno);
++					return -EINVAL;
++				}
++
++				/* Required by check_func_arg_reg_off() */
++				arg_type |= ARG_PTR_TO_DYNPTR | OBJ_RELEASE;
++				meta->release_regno = regno;
++			}
++			break;
+ 		case KF_ARG_PTR_TO_ITER:
+ 		case KF_ARG_PTR_TO_LIST_HEAD:
+ 		case KF_ARG_PTR_TO_LIST_NODE:
+@@ -11082,6 +11108,9 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+ 					verbose(env, "verifier internal error: missing ref obj id for parent of clone\n");
+ 					return -EFAULT;
+ 				}
++			} else if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_from_sockopt] &&
++				   (dynptr_arg_type & MEM_UNINIT)) {
++				dynptr_arg_type |= DYNPTR_TYPE_CGROUP_SOCKOPT;
+ 			}
+ 
+ 			ret = process_dynptr_func(env, regno, insn_idx, dynptr_arg_type, clone_ref_obj_id);
+@@ -11390,7 +11419,12 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	 * PTR_TO_BTF_ID in bpf_kfunc_arg_meta, do the release now.
  	 */
-@@ -5567,6 +5588,9 @@ static int check_ptr_alignment(struct bpf_verifier_env *env,
- 	case PTR_TO_XDP_SOCK:
- 		pointer_desc = "xdp_sock ";
- 		break;
-+	case PTR_TO_AUX:
-+		pointer_desc = "aux ";
-+		break;
- 	default:
- 		break;
- 	}
-@@ -6550,9 +6574,10 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
- 		if (err)
- 			verbose_linfo(env, insn_idx, "; ");
- 		if (!err && t == BPF_READ && value_regno >= 0) {
--			/* ctx access returns either a scalar, or a
--			 * PTR_TO_PACKET[_META,_END]. In the latter
--			 * case, we know the offset is zero.
-+			/* ctx access returns either a scalar, a
-+			 * PTR_TO_PACKET[_META,_END], or a
-+			 * PTR_TO_AUX[_END]. In the latter case, we know
-+			 * the offset is zero.
- 			 */
- 			if (reg_type == SCALAR_VALUE) {
- 				mark_reg_unknown(env, regs, value_regno);
-@@ -6592,8 +6617,8 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
- 		else
- 			err = check_stack_write(env, regno, off, size,
- 						value_regno, insn_idx);
--	} else if (reg_is_pkt_pointer(reg)) {
--		if (t == BPF_WRITE && !may_access_direct_pkt_data(env, NULL, t)) {
-+	} else if (reg_is_pkt_aux_pointer(reg)) {
-+		if (t == BPF_WRITE && !may_access_direct_pkt_aux_data(env, NULL, t)) {
- 			verbose(env, "cannot write into packet\n");
- 			return -EACCES;
- 		}
-@@ -6603,7 +6628,7 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
- 				value_regno);
- 			return -EACCES;
- 		}
--		err = check_packet_access(env, regno, off, size, false);
-+		err = check_packet_aux_access(env, regno, off, size, false);
- 		if (!err && t == BPF_READ && value_regno >= 0)
- 			mark_reg_unknown(env, regs, value_regno);
- 	} else if (reg->type == PTR_TO_FLOW_KEYS) {
-@@ -6951,8 +6976,9 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
- 	switch (base_type(reg->type)) {
- 	case PTR_TO_PACKET:
- 	case PTR_TO_PACKET_META:
--		return check_packet_access(env, regno, reg->off, access_size,
--					   zero_size_allowed);
-+	case PTR_TO_AUX:
-+		return check_packet_aux_access(env, regno, reg->off, access_size,
-+					       zero_size_allowed);
- 	case PTR_TO_MAP_KEY:
- 		if (meta && meta->raw_mode) {
- 			verbose(env, "R%d cannot write into %s\n", regno,
-@@ -7714,6 +7740,7 @@ static const struct bpf_reg_types mem_types = {
- 		PTR_TO_MEM | MEM_RINGBUF,
- 		PTR_TO_BUF,
- 		PTR_TO_BTF_ID | PTR_TRUSTED,
-+		PTR_TO_AUX,
- 	},
- };
- 
-@@ -7724,6 +7751,7 @@ static const struct bpf_reg_types int_ptr_types = {
- 		PTR_TO_PACKET_META,
- 		PTR_TO_MAP_KEY,
- 		PTR_TO_MAP_VALUE,
-+		PTR_TO_AUX,
- 	},
- };
- 
-@@ -8004,6 +8032,7 @@ int check_func_arg_reg_off(struct bpf_verifier_env *env,
- 	case PTR_TO_BUF:
- 	case PTR_TO_BUF | MEM_RDONLY:
- 	case SCALAR_VALUE:
-+	case PTR_TO_AUX:
- 		return 0;
- 	/* All the rest must be rejected, except PTR_TO_BTF_ID which allows
- 	 * fixed offset.
-@@ -8120,8 +8149,8 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 		return 0;
- 	}
- 
--	if (type_is_pkt_pointer(type) &&
--	    !may_access_direct_pkt_data(env, meta, BPF_READ)) {
-+	if (type_is_pkt_aux_pointer(type) &&
-+	    !may_access_direct_pkt_aux_data(env, meta, BPF_READ)) {
- 		verbose(env, "helper access to the packet is not allowed\n");
- 		return -EACCES;
- 	}
-@@ -8764,13 +8793,13 @@ static int check_func_proto(const struct bpf_func_proto *fn, int func_id)
-  * This also applies to dynptr slices belonging to skb and xdp dynptrs,
-  * since these slices point to packet data.
-  */
--static void clear_all_pkt_pointers(struct bpf_verifier_env *env)
-+static void clear_all_pkt_aux_pointers(struct bpf_verifier_env *env)
- {
- 	struct bpf_func_state *state;
- 	struct bpf_reg_state *reg;
- 
- 	bpf_for_each_reg_in_vstate(env->cur_state, state, reg, ({
--		if (reg_is_pkt_pointer_any(reg) || reg_is_dynptr_slice_pkt(reg))
-+		if (reg_is_pkt_aux_pointer_any(reg) || reg_is_dynptr_slice_pkt_aux(reg))
- 			mark_reg_invalid(env, reg);
- 	}));
- }
-@@ -8780,12 +8809,12 @@ enum {
- 	BEYOND_PKT_END = -2,
- };
- 
--static void mark_pkt_end(struct bpf_verifier_state *vstate, int regn, bool range_open)
-+static void mark_pkt_aux_end(struct bpf_verifier_state *vstate, int regn, bool range_open)
- {
- 	struct bpf_func_state *state = vstate->frame[vstate->curframe];
- 	struct bpf_reg_state *reg = &state->regs[regn];
- 
--	if (reg->type != PTR_TO_PACKET)
-+	if (reg->type != PTR_TO_PACKET && reg->type != PTR_TO_AUX)
- 		/* PTR_TO_PACKET_META is not supported yet */
- 		return;
- 
-@@ -9766,7 +9795,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 			return -EFAULT;
- 
- 		if (dynptr_type == BPF_DYNPTR_TYPE_SKB)
--			/* this will trigger clear_all_pkt_pointers(), which will
-+			/* this will trigger clear_all_pkt_aux_pointers(), which will
- 			 * invalidate all dynptr slices associated with the skb
- 			 */
- 			changes_data = true;
-@@ -9975,7 +10004,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 	}
- 
- 	if (changes_data)
--		clear_all_pkt_pointers(env);
-+		clear_all_pkt_aux_pointers(env);
- 	return 0;
- }
- 
-@@ -11514,7 +11543,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 					regs[BPF_REG_0].type |= MEM_RDONLY;
- 				} else {
- 					/* this will set env->seen_direct_write to true */
--					if (!may_access_direct_pkt_data(env, NULL, BPF_WRITE)) {
-+					if (!may_access_direct_pkt_aux_data(env, NULL, BPF_WRITE)) {
- 						verbose(env, "the prog does not allow writes to packet data\n");
- 						return -EINVAL;
- 					}
-@@ -12081,6 +12110,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 	case PTR_TO_SOCK_COMMON:
- 	case PTR_TO_TCP_SOCK:
- 	case PTR_TO_XDP_SOCK:
-+	case PTR_TO_AUX_END:
- 		verbose(env, "R%d pointer arithmetic on %s prohibited\n",
- 			dst, reg_type_str(env, ptr_reg->type));
- 		return -EACCES;
-@@ -12129,7 +12159,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 		 * == 0, since it's a scalar.
- 		 * dst_reg gets the pointer type and since some positive
- 		 * integer value was added to the pointer, give it a new 'id'
--		 * if it's a PTR_TO_PACKET.
-+		 * if it's a PTR_TO_PACKET or PTR_TO_AUX.
- 		 * this creates a new 'base' pointer, off_reg (variable) gets
- 		 * added into the variable offset, and we copy the fixed offset
- 		 * from ptr_reg.
-@@ -12153,7 +12183,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 		dst_reg->var_off = tnum_add(ptr_reg->var_off, off_reg->var_off);
- 		dst_reg->off = ptr_reg->off;
- 		dst_reg->raw = ptr_reg->raw;
--		if (reg_is_pkt_pointer(ptr_reg)) {
-+		if (reg_is_pkt_aux_pointer(ptr_reg)) {
- 			dst_reg->id = ++env->id_gen;
- 			/* something was added to pkt_ptr, set range to zero */
- 			memset(&dst_reg->raw, 0, sizeof(dst_reg->raw));
-@@ -12212,7 +12242,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 		dst_reg->var_off = tnum_sub(ptr_reg->var_off, off_reg->var_off);
- 		dst_reg->off = ptr_reg->off;
- 		dst_reg->raw = ptr_reg->raw;
--		if (reg_is_pkt_pointer(ptr_reg)) {
-+		if (reg_is_pkt_aux_pointer(ptr_reg)) {
- 			dst_reg->id = ++env->id_gen;
- 			/* something was added to pkt_ptr, set range to zero */
- 			if (smin_val < 0)
-@@ -13300,10 +13330,10 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 	return 0;
- }
- 
--static void find_good_pkt_pointers(struct bpf_verifier_state *vstate,
--				   struct bpf_reg_state *dst_reg,
--				   enum bpf_reg_type type,
--				   bool range_right_open)
-+static void find_good_pkt_aux_pointers(struct bpf_verifier_state *vstate,
-+				       struct bpf_reg_state *dst_reg,
-+				       enum bpf_reg_type type,
-+				       bool range_right_open)
- {
- 	struct bpf_func_state *state;
- 	struct bpf_reg_state *reg;
-@@ -13589,15 +13619,17 @@ static int flip_opcode(u32 opcode)
- 	return opcode_flip[opcode >> 4];
- }
- 
--static int is_pkt_ptr_branch_taken(struct bpf_reg_state *dst_reg,
--				   struct bpf_reg_state *src_reg,
--				   u8 opcode)
-+static int is_pkt_aux_ptr_branch_taken(struct bpf_reg_state *dst_reg,
-+				       struct bpf_reg_state *src_reg,
-+				       u8 opcode)
- {
- 	struct bpf_reg_state *pkt;
- 
--	if (src_reg->type == PTR_TO_PACKET_END) {
-+	if (src_reg->type == PTR_TO_PACKET_END ||
-+	    src_reg->type == PTR_TO_AUX_END) {
- 		pkt = dst_reg;
--	} else if (dst_reg->type == PTR_TO_PACKET_END) {
-+	} else if (dst_reg->type == PTR_TO_PACKET_END ||
-+		   dst_reg->type == PTR_TO_AUX_END) {
- 		pkt = src_reg;
- 		opcode = flip_opcode(opcode);
- 	} else {
-@@ -13888,7 +13920,7 @@ static void mark_ptr_or_null_reg(struct bpf_func_state *state,
- 	}
- }
- 
--/* The logic is similar to find_good_pkt_pointers(), both could eventually
-+/* The logic is similar to find_good_pkt_aux_pointers(), both could eventually
-  * be folded together at some point.
-  */
- static void mark_ptr_or_null_regs(struct bpf_verifier_state *vstate, u32 regno,
-@@ -13928,20 +13960,24 @@ static bool try_match_pkt_pointers(const struct bpf_insn *insn,
- 	case BPF_JGT:
- 		if ((dst_reg->type == PTR_TO_PACKET &&
- 		     src_reg->type == PTR_TO_PACKET_END) ||
-+		    (dst_reg->type == PTR_TO_AUX &&
-+		     src_reg->type == PTR_TO_AUX_END) ||
- 		    (dst_reg->type == PTR_TO_PACKET_META &&
- 		     reg_is_init_pkt_pointer(src_reg, PTR_TO_PACKET))) {
- 			/* pkt_data' > pkt_end, pkt_meta' > pkt_data */
--			find_good_pkt_pointers(this_branch, dst_reg,
--					       dst_reg->type, false);
--			mark_pkt_end(other_branch, insn->dst_reg, true);
-+			find_good_pkt_aux_pointers(this_branch, dst_reg,
-+						   dst_reg->type, false);
-+			mark_pkt_aux_end(other_branch, insn->dst_reg, true);
- 		} else if ((dst_reg->type == PTR_TO_PACKET_END &&
- 			    src_reg->type == PTR_TO_PACKET) ||
-+			   (dst_reg->type == PTR_TO_AUX_END &&
-+			    src_reg->type == PTR_TO_AUX) ||
- 			   (reg_is_init_pkt_pointer(dst_reg, PTR_TO_PACKET) &&
- 			    src_reg->type == PTR_TO_PACKET_META)) {
- 			/* pkt_end > pkt_data', pkt_data > pkt_meta' */
--			find_good_pkt_pointers(other_branch, src_reg,
--					       src_reg->type, true);
--			mark_pkt_end(this_branch, insn->src_reg, false);
-+			find_good_pkt_aux_pointers(other_branch, src_reg,
-+						   src_reg->type, true);
-+			mark_pkt_aux_end(this_branch, insn->src_reg, false);
- 		} else {
- 			return false;
- 		}
-@@ -13949,20 +13985,24 @@ static bool try_match_pkt_pointers(const struct bpf_insn *insn,
- 	case BPF_JLT:
- 		if ((dst_reg->type == PTR_TO_PACKET &&
- 		     src_reg->type == PTR_TO_PACKET_END) ||
-+		    (dst_reg->type == PTR_TO_AUX &&
-+		     src_reg->type == PTR_TO_AUX_END) ||
- 		    (dst_reg->type == PTR_TO_PACKET_META &&
- 		     reg_is_init_pkt_pointer(src_reg, PTR_TO_PACKET))) {
- 			/* pkt_data' < pkt_end, pkt_meta' < pkt_data */
--			find_good_pkt_pointers(other_branch, dst_reg,
--					       dst_reg->type, true);
--			mark_pkt_end(this_branch, insn->dst_reg, false);
-+			find_good_pkt_aux_pointers(other_branch, dst_reg,
-+						   dst_reg->type, true);
-+			mark_pkt_aux_end(this_branch, insn->dst_reg, false);
- 		} else if ((dst_reg->type == PTR_TO_PACKET_END &&
- 			    src_reg->type == PTR_TO_PACKET) ||
-+			   (dst_reg->type == PTR_TO_AUX_END &&
-+			    src_reg->type == PTR_TO_AUX) ||
- 			   (reg_is_init_pkt_pointer(dst_reg, PTR_TO_PACKET) &&
- 			    src_reg->type == PTR_TO_PACKET_META)) {
- 			/* pkt_end < pkt_data', pkt_data > pkt_meta' */
--			find_good_pkt_pointers(this_branch, src_reg,
--					       src_reg->type, false);
--			mark_pkt_end(other_branch, insn->src_reg, true);
-+			find_good_pkt_aux_pointers(this_branch, src_reg,
-+						   src_reg->type, false);
-+			mark_pkt_aux_end(other_branch, insn->src_reg, true);
- 		} else {
- 			return false;
- 		}
-@@ -13970,20 +14010,24 @@ static bool try_match_pkt_pointers(const struct bpf_insn *insn,
- 	case BPF_JGE:
- 		if ((dst_reg->type == PTR_TO_PACKET &&
- 		     src_reg->type == PTR_TO_PACKET_END) ||
-+		    (dst_reg->type == PTR_TO_AUX &&
-+		     src_reg->type == PTR_TO_AUX_END) ||
- 		    (dst_reg->type == PTR_TO_PACKET_META &&
- 		     reg_is_init_pkt_pointer(src_reg, PTR_TO_PACKET))) {
- 			/* pkt_data' >= pkt_end, pkt_meta' >= pkt_data */
--			find_good_pkt_pointers(this_branch, dst_reg,
--					       dst_reg->type, true);
--			mark_pkt_end(other_branch, insn->dst_reg, false);
-+			find_good_pkt_aux_pointers(this_branch, dst_reg,
-+						   dst_reg->type, true);
-+			mark_pkt_aux_end(other_branch, insn->dst_reg, false);
- 		} else if ((dst_reg->type == PTR_TO_PACKET_END &&
- 			    src_reg->type == PTR_TO_PACKET) ||
-+			   (dst_reg->type == PTR_TO_AUX_END &&
-+			    src_reg->type == PTR_TO_AUX) ||
- 			   (reg_is_init_pkt_pointer(dst_reg, PTR_TO_PACKET) &&
- 			    src_reg->type == PTR_TO_PACKET_META)) {
- 			/* pkt_end >= pkt_data', pkt_data >= pkt_meta' */
--			find_good_pkt_pointers(other_branch, src_reg,
--					       src_reg->type, false);
--			mark_pkt_end(this_branch, insn->src_reg, true);
-+			find_good_pkt_aux_pointers(other_branch, src_reg,
-+						   src_reg->type, false);
-+			mark_pkt_aux_end(this_branch, insn->src_reg, true);
- 		} else {
- 			return false;
- 		}
-@@ -13991,20 +14035,24 @@ static bool try_match_pkt_pointers(const struct bpf_insn *insn,
- 	case BPF_JLE:
- 		if ((dst_reg->type == PTR_TO_PACKET &&
- 		     src_reg->type == PTR_TO_PACKET_END) ||
-+		    (dst_reg->type == PTR_TO_AUX &&
-+		     src_reg->type == PTR_TO_AUX_END) ||
- 		    (dst_reg->type == PTR_TO_PACKET_META &&
- 		     reg_is_init_pkt_pointer(src_reg, PTR_TO_PACKET))) {
- 			/* pkt_data' <= pkt_end, pkt_meta' <= pkt_data */
--			find_good_pkt_pointers(other_branch, dst_reg,
--					       dst_reg->type, false);
--			mark_pkt_end(this_branch, insn->dst_reg, true);
-+			find_good_pkt_aux_pointers(other_branch, dst_reg,
-+						   dst_reg->type, false);
-+			mark_pkt_aux_end(this_branch, insn->dst_reg, true);
- 		} else if ((dst_reg->type == PTR_TO_PACKET_END &&
- 			    src_reg->type == PTR_TO_PACKET) ||
-+			   (dst_reg->type == PTR_TO_AUX_END &&
-+			    src_reg->type == PTR_TO_AUX) ||
- 			   (reg_is_init_pkt_pointer(dst_reg, PTR_TO_PACKET) &&
- 			    src_reg->type == PTR_TO_PACKET_META)) {
- 			/* pkt_end <= pkt_data', pkt_data <= pkt_meta' */
--			find_good_pkt_pointers(this_branch, src_reg,
--					       src_reg->type, true);
--			mark_pkt_end(other_branch, insn->src_reg, false);
-+			find_good_pkt_aux_pointers(this_branch, src_reg,
-+						   src_reg->type, true);
-+			mark_pkt_aux_end(other_branch, insn->src_reg, false);
- 		} else {
- 			return false;
- 		}
-@@ -14105,10 +14153,10 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 				       dst_reg->var_off.value,
- 				       flip_opcode(opcode),
- 				       is_jmp32);
--	} else if (reg_is_pkt_pointer_any(dst_reg) &&
--		   reg_is_pkt_pointer_any(src_reg) &&
-+	} else if (reg_is_pkt_aux_pointer_any(dst_reg) &&
-+		   reg_is_pkt_aux_pointer_any(src_reg) &&
- 		   !is_jmp32) {
--		pred = is_pkt_ptr_branch_taken(dst_reg, src_reg, opcode);
-+		pred = is_pkt_aux_ptr_branch_taken(dst_reg, src_reg, opcode);
- 	}
- 
- 	if (pred >= 0) {
-@@ -15609,6 +15657,7 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
- 		       check_ids(rold->ref_obj_id, rcur->ref_obj_id, idmap);
- 	case PTR_TO_PACKET_META:
- 	case PTR_TO_PACKET:
-+	case PTR_TO_AUX:
- 		/* We must have at least as much range as the old ptr
- 		 * did, so that any accesses which were safe before are
- 		 * still safe.  This is true even if old range < old off,
-@@ -18210,13 +18259,13 @@ static void specialize_kfunc(struct bpf_verifier_env *env,
- 
- 	if (func_id == special_kfunc_list[KF_bpf_dynptr_from_skb]) {
- 		seen_direct_write = env->seen_direct_write;
--		is_rdonly = !may_access_direct_pkt_data(env, NULL, BPF_WRITE);
-+		is_rdonly = !may_access_direct_pkt_aux_data(env, NULL, BPF_WRITE);
- 
- 		if (is_rdonly)
- 			*addr = (unsigned long)bpf_dynptr_from_skb_rdonly;
- 
- 		/* restore env->seen_direct_write to its original value, since
--		 * may_access_direct_pkt_data mutates it
-+		 * may_access_direct_pkt_aux_data mutates it
- 		 */
- 		env->seen_direct_write = seen_direct_write;
- 	}
+ 	if (meta.release_regno) {
+-		err = release_reference(env, regs[meta.release_regno].ref_obj_id);
++		verbose(env, "release refcounted PTR_TO_BTF_ID %s\n",
++			meta.func_name);
++		if (meta.func_id == special_kfunc_list[KF_bpf_sockopt_dynptr_release])
++			err = unmark_stack_slots_dynptr(env, &regs[meta.release_regno]);
++		else
++			err = release_reference(env, regs[meta.release_regno].ref_obj_id);
+ 		if (err) {
+ 			verbose(env, "kfunc %s#%d reference has not been acquired before\n",
+ 				func_name, meta.func_id);
 -- 
 2.34.1
 
