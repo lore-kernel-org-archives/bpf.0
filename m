@@ -1,21 +1,23 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C6C6368
-	for <bpf@vger.kernel.org>; Sun, 20 Aug 2023 02:43:22 +0000 (UTC)
-Received: from out-32.mta0.migadu.com (out-32.mta0.migadu.com [IPv6:2001:41d0:1004:224b::20])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13D91D771
-	for <bpf@vger.kernel.org>; Sat, 19 Aug 2023 18:41:41 -0700 (PDT)
-Message-ID: <79d3c797-17ba-bc9e-b1f9-44ad024b576f@linux.dev>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1EE0A5A
+	for <bpf@vger.kernel.org>; Sun, 20 Aug 2023 03:51:11 +0000 (UTC)
+Received: from out-10.mta1.migadu.com (out-10.mta1.migadu.com [95.215.58.10])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8675BAA
+	for <bpf@vger.kernel.org>; Sat, 19 Aug 2023 20:46:48 -0700 (PDT)
+Message-ID: <2cc81a2f-4e71-c2cb-1a69-c0e5badea8ae@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1692495699; h=from:from:reply-to:reply-to:subject:subject:date:date:
+	t=1692503206; h=from:from:reply-to:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-	bh=UyzMdkJUGGZImIIDV3kVx4Vupk9R5T81wame5f6pg+g=;
-	b=bfq7wcPoIr+AlO+wZMmA357dkf02WW3xG7gm5KcYTJ0puQ4Zn+6ZFsueEo0F05l+6cGFfU
-	GJ+74naanA5VBc1PCpCDjdwLBXx9sL555riZNLfOyR17FHBam7+Ucbh9G6xWEv8grJ+ZI5
-	rWREhPF/1sOR26zlKDcXv460PKGzu2c=
-Date: Sat, 19 Aug 2023 18:41:30 -0700
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/QlAIVYufvfpr1fozG5R8oBD9iYt1jNp0NRpc/Wf0t4=;
+	b=J9QBlEqgctk1s+CBaxf9jTAHQBnHYdpsr6qf3JKRm5BowGU7zbMXSy7XukW2MvhbVB3OFM
+	4JzMJFitI+A1srCARa8KvmLELFl3o4haOa0F/LMiV+wh5Dej7hjM4i+HKtQ6gspC6lCH+D
+	NGyEQuX3kgUWmKO4kla/46CQsyFF4rI=
+Date: Sat, 19 Aug 2023 20:46:40 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -23,48 +25,79 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Reply-To: yonghong.song@linux.dev
+Subject: Re: [PATCH bpf-next 02/15] bpf: Add BPF_KPTR_PERCPU_REF as a field
+ type
 Content-Language: en-US
-To: Shubham Bansal <illusionist.neo@gmail.com>,
- Johan Almbladh <johan.almbladh@anyfinetworks.com>,
- Paul Burton <paulburton@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
- "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Luke Nelson <luke.r.nels@gmail.com>,
- Xi Wang <xi.wang@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@kernel.org>, Ilya Leoshkevich <iii@linux.ibm.com>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- "David S. Miller" <davem@davemloft.net>, Wang YanQing <udknight@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ David Marchevsky <david.marchevsky@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ kernel-team@fb.com, Martin KaFai Lau <martin.lau@kernel.org>
+References: <20230814172809.1361446-1-yonghong.song@linux.dev>
+ <20230814172820.1362751-1-yonghong.song@linux.dev>
+ <ee360b23-9768-9187-4eb0-d43b67bcd07c@linux.dev>
+ <20230818232431.oatk3fpeuzzclooo@macbook-pro-8.dhcp.thefacebook.com>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Yonghong Song <yonghong.song@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@kernel.org>, bpf <bpf@vger.kernel.org>
-Subject: bpf: Request to add -mcpu=v4 support for
- ARM/MIPS/NFP/POWERPC/RISCV/S390/SPARC/X86_32
+In-Reply-To: <20230818232431.oatk3fpeuzzclooo@macbook-pro-8.dhcp.thefacebook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hi,
 
-A new set of bpf insns have been recently added in llvm with flag
-[-mcpu=v4](https://reviews.llvm.org/D144829). In the kernel,
-x86_64 and arm64 have implemented -mcpu=v4 support:
-   x86_64: 
-https://lore.kernel.org/all/20230728011143.3710005-1-yonghong.song@linux.dev/
-   arm64: 
-https://lore.kernel.org/bpf/20230815154158.717901-1-xukuohai@huaweicloud.com/
 
-The following arch's do not have -mcpu=v4 support yet:
-   arm, mips, nfp, powerpc, riscv, sc90, sparc and x86_32
+On 8/18/23 4:24 PM, Alexei Starovoitov wrote:
+> On Fri, Aug 18, 2023 at 02:37:41PM -0400, David Marchevsky wrote:
+>> On 8/14/23 1:28 PM, Yonghong Song wrote:
+>>> BPF_KPTR_PERCPU_REF represents a percpu field type like below
+>>>
+>>>    struct val_t {
+>>>      ... fields ...
+>>>    };
+>>>    struct t {
+>>>      ...
+>>>      struct val_t __percpu *percpu_data_ptr;
+>>>      ...
+>>>    };
+>>>
+>>> where
+>>>    #define __percpu __attribute__((btf_type_tag("percpu")))
+>>
+>> nit: Maybe this should be __percpu_kptr (and similar for the actual tag)?
+> 
+> +1.
+> 
+> I think it might conflict with kernel:
+> include/linux/compiler_types.h:# define __percpu	BTF_TYPE_TAG(percpu)
+> It's the same tag name, but the kernel semantics are different from our kptr
+> semantics inside bpf prog.
+> I think we have to use a different tag like:
+> #define __percpu_kptr __attribute__((btf_type_tag("percpu_kptr")))
 
-If you have a chance, could you take a look at what
-x86_64/arm64 does and add support to the above arch'es?
+Agree. Will use __percpu_kptr in the next revision.
 
-Thanks!
+> 
+>>> index 60e80e90c37d..e6348fd0a785 100644
+>>> --- a/include/linux/bpf.h
+>>> +++ b/include/linux/bpf.h
+>>> @@ -180,14 +180,15 @@ enum btf_field_type {
+>>>   	BPF_TIMER      = (1 << 1),
+>>>   	BPF_KPTR_UNREF = (1 << 2),
+>>>   	BPF_KPTR_REF   = (1 << 3),
+>>> -	BPF_KPTR       = BPF_KPTR_UNREF | BPF_KPTR_REF,
+>>> -	BPF_LIST_HEAD  = (1 << 4),
+>>> -	BPF_LIST_NODE  = (1 << 5),
+>>> -	BPF_RB_ROOT    = (1 << 6),
+>>> -	BPF_RB_NODE    = (1 << 7),
+>>> +	BPF_KPTR_PERCPU_REF   = (1 << 4),
+> 
+> I think _REF is redundant here. _UNREF is obsolete. We might remove it and
+> rename BPF_KPTR_REF to just BPF_KPTR.
+> BPF_KPTR_PERCPU should be clear enough.
 
-Yonghong
+Okay, will use BPF_KPTR_PERCPU in the next revision.
