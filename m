@@ -1,126 +1,109 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46855684
-	for <bpf@vger.kernel.org>; Mon, 21 Aug 2023 19:34:00 +0000 (UTC)
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CBCDDB
-	for <bpf@vger.kernel.org>; Mon, 21 Aug 2023 12:33:59 -0700 (PDT)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 37LIcZjJ007722
-	for <bpf@vger.kernel.org>; Mon, 21 Aug 2023 12:33:58 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=xW19t5EqFKm425UkLZNMHZhmEtPaVhDET6VAzksKHT8=;
- b=E2MkFSJ6RG7djl2x9j2+Nde0yz57tttalQrwegk9DJ8RrIeOW15vyownotRXvUzdQ6Ot
- 5jtaaUhREdQ5ske1nH9x1yI/nbRHVOO3n0t/EHFiUbCqiJ6pboDsouxXihLe9SOf8BFA
- jfCKTorFopJBT1k28zWoZBGgs+CcgPkJMtY= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by m0001303.ppops.net (PPS) with ESMTPS id 3sjsdx7gr0-4
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Mon, 21 Aug 2023 12:33:58 -0700
-Received: from twshared13387.02.ash9.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 21 Aug 2023 12:33:28 -0700
-Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-	id 4747223023FC5; Mon, 21 Aug 2023 12:33:15 -0700 (PDT)
-From: Dave Marchevsky <davemarchevsky@fb.com>
-To: <bpf@vger.kernel.org>
-CC: Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann
-	<daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau
-	<martin.lau@kernel.org>,
-        Kernel Team <kernel-team@fb.com>, <yonghong.song@linux.dev>,
-        Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH v2 bpf-next 2/7] bpf: Consider non-owning refs trusted
-Date: Mon, 21 Aug 2023 12:33:06 -0700
-Message-ID: <20230821193311.3290257-3-davemarchevsky@fb.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230821193311.3290257-1-davemarchevsky@fb.com>
-References: <20230821193311.3290257-1-davemarchevsky@fb.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1437F11707
+	for <bpf@vger.kernel.org>; Mon, 21 Aug 2023 19:44:16 +0000 (UTC)
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE155C2
+	for <bpf@vger.kernel.org>; Mon, 21 Aug 2023 12:44:15 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2bcb89b476bso27709801fa.1
+        for <bpf@vger.kernel.org>; Mon, 21 Aug 2023 12:44:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692647054; x=1693251854;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o7X9ySo5OwLp8DKa7+5HcQtvJJ7TyUa5Kwrdm9pFChw=;
+        b=iKMpIExi+a4WJylqTdILmurjCOSQXYYE+C6TfCBOnZtRXVR88X9Sn4ZwddkIWWKNkj
+         IE2zoZNUyho9WVDtqRMcwSq1/btQIRaa3JGJdnwAA9UEIwB3g9qIbUPQg1aMRPvtbNCS
+         S79e77KRgW2xVsrKSmtr97lfsjnc77pYuK+B2ffes9oQZ1ANhFUszxfrYl1RCfk448Ef
+         1/WYkONx1/bA3+VujSXCd4Nb8jG2y0CY1lhN7sZz86kTuPtco6Xs5nLNnx71NLKLOze0
+         kOpXE8ZtMwPTJc/xzoCypOKn1DsxoKPNKWBmjJLYu2vFEvjSfULqIJ7n+trzT3Hg+aoC
+         uHhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692647054; x=1693251854;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=o7X9ySo5OwLp8DKa7+5HcQtvJJ7TyUa5Kwrdm9pFChw=;
+        b=jKcnod7iClswzORBSInxYZNypoSEhQpItyIDj9sWXTlz5Skj/UwZbsZCCTuY8HZMRt
+         mtu1WvT2IlN891llcDbaA0iPcuUBzzFJ7uOJb0jrcH9aOxCfrRM0jlB9izYyaiAT16Fu
+         mPxlGnJUcPxFFTVUKqTJ9ocltDoeBg+uOQXduoqDmG0r8xtWaDT1ORKdb4QtzPJ0WBgd
+         0foLnI7CkTBXFfiNUxGcs9dLj+XdQTuMVjkAsBmzDa+L7rumEIJ7fUbuTQYhF8B03NW9
+         x4ZBNeonGfuz34AbAcGbZA5MV0wJ/dU4/QHPzIaK9dDKlzAqzI5CK/Iq2u4On6flqr6e
+         c7Ww==
+X-Gm-Message-State: AOJu0YynHByo06e314HEFO3ZpHBy35QYv5HbsQfyyiTvsiNJNeHioMV9
+	LaHbEXFlicdII9LXxQSIr0LpPlgxqI3e+GGsOnQ=
+X-Google-Smtp-Source: AGHT+IEHgeomnO5wZ6ULpr6VDVVcvSdLMhLzuq9ZUdDFn+qmGVxGeLQTiGPlN+6kLgTpUYWdVc4WEAcLKcoaK69PF+E=
+X-Received: by 2002:a2e:7213:0:b0:2bc:cdfa:3d82 with SMTP id
+ n19-20020a2e7213000000b002bccdfa3d82mr335086ljc.38.1692647053615; Mon, 21 Aug
+ 2023 12:44:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20230821000230.3108635-1-yonghong.song@linux.dev>
+ <CAP01T76hm=FBU3f9EePUsV525g=RFw0KPvSRn5BjHo=QGD_qEQ@mail.gmail.com>
+ <4a5a4fbf-fd9d-2723-2a5f-9a9da162bd5b@linux.dev> <CAP01T77R=sKccHMc5jrEF2vGyPpAGM25+ompTcT+W8W-mZCk+Q@mail.gmail.com>
+In-Reply-To: <CAP01T77R=sKccHMc5jrEF2vGyPpAGM25+ompTcT+W8W-mZCk+Q@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 21 Aug 2023 12:44:02 -0700
+Message-ID: <CAADnVQL-795Wzhy7E3N5XgVT0OgL0eFMwXxsD1myBGRbUVwaEg@mail.gmail.com>
+Subject: Re: [PATCH bpf 1/2] bpf: Fix a bpf_kptr_xchg() issue with local kptr
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Yonghong Song <yonghong.song@linux.dev>, Dave Marchevsky <davemarchevsky@fb.com>, 
+	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Kernel Team <kernel-team@fb.com>, Martin KaFai Lau <martin.lau@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: VMplWyEysRp_f2TNST5GjD84ouNbuQfv
-X-Proofpoint-ORIG-GUID: VMplWyEysRp_f2TNST5GjD84ouNbuQfv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-08-21_08,2023-08-18_01,2023-05-22_02
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-	SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Recent discussions around default kptr "trustedness" led to changes such
-as commit 6fcd486b3a0a ("bpf: Refactor RCU enforcement in the
-verifier."). One of the conclusions of those discussions, as expressed
-in code and comments in that patch, is that we'd like to move away from
-'raw' PTR_TO_BTF_ID without some type flag or other register state
-indicating trustedness. Although PTR_TRUSTED and PTR_UNTRUSTED flags mark
-this state explicitly, the verifier currently considers trustedness
-implied by other register state. For example, owning refs to graph
-collection nodes must have a nonzero ref_obj_id, so they pass the
-is_trusted_reg check despite having no explicit PTR_{UN}TRUSTED flag.
-This patch makes trustedness of non-owning refs to graph collection
-nodes explicit as well.
+On Mon, Aug 21, 2023 at 9:03=E2=80=AFAM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
+> > >
+> > > The fix on its own looks ok to me, but any reason you'd not like to
+> > > delegate to map_kptr_match_type?
+> > > Just to collect kptr related type matching logic in its own place.  I=
+t
+> > > doesn't matter too much though.
+> >
+> >  From comments from Alexei in
+> >
+> > https://lore.kernel.org/bpf/20230819002907.io3iphmnuk43xblu@macbook-pro=
+-8.dhcp.thefacebook.com/#t
+> >
+> > =3D=3D=3D=3D=3D
+> > The map_kptr_match_type() should have been used for kptrs pointing to
+> > kernel objects only.
+> > But you're calling it for MEM_ALLOC object with prog's BTF...
+> > =3D=3D=3D=3D=3D
+> >
+> > So looks like map_kptr_match_type() is for kptrs pointing to
+> > kernel objects only. So that is why I didn't use it.
+> >
+>
+> That function was added by me. Back then I added this check as we were
+> discussing possibly supporting such local kptr and more thought would
+> be needed about the design before just doing type matching. Also it
+> was using kernel_type_name which was later renamed as btf_type_name,
+> so as a precaution I added the btf_is_kernel check. Apart from that I
+> remember no other reason, so I think it should be ok to drop it now
+> and use it.
 
-By definition, non-owning refs are currently trusted. Although the ref
-has no control over pointee lifetime, due to non-owning ref clobbering
-rules (see invalidate_non_owning_refs) dereferencing a non-owning ref is
-safe in the critical section controlled by bpf_spin_lock associated with
-its owning collection.
+Agree with Kumar.
+When I said map_kptr_match_type() is only used with kernel BTF I meant
+that as code stands it was the intent of that helper.
+With MEM_ALLOC being kptr_xchg-ed it's better to share the code and
+map_kptr_match_type() should probably be adopted to work with both kernel
+and prog's BTFs.
 
-Note that the previous statement does not hold true for nodes with shared
-ownership due to the use-after-free issue that this series is
-addressing. True shared ownership was disabled by commit 7deca5eae833
-("bpf: Disable bpf_refcount_acquire kfunc calls until race conditions are=
- fixed"),
-though, so the statement holds for now. Further patches in the series wil=
-l change
-the trustedness state of non-owning refs before re-enabling
-bpf_refcount_acquire.
-
-Let's add NON_OWN_REF type flag to BPF_REG_TRUSTED_MODIFIERS such that a
-non-owning ref reg state would pass is_trusted_reg check. Somewhat
-surprisingly, this doesn't result in any change to user-visible
-functionality elsewhere in the verifier: graph collection nodes are all
-marked MEM_ALLOC, which tends to be handled in separate codepaths from
-"raw" PTR_TO_BTF_ID. Regardless, let's be explicit here and document the
-current state of things before changing it elsewhere in the series.
-
-Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
----
- include/linux/bpf_verifier.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index f70f9ac884d2..b6e58dab8e27 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -745,7 +745,7 @@ static inline bool bpf_prog_check_recur(const struct =
-bpf_prog *prog)
- 	}
- }
-=20
--#define BPF_REG_TRUSTED_MODIFIERS (MEM_ALLOC | PTR_TRUSTED)
-+#define BPF_REG_TRUSTED_MODIFIERS (MEM_ALLOC | PTR_TRUSTED | NON_OWN_REF=
-)
-=20
- static inline bool bpf_type_has_unsafe_modifiers(u32 type)
- {
---=20
-2.34.1
-
+And as Kumar noticed __check_ptr_off_reg() part of it is necessary for
+MEM_ALLOC too.
