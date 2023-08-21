@@ -1,142 +1,111 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FD3823C5;
-	Mon, 21 Aug 2023 14:53:01 +0000 (UTC)
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F132CE7;
-	Mon, 21 Aug 2023 07:52:59 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id B5ABE206BB;
-	Mon, 21 Aug 2023 14:52:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1692629578; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=QCjXCnPDxOs923ALySYO+egjUMFkHrYnb55t/mqxA30=;
-	b=V1XTWVeOOeVuqsNjcIbWLkgmI9dPJjxKdT4XVaUFHawfixjrskStbJgu9oQtrFO4Bc67bT
-	2oJhmuPjIuzmhVnNUyYXRiwTbQErsY55Btk0bdUEgp2KeHX/RQonZiQIkXQytUaX5aFKU5
-	YZ/dmNV0YVmsR6n+tEhrHZ8AbImN4Vs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1692629578;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=QCjXCnPDxOs923ALySYO+egjUMFkHrYnb55t/mqxA30=;
-	b=fLW8urHOpCj8AN47m9hJpBCuC2pv1VSxqCNUFa7EfIe6j0uavttXOFx4GTXhoX/sJHU0lS
-	T2rTtIwR2T95rUBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 75D1C13421;
-	Mon, 21 Aug 2023 14:52:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id 7J/qFkp642TLDAAAMHmgww
-	(envelope-from <krisman@suse.de>); Mon, 21 Aug 2023 14:52:58 +0000
-From: Gabriel Krisman Bertazi <krisman@suse.de>
-To: Breno Leitao <leitao@debian.org>
-Cc: sdf@google.com,  axboe@kernel.dk,  asml.silence@gmail.com,
-  willemdebruijn.kernel@gmail.com,  martin.lau@linux.dev,
-  bpf@vger.kernel.org,  linux-kernel@vger.kernel.org,
-  netdev@vger.kernel.org,  io-uring@vger.kernel.org,  kuba@kernel.org,
-  pabeni@redhat.com
-Subject: Re: [PATCH v3 6/9] io_uring/cmd: Introduce SOCKET_URING_OP_GETSOCKOPT
-In-Reply-To: <ZOMpxrTzvSGQRwYi@gmail.com> (Breno Leitao's message of "Mon, 21
-	Aug 2023 02:09:26 -0700")
-Organization: SUSE
-References: <20230817145554.892543-1-leitao@debian.org>
-	<20230817145554.892543-7-leitao@debian.org> <87zg2p345l.fsf@suse.de>
-	<ZOMpxrTzvSGQRwYi@gmail.com>
-Date: Mon, 21 Aug 2023 10:52:57 -0400
-Message-ID: <87fs4co3au.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DE7D79F7
+	for <bpf@vger.kernel.org>; Mon, 21 Aug 2023 15:09:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9624EC433C8;
+	Mon, 21 Aug 2023 15:09:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1692630583;
+	bh=FI4K6BFk3RcP+iLGylJ5QutVzletJNgfqF0MXLNwUf0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=dCKmpbvy7HJWTMFrBCj2/oKy5v78TCPMMm8WyuM+OEI+vYqq5+RaH3CnWLF7Y+df2
+	 Okr8hYkNswmMkxJOH1vIFrT9YnSkvPJk818OI6D6uno1ZVz+PZpRYGoL3S+dQV+yHv
+	 nWXIUNBh4HZf28mqMmWviX9yTVPJDCQbxl+YN5Pk/AasnLeNmY/RUsIEzxrq9SIuoJ
+	 BR9kDsPsuhDTWQUq6DVp5JPiZC0iHOiuGCHvrNczDwBTEpEe47c9w849ea2lIbyrD9
+	 GkeedOeN6HapZAa2Bcdna2Lvakkw3i1BUzBw/ZdEJ6Ec3nWSSnvWcVuhg01AozFdyz
+	 dGHAukZZPMMMw==
+Date: Tue, 22 Aug 2023 00:09:39 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org, Steven
+ Rostedt <rostedt@goodmis.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+ bpf@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>, Alexei
+ Starovoitov <ast@kernel.org>
+Subject: Re: [PATCH v5 0/9] tracing: Improbe BTF support on probe events
+Message-Id: <20230822000939.81897c0c904934bfb9156a59@kernel.org>
+In-Reply-To: <169137686814.271367.11218568219311636206.stgit@devnote2>
+References: <169137686814.271367.11218568219311636206.stgit@devnote2>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Breno Leitao <leitao@debian.org> writes:
+Hi Steve,
 
-> Hello Gabriel,
->
-> On Thu, Aug 17, 2023 at 02:38:46PM -0400, Gabriel Krisman Bertazi wrote:
->> Breno Leitao <leitao@debian.org> writes:
->> 
->> > +#if defined(CONFIG_NET)
->> >  int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
->> >  {
->> >  	struct socket *sock = cmd->file->private_data;
->> > @@ -189,8 +219,16 @@ int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
->> >  		if (ret)
->> >  			return ret;
->> >  		return arg;
->> > +	case SOCKET_URING_OP_GETSOCKOPT:
->> > +		return io_uring_cmd_getsockopt(sock, cmd, issue_flags);
->> >  	default:
->> >  		return -EOPNOTSUPP;
->> >  	}
->> >  }
->> > +#else
->> > +int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
->> > +{
->> > +	return -EOPNOTSUPP;
->> > +}
->> > +#endif
->> >  EXPORT_SYMBOL_GPL(io_uring_cmd_sock);
->> 
->> The CONFIG_NET guards are unrelated and need to go in a separate commit.
->> Specially because it is not only gating getsockopt, but also the already
->> merged SOCKET_URING_OP_SIOCINQ/_OP_SIOCOUTQ.
->
-> Well, so far, if CONFIG_NET is disable, and you call
-> io_uring_cmd_getsockopt, the callbacks will be called and returned
-> -EOPNOTSUPP.
+Can you review this series?
+I would like to push this to for-next.
 
-I'm not talking about io_uring_cmd_getsockopt; that would obviously
-return -EOPNOTSUPP before as well.  But you are changing
-io_uring_cmd_sock, which does more things:
+Thank you,
 
-int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
-{
-        [...]
-	if (!prot || !prot->ioctl)
-		return -EOPNOTSUPP;
+On Mon,  7 Aug 2023 11:54:28 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 
-	switch (cmd->sqe->cmd_op) {
-	case SOCKET_URING_OP_SIOCINQ:
-		ret = prot->ioctl(sk, SIOCINQ, &arg);
-		if (ret)
-			return ret;
-		return arg;
-	case SOCKET_URING_OP_SIOCOUTQ:
-		ret = prot->ioctl(sk, SIOCOUTQ, &arg);
-		if (ret)
-			return ret;
+> Hi,
+> 
+> Here is the 5th version of series to improve the BTF support on probe events.
+> The previous series is here:
+> 
+> https://lore.kernel.org/all/169078860386.173706.3091034523220945605.stgit@devnote2/
+> 
+> This version introduces kernel/trace/trace_btf.c to separate the btf generic
+> functions. These functions will be moved to btf.c next merge window.
+> This fixes the member-search function to return the bit-offset of the
+> parent anonymous union/structure. Thus the caller can calculate the real
+> bit-offset from the root data structure.
+> This also fixes the ftrace selftest issue which fails if the kernel
+> supports only BTF args but not support field access.
+> 
+> This series can be applied on top of "probes/core" branch of
+> https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git/
+> 
+> You can also get this series from:
+> 
+> git://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git topic/fprobe-event-ext
+> 
+> Thank you,
+> 
+> ---
+> 
+> Masami Hiramatsu (Google) (9):
+>       tracing/probes: Support BTF argument on module functions
+>       tracing/probes: Move finding func-proto API and getting func-param API to trace_btf
+>       tracing/probes: Add a function to search a member of a struct/union
+>       tracing/probes: Support BTF based data structure field access
+>       tracing/probes: Support BTF field access from $retval
+>       tracing/probes: Add string type check with BTF
+>       tracing/fprobe-event: Assume fprobe is a return event by $retval
+>       selftests/ftrace: Add BTF fields access testcases
+>       Documentation: tracing: Update fprobe event example with BTF field
+> 
+> 
+>  Documentation/trace/fprobetrace.rst                |   64 ++-
+>  include/linux/btf.h                                |    1 
+>  kernel/bpf/btf.c                                   |    2 
+>  kernel/trace/Makefile                              |    1 
+>  kernel/trace/trace.c                               |    3 
+>  kernel/trace/trace_btf.c                           |  109 ++++
+>  kernel/trace/trace_btf.h                           |   11 
+>  kernel/trace/trace_eprobe.c                        |    4 
+>  kernel/trace/trace_fprobe.c                        |   59 ++
+>  kernel/trace/trace_kprobe.c                        |    1 
+>  kernel/trace/trace_probe.c                         |  499 +++++++++++++++-----
+>  kernel/trace/trace_probe.h                         |   27 +
+>  kernel/trace/trace_uprobe.c                        |    1 
+>  .../ftrace/test.d/dynevent/add_remove_btfarg.tc    |   20 +
+>  .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |   10 
+>  15 files changed, 637 insertions(+), 175 deletions(-)
+>  create mode 100644 kernel/trace/trace_btf.c
+>  create mode 100644 kernel/trace/trace_btf.h
+> 
+> --
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-With your patch, these two cmd_op, are now being gated by CONFIG_NET.  I
-think it makes sense for them to be gated by it, But it should
-be in a separated change, or at least explained in your commit message.
-
-> With this new patch, it will eventually call sk_getsockopt which does
-> not exist in the CONFIG_NET=n world. That is why I have this
-> protection now. I.e, this `#if defined(CONFIG_NET)` is only necessary now,
-> since it is the first time this function (io_uring_cmd_sock) will call a
-> function that does not exist if CONFIG_NET is disabled.
->
-> I can split it in a different patch, if you think it makes a difference.
 
 -- 
-Gabriel Krisman Bertazi
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
