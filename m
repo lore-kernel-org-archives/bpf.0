@@ -1,104 +1,85 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E7037F
-	for <bpf@vger.kernel.org>; Tue, 22 Aug 2023 13:37:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C1EBC433C9;
-	Tue, 22 Aug 2023 13:37:33 +0000 (UTC)
-Date: Tue, 22 Aug 2023 09:37:20 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org, Martin
- KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org, Sven Schnelle
- <svens@linux.ibm.com>, Alexei Starovoitov <ast@kernel.org>
-Subject: Re: [PATCH v5 3/9] tracing/probes: Add a function to search a
- member of a struct/union
-Message-ID: <20230822093720.016c3554@rorschach.local.home>
-In-Reply-To: <169137689818.271367.4200174950023036516.stgit@devnote2>
-References: <169137686814.271367.11218568219311636206.stgit@devnote2>
-	<169137689818.271367.4200174950023036516.stgit@devnote2>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 360251CA02
+	for <bpf@vger.kernel.org>; Tue, 22 Aug 2023 13:50:51 +0000 (UTC)
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC4C1B9
+	for <bpf@vger.kernel.org>; Tue, 22 Aug 2023 06:50:49 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-162-8E3v38OlNGKU5le7b_tmJw-1; Tue, 22 Aug 2023 14:50:46 +0100
+X-MC-Unique: 8E3v38OlNGKU5le7b_tmJw-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 22 Aug
+ 2023 14:50:45 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Tue, 22 Aug 2023 14:50:45 +0100
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Breno Leitao' <leitao@debian.org>, Gabriel Krisman Bertazi
+	<krisman@suse.de>
+CC: "sdf@google.com" <sdf@google.com>, "axboe@kernel.dk" <axboe@kernel.dk>,
+	"asml.silence@gmail.com" <asml.silence@gmail.com>,
+	"willemdebruijn.kernel@gmail.com" <willemdebruijn.kernel@gmail.com>,
+	"martin.lau@linux.dev" <martin.lau@linux.dev>, "bpf@vger.kernel.org"
+	<bpf@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>, "io-uring@vger.kernel.org"
+	<io-uring@vger.kernel.org>, "kuba@kernel.org" <kuba@kernel.org>,
+	"pabeni@redhat.com" <pabeni@redhat.com>
+Subject: RE: [PATCH v3 8/9] io_uring/cmd: BPF hook for getsockopt cmd
+Thread-Topic: [PATCH v3 8/9] io_uring/cmd: BPF hook for getsockopt cmd
+Thread-Index: AQHZ1A/0EN7qKGB0O0aA2j2x1rbL4q/2UZaA
+Date: Tue, 22 Aug 2023 13:50:45 +0000
+Message-ID: <687cf089ecc5451d9e398d71c9e171f0@AcuMS.aculab.com>
+References: <20230817145554.892543-1-leitao@debian.org>
+ <20230817145554.892543-9-leitao@debian.org> <87pm3l32rk.fsf@suse.de>
+ <ZOMrD1DHeys0nFwt@gmail.com>
+In-Reply-To: <ZOMrD1DHeys0nFwt@gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Mon,  7 Aug 2023 11:54:58 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+...
+> Not really, sock->ops->getsockopt() does not suport sockptr_t, but
+> __user addresses, differently from setsockopt()
+>=20
+...
+>           int             (*getsockopt)(struct socket *sock, int level,
+>                                         int optname, char __user *optval,=
+ int __user *optlen);
+>=20
+> In order to be able to call sock->ops->getsockopt(), the callback
+> function will need to accepted sockptr.
 
-> --- a/kernel/trace/trace_btf.c
-> +++ b/kernel/trace/trace_btf.c
-> @@ -50,3 +50,60 @@ const struct btf_param *btf_get_func_param(const struct btf_type *func_proto, s3
->  		return NULL;
->  }
->  
-> +#define BTF_ANON_STACK_MAX	16
-> +
-> +/*
-> + * Find a member of data structure/union by name and return it.
-> + * Return NULL if not found, or -EINVAL if parameter is invalid.
-> + * If the member is an member of anonymous union/structure, the offset
-> + * of that anonymous union/structure is stored into @anon_offset. Caller
-> + * can calculate the correct offset from the root data structure by
-> + * adding anon_offset to the member's offset.
-> + */
-> +const struct btf_member *btf_find_struct_member(struct btf *btf,
-> +						const struct btf_type *type,
-> +						const char *member_name,
-> +						u32 *anon_offset)
-> +{
-> +	struct {
-> +		u32 tid;
-> +		u32 offset;
-> +	} anon_stack[BTF_ANON_STACK_MAX];
+It is also worth looking at whether 'optlen' can be passed in
+as a numeric parameter and then returned on success.
+That would move the user copy into the syscall wrapper.
 
-Where is this called as the above is 128 bytes, which is a bit large
-for the stack. It may not be bad if it's not that generic of a
-function. But if the stack is getting tight, this could still be an
-issue.
+=09David
 
--- Steve
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
+PT, UK
+Registration No: 1397386 (Wales)
 
-
-> +	const struct btf_member *member;
-> +	u32 tid, cur_offset = 0;
-> +	const char *name;
-> +	int i, top = 0;
-> +
-> +retry:
-> +	if (!btf_type_is_struct(type))
-> +		return ERR_PTR(-EINVAL);
-> +
-> +	for_each_member(i, type, member) {
-> +		if (!member->name_off) {
-> +			/* Anonymous union/struct: push it for later use */
-> +			type = btf_type_skip_modifiers(btf, member->type, &tid);
-> +			if (type && top < BTF_ANON_STACK_MAX) {
-> +				anon_stack[top].tid = tid;
-> +				anon_stack[top++].offset =
-> +					cur_offset + member->offset;
-> +			}
-> +		} else {
-> +			name = btf_name_by_offset(btf, member->name_off);
-> +			if (name && !strcmp(member_name, name)) {
-> +				if (anon_offset)
-> +					*anon_offset = cur_offset;
-> +				return member;
-> +			}
-> +		}
-> +	}
-> +	if (top > 0) {
-> +		/* Pop from the anonymous stack and retry */
-> +		tid = anon_stack[--top].tid;
-> +		cur_offset = anon_stack[top].offset;
-> +		type = btf_type_by_id(btf, tid);
-> +		goto retry;
-> +	}
-> +
-> +	return NULL;
-> +}
-> +
