@@ -1,54 +1,54 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4741D2EE
-	for <bpf@vger.kernel.org>; Tue, 22 Aug 2023 14:23:05 +0000 (UTC)
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14C0CD1
-	for <bpf@vger.kernel.org>; Tue, 22 Aug 2023 07:23:03 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 569B91D2E2
+	for <bpf@vger.kernel.org>; Tue, 22 Aug 2023 14:23:09 +0000 (UTC)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5564CC1
+	for <bpf@vger.kernel.org>; Tue, 22 Aug 2023 07:23:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1692714183;
+	s=mimecast20190719; t=1692714186;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=5M/hRtCDkx5mJxP2bDFGftPwYhWYnglT4hGCnOkg34M=;
-	b=GY/n205feXP+WY7ykm3qUwDmMH62fh6EZbEG4lGFpZD5QraFZeSvNNl64FluBdIpxmrZqG
-	vySksLfxelJRxcWXdzyUhnLz3+BjGGggxP78iHpy8vwVITsf50vq4SCOiM680VrTDZML17
-	SgwP7qAj7tC1npwtI3Q77OYUzilvMUw=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=aGBPocd8ZYgCSaz8KwLxCeq71cVC0OKXycTGwkJeFYg=;
+	b=BA43W+qI2jx/3eMXMR2YyghCDp3uuh7RUMixebg8BeumG6sbFsUR114QYjLwk6hj7ZbiCK
+	fKcZn0+gwvyMFTt+Y2y7OV0u1coIEuWQ5+awMZ4Abq+8tLEwBKEScTxSRmJz3M+LoDgNcT
+	d92SVGsORp3Kq7OZmIkBitOY8so1UYw=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-554-RqpUH7wgNiOm2EuMTFqdwQ-1; Tue, 22 Aug 2023 10:23:01 -0400
-X-MC-Unique: RqpUH7wgNiOm2EuMTFqdwQ-1
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-521a38098faso2884326a12.2
-        for <bpf@vger.kernel.org>; Tue, 22 Aug 2023 07:23:00 -0700 (PDT)
+ us-mta-93-7xsOih6fMQKS-gEhqkPH2w-1; Tue, 22 Aug 2023 10:23:04 -0400
+X-MC-Unique: 7xsOih6fMQKS-gEhqkPH2w-1
+Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-529fc4373bbso2079056a12.3
+        for <bpf@vger.kernel.org>; Tue, 22 Aug 2023 07:23:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692714180; x=1693318980;
+        d=1e100.net; s=20221208; t=1692714183; x=1693318983;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5M/hRtCDkx5mJxP2bDFGftPwYhWYnglT4hGCnOkg34M=;
-        b=jEuUtFRfiPp9bpr2HTgVWoZFFTL9wdblAlmVtImC6sX+UUv8Gn//UrPT1Te83YEOVs
-         2eW4bHLHZYAgpEEblvUMj8raL+r8FscDZXY7Gr9/DKsbHP+GVzGLzPTvxI+A/QOWsFs7
-         c+ormBJ5Fx0yTb9bcYEKB6Wh7J5cOrE48uMXkT1OyuA3vt5ICnHOAwTt4HWxS8HDlXZ9
-         vZaGzRSozaPtsSvy+E0RpWT3JfZ3PVIrfB4ErRiNsq2ZweH/556GmyiT/Ppb05NvUcSu
-         IY3S4ZfFa9fgOaoYf7hVH5UoupHDA4oACoJzcrRulxx7p65+si9kVPkPgbKTrPX736vK
-         7HCA==
-X-Gm-Message-State: AOJu0YzGvpkX1Rztv/UpVaTtvIUU7EKKzFiVjPBgI4JN9S9r4rjPTrFH
-	qKW9kgeJrOW8dIGhvE99SckF0YFnpcelTcGdjUsaGu3ug8Zamgfe0YAS4hG1oeYBYyEmA6vZA4f
-	vr3j7fMYatSbj
-X-Received: by 2002:aa7:d481:0:b0:528:88e2:7ff2 with SMTP id b1-20020aa7d481000000b0052888e27ff2mr7777421edr.1.1692714179970;
-        Tue, 22 Aug 2023 07:22:59 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF/FYc/OEK5o1tjgg/NVTIeGSx9says+oXdoObsu64vO3IliIOMEHoip/6Ge+FPf87lUzglqA==
-X-Received: by 2002:aa7:d481:0:b0:528:88e2:7ff2 with SMTP id b1-20020aa7d481000000b0052888e27ff2mr7777403edr.1.1692714179695;
-        Tue, 22 Aug 2023 07:22:59 -0700 (PDT)
+        bh=aGBPocd8ZYgCSaz8KwLxCeq71cVC0OKXycTGwkJeFYg=;
+        b=Tld7c11gMb8hX2qSOCC3YFLUW4ou813CZ4AUtR+13RWdhKRUPJDIJoVfPxh9+Su7Xw
+         yRCSlk5JqLX65ML75cMeMXcKRAGO9yaLEv5M0sjasqIUnudg2qI1pgx5KUNgEi+jMr4r
+         Sc90ZYPJclWv3lnuFN5et8nYQeSaPrcAIPYqzn0hcmftHQ0yRQ/cZe1dVeFV4TIgZ2fp
+         W4lGGYUSC6hKwgut4RgWmSNKyl7IGTlUbz4Ol2mWQw0e7a2r+jtw8/5LqpeoUpsfapLs
+         H1/Fe2OfQBzHZ55JBW48bpSzOHvGyX7pDu9Qm3tkOZWhoU3WmZ//GF4e8+uvc9JkjsuA
+         SmnQ==
+X-Gm-Message-State: AOJu0YwKJbYBrmUzSYCPkcXngT3d8K3N8t0D0oIEP2YeWZiht7szdoOP
+	k8ezFFKQHaCjAMdcWudtUamEvEBTf/fb19rgS1SISC6HCyH2W/d0WhUMcSKLgydvsVyOhp9Bfqc
+	MINumgjhPROWi
+X-Received: by 2002:a17:907:a065:b0:99b:ebf9:90f2 with SMTP id ia5-20020a170907a06500b0099bebf990f2mr7272622ejc.45.1692714183144;
+        Tue, 22 Aug 2023 07:23:03 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEzL8mTHixEVzjYOaE41W9p8JwN3KLArfKE8Ucq0sUpt/v7b7QAfSrC2eY+dH7nKOFy546/0A==
+X-Received: by 2002:a17:907:a065:b0:99b:ebf9:90f2 with SMTP id ia5-20020a170907a06500b0099bebf990f2mr7272599ejc.45.1692714182768;
+        Tue, 22 Aug 2023 07:23:02 -0700 (PDT)
 Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id d5-20020aa7d5c5000000b00521953ce6e0sm7670523eds.93.2023.08.22.07.22.59
+        by smtp.gmail.com with ESMTPSA id o26-20020a17090608da00b009a1082f423esm7668264eje.88.2023.08.22.07.23.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Aug 2023 07:22:59 -0700 (PDT)
+        Tue, 22 Aug 2023 07:23:02 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id ECE96D3CCA1; Tue, 22 Aug 2023 16:22:58 +0200 (CEST)
+	id 1D2E7D3CCA7; Tue, 22 Aug 2023 16:23:02 +0200 (CEST)
 From: =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -67,9 +67,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 Cc: =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
 	bpf@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH bpf-next 1/6] samples/bpf: Remove the xdp_monitor utility
-Date: Tue, 22 Aug 2023 16:22:39 +0200
-Message-ID: <20230822142255.1340991-2-toke@redhat.com>
+Subject: [PATCH bpf-next 4/6] samples/bpf: Remove the xdp1 and xdp2 utilities
+Date: Tue, 22 Aug 2023 16:22:42 +0200
+Message-ID: <20230822142255.1340991-5-toke@redhat.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230822142255.1340991-1-toke@redhat.com>
 References: <20230822142255.1340991-1-toke@redhat.com>
@@ -84,222 +84,466 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
 	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-	SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-	version=3.4.6
+	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-This utility has been ported to xdp-tools. Remove the unmaintained version
-in samples.
+The functionality of these utilities have been incorporated into the
+xdp-bench utility in xdp-tools. Remove the unmaintained versions in
+samples.
 
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- samples/bpf/Makefile           |   8 +--
- samples/bpf/xdp_monitor.bpf.c  |   8 ---
- samples/bpf/xdp_monitor_user.c | 118 ---------------------------------
- 3 files changed, 1 insertion(+), 133 deletions(-)
- delete mode 100644 samples/bpf/xdp_monitor.bpf.c
- delete mode 100644 samples/bpf/xdp_monitor_user.c
+ samples/bpf/Makefile    |   7 --
+ samples/bpf/xdp1_kern.c | 100 ------------------------
+ samples/bpf/xdp1_user.c | 166 ----------------------------------------
+ samples/bpf/xdp2_kern.c | 125 ------------------------------
+ 4 files changed, 398 deletions(-)
+ delete mode 100644 samples/bpf/xdp1_kern.c
+ delete mode 100644 samples/bpf/xdp1_user.c
+ delete mode 100644 samples/bpf/xdp2_kern.c
 
 diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index f90bcd3696bd..29b07c4ec066 100644
+index fb1dc9d96b2a..decd31167ee4 100644
 --- a/samples/bpf/Makefile
 +++ b/samples/bpf/Makefile
-@@ -55,7 +55,6 @@ tprogs-y += xdp_redirect_cpu
- tprogs-y += xdp_redirect_map_multi
- tprogs-y += xdp_redirect_map
- tprogs-y += xdp_redirect
--tprogs-y += xdp_monitor
- 
- # Libbpf dependencies
- LIBBPF_SRC = $(TOOLS_PATH)/lib/bpf
-@@ -116,7 +115,6 @@ xdp_redirect_map_multi-objs := xdp_redirect_map_multi_user.o $(XDP_SAMPLE)
- xdp_redirect_cpu-objs := xdp_redirect_cpu_user.o $(XDP_SAMPLE)
- xdp_redirect_map-objs := xdp_redirect_map_user.o $(XDP_SAMPLE)
- xdp_redirect-objs := xdp_redirect_user.o $(XDP_SAMPLE)
--xdp_monitor-objs := xdp_monitor_user.o $(XDP_SAMPLE)
- xdp_router_ipv4-objs := xdp_router_ipv4_user.o $(XDP_SAMPLE)
- 
- # Tell kbuild to always build the programs
-@@ -207,7 +205,6 @@ TPROGS_LDFLAGS := -L$(SYSROOT)/usr/lib
- endif
- 
- TPROGS_LDLIBS			+= $(LIBBPF) -lelf -lz
--TPROGLDLIBS_xdp_monitor		+= -lm
- TPROGLDLIBS_xdp_redirect	+= -lm
- TPROGLDLIBS_xdp_redirect_cpu	+= -lm
- TPROGLDLIBS_xdp_redirect_map	+= -lm
-@@ -330,7 +327,6 @@ $(obj)/xdp_redirect_cpu_user.o: $(obj)/xdp_redirect_cpu.skel.h
- $(obj)/xdp_redirect_map_multi_user.o: $(obj)/xdp_redirect_map_multi.skel.h
- $(obj)/xdp_redirect_map_user.o: $(obj)/xdp_redirect_map.skel.h
- $(obj)/xdp_redirect_user.o: $(obj)/xdp_redirect.skel.h
--$(obj)/xdp_monitor_user.o: $(obj)/xdp_monitor.skel.h
- $(obj)/xdp_router_ipv4_user.o: $(obj)/xdp_router_ipv4.skel.h
- 
- $(obj)/tracex5.bpf.o: $(obj)/syscall_nrs.h
-@@ -387,7 +383,6 @@ $(obj)/xdp_redirect_cpu.bpf.o: $(obj)/xdp_sample.bpf.o
- $(obj)/xdp_redirect_map_multi.bpf.o: $(obj)/xdp_sample.bpf.o
- $(obj)/xdp_redirect_map.bpf.o: $(obj)/xdp_sample.bpf.o
- $(obj)/xdp_redirect.bpf.o: $(obj)/xdp_sample.bpf.o
--$(obj)/xdp_monitor.bpf.o: $(obj)/xdp_sample.bpf.o
- $(obj)/xdp_router_ipv4.bpf.o: $(obj)/xdp_sample.bpf.o
- 
- $(obj)/%.bpf.o: $(src)/%.bpf.c $(obj)/vmlinux.h $(src)/xdp_sample.bpf.h $(src)/xdp_sample_shared.h
-@@ -399,7 +394,7 @@ $(obj)/%.bpf.o: $(src)/%.bpf.c $(obj)/vmlinux.h $(src)/xdp_sample.bpf.h $(src)/x
- 		-c $(filter %.bpf.c,$^) -o $@
- 
- LINKED_SKELS := xdp_redirect_cpu.skel.h xdp_redirect_map_multi.skel.h \
--		xdp_redirect_map.skel.h xdp_redirect.skel.h xdp_monitor.skel.h \
-+		xdp_redirect_map.skel.h xdp_redirect.skel.h \
- 		xdp_router_ipv4.skel.h
- clean-files += $(LINKED_SKELS)
- 
-@@ -407,7 +402,6 @@ xdp_redirect_cpu.skel.h-deps := xdp_redirect_cpu.bpf.o xdp_sample.bpf.o
- xdp_redirect_map_multi.skel.h-deps := xdp_redirect_map_multi.bpf.o xdp_sample.bpf.o
- xdp_redirect_map.skel.h-deps := xdp_redirect_map.bpf.o xdp_sample.bpf.o
- xdp_redirect.skel.h-deps := xdp_redirect.bpf.o xdp_sample.bpf.o
--xdp_monitor.skel.h-deps := xdp_monitor.bpf.o xdp_sample.bpf.o
- xdp_router_ipv4.skel.h-deps := xdp_router_ipv4.bpf.o xdp_sample.bpf.o
- 
- LINKED_BPF_SRCS := $(patsubst %.bpf.o,%.bpf.c,$(foreach skel,$(LINKED_SKELS),$($(skel)-deps)))
-diff --git a/samples/bpf/xdp_monitor.bpf.c b/samples/bpf/xdp_monitor.bpf.c
+@@ -30,8 +30,6 @@ tprogs-y += test_cgrp2_array_pin
+ tprogs-y += test_cgrp2_attach
+ tprogs-y += test_cgrp2_sock
+ tprogs-y += test_cgrp2_sock2
+-tprogs-y += xdp1
+-tprogs-y += xdp2
+ tprogs-y += xdp_router_ipv4
+ tprogs-y += test_current_task_under_cgroup
+ tprogs-y += trace_event
+@@ -83,9 +81,6 @@ test_cgrp2_array_pin-objs := test_cgrp2_array_pin.o
+ test_cgrp2_attach-objs := test_cgrp2_attach.o
+ test_cgrp2_sock-objs := test_cgrp2_sock.o
+ test_cgrp2_sock2-objs := test_cgrp2_sock2.o
+-xdp1-objs := xdp1_user.o
+-# reuse xdp1 source intentionally
+-xdp2-objs := xdp1_user.o
+ test_current_task_under_cgroup-objs := $(CGROUP_HELPERS) \
+ 				       test_current_task_under_cgroup_user.o
+ trace_event-objs := trace_event_user.o $(TRACE_HELPERS)
+@@ -132,8 +127,6 @@ always-y += test_overhead_raw_tp.bpf.o
+ always-y += test_overhead_kprobe.bpf.o
+ always-y += parse_varlen.o parse_simple.o parse_ldabs.o
+ always-y += test_cgrp2_tc.bpf.o
+-always-y += xdp1_kern.o
+-always-y += xdp2_kern.o
+ always-y += test_current_task_under_cgroup.bpf.o
+ always-y += trace_event_kern.o
+ always-y += sampleip_kern.o
+diff --git a/samples/bpf/xdp1_kern.c b/samples/bpf/xdp1_kern.c
 deleted file mode 100644
-index cfb41e2205f4..000000000000
---- a/samples/bpf/xdp_monitor.bpf.c
+index d91f27cbcfa9..000000000000
+--- a/samples/bpf/xdp1_kern.c
 +++ /dev/null
-@@ -1,8 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/*  Copyright(c) 2017-2018 Jesper Dangaard Brouer, Red Hat Inc.
+@@ -1,100 +0,0 @@
+-/* Copyright (c) 2016 PLUMgrid
 - *
-- * XDP monitor tool, based on tracepoints
+- * This program is free software; you can redistribute it and/or
+- * modify it under the terms of version 2 of the GNU General Public
+- * License as published by the Free Software Foundation.
 - */
--#include "xdp_sample.bpf.h"
+-#define KBUILD_MODNAME "foo"
+-#include <uapi/linux/bpf.h>
+-#include <linux/in.h>
+-#include <linux/if_ether.h>
+-#include <linux/if_packet.h>
+-#include <linux/if_vlan.h>
+-#include <linux/ip.h>
+-#include <linux/ipv6.h>
+-#include <bpf/bpf_helpers.h>
+-
+-struct {
+-	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
+-	__type(key, u32);
+-	__type(value, long);
+-	__uint(max_entries, 256);
+-} rxcnt SEC(".maps");
+-
+-static int parse_ipv4(void *data, u64 nh_off, void *data_end)
+-{
+-	struct iphdr *iph = data + nh_off;
+-
+-	if (iph + 1 > data_end)
+-		return 0;
+-	return iph->protocol;
+-}
+-
+-static int parse_ipv6(void *data, u64 nh_off, void *data_end)
+-{
+-	struct ipv6hdr *ip6h = data + nh_off;
+-
+-	if (ip6h + 1 > data_end)
+-		return 0;
+-	return ip6h->nexthdr;
+-}
+-
+-#define XDPBUFSIZE	60
+-SEC("xdp.frags")
+-int xdp_prog1(struct xdp_md *ctx)
+-{
+-	__u8 pkt[XDPBUFSIZE] = {};
+-	void *data_end = &pkt[XDPBUFSIZE-1];
+-	void *data = pkt;
+-	struct ethhdr *eth = data;
+-	int rc = XDP_DROP;
+-	long *value;
+-	u16 h_proto;
+-	u64 nh_off;
+-	u32 ipproto;
+-
+-	if (bpf_xdp_load_bytes(ctx, 0, pkt, sizeof(pkt)))
+-		return rc;
+-
+-	nh_off = sizeof(*eth);
+-	if (data + nh_off > data_end)
+-		return rc;
+-
+-	h_proto = eth->h_proto;
+-
+-	/* Handle VLAN tagged packet */
+-	if (h_proto == htons(ETH_P_8021Q) || h_proto == htons(ETH_P_8021AD)) {
+-		struct vlan_hdr *vhdr;
+-
+-		vhdr = data + nh_off;
+-		nh_off += sizeof(struct vlan_hdr);
+-		if (data + nh_off > data_end)
+-			return rc;
+-		h_proto = vhdr->h_vlan_encapsulated_proto;
+-	}
+-	/* Handle double VLAN tagged packet */
+-	if (h_proto == htons(ETH_P_8021Q) || h_proto == htons(ETH_P_8021AD)) {
+-		struct vlan_hdr *vhdr;
+-
+-		vhdr = data + nh_off;
+-		nh_off += sizeof(struct vlan_hdr);
+-		if (data + nh_off > data_end)
+-			return rc;
+-		h_proto = vhdr->h_vlan_encapsulated_proto;
+-	}
+-
+-	if (h_proto == htons(ETH_P_IP))
+-		ipproto = parse_ipv4(data, nh_off, data_end);
+-	else if (h_proto == htons(ETH_P_IPV6))
+-		ipproto = parse_ipv6(data, nh_off, data_end);
+-	else
+-		ipproto = 0;
+-
+-	value = bpf_map_lookup_elem(&rxcnt, &ipproto);
+-	if (value)
+-		*value += 1;
+-
+-	return rc;
+-}
 -
 -char _license[] SEC("license") = "GPL";
-diff --git a/samples/bpf/xdp_monitor_user.c b/samples/bpf/xdp_monitor_user.c
+diff --git a/samples/bpf/xdp1_user.c b/samples/bpf/xdp1_user.c
 deleted file mode 100644
-index 58015eb2ffae..000000000000
---- a/samples/bpf/xdp_monitor_user.c
+index f05e797013e9..000000000000
+--- a/samples/bpf/xdp1_user.c
 +++ /dev/null
-@@ -1,118 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/* Copyright(c) 2017 Jesper Dangaard Brouer, Red Hat, Inc. */
--static const char *__doc__=
--"XDP monitor tool, based on tracepoints\n";
--
--static const char *__doc_err_only__=
--" NOTICE: Only tracking XDP redirect errors\n"
--"         Enable redirect success stats via '-s/--stats'\n"
--"         (which comes with a per packet processing overhead)\n";
--
+@@ -1,166 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/* Copyright (c) 2016 PLUMgrid
+- */
+-#include <linux/bpf.h>
+-#include <linux/if_link.h>
+-#include <assert.h>
 -#include <errno.h>
+-#include <signal.h>
 -#include <stdio.h>
 -#include <stdlib.h>
--#include <stdbool.h>
--#include <stdint.h>
 -#include <string.h>
--#include <ctype.h>
 -#include <unistd.h>
--#include <locale.h>
--#include <getopt.h>
+-#include <libgen.h>
 -#include <net/if.h>
--#include <time.h>
--#include <signal.h>
+-
+-#include "bpf_util.h"
 -#include <bpf/bpf.h>
 -#include <bpf/libbpf.h>
--#include "bpf_util.h"
--#include "xdp_sample_user.h"
--#include "xdp_monitor.skel.h"
 -
--static int mask = SAMPLE_REDIRECT_ERR_CNT | SAMPLE_CPUMAP_ENQUEUE_CNT |
--		  SAMPLE_CPUMAP_KTHREAD_CNT | SAMPLE_EXCEPTION_CNT |
--		  SAMPLE_DEVMAP_XMIT_CNT | SAMPLE_DEVMAP_XMIT_CNT_MULTI;
+-static int ifindex;
+-static __u32 xdp_flags = XDP_FLAGS_UPDATE_IF_NOEXIST;
+-static __u32 prog_id;
 -
--DEFINE_SAMPLE_INIT(xdp_monitor);
+-static void int_exit(int sig)
+-{
+-	__u32 curr_prog_id = 0;
 -
--static const struct option long_options[] = {
--	{ "help", no_argument, NULL, 'h' },
--	{ "stats", no_argument, NULL, 's' },
--	{ "interval", required_argument, NULL, 'i' },
--	{ "verbose", no_argument, NULL, 'v' },
--	{}
--};
+-	if (bpf_xdp_query_id(ifindex, xdp_flags, &curr_prog_id)) {
+-		printf("bpf_xdp_query_id failed\n");
+-		exit(1);
+-	}
+-	if (prog_id == curr_prog_id)
+-		bpf_xdp_detach(ifindex, xdp_flags, NULL);
+-	else if (!curr_prog_id)
+-		printf("couldn't find a prog id on a given interface\n");
+-	else
+-		printf("program on interface changed, not removing\n");
+-	exit(0);
+-}
+-
+-/* simple per-protocol drop counter
+- */
+-static void poll_stats(int map_fd, int interval)
+-{
+-	unsigned int nr_cpus = bpf_num_possible_cpus();
+-	__u64 values[nr_cpus], prev[UINT8_MAX] = { 0 };
+-	int i;
+-
+-	while (1) {
+-		__u32 key = UINT32_MAX;
+-
+-		sleep(interval);
+-
+-		while (bpf_map_get_next_key(map_fd, &key, &key) == 0) {
+-			__u64 sum = 0;
+-
+-			assert(bpf_map_lookup_elem(map_fd, &key, values) == 0);
+-			for (i = 0; i < nr_cpus; i++)
+-				sum += values[i];
+-			if (sum > prev[key])
+-				printf("proto %u: %10llu pkt/s\n",
+-				       key, (sum - prev[key]) / interval);
+-			prev[key] = sum;
+-		}
+-	}
+-}
+-
+-static void usage(const char *prog)
+-{
+-	fprintf(stderr,
+-		"usage: %s [OPTS] IFACE\n\n"
+-		"OPTS:\n"
+-		"    -S    use skb-mode\n"
+-		"    -N    enforce native mode\n"
+-		"    -F    force loading prog\n",
+-		prog);
+-}
 -
 -int main(int argc, char **argv)
 -{
--	unsigned long interval = 2;
--	int ret = EXIT_FAIL_OPTION;
--	struct xdp_monitor *skel;
--	bool errors_only = true;
--	int longindex = 0, opt;
--	bool error = true;
+-	struct bpf_prog_info info = {};
+-	__u32 info_len = sizeof(info);
+-	const char *optstr = "FSN";
+-	int prog_fd, map_fd, opt;
+-	struct bpf_program *prog;
+-	struct bpf_object *obj;
+-	struct bpf_map *map;
+-	char filename[256];
+-	int err;
 -
--	/* Parse commands line args */
--	while ((opt = getopt_long(argc, argv, "si:vh",
--				  long_options, &longindex)) != -1) {
+-	while ((opt = getopt(argc, argv, optstr)) != -1) {
 -		switch (opt) {
--		case 's':
--			errors_only = false;
--			mask |= SAMPLE_REDIRECT_CNT;
+-		case 'S':
+-			xdp_flags |= XDP_FLAGS_SKB_MODE;
 -			break;
--		case 'i':
--			interval = strtoul(optarg, NULL, 0);
+-		case 'N':
+-			/* default, set below */
 -			break;
--		case 'v':
--			sample_switch_mode();
+-		case 'F':
+-			xdp_flags &= ~XDP_FLAGS_UPDATE_IF_NOEXIST;
 -			break;
--		case 'h':
--			error = false;
 -		default:
--			sample_usage(argv, long_options, __doc__, mask, error);
--			return ret;
+-			usage(basename(argv[0]));
+-			return 1;
 -		}
 -	}
 -
--	skel = xdp_monitor__open();
--	if (!skel) {
--		fprintf(stderr, "Failed to xdp_monitor__open: %s\n",
--			strerror(errno));
--		ret = EXIT_FAIL_BPF;
--		goto end;
+-	if (!(xdp_flags & XDP_FLAGS_SKB_MODE))
+-		xdp_flags |= XDP_FLAGS_DRV_MODE;
+-
+-	if (optind == argc) {
+-		usage(basename(argv[0]));
+-		return 1;
 -	}
 -
--	ret = sample_init_pre_load(skel);
--	if (ret < 0) {
--		fprintf(stderr, "Failed to sample_init_pre_load: %s\n", strerror(-ret));
--		ret = EXIT_FAIL_BPF;
--		goto end_destroy;
+-	ifindex = if_nametoindex(argv[optind]);
+-	if (!ifindex) {
+-		perror("if_nametoindex");
+-		return 1;
 -	}
 -
--	ret = xdp_monitor__load(skel);
--	if (ret < 0) {
--		fprintf(stderr, "Failed to xdp_monitor__load: %s\n", strerror(errno));
--		ret = EXIT_FAIL_BPF;
--		goto end_destroy;
+-	snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
+-	obj = bpf_object__open_file(filename, NULL);
+-	if (libbpf_get_error(obj))
+-		return 1;
+-
+-	prog = bpf_object__next_program(obj, NULL);
+-	bpf_program__set_type(prog, BPF_PROG_TYPE_XDP);
+-
+-	err = bpf_object__load(obj);
+-	if (err)
+-		return 1;
+-
+-	prog_fd = bpf_program__fd(prog);
+-
+-	map = bpf_object__next_map(obj, NULL);
+-	if (!map) {
+-		printf("finding a map in obj file failed\n");
+-		return 1;
+-	}
+-	map_fd = bpf_map__fd(map);
+-
+-	if (!prog_fd) {
+-		printf("bpf_prog_load_xattr: %s\n", strerror(errno));
+-		return 1;
 -	}
 -
--	ret = sample_init(skel, mask);
--	if (ret < 0) {
--		fprintf(stderr, "Failed to initialize sample: %s\n", strerror(-ret));
--		ret = EXIT_FAIL_BPF;
--		goto end_destroy;
+-	signal(SIGINT, int_exit);
+-	signal(SIGTERM, int_exit);
+-
+-	if (bpf_xdp_attach(ifindex, prog_fd, xdp_flags, NULL) < 0) {
+-		printf("link set xdp fd failed\n");
+-		return 1;
 -	}
 -
--	if (errors_only)
--		printf("%s", __doc_err_only__);
--
--	ret = sample_run(interval, NULL, NULL);
--	if (ret < 0) {
--		fprintf(stderr, "Failed during sample run: %s\n", strerror(-ret));
--		ret = EXIT_FAIL;
--		goto end_destroy;
+-	err = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
+-	if (err) {
+-		printf("can't get prog info - %s\n", strerror(errno));
+-		return err;
 -	}
--	ret = EXIT_OK;
--end_destroy:
--	xdp_monitor__destroy(skel);
--end:
--	sample_exit(ret);
+-	prog_id = info.id;
+-
+-	poll_stats(map_fd, 1);
+-
+-	return 0;
 -}
+diff --git a/samples/bpf/xdp2_kern.c b/samples/bpf/xdp2_kern.c
+deleted file mode 100644
+index 8bca674451ed..000000000000
+--- a/samples/bpf/xdp2_kern.c
++++ /dev/null
+@@ -1,125 +0,0 @@
+-/* Copyright (c) 2016 PLUMgrid
+- *
+- * This program is free software; you can redistribute it and/or
+- * modify it under the terms of version 2 of the GNU General Public
+- * License as published by the Free Software Foundation.
+- */
+-#define KBUILD_MODNAME "foo"
+-#include <uapi/linux/bpf.h>
+-#include <linux/in.h>
+-#include <linux/if_ether.h>
+-#include <linux/if_packet.h>
+-#include <linux/if_vlan.h>
+-#include <linux/ip.h>
+-#include <linux/ipv6.h>
+-#include <bpf/bpf_helpers.h>
+-
+-struct {
+-	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
+-	__type(key, u32);
+-	__type(value, long);
+-	__uint(max_entries, 256);
+-} rxcnt SEC(".maps");
+-
+-static void swap_src_dst_mac(void *data)
+-{
+-	unsigned short *p = data;
+-	unsigned short dst[3];
+-
+-	dst[0] = p[0];
+-	dst[1] = p[1];
+-	dst[2] = p[2];
+-	p[0] = p[3];
+-	p[1] = p[4];
+-	p[2] = p[5];
+-	p[3] = dst[0];
+-	p[4] = dst[1];
+-	p[5] = dst[2];
+-}
+-
+-static int parse_ipv4(void *data, u64 nh_off, void *data_end)
+-{
+-	struct iphdr *iph = data + nh_off;
+-
+-	if (iph + 1 > data_end)
+-		return 0;
+-	return iph->protocol;
+-}
+-
+-static int parse_ipv6(void *data, u64 nh_off, void *data_end)
+-{
+-	struct ipv6hdr *ip6h = data + nh_off;
+-
+-	if (ip6h + 1 > data_end)
+-		return 0;
+-	return ip6h->nexthdr;
+-}
+-
+-#define XDPBUFSIZE	60
+-SEC("xdp.frags")
+-int xdp_prog1(struct xdp_md *ctx)
+-{
+-	__u8 pkt[XDPBUFSIZE] = {};
+-	void *data_end = &pkt[XDPBUFSIZE-1];
+-	void *data = pkt;
+-	struct ethhdr *eth = data;
+-	int rc = XDP_DROP;
+-	long *value;
+-	u16 h_proto;
+-	u64 nh_off;
+-	u32 ipproto;
+-
+-	if (bpf_xdp_load_bytes(ctx, 0, pkt, sizeof(pkt)))
+-		return rc;
+-
+-	nh_off = sizeof(*eth);
+-	if (data + nh_off > data_end)
+-		return rc;
+-
+-	h_proto = eth->h_proto;
+-
+-	/* Handle VLAN tagged packet */
+-	if (h_proto == htons(ETH_P_8021Q) || h_proto == htons(ETH_P_8021AD)) {
+-		struct vlan_hdr *vhdr;
+-
+-		vhdr = data + nh_off;
+-		nh_off += sizeof(struct vlan_hdr);
+-		if (data + nh_off > data_end)
+-			return rc;
+-		h_proto = vhdr->h_vlan_encapsulated_proto;
+-	}
+-	/* Handle double VLAN tagged packet */
+-	if (h_proto == htons(ETH_P_8021Q) || h_proto == htons(ETH_P_8021AD)) {
+-		struct vlan_hdr *vhdr;
+-
+-		vhdr = data + nh_off;
+-		nh_off += sizeof(struct vlan_hdr);
+-		if (data + nh_off > data_end)
+-			return rc;
+-		h_proto = vhdr->h_vlan_encapsulated_proto;
+-	}
+-
+-	if (h_proto == htons(ETH_P_IP))
+-		ipproto = parse_ipv4(data, nh_off, data_end);
+-	else if (h_proto == htons(ETH_P_IPV6))
+-		ipproto = parse_ipv6(data, nh_off, data_end);
+-	else
+-		ipproto = 0;
+-
+-	value = bpf_map_lookup_elem(&rxcnt, &ipproto);
+-	if (value)
+-		*value += 1;
+-
+-	if (ipproto == IPPROTO_UDP) {
+-		swap_src_dst_mac(data);
+-
+-		if (bpf_xdp_store_bytes(ctx, 0, pkt, sizeof(pkt)))
+-			return rc;
+-
+-		rc = XDP_TX;
+-	}
+-
+-	return rc;
+-}
+-
+-char _license[] SEC("license") = "GPL";
 -- 
 2.41.0
 
