@@ -1,313 +1,113 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F17A1C9FF
-	for <bpf@vger.kernel.org>; Tue, 22 Aug 2023 13:06:16 +0000 (UTC)
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92810CDD
-	for <bpf@vger.kernel.org>; Tue, 22 Aug 2023 06:06:13 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C3997F
+	for <bpf@vger.kernel.org>; Tue, 22 Aug 2023 13:12:18 +0000 (UTC)
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC9BD7
+	for <bpf@vger.kernel.org>; Tue, 22 Aug 2023 06:12:16 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.169])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4RVV325MxJz4f3mJy
-	for <bpf@vger.kernel.org>; Tue, 22 Aug 2023 21:06:06 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgBH16m+suRk0ldIBQ--.4082S7;
-	Tue, 22 Aug 2023 21:06:09 +0800 (CST)
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4RVVB41XX9z4f3m7M
+	for <bpf@vger.kernel.org>; Tue, 22 Aug 2023 21:12:12 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+	by APP4 (Coremail) with SMTP id gCh0CgCnfaAptORkBq5IBQ--.28989S2;
+	Tue, 22 Aug 2023 21:12:13 +0800 (CST)
+Subject: Re: Question: Is it OK to assume the address of bpf_dynptr_kern will
+ be 8-bytes aligned and reuse the lowest bits to save extra info ?
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Joanne Koong <joannelkoong@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+References: <db144689-79c8-6cfb-6a11-983958b28955@huaweicloud.com>
+ <e51d4765-25ae-28d6-e141-e7272faa439e@huaweicloud.com>
+ <63cb33d1-6930-0555-dd43-7dd73a786f75@huaweicloud.com>
+ <CAADnVQLAQMV21M99xif1OZnyS+vyHpLJDb31c1b+s3fhrCLEvQ@mail.gmail.com>
+ <b3fab6ae-1425-48a5-1faa-bb88d44a08f1@huaweicloud.com>
+ <CAADnVQKoriZJn7B2+7O6h+Ebg_0VgViU-XXGMQ0ky6ysEJLFkw@mail.gmail.com>
+ <3ec5eed2-fe42-5eef-f8b6-7d6289e37ed8@huaweicloud.com>
+ <CAADnVQKJOc-qxFQmc8An6gp6Bq07LSGLTezQeQRX82TS-H4zvg@mail.gmail.com>
+ <57e3df33-f49b-5c8b-82b3-3a8c63a9b37e@huaweicloud.com>
+ <CAADnVQ+2JoqJJvinPvKA+4Nm8F9rTrpXBdq4SmbTeq_9bw=mwg@mail.gmail.com>
 From: Hou Tao <houtao@huaweicloud.com>
-To: bpf@vger.kernel.org
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Song Liu <song@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	houtao1@huawei.com
-Subject: [PATCH bpf-next 3/3] selftests/bpf: Test preemption between bpf_obj_new() and bpf_obj_drop()
-Date: Tue, 22 Aug 2023 21:38:07 +0800
-Message-Id: <20230822133807.3198625-4-houtao@huaweicloud.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20230822133807.3198625-1-houtao@huaweicloud.com>
-References: <20230822133807.3198625-1-houtao@huaweicloud.com>
+Message-ID: <a3eb33c4-b84f-5386-291c-c43d77b39c48@huaweicloud.com>
+Date: Tue, 22 Aug 2023 21:12:09 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <CAADnVQ+2JoqJJvinPvKA+4Nm8F9rTrpXBdq4SmbTeq_9bw=mwg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgBH16m+suRk0ldIBQ--.4082S7
-X-Coremail-Antispam: 1UD129KBjvJXoWxKr47WFW7Xw1fGw4kXr4kXrb_yoWxWw1Upa
-	yfAry0kwn2qw17G34Sqan7Cr4rtrW8X3W8JryfWFy5Zr17Wr95tr1xKFyYqF93KrWvqw4r
-	uFn8tFWkArWkJaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
-	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
-	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
-	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2I
-	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAI
-	w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
-	0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1c4S7UUUUU==
+Content-Language: en-US
+X-CM-TRANSID:gCh0CgCnfaAptORkBq5IBQ--.28989S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ur4ftrWruFykur47ZrW7XFb_yoW8uFW7pF
+	W8Gayj9r4DJFWDZ3sIgw48Xry8tF18Gr17Za1kJ3yruFyq9F9agr48Wa17CFn5Jr1fC3y2
+	qrW2934fX3y5Z37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
+	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
+	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6x
+	AIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
+	aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1CPfJUUUUU==
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-	MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
-	version=3.4.6
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-From: Hou Tao <houtao1@huawei.com>
+Hi,
 
-The test case creates 4 threads and then pins these 4 threads in CPU 0.
-These 4 threads will run different bpf program through
-bpf_prog_test_run_opts() and these bpf program will use bpf_obj_new()
-and bpf_obj_drop() to allocate and free local kptrs concurrently.
+On 8/22/2023 11:25 AM, Alexei Starovoitov wrote:
+> On Mon, Aug 21, 2023 at 6:46 PM Hou Tao <houtao@huaweicloud.com> wrote:
+>> Hi,
+>>
+>> On 8/22/2023 8:58 AM, Alexei Starovoitov wrote:
+>>> On Mon, Aug 21, 2023 at 5:55 PM Hou Tao <houtao@huaweicloud.com> wrote:
+>>>> Hi,
+>>>>
+>>>> On 8/22/2023 7:49 AM, Alexei Starovoitov wrote:
+>>>>> On Sat, Aug 19, 2023 at 3:39 AM Hou Tao <houtao@huaweicloud.com> wrote:
+>>>>>> Hi,
+>>>>>>
+>>>>>> On 8/18/2023 7:00 AM, Alexei Starovoitov wrote:
+>>>>>>> On Wed, Aug 16, 2023 at 11:35 PM Hou Tao <houtao@huaweicloud.com> wrote:
+>>>>>>>
+>> SNIP
+>>>>>>> If the existing bpf_map_lookup_elem() helper doesn't fit qp-tree we can
+>>>>>>> use new kfuncs from bpf prog and LPM-like map accessors from syscall.
+>>>>>> It is a feasible solution, but it will make qp-trie be different with
+>>>>>> other map types. I will try to extend the APIs in bpf_map_ops first to
+>>>>>> see how much churns it may introduce.
+>>>>> you mean you want to try to dynamically adapt bpf_map_lookup_elem()
+>>>>> to consider 'void *key' as a pointer to dynptr for bpf prog and
+>>>>> lpm-like tuple for syscall?
+>>>>> I'm afraid the verifier changes will be messy, since PTR_TO_MAP_KEY is
+>>>>> quite special.
+>>>> No. I didn't plan to do that. I am trying to add three new APIs in
+>>>> bpf_map_ops to handle lookup/update/delete operation from bpf syscall
+>>>> (e.g, map_lookup_elem_syscall). So bpf program and bpf syscall can use
+>>>> different API to operate on qp-trie.
+>>> How does bpf prog side api look like?
+>>> I thought we wanted to use dynptr as a key?
+>> Yes. bpf prog will use dynptr as the map key. The bpf program will use
+>> the same map helpers as hash map to operate on qp-trie and the verifier
+>> will be updated to allow using dynptr as map key for qp-trie.
+> And that's the problem I just mentioned.
+> PTR_TO_MAP_KEY is special. I don't think we should hack it to also
+> mean ARG_PTR_TO_DYNPTR depending on the first argument (map type).
 
-Under preemptible kernel, bpf_obj_new() and bpf_obj_drop() may preempt
-each other, bpf_obj_new() may return NULL and the test will fail before
-the fixes are applied as shown below:
-
-  test_preempted_bpf_ma_op:PASS:open_and_load 0 nsec
-  test_preempted_bpf_ma_op:PASS:attach 0 nsec
-  test_preempted_bpf_ma_op:PASS:no test prog 0 nsec
-  test_preempted_bpf_ma_op:PASS:no test prog 0 nsec
-  test_preempted_bpf_ma_op:PASS:no test prog 0 nsec
-  test_preempted_bpf_ma_op:PASS:no test prog 0 nsec
-  test_preempted_bpf_ma_op:PASS:pthread_create 0 nsec
-  test_preempted_bpf_ma_op:PASS:pthread_create 0 nsec
-  test_preempted_bpf_ma_op:PASS:pthread_create 0 nsec
-  test_preempted_bpf_ma_op:PASS:pthread_create 0 nsec
-  test_preempted_bpf_ma_op:PASS:run prog err 0 nsec
-  test_preempted_bpf_ma_op:PASS:run prog err 0 nsec
-  test_preempted_bpf_ma_op:PASS:run prog err 0 nsec
-  test_preempted_bpf_ma_op:PASS:run prog err 0 nsec
-  test_preempted_bpf_ma_op:FAIL:ENOMEM unexpected ENOMEM: got TRUE
-  #168     preempted_bpf_ma_op:FAIL
-  Summary: 0/0 PASSED, 0 SKIPPED, 1 FAILED
-
-Signed-off-by: Hou Tao <houtao1@huawei.com>
----
- .../bpf/prog_tests/preempted_bpf_ma_op.c      |  89 +++++++++++++++
- .../selftests/bpf/progs/preempted_bpf_ma_op.c | 106 ++++++++++++++++++
- 2 files changed, 195 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/preempted_bpf_ma_op.c
- create mode 100644 tools/testing/selftests/bpf/progs/preempted_bpf_ma_op.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/preempted_bpf_ma_op.c b/tools/testing/selftests/bpf/prog_tests/preempted_bpf_ma_op.c
-new file mode 100644
-index 000000000000..9ac7210af4c9
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/preempted_bpf_ma_op.c
-@@ -0,0 +1,89 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2023. Huawei Technologies Co., Ltd */
-+#define _GNU_SOURCE
-+#include <sched.h>
-+#include <pthread.h>
-+#include <stdbool.h>
-+#include <test_progs.h>
-+
-+#include "preempted_bpf_ma_op.skel.h"
-+
-+#define ALLOC_THREAD_NR 4
-+#define ALLOC_LOOP_NR 512
-+
-+struct alloc_ctx {
-+	/* output */
-+	int run_err;
-+	/* input */
-+	int fd;
-+	bool *nomem_err;
-+};
-+
-+static void *run_alloc_prog(void *data)
-+{
-+	struct alloc_ctx *ctx = data;
-+	cpu_set_t cpu_set;
-+	int i;
-+
-+	CPU_ZERO(&cpu_set);
-+	CPU_SET(0, &cpu_set);
-+	pthread_setaffinity_np(pthread_self(), sizeof(cpu_set), &cpu_set);
-+
-+	for (i = 0; i < ALLOC_LOOP_NR && !*ctx->nomem_err; i++) {
-+		LIBBPF_OPTS(bpf_test_run_opts, topts);
-+		int err;
-+
-+		err = bpf_prog_test_run_opts(ctx->fd, &topts);
-+		ctx->run_err |= err | topts.retval;
-+	}
-+
-+	return NULL;
-+}
-+
-+void test_preempted_bpf_ma_op(void)
-+{
-+	struct alloc_ctx ctx[ALLOC_THREAD_NR];
-+	struct preempted_bpf_ma_op *skel;
-+	pthread_t tid[ALLOC_THREAD_NR];
-+	int i, err;
-+
-+	skel = preempted_bpf_ma_op__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	err = preempted_bpf_ma_op__attach(skel);
-+	if (!ASSERT_OK(err, "attach"))
-+		goto out;
-+
-+	for (i = 0; i < ARRAY_SIZE(ctx); i++) {
-+		struct bpf_program *prog;
-+		char name[8];
-+
-+		snprintf(name, sizeof(name), "test%d", i);
-+		prog = bpf_object__find_program_by_name(skel->obj, name);
-+		if (!ASSERT_OK_PTR(prog, "no test prog"))
-+			goto out;
-+
-+		ctx[i].run_err = 0;
-+		ctx[i].fd = bpf_program__fd(prog);
-+		ctx[i].nomem_err = &skel->bss->nomem_err;
-+	}
-+
-+	memset(tid, 0, sizeof(tid));
-+	for (i = 0; i < ARRAY_SIZE(tid); i++) {
-+		err = pthread_create(&tid[i], NULL, run_alloc_prog, &ctx[i]);
-+		if (!ASSERT_OK(err, "pthread_create"))
-+			break;
-+	}
-+
-+	for (i = 0; i < ARRAY_SIZE(tid); i++) {
-+		if (!tid[i])
-+			continue;
-+		pthread_join(tid[i], NULL);
-+		ASSERT_EQ(ctx[i].run_err, 0, "run prog err");
-+	}
-+
-+	ASSERT_FALSE(skel->bss->nomem_err, "ENOMEM");
-+out:
-+	preempted_bpf_ma_op__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/preempted_bpf_ma_op.c b/tools/testing/selftests/bpf/progs/preempted_bpf_ma_op.c
-new file mode 100644
-index 000000000000..55907ef961bf
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/preempted_bpf_ma_op.c
-@@ -0,0 +1,106 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2023. Huawei Technologies Co., Ltd */
-+#include <vmlinux.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#include "bpf_experimental.h"
-+
-+struct bin_data {
-+	char data[256];
-+	struct bpf_spin_lock lock;
-+};
-+
-+struct map_value {
-+	struct bin_data __kptr * data;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__type(key, int);
-+	__type(value, struct map_value);
-+	__uint(max_entries, 2048);
-+} array SEC(".maps");
-+
-+char _license[] SEC("license") = "GPL";
-+
-+bool nomem_err = false;
-+
-+static int del_array(unsigned int i, int *from)
-+{
-+	struct map_value *value;
-+	struct bin_data *old;
-+
-+	value = bpf_map_lookup_elem(&array, from);
-+	if (!value)
-+		return 1;
-+
-+	old = bpf_kptr_xchg(&value->data, NULL);
-+	if (old)
-+		bpf_obj_drop(old);
-+
-+	(*from)++;
-+	return 0;
-+}
-+
-+static int add_array(unsigned int i, int *from)
-+{
-+	struct bin_data *old, *new;
-+	struct map_value *value;
-+
-+	value = bpf_map_lookup_elem(&array, from);
-+	if (!value)
-+		return 1;
-+
-+	new = bpf_obj_new(typeof(*new));
-+	if (!new) {
-+		nomem_err = true;
-+		return 1;
-+	}
-+
-+	old = bpf_kptr_xchg(&value->data, new);
-+	if (old)
-+		bpf_obj_drop(old);
-+
-+	(*from)++;
-+	return 0;
-+}
-+
-+static void del_then_add_array(int from)
-+{
-+	int i;
-+
-+	i = from;
-+	bpf_loop(512, del_array, &i, 0);
-+
-+	i = from;
-+	bpf_loop(512, add_array, &i, 0);
-+}
-+
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG2(test0, int, a)
-+{
-+	del_then_add_array(0);
-+	return 0;
-+}
-+
-+SEC("fentry/bpf_fentry_test2")
-+int BPF_PROG2(test1, int, a, u64, b)
-+{
-+	del_then_add_array(512);
-+	return 0;
-+}
-+
-+SEC("fentry/bpf_fentry_test3")
-+int BPF_PROG2(test2, char, a, int, b, u64, c)
-+{
-+	del_then_add_array(1024);
-+	return 0;
-+}
-+
-+SEC("fentry/bpf_fentry_test4")
-+int BPF_PROG2(test3, void *, a, char, b, int, c, u64, d)
-+{
-+	del_then_add_array(1536);
-+	return 0;
-+}
--- 
-2.29.2
+Sorry for misunderstanding your reply. But before switch to the kfunc
+way, could you please point me to some code or function which shows the
+specialty of PTR_MAP_KEY ?
 
