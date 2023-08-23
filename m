@@ -1,176 +1,124 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67B77CA7E;
-	Wed, 23 Aug 2023 15:07:01 +0000 (UTC)
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F7C10D;
-	Wed, 23 Aug 2023 08:06:54 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4RW8gp3y3Qz4f3lJv;
-	Wed, 23 Aug 2023 23:06:46 +0800 (CST)
-Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP4 (Coremail) with SMTP id gCh0CgAn_qCIIOZksUWeBQ--.39856S9;
-	Wed, 23 Aug 2023 23:06:49 +0800 (CST)
-From: Pu Lehui <pulehui@huaweicloud.com>
-To: linux-riscv@lists.infradead.org,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15ED6AD42
+	for <bpf@vger.kernel.org>; Wed, 23 Aug 2023 15:15:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBCA5C433C7;
+	Wed, 23 Aug 2023 15:15:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1692803734;
+	bh=ASbMdCajbcDHLaUjdYxqw9oJ/MlOFQjowbpMQ9Bc3tQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=J/RefnlCaBda4PdVcYjWR3IbDkE0mG0vxMvz2hnYhaO5ClKwcm8lxO8AxJ9QLMb6M
+	 rtJob9vFs8qgToO6kK5Il5NEih4ib2W7YWYUin/fXvjMP6HA1j506H7RaDep9iBJe9
+	 ns7w6p2NE9KVLQ/SjxN5Fo4kbp0OubH5AX2S9lPI9mF5rniZWQvjMunjnZWgdIYgWP
+	 +Ubu8PvJvB+kL2TCM1MUl8N2womMJJpFI8Q/lsmDEKaYAu/CcIaZWuqTmGrQ16wAf5
+	 JqYe/pEWty1UTjOl5LcooD8WSdvS7+tjGwGbmwOpJo7j3E6yYbkSW5CqkRV+vvO9xZ
+	 1UMN8/6fuWVZA==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Florent Revest <revest@chromium.org>
+Cc: linux-trace-kernel@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
+	bpf <bpf@vger.kernel.org>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Jiri Olsa <jolsa@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Xu Kuohai <xukuohai@huawei.com>,
-	Puranjay Mohan <puranjay12@gmail.com>,
-	Pu Lehui <pulehui@huawei.com>,
-	Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf-next 7/7] selftests/bpf: Enable cpu v4 tests for RV64
-Date: Wed, 23 Aug 2023 23:10:59 +0000
-Message-Id: <20230823231059.3363698-8-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230823231059.3363698-1-pulehui@huaweicloud.com>
-References: <20230823231059.3363698-1-pulehui@huaweicloud.com>
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH v4 0/9] bpf: fprobe: rethook: Use ftrace_regs instead of pt_regs
+Date: Thu, 24 Aug 2023 00:15:28 +0900
+Message-Id: <169280372795.282662.9784422934484459769.stgit@devnote2>
+X-Mailer: git-send-email 2.34.1
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgAn_qCIIOZksUWeBQ--.39856S9
-X-Coremail-Antispam: 1UD129KBjvJXoWxCF1DJryUCr4UJw4UXrW5Wrg_yoW7Jr1rp3
-	WkuasIy3WxKF1a9F1fAF4jvFWrGrs7ZrWUAFW0vr4Du3ZrJrWIqr92kr45JrZ0grZYvrs5
-	Zw1IgwnxZr48Zw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUQl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2048vs2IY02
-	0E87I2jVAFwI0_JF0E3s1l82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0
-	rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6x
-	IIjxv20xvEc7CjxVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK
-	6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4
-	xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8
-	JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20V
-	AGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI
-	7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-	Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
-	6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UMIIF0x
-	vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv
-	6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7sRiHq2tUUUUU==
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-	autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
 
-From: Pu Lehui <pulehui@huawei.com>
+Hi,
 
-Enable cpu v4 tests for RV64, and the relevant tests have passed.
+Here is the 4th version of the series to use ftrace_regs instead of pt_regs
+in fprobe.
+The previous version is here;
 
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
+https://lore.kernel.org/all/169181859570.505132.10136520092011157898.stgit@devnote2/
+
+This version fixes the issues pointed in the previous series; fix document
+description, keep CONFIG_FPROBE dependency for multi-kprobe, add
+static_assert check for ftrace_regs size, reorder the ftrace_partial_regs()
+patch for perf fprobe event support, introduce per-cpu pt_regs stack for
+perf fprobe event and add Florent's Ack (Thanks!). Also this adds a new
+documentation patch to clarify that the $argN and $retval is best effort.
+
+ - Document fix for the current fprobe callback prototype
+ - Simply replace pt_regs in fprobe_entry_handler with ftrace_regs.
+ - Expose ftrace_regs even if CONFIG_FUNCTION_TRACER=n.
+ - Introduce ftrace_partial_regs(). (This changes ARM64 which needs a custom
+   implementation)
+ - Replace pt_regs in rethook and fprobe_exit_handler with ftrace_regs. This
+   introduce a new HAVE_PT_REGS_TO_FTRACE_REGS_CAST which means ftrace_regs is
+   just a wrapper of pt_regs (except for arm64, other architectures do this)
+ - Update fprobe-events to use ftrace_regs natively.
+ - Update bpf multi-kprobe handler use ftrace_partial_regs().
+ - Update document for new fprobe callbacks.
+ - Add notes for the $argN and $retval.
+
+This series can be applied against the probes/core branch on linux-trace tree.
+
+This series can also be found below branch.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git/log/?h=topic/fprobe-ftrace-regs
+
+Thank you,
+
 ---
- tools/testing/selftests/bpf/progs/test_ldsx_insn.c | 3 ++-
- tools/testing/selftests/bpf/progs/verifier_bswap.c | 3 ++-
- tools/testing/selftests/bpf/progs/verifier_gotol.c | 3 ++-
- tools/testing/selftests/bpf/progs/verifier_ldsx.c  | 3 ++-
- tools/testing/selftests/bpf/progs/verifier_movsx.c | 3 ++-
- tools/testing/selftests/bpf/progs/verifier_sdiv.c  | 3 ++-
- 6 files changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_ldsx_insn.c b/tools/testing/selftests/bpf/progs/test_ldsx_insn.c
-index 916d9435f12c..67c14ba1e87b 100644
---- a/tools/testing/selftests/bpf/progs/test_ldsx_insn.c
-+++ b/tools/testing/selftests/bpf/progs/test_ldsx_insn.c
-@@ -5,7 +5,8 @@
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
- 
--#if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86)) && __clang_major__ >= 18
-+#if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
-+     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && __clang_major__ >= 18
- const volatile int skip = 0;
- #else
- const volatile int skip = 1;
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bswap.c b/tools/testing/selftests/bpf/progs/verifier_bswap.c
-index 770f9d882542..8893094725f0 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bswap.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bswap.c
-@@ -4,7 +4,8 @@
- #include <bpf/bpf_helpers.h>
- #include "bpf_misc.h"
- 
--#if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86)) && __clang_major__ >= 18
-+#if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
-+     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && __clang_major__ >= 18
- 
- SEC("socket")
- __description("BSWAP, 16")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_gotol.c b/tools/testing/selftests/bpf/progs/verifier_gotol.c
-index 17319a505e87..2dae5322a18e 100644
---- a/tools/testing/selftests/bpf/progs/verifier_gotol.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_gotol.c
-@@ -4,7 +4,8 @@
- #include <bpf/bpf_helpers.h>
- #include "bpf_misc.h"
- 
--#if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86)) && __clang_major__ >= 18
-+#if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
-+     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && __clang_major__ >= 18
- 
- SEC("socket")
- __description("gotol, small_imm")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_ldsx.c b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-index 4a2b567c0f69..0c638f45aaf1 100644
---- a/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-@@ -4,7 +4,8 @@
- #include <bpf/bpf_helpers.h>
- #include "bpf_misc.h"
- 
--#if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86)) && __clang_major__ >= 18
-+#if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
-+     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && __clang_major__ >= 18
- 
- SEC("socket")
- __description("LDSX, S8")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_movsx.c b/tools/testing/selftests/bpf/progs/verifier_movsx.c
-index d9528d578bd9..3c8ac2c57b1b 100644
---- a/tools/testing/selftests/bpf/progs/verifier_movsx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_movsx.c
-@@ -4,7 +4,8 @@
- #include <bpf/bpf_helpers.h>
- #include "bpf_misc.h"
- 
--#if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86)) && __clang_major__ >= 18
-+#if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
-+     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && __clang_major__ >= 18
- 
- SEC("socket")
- __description("MOV32SX, S8")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_sdiv.c b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-index fa3945930e93..0990f8825675 100644
---- a/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-@@ -4,7 +4,8 @@
- #include <bpf/bpf_helpers.h>
- #include "bpf_misc.h"
- 
--#if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86)) && __clang_major__ >= 18
-+#if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
-+     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && __clang_major__ >= 18
- 
- SEC("socket")
- __description("SDIV32, non-zero imm divisor, check 1")
--- 
-2.39.2
+Masami Hiramatsu (Google) (9):
+      Documentation: probes: Add a new ret_ip callback parameter
+      fprobe: Use fprobe_regs in fprobe entry handler
+      tracing: Expose ftrace_regs regardless of CONFIG_FUNCTION_TRACER
+      fprobe: rethook: Use ftrace_regs in fprobe exit handler and rethook
+      ftrace: Add ftrace_partial_regs() for converting ftrace_regs to pt_regs
+      tracing/fprobe: Enable fprobe events with CONFIG_DYNAMIC_FTRACE_WITH_ARGS
+      bpf: Enable kprobe_multi feature if CONFIG_FPROBE is enabled
+      Documentations: probes: Update fprobe document to use ftrace_regs
+      Documentation: tracing: Add a note about argument and retval access
 
+
+ Documentation/trace/fprobe.rst      |   18 +++--
+ Documentation/trace/fprobetrace.rst |    8 ++
+ Documentation/trace/kprobetrace.rst |    8 ++
+ arch/Kconfig                        |    1 
+ arch/arm64/include/asm/ftrace.h     |   11 +++
+ arch/loongarch/Kconfig              |    1 
+ arch/s390/Kconfig                   |    1 
+ arch/s390/include/asm/ftrace.h      |    4 +
+ arch/x86/Kconfig                    |    1 
+ arch/x86/kernel/rethook.c           |   13 ++-
+ include/linux/fprobe.h              |    4 +
+ include/linux/ftrace.h              |   89 ++++++++++++++++++------
+ include/linux/rethook.h             |   11 ++-
+ kernel/kprobes.c                    |   10 ++-
+ kernel/trace/Kconfig                |    9 ++
+ kernel/trace/bpf_trace.c            |   14 ++--
+ kernel/trace/fprobe.c               |   10 +--
+ kernel/trace/rethook.c              |   16 ++--
+ kernel/trace/trace_fprobe.c         |  131 ++++++++++++++++++++++++++---------
+ kernel/trace/trace_probe_tmpl.h     |    2 -
+ lib/test_fprobe.c                   |   10 +--
+ samples/fprobe/fprobe_example.c     |    4 +
+ 22 files changed, 267 insertions(+), 109 deletions(-)
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
