@@ -1,63 +1,62 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AAC3AD42
-	for <bpf@vger.kernel.org>; Wed, 23 Aug 2023 15:52:06 +0000 (UTC)
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FB910D0
-	for <bpf@vger.kernel.org>; Wed, 23 Aug 2023 08:52:01 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b9b50be31aso89029741fa.3
-        for <bpf@vger.kernel.org>; Wed, 23 Aug 2023 08:52:00 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B8AFC2CB
+	for <bpf@vger.kernel.org>; Wed, 23 Aug 2023 16:20:42 +0000 (UTC)
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A151B0
+	for <bpf@vger.kernel.org>; Wed, 23 Aug 2023 09:20:40 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b703a0453fso96873751fa.3
+        for <bpf@vger.kernel.org>; Wed, 23 Aug 2023 09:20:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692805919; x=1693410719;
+        d=gmail.com; s=20221208; t=1692807639; x=1693412439;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hdzvUnmQGqPL33vdbadyluhAnWE0eYSjwxwQRt99O+k=;
-        b=VDv86vvEMBD3hbDznCp0GL8ywxB5n4o6ZazLM46f0FmPD8PjtvgRxUYnF2SDxMb2sH
-         KO17WGJjNnGL0a5dtEzW1HPbLs9+1FvB+mnX44d9rXrD/jgCvTKA0I2cZwttzGA6eZHW
-         vgnETZC5CgiVUfISIG7E0Tg58A4OoNAMB610NIYnxmLDARfA7Qo3Obgfu0iiKkS8R775
-         LAgiGCLRKeTMNPvb0gVCGP/VRYNI/VIS6DNoLz1usJjd92VBSlVagJyJNcqOfJFFeMod
-         3zM0qOVEPO0K/EoU4L9/5qorIaidO9DnC94OlnmzuQQHRm+bmfOPOQkrIG9nhaNysGFs
-         IE7g==
+        bh=pgsf86BNhMX3GiCgge0P9KHFW3xNlPFln9yO2+fzkpc=;
+        b=TScK7YE7AktEE4CTIDh43pbKJXfsRq6sr+NBuLZoNJ4q6uN7Tn3upLbMDkm6Vuw04s
+         q2QPpWMnh+kccXqJqwCD7Sim372dqPbrLxWjxVu7qgr5Ra8mwnh9TFcusEX40ZQnZST4
+         o9YBH8biEVZJO9yQTx2yPdJH4cK46FVgdtqJArqC6QMzuc8NF00ApZrDEhSFYgNsVdZR
+         TBuLS//2FYM0uBOV2eDNZgvaMOToSIHqau6ggktOMYpc2RPcsRP1jJ9tNJbieDB8sOFW
+         Cf5Fsawsh6t1ZZBmb7KSeM8zW/E9wPnmLA9KtUEijxXy8fFysjea8eRZYSVnZDR/lEgl
+         0IzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692805919; x=1693410719;
+        d=1e100.net; s=20221208; t=1692807639; x=1693412439;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hdzvUnmQGqPL33vdbadyluhAnWE0eYSjwxwQRt99O+k=;
-        b=i2AoCy2HMxcAhfBuofZUyfphN/Osa0Oj7PkL32pEBM7YAUnJim9vi5+IPYcIhga4Eb
-         mLAszwMMnnTASJecKSuq6LJ77p+RzLutE8iD+WbCFbx6G4sDQ2YZ62sSQ4qhAyveoetG
-         C8oeRCHhQgPq+kuIcTvy0ZiGrJReK2vKBrkIEqfvcmen1F4N98xoxc6T+rfe8gQ5V7P1
-         L6n6yTkZv8IPat1E2sFulNt1Me/hn6vWEQbCBQsKqi8JXAjl6FKtwB/cAQ/D64Y4wJ/H
-         n5NLL0n3Vg32i9rbAq+/YSzbXlrQwuoJd1JxlxkfISYNrX1xiwYPjId3i5XSUJTsl8Wc
-         ELdw==
-X-Gm-Message-State: AOJu0Yz2fcnsO28XZ/VZZu/AX0lHyyriElZwBoL/aiGENfPxkNrbFvtP
-	cWJeFewnZ3ZpUFpuA6d6ljLWpy7gv/l5Sjz+zMg=
-X-Google-Smtp-Source: AGHT+IHWG28AOMLv0RAnyrENlqwvI9nK4CJg8w6Ob7T/8FXLSCmjQFYw0ysLXyZdIESk/wVmZQZF61wA9alG0AHLk00=
-X-Received: by 2002:a2e:9b4e:0:b0:2b5:7a87:a85a with SMTP id
- o14-20020a2e9b4e000000b002b57a87a85amr9642528ljj.13.1692805919168; Wed, 23
- Aug 2023 08:51:59 -0700 (PDT)
+        bh=pgsf86BNhMX3GiCgge0P9KHFW3xNlPFln9yO2+fzkpc=;
+        b=hSaIQls+aTEA8ttITpQsqVLeDLnB3XC6DAYrHR3RZ2+ZQDngFGGw5wO4whpmaStbYP
+         T+Gi7Hpa4eUK485VuUL/O477L2n3qW5D1Gus6D0i4b9B5b1obep7/xrN26SDGUBg76i3
+         tOhCavtqV6DedMuXnSZ+SoiXUbW7he1RBVz4ko/Jdqq4CJYS9xhXJ7ach1ho0E5FU+Ys
+         qtQyitYuoRlypQ4BkAtuF7Vu1Bwvqj3Vz3q+J9xRiLEyhzQ17BuB+ctbKrV0wtUdDk36
+         vuG4Saiw+FhxpeWrA2JGNWwHV0QFO/MoRI7MOiVjjJaC/mnHcxni6WfiPMOEVeh/WpSX
+         mIfw==
+X-Gm-Message-State: AOJu0YwF8prFJ3T0BmRfj3iyTkL0eBG8EryZhKXE7dPSrHyqyAcJbfZ6
+	VoG2wD+BbFDpelmpUXfem+64eIW1PbbDU+7/ZnA=
+X-Google-Smtp-Source: AGHT+IGsYP434fnXPgNzOFsFJhZo72LnE3fLNNOqSgTjY0uH57qOwm9tlqeEIHQTHT8LKophk0dEBHlNKV14F+B5JNs=
+X-Received: by 2002:a2e:380a:0:b0:2b6:d13a:8e34 with SMTP id
+ f10-20020a2e380a000000b002b6d13a8e34mr9569429lja.46.1692807638746; Wed, 23
+ Aug 2023 09:20:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230818083920.3771-1-laoar.shao@gmail.com> <20230818083920.3771-3-laoar.shao@gmail.com>
- <CAADnVQJ-BcSfPVL4J8DPA0XXgWtfUSXDzjnNeQvf1Z2SAASQ2g@mail.gmail.com> <45af850d8a07305eee252e5aa5014dbe743ca2af.camel@gmail.com>
-In-Reply-To: <45af850d8a07305eee252e5aa5014dbe743ca2af.camel@gmail.com>
+References: <20230821193311.3290257-1-davemarchevsky@fb.com>
+ <20230821193311.3290257-4-davemarchevsky@fb.com> <01367775-1be4-a344-60d7-6b2b1e48b77e@linux.dev>
+In-Reply-To: <01367775-1be4-a344-60d7-6b2b1e48b77e@linux.dev>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 23 Aug 2023 08:51:48 -0700
-Message-ID: <CAADnVQKGzQpcP+GhYOH2pg-M0WqBXsQErZT6MyFYdSNypUPWDA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add selftest for allow_ptr_leaks
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Yafang Shao <laoar.shao@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	bpf <bpf@vger.kernel.org>
+Date: Wed, 23 Aug 2023 09:20:27 -0700
+Message-ID: <CAADnVQK-6A08+OCtOK20yRebBP_N1hKgfmHxtMgokM67LZrcEQ@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 3/7] bpf: Use bpf_mem_free_rcu when
+ bpf_obj_dropping refcounted nodes
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: Dave Marchevsky <davemarchevsky@fb.com>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	Kernel Team <kernel-team@fb.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -67,46 +66,92 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Wed, Aug 23, 2023 at 2:45=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
+On Tue, Aug 22, 2023 at 11:26=E2=80=AFPM Yonghong Song <yonghong.song@linux=
+.dev> wrote:
 >
-> On Mon, 2023-08-21 at 15:45 -0700, Alexei Starovoitov wrote:
-> [...]
-> > > diff --git a/tools/testing/selftests/bpf/progs/test_tc_bpf.c b/tools/=
-testing/selftests/bpf/progs/test_tc_bpf.c
-> > > index d28ca8d..3e0f218 100644
-> > > --- a/tools/testing/selftests/bpf/progs/test_tc_bpf.c
-> > > +++ b/tools/testing/selftests/bpf/progs/test_tc_bpf.c
-> > > @@ -1,5 +1,8 @@
-> > >  // SPDX-License-Identifier: GPL-2.0
-> > >
-> > > +#include <linux/pkt_cls.h>
-> > > +#include <linux/ip.h>
-> > > +#include <linux/if_ether.h>
-> >
-> > Due to above it fails to compile:
-> >
-> > In file included from progs/test_tc_bpf.c:4:
-> > In file included from /usr/include/linux/ip.h:21:
-> > In file included from /usr/include/asm/byteorder.h:5:
-> > In file included from /usr/include/linux/byteorder/little_endian.h:13:
-> > /usr/include/linux/swab.h:136:8: error: unknown type name '__always_inl=
-ine'
-> >   136 | static __always_inline unsigned long __swab(const unsigned long=
- y)
-> >       |        ^
-> >
 >
-> This is strange, I can compile it no problem. On my system:
-> /usr/include/linux/swab.h includes /usr/include/linux/stddef.h
-> which defines __always_inline.
 >
-> What distro are you using?
+> On 8/21/23 12:33 PM, Dave Marchevsky wrote:
+> > This is the final fix for the use-after-free scenario described in
+> > commit 7793fc3babe9 ("bpf: Make bpf_refcount_acquire fallible for
+> > non-owning refs"). That commit, by virtue of changing
+> > bpf_refcount_acquire's refcount_inc to a refcount_inc_not_zero, fixed
+> > the "refcount incr on 0" splat. The not_zero check in
+> > refcount_inc_not_zero, though, still occurs on memory that could have
+> > been free'd and reused, so the commit didn't properly fix the root
+> > cause.
+> >
+> > This patch actually fixes the issue by free'ing using the recently-adde=
+d
+> > bpf_mem_free_rcu, which ensures that the memory is not reused until
+> > RCU grace period has elapsed. If that has happened then
+> > there are no non-owning references alive that point to the
+> > recently-free'd memory, so it can be safely reused.
+> >
+> > Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
+> > Acked-by: Yonghong Song <yonghong.song@linux.dev>
+> > ---
+> >   kernel/bpf/helpers.c | 6 +++++-
+> >   1 file changed, 5 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> > index eb91cae0612a..945a85e25ac5 100644
+> > --- a/kernel/bpf/helpers.c
+> > +++ b/kernel/bpf/helpers.c
+> > @@ -1913,7 +1913,11 @@ void __bpf_obj_drop_impl(void *p, const struct b=
+tf_record *rec)
+> >
+> >       if (rec)
+> >               bpf_obj_free_fields(rec, p);
+>
+> During reviewing my percpu kptr patch with link
+>
+> https://lore.kernel.org/bpf/20230814172809.1361446-1-yonghong.song@linux.=
+dev/T/#m2f7631b8047e9f5da60a0a9cd8717fceaf1adbb7
+> Kumar mentioned although percpu memory itself is freed under rcu.
+> But its record fields are freed immediately. This will cause
+> the problem since there may be some active uses of these fields
+> within rcu cs and after bpf_obj_free_fields(), some fields may
+> be re-initialized with new memory but they do not have chances
+> to free any more.
+>
+> Do we have problem here as well?
 
-That was centos8.
-dnf provides /usr/include/linux/swab.h
-kernel-headers-6.4.3.x86_64 : Header files for the Linux kernel for use by =
-glibc
-Repo        : kernel
-Matched from:
-Filename    : /usr/include/linux/swab.h
+I think it's not an issue here or in your percpu patch,
+since bpf_obj_free_fields() calls __bpf_obj_drop_impl() which will
+call bpf_mem_free_rcu() (after this patch set lands).
+
+In other words all bpf pointers are either properly life time
+checked through the verifier and freed via immediate bpf_mem_free()
+or they're bpf_mem_free_rcu().
+
+
+>
+> I am thinking whether I could create another flavor of bpf_mem_free_rcu
+> with a pre_free_callback function, something like
+>    bpf_mem_free_rcu_cb2(struct bpf_mem_alloc *ma, void *ptr,
+>        void (*cb)(void *, void *), void *arg1, void *arg2)
+>
+> The cb(arg1, arg2) will be called right before the real free of "ptr".
+>
+> For example, for this patch, the callback function can be
+>
+> static bpf_obj_free_fields_cb(void *rec, void *p)
+> {
+>         if (rec)
+>                 bpf_obj_free_fields(rec, p);
+>                 /* we need to ensure recursive freeing fields free
+>                  * needs to be done immediately, which means we will
+>                  * add a parameter to __bpf_obj_drop_impl() to
+>                  * indicate whether bpf_mem_free or bpf_mem_free_rcu
+>                  * should be called.
+>                  */
+> }
+>
+> bpf_mem_free_rcu_cb2(&bpf_global_ma, p, bpf_obj_free_fields_cb, rec, p);
+
+It sounds nice in theory, but will be difficult to implement.
+bpf_ma would need to add extra two 8 byte pointers for every object,
+but there is no room at present. So to free after rcu gp with a callback
+it would need to allocate 16 byte (at least) which might fail and so on.
+bpf_mem_free_rcu_cb2() would be the last resort.
