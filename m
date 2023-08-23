@@ -1,49 +1,65 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5595FBE7B;
-	Wed, 23 Aug 2023 13:49:08 +0000 (UTC)
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75EB519A;
-	Wed, 23 Aug 2023 06:49:03 -0700 (PDT)
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-523b066d7ceso6980283a12.2;
-        Wed, 23 Aug 2023 06:49:03 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85F63C2D4
+	for <bpf@vger.kernel.org>; Wed, 23 Aug 2023 14:51:49 +0000 (UTC)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C812E6D
+	for <bpf@vger.kernel.org>; Wed, 23 Aug 2023 07:51:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1692802307;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ui6+MdQPBHClMUzt17Gxb4m37Amorx/TKujWGiY52KY=;
+	b=blhen4WNWI9yf9U4FAra/gvRsZZT9eTnzlIK214su0rKtdvGJp59gGFLVwcepjm5tGfz/c
+	Cj0EcMf1JCByjXv+GyWu+fjq2r690QNKA6QQwwo4uu5lROCz+tiLBGBeipCWwp0EQRMknp
+	VXkP/h+3admA+WNYbvKlUKuebXdCecQ=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-551-RXJh7TX3PseJsGoIR3TCdg-1; Wed, 23 Aug 2023 10:51:45 -0400
+X-MC-Unique: RXJh7TX3PseJsGoIR3TCdg-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f42bcef2acso36432355e9.2
+        for <bpf@vger.kernel.org>; Wed, 23 Aug 2023 07:51:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692798542; x=1693403342;
+        d=1e100.net; s=20221208; t=1692802304; x=1693407104;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8HVeMF2i6Eu6fNCP7qdp68KyRQC3Cd1eZ1vG5fM2PLY=;
-        b=Pebi1r6Wjo1oGUHsZ+sUedx/YCVC2nX3BDach1wOr1Nw/L220u2Bjuu60XPSQ5uAHE
-         lAiJReqfwztBwHhrcL9s2yufeNq4AxpbQzg6ZVwK25zOvNqV5huFiVwgbPe5kdrn2XHh
-         bWJF2f31RV2b4+LCFaxfMcchMXdA79uG3K2tUqMGS94VHF/MXYP4V2l61W+eh2cfjuDv
-         8cH0zGQ+Wq11euee3i8dZjMH/AykK1ysTZXtPXgWK+M3njS0mbAziWYAfvPGOFBZRQRa
-         0tG6wQBXJ2ouERGlzNuuU3kEfeRhCdVysBZEsYWlwU34bjkYoxrbEH/fMi9wFmMiYYFB
-         YasQ==
-X-Gm-Message-State: AOJu0YxytPYgK5En0HFYaTGWJdpiSTwwU3qGsYcddkXimxBkKJu0Mbw2
-	dcpneAWU/Sj03jlojKD250A=
-X-Google-Smtp-Source: AGHT+IGpOg7sJlI/rEq2t0qmOj+PEzxbPvOFJibDR6ujnw/tubbxpv33784EHtRDeE4uTjaM2562xg==
-X-Received: by 2002:a05:6402:1657:b0:529:fa63:ef80 with SMTP id s23-20020a056402165700b00529fa63ef80mr8682360edx.28.1692798541666;
-        Wed, 23 Aug 2023 06:49:01 -0700 (PDT)
-Received: from gmail.com (fwdproxy-cln-000.fbsv.net. [2a03:2880:31ff::face:b00c])
-        by smtp.gmail.com with ESMTPSA id y2-20020aa7d502000000b00529fb5fd3b9sm7565236edq.80.2023.08.23.06.49.00
+        bh=Ui6+MdQPBHClMUzt17Gxb4m37Amorx/TKujWGiY52KY=;
+        b=hm9WJ/HqrUcqAluUuO1Oim9n8MHmALdBuPHtNWTEm2ytJI01LznI4rRnCQKzG89z4p
+         3Bdjm8BTLexnFepa5l5NcG5zLvOGQ/ljIFpQbUicIAMB3PQ38c5ShV1D4fiRVbKkDZK4
+         o3QzLJmk3JRBnGt76LK5OnDt56/WlY1dNkdiwrkrxkjj9LPiSzZAYbr1j2CIXTRbUgeB
+         f1YDU9pMgSVsoEumL2R0p9ptI7WoopkVOXkCXxPsedqB7bNEv+TM2tunEHT4mA2Z42AC
+         07Vo1QpTIbq+vQLMTiSTgCzlcuPek16dUH1DxGe5HllUbMmScE1HPfB7lLRcPE7diCCb
+         xW1g==
+X-Gm-Message-State: AOJu0YyS745weqw7+jRyyUdbuQu3r6fLA+aVl0ZE7l2l6W3hNJr2hxlC
+	8HtMt1Iqw7+E1o8ksaVYJl6/8gn7JDl68InlYWxvX0mIPBcEMvHozv8SqB5481D4raIicYaRqSC
+	siWWNtJTP4hEy
+X-Received: by 2002:a7b:c84d:0:b0:3fe:e8b4:436f with SMTP id c13-20020a7bc84d000000b003fee8b4436fmr8627004wml.14.1692802304780;
+        Wed, 23 Aug 2023 07:51:44 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEnVRBi8PK6/x0AzFBEPxF4kWcVG572OSwM5kYFDDA4dIEo8xQwVJCkjQc8s2Db/MeOg5WnoA==
+X-Received: by 2002:a7b:c84d:0:b0:3fe:e8b4:436f with SMTP id c13-20020a7bc84d000000b003fee8b4436fmr8626984wml.14.1692802304433;
+        Wed, 23 Aug 2023 07:51:44 -0700 (PDT)
+Received: from debian (2a01cb058d23d6007d3729c79874bf87.ipv6.abo.wanadoo.fr. [2a01:cb05:8d23:d600:7d37:29c7:9874:bf87])
+        by smtp.gmail.com with ESMTPSA id l20-20020a7bc454000000b003feee8d8011sm11525804wmi.41.2023.08.23.07.51.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Aug 2023 06:49:01 -0700 (PDT)
-Date: Wed, 23 Aug 2023 06:48:59 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Gabriel Krisman Bertazi <krisman@suse.de>
-Cc: sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
-	willemdebruijn.kernel@gmail.com, martin.lau@linux.dev,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, io-uring@vger.kernel.org, kuba@kernel.org,
-	pabeni@redhat.com
-Subject: Re: [PATCH v3 8/9] io_uring/cmd: BPF hook for getsockopt cmd
-Message-ID: <ZOYOS87mCmcYurkR@gmail.com>
-References: <20230817145554.892543-1-leitao@debian.org>
- <20230817145554.892543-9-leitao@debian.org>
- <87pm3l32rk.fsf@suse.de>
- <ZOMrD1DHeys0nFwt@gmail.com>
- <875y58nx9v.fsf@suse.de>
+        Wed, 23 Aug 2023 07:51:43 -0700 (PDT)
+Date: Wed, 23 Aug 2023 16:51:41 +0200
+From: Guillaume Nault <gnault@redhat.com>
+To: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Cc: "David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Alexei Starovoitov <ast@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>, netdev@vger.kernel.org,
+	bpf@vger.kernel.org, stable@vger.kernel.org,
+	Siwar Zitouni <siwar.zitouni@6wind.com>
+Subject: Re: [PATCH net v3] net: handle ARPHRD_PPP in dev_is_mac_header_xmit()
+Message-ID: <ZOYc/Uhb0RSUvi47@debian>
+References: <20230823134102.1848881-1-nicolas.dichtel@6wind.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,96 +68,55 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <875y58nx9v.fsf@suse.de>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230823134102.1848881-1-nicolas.dichtel@6wind.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+	SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Mon, Aug 21, 2023 at 01:03:08PM -0400, Gabriel Krisman Bertazi wrote:
-> Breno Leitao <leitao@debian.org> writes:
-> 
-> > On Thu, Aug 17, 2023 at 03:08:47PM -0400, Gabriel Krisman Bertazi wrote:
-> >> Breno Leitao <leitao@debian.org> writes:
-> >> 
-> >> > Add BPF hook support for getsockopts io_uring command. So, BPF cgroups
-> >> > programs can run when SOCKET_URING_OP_GETSOCKOPT command is executed
-> >> > through io_uring.
-> >> >
-> >> > This implementation follows a similar approach to what
-> >> > __sys_getsockopt() does, but, using USER_SOCKPTR() for optval instead of
-> >> > kernel pointer.
-> >> >
-> >> > Signed-off-by: Breno Leitao <leitao@debian.org>
-> >> > ---
-> >> >  io_uring/uring_cmd.c | 18 +++++++++++++-----
-> >> >  1 file changed, 13 insertions(+), 5 deletions(-)
-> >> >
-> >> > diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-> >> > index a567dd32df00..9e08a14760c3 100644
-> >> > --- a/io_uring/uring_cmd.c
-> >> > +++ b/io_uring/uring_cmd.c
-> >> > @@ -5,6 +5,8 @@
-> >> >  #include <linux/io_uring.h>
-> >> >  #include <linux/security.h>
-> >> >  #include <linux/nospec.h>
-> >> > +#include <linux/compat.h>
-> >> > +#include <linux/bpf-cgroup.h>
-> >> >  
-> >> >  #include <uapi/linux/io_uring.h>
-> >> >  #include <uapi/asm-generic/ioctls.h>
-> >> > @@ -184,17 +186,23 @@ static inline int io_uring_cmd_getsockopt(struct socket *sock,
-> >> >  	if (err)
-> >> >  		return err;
-> >> >  
-> >> > -	if (level == SOL_SOCKET) {
-> >> > +	err = -EOPNOTSUPP;
-> >> > +	if (level == SOL_SOCKET)
-> >> >  		err = sk_getsockopt(sock->sk, level, optname,
-> >> >  				    USER_SOCKPTR(optval),
-> >> >  				    KERNEL_SOCKPTR(&optlen));
-> >> > -		if (err)
-> >> > -			return err;
-> >> >  
-> >> > +	if (!(issue_flags & IO_URING_F_COMPAT))
-> >> > +		err = BPF_CGROUP_RUN_PROG_GETSOCKOPT(sock->sk, level,
-> >> > +						     optname,
-> >> > +						     USER_SOCKPTR(optval),
-> >> > +						     KERNEL_SOCKPTR(&optlen),
-> >> > +						     optlen, err);
-> >> > +
-> >> > +	if (!err)
-> >> >  		return optlen;
-> >> > -	}
-> >> 
-> >> Shouldn't you call sock->ops->getsockopt for level!=SOL_SOCKET prior to
-> >> running the hook?
-> >> Before this patch, it would bail out with EOPNOTSUPP,
-> >> but now the bpf hook gets called even for level!=SOL_SOCKET, which
-> >> doesn't fit __sys_getsockopt. Am I misreading the code?
-> >
-> > Not really, sock->ops->getsockopt() does not suport sockptr_t, but
-> > __user addresses, differently from setsockopt()
-> >
-> >           int             (*setsockopt)(struct socket *sock, int level,
-> >                                         int optname, sockptr_t optval,
-> >                                         unsigned int optlen);
-> >           int             (*getsockopt)(struct socket *sock, int level,
-> >                                         int optname, char __user *optval, int __user *optlen);
-> >
-> > In order to be able to call sock->ops->getsockopt(), the callback
-> > function will need to accepted sockptr.
-> 
-> So, it seems you won't support !SOL_SOCKETs here.  Then, I think you
-> shouldn't call the hook for those sockets. My main concern is that we
-> remain compatible to __sys_getsockopt when invoking the hook.
-> 
-> I think you should just have the following as the very first thing in
-> the function (but after the security_ check).
-> 
-> if (level != SOL_SOCKET)
->    return -EOPNOTSUPP;
+On Wed, Aug 23, 2023 at 03:41:02PM +0200, Nicolas Dichtel wrote:
+> The goal is to support a bpf_redirect() from an ethernet device (ingress)
+> to a ppp device (egress).
+> The l2 header is added automatically by the ppp driver, thus the ethernet
+> header should be removed.
 
-Gotcha. I will update. Thanks!
+Reviewed-by: Guillaume Nault <gnault@redhat.com>
+
+> CC: stable@vger.kernel.org
+> Fixes: 27b29f63058d ("bpf: add bpf_redirect() helper")
+> Signed-off-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+> Tested-by: Siwar Zitouni <siwar.zitouni@6wind.com>
+> ---
+> 
+> v2 -> v3:
+>  - add a comment in the code
+>  - rework the commit log
+> 
+> v1 -> v2:
+>  - I forgot the 'Tested-by' tag in the v1 :/
+> 
+>  include/linux/if_arp.h | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/include/linux/if_arp.h b/include/linux/if_arp.h
+> index 1ed52441972f..10a1e81434cb 100644
+> --- a/include/linux/if_arp.h
+> +++ b/include/linux/if_arp.h
+> @@ -53,6 +53,10 @@ static inline bool dev_is_mac_header_xmit(const struct net_device *dev)
+>  	case ARPHRD_NONE:
+>  	case ARPHRD_RAWIP:
+>  	case ARPHRD_PIMREG:
+> +	/* PPP adds its l2 header automatically in ppp_start_xmit().
+> +	 * This makes it look like an l3 device to __bpf_redirect() and tcf_mirred_init().
+> +	 */
+> +	case ARPHRD_PPP:
+>  		return false;
+>  	default:
+>  		return true;
+> -- 
+> 2.39.2
+> 
+
