@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE0221F186;
-	Wed, 23 Aug 2023 18:17:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0A21C4167D;
-	Wed, 23 Aug 2023 18:17:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ACE41ED47;
+	Wed, 23 Aug 2023 18:22:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B3CFC433C7;
+	Wed, 23 Aug 2023 18:22:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1692814628;
-	bh=oVc34mgV3FCHCFRuWZIFh7s3iqRrh+uYOxu0gKgphbc=;
+	s=k20201202; t=1692814952;
+	bh=XhVMfYe6nZ70KASS+6EJs35VBb/ki/oYhS3+q7aUePk=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=gbl8Ho+OIJFBCVGkffy0ZCht+2m9HlRKIBb+duA+VU3Ht+iJBwRrlDv1vyAcArPps
-	 Zt+17ndNPH54GvaNh/oBz8tlBp/nZAKHignXtbUKnNPqEXWmn3dDwp8IdgFhJ8dzMa
-	 HwHKIDXMJ/uqCIpdB9JTLjEwfbPOPgvWn/4EcmIItoiStt0TL5MgXoTiF6XzgsTZc5
-	 bigYmUMs41UnYcr88jWVP9DxRfX06OOqGxR7uKaYnhAJ8+iFtBDDtMzniXIGA81gaS
-	 OOFuFsMwDe2Y85oXpD1Z0ZR1GWeBrnQWqGy7cpsInsjF3Jm7lgOBAmuPeCPpGKTTQI
-	 BQMCMes+TQKog==
+	b=NcY+bvqoB9qC4bweo8x0eJ0J8rf67mYWnwOTgH119X4FJSTkmGmW6NNlZIdAc5CBI
+	 jEbzWOskfSFAzVHOkAa8WIaZJjaKkjgI+KskIt4QJOQMP4pcprGCO8W98ILkUZWk57
+	 B6cpUER6Hj6Po6AkeHaZ2mh78oEPcL54YCvoMQQwB5YRInWMOjnreX5ApzUsMLmylH
+	 doGEgmbO3f7CtJXnzFiHsuS0LMKeSyPK2jQhTbhzIQI1zLOZH3nG0hjhhjjwj3kDSX
+	 pBhjAYzwBAvw1P0ulpouX0/J5wJloO+tcfcCCOaeX1s2qSLyZHtccGNIYNbqyielGo
+	 /ZjZGW4pv/nDw==
 From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 To: Pu Lehui <pulehui@huaweicloud.com>, linux-riscv@lists.infradead.org,
  bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
@@ -26,12 +26,12 @@ Cc: Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>, Daniel
  Olsa <jolsa@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Xu Kuohai
  <xukuohai@huawei.com>, Puranjay Mohan <puranjay12@gmail.com>, Pu Lehui
  <pulehui@huawei.com>, Pu Lehui <pulehui@huaweicloud.com>
-Subject: Re: [PATCH bpf-next 2/7] riscv, bpf: Support sign-extension load insns
-In-Reply-To: <20230823231059.3363698-3-pulehui@huaweicloud.com>
+Subject: Re: [PATCH bpf-next 4/7] riscv, bpf: Support 32-bit offset jmp insn
+In-Reply-To: <20230823231059.3363698-5-pulehui@huaweicloud.com>
 References: <20230823231059.3363698-1-pulehui@huaweicloud.com>
- <20230823231059.3363698-3-pulehui@huaweicloud.com>
-Date: Wed, 23 Aug 2023 20:17:05 +0200
-Message-ID: <87h6oplj32.fsf@all.your.base.are.belong.to.us>
+ <20230823231059.3363698-5-pulehui@huaweicloud.com>
+Date: Wed, 23 Aug 2023 20:22:29 +0200
+Message-ID: <87cyzdliu2.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,7 +45,7 @@ Pu Lehui <pulehui@huaweicloud.com> writes:
 
 > From: Pu Lehui <pulehui@huawei.com>
 >
-> Add Support sign-extension load instructions for RV64.
+> Add support 32-bit offset jmp instruction for RV64.
 >
 > Signed-off-by: Pu Lehui <pulehui@huawei.com>
 
