@@ -1,45 +1,46 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA34BCA6E
-	for <bpf@vger.kernel.org>; Thu, 24 Aug 2023 13:31:42 +0000 (UTC)
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B94AE5E;
-	Thu, 24 Aug 2023 06:31:39 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-31768ce2e81so5975773f8f.1;
-        Thu, 24 Aug 2023 06:31:39 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A5A4CA6E
+	for <bpf@vger.kernel.org>; Thu, 24 Aug 2023 13:31:44 +0000 (UTC)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07FBE78;
+	Thu, 24 Aug 2023 06:31:42 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-31aeee69de0so4493952f8f.2;
+        Thu, 24 Aug 2023 06:31:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692883897; x=1693488697;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/FdYUtkQiM1JM6m+vtN/k3hYAug9sY5fG1iQwa7Fcq4=;
-        b=JpjQHo7+L3DPs8XZmCudaeskHTtaLnVxKG3aPWyUyez3hsjSz8vtopkx2yyIcRiRwV
-         CxbR+bJeaZsQKnRn99C5YuuA41+7pQ+IxE+w84BwuYF16Wiq+Im0RjfXuQTXJmJPZRGo
-         MLkfrXomm7xEAvMroz3Np7Cal+V0VCqQceP1qq2IQWQe3ewpHqWEu08iPKaLPy2GecAb
-         loS8fSaRQdL7IXxU+UmJLDka//AXrRgdbsFORtfcHTVrGxNHkiexGG83SPB5kBihTOZ8
-         SRX9QC4MfIUeMPBio0rWa1cVp8JPa+rniyDp31PXqhlrZuVY3UScBjYkVh6OUpYHkv0e
-         qtrQ==
+        d=gmail.com; s=20221208; t=1692883901; x=1693488701;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lRbZ/8a2wFTgwFE+Czu2PpLLLzMWLxHTHSPnuA9Gm+o=;
+        b=oYWYvKePLZGjS+ZoEl8nqGnfKWJ/5ZYZqjbab0+kcN0rDQKfC+uPSsnIgWkMRmchaP
+         kmB/bloU4msL5s6GFjkSzVQf8js0C978vVWo4JbuGczsYJ/hiJcB914hx8ipwG2pLE4r
+         5xV7/f4Hn73bYoAhdKka0EWmDvBuFjYAdFIL+QTaLTz04odlXiv4A1ZxyzykLLfmtDYe
+         ZKWDxm+ZsoNc7WWZC2lUfFzhqCg8jcrKz+Y3S42S1EZz3NHqw0cr+G45BZdYegXPzh12
+         3c6OYT7W+bmFMjwwWfodGWLxbHSaXz5xU5SccK3v8bNMhYtWEHJSa0F0Rpaz0D6PcFD3
+         HFig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692883897; x=1693488697;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/FdYUtkQiM1JM6m+vtN/k3hYAug9sY5fG1iQwa7Fcq4=;
-        b=ICxE6MP7OKV/5RVjexi6Yue4ZhJRFt10/t6gvFXU2Ej8lRaV1+asz0OKnPDDQuhP7K
-         L6YQhS0UEyRrhBXvJnIDnbKaa/3kGzyaW3pPQJmSJMvtSRvSXr/LK8rauJigANbverhF
-         5LqDMyOPwZXyc3C0AyyBr4OXtu12Or2CCBe2lFfAT2qASNHy3zZV35BQLpr6/SsBay88
-         lxo5x1nWetvBug28w384y+UvBjDQnGsXi+8ByV2MXzClmsY+4INQC2IMf4bWBx2Ik7Zj
-         Wg51JqymOj4XZ5V11vz0GRf0/VAA1tDlYEk95NTZFp8TteZEWPMkI0VZfque7wmkoeIR
-         21rw==
-X-Gm-Message-State: AOJu0YyOhKE7BffyVUdt+oy4/a1ZMfoL1wJNSGfeYoWGUEfpYKHagdVT
-	R5tRn8zbw+B1Z5bWJmod2Kg=
-X-Google-Smtp-Source: AGHT+IHL/HgZh8yHs1r/hj6jGyz5kbloHuUrEeF21EDf5fE7o76UP5eUp1ft4jmivITX/DrUjdKf7w==
-X-Received: by 2002:a05:6000:8b:b0:314:36f0:2214 with SMTP id m11-20020a056000008b00b0031436f02214mr10769903wrx.6.1692883897414;
-        Thu, 24 Aug 2023 06:31:37 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692883901; x=1693488701;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lRbZ/8a2wFTgwFE+Czu2PpLLLzMWLxHTHSPnuA9Gm+o=;
+        b=iaIa1HkAWiYwS/tw2lTm31ZJouXm3/EqVyq5D1xyCx0un8V/35vlobPc5Zu/jFC+xA
+         z5kpGqXOEgvmh1jNj6ya9Ju7VqR2xn/4M7RAesxGcjCnzPooUXjywboivQMB2HnqVfo/
+         U1Bs+3zteMQeR+tKRaGr7y5VO0sjNNCoaHidIPoihcFA0Nwa4dF5aFO9TdHRX7dcPkMK
+         fS/iLydRrU0V5rErm80kBTZkIR8HNcQBM5KOEj9GYczpLTzpTi4gb3weCu/NTUtBk4LX
+         BqqgeyPHMLEBVZXqn9A0N+WakSYj9tGW4GUK1DGiDsi79z7NIGjI9qDiEGDAVoXWvSWd
+         nJbQ==
+X-Gm-Message-State: AOJu0YxitLs45Gpn1OG0akF//Vt1IuwnEoq7SanJ8WVWysod4QtryJS2
+	tUqAKpaKVXM+lYZ1i/U/Njw=
+X-Google-Smtp-Source: AGHT+IHSeNPDuiAo4mvJL6SeFZqm5Y/OINirWF+gSjBoFG2Ur8fcxnPmq3uvy/x+VkYH3pkNmTQiNA==
+X-Received: by 2002:a5d:6084:0:b0:31a:d9bc:47a2 with SMTP id w4-20020a5d6084000000b0031ad9bc47a2mr13370813wrt.53.1692883901036;
+        Thu, 24 Aug 2023 06:31:41 -0700 (PDT)
 Received: from ip-172-31-30-46.eu-west-1.compute.internal (ec2-54-170-241-106.eu-west-1.compute.amazonaws.com. [54.170.241.106])
-        by smtp.gmail.com with ESMTPSA id h11-20020a5d548b000000b00317e77106dbsm22396112wrv.48.2023.08.24.06.31.36
+        by smtp.gmail.com with ESMTPSA id h11-20020a5d548b000000b00317e77106dbsm22396112wrv.48.2023.08.24.06.31.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Aug 2023 06:31:36 -0700 (PDT)
+        Thu, 24 Aug 2023 06:31:39 -0700 (PDT)
 From: Puranjay Mohan <puranjay12@gmail.com>
 To: paul.walmsley@sifive.com,
 	palmer@dabbelt.com,
@@ -58,10 +59,12 @@ To: paul.walmsley@sifive.com,
 	linux-riscv@lists.infradead.org,
 	linux-kernel@vger.kernel.org
 Cc: puranjay12@gmail.com
-Subject: [PATCH bpf-next v2 0/3] bpf, riscv: use BPF prog pack allocator in BPF JIT
-Date: Thu, 24 Aug 2023 13:31:32 +0000
-Message-Id: <20230824133135.1176709-1-puranjay12@gmail.com>
+Subject: [PATCH bpf-next v2 2/3] riscv: implement a memset like function for text
+Date: Thu, 24 Aug 2023 13:31:34 +0000
+Message-Id: <20230824133135.1176709-3-puranjay12@gmail.com>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230824133135.1176709-1-puranjay12@gmail.com>
+References: <20230824133135.1176709-1-puranjay12@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -71,147 +74,142 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-	FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+	FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Changes in v1 -> v2:
-1. Implement a new function patch_text_set_nosync() to be used in bpf_arch_text_invalidate().
-   The implementation in v1 called patch_text_nosync() in a loop and it was bad as it would
-   call flush_icache_range() for every word making it really slow. This was found by running
-   the test_tag selftest which would take forever to complete.
+The BPF JIT needs to write invalid instructions to RX regions of memory
+to invalidate removed BPF programs. This needs a function like memset()
+that can work with RX memory.
 
-Here is some data to prove the V2 fixes the problem:
+Implement patch_text_set_nosync() which is similar to text_poke_set() of
+x86.
 
-Without this series:
-root@rv-selftester:~/src/kselftest/bpf# time ./test_tag
-test_tag: OK (40945 tests)
+Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+---
+ arch/riscv/include/asm/patch.h |  1 +
+ arch/riscv/kernel/patch.c      | 74 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 75 insertions(+)
 
-real    7m47.562s
-user    0m24.145s
-sys     6m37.064s
-
-With this series applied:
-root@rv-selftester:~/src/selftest/bpf# time ./test_tag
-test_tag: OK (40945 tests)
-
-real    7m29.472s
-user    0m25.865s
-sys     6m18.401s
-
-BPF programs currently consume a page each on RISCV. For systems with many BPF
-programs, this adds significant pressure to instruction TLB. High iTLB pressure
-usually causes slow down for the whole system.
-
-Song Liu introduced the BPF prog pack allocator[1] to mitigate the above issue.
-It packs multiple BPF programs into a single huge page. It is currently only
-enabled for the x86_64 BPF JIT.
-
-I enabled this allocator on the ARM64 BPF JIT[2]. It is being reviewed now.
-
-This patch series enables the BPF prog pack allocator for the RISCV BPF JIT.
-This series needs a patch[3] from the ARM64 series to work.
-
-======================================================
-Performance Analysis of prog pack allocator on RISCV64
-======================================================
-
-Test setup:
-===========
-
-Host machine: Debian GNU/Linux 11 (bullseye)
-Qemu Version: QEMU emulator version 8.0.3 (Debian 1:8.0.3+dfsg-1)
-u-boot-qemu Version: 2023.07+dfsg-1
-opensbi Version: 1.3-1
-
-To test the performance of the BPF prog pack allocator on RV, a stresser
-tool[4] linked below was built. This tool loads 8 BPF programs on the system and
-triggers 5 of them in an infinite loop by doing system calls.
-
-The runner script starts 20 instances of the above which loads 8*20=160 BPF
-programs on the system, 5*20=100 of which are being constantly triggered.
-The script is passed a command which would be run in the above environment.
-
-The script was run with following perf command:
-./run.sh "perf stat -a \
-        -e iTLB-load-misses \
-        -e dTLB-load-misses  \
-        -e dTLB-store-misses \
-        -e instructions \
-        --timeout 60000"
-
-The output of the above command is discussed below before and after enabling the
-BPF prog pack allocator.
-
-The tests were run on qemu-system-riscv64 with 8 cpus, 16G memory. The rootfs
-was created using Bjorn's riscv-cross-builder[5] docker container linked below.
-
-Results
-=======
-
-Before enabling prog pack allocator:
-------------------------------------
-
-Performance counter stats for 'system wide':
-
-           4939048      iTLB-load-misses
-           5468689      dTLB-load-misses
-            465234      dTLB-store-misses
-     1441082097998      instructions
-
-      60.045791200 seconds time elapsed
-
-After enabling prog pack allocator:
------------------------------------
-
-Performance counter stats for 'system wide':
-
-           3430035      iTLB-load-misses
-           5008745      dTLB-load-misses
-            409944      dTLB-store-misses
-     1441535637988      instructions
-
-      60.046296600 seconds time elapsed
-
-Improvements in metrics
-=======================
-
-It was expected that the iTLB-load-misses would decrease as now a single huge
-page is used to keep all the BPF programs compared to a single page for each
-program earlier.
-
---------------------------------------------
-The improvement in iTLB-load-misses: -30.5 %
---------------------------------------------
-
-I repeated this expriment more than 100 times in different setups and the
-improvement was always greater than 30%.
-
-This patch series is boot tested on the Starfive VisionFive 2 board[6].
-The performance analysis was not done on the board because it doesn't
-expose iTLB-load-misses, etc. The stresser program was run on the board to test
-the loading and unloading of BPF programs
-
-[1] https://lore.kernel.org/bpf/20220204185742.271030-1-song@kernel.org/
-[2] https://lore.kernel.org/all/20230626085811.3192402-1-puranjay12@gmail.com/
-[3] https://lore.kernel.org/all/20230626085811.3192402-2-puranjay12@gmail.com/
-[4] https://github.com/puranjaymohan/BPF-Allocator-Bench
-[5] https://github.com/bjoto/riscv-cross-builder
-[6] https://www.starfivetech.com/en/site/boards
-
-Puranjay Mohan (3):
-  riscv: extend patch_text_nosync() for multiple pages
-  riscv: implement a memset like function for text
-  bpf, riscv: use prog pack allocator in the BPF JIT
-
- arch/riscv/include/asm/patch.h  |   1 +
- arch/riscv/kernel/patch.c       | 113 ++++++++++++++++++++++++++++++--
- arch/riscv/net/bpf_jit.h        |   3 +
- arch/riscv/net/bpf_jit_comp64.c |  56 +++++++++++++---
- arch/riscv/net/bpf_jit_core.c   | 113 +++++++++++++++++++++++++++-----
- 5 files changed, 255 insertions(+), 31 deletions(-)
-
+diff --git a/arch/riscv/include/asm/patch.h b/arch/riscv/include/asm/patch.h
+index 63c98833d510..aa5c1830ea43 100644
+--- a/arch/riscv/include/asm/patch.h
++++ b/arch/riscv/include/asm/patch.h
+@@ -7,6 +7,7 @@
+ #define _ASM_RISCV_PATCH_H
+ 
+ int patch_text_nosync(void *addr, const void *insns, size_t len);
++int patch_text_set_nosync(void *addr, const int c, size_t len);
+ int patch_text(void *addr, u32 *insns, int ninsns);
+ 
+ extern int riscv_patch_in_stop_machine;
+diff --git a/arch/riscv/kernel/patch.c b/arch/riscv/kernel/patch.c
+index 465b2eebbc37..24d49999ac1a 100644
+--- a/arch/riscv/kernel/patch.c
++++ b/arch/riscv/kernel/patch.c
+@@ -13,6 +13,7 @@
+ #include <asm/fixmap.h>
+ #include <asm/ftrace.h>
+ #include <asm/patch.h>
++#include <asm/string.h>
+ 
+ struct patch_insn {
+ 	void *addr;
+@@ -53,6 +54,34 @@ static void patch_unmap(int fixmap)
+ }
+ NOKPROBE_SYMBOL(patch_unmap);
+ 
++static int __patch_insn_set(void *addr, const int c, size_t len)
++{
++	void *waddr = addr;
++	bool across_pages = (((uintptr_t) addr & ~PAGE_MASK) + len) > PAGE_SIZE;
++	int ret;
++
++	/*
++	 * Only two pages can be mapped at a time for writing.
++	 */
++	if (len > 2 * PAGE_SIZE)
++		return -EINVAL;
++
++	if (across_pages)
++		patch_map(addr + PAGE_SIZE, FIX_TEXT_POKE1);
++
++	waddr = patch_map(addr, FIX_TEXT_POKE0);
++
++	memset(waddr, c, len);
++
++	patch_unmap(FIX_TEXT_POKE0);
++
++	if (across_pages)
++		patch_unmap(FIX_TEXT_POKE1);
++
++	return 0;
++}
++NOKPROBE_SYMBOL(__patch_insn_set);
++
+ static int __patch_insn_write(void *addr, const void *insn, size_t len)
+ {
+ 	void *waddr = addr;
+@@ -95,6 +124,14 @@ static int __patch_insn_write(void *addr, const void *insn, size_t len)
+ }
+ NOKPROBE_SYMBOL(__patch_insn_write);
+ #else
++static int __patch_insn_set (void *addr, const int c, size_t len)
++{
++	memset(addr, c, len);
++
++	return 0;
++}
++NOKPROBE_SYMBOL(__patch_insn_set);
++
+ static int __patch_insn_write(void *addr, const void *insn, size_t len)
+ {
+ 	return copy_to_kernel_nofault(addr, insn, len);
+@@ -102,6 +139,43 @@ static int __patch_insn_write(void *addr, const void *insn, size_t len)
+ NOKPROBE_SYMBOL(__patch_insn_write);
+ #endif /* CONFIG_MMU */
+ 
++static int patch_insn_set(void *addr, const int c, size_t len)
++{
++	size_t patched = 0;
++	size_t size;
++	int ret = 0;
++
++	/*
++	 * __patch_insn_set() can only work on 2 pages at a time so call it in a
++	 * loop with len <= 2 * PAGE_SIZE.
++	 */
++	while (patched < len && !ret) {
++		size = min_t(size_t,
++			     PAGE_SIZE * 2 - offset_in_page(addr + patched),
++			     len - patched);
++		ret = __patch_insn_set(addr + patched, c, size);
++
++		patched += size;
++	}
++
++	return ret;
++}
++NOKPROBE_SYMBOL(patch_insn_set);
++
++int patch_text_set_nosync(void *addr, const int c, size_t len)
++{
++	u32 *tp = addr;
++	int ret;
++
++	ret = patch_insn_set(tp, c, len);
++
++	if (!ret)
++		flush_icache_range((uintptr_t) tp, (uintptr_t) tp + len);
++
++	return ret;
++}
++NOKPROBE_SYMBOL(patch_text_set_nosync);
++
+ static int patch_insn_write(void *addr, const void *insn, size_t len)
+ {
+ 	size_t patched = 0;
 -- 
 2.39.2
 
