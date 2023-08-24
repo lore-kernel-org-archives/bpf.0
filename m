@@ -1,36 +1,36 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA4A1156FF
-	for <bpf@vger.kernel.org>; Thu, 24 Aug 2023 18:21:20 +0000 (UTC)
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA941BE3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1383615AC8
+	for <bpf@vger.kernel.org>; Thu, 24 Aug 2023 18:21:21 +0000 (UTC)
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11391BEB;
 	Thu, 24 Aug 2023 11:21:19 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 37OILAw0130191;
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 37OILAZf119095;
 	Thu, 24 Aug 2023 13:21:10 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
 	s=ti-com-17Q1; t=1692901270;
-	bh=0AfiQjed5ChtkdXYwfP+W9d+uQPzKKcTCI0+Tp0FZMQ=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=cUMhX+ChvpIIetEiw6PiJjIw83Ga9QfZVpvitBijc8o+pn9XlDw2mv+PG8rfF7Gkb
-	 SJokPIfw7uMghj/ndio/PBNtwzJyU/Isv3GU740bZ4JoDXmC8qVgQ7CiQGX+KTm0Ap
-	 m5VaFdz/yJI0DuDLH7+fQqUf6xutvxzEeuNWwznU=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 37OILA7u088748
+	bh=YBXfK1ffDRuuw2ZjihAgBCtqcWGidH+IMIvNmqD53/8=;
+	h=From:To:CC:Subject:Date;
+	b=yIREnAI9X+ZuUAEpYkqFXuVo7Ultu4Z8rH5Ge1rZkuN0wKgpBjQH12Mh/fn0KYodE
+	 I2YGvHW8wi0m5rTYJa1+NOeox7uzrRFchtBzL9SmKv+0fIe7b9SLr+JkD65EORfaVJ
+	 yhMJUWqTaNEMFw9DHhPxysh5JRIYHr/EREDkR16w=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 37OILAJv019000
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
 	Thu, 24 Aug 2023 13:21:10 -0500
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 24
- Aug 2023 13:21:10 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ Aug 2023 13:21:09 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 24 Aug 2023 13:21:10 -0500
+ Frontend Transport; Thu, 24 Aug 2023 13:21:09 -0500
 Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-	by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 37OILAUN029180;
-	Thu, 24 Aug 2023 13:21:10 -0500
+	by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 37OIL9qJ075286;
+	Thu, 24 Aug 2023 13:21:09 -0500
 From: Nishanth Menon <nm@ti.com>
 To: Mauro Carvalho Chehab <mchehab@kernel.org>,
         Jonathan Corbet
@@ -45,12 +45,10 @@ CC: <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
 	<trini@konsulko.com>,
         Neha Francis <n-francis@ti.com>, Nishanth Menon
 	<nm@ti.com>
-Subject: [PATCH 2/2] Documentation: bpf: Use sphinx-prompt
-Date: Thu, 24 Aug 2023 13:21:07 -0500
-Message-ID: <20230824182107.3702766-3-nm@ti.com>
+Subject: [PATCH 0/2] Documentation: sphinx: Add sphinx-prompt
+Date: Thu, 24 Aug 2023 13:21:05 -0500
+Message-ID: <20230824182107.3702766-1-nm@ti.com>
 X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230824182107.3702766-1-nm@ti.com>
-References: <20230824182107.3702766-1-nm@ti.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -60,62 +58,35 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+	SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Use Sphinx-prompt to generate a better rendered documentation that is
-easier for copy-paste.
+Hi,
+Discussion started off in u-boot documentation[1] and Heinrich
+suggested[2] getting something similar done for kernel as well.
 
-Signed-off-by: Nishanth Menon <nm@ti.com>
----
+https://youtu.be/ItjdVa59jjE shows how this change helps.
+
+I have picked just a trivial file to show the impact, but it can
+probably get done for other files as well.
+
+NOTE: I am a sphinx noob, so, there might be better approaches.
+Suggestions welcome.
+
+Nishanth Menon (2):
+  Documentation: sphinx: Add sphinx-prompt
+  Documentation: bpf: Use sphinx-prompt
+
  Documentation/bpf/libbpf/libbpf_build.rst | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ Documentation/conf.py                     |  2 +-
+ Documentation/sphinx/requirements.txt     |  1 +
+ 3 files changed, 12 insertions(+), 11 deletions(-)
 
-diff --git a/Documentation/bpf/libbpf/libbpf_build.rst b/Documentation/bpf/libbpf/libbpf_build.rst
-index 8e8c23e8093d..2b94e5778702 100644
---- a/Documentation/bpf/libbpf/libbpf_build.rst
-+++ b/Documentation/bpf/libbpf/libbpf_build.rst
-@@ -13,25 +13,25 @@ setting NO_PKG_CONFIG=1 when calling make.
- 
- To build both static libbpf.a and shared libbpf.so:
- 
--.. code-block:: bash
-+.. prompt:: bash $
- 
--    $ cd src
--    $ make
-+    cd src
-+    make
- 
- To build only static libbpf.a library in directory build/ and install them
- together with libbpf headers in a staging directory root/:
- 
--.. code-block:: bash
-+.. prompt:: bash $
- 
--    $ cd src
--    $ mkdir build root
--    $ BUILD_STATIC_ONLY=y OBJDIR=build DESTDIR=root make install
-+    cd src
-+    mkdir build root
-+    BUILD_STATIC_ONLY=y OBJDIR=build DESTDIR=root make install
- 
- To build both static libbpf.a and shared libbpf.so against a custom libelf
- dependency installed in /build/root/ and install them together with libbpf
- headers in a build directory /build/root/:
- 
--.. code-block:: bash
-+.. prompt:: bash $
- 
--    $ cd src
--    $ PKG_CONFIG_PATH=/build/root/lib64/pkgconfig DESTDIR=/build/root make
-\ No newline at end of file
-+    cd src
-+    PKG_CONFIG_PATH=/build/root/lib64/pkgconfig DESTDIR=/build/root make
+[1] https://lore.kernel.org/all/87fs48rgto.fsf@baylibre.com/
+[2] https://lore.kernel.org/r/Datecc5d8c56-546a-4cd7-6a78-1206e9675555@canonical.com
 -- 
 2.40.0
 
