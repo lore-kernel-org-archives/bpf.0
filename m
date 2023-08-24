@@ -1,18 +1,18 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06F7B12B61;
-	Thu, 24 Aug 2023 14:36:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45028134B6;
+	Thu, 24 Aug 2023 14:36:34 +0000 (UTC)
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE6B1FC6;
-	Thu, 24 Aug 2023 07:36:13 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RWlsr1mLNzNn47;
-	Thu, 24 Aug 2023 22:32:32 +0800 (CST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7201FEA;
+	Thu, 24 Aug 2023 07:36:15 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.57])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RWlvN08jnzVkKL;
+	Thu, 24 Aug 2023 22:33:52 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by canpemm500010.china.huawei.com
  (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Thu, 24 Aug
- 2023 22:36:06 +0800
+ 2023 22:36:08 +0800
 From: Liu Jian <liujian56@huawei.com>
 To: <john.fastabend@gmail.com>, <jakub@cloudflare.com>, <ast@kernel.org>,
 	<daniel@iogearbox.net>, <andrii@kernel.org>, <martin.lau@linux.dev>,
@@ -21,9 +21,9 @@ To: <john.fastabend@gmail.com>, <jakub@cloudflare.com>, <ast@kernel.org>,
 	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
 	<pabeni@redhat.com>, <dsahern@kernel.org>
 CC: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>, <liujian56@huawei.com>
-Subject: [PATCH bpf-next v3 1/7] bpf, sockmap: add BPF_F_PERMANENT flag for skmsg redirect
-Date: Thu, 24 Aug 2023 22:39:53 +0800
-Message-ID: <20230824143959.1134019-2-liujian56@huawei.com>
+Subject: [PATCH bpf-next v3 4/7] selftests/bpf: add skmsg verdict tests
+Date: Thu, 24 Aug 2023 22:39:56 +0800
+Message-ID: <20230824143959.1134019-5-liujian56@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230824143959.1134019-1-liujian56@huawei.com>
 References: <20230824143959.1134019-1-liujian56@huawei.com>
@@ -45,210 +45,140 @@ X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-If the sockmap msg redirection function is used only to forward packets
-and no other operation, the execution result of the BPF_SK_MSG_VERDICT
-program is the same each time. In this case, the BPF program only needs to
-be run once. Add BPF_F_PERMANENT flag to bpf_msg_redirect_map() and
-bpf_msg_redirect_hash() to implement this ability.
-
-Then we can enable this function in the bpf program as follows:
-bpf_msg_redirect_hash(xx, xx, xx, BPF_F_INGRESS | BPF_F_PERMANENT);
-
-Test results using netperf  TCP_STREAM mode:
-for i in 1 64 128 512 1k 2k 32k 64k 100k 500k 1m;then
-netperf -T 1,2 -t TCP_STREAM -H 127.0.0.1 -l 20 -- -m $i -s 100m,100m -S 100m,100m
-done
-
-before:
-3.84 246.52 496.89 1885.03 3415.29 6375.03 40749.09 48764.40 51611.34 55678.26 55992.78
-after:
-4.43 279.20 555.82 2080.79 3870.70 7105.44 41836.41 49709.75 51861.56 55211.00 54566.85
+Add two normal skmsg verdict tests in sockmap_basic.c
 
 Signed-off-by: Liu Jian <liujian56@huawei.com>
 ---
- include/linux/skmsg.h          |  1 +
- include/uapi/linux/bpf.h       | 15 +++++++++++++--
- net/core/skmsg.c               |  5 +++++
- net/core/sock_map.c            |  4 ++--
- net/ipv4/tcp_bpf.c             | 18 +++++++++++++-----
- tools/include/uapi/linux/bpf.h | 15 +++++++++++++--
- 6 files changed, 47 insertions(+), 11 deletions(-)
+ .../selftests/bpf/prog_tests/sockmap_basic.c  | 71 +++++++++++++++++++
+ .../bpf/progs/test_sockmap_msg_verdict.c      | 25 +++++++
+ 2 files changed, 96 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_msg_verdict.c
 
-diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-index 054d7911bfc9..2f4e9811ff85 100644
---- a/include/linux/skmsg.h
-+++ b/include/linux/skmsg.h
-@@ -82,6 +82,7 @@ struct sk_psock {
- 	u32				cork_bytes;
- 	u32				eval;
- 	bool				redir_ingress; /* undefined if sk_redir is null */
-+	bool				redir_permanent;
- 	struct sk_msg			*cork;
- 	struct sk_psock_progs		progs;
- #if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 70da85200695..f4de1ba390b4 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -3004,7 +3004,12 @@ union bpf_attr {
-  * 		egress interfaces can be used for redirection. The
-  * 		**BPF_F_INGRESS** value in *flags* is used to make the
-  * 		distinction (ingress path is selected if the flag is present,
-- * 		egress path otherwise). This is the only flag supported for now.
-+ * 		egress path otherwise). The **BPF_F_PERMANENT** value in
-+ *		*flags* is used to indicates whether the eBPF result is
-+ *		permanently (please note that, BPF_F_PERMANENT does not work with
-+ *		msg_apply_bytes() and msg_cork_bytes(), if msg_apply_bytes() or
-+ *		msg_cork_bytes() is configured, the BPF_F_PERMANENT function is
-+ *		automatically disabled).
-  * 	Return
-  * 		**SK_PASS** on success, or **SK_DROP** on error.
-  *
-@@ -3276,7 +3281,12 @@ union bpf_attr {
-  *		egress interfaces can be used for redirection. The
-  *		**BPF_F_INGRESS** value in *flags* is used to make the
-  *		distinction (ingress path is selected if the flag is present,
-- *		egress path otherwise). This is the only flag supported for now.
-+ *		egress path otherwise). The **BPF_F_PERMANENT** value in
-+ *		*flags* is used to indicates whether the eBPF result is
-+ *		permanently (please note that, BPF_F_PERMANENT does not work with
-+ *		msg_apply_bytes() and msg_cork_bytes(), if msg_apply_bytes() or
-+ *		msg_cork_bytes() is configured, the BPF_F_PERMANENT function is
-+ *		automatically disabled).
-  *	Return
-  *		**SK_PASS** on success, or **SK_DROP** on error.
-  *
-@@ -5872,6 +5882,7 @@ enum {
- /* BPF_FUNC_clone_redirect and BPF_FUNC_redirect flags. */
- enum {
- 	BPF_F_INGRESS			= (1ULL << 0),
-+	BPF_F_PERMANENT			= (1ULL << 1),
- };
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+index 064cc5e8d9ad..93bf1907abd9 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+@@ -12,6 +12,7 @@
+ #include "test_sockmap_progs_query.skel.h"
+ #include "test_sockmap_pass_prog.skel.h"
+ #include "test_sockmap_drop_prog.skel.h"
++#include "test_sockmap_msg_verdict.skel.h"
+ #include "bpf_iter_sockmap.skel.h"
  
- /* BPF_FUNC_skb_set_tunnel_key and BPF_FUNC_skb_get_tunnel_key flags. */
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index a29508e1ff35..df1443cf5fbd 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -885,6 +885,11 @@ int sk_psock_msg_verdict(struct sock *sk, struct sk_psock *psock,
- 			goto out;
- 		}
- 		psock->redir_ingress = sk_msg_to_ingress(msg);
-+		if (!msg->apply_bytes && !msg->cork_bytes)
-+			psock->redir_permanent =
-+				msg->flags & BPF_F_PERMANENT;
-+		else
-+			psock->redir_permanent = false;
- 		psock->sk_redir = msg->sk_redir;
- 		sock_hold(psock->sk_redir);
- 	}
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 08ab108206bf..35a361614f5e 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -662,7 +662,7 @@ BPF_CALL_4(bpf_msg_redirect_map, struct sk_msg *, msg,
+ #include "sockmap_helpers.h"
+@@ -475,6 +476,72 @@ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
+ 		test_sockmap_drop_prog__destroy(drop);
+ }
+ 
++static void test_sockmap_msg_verdict(bool is_ingress)
++{
++	int key, sent, recvd, recv_fd;
++	int err, map, verdict, s, c0, c1, p0, p1;
++	struct test_sockmap_msg_verdict *skel;
++	char buf[256] = "0123456789";
++
++	skel = test_sockmap_msg_verdict__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++	verdict = bpf_program__fd(skel->progs.prog_skmsg_verdict);
++	map = bpf_map__fd(skel->maps.sock_map);
++
++
++	err = bpf_prog_attach(verdict, map, BPF_SK_MSG_VERDICT, 0);
++	if (!ASSERT_OK(err, "bpf_prog_attach"))
++		goto out;
++
++	s = socket_loopback(AF_INET, SOCK_STREAM);
++	if (!ASSERT_GT(s, -1, "socket_loopback(s)"))
++		goto out;
++	err = create_socket_pairs(s, AF_INET, SOCK_STREAM, &c0, &c1, &p0, &p1);
++	if (!ASSERT_OK(err, "create_socket_pairs(s)"))
++		goto out;
++
++	key = 0;
++	err = bpf_map_update_elem(map, &key, &p1, BPF_NOEXIST);
++	if (!ASSERT_OK(err, "bpf_map_update_elem(key0)"))
++		goto out_close;
++	key = 1;
++	err = bpf_map_update_elem(map, &key, &c1, BPF_NOEXIST);
++	if (!ASSERT_OK(err, "bpf_map_update_elem(key1)"))
++		goto out_close;
++	key = 2;
++	err = bpf_map_update_elem(map, &key, &p0, BPF_NOEXIST);
++	if (!ASSERT_OK(err, "bpf_map_update_elem(key2)"))
++		goto out_close;
++	key = 3;
++	err = bpf_map_update_elem(map, &key, &c0, BPF_NOEXIST);
++	if (!ASSERT_OK(err, "bpf_map_update_elem(key3)"))
++		goto out_close;
++
++	if (is_ingress) {
++		recv_fd = c1;
++		skel->bss->skmsg_redir_flags = BPF_F_INGRESS;
++		skel->bss->skmsg_redir_key = 1;
++	} else {
++		recv_fd = c0;
++		skel->bss->skmsg_redir_flags = 0;
++		skel->bss->skmsg_redir_key = 2;
++	}
++
++	sent = xsend(p1, &buf, sizeof(buf), 0);
++	ASSERT_EQ(sent, sizeof(buf), "xsend(p1)");
++	recvd = recv_timeout(recv_fd, &buf, sizeof(buf), SOCK_NONBLOCK, IO_TIMEOUT_SEC);
++	ASSERT_EQ(recvd, sizeof(buf), "recv_timeout(recv_fd)");
++
++out_close:
++	close(c0);
++	close(p0);
++	close(c1);
++	close(p1);
++out:
++	test_sockmap_msg_verdict__destroy(skel);
++}
++
+ void test_sockmap_basic(void)
  {
- 	struct sock *sk;
- 
--	if (unlikely(flags & ~(BPF_F_INGRESS)))
-+	if (unlikely(flags & ~(BPF_F_INGRESS | BPF_F_PERMANENT)))
- 		return SK_DROP;
- 
- 	sk = __sock_map_lookup_elem(map, key);
-@@ -1261,7 +1261,7 @@ BPF_CALL_4(bpf_msg_redirect_hash, struct sk_msg *, msg,
- {
- 	struct sock *sk;
- 
--	if (unlikely(flags & ~(BPF_F_INGRESS)))
-+	if (unlikely(flags & ~(BPF_F_INGRESS | BPF_F_PERMANENT)))
- 		return SK_DROP;
- 
- 	sk = __sock_hash_lookup_elem(map, key);
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index 81f0dff69e0b..b53e356562a6 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -419,8 +419,10 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
- 		if (!psock->apply_bytes) {
- 			/* Clean up before releasing the sock lock. */
- 			eval = psock->eval;
--			psock->eval = __SK_NONE;
--			psock->sk_redir = NULL;
-+			if (!psock->redir_permanent) {
-+				psock->eval = __SK_NONE;
-+				psock->sk_redir = NULL;
-+			}
- 		}
- 		if (psock->cork) {
- 			cork = true;
-@@ -433,9 +435,15 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
- 		ret = tcp_bpf_sendmsg_redir(sk_redir, redir_ingress,
- 					    msg, tosend, flags);
- 		sent = origsize - msg->sg.size;
-+		/* disable the ability when something wrong */
-+		if (unlikely(ret < 0))
-+			psock->redir_permanent = 0;
- 
--		if (eval == __SK_REDIRECT)
-+		if (!psock->redir_permanent && eval == __SK_REDIRECT) {
- 			sock_put(sk_redir);
-+			psock->sk_redir = NULL;
-+			psock->eval = __SK_NONE;
-+		}
- 
- 		lock_sock(sk);
- 		if (unlikely(ret < 0)) {
-@@ -460,8 +468,8 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
- 	}
- 
- 	if (likely(!ret)) {
--		if (!psock->apply_bytes) {
--			psock->eval =  __SK_NONE;
-+		if (!psock->apply_bytes && !psock->redir_permanent) {
-+			psock->eval = __SK_NONE;
- 			if (psock->sk_redir) {
- 				sock_put(psock->sk_redir);
- 				psock->sk_redir = NULL;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 70da85200695..f4de1ba390b4 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -3004,7 +3004,12 @@ union bpf_attr {
-  * 		egress interfaces can be used for redirection. The
-  * 		**BPF_F_INGRESS** value in *flags* is used to make the
-  * 		distinction (ingress path is selected if the flag is present,
-- * 		egress path otherwise). This is the only flag supported for now.
-+ * 		egress path otherwise). The **BPF_F_PERMANENT** value in
-+ *		*flags* is used to indicates whether the eBPF result is
-+ *		permanently (please note that, BPF_F_PERMANENT does not work with
-+ *		msg_apply_bytes() and msg_cork_bytes(), if msg_apply_bytes() or
-+ *		msg_cork_bytes() is configured, the BPF_F_PERMANENT function is
-+ *		automatically disabled).
-  * 	Return
-  * 		**SK_PASS** on success, or **SK_DROP** on error.
-  *
-@@ -3276,7 +3281,12 @@ union bpf_attr {
-  *		egress interfaces can be used for redirection. The
-  *		**BPF_F_INGRESS** value in *flags* is used to make the
-  *		distinction (ingress path is selected if the flag is present,
-- *		egress path otherwise). This is the only flag supported for now.
-+ *		egress path otherwise). The **BPF_F_PERMANENT** value in
-+ *		*flags* is used to indicates whether the eBPF result is
-+ *		permanently (please note that, BPF_F_PERMANENT does not work with
-+ *		msg_apply_bytes() and msg_cork_bytes(), if msg_apply_bytes() or
-+ *		msg_cork_bytes() is configured, the BPF_F_PERMANENT function is
-+ *		automatically disabled).
-  *	Return
-  *		**SK_PASS** on success, or **SK_DROP** on error.
-  *
-@@ -5872,6 +5882,7 @@ enum {
- /* BPF_FUNC_clone_redirect and BPF_FUNC_redirect flags. */
- enum {
- 	BPF_F_INGRESS			= (1ULL << 0),
-+	BPF_F_PERMANENT			= (1ULL << 1),
- };
- 
- /* BPF_FUNC_skb_set_tunnel_key and BPF_FUNC_skb_get_tunnel_key flags. */
+ 	if (test__start_subtest("sockmap create_update_free"))
+@@ -515,4 +582,8 @@ void test_sockmap_basic(void)
+ 		test_sockmap_skb_verdict_fionread(true);
+ 	if (test__start_subtest("sockmap skb_verdict fionread on drop"))
+ 		test_sockmap_skb_verdict_fionread(false);
++	if (test__start_subtest("sockmap msg_verdict"))
++		test_sockmap_msg_verdict(false);
++	if (test__start_subtest("sockmap msg_verdict ingress"))
++		test_sockmap_msg_verdict(true);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_msg_verdict.c b/tools/testing/selftests/bpf/progs/test_sockmap_msg_verdict.c
+new file mode 100644
+index 000000000000..002b76a1ae35
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_sockmap_msg_verdict.c
+@@ -0,0 +1,25 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SOCKMAP);
++	__uint(max_entries, 4);
++	__type(key, int);
++	__type(value, int);
++} sock_map SEC(".maps");
++
++u64 skmsg_redir_flags = 0;
++u32 skmsg_redir_key = 0;
++
++SEC("sk_msg")
++int prog_skmsg_verdict(struct sk_msg_md *msg)
++{
++	u64 flags = skmsg_redir_flags;
++	int key = skmsg_redir_key;
++
++	bpf_msg_redirect_map(msg, &sock_map, key, flags);
++	return SK_PASS;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.34.1
 
