@@ -1,99 +1,174 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91286288E6
-	for <bpf@vger.kernel.org>; Thu, 24 Aug 2023 13:07:34 +0000 (UTC)
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8994FCEE
-	for <bpf@vger.kernel.org>; Thu, 24 Aug 2023 06:07:32 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-50043cf2e29so7885326e87.2
-        for <bpf@vger.kernel.org>; Thu, 24 Aug 2023 06:07:32 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99AE4288E6
+	for <bpf@vger.kernel.org>; Thu, 24 Aug 2023 13:31:41 +0000 (UTC)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A5D19A5;
+	Thu, 24 Aug 2023 06:31:40 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-31c5c06e8bbso3094275f8f.1;
+        Thu, 24 Aug 2023 06:31:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692882451; x=1693487251;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cjn54rfabjXUFYpv1kWYH23ENLxk4VM6zeFcKct15Ow=;
-        b=DqSJyxP1yz31ihqyTBazxHvTrcUsS0/HfZI5d3xJ9DLSM3ZE8t61eo4Xad80CXbVxj
-         sHB/5ugr6/pc/VdWWDU2SUW2DZTb3y/bvz6RIEREQLFDhLzDt3vS7WdstJgG5nS4DwQM
-         xJVtxLVHsWTGEjOfNupowVY06D43SQazznBpKQ0eP8orZXJ45E3zZap4dGUkpLYlaVwL
-         vUNTqW5T7RtqyDytFCSi/JfcSD+OD8WhHJeDKBfj3HUFZMJQHF4bROIO4Lv37fimnH4/
-         EmVckF5nVVujMudWnF/zXhdN2EJYVCbFS+gdx0FyBAdueUWSAvo9ABnQcBvGNwnLZYIL
-         zlRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692882451; x=1693487251;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1692883898; x=1693488698;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Cjn54rfabjXUFYpv1kWYH23ENLxk4VM6zeFcKct15Ow=;
-        b=ftcpmPIl3dwHpMh6Wp3PgaIuC4DCeKBGrJc/Q246Z6hw1p8tBK4tUk6gMZnNjy0fQY
-         eFV1fNpbTIEL0atZwGUEBRnGKZib+C/IREzgSCNJbqbSWkpLFmTuYov0lIufaSDBx5P1
-         Xz3OFRWefBqfbt5dt7Nm3wz1BKS8ExdK9S++xHz5j035QL+mKz6but9J4XIJ9ChZMwXc
-         aM49N3Po6+x7yh8Cy7I5zy9eb/SJAjCgYA3PuhdwZvLtZRlOTJ9f5zEPSdFMRd/cgCgj
-         YHMrXKlTLZBZvIHWWTsazf2Yv6s8VMYKgNNz+cNpkeJGrSfYP60hqa+/vUJg4uOsj6HW
-         MJDg==
-X-Gm-Message-State: AOJu0YxfUyF8Ilr7MnhWh7W1a4KqLVCBJlhlTSfXmbJR+5a96AoLhHaK
-	VsO2RVQjRxzcScceOIMejnaZCvw1P4Q=
-X-Google-Smtp-Source: AGHT+IFgVeKPRgZqznM+22aViaBMuk35guu4BsKjz4ecQV58zL7MkqWj5lwRgIH7pRq0k8/Rw0ZEYA==
-X-Received: by 2002:a05:6512:a8b:b0:4f8:4177:e087 with SMTP id m11-20020a0565120a8b00b004f84177e087mr13103153lfu.47.1692882450265;
-        Thu, 24 Aug 2023 06:07:30 -0700 (PDT)
-Received: from krava ([83.240.63.172])
-        by smtp.gmail.com with ESMTPSA id k25-20020aa7c059000000b0052889d090bfsm10499258edo.79.2023.08.24.06.07.28
+        bh=HOjnMoCdk8ero0eIWnTRV8IDjWokCkOdT233dw8f8cM=;
+        b=iMnUSfI2+Q9SIs1K6hZhMo+Arr01ZqvJxwD3uxjGKTxs2C3mOEX8zTkSa/iw1/ea+A
+         1obGFCB1YEh4uU1B9tgX84lYcb0Efl5eHke1ZttpwSWnkzqrkRoI8QXmaqnlazK0TD5+
+         9tsnxUjQJNkcnAO60l48rHELcsLqQKRjrtwVMkLHZFhD3Fsa/mrCPT4+o+K9IrXPhiaG
+         sYLcigRuUCUk0huxgn6LcK5vsuf1FNxZqb/70GapWKjid2DGaXJagHrHYax7v/q3dpy1
+         5uX+gS81yYp8mQKkfYi+eMqRjrxMSLuHa0Vdk/52tySindL0WVTzzrxO7oz8N0y0DGq0
+         OKcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692883898; x=1693488698;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HOjnMoCdk8ero0eIWnTRV8IDjWokCkOdT233dw8f8cM=;
+        b=KO35PbABhT8Cxpr45wwdSlZAnxIVJzW/qBfd6OPzxNVkMDORIbf88l+obGdGbCQnNN
+         fn6daZM1EqysyLdTU8EQd+NdSISnBFEGYJP7bBDvF/1WJP25S2OdssMU7sdynaDtNSfp
+         I5JPARHuh/iCTs0eh8VGi0PrL0h4eCEhatAOaR5/P4jUJSIlvNfxPIT2n0xH7VjByWLR
+         fg53b9mx9RKCP9trsEZWViO8D2qydI0oTUALlhzPHnpRKzNhSbxcXA+9Q2Tbc3tw/Swd
+         Jkp915WfofUMs0rq3ilF1S6jptKLUbqOxUc9atAWsciFAhc5wv/5k7RMUIbSVY+GUf4M
+         W9tA==
+X-Gm-Message-State: AOJu0YwS/yezglvDbNw9iSAMBWn3tQikdxMIft2DnpuAAnbJNvFc1w8J
+	ESuHCoQOyLLiO1kWd9GqRvU=
+X-Google-Smtp-Source: AGHT+IGYrNSHQo0VfFl5CRfj3Gtb5eiirSq1QGjvtMJU8Gr4wK3Ak9RlHQPqQpRwwQlFkga9ww4Lcg==
+X-Received: by 2002:a5d:62cf:0:b0:319:79a9:4d9e with SMTP id o15-20020a5d62cf000000b0031979a94d9emr11901798wrv.44.1692883898481;
+        Thu, 24 Aug 2023 06:31:38 -0700 (PDT)
+Received: from ip-172-31-30-46.eu-west-1.compute.internal (ec2-54-170-241-106.eu-west-1.compute.amazonaws.com. [54.170.241.106])
+        by smtp.gmail.com with ESMTPSA id h11-20020a5d548b000000b00317e77106dbsm22396112wrv.48.2023.08.24.06.31.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Aug 2023 06:07:29 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 24 Aug 2023 15:07:27 +0200
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	martin.lau@kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH bpf-next 1/2] selftests/bpf: add uprobe_multi test binary
- to .gitignore
-Message-ID: <ZOdWDxavXeJKpmbd@krava>
-References: <20230824000016.2658017-1-andrii@kernel.org>
+        Thu, 24 Aug 2023 06:31:38 -0700 (PDT)
+From: Puranjay Mohan <puranjay12@gmail.com>
+To: paul.walmsley@sifive.com,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	pulehui@huawei.com,
+	conor.dooley@microchip.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yhs@fb.com,
+	kpsingh@kernel.org,
+	bjorn@kernel.org,
+	bpf@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Cc: puranjay12@gmail.com
+Subject: [PATCH bpf-next v2 1/3] riscv: extend patch_text_nosync() for multiple pages
+Date: Thu, 24 Aug 2023 13:31:33 +0000
+Message-Id: <20230824133135.1176709-2-puranjay12@gmail.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230824133135.1176709-1-puranjay12@gmail.com>
+References: <20230824133135.1176709-1-puranjay12@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230824000016.2658017-1-andrii@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+	FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Wed, Aug 23, 2023 at 05:00:15PM -0700, Andrii Nakryiko wrote:
-> It seems like it was forgotten to add uprobe_multi binary to .gitignore.
-> Fix this trivial omission.
-> 
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+The patch_insn_write() function currently doesn't work for multiple
+pages of instructions, therefore patch_text_nosync() will fail with a
+page fault if called with lengths spanning multiple pages.
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+This commit extends the patch_insn_write() function to support multiple
+pages by copying at max 2 pages at a time in a loop. This implementation
+is similar to text_poke_copy() function of x86.
 
-thanks,
-jirka
+Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
+---
+ arch/riscv/kernel/patch.c | 39 ++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 34 insertions(+), 5 deletions(-)
 
-> ---
->  tools/testing/selftests/bpf/.gitignore | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-> index 110518ba4804..f1aebabfb017 100644
-> --- a/tools/testing/selftests/bpf/.gitignore
-> +++ b/tools/testing/selftests/bpf/.gitignore
-> @@ -44,6 +44,7 @@ test_cpp
->  /bench
->  /veristat
->  /sign-file
-> +/uprobe_multi
->  *.ko
->  *.tmp
->  xskxceiver
-> -- 
-> 2.34.1
-> 
-> 
+diff --git a/arch/riscv/kernel/patch.c b/arch/riscv/kernel/patch.c
+index 575e71d6c8ae..465b2eebbc37 100644
+--- a/arch/riscv/kernel/patch.c
++++ b/arch/riscv/kernel/patch.c
+@@ -53,12 +53,18 @@ static void patch_unmap(int fixmap)
+ }
+ NOKPROBE_SYMBOL(patch_unmap);
+ 
+-static int patch_insn_write(void *addr, const void *insn, size_t len)
++static int __patch_insn_write(void *addr, const void *insn, size_t len)
+ {
+ 	void *waddr = addr;
+ 	bool across_pages = (((uintptr_t) addr & ~PAGE_MASK) + len) > PAGE_SIZE;
+ 	int ret;
+ 
++	/*
++	 * Only two pages can be mapped at a time for writing.
++	 */
++	if (len > 2 * PAGE_SIZE)
++		return -EINVAL;
++
+ 	/*
+ 	 * Before reaching here, it was expected to lock the text_mutex
+ 	 * already, so we don't need to give another lock here and could
+@@ -74,7 +80,7 @@ static int patch_insn_write(void *addr, const void *insn, size_t len)
+ 		lockdep_assert_held(&text_mutex);
+ 
+ 	if (across_pages)
+-		patch_map(addr + len, FIX_TEXT_POKE1);
++		patch_map(addr + PAGE_SIZE, FIX_TEXT_POKE1);
+ 
+ 	waddr = patch_map(addr, FIX_TEXT_POKE0);
+ 
+@@ -87,15 +93,38 @@ static int patch_insn_write(void *addr, const void *insn, size_t len)
+ 
+ 	return ret;
+ }
+-NOKPROBE_SYMBOL(patch_insn_write);
++NOKPROBE_SYMBOL(__patch_insn_write);
+ #else
+-static int patch_insn_write(void *addr, const void *insn, size_t len)
++static int __patch_insn_write(void *addr, const void *insn, size_t len)
+ {
+ 	return copy_to_kernel_nofault(addr, insn, len);
+ }
+-NOKPROBE_SYMBOL(patch_insn_write);
++NOKPROBE_SYMBOL(__patch_insn_write);
+ #endif /* CONFIG_MMU */
+ 
++static int patch_insn_write(void *addr, const void *insn, size_t len)
++{
++	size_t patched = 0;
++	size_t size;
++	int ret = 0;
++
++	/*
++	 * Copy the instructions to the destination address, two pages at a time
++	 * because __patch_insn_write() can only handle len <= 2 * PAGE_SIZE.
++	 */
++	while (patched < len && !ret) {
++		size = min_t(size_t,
++			     PAGE_SIZE * 2 - offset_in_page(addr + patched),
++			     len - patched);
++		ret = __patch_insn_write(addr + patched, insn + patched, size);
++
++		patched += size;
++	}
++
++	return ret;
++}
++NOKPROBE_SYMBOL(patch_insn_write);
++
+ int patch_text_nosync(void *addr, const void *insns, size_t len)
+ {
+ 	u32 *tp = addr;
+-- 
+2.39.2
+
