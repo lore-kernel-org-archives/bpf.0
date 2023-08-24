@@ -1,49 +1,64 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEF957F;
-	Thu, 24 Aug 2023 01:53:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 255F3C433C7;
-	Thu, 24 Aug 2023 01:53:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1692842038;
-	bh=dUjRC96Y34euUDSaNA/h1pSNeZPTmkLzu7c2FEi2qA4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Pbk12ZrmqI8Ci5eZuW+fGynBf6JIzCY4Q3k6ZB/HU78f2Jdkaz9ZN5xraaI3HGsMP
-	 pDJIYewooAbY+9jxcNTA5wpiyUPFF/es9Izng350BdxnNrYf2zxn3v3icKa38RRTsP
-	 mSCLqHG/EfmUURRhWnoRta6McKOGaIsEOJsNmyj3cexzyIboKmoUvWkOziY5RK71OQ
-	 o+OrQZ8qJ0qS55rkPQtoefygY5aMAy/qx60L99qjRrBo8USvU1VP8FmETEBrXUY1yu
-	 DWMXlp9qcUZ7bnJ3unE+cN18tQsrJn2O56YMlyvIEHql0MYoWbDeqIjwtMGoRi+/cH
-	 tfOw2YjmXN9WA==
-Date: Wed, 23 Aug 2023 18:53:56 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Pu Lehui <pulehui@huaweicloud.com>
-Cc: linux-riscv@lists.infradead.org, bpf@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, =?UTF-8?B?QmrDtnJu?=
- =?UTF-8?B?IFTDtnBlbA==?= <bjorn@kernel.org>, Yonghong Song <yhs@fb.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
- Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, John Fastabend
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Xu Kuohai
- <xukuohai@huawei.com>, Puranjay Mohan <puranjay12@gmail.com>, Pu Lehui
- <pulehui@huawei.com>
-Subject: Re: [PATCH bpf-next v2 0/7] Add support cpu v4 insns for RV64
-Message-ID: <20230823185356.0db6cc1d@kernel.org>
-In-Reply-To: <20230824095001.3408573-1-pulehui@huaweicloud.com>
-References: <20230824095001.3408573-1-pulehui@huaweicloud.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 652D07F;
+	Thu, 24 Aug 2023 02:05:40 +0000 (UTC)
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B69E59;
+	Wed, 23 Aug 2023 19:05:39 -0700 (PDT)
+Received: from kwepemi500020.china.huawei.com (unknown [172.30.72.57])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RWRDR1nSgzLp7y;
+	Thu, 24 Aug 2023 10:02:31 +0800 (CST)
+Received: from [10.67.109.184] (10.67.109.184) by
+ kwepemi500020.china.huawei.com (7.221.188.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.31; Thu, 24 Aug 2023 10:05:36 +0800
+Message-ID: <53b858fe-8f42-ffc2-fede-4d5918e1e9de@huawei.com>
+Date: Thu, 24 Aug 2023 10:05:35 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH bpf-next v2 0/7] Add support cpu v4 insns for RV64
+Content-Language: en-US
+To: Jakub Kicinski <kuba@kernel.org>, Pu Lehui <pulehui@huaweicloud.com>
+CC: <linux-riscv@lists.infradead.org>, <bpf@vger.kernel.org>,
+	<netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, Yonghong Song
+	<yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+	<martin.lau@linux.dev>, Song Liu <song@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev
+	<sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>, Xu Kuohai <xukuohai@huawei.com>,
+	Puranjay Mohan <puranjay12@gmail.com>
+References: <20230824095001.3408573-1-pulehui@huaweicloud.com>
+ <20230823185356.0db6cc1d@kernel.org>
+From: Pu Lehui <pulehui@huawei.com>
+In-Reply-To: <20230823185356.0db6cc1d@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.109.184]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500020.china.huawei.com (7.221.188.8)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Thu, 24 Aug 2023 09:49:54 +0000 Pu Lehui wrote:
-> Add support cpu v4 instructions for RV64.
 
-Please make sure you fix the timezone on your system before sending 
-out the next version.
+
+On 2023/8/24 9:53, Jakub Kicinski wrote:
+> On Thu, 24 Aug 2023 09:49:54 +0000 Pu Lehui wrote:
+>> Add support cpu v4 instructions for RV64.
+> 
+> Please make sure you fix the timezone on your system before sending
+> out the next version.
+
+It looks so odd, will dig it out. Thanks.
