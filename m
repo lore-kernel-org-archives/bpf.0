@@ -1,214 +1,168 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D8BE101E2
-	for <bpf@vger.kernel.org>; Fri, 25 Aug 2023 14:14:39 +0000 (UTC)
-Received: from out-244.mta1.migadu.com (out-244.mta1.migadu.com [IPv6:2001:41d0:203:375::f4])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D6E2698;
-	Fri, 25 Aug 2023 07:14:17 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1692972442;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NAMtHKwgj081g8lIPVs72MliioxtTYHj7D9CTN85ELE=;
-	b=sbYFUS6BU4QMfloFkojbf7LlIvBmbwqI6WjTGL8/Nwev4csxD24mU9E4d6JXOYCR7eZA1m
-	PqI1zbyFtIGUv/PonAelJnAkImEIFlhA1NIhorTVqtvxfqefn7QdiSQXQ23nqD5sCFBkVJ
-	VzfeXLG9iKOnGGbqPpV4YVYm/Xq84uM=
-From: Hao Xu <hao.xu@linux.dev>
-To: io-uring@vger.kernel.org,
-	Jens Axboe <axboe@kernel.dk>
-Cc: Dominique Martinet <asmadeus@codewreck.org>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Stefan Roesch <shr@fb.com>,
-	Clay Harris <bugs@claycon.org>,
-	Dave Chinner <david@fromorbit.com>,
-	"Darrick J . Wong" <djwong@kernel.org>,
-	linux-fsdevel@vger.kernel.org,
-	linux-xfs@vger.kernel.org,
-	linux-ext4@vger.kernel.org,
-	linux-cachefs@redhat.com,
-	ecryptfs@vger.kernel.org,
-	linux-nfs@vger.kernel.org,
-	linux-unionfs@vger.kernel.org,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-s390@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-block@vger.kernel.org,
-	linux-btrfs@vger.kernel.org,
-	codalist@coda.cs.cmu.edu,
-	linux-f2fs-devel@lists.sourceforge.net,
-	cluster-devel@redhat.com,
-	linux-mm@kvack.org,
-	linux-nilfs@vger.kernel.org,
-	devel@lists.orangefs.org,
-	linux-cifs@vger.kernel.org,
-	samba-technical@lists.samba.org,
-	linux-mtd@lists.infradead.org,
-	Wanpeng Li <wanpengli@tencent.com>
-Subject: [PATCH 29/29] io_uring: add support for getdents
-Date: Fri, 25 Aug 2023 21:54:31 +0800
-Message-Id: <20230825135431.1317785-30-hao.xu@linux.dev>
-In-Reply-To: <20230825135431.1317785-1-hao.xu@linux.dev>
-References: <20230825135431.1317785-1-hao.xu@linux.dev>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03472101D2;
+	Fri, 25 Aug 2023 14:16:37 +0000 (UTC)
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4768E26A6;
+	Fri, 25 Aug 2023 07:16:13 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-99bdeae1d0aso122297966b.1;
+        Fri, 25 Aug 2023 07:16:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692972910; x=1693577710;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BCh/SkT77T2Ffe7WtjbsHe67/BKAxXhiOOGhuLP94jw=;
+        b=i7ddXGPylDzR0I6AGUY+4BbMsDkjQcZzLGkQxRODWnXGWBeTmbglt/ZcTYDGuC2yTm
+         Jp2kxq75o2VzkJKXDzsHt4j0hYQWTTXIsarDASyqBW06BYXd5E3T5vN5AuKQwUrYkOJH
+         EhYkFirUcRvH+VRlKaEmUUKi+147VPCGeMlh0xtrI4iaRggxWmn41WROVWnuIbreRwSm
+         DlU9oqysXfrLbGY4Tl4QPK5aTVwmeQeMa4iMRxka3SH3ws5qgqNWnScRNUP1sgiMRfY7
+         FbwglmSSmpHK4b8OKulXecmG1zIQFR7FgzFF+c8FuMaymdDSswspEBmqsBZPw125yYgw
+         GxuA==
+X-Gm-Message-State: AOJu0YwJyiVHsqRN/UAxfw6Xm/tuopsfMs4LvESyIds3hlv1DD1xKmzT
+	eXHsfBwzDB/0hM03CrJMbYs=
+X-Google-Smtp-Source: AGHT+IGQ+BS7r6qMCNwz4eVEEF8AR1o7mkAPgh8C4EePozWNU8E/0B3fxHTTLeScNXWoiZOk6sOFPQ==
+X-Received: by 2002:a17:907:a06a:b0:9a1:f46c:ffc5 with SMTP id ia10-20020a170907a06a00b009a1f46cffc5mr4877449ejc.41.1692972910299;
+        Fri, 25 Aug 2023 07:15:10 -0700 (PDT)
+Received: from gmail.com (fwdproxy-cln-021.fbsv.net. [2a03:2880:31ff:15::face:b00c])
+        by smtp.gmail.com with ESMTPSA id fx13-20020a170906b74d00b00982be08a9besm1014734ejb.172.2023.08.25.07.15.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Aug 2023 07:15:09 -0700 (PDT)
+Date: Fri, 25 Aug 2023 07:15:05 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	io-uring@vger.kernel.org, kuba@kernel.org, pabeni@redhat.com,
+	krisman@suse.de, Wang Yufen <wangyufen@huawei.com>,
+	Daniel =?iso-8859-1?Q?M=FCller?= <deso@posteo.net>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+	sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
+	willemdebruijn.kernel@gmail.com,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v3 9/9] selftests/bpf/sockopt: Add io_uring support
+Message-ID: <ZOi3aeq43hVb1Ner@gmail.com>
+References: <20230817145554.892543-1-leitao@debian.org>
+ <20230817145554.892543-10-leitao@debian.org>
+ <59278e71-3a88-5da9-b46e-9992987d258d@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <59278e71-3a88-5da9-b46e-9992987d258d@linux.dev>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-From: Hao Xu <howeyxu@tencent.com>
+On Mon, Aug 21, 2023 at 01:59:12PM -0700, Martin KaFai Lau wrote:
+> On 8/17/23 7:55 AM, Breno Leitao wrote:
+> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> > index 538df8fb8c42..4da04242b848 100644
+> > --- a/tools/testing/selftests/bpf/Makefile
+> > +++ b/tools/testing/selftests/bpf/Makefile
+> > @@ -362,6 +362,7 @@ CLANG_CFLAGS = $(CLANG_SYS_INCLUDES) \
+> >   $(OUTPUT)/test_l4lb_noinline.o: BPF_CFLAGS += -fno-inline
+> >   $(OUTPUT)/test_xdp_noinline.o: BPF_CFLAGS += -fno-inline
+> > +$(OUTPUT)/test_progs.o: CFLAGS += -I../../../include/
+> 
+> This is the tools/include? Is it really needed? iirc, some of the
+> prog_tests/*.c has already been using files from tools/include.
 
-This add support for getdents64 to io_uring, acting exactly like the
-syscall: the directory is iterated from it's current's position as
-stored in the file struct, and the file's position is updated exactly as
-if getdents64 had been called.
+You are right, we don't need it.
 
-For filesystems that support NOWAIT in iterate_shared(), try to use it
-first; if a user already knows the filesystem they use do not support
-nowait they can force async through IOSQE_ASYNC in the sqe flags,
-avoiding the need to bounce back through a useless EAGAIN return.
+> >   $(OUTPUT)/flow_dissector_load.o: flow_dissector_load.h
+> >   $(OUTPUT)/cgroup_getset_retval_hooks.o: cgroup_getset_retval_hooks.h
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt.c b/tools/testing/selftests/bpf/prog_tests/sockopt.c
+> > index 9e6a5e3ed4de..4693ad8bfe8f 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/sockopt.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/sockopt.c
+> > @@ -1,5 +1,6 @@
+> >   // SPDX-License-Identifier: GPL-2.0
+> >   #include <test_progs.h>
+> > +#include <io_uring/mini_liburing.h>
+> >   #include "cgroup_helpers.h"
+> >   static char bpf_log_buf[4096];
+> > @@ -38,6 +39,7 @@ static struct sockopt_test {
+> >   	socklen_t			get_optlen_ret;
+> >   	enum sockopt_test_error		error;
+> > +	bool				io_uring_support;
+> >   } tests[] = {
+> >   	/* ==================== getsockopt ====================  */
+> > @@ -53,6 +55,7 @@ static struct sockopt_test {
+> >   		.attach_type = BPF_CGROUP_GETSOCKOPT,
+> >   		.expected_attach_type = 0,
+> >   		.error = DENY_LOAD,
+> > +		.io_uring_support = true,
+> 
+> DENY_LOAD probably won't be an intersting test. The set/getsockopt won't be called.
 
-Co-developed-by: Dominique Martinet <asmadeus@codewreck.org>
-Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
-Signed-off-by: Hao Xu <howeyxu@tencent.com>
----
- include/uapi/linux/io_uring.h |  1 +
- io_uring/fs.c                 | 53 +++++++++++++++++++++++++++++++++++
- io_uring/fs.h                 |  3 ++
- io_uring/opdef.c              |  8 ++++++
- 4 files changed, 65 insertions(+)
+Yea, I will remove all the DENY_LOAD and DENY_ATTACH tests.
 
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index 8e61f8b7c2ce..3896397a1998 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -240,6 +240,7 @@ enum io_uring_op {
- 	IORING_OP_URING_CMD,
- 	IORING_OP_SEND_ZC,
- 	IORING_OP_SENDMSG_ZC,
-+	IORING_OP_GETDENTS,
- 
- 	/* this goes last, obviously */
- 	IORING_OP_LAST,
-diff --git a/io_uring/fs.c b/io_uring/fs.c
-index f6a69a549fd4..04711feac4e6 100644
---- a/io_uring/fs.c
-+++ b/io_uring/fs.c
-@@ -47,6 +47,12 @@ struct io_link {
- 	int				flags;
- };
- 
-+struct io_getdents {
-+	struct file			*file;
-+	struct linux_dirent64 __user	*dirent;
-+	unsigned int			count;
-+};
-+
- int io_renameat_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- {
- 	struct io_rename *ren = io_kiocb_to_cmd(req, struct io_rename);
-@@ -291,3 +297,50 @@ void io_link_cleanup(struct io_kiocb *req)
- 	putname(sl->oldpath);
- 	putname(sl->newpath);
- }
-+
-+int io_getdents_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
-+{
-+	struct io_getdents *gd = io_kiocb_to_cmd(req, struct io_getdents);
-+
-+	if (READ_ONCE(sqe->off))
-+		return -EINVAL;
-+
-+	gd->dirent = u64_to_user_ptr(READ_ONCE(sqe->addr));
-+	gd->count = READ_ONCE(sqe->len);
-+
-+	return 0;
-+}
-+
-+int io_getdents(struct io_kiocb *req, unsigned int issue_flags)
-+{
-+	struct io_getdents *gd = io_kiocb_to_cmd(req, struct io_getdents);
-+	struct file *file = req->file;
-+	unsigned long getdents_flags = 0;
-+	bool force_nonblock = issue_flags & IO_URING_F_NONBLOCK;
-+	bool locked;
-+	int ret;
-+
-+	if (force_nonblock) {
-+		if (!(file->f_flags & O_NONBLOCK) &&
-+		    !(file->f_mode & FMODE_NOWAIT))
-+			return -EAGAIN;
-+
-+		getdents_flags = DIR_CONTEXT_F_NOWAIT;
-+	}
-+
-+	ret = file_pos_lock_nowait(file, force_nonblock);
-+	if (ret == -EAGAIN)
-+		return ret;
-+	locked = ret;
-+
-+	ret = vfs_getdents(file, gd->dirent, gd->count, getdents_flags);
-+	if (locked)
-+		file_pos_unlock(file);
-+
-+	if (ret == -EAGAIN && force_nonblock)
-+		return -EAGAIN;
-+
-+	io_req_set_res(req, ret, 0);
-+	return 0;
-+}
-+
-diff --git a/io_uring/fs.h b/io_uring/fs.h
-index 0bb5efe3d6bb..f83a6f3a678d 100644
---- a/io_uring/fs.h
-+++ b/io_uring/fs.h
-@@ -18,3 +18,6 @@ int io_symlinkat(struct io_kiocb *req, unsigned int issue_flags);
- int io_linkat_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe);
- int io_linkat(struct io_kiocb *req, unsigned int issue_flags);
- void io_link_cleanup(struct io_kiocb *req);
-+
-+int io_getdents_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe);
-+int io_getdents(struct io_kiocb *req, unsigned int issue_flags);
-diff --git a/io_uring/opdef.c b/io_uring/opdef.c
-index 3b9c6489b8b6..1bae6b2a8d0b 100644
---- a/io_uring/opdef.c
-+++ b/io_uring/opdef.c
-@@ -428,6 +428,11 @@ const struct io_issue_def io_issue_defs[] = {
- 		.prep			= io_eopnotsupp_prep,
- #endif
- 	},
-+	[IORING_OP_GETDENTS] = {
-+		.needs_file		= 1,
-+		.prep			= io_getdents_prep,
-+		.issue			= io_getdents,
-+	},
- };
- 
- 
-@@ -648,6 +653,9 @@ const struct io_cold_def io_cold_defs[] = {
- 		.fail			= io_sendrecv_fail,
- #endif
- 	},
-+	[IORING_OP_GETDENTS] = {
-+		.name			= "GETDENTS",
-+	},
- };
- 
- const char *io_uring_get_opcode(u8 opcode)
--- 
-2.25.1
+> The existing test does not seem to have SOL_SOCKET for getsockopt also.
 
+I am planning to move two tests to use SOL_SOCKET so we can also
+exercise the io_uring tests. This is what I have in mind right now:
+
+ * getsockopt: read ctx->optlen
+ * getsockopt: support smaller ctx->optlen
+
+> > -static int run_test(int cgroup_fd, struct sockopt_test *test)
+> > +/* Core function that handles io_uring ring initialization,
+> > + * sending SQE with sockopt command and waiting for the CQE.
+> > + */
+> > +static int uring_sockopt(int op, int fd, int level, int optname,
+> > +			 const void *optval, socklen_t optlen)
+> > +{
+> > +	struct io_uring_cqe *cqe;
+> > +	struct io_uring_sqe *sqe;
+> > +	struct io_uring ring;
+> > +	int err;
+> > +
+> > +	err = io_uring_queue_init(1, &ring, 0);
+> > +	if (err) {
+> > +		log_err("Failed to initialize io_uring ring");
+> > +		return err;
+> > +	}
+> > +
+> > +	sqe = io_uring_get_sqe(&ring);
+> > +	if (!sqe) {
+> > +		log_err("Failed to get an SQE");
+> > +		return -1;
+> 
+> No need to io_uring_queue_exit() on the error path?
+
+Good idea. updating it.
+
+> > +	}
+> > +
+> > +	io_uring_prep_cmd(sqe, op, fd, level, optname, optval, optlen);
+> > +
+> > +	err = io_uring_submit(&ring);
+> > +	if (err != 1) {
+> > +		log_err("Failed to submit SQE");
+> 
+> Use ASSERT_* instead.
+> 
+> Regarding how to land this set,
+> it will be useful to have the selftest running in the bpf CI. While there is
+> iouring changes, some of the changes is in bpf and/or netdev also. eg. Patch
+> 3 already has a conflict with the net-next and bpf-next tree because of a
+> recent commit in socket.c on Aug 9.
+> 
+> May be Alexi and Daniel can advise how was similar patch managed before ?
+> 
+> 
