@@ -1,485 +1,410 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1ACAC2EB
-	for <bpf@vger.kernel.org>; Fri, 25 Aug 2023 11:12:52 +0000 (UTC)
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102031BE6;
-	Fri, 25 Aug 2023 04:12:50 -0700 (PDT)
-Received: from kwepemi500020.china.huawei.com (unknown [172.30.72.54])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RXHM5611qzfbdt;
-	Fri, 25 Aug 2023 19:11:13 +0800 (CST)
-Received: from [10.67.109.184] (10.67.109.184) by
- kwepemi500020.china.huawei.com (7.221.188.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.31; Fri, 25 Aug 2023 19:12:45 +0800
-Message-ID: <a8bce2e9-80e1-246c-9b87-19e2fdef25a8@huawei.com>
-Date: Fri, 25 Aug 2023 19:12:45 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B387C2FF
+	for <bpf@vger.kernel.org>; Fri, 25 Aug 2023 11:40:48 +0000 (UTC)
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359261FD7
+	for <bpf@vger.kernel.org>; Fri, 25 Aug 2023 04:40:46 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-977e0fbd742so97388766b.2
+        for <bpf@vger.kernel.org>; Fri, 25 Aug 2023 04:40:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692963644; x=1693568444;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=vswk1NqZu4qraxDNzBPPbFzhYsWffkwDrUNgkV7B9Vw=;
+        b=PzalQCkzHXDCJfHRTuCTV9SpvtKqYW9xh8IOfe/7ZCFXDizVbFNHP2pjy+4/OnkPtB
+         X0/nxbNEr3R++21wEcNIvh0sGyEr5fyL6DxqrId7RzLcxXezZDcZ8u1K1G23CYUfwNb5
+         twGLfT9z1JyavE0hea/584ufyYq9OGvIWu1KQQ59jzBtRaNcyWvkiOY/lAgcLRmtLZ7e
+         hQVK/V0x/BA+hgfq7oZbodjeo/THdORFmzxUD4BFzvpyawhxmd3XUvT/EJ2VdkKR2Pey
+         jzcyHMoki+7CpsCDYKR5Lb84qGKLcbg5j9HbpFtuxVUXXpiZ31R4HW5nn/NIZIeVSfXj
+         +97A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692963644; x=1693568444;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vswk1NqZu4qraxDNzBPPbFzhYsWffkwDrUNgkV7B9Vw=;
+        b=LS0v/6QCp5fh9I0aK7nF7plqv17kLo47fCAhytcyAEtvJWSREsowAb4HA01vncQb8f
+         9J6vUYKZUzcVjr7lUHe3x6bXeZfV39Psq7c8kNIg9Tjmzy4tj8yEKzVPdlHNEv/bZVeW
+         chNdeeX4X031fmW6+jNvYAvE5txxTP33pypek2RgROQIAKof9be0DnbqSKGbJIoCjqSY
+         niB+zfFio2vGO0emnWRhpHjVDevwSZZ0WF+8nFM/ISLHdBcEZ0OkvMrOe2hKLBbVooyF
+         3I6OIBmuISeChyAGfp/Tk5uZyKbNbioLsSHu2D7OOw30oz7TfstV/yc/57iuUSGZwE+C
+         Ypew==
+X-Gm-Message-State: AOJu0YwV/2OeC5WgTTceifs5HcnfR8Fvjx5mOfl7Hg/Qx5McTR/gblZw
+	GtoIRrt1ufeJFb7K9Ei0wVP8EUO2L5w=
+X-Google-Smtp-Source: AGHT+IGSeRnGhb3f17M8T24ra+78LEf0GK78KBpi1GqFcDGwpGmd6tStSiCqvUblM+pzytdRzTYipA==
+X-Received: by 2002:a17:906:4d2:b0:988:8be0:3077 with SMTP id g18-20020a17090604d200b009888be03077mr13815463eja.31.1692963644251;
+        Fri, 25 Aug 2023 04:40:44 -0700 (PDT)
+Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id z21-20020a1709064e1500b0098f99048053sm894014eju.148.2023.08.25.04.40.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Aug 2023 04:40:43 -0700 (PDT)
+Message-ID: <c7c1936bbfcb8b076de8b05db3baecae5d9fa8fd.camel@gmail.com>
+Subject: Re: [PATCH bpf-next] docs/bpf: Add description for CO-RE relocations
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: yonghong.song@linux.dev, bpf@vger.kernel.org, ast@kernel.org
+Cc: andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, 
+	kernel-team@fb.com
+Date: Fri, 25 Aug 2023 14:40:42 +0300
+In-Reply-To: <760317bb-188f-6967-b76d-1e9562a427b8@linux.dev>
+References: <20230824230102.2117902-1-eddyz87@gmail.com>
+	 <760317bb-188f-6967-b76d-1e9562a427b8@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH bpf-next v2 3/3] bpf, riscv: use prog pack allocator in
- the BPF JIT
-Content-Language: en-US
-To: Puranjay Mohan <puranjay12@gmail.com>
-CC: <bjorn@kernel.org>, <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-	<aou@eecs.berkeley.edu>, <conor.dooley@microchip.com>, <ast@kernel.org>,
-	<daniel@iogearbox.net>, <andrii@kernel.org>, <martin.lau@linux.dev>,
-	<song@kernel.org>, <yhs@fb.com>, <linux-riscv@lists.infradead.org>,
-	<bpf@vger.kernel.org>, <kpsingh@kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230824133135.1176709-1-puranjay12@gmail.com>
- <20230824133135.1176709-4-puranjay12@gmail.com>
- <3e21f79c-71a8-663e-1a62-0d2d787b9692@huawei.com>
- <b4d5aaaf-7fe6-29fd-645a-62a4032820ae@huawei.com>
- <CANk7y0hZBsrvMjOQihRLAZkX7OqNeuK+eHojc+X=-peUtn-k7g@mail.gmail.com>
-From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <CANk7y0hZBsrvMjOQihRLAZkX7OqNeuK+eHojc+X=-peUtn-k7g@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.109.184]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500020.china.huawei.com (7.221.188.8)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+	FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+On Thu, 2023-08-24 at 23:05 -0700, Yonghong Song wrote:
+>=20
+> On 8/24/23 4:01 PM, Eduard Zingerman wrote:
+> > Add a section on CO-RE relocations to llvm_relo.rst.
+> > Describe relevant .BTF.ext structure, `enum bpf_core_relo_kind`
+> > and `struct bpf_core_relo` in some detail.
+> > Description is based on doc-string from include/uapi/linux/bpf.h.
+>=20
+> Thanks Eduard. This is very helpful to give bpf deverlopers
+> some insight about how different of core relocations are
+> supported in llvm and libbpf.
 
+Hi Yonghong,
+thank you for taking a look.
 
-On 2023/8/25 16:42, Puranjay Mohan wrote:
-> Hi Pu,
-> 
-> On Fri, Aug 25, 2023 at 9:34 AM Pu Lehui <pulehui@huawei.com> wrote:
->>
->>
->>
->> On 2023/8/25 15:09, Pu Lehui wrote:
->>> Hi Puranjay,
->>>
->>> Happy to see the RV64 pack allocator implementation.
->>
->> RV32 also
->>
->>>
->>> On 2023/8/24 21:31, Puranjay Mohan wrote:
->>>> Use bpf_jit_binary_pack_alloc() for memory management of JIT binaries in
->>>> RISCV BPF JIT. The bpf_jit_binary_pack_alloc creates a pair of RW and RX
->>>> buffers. The JIT writes the program into the RW buffer. When the JIT is
->>>> done, the program is copied to the final RX buffer with
->>>> bpf_jit_binary_pack_finalize.
->>>>
->>>> Implement bpf_arch_text_copy() and bpf_arch_text_invalidate() for RISCV
->>>> JIT as these functions are required by bpf_jit_binary_pack allocator.
->>>>
->>>> Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
->>>> ---
->>>>    arch/riscv/net/bpf_jit.h        |   3 +
->>>>    arch/riscv/net/bpf_jit_comp64.c |  56 +++++++++++++---
->>>>    arch/riscv/net/bpf_jit_core.c   | 113 +++++++++++++++++++++++++++-----
->>>>    3 files changed, 146 insertions(+), 26 deletions(-)
->>>>
->>>> diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
->>>> index 2717f5490428..ad69319c8ea7 100644
->>>> --- a/arch/riscv/net/bpf_jit.h
->>>> +++ b/arch/riscv/net/bpf_jit.h
->>>> @@ -68,6 +68,7 @@ static inline bool is_creg(u8 reg)
->>>>    struct rv_jit_context {
->>>>        struct bpf_prog *prog;
->>>>        u16 *insns;        /* RV insns */
->>>> +    u16 *ro_insns;
->>
->> In fact, the definition of w/ or w/o ro_ still looks a bit confusing.
->> Maybe it is better for us not to change the current framework, as the
->> current `image` is the final executed RX image, and the trampoline
->> treats `image` as the same. Maybe it would be better to add a new RW
->> image, such like `rw_iamge`, so that we do not break the existing
->> framework and do not have to add too many comments.
-> 
-> I had thought about this and decided to create a new _ro image/header
-> and not _rw image/header. Here is my reasoning:
-> If we let the existing insns, header be considered the read_only
-> version from where the
-> program will run, and create new rw_insn and rw_header for doing the jit process
-> it would require a lot more changes to the framework.
-> functions like build_body(), bpf_jit_build_prologue(), etc. work on
-> ctx->insns and
+>=20
+> Some comments below.
+>=20
+> >=20
+> > Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+> > ---
+> >   Documentation/bpf/btf.rst        |  27 ++++-
+> >   Documentation/bpf/llvm_reloc.rst | 178 ++++++++++++++++++++++++++++++=
++
+> >   2 files changed, 201 insertions(+), 4 deletions(-)
+> >=20
+> > diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
+> > index f32db1f44ae9..c0530211c3c1 100644
+> > --- a/Documentation/bpf/btf.rst
+> > +++ b/Documentation/bpf/btf.rst
+> > @@ -726,8 +726,8 @@ same as the one describe in :ref:`BTF_Type_String`.
+> >   4.2 .BTF.ext section
+> >   --------------------
+> >  =20
+> > -The .BTF.ext section encodes func_info and line_info which needs loade=
+r
+> > -manipulation before loading into the kernel.
+> > +The .BTF.ext section encodes func_info, line_info and CO-RE relocation=
+s
+> > +which needs loader manipulation before loading into the kernel.
+> >  =20
+> >   The specification for .BTF.ext section is defined at ``tools/lib/bpf/=
+btf.h``
+> >   and ``tools/lib/bpf/btf.c``.
+> > @@ -745,11 +745,16 @@ The current header of .BTF.ext section::
+> >           __u32   func_info_len;
+> >           __u32   line_info_off;
+> >           __u32   line_info_len;
+> > +
+> > +        /* optional part of .BTF.ext header */
+> > +        __u32   core_relo_off;
+> > +        __u32   core_relo_len;
+> >       };
+> >  =20
+> >   It is very similar to .BTF section. Instead of type/string section, i=
+t
+> > -contains func_info and line_info section. See :ref:`BPF_Prog_Load` for=
+ details
+> > -about func_info and line_info record format.
+> > +contains func_info, line_info and core_relo sub-sections.
+> > +See :ref:`BPF_Prog_Load` for details about func_info and line_info
+> > +record format.
+> >  =20
+> >   The func_info is organized as below.::
+> >  =20
+> > @@ -787,6 +792,20 @@ kernel API, the ``insn_off`` is the instruction of=
+fset in the unit of ``struct
+> >   bpf_insn``. For ELF API, the ``insn_off`` is the byte offset from the
+> >   beginning of section (``btf_ext_info_sec->sec_name_off``).
+> >  =20
+> > +The core_relo is organized as below.::
+> > +
+> > +     core_relo_rec_size
+> > +     btf_ext_info_sec for section #1 /* core_relo for section #1 */
+> > +     btf_ext_info_sec for section #2 /* core_relo for section #2 */
+> > +
+> > +``core_relo_rec_size`` specifies the size of ``bpf_core_relo``
+> > +structure when .BTF.ext is generated. All ``bpf_core_relo`` structures
+> > +within a single ``btf_ext_info_sec`` describe relocations applied to
+> > +section named by ``btf_ext_info_sec::sec_name_off``.
+>=20
+> bpf_ext_info_sec->sec_name_off ?
 
-Hmm, the other parts should be fine, but the emit instruction is a 
-problem. All right, let's go ahead.
+Will change.
 
-> now all these references would have to be changed to ctx->rw_insns.
-> 
-> Howsoever we implement this, there is no way to do it without changing
-> the current framework.
-> The crux of the problem is that we need to use the r/w area for
-> writing and the r/x area for calculating
-> offsets.
-> 
-> If you think this can be done in a more efficient way then I would
-> love to implement that, but all other
-> solutions that I tried made the code very difficult to follow.
-> 
->>
->> And any other parts, it looks great.😄
->>
->>>>        int ninsns;
->>>>        int prologue_len;
->>>>        int epilogue_offset;
->>>> @@ -85,7 +86,9 @@ static inline int ninsns_rvoff(int ninsns)
->>>>    struct rv_jit_data {
->>>>        struct bpf_binary_header *header;
->>>> +    struct bpf_binary_header *ro_header;
->>>>        u8 *image;
->>>> +    u8 *ro_image;
->>>>        struct rv_jit_context ctx;
->>>>    };
->>>> diff --git a/arch/riscv/net/bpf_jit_comp64.c
->>>> b/arch/riscv/net/bpf_jit_comp64.c
->>>> index 0ca4f5c0097c..d77b16338ba2 100644
->>>> --- a/arch/riscv/net/bpf_jit_comp64.c
->>>> +++ b/arch/riscv/net/bpf_jit_comp64.c
->>>> @@ -144,7 +144,11 @@ static bool in_auipc_jalr_range(s64 val)
->>>>    /* Emit fixed-length instructions for address */
->>>>    static int emit_addr(u8 rd, u64 addr, bool extra_pass, struct
->>>> rv_jit_context *ctx)
->>>>    {
->>>> -    u64 ip = (u64)(ctx->insns + ctx->ninsns);
->>>> +    /*
->>>> +     * Use the ro_insns(RX) to calculate the offset as the BPF
->>>> program will
->>>> +     * finally run from this memory region.
->>>> +     */
->>>> +    u64 ip = (u64)(ctx->ro_insns + ctx->ninsns);
->>>>        s64 off = addr - ip;
->>>>        s64 upper = (off + (1 << 11)) >> 12;
->>>>        s64 lower = off & 0xfff;
->>>> @@ -465,7 +469,11 @@ static int emit_call(u64 addr, bool fixed_addr,
->>>> struct rv_jit_context *ctx)
->>>>        u64 ip;
->>>>        if (addr && ctx->insns) {
->>>
->>> ctx->insns need to sync to ctx->ro_insns
-> 
-> Can you elaborate this more. I am missing something here.
-> The sync happens at the end by calling bpf_jit_binary_pack_finalize().
+>=20
+> > +
+> > +See :ref:`Documentation/bpf/llvm_reloc <btf-co-re-relocations>`
+> > +for more information on CO-RE relocations.
+> > +
+> >   4.2 .BTF_ids section
+> >   --------------------
+> >  =20
+> > diff --git a/Documentation/bpf/llvm_reloc.rst b/Documentation/bpf/llvm_=
+reloc.rst
+> > index 450e6403fe3d..efe0b6ea4921 100644
+> > --- a/Documentation/bpf/llvm_reloc.rst
+> > +++ b/Documentation/bpf/llvm_reloc.rst
+> > @@ -240,3 +240,181 @@ The .BTF/.BTF.ext sections has R_BPF_64_NODYLD32 =
+relocations::
+> >         Offset             Info             Type               Symbol's=
+ Value  Symbol's Name
+> >     000000000000002c  0000000200000004 R_BPF_64_NODYLD32      000000000=
+0000000 .text
+> >     0000000000000040  0000000200000004 R_BPF_64_NODYLD32      000000000=
+0000000 .text
+> > +
+> > +.. _btf-co-re-relocations:
+> > +
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +CO-RE Relocations
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +
+> > +From object file point of view CO-RE mechanism is implemented as a set
+> > +of CO-RE specific relocation records. These relocation records are not
+> > +related to ELF relocations and are encoded in .BTF.ext section.
+> > +See :ref:`Documentation/bpf/btf <BTF_Ext_Section>` for more
+> > +information on .BTF.ext structure.
+> > +
+> > +
+>=20
+> one empty line here?
 
-if (addr && ctx->insns) {
-	ip = (u64)(long)(ctx->ro_insns + ctx->ninsns);
-	off = addr - ip;
-}
-emit ctx->insns + off
+Will change.
 
-Here we are assuming ctx->insns == ctx->ro_insns, if they not, the 
-offset calculated by ctx->ro_insns will not meaningful for ctx->insns.
-I was curious why we need to use ro_insns to calculate offset? Is that 
-any problem if we do jit iteration with ctx->insns and the final copy 
-ctx->insns to ro_insns?
+>=20
+> > +CO-RE relocations are applied to BPF instructions to update immediate
+> > +or offset fields of the instruction at load time with information
+> > +relevant for target kernel.
+> > +
+> > +Relocation kinds
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +
+> > +There are several kinds of CO-RE relocations that could be split in
+> > +three groups:
+> > +
+> > +* Field-based - patch instruction with field related information, e.g.
+> > +  change offset field of the BPF_LD instruction to reflect offset
+>=20
+> BPF_LDX?
 
-> 
->>>
->>>> -        ip = (u64)(long)(ctx->insns + ctx->ninsns);
->>>> +        /*
->>>> +         * Use the ro_insns(RX) to calculate the offset as the BPF
->>>> +         * program will finally run from this memory region.
->>>> +         */
->>>> +        ip = (u64)(long)(ctx->ro_insns + ctx->ninsns);
->>>>            off = addr - ip;
->>>>        }
->>>> @@ -578,7 +586,8 @@ static int add_exception_handler(const struct
->>>> bpf_insn *insn,
->>>>    {
->>>>        struct exception_table_entry *ex;
->>>>        unsigned long pc;
->>>> -    off_t offset;
->>>> +    off_t ins_offset;
->>>> +    off_t fixup_offset;
->>>>        if (!ctx->insns || !ctx->prog->aux->extable ||
->>>> BPF_MODE(insn->code) != BPF_PROBE_MEM)
->>>
->>> ctx->ro_insns need to be checked also.
-> 
-> ctx->ro_insns is not initialised until we call bpf_jit_binary_pack_finalize()?
+Correct, thank you.
 
-if (!ctx->insns || !ctx->prog->aux->extable ||
-...
-pc = (unsigned long)&ctx->ro_insns[ctx->ninsns - insn_len];
+>=20
+> > +  of a specific structure field in the target kernel.
+> > +
+> > +* Type-based - patch instruction with type related information, e.g.
+> > +  change immediate field of the BPF_MOV instruction to 0 or 1 to
+> > +  reflect if specific type is present in the target kernel.
+> > +
+> > +* Enum-based - patch instruction with enum related information, e.g.
+> > +  change immediate field of the BPF_MOV instruction to reflect value
+> > +  of a specific enum literal in the target kernel.
+>=20
+> BPF_MOV -> BPF_LD_IMM64 ?
+> below we actually have an example for this:
+>    +       5:	r1 =3D 0x1 ll
+>    +		28:  CO-RE <enumval_value> [9] enum bar::V =3D 1
 
-The uninitialized ctx->ro_insns may lead to illegal address access. 
-Although it will never happen, because we also assume that ctx->insns == 
-ctx->ro_insns.
+Correct, thank you.
 
-> 
->>>
->>>>            return 0;
->>>> @@ -593,12 +602,17 @@ static int add_exception_handler(const struct
->>>> bpf_insn *insn,
->>>>            return -EINVAL;
->>>>        ex = &ctx->prog->aux->extable[ctx->nexentries];
->>>> -    pc = (unsigned long)&ctx->insns[ctx->ninsns - insn_len];
->>>> +    pc = (unsigned long)&ctx->ro_insns[ctx->ninsns - insn_len];
->>>> -    offset = pc - (long)&ex->insn;
->>>> -    if (WARN_ON_ONCE(offset >= 0 || offset < INT_MIN))
->>>> +    /*
->>>> +     * This is the relative offset of the instruction that may fault
->>>> from
->>>> +     * the exception table itself. This will be written to the exception
->>>> +     * table and if this instruction faults, the destination register
->>>> will
->>>> +     * be set to '0' and the execution will jump to the next
->>>> instruction.
->>>> +     */
->>>> +    ins_offset = pc - (long)&ex->insn;
->>>> +    if (WARN_ON_ONCE(ins_offset >= 0 || ins_offset < INT_MIN))
->>>>            return -ERANGE;
->>>> -    ex->insn = offset;
->>>>        /*
->>>>         * Since the extable follows the program, the fixup offset is
->>>> always
->>>> @@ -607,12 +621,25 @@ static int add_exception_handler(const struct
->>>> bpf_insn *insn,
->>>>         * bits. We don't need to worry about buildtime or runtime sort
->>>>         * modifying the upper bits because the table is already sorted,
->>>> and
->>>>         * isn't part of the main exception table.
->>>> +     *
->>>> +     * The fixup_offset is set to the next instruction from the
->>>> instruction
->>>> +     * that may fault. The execution will jump to this after handling
->>>> the
->>>> +     * fault.
->>>>         */
->>>> -    offset = (long)&ex->fixup - (pc + insn_len * sizeof(u16));
->>>> -    if (!FIELD_FIT(BPF_FIXUP_OFFSET_MASK, offset))
->>>> +    fixup_offset = (long)&ex->fixup - (pc + insn_len * sizeof(u16));
->>>> +    if (!FIELD_FIT(BPF_FIXUP_OFFSET_MASK, fixup_offset))
->>>>            return -ERANGE;
->>>> -    ex->fixup = FIELD_PREP(BPF_FIXUP_OFFSET_MASK, offset) |
->>>> +    /*
->>>> +     * The offsets above have been calculated using the RO buffer but we
->>>> +     * need to use the R/W buffer for writes.
->>>> +     * switch ex to rw buffer for writing.
->>>> +     */
->>>> +    ex = (void *)ctx->insns + ((void *)ex - (void *)ctx->ro_insns);
->>>> +
->>>> +    ex->insn = ins_offset;
->>>> +
->>>> +    ex->fixup = FIELD_PREP(BPF_FIXUP_OFFSET_MASK, fixup_offset) |
->>>>            FIELD_PREP(BPF_FIXUP_REG_MASK, dst_reg);
->>>>        ex->type = EX_TYPE_BPF;
->>>> @@ -1006,6 +1033,7 @@ int arch_prepare_bpf_trampoline(struct
->>>> bpf_tramp_image *im, void *image,
->>>>        ctx.ninsns = 0;
->>>>        ctx.insns = NULL;
->>>> +    ctx.ro_insns = NULL;
->>>>        ret = __arch_prepare_bpf_trampoline(im, m, tlinks, func_addr,
->>>> flags, &ctx);
->>>>        if (ret < 0)
->>>>            return ret;
->>>> @@ -1014,7 +1042,15 @@ int arch_prepare_bpf_trampoline(struct
->>>> bpf_tramp_image *im, void *image,
->>>>            return -EFBIG;
->>>>        ctx.ninsns = 0;
->>>> +    /*
->>>> +     * The bpf_int_jit_compile() uses a RW buffer (ctx.insns) to
->>>> write the
->>>> +     * JITed instructions and later copies it to a RX region
->>>> (ctx.ro_insns).
->>>> +     * It also uses ctx.ro_insns to calculate offsets for jumps etc.
->>>> As the
->>>> +     * trampoline image uses the same memory area for writing and
->>>> execution,
->>>> +     * both ctx.insns and ctx.ro_insns can be set to image.
->>>> +     */
->>>>        ctx.insns = image;
->>>> +    ctx.ro_insns = image;
->>>>        ret = __arch_prepare_bpf_trampoline(im, m, tlinks, func_addr,
->>>> flags, &ctx);
->>>>        if (ret < 0)
->>>>            return ret;
->>>> diff --git a/arch/riscv/net/bpf_jit_core.c
->>>> b/arch/riscv/net/bpf_jit_core.c
->>>> index 7a26a3e1c73c..4c8dffc09368 100644
->>>> --- a/arch/riscv/net/bpf_jit_core.c
->>>> +++ b/arch/riscv/net/bpf_jit_core.c
->>>> @@ -8,6 +8,8 @@
->>>>    #include <linux/bpf.h>
->>>>    #include <linux/filter.h>
->>>> +#include <linux/memory.h>
->>>> +#include <asm/patch.h>
->>>>    #include "bpf_jit.h"
->>>>    /* Number of iterations to try until offsets converge. */
->>>> @@ -117,16 +119,27 @@ struct bpf_prog *bpf_int_jit_compile(struct
->>>> bpf_prog *prog)
->>>>                    sizeof(struct exception_table_entry);
->>>>                prog_size = sizeof(*ctx->insns) * ctx->ninsns;
->>>> -            jit_data->header =
->>>> -                bpf_jit_binary_alloc(prog_size + extable_size,
->>>> -                             &jit_data->image,
->>>> -                             sizeof(u32),
->>>> -                             bpf_fill_ill_insns);
->>>> -            if (!jit_data->header) {
->>>> +            jit_data->ro_header =
->>>> +                bpf_jit_binary_pack_alloc(prog_size +
->>>> +                              extable_size,
->>>> +                              &jit_data->ro_image,
->>>> +                              sizeof(u32),
->>>> +                              &jit_data->header,
->>>> +                              &jit_data->image,
->>>> +                              bpf_fill_ill_insns);
->>>> +            if (!jit_data->ro_header) {
->>>>                    prog = orig_prog;
->>>>                    goto out_offset;
->>>>                }
->>>> +            /*
->>>> +             * Use the image(RW) for writing the JITed instructions.
->>>> But also save
->>>> +             * the ro_image(RX) for calculating the offsets in the
->>>> image. The RW
->>>> +             * image will be later copied to the RX image from where
->>>> the program
->>>> +             * will run. The bpf_jit_binary_pack_finalize() will do
->>>> this copy in the
->>>> +             * final step.
->>>> +             */
->>>> +            ctx->ro_insns = (u16 *)jit_data->ro_image;
->>>>                ctx->insns = (u16 *)jit_data->image;
->>>>                /*
->>>>                 * Now, when the image is allocated, the image can
->>>> @@ -138,14 +151,12 @@ struct bpf_prog *bpf_int_jit_compile(struct
->>>> bpf_prog *prog)
->>>>        if (i == NR_JIT_ITERATIONS) {
->>>>            pr_err("bpf-jit: image did not converge in <%d passes!\n", i);
->>>> -        if (jit_data->header)
->>>> -            bpf_jit_binary_free(jit_data->header);
->>>>            prog = orig_prog;
->>>> -        goto out_offset;
->>>> +        goto out_free_hdr;
->>>>        }
->>>>        if (extable_size)
->>>> -        prog->aux->extable = (void *)ctx->insns + prog_size;
->>>> +        prog->aux->extable = (void *)ctx->ro_insns + prog_size;
->>>>    skip_init_ctx:
->>>>        pass++;
->>>> @@ -154,23 +165,35 @@ struct bpf_prog *bpf_int_jit_compile(struct
->>>> bpf_prog *prog)
->>>>        bpf_jit_build_prologue(ctx);
->>>>        if (build_body(ctx, extra_pass, NULL)) {
->>>> -        bpf_jit_binary_free(jit_data->header);
->>>>            prog = orig_prog;
->>>> -        goto out_offset;
->>>> +        goto out_free_hdr;
->>>>        }
->>>>        bpf_jit_build_epilogue(ctx);
->>>>        if (bpf_jit_enable > 1)
->>>>            bpf_jit_dump(prog->len, prog_size, pass, ctx->insns);
->>>> -    prog->bpf_func = (void *)ctx->insns;
->>>> +    prog->bpf_func = (void *)ctx->ro_insns;
->>>>        prog->jited = 1;
->>>>        prog->jited_len = prog_size;
->>>> -    bpf_flush_icache(jit_data->header, ctx->insns + ctx->ninsns);
->>>> -
->>>>        if (!prog->is_func || extra_pass) {
->>>> -        bpf_jit_binary_lock_ro(jit_data->header);
->>>> +        if (WARN_ON(bpf_jit_binary_pack_finalize(prog,
->>>> +                             jit_data->ro_header,
->>>> +                             jit_data->header))) {
->>>> +            /* ro_header has been freed */
->>>> +            jit_data->ro_header = NULL;
->>>> +            prog = orig_prog;
->>>> +            goto out_offset;
->>>> +        }
->>>> +        /*
->>>> +         * The instructions have now been copied to the ROX region from
->>>> +         * where they will execute.
->>>> +         * Write any modified data cache blocks out to memory and
->>>> +         * invalidate the corresponding blocks in the instruction cache.
->>>> +         */
->>>> +        bpf_flush_icache(jit_data->ro_header,
->>>> +                 ctx->ro_insns + ctx->ninsns);
->>>>            for (i = 0; i < prog->len; i++)
->>>>                ctx->offset[i] = ninsns_rvoff(ctx->offset[i]);
->>>>            bpf_prog_fill_jited_linfo(prog, ctx->offset);
->>>> @@ -185,6 +208,15 @@ struct bpf_prog *bpf_int_jit_compile(struct
->>>> bpf_prog *prog)
->>>>            bpf_jit_prog_release_other(prog, prog == orig_prog ?
->>>>                           tmp : orig_prog);
->>>>        return prog;
->>>> +
->>>> +out_free_hdr:
->>>> +    if (jit_data->header) {
->>>> +        bpf_arch_text_copy(&jit_data->ro_header->size,
->>>> +                   &jit_data->header->size,
->>>> +                   sizeof(jit_data->header->size));
->>>> +        bpf_jit_binary_pack_free(jit_data->ro_header, jit_data->header);
->>>> +    }
->>>> +    goto out_offset;
->>>>    }
->>>>    u64 bpf_jit_alloc_exec_limit(void)
->>>> @@ -204,3 +236,52 @@ void bpf_jit_free_exec(void *addr)
->>>>    {
->>>>        return vfree(addr);
->>>>    }
->>>> +
->>>> +void *bpf_arch_text_copy(void *dst, void *src, size_t len)
->>>> +{
->>>> +    int ret;
->>>> +
->>>> +    mutex_lock(&text_mutex);
->>>> +    ret = patch_text_nosync(dst, src, len);
->>>> +    mutex_unlock(&text_mutex);
->>>> +
->>>> +    if (ret)
->>>> +        return ERR_PTR(-EINVAL);
->>>> +
->>>> +    return dst;
->>>> +}
->>>> +
->>>> +int bpf_arch_text_invalidate(void *dst, size_t len)
->>>> +{
->>>> +    int ret = 0;
->>>
->>> no need to initialize it
->>>
->>>> +
->>>> +    mutex_lock(&text_mutex);
->>>> +    ret = patch_text_set_nosync(dst, 0, len);
->>>> +    mutex_unlock(&text_mutex);
->>>> +
->>>> +    return ret;
->>>> +}
->>>> +
->>>> +void bpf_jit_free(struct bpf_prog *prog)
->>>> +{
->>>> +    if (prog->jited) {
->>>> +        struct rv_jit_data *jit_data = prog->aux->jit_data;
->>>> +        struct bpf_binary_header *hdr;
->>>> +
->>>> +        /*
->>>> +         * If we fail the final pass of JIT (from jit_subprogs),
->>>> +         * the program may not be finalized yet. Call finalize here
->>>> +         * before freeing it.
->>>> +         */
->>>> +        if (jit_data) {
->>>> +            bpf_jit_binary_pack_finalize(prog, jit_data->ro_header,
->>>> +                             jit_data->header);
->>>> +            kfree(jit_data);
->>>> +        }
->>>> +        hdr = bpf_jit_binary_pack_hdr(prog);
->>>> +        bpf_jit_binary_pack_free(hdr, NULL);
->>>> +        WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(prog));
->>>> +    }
->>>> +
->>>> +    bpf_prog_unlock_free(prog);
->>>> +}
->>>
->>>
-> 
-> Thanks,
-> Puranjay
+>=20
+> > +
+> > +The complete list of relocation kinds is represented by the following =
+enum:
+> > +
+> > +.. code-block:: c
+> > +
+> > + enum bpf_core_relo_kind {
+> > +	BPF_CORE_FIELD_BYTE_OFFSET =3D 0,  /* field byte offset */
+> > +	BPF_CORE_FIELD_BYTE_SIZE   =3D 1,  /* field size in bytes */
+> > +	BPF_CORE_FIELD_EXISTS      =3D 2,  /* field existence in target kerne=
+l */
+> > +	BPF_CORE_FIELD_SIGNED      =3D 3,  /* field signedness (0 - unsigned,=
+ 1 - signed) */
+> > +	BPF_CORE_FIELD_LSHIFT_U64  =3D 4,  /* bitfield-specific left bitshift=
+ */
+> > +	BPF_CORE_FIELD_RSHIFT_U64  =3D 5,  /* bitfield-specific right bitshif=
+t */
+> > +	BPF_CORE_TYPE_ID_LOCAL     =3D 6,  /* type ID in local BPF object */
+> > +	BPF_CORE_TYPE_ID_TARGET    =3D 7,  /* type ID in target kernel */
+> > +	BPF_CORE_TYPE_EXISTS       =3D 8,  /* type existence in target kernel=
+ */
+> > +	BPF_CORE_TYPE_SIZE         =3D 9,  /* type size in bytes */
+> > +	BPF_CORE_ENUMVAL_EXISTS    =3D 10, /* enum value existence in target =
+kernel */
+> > +	BPF_CORE_ENUMVAL_VALUE     =3D 11, /* enum value integer value */
+> > +	BPF_CORE_TYPE_MATCHES      =3D 12, /* type match in target kernel */
+> > + };
+> > +
+> > +CO-RE Relocation Record
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +
+> > +Relocation record is encoded as the following structure:
+> > +
+> > +.. code-block:: c
+> > +
+> > + struct bpf_core_relo {
+> > +	__u32 insn_off;
+> > +	__u32 type_id;
+> > +	__u32 access_str_off;
+> > +	enum bpf_core_relo_kind kind;
+> > + };
+> > +
+> > +* ``insn_off`` - instruction offset (in bytes) within a code section
+> > +  associated with this relocation;
+> > +
+> > +* ``type_id`` - BTF type ID of the "root" (containing) entity of a
+> > +  relocatable type or field;
+> > +
+> > +* ``access_str_off`` - offset into corresponding .BTF string section.
+> > +  String interpretation depends on specific relocation kind:
+> > +
+> > +  * for field-based relocations, string encodes an accessed field usin=
+g
+> > +    a sequence of field and array indices, separated by colon (:). It'=
+s
+> > +    conceptually very close to LLVM's `getelementptr <GEP_>`_ instruct=
+ion's
+> > +    arguments for identifying offset to a field. For example, consider=
+ the
+> > +    following C code:
+> > +
+> > +    .. code-block:: c
+> > +
+> > +       struct sample {
+> > +           int a;
+> > +           int b;
+> > +           struct { int c[10]; };
+> > +       } __attribute__((preserve_access_index));
+> > +       struct sample *s;
+> > +
+> > +    * Access to ``s[0].a`` would be encoded as ``0:0``:
+> > +
+> > +      * ``0``: first element of ``s`` (as if ``s`` is an array);
+> > +      * ``0``: index of field ``a`` in ``struct sample``.
+> > +
+> > +    * Access to ``s->a`` would be encoded as ``0:0`` as well.
+> > +    * Access to ``s->b`` would be encoded as ``0:1``:
+> > +
+> > +      * ``0``: first element of ``s``;
+> > +      * ``1``: index of field ``b`` in ``struct sample``.
+> > +
+> > +    * Access to ``s[1].c[5]`` would be encoded as ``1:2:0:5``:
+> > +
+> > +      * ``1``: second element of ``s``;
+> > +      * ``2``: index of anonymous structure field in ``struct sample``=
+;
+> > +      * ``0``: index of field ``b`` in anonymous structure;
+>=20
+>=20
+> ``b`` =3D> ``c``
+
+Right, sorry, changed the example a few times ...
+
+>=20
+> > +      * ``5``: access to array element #5.
+> > +
+> > +  * for type-based relocations, string is expected to be just "0";
+> > +
+> > +  * for enum value-based relocations, string contains an index of enum
+> > +     value within its enum type;
+> > +
+> > +* ``kind`` - one of ``enum bpf_core_relo_kind``.
+> > +
+> > +.. _GEP: https://llvm.org/docs/LangRef.html#getelementptr-instruction
+> > +
+> > +.. _btf_co_re_relocation_examples:
+> > +
+> > +CO-RE Relocation Examples
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+> > +
+> > +For the following C code:
+> > +
+> > +.. code-block:: c
+> > +
+> > + struct foo {
+> > +     int a;
+> > +     int b;
+> > + } __attribute__((preserve_access_index));
+> > +
+> > + enum bar { U, V };
+> > +
+> > + void buz(struct foo *s, volatile unsigned long *g) {
+> > +   s->a =3D 1;
+> > +   *g =3D __builtin_preserve_field_info(s->b, 1);
+> > +   *g =3D __builtin_preserve_type_info(*s, 1);
+> > +   *g =3D __builtin_preserve_enum_value(*(enum bar *)V, 1);
+>=20
+> Maybe __builtin_btf_type_id() can be added as well?
+> So far, clang only supports the above 4 builtin's for core
+> relocations.
+
+Will add __builtin_btf_type_id() as well.
+
+>=20
+> > + }
+> > +
+> > +With the following BTF definititions:
+> > +
+> > +.. code-block::
+> > +
+> > + ...
+> > + [2] STRUCT 'foo' size=3D8 vlen=3D2
+> > + 	'a' type_id=3D3 bits_offset=3D0
+> > + 	'b' type_id=3D3 bits_offset=3D32
+> > + [3] INT 'int' size=3D4 bits_offset=3D0 nr_bits=3D32 encoding=3DSIGNED
+> > + ...
+> > + [9] ENUM 'bar' encoding=3DUNSIGNED size=3D4 vlen=3D2
+> > + 	'U' val=3D0
+> > + 	'V' val=3D1
+> > +
+> > +The following relocation entries would be generated:
+> > +
+> > +.. code-block:: c
+> > +
+> > +   <buz>:
+> > +       0:	*(u32 *)(r1 + 0x0) =3D 0x1
+> > +		00:  CO-RE <byte_off> [2] struct foo::a (0:0)
+> > +       1:	r1 =3D 0x4
+> > +		08:  CO-RE <byte_sz> [2] struct foo::b (0:1)
+> > +       2:	*(u64 *)(r2 + 0x0) =3D r1
+> > +       3:	r1 =3D 0x8
+> > +		18:  CO-RE <type_size> [2] struct foo
+> > +       4:	*(u64 *)(r2 + 0x0) =3D r1
+> > +       5:	r1 =3D 0x1 ll
+> > +		28:  CO-RE <enumval_value> [9] enum bar::V =3D 1
+> > +       7:	*(u64 *)(r2 + 0x0) =3D r1
+> > +       8:	exit
+> > +
+>=20
+> It would be great if we can have an example for each of above
+> core relocation kinds.
+
+You mean all 13 kinds, right?
+
+>=20
+> > +Note: modifications for llvm-objdump to show these relocation entries
+> > +are currently work in progress.
+
