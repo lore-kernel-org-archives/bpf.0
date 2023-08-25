@@ -1,248 +1,334 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C72ADDD0;
-	Fri, 25 Aug 2023 13:43:17 +0000 (UTC)
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C658D1FDE;
-	Fri, 25 Aug 2023 06:43:14 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.west.internal (Postfix) with ESMTP id B2A9032009B7;
-	Fri, 25 Aug 2023 09:43:10 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Fri, 25 Aug 2023 09:43:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjusaka.me; h=
-	cc:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:message-id:mime-version:reply-to:sender:subject
-	:subject:to:to; s=fm1; t=1692970990; x=1693057390; bh=cWLyjRrcaS
-	NB2Tn0G3Iyc+2TU5mhy5OdRlgEedNUqgs=; b=Wlt0EPZhRt18+4hLp+cTyABmV/
-	rcA8OjZR2phU7nOpBGDFJ0xMqSsQY1B73abOqxNz5/lp9jwn2CTf36Pt+IOTgOmD
-	9QpEcAf/bxNqTMP3uziR4d4WrjjGV1GL4FjD/c3+m/PeXjhY2nOvyyGYNS6zqTke
-	eoBsY+PPQHL27lUvJdxv8cTtaOUOfzqVLlqxbx9pdIHPYjkGj7uvukBPaKkJ3mzn
-	ed6QLpwS+Nbo8Paj4BBF+Z8VzGkIl7SnO0rMTkZc7Of0IUDWDBJMMxD/1CGY/FhA
-	u2rJzkevGbTRDz+k/otnKQrdVj2yz7z9i3V6IMkT8mXF3iz69UFMiuuG7Q6A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:message-id:mime-version:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1692970990; x=1693057390; bh=cWLyjRrcaSNB2
-	Tn0G3Iyc+2TU5mhy5OdRlgEedNUqgs=; b=19faRVhuP58P5mFZUAw6KY9kqcKLH
-	86Ni0yIxChPTrD6BHjpINDq+UD8PK4TOyocGC8qzDqa5KhRB55H7b8lQY0Dpcac1
-	LvcftJLg34QeHtI8/5iG+EdmJq/xHkaFs0LeAgHDKTgUKuADg2ssCK5kL2KNbDkh
-	lyEq6/9lgUArHL0PfuPmRl/Gm9dglykWthRbjYKPdRRNImzW6+qUzJSxDE7GuO2J
-	U2fu38jaaWsd94L2agyFkIc9VkNJJwLvE2GNe59BjHvpIXSJRxxHQUVDa88ozGcU
-	ydg6hJ/9Akcl1NnzHIMD8jOHIvhyAgybyIENuSiQr/vwLtn6JhXW7MaCg==
-X-ME-Sender: <xms:7a_oZJ6VG1pjVuorpyoCUUjoGgIDzRcI0o7CxVDOLIHUa_HnhDaSBg>
-    <xme:7a_oZG7EyF_54juxEvm9RTjrd-qGX3wfk3GXqfcPmkMf3Zi_E890Zp5KTeeDR38Sl
-    f_pF5FfJXiwKc38nak>
-X-ME-Received: <xmr:7a_oZAfPvpmC4r9QdgqOUaNjtGDn-xkgs-Z-QM39pYvfM44ApgWktz-xAEBzgyVx52GHmxpkhg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedruddvkedgieejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
-    ertddtnecuhfhrohhmpegkhhgvrghoucfnihcuoehmvgesmhgrnhhjuhhsrghkrgdrmhgv
-    qeenucggtffrrghtthgvrhhnpeffgeeluddvveekueettdeiffefffdvhfevhffgkeelte
-    egieetfeffheffudekteenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgvsehmrghnjhhush
-    grkhgrrdhmvg
-X-ME-Proxy: <xmx:7a_oZCLclRUEbiVb1slwRlFGWocrjfx_NGm5r6F_oSFM84m_Ckx8lA>
-    <xmx:7a_oZNIKMXxwj_IH9fnvM6haE-fOvaMOyrlCtoBM2A6LrsHl5Vbl-g>
-    <xmx:7a_oZLzjGIclSULVr44ozt8oEcrBAeN9FIL6lqHeaX_63skPH22wIQ>
-    <xmx:7q_oZKD1FyLSLttSIGolxpoLubSTy_NMuRE8pGbnkjQMLwmm6xJgIw>
-Feedback-ID: i3ea9498d:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 25 Aug 2023 09:43:05 -0400 (EDT)
-From: Zheao Li <me@manjusaka.me>
-To: edumazet@google.com,
-	mhiramat@kernel.org,
-	rostedt@goodmis.org,
-	davem@davemloft.net,
-	dsahern@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com
-Cc: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Zheao Li <me@manjusaka.me>
-Subject: [PATCH v4] tracepoint: add new `tcp:tcp_ca_event` trace event
-Date: Fri, 25 Aug 2023 13:32:47 +0000
-Message-Id: <20230825133246.344364-1-me@manjusaka.me>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C39520E7
+	for <bpf@vger.kernel.org>; Fri, 25 Aug 2023 13:50:04 +0000 (UTC)
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2B92139
+	for <bpf@vger.kernel.org>; Fri, 25 Aug 2023 06:50:02 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b9cdba1228so13437171fa.2
+        for <bpf@vger.kernel.org>; Fri, 25 Aug 2023 06:50:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google; t=1692971400; x=1693576200;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=PFLt/JgKazNBpSdygcRlrIoZFffEkOnqJybw0qrLDKI=;
+        b=gTIj7Dd0ys7dde3euNRHFmwhQLbhKPPYQVwRVEhPyNkZ2st7LGo8PJ4xE+e5aFA42z
+         Jfn8fdNhz1mzk+ShXZCSx7aZ2C5m1dkCOil5SAK5ed9YbeRW7huemxScAgL5+nNrCu0F
+         yTD9bEYcEY+7u8RSWHCxeasbRA7cMmoCS6btc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692971400; x=1693576200;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PFLt/JgKazNBpSdygcRlrIoZFffEkOnqJybw0qrLDKI=;
+        b=azeE2rq2Uz+9oy6Tp23iuUEkcu8pL1OIjfBUlcLORNMujF9DSaqkp3yC2UdG2J9sAb
+         FXKeHiRfIwBh2QgQADXh7LC/nviJmzUzG4hfa7xUqGq7TUY5Qs4K5RPO63h2nrOgKbxt
+         DIEEwNzOsFVnVb9Sj3XK+EqS+KjS5/FSq269it1RgnUzr+PBj73kG4nvFZ/Zw54EBAWp
+         kpsc+zXR9575aL9Ct/gAicfCjJ8G3PjSXqqStZQIm+IPcDodaDeiGRWcCNta0GTvWj7U
+         6Wr8Z5ApiPnZOnvd26IWHGFOUMyrT1E5VxwH84zai5hofQo8ub/4PqLTFBQ7Wjn8jIMP
+         4SGw==
+X-Gm-Message-State: AOJu0Yy9calF9Q9yrq50kzPxwP9hiobp605bYnLAvUU5Wjv+TBtvlKN4
+	m+LWrqjSFxaXr78CD3xAThJblg==
+X-Google-Smtp-Source: AGHT+IFEJYiMzeLKVQb/E1YY6qYnUaItDfuSQVE4kwOoRa4s0xmFhaMMkC5l5MsNPWw6/l20LMJdOw==
+X-Received: by 2002:a2e:b00c:0:b0:2b6:ccd6:3eae with SMTP id y12-20020a2eb00c000000b002b6ccd63eaemr13830288ljk.17.1692971399784;
+        Fri, 25 Aug 2023 06:49:59 -0700 (PDT)
+Received: from cloudflare.com (79.184.208.4.ipv4.supernova.orange.pl. [79.184.208.4])
+        by smtp.gmail.com with ESMTPSA id z9-20020a170906434900b0097404f4a124sm990995ejm.2.2023.08.25.06.49.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Aug 2023 06:49:58 -0700 (PDT)
+References: <20230824143959.1134019-1-liujian56@huawei.com>
+ <20230824143959.1134019-2-liujian56@huawei.com>
+User-agent: mu4e 1.6.10; emacs 28.2
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Liu Jian <liujian56@huawei.com>
+Cc: john.fastabend@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, sdf@google.com,
+ haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ dsahern@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3 1/7] bpf, sockmap: add BPF_F_PERMANENT flag
+ for skmsg redirect
+Date: Fri, 25 Aug 2023 15:04:03 +0200
+In-reply-to: <20230824143959.1134019-2-liujian56@huawei.com>
+Message-ID: <87r0nr5j0a.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hello 
+On Thu, Aug 24, 2023 at 10:39 PM +08, Liu Jian wrote:
+> If the sockmap msg redirection function is used only to forward packets
+> and no other operation, the execution result of the BPF_SK_MSG_VERDICT
+> program is the same each time. In this case, the BPF program only needs to
+> be run once. Add BPF_F_PERMANENT flag to bpf_msg_redirect_map() and
+> bpf_msg_redirect_hash() to implement this ability.
+>
+> Then we can enable this function in the bpf program as follows:
+> bpf_msg_redirect_hash(xx, xx, xx, BPF_F_INGRESS | BPF_F_PERMANENT);
+>
+> Test results using netperf  TCP_STREAM mode:
+> for i in 1 64 128 512 1k 2k 32k 64k 100k 500k 1m;then
+> netperf -T 1,2 -t TCP_STREAM -H 127.0.0.1 -l 20 -- -m $i -s 100m,100m -S 100m,100m
+> done
+>
+> before:
+> 3.84 246.52 496.89 1885.03 3415.29 6375.03 40749.09 48764.40 51611.34 55678.26 55992.78
+> after:
+> 4.43 279.20 555.82 2080.79 3870.70 7105.44 41836.41 49709.75 51861.56 55211.00 54566.85
+>
+> Signed-off-by: Liu Jian <liujian56@huawei.com>
+> ---
+>  include/linux/skmsg.h          |  1 +
+>  include/uapi/linux/bpf.h       | 15 +++++++++++++--
+>  net/core/skmsg.c               |  5 +++++
+>  net/core/sock_map.c            |  4 ++--
+>  net/ipv4/tcp_bpf.c             | 18 +++++++++++++-----
+>  tools/include/uapi/linux/bpf.h | 15 +++++++++++++--
+>  6 files changed, 47 insertions(+), 11 deletions(-)
+>
+> diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
+> index 054d7911bfc9..2f4e9811ff85 100644
+> --- a/include/linux/skmsg.h
+> +++ b/include/linux/skmsg.h
+> @@ -82,6 +82,7 @@ struct sk_psock {
+>  	u32				cork_bytes;
+>  	u32				eval;
+>  	bool				redir_ingress; /* undefined if sk_redir is null */
+> +	bool				redir_permanent;
+>  	struct sk_msg			*cork;
+>  	struct sk_psock_progs		progs;
+>  #if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 70da85200695..f4de1ba390b4 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -3004,7 +3004,12 @@ union bpf_attr {
+>   * 		egress interfaces can be used for redirection. The
+>   * 		**BPF_F_INGRESS** value in *flags* is used to make the
+>   * 		distinction (ingress path is selected if the flag is present,
+> - * 		egress path otherwise). This is the only flag supported for now.
+> + * 		egress path otherwise). The **BPF_F_PERMANENT** value in
+> + *		*flags* is used to indicates whether the eBPF result is
+> + *		permanently (please note that, BPF_F_PERMANENT does not work with
+> + *		msg_apply_bytes() and msg_cork_bytes(), if msg_apply_bytes() or
+> + *		msg_cork_bytes() is configured, the BPF_F_PERMANENT function is
+> + *		automatically disabled).
 
-This the 4th version of the patch, the previous discusstion is here
+There are some grammar mistakes here we need to fix. Hint - I find it
+helpful to run the text through an online grammar checker or an AI
+chatbot when unsure.
 
-https://lore.kernel.org/linux-trace-kernel/20230807183308.9015-1-me@manjusaka.me/
+Either way, let's reword so the flags are clearly listed out, since we
+now have two of them:
 
-In this version of the code, here's some different:
+The following *flags* are supported:
 
-1. The event name has been changed from `tcp_ca_event_set` to
-`tcp_ca_event`
+**BPF_F_INGRESS**
+        Both ingress and egress interfaces can be used for redirection.
+        The **BPF_F_INGRESS** value in *flags* is used to make the
+        distinction. Ingress path is selected if the flag is present,
+        egress path otherwise.
+**BPF_F_PERMANENT**
+        Indicates that redirect verdict and the target socket should be
+        remembered. The verdict program will not be run for subsequent
+        packets, unless an error occurs when forwarding packets.
 
-2. Output the current protocol family in TP_printk
+        **BPF_F_PERMANENT** cannot be use together with
+        **bpf_msg_apply_bytes**\ () and **bpf_msg_cork_bytes**\ (). If
+        either has been called, the **BPF_F_PERMANENT** flag is ignored.
 
-3. Show the ca_event symbol instead of the original number
 
-But the `./scripts/checkpatch.pl` has been failed to check this patch,
-because we sill have some code error in ./scripts/checkpatch.pl(in
-another world, the test would be failed when we use the 
-scripts/checkpatch.pl to check the events/tcp.h
+Please check the formatting is correct with:
 
-Feel free to ask me if you have have any issues and ideas.
+./scripts/bpf_doc.py --filename include/uapi/linux/bpf.h \
+  | rst2man /dev/stdin | man /dev/stdin
 
-Thanks
+That said, I'm not sure I like these semantics - flag being ignored
+under some circumstances. It leads to a silent failure.
 
----
+If I've asked for a permanent redirect, but it is cannot work in my BPF
+program, I'd rather get an error from bpf_msg_redirect_map/hash(), than
+be surprised that it is getting executed for every packet and have to
+troubleshoot why.
 
-In normal use case, the tcp_ca_event would be changed in high frequency.
+>   * 	Return
+>   * 		**SK_PASS** on success, or **SK_DROP** on error.
+>   *
+> @@ -3276,7 +3281,12 @@ union bpf_attr {
+>   *		egress interfaces can be used for redirection. The
+>   *		**BPF_F_INGRESS** value in *flags* is used to make the
+>   *		distinction (ingress path is selected if the flag is present,
+> - *		egress path otherwise). This is the only flag supported for now.
+> + *		egress path otherwise). The **BPF_F_PERMANENT** value in
+> + *		*flags* is used to indicates whether the eBPF result is
+> + *		permanently (please note that, BPF_F_PERMANENT does not work with
+> + *		msg_apply_bytes() and msg_cork_bytes(), if msg_apply_bytes() or
+> + *		msg_cork_bytes() is configured, the BPF_F_PERMANENT function is
+> + *		automatically disabled).
+>   *	Return
+>   *		**SK_PASS** on success, or **SK_DROP** on error.
+>   *
+> @@ -5872,6 +5882,7 @@ enum {
+>  /* BPF_FUNC_clone_redirect and BPF_FUNC_redirect flags. */
+>  enum {
+>  	BPF_F_INGRESS			= (1ULL << 0),
+> +	BPF_F_PERMANENT			= (1ULL << 1),
+>  };
+>  
+>  /* BPF_FUNC_skb_set_tunnel_key and BPF_FUNC_skb_get_tunnel_key flags. */
+> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+> index a29508e1ff35..df1443cf5fbd 100644
+> --- a/net/core/skmsg.c
+> +++ b/net/core/skmsg.c
+> @@ -885,6 +885,11 @@ int sk_psock_msg_verdict(struct sock *sk, struct sk_psock *psock,
+>  			goto out;
+>  		}
+>  		psock->redir_ingress = sk_msg_to_ingress(msg);
+> +		if (!msg->apply_bytes && !msg->cork_bytes)
+> +			psock->redir_permanent =
+> +				msg->flags & BPF_F_PERMANENT;
+> +		else
+> +			psock->redir_permanent = false;
 
-The developer can monitor the network quality more easier by tracing
-TCP stack with this TP event.
+Above can be rewritten as:
 
-So I propose to add a `tcp:tcp_ca_event` trace event
-like `tcp:tcp_cong_state_set` to help the people to
-trace the TCP connection status
+		psock->redir_permanent = !msg->apply_bytes &&
+					 !msg->cork_bytes &&
+					 (msg->flags & BPF_F_PERMANENT);
 
-Signed-off-by: Zheao Li <me@manjusaka.me>
----
- include/net/tcp.h          |  9 ++----
- include/trace/events/tcp.h | 60 ++++++++++++++++++++++++++++++++++++++
- net/ipv4/tcp_cong.c        | 10 +++++++
- 3 files changed, 72 insertions(+), 7 deletions(-)
+But as I wrote earlier, I don't think it's a good idea to ignore the
+flag. We can detect this conflict at the time the bpf_msg_sk_redirect_*
+helper is called and return an error.
 
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 0ca972ebd3dd..a68c5b61889c 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -1154,13 +1154,8 @@ static inline bool tcp_ca_needs_ecn(const struct sock *sk)
- 	return icsk->icsk_ca_ops->flags & TCP_CONG_NEEDS_ECN;
- }
- 
--static inline void tcp_ca_event(struct sock *sk, const enum tcp_ca_event event)
--{
--	const struct inet_connection_sock *icsk = inet_csk(sk);
--
--	if (icsk->icsk_ca_ops->cwnd_event)
--		icsk->icsk_ca_ops->cwnd_event(sk, event);
--}
-+/* from tcp_cong.c */
-+void tcp_ca_event(struct sock *sk, const enum tcp_ca_event event);
- 
- /* From tcp_cong.c */
- void tcp_set_ca_state(struct sock *sk, const u8 ca_state);
-diff --git a/include/trace/events/tcp.h b/include/trace/events/tcp.h
-index 7b1ddffa3dfc..993eb00403ea 100644
---- a/include/trace/events/tcp.h
-+++ b/include/trace/events/tcp.h
-@@ -41,6 +41,18 @@
- 	TP_STORE_V4MAPPED(__entry, saddr, daddr)
- #endif
- 
-+/* The TCP CA event traced by tcp_ca_event*/
-+#define tcp_ca_event_names    \
-+		EM(CA_EVENT_TX_START)     \
-+		EM(CA_EVENT_CWND_RESTART) \
-+		EM(CA_EVENT_COMPLETE_CWR) \
-+		EM(CA_EVENT_LOSS)         \
-+		EM(CA_EVENT_ECN_NO_CE)    \
-+		EMe(CA_EVENT_ECN_IS_CE)
-+
-+#define show_tcp_ca_event_names(val) \
-+	__print_symbolic(val, tcp_ca_event_names)
-+
- /*
-  * tcp event with arguments sk and skb
-  *
-@@ -419,6 +431,54 @@ TRACE_EVENT(tcp_cong_state_set,
- 		  __entry->cong_state)
- );
- 
-+TRACE_EVENT(tcp_ca_event,
-+
-+	TP_PROTO(struct sock *sk, const u8 ca_event),
-+
-+	TP_ARGS(sk, ca_event),
-+
-+	TP_STRUCT__entry(
-+		__field(const void *, skaddr)
-+		__field(__u16, sport)
-+		__field(__u16, dport)
-+		__field(__u16, family)
-+		__array(__u8, saddr, 4)
-+		__array(__u8, daddr, 4)
-+		__array(__u8, saddr_v6, 16)
-+		__array(__u8, daddr_v6, 16)
-+		__field(__u8, ca_event)
-+	),
-+
-+	TP_fast_assign(
-+		struct inet_sock *inet = inet_sk(sk);
-+		__be32 *p32;
-+
-+		__entry->skaddr = sk;
-+
-+		__entry->sport = ntohs(inet->inet_sport);
-+		__entry->dport = ntohs(inet->inet_dport);
-+		__entry->family = sk->sk_family;
-+
-+		p32 = (__be32 *) __entry->saddr;
-+		*p32 = inet->inet_saddr;
-+
-+		p32 = (__be32 *) __entry->daddr;
-+		*p32 =  inet->inet_daddr;
-+
-+		TP_STORE_ADDRS(__entry, inet->inet_saddr, inet->inet_daddr,
-+			   sk->sk_v6_rcv_saddr, sk->sk_v6_daddr);
-+
-+		__entry->ca_event = ca_event;
-+	),
-+
-+	TP_printk("family=%s sport=%hu dport=%hu saddr=%pI4 daddr=%pI4 saddrv6=%pI6c daddrv6=%pI6c ca_event=%s",
-+		  show_family_name(__entry->family),
-+		  __entry->sport, __entry->dport,
-+		  __entry->saddr, __entry->daddr,
-+		  __entry->saddr_v6, __entry->daddr_v6,
-+		  show_tcp_ca_event_names(__entry->ca_event))
-+);
-+
- #endif /* _TRACE_TCP_H */
- 
- /* This part must be outside protection */
-diff --git a/net/ipv4/tcp_cong.c b/net/ipv4/tcp_cong.c
-index 1b34050a7538..fb7ec6ebbbd0 100644
---- a/net/ipv4/tcp_cong.c
-+++ b/net/ipv4/tcp_cong.c
-@@ -34,6 +34,16 @@ struct tcp_congestion_ops *tcp_ca_find(const char *name)
- 	return NULL;
- }
- 
-+void tcp_ca_event(struct sock *sk, const enum tcp_ca_event event)
-+{
-+	const struct inet_connection_sock *icsk = inet_csk(sk);
-+
-+	trace_tcp_ca_event(sk, (u8)event);
-+
-+	if (icsk->icsk_ca_ops->cwnd_event)
-+		icsk->icsk_ca_ops->cwnd_event(sk, event);
-+}
-+
- void tcp_set_ca_state(struct sock *sk, const u8 ca_state)
- {
- 	struct inet_connection_sock *icsk = inet_csk(sk);
--- 
-2.34.1
+Naturally that means that that bpf_msg_{cork,apply}_bytes helpers need
+to be adjusted to return an error if BPF_F_PERMANENT has been set.
+
+>  		psock->sk_redir = msg->sk_redir;
+>  		sock_hold(psock->sk_redir);
+>  	}
+> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+> index 08ab108206bf..35a361614f5e 100644
+> --- a/net/core/sock_map.c
+> +++ b/net/core/sock_map.c
+> @@ -662,7 +662,7 @@ BPF_CALL_4(bpf_msg_redirect_map, struct sk_msg *, msg,
+>  {
+>  	struct sock *sk;
+>  
+> -	if (unlikely(flags & ~(BPF_F_INGRESS)))
+> +	if (unlikely(flags & ~(BPF_F_INGRESS | BPF_F_PERMANENT)))
+>  		return SK_DROP;
+>  
+>  	sk = __sock_map_lookup_elem(map, key);
+> @@ -1261,7 +1261,7 @@ BPF_CALL_4(bpf_msg_redirect_hash, struct sk_msg *, msg,
+>  {
+>  	struct sock *sk;
+>  
+> -	if (unlikely(flags & ~(BPF_F_INGRESS)))
+> +	if (unlikely(flags & ~(BPF_F_INGRESS | BPF_F_PERMANENT)))
+>  		return SK_DROP;
+>  
+>  	sk = __sock_hash_lookup_elem(map, key);
+> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+> index 81f0dff69e0b..b53e356562a6 100644
+> --- a/net/ipv4/tcp_bpf.c
+> +++ b/net/ipv4/tcp_bpf.c
+> @@ -419,8 +419,10 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
+>  		if (!psock->apply_bytes) {
+>  			/* Clean up before releasing the sock lock. */
+>  			eval = psock->eval;
+> -			psock->eval = __SK_NONE;
+> -			psock->sk_redir = NULL;
+> +			if (!psock->redir_permanent) {
+> +				psock->eval = __SK_NONE;
+> +				psock->sk_redir = NULL;
+> +			}
+>  		}
+>  		if (psock->cork) {
+>  			cork = true;
+> @@ -433,9 +435,15 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
+>  		ret = tcp_bpf_sendmsg_redir(sk_redir, redir_ingress,
+>  					    msg, tosend, flags);
+>  		sent = origsize - msg->sg.size;
+> +		/* disable the ability when something wrong */
+> +		if (unlikely(ret < 0))
+> +			psock->redir_permanent = 0;
+>  
+> -		if (eval == __SK_REDIRECT)
+> +		if (!psock->redir_permanent && eval == __SK_REDIRECT) {
+
+I believe eval == __SK_REDIRECT is always true here, and the eval local
+variable is redundant. We will be in this switch branch only if
+psock->eval == __SK_REDIRECT. It's something we missed during the review
+of cd9733f5d75c ("tcp_bpf: Fix one concurrency problem in the
+tcp_bpf_send_verdict function").
+
+>  			sock_put(sk_redir);
+> +			psock->sk_redir = NULL;
+> +			psock->eval = __SK_NONE;
+> +		}
+>  
+>  		lock_sock(sk);
+>  		if (unlikely(ret < 0)) {
+> @@ -460,8 +468,8 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
+>  	}
+>  
+>  	if (likely(!ret)) {
+> -		if (!psock->apply_bytes) {
+> -			psock->eval =  __SK_NONE;
+> +		if (!psock->apply_bytes && !psock->redir_permanent) {
+> +			psock->eval = __SK_NONE;
+>  			if (psock->sk_redir) {
+>  				sock_put(psock->sk_redir);
+>  				psock->sk_redir = NULL;
+> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+> index 70da85200695..f4de1ba390b4 100644
+> --- a/tools/include/uapi/linux/bpf.h
+> +++ b/tools/include/uapi/linux/bpf.h
+> @@ -3004,7 +3004,12 @@ union bpf_attr {
+>   * 		egress interfaces can be used for redirection. The
+>   * 		**BPF_F_INGRESS** value in *flags* is used to make the
+>   * 		distinction (ingress path is selected if the flag is present,
+> - * 		egress path otherwise). This is the only flag supported for now.
+> + * 		egress path otherwise). The **BPF_F_PERMANENT** value in
+> + *		*flags* is used to indicates whether the eBPF result is
+> + *		permanently (please note that, BPF_F_PERMANENT does not work with
+> + *		msg_apply_bytes() and msg_cork_bytes(), if msg_apply_bytes() or
+> + *		msg_cork_bytes() is configured, the BPF_F_PERMANENT function is
+> + *		automatically disabled).
+>   * 	Return
+>   * 		**SK_PASS** on success, or **SK_DROP** on error.
+>   *
+> @@ -3276,7 +3281,12 @@ union bpf_attr {
+>   *		egress interfaces can be used for redirection. The
+>   *		**BPF_F_INGRESS** value in *flags* is used to make the
+>   *		distinction (ingress path is selected if the flag is present,
+> - *		egress path otherwise). This is the only flag supported for now.
+> + *		egress path otherwise). The **BPF_F_PERMANENT** value in
+> + *		*flags* is used to indicates whether the eBPF result is
+> + *		permanently (please note that, BPF_F_PERMANENT does not work with
+> + *		msg_apply_bytes() and msg_cork_bytes(), if msg_apply_bytes() or
+> + *		msg_cork_bytes() is configured, the BPF_F_PERMANENT function is
+> + *		automatically disabled).
+>   *	Return
+>   *		**SK_PASS** on success, or **SK_DROP** on error.
+>   *
+> @@ -5872,6 +5882,7 @@ enum {
+>  /* BPF_FUNC_clone_redirect and BPF_FUNC_redirect flags. */
+>  enum {
+>  	BPF_F_INGRESS			= (1ULL << 0),
+> +	BPF_F_PERMANENT			= (1ULL << 1),
+>  };
+>  
+>  /* BPF_FUNC_skb_set_tunnel_key and BPF_FUNC_skb_get_tunnel_key flags. */
 
