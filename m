@@ -1,264 +1,159 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46680CA55;
-	Fri, 25 Aug 2023 15:11:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A51CFC433C7;
-	Fri, 25 Aug 2023 15:11:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1692976275;
-	bh=Yk82zBo/CO5JhPqCebob30ONG4lnlvLUkORIUTY0ODE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NYYVRerqYqnGpLF8blJdmxVpMOEPQLv0528BjC5vvBFsZNAz6HSSGB0+0FSTqmw/7
-	 Db7P0mmTsJO1oNY1/ZHWu8NyzK9JrsOCasrcwziq7v3vDEDceQvRopW668kANjqE5f
-	 XtN676xYCoJvkIHN5kf251pR26YpJ9SQiBSWWbB3qvKX/kVrAeNfp0cfhulI06kGyS
-	 rDA+euytpnrfPPjqUYcEaqjX12Vj0EdMyf1Oo7A6QZMfrIIcEUaHvGZ8srUTvsTFVz
-	 en/rpIYHaZ7zIlQRk5TaAyXVnqxQP9imT2Z+zB9eRFWghRFbDct0Qujy/WQpJcsiaU
-	 Wx3ea7l8r3I0w==
-Date: Fri, 25 Aug 2023 08:11:15 -0700
-From: "Darrick J. Wong" <djwong@kernel.org>
-To: Hao Xu <hao.xu@linux.dev>
-Cc: io-uring@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-	Dominique Martinet <asmadeus@codewreck.org>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Stefan Roesch <shr@fb.com>, Clay Harris <bugs@claycon.org>,
-	Dave Chinner <david@fromorbit.com>, linux-fsdevel@vger.kernel.org,
-	linux-xfs@vger.kernel.org, linux-ext4@vger.kernel.org,
-	linux-cachefs@redhat.com, ecryptfs@vger.kernel.org,
-	linux-nfs@vger.kernel.org, linux-unionfs@vger.kernel.org,
-	bpf@vger.kernel.org, netdev@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-block@vger.kernel.org, linux-btrfs@vger.kernel.org,
-	codalist@coda.cs.cmu.edu, linux-f2fs-devel@lists.sourceforge.net,
-	cluster-devel@redhat.com, linux-mm@kvack.org,
-	linux-nilfs@vger.kernel.org, devel@lists.orangefs.org,
-	linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-	linux-mtd@lists.infradead.org, Wanpeng Li <wanpengli@tencent.com>
-Subject: Re: [PATCH RFC v5 00/29] io_uring getdents
-Message-ID: <20230825151115.GB17891@frogsfrogsfrogs>
-References: <20230825135431.1317785-1-hao.xu@linux.dev>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E8AACA60
+	for <bpf@vger.kernel.org>; Fri, 25 Aug 2023 15:18:47 +0000 (UTC)
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0382121
+	for <bpf@vger.kernel.org>; Fri, 25 Aug 2023 08:18:46 -0700 (PDT)
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37PFA69m015318;
+	Fri, 25 Aug 2023 15:18:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=PMjr//xMHYo/Z0v5toc4Cy/Alu9NfkfcEXlHjLLC6G8=;
+ b=B0ZD6Wz2RKV6ELsluJroZZnivMcEe6vap1tUQGPhWiN6TuGB/LoeaBsTAFJS+pTNHVjy
+ XAV2fE8WIAHz0JLNYsKaeFx6+knTG6XxvN/QfY6jXP4z2Vwg6+pwhpQ7rInIlwI2X8b7
+ ABQ9W9xJ51YGJr7Z/vEBB9sm5UUMOOXe6hUG14MEMs8CgRO9Qo1+q2UtpRUZENatQ4h6
+ Z9SnH9LIHbrvvU6g6ThgPfQDn2p46b03/+AhQDsX888scOn5LOn5CimKbgu7LOtuyhT5
+ WoC1OvMFWpgpTkCeNxW9hCtc/wIsPQOCy9aO+nvz3m5BEpnAmd25MnAFbrjlq3YCTDSz Yg== 
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3spvrmbxqr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 25 Aug 2023 15:18:20 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 37PDCInp004042;
+	Fri, 25 Aug 2023 15:18:19 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3sn21s0g0x-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 25 Aug 2023 15:18:19 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 37PFIHRs22086330
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 25 Aug 2023 15:18:17 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4465120043;
+	Fri, 25 Aug 2023 15:18:17 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 30AC820040;
+	Fri, 25 Aug 2023 15:18:15 +0000 (GMT)
+Received: from li-bd3f974c-2712-11b2-a85c-df1cec4d728e.ibm.com.com (unknown [9.43.75.97])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 25 Aug 2023 15:18:14 +0000 (GMT)
+From: Hari Bathini <hbathini@linux.ibm.com>
+To: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, bpf@vger.kernel.org
+Cc: Michael Ellerman <mpe@ellerman.id.au>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Song Liu <songliubraving@fb.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [PATCH v3 1/5] powerpc/bpf: implement bpf_arch_text_copy
+Date: Fri, 25 Aug 2023 20:48:06 +0530
+Message-ID: <20230825151810.164418-2-hbathini@linux.ibm.com>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230825151810.164418-1-hbathini@linux.ibm.com>
+References: <20230825151810.164418-1-hbathini@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230825135431.1317785-1-hao.xu@linux.dev>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: b8Mh2RtNzn-eY5Pab_36vKt6MD3fgUCC
+X-Proofpoint-ORIG-GUID: b8Mh2RtNzn-eY5Pab_36vKt6MD3fgUCC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-25_13,2023-08-25_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1015 phishscore=0 impostorscore=0 malwarescore=0 adultscore=0
+ mlxlogscore=992 spamscore=0 mlxscore=0 priorityscore=1501 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2308250134
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,
+	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Fri, Aug 25, 2023 at 09:54:02PM +0800, Hao Xu wrote:
-> From: Hao Xu <howeyxu@tencent.com>
-> 
-> This series introduce getdents64 to io_uring, the code logic is similar
-> with the snychronized version's. It first try nowait issue, and offload
-> it to io-wq threads if the first try fails.
+bpf_arch_text_copy is used to dump JITed binary to RX page, allowing
+multiple BPF programs to share the same page. Use patch_instruction()
+to implement it.
 
-NAK on the entire series until Jens actually writes down what NOWAIT
-does, so that we can check that the *existing* nowait code branches
-actually behave how he says it should.
+Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
+---
+ arch/powerpc/net/bpf_jit_comp.c | 40 ++++++++++++++++++++++++++++++++-
+ 1 file changed, 39 insertions(+), 1 deletion(-)
 
-https://lore.kernel.org/all/e2d8e5f1-f794-38eb-cecf-ed30c571206b@kernel.dk/
+diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+index 37043dfc1add..170ebf8ac0f2 100644
+--- a/arch/powerpc/net/bpf_jit_comp.c
++++ b/arch/powerpc/net/bpf_jit_comp.c
+@@ -13,9 +13,12 @@
+ #include <linux/netdevice.h>
+ #include <linux/filter.h>
+ #include <linux/if_vlan.h>
+-#include <asm/kprobes.h>
++#include <linux/memory.h>
+ #include <linux/bpf.h>
+ 
++#include <asm/kprobes.h>
++#include <asm/code-patching.h>
++
+ #include "bpf_jit.h"
+ 
+ static void bpf_jit_fill_ill_insns(void *area, unsigned int size)
+@@ -23,6 +26,27 @@ static void bpf_jit_fill_ill_insns(void *area, unsigned int size)
+ 	memset32(area, BREAKPOINT_INSTRUCTION, size / 4);
+ }
+ 
++/*
++ * Patch 'len' bytes of instructions from opcode to addr, one instruction
++ * at a time. Returns addr on success. ERR_PTR(-EINVAL), otherwise.
++ */
++static void *bpf_patch_instructions(void *addr, void *opcode, size_t len)
++{
++	while (len > 0) {
++		ppc_inst_t insn = ppc_inst_read(opcode);
++		int ilen = ppc_inst_len(insn);
++
++		if (patch_instruction(addr, insn))
++			return ERR_PTR(-EINVAL);
++
++		len -= ilen;
++		addr = addr + ilen;
++		opcode = opcode + ilen;
++	}
++
++	return addr;
++}
++
+ int bpf_jit_emit_exit_insn(u32 *image, struct codegen_context *ctx, int tmp_reg, long exit_addr)
+ {
+ 	if (!exit_addr || is_offset_in_branch_range(exit_addr - (ctx->idx * 4))) {
+@@ -274,3 +298,17 @@ int bpf_add_extable_entry(struct bpf_prog *fp, u32 *image, int pass, struct code
+ 	ctx->exentry_idx++;
+ 	return 0;
+ }
++
++void *bpf_arch_text_copy(void *dst, void *src, size_t len)
++{
++	void *ret;
++
++	if (WARN_ON_ONCE(core_kernel_text((unsigned long)dst)))
++		return ERR_PTR(-EINVAL);
++
++	mutex_lock(&text_mutex);
++	ret = bpf_patch_instructions(dst, src, len);
++	mutex_unlock(&text_mutex);
++
++	return ret;
++}
+-- 
+2.41.0
 
---D
-
-> 
-> Patch1 and Patch2 are some preparation
-> Patch3 supports nowait for xfs getdents code
-> Patch4-11 are vfs change, include adding helpers and trylock for locks
-> Patch12-29 supports nowait for involved xfs journal stuff
-> note, Patch24 and 27 are actually two questions, might be removed later.
-> an xfs test may come later.
-> 
-> Tests I've done:
-> a liburing test case for functional test:
-> https://github.com/HowHsu/liburing/commit/39dc9a8e19c06a8cebf8c2301b85320eb45c061e?diff=unified
-> 
-> xfstests:
->     test/generic: 1 fails and 171 not run
->     test/xfs: 72 fails and 156 not run
-> run the code before without this patchset, same result.
-> I'll try to make the environment more right to run more tests here.
-> 
-> 
-> Tested it with a liburing performance test:
-> https://github.com/HowHsu/liburing/blob/getdents/test/getdents2.c
-> 
-> The test is controlled by the below script[2] which runs getdents2.t 100
-> times and calulate the avg.
-> The result show that io_uring version is about 2.6% faster:
-> 
-> note:
-> [1] the number of getdents call/request in io_uring and normal sync version
-> are made sure to be same beforehand.
-> 
-> [2] run_getdents.py
-> 
-> ```python3
-> 
-> import subprocess
-> 
-> N = 100
-> sum = 0.0
-> args = ["/data/home/howeyxu/tmpdir", "sync"]
-> 
-> for i in range(N):
->     output = subprocess.check_output(["./liburing/test/getdents2.t"] + args)
->     sum += float(output)
-> 
-> average = sum / N
-> print("Average of sync:", average)
-> 
-> sum = 0.0
-> args = ["/data/home/howeyxu/tmpdir", "iouring"]
-> 
-> for i in range(N):
->     output = subprocess.check_output(["./liburing/test/getdents2.t"] + args)
->     sum += float(output)
-> 
-> average = sum / N
-> print("Average of iouring:", average)
-> 
-> ```
-> 
-> v4->v5:
->  - move atime update to the beginning of getdents operation
->  - trylock for i_rwsem
->  - nowait semantics for involved xfs journal stuff
-> 
-> v3->v4:
->  - add Dave's xfs nowait code and fix a deadlock problem, with some code
->    style tweak.
->  - disable fixed file to avoid a race problem for now
->  - add a test program.
-> 
-> v2->v3:
->  - removed the kernfs patches
->  - add f_pos_lock logic
->  - remove the "reduce last EOF getdents try" optimization since
->    Dominique reports that doesn't make difference
->  - remove the rewind logic, I think the right way is to introduce lseek
->    to io_uring not to patch this logic to getdents.
->  - add Singed-off-by of Stefan Roesch for patch 1 since checkpatch
->    complained that Co-developed-by someone should be accompanied with
->    Signed-off-by same person, I can remove them if Stefan thinks that's
->    not proper.
-> 
-> 
-> Dominique Martinet (1):
->   fs: split off vfs_getdents function of getdents64 syscall
-> 
-> Hao Xu (28):
->   xfs: rename XBF_TRYLOCK to XBF_NOWAIT
->   xfs: add NOWAIT semantics for readdir
->   vfs: add nowait flag for struct dir_context
->   vfs: add a vfs helper for io_uring file pos lock
->   vfs: add file_pos_unlock() for io_uring usage
->   vfs: add a nowait parameter for touch_atime()
->   vfs: add nowait parameter for file_accessed()
->   vfs: move file_accessed() to the beginning of iterate_dir()
->   vfs: add S_NOWAIT for nowait time update
->   vfs: trylock inode->i_rwsem in iterate_dir() to support nowait
->   xfs: enforce GFP_NOIO implicitly during nowait time update
->   xfs: make xfs_trans_alloc() support nowait semantics
->   xfs: support nowait for xfs_log_reserve()
->   xfs: don't wait for free space in xlog_grant_head_check() in nowait
->     case
->   xfs: add nowait parameter for xfs_inode_item_init()
->   xfs: make xfs_trans_ijoin() error out -EAGAIN
->   xfs: set XBF_NOWAIT for xfs_buf_read_map if necessary
->   xfs: support nowait memory allocation in _xfs_buf_alloc()
->   xfs: distinguish error type of memory allocation failure for nowait
->     case
->   xfs: return -EAGAIN when bulk memory allocation fails in nowait case
->   xfs: comment page allocation for nowait case in xfs_buf_find_insert()
->   xfs: don't print warn info for -EAGAIN error in  xfs_buf_get_map()
->   xfs: support nowait for xfs_buf_read_map()
->   xfs: support nowait for xfs_buf_item_init()
->   xfs: return -EAGAIN when nowait meets sync in transaction commit
->   xfs: add a comment for xlog_kvmalloc()
->   xfs: support nowait semantics for xc_ctx_lock in xlog_cil_commit()
->   io_uring: add support for getdents
-> 
->  arch/s390/hypfs/inode.c         |  2 +-
->  block/fops.c                    |  2 +-
->  fs/btrfs/file.c                 |  2 +-
->  fs/btrfs/inode.c                |  2 +-
->  fs/cachefiles/namei.c           |  2 +-
->  fs/coda/dir.c                   |  4 +--
->  fs/ecryptfs/file.c              |  4 +--
->  fs/ext2/file.c                  |  4 +--
->  fs/ext4/file.c                  |  6 ++--
->  fs/f2fs/file.c                  |  4 +--
->  fs/file.c                       | 13 +++++++
->  fs/fuse/dax.c                   |  2 +-
->  fs/fuse/file.c                  |  4 +--
->  fs/gfs2/file.c                  |  2 +-
->  fs/hugetlbfs/inode.c            |  2 +-
->  fs/inode.c                      | 10 +++---
->  fs/internal.h                   |  8 +++++
->  fs/namei.c                      |  4 +--
->  fs/nfsd/vfs.c                   |  2 +-
->  fs/nilfs2/file.c                |  2 +-
->  fs/orangefs/file.c              |  2 +-
->  fs/orangefs/inode.c             |  2 +-
->  fs/overlayfs/file.c             |  2 +-
->  fs/overlayfs/inode.c            |  2 +-
->  fs/pipe.c                       |  2 +-
->  fs/ramfs/file-nommu.c           |  2 +-
->  fs/readdir.c                    | 61 +++++++++++++++++++++++++--------
->  fs/smb/client/cifsfs.c          |  2 +-
->  fs/splice.c                     |  2 +-
->  fs/stat.c                       |  2 +-
->  fs/ubifs/file.c                 |  2 +-
->  fs/udf/file.c                   |  2 +-
->  fs/xfs/libxfs/xfs_alloc.c       |  2 +-
->  fs/xfs/libxfs/xfs_attr_remote.c |  2 +-
->  fs/xfs/libxfs/xfs_btree.c       |  2 +-
->  fs/xfs/libxfs/xfs_da_btree.c    | 16 +++++++++
->  fs/xfs/libxfs/xfs_da_btree.h    |  1 +
->  fs/xfs/libxfs/xfs_dir2_block.c  |  7 ++--
->  fs/xfs/libxfs/xfs_dir2_priv.h   |  2 +-
->  fs/xfs/libxfs/xfs_shared.h      |  2 ++
->  fs/xfs/libxfs/xfs_trans_inode.c | 12 +++++--
->  fs/xfs/scrub/dir.c              |  2 +-
->  fs/xfs/scrub/readdir.c          |  2 +-
->  fs/xfs/scrub/repair.c           |  2 +-
->  fs/xfs/xfs_buf.c                | 43 +++++++++++++++++------
->  fs/xfs/xfs_buf.h                |  4 +--
->  fs/xfs/xfs_buf_item.c           |  9 +++--
->  fs/xfs/xfs_buf_item.h           |  2 +-
->  fs/xfs/xfs_buf_item_recover.c   |  2 +-
->  fs/xfs/xfs_dir2_readdir.c       | 49 ++++++++++++++++++++------
->  fs/xfs/xfs_dquot.c              |  2 +-
->  fs/xfs/xfs_file.c               |  6 ++--
->  fs/xfs/xfs_inode.c              | 27 +++++++++++++++
->  fs/xfs/xfs_inode.h              | 17 +++++----
->  fs/xfs/xfs_inode_item.c         | 12 ++++---
->  fs/xfs/xfs_inode_item.h         |  3 +-
->  fs/xfs/xfs_iops.c               | 31 ++++++++++++++---
->  fs/xfs/xfs_log.c                | 33 ++++++++++++------
->  fs/xfs/xfs_log.h                |  5 +--
->  fs/xfs/xfs_log_cil.c            | 17 +++++++--
->  fs/xfs/xfs_log_priv.h           |  4 +--
->  fs/xfs/xfs_trans.c              | 44 ++++++++++++++++++++----
->  fs/xfs/xfs_trans.h              |  2 +-
->  fs/xfs/xfs_trans_buf.c          | 18 ++++++++--
->  fs/zonefs/file.c                |  4 +--
->  include/linux/file.h            |  7 ++++
->  include/linux/fs.h              | 16 +++++++--
->  include/uapi/linux/io_uring.h   |  1 +
->  io_uring/fs.c                   | 53 ++++++++++++++++++++++++++++
->  io_uring/fs.h                   |  3 ++
->  io_uring/opdef.c                |  8 +++++
->  kernel/bpf/inode.c              |  4 +--
->  mm/filemap.c                    |  8 ++---
->  mm/shmem.c                      |  6 ++--
->  net/unix/af_unix.c              |  4 +--
->  75 files changed, 499 insertions(+), 161 deletions(-)
-> 
-> -- 
-> 2.25.1
-> 
