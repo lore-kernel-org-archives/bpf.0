@@ -1,22 +1,22 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A62EDFC0C
-	for <bpf@vger.kernel.org>; Fri, 25 Aug 2023 14:04:47 +0000 (UTC)
-Received: from out-248.mta1.migadu.com (out-248.mta1.migadu.com [IPv6:2001:41d0:203:375::f8])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057342722;
-	Fri, 25 Aug 2023 07:04:23 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A4C810788
+	for <bpf@vger.kernel.org>; Fri, 25 Aug 2023 14:05:38 +0000 (UTC)
+Received: from out-243.mta1.migadu.com (out-243.mta1.migadu.com [IPv6:2001:41d0:203:375::f3])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98650272B;
+	Fri, 25 Aug 2023 07:05:13 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1692972248;
+	t=1692972304;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ZAHRQkTlH3B9Ayy3ByDVW6IFO8x4JKviNIiMKvNnRxw=;
-	b=rqq9t63T1b93nHdvHPb4iPnifbVgNhCPhaGA0/+lVUtdq72oLevGN3oePkSOWgj4tFeMJO
-	883BuPqR+igY5LuYYZDHjdap5mSmKgc54EL0giqHkQRTPmks0t1/1oKfHQU1t1pMyd2ThX
-	7baCMPgFPzeqpA42kG/A+w1RFMlPw/c=
+	bh=xYVJABOgP4/8L2CV4jLRK/KE5S9+YcPlTWp5R3EisXs=;
+	b=mPHInzP0NdE0PARLrMiNVwBxHc2RcZZ9h1TcJI1UDo2PmUbrGHosmFv1DSPqUTrb8M6kqp
+	4M25de/KL1vHeKbgvgWIJvfxIGajB7oK9YCJR4tOksovz6wykfv/qKqEWZZksomlKe2dSa
+	K35zik9gA6wCtduft3CmT9CQD0iaLDk=
 From: Hao Xu <hao.xu@linux.dev>
 To: io-uring@vger.kernel.org,
 	Jens Axboe <axboe@kernel.dk>
@@ -51,9 +51,9 @@ Cc: Dominique Martinet <asmadeus@codewreck.org>,
 	samba-technical@lists.samba.org,
 	linux-mtd@lists.infradead.org,
 	Wanpeng Li <wanpengli@tencent.com>
-Subject: [PATCH 22/29] xfs: comment page allocation for nowait case in xfs_buf_find_insert()
-Date: Fri, 25 Aug 2023 21:54:24 +0800
-Message-Id: <20230825135431.1317785-23-hao.xu@linux.dev>
+Subject: [PATCH 24/29] xfs: support nowait for xfs_buf_read_map()
+Date: Fri, 25 Aug 2023 21:54:26 +0800
+Message-Id: <20230825135431.1317785-25-hao.xu@linux.dev>
 In-Reply-To: <20230825135431.1317785-1-hao.xu@linux.dev>
 References: <20230825135431.1317785-1-hao.xu@linux.dev>
 Precedence: bulk
@@ -72,26 +72,33 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 
 From: Hao Xu <howeyxu@tencent.com>
 
-Add comments for page allocation in nowait case in xfs_buf_find_insert()
+This causes xfstests generic/232 hung in umount process, waiting for ail
+push, so I comment it for now, need some hints from xfs folks.
+Not a real patch.
 
 Signed-off-by: Hao Xu <howeyxu@tencent.com>
 ---
- fs/xfs/xfs_buf.c | 2 ++
- 1 file changed, 2 insertions(+)
+ fs/xfs/xfs_buf.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/fs/xfs/xfs_buf.c b/fs/xfs/xfs_buf.c
-index eb3cd7702545..57bdc4c5dde1 100644
+index cdad80e1ae25..284962a9f31a 100644
 --- a/fs/xfs/xfs_buf.c
 +++ b/fs/xfs/xfs_buf.c
-@@ -633,6 +633,8 @@ xfs_buf_find_insert(
- 	 * allocate the memory from the heap to minimise memory usage. If we
- 	 * can't get heap memory for these small buffers, we fall back to using
- 	 * the page allocator.
-+	 * xfs_buf_alloc_kmem may return -EAGAIN, let's not return it but turn
-+	 * to page allocator as well.
- 	 */
- 	if (BBTOB(new_bp->b_length) >= PAGE_SIZE ||
- 	    xfs_buf_alloc_kmem(new_bp, flags) < 0) {
+@@ -828,6 +828,13 @@ xfs_buf_read_map(
+ 	trace_xfs_buf_read(bp, flags, _RET_IP_);
+ 
+ 	if (!(bp->b_flags & XBF_DONE)) {
++//		/*
++//		 * Let's bypass the _xfs_buf_read() for now
++//		 */
++//		if (flags & XBF_NOWAIT) {
++//			xfs_buf_relse(bp);
++//			return -EAGAIN;
++//		}
+ 		/* Initiate the buffer read and wait. */
+ 		XFS_STATS_INC(target->bt_mount, xb_get_read);
+ 		bp->b_ops = ops;
 -- 
 2.25.1
 
