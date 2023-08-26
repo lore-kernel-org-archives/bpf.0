@@ -1,101 +1,98 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A2727E
-	for <bpf@vger.kernel.org>; Sat, 26 Aug 2023 04:27:57 +0000 (UTC)
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4714210EF;
-	Fri, 25 Aug 2023 21:27:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=zOtYRmM1KcMu/qkHPeaVQPqZfOz66WB0I6DdOTbH94I=; b=RL3iWIn8BOjeCtIa1/n/WGGC3T
-	n9KamSR2jkO18DM9kvSNHCT6NsFHJ/5s3GmXhmtnweKexmiGQtLsH2D8EDSJ1Ez8YQEMXUj8KZP5W
-	ci2LMbfAT1T759nQLSJLPtvt3TmnRVvxhlatXL8X36eBmAs1E3L6bP6csg1q53TQt7Uloaqav0PLa
-	WTDLC0uTGgtY0BQXbCjew02NPEccT1Q4dySFud4SaQ48cWTkhy0WRkCfk2/LgShJODm74J7w3SD6M
-	R3CHdG3CNCshkTcGTGX6xSJ0OfXRRaltOgP6p3S5irbmfNIfTC7JQpK4HzHxkfiOHTB0kFe69GGO+
-	xNwdfd2w==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-	id 1qZktq-0011VR-2Y;
-	Sat, 26 Aug 2023 04:27:50 +0000
-Date: Sat, 26 Aug 2023 05:27:50 +0100
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Christoph Hellwig <hch@lst.de>,
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Aleksa Sarai <cyphar@cyphar.com>,
-	Lennart Poettering <lennart@poettering.net>,
-	Linux-Fsdevel <linux-fsdevel@vger.kernel.org>
-Subject: Re: fd == 0 means AT_FDCWD BPF_OBJ_GET commands
-Message-ID: <20230826042750.GP3390869@ZenIV>
-References: <CAEf4BzafCCeRm9M8pPzpwexadKy5OAEmrYcnVpKmqNJ2tnSVuw@mail.gmail.com>
- <20230517-allabendlich-umgekehrt-8cc81f8313ac@brauner>
- <20230517120528.GA17087@lst.de>
- <CAADnVQLitLUc1SozzKjBgq6HGTchE1cO+e4j8eDgtE0zFn5VEw@mail.gmail.com>
- <20230518-erdkugel-komprimieren-16548ca2a39c@brauner>
- <20230518162508.odupqkndqmpdfqnr@MacBook-Pro-8.local>
- <20230518-tierzucht-modewelt-eb6aaf60037e@brauner>
- <20230518182635.na7vgyysd7fk7eu4@MacBook-Pro-8.local>
- <CAHk-=whg-ygwrxm3GZ_aNXO=srH9sZ3NmFqu0KkyWw+wgEsi6g@mail.gmail.com>
- <20230519044433.2chdcze3qg2eho77@MacBook-Pro-8.local>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C0D362E
+	for <bpf@vger.kernel.org>; Sat, 26 Aug 2023 05:33:20 +0000 (UTC)
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0AE268F
+	for <bpf@vger.kernel.org>; Fri, 25 Aug 2023 22:33:19 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id 6a1803df08f44-64f37b2dfa6so12268806d6.1
+        for <bpf@vger.kernel.org>; Fri, 25 Aug 2023 22:33:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=obs-cr.20221208.gappssmtp.com; s=20221208; t=1693027998; x=1693632798;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aBvX3jM1LpE0z2FXJDrZB4Q0zxyGLGKJVvTBcTTxD/c=;
+        b=IgrSEW5RjO1zCulE14HFormjPD6gBWlmwEIW/dXid/UkRq1qcD05l8qIzEjlTZZSQH
+         nB40SF0ea2vHemdqvpzb+DOd1SlIpnFrqUmQpgXpVuGIrVNPv8QbgU6BHXMbufKz44zN
+         eUyEZ848mfhztQdfxY3WgYaPCq6KJREIBQOc+PWo4LZoJ8nU86Nw5JTQ1clZJwYSQxcX
+         6HzedyNmsOqpmGQQkoSYzPM33VMsR3kNbEQtDSGvpg0REYpXlk7nD0nnA+CAfGPDuBc2
+         Hs0+PWEB0OJHAenVvqm6p2muBMqR6UmsocAegPuk8aLJo75rgAsS+3SBk9F1g9MDo9kZ
+         l5EQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693027998; x=1693632798;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aBvX3jM1LpE0z2FXJDrZB4Q0zxyGLGKJVvTBcTTxD/c=;
+        b=dumQhWop7sWyYarWWdLkpwBj36nVsx1xFoBC2EU8GSFb4+GSyiTGsk8xfjPzwtmP6e
+         /jzhpj/0iCi+x8ar31ezGZk/fue4DVpADi9VrM4S1LinmuL2dGchWOPxCL7koNhqbfF9
+         LrzFxM1H7wst+DlWllt6o7Yw1ZBWhhx6rOKZBpg9w+qXmxVOLDT/oxlWvcY5YYd9/S53
+         2kjlButfIRbj5FD2nnay/HwY5LMfSzYSeonOxMiBp9gQnCzw/K5p/pm93TbYBqG7Qo5B
+         bzZ8sOEuszE22hqc+RQiNiPbwzcwrYQvPwxYsxFgOTwZVyWhk1WDj4yFngzUeMXJZPNx
+         Pw6w==
+X-Gm-Message-State: AOJu0YyblBI/tIxZDiRHdKF7hNQQ1rEuODEd81s8fSGBJXlivKa/4hrR
+	XvGaq4v3phParDNP6iIP9U/X955rZ/l8ck/9JIc=
+X-Google-Smtp-Source: AGHT+IHs/AjVRWPSAemAeYdpRvSBGayaFsGzxnb3sD3GrlYAfhTt3diiyzdnJ4Ed4CoWpm0sji9UVw==
+X-Received: by 2002:ad4:4eaa:0:b0:63d:753:fc4 with SMTP id ed10-20020ad44eaa000000b0063d07530fc4mr31134524qvb.4.1693027998327;
+        Fri, 25 Aug 2023 22:33:18 -0700 (PDT)
+Received: from borderland.rhod.uc.edu ([129.137.96.2])
+        by smtp.gmail.com with ESMTPSA id d14-20020a0cf0ce000000b006472e0dfe80sm1024785qvl.66.2023.08.25.22.33.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Aug 2023 22:33:17 -0700 (PDT)
+From: Will Hawkins <hawkinsw@obs.cr>
+To: bpf@vger.kernel.org,
+	bpf@ietf.org
+Cc: Will Hawkins <hawkinsw@obs.cr>
+Subject: [PATCH] bpf, docs: Correct source of offset for program-local call
+Date: Sat, 26 Aug 2023 01:32:54 -0400
+Message-ID: <20230826053258.1860167-1-hawkinsw@obs.cr>
+X-Mailer: git-send-email 2.41.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230519044433.2chdcze3qg2eho77@MacBook-Pro-8.local>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE
-	autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Thu, May 18, 2023 at 09:44:33PM -0700, Alexei Starovoitov wrote:
+The offset to use when calculating the target of a program-local call is
+in the instruction's imm field, not its offset field.
 
-> That footgun was removed from folly in 2021, but we still see this issue from time to time.
-> My point that the kernel can help here.
-> Since folks don't like sysctl to control FD assignment how about something like this:
-> 
-> diff --git a/fs/file.c b/fs/file.c
-> index 7893ea161d77..896e79433f61 100644
-> --- a/fs/file.c
-> +++ b/fs/file.c
-> @@ -554,9 +554,15 @@ static int alloc_fd(unsigned start, unsigned end, unsigned flags)
->         return error;
->  }
-> 
-> +__weak noinline u32 get_start_fd(void)
-> +{
-> +       return 0;
-> +}
-> +/* mark it as BPF_MODIFY_RETURN to let bpf progs adjust return value */
-> +
->  int __get_unused_fd_flags(unsigned flags, unsigned long nofile)
->  {
-> -       return alloc_fd(0, nofile, flags);
-> +       return alloc_fd(get_start_fd(), nofile, flags);
->  }
-> 
-> Then we can enforce fd >= 3 for a certain container or for a particular app.
+Signed-off-by: Will Hawkins <hawkinsw@obs.cr>
+---
+ Documentation/bpf/standardization/instruction-set.rst | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-[an extremely belated reply - had been net.dead since mid-May, just got to
-that thread]
+diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Documentation/bpf/standardization/instruction-set.rst
+index 4f73e9dc8d9e..c5b0b2011f16 100644
+--- a/Documentation/bpf/standardization/instruction-set.rst
++++ b/Documentation/bpf/standardization/instruction-set.rst
+@@ -373,7 +373,7 @@ BPF_JNE   0x5    any  PC += offset if dst != src
+ BPF_JSGT  0x6    any  PC += offset if dst > src                    signed
+ BPF_JSGE  0x7    any  PC += offset if dst >= src                   signed
+ BPF_CALL  0x8    0x0  call helper function by address              see `Helper functions`_
+-BPF_CALL  0x8    0x1  call PC += offset                            see `Program-local functions`_
++BPF_CALL  0x8    0x1  call PC += imm                               see `Program-local functions`_
+ BPF_CALL  0x8    0x2  call helper function by BTF ID               see `Helper functions`_
+ BPF_EXIT  0x9    0x0  return                                       BPF_JMP only
+ BPF_JLT   0xa    any  PC += offset if dst < src                    unsigned
+@@ -424,8 +424,8 @@ Program-local functions
+ ~~~~~~~~~~~~~~~~~~~~~~~
+ Program-local functions are functions exposed by the same BPF program as the
+ caller, and are referenced by offset from the call instruction, similar to
+-``BPF_JA``.  A ``BPF_EXIT`` within the program-local function will return to
+-the caller.
++``BPF_JA``.  The offset is encoded in the imm field of the call instruction.
++A ``BPF_EXIT`` within the program-local function will return to the caller.
+ 
+ Load and store instructions
+ ===========================
+-- 
+2.41.0
 
-As far as I'm concerned, the main conclusion is that BPF handling of file
-descriptors needs a fairly hostile code review, regarding the interactions
-with dup2(), shared descriptor tables, SCM_RIGHTS, etc.  Rationale:
-demonstrated utter lack of clue about the nature of file descriptors,
-along with a weird mental model of how they are used, complete with
-"if they are used not in the way we expect, let's shove a hook
-somewhere to enforce The Right Way(tm)".  Will do...
