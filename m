@@ -1,13 +1,13 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 119507EE
-	for <bpf@vger.kernel.org>; Sun, 27 Aug 2023 15:27:55 +0000 (UTC)
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DA2EC
-	for <bpf@vger.kernel.org>; Sun, 27 Aug 2023 08:27:53 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 065D97EE
+	for <bpf@vger.kernel.org>; Sun, 27 Aug 2023 15:27:58 +0000 (UTC)
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB71115
+	for <bpf@vger.kernel.org>; Sun, 27 Aug 2023 08:27:57 -0700 (PDT)
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 88D77257ECE43; Sun, 27 Aug 2023 08:27:39 -0700 (PDT)
+	id D2592257ECE79; Sun, 27 Aug 2023 08:27:49 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -15,9 +15,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v3 02/13] bpf: Add BPF_KPTR_PERCPU as a field type
-Date: Sun, 27 Aug 2023 08:27:39 -0700
-Message-Id: <20230827152739.1996391-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v3 04/13] bpf: Add bpf_this_cpu_ptr/bpf_per_cpu_ptr support for allocated percpu obj
+Date: Sun, 27 Aug 2023 08:27:49 -0700
+Message-Id: <20230827152749.1997202-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230827152729.1995219-1-yonghong.song@linux.dev>
 References: <20230827152729.1995219-1-yonghong.song@linux.dev>
@@ -34,185 +34,160 @@ X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-BPF_KPTR_PERCPU represents a percpu field type like below
+The bpf helpers bpf_this_cpu_ptr() and bpf_per_cpu_ptr() are re-purposed
+for allocated percpu objects. For an allocated percpu obj,
+the reg type is 'PTR_TO_BTF_ID | MEM_PERCPU | MEM_RCU'.
 
-  struct val_t {
-    ... fields ...
-  };
-  struct t {
-    ...
-    struct val_t __percpu_kptr *percpu_data_ptr;
-    ...
-  };
+The return type for these two re-purposed helpera is
+'PTR_TO_MEM | MEM_RCU | MEM_ALLOC'.
+The MEM_ALLOC allows that the per-cpu data can be read and written.
 
-where
-  #define __percpu_kptr __attribute__((btf_type_tag("percpu_kptr")))
-
-While BPF_KPTR_REF points to a trusted kernel object or a trusted
-local object, BPF_KPTR_PERCPU points to a trusted local
-percpu object.
-
-This patch added basic support for BPF_KPTR_PERCPU
-related to percpu_kptr field parsing, recording and free operations.
-BPF_KPTR_PERCPU also supports the same map types
-as BPF_KPTR_REF does.
-
-Note that unlike a local kptr, it is possible that
-a BPF_KTPR_PERCPU struct may not contain any
-special fields like other kptr, bpf_spin_lock, bpf_list_head, etc.
+Since the memory allocator bpf_mem_alloc() returns
+a ptr to a percpu ptr for percpu data, the first argument
+of bpf_this_cpu_ptr() and bpf_per_cpu_ptr() is patched
+with a dereference before passing to the helper func.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- include/linux/bpf.h  | 18 ++++++++++++------
- kernel/bpf/btf.c     |  5 +++++
- kernel/bpf/syscall.c |  4 ++++
- 3 files changed, 21 insertions(+), 6 deletions(-)
+ include/linux/bpf_verifier.h |  1 +
+ kernel/bpf/verifier.c        | 59 +++++++++++++++++++++++++++++++-----
+ 2 files changed, 52 insertions(+), 8 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 144dbddf53bd..d7ef65846903 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -180,14 +180,15 @@ enum btf_field_type {
- 	BPF_TIMER      =3D (1 << 1),
- 	BPF_KPTR_UNREF =3D (1 << 2),
- 	BPF_KPTR_REF   =3D (1 << 3),
--	BPF_KPTR       =3D BPF_KPTR_UNREF | BPF_KPTR_REF,
--	BPF_LIST_HEAD  =3D (1 << 4),
--	BPF_LIST_NODE  =3D (1 << 5),
--	BPF_RB_ROOT    =3D (1 << 6),
--	BPF_RB_NODE    =3D (1 << 7),
-+	BPF_KPTR_PERCPU =3D (1 << 4),
-+	BPF_KPTR       =3D BPF_KPTR_UNREF | BPF_KPTR_REF | BPF_KPTR_PERCPU,
-+	BPF_LIST_HEAD  =3D (1 << 5),
-+	BPF_LIST_NODE  =3D (1 << 6),
-+	BPF_RB_ROOT    =3D (1 << 7),
-+	BPF_RB_NODE    =3D (1 << 8),
- 	BPF_GRAPH_NODE_OR_ROOT =3D BPF_LIST_NODE | BPF_LIST_HEAD |
- 				 BPF_RB_NODE | BPF_RB_ROOT,
--	BPF_REFCOUNT   =3D (1 << 8),
-+	BPF_REFCOUNT   =3D (1 << 9),
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index b6e58dab8e27..a3236651ec64 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -480,6 +480,7 @@ struct bpf_insn_aux_data {
+ 	bool zext_dst; /* this insn zero extends dst reg */
+ 	bool storage_get_func_atomic; /* bpf_*_storage_get() with atomic memory=
+ alloc */
+ 	bool is_iter_next; /* bpf_iter_<type>_next() kfunc call */
++	bool call_with_percpu_alloc_ptr; /* {this,per}_cpu_ptr() with prog perc=
+pu alloc */
+ 	u8 alu_state; /* used in combination with alu_limit */
+=20
+ 	/* below fields are initialized once */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 6c886ead18f6..6b7e7ca611f3 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6221,7 +6221,7 @@ static int check_ptr_to_btf_access(struct bpf_verif=
+ier_env *env,
+ 		}
+=20
+ 		if (type_is_alloc(reg->type) && !type_is_non_owning_ref(reg->type) &&
+-		    !reg->ref_obj_id) {
++		    !(reg->type & MEM_RCU) && !reg->ref_obj_id) {
+ 			verbose(env, "verifier internal error: ref_obj_id for allocated objec=
+t must be non-zero\n");
+ 			return -EFAULT;
+ 		}
+@@ -7765,6 +7765,7 @@ static const struct bpf_reg_types btf_ptr_types =3D=
+ {
+ static const struct bpf_reg_types percpu_btf_ptr_types =3D {
+ 	.types =3D {
+ 		PTR_TO_BTF_ID | MEM_PERCPU,
++		PTR_TO_BTF_ID | MEM_PERCPU | MEM_RCU,
+ 		PTR_TO_BTF_ID | MEM_PERCPU | PTR_TRUSTED,
+ 	}
  };
-=20
- typedef void (*btf_dtor_kfunc_t)(void *);
-@@ -300,6 +301,8 @@ static inline const char *btf_field_type_name(enum bt=
-f_field_type type)
- 	case BPF_KPTR_UNREF:
- 	case BPF_KPTR_REF:
- 		return "kptr";
-+	case BPF_KPTR_PERCPU:
-+		return "percpu_kptr";
- 	case BPF_LIST_HEAD:
- 		return "bpf_list_head";
- 	case BPF_LIST_NODE:
-@@ -325,6 +328,7 @@ static inline u32 btf_field_type_size(enum btf_field_=
-type type)
- 		return sizeof(struct bpf_timer);
- 	case BPF_KPTR_UNREF:
- 	case BPF_KPTR_REF:
-+	case BPF_KPTR_PERCPU:
- 		return sizeof(u64);
- 	case BPF_LIST_HEAD:
- 		return sizeof(struct bpf_list_head);
-@@ -351,6 +355,7 @@ static inline u32 btf_field_type_align(enum btf_field=
-_type type)
- 		return __alignof__(struct bpf_timer);
- 	case BPF_KPTR_UNREF:
- 	case BPF_KPTR_REF:
-+	case BPF_KPTR_PERCPU:
- 		return __alignof__(u64);
- 	case BPF_LIST_HEAD:
- 		return __alignof__(struct bpf_list_head);
-@@ -389,6 +394,7 @@ static inline void bpf_obj_init_field(const struct bt=
-f_field *field, void *addr)
- 	case BPF_TIMER:
- 	case BPF_KPTR_UNREF:
- 	case BPF_KPTR_REF:
-+	case BPF_KPTR_PERCPU:
+@@ -7941,6 +7942,7 @@ static int check_reg_type(struct bpf_verifier_env *=
+env, u32 regno,
+ 		}
  		break;
- 	default:
- 		WARN_ON_ONCE(1);
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 249657c466dd..d98b76c128db 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -3293,6 +3293,8 @@ static int btf_find_kptr(const struct btf *btf, con=
-st struct btf_type *t,
- 		type =3D BPF_KPTR_UNREF;
- 	else if (!strcmp("kptr", __btf_name_by_offset(btf, t->name_off)))
- 		type =3D BPF_KPTR_REF;
-+	else if (!strcmp("percpu_kptr", __btf_name_by_offset(btf, t->name_off))=
-)
-+		type =3D BPF_KPTR_PERCPU;
- 	else
- 		return -EINVAL;
+ 	case PTR_TO_BTF_ID | MEM_PERCPU:
++	case PTR_TO_BTF_ID | MEM_PERCPU | MEM_RCU:
+ 	case PTR_TO_BTF_ID | MEM_PERCPU | PTR_TRUSTED:
+ 		/* Handled by helper specific checks */
+ 		break;
+@@ -9547,6 +9549,7 @@ static int check_helper_call(struct bpf_verifier_en=
+v *env, struct bpf_insn *insn
+ 			     int *insn_idx_p)
+ {
+ 	enum bpf_prog_type prog_type =3D resolve_prog_type(env->prog);
++	bool returns_cpu_specific_alloc_ptr =3D false;
+ 	const struct bpf_func_proto *fn =3D NULL;
+ 	enum bpf_return_type ret_type;
+ 	enum bpf_type_flag ret_flag;
+@@ -9785,6 +9788,23 @@ static int check_helper_call(struct bpf_verifier_e=
+nv *env, struct bpf_insn *insn
 =20
-@@ -3457,6 +3459,7 @@ static int btf_find_struct_field(const struct btf *=
-btf,
- 			break;
- 		case BPF_KPTR_UNREF:
- 		case BPF_KPTR_REF:
-+		case BPF_KPTR_PERCPU:
- 			ret =3D btf_find_kptr(btf, member_type, off, sz,
- 					    idx < info_cnt ? &info[idx] : &tmp);
- 			if (ret < 0)
-@@ -3523,6 +3526,7 @@ static int btf_find_datasec_var(const struct btf *b=
-tf, const struct btf_type *t,
- 			break;
- 		case BPF_KPTR_UNREF:
- 		case BPF_KPTR_REF:
-+		case BPF_KPTR_PERCPU:
- 			ret =3D btf_find_kptr(btf, var_type, off, sz,
- 					    idx < info_cnt ? &info[idx] : &tmp);
- 			if (ret < 0)
-@@ -3783,6 +3787,7 @@ struct btf_record *btf_parse_fields(const struct bt=
-f *btf, const struct btf_type
- 			break;
- 		case BPF_KPTR_UNREF:
- 		case BPF_KPTR_REF:
-+		case BPF_KPTR_PERCPU:
- 			ret =3D btf_parse_kptr(btf, &rec->fields[i], &info_arr[i]);
- 			if (ret < 0)
- 				goto end;
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index ebeb0695305a..e25e7e059d7d 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -514,6 +514,7 @@ void btf_record_free(struct btf_record *rec)
- 		switch (rec->fields[i].type) {
- 		case BPF_KPTR_UNREF:
- 		case BPF_KPTR_REF:
-+		case BPF_KPTR_PERCPU:
- 			if (rec->fields[i].kptr.module)
- 				module_put(rec->fields[i].kptr.module);
- 			btf_put(rec->fields[i].kptr.btf);
-@@ -560,6 +561,7 @@ struct btf_record *btf_record_dup(const struct btf_re=
-cord *rec)
- 		switch (fields[i].type) {
- 		case BPF_KPTR_UNREF:
- 		case BPF_KPTR_REF:
-+		case BPF_KPTR_PERCPU:
- 			btf_get(fields[i].kptr.btf);
- 			if (fields[i].kptr.module && !try_module_get(fields[i].kptr.module)) =
-{
- 				ret =3D -ENXIO;
-@@ -650,6 +652,7 @@ void bpf_obj_free_fields(const struct btf_record *rec=
-, void *obj)
- 			WRITE_ONCE(*(u64 *)field_ptr, 0);
- 			break;
- 		case BPF_KPTR_REF:
-+		case BPF_KPTR_PERCPU:
- 			xchgd_field =3D (void *)xchg((unsigned long *)field_ptr, 0);
- 			if (!xchgd_field)
- 				break;
-@@ -1045,6 +1048,7 @@ static int map_check_btf(struct bpf_map *map, const=
- struct btf *btf,
- 				break;
- 			case BPF_KPTR_UNREF:
- 			case BPF_KPTR_REF:
-+			case BPF_KPTR_PERCPU:
- 			case BPF_REFCOUNT:
- 				if (map->map_type !=3D BPF_MAP_TYPE_HASH &&
- 				    map->map_type !=3D BPF_MAP_TYPE_PERCPU_HASH &&
+ 		break;
+ 	}
++	case BPF_FUNC_per_cpu_ptr:
++	case BPF_FUNC_this_cpu_ptr:
++	{
++		struct bpf_reg_state *reg =3D &regs[BPF_REG_1];
++		const struct btf_type *type;
++
++		if (reg->type & MEM_RCU) {
++			type =3D btf_type_by_id(reg->btf, reg->btf_id);
++			if (!type || !btf_type_is_struct(type)) {
++				verbose(env, "Helper has invalid btf/btf_id in R1\n");
++				return -EFAULT;
++			}
++			returns_cpu_specific_alloc_ptr =3D true;
++			env->insn_aux_data[insn_idx].call_with_percpu_alloc_ptr =3D true;
++		}
++		break;
++	}
+ 	case BPF_FUNC_user_ringbuf_drain:
+ 		err =3D __check_func_call(env, insn, insn_idx_p, meta.subprogno,
+ 					set_user_ringbuf_callback_state);
+@@ -9874,14 +9894,18 @@ static int check_helper_call(struct bpf_verifier_=
+env *env, struct bpf_insn *insn
+ 			regs[BPF_REG_0].type =3D PTR_TO_MEM | ret_flag;
+ 			regs[BPF_REG_0].mem_size =3D tsize;
+ 		} else {
+-			/* MEM_RDONLY may be carried from ret_flag, but it
+-			 * doesn't apply on PTR_TO_BTF_ID. Fold it, otherwise
+-			 * it will confuse the check of PTR_TO_BTF_ID in
+-			 * check_mem_access().
+-			 */
+-			ret_flag &=3D ~MEM_RDONLY;
++			if (returns_cpu_specific_alloc_ptr) {
++				regs[BPF_REG_0].type =3D PTR_TO_BTF_ID | MEM_ALLOC | MEM_RCU;
++			} else {
++				/* MEM_RDONLY may be carried from ret_flag, but it
++				 * doesn't apply on PTR_TO_BTF_ID. Fold it, otherwise
++				 * it will confuse the check of PTR_TO_BTF_ID in
++				 * check_mem_access().
++				 */
++				ret_flag &=3D ~MEM_RDONLY;
++				regs[BPF_REG_0].type =3D PTR_TO_BTF_ID | ret_flag;
++			}
+=20
+-			regs[BPF_REG_0].type =3D PTR_TO_BTF_ID | ret_flag;
+ 			regs[BPF_REG_0].btf =3D meta.ret_btf;
+ 			regs[BPF_REG_0].btf_id =3D meta.ret_btf_id;
+ 		}
+@@ -18676,6 +18700,25 @@ static int do_misc_fixups(struct bpf_verifier_en=
+v *env)
+ 			goto patch_call_imm;
+ 		}
+=20
++		/* bpf_per_cpu_ptr() and bpf_this_cpu_ptr() */
++		if (env->insn_aux_data[i + delta].call_with_percpu_alloc_ptr) {
++			/* patch with 'r1 =3D *(u64 *)(r1 + 0)' since for percpu data,
++			 * bpf_mem_alloc() returns a ptr to the percpu data ptr.
++			 */
++			insn_buf[0] =3D BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, 0);
++			insn_buf[1] =3D *insn;
++			cnt =3D 2;
++
++			new_prog =3D bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			if (!new_prog)
++				return -ENOMEM;
++
++			delta +=3D cnt - 1;
++			env->prog =3D prog =3D new_prog;
++			insn =3D new_prog->insnsi + i + delta;
++			goto patch_call_imm;
++		}
++
+ 		/* BPF_EMIT_CALL() assumptions in some of the map_gen_lookup
+ 		 * and other inlining handlers are currently limited to 64 bit
+ 		 * only.
 --=20
 2.34.1
 
