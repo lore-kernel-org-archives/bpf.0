@@ -1,37 +1,37 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06ACC134DF
-	for <bpf@vger.kernel.org>; Mon, 28 Aug 2023 16:00:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F619134DF
+	for <bpf@vger.kernel.org>; Mon, 28 Aug 2023 16:00:21 +0000 (UTC)
 Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9152CA
-	for <bpf@vger.kernel.org>; Mon, 28 Aug 2023 09:00:15 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A47510B
+	for <bpf@vger.kernel.org>; Mon, 28 Aug 2023 09:00:20 -0700 (PDT)
 Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 41984C1522D3
+	by ietfa.amsl.com (Postfix) with ESMTP id 967A0C169534
 	for <bpf@vger.kernel.org>; Mon, 28 Aug 2023 09:00:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1693238409; bh=myVHlHPhOUO45BmNc7O2aV08eiwlHEZlSNgjsnu0IdA=;
+	t=1693238409; bh=hNDlIzFVzdMzhTM9Qvvgj9Q4fFPgTKNjDWv0Gcqzo0w=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=Q82Z50/IH+S1MvAA5Pqp495x0vVjYUq5m4rXA4mj8RqzFyQdbvOsp93CF9sRhFEoK
-	 YbmDgs3zV3NmIMQt3xPUnf4DKUTI+DVNFDiCn/3xVwnVpIf2UVeXHxvrgbbXHRIPzv
-	 cAzlbMzyWs2O0zJDqPIO3AXMKOWM12xhN5LtDFKU=
+	b=PKeLjBnNU8DQMMEm/3vPJ9wLpzfoz2UznJMsd2dM3TiAGNlXJ+JQ+0aMyPmm1kDz1
+	 jv9nGbJvhZER4u8n2/k386gHUT/2bkglbHSIlnw7s3HhSJkYb3rQviewGGHPc0flwf
+	 DuviMolDwQP1KdCUnYRjo9GEHRQ7f6Vezu/McWNA=
 X-Mailbox-Line: From bpf-bounces@ietf.org  Mon Aug 28 09:00:09 2023
 Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 2DC89C15109B;
+	by ietfa.amsl.com (Postfix) with ESMTP id 7D3EBC16951F;
 	Mon, 28 Aug 2023 09:00:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1693238409; bh=myVHlHPhOUO45BmNc7O2aV08eiwlHEZlSNgjsnu0IdA=;
+	t=1693238409; bh=hNDlIzFVzdMzhTM9Qvvgj9Q4fFPgTKNjDWv0Gcqzo0w=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=Q82Z50/IH+S1MvAA5Pqp495x0vVjYUq5m4rXA4mj8RqzFyQdbvOsp93CF9sRhFEoK
-	 YbmDgs3zV3NmIMQt3xPUnf4DKUTI+DVNFDiCn/3xVwnVpIf2UVeXHxvrgbbXHRIPzv
-	 cAzlbMzyWs2O0zJDqPIO3AXMKOWM12xhN5LtDFKU=
+	b=PKeLjBnNU8DQMMEm/3vPJ9wLpzfoz2UznJMsd2dM3TiAGNlXJ+JQ+0aMyPmm1kDz1
+	 jv9nGbJvhZER4u8n2/k386gHUT/2bkglbHSIlnw7s3HhSJkYb3rQviewGGHPc0flwf
+	 DuviMolDwQP1KdCUnYRjo9GEHRQ7f6Vezu/McWNA=
 Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id B0E77C1524A3
- for <bpf@ietfa.amsl.com>; Mon, 28 Aug 2023 09:00:06 -0700 (PDT)
+ by ietfa.amsl.com (Postfix) with ESMTP id 9CD9EC14CE52
+ for <bpf@ietfa.amsl.com>; Mon, 28 Aug 2023 09:00:08 -0700 (PDT)
 X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Score: -6.407
+X-Spam-Score: -1.41
 X-Spam-Level: 
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -40,40 +40,40 @@ X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	autolearn_force=no version=3.4.6
 Received: from mail.ietf.org ([50.223.129.194])
  by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NsMms3YrJLZu for <bpf@ietfa.amsl.com>;
- Mon, 28 Aug 2023 09:00:03 -0700 (PDT)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com
- [209.85.219.170])
+ with ESMTP id wpclsH1c6E12 for <bpf@ietfa.amsl.com>;
+ Mon, 28 Aug 2023 09:00:04 -0700 (PDT)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com
+ [209.85.128.174])
  (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
  key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
  (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id 0C4C5C15109B
- for <bpf@ietf.org>; Mon, 28 Aug 2023 09:00:03 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id
- 3f1490d57ef6-d7485d37283so3295268276.1
- for <bpf@ietf.org>; Mon, 28 Aug 2023 09:00:02 -0700 (PDT)
+ by ietfa.amsl.com (Postfix) with ESMTPS id 54F96C15152E
+ for <bpf@ietf.org>; Mon, 28 Aug 2023 09:00:04 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id
+ 00721157ae682-58fae4a5285so40345007b3.0
+ for <bpf@ietf.org>; Mon, 28 Aug 2023 09:00:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1693238402; x=1693843202;
+ d=1e100.net; s=20221208; t=1693238403; x=1693843203;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=luyLmajpmSyQ8FebgnWKEdKBcRafu1L+AJoXX7hfZQI=;
- b=B/WJIvnaYH4N6FNd9f7jYPNtiabqz61vR4VqWaMMRzyffWvpzVSw/xwrT7EupIcE/6
- 0lb1xMk6dksyteXyP5NUbPqSUipm3jGXRLvJSVvh1uM9GOeEcGGb9wn/ubOicL11Zk/W
- XqyUP4DXAVkNGh92YC/aFvP8RuCVRkqa85GsX4Pmg1A3bXFT5nZi00cJ09X8O0RXLKsd
- d1xuw4qDAlqs5yFvHUt7I7dn/i3shUYuviZNtgq9T/qtqS236KiWnRiFBUgm3zDgZzL8
- kRWbn25KzrnWeDZhu8ntgdU5Rvi6/0uczaVe7qFDYWIRQFm0OyAqD/+Hnnqdm/ZqwXvz
- 3A4g==
-X-Gm-Message-State: AOJu0YxcpmomprFXvIzW9L88lh8pWD1eD4Hv8Zyep8MwK5YRY2xGkpxd
- XHvR4I5rueufA9Ki+i7z5RA=
-X-Google-Smtp-Source: AGHT+IFKAhMgLqOjdorlnMf8KBNdknwsYtmf6Im5SJlixfCReU/29DcUaSpBUMJDWJM43ox04FmyQg==
-X-Received: by 2002:a25:a264:0:b0:d78:7e1:a715 with SMTP id
- b91-20020a25a264000000b00d7807e1a715mr10874158ybi.18.1693238402050; 
- Mon, 28 Aug 2023 09:00:02 -0700 (PDT)
+ bh=0Dq6hEvnyzheER3NLXV0bHMNRhjR+A8D02vzT+2FQtM=;
+ b=beONKgqyifzOc6t7+KxcHE003S79KRcILaJcdPpP9yqj9nnIGyTW8gZuwVzDaBa0Up
+ 1pmpnxpz6F5QnWVKmQX0Lv7l0WWzqjXDkchrCeZaN5djcHpuwzP4FmimdH08L03TaQaf
+ KfjuC+pFUITbj50+MnLS4T/PyMea61GQUdznXPp0/WnzBNkG9JtqWBZlAacH12jLDrfC
+ kbcRgeUWLRtZ4W9mlhwfPmkjiVC0EIo5vUtXG6GmC6wgbgFutQ5cH31nEhgohQ18cVf/
+ f1qHfcCyvDD87E8KGGQne9aw935TovlG5jQiHlacqOxAn7XHtE3zwlK5rhksbW1FPaPM
+ +4xg==
+X-Gm-Message-State: AOJu0Yzv6I+bkOj/DeqoBgZMrfJvabrS7C9dHfTOQ0oQiu+mxYK3T/FA
+ d1GfKOEBGKCfQEeUJBT2pJU=
+X-Google-Smtp-Source: AGHT+IGkPgIoZCO/1q2yZVVpwZp/R7ZnvvPjF/V5EdMHZGd5mSBTXSbbsuY9MBzaT+qbMgnHytKpPg==
+X-Received: by 2002:a81:94c4:0:b0:56d:2f9d:42cc with SMTP id
+ l187-20020a8194c4000000b0056d2f9d42ccmr25510012ywg.51.1693238403456; 
+ Mon, 28 Aug 2023 09:00:03 -0700 (PDT)
 Received: from localhost ([24.1.27.177]) by smtp.gmail.com with ESMTPSA id
- b19-20020a25cb13000000b00d20d4ffbbdbsm1747053ybg.0.2023.08.28.09.00.01
+ v5-20020a81a545000000b00559f1cb8444sm2178088ywg.70.2023.08.28.09.00.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 28 Aug 2023 09:00:01 -0700 (PDT)
+ Mon, 28 Aug 2023 09:00:03 -0700 (PDT)
 From: David Vernet <void@manifault.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
@@ -82,8 +82,8 @@ Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
  haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
  kernel-team@meta.com, hch@infradead.org, hawkinsw@obs.cr,
  dthaler@microsoft.com, bpf@ietf.org
-Date: Mon, 28 Aug 2023 10:59:47 -0500
-Message-ID: <20230828155948.123405-3-void@manifault.com>
+Date: Mon, 28 Aug 2023 10:59:48 -0500
+Message-ID: <20230828155948.123405-4-void@manifault.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230828155948.123405-1-void@manifault.com>
 References: <20230828155948.123405-1-void@manifault.com>
@@ -93,9 +93,9 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/7e6MtTT2MQUcRltGUGc4TTRWn-k>
-Subject: [Bpf] [PATCH bpf-next 2/3] bpf,
- docs: Add abi.rst document to standardization subdirectory
+Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/-BO0VqLqZMRZviTSPe8i5sXqRA8>
+Subject: [Bpf] [PATCH bpf-next 3/3] bpf,
+ docs: s/eBPF/BPF in standards documents
 X-BeenThere: bpf@ietf.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -114,97 +114,94 @@ Errors-To: bpf-bounces@ietf.org
 Sender: "Bpf" <bpf-bounces@ietf.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
-Message-ID: <20230828155947.CrnPa8OewqyMrJqTUTaZhyRwd0zwpFyTymzd8wr4PvE@z>
+Message-ID: <20230828155948.NYsm8GHvIiK8JvqgyE5CySh2qOL-QLq50z56r1QwWms@z>
 
-As specified in the IETF BPF charter, the BPF working group has plans to
-add one or more informational documents that recommend conventions and
-guidelines for producing portable BPF program binaries. The
-instruction-set.rst document currently contains a "Registers and calling
-convention" subsection which dictates a calling convention that belongs
-in an ABI document, rather than an instruction set document. Let's move
-it to a new abi.rst document so we can clean it up. The abi.rst document
-will of course be significantly changed and expanded upon over time. For
-now, it's really just a placeholder which will contain ABI-specific
-language that doesn't belong in other documents.
+There isn't really anything other than just "BPF" at this point, so
+referring to it as "eBPF" in our standards document just causes
+unnecessary confusion. Let's just be consistent and use "BPF".
 
+Suggested-by: Will Hawkins <hawkinsw@obs.cr>
 Signed-off-by: David Vernet <void@manifault.com>
 ---
- Documentation/bpf/standardization/abi.rst     | 25 +++++++++++++++++++
- Documentation/bpf/standardization/index.rst   |  1 +
- .../bpf/standardization/instruction-set.rst   | 16 ------------
- 3 files changed, 26 insertions(+), 16 deletions(-)
- create mode 100644 Documentation/bpf/standardization/abi.rst
+ .../bpf/standardization/instruction-set.rst   | 22 +++++++++----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/Documentation/bpf/standardization/abi.rst b/Documentation/bpf/standardization/abi.rst
-new file mode 100644
-index 000000000000..0c2e10eeb89a
---- /dev/null
-+++ b/Documentation/bpf/standardization/abi.rst
-@@ -0,0 +1,25 @@
-+.. contents::
-+.. sectnum::
-+
-+===================================================
-+BPF ABI Recommended Conventions and Guidelines v1.0
-+===================================================
-+
-+This is version 1.0 of an informational document containing recommended
-+conventions and guidelines for producing portable BPF program binaries.
-+
-+Registers and calling convention
-+================================
-+
-+BPF has 10 general purpose registers and a read-only frame pointer register,
-+all of which are 64-bits wide.
-+
-+The BPF calling convention is defined as:
-+
-+* R0: return value from function calls, and exit value for BPF programs
-+* R1 - R5: arguments for function calls
-+* R6 - R9: callee saved registers that function calls will preserve
-+* R10: read-only frame pointer to access stack
-+
-+R0 - R5 are scratch registers and BPF programs needs to spill/fill them if
-+necessary across calls.
-diff --git a/Documentation/bpf/standardization/index.rst b/Documentation/bpf/standardization/index.rst
-index d7b946f71261..a50c3baf6345 100644
---- a/Documentation/bpf/standardization/index.rst
-+++ b/Documentation/bpf/standardization/index.rst
-@@ -12,6 +12,7 @@ for the working group charter, documents, and more.
-    :maxdepth: 1
- 
-    instruction-set
-+   abi
- 
- .. Links:
- .. _IETF BPF Working Group: https://datatracker.ietf.org/wg/bpf/about/
 diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Documentation/bpf/standardization/instruction-set.rst
-index 4f73e9dc8d9e..cfe85129a303 100644
+index cfe85129a303..8afe6567209e 100644
 --- a/Documentation/bpf/standardization/instruction-set.rst
 +++ b/Documentation/bpf/standardization/instruction-set.rst
-@@ -97,22 +97,6 @@ Definitions
-     A:          10000110
-     B: 11111111 10000110
+@@ -1,11 +1,11 @@
+ .. contents::
+ .. sectnum::
  
--Registers and calling convention
--================================
--
--eBPF has 10 general purpose registers and a read-only frame pointer register,
--all of which are 64-bits wide.
--
--The eBPF calling convention is defined as:
--
--* R0: return value from function calls, and exit value for eBPF programs
--* R1 - R5: arguments for function calls
--* R6 - R9: callee saved registers that function calls will preserve
--* R10: read-only frame pointer to access stack
--
--R0 - R5 are scratch registers and eBPF programs needs to spill/fill them if
--necessary across calls.
--
+-========================================
+-eBPF Instruction Set Specification, v1.0
+-========================================
++=======================================
++BPF Instruction Set Specification, v1.0
++=======================================
+ 
+-This document specifies version 1.0 of the eBPF instruction set.
++This document specifies version 1.0 of the BPF instruction set.
+ 
+ Documentation conventions
+ =========================
+@@ -100,7 +100,7 @@ Definitions
  Instruction encoding
  ====================
  
+-eBPF has two instruction encodings:
++BPF has two instruction encodings:
+ 
+ * the basic instruction encoding, which uses 64 bits to encode an instruction
+ * the wide instruction encoding, which appends a second 64-bit immediate (i.e.,
+@@ -244,7 +244,7 @@ BPF_END    0xd0   0        byte swap operations (see `Byte swap instructions`_ b
+ =========  =====  =======  ==========================================================
+ 
+ Underflow and overflow are allowed during arithmetic operations, meaning
+-the 64-bit or 32-bit value will wrap. If eBPF program execution would
++the 64-bit or 32-bit value will wrap. If BPF program execution would
+ result in division by zero, the destination register is instead set to zero.
+ If execution would result in modulo by zero, for ``BPF_ALU64`` the value of
+ the destination register is unchanged whereas for ``BPF_ALU`` the upper
+@@ -366,7 +366,7 @@ BPF_JSLT  0xc    any  PC += offset if dst < src                    signed
+ BPF_JSLE  0xd    any  PC += offset if dst <= src                   signed
+ ========  =====  ===  ===========================================  =========================================
+ 
+-The eBPF program needs to store the return value into register R0 before doing a
++The BPF program needs to store the return value into register R0 before doing a
+ ``BPF_EXIT``.
+ 
+ Example:
+@@ -486,9 +486,9 @@ Atomic operations
+ 
+ Atomic operations are operations that operate on memory and can not be
+ interrupted or corrupted by other access to the same memory region
+-by other eBPF programs or means outside of this specification.
++by other BPF programs or means outside of this specification.
+ 
+-All atomic operations supported by eBPF are encoded as store operations
++All atomic operations supported by BPF are encoded as store operations
+ that use the ``BPF_ATOMIC`` mode modifier as follows:
+ 
+ * ``BPF_ATOMIC | BPF_W | BPF_STX`` for 32-bit operations
+@@ -578,7 +578,7 @@ where
+ Maps
+ ~~~~
+ 
+-Maps are shared memory regions accessible by eBPF programs on some platforms.
++Maps are shared memory regions accessible by BPF programs on some platforms.
+ A map can have various semantics as defined in a separate document, and may or
+ may not have a single contiguous memory region, but the 'map_val(map)' is
+ currently only defined for maps that do have a single contiguous memory region.
+@@ -600,6 +600,6 @@ identified by the given id.
+ Legacy BPF Packet access instructions
+ -------------------------------------
+ 
+-eBPF previously introduced special instructions for access to packet data that were
++BPF previously introduced special instructions for access to packet data that were
+ carried over from classic BPF. However, these instructions are
+ deprecated and should no longer be used.
 -- 
 2.41.0
 
