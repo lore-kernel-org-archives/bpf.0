@@ -1,80 +1,103 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB54C46AB
-	for <bpf@vger.kernel.org>; Mon, 28 Aug 2023 15:12:12 +0000 (UTC)
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04FB9FC;
-	Mon, 28 Aug 2023 08:12:08 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::646])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id 6C4252CD;
-	Mon, 28 Aug 2023 15:12:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 6C4252CD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1693235528; bh=bUKrXr8zVw9kjHDHioHUxchgQkRfrQ+AevoZbUABL5k=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=HJxgz8aK9MC2QKOD8U0DfryqN1jAGrDtbX82ZiyP0Ac+Kok9Epk/tDCL96kf9cZq3
-	 XDYl0Buz9cEtf327E1BpdhXM8gZJ4ZRB9SyVqPSjWVKQfrBQvRUGm6JuVUnYe+WBXh
-	 zy9cBeFUE1OLi6wUe4eW+oDQ3CYHhZlBui2nlNxWBZYJJ3U5pfo5mEeoGSyetr9YVJ
-	 1xJlq09922pB6BAPnBfbLi5c3rykjzMKQrTumGq3feSduw0fSBIEXDF4HxzztiWICG
-	 JVYOEsrCa/aYFUz7w54E75gRYf3KTzZoqfvo6NAGgwKr1qHzjw87xeMiuFPRXRBlPl
-	 Z0I9z4lz2XaZQ==
-From: Jonathan Corbet <corbet@lwn.net>
-To: Matthew Wilcox <willy@infradead.org>
-Cc: Nishanth Menon <nm@ti.com>, Mauro Carvalho Chehab <mchehab@kernel.org>,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- bpf@vger.kernel.org, Heinrich Schuchardt
- <heinrich.schuchardt@canonical.com>, Mattijs Korpershoek
- <mkorpershoek@baylibre.com>, Simon Glass <sjg@chromium.org>, Tom Rini
- <trini@konsulko.com>, Neha Francis <n-francis@ti.com>
-Subject: Re: [PATCH 1/2] Documentation: sphinx: Add sphinx-prompt
-In-Reply-To: <ZOyqhL32tuiMlS23@casper.infradead.org>
-References: <20230824182107.3702766-1-nm@ti.com>
- <20230824182107.3702766-2-nm@ti.com> <87h6om4u6o.fsf@meer.lwn.net>
- <20230828125912.hndmzfkof23zxpxl@tidings> <87edjn2sj0.fsf@meer.lwn.net>
- <ZOyqhL32tuiMlS23@casper.infradead.org>
-Date: Mon, 28 Aug 2023 09:12:07 -0600
-Message-ID: <87wmxf19rs.fsf@meer.lwn.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9116C134A6
+	for <bpf@vger.kernel.org>; Mon, 28 Aug 2023 16:00:01 +0000 (UTC)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789FFCA;
+	Mon, 28 Aug 2023 09:00:00 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-d7260fae148so3329989276.1;
+        Mon, 28 Aug 2023 09:00:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693238399; x=1693843199;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LVKo28epBiUG3SEESqk0GaOO1fQ+tGlFjow4pbPvDOc=;
+        b=f7mZjlRSsKdEAJTd2HmQUIXry+VBbv9QBjhY3v0GISsyaOpNoNxowo85p8cxej0pL9
+         DMZu7WRuL9pSQbMsetk5rbEPm9AbQE7prX+9aAoppUp35BkVnQDKAMUhc9cusSiGnreS
+         poouBn10o8J9dkv+dvdoKhTMDPtTUrgCKMbUkGnPbTgL4UQLYBzem7l8cuFeeQAYCFwe
+         tBMMiJfQowBrfmlxrinSnjVVFC/Ee3up4T12wDSgHfgoSyhWkEY+R9f3yC3/LbtabCuw
+         S40Qfk60bXr8eLohUhxJ+Bdx6wgPEwbDX3ys9/q6vk03o1et8yXv/MGDCwYsR9Qj2qrg
+         z/yA==
+X-Gm-Message-State: AOJu0YzTwy2sRDZ+jBSaT1fzYTrLbRhjLuRzk9uyUapuQKs68rYHKucq
+	wAlRjwruayLr8cr2SBvvMcybwHGWoMQIgA==
+X-Google-Smtp-Source: AGHT+IH+AFBVI3DPXh919wgqnRzEPxzRq+uwunyVsV2JXLy5zIepDPTI+3vWzY5m60dUrLlmwZ6Erw==
+X-Received: by 2002:a25:d807:0:b0:d71:5afb:7741 with SMTP id p7-20020a25d807000000b00d715afb7741mr25038389ybg.60.1693238399368;
+        Mon, 28 Aug 2023 08:59:59 -0700 (PDT)
+Received: from localhost ([24.1.27.177])
+        by smtp.gmail.com with ESMTPSA id f205-20020a25cfd6000000b00d05bb67965dsm1723919ybg.8.2023.08.28.08.59.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Aug 2023 08:59:58 -0700 (PDT)
+From: David Vernet <void@manifault.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@google.com,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel-team@meta.com,
+	hch@infradead.org,
+	hawkinsw@obs.cr,
+	dthaler@microsoft.com,
+	bpf@ietf.org
+Subject: [PATCH bpf-next 0/3] Clean up some standardization stuff
+Date: Mon, 28 Aug 2023 10:59:45 -0500
+Message-ID: <20230828155948.123405-1-void@manifault.com>
+X-Mailer: git-send-email 2.41.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Matthew Wilcox <willy@infradead.org> writes:
+The Documentation/bpf/standardization subdirectory contains documents
+that will be standardized with the IETF. There are a few things we can
+do to clean it up:
 
-> On Mon, Aug 28, 2023 at 07:41:39AM -0600, Jonathan Corbet wrote:
->> I appreciate attempts to improve our documentation, and hope that you
->> will continue to do so.  I am far from convinced, though, that this
->> change clears the bar for mainline inclusion.
->
-> I'd ask that you reconsider.  Looking at patch 2, I prefer what is
-> written there.  I don't think it adds cognitive load when reading the
-> plain docs.  I find the "copy and paste from html" argument not very
-> convincing, but I do like "copy and paste from rst", which this enables.
+- Move linux-notes.rst back to Documentation/bpf. It doesn't belong in
+  the standardization directory.
+- Move ABI-specific verbiage from instruction-set.rst into a new abi.rst
+  document. This document will be expanded significantly over time. For
+  now, we just need to get anything describing ABI out of
+  instruction-set.rst.
+- Say BPF instead of eBPF in our documents. It's just creating
+  confusion.
 
-Do you really think that the benefit from that justifies adding a build
-dependency and breaking everybody's docs build until they install it?  I
-rather suspect I would hear back from people who feel otherwise if I did
-that... 
+There is more we can and should do. For example, we should create a
+maps.rst document that will be a proposed standard for cross platform
+map types, and remove any relevant content from instruction-set.rst.
+This can be done in a subsequent patch set.
 
-> I also have a certain fond memory of how the plan9 people set up 'rc'
-> (their shell) so that ";" was both an empty statement, and the default
-> prompt.  So you could copy-paste lines starting with the ; prompt and
-> they'd work.  It's a small usabillity improvement, but it is there,
-> and wow is it annoying when you don't have it any more.
+David Vernet (3):
+  bpf,docs: Move linux-notes.rst to root bpf docs tree
+  bpf,docs: Add abi.rst document to standardization subdirectory
+  bpf,docs: s/eBPF/BPF in standards documents
 
-Ah, OK, so what we really need is a bash patch :)
+ Documentation/bpf/index.rst                   |  1 +
+ .../bpf/{standardization => }/linux-notes.rst |  0
+ Documentation/bpf/standardization/abi.rst     | 25 ++++++++++++
+ Documentation/bpf/standardization/index.rst   |  2 +-
+ .../bpf/standardization/instruction-set.rst   | 38 ++++++-------------
+ 5 files changed, 38 insertions(+), 28 deletions(-)
+ rename Documentation/bpf/{standardization => }/linux-notes.rst (100%)
+ create mode 100644 Documentation/bpf/standardization/abi.rst
 
-Thanks,
+-- 
+2.41.0
 
-jon
