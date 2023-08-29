@@ -1,49 +1,49 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9260223D2
-	for <bpf@vger.kernel.org>; Tue, 29 Aug 2023 08:00:35 +0000 (UTC)
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C50191
-	for <bpf@vger.kernel.org>; Tue, 29 Aug 2023 01:00:32 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-9a58dbd5daeso395355566b.2
-        for <bpf@vger.kernel.org>; Tue, 29 Aug 2023 01:00:32 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B053063D7
+	for <bpf@vger.kernel.org>; Tue, 29 Aug 2023 08:04:09 +0000 (UTC)
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7A3BE
+	for <bpf@vger.kernel.org>; Tue, 29 Aug 2023 01:04:08 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2ba1e9b1fa9so61625291fa.3
+        for <bpf@vger.kernel.org>; Tue, 29 Aug 2023 01:04:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693296031; x=1693900831;
+        d=gmail.com; s=20221208; t=1693296246; x=1693901046;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:date:from:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=+BfArbdHp4Bskz8cAKoWC+JX15qnvPWub5ioqmbKXOI=;
-        b=ooWUkuDMZKKUeP9MKrMcikJ8gDtskFTC6ezRABZo+5oPbR4iHOn7zEMcjhcr+5p0rY
-         ClblXmVnTnNmJGFkPN79VmHeVabF145Wt+1223eW/RvQEqLb/TNUa6tyIyj0+CFUsyy0
-         SDGlsx/xhBo+F6TUnjBovHGvA1CDOMm0OAPN+IH6LDZXbiHePt/sXT1xvZC826YZdzDW
-         J/SSa+ulgem4yc6c9hGWZyD5hvVZ8BSqDLeP5A8XyjB8ZJ92NpupqOBeUpsvNcUNHy+N
-         6otjwMFCP1iWV+1NB6AVQKtRdGW7lIBaG/K89ks4Er0sDJGh4T6L4384GoGXCPfUvlFf
-         P2mA==
+        bh=x+Xy5u/abU5fIybPgpWygiWKfp/E61rxjN9tn1Y4doc=;
+        b=m406M+EmPZ6i4o+3PGQhUJ3cqSW7UjXlLwfWouDNKdpVCoMzKWkcVrP8d0n6/cPF3m
+         uTJnpyzzLBNIxrqrSBERL8e65J+bL70chXGqDS23aL6MduQQQ0OQbntYj9sre00zw6su
+         WU1VEOaNdLgQO7Asu4dCE6X2ccYGwb0t3LCgHb/KxTHBRSANTN8m8qfQXxBCXwsLxWi7
+         fVJ+3X/RQxkraewShgcxnY+nXS69Kd5bceRpg8gyg9cDF5vy+Tr6umD2faKkoPYzpjwK
+         2GOEpP07C6X60WXTdMzLFWJww9yGSfxNdoUFCg+9uJ1sHSmD67uuMwZDUePcUZpEeAy0
+         Gs1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693296031; x=1693900831;
+        d=1e100.net; s=20221208; t=1693296246; x=1693901046;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:date:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+BfArbdHp4Bskz8cAKoWC+JX15qnvPWub5ioqmbKXOI=;
-        b=KmSh7+vGYq7PJFaIdQGnaCcQaPSXyWHwNdC/NkH2agI92qKrnM6LZbglnxAIG9Xldh
-         Lr5I/2zlNWfFxvVDugVUP1UW4C/PVOUhzgU7LEsI4j7SOwzZSdYmKeQbKFf6oxBfUbJn
-         PhVFWRJmsY4/7NEzZEbOt0LjWYfhtKjNUcKl2g2aUHYBe9EiHOS0jU3xV9i8ykXwfPdQ
-         NFrDZvdZSEsMpBL4gVCUv1bMe1iBjtE39IG7huY4B9kVKz9p5QBIrxNgTjYzepM0RbFc
-         nxz5VE4J2gfroI8gaFCEiTBF83PwiUMuJLzEB1yFZTq/VPJhJeD5B32kv4Z1glaucmz2
-         KKeA==
-X-Gm-Message-State: AOJu0Yw36NjrdhBv2PyLaw4CpR6Lzup9YXa620rUcPBif90fAFG0BIoD
-	WAOSd0ZEZJfiRzFSG/wlpcU=
-X-Google-Smtp-Source: AGHT+IHEg6uEjB/V4iPepEn6VVOvjit2UNWDo364yyjd+Z9uDrFvfSY1gNQXwZuDNqoSDA1rOas6yg==
-X-Received: by 2002:a17:906:535d:b0:9a2:1df2:8e08 with SMTP id j29-20020a170906535d00b009a21df28e08mr8680391ejo.45.1693296030421;
-        Tue, 29 Aug 2023 01:00:30 -0700 (PDT)
+        bh=x+Xy5u/abU5fIybPgpWygiWKfp/E61rxjN9tn1Y4doc=;
+        b=WMUe6ZlucoECLZU167W7mCKA/lfNvuqRokyD+ax0ZTmdvXJKMoIwVZctOYO1QeycNs
+         GrQNtGjfbZ1DZWZ9yUTUvBZ0oJ4wpcHnPXFffGJ5NRv90yflTsrK2XFr5cMCOh25+1Xm
+         QdPCUYwGsoYzJCIXDIMeBkv8CJIhjdfeCH2A+wt6EF2c8/eJQYxYzDHhC6Wzn1C/Wpq7
+         zuF0Hxcy+aqO8VolqG89UIGGvV+zy2Aic+xtg4UZIxg03C0kbuG9mSaqRFDqLSFubqnV
+         9tB5GubhTptmP2bL4drgbppCUdNZTw9rv5Flp50cVYfOfcyQcfA1TKvVZV12v16lprTT
+         mrHQ==
+X-Gm-Message-State: AOJu0Ywzz1G5HYFfGzPE69JytOR8hGiEFo5n+XsqC9TgLdWNKo/Q72CM
+	hfv+CdypA5sZCj4hx8Guv5Wz1QAx44j1Gw==
+X-Google-Smtp-Source: AGHT+IExlcMjitnSV17+pdB9eGKdmwDrZdpOHDYEw7Kl2XqbOUwQShcmJSK1sxQq57TIn6XgWarp0g==
+X-Received: by 2002:a2e:9f44:0:b0:2bc:cdcf:d888 with SMTP id v4-20020a2e9f44000000b002bccdcfd888mr14347778ljk.46.1693296246095;
+        Tue, 29 Aug 2023 01:04:06 -0700 (PDT)
 Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id z7-20020a17090655c700b00992f309cfe8sm5697742ejp.178.2023.08.29.01.00.29
+        by smtp.gmail.com with ESMTPSA id b22-20020a170906039600b0099c53c4407dsm5653360eja.78.2023.08.29.01.04.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Aug 2023 01:00:29 -0700 (PDT)
+        Tue, 29 Aug 2023 01:04:05 -0700 (PDT)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 29 Aug 2023 10:00:27 +0200
+Date: Tue, 29 Aug 2023 10:04:03 +0200
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -54,12 +54,11 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	KP Singh <kpsingh@chromium.org>,
 	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
 	Hou Tao <houtao1@huawei.com>, Daniel Xu <dxu@dxuuu.xyz>
-Subject: Re: [PATCH bpf-next 01/12] bpf: Move update_prog_stats to syscall
- object
-Message-ID: <ZO2lmzfblrGOmzxS@krava>
+Subject: Re: [PATCH bpf-next 06/12] bpf: Count missed stats in trace_call_bpf
+Message-ID: <ZO2mc/VOzjFAphG3@krava>
 References: <20230828075537.194192-1-jolsa@kernel.org>
- <20230828075537.194192-2-jolsa@kernel.org>
- <CAADnVQLMZRn9E=czkHUxwTiW+9=y=qVYGo1_eOOni59HafemSw@mail.gmail.com>
+ <20230828075537.194192-7-jolsa@kernel.org>
+ <CAADnVQJgGvsmr4Sug+ZWa68i9p4xLkW4OS8n4Afk3sZSdd0F5A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,7 +68,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQLMZRn9E=czkHUxwTiW+9=y=qVYGo1_eOOni59HafemSw@mail.gmail.com>
+In-Reply-To: <CAADnVQJgGvsmr4Sug+ZWa68i9p4xLkW4OS8n4Afk3sZSdd0F5A@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
 	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -77,24 +76,39 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Mon, Aug 28, 2023 at 10:25:38AM -0700, Alexei Starovoitov wrote:
-> On Mon, Aug 28, 2023 at 12:55 AM Jiri Olsa <jolsa@kernel.org> wrote:
+On Mon, Aug 28, 2023 at 10:32:05AM -0700, Alexei Starovoitov wrote:
+> On Mon, Aug 28, 2023 at 12:56 AM Jiri Olsa <jolsa@kernel.org> wrote:
 > >
-> >  static void notrace __bpf_prog_exit_recur(struct bpf_prog *prog, u64 start,
-> >                                           struct bpf_tramp_run_ctx *run_ctx)
-> >         __releases(RCU)
-> >  {
-> >         bpf_reset_run_ctx(run_ctx->saved_run_ctx);
+> > Increase misses stats in case bpf array execution is skipped
+> > because of recursion check in trace_call_bpf.
 > >
-> > -       update_prog_stats(prog, start);
-> > +       bpf_prog_update_prog_stats(prog, start);
+> > Adding bpf_prog_missed_array that increase misses counts for
+> > all bpf programs in bpf_prog_array.
+> >
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  include/linux/bpf.h      | 16 ++++++++++++++++
+> >  kernel/trace/bpf_trace.c |  3 +++
+> >  2 files changed, 19 insertions(+)
+> >
+> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > index 23a73f52c7bc..71154e991730 100644
+> > --- a/include/linux/bpf.h
+> > +++ b/include/linux/bpf.h
+> > @@ -2932,6 +2932,22 @@ static inline int sock_map_bpf_prog_query(const union bpf_attr *attr,
+> >  #endif /* CONFIG_BPF_SYSCALL */
+> >  #endif /* CONFIG_NET && CONFIG_BPF_SYSCALL */
+> >
+> > +static __always_inline void
+> > +bpf_prog_missed_array(const struct bpf_prog_array *array)
 > 
-> I bet this adds a noticeable performance regression.
-> The function was inlined before and the static key made it a nop.
-> Above makes it into a function call.
-> Please use always_inline and move it to a header.
+> The name hardly explains the purpose.
+> Please give it a better name.
+> Maybe bpf_prog_inc_misses_counters ?
+> Just extra "s".
 
-right.. will change
+I thought making it similar to bpf_prog_run_array,
+but bpf_prog_inc_misses_counters sounds better
 
 thanks,
 jirka
