@@ -1,187 +1,75 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCD481847
-	for <bpf@vger.kernel.org>; Wed, 30 Aug 2023 07:20:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEFD3C433C9;
-	Wed, 30 Aug 2023 07:20:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 253C91852
+	for <bpf@vger.kernel.org>; Wed, 30 Aug 2023 08:00:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B24B1C433CA;
+	Wed, 30 Aug 2023 08:00:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1693380043;
-	bh=QQ0quCTLpUTsywVNQHdI0D3Qosir/o/XOI1N8Eq4ZxA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=U/2MQvmFCsFlRDKWqD8Aprgs2DuOLsQgvv4AhaAGNtDvzD/+9TQ1WYHhRsuy2kMP1
-	 3RkwvpgKtUNE5Wlg65kgx2DiXWg7XE9avA4ZAqrSu8uEVnYlDOhSUpP+dl/GjOK5so
-	 m0ID85W7RN3W75zl6198lp9TJj8HAp0gwGtBh7XmZaK7Q5wjIWSYMWBzPihqGLUida
-	 pHeP3p8Q+Q824kvECId4pVMOOrKDL8uiaHto+5iNZ6ApYBdkrf2p8R3Dysgo8iB08z
-	 oGqRnolNsTRc4huwBU55FEiz/sNVcWhyOHn2fy0A2jXayxtR5zJD7sISUXnTavV544
-	 ttOxmud+b06aQ==
-Date: Wed, 30 Aug 2023 16:20:39 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Steven Rostedt
- <rostedt@goodmis.org>, Florent Revest <revest@chromium.org>,
- linux-trace-kernel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>, Sven
- Schnelle <svens@linux.ibm.com>, Alexei Starovoitov <ast@kernel.org>, Jiri
- Olsa <jolsa@kernel.org>, Arnaldo Carvalho de Melo <acme@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Alan Maguire <alan.maguire@oracle.com>,
- Mark Rutland <mark.rutland@arm.com>, Peter Zijlstra <peterz@infradead.org>,
- Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v4 6/9] tracing/fprobe: Enable fprobe events with
- CONFIG_DYNAMIC_FTRACE_WITH_ARGS
-Message-Id: <20230830162039.95c575460609cebdc34ab0c1@kernel.org>
-In-Reply-To: <169280379741.282662.12221517584561036597.stgit@devnote2>
-References: <169280372795.282662.9784422934484459769.stgit@devnote2>
-	<169280379741.282662.12221517584561036597.stgit@devnote2>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=k20201202; t=1693382423;
+	bh=us/CcTqEDDktbZAM7F7mJtPWO7A3gzB7r24c/SGVd58=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=eT0Iltsgo/l/dJkCJ/iQNr8c9qghPMAgma40yi56wb8oYM+pnAaY2oTPGFD8X6WqJ
+	 A+d3hZ7O2cakmwssWUp2E1+84Z3wRioATZrFFCNNcIwMt3U+/sCH8k4Z6ha5uY3A+M
+	 v7FEUKU4JLplmJHua93pafgIPBqBixkQFz2uIm6Wz07i2oeAuKfytkWZZ4MIrPMX24
+	 OPJQZpx364qPKRfq0dVx3vRIoIjhocKpPtgbtKp0Y2G2HMjH3ozHAYWnESvSYUA/p+
+	 mu5xD96v3HipiHBpm9cejBx9NmVZhe68AOtzDk3PergdoWl1ud5AbiGijFFkekEDBA
+	 rcLIYW5byxg6w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 97CB1E29F3A;
+	Wed, 30 Aug 2023 08:00:23 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v3 0/1] docs/bpf: Add description for CO-RE
+ relocations
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <169338242361.2642.14356576896820332828.git-patchwork-notify@kernel.org>
+Date: Wed, 30 Aug 2023 08:00:23 +0000
+References: <20230826222912.2560865-1-eddyz87@gmail.com>
+In-Reply-To: <20230826222912.2560865-1-eddyz87@gmail.com>
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com,
+ yonghong.song@linux.dev
 
-On Thu, 24 Aug 2023 00:16:37 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+Hello:
 
-> +#if !defined(CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS) || \
-> +	defined(CONFIG_HAVE_PT_REGS_TO_FTRACE_REGS_CAST)
-> +
-> +static __always_inline
-> +struct pt_regs *perf_fprobe_partial_regs(struct ftrace_regs *fregs)
-> +{
-> +	/* See include/linux/ftrace.h, this returns &fregs->regs */
-> +	return ftrace_partial_regs(fregs, NULL);
-> +}
-> +
-> +#define perf_fprobe_return_regs(regs) do {} while (0)
-> +
-> +#else /* CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS && !CONFIG_HAVE_PT_REGS_TO_FTRACE_REGS_CAST */
-> +
-> +/* Since fprobe handlers can be nested, pt_regs buffer need to be a stack */
-> +#define PERF_FPROBE_REGS_MAX	4
-> +
-> +struct pt_regs_stack {
-> +	struct pt_regs regs[PERF_FPROBE_REGS_MAX];
-> +	int idx;
-> +};
-> +
-> +static DEFINE_PER_CPU(struct pt_regs_stack, perf_fprobe_regs);
-> +
-> +static __always_inline
-> +struct pt_regs *perf_fprobe_partial_regs(struct ftrace_regs *fregs)
-> +{
-> +	struct pt_regs_stack *stack = this_cpu_ptr(&perf_fprobe_regs);
-> +	struct pt_regs *regs;
-> +
-> +	if (stack->idx < PERF_FPROBE_REGS_MAX) {
-> +		regs = stack->regs[stack->idx++];
-> +		return ftrace_partial_regs(fregs, regs);
-> +	}
-> +	return NULL;
-> +}
-> +
-> +static __always_inline void perf_fprobe_return_regs(struct pt_regs *regs)
-> +{
-> +	struct pt_regs_stack *stack = this_cpu_ptr(&perf_fprobe_regs);
-> +
-> +	if (WARN_ON_ONCE(regs != stack->regs[stack->idx]))
-> +		return;
-> +
-> +	--stack->idx;
-> +}
+This patch was applied to bpf/bpf.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-Ah, I found that the perf_trace_buf_alloc() does the same thing. So
+On Sun, 27 Aug 2023 01:29:11 +0300 you wrote:
+> Add a section on CO-RE relocations to llvm_relo.rst.
+> Based on doc-strings from include/uapi/linux/bpf.h and
+> tools/lib/bpf/relo_core.c
+> 
+> Changelog:
+> V2 -> V3:
+>  - Small fixes suggested by Yonghong;
+>  - Added ack from Yonghong;
+> V1 -> V2:
+>  - Small fixes suggested by Yonghong and Andrii;
+>  - C example extended to include all 13 relocation kinds (Yonghong);
+>  - Description of which fields are patched for which instruction
+>    classes (Andrii);
+>  - Details for BPF_CORE_TYPE_MATCHES relocation kind;
+>  - Details for BPF_CORE_FIELD_{LR}SHIFT_U64 relocation kinds.
+> 
+> [...]
 
-perf_trace_buf_alloc(size, &pt_regs, &rctx);
+Here is the summary with links:
+  - [bpf-next,v3,1/1] docs/bpf: Add description for CO-RE relocations
+    https://git.kernel.org/bpf/bpf/c/be4033d36070
 
-will give us the pt_regs at that point. Trace event does that so I think
-it is OK to do that here.
-
-Thank you,
-
-> +
-> +#endif /* !CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS || CONFIG_HAVE_PT_REGS_TO_FTRACE_REGS_CAST */
-> +
->  static int fentry_perf_func(struct trace_fprobe *tf, unsigned long entry_ip,
-> -			    struct pt_regs *regs)
-> +			    struct ftrace_regs *fregs)
->  {
->  	struct trace_event_call *call = trace_probe_event_call(&tf->tp);
->  	struct fentry_trace_entry_head *entry;
->  	struct hlist_head *head;
->  	int size, __size, dsize;
-> +	struct pt_regs *regs;
->  	int rctx;
->  
-> +	regs = perf_fprobe_partial_regs(fregs);
-> +	if (!regs)
-> +		return -EINVAL;
-> +
->  	head = this_cpu_ptr(call->perf_events);
->  	if (hlist_empty(head))
-> -		return 0;
-> +		goto out;
->  
-> -	dsize = __get_data_size(&tf->tp, regs);
-> +	dsize = __get_data_size(&tf->tp, fregs);
->  	__size = sizeof(*entry) + tf->tp.size + dsize;
->  	size = ALIGN(__size + sizeof(u32), sizeof(u64));
->  	size -= sizeof(u32);
->  
->  	entry = perf_trace_buf_alloc(size, NULL, &rctx);
-
-Here, we can borrow the pt_regs.
-
->  	if (!entry)
-> -		return 0;
-> +		goto out;
->  
->  	entry->ip = entry_ip;
->  	memset(&entry[1], 0, dsize);
-> -	store_trace_args(&entry[1], &tf->tp, regs, sizeof(*entry), dsize);
-> +	store_trace_args(&entry[1], &tf->tp, fregs, sizeof(*entry), dsize);
->  	perf_trace_buf_submit(entry, size, rctx, call->event.type, 1, regs,
->  			      head, NULL);
-> +out:
-> +	perf_fprobe_return_regs(regs);
->  	return 0;
->  }
->  NOKPROBE_SYMBOL(fentry_perf_func);
->  
->  static void
->  fexit_perf_func(struct trace_fprobe *tf, unsigned long entry_ip,
-> -		unsigned long ret_ip, struct pt_regs *regs)
-> +		unsigned long ret_ip, struct ftrace_regs *fregs)
->  {
->  	struct trace_event_call *call = trace_probe_event_call(&tf->tp);
->  	struct fexit_trace_entry_head *entry;
->  	struct hlist_head *head;
->  	int size, __size, dsize;
-> +	struct pt_regs *regs;
->  	int rctx;
->  
-> +	regs = perf_fprobe_partial_regs(fregs);
-> +	if (!regs)
-> +		return;
-> +
->  	head = this_cpu_ptr(call->perf_events);
->  	if (hlist_empty(head))
-> -		return;
-> +		goto out;
->  
-> -	dsize = __get_data_size(&tf->tp, regs);
-> +	dsize = __get_data_size(&tf->tp, fregs);
->  	__size = sizeof(*entry) + tf->tp.size + dsize;
->  	size = ALIGN(__size + sizeof(u32), sizeof(u64));
->  	size -= sizeof(u32);
->  
->  	entry = perf_trace_buf_alloc(size, NULL, &rctx);
-
-Ditto.
-
-Thanks,
+You are awesome, thank you!
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
