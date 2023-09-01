@@ -1,23 +1,23 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F05E75235;
-	Fri,  1 Sep 2023 07:10:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3E78CC433C9;
-	Fri,  1 Sep 2023 07:10:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12EBE8BEA;
+	Fri,  1 Sep 2023 08:20:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 74D3EC433C8;
+	Fri,  1 Sep 2023 08:20:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1693552226;
-	bh=1NIUPeYWfQmfUVrTaj0Uv33j5+UiYwZCFZQXznl1PQc=;
+	s=k20201202; t=1693556424;
+	bh=ZAki2J3DFnvCqnO/0ecTpuZXnK93mx8u2neEFWdSBds=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=rdjV9FrvtVqBOaFrOZYU2go+ZiG5lhdjCizz3KD83nTdKcFhAFYLTCRGiecni2NZE
-	 mV0UQa7ugcUzHppw7EGO0SWFQI2KptP89cP9O0C7Z7ofjdgmN0t/q0wqlnTHHQLs4w
-	 8GiDbXJqgMAZucwzf/c3jcy8ur6O5Ytp9XNBRHEMbasaF47VtVawfDlu+KqPkE5AJ/
-	 yJBVVe7KIsvq2GQ/a+l3bMfmi5mVgevTGCeWUKNdkIktMmyof5QJKQzB/g8x2YIJEg
-	 MmGo1dwNJUDOmHoXdTEkd1E4EnVtaZlvxXNQqxBpgwldkh4BQ/gmPbVMb6BDGgB50s
-	 76JGh0lZQc1RA==
+	b=ZXl5Oj/kYOrJxIxR3h/uYk8ikQRynnnwX2yuyPMfLFmmizejXeOYsk0NuivvlDXxi
+	 rzanK/x3kN1I4DSMB6LIjM7uOVVF9vTeuzdqj3ImKxYaEYncJ7vnM5rOYDumuwPwsS
+	 6zjy7ESZWUT0uTEMXuO9xCOKYviMxroP9JClFn03gfAnxmyYA78jA0SqkSYDWsRv2f
+	 vXZn1Js8e6WCbF9zJuy40GFbUnZc2PETb6SzXQswXUgt7ZLCjgWOepijLb16P8cSly
+	 NPmjGXXXbGrSlZaj5AB4MgWsoX7zJlQQVNdP6kfSrdirszo7NQyQooxLBX9ey+1V0A
+	 MxLm4VX6sNYEg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1BBDBC595D2;
-	Fri,  1 Sep 2023 07:10:26 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5CDA8E29F3C;
+	Fri,  1 Sep 2023 08:20:24 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -26,39 +26,43 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3] skbuff: skb_segment,
- Call zero copy functions before using skbuff frags
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: fix a CI failure caused by vsock
+ write
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <169355222610.20762.15768271551540080758.git-patchwork-notify@kernel.org>
-Date: Fri, 01 Sep 2023 07:10:26 +0000
-References: <20230831081702.101342-1-mkhalfella@purestorage.com>
-In-Reply-To: <20230831081702.101342-1-mkhalfella@purestorage.com>
-To: Mohamed Khalfella <mkhalfella@purestorage.com>
-Cc: willemdebruijn.kernel@gmail.com, alexanderduyck@fb.com,
- bpf@vger.kernel.org, brouer@redhat.com, davem@davemloft.net,
- dhowells@redhat.com, edumazet@google.com, keescook@chromium.org,
- kuba@kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- pabeni@redhat.com, willemb@google.com, stable@vger.kernel.org
+ <169355642437.27368.3865294006849826443.git-patchwork-notify@kernel.org>
+Date: Fri, 01 Sep 2023 08:20:24 +0000
+References: <20230901031037.3314007-1-xukuohai@huaweicloud.com>
+In-Reply-To: <20230901031037.3314007-1-xukuohai@huaweicloud.com>
+To: Xu Kuohai <xukuohai@huaweicloud.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
+ bobby.eshleman@bytedance.com
 
 Hello:
 
-This patch was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
+This patch was applied to bpf/bpf.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-On Thu, 31 Aug 2023 02:17:02 -0600 you wrote:
-> Commit bf5c25d60861 ("skbuff: in skb_segment, call zerocopy functions
-> once per nskb") added the call to zero copy functions in skb_segment().
-> The change introduced a bug in skb_segment() because skb_orphan_frags()
-> may possibly change the number of fragments or allocate new fragments
-> altogether leaving nrfrags and frag to point to the old values. This can
-> cause a panic with stacktrace like the one below.
+On Fri,  1 Sep 2023 11:10:37 +0800 you wrote:
+> From: Xu Kuohai <xukuohai@huawei.com>
+> 
+> While commit 90f0074cd9f9 ("selftests/bpf: fix a CI failure caused by vsock sockmap test")
+> fixes a receive failure of vsock sockmap test, there is still a write failure:
+> 
+> Error: #211/79 sockmap_listen/sockmap VSOCK test_vsock_redir
+> Error: #211/79 sockmap_listen/sockmap VSOCK test_vsock_redir
+>   ./test_progs:vsock_unix_redir_connectible:1501: egress: write: Transport endpoint is not connected
+>   vsock_unix_redir_connectible:FAIL:1501
+>   ./test_progs:vsock_unix_redir_connectible:1501: ingress: write: Transport endpoint is not connected
+>   vsock_unix_redir_connectible:FAIL:1501
+>   ./test_progs:vsock_unix_redir_connectible:1501: egress: write: Transport endpoint is not connected
+>   vsock_unix_redir_connectible:FAIL:1501
 > 
 > [...]
 
 Here is the summary with links:
-  - [v3] skbuff: skb_segment, Call zero copy functions before using skbuff frags
-    https://git.kernel.org/netdev/net/c/2ea35288c83b
+  - [bpf-next,v2] selftests/bpf: fix a CI failure caused by vsock write
+    https://git.kernel.org/bpf/bpf/c/b0193c731e43
 
 You are awesome, thank you!
 -- 
