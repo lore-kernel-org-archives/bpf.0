@@ -1,349 +1,359 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 388B23D84;
-	Mon,  4 Sep 2023 15:02:56 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5461A5;
-	Mon,  4 Sep 2023 08:02:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693839775; x=1725375775;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=XapmlrfnLX5LDrZZaSe/VUi/Nk3AYAt9THjCZb4VLsA=;
-  b=Ee9xHHth1JKp/fTmYem88BCmg0fXIFakvgahhhdO2tj1juU528YNmYEs
-   5Zllty/6aDvcr8nD1vggPU3BTOPKeF/CtkHem+m/XErR+8oj4gbY591Nl
-   C0LdrZim+5uLNNHZjxeXPImXrJn/lxRGKNlaWbX9+Gqg2AKbjwmplHJlH
-   O/H66R+lcVwyIifiikkUZdsSNrmvEGg4ommobiCI2zbcJ7TKz8AvkoQTh
-   nv4+h/g9zd8ICH6g8hEmroFbSK/jqvM10HQ+ED/dKsyJaBwSMw/1/xyZo
-   4cwRZ7UMimeFjk1nSmf6NqxQpJcRUmkz9c39yqLsN2uoRBivZpSEYrZzL
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="374008537"
-X-IronPort-AV: E=Sophos;i="6.02,226,1688454000"; 
-   d="scan'208";a="374008537"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2023 08:02:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="1071648710"
-X-IronPort-AV: E=Sophos;i="6.02,226,1688454000"; 
-   d="scan'208";a="1071648710"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga005.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 04 Sep 2023 08:02:54 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 4 Sep 2023 08:02:53 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 4 Sep 2023 08:02:53 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Mon, 4 Sep 2023 08:02:53 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.172)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Mon, 4 Sep 2023 08:02:53 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VKfg+a4XGphHk81g2jg/JHpmnhbecaWPIcHtPwFn3N9a5OU7ezvAt+gh94+aT150D78aeWOnvIyNlSPNgGK0mIhe60mg2qzHdZt2MPMdOpB7nFyI5bLGhmpPwZXW2Y/KtwplP8NPj0J0SIbyzuPWlfejly23Q52YZQyDgZHs02SkvNPMcoUTcrgyNi9hHzevCvqS2/oznX1sLoth34jX3DO7erDZgnO1NdVWplbIZC57TuGCwsps16mNJaA6K0kSdQ4mWaqR63zVwAR7FAN/vsOywAHrOVfsysQqx3pavsX8SpeQzZ+aPSlAjtuU0hWfMHc4x8AYZCs8Rd4s8ZGLDw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RIGHN9KzlIi1eNQ7/rL0v3Fvp0gfD/1TfQd2/7xq4DY=;
- b=b10Pmb3Ff+wR/w+5VV5PkUCVkDuIxrQMh38LWJwLV24bcml1cwkhwzaPgXMC3yFyuSAdjyUbR0OO8QMRfNYqlXDDzVSpRbGzTAoxcE/bifpyxCpYgMSfinYrz05KlMFRMbPkcKINTtS23FV550gnUkiSOXlRiU3DCY22HpxMQ0ltE6d+QlgPTqtTWNJHUf9m1D24OwwSwNPYPFgAQs/ChdJ8eMpF+kDdUshanW/aHKbwTfJMVW/AC3xR3ThD63EQfDfcldUK8RLf7FdfpPrKg1AvZifVkxcvMoULscymX0pcz5tni2WIxjt9Mk0Z9WI8eHb5n+KaebZjMnzt07AoTg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
- DM4PR11MB5534.namprd11.prod.outlook.com (2603:10b6:5:391::22) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6745.33; Mon, 4 Sep 2023 15:02:50 +0000
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::c1f9:b4eb:f57e:5c3d]) by DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::c1f9:b4eb:f57e:5c3d%3]) with mapi id 15.20.6745.030; Mon, 4 Sep 2023
- 15:02:50 +0000
-Date: Mon, 4 Sep 2023 17:02:40 +0200
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To: Larysa Zaremba <larysa.zaremba@intel.com>
-CC: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-	<andrii@kernel.org>, <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-	<john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-	<haoluo@google.com>, <jolsa@kernel.org>, David Ahern <dsahern@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>, Willem de Bruijn <willemb@google.com>,
-	Jesper Dangaard Brouer <brouer@redhat.com>, Anatoly Burakov
-	<anatoly.burakov@intel.com>, Alexander Lobakin <alexandr.lobakin@intel.com>,
-	Magnus Karlsson <magnus.karlsson@gmail.com>, Maryam Tahhan
-	<mtahhan@redhat.com>, <xdp-hints@xdp-project.net>, <netdev@vger.kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Alexei Starovoitov
-	<alexei.starovoitov@gmail.com>, Simon Horman <simon.horman@corigine.com>,
-	Tariq Toukan <tariqt@mellanox.com>, Saeed Mahameed <saeedm@mellanox.com>
-Subject: Re: [xdp-hints] [RFC bpf-next 03/23] ice: make RX checksum checking
- code more reusable
-Message-ID: <ZPXxkOCK5e4M/P5H@boxer>
-References: <20230824192703.712881-1-larysa.zaremba@intel.com>
- <20230824192703.712881-4-larysa.zaremba@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230824192703.712881-4-larysa.zaremba@intel.com>
-X-ClientProxiedBy: FR2P281CA0157.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:99::18) To DM4PR11MB6117.namprd11.prod.outlook.com
- (2603:10b6:8:b3::19)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 914B93C20
+	for <bpf@vger.kernel.org>; Mon,  4 Sep 2023 15:09:46 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4EE15E5B;
+	Mon,  4 Sep 2023 08:09:42 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C9E27143D;
+	Mon,  4 Sep 2023 08:10:19 -0700 (PDT)
+Received: from [192.168.1.3] (unknown [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 70DCF3F738;
+	Mon,  4 Sep 2023 08:09:39 -0700 (PDT)
+Message-ID: <a8779d0e-041e-e1c3-4c0b-27b55eae3286@arm.com>
+Date: Mon, 4 Sep 2023 16:09:40 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|DM4PR11MB5534:EE_
-X-MS-Office365-Filtering-Correlation-Id: c2969ea6-5513-4307-649c-08dbad5801de
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PL1Brs+8o6RB4y/vJB5k0uzCqP8gXVA1BTjMaXi9BWx5/keZdwsSsVFY1GDFD/+JFw8sx6lwUqDkvReS3uxUbI+gOrqJ00JdO5t1pNfNKHo5aNLOy3Z3Zfc6vHRmbH3BGAlaNFaUhiWckCJGJtOCXHYts6OnBA6oVeYXepb2tv8VP0w0KUkEVK6ruvAQszzGqCV5OngHAbX2aBQnz048BCRN9erwaEMNgtdeTNLUo6yj4s2GppapYdV2LkC8xzRNBHbZN5UZ8MtxM3sjvds1Ws//AZI0ko7gHym/ipN3wt62XfLP6oO6wijgWhQMu0adTM+8GwemAoC9wpTMG+CFTbqKktMuJD+x+wZu1pVwG8KJFtu5tjIYr70ELiu+QuPPWAnnnNA/Su/QjIbxbe9V6a7OdGZQ5fue+yuUqGjVCAl3uvIPbio6s+uLNhUy2zILeq+cSYJb/U3Cn7DXkEEHn4C5LRYyNeCf4qMc+8q95Qmg6ToOKD1LTC/XYpAqOM4EGn5VMsiLWKWma6L1+wuf/OQZ+AiQxbPsypJADfLYlCLlufHj4z9d4CcLcY4fbHq4
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(366004)(39860400002)(376002)(396003)(346002)(136003)(186009)(1800799009)(451199024)(86362001)(6666004)(5660300002)(6506007)(6486002)(44832011)(83380400001)(2906002)(26005)(7416002)(6512007)(9686003)(41300700001)(66476007)(54906003)(66556008)(66946007)(6636002)(316002)(38100700002)(82960400001)(8676002)(33716001)(8936002)(4326008)(6862004)(478600001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BBYnsXwGPkaQF69hJaFMC8zF+JbKOl2tNHmfHC582VZZzv2doLhUGDAC1zzW?=
- =?us-ascii?Q?BM9tyP7PtN14n93TwxqBeMbFgliu5zHq3TB5WRfthl/RCJDuxkSv3Elt1Z08?=
- =?us-ascii?Q?HLm3B46hw7U7omhe8g0Sa0QO/qUOhM6nrgNiVBoajikgbEqaWB+FqmItE/FN?=
- =?us-ascii?Q?Oc6BtuUjTgtidLJ4rZvi7qvLKJjudZSNMd0YjHZZ6nWlrWNWco/eQ0ac0OR6?=
- =?us-ascii?Q?gZmJRpBut3JGTXZbvl0EHq9h5t7rfvKxKlVc4hNQ+WDG0G6z2EjxwOEDgz2K?=
- =?us-ascii?Q?PpBoyrEoY5YBXXa6oeKWDHsd3sPReXRA+AJUBwNVlwrb0JUUO8TH/Z5+dC6o?=
- =?us-ascii?Q?XrexQ+MBq47WuQcp/Rj3uk+w2oo6Uvn24WU1shlZuiBr3vaJr0K/Bki98gLw?=
- =?us-ascii?Q?QeBxeUO+Rk7ZiyBrDvpDJsBoH6u2IdQx5eAdP2PQZHTEjlck3pkyfRM+pcxd?=
- =?us-ascii?Q?mv3wBD1uJArkq0XJ9wNZDXLu3up6pBzGhW2+d3oCnvCUJXBip/KCsrAOkRgi?=
- =?us-ascii?Q?mO97jIWwmnkiE9UYjyGol6+f3TBqMlfEJi8ODmPebN44hbD80DDcj5/CrYD8?=
- =?us-ascii?Q?CiZ8GhUbHYQib00OQZQAhvkMg6fJCIgf9xB4+aqIJ9XhblZx4pBc2wQ32v2M?=
- =?us-ascii?Q?fXlCQqQBAbMcr1niEhfTE9gR2aZK2zfWBW8Hb6QzYqxUSwyduAJHKn+YPka7?=
- =?us-ascii?Q?rq1qp60ppc88/SHK/wQhPG5at6dMYA1BzSsPYrTcnKUBb7fMPpnUK46ul9tc?=
- =?us-ascii?Q?VxKwKSkAcwrOYeWiuv1kDY9Q16R3OMH25P7Zaar9HIm0IjRDDBZNZ3Pg7yq4?=
- =?us-ascii?Q?i3i0WExK8WsD3jDuNz7iQbz5/LbosZ2iOE7HhrUUJIL9AHb2b7NRYs9q2E95?=
- =?us-ascii?Q?GDMjeEqqmgRMb6MdxudEE9GXFZdbax/aPoFLlF6bs01Gcsrzh/fNhf9ZwAPi?=
- =?us-ascii?Q?+Cw9VzwZE2TI30tDAsqS7bduU3RRlNTR4Voblarbj5XE1ZNZ8pDNVC6Gobi+?=
- =?us-ascii?Q?WWjIoyuOFR/CSifZhb/R0B3RmFW3Qj/phAQo72xBscjxZSQsL+JCeWmwBtwm?=
- =?us-ascii?Q?YF8Ri7tlsn3v4HNSlB49ch1H4jLyQ5JJDfG0zunj0XF4FXuzA1Uw9zLp0XD4?=
- =?us-ascii?Q?Mu6FTnkmbVdeLEe2G5IGrRAnO0u+IKptLnXkBQ8FvAQLc39wKZJQAwSH0RhD?=
- =?us-ascii?Q?QKgfP/Au7MOIHfinBab9ZFJ76S9ewAQfw9YI3IaFXZsRHQTuGWI2Evz2NnRp?=
- =?us-ascii?Q?7oUbfHoHjQbm7Xc8oDQrX48ezzfVnZCsWKkeYBNF/CfKOXN93uE6D8KAD62e?=
- =?us-ascii?Q?oUw+8bmTNBBSHHHkZP/RNItTKJd4kVPo0tHx/X4MENuc/ZANLPZf9ZOdZVtV?=
- =?us-ascii?Q?nyzGen7IGWkW3WRsJpJpxCMqxtlyysu/t35mSv9ioAQAq1jjcNVscWcult78?=
- =?us-ascii?Q?mQsDUxdKKoo8eLNYje1Hf2RiOsPRKMhhoBgVBj9zhj1ZXDq+CI8hBUxbETdv?=
- =?us-ascii?Q?igw0wvQ2fsCCADcH99DL1iYt62P8ky05o4Hets7km2/6KiBW+uac/N5VfOC9?=
- =?us-ascii?Q?/I54A4JyNDvkLttKjIF+b6/Mti8jI0pwG0nohGdp3FRTryr7sRt1t9xu4/2r?=
- =?us-ascii?Q?DA=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: c2969ea6-5513-4307-649c-08dbad5801de
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Sep 2023 15:02:50.6443
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0hH0xWQxuaAxjTyGWCQjUbq1+cDyuhoVvdC0/5LoPONN5LqAKj7Dxd3PQNmGO1uIiI8nDhoefAeB1f1SPOQj9n9pbdxxPitQTXmnEYVpSXg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5534
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 2/3] perf tools: Revert enable indices setting syntax
+ for BPF map
+Content-Language: en-US
+To: Ian Rogers <irogers@google.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
+ "coresight@lists.linaro.org" <coresight@lists.linaro.org>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+ Adrian Hunter <adrian.hunter@intel.com>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kan Liang <kan.liang@linux.intel.com>,
+ Rob Herring <robh@kernel.org>, linux-perf-users@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ Wang Nan <wangnan0@huawei.com>, Wang ShaoBo <bobo.shaobowang@huawei.com>,
+ YueHaibing <yuehaibing@huawei.com>, He Kuang <hekuang@huawei.com>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Mark Rutland <mark.rutland@arm.com>
+References: <20230728001212.457900-1-irogers@google.com>
+ <20230728001212.457900-3-irogers@google.com>
+ <77361428-5970-5031-e204-7aefcd9cbebc@arm.com>
+ <CAP-5=fVATGaoeaSEk5jjoGDY=pJkFThU2t2sixfwjouxisor=w@mail.gmail.com>
+From: James Clark <james.clark@arm.com>
+In-Reply-To: <CAP-5=fVATGaoeaSEk5jjoGDY=pJkFThU2t2sixfwjouxisor=w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+	RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Thu, Aug 24, 2023 at 09:26:42PM +0200, Larysa Zaremba wrote:
-> Previously, we only needed RX checksum flags in skb path,
-> hence all related code was written with skb in mind.
-> But with the addition of XDP hints via kfuncs to the ice driver,
-> the same logic will be needed in .xmo_() callbacks.
-> 
-> Put generic process of determining checksum status into
-> a separate function.
-> 
-> Now we cannot operate directly on skb, when deducing
-> checksum status, therefore introduce an intermediate enum for checksum
-> status. Fortunately, in ice, we have only 4 possibilities: checksum
-> validated at level 0, validated at level 1, no checksum, checksum error.
-> Use 3 bits for more convenient conversion.
-> 
-> Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
-> ---
->  drivers/net/ethernet/intel/ice/ice_txrx_lib.c | 105 ++++++++++++------
->  1 file changed, 69 insertions(+), 36 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-> index b2f241b73934..8b155a502b3b 100644
-> --- a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-> +++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-> @@ -102,18 +102,41 @@ ice_rx_hash_to_skb(const struct ice_rx_ring *rx_ring,
->  		skb_set_hash(skb, hash, ice_ptype_to_htype(rx_ptype));
->  }
->  
-> +enum ice_rx_csum_status {
-> +	ICE_RX_CSUM_LVL_0	= 0,
-> +	ICE_RX_CSUM_LVL_1	= BIT(0),
-> +	ICE_RX_CSUM_NONE	= BIT(1),
-> +	ICE_RX_CSUM_ERROR	= BIT(2),
-> +	ICE_RX_CSUM_FAIL	= ICE_RX_CSUM_NONE | ICE_RX_CSUM_ERROR,
-> +};
-> +
->  /**
-> - * ice_rx_csum - Indicate in skb if checksum is good
-> - * @ring: the ring we care about
-> - * @skb: skb currently being received and modified
-> + * ice_rx_csum_lvl - Get checksum level from status
-> + * @status: driver-specific checksum status
-> + */
-> +static u8 ice_rx_csum_lvl(enum ice_rx_csum_status status)
-> +{
-> +	return status & ICE_RX_CSUM_LVL_1;
-> +}
-> +
-> +/**
-> + * ice_rx_csum_ip_summed - Checksum status from driver-specific to generic
-> + * @status: driver-specific checksum status
-> + */
-> +static u8 ice_rx_csum_ip_summed(enum ice_rx_csum_status status)
-> +{
-> +	return status & ICE_RX_CSUM_NONE ? CHECKSUM_NONE : CHECKSUM_UNNECESSARY;
 
-	return !(status & ICE_RX_CSUM_NONE);
 
-?
-
-> +}
-> +
-> +/**
-> + * ice_get_rx_csum_status - Deduce checksum status from descriptor
->   * @rx_desc: the receive descriptor
->   * @ptype: the packet type decoded by hardware
->   *
-> - * skb->protocol must be set before this function is called
-> + * Returns driver-specific checksum status
->   */
-> -static void
-> -ice_rx_csum(struct ice_rx_ring *ring, struct sk_buff *skb,
-> -	    union ice_32b_rx_flex_desc *rx_desc, u16 ptype)
-> +static enum ice_rx_csum_status
-> +ice_get_rx_csum_status(const union ice_32b_rx_flex_desc *rx_desc, u16 ptype)
->  {
->  	struct ice_rx_ptype_decoded decoded;
->  	u16 rx_status0, rx_status1;
-> @@ -124,20 +147,12 @@ ice_rx_csum(struct ice_rx_ring *ring, struct sk_buff *skb,
->  
->  	decoded = ice_decode_rx_desc_ptype(ptype);
->  
-> -	/* Start with CHECKSUM_NONE and by default csum_level = 0 */
-> -	skb->ip_summed = CHECKSUM_NONE;
-> -	skb_checksum_none_assert(skb);
-> -
-> -	/* check if Rx checksum is enabled */
-> -	if (!(ring->netdev->features & NETIF_F_RXCSUM))
-> -		return;
-> -
->  	/* check if HW has decoded the packet and checksum */
->  	if (!(rx_status0 & BIT(ICE_RX_FLEX_DESC_STATUS0_L3L4P_S)))
-> -		return;
-> +		return ICE_RX_CSUM_NONE;
->  
->  	if (!(decoded.known && decoded.outer_ip))
-> -		return;
-> +		return ICE_RX_CSUM_NONE;
->  
->  	ipv4 = (decoded.outer_ip == ICE_RX_PTYPE_OUTER_IP) &&
->  	       (decoded.outer_ip_ver == ICE_RX_PTYPE_OUTER_IPV4);
-> @@ -146,43 +161,61 @@ ice_rx_csum(struct ice_rx_ring *ring, struct sk_buff *skb,
->  
->  	if (ipv4 && (rx_status0 & (BIT(ICE_RX_FLEX_DESC_STATUS0_XSUM_IPE_S) |
->  				   BIT(ICE_RX_FLEX_DESC_STATUS0_XSUM_EIPE_S))))
-> -		goto checksum_fail;
-> +		return ICE_RX_CSUM_FAIL;
->  
->  	if (ipv6 && (rx_status0 & (BIT(ICE_RX_FLEX_DESC_STATUS0_IPV6EXADD_S))))
-> -		goto checksum_fail;
-> +		return ICE_RX_CSUM_FAIL;
->  
->  	/* check for L4 errors and handle packets that were not able to be
->  	 * checksummed due to arrival speed
->  	 */
->  	if (rx_status0 & BIT(ICE_RX_FLEX_DESC_STATUS0_XSUM_L4E_S))
-> -		goto checksum_fail;
-> +		return ICE_RX_CSUM_FAIL;
->  
->  	/* check for outer UDP checksum error in tunneled packets */
->  	if ((rx_status1 & BIT(ICE_RX_FLEX_DESC_STATUS1_NAT_S)) &&
->  	    (rx_status0 & BIT(ICE_RX_FLEX_DESC_STATUS0_XSUM_EUDPE_S)))
-> -		goto checksum_fail;
-> -
-> -	/* If there is an outer header present that might contain a checksum
-> -	 * we need to bump the checksum level by 1 to reflect the fact that
-> -	 * we are indicating we validated the inner checksum.
-> -	 */
-> -	if (decoded.tunnel_type >= ICE_RX_PTYPE_TUNNEL_IP_GRENAT)
-> -		skb->csum_level = 1;
-> +		return ICE_RX_CSUM_FAIL;
->  
->  	/* Only report checksum unnecessary for TCP, UDP, or SCTP */
->  	switch (decoded.inner_prot) {
->  	case ICE_RX_PTYPE_INNER_PROT_TCP:
->  	case ICE_RX_PTYPE_INNER_PROT_UDP:
->  	case ICE_RX_PTYPE_INNER_PROT_SCTP:
-> -		skb->ip_summed = CHECKSUM_UNNECESSARY;
-> -		break;
-> -	default:
-> -		break;
-> +		/* If there is an outer header present that might contain
-> +		 * a checksum we need to bump the checksum level by 1 to reflect
-> +		 * the fact that we have validated the inner checksum.
-> +		 */
-> +		return decoded.tunnel_type >= ICE_RX_PTYPE_TUNNEL_IP_GRENAT ?
-> +		       ICE_RX_CSUM_LVL_1 : ICE_RX_CSUM_LVL_0;
->  	}
-> -	return;
->  
-> -checksum_fail:
-> -	ring->vsi->back->hw_csum_rx_error++;
-> +	return ICE_RX_CSUM_NONE;
-> +}
-> +
-> +/**
-> + * ice_rx_csum_into_skb - Indicate in skb if checksum is good
-> + * @ring: the ring we care about
-> + * @skb: skb currently being received and modified
-> + * @rx_desc: the receive descriptor
-> + * @ptype: the packet type decoded by hardware
-> + */
-> +static void
-> +ice_rx_csum_into_skb(struct ice_rx_ring *ring, struct sk_buff *skb,
-> +		     const union ice_32b_rx_flex_desc *rx_desc, u16 ptype)
-> +{
-> +	enum ice_rx_csum_status csum_status;
-> +
-> +	/* check if Rx checksum is enabled */
-> +	if (!(ring->netdev->features & NETIF_F_RXCSUM))
-> +		return;
-> +
-> +	csum_status = ice_get_rx_csum_status(rx_desc, ptype);
-> +	if (csum_status & ICE_RX_CSUM_ERROR)
-> +		ring->vsi->back->hw_csum_rx_error++;
-> +
-> +	skb->ip_summed = ice_rx_csum_ip_summed(csum_status);
-> +	skb->csum_level = ice_rx_csum_lvl(csum_status);
->  }
->  
->  /**
-> @@ -229,7 +262,7 @@ ice_process_skb_fields(struct ice_rx_ring *rx_ring,
->  	/* modifies the skb - consumes the enet header */
->  	skb->protocol = eth_type_trans(skb, rx_ring->netdev);
->  
-> -	ice_rx_csum(rx_ring, skb, rx_desc, ptype);
-> +	ice_rx_csum_into_skb(rx_ring, skb, rx_desc, ptype);
->  
->  	if (rx_ring->ptp_rx)
->  		ice_ptp_rx_hwts_to_skb(rx_ring, rx_desc, skb);
-> -- 
-> 2.41.0
+On 04/09/2023 15:56, Ian Rogers wrote:
+> On Mon, Sep 4, 2023 at 4:02 AM James Clark <james.clark@arm.com> wrote:
+>>
+>>
+>>
+>> On 28/07/2023 01:12, Ian Rogers wrote:
+>>> This reverts commit e571e029bdbf ("perf tools: Enable indices setting
+>>> syntax for BPF map").
+>>>
+>>> The reverted commit added a notion of arrays that could be set as
+>>> event terms for BPF events. The parsing hasn't worked over multiple
+>>> Linux releases. Given the broken nature of the parsing it appears the
+>>> code isn't in use, nor could I find a way for it to be used to add a
+>>> test.
+>>>
+>>> The original commit contains a test in the commit message,
+>>> however, running it yields:
+>>> ```
+>>> $ perf record -e './test_bpf_map_3.c/map:channel.value[0,1,2,3...5]=101/' usleep 2
+>>> event syntax error: '..pf_map_3.c/map:channel.value[0,1,2,3...5]=101/'
+>>>                                   \___ parser error
+>>> Run 'perf list' for a list of valid events
+>>>
+>>>  Usage: perf record [<options>] [<command>]
+>>>     or: perf record [<options>] -- <command> [<options>]
+>>>
+>>>     -e, --event <event>   event selector. use 'perf list' to list available events
+>>> ```
+>>>
+>>> Given the code can't be used this commit reverts and removes it.
+>>>
+>>
+>> Hi Ian,
+>>
+>> Unfortunately this revert breaks Coresight sink argument parsing.
+>>
+>> Before:
+>>
+>>   $ perf record -e cs_etm/@tmc_etr0/ -- true
+>>   [ perf record: Woken up 1 times to write data ]
+>>   [ perf record: Captured and wrote 4.008 MB perf.data ]
+>>
+>> After:
+>>
+>>   $ perf record -e cs_etm/@tmc_etr0/ -- true
+>>   event syntax error: 'cs_etm/@tmc_etr0/'
+>>                            \___ parser error
+>>
+>> I can't really see how it's related to the array syntax that the commit
+>> messages mention, but it could either be that the revert wasn't applied
+>> cleanly or just some unintended side effect.
+>>
+>> We should probably add a cross platform parsing test for Coresight
+>> arguments, but I don't know whether we should just blindly revert the
+>> revert for now, or work on a new change that explicitly fixes the
+>> Coresight case.
 > 
+> Agreed, I'll take a look. Any chance you could post the full error
+> message? I suspect there's a first error hiding in there too.
+> 
+> Thanks,
+> Ian
+> 
+
+No that seems to be the whole thing, running with -vvv and pasting
+everything:
+
+
+$ perf record -e cs_etm/@tmc_etr0/ -vvv -- true
+event syntax error: 'cs_etm/@tmc_etr0/'
+                           \___ parser error
+Run 'perf list' for a list of valid events
+
+ Usage: perf record [<options>] [<command>]
+    or: perf record [<options>] -- <command> [<options>]
+
+    -e, --event <event>   event selector. use 'perf list' to list
+available events
+
+
+I previously mentioned that this is a Coresight thing, but I saw that it
+may actually be the more generic "drv_str". Unless nothing other than
+Coresight is using it, then it's just a Coresight thing.
+
+>> Thanks
+>> James
+>>
+>>> Signed-off-by: Ian Rogers <irogers@google.com>
+>>> ---
+>>>  tools/perf/util/parse-events.c |   8 +--
+>>>  tools/perf/util/parse-events.l |  11 ---
+>>>  tools/perf/util/parse-events.y | 122 ---------------------------------
+>>>  3 files changed, 1 insertion(+), 140 deletions(-)
+>>>
+>>> diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
+>>> index 02647313c918..0e2004511cf5 100644
+>>> --- a/tools/perf/util/parse-events.c
+>>> +++ b/tools/perf/util/parse-events.c
+>>> @@ -800,13 +800,7 @@ parse_events_config_bpf(struct parse_events_state *parse_state,
+>>>
+>>>                       parse_events_error__handle(parse_state->error, idx,
+>>>                                               strdup(errbuf),
+>>> -                                             strdup(
+>>> -"Hint:\tValid config terms:\n"
+>>> -"     \tmap:[<arraymap>].value<indices>=[value]\n"
+>>> -"     \tmap:[<eventmap>].event<indices>=[event]\n"
+>>> -"\n"
+>>> -"     \twhere <indices> is something like [0,3...5] or [all]\n"
+>>> -"     \t(add -v to see detail)"));
+>>> +                                             NULL);
+>>>                       return err;
+>>>               }
+>>>       }
+>>> diff --git a/tools/perf/util/parse-events.l b/tools/perf/util/parse-events.l
+>>> index 99335ec586ae..d7d084cc4140 100644
+>>> --- a/tools/perf/util/parse-events.l
+>>> +++ b/tools/perf/util/parse-events.l
+>>> @@ -175,7 +175,6 @@ do {                                                      \
+>>>  %x mem
+>>>  %s config
+>>>  %x event
+>>> -%x array
+>>>
+>>>  group                [^,{}/]*[{][^}]*[}][^,{}/]*
+>>>  event_pmu    [^,{}/]+[/][^/]*[/][^,{}/]*
+>>> @@ -251,14 +250,6 @@ non_digit        [^0-9]
+>>>               }
+>>>  }
+>>>
+>>> -<array>{
+>>> -"]"                  { BEGIN(config); return ']'; }
+>>> -{num_dec}            { return value(yyscanner, 10); }
+>>> -{num_hex}            { return value(yyscanner, 16); }
+>>> -,                    { return ','; }
+>>> -"\.\.\."             { return PE_ARRAY_RANGE; }
+>>> -}
+>>> -
+>>>  <config>{
+>>>       /*
+>>>        * Please update config_term_names when new static term is added.
+>>> @@ -302,8 +293,6 @@ r0x{num_raw_hex}  { return str(yyscanner, PE_RAW); }
+>>>  {lc_type}-{lc_op_result}     { return lc_str(yyscanner, _parse_state); }
+>>>  {lc_type}-{lc_op_result}-{lc_op_result}      { return lc_str(yyscanner, _parse_state); }
+>>>  {name_minus}         { return str(yyscanner, PE_NAME); }
+>>> -\[all\]                      { return PE_ARRAY_ALL; }
+>>> -"["                  { BEGIN(array); return '['; }
+>>>  @{drv_cfg_term}              { return drv_str(yyscanner, PE_DRV_CFG_TERM); }
+>>>  }
+>>>
+>>> diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
+>>> index 454577f7aff6..5a90e7874c59 100644
+>>> --- a/tools/perf/util/parse-events.y
+>>> +++ b/tools/perf/util/parse-events.y
+>>> @@ -64,7 +64,6 @@ static void free_list_evsel(struct list_head* list_evsel)
+>>>  %token PE_LEGACY_CACHE
+>>>  %token PE_PREFIX_MEM
+>>>  %token PE_ERROR
+>>> -%token PE_ARRAY_ALL PE_ARRAY_RANGE
+>>>  %token PE_DRV_CFG_TERM
+>>>  %token PE_TERM_HW
+>>>  %type <num> PE_VALUE
+>>> @@ -108,11 +107,6 @@ static void free_list_evsel(struct list_head* list_evsel)
+>>>  %type <list_evsel> groups
+>>>  %destructor { free_list_evsel ($$); } <list_evsel>
+>>>  %type <tracepoint_name> tracepoint_name
+>>> -%destructor { free ($$.sys); free ($$.event); } <tracepoint_name>
+>>> -%type <array> array
+>>> -%type <array> array_term
+>>> -%type <array> array_terms
+>>> -%destructor { free ($$.ranges); } <array>
+>>>  %type <hardware_term> PE_TERM_HW
+>>>  %destructor { free ($$.str); } <hardware_term>
+>>>
+>>> @@ -127,7 +121,6 @@ static void free_list_evsel(struct list_head* list_evsel)
+>>>               char *sys;
+>>>               char *event;
+>>>       } tracepoint_name;
+>>> -     struct parse_events_array array;
+>>>       struct hardware_term {
+>>>               char *str;
+>>>               u64 num;
+>>> @@ -878,121 +871,6 @@ PE_TERM
+>>>
+>>>       $$ = term;
+>>>  }
+>>> -|
+>>> -name_or_raw array '=' name_or_legacy
+>>> -{
+>>> -     struct parse_events_term *term;
+>>> -     int err = parse_events_term__str(&term, PARSE_EVENTS__TERM_TYPE_USER, $1, $4, &@1, &@4);
+>>> -
+>>> -     if (err) {
+>>> -             free($1);
+>>> -             free($4);
+>>> -             free($2.ranges);
+>>> -             PE_ABORT(err);
+>>> -     }
+>>> -     term->array = $2;
+>>> -     $$ = term;
+>>> -}
+>>> -|
+>>> -name_or_raw array '=' PE_VALUE
+>>> -{
+>>> -     struct parse_events_term *term;
+>>> -     int err = parse_events_term__num(&term, PARSE_EVENTS__TERM_TYPE_USER, $1, $4, false, &@1, &@4);
+>>> -
+>>> -     if (err) {
+>>> -             free($1);
+>>> -             free($2.ranges);
+>>> -             PE_ABORT(err);
+>>> -     }
+>>> -     term->array = $2;
+>>> -     $$ = term;
+>>> -}
+>>> -|
+>>> -PE_DRV_CFG_TERM
+>>> -{
+>>> -     struct parse_events_term *term;
+>>> -     char *config = strdup($1);
+>>> -     int err;
+>>> -
+>>> -     if (!config)
+>>> -             YYNOMEM;
+>>> -     err = parse_events_term__str(&term, PARSE_EVENTS__TERM_TYPE_DRV_CFG, config, $1, &@1, NULL);
+>>> -     if (err) {
+>>> -             free($1);
+>>> -             free(config);
+>>> -             PE_ABORT(err);
+>>> -     }
+>>> -     $$ = term;
+>>> -}
+>>> -
+>>> -array:
+>>> -'[' array_terms ']'
+>>> -{
+>>> -     $$ = $2;
+>>> -}
+>>> -|
+>>> -PE_ARRAY_ALL
+>>> -{
+>>> -     $$.nr_ranges = 0;
+>>> -     $$.ranges = NULL;
+>>> -}
+>>> -
+>>> -array_terms:
+>>> -array_terms ',' array_term
+>>> -{
+>>> -     struct parse_events_array new_array;
+>>> -
+>>> -     new_array.nr_ranges = $1.nr_ranges + $3.nr_ranges;
+>>> -     new_array.ranges = realloc($1.ranges,
+>>> -                             sizeof(new_array.ranges[0]) *
+>>> -                             new_array.nr_ranges);
+>>> -     if (!new_array.ranges)
+>>> -             YYNOMEM;
+>>> -     memcpy(&new_array.ranges[$1.nr_ranges], $3.ranges,
+>>> -            $3.nr_ranges * sizeof(new_array.ranges[0]));
+>>> -     free($3.ranges);
+>>> -     $$ = new_array;
+>>> -}
+>>> -|
+>>> -array_term
+>>> -
+>>> -array_term:
+>>> -PE_VALUE
+>>> -{
+>>> -     struct parse_events_array array;
+>>> -
+>>> -     array.nr_ranges = 1;
+>>> -     array.ranges = malloc(sizeof(array.ranges[0]));
+>>> -     if (!array.ranges)
+>>> -             YYNOMEM;
+>>> -     array.ranges[0].start = $1;
+>>> -     array.ranges[0].length = 1;
+>>> -     $$ = array;
+>>> -}
+>>> -|
+>>> -PE_VALUE PE_ARRAY_RANGE PE_VALUE
+>>> -{
+>>> -     struct parse_events_array array;
+>>> -
+>>> -     if ($3 < $1) {
+>>> -             struct parse_events_state *parse_state = _parse_state;
+>>> -             struct parse_events_error *error = parse_state->error;
+>>> -             char *err_str;
+>>> -
+>>> -             if (asprintf(&err_str, "Expected '%ld' to be less-than '%ld'", $3, $1) < 0)
+>>> -                     err_str = NULL;
+>>> -
+>>> -             parse_events_error__handle(error, @1.first_column, err_str, NULL);
+>>> -             YYABORT;
+>>> -     }
+>>> -     array.nr_ranges = 1;
+>>> -     array.ranges = malloc(sizeof(array.ranges[0]));
+>>> -     if (!array.ranges)
+>>> -             YYNOMEM;
+>>> -     array.ranges[0].start = $1;
+>>> -     array.ranges[0].length = $3 - $1 + 1;
+>>> -     $$ = array;
+>>> -}
+>>>
+>>>  sep_dc: ':' |
+>>>
