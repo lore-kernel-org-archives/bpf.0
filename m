@@ -1,42 +1,34 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2EFB3C20
-	for <bpf@vger.kernel.org>; Mon,  4 Sep 2023 11:45:41 +0000 (UTC)
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.216])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 47B121AB;
-	Mon,  4 Sep 2023 04:45:36 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37872442D
+	for <bpf@vger.kernel.org>; Mon,  4 Sep 2023 13:05:09 +0000 (UTC)
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60D35F9;
+	Mon,  4 Sep 2023 06:05:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=JMU8s
-	U9ZldyZxdWa5jQ9IPJKvYaT1NQUbvws9N83oNc=; b=SekLazFZMqmJVUa94F4Az
-	XY12XNjBRGuDWAR5DyWO6TFu8gZFaT8e57RxeSA84K2AYRO6tv2Tl/ky3mA55Cbo
-	pe9sjOF1r3bukVWITPOuNi0W2mE4wOhZ//4mi1PXQrz6wsMoT8lp/95Mn7e5RDJK
-	xIuWrl1HUAqn3J36Z/TVP0=
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=6LzN0
+	UAzG8+m6OJmo1SPcFqvwr26rP6o6hRn4fJfRcE=; b=NpELvzQhnCb13V2aXZBMv
+	vu5J4x4IMD6m0XZuY5pK3qOMpxcoT/xhVu5tAODQ7wjtcd1jCnrWdXrawV1TZ3jN
+	1GZ7NRQTf1ioZRgni8MNMfBpAIcvNYhhe+E5ocDl8neRk0uROpZh2qK4vCJyYILR
+	WAkTdnZqkDsPYENwT2cc/w=
 Received: from localhost.localdomain (unknown [111.35.184.199])
-	by zwqz-smtp-mta-g2-3 (Coremail) with SMTP id _____wA31JCSv_VkIMm5BA--.20917S4;
-	Mon, 04 Sep 2023 19:29:39 +0800 (CST)
+	by zwqz-smtp-mta-g1-1 (Coremail) with SMTP id _____wAna3zK1fVk4xioBA--.12532S4;
+	Mon, 04 Sep 2023 21:04:29 +0800 (CST)
 From: David Wang <00107082@163.com>
-To: fw@strlen.de
-Cc: 00107082@163.com,
-	andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	haoluo@google.com,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kpsingh@kernel.org,
+To: 
+Cc: David Wang <00107082@163.com>,
+	Pablo Neira Ayuso <pablo@netfilter.org>,
+	Jozsef Kadlecsik <kadlec@netfilter.org>,
+	Florian Westphal <fw@strlen.de>,
+	netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org,
 	linux-kernel@vger.kernel.org,
-	martin.lau@linux.dev,
-	sdf@google.com,
-	song@kernel.org,
-	yonghong.song@linux.dev
-Subject: 
-Date: Mon,  4 Sep 2023 19:29:22 +0800
-Message-Id: <20230904112922.13882-1-00107082@163.com>
+	bpf@vger.kernel.org
+Subject: [PATCH] uapi/netfilter: Change netfilter hook verdict code definition from macro to enum
+Date: Mon,  4 Sep 2023 21:02:02 +0800
+Message-Id: <20230904130201.14632-1-00107082@163.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230904104856.GE11802@breakpoint.cc>
-References: <20230904104856.GE11802@breakpoint.cc>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -44,13 +36,13 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wA31JCSv_VkIMm5BA--.20917S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Kr4DZF45Xr1DXF4kZFyxKrg_yoW8Gr47pa
-	y5GaySka1UJF4fKFn7Wry7Za4IyrZ5Za45Jws8tayjk3y3Xry2gw1vkFW0krWfZ3W8Ww1a
-	vFWj9w1rJws3A3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UUpnQUUUUU=
+X-CM-TRANSID:_____wAna3zK1fVk4xioBA--.12532S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tF1rXw4ktFW5Zry3KFW5GFg_yoW8WrWUpF
+	9xCasIyr18WFW3C34vyw1S9F13Jws3AF17ury29ryUWF1rJw4vg3yY9r45t3Z3WrZ2yayj
+	qF1jqw1UC34DZrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pi1xRfUUUUU=
 X-Originating-IP: [111.35.184.199]
-X-CM-SenderInfo: qqqrilqqysqiywtou0bp/xtbBEAfgqmNfu9Xd3gAAsM
+X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiOwHgqmC5nH6kMwAAsc
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
 	FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_BL,
@@ -59,49 +51,51 @@ X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-At 2023-09-04 18:48:56, "Florian Westphal" <fw@strlen.de> wrote:
->David Wang <00107082@163.com> wrote:
->> This sample code implements a simple ipv4
->> blacklist via the new bpf type BPF_PROG_TYPE_NETFILTER,
->> which was introduced in 6.4.
->> 
->> The bpf program drops package if destination ip address
->> hits a match in the map of type BPF_MAP_TYPE_LPM_TRIE,
->> 
->> The userspace code would load the bpf program,
->> attach it to netfilter's FORWARD/OUTPUT hook,
->> and then write ip patterns into the bpf map.
->
->Thanks, I think its good to have this.
+As BPF_PROG_TYPE_NETFILTER was added in 6.4, a netfilter
+bpf program can attach to netfilter hooks, process package
+and return verdict back to netfilter. But those verdict
+codes are defined as macro, which could not be compiled
+into BTF with btf.c. libbpf, and maybe other bpf tools,
+would extract information from BTF and generate a
+common header "vmlinux.h". With macro definition, netfilter
+bpf program would have to redefine those macro again,
+besides including "vmlinux.h".
 
-Thanks for the quick response! Glad to contribute!
+This code change netfilter hook verdict code definition to
+enum, this way,  make it into BTF.
 
->> +
->> +#define NF_DROP 0
->> +#define NF_ACCEPT 1
->
->If you are interested, you could send a patch for nf-next that
->makes the uapi headers expose this as enum, AFAIU that would make
->the verdict nanes available via vmlinux.h.
->
+Signed-off-by: David Wang <00107082@163.com>
+---
+ include/uapi/linux/netfilter.h | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-I think I can work on this.
-
-
->> +	if (pvalue) {
->> +		/* cat /sys/kernel/debug/tracing/trace_pipe */
->> +		bpf_printk("rule matched with %d...\n", *pvalue);
->
->If you are interested you could send a patch that adds a kfunc to
->nf_bpf_link that exposes nf_log_packet() to bpf.
->
->nf_log_packet has a terrible api, I suggest to have the kfunc take
->'struct nf_hook_state *' instead of 6+ members of that struct as
->argument.
->
-
-Package logging strategy is out of my league, for now, but I will keep eye on this.
-
-
-David
+diff --git a/include/uapi/linux/netfilter.h b/include/uapi/linux/netfilter.h
+index 5a79ccb76701..d2f5dfab20dc 100644
+--- a/include/uapi/linux/netfilter.h
++++ b/include/uapi/linux/netfilter.h
+@@ -8,13 +8,15 @@
+ #include <linux/in6.h>
+ 
+ /* Responses from hook functions. */
+-#define NF_DROP 0
+-#define NF_ACCEPT 1
+-#define NF_STOLEN 2
+-#define NF_QUEUE 3
+-#define NF_REPEAT 4
+-#define NF_STOP 5	/* Deprecated, for userspace nf_queue compatibility. */
+-#define NF_MAX_VERDICT NF_STOP
++enum {
++	NF_DROP        = 0,
++	NF_ACCEPT      = 1,
++	NF_STOLEN      = 2,
++	NF_QUEUE       = 3,
++	NF_REPEAT      = 4,
++	NF_STOP        = 5,	/* Deprecated, for userspace nf_queue compatibility. */
++	NF_MAX_VERDICT = NF_STOP,
++};
+ 
+ /* we overload the higher bits for encoding auxiliary data such as the queue
+  * number or errno values. Not nice, but better than additional function
+-- 
+2.20.1
 
