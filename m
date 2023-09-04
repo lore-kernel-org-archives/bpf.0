@@ -1,93 +1,147 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B7A71FD6
-	for <bpf@vger.kernel.org>; Mon,  4 Sep 2023 11:27:12 +0000 (UTC)
-X-Greylist: delayed 920 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 04 Sep 2023 04:27:10 PDT
-Received: from m1326.mail.163.com (m1326.mail.163.com [220.181.13.26])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 52A3BE3;
-	Mon,  4 Sep 2023 04:27:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=oOrvVEuXehCrhaRUsZ2VCWXmwU+bjnfYSuYNWyrf6qI=; b=a
-	qGWbqkNYcFjwMjnHxKN2lK9U6fZkJldhS+2BgRMkx9nijw/KeHXrbyYpriiLjaEy
-	ARPP84jxYEm9IU+OK0UJmzNhG0iyf2OavnM+ws/P3MM1/Y5nbipA3p15EDMw6bYd
-	wE8GDLXhDVf6xmEWji3dpA9eMieLfsKJ1QTYq76S/Q=
-Received: from 00107082$163.com ( [111.35.184.199] ) by ajax-webmail-wmsvr26
- (Coremail) ; Mon, 4 Sep 2023 19:10:23 +0800 (CST)
-X-Originating-IP: [111.35.184.199]
-Date: Mon, 4 Sep 2023 19:10:23 +0800 (CST)
-From: "David Wang" <00107082@163.com>
-To: "Florian Westphal" <fw@strlen.de>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, 
-	"Daniel Borkmann" <daniel@iogearbox.net>, 
-	"Andrii Nakryiko" <andrii@kernel.org>, 
-	"Martin KaFai Lau" <martin.lau@linux.dev>, 
-	"Song Liu" <song@kernel.org>, 
-	"Yonghong Song" <yonghong.song@linux.dev>, 
-	"John Fastabend" <john.fastabend@gmail.com>, 
-	"KP Singh" <kpsingh@kernel.org>, 
-	"Stanislav Fomichev" <sdf@google.com>, "Hao Luo" <haoluo@google.com>, 
-	"Jiri Olsa" <jolsa@kernel.org>, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org
-Subject: Re:Re: [PATCH] samples/bpf: Add sample usage for
- BPF_PROG_TYPE_NETFILTER
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
- Copyright (c) 2002-2023 www.mailtech.cn 163com
-In-Reply-To: <20230904104856.GE11802@breakpoint.cc>
-References: <20230904102128.11476-1-00107082@163.com>
- <20230904104856.GE11802@breakpoint.cc>
-X-NTES-SC: AL_QuySAfSZukAp5SGYYukXn0oTju85XMCzuv8j3YJeN500kynv+QIif0dkG0DQ78y/Cg+UiCCrYQlT+tRgQJJoYbozapZjFwUkO3JyF79fvtYH
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2008C3FF9
+	for <bpf@vger.kernel.org>; Mon,  4 Sep 2023 11:44:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46F5BC433C7;
+	Mon,  4 Sep 2023 11:44:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1693827867;
+	bh=fYR3tc02KRKsQWWGmBLxr9JQRojGSNYY9TDLjFmJUSs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bltXaApYnLmdRt6ZqB6BIbyO2XcnmQKbtZMC+OGux2/kbAyHo1+a6SkQ54MopeAtm
+	 ospAwLs0JrnreoYGzUN4pc4OjZUNLtu79pEdr4WvHhoWzUn9zcVABhNkmws4cKa47g
+	 kMxiR+ftLWeVisIYTpn5HCEc8JOn7gTeFVqbmZXgVuRqijO7oExyjOki4NxC3Mcaww
+	 pPs22gl6fdJ5Ip9bMFpoMDGLWr5Lm6rFbiKRw+kDGtk3leZT+PekUYlKBKjM3igFIf
+	 UovfihIZqpC8zQTtfCvBheaW3vENIofypxiEPEIJ+QeRpm2fgqiN09IO+YmD5w9XRk
+	 BwijyodYuu4yw==
+Date: Mon, 4 Sep 2023 13:44:20 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Michael =?utf-8?B?V2Vpw58=?= <michael.weiss@aisec.fraunhofer.de>
+Cc: Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Quentin Monnet <quentin@isovalent.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	gyroidos@aisec.fraunhofer.de, paul@paul-moore.com,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [PATCH RFC 1/4] bpf: add cgroup device guard to flag a cgroup
+ device prog
+Message-ID: <20230904-harfe-haargenau-4c6cb31c304a@brauner>
+References: <20230814-devcg_guard-v1-0-654971ab88b1@aisec.fraunhofer.de>
+ <20230814-devcg_guard-v1-1-654971ab88b1@aisec.fraunhofer.de>
+ <20230815-feigling-kopfsache-56c2d31275bd@brauner>
+ <20230817221102.6hexih3uki3jf6w3@macbook-pro-8.dhcp.thefacebook.com>
+ <CAJqdLrpx4v4To=XSK0gyM4Ks2+c=Jrni2ttw4ZViKv-jK=tJKQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <3bc1d9a3.5bb6.18a5fe2f185.Coremail.00107082@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:GsGowABXtewgu_VkU9gTAA--.11573W
-X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiMwTgqlXmGU34bgACsO
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJqdLrpx4v4To=XSK0gyM4Ks2+c=Jrni2ttw4ZViKv-jK=tJKQ@mail.gmail.com>
 
-CkF0IDIwMjMtMDktMDQgMTg6NDg6NTYsICJGbG9yaWFuIFdlc3RwaGFsIiA8ZndAc3RybGVuLmRl
-PiB3cm90ZToKPkRhdmlkIFdhbmcgPDAwMTA3MDgyQDE2My5jb20+IHdyb3RlOgo+PiBUaGlzIHNh
-bXBsZSBjb2RlIGltcGxlbWVudHMgYSBzaW1wbGUgaXB2NAo+PiBibGFja2xpc3QgdmlhIHRoZSBu
-ZXcgYnBmIHR5cGUgQlBGX1BST0dfVFlQRV9ORVRGSUxURVIsCj4+IHdoaWNoIHdhcyBpbnRyb2R1
-Y2VkIGluIDYuNC4KPj4gCj4+IFRoZSBicGYgcHJvZ3JhbSBkcm9wcyBwYWNrYWdlIGlmIGRlc3Rp
-bmF0aW9uIGlwIGFkZHJlc3MKPj4gaGl0cyBhIG1hdGNoIGluIHRoZSBtYXAgb2YgdHlwZSBCUEZf
-TUFQX1RZUEVfTFBNX1RSSUUsCj4+IAo+PiBUaGUgdXNlcnNwYWNlIGNvZGUgd291bGQgbG9hZCB0
-aGUgYnBmIHByb2dyYW0sCj4+IGF0dGFjaCBpdCB0byBuZXRmaWx0ZXIncyBGT1JXQVJEL09VVFBV
-VCBob29rLAo+PiBhbmQgdGhlbiB3cml0ZSBpcCBwYXR0ZXJucyBpbnRvIHRoZSBicGYgbWFwLgo+
-Cj5UaGFua3MsIEkgdGhpbmsgaXRzIGdvb2QgdG8gaGF2ZSB0aGlzLgoKVGhhbmtzIGZvciB0aGUg
-cXVpY2sgcmVzcG9uc2UuCj4KPj4gZGlmZiAtLWdpdCBhL3NhbXBsZXMvYnBmL25ldGZpbHRlcl9p
-cDRfYmxhY2tsaXN0LmJwZi5jIGIvc2FtcGxlcy9icGYvbmV0ZmlsdGVyX2lwNF9ibGFja2xpc3Qu
-YnBmLmMKPj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPj4gaW5kZXggMDAwMDAwMDAwMDAwLi5kMzE1
-ZDY0ZmRhN2YKPj4gLS0tIC9kZXYvbnVsbAo+PiArKysgYi9zYW1wbGVzL2JwZi9uZXRmaWx0ZXJf
-aXA0X2JsYWNrbGlzdC5icGYuYwo+PiBAQCAtMCwwICsxLDYyIEBACj4+ICsvLyBTUERYLUxpY2Vu
-c2UtSWRlbnRpZmllcjogR1BMLTIuMAo+PiArCj4+ICsjaW5jbHVkZSAidm1saW51eC5oIgo+PiAr
-I2luY2x1ZGUgPGJwZi9icGZfaGVscGVycy5oPgo+PiArCj4+ICsKPj4gKyNkZWZpbmUgTkZfRFJP
-UCAwCj4+ICsjZGVmaW5lIE5GX0FDQ0VQVCAxCj4KPklmIHlvdSBhcmUgaW50ZXJlc3RlZCwgeW91
-IGNvdWxkIHNlbmQgYSBwYXRjaCBmb3IgbmYtbmV4dCB0aGF0Cj5tYWtlcyB0aGUgdWFwaSBoZWFk
-ZXJzIGV4cG9zZSB0aGlzIGFzIGVudW0sIEFGQUlVIHRoYXQgd291bGQgbWFrZQo+dGhlIHZlcmRp
-Y3QgbmFuZXMgYXZhaWxhYmxlIHZpYSB2bWxpbnV4LmguCj4KSSB0aGluayBJIGNhbiB3b3JrIG9u
-IHRoaXMuCgoKCj4+ICsJLyogc2VhcmNoIHAtPmRhZGRyIGluIHRyaWUgKi8KPj4gKwlrZXkucHJl
-Zml4bGVuID0gMzI7Cj4+ICsJa2V5LmRhdGEgPSBwLT5kYWRkcjsKPj4gKwlwdmFsdWUgPSBicGZf
-bWFwX2xvb2t1cF9lbGVtKCZpcHY0X2xwbV9tYXAsICZrZXkpOwo+PiArCWlmIChwdmFsdWUpIHsK
-Pj4gKwkJLyogY2F0IC9zeXMva2VybmVsL2RlYnVnL3RyYWNpbmcvdHJhY2VfcGlwZSAqLwo+PiAr
-CQlicGZfcHJpbnRrKCJydWxlIG1hdGNoZWQgd2l0aCAlZC4uLlxuIiwgKnB2YWx1ZSk7Cj4KPklm
-IHlvdSBhcmUgaW50ZXJlc3RlZCB5b3UgY291bGQgc2VuZCBhIHBhdGNoIHRoYXQgYWRkcyBhIGtm
-dW5jIHRvCj5uZl9icGZfbGluayB0aGF0IGV4cG9zZXMgbmZfbG9nX3BhY2tldCgpIHRvIGJwZi4K
-Pgo+bmZfbG9nX3BhY2tldCBoYXMgYSB0ZXJyaWJsZSBhcGksIEkgc3VnZ2VzdCB0byBoYXZlIHRo
-ZSBrZnVuYyB0YWtlCj4nc3RydWN0IG5mX2hvb2tfc3RhdGUgKicgaW5zdGVhZCBvZiA2KyBtZW1i
-ZXJzIG9mIHRoYXQgc3RydWN0IGFzCj5hcmd1bWVudC4KPgpMb2dnaW5nIHN0cmF0ZWd5IGlzIG91
-dCBvZiBteSBsZWFndWUsIGJ1dCBJIHdpbGwga2VlcCBleWUgb24gdGhpcy4KCkdsYWQgdG8gY29u
-dHJpYnV0ZS4KCgpEYXZpZAo=
+On Tue, Aug 29, 2023 at 03:35:46PM +0200, Alexander Mikhalitsyn wrote:
+> On Fri, Aug 18, 2023 at 12:11 AM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Tue, Aug 15, 2023 at 10:59:22AM +0200, Christian Brauner wrote:
+> > > On Mon, Aug 14, 2023 at 04:26:09PM +0200, Michael Weiß wrote:
+> > > > Introduce the BPF_F_CGROUP_DEVICE_GUARD flag for BPF_PROG_LOAD
+> > > > which allows to set a cgroup device program to be a device guard.
+> > >
+> > > Currently we block access to devices unconditionally in may_open_dev().
+> > > Anything that's mounted by an unprivileged containers will get
+> > > SB_I_NODEV set in s_i_flags.
+> > >
+> > > Then we currently mediate device access in:
+> > >
+> > > * inode_permission()
+> > >   -> devcgroup_inode_permission()
+> > > * vfs_mknod()
+> > >   -> devcgroup_inode_mknod()
+> > > * blkdev_get_by_dev() // sget()/sget_fc(), other ways to open block devices and friends
+> > >   -> devcgroup_check_permission()
+> > > * drivers/gpu/drm/amd/amdkfd // weird restrictions on showing gpu info afaict
+> > >   -> devcgroup_check_permission()
+> > >
+> > > All your new flag does is to bypass that SB_I_NODEV check afaict and let
+> > > it proceed to the devcgroup_*() checks for the vfs layer.
+> > >
+> > > But I don't get the semantics yet.
+> > > Is that a flag which is set on BPF_PROG_TYPE_CGROUP_DEVICE programs or
+> > > is that a flag on random bpf programs? It looks like it would be the
+> > > latter but design-wise I would expect this to be a property of the
+> > > device program itself.
+> >
+> > Looks like patch 4 attemps to bypass usual permission checks with:
+> > @@ -3976,9 +3979,19 @@ int vfs_mknod(struct mnt_idmap *idmap, struct inode *dir,
+> >         if (error)
+> >                 return error;
+> >
+> > -       if ((S_ISCHR(mode) || S_ISBLK(mode)) && !is_whiteout &&
+> > -           !capable(CAP_MKNOD))
+> > -               return -EPERM;
+> > +       /*
+> > +        * In case of a device cgroup restirction allow mknod in user
+> > +        * namespace. Otherwise just check global capability; thus,
+> > +        * mknod is also disabled for user namespace other than the
+> > +        * initial one.
+> > +        */
+> > +       if ((S_ISCHR(mode) || S_ISBLK(mode)) && !is_whiteout) {
+> > +               if (devcgroup_task_is_guarded(current)) {
+> > +                       if (!ns_capable(current_user_ns(), CAP_MKNOD))
+> > +                               return -EPERM;
+> > +               } else if (!capable(CAP_MKNOD))
+> > +                       return -EPERM;
+> > +       }
+> >
+> 
+> Dear colleagues,
+> 
+> > which pretty much sounds like authoritative LSM that was brought up in the past
+> > and LSM folks didn't like it.
+> 
+> Thanks for pointing this out, Alexei!
+> I've searched through the LKML archives and found a thread about this:
+> https://lore.kernel.org/all/CAEf4BzaBt0W3sWh_L4RRXEFYdBotzVEnQdqC7BO+PNWtD7eSUA@mail.gmail.com/
+> 
+> As far as I understand, disagreement here is about a practice of
+> skipping kernel-built capability checks based
+> on LSM hooks, right?
+> 
+> +CC Paul Moore <paul@paul-moore.com>
+> 
+> >
+> > If vfs folks are ok with this special bypass of permissions in vfs_mknod()
+> > we can talk about kernel->bpf api details.
+> > The way it's done with BPF_F_CGROUP_DEVICE_GUARD flag is definitely no go,
+> > but no point going into bpf details now until agreement on bypass is made.
+
+Afaiu the original concern was specifically about an LSM allowing to
+bypass other LSMs or DAC permissions. But this wouldn't be the case
+here. The general inode access LSM permission mediation is separate from
+specific device access management: the security_inode_permission() LSM
+hook would still be called and thus LSMs restrictions would continue to
+apply exactly as they do now.
+
+For cgroup v1 device access management was a cgroup controller with
+management interface through files. It then was ported to an eBPF
+program attachable to cgroups for cgroup v2. Arguably, it should
+probably have been ported to an LSM hook or a separate LSM and untied
+from cgroups completely. The confusion here seems to indicate that that
+would have been the right way to go.
+
+Because right now device access management seems its own form of
+mandatory access control.
