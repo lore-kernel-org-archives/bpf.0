@@ -1,46 +1,46 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6C6BDDB6
-	for <bpf@vger.kernel.org>; Tue,  5 Sep 2023 21:06:28 +0000 (UTC)
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214C3113;
-	Tue,  5 Sep 2023 14:06:25 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-401bdff4cb4so29679235e9.3;
-        Tue, 05 Sep 2023 14:06:25 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54F24DDB6
+	for <bpf@vger.kernel.org>; Tue,  5 Sep 2023 21:06:30 +0000 (UTC)
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FC51A2;
+	Tue,  5 Sep 2023 14:06:26 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-31977ace1c8so2630322f8f.1;
+        Tue, 05 Sep 2023 14:06:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693947983; x=1694552783; darn=vger.kernel.org;
+        d=gmail.com; s=20221208; t=1693947985; x=1694552785; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6V5hh3IDqle2NIe8ow8Gyr5GKd/nqaX7VxxzXo2o22I=;
-        b=kUo+eOGN3KNIcOkI/jVAIr4UzPdKgu3iLJmz8hUoy9cGyISCUHquj6WeLosf1JMM2H
-         HsEkBnjVs6OLCIFpOT4ux6Svd7L9nN3SfmXACbb79k1mm7Iwx1X+IpUq/5lm/hsqRjX+
-         ZaOfj0a3weG5M3sV/QgkQz4j6npKi7eko0EfCXoKZX6xDTOXvbB0ClXH8oPlC/dgAPq/
-         W9EyOkJjwFC8Ap/J7mnsAJymbM/R5DYTNNI0qrK4YDW79PHeZfoakchqSy1/8O1pzBnk
-         BIDhyVPD15nypTEEI9IaihikLQy+Hp/M/RhPC1zkw5Kno0Cfs94Ykpcyk0cCmb0qjbeM
-         gdxg==
+        bh=uYw2sBIqQ+y5a56KRhVpmKODqheJWAeWBRyQ0D2RtJk=;
+        b=Ly4JFlYbm24kwl42YdGswau5kh6lkGXFqu9iTv+/s508FJEjbNqX5Jp1PYCIFEWrj5
+         8HrhlTwHpYhu/pvcMZWqWZZgB3OIF7YQq2Gifrh9Ux2CnImi98vHVxamgjoYjkB8dhvX
+         HvkWp3FSLvvwSrE5aEzWWjilce0fAiIDMmx4/TheYnZiaThvfcKA1w8R9vhsw2iTWI6l
+         OxdaKA8SIgKKSBQGufzPOTC/fjg7d0FYjXgkywilhmHKOstxZaiOw/kfe7saCqJJygPU
+         pjNQxspFAI66cUMWeEcF++k3Dvquin0XsHEjNJclvyFNvftACW8T8vt1aLx1umDbTusz
+         LP7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693947983; x=1694552783;
+        d=1e100.net; s=20221208; t=1693947985; x=1694552785;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6V5hh3IDqle2NIe8ow8Gyr5GKd/nqaX7VxxzXo2o22I=;
-        b=eRv52OePkH5LwbmlD+8m3YNev2OjnROiOM9cisZzs6nl7ZjJ1ZxVO2FVLFSPGwCqJM
-         NM1Uj2sOLuCAruZYVcLJ4eHTfp0esERbxwa6rL2lMo/rN6PU9CU9YdQjKKEuKZrJImlB
-         gUIEBSQJyHvw1Kwq6+GT8PMYGfuCX46QSdRBaNIW21hN4mbHCljDgHzHWKhApCCUvuNk
-         x2fIgYp7SA8KawaF2Jo6kQt4jBhy+/EIlxenRrReAnog12V7P6Py2ExfQ7Kx08IexMRs
-         mOIFSc9yjipkA+/H+mYHW5Qq/dYOQr4Eb/tkOyV83ea34CPs4ZXL3WDQxcTZ/TA9JO68
-         CjfQ==
-X-Gm-Message-State: AOJu0YzbD4HJ/CSCNeSCmf5DZzObr+RqcmMKhQQNGwscPNHDqrow6SUm
-	fMZk0dPMRQuckGGzNZkQpuQ=
-X-Google-Smtp-Source: AGHT+IFsyitguLWJZO0DaUu9peItyEXtjVqXfTt9cClTQTQLY74x7HHyua3qBZGRWhzdoXoPBISJlw==
-X-Received: by 2002:a5d:4fd1:0:b0:317:6c16:a8a8 with SMTP id h17-20020a5d4fd1000000b003176c16a8a8mr747056wrw.35.1693947983172;
-        Tue, 05 Sep 2023 14:06:23 -0700 (PDT)
+        bh=uYw2sBIqQ+y5a56KRhVpmKODqheJWAeWBRyQ0D2RtJk=;
+        b=KgZCQnef+qqjLAmQOxoeKk6qJS8KcXZ01pvfPA1KuwmUzNwbUTY7t2KmiYwj6UuypH
+         SI3rRlAMkhTgBJRuM+Z1qTjP5qItQUezNgA6TbUJwnJbo9HwRZsfC7MmlJ9NzIHhZ2/l
+         0FjxHozNWLdGK2GGUYhTpBr0YELIMi4kfmzhDhULp5U7mwj+rmYc5Q3ZYSTcVradJirz
+         o3Jw1gjoeh6Vjzrc34DSRyFRwhCxkbVw+itJa1bbbw52kW1Igx5HyLOdXdwAYPsN8Ab4
+         EutN5S5o8FBT4LcxiPXPH5ymyGVSL6oyxsHCASwMjsdFeB80GzTMRx0c5g/zLt9BrClL
+         HJMQ==
+X-Gm-Message-State: AOJu0YzUyqkC52vBCNvzuibfCSLeun5/VlxvKczyCqOsPAgfok7NO4ws
+	lqLa2LVuTbJDsbgWLfmyf4Y=
+X-Google-Smtp-Source: AGHT+IF7OU/wHLI0hWBp0MjehOxhxDJzfWhI/L7w/T7gbyv/9j0KzXFV/0Mi7VTnZsRq1wWlgsz8NA==
+X-Received: by 2002:a5d:508d:0:b0:317:6310:a616 with SMTP id a13-20020a5d508d000000b003176310a616mr734496wrt.36.1693947985047;
+        Tue, 05 Sep 2023 14:06:25 -0700 (PDT)
 Received: from ip-172-31-30-46.eu-west-1.compute.internal (ec2-54-170-241-106.eu-west-1.compute.amazonaws.com. [54.170.241.106])
-        by smtp.gmail.com with ESMTPSA id e18-20020a5d5012000000b00317b063590fsm18427672wrt.55.2023.09.05.14.06.22
+        by smtp.gmail.com with ESMTPSA id e18-20020a5d5012000000b00317b063590fsm18427672wrt.55.2023.09.05.14.06.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Sep 2023 14:06:22 -0700 (PDT)
+        Tue, 05 Sep 2023 14:06:24 -0700 (PDT)
 From: Puranjay Mohan <puranjay12@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -61,9 +61,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: puranjay12@gmail.com
-Subject: [PATCH bpf-next 1/8] arm32, bpf: add support for 32-bit offset jmp instruction
-Date: Tue,  5 Sep 2023 21:06:14 +0000
-Message-Id: <20230905210621.1711859-2-puranjay12@gmail.com>
+Subject: [PATCH bpf-next 3/8] arm32, bpf: add support for sign-extension mov instruction
+Date: Tue,  5 Sep 2023 21:06:16 +0000
+Message-Id: <20230905210621.1711859-4-puranjay12@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230905210621.1711859-1-puranjay12@gmail.com>
 References: <20230905210621.1711859-1-puranjay12@gmail.com>
@@ -81,38 +81,109 @@ X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-The cpuv4 adds unconditional jump with 32-bit offset where the immediate
-field of the instruction is to be used to calculate the jump offset.
+The cpuv4 added a new BPF_MOVSX instruction that sign extends the src
+before moving it to the destination.
 
-BPF_JA | BPF_K | BPF_JMP32 => gotol +imm => PC += imm.
+BPF_ALU | BPF_MOVSX sign extends 8-bit and 16-bit operands into 32-bit
+operands, and zeroes the remaining upper 32 bits.
+
+BPF_ALU64 | BPF_MOVSX sign extends 8-bit, 16-bit, and 32-bit  operands
+into 64-bit operands.
+
+The offset field of the instruction is used to tell the number of bit to
+use for sign-extension. BPF_MOV and BPF_MOVSX have the same code but the
+former sets offset to 0 and the later one sets the offset to 8, 16 or 32
+
+The behaviour of this instruction is dst = (s8,s16,s32)src
+
+On ARM32 the implementation uses LSH and ARSH to extend the 8/16 bits to
+a 32-bit register and then it is sign extended to the upper 32-bit
+register using ARSH. For 32-bit we just move it to the destination
+register and use ARSH to extend it to the upper 32-bit register.
 
 Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
 ---
- arch/arm/net/bpf_jit_32.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ arch/arm/net/bpf_jit_32.c | 35 ++++++++++++++++++++++++++++++-----
+ 1 file changed, 30 insertions(+), 5 deletions(-)
 
 diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
-index 6a1c9fca5260..b26579da770e 100644
+index f7c162479cf2..0a30188de660 100644
 --- a/arch/arm/net/bpf_jit_32.c
 +++ b/arch/arm/net/bpf_jit_32.c
-@@ -1761,10 +1761,15 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 		break;
- 	/* JMP OFF */
- 	case BPF_JMP | BPF_JA:
-+	case BPF_JMP32 | BPF_JA:
- 	{
--		if (off == 0)
-+		if (BPF_CLASS(code) == BPF_JMP32 && imm != 0)
-+			jmp_offset = bpf2a32_offset(i + imm, i, ctx);
-+		else if (BPF_CLASS(code) == BPF_JMP &&  off != 0)
-+			jmp_offset = bpf2a32_offset(i + off, i, ctx);
-+		else
- 			break;
--		jmp_offset = bpf2a32_offset(i+off, i, ctx);
+@@ -747,12 +747,16 @@ static inline void emit_a32_alu_r64(const bool is64, const s8 dst[],
+ }
+ 
+ /* dst = src (4 bytes)*/
+-static inline void emit_a32_mov_r(const s8 dst, const s8 src,
++static inline void emit_a32_mov_r(const s8 dst, const s8 src, const u8 off,
+ 				  struct jit_ctx *ctx) {
+ 	const s8 *tmp = bpf2a32[TMP_REG_1];
+ 	s8 rt;
+ 
+ 	rt = arm_bpf_get_reg32(src, tmp[0], ctx);
++	if (off && off != 32) {
++		emit(ARM_LSL_I(rt, rt, 32 - off), ctx);
++		emit(ARM_ASR_I(rt, rt, 32 - off), ctx);
++	}
+ 	arm_bpf_put_reg32(dst, rt, ctx);
+ }
+ 
+@@ -761,15 +765,15 @@ static inline void emit_a32_mov_r64(const bool is64, const s8 dst[],
+ 				  const s8 src[],
+ 				  struct jit_ctx *ctx) {
+ 	if (!is64) {
+-		emit_a32_mov_r(dst_lo, src_lo, ctx);
++		emit_a32_mov_r(dst_lo, src_lo, 0, ctx);
+ 		if (!ctx->prog->aux->verifier_zext)
+ 			/* Zero out high 4 bytes */
+ 			emit_a32_mov_i(dst_hi, 0, ctx);
+ 	} else if (__LINUX_ARM_ARCH__ < 6 &&
+ 		   ctx->cpu_architecture < CPU_ARCH_ARMv5TE) {
+ 		/* complete 8 byte move */
+-		emit_a32_mov_r(dst_lo, src_lo, ctx);
+-		emit_a32_mov_r(dst_hi, src_hi, ctx);
++		emit_a32_mov_r(dst_lo, src_lo, 0, ctx);
++		emit_a32_mov_r(dst_hi, src_hi, 0, ctx);
+ 	} else if (is_stacked(src_lo) && is_stacked(dst_lo)) {
+ 		const u8 *tmp = bpf2a32[TMP_REG_1];
+ 
+@@ -785,6 +789,24 @@ static inline void emit_a32_mov_r64(const bool is64, const s8 dst[],
+ 	}
+ }
+ 
++/* dst = (signed)src */
++static inline void emit_a32_movsx_r64(const bool is64, const u8 off, const s8 dst[], const s8 src[],
++				      struct jit_ctx *ctx) {
++	const s8 *tmp = bpf2a32[TMP_REG_1];
++	const s8 *rt;
 +
- 		check_imm24(jmp_offset);
- 		emit(ARM_B(jmp_offset), ctx);
- 		break;
++	rt = arm_bpf_get_reg64(dst, tmp, ctx);
++
++	emit_a32_mov_r(dst_lo, src_lo, off, ctx);
++	if (!is64) {
++		if (!ctx->prog->aux->verifier_zext)
++			/* Zero out high 4 bytes */
++			emit_a32_mov_i(dst_hi, 0, ctx);
++	} else {
++		emit(ARM_ASR_I(rt[0], rt[1], 31), ctx);
++	}
++}
++
+ /* Shift operations */
+ static inline void emit_a32_alu_i(const s8 dst, const u32 val,
+ 				struct jit_ctx *ctx, const u8 op) {
+@@ -1445,7 +1467,10 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 				emit_a32_mov_i(dst_hi, 0, ctx);
+ 				break;
+ 			}
+-			emit_a32_mov_r64(is64, dst, src, ctx);
++			if (insn->off)
++				emit_a32_movsx_r64(is64, insn->off, dst, src, ctx);
++			else
++				emit_a32_mov_r64(is64, dst, src, ctx);
+ 			break;
+ 		case BPF_K:
+ 			/* Sign-extend immediate value to destination reg */
 -- 
 2.39.2
 
