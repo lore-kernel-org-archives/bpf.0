@@ -1,190 +1,126 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7F3E12B6A
-	for <bpf@vger.kernel.org>; Thu,  7 Sep 2023 16:23:27 +0000 (UTC)
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8838C4C0A
-	for <bpf@vger.kernel.org>; Thu,  7 Sep 2023 09:23:12 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id af79cd13be357-76f0807acb6so66132185a.1
-        for <bpf@vger.kernel.org>; Thu, 07 Sep 2023 09:23:12 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14BAD12B6A
+	for <bpf@vger.kernel.org>; Thu,  7 Sep 2023 16:25:15 +0000 (UTC)
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F13AAD17
+	for <bpf@vger.kernel.org>; Thu,  7 Sep 2023 09:24:54 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-53fa455cd94so888387a12.2
+        for <bpf@vger.kernel.org>; Thu, 07 Sep 2023 09:24:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1694103720; x=1694708520; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zFJeWKSBFQ9s+pM6/GAF1JD2E7z5XbK3jeVcGgIky0s=;
-        b=TbSeG260GTPT4qAqiyuC9DujTu/lyrTPYAj01s1Eg+yS0JO+ljQS49Y0mqFcofVC6w
-         uN1Fy13QM5ezmS+uueDpNikDCSrL3LpeI5rFCWtTUJlTX9VfPXCVvcZCPkB5Y06zC6dw
-         A4ZUSZvaqlE+rz56R0VTIfYatk/KkbyzH/no5+hmr6F9jY5Ct0GlTxdpFV+aA1Cyz2M/
-         heFgrn6v+DvzM9muLzUsw5gdYSSJzyu7PU44FPEElATrYYXsy310trQiIT7VJfcKKS8i
-         ZijKgst2/bvwW8X0Jcj4ienPg1Otfd1FDwD7FyPgYCR9fYpH0hlJbaCZO9QeGbnOq+gy
-         tZyw==
+        d=gmail.com; s=20221208; t=1694103812; x=1694708612; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dtiwktbF06zdW84B3KfuIGOfxurm/7WZ4sZDBeOrwXM=;
+        b=IXlXT2CwWH95OhRAFvQfIDegMV28DxBI/3FCoEEeMSJ1qTjdoORI+2y9q+/Y7ooKir
+         w7NgNIIb79Wi+fftE4qc0FOXYYJKZ+8hnERVQl8jFYFGkcRSA1dFc+mE1L2vet87tZDr
+         9Jc8VLKpKbvCnIRvuaXcd/mjpzguSXX0grlbKNlOCIayvicHs7bKQR/GKzpvtw7nnsmG
+         xptVAc9ZBDUhq+c9s7PMsm3c81bTMOFqQgL1+NEXqLuwH4mpX2Y/Dz9jxls5lkMrjfR4
+         eqflgj5i3fbC+6P59J6vWTAIZ0pD5vKukvRYtkPSbZhC46467UjSxRGVVPQOII12AeBe
+         1olA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694103720; x=1694708520;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=zFJeWKSBFQ9s+pM6/GAF1JD2E7z5XbK3jeVcGgIky0s=;
-        b=dv26d9ltnwRobjtQmLEKnk16JA9Y7FnroshZ7zeUueyWVeRJoGJcPcXZeEhbXFBB8F
-         b7g/VQ8IiIPwuDxHbWzwwxIMjsGlhGKnZejv6Nr97AdiMB2UjgICofdfoCjgvo8v4DGy
-         z/yC3TiZv/k6+VGi55EMjHpYhnyhexG6Qcs8SBxnIkLal37rvbbi3gLTHtT5HSZWUU4F
-         Uvn8BAt/N5v92wOVUGW4YpLCW9als7JkOFtbls5Ja99sOshLfwk4GUCWPTmy0+bGzE4O
-         iNm777IxABZcxV86LYf22EKYqhmO5+YBazViOZXxfNyfcZy08bazPYX8kFrFnPbXztlH
-         S6jQ==
-X-Gm-Message-State: AOJu0YxHk8qloWeCXYSdm7DgY4kD2q8AbSgxJhOo2SrNFMuqhXOvAjK8
-	MoRfkM68XjpLoS4mwcC8ZhZXH7piZvKerx5tSDE=
-X-Google-Smtp-Source: AGHT+IG+rSvacO9rHqr6N1+W3lw5GRcqJOtCUKh0uMMSa4vqE7HuDQQ6tp0Ol/iFld40s6YJ50eLuw==
-X-Received: by 2002:a17:90b:212:b0:271:ae19:c608 with SMTP id fy18-20020a17090b021200b00271ae19c608mr17569510pjb.41.1694088146743;
-        Thu, 07 Sep 2023 05:02:26 -0700 (PDT)
-Received: from [10.84.145.144] ([203.208.167.147])
-        by smtp.gmail.com with ESMTPSA id ik21-20020a170902ab1500b001b9f032bb3dsm12934327plb.3.2023.09.07.05.02.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Sep 2023 05:02:26 -0700 (PDT)
-Message-ID: <c24a5de1-33c6-0469-9902-27292660654e@bytedance.com>
-Date: Thu, 7 Sep 2023 20:02:19 +0800
+        d=1e100.net; s=20221208; t=1694103812; x=1694708612;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dtiwktbF06zdW84B3KfuIGOfxurm/7WZ4sZDBeOrwXM=;
+        b=WFTIYTPRxSRq0kLskUWT86zkIQiB9AekA5GtIh18DTjfdNzThmz1Fvv1q2RR/fzmHO
+         5K6//u2URkFZ20NUPnrECq/9snRUQAVjnZfC7B6/UUGOb5L0YeLETOnjqe8wmuamYcg1
+         xLmc+jptOhROKiP3qFx2946vcht1szVz9wslAQTsVbHWZ/08f2PxHxp7K4Yad6j4j/3e
+         +1itSojSOHU0GXsBVjy+hUlA0JLa+bIUuYVN5xtMZWZdDCX8buKAYNX+10QfOajpukIQ
+         QHFCzDCUou81M6ItfKVtP+aBmniyzjRtHW0I/9pSrLKzATzCNe82TuMVZz2/DL18ASBv
+         YkcQ==
+X-Gm-Message-State: AOJu0YwJFIXrIAfj93cE+8mCCVNAQ2vOFv8bL3TxrkGJ3CRwqs1atYho
+	Qt0ZEHAbHY7Mzuac3rgO4ROvp8Ov67WIsQ==
+X-Google-Smtp-Source: AGHT+IF7yYSiIF04SIufxciqiPaszWdYUpImojf6ajby0qTBkK1RuRrZSmjGgSco/0vMiKKgd+muNw==
+X-Received: by 2002:a05:6a00:b87:b0:68b:4e07:1358 with SMTP id g7-20020a056a000b8700b0068b4e071358mr18186595pfj.11.1694065389763;
+        Wed, 06 Sep 2023 22:43:09 -0700 (PDT)
+Received: from ubuntu.. ([43.132.98.117])
+        by smtp.googlemail.com with ESMTPSA id q7-20020a637507000000b00570574feda0sm11860963pgc.19.2023.09.06.22.43.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Sep 2023 22:43:09 -0700 (PDT)
+From: Hengqi Chen <hengqi.chen@gmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	alan.maguire@oracle.com,
+	olsajiri@gmail.com,
+	hengqi.chen@gmail.com
+Subject: [PATCH bpf-next v2 0/3] libbpf: Support symbol versioning for uprobe
+Date: Tue,  5 Sep 2023 15:12:54 +0000
+Message-Id: <20230905151257.729192-1-hengqi.chen@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.15.0
-Subject: Re: [RFC PATCH bpf-next 2/4] bpf: Introduce process open coded
- iterator kfuncs
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@kernel.org>, LKML <linux-kernel@vger.kernel.org>
-References: <20230827072057.1591929-1-zhouchuyi@bytedance.com>
- <20230827072057.1591929-3-zhouchuyi@bytedance.com>
- <CAADnVQLKytNcAF_LkMgMJ1sq9Tv8QMNc3En7Psuxg+=FXP+B-A@mail.gmail.com>
- <e5e986a0-0bb9-6611-77f0-f8472346965e@bytedance.com>
- <CAADnVQL-ZGV6C7VWdQpX64f0+gokE5MLBO3F2J3WyMoq-_NCPg@mail.gmail.com>
-From: Chuyi Zhou <zhouchuyi@bytedance.com>
-In-Reply-To: <CAADnVQL-ZGV6C7VWdQpX64f0+gokE5MLBO3F2J3WyMoq-_NCPg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hello,
-在 2023/9/7 01:17, Alexei Starovoitov 写道:
-[...cut...]
->>> This iter can be used in all ctx-s which is nice, but let's
->>> make the verifier enforce rcu_read_lock/unlock done by bpf prog
->>> instead of doing in the ctor/dtor of iter, since
->>> in sleepable progs the verifier won't recognize that body is RCU CS.
->>> We'd need to teach the verifier to allow bpf_iter_process_new()
->>> inside in_rcu_cs() and make sure there is no rcu_read_unlock
->>> while BPF_ITER_STATE_ACTIVE.
->>> bpf_iter_process_destroy() would become a nop.
->>
->> Thanks for your review!
->>
->> I think bpf_iter_process_{new, next, destroy} should be protected by
->> bpf_rcu_read_lock/unlock explicitly whether the prog is sleepable or
->> not, right?
-> 
-> Correct. By explicit bpf_rcu_read_lock() in case of sleepable progs
-> or just by using them in normal bpf progs that have implicit rcu_read_lock()
-> done before calling into them.
-Thanks for your explanation, I missed the latter.
-> 
->> I'm not very familiar with the BPF verifier, but I believe
->> there is still a risk in directly calling these kfuns even if
->> in_rcu_cs() is true.
->>
->> Maby what we actually need here is to enforce BPF verifier to check
->> env->cur_state->active_rcu_lock is true when we want to call these kfuncs.
-> 
-> active_rcu_lock means explicit bpf_rcu_read_lock.
-> Currently we do allow bpf_rcu_read_lock in non-sleepable, but it's pointless.
-> 
-> Technically we can extend the check:
->                  if (in_rbtree_lock_required_cb(env) && (rcu_lock ||
-> rcu_unlock)) {
->                          verbose(env, "Calling
-> bpf_rcu_read_{lock,unlock} in unnecessary rbtree callback\n");
->                          return -EACCES;
->                  }
-> to discourage their use in all non-sleepable, but it will break some progs.
-> 
-> I think it's ok to check in_rcu_cs() to allow bpf_iter_process_*().
-> If bpf prog adds explicit and unnecessary bpf_rcu_read_lock() around
-> the iter ops it won't do any harm.
-> Just need to make sure that rcu unlock logic:
->                  } else if (rcu_unlock) {
->                          bpf_for_each_reg_in_vstate(env->cur_state,
-> state, reg, ({
->                                  if (reg->type & MEM_RCU) {
->                                          reg->type &= ~(MEM_RCU |
-> PTR_MAYBE_NULL);
->                                          reg->type |= PTR_UNTRUSTED;
->                                  }
->                          }));
-> clears iter state that depends on rcu.
-> 
-> I thought about changing mark_stack_slots_iter() to do
-> st->type = PTR_TO_STACK | MEM_RCU;
-> so that the above clearing logic kicks in,
-> but it might be better to have something iter specific.
-> is_iter_reg_valid_init() should probably be changed to
-> make sure reg->type is not UNTRUSTED.
-> 
-Maybe it's something looks like the following?
+Dynamic symbols in shared library may have the same name, for example:
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index bb78212fa5b2..9185c4a40a21 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1172,7 +1172,15 @@ static bool is_dynptr_type_expected(struct 
-bpf_verifier_env *env, struct bpf_reg
+    $ nm -D /lib/x86_64-linux-gnu/libc.so.6 | grep rwlock_wrlock
+    000000000009b1a0 T __pthread_rwlock_wrlock@GLIBC_2.2.5
+    000000000009b1a0 T pthread_rwlock_wrlock@@GLIBC_2.34
+    000000000009b1a0 T pthread_rwlock_wrlock@GLIBC_2.2.5
 
-  static void __mark_reg_known_zero(struct bpf_reg_state *reg);
+    $ readelf -W --dyn-syms /lib/x86_64-linux-gnu/libc.so.6 | grep rwlock_wrlock
+      706: 000000000009b1a0   878 FUNC    GLOBAL DEFAULT   15 __pthread_rwlock_wrlock@GLIBC_2.2.5
+      2568: 000000000009b1a0   878 FUNC    GLOBAL DEFAULT   15 pthread_rwlock_wrlock@@GLIBC_2.34
+      2571: 000000000009b1a0   878 FUNC    GLOBAL DEFAULT   15 pthread_rwlock_wrlock@GLIBC_2.2.5
 
-+static bool in_rcu_cs(struct bpf_verifier_env *env);
-+
-+/* check whether we are using bpf_iter_process_*() or bpf_iter_css_*() */
-+static bool is_iter_need_rcu(struct bpf_kfunc_call_arg_meta *meta)
-+{
-+
-+}
-  static int mark_stack_slots_iter(struct bpf_verifier_env *env,
-+                                struct bpf_kfunc_call_arg_meta *meta,
-                                  struct bpf_reg_state *reg, int insn_idx,
-                                  struct btf *btf, u32 btf_id, int nr_slots)
-  {
-@@ -1193,6 +1201,12 @@ static int mark_stack_slots_iter(struct 
-bpf_verifier_env *env,
+There are two pthread_rwlock_wrlock symbols in libc.so .dynsym section.
+The one with @@ is the default version, the other is hidden.
+Note that the version info is stored in .gnu.version and .gnu.version_d
+sections of libc and the two symbols are at the _same_ offset.
 
-                 __mark_reg_known_zero(st);
-                 st->type = PTR_TO_STACK; /* we don't have dedicated reg 
-type */
-+               if (is_iter_need_rcu(meta)) {
-+                       if (in_rcu_cs(env))
-+                               st->type |= MEM_RCU;
-+                       else
-+                               st->type |= PTR_UNTRUSTED;
-+               }
-                 st->live |= REG_LIVE_WRITTEN;
-                 st->ref_obj_id = i == 0 ? id : 0;
-                 st->iter.btf = btf;
-@@ -1281,6 +1295,8 @@ static bool is_iter_reg_valid_init(struct 
-bpf_verifier_env *env, struct bpf_reg_
-                 struct bpf_stack_state *slot = &state->stack[spi - i];
-                 struct bpf_reg_state *st = &slot->spilled_ptr;
+Currently, specify `pthread_rwlock_wrlock`, `pthread_rwlock_wrlock@@GLIBC_2.34`
+or `pthread_rwlock_wrlock@GLIBC_2.2.5` in bpf_uprobe_opts::func_name won't work.
+Because there are two `pthread_rwlock_wrlock` in .dynsym sections without the
+version suffix and both are global bind.
 
-+               if (st->type & PTR_UNTRUSTED)
-+                       return false;
-                 /* only main (first) slot has ref_obj_id set */
-                 if (i == 0 && !st->ref_obj_id)
-                         return false;
+We could solve this by introducing symbol versioning ([0]). So that users can
+specify func, func@LIB_VERSION or func@@LIB_VERSION to attach a uprobe.
 
-> Andrii,
-> do you have better suggestions?
+This patchset resolves symbol conflicts and add symbol versioning for uprobe.
+  - Patch 1 resolves symbol conflicts at the same offset
+  - Patch 2 adds symbol versioning for dynsym
+  - Patch 3 adds selftests for the above changes
+
+Changes from v1:
+  - Address comments from Alan and Jiri
+  - Add selftests (Someone reminds me that there is an attempt at [1]
+    and part of the selftest code from Andrii is taken from there)
+
+  [0]: https://refspecs.linuxfoundation.org/LSB_5.0.0/LSB-Core-generic/LSB-Core-generic/symversion.html
+  [1]: https://lore.kernel.org/lkml/CAEf4BzZTrjjyyOm3ak9JsssPSh6T_ZmGd677a2rt5e5rBLUrpQ@mail.gmail.com/
+
+Hengqi Chen (3):
+  libbpf: Resolve symbol conflicts at the same offset for uprobe
+  libbpf: Support symbol versioning for uprobe
+  selftests/bpf: Add tests for symbol versioning for uprobe
+
+ tools/lib/bpf/elf.c                           | 150 ++++++++++++++++--
+ tools/lib/bpf/libbpf.c                        |   2 +-
+ tools/testing/selftests/bpf/Makefile          |   5 +-
+ .../testing/selftests/bpf/liburandom_read.map |  15 ++
+ .../testing/selftests/bpf/prog_tests/uprobe.c |  95 +++++++++++
+ .../testing/selftests/bpf/progs/test_uprobe.c |  61 +++++++
+ tools/testing/selftests/bpf/urandom_read.c    |   9 ++
+ .../testing/selftests/bpf/urandom_read_lib1.c |  41 +++++
+ 8 files changed, 361 insertions(+), 17 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/liburandom_read.map
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/uprobe.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_uprobe.c
+
+--
+2.34.1
