@@ -1,46 +1,46 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9250101C2
-	for <bpf@vger.kernel.org>; Tue,  5 Sep 2023 21:06:29 +0000 (UTC)
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD4E13E;
-	Tue,  5 Sep 2023 14:06:25 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fef56f7248so29092625e9.3;
-        Tue, 05 Sep 2023 14:06:25 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35A4A101C2
+	for <bpf@vger.kernel.org>; Tue,  5 Sep 2023 21:06:31 +0000 (UTC)
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCC6B3;
+	Tue,  5 Sep 2023 14:06:29 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-31c6cd238e0so181538f8f.0;
+        Tue, 05 Sep 2023 14:06:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693947984; x=1694552784; darn=vger.kernel.org;
+        d=gmail.com; s=20221208; t=1693947987; x=1694552787; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CwquC/nnDI7T/ZG1VkEe4vm26r8Eh5aZWTrEcG67A7A=;
-        b=ogzWoEoCwZZX0FD0DLSju5DPTLU9khObOdupZlj/uhVoSAmfZD9xEvxMEQYVXSGTlH
-         q7/oWAbb8hyJtp5OFvp9Rfm9001ogO9zpJYpPYKx9Cyjx6N30IqFUPt1SVU7xpRWRx7C
-         erkolG24bNyjsKE+hT6F6f8FT0LSAy6Wf6Lsej3Eedb2k3AQRF/D1lDHvs2OIt0HAR26
-         RheJxoaZ+9mbScP5ZYOROTAWvI9xsg7mEndTgB2vlny4ZfSCElRwp/ZVTzDSdRk61VZj
-         N76UXiYukM+rCrbwzSWn9TeMXd6rZacUa9DfVFh0WMYwRvFcReb8xVaoLQdQ6mSMKtuY
-         N1Yw==
+        bh=58eTHaDYZzO5ySLrzOeJSkgTs9llcVOEi3kOQ2Fo+FM=;
+        b=TOGMUJaq41otyBk1ntWFhoQGd7/93LcA9Q3LS07AhRLm815fhN0h7BsefovrUx8V7t
+         exDTCODqTQj16a5/FYGmivD9w2C7widul/75+prpKBLo0Af+wmh2MB1ZpXmfGu3sJAMv
+         N7hbHYvKOczTSerjSNpf9f2zP8C3hK9OvQ6gm3Synbb639h95g1VnahqzNM29Ez1L6r6
+         6qnpEDp1HYqx+Bpk/bKKpcTPCI0z1mTeWbHHdTZIGEm1EIhbmjs2dtdrkGkTlg4/7crc
+         zjsHChi23LZgvBr/ALBnVd1z1boYeDLzuC/MtJqlZITqfoF5hKjZkuT6MVx/S7fIbdaS
+         dJ9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693947984; x=1694552784;
+        d=1e100.net; s=20221208; t=1693947987; x=1694552787;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CwquC/nnDI7T/ZG1VkEe4vm26r8Eh5aZWTrEcG67A7A=;
-        b=ibtM9EQWZgm7KDblWQ6bLaOuTHKY3j4eQoChk8pFcmeaLKN9dbMncmTyq5ra30zRX9
-         u/PzxTGGNzFeS2bN3yEfXJKGoz+qf2/pbrKONgUW17siNcK+/CnN5npAlSyN+uApGLXR
-         Elhakq7zdboiW/sbmMlaoSzmBxS3GtzoZ+SpUZ5kFNWsf3+bNhkhEk7/XsxYJkaUpK1W
-         vW3hsw4Ojy3GT4p85fxjIjsUAMiNnzGvZgZMnz9da8QNCaCy34ge/fSiBquA5R4yUG3c
-         GBGe7gYCGVL0ZadKABAWCmvdV+i/GM/fgA5gHqnIR1G0Q4Js8RLn+eE7SdCdywWDkRD/
-         2HTA==
-X-Gm-Message-State: AOJu0YygJY+j+F6L+DaedsdD2p1Oz/kKE7sdGk6Hycj1U9mFiA7zipn9
-	Kng57BrPrZ99hSlKaiJxs8w=
-X-Google-Smtp-Source: AGHT+IHKpJIXt9w3hLunKRC4nLADCMpDxptUOsD0paIfnpBLl10KUBID17zOR4PNE74VCPb0Vle71A==
-X-Received: by 2002:a7b:cd96:0:b0:3fb:a0fc:1ba1 with SMTP id y22-20020a7bcd96000000b003fba0fc1ba1mr636373wmj.35.1693947983968;
-        Tue, 05 Sep 2023 14:06:23 -0700 (PDT)
+        bh=58eTHaDYZzO5ySLrzOeJSkgTs9llcVOEi3kOQ2Fo+FM=;
+        b=Q2YmTwLrqheNwV/ki1bvq5/7wb9HBlirhAcbGjaLdjct+nRT0KKc4kQ4oHlIWsTs+1
+         xfV0HD5/Q1JciQwpYBADhUbxFB7HOk6XSyK8yh+bo5PKt9I9RtDw8eus0hMobM5ymWTf
+         rk/mJjIcQU+Npi+C7HZ/bYHenOg9Lx00sA0+gB/rmF2kODZ65d3P+qrlMCVLpfa5TnnD
+         cz4nr+g+9zpefdWnIYF+Y8Z53WMcUxRltcYHs6mD1Mdy5tBYBuFSaMCoa9MCivrnOmmB
+         QElF/mLiJ3XLtq6+tq0Ki3fCOwQNzC776VvKZqt+hJkV+z4t73Cztn/D12w0jyT93mSX
+         iK4Q==
+X-Gm-Message-State: AOJu0Yz+1r3D36E1K5dU8Hh3VsnSH8HBPOIDZ8PplU+xJ+hLGebb0yAb
+	5mH/ttD+dGcoZ1ofUEjxk00=
+X-Google-Smtp-Source: AGHT+IFubmemnG3ZtDkEqPVHtWmumvX4j8Rtv4Uxe4mKV/fj31ZYJRG0xMAZx5AhbeR2cRt21X3Y6w==
+X-Received: by 2002:adf:e94e:0:b0:319:70c8:6e90 with SMTP id m14-20020adfe94e000000b0031970c86e90mr794163wrn.24.1693947987474;
+        Tue, 05 Sep 2023 14:06:27 -0700 (PDT)
 Received: from ip-172-31-30-46.eu-west-1.compute.internal (ec2-54-170-241-106.eu-west-1.compute.amazonaws.com. [54.170.241.106])
-        by smtp.gmail.com with ESMTPSA id e18-20020a5d5012000000b00317b063590fsm18427672wrt.55.2023.09.05.14.06.23
+        by smtp.gmail.com with ESMTPSA id e18-20020a5d5012000000b00317b063590fsm18427672wrt.55.2023.09.05.14.06.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Sep 2023 14:06:23 -0700 (PDT)
+        Tue, 05 Sep 2023 14:06:26 -0700 (PDT)
 From: Puranjay Mohan <puranjay12@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -61,9 +61,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: puranjay12@gmail.com
-Subject: [PATCH bpf-next 2/8] arm32, bpf: add support for sign-extension load instruction
-Date: Tue,  5 Sep 2023 21:06:15 +0000
-Message-Id: <20230905210621.1711859-3-puranjay12@gmail.com>
+Subject: [PATCH bpf-next 5/8] arm32, bpf: add support for 32-bit signed division
+Date: Tue,  5 Sep 2023 21:06:18 +0000
+Message-Id: <20230905210621.1711859-6-puranjay12@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230905210621.1711859-1-puranjay12@gmail.com>
 References: <20230905210621.1711859-1-puranjay12@gmail.com>
@@ -81,141 +81,106 @@ X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-The cpuv4 added the support of an instruction that is similar to load
-but also sign-extends the result after the load.
+The cpuv4 added a new BPF_SDIV instruction that does signed division.
+The encoding is similar to BPF_DIV but BPF_SDIV sets offset=1.
 
-BPF_MEMSX | <size> | BPF_LDX means dst = *(signed size *) (src + offset)
-here <size> can be one of BPF_B, BPF_H, BPF_W.
-
-ARM32 has instructions to load a byte or a half word with sign
-extension into a 32bit register. As the JIT uses two 32 bit registers
-to simulate a 64-bit BPF register, an extra instruction is emitted to
-sign-extent the result up to the second register.
+ARM32 already supports 32-bit BPF_DIV which can be easily extended to
+support BPF_SDIV as ARM32 has the SDIV instruction. When the CPU is not
+ARM-v7, we implement that SDIV/SMOD with the function call similar to
+the implementation of DIV/MOD.
 
 Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
 ---
- arch/arm/net/bpf_jit_32.c | 69 ++++++++++++++++++++++++++++++++++++++-
+ arch/arm/net/bpf_jit_32.c | 26 ++++++++++++++++++++------
  arch/arm/net/bpf_jit_32.h |  2 ++
- 2 files changed, 70 insertions(+), 1 deletion(-)
+ 2 files changed, 22 insertions(+), 6 deletions(-)
 
 diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
-index b26579da770e..f7c162479cf2 100644
+index 09496203f13e..f580ecf75710 100644
 --- a/arch/arm/net/bpf_jit_32.c
 +++ b/arch/arm/net/bpf_jit_32.c
-@@ -333,6 +333,9 @@ static u32 arm_bpf_ldst_imm8(u32 op, u8 rt, u8 rn, s16 imm8)
- #define ARM_LDRD_I(rt, rn, off)	arm_bpf_ldst_imm8(ARM_INST_LDRD_I, rt, rn, off)
- #define ARM_LDRH_I(rt, rn, off)	arm_bpf_ldst_imm8(ARM_INST_LDRH_I, rt, rn, off)
- 
-+#define ARM_LDRSH_I(rt, rn, off) arm_bpf_ldst_imm8(ARM_INST_LDRSH_I, rt, rn, off)
-+#define ARM_LDRSB_I(rt, rn, off) arm_bpf_ldst_imm8(ARM_INST_LDRSB_I, rt, rn, off)
-+
- #define ARM_STR_I(rt, rn, off)	arm_bpf_ldst_imm12(ARM_INST_STR_I, rt, rn, off)
- #define ARM_STRB_I(rt, rn, off)	arm_bpf_ldst_imm12(ARM_INST_STRB_I, rt, rn, off)
- #define ARM_STRD_I(rt, rn, off)	arm_bpf_ldst_imm8(ARM_INST_STRD_I, rt, rn, off)
-@@ -1026,6 +1029,24 @@ static bool is_ldst_imm(s16 off, const u8 size)
- 	return -off_max <= off && off <= off_max;
+@@ -228,6 +228,16 @@ static u32 jit_mod32(u32 dividend, u32 divisor)
+ 	return dividend % divisor;
  }
  
-+static bool is_ldst_imm8(s16 off, const u8 size)
++static s32 jit_sdiv32(s32 dividend, s32 divisor)
 +{
-+	s16 off_max = 0;
-+
-+	switch (size) {
-+	case BPF_B:
-+		off_max = 0xff;
-+		break;
-+	case BPF_W:
-+		off_max = 0xfff;
-+		break;
-+	case BPF_H:
-+		off_max = 0xff;
-+		break;
-+	}
-+	return -off_max <= off && off <= off_max;
++	return dividend / divisor;
 +}
 +
- /* *(size *)(dst + off) = src */
- static inline void emit_str_r(const s8 dst, const s8 src[],
- 			      s16 off, struct jit_ctx *ctx, const u8 sz){
-@@ -1105,6 +1126,45 @@ static inline void emit_ldx_r(const s8 dst[], const s8 src,
- 	arm_bpf_put_reg64(dst, rd, ctx);
++static s32 jit_smod32(s32 dividend, s32 divisor)
++{
++	return dividend % divisor;
++}
++
+ static inline void _emit(int cond, u32 inst, struct jit_ctx *ctx)
+ {
+ 	inst |= (cond << 28);
+@@ -477,7 +487,7 @@ static inline int epilogue_offset(const struct jit_ctx *ctx)
+ 	return to - from - 2;
  }
  
-+/* dst = *(signed size*)(src + off) */
-+static inline void emit_ldsx_r(const s8 dst[], const s8 src,
-+			       s16 off, struct jit_ctx *ctx, const u8 sz){
-+	const s8 *tmp = bpf2a32[TMP_REG_1];
-+	const s8 *rd = is_stacked(dst_lo) ? tmp : dst;
-+	s8 rm = src;
+-static inline void emit_udivmod(u8 rd, u8 rm, u8 rn, struct jit_ctx *ctx, u8 op)
++static inline void emit_udivmod(u8 rd, u8 rm, u8 rn, struct jit_ctx *ctx, u8 op, u8 sign)
+ {
+ 	const int exclude_mask = BIT(ARM_R0) | BIT(ARM_R1);
+ 	const s8 *tmp = bpf2a32[TMP_REG_1];
+@@ -485,9 +495,10 @@ static inline void emit_udivmod(u8 rd, u8 rm, u8 rn, struct jit_ctx *ctx, u8 op)
+ #if __LINUX_ARM_ARCH__ == 7
+ 	if (elf_hwcap & HWCAP_IDIVA) {
+ 		if (op == BPF_DIV)
+-			emit(ARM_UDIV(rd, rm, rn), ctx);
++			sign ? emit(ARM_SDIV(rd, rm, rn), ctx) : emit(ARM_UDIV(rd, rm, rn), ctx);
+ 		else {
+-			emit(ARM_UDIV(ARM_IP, rm, rn), ctx);
++			sign ? emit(ARM_SDIV(ARM_IP, rm, rn), ctx) :
++				emit(ARM_UDIV(ARM_IP, rm, rn), ctx);
+ 			emit(ARM_MLS(rd, rn, ARM_IP, rm), ctx);
+ 		}
+ 		return;
+@@ -515,8 +526,11 @@ static inline void emit_udivmod(u8 rd, u8 rm, u8 rn, struct jit_ctx *ctx, u8 op)
+ 	emit(ARM_PUSH(CALLER_MASK & ~exclude_mask), ctx);
+ 
+ 	/* Call appropriate function */
+-	emit_mov_i(ARM_IP, op == BPF_DIV ?
+-		   (u32)jit_udiv32 : (u32)jit_mod32, ctx);
++	if (sign)
++		emit_mov_i(ARM_IP, op == BPF_DIV ? (u32)jit_sdiv32 : (u32)jit_smod32, ctx);
++	else
++		emit_mov_i(ARM_IP, op == BPF_DIV ? (u32)jit_udiv32 : (u32)jit_mod32, ctx);
 +
-+	if (!is_ldst_imm8(off, sz)) {
-+		emit_a32_mov_i(tmp[0], off, ctx);
-+		emit(ARM_ADD_R(tmp[0], tmp[0], src), ctx);
-+		rm = tmp[0];
-+		off = 0;
-+	} else if (rd[1] == rm) {
-+		emit(ARM_MOV_R(tmp[0], rm), ctx);
-+		rm = tmp[0];
-+	}
-+	switch (sz) {
-+	case BPF_B:
-+		/* Load a Byte with sign extension*/
-+		emit(ARM_LDRSB_I(rd[1], rm, off), ctx);
-+		/* Carry the sign extension to upper 32 bits */
-+		emit(ARM_ASR_I(rd[0], rd[1], 31), ctx);
-+		break;
-+	case BPF_H:
-+		/* Load a HalfWord with sign extension*/
-+		emit(ARM_LDRSH_I(rd[1], rm, off), ctx);
-+		/* Carry the sign extension to upper 32 bits */
-+		emit(ARM_ASR_I(rd[0], rd[1], 31), ctx);
-+		break;
-+	case BPF_W:
-+		/* Load a Word*/
-+		emit(ARM_LDR_I(rd[1], rm, off), ctx);
-+		/* Carry the sign extension to upper 32 bits */
-+		emit(ARM_ASR_I(rd[0], rd[1], 31), ctx);
-+		break;
-+	}
-+	arm_bpf_put_reg64(dst, rd, ctx);
-+}
-+
- /* Arithmatic Operation */
- static inline void emit_ar_r(const u8 rd, const u8 rt, const u8 rm,
- 			     const u8 rn, struct jit_ctx *ctx, u8 op,
-@@ -1603,8 +1663,15 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 	case BPF_LDX | BPF_MEM | BPF_H:
- 	case BPF_LDX | BPF_MEM | BPF_B:
- 	case BPF_LDX | BPF_MEM | BPF_DW:
-+	/* LDSX: dst = *(signed size *)(src + off) */
-+	case BPF_LDX | BPF_MEMSX | BPF_B:
-+	case BPF_LDX | BPF_MEMSX | BPF_H:
-+	case BPF_LDX | BPF_MEMSX | BPF_W:
- 		rn = arm_bpf_get_reg32(src_lo, tmp2[1], ctx);
--		emit_ldx_r(dst, rn, off, ctx, BPF_SIZE(code));
-+		if (BPF_MODE(insn->code) == BPF_MEMSX)
-+			emit_ldsx_r(dst, rn, off, ctx, BPF_SIZE(code));
-+		else
-+			emit_ldx_r(dst, rn, off, ctx, BPF_SIZE(code));
- 		break;
- 	/* speculation barrier */
- 	case BPF_ST | BPF_NOSPEC:
+ 	emit_blx_r(ARM_IP, ctx);
+ 
+ 	/* Restore caller-saved registers from stack */
+@@ -1546,7 +1560,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 			rt = src_lo;
+ 			break;
+ 		}
+-		emit_udivmod(rd_lo, rd_lo, rt, ctx, BPF_OP(code));
++		emit_udivmod(rd_lo, rd_lo, rt, ctx, BPF_OP(code), off);
+ 		arm_bpf_put_reg32(dst_lo, rd_lo, ctx);
+ 		if (!ctx->prog->aux->verifier_zext)
+ 			emit_a32_mov_i(dst_hi, 0, ctx);
 diff --git a/arch/arm/net/bpf_jit_32.h b/arch/arm/net/bpf_jit_32.h
-index e0b593a1498d..79c7373fadce 100644
+index 79c7373fadce..438f0e1f91a0 100644
 --- a/arch/arm/net/bpf_jit_32.h
 +++ b/arch/arm/net/bpf_jit_32.h
-@@ -79,9 +79,11 @@
- #define ARM_INST_LDST__IMM12	0x00000fff
- #define ARM_INST_LDRB_I		0x05500000
- #define ARM_INST_LDRB_R		0x07d00000
-+#define ARM_INST_LDRSB_I	0x015000d0
- #define ARM_INST_LDRD_I		0x014000d0
- #define ARM_INST_LDRH_I		0x015000b0
- #define ARM_INST_LDRH_R		0x019000b0
-+#define ARM_INST_LDRSH_I	0x015000f0
- #define ARM_INST_LDR_I		0x05100000
- #define ARM_INST_LDR_R		0x07900000
+@@ -139,6 +139,7 @@
+ #define ARM_INST_TST_I		0x03100000
  
+ #define ARM_INST_UDIV		0x0730f010
++#define ARM_INST_SDIV		0x0710f010
+ 
+ #define ARM_INST_UMULL		0x00800090
+ 
+@@ -267,6 +268,7 @@
+ #define ARM_TST_I(rn, imm)	_AL3_I(ARM_INST_TST, 0, rn, imm)
+ 
+ #define ARM_UDIV(rd, rn, rm)	(ARM_INST_UDIV | (rd) << 16 | (rn) | (rm) << 8)
++#define ARM_SDIV(rd, rn, rm)	(ARM_INST_SDIV | (rd) << 16 | (rn) | (rm) << 8)
+ 
+ #define ARM_UMULL(rd_lo, rd_hi, rn, rm)	(ARM_INST_UMULL | (rd_hi) << 16 \
+ 					 | (rd_lo) << 12 | (rm) << 8 | rn)
 -- 
 2.39.2
 
