@@ -1,77 +1,75 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61516DDC5
-	for <bpf@vger.kernel.org>; Tue,  5 Sep 2023 19:59:27 +0000 (UTC)
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422CAC1
-	for <bpf@vger.kernel.org>; Tue,  5 Sep 2023 12:59:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1693943965;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A22A9DF44
+	for <bpf@vger.kernel.org>; Tue,  5 Sep 2023 20:07:17 +0000 (UTC)
+Received: from out-228.mta1.migadu.com (out-228.mta1.migadu.com [95.215.58.228])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6F59C
+	for <bpf@vger.kernel.org>; Tue,  5 Sep 2023 13:07:13 -0700 (PDT)
+Message-ID: <1cdcd246-fe16-20d2-3f2d-a3e1204de325@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1693944432;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xG4LB9IAozstQIWCr01koNlUpf5xpaj9G7oEndoa9nM=;
-	b=MJ9CWSEmgLyJUu3j2IeDXgqB1qD++i4QNH0Elr4QGL89aqFIQxZecK+2OOlxtIwpUlhz34
-	MNtEt6jafwzaMuhnYLkeQjJUUJaqy6CjdLCyAaWLHStVH+vJEDKFn8sjp45ZOMGVi1oGrD
-	lt3rGmMhqBleQKBx/mXlvNQcYfIPcQI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-339-QU-CFiYLM0mowc8wKwEGRg-1; Tue, 05 Sep 2023 15:59:23 -0400
-X-MC-Unique: QU-CFiYLM0mowc8wKwEGRg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D39E98164F6;
-	Tue,  5 Sep 2023 19:59:21 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.87])
-	by smtp.corp.redhat.com (Postfix) with SMTP id 9F805493110;
-	Tue,  5 Sep 2023 19:59:20 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Tue,  5 Sep 2023 21:58:31 +0200 (CEST)
-Date: Tue, 5 Sep 2023 21:58:29 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: "Eric W. Biederman" <ebiederm@xmission.com>,
-	Kui-Feng Lee <sinquersw@gmail.com>, bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 0/5] bpf: task_group_seq_get_next: misc
- cleanups
-Message-ID: <20230905195829.GA8002@redhat.com>
-References: <20230905154612.GA24872@redhat.com>
+	bh=0fwyi+AaCfi+6F/uAZQEblMsKt47lRW3QDeivafXWgc=;
+	b=A0iYOYWDgb+Mqha13+oOmuLrq13sYYYnGjlEgOr9WzcONoA4CYGLkMvqKVFAmGWWwnF/jo
+	MRXRmo24lF7bbWOsgVD7cux9jTatCuDVIpVY/2HWrN4h0EP7YWZeo2G6R4dXrTcFIKWEIl
+	5LaOk6wc5EOorO8mvisxZs8OrggjF7Y=
+Date: Tue, 5 Sep 2023 13:07:06 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230905154612.GA24872@redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-	RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-	autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH bpf-next v3 9/9] selftests/bpf: Add tests for cgroup unix
+ socket address hooks
+Content-Language: en-US
+To: Daan De Meyer <daan.j.demeyer@gmail.com>
+Cc: kernel-team@meta.com, netdev@vger.kernel.org, bpf@vger.kernel.org
+References: <20230831153455.1867110-1-daan.j.demeyer@gmail.com>
+ <20230831153455.1867110-10-daan.j.demeyer@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20230831153455.1867110-10-daan.j.demeyer@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-sorry for noise, forgot to mention...
+On 8/31/23 8:34 AM, Daan De Meyer wrote:
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sock_addr.c b/tools/testing/selftests/bpf/prog_tests/sock_addr.c
+> new file mode 100644
+> index 000000000000..07941dd48efb
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/sock_addr.c
+> @@ -0,0 +1,461 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <sys/un.h>
+> +
+> +#include "test_progs.h"
+> +
+> +#include "bindun_prog.skel.h"
+> +#include "connectun_prog.skel.h"
+> +#include "sendmsgun_prog.skel.h"
+> +#include "recvmsgun_prog.skel.h"
+> +#include "network_helpers.h"
+> +
+> +#define SERVUN_ADDRESS         "bpf_cgroup_unix_test"
+> +#define SERVUN_REWRITE_ADDRESS "bpf_cgroup_unix_test_rewrite"
+> +#define SRCUN_ADDRESS	       "bpf_cgroup_unix_test_src"
+> +
+> +enum sock_addr_test_type {
+> +	SOCK_ADDR_TEST_BIND,
+> +	SOCK_ADDR_TEST_CONNECT,
+> +	SOCK_ADDR_TEST_SENDMSG,
+> +	SOCK_ADDR_TEST_RECVMSG,
 
-this (hopefully simple) series was only compile-tested.
-
-On 09/05, Oleg Nesterov wrote:
->
-> Yonghong,
->
-> I am resending 1-5 of 6 as you suggested with your acks included.
->
-> The next (final) patch will change this code to use __next_thread when
->
-> 	https://lore.kernel.org/all/20230824143142.GA31222@redhat.com/
->
-> is merged.
->
-> Oleg.
+Tests are also needed for cgroup/get{sock,peer}nameun.
 
