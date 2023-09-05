@@ -1,158 +1,78 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36AEBDDCE
-	for <bpf@vger.kernel.org>; Tue,  5 Sep 2023 20:22:49 +0000 (UTC)
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77740CC;
-	Tue,  5 Sep 2023 13:22:48 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2bcfd3220d3so44141011fa.2;
-        Tue, 05 Sep 2023 13:22:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693945366; x=1694550166; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fG5rfBSuPXfXle+iI7qfryofXP3nifEMoZ37UvmA0n8=;
-        b=sThmf14zJl8SRFMRn6NvBI4FNvLHQzOTRCvnp/i1N8ogDRsnU3kFHUU2mjwEJ88yGG
-         5g4t/bGnuXaEOajN7Wf3tjhr4KXARGwDEsGdEUBXx3cBOXv/6pLBsgask/UaqoCQBvoK
-         wppxyQu3Y6X5+TJEtiDllzQQCp7Ifwx1NO9zRm7vauLFCMa/njWiYnFIkgZrQDena4EZ
-         wQKHSyVgVd/d//NQDmmP798Ib7YJYMgCuQgNCVf44TZ+qv8qUXCyVWTM7YGYEuVuOdn9
-         rEHddAw4do8PCPQ18OyJbM+ulpAVonlDEm9Oa4bveNvOIm+UBnAaCtr+ST4o4N5WSpSX
-         EuwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693945366; x=1694550166;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fG5rfBSuPXfXle+iI7qfryofXP3nifEMoZ37UvmA0n8=;
-        b=NtB0HK/SC3bKn+WC6qH454NEqHP5bsaEwKKt966e/fgVEDDyFcMIddlaGgp5GurjBC
-         E964i3gX4I5wxotqi+kwTvKOA5pVQeVvEIdRS3w9NluRoG3F96KZTCfXKfi45Hjfm3Nk
-         PCdu/OQ26OLuGdpp48jv3SNL6CXdoFC+Aa4vrARNSZY/xNNJjlEnIPhgNeQmIalIiUx9
-         hKohmS3KQvW5wBVCPEM/7h3CPF0zGIFsDGqKe7eNOdALwBIfv7Gpn22Y8AjilcebQHmS
-         emD40R9UD1BbEpctYgBS4MATM+yaCzwI3pgTD52yGf19zE7m6tBAwEiPrF8Mo6HKwwOE
-         gqJA==
-X-Gm-Message-State: AOJu0YzLoNZbWEB0yE3QXVgoaSWcPg8ZlK0GfrXmNocu6Lg2FogDJF6d
-	96AoAnKC6asD2gKyasTZXpanhOe/nEhQW3UYg4A=
-X-Google-Smtp-Source: AGHT+IElFCbjQ8SNtWknYAVBmUIgOQnWgkA8SKNq1xMdkZKmNfW5urzHgHNVH3M6IIja9nXx7Gmyy5EEMK046lLflyQ=
-X-Received: by 2002:a2e:9646:0:b0:2bc:b9cd:8bc2 with SMTP id
- z6-20020a2e9646000000b002bcb9cd8bc2mr596401ljh.4.1693945366347; Tue, 05 Sep
- 2023 13:22:46 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E6F3FC08
+	for <bpf@vger.kernel.org>; Tue,  5 Sep 2023 20:49:15 +0000 (UTC)
+X-Greylist: delayed 4504 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Sep 2023 13:49:13 PDT
+Received: from m1380.mail.163.com (m1380.mail.163.com [220.181.13.80])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25E5D132;
+	Tue,  5 Sep 2023 13:49:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=zjkgSPNyl1Ii404LUexGjZzuKpWa/hMD4sGafVzau7U=; b=G
+	Uiq09ZwFyhXfIc2jdeEybvbTXTMdXx9rzcKSR0DjYXudSuI+hUdcuF8ZE+B/WgBG
+	EtbTLmrtxt3JNZ9jHetdxmLQFd9I0dpCWlyD3NJJlmagAm4Tqz7S/Ib26xS35m33
+	Jirflak85ferl2Ph35AANT5yyIvhFpqDSIFGrWrHRM=
+Received: from 00107082$163.com ( [111.35.184.199] ) by ajax-webmail-wmsvr80
+ (Coremail) ; Wed, 6 Sep 2023 00:57:56 +0800 (CST)
+X-Originating-IP: [111.35.184.199]
+Date: Wed, 6 Sep 2023 00:57:56 +0800 (CST)
+From: "David Wang" <00107082@163.com>
+To: "Daniel Xu" <dxu@dxuuu.xyz>
+Cc: "Pablo Neira Ayuso" <pablo@netfilter.org>, 
+	"Jozsef Kadlecsik" <kadlec@netfilter.org>, 
+	"Florian Westphal" <fw@strlen.de>, netfilter-devel@vger.kernel.org, 
+	coreteam@netfilter.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
+Subject: Re: [PATCH] uapi/netfilter: Change netfilter hook verdict code
+ definition from macro to enum
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
+ Copyright (c) 2002-2023 www.mailtech.cn 163com
+In-Reply-To: <cc6e3tukgqhi5y4uhepntrpf272o652pytuynj4nijsf5bkgjq@rgnbhckr3p4w>
+References: <20230904130201.14632-1-00107082@163.com>
+ <cc6e3tukgqhi5y4uhepntrpf272o652pytuynj4nijsf5bkgjq@rgnbhckr3p4w>
+X-NTES-SC: AL_QuySAfWYvEgs4CidY+kXn0oTju85XMCzuv8j3YJeN500hyrP/yMcQEJqGmPq1seOICGMjSWMdBNC08teX6N9bbgB1OIaCTbjAwa1Sq2dLQrf
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230827072057.1591929-1-zhouchuyi@bytedance.com> <20230827072057.1591929-4-zhouchuyi@bytedance.com>
-In-Reply-To: <20230827072057.1591929-4-zhouchuyi@bytedance.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 5 Sep 2023 13:22:35 -0700
-Message-ID: <CAADnVQLbDWUxFen-RS67C86sOE5DykEPD8xyihJ2RnG1WEnTQg@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 3/4] bpf: Introduce css_descendant open-coded
- iterator kfuncs
-To: Chuyi Zhou <zhouchuyi@bytedance.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Message-ID: <19d2362f.5c85.18a6647817b.Coremail.00107082@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:UMGowAD3H88VXvdkUwIAAA--.195W
+X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiOxThqmC5nJKIeQAEsG
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Sun, Aug 27, 2023 at 12:21=E2=80=AFAM Chuyi Zhou <zhouchuyi@bytedance.co=
-m> wrote:
->
-> This Patch adds kfuncs bpf_iter_css_{new,next,destroy} which allow creati=
-on
-> and manipulation of struct bpf_iter_css in open-coded iterator style. The=
-se
-> kfuncs actually wrapps css_next_descendant_{pre, post}. BPF programs can
-> use these kfuncs through bpf_for_each macro for iteration of all descenda=
-nt
-> css under a root css.
->
-> Normally, css_next_descendant_{pre, post} should be called with rcu
-> locking. Although we have bpf_rcu_read_lock(), here we still calls
-> rcu_read_lock in bpf_iter_css_new and unlock in bpf_iter_css_destroy
-> for convenience use.
->
-> Signed-off-by: Chuyi Zhou <zhouchuyi@bytedance.com>
-> ---
->  include/uapi/linux/bpf.h       |  5 +++++
->  kernel/bpf/helpers.c           |  3 +++
->  kernel/bpf/task_iter.c         | 39 ++++++++++++++++++++++++++++++++++
->  tools/include/uapi/linux/bpf.h |  5 +++++
->  tools/lib/bpf/bpf_helpers.h    |  6 ++++++
->  5 files changed, 58 insertions(+)
->
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index cfbd527e3733..19f1f1bf9301 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -7203,4 +7203,9 @@ struct bpf_iter_process {
->         __u64 __opaque[1];
->  } __attribute__((aligned(8)));
->
-> +struct bpf_iter_css {
-> +       __u64 __opaque[2];
-> +       char __opaque_c[1];
-
-Burning extra 8 bytes for flags seems excessive.
-Maybe let's add two iterators for descendant_post/_pre ?
-The bpf prog code will be easier to read (no need to guess
-what bool flag does).
-
-> +} __attribute__((aligned(8)));
-> +
->  #endif /* _UAPI__LINUX_BPF_H__ */
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 81a2005edc26..47d46a51855f 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -2461,6 +2461,9 @@ BTF_ID_FLAGS(func, bpf_iter_css_task_destroy, KF_IT=
-ER_DESTROY)
->  BTF_ID_FLAGS(func, bpf_iter_process_new, KF_ITER_NEW)
->  BTF_ID_FLAGS(func, bpf_iter_process_next, KF_ITER_NEXT | KF_RET_NULL)
->  BTF_ID_FLAGS(func, bpf_iter_process_destroy, KF_ITER_DESTROY)
-> +BTF_ID_FLAGS(func, bpf_iter_css_new, KF_ITER_NEW)
-> +BTF_ID_FLAGS(func, bpf_iter_css_next, KF_ITER_NEXT | KF_RET_NULL)
-> +BTF_ID_FLAGS(func, bpf_iter_css_destroy, KF_ITER_DESTROY)
->  BTF_ID_FLAGS(func, bpf_dynptr_adjust)
->  BTF_ID_FLAGS(func, bpf_dynptr_is_null)
->  BTF_ID_FLAGS(func, bpf_dynptr_is_rdonly)
-> diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-> index a6717a76c1e0..ef9aef62f1ac 100644
-> --- a/kernel/bpf/task_iter.c
-> +++ b/kernel/bpf/task_iter.c
-> @@ -893,6 +893,45 @@ __bpf_kfunc void bpf_iter_process_destroy(struct bpf=
-_iter_process *it)
->         rcu_read_unlock();
->  }
->
-> +struct bpf_iter_css_kern {
-> +       struct cgroup_subsys_state *root;
-> +       struct cgroup_subsys_state *pos;
-> +       char flag;
-> +} __attribute__((aligned(8)));
-> +
-> +__bpf_kfunc int bpf_iter_css_new(struct bpf_iter_css *it,
-> +               struct cgroup_subsys_state *root, char flag)
-> +{
-> +       struct bpf_iter_css_kern *kit =3D (void *)it;
-> +
-> +       BUILD_BUG_ON(sizeof(struct bpf_iter_css_kern) !=3D sizeof(struct =
-bpf_iter_css));
-> +       BUILD_BUG_ON(__alignof__(struct bpf_iter_css_kern) !=3D __alignof=
-__(struct bpf_iter_css));
-> +       kit->root =3D root;
-> +       kit->pos =3D NULL;
-> +       kit->flag =3D flag;
-> +       rcu_read_lock();
-
-Same request as in previous patch.
-let's make bpf prog do explicit bpf_rcu_read_lock() instead.
+CgpBdCAyMDIzLTA5LTA2IDAwOjM4OjAyLCAiRGFuaWVsIFh1IiA8ZHh1QGR4dXV1Lnh5ej4gd3Jv
+dGU6Cj5IaSBEYXZpZCwKPgo+T24gTW9uLCBTZXAgMDQsIDIwMjMgYXQgMDk6MDI6MDJQTSArMDgw
+MCwgRGF2aWQgV2FuZyB3cm90ZToKCj4+ICAjaW5jbHVkZSA8bGludXgvaW42Lmg+Cj4+ICAKPj4g
+IC8qIFJlc3BvbnNlcyBmcm9tIGhvb2sgZnVuY3Rpb25zLiAqLwo+PiAtI2RlZmluZSBORl9EUk9Q
+IDAKPj4gLSNkZWZpbmUgTkZfQUNDRVBUIDEKPj4gLSNkZWZpbmUgTkZfU1RPTEVOIDIKPj4gLSNk
+ZWZpbmUgTkZfUVVFVUUgMwo+PiAtI2RlZmluZSBORl9SRVBFQVQgNAo+PiAtI2RlZmluZSBORl9T
+VE9QIDUJLyogRGVwcmVjYXRlZCwgZm9yIHVzZXJzcGFjZSBuZl9xdWV1ZSBjb21wYXRpYmlsaXR5
+LiAqLwo+PiAtI2RlZmluZSBORl9NQVhfVkVSRElDVCBORl9TVE9QCj4+ICtlbnVtIHsKPj4gKwlO
+Rl9EUk9QICAgICAgICA9IDAsCj4+ICsJTkZfQUNDRVBUICAgICAgPSAxLAo+PiArCU5GX1NUT0xF
+TiAgICAgID0gMiwKPj4gKwlORl9RVUVVRSAgICAgICA9IDMsCj4+ICsJTkZfUkVQRUFUICAgICAg
+PSA0LAo+PiArCU5GX1NUT1AgICAgICAgID0gNSwJLyogRGVwcmVjYXRlZCwgZm9yIHVzZXJzcGFj
+ZSBuZl9xdWV1ZSBjb21wYXRpYmlsaXR5LiAqLwo+PiArCU5GX01BWF9WRVJESUNUID0gTkZfU1RP
+UCwKPj4gK307Cj4KPlN3aXRjaGluZyBmcm9tIG1hY3JvIHRvIGVudW0gd29ya3MgZm9yIGFsbW9z
+dCBhbGwgdXNlIGNhc2VzLCBidXQgbm90Cj5hbGwuIElmIHNvbWVvbmUgaWYgI2lmZGVmaW5nIHRo
+ZSBzeW1ib2xzICh3aGljaCBpcyBwbGF1c2libGUpIHRoaXMKPmNoYW5nZSB3b3VsZCBicmVhayB0
+aGVtLgo+Cj5JIHRoaW5rIEkndmUgc2VlbiBzb21lIG90aGVyIG5ldHdvcmtpbmcgY29kZSBkZWZp
+bmUgYm90aCBlbnVtcyBhbmQKPm1hY3Jvcy4gQnV0IGl0IHdhcyBhIGxpdHRsZSB1Z2x5LiBOb3Qg
+c3VyZSBpZiB0aGF0IGlzIGFjY2VwdGFibGUgaGVyZSBvcgo+bm90Lgo+Cj5bLi4uXQo+Cj5UaGFu
+a3MsCj5EYW5pZWwKCgpUaGFua3MgZm9yIHRoZSByZXZpZXd+CkkgZG8gbm90IGhhdmUgYSBzdHJv
+bmcgcmVhc29uaW5nIHRvIGRlbnkgdGhlIHBvc3NpYmlsaXR5IG9mIGJyZWFraW5nIHVuZXhwZWN0
+ZWQgdXNhZ2Ugb2YgdGhpcyBtYWNyb3MsCgpidXQgSSBhbHNvIGFncmVlIHRoYXQgaXQgaXMgdWds
+eSB0byB1c2UgYm90aCBlbnVtIGFuZCBtYWNybyBhdCB0aGUgc2FtZSB0aW1lLgoKS2luZCBvZiBk
+b24ndCBrbm93IGhvdyB0byBwcm9jZWVkIGZyb20gaGVyZSBub3cuLi4=
