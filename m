@@ -1,176 +1,397 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1304E11731;
-	Thu,  7 Sep 2023 15:29:46 +0000 (UTC)
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A2810DF;
-	Thu,  7 Sep 2023 08:29:20 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id 4fb4d7f45d1cf-5230a22cfd1so1448020a12.1;
-        Thu, 07 Sep 2023 08:29:20 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E24D829B4
+	for <bpf@vger.kernel.org>; Thu,  7 Sep 2023 15:35:27 +0000 (UTC)
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F309171C
+	for <bpf@vger.kernel.org>; Thu,  7 Sep 2023 08:35:06 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-5921a962adfso11312457b3.1
+        for <bpf@vger.kernel.org>; Thu, 07 Sep 2023 08:35:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694100517; x=1694705317; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1694100893; x=1694705693; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=a+iQnvoR9WIvvuphk/xb2y7jezozNmyXY5BuGK/6FCk=;
-        b=QT0T5PVV6crUy32yYSeb2fNcVirjKNrqwn3fGxj9zooVxcoFmbb3N1r0LwyFgrMity
-         wpsnJIdPUDM11iKltMPmV3dyGXkWWFE4JwjwTNT2iB/OeTdfkSj9E4oOOZSZfcDvsuZb
-         U1nGEj/DoYruezOELVvNITFBM7UBW99+U0ThcjI4kxfZ4YWtU2PBuAY+3UpqLJGEkgHP
-         yyQjV9RW+WiC1JPVf3OfU6mSeimnrVINx7cjCdn2YfsjdXbe6se2atZyEOqOacIKITUw
-         3G3vAbBAS9Cx1nl2rY8F+nOP+zcS0eLQk6HomScvgAsD4H2mSbjB9u2PAk4JUGU+x6Jx
-         SYwA==
+        bh=wuVD3KjxuDmtHrR4M83KRmqZpQz2LCH9fQVoJWYT3Ec=;
+        b=GKGBlDa5W65q08TIofkkai3hv/OWfKfnDIUgLK3vwGh/tkQd5+K/DtB3LN6r+7RKAt
+         zrkmNkk6xInTCvNrpPNWt5C8JlXMlxD4Ba0Zbx1SrZvFbqQsuKdenrlBinfW0rr/hlgO
+         My0cpOWkfKqhwcxQ5wwmJ8p4qfo57ws2edYaES4pR9p/B+wnXZqfgvVZG61R4q0yfHus
+         C8kvf7Yp8O43B8gFpDbLjHYBTnSXO9GFoFLbG73YeJ4iXjX06BEuy334Ix0zmWQ00Ni1
+         XZPBAwer2GTwLyMVQcbKf7H3sqe2+nc+2KjMC80Ttj82wiUQ+w2V0Qv2Scx+b9ot3fyl
+         inDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694100517; x=1694705317;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1694100893; x=1694705693;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=a+iQnvoR9WIvvuphk/xb2y7jezozNmyXY5BuGK/6FCk=;
-        b=biuhGWGYnZoKkw8jcoNBXu9wUv9hbdJu8/eyhXJlI35/EgFb9ugWXhJhZp42Q3hxdE
-         b915ln9FPiIxvN/WS+gz1uj5PJJWoxGq7zCrnAqxRvA1pZ+quqXncGIwpsxR5Qt8TvYP
-         AdhvRPkSRLt8EhVZhVNMsLpyzIR3/owHAAjZGd4hmulCxDDOF9GyZzQZo6BCglpZa0rn
-         KSS0tMhHEkY2oWEURWxQSxfVHCPnELebt83ZKiZH7v5duZIrsPWp1E2Jvb4tELlA3Yme
-         SAqF63ta/zxSnvWLDWJS86Se5prnEQgxjmn9qBbLhllGlAQijNF2PqPfSVWrTOu3CWgX
-         GI8Q==
-X-Gm-Message-State: AOJu0YzIMpD3NsfviubL6CVX0lHvcMEGM/Zpqc5dS5CxSU+uaFf2545e
-	RffcfqzhWNlI4WudFh40wZQlw6aFZ1QHBUlpfmY+sev3yrw=
-X-Google-Smtp-Source: AGHT+IHvMG7BHxfBuEv/VtwE4M7iBZo1MCLbCeCOoLZE5hIc0qenbVkKo7iV8ndNJxlJRBVF8lgdOHhtNmiXXh4bKeY=
-X-Received: by 2002:a17:906:23e9:b0:9a2:276d:d84c with SMTP id
- j9-20020a17090623e900b009a2276dd84cmr4313287ejg.12.1694085243622; Thu, 07 Sep
- 2023 04:14:03 -0700 (PDT)
+        bh=wuVD3KjxuDmtHrR4M83KRmqZpQz2LCH9fQVoJWYT3Ec=;
+        b=DPeUquAeWTTcNbJfjyTQRJc7MQEhJM6AMJwN0aOZjGLjzLwICaIn+qQ+6+/x3EsGAk
+         kGnzrw6el5OPJsXI4pcr+crexjAMw9HKVEBdDdBfk8+hknANsSzq4NkRE1HHV7qka+gP
+         u5Fl4u4JqAclLyKBnND7Hi/H5P/iXiKOCk8GXtIpM0rxUx2/Y7qOM9W/xN32zPEchbq2
+         bPwr53yhyCn0Ym/m2rpS4+pB1NFNc7piBQrCRELh/3EJSMEwwIwTUaxQdpH44agR8HWz
+         D2VVaKZni29XXotEbKHAb/PdNamEe74rXz+4BA790U5e2/wVizgwDZbYbtLlGLh5ohsJ
+         gVZQ==
+X-Gm-Message-State: AOJu0YwLpPoo7QDJfX8zHPyGyXwpJXShzlSyfcVSX1oqjwykR2XLbxqP
+	d+5blLwmVoa2PTbN/hLSHWKX5EDwTBp/IA==
+X-Google-Smtp-Source: AGHT+IFJUJS5VLjZs0opS9/al5EA/ZPRMII8l0XDOJZBnoucUGmMhLSWfNDOnhvE4JCO1hCIgFEZ0g==
+X-Received: by 2002:a05:6a20:4a20:b0:14d:cca3:a100 with SMTP id fr32-20020a056a204a2000b0014dcca3a100mr13395590pzb.36.1694065431385;
+        Wed, 06 Sep 2023 22:43:51 -0700 (PDT)
+Received: from ubuntu.. ([43.132.98.117])
+        by smtp.googlemail.com with ESMTPSA id q7-20020a637507000000b00570574feda0sm11860963pgc.19.2023.09.06.22.43.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Sep 2023 22:43:51 -0700 (PDT)
+From: Hengqi Chen <hengqi.chen@gmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	alan.maguire@oracle.com,
+	olsajiri@gmail.com,
+	hengqi.chen@gmail.com
+Subject: [PATCH bpf-next v2 3/3] selftests/bpf: Add tests for symbol versioning for uprobe
+Date: Tue,  5 Sep 2023 15:12:57 +0000
+Message-Id: <20230905151257.729192-4-hengqi.chen@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230905151257.729192-1-hengqi.chen@gmail.com>
+References: <20230905151257.729192-1-hengqi.chen@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CABcoxUbYwuZUL-xm1+5juO42nJMgpQX7cNyQELYz+g2XkZi9TQ@mail.gmail.com>
- <87o7ienuss.fsf@toke.dk>
-In-Reply-To: <87o7ienuss.fsf@toke.dk>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Thu, 7 Sep 2023 13:13:27 +0200
-Message-ID: <CAP01T76Ce2KHQqTGsqs5K9RM5qSv07rNxnV+-=q_J25i9NkqxA@mail.gmail.com>
-Subject: Re: Possible deadlock in bpf queue map
-To: =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@kernel.org>
-Cc: Hsin-Wei Hung <hsinweih@uci.edu>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
 	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Thu, 7 Sept 2023 at 12:26, Toke H=C3=B8iland-J=C3=B8rgensen <toke@kernel=
-.org> wrote:
->
-> +Arnaldo
->
-> > Hi,
-> >
-> > Our bpf fuzzer, a customized Syzkaller, triggered a lockdep warning in
-> > the bpf queue map in v5.15. Since queue_stack_maps.c has no major chang=
-es
-> > since v5.15, we think this should still exist in the latest kernel.
-> > The bug can be occasionally triggered, and we suspect one of the
-> > eBPF programs involved to be the following one. We also attached the lo=
-ckdep
-> > warning at the end.
-> >
-> > #define DEFINE_BPF_MAP_NO_KEY(the_map, TypeOfMap, MapFlags,
-> > TypeOfValue, MaxEntries) \
-> >         struct {                                                       =
- \
-> >             __uint(type, TypeOfMap);                                   =
- \
-> >             __uint(map_flags, (MapFlags));                             =
- \
-> >             __uint(max_entries, (MaxEntries));                         =
- \
-> >             __type(value, TypeOfValue);                                =
- \
-> >         } the_map SEC(".maps");
-> >
-> > DEFINE_BPF_MAP_NO_KEY(map_0, BPF_MAP_TYPE_QUEUE, 0 | BPF_F_WRONLY,
-> > struct_0, 162);
-> > SEC("perf_event")
-> > int func(struct bpf_perf_event_data *ctx) {
-> >         char v0[96] =3D {};
-> >         uint64_t v1 =3D 0;
-> >         v1 =3D bpf_map_pop_elem(&map_0, v0);
-> >         return 163819661;
-> > }
-> >
-> >
-> > The program is attached to the following perf event.
-> >
-> > struct perf_event_attr attr_type_hw =3D {
-> >         .type =3D PERF_TYPE_HARDWARE,
-> >         .config =3D PERF_COUNT_HW_CPU_CYCLES,
-> >         .sample_freq =3D 50,
-> >         .inherit =3D 1,
-> >         .freq =3D 1,
-> > };
-> >
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3DWARNING: inconsistent lock state
-> > 5.15.26+ #2 Not tainted
-> > --------------------------------
-> > inconsistent {INITIAL USE} -> {IN-NMI} usage.
-> > syz-executor.5/19749 [HC1[1]:SC0[0]:HE0:SE1] takes:
-> > ffff88804c9fc198 (&qs->lock){..-.}-{2:2}, at: __queue_map_get+0x31/0x25=
-0
-> > {INITIAL USE} state was registered at:
-> >   lock_acquire+0x1a3/0x4b0
-> >   _raw_spin_lock_irqsave+0x48/0x60
-> >   __queue_map_get+0x31/0x250
-> >   bpf_prog_577904e86c81dead_func+0x12/0x4b4
-> >   trace_call_bpf+0x262/0x5d0
-> >   perf_trace_run_bpf_submit+0x91/0x1c0
-> >   perf_trace_sched_switch+0x46c/0x700
-> >   __schedule+0x11b5/0x24a0
-> >   schedule+0xd4/0x270
-> >   futex_wait_queue_me+0x25f/0x520
-> >   futex_wait+0x1e0/0x5f0
-> >   do_futex+0x395/0x1890
-> >   __x64_sys_futex+0x1cb/0x480
-> >   do_syscall_64+0x3b/0xc0
-> >   entry_SYSCALL_64_after_hwframe+0x44/0xae
-> > irq event stamp: 13640
-> > hardirqs last  enabled at (13639): [<ffffffff95eb2bf4>]
-> > _raw_spin_unlock_irq+0x24/0x40
-> > hardirqs last disabled at (13640): [<ffffffff95eb2d4d>]
-> > _raw_spin_lock_irqsave+0x5d/0x60
-> > softirqs last  enabled at (13464): [<ffffffff93e26de5>] __sys_bpf+0x3e1=
-5/0x4e80
-> > softirqs last disabled at (13462): [<ffffffff93e26da3>] __sys_bpf+0x3dd=
-3/0x4e80
-> >
-> > other info that might help us debug this:
-> >  Possible unsafe locking scenario:
-> >
-> >        CPU0
-> >        ----
-> >   lock(&qs->lock);
-> >   <Interrupt>
-> >     lock(&qs->lock);
->
-> Hmm, so that lock() uses raw_spin_lock_irqsave(), which *should* be
-> disabling interrupts entirely for the critical section. But I guess a
-> Perf hardware event can still trigger? Which seems like it would
-> potentially wreak havoc with lots of things, not just this queue map
-> function?
->
-> No idea how to protect against this, though. Hoping Arnaldo knows? :)
->
+This exercises the newly added dynsym symbol versioning logics.
+Now we accept symbols in form of func, func@LIB_VERSION or
+func@@LIB_VERSION.
 
-The locking should probably be protected by a percpu integer counter,
-incremented and decremented before and after the lock is taken,
-respectively. If it is already non-zero, then -EBUSY should be
-returned. It is similar to what htab_lock_bucket protects against in
-hashtab.c.
+The test rely on liburandom_read.so. For liburandom_read.so, we have:
+
+    $ nm -D liburandom_read.so
+                     w __cxa_finalize@GLIBC_2.17
+                     w __gmon_start__
+                     w _ITM_deregisterTMCloneTable
+                     w _ITM_registerTMCloneTable
+    0000000000000000 A LIBURANDOM_READ_1.0.0
+    0000000000000000 A LIBURANDOM_READ_2.0.0
+    000000000000081c T urandlib_api@@LIBURANDOM_READ_2.0.0
+    0000000000000814 T urandlib_api@LIBURANDOM_READ_1.0.0
+    0000000000000824 T urandlib_api_sameoffset@LIBURANDOM_READ_1.0.0
+    0000000000000824 T urandlib_api_sameoffset@@LIBURANDOM_READ_2.0.0
+    000000000000082c T urandlib_read_without_sema@@LIBURANDOM_READ_1.0.0
+    00000000000007c4 T urandlib_read_with_sema@@LIBURANDOM_READ_1.0.0
+    0000000000011018 D urandlib_read_with_sema_semaphore@@LIBURANDOM_READ_1.0.0
+
+For `urandlib_api`, specifying `urandlib_api` will cause a conflict because
+there are two symbols named urandlib_api and both are global bind.
+For `urandlib_api_sameoffset`, there are also two symbols in the .so, but
+both are at the same offset and essentially they refer to the same function
+so no conflict.
+
+Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
+---
+ tools/testing/selftests/bpf/Makefile          |  5 +-
+ .../testing/selftests/bpf/liburandom_read.map | 15 +++
+ .../testing/selftests/bpf/prog_tests/uprobe.c | 95 +++++++++++++++++++
+ .../testing/selftests/bpf/progs/test_uprobe.c | 61 ++++++++++++
+ tools/testing/selftests/bpf/urandom_read.c    |  9 ++
+ .../testing/selftests/bpf/urandom_read_lib1.c | 41 ++++++++
+ 6 files changed, 224 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/liburandom_read.map
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/uprobe.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_uprobe.c
+
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index edef49fcd23e..49ff9c716b79 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -193,11 +193,12 @@ endif
+
+ # Filter out -static for liburandom_read.so and its dependent targets so that static builds
+ # do not fail. Static builds leave urandom_read relying on system-wide shared libraries.
+-$(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c
++$(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c liburandom_read.map
+ 	$(call msg,LIB,,$@)
+ 	$(Q)$(CLANG) $(filter-out -static,$(CFLAGS) $(LDFLAGS))   \
+-		     $^ $(filter-out -static,$(LDLIBS))	     \
++		     $(filter %.c,$^) $(filter-out -static,$(LDLIBS)) \
+ 		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
++		     -Wl,--version-script=liburandom_read.map \
+ 		     -fPIC -shared -o $@
+
+ $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_read.so
+diff --git a/tools/testing/selftests/bpf/liburandom_read.map b/tools/testing/selftests/bpf/liburandom_read.map
+new file mode 100644
+index 000000000000..38a97a419a04
+--- /dev/null
++++ b/tools/testing/selftests/bpf/liburandom_read.map
+@@ -0,0 +1,15 @@
++LIBURANDOM_READ_1.0.0 {
++	global:
++		urandlib_api;
++		urandlib_api_sameoffset;
++		urandlib_read_without_sema;
++		urandlib_read_with_sema;
++		urandlib_read_with_sema_semaphore;
++	local:
++		*;
++};
++
++LIBURANDOM_READ_2.0.0 {
++	global:
++		urandlib_api;
++} LIBURANDOM_READ_1.0.0;
+diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe.c b/tools/testing/selftests/bpf/prog_tests/uprobe.c
+new file mode 100644
+index 000000000000..6c619bcca41c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/uprobe.c
+@@ -0,0 +1,95 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Hengqi Chen */
++
++#include <test_progs.h>
++#include "test_uprobe.skel.h"
++
++static FILE *urand_spawn(int *pid)
++{
++	FILE *f;
++
++	/* urandom_read's stdout is wired into f */
++	f = popen("./urandom_read 1 report-pid", "r");
++	if (!f)
++		return NULL;
++
++	if (fscanf(f, "%d", pid) != 1) {
++		pclose(f);
++		errno = EINVAL;
++		return NULL;
++	}
++
++	return f;
++}
++
++static int urand_trigger(FILE **urand_pipe)
++{
++	int exit_code;
++
++	/* pclose() waits for child process to exit and returns their exit code */
++	exit_code = pclose(*urand_pipe);
++	*urand_pipe = NULL;
++
++	return exit_code;
++}
++
++void test_uprobe(void)
++{
++	LIBBPF_OPTS(bpf_uprobe_opts, uprobe_opts);
++	struct test_uprobe *skel;
++	FILE *urand_pipe = NULL;
++	int urand_pid = 0, err;
++
++	skel = test_uprobe__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		return;
++
++	urand_pipe = urand_spawn(&urand_pid);
++	if (!ASSERT_OK_PTR(urand_pipe, "urand_spawn"))
++		goto cleanup;
++
++	skel->bss->my_pid = urand_pid;
++
++	/* Manual attach uprobe to urandlib_api
++	 * There are two `urandlib_api` symbols in .dynsym section:
++	 *   - urandlib_api@LIBURANDOM_READ_1.0.0
++	 *   - urandlib_api@LIBURANDOM_READ_1.0.0
++	 * Both are global bind and would cause a conflict if user
++	 * specify the symbol name without a version suffix
++	 */
++	uprobe_opts.func_name = "urandlib_api";
++	skel->links.test4 = bpf_program__attach_uprobe_opts(skel->progs.test4,
++							    urand_pid,
++							    "./liburandom_read.so",
++							    0 /* offset */,
++							    &uprobe_opts);
++	if (!ASSERT_ERR_PTR(skel->links.test4, "urandlib_api_attach_conflict"))
++		goto cleanup;
++
++	uprobe_opts.func_name = "urandlib_api@LIBURANDOM_READ_1.0.0";
++	skel->links.test4 = bpf_program__attach_uprobe_opts(skel->progs.test4,
++							    urand_pid,
++							    "./liburandom_read.so",
++							    0 /* offset */,
++							    &uprobe_opts);
++	if (!ASSERT_OK_PTR(skel->links.test4, "urandlib_api_attach_ok"))
++		goto cleanup;
++
++	/* Auto attach 3 uprobes to urandlib_api_sameoffset */
++	err = test_uprobe__attach(skel);
++	if (!ASSERT_OK(err, "skel_attach"))
++		goto cleanup;
++
++	/* trigger urandom_read */
++	ASSERT_OK(urand_trigger(&urand_pipe), "urand_exit_code");
++
++	ASSERT_EQ(skel->bss->test1_result, 1, "urandlib_api_sameoffset");
++	ASSERT_EQ(skel->bss->test2_result, 1, "urandlib_api_sameoffset@v1");
++	ASSERT_EQ(skel->bss->test3_result, 1, "urandlib_api_sameoffset@@v2");
++	ASSERT_EQ(skel->bss->test4_result, 1, "urandlib_api");
++
++cleanup:
++	if (urand_pipe)
++		pclose(urand_pipe);
++	test_uprobe__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_uprobe.c b/tools/testing/selftests/bpf/progs/test_uprobe.c
+new file mode 100644
+index 000000000000..8680280558da
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_uprobe.c
+@@ -0,0 +1,61 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2023 Hengqi Chen */
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++pid_t my_pid = 0;
++
++int test1_result = 0;
++int test2_result = 0;
++int test3_result = 0;
++int test4_result = 0;
++
++SEC("uprobe/./liburandom_read.so:urandlib_api_sameoffset")
++int BPF_UPROBE(test1)
++{
++	pid_t pid = bpf_get_current_pid_tgid() >> 32;
++
++	if (pid != my_pid)
++		return 0;
++
++	test1_result = 1;
++	return 0;
++}
++
++SEC("uprobe/./liburandom_read.so:urandlib_api_sameoffset@LIBURANDOM_READ_1.0.0")
++int BPF_UPROBE(test2)
++{
++	pid_t pid = bpf_get_current_pid_tgid() >> 32;
++
++	if (pid != my_pid)
++		return 0;
++
++	test2_result = 1;
++	return 0;
++}
++
++SEC("uprobe/./liburandom_read.so:urandlib_api_sameoffset@@LIBURANDOM_READ_2.0.0")
++int BPF_UPROBE(test3)
++{
++	pid_t pid = bpf_get_current_pid_tgid() >> 32;
++
++	if (pid != my_pid)
++		return 0;
++
++	test3_result = 1;
++	return 0;
++}
++
++SEC("uprobe")
++int BPF_UPROBE(test4)
++{
++	pid_t pid = bpf_get_current_pid_tgid() >> 32;
++
++	if (pid != my_pid)
++		return 0;
++
++	test4_result = 1;
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/urandom_read.c b/tools/testing/selftests/bpf/urandom_read.c
+index e92644d0fa75..b28e910a8fbb 100644
+--- a/tools/testing/selftests/bpf/urandom_read.c
++++ b/tools/testing/selftests/bpf/urandom_read.c
+@@ -21,6 +21,11 @@ void urand_read_without_sema(int iter_num, int iter_cnt, int read_sz);
+ void urandlib_read_with_sema(int iter_num, int iter_cnt, int read_sz);
+ void urandlib_read_without_sema(int iter_num, int iter_cnt, int read_sz);
+
++int urandlib_api(void);
++__asm__(".symver urandlib_api_old,urandlib_api@LIBURANDOM_READ_1.0.0");
++int urandlib_api_old(void);
++int urandlib_api_sameoffset(void);
++
+ unsigned short urand_read_with_sema_semaphore SEC(".probes");
+
+ static __attribute__((noinline))
+@@ -83,6 +88,10 @@ int main(int argc, char *argv[])
+
+ 	urandom_read(fd, count);
+
++	urandlib_api();
++	urandlib_api_old();
++	urandlib_api_sameoffset();
++
+ 	close(fd);
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/urandom_read_lib1.c b/tools/testing/selftests/bpf/urandom_read_lib1.c
+index 86186e24b740..403b0735e223 100644
+--- a/tools/testing/selftests/bpf/urandom_read_lib1.c
++++ b/tools/testing/selftests/bpf/urandom_read_lib1.c
+@@ -11,3 +11,44 @@ void urandlib_read_with_sema(int iter_num, int iter_cnt, int read_sz)
+ {
+ 	STAP_PROBE3(urandlib, read_with_sema, iter_num, iter_cnt, read_sz);
+ }
++
++/* Symbol versioning is different between static and shared library.
++ * Properly versioned symbols are needed for shared library, but
++ * only the symbol of the new version is needed for static library.
++ * Starting with GNU C 10, use symver attribute instead of .symver assembler
++ * directive, which works better with GCC LTO builds.
++ */
++#if defined(__GNUC__) && __GNUC__ >= 10
++
++#define DEFAULT_VERSION(internal_name, api_name, version) \
++	__attribute__((symver(#api_name "@@" #version)))
++#define COMPAT_VERSION(internal_name, api_name, version) \
++	__attribute__((symver(#api_name "@" #version)))
++
++#else
++
++#define COMPAT_VERSION(internal_name, api_name, version) \
++	asm(".symver " #internal_name "," #api_name "@" #version);
++#define DEFAULT_VERSION(internal_name, api_name, version) \
++	asm(".symver " #internal_name "," #api_name "@@" #version);
++
++#endif
++
++COMPAT_VERSION(urandlib_api_v1, urandlib_api, LIBURANDOM_READ_1.0.0)
++int urandlib_api_v1(void)
++{
++	return 1;
++}
++
++DEFAULT_VERSION(urandlib_api_v2, urandlib_api, LIBURANDOM_READ_2.0.0)
++int urandlib_api_v2(void)
++{
++	return 2;
++}
++
++COMPAT_VERSION(urandlib_api_sameoffset, urandlib_api_sameoffset, LIBURANDOM_READ_1.0.0)
++DEFAULT_VERSION(urandlib_api_sameoffset, urandlib_api_sameoffset, LIBURANDOM_READ_2.0.0)
++int urandlib_api_sameoffset(void)
++{
++	return 3;
++}
+--
+2.34.1
