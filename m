@@ -1,45 +1,46 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3BA711C8D
-	for <bpf@vger.kernel.org>; Wed,  6 Sep 2023 18:33:31 +0000 (UTC)
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E117DE6A;
-	Wed,  6 Sep 2023 11:33:23 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-31dcd553fecso149981f8f.2;
-        Wed, 06 Sep 2023 11:33:23 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 616BF11C93
+	for <bpf@vger.kernel.org>; Wed,  6 Sep 2023 18:33:32 +0000 (UTC)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14ECA1739;
+	Wed,  6 Sep 2023 11:33:29 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-401d80f4ef8so1889295e9.1;
+        Wed, 06 Sep 2023 11:33:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694025202; x=1694630002; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DkMd8RucoJq7+YF1ccMKdQnJgACQ8uOQuFZimzqRtoU=;
-        b=qS/lQOlGe9YTHo+9cyHgy/2Fs68CQZh7ERBYpL5LbKfn0sgbr/NUCnAypT0iFvyvk3
-         xax9bhdzBqT3JkYAn/td+h2SeAePsi7JBMHYMPJBM60r0L+ldh5087kxPFKh16hMKwSD
-         9kN5G3m+7yM6C330zWfBLynyjhuyNikpuNhRIOl0GniLml0EB5YKPpSQMyMTKRur3++n
-         W0tVxBRVBLE18aE2W3BX9jFgkiBb/KOMteJIOdWW8VN4SLzEuW4/vezwKi1sqI1g+p4L
-         SnYUvP+qYS5Zv52P7Dba10jMsvH8rI6FjygUOEn70xu0BCu2EmS7GvvVe7Fn06MmV1pn
-         3l7A==
+        d=gmail.com; s=20221208; t=1694025208; x=1694630008; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JXVC/JwrfhCwCFZ9CTtjljVWM7ojc7dibWwdrN2Ohcw=;
+        b=UNS1Gqo1DdXmAcd90wtLFNDoepfWSNlSNibeuhKwyWAR8B8x3inEcHXviPRzzcPlCg
+         PO8sEn350Q/hG6T95IPXjulneRgC7neQTKyr++SSwEvfBuyLZytJ7L5tlESR25O/L6BH
+         7CZnNuxagtDVdR7bTknT0iVkRX+fxOsCviohUVT9Pi/+HRp6YdKs+kjjzSHOREBKDecm
+         NUHqdAfSOGyIV0nKWHFjqiZS2ehRI8NoUGBAuESOXy/2rr8AA5pnI0K/LufZBmNtE6RA
+         cSh0/f2IRReGh51xCjQOtPMMidUOJCtrVOiqwnrrIdx2kK3GUQSYRCU+sWS/KRm9Pqyf
+         2AOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694025202; x=1694630002;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DkMd8RucoJq7+YF1ccMKdQnJgACQ8uOQuFZimzqRtoU=;
-        b=jJ8aN5giTnIct2tZaXdzEyCUqQUlFIT9RHt10uHC32vaLHt34yf8mZxd1EMef8bZLi
-         ht0kBJU7yycqoLaFqsc/9G1zTJuyKwO74AXUpH/b+/lKOInW7Yr7QHoZ+Y6i/MXDi5fW
-         VGgloAgk1sb/M++q3jJq+JLLoW4aI5sPmY2wtkKl/rL+ndkcKweW1vYb0/uCgGg9bkN7
-         uTzB9IQj9C3B28O2ubzfdSnBspKcWfi/feRbONt9X+r4xW/WV21SSceMfjeFO6PrKodi
-         brz/zliZpyPXdV8I+Unlh3GBeSLi0vxqk/o6UfGoCgYxAl99MH8tyl/gT4+CgVnKd78M
-         PCFQ==
-X-Gm-Message-State: AOJu0YzcO4rasZMubkDkdBwwL6kUynIbFEZvLWeTXFxbs0fS8qyDpRM+
-	/T6se3l2vT15uO7QHHWR62w=
-X-Google-Smtp-Source: AGHT+IEHI/QWDjLE4ntz3KI5NlVa9dtEpq2TyN/azxHrtUHhNiLe4lz1R2Kk3jYEQfgGuKa1ZQOSnA==
-X-Received: by 2002:a05:6000:1366:b0:31a:d6cb:7f94 with SMTP id q6-20020a056000136600b0031ad6cb7f94mr2913086wrz.23.1694025201915;
-        Wed, 06 Sep 2023 11:33:21 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1694025208; x=1694630008;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JXVC/JwrfhCwCFZ9CTtjljVWM7ojc7dibWwdrN2Ohcw=;
+        b=Pd/Rn0GIE1rwfWaBCcTigAGUR5blAySVmpl+UMoD+R90qlOyFTPpVrfo2QWpUfyEdI
+         o+eJJvBeOAjX05CZmlGUp6FDfdf/0up87J0GEVujZsQSXCWpIW1PbFd9QoYgOf+XmqQa
+         paJKGpTHI2N3gI2attATXfF4mDSSsAAs05Edazdfp7w2VNSVdA8/wT4ddZA7A1WbeN4c
+         iQSWzUbs0o7YHbKm4HAdusuwHGWA/H2JTY42pKOF03HyXDEUpOTXgQ7ZhdLVeeQm4T8T
+         +eLlOqKvuu6/YUag4V7pAl8tIV+K8PrG1fYBnLmFkZ/zWkoJ7F9wg5ryIEWhXFN4JR7P
+         inEg==
+X-Gm-Message-State: AOJu0YzVnpqoGcNglQWqA5QM8JLQL46YN5SVvGZ26mKZbpDYUSxudTVH
+	nyQiCmVOLisOiTk2zZS8sO4=
+X-Google-Smtp-Source: AGHT+IEvuuyOhEYeYiFyTZwzLJs0tKvnAKREJ96x/oGjHaA5sh8RfpDvjoFLxBHJddv/67hEG+QLYA==
+X-Received: by 2002:adf:e409:0:b0:31a:e772:ddf6 with SMTP id g9-20020adfe409000000b0031ae772ddf6mr3078630wrm.39.1694025208214;
+        Wed, 06 Sep 2023 11:33:28 -0700 (PDT)
 Received: from ip-172-31-30-46.eu-west-1.compute.internal (ec2-54-170-241-106.eu-west-1.compute.amazonaws.com. [54.170.241.106])
-        by smtp.gmail.com with ESMTPSA id l10-20020a5d4bca000000b003180155493esm21094891wrt.67.2023.09.06.11.33.21
+        by smtp.gmail.com with ESMTPSA id l10-20020a5d4bca000000b003180155493esm21094891wrt.67.2023.09.06.11.33.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Sep 2023 11:33:21 -0700 (PDT)
+        Wed, 06 Sep 2023 11:33:27 -0700 (PDT)
 From: Puranjay Mohan <puranjay12@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -60,10 +61,12 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: puranjay12@gmail.com
-Subject: [PATCH bpf-next v2 0/8] arm32, bpf: add support for cpuv4 insns
-Date: Wed,  6 Sep 2023 18:33:12 +0000
-Message-Id: <20230906183320.1959008-1-puranjay12@gmail.com>
+Subject: [PATCH bpf-next v2 8/8] bpf/tests: add tests for cpuv4 instructions
+Date: Wed,  6 Sep 2023 18:33:20 +0000
+Message-Id: <20230906183320.1959008-9-puranjay12@gmail.com>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230906183320.1959008-1-puranjay12@gmail.com>
+References: <20230906183320.1959008-1-puranjay12@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -78,224 +81,524 @@ X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Changes in V1 -> V2:
-- Fix coding style issues.
-- Don't use tmp variable for src in emit_ldsx_r() as it is redundant.
-- Optimize emit_ldsx_r() when offset can fit in immediate.
+The BPF JITs now support cpuv4 instructions. Add tests for these new
+instructions to the test suite:
 
-Add the support for cpuv4 instructions for ARM32 BPF JIT. 64-bit division
-was not supported earlier so this series adds 64-bit DIV, SDIV, MOD, SMOD
-instructions as well.
+1. Sign extended Load
+2. Sign extended Mov
+3. Unconditional byte swap
+4. Unconditional jump with 32-bit offset
+5. Signed division and modulo
 
-This series needs any one of the patches from [1] to disable zero-extension
-for BPF_MEMSX to support ldsx.
+Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+---
+ include/linux/filter.h |  50 +++++-
+ lib/test_bpf.c         | 371 +++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 417 insertions(+), 4 deletions(-)
 
-The relevant selftests have passed expect ldsx_insn which needs fentry:
-
-Tested on BeagleBone Black (ARMv7-A):
-
-[root@alarm del]# echo 1 > /proc/sys/net/core/bpf_jit_enable
-[root@alarm del]# ./test_progs -a verifier_sdiv,verifier_movsx,verifier_ldsx,verifier_gotol,verifier_bswap
-#337/1   verifier_bswap/BSWAP, 16:OK
-#337/2   verifier_bswap/BSWAP, 16 @unpriv:OK
-#337/3   verifier_bswap/BSWAP, 32:OK
-#337/4   verifier_bswap/BSWAP, 32 @unpriv:OK
-#337/5   verifier_bswap/BSWAP, 64:OK
-#337/6   verifier_bswap/BSWAP, 64 @unpriv:OK
-#337     verifier_bswap:OK
-#351/1   verifier_gotol/gotol, small_imm:OK
-#351/2   verifier_gotol/gotol, small_imm @unpriv:OK
-#351     verifier_gotol:OK
-#359/1   verifier_ldsx/LDSX, S8:OK
-#359/2   verifier_ldsx/LDSX, S8 @unpriv:OK
-#359/3   verifier_ldsx/LDSX, S16:OK
-#359/4   verifier_ldsx/LDSX, S16 @unpriv:OK
-#359/5   verifier_ldsx/LDSX, S32:OK
-#359/6   verifier_ldsx/LDSX, S32 @unpriv:OK
-#359/7   verifier_ldsx/LDSX, S8 range checking, privileged:OK
-#359/8   verifier_ldsx/LDSX, S16 range checking:OK
-#359/9   verifier_ldsx/LDSX, S16 range checking @unpriv:OK
-#359/10  verifier_ldsx/LDSX, S32 range checking:OK
-#359/11  verifier_ldsx/LDSX, S32 range checking @unpriv:OK
-#359     verifier_ldsx:OK
-#370/1   verifier_movsx/MOV32SX, S8:OK
-#370/2   verifier_movsx/MOV32SX, S8 @unpriv:OK
-#370/3   verifier_movsx/MOV32SX, S16:OK
-#370/4   verifier_movsx/MOV32SX, S16 @unpriv:OK
-#370/5   verifier_movsx/MOV64SX, S8:OK
-#370/6   verifier_movsx/MOV64SX, S8 @unpriv:OK
-#370/7   verifier_movsx/MOV64SX, S16:OK
-#370/8   verifier_movsx/MOV64SX, S16 @unpriv:OK
-#370/9   verifier_movsx/MOV64SX, S32:OK
-#370/10  verifier_movsx/MOV64SX, S32 @unpriv:OK
-#370/11  verifier_movsx/MOV32SX, S8, range_check:OK
-#370/12  verifier_movsx/MOV32SX, S8, range_check @unpriv:OK
-#370/13  verifier_movsx/MOV32SX, S16, range_check:OK
-#370/14  verifier_movsx/MOV32SX, S16, range_check @unpriv:OK
-#370/15  verifier_movsx/MOV32SX, S16, range_check 2:OK
-#370/16  verifier_movsx/MOV32SX, S16, range_check 2 @unpriv:OK
-#370/17  verifier_movsx/MOV64SX, S8, range_check:OK
-#370/18  verifier_movsx/MOV64SX, S8, range_check @unpriv:OK
-#370/19  verifier_movsx/MOV64SX, S16, range_check:OK
-#370/20  verifier_movsx/MOV64SX, S16, range_check @unpriv:OK
-#370/21  verifier_movsx/MOV64SX, S32, range_check:OK
-#370/22  verifier_movsx/MOV64SX, S32, range_check @unpriv:OK
-#370/23  verifier_movsx/MOV64SX, S16, R10 Sign Extension:OK
-#370/24  verifier_movsx/MOV64SX, S16, R10 Sign Extension @unpriv:OK
-#370     verifier_movsx:OK
-#382/1   verifier_sdiv/SDIV32, non-zero imm divisor, check 1:OK
-#382/2   verifier_sdiv/SDIV32, non-zero imm divisor, check 1 @unpriv:OK
-#382/3   verifier_sdiv/SDIV32, non-zero imm divisor, check 2:OK
-#382/4   verifier_sdiv/SDIV32, non-zero imm divisor, check 2 @unpriv:OK
-#382/5   verifier_sdiv/SDIV32, non-zero imm divisor, check 3:OK
-#382/6   verifier_sdiv/SDIV32, non-zero imm divisor, check 3 @unpriv:OK
-#382/7   verifier_sdiv/SDIV32, non-zero imm divisor, check 4:OK
-#382/8   verifier_sdiv/SDIV32, non-zero imm divisor, check 4 @unpriv:OK
-#382/9   verifier_sdiv/SDIV32, non-zero imm divisor, check 5:OK
-#382/10  verifier_sdiv/SDIV32, non-zero imm divisor, check 5 @unpriv:OK
-#382/11  verifier_sdiv/SDIV32, non-zero imm divisor, check 6:OK
-#382/12  verifier_sdiv/SDIV32, non-zero imm divisor, check 6 @unpriv:OK
-#382/13  verifier_sdiv/SDIV32, non-zero imm divisor, check 7:OK
-#382/14  verifier_sdiv/SDIV32, non-zero imm divisor, check 7 @unpriv:OK
-#382/15  verifier_sdiv/SDIV32, non-zero imm divisor, check 8:OK
-#382/16  verifier_sdiv/SDIV32, non-zero imm divisor, check 8 @unpriv:OK
-#382/17  verifier_sdiv/SDIV32, non-zero reg divisor, check 1:OK
-#382/18  verifier_sdiv/SDIV32, non-zero reg divisor, check 1 @unpriv:OK
-#382/19  verifier_sdiv/SDIV32, non-zero reg divisor, check 2:OK
-#382/20  verifier_sdiv/SDIV32, non-zero reg divisor, check 2 @unpriv:OK
-#382/21  verifier_sdiv/SDIV32, non-zero reg divisor, check 3:OK
-#382/22  verifier_sdiv/SDIV32, non-zero reg divisor, check 3 @unpriv:OK
-#382/23  verifier_sdiv/SDIV32, non-zero reg divisor, check 4:OK
-#382/24  verifier_sdiv/SDIV32, non-zero reg divisor, check 4 @unpriv:OK
-#382/25  verifier_sdiv/SDIV32, non-zero reg divisor, check 5:OK
-#382/26  verifier_sdiv/SDIV32, non-zero reg divisor, check 5 @unpriv:OK
-#382/27  verifier_sdiv/SDIV32, non-zero reg divisor, check 6:OK
-#382/28  verifier_sdiv/SDIV32, non-zero reg divisor, check 6 @unpriv:OK
-#382/29  verifier_sdiv/SDIV32, non-zero reg divisor, check 7:OK
-#382/30  verifier_sdiv/SDIV32, non-zero reg divisor, check 7 @unpriv:OK
-#382/31  verifier_sdiv/SDIV32, non-zero reg divisor, check 8:OK
-#382/32  verifier_sdiv/SDIV32, non-zero reg divisor, check 8 @unpriv:OK
-#382/33  verifier_sdiv/SDIV64, non-zero imm divisor, check 1:OK
-#382/34  verifier_sdiv/SDIV64, non-zero imm divisor, check 1 @unpriv:OK
-#382/35  verifier_sdiv/SDIV64, non-zero imm divisor, check 2:OK
-#382/36  verifier_sdiv/SDIV64, non-zero imm divisor, check 2 @unpriv:OK
-#382/37  verifier_sdiv/SDIV64, non-zero imm divisor, check 3:OK
-#382/38  verifier_sdiv/SDIV64, non-zero imm divisor, check 3 @unpriv:OK
-#382/39  verifier_sdiv/SDIV64, non-zero imm divisor, check 4:OK
-#382/40  verifier_sdiv/SDIV64, non-zero imm divisor, check 4 @unpriv:OK
-#382/41  verifier_sdiv/SDIV64, non-zero imm divisor, check 5:OK
-#382/42  verifier_sdiv/SDIV64, non-zero imm divisor, check 5 @unpriv:OK
-#382/43  verifier_sdiv/SDIV64, non-zero imm divisor, check 6:OK
-#382/44  verifier_sdiv/SDIV64, non-zero imm divisor, check 6 @unpriv:OK
-#382/45  verifier_sdiv/SDIV64, non-zero reg divisor, check 1:OK
-#382/46  verifier_sdiv/SDIV64, non-zero reg divisor, check 1 @unpriv:OK
-#382/47  verifier_sdiv/SDIV64, non-zero reg divisor, check 2:OK
-#382/48  verifier_sdiv/SDIV64, non-zero reg divisor, check 2 @unpriv:OK
-#382/49  verifier_sdiv/SDIV64, non-zero reg divisor, check 3:OK
-#382/50  verifier_sdiv/SDIV64, non-zero reg divisor, check 3 @unpriv:OK
-#382/51  verifier_sdiv/SDIV64, non-zero reg divisor, check 4:OK
-#382/52  verifier_sdiv/SDIV64, non-zero reg divisor, check 4 @unpriv:OK
-#382/53  verifier_sdiv/SDIV64, non-zero reg divisor, check 5:OK
-#382/54  verifier_sdiv/SDIV64, non-zero reg divisor, check 5 @unpriv:OK
-#382/55  verifier_sdiv/SDIV64, non-zero reg divisor, check 6:OK
-#382/56  verifier_sdiv/SDIV64, non-zero reg divisor, check 6 @unpriv:OK
-#382/57  verifier_sdiv/SMOD32, non-zero imm divisor, check 1:OK
-#382/58  verifier_sdiv/SMOD32, non-zero imm divisor, check 1 @unpriv:OK
-#382/59  verifier_sdiv/SMOD32, non-zero imm divisor, check 2:OK
-#382/60  verifier_sdiv/SMOD32, non-zero imm divisor, check 2 @unpriv:OK
-#382/61  verifier_sdiv/SMOD32, non-zero imm divisor, check 3:OK
-#382/62  verifier_sdiv/SMOD32, non-zero imm divisor, check 3 @unpriv:OK
-#382/63  verifier_sdiv/SMOD32, non-zero imm divisor, check 4:OK
-#382/64  verifier_sdiv/SMOD32, non-zero imm divisor, check 4 @unpriv:OK
-#382/65  verifier_sdiv/SMOD32, non-zero imm divisor, check 5:OK
-#382/66  verifier_sdiv/SMOD32, non-zero imm divisor, check 5 @unpriv:OK
-#382/67  verifier_sdiv/SMOD32, non-zero imm divisor, check 6:OK
-#382/68  verifier_sdiv/SMOD32, non-zero imm divisor, check 6 @unpriv:OK
-#382/69  verifier_sdiv/SMOD32, non-zero reg divisor, check 1:OK
-#382/70  verifier_sdiv/SMOD32, non-zero reg divisor, check 1 @unpriv:OK
-#382/71  verifier_sdiv/SMOD32, non-zero reg divisor, check 2:OK
-#382/72  verifier_sdiv/SMOD32, non-zero reg divisor, check 2 @unpriv:OK
-#382/73  verifier_sdiv/SMOD32, non-zero reg divisor, check 3:OK
-#382/74  verifier_sdiv/SMOD32, non-zero reg divisor, check 3 @unpriv:OK
-#382/75  verifier_sdiv/SMOD32, non-zero reg divisor, check 4:OK
-#382/76  verifier_sdiv/SMOD32, non-zero reg divisor, check 4 @unpriv:OK
-#382/77  verifier_sdiv/SMOD32, non-zero reg divisor, check 5:OK
-#382/78  verifier_sdiv/SMOD32, non-zero reg divisor, check 5 @unpriv:OK
-#382/79  verifier_sdiv/SMOD32, non-zero reg divisor, check 6:OK
-#382/80  verifier_sdiv/SMOD32, non-zero reg divisor, check 6 @unpriv:OK
-#382/81  verifier_sdiv/SMOD64, non-zero imm divisor, check 1:OK
-#382/82  verifier_sdiv/SMOD64, non-zero imm divisor, check 1 @unpriv:OK
-#382/83  verifier_sdiv/SMOD64, non-zero imm divisor, check 2:OK
-#382/84  verifier_sdiv/SMOD64, non-zero imm divisor, check 2 @unpriv:OK
-#382/85  verifier_sdiv/SMOD64, non-zero imm divisor, check 3:OK
-#382/86  verifier_sdiv/SMOD64, non-zero imm divisor, check 3 @unpriv:OK
-#382/87  verifier_sdiv/SMOD64, non-zero imm divisor, check 4:OK
-#382/88  verifier_sdiv/SMOD64, non-zero imm divisor, check 4 @unpriv:OK
-#382/89  verifier_sdiv/SMOD64, non-zero imm divisor, check 5:OK
-#382/90  verifier_sdiv/SMOD64, non-zero imm divisor, check 5 @unpriv:OK
-#382/91  verifier_sdiv/SMOD64, non-zero imm divisor, check 6:OK
-#382/92  verifier_sdiv/SMOD64, non-zero imm divisor, check 6 @unpriv:OK
-#382/93  verifier_sdiv/SMOD64, non-zero imm divisor, check 7:OK
-#382/94  verifier_sdiv/SMOD64, non-zero imm divisor, check 7 @unpriv:OK
-#382/95  verifier_sdiv/SMOD64, non-zero imm divisor, check 8:OK
-#382/96  verifier_sdiv/SMOD64, non-zero imm divisor, check 8 @unpriv:OK
-#382/97  verifier_sdiv/SMOD64, non-zero reg divisor, check 1:OK
-#382/98  verifier_sdiv/SMOD64, non-zero reg divisor, check 1 @unpriv:OK
-#382/99  verifier_sdiv/SMOD64, non-zero reg divisor, check 2:OK
-#382/100 verifier_sdiv/SMOD64, non-zero reg divisor, check 2 @unpriv:OK
-#382/101 verifier_sdiv/SMOD64, non-zero reg divisor, check 3:OK
-#382/102 verifier_sdiv/SMOD64, non-zero reg divisor, check 3 @unpriv:OK
-#382/103 verifier_sdiv/SMOD64, non-zero reg divisor, check 4:OK
-#382/104 verifier_sdiv/SMOD64, non-zero reg divisor, check 4 @unpriv:OK
-#382/105 verifier_sdiv/SMOD64, non-zero reg divisor, check 5:OK
-#382/106 verifier_sdiv/SMOD64, non-zero reg divisor, check 5 @unpriv:OK
-#382/107 verifier_sdiv/SMOD64, non-zero reg divisor, check 6:OK
-#382/108 verifier_sdiv/SMOD64, non-zero reg divisor, check 6 @unpriv:OK
-#382/109 verifier_sdiv/SMOD64, non-zero reg divisor, check 7:OK
-#382/110 verifier_sdiv/SMOD64, non-zero reg divisor, check 7 @unpriv:OK
-#382/111 verifier_sdiv/SMOD64, non-zero reg divisor, check 8:OK
-#382/112 verifier_sdiv/SMOD64, non-zero reg divisor, check 8 @unpriv:OK
-#382/113 verifier_sdiv/SDIV32, zero divisor:OK
-#382/114 verifier_sdiv/SDIV32, zero divisor @unpriv:OK
-#382/115 verifier_sdiv/SDIV64, zero divisor:OK
-#382/116 verifier_sdiv/SDIV64, zero divisor @unpriv:OK
-#382/117 verifier_sdiv/SMOD32, zero divisor:OK
-#382/118 verifier_sdiv/SMOD32, zero divisor @unpriv:OK
-#382/119 verifier_sdiv/SMOD64, zero divisor:OK
-#382/120 verifier_sdiv/SMOD64, zero divisor @unpriv:OK
-#382     verifier_sdiv:OK
-Summary: 5/163 PASSED, 0 SKIPPED, 0 FAILED
-
-As the selftests don't compile for 32-bit architectures without
-modifications I have added new tests to lib/test_bpf.c for cpuv4 insns:
-
-test_bpf: Summary: 1052 PASSED, 0 FAILED, [891/1040 JIT'ed]
-test_bpf: test_tail_calls: Summary: 10 PASSED, 0 FAILED, [10/10 JIT'ed]
-test_bpf: test_skb_segment: Summary: 2 PASSED, 0 FAILED
-
-[1] https://lore.kernel.org/all/mb61p5y4u3ptd.fsf@amazon.com/
-
-Puranjay Mohan (8):
-  arm32, bpf: add support for 32-bit offset jmp instruction
-  arm32, bpf: add support for sign-extension load instruction
-  arm32, bpf: add support for sign-extension mov instruction
-  arm32, bpf: add support for unconditional bswap instruction
-  arm32, bpf: add support for 32-bit signed division
-  arm32, bpf: add support for 64 bit division instruction
-  selftest, bpf: enable cpu v4 tests for arm32
-  bpf/tests: add tests for cpuv4 instructions
-
- arch/arm/net/bpf_jit_32.c                     | 275 ++++++++++++-
- arch/arm/net/bpf_jit_32.h                     |   4 +
- include/linux/filter.h                        |  50 ++-
- lib/test_bpf.c                                | 371 ++++++++++++++++++
- .../selftests/bpf/progs/verifier_bswap.c      |   3 +-
- .../selftests/bpf/progs/verifier_gotol.c      |   3 +-
- .../selftests/bpf/progs/verifier_ldsx.c       |   3 +-
- .../selftests/bpf/progs/verifier_movsx.c      |   3 +-
- .../selftests/bpf/progs/verifier_sdiv.c       |   3 +-
- 9 files changed, 688 insertions(+), 27 deletions(-)
-
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 761af6b3cf2b..0138832ad571 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -117,21 +117,25 @@ struct ctl_table_header;
+ 
+ /* ALU ops on immediates, bpf_add|sub|...: dst_reg += imm32 */
+ 
+-#define BPF_ALU64_IMM(OP, DST, IMM)				\
++#define BPF_ALU64_IMM_OFF(OP, DST, IMM, OFF)			\
+ 	((struct bpf_insn) {					\
+ 		.code  = BPF_ALU64 | BPF_OP(OP) | BPF_K,	\
+ 		.dst_reg = DST,					\
+ 		.src_reg = 0,					\
+-		.off   = 0,					\
++		.off   = OFF,					\
+ 		.imm   = IMM })
++#define BPF_ALU64_IMM(OP, DST, IMM)				\
++	BPF_ALU64_IMM_OFF(OP, DST, IMM, 0)
+ 
+-#define BPF_ALU32_IMM(OP, DST, IMM)				\
++#define BPF_ALU32_IMM_OFF(OP, DST, IMM, OFF)			\
+ 	((struct bpf_insn) {					\
+ 		.code  = BPF_ALU | BPF_OP(OP) | BPF_K,		\
+ 		.dst_reg = DST,					\
+ 		.src_reg = 0,					\
+-		.off   = 0,					\
++		.off   = OFF,					\
+ 		.imm   = IMM })
++#define BPF_ALU32_IMM(OP, DST, IMM)				\
++	BPF_ALU32_IMM_OFF(OP, DST, IMM, 0)
+ 
+ /* Endianess conversion, cpu_to_{l,b}e(), {l,b}e_to_cpu() */
+ 
+@@ -143,6 +147,16 @@ struct ctl_table_header;
+ 		.off   = 0,					\
+ 		.imm   = LEN })
+ 
++/* Byte Swap, bswap16/32/64 */
++
++#define BPF_BSWAP(DST, LEN)					\
++	((struct bpf_insn) {					\
++		.code  = BPF_ALU64 | BPF_END | BPF_SRC(BPF_TO_LE),	\
++		.dst_reg = DST,					\
++		.src_reg = 0,					\
++		.off   = 0,					\
++		.imm   = LEN })
++
+ /* Short form of mov, dst_reg = src_reg */
+ 
+ #define BPF_MOV64_REG(DST, SRC)					\
+@@ -179,6 +193,24 @@ struct ctl_table_header;
+ 		.off   = 0,					\
+ 		.imm   = IMM })
+ 
++/* Short form of movsx, dst_reg = (s8,s16,s32)src_reg */
++
++#define BPF_MOVSX64_REG(DST, SRC, OFF)				\
++	((struct bpf_insn) {					\
++		.code  = BPF_ALU64 | BPF_MOV | BPF_X,		\
++		.dst_reg = DST,					\
++		.src_reg = SRC,					\
++		.off   = OFF,					\
++		.imm   = 0 })
++
++#define BPF_MOVSX32_REG(DST, SRC, OFF)				\
++	((struct bpf_insn) {					\
++		.code  = BPF_ALU | BPF_MOV | BPF_X,		\
++		.dst_reg = DST,					\
++		.src_reg = SRC,					\
++		.off   = OFF,					\
++		.imm   = 0 })
++
+ /* Special form of mov32, used for doing explicit zero extension on dst. */
+ #define BPF_ZEXT_REG(DST)					\
+ 	((struct bpf_insn) {					\
+@@ -263,6 +295,16 @@ static inline bool insn_is_zext(const struct bpf_insn *insn)
+ 		.off   = OFF,					\
+ 		.imm   = 0 })
+ 
++/* Memory load, dst_reg = *(signed size *) (src_reg + off16) */
++
++#define BPF_LDX_MEMSX(SIZE, DST, SRC, OFF)			\
++	((struct bpf_insn) {					\
++		.code  = BPF_LDX | BPF_SIZE(SIZE) | BPF_MEMSX,	\
++		.dst_reg = DST,					\
++		.src_reg = SRC,					\
++		.off   = OFF,					\
++		.imm   = 0 })
++
+ /* Memory store, *(uint *) (dst_reg + off16) = src_reg */
+ 
+ #define BPF_STX_MEM(SIZE, DST, SRC, OFF)			\
+diff --git a/lib/test_bpf.c b/lib/test_bpf.c
+index ecde4216201e..7916503e6a6a 100644
+--- a/lib/test_bpf.c
++++ b/lib/test_bpf.c
+@@ -5111,6 +5111,104 @@ static struct bpf_test tests[] = {
+ 		{ },
+ 		{ { 0, 0xffffffff } }
+ 	},
++	/* MOVSX32 */
++	{
++		"ALU_MOVSX | BPF_B",
++		.u.insns_int = {
++			BPF_LD_IMM64(R2, 0x00000000ffffffefLL),
++			BPF_LD_IMM64(R3, 0xdeadbeefdeadbeefLL),
++			BPF_MOVSX32_REG(R1, R3, 8),
++			BPF_JMP_REG(BPF_JEQ, R2, R1, 2),
++			BPF_MOV32_IMM(R0, 2),
++			BPF_EXIT_INSN(),
++			BPF_MOV32_IMM(R0, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x1 } },
++	},
++	{
++		"ALU_MOVSX | BPF_H",
++		.u.insns_int = {
++			BPF_LD_IMM64(R2, 0x00000000ffffbeefLL),
++			BPF_LD_IMM64(R3, 0xdeadbeefdeadbeefLL),
++			BPF_MOVSX32_REG(R1, R3, 16),
++			BPF_JMP_REG(BPF_JEQ, R2, R1, 2),
++			BPF_MOV32_IMM(R0, 2),
++			BPF_EXIT_INSN(),
++			BPF_MOV32_IMM(R0, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x1 } },
++	},
++	{
++		"ALU_MOVSX | BPF_W",
++		.u.insns_int = {
++			BPF_LD_IMM64(R2, 0x00000000deadbeefLL),
++			BPF_LD_IMM64(R3, 0xdeadbeefdeadbeefLL),
++			BPF_MOVSX32_REG(R1, R3, 32),
++			BPF_JMP_REG(BPF_JEQ, R2, R1, 2),
++			BPF_MOV32_IMM(R0, 2),
++			BPF_EXIT_INSN(),
++			BPF_MOV32_IMM(R0, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x1 } },
++	},
++	/* MOVSX64 REG */
++	{
++		"ALU64_MOVSX | BPF_B",
++		.u.insns_int = {
++			BPF_LD_IMM64(R2, 0xffffffffffffffefLL),
++			BPF_LD_IMM64(R3, 0xdeadbeefdeadbeefLL),
++			BPF_MOVSX64_REG(R1, R3, 8),
++			BPF_JMP_REG(BPF_JEQ, R2, R1, 2),
++			BPF_MOV32_IMM(R0, 2),
++			BPF_EXIT_INSN(),
++			BPF_MOV32_IMM(R0, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x1 } },
++	},
++	{
++		"ALU64_MOVSX | BPF_H",
++		.u.insns_int = {
++			BPF_LD_IMM64(R2, 0xffffffffffffbeefLL),
++			BPF_LD_IMM64(R3, 0xdeadbeefdeadbeefLL),
++			BPF_MOVSX64_REG(R1, R3, 16),
++			BPF_JMP_REG(BPF_JEQ, R2, R1, 2),
++			BPF_MOV32_IMM(R0, 2),
++			BPF_EXIT_INSN(),
++			BPF_MOV32_IMM(R0, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x1 } },
++	},
++	{
++		"ALU64_MOVSX | BPF_W",
++		.u.insns_int = {
++			BPF_LD_IMM64(R2, 0xffffffffdeadbeefLL),
++			BPF_LD_IMM64(R3, 0xdeadbeefdeadbeefLL),
++			BPF_MOVSX64_REG(R1, R3, 32),
++			BPF_JMP_REG(BPF_JEQ, R2, R1, 2),
++			BPF_MOV32_IMM(R0, 2),
++			BPF_EXIT_INSN(),
++			BPF_MOV32_IMM(R0, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x1 } },
++	},
+ 	/* BPF_ALU | BPF_ADD | BPF_X */
+ 	{
+ 		"ALU_ADD_X: 1 + 2 = 3",
+@@ -6105,6 +6203,106 @@ static struct bpf_test tests[] = {
+ 		{ },
+ 		{ { 0, 2 } },
+ 	},
++	/* BPF_ALU | BPF_DIV | BPF_X off=1 (SDIV) */
++	{
++		"ALU_SDIV_X: -6 / 2 = -3",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, -6),
++			BPF_ALU32_IMM(BPF_MOV, R1, 2),
++			BPF_ALU32_REG_OFF(BPF_DIV, R0, R1, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, -3 } },
++	},
++	/* BPF_ALU | BPF_DIV | BPF_K off=1 (SDIV) */
++	{
++		"ALU_SDIV_K: -6 / 2 = -3",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, -6),
++			BPF_ALU32_IMM_OFF(BPF_DIV, R0, 2, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, -3 } },
++	},
++	/* BPF_ALU64 | BPF_DIV | BPF_X off=1 (SDIV64) */
++	{
++		"ALU64_SDIV_X: -6 / 2 = -3",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, -6),
++			BPF_ALU32_IMM(BPF_MOV, R1, 2),
++			BPF_ALU64_REG_OFF(BPF_DIV, R0, R1, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, -3 } },
++	},
++	/* BPF_ALU64 | BPF_DIV | BPF_K off=1 (SDIV64) */
++	{
++		"ALU64_SDIV_K: -6 / 2 = -3",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, -6),
++			BPF_ALU64_IMM_OFF(BPF_DIV, R0, 2, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, -3 } },
++	},
++	/* BPF_ALU | BPF_MOD | BPF_X off=1 (SMOD) */
++	{
++		"ALU_SMOD_X: -7 % 2 = -1",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, -7),
++			BPF_ALU32_IMM(BPF_MOV, R1, 2),
++			BPF_ALU32_REG_OFF(BPF_MOD, R0, R1, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, -1 } },
++	},
++	/* BPF_ALU | BPF_MOD | BPF_K off=1 (SMOD) */
++	{
++		"ALU_SMOD_K: -7 % 2 = -1",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, -7),
++			BPF_ALU32_IMM_OFF(BPF_MOD, R0, 2, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, -1 } },
++	},
++	/* BPF_ALU64 | BPF_MOD | BPF_X off=1 (SMOD64) */
++	{
++		"ALU64_SMOD_X: -7 % 2 = -1",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, -7),
++			BPF_ALU32_IMM(BPF_MOV, R1, 2),
++			BPF_ALU64_REG_OFF(BPF_MOD, R0, R1, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, -1 } },
++	},
++	/* BPF_ALU64 | BPF_MOD | BPF_K off=1 (SMOD64) */
++	{
++		"ALU64_SMOD_X: -7 % 2 = -1",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, -7),
++			BPF_ALU64_IMM_OFF(BPF_MOD, R0, 2, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, -1 } },
++	},
+ 	/* BPF_ALU | BPF_AND | BPF_X */
+ 	{
+ 		"ALU_AND_X: 3 & 2 = 2",
+@@ -7837,6 +8035,104 @@ static struct bpf_test tests[] = {
+ 		{ },
+ 		{ { 0, (u32) (cpu_to_le64(0xfedcba9876543210ULL) >> 32) } },
+ 	},
++	/* BSWAP */
++	{
++		"BSWAP 16: 0x0123456789abcdef -> 0xefcd",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
++			BPF_BSWAP(R0, 16),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0xefcd } },
++	},
++	{
++		"BSWAP 32: 0x0123456789abcdef -> 0xefcdab89",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
++			BPF_BSWAP(R0, 32),
++			BPF_ALU64_REG(BPF_MOV, R1, R0),
++			BPF_ALU64_IMM(BPF_RSH, R1, 32),
++			BPF_ALU32_REG(BPF_ADD, R0, R1), /* R1 = 0 */
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0xefcdab89 } },
++	},
++	{
++		"BSWAP 64: 0x0123456789abcdef -> 0x67452301",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
++			BPF_BSWAP(R0, 64),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x67452301 } },
++	},
++	{
++		"BSWAP 64: 0x0123456789abcdef >> 32 -> 0xefcdab89",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
++			BPF_BSWAP(R0, 64),
++			BPF_ALU64_IMM(BPF_RSH, R0, 32),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0xefcdab89 } },
++	},
++	/* BSWAP, reversed */
++	{
++		"BSWAP 16: 0xfedcba9876543210 -> 0x1032",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0xfedcba9876543210ULL),
++			BPF_BSWAP(R0, 16),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x1032 } },
++	},
++	{
++		"BSWAP 32: 0xfedcba9876543210 -> 0x10325476",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0xfedcba9876543210ULL),
++			BPF_BSWAP(R0, 32),
++			BPF_ALU64_REG(BPF_MOV, R1, R0),
++			BPF_ALU64_IMM(BPF_RSH, R1, 32),
++			BPF_ALU32_REG(BPF_ADD, R0, R1), /* R1 = 0 */
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x10325476 } },
++	},
++	{
++		"BSWAP 64: 0xfedcba9876543210 -> 0x98badcfe",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0xfedcba9876543210ULL),
++			BPF_BSWAP(R0, 64),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x98badcfe } },
++	},
++	{
++		"BSWAP 64: 0xfedcba9876543210 >> 32 -> 0x10325476",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0xfedcba9876543210ULL),
++			BPF_BSWAP(R0, 64),
++			BPF_ALU64_IMM(BPF_RSH, R0, 32),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x10325476 } },
++	},
+ 	/* BPF_LDX_MEM B/H/W/DW */
+ 	{
+ 		"BPF_LDX_MEM | BPF_B, base",
+@@ -8228,6 +8524,67 @@ static struct bpf_test tests[] = {
+ 		{ { 32, 0 } },
+ 		.stack_depth = 0,
+ 	},
++	/* BPF_LDX_MEMSX B/H/W */
++	{
++		"BPF_LDX_MEMSX | BPF_B",
++		.u.insns_int = {
++			BPF_LD_IMM64(R1, 0xdead0000000000f0ULL),
++			BPF_LD_IMM64(R2, 0xfffffffffffffff0ULL),
++			BPF_STX_MEM(BPF_DW, R10, R1, -8),
++#ifdef __BIG_ENDIAN
++			BPF_LDX_MEMSX(BPF_B, R0, R10, -1),
++#else
++			BPF_LDX_MEMSX(BPF_B, R0, R10, -8),
++#endif
++			BPF_JMP_REG(BPF_JNE, R0, R2, 1),
++			BPF_ALU64_IMM(BPF_MOV, R0, 0),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0 } },
++		.stack_depth = 8,
++	},
++	{
++		"BPF_LDX_MEMSX | BPF_H",
++		.u.insns_int = {
++			BPF_LD_IMM64(R1, 0xdead00000000f123ULL),
++			BPF_LD_IMM64(R2, 0xfffffffffffff123ULL),
++			BPF_STX_MEM(BPF_DW, R10, R1, -8),
++#ifdef __BIG_ENDIAN
++			BPF_LDX_MEMSX(BPF_H, R0, R10, -2),
++#else
++			BPF_LDX_MEMSX(BPF_H, R0, R10, -8),
++#endif
++			BPF_JMP_REG(BPF_JNE, R0, R2, 1),
++			BPF_ALU64_IMM(BPF_MOV, R0, 0),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0 } },
++		.stack_depth = 8,
++	},
++	{
++		"BPF_LDX_MEMSX | BPF_W",
++		.u.insns_int = {
++			BPF_LD_IMM64(R1, 0x00000000deadbeefULL),
++			BPF_LD_IMM64(R2, 0xffffffffdeadbeefULL),
++			BPF_STX_MEM(BPF_DW, R10, R1, -8),
++#ifdef __BIG_ENDIAN
++			BPF_LDX_MEMSX(BPF_W, R0, R10, -4),
++#else
++			BPF_LDX_MEMSX(BPF_W, R0, R10, -8),
++#endif
++			BPF_JMP_REG(BPF_JNE, R0, R2, 1),
++			BPF_ALU64_IMM(BPF_MOV, R0, 0),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0 } },
++		.stack_depth = 8,
++	},
+ 	/* BPF_STX_MEM B/H/W/DW */
+ 	{
+ 		"BPF_STX_MEM | BPF_B",
+@@ -9474,6 +9831,20 @@ static struct bpf_test tests[] = {
+ 		{ },
+ 		{ { 0, 1 } },
+ 	},
++	/* BPF_JMP32 | BPF_JA */
++	{
++		"JMP32_JA: Unconditional jump: if (true) return 1",
++		.u.insns_int = {
++			BPF_ALU32_IMM(BPF_MOV, R0, 0),
++			BPF_JMP32_IMM(BPF_JA, 0, 1, 0),
++			BPF_EXIT_INSN(),
++			BPF_ALU32_IMM(BPF_MOV, R0, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 1 } },
++	},
+ 	/* BPF_JMP | BPF_JSLT | BPF_K */
+ 	{
+ 		"JMP_JSLT_K: Signed jump: if (-2 < -1) return 1",
 -- 
 2.39.2
 
