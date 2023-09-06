@@ -1,46 +1,46 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADC96111AF
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4739111B0
 	for <bpf@vger.kernel.org>; Wed,  6 Sep 2023 18:33:31 +0000 (UTC)
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68CF2172E;
-	Wed,  6 Sep 2023 11:33:27 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-401ec23be82so2196515e9.0;
-        Wed, 06 Sep 2023 11:33:27 -0700 (PDT)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945851738;
+	Wed,  6 Sep 2023 11:33:29 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-402cc6b8bedso1984295e9.1;
+        Wed, 06 Sep 2023 11:33:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694025206; x=1694630006; darn=vger.kernel.org;
+        d=gmail.com; s=20221208; t=1694025207; x=1694630007; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Kq3pXZpNJyYGAYAUopCV9gdOqNzHaZbuqwhwG2crWsI=;
-        b=WuqAcQRbPO8UhaHEysWowUll6bopH7C7X8a6imJk8erBwdOgOLwJI5/HLvfiDrbANB
-         ZmRPHGd4aKm3FVfd2EnFTau9b3LgZXUkJMtA8o7g2snHJ9dBXP/3DtjbGaT3EgIUXVyf
-         hBGyDD8gXq065+hKYVmuL8sqMuRfLVcosWkr+ti94gEqGlijZGLJ8fHgHhuCTMt3c6Ae
-         M/jWeDsN8FtXlVCPvsj+F43leZKrO0lJdfFLuqplJ8JYAk6WQXmCzfKGANxenoUrTrJh
-         d91H0jY7Myq5zJX7aSH1Pr8YWywpUra0STirYQ7skziQQTgtYBfMAkV6RBO+dKwsAyR1
-         SA3A==
+        bh=zDHabXQ3v0V6rVN5TewLut1ATi0BNX0QhXwmwgrIhV4=;
+        b=Y1f8RY8kFgNQWx6xYtjRwTyP+AbvdqOxK/KMhPDk3RIdLqxlrrg+09VXuXuyw3F7L8
+         EqGQNZLcRdJR2z7mvI6R42GW/qDYIa/jY/Qv1AbLMxfgvAVYe7KhlRFQa45P/ZwYzuDW
+         qG7IgjacfktU9Wr5D1kkGABciPQvUM5eVHVLmSHt55NPkxrHbRAWQB4a7/q7PvQHWOoa
+         wFn8u+oohlV1vUBGkvXmfZnOh9E9u8Tkl/Uk8Q9bMpzs63DaWeiJTQlqUhElv2VY2i4p
+         ZxxMCIlyDX8KOJn+hkdaAiUT63Lblx1GBpjOdnTLRNrrjt1cVd9l3hxiB+yR5xJ5NoSE
+         +QKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694025206; x=1694630006;
+        d=1e100.net; s=20221208; t=1694025207; x=1694630007;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Kq3pXZpNJyYGAYAUopCV9gdOqNzHaZbuqwhwG2crWsI=;
-        b=hlyr45YmpsEQxJxUKK87qgjhj3Ms42cQi424Elrw38gT3Xe/7fojCGEt87RRfPkMaH
-         a3TFtuoj/QwkZujjc7UqfXqj1w42Izn1iUROGs0PrC0TbJrF040xEUoBVabkby6AvOIr
-         ufcNxjQYVlmKvDA0PK+jpHGcbO0uXBecghhIWWmkQ9c64Hy8B9phgVBTu+gNMxwHJByF
-         ew49ZGXSfhsu3v3oe7PlSNu9utVuzyRQNe28Wu+yhBRZ4YjidR1yBaNPYUOni8rty8dJ
-         hbe+HqndJv9dLT8YX29xSnFaMeaKKb5z6ip6BzKO9Wt3HwFu5w5K0TfnhY3TaNGY5rdr
-         B/Ow==
-X-Gm-Message-State: AOJu0YzXAsTRsXMm3ldrIsvMpuas35Dcrg7OMXwlBXfppNb/6F5Ooyw7
-	vXOuZRBzw/YbnkYYOzFMLbI=
-X-Google-Smtp-Source: AGHT+IHPpd768AGpl3xNi8VxcpPkQvuVn8cQhmAVI1ewq9Ri6g8wz065Fk4L5UlELRJYV4BgCn7stQ==
-X-Received: by 2002:a05:600c:2409:b0:401:bd2e:49fc with SMTP id 9-20020a05600c240900b00401bd2e49fcmr3017577wmp.24.1694025205748;
-        Wed, 06 Sep 2023 11:33:25 -0700 (PDT)
+        bh=zDHabXQ3v0V6rVN5TewLut1ATi0BNX0QhXwmwgrIhV4=;
+        b=lK9GEynF9/TpfqVDJGrgOct26x+/qdasvsLpDkrXqs69syNHmXfTH2DpFRnhlhwKkD
+         jCV96bPB2XUIRwm00RVE5qF5rDi+Djk0NCgTjl3JklBrWXIZEeCZyU66xYUCScXnkGgA
+         venA+ta1RvOkrwxXU1Fe6Ba2upIAGIbhy6cXFrDSxgfJH55I0b08XhX401H0Pl1SOmsL
+         2EcyqtwgQ/R8b+RhobcyrQBnNw23KN5fkPI3xm57PTH1ijkq1f6dU8yCUdK8Hyz34ves
+         +bSTgUxy3Qlz/1Gm9VD791t5CszllmAh250Yf4C9NMNoS+kRWt1SEGeBZv0iqMqNjN4S
+         +daw==
+X-Gm-Message-State: AOJu0YxwnFRoCvggCl/JKLSKfHQrIgtF1xtThxGyuHC0KgAimZye3w36
+	3YQgQKO8Xtn5BFc58y9kj7I=
+X-Google-Smtp-Source: AGHT+IF6zrzuB7dNZDvwoFD7KuzrYKg3eZVeC4tkmJLvhV11HRZ0cFMPbVge1Wr5VIdOESNSbBmymA==
+X-Received: by 2002:a05:600c:2285:b0:401:5443:5598 with SMTP id 5-20020a05600c228500b0040154435598mr2887693wmf.25.1694025207327;
+        Wed, 06 Sep 2023 11:33:27 -0700 (PDT)
 Received: from ip-172-31-30-46.eu-west-1.compute.internal (ec2-54-170-241-106.eu-west-1.compute.amazonaws.com. [54.170.241.106])
-        by smtp.gmail.com with ESMTPSA id l10-20020a5d4bca000000b003180155493esm21094891wrt.67.2023.09.06.11.33.24
+        by smtp.gmail.com with ESMTPSA id l10-20020a5d4bca000000b003180155493esm21094891wrt.67.2023.09.06.11.33.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Sep 2023 11:33:25 -0700 (PDT)
+        Wed, 06 Sep 2023 11:33:27 -0700 (PDT)
 From: Puranjay Mohan <puranjay12@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -61,9 +61,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: puranjay12@gmail.com
-Subject: [PATCH bpf-next v2 5/8] arm32, bpf: add support for 32-bit signed division
-Date: Wed,  6 Sep 2023 18:33:17 +0000
-Message-Id: <20230906183320.1959008-6-puranjay12@gmail.com>
+Subject: [PATCH bpf-next v2 7/8] selftest, bpf: enable cpu v4 tests for arm32
+Date: Wed,  6 Sep 2023 18:33:19 +0000
+Message-Id: <20230906183320.1959008-8-puranjay12@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230906183320.1959008-1-puranjay12@gmail.com>
 References: <20230906183320.1959008-1-puranjay12@gmail.com>
@@ -81,116 +81,88 @@ X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-The cpuv4 added a new BPF_SDIV instruction that does signed division.
-The encoding is similar to BPF_DIV but BPF_SDIV sets offset=1.
-
-ARM32 already supports 32-bit BPF_DIV which can be easily extended to
-support BPF_SDIV as ARM32 has the SDIV instruction. When the CPU is not
-ARM-v7, we implement that SDIV/SMOD with the function call similar to
-the implementation of DIV/MOD.
+Now that all the cpuv4 instructions are supported by the arm32 JIT,
+enable the selftests for arm32.
 
 Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
 ---
- arch/arm/net/bpf_jit_32.c | 38 ++++++++++++++++++++++++++++++--------
- arch/arm/net/bpf_jit_32.h |  2 ++
- 2 files changed, 32 insertions(+), 8 deletions(-)
+ tools/testing/selftests/bpf/progs/verifier_bswap.c | 3 ++-
+ tools/testing/selftests/bpf/progs/verifier_gotol.c | 3 ++-
+ tools/testing/selftests/bpf/progs/verifier_ldsx.c  | 3 ++-
+ tools/testing/selftests/bpf/progs/verifier_movsx.c | 3 ++-
+ tools/testing/selftests/bpf/progs/verifier_sdiv.c  | 3 ++-
+ 5 files changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
-index f837db5c71b1..91b3294963bc 100644
---- a/arch/arm/net/bpf_jit_32.c
-+++ b/arch/arm/net/bpf_jit_32.c
-@@ -228,6 +228,16 @@ static u32 jit_mod32(u32 dividend, u32 divisor)
- 	return dividend % divisor;
- }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bswap.c b/tools/testing/selftests/bpf/progs/verifier_bswap.c
+index 8893094725f0..5d54f8eae6a1 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_bswap.c
++++ b/tools/testing/selftests/bpf/progs/verifier_bswap.c
+@@ -5,7 +5,8 @@
+ #include "bpf_misc.h"
  
-+static s32 jit_sdiv32(s32 dividend, s32 divisor)
-+{
-+	return dividend / divisor;
-+}
-+
-+static s32 jit_smod32(s32 dividend, s32 divisor)
-+{
-+	return dividend % divisor;
-+}
-+
- static inline void _emit(int cond, u32 inst, struct jit_ctx *ctx)
- {
- 	inst |= (cond << 28);
-@@ -477,17 +487,18 @@ static inline int epilogue_offset(const struct jit_ctx *ctx)
- 	return to - from - 2;
- }
+ #if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
+-     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && __clang_major__ >= 18
++	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || defined(__TARGET_ARCH_arm)) && \
++	__clang_major__ >= 18
  
--static inline void emit_udivmod(u8 rd, u8 rm, u8 rn, struct jit_ctx *ctx, u8 op)
-+static inline void emit_udivmod(u8 rd, u8 rm, u8 rn, struct jit_ctx *ctx, u8 op, u8 sign)
- {
- 	const int exclude_mask = BIT(ARM_R0) | BIT(ARM_R1);
- 	const s8 *tmp = bpf2a32[TMP_REG_1];
-+	u32 dst;
+ SEC("socket")
+ __description("BSWAP, 16")
+diff --git a/tools/testing/selftests/bpf/progs/verifier_gotol.c b/tools/testing/selftests/bpf/progs/verifier_gotol.c
+index 2dae5322a18e..aa54ecd5829e 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_gotol.c
++++ b/tools/testing/selftests/bpf/progs/verifier_gotol.c
+@@ -5,7 +5,8 @@
+ #include "bpf_misc.h"
  
- #if __LINUX_ARM_ARCH__ == 7
- 	if (elf_hwcap & HWCAP_IDIVA) {
--		if (op == BPF_DIV)
--			emit(ARM_UDIV(rd, rm, rn), ctx);
--		else {
--			emit(ARM_UDIV(ARM_IP, rm, rn), ctx);
-+		if (op == BPF_DIV) {
-+			emit(sign ? ARM_SDIV(rd, rm, rn) : ARM_UDIV(rd, rm, rn), ctx);
-+		} else {
-+			emit(sign ? ARM_SDIV(ARM_IP, rm, rn) : ARM_UDIV(ARM_IP, rm, rn), ctx);
- 			emit(ARM_MLS(rd, rn, ARM_IP, rm), ctx);
- 		}
- 		return;
-@@ -515,8 +526,19 @@ static inline void emit_udivmod(u8 rd, u8 rm, u8 rn, struct jit_ctx *ctx, u8 op)
- 	emit(ARM_PUSH(CALLER_MASK & ~exclude_mask), ctx);
+ #if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
+-     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && __clang_major__ >= 18
++	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || defined(__TARGET_ARCH_arm)) && \
++	__clang_major__ >= 18
  
- 	/* Call appropriate function */
--	emit_mov_i(ARM_IP, op == BPF_DIV ?
--		   (u32)jit_udiv32 : (u32)jit_mod32, ctx);
-+	if (sign) {
-+		if (op == BPF_DIV)
-+			dst = (u32)jit_sdiv32;
-+		else
-+			dst = (u32)jit_smod32;
-+	} else {
-+		if (op == BPF_DIV)
-+			dst = (u32)jit_udiv32;
-+		else
-+			dst = (u32)jit_mod32;
-+	}
-+
-+	emit_mov_i(ARM_IP, dst, ctx);
- 	emit_blx_r(ARM_IP, ctx);
+ SEC("socket")
+ __description("gotol, small_imm")
+diff --git a/tools/testing/selftests/bpf/progs/verifier_ldsx.c b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
+index 0c638f45aaf1..1e1bc379c44f 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_ldsx.c
++++ b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
+@@ -5,7 +5,8 @@
+ #include "bpf_misc.h"
  
- 	/* Restore caller-saved registers from stack */
-@@ -1547,7 +1569,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 			rt = src_lo;
- 			break;
- 		}
--		emit_udivmod(rd_lo, rd_lo, rt, ctx, BPF_OP(code));
-+		emit_udivmod(rd_lo, rd_lo, rt, ctx, BPF_OP(code), off);
- 		arm_bpf_put_reg32(dst_lo, rd_lo, ctx);
- 		if (!ctx->prog->aux->verifier_zext)
- 			emit_a32_mov_i(dst_hi, 0, ctx);
-diff --git a/arch/arm/net/bpf_jit_32.h b/arch/arm/net/bpf_jit_32.h
-index 79c7373fadce..438f0e1f91a0 100644
---- a/arch/arm/net/bpf_jit_32.h
-+++ b/arch/arm/net/bpf_jit_32.h
-@@ -139,6 +139,7 @@
- #define ARM_INST_TST_I		0x03100000
+ #if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
+-     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && __clang_major__ >= 18
++	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || defined(__TARGET_ARCH_arm)) && \
++	__clang_major__ >= 18
  
- #define ARM_INST_UDIV		0x0730f010
-+#define ARM_INST_SDIV		0x0710f010
+ SEC("socket")
+ __description("LDSX, S8")
+diff --git a/tools/testing/selftests/bpf/progs/verifier_movsx.c b/tools/testing/selftests/bpf/progs/verifier_movsx.c
+index 3c8ac2c57b1b..ca11fd5dafd1 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_movsx.c
++++ b/tools/testing/selftests/bpf/progs/verifier_movsx.c
+@@ -5,7 +5,8 @@
+ #include "bpf_misc.h"
  
- #define ARM_INST_UMULL		0x00800090
+ #if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
+-     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && __clang_major__ >= 18
++	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || defined(__TARGET_ARCH_arm)) && \
++	__clang_major__ >= 18
  
-@@ -267,6 +268,7 @@
- #define ARM_TST_I(rn, imm)	_AL3_I(ARM_INST_TST, 0, rn, imm)
+ SEC("socket")
+ __description("MOV32SX, S8")
+diff --git a/tools/testing/selftests/bpf/progs/verifier_sdiv.c b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
+index 0990f8825675..fb039722b639 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_sdiv.c
++++ b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
+@@ -5,7 +5,8 @@
+ #include "bpf_misc.h"
  
- #define ARM_UDIV(rd, rn, rm)	(ARM_INST_UDIV | (rd) << 16 | (rn) | (rm) << 8)
-+#define ARM_SDIV(rd, rn, rm)	(ARM_INST_SDIV | (rd) << 16 | (rn) | (rm) << 8)
+ #if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
+-     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && __clang_major__ >= 18
++	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || defined(__TARGET_ARCH_arm)) && \
++	__clang_major__ >= 18
  
- #define ARM_UMULL(rd_lo, rd_hi, rn, rm)	(ARM_INST_UMULL | (rd_hi) << 16 \
- 					 | (rd_lo) << 12 | (rm) << 8 | rn)
+ SEC("socket")
+ __description("SDIV32, non-zero imm divisor, check 1")
 -- 
 2.39.2
 
