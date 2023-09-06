@@ -1,71 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05D1A110D;
-	Wed,  6 Sep 2023 09:10:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7F589C433CC;
-	Wed,  6 Sep 2023 09:10:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1693991422;
-	bh=Pg5P5w70D/0sYqWVupcpHLssw2eK1+o374nOt3wVL34=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=CIpjAbeu4rwEpyl37ZzRTXPakps6nehrMOebuDQpFW3xL1ltHAsjbNz04xAy05dRO
-	 2T0c/FhcdpQHVN5Gk+rpinbIoQPiZBFme73alBfNOvhXpj35zshICqRAulo7djAEzt
-	 bk0XlO6NODt4YnVcK09yND+/WedkHV1hhJ6VOouUj3dmf7GSQB9UZQjJLJZipdpf3d
-	 UuSkESigOOUewBCiZ6Nd4CpfVHwzoGgLyW428T2MZFS7AwEyYVYMQs6oZi9lwGMQQ7
-	 HyQ9o/2UmuSywi22ZfMm89XPLyiHCNEaY55QnHvutEeQfEW1m1XeIazhs7417Z3ePH
-	 5/7aEWARm3E9g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 654C9E22B00;
-	Wed,  6 Sep 2023 09:10:22 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5DC11375
+	for <bpf@vger.kernel.org>; Wed,  6 Sep 2023 09:30:26 +0000 (UTC)
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BCD1732;
+	Wed,  6 Sep 2023 02:29:49 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2bcc846fed0so53878551fa.2;
+        Wed, 06 Sep 2023 02:29:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693992561; x=1694597361; darn=vger.kernel.org;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/RsfULzpF1odV8BlqVly8vHWfWckX8ePw3jzEkac84c=;
+        b=HGWY78217NAWwRbV1imkKz1avzHjGN484j1O8KSz480YaEy3VmUIdmykLePYnY5jAY
+         nLEe/bgkwHdvsl1Mj65PWAN9WQqQX5ycfwMEUjj73gSxU66wsKAf10nKfBpoao7jUsB5
+         tWNqlOfTayh7tI8Du7B5P3Eyc+hsqyFuTrrj6pMe/pLT/mkWw89/GhEGH6vXAgx6Pdya
+         t4jpnJGc6boLX+Fa2GZbM/Nd6uc0mVoj38vdjJsKfzR8NmC22ZSDZIDCEpfbOVwctS5z
+         lDie3P+vMyfy0CGoLguXZU1szYFA76mNfQd+xOHp8AsulieOkm6mg3ivBC61EcTkZBqV
+         jyrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693992561; x=1694597361;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/RsfULzpF1odV8BlqVly8vHWfWckX8ePw3jzEkac84c=;
+        b=eOg5HM4Rs+1Ap0OX0Bzp42TCKhFfhVVOSfWtpEomvuggqRPanZQmIuo6PZep/xo1jL
+         slgB4aPRfwKRRbChIywGWNBWppPqTtQRt39ajJNTau/v5I7NAP1UcL+JELeQB5JdP7qv
+         38BY1Fwdp5sh9FEuhB8uI3bHOWG4K9mEVqzjCYKPMdzaWQeUvVtdLe2xYMMShis27gac
+         skDa3RDHub0ayo2ZYOLbIsdBqVqkSGfZzin8gX9wVruXtvRNzusFBDdzrS7Nzy3aLPKg
+         47QMWGkFEOWC7yuV4NBy+I6p+4/tjllmZzZRDCcKJEiPHGhihJI8G8L5OGxJodIdXE6V
+         sAhg==
+X-Gm-Message-State: AOJu0YwR+kY9XgT8VQZ49dAESnUBXd4gV6JXjvpw+CILMqHfwH/cu6uP
+	z2CAfhmPB/QZ/ka5odML6Azlke7l1UpkCm0Yvu0=
+X-Google-Smtp-Source: AGHT+IGKaMJSDf8csr0Zu2G/4dDSjwT1H9c5ww+CXkDQ7LrEQU9iFyU8J49LizPWQ/hizsoPTC0mPg==
+X-Received: by 2002:a2e:9cd5:0:b0:2bc:c21d:311f with SMTP id g21-20020a2e9cd5000000b002bcc21d311fmr1561491ljj.52.1693992560399;
+        Wed, 06 Sep 2023 02:29:20 -0700 (PDT)
+Received: from dev-dsk-pjy-1a-76bc80b3.eu-west-1.amazon.com (54-240-197-231.amazon.com. [54.240.197.231])
+        by smtp.gmail.com with ESMTPSA id t12-20020a7bc3cc000000b003fef19bb55csm19209577wmj.34.2023.09.06.02.29.19
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 06 Sep 2023 02:29:20 -0700 (PDT)
+From: Puranjay Mohan <puranjay12@gmail.com>
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc: Alexei Starovoitov <ast@kernel.org>,  Daniel Borkmann
+ <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>,  Martin
+ KaFai Lau <martin.lau@linux.dev>,  Song Liu <song@kernel.org>,  Yonghong
+ Song <yonghong.song@linux.dev>,  John Fastabend
+ <john.fastabend@gmail.com>,  KP Singh <kpsingh@kernel.org>,  Stanislav
+ Fomichev <sdf@google.com>,  Hao Luo <haoluo@google.com>,  Jiri Olsa
+ <jolsa@kernel.org>,  Shubham Bansal <illusionist.neo@gmail.com>,  Mykola
+ Lysenko <mykolal@fb.com>,  Shuah Khan <shuah@kernel.org>,
+  bpf@vger.kernel.org,  linux-kselftest@vger.kernel.org,
+  linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 6/8] arm32, bpf: add support for 64 bit
+ division instruction
+References: <20230905210621.1711859-1-puranjay12@gmail.com>
+	<20230905210621.1711859-7-puranjay12@gmail.com>
+	<ZPein8oS5egqGwzp@shell.armlinux.org.uk>
+Date: Wed, 06 Sep 2023 09:29:19 +0000
+In-Reply-To: <ZPein8oS5egqGwzp@shell.armlinux.org.uk> (Russell King's message
+	of "Tue, 5 Sep 2023 22:50:23 +0100")
+Message-ID: <mb61po7if3b0w.fsf@amazon.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf 0/3] bpf: Fixes for bpf_sk_storage
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <169399142241.26603.13283011863319569534.git-patchwork-notify@kernel.org>
-Date: Wed, 06 Sep 2023 09:10:22 +0000
-References: <20230901231129.578493-1-martin.lau@linux.dev>
-In-Reply-To: <20230901231129.578493-1-martin.lau@linux.dev>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, netdev@vger.kernel.org, kernel-team@meta.com
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+	FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-Hello:
+On Tue, Sep 05 2023, Russell King (Oracle) wrote:
 
-This series was applied to bpf/bpf.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+> On Tue, Sep 05, 2023 at 09:06:19PM +0000, Puranjay Mohan wrote:
+>> +cont:
+>> +
+>> +	/* Call appropriate function */
+>> +	if (sign)
+>> +		emit_mov_i(ARM_IP, op == BPF_DIV ? (u32)jit_sdiv64 : (u32)jit_smod64, ctx);
+>> +	else
+>> +		emit_mov_i(ARM_IP, op == BPF_DIV ? (u32)jit_udiv64 : (u32)jit_mod64, ctx);
+>
+> Same comment as the previous patch here.
 
-On Fri,  1 Sep 2023 16:11:26 -0700 you wrote:
-> From: Martin KaFai Lau <martin.lau@kernel.org>
-> 
-> This set has two fixes for bpf_sk_storage. Please see the individual
-> patch for details.
-> 
-> Martin KaFai Lau (3):
->   bpf: bpf_sk_storage: Fix invalid wait context lockdep report
->   bpf: bpf_sk_storage: Fix the missing uncharge in sk_omem_alloc
->   selftests/bpf: Check bpf_sk_storage has uncharged sk_omem_alloc
-> 
-> [...]
+Will fix both in next version.
 
-Here is the summary with links:
-  - [bpf,1/3] bpf: bpf_sk_storage: Fix invalid wait context lockdep report
-    https://git.kernel.org/bpf/bpf/c/a96a44aba556
-  - [bpf,2/3] bpf: bpf_sk_storage: Fix the missing uncharge in sk_omem_alloc
-    https://git.kernel.org/bpf/bpf/c/55d49f750b1c
-  - [bpf,3/3] selftests/bpf: Check bpf_sk_storage has uncharged sk_omem_alloc
-    https://git.kernel.org/bpf/bpf/c/a96d1cfb2da0
+>
+>> +
+>> +	emit_blx_r(ARM_IP, ctx);
+>> +
+>> +	/* Save return value */
+>> +	if (rd[1] != ARM_R0) {
+>> +		emit(ARM_MOV_R(rd[0], ARM_R1), ctx);
+>> +		emit(ARM_MOV_R(rd[1], ARM_R0), ctx);
+>> +	}
+>> +
+>> +	/* Recover {R1, R0} from stack if it is not Rd */
+>> +	if (rd[1] != ARM_R0)
+>> +		emit(ARM_POP(BIT(ARM_R0) | BIT(ARM_R1)), ctx);
+>> +	else
+>> +		emit(ARM_ADD_I(ARM_SP, ARM_SP, 8), ctx);
+>> +
+>> +	/* Recover {R3, R2} from stack if it is not Rd */
+>> +	if (rd[1] != ARM_R2)
+>> +		emit(ARM_POP(BIT(ARM_R2) | BIT(ARM_R3)), ctx);
+>> +	else
+>> +		emit(ARM_ADD_I(ARM_SP, ARM_SP, 8), ctx);
+>
+> 	if (rd[1] != ARM_R0) {
+> 		emit(ARM_POP(BIT(ARM_R0) | BIT(ARM_R1)), ctx);
+> 		emit(ARM_ADD_I(ARM_SP, ARM_SP, 8), ctx);
+> 	} else if (rd[1] != ARM_R2) {
+> 		emit(ARM_ADD_I(ARM_SP, ARM_SP, 8), ctx);
+> 		emit(ARM_POP(BIT(ARM_R2) | BIT(ARM_R3)), ctx);
+> 	} else {
+> 		emit(ARM_ADD_I(ARM_SP, ARM_SP, 16), ctx);
+> 	}
+>
+> Hmm?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Actually, there can also be a situation where rd[1] != ARM_R0 && rd[1] != ARM_R2,
+so should I do it like:
 
+ 	if (rd[1] != ARM_R0 && rd[1] != ARM_R2) {
+ 		emit(ARM_POP(BIT(ARM_R0) | BIT(ARM_R1)), ctx);
+ 		emit(ARM_POP(BIT(ARM_R2) | BIT(ARM_R3)), ctx);      
+ 	} else if (rd[1] != ARM_R0) {
+ 		emit(ARM_POP(BIT(ARM_R0) | BIT(ARM_R1)), ctx);
+ 		emit(ARM_ADD_I(ARM_SP, ARM_SP, 8), ctx);
+ 	} else if (rd[1] != ARM_R2) {
+ 		emit(ARM_ADD_I(ARM_SP, ARM_SP, 8), ctx);
+ 		emit(ARM_POP(BIT(ARM_R2) | BIT(ARM_R3)), ctx);
+ 	} else {
+ 		emit(ARM_ADD_I(ARM_SP, ARM_SP, 16), ctx);
+ 	}
 
+Thanks,
+Puranjay
