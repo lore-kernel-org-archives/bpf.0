@@ -1,85 +1,104 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A77914010
-	for <bpf@vger.kernel.org>; Thu,  7 Sep 2023 18:31:48 +0000 (UTC)
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C45B1BDC
-	for <bpf@vger.kernel.org>; Thu,  7 Sep 2023 11:31:24 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-401da71b7faso14849415e9.2
-        for <bpf@vger.kernel.org>; Thu, 07 Sep 2023 11:31:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1694111454; x=1694716254; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wNTVI4f7lyrYMJHSa0H1JID0t17YVxVdLEeXgpOF/ZM=;
-        b=ItcRfplH1pycUFlEj0Cw1eDir/cNk6pOBU9ulqZGvXp6vXGhwVYgG6RQH6j/pfOQM5
-         hvPOlX72o54fVjR5uvYvb0KILGbsQcRF3HsEkjgduCzW2AijxXdDbFtTSdWKUl9G7RgP
-         R+fJhX8oASgYhAl3mvW/DwzwVNOqKWfd+aTjVNjBsANf+k/3oY4+FNorKElwT0JGzknx
-         EKhjbHysy0F+a2APAFtom7Pg6J/hev3pU2NcSixNg/Mxqp1RO6WIGKhUGFYrAkrU4a5C
-         5XzL5ALBhHrzhRLbER2L4JCqOAAdWN2PYC5Hwi6De9VwDHyGzBrsmqYP5dd/YMORhQmw
-         ZVXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694111454; x=1694716254;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wNTVI4f7lyrYMJHSa0H1JID0t17YVxVdLEeXgpOF/ZM=;
-        b=n0Ogs9PYQSId6qofuF/tyiDtS0rDcZ800HSgX8D6P9nAOjZdj6ZaiKMaZ8+8w8yNL2
-         MmNtkih6K82OhdQvof9/IIFKxONacRLdorKbDQqH10iweoYkYc+U887SO+Sl27q1P3zn
-         u6bEY3jVE9rRPrj6lT35u/48zE90OUdOu7xOk5ZoN9w4ze326IeOQAVH8Kww6+f4Vxln
-         tDs49Mu9vngY+oSUnsvRlP0/ULTd7TCHU3xi8gZI4fzcSHyLOPQ0IwMnp2KFwjwsLYY7
-         QsQBDa4Az35tQ+WFOrrKp5jI8lDemdVsIM92RORgAZs5PKpK1HfBZUsSHuuOVB4wZP/m
-         a87Q==
-X-Gm-Message-State: AOJu0YwqlTV2911DavuRVkJIcxoHHKD6nnVMniQTFm3nmGNugR2Whz0I
-	ioZNXAToVAAdTtZdY4lHCl7ifbeqg+Ly56tsJs8Sjw==
-X-Google-Smtp-Source: AGHT+IEttfmERxiM/L3KpZSGhjYPzeNtvwYrv9CM30hDkctrjmmkCKyQTfrQDn8E2K4fXRGXb+4GaA==
-X-Received: by 2002:a05:600c:2811:b0:3fb:ffa8:6d78 with SMTP id m17-20020a05600c281100b003fbffa86d78mr4162952wmb.36.1694077651881;
-        Thu, 07 Sep 2023 02:07:31 -0700 (PDT)
-Received: from ?IPV6:2a02:8011:e80c:0:ace0:3e80:4307:5b4b? ([2a02:8011:e80c:0:ace0:3e80:4307:5b4b])
-        by smtp.gmail.com with ESMTPSA id m15-20020a056000180f00b003142ea7a661sm22591889wrh.21.2023.09.07.02.07.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Sep 2023 02:07:31 -0700 (PDT)
-Message-ID: <0fabfdb8-ca27-4f71-8b71-8a8fba45c5d3@isovalent.com>
-Date: Thu, 7 Sep 2023 10:07:30 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31AE98BF5
+	for <bpf@vger.kernel.org>; Thu,  7 Sep 2023 18:41:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CB24C43395
+	for <bpf@vger.kernel.org>; Thu,  7 Sep 2023 18:41:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1694112061;
+	bh=S9ZAswZQkRWoyTBkTJdEmpRgs0QwmwDTBD/yjXWEK40=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=gJr78pzBwWNytA0Owuys83RqLCISmNIyEGe1PUFf8eKNKhIiMG0Aa6xOnyqcCb0Xf
+	 5DDiCVJRiRhSlaTVY67LHAT282E8d9p2hGTXvLfGATNeMt/fZqlV2xHPlHAx0TPV4M
+	 Pp9IK+Ku+yClsEjjLbBpnVNaLv5jBtyXogiQsE+SKtf/JG+YBW2+14nxnUafHObtSa
+	 7cRa32by4UX7gPZx293CEV2mx0rVN2NBaZLsKhLVIgbUH7rAXHRnOMDfHMfAI0/21U
+	 sB355Bh3Q2JA9bg7DvOMg+0udldGVJdZUAvKQDbSj2icqZUGbPX5tQTpf7qtatty6m
+	 ZD9CD8anmcwlg==
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5008d16cc36so2152953e87.2
+        for <bpf@vger.kernel.org>; Thu, 07 Sep 2023 11:41:01 -0700 (PDT)
+X-Gm-Message-State: AOJu0YzJvbw4q6Jp4256q5oD951RqK7tMz9kPmD5w9ZO9kO8/kjPoBjB
+	u8CKuJRQ4vnVujvlFRbHrkDc+1cX1BMtQDSXfXs=
+X-Google-Smtp-Source: AGHT+IFpXvx04V93n2xfn+Df2HH+qexZ8rmAF4qR72CPztyrvOBuBW+9LN0MsASYVIpJc3z2W3JCYd+AzZDthxJt29I=
+X-Received: by 2002:a19:915a:0:b0:500:9704:3c9 with SMTP id
+ y26-20020a19915a000000b00500970403c9mr176541lfj.26.1694112059575; Thu, 07 Sep
+ 2023 11:40:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] bpftool: fix -Wcast-qual warning
-Content-Language: en-GB
-To: Denys Zagorui <dzagorui@cisco.com>, alastorze@fb.com, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org
-Cc: bpf@vger.kernel.org
-References: <20230907090210.968612-1-dzagorui@cisco.com>
-From: Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <20230907090210.968612-1-dzagorui@cisco.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+References: <20230907071311.254313-1-jolsa@kernel.org> <20230907071311.254313-4-jolsa@kernel.org>
+In-Reply-To: <20230907071311.254313-4-jolsa@kernel.org>
+From: Song Liu <song@kernel.org>
+Date: Thu, 7 Sep 2023 11:40:46 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4hX95fHZCDYnfzAwK43dbnGJUxHEF3bGdODWe_6MytnQ@mail.gmail.com>
+Message-ID: <CAPhsuW4hX95fHZCDYnfzAwK43dbnGJUxHEF3bGdODWe_6MytnQ@mail.gmail.com>
+Subject: Re: [PATCHv2 bpf-next 3/9] bpf: Add missed value to kprobe perf link info
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>, 
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@chromium.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Hou Tao <houtao1@huawei.com>, 
+	Daniel Xu <dxu@dxuuu.xyz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 07/09/2023 10:02, Denys Zagorui wrote:
-> This cast was made by purpose for older libbpf where the
-> bpf_object_skeleton field is void * instead of const void *
-> to eliminate a warning (as i understand
-> -Wincompatible-pointer-types-discards-qualifiers) but this
-> cast introduces another warning (-Wcast-qual) for libbpf
-> where data field is const void *
-> 
-> It makes sense for bpftool to be in sync with libbpf from
-> kernel sources
-> 
-> Signed-off-by: Denys Zagorui <dzagorui@cisco.com>
+On Thu, Sep 7, 2023 at 12:13=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> Add missed value to kprobe attached through perf link info to
+> hold the stats of missed kprobe handler execution.
+>
+> The kprobe's missed counter gets incremented when kprobe handler
+> is not executed due to another kprobe running on the same cpu.
+>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 
-Acked-by: Quentin Monnet <quentin@isovalent.com>
+[...]
 
+The code looks good to me. But I have two thoughts on this (and 2/9).
+
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index e5216420ec73..e824b0c50425 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -6546,6 +6546,7 @@ struct bpf_link_info {
+>                                         __u32 name_len;
+>                                         __u32 offset; /* offset from func=
+_name */
+>                                         __u64 addr;
+> +                                       __u64 missed;
+>                                 } kprobe; /* BPF_PERF_EVENT_KPROBE, BPF_P=
+ERF_EVENT_KRETPROBE */
+>                                 struct {
+>                                         __aligned_u64 tp_name;   /* in/ou=
+t */
+
+1) Shall we add missed for all bpf_link_info? Something like:
+
+diff --git i/include/uapi/linux/bpf.h w/include/uapi/linux/bpf.h
+index 5a39c7a13499..cf0b8b2a8b39 100644
+--- i/include/uapi/linux/bpf.h
++++ w/include/uapi/linux/bpf.h
+@@ -6465,6 +6465,7 @@ struct bpf_link_info {
+        __u32 type;
+        __u32 id;
+        __u32 prog_id;
++       __u64 missed;
+        union {
+                struct {
+                        __aligned_u64 tp_name; /* in/out: tp_name buffer pt=
+r */
+
+2) "missed" doesn't seem to fit well with other information in
+struct bpf_link_info. Other information there are more like stable-ish
+information; while missed is a stat that changes over time. Given we
+have prog_id in bpf_link_info, do we really need "missed" here?
+
+Thanks,
+Song
+
+
+[...]
