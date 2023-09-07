@@ -1,83 +1,217 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F91033FA
-	for <bpf@vger.kernel.org>; Thu,  7 Sep 2023 16:02:06 +0000 (UTC)
-Received: from pandora.armlinux.org.uk (unknown [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934A022A5A;
-	Thu,  7 Sep 2023 09:01:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=9U7UtfEdSnnxywMPXF+OgzCTVp9iErjz0p+rF6sp5Y0=; b=j9Li/W6nKb0IVyyG1BmtWdAX8C
-	bZYGlkAGnOk7pfVpG2QKqvGz0sPbf0EDV3Ch8AI+syL6yRGMdkJe8qHcQagYsDXKWpvLEQmSpq4xI
-	n9ilcx6wkDkHH3MJzjXDFTT9LRipQzTlYYPxeTNBqOwM4OD7i0z/g0d5ekH9MnsBwBhl3B4KjbuR9
-	Xs9e6uLj+1ipCampQCEJSX75IWoAg9v6K4pP4gS4mzDTYk7ca6TdpEmblimXsVXf198bMikhDZaIQ
-	0tnnIT9ENJdnmuiv8c/XxfKdfHBEBj3RZL1ngj2RhsnI/yQgBO36kyWkGnFdq9hk18ZiYSgghLWoU
-	Lcyj5ppw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35872)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1qeAhM-0001fF-2I;
-	Thu, 07 Sep 2023 09:49:12 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1qeAhM-0005hP-MX; Thu, 07 Sep 2023 09:49:12 +0100
-Date: Thu, 7 Sep 2023 09:49:12 +0100
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Puranjay Mohan <puranjay12@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Shubham Bansal <illusionist.neo@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 5/8] arm32, bpf: add support for 32-bit
- signed division
-Message-ID: <ZPmOiF9UsPf8FN5V@shell.armlinux.org.uk>
-References: <20230906183320.1959008-1-puranjay12@gmail.com>
- <20230906183320.1959008-6-puranjay12@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 049F228E7;
+	Thu,  7 Sep 2023 16:05:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E6C6C4339A;
+	Thu,  7 Sep 2023 16:05:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1694102748;
+	bh=SETT7D9Th+Jmeeyrb8PHMHUPrAPO4I03JKooKx3IGLw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=hCwjAgHBzZGgtUsCJOQlz9rSflUuq4ESDb4TQsx9InqZBSUwb3AmlsNyN4hVSDqT3
+	 9Rg330ymDc127ePJ7cQoGr6f3pLH8ZQkXlMpsvDJ2hp7SZKa1Xgx+uCUVHYKs9b7DR
+	 Ua+VjPChRSJ7wANDTZzON/yNG3isfWZQNfci7YlNTTxUdwH08Ibo4s29k+yOAxy9te
+	 LX99eL2i6bGSq0IsmDUVLIPhxxBd+Tb/vqyTNy1QoTmKjJMmh3e/947uiRX/zHzicV
+	 PmTwwO8gxmD3EdI2zI+LYSvwJIAW6BpFitoPpw8NA6bRS+Zt0CihKesj7LlZyf3Oyn
+	 xHkDy/Fy+B6pg==
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 2EB88DC684E; Thu,  7 Sep 2023 18:05:45 +0200 (CEST)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Hsin-Wei Hung
+ <hsinweih@uci.edu>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
+ Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>, Yonghong Song
+ <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh
+ <kpsingh@kernel.org>, Network Development <netdev@vger.kernel.org>, bpf
+ <bpf@vger.kernel.org>, Arnaldo Carvalho de Melo <acme@kernel.org>
+Subject: Re: Possible deadlock in bpf queue map
+In-Reply-To: <CAADnVQK-ov_rve4pM7McMDQd5E9U5-JPjT5522BaVWDH-NvM5g@mail.gmail.com>
+References: <CABcoxUbYwuZUL-xm1+5juO42nJMgpQX7cNyQELYz+g2XkZi9TQ@mail.gmail.com>
+ <87o7ienuss.fsf@toke.dk>
+ <CAP01T76Ce2KHQqTGsqs5K9RM5qSv07rNxnV+-=q_J25i9NkqxA@mail.gmail.com>
+ <87fs3qnnh4.fsf@toke.dk>
+ <CAADnVQK-ov_rve4pM7McMDQd5E9U5-JPjT5522BaVWDH-NvM5g@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Thu, 07 Sep 2023 18:05:45 +0200
+Message-ID: <8734zqnf3a.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230906183320.1959008-6-puranjay12@gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,
-	SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 06, 2023 at 06:33:17PM +0000, Puranjay Mohan wrote:
-> The cpuv4 added a new BPF_SDIV instruction that does signed division.
-> The encoding is similar to BPF_DIV but BPF_SDIV sets offset=1.
-> 
-> ARM32 already supports 32-bit BPF_DIV which can be easily extended to
-> support BPF_SDIV as ARM32 has the SDIV instruction. When the CPU is not
-> ARM-v7, we implement that SDIV/SMOD with the function call similar to
-> the implementation of DIV/MOD.
-> 
-> Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
 
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> On Thu, Sep 7, 2023 at 6:04=E2=80=AFAM Toke H=C3=B8iland-J=C3=B8rgensen <=
+toke@kernel.org> wrote:
+>>
+>> Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
+>>
+>> > On Thu, 7 Sept 2023 at 12:26, Toke H=C3=B8iland-J=C3=B8rgensen <toke@k=
+ernel.org> wrote:
+>> >>
+>> >> +Arnaldo
+>> >>
+>> >> > Hi,
+>> >> >
+>> >> > Our bpf fuzzer, a customized Syzkaller, triggered a lockdep warning=
+ in
+>> >> > the bpf queue map in v5.15. Since queue_stack_maps.c has no major c=
+hanges
+>> >> > since v5.15, we think this should still exist in the latest kernel.
+>> >> > The bug can be occasionally triggered, and we suspect one of the
+>> >> > eBPF programs involved to be the following one. We also attached th=
+e lockdep
+>> >> > warning at the end.
+>> >> >
+>> >> > #define DEFINE_BPF_MAP_NO_KEY(the_map, TypeOfMap, MapFlags,
+>> >> > TypeOfValue, MaxEntries) \
+>> >> >         struct {                                                   =
+     \
+>> >> >             __uint(type, TypeOfMap);                               =
+     \
+>> >> >             __uint(map_flags, (MapFlags));                         =
+     \
+>> >> >             __uint(max_entries, (MaxEntries));                     =
+     \
+>> >> >             __type(value, TypeOfValue);                            =
+     \
+>> >> >         } the_map SEC(".maps");
+>> >> >
+>> >> > DEFINE_BPF_MAP_NO_KEY(map_0, BPF_MAP_TYPE_QUEUE, 0 | BPF_F_WRONLY,
+>> >> > struct_0, 162);
+>> >> > SEC("perf_event")
+>> >> > int func(struct bpf_perf_event_data *ctx) {
+>> >> >         char v0[96] =3D {};
+>> >> >         uint64_t v1 =3D 0;
+>> >> >         v1 =3D bpf_map_pop_elem(&map_0, v0);
+>> >> >         return 163819661;
+>> >> > }
+>> >> >
+>> >> >
+>> >> > The program is attached to the following perf event.
+>> >> >
+>> >> > struct perf_event_attr attr_type_hw =3D {
+>> >> >         .type =3D PERF_TYPE_HARDWARE,
+>> >> >         .config =3D PERF_COUNT_HW_CPU_CYCLES,
+>> >> >         .sample_freq =3D 50,
+>> >> >         .inherit =3D 1,
+>> >> >         .freq =3D 1,
+>> >> > };
+>> >> >
+>> >> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3DWARNING: inconsistent lock state
+>> >> > 5.15.26+ #2 Not tainted
+>> >> > --------------------------------
+>> >> > inconsistent {INITIAL USE} -> {IN-NMI} usage.
+>> >> > syz-executor.5/19749 [HC1[1]:SC0[0]:HE0:SE1] takes:
+>> >> > ffff88804c9fc198 (&qs->lock){..-.}-{2:2}, at: __queue_map_get+0x31/=
+0x250
+>> >> > {INITIAL USE} state was registered at:
+>> >> >   lock_acquire+0x1a3/0x4b0
+>> >> >   _raw_spin_lock_irqsave+0x48/0x60
+>> >> >   __queue_map_get+0x31/0x250
+>> >> >   bpf_prog_577904e86c81dead_func+0x12/0x4b4
+>> >> >   trace_call_bpf+0x262/0x5d0
+>> >> >   perf_trace_run_bpf_submit+0x91/0x1c0
+>> >> >   perf_trace_sched_switch+0x46c/0x700
+>> >> >   __schedule+0x11b5/0x24a0
+>> >> >   schedule+0xd4/0x270
+>> >> >   futex_wait_queue_me+0x25f/0x520
+>> >> >   futex_wait+0x1e0/0x5f0
+>> >> >   do_futex+0x395/0x1890
+>> >> >   __x64_sys_futex+0x1cb/0x480
+>> >> >   do_syscall_64+0x3b/0xc0
+>> >> >   entry_SYSCALL_64_after_hwframe+0x44/0xae
+>> >> > irq event stamp: 13640
+>> >> > hardirqs last  enabled at (13639): [<ffffffff95eb2bf4>]
+>> >> > _raw_spin_unlock_irq+0x24/0x40
+>> >> > hardirqs last disabled at (13640): [<ffffffff95eb2d4d>]
+>> >> > _raw_spin_lock_irqsave+0x5d/0x60
+>> >> > softirqs last  enabled at (13464): [<ffffffff93e26de5>] __sys_bpf+0=
+x3e15/0x4e80
+>> >> > softirqs last disabled at (13462): [<ffffffff93e26da3>] __sys_bpf+0=
+x3dd3/0x4e80
+>> >> >
+>> >> > other info that might help us debug this:
+>> >> >  Possible unsafe locking scenario:
+>> >> >
+>> >> >        CPU0
+>> >> >        ----
+>> >> >   lock(&qs->lock);
+>> >> >   <Interrupt>
+>> >> >     lock(&qs->lock);
+>> >>
+>> >> Hmm, so that lock() uses raw_spin_lock_irqsave(), which *should* be
+>> >> disabling interrupts entirely for the critical section. But I guess a
+>> >> Perf hardware event can still trigger? Which seems like it would
+>> >> potentially wreak havoc with lots of things, not just this queue map
+>> >> function?
+>> >>
+>> >> No idea how to protect against this, though. Hoping Arnaldo knows? :)
+>> >>
+>> >
+>> > The locking should probably be protected by a percpu integer counter,
+>> > incremented and decremented before and after the lock is taken,
+>> > respectively. If it is already non-zero, then -EBUSY should be
+>> > returned. It is similar to what htab_lock_bucket protects against in
+>> > hashtab.c.
+>>
+>> Ah, neat! Okay, seems straight-forward enough to replicate. Hsin, could
+>> you please check if the patch below gets rid of the splat?
+>
+> Instead of adding all this complexity for the map that is so rarely used
+> it's easier to disallow it perf_event prog types.
+> Or add a single if (in_nmi()) return -EBUSY.
 
-Thanks, this is a lot more clear!
+Heh, I was actually thinking the "nmi-safe lock" thing might be
+something that could be neatly encapsulated into the lock library
+helpers. But OK, so you mean just something like the below, then?
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+I'll send a proper patch for that later if no one objects (or beats me
+to it) :)
+
+-Toke
+
+diff --git a/kernel/bpf/queue_stack_maps.c b/kernel/bpf/queue_stack_maps.c
+index 8d2ddcb7566b..138525424745 100644
+--- a/kernel/bpf/queue_stack_maps.c
++++ b/kernel/bpf/queue_stack_maps.c
+@@ -98,6 +98,9 @@ static long __queue_map_get(struct bpf_map *map, void *va=
+lue, bool delete)
+        int err =3D 0;
+        void *ptr;
+=20
++       if (in_nmi())
++               return -EBUSY;
++
+        raw_spin_lock_irqsave(&qs->lock, flags);
+=20
+        if (queue_stack_map_is_empty(qs)) {
+@@ -128,6 +131,9 @@ static long __stack_map_get(struct bpf_map *map, void *=
+value, bool delete)
+        void *ptr;
+        u32 index;
+=20
++       if (in_nmi())
++               return -EBUSY;
++
+        raw_spin_lock_irqsave(&qs->lock, flags);
+=20
+        if (queue_stack_map_is_empty(qs)) {
+@@ -193,6 +199,9 @@ static long queue_stack_map_push_elem(struct bpf_map *m=
+ap, void *value,
+        if (flags & BPF_NOEXIST || flags > BPF_EXIST)
+                return -EINVAL;
+=20
++       if (in_nmi())
++               return -EBUSY;
++
+        raw_spin_lock_irqsave(&qs->lock, irq_flags);
+=20
+        if (queue_stack_map_is_full(qs)) {
