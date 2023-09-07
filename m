@@ -1,397 +1,180 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E24D829B4
-	for <bpf@vger.kernel.org>; Thu,  7 Sep 2023 15:35:27 +0000 (UTC)
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F309171C
-	for <bpf@vger.kernel.org>; Thu,  7 Sep 2023 08:35:06 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-5921a962adfso11312457b3.1
-        for <bpf@vger.kernel.org>; Thu, 07 Sep 2023 08:35:06 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6186729B4
+	for <bpf@vger.kernel.org>; Thu,  7 Sep 2023 15:37:58 +0000 (UTC)
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB462D44
+	for <bpf@vger.kernel.org>; Thu,  7 Sep 2023 08:37:35 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2bc63e0d8cdso18365261fa.2
+        for <bpf@vger.kernel.org>; Thu, 07 Sep 2023 08:37:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694100893; x=1694705693; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1694101009; x=1694705809; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wuVD3KjxuDmtHrR4M83KRmqZpQz2LCH9fQVoJWYT3Ec=;
-        b=GKGBlDa5W65q08TIofkkai3hv/OWfKfnDIUgLK3vwGh/tkQd5+K/DtB3LN6r+7RKAt
-         zrkmNkk6xInTCvNrpPNWt5C8JlXMlxD4Ba0Zbx1SrZvFbqQsuKdenrlBinfW0rr/hlgO
-         My0cpOWkfKqhwcxQ5wwmJ8p4qfo57ws2edYaES4pR9p/B+wnXZqfgvVZG61R4q0yfHus
-         C8kvf7Yp8O43B8gFpDbLjHYBTnSXO9GFoFLbG73YeJ4iXjX06BEuy334Ix0zmWQ00Ni1
-         XZPBAwer2GTwLyMVQcbKf7H3sqe2+nc+2KjMC80Ttj82wiUQ+w2V0Qv2Scx+b9ot3fyl
-         inDA==
+        bh=lNUjL5NYr3fl2Nz9u4NMZvf537GDFiwVmtA3TLgGYPs=;
+        b=cn985BaibGuf0Nq7VgT52F+U32fHJNpMCqt5HkUsgKXw80e7RvR7TQNnByipS0LLGD
+         aY3gNdXkXzWnSJIUZ65viHQg164IudMrylLgPtyDG/M4n+P8q8C5pT/RR7mBVNMph5J7
+         QX99nt55/VHLESDWWp6H8OowF304Ksb7M9XwHvCjIjfI/xFjWVWntJUAE7nbydYJzglV
+         wtP3OpEEaWEd8zbC/DsOyRcO47e18OacVbS0cun+JWlb9m6PgkgsepqsNZ1vXVP9BgQZ
+         m3cPe01fRibW+qjlY0hWj/2WdrJvUFUOaUTYfvDn+XAToDBENdCFycug5KhCNJCJlqD2
+         f5uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694100893; x=1694705693;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1694101009; x=1694705809;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wuVD3KjxuDmtHrR4M83KRmqZpQz2LCH9fQVoJWYT3Ec=;
-        b=DPeUquAeWTTcNbJfjyTQRJc7MQEhJM6AMJwN0aOZjGLjzLwICaIn+qQ+6+/x3EsGAk
-         kGnzrw6el5OPJsXI4pcr+crexjAMw9HKVEBdDdBfk8+hknANsSzq4NkRE1HHV7qka+gP
-         u5Fl4u4JqAclLyKBnND7Hi/H5P/iXiKOCk8GXtIpM0rxUx2/Y7qOM9W/xN32zPEchbq2
-         bPwr53yhyCn0Ym/m2rpS4+pB1NFNc7piBQrCRELh/3EJSMEwwIwTUaxQdpH44agR8HWz
-         D2VVaKZni29XXotEbKHAb/PdNamEe74rXz+4BA790U5e2/wVizgwDZbYbtLlGLh5ohsJ
-         gVZQ==
-X-Gm-Message-State: AOJu0YwLpPoo7QDJfX8zHPyGyXwpJXShzlSyfcVSX1oqjwykR2XLbxqP
-	d+5blLwmVoa2PTbN/hLSHWKX5EDwTBp/IA==
-X-Google-Smtp-Source: AGHT+IFJUJS5VLjZs0opS9/al5EA/ZPRMII8l0XDOJZBnoucUGmMhLSWfNDOnhvE4JCO1hCIgFEZ0g==
-X-Received: by 2002:a05:6a20:4a20:b0:14d:cca3:a100 with SMTP id fr32-20020a056a204a2000b0014dcca3a100mr13395590pzb.36.1694065431385;
-        Wed, 06 Sep 2023 22:43:51 -0700 (PDT)
-Received: from ubuntu.. ([43.132.98.117])
-        by smtp.googlemail.com with ESMTPSA id q7-20020a637507000000b00570574feda0sm11860963pgc.19.2023.09.06.22.43.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Sep 2023 22:43:51 -0700 (PDT)
-From: Hengqi Chen <hengqi.chen@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	alan.maguire@oracle.com,
-	olsajiri@gmail.com,
-	hengqi.chen@gmail.com
-Subject: [PATCH bpf-next v2 3/3] selftests/bpf: Add tests for symbol versioning for uprobe
-Date: Tue,  5 Sep 2023 15:12:57 +0000
-Message-Id: <20230905151257.729192-4-hengqi.chen@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230905151257.729192-1-hengqi.chen@gmail.com>
-References: <20230905151257.729192-1-hengqi.chen@gmail.com>
+        bh=lNUjL5NYr3fl2Nz9u4NMZvf537GDFiwVmtA3TLgGYPs=;
+        b=YYLPIES3XCCiORXJNizsoWt1kCN2v93DkORb1mzhzvSpUMRN3ZFFmTyd2dFpjMuScu
+         rGZKGs+gMdRDQtlTeUq9seoy0nx+YsCw7hwWfsteJoMTayY0Zd4NJ+szdgMugDRp9Dzx
+         RXqFSkCaBCQslQkVjBt37oQXY6IsqcuxRpIanB5PWCRDBYFW4bCfo8xNon967YTaeaXr
+         GngTd2hw566jkWFxSJLSymQMlnDa8cXNNg2V03+r9LNsxtaAU2ib1jziSHM70WQdKApm
+         T//r1KfPFXR3iXPPqmjdTFHOFospNTbEzJh659CAkfTolPVJG3qC7W/QrvfMcdWe1mun
+         Lb4g==
+X-Gm-Message-State: AOJu0Yze/7qVNuqccwX5muwJxloKXC0sr5bf0O5XosPiQN3LkCR6AqlY
+	F6L/J1gemaxFIUTrkqj8W8GO9sXqMFsbhF6vEYY=
+X-Google-Smtp-Source: AGHT+IE8M5U7d80188WEncXGMShuelyS9wzD/CMBdxGkQ8nNQlFm1Kgoxlx4/yDxZlR/pnOoJvDJgJfBA6m34InE0nI=
+X-Received: by 2002:a05:651c:1214:b0:2bc:f39b:d1a8 with SMTP id
+ i20-20020a05651c121400b002bcf39bd1a8mr5282196lja.46.1694101009110; Thu, 07
+ Sep 2023 08:36:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20230830011128.1415752-1-iii@linux.ibm.com> <20230830011128.1415752-2-iii@linux.ibm.com>
+ <CANk7y0iNnOCZ_KmXBH_xJTG=BKzkDM_jZ+hc_NXcQbbZj-c33Q@mail.gmail.com>
+ <mb61p5y4u3ptd.fsf@amazon.com> <CAADnVQ+u1hMBS3rm=meQaAgujHf6bOvONrwg6nYh1qWzVLVoAA@mail.gmail.com>
+ <mb61p4jk630a9.fsf@amazon.com>
+In-Reply-To: <mb61p4jk630a9.fsf@amazon.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 7 Sep 2023 08:36:36 -0700
+Message-ID: <CAADnVQJCc6t82H+iFXvhs=mfg1DMxZ-1PS3DP5h7mtbuCW79qQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 01/11] bpf: Disable zero-extension for BPF_MEMSX
+To: Puranjay Mohan <puranjay12@gmail.com>
+Cc: Ilya Leoshkevich <iii@linux.ibm.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-This exercises the newly added dynsym symbol versioning logics.
-Now we accept symbols in form of func, func@LIB_VERSION or
-func@@LIB_VERSION.
+On Thu, Sep 7, 2023 at 12:33=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.co=
+m> wrote:
+>
+> On Wed, Sep 06 2023, Alexei Starovoitov wrote:
+>
+> > On Fri, Sep 1, 2023 at 7:57=E2=80=AFAM Puranjay Mohan <puranjay12@gmail=
+.com> wrote:
+> >>
+> >> On Fri, Sep 01 2023, Puranjay Mohan wrote:
+> >>
+> >> > The problem here is that reg->subreg_def should be set as DEF_NOT_SU=
+BREG for
+> >> > registers that are used as destination registers of BPF_LDX |
+> >> > BPF_MEMSX. I am seeing
+> >> > the same problem on ARM32 and was going to send a patch today.
+> >> >
+> >> > The problem is that is_reg64() returns false for destination registe=
+rs
+> >> > of BPF_LDX | BPF_MEMSX.
+> >> > But BPF_LDX | BPF_MEMSX always loads a 64 bit value because of the
+> >> > sign extension so
+> >> > is_reg64() should return true.
+> >> >
+> >> > I have written a patch that I will be sending as a reply to this.
+> >> > Please let me know if that makes sense.
+> >> >
+> >>
+> >> The check_reg_arg() function will mark reg->subreg_def =3D DEF_NOT_SUB=
+REG for destination
+> >> registers if is_reg64() returns true for these registers. My patch bel=
+ow make is_reg64()
+> >> return true for destination registers of BPF_LDX with mod =3D BPF_MEMS=
+X. I feel this is the
+> >> correct way to fix this problem.
+> >>
+> >> Here is my patch:
+> >>
+> >> --- 8< ---
+> >> From cf1bf5282183cf721926ab14d968d3d4097b89b8 Mon Sep 17 00:00:00 2001
+> >> From: Puranjay Mohan <puranjay12@gmail.com>
+> >> Date: Fri, 1 Sep 2023 11:18:59 +0000
+> >> Subject: [PATCH bpf] bpf: verifier: mark destination of sign-extended =
+load as
+> >>  64 bit
+> >>
+> >> The verifier can emit instructions to zero-extend destination register=
+s
+> >> when the register is being used to keep 32 bit values. This behaviour =
+is
+> >> enabled only when the JIT sets bpf_jit_needs_zext() -> true. In the ca=
+se
+> >> of a sign extended load instruction, the destination register always h=
+as a
+> >> 64-bit value, therefore the verifier should not emit zero-extend
+> >> instructions for it.
+> >>
+> >> Change is_reg64() to return true if the register under consideration i=
+s a
+> >> destination register of LDX instruction with mode =3D BPF_MEMSX.
+> >>
+> >> Fixes: 1f9a1ea821ff ("bpf: Support new sign-extension load insns")
+> >> Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+> >> ---
+> >>  kernel/bpf/verifier.c | 2 +-
+> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> >> index bb78212fa5b2..93f84b868ccc 100644
+> >> --- a/kernel/bpf/verifier.c
+> >> +++ b/kernel/bpf/verifier.c
+> >> @@ -3029,7 +3029,7 @@ static bool is_reg64(struct bpf_verifier_env *en=
+v, struct bpf_insn *insn,
+> >>
+> >>         if (class =3D=3D BPF_LDX) {
+> >>                 if (t !=3D SRC_OP)
+> >> -                       return BPF_SIZE(code) =3D=3D BPF_DW;
+> >> +                       return (BPF_SIZE(code) =3D=3D BPF_DW || BPF_MO=
+DE(code) =3D=3D BPF_MEMSX);
+> >
+> > Looks like we have a bug here for normal LDX too.
+> > This 'if' condition was inserting unnecessary zext for LDX.
+> > It was harmless for LDX and broken for LDSX.
+> > Both LDX and LDSX write all bits of 64-bit register.
+> >
+> > I think the proper fix is to remove above two lines.
+> > wdyt?
+>
+> For LDX this returns true only if it is with a BPF_DW, for others it retu=
+rns false.
+> This means a zext is inserted for BPF_LDX | BPF_B/H/W.
+>
+> This is not a bug because LDX writes 64 bits of the register only with BP=
+F_DW.
+> With BPF_B/H/W It only writes the lower 32bits and needs zext for upper 3=
+2 bits.
 
-The test rely on liburandom_read.so. For liburandom_read.so, we have:
+No. The interpreter writes all 64-bit for any LDX insn.
+All JITs must do it as well.
 
-    $ nm -D liburandom_read.so
-                     w __cxa_finalize@GLIBC_2.17
-                     w __gmon_start__
-                     w _ITM_deregisterTMCloneTable
-                     w _ITM_registerTMCloneTable
-    0000000000000000 A LIBURANDOM_READ_1.0.0
-    0000000000000000 A LIBURANDOM_READ_2.0.0
-    000000000000081c T urandlib_api@@LIBURANDOM_READ_2.0.0
-    0000000000000814 T urandlib_api@LIBURANDOM_READ_1.0.0
-    0000000000000824 T urandlib_api_sameoffset@LIBURANDOM_READ_1.0.0
-    0000000000000824 T urandlib_api_sameoffset@@LIBURANDOM_READ_2.0.0
-    000000000000082c T urandlib_read_without_sema@@LIBURANDOM_READ_1.0.0
-    00000000000007c4 T urandlib_read_with_sema@@LIBURANDOM_READ_1.0.0
-    0000000000011018 D urandlib_read_with_sema_semaphore@@LIBURANDOM_READ_1.0.0
+> On 32 bit architectures where a 64-bit BPF register is simulated with two=
+ 32-bit registers,
+> explicit zext is required for BPF_LDX | BPF_B/H/W.
 
-For `urandlib_api`, specifying `urandlib_api` will cause a conflict because
-there are two symbols named urandlib_api and both are global bind.
-For `urandlib_api_sameoffset`, there are also two symbols in the .so, but
-both are at the same offset and essentially they refer to the same function
-so no conflict.
+zext JIT-aid done by the verifier has nothing to do with 32-bit architectur=
+e.
+It's necessary on 64-bit as well when HW doesn't automatically zero out
+upper 32-bit like it does on arm64 and x86-64
 
-Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
----
- tools/testing/selftests/bpf/Makefile          |  5 +-
- .../testing/selftests/bpf/liburandom_read.map | 15 +++
- .../testing/selftests/bpf/prog_tests/uprobe.c | 95 +++++++++++++++++++
- .../testing/selftests/bpf/progs/test_uprobe.c | 61 ++++++++++++
- tools/testing/selftests/bpf/urandom_read.c    |  9 ++
- .../testing/selftests/bpf/urandom_read_lib1.c | 41 ++++++++
- 6 files changed, 224 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/liburandom_read.map
- create mode 100644 tools/testing/selftests/bpf/prog_tests/uprobe.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_uprobe.c
+> So, we should not remove this.
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index edef49fcd23e..49ff9c716b79 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -193,11 +193,12 @@ endif
-
- # Filter out -static for liburandom_read.so and its dependent targets so that static builds
- # do not fail. Static builds leave urandom_read relying on system-wide shared libraries.
--$(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c
-+$(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c liburandom_read.map
- 	$(call msg,LIB,,$@)
- 	$(Q)$(CLANG) $(filter-out -static,$(CFLAGS) $(LDFLAGS))   \
--		     $^ $(filter-out -static,$(LDLIBS))	     \
-+		     $(filter %.c,$^) $(filter-out -static,$(LDLIBS)) \
- 		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
-+		     -Wl,--version-script=liburandom_read.map \
- 		     -fPIC -shared -o $@
-
- $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_read.so
-diff --git a/tools/testing/selftests/bpf/liburandom_read.map b/tools/testing/selftests/bpf/liburandom_read.map
-new file mode 100644
-index 000000000000..38a97a419a04
---- /dev/null
-+++ b/tools/testing/selftests/bpf/liburandom_read.map
-@@ -0,0 +1,15 @@
-+LIBURANDOM_READ_1.0.0 {
-+	global:
-+		urandlib_api;
-+		urandlib_api_sameoffset;
-+		urandlib_read_without_sema;
-+		urandlib_read_with_sema;
-+		urandlib_read_with_sema_semaphore;
-+	local:
-+		*;
-+};
-+
-+LIBURANDOM_READ_2.0.0 {
-+	global:
-+		urandlib_api;
-+} LIBURANDOM_READ_1.0.0;
-diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe.c b/tools/testing/selftests/bpf/prog_tests/uprobe.c
-new file mode 100644
-index 000000000000..6c619bcca41c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/uprobe.c
-@@ -0,0 +1,95 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2021 Hengqi Chen */
-+
-+#include <test_progs.h>
-+#include "test_uprobe.skel.h"
-+
-+static FILE *urand_spawn(int *pid)
-+{
-+	FILE *f;
-+
-+	/* urandom_read's stdout is wired into f */
-+	f = popen("./urandom_read 1 report-pid", "r");
-+	if (!f)
-+		return NULL;
-+
-+	if (fscanf(f, "%d", pid) != 1) {
-+		pclose(f);
-+		errno = EINVAL;
-+		return NULL;
-+	}
-+
-+	return f;
-+}
-+
-+static int urand_trigger(FILE **urand_pipe)
-+{
-+	int exit_code;
-+
-+	/* pclose() waits for child process to exit and returns their exit code */
-+	exit_code = pclose(*urand_pipe);
-+	*urand_pipe = NULL;
-+
-+	return exit_code;
-+}
-+
-+void test_uprobe(void)
-+{
-+	LIBBPF_OPTS(bpf_uprobe_opts, uprobe_opts);
-+	struct test_uprobe *skel;
-+	FILE *urand_pipe = NULL;
-+	int urand_pid = 0, err;
-+
-+	skel = test_uprobe__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	urand_pipe = urand_spawn(&urand_pid);
-+	if (!ASSERT_OK_PTR(urand_pipe, "urand_spawn"))
-+		goto cleanup;
-+
-+	skel->bss->my_pid = urand_pid;
-+
-+	/* Manual attach uprobe to urandlib_api
-+	 * There are two `urandlib_api` symbols in .dynsym section:
-+	 *   - urandlib_api@LIBURANDOM_READ_1.0.0
-+	 *   - urandlib_api@LIBURANDOM_READ_1.0.0
-+	 * Both are global bind and would cause a conflict if user
-+	 * specify the symbol name without a version suffix
-+	 */
-+	uprobe_opts.func_name = "urandlib_api";
-+	skel->links.test4 = bpf_program__attach_uprobe_opts(skel->progs.test4,
-+							    urand_pid,
-+							    "./liburandom_read.so",
-+							    0 /* offset */,
-+							    &uprobe_opts);
-+	if (!ASSERT_ERR_PTR(skel->links.test4, "urandlib_api_attach_conflict"))
-+		goto cleanup;
-+
-+	uprobe_opts.func_name = "urandlib_api@LIBURANDOM_READ_1.0.0";
-+	skel->links.test4 = bpf_program__attach_uprobe_opts(skel->progs.test4,
-+							    urand_pid,
-+							    "./liburandom_read.so",
-+							    0 /* offset */,
-+							    &uprobe_opts);
-+	if (!ASSERT_OK_PTR(skel->links.test4, "urandlib_api_attach_ok"))
-+		goto cleanup;
-+
-+	/* Auto attach 3 uprobes to urandlib_api_sameoffset */
-+	err = test_uprobe__attach(skel);
-+	if (!ASSERT_OK(err, "skel_attach"))
-+		goto cleanup;
-+
-+	/* trigger urandom_read */
-+	ASSERT_OK(urand_trigger(&urand_pipe), "urand_exit_code");
-+
-+	ASSERT_EQ(skel->bss->test1_result, 1, "urandlib_api_sameoffset");
-+	ASSERT_EQ(skel->bss->test2_result, 1, "urandlib_api_sameoffset@v1");
-+	ASSERT_EQ(skel->bss->test3_result, 1, "urandlib_api_sameoffset@@v2");
-+	ASSERT_EQ(skel->bss->test4_result, 1, "urandlib_api");
-+
-+cleanup:
-+	if (urand_pipe)
-+		pclose(urand_pipe);
-+	test_uprobe__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_uprobe.c b/tools/testing/selftests/bpf/progs/test_uprobe.c
-new file mode 100644
-index 000000000000..8680280558da
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_uprobe.c
-@@ -0,0 +1,61 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Hengqi Chen */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+pid_t my_pid = 0;
-+
-+int test1_result = 0;
-+int test2_result = 0;
-+int test3_result = 0;
-+int test4_result = 0;
-+
-+SEC("uprobe/./liburandom_read.so:urandlib_api_sameoffset")
-+int BPF_UPROBE(test1)
-+{
-+	pid_t pid = bpf_get_current_pid_tgid() >> 32;
-+
-+	if (pid != my_pid)
-+		return 0;
-+
-+	test1_result = 1;
-+	return 0;
-+}
-+
-+SEC("uprobe/./liburandom_read.so:urandlib_api_sameoffset@LIBURANDOM_READ_1.0.0")
-+int BPF_UPROBE(test2)
-+{
-+	pid_t pid = bpf_get_current_pid_tgid() >> 32;
-+
-+	if (pid != my_pid)
-+		return 0;
-+
-+	test2_result = 1;
-+	return 0;
-+}
-+
-+SEC("uprobe/./liburandom_read.so:urandlib_api_sameoffset@@LIBURANDOM_READ_2.0.0")
-+int BPF_UPROBE(test3)
-+{
-+	pid_t pid = bpf_get_current_pid_tgid() >> 32;
-+
-+	if (pid != my_pid)
-+		return 0;
-+
-+	test3_result = 1;
-+	return 0;
-+}
-+
-+SEC("uprobe")
-+int BPF_UPROBE(test4)
-+{
-+	pid_t pid = bpf_get_current_pid_tgid() >> 32;
-+
-+	if (pid != my_pid)
-+		return 0;
-+
-+	test4_result = 1;
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/urandom_read.c b/tools/testing/selftests/bpf/urandom_read.c
-index e92644d0fa75..b28e910a8fbb 100644
---- a/tools/testing/selftests/bpf/urandom_read.c
-+++ b/tools/testing/selftests/bpf/urandom_read.c
-@@ -21,6 +21,11 @@ void urand_read_without_sema(int iter_num, int iter_cnt, int read_sz);
- void urandlib_read_with_sema(int iter_num, int iter_cnt, int read_sz);
- void urandlib_read_without_sema(int iter_num, int iter_cnt, int read_sz);
-
-+int urandlib_api(void);
-+__asm__(".symver urandlib_api_old,urandlib_api@LIBURANDOM_READ_1.0.0");
-+int urandlib_api_old(void);
-+int urandlib_api_sameoffset(void);
-+
- unsigned short urand_read_with_sema_semaphore SEC(".probes");
-
- static __attribute__((noinline))
-@@ -83,6 +88,10 @@ int main(int argc, char *argv[])
-
- 	urandom_read(fd, count);
-
-+	urandlib_api();
-+	urandlib_api_old();
-+	urandlib_api_sameoffset();
-+
- 	close(fd);
- 	return 0;
- }
-diff --git a/tools/testing/selftests/bpf/urandom_read_lib1.c b/tools/testing/selftests/bpf/urandom_read_lib1.c
-index 86186e24b740..403b0735e223 100644
---- a/tools/testing/selftests/bpf/urandom_read_lib1.c
-+++ b/tools/testing/selftests/bpf/urandom_read_lib1.c
-@@ -11,3 +11,44 @@ void urandlib_read_with_sema(int iter_num, int iter_cnt, int read_sz)
- {
- 	STAP_PROBE3(urandlib, read_with_sema, iter_num, iter_cnt, read_sz);
- }
-+
-+/* Symbol versioning is different between static and shared library.
-+ * Properly versioned symbols are needed for shared library, but
-+ * only the symbol of the new version is needed for static library.
-+ * Starting with GNU C 10, use symver attribute instead of .symver assembler
-+ * directive, which works better with GCC LTO builds.
-+ */
-+#if defined(__GNUC__) && __GNUC__ >= 10
-+
-+#define DEFAULT_VERSION(internal_name, api_name, version) \
-+	__attribute__((symver(#api_name "@@" #version)))
-+#define COMPAT_VERSION(internal_name, api_name, version) \
-+	__attribute__((symver(#api_name "@" #version)))
-+
-+#else
-+
-+#define COMPAT_VERSION(internal_name, api_name, version) \
-+	asm(".symver " #internal_name "," #api_name "@" #version);
-+#define DEFAULT_VERSION(internal_name, api_name, version) \
-+	asm(".symver " #internal_name "," #api_name "@@" #version);
-+
-+#endif
-+
-+COMPAT_VERSION(urandlib_api_v1, urandlib_api, LIBURANDOM_READ_1.0.0)
-+int urandlib_api_v1(void)
-+{
-+	return 1;
-+}
-+
-+DEFAULT_VERSION(urandlib_api_v2, urandlib_api, LIBURANDOM_READ_2.0.0)
-+int urandlib_api_v2(void)
-+{
-+	return 2;
-+}
-+
-+COMPAT_VERSION(urandlib_api_sameoffset, urandlib_api_sameoffset, LIBURANDOM_READ_1.0.0)
-+DEFAULT_VERSION(urandlib_api_sameoffset, urandlib_api_sameoffset, LIBURANDOM_READ_2.0.0)
-+int urandlib_api_sameoffset(void)
-+{
-+	return 3;
-+}
---
-2.34.1
+I still think we should.
