@@ -1,72 +1,44 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A6314299
-	for <bpf@vger.kernel.org>; Thu,  7 Sep 2023 23:06:08 +0000 (UTC)
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A3E1BFC;
-	Thu,  7 Sep 2023 16:06:03 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-401d10e3e54so15627185e9.2;
-        Thu, 07 Sep 2023 16:06:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694127962; x=1694732762; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q1A01Vb7M9/CvOvvy/tRz9MhOl+QjbGTZcIw1h515GI=;
-        b=mKWtIaKrBaVznTA8yFnY5c71MiCJRUdeFo6YRqHkMbPGnAIuPBg+TbPlQBdOWDcj9A
-         apy7GX6GSY7em99Ozk3Lwignh52BosRnsoGXKHCqrIgZFnazVbwpspRYtx2BG0QmF29f
-         UXORV0jrNZ4opmGPWACoVtX5cNQfAYma2ztsfyj4YCSDhHO3PrOofDTyvt71ZiDHNMdJ
-         rNlXm7w9ygAne5EDj+g8JdGBze+7T+juPCvKw3L60rASlHHuqBdChHMa5QYsCdHjZRCu
-         BXChlvfCUmN+RHhyVaQWKtT7aIln+sBMWgRIaloMpAN+6TZChio+o/TLrfDeSfLpm3ev
-         fN0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694127962; x=1694732762;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=q1A01Vb7M9/CvOvvy/tRz9MhOl+QjbGTZcIw1h515GI=;
-        b=RzhnxM1vDTIoJ7VFu1wO0dTx0lhYFCTXd/QYPKzVRvLuo4rTLvOlY1qnVlwHv2AcvO
-         MmHnjgPZi1DBf0Pfb+/ZRF962Dl5siLDUfd/UOYkZHeyBNI0FyOGA0FSDAOfeuJrZbOv
-         MmPEfMN1MDCSKCFu1V9PNa7U6VhFNJQ+Bci1YjbviDLf6pgfJB7r9ozzOhpyrSqwFHBg
-         K7E4F/3ypN8a3UCVeYQV7KXklcBftwBnq8oQVnzyDpIZGCKxtWcZBPaC5TmSEGzPfCyr
-         vkfcFg78rmmfh0DHcSHVxAryUamzogq4aGFqMszeSnw+sJ7g4HctATNmPH+PjwmTpIqS
-         EBEQ==
-X-Gm-Message-State: AOJu0YwTiURgEIJPsju7ZZD5Xnwys+hD8hlCNkxSmLJZqfI/KdTlUzcY
-	ZU+o6h3eEOoRHntHxwlCYsM=
-X-Google-Smtp-Source: AGHT+IEpV5PqBqA3OEVDFiT2Vm2tbW+TW3MN5AIhRzxdbQ8A3vlFQuu/IE9Jn54Y4o4unYmMHZiyag==
-X-Received: by 2002:adf:f709:0:b0:317:69d2:35be with SMTP id r9-20020adff709000000b0031769d235bemr518704wrp.30.1694127962041;
-        Thu, 07 Sep 2023 16:06:02 -0700 (PDT)
-Received: from ip-172-31-30-46.eu-west-1.compute.internal (ec2-3-249-32-32.eu-west-1.compute.amazonaws.com. [3.249.32.32])
-        by smtp.gmail.com with ESMTPSA id n13-20020a5d484d000000b0031f3b04e7cdsm491358wrs.109.2023.09.07.16.06.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Sep 2023 16:06:01 -0700 (PDT)
-From: Puranjay Mohan <puranjay12@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shubham Bansal <illusionist.neo@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: puranjay12@gmail.com
-Subject: [PATCH bpf-next v3 9/9] MAINTAINERS: Add myself for ARM32 BPF JIT maintainer.
-Date: Thu,  7 Sep 2023 23:05:50 +0000
-Message-Id: <20230907230550.1417590-10-puranjay12@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230907230550.1417590-1-puranjay12@gmail.com>
-References: <20230907230550.1417590-1-puranjay12@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 655BC14A87
+	for <bpf@vger.kernel.org>; Thu,  7 Sep 2023 23:42:14 +0000 (UTC)
+Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7342A1BD2
+	for <bpf@vger.kernel.org>; Thu,  7 Sep 2023 16:42:13 -0700 (PDT)
+Received: from pps.filterd (m0354650.ppops.net [127.0.0.1])
+	by mx0a-00206402.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 387HPVQw016732;
+	Thu, 7 Sep 2023 23:42:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=from:to:cc:subject:date:message-id:in-reply-to:references
+	:mime-version:content-transfer-encoding:content-type; s=default;
+	 bh=Az8uD3vR+LqKVSBoaSF5yKiMSRElub0jbj9JLqszPf4=; b=QWzi33yBtDCs
+	4qAcrA8Os7LKI21Pj623p5Ro/FGxpBmOdrf/v2l8kyjjBjAICe2ICbPo8SnRrNa6
+	d8FEYjjRmWOj5BKZW3UPisQWs+jWxHg92bfpTqdnG5doT+Fja3T9XrCB+GKeHfSg
+	q/7GwkjVK5lOBvQq4cSSbVnBHbMP2nG2o03TKIXkVr91REY+tiG0xudqNfgHsIBQ
+	CxzSmcIcnouN6XVx0MT66YO4jmsTfnPEhxPYWak35LNemUAkTbEBPMRUHwvOaznx
+	bjhnazR5IZURiENAo182jB+74twB1veofspkDyDcLrdbzss7PgpMHXJv4BYnDkX4
+	sVX67VA3dQ==
+Received: from 04wpexch06.crowdstrike.sys (dragosx.crowdstrike.com [208.42.231.60])
+	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 3svhhabsfd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 Sep 2023 23:42:00 +0000 (GMT)
+Received: from LL-556NGK3.crowdstrike.sys (10.100.11.122) by
+ 04wpexch06.crowdstrike.sys (10.100.11.99) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.16; Thu, 7 Sep 2023 23:41:58 +0000
+From: Martin Kelly <martin.kelly@crowdstrike.com>
+To: <bpf@vger.kernel.org>
+CC: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin Kelly
+	<martin.kelly@crowdstrike.com>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: add tests for ring_buffer__query
+Date: Thu, 7 Sep 2023 16:40:41 -0700
+Message-ID: <20230907234041.58388-3-martin.kelly@crowdstrike.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230907234041.58388-1-martin.kelly@crowdstrike.com>
+References: <20230907234041.58388-1-martin.kelly@crowdstrike.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -74,37 +46,75 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-	FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.100.11.122]
+X-ClientProxiedBy: 04WPEXCH11.crowdstrike.sys (10.100.11.115) To
+ 04wpexch06.crowdstrike.sys (10.100.11.99)
+X-Disclaimer: USA
+X-Proofpoint-ORIG-GUID: 2_x1Oeyr1c0NuqcRHgwO0FTqYOlzg6ae
+X-Proofpoint-GUID: 2_x1Oeyr1c0NuqcRHgwO0FTqYOlzg6ae
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-07_13,2023-09-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ bulkscore=0 priorityscore=1501 mlxlogscore=999 adultscore=0 suspectscore=0
+ phishscore=0 spamscore=0 malwarescore=0 clxscore=1015 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2308100000
+ definitions=main-2309070208
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-As Shubham has been inactive since 2017, Add myself for ARM32 BPF JIT.
+Confirm we get the same results using ring_buffer__query from the
+usermode side as from the corresponding BPF helper.
 
-Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+Signed-off-by: Martin Kelly <martin.kelly@crowdstrike.com>
 ---
- MAINTAINERS | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ .../selftests/bpf/prog_tests/ringbuf.c        | 22 +++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 612d6d1dbf36..c241856819bd 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3602,9 +3602,10 @@ F:	Documentation/devicetree/bindings/iio/accel/bosch,bma400.yaml
- F:	drivers/iio/accel/bma400*
+diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf.c b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
+index ac104dc652e3..93dcb92fc0c5 100644
+--- a/tools/testing/selftests/bpf/prog_tests/ringbuf.c
++++ b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
+@@ -91,6 +91,7 @@ static void ringbuf_subtest(void)
+ 	int err, cnt, rb_fd;
+ 	int page_size = getpagesize();
+ 	void *mmap_ptr, *tmp_ptr;
++	__u64 val;
  
- BPF JIT for ARM
--M:	Shubham Bansal <illusionist.neo@gmail.com>
-+M:	Puranjay Mohan <puranjay12@gmail.com>
-+R:	Shubham Bansal <illusionist.neo@gmail.com>
- L:	bpf@vger.kernel.org
--S:	Odd Fixes
-+S:	Maintained
- F:	arch/arm/net/
+ 	skel = test_ringbuf_lskel__open();
+ 	if (CHECK(!skel, "skel_open", "skeleton open failed\n"))
+@@ -176,6 +177,27 @@ static void ringbuf_subtest(void)
+ 	      "err_prod_pos", "exp %ld, got %ld\n",
+ 	      3L * rec_sz, skel->bss->prod_pos);
  
- BPF JIT for ARM64
++	/* verify the same results from the usermode side */
++	val = ring_buffer__query(ringbuf, 0, BPF_RB_AVAIL_DATA);
++	CHECK(val != 3 * rec_sz,
++	      "err_query_avail_size", "exp %ld, got %llu\n",
++	      3L * rec_sz, val);
++
++	val = ring_buffer__query(ringbuf, 0, BPF_RB_RING_SIZE);
++	CHECK(val != page_size,
++	      "err_query_ring_size", "exp %ld, got %llu\n",
++	      (long)page_size, val);
++
++	val = ring_buffer__query(ringbuf, 0, BPF_RB_CONS_POS);
++	CHECK(val != 0,
++	      "err_query_cons_pos", "exp %ld, got %llu\n",
++	      0L, val);
++
++	val = ring_buffer__query(ringbuf, 0, BPF_RB_PROD_POS);
++	CHECK(val != 3 * rec_sz,
++	      "err_query_prod_pos", "exp %ld, got %llu\n",
++	      3L * rec_sz, val);
++
+ 	/* poll for samples */
+ 	err = ring_buffer__poll(ringbuf, -1);
+ 
 -- 
-2.39.2
+2.34.1
 
