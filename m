@@ -1,156 +1,142 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0E9914A9D
-	for <bpf@vger.kernel.org>; Thu,  7 Sep 2023 23:42:14 +0000 (UTC)
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7171BD3
-	for <bpf@vger.kernel.org>; Thu,  7 Sep 2023 16:42:13 -0700 (PDT)
-Received: from pps.filterd (m0354655.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 387GvAtM021267;
-	Thu, 7 Sep 2023 23:41:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding:content-type; s=default;
-	 bh=oXT3tCQf+HMM+M0J1xLiShITznYZpY7YxbJRw5eV81M=; b=dyJq0MEXeuZw
-	+jjqr9rE7qFtx/uRzf0cXAOSFIdynA2zPdfTg4BRMSpk4I1yQiuemMx3jFxJBigV
-	bZLH+61RQGL3PzxHIpWclteCLM65BAnlk8jR0yC2dyWPzP6S3nJML+Yd+dJMNfak
-	PPYzEC/jxSls1F8BQXyG+o+yhwmOX92W2rm5DvoWOHdQyyXRjOa1NMgKm/srcCOy
-	rpfgcv7Ju1Cf3gNCw4N240pW6RbotR4syRoT6I8G1d6yVfZ46gBda4+hdVD0UBwq
-	+H2xdOQoORYprbl3n3Wu14pGw3VimAbDeWkm1kbR68dJGhwxLBznGKjL7/KAI93s
-	ccpsAjZPCA==
-Received: from 04wpexch06.crowdstrike.sys (dragosx.crowdstrike.com [208.42.231.60])
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 3syjg4gsuy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 07 Sep 2023 23:41:57 +0000 (GMT)
-Received: from LL-556NGK3.crowdstrike.sys (10.100.11.122) by
- 04wpexch06.crowdstrike.sys (10.100.11.99) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.16; Thu, 7 Sep 2023 23:41:55 +0000
-From: Martin Kelly <martin.kelly@crowdstrike.com>
-To: <bpf@vger.kernel.org>
-CC: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin Kelly
-	<martin.kelly@crowdstrike.com>
-Subject: [PATCH bpf-next 1/2] libbpf: add ring_buffer__query
-Date: Thu, 7 Sep 2023 16:40:40 -0700
-Message-ID: <20230907234041.58388-2-martin.kelly@crowdstrike.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230907234041.58388-1-martin.kelly@crowdstrike.com>
-References: <20230907234041.58388-1-martin.kelly@crowdstrike.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD9C628;
+	Fri,  8 Sep 2023 00:30:27 +0000 (UTC)
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E3B1BD8;
+	Thu,  7 Sep 2023 17:30:23 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-99bc9e3cbf1so319222466b.0;
+        Thu, 07 Sep 2023 17:30:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1694133021; x=1694737821; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rWH+VGW4ynUEnqVgfK8Uo5vbTneevGaezyT5mB/sqg4=;
+        b=OiY77u4+0lZZf05zyJjqtXsFEt53gnu17pzSAddazvgmxBSqq/iFfofB+q7WLCDEyU
+         m/fz+w2DjK7ajFwh6Wl5OMnpq2lSnZxhKNITuhb+ArT10qBLF/w3E6hUYLr2Ynr9Uy0L
+         sHeGcXkyahOnjrEnkCzBF3EwG9xF9KIv8UmufrGSjWBO9hDNyInV8+iHy5QYfk82jWye
+         xbFkA6w68il0m14wAmbY3aZ9vJvLyqfqhwJlL2IlVpJJ69odvj++3/+rNIuFZ3ktA/po
+         yf2n1Q3ML2zeCD2E+gfopvnQ7ym8KgJXlk0oJnacR9HwefsoXzYDvWgFTWYeFL/HpkjL
+         rvkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694133021; x=1694737821;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rWH+VGW4ynUEnqVgfK8Uo5vbTneevGaezyT5mB/sqg4=;
+        b=swAuNJCU2T/msM1CDytYscRXwuvHCPjssnrRg+Q6Gn7quYAY71uw8aCdr4KLss/JJi
+         G6KLB7yGgMtpzSEqasgGhnoK9InCJNEld8+zIiBIk6Ib73pTZPE7X04zo7zpkugFhJci
+         FB+wowcPCWOhpTjklmK7ntYr2LOzHNB4AGtrC9b25JIVYeLFsYHwRSAhkJs8WFQWvS4u
+         vQxfHEgY989eWvrIeqsl/qncCGZ2RDh8vKZ5Mk2v5JpUD/f4gpCSG4bq17oZDFtAC9Kv
+         wJHwZCnijNuEHfLVBXqC1a5ybSKNjL6PIh5HcP7KQEar+axr0nPLUVpqEUAJzfRRNzW3
+         rmNw==
+X-Gm-Message-State: AOJu0Ywbm+yLTgh3g27h3+DIFkr+l/LoZwnwZO1VTqKbEQRqI2iKTpej
+	ASdAUdrtewy2vCnIWaRCJoM=
+X-Google-Smtp-Source: AGHT+IHUmcSd3yGn0Yc+fxHKH36GJLlYUzap6qvtcfMqwZgOcAgDOYhbcm3dJF4+eYZ9U6PvPuYQ6g==
+X-Received: by 2002:a17:907:6e87:b0:9a1:c69c:9388 with SMTP id sh7-20020a1709076e8700b009a1c69c9388mr4152809ejc.37.1694133021412;
+        Thu, 07 Sep 2023 17:30:21 -0700 (PDT)
+Received: from [192.168.8.100] ([148.252.141.16])
+        by smtp.gmail.com with ESMTPSA id lz24-20020a170906fb1800b009932337747esm280974ejb.86.2023.09.07.17.30.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Sep 2023 17:30:21 -0700 (PDT)
+Message-ID: <6489b8cb-7d54-1e29-f192-a3449ed87fa1@gmail.com>
+Date: Fri, 8 Sep 2023 01:29:55 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.100.11.122]
-X-ClientProxiedBy: 04WPEXCH11.crowdstrike.sys (10.100.11.115) To
- 04wpexch06.crowdstrike.sys (10.100.11.99)
-X-Disclaimer: USA
-X-Proofpoint-GUID: 2ywK5kpBgxDOQRM2XE6rSxDd0l2DuZYI
-X-Proofpoint-ORIG-GUID: 2ywK5kpBgxDOQRM2XE6rSxDd0l2DuZYI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-07_13,2023-09-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- clxscore=1015 adultscore=0 lowpriorityscore=0 suspectscore=0
- mlxlogscore=994 impostorscore=0 spamscore=0 priorityscore=1501
- phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2308100000 definitions=main-2309070208
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 07/11] vfs: add nowait parameter for file_accessed()
+To: Dave Chinner <david@fromorbit.com>, Hao Xu <hao.xu@linux.dev>
+Cc: Matthew Wilcox <willy@infradead.org>, io-uring@vger.kernel.org,
+ Jens Axboe <axboe@kernel.dk>, Dominique Martinet <asmadeus@codewreck.org>,
+ Christian Brauner <brauner@kernel.org>,
+ Alexander Viro <viro@zeniv.linux.org.uk>, Stefan Roesch <shr@fb.com>,
+ Clay Harris <bugs@claycon.org>, "Darrick J . Wong" <djwong@kernel.org>,
+ linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+ linux-ext4@vger.kernel.org, linux-cachefs@redhat.com,
+ ecryptfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+ linux-unionfs@vger.kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-block@vger.kernel.org, linux-btrfs@vger.kernel.org,
+ codalist@coda.cs.cmu.edu, linux-f2fs-devel@lists.sourceforge.net,
+ cluster-devel@redhat.com, linux-mm@kvack.org, linux-nilfs@vger.kernel.org,
+ devel@lists.orangefs.org, linux-cifs@vger.kernel.org,
+ samba-technical@lists.samba.org, linux-mtd@lists.infradead.org,
+ Wanpeng Li <wanpengli@tencent.com>
+References: <20230827132835.1373581-1-hao.xu@linux.dev>
+ <20230827132835.1373581-8-hao.xu@linux.dev>
+ <ZOvA5DJDZN0FRymp@casper.infradead.org>
+ <c728bf3f-d9db-4865-8473-058b26c11c06@linux.dev>
+ <ZO3cI+DkotHQo3md@casper.infradead.org>
+ <642de4e6-801d-fcad-a7ce-bfc6dec3b6e5@linux.dev>
+ <ZPUJHAKzxvXiEDYA@dread.disaster.area>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <ZPUJHAKzxvXiEDYA@dread.disaster.area>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-	autolearn=ham autolearn_force=no version=3.4.6
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add ring_buffer__query to fetch ringbuffer information from userspace,
-working the same as the bpf_ringbuf_query helper.
+On 9/3/23 23:30, Dave Chinner wrote:
+> On Wed, Aug 30, 2023 at 02:11:31PM +0800, Hao Xu wrote:
+>> On 8/29/23 19:53, Matthew Wilcox wrote:
+>>> On Tue, Aug 29, 2023 at 03:46:13PM +0800, Hao Xu wrote:
+>>>> On 8/28/23 05:32, Matthew Wilcox wrote:
+>>>>> On Sun, Aug 27, 2023 at 09:28:31PM +0800, Hao Xu wrote:
+>>>>>> From: Hao Xu <howeyxu@tencent.com>
+>>>>>>
+>>>>>> Add a boolean parameter for file_accessed() to support nowait semantics.
+>>>>>> Currently it is true only with io_uring as its initial caller.
+>>>>>
+>>>>> So why do we need to do this as part of this series?  Apparently it
+>>>>> hasn't caused any problems for filemap_read().
+>>>>>
+>>>>
+>>>> We need this parameter to indicate if nowait semantics should be enforced in
+>>>> touch_atime(), There are locks and maybe IOs in it.
+>>>
+>>> That's not my point.  We currently call file_accessed() and
+>>> touch_atime() for nowait reads and nowait writes.  You haven't done
+>>> anything to fix those.
+>>>
+>>> I suspect you can trim this patchset down significantly by avoiding
+>>> fixing the file_accessed() problem.  And then come back with a later
+>>> patchset that fixes it for all nowait i/o.  Or do a separate prep series
+>>
+>> I'm ok to do that.
+>>
+>>> first that fixes it for the existing nowait users, and then a second
+>>> series to do all the directory stuff.
+>>>
+>>> I'd do the first thing.  Just ignore the problem.  Directory atime
+>>> updates cause I/O so rarely that you can afford to ignore it.  Almost
+>>> everyone uses relatime or nodiratime.
+>>
+>> Hi Matthew,
+>> The previous discussion shows this does cause issues in real
+>> producations: https://lore.kernel.org/io-uring/2785f009-2ebb-028d-8250-d5f3a30510f0@gmail.com/#:~:text=fwiw%2C%20we%27ve%20just%20recently%20had%20similar%20problems%20with%20io_uring%20read/write
+>>
+> 
+> Then separate it out into it's own patch set so we can have a
+> discussion on the merits of requiring using noatime, relatime or
+> lazytime for really latency sensitive IO applications. Changing code
+> is not always the right solution...
 
-Signed-off-by: Martin Kelly <martin.kelly@crowdstrike.com>
----
- tools/lib/bpf/libbpf.h   |  2 ++
- tools/lib/bpf/libbpf.map |  1 +
- tools/lib/bpf/ringbuf.c  | 33 +++++++++++++++++++++++++++++++++
- 3 files changed, 36 insertions(+)
+Separation sounds reasonable, but it can hardly be said that only
+latency sensitive apps would care about >1s nowait/async submission
+delays. Presumably, btrfs can improve on that, but it still looks
+like it's perfectly legit for filesystems do heavy stuff in
+timestamping like waiting for IO. Right?
 
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 0e52621cba43..4ceed3ffabc2 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -1248,6 +1248,8 @@ LIBBPF_API int ring_buffer__add(struct ring_buffer *rb, int map_fd,
- LIBBPF_API int ring_buffer__poll(struct ring_buffer *rb, int timeout_ms);
- LIBBPF_API int ring_buffer__consume(struct ring_buffer *rb);
- LIBBPF_API int ring_buffer__epoll_fd(const struct ring_buffer *rb);
-+LIBBPF_API __u64 ring_buffer__query(struct ring_buffer *rb, unsigned int index,
-+				    __u64 flags);
- 
- struct user_ring_buffer_opts {
- 	size_t sz; /* size of this struct, for forward/backward compatibility */
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 57712321490f..cbb3dc39446e 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -400,4 +400,5 @@ LIBBPF_1.3.0 {
- 		bpf_program__attach_netfilter;
- 		bpf_program__attach_tcx;
- 		bpf_program__attach_uprobe_multi;
-+		ring_buffer__query;
- } LIBBPF_1.2.0;
-diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
-index 02199364db13..85ccac7a2db3 100644
---- a/tools/lib/bpf/ringbuf.c
-+++ b/tools/lib/bpf/ringbuf.c
-@@ -69,6 +69,15 @@ static void ringbuf_unmap_ring(struct ring_buffer *rb, struct ring *r)
- 	}
- }
- 
-+static unsigned long ringbuf_avail_data_sz(struct ring *r)
-+{
-+	unsigned long cons_pos, prod_pos;
-+
-+	cons_pos = smp_load_acquire(r->consumer_pos);
-+	prod_pos = smp_load_acquire(r->producer_pos);
-+	return prod_pos - cons_pos;
-+}
-+
- /* Add extra RINGBUF maps to this ring buffer manager */
- int ring_buffer__add(struct ring_buffer *rb, int map_fd,
- 		     ring_buffer_sample_fn sample_cb, void *ctx)
-@@ -323,6 +332,30 @@ int ring_buffer__epoll_fd(const struct ring_buffer *rb)
- 	return rb->epoll_fd;
- }
- 
-+/* A userspace analogue to bpf_ringbuf_query for a particular ringbuffer index
-+ * managed by this ringbuffer manager. Flags has the same arguments as
-+ * bpf_ringbuf_query, and the index given is a 0-based index tracking the order
-+ * the ringbuffers were added via ring_buffer__add. Returns the data requested
-+ * according to flags.
-+ */
-+__u64 ring_buffer__query(struct ring_buffer *rb, unsigned int index, __u64 flags)
-+{
-+	struct ring *ring = &rb->rings[index];
-+
-+	switch (flags) {
-+	case BPF_RB_AVAIL_DATA:
-+		return ringbuf_avail_data_sz(ring);
-+	case BPF_RB_RING_SIZE:
-+		return ring->mask + 1;
-+	case BPF_RB_CONS_POS:
-+		return smp_load_acquire(ring->consumer_pos);
-+	case BPF_RB_PROD_POS:
-+		return smp_load_acquire(ring->producer_pos);
-+	default:
-+		return 0;
-+	}
-+}
-+
- static void user_ringbuf_unmap_ring(struct user_ring_buffer *rb)
- {
- 	if (rb->consumer_pos) {
 -- 
-2.34.1
-
+Pavel Begunkov
