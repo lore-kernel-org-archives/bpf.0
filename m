@@ -1,94 +1,67 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A2BD7466
-	for <bpf@vger.kernel.org>; Fri,  8 Sep 2023 23:38:05 +0000 (UTC)
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6E618E
-	for <bpf@vger.kernel.org>; Fri,  8 Sep 2023 16:38:04 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-500cfb168c6so4223741e87.2
-        for <bpf@vger.kernel.org>; Fri, 08 Sep 2023 16:38:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694216283; x=1694821083; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bEm7zeautVu6SBvP0lnrQuux1uiA1fV2WmsOvXU/LiU=;
-        b=fyv3GrqBvoRrxF22qbyi7I1U7QA/EWpHDadyug3JG84rSTshcPtZ/dr4+g/40DKTNL
-         PJXmhZ/mzi+RvWbDCkwnKCDoj7UvSR24E0EnQzfhs0S7993lAcIvATMKOlz6BKObNGxN
-         +1O5liXtsWL1LImVpYPn2aM5j7HC5s3NvksGq+7JrTa1zgJXjOBmFuOg957x61PUKNU2
-         ih5J9djGSk7vuH2W9tme4kQXudJhocf45Gck6Sg9MqEwzNeZex6bLdzjQsYG4pfPotOA
-         Wa+OeXNQRfHlWkovcIg1QWunqftRxVyuKFY3aMCb0bPk7Mhe/hGfKmtO7B4AKtRAn6bu
-         i0kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694216283; x=1694821083;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bEm7zeautVu6SBvP0lnrQuux1uiA1fV2WmsOvXU/LiU=;
-        b=QpLUDoAPZEBEhIw+HVjZ9if8ggdXRD6w+kvTOvntPjyzALYa/DaI6vNGHi/VgRGXNR
-         06Et4WOEHnLHN5B22AqoXhucaGswX+vs4DvHE3kFSVw8yWyrt3zbrHKU2Ddy1oq9yPSX
-         9gedss6GDy3fbavWSp/bEVwZQJyG/kyIuRgG9zBI4TAWDskicrsnK+5m/2ZDwWeY6xo9
-         XGLED/cFgadfpwCTVu7lXZ6B/TBGrpQk/byqyeieDqTgJMrUw+rTumuyiWehtBrEibZi
-         3mM0gYUacHh+1wBNoPuVJJ3Ja5BCkRZDH1E2QtCrOQjggaiGJMEzQzZvzLY1B8y7B8qj
-         Tx2g==
-X-Gm-Message-State: AOJu0YzIFqVMZcCA5auGZNV6oILC8PnFGasxWj9oLMj2hzoXuNGrSFhI
-	z1/oT4y30T0VgBPFTk8zQyfckBJkn8SUuTrcuD8=
-X-Google-Smtp-Source: AGHT+IG9sFeFDJDJ3c1xfxwX/4N92AuWVDRm6mQJ36eem2gRpvWodnJhghOjc5m/OlhI9HrCFJeZuaPQJCxoBFZyssc=
-X-Received: by 2002:ac2:4d0f:0:b0:4fd:d08c:fa3e with SMTP id
- r15-20020ac24d0f000000b004fdd08cfa3emr2976669lfi.42.1694216282687; Fri, 08
- Sep 2023 16:38:02 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E74031FBF
+	for <bpf@vger.kernel.org>; Fri,  8 Sep 2023 23:40:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 68152C433C9;
+	Fri,  8 Sep 2023 23:40:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1694216423;
+	bh=7x+zgJcMuRS5ceYgLeya9fl6w+RvP4GvAReh/ywu2fI=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=rkwBZsE1M+/dQs8+X4agh8822ozMIg4EBGE4283es0cfbBei6RTAnDdVCG4dvLv6K
+	 D4QXumR+7umt5D1yh7wJdjoM1Uxyhhdp/MU+8usCGWH5OTtf3yYLcCsuoQFAiMN6XG
+	 +ef1xASDLTcmf6muCkj2HlolKzEzBoDg1o4i3EbDtio3N/XLaxXuipvS56ihhcwJeX
+	 kK/SW8AWj2JPapUidE2gOEULpCQmkWRUMWbTogLXy+jxcAkZxDk73a4KSoztwlBnky
+	 4o3v8T6IkMP8aDpETHaRLa/OaAlLbVawMVqk1iu3kKdhrWw5WZBElClNsdj6fn0kAj
+	 CCKl9kzLRDCCQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 51C95E53807;
+	Fri,  8 Sep 2023 23:40:23 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <eaed0418-1315-44a4-96d3-d6dbd4d999e8@crowdstrike.com>
-In-Reply-To: <eaed0418-1315-44a4-96d3-d6dbd4d999e8@crowdstrike.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 8 Sep 2023 16:37:50 -0700
-Message-ID: <CAEf4BzafNXQFym=CtiitFJ=yVdQ0xEyShDAZLEsHGhvnp36b1Q@mail.gmail.com>
-Subject: Re: libbpf ringbuffer callback prototype
-To: Martin Kelly <martin.kelly@crowdstrike.com>
-Cc: bpf@vger.kernel.org, Marco Vedovati <marco.vedovati@crowdstrike.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] bpftool: fix -Wcast-qual warning
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <169421642333.339.16003950712941590631.git-patchwork-notify@kernel.org>
+Date: Fri, 08 Sep 2023 23:40:23 +0000
+References: <20230907090210.968612-1-dzagorui@cisco.com>
+In-Reply-To: <20230907090210.968612-1-dzagorui@cisco.com>
+To: Denys Zagorui <dzagorui@cisco.com>
+Cc: alastorze@fb.com, quentin@isovalent.com, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
+ kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+ bpf@vger.kernel.org
 
-On Thu, Sep 7, 2023 at 1:09=E2=80=AFPM Martin Kelly
-<martin.kelly@crowdstrike.com> wrote:
->
-> I noticed that the data pointer in the libbpf ringbuffer callback has
-> type void *, without const:
->
-> typedef int (*ring_buffer_sample_fn)(void *ctx, void *data, size_t size);
->
-> However, if you actually try to write to this data, you'll get a SIGSEGV.
->
-> It seems to me the prototype should ideally be const void * so the
-> compiler can throw -Wdiscarded-qualifiers if someone tries to assign it
-> to a non-const type. I'm not sure there's anything to be done about it,
-> as changing it now would break the API. However, I wanted to mention it
-> just in case anyone has thoughts about this.
+Hello:
 
-Yeah, that's an unfortunate omission... Kernel never allowed to mmap
-data area as writable, so there is no way to ever write anything back
-through this pointer.
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-But as you said, adding that const in a callback type would cause
-compilation error for every single customer. So it seems just not
-worth it at this point.
+On Thu,  7 Sep 2023 02:02:10 -0700 you wrote:
+> This cast was made by purpose for older libbpf where the
+> bpf_object_skeleton field is void * instead of const void *
+> to eliminate a warning (as i understand
+> -Wincompatible-pointer-types-discards-qualifiers) but this
+> cast introduces another warning (-Wcast-qual) for libbpf
+> where data field is const void *
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2] bpftool: fix -Wcast-qual warning
+    https://git.kernel.org/bpf/bpf-next/c/52f8e1648394
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
->
-> Thanks,
->
-> Martin
->
->
