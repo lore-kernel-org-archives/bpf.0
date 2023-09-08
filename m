@@ -1,22 +1,22 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E74031FBF
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21C077474
 	for <bpf@vger.kernel.org>; Fri,  8 Sep 2023 23:40:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 68152C433C9;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7C8C7C433CA;
 	Fri,  8 Sep 2023 23:40:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1694216423;
-	bh=7x+zgJcMuRS5ceYgLeya9fl6w+RvP4GvAReh/ywu2fI=;
+	bh=EYy6dm59NBJFJSkKgAVVKliFV8RPPvIRF78A5HR9JTk=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=rkwBZsE1M+/dQs8+X4agh8822ozMIg4EBGE4283es0cfbBei6RTAnDdVCG4dvLv6K
-	 D4QXumR+7umt5D1yh7wJdjoM1Uxyhhdp/MU+8usCGWH5OTtf3yYLcCsuoQFAiMN6XG
-	 +ef1xASDLTcmf6muCkj2HlolKzEzBoDg1o4i3EbDtio3N/XLaxXuipvS56ihhcwJeX
-	 kK/SW8AWj2JPapUidE2gOEULpCQmkWRUMWbTogLXy+jxcAkZxDk73a4KSoztwlBnky
-	 4o3v8T6IkMP8aDpETHaRLa/OaAlLbVawMVqk1iu3kKdhrWw5WZBElClNsdj6fn0kAj
-	 CCKl9kzLRDCCQ==
+	b=dx3rPf0MzkZsWXLUkXWew2LJ5W//xr3SYY86QyC8Rgn0pdWc/lcZgXiIXqdsmqF+V
+	 +57Bz+3Un50MNepPyimHkPA0JvqP7f8jXAEvEqetFgvYvBdSx5JmMV5ydu0RsXG6T8
+	 pVk2AbMW/0XCPRhqSPr1SRsqYflSbM/clfQOewEMTs3O0X9XWNVpn9djmG0y83osd1
+	 yL3+9xWwoR4SBzCb8Mr7eBjctL96kKBgi3To4SlUvEBr4Pflsk1zTxS5c/nwFkSqus
+	 WNtBDOYKj5MLEl46UPF+QHba6kYPteVoM0uaFVoXYtO22WXhM0l3z3rzKFzUCJSP1q
+	 kNkKzqdvlElmA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 51C95E53807;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5CAFFF1D6A9;
 	Fri,  8 Sep 2023 23:40:23 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -26,38 +26,47 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] bpftool: fix -Wcast-qual warning
+Subject: Re: [PATCH bpf-next v12 0/2] selftests/bpf: Optimize kallsyms cache
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <169421642333.339.16003950712941590631.git-patchwork-notify@kernel.org>
+ <169421642337.339.11184428489042288950.git-patchwork-notify@kernel.org>
 Date: Fri, 08 Sep 2023 23:40:23 +0000
-References: <20230907090210.968612-1-dzagorui@cisco.com>
-In-Reply-To: <20230907090210.968612-1-dzagorui@cisco.com>
-To: Denys Zagorui <dzagorui@cisco.com>
-Cc: alastorze@fb.com, quentin@isovalent.com, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org,
- bpf@vger.kernel.org
+References: <tencent_FA47B711AB0DEC843EB3362E6355505ED509@qq.com>
+In-Reply-To: <tencent_FA47B711AB0DEC843EB3362E6355505ED509@qq.com>
+To: Rong Tao <rtoax@foxmail.com>
+Cc: olsajiri@gmail.com, andrii@kernel.org, daniel@iogearbox.net,
+ rongtao@cestc.cn, ast@kernel.org, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+ shuah@kernel.org, mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+ laoar.shao@gmail.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org
 
 Hello:
 
-This patch was applied to bpf/bpf-next.git (master)
+This series was applied to bpf/bpf-next.git (master)
 by Andrii Nakryiko <andrii@kernel.org>:
 
-On Thu,  7 Sep 2023 02:02:10 -0700 you wrote:
-> This cast was made by purpose for older libbpf where the
-> bpf_object_skeleton field is void * instead of const void *
-> to eliminate a warning (as i understand
-> -Wincompatible-pointer-types-discards-qualifiers) but this
-> cast introduces another warning (-Wcast-qual) for libbpf
-> where data field is const void *
+On Thu,  7 Sep 2023 09:59:12 +0800 you wrote:
+> From: Rong Tao <rongtao@cestc.cn>
+> 
+> We need to optimize the kallsyms cache, including optimizations for the
+> number of symbols limit, and, some test cases add new kernel symbols
+> (such as testmods) and we need to refresh kallsyms (reload or refresh).
+> 
+> Rong Tao (2):
+>   selftests/bpf: trace_helpers.c: optimize kallsyms cache
+>   selftests/bpf: trace_helpers.c: Add a global ksyms initialization
+>     mutex
 > 
 > [...]
 
 Here is the summary with links:
-  - [v2] bpftool: fix -Wcast-qual warning
-    https://git.kernel.org/bpf/bpf-next/c/52f8e1648394
+  - [bpf-next,v12,1/2] selftests/bpf: trace_helpers.c: optimize kallsyms cache
+    https://git.kernel.org/bpf/bpf-next/c/c698eaebdf47
+  - [bpf-next,v12,2/2] selftests/bpf: trace_helpers.c: Add a global ksyms initialization mutex
+    https://git.kernel.org/bpf/bpf-next/c/a28b1ba25934
 
 You are awesome, thank you!
 -- 
