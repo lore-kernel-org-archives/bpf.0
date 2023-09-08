@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ABBA13AFA
-	for <bpf@vger.kernel.org>; Fri,  8 Sep 2023 18:04:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 364E7C116A3;
-	Fri,  8 Sep 2023 18:04:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E42713AFA
+	for <bpf@vger.kernel.org>; Fri,  8 Sep 2023 18:04:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59388C116A2;
+	Fri,  8 Sep 2023 18:04:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1694196252;
-	bh=e9weMesk8QdrOasbyYzFhtGZrpedZ3ADoEH6cSti4MI=;
+	s=k20201202; t=1694196260;
+	bh=G3kWEAeDwL03tPC6MtrL1i9JEwXGWiB2Kb4SgZgeeP8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DP0O2PzdJTRV6g+zWHCpUUNyEwbIvvwl4560WRbjU1Nt8D72pd+hVA9tqcNubTKAy
-	 fTBPTaH8ePiESHXBPpZ6X3cmK3Xn23mIlXNfRkXHvYWWW/AayFOzKArgAVsap16qF6
-	 zp5fztcHb0icEmuN4cWbkyqT4WHwL/dsGbAKh5DW6jf1BpIsFnA/XYMcIEuqTTznRQ
-	 ZzK2kg5wSUlmKYQomL2Ot3qwQhi73Z+SnrfG1Qgy4laCEQw0Z7ZILlVJazO5y7vV4t
-	 LUmZgK4OkPoisFKd2dRyoC0pybNOUX6m0n2BOQ0z+UBj7SvgCRtrdXDqO6JMxWWXQu
-	 4tvlYXcAbnMGA==
+	b=ahQxPyyA6gvp0w4XdTPIToXVksY0dlv3rwL8+++Es2L9M0cCLD/SE2XPTr0TWKD6s
+	 M0pJAZkXJGk1lLcO/NhFFRAYjl586UEeYBANRvOK9DLK4VjO2mEE4Ji+UyAuHTb08r
+	 EekuSxC9xpcIP//QsrRLZuHjY8EGRtC2Kr8PKFr9etuyFEfvW0hcVL1rn0tVqTSqel
+	 S2Dxf8JoxwFuM4QNNNd2N3Sdz9uQtK+SQZ9fjGzzuGJVfJPKqkU/CBOQIKVmm5tEM+
+	 085kgD3Bw9GqBrFJUayOqgiy2qbpovx1C5un5NDpOlbWrD3DgV2Wt+rkpKNe0Uq1+W
+	 Hw8yNv6Z0ah4A==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -32,12 +32,12 @@ Cc: Tomislav Novak <tnovak@meta.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-perf-users@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 5/5] hw_breakpoint: fix single-stepping when using bpf_overflow_handler
-Date: Fri,  8 Sep 2023 14:03:51 -0400
-Message-Id: <20230908180352.3458731-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 3/3] hw_breakpoint: fix single-stepping when using bpf_overflow_handler
+Date: Fri,  8 Sep 2023 14:04:13 -0400
+Message-Id: <20230908180413.3458812-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230908180352.3458731-1-sashal@kernel.org>
-References: <20230908180352.3458731-1-sashal@kernel.org>
+In-Reply-To: <20230908180413.3458812-1-sashal@kernel.org>
+References: <20230908180413.3458812-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,7 +46,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.4.256
+X-stable-base: Linux 4.19.294
 Content-Transfer-Encoding: 8bit
 
 From: Tomislav Novak <tnovak@meta.com>
@@ -91,10 +91,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  3 files changed, 25 insertions(+), 9 deletions(-)
 
 diff --git a/arch/arm/kernel/hw_breakpoint.c b/arch/arm/kernel/hw_breakpoint.c
-index b06d9ea07c846..a69dd64a84017 100644
+index 2ee5b7f5e7ad0..c71ecd06131ca 100644
 --- a/arch/arm/kernel/hw_breakpoint.c
 +++ b/arch/arm/kernel/hw_breakpoint.c
-@@ -623,7 +623,7 @@ int hw_breakpoint_arch_parse(struct perf_event *bp,
+@@ -631,7 +631,7 @@ int hw_breakpoint_arch_parse(struct perf_event *bp,
  	hw->address &= ~alignment_mask;
  	hw->ctrl.len <<= offset;
  
@@ -103,7 +103,7 @@ index b06d9ea07c846..a69dd64a84017 100644
  		/*
  		 * Mismatch breakpoints are required for single-stepping
  		 * breakpoints.
-@@ -795,7 +795,7 @@ static void watchpoint_handler(unsigned long addr, unsigned int fsr,
+@@ -803,7 +803,7 @@ static void watchpoint_handler(unsigned long addr, unsigned int fsr,
  		 * Otherwise, insert a temporary mismatch breakpoint so that
  		 * we can single-step over the watchpoint trigger.
  		 */
@@ -112,7 +112,7 @@ index b06d9ea07c846..a69dd64a84017 100644
  			continue;
  step:
  		enable_single_step(wp, instruction_pointer(regs));
-@@ -808,7 +808,7 @@ static void watchpoint_handler(unsigned long addr, unsigned int fsr,
+@@ -816,7 +816,7 @@ static void watchpoint_handler(unsigned long addr, unsigned int fsr,
  		info->trigger = addr;
  		pr_debug("watchpoint fired: address = 0x%x\n", info->trigger);
  		perf_bp_event(wp, regs);
@@ -121,7 +121,7 @@ index b06d9ea07c846..a69dd64a84017 100644
  			enable_single_step(wp, instruction_pointer(regs));
  	}
  
-@@ -883,7 +883,7 @@ static void breakpoint_handler(unsigned long unknown, struct pt_regs *regs)
+@@ -891,7 +891,7 @@ static void breakpoint_handler(unsigned long unknown, struct pt_regs *regs)
  			info->trigger = addr;
  			pr_debug("breakpoint fired: address = 0x%x\n", addr);
  			perf_bp_event(bp, regs);
@@ -131,10 +131,10 @@ index b06d9ea07c846..a69dd64a84017 100644
  			goto unlock;
  		}
 diff --git a/arch/arm64/kernel/hw_breakpoint.c b/arch/arm64/kernel/hw_breakpoint.c
-index b4a1607958246..534578eba556e 100644
+index 9f105fe58595d..5d120e39bf61a 100644
 --- a/arch/arm64/kernel/hw_breakpoint.c
 +++ b/arch/arm64/kernel/hw_breakpoint.c
-@@ -654,7 +654,7 @@ static int breakpoint_handler(unsigned long unused, unsigned int esr,
+@@ -661,7 +661,7 @@ static int breakpoint_handler(unsigned long unused, unsigned int esr,
  		perf_bp_event(bp, regs);
  
  		/* Do we need to handle the stepping? */
@@ -143,7 +143,7 @@ index b4a1607958246..534578eba556e 100644
  			step = 1;
  unlock:
  		rcu_read_unlock();
-@@ -733,7 +733,7 @@ static u64 get_distance_from_watchpoint(unsigned long addr, u64 val,
+@@ -740,7 +740,7 @@ static u64 get_distance_from_watchpoint(unsigned long addr, u64 val,
  static int watchpoint_report(struct perf_event *wp, unsigned long addr,
  			     struct pt_regs *regs)
  {
@@ -153,11 +153,11 @@ index b4a1607958246..534578eba556e 100644
  
  	info->trigger = addr;
 diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index b7ac395513c0f..c99e2f851d312 100644
+index efe30b9b11908..f17e08bd294c2 100644
 --- a/include/linux/perf_event.h
 +++ b/include/linux/perf_event.h
-@@ -1018,15 +1018,31 @@ extern int perf_event_output(struct perf_event *event,
- 			     struct pt_regs *regs);
+@@ -998,15 +998,31 @@ extern void perf_event_output(struct perf_event *event,
+ 			      struct pt_regs *regs);
  
  static inline bool
 -is_default_overflow_handler(struct perf_event *event)
