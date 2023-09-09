@@ -1,197 +1,230 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BDF8EA1
-	for <bpf@vger.kernel.org>; Sat,  9 Sep 2023 00:24:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19ACFC433AD;
-	Sat,  9 Sep 2023 00:24:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1694219092;
-	bh=jIh1uWoMMSsO9tNjjSpeUM2uA+UPdJFbrIVOnNXgjgw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=X6x5avYo5QV/OtSDlibFbombzStm4DUcc/DO2Uj5ySoSUZCCLk2YDE20Z/v9++rM/
-	 R8ZHwe9u9cuwgV8O6Qe4bZ21UMjrsY1eO5YMwGPuAS6nFu/oVgq7b3UlRPLA7evNFh
-	 qG/hyrhGJja1PDgnSwwX5xijsi1PQrlmOqTv3yzdSsQi3f24rp9nTWKVEyT/ibfuG2
-	 0BDngvW6/WgptzhWFhboTKOOD1iMvLKXD+9HUegrCf59ihpfYv9c9yzVWv1/P1+W3Q
-	 CH2AvDQp0Hv8oif93MPJ5gMXCRyKbyFgSXLxEovQrR8Rhkpr4jZLVu2Q0SZIOFZV6X
-	 nqPixfSBAE2Cw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Tomislav Novak <tnovak@fb.com>,
-	Samuel Gosselin <sgosselin@google.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Russell King <rmk+kernel@armlinux.org.uk>,
-	Sasha Levin <sashal@kernel.org>,
-	will@kernel.org,
-	mark.rutland@arm.com,
-	linux@armlinux.org.uk,
-	peterz@infradead.org,
-	mingo@redhat.com,
-	acme@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-perf-users@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 4/5] ARM: 9316/1: hw_breakpoint: fix single-stepping when using bpf_overflow_handler
-Date: Fri,  8 Sep 2023 20:24:39 -0400
-Message-Id: <20230909002442.3578957-4-sashal@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230909002442.3578957-1-sashal@kernel.org>
-References: <20230909002442.3578957-1-sashal@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 753907E5
+	for <bpf@vger.kernel.org>; Sat,  9 Sep 2023 00:35:21 +0000 (UTC)
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A29726AF
+	for <bpf@vger.kernel.org>; Fri,  8 Sep 2023 17:34:43 -0700 (PDT)
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-26d0d376ec7so2017408a91.2
+        for <bpf@vger.kernel.org>; Fri, 08 Sep 2023 17:34:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1694219316; x=1694824116; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wkwzVpKZI8AElfEw0By4C1BBurm/G7/5cU7n5hfx9N8=;
+        b=eyVpDUdnYHSXFrL7dTZkRc4HHnM8w9Scp0r7guil2vZvaDNSbv1Pblc1TWXlsv6XIv
+         dZk5OvQujCrQLQbvPr5SJMczcUp3GOct/WHS7W6SF4PEYRkHyeDoE0ioa9jRFNYyUffh
+         glY9yWCVc1anBfmnnv4PDcdoVvb96rdsYB/aCZNEjIN//jotZoPHh5M3XEy/BapxFVzx
+         XIwa1llN/b7UrDhe/VeHoV2BTQ2dLQMgp95It7M5vEeiEouM5/BIT/RehvmMakXPKk0S
+         6QTJUD/uiRwzeN64JngzaHqMxNQcqhWMka2J5xcO4prRPTcc+rgTEcnjSP98kyBqsnoK
+         7/cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694219316; x=1694824116;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wkwzVpKZI8AElfEw0By4C1BBurm/G7/5cU7n5hfx9N8=;
+        b=OkH65bi9boqKNA1CtdrS+rZyNoMYWZ4Dyf0GuTZJJ5V9G1CgLb05FZcp8HhB0LHnCc
+         5b4GkjC+pDjop7b9bPk90HbDYd1W0NJVVoLutvFGBKNnaeXYMQt09pxboPTB55j06RSq
+         I4exqg9qbg10k/8VzYw9RfCBW1geFQxCoNZCpcekLGlkacL+bG1/qacCtP7PvZA7pWiu
+         NbxGbj81xvLhJSFtmsbwBAfTjxn0RWuME+pf3ylKO8tHI/SHXQh4YdLe7I8qnGcXdpz6
+         Xe8lZwl2Ojd3vsuIe0BO8ESs3h7Fzl7jxID49shMhipTH/HzDvbQaaDkO5eCQXxZFD1T
+         Vbcg==
+X-Gm-Message-State: AOJu0YzRtAsb9gYOiR2xbXE7ACMiblc9xauvewcRZ/uyv7UCYo30aai1
+	fLuEYdIV+q5BNvDcmlwH9CYAd4DJYpPEMjzWDM61bw==
+X-Google-Smtp-Source: AGHT+IGSGny7UNu15/l3aPj2GcWeCNmHS1EE30QCX6jl2lUiWeTGt9/yyOuZyji4dPBJ1ZiYSfu8Pp1pY6Vr34HQxSY=
+X-Received: by 2002:a17:90b:1a81:b0:273:e49e:6d7b with SMTP id
+ ng1-20020a17090b1a8100b00273e49e6d7bmr2185053pjb.3.1694219315670; Fri, 08 Sep
+ 2023 17:28:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.14.325
-Content-Transfer-Encoding: 8bit
+References: <20230907210023.2467151-1-sdf@google.com> <CAEf4Bzb5VkJ=_4NKjSuwOVAUeSBxyVjNu_rMmatfeQZdB+bohg@mail.gmail.com>
+In-Reply-To: <CAEf4Bzb5VkJ=_4NKjSuwOVAUeSBxyVjNu_rMmatfeQZdB+bohg@mail.gmail.com>
+From: Stanislav Fomichev <sdf@google.com>
+Date: Fri, 8 Sep 2023 17:28:24 -0700
+Message-ID: <CAKH8qBs3nRn4TdT45vv1s7jZm1yD+aoZSMbb-k_ePS3uPdJ6Gg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Future-proof connect4_prog.c
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, yhs@fb.com, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, haoluo@google.com, 
+	jolsa@kernel.org, Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
+	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+	USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-From: Tomislav Novak <tnovak@fb.com>
+On Fri, Sep 8, 2023 at 4:42=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Thu, Sep 7, 2023 at 2:00=E2=80=AFPM Stanislav Fomichev <sdf@google.com=
+> wrote:
+> >
+> > With the new internal clang version I see the following optimization
+> > that makes connect4 program unverifiable.
+> >
+> > The following code:
+> >
+> >         int do_bind()
+>
+> Yonghong added __weak to do_bind a few months ago ([0]), which makes
+> it illegal for the compiler to assume 0 or 1 return. Can you please
+> double check that this is the issue with __weak?
+>
+>   [0] https://lore.kernel.org/bpf/20230310012410.2920570-1-yhs@fb.com/
 
-[ Upstream commit e6b51532d5273eeefba84106daea3d392c602837 ]
+It does indeed fix it for me, thank you! Mystery solved on "why I
+can't repro this on the upstream" :-) I've completely missed that
+extra __weak..
 
-Arm platforms use is_default_overflow_handler() to determine if the
-hw_breakpoint code should single-step over the breakpoint trigger or
-let the custom handler deal with it.
-
-Since bpf_overflow_handler() currently isn't recognized as a default
-handler, attaching a BPF program to a PERF_TYPE_BREAKPOINT event causes
-it to keep firing (the instruction triggering the data abort exception
-is never skipped). For example:
-
-  # bpftrace -e 'watchpoint:0x10000:4:w { print("hit") }' -c ./test
-  Attaching 1 probe...
-  hit
-  hit
-  [...]
-  ^C
-
-(./test performs a single 4-byte store to 0x10000)
-
-This patch replaces the check with uses_default_overflow_handler(),
-which accounts for the bpf_overflow_handler() case by also testing
-if one of the perf_event_output functions gets invoked indirectly,
-via orig_default_handler.
-
-Link: https://lore.kernel.org/linux-arm-kernel/20220923203644.2731604-1-tnovak@fb.com/
-
-Signed-off-by: Tomislav Novak <tnovak@fb.com>
-Tested-by: Samuel Gosselin <sgosselin@google.com> # arm64
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-Acked-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/arm/kernel/hw_breakpoint.c   |  8 ++++----
- arch/arm64/kernel/hw_breakpoint.c |  4 ++--
- include/linux/perf_event.h        | 22 +++++++++++++++++++---
- 3 files changed, 25 insertions(+), 9 deletions(-)
-
-diff --git a/arch/arm/kernel/hw_breakpoint.c b/arch/arm/kernel/hw_breakpoint.c
-index a8783964ebde9..6f5907970143f 100644
---- a/arch/arm/kernel/hw_breakpoint.c
-+++ b/arch/arm/kernel/hw_breakpoint.c
-@@ -631,7 +631,7 @@ int arch_validate_hwbkpt_settings(struct perf_event *bp)
- 	info->address &= ~alignment_mask;
- 	info->ctrl.len <<= offset;
- 
--	if (is_default_overflow_handler(bp)) {
-+	if (uses_default_overflow_handler(bp)) {
- 		/*
- 		 * Mismatch breakpoints are required for single-stepping
- 		 * breakpoints.
-@@ -803,7 +803,7 @@ static void watchpoint_handler(unsigned long addr, unsigned int fsr,
- 		 * Otherwise, insert a temporary mismatch breakpoint so that
- 		 * we can single-step over the watchpoint trigger.
- 		 */
--		if (!is_default_overflow_handler(wp))
-+		if (!uses_default_overflow_handler(wp))
- 			continue;
- step:
- 		enable_single_step(wp, instruction_pointer(regs));
-@@ -816,7 +816,7 @@ static void watchpoint_handler(unsigned long addr, unsigned int fsr,
- 		info->trigger = addr;
- 		pr_debug("watchpoint fired: address = 0x%x\n", info->trigger);
- 		perf_bp_event(wp, regs);
--		if (is_default_overflow_handler(wp))
-+		if (uses_default_overflow_handler(wp))
- 			enable_single_step(wp, instruction_pointer(regs));
- 	}
- 
-@@ -891,7 +891,7 @@ static void breakpoint_handler(unsigned long unknown, struct pt_regs *regs)
- 			info->trigger = addr;
- 			pr_debug("breakpoint fired: address = 0x%x\n", addr);
- 			perf_bp_event(bp, regs);
--			if (is_default_overflow_handler(bp))
-+			if (uses_default_overflow_handler(bp))
- 				enable_single_step(bp, addr);
- 			goto unlock;
- 		}
-diff --git a/arch/arm64/kernel/hw_breakpoint.c b/arch/arm64/kernel/hw_breakpoint.c
-index 6e96cea99a4ec..7f608a8d43860 100644
---- a/arch/arm64/kernel/hw_breakpoint.c
-+++ b/arch/arm64/kernel/hw_breakpoint.c
-@@ -662,7 +662,7 @@ static int breakpoint_handler(unsigned long unused, unsigned int esr,
- 		perf_bp_event(bp, regs);
- 
- 		/* Do we need to handle the stepping? */
--		if (is_default_overflow_handler(bp))
-+		if (uses_default_overflow_handler(bp))
- 			step = 1;
- unlock:
- 		rcu_read_unlock();
-@@ -741,7 +741,7 @@ static u64 get_distance_from_watchpoint(unsigned long addr, u64 val,
- static int watchpoint_report(struct perf_event *wp, unsigned long addr,
- 			     struct pt_regs *regs)
- {
--	int step = is_default_overflow_handler(wp);
-+	int step = uses_default_overflow_handler(wp);
- 	struct arch_hw_breakpoint *info = counter_arch_bp(wp);
- 
- 	info->trigger = addr;
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index 5efd8109ad0ab..e175d5e3acd68 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -985,15 +985,31 @@ extern void perf_event_output(struct perf_event *event,
- 			      struct pt_regs *regs);
- 
- static inline bool
--is_default_overflow_handler(struct perf_event *event)
-+__is_default_overflow_handler(perf_overflow_handler_t overflow_handler)
- {
--	if (likely(event->overflow_handler == perf_event_output_forward))
-+	if (likely(overflow_handler == perf_event_output_forward))
- 		return true;
--	if (unlikely(event->overflow_handler == perf_event_output_backward))
-+	if (unlikely(overflow_handler == perf_event_output_backward))
- 		return true;
- 	return false;
- }
- 
-+#define is_default_overflow_handler(event) \
-+	__is_default_overflow_handler((event)->overflow_handler)
-+
-+#ifdef CONFIG_BPF_SYSCALL
-+static inline bool uses_default_overflow_handler(struct perf_event *event)
-+{
-+	if (likely(is_default_overflow_handler(event)))
-+		return true;
-+
-+	return __is_default_overflow_handler(event->orig_overflow_handler);
-+}
-+#else
-+#define uses_default_overflow_handler(event) \
-+	is_default_overflow_handler(event)
-+#endif
-+
- extern void
- perf_event_header__init_id(struct perf_event_header *header,
- 			   struct perf_sample_data *data,
--- 
-2.40.1
-
+>
+> >         {
+> >                 if (bpf_bind() !=3D 0)
+> >                         return 0;
+> >                 return 1;
+> >         }
+> >         int connect_v4_prog()
+> >         {
+> >                 return do_bind() ? 1 : 0;
+> >         }
+> >
+> > Becomes:
+> >
+> >         int do_bind()
+> >         {
+> >                 if (bpf_bind() !=3D 0)
+> >                         return 0;
+> >                 return 1;
+> >         }
+> >         int connect_v4_prog()
+> >         {
+> >                 return do_bind();
+> >         }
+> >
+> > IOW, looks like clang is able to see that do_bind returns only 0 and
+> > 1 and the extra branch around 'return do_bind' is not needed.
+> > This, however, seems to break the verifier, which assumes that
+> > bpf2bpf calls can return 0-0xffffffff.
+> >
+> > Note, I can produce those programs only with the internal fork of clang=
+.
+> > The latest one from git still produced correct bytecode. It might be
+> > some options/optimizations that we enable and that are still
+> > disabled for the general upstream users, not sure. I've desided
+> > to send this patch out anyway since it seems like a correct optimizatio=
+n
+> > the compiler might do.
+> >
+> > So to be future-proof, reshape the code a bit to return bpf_bind
+> > result directly. This will not give any hint to the clang about
+> > the return value and will force it generate that '? 1: 0' branch
+> > at the callee.
+> >
+> > Good program:
+> >
+> > 0000000000000000 <do_bind>:
+> >        0:       b4 02 00 00 7f 00 00 04 w2 =3D 0x400007f
+> >        1:       63 2a f4 ff 00 00 00 00 *(u32 *)(r10 - 0xc) =3D r2
+> >        2:       b4 02 00 00 02 00 00 00 w2 =3D 0x2
+> >        3:       63 2a f0 ff 00 00 00 00 *(u32 *)(r10 - 0x10) =3D r2
+> >        4:       b7 02 00 00 00 00 00 00 r2 =3D 0x0
+> >        5:       63 2a fc ff 00 00 00 00 *(u32 *)(r10 - 0x4) =3D r2
+> >        6:       63 2a f8 ff 00 00 00 00 *(u32 *)(r10 - 0x8) =3D r2
+> >        7:       bf a2 00 00 00 00 00 00 r2 =3D r10
+> >        8:       07 02 00 00 f0 ff ff ff r2 +=3D -0x10
+> >        9:       b4 03 00 00 10 00 00 00 w3 =3D 0x10
+> >       10:       85 00 00 00 40 00 00 00 call 0x40
+> >       11:       bf 01 00 00 00 00 00 00 r1 =3D r0
+> >       12:       b4 00 00 00 01 00 00 00 w0 =3D 0x1
+> >       13:       15 01 01 00 00 00 00 00 if r1 =3D=3D 0x0 goto +0x1 <LBB=
+0_2>
+> >       14:       b4 00 00 00 00 00 00 00 w0 =3D 0x0
+> >
+> > 00000000000001b0 <LBB1_30>:
+> >       54:       bc 60 00 00 00 00 00 00 w0 =3D w6
+> >       55:       95 00 00 00 00 00 00 00 exit
+> >
+> > 0000000000000578 <LBB1_28>:
+> >      ...
+> >      180:       85 10 00 00 ff ff ff ff call -0x1
+> >      181:       b4 06 00 00 01 00 00 00 w6 =3D 0x1
+> >      182:       56 00 7f ff 00 00 00 00 if w0 !=3D 0x0 goto -0x81 <LBB1=
+_30>
+> >      183:       b4 06 00 00 00 00 00 00 w6 =3D 0x0
+> >      184:       05 00 7d ff 00 00 00 00 goto -0x83 <LBB1_30>
+> >
+> > Bad program:
+> > 0000000000000000 <do_bind>:
+> >        0:       b4 02 00 00 7f 00 00 04 w2 =3D 0x400007f
+> >        1:       63 2a f4 ff 00 00 00 00 *(u32 *)(r10 - 0xc) =3D r2
+> >        2:       b4 02 00 00 02 00 00 00 w2 =3D 0x2
+> >        3:       63 2a f0 ff 00 00 00 00 *(u32 *)(r10 - 0x10) =3D r2
+> >        4:       b7 02 00 00 00 00 00 00 r2 =3D 0x0
+> >        5:       63 2a fc ff 00 00 00 00 *(u32 *)(r10 - 0x4) =3D r2
+> >        6:       63 2a f8 ff 00 00 00 00 *(u32 *)(r10 - 0x8) =3D r2
+> >        7:       bf a2 00 00 00 00 00 00 r2 =3D r10
+> >        8:       07 02 00 00 f0 ff ff ff r2 +=3D -0x10
+> >        9:       b4 03 00 00 10 00 00 00 w3 =3D 0x10
+> >       10:       85 00 00 00 40 00 00 00 call 0x40
+> >       11:       bf 01 00 00 00 00 00 00 r1 =3D r0
+> >       12:       b4 00 00 00 01 00 00 00 w0 =3D 0x1
+> >       13:       15 01 01 00 00 00 00 00 if r1 =3D=3D 0x0 goto +0x1 <LBB=
+0_2>
+> >       14:       b4 00 00 00 00 00 00 00 w0 =3D 0x0
+> >
+> > 00000000000001b0 <LBB1_3>:
+> >       54:       bc 60 00 00 00 00 00 00 w0 =3D w6
+> >       55:       95 00 00 00 00 00 00 00 exit
+> >
+> > 0000000000000578 <LBB1_28>:
+> >      ...
+> >      180:       85 10 00 00 ff ff ff ff call -0x1
+> >      181:       bc 06 00 00 00 00 00 00 w6 =3D w0
+> >      182:       05 00 7f ff 00 00 00 00 goto -0x81 <LBB1_3>
+> >
+> > Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > Signed-off-by: Stanislav Fomichev <sdf@google.com>
+> > ---
+> >  tools/testing/selftests/bpf/progs/connect4_prog.c | 7 ++-----
+> >  1 file changed, 2 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/bpf/progs/connect4_prog.c b/tools/=
+testing/selftests/bpf/progs/connect4_prog.c
+> > index 7ef49ec04838..b7fc46a0787b 100644
+> > --- a/tools/testing/selftests/bpf/progs/connect4_prog.c
+> > +++ b/tools/testing/selftests/bpf/progs/connect4_prog.c
+> > @@ -41,10 +41,7 @@ int do_bind(struct bpf_sock_addr *ctx)
+> >         sa.sin_port =3D bpf_htons(0);
+> >         sa.sin_addr.s_addr =3D bpf_htonl(SRC_REWRITE_IP4);
+> >
+> > -       if (bpf_bind(ctx, (struct sockaddr *)&sa, sizeof(sa)) !=3D 0)
+> > -               return 0;
+> > -
+> > -       return 1;
+> > +       return bpf_bind(ctx, (struct sockaddr *)&sa, sizeof(sa));
+> >  }
+> >
+> >  static __inline int verify_cc(struct bpf_sock_addr *ctx,
+> > @@ -194,7 +191,7 @@ int connect_v4_prog(struct bpf_sock_addr *ctx)
+> >         ctx->user_ip4 =3D bpf_htonl(DST_REWRITE_IP4);
+> >         ctx->user_port =3D bpf_htons(DST_REWRITE_PORT4);
+> >
+> > -       return do_bind(ctx) ? 1 : 0;
+> > +       return do_bind(ctx) ? 0 : 1;
+> >  }
+> >
+> >  char _license[] SEC("license") =3D "GPL";
+> > --
+> > 2.42.0.283.g2d96d420d3-goog
+> >
