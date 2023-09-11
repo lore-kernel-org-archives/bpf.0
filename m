@@ -1,32 +1,32 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72D3314F81;
-	Mon, 11 Sep 2023 15:29:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2647614F9C;
+	Mon, 11 Sep 2023 15:29:37 +0000 (UTC)
 Received: from pandora.armlinux.org.uk (unknown [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65658E4;
-	Mon, 11 Sep 2023 08:29:34 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C59E4;
+	Mon, 11 Sep 2023 08:29:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
 	Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
 	In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=xxAFmOFPowfCTWnGhmAR1kdsvUwVwDMZvbxX5Uff/dU=; b=swjus+QVqUNsxtG/Im9quGFkm/
-	GTxFnWWnojOzz0C+F3mczCeJG9TnQ93EJs1W3sbF4LfUPZso44qoyJy/dFMSUVbSGFfEFBSRQj/l7
-	uK229TSsg9j7GJ2KblqeX2RTjBEIFLxqbf6sgOHUMDtGtyylTupMq7QmbLOnhzGlnqKqqySgZs4GC
-	stvKK9CaPllVsT3ZTBsjE4I2BXsk27+x21dWOm1jahA80Bftb9zw1MaXiRO1SJiIBNBTszgpuWhpb
-	22XofLui+pVqBNVWiubDwA/SsUs0m1w4DRSiLj2eyiyFY2vmn46TDZj1nvha6ZInA6djXLpqmBAzn
-	FpKvL7+w==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:58048 helo=rmk-PC.armlinux.org.uk)
+	bh=2UMKl9n6SLgFdjTeNxnsUryhc1R/WooK+tuMaErZ3oE=; b=sQz49DVOjuMAE64jkvHTULutx3
+	3PnTJRDmZh3EKIkkkwzlQ5dXDxuvOmXeJ0woodUXoMtr5N2jEEL76S/3JS2++BGK5xcRIxXTRRqy9
+	oRAlF6GfMdwm/4GMbsBjMLQgYRlAPmJAv7/7zEJhKSqLMBYh0Cv8ToVzlrjhRuPX/dP5+AdRTU0xC
+	7QD3winBsom+zmuAfOuxeK3rIkd41e1aK/l/7Mv3ustFd8YBKPGNjQCnQatGjeuYx7Eo/8Cknm5Pq
+	NcYUxxX6LrkVgwzN0eSuK3JRAJ8lx1DinrhgCfVBlvLYJTtqvHPBdNxHI4q6KggwztB/NmJhghgev
+	nE+2V63A==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:39320 helo=rmk-PC.armlinux.org.uk)
 	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <rmk@armlinux.org.uk>)
-	id 1qfiqq-0008EQ-2d;
-	Mon, 11 Sep 2023 16:29:24 +0100
+	id 1qfiqx-0008FD-1O;
+	Mon, 11 Sep 2023 16:29:31 +0100
 Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
 	(envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-	id 1qfiqn-007TPY-Gn; Mon, 11 Sep 2023 16:29:21 +0100
+	id 1qfiqx-007TPm-QD; Mon, 11 Sep 2023 16:29:31 +0100
 In-Reply-To: <ZP8yEFWn0Ml3ALWq@shell.armlinux.org.uk>
 References: <ZP8yEFWn0Ml3ALWq@shell.armlinux.org.uk>
 From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
@@ -52,7 +52,7 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Samin Guo <samin.guo@starfivetech.com>,
 	Sascha Hauer <s.hauer@pengutronix.de>,
 	Shawn Guo <shawnguo@kernel.org>
-Subject: [PATCH net-next 3/6] net: stmmac: intel-plat: use
+Subject: [PATCH net-next 5/6] net: stmmac: starfive: use
  dwmac_set_tx_clk_gmii()
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -63,9 +63,9 @@ MIME-Version: 1.0
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1qfiqn-007TPY-Gn@rmk-PC.armlinux.org.uk>
+Message-Id: <E1qfiqx-007TPm-QD@rmk-PC.armlinux.org.uk>
 Sender: Russell King <rmk@armlinux.org.uk>
-Date: Mon, 11 Sep 2023 16:29:21 +0100
+Date: Mon, 11 Sep 2023 16:29:31 +0100
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,
 	SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
@@ -74,62 +74,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 
 Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 ---
- .../stmicro/stmmac/dwmac-intel-plat.c         | 35 +++++--------------
- 1 file changed, 9 insertions(+), 26 deletions(-)
+ .../ethernet/stmicro/stmmac/dwmac-starfive.c  | 29 +++++--------------
+ 1 file changed, 8 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel-plat.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel-plat.c
-index d352a14f9d48..8cc22f11072e 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel-plat.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel-plat.c
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
+index 9289bb87c3e3..3dc04017e3d3 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
 @@ -14,6 +14,7 @@
- #include "dwmac4.h"
- #include "stmmac.h"
+ #include <linux/regmap.h>
+ 
  #include "stmmac_platform.h"
 +#include "stmmac_plat_lib.h"
  
- struct intel_dwmac {
- 	struct device *dev;
-@@ -31,32 +32,14 @@ struct intel_dwmac_data {
- static void kmb_eth_fix_mac_speed(void *priv, unsigned int speed, unsigned int mode)
+ #define STARFIVE_DWMAC_PHY_INFT_RGMII	0x1
+ #define STARFIVE_DWMAC_PHY_INFT_RMII	0x4
+@@ -27,29 +28,15 @@ struct starfive_dwmac {
+ static void starfive_dwmac_fix_mac_speed(void *priv, unsigned int speed, unsigned int mode)
  {
- 	struct intel_dwmac *dwmac = priv;
+ 	struct starfive_dwmac *dwmac = priv;
 -	unsigned long rate;
--	int ret;
--
--	rate = clk_get_rate(dwmac->tx_clk);
+ 	int err;
+ 
+-	rate = clk_get_rate(dwmac->clk_tx);
 -
 -	switch (speed) {
 -	case SPEED_1000:
 -		rate = 125000000;
 -		break;
--
 -	case SPEED_100:
 -		rate = 25000000;
 -		break;
--
 -	case SPEED_10:
 -		rate = 2500000;
 -		break;
--
 -	default:
--		dev_err(dwmac->dev, "Invalid speed\n");
+-		dev_err(dwmac->dev, "invalid speed %u\n", speed);
 -		break;
 -	}
 -
--	ret = clk_set_rate(dwmac->tx_clk, rate);
--	if (ret)
--		dev_err(dwmac->dev, "Failed to configure tx clock rate\n");
-+	int err;
-+
-+	err = dwmac_set_tx_clk_gmii(dwmac->tx_clk, speed);
+-	err = clk_set_rate(dwmac->clk_tx, rate);
+-	if (err)
+-		dev_err(dwmac->dev, "failed to set tx rate %lu\n", rate);
++	err = dwmac_set_tx_clk_gmii(dwmac->clk_tx, speed);
 +	if (err == -ENOTSUPP)
 +		dev_err(dwmac->dev, "invalid speed %dMbps\n", speed);
 +	else if (err)
-+		dev_err(dwmac->dev, "failed to set tx rate for speed %dMbps: %pe\n",
++		dev_err(dwmac->dev,
++			"failed to set tx rate for speed %dMbps: %pe\n",
 +			speed, ERR_PTR(err));
  }
  
- static const struct intel_dwmac_data kmb_data = {
+ static int starfive_dwmac_set_mode(struct plat_stmmacenet_data *plat_dat)
 -- 
 2.30.2
 
