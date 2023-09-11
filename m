@@ -1,112 +1,239 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB2611C82;
-	Mon, 11 Sep 2023 15:42:28 +0000 (UTC)
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBC8127;
-	Mon, 11 Sep 2023 08:42:26 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 952BA1F38D;
-	Mon, 11 Sep 2023 15:42:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1694446944; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3xXDQka3gqHzTmbM91PUqKCNwVv5hIrQkTXz5vFWWz8=;
-	b=orN+6SbhdVggei5E57EsUfJsiLKTfW08RYjOOVA2l8f5lm4UfC3hRJ+PgTzyTzumbZxOVf
-	hw2/anP2YoMQmfbw/oEoIkjQAjkKyUlv1CCqvhF94l0asZBV7znF7pojvRbfmPrbNwvkMB
-	yCzM3NajV41At+jdrDQo6tcy1auUN6Y=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1694446944;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3xXDQka3gqHzTmbM91PUqKCNwVv5hIrQkTXz5vFWWz8=;
-	b=I5E+uNod2iDLygEjzr91eL5+LUNmI9G2s0LFeHtadKJI35gQJJK8PtD4iudTJn+PMwDkrg
-	VR7P/MbAY4Au9YBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5DF3E13780;
-	Mon, 11 Sep 2023 15:42:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id dO12EWA1/2Q9cQAAMHmgww
-	(envelope-from <krisman@suse.de>); Mon, 11 Sep 2023 15:42:24 +0000
-From: Gabriel Krisman Bertazi <krisman@suse.de>
-To: Breno Leitao <leitao@debian.org>
-Cc: sdf@google.com,  axboe@kernel.dk,  asml.silence@gmail.com,
-  willemdebruijn.kernel@gmail.com,  kuba@kernel.org,  martin.lau@linux.dev,
-  bpf@vger.kernel.org,  linux-kernel@vger.kernel.org,
-  netdev@vger.kernel.org,  io-uring@vger.kernel.org,  pabeni@redhat.com
-Subject: Re: [PATCH v5 3/8] io_uring/cmd: Pass compat mode in issue_flags
-In-Reply-To: <20230911103407.1393149-4-leitao@debian.org> (Breno Leitao's
-	message of "Mon, 11 Sep 2023 03:34:02 -0700")
-Organization: SUSE
-References: <20230911103407.1393149-1-leitao@debian.org>
-	<20230911103407.1393149-4-leitao@debian.org>
-Date: Mon, 11 Sep 2023 11:42:23 -0400
-Message-ID: <87v8cg90o0.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E52D1F51E;
+	Mon, 11 Sep 2023 15:46:09 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371C9FB;
+	Mon, 11 Sep 2023 08:46:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694447168; x=1725983168;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=EGZf1+DVn+gyziuqfigDtm3H2lqewI5JtUnRehH1Sco=;
+  b=AkFbVm+J18qg7N9laCG+ojqAJcic/iItPCXhCoq+5Qi0+sGGUrx9Uc/G
+   iytz3AzMU+yjO/Qla/AFmv7sfilboc8AiCM5hZ28/S8pKOnjhIcwIrUzt
+   QeGwCwbUF4BWe9h9AhoCyKDTcC9IPGxyFIg32T/cXR9urm6ITQL+zOMsG
+   qY91Rq1TjAGF6fy9qar+w9Lo94pzswV12P4JJkPoj1MfAtp5/QkPPydBT
+   C58JlHN2xGIPT/Pg+YN3KFxDxYQsdNB+Zyupva6NBxs5ANL1z2nppwojI
+   OnKfqK5rSLtxWqQCALqoVQP7Q5ncwNER0wE/bAEMJXSXPCxISdv1pq517
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="444539598"
+X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
+   d="scan'208";a="444539598"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 08:45:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="917061944"
+X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
+   d="scan'208";a="917061944"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 11 Sep 2023 08:45:36 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id DB1B145B; Mon, 11 Sep 2023 18:45:35 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH net-next v1 2/2] net: core: Sort headers alphabetically
+Date: Mon, 11 Sep 2023 18:45:34 +0300
+Message-Id: <20230911154534.4174265-2-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
+In-Reply-To: <20230911154534.4174265-1-andriy.shevchenko@linux.intel.com>
+References: <20230911154534.4174265-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Breno Leitao <leitao@debian.org> writes:
+It's rather a gigantic list of heards that is very hard to follow.
+Sorting helps to see what's already included and what's not.
+It improves a maintainability in a long term.
 
-> Create a new flag to track if the operation is running compat mode.
-> This basically check the context->compat and pass it to the issue_flags,
-> so, it could be queried later in the callbacks.
->
-> Signed-off-by: Breno Leitao <leitao@debian.org>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ net/core/dev.c | 135 +++++++++++++++++++++++++------------------------
+ 1 file changed, 69 insertions(+), 66 deletions(-)
 
-Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
-
-
-> ---
->  include/linux/io_uring.h | 1 +
->  io_uring/uring_cmd.c     | 2 ++
->  2 files changed, 3 insertions(+)
->
-> diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
-> index 106cdc55ff3b..bc53b35966ed 100644
-> --- a/include/linux/io_uring.h
-> +++ b/include/linux/io_uring.h
-> @@ -20,6 +20,7 @@ enum io_uring_cmd_flags {
->  	IO_URING_F_SQE128		= (1 << 8),
->  	IO_URING_F_CQE32		= (1 << 9),
->  	IO_URING_F_IOPOLL		= (1 << 10),
-> +	IO_URING_F_COMPAT		= (1 << 11),
->  };
->  
->  struct io_uring_cmd {
-> diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-> index 537795fddc87..60f843a357e0 100644
-> --- a/io_uring/uring_cmd.c
-> +++ b/io_uring/uring_cmd.c
-> @@ -128,6 +128,8 @@ int io_uring_cmd(struct io_kiocb *req, unsigned int issue_flags)
->  		issue_flags |= IO_URING_F_SQE128;
->  	if (ctx->flags & IORING_SETUP_CQE32)
->  		issue_flags |= IO_URING_F_CQE32;
-> +	if (ctx->compat)
-> +		issue_flags |= IO_URING_F_COMPAT;
->  	if (ctx->flags & IORING_SETUP_IOPOLL) {
->  		if (!file->f_op->uring_cmd_iopoll)
->  			return -EOPNOTSUPP;
-
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 85df22f05c38..d795a6c5a591 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -68,91 +68,94 @@
+  *				        - netif_rx() feedback
+  */
+ 
+-#include <linux/uaccess.h>
++#include <linux/audit.h>
+ #include <linux/bitmap.h>
++#include <linux/bpf.h>
++#include <linux/bpf_trace.h>
+ #include <linux/capability.h>
+ #include <linux/cpu.h>
+-#include <linux/types.h>
+-#include <linux/kernel.h>
+-#include <linux/hash.h>
+-#include <linux/slab.h>
+-#include <linux/sched.h>
+-#include <linux/sched/mm.h>
+-#include <linux/mutex.h>
+-#include <linux/rwsem.h>
+-#include <linux/string.h>
+-#include <linux/mm.h>
+-#include <linux/socket.h>
+-#include <linux/sockios.h>
++#include <linux/cpu_rmap.h>
++#include <linux/crash_dump.h>
++#include <linux/ctype.h>
++#include <linux/delay.h>
++#include <linux/dmaengine.h>
++#include <linux/err.h>
+ #include <linux/errno.h>
+-#include <linux/interrupt.h>
+-#include <linux/if_ether.h>
+-#include <linux/netdevice.h>
++#include <linux/errqueue.h>
+ #include <linux/etherdevice.h>
+ #include <linux/ethtool.h>
+-#include <linux/skbuff.h>
++#include <linux/hash.h>
++#include <linux/hashtable.h>
++#include <linux/highmem.h>
++#include <linux/hrtimer.h>
++#include <linux/if_arp.h>
++#include <linux/if_ether.h>
++#include <linux/if_macvlan.h>
++#include <linux/if_vlan.h>
++#include <linux/indirect_call_wrapper.h>
++#include <linux/inetdevice.h>
++#include <linux/in.h>
++#include <linux/init.h>
++#include <linux/interrupt.h>
++#include <linux/ip.h>
++#include <linux/ipv6.h>
++#include <linux/jhash.h>
++#include <linux/kernel.h>
+ #include <linux/kthread.h>
+-#include <linux/bpf.h>
+-#include <linux/bpf_trace.h>
+-#include <net/net_namespace.h>
+-#include <net/sock.h>
+-#include <net/busy_poll.h>
++#include <linux/mm.h>
++#include <linux/module.h>
++#include <linux/mutex.h>
++#include <linux/netdevice.h>
++#include <linux/netfilter_netdev.h>
++#include <linux/net_namespace.h>
++#include <linux/netpoll.h>
++#include <linux/once_lite.h>
++#include <linux/pm_runtime.h>
++#include <linux/prandom.h>
++#include <linux/random.h>
++#include <linux/rcupdate.h>
+ #include <linux/rtnetlink.h>
++#include <linux/rwsem.h>
++#include <linux/sched.h>
++#include <linux/sched/mm.h>
++#include <linux/sctp.h>
++#include <linux/skbuff.h>
++#include <linux/slab.h>
++#include <linux/socket.h>
++#include <linux/sockios.h>
+ #include <linux/stat.h>
++#include <linux/static_key.h>
++#include <linux/string.h>
++#include <linux/types.h>
++#include <linux/uaccess.h>
++#include <linux/vmalloc.h>
++
++#include <asm/current.h>
++
++#include <net/busy_poll.h>
++#include <net/checksum.h>
++#include <net/devlink.h>
+ #include <net/dsa.h>
+ #include <net/dst.h>
+ #include <net/dst_metadata.h>
+ #include <net/gro.h>
+-#include <net/pkt_sched.h>
+-#include <net/pkt_cls.h>
+-#include <net/checksum.h>
+-#include <net/xfrm.h>
+-#include <net/tcx.h>
+-#include <linux/highmem.h>
+-#include <linux/init.h>
+-#include <linux/module.h>
+-#include <linux/netpoll.h>
+-#include <linux/rcupdate.h>
+-#include <linux/delay.h>
+-#include <net/iw_handler.h>
+-#include <asm/current.h>
+-#include <linux/audit.h>
+-#include <linux/dmaengine.h>
+-#include <linux/err.h>
+-#include <linux/ctype.h>
+-#include <linux/if_arp.h>
+-#include <linux/if_vlan.h>
+-#include <linux/ip.h>
+ #include <net/ip.h>
++#include <net/iw_handler.h>
+ #include <net/mpls.h>
+-#include <linux/ipv6.h>
+-#include <linux/in.h>
+-#include <linux/jhash.h>
+-#include <linux/random.h>
++#include <net/netdev_rx_queue.h>
++#include <net/net_namespace.h>
++#include <net/pkt_cls.h>
++#include <net/pkt_sched.h>
++#include <net/sock.h>
++#include <net/tcx.h>
++#include <net/udp_tunnel.h>
++#include <net/xfrm.h>
++
+ #include <trace/events/napi.h>
+ #include <trace/events/net.h>
+-#include <trace/events/skb.h>
+ #include <trace/events/qdisc.h>
++#include <trace/events/skb.h>
+ #include <trace/events/xdp.h>
+-#include <linux/inetdevice.h>
+-#include <linux/cpu_rmap.h>
+-#include <linux/static_key.h>
+-#include <linux/hashtable.h>
+-#include <linux/vmalloc.h>
+-#include <linux/if_macvlan.h>
+-#include <linux/errqueue.h>
+-#include <linux/hrtimer.h>
+-#include <linux/netfilter_netdev.h>
+-#include <linux/crash_dump.h>
+-#include <linux/sctp.h>
+-#include <net/udp_tunnel.h>
+-#include <linux/net_namespace.h>
+-#include <linux/indirect_call_wrapper.h>
+-#include <net/devlink.h>
+-#include <linux/pm_runtime.h>
+-#include <linux/prandom.h>
+-#include <linux/once_lite.h>
+-#include <net/netdev_rx_queue.h>
+ 
+ #include "dev.h"
+ #include "net-sysfs.h"
 -- 
-Gabriel Krisman Bertazi
+2.40.0.1.gaa8946217a0b
+
