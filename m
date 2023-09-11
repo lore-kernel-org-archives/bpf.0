@@ -1,107 +1,112 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 106FA11C82;
-	Mon, 11 Sep 2023 15:46:50 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7589121;
-	Mon, 11 Sep 2023 08:46:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694447209; x=1725983209;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=YjRdALQo6iO1ekUDe9KTiN6+J4DKc5QGUKKvZdLZ6Fg=;
-  b=VAr+T+so/Ib372/Lo/cbODLMrlrsOOZIWmD/6i3NY7rxEfSsSEd2NXPR
-   CbikkgO3cVOXypVi9uwt69jsrYnlsjVzzI+F3JAclB02bl+yalcrMD2MW
-   xjiwnA9bRaAtmsmH2BHFmw5XVoNotob0GWN7X7XjdISgcbHKshbMPuFhL
-   LKVg5lqWg3scpX5YwLCqdMGf9zvgVbi/pSIWk9W7+Cdqa5w0Wo2uymize
-   By+Oz7BYtSsmievYibH7OyqVDGbYwkf4iY8MUM3w0598q+3/o5JZA0U5W
-   RY0CILn3UbB4Kg+1iOu3Too5cBTRbe1VJjq5nPt7xUy6if+c+BtZ/9d9a
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="358412451"
-X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
-   d="scan'208";a="358412451"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 08:45:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="990123595"
-X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
-   d="scan'208";a="990123595"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 11 Sep 2023 08:45:36 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 39E8213F; Mon, 11 Sep 2023 18:45:35 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Subject: [PATCH net-next v1 1/2] net: core: Use the bitmap API to allocate bitmaps
-Date: Mon, 11 Sep 2023 18:45:33 +0300
-Message-Id: <20230911154534.4174265-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 108FE11C80;
+	Mon, 11 Sep 2023 15:54:02 +0000 (UTC)
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221B4193;
+	Mon, 11 Sep 2023 08:54:01 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id D02C021858;
+	Mon, 11 Sep 2023 15:53:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1694447639; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=w1hU2rySzchPvfa0Wrv+/KzNAllK1m5RVyNxjuW0p78=;
+	b=P/ihoVSGa95xiemo3MTPD96SZx5qps7CdKbeHaotHJ6dKb/WrX1hQ8UmJu5t30xLUrQkdf
+	ZaMsiNXgVEyNOHEQYTMGlkEz/CaYvaoXL2hK56fFN8mlphFYmgk8/f+oxK8saKV1VYUsju
+	E0zpK/64S1G4tobdIazXal9MXF+1ar8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1694447639;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=w1hU2rySzchPvfa0Wrv+/KzNAllK1m5RVyNxjuW0p78=;
+	b=hz1uI0y1MedAGwyeWiiY5Eh+W+SEWc3LQ//38EsqFtkHMtSJe2vSwvuhfRefgC/GZIaKTR
+	D4LHrr/4TDlgi8Ag==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9920013780;
+	Mon, 11 Sep 2023 15:53:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+	by imap2.suse-dmz.suse.de with ESMTPSA
+	id kmfoHxc4/2S/dwAAMHmgww
+	(envelope-from <krisman@suse.de>); Mon, 11 Sep 2023 15:53:59 +0000
+From: Gabriel Krisman Bertazi <krisman@suse.de>
+To: Breno Leitao <leitao@debian.org>
+Cc: sdf@google.com,  axboe@kernel.dk,  asml.silence@gmail.com,
+  willemdebruijn.kernel@gmail.com,  kuba@kernel.org,  martin.lau@linux.dev,
+  bpf@vger.kernel.org,  linux-kernel@vger.kernel.org,
+  netdev@vger.kernel.org,  io-uring@vger.kernel.org,  pabeni@redhat.com
+Subject: Re: [PATCH v5 5/8] io_uring/cmd: return -EOPNOTSUPP if net is disabled
+In-Reply-To: <20230911103407.1393149-6-leitao@debian.org> (Breno Leitao's
+	message of "Mon, 11 Sep 2023 03:34:04 -0700")
+Organization: SUSE
+References: <20230911103407.1393149-1-leitao@debian.org>
+	<20230911103407.1393149-6-leitao@debian.org>
+Date: Mon, 11 Sep 2023 11:53:58 -0400
+Message-ID: <87ledc904p.fsf@suse.de>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Use bitmap_zalloc() and bitmap_free() instead of hand-writing them.
-It is less verbose and it improves the type checking and semantic.
+Breno Leitao <leitao@debian.org> writes:
 
-While at it, add missing header inclusion (should be bitops.h,
-but with the above change it becomes bitmap.h).
+> Protect io_uring_cmd_sock() to be called if CONFIG_NET is not set. If
+> network is not enabled, but io_uring is, then we want to return
+> -EOPNOTSUPP for any possible socket operation.
+>
+> This is helpful because io_uring_cmd_sock() can now call functions that
+> only exits if CONFIG_NET is enabled without having #ifdef CONFIG_NET
+> inside the function itself.
+>
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> ---
+>  io_uring/uring_cmd.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+> index 60f843a357e0..a7d6a7d112b7 100644
+> --- a/io_uring/uring_cmd.c
+> +++ b/io_uring/uring_cmd.c
+> @@ -167,6 +167,7 @@ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+>  }
+>  EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed);
+>  
+> +#if defined(CONFIG_NET)
+>  int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
+>  {
+>  	struct socket *sock = cmd->file->private_data;
+> @@ -193,3 +194,10 @@ int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
+>  	}
+>  }
+>  EXPORT_SYMBOL_GPL(io_uring_cmd_sock);
+> +#else
+> +int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +#endif
+> +
 
-Suggested-by: Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- net/core/dev.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Is net/socket.c even built without CONFIG_NET? if not, you don't even need
+the alternative EOPNOTSUPP implementation.
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index ccff2b6ef958..85df22f05c38 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -69,7 +69,7 @@
-  */
- 
- #include <linux/uaccess.h>
--#include <linux/bitops.h>
-+#include <linux/bitmap.h>
- #include <linux/capability.h>
- #include <linux/cpu.h>
- #include <linux/types.h>
-@@ -1080,7 +1080,7 @@ static int __dev_alloc_name(struct net *net, const char *name, char *buf)
- 			return -EINVAL;
- 
- 		/* Use one page as a bit array of possible slots */
--		inuse = (unsigned long *) get_zeroed_page(GFP_ATOMIC);
-+		inuse = bitmap_zalloc(max_netdevices, GFP_ATOMIC);
- 		if (!inuse)
- 			return -ENOMEM;
- 
-@@ -1109,7 +1109,7 @@ static int __dev_alloc_name(struct net *net, const char *name, char *buf)
- 		}
- 
- 		i = find_first_zero_bit(inuse, max_netdevices);
--		free_page((unsigned long) inuse);
-+		bitmap_free(inuse);
- 	}
- 
- 	snprintf(buf, IFNAMSIZ, name, i);
 -- 
-2.40.0.1.gaa8946217a0b
-
+Gabriel Krisman Bertazi
