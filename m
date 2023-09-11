@@ -1,92 +1,166 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD37AC121
-	for <bpf@vger.kernel.org>; Mon, 11 Sep 2023 09:20:33 +0000 (UTC)
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE71ACD3
-	for <bpf@vger.kernel.org>; Mon, 11 Sep 2023 02:20:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1694424031;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bPNf+LMH2dPWsk1O9R4yW1taYmiwMEwNxmfzPkZ8n54=;
-	b=fTvuAB4+L5f4QO53dDmctIhh3b9NnS2qpTLhoa+T0Ci9oebJi5p2jEX+baT8FUO9I9LlNq
-	z7GwwiocgFRFbesFvk8UCtr8P+l1Ys6//7NffSz9f815SkaFYLpTyciOhhsNDTEQlOWHK0
-	jvMQ3rQJ4D+DdcCmkyojShRVCHPoWTc=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-654-GAevZkZbNHKRlR5d1RXapA-1; Mon, 11 Sep 2023 05:20:29 -0400
-X-MC-Unique: GAevZkZbNHKRlR5d1RXapA-1
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-993eeb3a950so291567066b.2
-        for <bpf@vger.kernel.org>; Mon, 11 Sep 2023 02:20:29 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 239F1BE67;
+	Mon, 11 Sep 2023 10:34:28 +0000 (UTC)
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C94120;
+	Mon, 11 Sep 2023 03:34:26 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-99bcfe28909so533695066b.3;
+        Mon, 11 Sep 2023 03:34:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694424028; x=1695028828;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1694428465; x=1695033265;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bPNf+LMH2dPWsk1O9R4yW1taYmiwMEwNxmfzPkZ8n54=;
-        b=HE18mnO3wxkKkjPSgrHmaKiKEdmT1wizCtHqniXarNjvfkV0xkh3T46PSiey7SJ20y
-         Do1sU4PmGuHftgxiImyNanAJQlSdGSaftF0d+/dSYgVs0szUX0Qlr27wLvHC1Toh+Cd3
-         UfPl4/vjBlnV9XYxcRXc2cT7nLrOYsqejfXeMjK/tAJLNGbRzV8dK8govNxDFFLlO73Q
-         7wDqtYENIr/8aVhcmRJy/EM8ejYg793A5XpiCqCD4s/SlJm7rgjq28sstMxoGjkLCS9J
-         In+CpAYtBPL45vdrJRGTUT6HytTkb1Q6BbMvxcT29GT/Xn9yxaGwgS2x9LPT3Fr/cA9h
-         JFtA==
-X-Gm-Message-State: AOJu0Yx7CWe5aFMgRKU40t7leyaavnDDMZ5p8WHf2LklnA6HJg3BzHPe
-	QsufDFVRhlloLicKI1h/AmL+UanDiqNf/m7aZCVpAMtEMntL21q0HUVwcu6MYCHmwq4kv5TJK3N
-	cjhC8cmIOp4CA
-X-Received: by 2002:a17:906:24b:b0:9a1:fc1e:19af with SMTP id 11-20020a170906024b00b009a1fc1e19afmr6786243ejl.36.1694424028611;
-        Mon, 11 Sep 2023 02:20:28 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGijDggNvdmqYqoLEDD9Wp9ri92BPlaUPd4uWRjxNU59f99NwK55C+xsHG7LTncUSgylxp7Hg==
-X-Received: by 2002:a17:906:24b:b0:9a1:fc1e:19af with SMTP id 11-20020a170906024b00b009a1fc1e19afmr6786233ejl.36.1694424028295;
-        Mon, 11 Sep 2023 02:20:28 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id z10-20020a170906074a00b00993cc1242d4sm5019863ejb.151.2023.09.11.02.20.27
+        bh=T63D+iseOM6feL2ViRPYbx+xbxxkgrRy6waBaJFXQkc=;
+        b=F5hyEGX3FBvG4wSuDLNanCDzwWIu0uUOZNxdN8JjGHbsgxO+rQbRomrOMtGbMHLwNI
+         yVZFUx5Iwmpj7NrGlcKxqx8y9p6hkzV3kq7cu/mRAYanHjzeA8fp6cm46QsGYYBtGPUq
+         q1nf3BHWvTqEv1lGtQ17Nrectxa78Dl9rOh7YpjEtCpkwFulDc+G/0qAC1rWDSc0i3cA
+         E8nTWR+zp/F8xB4uCzus3if/osegoqdcm9hHgG37+V5Sm0z7C4OiEI+cCu1OOU4TMLlw
+         1Gq9oMCZIIRDbp2Em97YMNVknjnoFHcCvfdJUIBettRV4AwvuP164z2jrl4+7CZ+GWwV
+         4mYw==
+X-Gm-Message-State: AOJu0Yxrr8yNPVW4FYX3w/nXB/7u70i8BLfK19sHfpBZYDWRG6FCM8C6
+	hPzoepT+foj+2xAjX5pTuMA=
+X-Google-Smtp-Source: AGHT+IEG7pX01Le5VoJCsHW9UPN7FfkBOSLPgQg8x79CdKdfegtdb4J1yhEIzbsu4e6W3g33fphzlA==
+X-Received: by 2002:a17:906:1cf:b0:9a1:c991:a521 with SMTP id 15-20020a17090601cf00b009a1c991a521mr8145455ejj.4.1694428465179;
+        Mon, 11 Sep 2023 03:34:25 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-012.fbsv.net. [2a03:2880:31ff:c::face:b00c])
+        by smtp.gmail.com with ESMTPSA id b9-20020a170906490900b00992f2befcbcsm5131977ejq.180.2023.09.11.03.34.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 02:20:28 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id A1042DC709F; Mon, 11 Sep 2023 11:20:27 +0200 (CEST)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard
- Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Paolo
- Abeni <pabeni@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, Sebastian
- Andrzej Siewior <bigeasy@linutronix.de>
-Subject: Re: [PATCH net-next 2/2] bpf: Remove xdp_do_flush_map().
-In-Reply-To: <20230908143215.869913-3-bigeasy@linutronix.de>
-References: <20230908143215.869913-1-bigeasy@linutronix.de>
- <20230908143215.869913-3-bigeasy@linutronix.de>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Mon, 11 Sep 2023 11:20:27 +0200
-Message-ID: <87msxtkqw4.fsf@toke.dk>
+        Mon, 11 Sep 2023 03:34:24 -0700 (PDT)
+From: Breno Leitao <leitao@debian.org>
+To: sdf@google.com,
+	axboe@kernel.dk,
+	asml.silence@gmail.com,
+	willemdebruijn.kernel@gmail.com,
+	kuba@kernel.org,
+	martin.lau@linux.dev,
+	krisman@suse.de,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	io-uring@vger.kernel.org,
+	Willem de Bruijn <willemb@google.com>
+Subject: [PATCH v5 1/8] net/socket: Break down __sys_setsockopt
+Date: Mon, 11 Sep 2023 03:34:00 -0700
+Message-Id: <20230911103407.1393149-2-leitao@debian.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230911103407.1393149-1-leitao@debian.org>
+References: <20230911103407.1393149-1-leitao@debian.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-	autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Sebastian Andrzej Siewior <bigeasy@linutronix.de> writes:
+Split __sys_setsockopt() into two functions by removing the core
+logic into a sub-function (do_sock_setsockopt()). This will avoid
+code duplication when doing the same operation in other callers, for
+instance.
 
-> xdp_do_flush_map() can be removed because there is no more user in tree.
->
-> Remove xdp_do_flush_map().
->
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+do_sock_setsockopt() will be called by io_uring setsockopt() command
+operation in the following patch.
 
-Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+Signed-off-by: Breno Leitao <leitao@debian.org>
+Reviewed-by: Willem de Bruijn <willemb@google.com>
+---
+ include/net/sock.h |  2 ++
+ net/socket.c       | 38 +++++++++++++++++++++++++-------------
+ 2 files changed, 27 insertions(+), 13 deletions(-)
+
+diff --git a/include/net/sock.h b/include/net/sock.h
+index 11d503417591..aa8fb54ad0af 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -1861,6 +1861,8 @@ int sk_setsockopt(struct sock *sk, int level, int optname,
+ 		  sockptr_t optval, unsigned int optlen);
+ int sock_setsockopt(struct socket *sock, int level, int op,
+ 		    sockptr_t optval, unsigned int optlen);
++int do_sock_setsockopt(struct socket *sock, bool compat, int level,
++		       int optname, char __user *user_optval, int optlen);
+ 
+ int sk_getsockopt(struct sock *sk, int level, int optname,
+ 		  sockptr_t optval, sockptr_t optlen);
+diff --git a/net/socket.c b/net/socket.c
+index 77f28328e387..360332e098d4 100644
+--- a/net/socket.c
++++ b/net/socket.c
+@@ -2261,31 +2261,22 @@ static bool sock_use_custom_sol_socket(const struct socket *sock)
+ 	return test_bit(SOCK_CUSTOM_SOCKOPT, &sock->flags);
+ }
+ 
+-/*
+- *	Set a socket option. Because we don't know the option lengths we have
+- *	to pass the user mode parameter for the protocols to sort out.
+- */
+-int __sys_setsockopt(int fd, int level, int optname, char __user *user_optval,
+-		int optlen)
++int do_sock_setsockopt(struct socket *sock, bool compat, int level,
++		       int optname, char __user *user_optval, int optlen)
+ {
+ 	sockptr_t optval = USER_SOCKPTR(user_optval);
+ 	const struct proto_ops *ops;
+ 	char *kernel_optval = NULL;
+-	int err, fput_needed;
+-	struct socket *sock;
++	int err;
+ 
+ 	if (optlen < 0)
+ 		return -EINVAL;
+ 
+-	sock = sockfd_lookup_light(fd, &err, &fput_needed);
+-	if (!sock)
+-		return err;
+-
+ 	err = security_socket_setsockopt(sock, level, optname);
+ 	if (err)
+ 		goto out_put;
+ 
+-	if (!in_compat_syscall())
++	if (!compat)
+ 		err = BPF_CGROUP_RUN_PROG_SETSOCKOPT(sock->sk, &level, &optname,
+ 						     user_optval, &optlen,
+ 						     &kernel_optval);
+@@ -2308,6 +2299,27 @@ int __sys_setsockopt(int fd, int level, int optname, char __user *user_optval,
+ 					    optlen);
+ 	kfree(kernel_optval);
+ out_put:
++	return err;
++}
++EXPORT_SYMBOL(do_sock_setsockopt);
++
++/* Set a socket option. Because we don't know the option lengths we have
++ * to pass the user mode parameter for the protocols to sort out.
++ */
++int __sys_setsockopt(int fd, int level, int optname, char __user *user_optval,
++		     int optlen)
++{
++	bool compat = in_compat_syscall();
++	int err, fput_needed;
++	struct socket *sock;
++
++	sock = sockfd_lookup_light(fd, &err, &fput_needed);
++	if (!sock)
++		return err;
++
++	err = do_sock_setsockopt(sock, compat, level, optname, user_optval,
++				 optlen);
++
+ 	fput_light(sock->file, fput_needed);
+ 	return err;
+ }
+-- 
+2.34.1
 
