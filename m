@@ -1,137 +1,104 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2677311710
-	for <bpf@vger.kernel.org>; Mon, 11 Sep 2023 13:58:46 +0000 (UTC)
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id B024FCD7
-	for <bpf@vger.kernel.org>; Mon, 11 Sep 2023 06:58:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1694440724;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=A36/jUHiNm3kPuZ+L53KLWDeRgfIZbwcm1XGDxvpiWs=;
-	b=DTRfODe2MwKc+zVv6y3/QBAfYP81+n0lxrdYzv/J8OK5/s+8dSJrkb/ZLssOlaqML6gjVt
-	7qcOt8ngopDPCxDufrQ8qtIxqJuhNks9tDa3Ia5I+ulNe9MqWajBjDBSauVYgGk1IEVTLW
-	6gVCA7MVkA6IGXVjjSjjifpbzfO4oxs=
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
- [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-247-Md4xgoWtNJ--EwDrXa1udg-1; Mon, 11 Sep 2023 09:58:43 -0400
-X-MC-Unique: Md4xgoWtNJ--EwDrXa1udg-1
-Received: by mail-lf1-f72.google.com with SMTP id 2adb3069b0e04-500c67585acso4512059e87.2
-        for <bpf@vger.kernel.org>; Mon, 11 Sep 2023 06:58:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694440721; x=1695045521;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=A36/jUHiNm3kPuZ+L53KLWDeRgfIZbwcm1XGDxvpiWs=;
-        b=imHl94vLQlLGenX63mYevMR4HeVYlT9+MxIWjNSmzSnIJOwrn6AVCu0xA5nYVxPZ+s
-         mRt/1o+biMOtMteTa5ynwWRPb8xD0xu+7e/pSfgpbONsCVCK364uL1vqLYnuWfeGc7L+
-         eQla00wz6WAuwuQNuQWXStRVRXgJr2iYrGyRkfQ9/E6ZsbUpwUhtDLwrOIZJkROr0DG6
-         N6C607xePzbdsm2O2pbacgrmj/4i/cV3VjkDl58cjEKUtP+YUPPWvJzN7GueBnLuiW9t
-         iUMbGgqG8fisPqtuuOAAr31XSX3pkAkalaJ4izNOYzNqQn/O3Udr/pa1OR/7FTeQSJZQ
-         hM2g==
-X-Gm-Message-State: AOJu0Yy6RnVwGapDa+zpsAnFy5o9CYjU4LCZ81D0pgTAGpKFwRKWjSSO
-	jY8COWhcTMb4Q+KBPsGi+vFsthplDHLRWTDS9MRqQqb7U4Em7VkSjuHqCdeDXC79ODUPNekGAuj
-	aLQKf7hC77MyR3LUg06fh
-X-Received: by 2002:ac2:4ece:0:b0:4fc:3756:754e with SMTP id p14-20020ac24ece000000b004fc3756754emr6711880lfr.56.1694440721086;
-        Mon, 11 Sep 2023 06:58:41 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGCdjrohb0Z6US6Uo0TPXg4UkXz9wIkaXq+F/rQatOYdo18Jpk+r9G7b3qDcWRWtJh0gCDxlg==
-X-Received: by 2002:ac2:4ece:0:b0:4fc:3756:754e with SMTP id p14-20020ac24ece000000b004fc3756754emr6711866lfr.56.1694440720669;
-        Mon, 11 Sep 2023 06:58:40 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id sb1-20020a170906edc100b009a1c05bd672sm5362988ejb.127.2023.09.11.06.58.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 06:58:40 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id D42BADC70F5; Mon, 11 Sep 2023 15:58:39 +0200 (CEST)
-From: =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Stanislav Fomichev <sdf@google.com>,
-	Gerhard Engleder <gerhard@engleder-embedded.com>,
-	Simon Horman <horms@kernel.org>
-Cc: =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-	Marek Majtyka <alardam@gmail.com>,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH net] veth: Update XDP feature set when bringing up device
-Date: Mon, 11 Sep 2023 15:58:25 +0200
-Message-ID: <20230911135826.722295-1-toke@redhat.com>
-X-Mailer: git-send-email 2.42.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 021ED1170E
+	for <bpf@vger.kernel.org>; Mon, 11 Sep 2023 14:16:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95A3BC433C7;
+	Mon, 11 Sep 2023 14:16:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1694441766;
+	bh=KXMxuh2b3iJk8T/pEtBjYdbcbrbdQSKwgRi4Ihd42Cc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=NsiA08LeJ2l2QqaF2Mc6EPGMtZH+dDzcgipfV7b7nC0+R82itaFMgvZHm/PC3Ag/8
+	 wOkdRAEiJhReJPG82IycnW2brztwBd70iPPejBKp1KgNyVGDJxhcQd0z8yIjZNRwUX
+	 R8ujtKfFqjA0bT3CTjlYrXErPATtpmyBqwOuokY3EdPHaoawjT4bZt0o1fE0IybKo/
+	 8QB3w7+XEI/s2YMx3Qmg7R5zIpsUOgjdCVSy6o2eb+/Rwr/TMKBrwVPNXD124U9OCr
+	 ObNs/a+bbt/g7xKzgPTtvGSapBb3o+vGb7u7T3o1wYB8NJ7Dpir2rLEwMATY/k2+gp
+	 CdSFXxmQUopOQ==
+Date: Mon, 11 Sep 2023 23:15:59 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Sven Schnelle <svens@linux.ibm.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Steven Rostedt
+ <rostedt@goodmis.org>, Florent Revest <revest@chromium.org>,
+ linux-trace-kernel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>, Alexei
+ Starovoitov <ast@kernel.org>, Jiri Olsa <jolsa@kernel.org>, Arnaldo
+ Carvalho de Melo <acme@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Alan Maguire <alan.maguire@oracle.com>, Mark Rutland
+ <mark.rutland@arm.com>, Peter Zijlstra <peterz@infradead.org>, Thomas
+ Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v4 4/9] fprobe: rethook: Use ftrace_regs in fprobe exit
+ handler and rethook
+Message-Id: <20230911231559.67dc02ec42995042b7e92c58@kernel.org>
+In-Reply-To: <yt9dy1hdi1pe.fsf@linux.ibm.com>
+References: <169280372795.282662.9784422934484459769.stgit@devnote2>
+	<169280377434.282662.7610009313268953247.stgit@devnote2>
+	<20230904224038.4420a76ea15931aa40179697@kernel.org>
+	<yt9d5y4pozrl.fsf@linux.ibm.com>
+	<20230905223633.23cd4e6e8407c45b934be477@kernel.org>
+	<yt9dzg1zokyg.fsf@linux.ibm.com>
+	<20230909232435.dfa15f93f1c5eef5b229a7d2@kernel.org>
+	<yt9dy1hdi1pe.fsf@linux.ibm.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-There's an early return in veth_set_features() if the device is in a down
-state, which leads to the XDP feature flags not being updated when enabling
-GRO while the device is down. Which in turn leads to XDP_REDIRECT not
-working, because the redirect code now checks the flags.
+On Mon, 11 Sep 2023 09:55:09 +0200
+Sven Schnelle <svens@linux.ibm.com> wrote:
 
-Fix this by updating the feature flags after bringing the device up.
+> Masami Hiramatsu (Google) <mhiramat@kernel.org> writes:
+> 
+> >> > IOW, it is ftrace save regs/restore regs code issue. I need to check how the
+> >> > function_graph implements it.
+> >> 
+> >> gpr2-gpr14 are always saved in ftrace_caller/ftrace_regs_caller(),
+> >> regardless of the FTRACE_WITH_REGS flags. The only difference is that
+> >> without the FTRACE_WITH_REGS flag the program status word (psw) is not
+> >> saved because collecting that is a rather expensive operation.
+> >
+> > Thanks for checking that! So s390 will recover those saved registers
+> > even if FTRACE_WITH_REGS flag is not set? (I wonder what is the requirement
+> > of the ftrace_regs when returning from ftrace_call() without
+> > FTRACE_WITH_REGS?)
+> 
+> Yes, it will recover these in all cases.
 
-Before this patch:
+Thanks for the confirmation!
 
-NETDEV_XDP_ACT_BASIC:		yes
-NETDEV_XDP_ACT_REDIRECT:	yes
-NETDEV_XDP_ACT_NDO_XMIT:	no
-NETDEV_XDP_ACT_XSK_ZEROCOPY:	no
-NETDEV_XDP_ACT_HW_OFFLOAD:	no
-NETDEV_XDP_ACT_RX_SG:		yes
-NETDEV_XDP_ACT_NDO_XMIT_SG:	no
+> 
+> >> 
+> >> I used the following commands to test rethook (is that the correct
+> >> testcase?)
+> >> 
+> >> #!/bin/bash
+> >> cd /sys/kernel/tracing
+> >> 
+> >> echo 'r:icmp_rcv icmp_rcv' >kprobe_events
+> >> echo 1 >events/kprobes/icmp_rcv/enable
+> >> ping -c 1 127.0.0.1
+> >> cat trace
+> >
+> > No, the kprobe will path pt_regs to rethook.
+> > Cna you run
+> >
+> > echo "f:icmp_rcv%return icmp_rcv" >> dynamic_events
+> 
+> Ah, ok. Seems to work as well:
+> 
+>   ping-481     [001] ..s2.    53.918480: icmp_rcv: (ip_protocol_deliver_rcu+0x42/0x218 <- icmp_rcv)
+>   ping-481     [001] ..s2.    53.918491: icmp_rcv: (ip_protocol_deliver_rcu+0x42/0x218 <- icmp_rcv)
 
-After this patch:
+Nice!
+OK, then s390 is safe to use ftrace_regs :) 
 
-NETDEV_XDP_ACT_BASIC:		yes
-NETDEV_XDP_ACT_REDIRECT:	yes
-NETDEV_XDP_ACT_NDO_XMIT:	yes
-NETDEV_XDP_ACT_XSK_ZEROCOPY:	no
-NETDEV_XDP_ACT_HW_OFFLOAD:	no
-NETDEV_XDP_ACT_RX_SG:		yes
-NETDEV_XDP_ACT_NDO_XMIT_SG:	yes
+Thanks!
 
-Fixes: fccca038f300 ("veth: take into account device reconfiguration for xdp_features flag")
-Fixes: 66c0e13ad236 ("drivers: net: turn on XDP features")
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
----
- drivers/net/veth.c | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 9c6f4f83f22b..0deefd1573cf 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -1446,6 +1446,8 @@ static int veth_open(struct net_device *dev)
- 		netif_carrier_on(peer);
- 	}
- 
-+	veth_set_xdp_features(dev);
-+
- 	return 0;
- }
- 
 -- 
-2.42.0
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
