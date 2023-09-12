@@ -1,87 +1,126 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2290728E6
-	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 06:00:49 +0000 (UTC)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0AB5AF;
-	Mon, 11 Sep 2023 23:00:48 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-d80089712e5so6199951276.1;
-        Mon, 11 Sep 2023 23:00:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694498448; x=1695103248;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VUILU1E0+FdlFdLUANe6gniGaPM89l1IGPrpgMyRN5I=;
-        b=IRltfIMM1TXrcViGkNG/VK96IsT8nn517HsTaBAcVNPZhllEPrcf5LpVyrV/16Ejb6
-         0Zo39/6wnk59EIQKH4ys6UGC4QNP9YB/5pLtLQkQskPVWYUBhtWglNJB8kz+uMbIT/4Q
-         I3qm401yQCQN6rRVbmO/iasgbO3/LDhaS+GtlROGx2JPACVdDAkCEzOAcRc3B7TuUsS1
-         /5da9rKMNpSKgqCE6vVDd41NgR6cgGxN8oslTgAN+v1RLSRPjbtZsN/BCu/txU3xk49u
-         wLF3QkXD/WVLedc2CdezxKcGGP4hqhRnvqKMFH2TiiFdXzeqUjynYQ5SZYeDiCGnCkAf
-         OmZA==
-X-Gm-Message-State: AOJu0Yzor37LZBmzTkYR9Nc1wza50RF/2dgkX7k/7V4sWeVUKiCa1H7p
-	zTaW9/70N0oP5GihcozBs2a4DV6zZM6nVY6+RSYb22S2hk0=
-X-Google-Smtp-Source: AGHT+IF/lQdOP9qBizGBb21/Z1f2teVHR7FJHFpnrBDMARdoZAr7FlCDkEC5rQJErcxnOmRKhjLH+VTclPBLLqIxCAI=
-X-Received: by 2002:a25:dc11:0:b0:d09:22c0:138d with SMTP id
- y17-20020a25dc11000000b00d0922c0138dmr2062829ybe.7.1694498447808; Mon, 11 Sep
- 2023 23:00:47 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE55828E6
+	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 06:08:14 +0000 (UTC)
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9C0E77;
+	Mon, 11 Sep 2023 23:08:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=sFuiyOstyY2vXIAcLnV3dqg2ACy5vJ9mQ7xD1vWkyWU=; b=S+ghahK5zgWOWbOTGcZSByqN4k
+	zlUfkuCICe0Zo95hD5owu+bcaqeo2x7YtelwLOYT+BvXaavKIrSo9avGUI9fGd2n1BG7I3uF9TiXV
+	XqpqeG+RQXkOsYDYUoj1bdd6cnfD+CcR4Pnbnl6aW+8KiG6Yz6qvlMuvGxaalRwPE1p1sM9K/i1FO
+	akZ3V3QRBtD7H9lndzkSNoROC6jRSDAWl/I3JIATZxLkcWKfwsnYqc657U2TfY2K52NzLPlfiAqvS
+	Rnmfu1KDyWkf5xv4Di1a5V4TAUN1JKE7BTscWhIB1Pe9ZY/cp97GWrMc5cuxveOxvlYvopZmMryo5
+	ogbMDsVw==;
+Received: from [2601:1c2:980:9ec0::9fed] (helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1qfwZJ-002FfO-15;
+	Tue, 12 Sep 2023 06:08:13 +0000
+From: Randy Dunlap <rdunlap@infradead.org>
+To: linux-kernel@vger.kernel.org
+Cc: Randy Dunlap <rdunlap@infradead.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Subject: [PATCH bpf] bpf, cgroup: fix multiple kernel-doc warnings
+Date: Mon, 11 Sep 2023 23:08:12 -0700
+Message-ID: <20230912060812.1715-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230911170559.4037734-1-irogers@google.com> <20230911170559.4037734-5-irogers@google.com>
-In-Reply-To: <20230911170559.4037734-5-irogers@google.com>
-From: Namhyung Kim <namhyung@kernel.org>
-Date: Mon, 11 Sep 2023 23:00:36 -0700
-Message-ID: <CAM9d7cjj9V+tmrF_=8YgnxiLVGcGYKLZ-4pNgEgQM+3XSCHrsQ@mail.gmail.com>
-Subject: Re: [PATCH v1 5/5] perf bpf-filter: Add YYDEBUG
-To: Ian Rogers <irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	James Clark <james.clark@arm.com>, Gaosheng Cui <cuigaosheng1@huawei.com>, 
-	Rob Herring <robh@kernel.org>, linux-perf-users@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Sep 11, 2023 at 10:06=E2=80=AFAM Ian Rogers <irogers@google.com> wr=
-ote:
->
-> YYDEBUG enables line numbers and other error helpers in the generated
-> bpf-filter-bison.c. Conditionally enabled only for debug builds.
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
+Fix missing or extra function parameter kernel-doc warnings
+in cgroup.c:
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
+kernel/bpf/cgroup.c:1359: warning: Excess function parameter 'type' description in '__cgroup_bpf_run_filter_skb'
+kernel/bpf/cgroup.c:1359: warning: Function parameter or member 'atype' not described in '__cgroup_bpf_run_filter_skb'
+kernel/bpf/cgroup.c:1439: warning: Excess function parameter 'type' description in '__cgroup_bpf_run_filter_sk'
+kernel/bpf/cgroup.c:1439: warning: Function parameter or member 'atype' not described in '__cgroup_bpf_run_filter_sk'
+kernel/bpf/cgroup.c:1467: warning: Excess function parameter 'type' description in '__cgroup_bpf_run_filter_sock_addr'
+kernel/bpf/cgroup.c:1467: warning: Function parameter or member 'atype' not described in '__cgroup_bpf_run_filter_sock_addr'
+kernel/bpf/cgroup.c:1512: warning: Excess function parameter 'type' description in '__cgroup_bpf_run_filter_sock_ops'
+kernel/bpf/cgroup.c:1512: warning: Function parameter or member 'atype' not described in '__cgroup_bpf_run_filter_sock_ops'
+kernel/bpf/cgroup.c:1685: warning: Excess function parameter 'type' description in '__cgroup_bpf_run_filter_sysctl'
+kernel/bpf/cgroup.c:1685: warning: Function parameter or member 'atype' not described in '__cgroup_bpf_run_filter_sysctl'
+kernel/bpf/cgroup.c:795: warning: Excess function parameter 'type' description in '__cgroup_bpf_replace'
+kernel/bpf/cgroup.c:795: warning: Function parameter or member 'new_prog' not described in '__cgroup_bpf_replace'
 
-Thanks,
-Namhyung
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+---
+ kernel/bpf/cgroup.c |   13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-
-> ---
->  tools/perf/util/bpf-filter.y | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/tools/perf/util/bpf-filter.y b/tools/perf/util/bpf-filter.y
-> index 5dfa948fc986..0e4d6de3c2ad 100644
-> --- a/tools/perf/util/bpf-filter.y
-> +++ b/tools/perf/util/bpf-filter.y
-> @@ -3,6 +3,10 @@
->
->  %{
->
-> +#ifndef NDEBUG
-> +#define YYDEBUG 1
-> +#endif
-> +
->  #include <stdio.h>
->  #include <string.h>
->  #include <linux/compiler.h>
-> --
-> 2.42.0.283.g2d96d420d3-goog
->
+diff -- a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -785,7 +785,8 @@ found:
+  *                          to descendants
+  * @cgrp: The cgroup which descendants to traverse
+  * @link: A link for which to replace BPF program
+- * @type: Type of attach operation
++ * @new_prog: &struct bpf_prog for the target BPF program with its refcnt
++ *            incremented
+  *
+  * Must be called with cgroup_mutex held.
+  */
+@@ -1334,7 +1335,7 @@ int cgroup_bpf_prog_query(const union bp
+  * __cgroup_bpf_run_filter_skb() - Run a program for packet filtering
+  * @sk: The socket sending or receiving traffic
+  * @skb: The skb that is being sent or received
+- * @type: The type of program to be executed
++ * @atype: The type of program to be executed
+  *
+  * If no socket is passed, or the socket is not of type INET or INET6,
+  * this function does nothing and returns 0.
+@@ -1424,7 +1425,7 @@ EXPORT_SYMBOL(__cgroup_bpf_run_filter_sk
+ /**
+  * __cgroup_bpf_run_filter_sk() - Run a program on a sock
+  * @sk: sock structure to manipulate
+- * @type: The type of program to be executed
++ * @atype: The type of program to be executed
+  *
+  * socket is passed is expected to be of type INET or INET6.
+  *
+@@ -1449,7 +1450,7 @@ EXPORT_SYMBOL(__cgroup_bpf_run_filter_sk
+  *                                       provided by user sockaddr
+  * @sk: sock struct that will use sockaddr
+  * @uaddr: sockaddr struct provided by user
+- * @type: The type of program to be executed
++ * @atype: The type of program to be executed
+  * @t_ctx: Pointer to attach type specific context
+  * @flags: Pointer to u32 which contains higher bits of BPF program
+  *         return value (OR'ed together).
+@@ -1496,7 +1497,7 @@ EXPORT_SYMBOL(__cgroup_bpf_run_filter_so
+  * @sock_ops: bpf_sock_ops_kern struct to pass to program. Contains
+  * sk with connection information (IP addresses, etc.) May not contain
+  * cgroup info if it is a req sock.
+- * @type: The type of program to be executed
++ * @atype: The type of program to be executed
+  *
+  * socket passed is expected to be of type INET or INET6.
+  *
+@@ -1670,7 +1671,7 @@ const struct bpf_verifier_ops cg_dev_ver
+  * @ppos: value-result argument: value is position at which read from or write
+  *	to sysctl is happening, result is new position if program overrode it,
+  *	initial value otherwise
+- * @type: type of program to be executed
++ * @atype: type of program to be executed
+  *
+  * Program is run when sysctl is being accessed, either read or written, and
+  * can allow or deny such access.
