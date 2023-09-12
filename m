@@ -1,46 +1,46 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D92E917C2
-	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 23:32:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA5381429F
+	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 23:32:22 +0000 (UTC)
 Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2505710FE
-	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 16:32:21 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id 4fb4d7f45d1cf-51a52a7d859so789451a12.0
-        for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 16:32:21 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C59F10FE
+	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 16:32:22 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id 4fb4d7f45d1cf-52eed139ec2so6313590a12.2
+        for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 16:32:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694561539; x=1695166339; darn=vger.kernel.org;
+        d=gmail.com; s=20221208; t=1694561540; x=1695166340; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QJ21yuVoz7wiPdHAcyvrcUWYh9xWXZBQttp6kj1ZBwo=;
-        b=sivt6lPyZY/n7oI3pZfZSTHjCzg+boSIy8uiJbX9UjvW0+sKy4lSXKrOGpWLCPOjze
-         8AmIsomeG1w37AO3cp7yRC/bjEvNdNzVwEYlBgIOVf9j1bVRKaLsDOKw0mfIl2aMkquS
-         ZxRS13x4MzuquR5haWgIWGOcnpemmwQl5IjUKA3l4QyHjva7ulkiEVaTFiaQXeY6ITou
-         eri8LWWfkOmmaCoD6968u9sdAfS9Sp4S2RkgarokApLm3K8Lje0T3DB66cg4VnxgqZCr
-         UQJ5gGSbT74VPSDkZEMBhrcHSAbwe9O41bghzGQJ2xkOJniVBSrRb0QA4+9yps0ZtbqK
-         7zKQ==
+        bh=1WLolWLG60Kjojm7uamT/JxAmYWhvrYdhW6u3XhIoUw=;
+        b=IUpjBrA2XokbgFi7RspmLRH9dJxDgq/d+GKxuTtgiHixCdIE2NyCcJphkGLbm1kREV
+         vACXZ5HRYILSMjAPt0jfLgE2e66R4199m2bOhwpKHWv56kHOvCMPHQcqTG6t7ueseZ/8
+         HmtQWCD9kvDjy8Zjk/BLEtAwTJ/h7Q5aeMW2RYWhIcRH8x/mYiNiEngitKwDjbpSU1C5
+         AL5ip070xwNBvMDB16+5RIcYAYX2Xc87KaCcWZD5xcOdful2Dpfqm4m8t+MIXV0TXxJM
+         +zvpb2eCHTMxnbCzImtjLkTrucSD9OBxEhd5Nh9sD1v4HCzZ/oOOeCmyZqODQw3SQ0LY
+         689w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694561539; x=1695166339;
+        d=1e100.net; s=20230601; t=1694561540; x=1695166340;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QJ21yuVoz7wiPdHAcyvrcUWYh9xWXZBQttp6kj1ZBwo=;
-        b=ibVg88nEiiCix+i45JpXAspV0N407RgL4AioXO6i+bc4wJXaUgSccx2+kkctztwJXR
-         K/EPk+jctQq3GKkxPb63WScNVVBjUn165jmdm4wp8l4/z7soyWhN2XjLIbLOYWEW4y+B
-         LHFXKoWoZ7EpJRD9ZGN7yG+14veb0lmUbeC1zXPFo5DRS9jKi1eYg5OLQ66SAoYxr4PJ
-         8c5VkPWqWgloX1ZKrHO/WwNZgSVaRypG9xEXQD+HG6G+Z41D5oYQ2rs8LpKA9RSG5mBb
-         su/h861933cS3si3MEdLxD2PsSVJJYQA8EBSvUi7rwaouTLs4ndC3VSneKBHp9dip9Sy
-         fBzQ==
-X-Gm-Message-State: AOJu0YxnDMBH1df9xKeZLERqbE0NX92l4PtkNf2a3iqnCXb2txq+M5IU
-	t5X8fZQLv4/gLi4dNEuaDA16HmA1vGbfVA==
-X-Google-Smtp-Source: AGHT+IHkDC7og1nV7UDcQ/MLZZrddrLeltuD0oMJ9XUE1jTDYrCd3cbpbkQCQO53PMkvX2iJdDWVSw==
-X-Received: by 2002:aa7:d8d0:0:b0:523:b37e:b83b with SMTP id k16-20020aa7d8d0000000b00523b37eb83bmr1621715eds.13.1694561538998;
-        Tue, 12 Sep 2023 16:32:18 -0700 (PDT)
+        bh=1WLolWLG60Kjojm7uamT/JxAmYWhvrYdhW6u3XhIoUw=;
+        b=KZFDDt17aNtb5Tpw2AYroXIUOZsKQdsesurU+G8aFIHwfiRSXuy7sxbTERnoBXpA4+
+         DWeyn7evC7C6HqTQ5ZCPU/6aXYhDlJ80JiW2+q1ff3cHj4g8eYPAPOYxQ6oPC28FGF/l
+         lYd+FhXGhNE8shp8fPRzt5Ut2cQBqmQE740/9AlsWlzQ5KNg6vOuuEa6TvWKPC7wjPd4
+         guSjxnR3nOuaKxbL9VHX5aavMPIvP2xJls7h0HKfysJl6IHPuKAHZckklcuY9F7gA2Tt
+         5KkvkgIFZSk5xQWVjPTwEYEX2m+6Zz6oLXUANp47Jxpmm4KIgTZ1y3J8SP+XIb3KDRK7
+         JvDQ==
+X-Gm-Message-State: AOJu0YwymtttjktR/EQOE2m3or4uL7LL4jgBO5yAZdlbGuils/UObrX/
+	BECCgfcD3UT336pWrv5nBtW/54PEnnCQ0g==
+X-Google-Smtp-Source: AGHT+IEHAuFU2vLP9Tbx7iPEmYWHdrrWlMQ3HPmCUsKMW2km2m3f2Ytts9JIXC13edVINCmKohainw==
+X-Received: by 2002:a17:906:d8:b0:9ad:8ab4:523d with SMTP id 24-20020a17090600d800b009ad8ab4523dmr526618eji.69.1694561540470;
+        Tue, 12 Sep 2023 16:32:20 -0700 (PDT)
 Received: from localhost ([212.203.98.42])
-        by smtp.gmail.com with ESMTPSA id m21-20020a50ef15000000b005232ea6a330sm6470428eds.2.2023.09.12.16.32.18
+        by smtp.gmail.com with ESMTPSA id oy25-20020a170907105900b0099d0c0bb92bsm7430493ejb.80.2023.09.12.16.32.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Sep 2023 16:32:18 -0700 (PDT)
+        Tue, 12 Sep 2023 16:32:20 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -50,9 +50,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	David Vernet <void@manifault.com>,
 	Puranjay Mohan <puranjay12@gmail.com>
-Subject: [PATCH bpf-next v3 04/17] bpf: Implement BPF exceptions
-Date: Wed, 13 Sep 2023 01:32:01 +0200
-Message-ID: <20230912233214.1518551-5-memxor@gmail.com>
+Subject: [PATCH bpf-next v3 06/17] bpf: Add support for custom exception callbacks
+Date: Wed, 13 Sep 2023 01:32:03 +0200
+Message-ID: <20230912233214.1518551-7-memxor@gmail.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230912233214.1518551-1-memxor@gmail.com>
 References: <20230912233214.1518551-1-memxor@gmail.com>
@@ -62,702 +62,399 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=25872; i=memxor@gmail.com; h=from:subject; bh=haq9dFiLNXTn+v6xsXQzWfZbt4kHIpUdng66Xk64EOI=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBlAPSszYVUD8edRz1EGJF9jwcyYQROOHCHkWQ37 +lXeM/x6haJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCZQD0rAAKCRBM4MiGSL8R ypQfEACZpIv+eSsut61HjyrpdwhZfenGSJzSWqYIpYORDpF5nGFjUxBcSOWbDfl5xVMBvJ6XQlo t7jiQ0darTIHxGJTFv/rhyZ3h2imvbtDdKYvhDMgPWexJbnPgExODWQ+YTVG9TA81VOprTqYehD NXCbmKuFR0F28oHTnPC5ZZYYGUrMWCDlt4j5aAYny9FukH7mWdeR1G+HXHRTqYv912d+KxTMq7E GzR8CkpsR58K6BeTB6G62aZQ6TuYxaDF2qxDJm4GtYc8KFu7IwFGPYLcONPh66k1JtA8/aJq1IE +Yts/B1A/q8nKWh8NGNGn9vORM6zjYQkEbV7FfP3BbOx3bPFiu7+9rUY9pPdNwyOCfZoTCCnZyd DwOVlQpgXG1bTR3GihjBHVt3JzyoJt4yN22txGjqLelAHQ8k0zvwdw2OS3EQj0RQWqeuo23zEm3 CrIM89KWcxINB01Jhd9CjW/0mdVXJCdcjecK7RQNBw6WJr0Az3PWLtbD66m7InDCSn5b2ut4Kd7 aruuLhVm/l5sflUY8/AMHoS9JQnqZdGCkesk9/eQIqZvco7vvx2YCRsbKdCXU9S+4hK+ftqH7n6 R0MWAMjC3goaMFhMMgEmwJ8p36lbsaeoRa1ojScwsy10xucSc9+bG+qwTxLHmOKAVoJJWl1hs1p a7EKOrNJUdMyHjA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=14967; i=memxor@gmail.com; h=from:subject; bh=TDfzw634HmkH1qVCVePwzkM2jE1F2uiZx1L4alpQjTM=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBlAPSsL7t77AucDPyTTLAKmcVekU7OJFloBpBK7 VZvoOFgh1+JAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCZQD0rAAKCRBM4MiGSL8R ysemEACNPNAYCB2cQN4hROiLygjE42W9w/aqhRPKy8Ww3cJBHiOzPVZtKezS60WBA5omivAKIcp QXwwUszS4XP52QnhZeazOyQF7+h3Q7FYx4o32WvsvqI/RxW/UGr1JH8rdE0FkaJPSag8hGvY75D yq46pF21tm//Wclsfd+bge00k7nnPIkGM3RziuJzbOcuwRYJVdsf41NdRjxXCJA1vgztgp9Qz7H jOi4X4Z6AUuf4lRVQi0PzZnl7hdZtjiPvs6E2blf7ztlQRppYXwww0u+8FSNm78cOjqcS1WHb4U Gk4vq0wnNsPahuuqrst6zGbDiLzQpka2FkTsplwmsibg1ubYsdqn6/eI+pUFRKanxYEIKCHZkMt dh73ZNfLOhKW5/+rAe89rzrxNzKSR0zb1Llk1UhbECL/sQeW91gWVoR9kEqc6g5Fzvc1oBJOhOg 6PiVaCHhSdl8xejym+xKimzA+oullUOPh98Kl7MbdFhK24cpIVVhGxmiL6YqfrkkAFkVujEDMHq YO2NIQl0YGnb6+UemTQ8gDF6T1zBrFJnUJUFTPNEU++/G0tLQ4hFlyZlbrOm9X3E76gfSypMe/v z0RqfFFelcddrhhvW5w2eXjReubXqS3u4WsDgnfWiTXBZpLyxfd15UFbtzzBEXtAZ075clPFVA5 4XAGYJxYM+REDPQ==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 
-This patch implements BPF exceptions, and introduces a bpf_throw kfunc
-to allow programs to throw exceptions during their execution at runtime.
-A bpf_throw invocation is treated as an immediate termination of the
-program, returning back to its caller within the kernel, unwinding all
-stack frames.
+By default, the subprog generated by the verifier to handle a thrown
+exception hardcodes a return value of 0. To allow user-defined logic
+and modification of the return value when an exception is thrown,
+introduce the 'exception_callback:' declaration tag, which marks a
+callback as the default exception handler for the program.
 
-This allows the program to simplify its implementation, by testing for
-runtime conditions which the verifier has no visibility into, and assert
-that they are true. In case they are not, the program can simply throw
-an exception from the other branch.
+The format of the declaration tag is 'exception_callback:<value>', where
+<value> is the name of the exception callback. Each main program can be
+tagged using this BTF declaratiion tag to associate it with an exception
+callback. In case the tag is absent, the default callback is used.
 
-BPF exceptions are explicitly *NOT* an unlikely slowpath error handling
-primitive, and this objective has guided design choices of the
-implementation of the them within the kernel (with the bulk of the cost
-for unwinding the stack offloaded to the bpf_throw kfunc).
+As such, the exception callback cannot be modified at runtime, only set
+during verification.
 
-The implementation of this mechanism requires use of add_hidden_subprog
-mechanism introduced in the previous patch, which generates a couple of
-instructions to move R1 to R0 and exit. The JIT then rewrites the
-prologue of this subprog to take the stack pointer and frame pointer as
-inputs and reset the stack frame, popping all callee-saved registers
-saved by the main subprog. The bpf_throw function then walks the stack
-at runtime, and invokes this exception subprog with the stack and frame
-pointers as parameters.
+Allowing modification of the callback for the current program execution
+at runtime leads to issues when the programs begin to nest, as any
+per-CPU state maintaing this information will have to be saved and
+restored. We don't want it to stay in bpf_prog_aux as this takes a
+global effect for all programs. An alternative solution is spilling
+the callback pointer at a known location on the program stack on entry,
+and then passing this location to bpf_throw as a parameter.
 
-Reviewers must take note that currently the main program is made to save
-all callee-saved registers on x86_64 during entry into the program. This
-is because we must do an equivalent of a lightweight context switch when
-unwinding the stack, therefore we need the callee-saved registers of the
-caller of the BPF program to be able to return with a sane state.
-
-Note that we have to additionally handle r12, even though it is not used
-by the program, because when throwing the exception the program makes an
-entry into the kernel which could clobber r12 after saving it on the
-stack. To be able to preserve the value we received on program entry, we
-push r12 and restore it from the generated subprogram when unwinding the
-stack.
-
-For now, bpf_throw invocation fails when lingering resources or locks
-exist in that path of the program. In a future followup, bpf_throw will
-be extended to perform frame-by-frame unwinding to release lingering
-resources for each stack frame, removing this limitation.
+However, since exceptions are geared more towards a use case where they
+are ideally never invoked, optimizing for this use case and adding to
+the complexity has diminishing returns.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- arch/x86/net/bpf_jit_comp.c                   |  89 ++++++++++++--
- include/linux/bpf.h                           |   3 +
- include/linux/bpf_verifier.h                  |   4 +
- include/linux/filter.h                        |   6 +
- kernel/bpf/core.c                             |   2 +-
- kernel/bpf/helpers.c                          |  38 ++++++
- kernel/bpf/verifier.c                         | 116 +++++++++++++++---
- .../testing/selftests/bpf/bpf_experimental.h  |  16 +++
- 8 files changed, 247 insertions(+), 27 deletions(-)
+ include/linux/bpf.h                           |   4 +-
+ include/linux/bpf_verifier.h                  |   1 +
+ kernel/bpf/btf.c                              |  29 +++--
+ kernel/bpf/verifier.c                         | 113 ++++++++++++++++--
+ .../testing/selftests/bpf/bpf_experimental.h  |  31 ++++-
+ 5 files changed, 160 insertions(+), 18 deletions(-)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index d0c24b5a6abb..84005f2114e0 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -18,6 +18,8 @@
- #include <asm/text-patching.h>
- #include <asm/unwind.h>
- 
-+static bool all_callee_regs_used[4] = {true, true, true, true};
-+
- static u8 *emit_code(u8 *ptr, u32 bytes, unsigned int len)
- {
- 	if (len == 1)
-@@ -256,6 +258,14 @@ struct jit_context {
- /* Number of bytes that will be skipped on tailcall */
- #define X86_TAIL_CALL_OFFSET	(11 + ENDBR_INSN_SIZE)
- 
-+static void push_r12(u8 **pprog)
-+{
-+	u8 *prog = *pprog;
-+
-+	EMIT2(0x41, 0x54);   /* push r12 */
-+	*pprog = prog;
-+}
-+
- static void push_callee_regs(u8 **pprog, bool *callee_regs_used)
- {
- 	u8 *prog = *pprog;
-@@ -271,6 +281,14 @@ static void push_callee_regs(u8 **pprog, bool *callee_regs_used)
- 	*pprog = prog;
- }
- 
-+static void pop_r12(u8 **pprog)
-+{
-+	u8 *prog = *pprog;
-+
-+	EMIT2(0x41, 0x5C);   /* pop r12 */
-+	*pprog = prog;
-+}
-+
- static void pop_callee_regs(u8 **pprog, bool *callee_regs_used)
- {
- 	u8 *prog = *pprog;
-@@ -292,7 +310,8 @@ static void pop_callee_regs(u8 **pprog, bool *callee_regs_used)
-  * while jumping to another program
-  */
- static void emit_prologue(u8 **pprog, u32 stack_depth, bool ebpf_from_cbpf,
--			  bool tail_call_reachable, bool is_subprog)
-+			  bool tail_call_reachable, bool is_subprog,
-+			  bool is_exception_cb)
- {
- 	u8 *prog = *pprog;
- 
-@@ -312,8 +331,22 @@ static void emit_prologue(u8 **pprog, u32 stack_depth, bool ebpf_from_cbpf,
- 			/* Keep the same instruction layout. */
- 			EMIT2(0x66, 0x90); /* nop2 */
- 	}
--	EMIT1(0x55);             /* push rbp */
--	EMIT3(0x48, 0x89, 0xE5); /* mov rbp, rsp */
-+	/* Exception callback receives FP as third parameter */
-+	if (is_exception_cb) {
-+		EMIT3(0x48, 0x89, 0xF4); /* mov rsp, rsi */
-+		EMIT3(0x48, 0x89, 0xD5); /* mov rbp, rdx */
-+		/* The main frame must have exception_boundary as true, so we
-+		 * first restore those callee-saved regs from stack, before
-+		 * reusing the stack frame.
-+		 */
-+		pop_callee_regs(&prog, all_callee_regs_used);
-+		pop_r12(&prog);
-+		/* Reset the stack frame. */
-+		EMIT3(0x48, 0x89, 0xEC); /* mov rsp, rbp */
-+	} else {
-+		EMIT1(0x55);             /* push rbp */
-+		EMIT3(0x48, 0x89, 0xE5); /* mov rbp, rsp */
-+	}
- 
- 	/* X86_TAIL_CALL_OFFSET is here */
- 	EMIT_ENDBR();
-@@ -472,7 +505,8 @@ static void emit_return(u8 **pprog, u8 *ip)
-  *   goto *(prog->bpf_func + prologue_size);
-  * out:
-  */
--static void emit_bpf_tail_call_indirect(u8 **pprog, bool *callee_regs_used,
-+static void emit_bpf_tail_call_indirect(struct bpf_prog *bpf_prog,
-+					u8 **pprog, bool *callee_regs_used,
- 					u32 stack_depth, u8 *ip,
- 					struct jit_context *ctx)
- {
-@@ -522,7 +556,12 @@ static void emit_bpf_tail_call_indirect(u8 **pprog, bool *callee_regs_used,
- 	offset = ctx->tail_call_indirect_label - (prog + 2 - start);
- 	EMIT2(X86_JE, offset);                    /* je out */
- 
--	pop_callee_regs(&prog, callee_regs_used);
-+	if (bpf_prog->aux->exception_boundary) {
-+		pop_callee_regs(&prog, all_callee_regs_used);
-+		pop_r12(&prog);
-+	} else {
-+		pop_callee_regs(&prog, callee_regs_used);
-+	}
- 
- 	EMIT1(0x58);                              /* pop rax */
- 	if (stack_depth)
-@@ -546,7 +585,8 @@ static void emit_bpf_tail_call_indirect(u8 **pprog, bool *callee_regs_used,
- 	*pprog = prog;
- }
- 
--static void emit_bpf_tail_call_direct(struct bpf_jit_poke_descriptor *poke,
-+static void emit_bpf_tail_call_direct(struct bpf_prog *bpf_prog,
-+				      struct bpf_jit_poke_descriptor *poke,
- 				      u8 **pprog, u8 *ip,
- 				      bool *callee_regs_used, u32 stack_depth,
- 				      struct jit_context *ctx)
-@@ -575,7 +615,13 @@ static void emit_bpf_tail_call_direct(struct bpf_jit_poke_descriptor *poke,
- 	emit_jump(&prog, (u8 *)poke->tailcall_target + X86_PATCH_SIZE,
- 		  poke->tailcall_bypass);
- 
--	pop_callee_regs(&prog, callee_regs_used);
-+	if (bpf_prog->aux->exception_boundary) {
-+		pop_callee_regs(&prog, all_callee_regs_used);
-+		pop_r12(&prog);
-+	} else {
-+		pop_callee_regs(&prog, callee_regs_used);
-+	}
-+
- 	EMIT1(0x58);                                  /* pop rax */
- 	if (stack_depth)
- 		EMIT3_off32(0x48, 0x81, 0xC4, round_up(stack_depth, 8));
-@@ -1050,8 +1096,20 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image, u8 *rw_image
- 
- 	emit_prologue(&prog, bpf_prog->aux->stack_depth,
- 		      bpf_prog_was_classic(bpf_prog), tail_call_reachable,
--		      bpf_is_subprog(bpf_prog));
--	push_callee_regs(&prog, callee_regs_used);
-+		      bpf_is_subprog(bpf_prog), bpf_prog->aux->exception_cb);
-+	/* Exception callback will clobber callee regs for its own use, and
-+	 * restore the original callee regs from main prog's stack frame.
-+	 */
-+	if (bpf_prog->aux->exception_boundary) {
-+		/* We also need to save r12, which is not mapped to any BPF
-+		 * register, as we throw after entry into the kernel, which may
-+		 * overwrite r12.
-+		 */
-+		push_r12(&prog);
-+		push_callee_regs(&prog, all_callee_regs_used);
-+	} else {
-+		push_callee_regs(&prog, callee_regs_used);
-+	}
- 
- 	ilen = prog - temp;
- 	if (rw_image)
-@@ -1648,13 +1706,15 @@ st:			if (is_imm8(insn->off))
- 
- 		case BPF_JMP | BPF_TAIL_CALL:
- 			if (imm32)
--				emit_bpf_tail_call_direct(&bpf_prog->aux->poke_tab[imm32 - 1],
-+				emit_bpf_tail_call_direct(bpf_prog,
-+							  &bpf_prog->aux->poke_tab[imm32 - 1],
- 							  &prog, image + addrs[i - 1],
- 							  callee_regs_used,
- 							  bpf_prog->aux->stack_depth,
- 							  ctx);
- 			else
--				emit_bpf_tail_call_indirect(&prog,
-+				emit_bpf_tail_call_indirect(bpf_prog,
-+							    &prog,
- 							    callee_regs_used,
- 							    bpf_prog->aux->stack_depth,
- 							    image + addrs[i - 1],
-@@ -1907,7 +1967,12 @@ st:			if (is_imm8(insn->off))
- 			seen_exit = true;
- 			/* Update cleanup_addr */
- 			ctx->cleanup_addr = proglen;
--			pop_callee_regs(&prog, callee_regs_used);
-+			if (bpf_prog->aux->exception_boundary) {
-+				pop_callee_regs(&prog, all_callee_regs_used);
-+				pop_r12(&prog);
-+			} else {
-+				pop_callee_regs(&prog, callee_regs_used);
-+			}
- 			EMIT1(0xC9);         /* leave */
- 			emit_return(&prog, image + addrs[i - 1] + (prog - temp));
- 			break;
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index c3667e95af59..16740ee82082 100644
+index 16740ee82082..30063a760b5a 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -1410,6 +1410,8 @@ struct bpf_prog_aux {
- 	bool sleepable;
- 	bool tail_call_reachable;
- 	bool xdp_has_frags;
-+	bool exception_cb;
-+	bool exception_boundary;
- 	/* BTF_KIND_FUNC_PROTO for valid attach_btf_id */
- 	const struct btf_type *attach_func_proto;
- 	/* function name for valid attach_btf_id */
-@@ -1432,6 +1434,7 @@ struct bpf_prog_aux {
- 	int cgroup_atype; /* enum cgroup_bpf_attach_type */
- 	struct bpf_map *cgroup_storage[MAX_BPF_CGROUP_STORAGE_TYPE];
- 	char name[BPF_OBJ_NAME_LEN];
-+	unsigned int (*bpf_exception_cb)(u64 cookie, u64 sp, u64 bp);
- #ifdef CONFIG_SECURITY
- 	void *security;
- #endif
+@@ -2422,9 +2422,11 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
+ int btf_check_subprog_call(struct bpf_verifier_env *env, int subprog,
+ 			   struct bpf_reg_state *regs);
+ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog,
+-			  struct bpf_reg_state *reg);
++			  struct bpf_reg_state *reg, bool is_ex_cb);
+ int btf_check_type_match(struct bpf_verifier_log *log, const struct bpf_prog *prog,
+ 			 struct btf *btf, const struct btf_type *t);
++const char *btf_find_decl_tag_value(const struct btf *btf, const struct btf_type *pt,
++				    int comp_idx, const char *tag_key);
+ 
+ struct bpf_prog *bpf_prog_by_id(u32 id);
+ struct bpf_link *bpf_link_by_id(u32 id);
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 3c2a8636ab29..da21a3ec5027 100644
+index da21a3ec5027..94ec766432f5 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -541,7 +541,9 @@ struct bpf_subprog_info {
- 	bool has_tail_call;
- 	bool tail_call_reachable;
- 	bool has_ld_abs;
-+	bool is_cb;
- 	bool is_async_cb;
-+	bool is_exception_cb;
- };
+@@ -300,6 +300,7 @@ struct bpf_func_state {
+ 	bool in_callback_fn;
+ 	struct tnum callback_ret_range;
+ 	bool in_async_callback_fn;
++	bool in_exception_callback_fn;
  
- struct bpf_verifier_env;
-@@ -589,6 +591,7 @@ struct bpf_verifier_env {
- 	u32 used_btf_cnt;		/* number of used BTF objects */
- 	u32 id_gen;			/* used to generate unique reg IDs */
- 	u32 hidden_subprog_cnt;		/* number of hidden subprogs */
-+	int exception_callback_subprog;
- 	bool explore_alu_limits;
- 	bool allow_ptr_leaks;
- 	bool allow_uninit_stack;
-@@ -596,6 +599,7 @@ struct bpf_verifier_env {
- 	bool bypass_spec_v1;
- 	bool bypass_spec_v4;
- 	bool seen_direct_write;
-+	bool seen_exception;
- 	struct bpf_insn_aux_data *insn_aux_data; /* array of per-insn state */
- 	const struct bpf_line_info *prev_linfo;
- 	struct bpf_verifier_log log;
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 9fd8f0dc4077..389e550a6a25 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -1129,6 +1129,7 @@ const char *__bpf_address_lookup(unsigned long addr, unsigned long *size,
- bool is_bpf_text_address(unsigned long addr);
- int bpf_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
- 		    char *sym);
-+struct bpf_prog *bpf_prog_ksym_find(unsigned long addr);
- 
- static inline const char *
- bpf_address_lookup(unsigned long addr, unsigned long *size,
-@@ -1196,6 +1197,11 @@ static inline int bpf_get_kallsym(unsigned int symnum, unsigned long *value,
- 	return -ERANGE;
+ 	/* The following fields should be last. See copy_func_state() */
+ 	int acquired_refs;
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 187b57276fec..f93e835d90af 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -3310,10 +3310,10 @@ static int btf_find_kptr(const struct btf *btf, const struct btf_type *t,
+ 	return BTF_FIELD_FOUND;
  }
  
-+static inline struct bpf_prog *bpf_prog_ksym_find(unsigned long addr)
-+{
-+	return NULL;
-+}
-+
- static inline const char *
- bpf_address_lookup(unsigned long addr, unsigned long *size,
- 		   unsigned long *off, char **modname, char *sym)
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 840ba952702d..7849b9cca749 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -733,7 +733,7 @@ bool is_bpf_text_address(unsigned long addr)
- 	return ret;
- }
- 
--static struct bpf_prog *bpf_prog_ksym_find(unsigned long addr)
-+struct bpf_prog *bpf_prog_ksym_find(unsigned long addr)
+-static const char *btf_find_decl_tag_value(const struct btf *btf,
+-					   const struct btf_type *pt,
+-					   int comp_idx, const char *tag_key)
++const char *btf_find_decl_tag_value(const struct btf *btf, const struct btf_type *pt,
++				    int comp_idx, const char *tag_key)
  {
- 	struct bpf_ksym *ksym = bpf_ksym_find(addr);
- 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index b0a9834f1051..78e8f4de6750 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2449,6 +2449,43 @@ __bpf_kfunc void bpf_rcu_read_unlock(void)
- 	rcu_read_unlock();
- }
- 
-+struct bpf_throw_ctx {
-+	struct bpf_prog_aux *aux;
-+	u64 sp;
-+	u64 bp;
-+	int cnt;
-+};
-+
-+static bool bpf_stack_walker(void *cookie, u64 ip, u64 sp, u64 bp)
-+{
-+	struct bpf_throw_ctx *ctx = cookie;
-+	struct bpf_prog *prog;
-+
-+	if (!is_bpf_text_address(ip))
-+		return !ctx->cnt;
-+	prog = bpf_prog_ksym_find(ip);
-+	ctx->cnt++;
-+	if (bpf_is_subprog(prog))
-+		return true;
-+	ctx->aux = prog->aux;
-+	ctx->sp = sp;
-+	ctx->bp = bp;
-+	return false;
-+}
-+
-+__bpf_kfunc void bpf_throw(u64 cookie)
-+{
-+	struct bpf_throw_ctx ctx = {};
-+
-+	arch_bpf_stack_walk(bpf_stack_walker, &ctx);
-+	WARN_ON_ONCE(!ctx.aux);
-+	if (ctx.aux)
-+		WARN_ON_ONCE(!ctx.aux->exception_boundary);
-+	WARN_ON_ONCE(!ctx.bp);
-+	WARN_ON_ONCE(!ctx.cnt);
-+	ctx.aux->bpf_exception_cb(cookie, ctx.sp, ctx.bp);
-+}
-+
- __diag_pop();
- 
- BTF_SET8_START(generic_btf_ids)
-@@ -2478,6 +2515,7 @@ BTF_ID_FLAGS(func, bpf_cgroup_from_id, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_task_under_cgroup, KF_RCU)
- #endif
- BTF_ID_FLAGS(func, bpf_task_from_pid, KF_ACQUIRE | KF_RET_NULL)
-+BTF_ID_FLAGS(func, bpf_throw)
- BTF_SET8_END(generic_btf_ids)
- 
- static const struct btf_kfunc_id_set generic_kfunc_set = {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 39548e326d53..9baa6f187b38 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -543,6 +543,7 @@ static bool is_dynptr_ref_function(enum bpf_func_id func_id)
- }
- 
- static bool is_callback_calling_kfunc(u32 btf_id);
-+static bool is_bpf_throw_kfunc(struct bpf_insn *insn);
- 
- static bool is_callback_calling_function(enum bpf_func_id func_id)
- {
-@@ -1748,7 +1749,9 @@ static int copy_verifier_state(struct bpf_verifier_state *dst_state,
- 		return -ENOMEM;
- 	dst_state->jmp_history_cnt = src->jmp_history_cnt;
- 
--	/* if dst has more stack frames then src frame, free them */
-+	/* if dst has more stack frames then src frame, free them, this is also
-+	 * necessary in case of exceptional exits using bpf_throw.
-+	 */
- 	for (i = src->curframe + 1; i <= dst_state->curframe; i++) {
- 		free_func_state(dst_state->frame[i]);
- 		dst_state->frame[i] = NULL;
-@@ -2868,7 +2871,7 @@ static int check_subprogs(struct bpf_verifier_env *env)
- 		if (i == subprog_end - 1) {
- 			/* to avoid fall-through from one subprog into another
- 			 * the last insn of the subprog should be either exit
--			 * or unconditional jump back
-+			 * or unconditional jump back or bpf_throw call
- 			 */
- 			if (code != (BPF_JMP | BPF_EXIT) &&
- 			    code != (BPF_JMP32 | BPF_JA) &&
-@@ -5661,6 +5664,27 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx)
- 	for (; i < subprog_end; i++) {
- 		int next_insn, sidx;
- 
-+		if (bpf_pseudo_kfunc_call(insn + i) && !insn[i].off) {
-+			bool err = false;
-+
-+			if (!is_bpf_throw_kfunc(insn + i))
-+				continue;
-+			if (subprog[idx].is_cb)
-+				err = true;
-+			for (int c = 0; c < frame && !err; c++) {
-+				if (subprog[ret_prog[c]].is_cb) {
-+					err = true;
-+					break;
-+				}
-+			}
-+			if (!err)
-+				continue;
-+			verbose(env,
-+				"bpf_throw kfunc (insn %d) cannot be called from callback subprog %d\n",
-+				i, idx);
-+			return -EINVAL;
-+		}
-+
- 		if (!bpf_pseudo_call(insn + i) && !bpf_pseudo_func(insn + i))
- 			continue;
- 		/* remember insn and function to return to */
-@@ -8919,6 +8943,7 @@ static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 	 * callbacks
- 	 */
- 	if (set_callee_state_cb != set_callee_state) {
-+		env->subprog_info[subprog].is_cb = true;
- 		if (bpf_pseudo_kfunc_call(insn) &&
- 		    !is_callback_calling_kfunc(insn->imm)) {
- 			verbose(env, "verifier bug: kfunc %s#%d not marked as callback-calling\n",
-@@ -9308,7 +9333,8 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
- 		verbose(env, "to caller at %d:\n", *insn_idx);
- 		print_verifier_state(env, caller, true);
- 	}
--	/* clear everything in the callee */
-+	/* clear everything in the callee. In case of exceptional exits using
-+	 * bpf_throw, this will be done by copy_verifier_state for extra frames. */
- 	free_func_state(callee);
- 	state->frame[state->curframe--] = NULL;
- 	return 0;
-@@ -9432,17 +9458,17 @@ record_func_key(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
- 	return 0;
- }
- 
--static int check_reference_leak(struct bpf_verifier_env *env)
-+static int check_reference_leak(struct bpf_verifier_env *env, bool exception_exit)
- {
- 	struct bpf_func_state *state = cur_func(env);
- 	bool refs_lingering = false;
++	const char *value = NULL;
  	int i;
  
--	if (state->frameno && !state->in_callback_fn)
-+	if (!exception_exit && state->frameno && !state->in_callback_fn)
- 		return 0;
- 
- 	for (i = 0; i < state->acquired_refs; i++) {
--		if (state->in_callback_fn && state->refs[i].callback_ref != state->frameno)
-+		if (!exception_exit && state->in_callback_fn && state->refs[i].callback_ref != state->frameno)
+ 	for (i = 1; i < btf_nr_types(btf); i++) {
+@@ -3327,9 +3327,14 @@ static const char *btf_find_decl_tag_value(const struct btf *btf,
  			continue;
- 		verbose(env, "Unreleased reference id=%d alloc_insn=%d\n",
- 			state->refs[i].id, state->refs[i].insn_idx);
-@@ -9697,7 +9723,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 
- 	switch (func_id) {
- 	case BPF_FUNC_tail_call:
--		err = check_reference_leak(env);
-+		err = check_reference_leak(env, false);
- 		if (err) {
- 			verbose(env, "tail_call would lead to reference leak\n");
- 			return err;
-@@ -10332,6 +10358,7 @@ enum special_kfunc_type {
- 	KF_bpf_dynptr_clone,
- 	KF_bpf_percpu_obj_new_impl,
- 	KF_bpf_percpu_obj_drop_impl,
-+	KF_bpf_throw,
- };
- 
- BTF_SET_START(special_kfunc_set)
-@@ -10354,6 +10381,7 @@ BTF_ID(func, bpf_dynptr_slice_rdwr)
- BTF_ID(func, bpf_dynptr_clone)
- BTF_ID(func, bpf_percpu_obj_new_impl)
- BTF_ID(func, bpf_percpu_obj_drop_impl)
-+BTF_ID(func, bpf_throw)
- BTF_SET_END(special_kfunc_set)
- 
- BTF_ID_LIST(special_kfunc_list)
-@@ -10378,6 +10406,7 @@ BTF_ID(func, bpf_dynptr_slice_rdwr)
- BTF_ID(func, bpf_dynptr_clone)
- BTF_ID(func, bpf_percpu_obj_new_impl)
- BTF_ID(func, bpf_percpu_obj_drop_impl)
-+BTF_ID(func, bpf_throw)
- 
- static bool is_kfunc_ret_null(struct bpf_kfunc_call_arg_meta *meta)
- {
-@@ -10695,6 +10724,12 @@ static bool is_callback_calling_kfunc(u32 btf_id)
- 	return btf_id == special_kfunc_list[KF_bpf_rbtree_add_impl];
+ 		if (strncmp(__btf_name_by_offset(btf, t->name_off), tag_key, len))
+ 			continue;
+-		return __btf_name_by_offset(btf, t->name_off) + len;
++		/* Prevent duplicate entries for same type */
++		if (value)
++			return ERR_PTR(-EEXIST);
++		value = __btf_name_by_offset(btf, t->name_off) + len;
+ 	}
+-	return NULL;
++	if (!value)
++		return ERR_PTR(-ENOENT);
++	return value;
  }
  
-+static bool is_bpf_throw_kfunc(struct bpf_insn *insn)
+ static int
+@@ -3347,7 +3352,7 @@ btf_find_graph_root(const struct btf *btf, const struct btf_type *pt,
+ 	if (t->size != sz)
+ 		return BTF_FIELD_IGNORE;
+ 	value_type = btf_find_decl_tag_value(btf, pt, comp_idx, "contains:");
+-	if (!value_type)
++	if (IS_ERR(value_type))
+ 		return -EINVAL;
+ 	node_field_name = strstr(value_type, ":");
+ 	if (!node_field_name)
+@@ -6954,7 +6959,7 @@ int btf_check_subprog_call(struct bpf_verifier_env *env, int subprog,
+  * (either PTR_TO_CTX or SCALAR_VALUE).
+  */
+ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog,
+-			  struct bpf_reg_state *regs)
++			  struct bpf_reg_state *regs, bool is_ex_cb)
+ {
+ 	struct bpf_verifier_log *log = &env->log;
+ 	struct bpf_prog *prog = env->prog;
+@@ -7011,7 +7016,7 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog,
+ 			tname, nargs, MAX_BPF_FUNC_REG_ARGS);
+ 		return -EINVAL;
+ 	}
+-	/* check that function returns int */
++	/* check that function returns int, exception cb also requires this */
+ 	t = btf_type_by_id(btf, t->type);
+ 	while (btf_type_is_modifier(t))
+ 		t = btf_type_by_id(btf, t->type);
+@@ -7060,6 +7065,14 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog,
+ 			i, btf_type_str(t), tname);
+ 		return -EINVAL;
+ 	}
++	/* We have already ensured that the callback returns an integer, just
++	 * like all global subprogs. We need to determine it only has a single
++	 * scalar argument.
++	 */
++	if (is_ex_cb && (nargs != 1 || regs[BPF_REG_1].type != SCALAR_VALUE)) {
++		bpf_log(log, "exception cb only supports single integer argument\n");
++		return -EINVAL;
++	}
+ 	return 0;
+ }
+ 
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index ec767ae08c2b..ec3f22312516 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2457,6 +2457,68 @@ static int add_subprog(struct bpf_verifier_env *env, int off)
+ 	return env->subprog_cnt - 1;
+ }
+ 
++static int bpf_find_exception_callback_insn_off(struct bpf_verifier_env *env)
 +{
-+	return bpf_pseudo_kfunc_call(insn) && insn->off == 0 &&
-+	       insn->imm == special_kfunc_list[KF_bpf_throw];
++	struct bpf_prog_aux *aux = env->prog->aux;
++	struct btf *btf = aux->btf;
++	const struct btf_type *t;
++	u32 main_btf_id, id;
++	const char *name;
++	int ret, i;
++
++	/* Non-zero func_info_cnt implies valid btf */
++	if (!aux->func_info_cnt)
++		return 0;
++	main_btf_id = aux->func_info[0].type_id;
++
++	t = btf_type_by_id(btf, main_btf_id);
++	if (!t) {
++		verbose(env, "invalid btf id for main subprog in func_info\n");
++		return -EINVAL;
++	}
++
++	name = btf_find_decl_tag_value(btf, t, -1, "exception_callback:");
++	if (IS_ERR(name)) {
++		ret = PTR_ERR(name);
++		/* If there is no tag present, there is no exception callback */
++		if (ret == -ENOENT)
++			ret = 0;
++		else if (ret == -EEXIST)
++			verbose(env, "multiple exception callback tags for main subprog\n");
++		return ret;
++	}
++
++	ret = btf_find_by_name_kind(btf, name, BTF_KIND_FUNC);
++	if (ret < 0) {
++		verbose(env, "exception callback '%s' could not be found in BTF\n", name);
++		return ret;
++	}
++	id = ret;
++	t = btf_type_by_id(btf, id);
++	if (btf_func_linkage(t) != BTF_FUNC_GLOBAL) {
++		verbose(env, "exception callback '%s' must have global linkage\n", name);
++		return -EINVAL;
++	}
++	ret = 0;
++	for (i = 0; i < aux->func_info_cnt; i++) {
++		if (aux->func_info[i].type_id != id)
++			continue;
++		ret = aux->func_info[i].insn_off;
++		/* Further func_info and subprog checks will also happen
++		 * later, so assume this is the right insn_off for now.
++		 */
++		if (!ret) {
++			verbose(env, "invalid exception callback insn_off in func_info: 0\n");
++			ret = -EINVAL;
++		}
++	}
++	if (!ret) {
++		verbose(env, "exception callback type id not found in func_info\n");
++		ret = -EINVAL;
++	}
++	return ret;
 +}
 +
- static bool is_rbtree_lock_required_kfunc(u32 btf_id)
+ #define MAX_KFUNC_DESCS 256
+ #define MAX_KFUNC_BTFS	256
+ 
+@@ -2796,8 +2858,8 @@ bpf_jit_find_kfunc_model(const struct bpf_prog *prog,
+ static int add_subprog_and_kfunc(struct bpf_verifier_env *env)
  {
- 	return is_bpf_rbtree_api_kfunc(btf_id);
-@@ -11480,6 +11515,15 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		}
+ 	struct bpf_subprog_info *subprog = env->subprog_info;
++	int i, ret, insn_cnt = env->prog->len, ex_cb_insn;
+ 	struct bpf_insn *insn = env->prog->insnsi;
+-	int i, ret, insn_cnt = env->prog->len;
+ 
+ 	/* Add entry function. */
+ 	ret = add_subprog(env, 0);
+@@ -2823,6 +2885,26 @@ static int add_subprog_and_kfunc(struct bpf_verifier_env *env)
+ 			return ret;
  	}
  
-+	if (meta.func_id == special_kfunc_list[KF_bpf_throw]) {
-+		if (!bpf_jit_supports_exceptions()) {
-+			verbose(env, "JIT does not support calling kfunc %s#%d\n",
-+				func_name, meta.func_id);
-+			return -ENOTSUPP;
-+		}
-+		env->seen_exception = true;
-+	}
++	ret = bpf_find_exception_callback_insn_off(env);
++	if (ret < 0)
++		return ret;
++	ex_cb_insn = ret;
 +
- 	for (i = 0; i < CALLER_SAVED_REGS; i++)
- 		mark_reg_not_init(env, regs, caller_saved[i]);
- 
-@@ -14525,7 +14569,7 @@ static int check_ld_abs(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 	 * gen_ld_abs() may terminate the program at runtime, leading to
- 	 * reference leak.
- 	 */
--	err = check_reference_leak(env);
-+	err = check_reference_leak(env, false);
- 	if (err) {
- 		verbose(env, "BPF_LD_[ABS|IND] cannot be mixed with socket references\n");
- 		return err;
-@@ -16539,6 +16583,7 @@ static int do_check(struct bpf_verifier_env *env)
- 	int prev_insn_idx = -1;
- 
- 	for (;;) {
-+		bool exception_exit = false;
- 		struct bpf_insn *insn;
- 		u8 class;
- 		int err;
-@@ -16753,12 +16798,17 @@ static int do_check(struct bpf_verifier_env *env)
- 						return -EINVAL;
- 					}
- 				}
--				if (insn->src_reg == BPF_PSEUDO_CALL)
-+				if (insn->src_reg == BPF_PSEUDO_CALL) {
- 					err = check_func_call(env, insn, &env->insn_idx);
--				else if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL)
-+				} else if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
- 					err = check_kfunc_call(env, insn, &env->insn_idx);
--				else
-+					if (!err && is_bpf_throw_kfunc(insn)) {
-+						exception_exit = true;
-+						goto process_bpf_exit_full;
-+					}
-+				} else {
- 					err = check_helper_call(env, insn, &env->insn_idx);
-+				}
- 				if (err)
- 					return err;
- 
-@@ -16788,7 +16838,7 @@ static int do_check(struct bpf_verifier_env *env)
- 					verbose(env, "BPF_EXIT uses reserved fields\n");
- 					return -EINVAL;
- 				}
--
-+process_bpf_exit_full:
- 				if (env->cur_state->active_lock.ptr &&
- 				    !in_rbtree_lock_required_cb(env)) {
- 					verbose(env, "bpf_spin_unlock is missing\n");
-@@ -16807,10 +16857,23 @@ static int do_check(struct bpf_verifier_env *env)
- 				 * function, for which reference_state must
- 				 * match caller reference state when it exits.
- 				 */
--				err = check_reference_leak(env);
-+				err = check_reference_leak(env, exception_exit);
- 				if (err)
- 					return err;
- 
-+				/* The side effect of the prepare_func_exit
-+				 * which is being skipped is that it frees
-+				 * bpf_func_state. Typically, process_bpf_exit
-+				 * will only be hit with outermost exit.
-+				 * copy_verifier_state in pop_stack will handle
-+				 * freeing of any extra bpf_func_state left over
-+				 * from not processing all nested function
-+				 * exits. We also skip return code checks as
-+				 * they are not needed for exceptional exits.
-+				 */
-+				if (exception_exit)
-+					goto process_bpf_exit;
-+
- 				if (state->curframe) {
- 					/* exit from nested function */
- 					err = prepare_func_exit(env, &env->insn_idx);
-@@ -18113,6 +18176,9 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 		}
- 		func[i]->aux->num_exentries = num_exentries;
- 		func[i]->aux->tail_call_reachable = env->subprog_info[i].tail_call_reachable;
-+		func[i]->aux->exception_cb = env->subprog_info[i].is_exception_cb;
-+		if (!i)
-+			func[i]->aux->exception_boundary = env->seen_exception;
- 		func[i] = bpf_int_jit_compile(func[i]);
- 		if (!func[i]->jited) {
- 			err = -ENOTSUPP;
-@@ -18201,6 +18267,8 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 	prog->aux->func = func;
- 	prog->aux->func_cnt = env->subprog_cnt - env->hidden_subprog_cnt;
- 	prog->aux->real_func_cnt = env->subprog_cnt;
-+	prog->aux->bpf_exception_cb = (void *)func[env->exception_callback_subprog]->bpf_func;
-+	prog->aux->exception_boundary = func[0]->aux->exception_boundary;
- 	bpf_prog_jit_attempt_done(prog);
- 	return 0;
- out_free:
-@@ -18437,7 +18505,7 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- }
- 
- /* The function requires that first instruction in 'patch' is insnsi[prog->len - 1] */
--static __maybe_unused int add_hidden_subprog(struct bpf_verifier_env *env, struct bpf_insn *patch, int len)
-+static int add_hidden_subprog(struct bpf_verifier_env *env, struct bpf_insn *patch, int len)
- {
- 	struct bpf_subprog_info *info = env->subprog_info;
- 	int cnt = env->subprog_cnt;
-@@ -18481,6 +18549,26 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 	struct bpf_map *map_ptr;
- 	int i, ret, cnt, delta = 0;
- 
-+	if (env->seen_exception && !env->exception_callback_subprog) {
-+		struct bpf_insn patch[] = {
-+			env->prog->insnsi[insn_cnt - 1],
-+			BPF_MOV64_IMM(BPF_REG_0, 0),
-+			BPF_EXIT_INSN(),
-+		};
-+
-+		ret = add_hidden_subprog(env, patch, ARRAY_SIZE(patch));
++	/* If ex_cb_insn > 0, this means that the main program has a subprog
++	 * marked using BTF decl tag to serve as the exception callback.
++	 */
++	if (ex_cb_insn) {
++		ret = add_subprog(env, ex_cb_insn);
 +		if (ret < 0)
 +			return ret;
-+		prog = env->prog;
-+		insn = prog->insnsi;
-+
-+		env->exception_callback_subprog = env->subprog_cnt - 1;
-+		/* Don't update insn_cnt, as add_hidden_subprog always appends insns */
-+		env->subprog_info[env->exception_callback_subprog].is_cb = true;
-+		env->subprog_info[env->exception_callback_subprog].is_async_cb = true;
-+		env->subprog_info[env->exception_callback_subprog].is_exception_cb = true;
++		for (i = 1; i < env->subprog_cnt; i++) {
++			if (env->subprog_info[i].start != ex_cb_insn)
++				continue;
++			env->exception_callback_subprog = i;
++			break;
++		}
 +	}
 +
- 	for (i = 0; i < insn_cnt; i++, insn++) {
- 		/* Make divide-by-zero exceptions impossible. */
- 		if (insn->code == (BPF_ALU64 | BPF_MOD | BPF_X) ||
+ 	/* Add a fake 'exit' subprog which could simplify subprog iteration
+ 	 * logic. 'subprog_cnt' should not be increased.
+ 	 */
+@@ -5707,6 +5789,10 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx)
+ 			/* async callbacks don't increase bpf prog stack size unless called directly */
+ 			if (!bpf_pseudo_call(insn + i))
+ 				continue;
++			if (subprog[sidx].is_exception_cb) {
++				verbose(env, "insn %d cannot call exception cb directly\n", i);
++				return -EINVAL;
++			}
+ 		}
+ 		i = next_insn;
+ 		idx = sidx;
+@@ -5728,8 +5814,13 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx)
+ 	 * tail call counter throughout bpf2bpf calls combined with tailcalls
+ 	 */
+ 	if (tail_call_reachable)
+-		for (j = 0; j < frame; j++)
++		for (j = 0; j < frame; j++) {
++			if (subprog[ret_prog[j]].is_exception_cb) {
++				verbose(env, "cannot tail call within exception cb\n");
++				return -EINVAL;
++			}
+ 			subprog[ret_prog[j]].tail_call_reachable = true;
++		}
+ 	if (subprog[0].tail_call_reachable)
+ 		env->prog->aux->tail_call_reachable = true;
+ 
+@@ -14630,7 +14721,7 @@ static int check_return_code(struct bpf_verifier_env *env)
+ 	const bool is_subprog = frame->subprogno;
+ 
+ 	/* LSM and struct_ops func-ptr's return type could be "void" */
+-	if (!is_subprog) {
++	if (!is_subprog || frame->in_exception_callback_fn) {
+ 		switch (prog_type) {
+ 		case BPF_PROG_TYPE_LSM:
+ 			if (prog->expected_attach_type == BPF_LSM_CGROUP)
+@@ -14678,7 +14769,7 @@ static int check_return_code(struct bpf_verifier_env *env)
+ 		return 0;
+ 	}
+ 
+-	if (is_subprog) {
++	if (is_subprog && !frame->in_exception_callback_fn) {
+ 		if (reg->type != SCALAR_VALUE) {
+ 			verbose(env, "At subprogram exit the register R0 is not a scalar value (%s)\n",
+ 				reg_type_str(env, reg->type));
+@@ -19334,7 +19425,7 @@ static void free_states(struct bpf_verifier_env *env)
+ 	}
+ }
+ 
+-static int do_check_common(struct bpf_verifier_env *env, int subprog)
++static int do_check_common(struct bpf_verifier_env *env, int subprog, bool is_ex_cb)
+ {
+ 	bool pop_log = !(env->log.level & BPF_LOG_LEVEL2);
+ 	struct bpf_verifier_state *state;
+@@ -19365,7 +19456,7 @@ static int do_check_common(struct bpf_verifier_env *env, int subprog)
+ 
+ 	regs = state->frame[state->curframe]->regs;
+ 	if (subprog || env->prog->type == BPF_PROG_TYPE_EXT) {
+-		ret = btf_prepare_func_args(env, subprog, regs);
++		ret = btf_prepare_func_args(env, subprog, regs, is_ex_cb);
+ 		if (ret)
+ 			goto out;
+ 		for (i = BPF_REG_1; i <= BPF_REG_5; i++) {
+@@ -19381,6 +19472,12 @@ static int do_check_common(struct bpf_verifier_env *env, int subprog)
+ 				regs[i].id = ++env->id_gen;
+ 			}
+ 		}
++		if (is_ex_cb) {
++			state->frame[0]->in_exception_callback_fn = true;
++			env->subprog_info[subprog].is_cb = true;
++			env->subprog_info[subprog].is_async_cb = true;
++			env->subprog_info[subprog].is_exception_cb = true;
++		}
+ 	} else {
+ 		/* 1st arg to a function */
+ 		regs[BPF_REG_1].type = PTR_TO_CTX;
+@@ -19445,7 +19542,7 @@ static int do_check_subprogs(struct bpf_verifier_env *env)
+ 			continue;
+ 		env->insn_idx = env->subprog_info[i].start;
+ 		WARN_ON_ONCE(env->insn_idx == 0);
+-		ret = do_check_common(env, i);
++		ret = do_check_common(env, i, env->exception_callback_subprog == i);
+ 		if (ret) {
+ 			return ret;
+ 		} else if (env->log.level & BPF_LOG_LEVEL) {
+@@ -19462,7 +19559,7 @@ static int do_check_main(struct bpf_verifier_env *env)
+ 	int ret;
+ 
+ 	env->insn_idx = 0;
+-	ret = do_check_common(env, 0);
++	ret = do_check_common(env, 0, false);
+ 	if (!ret)
+ 		env->prog->aux->stack_depth = env->subprog_info[0].stack_depth;
+ 	return ret;
 diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-index 4494eaa9937e..333b54a86e3a 100644
+index 333b54a86e3a..9a87170524ce 100644
 --- a/tools/testing/selftests/bpf/bpf_experimental.h
 +++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -162,4 +162,20 @@ extern void bpf_percpu_obj_drop_impl(void *kptr, void *meta) __ksym;
- /* Convenience macro to wrap over bpf_obj_drop_impl */
- #define bpf_percpu_obj_drop(kptr) bpf_percpu_obj_drop_impl(kptr, NULL)
+@@ -165,7 +165,16 @@ extern void bpf_percpu_obj_drop_impl(void *kptr, void *meta) __ksym;
+ /* Description
+  *	Throw a BPF exception from the program, immediately terminating its
+  *	execution and unwinding the stack. The supplied 'cookie' parameter
+- *	will be the return value of the program when an exception is thrown.
++ *	will be the return value of the program when an exception is thrown,
++ *	and the default exception callback is used. Otherwise, if an exception
++ *	callback is set using the '__exception_cb(callback)' declaration tag
++ *	on the main program, the 'cookie' parameter will be the callback's only
++ *	input argument.
++ *
++ *	Thus, in case of default exception callback, 'cookie' is subjected to
++ *	constraints on the program's return value (as with R0 on exit).
++ *	Otherwise, the return value of the marked exception callback will be
++ *	subjected to the same checks.
+  *
+  *	Note that throwing an exception with lingering resources (locks,
+  *	references, etc.) will lead to a verification error.
+@@ -178,4 +187,24 @@ extern void bpf_percpu_obj_drop_impl(void *kptr, void *meta) __ksym;
+  */
+ extern void bpf_throw(u64 cookie) __ksym;
  
-+/* Description
-+ *	Throw a BPF exception from the program, immediately terminating its
-+ *	execution and unwinding the stack. The supplied 'cookie' parameter
-+ *	will be the return value of the program when an exception is thrown.
++/* This macro must be used to mark the exception callback corresponding to the
++ * main program. For example:
 + *
-+ *	Note that throwing an exception with lingering resources (locks,
-+ *	references, etc.) will lead to a verification error.
++ * int exception_cb(u64 cookie) {
++ *	return cookie;
++ * }
 + *
-+ *	Note that callbacks *cannot* call this helper.
-+ * Returns
-+ *	Never.
-+ * Throws
-+ *	An exception with the specified 'cookie' value.
++ * SEC("tc")
++ * __exception_cb(exception_cb)
++ * int main_prog(struct __sk_buff *ctx) {
++ *	...
++ *	return TC_ACT_OK;
++ * }
++ *
++ * Here, exception callback for the main program will be 'exception_cb'. Note
++ * that this attribute can only be used once, and multiple exception callbacks
++ * specified for the main program will lead to verification error.
 + */
-+extern void bpf_throw(u64 cookie) __ksym;
++#define __exception_cb(name) __attribute__((btf_decl_tag("exception_callback:" #name)))
 +
  #endif
 -- 
