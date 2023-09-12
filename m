@@ -1,46 +1,46 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0749017C2
-	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 23:32:20 +0000 (UTC)
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0577F10FF
-	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 16:32:20 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id ffacd0b85a97d-31c6d17aec4so6107237f8f.1
-        for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 16:32:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1489F1429F
+	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 23:32:22 +0000 (UTC)
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEB210FF
+	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 16:32:21 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id a640c23a62f3a-99bdcade7fbso769046366b.1
+        for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 16:32:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694561538; x=1695166338; darn=vger.kernel.org;
+        d=gmail.com; s=20221208; t=1694561540; x=1695166340; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5fOfWa2tmL8t6EH3saX0Z0ggyM4Di2cdRmBbwAqkfyk=;
-        b=qPPRishCaidTLj6eKgXHgLU6KajK913VGvCq3p+ySUsemjX8u3t1C0VJ/4cIaoNdEE
-         JutnnRQe6kTpuQKW+eHoa5JqYW9UcxWg9J3hpWDqibxwi3EPhK79MKJjIP+fR63sg4DS
-         xiJincs/vGG/GjxqP/8sw782fo4xaivrCVNxzA/R6B/tEroWXjj0k+ELgEVgVbaR6xO6
-         WamoTQZqogS2EtRJy2Nn+xpqoe37VSaYCwbdrLK+PndA3i9EbRlFVXUwxcbe19mF6bD+
-         xb8tN2x6AaqbYqTF8rDQBvcsidW/ggDMMw1sJL7yr3aS94IbTBCuymgBGaBkQOCStiTn
-         kttw==
+        bh=FnInjG/GiUGZnd4FDblN9l9WbO13rPNJBMBFSUVUPls=;
+        b=i0ygThk33J2tbEvT1QbJweiD5mBITQJ1ZVHAo2mIplBrPhuJ2l+imvO+w24yNe26Eh
+         yIMq++2/dXxJ8A2rM75lwi6vxAvUnJY+c9Z7yQX00D5ldHDO9+4d2ZC30sXvdlf+CGEF
+         Dd03e8L4Ku/1zeu80ZSM50vyZcLjjHwADeAJdWPr43i7PjdBc/drkSKt+ddgeatzDQH6
+         Q/H8WuTu9ePGGCZKGBYoWYA5Hxi4H4Ll7iw/JqDfcBEy3NQg72xXkimnMU+iCKw/eOlj
+         mT8NnQ+ZxFTDXKM4gzlpzWSKhBkl4VEthJGnnK3m/YDV5FhAhS7RTzV0+EofHvNmhVao
+         2JAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694561538; x=1695166338;
+        d=1e100.net; s=20230601; t=1694561540; x=1695166340;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5fOfWa2tmL8t6EH3saX0Z0ggyM4Di2cdRmBbwAqkfyk=;
-        b=vCAUHb+A6LEPEsAfQFG1IyMiIVo+o+lT9kE9beQZQb0f8R9KMRYjIb2iK6QSCl2rxn
-         7meIQAZj4TIxYO0V2ltDA/mA56a9d+I+Hth6NwbaVLB2Fl/mvUg/HMfXyxzR6Yvwt9QW
-         gNTezeuQz2f0iJIZfBUTS7Qe1D+6AK3Kuqger/us4qk+lKfXNAosKoZ85jBV6ZSz7eJs
-         Jqh2AVq5v7go0twMRn3WHcL5/YPXlhl6p/tj2QEMBlCBp+sd+vjorhuP7PQWPcuiIfBr
-         G8HscjClo8h0cJp/VkMC8eDL4sHkA8vOS9HYQVeUv6voKJfYHI3LrecWmwcdcyfrIiuA
-         dqdQ==
-X-Gm-Message-State: AOJu0Yzfz4wcj4hrhiSr6uORIWou9Vn1jymLlmX3ySi06jzmaKfcsqlf
-	XMr/cySUAe/zvC2FOfAbKK3XyEf9tf9yGg==
-X-Google-Smtp-Source: AGHT+IHknOJTnoJd4b1Sq1Rj5m7sOTA1uPpiGYA337JJFHfK70Y6vShIU3tPSaBO5Ada6WLZIBSfkg==
-X-Received: by 2002:adf:d4c1:0:b0:31f:a277:4cde with SMTP id w1-20020adfd4c1000000b0031fa2774cdemr700068wrk.43.1694561538254;
-        Tue, 12 Sep 2023 16:32:18 -0700 (PDT)
+        bh=FnInjG/GiUGZnd4FDblN9l9WbO13rPNJBMBFSUVUPls=;
+        b=wTP6g2ZzwizT1UPxt8L9MS0DyHqPFPE4y+2gjf+2lHu1JWXp0kLclYv/QPuFLI3K0V
+         jgEvwU9xYu1iclmH0qA+AW/M5By5YMHJHs4t09W0vondxn+ZfZteCZwZHJeFjhGvZ05m
+         u7+XRdbwER4q/rUHVjbTxg6+LQ0ySduTLWYeYfSNAo8rFsQ6Ptw/uxE4C/n6IJdL2McC
+         zeVpy9dbpAYgAK4kqa4+EE6ErKZkj1i60C7EDuDnMviufCc+VzDfR7qU5BYYrmPf9B2I
+         OxALZQaZ2AN66Lncckz1BiHwC4/ROlhG/KoKNebtWK5WMwsX+CZnAAeLNVZBDf1Sc8oq
+         5VeA==
+X-Gm-Message-State: AOJu0YyxyEPbvX451C9BCIy2Z7jTH0pg95pxfIS3NIN3ZIY4q5noz2LB
+	wzHfogWfgLmJkEG+Y9LgPhpEAv8fvxIihw==
+X-Google-Smtp-Source: AGHT+IEDHXBr49p4haN+dJO2ObWGfLaD+m2z1Tf5uRp0SZkey96d3yc65OaW5oacSsM9/ICs5oWmnw==
+X-Received: by 2002:a17:907:7714:b0:9a9:e53d:5d59 with SMTP id kw20-20020a170907771400b009a9e53d5d59mr435155ejc.25.1694561539712;
+        Tue, 12 Sep 2023 16:32:19 -0700 (PDT)
 Received: from localhost ([212.203.98.42])
-        by smtp.gmail.com with ESMTPSA id u12-20020aa7d98c000000b0052a1d98618bsm6506825eds.54.2023.09.12.16.32.18
+        by smtp.gmail.com with ESMTPSA id oy25-20020a170907105900b0099d0c0bb92bsm7430481ejb.80.2023.09.12.16.32.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Sep 2023 16:32:18 -0700 (PDT)
+        Tue, 12 Sep 2023 16:32:19 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -50,9 +50,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	David Vernet <void@manifault.com>,
 	Puranjay Mohan <puranjay12@gmail.com>
-Subject: [PATCH bpf-next v3 03/17] bpf: Implement support for adding hidden subprogs
-Date: Wed, 13 Sep 2023 01:32:00 +0200
-Message-ID: <20230912233214.1518551-4-memxor@gmail.com>
+Subject: [PATCH bpf-next v3 05/17] bpf: Refactor check_btf_func and split into two phases
+Date: Wed, 13 Sep 2023 01:32:02 +0200
+Message-ID: <20230912233214.1518551-6-memxor@gmail.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230912233214.1518551-1-memxor@gmail.com>
 References: <20230912233214.1518551-1-memxor@gmail.com>
@@ -62,219 +62,252 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8798; i=memxor@gmail.com; h=from:subject; bh=taTmdIM29si9oEtx177zT6xSGvloeVryMsABiMpFttI=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBlAPSs97mBFCvOHPHvSPjInht5snikqcS62KUx5 kYrP9VSjeWJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCZQD0rAAKCRBM4MiGSL8R ytIbEACfpLni0II7Kn8DVhAWl/ug3O069hXn+ypUEKbcs8x9/JYUyerctHPtuc+85HJjWL2JyFN kmuX6bFwDs2f6eOTcCSxnVzaP2dmZhwCv3jgnVGUOcVDKfzGRXUB0NMaivXrtV5bwTiN6aqydbZ ndhSMum/nVFPu/VR9EbRtB8SV7dpbgHw7A9IoeBBIAiCs6HXm6Bk+BH0oS5SA6A9QUE9zQF+s5Q Fs+9J5OJL9Mq4u4Te3SswHzCc/LfRwy6kKjcj9o4uemTT3pmOU5qWiGiRnG5Ub8girxvZS2ibl9 4Q9Sf2qDxAKfRNd/seGPq7v+LQEkjy0chp8XkZgvpuBOB+bE14xasIs9Ieem8TyK84DV4hMWPOs OF+UpOwr1xSbNZcx78Q3DmCWloYKhBVwl8eV1CnWqXzZ53S62gp5yWh7EvEouyhwYDo5X8LaeeP tme255mjd8H8n1hTIKlBr1y/NnF82LjAV1Dz/neWeq37dc9RULPsx7dWvGLHc/xI9Ec69veTI+e joaRghkW7mJTPvyYCjHTRUgZi6XCyjFKXbasXRoyD3cIr6xxM4w3RXm8NEor7bU435WP3hw+oQ3 D5DrHsAAruI/oNQSPGhyvAmTeb8k1wfNGdYXubxKWAGBikNMUM8qMs/3AdYmO6uWfY8gof2pq6H AR+5Eusi5N7CmHw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7961; i=memxor@gmail.com; h=from:subject; bh=E2xIvz5e13nheKE0OeG1Qehip8VtJjWYOdIDnjR2D4k=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBlAPSs53rV+MnMc4PA1jYNqb6XVsGGNZe6U5n9o aLTEH/dMQKJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCZQD0rAAKCRBM4MiGSL8R ygMND/48xFUhIxLjOMH3fHgkL9Yz6jpiZphZy+Dzh67/gmjktFT49+F78I4pL8/AVYmmHk99p0Y FISoFsb9HV1RoRYAwmrzCbGZ4RQkqBf4QbC9QzIbH5B02UZcDv8+bUJwyBlYKkoLJVpoP+BxiL2 +Xny4s9DyL0Ci2k8eD6lPZHdn+6K8DssODR0aYE+On7QmkqxLGQ1LC50NlPLZdLhg9nlT/mG2ff L7MSWCEQRp+0rR3GtPSGCLZ3+jzCFLMBVw5czVrvb7HV8ohrFSklC6r6Kjjc/UGW5r5GfPC6ZPr ycOV7yGJ+IlYlHrqz56vdyHZvfaZWmohOT/odGWYaTS9RqY7J+/RJtsHpFdllqIBN1qI6hmwCB3 MIO5H/J6VuxwP3wTdkDsiuNMaLmFIKYFRRaM/3OjfENUAh0ouL1x5JirLGc+3oKS1KdP6QNYPBw 8oLiNrKVcas3aviiGBf8sr7S48D1RGN/vGxm2UZUHonZNQrZdYi3ZTaKCqV4QIuwfzf0/+oQrE+ MMmytdWitH/5L1GGO3nht2oFBM1UR3uIyfj5xPEvdTlgyqzzWi4Gy5p1Kv/Oem3dECrt7ckp8GI LvES+uakiLRidlcBW2IiE3bZ44GJzoysEiEKPmf4leHej1rz9XsdqyxYOoeqLHSATaDMrq5FtQp pW/gXqh8dkR2WGA==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 
-Introduce support in the verifier for generating a subprogram and
-include it as part of a BPF program dynamically after the do_check phase
-is complete. The first user will be the next patch which generates
-default exception callbacks if none are set for the program. The phase
-of invocation will be do_misc_fixups. Note that this is an internal
-verifier function, and should be used with instruction blocks which
-uphold the invariants stated in check_subprogs.
+This patch splits the check_btf_info's check_btf_func check into two
+separate phases.  The first phase sets up the BTF and prepares
+func_info, but does not perform any validation of required invariants
+for subprogs just yet. This is left to the second phase, which happens
+where check_btf_info executes currently, and performs the line_info and
+CO-RE relocation.
 
-Since these subprogs are always appended to the end of the instruction
-sequence of the program, it becomes relatively inexpensive to do the
-related adjustments to the subprog_info of the program. Only the fake
-exit subprogram is shifted forward, making room for our new subprog.
+The reason to perform this split is to obtain the userspace supplied
+func_info information before we perform the add_subprog call, where we
+would now require finding and adding subprogs that may not have a
+bpf_pseudo_call or bpf_pseudo_func instruction in the program.
 
-This is useful to insert a new subprogram, get it JITed, and obtain its
-function pointer. The next patch will use this functionality to insert a
-default exception callback which will be invoked after unwinding the
-stack.
+We require this as we want to enable userspace to supply exception
+callbacks that can override the default hidden subprogram generated by
+the verifier (which performs a hardcoded action). In such a case, the
+exception callback may never be referenced in an instruction, but will
+still be suitably annotated (by way of BTF declaration tags). For
+finding this exception callback, we would require the program's BTF
+information, and the supplied func_info information which maps BTF type
+IDs to subprograms.
 
-Note that these added subprograms are invisible to userspace, and never
-reported in BPF_OBJ_GET_INFO_BY_ID etc. For now, only a single
-subprogram is supported, but more can be easily supported in the future.
-
-To this end, two function counts are introduced now, the existing
-func_cnt, and real_func_cnt, the latter including hidden programs. This
-allows us to conver the JIT code to use the real_func_cnt for management
-of resources while syscall path continues working with existing
-func_cnt.
+Since the exception callback won't actually be referenced through
+instructions, later checks in check_cfg and do_check_subprogs will not
+verify the subprog. This means that add_subprog needs to add them in the
+add_subprog_and_kfunc phase before we move forward, which is why the BTF
+and func_info are required at that point.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf.h          |  1 +
- include/linux/bpf_verifier.h |  3 ++-
- kernel/bpf/core.c            | 12 ++++++------
- kernel/bpf/syscall.c         |  2 +-
- kernel/bpf/verifier.c        | 36 +++++++++++++++++++++++++++++++++---
- 5 files changed, 43 insertions(+), 11 deletions(-)
+ kernel/bpf/verifier.c | 128 +++++++++++++++++++++++++++++++++---------
+ 1 file changed, 100 insertions(+), 28 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 9171b0b6a590..c3667e95af59 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1389,6 +1389,7 @@ struct bpf_prog_aux {
- 	u32 stack_depth;
- 	u32 id;
- 	u32 func_cnt; /* used by non-func prog as the number of func progs */
-+	u32 real_func_cnt; /* includes hidden progs, only used for JIT and freeing progs */
- 	u32 func_idx; /* 0 for non-func prog, the index in func array for func prog */
- 	u32 attach_btf_id; /* in-kernel BTF type id to attach to */
- 	u32 ctx_arg_info_size;
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index a3236651ec64..3c2a8636ab29 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -588,6 +588,7 @@ struct bpf_verifier_env {
- 	u32 used_map_cnt;		/* number of used maps */
- 	u32 used_btf_cnt;		/* number of used BTF objects */
- 	u32 id_gen;			/* used to generate unique reg IDs */
-+	u32 hidden_subprog_cnt;		/* number of hidden subprogs */
- 	bool explore_alu_limits;
- 	bool allow_ptr_leaks;
- 	bool allow_uninit_stack;
-@@ -598,7 +599,7 @@ struct bpf_verifier_env {
- 	struct bpf_insn_aux_data *insn_aux_data; /* array of per-insn state */
- 	const struct bpf_line_info *prev_linfo;
- 	struct bpf_verifier_log log;
--	struct bpf_subprog_info subprog_info[BPF_MAX_SUBPROGS + 1];
-+	struct bpf_subprog_info subprog_info[BPF_MAX_SUBPROGS + 2]; /* max + 2 for the fake and exception subprogs */
- 	union {
- 		struct bpf_idmap idmap_scratch;
- 		struct bpf_idset idset_scratch;
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index c4ac084f2767..840ba952702d 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -212,7 +212,7 @@ void bpf_prog_fill_jited_linfo(struct bpf_prog *prog,
- 	const struct bpf_line_info *linfo;
- 	void **jited_linfo;
- 
--	if (!prog->aux->jited_linfo)
-+	if (!prog->aux->jited_linfo || prog->aux->func_idx > prog->aux->func_cnt)
- 		/* Userspace did not provide linfo */
- 		return;
- 
-@@ -539,7 +539,7 @@ static void bpf_prog_kallsyms_del_subprogs(struct bpf_prog *fp)
- {
- 	int i;
- 
--	for (i = 0; i < fp->aux->func_cnt; i++)
-+	for (i = 0; i < fp->aux->real_func_cnt; i++)
- 		bpf_prog_kallsyms_del(fp->aux->func[i]);
- }
- 
-@@ -589,7 +589,7 @@ bpf_prog_ksym_set_name(struct bpf_prog *prog)
- 	sym  = bin2hex(sym, prog->tag, sizeof(prog->tag));
- 
- 	/* prog->aux->name will be ignored if full btf name is available */
--	if (prog->aux->func_info_cnt) {
-+	if (prog->aux->func_info_cnt && prog->aux->func_idx < prog->aux->func_info_cnt) {
- 		type = btf_type_by_id(prog->aux->btf,
- 				      prog->aux->func_info[prog->aux->func_idx].type_id);
- 		func_name = btf_name_by_offset(prog->aux->btf, type->name_off);
-@@ -1208,7 +1208,7 @@ int bpf_jit_get_func_addr(const struct bpf_prog *prog,
- 		if (!extra_pass)
- 			addr = NULL;
- 		else if (prog->aux->func &&
--			 off >= 0 && off < prog->aux->func_cnt)
-+			 off >= 0 && off < prog->aux->real_func_cnt)
- 			addr = (u8 *)prog->aux->func[off]->bpf_func;
- 		else
- 			return -EINVAL;
-@@ -2721,7 +2721,7 @@ static void bpf_prog_free_deferred(struct work_struct *work)
- #endif
- 	if (aux->dst_trampoline)
- 		bpf_trampoline_put(aux->dst_trampoline);
--	for (i = 0; i < aux->func_cnt; i++) {
-+	for (i = 0; i < aux->real_func_cnt; i++) {
- 		/* We can just unlink the subprog poke descriptor table as
- 		 * it was originally linked to the main program and is also
- 		 * released along with it.
-@@ -2729,7 +2729,7 @@ static void bpf_prog_free_deferred(struct work_struct *work)
- 		aux->func[i]->aux->poke_tab = NULL;
- 		bpf_jit_free(aux->func[i]);
- 	}
--	if (aux->func_cnt) {
-+	if (aux->real_func_cnt) {
- 		kfree(aux->func);
- 		bpf_prog_unlock_free(aux->prog);
- 	} else {
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 6a692f3bea15..85c1d908f70f 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2749,7 +2749,7 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr, u32 uattr_size)
- 	 * period before we can tear down JIT memory since symbols
- 	 * are already exposed under kallsyms.
- 	 */
--	__bpf_prog_put_noref(prog, prog->aux->func_cnt);
-+	__bpf_prog_put_noref(prog, prog->aux->real_func_cnt);
- 	return err;
- free_prog_sec:
- 	free_uid(prog->aux->user);
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 18e673c0ac15..39548e326d53 100644
+index 9baa6f187b38..ec767ae08c2b 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -15210,7 +15210,8 @@ static void adjust_btf_func(struct bpf_verifier_env *env)
- 	if (!aux->func_info)
- 		return;
+@@ -15115,20 +15115,18 @@ static int check_abnormal_return(struct bpf_verifier_env *env)
+ #define MIN_BPF_FUNCINFO_SIZE	8
+ #define MAX_FUNCINFO_REC_SIZE	252
  
--	for (i = 0; i < env->subprog_cnt; i++)
-+	/* func_info is not available for hidden subprogs */
-+	for (i = 0; i < env->subprog_cnt - env->hidden_subprog_cnt; i++)
- 		aux->func_info[i].insn_off = env->subprog_info[i].start;
- }
+-static int check_btf_func(struct bpf_verifier_env *env,
+-			  const union bpf_attr *attr,
+-			  bpfptr_t uattr)
++static int check_btf_func_early(struct bpf_verifier_env *env,
++				const union bpf_attr *attr,
++				bpfptr_t uattr)
+ {
+-	const struct btf_type *type, *func_proto, *ret_type;
+-	u32 i, nfuncs, urec_size, min_size;
+ 	u32 krec_size = sizeof(struct bpf_func_info);
++	const struct btf_type *type, *func_proto;
++	u32 i, nfuncs, urec_size, min_size;
+ 	struct bpf_func_info *krecord;
+-	struct bpf_func_info_aux *info_aux = NULL;
+ 	struct bpf_prog *prog;
+ 	const struct btf *btf;
+-	bpfptr_t urecord;
+ 	u32 prev_offset = 0;
+-	bool scalar_return;
++	bpfptr_t urecord;
+ 	int ret = -ENOMEM;
  
-@@ -18151,7 +18152,8 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 		 * the call instruction, as an index for this list
- 		 */
- 		func[i]->aux->func = func;
--		func[i]->aux->func_cnt = env->subprog_cnt;
-+		func[i]->aux->func_cnt = env->subprog_cnt - env->hidden_subprog_cnt;
-+		func[i]->aux->real_func_cnt = env->subprog_cnt;
+ 	nfuncs = attr->func_info_cnt;
+@@ -15138,11 +15136,6 @@ static int check_btf_func(struct bpf_verifier_env *env,
+ 		return 0;
  	}
- 	for (i = 0; i < env->subprog_cnt; i++) {
- 		old_bpf_func = func[i]->bpf_func;
-@@ -18197,7 +18199,8 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 	prog->aux->extable = func[0]->aux->extable;
- 	prog->aux->num_exentries = func[0]->aux->num_exentries;
- 	prog->aux->func = func;
--	prog->aux->func_cnt = env->subprog_cnt;
-+	prog->aux->func_cnt = env->subprog_cnt - env->hidden_subprog_cnt;
-+	prog->aux->real_func_cnt = env->subprog_cnt;
- 	bpf_prog_jit_attempt_done(prog);
+ 
+-	if (nfuncs != env->subprog_cnt) {
+-		verbose(env, "number of funcs in func_info doesn't match number of subprogs\n");
+-		return -EINVAL;
+-	}
+-
+ 	urec_size = attr->func_info_rec_size;
+ 	if (urec_size < MIN_BPF_FUNCINFO_SIZE ||
+ 	    urec_size > MAX_FUNCINFO_REC_SIZE ||
+@@ -15160,9 +15153,6 @@ static int check_btf_func(struct bpf_verifier_env *env,
+ 	krecord = kvcalloc(nfuncs, krec_size, GFP_KERNEL | __GFP_NOWARN);
+ 	if (!krecord)
+ 		return -ENOMEM;
+-	info_aux = kcalloc(nfuncs, sizeof(*info_aux), GFP_KERNEL | __GFP_NOWARN);
+-	if (!info_aux)
+-		goto err_free;
+ 
+ 	for (i = 0; i < nfuncs; i++) {
+ 		ret = bpf_check_uarg_tail_zero(urecord, krec_size, urec_size);
+@@ -15201,11 +15191,6 @@ static int check_btf_func(struct bpf_verifier_env *env,
+ 			goto err_free;
+ 		}
+ 
+-		if (env->subprog_info[i].start != krecord[i].insn_off) {
+-			verbose(env, "func_info BTF section doesn't match subprog layout in BPF program\n");
+-			goto err_free;
+-		}
+-
+ 		/* check type_id */
+ 		type = btf_type_by_id(btf, krecord[i].type_id);
+ 		if (!type || !btf_type_is_func(type)) {
+@@ -15213,12 +15198,80 @@ static int check_btf_func(struct bpf_verifier_env *env,
+ 				krecord[i].type_id);
+ 			goto err_free;
+ 		}
+-		info_aux[i].linkage = BTF_INFO_VLEN(type->info);
+ 
+ 		func_proto = btf_type_by_id(btf, type->type);
+ 		if (unlikely(!func_proto || !btf_type_is_func_proto(func_proto)))
+ 			/* btf_func_check() already verified it during BTF load */
+ 			goto err_free;
++
++		prev_offset = krecord[i].insn_off;
++		bpfptr_add(&urecord, urec_size);
++	}
++
++	prog->aux->func_info = krecord;
++	prog->aux->func_info_cnt = nfuncs;
++	return 0;
++
++err_free:
++	kvfree(krecord);
++	return ret;
++}
++
++static int check_btf_func(struct bpf_verifier_env *env,
++			  const union bpf_attr *attr,
++			  bpfptr_t uattr)
++{
++	const struct btf_type *type, *func_proto, *ret_type;
++	u32 i, nfuncs, urec_size, min_size;
++	u32 krec_size = sizeof(struct bpf_func_info);
++	struct bpf_func_info *krecord;
++	struct bpf_func_info_aux *info_aux = NULL;
++	struct bpf_prog *prog;
++	const struct btf *btf;
++	bpfptr_t urecord;
++	u32 prev_offset = 0;
++	bool scalar_return;
++	int ret = -ENOMEM;
++
++	nfuncs = attr->func_info_cnt;
++	if (!nfuncs) {
++		if (check_abnormal_return(env))
++			return -EINVAL;
++		return 0;
++	}
++	if (nfuncs != env->subprog_cnt) {
++		verbose(env, "number of funcs in func_info doesn't match number of subprogs\n");
++		return -EINVAL;
++	}
++
++	urec_size = attr->func_info_rec_size;
++
++	prog = env->prog;
++	btf = prog->aux->btf;
++
++	urecord = make_bpfptr(attr->func_info, uattr.is_kernel);
++	min_size = min_t(u32, krec_size, urec_size);
++
++	krecord = prog->aux->func_info;
++	info_aux = kcalloc(nfuncs, sizeof(*info_aux), GFP_KERNEL | __GFP_NOWARN);
++	if (!info_aux)
++		return -ENOMEM;
++
++	for (i = 0; i < nfuncs; i++) {
++		/* check insn_off */
++		ret = -EINVAL;
++
++		if (env->subprog_info[i].start != krecord[i].insn_off) {
++			verbose(env, "func_info BTF section doesn't match subprog layout in BPF program\n");
++			goto err_free;
++		}
++
++		/* Already checked type_id */
++		type = btf_type_by_id(btf, krecord[i].type_id);
++		info_aux[i].linkage = BTF_INFO_VLEN(type->info);
++		/* Already checked func_proto */
++		func_proto = btf_type_by_id(btf, type->type);
++
+ 		ret_type = btf_type_skip_modifiers(btf, func_proto->type, NULL);
+ 		scalar_return =
+ 			btf_type_is_small_int(ret_type) || btf_is_any_enum(ret_type);
+@@ -15235,13 +15288,10 @@ static int check_btf_func(struct bpf_verifier_env *env,
+ 		bpfptr_add(&urecord, urec_size);
+ 	}
+ 
+-	prog->aux->func_info = krecord;
+-	prog->aux->func_info_cnt = nfuncs;
+ 	prog->aux->func_info_aux = info_aux;
  	return 0;
- out_free:
-@@ -18433,6 +18436,33 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	return 0;
+ 
+ err_free:
+-	kvfree(krecord);
+ 	kfree(info_aux);
+ 	return ret;
+ }
+@@ -15459,9 +15509,9 @@ static int check_core_relo(struct bpf_verifier_env *env,
+ 	return err;
  }
  
-+/* The function requires that first instruction in 'patch' is insnsi[prog->len - 1] */
-+static __maybe_unused int add_hidden_subprog(struct bpf_verifier_env *env, struct bpf_insn *patch, int len)
-+{
-+	struct bpf_subprog_info *info = env->subprog_info;
-+	int cnt = env->subprog_cnt;
-+	struct bpf_prog *prog;
-+
-+	/* We only reserve one slot for hidden subprogs in subprog_info. */
-+	if (env->hidden_subprog_cnt) {
-+		verbose(env, "verifier internal error: only one hidden subprog supported\n");
-+		return -EFAULT;
-+	}
-+	/* We're not patching any existing instruction, just appending the new
-+	 * ones for the hidden subprog. Hence all of the adjustment operations
-+	 * in bpf_patch_insn_data are no-ops.
-+	 */
-+	prog = bpf_patch_insn_data(env, env->prog->len - 1, patch, len);
-+	if (!prog)
-+		return -ENOMEM;
-+	env->prog = prog;
-+	info[cnt + 1].start = info[cnt].start;
-+	info[cnt].start = prog->len - len + 1;
-+	env->subprog_cnt++;
-+	env->hidden_subprog_cnt++;
+-static int check_btf_info(struct bpf_verifier_env *env,
+-			  const union bpf_attr *attr,
+-			  bpfptr_t uattr)
++static int check_btf_info_early(struct bpf_verifier_env *env,
++				const union bpf_attr *attr,
++				bpfptr_t uattr)
+ {
+ 	struct btf *btf;
+ 	int err;
+@@ -15481,6 +15531,24 @@ static int check_btf_info(struct bpf_verifier_env *env,
+ 	}
+ 	env->prog->aux->btf = btf;
+ 
++	err = check_btf_func_early(env, attr, uattr);
++	if (err)
++		return err;
 +	return 0;
 +}
 +
- /* Do various post-verification rewrites in a single program pass.
-  * These rewrites simplify JIT and interpreter implementations.
-  */
++static int check_btf_info(struct bpf_verifier_env *env,
++			  const union bpf_attr *attr,
++			  bpfptr_t uattr)
++{
++	int err;
++
++	if (!attr->func_info_cnt && !attr->line_info_cnt) {
++		if (check_abnormal_return(env))
++			return -EINVAL;
++		return 0;
++	}
++
+ 	err = check_btf_func(env, attr, uattr);
+ 	if (err)
+ 		return err;
+@@ -19990,6 +20058,10 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr, __u3
+ 	if (!env->explored_states)
+ 		goto skip_full_check;
+ 
++	ret = check_btf_info_early(env, attr, uattr);
++	if (ret < 0)
++		goto skip_full_check;
++
+ 	ret = add_subprog_and_kfunc(env);
+ 	if (ret < 0)
+ 		goto skip_full_check;
 -- 
 2.41.0
 
