@@ -1,97 +1,98 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 615F317993;
-	Tue, 12 Sep 2023 10:25:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FB74C433C8;
-	Tue, 12 Sep 2023 10:25:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1694514314;
-	bh=l8TYq2vvs2AJoO+xBUEw8Ne1rI7EQ4kmhcp+8GQQDrI=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=nUMSlsi4OAPPwuvoT19S1yJzgl1+ANn8ra7jcRDMrFD9ByMDQYx1x7cREZMMhQArQ
-	 cMb0T8uaae3mn9zOjzWghgHyh/jR35YKePAbRcKjGeC7e+ug278z4VhJPAO3J1KLmX
-	 YO/FIvbbySG06BMW5nWGSEIplu0GlxIOjqew7kaLrWYO9Zd5QNEjOIpH1dza+MNieP
-	 TVPtES/pe5jh3wFnaOUrgSwMZp9y4SVmfnyHEMOf3ixYSjEHnVW/u9ifRNFMQN26KN
-	 QGyweDDCb8ORAAWScx2yacHVwzRRrCegJTZ/eo9lZt0dkAtXqDrP6VBRW0Y7IiFG/B
-	 3is++u95za89A==
-Message-ID: <b5aab947-3066-dc3a-5ae7-a594fa96f72c@kernel.org>
-Date: Tue, 12 Sep 2023 12:25:04 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C16F51775A
+	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 10:27:13 +0000 (UTC)
+X-Greylist: delayed 532 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 12 Sep 2023 03:27:13 PDT
+Received: from smtp65.iad3b.emailsrvr.com (smtp65.iad3b.emailsrvr.com [146.20.161.65])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5681701
+	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 03:27:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mev.co.uk;
+	s=20221208-6x11dpa4; t=1694513899;
+	bh=FH3C6DGeGqxyT5D0x1WZDEUoGXKaA0SlVyvXD/E86uk=;
+	h=Date:Subject:To:From:From;
+	b=Tq6xJ2+piqPbhOIJE69N/bFxHEol/tmPY3c/hCTgDQpjfzcL1PHLR0dKjZfF714V7
+	 Vl/6zaEzVFXQTpS59Oc3i3RhW8WqIwPdHyjcxiin/hSqOtSelQtRrdQ5MMJLWJtYqR
+	 D98zi0KdjdUX1nH+1iIJQBq7/UhFQ72R5qHGEl7g=
+X-Auth-ID: abbotti@mev.co.uk
+Received: by smtp17.relay.iad3b.emailsrvr.com (Authenticated sender: abbotti-AT-mev.co.uk) with ESMTPSA id C837BA00C7;
+	Tue, 12 Sep 2023 06:18:15 -0400 (EDT)
+Message-ID: <44acdea6-271f-4e71-a0b3-d74a92034a9a@mev.co.uk>
+Date: Tue, 12 Sep 2023 11:18:13 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Cc: "David S. Miller" <davem@davemloft.net>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, Paolo Abeni <pabeni@redhat.com>,
- Thomas Gleixner <tglx@linutronix.de>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Arthur Kiyanovski <akiyano@amazon.com>, Clark Wang <xiaoning.wang@nxp.com>,
- Claudiu Manoil <claudiu.manoil@nxp.com>, David Arinzon
- <darinzon@amazon.com>, Edward Cree <ecree.xilinx@gmail.com>,
- Felix Fietkau <nbd@nbd.name>, Grygorii Strashko <grygorii.strashko@ti.com>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Jassi Brar <jaswinder.singh@linaro.org>,
- Jesse Brandeburg <jesse.brandeburg@intel.com>,
- John Crispin <john@phrozen.org>, Leon Romanovsky <leon@kernel.org>,
- Lorenzo Bianconi <lorenzo@kernel.org>, Louis Peens
- <louis.peens@corigine.com>, Marcin Wojtas <mw@semihalf.com>,
- Mark Lee <Mark-MC.Lee@mediatek.com>, Martin Habets
- <habetsm.xilinx@gmail.com>, Matthias Brugger <matthias.bgg@gmail.com>,
- NXP Linux Team <linux-imx@nxp.com>, Noam Dagan <ndagan@amazon.com>,
- Russell King <linux@armlinux.org.uk>, Saeed Bishara <saeedb@amazon.com>,
- Saeed Mahameed <saeedm@nvidia.com>, Sean Wang <sean.wang@mediatek.com>,
- Shay Agroskin <shayagr@amazon.com>, Shenwei Wang <shenwei.wang@nxp.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Tony Nguyen <anthony.l.nguyen@intel.com>,
- Vladimir Oltean <vladimir.oltean@nxp.com>, Wei Fang <wei.fang@nxp.com>
-Subject: Re: [PATCH net-next 1/2] net: Tree wide: Replace xdp_do_flush_map()
- with xdp_do_flush().
-Content-Language: en-US
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- netdev@vger.kernel.org, bpf@vger.kernel.org
-References: <20230908143215.869913-1-bigeasy@linutronix.de>
- <20230908143215.869913-2-bigeasy@linutronix.de>
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <20230908143215.869913-2-bigeasy@linutronix.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/7] drivers/comedi: fix Python string escapes
+To: Benjamin Gray <bgray@linux.ibm.com>, linux-ia64@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ llvm@lists.linux.dev, linux-pm@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Cc: Jonathan Corbet <corbet@lwn.net>,
+ H Hartley Sweeten <hsweeten@visionengravers.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Jan Kiszka <jan.kiszka@siemens.com>, Kieran Bingham <kbingham@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+ Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
+ linux-perf-users@vger.kernel.org,
+ Todd E Brandt <todd.e.brandt@linux.intel.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>
+References: <20230912060801.95533-1-bgray@linux.ibm.com>
+ <20230912060801.95533-4-bgray@linux.ibm.com>
+Content-Language: en-GB
+From: Ian Abbott <abbotti@mev.co.uk>
+Organization: MEV Ltd.
+In-Reply-To: <20230912060801.95533-4-bgray@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Classification-ID: 263f4c94-c5b5-4040-bf22-1f7e4ea60010-1-1
 
-
-
-On 08/09/2023 16.32, Sebastian Andrzej Siewior wrote:
-> xdp_do_flush_map() is deprecated and new code should use xdp_do_flush()
-> instead.
+On 12/09/2023 07:07, Benjamin Gray wrote:
+> Python 3.6 introduced a DeprecationWarning for invalid escape sequences.
+> This is upgraded to a SyntaxWarning in Python 3.12, and will eventually
+> be a syntax error.
 > 
-> Replace xdp_do_flush_map() with xdp_do_flush().
+> Fix these now to get ahead of it before it's an error.
 > 
-[...]
-> Signed-off-by: Sebastian Andrzej Siewior<bigeasy@linutronix.de>
+> Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
 > ---
->   drivers/net/ethernet/amazon/ena/ena_netdev.c     | 2 +-
->   drivers/net/ethernet/freescale/enetc/enetc.c     | 2 +-
->   drivers/net/ethernet/freescale/fec_main.c        | 2 +-
->   drivers/net/ethernet/intel/i40e/i40e_txrx.c      | 2 +-
->   drivers/net/ethernet/intel/ice/ice_txrx_lib.c    | 2 +-
->   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c    | 2 +-
->   drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c     | 2 +-
->   drivers/net/ethernet/marvell/mvneta.c            | 2 +-
->   drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c  | 2 +-
->   drivers/net/ethernet/mediatek/mtk_eth_soc.c      | 2 +-
->   drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c | 2 +-
->   drivers/net/ethernet/netronome/nfp/nfd3/xsk.c    | 2 +-
->   drivers/net/ethernet/sfc/efx_channels.c          | 2 +-
->   drivers/net/ethernet/sfc/siena/efx_channels.c    | 2 +-
->   drivers/net/ethernet/socionext/netsec.c          | 2 +-
->   drivers/net/ethernet/ti/cpsw_priv.c              | 2 +-
->   16 files changed, 16 insertions(+), 16 deletions(-)
+>   drivers/comedi/drivers/ni_routing/tools/convert_csv_to_c.py | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/comedi/drivers/ni_routing/tools/convert_csv_to_c.py b/drivers/comedi/drivers/ni_routing/tools/convert_csv_to_c.py
+> index 90378fb50580..d19101fc2a94 100755
+> --- a/drivers/comedi/drivers/ni_routing/tools/convert_csv_to_c.py
+> +++ b/drivers/comedi/drivers/ni_routing/tools/convert_csv_to_c.py
+> @@ -44,7 +44,7 @@ def routedict_to_structinit_single(name, D, return_name=False):
+>   
+>       lines.append('\t\t[B({})] = {{'.format(D0_sig))
+>       for D1_sig, value in D1:
+> -      if not re.match('[VIU]\([^)]*\)', value):
+> +      if not re.match(r'[VIU]\([^)]*\)', value):
+>           sys.stderr.write('Invalid register format: {}\n'.format(repr(value)))
+>           sys.stderr.write(
+>             'Register values should be formatted with V(),I(),or U()\n')
 
-Happy to see this cleanup across all drivers.
+Looks good thanks!  I ran the modified script using 'make everything' in 
+the directory (after setting up a python venv to install ctypesgen) and 
+it didn't break anything. (There were some harmless errors output by 
+ctypesgen due to failing to parse some GCC extensions, but those are 
+nothing to do with this patch and the generated C files are OK.)
 
-Acked-by: Jesper Dangaard Brouer <hawk@kernel.org>
+Reviewed-by: Ian Abbott <abbotti@mev.co.uk>
+
+-- 
+-=( Ian Abbott <abbotti@mev.co.uk> || MEV Ltd. is a company  )=-
+-=( registered in England & Wales.  Regd. number: 02862268.  )=-
+-=( Regd. addr.: S11 & 12 Building 67, Europa Business Park, )=-
+-=( Bird Hall Lane, STOCKPORT, SK3 0XA, UK. || www.mev.co.uk )=-
+
