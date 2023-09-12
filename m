@@ -1,58 +1,72 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ABBE1774B
-	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 10:07:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D7A17994
+	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 10:18:42 +0000 (UTC)
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id E5B5C10E7
-	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 03:07:33 -0700 (PDT)
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4BF921723
+	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 03:18:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1694513921;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Oucudl+k5IeCt8bSPR9EAaN7OT3eWorjofAbojhI4aE=;
+	b=OVAjADK76J5rmhxnmhk5Yh8HxQkd7FM7b12e705N1b7J+VsJ9b4DjoD2QdhakdSmrQQ6LA
+	yNKt9FghvvkrctcLP9yLeJEDjXVkg+8EHqnP+G8FEUEY5PaLqEKpKpTu6tZhVoCDNMin65
+	G/A+dWCtSHxbFfluK5XfcB/6K53wa+s=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-382-79-D2m7SNHyKDGXonkWRCQ-1; Tue, 12 Sep 2023 06:07:30 -0400
-X-MC-Unique: 79-D2m7SNHyKDGXonkWRCQ-1
-Received: by mail-lj1-f199.google.com with SMTP id 38308e7fff4ca-2bcc0c073ffso9399581fa.1
-        for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 03:07:30 -0700 (PDT)
+ us-mta-328-CJOBKFqvNaS-uXKoc6ChGg-1; Tue, 12 Sep 2023 06:18:39 -0400
+X-MC-Unique: CJOBKFqvNaS-uXKoc6ChGg-1
+Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-52c0134dfcdso789466a12.1
+        for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 03:18:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694513249; x=1695118049;
+        d=1e100.net; s=20230601; t=1694513918; x=1695118718;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=SXAsEx53roHbjXgU/fW2WoeQROrWdmdzDO7kKXSOpxA=;
-        b=kki8l6DqZXIo3gsDWsw0Qb0Wqdsvd3xmgVLggIrj0cT4nXlV4c8jpP+f0gQfH5qvYP
-         ux8xVbxzZtoImv3btJzYBzXpG5FwgWxkEmRWkvdTATNMW8uk8YosWKA+mWhwtHA7bDRg
-         NcN10FDsEk1TBq9P0CnTb0lhj87MDAM1C+U/9Vlk8NVaCO/ymDzjZPgAdlx3fWxlk8Lg
-         0px1drKGmW++JVgkdPjV63gM6xh4RfcNhO3YHK0xJ7iLUBgWxGq/4h4jhrKpIRJ9iGnT
-         Qd8ISAnXLT83wXQupdOLPs5b/bT9k9wb7n6W4CKhs/ayN1e7rlN2gjua4dFTzGfaBpPC
-         DmEg==
-X-Gm-Message-State: AOJu0YyHU9QyXqaZKgpgrR5bmVzsjsbNIRVmlHtYUkjW1PjmSRnDCnLD
-	Bc4OT3NdQKFOpsdGbXOpg1fmrkOQXzxFc1+cNNKXP/4HH5JAxKB78joShjuXxmF/YfmMN9xT1qv
-	nBRpMrn8dK+tq
-X-Received: by 2002:a2e:b4b8:0:b0:2bc:d505:2bf3 with SMTP id q24-20020a2eb4b8000000b002bcd5052bf3mr7834226ljm.1.1694513249328;
-        Tue, 12 Sep 2023 03:07:29 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEVXuZArVyVBfC/ZkfL9Dcs41TWZcM2AMy0lWn8fejr7PdIYjG+1y1NiXPGtb9+cWQ6YJUPhw==
-X-Received: by 2002:a2e:b4b8:0:b0:2bc:d505:2bf3 with SMTP id q24-20020a2eb4b8000000b002bcd5052bf3mr7834209ljm.1.1694513248993;
-        Tue, 12 Sep 2023 03:07:28 -0700 (PDT)
+        bh=Oucudl+k5IeCt8bSPR9EAaN7OT3eWorjofAbojhI4aE=;
+        b=pvtETTCEq5YEr0qaKq/s0qqyDMMjShQayXF7oA9xHoC19SxUqNy0v8TCqdiOwx6ROa
+         On+t0J7uWIw2A6aM4m7guXNadPZicmnDLICJApljUzEX1XuZqK4LB2gr0aq7aWLngbB4
+         26DYZKMIn1m3KlpRoHFClSwnoFVzL8IFg9Ao+9lRZOhS5omvNoumm7PplJA37ZKsn8aZ
+         fBJhWLZ3bahJHAEghCD4jgfVufF2jnMlnC17AIXOBEfaERFdlFku6ZKi5M+4qZ/qTd5X
+         BBDw1XeXIst+dMXq5R0cemKsHh8lUYwk1zUUHBlCg29lXSs6K4ezdxxwwOCxDdtYuRDg
+         tT4w==
+X-Gm-Message-State: AOJu0Yyf2R6yLliorwpJueACPFhgc3fkbIde+YuwFZgHtfp6b+rMstwQ
+	6VEB7eVOaGaO2R6cZtvTAQSi8xBCUloKAC+ipAmQrTvEw01zEXvJEn3h8Tex++5wvP4qNCcdHvN
+	g9ZHCScD1b2kl
+X-Received: by 2002:a17:907:971d:b0:9ad:786d:72af with SMTP id jg29-20020a170907971d00b009ad786d72afmr2092906ejc.5.1694513918693;
+        Tue, 12 Sep 2023 03:18:38 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEKwCMgpdBMyoyLEjev3VQygvMbQjCTrvrmIP82YAFTOsxsVft5rlwggdRA/8rvn4uqVVCjZw==
+X-Received: by 2002:a17:907:971d:b0:9ad:786d:72af with SMTP id jg29-20020a170907971d00b009ad786d72afmr2092894ejc.5.1694513918370;
+        Tue, 12 Sep 2023 03:18:38 -0700 (PDT)
 Received: from gerbillo.redhat.com (146-241-249-231.dyn.eolo.it. [146.241.249.231])
-        by smtp.gmail.com with ESMTPSA id lj16-20020a170906f9d000b00992d0de8762sm6580732ejb.216.2023.09.12.03.07.27
+        by smtp.gmail.com with ESMTPSA id z25-20020a1709067e5900b009937e7c4e54sm6681815ejr.39.2023.09.12.03.18.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Sep 2023 03:07:28 -0700 (PDT)
-Message-ID: <155aabf8b873bb8cdcafbd6139c42b08513e5fe6.camel@redhat.com>
-Subject: Re: [PATCH net] veth: Update XDP feature set when bringing up device
+        Tue, 12 Sep 2023 03:18:38 -0700 (PDT)
+Message-ID: <ad61e3fffdfb899d57307b2bddb2226a084bcb65.camel@redhat.com>
+Subject: Re: [PATCH net-next 1/6] net: stmmac: add platform library
 From: Paolo Abeni <pabeni@redhat.com>
-To: Toke =?ISO-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub
- Kicinski <kuba@kernel.org>,  Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, Lorenzo Bianconi
- <lorenzo@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Stanislav
- Fomichev <sdf@google.com>, Gerhard Engleder
- <gerhard@engleder-embedded.com>, Simon Horman <horms@kernel.org>
-Cc: Marek Majtyka <alardam@gmail.com>, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org
-Date: Tue, 12 Sep 2023 12:07:26 +0200
-In-Reply-To: <20230911135826.722295-1-toke@redhat.com>
-References: <20230911135826.722295-1-toke@redhat.com>
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>, Alexandre Torgue
+	 <alexandre.torgue@foss.st.com>, Jose Abreu <joabreu@synopsys.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org, Daniel
+ Borkmann <daniel@iogearbox.net>, "David S. Miller" <davem@davemloft.net>,
+ Emil Renner Berthing <kernel@esmil.dk>, Eric Dumazet <edumazet@google.com>,
+ Fabio Estevam <festevam@gmail.com>,  Jakub Kicinski <kuba@kernel.org>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
+ <john.fastabend@gmail.com>, linux-arm-kernel@lists.infradead.org, 
+ linux-stm32@st-md-mailman.stormreply.com, Maxime Coquelin
+ <mcoquelin.stm32@gmail.com>, netdev@vger.kernel.org, NXP Linux Team
+ <linux-imx@nxp.com>, Pengutronix Kernel Team <kernel@pengutronix.de>, Samin
+ Guo <samin.guo@starfivetech.com>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Shawn Guo <shawnguo@kernel.org>
+Date: Tue, 12 Sep 2023 12:18:36 +0200
+In-Reply-To: <E1qfiqd-007TPL-7K@rmk-PC.armlinux.org.uk>
+References: <ZP8yEFWn0Ml3ALWq@shell.armlinux.org.uk>
+	 <E1qfiqd-007TPL-7K@rmk-PC.armlinux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
@@ -63,62 +77,15 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Hi,
+On Mon, 2023-09-11 at 16:29 +0100, Russell King (Oracle) wrote:
+> Add a platform library of helper functions for common traits in the
+> platform drivers. Currently, this is setting the tx clock.
+>=20
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 
-On Mon, 2023-09-11 at 15:58 +0200, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
-> There's an early return in veth_set_features() if the device is in a down
-> state, which leads to the XDP feature flags not being updated when enabli=
-ng
-> GRO while the device is down. Which in turn leads to XDP_REDIRECT not
-> working, because the redirect code now checks the flags.
->=20
-> Fix this by updating the feature flags after bringing the device up.
->=20
-> Before this patch:
->=20
-> NETDEV_XDP_ACT_BASIC:		yes
-> NETDEV_XDP_ACT_REDIRECT:	yes
-> NETDEV_XDP_ACT_NDO_XMIT:	no
-> NETDEV_XDP_ACT_XSK_ZEROCOPY:	no
-> NETDEV_XDP_ACT_HW_OFFLOAD:	no
-> NETDEV_XDP_ACT_RX_SG:		yes
-> NETDEV_XDP_ACT_NDO_XMIT_SG:	no
->=20
-> After this patch:
->=20
-> NETDEV_XDP_ACT_BASIC:		yes
-> NETDEV_XDP_ACT_REDIRECT:	yes
-> NETDEV_XDP_ACT_NDO_XMIT:	yes
-> NETDEV_XDP_ACT_XSK_ZEROCOPY:	no
-> NETDEV_XDP_ACT_HW_OFFLOAD:	no
-> NETDEV_XDP_ACT_RX_SG:		yes
-> NETDEV_XDP_ACT_NDO_XMIT_SG:	yes
->=20
-> Fixes: fccca038f300 ("veth: take into account device reconfiguration for =
-xdp_features flag")
-> Fixes: 66c0e13ad236 ("drivers: net: turn on XDP features")
-> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> ---
->  drivers/net/veth.c | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index 9c6f4f83f22b..0deefd1573cf 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-> @@ -1446,6 +1446,8 @@ static int veth_open(struct net_device *dev)
->  		netif_carrier_on(peer);
->  	}
-> =20
-> +	veth_set_xdp_features(dev);
-> +
->  	return 0;
->  }
-
-The patch LGTM, thanks!
-
-I think it would be nice to add some specific self-tests here. Could
-you please consider following-up with them?
+FTR, two copies of this series landed on the ML. I'm marking the no-
+cover-letter version as Superseded, but please have a look at the
+comments there, too.
 
 Thanks,
 
