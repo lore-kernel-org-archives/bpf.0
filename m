@@ -1,144 +1,131 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 156C7171AB
-	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 06:08:56 +0000 (UTC)
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CD31703;
-	Mon, 11 Sep 2023 23:08:55 -0700 (PDT)
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38C5mYkm022911;
-	Tue, 12 Sep 2023 06:08:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=AHbcqJ2CieRG9hp04VV8TGkxNE1F6nI9dc1SB21bi+c=;
- b=KL+HGGv6nI2bTy7njwn26PxsHbyEE1JS45DdUTWZ8bBeBB6Yj2aG4RzaFZ8rNn8JHjq6
- 33w3Hk4LaJnp/RA7mIsjf7cFTcn2czaKsJB5NuIGmpRL1kux2V354quKyHE1xcstH0Eg
- tMQ+gndQfl8DXw/cqpukXILWeSOwZJHCbUJ0UyHEfg9G8644BXDs4nw+/FE8HezRGpxN
- buLU/gANH6WviS3YEL6oze0+hEJUql3t1foFx2TrdChLf51BVD3jy+lYMyp6bGgqi7c5
- n7lQ/H69ONCv/hlh7o0kvJ8yU95dyajmY0vdOkvuSTly264aa2kvQupcsmq8MCRQtfbH yA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t2gmraq03-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 Sep 2023 06:08:20 +0000
-Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38C67JsQ018554;
-	Tue, 12 Sep 2023 06:08:19 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t2gmrapy9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 Sep 2023 06:08:19 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38C5K8rl012005;
-	Tue, 12 Sep 2023 06:08:17 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3t15r1r6ap-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 Sep 2023 06:08:17 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38C68GcO28705526
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 12 Sep 2023 06:08:16 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0E64620040;
-	Tue, 12 Sep 2023 06:08:16 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7FA5520043;
-	Tue, 12 Sep 2023 06:08:15 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 12 Sep 2023 06:08:15 +0000 (GMT)
-Received: from bgray-lenovo-p15.ozlabs.ibm.com (haven.au.ibm.com [9.192.254.114])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 5956060595;
-	Tue, 12 Sep 2023 16:08:13 +1000 (AEST)
-From: Benjamin Gray <bgray@linux.ibm.com>
-To: linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, llvm@lists.linux.dev,
-        linux-pm@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc: Jonathan Corbet <corbet@lwn.net>, Ian Abbott <abbotti@mev.co.uk>,
-        H Hartley Sweeten <hsweeten@visionengravers.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Kieran Bingham <kbingham@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org,
-        Todd E Brandt <todd.e.brandt@linux.intel.com>,
-        Andrii Nakryiko <andrii@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-        Shuah Khan <shuah@kernel.org>, Benjamin Gray <bgray@linux.ibm.com>
-Subject: [PATCH v2 4/7] scripts: fix Python string escapes
-Date: Tue, 12 Sep 2023 16:07:58 +1000
-Message-ID: <20230912060801.95533-5-bgray@linux.ibm.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230912060801.95533-1-bgray@linux.ibm.com>
-References: <20230912060801.95533-1-bgray@linux.ibm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F425171B1
+	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 06:26:10 +0000 (UTC)
+Received: from out-216.mta0.migadu.com (out-216.mta0.migadu.com [91.218.175.216])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90122AF
+	for <bpf@vger.kernel.org>; Mon, 11 Sep 2023 23:26:09 -0700 (PDT)
+Message-ID: <d8194c20-443e-d574-18c5-cecc7c5ce702@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1694499967;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=iXe7Go0n5O6ds1fKh6BJavzWDya8M8+rp8RT20P6NKU=;
+	b=nnD52Br7tvg4R5aSIWUWDw3R2FNLzOivMjQtGiYaE9DIkxP/wAyOC0sQqq7Xr/sngBVdzi
+	zOCN3HZmOXy8UjpcOmp75a50HbnrraiC1b/eToO5zLG2JxYlhneFf1ZBZYpQp/40FysW6B
+	B5zOyW/Edga8JaubZH128iR8d8XCMrQ=
+Date: Mon, 11 Sep 2023 23:26:01 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: A2TrB0HujiOs_UwzMmju5UXnpzVKn05t
-X-Proofpoint-ORIG-GUID: 3euzVgIOZ-4yQSvwXOSBFMDwLp03uWEg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-12_03,2023-09-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- priorityscore=1501 bulkscore=0 lowpriorityscore=0 phishscore=0
- malwarescore=0 suspectscore=0 clxscore=1015 mlxscore=0 spamscore=0
- adultscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2308100000 definitions=main-2309120050
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Offloaded prog after
+ non-offloaded should not cause BUG
+Content-Language: en-US
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: andrii@kernel.org, daniel@iogearbox.net, kernel-team@fb.com,
+ yonghong.song@linux.dev, sdf@google.com, kuba@kernel.org,
+ bpf@vger.kernel.org, ast@kernel.org
+References: <20230912005539.2248244-1-eddyz87@gmail.com>
+ <20230912005539.2248244-3-eddyz87@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20230912005539.2248244-3-eddyz87@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Python 3.6 introduced a DeprecationWarning for invalid escape sequences.
-This is upgraded to a SyntaxWarning in Python 3.12, and will eventually
-be a syntax error.
+On 9/11/23 5:55 PM, Eduard Zingerman wrote:
+> Check what happens if non-offloaded dev bound BPF
+> program is followed by offloaded dev bound program.
+> Test case adapated from syzbot report [1].
+> 
+> [1] https://lore.kernel.org/bpf/000000000000d97f3c060479c4f8@google.com/
+> 
+> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+> ---
+>   .../bpf/prog_tests/xdp_dev_bound_only.c       | 58 +++++++++++++++++++
+>   1 file changed, 58 insertions(+)
+>   create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_dev_bound_only.c
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_dev_bound_only.c b/tools/testing/selftests/bpf/prog_tests/xdp_dev_bound_only.c
+> new file mode 100644
+> index 000000000000..5ee4c16d2e21
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_dev_bound_only.c
+> @@ -0,0 +1,58 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <net/if.h>
+> +#include <test_progs.h>
+> +#include <network_helpers.h>
+> +
+> +#define LOCAL_NETNS "xdp_dev_bound_only_netns"
+> +
+> +int load_dummy_prog(char *name, __u32 ifindex, __u32 flags)
 
-Fix these now to get ahead of it before it's an error.
+I added static.
 
-Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
----
- scripts/clang-tools/gen_compile_commands.py | 2 +-
- scripts/gdb/linux/symbols.py                | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> +{
+> +	struct bpf_insn insns[] = { BPF_MOV64_IMM(BPF_REG_0, 0), BPF_EXIT_INSN() };
+> +	LIBBPF_OPTS(bpf_prog_load_opts, opts);
+> +
+> +	opts.prog_flags = flags;
+> +	opts.prog_ifindex = ifindex;
+> +	return bpf_prog_load(BPF_PROG_TYPE_XDP, name, "GPL", insns, ARRAY_SIZE(insns), &opts);
+> +}
+> +
+> +/* A test case for bpf_offload_netdev->offload handling bug:
+> + * - create a veth device (does not support offload);
+> + * - create a device bound XDP program with BPF_F_XDP_DEV_BOUND_ONLY flag
+> + *   (such programs are not offloaded);
+> + * - create a device bound XDP program without flags (such programs are offloaded).
+> + * This might lead to 'BUG: kernel NULL pointer dereference'.
+> + */
+> +void test_xdp_dev_bound_only_offdev(void)
+> +{
+> +	struct nstoken *tok = NULL;
+> +	__u32 ifindex;
+> +	int fd1 = -1;
+> +	int fd2 = -1;
+> +
+> +	SYS(out, "ip netns add " LOCAL_NETNS);
+> +	tok = open_netns(LOCAL_NETNS);
 
-diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
-index a84cc5737c2c..649a80005c83 100755
---- a/scripts/clang-tools/gen_compile_commands.py
-+++ b/scripts/clang-tools/gen_compile_commands.py
-@@ -170,7 +170,7 @@ def process_line(root_directory, command_prefix, file_path):
-     # escape the pound sign '#', either as '\#' or '$(pound)' (depending on the
-     # kernel version). The compile_commands.json file is not interepreted
-     # by Make, so this code replaces the escaped version with '#'.
--    prefix = command_prefix.replace('\#', '#').replace('$(pound)', '#')
-+    prefix = command_prefix.replace('\\#', '#').replace('$(pound)', '#')
- 
-     # Use os.path.abspath() to normalize the path resolving '.' and '..' .
-     abs_path = os.path.abspath(os.path.join(root_directory, file_path))
-diff --git a/scripts/gdb/linux/symbols.py b/scripts/gdb/linux/symbols.py
-index 5179edd1b627..2a55c4b83306 100644
---- a/scripts/gdb/linux/symbols.py
-+++ b/scripts/gdb/linux/symbols.py
-@@ -82,7 +82,7 @@ lx-symbols command."""
-         self.module_files_updated = True
- 
-     def _get_module_file(self, module_name):
--        module_pattern = ".*/{0}\.ko(?:.debug)?$".format(
-+        module_pattern = r".*/{0}\.ko(?:.debug)?$".format(
-             module_name.replace("_", r"[_\-]"))
-         for name in self.module_files:
-             if re.match(module_pattern, name) and os.path.exists(name):
--- 
-2.41.0
+Also added NULL check for tok.
+
+> +	SYS(out, "ip link add eth42 type veth");
+> +	ifindex = if_nametoindex("eth42");
+> +	if (!ASSERT_NEQ(ifindex, 0, "if_nametoindex")) {
+> +		perror("if_nametoindex");
+> +		goto out;
+> +	}
+> +	fd1 = load_dummy_prog("dummy1", ifindex, BPF_F_XDP_DEV_BOUND_ONLY);
+> +	if (!ASSERT_GE(fd1, 0, "load_dummy_prog #1")) {
+> +		perror("load_dummy_prog #1");
+> +		goto out;
+> +	}
+> +	/* Program with ifindex is considered offloaded, however veth
+> +	 * does not support offload => error should be reported.
+> +	 */
+> +	fd2 = load_dummy_prog("dummy2", ifindex, 0);
+> +	ASSERT_EQ(fd2, -EINVAL, "load_dummy_prog #2 (offloaded)");
+> +
+> +out:
+> +	close(fd1);
+> +	close(fd2);
+> +	SYS_NOFAIL("ip link delete eth42");
+> +	SYS_NOFAIL("ip netns del " LOCAL_NETNS);
+> +	if (tok)
+
+close_netns() can handle NULL, so removed this tok check.
+
+Applied. Thanks for the fix and test!
+
+> +		close_netns(tok);
+> +}
 
