@@ -1,46 +1,45 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA4217C8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08C5517D9
 	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 01:11:20 +0000 (UTC)
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371979AF51
-	for <bpf@vger.kernel.org>; Mon, 11 Sep 2023 17:58:09 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-52eed139ec2so4888433a12.2
-        for <bpf@vger.kernel.org>; Mon, 11 Sep 2023 17:58:09 -0700 (PDT)
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182DBEADD6
+	for <bpf@vger.kernel.org>; Mon, 11 Sep 2023 17:57:58 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2bf8b9c5ca0so28363891fa.0
+        for <bpf@vger.kernel.org>; Mon, 11 Sep 2023 17:57:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694480212; x=1695085012; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=62Tv26+GzZO2QOffDbc9TVLFHEBItRH7qqMDHFtHY4A=;
-        b=JFMNZdhHCD/72iqcygwY7cEj2SB8u2H3aQu4I5B6A/Qpr19jxJfkq2Y6ZCDUUo5bNg
-         nfl+y1HM61NMG7QuE/ZnPjLvA09dbkJdIIjd6gbKBkzJ+tiqFW7fl7La8dAhYvyem/K9
-         E8zxyj+PxRns5+TTsu3j1pLgLStXypyoWq0Bx8q+AuN/cMS4qOOwp4S9IHgYcwGghD+0
-         vUJaYS5DbVIaXeD0L2AQWNdaF/E+3m0zJZSOBzWUqNwt+9mUPoES1plraW8hMpBFZhaP
-         IRCvuS2Ug4/Y6QT+R8AYiI+6/QDG8q6b9RZCpeGweq+pRb22gfZ7Yn44g8F8VtzNhni9
-         DmYw==
+        d=gmail.com; s=20221208; t=1694480210; x=1695085010; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y2KeU1NE47LCW3P4VpCbOe+Lmrn9Jf8vvs/VSfYTWbc=;
+        b=g0v85jzuL5CZFe0A8A2idWw9lNbj1d0wEA8/LiTkYrQGFQFEhP98/SD3HSZTc//EoG
+         Ac7RTHc5YC6XaahvmRKWO3yxnBbsjPsurprJfMTJIzyZzmroX4Ytop0iyWgJ06dCcKvZ
+         geLNYrKGVZpNbUW5w+Wh9P6SZU2ab8d+0rsfG2wahSARu0RbtEO9eCTQoI0dG0Ftv7AE
+         CA6rxwRgqKhXHTTYCBzau0SAFUzYT1E6QoTPz0qjcWUmrPHC1fy44FJOrwtFmF1WamUt
+         s4Pofhgud61xUdaIcQmb3EeiKlp2X2meiABCv5SqTdPuwnDZsYCVoYYIoFdtBI2sr49C
+         mMTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694480212; x=1695085012;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=62Tv26+GzZO2QOffDbc9TVLFHEBItRH7qqMDHFtHY4A=;
-        b=nMAp2iJ1jSGFt3HUScKUuyeN9PGDO7F5BzQtVPPM2Ne4RvGoLXbPnm3XGSXnORptfy
-         wsD1x+4yfZ8fUdPbZOeW8jIkfBz/RmiRxHn3wwKek//Fvc7LG528E2enpRuKF0bB1odT
-         GF4Pb98mEHRb6jDzEmDeFsbuz1n3GpdgKh7g1uGkhCgtyH3QmASf0GMNsHbNAYo2NyJ2
-         K4WrcJZrJv6cUQlBPmAbsyDv7roY3eWoq+HXyUwezSD3IoRclpyWKkBUfqNPaBzfXtGg
-         bRQnARYNVWMS5knv/s+zr0aB0KifCIjEqRvuU41veM+twU5maWkwDYKQbXhlZZxldPQo
-         WNmg==
-X-Gm-Message-State: AOJu0YxdAczFezTGt1Rprn7L7YeRdnk4Dreiqfk8ToxjeYX6kz292UH6
-	fprVaP4EqUMUR3qg2hajicn3O9PJ75+Fzw==
-X-Google-Smtp-Source: AGHT+IFaTejynSwqYgBfG2Zyr7NVRDNewlCXJu5V6M8qPJbFoZj5kOaPPayQMOJ7+SPfBaKfi0IRsw==
-X-Received: by 2002:a17:907:2cca:b0:9a1:bf00:ae52 with SMTP id hg10-20020a1709072cca00b009a1bf00ae52mr8565305ejc.62.1694480212047;
-        Mon, 11 Sep 2023 17:56:52 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1694480210; x=1695085010;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y2KeU1NE47LCW3P4VpCbOe+Lmrn9Jf8vvs/VSfYTWbc=;
+        b=CEwP8G5zHctbZW7m5NSbQmrcFpMChk5cMAyTVaBfH2DehlJNVpsZ6lX0rWRAx6+hOd
+         62JNsCWBL1qQsUlZjb3O5H+F1oKPaTR2cRSKwLAR8Naoct+c9GERJPNQxMuzMRuAHx6E
+         SQA7Ecw7vxNbfytZFl6/xB30T7oPZhSLZhWPHw44lwocn6fz8ToGUb3hsKhUpUzTje0Z
+         xGfj+sjc8Y+JztAjyO2/hIhIfvq9eyKSMV/JnPJlapA5ef1AxaYvyoMx0yuGjfYYQTBa
+         21PrmMzOHaTX8J9I1CqS2Ych1ASIi0tuxCe/m+YL36KyKKXXrTb0Gug0Rtc4lQ/KjZWz
+         iHuw==
+X-Gm-Message-State: AOJu0Yymz33hFhXeMjl55cTefjNcI0TeanFH9XezWOzwJYQKaepEVTCs
+	xY2iKsmNbZFX/JPiL6fHDCJv2UrO/atzdQ==
+X-Google-Smtp-Source: AGHT+IFMXj+wuVn15AUmlPxsrWIXKX3zAJBZ+yukR+f1w3M5pup3zyo/q3H2pKpQJfMZj36qM7ewTA==
+X-Received: by 2002:a2e:9e03:0:b0:2bc:f5a0:cc25 with SMTP id e3-20020a2e9e03000000b002bcf5a0cc25mr8350234ljk.2.1694480209540;
+        Mon, 11 Sep 2023 17:56:49 -0700 (PDT)
 Received: from bigfoot.. (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id gt33-20020a1709072da100b009ad854daea6sm272153ejc.132.2023.09.11.17.56.51
+        by smtp.gmail.com with ESMTPSA id gt33-20020a1709072da100b009ad854daea6sm272153ejc.132.2023.09.11.17.56.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 17:56:51 -0700 (PDT)
+        Mon, 11 Sep 2023 17:56:49 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -52,12 +51,10 @@ Cc: andrii@kernel.org,
 	sdf@google.com,
 	kuba@kernel.org,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Offloaded prog after non-offloaded should not cause BUG
-Date: Tue, 12 Sep 2023 03:55:38 +0300
-Message-ID: <20230912005539.2248244-3-eddyz87@gmail.com>
+Subject: [PATCH bpf-next 0/2] Avoid dummy bpf_offload_netdev in __bpf_prog_dev_bound_init
+Date: Tue, 12 Sep 2023 03:55:36 +0300
+Message-ID: <20230912005539.2248244-1-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230912005539.2248244-1-eddyz87@gmail.com>
-References: <20230912005539.2248244-1-eddyz87@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -72,82 +69,27 @@ X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Check what happens if non-offloaded dev bound BPF
-program is followed by offloaded dev bound program.
-Test case adapated from syzbot report [1].
+For a device bound BPF program with flag BPF_F_XDP_DEV_BOUND_ONLY,
+in case if device does not support offload, __bpf_prog_dev_bound_init()
+creates a dummy bpf_offload_netdev struct with .offdev field set to NULL.
+
+This dummy struct might be reused for programs without this flag
+bound to the same device. However, bpf_prog_offload_verifier_prep()
+that uses bpf_offload_netdev assumes that .offdev field cannot be NULL.
+
+This bug was reported by syzbot in [1].
 
 [1] https://lore.kernel.org/bpf/000000000000d97f3c060479c4f8@google.com/
 
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
----
+Eduard Zingerman (2):
+  bpf: Avoid dummy bpf_offload_netdev in __bpf_prog_dev_bound_init
+  selftests/bpf: Offloaded prog after non-offloaded should not cause BUG
+
+ kernel/bpf/offload.c                          | 12 ++--
  .../bpf/prog_tests/xdp_dev_bound_only.c       | 58 +++++++++++++++++++
- 1 file changed, 58 insertions(+)
+ 2 files changed, 65 insertions(+), 5 deletions(-)
  create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_dev_bound_only.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_dev_bound_only.c b/tools/testing/selftests/bpf/prog_tests/xdp_dev_bound_only.c
-new file mode 100644
-index 000000000000..5ee4c16d2e21
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_dev_bound_only.c
-@@ -0,0 +1,58 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <net/if.h>
-+#include <test_progs.h>
-+#include <network_helpers.h>
-+
-+#define LOCAL_NETNS "xdp_dev_bound_only_netns"
-+
-+int load_dummy_prog(char *name, __u32 ifindex, __u32 flags)
-+{
-+	struct bpf_insn insns[] = { BPF_MOV64_IMM(BPF_REG_0, 0), BPF_EXIT_INSN() };
-+	LIBBPF_OPTS(bpf_prog_load_opts, opts);
-+
-+	opts.prog_flags = flags;
-+	opts.prog_ifindex = ifindex;
-+	return bpf_prog_load(BPF_PROG_TYPE_XDP, name, "GPL", insns, ARRAY_SIZE(insns), &opts);
-+}
-+
-+/* A test case for bpf_offload_netdev->offload handling bug:
-+ * - create a veth device (does not support offload);
-+ * - create a device bound XDP program with BPF_F_XDP_DEV_BOUND_ONLY flag
-+ *   (such programs are not offloaded);
-+ * - create a device bound XDP program without flags (such programs are offloaded).
-+ * This might lead to 'BUG: kernel NULL pointer dereference'.
-+ */
-+void test_xdp_dev_bound_only_offdev(void)
-+{
-+	struct nstoken *tok = NULL;
-+	__u32 ifindex;
-+	int fd1 = -1;
-+	int fd2 = -1;
-+
-+	SYS(out, "ip netns add " LOCAL_NETNS);
-+	tok = open_netns(LOCAL_NETNS);
-+	SYS(out, "ip link add eth42 type veth");
-+	ifindex = if_nametoindex("eth42");
-+	if (!ASSERT_NEQ(ifindex, 0, "if_nametoindex")) {
-+		perror("if_nametoindex");
-+		goto out;
-+	}
-+	fd1 = load_dummy_prog("dummy1", ifindex, BPF_F_XDP_DEV_BOUND_ONLY);
-+	if (!ASSERT_GE(fd1, 0, "load_dummy_prog #1")) {
-+		perror("load_dummy_prog #1");
-+		goto out;
-+	}
-+	/* Program with ifindex is considered offloaded, however veth
-+	 * does not support offload => error should be reported.
-+	 */
-+	fd2 = load_dummy_prog("dummy2", ifindex, 0);
-+	ASSERT_EQ(fd2, -EINVAL, "load_dummy_prog #2 (offloaded)");
-+
-+out:
-+	close(fd1);
-+	close(fd2);
-+	SYS_NOFAIL("ip link delete eth42");
-+	SYS_NOFAIL("ip netns del " LOCAL_NETNS);
-+	if (tok)
-+		close_netns(tok);
-+}
 -- 
 2.41.0
 
