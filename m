@@ -1,88 +1,69 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDAC633D2
-	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 19:57:57 +0000 (UTC)
-Received: from out-219.mta1.migadu.com (out-219.mta1.migadu.com [95.215.58.219])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143E91B2
-	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 12:57:57 -0700 (PDT)
-Message-ID: <8b272d63-5dd7-13bd-7691-d061895fdbe1@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1694548674;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=I8O2Nscd47hkRROGFh80UDSBByNjzYNNhSIVk3mOdSU=;
-	b=NPxpvABMTXZYABRLcfwsASp2EUogpYid24GMsBkMb4WxznmknrD7VDDnNsXtQJQ5Q6VCsF
-	Qxebw4mdfJHig5Lgf4B1sjGQnCxeT9GAtgzBDAe6xlNX8y3vhYR3hGJQt7Yp8xyyxJXJpa
-	AkluNAMk/4AEKPJCebJ0wgc7mxxc0zk=
-Date: Tue, 12 Sep 2023 12:57:47 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FFC41FA8
+	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 20:20:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8CCF6C433C9;
+	Tue, 12 Sep 2023 20:20:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1694550025;
+	bh=hHFOxkwWPUtRzqpYo757WoZUZn4Twmz5EfGjFfx3rb8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=S10YmzMZz4XIQRC3fXmBgknQ8g7X57k/VJQPqviJOj0AgPZAzlCTwEoysB/nJYQ0w
+	 d9PL6WUaqmQrMnLRkEvpxEpNqTFdjyQhNCU0NRpIUipMdYnBD5shVdxXBI33GAJmzI
+	 9/TxL9HwbbN0TitzSn21gZNAKoi0xbVakDz6PBZ8jVGaMtXAapIWgxoJTCDHmaafIF
+	 9P2xa6hf7S8qk6W2AilFxrpWLck8k0tmOGQqzQ/xUHHXXdmqH8BoY9FTDWN8oqGdxe
+	 igoD0VA3DFyDxFmd5F/78zUVmwmQBbqXKRhOj3uLzWPIjtSifPl9ffMP/zQfnU/ScA
+	 CCBXDJm9l/39A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6FF15C04DD9;
+	Tue, 12 Sep 2023 20:20:25 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 2/6] bpf: Introduce css_task open-coded
- iterator kfuncs
-Content-Language: en-US
-To: Chuyi Zhou <zhouchuyi@bytedance.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@kernel.org, tj@kernel.org, linux-kernel@vger.kernel.org,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] bpf: Fix a erroneous check after snprintf()
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <169455002545.29579.9098192345328945185.git-patchwork-notify@kernel.org>
+Date: Tue, 12 Sep 2023 20:20:25 +0000
+References: <393bdebc87b22563c08ace094defa7160eb7a6c0.1694190795.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <393bdebc87b22563c08ace094defa7160eb7a6c0.1694190795.git.christophe.jaillet@wanadoo.fr>
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+ haoluo@google.com, jolsa@kernel.org, void@manifault.com,
+ linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
  bpf@vger.kernel.org
-References: <20230912070149.969939-1-zhouchuyi@bytedance.com>
- <20230912070149.969939-3-zhouchuyi@bytedance.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20230912070149.969939-3-zhouchuyi@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 9/12/23 12:01 AM, Chuyi Zhou wrote:
-> +__bpf_kfunc int bpf_iter_css_task_new(struct bpf_iter_css_task *it,
-> +		struct cgroup_subsys_state *css, unsigned int flags)
-> +{
-> +	struct bpf_iter_css_task_kern *kit = (void *)it;
-> +
-> +	BUILD_BUG_ON(sizeof(struct bpf_iter_css_task_kern) != sizeof(struct bpf_iter_css_task));
-> +	BUILD_BUG_ON(__alignof__(struct bpf_iter_css_task_kern) !=
-> +					__alignof__(struct bpf_iter_css_task));
-> +
-> +	switch (flags) {
-> +	case CSS_TASK_ITER_PROCS | CSS_TASK_ITER_THREADED:
-> +	case CSS_TASK_ITER_PROCS:
-> +	case 0:
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	kit->css_it = kzalloc(sizeof(struct css_task_iter), GFP_KERNEL);
-> +	if (!kit->css_it)
-> +		return -ENOMEM;
-> +	css_task_iter_start(css, flags, kit->css_it);
-> +	return 0;
-> +}
-> +
+Hello:
 
-> +static bool check_css_task_iter_allowlist(struct bpf_verifier_env *env)
-> +{
-> +	enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
-> +
-> +	switch (prog_type) {
-> +	case BPF_PROG_TYPE_LSM:
+This patch was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-This will allow the non-sleepable lsm prog to call bpf_iter_css_task_new. The 
-above kzalloc(GFP_KERNEL) in bpf_iter_css_task_new should trigger a lockdep 
-error in the lsm selftest in patch 6.
+On Fri,  8 Sep 2023 18:33:35 +0200 you wrote:
+> snprintf() does not return negative error code on error, it returns the
+> number of characters which *would* be generated for the given input.
+> 
+> Fix the error handling check.
+> 
+> Fixes: 57539b1c0ac2 ("bpf: Enable annotating trusted nested pointers")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> 
+> [...]
 
-> +		return true;
-> +	case BPF_TRACE_ITER:
-> +		return env->prog->aux->sleepable;
-> +	default:
-> +		return false;
-> +	}
-> +}
+Here is the summary with links:
+  - bpf: Fix a erroneous check after snprintf()
+    https://git.kernel.org/bpf/bpf/c/a8f12572860a
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
