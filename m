@@ -1,32 +1,32 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15AB0A933
-	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 21:30:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7B7DA933
+	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 21:32:20 +0000 (UTC)
 Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B9410EB
-	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 14:30:03 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38CKgKGu006347
-	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 14:30:03 -0700
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055EA10CA
+	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 14:32:19 -0700 (PDT)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38CKg1Hc013873
+	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 14:32:19 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3t2y8t8ecf-7
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3t2y8d0f96-13
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 14:30:02 -0700
-Received: from twshared40933.03.prn6.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 14:32:19 -0700
+Received: from twshared68648.02.prn6.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 12 Sep 2023 14:29:32 -0700
+ 15.1.2507.23; Tue, 12 Sep 2023 14:32:16 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id BA86537F40769; Tue, 12 Sep 2023 14:29:29 -0700 (PDT)
+	id A80FE37F4073D; Tue, 12 Sep 2023 14:29:27 -0700 (PDT)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>
 CC: <linux-fsdevel@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
         <keescook@chromium.org>, <brauner@kernel.org>,
         <lennart@poettering.net>, <kernel-team@meta.com>, <sargun@sargun.me>
-Subject: [PATCH v4 bpf-next 10/12] libbpf: add BPF token support to bpf_btf_load() API
-Date: Tue, 12 Sep 2023 14:29:04 -0700
-Message-ID: <20230912212906.3975866-11-andrii@kernel.org>
+Subject: [PATCH v4 bpf-next 09/12] libbpf: add BPF token support to bpf_map_create() API
+Date: Tue, 12 Sep 2023 14:29:03 -0700
+Message-ID: <20230912212906.3975866-10-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230912212906.3975866-1-andrii@kernel.org>
 References: <20230912212906.3975866-1-andrii@kernel.org>
@@ -39,66 +39,59 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: oMMWdF2zGvmPsvLS_9hp0QQyrRAfFYX3
-X-Proofpoint-ORIG-GUID: oMMWdF2zGvmPsvLS_9hp0QQyrRAfFYX3
+X-Proofpoint-GUID: Dn9FTZEhz6S6t49_zwZeZ8Pn_TTbwsOO
+X-Proofpoint-ORIG-GUID: Dn9FTZEhz6S6t49_zwZeZ8Pn_TTbwsOO
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
  definitions=2023-09-12_20,2023-09-05_01,2023-05-22_02
 
-Allow user to specify token_fd for bpf_btf_load() API that wraps
-kernel's BPF_BTF_LOAD command. This allows loading BTF from unprivileged
-process as long as it has BPF token allowing BPF_BTF_LOAD command, which
-can be created and delegated by privileged process.
+Add ability to provide token_fd for BPF_MAP_CREATE command through
+bpf_map_create() API.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
  tools/lib/bpf/bpf.c | 4 +++-
- tools/lib/bpf/bpf.h | 3 ++-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ tools/lib/bpf/bpf.h | 4 +++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index f9ee7608a96a..4547ae1037af 100644
+index 593ff9ea120d..f9ee7608a96a 100644
 --- a/tools/lib/bpf/bpf.c
 +++ b/tools/lib/bpf/bpf.c
-@@ -1168,7 +1168,7 @@ int bpf_raw_tracepoint_open(const char *name, int p=
-rog_fd)
-=20
- int bpf_btf_load(const void *btf_data, size_t btf_size, struct bpf_btf_l=
-oad_opts *opts)
+@@ -169,7 +169,7 @@ int bpf_map_create(enum bpf_map_type map_type,
+ 		   __u32 max_entries,
+ 		   const struct bpf_map_create_opts *opts)
  {
--	const size_t attr_sz =3D offsetofend(union bpf_attr, btf_log_true_size)=
-;
-+	const size_t attr_sz =3D offsetofend(union bpf_attr, btf_token_fd);
+-	const size_t attr_sz =3D offsetofend(union bpf_attr, map_extra);
++	const size_t attr_sz =3D offsetofend(union bpf_attr, map_token_fd);
  	union bpf_attr attr;
- 	char *log_buf;
- 	size_t log_size;
-@@ -1193,6 +1193,8 @@ int bpf_btf_load(const void *btf_data, size_t btf_s=
-ize, struct bpf_btf_load_opts
+ 	int fd;
 =20
- 	attr.btf =3D ptr_to_u64(btf_data);
- 	attr.btf_size =3D btf_size;
-+	attr.btf_token_fd =3D OPTS_GET(opts, token_fd, 0);
+@@ -198,6 +198,8 @@ int bpf_map_create(enum bpf_map_type map_type,
+ 	attr.numa_node =3D OPTS_GET(opts, numa_node, 0);
+ 	attr.map_ifindex =3D OPTS_GET(opts, map_ifindex, 0);
+=20
++	attr.map_token_fd =3D OPTS_GET(opts, token_fd, 0);
 +
- 	/* log_level =3D=3D 0 and log_buf !=3D NULL means "try loading without
- 	 * log_buf, but retry with log_buf and log_level=3D1 on error", which i=
-s
- 	 * consistent across low-level and high-level BTF and program loading
+ 	fd =3D sys_bpf_fd(BPF_MAP_CREATE, &attr, attr_sz);
+ 	return libbpf_err_errno(fd);
+ }
 diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 415ecebd41aa..20351bfba533 100644
+index 16d5c257066c..415ecebd41aa 100644
 --- a/tools/lib/bpf/bpf.h
 +++ b/tools/lib/bpf/bpf.h
-@@ -132,9 +132,10 @@ struct bpf_btf_load_opts {
- 	 * If kernel doesn't support this feature, log_size is left unchanged.
- 	 */
- 	__u32 log_true_size;
-+	__u32 token_fd;
- 	size_t :0;
- };
--#define bpf_btf_load_opts__last_field log_true_size
-+#define bpf_btf_load_opts__last_field token_fd
+@@ -51,8 +51,10 @@ struct bpf_map_create_opts {
 =20
- LIBBPF_API int bpf_btf_load(const void *btf_data, size_t btf_size,
- 			    struct bpf_btf_load_opts *opts);
+ 	__u32 numa_node;
+ 	__u32 map_ifindex;
++
++	__u32 token_fd;
+ };
+-#define bpf_map_create_opts__last_field map_ifindex
++#define bpf_map_create_opts__last_field token_fd
+=20
+ LIBBPF_API int bpf_map_create(enum bpf_map_type map_type,
+ 			      const char *map_name,
 --=20
 2.34.1
 
