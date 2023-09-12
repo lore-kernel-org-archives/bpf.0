@@ -1,23 +1,23 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23E4FAD57;
-	Tue, 12 Sep 2023 20:20:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9A83DC433CA;
-	Tue, 12 Sep 2023 20:20:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E15B647
+	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 20:20:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E7AFEC433C8;
+	Tue, 12 Sep 2023 20:20:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1694550025;
-	bh=gU/CeO6Y/T1uavamob8EZRBzi77IzZ7qj2zJ7oTQMBo=;
+	s=k20201202; t=1694550027;
+	bh=qcOXM0cVBmy9bKgRtSElnIjmRIk9WoM9JMQ+/ejaCj8=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=obbcqfaHsYA2dOc9urGdZ6AGLjEfPrMnjD1rNHGNmY70wJoLJkTPRIR9OLeNij+5P
-	 iqVGZh1xteAPm18aaCoduzHjQXmx6cGfxvtgW3zEtZBB4crdsVfha8pqdDsnDo3lpt
-	 YikCT7NTwNa0RCMkm/G7C8ikeXUFQsxB6jp/2cj4nZHFWDxyZfpvyBBHskYMbYZLAw
-	 +RYMavHAGnuAEok6ewyjgam4Cwcrg9NhZ4SyDJg6y57KEDhdhDIcDBKbgWqob8VCfe
-	 9LTAegjGiM0sxEN6Qd4PWd3gWSAD710n9n/mRgLdgDsZximiVDsm3DDvEDc6ucsz7I
-	 ESUYFCRPmfcJw==
+	b=EfF0d5/jE8m9NV3n/3f+5mKd12i8ib1tVBt2SLELCBOCehdJO38JO7+5kJTxjUbnF
+	 DYMWMCdGCyrk/Q8OFeum3aKZw1wDVEz5LUdSwARY6yq56rhQxwKXQ2usDqaLQ5qUtl
+	 RNITbMHvmwXqNHdeA3OzlIYwFM2aJ/LeHDLuifDf1kK1ajWIwRzGTtRAEqWcEKB7Rf
+	 vAlBDdPIn6GT4WbUUjxaZJUmsSmh8Y+ZmaXuT7IUR4vuOdKl1mO/cGMi7Y/IKHtRW5
+	 2mV7WokAv//eIZPpqFbYASdGQXzrTWLWzknYMSLVasPAfJVMU+vArYdMZPBt2hMH1f
+	 Izclp2a2kLj6Q==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7CE56E1C290;
-	Tue, 12 Sep 2023 20:20:25 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D3667E1C282;
+	Tue, 12 Sep 2023 20:20:26 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -26,38 +26,41 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf] selftests/bpf: fix unpriv_disabled check in test_verifier
+Subject: Re: [PATCH bpf-next 0/3] bpf, x64: Fix tailcall infinite loop
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <169455002550.29579.5589738448347101961.git-patchwork-notify@kernel.org>
-Date: Tue, 12 Sep 2023 20:20:25 +0000
-References: <20230912120631.213139-1-asavkov@redhat.com>
-In-Reply-To: <20230912120631.213139-1-asavkov@redhat.com>
-To: Artem Savkov <asavkov@redhat.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- bpf@vger.kernel.org, netdev@vger.kernel.org, eddyz87@gmail.com,
- linux-kernel@vger.kernel.org
+ <169455002685.29579.6381172628752155950.git-patchwork-notify@kernel.org>
+Date: Tue, 12 Sep 2023 20:20:26 +0000
+References: <20230912150442.2009-1-hffilwlqm@gmail.com>
+In-Reply-To: <20230912150442.2009-1-hffilwlqm@gmail.com>
+To: Leon Hwang <hffilwlqm@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, maciej.fijalkowski@intel.com, song@kernel.org,
+ iii@linux.ibm.com, xukuohai@huawei.com, kernel-patches-bot@fb.com
 
 Hello:
 
-This patch was applied to bpf/bpf.git (master)
+This series was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Tue, 12 Sep 2023 14:06:31 +0200 you wrote:
-> Commit 1d56ade032a49 changed the function get_unpriv_disabled() to
-> return its results as a bool instead of updating a global variable, but
-> test_verifier was not updated to keep in line with these changes. Thus
-> unpriv_disabled is always false in test_verifier and unprivileged tests
-> are not properly skipped on systems with unprivileged bpf disabled.
+On Tue, 12 Sep 2023 23:04:39 +0800 you wrote:
+> This patch series fixes a tailcall infinite loop on x64.
 > 
-> Fixes: 1d56ade032a49 ("selftests/bpf: Unprivileged tests for test_loader.c")
-> Signed-off-by: Artem Savkov <asavkov@redhat.com>
+> From commit ebf7d1f508a73871 ("bpf, x64: rework pro/epilogue and tailcall
+> handling in JIT"), the tailcall on x64 works better than before.
+> 
+> From commit e411901c0b775a3a ("bpf: allow for tailcalls in BPF subprograms
+> for x64 JIT"), tailcall is able to run in BPF subprograms on x64.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf] selftests/bpf: fix unpriv_disabled check in test_verifier
-    https://git.kernel.org/bpf/bpf/c/d128860dbb29
+  - [bpf-next,1/3] bpf, x64: Comment tail_call_cnt initialisation
+    https://git.kernel.org/bpf/bpf-next/c/2bee9770f3c6
+  - [bpf-next,2/3] bpf, x64: Fix tailcall infinite loop
+    https://git.kernel.org/bpf/bpf-next/c/2b5dcb31a19a
+  - [bpf-next,3/3] selftests/bpf: Add testcases for tailcall infinite loop fixing
+    https://git.kernel.org/bpf/bpf-next/c/e13b5f2f3ba3
 
 You are awesome, thank you!
 -- 
