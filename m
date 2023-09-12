@@ -1,94 +1,66 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96DAC8488
-	for <bpf@vger.kernel.org>; Mon, 11 Sep 2023 23:06:29 +0000 (UTC)
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24FB2CBD75
-	for <bpf@vger.kernel.org>; Mon, 11 Sep 2023 16:03:59 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-68fbbb953cfso1473316b3a.2
-        for <bpf@vger.kernel.org>; Mon, 11 Sep 2023 16:03:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694473371; x=1695078171; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Fx0gR2ESc4lJCkHeNwni0JEpr6/GKNTWX/V+qZxf4Do=;
-        b=yOo/fUz8DPGGqaxGWRsJvhhxCXY7VzWzCwL+tdAg3ysYlnn0plLAlnZPQTxxW5BNEs
-         wvKJ9i0JaYkLACBHaXRQOuj2tIRsYbUgBeKOs7Lzv6GKflv9OXogvJIHmqgJQBK31stE
-         Mqqc9kLrucrUWCwlegpqBvo03o08VtTdMC0fvEnq739guRD6XLmjfWkMPqDa7YcoHJmF
-         D4nl0iAy0Qss9gqCrpwB1GaYxhbsH0DqMTDt+evu13uD/Zr2exkkSBCDXQKtw1dp+s+7
-         8fmZ1fimzykgO+5tuozshixSYGXq6NI8YpcOOvOtvjvF0yIbapSpY87ht8ODLbmOn4+t
-         yz9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694473371; x=1695078171;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Fx0gR2ESc4lJCkHeNwni0JEpr6/GKNTWX/V+qZxf4Do=;
-        b=LZXGLK8cVSmsnWxJbZ2wJsvKVfsWSg8nTNwgKKo9txKT8T88LO2Quyr9gixkBGSJqX
-         7majgdHDbK7Aa9Xp5mVzFLwiiV6NaqmmoixkcEMrhh4J0rxukU8cb5Gc5e1x9fsM5eKW
-         aIx9W5oGAEyb8ya/ED3cawc9OL7wefbqeQ/VF3eDamQGlE5Pr13jaXI8BueZrZ/KUg37
-         h+lx0BYwe/xCJY/P0ZShuzYW0C3B7TboPyldA2oBYTQ3bMnsPL4/TnuzRvO5MGQxrrCk
-         I1vUdPS7XuVE1Lj/xJlnuyfQRF7kAQAyhR5RlFnsZV2RXjswt1YJS0shUHYnV6g23sZn
-         Yi7w==
-X-Gm-Message-State: AOJu0Yza10gKMzWOSgTRy1cqqGdVOsjVvUvqEGH5jbnB6DEJjR1PQEkk
-	o53jWt5QcJOE31U+Q5E6lCGSreaUeFZkNWmmkeYVcYL8CdkjQOpIiHg=
-X-Google-Smtp-Source: AGHT+IHHfIWUIjIzBE6AKQx2HgmCouux51fozxiALlTAf6+prejD6RO4cCCYO4UujkzNTsNXYdatZHi0Ok3aRyWfiC4=
-X-Received: by 2002:a05:6a00:c95:b0:68a:51dc:50c0 with SMTP id
- a21-20020a056a000c9500b0068a51dc50c0mr13544622pfv.32.1694472502737; Mon, 11
- Sep 2023 15:48:22 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 656FF14F97
+	for <bpf@vger.kernel.org>; Tue, 12 Sep 2023 00:30:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1E668C4163C;
+	Tue, 12 Sep 2023 00:30:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1694478627;
+	bh=KLjjVVXmrgBmEYHg8q0teeOp/4ipFC3Ut+Hc/DdQYJQ=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=VAySSY4mMiMZYRJHEcY/SeAXt1eTatYYhbR4d9ucanu8xrlQ6auObN0yW9kWrPWTs
+	 a3xuQGUcqxIWLW9s3ry/6MTjh7j+Yw+iyAj2RAL3g1HfqCEufKny7xRqrYwFmDx1yk
+	 X36fGggv/o+FvMGqZtsga5AMWM+G8bBdYKjkjp0j60a7vGanxdHbJXloZvlzQorcuQ
+	 j5WrcQN6wAzTZCOFQ4mJfBrZ29s3drZ1I2mq1ZJiPyCq/S5S9BWWomgAPnzgRuSm6v
+	 0++/8cmWjRS0UmlJNiygiSllQaugGOq+fBNzYitKQxAPMLwiXE5Y/C7PCki8EQt90c
+	 YkSj0ZDNneM+w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 03E07E1C280;
+	Tue, 12 Sep 2023 00:30:27 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230908225807.1780455-1-sdf@google.com> <20230908225807.1780455-3-sdf@google.com>
- <6c275fdc-4468-7573-a33c-35fc442c61c5@linux.dev>
-In-Reply-To: <6c275fdc-4468-7573-a33c-35fc442c61c5@linux.dev>
-From: Stanislav Fomichev <sdf@google.com>
-Date: Mon, 11 Sep 2023 15:48:10 -0700
-Message-ID: <CAKH8qBv78jTrktfThFK=Ze12tjgAsgYXyNaRy-3m8QE8J-xwuQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/3] bpf: expose information about supported xdp
- metadata kfunc
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, song@kernel.org, yhs@fb.com, john.fastabend@gmail.com, 
-	kpsingh@kernel.org, haoluo@google.com, jolsa@kernel.org, 
-	netdev@vger.kernel.org, Willem de Bruijn <willemb@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_INVALID,DKIM_SIGNED,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,SPF_NONE
-	autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] selftests/bpf: Correct map_fd to data_fd in
+ tailcalls
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <169447862701.16556.10767524281745060375.git-patchwork-notify@kernel.org>
+Date: Tue, 12 Sep 2023 00:30:27 +0000
+References: <20230906154256.95461-1-hffilwlqm@gmail.com>
+In-Reply-To: <20230906154256.95461-1-hffilwlqm@gmail.com>
+To: Leon Hwang <hffilwlqm@gmail.com>
+Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, maciej.fijalkowski@intel.com, jakub@cloudflare.com,
+ kernel-patches-bot@fb.com
 
-On Mon, Sep 11, 2023 at 3:11=E2=80=AFPM Martin KaFai Lau <martin.lau@linux.=
-dev> wrote:
->
-> On 9/8/23 3:58 PM, Stanislav Fomichev wrote:
-> > @@ -12,15 +13,24 @@ static int
-> >   netdev_nl_dev_fill(struct net_device *netdev, struct sk_buff *rsp,
-> >                  const struct genl_info *info)
-> >   {
-> > +     u64 xdp_rx_meta =3D 0;
-> >       void *hdr;
-> >
-> >       hdr =3D genlmsg_iput(rsp, info);
-> >       if (!hdr)
-> >               return -EMSGSIZE;
-> >
-> > +#define XDP_METADATA_KFUNC(_, flag, __, xmo) \
-> > +     if (netdev->xdp_metadata_ops->xmo) \
->
-> A NULL check is needed for netdev->xdp_metadata_ops.
+Hello:
 
-Oh, sure, will add, thanks!
+This patch was applied to bpf/bpf-next.git (master)
+by Martin KaFai Lau <martin.lau@kernel.org>:
 
-> > +             xdp_rx_meta |=3D flag;
-> > +XDP_METADATA_KFUNC_xxx
-> > +#undef XDP_METADATA_KFUNC
-> > +
->
+On Wed,  6 Sep 2023 23:42:56 +0800 you wrote:
+> Get and check data_fd. It should not check map_fd again.
+> 
+> Meanwhile, correct some 'return' to 'goto out'.
+> 
+> Thank the suggestion from Maciej in "bpf, x64: Fix tailcall infinite
+> loop"[0] discussions.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next] selftests/bpf: Correct map_fd to data_fd in tailcalls
+    https://git.kernel.org/bpf/bpf-next/c/96daa9874211
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
