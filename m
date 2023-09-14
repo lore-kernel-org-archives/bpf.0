@@ -1,32 +1,32 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFE69D2FF
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C78A0D2FC
 	for <bpf@vger.kernel.org>; Thu, 14 Sep 2023 23:12:32 +0000 (UTC)
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE672710
+Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C74270E
 	for <bpf@vger.kernel.org>; Thu, 14 Sep 2023 16:12:32 -0700 (PDT)
-Received: from pps.filterd (m0354651.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 38EL98Zk004048;
-	Thu, 14 Sep 2023 23:12:19 GMT
+Received: from pps.filterd (m0354653.ppops.net [127.0.0.1])
+	by mx0b-00206402.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 38EL8nlg001980;
+	Thu, 14 Sep 2023 23:12:11 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
 	 h=from:to:cc:subject:date:message-id:in-reply-to:references
 	:mime-version:content-transfer-encoding:content-type; s=default;
-	 bh=xHsuaCF+ji5JlvQ6uEDscbrgcEVIoNUmC1moDiZoHbY=; b=EtIe3b2jboAa
-	eKflg8S2/pBvDJa3VepOv/OhuSRCl5dcVj/9wuqzPVNoSA1zMyG7sZrQNJxjNyAP
-	nfcQ1RD5xuT10GnDaZDQJ7Pqn/KkOciYDxZyx3NRLp+d5NzFpeveepcDS1GUKLsT
-	7KE7eFDbHf6C6FNSLAqAIhgh34WBZkk8E5NlQidh9b1Z0Y3lR6wTjG4CoBUw3Xl2
-	9yzjLWEBARWhMLTH7jLJzktwrO1yn8+DBGAJY//GXsGJC/Q06zBK4N6kpUrSFzaP
-	Wy4aJN3d0f3sTCkWclyelf9dR4cEACf1fHhoQt4jQq2I+ry1A8Ss2c9aI1rlCYuN
-	ybGIdF6Llw==
+	 bh=3VKnBjyqIG9ubd52IwIp0UBhKUowISe6tTaia/J8dsE=; b=kCpOh7hOdZmQ
+	uNrQ94Z7Xbf/+bgXLfNt8DKkGNwEAhjFp7JuuVd6ckHP3rUGp8ocNZlTbbXCLkeI
+	fEZp3TAhns2Fvk29OjU7gRiGSZz/v8wIby2y25ar5kk3jzO+R7PaoVNUtoRtnDcM
+	JKOSmToZh/028eRg7rcOvq0+mINXfcQ0w5WhVlZHnvTj/cdUJHrPtKH5JE5/8CiN
+	Jifw1bMma+4EoBVc+QY6Lg7/mvbYQgtM9nOcOSGESV6SXVV8tCKkth8Rj8MvK1qe
+	4Ei2lk1IzDN7kLowOUmmK+UbC/KSAL3cOEebijPbQbRLXzU5ZS0ubKheuBjVa8/U
+	8MQfZhnupQ==
 Received: from 04wpexch06.crowdstrike.sys (dragosx.crowdstrike.com [208.42.231.60])
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 3t2y9966na-1
+	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 3t2y9fpcp5-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 14 Sep 2023 23:12:19 +0000 (GMT)
+	Thu, 14 Sep 2023 23:12:11 +0000 (GMT)
 Received: from LL-556NGK3.crowdstrike.sys (10.100.11.122) by
  04wpexch06.crowdstrike.sys (10.100.11.99) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.16; Thu, 14 Sep 2023 23:12:17 +0000
+ 15.2.1258.16; Thu, 14 Sep 2023 23:12:09 +0000
 From: Martin Kelly <martin.kelly@crowdstrike.com>
 To: <bpf@vger.kernel.org>
 CC: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
@@ -34,9 +34,9 @@ CC: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Martin KaFai Lau
 	<martin.lau@kernel.org>,
         Martin Kelly <martin.kelly@crowdstrike.com>
-Subject: [PATCH bpf-next 08/14] selftests/bpf: add tests for ring__avail_data_size
-Date: Thu, 14 Sep 2023 16:11:17 -0700
-Message-ID: <20230914231123.193901-9-martin.kelly@crowdstrike.com>
+Subject: [PATCH bpf-next 01/14] libbpf: refactor cleanup in ring_buffer__add
+Date: Thu, 14 Sep 2023 16:11:10 -0700
+Message-ID: <20230914231123.193901-2-martin.kelly@crowdstrike.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230914231123.193901-1-martin.kelly@crowdstrike.com>
 References: <20230914231123.193901-1-martin.kelly@crowdstrike.com>
@@ -52,48 +52,85 @@ X-Originating-IP: [10.100.11.122]
 X-ClientProxiedBy: 04WPEXCH12.crowdstrike.sys (10.100.11.116) To
  04wpexch06.crowdstrike.sys (10.100.11.99)
 X-Disclaimer: USA
-X-Proofpoint-GUID: Qy2_Vo5qfXw3G4q-FE1W92bgas_vOg78
-X-Proofpoint-ORIG-GUID: Qy2_Vo5qfXw3G4q-FE1W92bgas_vOg78
+X-Proofpoint-ORIG-GUID: tpSbVQu2kUsCcw_blFOVvPBM7F1n9TgV
+X-Proofpoint-GUID: tpSbVQu2kUsCcw_blFOVvPBM7F1n9TgV
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
  definitions=2023-09-14_12,2023-09-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=955
- priorityscore=1501 phishscore=0 mlxscore=0 suspectscore=0 bulkscore=0
- spamscore=0 malwarescore=0 lowpriorityscore=0 clxscore=1015 adultscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2308100000 definitions=main-2309140202
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1015 spamscore=0 phishscore=0 mlxscore=0 bulkscore=0
+ malwarescore=0 adultscore=0 impostorscore=0 suspectscore=0
+ lowpriorityscore=0 mlxlogscore=607 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2308100000 definitions=main-2309140202
 
-Add test for the new API ring__avail_data_size.
+Refactor the cleanup code in ring_buffer__add to use a unified err_out
+label. This reduces code duplication, as well as plugging a potential
+leak if mmap_sz != (__u64)(size_t)mmap_sz (currently this would miss
+unmapping tmp because ringbuf_unmap_ring isn't called).
 
 Signed-off-by: Martin Kelly <martin.kelly@crowdstrike.com>
 ---
- tools/testing/selftests/bpf/prog_tests/ringbuf.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ tools/lib/bpf/ringbuf.c | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf.c b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
-index 0400123da690..e4e1171e2e4d 100644
---- a/tools/testing/selftests/bpf/prog_tests/ringbuf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
-@@ -92,7 +92,7 @@ static void ringbuf_subtest(void)
- 	int page_size = getpagesize();
- 	void *mmap_ptr, *tmp_ptr;
- 	struct ring *ring;
--	unsigned long cons_pos, prod_pos;
-+	unsigned long avail_data, cons_pos, prod_pos;
+diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
+index 02199364db13..f2020807996c 100644
+--- a/tools/lib/bpf/ringbuf.c
++++ b/tools/lib/bpf/ringbuf.c
+@@ -118,10 +118,9 @@ int ring_buffer__add(struct ring_buffer *rb, int map_fd,
+ 	/* Map writable consumer page */
+ 	tmp = mmap(NULL, rb->page_size, PROT_READ | PROT_WRITE, MAP_SHARED, map_fd, 0);
+ 	if (tmp == MAP_FAILED) {
+-		err = -errno;
+ 		pr_warn("ringbuf: failed to mmap consumer page for map fd=%d: %d\n",
+ 			map_fd, err);
+-		return libbpf_err(err);
++		goto err_out;
+ 	}
+ 	r->consumer_pos = tmp;
  
- 	skel = test_ringbuf_lskel__open();
- 	if (CHECK(!skel, "skel_open", "skeleton open failed\n"))
-@@ -185,6 +185,10 @@ static void ringbuf_subtest(void)
- 	/* verify getting this data directly via the ring object yields the same
- 	 * results
+@@ -131,16 +130,15 @@ int ring_buffer__add(struct ring_buffer *rb, int map_fd,
  	 */
-+	avail_data = ring__avail_data_size(ring);
-+	CHECK(avail_data != 3 * rec_sz,
-+	      "err_ring_avail_size", "exp %ld, got %ld\n",
-+	      3L * rec_sz, avail_data);
- 	cons_pos = ring__consumer_pos(ring);
- 	CHECK(cons_pos != 0,
- 	      "err_ring_cons_pos", "exp %ld, got %ld\n",
+ 	mmap_sz = rb->page_size + 2 * (__u64)info.max_entries;
+ 	if (mmap_sz != (__u64)(size_t)mmap_sz) {
++		errno = E2BIG;
+ 		pr_warn("ringbuf: ring buffer size (%u) is too big\n", info.max_entries);
+-		return libbpf_err(-E2BIG);
++		goto err_out;
+ 	}
+ 	tmp = mmap(NULL, (size_t)mmap_sz, PROT_READ, MAP_SHARED, map_fd, rb->page_size);
+ 	if (tmp == MAP_FAILED) {
+-		err = -errno;
+-		ringbuf_unmap_ring(rb, r);
+ 		pr_warn("ringbuf: failed to mmap data pages for map fd=%d: %d\n",
+ 			map_fd, err);
+-		return libbpf_err(err);
++		goto err_out;
+ 	}
+ 	r->producer_pos = tmp;
+ 	r->data = tmp + rb->page_size;
+@@ -151,15 +149,18 @@ int ring_buffer__add(struct ring_buffer *rb, int map_fd,
+ 	e->events = EPOLLIN;
+ 	e->data.fd = rb->ring_cnt;
+ 	if (epoll_ctl(rb->epoll_fd, EPOLL_CTL_ADD, map_fd, e) < 0) {
+-		err = -errno;
+-		ringbuf_unmap_ring(rb, r);
+ 		pr_warn("ringbuf: failed to epoll add map fd=%d: %d\n",
+ 			map_fd, err);
+-		return libbpf_err(err);
++		goto err_out;
+ 	}
+ 
+ 	rb->ring_cnt++;
+ 	return 0;
++
++err_out:
++	err = -errno;
++	ringbuf_unmap_ring(rb, r);
++	return libbpf_err(err);
+ }
+ 
+ void ring_buffer__free(struct ring_buffer *rb)
 -- 
 2.34.1
 
