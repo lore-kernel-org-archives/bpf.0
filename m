@@ -1,167 +1,142 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 244D520B2B
-	for <bpf@vger.kernel.org>; Thu, 14 Sep 2023 12:13:43 +0000 (UTC)
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A1A1FC9
-	for <bpf@vger.kernel.org>; Thu, 14 Sep 2023 05:13:43 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id a640c23a62f3a-9adb9fa7200so131140566b.0
-        for <bpf@vger.kernel.org>; Thu, 14 Sep 2023 05:13:43 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB344208A8;
+	Thu, 14 Sep 2023 12:19:16 +0000 (UTC)
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEE31FCA;
+	Thu, 14 Sep 2023 05:19:16 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2bceb02fd2bso13590741fa.1;
+        Thu, 14 Sep 2023 05:19:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694693621; x=1695298421; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RTXlV2LvqMCVJ/I2tg55mmX5FwjBNIrWdoJP8/3/mBM=;
-        b=FLPrSktjhG9V0td20rJQ9hRHptcv3cxadQbhNhRAUHKsm0ow4hQttvrYmVoQVq6QBS
-         x0VP79QMYtN+gmeJVXiNvhoihrZSqatCtvkV5Xchgb4f8+lagtW3pdq5GvqbbIulGdYg
-         cB/P244xAMwQACtwNX/c8G2qejEGanOE59T5d8D4nBf8a5LC9hKSQxl1OmuyGb4K1AOP
-         sAAaRiPDGJzJPbXj/IslI0GkhTJLlg0zG6pPfyhmRy2FG+ZV9+1Wz2pnr+lLqi70tQxZ
-         7M0mIRCHLlea/bpB4NMnksUDWOtiF3DqVBpPKWZET7TPqz2ubt2/IjBuDyTmX1zRYbwT
-         wcew==
+        d=gmail.com; s=20221208; t=1694693954; x=1695298754; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MIai8kEfSJbbe1MQb/EaG0qclNnxV1ZUNxpY+1c/fgg=;
+        b=qmV0jNYFzd4yu8PKwd04qfL+mI9xgGFkLb87lchMQFEXPZjOob/HGUMSKKdUgWg/I+
+         C6VidDWz2FKfwMrkZdmllMdU+xiMIdDR49HCoMp4DKaK93gPI4DcJtsNhhISdWBU4G+y
+         Ewdz/Wy0ssW1Y5B3ImBpB028OUp3QiXnBGW0HaFNCyy0fCHu/S/xYscQEkZunQ4VLVJ6
+         iJhrem8IrNKZbjhiZ6+eOSQ6fSCwLRAt0R4qrCPhBTqEWTpJ8QgRe5sOC5CXcDeNTz44
+         H1dGoafP9gpbXEBeay4zMl0WlnEml/63d1yqpd58GaEMmZ9Fx4Gk68biaHRH8NnXu0Ue
+         Djrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694693621; x=1695298421;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RTXlV2LvqMCVJ/I2tg55mmX5FwjBNIrWdoJP8/3/mBM=;
-        b=advlykge+Af6F3+rg+KXe7ZAjknLRWF+c5TCScE2ZtnR/8IJW8Eo1LfCa1JbyCxQ/a
-         Axl0u4kadyKMc3snfm03WyOpHUO6pKbkBXemtwZyyue5aJLnDIkYYYjCeRcrCq2jyTzU
-         W8ZAHQoktN0PlsDKJui307h46xbGJ3cnt8YV2N2keajza5AzidhE01OeEs+bgINP+JSI
-         H961AOOgX3Uz6EUM8j4MCLFy/s9juCdRHvV1DKh9sB1Jav67ZC4Uc/XCSGBaC33nZdR6
-         CumU0R7JN8hQglUFB5/3dtugPyNzLmvpk9yCn8AUz1Q/vlvQGZzB6SyXiL+945i1a4HO
-         UTdw==
-X-Gm-Message-State: AOJu0YysuWsQTD8J2ohfcjmTcI7Mz/XXr99M3eeuBao5r/ulttIufS4D
-	MhqYa6MayKwrGJEkI0T9ziVm5DmZUu9Vo5Ut7/A=
-X-Google-Smtp-Source: AGHT+IE6ld5Q8C7HJHZrvfzgIt41swFKh3mx12aVzHq0+v4lPON2P3v9G1IixrSV6sEPOXHii6gHKC4gMG2qNDWE6UU=
-X-Received: by 2002:a17:907:6091:b0:9aa:1794:945b with SMTP id
- ht17-20020a170907609100b009aa1794945bmr2457519ejc.22.1694693621334; Thu, 14
- Sep 2023 05:13:41 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1694693954; x=1695298754;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MIai8kEfSJbbe1MQb/EaG0qclNnxV1ZUNxpY+1c/fgg=;
+        b=ogFSAXMYXDv+zglZfeTboxf6zxmc2AKymO8UnQ+nxj3KbUvX8bri9MxXV4olVO7qCa
+         3B7aFyAUHYylRHwlzLfacR8WMqxWj0Ms1NworiOh9tw25YOqTgN9NwaFC3338is+R9ij
+         qDUuOxqziEoDvUurX61KHqROwB+Vbk2DqEX06+tbiIdZ9bJ5b+mSWsBENigSGLeZOe04
+         A4e4V2lKAYtUrK/bYYKUVN4vAVKPlR0vv2+LvEINlpwZvWKFhtfw9EQSxj/wsBts/VzF
+         n7HQcaTVwFcCxok6ErPvSpGJtzqmDMgkOO7EhhurvatsoF/RpDYYQwtcpfckVP1xn8go
+         I2WA==
+X-Gm-Message-State: AOJu0Yyacvp8VNFN299huZ10kQPCDVV0giVRIzaWReqrbKLpfzTGY3OB
+	8V3w8ksYxYLdhqhH+WoijlE=
+X-Google-Smtp-Source: AGHT+IE9J7DJwE8nML/CCXVSNOTksA6PiQP2wqKee1UuUlkr5qnQ39Oe2QWwbbOyrqnQ31oguUUuxw==
+X-Received: by 2002:a2e:808d:0:b0:2bd:a5e:2255 with SMTP id i13-20020a2e808d000000b002bd0a5e2255mr4898056ljg.28.1694693954191;
+        Thu, 14 Sep 2023 05:19:14 -0700 (PDT)
+Received: from mobilestation ([178.176.56.174])
+        by smtp.gmail.com with ESMTPSA id w24-20020a2e9bd8000000b002bce5e379a3sm261435ljj.7.2023.09.14.05.19.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Sep 2023 05:19:13 -0700 (PDT)
+Date: Thu, 14 Sep 2023 15:19:10 +0300
+From: Serge Semin <fancer.lancer@gmail.com>
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	Jose Abreu <joabreu@synopsys.com>, Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org, 
+	Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller" <davem@davemloft.net>, 
+	Emil Renner Berthing <kernel@esmil.dk>, Eric Dumazet <edumazet@google.com>, 
+	Fabio Estevam <festevam@gmail.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	linux-arm-kernel@lists.infradead.org, linux-stm32@st-md-mailman.stormreply.com, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, netdev@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Samin Guo <samin.guo@starfivetech.com>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Shawn Guo <shawnguo@kernel.org>
+Subject: Re: [PATCH net-next 2/6] net: stmmac: imx: use
+ dwmac_set_tx_clk_gmii()
+Message-ID: <hsov2bii5wenzexplq2fbgzsls2y5yssdobqjeil2nd2haqilm@jammanegu4vd>
+References: <ZP8yEFWn0Ml3ALWq@shell.armlinux.org.uk>
+ <E1qfiqi-007TPS-BZ@rmk-PC.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230912233214.1518551-1-memxor@gmail.com> <20230912233214.1518551-13-memxor@gmail.com>
- <mb61pmsxq14h4.fsf@amazon.com>
-In-Reply-To: <mb61pmsxq14h4.fsf@amazon.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Thu, 14 Sep 2023 14:13:05 +0200
-Message-ID: <CAP01T7691P9m4ZrDQk63waC9wGu3ToK-cznsHha-r6Lteh0fWw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 12/17] bpf: Disallow fentry/fexit/freplace for
- exception callbacks
-To: Puranjay Mohan <puranjay12@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, 
-	David Vernet <void@manifault.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <E1qfiqi-007TPS-BZ@rmk-PC.armlinux.org.uk>
 
-On Wed, 13 Sept 2023 at 17:24, Puranjay Mohan <puranjay12@gmail.com> wrote:
->
-> On Wed, Sep 13 2023, Kumar Kartikeya Dwivedi wrote:
->
-> > During testing, it was discovered that extensions to exception callbacks
-> > had no checks, upon running a testcase, the kernel ended up running off
-> > the end of a program having final call as bpf_throw, and hitting int3
-> > instructions.
-> >
-> > The reason is that while the default exception callback would have reset
-> > the stack frame to return back to the main program's caller, the
-> > replacing extension program will simply return back to bpf_throw, which
-> > will instead return back to the program and the program will continue
-> > execution, now in an undefined state where anything could happen.
-> >
-> > The way to support extensions to an exception callback would be to mark
-> > the BPF_PROG_TYPE_EXT main subprog as an exception_cb, and prevent it
-> > from calling bpf_throw. This would make the JIT produce a prologue that
-> > restores saved registers and reset the stack frame. But let's not do
-> > that until there is a concrete use case for this, and simply disallow
-> > this for now.
-> >
-> > Similar issues will exist for fentry and fexit cases, where trampoline
-> > saves data on the stack when invoking exception callback, which however
-> > will then end up resetting the stack frame, and on return, the fexit
-> > program will never will invoked as the return address points to the main
-> > program's caller in the kernel. Instead of additional complexity and
-> > back and forth between the two stacks to enable such a use case, simply
-> > forbid it.
-> >
-> > One key point here to note is that currently X86_TAIL_CALL_OFFSET didn't
-> > require any modifications, even though we emit instructions before the
-> > corresponding endbr64 instruction. This is because we ensure that a main
-> > subprog never serves as an exception callback, and therefore the
-> > exception callback (which will be a global subprog) can never serve as
-> > the tail call target, eliminating any discrepancies. However, once we
-> > support a BPF_PROG_TYPE_EXT to also act as an exception callback, it
-> > will end up requiring change to the tail call offset to account for the
-> > extra instructions. For simplicitly, tail calls could be disabled for
-> > such targets.
-> >
-> > Noting the above, it appears better to wait for a concrete use case
-> > before choosing to permit extension programs to replace exception
-> > callbacks.
-> >
-> > As a precaution, we disable fentry and fexit for exception callbacks as
-> > well.
-> >
-> > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> > ---
-> >  kernel/bpf/helpers.c  |  1 +
-> >  kernel/bpf/verifier.c | 11 +++++++++++
-> >  2 files changed, 12 insertions(+)
-> >
-> > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> > index 2c8e1ee97b71..7ff2a42f1996 100644
-> > --- a/kernel/bpf/helpers.c
-> > +++ b/kernel/bpf/helpers.c
-> > @@ -2490,6 +2490,7 @@ __bpf_kfunc void bpf_throw(u64 cookie)
-> >        */
-> >       kasan_unpoison_task_stack_below((void *)ctx.sp);
-> >       ctx.aux->bpf_exception_cb(cookie, ctx.sp, ctx.bp);
-> > +     WARN(1, "A call to BPF exception callback should never return\n");
-> >  }
-> >
-> >  __diag_pop();
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 0ba32b626320..21e37e46d792 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -19750,6 +19750,12 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
-> >                       bpf_log(log, "Subprog %s doesn't exist\n", tname);
-> >                       return -EINVAL;
-> >               }
-> > +             if (aux->func && aux->func[subprog]->aux->exception_cb) {
-> > +                     bpf_log(log,
-> > +                             "%s programs cannot attach to exception callback\n",
-> > +                             prog_extension ? "Extension" : "FENTRY/FEXIT");
-> > +                     return -EINVAL;
-> > +             }
-> >               conservative = aux->func_info_aux[subprog].unreliable;
-> >               if (prog_extension) {
-> >                       if (conservative) {
-> > @@ -19762,6 +19768,11 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
-> >                                       "Extension programs should be JITed\n");
-> >                               return -EINVAL;
-> >                       }
-> > +                     if (aux->func && aux->func[subprog]->aux->exception_cb) {
-> > +                             bpf_log(log,
-> > +                                     "Extension programs cannot replace exception callback\n");
-> > +                             return -EINVAL;
-> > +                     }
->
-> This check is redundant because you already did this check above if (prog_extension branch)
-> Remove this as it will never be reached.
->
+On Mon, Sep 11, 2023 at 04:29:16PM +0100, Russell King (Oracle) wrote:
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 
-Good catch, will fix it in v4.
+BTW I don't know whether it's ok to have an empty description in the
+patches for the networking subsystem, but the kernel maintainers
+mainly request to add at least some text with the change justification
+especially seeing the submitting-patches.rst doc says the description
+is mandatory.
 
->
-> >               }
-> >               if (!tgt_prog->jited) {
-> >                       bpf_log(log, "Can attach to only JITed progs\n");
->
->
-> Thanks,
-> Puranjay
+-Serge(y)
+
+> ---
+>  .../net/ethernet/stmicro/stmmac/dwmac-imx.c   | 27 ++++++-------------
+>  1 file changed, 8 insertions(+), 19 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-imx.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-imx.c
+> index df34e34cc14f..d2569faf7cc3 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-imx.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-imx.c
+> @@ -21,6 +21,7 @@
+>  #include <linux/stmmac.h>
+>  
+>  #include "stmmac_platform.h"
+> +#include "stmmac_plat_lib.h"
+>  
+>  #define GPR_ENET_QOS_INTF_MODE_MASK	GENMASK(21, 16)
+>  #define GPR_ENET_QOS_INTF_SEL_MII	(0x0 << 16)
+> @@ -186,7 +187,6 @@ static void imx_dwmac_fix_speed(void *priv, unsigned int speed, unsigned int mod
+>  {
+>  	struct plat_stmmacenet_data *plat_dat;
+>  	struct imx_priv_data *dwmac = priv;
+> -	unsigned long rate;
+>  	int err;
+>  
+>  	plat_dat = dwmac->plat_dat;
+> @@ -196,24 +196,13 @@ static void imx_dwmac_fix_speed(void *priv, unsigned int speed, unsigned int mod
+>  	    (plat_dat->mac_interface == PHY_INTERFACE_MODE_MII))
+>  		return;
+>  
+> -	switch (speed) {
+> -	case SPEED_1000:
+> -		rate = 125000000;
+> -		break;
+> -	case SPEED_100:
+> -		rate = 25000000;
+> -		break;
+> -	case SPEED_10:
+> -		rate = 2500000;
+> -		break;
+> -	default:
+> -		dev_err(dwmac->dev, "invalid speed %u\n", speed);
+> -		return;
+> -	}
+> -
+> -	err = clk_set_rate(dwmac->clk_tx, rate);
+> -	if (err < 0)
+> -		dev_err(dwmac->dev, "failed to set tx rate %lu\n", rate);
+> +	err = dwmac_set_tx_clk_gmii(dwmac->clk_tx, speed);
+> +	if (err == -ENOTSUPP)
+> +		dev_err(dwmac->dev, "invalid speed %dMbps\n", speed);
+> +	else if (err)
+> +		dev_err(dwmac->dev,
+> +			"failed to set tx rate for speed %dMbps: %pe\n",
+> +			speed, ERR_PTR(err));
+>  }
+>  
+>  static void imx93_dwmac_fix_speed(void *priv, unsigned int speed, unsigned int mode)
+> -- 
+> 2.30.2
+> 
+> 
