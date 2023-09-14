@@ -1,44 +1,44 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C64F927716
-	for <bpf@vger.kernel.org>; Thu, 14 Sep 2023 21:05:09 +0000 (UTC)
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1792700
-	for <bpf@vger.kernel.org>; Thu, 14 Sep 2023 14:05:09 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-59b5a586da6so26825347b3.1
-        for <bpf@vger.kernel.org>; Thu, 14 Sep 2023 14:05:09 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4FD127716
+	for <bpf@vger.kernel.org>; Thu, 14 Sep 2023 21:05:13 +0000 (UTC)
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B0892701
+	for <bpf@vger.kernel.org>; Thu, 14 Sep 2023 14:05:13 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-26d50941f68so1300648a91.1
+        for <bpf@vger.kernel.org>; Thu, 14 Sep 2023 14:05:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694725508; x=1695330308; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1694725513; x=1695330313; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lXhMN6bGqnJggKKLO/4TPQFnVFdhmWWVa7skOr7EcB8=;
-        b=1eVf/qMBlmaRnP/1942HvQrE/fVdAZvSdZl+GAruNIN/cxjz2IRUWcYkdxtXwVC7i+
-         mc2qT+JSgHDHggfQjgWUzwiASaPgEzaAgj5jSqZfzFO3a650REd3oj9SnQQMm30g8oY+
-         JuVdE9/s78Vr97KT6H1xz4/AC2aECct6lm3uqP1S6fPHgP3lHa1seGnGt0TM1AR9EApY
-         ZoQGxK2pIjGQTPt7LCVcheSdLo7wlt+wMTm/lI5qk4e19MytdrLCE84U5s07qpgj3Jlv
-         dEGrCgKlm5bWYPqmGe3A5iZmdvcLTiuzKILne8Um8WOEpgKsQ1PD2J6pZnW2GBXCK+oW
-         b7Yw==
+        bh=13spL0Rm0ZGXcXIcH5DSZIzgePO9nUsV+W7OjRfRCTw=;
+        b=z7o/7zN8ak/Mld6rjv1ajnGeVLErVL+p+yv/QSP5nA1cEZBJX0JPt6vvWzrkSTjCdn
+         KQxLb1UuB2y8bv6rr+u8ArI0ORPPYyJIZ/O+MdMHUDydYDEKbgcuNG/R7oSXQg7MMS/Q
+         NHy7GQGog0qzu0JAd5TQVZa0hqjBa64XAKk6uuuQ7jles/2pakDfzbyQU8Ql6x0CYSUl
+         +fH4Sre+DiyJ0vC9de0UkobSPE4UdnvUp1NIT4g5b1RPnAZnPBUSzXu3KUpQr6Mqwtz6
+         DLYRJ1eLuYKiUA+PRrYt7aQfbD6JrM3m8XN0x86L0ysFwafhmE7QZamgZr5BDghX7JBz
+         3Tdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694725508; x=1695330308;
+        d=1e100.net; s=20230601; t=1694725513; x=1695330313;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lXhMN6bGqnJggKKLO/4TPQFnVFdhmWWVa7skOr7EcB8=;
-        b=iMKMH0mejeomLAvtaph2Bjp+NyV/bv74pl482GJujd9SiIzOCmMonSLxd1la+xspcS
-         IaXi1+8462F81vfjMcmxOdyLyOIDdOCZKdCKT6p/+ddlRHx6vGvq0vsPA2ddl9HL8GMF
-         i6fMSlbT5eNDOJ64As0VF//4lnmTBQx5NhIlIDgXqqnGwnVlBfEzgdVLMThE/WG8zPt/
-         Y+GetJUhIGJ6Rgtw9KkV0YS4LwIRyhBXOMUBOMomuKBfmyNLksJWi5rY44Xik2EKkyS8
-         U0eBpxQN3Q4HFzyFsyw6skVhLI5Ipf/zrXG76nRaiUAGOMd24aGaeRSTg96Uf07lgGjF
-         8H/g==
-X-Gm-Message-State: AOJu0YyV5LwAb66iCgRSlx8H12BH36MYlXGU+niGquJ2syzOxnxhVK6P
-	ooB3KcXYTK21xoAVdRC9dOv0Rjk77NyNrbMKh4njLIzW4ZX4NyzfK6uf98oqQ0T4JujYDFNOzgc
-	t16eQCtqSNvPUOcr9OadiCH1aL0/VyI0HDBTIruWQQALpon8jgQ==
-X-Google-Smtp-Source: AGHT+IGI2D9XWQKji+z7BtupmR2kkWhx+xOBty7hIfVTjdRPqhTUDncVdW97+QXgcVjNaC3FDLQCpxo=
+        bh=13spL0Rm0ZGXcXIcH5DSZIzgePO9nUsV+W7OjRfRCTw=;
+        b=cxYp027IZHbRTTpSzf2VPZiJo7i07N8bdsSPJRcsVIiEJLMJ9XUGzedJNGhvM+1sUL
+         LOezwyH37i6XdJomBIlM5ihbeVWHTMUu8mS4OsdlMPX/RfbagvtDSn395pel+sQjMMfq
+         ObsDmfASf7wPPW8xJe8kMP+P4FHdoaA1pldVlvvrSTEXLcWz71JriaEsPE3rq3LFCETH
+         epjZI7hJuMxMj3bT8ayjWgStqFFZRBeZbl5zUG3J9kcYzLk71Dbz5uvJl4J3RMz2TmC8
+         PIqrWbCbjWXp+xhK7Ly5Dso7uIaMMHSMn9uxv8KK0chjhMXt4ROyd/hiDNRx09e+fFuG
+         Hztw==
+X-Gm-Message-State: AOJu0YweWiSZsOAgWeitK6qCkn0FfCDCCS47opCeOnlPzaqcpQCk0dk4
+	wDRgz5+jlBAGf7H9uCdziXXKvoPKwKdLHgTrtsp/WIEYFqgp4vS/JR91cTQ3Za/m2DYW5gHuOlI
+	GaW8RxJjmsk273zLqYjBkY8JhAJQHBsMCrnR7M0mOHSy1noEGug==
+X-Google-Smtp-Source: AGHT+IEMN2hG9dtM5YRRKewCpdKoIKPR7ONPikbZ6FD/09kibOLr5RACjhIMih7flqe4lTNsti13Q60=
 X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a81:9850:0:b0:59b:5a5b:3a91 with SMTP id
- p77-20020a819850000000b0059b5a5b3a91mr104601ywg.2.1694725508369; Thu, 14 Sep
- 2023 14:05:08 -0700 (PDT)
-Date: Thu, 14 Sep 2023 14:04:50 -0700
+ (user=sdf job=sendgmr) by 2002:a17:90a:df8a:b0:271:df39:2332 with SMTP id
+ p10-20020a17090adf8a00b00271df392332mr165599pjv.9.1694725512346; Thu, 14 Sep
+ 2023 14:05:12 -0700 (PDT)
+Date: Thu, 14 Sep 2023 14:04:52 -0700
 In-Reply-To: <20230914210452.2588884-1-sdf@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -48,8 +48,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20230914210452.2588884-1-sdf@google.com>
 X-Mailer: git-send-email 2.42.0.459.ge4e396fd5e-goog
-Message-ID: <20230914210452.2588884-8-sdf@google.com>
-Subject: [PATCH bpf-next v2 7/9] selftests/bpf: Add TX side to xdp_metadata
+Message-ID: <20230914210452.2588884-10-sdf@google.com>
+Subject: [PATCH bpf-next v2 9/9] xsk: document tx_metadata_len layout
 From: Stanislav Fomichev <sdf@google.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
@@ -61,119 +61,112 @@ Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
 	xdp-hints@xdp-project.net
 Content-Type: text/plain; charset="UTF-8"
 
-Request TX timestamp and make sure it's not empty.
-Request TX checksum offload (SW-only) and make sure it's resolved
-to the correct one.
+- how to use
+- how to query features
+- pointers to the examples
 
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- .../selftests/bpf/prog_tests/xdp_metadata.c   | 31 +++++++++++++++++--
- 1 file changed, 28 insertions(+), 3 deletions(-)
+ Documentation/networking/index.rst           |  1 +
+ Documentation/networking/xsk-tx-metadata.rst | 77 ++++++++++++++++++++
+ 2 files changed, 78 insertions(+)
+ create mode 100644 Documentation/networking/xsk-tx-metadata.rst
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-index 626c461fa34d..f0da8fe93276 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-@@ -57,6 +57,7 @@ static int open_xsk(int ifindex, struct xsk *xsk)
- 		.comp_size = XSK_RING_CONS__DEFAULT_NUM_DESCS,
- 		.frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE,
- 		.flags = XDP_UMEM_UNALIGNED_CHUNK_FLAG,
-+		.tx_metadata_len = sizeof(struct xsk_tx_metadata),
- 	};
- 	__u32 idx;
- 	u64 addr;
-@@ -138,6 +139,7 @@ static void ip_csum(struct iphdr *iph)
+diff --git a/Documentation/networking/index.rst b/Documentation/networking/index.rst
+index 5b75c3f7a137..9b2accb48df7 100644
+--- a/Documentation/networking/index.rst
++++ b/Documentation/networking/index.rst
+@@ -123,6 +123,7 @@ Refer to :ref:`netdev-FAQ` for a guide on netdev development process specifics.
+    xfrm_sync
+    xfrm_sysctl
+    xdp-rx-metadata
++   xsk-tx-metadata
  
- static int generate_packet(struct xsk *xsk, __u16 dst_port)
- {
-+	struct xsk_tx_metadata *meta;
- 	struct xdp_desc *tx_desc;
- 	struct udphdr *udph;
- 	struct ethhdr *eth;
-@@ -151,10 +153,14 @@ static int generate_packet(struct xsk *xsk, __u16 dst_port)
- 		return -1;
+ .. only::  subproject and html
  
- 	tx_desc = xsk_ring_prod__tx_desc(&xsk->tx, idx);
--	tx_desc->addr = idx % (UMEM_NUM / 2) * UMEM_FRAME_SIZE;
-+	tx_desc->addr = idx % (UMEM_NUM / 2) * UMEM_FRAME_SIZE + sizeof(struct xsk_tx_metadata);
- 	printf("%p: tx_desc[%u]->addr=%llx\n", xsk, idx, tx_desc->addr);
- 	data = xsk_umem__get_data(xsk->umem_area, tx_desc->addr);
- 
-+	meta = data - sizeof(struct xsk_tx_metadata);
-+	memset(meta, 0, sizeof(*meta));
-+	meta->flags = XDP_TX_METADATA_TIMESTAMP;
+diff --git a/Documentation/networking/xsk-tx-metadata.rst b/Documentation/networking/xsk-tx-metadata.rst
+new file mode 100644
+index 000000000000..b7289f06745c
+--- /dev/null
++++ b/Documentation/networking/xsk-tx-metadata.rst
+@@ -0,0 +1,77 @@
++==================
++AF_XDP TX Metadata
++==================
 +
- 	eth = data;
- 	iph = (void *)(eth + 1);
- 	udph = (void *)(iph + 1);
-@@ -178,11 +184,17 @@ static int generate_packet(struct xsk *xsk, __u16 dst_port)
- 	udph->source = htons(AF_XDP_SOURCE_PORT);
- 	udph->dest = htons(dst_port);
- 	udph->len = htons(sizeof(*udph) + UDP_PAYLOAD_BYTES);
--	udph->check = 0;
-+	udph->check = ~csum_tcpudp_magic(iph->saddr, iph->daddr,
-+					 ntohs(udph->len), IPPROTO_UDP, 0);
- 
- 	memset(udph + 1, 0xAA, UDP_PAYLOAD_BYTES);
- 
-+	meta->flags |= XDP_TX_METADATA_CHECKSUM | XDP_TX_METADATA_CHECKSUM_SW;
-+	meta->csum_start = sizeof(*eth) + sizeof(*iph);
-+	meta->csum_offset = offsetof(struct udphdr, check);
++This document describes how to enable offloads when transmitting packets
++via :doc:`af_xdp`. Refer to :doc:`xdp-rx-metadata` on how to access similar
++metadata on the receive side.
 +
- 	tx_desc->len = sizeof(*eth) + sizeof(*iph) + sizeof(*udph) + UDP_PAYLOAD_BYTES;
-+	tx_desc->options |= XDP_TX_METADATA;
- 	xsk_ring_prod__submit(&xsk->tx, 1);
- 
- 	ret = sendto(xsk_socket__fd(xsk->socket), NULL, 0, MSG_DONTWAIT, NULL, 0);
-@@ -194,13 +206,21 @@ static int generate_packet(struct xsk *xsk, __u16 dst_port)
- 
- static void complete_tx(struct xsk *xsk)
- {
--	__u32 idx;
-+	struct xsk_tx_metadata *meta;
- 	__u64 addr;
-+	void *data;
-+	__u32 idx;
- 
- 	if (ASSERT_EQ(xsk_ring_cons__peek(&xsk->comp, 1, &idx), 1, "xsk_ring_cons__peek")) {
- 		addr = *xsk_ring_cons__comp_addr(&xsk->comp, idx);
- 
- 		printf("%p: complete tx idx=%u addr=%llx\n", xsk, idx, addr);
++General Design
++==============
 +
-+		data = xsk_umem__get_data(xsk->umem_area, addr);
-+		meta = data - sizeof(struct xsk_tx_metadata);
++The headroom for the metadata is reserved via ``tx_metadata_len`` in
++``struct xdp_umem_reg``. The metadata length is therefore the same for
++every socket that shares the same umem. The metadata layout is a fixed UAPI,
++refer to ``union xsk_tx_metadata`` in ``include/uapi/linux/if_xdp.h``.
++Thus, generally, the ``tx_metadata_len`` field above should contain
++``sizeof(union xsk_tx_metadata)``.
 +
-+		ASSERT_NEQ(meta->completion.tx_timestamp, 0, "tx_timestamp");
++The headroom and the metadata itself should be located right before
++``xdp_desc->addr`` in the umem frame. Within a frame, the metadata
++layout is as follows::
 +
- 		xsk_ring_cons__release(&xsk->comp, 1);
- 	}
- }
-@@ -221,6 +241,7 @@ static int verify_xsk_metadata(struct xsk *xsk)
- 	const struct xdp_desc *rx_desc;
- 	struct pollfd fds = {};
- 	struct xdp_meta *meta;
-+	struct udphdr *udph;
- 	struct ethhdr *eth;
- 	struct iphdr *iph;
- 	__u64 comp_addr;
-@@ -257,6 +278,7 @@ static int verify_xsk_metadata(struct xsk *xsk)
- 	ASSERT_EQ(eth->h_proto, htons(ETH_P_IP), "eth->h_proto");
- 	iph = (void *)(eth + 1);
- 	ASSERT_EQ((int)iph->version, 4, "iph->version");
-+	udph = (void *)(iph + 1);
- 
- 	/* custom metadata */
- 
-@@ -270,6 +292,9 @@ static int verify_xsk_metadata(struct xsk *xsk)
- 
- 	ASSERT_EQ(meta->rx_hash_type, 0, "rx_hash_type");
- 
-+	/* checksum offload */
-+	ASSERT_EQ(udph->check, 0x1c72, "csum");
++           tx_metadata_len
++     /                         \
++    +-----------------+---------+----------------------------+
++    | xsk_tx_metadata | padding |          payload           |
++    +-----------------+---------+----------------------------+
++                                ^
++                                |
++                          xdp_desc->addr
 +
- 	xsk_ring_cons__release(&xsk->rx, 1);
- 	refill_rx(xsk, comp_addr);
- 
++An AF_XDP application can request headrooms larger than ``sizeof(struct
++xsk_tx_metadata)``. The kernel will ignore the padding (and will still
++use ``xdp_desc->addr - tx_metadata_len`` to locate
++the ``xsk_tx_metadata``). For the frames that shouldn't carry
++any metadata (i.e., the ones that don't have ``XDP_TX_METADATA`` option),
++the metadata area is ignored by the kernel as well.
++
++The flags field enables the particular offload:
++
++- ``XDP_TX_METADATA_TIMESTAMP``: requests the device to put transmission
++  timestamp into ``tx_timestamp`` field of ``union xsk_tx_metadata``.
++- ``XDP_TX_METADATA_CHECKSUM``: requests the device to calculate L4
++  checksum. ``csum_start`` specifies byte offset of there the checksumming
++  should start and ``csum_offset`` specifies byte offset where the
++  device should store the computed checksum.
++- ``XDP_TX_METADATA_CHECKSUM_SW``: requests checksum calculation to
++  be done in software; this mode works only in ``XSK_COPY`` mode and
++  is mostly intended for testing. Do not enable this option, it
++  will negatively affect performance.
++
++Besides the flags above, in order to trigger the offloads, the first
++packet's ``struct xdp_desc`` descriptor should set ``XDP_TX_METADATA``
++bit in the ``options`` field. Also not that in a multi-buffer packet
++only the first chunk should carry the metadata.
++
++Querying Device Capabilities
++============================
++
++Every devices exports its offloads capabilities via netlink netdev family.
++Refer to ``xsk-flags`` features bitmask in
++``Documentation/netlink/specs/netdev.yaml``.
++
++- ``tx-timestamp``: device supports ``XDP_TX_METADATA_TIMESTAMP``
++- ``tx-checksum``: device supports ``XDP_TX_METADATA_CHECKSUM``
++
++Note that every devices supports ``XDP_TX_METADATA_CHECKSUM_SW`` when
++running in ``XSK_COPY`` mode.
++
++See ``tools/net/ynl/samples/netdev.c`` on how to query this information.
++
++Example
++=======
++
++See ``tools/testing/selftests/bpf/xdp_hw_metadata.c`` for an example
++program that handles TX metadata. Also see https://github.com/fomichev/xskgen
++for a more bare-bones example.
 -- 
 2.42.0.459.ge4e396fd5e-goog
 
