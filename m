@@ -1,142 +1,247 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB344208A8;
-	Thu, 14 Sep 2023 12:19:16 +0000 (UTC)
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEE31FCA;
-	Thu, 14 Sep 2023 05:19:16 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2bceb02fd2bso13590741fa.1;
-        Thu, 14 Sep 2023 05:19:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694693954; x=1695298754; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MIai8kEfSJbbe1MQb/EaG0qclNnxV1ZUNxpY+1c/fgg=;
-        b=qmV0jNYFzd4yu8PKwd04qfL+mI9xgGFkLb87lchMQFEXPZjOob/HGUMSKKdUgWg/I+
-         C6VidDWz2FKfwMrkZdmllMdU+xiMIdDR49HCoMp4DKaK93gPI4DcJtsNhhISdWBU4G+y
-         Ewdz/Wy0ssW1Y5B3ImBpB028OUp3QiXnBGW0HaFNCyy0fCHu/S/xYscQEkZunQ4VLVJ6
-         iJhrem8IrNKZbjhiZ6+eOSQ6fSCwLRAt0R4qrCPhBTqEWTpJ8QgRe5sOC5CXcDeNTz44
-         H1dGoafP9gpbXEBeay4zMl0WlnEml/63d1yqpd58GaEMmZ9Fx4Gk68biaHRH8NnXu0Ue
-         Djrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694693954; x=1695298754;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MIai8kEfSJbbe1MQb/EaG0qclNnxV1ZUNxpY+1c/fgg=;
-        b=ogFSAXMYXDv+zglZfeTboxf6zxmc2AKymO8UnQ+nxj3KbUvX8bri9MxXV4olVO7qCa
-         3B7aFyAUHYylRHwlzLfacR8WMqxWj0Ms1NworiOh9tw25YOqTgN9NwaFC3338is+R9ij
-         qDUuOxqziEoDvUurX61KHqROwB+Vbk2DqEX06+tbiIdZ9bJ5b+mSWsBENigSGLeZOe04
-         A4e4V2lKAYtUrK/bYYKUVN4vAVKPlR0vv2+LvEINlpwZvWKFhtfw9EQSxj/wsBts/VzF
-         n7HQcaTVwFcCxok6ErPvSpGJtzqmDMgkOO7EhhurvatsoF/RpDYYQwtcpfckVP1xn8go
-         I2WA==
-X-Gm-Message-State: AOJu0Yyacvp8VNFN299huZ10kQPCDVV0giVRIzaWReqrbKLpfzTGY3OB
-	8V3w8ksYxYLdhqhH+WoijlE=
-X-Google-Smtp-Source: AGHT+IE9J7DJwE8nML/CCXVSNOTksA6PiQP2wqKee1UuUlkr5qnQ39Oe2QWwbbOyrqnQ31oguUUuxw==
-X-Received: by 2002:a2e:808d:0:b0:2bd:a5e:2255 with SMTP id i13-20020a2e808d000000b002bd0a5e2255mr4898056ljg.28.1694693954191;
-        Thu, 14 Sep 2023 05:19:14 -0700 (PDT)
-Received: from mobilestation ([178.176.56.174])
-        by smtp.gmail.com with ESMTPSA id w24-20020a2e9bd8000000b002bce5e379a3sm261435ljj.7.2023.09.14.05.19.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Sep 2023 05:19:13 -0700 (PDT)
-Date: Thu, 14 Sep 2023 15:19:10 +0300
-From: Serge Semin <fancer.lancer@gmail.com>
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Jose Abreu <joabreu@synopsys.com>, Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org, 
-	Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller" <davem@davemloft.net>, 
-	Emil Renner Berthing <kernel@esmil.dk>, Eric Dumazet <edumazet@google.com>, 
-	Fabio Estevam <festevam@gmail.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-stm32@st-md-mailman.stormreply.com, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, netdev@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Samin Guo <samin.guo@starfivetech.com>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Shawn Guo <shawnguo@kernel.org>
-Subject: Re: [PATCH net-next 2/6] net: stmmac: imx: use
- dwmac_set_tx_clk_gmii()
-Message-ID: <hsov2bii5wenzexplq2fbgzsls2y5yssdobqjeil2nd2haqilm@jammanegu4vd>
-References: <ZP8yEFWn0Ml3ALWq@shell.armlinux.org.uk>
- <E1qfiqi-007TPS-BZ@rmk-PC.armlinux.org.uk>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A547208BD
+	for <bpf@vger.kernel.org>; Thu, 14 Sep 2023 12:21:09 +0000 (UTC)
+X-Greylist: delayed 594 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 14 Sep 2023 05:21:08 PDT
+Received: from mail-m11877.qiye.163.com (mail-m11877.qiye.163.com [115.236.118.77])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325921BF0;
+	Thu, 14 Sep 2023 05:21:07 -0700 (PDT)
+Received: from [192.168.0.100] (unknown [113.87.233.110])
+	by mail-m12769.qiye.163.com (Hmail) with ESMTPA id E69B42803EC;
+	Thu, 14 Sep 2023 20:10:28 +0800 (CST)
+Message-ID: <11c01e2e-5e6a-442a-868e-b55f73ebcd7e@sangfor.com.cn>
+Date: Thu, 14 Sep 2023 20:10:28 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <E1qfiqi-007TPS-BZ@rmk-PC.armlinux.org.uk>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v2] bpf: Using binary search to improve the
+ performance of btf_find_by_name_kind
+To: Eduard Zingerman <eddyz87@gmail.com>,
+ Alan Maguire <alan.maguire@oracle.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Song Liu <song@kernel.org>,
+ Yonghong Song <yhs@fb.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>, dinghui@sangfor.com.cn,
+ huangcun@sangfor.com.cn, bpf <bpf@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>
+References: <20230909091646.420163-1-pengdonglin@sangfor.com.cn>
+ <20ef8441084c9d5fd54f84987afa77eed7fe148e.camel@gmail.com>
+ <e78dc807b54f80fd3db836df08f71c7d2fb33387.camel@gmail.com>
+ <CAADnVQL0O_WFYcYQRig7osO0piPdOH2yHkdH0CxCfNV7NkA0Lw@mail.gmail.com>
+ <035ab912d7d6bd11c54c038464795da01dbed2de.camel@gmail.com>
+ <CAADnVQLMHUNE95eBXdy6=+gHoFHRsihmQ75GZvGy-hSuHoaT5A@mail.gmail.com>
+ <5f8d82c3-838e-4d75-bb25-7d98a6d0a37c@sangfor.com.cn>
+ <e564b0e9-3497-a133-3094-afefc0cd1f7e@oracle.com>
+ <0bef11aa061a425f276a539a47b786ec6b661987.camel@gmail.com>
+From: pengdonglin <pengdonglin@sangfor.com.cn>
+In-Reply-To: <0bef11aa061a425f276a539a47b786ec6b661987.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCGUpMVkgZGh1MSRhMGk4dTVUTARMWGhIXJBQOD1
+	lXWRgSC1lBWUpKSFVDTFVJSEhVSkpLWVdZFhoPEhUdFFlBWU9LSFVKSktISkNVSktLVUtZBg++
+X-HM-Tid: 0a8a9399908db243kuuue69b42803ec
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Mj46Pxw4Tj1KMwxWDwJPNxMT
+	Gj4aCT9VSlVKTUJPTUJIT0lCQklJVTMWGhIXVQseFRwfFBUcFxIVOwgaFRwdFAlVGBQWVRgVRVlX
+	WRILWUFZSkpIVUNMVUlISFVKSktZV1kIAVlBSkpKTUk3Bg++
 
-On Mon, Sep 11, 2023 at 04:29:16PM +0100, Russell King (Oracle) wrote:
-> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-
-BTW I don't know whether it's ok to have an empty description in the
-patches for the networking subsystem, but the kernel maintainers
-mainly request to add at least some text with the change justification
-especially seeing the submitting-patches.rst doc says the description
-is mandatory.
-
--Serge(y)
-
-> ---
->  .../net/ethernet/stmicro/stmmac/dwmac-imx.c   | 27 ++++++-------------
->  1 file changed, 8 insertions(+), 19 deletions(-)
+On 2023/9/13 21:45, Eduard Zingerman wrote:
+> On Wed, 2023-09-13 at 14:34 +0100, Alan Maguire wrote:
+>> On 13/09/2023 11:32, pengdonglin wrote:
+>>> On 2023/9/13 2:46, Alexei Starovoitov wrote:
+>>>> On Tue, Sep 12, 2023 at 10:03 AM Eduard Zingerman <eddyz87@gmail.com>
+>>>> wrote:
+>>>>>
+>>>>> On Tue, 2023-09-12 at 09:40 -0700, Alexei Starovoitov wrote:
+>>>>>> On Tue, Sep 12, 2023 at 7:19 AM Eduard Zingerman <eddyz87@gmail.com>
+>>>>>> wrote:
+>>>>>>>
+>>>>>>> On Tue, 2023-09-12 at 16:51 +0300, Eduard Zingerman wrote:
+>>>>>>>> On Sat, 2023-09-09 at 02:16 -0700, Donglin Peng wrote:
+>>>>>>>>> Currently, we are only using the linear search method to find the
+>>>>>>>>> type id
+>>>>>>>>> by the name, which has a time complexity of O(n). This change
+>>>>>>>>> involves
+>>>>>>>>> sorting the names of btf types in ascending order and using
+>>>>>>>>> binary search,
+>>>>>>>>> which has a time complexity of O(log(n)). This idea was inspired
+>>>>>>>>> by the
+>>>>>>>>> following patch:
+>>>>>>>>>
+>>>>>>>>> 60443c88f3a8 ("kallsyms: Improve the performance of
+>>>>>>>>> kallsyms_lookup_name()").
+>>>>>>>>>
+>>>>>>>>> At present, this improvement is only for searching in vmlinux's and
+>>>>>>>>> module's BTFs, and the kind should only be BTF_KIND_FUNC or
+>>>>>>>>> BTF_KIND_STRUCT.
+>>>>>>>>>
+>>>>>>>>> Another change is the search direction, where we search the BTF
+>>>>>>>>> first and
+>>>>>>>>> then its base, the type id of the first matched btf_type will be
+>>>>>>>>> returned.
+>>>>>>>>>
+>>>>>>>>> Here is a time-consuming result that finding all the type ids of
+>>>>>>>>> 67,819 kernel
+>>>>>>>>> functions in vmlinux's BTF by their names:
+>>>>>>>>>
+>>>>>>>>> Before: 17000 ms
+>>>>>>>>> After:     10 ms
+>>>>>>>>>
+>>>>>>>>> The average lookup performance has improved about 1700x at the
+>>>>>>>>> above scenario.
+>>>>>>>>>
+>>>>>>>>> However, this change will consume more memory, for example,
+>>>>>>>>> 67,819 kernel
+>>>>>>>>> functions will allocate about 530KB memory.
+>>>>>>>>
+>>>>>>>> Hi Donglin,
+>>>>>>>>
+>>>>>>>> I think this is a good improvement. However, I wonder, why did you
+>>>>>>>> choose to have a separate name map for each BTF kind?
+>>>>>>>>
+>>>>>>>> I did some analysis for my local testing kernel config and got
+>>>>>>>> such numbers:
+>>>>>>>> - total number of BTF objects: 97350
+>>>>>>>> - number of FUNC and STRUCT objects: 51597
+>>>>>>>> - number of FUNC, STRUCT, UNION, ENUM, ENUM64, TYPEDEF, DATASEC
+>>>>>>>> objects: 56817
+>>>>>>>>     (these are all kinds for which lookup by name might make sense)
+>>>>>>>> - number of named objects: 54246
+>>>>>>>> - number of name collisions:
+>>>>>>>>     - unique names: 53985 counts
+>>>>>>>>     - 2 objects with the same name: 129 counts
+>>>>>>>>     - 3 objects with the same name: 3 counts
+>>>>>>>>
+>>>>>>>> So, it appears that having a single map for all named objects makes
+>>>>>>>> sense and would also simplify the implementation, what do you think?
+>>>>>>>
+>>>>>>> Some more numbers for my config:
+>>>>>>> - 13241 types (struct, union, typedef, enum), log2 13241 = 13.7
+>>>>>>> - 43575 funcs, log2 43575 = 15.4
+>>>>>>> Thus, having separate map for types vs functions might save ~1.7
+>>>>>>> search iterations. Is this a significant slowdown in practice?
+>>>>>>
+>>>>>> What do you propose to do in case of duplicates ?
+>>>>>> func and struct can have the same name, but they will have two
+>>>>>> different
+>>>>>> btf_ids. How do we store them ?
+>>>>>> Also we might add global vars to BTF. Such request came up several
+>>>>>> times.
+>>>>>> So we need to make sure our search approach scales to
+>>>>>> func, struct, vars. I don't recall whether we search any other kinds.
+>>>>>> Separate arrays for different kinds seems ok.
+>>>>>> It's a bit of code complexity, but it's not an increase in memory.
+>>>>>
+>>>>> Binary search gives, say, lowest index of a thing with name A, then
+>>>>> increment index while name remains A looking for correct kind.
+>>>>> Given the name conflicts info from above, 99% of times there would be
+>>>>> no need to iterate and in very few cases there would a couple of
+>>>>> iterations.
+>>>>>
+>>>>> Same logic would be necessary with current approach if different BTF
+>>>>> kinds would be allowed in BTF_ID_NAME_* cohorts. I figured that these
+>>>>> cohorts are mainly a way to split the tree for faster lookups, but
+>>>>> maybe that is not the main intent.
+>>>>>
+>>>>>> With 13k structs and 43k funcs it's 56k * (4 + 4) that's 0.5 Mbyte
+>>>>>> extra memory. That's quite a bit. Anything we can do to compress it?
+>>>>>
+>>>>> That's an interesting question, from the top of my head:
+>>>>> pre-sort in pahole (re-assign IDs so that increasing ID also would
+>>>>> mean "increasing" name), shouldn't be that difficult.
+>>>>
+>>>> That sounds great. kallsyms are pre-sorted at build time.
+>>>> We should do the same with BTF.
+>>>> I think GCC can emit BTF directly now and LLVM emits it for bpf progs
+>>>> too,
+>>>> but since vmlinux and kernel module BTFs will keep being processed
+>>>> through pahole we don't have to make gcc/llvm sort things right away.
+>>>> pahole will be enough. The kernel might do 'is it sorted' check
+>>>> during BTF validation and then use binary search or fall back to linear
+>>>> when not-sorted == old pahole.
+>>>>
+>>>
+>>> Yeah, I agree and will attempt to modify the pahole and perform a test.
+>>> Do we need
+>>> to introduce a new macro to control the behavior when the BTF is not
+>>> sorted? If
+>>> it is not sorted, we can use the method mentioned in this patch or use
+>>> linear
+>>> search.
+>>>
+>>>
+>>
+>> One challenge with pahole is that it often runs in parallel mode, so I
+>> suspect any sorting would have to be done after merging across threads.
+>> Perhaps BTF deduplication time might be a useful time to re-sort by
+>> name? BTF dedup happens after BTF has been merged, and a new "sorted"
+>> btf_dedup_opts option could be added and controlled by a pahole
+>> option. However dedup is pretty complicated already..
 > 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-imx.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-imx.c
-> index df34e34cc14f..d2569faf7cc3 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-imx.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-imx.c
-> @@ -21,6 +21,7 @@
->  #include <linux/stmmac.h>
->  
->  #include "stmmac_platform.h"
-> +#include "stmmac_plat_lib.h"
->  
->  #define GPR_ENET_QOS_INTF_MODE_MASK	GENMASK(21, 16)
->  #define GPR_ENET_QOS_INTF_SEL_MII	(0x0 << 16)
-> @@ -186,7 +187,6 @@ static void imx_dwmac_fix_speed(void *priv, unsigned int speed, unsigned int mod
->  {
->  	struct plat_stmmacenet_data *plat_dat;
->  	struct imx_priv_data *dwmac = priv;
-> -	unsigned long rate;
->  	int err;
->  
->  	plat_dat = dwmac->plat_dat;
-> @@ -196,24 +196,13 @@ static void imx_dwmac_fix_speed(void *priv, unsigned int speed, unsigned int mod
->  	    (plat_dat->mac_interface == PHY_INTERFACE_MODE_MII))
->  		return;
->  
-> -	switch (speed) {
-> -	case SPEED_1000:
-> -		rate = 125000000;
-> -		break;
-> -	case SPEED_100:
-> -		rate = 25000000;
-> -		break;
-> -	case SPEED_10:
-> -		rate = 2500000;
-> -		break;
-> -	default:
-> -		dev_err(dwmac->dev, "invalid speed %u\n", speed);
-> -		return;
-> -	}
-> -
-> -	err = clk_set_rate(dwmac->clk_tx, rate);
-> -	if (err < 0)
-> -		dev_err(dwmac->dev, "failed to set tx rate %lu\n", rate);
-> +	err = dwmac_set_tx_clk_gmii(dwmac->clk_tx, speed);
-> +	if (err == -ENOTSUPP)
-> +		dev_err(dwmac->dev, "invalid speed %dMbps\n", speed);
-> +	else if (err)
-> +		dev_err(dwmac->dev,
-> +			"failed to set tx rate for speed %dMbps: %pe\n",
-> +			speed, ERR_PTR(err));
->  }
->  
->  static void imx93_dwmac_fix_speed(void *priv, unsigned int speed, unsigned int mode)
-> -- 
-> 2.30.2
+> Hi Alan,
 > 
+> libbpf might be the right place to do this, however, I think that it is
+> also doable in pahole's btf_encoder__encode(), e.g. as follows:
+> - after a call to btf__dedup():
+>    - create a sorted by name IDs ordering;
+>    - create a new BTF object;
+>    - add records to the new BTF according to the sorted ordering;
+>    - remap id references while adding;
+>    - use the new BTF object instead of old one to write BTF output.
 > 
+> I assume that implementation would be similar regardless whether it is
+> done in pahole or in libbpf.
+
+Sounds good ;). We can place named objects at the start and may also need a
+variable to keep trace of the number.
+
+> 
+> Thanks,
+> Eduard
+> 
+>> One thing we should weigh up though is if there are benefits to the
+>> way BTF is currently laid out. It tends to start with base types,
+>> and often-encountered types end up being located towards the start
+>> of the BTF data. For example
+>>
+>>
+>> [1] INT 'long unsigned int' size=8 bits_offset=0 nr_bits=64 encoding=(none)
+>> [2] CONST '(anon)' type_id=1
+>> [3] VOLATILE '(anon)' type_id=1
+>> [4] ARRAY '(anon)' type_id=1 index_type_id=21 nr_elems=2
+>> [5] PTR '(anon)' type_id=8
+>> [6] CONST '(anon)' type_id=5
+>> [7] INT 'char' size=1 bits_offset=0 nr_bits=8 encoding=SIGNED
+>> [8] CONST '(anon)' type_id=7
+>> [9] INT 'unsigned int' size=4 bits_offset=0 nr_bits=32 encoding=(none)
+>> [10] CONST '(anon)' type_id=9
+>> [11] TYPEDEF '__s8' type_id=12
+>> [12] INT 'signed char' size=1 bits_offset=0 nr_bits=8 encoding=SIGNED
+>> [13] TYPEDEF '__u8' type_id=14
+>>
+>> So often-used types will be found quickly, even under linear search
+>> conditions.
+>>
+>> When we look at how many lookups by id (which are O(1), since they are
+>> done via the btf->types[] array) versus by name, we see:
+>>
+>> $ grep btf_type_by_id kernel/bpf/*.c|wc -l
+>> 120
+>> $ grep btf_find_by_nam kernel/bpf/*.c|wc -l
+>> 15
+>>
+>> I don't see a huge number of name-based lookups, and I think most are
+>> outside of the hotter codepaths, unless I'm missing some. All of which
+>> is to say it would be a good idea to have a clear sense of what will get
+>> faster with sorted-by-name BTF. Thanks!
+>>
+>> Alan
+> 
+
