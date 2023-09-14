@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBB2239A
-	for <bpf@vger.kernel.org>; Thu, 14 Sep 2023 01:55:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EA75C43140;
-	Thu, 14 Sep 2023 01:55:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 666EC39E
+	for <bpf@vger.kernel.org>; Thu, 14 Sep 2023 01:55:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 325C6C433CB;
+	Thu, 14 Sep 2023 01:55:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1694656508;
-	bh=t1Pr/RNuBBUYiftS/aXKvA2dyLKFjLPI0RdyqKx26mY=;
+	s=k20201202; t=1694656532;
+	bh=H8J6x+2Y6tppzE18uo4IDaHZGGtg6t6HrzYXaGUNOes=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GPGreEU6tMMDK9Svk9eRu0j0d8cmMTcjcsBzD9NHwaetOnMkcT6q/ODzUWS6S00Uc
-	 LEVpLhcGUMDLLJZ0uPZsetwNVFZ1JpRKfIaUsV9fGKkstgZVNqZz9UiAW6gpju2Br4
-	 EoE9x0gbdiSkY+4Ah51S1PcVSARk3bC36ap1PhyAZptlKOEfLo6cmdJkox+NodTnt0
-	 +IJbKIBM5Jrsi2YnUNSHRv6z+1znI/LkKUcMWPpGGE+wLnu1alXNB713ja3pOX2hHy
-	 HCsWMpjTp56fnLm1xlZfAFYHR3gljZjdPc8VcwrPqfxlIBe4RWba2LIIR310R2QhUP
-	 kXqn9pycDrfDw==
+	b=qvzLWIBe2AOKn1ZnpUkPKNGGpdSOGvm6UsDAlcV9DQpYcLJuEyMCxUxOLsm4my0Yv
+	 HxmGkNP9X2vrD6t0FCWUAyOY41QCk2uKq3TtYECEhRHrEC1OH/EO9NIM2Ng75ahneM
+	 kAj89ST4jkTcY7mW4RSv1Zj1uzBcX9jvCs8w9C0IkN8YpII57o2vUPvX2BYhZIWlJy
+	 P9TngpjwyS/ewXAmJ049+7Le28OXWMItNg+bAX/LkV/mMUc+ftBJ8hEPfhFXXAvwlk
+	 0eeoqvXW+wsoP7ABFNHoXmNSRX8RAaiFUCEp69fpTeCebMCSg0retda+JBHSUwNNI1
+	 ynj980ktmx0wA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -25,12 +25,12 @@ Cc: Daniel Borkmann <daniel@iogearbox.net>,
 	ast@kernel.org,
 	andrii@kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.5 4/7] bpf: Annotate bpf_long_memcpy with data_race
-Date: Wed, 13 Sep 2023 21:54:48 -0400
-Message-Id: <20230914015459.51740-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 4/6] bpf: Annotate bpf_long_memcpy with data_race
+Date: Wed, 13 Sep 2023 21:55:14 -0400
+Message-Id: <20230914015523.51894-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230914015459.51740-1-sashal@kernel.org>
-References: <20230914015459.51740-1-sashal@kernel.org>
+In-Reply-To: <20230914015523.51894-1-sashal@kernel.org>
+References: <20230914015523.51894-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -39,7 +39,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.5.3
+X-stable-base: Linux 6.1.53
 Content-Transfer-Encoding: 8bit
 
 From: Daniel Borkmann <daniel@iogearbox.net>
@@ -104,10 +104,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index f58895830adae..eb1bb76e87f8b 100644
+index 8cef9ec3a89c2..5b53d4c166506 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -425,7 +425,7 @@ static inline void bpf_long_memcpy(void *dst, const void *src, u32 size)
+@@ -301,7 +301,7 @@ static inline void bpf_long_memcpy(void *dst, const void *src, u32 size)
  
  	size /= sizeof(long);
  	while (size--)
