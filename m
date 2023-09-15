@@ -1,103 +1,135 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A1C515EA0
-	for <bpf@vger.kernel.org>; Fri, 15 Sep 2023 17:36:25 +0000 (UTC)
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7C12D73
-	for <bpf@vger.kernel.org>; Fri, 15 Sep 2023 10:34:35 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-59b59e1ac70so31984707b3.1
-        for <bpf@vger.kernel.org>; Fri, 15 Sep 2023 10:34:35 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E24615EA0
+	for <bpf@vger.kernel.org>; Fri, 15 Sep 2023 17:39:38 +0000 (UTC)
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862802119
+	for <bpf@vger.kernel.org>; Fri, 15 Sep 2023 10:38:52 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-502e6d632b6so3505161e87.0
+        for <bpf@vger.kernel.org>; Fri, 15 Sep 2023 10:38:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694799275; x=1695404075; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=8CEOaleRfmVWxu+aHRyiNpWZbJifyuSx+uIjLiDWCm0=;
-        b=nPF2LtGZqBGsepshfqQ06vgVug/Orws9Xw6tEl7DC4ka7trRIDOgrtP80M2P6ssxgD
-         cg+XvCXwaQuvajAKyA5KowA5EYpK9jBrkjYy0oDmpK8ZRTakZD8eppLDlUQEBHt3fYFh
-         msJ9oMEIpNzSc+UIm9gYAn8t5hdKMEfuvav2jMGL5DNVusNJqFwPIyoKaNJ8X258hoBR
-         dFLIiTzGbHnLazRiIuG1jOqTHvcba97F8lUdWUAy/+qFsCs1xrI7emYvKclCLhs6cSJL
-         wnwz76YKUyVuE6di/tZZ9bhiYFYzLgqd373RCdBPa01rbpxzIeZVGfWOGN1Y5QaDpEAM
-         /7Iw==
+        d=gmail.com; s=20230601; t=1694799531; x=1695404331; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zj1YplooMzQIeendO/ZR6T9qTdnlAkNv7fz8wUiQeSM=;
+        b=IlfDqOwHuHIAV1//Nm765IJRcyvbATTM5lL1x9k/atlFf0H+jVD32MnsFDIVjRfVWb
+         UGU4AyMhK1Fulfzsqh6/gtsqaMvylFHfGTb6oNrL668a7JmynjY4Fa8RbFxTzEt0T9AJ
+         XWJi69LUAdUIRbTeqc+riiKWsB5+8zXMfpEOOBCaCkmXZi7r7GSUiwDSzApZ0MzAvsGh
+         xb7SdHY22OO6UEJQClFE8fZb8rF8ry66L2VGxxsC5KuvyM0xCmsB7XzDbQhe7usnOvFM
+         3+9x/ILPCHG7G3p0oNgUyWR5CUuynd73qJalEiInR4Haziny/fUIU2AhbvLZHq6Nzl94
+         xPBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694799275; x=1695404075;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8CEOaleRfmVWxu+aHRyiNpWZbJifyuSx+uIjLiDWCm0=;
-        b=soDNIkog0ePi5PbwLjl+J1rTXh83jm26Q334vIjC/4wymupsfRva9ZAuRR6m0Lcrob
-         PiiN+n9idM+XS8yBAbSqNGtNrsQk+vhntnwWB1J55rx5OD1U1kuJ9kWEzu+DynONYXoR
-         dYdkicuj32/trgRiw2DrImq2Z8BCh5b8f9D4rPWW+ZiSVEG7GkwadTbykYilSzLoslBd
-         tJ0tVdOaa2lvBOzl6LlEEXnGSBHH7mKERgaE1sOZPL5Wbg0aCqzl6Wq0z9GMNtY9B3LP
-         D5EkUjjg8xn0INY8vuTKMNKh6P2oh59vYr9L+RS9zBSvGF9UBI9b506ll2WEjQZ3I4YG
-         a4jg==
-X-Gm-Message-State: AOJu0Yyefjfm+6r1ATe7HN5V5KjVLN+59oXJ2EK99Eif6O1XDB3yiX2s
-	t2d7G2MAVBli7XHFvXunZZCBvaEqMi0mxe6yQFw=
-X-Google-Smtp-Source: AGHT+IFBiU/ZCcBisMOL23Ew9xLGlAsZyNiAQBseIuvEQJu6APv2wfjEyjUavA3eiZwGcb97xAwMjmNNJozwXDw6BJo=
-X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:7f04:6b3:b482:dd2c])
- (user=ndesaulniers job=sendgmr) by 2002:a81:ac5f:0:b0:579:f832:74b with SMTP
- id z31-20020a81ac5f000000b00579f832074bmr64518ywj.10.1694799274896; Fri, 15
- Sep 2023 10:34:34 -0700 (PDT)
-Date: Fri, 15 Sep 2023 10:34:26 -0700
+        d=1e100.net; s=20230601; t=1694799531; x=1695404331;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zj1YplooMzQIeendO/ZR6T9qTdnlAkNv7fz8wUiQeSM=;
+        b=es5AaV/iXOIJM2xtKab5h99ORuO+kpT4d2zEYij8F+UyEgDGpUF3xWJcixYmBXm2Om
+         oQKd08+aiQycewqCZAyk1fbl4REvvxlrLhjKl0XlUy0YTj4BUcMYrjgB41niBAK2SsXe
+         ePy+GYs31Z+uUQsZsDxrPHHrAh0Xh+H1nG44o/XAro91sQyT+OjEbMM2n8ADL0sMZ4lB
+         tkhot7t2jRX1YZal9cy0vH3g8nyQN/hUWHf0sbWGsNLwdtB03CN0KoBVrgNnzIvaP2g7
+         AWanZWkX7rMURcXrO345/XsQ6Qz1PBDoy+dqunZOLygu3emPpVJDQB9biIjLGQ7Gcb/C
+         6Wyg==
+X-Gm-Message-State: AOJu0YwE9WDmaHZAYrzstgJPY9+kpNUCSqOvMvLdG5l17Qz3k8xlAVIq
+	qktzrwl49vtG5bHivSIlLNWOVcog3YZ65pHTWYI=
+X-Google-Smtp-Source: AGHT+IEtYAnCuAobupNeMYOrJBTtzijb4Bjw1/ZMPCLU2PQeuM+74w8w2jYT7q7Qda+YMBNPH7xs3jkTkYbqKnTrwY8=
+X-Received: by 2002:ac2:52ab:0:b0:4fb:8f79:631 with SMTP id
+ r11-20020ac252ab000000b004fb8f790631mr1994108lfm.46.1694799530441; Fri, 15
+ Sep 2023 10:38:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAKKVBGUC/3WNSwrDIBiEryL/uhajaaJZ9R4llMRXBBuDFmkJ3
- r3ivsuZ+WbmhKSj0wkmdELU2SUX9irYBYHclt1q7FTVQAllRHQ3vB7mKYP3jcRs4FwsTHSq76F
- 2jqiN+7S9B6DKIpirvbn0DvHbXjJt4Z/BTHGHCR2HkSjGV2XuNgTr9VWGF8yllB/0GbpwsgAAA A==
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=eMOZeIQ4DYNKvsNmDNzVbQZqpdex34Aww3b8Ah957X4=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694799273; l=772;
- i=ndesaulniers@google.com; s=20230823; h=from:subject:message-id;
- bh=Su0VeWzLLW5m4JW7phmTjSjouMb7pr+oMSGtFqqroBs=; b=scxlJ85JlEGMgwbKW/xcGhuMTeJcbrDquF6+4ucCQh3voJj9Abvx6TkbueYcg7QcRH/LcaNrJ
- mX0JcNwT9T+AW4+NSmsF0uUr7OgKV5U9TpTdeb9hSdnz5v+sgu6TQxI
-X-Mailer: b4 0.12.3
-Message-ID: <20230915-bpf_collision-v3-0-263fc519c21f@google.com>
-Subject: [PATCH bpf v3 0/2] link to v1: https://lore.kernel.org/bpf/20230915103228.1196234-1-jolsa@kernel.org/
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Jiri Olsa <jolsa@kernel.org>
-Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@chromium.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>, stable@vger.kernel.org, 
-	Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>, Marcus Seyfarth <m.seyfarth@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-	autolearn=unavailable autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+References: <20230914145126.40202-1-hffilwlqm@gmail.com> <CAEyhmHRAvR=Ch-DjMpmpB0zeUsbQYcTXkMqyTSL9iwmZukcTgw@mail.gmail.com>
+ <8148921c-cc06-bad7-787f-d190cba0bce1@gmail.com> <CAEyhmHR9g+B67Fy_wmdTwHzMFhmdw86ak6dPFpMjui16ecTUjw@mail.gmail.com>
+In-Reply-To: <CAEyhmHR9g+B67Fy_wmdTwHzMFhmdw86ak6dPFpMjui16ecTUjw@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 15 Sep 2023 10:38:39 -0700
+Message-ID: <CAADnVQ+FLBbvE=TPuNHs2ir3s+6kVOpZGQ4U_X3SuAaAAcdL-w@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf: Fix tr dereferencing
+To: Hengqi Chen <hengqi.chen@gmail.com>
+Cc: Leon Hwang <hffilwlqm@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
+	Stanislav Fomichev <sdf@google.com>, kbuild test robot <lkp@intel.com>, Dan Carpenter <dan.carpenter@linaro.org>, 
+	"Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>, kernel-patches-bot@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
-Changes in v3:
-- combine v1 and v2 into a series; I didn't recognize that this macro
-  appeared twice in the kernel sources.
-- Use __PASTE twice.
-- Link to v2: https://lore.kernel.org/r/20230915-bpf_collision-v2-1-027670d38bdf@google.com
+On Thu, Sep 14, 2023 at 7:54=E2=80=AFPM Hengqi Chen <hengqi.chen@gmail.com>=
+ wrote:
+>
+> On Fri, Sep 15, 2023 at 10:18=E2=80=AFAM Leon Hwang <hffilwlqm@gmail.com>=
+ wrote:
+> >
+> >
+> >
+> > On 15/9/23 10:13, Hengqi Chen wrote:
+> > > On Thu, Sep 14, 2023 at 10:51=E2=80=AFPM Leon Hwang <hffilwlqm@gmail.=
+com> wrote:
+> > >>
+> > >> Fix 'tr' dereferencing bug when CONFIG_BPF_JIT is turned off.
+> > >>
+> > >> Like 'bpf_trampoline_get_progs()', return 'ERR_PTR()' and then check=
+ by
+> > >> 'IS_ERR()'. As a result, when CONFIG_BPF_JIT is turned off, it's abl=
+e to
+> > >> handle the case that 'bpf_trampoline_get()' returns
+> > >> 'ERR_PTR(-EOPNOTSUPP)'.
+> > >>
+> > >> Fixes: 4a1e7c0c63e0 ("bpf: Support attaching freplace programs to mu=
+ltiple attach points")
+> > >> Fixes: f7b12b6fea00 ("bpf: verifier: refactor check_attach_btf_id()"=
+)
+> > >> Fixes: 69fd337a975c ("bpf: per-cgroup lsm flavor")
+> > >> Reported-by: kernel test robot <lkp@intel.com>
+> > >> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+> > >> Closes: https://lore.kernel.org/r/202309131936.5Nc8eUD0-lkp@intel.co=
+m/
+> > >> Signed-off-by: Leon Hwang <hffilwlqm@gmail.com>
+> > >> ---
+> > >>  kernel/bpf/syscall.c    | 4 ++--
+> > >>  kernel/bpf/trampoline.c | 6 +++---
+> > >>  kernel/bpf/verifier.c   | 4 ++--
+> > >>  3 files changed, 7 insertions(+), 7 deletions(-)
+> > >>
+> > >> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> > >> index 6a692f3bea150..5748d01c99854 100644
+> > >> --- a/kernel/bpf/syscall.c
+> > >> +++ b/kernel/bpf/syscall.c
+> > >> @@ -3211,8 +3211,8 @@ static int bpf_tracing_prog_attach(struct bpf_=
+prog *prog,
+> > >>                 }
+> > >>
+> > >>                 tr =3D bpf_trampoline_get(key, &tgt_info);
+> > >> -               if (!tr) {
+> > >> -                       err =3D -ENOMEM;
+> > >> +               if (IS_ERR(tr)) {
+> > >> +                       err =3D PTR_ERR(tr);
+> > >>                         goto out_unlock;
+> > >
+> > > IS_ERR does not check the null case, so this should be IS_ERR_OR_NULL=
+ instead.
+> >
+> > Actually, bpf_trampoline_get() would not return NULL. It returns ERR_PT=
+R(-ENOMEM)
+> > or a valid ptr.
+> >
+>
+> OK, I missed the change in bpf_trampoline_get(). Anyway,
+>
+> Reviewed-by: Hengqi Chen <hengqi.chen@gmail.com>
 
----
-Jiri Olsa (1):
-      bpf: Fix BTF_ID symbol generation collision
-
-Nick Desaulniers (1):
-      bpf: Fix BTF_ID symbol generation collision in tools/
-
- include/linux/btf_ids.h       | 2 +-
- tools/include/linux/btf_ids.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
----
-base-commit: 9fdfb15a3dbf818e06be514f4abbfc071004cbe7
-change-id: 20230915-bpf_collision-36889a391d44
-
-Best regards,
--- 
-Nick Desaulniers <ndesaulniers@google.com>
-
+That's too much churn to address !JIT config.
+Just make it return NULL in that case,
+instead of hacking things all over the place.
