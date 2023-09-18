@@ -1,65 +1,61 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41FF2210F9
-	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 16:05:07 +0000 (UTC)
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C9644AB
-	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 09:03:50 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2c00e1d4c08so17040301fa.3
-        for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 09:03:50 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A72151F5FC
+	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 16:05:15 +0000 (UTC)
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BCE126
+	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 09:03:05 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id d75a77b69052e-414ba610766so564521cf.0
+        for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 09:03:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695052979; x=1695657779; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1695052841; x=1695657641; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HLVba2ehhbQq4ioWVdYGZ+oLzzTKyohQ6D5FFQAosU8=;
-        b=aZ0nDAeWYrJtSU3cbG45TzyZUTESLkvyXei5MUGHUubMSBU1xH7qQPics5GLx4l7PF
-         jx4HuwTzjqwUeeHKje4nTTRlo7MSO8o2snkKq4uILoJifvTxlBCXupEeCbgvVTlq/a+E
-         y85SX+eBxP0W1Pv+C0+LM5mg6PgKFrFjzfLLotYD5DwbCO42fo3PO2ZPlRcuLKJ1f5CD
-         2oi/PuGUl7k8zINmG89AYgaSMLG4Z2l+i3Ep9Crhss7xRoahOhahV79wgKtp2nrL1rE3
-         rmJBEDFvGePLIu8jzg8RRWQddqgjh/i/XhkVe6/9QmiH8N2PfhwEl27MYCSB8WbgV122
-         EnbQ==
+        bh=aPbc3h7r/oRbbvZIuYtcLljAjL8wVOiSbWBBq1HxtZI=;
+        b=U0AWW05RHq396RL86hb5uWizQikak28VzjFj1hQI1HS/hlOD+pITusJwGcOy0pzXH3
+         O0SJ6OYb9cS20oH9z7VyVDcIqiLAFAgvePkqV4GnsLd4b5r7E8boEY4trWrfqRL6+DYC
+         t2iIuqgQr6tuz6Poka7krqgu70bLZYWzOOqKAZxRGk1NBDmF7idWmHP9FmzV7YpNT/gj
+         yLEewMNbOXPsl/96oDCafHrpaHWiHFV1IQYPG1JED1m8SCO9oNJu6qzvwnrsN/YvOCoj
+         OwMq5f5sJaew0kdrJG0MiV4IvnvqhmZ7Q129dBrQjsybRYdDA7+3v/l85TALCtJylWnb
+         0Dfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695052979; x=1695657779;
+        d=1e100.net; s=20230601; t=1695052841; x=1695657641;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HLVba2ehhbQq4ioWVdYGZ+oLzzTKyohQ6D5FFQAosU8=;
-        b=pqxAaKq5D99kOj9RGKfLflgga/XPnTooXV298Uv1nHQ7gRAdS/2WLocb5mJg/5nlMl
-         M9IynnMfZWIsY905HWRCnvbg2/28+WZiK5keFZODYFjFLLuJcllUc3JJ3L9pH8Ms2Aoz
-         NVtAX86gr+D5+cWzz60m+B9Erp8jBtz+G2h/3DsJVqLYgHV59eyTTEi1nTHPtQI3siJU
-         Hztmn1+HyTLmb561Y5QXv0lE5OoS/00vgGK7QjsTtdaySzoZAqzI7Nv3d5w6Zun/bkvZ
-         t1PS/RrI8835mQYN0RwT1iCv7auzwZTcCowHT+uflVO/hkbTJb1VXlajtm39ph5XX+9F
-         oQGg==
-X-Gm-Message-State: AOJu0Yznc+I1Za4d6Birl8sIbs7sop/eSZQOyk2T5g56whMj1xQWEvKJ
-	Tf0wrLHGOvk66V9yG0I2plPyY30rfW9ypl1Ii9l6NkHz038=
-X-Google-Smtp-Source: AGHT+IEzL3HKdjX9k+RDyFemAVduCRRD6kGG9jB0DuRxmICwdSqpt32Qc1IxoDI39lZPQGxhRUs2Z4BnKxB8tWtOLXM=
-X-Received: by 2002:a05:600c:2215:b0:401:bf56:8ba0 with SMTP id
- z21-20020a05600c221500b00401bf568ba0mr7367134wml.28.1695052072963; Mon, 18
- Sep 2023 08:47:52 -0700 (PDT)
+        bh=aPbc3h7r/oRbbvZIuYtcLljAjL8wVOiSbWBBq1HxtZI=;
+        b=oTXnbKXTJWnk/HYU8OmAI0D4esBiU89cIrFASkDtwigVHmXn3gwlhh87EPoKOYxyFl
+         ap5BqRUB4iBdfTHvSuBt7FG5x+HzLRu+cWN80JeUrb9VMgGf/HOE53ksZeI12dtqZPQU
+         VXYvY0bDX6xGIGmgu/cOwLH7DEMsY1Lg9G0PwM85+PgdgA0d+f82iH2VpCKy0sQwCC3N
+         cVmIozTbR/SiUdIIyAMU8rwHDDC3Xuhv2NjMen7HPQP7rX321RsBemoaEgZ1Xdj3SmMr
+         negQAYdUu4nvtHmkUWBi4AK9XtzgupBVaeqMDIXtiOxb+M4bUuexfIEm/5G4nijWW0Qw
+         vSrA==
+X-Gm-Message-State: AOJu0Yx2w8I9iB+yh7mC4BWJOceE06/OeNneW7viLsqG9v/4OW+3PquU
+	Q4+9GAL5FrOiax45QIdD8nkn8BBbDIGaw0Y5ghE+sg==
+X-Google-Smtp-Source: AGHT+IFIefoxDkNOkiqpUZNXgc2fZMzOGoiJvuOfPtMmY+EmzdXSLDvdTT7+Ztu+qykuDhW/bRgroZ68/Zc+GlL5UUE=
+X-Received: by 2002:a05:622a:18a9:b0:410:8114:107b with SMTP id
+ v41-20020a05622a18a900b004108114107bmr331037qtc.12.1695052841053; Mon, 18 Sep
+ 2023 09:00:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230918143914.292526-1-memxor@gmail.com> <20230918143914.292526-4-memxor@gmail.com>
-In-Reply-To: <20230918143914.292526-4-memxor@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 18 Sep 2023 08:47:40 -0700
-Message-ID: <CAADnVQLX6BBzQuFS8bcP2ucfSDFGZT3C+N+yagxUiMPtnsra-Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 3/3] bpf: Disable exceptions when CONFIG_UNWINDER_FRAME_POINTER=y
+References: <20230918155233.297024-1-memxor@gmail.com> <20230918155233.297024-4-memxor@gmail.com>
+In-Reply-To: <20230918155233.297024-4-memxor@gmail.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Mon, 18 Sep 2023 18:00:29 +0200
+Message-ID: <CANn89iLUX16q0ir1ueOcLg_ROo5FXZ+t-U-116MjxrOOSrj0PA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/3] bpf: Disable exceptions when CONFIG_UNWINDER_FRAME_POINTER=y
 To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Eric Dumazet <edumazet@google.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Yonghong Song <yonghong.song@linux.dev>, David Vernet <void@manifault.com>, 
-	Puranjay Mohan <puranjay12@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 18, 2023 at 7:39=E2=80=AFAM Kumar Kartikeya Dwivedi
+On Mon, Sep 18, 2023 at 5:52=E2=80=AFPM Kumar Kartikeya Dwivedi
 <memxor@gmail.com> wrote:
 >
 > The build with CONFIG_UNWINDER_FRAME_POINTER=3Dy is broken for
@@ -70,6 +66,8 @@ On Mon, Sep 18, 2023 at 7:39=E2=80=AFAM Kumar Kartikeya Dwivedi
 > Fixes: fd5d27b70188 ("arch/x86: Implement arch_bpf_stack_walk")
 > Reported-by: Eric Dumazet <edumazet@google.com>
 > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
 
-Very weird that only this patch reached patchwork.
-Could you resend and trim cc list significantly?
+SGTM, feel free adding
+
+Reviewed-by: Eric Dumazet <edumazet@google.com>
