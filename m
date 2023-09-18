@@ -1,71 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1626A33E2
-	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 16:29:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C92EC433C9
-	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 16:29:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1695054547;
-	bh=bIScZDSarCmOldPejQYXyOwMlItQgnmEFeGCinR7+Ao=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=YlOvnsWpTIEjzR1qfc8wGBF3yBnSgrHjHIP39Mb4tfQfZb4KRCP9uAH5QKaHC0HWQ
-	 6JhbD8Y2p2zYBaVPRQugu+oqZB2RRdTeuCK7OQ//C7X9wH+THBv+6+autKWkf1KK4n
-	 WKCnTLDVDqI3c7FKVoaJx54g7IhejPrFOLLgUJ+4c+iCd/u19C/izdNVLnt/U2CzBa
-	 PnRvZ3oo3LsNOARVV+wxy97Q7TSzhO6wUbRK2XzHP/zZNt0dhFA/iVmE+JeoMK2yj8
-	 lP5Sd5FxlFKbrhrY7DEZAs9aPKwZUfx6yoJGEbNhZ5ZsSanwTaSiLCk2s22+4GFwHX
-	 jwQ6bXsNnUzjg==
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-52c4d3ff424so5841396a12.0
-        for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 09:29:07 -0700 (PDT)
-X-Gm-Message-State: AOJu0YzI8+u/WiJeCQNWVb0iaJsV7m/DWzs0IVISYnzb6ywBfEKqUsba
-	ljoPPahhtigZkPunvrujgMV4nv7WChpWwygJQU3REA==
-X-Google-Smtp-Source: AGHT+IGFizkAWnjs6XKY7G7IkOr11E8gFY0Ec5SFArsvF9d7vzTnafn7UQ9cXA9NFbKD9mljtwgdWRoPupGMinp53OU=
-X-Received: by 2002:aa7:d8d7:0:b0:52b:d169:b374 with SMTP id
- k23-20020aa7d8d7000000b0052bd169b374mr7709583eds.3.1695054546031; Mon, 18 Sep
- 2023 09:29:06 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2BA8262A9
+	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 16:34:08 +0000 (UTC)
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BBA9EED
+	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 09:33:55 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id ffacd0b85a97d-31aeef88a55so4224807f8f.2
+        for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 09:33:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695054834; x=1695659634; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=r3Naoc4gG2mkQtePsEFFN2S+1KQG8MR2mniab1JfQY8=;
+        b=jZ35HKH/bxUEogN4Cdt1CmdUHJ4OpBmAcy3ZA8SKuLVzpQc7Wdq1kBRPaOqa8MH7jZ
+         HqkktHqGIZ8mCQsSNbOQxo4OBJj+OsWcyBulpeqztCMqsthb3VUJWSrMPf9YyePR9/YP
+         8hyHZqSMn//PBm3+cgKRhs/a7O8tPhtsO7+0sQfUWAlhUuhbkB+KRBZmaVT9v8+A1tIq
+         07F5ZbGq2Fu5XgFc6H5o7Syqh7hApDYzS55YrIT7a0iISfIIe6OvwJdpX4sdV6F28z9I
+         bKD45TxsDZkjdarfs71d82TC8vpkM3ckURYRvJPnATzlAl0ol7J8EKRbH5eAO0rBqg7R
+         wUfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695054834; x=1695659634;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=r3Naoc4gG2mkQtePsEFFN2S+1KQG8MR2mniab1JfQY8=;
+        b=rmhBLNwzpYC+dZJhMUoCo942/ltc1OwnGuSX4P21/0tyyF1AI+ETLNmAz9YXiLYWHM
+         GgZHTDNYV5IaG+sERFvtwJHug4jLuMHfsNmyNGYyTd2rDtfJGO4wqflWQqC5Pz1BtdYL
+         w7P/Uojt3kk/Tnv0HJWNJ+je1VzyRlwyfojYMVFQL2VNQlL1H6MUEPuMWEuL7dRKmM7Q
+         hniAXxQ7efffBtEFJ0uW6701Ib5mD9O0LLbkqCFq8dSyubxLBsdCbxEBcS1XaRkMnVPs
+         yg9GNXUtglk5S9xhO1S2D/RfQttdP2v5FiZKJ+BNhY5xuMJD4pDPLvaFjC/Dd0h4qi5f
+         /8qA==
+X-Gm-Message-State: AOJu0YxAQrsSHm0prR9Y8hRrwZgbTo8Dh4bHvFHHeUTLHhRGRDKQkxw4
+	Xxu5xyAURpH+S7O6T5YUZVkO9V1Va2dc7g==
+X-Google-Smtp-Source: AGHT+IHCbsvkotmWKbRUe2jnayZm2q5L0JeKRmRUv8GpP0/5wv6mAv5LIYkmThpoBoP2Ad0uSd/WXw==
+X-Received: by 2002:a17:906:cc9:b0:9a1:af6f:e373 with SMTP id l9-20020a1709060cc900b009a1af6fe373mr7925959ejh.42.1695047958765;
+        Mon, 18 Sep 2023 07:39:18 -0700 (PDT)
+Received: from localhost (vpn-253-124.epfl.ch. [128.179.253.124])
+        by smtp.gmail.com with ESMTPSA id v15-20020a17090606cf00b009829d2e892csm6660350ejb.15.2023.09.18.07.39.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Sep 2023 07:39:18 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Matthieu Baerts <matthieu.baerts@tessares.net>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	David Vernet <void@manifault.com>,
+	Puranjay Mohan <puranjay12@gmail.com>
+Subject: [PATCH bpf-next v1 2/3] bpf: Fix bpf_throw warning on 32-bit arch
+Date: Mon, 18 Sep 2023 16:39:13 +0200
+Message-ID: <20230918143914.292526-3-memxor@gmail.com>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230918143914.292526-1-memxor@gmail.com>
+References: <20230918143914.292526-1-memxor@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230616000441.3677441-1-kpsingh@kernel.org> <20230616000441.3677441-6-kpsingh@kernel.org>
- <CAHC9VhSSX0KRuWRURUmt2tUis6fbbmozUbcoeAPkLRmfR2jqAg@mail.gmail.com>
-In-Reply-To: <CAHC9VhSSX0KRuWRURUmt2tUis6fbbmozUbcoeAPkLRmfR2jqAg@mail.gmail.com>
-From: KP Singh <kpsingh@kernel.org>
-Date: Mon, 18 Sep 2023 18:28:55 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ7KBBJV-CWPkMCqT6rK6yVEOJzhqUjvWzp9BAm-rx3Gsg@mail.gmail.com>
-Message-ID: <CACYkzJ7KBBJV-CWPkMCqT6rK6yVEOJzhqUjvWzp9BAm-rx3Gsg@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] security: Add CONFIG_SECURITY_HOOK_LIKELY
-To: Paul Moore <paul@paul-moore.com>
-Cc: linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
-	keescook@chromium.org, casey@schaufler-ca.com, song@kernel.org, 
-	daniel@iogearbox.net, ast@kernel.org, jannh@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1155; i=memxor@gmail.com; h=from:subject; bh=ZOTWQIcL62XArqSGkyZTul7LUdFIfys+cfEYyQUk+J0=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBlCGDZNFkPeR7f1jtQEtzuoZ6FDD6EEp2fT9oP7 fA8CdQa9qiJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCZQhg2QAKCRBM4MiGSL8R yrk0D/0fQJ9uVcnSnINXcKuy1/VPmpM/LQJJaFyZvH+A0P5TwzD2sJplIkKaUnCO755SLNI0bqF Xc4jJ0v0GgfikWt3eimeT9K/CvM4UHFOPle7MDUc+VwQs4r/T7MPpy0J5S9p0Nui/ckqGr5hLsg /h3j0x1wc0JMPeMT6qXCWTiqmtwiWYuue7af7zBuN4m68wc8XMQNAZbbRu1cBYcFmjecWL1x00T UGDYAtcm0gRhzRXptMHRz9HyzFcgJ/YTNNo1BhtTMgdY68J+WDpV3YH3ezmkR8JTbmAVgGhlMke XdUY0aQXNKCBAxJjOL+ELdJD3tx0hTabasfDJHLA5EuD3GEiuetm4zuZS21bAtISroUPAOSm6Ef MEDI2aXPsLZ/Rj8sXw0EFaRswOWLGecmpvk8YOWpnDP+n9GqZvFZZy4DbE+Ri3NiaXBqeppOPUy B3mz9d7/kpmoX9PkqxH5hjQfmYUAG9Hg1//CRQ29W8hUKh+184D8yfj2OdizIocn8CdQWJm6YQA IkS3UKiVHFSctHbkoqzK+vq4Z/IJQy2zdZcpMw8rWyg507Im/fLrUqHvE0RscjhpTRDTnjx54Cb NcZMHPzhN5NK1QpaW3Co8Sfx0FfcUQRRapup84xcr5G59/oOgb+avAShQ9+A6l6Js3/VIjlBYv2 2lgbz7sC3iUM3mA==
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Mon, Sep 18, 2023 at 3:56=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
-ote:
->
-> On Thu, Jun 15, 2023 at 8:05=E2=80=AFPM KP Singh <kpsingh@kernel.org> wro=
-te:
-> >
-> > This config influences the nature of the static key that guards the
-> > static call for LSM hooks.
->
-> No further comment on the rest of this patch series yet, this just
-> happened to bubble to the top of my inbox and I wanted to comment
-> quickly - I'm not in favor of adding a Kconfig option for something
+On 32-bit architectures, the pointer width is 32-bit, while we try to
+cast from a u64 down to it, the compiler complains on mismatch in
+integer size. Fix this by first casting to long which should match
+the pointer width on targets supported by Linux.
 
-I understand, I will send the v3 with the patch for reference and we
-can drop it, if that's the consensus.
+Fixes: ec5290a178b7 ("bpf: Prevent KASAN false positive with bpf_throw")
+Reported-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ kernel/bpf/helpers.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> like this.  If you have an extremely well defined use case then you
-> can probably do the work to figure out the "correct" value for the
-> tunable, but for a general purpose kernel build that will have
-> different LSMs active, a variety of different BPF LSM hook
-> implementations at different times, etc. there is little hope to
-> getting this right.  No thank you.
->
-> --
-> paul-moore.com
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 7ff2a42f1996..dd1c69ee3375 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -2488,7 +2488,7 @@ __bpf_kfunc void bpf_throw(u64 cookie)
+ 	 * deeper stack depths than ctx.sp as we do not return from bpf_throw,
+ 	 * which skips compiler generated instrumentation to do the same.
+ 	 */
+-	kasan_unpoison_task_stack_below((void *)ctx.sp);
++	kasan_unpoison_task_stack_below((void *)(long)ctx.sp);
+ 	ctx.aux->bpf_exception_cb(cookie, ctx.sp, ctx.bp);
+ 	WARN(1, "A call to BPF exception callback should never return\n");
+ }
+-- 
+2.41.0
+
