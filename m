@@ -1,76 +1,60 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF2B31F95D;
-	Mon, 18 Sep 2023 15:55:38 +0000 (UTC)
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8EA610D0;
-	Mon, 18 Sep 2023 08:54:27 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-1d544a4a315so3020032fac.3;
-        Mon, 18 Sep 2023 08:54:27 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDE20210FF
+	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 15:57:35 +0000 (UTC)
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425E71B5
+	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 08:56:05 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id 4fb4d7f45d1cf-530fa34ab80so2906754a12.0
+        for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 08:56:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695052210; x=1695657010; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=61snCKe06KPtK8SZFvfz/MMgI8Hd2GlUCK6N97LWobM=;
-        b=aAsBq0m6J+VzutsMpV30BVv5d1+lbdIJcstgS+f2tfC7WZH9+67GAW7FtohbIswlXu
-         qW6pvF2Exl8f93VklFOxlAMrrW2fh7sur+hcKOSU5zOHWXnjLGfjjGSAe+5CL9RPeT4A
-         g/6YCHVDbx9KsyyEIyW7LPFKUqXSyahvZ5K/E5LLZxbVd2vQCPvGwas1Ox0EIjSW+n2a
-         wIvbD90ALLxBdhLiM4xr9hZ2M9ddv97i8Vw+e3uGp07fAKHiyomVdNEyv0hGAwmu/fWs
-         LF4gjiG5APBRK0v/lEzS79d4ozPtxtW7oE6WDhhGySJ8W8ToLz7x6EvgdU5oegUHgo9+
-         RpLA==
+        d=gmail.com; s=20230601; t=1695052354; x=1695657154; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=b7/VCfZ/0qX+gh35pHtwLjYy8IOpSlbNWTMoh0TEEBo=;
+        b=fYPAB/sGSVY021u4QDYp5k4t6JY8efi74NNarLUBDtAyTVuLc3uNIcsjCWQvrIqlni
+         f4YBAZ4wZ0W+0ps67l1IlZ4z3SPoiP7b6ztUkwJbQKJWScNbx0w+gtO9/ysWTSn/MAyc
+         mIUK1yc7wjhIPT1dX1+j0TA9nQksNZDGchXigKo6lwJH0JHRjXnAAUoPJRrlRXtqaRFV
+         Tg61VIi61mdN4F7ekN/CoJorUdaP7wWL+QbcBwBfL5aPddl1pxTi41u6wukqT/3lxR24
+         CwlD9hLtDRtrwJtdW030dvsMdU86WY0/1fXjjrJ4DFRbvmNK6C0Bkrtw/syQZKSQu4CG
+         1ksg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695052210; x=1695657010;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=61snCKe06KPtK8SZFvfz/MMgI8Hd2GlUCK6N97LWobM=;
-        b=KYmm+CTvmopQy3X8MOAa52HOn/l4b54KvEtvSvz/CtLTbjC5hklPqPjniB7fjv4XKY
-         46Rmosj0TIw6oDX6i4g34gTT820bNV9fy/3rLUu/Sg8Tm0gh3Wun4wiRYjWC/dQDoFU3
-         n/Jp9czNGTU8NOSlG8dYkEqNf5PeqC3cEyF+YvgFR5uvY2MYHOX/jcZCYwoSqE+1br43
-         9D68JLTiOLiP3t448iVtC7SFqOKyOW4GabePOYut1HP+/QXZZk7ePOq+I1LSPx4XgSrN
-         C8fsDgjDImVaywdQ9G8DNNHw8CitrbSASfALvRmJF2NjsOM6FG5m9BEPGBNjPyd4A4v7
-         PY3g==
-X-Gm-Message-State: AOJu0Yxiht7rcxM/J5NGiVUHkkWzbwkwpSAkKLMIt7CmKGviXkpy1H2k
-	50TCxdZE+1eQPAa8dAPPvASLZA0edwJ8pw==
-X-Google-Smtp-Source: AGHT+IEzx/KVZBPGz2VbExUWiBpA46W8imxgXBV2iRh0gYXZXb1hNpFROGMdgbEmKHjxz+ijKNaF3w==
-X-Received: by 2002:a67:eb98:0:b0:44d:e70d:8a4b with SMTP id e24-20020a67eb98000000b0044de70d8a4bmr6951497vso.8.1695045481946;
-        Mon, 18 Sep 2023 06:58:01 -0700 (PDT)
-Received: from localhost (193.132.150.34.bc.googleusercontent.com. [34.150.132.193])
-        by smtp.gmail.com with ESMTPSA id r11-20020a0ce28b000000b00646e0411e8csm1833490qvl.30.2023.09.18.06.58.01
+        d=1e100.net; s=20230601; t=1695052354; x=1695657154;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b7/VCfZ/0qX+gh35pHtwLjYy8IOpSlbNWTMoh0TEEBo=;
+        b=g6WUAnyRA4KtQC/nbVqlQwu2HjnUmOWWUESNmJUw4jByyhHzeGs0EQN/G6c4bUgmCt
+         O0TIpnqi6JN9w01Bzf4v4Nox2RwULrSZBFAG3qi9mwIescstebDS4vjcMyxfQrC6MLc4
+         UctFYCCcckQE1V/hSTRv48LMs995Dm3F2Z91ImE16+VYQtIFl5aVg7EAsnWlbhhV7eWn
+         5vjncftSGZoQ2OzX9SLj8L9v07MsKkagw+M/hHSCPbcxVhgRHkM+y2k+hiUEZbHJOidH
+         YHO1xw5tz9R6QvbPeGfd1Nrx9ZhOLOoFM3hvP4bxPHUvh1yasAz2GSlFfKAC2SJIhOIV
+         KKWg==
+X-Gm-Message-State: AOJu0YwQEUd9OrC84XuJD6z5s1ZPwLDwvuAzkS6YTtvPQZvn9kEEEhOB
+	NtwgAKFFSioH5gu4EE620j0TwyNzz4mCdQ==
+X-Google-Smtp-Source: AGHT+IFH+oDN9EEdBCRWkZqFPGfEBttnBkrI4RJODj8XnAfmES7gu8Gr+fdeXyNBNDgg1tKBRtdINA==
+X-Received: by 2002:a17:907:2c47:b0:9ad:eeb3:22f8 with SMTP id hf7-20020a1709072c4700b009adeeb322f8mr78483ejc.22.1695052354328;
+        Mon, 18 Sep 2023 08:52:34 -0700 (PDT)
+Received: from localhost ([212.203.98.42])
+        by smtp.gmail.com with ESMTPSA id z18-20020a1709067e5200b0099d798a6bb5sm6588203ejr.67.2023.09.18.08.52.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Sep 2023 06:58:01 -0700 (PDT)
-Date: Mon, 18 Sep 2023 09:58:00 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: David Howells <dhowells@redhat.com>, 
- Eric Dumazet <edumazet@google.com>
-Cc: dhowells@redhat.com, 
- syzbot <syzbot+62cbf263225ae13ff153@syzkaller.appspotmail.com>, 
- bpf@vger.kernel.org, 
- davem@davemloft.net, 
- dsahern@kernel.org, 
- kuba@kernel.org, 
- linux-kernel@vger.kernel.org, 
- netdev@vger.kernel.org, 
- pabeni@redhat.com, 
- syzkaller-bugs@googlegroups.com
-Message-ID: <65085768c17da_898cd294ae@willemb.c.googlers.com.notmuch>
-In-Reply-To: <3905046.1695031382@warthog.procyon.org.uk>
-References: <3793723.1694795079@warthog.procyon.org.uk>
- <CANn89iLwMhOnrmQTZJ+BqZJSbJZ+Q4W6xRknAAr+uSrk5TX-EQ@mail.gmail.com>
- <0000000000001c12b30605378ce8@google.com>
- <3905046.1695031382@warthog.procyon.org.uk>
-Subject: Re: [syzbot] [net?] WARNING in __ip6_append_data
+        Mon, 18 Sep 2023 08:52:34 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>
+Subject: [PATCH bpf-next v2 0/3] Fixes for Exceptions
+Date: Mon, 18 Sep 2023 17:52:30 +0200
+Message-ID: <20230918155233.297024-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.41.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=762; i=memxor@gmail.com; h=from:subject; bh=ObqxHCxeTcSdg+MxsdVb36xCD4Y7T6K6uCkrzZz3MWQ=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBlCHIauOyLQUHMfBZrwfIs6M5OLiWVltbILC4UH HOQWtqZ5SaJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCZQhyGgAKCRBM4MiGSL8R yvmoD/93mRXKP7EciammR/+Wxuihvai6uD04RDdhgd/JowyynhtZmCyIZEuabELToCcMmqSJdJa USz0xkfA2rkIXBPleKDns4W5n/JS3oG/9H6s3z4/NZxyyj05p9BoAsCQC5Rn74nDA9D7R17g2w4 DeAw+T4HM1Moex6GTFn+n1m+C03p5FEFMEhNvF9g2UIW2vfwYxx4g6l8eC70Ue8sC4xdbw5KsKK iAwRGrDf2D3Aovt4rzmNV5HIL+FFZkpsYQEkuIyD4TfGnpPiwebrRKuaU28xuBT0WjmBdofB865 H35zFlSbZGC9HZYL4O3qjis/soPf11ytiV9LcrLkfVeRT8fdhBhBxjEp1eoMGCl8QmI7HHPR3zR 7bq9fOjFppZVAznR/AGkDUhn7aHJH8eB6nEEr0uihM3053MdJdes1QdAnHGY1tVuESdh0aUUdU+ Io2S/Gln48qt8UYsAPZ9rJlIZZs4FJ4nRRbezVNqBYVh2GWuva5JWvVNxNTubvbCEcLNSErad7+ jfxmVcZZar1UZjqQy7iK5pr+lsZN2YH0A27qyV3ekcuGXTvSg5WCD3v94urlR4zdJ4WsLWZjNgL uyB0M89lNnzhAY18B9VnSfxWNTXjdhWmWtChIvj27K1+Kx2Xs3JbKK3Crtc5kBJXgYDgS4O1zy1 /nXUmU7NC3iyAqg==
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
 	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -78,29 +62,27 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-David Howells wrote:
-> David Howells <dhowells@redhat.com> wrote:
-> 
-> > I think the attached is probably an equivalent cleaned up reproducer.  Note
-> > that if the length given to sendfile() is less than 65536, it fails with
-> > EINVAL before it gets into __ip6_append_data().
-> 
-> Actually, it only fails with EINVAL if the size is not a multiple of the block
-> size of the source file because it's open O_DIRECT so, say, 65536-512 is fine
-> (and works).
-> 
-> But thinking more on this further, is this even a bug in my code, I wonder?
-> The length passed is 65536 - but a UDP packet can't carry that, so it
-> shouldn't it have errored out before getting that far?  (which is what it
-> seems to do when I try it).
-> 
-> I don't see how we get past the length check in ip6_append_data() with the
-> reproducer we're given unless the MTU is somewhat bigger than 65536 (is that
-> even possible?)
+Set of fixes for bugs reported for the exceptions series.
 
-An ipv6 packet can carry 64KB of payload, so maxnonfragsize of 65535 + 40
-sounds correct. But payload length passed of 65536 is not (ignoring ipv6
-jumbograms). So that should probably trigger an EINVAL -- if that is indeed
-what the repro does.
+Changelog:
+----------
+v1 -> v2
+v1: https://lore.kernel.org/bpf/20230918143914.292526-1-memxor@gmail.com
 
+ * Resend with trimmed Cc due to patchwork problem (Alexei)
+
+Kumar Kartikeya Dwivedi (3):
+  selftests/bpf: Print log buffer for exceptions test only on failure
+  bpf: Fix bpf_throw warning on 32-bit arch
+  bpf: Disable exceptions when CONFIG_UNWINDER_FRAME_POINTER=y
+
+ arch/x86/net/bpf_jit_comp.c                         | 9 ++++-----
+ kernel/bpf/helpers.c                                | 2 +-
+ tools/testing/selftests/bpf/prog_tests/exceptions.c | 5 +++--
+ 3 files changed, 8 insertions(+), 8 deletions(-)
+
+
+base-commit: ec6f1b4db95b7eedb3fe85f4f14e08fa0e9281c3
+-- 
+2.41.0
 
