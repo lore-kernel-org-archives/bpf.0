@@ -1,122 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB13C6FB8
-	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 13:27:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45C21C433AB
-	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 13:27:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1695043668;
-	bh=NpDQaIq8slcpBBgt5F7J36tVVCzb5GbvEyBtCzOBLa8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=UoxmHwOgqyogWMleGl7hlYN60HkduLBu56UN6a+4DTfHcLmBgI+h1pf5qWAePe/Uk
-	 IbqBJP8SKRqIWxZyTr+dA2QAoihC53I3syrPshrD/i/O5neW3R+fPbjb3iGdp37RLZ
-	 PUdOuzTbvs0TwPzO9bOg8mIwcy0VrhLPrhJDaxSCW9pnAU6NYFC+tSP6v32rkmfRBx
-	 zGjl8ZbkzUCq8QUI8X2aE309WAaqmFZba1mAvrVYeU9nX6XOnDOChV6HaXRN8E9GjK
-	 ODvI9HpRdEj0ikMDnSA2QtIT/66Ed0qf87vgraicOICuSilQc/0/T4wfou04qrvFUu
-	 WrlEUzbRWL6fA==
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-52a4737a08fso5437422a12.3
-        for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 06:27:48 -0700 (PDT)
-X-Gm-Message-State: AOJu0YzVgaX9bp69xIWPUHkBEDyVd2E4QZujGXeCuUpl1BtYG48lGui8
-	/mPUhcnZhU6pL4meBVq9vEDnQlt+/815mNS4evz2Dw==
-X-Google-Smtp-Source: AGHT+IHVacgZlb19m5SNsEYtq+vvIEOgYDfqOIvL1EGeUP6of8LJwyHm479IBQOjE2k7UHwxocOqT8Qvp9EQwMirE8w=
-X-Received: by 2002:aa7:d58b:0:b0:530:4f4b:9d1a with SMTP id
- r11-20020aa7d58b000000b005304f4b9d1amr7872098edq.5.1695043666738; Mon, 18 Sep
- 2023 06:27:46 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 985A91170A
+	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 15:16:45 +0000 (UTC)
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD776107
+	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 08:16:40 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-d81dd7d76e0so2565458276.1
+        for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 08:16:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1695050199; x=1695654999; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=I+ba8nOonW48pFx7JDQczLkhubSZ9AQohpTMzp90x54=;
+        b=3L2f5AfwN/33pSZoxV9upUim0bVlxKggLbwoK2s8WyDcsG6yYUmQbqgw/env4sozbj
+         hpQwMGZo45N6nQyB9dZga81erjfIlrZcbR5WzHeycmrby5OVPT9iOH9cZZu3+4NiEhE/
+         MIKTrH8JWgSaOyHALl05fpoXOXG1Oe7u/+BDxqKH+QYxGDR03/zGx7TY/iZVHcu/c58l
+         3PbN63AfzBHYJ9hsmIKjA+yMsD0cjiR29be0US2QDgpw8tH/XA7ClBfVEifUhizEAnMc
+         hqYlcZih2S7BKdx4qXoLnkVNjfHp7AJo5PJUMn8LfwGe6sQ3QmgXz7J4spOTW96G/1zW
+         zkbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695050199; x=1695654999;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=I+ba8nOonW48pFx7JDQczLkhubSZ9AQohpTMzp90x54=;
+        b=QGjkPf1Rs9jJ4mdfWRtWaofg/wBCn7H1Nj0Q55KsQBgDF/8rE33Ry+EcUGhxOfygWz
+         qSR3RhVuWApDtQMke94W1s3khGr0I2Vq62Al3OD2vS3knl5DkF8dgdQgJdDRYfX2EiLB
+         /I4GiyAcOULzauZ8te0GSKOw2YaxUbn0j+wHdv3mtP7w1KCIXz3EEMNE1soYuFkmy7Dl
+         27O4dYbOeb/87hj1QrMvUqlamUzAfyoaZaYquwHvZDP4RoUrL4+/14Ns0mQ70htUhr51
+         TwA958eA3IReeSPUy2f72YIPXm0LGEoaq+65hMidrwtQRFba780XsKFwEZJWfz+CDxrP
+         cpYA==
+X-Gm-Message-State: AOJu0Yzv7WdD4wqPgAgefMyg1b9j47+j0FVEeJMa/TMcUcqp7qhXC95k
+	LhcCqJCTVW+dLF4Wzmg/9DKeLOj1z7ZprvIz6FAEcQ==
+X-Google-Smtp-Source: AGHT+IHjG3S38tK48PZ1ZKvxcW+y67RTNF+WQ4QGZuh9+NLEbx+e4VBHmEB4JWtU/da/g/d9iBb9Cg==
+X-Received: by 2002:a0c:e485:0:b0:656:292:d45e with SMTP id n5-20020a0ce485000000b006560292d45emr8664335qvl.1.1695049767648;
+        Mon, 18 Sep 2023 08:09:27 -0700 (PDT)
+Received: from [192.168.1.31] (d-65-175-157-166.nh.cpe.atlanticbb.net. [65.175.157.166])
+        by smtp.gmail.com with ESMTPSA id w25-20020a0cb559000000b0064f741d2a97sm3541898qvd.40.2023.09.18.08.09.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Sep 2023 08:09:27 -0700 (PDT)
+Message-ID: <5c3b16c8-63e6-4f80-8fa2-6bacb38cdcb6@google.com>
+Date: Mon, 18 Sep 2023 11:09:26 -0400
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230616000441.3677441-1-kpsingh@kernel.org> <20230616000441.3677441-6-kpsingh@kernel.org>
- <202306201356.CF454506@keescook>
-In-Reply-To: <202306201356.CF454506@keescook>
-From: KP Singh <kpsingh@kernel.org>
-Date: Mon, 18 Sep 2023 15:27:36 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ7Nv+_L_scpZL3L32AZtradq6yTeN9adz0ayihe3PpHsw@mail.gmail.com>
-Message-ID: <CACYkzJ7Nv+_L_scpZL3L32AZtradq6yTeN9adz0ayihe3PpHsw@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] security: Add CONFIG_SECURITY_HOOK_LIKELY
-To: Kees Cook <keescook@chromium.org>
-Cc: linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
-	paul@paul-moore.com, casey@schaufler-ca.com, song@kernel.org, 
-	daniel@iogearbox.net, ast@kernel.org, jannh@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: BPF memory model
+Content-Language: en-US
+To: paulmck@kernel.org
+Cc: Josh Don <joshdon@google.com>, Hao Luo <haoluo@google.com>,
+ davemarchevsky@meta.com, Tejun Heo <tj@kernel.org>,
+ David Vernet <dvernet@meta.com>, Neel Natu <neelnatu@google.com>,
+ Jack Humphries <jhumphri@google.com>, bpf@vger.kernel.org, ast@kernel.org
+References: <CABk29NuQ4C-w_JA-zev796Nr_vx932qC4_OcdH=gMM6HZ_r4WQ@mail.gmail.com>
+ <33f06fa6-2f4d-4e50-a87e-0d6604d3c413@paulmck-laptop>
+From: Barret Rhoden <brho@google.com>
+In-Reply-To: <33f06fa6-2f4d-4e50-a87e-0d6604d3c413@paulmck-laptop>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+	autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Tue, Jun 20, 2023 at 10:59=E2=80=AFPM Kees Cook <keescook@chromium.org> =
-wrote:
->
-> On Fri, Jun 16, 2023 at 02:04:41AM +0200, KP Singh wrote:
-> > [...]
-> > @@ -110,6 +110,9 @@ static __initdata struct lsm_info *exclusive;
-> >  #undef LSM_HOOK
-> >  #undef DEFINE_LSM_STATIC_CALL
-> >
-> > +#define security_hook_active(n, h) \
-> > +     static_branch_maybe(CONFIG_SECURITY_HOOK_LIKELY, &SECURITY_HOOK_A=
-CTIVE_KEY(h, n))
-> > +
-> >  /*
-> >   * Initialise a table of static calls for each LSM hook.
-> >   * DEFINE_STATIC_CALL_NULL invocation above generates a key (STATIC_CA=
-LL_KEY)
-> > @@ -816,7 +819,7 @@ static int lsm_superblock_alloc(struct super_block =
-*sb)
-> >   */
-> >  #define __CALL_STATIC_VOID(NUM, HOOK, ...)                            =
-    \
-> >  do {                                                                  =
-    \
-> > -     if (static_branch_unlikely(&SECURITY_HOOK_ACTIVE_KEY(HOOK, NUM)))=
- {    \
-> > +     if (security_hook_active(NUM, HOOK)) {                           =
-    \
-> >               static_call(LSM_STATIC_CALL(HOOK, NUM))(__VA_ARGS__);    =
-    \
-> >       }                                                                =
-    \
-> >  } while (0);
-> > @@ -828,7 +831,7 @@ do {                                               =
-                            \
-> >
-> >  #define __CALL_STATIC_INT(NUM, R, HOOK, LABEL, ...)                   =
-    \
-> >  do {                                                                  =
-    \
-> > -     if (static_branch_unlikely(&SECURITY_HOOK_ACTIVE_KEY(HOOK, NUM)))=
- {  \
-> > +     if (security_hook_active(NUM, HOOK)) {    \
-> >               R =3D static_call(LSM_STATIC_CALL(HOOK, NUM))(__VA_ARGS__=
-);    \
-> >               if (R !=3D 0)                                            =
-      \
-> >                       goto LABEL;                                      =
-    \
->
-> I actually think I'd prefer there be no macro wrapping
-> static_branch_maybe(), just for reading it more easily. i.e. people
-> reading this code are going to expect the static_branch/static_call code
-> patterns, and seeing "security_hook_active" only slows them down in
-> understanding it. I don't think it's _that_ ugly to have it all typed
-> out. e.g.:
+On 9/8/23 04:42, Paul E. McKenney wrote:
+> But what BPF programs are you running that are seeing excessive 
+> synchronization overhead? That will tell us which operations to start 
+> with. (Or maybe it is time to just add the full Linux-kernel 
+> atomic-operations kitchen sink, but that would not normally be the way 
+> to bet.)
 
-Done and agreed, especially given that this is behind a macro anyways.
+Here's what I use in BPF, (also for writing parallel schedulers):
+- READ_ONCE/WRITE_ONCE
+- compiler atomic builtins, like CAS, swap/exchange, fetch_and_add, etc.
+- smp_store_release, __atomic_load_n, etc.
+- at one point, i was sprinkling asm volatile ("" ::: "memory") around 
+too, though not in any active code at the moment.
+
+My mental model, right or wrong, is that I am operating under something 
+like the LKMM, and that I need to convince the compiler to spit out the 
+right code (sort of like writing shared memory code to talk to a device 
+or userspace) and hope the JIT does the right thing.
+
+Barret
 
 
->
->         if (static_branch_maybe(CONFIG_SECURITY_HOOK_LIKELY,             =
-    \
->                                 &SECURITY_HOOK_ACTIVE_KEY(HOOK, NUM)) {  =
-    \
->                 R =3D static_call(LSM_STATIC_CALL(HOOK, NUM))(__VA_ARGS__=
-);    \
->                 if (R !=3D 0)                                            =
-      \
->                         goto LABEL;                                      =
-    \
->
->
->
-> --
-> Kees Cook
