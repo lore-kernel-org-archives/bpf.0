@@ -1,115 +1,159 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FF3A1C289
-	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 15:36:09 +0000 (UTC)
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13BD01706
-	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 08:33:01 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id a640c23a62f3a-9adc75f6f09so474493066b.0
-        for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 08:33:00 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F9071CAAC;
+	Mon, 18 Sep 2023 15:39:44 +0000 (UTC)
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B183C171D;
+	Mon, 18 Sep 2023 08:38:21 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9a64619d8fbso614591766b.0;
+        Mon, 18 Sep 2023 08:38:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695050989; x=1695655789; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1695051309; x=1695656109; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1YiCPcSujgZLNKIlHUVm+vvy2lgJ4MowgcIqAbJ/rmc=;
-        b=KbNe0xMHjsitcj8rdrAnZ3LUKrtLhdBFDpJeW4hHk0p863fvFHTT0wrfDy7lc7eKMh
-         OWHnG8Yf+gNuuyYcfPvrPUUNBz7ak10fEZ2mSj8EIWOZknoGGoWXQyOovLD797g40kpP
-         lwWF++mytXWZfrSqwkIdcD7Vup1pwqCm4X1fhU2U5V/pPHr0xmQNv5yInGw6F51sSK9p
-         NKfqQAojyVr+mxHs+WR2Hc7ee6uOJFxd62niewNLfYpBchvE+MeVy13vPCKbkJqfriGP
-         g3uznwMJuYFcqXfFTu8HTspiY9RNrW3tOwns72c0Xwb65GdWV6h23jweeeecLtpKc7NG
-         ln5A==
+        bh=lIg5kmcPyIGWrNt6ZWUNIONMl/n/uAOZSBLcW4/Hcy4=;
+        b=Hv+NRusGbiQa6MAbmfZp8SCfvT0C3RFHyjg7sAQ5qYO4Qsrbkp1/F0Z48DB/EfcQWm
+         FyGymStnVGZ5Gvq54+TdB3mSYGjZqXF1Jzj7W0mufZEN94xMR4orDKOBvvnfcQV3Ke7m
+         ATA3rPEpH3ja0O+VP6XvC+6315jAFNJyAcpfSMrKGxTU84k0KviKlZN5e03eng3l44mk
+         m3taGDnPmjYE9Xa5UyIP6/GLbmpTHYTf90TlV7G0My+/m35nEf9lqFPrGc8C8G0JweGs
+         FefI4d7t8NeYOJXL7V7ko7N1udqL7niE/kz8rn5aqZa+l2hM6JyEax5Me4BwLeUdBr1V
+         dV0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695050989; x=1695655789;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1695051309; x=1695656109;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1YiCPcSujgZLNKIlHUVm+vvy2lgJ4MowgcIqAbJ/rmc=;
-        b=CX2OWoAeaJHg9Vi7ZU/aa1CKiQVoIdtezAWlE6v72n5/aicqM2H/pO0QcdeKY8xMLm
-         DCD1oaZEwfMPVBxUiIj2DxYtFc1DUe/90IySrjwRm2thhS1A3lnENtugyrAKiD3eYv4m
-         RGWynS9c9mpoJ/6sekKpcFgDzzK/oapImutSV/0PAjOeDkC0CdbAPvbIjZru3lQofSfu
-         yfWk4gMS8vAiXsD+vVexEQgu/WhlXABsFmo9K7Er58HGRXtfdTZCFz3kpIqHHSY4vz3C
-         UbSnYrD4JlCYEgsJzGAD4HSz+CIzKk+Rm4zKwlZHwR2s54zSlQcVxyXHbp4yGCej/NRu
-         2kdw==
-X-Gm-Message-State: AOJu0YwTIKA1RgafpeBNk0Whq4Ii311XW9xBnGn86GV5sVFanabfB6U0
-	LpRBU3WwtCK2tMs/OT9NWmAuaHmfQg1p/w==
-X-Google-Smtp-Source: AGHT+IGDlgpk4SMAnwmzydIfWpcDsuXIR1s+XP+sc0EgWsJa4IQq6cy2MHd66g9m/PBnCkMZ7JOYwA==
-X-Received: by 2002:a05:6512:2526:b0:503:9ea:3a67 with SMTP id be38-20020a056512252600b0050309ea3a67mr5140809lfb.26.1695047959858;
-        Mon, 18 Sep 2023 07:39:19 -0700 (PDT)
-Received: from localhost (vpn-253-124.epfl.ch. [128.179.253.124])
-        by smtp.gmail.com with ESMTPSA id v15-20020a056402348f00b005308a170845sm4698778edc.29.2023.09.18.07.39.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Sep 2023 07:39:19 -0700 (PDT)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Eric Dumazet <edumazet@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	David Vernet <void@manifault.com>,
-	Puranjay Mohan <puranjay12@gmail.com>
-Subject: [PATCH bpf-next v1 3/3] bpf: Disable exceptions when CONFIG_UNWINDER_FRAME_POINTER=y
-Date: Mon, 18 Sep 2023 16:39:14 +0200
-Message-ID: <20230918143914.292526-4-memxor@gmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230918143914.292526-1-memxor@gmail.com>
-References: <20230918143914.292526-1-memxor@gmail.com>
+        bh=lIg5kmcPyIGWrNt6ZWUNIONMl/n/uAOZSBLcW4/Hcy4=;
+        b=uqM4xcpMlxHmEKpvTokCfrDu6VOMruEXPdhoxk012PALCPLac2k2YmTs3GR8VwTA9k
+         ieLKniNxOTlM5uJWFFEmfajq7XTEVNRqWfLULinVAp2Mpk3A2aSSyFBAD8Bh9XW4mlqY
+         Fyxkv9a77ybga2ObkDh5aAj1MzQ0auTqw153R99X3fsOhQHHsCDp/BIJXFYJQTbTpW3W
+         3mKLjExIkCYuSqiyNENSzb/Z8d5SFcSsgvaO8yCbooN8W67L0/COxaJKiY6vdwXlExOW
+         +L08bl3ywrtREuklBdH3ps+sJcY7NbgXBuAdwfYe/Zl4S8EWt7iw7yrE10rgeViEBR1I
+         cyzg==
+X-Gm-Message-State: AOJu0Yz5OxVRse9/speJKeFpQ8G/0u6SITUzo9Jj/5TbvhKi2xnBK1CQ
+	d+eK4RqDiw0eiJ+ZBq4dogX3bQ9jVss1xMaWP1nM4BTPsSE=
+X-Google-Smtp-Source: AGHT+IGbRU1gGq5co9AF9V4Vu4I8crFNkb5bMq6AdvHqEfRp8Fy7YH+gFbsjE4OgZ/2TiBFl6puhScGV2pbPEWH/hSY=
+X-Received: by 2002:adf:e0ca:0:b0:319:6997:942e with SMTP id
+ m10-20020adfe0ca000000b003196997942emr7333572wri.8.1695045362032; Mon, 18 Sep
+ 2023 06:56:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1606; i=memxor@gmail.com; h=from:subject; bh=znk/eRrHas+L6qZGPKLxKYJFS9c8+0jZu8DHA5j7bn8=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBlCGDalXKT6QxLcISac8/HqhxMxlkR+GK7znj4E +bFGXLmgz+JAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCZQhg2gAKCRBM4MiGSL8R ykQ/D/9btE9cc7zW6cRgnyZ1s6zbD2imMI5MPYJTEygnC+fvhYpOxiVDlmV15iRj86mBXeCgEmF xaxUP7crsJpgs07huyeFoM8CHSnS+/AOFZQC8yOJxJquc02mToLl2DwCz5R/RQwcoYjHxlVpe0s jbZGJ2qs2jOj3BoFm1vwxGg+6ouMPT+K49bCq9E3kZlW2+jU+CnzZKAt3pIUacW8vhvP9sTrmZC V0ijsGVK0yMWe1My7dTL2W0FhIK9iJir/1Q/cAwSQqxnqFI7tq2+RxGx38Af+0tBGGO1DnropSx ztU5vihHb9z7Qd29x43dyGZRrHai33ykYAEHbr3BvcEVlkoFv6dSk7fFv7DGlm4OPxL4/PuOx5J ZhxqAf81eETt3pYQuERXvllZgMVjPcFldbhhqQhedGmXvCbMkAlhvG80vQf6o4QHMmK48K//0dA n7jifOEa9FoDNga00DFy0a45JAqVHLLBuKymrOWptJwrZ8Yy0H4PV1xGqVZGW6rph0QvR0/gq3s elQ6V00lPnzzl9JwRmyu6O3yhdvxA4RVAjjRnF1UMSGacFvpj0k4Il8PEtJfac47zKqNMpZZnbv 8BGegR40ABbMY2mSDu3T++VzNQcYcps5S8P6+ZYamjthYV0G8pRYvRBXdo6ngOabh/eHmgYDyKo 3YBNSqOAbJk0MXw==
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
-Content-Transfer-Encoding: 8bit
+References: <20230916165853.15153-1-alexei.starovoitov@gmail.com>
+ <CANn89iK_367bq4Gv+AuA-H5UgXNuM=N3XCp7N8nkeMik0Kwp+Q@mail.gmail.com>
+ <CAADnVQL14y5=eXp=KwAjOYeLuu8DTbL_GDkGxNoHjhy498yBqw@mail.gmail.com> <CANn89iKkEcsaEQRNmxdEHAkTbPVgVekUcjJvDsd-_fs0M9Qszw@mail.gmail.com>
+In-Reply-To: <CANn89iKkEcsaEQRNmxdEHAkTbPVgVekUcjJvDsd-_fs0M9Qszw@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 18 Sep 2023 06:55:51 -0700
+Message-ID: <CAADnVQLn1dtBNyywZO38WyWtUyomKJDdMefpkj3mkR=+fOh+tg@mail.gmail.com>
+Subject: Re: pull-request: bpf-next 2023-09-16
+To: Eric Dumazet <edumazet@google.com>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-The build with CONFIG_UNWINDER_FRAME_POINTER=y is broken for
-current exceptions feature as it assumes ORC unwinder specific fields in
-the unwind_state. Disable exceptions when frame_pointer unwinder is
-enabled for now.
+On Mon, Sep 18, 2023 at 6:54=E2=80=AFAM Eric Dumazet <edumazet@google.com> =
+wrote:
+>
+> On Mon, Sep 18, 2023 at 3:41=E2=80=AFPM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Mon, Sep 18, 2023 at 6:25=E2=80=AFAM Eric Dumazet <edumazet@google.c=
+om> wrote:
+> > >
+> > > On Sat, Sep 16, 2023 at 6:59=E2=80=AFPM Alexei Starovoitov
+> > > <alexei.starovoitov@gmail.com> wrote:
+> > > >
+> > > > Hi David, hi Jakub, hi Paolo, hi Eric,
+> > > >
+> > > > The following pull-request contains BPF updates for your *net-next*=
+ tree.
+> > > >
+> > > > We've added 73 non-merge commits during the last 9 day(s) which con=
+tain
+> > > > a total of 79 files changed, 5275 insertions(+), 600 deletions(-).
+> > > >
+> > > > The main changes are:
+> > > >
+> > > > 1) Basic BTF validation in libbpf, from Andrii Nakryiko.
+> > > >
+> > > > 2) bpf_assert(), bpf_throw(), exceptions in bpf progs, from Kumar K=
+artikeya Dwivedi.
+> > > >
+> > > > 3) next_thread cleanups, from Oleg Nesterov.
+> > > >
+> > > > 4) Add mcpu=3Dv4 support to arm32, from Puranjay Mohan.
+> > > >
+> > > > 5) Add support for __percpu pointers in bpf progs, from Yonghong So=
+ng.
+> > > >
+> > > > 6) Fix bpf tailcall interaction with bpf trampoline, from Leon Hwan=
+g.
+> > > >
+> > > > 7) Raise irq_work in bpf_mem_alloc while irqs are disabled to impro=
+ve refill probabablity, from Hou Tao.
+> > > >
+> > > > Please consider pulling these changes from:
+> > > >
+> > > >   git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
+> > > >
+> > >
+> > > This might have been raised already, but bpf on x86 now depends on
+> > > CONFIG_UNWINDER_ORC ?
+> > >
+> > > $ grep CONFIG_UNWINDER_ORC .config
+> > > # CONFIG_UNWINDER_ORC is not set
+> > >
+> > > $ make ...
+> > > arch/x86/net/bpf_jit_comp.c:3022:58: error: no member named 'sp' in
+> > > 'struct unwind_state'
+> > >                 if (!addr || !consume_fn(cookie, (u64)addr,
+> > > (u64)state.sp, (u64)state.bp))
+> > >                                                                  ~~~~=
+~ ^
+> > > 1 error generated.
+> >
+> > Kumar,
+> > can probably explain better,
+> > but no the bpf as whole doesn't depend.
+> > One feature needs either ORC or frame unwinder.
+> > It won't work with unwinder_guess.
+> > The build error is a separate issue.
+> > It hasn't been reported before.
+>
+> In my builds, I do have CONFIG_UNWINDER_FRAME_POINTER=3Dy
+>
+> $ grep UNWIND .config
+> # CONFIG_UNWINDER_ORC is not set
+> CONFIG_UNWINDER_FRAME_POINTER=3Dy
+>
+>
+> I note state.sp is only available to CONFIG_UNWINDER_ORC
+>
+> arch/x86/include/asm/unwind.h
+>
+> #if defined(CONFIG_UNWINDER_ORC)
+>     bool signal, full_regs;
+>     unsigned long sp, bp, ip;
+>     struct pt_regs *regs, *prev_regs;
+> #elif defined(CONFIG_UNWINDER_FRAME_POINTER)
+>    bool got_irq;
+>    unsigned long *bp, *orig_sp, ip;   // this is orig_sp , not sp.
 
-Fixes: fd5d27b70188 ("arch/x86: Implement arch_bpf_stack_walk")
-Reported-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- arch/x86/net/bpf_jit_comp.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 84005f2114e0..8c10d9abc239 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -3003,16 +3003,15 @@ void bpf_jit_free(struct bpf_prog *prog)
- bool bpf_jit_supports_exceptions(void)
- {
- 	/* We unwind through both kernel frames (starting from within bpf_throw
--	 * call) and BPF frames. Therefore we require one of ORC or FP unwinder
--	 * to be enabled to walk kernel frames and reach BPF frames in the stack
--	 * trace.
-+	 * call) and BPF frames. Therefore we require ORC unwinder to be enabled
-+	 * to walk kernel frames and reach BPF frames in the stack trace.
- 	 */
--	return IS_ENABLED(CONFIG_UNWINDER_ORC) || IS_ENABLED(CONFIG_UNWINDER_FRAME_POINTER);
-+	return IS_ENABLED(CONFIG_UNWINDER_ORC);
- }
- 
- void arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp, u64 bp), void *cookie)
- {
--#if defined(CONFIG_UNWINDER_ORC) || defined(CONFIG_UNWINDER_FRAME_POINTER)
-+#if defined(CONFIG_UNWINDER_ORC)
- 	struct unwind_state state;
- 	unsigned long addr;
- 
--- 
-2.41.0
-
+Right. Our replies crossed.
+Please ignore this PR. We need to fix this first.
