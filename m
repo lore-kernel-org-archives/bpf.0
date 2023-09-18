@@ -1,64 +1,66 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EBD41D686
-	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 16:06:53 +0000 (UTC)
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C42B2D42
-	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 09:06:47 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id 38308e7fff4ca-2bfea381255so37284011fa.3
-        for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 09:06:46 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0119E210FB;
+	Mon, 18 Sep 2023 16:07:55 +0000 (UTC)
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E5F46BA;
+	Mon, 18 Sep 2023 09:07:43 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id 5b1f17b1804b1-404573e6c8fso47331365e9.1;
+        Mon, 18 Sep 2023 09:07:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695053205; x=1695658005; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bWLbZ1J0oeUlS0QBC3LOMF2rfKN6MrliiLEkPfiun10=;
-        b=OVZd0AGJaBh7AmWJ+ZE/PYG5u0oil6BFKksvf2l+T5UKJfN5ZYr7LbwwJD0YgdsbqG
-         VQDWQTTHKfNGIyUczEHH7POKEA/yf36GiKW+J0VIHZ8Bcon5Do9eUe1cCygf4+rKp0K3
-         /6tYosjlSIf26p5q/pE+GfY2HO+zWaITREFYKsceUWcGg18dPpENEcxgLoUSGQ5IHrwb
-         688bf4XLwamCrBw7ruWqlKT6vDfmOckywdmUhvyFCleTz0kD5QJv/5nkhG6dPnlpoGjb
-         WLn/tWzSn6nBgz8OMquzeCxoItPTNQGUDz0mQ5efzgGvEH2qliih5fsvwZ9+Vb/Koe18
-         G2gw==
+        d=gmail.com; s=20230601; t=1695053262; x=1695658062; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=J8DqzhvzyGA39Yvgz+zBRm+sIYZErBZTUzgkb6fr790=;
+        b=OvdiFBZN0FhFPMNTD5Tsj4dfT3/0/g4OGvo0a8AHecS7aOo+d+A13yQcrMRwEcK3U2
+         Cxzpe+i++Htli53SpWnhykUcLFH1f6JulIDLnmtRmz4JXbNKO6BLZ1LVxRpX+JNYqkls
+         8l2dA70n2WQCw2HlXG0/WZcCtP1/HLLWXs0H+zd4GoEnSQerG8+m7+f7iPs7aSQUFhZN
+         su4NJwisDz83dJziEut67D7aYB32/XdgjJqYGpinkFGjA5ov38EnneKFWt0KVMNgKxZK
+         B1xy/1rGiQbW5hs6Jfk0/1e1P4PMtX1xpIQn5/gxOSEbmrxjKcGsIYDpmNlR4c73Z74Y
+         yOlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695053205; x=1695658005;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bWLbZ1J0oeUlS0QBC3LOMF2rfKN6MrliiLEkPfiun10=;
-        b=e0pHHMNPeioAL6lzmqKc1RtCOZqmV5jitvEh9H5Y7IuD/a+LNj5W9Z5ypz2/F25ZkC
-         t7KsL3fAA0UE2LxdiKDLkopCn5c0EFxTxdsZDw4yFBXyy9Zhon3rlHlRJtQeXnoCNv3O
-         vWp//I6cis9u3nVUuhP13JinnLRDU4nsXFETxBpa5Mry4V05Lst4//W0A8wPW1kdwdjR
-         P5FlE0Zzn5BP/Py/w4KGM7fwBYQiAy3NniuZxqK8PzX7omdwEEULywzJzyqdqA1mxiI9
-         Fb1EQAjf07WWgxUn53ST4oI7rorKYLxGYvNb3yIMTge4I8ciqIDshycujBr+dwJAoXLH
-         dg+w==
-X-Gm-Message-State: AOJu0YyDJtsKjyTifM2rym6Prrer/fn8owcrVoGQ4jtFkLXRFbFAbxFh
-	WjbtzvF5zhRh1lmZzQSamIH+adzn7YHzvQ==
-X-Google-Smtp-Source: AGHT+IFGZzuVgpOzjT+QEt1YLmcP1fk7iBZXUwlC0/Soo2Om0V0LGTdLXDmQs75mDcOc7LEvADMLKw==
-X-Received: by 2002:a05:6512:3150:b0:503:4c3:c67d with SMTP id s16-20020a056512315000b0050304c3c67dmr3924834lfi.21.1695052355315;
-        Mon, 18 Sep 2023 08:52:35 -0700 (PDT)
-Received: from localhost ([212.203.98.42])
-        by smtp.gmail.com with ESMTPSA id br13-20020a170906d14d00b0099cf9bf4c98sm6718919ejb.8.2023.09.18.08.52.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Sep 2023 08:52:35 -0700 (PDT)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>
-Subject: [PATCH bpf-next v2 1/3] selftests/bpf: Print log buffer for exceptions test only on failure
-Date: Mon, 18 Sep 2023 17:52:31 +0200
-Message-ID: <20230918155233.297024-2-memxor@gmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230918155233.297024-1-memxor@gmail.com>
-References: <20230918155233.297024-1-memxor@gmail.com>
+        d=1e100.net; s=20230601; t=1695053262; x=1695658062;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=J8DqzhvzyGA39Yvgz+zBRm+sIYZErBZTUzgkb6fr790=;
+        b=SNCEdPeJYLP/Ta2kSopq/dLexKbQWbytGjGBFNMR6b9N/xOGi0WnX631q+qKlABfHQ
+         YpDWvN+w61t/HbOqnH1Zr9DrDlXe+N3rgiFPXibCDdoB1Nxebp7aUj0dPF/YgCwbPvtz
+         jtGvt6fR7X5iNgucdONUE8XoKpRmRfI06eqFf8lEfjHWt0nn81ZOMT19LxgAvOpHdriV
+         T+grYlc7A84Z9UJVHOJwYbQMCYeYpmuS6hy1aEpo+/yVh0iFug77DdMJ9diYMPRACQX3
+         nC24ygXE+bq9HLGzwhVuTyejOw2RTlMSijAldnuZ6046sPHwaXZMDZXfmDIMqLQGDxkX
+         FDzg==
+X-Gm-Message-State: AOJu0Ywk/dBGQEgYu4BCxOG1ob/afPNZhKqjCvct+Gq7UkWEqQ7ks8YW
+	G6KLbEdzzv8a3sAqSh3XtDrNnQ9NyMF0aEjIbpQfgcuLipA=
+X-Google-Smtp-Source: AGHT+IGv+cuS54y/ErE5nGFW0PhBBF5V5HKYi2enBs4vIQaNjWZXZ6zmR+tedv60Zzbf/GLfnsSHAJ6CT+JRpZdhNeA=
+X-Received: by 2002:a17:906:20f:b0:9ad:8c4f:1f1a with SMTP id
+ 15-20020a170906020f00b009ad8c4f1f1amr8325459ejd.30.1695043600498; Mon, 18 Sep
+ 2023 06:26:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1440; i=memxor@gmail.com; h=from:subject; bh=oHvLk0ZHhNY+L7Ri8crRqUByZW+W4S/TRihF1kQbWZ4=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBlCHIa68qPVyIcWw95cm+Qf50mRMtCOeMoIpeaU jCwVNvFr96JAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCZQhyGgAKCRBM4MiGSL8R yrvMEACbNYE+XIIY2psVobAp7Jq00IF1//D0Z3HR2Ey/H/3oSyySfVWZBXDdGOiHWaS+srxfx/L +xNCRMZNjrqLkMhZRTjCCM5zgl6Wr+mtIBPvICkmK1Jc1n/ni5nWAx0Me29uwxyCMdTCuuv6koW vr0/6P6XjDlzNDNNpfp0GwolRHpSJNzunIrdbmCgcipJC9e8zlGVbu+m3aGqMLFdYNm0peDNhs1 uFYR/GmIwvY+ElkdndTPZRgtJkiO5Cj5Yiw/uTYRYNOMm3ZuE9Nj8Jm3Z5CVNsMOSzGmch5TIXG /UkispHOmzko/dKQaHjnIqK06vJY+EeAXOzfhC1269AOqgP4eE5+TpTARMtXbw7J+n7N2JSnKm3 PDc8FFnUF7HqAFRrS0VCottARFOplMOUxhXwRPXyk6FGfSoUdEqgxk1JeRvQl9T5JmYfCmYQbVh tsHvsf5MelsLda2WWZEyC5uy7r8OpFCu6CSG2HtYM4d772cD3Veh+/Ix/LILsjwQrrUnjf6XBM4 hNoen8qwVOIxKvz+Lu/w5CUKqAepACsUqqfgej1WFOb81qKslyLYHHPuDbMoope1E0amZ5CZa6k iuZjFcqyOtNUHnzZ7+BmXqd08FMj0SgqxYyuUeAVaAPs8EMzSxTZ2uCiMtl2W5/v0Pf8TFX2DEk HCGP329+HvxrODA==
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
-Content-Transfer-Encoding: 8bit
+References: <20230912233214.1518551-1-memxor@gmail.com> <20230912233214.1518551-11-memxor@gmail.com>
+ <fb51f3ed-a8aa-42f1-b649-eb684235323a@tessares.net>
+In-Reply-To: <fb51f3ed-a8aa-42f1-b649-eb684235323a@tessares.net>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Mon, 18 Sep 2023 15:26:04 +0200
+Message-ID: <CAP01T76ivGmVai3WbYo3D2jiz=rLubAHEpzihYinbKYKvGpViA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 10/17] bpf: Prevent KASAN false positive with bpf_throw
+To: Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc: bpf@vger.kernel.org, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
+	Alexander Potapenko <glider@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Yonghong Song <yonghong.song@linux.dev>, David Vernet <void@manifault.com>, 
+	Puranjay Mohan <puranjay12@gmail.com>, netdev <netdev@vger.kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>, 
+	Jakub Kicinski <kuba@kernel.org>, MPTCP Upstream <mptcp@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
 	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -66,36 +68,88 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Alexei reported seeing log messages for some test cases even though we
-just wanted to match the error string from the verifier. Move the
-printing of the log buffer to a guarded condition so that we only print
-it when we fail to match on the expected string in the log buffer,
-preventing unneeded output when running the test.
+On Mon, 18 Sept 2023 at 15:20, Matthieu Baerts
+<matthieu.baerts@tessares.net> wrote:
+>
+> Hi Kumar,
+>
+> (+ netdev in Cc as this patch is now in net-next tree as well ; same for
+> mptcp-next)
+>
+>
+> On 13/09/2023 01:32, Kumar Kartikeya Dwivedi wrote:
+> > The KASAN stack instrumentation when CONFIG_KASAN_STACK is true poisons
+> > the stack of a function when it is entered and unpoisons it when
+> > leaving. However, in the case of bpf_throw, we will never return as we
+> > switch our stack frame to the BPF exception callback. Later, this
+> > discrepancy will lead to confusing KASAN splats when kernel resumes
+> > execution on return from the BPF program.
+> >
+> > Fix this by unpoisoning everything below the stack pointer of the BPF
+> > program, which should cover the range that would not be unpoisoned. An
+> > example splat is below:
+>
+> Thank you for your patch!
+>
+> (...)
+>
+> > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> > index 78e8f4de6750..2c8e1ee97b71 100644
+> > --- a/kernel/bpf/helpers.c
+> > +++ b/kernel/bpf/helpers.c
+> > @@ -22,6 +22,7 @@
+> >  #include <linux/security.h>
+> >  #include <linux/btf_ids.h>
+> >  #include <linux/bpf_mem_alloc.h>
+> > +#include <linux/kasan.h>
+> >
+> >  #include "../../lib/kstrtox.h"
+> >
+> > @@ -2483,6 +2484,11 @@ __bpf_kfunc void bpf_throw(u64 cookie)
+> >               WARN_ON_ONCE(!ctx.aux->exception_boundary);
+> >       WARN_ON_ONCE(!ctx.bp);
+> >       WARN_ON_ONCE(!ctx.cnt);
+> > +     /* Prevent KASAN false positives for CONFIG_KASAN_STACK by unpoisoning
+> > +      * deeper stack depths than ctx.sp as we do not return from bpf_throw,
+> > +      * which skips compiler generated instrumentation to do the same.
+> > +      */
+> > +     kasan_unpoison_task_stack_below((void *)ctx.sp);
+>
+> Our CI validating MPTCP tree has just reported the following error when
+> building the kernel for a 32-bit architecture:
+>
+>   kernel/bpf/helpers.c: In function 'bpf_throw':
+>   kernel/bpf/helpers.c:2491:41: error: cast to pointer from integer of
+> different size [-Werror=int-to-pointer-cast]
+>    2491 |         kasan_unpoison_task_stack_below((void *)ctx.sp);
+>         |                                         ^
+>   cc1: all warnings being treated as errors
+>
+> Source:
+> https://github.com/multipath-tcp/mptcp_net-next/actions/runs/6221288400/job/16882945173
+>
+>
+> It looks like this issue has been introduced by your patch. Are you
+> already looking at a fix?
+>
 
-Reported-by: Alexei Starovoitov <ast@kernel.org>
-Fixes: d2a93715bfb0 ("selftests/bpf: Add tests for BPF exceptions")
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- tools/testing/selftests/bpf/prog_tests/exceptions.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Yes, my patch is responsible. So pointers here are 32-bits, while
+ctx.sp is 64-bit, hence it is complaining.
+I think long is supposed to match pointer width on all targets Linux
+supports, so doing this should fix it.
+(void*)(long)ctx.sp
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions.c b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-index 5663e427dc00..516f4a13013c 100644
---- a/tools/testing/selftests/bpf/prog_tests/exceptions.c
-+++ b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-@@ -103,9 +103,10 @@ static void test_exceptions_success(void)
- 			goto done;						  \
- 		}								  \
- 		if (load_ret != 0) {						  \
--			printf("%s\n", log_buf);				  \
--			if (!ASSERT_OK_PTR(strstr(log_buf, msg), "strstr"))	  \
-+			if (!ASSERT_OK_PTR(strstr(log_buf, msg), "strstr")) {	  \
-+				printf("%s\n", log_buf);			  \
- 				goto done;					  \
-+			}							  \
- 		}								  \
- 		if (!load_ret && attach_err) {					  \
- 			if (!ASSERT_ERR_PTR(link = bpf_program__attach(prog), "attach err")) \
--- 
-2.41.0
+I will send a fix for this soon.
 
+Thanks
+
+
+> >       ctx.aux->bpf_exception_cb(cookie, ctx.sp, ctx.bp);
+> >  }
+> >
+>
+> Cheers,
+> Matt
+> --
+> Tessares | Belgium | Hybrid Access Solutions
+> www.tessares.net
