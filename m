@@ -1,83 +1,75 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9749721356
-	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 15:57:37 +0000 (UTC)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E29CD0
-	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 08:55:05 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-59c04237bf2so38580637b3.0
-        for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 08:55:05 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41FF2210F9
+	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 16:05:07 +0000 (UTC)
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C9644AB
+	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 09:03:50 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2c00e1d4c08so17040301fa.3
+        for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 09:03:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1695051996; x=1695656796; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1695052979; x=1695657779; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Irf/x7Bp+jiHwey/YAiDuVo4UVdOZIsn4X23hTZ4uKg=;
-        b=cuCEYR+/07/XQp9dGrGS3X9stnIuNPSJnD4SsnST12BU6QM4iQqStFuFy/gxh1oO8e
-         U/gHKi98UtVk8K4x9p/RSybiP09iIA0fKNfV8DO2W1iQXQqhQ2p1e5rEHgoafJcUOZgk
-         qwgNcsibuL+ZnXDxJWlVo9vgmx02EHrAsTD2J5HEZbq58Z1+FieN7XjKqMrtnAgSmlPj
-         /Q0VuEnmqD8r3PMNYccA+VXGwVNjB65MMf1I0eaecOcledIyVdD9ZkUNstSqrq4jPLa2
-         NSYYL+zf6cCiO/JzpWXXTSUofVRYV5kmHXusrLb01q0uildyUH127pS/smdMibE0uodL
-         QjgA==
+        bh=HLVba2ehhbQq4ioWVdYGZ+oLzzTKyohQ6D5FFQAosU8=;
+        b=aZ0nDAeWYrJtSU3cbG45TzyZUTESLkvyXei5MUGHUubMSBU1xH7qQPics5GLx4l7PF
+         jx4HuwTzjqwUeeHKje4nTTRlo7MSO8o2snkKq4uILoJifvTxlBCXupEeCbgvVTlq/a+E
+         y85SX+eBxP0W1Pv+C0+LM5mg6PgKFrFjzfLLotYD5DwbCO42fo3PO2ZPlRcuLKJ1f5CD
+         2oi/PuGUl7k8zINmG89AYgaSMLG4Z2l+i3Ep9Crhss7xRoahOhahV79wgKtp2nrL1rE3
+         rmJBEDFvGePLIu8jzg8RRWQddqgjh/i/XhkVe6/9QmiH8N2PfhwEl27MYCSB8WbgV122
+         EnbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695051996; x=1695656796;
+        d=1e100.net; s=20230601; t=1695052979; x=1695657779;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Irf/x7Bp+jiHwey/YAiDuVo4UVdOZIsn4X23hTZ4uKg=;
-        b=rZ8ceZPsClep0LxnXQpiIlLUmbVb+TjlSw6joKnl7ZvZbHt53g8rXDDxEMey6n0Zdk
-         7f++QG8f/klNOqGN90hWp8TsCVh3XTeAij3NYRJxrpdD+oO2s/yTyCzaQIJwDLBu/Ty0
-         WRAoUJF+tdj+kuGE6ZkNZpPD9W41hfliC3RRdE8uojCFQ/MhmJ3h2yPUuZnTyTLbKAT4
-         rt5UmUhUWqAegXh3ZtmAAOoKLgTBBLd7BS+4MHe1UCeaX0mqPn3kh0bQyJJ1ef4mITRg
-         aRMgadE1s/lpMYiz/lYs5dy17LkijXKJAg6KXpwX3X+OH47pLVRk6Sbt0hDZonkpbqnP
-         JKzw==
-X-Gm-Message-State: AOJu0YyjX9LsTryH7Ux+fLv8ILG77jLPsqsCJbLh3kVQTGsfU414uyif
-	qHJ6mMESTdGgmTGedOcglqC26BXrWROE/izGfjrjHHsY3By8/4Q=
-X-Google-Smtp-Source: AGHT+IEY9guvH+H+a1GPkqEqVUEXKZHgyyxqPouezy+bEL0NRJ6QduLtiwQ2/tJ+MG3mC58mAuZmims6EZ4M9iL1wZw=
-X-Received: by 2002:a25:50d8:0:b0:d0c:9ab2:72d3 with SMTP id
- e207-20020a2550d8000000b00d0c9ab272d3mr7977417ybb.14.1695045363162; Mon, 18
- Sep 2023 06:56:03 -0700 (PDT)
+        bh=HLVba2ehhbQq4ioWVdYGZ+oLzzTKyohQ6D5FFQAosU8=;
+        b=pqxAaKq5D99kOj9RGKfLflgga/XPnTooXV298Uv1nHQ7gRAdS/2WLocb5mJg/5nlMl
+         M9IynnMfZWIsY905HWRCnvbg2/28+WZiK5keFZODYFjFLLuJcllUc3JJ3L9pH8Ms2Aoz
+         NVtAX86gr+D5+cWzz60m+B9Erp8jBtz+G2h/3DsJVqLYgHV59eyTTEi1nTHPtQI3siJU
+         Hztmn1+HyTLmb561Y5QXv0lE5OoS/00vgGK7QjsTtdaySzoZAqzI7Nv3d5w6Zun/bkvZ
+         t1PS/RrI8835mQYN0RwT1iCv7auzwZTcCowHT+uflVO/hkbTJb1VXlajtm39ph5XX+9F
+         oQGg==
+X-Gm-Message-State: AOJu0Yznc+I1Za4d6Birl8sIbs7sop/eSZQOyk2T5g56whMj1xQWEvKJ
+	Tf0wrLHGOvk66V9yG0I2plPyY30rfW9ypl1Ii9l6NkHz038=
+X-Google-Smtp-Source: AGHT+IEzL3HKdjX9k+RDyFemAVduCRRD6kGG9jB0DuRxmICwdSqpt32Qc1IxoDI39lZPQGxhRUs2Z4BnKxB8tWtOLXM=
+X-Received: by 2002:a05:600c:2215:b0:401:bf56:8ba0 with SMTP id
+ z21-20020a05600c221500b00401bf568ba0mr7367134wml.28.1695052072963; Mon, 18
+ Sep 2023 08:47:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230616000441.3677441-1-kpsingh@kernel.org> <20230616000441.3677441-6-kpsingh@kernel.org>
-In-Reply-To: <20230616000441.3677441-6-kpsingh@kernel.org>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 18 Sep 2023 09:55:52 -0400
-Message-ID: <CAHC9VhSSX0KRuWRURUmt2tUis6fbbmozUbcoeAPkLRmfR2jqAg@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] security: Add CONFIG_SECURITY_HOOK_LIKELY
-To: KP Singh <kpsingh@kernel.org>
-Cc: linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
-	keescook@chromium.org, casey@schaufler-ca.com, song@kernel.org, 
-	daniel@iogearbox.net, ast@kernel.org, jannh@google.com
+References: <20230918143914.292526-1-memxor@gmail.com> <20230918143914.292526-4-memxor@gmail.com>
+In-Reply-To: <20230918143914.292526-4-memxor@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 18 Sep 2023 08:47:40 -0700
+Message-ID: <CAADnVQLX6BBzQuFS8bcP2ucfSDFGZT3C+N+yagxUiMPtnsra-Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 3/3] bpf: Disable exceptions when CONFIG_UNWINDER_FRAME_POINTER=y
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Eric Dumazet <edumazet@google.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Yonghong Song <yonghong.song@linux.dev>, David Vernet <void@manifault.com>, 
+	Puranjay Mohan <puranjay12@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
 
-On Thu, Jun 15, 2023 at 8:05=E2=80=AFPM KP Singh <kpsingh@kernel.org> wrote=
-:
+On Mon, Sep 18, 2023 at 7:39=E2=80=AFAM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
 >
-> This config influences the nature of the static key that guards the
-> static call for LSM hooks.
+> The build with CONFIG_UNWINDER_FRAME_POINTER=3Dy is broken for
+> current exceptions feature as it assumes ORC unwinder specific fields in
+> the unwind_state. Disable exceptions when frame_pointer unwinder is
+> enabled for now.
+>
+> Fixes: fd5d27b70188 ("arch/x86: Implement arch_bpf_stack_walk")
+> Reported-by: Eric Dumazet <edumazet@google.com>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-No further comment on the rest of this patch series yet, this just
-happened to bubble to the top of my inbox and I wanted to comment
-quickly - I'm not in favor of adding a Kconfig option for something
-like this.  If you have an extremely well defined use case then you
-can probably do the work to figure out the "correct" value for the
-tunable, but for a general purpose kernel build that will have
-different LSMs active, a variety of different BPF LSM hook
-implementations at different times, etc. there is little hope to
-getting this right.  No thank you.
-
---=20
-paul-moore.com
+Very weird that only this patch reached patchwork.
+Could you resend and trim cc list significantly?
