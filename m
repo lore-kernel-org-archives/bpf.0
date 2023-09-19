@@ -1,200 +1,425 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A83C45237
-	for <bpf@vger.kernel.org>; Tue, 19 Sep 2023 16:12:07 +0000 (UTC)
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC63BF
-	for <bpf@vger.kernel.org>; Tue, 19 Sep 2023 09:12:05 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38JFtYig005785;
-	Tue, 19 Sep 2023 16:11:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2023-03-30;
- bh=qi+JDenCjtjr8dP5sT6OZBTg6+SKqHUbmUxWMervSj4=;
- b=wkS2wlh1Qz1/ReX9hQUOM6bD/oVNQRv7xElpf4OTubimv36fbwed4rn+eX12Rgif97Wr
- mkCJL/lJUpLrC3vUFj0CXYUkeJfUeHg+AfYRsH0CM8ZpxLeEBukxbODMNRYx9vuzP4/t
- dumnQ49gjX3xyMSUOlKnzUGaB1m7Sh4hPT8IrPPyjwOel4JRnawTtpoV0yT20p57qN22
- 346DAZDWFeND1MfryzJ7p9QmwrKjVRC6iQd29M5hMJxJxL4QevJCFhCWex9vflyUMZTB
- 9uc9vzzQSlsxxpQB4Va909kNlXd3GreCGuiEHMrAUKFmVJ8tBdz0i8gUMbmRKT423/XX dQ== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3t52y1wbjs-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 19 Sep 2023 16:11:58 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 38JFPBQn027199;
-	Tue, 19 Sep 2023 16:11:57 GMT
-Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam04lp2049.outbound.protection.outlook.com [104.47.74.49])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3t52t64kpm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 19 Sep 2023 16:11:57 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Pmc/Dj/nmqfJnv/ule76g0o2KSYLDR2OdC30rQ4quVzCDTCTNYHFsvLnaS03uek4a5PHxV71FstE6ALRpT0IZL7oy0q/Iql330+Rrpu3DCs+d43E+BVm4X329zwNSA2hlPC/3y7ONkFk0oSzPhpzfhVG8Nnk/QCDGHi9L8A0aGVwhDFwYHu0YE/CdjICU14sCWYsxFLHYKqBWZRIi5rMdEHvrv4oJDGoFztha3Drt24nBHdFwjnlPtIZxLJ4trlSb1GiYh5kjjqgRamZfY4Dof7Uh2YxO9/2e7IrJDZazUgil34/ocK/VWFmO57pdaWVm9KEA1WzOnVVRbb3N7UTXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qi+JDenCjtjr8dP5sT6OZBTg6+SKqHUbmUxWMervSj4=;
- b=e0UMWpasenOGuThTVmLspuz9DCHXIpSXiv2Al1Sg0VXUZXZIe3LrOWOMyfBUCM9FxvmcM5ys1x5slEAl9ayg7j5VSe9Xw7m6ZyzKBIowNnTAzY4QAN02I0crG7GbrQ/5VkaJS7Zu2Ah+8wwVW13S3S0AlPHG+l5vkVFtxd1PU+1qNwPGPqRZNBC43UATbAelJcj0U8OFvZr9e05E/iZp+Q0x120xcnkXP7jDhmCUl/HLwi7UMEuuoplOWKsDp6MkGCER6V4nyMoCLB82jnSgg1bfdN3WXk29YyoF0L6G8xDjUmC3aevx8JrH9nR+AiJ6PteAj2jSaUEgghik4S3zQA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qi+JDenCjtjr8dP5sT6OZBTg6+SKqHUbmUxWMervSj4=;
- b=QDvwxbAcqKobVOoPD4j0BpztZQNd6Tl/hvVLbqDLStiF4XULXRFvXVZdV3QT1By0eLabxPqZHm/P/33Ta+hDaSQdhk2Wq+S75JASbal67mRvLAZzfb+XIG4lsMku6VhG1uJNi6Oh0nCRHtn0b0WbcymEhW3Zo7m16Ozc71Pu5Yc=
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
- by PH0PR10MB4519.namprd10.prod.outlook.com (2603:10b6:510:37::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.28; Tue, 19 Sep
- 2023 16:11:54 +0000
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::6efb:19f3:767c:1e23]) by BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::6efb:19f3:767c:1e23%6]) with mapi id 15.20.6792.026; Tue, 19 Sep 2023
- 16:11:54 +0000
-Message-ID: <26d04fc4-0645-2abe-8aa8-c3682b6fc3cb@oracle.com>
-Date: Tue, 19 Sep 2023 17:11:50 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: Is is possible to get the function calling stack in an fentry bpf
- program?
-Content-Language: en-GB
-To: =?UTF-8?B?5YiY55WF?= <chang-liu22@mails.tsinghua.edu.cn>,
-        bpf@vger.kernel.org
-References: <49b9b6f.1279.18aadb90e05.Coremail.chang-liu22@mails.tsinghua.edu.cn>
-From: Alan Maguire <alan.maguire@oracle.com>
-In-Reply-To: <49b9b6f.1279.18aadb90e05.Coremail.chang-liu22@mails.tsinghua.edu.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO4P302CA0042.GBRP302.PROD.OUTLOOK.COM
- (2603:10a6:600:317::14) To BLAPR10MB5267.namprd10.prod.outlook.com
- (2603:10b6:208:30e::22)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 886183AC01
+	for <bpf@vger.kernel.org>; Tue, 19 Sep 2023 16:13:02 +0000 (UTC)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE33AC
+	for <bpf@vger.kernel.org>; Tue, 19 Sep 2023 09:13:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1695139979;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=7DinXRW8uYhcdYnKxZEOd/0XsHigGWMaEQ5KwkB8lL0=;
+	b=GfUck5DGo1+7ir4tnX8Dd67uKi5l6nZk3oBr0/bgYbeSaQX6fVriu2u+DOJ/SeRyJ1K8DM
+	RF35XqByuschLkCW63hYVeyvLW2s4DlIxTToWpKHyH/ZMVrgFdJd8JrtVR0hnMjh7K0gKB
+	0kUpgoSdnXGDJ9MGk+PuvRY3c7k0XpE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-682-DRLT1Ma4NdKf3JKiGG0BYg-1; Tue, 19 Sep 2023 12:12:56 -0400
+X-MC-Unique: DRLT1Ma4NdKf3JKiGG0BYg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 50DE08039D1;
+	Tue, 19 Sep 2023 16:12:55 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.216])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 931D6492B16;
+	Tue, 19 Sep 2023 16:12:53 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+	Kingdom.
+	Registered in England and Wales under Company Registration No. 3798903
+From: David Howells <dhowells@redhat.com>
+To: netdev@vger.kernel.org
+cc: dhowells@redhat.com,
+    syzbot+62cbf263225ae13ff153@syzkaller.appspotmail.com,
+    Eric Dumazet <edumazet@google.com>,
+    Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+    "David S. Miller" <davem@davemloft.net>,
+    David Ahern <dsahern@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+    Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org,
+    syzkaller-bugs@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: [PATCH net] ipv4, ipv6: Fix handling of transhdrlen in __ip{,6}_append_data()
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BLAPR10MB5267:EE_|PH0PR10MB4519:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7aa67465-177a-4f2c-735f-08dbb92b240e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	GiIMQCA5JdeM4DrJ3d3ke9prX2RhDpgn77D8Rsmz5ku6pIAXEo7IS354U87Qnz0xGSbMhM+YJwoc8Oi3DBLiWfGW2BafkLko4qYR3T2fbsOPvwAK61kA7qdspa0pcPdrE2gdLrtWjfuqmvRgx/yUnqtaukYr+Fmtf/ejJPe4xLwuWLZ4k793e1gUKU9YJpKgk30F/ml0+RQl+/8FUIAmI3Nj3DF1XKOip1ISG7kEqBjgq5df75wAMSVK/cDuR5ZRdaRC9sKkLWhVEdu5D0uBNoZk4pXVRF4eMrt4UVlSbcyEdLRqDVE0MZKVIk/q0lTuncbJqh2QCNAPngXj3zUfgceRrtyIv+T40Eur1PtLvXqY7BRfYeFF8zMCr1Z6h6HxYWnxOWTl8WbowQIjJDE/newazOEkfZM6xTNL7KABxDZMMj4d1/WvKTh+P6AWOYQA2KxoJxxhPmCCZM0YLkbpF+a4ariKg46HODsaMPZaAyHticq7J3dNGfzQpuIA6zJLx8QU1VqjFsnkJFGWukbq33xLf1Goo7SxMoF30y3D4dWX38if4471JMOrO87toRllsriN40qCx0xH4uIR9euaDKSLSZZ9Coz1lx4j5P9qc/9wAgAMfHadZJPiun066FO63I8z5u7xilStiNp+A+DbXgcGjzEDz+FfugHhMx3iKYI=
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(396003)(366004)(376002)(346002)(136003)(186009)(451199024)(1800799009)(316002)(66556008)(66476007)(66946007)(478600001)(38100700002)(2906002)(31696002)(86362001)(8936002)(8676002)(41300700001)(44832011)(5660300002)(83380400001)(6512007)(2616005)(6666004)(53546011)(6506007)(6486002)(36756003)(31686004)(15583001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?utf-8?B?U09xM0JvSHQzSFUwMGU2YTZjZ3FpWFFFbU82WGJuVVk3RTZsQjI2OEdyUmQ2?=
- =?utf-8?B?U3hlWEFuRytxTVNZWkdSQWtzL3FaSGx6b3lYelB6S3RPSlI1WW8wRjZSWWV3?=
- =?utf-8?B?UmJxcDcwQ3pYNGxWSE5lQ1hnSC9jcDBTeHRMMllnQW9mUjhBWHp1ZHBIWHNT?=
- =?utf-8?B?VTduN2tJeFd2bVZzNVkyM2ZhejkwNmh4VmVxUDh6dGgzUXoyUmtFRkZqOFZG?=
- =?utf-8?B?Q1d3SmhtZnNWQXR5WEFibGFmRjhHc2owTGpVQm9ZMzlhNW9jNFNaR2JGd2p0?=
- =?utf-8?B?ZXVyeG02Y1dVaGdQS3hzWGp5UzJENVhMbnczanI4Wk1Sc2NpcUdpSVdoTnpu?=
- =?utf-8?B?b084ZS9vVGpWMWQxRnVjSmdXYmRYTTI1M3puSmlYYmZ0akVPUVpZN3dwcG9Z?=
- =?utf-8?B?c1pJL1EzU2dUcURIUURKOHFldDlMUXBWQzJEMUVHeUxGL3hwQlNBa0xFNDRp?=
- =?utf-8?B?TDdhRm55L2UwdkFKd0VjWEplOUxCNGtiSHkyZUllMjBoQnpWclJTb1dwTTVN?=
- =?utf-8?B?TzVaTUxvYzVUc25pMHY5UzhSUGd4LzdKKy9tdUhIUkZ6bzkvV2tJbXdRTFRm?=
- =?utf-8?B?WllxVVFFMGM1UFg4bEprcWZLbkNWT05BT3dzeTVYRWFCMFd2N1Z5MVRCSlBF?=
- =?utf-8?B?QmRscWU4YUpTZkQ3d1JTeHhsQ2N4anZ6WFFxUEpFR0VNdUlxMi9lVUczOWN1?=
- =?utf-8?B?ZGRRMDdQWEZkbnJyTjBoWG96Q2lLQy9rdnNmTExrWmo5NjdDMzg4SVhNdkxC?=
- =?utf-8?B?RkdNWkpKY1VGdG90ekFXNTVyenlQeFpuMzVhMEk5ei9jVEF2WUJ2OVh5QThm?=
- =?utf-8?B?dEd2bVhMWGlicDc4YmRQUTFBUkQ4OWNWMnRDbVhST0xITWtZaWNMVzFERUtV?=
- =?utf-8?B?TUVkMmk4cm54OU5zNzRVb0dGZlU4SnFSU3orWGFrdlR0a1QrRkhZQ2MrWFFZ?=
- =?utf-8?B?RHpOYWt2N0kyNHR0WFFUZndXMnZCRGsxRGtwNktzMFJxN3FZcGJsTEVWUWVW?=
- =?utf-8?B?YmpQV01jUzV4U3JvVEQrQmxMbk1zajF4cFNHTVQxaHZOdHpoNFQwTVVDbkla?=
- =?utf-8?B?bTdmb0ZudVJQdDc4NVBqWWptY1VJamhjMExnVEpENktGZWVNZnlaNTNCYmdG?=
- =?utf-8?B?bkpvK1JRNUVrckZ2UzBWSWw5bFZ6NHcxSytiRHNjL2lGMXcreGh2V0Vxakpn?=
- =?utf-8?B?a2t1LzlJOTYvRHVsRnBDSXhvWHFhVmxqaFpreW1GVUdIeEV0WFhlT2R0Zi9h?=
- =?utf-8?B?dmFJamtubVNjRDhNWnZtYVZnaVEvS3VxTTJ0c1NNTzlxVmFZRGo5TGh2UU42?=
- =?utf-8?B?dk90MEp3VWFpWmwvS1ZBOE56Skk3YTFHWkNqV2FtZ3dsWnMvV2JtQ0F1ak1O?=
- =?utf-8?B?cWZaV01kVHhSRFhVNWRHZkhmdU4zY3hhVytQa3dMYXFWRGFGd0VsLzUrMndj?=
- =?utf-8?B?bmxlbTR4VWp0R3I3RXgyUWNvNzBZbUFjRnVnbEN3ZjJDVlVCNCtxL0xKVFg3?=
- =?utf-8?B?TjlqcGIwVVpDRXlkWE16TEhsbGRsMXJxQk4wSmFqREV2T2pESGtSV0ZtOXky?=
- =?utf-8?B?M1FsNGJnc2VNQ2JZR0VQTzE0aDN3YUR1TzZmbWpLZlFoMzdjUXJEa0J1ZGVl?=
- =?utf-8?B?UUU2d0FQNEQydHpSREZ6RzhFZ2plK05XY2RnNDhrR0RXWTMzdTc4amNXSkh1?=
- =?utf-8?B?UXI2WU9yU3pvN2RpckZocGNSU3pmN2g1WDlneVRJZ2RvZWNGR0VjVkt6Q3Ez?=
- =?utf-8?B?cHVTdGZiQlRzalcwdTlFb2FRR2JJUE55V2JKVTRleGZkV045THllRm1KWGpS?=
- =?utf-8?B?dmdOOEhZM0hmeFdYQWp4NGlSdGFRMnlCa1ZkZllkMHlxSVJxZS82U0txcG4w?=
- =?utf-8?B?WnpmY2pYYk43ZW42YkpjdFVrbExXK2JYQlg2TXZQazFFcjN2YVV1d1RTVVBa?=
- =?utf-8?B?N0lTQmhZU3JpWkhqRXA1aXBLY2hoOUx5RnJJeEpRWDBCL1hCNVJWS2tWOWFX?=
- =?utf-8?B?STh0WFh6NlNlQkRzZUpCdW9zKzFlV1IrMER0TTdxMFZtQ1pHSFJUcDExdzFP?=
- =?utf-8?B?UlNWa2J6RVp4a2hjemRJVXA3bFVpQVlvbkwrNWw5TE5XSEExYlNVT0wwVkFF?=
- =?utf-8?B?L3pDMlY3eHRmYUxyWk8vRkZqZU0xd1g2Qm1FYWFPRWFHZXVyT1FFcUFuS3JY?=
- =?utf-8?Q?oPnOMGqfg60MRKabQLg7aJo=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	/NZRAfbqoOw4URkvfu8ibx6JehZeci7SMaNhOfmy59b79aF8f5I0Kr/6HexgN4x9IyKgIydXct3QoGHWCIyfpER0dhWYdXeJOgA06m4ovv9So8LyF+4QFsmAKm0qf+3uB5DegNAx/iJi0lh5XPldfEFWk/IMmM4WDUvE5cGeK59b4dT47eNklW/Sdx27TVYCrJHL0da6V7QLlT220une4SY7UscfWJ694pssDZ4KxGLA7kVC3hKQt0ZJQmPs6FbqTEbbdX2RPw1cAY//J4aKV5m2X04csdBmsNDtNfbEH/ZVyGFS8LZKoRALGIKJce29LAWeD/1P9vpm4TF7+PxZ2BJYj/cvsx4J2pn9oRi9Brl/klekt587XDGaoJ+2sfDGYSSTb+5Nb2K1DLbncJWXBE0pCC8JE5RHrNB55PWgqRIF183QDhHpbLryn+zkg1GSxUfRLtwvliVeFE7Gp7R6faSwvGc0LaYeKfZPIzhckh+CIvJh9FFQbRW8eSQyMkhUkuuvxahlKsLaRDS3w/99QB6X2JmuZd4qFkC5J2flafhtk9gY0QK2XB66rmFyy859y/csfZCECnCtzUbcNNbBm5LJCwtGslz6cjKjNwldXUTgCpvKyYPsc2lf7kGnGWhKtkWr2EcH7gxcmrGFMkSrRnWPepIuap0fOpgiUyOOcMbj6Ltry3Ax4QwVETOmZXnkdxVEfcVx2Qhi4VNeu/Nk0Yp4e/9082rzrKyEdm/MqLIcFTobC/xgZvYVquccFxMnMpcvzpyMwnUFr+seI1tOdSVHGWTw3WAIoR1giVFGdZf+wh+R08/1RfxGwPAEh9MP
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7aa67465-177a-4f2c-735f-08dbb92b240e
-X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2023 16:11:54.5140
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HSmMtTqrLpqyFTRFrKzaO/Mqa87b3RsgKcw15xfooOZIRNhsR+oBhVpZUhRnnp2k/OQpJ1/hj/4qKBUzlgTo9w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4519
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-19_07,2023-09-19_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0
- malwarescore=0 adultscore=0 phishscore=0 bulkscore=0 mlxscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309190139
-X-Proofpoint-GUID: GQUPsdK-GepCqm-NW3gLFFQayxx96H6Z
-X-Proofpoint-ORIG-GUID: GQUPsdK-GepCqm-NW3gLFFQayxx96H6Z
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <75314.1695139973.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 19 Sep 2023 17:12:53 +0100
+Message-ID: <75315.1695139973@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+	SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 19/09/2023 14:55, 刘畅 wrote:
-> Hi all
-> 
-> I attached an fentry eBPF program to a kernel function, i.e., tcp_transmit_skb(). I want to implement different logic in the bpf program for different calling stack cases, e.g., __tcp_retransmit_skb()->tcp_transmit_skb() and tcp_write_xmit()->tcp_transmit_skb(). I know that I can access stack traces using the bpf_get_stack() helper function. However, in the fentry eBPF program, I don't know the value of the RSP and RBP register, which means I can not locate the return address even if I can get the stack traces. I want to know if there's any way that I can get the return address and thus get the function calling stack in an fentry bpf program. 
-> 
-> I'd be appreciate if you can help me.
->
+    =
 
-Note that fentry programs can access the ctx pointer; it's just that the
-BPF_PROG() macro hides it.  For example, see
+Including the transhdrlen in length is a problem when the packet is
+partially filled (e.g. something like send(MSG_MORE) happened previously)
+when appending to an IPv4 or IPv6 packet as we don't want to repeat the
+transport header or account for it twice.  This can happen under some
+circumstances, such as splicing into an L2TP socket.
 
-tools/testing/selftests/bpf/progs/test_bpf_cookie.c
+The symptom observed is a warning in __ip6_append_data():
 
-...where we have:
+    WARNING: CPU: 1 PID: 5042 at net/ipv6/ip6_output.c:1800 __ip6_append_d=
+ata.isra.0+0x1be8/0x47f0 net/ipv6/ip6_output.c:1800
 
-SEC("fentry/bpf_fentry_test1")
-int BPF_PROG(fentry_test1, int a)
-{
-        update(ctx, &fentry_res);
-        return 0;
-}
+that occurs when MSG_SPLICE_PAGES is used to append more data to an alread=
+y
+partially occupied skbuff.  The warning occurs when 'copy' is larger than
+the amount of data in the message iterator.  This is because the requested
+length includes the transport header length when it shouldn't.  This can b=
+e
+triggered by, for example:
 
-SEC("fexit/bpf_fentry_test1")
-int BPF_PROG(fexit_test1, int a, int ret)
-{
-        update(ctx, &fexit_res);
-        return 0;
-}
+        sfd =3D socket(AF_INET6, SOCK_DGRAM, IPPROTO_L2TP);
+        bind(sfd, ...); // ::1
+        connect(sfd, ...); // ::1 port 7
+        send(sfd, buffer, 4100, MSG_MORE);
+        sendfile(sfd, dfd, NULL, 1024);
 
-Once you have ctx, you should (I think) be able to call bpf_get_stack().
-If you've got a limited number of function callers you could probably
-search for their addresses in the stack data returned without having to
-parse stack frame boundaries.
+Fix this by pushing the addition of transhdrlen into length down into
+__ip_append_data() and __ip6_append_data(), making it conditional on the
+write queue being empty (otherwise we just clear transhdrlen).
 
-Another less tricky option though is to trace the calling functions too,
-and use a hashmap or similar to map from skb to caller in the calling
-functions. Then when you reach the function of interest you can check
-the map to see which caller added the map entry for that skb.
+Notes:
 
-Alan
+ (1) The length supplied by userspace in ping_*_sendmsg() includes the
+     transport header len in the size, so we need to subtract it as the
+     iterator has been advanced to copy out the header - however we still
+     have to return the fact that we use it from sys_sendmsg(), so we can'=
+t
+     just preemptively decrease len at the beginning of the function.
 
-> Chang Liu
-> Tsinghua University, China
+ (2) Raw sockets include the transport header in the payload and pass down
+     a zero transhdrlen, which I just leave as is.
+
+ (3) A smaller fix could be to make ip{,6}_append_data() subtract
+     transhdrlen from length if it is going to set transhdrlen to 0 - but
+     it would seem better just not to include it in the first place.
+
+Reported-by: syzbot+62cbf263225ae13ff153@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/r/0000000000001c12b30605378ce8@google.com/
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Eric Dumazet <edumazet@google.com>
+cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+cc: "David S. Miller" <davem@davemloft.net>
+cc: David Ahern <dsahern@kernel.org>
+cc: Paolo Abeni <pabeni@redhat.com>
+cc: Jakub Kicinski <kuba@kernel.org>
+cc: netdev@vger.kernel.org
+cc: bpf@vger.kernel.org
+cc: syzkaller-bugs@googlegroups.com
+---
+ net/ipv4/icmp.c       |    3 +--
+ net/ipv4/ip_output.c  |    7 +++++--
+ net/ipv4/ping.c       |    3 ++-
+ net/ipv4/udp.c        |    8 +++-----
+ net/ipv6/icmp.c       |    6 ++----
+ net/ipv6/ip6_output.c |   16 +++++++++-------
+ net/ipv6/ping.c       |    3 ++-
+ net/ipv6/udp.c        |    8 +++-----
+ net/l2tp/l2tp_ip6.c   |    4 +---
+ 9 files changed, 28 insertions(+), 30 deletions(-)
+
+diff --git a/net/ipv4/icmp.c b/net/ipv4/icmp.c
+index b8607763d113..e1140597e971 100644
+--- a/net/ipv4/icmp.c
++++ b/net/ipv4/icmp.c
+@@ -368,8 +368,7 @@ static void icmp_push_reply(struct sock *sk,
+ 	struct sk_buff *skb;
+ =
+
+ 	if (ip_append_data(sk, fl4, icmp_glue_bits, icmp_param,
+-			   icmp_param->data_len+icmp_param->head_len,
+-			   icmp_param->head_len,
++			   icmp_param->data_len, icmp_param->head_len,
+ 			   ipc, rt, MSG_DONTWAIT) < 0) {
+ 		__ICMP_INC_STATS(sock_net(sk), ICMP_MIB_OUTERRORS);
+ 		ip_flush_pending_frames(sk);
+diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
+index 4ab877cf6d35..80735bb34a73 100644
+--- a/net/ipv4/ip_output.c
++++ b/net/ipv4/ip_output.c
+@@ -974,6 +974,11 @@ static int __ip_append_data(struct sock *sk,
+ 	bool paged, extra_uref =3D false;
+ 	u32 tskey =3D 0;
+ =
+
++	if (skb_queue_empty(&sk->sk_write_queue))
++		length +=3D transhdrlen;
++	else
++		transhdrlen =3D 0;
++
+ 	skb =3D skb_peek_tail(queue);
+ =
+
+ 	exthdrlen =3D !skb ? rt->dst.header_len : 0;
+@@ -1353,8 +1358,6 @@ int ip_append_data(struct sock *sk, struct flowi4 *f=
+l4,
+ 		err =3D ip_setup_cork(sk, &inet->cork.base, ipc, rtp);
+ 		if (err)
+ 			return err;
+-	} else {
+-		transhdrlen =3D 0;
+ 	}
+ =
+
+ 	return __ip_append_data(sk, fl4, &sk->sk_write_queue, &inet->cork.base,
+diff --git a/net/ipv4/ping.c b/net/ipv4/ping.c
+index 75e0aee35eb7..237f25a015f7 100644
+--- a/net/ipv4/ping.c
++++ b/net/ipv4/ping.c
+@@ -819,7 +819,8 @@ static int ping_v4_sendmsg(struct sock *sk, struct msg=
+hdr *msg, size_t len)
+ 	pfh.wcheck =3D 0;
+ 	pfh.family =3D AF_INET;
+ =
+
+-	err =3D ip_append_data(sk, &fl4, ping_getfrag, &pfh, len,
++	err =3D ip_append_data(sk, &fl4, ping_getfrag, &pfh,
++			     len - sizeof(struct icmphdr),
+ 			     sizeof(struct icmphdr), &ipc, &rt,
+ 			     msg->msg_flags);
+ 	if (err)
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index f39b9c844580..b16da49a8478 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -1042,7 +1042,6 @@ int udp_sendmsg(struct sock *sk, struct msghdr *msg,=
+ size_t len)
+ 	DECLARE_SOCKADDR(struct sockaddr_in *, usin, msg->msg_name);
+ 	struct flowi4 fl4_stack;
+ 	struct flowi4 *fl4;
+-	int ulen =3D len;
+ 	struct ipcm_cookie ipc;
+ 	struct rtable *rt =3D NULL;
+ 	int free =3D 0;
+@@ -1084,7 +1083,6 @@ int udp_sendmsg(struct sock *sk, struct msghdr *msg,=
+ size_t len)
+ 		}
+ 		release_sock(sk);
+ 	}
+-	ulen +=3D sizeof(struct udphdr);
+ =
+
+ 	/*
+ 	 *	Get and verify the address.
+@@ -1238,7 +1236,7 @@ int udp_sendmsg(struct sock *sk, struct msghdr *msg,=
+ size_t len)
+ 	if (!corkreq) {
+ 		struct inet_cork cork;
+ =
+
+-		skb =3D ip_make_skb(sk, fl4, getfrag, msg, ulen,
++		skb =3D ip_make_skb(sk, fl4, getfrag, msg, len,
+ 				  sizeof(struct udphdr), &ipc, &rt,
+ 				  &cork, msg->msg_flags);
+ 		err =3D PTR_ERR(skb);
+@@ -1268,8 +1266,8 @@ int udp_sendmsg(struct sock *sk, struct msghdr *msg,=
+ size_t len)
+ 	up->pending =3D AF_INET;
+ =
+
+ do_append_data:
+-	up->len +=3D ulen;
+-	err =3D ip_append_data(sk, fl4, getfrag, msg, ulen,
++	up->len +=3D sizeof(struct udphdr) + len;
++	err =3D ip_append_data(sk, fl4, getfrag, msg, len,
+ 			     sizeof(struct udphdr), &ipc, &rt,
+ 			     corkreq ? msg->msg_flags|MSG_MORE : msg->msg_flags);
+ 	if (err)
+diff --git a/net/ipv6/icmp.c b/net/ipv6/icmp.c
+index 93a594a901d1..55ae1966fa75 100644
+--- a/net/ipv6/icmp.c
++++ b/net/ipv6/icmp.c
+@@ -614,8 +614,7 @@ void icmp6_send(struct sk_buff *skb, u8 type, u8 code,=
+ __u32 info,
+ 	idev =3D __in6_dev_get(skb->dev);
+ =
+
+ 	if (ip6_append_data(sk, icmpv6_getfrag, &msg,
+-			    len + sizeof(struct icmp6hdr),
+-			    sizeof(struct icmp6hdr),
++			    len, sizeof(struct icmp6hdr),
+ 			    &ipc6, &fl6, (struct rt6_info *)dst,
+ 			    MSG_DONTWAIT)) {
+ 		ICMP6_INC_STATS(net, idev, ICMP6_MIB_OUTERRORS);
+@@ -801,8 +800,7 @@ static enum skb_drop_reason icmpv6_echo_reply(struct s=
+k_buff *skb)
+ 			goto out_dst_release;
+ =
+
+ 	if (ip6_append_data(sk, icmpv6_getfrag, &msg,
+-			    skb->len + sizeof(struct icmp6hdr),
+-			    sizeof(struct icmp6hdr), &ipc6, &fl6,
++			    skb->len, sizeof(struct icmp6hdr), &ipc6, &fl6,
+ 			    (struct rt6_info *)dst, MSG_DONTWAIT)) {
+ 		__ICMP6_INC_STATS(net, idev, ICMP6_MIB_OUTERRORS);
+ 		ip6_flush_pending_frames(sk);
+diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
+index 54fc4c711f2c..21bae77489c9 100644
+--- a/net/ipv6/ip6_output.c
++++ b/net/ipv6/ip6_output.c
+@@ -1490,6 +1490,11 @@ static int __ip6_append_data(struct sock *sk,
+ 	unsigned int wmem_alloc_delta =3D 0;
+ 	bool paged, extra_uref =3D false;
+ =
+
++	if (skb_queue_empty(&sk->sk_write_queue))
++		length +=3D transhdrlen;
++	else
++		transhdrlen =3D 0;
++
+ 	skb =3D skb_peek_tail(queue);
+ 	if (!skb) {
+ 		exthdrlen =3D opt ? opt->opt_flen : 0;
+@@ -1868,7 +1873,6 @@ int ip6_append_data(struct sock *sk,
+ {
+ 	struct inet_sock *inet =3D inet_sk(sk);
+ 	struct ipv6_pinfo *np =3D inet6_sk(sk);
+-	int exthdrlen;
+ 	int err;
+ =
+
+ 	if (flags&MSG_PROBE)
+@@ -1884,13 +1888,11 @@ int ip6_append_data(struct sock *sk,
+ 			return err;
+ =
+
+ 		inet->cork.fl.u.ip6 =3D *fl6;
+-		exthdrlen =3D (ipc6->opt ? ipc6->opt->opt_flen : 0);
+-		length +=3D exthdrlen;
+-		transhdrlen +=3D exthdrlen;
+-	} else {
+-		transhdrlen =3D 0;
+ 	}
+ =
+
++	/* Add space for extensions */
++	transhdrlen +=3D (ipc6->opt ? ipc6->opt->opt_flen : 0);
++
+ 	return __ip6_append_data(sk, &sk->sk_write_queue, &inet->cork,
+ 				 &np->cork, sk_page_frag(sk), getfrag,
+ 				 from, length, transhdrlen, flags, ipc6);
+@@ -2095,7 +2097,7 @@ struct sk_buff *ip6_make_skb(struct sock *sk,
+ =
+
+ 	err =3D __ip6_append_data(sk, &queue, cork, &v6_cork,
+ 				&current->task_frag, getfrag, from,
+-				length + exthdrlen, transhdrlen + exthdrlen,
++				length, transhdrlen + exthdrlen,
+ 				flags, ipc6);
+ 	if (err) {
+ 		__ip6_flush_pending_frames(sk, &queue, cork, &v6_cork);
+diff --git a/net/ipv6/ping.c b/net/ipv6/ping.c
+index 5831aaa53d75..fa2701241724 100644
+--- a/net/ipv6/ping.c
++++ b/net/ipv6/ping.c
+@@ -174,7 +174,8 @@ static int ping_v6_sendmsg(struct sock *sk, struct msg=
+hdr *msg, size_t len)
+ 		ipc6.hlimit =3D ip6_sk_dst_hoplimit(np, &fl6, dst);
+ =
+
+ 	lock_sock(sk);
+-	err =3D ip6_append_data(sk, ping_getfrag, &pfh, len,
++	err =3D ip6_append_data(sk, ping_getfrag, &pfh,
++			      len - sizeof(struct icmp6hdr),
+ 			      sizeof(struct icmp6hdr), &ipc6, &fl6, rt,
+ 			      MSG_DONTWAIT);
+ =
+
+diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+index 86b5d509a468..9dd71f542c9f 100644
+--- a/net/ipv6/udp.c
++++ b/net/ipv6/udp.c
+@@ -1331,7 +1331,6 @@ int udpv6_sendmsg(struct sock *sk, struct msghdr *ms=
+g, size_t len)
+ 	struct ipcm6_cookie ipc6;
+ 	int addr_len =3D msg->msg_namelen;
+ 	bool connected =3D false;
+-	int ulen =3D len;
+ 	int corkreq =3D READ_ONCE(up->corkflag) || msg->msg_flags&MSG_MORE;
+ 	int err;
+ 	int is_udplite =3D IS_UDPLITE(sk);
+@@ -1416,7 +1415,6 @@ int udpv6_sendmsg(struct sock *sk, struct msghdr *ms=
+g, size_t len)
+ 		}
+ 		release_sock(sk);
+ 	}
+-	ulen +=3D sizeof(struct udphdr);
+ =
+
+ 	memset(fl6, 0, sizeof(*fl6));
+ =
+
+@@ -1567,7 +1565,7 @@ int udpv6_sendmsg(struct sock *sk, struct msghdr *ms=
+g, size_t len)
+ 	if (!corkreq) {
+ 		struct sk_buff *skb;
+ =
+
+-		skb =3D ip6_make_skb(sk, getfrag, msg, ulen,
++		skb =3D ip6_make_skb(sk, getfrag, msg, len,
+ 				   sizeof(struct udphdr), &ipc6,
+ 				   (struct rt6_info *)dst,
+ 				   msg->msg_flags, &cork);
+@@ -1594,8 +1592,8 @@ int udpv6_sendmsg(struct sock *sk, struct msghdr *ms=
+g, size_t len)
+ do_append_data:
+ 	if (ipc6.dontfrag < 0)
+ 		ipc6.dontfrag =3D np->dontfrag;
+-	up->len +=3D ulen;
+-	err =3D ip6_append_data(sk, getfrag, msg, ulen, sizeof(struct udphdr),
++	up->len +=3D sizeof(struct udphdr) + len;
++	err =3D ip6_append_data(sk, getfrag, msg, len, sizeof(struct udphdr),
+ 			      &ipc6, fl6, (struct rt6_info *)dst,
+ 			      corkreq ? msg->msg_flags|MSG_MORE : msg->msg_flags);
+ 	if (err)
+diff --git a/net/l2tp/l2tp_ip6.c b/net/l2tp/l2tp_ip6.c
+index ed8ebb6f5909..d5d1c3b68200 100644
+--- a/net/l2tp/l2tp_ip6.c
++++ b/net/l2tp/l2tp_ip6.c
+@@ -499,7 +499,6 @@ static int l2tp_ip6_sendmsg(struct sock *sk, struct ms=
+ghdr *msg, size_t len)
+ 	struct ipcm6_cookie ipc6;
+ 	int addr_len =3D msg->msg_namelen;
+ 	int transhdrlen =3D 4; /* zero session-id */
+-	int ulen;
+ 	int err;
+ =
+
+ 	/* Rough check on arithmetic overflow,
+@@ -507,7 +506,6 @@ static int l2tp_ip6_sendmsg(struct sock *sk, struct ms=
+ghdr *msg, size_t len)
+ 	 */
+ 	if (len > INT_MAX - transhdrlen)
+ 		return -EMSGSIZE;
+-	ulen =3D len + transhdrlen;
+ =
+
+ 	/* Mirror BSD error message compatibility */
+ 	if (msg->msg_flags & MSG_OOB)
+@@ -629,7 +627,7 @@ static int l2tp_ip6_sendmsg(struct sock *sk, struct ms=
+ghdr *msg, size_t len)
+ back_from_confirm:
+ 	lock_sock(sk);
+ 	err =3D ip6_append_data(sk, ip_generic_getfrag, msg,
+-			      ulen, transhdrlen, &ipc6,
++			      len, transhdrlen, &ipc6,
+ 			      &fl6, (struct rt6_info *)dst,
+ 			      msg->msg_flags);
+ 	if (err)
+
