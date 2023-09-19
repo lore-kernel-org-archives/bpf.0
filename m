@@ -1,122 +1,139 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78FC338DD5
-	for <bpf@vger.kernel.org>; Tue, 19 Sep 2023 08:57:36 +0000 (UTC)
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDCEA11A;
-	Tue, 19 Sep 2023 01:57:34 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-31f71b25a99so5336250f8f.2;
-        Tue, 19 Sep 2023 01:57:34 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84C1479CD
+	for <bpf@vger.kernel.org>; Tue, 19 Sep 2023 09:04:57 +0000 (UTC)
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4605912A
+	for <bpf@vger.kernel.org>; Tue, 19 Sep 2023 02:04:55 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-415155b2796so246001cf.1
+        for <bpf@vger.kernel.org>; Tue, 19 Sep 2023 02:04:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695113853; x=1695718653; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1695114294; x=1695719094; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8M0oH3rEpj2jIH57zHE90N6wAzwLmk1hC60jq7/TfHg=;
-        b=UnvUmYW9t+62tSO9cDZLDbwBNl0sLb/ElHQhYNWBNFnkmSHpH53HhSMbHKM3wmxnm9
-         nQfAJfz1JE3yqc0ZC+DfxsHNi11Id0LWKjoyDpfJK8BT/4Ov/NUe9w3hQMGvyy6PUNkh
-         0TyNsm8KFzQHF6S0mZm5eVUzIaBVCKlc6DKscas3MhaIU+BKfxkMzgpbH0HD8fxYPztc
-         iBViLpo0W5lPQPI+6IARjdadXo5g0ISfHHXz6r2SoLIyTDLNDb1OP4gZetL2FqIsBEUV
-         Kxi5hRNJ6VzKgc6f2Huf9gGYpirxqhetqjV0L8hFsLblSSV5mWYMkC2+q5hJxQerkt6g
-         gk4w==
+        bh=7/oi4X3L5BnW+K69jB8Ov4ZNb09lPvvTlldUKOwOkGU=;
+        b=qgBDb41YlX7gYTIa2/cCXpfPdeFrEAK5C5hCflV6DC4KATJtZzqbCHiv+puVcxgRG/
+         vmSite9CfaS8sDRVmY/pODPnNFmJ/1HMBjBYHcn3x1GDe9ZfR4TjTujqyt+FyrGnB4we
+         PFpLmfreZsvHz+12IGCh1J2sUp/u7EnuGROW2snYoT5yor3oZe3awscm3KWR1Q9XVuQN
+         6s5lK5uEjJkXE8H5/JGUb8GM44BktBuz7WT54Lw3K0Y+YqHHmdwKz6whwQj4VCkY+8ZT
+         zrMNKMDRmMmIQIYLag1R83YLoFeN2TuxFILrr8KOn1z1q1ou+B7ppMbxOOSnluXDLQmw
+         ievA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695113853; x=1695718653;
+        d=1e100.net; s=20230601; t=1695114294; x=1695719094;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8M0oH3rEpj2jIH57zHE90N6wAzwLmk1hC60jq7/TfHg=;
-        b=ROdYee6uVmJmbTBv2Gmu8xwDG22BVw5e8BOAqONeD0/IivdiVyTXPeqk9G+UyK8WbS
-         kvPxjw1Y03mvwlvEKVchaz5hLyI/9PAJPwKnG9e8XexJVGHINkeLkqpYqU31YEzW1su6
-         wlV0B5c2Bjp4/DXhCwXW6EP0d/Exu3ziywoCV9AGdtVjyMO0Y0dW/iBGp53lMpRkujQ6
-         x3NnxOqePh+cDNw4aYl+JntOQVeinV/Hgy1DNYWMnLtEYZdQ5mER8qg4Ure/ZeRZ7zeA
-         EEQMbw+p64Z4BhcUvCOVXFxHDt0y/yzVs1yvvjFPG7dI7UW2G5uke+DMcuZEmGrFFK0j
-         WN0A==
-X-Gm-Message-State: AOJu0YwAb4Hk7Cd7HxTaJfKxHCakwrCtzebV4b6g9GbNgAhU5BTJZLKO
-	hSwnRxhHX3ZjgrFBC9naTbvhn+cmmX06fRzCHDI=
-X-Google-Smtp-Source: AGHT+IFEm6ihX07RHkQmJfPR6TpX2UomyvS3tyYQCrIhoP2uqDAyqq7eUstv+fQIDZ8XqcVULym8YSHeZoX2xIpK0Ws=
-X-Received: by 2002:adf:ce87:0:b0:317:57f0:fae with SMTP id
- r7-20020adfce87000000b0031757f00faemr9012499wrn.63.1695113853086; Tue, 19 Sep
- 2023 01:57:33 -0700 (PDT)
+        bh=7/oi4X3L5BnW+K69jB8Ov4ZNb09lPvvTlldUKOwOkGU=;
+        b=OcqntzXjTv3Ej5VYPacaDCUFrBCTX8ce97SvGutQVwG9zfXlwCAHnsztjXX6SUZTnK
+         PD9H4ChuFMFkBGJ8OrfG64xV934Lh5GA+dD1AgFc78gye+2ycBS14WjrkWE/oN21C3N1
+         vzQg54hxyTCWnhjDg2Bjvoji/KOulGCfMljBw40D2IcI2iwQN4h9aw977SXycwmCUGLu
+         IJcbjiPZsGib9xJa2wlceIijGCEbQwn1woV8w8WXb5o1tf9kRBv5IeEK0mSlIIiApFXb
+         leqdJNlJ0Y1Du6sAsRdDaYp7Fz9Fq6j/gdFiDeZXyXqrpGPkV8kbGmtHJlUaCu2p9HDe
+         gtxg==
+X-Gm-Message-State: AOJu0YxEJCTUO9XMkUuVlkWXzH3BPIrveAoMjlp5I+O0Nu1QSSiFJ6Vl
+	p73buwnguW98AKBHGT1LFfS0rkD0sC9R8+vxySxQbQ==
+X-Google-Smtp-Source: AGHT+IEF/GNkZ5xnMa3iueZI1Q6OKylsLCUnyxGRIeKe1FBhTSCtbhnhch5SgaARlyTbVwPzdupZ5KECFNAMxBs/ls0=
+X-Received: by 2002:a05:622a:251:b0:40f:d3db:f328 with SMTP id
+ c17-20020a05622a025100b0040fd3dbf328mr179702qtx.2.1695114294212; Tue, 19 Sep
+ 2023 02:04:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAADnVQJ4Fg-VQ-tVCEqsKLuozT7y_o8pZ1oM3eBW7u-Z0jOk4A@mail.gmail.com>
- <20230918112549.105846-1-gerhorst@amazon.de>
-In-Reply-To: <20230918112549.105846-1-gerhorst@amazon.de>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 19 Sep 2023 01:57:21 -0700
-Message-ID: <CAADnVQJZRqNZ_rKw2tUrmDpwhW7JGUge1+9x1_qtROf=OyMpHw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] Revert "bpf: Fix issue in verifying allow_ptr_leaks"
-To: Luis Gerhorst <gerhorst@amazon.de>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Luis Gerhorst <gerhorst@cs.fau.de>, 
-	Hagar Gamal Halim Hemdan <hagarhem@amazon.de>, Hao Luo <haoluo@google.com>, 
-	Ilya Leoshkevich <iii@linux.ibm.com>, John Fastabend <john.fastabend@gmail.com>, 
-	Jiri Olsa <jolsa@kernel.org>, KP Singh <kpsingh@kernel.org>, 
-	Yafang Shao <laoar.shao@gmail.com>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Mykola Lysenko <mykolal@fb.com>, Puranjay Mohan <puranjay12@gmail.com>, 
-	Stanislav Fomichev <sdf@google.com>, Shuah Khan <shuah@kernel.org>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>
+References: <3793723.1694795079@warthog.procyon.org.uk> <CANn89iLwMhOnrmQTZJ+BqZJSbJZ+Q4W6xRknAAr+uSrk5TX-EQ@mail.gmail.com>
+ <0000000000001c12b30605378ce8@google.com> <3905046.1695031382@warthog.procyon.org.uk>
+ <65085768c17da_898cd294ae@willemb.c.googlers.com.notmuch> <CANn89iJ39Hguu6bRm2am6J_u0pSnm++ORa_UVpC0+8-mxORFfw@mail.gmail.com>
+ <ZQlbYVCjCyuPotdX@katalix.com>
+In-Reply-To: <ZQlbYVCjCyuPotdX@katalix.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Tue, 19 Sep 2023 11:04:41 +0200
+Message-ID: <CANn89i+fPjwonpWAXOCzrCG+hYH4kwMgJidwZf0CQaoCPOffXA@mail.gmail.com>
+Subject: Re: [syzbot] [net?] WARNING in __ip6_append_data
+To: Tom Parkin <tparkin@katalix.com>
+Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, David Howells <dhowells@redhat.com>, 
+	syzbot <syzbot+62cbf263225ae13ff153@syzkaller.appspotmail.com>, bpf@vger.kernel.org, 
+	davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
+	syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Mon, Sep 18, 2023 at 4:26=E2=80=AFAM Luis Gerhorst <gerhorst@amazon.de> =
-wrote:
+On Tue, Sep 19, 2023 at 10:27=E2=80=AFAM Tom Parkin <tparkin@katalix.com> w=
+rote:
 >
-> It is true that this is not easily possible using the method most exploit=
-s use,
-> at least to my knowledge (i.e., accessing the same address from another c=
-ore).
-> However, it is still possible to evict the cacheline with skb->data/data_=
-end
-> from the cache in between the loads by iterating over a large map using
-> bpf_loop(). Then the load of skb->data_end would be slow while skb->data =
-is
-> readily available in a callee-saved register.
+> On  Mon, Sep 18, 2023 at 16:04:49 +0200, Eric Dumazet wrote:
+> > On Mon, Sep 18, 2023 at 3:58=E2=80=AFPM Willem de Bruijn
+> > <willemdebruijn.kernel@gmail.com> wrote:
+> > >
+> > > David Howells wrote:
+> > > > David Howells <dhowells@redhat.com> wrote:
+> > > >
+> > > > > I think the attached is probably an equivalent cleaned up reprodu=
+cer.  Note
+> > > > > that if the length given to sendfile() is less than 65536, it fai=
+ls with
+> > > > > EINVAL before it gets into __ip6_append_data().
+> > > >
+> > > > Actually, it only fails with EINVAL if the size is not a multiple o=
+f the block
+> > > > size of the source file because it's open O_DIRECT so, say, 65536-5=
+12 is fine
+> > > > (and works).
+> > > >
+> > > > But thinking more on this further, is this even a bug in my code, I=
+ wonder?
+> > > > The length passed is 65536 - but a UDP packet can't carry that, so =
+it
+> > > > shouldn't it have errored out before getting that far?  (which is w=
+hat it
+> > > > seems to do when I try it).
+> > > >
+> > > > I don't see how we get past the length check in ip6_append_data() w=
+ith the
+> > > > reproducer we're given unless the MTU is somewhat bigger than 65536=
+ (is that
+> > > > even possible?)
+> > >
+> > > An ipv6 packet can carry 64KB of payload, so maxnonfragsize of 65535 =
++ 40
+> > > sounds correct. But payload length passed of 65536 is not (ignoring i=
+pv6
+> > > jumbograms). So that should probably trigger an EINVAL -- if that is =
+indeed
+> > > what the repro does.
+> >
+> > l2tp_ip6_sendmsg() claims ip6_append_data() can make better checks,
+> > but what about simply replacing INT_MAX by 65535 ?
+>
+> Slightly OT but I think the l2tp_ip6.c approach was probably cribbed
+> from net/ipv6/udp.c's udpv6_sendmsg originally:
+>
+>
+>     /* Rough check on arithmetic overflow,
+>        better check is made in ip6_append_data().
+>        */
+>     if (len > INT_MAX - sizeof(struct udphdr))
+>         return -EMSGSIZE;
+>
+>
+> Should the udp code be modified similarly?
+>
 
-...
+Unfortunately both l2tp and udp support CORK (MSG_MORE),
+so a modified check like that will not be enough to prevent syzbot reports.
 
-> call %[bpf_loop]; \
-> gadget_%=3D: \
-> r2 =3D *(u32 *)(r7 + 80);   \
-> if r2 <=3D r9 goto exit_%=3D; \
+Better than nothing, of course.
 
-r9 is supposed to be available in the callee-saved register? :)
-I think you're missing that it is _callee_ saved.
-If that bpf_loop indeed managed to flush L1 cache the
-refill of r9 in the epilogue would be a cache miss.
-And r7 will be a cache miss as well.
-So there is no chance cpu will execute 'if r2 <=3D r9' speculatively.
-
-I have to agree that the above approach sounds plausible in theory
-and I've never seen anyone propose to mispredict a branch
-this way. Which also means that no known speculation attack
-was crafted. I suspect that's a strong sign that
-the above approach is indeed a theory and it doesn't work in practice.
-Likely because the whole cache is flushed the subsequent misses
-will spoil all speculation. For spec v1 to work you need
-only one slow load in one side of that branch.
-The other load and the speculative code after should not miss.
-When it does the spec code won't be able to leave the breadcrumbs
-of the leaked bit in the cache.
-'Leak full byte' is also 'wishful thinking' imo.
-I haven't seen any attack that leaks byte at-a-time.
-
-So I will insist on seeing a full working exploit before doing
-anything else here. It's good to discuss this cpu speculation
-concerns, but we have to stay practical.
-Even removing bpf from the picture there is so much code
-in the network core that checks packet boundaries.
-One can find plenty of cases of 'read past skb->end'
-under speculation and I'm arguing none of them are exploitable.
+I also note that ipv4 size of l2tp does not have any check,
+an overflow seems possible with carefully chosen size.
