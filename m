@@ -1,115 +1,98 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 488C0A3B
-	for <bpf@vger.kernel.org>; Tue, 19 Sep 2023 05:43:37 +0000 (UTC)
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35E5FC;
-	Mon, 18 Sep 2023 22:43:34 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-65642ade0easo17995936d6.1;
-        Mon, 18 Sep 2023 22:43:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695102214; x=1695707014; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mjesQVNT+DryUaqUKb0b5eBDwkWp5Kc/txf22mT/W50=;
-        b=ByU+hHD2ibDMiavw4fx/O70zZc6sLQPLvAG/Y8jMEeH/YjzVmYjqHLCv6/dPI5bEoT
-         V6ujSVCHrP89biolx2TDZ963j60/GP3unO1c4k9MNb52z1eL+DTdXMKlFzrfcnMKUV5w
-         i9Vf5QKXrmGF5/WqBOPl0BkaImpcPB+Q+/dKsh83BybcAj4crOPFlSizsxkVPCOmmL+R
-         ncKE5QIyIhuc1irLwu+ugyOtv1SJYJvc0TAgkFSOqwMDQGNfPw+g/bWtpROsbc9nklNb
-         OLnh5McSaqdYeMK/AxYW4LHQ+culH7ZZXPMngxc6J9doZ7aqqQkxVmop2yk7r4vli0We
-         Krxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695102214; x=1695707014;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mjesQVNT+DryUaqUKb0b5eBDwkWp5Kc/txf22mT/W50=;
-        b=I/WYwfTP0ffzMXkEzRIJJfDWh0EW2I7UmjQtLWfqui3F6rMVHdMu9vt+e24E0P9KDD
-         +l7ybAGOVsTEeX9LiGHV49qo7oN/Hwyle7bA9JMBvoZD/AepmEeApiTfo2n1E+gckRGr
-         bo73zBRHzS1sJH16L9hUPzjCEilG4RP5JzAl97Bi1ltlg9GspwMfVju/KVbcQ5xRZPks
-         aFZhl5dD8j1fsDeOnDI1gU6XPFQfnfrJWZISFCH9ZEXykjJYJQv07O5g+QZHJKUl2SST
-         0t9KRQ7VDj4b3sCZG2B4KCb7qW/anLND8X4RsG8XTFjKW7pLV8fpDy/WUSAOaCPspR1L
-         zlCQ==
-X-Gm-Message-State: AOJu0Yw1UDG4lY80IrBLJTJTl4U3qvAfLn5+G6G/yOCPzDxbIxvEhD7n
-	y7MMzyHWvPvJ0gKz560mdk+nHcE4zJgXy58bVRM=
-X-Google-Smtp-Source: AGHT+IEocmxoe+7svG20ot8HPLzzr0JwTBXheGFmsXDiCTynxBaGuwi5Y8zP2wb87ZbZvKzhYGKW63sjG81U0RaZDbE=
-X-Received: by 2002:a0c:f3d3:0:b0:656:28b1:16c6 with SMTP id
- f19-20020a0cf3d3000000b0065628b116c6mr12006704qvm.2.1695102213947; Mon, 18
- Sep 2023 22:43:33 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD4EF180
+	for <bpf@vger.kernel.org>; Tue, 19 Sep 2023 06:03:58 +0000 (UTC)
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D36FC
+	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 23:03:57 -0700 (PDT)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38J3YsPD007749
+	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 23:03:56 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3t73uy1ndu-8
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Mon, 18 Sep 2023 23:03:56 -0700
+Received: from twshared27355.37.frc1.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 18 Sep 2023 23:03:53 -0700
+Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
+	id F00F024985086; Mon, 18 Sep 2023 23:03:44 -0700 (PDT)
+From: Song Liu <song@kernel.org>
+To: <bpf@vger.kernel.org>
+CC: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <kernel-team@meta.com>, <iii@linux.ibm.com>,
+        Song Liu
+	<song@kernel.org>
+Subject: [PATCH bpf 1/2] s390/bpf: Let arch_prepare_bpf_trampoline return program size
+Date: Mon, 18 Sep 2023 23:02:57 -0700
+Message-ID: <20230919060258.3237176-2-song@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230919060258.3237176-1-song@kernel.org>
+References: <20230919060258.3237176-1-song@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230903142800.3870-1-laoar.shao@gmail.com> <20230903142800.3870-2-laoar.shao@gmail.com>
- <ysajseo5a5dashpz4dtkdpthtdww4m6wpgtgpakbtlbqoy7cvg@53fx3pou6hrl>
-In-Reply-To: <ysajseo5a5dashpz4dtkdpthtdww4m6wpgtgpakbtlbqoy7cvg@53fx3pou6hrl>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Tue, 19 Sep 2023 13:42:57 +0800
-Message-ID: <CALOAHbBD32gk5ztVBfXoM+mVWXeXre2Pma6Lvk0BZuvQQtAQ0Q@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 1/5] cgroup: Enable task_under_cgroup_hierarchy()
- on cgroup1
-To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
-	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, kpsingh@kernel.org, sdf@google.com, 
-	haoluo@google.com, jolsa@kernel.org, tj@kernel.org, lizefan.x@bytedance.com, 
-	hannes@cmpxchg.org, yosryahmed@google.com, cgroups@vger.kernel.org, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: CeHgicEH-LORlIzCRTtl-i74GRwfNcky
+X-Proofpoint-GUID: CeHgicEH-LORlIzCRTtl-i74GRwfNcky
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-18_11,2023-09-18_01,2023-05-22_02
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=ham
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Mon, Sep 18, 2023 at 10:45=E2=80=AFPM Michal Koutn=C3=BD <mkoutny@suse.c=
-om> wrote:
->
-> On Sun, Sep 03, 2023 at 02:27:56PM +0000, Yafang Shao <laoar.shao@gmail.c=
-om> wrote:
-> >  static inline bool task_under_cgroup_hierarchy(struct task_struct *tas=
-k,
-> >                                              struct cgroup *ancestor)
-> >  {
-> >       struct css_set *cset =3D task_css_set(task);
-> > +     struct cgroup *cgrp;
-> > +     bool ret =3D false;
-> > +     int ssid;
-> > +
-> > +     if (ancestor->root =3D=3D &cgrp_dfl_root)
-> > +             return cgroup_is_descendant(cset->dfl_cgrp, ancestor);
-> > +
-> > +     for (ssid =3D 0; ssid < CGROUP_SUBSYS_COUNT; ssid++) {
->
-> This loop were better an iteration over cset->cgrp_links to handle any
-> v1 hierarchy (under css_set_lock :-/).
+arch_prepare_bpf_trampoline() for s390 currently returns 0 on success. Th=
+is
+is not a problem for regular trampoline. However, struct_ops relies on th=
+e
+return value to advance "image" pointer:
 
-Agree. That is better.
+bpf_struct_ops_map_update_elem() {
+    ...
+    for_each_member(i, t, member) {
+        ...
+        err =3D bpf_struct_ops_prepare_trampoline();
+        ...
+        image +=3D err;
+    }
+}
 
->
-> > +             if (!ancestor->subsys[ssid])
-> > +                     continue;
-> >
-> > -     return cgroup_is_descendant(cset->dfl_cgrp, ancestor);
-> > +             cgrp =3D task_css(task, ssid)->cgroup;
->
-> Does this pass on a lockdep-enabled kernel?
+When arch_prepare_bpf_trampoline returns 0 on success, all members of the
+struct_ops will point to the same trampoline (the last one).
 
-Yes, the lockdep is enabled.
+Fix this by returning the program size in arch_prepare_bpf_trampoline (on
+success). This is the same behavior as other architectures.
 
->
-> See conditions in task_css_set_check(), it seems at least RCU read lock
-> would be needed (if not going through cgrp_links mentioned above).
+Signed-off-by: Song Liu <song@kernel.org>
+---
+ arch/s390/net/bpf_jit_comp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-All the call sites of it are already under RCU protection, so we don't
-need to explicitly set RCU read lock here.
-
+diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
+index de2fb12120d2..2861e3360aff 100644
+--- a/arch/s390/net/bpf_jit_comp.c
++++ b/arch/s390/net/bpf_jit_comp.c
+@@ -2513,7 +2513,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_im=
+age *im, void *image,
+ 			return -E2BIG;
+ 	}
+=20
+-	return ret;
++	return tjit.common.prg;
+ }
+=20
+ bool bpf_jit_supports_subprog_tailcalls(void)
 --=20
-Regards
-Yafang
+2.34.1
+
