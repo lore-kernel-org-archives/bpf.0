@@ -1,47 +1,47 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 165473FB34
-	for <bpf@vger.kernel.org>; Tue, 19 Sep 2023 10:14:29 +0000 (UTC)
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510A21AC
-	for <bpf@vger.kernel.org>; Tue, 19 Sep 2023 03:14:05 -0700 (PDT)
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38JA8abu005620;
-	Tue, 19 Sep 2023 10:13:50 GMT
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A7A33398B
+	for <bpf@vger.kernel.org>; Tue, 19 Sep 2023 10:14:33 +0000 (UTC)
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD88129
+	for <bpf@vger.kernel.org>; Tue, 19 Sep 2023 03:14:09 -0700 (PDT)
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38JA88IS008330;
+	Tue, 19 Sep 2023 10:13:56 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=SWudXKpO6AYlqFR+5edL211VyDcI+BRjyumnbFu1H98=;
- b=IJ3mXBLpWt6zvcAyYkzcl2YPYK3WhTgMjRwFFqGwb2/AGbhehhjgOdmpRb//q/pt4q58
- B+vd03kEwCsjPxJgpN61COlhEd4Ezg9OD/UQEOQlKTJBRsL/c0vjq4jy1NMPhYcwh23N
- a4Ka/7zyHiilpWZTgcXXEliStKtM6qk9Q7QjojyTSgV5Lgmnlbhglu279CKb7bPH5zti
- NjTs9sq9YFBzoQoVqcKHcXjsKYR/FQW00Mi1m0KqDp2KRmR19ZI7v7K1vQTpYv5L+2In
- MTGiUtV6rz1ziXGmhnujtS2TC/ZX4s7LaC0oX9QuobfUvlegDqxZQZ+rBXm09YyENKpu +Q== 
+ bh=SalS81j0IHnhzNqWJJflrBw1KzZYPuhZ4Bm5hSVisfc=;
+ b=dY/qcna750nExkdEWT+XQYKTiOHrPJVtzuCBwINrCVdCpuTgMET9QjKdsut8mjohtIbe
+ 48E3eiuhoUrrZoXnYsYb3fRwAaRXb8L76Ukg3wjEfRF9Z3wsy0rmSRm3aQ6Mln5SLKLT
+ LZDWXUWeSLM0ORABuDrtENepOIfj2Hwxsvd+eONtvYiQJ0MLgFd7IFQlk1vewAd04l6u
+ UI2iBPcuRAL4cENpfFaqXO4qykqmecwMPAUWKHdFQ7d9JHAns5Z0MqHpHXauDTUb2n1a
+ f8qZM9O3WdbLX9Hn0wjqz/fOsKSbzVFNgc7gllZjMNTDUYjvwMhmAGrbSNE8MsFSXGwI 9Q== 
 Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t78k59gtb-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t77fwbads-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 Sep 2023 10:13:49 +0000
+	Tue, 19 Sep 2023 10:13:56 +0000
 Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38J9L4fT010371;
-	Tue, 19 Sep 2023 10:13:49 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3t5rwk2uah-1
+	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38J9FAxg010124;
+	Tue, 19 Sep 2023 10:13:55 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3t5rwk2ub9-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 Sep 2023 10:13:48 +0000
+	Tue, 19 Sep 2023 10:13:55 +0000
 Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38JADkec41615942
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38JADq9553281072
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 19 Sep 2023 10:13:46 GMT
+	Tue, 19 Sep 2023 10:13:52 GMT
 Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 396C52004F;
-	Tue, 19 Sep 2023 10:13:46 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 40FA720069;
+	Tue, 19 Sep 2023 10:13:52 +0000 (GMT)
 Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A5EB120067;
-	Tue, 19 Sep 2023 10:13:45 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id A526D2004F;
+	Tue, 19 Sep 2023 10:13:51 +0000 (GMT)
 Received: from heavy.boeblingen.de.ibm.com (unknown [9.171.67.55])
 	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 19 Sep 2023 10:13:45 +0000 (GMT)
+	Tue, 19 Sep 2023 10:13:51 +0000 (GMT)
 From: Ilya Leoshkevich <iii@linux.ibm.com>
 To: Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -50,9 +50,9 @@ Cc: bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Alexander Gordeev <agordeev@linux.ibm.com>,
         Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next v2 04/10] s390/bpf: Implement BPF_MOV | BPF_X with sign-extension
-Date: Tue, 19 Sep 2023 12:09:06 +0200
-Message-ID: <20230919101336.2223655-5-iii@linux.ibm.com>
+Subject: [PATCH bpf-next v2 08/10] s390/bpf: Implement signed division
+Date: Tue, 19 Sep 2023 12:09:10 +0200
+Message-ID: <20230919101336.2223655-9-iii@linux.ibm.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230919101336.2223655-1-iii@linux.ibm.com>
 References: <20230919101336.2223655-1-iii@linux.ibm.com>
@@ -64,92 +64,259 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 0Rnv_RY4T6oc072IvhVh-rXMQymPbaI4
-X-Proofpoint-ORIG-GUID: 0Rnv_RY4T6oc072IvhVh-rXMQymPbaI4
+X-Proofpoint-GUID: -mHn9xpch-rFIRd8xtgXlL68EKPDdPCL
+X-Proofpoint-ORIG-GUID: -mHn9xpch-rFIRd8xtgXlL68EKPDdPCL
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
  definitions=2023-09-19_04,2023-09-18_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=991
- lowpriorityscore=0 suspectscore=0 priorityscore=1501 impostorscore=0
- adultscore=0 mlxscore=0 clxscore=1015 malwarescore=0 spamscore=0
- phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 bulkscore=0 suspectscore=0 malwarescore=0 mlxscore=0
+ adultscore=0 spamscore=0 mlxlogscore=999 impostorscore=0 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2308100000 definitions=main-2309190085
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+	DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,
+	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Implement the cpuv4 register-to-register move with sign extension. It
-is distinguished from the normal moves by non-zero values in
-insn->off, which determine the source size. s390x has instructions to
-deal with all of them: lbr, lhr, lgbr, lghr and lgfr.
+Implement the cpuv4 signed division. It is encoded as unsigned
+division, but with off field set to 1. s390x has the necessary
+instructions: dsgfr, dsgf and dsgr.
 
 Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
- arch/s390/net/bpf_jit_comp.c | 48 ++++++++++++++++++++++++++++++------
- 1 file changed, 40 insertions(+), 8 deletions(-)
+ arch/s390/net/bpf_jit_comp.c | 172 +++++++++++++++++++++++++----------
+ 1 file changed, 125 insertions(+), 47 deletions(-)
 
 diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
-index e6a643f63ebf..fc8bbddf6533 100644
+index 55634e4c6815..fd1936a63878 100644
 --- a/arch/s390/net/bpf_jit_comp.c
 +++ b/arch/s390/net/bpf_jit_comp.c
-@@ -795,15 +795,47 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
+@@ -949,66 +949,115 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
  	/*
- 	 * BPF_MOV
+ 	 * BPF_DIV / BPF_MOD
  	 */
--	case BPF_ALU | BPF_MOV | BPF_X: /* dst = (u32) src */
--		/* llgfr %dst,%src */
--		EMIT4(0xb9160000, dst_reg, src_reg);
--		if (insn_is_zext(&insn[1]))
--			insn_count = 2;
-+	case BPF_ALU | BPF_MOV | BPF_X:
-+		switch (insn->off) {
-+		case 0: /* DST = (u32) SRC */
-+			/* llgfr %dst,%src */
-+			EMIT4(0xb9160000, dst_reg, src_reg);
-+			if (insn_is_zext(&insn[1]))
-+				insn_count = 2;
+-	case BPF_ALU | BPF_DIV | BPF_X: /* dst = (u32) dst / (u32) src */
+-	case BPF_ALU | BPF_MOD | BPF_X: /* dst = (u32) dst % (u32) src */
++	case BPF_ALU | BPF_DIV | BPF_X:
++	case BPF_ALU | BPF_MOD | BPF_X:
+ 	{
+ 		int rc_reg = BPF_OP(insn->code) == BPF_DIV ? REG_W1 : REG_W0;
+ 
+-		/* lhi %w0,0 */
+-		EMIT4_IMM(0xa7080000, REG_W0, 0);
+-		/* lr %w1,%dst */
+-		EMIT2(0x1800, REG_W1, dst_reg);
+-		/* dlr %w0,%src */
+-		EMIT4(0xb9970000, REG_W0, src_reg);
++		switch (off) {
++		case 0: /* dst = (u32) dst {/,%} (u32) src */
++			/* xr %w0,%w0 */
++			EMIT2(0x1700, REG_W0, REG_W0);
++			/* lr %w1,%dst */
++			EMIT2(0x1800, REG_W1, dst_reg);
++			/* dlr %w0,%src */
++			EMIT4(0xb9970000, REG_W0, src_reg);
 +			break;
-+		case 8: /* DST = (u32)(s8) SRC */
-+			/* lbr %dst,%src */
-+			EMIT4(0xb9260000, dst_reg, src_reg);
-+			/* llgfr %dst,%dst */
-+			EMIT4(0xb9160000, dst_reg, dst_reg);
-+			break;
-+		case 16: /* DST = (u32)(s16) SRC */
-+			/* lhr %dst,%src */
-+			EMIT4(0xb9270000, dst_reg, src_reg);
-+			/* llgfr %dst,%dst */
-+			EMIT4(0xb9160000, dst_reg, dst_reg);
-+			break;
-+		}
- 		break;
--	case BPF_ALU64 | BPF_MOV | BPF_X: /* dst = src */
--		/* lgr %dst,%src */
--		EMIT4(0xb9040000, dst_reg, src_reg);
-+	case BPF_ALU64 | BPF_MOV | BPF_X:
-+		switch (insn->off) {
-+		case 0: /* DST = SRC */
-+			/* lgr %dst,%src */
-+			EMIT4(0xb9040000, dst_reg, src_reg);
-+			break;
-+		case 8: /* DST = (s8) SRC */
-+			/* lgbr %dst,%src */
-+			EMIT4(0xb9060000, dst_reg, src_reg);
-+			break;
-+		case 16: /* DST = (s16) SRC */
-+			/* lghr %dst,%src */
-+			EMIT4(0xb9070000, dst_reg, src_reg);
-+			break;
-+		case 32: /* DST = (s32) SRC */
-+			/* lgfr %dst,%src */
-+			EMIT4(0xb9140000, dst_reg, src_reg);
++		case 1: /* dst = (u32) ((s32) dst {/,%} (s32) src) */
++			/* lgfr %r1,%dst */
++			EMIT4(0xb9140000, REG_W1, dst_reg);
++			/* dsgfr %r0,%src */
++			EMIT4(0xb91d0000, REG_W0, src_reg);
 +			break;
 +		}
+ 		/* llgfr %dst,%rc */
+ 		EMIT4(0xb9160000, dst_reg, rc_reg);
+ 		if (insn_is_zext(&insn[1]))
+ 			insn_count = 2;
  		break;
- 	case BPF_ALU | BPF_MOV | BPF_K: /* dst = (u32) imm */
- 		/* llilf %dst,imm */
+ 	}
+-	case BPF_ALU64 | BPF_DIV | BPF_X: /* dst = dst / src */
+-	case BPF_ALU64 | BPF_MOD | BPF_X: /* dst = dst % src */
++	case BPF_ALU64 | BPF_DIV | BPF_X:
++	case BPF_ALU64 | BPF_MOD | BPF_X:
+ 	{
+ 		int rc_reg = BPF_OP(insn->code) == BPF_DIV ? REG_W1 : REG_W0;
+ 
+-		/* lghi %w0,0 */
+-		EMIT4_IMM(0xa7090000, REG_W0, 0);
+-		/* lgr %w1,%dst */
+-		EMIT4(0xb9040000, REG_W1, dst_reg);
+-		/* dlgr %w0,%dst */
+-		EMIT4(0xb9870000, REG_W0, src_reg);
++		switch (off) {
++		case 0: /* dst = dst {/,%} src */
++			/* lghi %w0,0 */
++			EMIT4_IMM(0xa7090000, REG_W0, 0);
++			/* lgr %w1,%dst */
++			EMIT4(0xb9040000, REG_W1, dst_reg);
++			/* dlgr %w0,%src */
++			EMIT4(0xb9870000, REG_W0, src_reg);
++			break;
++		case 1: /* dst = (s64) dst {/,%} (s64) src */
++			/* lgr %w1,%dst */
++			EMIT4(0xb9040000, REG_W1, dst_reg);
++			/* dsgr %w0,%src */
++			EMIT4(0xb90d0000, REG_W0, src_reg);
++			break;
++		}
+ 		/* lgr %dst,%rc */
+ 		EMIT4(0xb9040000, dst_reg, rc_reg);
+ 		break;
+ 	}
+-	case BPF_ALU | BPF_DIV | BPF_K: /* dst = (u32) dst / (u32) imm */
+-	case BPF_ALU | BPF_MOD | BPF_K: /* dst = (u32) dst % (u32) imm */
++	case BPF_ALU | BPF_DIV | BPF_K:
++	case BPF_ALU | BPF_MOD | BPF_K:
+ 	{
+ 		int rc_reg = BPF_OP(insn->code) == BPF_DIV ? REG_W1 : REG_W0;
+ 
+ 		if (imm == 1) {
+ 			if (BPF_OP(insn->code) == BPF_MOD)
+-				/* lhgi %dst,0 */
++				/* lghi %dst,0 */
+ 				EMIT4_IMM(0xa7090000, dst_reg, 0);
+ 			else
+ 				EMIT_ZERO(dst_reg);
+ 			break;
+ 		}
+-		/* lhi %w0,0 */
+-		EMIT4_IMM(0xa7080000, REG_W0, 0);
+-		/* lr %w1,%dst */
+-		EMIT2(0x1800, REG_W1, dst_reg);
+ 		if (!is_first_pass(jit) && can_use_ldisp_for_lit32(jit)) {
+-			/* dl %w0,<d(imm)>(%l) */
+-			EMIT6_DISP_LH(0xe3000000, 0x0097, REG_W0, REG_0, REG_L,
+-				      EMIT_CONST_U32(imm));
++			switch (off) {
++			case 0: /* dst = (u32) dst {/,%} (u32) imm */
++				/* xr %w0,%w0 */
++				EMIT2(0x1700, REG_W0, REG_W0);
++				/* lr %w1,%dst */
++				EMIT2(0x1800, REG_W1, dst_reg);
++				/* dl %w0,<d(imm)>(%l) */
++				EMIT6_DISP_LH(0xe3000000, 0x0097, REG_W0, REG_0,
++					      REG_L, EMIT_CONST_U32(imm));
++				break;
++			case 1: /* dst = (s32) dst {/,%} (s32) imm */
++				/* lgfr %r1,%dst */
++				EMIT4(0xb9140000, REG_W1, dst_reg);
++				/* dsgf %r0,<d(imm)>(%l) */
++				EMIT6_DISP_LH(0xe3000000, 0x001d, REG_W0, REG_0,
++					      REG_L, EMIT_CONST_U32(imm));
++				break;
++			}
+ 		} else {
+-			/* lgfrl %dst,imm */
+-			EMIT6_PCREL_RILB(0xc40c0000, dst_reg,
+-					 _EMIT_CONST_U32(imm));
+-			jit->seen |= SEEN_LITERAL;
+-			/* dlr %w0,%dst */
+-			EMIT4(0xb9970000, REG_W0, dst_reg);
++			switch (off) {
++			case 0: /* dst = (u32) dst {/,%} (u32) imm */
++				/* xr %w0,%w0 */
++				EMIT2(0x1700, REG_W0, REG_W0);
++				/* lr %w1,%dst */
++				EMIT2(0x1800, REG_W1, dst_reg);
++				/* lrl %dst,imm */
++				EMIT6_PCREL_RILB(0xc40d0000, dst_reg,
++						 _EMIT_CONST_U32(imm));
++				jit->seen |= SEEN_LITERAL;
++				/* dlr %w0,%dst */
++				EMIT4(0xb9970000, REG_W0, dst_reg);
++				break;
++			case 1: /* dst = (s32) dst {/,%} (s32) imm */
++				/* lgfr %w1,%dst */
++				EMIT4(0xb9140000, REG_W1, dst_reg);
++				/* lgfrl %dst,imm */
++				EMIT6_PCREL_RILB(0xc40c0000, dst_reg,
++						 _EMIT_CONST_U32(imm));
++				jit->seen |= SEEN_LITERAL;
++				/* dsgr %w0,%dst */
++				EMIT4(0xb90d0000, REG_W0, dst_reg);
++				break;
++			}
+ 		}
+ 		/* llgfr %dst,%rc */
+ 		EMIT4(0xb9160000, dst_reg, rc_reg);
+@@ -1016,8 +1065,8 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
+ 			insn_count = 2;
+ 		break;
+ 	}
+-	case BPF_ALU64 | BPF_DIV | BPF_K: /* dst = dst / imm */
+-	case BPF_ALU64 | BPF_MOD | BPF_K: /* dst = dst % imm */
++	case BPF_ALU64 | BPF_DIV | BPF_K:
++	case BPF_ALU64 | BPF_MOD | BPF_K:
+ 	{
+ 		int rc_reg = BPF_OP(insn->code) == BPF_DIV ? REG_W1 : REG_W0;
+ 
+@@ -1027,21 +1076,50 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
+ 				EMIT4_IMM(0xa7090000, dst_reg, 0);
+ 			break;
+ 		}
+-		/* lghi %w0,0 */
+-		EMIT4_IMM(0xa7090000, REG_W0, 0);
+-		/* lgr %w1,%dst */
+-		EMIT4(0xb9040000, REG_W1, dst_reg);
+ 		if (!is_first_pass(jit) && can_use_ldisp_for_lit64(jit)) {
+-			/* dlg %w0,<d(imm)>(%l) */
+-			EMIT6_DISP_LH(0xe3000000, 0x0087, REG_W0, REG_0, REG_L,
+-				      EMIT_CONST_U64(imm));
++			switch (off) {
++			case 0: /* dst = dst {/,%} imm */
++				/* lghi %w0,0 */
++				EMIT4_IMM(0xa7090000, REG_W0, 0);
++				/* lgr %w1,%dst */
++				EMIT4(0xb9040000, REG_W1, dst_reg);
++				/* dlg %w0,<d(imm)>(%l) */
++				EMIT6_DISP_LH(0xe3000000, 0x0087, REG_W0, REG_0,
++					      REG_L, EMIT_CONST_U64(imm));
++				break;
++			case 1: /* dst = (s64) dst {/,%} (s64) imm */
++				/* lgr %w1,%dst */
++				EMIT4(0xb9040000, REG_W1, dst_reg);
++				/* dsg %w0,<d(imm)>(%l) */
++				EMIT6_DISP_LH(0xe3000000, 0x000d, REG_W0, REG_0,
++					      REG_L, EMIT_CONST_U64(imm));
++				break;
++			}
+ 		} else {
+-			/* lgrl %dst,imm */
+-			EMIT6_PCREL_RILB(0xc4080000, dst_reg,
+-					 _EMIT_CONST_U64(imm));
+-			jit->seen |= SEEN_LITERAL;
+-			/* dlgr %w0,%dst */
+-			EMIT4(0xb9870000, REG_W0, dst_reg);
++			switch (off) {
++			case 0: /* dst = dst {/,%} imm */
++				/* lghi %w0,0 */
++				EMIT4_IMM(0xa7090000, REG_W0, 0);
++				/* lgr %w1,%dst */
++				EMIT4(0xb9040000, REG_W1, dst_reg);
++				/* lgrl %dst,imm */
++				EMIT6_PCREL_RILB(0xc4080000, dst_reg,
++						 _EMIT_CONST_U64(imm));
++				jit->seen |= SEEN_LITERAL;
++				/* dlgr %w0,%dst */
++				EMIT4(0xb9870000, REG_W0, dst_reg);
++				break;
++			case 1: /* dst = (s64) dst {/,%} (s64) imm */
++				/* lgr %w1,%dst */
++				EMIT4(0xb9040000, REG_W1, dst_reg);
++				/* lgrl %dst,imm */
++				EMIT6_PCREL_RILB(0xc4080000, dst_reg,
++						 _EMIT_CONST_U64(imm));
++				jit->seen |= SEEN_LITERAL;
++				/* dsgr %w0,%dst */
++				EMIT4(0xb90d0000, REG_W0, dst_reg);
++				break;
++			}
+ 		}
+ 		/* lgr %dst,%rc */
+ 		EMIT4(0xb9040000, dst_reg, rc_reg);
 -- 
 2.41.0
 
