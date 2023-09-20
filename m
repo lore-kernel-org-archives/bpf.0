@@ -1,33 +1,35 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8E8023C6
-	for <bpf@vger.kernel.org>; Wed, 20 Sep 2023 05:32:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 684A428F1
+	for <bpf@vger.kernel.org>; Wed, 20 Sep 2023 05:32:21 +0000 (UTC)
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE53AB
-	for <bpf@vger.kernel.org>; Tue, 19 Sep 2023 22:32:18 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0A5DE
+	for <bpf@vger.kernel.org>; Tue, 19 Sep 2023 22:32:19 -0700 (PDT)
 Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38K1v8cK005347
-	for <bpf@vger.kernel.org>; Tue, 19 Sep 2023 22:32:18 -0700
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38K1v8Vu005308
+	for <bpf@vger.kernel.org>; Tue, 19 Sep 2023 22:32:19 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3t76krh2gs-3
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3t76krh2gt-6
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 19 Sep 2023 22:32:17 -0700
-Received: from twshared27355.37.frc1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Tue, 19 Sep 2023 22:32:18 -0700
+Received: from twshared52565.14.frc2.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 19 Sep 2023 22:32:16 -0700
+ 15.1.2507.23; Tue, 19 Sep 2023 22:32:17 -0700
 Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-	id 388EF24A600A8; Tue, 19 Sep 2023 22:32:06 -0700 (PDT)
+	id 3B31524A600DB; Tue, 19 Sep 2023 22:32:13 -0700 (PDT)
 From: Song Liu <song@kernel.org>
 To: <bpf@vger.kernel.org>
 CC: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <martin.lau@kernel.org>, <kernel-team@meta.com>,
         Song Liu <song@kernel.org>
-Subject: [PATCH bpf-next 0/8] Allocate bpf trampoline on bpf_prog_pack
-Date: Tue, 19 Sep 2023 22:31:50 -0700
-Message-ID: <20230920053158.3175043-1-song@kernel.org>
+Subject: [PATCH bpf-next 3/8] bpf: Adjust argument names of arch_prepare_bpf_trampoline()
+Date: Tue, 19 Sep 2023 22:31:53 -0700
+Message-ID: <20230920053158.3175043-4-song@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230920053158.3175043-1-song@kernel.org>
+References: <20230920053158.3175043-1-song@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,8 +39,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: Z-uihkhsulmd-Ah-78mDsFfQ6zU5vTwp
-X-Proofpoint-GUID: Z-uihkhsulmd-Ah-78mDsFfQ6zU5vTwp
+X-Proofpoint-ORIG-GUID: cdKmAcceISgd4ithLgVW46U0SySyd0mA
+X-Proofpoint-GUID: cdKmAcceISgd4ithLgVW46U0SySyd0mA
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
  definitions=2023-09-20_02,2023-09-19_01,2023-05-22_02
@@ -49,36 +51,117 @@ X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-This set enables allocating bpf trampoline from bpf_prog_pack on x86. The
-majority of this work, however, is the refactoring of trampoline code.
-This is needed because we need to handle 4 archs and 2 users (trampoline
-and struct_ops).
+We are using "im" for "struct bpf_tramp_image" and "tr" for "struct
+bpf_trampoline" in most of the code base. The only exception is the
+prototype and fallback version of arch_prepare_bpf_trampoline(). Update
+them to match the rest of the code base.
 
-1/8 is a dependency that is already applied to bpf tree.
-2/8 through 7/8 refactors trampoline code. A few helpers are added.
-8/8 finally let bpf trampoline on x86 use bpf_prog_pack.
+We mix "orig_call" and "func_addr" for the argument in different versions
+of arch_prepare_bpf_trampoline(). s/orig_call/func_addr/g so they match.
 
-Song Liu (8):
-  s390/bpf: Let arch_prepare_bpf_trampoline return program size
-  bpf: Let bpf_prog_pack_free handle any pointer
-  bpf: Adjust argument names of arch_prepare_bpf_trampoline()
-  bpf: Add helpers for trampoline image management
-  bpf, x86: Adjust arch_prepare_bpf_trampoline return value
-  bpf: Add arch_bpf_trampoline_size()
-  bpf: Use arch_bpf_trampoline_size for trampoline
-  x86, bpf: Use bpf_prog_pack for bpf trampoline
+Signed-off-by: Song Liu <song@kernel.org>
+---
+ arch/arm64/net/bpf_jit_comp.c | 10 +++++-----
+ include/linux/bpf.h           |  4 ++--
+ kernel/bpf/trampoline.c       |  4 ++--
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
- arch/arm64/net/bpf_jit_comp.c   |  62 +++++++++++-----
- arch/riscv/net/bpf_jit_comp64.c |  24 ++++--
- arch/s390/net/bpf_jit_comp.c    |  52 +++++++------
- arch/x86/net/bpf_jit_comp.c     | 127 +++++++++++++++++++++++++-------
- include/linux/bpf.h             |  12 ++-
- include/linux/filter.h          |   2 +-
- kernel/bpf/bpf_struct_ops.c     |  12 ++-
- kernel/bpf/core.c               |  21 +++---
- kernel/bpf/dispatcher.c         |   5 +-
- kernel/bpf/trampoline.c         |  89 ++++++++++++++++------
- 10 files changed, 285 insertions(+), 121 deletions(-)
-
---
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.=
+c
+index 7d4af64e3982..d81b886ea4df 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -1828,7 +1828,7 @@ static void restore_args(struct jit_ctx *ctx, int a=
+rgs_off, int nregs)
+  *
+  */
+ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_imag=
+e *im,
+-			      struct bpf_tramp_links *tlinks, void *orig_call,
++			      struct bpf_tramp_links *tlinks, void *func_addr,
+ 			      int nregs, u32 flags)
+ {
+ 	int i;
+@@ -1926,7 +1926,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, =
+struct bpf_tramp_image *im,
+=20
+ 	if (flags & BPF_TRAMP_F_IP_ARG) {
+ 		/* save ip address of the traced function */
+-		emit_addr_mov_i64(A64_R(10), (const u64)orig_call, ctx);
++		emit_addr_mov_i64(A64_R(10), (const u64)func_addr, ctx);
+ 		emit(A64_STR64I(A64_R(10), A64_SP, ip_off), ctx);
+ 	}
+=20
+@@ -2029,7 +2029,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, =
+struct bpf_tramp_image *im,
+ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image,
+ 				void *image_end, const struct btf_func_model *m,
+ 				u32 flags, struct bpf_tramp_links *tlinks,
+-				void *orig_call)
++				void *func_addr)
+ {
+ 	int i, ret;
+ 	int nregs =3D m->nr_args;
+@@ -2050,7 +2050,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_im=
+age *im, void *image,
+ 	if (nregs > 8)
+ 		return -ENOTSUPP;
+=20
+-	ret =3D prepare_trampoline(&ctx, im, tlinks, orig_call, nregs, flags);
++	ret =3D prepare_trampoline(&ctx, im, tlinks, func_addr, nregs, flags);
+ 	if (ret < 0)
+ 		return ret;
+=20
+@@ -2061,7 +2061,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_im=
+age *im, void *image,
+ 	ctx.idx =3D 0;
+=20
+ 	jit_fill_hole(image, (unsigned int)(image_end - image));
+-	ret =3D prepare_trampoline(&ctx, im, tlinks, orig_call, nregs, flags);
++	ret =3D prepare_trampoline(&ctx, im, tlinks, func_addr, nregs, flags);
+=20
+ 	if (ret > 0 && validate_code(&ctx) < 0)
+ 		ret =3D -EINVAL;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 30063a760b5a..27a18c0c10ca 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1079,10 +1079,10 @@ struct bpf_tramp_run_ctx;
+  *      fexit =3D a set of program to run after original function
+  */
+ struct bpf_tramp_image;
+-int arch_prepare_bpf_trampoline(struct bpf_tramp_image *tr, void *image,=
+ void *image_end,
++int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image,=
+ void *image_end,
+ 				const struct btf_func_model *m, u32 flags,
+ 				struct bpf_tramp_links *tlinks,
+-				void *orig_call);
++				void *func_addr);
+ u64 notrace __bpf_prog_enter_sleepable_recur(struct bpf_prog *prog,
+ 					     struct bpf_tramp_run_ctx *run_ctx);
+ void notrace __bpf_prog_exit_sleepable_recur(struct bpf_prog *prog, u64 =
+start,
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index e97aeda3a86b..e114a1c7961e 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -1032,10 +1032,10 @@ bpf_trampoline_exit_t bpf_trampoline_exit(const s=
+truct bpf_prog *prog)
+ }
+=20
+ int __weak
+-arch_prepare_bpf_trampoline(struct bpf_tramp_image *tr, void *image, voi=
+d *image_end,
++arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, voi=
+d *image_end,
+ 			    const struct btf_func_model *m, u32 flags,
+ 			    struct bpf_tramp_links *tlinks,
+-			    void *orig_call)
++			    void *func_addr)
+ {
+ 	return -ENOTSUPP;
+ }
+--=20
 2.34.1
+
