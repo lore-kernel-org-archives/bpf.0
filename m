@@ -1,282 +1,275 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E116E3E468
-	for <bpf@vger.kernel.org>; Wed, 20 Sep 2023 16:01:07 +0000 (UTC)
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F65C2
-	for <bpf@vger.kernel.org>; Wed, 20 Sep 2023 09:01:05 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-59bbdb435bfso71407407b3.3
-        for <bpf@vger.kernel.org>; Wed, 20 Sep 2023 09:01:05 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C2A63D3BF
+	for <bpf@vger.kernel.org>; Wed, 20 Sep 2023 16:20:36 +0000 (UTC)
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5F4ED
+	for <bpf@vger.kernel.org>; Wed, 20 Sep 2023 09:20:34 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-52fe27898e9so8253012a12.0
+        for <bpf@vger.kernel.org>; Wed, 20 Sep 2023 09:20:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695225664; x=1695830464; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FcLhPCrwwwzDx7ZnjOS15KL3IF6kPxcDZSbSJfXxVfE=;
-        b=PVjuMy9z73A0sdilf6Nuh1Hr3p4piPUQJh2Bic9+m8qCZsqJWdPQFNHIXNADrkhRd6
-         LwPELYlO/VWDDdojTmpEw36GMGKBx3SQ2eUXQ3dOiYg3AKqJY3ZBByfXLd8RAVaRPDHH
-         8ttClsHZkSbHsglcDhd5ffKJ0t+CtMG9/s8t4GXUVj4kiYW3ZUtxMXGJWKYIJuy/tmxO
-         s6eV/3irprQPFb7WwTF+byskgFNHy4buvRCPerwVRhriFhMthfOZIW2SW9HWxkv0mVS5
-         mZACPvMIh5H4I6YYrfjtojZi1r34Ua6QHPxtXiyc7hgpmJ+qPVaZKiB92GV8cE9Kc9KN
-         UqAg==
+        d=gmail.com; s=20230601; t=1695226833; x=1695831633; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=KvQFgL/CIZURXhHTqA1Ctesy0CbZsegG4kyqna2Nnwc=;
+        b=LC+alC7u1E3UGoXED5AXla6aeqlEW63nUtKW7a1pNBYS0O435gcY6GVcvNtonvhdK8
+         TlyvGEgP8CNpyAbtFcOHKdOt9lHxGvP1PvnhesR6EwC8aUS3BR5Fwnogb6L3lTOx+D5E
+         Soz78hXijxy2XZWl6jtTZRTcAE25EqgZD40mqmxj7YXID1Yf5pALupyEhUkQv5fFIn7Z
+         u9UlXtD7pxqzv2LMhAo56E0aBtIta8OFo2XXahnh4aQt7SbUB2nKXOKTc5T4UwUGtMj+
+         yAI+ryz3Qe8WtvyqcZlLtrwiUtPShlZkxf3qSCSOJu5S2NVQsP9jBEfudgyI/WD6itZc
+         /2eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695225664; x=1695830464;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FcLhPCrwwwzDx7ZnjOS15KL3IF6kPxcDZSbSJfXxVfE=;
-        b=CXxB1b/JhIRcx4YqpfuQC1wzzreLiaRBMF29ucIPYwMLa87buQtN1ZLfGQO9hfRm4B
-         jOy3gAgamwWcRD82O3yh+qNiL1sEr2vdC9aZeeB0oVyBZlw7jry+ark4dg0r4qMdjjw5
-         D8mT+Tjf6W+av3ltZfgVt5gp+/l7o8nhC/RBTrG4skJM/a2HcmQjxUyJ8L7sJA7xBDVs
-         E6SnOc5ofb0k66Vs0ZFiAWmPXOL2Tl6DFyqQHzzW35H1g2PB125taYGEcYLR1QEC7FNk
-         PyqnwGEEuMf6ATgnpROmKjqDawWqpBUMF1Qq0mveirzbhVl6MiiSrirKH7X7mCJ5Nri5
-         B9pw==
-X-Gm-Message-State: AOJu0Ywcl0v0C3HqnynhDWIqRZb6sVnKraBfccIt+6Lh3yN5XphtpKTm
-	b6LAWTIEEE60Wy3lX0d+iIa2EVXIQVo=
-X-Google-Smtp-Source: AGHT+IHLyVU3g0w0KV+/7ViwpObzDIatmeyXZaSES99kO1GCKKTbyvvCyvAs6MpQPbZ3bKofWbI9FA==
-X-Received: by 2002:a81:6d11:0:b0:59b:ec11:7734 with SMTP id i17-20020a816d11000000b0059bec117734mr2791925ywc.39.1695225663593;
-        Wed, 20 Sep 2023 09:01:03 -0700 (PDT)
-Received: from kickker.attlocal.net ([2600:1700:6cf8:1240:dcd2:9730:2c7c:239f])
-        by smtp.gmail.com with ESMTPSA id m131-20020a817189000000b00589dbcf16cbsm3860490ywc.35.2023.09.20.09.00.59
+        d=1e100.net; s=20230601; t=1695226833; x=1695831633;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KvQFgL/CIZURXhHTqA1Ctesy0CbZsegG4kyqna2Nnwc=;
+        b=uUdE95yCcvWNRsNi8T7wlVgoscRyKzcZ81vNFEQd3Qp0MKsBPyZYiPgSD/x8d1Gbz0
+         RFzMeId2H+9zL45q3KBLGzYzn5hj4tz7w/yKeGZtoDzKFsyPpqElG6hND3WvG/0N7lal
+         HCohKIN15dYQpq3ewhu3XlmI5iTnCvTp2Uugc00DYixWIwCHhNavC+gT042WjIZD4FFa
+         Bkj92oNnF5UanrPmLe3/Y2ieyjKHCOZUFLID0xiJ6zbifM4OZONeMr9za6Iy1gpRVH8h
+         EdmrQm8PdbpaRmxBMJuy3anPYNmhMdrRwQic+fY9yyds3vEhpbeuIppiQ0v8wpi2Hpn9
+         PdDA==
+X-Gm-Message-State: AOJu0YykKavTOeSQfo0DpAgTCtgrqeYge5T+1Q5mx36DHzY5VxCMXQpa
+	swWlt6oDM3MLM6wNbeZmkVp55XNVc6zjmQ==
+X-Google-Smtp-Source: AGHT+IH0vt7znxXEkN5vhJFsJ/1VkLnCAtKnAC0mwpRk1/ID+Aow75oTbi2eFLGOzHAS1ICdBzfbrg==
+X-Received: by 2002:a17:906:1010:b0:9ae:48df:2235 with SMTP id 16-20020a170906101000b009ae48df2235mr2397887ejm.55.1695226832516;
+        Wed, 20 Sep 2023 09:20:32 -0700 (PDT)
+Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id sy5-20020a1709076f0500b009adc7433419sm8645288ejc.18.2023.09.20.09.20.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Sep 2023 09:01:01 -0700 (PDT)
-From: thinker.li@gmail.com
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	kernel-team@meta.com,
-	andrii@kernel.org
-Cc: sinquersw@gmail.com,
-	kuifeng@meta.com,
-	Kui-Feng Lee <thinker.li@gmail.com>
-Subject: [RFC bpf-next v3 11/11] selftests/bpf: test case for register_bpf_struct_ops().
-Date: Wed, 20 Sep 2023 08:59:24 -0700
-Message-Id: <20230920155923.151136-12-thinker.li@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230920155923.151136-1-thinker.li@gmail.com>
-References: <20230920155923.151136-1-thinker.li@gmail.com>
+        Wed, 20 Sep 2023 09:20:31 -0700 (PDT)
+Message-ID: <b9706fdd932a30f161c4c5f3c4fe4fd4d19cf9df.camel@gmail.com>
+Subject: Re: [BUG] verifier escape with iteration helpers (bpf_loop, ...)
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Andrew Werner
+ <awerner32@gmail.com>, bpf <bpf@vger.kernel.org>, Andrei Matei
+ <andreimatei1@gmail.com>, Tamir Duberstein <tamird@gmail.com>, Joanne Koong
+ <joannelkoong@gmail.com>, kernel-team@dataexmachina.dev, Song Liu
+ <song@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Wed, 20 Sep 2023 19:20:30 +0300
+In-Reply-To: <ee714151d7c840c82d79f9d12a0f51ef13b798e3.camel@gmail.com>
+References: 
+	<CA+vRuzPChFNXmouzGG+wsy=6eMcfr1mFG0F3g7rbg-sedGKW3w@mail.gmail.com>
+	 <CAADnVQJpLAzmUfwvWBr8a_PWHYHxHw9vdAXnWB4R4PbVY4S4mw@mail.gmail.com>
+	 <CAEf4Bzbubu7KjBv=98BZrVnTrcfPQrnsp-g1kOYKM=kUtiqEgw@mail.gmail.com>
+	 <dff1cfec20d1711cb023be38dfe886bac8aac5f6.camel@gmail.com>
+	 <CAP01T76duVGmnb+LQjhdKneVYs1q=ehU4yzTLmgZdG0r2ErOYQ@mail.gmail.com>
+	 <a2995c1d7c01794ca9b652cdea7917cac5d98a16.camel@gmail.com>
+	 <97a90da09404c65c8e810cf83c94ac703705dc0e.camel@gmail.com>
+	 <CAEf4BzYg8T_Dek6T9HYjHZCuLTQT8ptAkQRxrsgaXg7-MZmHDA@mail.gmail.com>
+	 <ee714151d7c840c82d79f9d12a0f51ef13b798e3.camel@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+	FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-From: Kui-Feng Lee <thinker.li@gmail.com>
+On Wed, 2023-09-20 at 03:19 +0300, Eduard Zingerman wrote:
+[...]
+> Liveness is a precondition for all subsequent checks, so example
+> involving precision would also involve liveness. Here is a combined
+> example:
+>=20
+>     r8 =3D 0
+>     fp[-16] =3D 0
+>     r7 =3D -16
+>     r6 =3D bpf_get_current_pid_tgid()
+>     bpf_iter_num_new(&fp[-8], 0, 10)
+>     while (bpf_iter_num_next(&fp[-8])) {
+>       r6++
+>       if (r6 !=3D 42) {
+>         r7 =3D -32
+>         continue;
+>       }
+>       r0 =3D r10
+>       r0 +=3D r7
+>       r8 =3D *(u64 *)(r0 + 0)
+>     }
+>     bpf_iter_num_destroy(&fp[-8])
+>     return r8
+>=20
+> (Complete source code is at the end of the email).
+>=20
+> The call to bpf_iter_num_next() is reachable with r7 values -16 and -32.
+> State with r7=3D-16 is visited first, at which point r7 has no read mark
+> and is not marked precise.
+> State with r7=3D-32 is visited second:
+> - states_equal() for is_iter_next_insn() should ignore absence of
+>   REG_LIVE_READ mark on r7, otherwise both states would be considered
+>   identical;
+> - states_equal() for is_iter_next_insn() should ignore absence of
+>   precision mark on r7, otherwise both states would be considered
+>   identical.
+>=20
+> > > A possible fix is to add a special flag to states_equal() and
+> > > conditionally ignore logic related to liveness and precision when thi=
+s
+> > > flag is set. Set this flag for is_iter_next_insn() branch above.
+> >=20
+> > Probably not completely ignore liveness (and maybe precision, but
+> > let's do it one step at a time), but only at least one of the
+> > registers or stack slots are marked as written or read in one of
+> > old/new states? Basically, if some register/slot at the end of
+> > iteration is read or modified, it must be important for loop
+> > invariant, so even if the parent state says it's not read, we still
+> > treat it as read. Can you please try that with just read/write marks
+> > and see if anything fails?
+>=20
+> Unfortunately for the example above neither liveness nor precision
+> marks are present when states are compared, e.g. here is the
+> (extended) log:
+>=20
+> 12: (85) call bpf_iter_num_next#52356
+> ...
+> is_iter_next (12):
+>   old:
+>      R0=3Dscalar() R1_rw=3Dfp-8 R6_r=3Dscalar(id=3D1) R7=3D-16 R8_r=3D0 R=
+10=3Dfp0
+>      fp-8_r=3Diter_num(ref_id=3D2,state=3Dactive,depth=3D0) fp-16=3D00000=
+000 refs=3D2
+>   new:
+>      R0=3Drdonly_mem(id=3D3,ref_obj_id=3D2,off=3D0,imm=3D0) R1_w=3Dfp-8 R=
+6=3D42 R7_w=3D-32 R8=3D0 R10=3Dfp0
+>      fp-8=3Diter_num(ref_id=3D2,state=3Dactive,depth=3D1) fp-16=3D0000000=
+0 refs=3D2
+> > hit
 
-Register a new struct_ops type bpf_testmod_ops from the bpf_testmod module.
-test_2 of bpf_testmod_ops will be called by the bpf_testmod module.
+It might be the case that I miss-read situation a bit, because there
+is also R6 which is actually used to pick the branch. And it has read
+mark but does not have precision mark, because jump was not predicted.
 
-Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
----
- .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 63 +++++++++++++++++++
- .../selftests/bpf/bpf_testmod/bpf_testmod.h   |  5 ++
- .../bpf/prog_tests/test_struct_ops_module.c   | 43 +++++++++++++
- .../selftests/bpf/progs/struct_ops_module.c   | 30 +++++++++
- 4 files changed, 141 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_module.c
+In general, if we hit an old state with .branches > 0:
+- either there is an execution path "old -> safe exit";
+- or there is a loop (not necessarily because of iterator) and old is
+  a [grand]parent of the "cur" state.
 
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-index cefc5dd72573..3d208dbd23e4 100644
---- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (c) 2020 Facebook */
-+#include <linux/bpf.h>
- #include <linux/btf.h>
- #include <linux/btf_ids.h>
- #include <linux/error-injection.h>
-@@ -517,11 +518,70 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test_static_unused_arg)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_offset)
- BTF_SET8_END(bpf_testmod_check_kfunc_ids)
- 
-+#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-+
-+DEFINE_STRUCT_OPS_VALUE_TYPE(bpf_testmod_ops);
-+
-+static int bpf_testmod_ops_init(struct btf *btf)
-+{
-+	return 0;
-+}
-+
-+static bool bpf_testmod_ops_is_valid_access(int off, int size,
-+					    enum bpf_access_type type,
-+					    const struct bpf_prog *prog,
-+					    struct bpf_insn_access_aux *info)
-+{
-+	return bpf_tracing_btf_ctx_access(off, size, type, prog, info);
-+}
-+
-+static int bpf_testmod_ops_init_member(const struct btf_type *t,
-+				       const struct btf_member *member,
-+				       void *kdata, const void *udata)
-+{
-+	return 0;
-+}
-+
- static const struct btf_kfunc_id_set bpf_testmod_kfunc_set = {
- 	.owner = THIS_MODULE,
- 	.set   = &bpf_testmod_check_kfunc_ids,
- };
- 
-+static const struct bpf_verifier_ops bpf_testmod_verifier_ops = {
-+	.is_valid_access = bpf_testmod_ops_is_valid_access,
-+};
-+
-+static int bpf_dummy_reg(void *kdata)
-+{
-+	struct bpf_testmod_ops *ops = kdata;
-+	int r;
-+
-+	BTF_STRUCT_OPS_TYPE_EMIT(bpf_testmod_ops);
-+	r = ops->test_2(4, 3);
-+	printk(KERN_CRIT "bpf_dummy_reg: test_2 %d\n", r);
-+	return 0;
-+}
-+
-+static void bpf_dummy_unreg(void *kdata)
-+{
-+}
-+
-+struct bpf_struct_ops bpf_bpf_testmod_ops = {
-+	.verifier_ops = &bpf_testmod_verifier_ops,
-+	.init = bpf_testmod_ops_init,
-+	.init_member = bpf_testmod_ops_init_member,
-+	.reg = bpf_dummy_reg,
-+	.unreg = bpf_dummy_unreg,
-+	.name = "bpf_testmod_ops",
-+};
-+
-+static struct bpf_struct_ops_mod bpf_testmod_struct_ops = {
-+	.owner = THIS_MODULE,
-+	.st_ops = &bpf_bpf_testmod_ops,
-+};
-+
-+#endif /* CONFIG_DEBUG_INFO_BTF_MODULES */
-+
- extern int bpf_fentry_test1(int a);
- 
- static int bpf_testmod_init(void)
-@@ -532,6 +592,9 @@ static int bpf_testmod_init(void)
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_testmod_kfunc_set);
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &bpf_testmod_kfunc_set);
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &bpf_testmod_kfunc_set);
-+#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-+	ret = ret ?: register_bpf_struct_ops(&bpf_testmod_struct_ops);
-+#endif
- 	if (ret < 0)
- 		return ret;
- 	if (bpf_fentry_test1(0) < 0)
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h
-index f32793efe095..ca5435751c79 100644
---- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h
-@@ -28,4 +28,9 @@ struct bpf_iter_testmod_seq {
- 	int cnt;
- };
- 
-+struct bpf_testmod_ops {
-+	int (*test_1)(void);
-+	int (*test_2)(int a, int b);
-+};
-+
- #endif /* _BPF_TESTMOD_H */
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
-new file mode 100644
-index 000000000000..8219a477b6d6
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
-@@ -0,0 +1,43 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Meta Platforms, Inc. and affiliates. */
-+#include <test_progs.h>
-+
-+#include "struct_ops_module.skel.h"
-+#include "testing_helpers.h"
-+
-+static void test_regular_load(void)
-+{
-+	struct struct_ops_module *skel;
-+	struct bpf_link *link;
-+	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, opts);
-+	int err;
-+
-+	printf("test_regular_load\n");
-+	skel = struct_ops_module__open_opts(&opts);
-+	if (!ASSERT_OK_PTR(skel, "struct_ops_module_open"))
-+		return;
-+	err = struct_ops_module__load(skel);
-+	if (!ASSERT_OK(err, "struct_ops_module_load"))
-+		return;
-+
-+	link = bpf_map__attach_struct_ops(skel->maps.testmod_1);
-+	ASSERT_OK_PTR(link, "attach_test_mod_1");
-+
-+	ASSERT_EQ(skel->bss->test_2_result, 7, "test_2_result");
-+
-+	bpf_link__destroy(link);
-+
-+	struct_ops_module__destroy(skel);
-+
-+	/* Wait for the map to be freed, or we may fail to unload
-+	 * bpf_testmod.
-+	 */
-+	sleep(1);
-+}
-+
-+void serial_test_struct_ops_module(void)
-+{
-+	if (test__start_subtest("regular_load"))
-+		test_regular_load();
-+}
-+
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_module.c b/tools/testing/selftests/bpf/progs/struct_ops_module.c
-new file mode 100644
-index 000000000000..cb305d04342f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_module.c
-@@ -0,0 +1,30 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "../bpf_testmod/bpf_testmod.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int test_2_result = 0;
-+
-+SEC("struct_ops/test_1")
-+int BPF_PROG(test_1)
-+{
-+	return 0xdeadbeef;
-+}
-+
-+SEC("struct_ops/test_2")
-+int BPF_PROG(test_2, int a, int b)
-+{
-+	test_2_result = a + b;
-+	return a + b;
-+}
-+
-+SEC(".struct_ops.link")
-+struct bpf_testmod_ops testmod_1 = {
-+	.test_1 = (void *)test_1,
-+	.test_2 = (void *)test_2,
-+};
-+
--- 
-2.34.1
+In either case, "cur" state is safe to prune if:
+- it is possible to show that it would take same jump branches as
+  "old" state;
+- and iteration depth differs.
+
+All registers that took part in conditional jumps should already have
+read marks in old state. However, not all jumps could be predicted,
+thus not all such registers are marked as precise.
+
+Unfortunately, treating read marks as precision marks is not sufficient.
+For the particular example above:
+
+    old: ... R6_r=3Dscalar(id=3D1) ...
+    cur: ... R6=3D42 ...
+
+Here range_within() check in regsafe() would return true and old and
+cur would still be considered identical:
+
+    static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state =
+*rold,
+                struct bpf_reg_state *rcur, struct bpf_idmap *idmap)
+    {
+        ...
+        switch (base_type(rold->type)) {
+        case SCALAR_VALUE:
+            ...
+            if (!rold->precise)
+                return true;
+            ...
+            return range_within(rold, rcur) &&
+                   tnum_in(rold->var_off, rcur->var_off) &&
+                   check_scalar_ids(rold->id, rcur->id, idmap);
+        case ...
+        }
+        ...
+    }
+   =20
+So it appears that there is no need to ignore liveness checks after all,
+but I don't see a way to make non-exact scalar comparisons at the moment.
+
+> Note that for old state r7 value is not really important to get to exit,
+> the verification trace looks as follows:
+> 1. ... start ...
+> 2. bpf_iter_num_next(&fp[-8]) ;; r7=3D-16, checkpoint saved
+> 3. r6++
+> 4. r7 =3D -32
+> 5. bpf_iter_num_next(&fp[-8]) ;; push new state with r7=3D-32
+> 6. bpf_iter_num_destroy(&fp[-8])
+> 7. return 8
+>=20
+> The r7 liveness and precision is important for state scheduled at (5)
+> but it is not known yet, so when both states are compared marks are
+> absent in cur and in old.
+>=20
+> ---
+>=20
+> /* BTF FUNC records are not generated for kfuncs referenced
+>  * from inline assembly. These records are necessary for
+>  * libbpf to link the program. The function below is a hack
+>  * to ensure that BTF FUNC records are generated.
+>  */
+> void __kfunc_btf_root(void)
+> {
+> 	bpf_iter_num_new(0, 0, 0);
+> 	bpf_iter_num_next(0);
+> 	bpf_iter_num_destroy(0);
+> }
+>=20
+> SEC("fentry/" SYS_PREFIX "sys_nanosleep")
+> __failure
+> __msg("20: (79) r8 =3D *(u64 *)(r0 +0)")
+> __msg("invalid read from stack R0 off=3D-32 size=3D8")
+> __naked int iter_next_exact(const void *ctx)
+> {
+> 	asm volatile (
+> 		"r8 =3D 0;"
+> 		"*(u64 *)(r10 - 16) =3D r8;"
+> 		"r7 =3D -16;"
+> 		"call %[bpf_get_current_pid_tgid];"
+> 		"r6 =3D r0;"
+> 		"r1 =3D r10;"
+> 		"r1 +=3D -8;"
+> 		"r2 =3D 0;"
+> 		"r3 =3D 10;"
+> 		"call %[bpf_iter_num_new];"
+> 	"1:"
+> 		"r1 =3D r10;"
+> 		"r1 +=3D -8;\n"
+> 		"call %[bpf_iter_num_next];"
+> 		"if r0 =3D=3D 0 goto 2f;"
+> 		"r6 +=3D 1;"
+> 		"if r6 !=3D 42 goto 3f;"
+> 		"r7 =3D -32;"
+> 		"goto 1b;\n"
+> 	"3:"
+> 		"r0 =3D r10;"
+> 		"r0 +=3D r7;"
+> 		"r8 =3D *(u64 *)(r0 + 0);"
+> 		"goto 1b;\n"
+> 	"2:"
+> 		"r1 =3D r10;"
+> 		"r1 +=3D -8;"
+> 		"call %[bpf_iter_num_destroy];"
+> 		"r0 =3D r8;"
+> 		"exit;"
+> 		:
+> 		: __imm(bpf_get_current_pid_tgid),
+> 		  __imm(bpf_iter_num_new),
+> 		  __imm(bpf_iter_num_next),
+> 		  __imm(bpf_iter_num_destroy),
+> 		  __imm(bpf_probe_read_user)
+> 		: __clobber_all
+> 	);
+> }
+>=20
 
