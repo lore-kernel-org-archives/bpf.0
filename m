@@ -1,128 +1,127 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE2414A532;
-	Thu, 21 Sep 2023 17:51:15 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4987A7EA02;
-	Thu, 21 Sep 2023 10:50:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695318647; x=1726854647;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=xzUHdYuTPX8UEPkN1RU7vl2/b1DAaw7BomhJXS2mn5U=;
-  b=C1x6IMkzybQYgmnhFfnSwg+lFuiSlzY1GJQk9HodNkYa1ZktK+/YHZf8
-   W2bJECY5Ud5E0lG6KryKrZYdD7i1iZHqFZMUz0aoquzOTcHnMhCme/MSI
-   tizhZQQK+6+qy5XCfivaUwFI6YB0kCDwPg8Yu0XRQvrvRtxTeH7Au7Xmt
-   3Q6/FGLy+13lpm0/tRI75f8Ir51AixXOghoBu6/bPwDxlvNoPoSAO2S1k
-   QiFPVxbVasxcP4+i1SSft6rqUNPdnZQ3nDSJ3Mxfp0Xu6Q3/y62pbtT5O
-   NdJFrOP5679r0BSJohoHDE98baNq+WG8wdJuzRsdKloCGmOrzlMHbAyr3
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="384344978"
-X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
-   d="scan'208";a="384344978"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 05:25:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="776399273"
-X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
-   d="scan'208";a="776399273"
-Received: from choongyo-mobl.gar.corp.intel.com (HELO [10.215.240.199]) ([10.215.240.199])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 05:25:29 -0700
-Message-ID: <f9b21a9d-4ae2-1f91-b621-2e27f746f661@linux.intel.com>
-Date: Thu, 21 Sep 2023 20:25:05 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E77A91A5A8;
+	Thu, 21 Sep 2023 17:52:09 +0000 (UTC)
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E9983CB;
+	Thu, 21 Sep 2023 10:51:42 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9adcb89b48bso152534166b.2;
+        Thu, 21 Sep 2023 10:51:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695318701; x=1695923501; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mq/loJ3f6wtqZ+hmIk0WpfL7yP6DzrTTWuWZOJLjWIU=;
+        b=Yo7IDN6XPIEo4HgwOMU+eg15ZY7ii8eE0NNcUw3MbtmARl7UlF2BDTOHfZdG3uOP+d
+         LQ7x/LIOsBny4/jOMwvER+KMvEObPt2upf97pDmVSiMVT93TLIRsytZ59tLQ+uDYu/UH
+         U1fCehVqom21WL0Xs5K8Dxg2mAP1QPRbbzyYswYsvFPDaiOWTIGIRm7PMWAoqEWGjs/q
+         thUwY7Cs13V7HjC+fWblvTvxHex4VDAtyGFBTfjDNBHLJLarMPc4XwOks9yvExJYM7zF
+         Lrcyi1SCm7O08YvtqgQ8x1kVL3x6mXv8x7vbIkPsnWFMESQKzD1RAJNIYufK5h40NPcF
+         PmWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695318701; x=1695923501;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mq/loJ3f6wtqZ+hmIk0WpfL7yP6DzrTTWuWZOJLjWIU=;
+        b=tNd3/C+LVhanrtSux6/rboKdM2MbUsTaKbagubcn25guoy4Fw9Bf5BGjcndV1Uqykn
+         EV8zB5FHaMGycYEJoKhWgYEfbAebo9NtHAk3woh96kP59pTMO5fBS27J/9XTZtIIqVh6
+         X75Ms85dbtG6IjepVlaYwKxqwAxx0rZmvZBLJWi3Pd8wLY7U5Htox3E0GitkMr03TaXj
+         91ot9Xn8ORDRcA925G2QqwqsdPCs5E05AYei952/iGv9cNkuANPIVrnXDOVHYVloChi3
+         JyiJ0zfVSW6pWCv5Nz9xwhe4IU5clEzUuDe9tDLu+5tergDha8gaiCjJttSn533Az1aR
+         /SMg==
+X-Gm-Message-State: AOJu0Ywze9XOkS1k7x9OuxdbQKfsaGAakDoCilCLKLU+VVDcBM3yJPcj
+	UzcYyu6EYZJVNkC8t6rVHQLus9/i6FHU/Q+zSqQ=
+X-Google-Smtp-Source: AGHT+IEFJhITBWBqjtaYAixXBZqOAAIzen+B4s581uvnjceqIXO+7rnHnzvDICY3TNx/rCYfF9n+yQ==
+X-Received: by 2002:a2e:910e:0:b0:2bc:efa4:2c36 with SMTP id m14-20020a2e910e000000b002bcefa42c36mr5019470ljg.11.1695298174088;
+        Thu, 21 Sep 2023 05:09:34 -0700 (PDT)
+Received: from daandemeyer-fedora-PC1EV17T.thefacebook.com ([2620:10d:c092:400::4:2a59])
+        by smtp.googlemail.com with ESMTPSA id gx10-20020a170906f1ca00b0099cb349d570sm952258ejb.185.2023.09.21.05.09.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Sep 2023 05:09:33 -0700 (PDT)
+From: Daan De Meyer <daan.j.demeyer@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Daan De Meyer <daan.j.demeyer@gmail.com>,
+	martin.lau@linux.dev,
+	kernel-team@meta.com,
+	netdev@vger.kernel.org
+Subject: [PATCH bpf-next v5 5/9] libbpf: Add support for cgroup unix socket address hooks
+Date: Thu, 21 Sep 2023 14:09:07 +0200
+Message-ID: <20230921120913.566702-6-daan.j.demeyer@gmail.com>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230921120913.566702-1-daan.j.demeyer@gmail.com>
+References: <20230921120913.566702-1-daan.j.demeyer@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH net-next v2 0/5] TSN auto negotiation between 1G and 2.5G
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
- David E Box <david.e.box@linux.intel.com>,
- Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>,
- Jose Abreu <Jose.Abreu@synopsys.com>, Heiner Kallweit
- <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, =?UTF-8?Q?Marek_Beh=c3=ban?=
- <kabel@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>,
- Giuseppe Cavallaro <peppe.cavallaro@st.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Jose Abreu <joabreu@synopsys.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Richard Cochran <richardcochran@gmail.com>,
- Philipp Zabel <p.zabel@pengutronix.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, Wong Vee Khee
- <veekhee@apple.com>, Jon Hunter <jonathanh@nvidia.com>,
- Jesse Brandeburg <jesse.brandeburg@intel.com>,
- Revanth Kumar Uppala <ruppala@nvidia.com>,
- Shenwei Wang <shenwei.wang@nxp.com>,
- Andrey Konovalov <andrey.konovalov@linaro.org>,
- Jochen Henneberg <jh@henneberg-systemdesign.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, platform-driver-x86@vger.kernel.org,
- linux-hwmon@vger.kernel.org, bpf@vger.kernel.org,
- Voon Wei Feng <weifeng.voon@intel.com>,
- Tan Tee Min <tee.min.tan@linux.intel.com>,
- Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
- Lai Peter Jun Ann <jun.ann.lai@intel.com>
-References: <20230804084527.2082302-1-yong.liang.choong@linux.intel.com>
- <5bd05ba2-fd88-4e5c-baed-9971ff917484@lunn.ch>
-Content-Language: en-US
-From: Choong Yong Liang <yong.liang.choong@linux.intel.com>
-In-Reply-To: <5bd05ba2-fd88-4e5c-baed-9971ff917484@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=no
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+Add the necessary plumbing to hook up the new cgroup unix sockaddr
+hooks into libbpf.
 
+Signed-off-by: Daan De Meyer <daan.j.demeyer@gmail.com>
+---
+ tools/lib/bpf/libbpf.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-On 4/8/2023 8:04 pm, Andrew Lunn wrote:
-> On Fri, Aug 04, 2023 at 04:45:22PM +0800, Choong Yong Liang wrote:
->> Intel platforms’ integrated Gigabit Ethernet controllers support
->> 2.5Gbps mode statically using BIOS programming. In the current
->> implementation, the BIOS menu provides an option to select between
->> 10/100/1000Mbps and 2.5Gbps modes. Based on the selection, the BIOS
->> programs the Phase Lock Loop (PLL) registers. The BIOS also read the
->> TSN lane registers from Flexible I/O Adapter (FIA) block and provided
->> 10/100/1000Mbps/2.5Gbps information to the stmmac driver. But
->> auto-negotiation between 10/100/1000Mbps and 2.5Gbps is not allowed.
->> The new proposal is to support auto-negotiation between 10/100/1000Mbps
->> and 2.5Gbps . Auto-negotiation between 10, 100, 1000Mbps will use
->> in-band auto negotiation. Auto-negotiation between 10/100/1000Mbps and
->> 2.5Gbps will work as the following proposed flow, the stmmac driver reads
->> the PHY link status registers then identifies the negotiated speed.
->> Based on the speed stmmac driver will identify TSN lane registers from
->> FIA then send IPC command to the Power Management controller (PMC)
->> through PMC driver/API. PMC will act as a proxy to programs the
->> PLL registers.
-> 
-> Have you considered using out of band for all link modes? You might
-> end up with a cleaner architecture, and not need any phylink/phylib
-> hacks.
-> 
-> 	Andrew
-Hi Andrew,
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 3a6108e3238b..2c5c8c8f2aa2 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -82,17 +82,22 @@ static const char * const attach_type_name[] = {
+ 	[BPF_CGROUP_INET6_BIND]		= "cgroup_inet6_bind",
+ 	[BPF_CGROUP_INET4_CONNECT]	= "cgroup_inet4_connect",
+ 	[BPF_CGROUP_INET6_CONNECT]	= "cgroup_inet6_connect",
++	[BPF_CGROUP_UNIX_CONNECT]       = "cgroup_unix_connect",
+ 	[BPF_CGROUP_INET4_POST_BIND]	= "cgroup_inet4_post_bind",
+ 	[BPF_CGROUP_INET6_POST_BIND]	= "cgroup_inet6_post_bind",
+ 	[BPF_CGROUP_INET4_GETPEERNAME]	= "cgroup_inet4_getpeername",
+ 	[BPF_CGROUP_INET6_GETPEERNAME]	= "cgroup_inet6_getpeername",
++	[BPF_CGROUP_UNIX_GETPEERNAME]	= "cgroup_unix_getpeername",
+ 	[BPF_CGROUP_INET4_GETSOCKNAME]	= "cgroup_inet4_getsockname",
+ 	[BPF_CGROUP_INET6_GETSOCKNAME]	= "cgroup_inet6_getsockname",
++	[BPF_CGROUP_UNIX_GETSOCKNAME]	= "cgroup_unix_getsockname",
+ 	[BPF_CGROUP_UDP4_SENDMSG]	= "cgroup_udp4_sendmsg",
+ 	[BPF_CGROUP_UDP6_SENDMSG]	= "cgroup_udp6_sendmsg",
++	[BPF_CGROUP_UNIX_SENDMSG]	= "cgroup_unix_sendmsg",
+ 	[BPF_CGROUP_SYSCTL]		= "cgroup_sysctl",
+ 	[BPF_CGROUP_UDP4_RECVMSG]	= "cgroup_udp4_recvmsg",
+ 	[BPF_CGROUP_UDP6_RECVMSG]	= "cgroup_udp6_recvmsg",
++	[BPF_CGROUP_UNIX_RECVMSG]	= "cgroup_unix_recvmsg",
+ 	[BPF_CGROUP_GETSOCKOPT]		= "cgroup_getsockopt",
+ 	[BPF_CGROUP_SETSOCKOPT]		= "cgroup_setsockopt",
+ 	[BPF_SK_SKB_STREAM_PARSER]	= "sk_skb_stream_parser",
+@@ -8960,14 +8965,19 @@ static const struct bpf_sec_def section_defs[] = {
+ 	SEC_DEF("cgroup/bind6",		CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_BIND, SEC_ATTACHABLE),
+ 	SEC_DEF("cgroup/connect4",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_CONNECT, SEC_ATTACHABLE),
+ 	SEC_DEF("cgroup/connect6",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_CONNECT, SEC_ATTACHABLE),
++	SEC_DEF("cgroup/connectun",	CGROUP_SOCK_ADDR, BPF_CGROUP_UNIX_CONNECT, SEC_ATTACHABLE),
+ 	SEC_DEF("cgroup/sendmsg4",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP4_SENDMSG, SEC_ATTACHABLE),
+ 	SEC_DEF("cgroup/sendmsg6",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP6_SENDMSG, SEC_ATTACHABLE),
++	SEC_DEF("cgroup/sendmsgun",	CGROUP_SOCK_ADDR, BPF_CGROUP_UNIX_SENDMSG, SEC_ATTACHABLE),
+ 	SEC_DEF("cgroup/recvmsg4",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP4_RECVMSG, SEC_ATTACHABLE),
+ 	SEC_DEF("cgroup/recvmsg6",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP6_RECVMSG, SEC_ATTACHABLE),
++	SEC_DEF("cgroup/recvmsgun",	CGROUP_SOCK_ADDR, BPF_CGROUP_UNIX_RECVMSG, SEC_ATTACHABLE),
+ 	SEC_DEF("cgroup/getpeername4",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_GETPEERNAME, SEC_ATTACHABLE),
+ 	SEC_DEF("cgroup/getpeername6",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_GETPEERNAME, SEC_ATTACHABLE),
++	SEC_DEF("cgroup/getpeernameun", CGROUP_SOCK_ADDR, BPF_CGROUP_UNIX_GETPEERNAME, SEC_ATTACHABLE),
+ 	SEC_DEF("cgroup/getsockname4",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_GETSOCKNAME, SEC_ATTACHABLE),
+ 	SEC_DEF("cgroup/getsockname6",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_GETSOCKNAME, SEC_ATTACHABLE),
++	SEC_DEF("cgroup/getsocknameun", CGROUP_SOCK_ADDR, BPF_CGROUP_UNIX_GETSOCKNAME, SEC_ATTACHABLE),
+ 	SEC_DEF("cgroup/sysctl",	CGROUP_SYSCTL, BPF_CGROUP_SYSCTL, SEC_ATTACHABLE),
+ 	SEC_DEF("cgroup/getsockopt",	CGROUP_SOCKOPT, BPF_CGROUP_GETSOCKOPT, SEC_ATTACHABLE),
+ 	SEC_DEF("cgroup/setsockopt",	CGROUP_SOCKOPT, BPF_CGROUP_SETSOCKOPT, SEC_ATTACHABLE),
+-- 
+2.41.0
 
-After conducting a comprehensive study, it seems that implementing 
-out-of-band for all link modes might not be feasible. I may have missed 
-some key aspects during my analysis.
-
-Would you be open to sharing a high-level idea of how we could potentially 
-make this feasible? Your insights would be greatly appreciated.
-
-By the way, I've submitted a new design that not exposing phylink's AN mode 
-into phylib. Please help review it to determine if it is acceptable.
