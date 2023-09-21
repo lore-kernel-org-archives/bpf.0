@@ -1,112 +1,146 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCBEB44483;
-	Thu, 21 Sep 2023 17:49:31 +0000 (UTC)
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02BB88084;
-	Thu, 21 Sep 2023 10:38:34 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-9a648f9d8e3so161718566b.1;
-        Thu, 21 Sep 2023 10:38:34 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D980141754;
+	Thu, 21 Sep 2023 17:49:36 +0000 (UTC)
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA74380FA9;
+	Thu, 21 Sep 2023 10:36:55 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id 5614622812f47-3adcae1e9f6so192352b6e.0;
+        Thu, 21 Sep 2023 10:36:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695317913; x=1695922713; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y14cfr9X7ZfqN6REntNnZLiNj9fIlAHdGv7Az327RZ4=;
-        b=E3PROPb1bzLJOMm/FSeIgO0wBRldSKRkyxAHYKbwwAcchLjjax7S5R+/f7NtN19XGi
-         iXl510YcNO4xwDB8z+SDkdlf//hgSanw6H22nxi4LscyJ7xd+L2gvG/CxkhinqI6SX+o
-         rravndbz7tZVLexWGNtSYJnDp893enAp1v4e3WR+FxSB+F+rH0nLSLJtBxipj0uTnhXJ
-         T1glSxvKjBeZt5yK/+J3f9vaf3I+QQ86hAuG0IqtfjdQfAksHgB8IT56SK8m0DwaW5s5
-         uGZRhCxsLOUcrz7Q0ZmRVA848qs60eFWEzwUWE1g7nm5RkvZtB8DswRupX35bQvpYaOE
-         K1yA==
+        d=gmail.com; s=20230601; t=1695317815; x=1695922615; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pk82zE/dtTZn+xATdDbyMFOaczKW9JrERtnmCSdw+Lw=;
+        b=K4fg/8EHy+db4DQwoccC36mU1NqhJrKF/eYhzZ/UrewFXqNgXjDkCb/Iw0ZQzQnhcI
+         hKQm0ma5kXGzb/ZZ8Ec8TdyOH9Hr6Cqx/eA2wPkGYxkvLXdJWJ7k2Y8zOxouzE3rz2vf
+         bs9UNPDNuiCSiH1zydn7vFPs5HbtpjJRdECtvBQT3Hen97Mb2i4VpCzHLN47muogkAUG
+         hxwytAvbI9MS7GNJTiY6Lq+fBl5i4d1NdwO50jbqTpqq7HLCUry81rU/wYau9iY1J8A5
+         oqdh6yvcIjXAa2bibsrI5JUIy8nARKMCYOvZZoBXk+sWk2ieLfBfKK3MunkP4FzBuE0F
+         5IlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695317913; x=1695922713;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y14cfr9X7ZfqN6REntNnZLiNj9fIlAHdGv7Az327RZ4=;
-        b=JN4Iz1Wk47FD4gqXTwu3cHNuK2vbCwen6hxaNJCiWejIX240O7xB63I97saESrzeto
-         Vyr8XP/qpJjpkc1Z58qgxY5DncCr9pGdcfA9KTJyqIFN+k9BYs6GigOAJYh76aciYqva
-         AzuykzqN1/7olIaZPKypasCV+5tUtY6pLAYKIvu+wILMGPbTm9tXkoMQcyfxkzY5kvTv
-         rZ4tw5FLUJGxmTGbbvSRx/e91dHxeGNnSL2KkoULYhFFOjWhAtjLp5fvr0wkFIu03gTa
-         gNl0BKtLd58u+OTLfKaK+/pR/lzIY5fs1R38Jww57Wvay6cgkfJcTJr5V6PlR/WE+5W3
-         3wEw==
-X-Gm-Message-State: AOJu0YyJ6lEFeBxaqLYRIF8xhDu+NyfgsgkPV31UVKAzqPb5cye7L4V0
-	kWHTEcGErih0Ph3y/ibDWQgrkd5EoobpJBTDn7I=
-X-Google-Smtp-Source: AGHT+IHucW0QapyF6rf3iOtsRReWvbk8lH8jczNbwidhOigjSKdB/LYWI9iZJpoPXaeKh2pdO1CXag==
-X-Received: by 2002:a2e:b616:0:b0:2b9:36d5:729c with SMTP id r22-20020a2eb616000000b002b936d5729cmr4439296ljn.47.1695298169438;
-        Thu, 21 Sep 2023 05:09:29 -0700 (PDT)
-Received: from daandemeyer-fedora-PC1EV17T.thefacebook.com ([2620:10d:c092:400::4:2a59])
-        by smtp.googlemail.com with ESMTPSA id gx10-20020a170906f1ca00b0099cb349d570sm952258ejb.185.2023.09.21.05.09.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Sep 2023 05:09:28 -0700 (PDT)
-From: Daan De Meyer <daan.j.demeyer@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Daan De Meyer <daan.j.demeyer@gmail.com>,
-	martin.lau@linux.dev,
-	kernel-team@meta.com,
-	netdev@vger.kernel.org
-Subject: [PATCH bpf-next v5 1/9] selftests/bpf: Add missing section name tests for getpeername/getsockname
-Date: Thu, 21 Sep 2023 14:09:03 +0200
-Message-ID: <20230921120913.566702-2-daan.j.demeyer@gmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230921120913.566702-1-daan.j.demeyer@gmail.com>
-References: <20230921120913.566702-1-daan.j.demeyer@gmail.com>
+        d=1e100.net; s=20230601; t=1695317815; x=1695922615;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pk82zE/dtTZn+xATdDbyMFOaczKW9JrERtnmCSdw+Lw=;
+        b=QB4fnx0UygWNMPRQXxXQI34a/tQJ/KYVSa1D6HyPLQebI9pZr2KCpdQya5vtWrU58V
+         ZSMTpJbH0EIomkwQTKzAZ8IqVprciAKVn8mzys8l6pLnKWlt/jRU4Ud90THkOyf4rf0S
+         SGa6wd0sNVfgRiJPCdMni7pOFFwsWsRnSRF973aU3eSpe5NGzP5WjBd3FXdxfHw1rj4W
+         EErnyUgUbXD0SPqe77zJbBcIME2WtDfAH2bks93DhGyywrUA5htm+BqgoIsA7RpVNCh/
+         /DH6zAPyCe4zfPyZ/I+WKmNHdQihpzCj/rP4pBLKAXA8NiflfKfkT1nZDuJx+02Yd7LK
+         YG5w==
+X-Gm-Message-State: AOJu0Ywcg0nwa6wsTGVr+E0MN6cWuMR670TtkNVT/3PHTMo/C57KSpxP
+	KCWEST7n/Y2k7zhdQ29WTMp+iDC2KfKzyvSjkGDDzgkFTdTtng==
+X-Google-Smtp-Source: AGHT+IHRvPDDapKsyXA/SXd3CeM8A0NfCkA/x3l/6T/asTQkDelvkWybsb2S6lb8D13HUDymbyk5ECSsrtYyLldm3x0=
+X-Received: by 2002:a05:6214:5001:b0:656:2e07:94cc with SMTP id
+ jo1-20020a056214500100b006562e0794ccmr4570370qvb.6.1695281327519; Thu, 21 Sep
+ 2023 00:28:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230918093304.367826-1-tushar.vyavahare@intel.com>
+In-Reply-To: <20230918093304.367826-1-tushar.vyavahare@intel.com>
+From: Magnus Karlsson <magnus.karlsson@gmail.com>
+Date: Thu, 21 Sep 2023 09:28:36 +0200
+Message-ID: <CAJ8uoz3XiM=bKrEvfnb_y6TJv53R8-bkY1e2L0Tiad6uoTaTwQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/8] Add a test for SHARED_UMEM feature
+To: Tushar Vyavahare <tushar.vyavahare@intel.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, bjorn@kernel.org, 
+	magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, 
+	jonathan.lemon@gmail.com, davem@davemloft.net, kuba@kernel.org, 
+	pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net, 
+	tirthendu.sarkar@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-These were missed when these hooks were first added so add them now
-instead to make sure every sockaddr hook has a matching section name
-test.
+On Mon, 18 Sept 2023 at 11:12, Tushar Vyavahare
+<tushar.vyavahare@intel.com> wrote:
+>
+> Implement a test for the SHARED_UMEM feature in this patch set and make
+> necessary changes/improvements. Ensure that the framework now supports
+> different streams for different sockets.
 
-Signed-off-by: Daan De Meyer <daan.j.demeyer@gmail.com>
----
- .../selftests/bpf/prog_tests/section_names.c  | 20 +++++++++++++++++++
- 1 file changed, 20 insertions(+)
+Thanks Tushar for contributing this new test. Had some comments in
+three of the patches. Please take a look.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/section_names.c b/tools/testing/selftests/bpf/prog_tests/section_names.c
-index 8b571890c57e..fc5248e94a01 100644
---- a/tools/testing/selftests/bpf/prog_tests/section_names.c
-+++ b/tools/testing/selftests/bpf/prog_tests/section_names.c
-@@ -158,6 +158,26 @@ static struct sec_name_test tests[] = {
- 		{0, BPF_PROG_TYPE_CGROUP_SOCKOPT, BPF_CGROUP_SETSOCKOPT},
- 		{0, BPF_CGROUP_SETSOCKOPT},
- 	},
-+	{
-+		"cgroup/getpeername4",
-+		{0, BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_GETPEERNAME},
-+		{0, BPF_CGROUP_INET4_GETPEERNAME},
-+	},
-+	{
-+		"cgroup/getpeername6",
-+		{0, BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_GETPEERNAME},
-+		{0, BPF_CGROUP_INET6_GETPEERNAME},
-+	},
-+	{
-+		"cgroup/getsockname4",
-+		{0, BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_GETSOCKNAME},
-+		{0, BPF_CGROUP_INET4_GETSOCKNAME},
-+	},
-+	{
-+		"cgroup/getsockname6",
-+		{0, BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_GETSOCKNAME},
-+		{0, BPF_CGROUP_INET6_GETSOCKNAME},
-+	},
- };
- 
- static void test_prog_type_by_name(const struct sec_name_test *test)
--- 
-2.41.0
+/Magnus
 
+> Patch series summary:
+>
+> 1: Move the packet stream from the ifobject struct to the xsk_socket_info
+>    struct to enable the use of different streams for different sockets
+>    This will facilitate the sending and receiving of data from multiple
+>    sockets simultaneously using the SHARED_XDP_UMEM feature.
+>
+>    It gives flexibility of send/recive individual traffic on particular
+>    socket.
+>
+> 2: Rename the header file to a generic name so that it can be used by all
+>    future XDP programs.
+>
+> 3: Move the src_mac and dst_mac fields from the ifobject structure to the
+>    xsk_socket_info structure to achieve per-socket MAC address assignment.
+>    Implement the function called generate_mac_addresses() to generate MAC
+>    addresses based on the required number by the framework.
+>
+>    Require this in order to steer traffic to various sockets in subsequent
+>    patches.
+>
+> 4: Improve the receive_pkt() function to enable it to receive packets from
+>    multiple sockets. Define a sock_num variable to iterate through all the
+>    sockets in the Rx path. Add nb_valid_entries to check that all the
+>    expected number of packets are received.
+>
+> 5: The pkt_set() function no longer needs the umem parameter. This commit
+>    removes the umem parameter from the pkt_set() function.
+>
+> 6: Iterate over all the sockets in the send pkts function. Update
+>    send_pkts() to handle multiple sockets for sending packets.
+>    Multiple TX sockets are utilized alternately based on the batch size
+>    for improve packet transmission.
+>
+> 7: Modify xsk_update_xskmap() to accept the index as an argument, enabling
+>    the addition of multiple sockets to xskmap.
+>
+> 8: Add a new test for testing shared umem feature. This is accomplished by
+>    adding a new XDP program and using the multiple sockets. The new  XDP
+>    program redirects the packets based on the destination MAC address.
+>
+> Tushar Vyavahare (8):
+>   selftests/xsk: move pkt_stream to the xsk_socket_info
+>   selftests/xsk: rename xsk_xdp_metadata.h to xsk_xdp_common.h
+>   selftests/xsk: implement a function that generates MAC addresses
+>   selftests/xsk: iterate over all the sockets in the receive pkts
+>     function
+>   selftests/xsk: remove unnecessary parameter from pkt_set() function
+>     call
+>   selftests/xsk: iterate over all the sockets in the send pkts function
+>   selftests/xsk: modify xsk_update_xskmap() to accept the index as an
+>     argument.
+>   selftests/xsk: add a test for shared umem feature
+>
+>  .../selftests/bpf/progs/xsk_xdp_progs.c       |  22 +-
+>  tools/testing/selftests/bpf/xsk.c             |   3 +-
+>  tools/testing/selftests/bpf/xsk.h             |   2 +-
+>  tools/testing/selftests/bpf/xsk_xdp_common.h  |  12 +
+>  .../testing/selftests/bpf/xsk_xdp_metadata.h  |   5 -
+>  tools/testing/selftests/bpf/xskxceiver.c      | 524 +++++++++++-------
+>  tools/testing/selftests/bpf/xskxceiver.h      |  14 +-
+>  7 files changed, 376 insertions(+), 206 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/xsk_xdp_common.h
+>  delete mode 100644 tools/testing/selftests/bpf/xsk_xdp_metadata.h
+>
+> --
+> 2.34.1
+>
+>
