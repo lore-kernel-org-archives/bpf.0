@@ -1,97 +1,118 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92AC9171A8;
-	Thu, 21 Sep 2023 18:10:44 +0000 (UTC)
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D576AF69A;
-	Thu, 21 Sep 2023 11:07:22 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2c108e106f0so21888911fa.1;
-        Thu, 21 Sep 2023 11:07:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695319640; x=1695924440; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5t+zBQuHK7J2v55Cd/nUoBpjLhPWqb/Jbv3ggXNu9ck=;
-        b=atLYajckDJjCAgUSOOS0esn5uCpHZo5eQ05Zn06TYr14Jf3tFcRui1Dk6q+MiAKwA2
-         Ix1EydI3NAO8lYhdbkxE3be5mqtyi9DXAJiIbcbjQd7hwWdNvPYj/eWaqSGXTV6AldAM
-         oauh2OkTzJrObZEhCLCuzwsM8/en0vB8Jwo5/GTuMXZi7Fu6wGtewOubmh/wGzwQbPET
-         YdrnMcH8sOqkc+MlKcfJMNu7AxnN3sTI2ZTUU5zvc9EXGVIt0XTNkRayQRmbWM9n+c5d
-         XLPn+QL6/4E6GH+xMJX4SbZUXQVp4P4nEabQQ0vJjYV64sQoT06zYPyWRi49OM4lWgcP
-         Ekig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695319640; x=1695924440;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5t+zBQuHK7J2v55Cd/nUoBpjLhPWqb/Jbv3ggXNu9ck=;
-        b=twDm0514psZwKLfXQtmCUSpJRIT62HFzhgXo6Mso9p1F2sV1i/TMiBNDLxHHtBN3ba
-         x5OEMcjK7gge7s8nZ3DBl2FdAYAj/B7P3l+5uPqnFRToLYEbGP6sDdlO3VAQdBliJ6tg
-         6shJ+9cKvK57wiApOneODMSuzHPy5rxF/Ydifs9EHuu/g9N7oP5R4s85/FIaRnN7d8fF
-         SIwzta2WM30e0tyNz7bV2EzFtUfDT73D1I+OD5UQUZ2Yad/CmDIMdSPYMruh4b1AhVFE
-         xs/ukg8a6y5H/SIiSllmoOw852pYi+fkqiXffbW35DGqLvzIiuaPnr452mBPHEZ3Hvp6
-         IBEw==
-X-Gm-Message-State: AOJu0Yz6FS9jnArkBgnMtMKiIudH9/KEo4HXsemavTANSyI6u5A/QRCN
-	pyP1hYcyPDg8UTRlyHsIFvR5MMFElcGYrHu2FLY=
-X-Google-Smtp-Source: AGHT+IEsF4k6+4hSypg1cAgtjFoQNRSEnFY2zhy/I4OJXwoQHyIUTn1zt+SY4Cb3FhSOwMk12jwVfA==
-X-Received: by 2002:a17:907:2ced:b0:9ae:6648:9b67 with SMTP id hz13-20020a1709072ced00b009ae66489b67mr1004642ejc.1.1695298177299;
-        Thu, 21 Sep 2023 05:09:37 -0700 (PDT)
-Received: from daandemeyer-fedora-PC1EV17T.thefacebook.com ([2620:10d:c092:400::4:2a59])
-        by smtp.googlemail.com with ESMTPSA id gx10-20020a170906f1ca00b0099cb349d570sm952258ejb.185.2023.09.21.05.09.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Sep 2023 05:09:36 -0700 (PDT)
-From: Daan De Meyer <daan.j.demeyer@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Daan De Meyer <daan.j.demeyer@gmail.com>,
-	martin.lau@linux.dev,
-	kernel-team@meta.com,
-	netdev@vger.kernel.org
-Subject: [PATCH bpf-next v5 8/9] selftests/bpf: Make sure mount directory exists
-Date: Thu, 21 Sep 2023 14:09:10 +0200
-Message-ID: <20230921120913.566702-9-daan.j.demeyer@gmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230921120913.566702-1-daan.j.demeyer@gmail.com>
-References: <20230921120913.566702-1-daan.j.demeyer@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDDA619BB9;
+	Thu, 21 Sep 2023 18:10:48 +0000 (UTC)
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5FDAFC09;
+	Thu, 21 Sep 2023 11:07:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=Z/gjZ6NwdeuNXyz1iXfuNTb1780WrCUmfyXB8A74g+o=; b=mDecZEV1D+Pkf7/ecZob0+PcEI
+	ydp21+7Xc4bfOIzUutQLHT7djnvEvIPGcR+X8uvGKkLB1LSGAGof30d4Iz/x2/PooFHIQd+SHN4V4
+	l57farp1zDlyjbX6Wctfvy7L+7NuRZyy3wrFanEnZ3ZHWAxnhPRrvmdsYbdWtQTmAlkY=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1qjKro-0076AY-OI; Thu, 21 Sep 2023 16:41:20 +0200
+Date: Thu, 21 Sep 2023 16:41:20 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc: Choong Yong Liang <yong.liang.choong@linux.intel.com>,
+	Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+	David E Box <david.e.box@linux.intel.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Mark Gross <markgross@kernel.org>,
+	Jose Abreu <Jose.Abreu@synopsys.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Jose Abreu <joabreu@synopsys.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Wong Vee Khee <veekhee@apple.com>,
+	Jon Hunter <jonathanh@nvidia.com>,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Revanth Kumar Uppala <ruppala@nvidia.com>,
+	Shenwei Wang <shenwei.wang@nxp.com>,
+	Andrey Konovalov <andrey.konovalov@linaro.org>,
+	Jochen Henneberg <jh@henneberg-systemdesign.com>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
+	platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	bpf@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
+	Tan Tee Min <tee.min.tan@linux.intel.com>,
+	Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+	Lai Peter Jun Ann <jun.ann.lai@intel.com>
+Subject: Re: [PATCH net-next v2 0/5] TSN auto negotiation between 1G and 2.5G
+Message-ID: <0098eaf3-717a-4b50-b2a0-4b28b75b0735@lunn.ch>
+References: <20230804084527.2082302-1-yong.liang.choong@linux.intel.com>
+ <5bd05ba2-fd88-4e5c-baed-9971ff917484@lunn.ch>
+ <f9b21a9d-4ae2-1f91-b621-2e27f746f661@linux.intel.com>
+ <37fe9352-ec84-47b8-bb49-9441987ca1b9@lunn.ch>
+ <ZQxPQ9t8/TKcjlo8@shell.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZQxPQ9t8/TKcjlo8@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-The mount directory for the selftests cgroup tree might
-not exist so let's make sure it does exist by creating
-it ourselves if it doesn't exist.
+On Thu, Sep 21, 2023 at 03:12:19PM +0100, Russell King (Oracle) wrote:
+> On Thu, Sep 21, 2023 at 03:21:00PM +0200, Andrew Lunn wrote:
+> > > Hi Andrew,
+> > > 
+> > > After conducting a comprehensive study, it seems that implementing
+> > > out-of-band for all link modes might not be feasible. I may have missed some
+> > > key aspects during my analysis.
+> > > 
+> > > Would you be open to sharing a high-level idea of how we could potentially
+> > > make this feasible? Your insights would be greatly appreciated.
+> > 
+> > stmmac_mac_link_up() gets passed interface, speed and duplex. That
+> > tells you what the PHY has negotiated. Is there anything else you need
+> > to know?
+> 
+> The problem is... the stmmac driver is utter bollocks - that information
+> is *not* passed to the BSP. Instead, stmmac parse and store information
+> such as the PHY interface mode at initialisation time. BSPs also re-
+> parse and store e.g. the PHY interface mode at initialisation time.
+> The driver ignores what it gets from phylink.
+> 
+> The driver is basically utter crap. That's an area I _had_ patches to
+> clean up. I no longer do. stmmac is crap crap crap and will stay crap
+> until they become more receptive to patches to fix it, even if the
+> patches are not 100% to their liking but are in fact correct. Maybe
+> if I ever decide to touch that driver in the future. Which I doubt
+> given my recent experience.
 
-Signed-off-by: Daan De Meyer <daan.j.demeyer@gmail.com>
----
- tools/testing/selftests/bpf/cgroup_helpers.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Hi Russell
 
-diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
-index 2caee8423ee0..6dcf0cd375c4 100644
---- a/tools/testing/selftests/bpf/cgroup_helpers.c
-+++ b/tools/testing/selftests/bpf/cgroup_helpers.c
-@@ -195,6 +195,11 @@ int setup_cgroup_environment(void)
- 
- 	format_cgroup_path(cgroup_workdir, "");
- 
-+	if (mkdir(CGROUP_MOUNT_PATH, 0777) && errno != EEXIST) {
-+		log_err("mkdir mount");
-+		return 1;
-+	}
-+
- 	if (unshare(CLONE_NEWNS)) {
- 		log_err("unshare");
- 		return 1;
--- 
-2.41.0
+You pointed out the current proposal will break stuff. Do you see a
+way forward for this patchset which does not first involve actually
+cleaning up of this driver?
 
+	Andrew
