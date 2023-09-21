@@ -1,163 +1,201 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7059441E37;
-	Thu, 21 Sep 2023 18:10:31 +0000 (UTC)
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43D4897F0;
-	Thu, 21 Sep 2023 10:52:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=y80U+ROzdWFAGesuJv0fAWCJugjaoZUvkVKbCL8UtRM=; b=J1yh53DeBNARTsqqU8MHBzo9Oa
-	t0+dRp/RaWdqEqR/zlkiuTCdTMvV7LfZBpgaPOo9mz3Ar25SG5iPMKXPJ1Pakv7POYEio6eyu3imp
-	Jue1paSBhwzjv0GVy6aou42CWQp6vSIlPYV8hlPJ5VHamcRnA8qcdTN4cPrFGpVz1BTCn704A78vE
-	WKxVrydWMewhT15+u9bny+bRHgeZaaqgcYNfslcWse8SCYpLZxpj04q12Qq2mZevEQIJk5Ji3lybk
-	draQ9SuAvOjf/F8wS4j1zOR8oS4A/59eybSt0kjrpVaKBQ211JZ5hMg5lAiocOJweLC8GJ5sJOtgz
-	HfWLrfPQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:54404)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1qjKIb-0004k2-1O;
-	Thu, 21 Sep 2023 15:04:57 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1qjKIX-0003an-Lu; Thu, 21 Sep 2023 15:04:53 +0100
-Date: Thu, 21 Sep 2023 15:04:53 +0100
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Choong Yong Liang <yong.liang.choong@linux.intel.com>
-Cc: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-	David E Box <david.e.box@linux.intel.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Mark Gross <markgross@kernel.org>,
-	Jose Abreu <Jose.Abreu@synopsys.com>, Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jose Abreu <joabreu@synopsys.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Wong Vee Khee <veekhee@apple.com>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Revanth Kumar Uppala <ruppala@nvidia.com>,
-	Shenwei Wang <shenwei.wang@nxp.com>,
-	Andrey Konovalov <andrey.konovalov@linaro.org>,
-	Jochen Henneberg <jh@henneberg-systemdesign.com>,
-	David E Box <david.e.box@intel.com>,
-	Andrew Halaney <ahalaney@redhat.com>,
-	Simon Horman <simon.horman@corigine.com>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	bpf@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
-	Tan Tee Min <tee.min.tan@linux.intel.com>,
-	Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
-	Lai Peter Jun Ann <jun.ann.lai@intel.com>
-Subject: Re: [PATCH net-next v3 3/5] net: phy: update in-band AN mode when
- changing interface by PHY driver
-Message-ID: <ZQxNhYcusHfrJvxM@shell.armlinux.org.uk>
-References: <20230921121946.3025771-1-yong.liang.choong@linux.intel.com>
- <20230921121946.3025771-4-yong.liang.choong@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2C2F1A588;
+	Thu, 21 Sep 2023 18:10:40 +0000 (UTC)
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47FFAE5D3;
+	Thu, 21 Sep 2023 11:05:20 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-4050bd2e33aso13545695e9.2;
+        Thu, 21 Sep 2023 11:05:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695319519; x=1695924319; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=B71VH3ITp4Fy7KHXz/EpaCh3rxhhysXnD37J811sMRg=;
+        b=WC0QxZklWFgIeiL7qt67aD/GaKE0NdnKRd+O08mNYcCwtv1g4kUmwFWMtTIbBX1w8Z
+         pki1mlStny84efRYlw/Kz3mECG7qLMGgQ5q24jtdsIbuacKnNi9ZhrUy53eqVDYjuS+s
+         HGWguvTGiesyKiOvFupOJHj7TsXvRENDzg7iPB0rFoDfRnQDWQW9Zw3kHePGwF/+ekL8
+         ikkOlNkAWVQ80KKQQN8rpsdAn1jWqPlFTCh5wUv2FaYGnBPEjUFKf1vTFlecceLELgwC
+         98p7BjqokNnkl/JRtOQc+ns/20xyv9LQhkrQA0XrEDURflY+iK1NYxNebf34RPOnBzBX
+         poXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695319519; x=1695924319;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B71VH3ITp4Fy7KHXz/EpaCh3rxhhysXnD37J811sMRg=;
+        b=O2vr49KX/5Uaz4BXDISQudxKRWxtLMf77ZRLX4mAitTu0GbcbQgqKfPBbxaZKUNtZ/
+         OjqC3SzFzN+x3TuCZtDlqmaZCJKETUNe/YZ7HUmSthxbu/wYeRLRek8NiQ39ULs//az4
+         4ZwFxwleWnFTVAZFYv/lKEi2Tz2AFyV0ElU/Hgy8mG79dEG6jJm/Na93jSzOs6252PRG
+         n8icRiijtv5Px8MFs6x9f2WEHTy+XfKMyfM5J0w5gSH5K9Th+hhkKcyqrjre/xwB2qBS
+         mYEz94fy7kz3KzU4OREUE8JuACa30ZFnT57v/QpYIOA3PkHrUrCRl8aUmPClmCkruPD9
+         w0uA==
+X-Gm-Message-State: AOJu0Yw1YUAPwawQrCubFcT+N2UlVYNyYyRTZehLZ1WXl00VeJBS+BYu
+	ICX6pzfiK5yQXG3Ced4jzCXK0RnFr/a/BznKdYs=
+X-Google-Smtp-Source: AGHT+IFlOJE9EsIjpQZ4sKh3Vf0bwArcMij/fX0xxrX5JuhdXZRYOY6YV9DZmIviGx8SCY1vGBFP4Q==
+X-Received: by 2002:a17:906:314b:b0:9a2:139:f45d with SMTP id e11-20020a170906314b00b009a20139f45dmr4819216eje.43.1695298168358;
+        Thu, 21 Sep 2023 05:09:28 -0700 (PDT)
+Received: from daandemeyer-fedora-PC1EV17T.thefacebook.com ([2620:10d:c092:400::4:2a59])
+        by smtp.googlemail.com with ESMTPSA id gx10-20020a170906f1ca00b0099cb349d570sm952258ejb.185.2023.09.21.05.09.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Sep 2023 05:09:27 -0700 (PDT)
+From: Daan De Meyer <daan.j.demeyer@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Daan De Meyer <daan.j.demeyer@gmail.com>,
+	martin.lau@linux.dev,
+	kernel-team@meta.com,
+	netdev@vger.kernel.org
+Subject: [PATCH bpf-next v5 0/9] Add cgroup sockaddr hooks for unix sockets
+Date: Thu, 21 Sep 2023 14:09:02 +0200
+Message-ID: <20230921120913.566702-1-daan.j.demeyer@gmail.com>
+X-Mailer: git-send-email 2.41.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230921121946.3025771-4-yong.liang.choong@linux.intel.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.6
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Thu, Sep 21, 2023 at 08:19:44PM +0800, Choong Yong Liang wrote:
-> As there is a mechanism in PHY drivers to switch the PHY interface
-> between SGMII and 2500BaseX according to link speed. In this case,
-> the in-band AN mode should be switching based on the PHY interface
-> as well, if the PHY interface has been changed/updated by PHY driver.
-> 
-> For e.g., disable in-band AN in 2500BaseX mode, or enable in-band AN
-> back for SGMII mode (10/100/1000Mbps).
-> 
-> Signed-off-by: Choong Yong Liang <yong.liang.choong@linux.intel.com>
+Changes since v4:
 
-This approach is *going* to break existing setups, sorry.
+* Dropped support for intercepting bind() as when using bind() with unix sockets
+  and a pathname sockaddr, bind() will create an inode in the filesystem that
+  needs to be cleaned up. If the address is rewritten, users might try to clean
+  up the wrong file and leak the actual socket file in the filesystem.
+* Changed bpf_sock_addr_set_unix_addr() to use BTF_KFUNC_HOOK_CGROUP_SKB instead
+  of BTF_KFUNC_HOOK_COMMON.
+* Removed unix socket related changes from BPF_CGROUP_PRE_CONNECT_ENABLED() as
+  unix sockets do not support pre-connect.
+* Added tests for getpeernameun and getsocknameun hooks.
+* We now disallow an empty sockaddr in bpf_sock_addr_set_unix_addr() similar to
+  unix_validate_addr().
+* Removed unnecessary cgroup_bpf_enabled() checks
+* Removed unnecessary error checks
 
-> +/**
-> + * phylink_interface_change() - update both cfg_link_an_mode and
-> + * cur_link_an_mode when there is a change in the interface.
-> + * @phydev: pointer to &struct phy_device
-> + *
-> + * When the PHY interface switches between SGMII and 2500BaseX in
-> + * accordance with the link speed, the in-band AN mode should also switch
-> + * based on the PHY interface
-> + */
-> +static void phylink_interface_change(struct phy_device *phydev)
-> +{
-> +	struct phylink *pl = phydev->phylink;
-> +
-> +	if (pl->phy_state.interface != phydev->interface) {
-> +		/* Fallback to the correct AN mode. */
-> +		if (phy_interface_mode_is_8023z(phydev->interface) &&
-> +		    pl->cfg_link_an_mode == MLO_AN_INBAND) {
-> +			pl->cfg_link_an_mode = MLO_AN_PHY;
-> +			pl->cur_link_an_mode = MLO_AN_PHY;
+Changes since v3:
 
-1. Why are you changing both cfg_link_an_mode (configured link AN mode)
-and cur_link_an_mode (current link AN mode) ?
+* Renamed bpf_sock_addr_set_addr() to bpf_sock_addr_set_unix_addr() and
+  made it only operate on AF_UNIX sockaddrs. This is because for the other
+  families, users usually want to configure more than just the address so
+  a generic interface will not fit the bill here. e.g. for AF_INET and AF_INET6,
+  users would generally also want to be able to configure the port which the
+  current interface doesn't support. So we expose an AF_UNIX specific function
+  instead.
+* Made the tests in the new sock addr tests more generic (similar to test_sock_addr.c),
+  this should make it easier to migrate the other sock addr tests in the future.
+* Removed the new kfunc hook and attached to BTF_KFUNC_HOOK_COMMON instead
+* Set uaddrlen to 0 when the family is AF_UNSPEC
+* Pass in the addrlen to the hook from IPv6 code
+* Fixed mount directory mkdir() to ignore EEXIST
 
-The "configured" link AN mode is supposed to be whatever was configured
-at phylink creation time, and it's never supposed to change. The
-"current" link AN mode can change, but changing that must be followed
-by a major reconfiguration to ensure everything is correctly setup.
-That will happen only because the change to the current link AN mode
-can only happen when pl->phy_state.interface has changed, and the
-change of pl->phy_state.interface triggers the reconfiguration.
+Changes since v2:
 
-2. You force this behaviour on everyone, so now everyone with a SFP
-module that operates in 802.3z mode will be switched out of inband mode
-whether they want that or not. This is likely to cause some breakage.
+* Configuring the sock addr is now done via a new kfunc bpf_sock_addr_set()
+* The addrlen is exposed as u32 in bpf_sock_addr_kern
+* Selftests are updated to use the new kfunc
+* Selftests are now added as a new sock_addr test in prog_tests/
+* Added BTF_KFUNC_HOOK_SOCK_ADDR for BPF_PROG_TYPE_CGROUP_SOCK_ADDR
+* __cgroup_bpf_run_filter_sock_addr() now returns the modified addrlen
 
-> +		} else if (pl->config->ovr_an_inband) {
-> +			pl->cfg_link_an_mode = MLO_AN_INBAND;
-> +			pl->cur_link_an_mode = MLO_AN_INBAND;
+Changes since v1:
 
-Here you force inband when not 802.3z mode and ovr_an_inband is set.
-There are SFP modules that do *not* support in-band at all, and this
-will break these modules when combined with a driver that sets
-ovr_an_inband. So more breakage.
+* Split into multiple patches instead of one single patch
+* Added unix support for all socket address hooks instead of only connect()
+* Switched approach to expose the socket address length to the bpf hook
+instead of recalculating the socket address length in kernelspace to
+properly support abstract unix socket addresses
+* Modified socket address hook tests to calculate the socket address length
+once and pass it around everywhere instead of recalculating the actual unix
+socket address length on demand.
+* Added some missing section name tests for getpeername()/getsockname()
 
-Please enumerate the PHY interface modes that you are trying to support
-with this patch set, and indicate whether you want in-band for that
-mode or not, and where the restriction for whether in-band can be used
-comes from (PHY, PCS or MAC) so that it's possible to better understand
-what you're trying to achieve.
+This patch series extends the cgroup sockaddr hooks to include support for
+unix sockets. To add support for unix sockets, struct bpf_sock_addr is
+extended to expose the unix socket path (sun_path) and the socket address
+length to the bpf program. For unix sockets, the address length is writable,
+for the other socket address hook types, the address length is only readable.
 
-Thanks.
+I intend to use these new hooks in systemd to reimplement the LogNamespace=
+feature, which allows running multiple instances of systemd-journald to
+process the logs of different services. systemd-journald also processes
+syslog messages, so currently, using log namespaces means all services running
+in the same log namespace have to live in the same private mount namespace
+so that systemd can mount the journal namespace's associated syslog socket
+over /dev/log to properly direct syslog messages from all services running
+in that log namespace to the correct systemd-journald instance. We want to
+relax this requirement so that processes running in disjoint mount namespaces
+can still run in the same log namespace. To achieve this, we can use these
+new hooks to rewrite the socket address of any connect(), sendto(), ...
+syscalls to /dev/log to the socket address of the journal namespace's syslog
+socket instead, which will transparently do the redirection without requiring
+use of a mount namespace and mounting over /dev/log.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Aside from the above usecase, these hooks can more generally be used to
+transparently redirect unix sockets to different addresses as required by
+services.
+
+Daan De Meyer (9):
+  selftests/bpf: Add missing section name tests for
+    getpeername/getsockname
+  bpf: Propagate modified uaddrlen from cgroup sockaddr programs
+  bpf: Add bpf_sock_addr_set_unix_addr() to allow writing unix sockaddr
+    from bpf
+  bpf: Implement cgroup sockaddr hooks for unix sockets
+  libbpf: Add support for cgroup unix socket address hooks
+  bpftool: Add support for cgroup unix socket address hooks
+  documentation/bpf: Document cgroup unix socket address hooks
+  selftests/bpf: Make sure mount directory exists
+  selftests/bpf: Add tests for cgroup unix socket address hooks
+
+ Documentation/bpf/libbpf/program_types.rst    |  10 +
+ include/linux/bpf-cgroup-defs.h               |   5 +
+ include/linux/bpf-cgroup.h                    |  94 +--
+ include/linux/filter.h                        |   1 +
+ include/uapi/linux/bpf.h                      |  13 +-
+ kernel/bpf/btf.c                              |   1 +
+ kernel/bpf/cgroup.c                           |  29 +-
+ kernel/bpf/syscall.c                          |  15 +
+ kernel/bpf/verifier.c                         |   5 +-
+ net/core/filter.c                             |  49 +-
+ net/ipv4/af_inet.c                            |   7 +-
+ net/ipv4/ping.c                               |   2 +-
+ net/ipv4/tcp_ipv4.c                           |   2 +-
+ net/ipv4/udp.c                                |   9 +-
+ net/ipv6/af_inet6.c                           |   9 +-
+ net/ipv6/ping.c                               |   2 +-
+ net/ipv6/tcp_ipv6.c                           |   2 +-
+ net/ipv6/udp.c                                |   6 +-
+ net/unix/af_unix.c                            |  36 +-
+ .../bpftool/Documentation/bpftool-cgroup.rst  |  16 +-
+ .../bpftool/Documentation/bpftool-prog.rst    |   8 +-
+ tools/bpf/bpftool/bash-completion/bpftool     |  14 +-
+ tools/bpf/bpftool/cgroup.c                    |  16 +-
+ tools/bpf/bpftool/prog.c                      |   7 +-
+ tools/include/uapi/linux/bpf.h                |  13 +-
+ tools/lib/bpf/libbpf.c                        |  10 +
+ tools/testing/selftests/bpf/bpf_kfuncs.h      |  14 +
+ tools/testing/selftests/bpf/cgroup_helpers.c  |   5 +
+ tools/testing/selftests/bpf/network_helpers.c |  34 ++
+ tools/testing/selftests/bpf/network_helpers.h |   1 +
+ .../selftests/bpf/prog_tests/section_names.c  |  45 ++
+ .../selftests/bpf/prog_tests/sock_addr.c      | 570 ++++++++++++++++++
+ .../selftests/bpf/progs/connectun_prog.c      |  40 ++
+ .../selftests/bpf/progs/recvmsgun_prog.c      |  39 ++
+ .../selftests/bpf/progs/sendmsgun_prog.c      |  40 ++
+ 35 files changed, 1076 insertions(+), 93 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/sock_addr.c
+ create mode 100644 tools/testing/selftests/bpf/progs/connectun_prog.c
+ create mode 100644 tools/testing/selftests/bpf/progs/recvmsgun_prog.c
+ create mode 100644 tools/testing/selftests/bpf/progs/sendmsgun_prog.c
+
+--
+2.41.0
+
