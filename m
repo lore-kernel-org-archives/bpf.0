@@ -1,125 +1,211 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B772D8D60C;
-	Thu, 21 Sep 2023 18:41:01 +0000 (UTC)
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F52C066C;
-	Thu, 21 Sep 2023 11:40:32 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-58dce1f42d6so35438467b3.0;
-        Thu, 21 Sep 2023 11:40:32 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAFC79CA41;
+	Thu, 21 Sep 2023 18:44:15 +0000 (UTC)
+Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03773ECA5C;
+	Thu, 21 Sep 2023 11:44:13 -0700 (PDT)
+Received: by mail-oo1-xc32.google.com with SMTP id 006d021491bc7-57b48918efcso152707eaf.1;
+        Thu, 21 Sep 2023 11:44:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695321630; x=1695926430; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ofSWuZZY4bEa02tXmv8xlB2YJR3Z2AWM+YX2J2Kxd10=;
-        b=mtkZF+KAD5HlJHqOTZ2WDBfGQlhknJAr1lzNrklsP+vcO3mnlwVBil/26YhUFIk1Aa
-         RQrj+UaVmcoH+U3Eg00ByPWmtx/sAecBraOESvoFr9oMDSJRQNzD5eGlNcO633VxT/1f
-         Q78xC0p272Sy9mW5s/MABIe7yLrBJcBnZBhXegWdJaesCu62jOYs4j0GekYCgbZGkM5B
-         +U4icQtgiX50gUjg+RoeRHJQahmejqKPnnehtNCohXqYe6lgJTJ9b07Pa6sYzNdis41J
-         F6chWFpburnVk8nTBRFHNiGJzLEPlWc8KgpuONmaVkvEvp7EXCbXFb6qTvAJbnI/IqLu
-         dNQQ==
+        d=gmail.com; s=20230601; t=1695321853; x=1695926653; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YYfgmqOWJYL4RFhEhCUjfY5/mLJnIuSj1yZxZ7ffUFY=;
+        b=TewYodz0AirS0wk/c8jPg71Llu4dQnIk5ccntjBs6wJ5MfsnC8m/7Y7Ea1bhUzu9uu
+         mZ62fxNEkj/+I3+a2WEdV61VdBQTdw7mqVdENT1AbrtP199eU7Xi0ITMplLC14M4xE1m
+         wYci6VGF9Ti/fNr0uSANM6ygYiZppZi2IP5oWJdNaXP4EL52CgLTyBmRYbSSJhBk6l0p
+         OYW7LPRWBUOmZxQceSu60pRNZXgqEuwmUMNylbHCr7sotQckZhgHTZfRBSAGxJvHuKUh
+         R+sIxQow+V5iVTHAwTzZA2pjEu/dycOtv+Dzu9IjPy+EyiP9yFiob1y8JksDjiuysnt3
+         br/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695321630; x=1695926430;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ofSWuZZY4bEa02tXmv8xlB2YJR3Z2AWM+YX2J2Kxd10=;
-        b=uJLy7VQ4ffRRJe1sk2d/aEkT6h1mUXL3f7lwFbCAZrb2cpGsIiOKP0tubHpcrmfODW
-         k6K8iVWAyQdIiuchQ709l5mvOy6fyZnN0W/mJJqZM9/5uI2DmKs80gSaER4vDj4gvKi6
-         5/X3LbmebnfcWqw1tzHozf1JBDilsyLyobY8kp6xTPJsEDrIADx6qCHBQYTSlSNS41Jt
-         TaWittHUA4Q1bqJ83d7vs6OvlvGcS3OOHP8UFh/OpKTpt+6ai/LEOYyFArVdCc6ZhgCk
-         ly4psM1TB0b+4W08JoNPCTR/5Yi2HlPFofpfTcR21xLEfmFPuyD3UCFhzXZrYhmEWzTA
-         RktA==
-X-Gm-Message-State: AOJu0Yww+Yka5tAkW99FO3Qe3JNcTFuGMGaWS/taty3/6F+1d7e4EIwH
-	dMtfjA14ohuNQ1iCgetUJ6yWlrUClFE=
-X-Google-Smtp-Source: AGHT+IGIJZh89SHkayG95dKRNldnohSO7TVARbXQAfTa6hwHa8apb3a2ZwoBvaHU6riFVfmtkY0FTQ==
-X-Received: by 2002:a05:6a00:2d16:b0:68c:44ed:fb6 with SMTP id fa22-20020a056a002d1600b0068c44ed0fb6mr6423829pfb.16.1695271955225;
-        Wed, 20 Sep 2023 21:52:35 -0700 (PDT)
-Received: from localhost ([98.97.37.198])
-        by smtp.gmail.com with ESMTPSA id i6-20020aa787c6000000b0068a0b5df6b2sm352972pfo.196.2023.09.20.21.52.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Sep 2023 21:52:34 -0700 (PDT)
-Date: Wed, 20 Sep 2023 21:52:32 -0700
-From: John Fastabend <john.fastabend@gmail.com>
-To: Martin KaFai Lau <martin.lau@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>
-Cc: netdev@vger.kernel.org, 
- bpf@vger.kernel.org, 
- Kui-Feng Lee <sinquersw@gmail.com>, 
- Ma Ke <make_ruc2021@163.com>, 
- jakub@cloudflare.com, 
- davem@davemloft.net, 
- edumazet@google.com, 
- kuba@kernel.org, 
- pabeni@redhat.com
-Message-ID: <650bcc10d2735_7d31e208e7@john.notmuch>
-In-Reply-To: <d05b61ca-0575-de1e-8638-9815ad67f597@linux.dev>
-References: <20230918093620.3479627-1-make_ruc2021@163.com>
- <dc84f39f-5b13-4a7d-a26c-598227fd9a42@gmail.com>
- <650b34ca2b41c_4e8122080@john.notmuch>
- <d05b61ca-0575-de1e-8638-9815ad67f597@linux.dev>
-Subject: Re: [PATCH] bpf, sockmap: fix deadlocks in the sockhash and sockmap
+        d=1e100.net; s=20230601; t=1695321853; x=1695926653;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YYfgmqOWJYL4RFhEhCUjfY5/mLJnIuSj1yZxZ7ffUFY=;
+        b=rV2D/ZRkTl6a59IsOd5V1cnhkRAA11GrulLn4z4L1AoVLkXAKCM3Q1a1AL3SVLDhYm
+         nMTmbWWXZziknnv0W17VGbATT7EuwFA4QjT+YMlcQPG3Mr6eBHiAcRDdEeDkStIlBHyx
+         Wl3XUFKY1unU7sfvIS4q0ofFknDRutPngWqDVszTTpJCKdrk2yLIfnvkPWeQU/iJe4SI
+         AIxsFeYAyWRJ7bpzhdFonVN7mEsRxghOaFsR0gSKjQbg6HWvmIxjLxdv50AaOwspXhPp
+         cP5PNnDRfeaFSy63q3tiGUI94PQPEinG1V07XkxcY8/8koNLipjYjXNC2InsUbcLbEq6
+         0Jbw==
+X-Gm-Message-State: AOJu0YxQMgcGwRdLHCpFERK1YiBSTyYhCvQqyGXbf+q0y9KTrwydlCdA
+	B5bbWbuNwJyJ8cuZu/fw877rY/CWyQRfTGNxsyebR6nWVo6MaQ==
+X-Google-Smtp-Source: AGHT+IFXGzgLX7ANRyQlp6Bi5iEojSubUy63e1IH7TE/jMO1+ZjCNxZY76ReOoGSvNG4+KlXDv3jhamG37y9rhhAkfM=
+X-Received: by 2002:a05:6214:2b0a:b0:63c:f852:aa30 with SMTP id
+ jx10-20020a0562142b0a00b0063cf852aa30mr4799963qvb.0.1695279693856; Thu, 21
+ Sep 2023 00:01:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+MIME-Version: 1.0
+References: <20230918093304.367826-1-tushar.vyavahare@intel.com> <20230918093304.367826-7-tushar.vyavahare@intel.com>
+In-Reply-To: <20230918093304.367826-7-tushar.vyavahare@intel.com>
+From: Magnus Karlsson <magnus.karlsson@gmail.com>
+Date: Thu, 21 Sep 2023 09:01:22 +0200
+Message-ID: <CAJ8uoz1QtRzeo8DxrpujjHGoPWd8FJASUWjfNrROuaJOCw+ZGA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 6/8] selftests/xsk: iterate over all the sockets
+ in the send pkts function
+To: Tushar Vyavahare <tushar.vyavahare@intel.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, bjorn@kernel.org, 
+	magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, 
+	jonathan.lemon@gmail.com, davem@davemloft.net, kuba@kernel.org, 
+	pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net, 
+	tirthendu.sarkar@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Martin KaFai Lau wrote:
-> On 9/20/23 11:07 AM, John Fastabend wrote:
-> >>> pay much attention to their deletion. Compared with hash
-> >>> maps, sockhash only provides spin_lock_bh protection.
-> >>> This causes it to appear to have self-locking behavior
-> >>> in the interrupt context, as CVE-2023-0160 points out.
-> > 
-> > CVE is a bit exagerrated in my opinion. I'm not sure why
-> > anyone would delete an element from interrupt context. But,
-> > OK if someone wrote such a thing we shouldn't lock up.
-> 
-> This should only happen in tracing program?
-> not sure if it will be too drastic to disallow tracing program to use 
-> bpf_map_delete_elem during load time now.
+On Mon, 18 Sept 2023 at 11:15, Tushar Vyavahare
+<tushar.vyavahare@intel.com> wrote:
+>
+> Update send_pkts() to handle multiple sockets for sending packets.
+> Multiple TX sockets are utilized alternately based on the batch size for
+> improve packet transmission.
 
-I don't think we have any users from tracing programs, but
-might be something out there?
+I do not know if it is "improved" ;-), but it is good to test sending
+from multiple sockets. Please make that clearer.
 
-> 
-> A followup question, if sockmap can be accessed from tracing program, does it 
-> need an in_nmi() check?
+> Signed-off-by: Tushar Vyavahare <tushar.vyavahare@intel.com>
+> ---
+>  tools/testing/selftests/bpf/xskxceiver.c | 64 +++++++++++++++++-------
+>  1 file changed, 45 insertions(+), 19 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
+> index e67032f04a74..0ef0575c095c 100644
+> --- a/tools/testing/selftests/bpf/xskxceiver.c
+> +++ b/tools/testing/selftests/bpf/xskxceiver.c
+> @@ -1204,13 +1204,13 @@ static int receive_pkts(struct test_spec *test)
+>         return TEST_PASS;
+>  }
+>
+> -static int __send_pkts(struct ifobject *ifobject, struct pollfd *fds, bool timeout)
+> +static int __send_pkts(struct ifobject *ifobject, struct xsk_socket_info *xsk, bool timeout)
+>  {
+>         u32 i, idx = 0, valid_pkts = 0, valid_frags = 0, buffer_len;
+> -       struct pkt_stream *pkt_stream = ifobject->xsk->pkt_stream;
+> -       struct xsk_socket_info *xsk = ifobject->xsk;
+> +       struct pkt_stream *pkt_stream = xsk->pkt_stream;
+>         struct xsk_umem_info *umem = ifobject->umem;
+>         bool use_poll = ifobject->use_poll;
+> +       struct pollfd fds = { };
+>         int ret;
+>
+>         buffer_len = pkt_get_buffer_len(umem, pkt_stream->max_pkt_len);
+> @@ -1222,9 +1222,12 @@ static int __send_pkts(struct ifobject *ifobject, struct pollfd *fds, bool timeo
+>                 return TEST_CONTINUE;
+>         }
+>
+> +       fds.fd = xsk_socket__fd(xsk->xsk);
+> +       fds.events = POLLOUT;
+> +
+>         while (xsk_ring_prod__reserve(&xsk->tx, BATCH_SIZE, &idx) < BATCH_SIZE) {
+>                 if (use_poll) {
+> -                       ret = poll(fds, 1, POLL_TMOUT);
+> +                       ret = poll(&fds, 1, POLL_TMOUT);
+>                         if (timeout) {
+>                                 if (ret < 0) {
+>                                         ksft_print_msg("ERROR: [%s] Poll error %d\n",
+> @@ -1303,7 +1306,7 @@ static int __send_pkts(struct ifobject *ifobject, struct pollfd *fds, bool timeo
+>         xsk->outstanding_tx += valid_frags;
+>
+>         if (use_poll) {
+> -               ret = poll(fds, 1, POLL_TMOUT);
+> +               ret = poll(&fds, 1, POLL_TMOUT);
+>                 if (ret <= 0) {
+>                         if (ret == 0 && timeout)
+>                                 return TEST_PASS;
+> @@ -1349,27 +1352,50 @@ static int wait_for_tx_completion(struct xsk_socket_info *xsk)
+>         return TEST_PASS;
+>  }
+>
+> +bool all_packets_sent(struct test_spec *test, unsigned long *bitmap)
+> +{
+> +       if (test_bit(test->nb_sockets, bitmap))
+> +               return true;
 
-I think we could just do 'in_nmi(); return EOPNOTSUPP;'
+This does not seem to be correct. You are testing one bit here, but
+are you not supposed to test that all bits have been set?
 
-> 
-> >>>    	hash = sock_hash_bucket_hash(key, key_size);
-> >>>    	bucket = sock_hash_select_bucket(htab, hash);
-> >>>    
-> >>> -	spin_lock_bh(&bucket->lock);
-> >>> +	spin_lock_irqsave(&bucket->lock, flags);
-> > 
-> > The hashtab code htab_lock_bucket also does a preempt_disable()
-> > followed by raw_spin_lock_irqsave(). Do we need this as well
-> > to handle the PREEMPT_CONFIG cases.
-> 
-> iirc, preempt_disable in htab is for the CONFIG_PREEMPT but it is for the 
-> __this_cpu_inc_return to avoid unnecessary lock failure due to preemption, so 
-> probably it is not needed here. The commit 2775da216287 ("bpf: Disable 
-> preemption when increasing per-cpu map_locked")
-> 
-> If map_delete can be called from any tracing context, the raw_spin_lock_xxx 
-> version is probably needed though. Otherwise, splat (e.g. 
-> PROVE_RAW_LOCK_NESTING) could be triggered.
+> +
+> +       return false;
+> +}
+> +
+>  static int send_pkts(struct test_spec *test, struct ifobject *ifobject)
+>  {
+> -       struct pkt_stream *pkt_stream = ifobject->xsk->pkt_stream;
+>         bool timeout = !is_umem_valid(test->ifobj_rx);
+> -       struct pollfd fds = { };
+> -       u32 ret;
+> +       u32 i, ret;
+>
+> -       fds.fd = xsk_socket__fd(ifobject->xsk->xsk);
+> -       fds.events = POLLOUT;
+> +       DECLARE_BITMAP(bitmap, MAX_SOCKETS);
 
-Yep. I'll look at it I guess. We should probably either block
-access from tracing programs or add some tests.
+Should be with the declarations in RCT order.
+
+>
+> -       while (pkt_stream->current_pkt_nb < pkt_stream->nb_pkts) {
+> -               ret = __send_pkts(ifobject, &fds, timeout);
+> -               if (ret == TEST_CONTINUE && !test->fail)
+> -                       continue;
+> -               if ((ret || test->fail) && !timeout)
+> -                       return TEST_FAILURE;
+> -               if (ret == TEST_PASS && timeout)
+> -                       return ret;
+> +       while (!(all_packets_sent(test, bitmap))) {
+> +               for (i = 0; i < test->nb_sockets; i++) {
+> +                       struct pkt_stream *pkt_stream;
+> +
+> +                       pkt_stream = ifobject->xsk_arr[i].pkt_stream;
+> +                       if (!pkt_stream || pkt_stream->current_pkt_nb >= pkt_stream->nb_pkts) {
+
+Can pkt_stream be NULL?
+
+> +                               __test_and_set_bit((1 << i), bitmap);
+
+test_and_set? You are not testing anything here so it is enough to just set it.
+
+> +                               continue;
+> +                       }
+> +                       ret = __send_pkts(ifobject, &ifobject->xsk_arr[i], timeout);
+> +                       if (ret == TEST_CONTINUE && !test->fail)
+> +                               continue;
+> +
+> +                       if ((ret || test->fail) && !timeout)
+> +                               return TEST_FAILURE;
+> +
+> +                       if (ret == TEST_PASS && timeout)
+> +                               return ret;
+> +
+> +                       ret = wait_for_tx_completion(&ifobject->xsk_arr[i]);
+> +                       if ((ret || test->fail) && !timeout)
+> +                               return TEST_FAILURE;
+> +
+> +                       if (ret == TEST_PASS && timeout)
+> +                               return ret;
+
+Why testing the same things before and after wait_for_tx_completion?
+Should it not be fine to just do it in one place?
+
+> +               }
+>         }
+>
+> -       return wait_for_tx_completion(ifobject->xsk);
+> +       return TEST_PASS;
+>  }
+>
+>  static int get_xsk_stats(struct xsk_socket *xsk, struct xdp_statistics *stats)
+> --
+> 2.34.1
+>
+>
