@@ -1,198 +1,128 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 991AD29432
-	for <bpf@vger.kernel.org>; Thu, 21 Sep 2023 17:49:51 +0000 (UTC)
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2FC9780F7
-	for <bpf@vger.kernel.org>; Thu, 21 Sep 2023 10:34:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1695317582;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1k8SHjrX7h+9geU6a4EfiZKaqOkQZE0r44U3ZFD7cFc=;
-	b=Z1Ww4bUYpO3zvEPGHV1tMDwn00DOEFrl5ZU6fGpfq1JYneygAKTX7e1x28lVdSAPmiWhVr
-	MU1d26adUOOv6d6IQerRq3eML58lqu8+oHTJEGZj00nOaUxayzJyhKAYjr9givpfJzNSOo
-	+pBaTzcMe8F4TFoLetLowPoz/HgZh4Y=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-19-4NQ098haO9O244DpWWMfJw-1; Thu, 21 Sep 2023 03:01:20 -0400
-X-MC-Unique: 4NQ098haO9O244DpWWMfJw-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-405369a7ebfso493375e9.0
-        for <bpf@vger.kernel.org>; Thu, 21 Sep 2023 00:01:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695279679; x=1695884479;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1k8SHjrX7h+9geU6a4EfiZKaqOkQZE0r44U3ZFD7cFc=;
-        b=HGIE1iOzAUBOkR2wbTbdBtc5hB/0DdL910tIR6ZkcdZhPiBGdDSJuH014c0OtYetYf
-         DjtRjDjIwWfuQ9FcWWLXbZnoASuY3AfdIbViGJ/9wvB1Yuspx3298Y+uH2wLdo0J72DO
-         MNfZWf53lhh5efp954Zs7CXXWyAniYLtmIzK7BSMOsBWwprH5cxijRKkX3gWsXh4iy84
-         HaImitGhLtLiXSGSCviDTLRl2wUdBhbicDp1S/PsqvgsjvTQZudgUFZKx9mQcvT8MkbM
-         TrdtiaEmQcrcWRP+RphxsR3+I9dS6b3TzTEnO6hY/wKj46p3t+AsygzEJsAXAIe67lCP
-         VUwA==
-X-Gm-Message-State: AOJu0Yx4vpeEdPIsoJdQiPFteELTFuWv60u3JHa2LRpG6qSsUo5xUZvb
-	PVXW1fSnUWMnEPpfvt0FuFZD6y/DgV8aJLD1bZcu++2hn99MibtLtB2o/hYOTfH5Y54sUrMH0Iy
-	hNbLxpRuIfw0s
-X-Received: by 2002:adf:f2c3:0:b0:320:8f0:b93d with SMTP id d3-20020adff2c3000000b0032008f0b93dmr4009692wrp.3.1695279678803;
-        Thu, 21 Sep 2023 00:01:18 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFlabPQ9ETJCqjwqd2LwoQEltmhfS/JafI5C64mu6pBljNOcNJ7n71e438DM+Z//+Per1W11g==
-X-Received: by 2002:adf:f2c3:0:b0:320:8f0:b93d with SMTP id d3-20020adff2c3000000b0032008f0b93dmr4009661wrp.3.1695279678370;
-        Thu, 21 Sep 2023 00:01:18 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-251-4.dyn.eolo.it. [146.241.251.4])
-        by smtp.gmail.com with ESMTPSA id t21-20020a170906179500b00988e953a586sm588033eje.61.2023.09.21.00.01.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Sep 2023 00:01:18 -0700 (PDT)
-Message-ID: <f5832f155f3daff50b0e7ea94fee84d3a70e4f29.camel@redhat.com>
-Subject: Re: [PATCH net v2 3/3] octeontx2-pf: Do xdp_do_flush() after
- redirects.
-From: Paolo Abeni <pabeni@redhat.com>
-To: Kui-Feng Lee <sinquersw@gmail.com>, Sebastian Andrzej Siewior
-	 <bigeasy@linutronix.de>, netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>, Alexei Starovoitov
- <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,  Jesper Dangaard
- Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Thomas
- Gleixner <tglx@linutronix.de>, Geetha sowjanya <gakula@marvell.com>,
- Subbaraya Sundeep <sbhatta@marvell.com>, Sunil Goutham
- <sgoutham@marvell.com>, hariprasad <hkelam@marvell.com>
-Date: Thu, 21 Sep 2023 09:01:16 +0200
-In-Reply-To: <aa182e22-e7b9-d8e7-04ea-781fe0fb9103@gmail.com>
-References: <20230918153611.165722-1-bigeasy@linutronix.de>
-	 <20230918153611.165722-4-bigeasy@linutronix.de>
-	 <aa182e22-e7b9-d8e7-04ea-781fe0fb9103@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE2414A532;
+	Thu, 21 Sep 2023 17:51:15 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4987A7EA02;
+	Thu, 21 Sep 2023 10:50:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695318647; x=1726854647;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xzUHdYuTPX8UEPkN1RU7vl2/b1DAaw7BomhJXS2mn5U=;
+  b=C1x6IMkzybQYgmnhFfnSwg+lFuiSlzY1GJQk9HodNkYa1ZktK+/YHZf8
+   W2bJECY5Ud5E0lG6KryKrZYdD7i1iZHqFZMUz0aoquzOTcHnMhCme/MSI
+   tizhZQQK+6+qy5XCfivaUwFI6YB0kCDwPg8Yu0XRQvrvRtxTeH7Au7Xmt
+   3Q6/FGLy+13lpm0/tRI75f8Ir51AixXOghoBu6/bPwDxlvNoPoSAO2S1k
+   QiFPVxbVasxcP4+i1SSft6rqUNPdnZQ3nDSJ3Mxfp0Xu6Q3/y62pbtT5O
+   NdJFrOP5679r0BSJohoHDE98baNq+WG8wdJuzRsdKloCGmOrzlMHbAyr3
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="384344978"
+X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
+   d="scan'208";a="384344978"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 05:25:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="776399273"
+X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
+   d="scan'208";a="776399273"
+Received: from choongyo-mobl.gar.corp.intel.com (HELO [10.215.240.199]) ([10.215.240.199])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 05:25:29 -0700
+Message-ID: <f9b21a9d-4ae2-1f91-b621-2e27f746f661@linux.intel.com>
+Date: Thu, 21 Sep 2023 20:25:05 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-	SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-	version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH net-next v2 0/5] TSN auto negotiation between 1G and 2.5G
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+ David E Box <david.e.box@linux.intel.com>,
+ Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>,
+ Jose Abreu <Jose.Abreu@synopsys.com>, Heiner Kallweit
+ <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>,
+ "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, =?UTF-8?Q?Marek_Beh=c3=ban?=
+ <kabel@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>,
+ Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Jose Abreu <joabreu@synopsys.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Richard Cochran <richardcochran@gmail.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Wong Vee Khee
+ <veekhee@apple.com>, Jon Hunter <jonathanh@nvidia.com>,
+ Jesse Brandeburg <jesse.brandeburg@intel.com>,
+ Revanth Kumar Uppala <ruppala@nvidia.com>,
+ Shenwei Wang <shenwei.wang@nxp.com>,
+ Andrey Konovalov <andrey.konovalov@linaro.org>,
+ Jochen Henneberg <jh@henneberg-systemdesign.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, platform-driver-x86@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, bpf@vger.kernel.org,
+ Voon Wei Feng <weifeng.voon@intel.com>,
+ Tan Tee Min <tee.min.tan@linux.intel.com>,
+ Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+ Lai Peter Jun Ann <jun.ann.lai@intel.com>
+References: <20230804084527.2082302-1-yong.liang.choong@linux.intel.com>
+ <5bd05ba2-fd88-4e5c-baed-9971ff917484@lunn.ch>
+Content-Language: en-US
+From: Choong Yong Liang <yong.liang.choong@linux.intel.com>
+In-Reply-To: <5bd05ba2-fd88-4e5c-baed-9971ff917484@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Mon, 2023-09-18 at 10:58 -0700, Kui-Feng Lee wrote:
->=20
-> On 9/18/23 08:36, Sebastian Andrzej Siewior wrote:
-> > xdp_do_flush() should be invoked before leaving the NAPI poll function
-> > if XDP-redirect has been performed.
-> >=20
-> > Invoke xdp_do_flush() before leaving NAPI.
-> >=20
-> > Cc: Geetha sowjanya <gakula@marvell.com>
-> > Cc: Subbaraya Sundeep <sbhatta@marvell.com>
-> > Cc: Sunil Goutham <sgoutham@marvell.com>
-> > Cc: hariprasad <hkelam@marvell.com>
-> > Fixes: 06059a1a9a4a5 ("octeontx2-pf: Add XDP support to netdev PF")
-> > Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> > Acked-by: Geethasowjanya Akula <gakula@marvell.com>
-> > ---
-> >   .../marvell/octeontx2/nic/otx2_txrx.c         | 19 +++++++++++++-----=
--
-> >   1 file changed, 13 insertions(+), 6 deletions(-)
-> >=20
-> > diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c b/d=
-rivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-> > index e77d438489557..53b2a4ef52985 100644
-> > --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-> > +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-> > @@ -29,7 +29,8 @@
-> >   static bool otx2_xdp_rcv_pkt_handler(struct otx2_nic *pfvf,
-> >   				     struct bpf_prog *prog,
-> >   				     struct nix_cqe_rx_s *cqe,
-> > -				     struct otx2_cq_queue *cq);
-> > +				     struct otx2_cq_queue *cq,
-> > +				     bool *need_xdp_flush);
-> >  =20
-> >   static int otx2_nix_cq_op_status(struct otx2_nic *pfvf,
-> >   				 struct otx2_cq_queue *cq)
-> > @@ -337,7 +338,7 @@ static bool otx2_check_rcv_errors(struct otx2_nic *=
-pfvf,
-> >   static void otx2_rcv_pkt_handler(struct otx2_nic *pfvf,
-> >   				 struct napi_struct *napi,
-> >   				 struct otx2_cq_queue *cq,
-> > -				 struct nix_cqe_rx_s *cqe)
-> > +				 struct nix_cqe_rx_s *cqe, bool *need_xdp_flush)
-> >   {
-> >   	struct nix_rx_parse_s *parse =3D &cqe->parse;
-> >   	struct nix_rx_sg_s *sg =3D &cqe->sg;
-> > @@ -353,7 +354,7 @@ static void otx2_rcv_pkt_handler(struct otx2_nic *p=
-fvf,
-> >   	}
-> >  =20
-> >   	if (pfvf->xdp_prog)
-> > -		if (otx2_xdp_rcv_pkt_handler(pfvf, pfvf->xdp_prog, cqe, cq))
-> > +		if (otx2_xdp_rcv_pkt_handler(pfvf, pfvf->xdp_prog, cqe, cq, need_xdp=
-_flush))
-> >   			return;
-> >  =20
-> >   	skb =3D napi_get_frags(napi);
-> > @@ -388,6 +389,7 @@ static int otx2_rx_napi_handler(struct otx2_nic *pf=
-vf,
-> >   				struct napi_struct *napi,
-> >   				struct otx2_cq_queue *cq, int budget)
-> >   {
-> > +	bool need_xdp_flush =3D false;
-> >   	struct nix_cqe_rx_s *cqe;
-> >   	int processed_cqe =3D 0;
-> >  =20
-> > @@ -409,13 +411,15 @@ static int otx2_rx_napi_handler(struct otx2_nic *=
-pfvf,
-> >   		cq->cq_head++;
-> >   		cq->cq_head &=3D (cq->cqe_cnt - 1);
-> >  =20
-> > -		otx2_rcv_pkt_handler(pfvf, napi, cq, cqe);
-> > +		otx2_rcv_pkt_handler(pfvf, napi, cq, cqe, &need_xdp_flush);
-> >  =20
-> >   		cqe->hdr.cqe_type =3D NIX_XQE_TYPE_INVALID;
-> >   		cqe->sg.seg_addr =3D 0x00;
-> >   		processed_cqe++;
-> >   		cq->pend_cqe--;
-> >   	}
-> > +	if (need_xdp_flush)
-> > +		xdp_do_flush();
-> >  =20
-> >   	/* Free CQEs to HW */
-> >   	otx2_write64(pfvf, NIX_LF_CQ_OP_DOOR,
-> > @@ -1354,7 +1358,8 @@ bool otx2_xdp_sq_append_pkt(struct otx2_nic *pfvf=
-, u64 iova, int len, u16 qidx)
-> >   static bool otx2_xdp_rcv_pkt_handler(struct otx2_nic *pfvf,
-> >   				     struct bpf_prog *prog,
-> >   				     struct nix_cqe_rx_s *cqe,
-> > -				     struct otx2_cq_queue *cq)
-> > +				     struct otx2_cq_queue *cq,
-> > +				     bool *need_xdp_flush)
-> >   {
-> >   	unsigned char *hard_start, *data;
-> >   	int qidx =3D cq->cq_idx;
-> > @@ -1391,8 +1396,10 @@ static bool otx2_xdp_rcv_pkt_handler(struct otx2=
-_nic *pfvf,
-> >  =20
-> >   		otx2_dma_unmap_page(pfvf, iova, pfvf->rbsize,
-> >   				    DMA_FROM_DEVICE);
-> > -		if (!err)
-> > +		if (!err) {
-> > +			*need_xdp_flush =3D true;
->=20
-> Is it possible to call xdp_do_flush() at the first place (here)?
 
-AFAICT that would kill much/all of the performance benefits of bulk
-redirect.
 
-I think the proposed solution is a better one.
+On 4/8/2023 8:04 pm, Andrew Lunn wrote:
+> On Fri, Aug 04, 2023 at 04:45:22PM +0800, Choong Yong Liang wrote:
+>> Intel platforms’ integrated Gigabit Ethernet controllers support
+>> 2.5Gbps mode statically using BIOS programming. In the current
+>> implementation, the BIOS menu provides an option to select between
+>> 10/100/1000Mbps and 2.5Gbps modes. Based on the selection, the BIOS
+>> programs the Phase Lock Loop (PLL) registers. The BIOS also read the
+>> TSN lane registers from Flexible I/O Adapter (FIA) block and provided
+>> 10/100/1000Mbps/2.5Gbps information to the stmmac driver. But
+>> auto-negotiation between 10/100/1000Mbps and 2.5Gbps is not allowed.
+>> The new proposal is to support auto-negotiation between 10/100/1000Mbps
+>> and 2.5Gbps . Auto-negotiation between 10, 100, 1000Mbps will use
+>> in-band auto negotiation. Auto-negotiation between 10/100/1000Mbps and
+>> 2.5Gbps will work as the following proposed flow, the stmmac driver reads
+>> the PHY link status registers then identifies the negotiated speed.
+>> Based on the speed stmmac driver will identify TSN lane registers from
+>> FIA then send IPC command to the Power Management controller (PMC)
+>> through PMC driver/API. PMC will act as a proxy to programs the
+>> PLL registers.
+> 
+> Have you considered using out of band for all link modes? You might
+> end up with a cleaner architecture, and not need any phylink/phylib
+> hacks.
+> 
+> 	Andrew
+Hi Andrew,
 
-Cheers,
+After conducting a comprehensive study, it seems that implementing 
+out-of-band for all link modes might not be feasible. I may have missed 
+some key aspects during my analysis.
 
-Paolo
+Would you be open to sharing a high-level idea of how we could potentially 
+make this feasible? Your insights would be greatly appreciated.
 
+By the way, I've submitted a new design that not exposing phylink's AN mode 
+into phylib. Please help review it to determine if it is acceptable.
