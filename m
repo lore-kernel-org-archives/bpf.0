@@ -1,138 +1,170 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8AE44CFC6;
-	Thu, 21 Sep 2023 18:11:28 +0000 (UTC)
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3408C625;
-	Thu, 21 Sep 2023 10:54:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=GhMoIAPgQCKJ2wdzruWvhIESRnzObv34y1rzTZCaGfs=; b=jOwla4wSicj5QITXQqyN6Y6ZUK
-	YZrdeLZYjbeLa+ZxVE+nEO3Y7OCwneLpSMeZypAhOUmtkLxmURie3dLLZAvKxSeo0zZYcTXCdTCdu
-	QpuMqw0G9TRJM5IBXU35OqfEu8Gn+wgbo1WOiP1zXqLd9F1/NnlB0H7JqI/YGu7cRZR8ulw78J0pG
-	P978Iqr3K6p7CVySLjAeWDIh+tBN3C6OFk9UQ5KUWe4D9nBcsla66SnN7NlcASjtnVp55mXIJD6Fv
-	3QehZoFgLjZ3k1BTsWks4d4df5f5wsHnePBZ5Jgd4kuY9vRk3GGc12ITEebpkwYdPm5l49R5PF/Ak
-	UI8PTmiw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:51610)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1qjL5N-0004wv-0s;
-	Thu, 21 Sep 2023 15:55:21 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1qjL5J-0003dB-V1; Thu, 21 Sep 2023 15:55:17 +0100
-Date: Thu, 21 Sep 2023 15:55:17 +0100
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Choong Yong Liang <yong.liang.choong@linux.intel.com>,
-	Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-	David E Box <david.e.box@linux.intel.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Mark Gross <markgross@kernel.org>,
-	Jose Abreu <Jose.Abreu@synopsys.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jose Abreu <joabreu@synopsys.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Wong Vee Khee <veekhee@apple.com>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Revanth Kumar Uppala <ruppala@nvidia.com>,
-	Shenwei Wang <shenwei.wang@nxp.com>,
-	Andrey Konovalov <andrey.konovalov@linaro.org>,
-	Jochen Henneberg <jh@henneberg-systemdesign.com>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	bpf@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
-	Tan Tee Min <tee.min.tan@linux.intel.com>,
-	Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
-	Lai Peter Jun Ann <jun.ann.lai@intel.com>
-Subject: Re: [PATCH net-next v2 0/5] TSN auto negotiation between 1G and 2.5G
-Message-ID: <ZQxZVbmdcAN6UI2G@shell.armlinux.org.uk>
-References: <20230804084527.2082302-1-yong.liang.choong@linux.intel.com>
- <5bd05ba2-fd88-4e5c-baed-9971ff917484@lunn.ch>
- <f9b21a9d-4ae2-1f91-b621-2e27f746f661@linux.intel.com>
- <37fe9352-ec84-47b8-bb49-9441987ca1b9@lunn.ch>
- <ZQxPQ9t8/TKcjlo8@shell.armlinux.org.uk>
- <0098eaf3-717a-4b50-b2a0-4b28b75b0735@lunn.ch>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 040624E26B;
+	Thu, 21 Sep 2023 18:14:27 +0000 (UTC)
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6B1A152E;
+	Thu, 21 Sep 2023 11:13:57 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-4053c6f0d55so932845e9.0;
+        Thu, 21 Sep 2023 11:13:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695320036; x=1695924836; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IhSyZJB50EQ/z1ueEeK7zMVrJuLFu7S00bbiYDenSas=;
+        b=gZYlC2jeMQZ6EVSf/pmRBCu3iji1ZnNHhtc7jA0Syy+HfunQhEy0Pqs780fDEoOoLV
+         NmjR3la0UkuMGHc5ax+Y7AUM+7jTJIM53rZF8sFFQr0mc+EoFRPYBKKi5Z4yUxPu9fzI
+         9YqtX/5txaibI35IebOgK7R7xX5stLkY4uX3yZV044n6/zsVfm+glVPWjxzGRhTEKwEV
+         L/ws2ONJ7Zy9TKNRuL8voP+H9ftgl8EMsWcEM3GKPSZ1fcgpJHhbTxjOtJ93HGhaV6GI
+         S0inSVwSC+B75pmvUQm+E1wnRTp40JHIEkBZtpXoPbRSmAr7/Txiz9LRIuNi6aqPNwnn
+         C22g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695320036; x=1695924836;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IhSyZJB50EQ/z1ueEeK7zMVrJuLFu7S00bbiYDenSas=;
+        b=uY/ddPDueiOQEmsJ/jY/vwGqSUflMaK3UDVPMAd5YkuyMC8L51Ywas0j9dyJybwBB+
+         vmnlwBlTIjGoYwSNFyg3pdtP/Zw6AmhkqROXiVOLNzWkaSICS/p9saRpp2yDyrAN3D5W
+         PtIUqEIbBdgO5snqtfI7vfJfxvdEq7yFJrBF6cTQIf9reqG8JmDBYYXUbH+s9MQSQR7L
+         OPktEKBd1ud6z2ESTcPPExN+0c5phQ+PUKWttoB6oTBmhkejdjAubxLIHzGIMhxO31ws
+         CJOpGPf6T6lwaAnJFJbhWceWAUZIzU8f4CV35r+J6IOp9+dpPALPBF4rBO6K18NXb7FD
+         dJ1Q==
+X-Gm-Message-State: AOJu0Yxof4cUGK+DtedvRUPP/NjGJFLfM0zRC2e5B8IIjxVF90yZxCLm
+	K9rnB9kE09d2dHPpomqgJhvNN4/2FdCr6TMR99k=
+X-Google-Smtp-Source: AGHT+IEDa0cJTjwXfFOtdNBjtD/3Cuqf/v0Q4czqj+Lrx4LlX5Ul01oiKjd0N14REwCypNDg444Cew==
+X-Received: by 2002:a17:906:30c6:b0:9a2:2635:dab6 with SMTP id b6-20020a17090630c600b009a22635dab6mr4681780ejb.47.1695298171945;
+        Thu, 21 Sep 2023 05:09:31 -0700 (PDT)
+Received: from daandemeyer-fedora-PC1EV17T.thefacebook.com ([2620:10d:c092:400::4:2a59])
+        by smtp.googlemail.com with ESMTPSA id gx10-20020a170906f1ca00b0099cb349d570sm952258ejb.185.2023.09.21.05.09.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Sep 2023 05:09:31 -0700 (PDT)
+From: Daan De Meyer <daan.j.demeyer@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Daan De Meyer <daan.j.demeyer@gmail.com>,
+	martin.lau@linux.dev,
+	kernel-team@meta.com,
+	netdev@vger.kernel.org
+Subject: [PATCH bpf-next v5 3/9] bpf: Add bpf_sock_addr_set_unix_addr() to allow writing unix sockaddr from bpf
+Date: Thu, 21 Sep 2023 14:09:05 +0200
+Message-ID: <20230921120913.566702-4-daan.j.demeyer@gmail.com>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230921120913.566702-1-daan.j.demeyer@gmail.com>
+References: <20230921120913.566702-1-daan.j.demeyer@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0098eaf3-717a-4b50-b2a0-4b28b75b0735@lunn.ch>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.6
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Thu, Sep 21, 2023 at 04:41:20PM +0200, Andrew Lunn wrote:
-> On Thu, Sep 21, 2023 at 03:12:19PM +0100, Russell King (Oracle) wrote:
-> > On Thu, Sep 21, 2023 at 03:21:00PM +0200, Andrew Lunn wrote:
-> > > > Hi Andrew,
-> > > > 
-> > > > After conducting a comprehensive study, it seems that implementing
-> > > > out-of-band for all link modes might not be feasible. I may have missed some
-> > > > key aspects during my analysis.
-> > > > 
-> > > > Would you be open to sharing a high-level idea of how we could potentially
-> > > > make this feasible? Your insights would be greatly appreciated.
-> > > 
-> > > stmmac_mac_link_up() gets passed interface, speed and duplex. That
-> > > tells you what the PHY has negotiated. Is there anything else you need
-> > > to know?
-> > 
-> > The problem is... the stmmac driver is utter bollocks - that information
-> > is *not* passed to the BSP. Instead, stmmac parse and store information
-> > such as the PHY interface mode at initialisation time. BSPs also re-
-> > parse and store e.g. the PHY interface mode at initialisation time.
-> > The driver ignores what it gets from phylink.
-> > 
-> > The driver is basically utter crap. That's an area I _had_ patches to
-> > clean up. I no longer do. stmmac is crap crap crap and will stay crap
-> > until they become more receptive to patches to fix it, even if the
-> > patches are not 100% to their liking but are in fact correct. Maybe
-> > if I ever decide to touch that driver in the future. Which I doubt
-> > given my recent experience.
-> 
-> Hi Russell
-> 
-> You pointed out the current proposal will break stuff. Do you see a
-> way forward for this patchset which does not first involve actually
-> cleaning up of this driver?
+As prep for adding unix socket support to the cgroup sockaddr hooks,
+let's add a kfunc bpf_sock_addr_set_unix_addr() that allows modifying a sockaddr
+from bpf. While this is already possible for AF_INET and AF_INET6, we'll
+need this kfunc when we add unix socket support since modifying the
+address for those requires modifying both the address and the sockaddr
+length.
 
-As I said in one of my replies, it would really help if the author can
-provide a table showing what is attempting to be achieved here. With
-that, we should be able to work out exactly what is required, what
-needs to change in stmmac, etc.
+Signed-off-by: Daan De Meyer <daan.j.demeyer@gmail.com>
+---
+ kernel/bpf/btf.c  |  1 +
+ net/core/filter.c | 34 +++++++++++++++++++++++++++++++++-
+ 2 files changed, 34 insertions(+), 1 deletion(-)
 
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index f93e835d90af..55765632059e 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -7850,6 +7850,7 @@ static int bpf_prog_type_to_kfunc_hook(enum bpf_prog_type prog_type)
+ 	case BPF_PROG_TYPE_SYSCALL:
+ 		return BTF_KFUNC_HOOK_SYSCALL;
+ 	case BPF_PROG_TYPE_CGROUP_SKB:
++	case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
+ 		return BTF_KFUNC_HOOK_CGROUP_SKB;
+ 	case BPF_PROG_TYPE_SCHED_ACT:
+ 		return BTF_KFUNC_HOOK_SCHED_ACT;
+diff --git a/net/core/filter.c b/net/core/filter.c
+index a094694899c9..bd1c42b28483 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -81,6 +81,7 @@
+ #include <net/xdp.h>
+ #include <net/mptcp.h>
+ #include <net/netfilter/nf_conntrack_bpf.h>
++#include <linux/un.h>
+ 
+ static const struct bpf_func_proto *
+ bpf_sk_base_func_proto(enum bpf_func_id func_id);
+@@ -11752,6 +11753,26 @@ __bpf_kfunc int bpf_dynptr_from_xdp(struct xdp_buff *xdp, u64 flags,
+ 
+ 	return 0;
+ }
++
++__bpf_kfunc int bpf_sock_addr_set_unix_addr(struct bpf_sock_addr_kern *sa_kern,
++					    const u8 *addr, u32 addrlen__sz)
++{
++	struct sockaddr *sa = sa_kern->uaddr;
++	struct sockaddr_un *un;
++
++	if (sa_kern->sk->sk_family != AF_UNIX)
++		return -EINVAL;
++
++	/* We do not allow changing the address of unnamed unix sockets. */
++	if (addrlen__sz == 0 || addrlen__sz > UNIX_PATH_MAX)
++		return -EINVAL;
++
++	un = (struct sockaddr_un *)sa;
++	memcpy(un->sun_path, addr, addrlen__sz);
++	sa_kern->uaddrlen = offsetof(struct sockaddr_un, sun_path) + addrlen__sz;
++
++	return 0;
++}
+ __diag_pop();
+ 
+ int bpf_dynptr_from_skb_rdonly(struct sk_buff *skb, u64 flags,
+@@ -11776,6 +11797,10 @@ BTF_SET8_START(bpf_kfunc_check_set_xdp)
+ BTF_ID_FLAGS(func, bpf_dynptr_from_xdp)
+ BTF_SET8_END(bpf_kfunc_check_set_xdp)
+ 
++BTF_SET8_START(bpf_kfunc_check_set_sock_addr)
++BTF_ID_FLAGS(func, bpf_sock_addr_set_unix_addr)
++BTF_SET8_END(bpf_kfunc_check_set_sock_addr)
++
+ static const struct btf_kfunc_id_set bpf_kfunc_set_skb = {
+ 	.owner = THIS_MODULE,
+ 	.set = &bpf_kfunc_check_set_skb,
+@@ -11786,6 +11811,11 @@ static const struct btf_kfunc_id_set bpf_kfunc_set_xdp = {
+ 	.set = &bpf_kfunc_check_set_xdp,
+ };
+ 
++static const struct btf_kfunc_id_set bpf_kfunc_set_sock_addr = {
++	.owner = THIS_MODULE,
++	.set = &bpf_kfunc_check_set_sock_addr,
++};
++
+ static int __init bpf_kfunc_init(void)
+ {
+ 	int ret;
+@@ -11800,7 +11830,9 @@ static int __init bpf_kfunc_init(void)
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_LWT_XMIT, &bpf_kfunc_set_skb);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_LWT_SEG6LOCAL, &bpf_kfunc_set_skb);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_NETFILTER, &bpf_kfunc_set_skb);
+-	return ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &bpf_kfunc_set_xdp);
++	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &bpf_kfunc_set_xdp);
++	return ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
++						&bpf_kfunc_set_sock_addr);
+ }
+ late_initcall(bpf_kfunc_init);
+ 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+2.41.0
+
