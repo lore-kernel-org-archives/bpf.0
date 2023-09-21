@@ -1,113 +1,167 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E731BBE71
-	for <bpf@vger.kernel.org>; Thu, 21 Sep 2023 17:12:50 +0000 (UTC)
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EC84697;
-	Thu, 21 Sep 2023 10:12:24 -0700 (PDT)
-Received: from fsav314.sakura.ne.jp (fsav314.sakura.ne.jp [153.120.85.145])
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 38LDKAiK029837;
-	Thu, 21 Sep 2023 22:20:10 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav314.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav314.sakura.ne.jp);
- Thu, 21 Sep 2023 22:20:10 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav314.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-	(authenticated bits=0)
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 38LDKACn029819
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-	Thu, 21 Sep 2023 22:20:10 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <cb67f607-3a9d-34d2-0877-a3ff957da79e@I-love.SAKURA.ne.jp>
-Date: Thu, 21 Sep 2023 22:20:09 +0900
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B93B2D53F
+	for <bpf@vger.kernel.org>; Thu, 21 Sep 2023 17:22:24 +0000 (UTC)
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199394CB32;
+	Thu, 21 Sep 2023 10:14:51 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2bffc55af02so21366791fa.2;
+        Thu, 21 Sep 2023 10:14:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695316490; x=1695921290; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:to:from
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PT7BtDLW9rg1Fg+vRZKPaEJl+Jt/zEwGch4+5k14AJA=;
+        b=jbTXabZFaLasSJgCpvAUWon2To2ZzV3zfOiWkLo8Ex8+zHD2pWle9/dawKl+y5w+VG
+         jDGWAUTp25OnC/oqhGoCix9eu/5vtieZytoAXW0Zance5sjmhWY8dQCa2TbMDyOUm1Mj
+         QOFPjVEXWZYGceZJvj01yqMckvLHDWt4V60btBPzHsrtvc0dACSlOyAPvivJ9Xj2eQX8
+         Fj1nF8xK/FHSoABdTLtJrqy2SgQnVjKWhNSNIK58ejdWLab0bS1/1gaENvcZbJoGu2gA
+         KEUFx4K2VuYnt/upx6fM4k9M9GhHCSJm1T6EiKZy2CoOQ/zTcxIZH/zHK1NwTzGqNWZM
+         017g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695316490; x=1695921290;
+        h=mime-version:message-id:date:references:in-reply-to:subject:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PT7BtDLW9rg1Fg+vRZKPaEJl+Jt/zEwGch4+5k14AJA=;
+        b=QXW6vtjPi2ZCND6KOwAq32eKGnpVKhQqlgGWmLr+wwfd35EPldFT/A30/0HwVZdbOB
+         jbOuUkHBwNrMDtz2rMydCtfPSgyDHrIElovUnEabLBXE2xnn/sDNlIpz1bH2ON8E4ZxE
+         7FRl9AwpitFn5BYDwpie2VwEFnO3mul/zOx0+z9yrlsr9pXoE6SXMlaAagcZ5QPr/a77
+         S1OVaqkLM+vxjt8OjCO5qLjg0gxhDObWVbIgyakjU5I/0rztvpav3SuOyrsI15fqnscy
+         4SlZ45IhX+wVmxtH/B+LjtULfDq6kQ2THSrwXuJZk/BhCRC2e+odyvA2BDRUZNFceVfj
+         2ddw==
+X-Gm-Message-State: AOJu0YxUvPaQyBAP+9O6qlv5pea3U8gYx1FnQ6pRrubZcwUaum3tPCrH
+	C90ishhVue3gntAYatqnDb83KQgqSzigYopAEhY=
+X-Google-Smtp-Source: AGHT+IHh/1wwPrkBE5tRlQhDTSHXcqJ71kW307h+QJbF0bmMxsCiJ7umyPGEEJzsfhPmdwuJd+L4lA==
+X-Received: by 2002:adf:e490:0:b0:319:735c:73e1 with SMTP id i16-20020adfe490000000b00319735c73e1mr4959090wrm.4.1695306820635;
+        Thu, 21 Sep 2023 07:33:40 -0700 (PDT)
+Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
+        by smtp.gmail.com with ESMTPSA id e24-20020a5d5958000000b00317ab75748bsm1916735wri.49.2023.09.21.07.33.39
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 21 Sep 2023 07:33:40 -0700 (PDT)
+From: Puranjay Mohan <puranjay12@gmail.com>
+To: Xu Kuohai <xukuohai@huaweicloud.com>, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+ song@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com,
+ bpf@vger.kernel.org, kpsingh@kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v5 1/3] arm64: patching: Add aarch64_insn_copy()
+In-Reply-To: <9084901f-730c-cf33-9337-f18a3c17283f@huaweicloud.com>
+References: <20230908144320.2474-1-puranjay12@gmail.com>
+ <20230908144320.2474-2-puranjay12@gmail.com>
+ <9084901f-730c-cf33-9337-f18a3c17283f@huaweicloud.com>
+Date: Thu, 21 Sep 2023 14:33:34 +0000
+Message-ID: <mb61pil83a94x.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v3 2/5] security: Count the LSMs enabled at compile time
-Content-Language: en-US
-To: KP Singh <kpsingh@kernel.org>, linux-security-module@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc: paul@paul-moore.com, keescook@chromium.org, casey@schaufler-ca.com,
-        song@kernel.org, daniel@iogearbox.net, ast@kernel.org,
-        Kui-Feng Lee <sinquersw@gmail.com>
-References: <20230918212459.1937798-1-kpsingh@kernel.org>
- <20230918212459.1937798-3-kpsingh@kernel.org>
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <20230918212459.1937798-3-kpsingh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+	FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 2023/09/19 6:24, KP Singh wrote:
-> These macros are a clever trick to determine a count of the number of
-> LSMs that are enabled in the config to ascertain the maximum number of
-> static calls that need to be configured per LSM hook.
+Xu Kuohai <xukuohai@huaweicloud.com> writes:
 
-As a LKM-based LSM user, indirect function calls using a linked list have
-an advantage which this series kills. There always is a situation where a
-LSM cannot be built into vmlinux (and hence has to be loaded as a LKM-based
-LSM) due to distributor's support policy. Therefore, honestly speaking,
-I don't want LSM infrastructure to define the maximum number of "slots" or
-"static calls"...
+> On 9/8/2023 10:43 PM, Puranjay Mohan wrote:
+>> This will be used by BPF JIT compiler to dump JITed binary to a RX huge
+>> page, and thus allow multiple BPF programs sharing the a huge (2MB)
+>> page.
+>> 
+>> The bpf_prog_pack allocator that implements the above feature allocates
+>> a RX/RW buffer pair. The JITed code is written to the RW buffer and then
+>> this function will be used to copy the code from RW to RX buffer.
+>> 
+>> Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+>> Acked-by: Song Liu <song@kernel.org>
+>> ---
+>>   arch/arm64/include/asm/patching.h |  1 +
+>>   arch/arm64/kernel/patching.c      | 41 +++++++++++++++++++++++++++++++
+>>   2 files changed, 42 insertions(+)
+>> 
+>> diff --git a/arch/arm64/include/asm/patching.h b/arch/arm64/include/asm/patching.h
+>> index 68908b82b168..f78a0409cbdb 100644
+>> --- a/arch/arm64/include/asm/patching.h
+>> +++ b/arch/arm64/include/asm/patching.h
+>> @@ -8,6 +8,7 @@ int aarch64_insn_read(void *addr, u32 *insnp);
+>>   int aarch64_insn_write(void *addr, u32 insn);
+>>   
+>>   int aarch64_insn_write_literal_u64(void *addr, u64 val);
+>> +void *aarch64_insn_copy(void *dst, const void *src, size_t len);
+>>   
+>>   int aarch64_insn_patch_text_nosync(void *addr, u32 insn);
+>>   int aarch64_insn_patch_text(void *addrs[], u32 insns[], int cnt);
+>> diff --git a/arch/arm64/kernel/patching.c b/arch/arm64/kernel/patching.c
+>> index b4835f6d594b..243d6ae8d2d8 100644
+>> --- a/arch/arm64/kernel/patching.c
+>> +++ b/arch/arm64/kernel/patching.c
+>> @@ -105,6 +105,47 @@ noinstr int aarch64_insn_write_literal_u64(void *addr, u64 val)
+>>   	return ret;
+>>   }
+>>   
+>> +/**
+>> + * aarch64_insn_copy - Copy instructions into (an unused part of) RX memory
+>> + * @dst: address to modify
+>> + * @src: source of the copy
+>> + * @len: length to copy
+>> + *
+>> + * Useful for JITs to dump new code blocks into unused regions of RX memory.
+>> + */
+>> +noinstr void *aarch64_insn_copy(void *dst, const void *src, size_t len)
+>> +{
+>> +	unsigned long flags;
+>> +	size_t patched = 0;
+>> +	size_t size;
+>> +	void *waddr;
+>> +	void *ptr;
+>> +	int ret;
+>> +
+>
+> check whether the input address and length are aligned to instruction size?
 
-> 
-> Without this one would need to generate static calls for (number of
-> possible LSMs * number of LSM hooks) which ends up being quite wasteful
-> especially when some LSMs are not compiled into the kernel.
+Will add a check that dst is aligned to instruction size and len is a
+multiple of instruction size.
 
-I can't interpret "number of possible LSMs * number of LSM hooks" part.
-Is this tokenized as "number of possible LSMs" (an integer) * (multipled by)
-"number of LSM hooks" (an integer) ? But the next patch includes
+>
+>> +	raw_spin_lock_irqsave(&patch_lock, flags);
+>> +
+>> +	while (patched < len) {
+>> +		ptr = dst + patched;
+>> +		size = min_t(size_t, PAGE_SIZE - offset_in_page(ptr),
+>> +			     len - patched);
+>> +
+>> +		waddr = patch_map(ptr, FIX_TEXT_POKE0);
+>> +		ret = copy_to_kernel_nofault(waddr, src + patched, size);
+>> +		patch_unmap(FIX_TEXT_POKE0);
+>> +
+>> +		if (ret < 0) {
+>> +			raw_spin_unlock_irqrestore(&patch_lock, flags);
+>> +			return NULL;
+>> +		}
+>> +		patched += size;
+>> +	}
+>> +	raw_spin_unlock_irqrestore(&patch_lock, flags);
+>> +
+>> +	caches_clean_inval_pou((uintptr_t)dst, (uintptr_t)dst + len);
+>> +
+>
+> seems flush_icache_range() or something like should be called here to
+> ensure the other CPUs' pipelines are cleared, otherwise the old instructions
+> at the dst address might be executed on other CPUs after the copy is complete,
+> which is not expected.
 
-  struct lsm_static_calls_table {
-  #define LSM_HOOK(RET, DEFAULT, NAME, ...) \
-  		struct lsm_static_call NAME[MAX_LSM_COUNT];
-  	#include <linux/lsm_hook_defs.h>
-  	#undef LSM_HOOK
-  } __randomize_layout;
+Sure, I will use flush_icache_range() in place of
+caches_clean_inval_pou() in the next version 
 
-which seems to me that lsm_static_calls_table will get "number of possible
-LSMs" static calls for each LSM hook defined in linux/lsm_hook_defs.h .
-How did this patch help reducing static calls? What does "possible LSMs" mean?
-Should "number of possible LSMs" be replaced with "number of built-in LSMs" ?
-
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org
-
-Trailing ">" is missing.
-
-> +/*
-> + * Macros to count the number of LSMs enabled in the kernel at compile time.
-> + */
-> +#define MAX_LSM_COUNT			\
-> +	___COUNT_COMMAS(		\
-> +		CAPABILITIES_ENABLED	\
-> +		SELINUX_ENABLED		\
-> +		SMACK_ENABLED		\
-> +		APPARMOR_ENABLED	\
-> +		TOMOYO_ENABLED		\
-> +		YAMA_ENABLED		\
-> +		LOADPIN_ENABLED		\
-> +		LOCKDOWN_ENABLED	\
-> +		BPF_LSM_ENABLED		\
-> +		LANDLOCK_ENABLED)
-
-Since IS_ENABLED(CONFIG_FOO) is evaluated to either 1 or 0, why can't you directly
-do like IS_ENABLED(CONFIG_FOO) + IS_ENABLED(CONFIG_BAR) + IS_ENABLED(CONFIG_BUZ) ?
-If you can't do direct "+", can't you still do indirect "+" like something below?
-
-#if IS_ENABLED(CONFIG_FOO)
-#define FOO_ENABLED 1
-#else
-#define FOO_ENABLED 0
-#endif
-
+>
+>> +	return dst;
+>> +}
+>> +
+>>   int __kprobes aarch64_insn_patch_text_nosync(void *addr, u32 insn)
+>>   {
+>>   	u32 *tp = addr;
