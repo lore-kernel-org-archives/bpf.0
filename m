@@ -1,346 +1,173 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 072D32032E
-	for <bpf@vger.kernel.org>; Thu, 21 Sep 2023 17:28:28 +0000 (UTC)
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9800557B06;
-	Thu, 21 Sep 2023 10:27:59 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-31dcf18f9e2so1218974f8f.0;
-        Thu, 21 Sep 2023 10:27:59 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC94517744
+	for <bpf@vger.kernel.org>; Thu, 21 Sep 2023 17:31:29 +0000 (UTC)
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3916530ED
+	for <bpf@vger.kernel.org>; Thu, 21 Sep 2023 10:28:28 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-99c1c66876aso148534866b.2
+        for <bpf@vger.kernel.org>; Thu, 21 Sep 2023 10:28:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695317275; x=1695922075; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:to:from
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aLOUgBOKWq6NxdLoayq1kH+OHtuiezuR3fsDyRpcAkg=;
-        b=BQATa9o9w8G1HdgATZ39j0QSA7ONtwIK7+txsC1lXDeaCsXBSDjcUwa4Vnu/9WZp9r
-         K5zBz3IBjTz24RImvghtJtLWDeJwiiNi9mjhh9DbG3x2ErmPgWcZGLee00y8YFOrw5RW
-         j4q22WPwuBSi+LtX0QTuhsQnJl1w7IGbc63xmm8XeNg8YxHq/c1SjE+c3+CDNwpNJE0Q
-         lKanOhOm9dSLRezciqCiz8bkgbaX0XanpzcLY4gVlDXHm++MJ1J5o9FqnbhgMQ8Woj1S
-         aY37FXZXcGTUZFCt2AZSNytMqDcWI7pH3WUAFEuHraqsd6okKZYL/iWoXgK7HvnOgvUT
-         4PlA==
+        d=gmail.com; s=20230601; t=1695317306; x=1695922106; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hrGSVM+r8onQIbS/fvQg7ZdNcdy6hV98KwyB8HQsmt0=;
+        b=DAQPE7+zGDHHt3qY1KFeLykNgXybsJp675EnNBPGIKF80CNCpmsqM+H6esfABtfcfC
+         xjpHjeuu7/Fq9wel0EVCQ4T4QDYQUXxQBXuHBWiSDT1+fgMRFozSP/apTvitTQdKswqV
+         DouRzQBx2bLdd7vZ7a00B8IjjQndg0W1Wdhx1SoVXYPi1Pk13xxNyc9cJH/7ay83NfWX
+         CF0DxTHcL0ZI7n6AnNsjz3dwOAdsjGgLz+zUNcpIqxRu1koWI+bc1drFDjNJIOt6fVPn
+         wy+/yZaWXC4YpHZKh+eaYAWDasrsMTXnwd/fVHrk598b8iFE7J8I8CRC6B5Se80p+tQm
+         XeFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695317275; x=1695922075;
-        h=mime-version:message-id:date:references:in-reply-to:subject:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aLOUgBOKWq6NxdLoayq1kH+OHtuiezuR3fsDyRpcAkg=;
-        b=iEzfHCZYZj9OeaPi1P+Z3JvJc4b8YVZkQnANeOv263SgppB4GRFmzE9jQBONPW2Vzd
-         3G1qGL8L5JEB7TAfu3deOmiohYpqxIq6zmvdHmHuouiudcCaIejOdbSVneOp7ChUAu/l
-         vJ60nK5OF+f7eOcQBVK2yBg5DALGzhQT2Rj/d+qLrIsKlQ6sqNo4+fx5meElXDWNkR6n
-         tiAL3smYo7loFpEszJSP5FpbKFl4HJtNSYL2E+pgRcKkwcZbF2NV0EOlZuLa+Oayb0Ow
-         u17yW49CnAzS5t4bhYByLDgEm3D3GLJIHUWQYCztz6n0cYqTvNKIT0FIxlcc6MUSmErD
-         jSXA==
-X-Gm-Message-State: AOJu0YzNJDvGK4zVUIrdh8IALd2FwVesiX2JmNvoru5sDixmzas01zEC
-	t32PWV9krE0BvHv3EICOwBUPQwPkgKzPVdS8xIE=
-X-Google-Smtp-Source: AGHT+IEUpN0KuvGnoDiMlnRabWMiMnNcX5ax9rogd8GDac7s6BmcAIsrNfcqrWw+ZP+e60CCtjEJxQ==
-X-Received: by 2002:a5d:58d6:0:b0:320:4cf:5b50 with SMTP id o22-20020a5d58d6000000b0032004cf5b50mr5202131wrf.5.1695302221075;
-        Thu, 21 Sep 2023 06:17:01 -0700 (PDT)
-Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
-        by smtp.gmail.com with ESMTPSA id w12-20020a5d608c000000b003179d5aee67sm1733019wrt.94.2023.09.21.06.16.59
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 21 Sep 2023 06:16:59 -0700 (PDT)
-From: Puranjay Mohan <puranjay12@gmail.com>
-To: Xu Kuohai <xukuohai@huaweicloud.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, Zi Shen Lim <zlim.lnx@gmail.com>, Catalin Marinas
- <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/1] bpf, arm64: support exceptions
-In-Reply-To: <041d4f6b-1350-105e-6ab0-73980aba26ea@huaweicloud.com>
-References: <20230917000045.56377-1-puranjay12@gmail.com>
- <20230917000045.56377-2-puranjay12@gmail.com>
- <041d4f6b-1350-105e-6ab0-73980aba26ea@huaweicloud.com>
-Date: Thu, 21 Sep 2023 13:16:56 +0000
-Message-ID: <mb61pil83k6nr.fsf@gmail.com>
+        d=1e100.net; s=20230601; t=1695317306; x=1695922106;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hrGSVM+r8onQIbS/fvQg7ZdNcdy6hV98KwyB8HQsmt0=;
+        b=RkIRIBQRA1TZWTbt8YH4PRlC4sgHAAQiEddESK4TnqoX+9jrEue1MfT1PqLgQ9KWn7
+         1z7x4MWGrSn5+ggKfUY7Ml7GtWtcweLSqUiMOYepqO9Th7xdwHeWYUrePrx8ycrbevNN
+         433QfYbRLsjCbeIqeRRawXGuSo+52ib4D/1eS/sJlvgrrxqFG9jxvVQ6gpUXuECyDHu3
+         cqqH9GDpZ6klhYThl/3jpF1gUswo6XYVEKq8vBT9AlxwchMN7Eg6uROvE1oBisldddM4
+         M9YZAhhJyfb+ufZo1WYi5MwMMS34Q4TNRAMrxPdEfhI6Xc7IKNrc9+RFwqPrQtS8QbbL
+         V9tw==
+X-Gm-Message-State: AOJu0YzHBoAkrsJbIHHI84T+GXuoMKKTcvmeQm2robzjczXQ4BotW2Xo
+	t+jonDPPcMrUXrM+gV2fJ2so+/rnuR7QFq8chJc2ANhBXu4G2A==
+X-Google-Smtp-Source: AGHT+IE0AP2GIy/nVTu1t8ljZ43I6QUbz1mUA3KpGT0ks5/myvz44f9Q+DPSjlMKVqTWmq/xwBnMW60hNMQBWeTpx10=
+X-Received: by 2002:adf:d0cc:0:b0:317:61af:d64a with SMTP id
+ z12-20020adfd0cc000000b0031761afd64amr4920408wrh.3.1695301004811; Thu, 21 Sep
+ 2023 05:56:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-	FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+References: <CA+vRuzPChFNXmouzGG+wsy=6eMcfr1mFG0F3g7rbg-sedGKW3w@mail.gmail.com>
+ <CAADnVQJpLAzmUfwvWBr8a_PWHYHxHw9vdAXnWB4R4PbVY4S4mw@mail.gmail.com>
+ <CAEf4Bzbubu7KjBv=98BZrVnTrcfPQrnsp-g1kOYKM=kUtiqEgw@mail.gmail.com>
+ <dff1cfec20d1711cb023be38dfe886bac8aac5f6.camel@gmail.com>
+ <CAP01T76duVGmnb+LQjhdKneVYs1q=ehU4yzTLmgZdG0r2ErOYQ@mail.gmail.com>
+ <a2995c1d7c01794ca9b652cdea7917cac5d98a16.camel@gmail.com>
+ <97a90da09404c65c8e810cf83c94ac703705dc0e.camel@gmail.com>
+ <CAEf4BzYg8T_Dek6T9HYjHZCuLTQT8ptAkQRxrsgaXg7-MZmHDA@mail.gmail.com>
+ <ee714151d7c840c82d79f9d12a0f51ef13b798e3.camel@gmail.com>
+ <CAADnVQJn35f0UvYJ9gyFT4BfViXn8T8rPCXRAC=m_Jx_CFjrtw@mail.gmail.com> <5649df64315467c67b969e145afda8bbf7e60445.camel@gmail.com>
+In-Reply-To: <5649df64315467c67b969e145afda8bbf7e60445.camel@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 21 Sep 2023 05:56:33 -0700
+Message-ID: <CAADnVQJO0aVJfV=8RDf5rdtjOCC-=57dmHF20fQYV9EiW2pJ2Q@mail.gmail.com>
+Subject: Re: [BUG] verifier escape with iteration helpers (bpf_loop, ...)
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Andrew Werner <awerner32@gmail.com>, 
+	bpf <bpf@vger.kernel.org>, Andrei Matei <andreimatei1@gmail.com>, 
+	Tamir Duberstein <tamird@gmail.com>, Joanne Koong <joannelkoong@gmail.com>, kernel-team@dataexmachina.dev, 
+	Song Liu <song@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Xu Kuohai <xukuohai@huaweicloud.com> writes:
-
-> On 9/17/2023 8:00 AM, Puranjay Mohan wrote:
->> Implement arch_bpf_stack_walk() for the ARM64 JIT. This will be used
->> by bpf_throw() to unwind till the program marked as exception boundary and
->> run the callback with the stack of the main program.
->> 
->> The prologue generation code has been modified to make the callback
->> program use the stack of the program marked as exception boundary where
->> callee-saved registers are already pushed.
->> 
->> As the bpf_throw function never returns, if it clobbers any callee-saved
->> registers, they would remain clobbered. So, the prologue of the
->> exception-boundary program is modified to push R23 and R24 as well,
->> which the callback will then recover in its epilogue.
->> 
->> The Procedure Call Standard for the Arm 64-bit Architecture[1] states
->> that registers r19 to r28 should be saved by the callee. BPF programs on
->> ARM64 already save all callee-saved registers except r23 and r24. This
->> patch adds an instruction in prologue of the  program to save these
->> two registers and another instruction in the epilogue to recover them.
->> 
->> These extra instructions are only added if bpf_throw() used. Otherwise
->> the emitted prologue/epilogue remains unchanged.
->> 
->> [1] https://github.com/ARM-software/abi-aa/blob/main/aapcs64/aapcs64.rst
->> 
->> Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
->> ---
->>   arch/arm64/net/bpf_jit_comp.c                | 98 ++++++++++++++++----
->>   tools/testing/selftests/bpf/DENYLIST.aarch64 |  1 -
->>   2 files changed, 79 insertions(+), 20 deletions(-)
->> 
->> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
->> index 7d4af64e3982..fcc55e558863 100644
->> --- a/arch/arm64/net/bpf_jit_comp.c
->> +++ b/arch/arm64/net/bpf_jit_comp.c
->> @@ -21,6 +21,7 @@
->>   #include <asm/insn.h>
->>   #include <asm/patching.h>
->>   #include <asm/set_memory.h>
->> +#include <asm/stacktrace.h>
->>   
->>   #include "bpf_jit.h"
->>   
->> @@ -285,7 +286,7 @@ static bool is_lsi_offset(int offset, int scale)
->>   /* Tail call offset to jump into */
->>   #define PROLOGUE_OFFSET (BTI_INSNS + 2 + PAC_INSNS + 8)
->>   
->> -static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
->> +static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf, bool is_exception_cb)
->>   {
->>   	const struct bpf_prog *prog = ctx->prog;
->>   	const bool is_main_prog = !bpf_is_subprog(prog);
->> @@ -333,19 +334,28 @@ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
->>   	emit(A64_MOV(1, A64_R(9), A64_LR), ctx);
->>   	emit(A64_NOP, ctx);
->>   
->> -	/* Sign lr */
->> -	if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL))
->> -		emit(A64_PACIASP, ctx);
->> -
->> -	/* Save FP and LR registers to stay align with ARM64 AAPCS */
->> -	emit(A64_PUSH(A64_FP, A64_LR, A64_SP), ctx);
->> -	emit(A64_MOV(1, A64_FP, A64_SP), ctx);
->> -
->> -	/* Save callee-saved registers */
->> -	emit(A64_PUSH(r6, r7, A64_SP), ctx);
->> -	emit(A64_PUSH(r8, r9, A64_SP), ctx);
->> -	emit(A64_PUSH(fp, tcc, A64_SP), ctx);
->> -	emit(A64_PUSH(fpb, A64_R(28), A64_SP), ctx);
->> +	if (!is_exception_cb) {
->> +		/* Sign lr */
->> +		if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL))
->> +			emit(A64_PACIASP, ctx);
->> +		/* Save FP and LR registers to stay align with ARM64 AAPCS */
->> +		emit(A64_PUSH(A64_FP, A64_LR, A64_SP), ctx);
->> +		emit(A64_MOV(1, A64_FP, A64_SP), ctx);
->> +
->> +		/* Save callee-saved registers */
->> +		emit(A64_PUSH(r6, r7, A64_SP), ctx);
->> +		emit(A64_PUSH(r8, r9, A64_SP), ctx);
->> +		emit(A64_PUSH(fp, tcc, A64_SP), ctx);
->> +		emit(A64_PUSH(fpb, A64_R(28), A64_SP), ctx);
->> +	} else {
->> +		/* Exception callback receives FP of Main Program as third parameter */
->> +		emit(A64_MOV(1, A64_FP, A64_R(2)), ctx);
->> +		/*
->> +		 * Main Program already pushed the frame record and the callee-saved registers. The
->> +		 * exception callback will not push anything and re-use the main program's stack.
->> +		 */
->> +		emit(A64_SUB_I(1, A64_SP, A64_FP, 80), ctx); /* 10 registers are on the stack */
+On Thu, Sep 21, 2023 at 4:03=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com=
+> wrote:
 >
-> To ensure th calculated A6_SP is always correct, add an assertion
-> to ensure the distance between A64_FP and A64_SP is 80 after all
-> callee-registers are pushed to the stack?
+> I repeat the complete example with added instruction numbers in the
+> end of the email. As of now verifier takes the following paths:
 >
-
-I agree that this should be done. Can you give an example how this
-should be implemented? 
-
->> +	}
->>   
->>   	/* Set up BPF prog stack base register */
->>   	emit(A64_MOV(1, fp, A64_SP), ctx);
->> @@ -365,6 +375,13 @@ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
->>   		emit_bti(A64_BTI_J, ctx);
->>   	}
->>   
->> +	/*
->> +	 * Program acting as exception boundary should save all ARM64 Callee-saved registers as the
->> +	 * exception callback needs to recover all ARM64 Callee-saved registers in its epilogue.
->> +	 */
->> +	if (prog->aux->exception_boundary)
->> +		emit(A64_PUSH(A64_R(23), A64_R(24), A64_SP), ctx);
+>   First:
+>     // First path is for "drained" iterator and is not very interesting.
+>     0: (b7) r8 =3D 0                        ; R8_w=3D0
+>        ...
+>     2: (b7) r7 =3D -16                      ; R7_w=3D-16
+>        ...
+>     4: (bf) r6 =3D r0                       ; R0_w=3Dscalar(id=3D1) R6_w=
+=3Dscalar(id=3D1)
+>        ...
+>     12: (85) call bpf_iter_num_next#63182
+>        ; R0_w=3D0 fp-8=3Diter_num(ref_id=3D2,state=3Ddrained,depth=3D0) r=
+efs=3D2
+>     13: (15) if r0 =3D=3D 0x0 goto pc+8
+>     22: (bf) r1 =3D r10
+>        ...
+>     26: (95) exit
 >
-> Blindly storing x23/x24 to BPF_FP -8/16 is incorrect, as the stack
-> space below BPF_FP might be written with other values by the bpf
-> prog.
->
+>   Second:
+>     // Note: at 13 a first checkpoint with "active" iterator state is rea=
+ched
+>     //       this checkpoint is created for R7=3D-16 w/o read mark.
 
-Thanks for pointing this out. I will set fp = A64_SP - 16 so to allocate
-space for saving x23/x24. And I will take care while poping back in the epilogue.
+Thanks for detailed example.
+The analysis in my previous email was based on C code
+where I assumed the asm code generated by compiler for
+if (r6 !=3D 42)
+would be
+if (unlikely(r6 !=3D 42))
+and fallthrough insn after 'if' insn would be 'r0 =3D r10'.
+Now I see that asm matches if (likely(r6 !=3D 42)).
+I suspect if you use that in C code you wouldn't need to
+write the test in asm.
+Just a thought.
 
->> +
->>   	emit(A64_SUB_I(1, fpb, fp, ctx->fpb_offset), ctx);
->>   
->>   	/* Stack must be multiples of 16B */
->> @@ -653,7 +670,7 @@ static void build_plt(struct jit_ctx *ctx)
->>   		plt->target = (u64)&dummy_tramp;
->>   }
->>   
->> -static void build_epilogue(struct jit_ctx *ctx)
->> +static void build_epilogue(struct jit_ctx *ctx, bool is_exception_cb)
->>   {
->>   	const u8 r0 = bpf2a64[BPF_REG_0];
->>   	const u8 r6 = bpf2a64[BPF_REG_6];
->> @@ -666,6 +683,14 @@ static void build_epilogue(struct jit_ctx *ctx)
->>   	/* We're done with BPF stack */
->>   	emit(A64_ADD_I(1, A64_SP, A64_SP, ctx->stack_size), ctx);
->>   
->> +	/*
->> +	 * Program acting as exception boundary pushes R23 and R24 in addition to BPF callee-saved
->> +	 * registers. Exception callback uses the boundary program's stack frame, so recover these
->
-> Keep the line width within 80 characters?
+>     from 12 to 13: R0_w=3Drdonly_mem(id=3D3,ref_obj_id=3D2,off=3D0,imm=3D=
+0) R6=3Dscalar(id=3D1)
+>                    R7=3D-16 R8=3D0 R10=3Dfp0 fp-8=3Diter_num(ref_id=3D2,s=
+tate=3Dactive,depth=3D1)
+>                    fp-16=3D00000000 refs=3D2
+>     13: (15) if r0 =3D=3D 0x0 goto pc+8       ; R0_w=3Drdonly_mem(id=3D3,=
+ref_obj_id=3D2,off=3D0,imm=3D0) refs=3D2
+>     14: (07) r6 +=3D 1                      ; R6=3Dscalar() refs=3D2
+>     15: (55) if r6 !=3D 0x2a goto pc+2      ; R6=3D42 refs=3D2
+>     16: (b7) r7 =3D -32                     ; R7_w=3D-32 refs=3D2
+>     17: (05) goto pc-8
+>     10: (bf) r1 =3D r10                     ; R1_w=3Dfp0 R10=3Dfp0 refs=
+=3D2
+>     11: (07) r1 +=3D -8
+>       is_iter_next (12):
+>         old:
+>            R0=3Dscalar() R1_rw=3Dfp-8 R6_r=3Dscalar(id=3D1) R7=3D-16 R8_r=
+=3D0 R10=3Dfp0
+>            fp-8_r=3Diter_num(ref_id=3D2,state=3Dactive,depth=3D0) fp-16=
+=3D00000000 refs=3D2
+>         cur:
+>            R0=3Drdonly_mem(id=3D3,ref_obj_id=3D2,off=3D0,imm=3D0) R1_w=3D=
+fp-8 R6=3D42 R7_w=3D-32
+>            R8=3D0 R10=3Dfp0 fp-8=3Diter_num(ref_id=3D2,state=3Dactive,dep=
+th=3D1) fp-16=3D00000000 refs=3D2
+>       > hit
+>     12: safe
+>     // At this point R7=3D-32 but it still lacks read or precision marks,
+>     // thus states_equal() called from is_state_visited() for is_iter_nex=
+t_insn()
+>     // branch returns true. (I added some logging to make it clear above)
 
-bdc48fa11e46 ("checkpatch/coding-style: deprecate 80-column warning")
-removed the warning so I started using 100 character lines.
+Maybe instead of brute forcing all regs to live and precise
+we can add iter.depth check to stacksafe() such
+that depth=3D0 !=3D depth=3D1, but
+depth=3D1 =3D=3D depthN ?
+(and a tweak to iter_active_depths_differ() as well)
 
->
->> +	 * extra registers in the above two cases.
->> +	 */
->> +	if (ctx->prog->aux->exception_boundary || is_exception_cb)
->> +		emit(A64_POP(A64_R(23), A64_R(24), A64_SP), ctx);
->> +
->>   	/* Restore x27 and x28 */
->>   	emit(A64_POP(fpb, A64_R(28), A64_SP), ctx);
->>   	/* Restore fs (x25) and x26 */
->> @@ -1575,7 +1600,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
->>   	 * BPF line info needs ctx->offset[i] to be the offset of
->>   	 * instruction[i] in jited image, so build prologue first.
->>   	 */
->> -	if (build_prologue(&ctx, was_classic)) {
->> +	if (build_prologue(&ctx, was_classic, prog->aux->exception_cb)) {
->>   		prog = orig_prog;
->>   		goto out_off;
->>   	}
->> @@ -1586,7 +1611,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
->>   	}
->>   
->>   	ctx.epilogue_offset = ctx.idx;
->> -	build_epilogue(&ctx);
->> +	build_epilogue(&ctx, prog->aux->exception_cb);
->>   	build_plt(&ctx);
->>   
->>   	extable_align = __alignof__(struct exception_table_entry);
->> @@ -1614,7 +1639,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
->>   	ctx.idx = 0;
->>   	ctx.exentry_idx = 0;
->>   
->> -	build_prologue(&ctx, was_classic);
->> +	build_prologue(&ctx, was_classic, prog->aux->exception_cb);
->>   
->>   	if (build_body(&ctx, extra_pass)) {
->>   		bpf_jit_binary_free(header);
->> @@ -1622,7 +1647,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
->>   		goto out_off;
->>   	}
->>   
->> -	build_epilogue(&ctx);
->> +	build_epilogue(&ctx, prog->aux->exception_cb);
->>   	build_plt(&ctx);
->>   
->>   	/* 3. Extra pass to validate JITed code. */
->> @@ -2286,3 +2311,38 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
->>   
->>   	return ret;
->>   }
->> +
->> +bool bpf_jit_supports_exceptions(void)
->> +{
->> +	/* We unwind through both kernel frames (starting from within bpf_throw call) and
->> +	 * BPF frames. Therefore we require FP unwinder to be enabled to walk kernel frames and
->> +	 * reach BPF frames in the stack trace.
->> +	 * ARM64 kernel is aways compiled with CONFIG_FRAME_POINTER=y
->> +	 */
->> +	return true;
->> +}
->> +
->> +void arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp, u64 bp), void *cookie)
->> +{
->> +	struct stack_info stacks[] = {
->> +		stackinfo_get_task(current),
->> +	};
->> +
->
-> Seems there is no need to define "stacks" as an array
+Then in the above r7 will be 'equivalent', but fp-8 will differ,
+then the state with r7=3D-32 won't be pruned
+and it will address this particular example ? or not ?
 
-Sure, will change in next version.
+Even if it does the gut feel that it won't be enough though,
+but I wanted to mention this to brainstorm, since below:
 
->
->> +	struct unwind_state state = {
->> +		.stacks = stacks,
->> +		.nr_stacks = ARRAY_SIZE(stacks),
->> +	};
->> +	unwind_init_common(&state, current);
->> +	state.fp = (unsigned long)__builtin_frame_address(1);
->> +	state.pc = (unsigned long)__builtin_return_address(0);
->> +
->> +	if (unwind_next_frame_record(&state))
->> +		return;
->> +	while (1) {
->> +		/* We only use the fp in the exception callback. Pass 0 for sp as it's unavailable*/
->> +		if (!consume_fn(cookie, (u64)state.pc, 0, (u64)state.fp))
->> +			break;
->> +		if (unwind_next_frame_record(&state))
->
-> When PTR_AUTH is implemented, lr is encoded before being pushed to
-> the stack, but unwind_next_frame_record() does not decode state.pc
-> when fetching it from the stack.
+> The "fix" that I have locally is not really a fix. It forces "exact"
+> states comparisons for is_iter_next_insn() case:
+> 1. liveness marks are ignored;
+> 2. precision marks are ignored;
+> 3. scalars are compared using regs_exact().
 
-Thanks for pointing this out. I will fix this in the next version.
+is too drastic.
 
->> +			break;
->> +	}
->
-> And it's better to simplify the if-while(1)-if to:
->
-> while (!unwind_next_frame_record(&state)) {
->      ...
-> }
+> It breaks a number a number of tests, because iterator "entry" states
+> are no longer equal and upper iteration bound is not tracked:
+> - iters/simplest_loop
 
-Sure,
-Will use this method in the next version.
+that's a clear sign that forcing 1,2,3 is a dead end.
 
->
->> +}
->> diff --git a/tools/testing/selftests/bpf/DENYLIST.aarch64 b/tools/testing/selftests/bpf/DENYLIST.aarch64
->> index f5065576cae9..7f768d335698 100644
->> --- a/tools/testing/selftests/bpf/DENYLIST.aarch64
->> +++ b/tools/testing/selftests/bpf/DENYLIST.aarch64
->> @@ -1,6 +1,5 @@
->>   bpf_cookie/multi_kprobe_attach_api               # kprobe_multi_link_api_subtest:FAIL:fentry_raw_skel_load unexpected error: -3
->>   bpf_cookie/multi_kprobe_link_api                 # kprobe_multi_link_api_subtest:FAIL:fentry_raw_skel_load unexpected error: -3
->> -exceptions					 # JIT does not support calling kfunc bpf_throw: -524
->>   fexit_sleep                                      # The test never returns. The remaining tests cannot start.
->>   kprobe_multi_bench_attach                        # bpf_program__attach_kprobe_multi_opts unexpected error: -95
->>   kprobe_multi_test/attach_api_addrs               # bpf_program__attach_kprobe_multi_opts unexpected error: -95
-
-
-Thanks,
-Puranjay
+Another idea is to add another state.branches specifically for loop body
+and keep iterating the body until branches=3D=3D0.
+Same concept as the verifier uses for the whole prog, but localized
+to a loop to make sure we don't declare 'equivalent' state
+until all paths in the loop body are explored.
