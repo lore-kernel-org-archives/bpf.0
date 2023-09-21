@@ -1,143 +1,159 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA33A42BE2
-	for <bpf@vger.kernel.org>; Thu, 21 Sep 2023 18:10:51 +0000 (UTC)
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5457CB05A7
-	for <bpf@vger.kernel.org>; Thu, 21 Sep 2023 11:08:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1695319716;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=R9gyNPaV4zuqNuZuo/vx9UBWKean5gdHBlkkwmtG0SQ=;
-	b=XOT1ZkquHLDF5KYxecldIkAlvz1YAy9XUOfXoxfhBbLGEdCHnCqL6d0ANRy24G6Iz695TE
-	y2EdXZsBVzp4Y5PQLRAB8P6iZyEcBQ1dsT9h2GrpBXxjgS1UomGJgdYDVxT+2ErLeoQuuV
-	b5CT83oWz75Gxo23TbMyR8WycKrz0jU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-515-0ruNuvMkOS6GtcLt8Ah2FA-1; Thu, 21 Sep 2023 06:41:22 -0400
-X-MC-Unique: 0ruNuvMkOS6GtcLt8Ah2FA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BBA57101A529;
-	Thu, 21 Sep 2023 10:41:21 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.216])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 5A0D751E3;
-	Thu, 21 Sep 2023 10:41:20 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-	Kingdom.
-	Registered in England and Wales under Company Registration No. 3798903
-From: David Howells <dhowells@redhat.com>
-To: netdev@vger.kernel.org
-cc: dhowells@redhat.com,
-    syzbot+62cbf263225ae13ff153@syzkaller.appspotmail.com,
-    Eric Dumazet <edumazet@google.com>,
-    Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-    "David S. Miller" <davem@davemloft.net>,
-    David Ahern <dsahern@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-    Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org,
-    syzkaller-bugs@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: [PATCH net v3] ipv4, ipv6: Fix handling of transhdrlen in __ip{,6}_append_data()
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BBAF43AAE
+	for <bpf@vger.kernel.org>; Thu, 21 Sep 2023 18:11:00 +0000 (UTC)
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90079A70C8
+	for <bpf@vger.kernel.org>; Thu, 21 Sep 2023 11:00:36 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2c008d8fd07so21440381fa.1
+        for <bpf@vger.kernel.org>; Thu, 21 Sep 2023 11:00:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695319235; x=1695924035; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xsoT1u7/u6X65xdCoAMe/73F6FG9WCFKQ1c7QYZKvWI=;
+        b=PTr4kYO/FXscwqFs1NilO9PdxcqxprdRc9fYFy4eMRBJNRf71hUsoplC9dDtHmRoU4
+         Gfk63ZtM2TY6c0OlZXS2d45S/ImAlwLCCVo83W9Hoht1+4qBlkn7vs2yPdfkQDjnXsGe
+         dzlNi9Jahk9Ey3+mhqnvJR290xyBumNpMbeEl7uNWYeaQgUDV8Fe1RflAp7pdgM3hQl+
+         K2uiMPSKkn9XsJMzhyqS1YWlYJewEuH82nb3MJaBepoQBDTsvgXC3jGI9hEVwz9pj6tU
+         WGbUYZyBeLLK13t78tlYTi/t8HYO/FbCpBOI1PEa1KpvFUjV9eLY36AZB4P26U2DxB8O
+         Vifg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695319235; x=1695924035;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xsoT1u7/u6X65xdCoAMe/73F6FG9WCFKQ1c7QYZKvWI=;
+        b=foeobUX3KZDVAfOLwuUjqXL+AJ7A4zFoIIWmHJ0CRkoTGkH6R8QLH/SFJs6T28uLv+
+         jziK/HPpGlLFIQpT3ZeAdbL586MOeboPOOhhbnlYhyLV9zrUfg3G6/0xExWgU4i84smr
+         FW/9AAJqEqvWvS9w/UHWzNUApVOzyHtUPzA6JyYVp2AR/NuwJc6LDAkTQbNwTqMAQ2a4
+         QhC+twKuJcD22HyXFTubHBPXdDUp9yl7BxWZeIZY8DDPgGCfxr53xRmYbhVbSRrsRDYz
+         lqZKl8GTTqyUwzOP/tv8gjZBuNjd/hoc/UlcRJQW81GnOBSH1qGZ2DbwKSHgb/BEFV76
+         4beg==
+X-Gm-Message-State: AOJu0YxdkKlWjbKKMjKP1mdarg4/8a/yvreWmUuI0n8zcHA+05Xfj/i/
+	QlOwkttfQJVEbdgkzWFq6ZkPKQy0FAHCOuWpJJs/llWeUM7GsA==
+X-Google-Smtp-Source: AGHT+IH7KvCk/GFm88oWBeAmU5yd+d0enN+IP6akjsZLA/qsKFjVnz5s4wT0iDh5yW57lqQqRTI7T3yAbrsLm7oUU34=
+X-Received: by 2002:adf:ea0e:0:b0:31f:e756:cbf9 with SMTP id
+ q14-20020adfea0e000000b0031fe756cbf9mr4815022wrm.22.1695287661534; Thu, 21
+ Sep 2023 02:14:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <730407.1695292879.1@warthog.procyon.org.uk>
+References: <CA+vRuzPChFNXmouzGG+wsy=6eMcfr1mFG0F3g7rbg-sedGKW3w@mail.gmail.com>
+ <CAADnVQJpLAzmUfwvWBr8a_PWHYHxHw9vdAXnWB4R4PbVY4S4mw@mail.gmail.com>
+ <CAEf4Bzbubu7KjBv=98BZrVnTrcfPQrnsp-g1kOYKM=kUtiqEgw@mail.gmail.com>
+ <dff1cfec20d1711cb023be38dfe886bac8aac5f6.camel@gmail.com>
+ <CAP01T76duVGmnb+LQjhdKneVYs1q=ehU4yzTLmgZdG0r2ErOYQ@mail.gmail.com>
+ <a2995c1d7c01794ca9b652cdea7917cac5d98a16.camel@gmail.com>
+ <97a90da09404c65c8e810cf83c94ac703705dc0e.camel@gmail.com>
+ <CAEf4BzYg8T_Dek6T9HYjHZCuLTQT8ptAkQRxrsgaXg7-MZmHDA@mail.gmail.com> <ee714151d7c840c82d79f9d12a0f51ef13b798e3.camel@gmail.com>
+In-Reply-To: <ee714151d7c840c82d79f9d12a0f51ef13b798e3.camel@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 21 Sep 2023 02:14:09 -0700
+Message-ID: <CAADnVQJn35f0UvYJ9gyFT4BfViXn8T8rPCXRAC=m_Jx_CFjrtw@mail.gmail.com>
+Subject: Re: [BUG] verifier escape with iteration helpers (bpf_loop, ...)
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Andrew Werner <awerner32@gmail.com>, 
+	bpf <bpf@vger.kernel.org>, Andrei Matei <andreimatei1@gmail.com>, 
+	Tamir Duberstein <tamird@gmail.com>, Joanne Koong <joannelkoong@gmail.com>, kernel-team@dataexmachina.dev, 
+	Song Liu <song@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 21 Sep 2023 11:41:19 +0100
-Message-ID: <730408.1695292879@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-	SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-	version=3.4.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-    =
+On Tue, Sep 19, 2023 at 5:19=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
+> wrote:
+>
+> > >
+> > > Note that R7=3Dfp-16 in old state vs R7_w=3D57005 in cur state.
+> > > The registers are considered equal because R7 does not have a read ma=
+rk.
+> > > However read marks are not yet finalized for old state because
+> > > sl->state.branches !=3D 0.
 
-Including the transhdrlen in length is a problem when the packet is
-partially filled (e.g. something like send(MSG_MORE) happened previously)
-when appending to an IPv4 or IPv6 packet as we don't want to repeat the
-transport header or account for it twice.  This can happen under some
-circumstances, such as splicing into an L2TP socket.
+By "liveness marks are not finalized" you mean that
+regs don't have LIVE_DONE?
+That shouldn't matter to state comparison.
+It only needs to see LIVE_READ.
+LIVE_DONE is a sanity check for liveness algorithm only.
+It doesn't affect correctness.
 
-The symptom observed is a warning in __ip6_append_data():
+> > > (Note: precision marks are not finalized as
+> > > well, which should be a problem, but this requires another example).
+> >
+> > I originally convinced myself that non-finalized precision marking is
+> > fine, see the comment next to process_iter_next_call() for reasoning.
+> > If you can have a dedicated example for precision that would be great.
+> >
+> > As for read marks... Yep, that's a bummer. That r7 is not used after
+> > the loop, so is not marked as read, and it's basically ignored for
+> > loop invariant checking, which is definitely not what was intended.
+>
+> Liveness is a precondition for all subsequent checks, so example
+> involving precision would also involve liveness. Here is a combined
+> example:
+>
+>     r8 =3D 0
+>     fp[-16] =3D 0
+>     r7 =3D -16
+>     r6 =3D bpf_get_current_pid_tgid()
+>     bpf_iter_num_new(&fp[-8], 0, 10)
+>     while (bpf_iter_num_next(&fp[-8])) {
+>       r6++
+>       if (r6 !=3D 42) {
+>         r7 =3D -32
+>         continue;
+>       }
+>       r0 =3D r10
+>       r0 +=3D r7
+>       r8 =3D *(u64 *)(r0 + 0)
+>     }
+>     bpf_iter_num_destroy(&fp[-8])
+>     return r8
+>
+> (Complete source code is at the end of the email).
+>
+> The call to bpf_iter_num_next() is reachable with r7 values -16 and -32.
+> State with r7=3D-16 is visited first, at which point r7 has no read mark
+> and is not marked precise.
+> State with r7=3D-32 is visited second:
+> - states_equal() for is_iter_next_insn() should ignore absence of
+>   REG_LIVE_READ mark on r7, otherwise both states would be considered
+>   identical;
 
-    WARNING: CPU: 1 PID: 5042 at net/ipv6/ip6_output.c:1800 __ip6_append_d=
-ata.isra.0+0x1be8/0x47f0 net/ipv6/ip6_output.c:1800
+I think assuming live_read on all regs in regsafe() when
+cb or iter body is being processed will have big impact
+on processed insns.
+I suspect the underlying issue is different.
 
-that occurs when MSG_SPLICE_PAGES is used to append more data to an alread=
-y
-partially occupied skbuff.  The warning occurs when 'copy' is larger than
-the amount of data in the message iterator.  This is because the requested
-length includes the transport header length when it shouldn't.  This can b=
-e
-triggered by, for example:
+In the first pass of the body with r7=3D-16 the 'r0 +=3D r7'
+insn should have added the read mark to r7,
+so is_iter_next_insn after 2nd pass with r7=3D-32 should reach
+case SCALAR_VALUE in regsafe().
+There we need to do something with lack of precision in r7=3D-16,
+but assume that is fixed, the 3rd iter of the loop should continue
+and 'r0 +=3D r7' in the _3rd_ iter of the loop should propagate
+read mark all the way to r7=3D-32 reg.
+I mean the parentage chain between regs should link
+regs of iterations.
+I believe the process_iter_next_call() logic maintains
+correct parentage chain, since it's just a push_stack()
+and is_state_visited() should be connecting parents.
+So in case of iter body the issue with above loop is only
+in missing precision,
+but for your cb verification code I suspect the issue is due
+to lack of parentage chain and liveness is not propagated ?
 
-        sfd =3D socket(AF_INET6, SOCK_DGRAM, IPPROTO_L2TP);
-        bind(sfd, ...); // ::1
-        connect(sfd, ...); // ::1 port 7
-        send(sfd, buffer, 4100, MSG_MORE);
-        sendfile(sfd, dfd, NULL, 1024);
-
-Fix this by only adding transhdrlen into the length if the write queue is
-empty in l2tp_ip6_sendmsg(), analogously to how UDP does things.
-
-l2tp_ip_sendmsg() looks like it won't suffer from this problem as it build=
-s
-the UDP packet itself.
-
-Fixes: a32e0eec7042 ("l2tp: introduce L2TPv3 IP encapsulation support for =
-IPv6")
-Reported-by: syzbot+62cbf263225ae13ff153@syzkaller.appspotmail.com
-Link: https://lore.kernel.org/r/0000000000001c12b30605378ce8@google.com/
-Suggested-by: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Eric Dumazet <edumazet@google.com>
-cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-cc: "David S. Miller" <davem@davemloft.net>
-cc: David Ahern <dsahern@kernel.org>
-cc: Paolo Abeni <pabeni@redhat.com>
-cc: Jakub Kicinski <kuba@kernel.org>
-cc: netdev@vger.kernel.org
-cc: bpf@vger.kernel.org
-cc: syzkaller-bugs@googlegroups.com
----
- net/l2tp/l2tp_ip6.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/l2tp/l2tp_ip6.c b/net/l2tp/l2tp_ip6.c
-index ed8ebb6f5909..11f3d375cec0 100644
---- a/net/l2tp/l2tp_ip6.c
-+++ b/net/l2tp/l2tp_ip6.c
-@@ -507,7 +507,6 @@ static int l2tp_ip6_sendmsg(struct sock *sk, struct ms=
-ghdr *msg, size_t len)
- 	 */
- 	if (len > INT_MAX - transhdrlen)
- 		return -EMSGSIZE;
--	ulen =3D len + transhdrlen;
- =
-
- 	/* Mirror BSD error message compatibility */
- 	if (msg->msg_flags & MSG_OOB)
-@@ -628,6 +627,7 @@ static int l2tp_ip6_sendmsg(struct sock *sk, struct ms=
-ghdr *msg, size_t len)
- =
-
- back_from_confirm:
- 	lock_sock(sk);
-+	ulen =3D len + skb_queue_empty(&sk->sk_write_queue) ? transhdrlen : 0;
- 	err =3D ip6_append_data(sk, ip_generic_getfrag, msg,
- 			      ulen, transhdrlen, &ipc6,
- 			      &fl6, (struct rt6_info *)dst,
-
+I could be completely off the mark.
+The discussion is hard to follow.
+It's probably time to post raw patch and continue with code.
