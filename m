@@ -1,35 +1,35 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B7E33CD13;
-	Thu, 21 Sep 2023 17:22:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70E6E3F4B1;
+	Thu, 21 Sep 2023 17:22:41 +0000 (UTC)
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAC354925;
-	Thu, 21 Sep 2023 10:17:11 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B23551F54;
+	Thu, 21 Sep 2023 10:16:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695316633; x=1726852633;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=A586LM0+gOXd/iEXjaMd75qtDywyXfu3CO1tYPaBTEU=;
-  b=EGyrJUi6MWNaAgyLgzFST1Cw8KC9HLwVF/MDSOQ1DwRqEEtMoghOcJx8
-   aBSLporeERcX2a7FzdJNv6i9tkNUQSO0E43uKg3jFHgZyND+5xO86TPOm
-   aT6RPGdn+1zAL5D6cNzUGOM/rlNhomdtuuctBKMMVgqnhjxX3ckrayL5M
-   TBCZXG4XlGkF6RAFmRCrTC+TY1DPJLLikXSztng/pwbV92B+Fhp9YNVCs
-   gPEV7+1j3eckDTE9tEn5brf2J0EEKwUaSP5CTC5NkI85EbtH4Zj5viFZY
-   G2vXiikhUY65LItYksI0n8apto+zFcMOCBFdjegAez7VmEnDwXK9Olkn3
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="444608385"
+  t=1695316619; x=1726852619;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6hzWF6t3usS5DT5I810V3jYMFYBjf/9WntyNrqaTQuo=;
+  b=bJ2vQwqqvZUSlPQef5CO7qJl7hpl60lcNGbtiepil+vDOyE23iqnsvjZ
+   H7zkCcVHvqSwcypLhDNlwLZ54wSS1+8xJfjNzdE1vXSYvsfSRkxVh34eM
+   O2Cngk1Rgx4fPh3dw1G6aisXoiElqyZGzi2EVbLpbduE02b+LXisOuUQk
+   IMYrjpOJLF0ns1TO3cDk0t4xUPYqLcwEMwZH25mCgNbn/ldbS9XjVXnFc
+   OWSUyOhYUuGfxhfY5nsDskRSA/VnF9VW4SWmOeylepvNlHL0GowqnPRM7
+   GmS0AO9h/cctYPyXDZ5THol3YJtVszkXIap6NGeW+S5yPfh+m7IZohWaE
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="444608109"
 X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
-   d="scan'208";a="444608385"
+   d="scan'208";a="444608109"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 05:21:21 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 05:20:23 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="862442142"
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="862441612"
 X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
-   d="scan'208";a="862442142"
+   d="scan'208";a="862441612"
 Received: from yongliang-ubuntu20-ilbpg12.png.intel.com ([10.88.229.33])
-  by fmsmga002.fm.intel.com with ESMTP; 21 Sep 2023 05:21:11 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 21 Sep 2023 05:20:13 -0700
 From: Choong Yong Liang <yong.liang.choong@linux.intel.com>
 To: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
 	David E Box <david.e.box@linux.intel.com>,
@@ -78,117 +78,89 @@ Cc: David E Box <david.e.box@intel.com>,
 	Tan Tee Min <tee.min.tan@linux.intel.com>,
 	Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
 	Lai Peter Jun Ann <jun.ann.lai@intel.com>
-Subject: [PATCH net-next v3 5/5] stmmac: intel: Add 1G/2.5G auto-negotiation support for ADL-N
-Date: Thu, 21 Sep 2023 20:19:46 +0800
-Message-Id: <20230921121946.3025771-6-yong.liang.choong@linux.intel.com>
+Subject: [PATCH net-next v3 0/5] TSN auto negotiation between 1G and 2.5G
+Date: Thu, 21 Sep 2023 20:19:41 +0800
+Message-Id: <20230921121946.3025771-1-yong.liang.choong@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230921121946.3025771-1-yong.liang.choong@linux.intel.com>
-References: <20230921121946.3025771-1-yong.liang.choong@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-	SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+	DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+	SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add modphy register lane to have 1G/2.5G auto-negotiation support for
-ADL-N.
+Intel platforms’ integrated Gigabit Ethernet controllers support
+2.5Gbps mode statically using BIOS programming. In the current
+implementation, the BIOS menu provides an option to select between
+10/100/1000Mbps and 2.5Gbps modes. Based on the selection, the BIOS
+programs the Phase Lock Loop (PLL) registers. The BIOS also read the
+TSN lane registers from Flexible I/O Adapter (FIA) block and provided
+10/100/1000Mbps/2.5Gbps information to the stmmac driver. But
+auto-negotiation between 10/100/1000Mbps and 2.5Gbps is not allowed.
+The new proposal is to support auto-negotiation between 10/100/1000Mbps
+and 2.5Gbps . Auto-negotiation between 10, 100, 1000Mbps will use
+in-band auto negotiation. Auto-negotiation between 10/100/1000Mbps and
+2.5Gbps will work as the following proposed flow, the stmmac driver reads
+the PHY link status registers then identifies the negotiated speed.
+Based on the speed stmmac driver will identify TSN lane registers from
+FIA then send IPC command to the Power Management controller (PMC)
+through PMC driver/API. PMC will act as a proxy to programs the
+PLL registers.
+changelog:
 
-Signed-off-by: Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
-Signed-off-by: Choong Yong Liang <yong.liang.choong@linux.intel.com>
+v1 -> v2: 
+ - Add static to pmc_lpm_modes declaration
+ - Add cur_link_an_mode to the kernel doc
+ - Combine 2 commits i.e. "stmmac: intel: Separate driver_data of ADL-N
+ from TGL" and "net: stmmac: Add 1G/2.5G auto-negotiation
+ support for ADL-N" into 1 commit.
+
+v2 -> v3:
+ - Create `pmc_ipc.c` file for `intel_pmc_ipc()` function and 
+ allocate the file in `arch/x86/platform/intel/` directory.
+ - Update phylink's AN mode during phy interface change and 
+ not exposing phylink's AN mode into phylib.
+
 ---
- .../net/ethernet/stmicro/stmmac/dwmac-intel.c | 49 ++++++++++++++++++-
- .../net/ethernet/stmicro/stmmac/dwmac-intel.h |  2 +
- 2 files changed, 50 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-index a211f42914a2..bece46faa710 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-@@ -961,6 +961,53 @@ static int adls_sgmii_phy1_data(struct pci_dev *pdev,
- static struct stmmac_pci_info adls_sgmii1g_phy1_info = {
- 	.setup = adls_sgmii_phy1_data,
- };
-+
-+static int adln_common_data(struct pci_dev *pdev,
-+			    struct plat_stmmacenet_data *plat)
-+{
-+	struct intel_priv_data *intel_priv = plat->bsp_priv;
-+
-+	plat->rx_queues_to_use = 6;
-+	plat->tx_queues_to_use = 4;
-+	plat->clk_ptp_rate = 204800000;
-+
-+	plat->safety_feat_cfg->tsoee = 1;
-+	plat->safety_feat_cfg->mrxpee = 0;
-+	plat->safety_feat_cfg->mestee = 1;
-+	plat->safety_feat_cfg->mrxee = 1;
-+	plat->safety_feat_cfg->mtxee = 1;
-+	plat->safety_feat_cfg->epsi = 0;
-+	plat->safety_feat_cfg->edpp = 0;
-+	plat->safety_feat_cfg->prtyen = 0;
-+	plat->safety_feat_cfg->tmouten = 0;
-+
-+	intel_priv->tsn_lane_registers = adln_tsn_lane_registers;
-+	intel_priv->max_tsn_lane_registers = ARRAY_SIZE(adln_tsn_lane_registers);
-+
-+	return intel_mgbe_common_data(pdev, plat);
-+}
-+
-+static int adln_sgmii_phy0_data(struct pci_dev *pdev,
-+				struct plat_stmmacenet_data *plat)
-+{
-+	struct intel_priv_data *intel_priv = plat->bsp_priv;
-+
-+	plat->bus_id = 1;
-+	plat->phy_interface = PHY_INTERFACE_MODE_SGMII;
-+	plat->max_speed = SPEED_2500;
-+	plat->serdes_powerup = intel_serdes_powerup;
-+	plat->serdes_powerdown = intel_serdes_powerdown;
-+	plat->config_serdes = intel_config_serdes;
-+
-+	intel_priv->pid_modphy = PID_MODPHY1;
-+
-+	return adln_common_data(pdev, plat);
-+}
-+
-+static struct stmmac_pci_info adln_sgmii1g_phy0_info = {
-+	.setup = adln_sgmii_phy0_data,
-+};
-+
- static const struct stmmac_pci_func_data galileo_stmmac_func_data[] = {
- 	{
- 		.func = 6,
-@@ -1343,7 +1390,7 @@ static const struct pci_device_id intel_eth_pci_id_table[] = {
- 	{ PCI_DEVICE_DATA(INTEL, TGLH_SGMII1G_1, &tgl_sgmii1g_phy1_info) },
- 	{ PCI_DEVICE_DATA(INTEL, ADLS_SGMII1G_0, &adls_sgmii1g_phy0_info) },
- 	{ PCI_DEVICE_DATA(INTEL, ADLS_SGMII1G_1, &adls_sgmii1g_phy1_info) },
--	{ PCI_DEVICE_DATA(INTEL, ADLN_SGMII1G, &tgl_sgmii1g_phy0_info) },
-+	{ PCI_DEVICE_DATA(INTEL, ADLN_SGMII1G, &adln_sgmii1g_phy0_info) },
- 	{ PCI_DEVICE_DATA(INTEL, RPLP_SGMII1G, &tgl_sgmii1g_phy0_info) },
- 	{}
- };
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.h b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.h
-index 093eed977ab0..2c6b50958988 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.h
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.h
-@@ -124,8 +124,10 @@ static const struct pmc_serdes_regs pid_modphy1_2p5g_regs[] = {
- 	{}
- };
- 
-+static const int adln_tsn_lane_registers[] = {6};
- static const int ehl_tsn_lane_registers[] = {7, 8, 9, 10, 11};
- #else
-+static const int adln_tsn_lane_registers[] = {};
- static const int ehl_tsn_lane_registers[] = {};
- #endif /* CONFIG_INTEL_PMC_IPC */
- 
+Choong Yong Liang (2):
+  net: phy: update in-band AN mode when changing interface by PHY driver
+  stmmac: intel: Add 1G/2.5G auto-negotiation support for ADL-N
+
+David E. Box (1):
+  arch: x86: Add IPC mailbox accessor function and add SoC register
+    access
+
+Tan, Tee Min (2):
+  net: pcs: xpcs: combine C37 SGMII AN and 2500BASEX for Intel mGbE
+    controller
+  net: stmmac: enable Intel mGbE 1G/2.5G auto-negotiation support
+
+ MAINTAINERS                                   |   2 +
+ arch/x86/Kconfig                              |   9 +
+ arch/x86/platform/intel/Makefile              |   1 +
+ arch/x86/platform/intel/pmc_ipc.c             |  75 +++++++
+ drivers/net/ethernet/stmicro/stmmac/Kconfig   |   1 +
+ .../net/ethernet/stmicro/stmmac/dwmac-intel.c | 183 +++++++++++++++++-
+ .../net/ethernet/stmicro/stmmac/dwmac-intel.h |  81 ++++++++
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c |  20 ++
+ drivers/net/pcs/pcs-xpcs.c                    |  72 +++++--
+ drivers/net/phy/phylink.c                     |  30 ++-
+ include/linux/pcs/pcs-xpcs.h                  |   1 +
+ .../linux/platform_data/x86/intel_pmc_ipc.h   |  34 ++++
+ include/linux/stmmac.h                        |   1 +
+ 13 files changed, 493 insertions(+), 17 deletions(-)
+ create mode 100644 arch/x86/platform/intel/pmc_ipc.c
+ create mode 100644 include/linux/platform_data/x86/intel_pmc_ipc.h
+
 -- 
 2.25.1
 
