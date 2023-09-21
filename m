@@ -1,146 +1,198 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D980141754;
-	Thu, 21 Sep 2023 17:49:36 +0000 (UTC)
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA74380FA9;
-	Thu, 21 Sep 2023 10:36:55 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id 5614622812f47-3adcae1e9f6so192352b6e.0;
-        Thu, 21 Sep 2023 10:36:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695317815; x=1695922615; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pk82zE/dtTZn+xATdDbyMFOaczKW9JrERtnmCSdw+Lw=;
-        b=K4fg/8EHy+db4DQwoccC36mU1NqhJrKF/eYhzZ/UrewFXqNgXjDkCb/Iw0ZQzQnhcI
-         hKQm0ma5kXGzb/ZZ8Ec8TdyOH9Hr6Cqx/eA2wPkGYxkvLXdJWJ7k2Y8zOxouzE3rz2vf
-         bs9UNPDNuiCSiH1zydn7vFPs5HbtpjJRdECtvBQT3Hen97Mb2i4VpCzHLN47muogkAUG
-         hxwytAvbI9MS7GNJTiY6Lq+fBl5i4d1NdwO50jbqTpqq7HLCUry81rU/wYau9iY1J8A5
-         oqdh6yvcIjXAa2bibsrI5JUIy8nARKMCYOvZZoBXk+sWk2ieLfBfKK3MunkP4FzBuE0F
-         5IlA==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 991AD29432
+	for <bpf@vger.kernel.org>; Thu, 21 Sep 2023 17:49:51 +0000 (UTC)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2FC9780F7
+	for <bpf@vger.kernel.org>; Thu, 21 Sep 2023 10:34:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1695317582;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1k8SHjrX7h+9geU6a4EfiZKaqOkQZE0r44U3ZFD7cFc=;
+	b=Z1Ww4bUYpO3zvEPGHV1tMDwn00DOEFrl5ZU6fGpfq1JYneygAKTX7e1x28lVdSAPmiWhVr
+	MU1d26adUOOv6d6IQerRq3eML58lqu8+oHTJEGZj00nOaUxayzJyhKAYjr9givpfJzNSOo
+	+pBaTzcMe8F4TFoLetLowPoz/HgZh4Y=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-19-4NQ098haO9O244DpWWMfJw-1; Thu, 21 Sep 2023 03:01:20 -0400
+X-MC-Unique: 4NQ098haO9O244DpWWMfJw-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-405369a7ebfso493375e9.0
+        for <bpf@vger.kernel.org>; Thu, 21 Sep 2023 00:01:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695317815; x=1695922615;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pk82zE/dtTZn+xATdDbyMFOaczKW9JrERtnmCSdw+Lw=;
-        b=QB4fnx0UygWNMPRQXxXQI34a/tQJ/KYVSa1D6HyPLQebI9pZr2KCpdQya5vtWrU58V
-         ZSMTpJbH0EIomkwQTKzAZ8IqVprciAKVn8mzys8l6pLnKWlt/jRU4Ud90THkOyf4rf0S
-         SGa6wd0sNVfgRiJPCdMni7pOFFwsWsRnSRF973aU3eSpe5NGzP5WjBd3FXdxfHw1rj4W
-         EErnyUgUbXD0SPqe77zJbBcIME2WtDfAH2bks93DhGyywrUA5htm+BqgoIsA7RpVNCh/
-         /DH6zAPyCe4zfPyZ/I+WKmNHdQihpzCj/rP4pBLKAXA8NiflfKfkT1nZDuJx+02Yd7LK
-         YG5w==
-X-Gm-Message-State: AOJu0Ywcg0nwa6wsTGVr+E0MN6cWuMR670TtkNVT/3PHTMo/C57KSpxP
-	KCWEST7n/Y2k7zhdQ29WTMp+iDC2KfKzyvSjkGDDzgkFTdTtng==
-X-Google-Smtp-Source: AGHT+IHRvPDDapKsyXA/SXd3CeM8A0NfCkA/x3l/6T/asTQkDelvkWybsb2S6lb8D13HUDymbyk5ECSsrtYyLldm3x0=
-X-Received: by 2002:a05:6214:5001:b0:656:2e07:94cc with SMTP id
- jo1-20020a056214500100b006562e0794ccmr4570370qvb.6.1695281327519; Thu, 21 Sep
- 2023 00:28:47 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1695279679; x=1695884479;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1k8SHjrX7h+9geU6a4EfiZKaqOkQZE0r44U3ZFD7cFc=;
+        b=HGIE1iOzAUBOkR2wbTbdBtc5hB/0DdL910tIR6ZkcdZhPiBGdDSJuH014c0OtYetYf
+         DjtRjDjIwWfuQ9FcWWLXbZnoASuY3AfdIbViGJ/9wvB1Yuspx3298Y+uH2wLdo0J72DO
+         MNfZWf53lhh5efp954Zs7CXXWyAniYLtmIzK7BSMOsBWwprH5cxijRKkX3gWsXh4iy84
+         HaImitGhLtLiXSGSCviDTLRl2wUdBhbicDp1S/PsqvgsjvTQZudgUFZKx9mQcvT8MkbM
+         TrdtiaEmQcrcWRP+RphxsR3+I9dS6b3TzTEnO6hY/wKj46p3t+AsygzEJsAXAIe67lCP
+         VUwA==
+X-Gm-Message-State: AOJu0Yx4vpeEdPIsoJdQiPFteELTFuWv60u3JHa2LRpG6qSsUo5xUZvb
+	PVXW1fSnUWMnEPpfvt0FuFZD6y/DgV8aJLD1bZcu++2hn99MibtLtB2o/hYOTfH5Y54sUrMH0Iy
+	hNbLxpRuIfw0s
+X-Received: by 2002:adf:f2c3:0:b0:320:8f0:b93d with SMTP id d3-20020adff2c3000000b0032008f0b93dmr4009692wrp.3.1695279678803;
+        Thu, 21 Sep 2023 00:01:18 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFlabPQ9ETJCqjwqd2LwoQEltmhfS/JafI5C64mu6pBljNOcNJ7n71e438DM+Z//+Per1W11g==
+X-Received: by 2002:adf:f2c3:0:b0:320:8f0:b93d with SMTP id d3-20020adff2c3000000b0032008f0b93dmr4009661wrp.3.1695279678370;
+        Thu, 21 Sep 2023 00:01:18 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-251-4.dyn.eolo.it. [146.241.251.4])
+        by smtp.gmail.com with ESMTPSA id t21-20020a170906179500b00988e953a586sm588033eje.61.2023.09.21.00.01.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Sep 2023 00:01:18 -0700 (PDT)
+Message-ID: <f5832f155f3daff50b0e7ea94fee84d3a70e4f29.camel@redhat.com>
+Subject: Re: [PATCH net v2 3/3] octeontx2-pf: Do xdp_do_flush() after
+ redirects.
+From: Paolo Abeni <pabeni@redhat.com>
+To: Kui-Feng Lee <sinquersw@gmail.com>, Sebastian Andrzej Siewior
+	 <bigeasy@linutronix.de>, netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>, Alexei Starovoitov
+ <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,  Jesper Dangaard
+ Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Thomas
+ Gleixner <tglx@linutronix.de>, Geetha sowjanya <gakula@marvell.com>,
+ Subbaraya Sundeep <sbhatta@marvell.com>, Sunil Goutham
+ <sgoutham@marvell.com>, hariprasad <hkelam@marvell.com>
+Date: Thu, 21 Sep 2023 09:01:16 +0200
+In-Reply-To: <aa182e22-e7b9-d8e7-04ea-781fe0fb9103@gmail.com>
+References: <20230918153611.165722-1-bigeasy@linutronix.de>
+	 <20230918153611.165722-4-bigeasy@linutronix.de>
+	 <aa182e22-e7b9-d8e7-04ea-781fe0fb9103@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230918093304.367826-1-tushar.vyavahare@intel.com>
-In-Reply-To: <20230918093304.367826-1-tushar.vyavahare@intel.com>
-From: Magnus Karlsson <magnus.karlsson@gmail.com>
-Date: Thu, 21 Sep 2023 09:28:36 +0200
-Message-ID: <CAJ8uoz3XiM=bKrEvfnb_y6TJv53R8-bkY1e2L0Tiad6uoTaTwQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/8] Add a test for SHARED_UMEM feature
-To: Tushar Vyavahare <tushar.vyavahare@intel.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, bjorn@kernel.org, 
-	magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, 
-	jonathan.lemon@gmail.com, davem@davemloft.net, kuba@kernel.org, 
-	pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net, 
-	tirthendu.sarkar@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+	SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Mon, 18 Sept 2023 at 11:12, Tushar Vyavahare
-<tushar.vyavahare@intel.com> wrote:
->
-> Implement a test for the SHARED_UMEM feature in this patch set and make
-> necessary changes/improvements. Ensure that the framework now supports
-> different streams for different sockets.
+On Mon, 2023-09-18 at 10:58 -0700, Kui-Feng Lee wrote:
+>=20
+> On 9/18/23 08:36, Sebastian Andrzej Siewior wrote:
+> > xdp_do_flush() should be invoked before leaving the NAPI poll function
+> > if XDP-redirect has been performed.
+> >=20
+> > Invoke xdp_do_flush() before leaving NAPI.
+> >=20
+> > Cc: Geetha sowjanya <gakula@marvell.com>
+> > Cc: Subbaraya Sundeep <sbhatta@marvell.com>
+> > Cc: Sunil Goutham <sgoutham@marvell.com>
+> > Cc: hariprasad <hkelam@marvell.com>
+> > Fixes: 06059a1a9a4a5 ("octeontx2-pf: Add XDP support to netdev PF")
+> > Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> > Acked-by: Geethasowjanya Akula <gakula@marvell.com>
+> > ---
+> >   .../marvell/octeontx2/nic/otx2_txrx.c         | 19 +++++++++++++-----=
+-
+> >   1 file changed, 13 insertions(+), 6 deletions(-)
+> >=20
+> > diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c b/d=
+rivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+> > index e77d438489557..53b2a4ef52985 100644
+> > --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+> > +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+> > @@ -29,7 +29,8 @@
+> >   static bool otx2_xdp_rcv_pkt_handler(struct otx2_nic *pfvf,
+> >   				     struct bpf_prog *prog,
+> >   				     struct nix_cqe_rx_s *cqe,
+> > -				     struct otx2_cq_queue *cq);
+> > +				     struct otx2_cq_queue *cq,
+> > +				     bool *need_xdp_flush);
+> >  =20
+> >   static int otx2_nix_cq_op_status(struct otx2_nic *pfvf,
+> >   				 struct otx2_cq_queue *cq)
+> > @@ -337,7 +338,7 @@ static bool otx2_check_rcv_errors(struct otx2_nic *=
+pfvf,
+> >   static void otx2_rcv_pkt_handler(struct otx2_nic *pfvf,
+> >   				 struct napi_struct *napi,
+> >   				 struct otx2_cq_queue *cq,
+> > -				 struct nix_cqe_rx_s *cqe)
+> > +				 struct nix_cqe_rx_s *cqe, bool *need_xdp_flush)
+> >   {
+> >   	struct nix_rx_parse_s *parse =3D &cqe->parse;
+> >   	struct nix_rx_sg_s *sg =3D &cqe->sg;
+> > @@ -353,7 +354,7 @@ static void otx2_rcv_pkt_handler(struct otx2_nic *p=
+fvf,
+> >   	}
+> >  =20
+> >   	if (pfvf->xdp_prog)
+> > -		if (otx2_xdp_rcv_pkt_handler(pfvf, pfvf->xdp_prog, cqe, cq))
+> > +		if (otx2_xdp_rcv_pkt_handler(pfvf, pfvf->xdp_prog, cqe, cq, need_xdp=
+_flush))
+> >   			return;
+> >  =20
+> >   	skb =3D napi_get_frags(napi);
+> > @@ -388,6 +389,7 @@ static int otx2_rx_napi_handler(struct otx2_nic *pf=
+vf,
+> >   				struct napi_struct *napi,
+> >   				struct otx2_cq_queue *cq, int budget)
+> >   {
+> > +	bool need_xdp_flush =3D false;
+> >   	struct nix_cqe_rx_s *cqe;
+> >   	int processed_cqe =3D 0;
+> >  =20
+> > @@ -409,13 +411,15 @@ static int otx2_rx_napi_handler(struct otx2_nic *=
+pfvf,
+> >   		cq->cq_head++;
+> >   		cq->cq_head &=3D (cq->cqe_cnt - 1);
+> >  =20
+> > -		otx2_rcv_pkt_handler(pfvf, napi, cq, cqe);
+> > +		otx2_rcv_pkt_handler(pfvf, napi, cq, cqe, &need_xdp_flush);
+> >  =20
+> >   		cqe->hdr.cqe_type =3D NIX_XQE_TYPE_INVALID;
+> >   		cqe->sg.seg_addr =3D 0x00;
+> >   		processed_cqe++;
+> >   		cq->pend_cqe--;
+> >   	}
+> > +	if (need_xdp_flush)
+> > +		xdp_do_flush();
+> >  =20
+> >   	/* Free CQEs to HW */
+> >   	otx2_write64(pfvf, NIX_LF_CQ_OP_DOOR,
+> > @@ -1354,7 +1358,8 @@ bool otx2_xdp_sq_append_pkt(struct otx2_nic *pfvf=
+, u64 iova, int len, u16 qidx)
+> >   static bool otx2_xdp_rcv_pkt_handler(struct otx2_nic *pfvf,
+> >   				     struct bpf_prog *prog,
+> >   				     struct nix_cqe_rx_s *cqe,
+> > -				     struct otx2_cq_queue *cq)
+> > +				     struct otx2_cq_queue *cq,
+> > +				     bool *need_xdp_flush)
+> >   {
+> >   	unsigned char *hard_start, *data;
+> >   	int qidx =3D cq->cq_idx;
+> > @@ -1391,8 +1396,10 @@ static bool otx2_xdp_rcv_pkt_handler(struct otx2=
+_nic *pfvf,
+> >  =20
+> >   		otx2_dma_unmap_page(pfvf, iova, pfvf->rbsize,
+> >   				    DMA_FROM_DEVICE);
+> > -		if (!err)
+> > +		if (!err) {
+> > +			*need_xdp_flush =3D true;
+>=20
+> Is it possible to call xdp_do_flush() at the first place (here)?
 
-Thanks Tushar for contributing this new test. Had some comments in
-three of the patches. Please take a look.
+AFAICT that would kill much/all of the performance benefits of bulk
+redirect.
 
-/Magnus
+I think the proposed solution is a better one.
 
-> Patch series summary:
->
-> 1: Move the packet stream from the ifobject struct to the xsk_socket_info
->    struct to enable the use of different streams for different sockets
->    This will facilitate the sending and receiving of data from multiple
->    sockets simultaneously using the SHARED_XDP_UMEM feature.
->
->    It gives flexibility of send/recive individual traffic on particular
->    socket.
->
-> 2: Rename the header file to a generic name so that it can be used by all
->    future XDP programs.
->
-> 3: Move the src_mac and dst_mac fields from the ifobject structure to the
->    xsk_socket_info structure to achieve per-socket MAC address assignment.
->    Implement the function called generate_mac_addresses() to generate MAC
->    addresses based on the required number by the framework.
->
->    Require this in order to steer traffic to various sockets in subsequent
->    patches.
->
-> 4: Improve the receive_pkt() function to enable it to receive packets from
->    multiple sockets. Define a sock_num variable to iterate through all the
->    sockets in the Rx path. Add nb_valid_entries to check that all the
->    expected number of packets are received.
->
-> 5: The pkt_set() function no longer needs the umem parameter. This commit
->    removes the umem parameter from the pkt_set() function.
->
-> 6: Iterate over all the sockets in the send pkts function. Update
->    send_pkts() to handle multiple sockets for sending packets.
->    Multiple TX sockets are utilized alternately based on the batch size
->    for improve packet transmission.
->
-> 7: Modify xsk_update_xskmap() to accept the index as an argument, enabling
->    the addition of multiple sockets to xskmap.
->
-> 8: Add a new test for testing shared umem feature. This is accomplished by
->    adding a new XDP program and using the multiple sockets. The new  XDP
->    program redirects the packets based on the destination MAC address.
->
-> Tushar Vyavahare (8):
->   selftests/xsk: move pkt_stream to the xsk_socket_info
->   selftests/xsk: rename xsk_xdp_metadata.h to xsk_xdp_common.h
->   selftests/xsk: implement a function that generates MAC addresses
->   selftests/xsk: iterate over all the sockets in the receive pkts
->     function
->   selftests/xsk: remove unnecessary parameter from pkt_set() function
->     call
->   selftests/xsk: iterate over all the sockets in the send pkts function
->   selftests/xsk: modify xsk_update_xskmap() to accept the index as an
->     argument.
->   selftests/xsk: add a test for shared umem feature
->
->  .../selftests/bpf/progs/xsk_xdp_progs.c       |  22 +-
->  tools/testing/selftests/bpf/xsk.c             |   3 +-
->  tools/testing/selftests/bpf/xsk.h             |   2 +-
->  tools/testing/selftests/bpf/xsk_xdp_common.h  |  12 +
->  .../testing/selftests/bpf/xsk_xdp_metadata.h  |   5 -
->  tools/testing/selftests/bpf/xskxceiver.c      | 524 +++++++++++-------
->  tools/testing/selftests/bpf/xskxceiver.h      |  14 +-
->  7 files changed, 376 insertions(+), 206 deletions(-)
->  create mode 100644 tools/testing/selftests/bpf/xsk_xdp_common.h
->  delete mode 100644 tools/testing/selftests/bpf/xsk_xdp_metadata.h
->
-> --
-> 2.34.1
->
->
+Cheers,
+
+Paolo
+
