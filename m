@@ -1,55 +1,90 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F191542C1C
-	for <bpf@vger.kernel.org>; Thu, 21 Sep 2023 17:22:48 +0000 (UTC)
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B184B573EA
-	for <bpf@vger.kernel.org>; Thu, 21 Sep 2023 10:18:40 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-5334d78c5f6so876070a12.2
-        for <bpf@vger.kernel.org>; Thu, 21 Sep 2023 10:18:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695316719; x=1695921519; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yMqq3AARWyXbrKYJTzEmeS3BTtZYH6TPZAZzIFbUV54=;
-        b=LW9lJsOg+/WNPL7P8AncNyXJQSYPUBqhAhWyYaGpuiheXkEpOEJLjRDiaYltslabON
-         wYiM2IWjQUJT2giLYr6y2iH+8oZzksvXLZkIDfV7yNJjjqPVb/ZWb6ZblPCI1+LPwL2h
-         SePEHehO4jjy29AJ6Wee0PJFQVAKaPMM53cNkmHbqBRv8Uvu94gQ/nYCICjxnonrWrjY
-         v41A/x/al1koXziVwnfRzvFDiHPE4HOFOK25ZYU7zJ9+fBl3/cxkscCBtanNDkNDcBEo
-         uU7VV8a1WexRClviLxJkFtrtQCa/qX36gQFSckuf802QngJadjNVK69hcBhSnyW7Mbfs
-         mtKw==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9003B199DB
+	for <bpf@vger.kernel.org>; Thu, 21 Sep 2023 17:22:53 +0000 (UTC)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA79B59164
+	for <bpf@vger.kernel.org>; Thu, 21 Sep 2023 10:20:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1695316810;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mYFUdBslfSemlERse4Us5f4NKymG/+Lupcjrt0UUg2s=;
+	b=ZmmM59PdnY4yuT7LqNs4/OaPZJAK5tfHw6KhcI7f3YjjrNh0swPyX/xOjV5ZrNCF9qhdlO
+	07Oc4RUsdKkYVz9ryLRU8ddIa9UMTTmqswwGDSry81COkyiP1rYEjvrM4juQ6jJR8M3Mde
+	kkA0g7/ZO28eeAvVI/yUBp8zMup861U=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-635-534w_DK9MPqB5a3vjC9KGg-1; Thu, 21 Sep 2023 10:03:11 -0400
+X-MC-Unique: 534w_DK9MPqB5a3vjC9KGg-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-9a9d7a801a3so76020866b.2
+        for <bpf@vger.kernel.org>; Thu, 21 Sep 2023 07:03:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695316719; x=1695921519;
+        d=1e100.net; s=20230601; t=1695304980; x=1695909780;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yMqq3AARWyXbrKYJTzEmeS3BTtZYH6TPZAZzIFbUV54=;
-        b=D4GXdbCjAV5NB1avOmXd/u13jBFFJEXdIv1mPuiDar4NNYIVZT3jqbj5pqENMnD334
-         zEWPe64jvVz2I3BVhH8L+JS2QQR3FWlNo8MQEB47lWosuzffpLDIUa1obwxtJY16j7fI
-         4FKFERjwA+rfpbc2M1/v6DhgF2Wq39nwR6aWIrdm79FPQ7KUndzbdZkLKuKJcNzEPryf
-         2nuEKAcT0rr/MEtf94HJpsVkPIP/z76VrdkUkq1QODMAKCvnQ083Rc/yrgQKtXAgTaRa
-         Zazjz+NBnzwd+ra+2JzhQ8o/5YElj6h4KJh3QeIpans/YuO1l5mp9CtNDwaiydgomRpC
-         BpKA==
-X-Gm-Message-State: AOJu0Yx//2VjVgi5upcZWwiznFkjOgHuHjpSz7BhGhTvXyzGZ3QESFBc
-	f4E1n5TlLEVCsMKF8Pb1h4D0KTl7svSM6Q==
-X-Google-Smtp-Source: AGHT+IE+s97P4m34QaccumoMdNCG8UtnFMnnXoz9nFrCZzywQN7Ck2Ou4bxfI2poENfWa35STXH38w==
-X-Received: by 2002:a17:906:5386:b0:9a1:be50:ae61 with SMTP id g6-20020a170906538600b009a1be50ae61mr4653539ejo.69.1695305236375;
-        Thu, 21 Sep 2023 07:07:16 -0700 (PDT)
-Received: from krava (253.252.164.109.static.wline.lns.sme.cust.swisscom.ch. [109.164.252.253])
-        by smtp.gmail.com with ESMTPSA id k15-20020a170906970f00b0098733a40bb7sm1090358ejx.155.2023.09.21.07.07.15
+        bh=mYFUdBslfSemlERse4Us5f4NKymG/+Lupcjrt0UUg2s=;
+        b=L1pgtU3LlIYB5uAbIn+IsRhw/asU9ubiYrWWHZCtVlrHyn8wOuQJRBsCM9XKGIZ4DI
+         N9XwDvs0lXcqzbzx25s7xXm/8jGkDFl62a7z5VmOtWjIjd0H5SgZ8fQPaPeHx1cYgKv2
+         4bhSvxCVTYw2wAAgbZHCJvDq/Jr6g6RQ8yRfiaBRQnTvNJgKSo4l0TNoYcfV+gGOO/pJ
+         8ZpR97ibbhG7uhSflAi3gzVgp1MxmlpEWq75B+Xgn5AFs7nPjS+n5JJAuetp5741iQBW
+         nOblvdMbnTj/d5MApo2mbndKpp8QucTZG2pmBAmIiThPdRPrlpbC/xb14OOBmY+qLdw2
+         DyRA==
+X-Gm-Message-State: AOJu0YxhrM5UzZnSh86CHXCJY8vQxRNXJpp3FDAsHKCPKXc88HwrgpQR
+	mcFBjivLGhqjztcHZWjHUYqvLI4zcfwWsrcYEyviPON2hSl18wvG/YsPKSeG5jKYotK3n4rNvEZ
+	OFjj5FHyQ7YAI
+X-Received: by 2002:a17:906:13:b0:9a5:7e63:2e0 with SMTP id 19-20020a170906001300b009a57e6302e0mr5496779eja.30.1695304980544;
+        Thu, 21 Sep 2023 07:03:00 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEGDrtu0JFw6590Ay/MhiYHIEI6g5Txx1wcLitr4s1+bWtmtSPAeMYJ5QGJ2kmybduZxOWLIA==
+X-Received: by 2002:a17:906:13:b0:9a5:7e63:2e0 with SMTP id 19-20020a170906001300b009a57e6302e0mr5496721eja.30.1695304980143;
+        Thu, 21 Sep 2023 07:03:00 -0700 (PDT)
+Received: from redhat.com ([2.52.150.187])
+        by smtp.gmail.com with ESMTPSA id dt11-20020a170906b78b00b009ae482d70besm1079598ejb.134.2023.09.21.07.02.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Sep 2023 07:07:15 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 21 Sep 2023 16:07:13 +0200
-To: Song Liu <song@kernel.org>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, martin.lau@kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH bpf-next 6/8] bpf: Add arch_bpf_trampoline_size()
-Message-ID: <ZQxOEVFUFFgYpqtx@krava>
-References: <20230920053158.3175043-1-song@kernel.org>
- <20230920053158.3175043-7-song@kernel.org>
+        Thu, 21 Sep 2023 07:02:59 -0700 (PDT)
+Date: Thu, 21 Sep 2023 10:02:53 -0400
+From: "Michael S. Tsirkin" <mst@redhat.com>
+To: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc: virtualization@lists.linux-foundation.org,
+	Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Jason Wang <jasowang@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Mark Gross <markgross@kernel.org>,
+	Vadim Pasternak <vadimp@nvidia.com>,
+	Bjorn Andersson <bjorn.andersson@linaro.org>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
+	Cornelia Huck <cohuck@redhat.com>,
+	Halil Pasic <pasic@linux.ibm.com>,
+	Eric Farman <farman@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Vincent Whitchurch <vincent.whitchurch@axis.com>,
+	linux-um@lists.infradead.org, netdev@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+	kvm@vger.kernel.org, bpf@vger.kernel.org,
+	kangjie.xu@linux.alibaba.com
+Subject: Re: [PATCH v14 30/42] virtio_pci: introduce helper to get/set queue
+ reset
+Message-ID: <20230921100112-mutt-send-email-mst@kernel.org>
+References: <20220801063902.129329-1-xuanzhuo@linux.alibaba.com>
+ <20220801063902.129329-31-xuanzhuo@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -58,81 +93,104 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230920053158.3175043-7-song@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+In-Reply-To: <20220801063902.129329-31-xuanzhuo@linux.alibaba.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+	SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Tue, Sep 19, 2023 at 10:31:56PM -0700, Song Liu wrote:
-
-SNIP
-
-> +int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
-> +			     struct bpf_tramp_links *tlinks, void *func_addr)
-> +{
-> +	struct bpf_tramp_image im;
-> +	void *image;
-> +	int ret;
-> +
-> +	/* Allocate a temporary buffer for __arch_prepare_bpf_trampoline().
-> +	 * This will NOT cause fragmentation in direct map, as we do not
-> +	 * call set_memory_*() on this buffer.
-> +	 */
-> +	image = bpf_jit_alloc_exec(PAGE_SIZE);
-> +	if (!image)
-> +		return -ENOMEM;
-> +
-> +	ret = __arch_prepare_bpf_trampoline(&im, image, image + PAGE_SIZE, m, flags,
-> +					    tlinks, func_addr);
-> +	bpf_jit_free_exec(image);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return ret;
-
-this can be just 'return ret;'
-
-jirka
-
-> +}
-> +
->  static int emit_bpf_dispatcher(u8 **pprog, int a, int b, s64 *progs, u8 *image, u8 *buf)
->  {
->  	u8 *jg_reloc, *prog = *pprog;
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 548f3ef34ba1..5bbac549b0a0 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1087,6 +1087,8 @@ void *arch_alloc_bpf_trampoline(int size);
->  void arch_free_bpf_trampoline(void *image, int size);
->  void arch_protect_bpf_trampoline(void *image, int size);
->  void arch_unprotect_bpf_trampoline(void *image, int size);
-> +int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
-> +			     struct bpf_tramp_links *tlinks, void *func_addr);
+On Mon, Aug 01, 2022 at 02:38:50PM +0800, Xuan Zhuo wrote:
+> Introduce new helpers to implement queue reset and get queue reset
+> status.
+> 
+>  https://github.com/oasis-tcs/virtio-spec/issues/124
+>  https://github.com/oasis-tcs/virtio-spec/issues/139
+> 
+> Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+> Acked-by: Jason Wang <jasowang@redhat.com>
+> ---
+>  drivers/virtio/virtio_pci_modern_dev.c | 39 ++++++++++++++++++++++++++
+>  include/linux/virtio_pci_modern.h      |  2 ++
+>  2 files changed, 41 insertions(+)
+> 
+> diff --git a/drivers/virtio/virtio_pci_modern_dev.c b/drivers/virtio/virtio_pci_modern_dev.c
+> index fa2a9445bb18..869cb46bef96 100644
+> --- a/drivers/virtio/virtio_pci_modern_dev.c
+> +++ b/drivers/virtio/virtio_pci_modern_dev.c
+> @@ -3,6 +3,7 @@
+>  #include <linux/virtio_pci_modern.h>
+>  #include <linux/module.h>
+>  #include <linux/pci.h>
+> +#include <linux/delay.h>
 >  
->  u64 notrace __bpf_prog_enter_sleepable_recur(struct bpf_prog *prog,
->  					     struct bpf_tramp_run_ctx *run_ctx);
-> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> index 5509bdf98067..285c5b7c1ea4 100644
-> --- a/kernel/bpf/trampoline.c
-> +++ b/kernel/bpf/trampoline.c
-> @@ -1070,6 +1070,12 @@ void __weak arch_unprotect_bpf_trampoline(void *image, int size)
->  	set_memory_rw((long)image, 1);
+>  /*
+>   * vp_modern_map_capability - map a part of virtio pci capability
+> @@ -474,6 +475,44 @@ void vp_modern_set_status(struct virtio_pci_modern_device *mdev,
 >  }
+>  EXPORT_SYMBOL_GPL(vp_modern_set_status);
 >  
-> +int __weak arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
-> +				    struct bpf_tramp_links *tlinks, void *func_addr)
+> +/*
+> + * vp_modern_get_queue_reset - get the queue reset status
+> + * @mdev: the modern virtio-pci device
+> + * @index: queue index
+> + */
+> +int vp_modern_get_queue_reset(struct virtio_pci_modern_device *mdev, u16 index)
 > +{
-> +	return -ENOTSUPP;
-> +}
+> +	struct virtio_pci_modern_common_cfg __iomem *cfg;
 > +
->  static int __init init_trampolines(void)
->  {
->  	int i;
+> +	cfg = (struct virtio_pci_modern_common_cfg __iomem *)mdev->common;
+> +
+> +	vp_iowrite16(index, &cfg->cfg.queue_select);
+> +	return vp_ioread16(&cfg->queue_reset);
+> +}
+> +EXPORT_SYMBOL_GPL(vp_modern_get_queue_reset);
+> +
+
+Actually, this does not validate that the config structure is big
+enough. So it can access some unrelated memory. Don't know whether
+that's exploitable e.g. for CoCo but not nice, anyway.
+Need to validate the size and disable reset if it's too small.
+
+
+> +/*
+> + * vp_modern_set_queue_reset - reset the queue
+> + * @mdev: the modern virtio-pci device
+> + * @index: queue index
+> + */
+> +void vp_modern_set_queue_reset(struct virtio_pci_modern_device *mdev, u16 index)
+> +{
+> +	struct virtio_pci_modern_common_cfg __iomem *cfg;
+> +
+> +	cfg = (struct virtio_pci_modern_common_cfg __iomem *)mdev->common;
+> +
+> +	vp_iowrite16(index, &cfg->cfg.queue_select);
+> +	vp_iowrite16(1, &cfg->queue_reset);
+> +
+> +	while (vp_ioread16(&cfg->queue_reset))
+> +		msleep(1);
+> +
+> +	while (vp_ioread16(&cfg->cfg.queue_enable))
+> +		msleep(1);
+> +}
+> +EXPORT_SYMBOL_GPL(vp_modern_set_queue_reset);
+> +
+>  /*
+>   * vp_modern_queue_vector - set the MSIX vector for a specific virtqueue
+>   * @mdev: the modern virtio-pci device
+> diff --git a/include/linux/virtio_pci_modern.h b/include/linux/virtio_pci_modern.h
+> index 05123b9a606f..c4eeb79b0139 100644
+> --- a/include/linux/virtio_pci_modern.h
+> +++ b/include/linux/virtio_pci_modern.h
+> @@ -113,4 +113,6 @@ void __iomem * vp_modern_map_vq_notify(struct virtio_pci_modern_device *mdev,
+>  				       u16 index, resource_size_t *pa);
+>  int vp_modern_probe(struct virtio_pci_modern_device *mdev);
+>  void vp_modern_remove(struct virtio_pci_modern_device *mdev);
+> +int vp_modern_get_queue_reset(struct virtio_pci_modern_device *mdev, u16 index);
+> +void vp_modern_set_queue_reset(struct virtio_pci_modern_device *mdev, u16 index);
+>  #endif
 > -- 
-> 2.34.1
-> 
-> 
+> 2.31.0
+
