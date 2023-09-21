@@ -1,127 +1,163 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E77A91A5A8;
-	Thu, 21 Sep 2023 17:52:09 +0000 (UTC)
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E9983CB;
-	Thu, 21 Sep 2023 10:51:42 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9adcb89b48bso152534166b.2;
-        Thu, 21 Sep 2023 10:51:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695318701; x=1695923501; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mq/loJ3f6wtqZ+hmIk0WpfL7yP6DzrTTWuWZOJLjWIU=;
-        b=Yo7IDN6XPIEo4HgwOMU+eg15ZY7ii8eE0NNcUw3MbtmARl7UlF2BDTOHfZdG3uOP+d
-         LQ7x/LIOsBny4/jOMwvER+KMvEObPt2upf97pDmVSiMVT93TLIRsytZ59tLQ+uDYu/UH
-         U1fCehVqom21WL0Xs5K8Dxg2mAP1QPRbbzyYswYsvFPDaiOWTIGIRm7PMWAoqEWGjs/q
-         thUwY7Cs13V7HjC+fWblvTvxHex4VDAtyGFBTfjDNBHLJLarMPc4XwOks9yvExJYM7zF
-         Lrcyi1SCm7O08YvtqgQ8x1kVL3x6mXv8x7vbIkPsnWFMESQKzD1RAJNIYufK5h40NPcF
-         PmWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695318701; x=1695923501;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mq/loJ3f6wtqZ+hmIk0WpfL7yP6DzrTTWuWZOJLjWIU=;
-        b=tNd3/C+LVhanrtSux6/rboKdM2MbUsTaKbagubcn25guoy4Fw9Bf5BGjcndV1Uqykn
-         EV8zB5FHaMGycYEJoKhWgYEfbAebo9NtHAk3woh96kP59pTMO5fBS27J/9XTZtIIqVh6
-         X75Ms85dbtG6IjepVlaYwKxqwAxx0rZmvZBLJWi3Pd8wLY7U5Htox3E0GitkMr03TaXj
-         91ot9Xn8ORDRcA925G2QqwqsdPCs5E05AYei952/iGv9cNkuANPIVrnXDOVHYVloChi3
-         JyiJ0zfVSW6pWCv5Nz9xwhe4IU5clEzUuDe9tDLu+5tergDha8gaiCjJttSn533Az1aR
-         /SMg==
-X-Gm-Message-State: AOJu0Ywze9XOkS1k7x9OuxdbQKfsaGAakDoCilCLKLU+VVDcBM3yJPcj
-	UzcYyu6EYZJVNkC8t6rVHQLus9/i6FHU/Q+zSqQ=
-X-Google-Smtp-Source: AGHT+IEFJhITBWBqjtaYAixXBZqOAAIzen+B4s581uvnjceqIXO+7rnHnzvDICY3TNx/rCYfF9n+yQ==
-X-Received: by 2002:a2e:910e:0:b0:2bc:efa4:2c36 with SMTP id m14-20020a2e910e000000b002bcefa42c36mr5019470ljg.11.1695298174088;
-        Thu, 21 Sep 2023 05:09:34 -0700 (PDT)
-Received: from daandemeyer-fedora-PC1EV17T.thefacebook.com ([2620:10d:c092:400::4:2a59])
-        by smtp.googlemail.com with ESMTPSA id gx10-20020a170906f1ca00b0099cb349d570sm952258ejb.185.2023.09.21.05.09.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Sep 2023 05:09:33 -0700 (PDT)
-From: Daan De Meyer <daan.j.demeyer@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Daan De Meyer <daan.j.demeyer@gmail.com>,
-	martin.lau@linux.dev,
-	kernel-team@meta.com,
-	netdev@vger.kernel.org
-Subject: [PATCH bpf-next v5 5/9] libbpf: Add support for cgroup unix socket address hooks
-Date: Thu, 21 Sep 2023 14:09:07 +0200
-Message-ID: <20230921120913.566702-6-daan.j.demeyer@gmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230921120913.566702-1-daan.j.demeyer@gmail.com>
-References: <20230921120913.566702-1-daan.j.demeyer@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7059441E37;
+	Thu, 21 Sep 2023 18:10:31 +0000 (UTC)
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43D4897F0;
+	Thu, 21 Sep 2023 10:52:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=y80U+ROzdWFAGesuJv0fAWCJugjaoZUvkVKbCL8UtRM=; b=J1yh53DeBNARTsqqU8MHBzo9Oa
+	t0+dRp/RaWdqEqR/zlkiuTCdTMvV7LfZBpgaPOo9mz3Ar25SG5iPMKXPJ1Pakv7POYEio6eyu3imp
+	Jue1paSBhwzjv0GVy6aou42CWQp6vSIlPYV8hlPJ5VHamcRnA8qcdTN4cPrFGpVz1BTCn704A78vE
+	WKxVrydWMewhT15+u9bny+bRHgeZaaqgcYNfslcWse8SCYpLZxpj04q12Qq2mZevEQIJk5Ji3lybk
+	draQ9SuAvOjf/F8wS4j1zOR8oS4A/59eybSt0kjrpVaKBQ211JZ5hMg5lAiocOJweLC8GJ5sJOtgz
+	HfWLrfPQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:54404)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1qjKIb-0004k2-1O;
+	Thu, 21 Sep 2023 15:04:57 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1qjKIX-0003an-Lu; Thu, 21 Sep 2023 15:04:53 +0100
+Date: Thu, 21 Sep 2023 15:04:53 +0100
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Choong Yong Liang <yong.liang.choong@linux.intel.com>
+Cc: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+	David E Box <david.e.box@linux.intel.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Mark Gross <markgross@kernel.org>,
+	Jose Abreu <Jose.Abreu@synopsys.com>, Andrew Lunn <andrew@lunn.ch>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Jose Abreu <joabreu@synopsys.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Wong Vee Khee <veekhee@apple.com>,
+	Jon Hunter <jonathanh@nvidia.com>,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Revanth Kumar Uppala <ruppala@nvidia.com>,
+	Shenwei Wang <shenwei.wang@nxp.com>,
+	Andrey Konovalov <andrey.konovalov@linaro.org>,
+	Jochen Henneberg <jh@henneberg-systemdesign.com>,
+	David E Box <david.e.box@intel.com>,
+	Andrew Halaney <ahalaney@redhat.com>,
+	Simon Horman <simon.horman@corigine.com>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
+	platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	bpf@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
+	Tan Tee Min <tee.min.tan@linux.intel.com>,
+	Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+	Lai Peter Jun Ann <jun.ann.lai@intel.com>
+Subject: Re: [PATCH net-next v3 3/5] net: phy: update in-band AN mode when
+ changing interface by PHY driver
+Message-ID: <ZQxNhYcusHfrJvxM@shell.armlinux.org.uk>
+References: <20230921121946.3025771-1-yong.liang.choong@linux.intel.com>
+ <20230921121946.3025771-4-yong.liang.choong@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230921121946.3025771-4-yong.liang.choong@linux.intel.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=no
-	autolearn_force=no version=3.4.6
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add the necessary plumbing to hook up the new cgroup unix sockaddr
-hooks into libbpf.
+On Thu, Sep 21, 2023 at 08:19:44PM +0800, Choong Yong Liang wrote:
+> As there is a mechanism in PHY drivers to switch the PHY interface
+> between SGMII and 2500BaseX according to link speed. In this case,
+> the in-band AN mode should be switching based on the PHY interface
+> as well, if the PHY interface has been changed/updated by PHY driver.
+> 
+> For e.g., disable in-band AN in 2500BaseX mode, or enable in-band AN
+> back for SGMII mode (10/100/1000Mbps).
+> 
+> Signed-off-by: Choong Yong Liang <yong.liang.choong@linux.intel.com>
 
-Signed-off-by: Daan De Meyer <daan.j.demeyer@gmail.com>
----
- tools/lib/bpf/libbpf.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+This approach is *going* to break existing setups, sorry.
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 3a6108e3238b..2c5c8c8f2aa2 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -82,17 +82,22 @@ static const char * const attach_type_name[] = {
- 	[BPF_CGROUP_INET6_BIND]		= "cgroup_inet6_bind",
- 	[BPF_CGROUP_INET4_CONNECT]	= "cgroup_inet4_connect",
- 	[BPF_CGROUP_INET6_CONNECT]	= "cgroup_inet6_connect",
-+	[BPF_CGROUP_UNIX_CONNECT]       = "cgroup_unix_connect",
- 	[BPF_CGROUP_INET4_POST_BIND]	= "cgroup_inet4_post_bind",
- 	[BPF_CGROUP_INET6_POST_BIND]	= "cgroup_inet6_post_bind",
- 	[BPF_CGROUP_INET4_GETPEERNAME]	= "cgroup_inet4_getpeername",
- 	[BPF_CGROUP_INET6_GETPEERNAME]	= "cgroup_inet6_getpeername",
-+	[BPF_CGROUP_UNIX_GETPEERNAME]	= "cgroup_unix_getpeername",
- 	[BPF_CGROUP_INET4_GETSOCKNAME]	= "cgroup_inet4_getsockname",
- 	[BPF_CGROUP_INET6_GETSOCKNAME]	= "cgroup_inet6_getsockname",
-+	[BPF_CGROUP_UNIX_GETSOCKNAME]	= "cgroup_unix_getsockname",
- 	[BPF_CGROUP_UDP4_SENDMSG]	= "cgroup_udp4_sendmsg",
- 	[BPF_CGROUP_UDP6_SENDMSG]	= "cgroup_udp6_sendmsg",
-+	[BPF_CGROUP_UNIX_SENDMSG]	= "cgroup_unix_sendmsg",
- 	[BPF_CGROUP_SYSCTL]		= "cgroup_sysctl",
- 	[BPF_CGROUP_UDP4_RECVMSG]	= "cgroup_udp4_recvmsg",
- 	[BPF_CGROUP_UDP6_RECVMSG]	= "cgroup_udp6_recvmsg",
-+	[BPF_CGROUP_UNIX_RECVMSG]	= "cgroup_unix_recvmsg",
- 	[BPF_CGROUP_GETSOCKOPT]		= "cgroup_getsockopt",
- 	[BPF_CGROUP_SETSOCKOPT]		= "cgroup_setsockopt",
- 	[BPF_SK_SKB_STREAM_PARSER]	= "sk_skb_stream_parser",
-@@ -8960,14 +8965,19 @@ static const struct bpf_sec_def section_defs[] = {
- 	SEC_DEF("cgroup/bind6",		CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_BIND, SEC_ATTACHABLE),
- 	SEC_DEF("cgroup/connect4",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_CONNECT, SEC_ATTACHABLE),
- 	SEC_DEF("cgroup/connect6",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_CONNECT, SEC_ATTACHABLE),
-+	SEC_DEF("cgroup/connectun",	CGROUP_SOCK_ADDR, BPF_CGROUP_UNIX_CONNECT, SEC_ATTACHABLE),
- 	SEC_DEF("cgroup/sendmsg4",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP4_SENDMSG, SEC_ATTACHABLE),
- 	SEC_DEF("cgroup/sendmsg6",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP6_SENDMSG, SEC_ATTACHABLE),
-+	SEC_DEF("cgroup/sendmsgun",	CGROUP_SOCK_ADDR, BPF_CGROUP_UNIX_SENDMSG, SEC_ATTACHABLE),
- 	SEC_DEF("cgroup/recvmsg4",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP4_RECVMSG, SEC_ATTACHABLE),
- 	SEC_DEF("cgroup/recvmsg6",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP6_RECVMSG, SEC_ATTACHABLE),
-+	SEC_DEF("cgroup/recvmsgun",	CGROUP_SOCK_ADDR, BPF_CGROUP_UNIX_RECVMSG, SEC_ATTACHABLE),
- 	SEC_DEF("cgroup/getpeername4",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_GETPEERNAME, SEC_ATTACHABLE),
- 	SEC_DEF("cgroup/getpeername6",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_GETPEERNAME, SEC_ATTACHABLE),
-+	SEC_DEF("cgroup/getpeernameun", CGROUP_SOCK_ADDR, BPF_CGROUP_UNIX_GETPEERNAME, SEC_ATTACHABLE),
- 	SEC_DEF("cgroup/getsockname4",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_GETSOCKNAME, SEC_ATTACHABLE),
- 	SEC_DEF("cgroup/getsockname6",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_GETSOCKNAME, SEC_ATTACHABLE),
-+	SEC_DEF("cgroup/getsocknameun", CGROUP_SOCK_ADDR, BPF_CGROUP_UNIX_GETSOCKNAME, SEC_ATTACHABLE),
- 	SEC_DEF("cgroup/sysctl",	CGROUP_SYSCTL, BPF_CGROUP_SYSCTL, SEC_ATTACHABLE),
- 	SEC_DEF("cgroup/getsockopt",	CGROUP_SOCKOPT, BPF_CGROUP_GETSOCKOPT, SEC_ATTACHABLE),
- 	SEC_DEF("cgroup/setsockopt",	CGROUP_SOCKOPT, BPF_CGROUP_SETSOCKOPT, SEC_ATTACHABLE),
+> +/**
+> + * phylink_interface_change() - update both cfg_link_an_mode and
+> + * cur_link_an_mode when there is a change in the interface.
+> + * @phydev: pointer to &struct phy_device
+> + *
+> + * When the PHY interface switches between SGMII and 2500BaseX in
+> + * accordance with the link speed, the in-band AN mode should also switch
+> + * based on the PHY interface
+> + */
+> +static void phylink_interface_change(struct phy_device *phydev)
+> +{
+> +	struct phylink *pl = phydev->phylink;
+> +
+> +	if (pl->phy_state.interface != phydev->interface) {
+> +		/* Fallback to the correct AN mode. */
+> +		if (phy_interface_mode_is_8023z(phydev->interface) &&
+> +		    pl->cfg_link_an_mode == MLO_AN_INBAND) {
+> +			pl->cfg_link_an_mode = MLO_AN_PHY;
+> +			pl->cur_link_an_mode = MLO_AN_PHY;
+
+1. Why are you changing both cfg_link_an_mode (configured link AN mode)
+and cur_link_an_mode (current link AN mode) ?
+
+The "configured" link AN mode is supposed to be whatever was configured
+at phylink creation time, and it's never supposed to change. The
+"current" link AN mode can change, but changing that must be followed
+by a major reconfiguration to ensure everything is correctly setup.
+That will happen only because the change to the current link AN mode
+can only happen when pl->phy_state.interface has changed, and the
+change of pl->phy_state.interface triggers the reconfiguration.
+
+2. You force this behaviour on everyone, so now everyone with a SFP
+module that operates in 802.3z mode will be switched out of inband mode
+whether they want that or not. This is likely to cause some breakage.
+
+> +		} else if (pl->config->ovr_an_inband) {
+> +			pl->cfg_link_an_mode = MLO_AN_INBAND;
+> +			pl->cur_link_an_mode = MLO_AN_INBAND;
+
+Here you force inband when not 802.3z mode and ovr_an_inband is set.
+There are SFP modules that do *not* support in-band at all, and this
+will break these modules when combined with a driver that sets
+ovr_an_inband. So more breakage.
+
+Please enumerate the PHY interface modes that you are trying to support
+with this patch set, and indicate whether you want in-band for that
+mode or not, and where the restriction for whether in-band can be used
+comes from (PHY, PCS or MAC) so that it's possible to better understand
+what you're trying to achieve.
+
+Thanks.
+
 -- 
-2.41.0
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
