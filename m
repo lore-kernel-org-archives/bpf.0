@@ -1,189 +1,118 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 298D69CA64;
-	Fri, 22 Sep 2023 10:37:27 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9F999;
-	Fri, 22 Sep 2023 03:37:24 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 85F6740004;
-	Fri, 22 Sep 2023 10:37:08 +0000 (UTC)
-Message-ID: <6d686c54-078d-8d71-d4e2-c754cf92c557@ghiti.fr>
-Date: Fri, 22 Sep 2023 12:37:07 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA0939CA78
+	for <bpf@vger.kernel.org>; Fri, 22 Sep 2023 10:39:58 +0000 (UTC)
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8646099
+	for <bpf@vger.kernel.org>; Fri, 22 Sep 2023 03:39:56 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2bffdf50212so32172021fa.1
+        for <bpf@vger.kernel.org>; Fri, 22 Sep 2023 03:39:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1695379195; x=1695983995; darn=vger.kernel.org;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=bd3Lp+mNhz8XYxLGBCuWdPha+I4ZIt6td6DPuyV79r0=;
+        b=A3q62NGJPfqXYvMV9zhjJ7/N3nORSHbaBT7eL+A2Gn1FSIAIMXrdtj+GJb5VWS32Dg
+         CmtXTstXDx8SIx5Z+zsAB3usJzJlGm86lRMKe2W5HYoSGgtPf+dZ7br4m32HG8PXR+rc
+         kGBrFphCJ24Dma2JkEP0S9+Lc6BiYNvgcs24gxc9enrqgjigOFR6o9ndgRT7zoa6pswO
+         xKOkS2fsrflpxA1r3EHufaMRSFrLeXIDEJQ4h2GMxEDIB6ampa5abzZAaLu2mmqVAFCZ
+         Pz0qi3jqaP8jEgM8W9kH+MXdNcX6Ihw9gVEknlGr+zS0uufabSuojhJYhPJIB+6PspUr
+         rkOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695379195; x=1695983995;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bd3Lp+mNhz8XYxLGBCuWdPha+I4ZIt6td6DPuyV79r0=;
+        b=b3mUA0oJD27h4iA+3oc2c8U6Yy4q7MSB+IEx4h0v2YYNomDwebZKVNYkdo1v9VxAoa
+         Um5uStmFJn1Gqw4+ApNI21mzAeHzAobZ/OPLAED4hOKNCq7P4oVNBUl3by8VbpuEmXYu
+         nuaDQVRQjJ9PkoF5avvpvYGUvxLKvyE1MoMAGEiYX/MnP4rRx1LsRDWaqW4NHzEMKM8Q
+         euspLxJ79gxQ4SGyDfO4mga3Q5IarIeJrcC2FD5NKh0QngUCXxSRpf0kqo7+7CZGTpzW
+         KZtWxawjhsuDFQpe+lUYulSiO7FbnTsbFuIQknG5V2nWG5Yx3cfaUvqCyt0ujztd0DLo
+         xH4g==
+X-Gm-Message-State: AOJu0Yyn7S1aoIlQc3GwUYlD/8fVI8Dx1u0+NEhjn5wPR0mZyiiUzK/+
+	VF0hwCYZqHsOQXtmnUaTbfyQJA==
+X-Google-Smtp-Source: AGHT+IGc3YC+ytaWH2/Gm8wMswgofRd1VqvQcNJGwGldp04+48Gqb0Aue9oZWdQ+j14DrysmX1AUIw==
+X-Received: by 2002:a2e:910f:0:b0:2bc:b70d:9cb5 with SMTP id m15-20020a2e910f000000b002bcb70d9cb5mr7121103ljg.33.1695379194634;
+        Fri, 22 Sep 2023 03:39:54 -0700 (PDT)
+Received: from cloudflare.com ([2a09:bac5:5064:2dc::49:63])
+        by smtp.gmail.com with ESMTPSA id o24-20020a1709064f9800b0099cce6f7d50sm2528990eju.64.2023.09.22.03.39.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Sep 2023 03:39:53 -0700 (PDT)
+References: <20230920232706.498747-1-john.fastabend@gmail.com>
+ <20230920232706.498747-3-john.fastabend@gmail.com>
+User-agent: mu4e 1.6.10; emacs 28.2
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: John Fastabend <john.fastabend@gmail.com>
+Cc: daniel@iogearbox.net, ast@kernel.org, andrii@kernel.org,
+ bpf@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH bpf 2/3] bpf: sockmap, do not inc copied_seq when PEEK
+ flag set
+Date: Fri, 22 Sep 2023 12:23:53 +0200
+In-reply-to: <20230920232706.498747-3-john.fastabend@gmail.com>
+Message-ID: <87a5tesd8n.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v3 08/13] riscv: extend execmem_params for generated code
- allocations
-Content-Language: en-US
-To: Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org
-Cc: Andrew Morton <akpm@linux-foundation.org>, =?UTF-8?B?QmrDtnJuIFTDtnBl?=
- =?UTF-8?Q?l?= <bjorn@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- "David S. Miller" <davem@davemloft.net>, Dinh Nguyen <dinguyen@kernel.org>,
- Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
- Huacai Chen <chenhuacai@kernel.org>,
- Kent Overstreet <kent.overstreet@linux.dev>,
- Luis Chamberlain <mcgrof@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nadav Amit <nadav.amit@gmail.com>,
- "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Puranjay Mohan <puranjay12@gmail.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
- Steven Rostedt <rostedt@goodmis.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
- bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mips@vger.kernel.org, linux-mm@kvack.org,
- linux-modules@vger.kernel.org, linux-parisc@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- loongarch@lists.linux.dev, netdev@vger.kernel.org,
- sparclinux@vger.kernel.org, x86@kernel.org
-References: <20230918072955.2507221-1-rppt@kernel.org>
- <20230918072955.2507221-9-rppt@kernel.org>
-From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20230918072955.2507221-9-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: alex@ghiti.fr
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-	RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hi Mike,
-
-On 18/09/2023 09:29, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+On Wed, Sep 20, 2023 at 04:27 PM -07, John Fastabend wrote:
+> When data is peek'd off the receive queue we shouldn't considered it
+> copied from tcp_sock side. When we increment copied_seq this will confuse
+> tcp_data_ready() because copied_seq can be arbitrarily increased. From]
+> application side it results in poll() operations not waking up when
+> expected.
 >
-> The memory allocations for kprobes and BPF on RISC-V are not placed in
-> the modules area and these custom allocations are implemented with
-> overrides of alloc_insn_page() and  bpf_jit_alloc_exec().
+> Notice tcp stack without BPF recvmsg programs also does not increment
+> copied_seq.
 >
-> Slightly reorder execmem_params initialization to support both 32 and 64
-> bit variants, define EXECMEM_KPROBES and EXECMEM_BPF ranges in
-> riscv::execmem_params and drop overrides of alloc_insn_page() and
-> bpf_jit_alloc_exec().
+> We broke this when we moved copied_seq into recvmsg to only update when
+> actual copy was happening. But, it wasn't working correctly either before
+> because the tcp_data_ready() tried to use the copied_seq value to see
+> if data was read by user yet. See fixes tags.
 >
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> Fixes: e5c6de5fa0258 ("bpf, sockmap: Incorrectly handling copied_seq")
+> Fixes: 04919bed948dc ("tcp: Introduce tcp_read_skb()")
+> Signed-off-by: John Fastabend <john.fastabend@gmail.com>
 > ---
->   arch/riscv/kernel/module.c         | 21 ++++++++++++++++++++-
->   arch/riscv/kernel/probes/kprobes.c | 10 ----------
->   arch/riscv/net/bpf_jit_core.c      | 13 -------------
->   3 files changed, 20 insertions(+), 24 deletions(-)
+>  net/ipv4/tcp_bpf.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 >
-> diff --git a/arch/riscv/kernel/module.c b/arch/riscv/kernel/module.c
-> index 343a0edfb6dd..31505ecb5c72 100644
-> --- a/arch/riscv/kernel/module.c
-> +++ b/arch/riscv/kernel/module.c
-> @@ -436,20 +436,39 @@ int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
->   	return 0;
->   }
->   
-> -#if defined(CONFIG_MMU) && defined(CONFIG_64BIT)
-> +#ifdef CONFIG_MMU
->   static struct execmem_params execmem_params __ro_after_init = {
->   	.ranges = {
->   		[EXECMEM_DEFAULT] = {
->   			.pgprot = PAGE_KERNEL,
->   			.alignment = 1,
->   		},
-> +		[EXECMEM_KPROBES] = {
-> +			.pgprot = PAGE_KERNEL_READ_EXEC,
-> +			.alignment = 1,
-> +		},
-> +		[EXECMEM_BPF] = {
-> +			.pgprot = PAGE_KERNEL,
-> +			.alignment = 1,
+> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+> index 81f0dff69e0b..327268203001 100644
+> --- a/net/ipv4/tcp_bpf.c
+> +++ b/net/ipv4/tcp_bpf.c
+> @@ -222,6 +222,7 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+>  				  int *addr_len)
+>  {
+>  	struct tcp_sock *tcp = tcp_sk(sk);
+> +	int peek = flags & MSG_PEEK;
+>  	u32 seq = tcp->copied_seq;
+>  	struct sk_psock *psock;
+>  	int copied = 0;
+> @@ -311,7 +312,8 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+>  		copied = -EAGAIN;
+>  	}
+>  out:
+> -	WRITE_ONCE(tcp->copied_seq, seq);
+> +	if (!peek)
+> +		WRITE_ONCE(tcp->copied_seq, seq);
+>  	tcp_rcv_space_adjust(sk);
+>  	if (copied > 0)
+>  		__tcp_cleanup_rbuf(sk, copied);
 
+I was surprised to see that we recalculate TCP buffer space and ACK
+frames when peeking at the receive queue. But tcp_recvmsg seems to do
+the same.
 
-Not entirely sure it is the same alignment (sorry did not go through the 
-entire series), but if it is, the alignment above ^ is not the same that 
-is requested by our current bpf_jit_alloc_exec() implementation which is 
-PAGE_SIZE.
-
-
-> +		},
->   	},
->   };
->   
->   struct execmem_params __init *execmem_arch_params(void)
->   {
-> +#ifdef CONFIG_64BIT
->   	execmem_params.ranges[EXECMEM_DEFAULT].start = MODULES_VADDR;
->   	execmem_params.ranges[EXECMEM_DEFAULT].end = MODULES_END;
-> +#else
-> +	execmem_params.ranges[EXECMEM_DEFAULT].start = VMALLOC_START;
-> +	execmem_params.ranges[EXECMEM_DEFAULT].end = VMALLOC_END;
-> +#endif
-> +
-> +	execmem_params.ranges[EXECMEM_KPROBES].start = VMALLOC_START;
-> +	execmem_params.ranges[EXECMEM_KPROBES].end = VMALLOC_END;
-> +
-> +	execmem_params.ranges[EXECMEM_BPF].start = BPF_JIT_REGION_START;
-> +	execmem_params.ranges[EXECMEM_BPF].end = BPF_JIT_REGION_END;
->   
->   	return &execmem_params;
->   }
-> diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probes/kprobes.c
-> index 2f08c14a933d..e64f2f3064eb 100644
-> --- a/arch/riscv/kernel/probes/kprobes.c
-> +++ b/arch/riscv/kernel/probes/kprobes.c
-> @@ -104,16 +104,6 @@ int __kprobes arch_prepare_kprobe(struct kprobe *p)
->   	return 0;
->   }
->   
-> -#ifdef CONFIG_MMU
-> -void *alloc_insn_page(void)
-> -{
-> -	return  __vmalloc_node_range(PAGE_SIZE, 1, VMALLOC_START, VMALLOC_END,
-> -				     GFP_KERNEL, PAGE_KERNEL_READ_EXEC,
-> -				     VM_FLUSH_RESET_PERMS, NUMA_NO_NODE,
-> -				     __builtin_return_address(0));
-> -}
-> -#endif
-> -
->   /* install breakpoint in text */
->   void __kprobes arch_arm_kprobe(struct kprobe *p)
->   {
-> diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
-> index 7b70ccb7fec3..c8a758f0882b 100644
-> --- a/arch/riscv/net/bpf_jit_core.c
-> +++ b/arch/riscv/net/bpf_jit_core.c
-> @@ -218,19 +218,6 @@ u64 bpf_jit_alloc_exec_limit(void)
->   	return BPF_JIT_REGION_SIZE;
->   }
->   
-> -void *bpf_jit_alloc_exec(unsigned long size)
-> -{
-> -	return __vmalloc_node_range(size, PAGE_SIZE, BPF_JIT_REGION_START,
-> -				    BPF_JIT_REGION_END, GFP_KERNEL,
-> -				    PAGE_KERNEL, 0, NUMA_NO_NODE,
-> -				    __builtin_return_address(0));
-> -}
-> -
-> -void bpf_jit_free_exec(void *addr)
-> -{
-> -	return vfree(addr);
-> -}
-> -
->   void *bpf_arch_text_copy(void *dst, void *src, size_t len)
->   {
->   	int ret;
-
-
-Otherwise, you can add:
-
-Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-
-Thanks,
-
-Alex
-
+Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
