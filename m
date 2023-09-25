@@ -1,32 +1,32 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F09062420F
-	for <bpf@vger.kernel.org>; Mon, 25 Sep 2023 21:52:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76D5324213
+	for <bpf@vger.kernel.org>; Mon, 25 Sep 2023 21:52:30 +0000 (UTC)
 Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EACAF
-	for <bpf@vger.kernel.org>; Mon, 25 Sep 2023 14:52:30 -0700 (PDT)
-Received: from pps.filterd (m0354655.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 38PE1xYp020891;
-	Mon, 25 Sep 2023 21:52:09 GMT
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F94D11C
+	for <bpf@vger.kernel.org>; Mon, 25 Sep 2023 14:52:28 -0700 (PDT)
+Received: from pps.filterd (m0354654.ppops.net [127.0.0.1])
+	by mx0b-00206402.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 38PEC9Wi023153;
+	Mon, 25 Sep 2023 21:52:13 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
 	 h=from:to:cc:subject:date:message-id:in-reply-to:references
 	:mime-version:content-transfer-encoding:content-type; s=default;
-	 bh=P5GUbZOx+qmnaD17cFxjA7z9CKXPoygw9BNJj8DGy1A=; b=ZNPNq6ulLykT
-	DmpBV0drYnshNbWHcdN02Mr272aZKHUJBtQTfBLy+jxhS0bRvGG0yuoaTsVJz20u
-	34/twRv7AGai6KxBizn6zjC02vptEXR2bZLr979/TBp5wE+4NlwHhN+nkF5h3jbP
-	qNnKZlv+GcNbVYCoOcIqFQwoK0GgdeqR8P6rcNV49ut2iUi6N3CSx4kK9irpPEFm
-	3HlRsvNF/p1YiwqDwbKX24g6Pw9fZkHOFQME2oIf1bdQRF/PJNFdavZgEPVotOQZ
-	rpwhjPvzu/DYiOsismMg0A2q3gR4ej9WxhaS2BCbEmm//+MplmKcwqgZCY02ISCl
-	yIhO5YDdxw==
+	 bh=MC0uvYMO2FCgf65F6KKYGwogxSRr8eNxjVlVQ6tS7/M=; b=DH8emgZnpSc7
+	f3EbBaGUm0utnddjD+ikUHTLQLC9pKlG3Fy//SoIC0bTFz5rSwnsQw/Y61GZx1AC
+	/B9Ar1WM0PFeFkl7xO/KfKEtVF4qGEnzBk6BxzUSmFg+f3PVkz0+1zDJ5qzPO8V/
+	Xs88u1kwLEhXfI/FaQKTRRDhkowQ3uTaIab/g7amMgK9Zi9YsDay1Isj0FiMqyVA
+	mEZSqFXOs5gZ1yG3+Vv8mWHv+X+sRHEX3ulsQyIGU89+n6G9r/Q/QKmqFgylhqTH
+	boy1rVToCFMqMZnIs7db2efE7/5X6Up2hy5ZyXh0nx4V38DuEspxMNXX0k14Tpsr
+	WFPohzYZ9A==
 Received: from 04wpexch06.crowdstrike.sys (dragosx.crowdstrike.com [208.42.231.60])
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 3tac99mtfh-1
+	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 3taatvvybr-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 25 Sep 2023 21:52:09 +0000 (GMT)
+	Mon, 25 Sep 2023 21:52:13 +0000 (GMT)
 Received: from LL-556NGK3.crowdstrike.sys (10.100.11.122) by
  04wpexch06.crowdstrike.sys (10.100.11.99) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.25; Mon, 25 Sep 2023 21:52:07 +0000
+ 15.2.1258.25; Mon, 25 Sep 2023 21:52:11 +0000
 From: Martin Kelly <martin.kelly@crowdstrike.com>
 To: <bpf@vger.kernel.org>
 CC: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
@@ -34,9 +34,9 @@ CC: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Martin KaFai Lau
 	<martin.lau@kernel.org>,
         Martin Kelly <martin.kelly@crowdstrike.com>
-Subject: [PATCH bpf-next v2 04/14] selftests/bpf: add tests for ring_buffer__ring
-Date: Mon, 25 Sep 2023 14:50:35 -0700
-Message-ID: <20230925215045.2375758-5-martin.kelly@crowdstrike.com>
+Subject: [PATCH bpf-next v2 07/14] libbpf: add ring__avail_data_size
+Date: Mon, 25 Sep 2023 14:50:38 -0700
+Message-ID: <20230925215045.2375758-8-martin.kelly@crowdstrike.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230925215045.2375758-1-martin.kelly@crowdstrike.com>
 References: <20230925215045.2375758-1-martin.kelly@crowdstrike.com>
@@ -52,16 +52,16 @@ X-Originating-IP: [10.100.11.122]
 X-ClientProxiedBy: 04WPEXCH12.crowdstrike.sys (10.100.11.116) To
  04wpexch06.crowdstrike.sys (10.100.11.99)
 X-Disclaimer: USA
-X-Proofpoint-ORIG-GUID: q9gSQyKjdjeCb4VI17fKVkM7zXnpw6Se
-X-Proofpoint-GUID: q9gSQyKjdjeCb4VI17fKVkM7zXnpw6Se
+X-Proofpoint-GUID: 8EMmCCmMKtBspnmYE-CwWG5B9roTInju
+X-Proofpoint-ORIG-GUID: 8EMmCCmMKtBspnmYE-CwWG5B9roTInju
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-09-25_18,2023-09-25_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- adultscore=0 suspectscore=0 lowpriorityscore=0 bulkscore=0 mlxscore=0
- priorityscore=1501 malwarescore=0 phishscore=0 spamscore=0 mlxlogscore=698
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2309180000
- definitions=main-2309250168
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
+ mlxscore=0 bulkscore=0 phishscore=0 priorityscore=1501 mlxlogscore=965
+ adultscore=0 malwarescore=0 clxscore=1015 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2309180000 definitions=main-2309250168
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
 	RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
@@ -69,51 +69,72 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add tests for the new API ring_buffer__ring.
+Add ring__avail_data_size for querying the currently available data in
+the ringbuffer, similar to the BPF_RB_AVAIL_DATA flag in
+bpf_ringbuf_query. This is racy during ongoing operations but is still
+useful for overall information on how a ringbuffer is behaving.
 
 Signed-off-by: Martin Kelly <martin.kelly@crowdstrike.com>
 ---
- .../selftests/bpf/prog_tests/ringbuf_multi.c      | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ tools/lib/bpf/libbpf.h   | 11 +++++++++++
+ tools/lib/bpf/libbpf.map |  1 +
+ tools/lib/bpf/ringbuf.c  |  9 +++++++++
+ 3 files changed, 21 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf_multi.c b/tools/testing/selftests/bpf/prog_tests/ringbuf_multi.c
-index 1455911d9fcb..58522195081b 100644
---- a/tools/testing/selftests/bpf/prog_tests/ringbuf_multi.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ringbuf_multi.c
-@@ -42,6 +42,8 @@ void test_ringbuf_multi(void)
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index ab470179b7fe..d60254c5edc6 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -1282,6 +1282,17 @@ LIBBPF_API unsigned long ring__consumer_pos(const struct ring *r);
+  */
+ LIBBPF_API unsigned long ring__producer_pos(const struct ring *r);
+ 
++/**
++ * @brief **ring__avail_data_size()** returns the number of bytes in the
++ * ringbuffer not yet consumed. This has no locking associated with it, so it
++ * can be inaccurate if operations are ongoing while this is called. However, it
++ * should still show the correct trend over the long-term.
++ *
++ * @param r A ringbuffer object.
++ * @return The number of bytes not yet consumed.
++ */
++LIBBPF_API size_t ring__avail_data_size(const struct ring *r);
++
+ struct user_ring_buffer_opts {
+ 	size_t sz; /* size of this struct, for forward/backward compatibility */
+ };
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 3bec002449d5..5184c94c0502 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -400,6 +400,7 @@ LIBBPF_1.3.0 {
+ 		bpf_program__attach_netfilter;
+ 		bpf_program__attach_tcx;
+ 		bpf_program__attach_uprobe_multi;
++		ring__avail_data_size;
+ 		ring__consumer_pos;
+ 		ring__producer_pos;
+ 		ring_buffer__ring;
+diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
+index d14a607f6b66..07fbc6adcdd9 100644
+--- a/tools/lib/bpf/ringbuf.c
++++ b/tools/lib/bpf/ringbuf.c
+@@ -352,6 +352,15 @@ unsigned long ring__producer_pos(const struct ring *r)
+ 	return smp_load_acquire(r->producer_pos);
+ }
+ 
++size_t ring__avail_data_size(const struct ring *r)
++{
++	unsigned long cons_pos, prod_pos;
++
++	cons_pos = ring__consumer_pos(r);
++	prod_pos = ring__producer_pos(r);
++	return prod_pos - cons_pos;
++}
++
+ static void user_ringbuf_unmap_ring(struct user_ring_buffer *rb)
  {
- 	struct test_ringbuf_multi *skel;
- 	struct ring_buffer *ringbuf = NULL;
-+	struct ring *ring_old;
-+	struct ring *ring;
- 	int err;
- 	int page_size = getpagesize();
- 	int proto_fd = -1;
-@@ -84,11 +86,24 @@ void test_ringbuf_multi(void)
- 	if (CHECK(!ringbuf, "ringbuf_create", "failed to create ringbuf\n"))
- 		goto cleanup;
- 
-+	/* verify ring_buffer__ring returns expected results */
-+	ring = ring_buffer__ring(ringbuf, 0);
-+	if (!ASSERT_OK_PTR(ring, "ring_buffer__ring_idx_0"))
-+		goto cleanup;
-+	ring_old = ring;
-+	ring = ring_buffer__ring(ringbuf, 1);
-+	ASSERT_ERR_PTR(ring, "ring_buffer__ring_idx_1");
-+
- 	err = ring_buffer__add(ringbuf, bpf_map__fd(skel->maps.ringbuf2),
- 			      process_sample, (void *)(long)2);
- 	if (CHECK(err, "ringbuf_add", "failed to add another ring\n"))
- 		goto cleanup;
- 
-+	/* verify adding a new ring didn't invalidate our older pointer */
-+	ring = ring_buffer__ring(ringbuf, 0);
-+	if (!ASSERT_EQ(ring, ring_old, "ring_buffer__ring_again"))
-+		goto cleanup;
-+
- 	err = test_ringbuf_multi__attach(skel);
- 	if (CHECK(err, "skel_attach", "skeleton attachment failed: %d\n", err))
- 		goto cleanup;
+ 	if (rb->consumer_pos) {
 -- 
 2.34.1
 
