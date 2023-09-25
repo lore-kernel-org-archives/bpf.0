@@ -1,34 +1,36 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A8602421C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86DD3250E1
 	for <bpf@vger.kernel.org>; Mon, 25 Sep 2023 21:53:43 +0000 (UTC)
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A99116
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D5E11C
 	for <bpf@vger.kernel.org>; Mon, 25 Sep 2023 14:53:41 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38PKH9vh027000
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+	by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 38PKHAnT002698
 	for <bpf@vger.kernel.org>; Mon, 25 Sep 2023 14:53:40 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3tb9fadxdf-1
+	by m0089730.ppops.net (PPS) with ESMTPS id 3tb9fwe2qc-6
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
 	for <bpf@vger.kernel.org>; Mon, 25 Sep 2023 14:53:40 -0700
 Received: from twshared19625.39.frc1.facebook.com (2620:10d:c0a8:1c::1b) by
- mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.23; Mon, 25 Sep 2023 14:53:37 -0700
 Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-	id 6C42624F393EE; Mon, 25 Sep 2023 14:53:28 -0700 (PDT)
+	id 6684024F39451; Mon, 25 Sep 2023 14:53:32 -0700 (PDT)
 From: Song Liu <song@kernel.org>
 To: <bpf@vger.kernel.org>
 CC: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <martin.lau@kernel.org>, <kernel-team@meta.com>, <iii@linux.ibm.com>,
         Song
  Liu <song@kernel.org>
-Subject: [PATCH v2 bpf-next 0/8] Allocate bpf trampoline on bpf_prog_pack
-Date: Mon, 25 Sep 2023 14:53:16 -0700
-Message-ID: <20230925215324.2962716-1-song@kernel.org>
+Subject: [PATCH v2 bpf-next 2/8] bpf: Let bpf_prog_pack_free handle any pointer
+Date: Mon, 25 Sep 2023 14:53:18 -0700
+Message-ID: <20230925215324.2962716-3-song@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230925215324.2962716-1-song@kernel.org>
+References: <20230925215324.2962716-1-song@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,8 +40,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: fBj3UpnYieZI1dceX4T1Mo24YWQAjJW-
-X-Proofpoint-ORIG-GUID: fBj3UpnYieZI1dceX4T1Mo24YWQAjJW-
+X-Proofpoint-ORIG-GUID: ucx1LJfJ1fa6Uqg4mK10kdCMvpu5EjxW
+X-Proofpoint-GUID: ucx1LJfJ1fa6Uqg4mK10kdCMvpu5EjxW
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-09-25_18,2023-09-25_01,2023-05-22_02
@@ -50,42 +52,128 @@ X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-This set enables allocating bpf trampoline from bpf_prog_pack on x86. The
-majority of this work, however, is the refactoring of trampoline code.
-This is needed because we need to handle 4 archs and 2 users (trampoline
-and struct_ops).
+Currently, bpf_prog_pack_free only can only free pointer to struct
+bpf_binary_header, which is not flexible. Add a size argument to
+bpf_prog_pack_free so that it can handle any pointer.
 
-1/8 is a dependency that is already applied to bpf tree.
-2/8 through 7/8 refactors trampoline code. A few helpers are added.
-8/8 finally let bpf trampoline on x86 use bpf_prog_pack.
+Signed-off-by: Song Liu <song@kernel.org>
+---
+ include/linux/filter.h  |  2 +-
+ kernel/bpf/core.c       | 21 ++++++++++-----------
+ kernel/bpf/dispatcher.c |  5 +----
+ 3 files changed, 12 insertions(+), 16 deletions(-)
 
-Changes in v2:
-1. Add missing changes in net/bpf/bpf_dummy_struct_ops.c.
-2. Reduce one dry run in arch_prepare_bpf_trampoline. (Xu Kuohai)
-3. Other small fixes.
-
-Song Liu (8):
-  s390/bpf: Let arch_prepare_bpf_trampoline return program size
-  bpf: Let bpf_prog_pack_free handle any pointer
-  bpf: Adjust argument names of arch_prepare_bpf_trampoline()
-  bpf: Add helpers for trampoline image management
-  bpf, x86: Adjust arch_prepare_bpf_trampoline return value
-  bpf: Add arch_bpf_trampoline_size()
-  bpf: Use arch_bpf_trampoline_size
-  x86, bpf: Use bpf_prog_pack for bpf trampoline
-
- arch/arm64/net/bpf_jit_comp.c   |  55 +++++++++-----
- arch/riscv/net/bpf_jit_comp64.c |  24 ++++---
- arch/s390/net/bpf_jit_comp.c    |  43 ++++++-----
- arch/x86/net/bpf_jit_comp.c     | 124 +++++++++++++++++++++++++-------
- include/linux/bpf.h             |  12 +++-
- include/linux/filter.h          |   2 +-
- kernel/bpf/bpf_struct_ops.c     |  19 +++--
- kernel/bpf/core.c               |  21 +++---
- kernel/bpf/dispatcher.c         |   5 +-
- kernel/bpf/trampoline.c         |  93 ++++++++++++++++++------
- net/bpf/bpf_dummy_struct_ops.c  |   7 +-
- 11 files changed, 277 insertions(+), 128 deletions(-)
-
---
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 27406aee2d40..eda9efe20026 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1073,7 +1073,7 @@ struct bpf_binary_header *
+ bpf_jit_binary_pack_hdr(const struct bpf_prog *fp);
+=20
+ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_ins=
+ns);
+-void bpf_prog_pack_free(struct bpf_binary_header *hdr);
++void bpf_prog_pack_free(void *ptr, u32 size);
+=20
+ static inline bool bpf_prog_kallsyms_verify_off(const struct bpf_prog *f=
+p)
+ {
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 08626b519ce2..fcdf710e6a32 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -928,20 +928,20 @@ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_ho=
+le_t bpf_fill_ill_insns)
+ 	return ptr;
+ }
+=20
+-void bpf_prog_pack_free(struct bpf_binary_header *hdr)
++void bpf_prog_pack_free(void *ptr, u32 size)
+ {
+ 	struct bpf_prog_pack *pack =3D NULL, *tmp;
+ 	unsigned int nbits;
+ 	unsigned long pos;
+=20
+ 	mutex_lock(&pack_mutex);
+-	if (hdr->size > BPF_PROG_PACK_SIZE) {
+-		bpf_jit_free_exec(hdr);
++	if (size > BPF_PROG_PACK_SIZE) {
++		bpf_jit_free_exec(ptr);
+ 		goto out;
+ 	}
+=20
+ 	list_for_each_entry(tmp, &pack_list, list) {
+-		if ((void *)hdr >=3D tmp->ptr && (tmp->ptr + BPF_PROG_PACK_SIZE) > (vo=
+id *)hdr) {
++		if (ptr >=3D tmp->ptr && (tmp->ptr + BPF_PROG_PACK_SIZE) > ptr) {
+ 			pack =3D tmp;
+ 			break;
+ 		}
+@@ -950,10 +950,10 @@ void bpf_prog_pack_free(struct bpf_binary_header *h=
+dr)
+ 	if (WARN_ONCE(!pack, "bpf_prog_pack bug\n"))
+ 		goto out;
+=20
+-	nbits =3D BPF_PROG_SIZE_TO_NBITS(hdr->size);
+-	pos =3D ((unsigned long)hdr - (unsigned long)pack->ptr) >> BPF_PROG_CHU=
+NK_SHIFT;
++	nbits =3D BPF_PROG_SIZE_TO_NBITS(size);
++	pos =3D ((unsigned long)ptr - (unsigned long)pack->ptr) >> BPF_PROG_CHU=
+NK_SHIFT;
+=20
+-	WARN_ONCE(bpf_arch_text_invalidate(hdr, hdr->size),
++	WARN_ONCE(bpf_arch_text_invalidate(ptr, size),
+ 		  "bpf_prog_pack bug: missing bpf_arch_text_invalidate?\n");
+=20
+ 	bitmap_clear(pack->bitmap, pos, nbits);
+@@ -1100,8 +1100,7 @@ bpf_jit_binary_pack_alloc(unsigned int proglen, u8 =
+**image_ptr,
+=20
+ 	*rw_header =3D kvmalloc(size, GFP_KERNEL);
+ 	if (!*rw_header) {
+-		bpf_arch_text_copy(&ro_header->size, &size, sizeof(size));
+-		bpf_prog_pack_free(ro_header);
++		bpf_prog_pack_free(ro_header, size);
+ 		bpf_jit_uncharge_modmem(size);
+ 		return NULL;
+ 	}
+@@ -1132,7 +1131,7 @@ int bpf_jit_binary_pack_finalize(struct bpf_prog *p=
+rog,
+ 	kvfree(rw_header);
+=20
+ 	if (IS_ERR(ptr)) {
+-		bpf_prog_pack_free(ro_header);
++		bpf_prog_pack_free(ro_header, ro_header->size);
+ 		return PTR_ERR(ptr);
+ 	}
+ 	return 0;
+@@ -1153,7 +1152,7 @@ void bpf_jit_binary_pack_free(struct bpf_binary_hea=
+der *ro_header,
+ {
+ 	u32 size =3D ro_header->size;
+=20
+-	bpf_prog_pack_free(ro_header);
++	bpf_prog_pack_free(ro_header, size);
+ 	kvfree(rw_header);
+ 	bpf_jit_uncharge_modmem(size);
+ }
+diff --git a/kernel/bpf/dispatcher.c b/kernel/bpf/dispatcher.c
+index fa3e9225aedc..56760fc10e78 100644
+--- a/kernel/bpf/dispatcher.c
++++ b/kernel/bpf/dispatcher.c
+@@ -150,10 +150,7 @@ void bpf_dispatcher_change_prog(struct bpf_dispatche=
+r *d, struct bpf_prog *from,
+ 			goto out;
+ 		d->rw_image =3D bpf_jit_alloc_exec(PAGE_SIZE);
+ 		if (!d->rw_image) {
+-			u32 size =3D PAGE_SIZE;
+-
+-			bpf_arch_text_copy(d->image, &size, sizeof(size));
+-			bpf_prog_pack_free((struct bpf_binary_header *)d->image);
++			bpf_prog_pack_free(d->image, PAGE_SIZE);
+ 			d->image =3D NULL;
+ 			goto out;
+ 		}
+--=20
 2.34.1
+
