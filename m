@@ -1,33 +1,35 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0229E3B7B0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E83D4734E
 	for <bpf@vger.kernel.org>; Tue, 26 Sep 2023 19:00:36 +0000 (UTC)
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403CC1BB
-	for <bpf@vger.kernel.org>; Tue, 26 Sep 2023 12:00:35 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7CB192
+	for <bpf@vger.kernel.org>; Tue, 26 Sep 2023 12:00:34 -0700 (PDT)
 Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38QIhqlB016777
-	for <bpf@vger.kernel.org>; Tue, 26 Sep 2023 12:00:35 -0700
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38QIhqlA016777
+	for <bpf@vger.kernel.org>; Tue, 26 Sep 2023 12:00:34 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3tc0h1k16y-18
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3tc0h1k16y-17
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
 	for <bpf@vger.kernel.org>; Tue, 26 Sep 2023 12:00:34 -0700
-Received: from twshared34392.14.frc2.facebook.com (2620:10d:c085:108::4) by
+Received: from twshared19625.39.frc1.facebook.com (2620:10d:c085:208::f) by
  mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 26 Sep 2023 12:00:33 -0700
+ 15.1.2507.23; Tue, 26 Sep 2023 12:00:32 -0700
 Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-	id 48EF02500687C; Tue, 26 Sep 2023 12:00:26 -0700 (PDT)
+	id 32D34250068AF; Tue, 26 Sep 2023 12:00:30 -0700 (PDT)
 From: Song Liu <song@kernel.org>
 To: <bpf@vger.kernel.org>
 CC: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <martin.lau@kernel.org>, <kernel-team@meta.com>, <iii@linux.ibm.com>,
         <bjorn@kernel.org>, Song Liu <song@kernel.org>
-Subject: [PATCH v3 bpf-next 0/8] Allocate bpf trampoline on bpf_prog_pack
-Date: Tue, 26 Sep 2023 12:00:12 -0700
-Message-ID: <20230926190020.1111575-1-song@kernel.org>
+Subject: [PATCH v3 bpf-next 4/8] bpf: Add helpers for trampoline image management
+Date: Tue, 26 Sep 2023 12:00:16 -0700
+Message-ID: <20230926190020.1111575-5-song@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230926190020.1111575-1-song@kernel.org>
+References: <20230926190020.1111575-1-song@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,8 +39,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 9KBMXjgCD0LrJ56xoG6xiCiTjYzIgaPK
-X-Proofpoint-GUID: 9KBMXjgCD0LrJ56xoG6xiCiTjYzIgaPK
+X-Proofpoint-ORIG-GUID: mzdDLLDrYO8hpuO9TI7o8y2w-mzBl3MF
+X-Proofpoint-GUID: mzdDLLDrYO8hpuO9TI7o8y2w-mzBl3MF
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-09-26_13,2023-09-26_01,2023-05-22_02
@@ -49,46 +51,256 @@ X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-This set enables allocating bpf trampoline from bpf_prog_pack on x86. The
-majority of this work, however, is the refactoring of trampoline code.
-This is needed because we need to handle 4 archs and 2 users (trampoline
-and struct_ops).
+As BPF trampoline of different archs moves from bpf_jit_[alloc|free]_exec=
+()
+to bpf_prog_pack_[alloc|free](), we need to use different _alloc, _free f=
+or
+different archs during the transition. Add the following helpers for this
+transition:
 
-1/8 is a dependency that is already applied to bpf tree.
-2/8 through 7/8 refactors trampoline code. A few helpers are added.
-8/8 finally let bpf trampoline on x86 use bpf_prog_pack.
+void *arch_alloc_bpf_trampoline(int size);
+void arch_free_bpf_trampoline(void *image, int size);
+void arch_protect_bpf_trampoline(void *image, int size);
+void arch_unprotect_bpf_trampoline(void *image, int size);
 
-Changes in v3:
-1. Fix bug in s390. (Thanks to Ilya Leoshkevich).
-2. Fix build error in riscv. (kernel test robot).
+The fallback version of these helpers require size <=3D PAGE_SIZE, but th=
+ey
+are only called with size =3D=3D PAGE_SIZE. They will be called with size=
+ <
+PAGE_SIZE when arch_bpf_trampoline_size() helper is introduced later.
 
-Changes in v2:
-1. Add missing changes in net/bpf/bpf_dummy_struct_ops.c.
-2. Reduce one dry run in arch_prepare_bpf_trampoline. (Xu Kuohai)
-3. Other small fixes.
+Signed-off-by: Song Liu <song@kernel.org>
+Acked-by: Ilya Leoshkevich <iii@linux.ibm.com>
+Tested-by: Ilya Leoshkevich <iii@linux.ibm.com>  # on s390x
+---
+ include/linux/bpf.h            |  5 ++++
+ kernel/bpf/bpf_struct_ops.c    | 12 ++++------
+ kernel/bpf/trampoline.c        | 44 ++++++++++++++++++++++++++++------
+ net/bpf/bpf_dummy_struct_ops.c |  7 +++---
+ 4 files changed, 50 insertions(+), 18 deletions(-)
 
-Song Liu (8):
-  s390/bpf: Let arch_prepare_bpf_trampoline return program size
-  bpf: Let bpf_prog_pack_free handle any pointer
-  bpf: Adjust argument names of arch_prepare_bpf_trampoline()
-  bpf: Add helpers for trampoline image management
-  bpf, x86: Adjust arch_prepare_bpf_trampoline return value
-  bpf: Add arch_bpf_trampoline_size()
-  bpf: Use arch_bpf_trampoline_size
-  x86, bpf: Use bpf_prog_pack for bpf trampoline
-
- arch/arm64/net/bpf_jit_comp.c   |  55 +++++++++-----
- arch/riscv/net/bpf_jit_comp64.c |  25 ++++---
- arch/s390/net/bpf_jit_comp.c    |  56 +++++++++------
- arch/x86/net/bpf_jit_comp.c     | 124 +++++++++++++++++++++++++-------
- include/linux/bpf.h             |  12 +++-
- include/linux/filter.h          |   2 +-
- kernel/bpf/bpf_struct_ops.c     |  19 +++--
- kernel/bpf/core.c               |  21 +++---
- kernel/bpf/dispatcher.c         |   5 +-
- kernel/bpf/trampoline.c         |  93 ++++++++++++++++++------
- net/bpf/bpf_dummy_struct_ops.c  |   7 +-
- 11 files changed, 292 insertions(+), 127 deletions(-)
-
---
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index f90339c26c4e..b28852351959 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1083,6 +1083,11 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_i=
+mage *im, void *image, void *i
+ 				const struct btf_func_model *m, u32 flags,
+ 				struct bpf_tramp_links *tlinks,
+ 				void *func_addr);
++void *arch_alloc_bpf_trampoline(int size);
++void arch_free_bpf_trampoline(void *image, int size);
++void arch_protect_bpf_trampoline(void *image, int size);
++void arch_unprotect_bpf_trampoline(void *image, int size);
++
+ u64 notrace __bpf_prog_enter_sleepable_recur(struct bpf_prog *prog,
+ 					     struct bpf_tramp_run_ctx *run_ctx);
+ void notrace __bpf_prog_exit_sleepable_recur(struct bpf_prog *prog, u64 =
+start,
+diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+index db6176fb64dc..e9e95879bce2 100644
+--- a/kernel/bpf/bpf_struct_ops.c
++++ b/kernel/bpf/bpf_struct_ops.c
+@@ -515,7 +515,7 @@ static long bpf_struct_ops_map_update_elem(struct bpf=
+_map *map, void *key,
+ 			if (err)
+ 				goto reset_unlock;
+ 		}
+-		set_memory_rox((long)st_map->image, 1);
++		arch_protect_bpf_trampoline(st_map->image, PAGE_SIZE);
+ 		/* Let bpf_link handle registration & unregistration.
+ 		 *
+ 		 * Pair with smp_load_acquire() during lookup_elem().
+@@ -524,7 +524,7 @@ static long bpf_struct_ops_map_update_elem(struct bpf=
+_map *map, void *key,
+ 		goto unlock;
+ 	}
+=20
+-	set_memory_rox((long)st_map->image, 1);
++	arch_protect_bpf_trampoline(st_map->image, PAGE_SIZE);
+ 	err =3D st_ops->reg(kdata);
+ 	if (likely(!err)) {
+ 		/* This refcnt increment on the map here after
+@@ -547,8 +547,7 @@ static long bpf_struct_ops_map_update_elem(struct bpf=
+_map *map, void *key,
+ 	 * there was a race in registering the struct_ops (under the same name)=
+ to
+ 	 * a sub-system through different struct_ops's maps.
+ 	 */
+-	set_memory_nx((long)st_map->image, 1);
+-	set_memory_rw((long)st_map->image, 1);
++	arch_unprotect_bpf_trampoline(st_map->image, PAGE_SIZE);
+=20
+ reset_unlock:
+ 	bpf_struct_ops_map_put_progs(st_map);
+@@ -616,7 +615,7 @@ static void __bpf_struct_ops_map_free(struct bpf_map =
+*map)
+ 		bpf_struct_ops_map_put_progs(st_map);
+ 	bpf_map_area_free(st_map->links);
+ 	if (st_map->image) {
+-		bpf_jit_free_exec(st_map->image);
++		arch_free_bpf_trampoline(st_map->image, PAGE_SIZE);
+ 		bpf_jit_uncharge_modmem(PAGE_SIZE);
+ 	}
+ 	bpf_map_area_free(st_map->uvalue);
+@@ -691,7 +690,7 @@ static struct bpf_map *bpf_struct_ops_map_alloc(union=
+ bpf_attr *attr)
+ 		return ERR_PTR(ret);
+ 	}
+=20
+-	st_map->image =3D bpf_jit_alloc_exec(PAGE_SIZE);
++	st_map->image =3D arch_alloc_bpf_trampoline(PAGE_SIZE);
+ 	if (!st_map->image) {
+ 		/* __bpf_struct_ops_map_free() uses st_map->image as flag
+ 		 * for "charged or not". In this case, we need to unchange
+@@ -711,7 +710,6 @@ static struct bpf_map *bpf_struct_ops_map_alloc(union=
+ bpf_attr *attr)
+ 	}
+=20
+ 	mutex_init(&st_map->lock);
+-	set_vm_flush_reset_perms(st_map->image);
+ 	bpf_map_init_from_attr(map, attr);
+=20
+ 	return map;
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index e114a1c7961e..5509bdf98067 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -254,7 +254,7 @@ bpf_trampoline_get_progs(const struct bpf_trampoline =
+*tr, int *total, bool *ip_a
+ static void bpf_tramp_image_free(struct bpf_tramp_image *im)
+ {
+ 	bpf_image_ksym_del(&im->ksym);
+-	bpf_jit_free_exec(im->image);
++	arch_free_bpf_trampoline(im->image, PAGE_SIZE);
+ 	bpf_jit_uncharge_modmem(PAGE_SIZE);
+ 	percpu_ref_exit(&im->pcref);
+ 	kfree_rcu(im, rcu);
+@@ -365,10 +365,9 @@ static struct bpf_tramp_image *bpf_tramp_image_alloc=
+(u64 key)
+ 		goto out_free_im;
+=20
+ 	err =3D -ENOMEM;
+-	im->image =3D image =3D bpf_jit_alloc_exec(PAGE_SIZE);
++	im->image =3D image =3D arch_alloc_bpf_trampoline(PAGE_SIZE);
+ 	if (!image)
+ 		goto out_uncharge;
+-	set_vm_flush_reset_perms(image);
+=20
+ 	err =3D percpu_ref_init(&im->pcref, __bpf_tramp_image_release, 0, GFP_K=
+ERNEL);
+ 	if (err)
+@@ -381,7 +380,7 @@ static struct bpf_tramp_image *bpf_tramp_image_alloc(=
+u64 key)
+ 	return im;
+=20
+ out_free_image:
+-	bpf_jit_free_exec(im->image);
++	arch_free_bpf_trampoline(im->image, PAGE_SIZE);
+ out_uncharge:
+ 	bpf_jit_uncharge_modmem(PAGE_SIZE);
+ out_free_im:
+@@ -444,7 +443,7 @@ static int bpf_trampoline_update(struct bpf_trampolin=
+e *tr, bool lock_direct_mut
+ 	if (err < 0)
+ 		goto out_free;
+=20
+-	set_memory_rox((long)im->image, 1);
++	arch_protect_bpf_trampoline(im->image, PAGE_SIZE);
+=20
+ 	WARN_ON(tr->cur_image && total =3D=3D 0);
+ 	if (tr->cur_image)
+@@ -465,8 +464,7 @@ static int bpf_trampoline_update(struct bpf_trampolin=
+e *tr, bool lock_direct_mut
+ 		tr->fops->trampoline =3D 0;
+=20
+ 		/* reset im->image memory attr for arch_prepare_bpf_trampoline */
+-		set_memory_nx((long)im->image, 1);
+-		set_memory_rw((long)im->image, 1);
++		arch_unprotect_bpf_trampoline(im->image, PAGE_SIZE);
+ 		goto again;
+ 	}
+ #endif
+@@ -1040,6 +1038,38 @@ arch_prepare_bpf_trampoline(struct bpf_tramp_image=
+ *im, void *image, void *image
+ 	return -ENOTSUPP;
+ }
+=20
++void * __weak arch_alloc_bpf_trampoline(int size)
++{
++	void *image;
++
++	WARN_ON_ONCE(size > PAGE_SIZE || size <=3D 0);
++	image =3D bpf_jit_alloc_exec(PAGE_SIZE);
++	if (image)
++		set_vm_flush_reset_perms(image);
++	return image;
++}
++
++void __weak arch_free_bpf_trampoline(void *image, int size)
++{
++	/* bpf_jit_free_exec doesn't need "size", but
++	 * bpf_prog_pack_free() needs it.
++	 */
++	bpf_jit_free_exec(image);
++}
++
++void __weak arch_protect_bpf_trampoline(void *image, int size)
++{
++	WARN_ON_ONCE(size > PAGE_SIZE || size <=3D 0);
++	set_memory_rox((long)image, 1);
++}
++
++void __weak arch_unprotect_bpf_trampoline(void *image, int size)
++{
++	WARN_ON_ONCE(size > PAGE_SIZE || size <=3D 0);
++	set_memory_nx((long)image, 1);
++	set_memory_rw((long)image, 1);
++}
++
+ static int __init init_trampolines(void)
+ {
+ 	int i;
+diff --git a/net/bpf/bpf_dummy_struct_ops.c b/net/bpf/bpf_dummy_struct_op=
+s.c
+index 5918d1b32e19..2748f9d77b18 100644
+--- a/net/bpf/bpf_dummy_struct_ops.c
++++ b/net/bpf/bpf_dummy_struct_ops.c
+@@ -101,12 +101,11 @@ int bpf_struct_ops_test_run(struct bpf_prog *prog, =
+const union bpf_attr *kattr,
+ 		goto out;
+ 	}
+=20
+-	image =3D bpf_jit_alloc_exec(PAGE_SIZE);
++	image =3D arch_alloc_bpf_trampoline(PAGE_SIZE);
+ 	if (!image) {
+ 		err =3D -ENOMEM;
+ 		goto out;
+ 	}
+-	set_vm_flush_reset_perms(image);
+=20
+ 	link =3D kzalloc(sizeof(*link), GFP_USER);
+ 	if (!link) {
+@@ -124,7 +123,7 @@ int bpf_struct_ops_test_run(struct bpf_prog *prog, co=
+nst union bpf_attr *kattr,
+ 	if (err < 0)
+ 		goto out;
+=20
+-	set_memory_rox((long)image, 1);
++	arch_protect_bpf_trampoline(image, PAGE_SIZE);
+ 	prog_ret =3D dummy_ops_call_op(image, args);
+=20
+ 	err =3D dummy_ops_copy_args(args);
+@@ -134,7 +133,7 @@ int bpf_struct_ops_test_run(struct bpf_prog *prog, co=
+nst union bpf_attr *kattr,
+ 		err =3D -EFAULT;
+ out:
+ 	kfree(args);
+-	bpf_jit_free_exec(image);
++	arch_free_bpf_trampoline(image, PAGE_SIZE);
+ 	if (link)
+ 		bpf_link_put(&link->link);
+ 	kfree(tlinks);
+--=20
 2.34.1
+
