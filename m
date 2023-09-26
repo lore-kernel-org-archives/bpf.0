@@ -1,247 +1,257 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F3943715D
-	for <bpf@vger.kernel.org>; Tue, 26 Sep 2023 20:47:38 +0000 (UTC)
-Received: from mail-oa1-f77.google.com (mail-oa1-f77.google.com [209.85.160.77])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05883136
-	for <bpf@vger.kernel.org>; Tue, 26 Sep 2023 13:47:35 -0700 (PDT)
-Received: by mail-oa1-f77.google.com with SMTP id 586e51a60fabf-1dcfa4cd2b6so16689161fac.1
-        for <bpf@vger.kernel.org>; Tue, 26 Sep 2023 13:47:34 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E8F4374CE
+	for <bpf@vger.kernel.org>; Tue, 26 Sep 2023 21:26:34 +0000 (UTC)
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242AC903F
+	for <bpf@vger.kernel.org>; Tue, 26 Sep 2023 14:26:32 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-59c0dd156e5so199420747b3.3
+        for <bpf@vger.kernel.org>; Tue, 26 Sep 2023 14:26:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1695763591; x=1696368391; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1M0ZxDhPpbzbmTdpjKq/EH6B6II7eIRIx4eN4Kr09go=;
+        b=3bGh7LRCdC/lgcxFPQQIjN00i2Ekfksi7wMia56EPExeJinZTvY2ZaMoyyEKlThOuj
+         IkFme7qliWnqCVt/b6GOcouTZBKuYU3PtdWbZucM0pceKHSS62e9kGAm06gzvnhP0J+M
+         JS6sDG8/Ns1+AshDvPjrbmIwjEOlzoHp45KrEz4Z2tmYvAyYDlqcZniBTlRFQZGiRT+4
+         LE+O9LQ/T7/rndrQRlIuAYoNe+qqA1f0gBoZlzyRSSu7rhdmAIWWK20+njNO2AYarsrA
+         IELNQ6E7pdzk6jsXB4zTWDk5MS++Mkycq6PWTqwnddwvaNUiKOeY3Yy/dzRZHiolSycf
+         Lgkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695761254; x=1696366054;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7/zDMVC/fYmKPYBhxu9c4/EG5uLEdTJncjl69CxbpaI=;
-        b=t5cPtFBSB32a0CEjyCHGLWbWt9JZwKETtuBMSfQJ39I2AQMT8u36bXFQRMuxo9v6gK
-         eMmRMc58rNdmPTD0Sp+2T8gTLVlibTc86wAZM62crbx304M0flnRnLnzipe56Cmlf1CS
-         jfHb+bIK/GwwWalAzjrEjnls3Q8z+lW+Fbkkr2NJGCgO/8ofEP51tiJNFPEHjjMWfp9V
-         0BiexAGZ3BVXdyKBvpP4Ty1DVi2RXfnCBZ3wh+L2N1gcNnOEnVJd0DrFl0uTgLfhI3/f
-         8m8fM6bNZJOFxvdZZY7gx2AznJhewgyPZASm4KFmWXzjvhOFuGbGn64OuCWrNUOR+ucy
-         IhxA==
-X-Gm-Message-State: AOJu0YxN9VCILu01umFI8ap0yXVs72+twoyX1lr/gPQes/QBQ8FMl1Vc
-	ybU5ePPCr1wb79uK4T0RkllK+tPivt7eNdQNeqPSQECiVdj0
-X-Google-Smtp-Source: AGHT+IF5/b+N+5KGxuCTJnyIeBi3zIXcRokuHfKRpscL+qHJZH2/jepRo1bLPhfFTY1CnjK/K8w70tXdwtAnk32eJTe64zohFvmr
+        d=1e100.net; s=20230601; t=1695763591; x=1696368391;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=1M0ZxDhPpbzbmTdpjKq/EH6B6II7eIRIx4eN4Kr09go=;
+        b=P2ek/gndnCqP3k23Ue2O5s+SX4VwyQ5Gzbjv33YmSu/OXBfw+CwvQWYfJ0Ev9qjI4V
+         rxOkVqBGlQ2fDUhZJCe8gti0PsnNt8qiGWKkU65qtdftMoEHYZTmLWKgRLd4ugNtExji
+         QGAtwRR94BFqHcK/DIB7qDZblf7x5dg3BVFyHiCP7IcPK/Td4c31SSsRyHEgmP024oqx
+         kQ47TtFNsNMUZG334Oa6cI+MrX1u2bc4o7FWydzawRdmtkCl2LVIwPHSq1vU4awm7HJE
+         7/60fGLqJwITWg8UFrkIHp7j9KAjTPrJ2efVZJcsgkAcSE7y9zEClV0WAifNdacvROVI
+         hclg==
+X-Gm-Message-State: AOJu0YzrtBDkA9yyMgp8hsZTmtRqJIx3LkZPYGhd+PbUTkpqp0zqJgNV
+	KJ3qnPI/rH651oUb4D2DPg1N1Ak=
+X-Google-Smtp-Source: AGHT+IEQV9RjRxyay9q2R34lZnRBdbz5E0qy/hCrIJRCmAeZHQblXVs/TIZI/mbc9n0egaw0WBtVQOg=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a81:ae46:0:b0:584:41a6:6cd8 with SMTP id
+ g6-20020a81ae46000000b0058441a66cd8mr1754ywk.8.1695763591286; Tue, 26 Sep
+ 2023 14:26:31 -0700 (PDT)
+Date: Tue, 26 Sep 2023 14:26:29 -0700
+In-Reply-To: <20230926055913.9859-2-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Received: by 2002:a05:6871:6a87:b0:1c5:87d6:b779 with SMTP id
- zf7-20020a0568716a8700b001c587d6b779mr54027oab.8.1695761254376; Tue, 26 Sep
- 2023 13:47:34 -0700 (PDT)
-Date: Tue, 26 Sep 2023 13:47:34 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000030ed510606492f24@google.com>
-Subject: [syzbot] [bpf?] WARNING in bpf_mprog_attach
-From: syzbot <syzbot+baa44e3dbbe48e05c1ad@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com, 
-	jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org, 
-	martin.lau@linux.dev, sdf@google.com, song@kernel.org, 
-	syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-	RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.6
+Mime-Version: 1.0
+References: <20230926055913.9859-1-daniel@iogearbox.net> <20230926055913.9859-2-daniel@iogearbox.net>
+Message-ID: <ZRNMhVfuqPrK3J6O@google.com>
+Subject: Re: [PATCH bpf-next 1/8] meta, bpf: Add bpf programmable meta device
+From: Stanislav Fomichev <sdf@google.com>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, martin.lau@kernel.org, 
+	razor@blackwall.org, ast@kernel.org, andrii@kernel.org, 
+	john.fastabend@gmail.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hello,
+On 09/26, Daniel Borkmann wrote:
+> This work adds a new, minimal BPF-programmable device called "meta" we
+> recently presented at LSF/MM/BPF. The latter name derives from the Greek
+> =CE=BC=CE=B5=CF=84=CE=AC, encompassing a wide array of meanings such as "=
+on top of", "beyond".
+> Given business logic is defined by BPF, this device can have many meaning=
+s.
+> The core idea is that BPF programs are executed within the drivers xmit
+> routine and therefore e.g. in case of containers/Pods moving BPF processi=
+ng
+> closer to the source.
+>=20
+> One of the goals was that in case of Pod egress traffic, this allows to
+> move BPF programs from hostns tcx ingress into the device itself, providi=
+ng
+> earlier drop or forward mechanisms, for example, if the BPF program
+> determines that the skb must be sent out of the node, then a redirect to
+> the physical device can take place directly without going through per-CPU
+> backlog queue. This helps to shift processing for such traffic from softi=
+rq
+> to process context, leading to better scheduling decisions and better
+> performance.
+>=20
+> In this initial version, the meta device ships as a pair, but we plan to
+> extend this further so it can also operate in single device mode. The pai=
+r
+> comes with a primary and a peer device. Only the primary device, typicall=
+y
+> residing in hostns, can manage BPF programs for itself and its peer. The
+> peer device is designated for containers/Pods and cannot attach/detach
+> BPF programs. Upon the device creation, the user can set the default poli=
+cy
+> to 'forward' or 'drop' for the case when no BPF program is attached.
+>=20
+> Additionally, the device can be operated in L3 (default) or L2 mode. The
+> management of BPF programs is done via bpf_mprog, so that multi-attach is
+> supported right from the beginning with similar API/dependency controls a=
+s
+> tcx. For details on the latter see commit 053c8e1f235d ("bpf: Add generic
+> attach/detach/query API for multi-progs"). tc BPF compatibility is provid=
+ed,
+> so that existing programs can be easily migrated.
+>=20
+> Going forward, we plan to use meta devices in Cilium as the main device t=
+ype
+> for connecting Pods. They will be operated in L3 mode in order to simplif=
+y
+> a Pod's neighbor management and the peer will operate in default drop mod=
+e,
+> so that no traffic is leaving between the time when a Pod is brought up b=
+y
+> the CNI plugin and programs attached by the agent. Additionally, the prog=
+rams
+> we attach via tcx on the physical devices are using bpf_redirect_peer()
+> for inbound traffic into meta device, hence the latter also supporting th=
+e
+> ndo_get_peer_dev callback. Similarly, we use bpf_redirect_neigh() for the
+> way out, pushing to phys device directly. Also, BIG TCP is supported on m=
+eta
+> device. For the follow-up work in single device mode, we plan to convert
+> Cilium's cilium_host/_net devices into a single one.
+>=20
+> An extensive test suite for checking device operations and the BPF progra=
+m
+> and link management API comes as BPF selftests in this series.
+>=20
+> Co-developed-by: Nikolay Aleksandrov <razor@blackwall.org>
+> Signed-off-by: Nikolay Aleksandrov <razor@blackwall.org>
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> Link: https://github.com/borkmann/iproute2/commits/pr/meta
+> Link: http://vger.kernel.org/bpfconf2023_material/tcx_meta_netdev_borkman=
+n.pdf (24ff.)
+> ---
+>  MAINTAINERS                    |   9 +
+>  drivers/net/Kconfig            |   9 +
+>  drivers/net/Makefile           |   1 +
+>  drivers/net/meta.c             | 734 +++++++++++++++++++++++++++++++++
+>  include/linux/netdevice.h      |   2 +
+>  include/net/meta.h             |  31 ++
+>  include/uapi/linux/bpf.h       |   2 +
+>  include/uapi/linux/if_link.h   |  25 ++
+>  kernel/bpf/syscall.c           |  30 +-
+>  tools/include/uapi/linux/bpf.h |   2 +
+>  10 files changed, 840 insertions(+), 5 deletions(-)
+>  create mode 100644 drivers/net/meta.c
+>  create mode 100644 include/net/meta.h
+>=20
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 8985a1b0b5ee..ec3edd4caa56 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -3774,6 +3774,15 @@ L:	bpf@vger.kernel.org
+>  S:	Maintained
+>  F:	tools/lib/bpf/
+> =20
+> +BPF [META]
+> +M:	Daniel Borkmann <daniel@iogearbox.net>
+> +M:	Nikolay Aleksandrov <razor@blackwall.org>
+> +L:	bpf@vger.kernel.org
+> +L:	netdev@vger.kernel.org
+> +S:	Supported
+> +F:	drivers/net/meta.c
+> +F:	include/net/meta.h
+> +
+>  BPF [MISC]
+>  L:	bpf@vger.kernel.org
+>  S:	Odd Fixes
+> diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
+> index 44eeb5d61ba9..9959cdd50b0b 100644
+> --- a/drivers/net/Kconfig
+> +++ b/drivers/net/Kconfig
+> @@ -448,6 +448,15 @@ config NLMON
+>  	  diagnostics, etc. This is mostly intended for developers or support
+>  	  to debug netlink issues. If unsure, say N.
+> =20
+> +config META
+> +	bool "BPF-programmable meta device"
+> +	depends on BPF_SYSCALL
+> +	help
+> +	  The virtual meta devices can be created in pairs and used to connect
+> +	  two network namespaces. A BPF program can be attached to the device(s=
+)
+> +	  which then gets executed on transmission to implement the driver
+> +	  internal logic.
+> +
+>  config NET_VRF
+>  	tristate "Virtual Routing and Forwarding (Lite)"
+>  	depends on IP_MULTIPLE_TABLES
+> diff --git a/drivers/net/Makefile b/drivers/net/Makefile
+> index e26f98f897c5..18eabeb78ece 100644
+> --- a/drivers/net/Makefile
+> +++ b/drivers/net/Makefile
+> @@ -22,6 +22,7 @@ obj-$(CONFIG_MDIO) +=3D mdio.o
+>  obj-$(CONFIG_NET) +=3D loopback.o
+>  obj-$(CONFIG_NETDEV_LEGACY_INIT) +=3D Space.o
+>  obj-$(CONFIG_NETCONSOLE) +=3D netconsole.o
+> +obj-$(CONFIG_META) +=3D meta.o
+>  obj-y +=3D phy/
+>  obj-y +=3D pse-pd/
+>  obj-y +=3D mdio/
+> diff --git a/drivers/net/meta.c b/drivers/net/meta.c
+> new file mode 100644
+> index 000000000000..e464f547b0a6
+> --- /dev/null
+> +++ b/drivers/net/meta.c
+> @@ -0,0 +1,734 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/* Copyright (c) 2023 Isovalent */
+> +
+> +#include <linux/netdevice.h>
+> +#include <linux/ethtool.h>
+> +#include <linux/etherdevice.h>
+> +#include <linux/filter.h>
+> +#include <linux/netfilter_netdev.h>
+> +#include <linux/bpf_mprog.h>
+> +
+> +#include <net/meta.h>
+> +#include <net/dst.h>
+> +#include <net/tcx.h>
+> +
+> +#define DRV_NAME	"meta"
+> +#define DRV_VERSION	"1.0"
+> +
+> +struct meta {
+> +	/* Needed in fast-path */
+> +	struct net_device __rcu *peer;
+> +	struct bpf_mprog_entry __rcu *active;
+> +	enum meta_action policy;
+> +	struct bpf_mprog_bundle	bundle;
+> +	/* Needed in slow-path */
+> +	enum meta_mode mode;
+> +	bool primary;
+> +	u32 headroom;
+> +};
+> +
+> +static void meta_scrub_minimum(struct sk_buff *skb)
+> +{
 
-syzbot found the following issue on:
+[..]
 
-HEAD commit:    bf6547d8715b Merge branches 'for-next/sve-remove-pseudo-re..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=15e15266680000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=87bf2bd0cc8825ea
-dashboard link: https://syzkaller.appspot.com/bug?extid=baa44e3dbbe48e05c1ad
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1429fe12680000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=135744cc680000
+> +	skb->skb_iif =3D 0;
+> +	skb->ignore_df =3D 0;
+> +	skb->priority =3D 0;
+> +	skb_dst_drop(skb);
+> +	skb_ext_reset(skb);
+> +	nf_reset_ct(skb);
+> +	nf_reset_trace(skb);
+> +	nf_skip_egress(skb, true);
+> +	ipvs_reset(skb);
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ce9077c94d96/disk-bf6547d8.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/a846fe1c61d3/vmlinux-bf6547d8.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/b4436f7e6852/Image-bf6547d8.gz.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+baa44e3dbbe48e05c1ad@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 6072 at include/linux/bpf_mprog.h:198 bpf_mprog_total include/linux/bpf_mprog.h:198 [inline]
-WARNING: CPU: 1 PID: 6072 at include/linux/bpf_mprog.h:198 bpf_mprog_pos_before kernel/bpf/mprog.c:200 [inline]
-WARNING: CPU: 1 PID: 6072 at include/linux/bpf_mprog.h:198 bpf_mprog_attach+0x584/0xb88 kernel/bpf/mprog.c:258
-Modules linked in:
-CPU: 1 PID: 6072 Comm: syz-executor183 Not tainted 6.6.0-rc3-syzkaller-gbf6547d8715b #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/04/2023
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : bpf_mprog_total include/linux/bpf_mprog.h:198 [inline]
-pc : bpf_mprog_pos_before kernel/bpf/mprog.c:200 [inline]
-pc : bpf_mprog_attach+0x584/0xb88 kernel/bpf/mprog.c:258
-lr : bpf_mprog_total include/linux/bpf_mprog.h:198 [inline]
-lr : bpf_mprog_pos_before kernel/bpf/mprog.c:200 [inline]
-lr : bpf_mprog_attach+0x584/0xb88 kernel/bpf/mprog.c:258
-sp : ffff800096767920
-x29: ffff800096767a00 x28: 0000000000000040 x27: 1fffe0001983e841
-x26: 0000000000000000 x25: ffff0000cc1f4208 x24: 00000000ffffffde
-x23: ffff8000967679a0 x22: ffff8000967679c0 x21: ffff0000cc1f4008
-x20: ffff0000cc1f4628 x19: dfff800000000000 x18: 0000000000000000
-x17: 0000000000000000 x16: ffff80008a576f00 x15: 0000000000000002
-x14: 1ffff00012cecf34 x13: 0000000000000000 x12: 0000000000000000
-x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
-x8 : ffff0000d4921bc0 x7 : 0000000000000000 x6 : 0000000000000000
-x5 : 0000000000000008 x4 : 0000000000000000 x3 : 0000000000000010
-x2 : 0000000000000000 x1 : 0000000000000040 x0 : 000000000000003f
-Call trace:
- bpf_mprog_total include/linux/bpf_mprog.h:198 [inline]
- bpf_mprog_pos_before kernel/bpf/mprog.c:200 [inline]
- bpf_mprog_attach+0x584/0xb88 kernel/bpf/mprog.c:258
- tcx_prog_attach+0x23c/0x6ac kernel/bpf/tcx.c:39
- bpf_prog_attach+0x19c/0x340 kernel/bpf/syscall.c:3848
- __sys_bpf+0x2e8/0x5dc kernel/bpf/syscall.c:5344
- __do_sys_bpf kernel/bpf/syscall.c:5439 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5437 [inline]
- __arm64_sys_bpf+0x80/0x98 kernel/bpf/syscall.c:5437
- __invoke_syscall arch/arm64/kernel/syscall.c:37 [inline]
- invoke_syscall+0x98/0x2b8 arch/arm64/kernel/syscall.c:51
- el0_svc_common+0x130/0x23c arch/arm64/kernel/syscall.c:136
- do_el0_svc+0x48/0x58 arch/arm64/kernel/syscall.c:155
- el0_svc+0x58/0x16c arch/arm64/kernel/entry-common.c:678
- el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:696
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-irq event stamp: 576
-hardirqs last  enabled at (575): [<ffff800080034500>] local_daif_restore+0x1c/0x3c arch/arm64/include/asm/daifflags.h:75
-hardirqs last disabled at (576): [<ffff80008a625394>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:436
-softirqs last  enabled at (562): [<ffff8000805caa34>] spin_unlock_bh include/linux/spinlock.h:396 [inline]
-softirqs last  enabled at (562): [<ffff8000805caa34>] bpf_prog_by_id+0x144/0x168 kernel/bpf/syscall.c:4083
-softirqs last disabled at (560): [<ffff8000805ca92c>] spin_lock_bh include/linux/spinlock.h:356 [inline]
-softirqs last disabled at (560): [<ffff8000805ca92c>] bpf_prog_by_id+0x3c/0x168 kernel/bpf/syscall.c:4077
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 6072 at include/linux/bpf_mprog.h:198 bpf_mprog_total include/linux/bpf_mprog.h:198 [inline]
-WARNING: CPU: 1 PID: 6072 at include/linux/bpf_mprog.h:198 bpf_mprog_insert+0x2bc/0x3f8 kernel/bpf/mprog.c:131
-Modules linked in:
-CPU: 1 PID: 6072 Comm: syz-executor183 Tainted: G        W          6.6.0-rc3-syzkaller-gbf6547d8715b #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/04/2023
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : bpf_mprog_total include/linux/bpf_mprog.h:198 [inline]
-pc : bpf_mprog_insert+0x2bc/0x3f8 kernel/bpf/mprog.c:131
-lr : bpf_mprog_total include/linux/bpf_mprog.h:198 [inline]
-lr : bpf_mprog_insert+0x2bc/0x3f8 kernel/bpf/mprog.c:131
-sp : ffff8000967678c0
-x29: ffff8000967678c0 x28: 0000000000000040 x27: 1fffe0001983e841
-x26: dfff800000000000 x25: 0000000000000040 x24: 0000000000000008
-x23: ffff0000cc1f4008 x22: 00000000ffffffff x21: ffff0000cc1f4208
-x20: ffff8000967679c0 x19: ffff800096767ac0 x18: 0000000000000000
-x17: 0000000000000000 x16: ffff80008a576f00 x15: 0000000000000002
-x14: 1ffff00012cecf34 x13: 0000000000000000 x12: 0000000000000000
-x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
-x8 : ffff0000d4921bc0 x7 : 0000000000000000 x6 : 0000000000000000
-x5 : 0000000000000008 x4 : 0000000000000008 x3 : 00000000ffffffff
-x2 : ffff8000967679c0 x1 : 0000000000000040 x0 : 000000000000003f
-Call trace:
- bpf_mprog_total include/linux/bpf_mprog.h:198 [inline]
- bpf_mprog_insert+0x2bc/0x3f8 kernel/bpf/mprog.c:131
- bpf_mprog_attach+0xa40/0xb88 kernel/bpf/mprog.c:288
- tcx_prog_attach+0x23c/0x6ac kernel/bpf/tcx.c:39
- bpf_prog_attach+0x19c/0x340 kernel/bpf/syscall.c:3848
- __sys_bpf+0x2e8/0x5dc kernel/bpf/syscall.c:5344
- __do_sys_bpf kernel/bpf/syscall.c:5439 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5437 [inline]
- __arm64_sys_bpf+0x80/0x98 kernel/bpf/syscall.c:5437
- __invoke_syscall arch/arm64/kernel/syscall.c:37 [inline]
- invoke_syscall+0x98/0x2b8 arch/arm64/kernel/syscall.c:51
- el0_svc_common+0x130/0x23c arch/arm64/kernel/syscall.c:136
- do_el0_svc+0x48/0x58 arch/arm64/kernel/syscall.c:155
- el0_svc+0x58/0x16c arch/arm64/kernel/entry-common.c:678
- el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:696
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-irq event stamp: 724
-hardirqs last  enabled at (723): [<ffff80008a6253dc>] el1_dbg+0x6c/0x80 arch/arm64/kernel/entry-common.c:439
-hardirqs last disabled at (724): [<ffff80008a625394>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:436
-softirqs last  enabled at (594): [<ffff8000800218ec>] softirq_handle_end kernel/softirq.c:399 [inline]
-softirqs last  enabled at (594): [<ffff8000800218ec>] __do_softirq+0xac0/0xd54 kernel/softirq.c:582
-softirqs last disabled at (579): [<ffff80008002aad4>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:80
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 6072 at include/linux/bpf_mprog.h:198 bpf_mprog_total include/linux/bpf_mprog.h:198 [inline]
-WARNING: CPU: 1 PID: 6072 at include/linux/bpf_mprog.h:198 bpf_mprog_entry_grow include/linux/bpf_mprog.h:277 [inline]
-WARNING: CPU: 1 PID: 6072 at include/linux/bpf_mprog.h:198 bpf_mprog_insert+0x2d0/0x3f8 kernel/bpf/mprog.c:142
-Modules linked in:
-CPU: 1 PID: 6072 Comm: syz-executor183 Tainted: G        W          6.6.0-rc3-syzkaller-gbf6547d8715b #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/04/2023
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : bpf_mprog_total include/linux/bpf_mprog.h:198 [inline]
-pc : bpf_mprog_entry_grow include/linux/bpf_mprog.h:277 [inline]
-pc : bpf_mprog_insert+0x2d0/0x3f8 kernel/bpf/mprog.c:142
-lr : bpf_mprog_total include/linux/bpf_mprog.h:198 [inline]
-lr : bpf_mprog_entry_grow include/linux/bpf_mprog.h:277 [inline]
-lr : bpf_mprog_insert+0x2d0/0x3f8 kernel/bpf/mprog.c:142
-sp : ffff8000967678c0
-x29: ffff8000967678c0 x28: 1fffe0001983e882 x27: 1fffe0001983e841
-x26: dfff800000000000 x25: 0000000000000040 x24: ffff0000cc1f4628
-x23: ffff0000cc1f4410 x22: 0000000000000000 x21: ffff0000cc1f4210
-x20: ffff8000967679c0 x19: ffff800096767ac0 x18: 0000000000000000
-x17: 0000000000000000 x16: ffff80008a576ca0 x15: ffff80009503e000
-x14: ffff80009509e000 x13: ffff80009503e000 x12: ffff80009509e000
-x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
-x8 : ffff0000d4921bc0 x7 : ffff800093fee000 x6 : ffff80009501e000
-x5 : ffff0000cc1f4410 x4 : ffff0000cc1f4208 x3 : ffff0000cc1f4390
-x2 : fffffffffffffff0 x1 : 0000000000000040 x0 : 000000000000003f
-Call trace:
- bpf_mprog_total include/linux/bpf_mprog.h:198 [inline]
- bpf_mprog_entry_grow include/linux/bpf_mprog.h:277 [inline]
- bpf_mprog_insert+0x2d0/0x3f8 kernel/bpf/mprog.c:142
- bpf_mprog_attach+0xa40/0xb88 kernel/bpf/mprog.c:288
- tcx_prog_attach+0x23c/0x6ac kernel/bpf/tcx.c:39
- bpf_prog_attach+0x19c/0x340 kernel/bpf/syscall.c:3848
- __sys_bpf+0x2e8/0x5dc kernel/bpf/syscall.c:5344
- __do_sys_bpf kernel/bpf/syscall.c:5439 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5437 [inline]
- __arm64_sys_bpf+0x80/0x98 kernel/bpf/syscall.c:5437
- __invoke_syscall arch/arm64/kernel/syscall.c:37 [inline]
- invoke_syscall+0x98/0x2b8 arch/arm64/kernel/syscall.c:51
- el0_svc_common+0x130/0x23c arch/arm64/kernel/syscall.c:136
- do_el0_svc+0x48/0x58 arch/arm64/kernel/syscall.c:155
- el0_svc+0x58/0x16c arch/arm64/kernel/entry-common.c:678
- el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:696
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-irq event stamp: 746
-hardirqs last  enabled at (745): [<ffff80008a627868>] __exit_to_kernel_mode arch/arm64/kernel/entry-common.c:84 [inline]
-hardirqs last  enabled at (745): [<ffff80008a627868>] exit_to_kernel_mode+0xdc/0x10c arch/arm64/kernel/entry-common.c:94
-hardirqs last disabled at (746): [<ffff80008a625394>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:436
-softirqs last  enabled at (740): [<ffff8000800218ec>] softirq_handle_end kernel/softirq.c:399 [inline]
-softirqs last  enabled at (740): [<ffff8000800218ec>] __do_softirq+0xac0/0xd54 kernel/softirq.c:582
-softirqs last disabled at (727): [<ffff80008002aad4>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:80
----[ end trace 0000000000000000 ]---
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+This looks similar to skb_scrub_packet; what's the difference?
