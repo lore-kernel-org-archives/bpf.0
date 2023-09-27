@@ -1,38 +1,38 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D61BE1CF8F;
-	Wed, 27 Sep 2023 07:58:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45D911CF87;
+	Wed, 27 Sep 2023 07:58:31 +0000 (UTC)
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65669126;
-	Wed, 27 Sep 2023 00:58:27 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381F0BF;
+	Wed, 27 Sep 2023 00:58:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695801507; x=1727337507;
+  t=1695801510; x=1727337510;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=aNtXipEMNhdayA0zjVI6ZWIXa7v+Ldi7Wvk8uKIoduQ=;
-  b=m1PrNDCz/0zrjqpxL/9dkI1T4lCNsSqSZt433ghuz7sJdymE//tvB3j2
-   s2wtMj+lI/FC48ujQWOOsN0pwbK9EE6XyklxM+5k+5wZ189QqLBlO9C6Z
-   Y3/6B9NAg5CLFRxa1ZsED8HqHYhW5TWQim2/AeKIen29e4xQy1kJ3TRNc
-   VT0JV7c03S61vz2o+OQ31DEPH88EAY9Ww8xts49hZazD3Pm8GHOByPSg3
-   AqQdd7K9XcIhwO8ytOne8JPU8DWlVSClZ3DqgQAMS8Anbl3na3cunKi2N
-   CessTvEZLc28nP3NFMD8XRrhDCvGmRCBjnZ4W8aQzA8vWaroE2ASnxBuF
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="366818159"
+  bh=TUCra0VQt36VV4IdHiSrlZOdvZoSF4aLO7LlatDcyz0=;
+  b=MF+ngF9a8SngnlYtTuj1tFcO9OcodqoKqPE0erJDy/Ao3brCE1J9OeWN
+   ROc26ahk/SR2hCTIPmBZ2WsbLKRgwesNdARgk8ee0dfFrWfX6OqkummHc
+   yin+IZ7rPymuifcMCJLjr54iARsB/7InxiT9AObJuLOwWETpiF4r4JgNc
+   Hc9rvcBXRvQ0IkQQQQQEP5qyIXnZDLRjd3j9qA0J86iAYT4yk2OB0GYeB
+   W4/Z2iGEhT1CWwjtNVi6mTTJhHUsUG4B6Ng98ZadfOl0UVLZn8pWGw3+G
+   P7ktHStLLkpEfkAF7LZ4fL/4incJNSNFjVPKpd81pdzQ/mpY1UolDUxF8
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="366818184"
 X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="366818159"
+   d="scan'208";a="366818184"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 00:58:27 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 00:58:29 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="725714064"
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="725714074"
 X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="725714064"
+   d="scan'208";a="725714074"
 Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by orsmga006.jf.intel.com with ESMTP; 27 Sep 2023 00:58:19 -0700
+  by orsmga006.jf.intel.com with ESMTP; 27 Sep 2023 00:58:23 -0700
 Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id 977856D51D;
-	Wed, 27 Sep 2023 08:58:17 +0100 (IST)
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id 857777EAC1;
+	Wed, 27 Sep 2023 08:58:21 +0100 (IST)
 From: Larysa Zaremba <larysa.zaremba@intel.com>
 To: bpf@vger.kernel.org
 Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
@@ -62,11 +62,10 @@ Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
 	Simon Horman <simon.horman@corigine.com>,
 	Tariq Toukan <tariqt@mellanox.com>,
 	Saeed Mahameed <saeedm@mellanox.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Aleksander Lobakin <aleksander.lobakin@intel.com>
-Subject: [RFC bpf-next v2 16/24] net, xdp: allow metadata > 32
-Date: Wed, 27 Sep 2023 09:51:16 +0200
-Message-ID: <20230927075124.23941-17-larysa.zaremba@intel.com>
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: [RFC bpf-next v2 18/24] veth: Implement VLAN tag and checksum XDP hint
+Date: Wed, 27 Sep 2023 09:51:18 +0200
+Message-ID: <20230927075124.23941-19-larysa.zaremba@intel.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230927075124.23941-1-larysa.zaremba@intel.com>
 References: <20230927075124.23941-1-larysa.zaremba@intel.com>
@@ -83,81 +82,75 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-From: Aleksander Lobakin <aleksander.lobakin@intel.com>
-
-When using XDP hints, metadata sometimes has to be much bigger
-than 32 bytes. Relax the restriction, allow metadata larger than 32 bytes
-and make __skb_metadata_differs() work with bigger lengths.
-
-Now size of metadata is only limited by the fact it is stored as u8
-in skb_shared_info, so maximum possible value is 255. Other important
-conditions, such as having enough space for xdp_frame building, are already
-checked in bpf_xdp_adjust_meta().
-
-The requirement of having its length aligned to 4 bytes is still
-valid.
+In order to test VLAN tag and checksum XDP hints in hardware-independent
+selftests, implement newly added XDP hints in veth driver.
 
 Acked-by: Stanislav Fomichev <sdf@google.com>
-Signed-off-by: Aleksander Lobakin <aleksander.lobakin@intel.com>
 Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
 ---
- include/linux/skbuff.h | 13 ++++++++-----
- include/net/xdp.h      |  7 ++++++-
- 2 files changed, 14 insertions(+), 6 deletions(-)
+ drivers/net/veth.c | 42 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 4174c4b82d13..1c647e33abda 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -4232,10 +4232,13 @@ static inline bool __skb_metadata_differs(const struct sk_buff *skb_a,
- {
- 	const void *a = skb_metadata_end(skb_a);
- 	const void *b = skb_metadata_end(skb_b);
--	/* Using more efficient varaiant than plain call to memcmp(). */
--#if defined(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) && BITS_PER_LONG == 64
- 	u64 diffs = 0;
- 
-+	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ||
-+	    BITS_PER_LONG != 64)
-+		goto slow;
-+
-+	/* Using more efficient variant than plain call to memcmp(). */
- 	switch (meta_len) {
- #define __it(x, op) (x -= sizeof(u##op))
- #define __it_diff(a, b, op) (*(u##op *)__it(a, op)) ^ (*(u##op *)__it(b, op))
-@@ -4255,11 +4258,11 @@ static inline bool __skb_metadata_differs(const struct sk_buff *skb_a,
- 		fallthrough;
- 	case  4: diffs |= __it_diff(a, b, 32);
- 		break;
-+	default:
-+slow:
-+		return memcmp(a - meta_len, b - meta_len, meta_len);
- 	}
- 	return diffs;
--#else
--	return memcmp(a - meta_len, b - meta_len, meta_len);
--#endif
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index 0deefd1573cf..b17938a43f98 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -1736,6 +1736,46 @@ static int veth_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
+ 	return 0;
  }
  
- static inline bool skb_metadata_differs(const struct sk_buff *skb_a,
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 1dba8ab6c6ba..b111ee9c303e 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -369,7 +369,12 @@ xdp_data_meta_unsupported(const struct xdp_buff *xdp)
- 
- static inline bool xdp_metalen_invalid(unsigned long metalen)
- {
--	return (metalen & (sizeof(__u32) - 1)) || (metalen > 32);
-+	typeof(metalen) meta_max;
++static int veth_xdp_rx_vlan_tag(const struct xdp_md *ctx, __be16 *vlan_proto,
++				u16 *vlan_tci)
++{
++	struct veth_xdp_buff *_ctx = (void *)ctx;
++	struct sk_buff *skb = _ctx->skb;
++	int err;
 +
-+	meta_max = type_max(typeof_member(struct skb_shared_info, meta_len));
-+	BUILD_BUG_ON(!__builtin_constant_p(meta_max));
++	if (!skb)
++		return -ENODATA;
 +
-+	return !IS_ALIGNED(metalen, sizeof(u32)) || metalen > meta_max;
- }
++	err = __vlan_hwaccel_get_tag(skb, vlan_tci);
++	if (err)
++		return err;
++
++	*vlan_proto = skb->vlan_proto;
++	return err;
++}
++
++static int veth_xdp_rx_csum(const struct xdp_md *ctx,
++			    enum xdp_csum_status *csum_status,
++			    __wsum *csum)
++{
++	struct veth_xdp_buff *_ctx = (void *)ctx;
++	struct sk_buff *skb = _ctx->skb;
++
++	if (!skb)
++		return -ENODATA;
++
++	if (skb->ip_summed == CHECKSUM_UNNECESSARY) {
++		*csum_status = XDP_CHECKSUM_VERIFIED;
++	} else if (skb->ip_summed == CHECKSUM_COMPLETE) {
++		*csum_status = XDP_CHECKSUM_COMPLETE;
++		*csum = skb->csum;
++	} else {
++		return -ENODATA;
++	}
++
++	return 0;
++}
++
+ static const struct net_device_ops veth_netdev_ops = {
+ 	.ndo_init            = veth_dev_init,
+ 	.ndo_open            = veth_open,
+@@ -1760,6 +1800,8 @@ static const struct net_device_ops veth_netdev_ops = {
+ static const struct xdp_metadata_ops veth_xdp_metadata_ops = {
+ 	.xmo_rx_timestamp		= veth_xdp_rx_timestamp,
+ 	.xmo_rx_hash			= veth_xdp_rx_hash,
++	.xmo_rx_vlan_tag		= veth_xdp_rx_vlan_tag,
++	.xmo_rx_csum			= veth_xdp_rx_csum,
+ };
  
- struct xdp_attachment_info {
+ #define VETH_FEATURES (NETIF_F_SG | NETIF_F_FRAGLIST | NETIF_F_HW_CSUM | \
 -- 
 2.41.0
 
