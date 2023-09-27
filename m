@@ -1,38 +1,38 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 722561CA92;
-	Wed, 27 Sep 2023 07:58:12 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7125193;
-	Wed, 27 Sep 2023 00:58:10 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22EFA1CAAB;
+	Wed, 27 Sep 2023 07:58:18 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0351B4;
+	Wed, 27 Sep 2023 00:58:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695801490; x=1727337490;
+  t=1695801496; x=1727337496;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=XUcK1rwh0PuHKBdk/brR50LjiE2DrMuT31ALE6+YqG8=;
-  b=NlTL2lWiX8bw79aOO+xwyiJms4p/Sep2JF+c5aZWAEzrTT28ZSMjBIyf
-   b3RUVkYB/OIeYbq4zlyboaNaAczqGvVC3LTjnHvppw3K28jxxoDatip8H
-   rCqIbwTDMg34URCJ+lIsrBLO8E2xwcxfEAuUUTZGnfoEttQFiugedBxBk
-   UuIc6EntneUMrofqX1kP+oFkEQBIyI5apIEDjp+o9borM84Ag7M5/xCxW
-   F5/32GgLi4WopxXpm0rqeWyO0N52V+B9ZVV0ZQFom63/ju+o4JjRwZlu4
-   eNm/l1WqJIWHGWVtA3iRejEO85TDe5lhYFE6S8NFe/bE4HmcpIDIeKFrR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="362008520"
+  bh=Hlg3ORE7b36fvjFjvqpO+SiEvpQQFx02mmgSfeSPiNw=;
+  b=n7wJhRRdeStz5JjPnzUjOcaD+7cv1CqbGs1YyN//4XG/rHcoU3Ex9iWF
+   qzIMNYW/1xZk3C2HvDA2+8cOkm3OOwzDRE7uyJxFXYjcO4LIP7CAx8NZK
+   bSqu7rDMpYMthmDoQ5x+2z9iW8ca8yM1v4Y9Q4vLORAxc2tuvfm29T2YB
+   WjZYVdvPpx+slJDSWIcxsWLRyKEHxNnI4ItASRIlpgzx45DtvZ2G6ysxX
+   E0g8D8vbgSJYCUxJfFZg1n/qRiqW8w0Ghud77jDeibSEO4ASODpxYCP9C
+   D0dd3O5feOripEC1bT/b2lzp4aObuJNs+28tMNPoGU/gRzNFw+NOdting
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="366818053"
 X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="362008520"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 00:58:06 -0700
+   d="scan'208";a="366818053"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 00:58:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="752478121"
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="725714031"
 X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="752478121"
+   d="scan'208";a="725714031"
 Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by fmsmga007.fm.intel.com with ESMTP; 27 Sep 2023 00:58:00 -0700
+  by orsmga006.jf.intel.com with ESMTP; 27 Sep 2023 00:58:08 -0700
 Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id EEA0D6D51D;
-	Wed, 27 Sep 2023 08:57:57 +0100 (IST)
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id C80BD6D511;
+	Wed, 27 Sep 2023 08:58:05 +0100 (IST)
 From: Larysa Zaremba <larysa.zaremba@intel.com>
 To: bpf@vger.kernel.org
 Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
@@ -63,9 +63,9 @@ Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
 	Tariq Toukan <tariqt@mellanox.com>,
 	Saeed Mahameed <saeedm@mellanox.com>,
 	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [RFC bpf-next v2 08/24] ice: Support XDP hints in AF_XDP ZC mode
-Date: Wed, 27 Sep 2023 09:51:08 +0200
-Message-ID: <20230927075124.23941-9-larysa.zaremba@intel.com>
+Subject: [RFC bpf-next v2 10/24] ice: Implement VLAN tag hint
+Date: Wed, 27 Sep 2023 09:51:10 +0200
+Message-ID: <20230927075124.23941-11-larysa.zaremba@intel.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230927075124.23941-1-larysa.zaremba@intel.com>
 References: <20230927075124.23941-1-larysa.zaremba@intel.com>
@@ -77,92 +77,195 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-	autolearn_force=no version=3.4.6
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+	SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-In AF_XDP ZC, xdp_buff is not stored on ring,
-instead it is provided by xsk_buff_pool.
-Space for metadata sources right after such buffers was already reserved
-in commit 94ecc5ca4dbf ("xsk: Add cb area to struct xdp_buff_xsk").
-This makes the implementation rather straightforward.
+Implement .xmo_rx_vlan_tag callback to allow XDP code to read
+packet's VLAN tag.
 
-Update AF_XDP ZC packet processing to support XDP hints.
+At the same time, use vlan_tci instead of vlan_tag in touched code,
+because VLAN tag often refers to VLAN proto and VLAN TCI combined,
+while in the code we clearly store only VLAN TCI.
 
 Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
 ---
- drivers/net/ethernet/intel/ice/ice_xsk.c | 34 ++++++++++++++++++++++--
- 1 file changed, 32 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_main.c     | 20 ++++++++++++++
+ drivers/net/ethernet/intel/ice/ice_txrx.c     |  6 ++---
+ drivers/net/ethernet/intel/ice/ice_txrx.h     |  1 +
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.c | 26 +++++++++++++++++++
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.h |  4 +--
+ drivers/net/ethernet/intel/ice/ice_xsk.c      |  6 ++---
+ 6 files changed, 55 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
-index ef778b8e6d1b..6ca620b2fbdd 100644
---- a/drivers/net/ethernet/intel/ice/ice_xsk.c
-+++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
-@@ -752,22 +752,51 @@ static int ice_xmit_xdp_tx_zc(struct xdp_buff *xdp,
- 	return ICE_XDP_CONSUMED;
+diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
+index 2153e27642eb..47e8920e1727 100644
+--- a/drivers/net/ethernet/intel/ice/ice_main.c
++++ b/drivers/net/ethernet/intel/ice/ice_main.c
+@@ -6014,6 +6014,23 @@ ice_fix_features(struct net_device *netdev, netdev_features_t features)
+ 	return features;
  }
  
 +/**
-+ * ice_prepare_pkt_ctx_zc - Prepare packet context for XDP hints
-+ * @xdp: xdp_buff used as input to the XDP program
-+ * @eop_desc: End of packet descriptor
-+ * @rx_ring: Rx ring with packet context
++ * ice_set_rx_rings_vlan_proto - update rings with new stripped VLAN proto
++ * @vsi: PF's VSI
++ * @vlan_ethertype: VLAN ethertype (802.1Q or 802.1ad) in network byte order
 + *
-+ * In regular XDP, xdp_buff is placed inside the ring structure,
-+ * just before the packet context, so the latter can be accessed
-+ * with xdp_buff address only at all times, but in ZC mode,
-+ * xdp_buffs come from the pool, so we need to reinitialize
-+ * context for every packet.
-+ *
-+ * We can safely convert xdp_buff_xsk to ice_xdp_buff,
-+ * because there are XSK_PRIV_MAX bytes reserved in xdp_buff_xsk
-+ * right after xdp_buff, for our private use.
-+ * XSK_CHECK_PRIV_TYPE() ensures we do not go above the limit.
++ * Store current stripped VLAN proto in ring packet context,
++ * so it can be accessed more efficiently by packet processing code.
 + */
-+static void ice_prepare_pkt_ctx_zc(struct xdp_buff *xdp,
-+				   union ice_32b_rx_flex_desc *eop_desc,
-+				   struct ice_rx_ring *rx_ring)
++static void
++ice_set_rx_rings_vlan_proto(struct ice_vsi *vsi, __be16 vlan_ethertype)
 +{
-+	XSK_CHECK_PRIV_TYPE(struct ice_xdp_buff);
-+	((struct ice_xdp_buff *)xdp)->pkt_ctx = rx_ring->pkt_ctx;
-+	ice_xdp_meta_set_desc(xdp, eop_desc);
++	u16 i;
++
++	ice_for_each_alloc_rxq(vsi, i)
++		vsi->rx_rings[i]->pkt_ctx.vlan_proto = vlan_ethertype;
 +}
 +
  /**
-  * ice_run_xdp_zc - Executes an XDP program in zero-copy path
-  * @rx_ring: Rx ring
-  * @xdp: xdp_buff used as input to the XDP program
-  * @xdp_prog: XDP program to run
-  * @xdp_ring: ring to be used for XDP_TX action
-+ * @rx_desc: packet descriptor
-  *
-  * Returns any of ICE_XDP_{PASS, CONSUMED, TX, REDIR}
-  */
- static int
- ice_run_xdp_zc(struct ice_rx_ring *rx_ring, struct xdp_buff *xdp,
--	       struct bpf_prog *xdp_prog, struct ice_tx_ring *xdp_ring)
-+	       struct bpf_prog *xdp_prog, struct ice_tx_ring *xdp_ring,
-+	       union ice_32b_rx_flex_desc *rx_desc)
- {
- 	int err, result = ICE_XDP_PASS;
- 	u32 act;
+  * ice_set_vlan_offload_features - set VLAN offload features for the PF VSI
+  * @vsi: PF's VSI
+@@ -6056,6 +6073,9 @@ ice_set_vlan_offload_features(struct ice_vsi *vsi, netdev_features_t features)
+ 	if (strip_err || insert_err)
+ 		return -EIO;
  
-+	ice_prepare_pkt_ctx_zc(xdp, rx_desc, rx_ring);
- 	act = bpf_prog_run_xdp(xdp_prog, xdp);
++	ice_set_rx_rings_vlan_proto(vsi, enable_stripping ?
++				    htons(vlan_ethertype) : 0);
++
+ 	return 0;
+ }
  
- 	if (likely(act == XDP_REDIRECT)) {
-@@ -907,7 +936,8 @@ int ice_clean_rx_irq_zc(struct ice_rx_ring *rx_ring, int budget)
- 		if (ice_is_non_eop(rx_ring, rx_desc))
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.c b/drivers/net/ethernet/intel/ice/ice_txrx.c
+index 4e6546d9cf85..4fd7614f243d 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx.c
++++ b/drivers/net/ethernet/intel/ice/ice_txrx.c
+@@ -1183,7 +1183,7 @@ int ice_clean_rx_irq(struct ice_rx_ring *rx_ring, int budget)
+ 		struct sk_buff *skb;
+ 		unsigned int size;
+ 		u16 stat_err_bits;
+-		u16 vlan_tag = 0;
++		u16 vlan_tci;
+ 
+ 		/* get the Rx desc from Rx ring based on 'next_to_clean' */
+ 		rx_desc = ICE_RX_DESC(rx_ring, ntc);
+@@ -1278,7 +1278,7 @@ int ice_clean_rx_irq(struct ice_rx_ring *rx_ring, int budget)
  			continue;
+ 		}
  
--		xdp_res = ice_run_xdp_zc(rx_ring, first, xdp_prog, xdp_ring);
-+		xdp_res = ice_run_xdp_zc(rx_ring, first, xdp_prog, xdp_ring,
-+					 rx_desc);
- 		if (likely(xdp_res & (ICE_XDP_TX | ICE_XDP_REDIR))) {
- 			xdp_xmit |= xdp_res;
- 		} else if (xdp_res == ICE_XDP_EXIT) {
+-		vlan_tag = ice_get_vlan_tag_from_rx_desc(rx_desc);
++		vlan_tci = ice_get_vlan_tci(rx_desc);
+ 
+ 		/* pad the skb if needed, to make a valid ethernet frame */
+ 		if (eth_skb_pad(skb))
+@@ -1292,7 +1292,7 @@ int ice_clean_rx_irq(struct ice_rx_ring *rx_ring, int budget)
+ 
+ 		ice_trace(clean_rx_irq_indicate, rx_ring, rx_desc, skb);
+ 		/* send completed skb up the stack */
+-		ice_receive_skb(rx_ring, skb, vlan_tag);
++		ice_receive_skb(rx_ring, skb, vlan_tci);
+ 
+ 		/* update budget accounting */
+ 		total_rx_pkts++;
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.h b/drivers/net/ethernet/intel/ice/ice_txrx.h
+index 4237702a58a9..41e0b14e6643 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx.h
++++ b/drivers/net/ethernet/intel/ice/ice_txrx.h
+@@ -260,6 +260,7 @@ enum ice_rx_dtype {
+ struct ice_pkt_ctx {
+ 	const union ice_32b_rx_flex_desc *eop_desc;
+ 	u64 cached_phctime;
++	__be16 vlan_proto;
+ };
+ 
+ struct ice_xdp_buff {
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
+index 574a119aecf5..fa138f66e1c4 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
++++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
+@@ -626,7 +626,33 @@ static int ice_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
+ 	return 0;
+ }
+ 
++/**
++ * ice_xdp_rx_vlan_tag - VLAN tag XDP hint handler
++ * @ctx: XDP buff pointer
++ * @vlan_proto: destination address for VLAN protocol
++ * @vlan_tci: destination address for VLAN TCI
++ *
++ * Copy VLAN tag (if was stripped) and corresponding protocol
++ * to the destination address.
++ */
++static int ice_xdp_rx_vlan_tag(const struct xdp_md *ctx, __be16 *vlan_proto,
++			       u16 *vlan_tci)
++{
++	const struct ice_xdp_buff *xdp_ext = (void *)ctx;
++
++	*vlan_proto = xdp_ext->pkt_ctx.vlan_proto;
++	if (!*vlan_proto)
++		return -ENODATA;
++
++	*vlan_tci = ice_get_vlan_tci(xdp_ext->pkt_ctx.eop_desc);
++	if (!*vlan_tci)
++		return -ENODATA;
++
++	return 0;
++}
++
+ const struct xdp_metadata_ops ice_xdp_md_ops = {
+ 	.xmo_rx_timestamp		= ice_xdp_rx_hw_ts,
+ 	.xmo_rx_hash			= ice_xdp_rx_hash,
++	.xmo_rx_vlan_tag		= ice_xdp_rx_vlan_tag,
+ };
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib.h b/drivers/net/ethernet/intel/ice/ice_txrx_lib.h
+index 145883eec129..b7205826fea8 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx_lib.h
++++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib.h
+@@ -84,7 +84,7 @@ ice_build_ctob(u64 td_cmd, u64 td_offset, unsigned int size, u64 td_tag)
+ }
+ 
+ /**
+- * ice_get_vlan_tag_from_rx_desc - get VLAN from Rx flex descriptor
++ * ice_get_vlan_tci - get VLAN TCI from Rx flex descriptor
+  * @rx_desc: Rx 32b flex descriptor with RXDID=2
+  *
+  * The OS and current PF implementation only support stripping a single VLAN tag
+@@ -92,7 +92,7 @@ ice_build_ctob(u64 td_cmd, u64 td_offset, unsigned int size, u64 td_tag)
+  * one is found return the tag, else return 0 to mean no VLAN tag was found.
+  */
+ static inline u16
+-ice_get_vlan_tag_from_rx_desc(union ice_32b_rx_flex_desc *rx_desc)
++ice_get_vlan_tci(const union ice_32b_rx_flex_desc *rx_desc)
+ {
+ 	u16 stat_err_bits;
+ 
+diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
+index 6ca620b2fbdd..39775bb6cec1 100644
+--- a/drivers/net/ethernet/intel/ice/ice_xsk.c
++++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
+@@ -898,7 +898,7 @@ int ice_clean_rx_irq_zc(struct ice_rx_ring *rx_ring, int budget)
+ 		struct xdp_buff *xdp;
+ 		struct sk_buff *skb;
+ 		u16 stat_err_bits;
+-		u16 vlan_tag = 0;
++		u16 vlan_tci;
+ 
+ 		rx_desc = ICE_RX_DESC(rx_ring, ntc);
+ 
+@@ -977,10 +977,10 @@ int ice_clean_rx_irq_zc(struct ice_rx_ring *rx_ring, int budget)
+ 		total_rx_bytes += skb->len;
+ 		total_rx_packets++;
+ 
+-		vlan_tag = ice_get_vlan_tag_from_rx_desc(rx_desc);
++		vlan_tci = ice_get_vlan_tci(rx_desc);
+ 
+ 		ice_process_skb_fields(rx_ring, rx_desc, skb);
+-		ice_receive_skb(rx_ring, skb, vlan_tag);
++		ice_receive_skb(rx_ring, skb, vlan_tci);
+ 	}
+ 
+ 	rx_ring->next_to_clean = ntc;
 -- 
 2.41.0
 
