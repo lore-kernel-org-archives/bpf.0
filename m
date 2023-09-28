@@ -1,47 +1,47 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 969983B2B9
-	for <bpf@vger.kernel.org>; Thu, 28 Sep 2023 19:48:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E623B2B9
+	for <bpf@vger.kernel.org>; Thu, 28 Sep 2023 19:48:55 +0000 (UTC)
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B331A3
-	for <bpf@vger.kernel.org>; Thu, 28 Sep 2023 12:48:51 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 990EE1A4
+	for <bpf@vger.kernel.org>; Thu, 28 Sep 2023 12:48:54 -0700 (PDT)
 Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38SJguBF012128;
-	Thu, 28 Sep 2023 19:48:30 GMT
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38SJguhR012120;
+	Thu, 28 Sep 2023 19:48:34 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=NKeyvsHYjJzRAAVbZHSz5r78Dur6mSGbgkTYTwadXlI=;
- b=mMMtzLwGo0O4/MKj/oYR33zjIpRlRA/U6JvXMdMM/CsaL895Sa5Qacq8rVheeLxLgtFZ
- +xNnpluyoisxmkGUN5sVPQSR0lfO3AoBU7Q0Y6uFAGbqUaHenIlK5bhYFVkWSz3U+aYY
- mXmaJBohVSiJ1o9KcPlLT3FuKftK+OVs3odw6oNGqAyrwzxdULQPEETgMk9v+6zwOYYG
- Nb/wLopdBr9dyTb5KglqaP1O38IvXsXyjoIYSnJrfNfxhsAEVXLIwqcCsHvdNHhlKmHE
- WgXBJSTLpzBbnXc4LKYpysceTf/WNxxvP8v8sOv3SPDG/RsCvb5lrSuztW7qaT7opw0x Fg== 
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tdfgyrkkd-1
+ bh=rw2xvaos3ujdFQhktNdqT+qoefRatgCvXuIyXiJNv9w=;
+ b=nZfPejoteqd0V5vSkKU8DEzWpki7H8d7aBQQxiM+vF9PMg7QwWiP5xK84LoEL9dp4gXj
+ gguopueli9+MjmxRXGCzHhY/ZDglfDODsPDhq2IpmtF83SOHD/GLIZmSJC/OjS1dIad5
+ 6XV/OGRx/p8KqiFqwWF5o0Qq0irOU/ePVe3tbU1tB3XZIsH3HFakwTeM+xpyyCnda0+V
+ 8IuBy7h8S+nUpXDAyi+hEG4lh+g8W+Iyd+NBe9Wr7y+k4YLS/UoYh4HzN/QHDR4i3isy
+ meQmdUPcuT2HxnfaXTTYfBsqDvH7Tp9CF6zh7D5E4aBCfKtxsXtmH0p4a5nvP603S4au pw== 
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tdfgyrkq2-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 28 Sep 2023 19:48:29 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38SIF8IY008445;
-	Thu, 28 Sep 2023 19:48:28 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3taabt7u0n-1
+	Thu, 28 Sep 2023 19:48:33 +0000
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38SIRJxc030544;
+	Thu, 28 Sep 2023 19:48:33 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3tad226x98-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 28 Sep 2023 19:48:28 +0000
+	Thu, 28 Sep 2023 19:48:33 +0000
 Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38SJmRbT46137712
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38SJmVVG44433990
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 28 Sep 2023 19:48:27 GMT
+	Thu, 28 Sep 2023 19:48:31 GMT
 Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id ED1622004E;
-	Thu, 28 Sep 2023 19:48:26 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 724C12004D;
+	Thu, 28 Sep 2023 19:48:31 +0000 (GMT)
 Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1697C20043;
-	Thu, 28 Sep 2023 19:48:25 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 86E1720043;
+	Thu, 28 Sep 2023 19:48:29 +0000 (GMT)
 Received: from li-bd3f974c-2712-11b2-a85c-df1cec4d728e.ibm.com.com (unknown [9.43.85.6])
 	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 28 Sep 2023 19:48:24 +0000 (GMT)
+	Thu, 28 Sep 2023 19:48:29 +0000 (GMT)
 From: Hari Bathini <hbathini@linux.ibm.com>
 To: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, bpf@vger.kernel.org
 Cc: Michael Ellerman <mpe@ellerman.id.au>,
@@ -50,9 +50,9 @@ Cc: Michael Ellerman <mpe@ellerman.id.au>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>, Song Liu <songliubraving@fb.com>,
         Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [PATCH v5 2/5] powerpc/bpf: implement bpf_arch_text_copy
-Date: Fri, 29 Sep 2023 01:18:15 +0530
-Message-ID: <20230928194818.261163-3-hbathini@linux.ibm.com>
+Subject: [PATCH v5 4/5] powerpc/bpf: rename powerpc64_jit_data to powerpc_jit_data
+Date: Fri, 29 Sep 2023 01:18:17 +0530
+Message-ID: <20230928194818.261163-5-hbathini@linux.ibm.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230928194818.261163-1-hbathini@linux.ibm.com>
 References: <20230928194818.261163-1-hbathini@linux.ibm.com>
@@ -64,13 +64,13 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: pJK6Z4BA5ek5jjHqKDcokptuAEnUOJFZ
-X-Proofpoint-ORIG-GUID: pJK6Z4BA5ek5jjHqKDcokptuAEnUOJFZ
+X-Proofpoint-GUID: lK1Z04Cf-MbMJcDbk2IEIHhE2N0oDgBU
+X-Proofpoint-ORIG-GUID: lK1Z04Cf-MbMJcDbk2IEIHhE2N0oDgBU
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-09-28_19,2023-09-28_03,2023-05-22_02
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
- impostorscore=0 mlxscore=0 mlxlogscore=999 adultscore=0 lowpriorityscore=0
+ impostorscore=0 mlxscore=0 mlxlogscore=695 adultscore=0 lowpriorityscore=0
  spamscore=0 bulkscore=0 phishscore=0 malwarescore=0 priorityscore=1501
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2309180000
  definitions=main-2309280167
@@ -80,52 +80,36 @@ X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-bpf_arch_text_copy is used to dump JITed binary to RX page, allowing
-multiple BPF programs to share the same page. Use the newly introduced
-patch_instructions() to implement it.
+powerpc64_jit_data is a misnomer as it is meant for both ppc32 and
+ppc64. Rename it to powerpc_jit_data.
 
 Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
 ---
- arch/powerpc/net/bpf_jit_comp.c | 20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
+ arch/powerpc/net/bpf_jit_comp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
-index 37043dfc1add..c740eac8d584 100644
+index ecd7cffbbe28..e7ca270a39d5 100644
 --- a/arch/powerpc/net/bpf_jit_comp.c
 +++ b/arch/powerpc/net/bpf_jit_comp.c
-@@ -13,9 +13,13 @@
- #include <linux/netdevice.h>
- #include <linux/filter.h>
- #include <linux/if_vlan.h>
--#include <asm/kprobes.h>
-+#include <linux/kernel.h>
-+#include <linux/memory.h>
- #include <linux/bpf.h>
- 
-+#include <asm/kprobes.h>
-+#include <asm/code-patching.h>
-+
- #include "bpf_jit.h"
- 
- static void bpf_jit_fill_ill_insns(void *area, unsigned int size)
-@@ -274,3 +278,17 @@ int bpf_add_extable_entry(struct bpf_prog *fp, u32 *image, int pass, struct code
- 	ctx->exentry_idx++;
+@@ -43,7 +43,7 @@ int bpf_jit_emit_exit_insn(u32 *image, struct codegen_context *ctx, int tmp_reg,
  	return 0;
  }
-+
-+void *bpf_arch_text_copy(void *dst, void *src, size_t len)
-+{
-+	int err;
-+
-+	if (WARN_ON_ONCE(core_kernel_text((unsigned long)dst)))
-+		return ERR_PTR(-EINVAL);
-+
-+	mutex_lock(&text_mutex);
-+	err = patch_instructions(dst, src, len, false);
-+	mutex_unlock(&text_mutex);
-+
-+	return err ? ERR_PTR(err) : dst;
-+}
+ 
+-struct powerpc64_jit_data {
++struct powerpc_jit_data {
+ 	struct bpf_binary_header *header;
+ 	u32 *addrs;
+ 	u8 *image;
+@@ -63,7 +63,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 	u8 *image = NULL;
+ 	u32 *code_base;
+ 	u32 *addrs;
+-	struct powerpc64_jit_data *jit_data;
++	struct powerpc_jit_data *jit_data;
+ 	struct codegen_context cgctx;
+ 	int pass;
+ 	int flen;
 -- 
 2.41.0
 
