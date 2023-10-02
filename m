@@ -1,24 +1,24 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EC981F19B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79829200D8
 	for <bpf@vger.kernel.org>; Mon,  2 Oct 2023 20:25:44 +0000 (UTC)
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413BABF;
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F2CE0;
 	Mon,  2 Oct 2023 13:25:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1696278340;
-	bh=59wn3SGQn5EasbWDlPH2hsibVMaavmRBQEcVCMjx328=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ThHe+mc3wT377xFGOOGTefue/CDbHl8Kt/rUbnKtH4P8SQXiQvbA/vvBecPthNUky
-	 HMc6ucjx/uh6jMiRSJQ6Odn3w60MMxbCp6fdIRkvvhACZ7PaIvQw1JrXUF4mxy9p/5
-	 yHw2e0ykUWyriz3kuEIf9mgqjgP592qLlyfRNjNJYCqogf64EpB6wATgLbAWNBlwzH
-	 sEyCR1I19N7YExHMi9bijPo4eFnA/4NmaHpLZsVRp+P3Uf8ShjJ/8T9zFynMulIeYe
-	 Ty3Rs2ZMettMb8Bg36Z/vF/NwNCkMjYdKZbMKMcdmpaQT0rgNuDAi1h8BX+c1nCjNw
-	 /hXeTbH1M0BzA==
+	s=smtpout1; t=1696278338;
+	bh=3b0xY900x5Ga7B1Di/fAn9zUiD76TyAJd3fltNUcrkE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=diM2fCE6voKFZTAhGB8J6dK6Lg7Ie3GlgN99Ma25jYPl4CdsZgwlVt0JqlWrsFEz4
+	 uopRIz1U2p1e2J/FVKg5fDh8yJ61bPWG576Pb3dRD5N+IPwpqcXBzTAlYlr8NEZSA4
+	 iukPfzwImQPPQhDlrYr6pDySh23oojfyi18F65zNQChaD/XZ+/U9WMAA0bo6kCg4nw
+	 eURkrWFA6t3GYt9BcgA46Xwk6Lktw2MFQsa0BfxctiZGz3rl1vd+sUnKb/yHf2ect/
+	 CGBs63RpmiWrWD7FcSR6jkPUDi2YljOhZSwVhwG07LMVkOwrM9uM/cGj7pU6YPmX3V
+	 0tx763L50jR7w==
 Received: from localhost.localdomain (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4RzssJ1rbkz1V7p;
-	Mon,  2 Oct 2023 16:25:40 -0400 (EDT)
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4RzssG4vbhz1V7n;
+	Mon,  2 Oct 2023 16:25:38 -0400 (EDT)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To: Steven Rostedt <rostedt@goodmis.org>
 Cc: linux-kernel@vger.kernel.org,
@@ -36,12 +36,10 @@ Cc: linux-kernel@vger.kernel.org,
 	Namhyung Kim <namhyung@kernel.org>,
 	bpf@vger.kernel.org,
 	Joel Fernandes <joel@joelfernandes.org>
-Subject: [RFC PATCH v3 4/5] tracing/perf: add support for faultable tracepoints
-Date: Mon,  2 Oct 2023 16:25:30 -0400
-Message-Id: <20231002202531.3160-5-mathieu.desnoyers@efficios.com>
+Subject: [RFC PATCH v3 0/5] Faultable Tracepoints
+Date: Mon,  2 Oct 2023 16:25:26 -0400
+Message-Id: <20231002202531.3160-1-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231002202531.3160-1-mathieu.desnoyers@efficios.com>
-References: <20231002202531.3160-1-mathieu.desnoyers@efficios.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,25 +47,28 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-In preparation for converting system call enter/exit instrumentation
-into faultable tracepoints, make sure that perf can handle registering
-to such tracepoints by explicitly disabling preemption within the perf
-tracepoint probes to respect the current expectations within perf ring
-buffer code.
+Wire up the system call tracepoints with Tasks Trace RCU to allow
+the ftrace, perf, and eBPF tracers to handle page faults.
 
-This change does not yet allow perf to take page faults per se within
-its probe, but allows its existing probes to connect to faultable
-tracepoints.
+This series does the initial wire-up allowing tracers to handle page
+faults, but leaves out the actual handling of said page faults as future
+work.
 
-Co-developed-by: Michael Jeanson <mjeanson@efficios.com>
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+This series is based on kernel v6.5.5.
+
+Feedback is welcome!
+
+Thanks,
+
+Mathieu
+
+Cc: Michael Jeanson <mjeanson@efficios.com>
 Cc: Steven Rostedt <rostedt@goodmis.org>
 Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: Alexei Starovoitov <ast@kernel.org>
@@ -81,77 +82,29 @@ Cc: Jiri Olsa <jolsa@redhat.com>
 Cc: Namhyung Kim <namhyung@kernel.org>
 Cc: bpf@vger.kernel.org
 Cc: Joel Fernandes <joel@joelfernandes.org>
----
- include/trace/perf.h | 27 +++++++++++++++++++++++----
- 1 file changed, 23 insertions(+), 4 deletions(-)
 
-diff --git a/include/trace/perf.h b/include/trace/perf.h
-index 2c11181c82e0..fb47815f6eff 100644
---- a/include/trace/perf.h
-+++ b/include/trace/perf.h
-@@ -12,8 +12,8 @@
- #undef __perf_task
- #define __perf_task(t)	(__task = (t))
- 
--#undef DECLARE_EVENT_CLASS
--#define DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print)	\
-+#undef _DECLARE_EVENT_CLASS
-+#define _DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print, tp_flags) \
- static notrace void							\
- perf_trace_##call(void *__data, proto)					\
- {									\
-@@ -28,13 +28,18 @@ perf_trace_##call(void *__data, proto)					\
- 	int __data_size;						\
- 	int rctx;							\
- 									\
-+	if ((tp_flags) & TRACEPOINT_MAY_FAULT) {			\
-+		might_fault();						\
-+		preempt_disable_notrace();				\
-+	}								\
-+									\
- 	__data_size = trace_event_get_offsets_##call(&__data_offsets, args); \
- 									\
- 	head = this_cpu_ptr(event_call->perf_events);			\
- 	if (!bpf_prog_array_valid(event_call) &&			\
- 	    __builtin_constant_p(!__task) && !__task &&			\
- 	    hlist_empty(head))						\
--		return;							\
-+		goto end;						\
- 									\
- 	__entry_size = ALIGN(__data_size + sizeof(*entry) + sizeof(u32),\
- 			     sizeof(u64));				\
-@@ -42,7 +47,7 @@ perf_trace_##call(void *__data, proto)					\
- 									\
- 	entry = perf_trace_buf_alloc(__entry_size, &__regs, &rctx);	\
- 	if (!entry)							\
--		return;							\
-+		goto end;						\
- 									\
- 	perf_fetch_caller_regs(__regs);					\
- 									\
-@@ -53,8 +58,22 @@ perf_trace_##call(void *__data, proto)					\
- 	perf_trace_run_bpf_submit(entry, __entry_size, rctx,		\
- 				  event_call, __count, __regs,		\
- 				  head, __task);			\
-+end:									\
-+	if ((tp_flags) & TRACEPOINT_MAY_FAULT)				\
-+		preempt_enable_notrace();				\
- }
- 
-+#undef DECLARE_EVENT_CLASS
-+#define DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print)	\
-+	_DECLARE_EVENT_CLASS(call, PARAMS(proto), PARAMS(args),		\
-+			     PARAMS(tstruct), PARAMS(assign), PARAMS(print), 0)
-+
-+#undef DECLARE_EVENT_CLASS_MAY_FAULT
-+#define DECLARE_EVENT_CLASS_MAY_FAULT(call, proto, args, tstruct, assign, print) \
-+	_DECLARE_EVENT_CLASS(call, PARAMS(proto), PARAMS(args),		\
-+			     PARAMS(tstruct), PARAMS(assign), PARAMS(print), \
-+			     TRACEPOINT_MAY_FAULT)
-+
- /*
-  * This part is compiled out, it is only here as a build time check
-  * to make sure that if the tracepoint handling changes, the
+Mathieu Desnoyers (5):
+  tracing: Introduce faultable tracepoints (v3)
+  tracing/ftrace: Add support for faultable tracepoints
+  tracing/bpf-trace: add support for faultable tracepoints
+  tracing/perf: add support for faultable tracepoints
+  tracing: convert sys_enter/exit to faultable tracepoints
+
+ include/linux/tracepoint-defs.h | 14 +++++
+ include/linux/tracepoint.h      | 88 ++++++++++++++++++++++---------
+ include/trace/bpf_probe.h       | 21 ++++++--
+ include/trace/define_trace.h    |  7 +++
+ include/trace/events/syscalls.h |  4 +-
+ include/trace/perf.h            | 27 ++++++++--
+ include/trace/trace_events.h    | 73 ++++++++++++++++++++++++--
+ init/Kconfig                    |  1 +
+ kernel/trace/bpf_trace.c        | 10 +++-
+ kernel/trace/trace_events.c     | 26 +++++++---
+ kernel/trace/trace_fprobe.c     |  5 +-
+ kernel/trace/trace_syscalls.c   | 92 +++++++++++++++++++++++----------
+ kernel/tracepoint.c             | 58 +++++++++++----------
+ 13 files changed, 325 insertions(+), 101 deletions(-)
+
 -- 
 2.25.1
 
