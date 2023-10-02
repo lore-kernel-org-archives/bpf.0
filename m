@@ -1,42 +1,58 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C108B10A36;
-	Mon,  2 Oct 2023 11:34:24 +0000 (UTC)
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07EE8D3;
-	Mon,  2 Oct 2023 04:34:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=ehK+lbV6ZoXq1OUCCd+2dyRa9oXz6+uKhr8+Vbae/CY=; b=UAeIfCtH9TQOJSrDalRfCtdK28
-	6pYV1R8j3Ht6PS76jiE22dfhaz8r66g06AJEB4IZVclxsrcxG9ASIl9Gio6/Pb78K/74hkYuDPK+y
-	KQNf24zsBIJQYbFLQMrj3GIOVGJg7ZiDP2hM4IVhART+x/iMi9dltGcfZmi0zA+WCjnrlQjt8PDNz
-	Z157rj/l1NPUpWDe38d2HWiABmh0yRO0ccorMOpZfIwWe0f7gyfTnRhPvD83yaa6YtICqRH+hidqB
-	ZWWbxvMjKr73MkDdlXiP4bTpZKIY2/7rKm3JFCnph7ADw5X5vxJT7cknSSBvFZ+e3CJBBkyXa2Mpr
-	vXq++9bg==;
-Received: from 226.206.1.85.dynamic.wline.res.cust.swisscom.ch ([85.1.206.226] helo=localhost)
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1qnHBq-0009FV-6X; Mon, 02 Oct 2023 13:34:18 +0200
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: davem@davemloft.net
-Cc: kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	daniel@iogearbox.net,
-	ast@kernel.org,
-	andrii@kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C2071775C;
+	Mon,  2 Oct 2023 12:28:11 +0000 (UTC)
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6705FCE;
+	Mon,  2 Oct 2023 05:28:10 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-5230a22cfd1so22167391a12.1;
+        Mon, 02 Oct 2023 05:28:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696249688; x=1696854488; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y14cfr9X7ZfqN6REntNnZLiNj9fIlAHdGv7Az327RZ4=;
+        b=bFDZBkfVgR5lyLDXaBgMxFNWrkdrAXgzNeuvyPWZoKNDQvk+WqfDDvDTTT+Ys0Q2UO
+         bQNflt5+NqfD1teXjsHVcygwLcu8NcMz4sq1TxHquziv/rEWn8Pd7ijNZyC+z73I98Ih
+         kYkteHJJwYDHo7iFjhvkOoX7PciFDQKWJ16Q1Ts/3JrAHEKRyifGGRtILxV3q9o6892b
+         fs61un3kG7+yDqWVSxcCWsd+nK0e20zpwbzRJi4D1TpnZlhNv9qMlyOSgY8i57tHGOXI
+         nL1BQiTN08zyAv0I2iagFhjPgmlM6m5ayy3f48vOfdkl9tWaZODcmNnMXEzEoLiLt3Kd
+         INiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696249688; x=1696854488;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=y14cfr9X7ZfqN6REntNnZLiNj9fIlAHdGv7Az327RZ4=;
+        b=oDE/4y2AslngtyUeilBfR8oLHRHnYF6LcD6bvOznn7P6tkHZWalwaOmhM82j1qHWZg
+         IK+61SwY2/sPPqagfxoRb75SuIiIX1v8BjiprC/g1nziD7UoxWAKdFChXNrs0re3E2mN
+         GsIoUVhvtQOYIbCrFED0IS4PORNjk9Bda+w6oaTkFQzMYfPhG6kLTf/ktqo4kKSMLYNl
+         Q7TJKH6KQcf7o4Hx5WzVaFCh8nWDRgWNK9EoEhfgqbQ1HGtqCKOLLTM+EyHyomZQ2MaU
+         fjASX8yUpuXm6s+s24PsfBrJrZ9yl0dgDVNg3rj/LxYKk+tx5LdWq1xd/PzgArs0G1TE
+         BW6g==
+X-Gm-Message-State: AOJu0YwrEDUUtwBbrBankfLCrOFwv5Nd2NHD7glmhH/FqgA/5xVHyyy8
+	U/H9nRXO1cPaIbbQesw5rqBDouAs81YIfBpm
+X-Google-Smtp-Source: AGHT+IE47xjupsHijknyq1B1UNvsuxzC/a09y1ERunHDQljFIGs8eQhsShjJib+WRaJQ3C9zG8fVEQ==
+X-Received: by 2002:a50:ef17:0:b0:532:ac24:3081 with SMTP id m23-20020a50ef17000000b00532ac243081mr9195318eds.30.1696249688524;
+        Mon, 02 Oct 2023 05:28:08 -0700 (PDT)
+Received: from daandemeyer-fedora-PC1EV17T.thefacebook.com (2001-1c05-3310-3500-aa0d-0bb2-d029-8797.cable.dynamic.v6.ziggo.nl. [2001:1c05:3310:3500:aa0d:bb2:d029:8797])
+        by smtp.googlemail.com with ESMTPSA id v10-20020aa7dbca000000b005330b2d1904sm15263099edt.71.2023.10.02.05.28.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Oct 2023 05:28:08 -0700 (PDT)
+From: Daan De Meyer <daan.j.demeyer@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Daan De Meyer <daan.j.demeyer@gmail.com>,
 	martin.lau@linux.dev,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: pull-request: bpf 2023-10-02
-Date: Mon,  2 Oct 2023 13:34:17 +0200
-Message-Id: <20231002113417.2309-1-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
+	kernel-team@meta.com,
+	netdev@vger.kernel.org
+Subject: [PATCH bpf-next v7 1/9] selftests/bpf: Add missing section name tests for getpeername/getsockname
+Date: Mon,  2 Oct 2023 14:27:47 +0200
+Message-ID: <20231002122756.323591-2-daan.j.demeyer@gmail.com>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20231002122756.323591-1-daan.j.demeyer@gmail.com>
+References: <20231002122756.323591-1-daan.j.demeyer@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -44,108 +60,53 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27049/Mon Oct  2 09:37:00 2023)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hi David, hi Jakub, hi Paolo, hi Eric,
+These were missed when these hooks were first added so add them now
+instead to make sure every sockaddr hook has a matching section name
+test.
 
-The following pull-request contains BPF updates for your *net* tree.
+Signed-off-by: Daan De Meyer <daan.j.demeyer@gmail.com>
+---
+ .../selftests/bpf/prog_tests/section_names.c  | 20 +++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-We've added 11 non-merge commits during the last 12 day(s) which contain
-a total of 12 files changed, 176 insertions(+), 41 deletions(-).
+diff --git a/tools/testing/selftests/bpf/prog_tests/section_names.c b/tools/testing/selftests/bpf/prog_tests/section_names.c
+index 8b571890c57e..fc5248e94a01 100644
+--- a/tools/testing/selftests/bpf/prog_tests/section_names.c
++++ b/tools/testing/selftests/bpf/prog_tests/section_names.c
+@@ -158,6 +158,26 @@ static struct sec_name_test tests[] = {
+ 		{0, BPF_PROG_TYPE_CGROUP_SOCKOPT, BPF_CGROUP_SETSOCKOPT},
+ 		{0, BPF_CGROUP_SETSOCKOPT},
+ 	},
++	{
++		"cgroup/getpeername4",
++		{0, BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_GETPEERNAME},
++		{0, BPF_CGROUP_INET4_GETPEERNAME},
++	},
++	{
++		"cgroup/getpeername6",
++		{0, BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_GETPEERNAME},
++		{0, BPF_CGROUP_INET6_GETPEERNAME},
++	},
++	{
++		"cgroup/getsockname4",
++		{0, BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_GETSOCKNAME},
++		{0, BPF_CGROUP_INET4_GETSOCKNAME},
++	},
++	{
++		"cgroup/getsockname6",
++		{0, BPF_PROG_TYPE_CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_GETSOCKNAME},
++		{0, BPF_CGROUP_INET6_GETSOCKNAME},
++	},
+ };
+ 
+ static void test_prog_type_by_name(const struct sec_name_test *test)
+-- 
+2.41.0
 
-The main changes are:
-
-1) Fix BPF verifier to reset backtrack_state masks on global function exit as
-   otherwise subsequent precision tracking would reuse them, from Andrii Nakryiko.
-
-2) Several sockmap fixes for available bytes accounting, from John Fastabend.
-
-3) Reject sk_msg egress redirects to non-TCP sockets given this is only
-   supported for TCP sockets today, from Jakub Sitnicki.
-
-4) Fix a syzkaller splat in bpf_mprog when hitting maximum program limits with
-   BPF_F_BEFORE directive, from Daniel Borkmann and Nikolay Aleksandrov.
-
-5) Fix BPF memory allocator to use kmalloc_size_roundup() to adjust
-   size_index for selecting a bpf_mem_cache, from Hou Tao.
-
-6) Fix arch_prepare_bpf_trampoline return code for s390 JIT, from Song Liu.
-
-7) Fix bpf_trampoline_get when CONFIG_BPF_JIT is turned off, from Leon Hwang.
-
-Please consider pulling these changes from:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/for-netdev
-
-Thanks a lot!
-
-Also thanks to reporters, reviewers and testers of commits in this pull-request:
-
-Chris Mason, Dan Carpenter, Emil Renner Berthing, Ilya Leoshkevich, 
-Jakub Sitnicki, John Fastabend, kernel test robot, Nathan Chancellor
-
-----------------------------------------------------------------
-
-The following changes since commit 8070274b472e2e9f5f67a990f5e697634c415708:
-
-  net: stmmac: fix incorrect rxq|txq_stats reference (2023-09-19 10:21:15 +0200)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/for-netdev
-
-for you to fetch changes up to 9077fc228f09c9f975c498c55f5d2e882cd0da59:
-
-  bpf: Use kmalloc_size_roundup() to adjust size_index (2023-09-30 09:39:28 -0700)
-
-----------------------------------------------------------------
-bpf-for-netdev
-
-----------------------------------------------------------------
-Alexei Starovoitov (1):
-      Merge branch 's390-bpf-fix-arch_prepare_bpf_trampoline'
-
-Andrii Nakryiko (1):
-      bpf: unconditionally reset backtrack_state masks on global func exit
-
-Daniel Borkmann (2):
-      bpf, mprog: Fix maximum program check on mprog attachment
-      selftest/bpf: Add various selftests for program limits
-
-Hou Tao (1):
-      bpf: Use kmalloc_size_roundup() to adjust size_index
-
-Jakub Sitnicki (1):
-      bpf, sockmap: Reject sk_msg egress redirects to non-TCP sockets
-
-John Fastabend (3):
-      bpf: tcp_read_skb needs to pop skb regardless of seq
-      bpf, sockmap: Do not inc copied_seq when PEEK flag set
-      bpf, sockmap: Add tests for MSG_F_PEEK
-
-Leon Hwang (1):
-      bpf: Fix tr dereferencing
-
-Song Liu (2):
-      s390/bpf: Let arch_prepare_bpf_trampoline return program size
-      selftests/bpf: Check bpf_cubic_acked() is called via struct_ops
-
- arch/s390/net/bpf_jit_comp.c                       |  2 +-
- include/linux/bpf.h                                |  2 +-
- kernel/bpf/memalloc.c                              | 44 +++++-------
- kernel/bpf/mprog.c                                 |  3 +
- kernel/bpf/verifier.c                              |  8 +--
- net/core/sock_map.c                                |  4 ++
- net/ipv4/tcp.c                                     | 10 +--
- net/ipv4/tcp_bpf.c                                 |  4 +-
- .../testing/selftests/bpf/prog_tests/bpf_tcp_ca.c  |  2 +
- .../selftests/bpf/prog_tests/sockmap_basic.c       | 51 +++++++++++++
- tools/testing/selftests/bpf/prog_tests/tc_opts.c   | 84 ++++++++++++++++++++++
- tools/testing/selftests/bpf/progs/bpf_cubic.c      |  3 +
- 12 files changed, 176 insertions(+), 41 deletions(-)
