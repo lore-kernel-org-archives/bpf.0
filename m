@@ -1,31 +1,30 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E3CA1F955
-	for <bpf@vger.kernel.org>; Mon,  2 Oct 2023 19:53:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 903461F955
+	for <bpf@vger.kernel.org>; Mon,  2 Oct 2023 19:54:01 +0000 (UTC)
 Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4C9B4
-	for <bpf@vger.kernel.org>; Mon,  2 Oct 2023 12:53:54 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 005A3AD
+	for <bpf@vger.kernel.org>; Mon,  2 Oct 2023 12:53:59 -0700 (PDT)
 Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 392JXVFw008368
-	for <bpf@vger.kernel.org>; Mon, 2 Oct 2023 12:53:53 -0700
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 392JXUYs008271
+	for <bpf@vger.kernel.org>; Mon, 2 Oct 2023 12:53:59 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=XplMyuxD2GhVeNIiPXi6hTKjvPJ59XNrMZ1eDQXXnE4=;
- b=QH/w7b7mJIrEiZaieAYHYEGmIxuA9TEfGtZjfZOT3mtic0iIRYcppFrBsZEZ8j1RVX4Y
- dVcCMA2ojzL2n4TFy1gbmoKeqPRgzcXxQxxBVJPvPMsULzcvHOGU0S7DS3nbG6Us9MwE
- 0+gbWBryWg4TgOOikP/fwup9GaQ4+XQhelg= 
+ : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=facebook; bh=ws8vhTFN5UXHNlqtyxcBCQaETEVM0wKEuMahkaP5N94=;
+ b=alxxkpr2r3Mdbiy1qRSTjSIZvkZjzTeKlYHFccrkNih6u9gRllqFc/yjdlXdVGOijYT9
+ JDG0x3YVsCBM+LNv5KFei+o7yOle4BgiQ59Gex7eV6HrNQDw4yVCyejYa/mhM4L91zaa
+ 3TC20euZq+zehTlw0vzygsLd5oyAFd0pDVU= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3tfng8r8un-1
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3tfng8r8v7-4
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Mon, 02 Oct 2023 12:53:53 -0700
-Received: from twshared4117.09.ash9.facebook.com (2620:10d:c085:208::f) by
+	for <bpf@vger.kernel.org>; Mon, 02 Oct 2023 12:53:59 -0700
+Received: from twshared1579.04.ash8.facebook.com (2620:10d:c085:108::4) by
  mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 2 Oct 2023 12:53:52 -0700
+ 15.1.2507.23; Mon, 2 Oct 2023 12:53:55 -0700
 Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-	id 1B552252182BF; Mon,  2 Oct 2023 12:53:48 -0700 (PDT)
+	id 7F25225218270; Mon,  2 Oct 2023 12:53:43 -0700 (PDT)
 From: Dave Marchevsky <davemarchevsky@fb.com>
 To: <bpf@vger.kernel.org>
 CC: Alexei Starovoitov <ast@kernel.org>,
@@ -37,23 +36,22 @@ CC: Alexei Starovoitov <ast@kernel.org>,
         Kernel Team <kernel-team@fb.com>,
         Dave Marchevsky
 	<davemarchevsky@fb.com>
-Subject: [PATCH v4 bpf-next 3/3] selftests/bpf: Add tests for open-coded task_vma iter
-Date: Mon, 2 Oct 2023 12:53:41 -0700
-Message-ID: <20231002195341.2940874-4-davemarchevsky@fb.com>
+Subject: [PATCH v4 bpf-next 0/3] Open-coded task_vma iter
+Date: Mon, 2 Oct 2023 12:53:38 -0700
+Message-ID: <20231002195341.2940874-1-davemarchevsky@fb.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231002195341.2940874-1-davemarchevsky@fb.com>
-References: <20231002195341.2940874-1-davemarchevsky@fb.com>
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: fG1MOiuGFnqalSuZEjOOSV1_i7iUCMxF
+X-Proofpoint-ORIG-GUID: fG1MOiuGFnqalSuZEjOOSV1_i7iUCMxF
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: zvqHQ4_G9b3m4aGj84_CIvF2SgPu1i69
-X-Proofpoint-ORIG-GUID: zvqHQ4_G9b3m4aGj84_CIvF2SgPu1i69
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-10-02_14,2023-10-02_01,2023-05-22_02
@@ -64,190 +62,134 @@ X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-The open-coded task_vma iter added earlier in this series allows for
-natural iteration over a task's vmas using existing open-coded iter
-infrastructure, specifically bpf_for_each.
+At Meta we have a profiling daemon which periodically collects
+information on many hosts. This collection usually involves grabbing
+stacks (user and kernel) using perf_event BPF progs and later symbolicating
+them. For user stacks we try to use BPF_F_USER_BUILD_ID and rely on
+remote symbolication, but BPF_F_USER_BUILD_ID doesn't always succeed. In
+those cases we must fall back to digging around in /proc/PID/maps to map
+virtual address to (binary, offset). The /proc/PID/maps digging does not
+occur synchronously with stack collection, so the process might already
+be gone, in which case it won't have /proc/PID/maps and we will fail to
+symbolicate.
 
-This patch adds a test demonstrating this pattern and validating
-correctness. The vma->vm_start and vma->vm_end addresses of the first
-1000 vmas are recorded and compared to /proc/PID/maps output. As
-expected, both see the same vmas and addresses - with the exception of
-the [vsyscall] vma - which is explained in a comment in the prog_tests
-program.
+This 'exited process problem' doesn't occur very often as
+most of the prod services we care to profile are long-lived daemons, but
+there are enough usecases to warrant a workaround: a BPF program which
+can be optionally loaded at data collection time and essentially walks
+/proc/PID/maps. Currently this is done by walking the vma list:
 
-Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
----
- .../testing/selftests/bpf/prog_tests/iters.c  | 71 +++++++++++++++++++
- .../selftests/bpf/progs/iters_task_vma.c      | 63 ++++++++++++++++
- 2 files changed, 134 insertions(+)
+  struct vm_area_struct* mmap =3D BPF_CORE_READ(mm, mmap);
+  mmap_next =3D BPF_CORE_READ(rmap, vm_next); /* in a loop */
+
+Since commit 763ecb035029 ("mm: remove the vma linked list") there's no
+longer a vma linked list to walk. Walking the vma maple tree is not as
+simple as hopping struct vm_area_struct->vm_next. Luckily,
+commit f39af05949a4 ("mm: add VMA iterator"), another commit in that series,
+added struct vma_iterator and for_each_vma macro for easy vma iteration. If
+similar functionality was exposed to BPF programs, it would be perfect for =
+our
+usecase.
+
+This series adds such functionality, specifically a BPF equivalent of
+for_each_vma using the open-coded iterator style.
+
+Notes:
+  * This approach was chosen after discussion on a previous series [0] which
+    attempted to solve the same problem by adding a BPF_F_VMA_NEXT flag to
+    bpf_find_vma.
+  * Unlike the task_vma bpf_iter, the open-coded iterator kfuncs here do not
+    drop the vma read lock between iterations. See Alexei's response in [0].
+  * The [vsyscall] page isn't really part of task->mm's vmas, but
+    /proc/PID/maps returns information about it anyways. The vma iter added
+    here does not do the same. See comment on selftest in patch 3.
+  * bpf_iter_task_vma allocates a _data struct which contains - among other
+    things - struct vma_iterator, using BPF allocator and keeps a pointer to
+    the bpf_iter_task_vma_data. This is done in order to prevent changes to
+    struct ma_state - which is wrapped by struct vma_iterator - from
+    necessitating changes to uapi struct bpf_iter_task_vma.
+
+Changelog:
+
+v3 -> v4: https://lore.kernel.org/bpf/20230822050558.2937659-1-davemarchevs=
+ky@fb.com/
+
+Patch 1 ("bpf: Don't explicitly emit BTF for struct btf_iter_num")
+  * Add Andrii ack
+Patch 2 ("bpf: Introduce task_vma open-coded iterator kfuncs")
+  * Mark bpf_iter_task_vma_new args KF_RCU and remove now-unnecessary !task
+    check (Yonghong)
+    * Although KF_RCU is a function-level flag, in reality it only applies =
+to
+      the task_struct *task parameter, as the other two params are a scalar=
+ int
+      and a specially-handled KF_ARG_PTR_TO_ITER
+   * Remove struct bpf_iter_task_vma definition from uapi headers, define in
+     kernel/bpf/task_iter.c instead (Andrii)
+Patch 3 ("selftests/bpf: Add tests for open-coded task_vma iter")
+  * Use a local var when looping over vmas to track map idx. Update vmas_se=
+en
+    global after done iterating. Don't start iterating or update vmas_seen =
+if
+    vmas_seen global is nonzero. (Andrii)
+  * Move getpgid() call to correct spot - above skel detach. (Andrii)
+
+v2 -> v3: https://lore.kernel.org/bpf/20230821173415.1970776-1-davemarchevs=
+ky@fb.com/
+
+Patch 1 ("bpf: Don't explicitly emit BTF for struct btf_iter_num")
+  * Add Yonghong ack
+
+Patch 2 ("bpf: Introduce task_vma open-coded iterator kfuncs")
+  * UAPI bpf header and tools/ version should match
+  * Add bpf_iter_task_vma_kern_data which bpf_iter_task_vma_kern points to,
+    bpf_mem_alloc/free it instead of just vma_iterator. (Alexei)
+    * Inner data ptr =3D=3D NULL implies initialization failed
+
+
+v1 -> v2: https://lore.kernel.org/bpf/20230810183513.684836-1-davemarchevsk=
+y@fb.com/
+  * Patch 1
+    * Now removes the unnecessary BTF_TYPE_EMIT instead of changing the
+      type (Yonghong)
+  * Patch 2
+    * Don't do unnecessary BTF_TYPE_EMIT (Yonghong)
+    * Bump task refcount to prevent ->mm reuse (Yonghong)
+    * Keep a pointer to vma_iterator in bpf_iter_task_vma, alloc/free
+      via BPF mem allocator (Yonghong, Stanislav)
+  * Patch 3
+
+Patch summary:
+  * Patch 1 is a tiny fix I ran into while implementing the vma iter in this
+    series. It can be applied independently.
+  * Patch 2 is the meat of the implementation
+  * Patch 3 adds tests for the new functionality
+    * Existing iter tests exercise failure cases (e.g. prog that doesn't ca=
+ll
+      _destroy()). I didn't replicate them in this series, but am happy to =
+add
+      them in v2 if folks feel that it would be worthwhile.
+
+  [0]: https://lore.kernel.org/bpf/20230801145414.418145-1-davemarchevsky@f=
+b.com/
+
+Dave Marchevsky (3):
+  bpf: Don't explicitly emit BTF for struct btf_iter_num
+  bpf: Introduce task_vma open-coded iterator kfuncs
+  selftests/bpf: Add tests for open-coded task_vma iter
+
+ kernel/bpf/bpf_iter.c                         |  2 -
+ kernel/bpf/helpers.c                          |  3 +
+ kernel/bpf/task_iter.c                        | 85 +++++++++++++++++++
+ tools/lib/bpf/bpf_helpers.h                   |  8 ++
+ .../selftests/bpf/prog_tests/bpf_iter.c       | 26 +++---
+ .../testing/selftests/bpf/prog_tests/iters.c  | 71 ++++++++++++++++
+ ...f_iter_task_vma.c =3D> bpf_iter_task_vmas.c} |  0
+ .../selftests/bpf/progs/iters_task_vma.c      | 63 ++++++++++++++
+ 8 files changed, 243 insertions(+), 15 deletions(-)
+ rename tools/testing/selftests/bpf/progs/{bpf_iter_task_vma.c =3D> bpf_ite=
+r_task_vmas.c} (100%)
  create mode 100644 tools/testing/selftests/bpf/progs/iters_task_vma.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/iters.c b/tools/testi=
-ng/selftests/bpf/prog_tests/iters.c
-index 10804ae5ae97..7a18fc21f364 100644
---- a/tools/testing/selftests/bpf/prog_tests/iters.c
-+++ b/tools/testing/selftests/bpf/prog_tests/iters.c
-@@ -8,6 +8,7 @@
- #include "iters_looping.skel.h"
- #include "iters_num.skel.h"
- #include "iters_testmod_seq.skel.h"
-+#include "iters_task_vma.skel.h"
-=20
- static void subtest_num_iters(void)
- {
-@@ -90,6 +91,74 @@ static void subtest_testmod_seq_iters(void)
- 	iters_testmod_seq__destroy(skel);
- }
-=20
-+static void subtest_task_vma_iters(void)
-+{
-+	unsigned long start, end, bpf_iter_start, bpf_iter_end;
-+	struct iters_task_vma *skel;
-+	char rest_of_line[1000];
-+	unsigned int seen;
-+	int err;
-+	FILE *f;
-+
-+	skel =3D iters_task_vma__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	bpf_program__set_autoload(skel->progs.iter_task_vma_for_each, true);
-+
-+	err =3D iters_task_vma__load(skel);
-+	if (!ASSERT_OK(err, "skel_load"))
-+		goto cleanup;
-+
-+	skel->bss->target_pid =3D getpid();
-+
-+	err =3D iters_task_vma__attach(skel);
-+	if (!ASSERT_OK(err, "skel_attach"))
-+		goto cleanup;
-+
-+	getpgid(skel->bss->target_pid);
-+	iters_task_vma__detach(skel);
-+
-+	if (!ASSERT_GT(skel->bss->vmas_seen, 0, "vmas_seen_gt_zero"))
-+		goto cleanup;
-+
-+	f =3D fopen("/proc/self/maps", "r");
-+	if (!ASSERT_OK_PTR(f, "proc_maps_fopen"))
-+		goto cleanup;
-+
-+	seen =3D 0;
-+	while (fscanf(f, "%lx-%lx %[^\n]\n", &start, &end, rest_of_line) =3D=3D=
- 3) {
-+		/* [vsyscall] vma isn't _really_ part of task->mm vmas.
-+		 * /proc/PID/maps returns it when out of vmas - see get_gate_vma
-+		 * calls in fs/proc/task_mmu.c
-+		 */
-+		if (strstr(rest_of_line, "[vsyscall]"))
-+			continue;
-+
-+		err =3D bpf_map_lookup_elem(bpf_map__fd(skel->maps.vm_start),
-+					  &seen, &bpf_iter_start);
-+		if (!ASSERT_OK(err, "vm_start map_lookup_elem"))
-+			goto cleanup;
-+
-+		err =3D bpf_map_lookup_elem(bpf_map__fd(skel->maps.vm_end),
-+					  &seen, &bpf_iter_end);
-+		if (!ASSERT_OK(err, "vm_end map_lookup_elem"))
-+			goto cleanup;
-+
-+		ASSERT_EQ(bpf_iter_start, start, "vma->vm_start match");
-+		ASSERT_EQ(bpf_iter_end, end, "vma->vm_end match");
-+		seen++;
-+	}
-+
-+	fclose(f);
-+
-+	if (!ASSERT_EQ(skel->bss->vmas_seen, seen, "vmas_seen_eq"))
-+		goto cleanup;
-+
-+cleanup:
-+	iters_task_vma__destroy(skel);
-+}
-+
- void test_iters(void)
- {
- 	RUN_TESTS(iters_state_safety);
-@@ -103,4 +172,6 @@ void test_iters(void)
- 		subtest_num_iters();
- 	if (test__start_subtest("testmod_seq"))
- 		subtest_testmod_seq_iters();
-+	if (test__start_subtest("task_vma"))
-+		subtest_task_vma_iters();
- }
-diff --git a/tools/testing/selftests/bpf/progs/iters_task_vma.c b/tools/t=
-esting/selftests/bpf/progs/iters_task_vma.c
-new file mode 100644
-index 000000000000..1ac7ca0633be
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/iters_task_vma.c
-@@ -0,0 +1,63 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Meta Platforms, Inc. and affiliates. */
-+
-+#include <limits.h>
-+#include <linux/errno.h>
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+pid_t target_pid =3D 0;
-+unsigned int vmas_seen =3D 0;
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1000);
-+	__type(key, int);
-+	__type(value, unsigned long);
-+} vm_start SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1000);
-+	__type(key, int);
-+	__type(value, unsigned long);
-+} vm_end SEC(".maps");
-+
-+SEC("?raw_tp/sys_enter")
-+int iter_task_vma_for_each(const void *ctx)
-+{
-+	struct task_struct *task =3D bpf_get_current_task_btf();
-+	struct vm_area_struct *vma;
-+	unsigned long *start, *end;
-+	unsigned int seen =3D 0;
-+
-+	if (task->pid !=3D target_pid)
-+		return 0;
-+
-+	if (vmas_seen)
-+		return 0;
-+
-+	bpf_for_each(task_vma, vma, task, 0) {
-+		if (seen >=3D 1000)
-+			break;
-+
-+		start =3D bpf_map_lookup_elem(&vm_start, &seen);
-+		if (!start)
-+			break;
-+		*start =3D vma->vm_start;
-+
-+		end =3D bpf_map_lookup_elem(&vm_end, &seen);
-+		if (!end)
-+			break;
-+		*end =3D vma->vm_end;
-+
-+		seen++;
-+	}
-+
-+	if (!vmas_seen)
-+		vmas_seen =3D seen;
-+	return 0;
-+}
-+
-+char _license[] SEC("license") =3D "GPL";
 --=20
 2.34.1
-
