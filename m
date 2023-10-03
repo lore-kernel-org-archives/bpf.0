@@ -1,480 +1,157 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 490D7D2EB
-	for <bpf@vger.kernel.org>; Tue,  3 Oct 2023 18:27:04 +0000 (UTC)
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB4A90
-	for <bpf@vger.kernel.org>; Tue,  3 Oct 2023 11:27:01 -0700 (PDT)
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 3FA52C180EDF
-	for <bpf@vger.kernel.org>; Tue,  3 Oct 2023 11:27:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1696357621; bh=5FqyzndqvYpAflVKHeIss6Zbn7zsLsu+LaYA723Od9Q=;
-	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=OasOAtofvvwJw+m/6+uBv1FMnF14OwQcjay2Wx/soylzr8FSNZv5BwEDKU7jouhLa
-	 iTLYywP3Ll7Cy70KXmCejBOkLrBXL+7vv4Rn0HjKs41BjZdvBWOkGkfbLbLuHgmwwB
-	 2YIdZWCT50W2KztEV55vyc8kIxciFntPqMStn4kE=
-X-Mailbox-Line: From bpf-bounces@ietf.org  Tue Oct  3 11:27:01 2023
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id EB7CBC157902;
-	Tue,  3 Oct 2023 11:27:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1696357621; bh=5FqyzndqvYpAflVKHeIss6Zbn7zsLsu+LaYA723Od9Q=;
-	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=OasOAtofvvwJw+m/6+uBv1FMnF14OwQcjay2Wx/soylzr8FSNZv5BwEDKU7jouhLa
-	 iTLYywP3Ll7Cy70KXmCejBOkLrBXL+7vv4Rn0HjKs41BjZdvBWOkGkfbLbLuHgmwwB
-	 2YIdZWCT50W2KztEV55vyc8kIxciFntPqMStn4kE=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id 5B984C157902
- for <bpf@ietfa.amsl.com>; Tue,  3 Oct 2023 11:26:59 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Score: -0.407
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,
-	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mALiJYburpFp for <bpf@ietfa.amsl.com>;
- Tue,  3 Oct 2023 11:26:54 -0700 (PDT)
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com
- [209.85.215.172])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id B65D9C15198F
- for <bpf@ietf.org>; Tue,  3 Oct 2023 11:26:54 -0700 (PDT)
-Received: by mail-pg1-f172.google.com with SMTP id
- 41be03b00d2f7-584a761b301so859702a12.3
- for <bpf@ietf.org>; Tue, 03 Oct 2023 11:26:54 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48F19347CD
+	for <bpf@vger.kernel.org>; Tue,  3 Oct 2023 18:29:45 +0000 (UTC)
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2BE990;
+	Tue,  3 Oct 2023 11:29:42 -0700 (PDT)
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-690d8fb3b7eso973644b3a.1;
+        Tue, 03 Oct 2023 11:29:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696357614; x=1696962414;
- h=user-agent:in-reply-to:content-disposition:mime-version:references
- :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=X1UUq1ErSjgqYaU/Hf1+EggrjHRNcxf46ITk7awz++4=;
- b=INcqlxTnyLbsmoJVtaFzqE5aOv1YSGCMRl786O59uJ1USCsGNwRAslL7Lh09r9a6C9
- uOCWWQEnVNlqE5yG0MszIfddweZud068tbP5zmfLpRo7UJojGGX+rVkqAygrH5UeM0fR
- oxmpUUnMp4mf1xZTuyQMhLYphvZb5IblNOBxsFShFZ1zTRKagZialYPjFi4T11K8mq0m
- F92eVHUNrmOMqzvGRPrVCVg3eA1tCz4vNW2LhXtZ0QSabf1+z99C8fMQCnYPX0EAaHGc
- ipzHHztZUjrZ52Y6W+QjUJ4zuVbbPSNzfvOi/pLkkVwVwQOtiOlLOP9O9BJBlEikR5b+
- Zw1A==
-X-Gm-Message-State: AOJu0YyN8rjzwravhiqEk+3NaEkuS1Vfz9TXl/juxeU9xt3wAOEk3PgE
- s5f+URjF4s6AiB+elr6Nf9LSiJ3Sw8ZarA==
-X-Google-Smtp-Source: AGHT+IFV6bNIxRHHkvoJOTsoVjfKYjqCgywYE9kJmJIZ8n/u1Fee2btlg9fFOWG+CQAIxbHnKT3Ygw==
-X-Received: by 2002:a05:6a21:197:b0:149:122b:6330 with SMTP id
- le23-20020a056a21019700b00149122b6330mr333734pzb.10.1696357613621; 
- Tue, 03 Oct 2023 11:26:53 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1696357782; x=1696962582;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=C8sQRY8roqNIFk3L84KXVcV0uLeEhN7pGXERpmeZkvg=;
+        b=tSsnzmPHOEL25bHOw6FAZ/iyMLFWSzFn/0rVtdyQqhPzBhipYpdLw9mwwpMyKj++Kx
+         sBzK7kSWJMrjgDnf848dEsO35fjwFu2ACbPW2IfwCTMRQ5eWkZyTysloipwVBdt66eB4
+         uD9Fjnm9tzfrTTT8y4dRSbuHZn6SrH4NaOUqm1LIXrLGWtVhVqDFh0eVzl4dLZIBnyVI
+         bBBzlbRLeOUEV7SJaC7mjlp/xHiZmKUhvd46KvRnQk9NpGuUidoM1bGG5vDCN+uHaFX2
+         P1hznFHTEp61W+3wmKhgP6GZAE2emxYsNsaLErp1v8Y2szdB+gxd7QJfo8izesjngFuT
+         tJ1g==
+X-Gm-Message-State: AOJu0YyjczOMTF9vzGSBVxMNuFd9CsHwHOCJ+Gh+QjdY9bwMeFSjJBoq
+	DxrmbrjwxigBvz8rkhtzEbw=
+X-Google-Smtp-Source: AGHT+IG6HIs+20OBGFQ3lm7n7+ND1W09MC3dl849h2sUlCWqAAFTtkCxzugKEheYLuy2Iq/oRGCZLg==
+X-Received: by 2002:a05:6a20:144c:b0:13c:ca8b:7e29 with SMTP id a12-20020a056a20144c00b0013cca8b7e29mr345308pzi.12.1696357782138;
+        Tue, 03 Oct 2023 11:29:42 -0700 (PDT)
 Received: from maniforge ([2620:10d:c090:400::4:d6ec])
- by smtp.gmail.com with ESMTPSA id
- i8-20020aa79088000000b00690c9fda0fesm1671792pfa.169.2023.10.03.11.26.52
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 03 Oct 2023 11:26:52 -0700 (PDT)
-Date: Tue, 3 Oct 2023 13:26:50 -0500
+        by smtp.gmail.com with ESMTPSA id c9-20020a62e809000000b00690b8961bf4sm1724032pfi.146.2023.10.03.11.29.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Oct 2023 11:29:41 -0700 (PDT)
+Date: Tue, 3 Oct 2023 13:29:36 -0500
 From: David Vernet <void@manifault.com>
-To: Will Hawkins <hawkinsw@obs.cr>
-Cc: bpf@ietf.org, bpf@vger.kernel.org
-Message-ID: <20231003182650.GA5902@maniforge>
-References: <20231002142001.3223261-1-hawkinsw@obs.cr>
+To: Song Liu <songliubraving@meta.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	"daniel@iogearbox.net" <daniel@iogearbox.net>,
+	"andrii@kernel.org" <andrii@kernel.org>,
+	"martin.lau@linux.dev" <martin.lau@linux.dev>,
+	"song@kernel.org" <song@kernel.org>,
+	"yonghong.song@linux.dev" <yonghong.song@linux.dev>,
+	"john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+	"kpsingh@kernel.org" <kpsingh@kernel.org>,
+	"sdf@google.com" <sdf@google.com>,
+	"haoluo@google.com" <haoluo@google.com>,
+	"jolsa@kernel.org" <jolsa@kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Kernel Team <kernel-team@meta.com>,
+	"himadrispandya@gmail.com" <himadrispandya@gmail.com>,
+	"julia.lawall@inria.fr" <julia.lawall@inria.fr>
+Subject: Re: [PATCH bpf-next 2/2] bpf/selftests: Test pinning bpf timer to a
+ core
+Message-ID: <20231003182936.GC5902@maniforge>
+References: <20231002234708.331192-1-void@manifault.com>
+ <20231002234708.331192-2-void@manifault.com>
+ <4EC94A6E-B3C5-4D2D-BD4B-FF7C4F149FD1@fb.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231002142001.3223261-1-hawkinsw@obs.cr>
+In-Reply-To: <4EC94A6E-B3C5-4D2D-BD4B-FF7C4F149FD1@fb.com>
 User-Agent: Mutt/2.2.10 (2023-03-25)
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/pxyLiXYRYtr0GKa4QFVC5RllUKM>
-Subject: Re: [Bpf] [PATCH] bpf,
- docs: Add additional ABI working draft base text
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Id: Discussion of BPF/eBPF standardization efforts within the IETF
- <bpf.ietf.org>
-List-Unsubscribe: <https://www.ietf.org/mailman/options/bpf>,
- <mailto:bpf-request@ietf.org?subject=unsubscribe>
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-List-Subscribe: <https://www.ietf.org/mailman/listinfo/bpf>,
- <mailto:bpf-request@ietf.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
-Message-ID: <20231003182650.rjti-iw2zRsQjjk1Hv64J5KuYhs6NMxNg608sb4C1QE@z>
 
-On Mon, Oct 02, 2023 at 10:19:55AM -0400, Will Hawkins wrote:
-
-Hi Will,
-
-Thanks for working on this. This is really great work and (obviously) a
-big improvement over my tiny little ABI doc. I left some comments below,
-as is to be expected given that it's only the first draft.
-
-> Per David's description of the IETF standardization process, this
-> document will form the basis for an informational eBPF ABI. The
-> work in this commit is a slightly more complete skeleton for the work
-> that we will do. Everything in this document (from formatting to topics
-> to details) is open for change and feedback.
-> ---
->  Documentation/bpf/standardization/abi.rst | 237 ++++++++++++++++++++--
->  1 file changed, 225 insertions(+), 12 deletions(-)
+On Tue, Oct 03, 2023 at 06:15:03PM +0000, Song Liu wrote:
 > 
-> diff --git a/Documentation/bpf/standardization/abi.rst b/Documentation/bpf/standardization/abi.rst
-> index 0c2e10eeb89a..cadbd1b4d6b3 100644
-> --- a/Documentation/bpf/standardization/abi.rst
-> +++ b/Documentation/bpf/standardization/abi.rst
-> @@ -1,25 +1,238 @@
-> -.. contents::
-> -.. sectnum::
-> -
->  ===================================================
->  BPF ABI Recommended Conventions and Guidelines v1.0
->  ===================================================
->  
-> -This is version 1.0 of an informational document containing recommended
-> -conventions and guidelines for producing portable BPF program binaries.
-> +An application binary interface (ABI) defines the requirements that one or more binary software
-> +objects must meet in order to guarantee that they can interoperate and/or use the resources provided
-> +by operating systems/hardware combinations.  (For alternate definitions of ABI, see
-> +[SYSVABI]_, [POWERPCABI]_)
-> +
-> +The purpose of this document is to define an ABI which will define the extent to which compiled
-> +eBPF programs are compatible with each other and the eBPF machine/processor [#]_ on which they
+> 
+> > On Oct 2, 2023, at 4:47 PM, David Vernet <void@manifault.com> wrote:
+> > 
+> > Now that we support pinning a BPF timer to the current core, we should
+> > test it with some selftests. This patch adds two new testcases to the
+> > timer suite, which verifies that a BPF timer both with and without
+> > BPF_F_TIMER_ABS, can be pinned to the calling core with
+> > BPF_F_TIMER_CPU_PIN.
+> > 
+> > Signed-off-by: David Vernet <void@manifault.com>
+> 
+> Acked-by: Song Liu <song@kernel.org>
+> 
+> With one nit/question below. 
+> 
+> > ---
+> > .../testing/selftests/bpf/prog_tests/timer.c  |  4 +
+> > tools/testing/selftests/bpf/progs/timer.c     | 75 +++++++++++++++++++
+> > 2 files changed, 79 insertions(+)
+> > 
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/timer.c b/tools/testing/selftests/bpf/prog_tests/timer.c
+> > index 290c21dbe65a..d8bc838445ec 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/timer.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/timer.c
+> > @@ -14,6 +14,7 @@ static int timer(struct timer *timer_skel)
+> > 
+> > ASSERT_EQ(timer_skel->data->callback_check, 52, "callback_check1");
+> > ASSERT_EQ(timer_skel->data->callback2_check, 52, "callback2_check1");
+> > + ASSERT_EQ(timer_skel->bss->pinned_callback_check, 0, "pinned_callback_check1");
+> > 
+> > prog_fd = bpf_program__fd(timer_skel->progs.test1);
+> > err = bpf_prog_test_run_opts(prog_fd, &topts);
+> > @@ -32,6 +33,9 @@ static int timer(struct timer *timer_skel)
+> > /* check that timer_cb3() was executed twice */
+> > ASSERT_EQ(timer_skel->bss->abs_data, 12, "abs_data");
+> > 
+> > + /* check that timer_cb_pinned() was executed twice */
+> > + ASSERT_EQ(timer_skel->bss->pinned_callback_check, 2, "pinned_callback_check");
+> > +
+> > /* check that there were no errors in timer execution */
+> > ASSERT_EQ(timer_skel->bss->err, 0, "err");
+> > 
+> > diff --git a/tools/testing/selftests/bpf/progs/timer.c b/tools/testing/selftests/bpf/progs/timer.c
+> > index 9a16d95213e1..0112b9c038b4 100644
+> > --- a/tools/testing/selftests/bpf/progs/timer.c
+> > +++ b/tools/testing/selftests/bpf/progs/timer.c
+> > @@ -53,12 +53,28 @@ struct {
+> > __type(value, struct elem);
+> > } abs_timer SEC(".maps");
+> > 
+> > +struct {
+> > + __uint(type, BPF_MAP_TYPE_ARRAY);
+> > + __uint(max_entries, 1);
+> > + __type(key, int);
+> > + __type(value, struct elem);
+> > +} soft_timer_pinned SEC(".maps");
+> > +
+> > +struct {
+> > + __uint(type, BPF_MAP_TYPE_ARRAY);
+> > + __uint(max_entries, 1);
+> > + __type(key, int);
+> > + __type(value, struct elem);
+> > +} abs_timer_pinned SEC(".maps");
+> 
+> nit: I think we can also do something like the following, but I am not 
+> sure whether this style is not recommended. 
+> 
+> diff --git i/tools/testing/selftests/bpf/progs/timer.c w/tools/testing/selftests/bpf/progs/timer.c
+> index 9a16d95213e1..638eeebcd6c9 100644
+> --- i/tools/testing/selftests/bpf/progs/timer.c
+> +++ w/tools/testing/selftests/bpf/progs/timer.c
+> @@ -51,7 +51,7 @@ struct {
+>         __uint(max_entries, 1);
+>         __type(key, int);
+>         __type(value, struct elem);
+> -} abs_timer SEC(".maps");
+> +} abs_timer SEC(".maps"), soft_timer_pinned SEC(".maps"), abs_timer_pinned SEC(".maps");
 
-s/eBPF/BPF throughout the doc
-
-> +are executing.
-> +
-> +The ABI is specified in two parts: a generic part and a processor-specific part.
-> +A pairing of of generic ABI with the processor-specific ABI for a certain instantiation
-
-s/of of/of
-
-> +of an eBPF machine represents a complete binary interface for eBPF programs executing
-> +on that machine.
-> +
-> +This document is a generic ABI and specifies the parameters and behavior common to all
-
-Should this say, "This document is the generic ABI..." to reflect the
-fact that it's the first of the two ABI parts mentioned in the prior
-paragraph?
-
-> +instantiations of eBPF machines. In addition, it defines the details that must be specified by each
-> +processor-specific ABI. 
-> +
-> +These psABIs are the second part of the ABI. Each instantiation of an eBPF machine must
-> +describe the mechanism through which binary interface compatibility is maintained with
-> +respect to the issues highlighted by this document. However, the details that must be
-> +defined by a psABI are a minimum -- a psABI may specify additional requirements for binary
-> +interface compatibility on a platform.
-> +
-> +.. contents::
-> +.. sectnum::
-> +
-> +How To Use This ABI
-> +===================
-> +
-> +Conformance
-> +===========
-> +
-> +Note: Red Hat specifies different levels of conformance over time [RHELABI]_.
-
-I don't think we should specify conformance guidelines for a
-distribution as part of the standardization document. RHEL, Debian,
-future distros, Windows, etc, can all decide what guidelines they give
-developers for backward compatibility, etc with their release cycles,
-but that's entirely separate from a standardization document that's
-enumerating generic or psABIs.
-
-> +
-> +Related Work
-> +============
-> +eBPF programs are not unique for the way that they operate on a virtualized machine and processor.
-> +There are many programming languages that compile to an ISA that is specific to a virtual machine.
-> +Like the specification presented herein, those languages and virtual machines also have ABIs.
-> +
-> +For example, the Go programming language and the runtime included statically with each program compiled
-> +from Go source code have a defined ABI [GOABI]_. Java programs compiled to bytecode follow a well-defined
-> +ABI for interoperability with other compiled Java programs and libraries [JAVAABI]_. Programs compiled to
-> +bytecode for execution as user applications on the Android operating system (OS) adhere to a bytecode
-> +specification that shares much in common with an ABI [DALVIKABI]_. Finally, the Common Language Runtime (CLR)
-> +designed to execute programs compiled to the Microsoft Intermediate Language (MSIL) has a fully specified
-> +ABI [CLRABI]_.
-
-While this section is certainly useful background for the reader, I'm
-also not sure it's necessary or appropriate to include. These ABIs are
-independent of this one, and could change at any time. It's probably
-best if we avoid referencing external documents that aren't actual
-dependencies of this document. Feel free to disagree.
-
-> +Vocabulary
-> +==========
-> +
-> +#. Program: An eBPF Program is a self-contained set of eBPF instructions that execute
-> +   on an eBPF processor.
-
-I wonder if we want to be a bit more concrete here. "Self-contained",
-for example, is arguably a bit ambiguous in terms of what it means. What
-do you think about this?
-
-"Program: A BPF Program is an ordered set of BPF instructions, with
-exactly one entry instruction where the program begins, and one or more
-BPF_EXIT instructions where program execution can end."
-
-> +#. Program Type: Every eBPF program has an associated type. The program type defines, among other things,
-> +   a program's possible attach types.
-> +#. Attach Type: An attach type defines the set of BPF hook points to which an eBPF
-> +   program can attach.
-> +#. BPF Hook Points: Places in a BPF-enabled component (e.g., the Linux Kernel, the Windows kernel) where
-> +   an eBPF program may be attached.
-
-Hmm, I'm not sure if having this vocabulary section at the beginning of
-the document is optimal. Consider that the above 3 definitions are quite
-sparse, and essentially do nothing other than reference each other, and
-they're also leaving out a lot of detail that will be explored more
-substantively later in the document (or in the framework / architecture
-informational document described in [0]).
-
-[0]: https://datatracker.ietf.org/wg/bpf/about/
-
-It seems like it might make more sense to follow the approach taken by
-the JVM specification [1], SysV ABI [2], and RISC-V psABI [3] (though
-they do have a section that defines appreviations and a couple of
-terms), and instead just have each chapter explain all of these concepts
-in more detail without any kind of introduction. What do you think?
-
-[1]: https://docs.oracle.com/javase/specs/jvms/se21/html/index.html
-[2]: https://refspecs.linuxfoundation.org/elf/x86_64-abi-0.95.pdf
-[3]: https://github.com/riscv-non-isa/riscv-elf-psabi-doc/releases/download/draft-20230929-e5c800e661a53efe3c2678d71a306323b60eb13b/riscv-abi.pdf
-
-> +#. eBPF Machine Instantiation: 
-> +#. ABI-conforming system: A computer system that provides the binary sys- tem interface for application
-> +   programs described in the System V ABI [SYSVABI]_.
-> +#. ABI-conforming program: A program written to include only the system routines, commands, and other
-> +   resources included in the ABI, and a program compiled into an executable file that has the formats
-> +   and characteristics specified for such files in the ABI, and a program whose behavior complies with
-> +   the rules given in the ABI [SYSVABI]_.
-> +#. ABI-nonconforming program: A program which has been written to include system routines, commands, or
-> +   other resources not included in the ABI, or a program which has been compiled into a format different
-> +   from those specified in the ABI, or a program which does not behave as specified in the ABI [SYSVABI]_.
-> +#. Undefined Behavior: Behavior that may vary from instance to instance or may change at some time in the future.
-> +   Some undesirable programming practices are marked in the ABI as yielding undefined behavior [SYSVABI]_. 
-> +#. Unspecified Property: A property of an entity that is not explicitly included or referenced in this specification,
-> +   and may change at some time in the future. In general, it is not good practice to make a program depend
-> +   on an unspecified property [SYSVABI]_.
-> +
-> +Program Execution Environment
-> +=============================
-> +
-> +A loaded eBPF program is executed on an eBPF machine. That machine, physical or virtual, runs in a freestanding
-> +or hosted environment [#]_.
-> +
-> +eBPF Machine Freestanding Environment
-> +-------------------------------------
-> +
-> +
-> +eBPF Machine Hosted Environment
-> +-------------------------------
-> +
-> +A loaded eBPF program can be attached to a BPF hook point in a BPF-enabled application
-> +compatible with the attach type of its program type. When the BPF-enabled application's
-> +execution reaches a BPF hook point to which an eBPF program is attached, that program
-> +begins execution on the eBPF machine at its first instruction. The contents of eBPF machine's
-> +registers and memory at the time it starts execution are defined by the eBPF program's
-> +type and attach point.
-> +
-> +Processor Architecture
-> +======================
-> +
-> +This section describes the processor architecture available
-> +to programs. It also defines the reference language data types, giving the
-> +foundation for system interface specifications [SYSVABI]_
-
-Why are we linking to the SYSVABI doc here?
-
-> +
-> +Registers
-> +---------
-> +
-> +General Purpose Registers
-> +^^^^^^^^^^^^^^^^^^^^^^^^^
-> +eBPF has 11 64-bit wide registers, `r0` - `r10`. The contents of the registers
-> +at the beginning of an eBPF program's execution depend on the program's type.
-
-We should probably also mention the 32 bit subregisters (they can only
-be accessed through special ALU operations), and that they zero-extend
-into 64 bit on writes.
-
-> +
-> +Frame Pointer Register
-> +^^^^^^^^^^^^^^^^^^^^^^
-> +The use of a frame pointer by programs is not required. If, however, an eBPF program
-> +does use a frame pointer, it must be stored in register `r10`.
-
-Should we also specify that it should be read only?
-
-> +
-> +Data Types
-> +----------
->  
-> -Registers and calling convention
-> -================================
-> +Numeric Types
-> +^^^^^^^^^^^^^
->  
-> -BPF has 10 general purpose registers and a read-only frame pointer register,
-> -all of which are 64-bits wide.
-> +The eBPF machine supports 32- and 64-bit signed and unsigned integers. It does 
-> +not support floating-point data types. All signed integers are represented in
-> +twos-complement format where the sign bit is stored in the most-significant
-> +bit.
->  
-> -The BPF calling convention is defined as:
-> +Pointers
-> +^^^^^^^^
->  
-> -* R0: return value from function calls, and exit value for BPF programs
-> +Function Calling Sequence
-> +=========================
-> +This section defines the standard function calling sequence in a way that
-> +accommodates exceptions, stack management, register (non)volatility, and access
-> +to capabilities of the hosting environment (where applicable).
-> +
-> +Functions in eBPF may define between 0 and 5 parameters. Each of the arguments in
-> +a function call are passed in registers.
-> +
-> +The eBPF calling convention is defined as:
-> +
-> +* R0: return value from function calls, and exit value for eBPF programs
->  * R1 - R5: arguments for function calls
->  * R6 - R9: callee saved registers that function calls will preserve
->  * R10: read-only frame pointer to access stack
->  
-> -R0 - R5 are scratch registers and BPF programs needs to spill/fill them if
-> +R0 - R5 are scratch registers and eBPF programs needs to spill/fill them if
->  necessary across calls.
-> +
-> +Every function invocation proceeds as if it has exclusive access to an
-> +implementation-defined amount of stack space. R10 is a pointer to the byte of
-> +memory with the highest address in that stack space. The contents
-> +of a function invocation's stack space do not persist between invocations.
-> +
-> +**TODO** Discuss manufactured prologue and epilogue. Take language from the design FAQ.
-> +
-> +Execution Environment Interface
-> +===============================
-> +
-> +When an eBPF program executes in a hosted environment, the hosted environment may make
-> +available to eBPF programs certain capabilities. This section describes those capabilities
-> +and the mechanism for accessing them.
-> +
-> +
-> +Program Execution
-> +=================
-> +
-> +Program Return Values
-> +---------------------
-> +
-> +**NOTE** libbpf currently defines the return value of an ebpf program as a 32-bit unsigned integer.
-> +
-> +Program Loading and Dynamic Linking
-> +-----------------------------------
-> +This section describes the object file information and system actions that create
-> +running programs. Some information here applies to all systems; information specific
-> +to one processor resides in sections marked accordingly [SYSVABI]_.
-> +
-> +eBPF programs saved in ELF files must be loaded from storage and properly configured before
-> +they can be executed on an eBPF machine. 
-> +
-> +Program Loading (Processor-Specific)
-> +^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> +
-> +Dynamic Linking
-> +^^^^^^^^^^^^^^^
-> +
-> +Global Offset Table (Processor-Specific)
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +Procedure Linkage Table (Processor-Specific)
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +Exception Handling
-> +==================
-> +
-> +eBPF Program Types
-> +==================
-> +**NOTE** This information may end up as a subsection somewhere else.
-> +
-> +eBPF Maps
-> +=========
-> +**NOTE** This information may end up as a subsection somewhere else.
-> +
-> +System Calls
-> +============
-> +
-> +**TODO**
-> +
-> +C Programming Language Support
-> +==============================
-> +
-> +**NOTE** This section could be included in order to define the contents
-> +of standardized processor-specific header files that would make it easier
-> +for programmers to write programs.
-> +
-> +Notes
-> +=====
-> +.. [#] The eBPF machine does not need to be a physical instantiation of a processor. In fact, many instantiations of eBPF machines are virtual.
-> +.. [#] See the [CSTD]_ for the inspiration for this distinction.
-> +
-> +References
-> +==========
-> +
-> +.. [SYSVABI] System V Application Binary Interface - Edition 4.1. SCO Developer Specs. The Santa Cruz Operation. 1997. https://www.sco.com/developers/devspecs/gabi41.pdf
-> +.. [POWERPCABI] Developing PowerPC Embedded Application Binary Interface (EABI) Compliant Programs. PowerPC Embedded Processors Application Note. IBM. 1998. http://class.ece.iastate.edu/arun/Cpre381_Sp06/lab/labw12a/eabi_app.pdf
-> +.. [GOABI] Go internal ABI specification. Go Source Code. No authors. 2023. https://go.googlesource.com/go/+/refs/heads/master/src/cmd/compile/abi-internal.md
-> +.. [JAVAABI] The Java (r) Language Specification - Java SE 7 Edition. Gosling, James et. al. Oracle. 2013. https://docs.oracle.com/javase/specs/jls/se7/html/index.html
-
-If we do share a link, it should probably be to the Java Virtual Machine
-specification rather than the language specification. I believe the most
-recent edition is 21.
-
-> +.. [DALVIKABI] Dalvik Bytecode. Android Core Runtime Documentation. No authors. Google. 2022. https://source.android.com/docs/core/runtime/dalvik-bytecode
-> +.. [CLRABI] CLR ABI. The Book of the Runtime. No authors. Microsoft. 2023. https://github.com/dotnet/coreclr/blob/master/Documentation/botr/clr-abi.md. 
-> +.. [CSTD] International Standard: Programming Languages - C. ISO/IEC. 2018. https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2310.pdf.
-> +.. [RHELABI] Red Hat Enterprise Linux 8: Application Compatibility Guide. Red Hat. 2023. https://access.redhat.com/articles/rhel8-abi-compatibility 
-> +
-
-Everything else looks fine for now. Something I think we should figure
-out though is what we want to put each of the following docs from the
-charter:
-
-- [I] one or more documents that recommend conventions and guidelines
-  for producing portable BPF program binaries,
-
-- [I] an architecture and framework document.
-
-It seems like some of what's going into this document (e.g. formally
-defining a "Program", data types, etc) could arguably belong in an
-architecture and framework document. Honestly, I think it would probably
-be easier and make more sense to just have a single monolithic BPF
-Machine informational document, though I'm not sure if that's viable at
-this point given that we specified different documents in the charter.
+This looks like a nice readability improvement / cleanup to me. If
+nobody objects, I'd say let's apply it.
 
 Thanks,
 David
-
--- 
-Bpf mailing list
-Bpf@ietf.org
-https://www.ietf.org/mailman/listinfo/bpf
