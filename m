@@ -1,158 +1,92 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F15336F
-	for <bpf@vger.kernel.org>; Wed,  4 Oct 2023 00:21:18 +0000 (UTC)
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CED8A7
-	for <bpf@vger.kernel.org>; Tue,  3 Oct 2023 17:21:14 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 393KUvMb011040
-	for <bpf@vger.kernel.org>; Tue, 3 Oct 2023 17:21:13 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3tg728ragy-5
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 03 Oct 2023 17:21:13 -0700
-Received: from twshared22837.17.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 3 Oct 2023 17:21:12 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 1DA0039214E01; Tue,  3 Oct 2023 17:17:57 -0700 (PDT)
-From: Andrii Nakryiko <andrii@kernel.org>
-To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@kernel.org>
-CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next 2/3] selftests/bpf: support building selftests in optimized -O2 mode
-Date: Tue, 3 Oct 2023 17:17:49 -0700
-Message-ID: <20231004001750.2939898-2-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231004001750.2939898-1-andrii@kernel.org>
-References: <20231004001750.2939898-1-andrii@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B2827E
+	for <bpf@vger.kernel.org>; Wed,  4 Oct 2023 00:22:55 +0000 (UTC)
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273648E
+	for <bpf@vger.kernel.org>; Tue,  3 Oct 2023 17:22:54 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-991c786369cso257346266b.1
+        for <bpf@vger.kernel.org>; Tue, 03 Oct 2023 17:22:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696378972; x=1696983772; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5MHVLaedj4g/c3tPVcV8pmigaMsH0jqAy5Bu1idQin8=;
+        b=fmZBMLE3b6Kang1D7OFC9f5YtrN1SUKuiXs9+DybM4ekch0p35pFa5/sTApd9WegZo
+         GUKegAUPnfkX6CImffI1SB2oQ4bTMC5UO2g/FsShOG6YuifgGe4LsmAIbF8nqPctUYKc
+         FH0Ft3lEaj/oJ09jNQiy4JqXByP6AkjlLkdfmE8+1/lMaRD6a0VIGyP5g4TL463VTeLp
+         rkqUatsth6ebZgPBQl8F5/1YqDIV6ByhkmfgGqB20gS5ue3RM2oDCLJFY+IJfu/AT4qC
+         NnSfIy1cP4fIFetBuxIo/nuTjg4O6d33clhIuAZwj2jirMXYNiQLTgcYcmm9z0sOQvCY
+         rDKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696378972; x=1696983772;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5MHVLaedj4g/c3tPVcV8pmigaMsH0jqAy5Bu1idQin8=;
+        b=UkowQcQvYsxCCm5AFNJ+rpAg389AIlv+noN6ckBbHmK+vSq6CWoY6zjSRSQpX0hYOK
+         tJVXzhGP1s72dLcjEyUwqieO0HbW68UcUTJkmFs9XznjJ1WcqXMmC8H4RLbCbHj2FhSR
+         pbjMfRG+pjK66WpespwPGeakN0O5C25kqIOSMmnV7tp3HoW3255CNvlZ+kdSgexithX4
+         +GmrjvzPwvka7WN5aCKUZoUwnJa4Wqg5CjptLC1oJHJe1oE344s3DFpmPC6413Kf/OW6
+         Vj1qGGH479EM8JYtZ2FfinzzRsrSMoMElZWKyeyutV4iFJ+TrlkYyBHkobenl/UGlnIe
+         JMtw==
+X-Gm-Message-State: AOJu0YxHrnFp0pMXlNZCEfTWH8kyKoFRZ80B+vduLJ4Ay1j8gUABTP2Q
+	gUHgFUr0Sl9jltcJpDtklhwoXSn+0yDWXSmDK7jjc55S
+X-Google-Smtp-Source: AGHT+IEzwHQMiH31dGcNGUssMNNfoVh/aIBKTcloNgRLNV3qygKZQvqeg4ulxCz0P+p+onH+U7EiRIAsRwDX/BiMdl0=
+X-Received: by 2002:a17:906:30d2:b0:9ae:695f:f938 with SMTP id
+ b18-20020a17090630d200b009ae695ff938mr593087ejb.56.1696378972574; Tue, 03 Oct
+ 2023 17:22:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <CAEf4BzZ6V2B5QvjuCEU-MB8V-Fjkgv_yP839r9=NDcuFsgBOLw@mail.gmail.com>
+ <d68855da2d8595ed9db812cc12db0dab80c39fc4.camel@gmail.com>
+ <CAADnVQJbKf5PgL5fokJAB4y5+5iqKd17W9e0P6q=vJPQM+9NJQ@mail.gmail.com>
+ <9dd331b31755632f0528bfb1d0acbf904cedbd98.camel@gmail.com>
+ <CAADnVQLNAzjTpyE7UcnD0Q0-p4fvL6u_3_B54o6ttBBvBv7rFw@mail.gmail.com>
+ <680e69504eabbae2abd5e9e2b745319c561c86ef.camel@gmail.com>
+ <CAADnVQL5ausgq5ERiMKn+Y-Nrp32e2WTq3s5JVJCDojsR0ZF+A@mail.gmail.com>
+ <8b75e01d27696cd6661890e49bdc06b1e96092c7.camel@gmail.com>
+ <CAADnVQLTe2=K1nTk+Ry8WmBU1C724paoT8p8_7jYL9oymchp_A@mail.gmail.com>
+ <5b7f4b6199decf266a9218b674c232662ed13db5.camel@gmail.com>
+ <20231003230820.iazvofhysfmurwon@MacBook-Pro-49.local> <7fd8b2cb49ba45a0c695aa954db8cd753c664ce4.camel@gmail.com>
+In-Reply-To: <7fd8b2cb49ba45a0c695aa954db8cd753c664ce4.camel@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 3 Oct 2023 17:22:40 -0700
+Message-ID: <CAEf4BzbHLiDM0fObGXBuuDO24MBNVo2dc41VvfhWNP9osxZ6Ew@mail.gmail.com>
+Subject: Re: [BUG] verifier escape with iteration helpers (bpf_loop, ...)
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Andrew Werner <awerner32@gmail.com>, 
+	bpf <bpf@vger.kernel.org>, Andrei Matei <andreimatei1@gmail.com>, 
+	Tamir Duberstein <tamird@gmail.com>, Joanne Koong <joannelkoong@gmail.com>, kernel-team@dataexmachina.dev, 
+	Song Liu <song@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: JpiLjRLKgcJ0Ffp5GmGb05Z7dRkRo1hJ
-X-Proofpoint-GUID: JpiLjRLKgcJ0Ffp5GmGb05Z7dRkRo1hJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-03_19,2023-10-02_01,2023-05-22_02
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add support for building selftests with -O2 level of optimization, which
-allows more compiler warnings detection (like lots of potentially
-uninitialized usage), but also is useful to have a faster-running test
-for some CPU-intensive tests.
+On Tue, Oct 3, 2023 at 4:14=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com>=
+ wrote:
+>
+> On Tue, 2023-10-03 at 16:08 -0700, Alexei Starovoitov wrote:
+> > ...
+>
+> I'll reply a bit later.
+> Keeping all states before loop in a limbo might indeed be an issue
+> performance wise.
+>
+> > I think we need a call to converge. Office hours on Thu at 9am?
+> > Or tomorrow at 9am?
+>
+> Both are fine by me.
 
-One can build optimized versions of libbpf and selftests by running:
-
-  $ make RELEASE=3D1
-
-There is a measurable speed up of about 10 seconds for me locally,
-though it's mostly capped by non-parallelized serial tests. User CPU
-time goes down by total 40 seconds, from 1m10s to 0m28s.
-
-Unoptimized build (-O0)
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-Summary: 430/3544 PASSED, 25 SKIPPED, 4 FAILED
-
-real    1m59.937s
-user    1m10.877s
-sys     3m14.880s
-
-Optimized build (-O2)
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-Summary: 425/3543 PASSED, 25 SKIPPED, 9 FAILED
-
-real    1m50.540s
-user    0m28.406s
-sys     3m13.198s
-
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/testing/selftests/bpf/Makefile | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-index a25e262dbc69..55d1b1848e6c 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -27,7 +27,9 @@ endif
- BPF_GCC		?=3D $(shell command -v bpf-gcc;)
- SAN_CFLAGS	?=3D
- SAN_LDFLAGS	?=3D $(SAN_CFLAGS)
--CFLAGS +=3D -g -O0 -rdynamic						\
-+RELEASE		?=3D
-+OPT_FLAGS	?=3D $(if $(RELEASE),-O2,-O0)
-+CFLAGS +=3D -g $(OPT_FLAGS) -rdynamic					\
- 	  -Wall -Werror 						\
- 	  $(GENFLAGS) $(SAN_CFLAGS)					\
- 	  -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)		\
-@@ -241,7 +243,7 @@ $(OUTPUT)/runqslower: $(BPFOBJ) | $(DEFAULT_BPFTOOL) =
-$(RUNQSLOWER_OUTPUT)
- 		    BPFTOOL_OUTPUT=3D$(HOST_BUILD_DIR)/bpftool/		       \
- 		    BPFOBJ_OUTPUT=3D$(BUILD_DIR)/libbpf			       \
- 		    BPFOBJ=3D$(BPFOBJ) BPF_INCLUDE=3D$(INCLUDE_DIR)		       \
--		    EXTRA_CFLAGS=3D'-g -O0 $(SAN_CFLAGS)'			       \
-+		    EXTRA_CFLAGS=3D'-g $(OPT_FLAGS) $(SAN_CFLAGS)'	       \
- 		    EXTRA_LDFLAGS=3D'$(SAN_LDFLAGS)' &&			       \
- 		    cp $(RUNQSLOWER_OUTPUT)runqslower $@
-=20
-@@ -279,7 +281,7 @@ $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $=
-(BPFTOOLDIR)/Makefile)    \
- 		    $(HOST_BPFOBJ) | $(HOST_BUILD_DIR)/bpftool
- 	$(Q)$(MAKE) $(submake_extras)  -C $(BPFTOOLDIR)			       \
- 		    ARCH=3D CROSS_COMPILE=3D CC=3D"$(HOSTCC)" LD=3D"$(HOSTLD)" 	      =
- \
--		    EXTRA_CFLAGS=3D'-g -O0'				       \
-+		    EXTRA_CFLAGS=3D'-g $(OPT_FLAGS)'			       \
- 		    OUTPUT=3D$(HOST_BUILD_DIR)/bpftool/			       \
- 		    LIBBPF_OUTPUT=3D$(HOST_BUILD_DIR)/libbpf/		       \
- 		    LIBBPF_DESTDIR=3D$(HOST_SCRATCH_DIR)/			       \
-@@ -290,7 +292,7 @@ $(CROSS_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(B=
-PFTOOLDIR)/Makefile)	\
- 		    $(BPFOBJ) | $(BUILD_DIR)/bpftool
- 	$(Q)$(MAKE) $(submake_extras)  -C $(BPFTOOLDIR)				\
- 		    ARCH=3D$(ARCH) CROSS_COMPILE=3D$(CROSS_COMPILE)			\
--		    EXTRA_CFLAGS=3D'-g -O0'					\
-+		    EXTRA_CFLAGS=3D'-g $(OPT_FLAGS)'				\
- 		    OUTPUT=3D$(BUILD_DIR)/bpftool/				\
- 		    LIBBPF_OUTPUT=3D$(BUILD_DIR)/libbpf/				\
- 		    LIBBPF_DESTDIR=3D$(SCRATCH_DIR)/				\
-@@ -313,7 +315,7 @@ $(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Make=
-file)		       \
- 	   $(APIDIR)/linux/bpf.h					       \
- 	   | $(BUILD_DIR)/libbpf
- 	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) OUTPUT=3D$(BUILD_DIR)/libbpf=
-/ \
--		    EXTRA_CFLAGS=3D'-g -O0 $(SAN_CFLAGS)'			       \
-+		    EXTRA_CFLAGS=3D'-g $(OPT_FLAGS) $(SAN_CFLAGS)'	       \
- 		    EXTRA_LDFLAGS=3D'$(SAN_LDFLAGS)'			       \
- 		    DESTDIR=3D$(SCRATCH_DIR) prefix=3D all install_headers
-=20
-@@ -322,7 +324,7 @@ $(HOST_BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)=
-/Makefile)		       \
- 		$(APIDIR)/linux/bpf.h					       \
- 		| $(HOST_BUILD_DIR)/libbpf
- 	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR)                             =
-\
--		    EXTRA_CFLAGS=3D'-g -O0' ARCH=3D CROSS_COMPILE=3D		       \
-+		    EXTRA_CFLAGS=3D'-g $(OPT_FLAGS)' ARCH=3D CROSS_COMPILE=3D	       \
- 		    OUTPUT=3D$(HOST_BUILD_DIR)/libbpf/			       \
- 		    CC=3D"$(HOSTCC)" LD=3D"$(HOSTLD)"			       \
- 		    DESTDIR=3D$(HOST_SCRATCH_DIR)/ prefix=3D all install_headers
---=20
-2.34.1
-
+Ditto.
