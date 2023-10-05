@@ -1,110 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB5B125A3
-	for <bpf@vger.kernel.org>; Thu,  5 Oct 2023 13:27:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RX91+hxH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B88F7C4AF69
-	for <bpf@vger.kernel.org>; Thu,  5 Oct 2023 13:27:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696512467;
-	bh=N1dE7AmjrUZ47G8HQruxm76EJR2/5jXU4d/2bgOQyD8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=RX91+hxHDnfAAc5JnJjtmLsXaBeaTfXs/YUeCrPgTf4rAIo1sjr/h/E6XJlq//yje
-	 po8V3DDCBmjT+BZWX7BR7U1LDI3FsVSryPNucgjYQMwKZbZWGmbxAhEDxofAWop0ys
-	 pD9N0E2FfXWlkmwb5UkTqrzhIcnI5wzZVVjY2tS59LbydSsnTI+AaI0haTWn13U9wR
-	 GiN3LUj+Sdr+H8zvYkv7WTYhjmALEUH6LVSZVJvVOWSBTpnLEAEQEmb2ohDDfNKUgc
-	 RfRHaZSSoRZSSlaUahAJobZtlEay1s5puFPuPCvOtRFTY7Mt570OGocDcTh+xw/auH
-	 K5fyvD7EUlv0g==
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5384975e34cso1749508a12.0
-        for <bpf@vger.kernel.org>; Thu, 05 Oct 2023 06:27:47 -0700 (PDT)
-X-Gm-Message-State: AOJu0YwtDbzep3KLGJ99eK5tDGIb6Qoz/zmZmA4jgYS1yBWK47THaOMK
-	n3rKKaKuJ0ZWJox5MeXrOoGMzxHUE8U+m/2BoLi1Wg==
-X-Google-Smtp-Source: AGHT+IHFOywWEnxWs29vHFV4gq5qgGxjrrUvMtfRCD2Ccr7MKURyA9Sy2tPKeI1YA+BoW/dGxflH4GTeRjKC/Q0IIX8=
-X-Received: by 2002:aa7:d588:0:b0:523:33d7:e324 with SMTP id
- r8-20020aa7d588000000b0052333d7e324mr4669372edq.38.1696512466159; Thu, 05 Oct
- 2023 06:27:46 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E7911F60C
+	for <bpf@vger.kernel.org>; Thu,  5 Oct 2023 13:45:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7DA28123
+	for <bpf@vger.kernel.org>; Thu,  5 Oct 2023 06:45:31 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 3950CaE4025726
+	for <bpf@vger.kernel.org>; Wed, 4 Oct 2023 20:24:09 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by m0001303.ppops.net (PPS) with ESMTPS id 3th7gma7m3-8
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Wed, 04 Oct 2023 20:24:09 -0700
+Received: from twshared27355.37.frc1.facebook.com (2620:10d:c0a8:1c::11) by
+ mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 4 Oct 2023 20:24:07 -0700
+Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
+	id D4FCD2576602D; Wed,  4 Oct 2023 20:23:55 -0700 (PDT)
+From: Song Liu <song@kernel.org>
+To: <bpf@vger.kernel.org>
+CC: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <martin.lau@kernel.org>, <kernel-team@meta.com>,
+        Song Liu <song@kernel.org>, Tejun Heo <tj@kernel.org>
+Subject: [PATCH v3 bpf-next] bpf: Avoid unnecessary -EBUSY from htab_lock_bucket
+Date: Wed, 4 Oct 2023 20:23:50 -0700
+Message-ID: <20231005032350.1877318-1-song@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230928202410.3765062-1-kpsingh@kernel.org> <20230928202410.3765062-5-kpsingh@kernel.org>
- <ZR5vSyyNGBb8TvNH@krava> <CACYkzJ69x9jX3scjSA7zT99CJoM+eG6FDQdBT-SCxm47a6UEoA@mail.gmail.com>
-In-Reply-To: <CACYkzJ69x9jX3scjSA7zT99CJoM+eG6FDQdBT-SCxm47a6UEoA@mail.gmail.com>
-From: KP Singh <kpsingh@kernel.org>
-Date: Thu, 5 Oct 2023 15:27:35 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ7Q0NEc9HThS1DZr0pMC+zO0GSToWmwQkTgXTeDs5VKaw@mail.gmail.com>
-Message-ID: <CACYkzJ7Q0NEc9HThS1DZr0pMC+zO0GSToWmwQkTgXTeDs5VKaw@mail.gmail.com>
-Subject: Re: [PATCH v5 4/5] bpf: Only enable BPF LSM hooks when an LSM program
- is attached
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
-	paul@paul-moore.com, keescook@chromium.org, casey@schaufler-ca.com, 
-	song@kernel.org, daniel@iogearbox.net, ast@kernel.org, renauld@google.com
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: IRBa_xTQ0vjOMafR_GhsjcIFwN_U2oe3
+X-Proofpoint-ORIG-GUID: IRBa_xTQ0vjOMafR_GhsjcIFwN_U2oe3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-04_13,2023-10-02_01,2023-05-22_02
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
+	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=no
+	autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Thu, Oct 5, 2023 at 3:26=E2=80=AFPM KP Singh <kpsingh@kernel.org> wrote:
->
-> On Thu, Oct 5, 2023 at 10:09=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wr=
-ote:
-> >
-> > On Thu, Sep 28, 2023 at 10:24:09PM +0200, KP Singh wrote:
-> >
-> > SNIP
-> >
-> > > diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> > > index e97aeda3a86b..df9699bce372 100644
-> > > --- a/kernel/bpf/trampoline.c
-> > > +++ b/kernel/bpf/trampoline.c
-> > > @@ -13,6 +13,7 @@
-> > >  #include <linux/bpf_verifier.h>
-> > >  #include <linux/bpf_lsm.h>
-> > >  #include <linux/delay.h>
-> > > +#include <linux/bpf_lsm.h>
-> > >
-> > >  /* dummy _ops. The verifier will operate on target program's ops. */
-> > >  const struct bpf_verifier_ops bpf_extension_verifier_ops =3D {
-> > > @@ -514,7 +515,7 @@ static int __bpf_trampoline_link_prog(struct bpf_=
-tramp_link *link, struct bpf_tr
-> > >  {
-> > >       enum bpf_tramp_prog_type kind;
-> > >       struct bpf_tramp_link *link_exiting;
+htab_lock_bucket uses the following logic to avoid recursion:
 
-I think this is a typo here. It should be existing, no?
+1. preempt_disable();
+2. check percpu counter htab->map_locked[hash] for recursion;
+   2.1. if map_lock[hash] is already taken, return -BUSY;
+3. raw_spin_lock_irqsave();
 
-> > > -     int err =3D 0;
-> > > +     int err =3D 0, num_lsm_progs =3D 0;
-> > >       int cnt =3D 0, i;
-> > >
-> > >       kind =3D bpf_attach_type_to_tramp(link->link.prog);
-> > > @@ -545,8 +546,14 @@ static int __bpf_trampoline_link_prog(struct bpf=
-_tramp_link *link, struct bpf_tr
-> > >                       continue;
-> > >               /* prog already linked */
-> > >               return -EBUSY;
-> > > +
-> > > +             if (link_exiting->link.prog->type =3D=3D BPF_PROG_TYPE_=
-LSM)
-> > > +                     num_lsm_progs++;
-> >
-> > this looks wrong, it's never reached.. seems like we should add separat=
-e
-> > hlist_for_each_entry loop over trampoline's links for this check/init o=
-f
-> > num_lsm_progs ?
-> >
-> > jirka
->
-> Good catch, I missed this during my rebase, after
-> https://lore.kernel.org/bpf/20220510205923.3206889-2-kuifeng@fb.com/
-> this condition is basically never reached. I will do a general loop
-> over to count LSM programs and toggle the hook to true (and same for
-> unlink).
->
-> - KP
->
-> [...]
+However, if an IRQ hits between 2 and 3, BPF programs attached to the IRQ
+logic will not able to access the same hash of the hashtab and get -EBUSY=
+.
+This -EBUSY is not really necessary. Fix it by disabling IRQ before
+checking map_locked:
+
+1. preempt_disable();
+2. local_irq_save();
+3. check percpu counter htab->map_locked[hash] for recursion;
+   3.1. if map_lock[hash] is already taken, return -BUSY;
+4. raw_spin_lock().
+
+Similarly, use raw_spin_unlock() and local_irq_restore() in
+htab_unlock_bucket().
+
+Suggested-by: Tejun Heo <tj@kernel.org>
+Signed-off-by: Song Liu <song@kernel.org>
+
+---
+Changes in v3:
+1. Use raw_local_irq_* APIs instead.
+
+Changes in v2:
+1. Use raw_spin_unlock() and local_irq_restore() in htab_unlock_bucket().
+   (Andrii)
+---
+ kernel/bpf/hashtab.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index a8c7e1c5abfa..74c8d1b41dd5 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -155,13 +155,15 @@ static inline int htab_lock_bucket(const struct bpf=
+_htab *htab,
+ 	hash =3D hash & min_t(u32, HASHTAB_MAP_LOCK_MASK, htab->n_buckets - 1);
+=20
+ 	preempt_disable();
++	raw_local_irq_save(flags);
+ 	if (unlikely(__this_cpu_inc_return(*(htab->map_locked[hash])) !=3D 1)) =
+{
+ 		__this_cpu_dec(*(htab->map_locked[hash]));
++		raw_local_irq_restore(flags);
+ 		preempt_enable();
+ 		return -EBUSY;
+ 	}
+=20
+-	raw_spin_lock_irqsave(&b->raw_lock, flags);
++	raw_spin_lock(&b->raw_lock);
+ 	*pflags =3D flags;
+=20
+ 	return 0;
+@@ -172,8 +174,9 @@ static inline void htab_unlock_bucket(const struct bp=
+f_htab *htab,
+ 				      unsigned long flags)
+ {
+ 	hash =3D hash & min_t(u32, HASHTAB_MAP_LOCK_MASK, htab->n_buckets - 1);
+-	raw_spin_unlock_irqrestore(&b->raw_lock, flags);
++	raw_spin_unlock(&b->raw_lock);
+ 	__this_cpu_dec(*(htab->map_locked[hash]));
++	raw_local_irq_restore(flags);
+ 	preempt_enable();
+ }
+=20
+--=20
+2.34.1
+
