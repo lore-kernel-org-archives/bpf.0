@@ -1,644 +1,329 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E418EA6
-	for <bpf@vger.kernel.org>; Thu,  5 Oct 2023 14:59:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844B3273FC
+	for <bpf@vger.kernel.org>; Thu,  5 Oct 2023 15:25:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K4SR48wO"
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D146BBBD
-	for <bpf@vger.kernel.org>; Thu,  5 Oct 2023 07:58:58 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-6934202b8bdso895808b3a.1
-        for <bpf@vger.kernel.org>; Thu, 05 Oct 2023 07:58:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696517938; x=1697122738; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T8k/firFt8GFtmOzfzAkMAqTvf+tdjpGx4hzpKlHyVM=;
-        b=K4SR48wOzBxsjPq/x37zYlH5nsuIMPfgEbvtev6v33mVRothlcD1PNSgHzqpw5vrfu
-         jNnHHy8pzazKy3pvG3DxnP6TFZHpRROx/pt8wH7KRkJHasmj522dk2jpcH2AjuPdszdL
-         Mhr+U0DpOiVdO00vCsQtx6YakYMQQipDxnyN64u55hTq9kI8mpvNRm2vaf0Wh/fBi8ML
-         FUNKEGnBrL5B5WhyiYyjHev8L2n3AWMW6Fmv10VPlHVlTcO5sTFymB56zw+wL43rOX8e
-         eFcaoNVeu/DJ9fk7z72JmxXIILX3P32zF8RkO+DGyR2lDiDofDkPrPo0Jj6i4BmRQusb
-         jH3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696517938; x=1697122738;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T8k/firFt8GFtmOzfzAkMAqTvf+tdjpGx4hzpKlHyVM=;
-        b=J0GTphPLQ9N5ZB40E1Wwi7/kGgSNvWiJYJ2Hh2nmPu3lKvFpU2emQ52Y2gAkiHqHrU
-         BFNn+VE/lmPmP3Xl60Lf6ubSYrbDzt3DSsDoDl5uWds4dSB9nw6M4e/yMxDw9mSQm9aJ
-         5L/u2jZGm6+AJRwIXw1hodTVQWq61aJN710d7dfDiPvrSilO3UaLTRmRDNoNDqsr9rZc
-         46fxfcLzh61hkSfRNEnUjWNQM4NZg07OGOC9CmurqFNZ7namPFgkYO08zO/akINx/gy5
-         FBieNpTYg7g1RNYrbcfwzD91NMCVXbtFKpdBex7aDFCn5SvTcuO2RK6YUgELEInJ2Sp5
-         SOFA==
-X-Gm-Message-State: AOJu0Yw0ZuuyR611gIJYAfvmOp4qkWUPTwT9WO5PRIM3j+y8srQj1264
-	/910QI1Z0IiTbFnSqU9Z4wG1x5WPgfXZig==
-X-Google-Smtp-Source: AGHT+IGcbd/8Rm0JUFrhp3tmByX06y/m2/qvk6wj/nD9S070sUdV+r4vvCotoBZKv+PiTsnW3q/qgg==
-X-Received: by 2002:a05:6a21:71c1:b0:15d:ad11:748 with SMTP id ay1-20020a056a2171c100b0015dad110748mr5759508pzc.30.1696517937768;
-        Thu, 05 Oct 2023 07:58:57 -0700 (PDT)
-Received: from localhost.localdomain (bb119-74-148-123.singnet.com.sg. [119.74.148.123])
-        by smtp.gmail.com with ESMTPSA id q1-20020a170902a3c100b001c61512f2a6sm1819930plb.220.2023.10.05.07.58.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Oct 2023 07:58:57 -0700 (PDT)
-From: Leon Hwang <hffilwlqm@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	maciej.fijalkowski@intel.com,
-	jakub@cloudflare.com,
-	iii@linux.ibm.com,
-	hengqi.chen@gmail.com,
-	hffilwlqm@gmail.com
-Subject: [RFC PATCH bpf-next 3/3] selftests/bpf: Add testcases for tailcall hierarchy fixing
-Date: Thu,  5 Oct 2023 22:58:14 +0800
-Message-ID: <20231005145814.83122-4-hffilwlqm@gmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231005145814.83122-1-hffilwlqm@gmail.com>
-References: <20231005145814.83122-1-hffilwlqm@gmail.com>
+	dkim=pass (1024-bit key) header.d=nonadev.net header.i=@nonadev.net header.b="cNoAA07y"
+X-Greylist: delayed 3601 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 05 Oct 2023 08:25:49 PDT
+Received: from erza.lautre.net (erza.lautre.net [80.67.160.89])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF7CE6721;
+	Thu,  5 Oct 2023 08:25:49 -0700 (PDT)
+Received: from d-jobol (unknown [88.182.87.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by erza.lautre.net (Postfix) with ESMTPSA id 2AD94E9405;
+	Thu,  5 Oct 2023 11:47:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=nonadev.net;
+	s=alternc; t=1696499276;
+	bh=sTTtEckhDuyyBfbASN1DPxrhh8QlS41mkwr5UFWRTLA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=cNoAA07yPbxlVnHt2cH6z/41SG3YTlhx8fkauEbQM8kQIiE1u9LdBwdx3CVsUKxjB
+	 B0vtkvZyVY6O62Jacu16NjY7iC0/jZEr8PSHvoJFQHuObyczGv95YIlD0xa5j7H2mt
+	 KrC/wZxzZCXCxl/eBrnnKczCP0PCYxu4FMTPvyIM=
+Date: Thu, 5 Oct 2023 11:47:54 +0200
+From: =?UTF-8?B?Sm9zw6k=?= Bollo <jobol@nonadev.net>
+To: KP Singh <kpsingh@kernel.org>
+Cc: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, linux-security-module
+ <linux-security-module@vger.kernel.org>, Casey Schaufler
+ <casey@schaufler-ca.com>, Paul Moore <paul@paul-moore.com>, bpf
+ <bpf@vger.kernel.org>, Kees Cook <keescook@chromium.org>, Linus Torvalds
+ <torvalds@linux-foundation.org>
+Subject: Re: [RFC PATCH 1/2] LSM: Allow dynamically appendable LSM modules.
+Message-ID: <20231005114754.56c40a2f@d-jobol>
+In-Reply-To: <CACYkzJ5k7oYxFgWp9bz1Wmp3n6LcU39Mh-HXFWTKnZnpY-Ef7w@mail.gmail.com>
+References: <cc8e16bb-5083-01da-4a77-d251a76dc8ff@I-love.SAKURA.ne.jp>
+	<CACYkzJ5k7oYxFgWp9bz1Wmp3n6LcU39Mh-HXFWTKnZnpY-Ef7w@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-	HK_RANDOM_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add some test cases to confirm the tailcall hierarchy issue has been fixed.
+Le Wed, 27 Sep 2023 18:02:32 +0200,
+KP Singh <kpsingh@kernel.org> a =C3=A9crit :
 
-Signed-off-by: Leon Hwang <hffilwlqm@gmail.com>
----
- .../selftests/bpf/prog_tests/tailcalls.c      | 384 ++++++++++++++++++
- .../bpf/progs/tailcall_bpf2bpf_hierarchy1.c   |  34 ++
- .../bpf/progs/tailcall_bpf2bpf_hierarchy2.c   |  55 +++
- .../bpf/progs/tailcall_bpf2bpf_hierarchy3.c   |  46 +++
- 4 files changed, 519 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy1.c
- create mode 100644 tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy2.c
- create mode 100644 tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy3.c
+> On Wed, Sep 27, 2023 at 5:09=E2=80=AFPM Tetsuo Handa
+> <penguin-kernel@i-love.sakura.ne.jp> wrote:
+> >
+> > Recently, the LSM community is trying to make drastic changes.
+> >
+> > Crispin Cowan has explained
+> >
+> >   It is Linus' comments that spurred me to want to start this
+> > undertaking.  He observes that there are many different security
+> > approaches, each with their own advocates.  He doesn't want to
+> > arbitrate which of them should be "the" Linux security approach,
+> > and would rather that Linux can support any of them.
+> >
+> >   That is the purpose of this project:  to allow Linux to support a
+> > variety of security models, so that security developers don't have
+> > to have the "my dog's bigger than your dog" argument, and users can
+> > choose the security model that suits their needs.
+> >
+> > when the LSM project started [1].
+> >
+> > However, Casey Schaufler is trying to make users difficult to
+> > choose the security model that suits their needs, by requiring LSM
+> > ID value which is assigned to only LSM modules that succeeded to
+> > become in-tree [2]. Therefore, I'm asking Casey and Paul Moore to
+> > change their mind to allow assigning LSM ID value to any LSM
+> > modules (so that users can choose the security model that suits
+> > their needs) [3].
+> >
+> > I expect that LSM ID value will be assigned to any publicly
+> > available LSM modules. Otherwise, it is mostly pointless to propose
+> > this patch; there will be little LSM modules to built into vmlinux;
+> > let alone dynamically loading as LKM-based LSMs.
+> >
+> > Also, KP Singh is trying to replace the linked list with static
+> > calls in order to reduce overhead of indirect calls [4]. However,
+> > this change assumed that any LSM modules are built-in. I don't like
+> > such assumption because I still consider that LSM modules which are
+> > not built into vmlinux will be wanted by users [5].
+> >
+> > Then, Casey told me to supply my implementation of loadable security
+> > modules [6]. Therefore, I post this patch as basic changes needed
+> > for allowing dynamically appendable LSM modules (and an example of
+> > appendable LSM modules). This patch was tested on only x86_64.
+> >
+> > Question for KP Singh would be how can we allow dynamically
+> > appendable LSM modules if current linked list is replaced with
+> > static calls with minimal-sized array... =20
+>=20
+> As I suggested in the other thread:
+>=20
+> https://lore.kernel.org/bpf/20230918212459.1937798-1-kpsingh@kernel.org/T=
+/#md21b9d9cc769f39e451d20364857b693d3fcb587
+>=20
+> You can add extra static call slots and fallback to a linked list
+> based implementation if you have more than say N modules [1] and
+> fallback to a linked list implementation [2].
+>=20
+> for [1] you can just do MAX_LSM_COUNT you can just do:
+>=20
+> #ifdef CONFIG_MODULAR_LSM
+> #define MODULAR_LSM_ENABLED "1,1,1,1"
+> #endif
+>=20
+> and use it in the LSM_COUNT.
+>=20
+> for [2] you can choose to export a better module API than directly
+> exposing security_hook_heads.
+>=20
+> Now, comes the question of whether we need dynamically loaded LSMs, I
+> am not in favor of this.Please share your limitations of BPF as you
+> mentioned and what's missing to implement dynamic LSMs. My question
+> still remains unanswered.
+>=20
+> Until I hear the real limitations of using BPF, it's a NAK from me.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-index fc6b2954e8f50..3133fe63808ac 100644
---- a/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-@@ -1105,6 +1105,378 @@ static void test_tailcall_bpf2bpf_fentry_entry(void)
- 	bpf_object__close(tgt_obj);
- }
- 
-+
-+static void test_tailcall_hierarchy_count(const char *which, bool test_fentry,
-+					  bool test_fexit)
-+{
-+	int err, map_fd, prog_fd, main_data_fd, fentry_data_fd, fexit_data_fd, i, val;
-+	struct bpf_object *obj = NULL, *fentry_obj = NULL, *fexit_obj = NULL;
-+	struct bpf_link *fentry_link = NULL, *fexit_link = NULL;
-+	struct bpf_map *prog_array, *data_map;
-+	struct bpf_program *prog;
-+	char buff[128] = {};
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, topts,
-+		.data_in = buff,
-+		.data_size_in = sizeof(buff),
-+		.repeat = 1,
-+	);
-+
-+	err = bpf_prog_test_load(which, BPF_PROG_TYPE_SCHED_CLS, &obj,
-+				 &prog_fd);
-+	if (!ASSERT_OK(err, "load obj"))
-+		return;
-+
-+	prog = bpf_object__find_program_by_name(obj, "entry");
-+	if (!ASSERT_OK_PTR(prog, "find entry prog"))
-+		goto out;
-+
-+	prog_fd = bpf_program__fd(prog);
-+	if (!ASSERT_GE(prog_fd, 0, "prog_fd"))
-+		goto out;
-+
-+	prog_array = bpf_object__find_map_by_name(obj, "jmp_table");
-+	if (!ASSERT_OK_PTR(prog_array, "find jmp_table"))
-+		goto out;
-+
-+	map_fd = bpf_map__fd(prog_array);
-+	if (!ASSERT_GE(map_fd, 0, "map_fd"))
-+		goto out;
-+
-+	i = 0;
-+	err = bpf_map_update_elem(map_fd, &i, &prog_fd, BPF_ANY);
-+	if (!ASSERT_OK(err, "update jmp_table"))
-+		goto out;
-+
-+	if (test_fentry) {
-+		fentry_obj = bpf_object__open_file("tailcall_bpf2bpf_fentry.bpf.o",
-+						   NULL);
-+		if (!ASSERT_OK_PTR(fentry_obj, "open fentry_obj file"))
-+			goto out;
-+
-+		prog = bpf_object__find_program_by_name(fentry_obj, "fentry");
-+		if (!ASSERT_OK_PTR(prog, "find fentry prog"))
-+			goto out;
-+
-+		err = bpf_program__set_attach_target(prog, prog_fd,
-+						     "subprog_tail");
-+		if (!ASSERT_OK(err, "set_attach_target subprog_tail"))
-+			goto out;
-+
-+		err = bpf_object__load(fentry_obj);
-+		if (!ASSERT_OK(err, "load fentry_obj"))
-+			goto out;
-+
-+		fentry_link = bpf_program__attach_trace(prog);
-+		if (!ASSERT_OK_PTR(fentry_link, "attach_trace"))
-+			goto out;
-+	}
-+
-+	if (test_fexit) {
-+		fexit_obj = bpf_object__open_file("tailcall_bpf2bpf_fexit.bpf.o",
-+						  NULL);
-+		if (!ASSERT_OK_PTR(fexit_obj, "open fexit_obj file"))
-+			goto out;
-+
-+		prog = bpf_object__find_program_by_name(fexit_obj, "fexit");
-+		if (!ASSERT_OK_PTR(prog, "find fexit prog"))
-+			goto out;
-+
-+		err = bpf_program__set_attach_target(prog, prog_fd,
-+						     "subprog_tail");
-+		if (!ASSERT_OK(err, "set_attach_target subprog_tail"))
-+			goto out;
-+
-+		err = bpf_object__load(fexit_obj);
-+		if (!ASSERT_OK(err, "load fexit_obj"))
-+			goto out;
-+
-+		fexit_link = bpf_program__attach_trace(prog);
-+		if (!ASSERT_OK_PTR(fexit_link, "attach_trace"))
-+			goto out;
-+	}
-+
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+	ASSERT_OK(err, "tailcall");
-+	ASSERT_EQ(topts.retval, 1, "tailcall retval");
-+
-+	data_map = bpf_object__find_map_by_name(obj, ".bss");
-+	if (!ASSERT_FALSE(!data_map || !bpf_map__is_internal(data_map),
-+			  "find data_map"))
-+		goto out;
-+
-+	main_data_fd = bpf_map__fd(data_map);
-+	if (!ASSERT_GE(main_data_fd, 0, "main_data_fd"))
-+		goto out;
-+
-+	i = 0;
-+	err = bpf_map_lookup_elem(main_data_fd, &i, &val);
-+	ASSERT_OK(err, "tailcall count");
-+	ASSERT_EQ(val, 34, "tailcall count");
-+
-+	if (test_fentry) {
-+		data_map = bpf_object__find_map_by_name(fentry_obj, ".bss");
-+		if (!ASSERT_FALSE(!data_map || !bpf_map__is_internal(data_map),
-+				  "find tailcall_bpf2bpf_fentry.bss map"))
-+			goto out;
-+
-+		fentry_data_fd = bpf_map__fd(data_map);
-+		if (!ASSERT_GE(fentry_data_fd, 0,
-+				  "find tailcall_bpf2bpf_fentry.bss map fd"))
-+			goto out;
-+
-+		i = 0;
-+		err = bpf_map_lookup_elem(fentry_data_fd, &i, &val);
-+		ASSERT_OK(err, "fentry count");
-+		ASSERT_EQ(val, 68, "fentry count");
-+	}
-+
-+	if (test_fexit) {
-+		data_map = bpf_object__find_map_by_name(fexit_obj, ".bss");
-+		if (!ASSERT_FALSE(!data_map || !bpf_map__is_internal(data_map),
-+				  "find tailcall_bpf2bpf_fexit.bss map"))
-+			goto out;
-+
-+		fexit_data_fd = bpf_map__fd(data_map);
-+		if (!ASSERT_GE(fexit_data_fd, 0,
-+				  "find tailcall_bpf2bpf_fexit.bss map fd"))
-+			goto out;
-+
-+		i = 0;
-+		err = bpf_map_lookup_elem(fexit_data_fd, &i, &val);
-+		ASSERT_OK(err, "fexit count");
-+		ASSERT_EQ(val, 68, "fexit count");
-+	}
-+
-+	i = 0;
-+	err = bpf_map_delete_elem(map_fd, &i);
-+	if (!ASSERT_OK(err, "delete_elem from jmp_table"))
-+		goto out;
-+
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+	ASSERT_OK(err, "tailcall");
-+	ASSERT_EQ(topts.retval, 1, "tailcall retval");
-+
-+	i = 0;
-+	err = bpf_map_lookup_elem(main_data_fd, &i, &val);
-+	ASSERT_OK(err, "tailcall count");
-+	ASSERT_EQ(val, 35, "tailcall count");
-+
-+	if (test_fentry) {
-+		i = 0;
-+		err = bpf_map_lookup_elem(fentry_data_fd, &i, &val);
-+		ASSERT_OK(err, "fentry count");
-+		ASSERT_EQ(val, 70, "fentry count");
-+	}
-+
-+	if (test_fexit) {
-+		i = 0;
-+		err = bpf_map_lookup_elem(fexit_data_fd, &i, &val);
-+		ASSERT_OK(err, "fexit count");
-+		ASSERT_EQ(val, 70, "fexit count");
-+	}
-+
-+out:
-+	bpf_link__destroy(fentry_link);
-+	bpf_link__destroy(fexit_link);
-+	bpf_object__close(fentry_obj);
-+	bpf_object__close(fexit_obj);
-+	bpf_object__close(obj);
-+}
-+
-+static void test_tailcall_bpf2bpf_hierarchy_1(void)
-+{
-+	test_tailcall_hierarchy_count("tailcall_bpf2bpf_hierarchy1.bpf.o",
-+				      false, false);
-+}
-+
-+static void test_tailcall_bpf2bpf_hierarchy_fentry(void)
-+{
-+	test_tailcall_hierarchy_count("tailcall_bpf2bpf_hierarchy1.bpf.o",
-+				      true, false);
-+}
-+
-+static void test_tailcall_bpf2bpf_hierarchy_fexit(void)
-+{
-+	test_tailcall_hierarchy_count("tailcall_bpf2bpf_hierarchy1.bpf.o",
-+				      false, true);
-+}
-+
-+static void test_tailcall_bpf2bpf_hierarchy_fentry_fexit(void)
-+{
-+	test_tailcall_hierarchy_count("tailcall_bpf2bpf_hierarchy1.bpf.o",
-+				      true, true);
-+}
-+
-+static void test_tailcall_bpf2bpf_hierarchy_2(void)
-+{
-+	int err, map_fd, prog_fd, data_fd, main_fd, i, val[2];
-+	struct bpf_map *prog_array, *data_map;
-+	struct bpf_object *obj = NULL;
-+	struct bpf_program *prog;
-+	char buff[128] = {};
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, topts,
-+		.data_in = buff,
-+		.data_size_in = sizeof(buff),
-+		.repeat = 1,
-+	);
-+
-+	err = bpf_prog_test_load("tailcall_bpf2bpf_hierarchy2.bpf.o",
-+				 BPF_PROG_TYPE_SCHED_CLS,
-+				 &obj, &prog_fd);
-+	if (!ASSERT_OK(err, "load obj"))
-+		return;
-+
-+	prog = bpf_object__find_program_by_name(obj, "entry");
-+	if (!ASSERT_OK_PTR(prog, "find entry prog"))
-+		goto out;
-+
-+	main_fd = bpf_program__fd(prog);
-+	if (!ASSERT_GE(main_fd, 0, "main_fd"))
-+		goto out;
-+
-+	prog_array = bpf_object__find_map_by_name(obj, "jmp_table");
-+	if (!ASSERT_OK_PTR(prog_array, "find jmp_table map"))
-+		goto out;
-+
-+	map_fd = bpf_map__fd(prog_array);
-+	if (!ASSERT_GE(map_fd, 0, "find jmp_table map fd"))
-+		goto out;
-+
-+	prog = bpf_object__find_program_by_name(obj, "classifier_0");
-+	if (!ASSERT_OK_PTR(prog, "find classifier_0 prog"))
-+		goto out;
-+
-+	prog_fd = bpf_program__fd(prog);
-+	if (!ASSERT_GE(prog_fd, 0, "find classifier_0 prog fd"))
-+		goto out;
-+
-+	i = 0;
-+	err = bpf_map_update_elem(map_fd, &i, &prog_fd, BPF_ANY);
-+	if (!ASSERT_OK(err, "update jmp_table"))
-+		goto out;
-+
-+	prog = bpf_object__find_program_by_name(obj, "classifier_1");
-+	if (!ASSERT_OK_PTR(prog, "find classifier_1 prog"))
-+		goto out;
-+
-+	prog_fd = bpf_program__fd(prog);
-+	if (!ASSERT_GE(prog_fd, 0, "find classifier_1 prog fd"))
-+		goto out;
-+
-+	i = 1;
-+	err = bpf_map_update_elem(map_fd, &i, &prog_fd, BPF_ANY);
-+	if (!ASSERT_OK(err, "update jmp_table"))
-+		goto out;
-+
-+	err = bpf_prog_test_run_opts(main_fd, &topts);
-+	ASSERT_OK(err, "tailcall");
-+	ASSERT_EQ(topts.retval, 1, "tailcall retval");
-+
-+	data_map = bpf_object__find_map_by_name(obj, ".bss");
-+	if (!ASSERT_FALSE(!data_map || !bpf_map__is_internal(data_map),
-+			  "find .bss map"))
-+		goto out;
-+
-+	data_fd = bpf_map__fd(data_map);
-+	if (!ASSERT_GE(data_fd, 0, "find .bss map fd"))
-+		goto out;
-+
-+	i = 0;
-+	err = bpf_map_lookup_elem(data_fd, &i, &val);
-+	ASSERT_OK(err, "tailcall counts");
-+	ASSERT_EQ(val[0], 33, "tailcall count0");
-+	ASSERT_EQ(val[1], 0, "tailcall count1");
-+
-+out:
-+	bpf_object__close(obj);
-+}
-+
-+static void test_tailcall_bpf2bpf_hierarchy_3(void)
-+{
-+	int err, map_fd, prog_fd, data_fd, main_fd, i, val;
-+	struct bpf_map *prog_array, *data_map;
-+	struct bpf_object *obj = NULL;
-+	struct bpf_program *prog;
-+	char buff[128] = {};
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, topts,
-+		.data_in = buff,
-+		.data_size_in = sizeof(buff),
-+		.repeat = 1,
-+	);
-+
-+	err = bpf_prog_test_load("tailcall_bpf2bpf_hierarchy3.bpf.o",
-+				 BPF_PROG_TYPE_SCHED_CLS,
-+				 &obj, &prog_fd);
-+	if (!ASSERT_OK(err, "load obj"))
-+		return;
-+
-+	prog = bpf_object__find_program_by_name(obj, "entry");
-+	if (!ASSERT_OK_PTR(prog, "find entry prog"))
-+		goto out;
-+
-+	main_fd = bpf_program__fd(prog);
-+	if (!ASSERT_GE(main_fd, 0, "main_fd"))
-+		goto out;
-+
-+	prog_array = bpf_object__find_map_by_name(obj, "jmp_table0");
-+	if (!ASSERT_OK_PTR(prog_array, "find jmp_table0 map"))
-+		goto out;
-+
-+	map_fd = bpf_map__fd(prog_array);
-+	if (!ASSERT_GE(map_fd, 0, "find jmp_table0 map fd"))
-+		goto out;
-+
-+	prog = bpf_object__find_program_by_name(obj, "classifier_0");
-+	if (!ASSERT_OK_PTR(prog, "find classifier_0 prog"))
-+		goto out;
-+
-+	prog_fd = bpf_program__fd(prog);
-+	if (!ASSERT_GE(prog_fd, 0, "find classifier_0 prog fd"))
-+		goto out;
-+
-+	i = 0;
-+	err = bpf_map_update_elem(map_fd, &i, &prog_fd, BPF_ANY);
-+	if (!ASSERT_OK(err, "update jmp_table0"))
-+		goto out;
-+
-+	prog_array = bpf_object__find_map_by_name(obj, "jmp_table1");
-+	if (!ASSERT_OK_PTR(prog_array, "find jmp_table1 map"))
-+		goto out;
-+
-+	map_fd = bpf_map__fd(prog_array);
-+	if (!ASSERT_GE(map_fd, 0, "find jmp_table1 map fd"))
-+		goto out;
-+
-+	i = 0;
-+	err = bpf_map_update_elem(map_fd, &i, &prog_fd, BPF_ANY);
-+	if (!ASSERT_OK(err, "update jmp_table1"))
-+		goto out;
-+
-+	err = bpf_prog_test_run_opts(main_fd, &topts);
-+	ASSERT_OK(err, "tailcall");
-+	ASSERT_EQ(topts.retval, 1, "tailcall retval");
-+
-+	data_map = bpf_object__find_map_by_name(obj, ".bss");
-+	if (!ASSERT_FALSE(!data_map || !bpf_map__is_internal(data_map),
-+			  "find .bss map"))
-+		goto out;
-+
-+	data_fd = bpf_map__fd(data_map);
-+	if (!ASSERT_GE(data_fd, 0, "find .bss map fd"))
-+		goto out;
-+
-+	i = 0;
-+	err = bpf_map_lookup_elem(data_fd, &i, &val);
-+	ASSERT_OK(err, "tailcall count");
-+	ASSERT_EQ(val, 33, "tailcall count");
-+
-+out:
-+	bpf_object__close(obj);
-+}
-+
- void test_tailcalls(void)
- {
- 	if (test__start_subtest("tailcall_1"))
-@@ -1139,4 +1511,16 @@ void test_tailcalls(void)
- 		test_tailcall_bpf2bpf_fentry_fexit();
- 	if (test__start_subtest("tailcall_bpf2bpf_fentry_entry"))
- 		test_tailcall_bpf2bpf_fentry_entry();
-+	if (test__start_subtest("tailcall_bpf2bpf_hierarchy_1"))
-+		test_tailcall_bpf2bpf_hierarchy_1();
-+	if (test__start_subtest("tailcall_bpf2bpf_hierarchy_fentry"))
-+		test_tailcall_bpf2bpf_hierarchy_fentry();
-+	if (test__start_subtest("tailcall_bpf2bpf_hierarchy_fexit"))
-+		test_tailcall_bpf2bpf_hierarchy_fexit();
-+	if (test__start_subtest("tailcall_bpf2bpf_hierarchy_fentry_fexit"))
-+		test_tailcall_bpf2bpf_hierarchy_fentry_fexit();
-+	if (test__start_subtest("tailcall_bpf2bpf_hierarchy_2"))
-+		test_tailcall_bpf2bpf_hierarchy_2();
-+	if (test__start_subtest("tailcall_bpf2bpf_hierarchy_3"))
-+		test_tailcall_bpf2bpf_hierarchy_3();
- }
-diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy1.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy1.c
-new file mode 100644
-index 0000000000000..0bfbb7c9637b7
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy1.c
-@@ -0,0 +1,34 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_legacy.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 1);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+} jmp_table SEC(".maps");
-+
-+int count = 0;
-+
-+static __noinline
-+int subprog_tail(struct __sk_buff *skb)
-+{
-+	bpf_tail_call_static(skb, &jmp_table, 0);
-+	return 0;
-+}
-+
-+SEC("tc")
-+int entry(struct __sk_buff *skb)
-+{
-+	volatile int ret = 1;
-+
-+	count++;
-+	subprog_tail(skb);
-+	subprog_tail(skb);
-+
-+	return ret;
-+}
-+
-+char __license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy2.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy2.c
-new file mode 100644
-index 0000000000000..b84541546082e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy2.c
-@@ -0,0 +1,55 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_legacy.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 2);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+} jmp_table SEC(".maps");
-+
-+int count0 = 0;
-+int count1 = 0;
-+
-+static __noinline
-+int subprog_tail0(struct __sk_buff *skb)
-+{
-+	bpf_tail_call_static(skb, &jmp_table, 0);
-+	return 0;
-+}
-+
-+SEC("tc")
-+int classifier_0(struct __sk_buff *skb)
-+{
-+	count0++;
-+	subprog_tail0(skb);
-+	return 0;
-+}
-+
-+static __noinline
-+int subprog_tail1(struct __sk_buff *skb)
-+{
-+	bpf_tail_call_static(skb, &jmp_table, 1);
-+	return 0;
-+}
-+
-+SEC("tc")
-+int classifier_1(struct __sk_buff *skb)
-+{
-+	count1++;
-+	subprog_tail1(skb);
-+	return 0;
-+}
-+
-+SEC("tc")
-+int entry(struct __sk_buff *skb)
-+{
-+	subprog_tail0(skb);
-+	subprog_tail1(skb);
-+
-+	return 1;
-+}
-+
-+char __license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy3.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy3.c
-new file mode 100644
-index 0000000000000..6398a1d277fc7
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf_hierarchy3.c
-@@ -0,0 +1,46 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_legacy.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 1);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+} jmp_table0 SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 1);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+} jmp_table1 SEC(".maps");
-+
-+int count = 0;
-+
-+static __noinline
-+int subprog_tail(struct __sk_buff *skb, void *jmp_table)
-+{
-+	bpf_tail_call_static(skb, jmp_table, 0);
-+	return 0;
-+}
-+
-+SEC("tc")
-+int classifier_0(struct __sk_buff *skb)
-+{
-+	count++;
-+	subprog_tail(skb, &jmp_table0);
-+	subprog_tail(skb, &jmp_table1);
-+	return 1;
-+}
-+
-+SEC("tc")
-+int entry(struct __sk_buff *skb)
-+{
-+	bpf_tail_call_static(skb, &jmp_table0, 0);
-+
-+	return 0;
-+}
-+
-+char __license[] SEC("license") = "GPL";
--- 
-2.41.0
+Hi all,
+
+I don't understand the reason why you want to enforce implementers to
+use your BPF?
+
+Even if it can do any possible thing that security implementer wants,
+why enforcing to use it? For experimenting? But then after successful
+experimentation the implementer must translate to real LSM and rewrite
+almost every thing.
+
+And also why to use faty BPF for a tricky simple stuff?
+
+Regards
+Jos=C3=A9 Bollo
+
+
+> >
+> > Link:
+> > https://marc.info/?l=3Dlinux-security-module&m=3D98706471912438&w=3D2 [=
+1]
+> > Link:
+> > https://lkml.kernel.org/r/20230912205658.3432-2-casey@schaufler-ca.com
+> > [2] Link:
+> > https://lkml.kernel.org/r/6e1c25f5-b78c-8b4e-ddc3-484129c4c0ec@I-love.S=
+AKURA.ne.jp
+> > [3] Link:
+> > https://lkml.kernel.org/r/20230918212459.1937798-1-kpsingh@kernel.org
+> > [4] Link:
+> > https://lkml.kernel.org/r/ed785c86-a1d8-caff-c629-f8a50549e05b@I-love.S=
+AKURA.ne.jp
+> > [5] Link:
+> > https://lkml.kernel.org/r/36c7cf74-508f-1690-f86a-bb18ec686fcf@schaufle=
+r-ca.com
+> > [6] Signed-off-by: Tetsuo Handa
+> > <penguin-kernel@I-love.SAKURA.ne.jp> --- include/linux/lsm_hooks.h
+> > |   2 + security/security.c       | 107
+> > ++++++++++++++++++++++++++++++++++++++ 2 files changed, 109
+> > insertions(+)
+> >
+> > diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> > index dcb5e5b5eb13..73db3c41df26 100644
+> > --- a/include/linux/lsm_hooks.h
+> > +++ b/include/linux/lsm_hooks.h
+> > @@ -105,6 +105,8 @@ extern char *lsm_names;
+> >
+> >  extern void security_add_hooks(struct security_hook_list *hooks,
+> > int count, const char *lsm);
+> > +extern int register_loadable_lsm(struct security_hook_list *hooks,
+> > int count,
+> > +                                const char *lsm);
+> >
+> >  #define LSM_FLAG_LEGACY_MAJOR  BIT(0)
+> >  #define LSM_FLAG_EXCLUSIVE     BIT(1)
+> > diff --git a/security/security.c b/security/security.c
+> > index 23b129d482a7..6c64b7afb251 100644
+> > --- a/security/security.c
+> > +++ b/security/security.c
+> > @@ -74,6 +74,7 @@ const char *const
+> > lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX + 1] =3D { };
+> >
+> >  struct security_hook_heads security_hook_heads __ro_after_init;
+> > +EXPORT_SYMBOL_GPL(security_hook_heads); =20
+>=20
+> Rather than exposting security_hook_heads, this should actually export
+> security_hook_module_register. This should internally handle any data
+> structures used and also not need the special magic that you did for
+> __ro_after_init.
+>=20
+> - KP
+>=20
+> >  static BLOCKING_NOTIFIER_HEAD(blocking_lsm_notifier_chain);
+> >
+> >  static struct kmem_cache *lsm_file_cache;
+> > @@ -537,6 +538,112 @@ void __init security_add_hooks(struct
+> > security_hook_list *hooks, int count, }
+> >  }
+> >
+> > +#if defined(CONFIG_STRICT_KERNEL_RWX)
+> > +#define MAX_RO_PAGES 1024 /* Wild guess. Can be minimized by
+> > dynamic allocation. */ +static struct page *ro_pages[MAX_RO_PAGES];
+> > /* Pages that are marked read-only. */ +static unsigned int
+> > ro_pages_len; /* Number of pages that are marked read-only. */ +
+> > +/* Check whether a page containing given address does not have
+> > _PAGE_BIT_RW bit. */ +static bool lsm_test_page_ro(void *addr)
+> > +{
+> > +       unsigned int i;
+> > +       int unused;
+> > +       struct page *page;
+> > +
+> > +       page =3D (struct page *) lookup_address((unsigned long) addr,
+> > &unused);
+> > +       if (!page)
+> > +               return false;
+> > +       if (test_bit(_PAGE_BIT_RW, &(page->flags)))
+> > +               return true;
+> > +       for (i =3D 0; i < ro_pages_len; i++)
+> > +               if (page =3D=3D ro_pages[i])
+> > +                       return true;
+> > +       if (ro_pages_len =3D=3D MAX_RO_PAGES)
+> > +               return false;
+> > +       ro_pages[ro_pages_len++] =3D page;
+> > +       return true;
+> > +}
+> > +
+> > +/* Find pages which do not have _PAGE_BIT_RW bit. */
+> > +static bool check_ro_pages(struct security_hook_list *hooks, int
+> > count) +{
+> > +       int i;
+> > +       struct hlist_head *list =3D &security_hook_heads.capable;
+> > +
+> > +       if (!copy_to_kernel_nofault(list, list, sizeof(void *)))
+> > +               return true;
+> > +       for (i =3D 0; i < count; i++) {
+> > +               struct hlist_head *head =3D hooks[i].head;
+> > +               struct security_hook_list *shp;
+> > +
+> > +               if (!lsm_test_page_ro(&head->first))
+> > +                       return false;
+> > +               hlist_for_each_entry(shp, head, list)
+> > +                       if (!lsm_test_page_ro(&shp->list.next) ||
+> > +                           !lsm_test_page_ro(&shp->list.pprev))
+> > +                               return false;
+> > +       }
+> > +       return true;
+> > +}
+> > +#endif
+> > +
+> > +/**
+> > + * register_loadable_lsm - Add a dynamically appendable module's
+> > hooks to the hook lists.
+> > + * @hooks: the hooks to add
+> > + * @count: the number of hooks to add
+> > + * @lsm: the name of the security module
+> > + *
+> > + * Each dynamically appendable LSM has to register its hooks with
+> > the infrastructure.
+> > + *
+> > + * Assumes that this function is called from module_init()
+> > function where
+> > + * call to this function is already serialized by module_mutex
+> > lock.
+> > + */
+> > +int register_loadable_lsm(struct security_hook_list *hooks, int
+> > count,
+> > +                         const char *lsm)
+> > +{
+> > +       int i;
+> > +       char *cp;
+> > +
+> > +       // TODO: Check whether proposed hooks can co-exist with
+> > already chained hooks,
+> > +       //       and bail out here if one of hooks cannot
+> > co-exist... +
+> > +#if defined(CONFIG_STRICT_KERNEL_RWX)
+> > +       // Find pages which needs to make temporarily writable.
+> > +       ro_pages_len =3D 0;
+> > +       if (!check_ro_pages(hooks, count)) {
+> > +               pr_err("Can't make security_hook_heads again
+> > writable. Retry with rodata=3Doff kernel command line option
+> > added.\n");
+> > +               return -EINVAL;
+> > +       }
+> > +       pr_info("ro_pages_len=3D%d\n", ro_pages_len);
+> > +#endif
+> > +       // At least "capability" is already included.
+> > +       cp =3D kasprintf(GFP_KERNEL, "%s,%s", lsm_names, lsm);
+> > +       if (!cp) {
+> > +               pr_err("%s - Cannot get memory.\n", __func__);
+> > +               return -ENOMEM;
+> > +       }
+> > +#if defined(CONFIG_STRICT_KERNEL_RWX)
+> > +       // Make security_hook_heads (and hooks chained) temporarily
+> > writable.
+> > +       for (i =3D 0; i < ro_pages_len; i++)
+> > +               set_bit(_PAGE_BIT_RW, &(ro_pages[i]->flags));
+> > +#endif
+> > +       // Register dynamically appendable module's hooks.
+> > +       for (i =3D 0; i < count; i++) {
+> > +               hooks[i].lsm =3D lsm;
+> > +               hlist_add_tail_rcu(&hooks[i].list, hooks[i].head);
+> > +       }
+> > +#if defined(CONFIG_STRICT_KERNEL_RWX)
+> > +       // Make security_hook_heads (and hooks chained) again
+> > read-only.
+> > +       for (i =3D 0; i < ro_pages_len; i++)
+> > +               clear_bit(_PAGE_BIT_RW, &(ro_pages[i]->flags));
+> > +#endif
+> > +       // TODO: Wait for reader side before kfree().
+> > +       kfree(lsm_names);
+> > +       lsm_names =3D cp;
+> > +       return 0;
+> > +}
+> > +EXPORT_SYMBOL_GPL(register_loadable_lsm);
+> > +
+> >  int call_blocking_lsm_notifier(enum lsm_event event, void *data)
+> >  {
+> >         return
+> > blocking_notifier_call_chain(&blocking_lsm_notifier_chain, --
+> > 2.18.4 =20
 
