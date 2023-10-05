@@ -1,47 +1,47 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BF834369B
-	for <bpf@vger.kernel.org>; Thu,  5 Oct 2023 23:09:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A90D1640A
+	for <bpf@vger.kernel.org>; Thu,  5 Oct 2023 23:09:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QHb1fH5j"
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3288C135
-	for <bpf@vger.kernel.org>; Thu,  5 Oct 2023 16:09:07 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5a2318df875so22818357b3.2
-        for <bpf@vger.kernel.org>; Thu, 05 Oct 2023 16:09:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yGE388Mq"
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6C8D5C
+	for <bpf@vger.kernel.org>; Thu,  5 Oct 2023 16:09:11 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d816fa2404aso2121813276.0
+        for <bpf@vger.kernel.org>; Thu, 05 Oct 2023 16:09:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696547346; x=1697152146; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1696547351; x=1697152151; darn=vger.kernel.org;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=aDPuyVd3XTrJMjMwlPDdlF9+59DlOSoA2gz1djDjGjM=;
-        b=QHb1fH5jZfpq8RyeS/YaV/fetq7213oKI3Glm+P5Tv0brElakNGE0zusBc1IqtkzHS
-         F3cE0t+BdUKNRsfu4cOXwERujggbR3NbvxMMcWltEgnL7eyCws5CIP/V/GXYEIinNH++
-         cFxdCofmm6ACZ3U7t5n0pC7GXLLtCfcaLa9bwh0z6g4tF0bsVEVy4oUiAfiHjllUhIWT
-         MynrYEVVosmuvb9Cc/SL22cUvJGFQuRu4kVtwnTtHBYNhkvXxDIKvrxiRIczfjwbJuq7
-         oHi2F4cmXpeU38AyWzqrmnv0SmctqOZYMnwGIDuFsCOKFkiJK9WpAfLQ0PmMeOUyCSCc
-         fYJA==
+        bh=MTpWBQgPQVQy0TAZXLEWpBVQQ2YTPMy6ZmoyjFN0GGE=;
+        b=yGE388MqJTU/fjPZnES+SGVGN9DpeJ67NXpzBBTNoFPld7Qa3qESa4n/bz8CNqTOwf
+         HIIQWmLaUlkebgzY4Q3gKNp90E2XoDbKLIEPKdzYGgO6XCDdXMQAH9SUaiT8BtMHgLHy
+         E0YPNMcbvC3wzbIzAa5emj5zUQ34vMY2hOrCDU8z086mUTnMggBg2JOChXXgXU7Uhrh3
+         fzTrJ7zsslmFzOna+9kSTGk0EqqQhIKvaQpsh3VYC5GuXEZaFUBAStumtm/9oj6k7uNi
+         72yCdGjHiikGpKiyR+LAmw8DW7eipCJKVo5qyt+dnG5TXlP6P/IAeno+FWc/5hgpw4/1
+         UxAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696547346; x=1697152146;
+        d=1e100.net; s=20230601; t=1696547351; x=1697152151;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aDPuyVd3XTrJMjMwlPDdlF9+59DlOSoA2gz1djDjGjM=;
-        b=sR/B1EbiLKoH4W5goFJzhFH2SQXjS8Qf/Xq5nM6eFH0PvMma4tUIK0I6bY9kDFlbcM
-         WzrnwwWjbiDHj61iPPerw69bOwqhOmUV82Sh+KBvqZU9hl1H8yog+UzFcw9B3m1E17rd
-         Bmkmyv+yPmUA4bSKonnLS6+ddFNbV13kcpYcjYzszwoAeUsWJNZ59aS/I1RKnB0ReVHD
-         UmOayXjGw6cG5m2aP2S5liSBRG88ze4icflta/OrBxSHA9CV2lGD2OAn9sKVww0CGz/P
-         AsrO+zbaLeRZxQ9/cgwenRmR8/FiVaBtYjHLHsn4h18l2IKTezlbJJCRVi/UacCI8Swl
-         tr3g==
-X-Gm-Message-State: AOJu0YyEaQpaWPsjLvi14El7tx6TPHC3avNf+JwrT5mhxlNEmRr45QgC
-	qLzWokqlncaCyKRA62JUVarQsu+FyCpa
-X-Google-Smtp-Source: AGHT+IFQDjjuJ9i5zSFcUSzRWjUMmm/ajUwJIkmJtY7wD6WB6BJUTaAn4xhEtzWUY7ES/84RgxbXsLDpBnQp
+        bh=MTpWBQgPQVQy0TAZXLEWpBVQQ2YTPMy6ZmoyjFN0GGE=;
+        b=AjXqzQGqakPUPXzCjMEfp0TQdMxzlNOZoNynCTu3iC5RROKqo35veKdAT8cln0k4m9
+         rpsgfpWlVf9jA28i+FZbIgk9lj+gUblxDYEbypENNd3BDsecbkodm3vKeDZg+S9klA0d
+         n13xtWLOGGHQI/4sgLi9J3XfMK9EF4ZE+72ab8aDmlHjrV8Y6yV/pAZqqjzv1j5jpjES
+         ghAxMCxQPX7aXfa9UmjvIbyDddf84e6isuxeWIuAyTJxLvRErRCNvNSFEwmqj+pFODfa
+         LmtdXGxiv1byHX2Z4KWNi1OWCwGQ30UpzfbCf0QQhYSr3WR3poXehUULLUlx1Qm4DmXG
+         3eeg==
+X-Gm-Message-State: AOJu0Ywv0+JaX9gxvrC0b0eOaQ1JuRZ0s5hyLDeuA4s7PfsL/HNm64uy
+	uYYvfdNDuHqcjyM013XcOJenoz5oEJ/X
+X-Google-Smtp-Source: AGHT+IGnxaCsZLcDNpjb2IRnCqzooQl7/eSuSXSt2DJTDf33tEW2BnCckAmI3vVY62Ne9wg9AkMtIxPrNICk
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:7449:56a1:2b14:305b])
- (user=irogers job=sendgmr) by 2002:a05:690c:3146:b0:5a4:f657:3a95 with SMTP
- id fc6-20020a05690c314600b005a4f6573a95mr91738ywb.1.1696547346425; Thu, 05
- Oct 2023 16:09:06 -0700 (PDT)
-Date: Thu,  5 Oct 2023 16:08:37 -0700
+ (user=irogers job=sendgmr) by 2002:a25:2513:0:b0:d0f:a0a6:8e87 with SMTP id
+ l19-20020a252513000000b00d0fa0a68e87mr93479ybl.2.1696547351036; Thu, 05 Oct
+ 2023 16:09:11 -0700 (PDT)
+Date: Thu,  5 Oct 2023 16:08:39 -0700
 In-Reply-To: <20231005230851.3666908-1-irogers@google.com>
-Message-Id: <20231005230851.3666908-5-irogers@google.com>
+Message-Id: <20231005230851.3666908-7-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20231005230851.3666908-1-irogers@google.com>
 X-Mailer: git-send-email 2.42.0.609.gbb76f46606-goog
-Subject: [PATCH v2 04/18] perf hisi-ptt: Fix potential memory leak
+Subject: [PATCH v2 06/18] perf buildid-cache: Fix use of uninitialized value
 From: Ian Rogers <irogers@google.com>
 To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
 	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -73,80 +73,32 @@ X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Fix clang-tidy found potential memory leak and unread value:
-```
-tools/perf/util/hisi-ptt.c:108:3: warning: Value stored to 'data_offset' is never read [clang-analyzer-deadcode.DeadStores]
-                data_offset = 0;
-                ^             ~
-tools/perf/util/hisi-ptt.c:108:3: note: Value stored to 'data_offset' is never read
-                data_offset = 0;
-                ^             ~
-tools/perf/util/hisi-ptt.c:112:12: warning: Potential leak of memory pointed to by 'data' [clang-analyzer-unix.Malloc]
-                        return -errno;
-                                ^
-/usr/include/errno.h:38:18: note: expanded from macro 'errno'
-                 ^
-tools/perf/util/hisi-ptt.c:100:15: note: Memory is allocated
-        void *data = malloc(size);
-                     ^~~~~~~~~~~~
-tools/perf/util/hisi-ptt.c:104:6: note: Assuming 'data' is non-null
-        if (!data)
-            ^~~~~
-tools/perf/util/hisi-ptt.c:104:2: note: Taking false branch
-        if (!data)
-        ^
-tools/perf/util/hisi-ptt.c:107:6: note: Assuming the condition is false
-        if (perf_data__is_pipe(session->data)) {
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-tools/perf/util/hisi-ptt.c:107:2: note: Taking false branch
-        if (perf_data__is_pipe(session->data)) {
-        ^
-tools/perf/util/hisi-ptt.c:111:7: note: Assuming the condition is true
-                if (data_offset == -1)
-                    ^~~~~~~~~~~~~~~~~
-tools/perf/util/hisi-ptt.c:111:3: note: Taking true branch
-                if (data_offset == -1)
-                ^
-tools/perf/util/hisi-ptt.c:112:12: note: Potential leak of memory pointed to by 'data'
-                        return -errno;
-                                ^
-/usr/include/errno.h:38:18: note: expanded from macro 'errno'
-```
+The buildid filename is first determined and then from this the
+buildid read. If getting the filename fails then the buildid will be
+used for a later memcmp uninitialized. Detected by clang-tidy.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/hisi-ptt.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ tools/perf/builtin-buildid-cache.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/util/hisi-ptt.c b/tools/perf/util/hisi-ptt.c
-index 45b614bb73bf..ea297329c526 100644
---- a/tools/perf/util/hisi-ptt.c
-+++ b/tools/perf/util/hisi-ptt.c
-@@ -98,18 +98,18 @@ static int hisi_ptt_process_auxtrace_event(struct perf_session *session,
- 	int fd = perf_data__fd(session->data);
- 	int size = event->auxtrace.size;
- 	void *data = malloc(size);
--	off_t data_offset;
- 	int err;
+diff --git a/tools/perf/builtin-buildid-cache.c b/tools/perf/builtin-buildid-cache.c
+index cd381693658b..e2a40f1d9225 100644
+--- a/tools/perf/builtin-buildid-cache.c
++++ b/tools/perf/builtin-buildid-cache.c
+@@ -277,8 +277,10 @@ static bool dso__missing_buildid_cache(struct dso *dso, int parm __maybe_unused)
+ 	char filename[PATH_MAX];
+ 	struct build_id bid;
  
- 	if (!data)
- 		return -errno;
- 
--	if (perf_data__is_pipe(session->data)) {
--		data_offset = 0;
--	} else {
--		data_offset = lseek(fd, 0, SEEK_CUR);
--		if (data_offset == -1)
-+	if (!perf_data__is_pipe(session->data)) {
-+		off_t data_offset = lseek(fd, 0, SEEK_CUR);
+-	if (dso__build_id_filename(dso, filename, sizeof(filename), false) &&
+-	    filename__read_build_id(filename, &bid) == -1) {
++	if (!dso__build_id_filename(dso, filename, sizeof(filename), false))
++		return true;
 +
-+		if (data_offset == -1) {
-+			free(data);
- 			return -errno;
-+		}
- 	}
++	if (filename__read_build_id(filename, &bid) == -1) {
+ 		if (errno == ENOENT)
+ 			return false;
  
- 	err = readn(fd, data, size);
 -- 
 2.42.0.609.gbb76f46606-goog
 
