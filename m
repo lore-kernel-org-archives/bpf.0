@@ -1,140 +1,103 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A31311CA6
-	for <bpf@vger.kernel.org>; Thu,  5 Oct 2023 11:26:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69A0F125A3
+	for <bpf@vger.kernel.org>; Thu,  5 Oct 2023 13:26:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sxSa8gwE"
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD1524E8C
-	for <bpf@vger.kernel.org>; Thu,  5 Oct 2023 04:26:24 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-406402933edso7296705e9.2
-        for <bpf@vger.kernel.org>; Thu, 05 Oct 2023 04:26:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696505183; x=1697109983; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OIoVj/vy/Hhfr+/0m/hFD6cIq0HW6TEhAF0rpYQmF/Q=;
-        b=sxSa8gwEU2bJQV8BFuRm8xcA9prs1pTumWXh6IjDwCcIcms9rJjmGt7LfNez0S6XSn
-         pkpI8Gx+xLfo7cx5cjcxo7b7t/BGcuQPLUJQAX0tzzXIkI9hkPp3u4PlwVOXiSXqbHZm
-         EPSkxhT5mvtU499qw/Ci794aLOROpTQZ2v8O5EJRUp078hPb2C47Y1rVsuMb2xWSP6kp
-         YeZM+zZ23xHpm+Ae0IhWsOdx3AANVYm+ormTc/+7QcehhjP7JletgwinC94yDAljdA7E
-         J+IrJ513ji8+BpOxjuAUL2/NXwO1TBU7gVm/vpQJkmre+fF3HOlr/NylFGbS9a2lVNs2
-         Gq4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696505183; x=1697109983;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OIoVj/vy/Hhfr+/0m/hFD6cIq0HW6TEhAF0rpYQmF/Q=;
-        b=xD41yUQq7nU8XzMJw4wxC7xu/Qv2zWVfFSu9I9glCSYUvJUQGGRoBouNgxjMDivdtu
-         c5QdEiplLf/OxjN6f5HqEaGpYE4W3g9m4Pk7vYkQfnShJUwnQI599/5fxyco2q5NNRwn
-         8OrA7DAzHhYnI6oHfD+UdPw7ZmuJ0VT4MobGir9SRSEnCA8dO1aRT2wQrtVsQwp6ksm5
-         7kdm5bSQjHLECqPsfsKlSHseh9cwA/2dKItkXMjWPZbY/QzUV75XcVJEX38vggFpBsS2
-         8t9bvWK771Ya0OIK20PYTg9QstonMB3ddhTJE3uHDxYkdqURFimdG910BxHGT3K96dPN
-         CmCQ==
-X-Gm-Message-State: AOJu0Yw0kjSKQUb/Fise7NkjcyCuFw9D5foUej6DVkxt0giiT5PND68b
-	F9M3mo6rFiUJCwIvRDfoA0fzvGF2TViCHqyXivA=
-X-Google-Smtp-Source: AGHT+IHV/0U0tPheZ+n2tRuJTVjDaXfN/KItCLS2BjT7QFkuspBqhUW2+Fo63oVhCbRZkWcVtLYIiw==
-X-Received: by 2002:a5d:5912:0:b0:31f:f11b:8b68 with SMTP id v18-20020a5d5912000000b0031ff11b8b68mr4011493wrd.71.1696505183048;
-        Thu, 05 Oct 2023 04:26:23 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id k12-20020a5d628c000000b003233a31a467sm1578885wru.34.2023.10.05.04.26.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Oct 2023 04:26:22 -0700 (PDT)
-Date: Thu, 5 Oct 2023 14:26:19 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: brauner@kernel.org
-Cc: bpf@vger.kernel.org
-Subject: [bug report] file: convert to SLAB_TYPESAFE_BY_RCU
-Message-ID: <abcd771c-61f8-479b-ab15-af2f5b3ce896@moroto.mountain>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UO+9Z7sl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5856C4AF69
+	for <bpf@vger.kernel.org>; Thu,  5 Oct 2023 13:26:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1696512380;
+	bh=6mUgLSnm4Kc6OY+sFrERl85k6Jk4/7QG8hihF86ti4M=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=UO+9Z7sl0+ubzgtjMC6tXjlhn7kW41BUU+O2FIehewxPZryW3RdQfV0Ri9zecskQc
+	 RazCP8sTGYJl7howu808n9kw4yOdXFVsZFzywTl7QMtCMvIzT7pehx8FEey4erPIDp
+	 guMbQ2zF1ZusUvg/tSXoGSY28UhiCRRioLCRl/l47EL7RzH1byrkwuVfV4/iXFiXcT
+	 jPRPH3vmU+EV771R2yBzSxY35PDVcD0MiNGGrkFzL9NSD+qigEKEFIFhL2XHh2Gk2s
+	 aS8cSrAb60bW1nW3A/QaXAwBoif67NkNFr0cZzLMZCYyjESp5OBYgzizaamPz0lUEw
+	 hEcrbg2+/TEBg==
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5334f9a56f6so1710854a12.3
+        for <bpf@vger.kernel.org>; Thu, 05 Oct 2023 06:26:20 -0700 (PDT)
+X-Gm-Message-State: AOJu0YyruqNc7sAgxhPxJUHHV5AZN6IO3JzIz7i129qArAOg+dyS8geN
+	Cq95aQlxGN5C6KBT6+u9u2VQEtCnVips0yZG6T6ayA==
+X-Google-Smtp-Source: AGHT+IGjEoiN5sIey9XlvsLiGVpcrzObalyvIGnXglMXvNE6FLnE02Xn7KXKfKtdJpJoQEp9dBTg8bLESCIN87KN+xM=
+X-Received: by 2002:a05:6402:134f:b0:532:bb18:7986 with SMTP id
+ y15-20020a056402134f00b00532bb187986mr5067221edw.39.1696512379251; Thu, 05
+ Oct 2023 06:26:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+References: <20230928202410.3765062-1-kpsingh@kernel.org> <20230928202410.3765062-5-kpsingh@kernel.org>
+ <ZR5vSyyNGBb8TvNH@krava>
+In-Reply-To: <ZR5vSyyNGBb8TvNH@krava>
+From: KP Singh <kpsingh@kernel.org>
+Date: Thu, 5 Oct 2023 15:26:08 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ69x9jX3scjSA7zT99CJoM+eG6FDQdBT-SCxm47a6UEoA@mail.gmail.com>
+Message-ID: <CACYkzJ69x9jX3scjSA7zT99CJoM+eG6FDQdBT-SCxm47a6UEoA@mail.gmail.com>
+Subject: Re: [PATCH v5 4/5] bpf: Only enable BPF LSM hooks when an LSM program
+ is attached
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
+	paul@paul-moore.com, keescook@chromium.org, casey@schaufler-ca.com, 
+	song@kernel.org, daniel@iogearbox.net, ast@kernel.org, renauld@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello Christian Brauner,
+On Thu, Oct 5, 2023 at 10:09=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrot=
+e:
+>
+> On Thu, Sep 28, 2023 at 10:24:09PM +0200, KP Singh wrote:
+>
+> SNIP
+>
+> > diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> > index e97aeda3a86b..df9699bce372 100644
+> > --- a/kernel/bpf/trampoline.c
+> > +++ b/kernel/bpf/trampoline.c
+> > @@ -13,6 +13,7 @@
+> >  #include <linux/bpf_verifier.h>
+> >  #include <linux/bpf_lsm.h>
+> >  #include <linux/delay.h>
+> > +#include <linux/bpf_lsm.h>
+> >
+> >  /* dummy _ops. The verifier will operate on target program's ops. */
+> >  const struct bpf_verifier_ops bpf_extension_verifier_ops =3D {
+> > @@ -514,7 +515,7 @@ static int __bpf_trampoline_link_prog(struct bpf_tr=
+amp_link *link, struct bpf_tr
+> >  {
+> >       enum bpf_tramp_prog_type kind;
+> >       struct bpf_tramp_link *link_exiting;
+> > -     int err =3D 0;
+> > +     int err =3D 0, num_lsm_progs =3D 0;
+> >       int cnt =3D 0, i;
+> >
+> >       kind =3D bpf_attach_type_to_tramp(link->link.prog);
+> > @@ -545,8 +546,14 @@ static int __bpf_trampoline_link_prog(struct bpf_t=
+ramp_link *link, struct bpf_tr
+> >                       continue;
+> >               /* prog already linked */
+> >               return -EBUSY;
+> > +
+> > +             if (link_exiting->link.prog->type =3D=3D BPF_PROG_TYPE_LS=
+M)
+> > +                     num_lsm_progs++;
+>
+> this looks wrong, it's never reached.. seems like we should add separate
+> hlist_for_each_entry loop over trampoline's links for this check/init of
+> num_lsm_progs ?
+>
+> jirka
 
-The patch d089d9d056c0: "file: convert to SLAB_TYPESAFE_BY_RCU" from
-Sep 29, 2023 (linux-next), leads to the following Smatch static
-checker warning:
+Good catch, I missed this during my rebase, after
+https://lore.kernel.org/bpf/20220510205923.3206889-2-kuifeng@fb.com/
+this condition is basically never reached. I will do a general loop
+over to count LSM programs and toggle the hook to true (and same for
+unlink).
 
-	kernel/bpf/task_iter.c:302 task_file_seq_get_next()
-	warn: ignoring unreachable code.
+- KP
 
-kernel/bpf/task_iter.c
-    258 static struct file *
-    259 task_file_seq_get_next(struct bpf_iter_seq_task_file_info *info)
-    260 {
-    261         u32 saved_tid = info->tid;
-    262         struct task_struct *curr_task;
-    263         unsigned int curr_fd = info->fd;
-    264 
-    265         /* If this function returns a non-NULL file object,
-    266          * it held a reference to the task/file.
-    267          * Otherwise, it does not hold any reference.
-    268          */
-    269 again:
-    270         if (info->task) {
-    271                 curr_task = info->task;
-    272                 curr_fd = info->fd;
-    273         } else {
-    274                 curr_task = task_seq_get_next(&info->common, &info->tid, true);
-    275                 if (!curr_task) {
-    276                         info->task = NULL;
-    277                         return NULL;
-    278                 }
-    279 
-    280                 /* set info->task */
-    281                 info->task = curr_task;
-    282                 if (saved_tid == info->tid)
-    283                         curr_fd = info->fd;
-    284                 else
-    285                         curr_fd = 0;
-    286         }
-    287 
-    288         rcu_read_lock();
-    289         for (;; curr_fd++) {
-    290                 struct file *f;
-    291                 f = task_lookup_next_fdget_rcu(curr_task, &curr_fd);
-    292                 if (!f)
-    293                         continue;
-
-Should this be a break?
-
-    294 
-    295                 /* set info->fd */
-    296                 info->fd = curr_fd;
-    297                 rcu_read_unlock();
-    298                 return f;
-    299         }
-    300 
-    301         /* the current task is done, go to the next task */
---> 302         rcu_read_unlock();
-
-Unreachable
-
-    303         put_task_struct(curr_task);
-    304 
-    305         if (info->common.type == BPF_TASK_ITER_TID) {
-    306                 info->task = NULL;
-    307                 return NULL;
-    308         }
-    309 
-    310         info->task = NULL;
-    311         info->fd = 0;
-    312         saved_tid = ++(info->tid);
-    313         goto again;
-    314 }
-
-regards,
-dan carpenter
+[...]
