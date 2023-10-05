@@ -1,47 +1,47 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2BB7436BE
-	for <bpf@vger.kernel.org>; Thu,  5 Oct 2023 23:09:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4476843A93
+	for <bpf@vger.kernel.org>; Thu,  5 Oct 2023 23:09:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AqNhgrFb"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qjtCvls5"
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B515C139
-	for <bpf@vger.kernel.org>; Thu,  5 Oct 2023 16:09:26 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d81c02bf2beso1958798276.2
-        for <bpf@vger.kernel.org>; Thu, 05 Oct 2023 16:09:26 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C74413A
+	for <bpf@vger.kernel.org>; Thu,  5 Oct 2023 16:09:31 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d8943298013so1910842276.2
+        for <bpf@vger.kernel.org>; Thu, 05 Oct 2023 16:09:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696547366; x=1697152166; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1696547370; x=1697152170; darn=vger.kernel.org;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=uSqAvWdBbUtQxC7pnyJJtR4WVxr7hcg6OVnTaxh+F6M=;
-        b=AqNhgrFbRKtUQdWQjxRR5EHYfMMb4DG7jZ19gCcE2xsMbDVRxvMRvV3uQm8kEO0/n9
-         cvwinzb6BPcWY6ewNPjPyu2Sb6s5j+LsUrcuuv2i6JgKzd7GU0bayM6KhdV5l3nmfFY2
-         Ox9N1RhODCo7vjmHbsW1t+5XX3riysjwC55idTsfAdcp7A84jggSp/2VzdvdyLzUl4Lb
-         VUr5WIjeyZt91oKbAshQ3V85qHwFNlW4CMj6FVa1lzlSoqtkr+w+m1bB45g7OrQjD9t7
-         368B3Xurb29JH/Z/asL0n7/I6bwqChboHNOJB2wqUtt22LskCAnRDoJPVGiOLMGSsytI
-         h94A==
+        bh=HGxcidzGPRegna1u1K7BT077Nrlph2dhlmMJs3FQauY=;
+        b=qjtCvls5v8mag+wFClqLuBaKLzk6ijHeHJt4XcHzOxbnR1rQR1spiwejCbu0YVBuI/
+         cluu6B6kbyRaJ1sb5HPqGcTgislwsIrmQWi158NgzXwvwL7G13hlOacWou+SijnRv0Lo
+         Mw8ClDoyvOpV0QXDm7rs1UPsVGFLhLeuc3XkQv+MctNpbw8bmo8B+dsSdPqVLo6sKQb3
+         gIbydW4Zzvx9cGBKz9yPKhnhXDRW1YOvrOvPJzkQd3ctbyWpOWoDfLx4UoF4RvTkgU0y
+         9O4Gn02xioFzNdYrO0/maAxkgco11ttZ63P+F9/y/OpL6PXFG6fPbXb4iH9+7TQidOgx
+         AWjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696547366; x=1697152166;
+        d=1e100.net; s=20230601; t=1696547370; x=1697152170;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uSqAvWdBbUtQxC7pnyJJtR4WVxr7hcg6OVnTaxh+F6M=;
-        b=EsSWsTj5oxx1YGtACAp1g1/WVKiylppo3RhKZMo1XF9GaOZdtK6Y2N7D0t2Ma+hB8d
-         scJjgC/t6XcZ83PWCj38js/q45tiOHAlhHFkW5j0RchHukpBE48M549AN1flPR0vokKa
-         KYAP22/8yhqQysGfrJedfWs53NjIE0QKQskVSbv2+UFQNm9yIsMGar+Nl+K9qKbm+vUW
-         K94qlSxQ6LdQHhn63iNC4gqxSdQBEWTy2OoDBLUam+FlxQlk4InvU8elXu7WMBKUhk8N
-         t8YpxVJF/E/MRiLtve/ahBCwZH+zS8aqMsLAhfLYKstSYgCQD20AhmR7ffNhMlIVQ3lI
-         KMSg==
-X-Gm-Message-State: AOJu0YzALF0ZRp7YKW4G5ANHVVNxuHm92bJfOpJbaiQ6JcgkINnkRpEX
-	TTPl/rUXQ1ShsB6K83qTIh1hOIquOYPk
-X-Google-Smtp-Source: AGHT+IEYRgFM2NV2BQHADakfTQjBrB/7bt9C3vOnga95X2gYJqpyJ21VOHkHsl8QQL8bn7YhF9HuuYUts//N
+        bh=HGxcidzGPRegna1u1K7BT077Nrlph2dhlmMJs3FQauY=;
+        b=oVv0I4/JYTDCLpEsagSO7Ul65+m3Sxm9R07yoxFs0PeJit0Pp+dIQRj8EYMxNyGfmp
+         gMasS3QKjXae8JFNGSLWm6NOout5fEI3wmI3JrfY0oK2fZmKh4aMevQaCsF2OnuHrCK3
+         lqKc9+LxeCwEyHiIa7wl1xYU0iy3vQEWTTWC54the1XB/ChFTZ/GYulKFPpkvc47g3Ma
+         9NNzGtMPIFTNAcYiHYHNqVGr3oxV4cK5wiWtx4SjEJ8EMN3kNq4cNvUSlQAAUP98koIO
+         1H0yEvSdhQQP7AqbOGbuktKBjmDhJ9LHHfZh4KZYYMs4TNjaWtuSKdPDY6gqDNUoEa+v
+         S6/Q==
+X-Gm-Message-State: AOJu0Yzzi+g+pJIBzj/BGgRu8v9e6YBWZ7OcUik4vs7CxtZbct/g8kMY
+	8C+JcGQGoh8f/OKqWnQH90dOndqr4XPS
+X-Google-Smtp-Source: AGHT+IEgTi3PLG+3o2WWDEFrIlbIkR+q1EaEaSDVhwE+qexUhANhreJWyGErr61dmZWaJXVBJMGi41ML+jYa
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:7449:56a1:2b14:305b])
- (user=irogers job=sendgmr) by 2002:a05:6902:181a:b0:d89:3ed5:6042 with SMTP
- id cf26-20020a056902181a00b00d893ed56042mr106147ybb.11.1696547365955; Thu, 05
- Oct 2023 16:09:25 -0700 (PDT)
-Date: Thu,  5 Oct 2023 16:08:45 -0700
+ (user=irogers job=sendgmr) by 2002:a25:74c2:0:b0:d7b:9902:fb3d with SMTP id
+ p185-20020a2574c2000000b00d7b9902fb3dmr105008ybc.0.1696547370559; Thu, 05 Oct
+ 2023 16:09:30 -0700 (PDT)
+Date: Thu,  5 Oct 2023 16:08:47 -0700
 In-Reply-To: <20231005230851.3666908-1-irogers@google.com>
-Message-Id: <20231005230851.3666908-13-irogers@google.com>
+Message-Id: <20231005230851.3666908-15-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20231005230851.3666908-1-irogers@google.com>
 X-Mailer: git-send-email 2.42.0.609.gbb76f46606-goog
-Subject: [PATCH v2 12/18] perf hists browser: Avoid potential NULL dereference
+Subject: [PATCH v2 14/18] perf parse-events: Fix unlikely memory leak when
+ cloning terms
 From: Ian Rogers <irogers@google.com>
 To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
 	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -69,31 +70,33 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
 	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-	autolearn=unavailable autolearn_force=no version=3.4.6
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On other code paths browser->he_selection is NULL checked, add a
-missing case reported by clang-tidy.
+Add missing free on an error path as detected by clang-tidy.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/ui/browsers/hists.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/perf/util/parse-events.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/ui/browsers/hists.c b/tools/perf/ui/browsers/hists.c
-index f02ee605bbce..f4812b226818 100644
---- a/tools/perf/ui/browsers/hists.c
-+++ b/tools/perf/ui/browsers/hists.c
-@@ -3302,7 +3302,7 @@ static int evsel__hists_browse(struct evsel *evsel, int nr_events, const char *h
- 							&options[nr_options],
- 							&bi->to.ms,
- 							bi->to.al_addr);
--		} else {
-+		} else if (browser->he_selection) {
- 			nr_options += add_annotate_opt(browser,
- 						       &actions[nr_options],
- 						       &options[nr_options],
+diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
+index c56e07bd7dd6..23c027cf20ae 100644
+--- a/tools/perf/util/parse-events.c
++++ b/tools/perf/util/parse-events.c
+@@ -2549,8 +2549,10 @@ int parse_events_term__clone(struct parse_events_term **new,
+ 		return new_term(new, &temp, /*str=*/NULL, term->val.num);
+ 
+ 	str = strdup(term->val.str);
+-	if (!str)
++	if (!str) {
++		zfree(&temp.config);
+ 		return -ENOMEM;
++	}
+ 	return new_term(new, &temp, str, /*num=*/0);
+ }
+ 
 -- 
 2.42.0.609.gbb76f46606-goog
 
