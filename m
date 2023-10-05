@@ -1,47 +1,47 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A945C43695
-	for <bpf@vger.kernel.org>; Thu,  5 Oct 2023 23:09:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 338F8436B6
+	for <bpf@vger.kernel.org>; Thu,  5 Oct 2023 23:09:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uZVuZXdw"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dhDVCBX4"
 Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B8B132
-	for <bpf@vger.kernel.org>; Thu,  5 Oct 2023 16:09:04 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-59f6902dc8bso22774597b3.0
-        for <bpf@vger.kernel.org>; Thu, 05 Oct 2023 16:09:04 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C3C11C
+	for <bpf@vger.kernel.org>; Thu,  5 Oct 2023 16:09:09 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-59ee66806d7so21706867b3.0
+        for <bpf@vger.kernel.org>; Thu, 05 Oct 2023 16:09:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696547344; x=1697152144; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1696547349; x=1697152149; darn=vger.kernel.org;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=uVKoLuc5a7LEHlQh90vyaH3VbvcXZG1OCxjaJSmoY8k=;
-        b=uZVuZXdwF+UaQzN+j5ci/zOPDWqvXBGviotmMlC1ioE/3wiNDwWySHYd75Gm8qezlH
-         0uQX1dMtw1/zgS3ZA3Y73XsCeReO6sN8AWcnZXRh+scinxEslZZydX/du0KVM/evNW4O
-         5pNMkqYqfEGXrRaV2A0W6Zp+V8dKCPcF2hn6ZkSRC9k7tkgTu5YlHwb1e1N6GuzqH75f
-         GP6nx3NHo7LwHIK49uZd1YGkFk9W7CYnD3IXwj2n3mJBZLriaMbnUjtd90i/ClVZtljJ
-         +/OXre5yLaaBZAts79ki+gWCPQVWR33Dzvzm5yqmZZOK6/taF7TA34YLkqJEsAP0IgMj
-         88DQ==
+        bh=i2XqQMJ0GkpZoKYBOeb+AHUkFWOwFAfTNDekNOfqFv8=;
+        b=dhDVCBX40y5B0cotpbQmfRlDiY983Jxw+B+ksE2VxDNGQrDNqQHwCSamlheGdTV0i4
+         t0s+PAmnL/e+aU4zdEJLoS0St61Qc8CCAojtb7DPsl5Uk+AqtWsO26z8S1nPinspNIF2
+         p4LqZDQcb5Cw7aEQnMnKgI/PODEyW1zxCZjVP355JrJF2W/aFOnTczx1uuK8jjtDTb/J
+         u6BQF/8SA+GNQ0e8o+dTAk43PYDL2iBV84Llj1Dxd8vwxqWMmjWjA8jJrRbv3A6QK+3z
+         b5uKJFJ4x9cHMYOyH//EsRPdrJ3WiYcBV/NeNOAC+9q5nAs1GNc8feFXgCMUOL3ICuqz
+         cGgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696547344; x=1697152144;
+        d=1e100.net; s=20230601; t=1696547349; x=1697152149;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uVKoLuc5a7LEHlQh90vyaH3VbvcXZG1OCxjaJSmoY8k=;
-        b=p6N8yIJvDIZKrDxIOg1DL8qqfy4d0FOid4QM/BwsqjEV4XFxbunaH3sZyN38+OWL8H
-         ql9T/IbzQW+5DAXMr5wmz4kjKt9070XFBKYBzhsmdyp9+Vr7eAro2iaclZ9OkG91TR/e
-         O+UzAa93K52hZkGUgZuK/EPWyAzw9dSPj9nqjqATwMULHXX0fN3dDaBhIh+trr/K5IXq
-         YDujYOoBOPnrNVE0I2e5Q4CJpUk6824Nijrus6H2XY4mMp7GdJB+CS4aEiHn+Qam7Bk3
-         /OOtcGxxl463N3u08hlXd75uy5HuKxRvOXSDtQ2vUl7GLD2SvnNIZYNqgB2uqVT8V3it
-         D0mw==
-X-Gm-Message-State: AOJu0YxMnq1VYBooVOJ5eiPJE0hhcE7UXrXGWF1xaxikucqetCrErLQz
-	SQh1IDLByL2gAe8ikYzBr8gNidLpTSyT
-X-Google-Smtp-Source: AGHT+IHo6U+kJASF6nCohpjFiAn0CLPcx5Qb6otqZC+Kpf+MOzGXa7HHf6AdITUGY7vbn2be8G5F1c0EEIDU
+        bh=i2XqQMJ0GkpZoKYBOeb+AHUkFWOwFAfTNDekNOfqFv8=;
+        b=QemKoDWWZ1RuBIuZjm3VXY7A/tAtaFb/nSVRnA2Bg251vhRa4Bx7VuC9t3rINlHZ+O
+         kAiM3c5dxYb4wurotPS5w1wm+uBLxLpdoSQOAnSu8wUz+D3uCUMTN7gRqLJ5vxkaWJGb
+         FcsexqCqhGhCAGsQmzTS7O/oDg+bMS4m1WszWiV0THFDylBFfHcraOr6n+3z1MJp7cq7
+         s9JdxYyKgaDGL7aYAd38u7f1rz/g6zr2ZtpVkHXtCm2shmfSdPsyfcIe82eEMwomjqjQ
+         eH2h/Xyz1A8yQgF46818V5o9s7hgsjpGm8QSKyn/IIPTIxSdP9D8H+vKQ6xdptln3mwo
+         SmKA==
+X-Gm-Message-State: AOJu0Yw6EKDc+vdQEOob7z0ULV8ys2OeTQTQca5exZ6jy19O2zNfgT1u
+	t4qaNJ4pJkNY6Np0d292W7MvwGSYLmZE
+X-Google-Smtp-Source: AGHT+IGfGlEcR5cafu/s4l0RQy8FE4MK3zRFkQ6Zp8BoRNaDEtxn5kvn9B3Xn4doaEJk2RCpa1Y7G/TCwC7Y
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:7449:56a1:2b14:305b])
- (user=irogers job=sendgmr) by 2002:a25:d4d1:0:b0:d81:7d48:a459 with SMTP id
- m200-20020a25d4d1000000b00d817d48a459mr114013ybf.8.1696547344121; Thu, 05 Oct
- 2023 16:09:04 -0700 (PDT)
-Date: Thu,  5 Oct 2023 16:08:36 -0700
+ (user=irogers job=sendgmr) by 2002:a81:a9c4:0:b0:59b:eace:d467 with SMTP id
+ g187-20020a81a9c4000000b0059beaced467mr116956ywh.3.1696547348754; Thu, 05 Oct
+ 2023 16:09:08 -0700 (PDT)
+Date: Thu,  5 Oct 2023 16:08:38 -0700
 In-Reply-To: <20231005230851.3666908-1-irogers@google.com>
-Message-Id: <20231005230851.3666908-4-irogers@google.com>
+Message-Id: <20231005230851.3666908-6-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20231005230851.3666908-1-irogers@google.com>
 X-Mailer: git-send-email 2.42.0.609.gbb76f46606-goog
-Subject: [PATCH v2 03/18] run-clang-tools: Add pass through checks and and
- header-filter arguments
+Subject: [PATCH v2 05/18] perf bench uprobe: Fix potential use of memory after free
 From: Ian Rogers <irogers@google.com>
 To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
 	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -69,74 +68,34 @@ To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add a -checks argument to allow the checks passed to the clang-tool to
-be set on the command line.
-
-Add a pass through -header-filter option.
-
-Don't run analysis on non-C or CPP files.
+Found by clang-tidy:
+```
+bench/uprobe.c:98:3: warning: Use of memory after it is freed [clang-analyzer-unix.Malloc]
+                bench_uprobe_bpf__destroy(skel);
+```
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- scripts/clang-tools/run-clang-tools.py | 32 ++++++++++++++++++++------
- 1 file changed, 25 insertions(+), 7 deletions(-)
+ tools/perf/bench/uprobe.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools/run-clang-tools.py
-index 3266708a8658..f31ffd09e1ea 100755
---- a/scripts/clang-tools/run-clang-tools.py
-+++ b/scripts/clang-tools/run-clang-tools.py
-@@ -33,6 +33,11 @@ def parse_arguments():
-     path_help = "Path to the compilation database to parse"
-     parser.add_argument("path", type=str, help=path_help)
+diff --git a/tools/perf/bench/uprobe.c b/tools/perf/bench/uprobe.c
+index 914c0817fe8a..5c71fdc419dd 100644
+--- a/tools/perf/bench/uprobe.c
++++ b/tools/perf/bench/uprobe.c
+@@ -89,6 +89,7 @@ static int bench_uprobe__setup_bpf_skel(enum bench_uprobe bench)
+ 	return err;
+ cleanup:
+ 	bench_uprobe_bpf__destroy(skel);
++	skel = NULL;
+ 	return err;
+ }
  
-+    checks_help = "Checks to pass to the analysis"
-+    parser.add_argument("-checks", type=str, default=None, help=checks_help)
-+    header_filter_help = "Pass the -header-filter value to the tool"
-+    parser.add_argument("-header-filter", type=str, default=None, help=header_filter_help)
-+
-     return parser.parse_args()
- 
- 
-@@ -45,14 +50,27 @@ def init(l, a):
- 
- def run_analysis(entry):
-     # Disable all checks, then re-enable the ones we want
--    checks = []
--    checks.append("-checks=-*")
--    if args.type == "clang-tidy":
--        checks.append("linuxkernel-*")
-+    global args
-+    checks = None
-+    if args.checks:
-+        checks = args.checks.split(',')
-     else:
--        checks.append("clang-analyzer-*")
--        checks.append("-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling")
--    p = subprocess.run(["clang-tidy", "-p", args.path, ",".join(checks), entry["file"]],
-+        checks = ["-*"]
-+        if args.type == "clang-tidy":
-+            checks.append("linuxkernel-*")
-+        else:
-+            checks.append("clang-analyzer-*")
-+            checks.append("-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling")
-+    file = entry["file"]
-+    if not file.endswith(".c") and not file.endswith(".cpp"):
-+        with lock:
-+            print(f"Skipping non-C file: '{file}'", file=sys.stderr)
-+        return
-+    pargs = ["clang-tidy", "-p", args.path, "-checks=" + ",".join(checks)]
-+    if args.header_filter:
-+        pargs.append("-header-filter=" + args.header_filter)
-+    pargs.append(file)
-+    p = subprocess.run(pargs,
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.STDOUT,
-                        cwd=entry["directory"])
 -- 
 2.42.0.609.gbb76f46606-goog
 
