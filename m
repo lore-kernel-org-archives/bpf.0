@@ -1,26 +1,38 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 690AD42C13;
-	Fri,  6 Oct 2023 21:50:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAD85450D0
+	for <bpf@vger.kernel.org>; Fri,  6 Oct 2023 22:07:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JQTyIrAS"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B6ED1C433C8;
-	Fri,  6 Oct 2023 21:50:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696629023;
-	bh=vnr8MJ3nuUJWlcG4ceW7CQzIfkNNw5ZuI20tJRihHdw=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=JQTyIrASFRYxq407PUwx88KTmlsAvpayXUorRGz7K25UhnD5fO1pmNlBPvdRg1hRw
-	 87zlUdgSA0/6AXhRO7c/T3NFZ5cbGllQXcSdxyv2B3TpDJwQJtmkMb1RqQxrWnkf3W
-	 earHVFX3UEl/n5gIPAmH9pPirufTDLN3PLVyH3J3ue73oFjyHZsngeVfjAuB2oyZYY
-	 TkklQ/LFWtRWLDM+u4qe3hVL2zFNB9+NJaQX/TeUR7u95w//HPy+E2PrgonTDrE1XE
-	 +XT6ChB25dS4r6ok9fsxy6Utz3m/ElwejQErSZxx9gTczTmC5PhQAZjFJwieLkPhRM
-	 hPF20BM6Dmylw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9A5FFE632D2;
-	Fri,  6 Oct 2023 21:50:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="JY5fdzae"
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29466BE
+	for <bpf@vger.kernel.org>; Fri,  6 Oct 2023 15:07:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=Te9a6DGjsrbCHeFiuWsmLzlM5lIt/JC9VNLPcajb48Q=; b=JY5fdzaesqQ1XqUOqZFVqzy22U
+	XrUfwrvQ9vCok+1QDXQ3K8tI2FklvRpw6TL7RDHID4lBKHQ8HPMTHeZ0V86ofRZc5pyOzqRlUaDsN
+	Fl6/jgth0XSPqgnRz3hYsDaygmSDV2o7JnjQFvKHOvWz83cogMo80gSSuE+MYJHdA9L0/cs3ln91P
+	p4jvlVw2S9lIcrVoqvlHiUMaWXcbIjLuH/9Ku/wu4ycAAVUIRp6WlqVOHSU8zHhm20ApnqVqsQ0rU
+	7CnREPKdOrfZ15Bf0LztnJQ8FwBlDrCYF3TWg4rnp9GeqbGTziS2nYQbcqrloXoIdLoN1YDOchoWQ
+	Va6/DKiA==;
+Received: from 17.249.197.178.dynamic.dsl-lte-bonding.lssmb00p-msn.res.cust.swisscom.ch ([178.197.249.17] helo=localhost)
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1qosyO-0001jq-U5; Sat, 07 Oct 2023 00:07:05 +0200
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: bpf@vger.kernel.org
+Cc: lmb@isovalent.com,
+	martin.lau@kernel.org,
+	Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH bpf 1/7] bpf: Fix BPF_PROG_QUERY last field check
+Date: Sat,  7 Oct 2023 00:06:49 +0200
+Message-Id: <20231006220655.1653-1-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.21.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -28,44 +40,51 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] bpf: Annotate struct bpf_stack_map with __counted_by
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <169662902362.27188.6560654759744459728.git-patchwork-notify@kernel.org>
-Date: Fri, 06 Oct 2023 21:50:23 +0000
-References: <20231006201657.work.531-kees@kernel.org>
-In-Reply-To: <20231006201657.work.531-kees@kernel.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: song@kernel.org, jolsa@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
- haoluo@google.com, gustavoars@kernel.org, bpf@vger.kernel.org,
- linux-hardening@vger.kernel.org, nathan@kernel.org, ndesaulniers@google.com,
- trix@redhat.com, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27053/Fri Oct  6 09:44:40 2023)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-Hello:
+While working on the ebpf-go [0] library integration for bpf_mprog and tcx,
+Lorenz noticed that two subsequent BPF_PROG_QUERY requests currently fail. A
+typical workflow is to first gather the bpf_mprog count without passing program/
+link arrays, followed by the second request which contains the actual array
+pointers.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+The initial call populates count and revision fields. The second call gets
+rejected due to a BPF_PROG_QUERY_LAST_FIELD bug which should point to
+query.revision instead of query.link_attach_flags since the former is really
+the last member.
 
-On Fri,  6 Oct 2023 13:17:00 -0700 you wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
-> array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct bpf_stack_map.
-> 
-> [...]
+It was not noticed in libbpf as bpf_prog_query_opts() always calls bpf(2) with
+an on-stack bpf_attr that is memset() each time (and therefore query.revision
+was reset to zero).
 
-Here is the summary with links:
-  - bpf: Annotate struct bpf_stack_map with __counted_by
-    https://git.kernel.org/bpf/bpf-next/c/84cb9cbd911a
+  [0] https://ebpf-go.dev
 
-You are awesome, thank you!
+Fixes: e420bed02507 ("bpf: Add fd-based tcx multi-prog infra with link support")
+Reported-by: Lorenz Bauer <lmb@isovalent.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+---
+ kernel/bpf/syscall.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index eb01c31ed591..453a43695a23 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -3913,7 +3913,7 @@ static int bpf_prog_detach(const union bpf_attr *attr)
+ 	return ret;
+ }
+ 
+-#define BPF_PROG_QUERY_LAST_FIELD query.link_attach_flags
++#define BPF_PROG_QUERY_LAST_FIELD query.revision
+ 
+ static int bpf_prog_query(const union bpf_attr *attr,
+ 			  union bpf_attr __user *uattr)
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 
