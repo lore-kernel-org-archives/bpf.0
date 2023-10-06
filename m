@@ -1,24 +1,24 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C586E2AB3B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD35936B1D
 	for <bpf@vger.kernel.org>; Fri,  6 Oct 2023 18:20:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D8Du0YO7"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4D26CC433CB;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kKA6m5+e"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4897FC433C7;
 	Fri,  6 Oct 2023 18:20:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1696616428;
-	bh=mX9XAvg1k8szLzkED8DMJsitLEGM236WzCfmwriOQ/8=;
+	bh=ogX3BedWWyC2cF1wW8uFkDVW6LrxMAMflmTrglEvTKo=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=D8Du0YO7lHhuV660RCeJZOt/cMfSd6Hqdzf/v0otyH4d3RKG6Vd8eqVvyg1bogM0Y
-	 1kBiuTdorc1J9c85E7uPVGQTTXLq1c4HBZBvpG+F3joAMJazgWSAcohEp52y/8MheE
-	 fizll02lGczU95eVz1I2MwmDLxXWiUvdQFxoHCxoDZo6rQ+7IbUaX84iosLf6+/LvI
-	 vqJUNOxL1JnOid1zZX4OPaTp98ci23YunhJoo/MG9nFOgp6F++9Gih5v4VJUuroY1p
-	 jPm+C9V6GvlA6v6eikWT1eny5lV4uzaezfF11rkJVXVk7WmiQUe84XjQdd9cwSq9HC
-	 rnFY2foZDZ1Jg==
+	b=kKA6m5+e8Lmz7nCZRHMwRXQIArFe+B/7KFqyGaNdfWWGJAeBQUFDeW0RaoADeA3Mt
+	 u6oPCJVyE7uodjDDWwNygH227STYVmrKyonSOat87bTiSY/NhaSjMeSY81u7dJjvnx
+	 205m80y1FibxTYw9nBrklE8eq97x2KkRJjSR8ISGJKEUaiR8HXob8TDv1kgbATBSQQ
+	 SIqITImkAuIZmQUi6dOF3K1+sKV4G0zthoNB3/ee5L6u9ONFx0JVP0neBV+QrbpvGc
+	 hQV0EGfSIb8RxyUWjDzgcjU7mvBmnBD6hGVQZgLR6u75vZbIM/zvSb1IUOXgrSW4yt
+	 yJRxwT9IyaZbA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2FF1DE22AE3;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 23962E632D2;
 	Fri,  6 Oct 2023 18:20:28 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -28,39 +28,53 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 bpf-next 1/3] selftests/bpf: fix compiler warnings reported
- in -O2 mode
+Subject: Re: [PATCH bpf-next 1/3] selftests/bpf: fix compiler warnings reported in
+ -O2 mode
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <169661642819.9586.14987488513242535218.git-patchwork-notify@kernel.org>
+ <169661642814.9586.15213671983813224846.git-patchwork-notify@kernel.org>
 Date: Fri, 06 Oct 2023 18:20:28 +0000
-References: <20231006175744.3136675-1-andrii@kernel.org>
-In-Reply-To: <20231006175744.3136675-1-andrii@kernel.org>
+References: <20231004001750.2939898-1-andrii@kernel.org>
+In-Reply-To: <20231004001750.2939898-1-andrii@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>
 Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- martin.lau@kernel.org, kernel-team@meta.com, jolsa@kernel.org
+ martin.lau@kernel.org, kernel-team@meta.com
 
 Hello:
 
 This series was applied to bpf/bpf-next.git (master)
 by Daniel Borkmann <daniel@iogearbox.net>:
 
-On Fri, 6 Oct 2023 10:57:42 -0700 you wrote:
+On Tue, 3 Oct 2023 17:17:48 -0700 you wrote:
 > Fix a bunch of potentially unitialized variable usage warnings that are
 > reported by GCC in -O2 mode. Also silence overzealous stringop-truncation
 > class of warnings.
 > 
-> Acked-by: Jiri Olsa <jolsa@kernel.org>
 > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> 
-> [...]
+> ---
+>  tools/testing/selftests/bpf/Makefile                      | 4 +++-
+>  .../selftests/bpf/map_tests/map_in_map_batch_ops.c        | 4 ++--
+>  tools/testing/selftests/bpf/prog_tests/bloom_filter_map.c | 4 ++--
+>  tools/testing/selftests/bpf/prog_tests/connect_ping.c     | 4 ++--
+>  tools/testing/selftests/bpf/prog_tests/linked_list.c      | 2 +-
+>  tools/testing/selftests/bpf/prog_tests/lwt_helpers.h      | 3 ++-
+>  tools/testing/selftests/bpf/prog_tests/queue_stack_map.c  | 2 +-
+>  tools/testing/selftests/bpf/prog_tests/sockmap_basic.c    | 8 ++++----
+>  tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h  | 2 +-
+>  tools/testing/selftests/bpf/prog_tests/sockmap_listen.c   | 4 ++--
+>  tools/testing/selftests/bpf/prog_tests/xdp_metadata.c     | 2 +-
+>  tools/testing/selftests/bpf/test_loader.c                 | 4 ++--
+>  tools/testing/selftests/bpf/xdp_features.c                | 4 ++--
+>  tools/testing/selftests/bpf/xdp_hw_metadata.c             | 2 +-
+>  tools/testing/selftests/bpf/xskxceiver.c                  | 2 +-
+>  15 files changed, 27 insertions(+), 24 deletions(-)
 
 Here is the summary with links:
-  - [v2,bpf-next,1/3] selftests/bpf: fix compiler warnings reported in -O2 mode
-    https://git.kernel.org/bpf/bpf-next/c/925a01577ea5
-  - [v2,bpf-next,2/3] selftests/bpf: support building selftests in optimized -O2 mode
+  - [bpf-next,1/3] selftests/bpf: fix compiler warnings reported in -O2 mode
+    (no matching commit)
+  - [bpf-next,2/3] selftests/bpf: support building selftests in optimized -O2 mode
     https://git.kernel.org/bpf/bpf-next/c/46475cc0dded
-  - [v2,bpf-next,3/3] selftests/bpf: don't truncate #test/subtest field
+  - [bpf-next,3/3] selftests/bpf: don't truncate #test/subtest field
     https://git.kernel.org/bpf/bpf-next/c/0af3aace5b91
 
 You are awesome, thank you!
