@@ -1,37 +1,37 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C95B450E1
-	for <bpf@vger.kernel.org>; Fri,  6 Oct 2023 22:07:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA042450DE
+	for <bpf@vger.kernel.org>; Fri,  6 Oct 2023 22:07:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="BqpiozE2"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="FsVwmQdN"
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04419C6
-	for <bpf@vger.kernel.org>; Fri,  6 Oct 2023 15:07:09 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81E4C2
+	for <bpf@vger.kernel.org>; Fri,  6 Oct 2023 15:07:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=vmjt1zucbNReqKZHFcgq4P0pS9RiDVa24Zh8J5ZgTS4=; b=BqpiozE2ia25S5FUKKfGJDJtEt
-	dweeUQwPpc5v6/xaTRiKHflV3nLCuxr+pvKD5VTl12I179/G6H/CeZRCPRTNKJDxUF/p2lv8JRK2K
-	3A7jhsvJolwDvZzI30EMMBNI4E6Pm0uxZE6V3sBn66i8LYm9n2gPughAeEDhzYBLz/2JgoTC/hXTa
-	8TgENHCPQrf/LkoS4lITXgDFykLY6d3ToRnUjHjZWHrqC3Xu0w/KoMr+VvtzL8Z+mW9d8AqD0oYjI
-	wfUes4mOIReQgpeFOJUkKT4Fd6+2LTpu5qHiP2ForGqv51WQP/XB/vFSk9nUBGPaLJiXImtaBZIlm
-	p7BhvEAw==;
+	bh=VTU4pC+2vYp/g/9Dqh2XdHYO+xFsF/lWNjBMJswyRDU=; b=FsVwmQdN9qloh7xbXakF7jCvO9
+	WLwaBsAS4Z8BcOlzbUHfnzg4x99KTRWWyaS/XupJO1b1y+ST6BqWut3+hGlcL41aNi0ij3mN/QPee
+	b8urRwDUTUCohqJdY5HoKXK/53DkDH2v1Jc+cK+uAfGnvRR1xioI4u6Wv9wd598muq4bkPJ9vikAv
+	4xmYc4tQZp5oqXB6GRYlznmu8iKDlu8GhARECL8Xt5xcQLu4Bux3hyRmXbBU8W/pSHwvVlotVEl2h
+	v/0iaUdaobQZsbt7ykKwOiXgjSPEOsKBdv40kuWoGsGKaXjtZgTQCoth1S/xV7cvkhN3zTPXA9v92
+	uhpboTgQ==;
 Received: from 17.249.197.178.dynamic.dsl-lte-bonding.lssmb00p-msn.res.cust.swisscom.ch ([178.197.249.17] helo=localhost)
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1qosyR-0001kb-Pi; Sat, 07 Oct 2023 00:07:07 +0200
+	id 1qosyQ-0001kF-BB; Sat, 07 Oct 2023 00:07:06 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: bpf@vger.kernel.org
 Cc: lmb@isovalent.com,
 	martin.lau@kernel.org,
 	Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf 6/7] selftests/bpf: Test query on empty mprog and pass revision into attach
-Date: Sat,  7 Oct 2023 00:06:54 +0200
-Message-Id: <20231006220655.1653-6-daniel@iogearbox.net>
+Subject: [PATCH bpf 4/7] selftests/bpf: Test bpf_mprog query API via libbpf and raw syscall
+Date: Sat,  7 Oct 2023 00:06:52 +0200
+Message-Id: <20231006220655.1653-4-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20231006220655.1653-1-daniel@iogearbox.net>
 References: <20231006220655.1653-1-daniel@iogearbox.net>
@@ -50,16 +50,19 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add a new test case to query on an empty bpf_mprog and pass the revision
-directly into expected_revision for attachment to assert that this does
-succeed.
+Add a new test case which performs double query of the bpf_mprog through
+libbpf API, but also via raw bpf(2) syscall. This is testing to gather
+first the count and then in a subsequent probe the full information with
+the program array without clearing passed structs in between.
 
+  # ./vmtest.sh -- ./test_progs -t tc_opts
+  [...]
   ./test_progs -t tc_opts
-  [    1.406778] tsc: Refined TSC clocksource calibration: 3407.990 MHz
-  [    1.408863] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x311fcaf6eb0, max_idle_ns: 440795321766 ns
-  [    1.412419] clocksource: Switched to clocksource tsc
-  [    1.428671] bpf_testmod: loading out-of-tree module taints kernel.
-  [    1.430260] bpf_testmod: module verification failed: signature and/or required key missing - tainting kernel
+  [    1.398818] tsc: Refined TSC clocksource calibration: 3407.999 MHz
+  [    1.400263] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x311fd336761, max_idle_ns: 440795243819 ns
+  [    1.402734] clocksource: Switched to clocksource tsc
+  [    1.426639] bpf_testmod: loading out-of-tree module taints kernel.
+  [    1.428112] bpf_testmod: module verification failed: signature and/or required key missing - tainting kernel
   #252     tc_opts_after:OK
   #253     tc_opts_append:OK
   #254     tc_opts_basic:OK
@@ -76,34 +79,35 @@ succeed.
   #265     tc_opts_max:OK
   #266     tc_opts_mixed:OK
   #267     tc_opts_prepend:OK
-  #268     tc_opts_query:OK
-  #269     tc_opts_query_attach:OK     <--- (new test)
-  #270     tc_opts_replace:OK
-  #271     tc_opts_revision:OK
-  Summary: 20/0 PASSED, 0 SKIPPED, 0 FAILED
+  #268     tc_opts_query:OK            <--- (new test)
+  #269     tc_opts_replace:OK
+  #270     tc_opts_revision:OK
+  Summary: 19/0 PASSED, 0 SKIPPED, 0 FAILED
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- .../selftests/bpf/prog_tests/tc_opts.c        | 59 +++++++++++++++++++
- 1 file changed, 59 insertions(+)
+ .../selftests/bpf/prog_tests/tc_opts.c        | 167 ++++++++++++++++++
+ 1 file changed, 167 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/tc_opts.c b/tools/testing/selftests/bpf/prog_tests/tc_opts.c
-index 2174bea3427e..ba91b0226839 100644
+index 99af79ea21a9..aeec10bb3396 100644
 --- a/tools/testing/selftests/bpf/prog_tests/tc_opts.c
 +++ b/tools/testing/selftests/bpf/prog_tests/tc_opts.c
-@@ -2629,3 +2629,62 @@ void serial_test_tc_opts_query(void)
- 	test_tc_opts_query_target(BPF_TCX_INGRESS);
- 	test_tc_opts_query_target(BPF_TCX_EGRESS);
+@@ -2462,3 +2462,170 @@ void serial_test_tc_opts_max(void)
+ 	test_tc_opts_max_target(BPF_TCX_INGRESS, BPF_F_AFTER, true);
+ 	test_tc_opts_max_target(BPF_TCX_EGRESS, BPF_F_AFTER, false);
  }
 +
-+static void test_tc_opts_query_attach_target(int target)
++static void test_tc_opts_query_target(int target)
 +{
++	const size_t attr_size = offsetofend(union bpf_attr, query);
 +	LIBBPF_OPTS(bpf_prog_attach_opts, opta);
 +	LIBBPF_OPTS(bpf_prog_detach_opts, optd);
 +	LIBBPF_OPTS(bpf_prog_query_opts, optq);
++	__u32 fd1, fd2, fd3, fd4, id1, id2, id3, id4;
 +	struct test_tc_link *skel;
-+	__u32 prog_ids[2];
-+	__u32 fd1, id1;
++	union bpf_attr attr;
++	__u32 prog_ids[5];
 +	int err;
 +
 +	skel = test_tc_link__open_and_load();
@@ -111,48 +115,154 @@ index 2174bea3427e..ba91b0226839 100644
 +		goto cleanup;
 +
 +	fd1 = bpf_program__fd(skel->progs.tc1);
++	fd2 = bpf_program__fd(skel->progs.tc2);
++	fd3 = bpf_program__fd(skel->progs.tc3);
++	fd4 = bpf_program__fd(skel->progs.tc4);
++
 +	id1 = id_from_prog_fd(fd1);
++	id2 = id_from_prog_fd(fd2);
++	id3 = id_from_prog_fd(fd3);
++	id4 = id_from_prog_fd(fd4);
 +
-+	err = bpf_prog_query_opts(loopback, target, &optq);
-+	if (!ASSERT_OK(err, "prog_query"))
-+		goto cleanup;
-+
-+	ASSERT_EQ(optq.count, 0, "count");
-+	ASSERT_EQ(optq.revision, 1, "revision");
++	assert_mprog_count(target, 0);
 +
 +	LIBBPF_OPTS_RESET(opta,
-+		.expected_revision = optq.revision,
++		.expected_revision = 1,
 +	);
 +
 +	err = bpf_prog_attach_opts(fd1, loopback, target, &opta);
 +	if (!ASSERT_EQ(err, 0, "prog_attach"))
 +		goto cleanup;
 +
++	assert_mprog_count(target, 1);
++
++	LIBBPF_OPTS_RESET(opta,
++		.expected_revision = 2,
++	);
++
++	err = bpf_prog_attach_opts(fd2, loopback, target, &opta);
++	if (!ASSERT_EQ(err, 0, "prog_attach"))
++		goto cleanup1;
++
++	assert_mprog_count(target, 2);
++
++	LIBBPF_OPTS_RESET(opta,
++		.expected_revision = 3,
++	);
++
++	err = bpf_prog_attach_opts(fd3, loopback, target, &opta);
++	if (!ASSERT_EQ(err, 0, "prog_attach"))
++		goto cleanup2;
++
++	assert_mprog_count(target, 3);
++
++	LIBBPF_OPTS_RESET(opta,
++		.expected_revision = 4,
++	);
++
++	err = bpf_prog_attach_opts(fd4, loopback, target, &opta);
++	if (!ASSERT_EQ(err, 0, "prog_attach"))
++		goto cleanup3;
++
++	assert_mprog_count(target, 4);
++
++	/* Test 1: Double query via libbpf API */
++	err = bpf_prog_query_opts(loopback, target, &optq);
++	if (!ASSERT_OK(err, "prog_query"))
++		goto cleanup4;
++
++	ASSERT_EQ(optq.count, 4, "count");
++	ASSERT_EQ(optq.revision, 5, "revision");
++	ASSERT_EQ(optq.prog_ids, NULL, "prog_ids");
++	ASSERT_EQ(optq.link_ids, NULL, "link_ids");
++
 +	memset(prog_ids, 0, sizeof(prog_ids));
 +	optq.prog_ids = prog_ids;
-+	optq.count = ARRAY_SIZE(prog_ids);
 +
 +	err = bpf_prog_query_opts(loopback, target, &optq);
 +	if (!ASSERT_OK(err, "prog_query"))
-+		goto cleanup1;
++		goto cleanup4;
 +
-+	ASSERT_EQ(optq.count, 1, "count");
-+	ASSERT_EQ(optq.revision, 2, "revision");
++	ASSERT_EQ(optq.count, 4, "count");
++	ASSERT_EQ(optq.revision, 5, "revision");
 +	ASSERT_EQ(optq.prog_ids[0], id1, "prog_ids[0]");
-+	ASSERT_EQ(optq.prog_ids[1], 0, "prog_ids[1]");
++	ASSERT_EQ(optq.prog_ids[1], id2, "prog_ids[1]");
++	ASSERT_EQ(optq.prog_ids[2], id3, "prog_ids[2]");
++	ASSERT_EQ(optq.prog_ids[3], id4, "prog_ids[3]");
++	ASSERT_EQ(optq.prog_ids[4], 0, "prog_ids[4]");
++	ASSERT_EQ(optq.link_ids, NULL, "link_ids");
++
++	/* Test 2: Double query via bpf_attr & bpf(2) directly */
++	memset(&attr, 0, attr_size);
++	attr.query.target_ifindex = loopback;
++	attr.query.attach_type = target;
++
++	err = syscall(__NR_bpf, BPF_PROG_QUERY, &attr, attr_size);
++	if (!ASSERT_OK(err, "prog_query"))
++		goto cleanup4;
++
++	ASSERT_EQ(attr.query.count, 4, "count");
++	ASSERT_EQ(attr.query.revision, 5, "revision");
++	ASSERT_EQ(attr.query.query_flags, 0, "query_flags");
++	ASSERT_EQ(attr.query.attach_flags, 0, "attach_flags");
++	ASSERT_EQ(attr.query.target_ifindex, loopback, "target_ifindex");
++	ASSERT_EQ(attr.query.attach_type, target, "attach_type");
++	ASSERT_EQ(attr.query.prog_ids, 0, "prog_ids");
++	ASSERT_EQ(attr.query.prog_attach_flags, 0, "prog_attach_flags");
++	ASSERT_EQ(attr.query.link_ids, 0, "link_ids");
++	ASSERT_EQ(attr.query.link_attach_flags, 0, "link_attach_flags");
++
++	memset(prog_ids, 0, sizeof(prog_ids));
++	attr.query.prog_ids = ptr_to_u64(prog_ids);
++
++	err = syscall(__NR_bpf, BPF_PROG_QUERY, &attr, attr_size);
++	if (!ASSERT_OK(err, "prog_query"))
++		goto cleanup4;
++
++	ASSERT_EQ(attr.query.count, 4, "count");
++	ASSERT_EQ(attr.query.revision, 5, "revision");
++	ASSERT_EQ(attr.query.query_flags, 0, "query_flags");
++	ASSERT_EQ(attr.query.attach_flags, 0, "attach_flags");
++	ASSERT_EQ(attr.query.target_ifindex, loopback, "target_ifindex");
++	ASSERT_EQ(attr.query.attach_type, target, "attach_type");
++	ASSERT_EQ(attr.query.prog_ids, ptr_to_u64(prog_ids), "prog_ids");
++	ASSERT_EQ(prog_ids[0], id1, "prog_ids[0]");
++	ASSERT_EQ(prog_ids[1], id2, "prog_ids[1]");
++	ASSERT_EQ(prog_ids[2], id3, "prog_ids[2]");
++	ASSERT_EQ(prog_ids[3], id4, "prog_ids[3]");
++	ASSERT_EQ(prog_ids[4], 0, "prog_ids[4]");
++	ASSERT_EQ(attr.query.prog_attach_flags, 0, "prog_attach_flags");
++	ASSERT_EQ(attr.query.link_ids, 0, "link_ids");
++	ASSERT_EQ(attr.query.link_attach_flags, 0, "link_attach_flags");
++
++cleanup4:
++	err = bpf_prog_detach_opts(fd4, loopback, target, &optd);
++	ASSERT_OK(err, "prog_detach");
++	assert_mprog_count(target, 3);
++
++cleanup3:
++	err = bpf_prog_detach_opts(fd3, loopback, target, &optd);
++	ASSERT_OK(err, "prog_detach");
++	assert_mprog_count(target, 2);
++
++cleanup2:
++	err = bpf_prog_detach_opts(fd2, loopback, target, &optd);
++	ASSERT_OK(err, "prog_detach");
++	assert_mprog_count(target, 1);
 +
 +cleanup1:
 +	err = bpf_prog_detach_opts(fd1, loopback, target, &optd);
 +	ASSERT_OK(err, "prog_detach");
 +	assert_mprog_count(target, 0);
++
 +cleanup:
 +	test_tc_link__destroy(skel);
 +}
 +
-+void serial_test_tc_opts_query_attach(void)
++void serial_test_tc_opts_query(void)
 +{
-+	test_tc_opts_query_attach_target(BPF_TCX_INGRESS);
-+	test_tc_opts_query_attach_target(BPF_TCX_EGRESS);
++	test_tc_opts_query_target(BPF_TCX_INGRESS);
++	test_tc_opts_query_target(BPF_TCX_EGRESS);
 +}
 -- 
 2.34.1
