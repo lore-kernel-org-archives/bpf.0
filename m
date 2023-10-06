@@ -1,146 +1,114 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DCEA405CC;
-	Fri,  6 Oct 2023 23:02:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D011344487
+	for <bpf@vger.kernel.org>; Fri,  6 Oct 2023 23:07:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="ePX/sYbp"
-Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4351F9C;
-	Fri,  6 Oct 2023 16:02:12 -0700 (PDT)
-Received: from eig-obgw-6005a.ext.cloudfilter.net ([10.0.30.201])
-	by cmsmtp with ESMTP
-	id orRIqdGkHqBU3otpjqVuis; Fri, 06 Oct 2023 23:02:11 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id otpiqd15fsqNFotpiqdcYf; Fri, 06 Oct 2023 23:02:10 +0000
-X-Authority-Analysis: v=2.4 cv=aPzjFJxm c=1 sm=1 tr=0 ts=652091f2
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=Dx1Zrv+1i3YEdDUMOX3koA==:17
- a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=IkcTkHD0fZMA:10 a=bhdUkHdE2iEA:10 a=wYkD_t78qR0A:10 a=VwQbUJbxAAAA:8
- a=hWMQpYRtAAAA:8 a=pGLkceISAAAA:8 a=1XWaLZrsAAAA:8 a=NEAV23lmAAAA:8
- a=cm27Pg_UAAAA:8 a=GO2MODqShKhmYEK19rIA:9 a=QEXdDO2ut3YA:10
- a=AjGcO6oz07-iQ99wixmX:22 a=KCsI-UfzjElwHeZNREa_:22 a=xmb-EsYY8bH0VWELuYED:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=D1jWl+Tzg11Q4/gxmIXK9n2WMBr7aaQFJ8hHOf2UdsQ=; b=ePX/sYbpKTIU/yGeXz9L+5lgna
-	Hr5tQZm1PJJuwoB480gET8ruoogLBVGfA6PEAsSTnl81iBF57gow0WycKxTc7MEliqABUbmKpBzrB
-	PmVcQihYF9wJMLqh2wA/lEAlECvczrvlmxKNWsgYylZcR7RvBsoQsRREHuW1HL6d1KoKXzwnrSRgX
-	hsfGq194ZqjEHxoF1jT+6f1gQoGIoG8Y8dC9nmLX68LfJ/oq1bpJNr0gZJQOR0OF5640Gf+RDIYld
-	9nqlCB42qcwp4tXelWk75+PJ8DZ6u/s1ZpVSC6wtvKT68KhCYmi9kgRSD7dGGB6g2VziLJlTOOZUX
-	iWJ2TQWg==;
-Received: from 94-238-9-39.abo.bbox.fr ([94.238.9.39]:47408 helo=[192.168.1.98])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.96.1)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1qorm9-001Bge-1M;
-	Fri, 06 Oct 2023 15:50:21 -0500
-Message-ID: <6b203ddd-d8d9-46e3-acbd-89d658f80e3a@embeddedor.com>
-Date: Fri, 6 Oct 2023 22:50:15 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UGGt2VDb"
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F075393
+	for <bpf@vger.kernel.org>; Fri,  6 Oct 2023 16:07:06 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-405361bb9f7so24019115e9.2
+        for <bpf@vger.kernel.org>; Fri, 06 Oct 2023 16:07:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696633625; x=1697238425; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6IvT8HUUMWyErGis/DYt2jgKfgnESMJvheoFrfgEBGA=;
+        b=UGGt2VDb5SDjQap7B88zeI4NXZkXY3iwxyIquauIQuM9x+e16VnRnEl+deohlNLRpP
+         SkfXnXAjkUxhnNW3jqb83tWXvEhHRnLD0xbw8XEuPgyHSA8l2TZQ3bYoVgpVW8FSPPhM
+         /3gSJe7B8elFsb2r4cWoFfELIlw34yDBg1b4kFiiprNE8HlnCCt3B4WBPwDiusQJiujO
+         AQ8jTrKNj806Ii0qQEScea6UubUNbH4DpElA8L9X4ShxcTezHHrECeCy4b2EprZ6vZPv
+         9DX42Nl1jlJIVyi+M5kSrPnUvzZBDuhebFGgEJwe3WP2iVlPXyvZoV2l6GOhRHvFBt3E
+         7f9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696633625; x=1697238425;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6IvT8HUUMWyErGis/DYt2jgKfgnESMJvheoFrfgEBGA=;
+        b=eEOrbimruX4rDaxWrnIewit66D3fOx8tQNzO+ViLX5fSu3R4nSheoCXwqQnh5SQh2c
+         mcrReZs+jvKCEHUQodLEAuFe4bUlx+PQMxp3mHPWCWjmx/F/C6Dm/3IgLUU+6CjuxaBD
+         uogLTUKc/uY3C/GS8h6OKx2gg5JOBr4zYkYRd08RycJ/VkW3rRCOx/+b8WjGx2QDgo1G
+         YFFBttHkReT9d+zNO6tHm8ZMdQ+TGPt6pWG3TTZMyRTE0FtL2jsmL+vW+hJDzX0InQLp
+         6rVq4BFG7YQk3kmAwL9vWjwVj4AsrBvLoBqpr6tkVNI7PEpNXlcsAcoE1XNsuxI0SUE4
+         dcmQ==
+X-Gm-Message-State: AOJu0YwpPqIufTcBdZQ2GxyxoLVb5XefLMyIyv1kPYV8SXaHcX2vJBvv
+	sGClD2Pup6cEbIOkpoQ+WziJmUUIp2bfQnv1tL71ohMc
+X-Google-Smtp-Source: AGHT+IFxxFDXENFsO3nDRIcNThd6pM9Q6AC2KQGdHxMCEjqyZIWvK4DABdZqTi7BsZ7iIa76lIT4zfV1wLyId76k+qc=
+X-Received: by 2002:a7b:cd0a:0:b0:405:3dbc:8821 with SMTP id
+ f10-20020a7bcd0a000000b004053dbc8821mr8395683wmj.22.1696633625036; Fri, 06
+ Oct 2023 16:07:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] bpf: Annotate struct bpf_stack_map with __counted_by
-Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>, Song Liu <song@kernel.org>
-Cc: Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>, bpf@vger.kernel.org,
- linux-hardening@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20231006201657.work.531-kees@kernel.org>
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20231006201657.work.531-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 94.238.9.39
-X-Source-L: No
-X-Exim-ID: 1qorm9-001Bge-1M
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 94-238-9-39.abo.bbox.fr ([192.168.1.98]) [94.238.9.39]:47408
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 0
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfPbIlqTGL6AuBhAaU/RqerWqzU9CWVTp3Q4V017J421Xs7UiLFH7qNBwND26g4H0OrN2bExfYRtVpC/dWpNok8zBA2QN2U5+0oY2NPq4jcqmno0tTkVW
- I5hFBqdX3ODmtm52YikTT0qn1nCU6kLELF+gV/tifgMMIHvLglEfDLX22gIlyAlrMlpx84GFgOGD1ilh+G3d0G0aMRRHGjhyFGVmHAt3HwPI++3l7qSFsLZZ
- DGkjYkt7XLtjXoL4tS/9uv98izIAU6b7wHLqmUW2+ZbClN9TW1x8e4kt62HjQphE
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <PH7PR21MB387850B8DB6A2A5FB87DAC06A3C0A@PH7PR21MB3878.namprd21.prod.outlook.com>
+ <PH7PR21MB3878027C6E6FB01651023912A3C0A@PH7PR21MB3878.namprd21.prod.outlook.com>
+ <CAADnVQL69iqzxsNRDLKW22B=3sJpO0Yy2yHzioWZmhtQvUwtTQ@mail.gmail.com> <PH7PR21MB3878A25F817337EF14FE039FA3CAA@PH7PR21MB3878.namprd21.prod.outlook.com>
+In-Reply-To: <PH7PR21MB3878A25F817337EF14FE039FA3CAA@PH7PR21MB3878.namprd21.prod.outlook.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 6 Oct 2023 16:06:53 -0700
+Message-ID: <CAADnVQ+BOdrU4x3qKHJVbpZCJwTWe6HXWhuMqOk-x5UK22yPDQ@mail.gmail.com>
+Subject: Re: [Bpf] ISA RFC compliance question
+To: Dave Thaler <dthaler@microsoft.com>
+Cc: "bpf@ietf.org" <bpf@ietf.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+On Thu, Oct 5, 2023 at 1:14=E2=80=AFPM Dave Thaler <dthaler@microsoft.com> =
+wrote:
+>
+> > Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> > On Fri, Sep 29, 2023 at 1:17=E2=80=AFPM Dave Thaler
+> > <dthaler=3D40microsoft.com@dmarc.ietf.org> wrote:
+> > > Now that we have some new "v4" instructions, it seems a good time to
+> > > ask about what it means to support (or comply with) the ISA RFC once
+> > > published.  Does it mean that a verifier/disassembler/JIT compiler/et=
+c. MUST
+> > support *all* the
+> > > non-deprecated instructions in the document?   That is any runtime or=
+ tool that
+> > > doesn't support the new instructions is considered non-compliant with=
+ the BPF
+> > ISA?
+> [...]
+> > > Or should we create some things that are SHOULDs, or finer grained
+> > > units of compliance so as to not declare existing deployments non-com=
+pliant?
+> >
+> > I suspect 'non-compliance' label will cause an unnecessary backlash, so=
+ I would
+> > go with SHOULD wording.
+>
+> Yeah, but if each instruction is a separate SHOULD, then a runtime could =
+(say)
+> support one atomic instruction and not others.  Having that level of gran=
+ularity
+> would really complicate interoperability and cross-platform tooling in my=
+ opinion.
+> So it might be better to list groups of instructions and have the SHOULD =
+be at the
+> granularity of a group?
 
-
-On 10/6/23 22:17, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time via CONFIG_UBSAN_BOUNDS (for
-> array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct bpf_stack_map.
-> 
-> Cc: Song Liu <song@kernel.org>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Andrii Nakryiko <andrii@kernel.org>
-> Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> Cc: Yonghong Song <yonghong.song@linux.dev>
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: KP Singh <kpsingh@kernel.org>
-> Cc: Stanislav Fomichev <sdf@google.com>
-> Cc: Hao Luo <haoluo@google.com>
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: bpf@vger.kernel.org
-> Cc: linux-hardening@vger.kernel.org
-> Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci [1]
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-
-Thanks!
--- 
-Gustavo
-
-> ---
->   kernel/bpf/stackmap.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> index 458bb80b14d5..d6b277482085 100644
-> --- a/kernel/bpf/stackmap.c
-> +++ b/kernel/bpf/stackmap.c
-> @@ -28,7 +28,7 @@ struct bpf_stack_map {
->   	void *elems;
->   	struct pcpu_freelist freelist;
->   	u32 n_buckets;
-> -	struct stack_map_bucket *buckets[];
-> +	struct stack_map_bucket *buckets[] __counted_by(n_buckets);
->   };
->   
->   static inline bool stack_map_use_build_id(struct bpf_map *map)
+I guess we can group them based on LLVM evolution of the instruction set:
+-mcpu=3Dv1,v2,v3,v4
+but it would have mainly historical benefits and not practical.
+Grouping atomic vs not is not realistic either, since atomic_xadd
+was there since the very beginning.
+I suspect any kind of grouping scheme will end up in bike shedding.
+My preference would be to agree on either SHOULD or MUST for
+all insns currently described in ISA doc.
+We can go with MUST to force compliance.
+Some archs, OSes, JITs won't be compliant in the short term,
+but MUST wording will be a good motivation to do the work now instead of la=
+ter.
