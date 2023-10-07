@@ -1,47 +1,47 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B55AD23749
-	for <bpf@vger.kernel.org>; Sat,  7 Oct 2023 14:00:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 282BCF9E7
+	for <bpf@vger.kernel.org>; Sat,  7 Oct 2023 14:03:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mxiPt5qF"
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925DCB6
-	for <bpf@vger.kernel.org>; Sat,  7 Oct 2023 07:00:06 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-6969b391791so2386726b3a.3
-        for <bpf@vger.kernel.org>; Sat, 07 Oct 2023 07:00:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bjcoZkKX"
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82511BF;
+	Sat,  7 Oct 2023 07:03:15 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1c87e55a6baso22595955ad.3;
+        Sat, 07 Oct 2023 07:03:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696687201; x=1697292001; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1696687395; x=1697292195; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dpzkmLeAt7BQEAYyhM465wQCi7VPMI6aZUboDp9HsGU=;
-        b=mxiPt5qFxEN02yQRrWAKUCOzKl5vW1nFMLpW1iBcm8UWtMKP94ihRdDZFngeGpTUCv
-         v+bRI1Wjc7pFflVniDHVGatGMOs/erRRF3VrWpCvGGZumKycTeO0gpH2Pgn2yhKDRqQG
-         SiDlA9UmsgC4EG/dwbsLDol4qBB5JjIfK7hIffsJ9Rx8jDyuQGPAP8sVBZZDvaEf1iIJ
-         Y1kGJ2DW02edpm4XCDlAULlavyFLq1uHrdCuVzUVsBvEEPMu/AdqeFfkC1AH80bLgJNh
-         JpxJ6WE3uS0dPl0+sHzD3u55bqdEBjSKpzzkmFjxTnu52IygH1NMe4lM10Au7BSG5o5j
-         b7eg==
+        bh=Y5wlDoYxzVIeScokp/8KshwCTixlVDCtPhsT0zoCop8=;
+        b=bjcoZkKX7vUYWDlPYvBG9ryoRkxhEUq0mnet5CQ4x2Sbv02HLAoXC0MtQItcTvWbBY
+         j+FASX7FlH5hCNRCfkI5J98IqZ2aTdibDtsVMzz/2b5z5C6Dr0VuDS/BoAZDmZtUh290
+         n0ymgpNZyNFGqzZ7Y7LgulbvShT60lNmO+mzSZnC0xFTEzcYaZw8pk4E7+5IT7399kXm
+         LWWQT6pbNyW/tJcvLsLeg1XzC8pLlOp3IgUItwCTVg4cxCUuUPBw3J402FKEYEhy3pUP
+         ZsnGSdp9zDEFenrDUPxGiunojBTNtjtOuJERgkW3IWOAulIFhRfqRYdODfhb9s2k4hyE
+         hfzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696687201; x=1697292001;
+        d=1e100.net; s=20230601; t=1696687395; x=1697292195;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dpzkmLeAt7BQEAYyhM465wQCi7VPMI6aZUboDp9HsGU=;
-        b=ByN5MnyHC0iCTpL6sRqQ4WJZJPipOy4fzUZ+JtsIXmRIfaCtKWG9n9IF7n2qQrK6rN
-         rW18O0zooPiMaGu+y6gTrAZOa77L2rXYCXh2niL25LdLulANQPEhCl23E8b2qdErx16Y
-         LFOS7yJaOEtKVqJh8Q7OuCElGnQ151T9Te5vU1qqSqF37nqUk6aBkW0AMLHssx06r6jz
-         CKoYMbSBVQ+ZgXQf7RU4CXBvIUexc2Q1AwjMouiVk42zEj9MgnKTEIKmOB/+tzdy6k8H
-         rGOQIn2WrVKcVdZbnsGoOAo2Qjs8zQ3dliiEQL7tp/Mz8M2AQYlMYJtYyme0u2f5WgV5
-         +smQ==
-X-Gm-Message-State: AOJu0YzRi/g+IGK/Hk2dgtILbfyblNfsEQzK0bIHxNLAWzSdcK523mk+
-	sDdZXew2IfM9X5KghWJxhm0=
-X-Google-Smtp-Source: AGHT+IG00leOJgmzz5affaYPBsYGUIdBOyfB21lFLm6gCJQ7sZS7VKB13NaCIfVUxmbQjGDlGkCfhA==
-X-Received: by 2002:a05:6a00:39a2:b0:691:2d4:23b2 with SMTP id fi34-20020a056a0039a200b0069102d423b2mr11671653pfb.15.1696687200723;
-        Sat, 07 Oct 2023 07:00:00 -0700 (PDT)
+        bh=Y5wlDoYxzVIeScokp/8KshwCTixlVDCtPhsT0zoCop8=;
+        b=hFhVqcEsfqs76YiPRhpzgnRUfcvoYhisZmSAyu5+3L74upn9aldDGruucFn60ZE0Jb
+         3w6wtxc/QYkAhJTNcqJWgKhFJujWVFu7J3M6Fu0QJWn6P8kQDahVL83ws6K4nCCQhukj
+         dWSfZRmP8Un0j7MRKOcqPxnd9TlwwrbthbI1jrlDJhrvsXxf1TzTxouWsBI7kw/Bt02q
+         rKWjPva4YSaBfq4nNBf5McEluipKo7oqYpu0iooJfAL+lRy4wAAN1/U08pbnwUctFZbE
+         zkxJrdbLmt0RW0dckJDcbfxIyGXoUNI+cvcVEcXwGt3bR4le5TzZtkaBCUgGEYWIZBVH
+         cZ3A==
+X-Gm-Message-State: AOJu0YzNUTfCEtplyIYzoY7TeaQmOG4ffMEPmuATB8JeWZJ7FjGex4re
+	+R3vOny5thP87OosjZmdSVY=
+X-Google-Smtp-Source: AGHT+IFiLy9ShGYPhLYdExUofG9fYedfCOv1rJGaYo7AZaKCTT0iqPNAZJ055FsfUjw7VAiZW4pDPw==
+X-Received: by 2002:a17:902:8e87:b0:1b2:4852:9a5f with SMTP id bg7-20020a1709028e8700b001b248529a5fmr10067504plb.54.1696687394891;
+        Sat, 07 Oct 2023 07:03:14 -0700 (PDT)
 Received: from vultr.guest ([45.77.191.53])
-        by smtp.gmail.com with ESMTPSA id i23-20020aa787d7000000b00682a908949bsm3302978pfo.92.2023.10.07.06.59.59
+        by smtp.gmail.com with ESMTPSA id l13-20020a170902f68d00b001c0a414695dsm5897550plg.62.2023.10.07.07.03.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Oct 2023 07:00:00 -0700 (PDT)
+        Sat, 07 Oct 2023 07:03:14 -0700 (PDT)
 From: Yafang Shao <laoar.shao@gmail.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -49,17 +49,23 @@ To: ast@kernel.org,
 	andrii@kernel.org,
 	martin.lau@linux.dev,
 	song@kernel.org,
-	yhs@fb.com,
+	yonghong.song@linux.dev,
 	kpsingh@kernel.org,
 	sdf@google.com,
 	haoluo@google.com,
-	jolsa@kernel.org
-Cc: bpf@vger.kernel.org,
-	Yafang Shao <laoar.shao@gmail.com>,
-	Feng Zhou <zhoufeng.zf@bytedance.com>
-Subject: [PATCH bpf-next v2 1/2] bpf: Fix missed rcu read lock in bpf_task_under_cgroup()
-Date: Sat,  7 Oct 2023 13:59:44 +0000
-Message-Id: <20231007135945.4306-1-laoar.shao@gmail.com>
+	jolsa@kernel.org,
+	tj@kernel.org,
+	lizefan.x@bytedance.com,
+	hannes@cmpxchg.org,
+	yosryahmed@google.com,
+	mkoutny@suse.com,
+	sinquersw@gmail.com
+Cc: cgroups@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Yafang Shao <laoar.shao@gmail.com>
+Subject: [RFC PATCH bpf-next 0/8] bpf, cgroup: Add BPF support for cgroup1 hierarchy 
+Date: Sat,  7 Oct 2023 14:02:56 +0000
+Message-Id: <20231007140304.4390-1-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.39.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -70,108 +76,85 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-When employed within a sleepable program not under RCU protection, the use
-of 'bpf_task_under_cgroup()' may trigger a warning in the kernel log,
-particularly when CONFIG_PROVE_RCU is enabled.
+Currently, BPF is primarily confined to cgroup2, with the exception of
+cgroup_iter, which supports cgroup1 fds. Unfortunately, this limitation
+prevents us from harnessing the full potential of BPF within cgroup1
+environments.
 
-[ 1259.662354] =============================
-[ 1259.662357] WARNING: suspicious RCU usage
-[ 1259.662358] 6.5.0+ #33 Not tainted
-[ 1259.662360] -----------------------------
-[ 1259.662361] include/linux/cgroup.h:423 suspicious rcu_dereference_check() usage!
-[ 1259.662364]
-other info that might help us debug this:
+In our endeavor to seamlessly integrate BPF within our Kubernetes
+environment, which relies on cgroup1, we have been exploring the
+possibility of transitioning to cgroup2. While this transition is
+forward-looking, it poses challenges due to the necessity for numerous
+applications to adapt.
 
-[ 1259.662366]
-rcu_scheduler_active = 2, debug_locks = 1
-[ 1259.662368] 1 lock held by trace/72954:
-[ 1259.662369]  #0: ffffffffb5e3eda0 (rcu_read_lock_trace){....}-{0:0}, at: __bpf_prog_enter_sleepable+0x0/0xb0
-[ 1259.662383]
-stack backtrace:
-[ 1259.662385] CPU: 50 PID: 72954 Comm: trace Kdump: loaded Not tainted 6.5.0+ #33
-[ 1259.662391] Call Trace:
-[ 1259.662393]  <TASK>
-[ 1259.662395]  dump_stack_lvl+0x6e/0x90
-[ 1259.662401]  dump_stack+0x10/0x20
-[ 1259.662404]  lockdep_rcu_suspicious+0x163/0x1b0
-[ 1259.662412]  task_css_set.part.0+0x23/0x30
-[ 1259.662417]  bpf_task_under_cgroup+0xe7/0xf0
-[ 1259.662422]  bpf_prog_7fffba481a3bcf88_lsm_run+0x5c/0x93
-[ 1259.662431]  bpf_trampoline_6442505574+0x60/0x1000
-[ 1259.662439]  bpf_lsm_bpf+0x5/0x20
-[ 1259.662443]  ? security_bpf+0x32/0x50
-[ 1259.662452]  __sys_bpf+0xe6/0xdd0
-[ 1259.662463]  __x64_sys_bpf+0x1a/0x30
-[ 1259.662467]  do_syscall_64+0x38/0x90
-[ 1259.662472]  entry_SYSCALL_64_after_hwframe+0x6e/0xd8
-[ 1259.662479] RIP: 0033:0x7f487baf8e29
-...
-[ 1259.662504]  </TASK>
+While we acknowledge that cgroup2 represents the future, we also recognize
+that such transitions demand time and effort. As a result, we are
+considering an alternative approach. Instead of migrating to cgroup2, we
+are contemplating modifications to the BPF kernel code to ensure
+compatibility with cgroup1. These adjustments appear to be relatively
+minor, making this option more feasible.
 
-This issue can be reproduced by executing a straightforward program, as
-demonstrated below:
+Given the widespread use of cgroup1 in container environments, this change
+would be beneficial to many users.
 
-SEC("lsm.s/bpf")
-int BPF_PROG(lsm_run, int cmd, union bpf_attr *attr, unsigned int size)
-{
-        struct cgroup *cgrp = NULL;
-        struct task_struct *task;
-        int ret = 0;
+As discussed with Tejun[1], it has been determined that tying the interface
+directly to the cgroup1 hierarchies is acceptable. As a result, this
+patchset introduces cgroup1-only interfaces that operate with both
+hierarchy ID and cgroup ID as parameters.
 
-        if (cmd != BPF_LINK_CREATE)
-                return 0;
+Within this patchset, two new cgroup1-only interfaces have been introduced:
 
-        // The cgroup2 should be mounted first
-        cgrp = bpf_cgroup_from_id(1);
-        if (!cgrp)
-                goto out;
-        task = bpf_get_current_task_btf();
-        if (bpf_task_under_cgroup(task, cgrp))
-                ret = -1;
-        bpf_cgroup_release(cgrp);
-
-out:
-        return ret;
-}
-
-After running the program, if you subsequently execute another BPF program,
-you will encounter the warning. It's worth noting that
-task_under_cgroup_hierarchy() is also utilized by
-bpf_current_task_under_cgroup(). However, bpf_current_task_under_cgroup()
-doesn't exhibit this issue because it cannot be used in sleepable BPF
-programs.
-
-Fixes: b5ad4cdc46c7 ("bpf: Add bpf_task_under_cgroup() kfunc")
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-Acked-by: Stanislav Fomichev <sdf@google.com>
-Cc: Feng Zhou <zhoufeng.zf@bytedance.com>
----
- kernel/bpf/helpers.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index dd1c69ee3375..bb521b181cc3 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2212,7 +2212,12 @@ __bpf_kfunc struct cgroup *bpf_cgroup_from_id(u64 cgid)
- __bpf_kfunc long bpf_task_under_cgroup(struct task_struct *task,
- 				       struct cgroup *ancestor)
- {
--	return task_under_cgroup_hierarchy(task, ancestor);
-+	long ret;
-+
-+	rcu_read_lock();
-+	ret = task_under_cgroup_hierarchy(task, ancestor);
-+	rcu_read_unlock();
-+	return ret;
- }
- #endif /* CONFIG_CGROUPS */
+- [bpf_]task_cgroup1_id_within_hierarchy
+  Retrieves the associated cgroup ID of a task whithin a specific
+  cgroup1 hierarchy. The cgroup1 hierarchy is identified by its
+  hierarchy ID.
+- [bpf_]task_ancestor_cgroup1_id_within_hierarchy
+  Retrieves the associated ancestor cgroup ID of a task whithin a
+  specific cgroup1 hierarchy. he specific ancestor cgroup is determined by
+  the ancestor level within the cgroup1 hierarchy.
  
+These two new kfuncs enable the tracing of tasks within a designated
+container or its ancestor cgroup directory in BPF programs. Additionally,
+they are capable of operating on named cgroups, providing valuable utility
+for hybrid cgroup mode scenarios.
+
+[1]. https://lwn.net/ml/cgroups/ZRHU6MfwqRxjBFUH@slm.duckdns.org/
+
+Changes:
+- bpf, cgroup: Add bpf support for cgroup controller
+  https://lwn.net/Articles/945318/
+- bpf, cgroup: Enable cgroup_array map on cgroup1
+  https://lore.kernel.org/bpf/20230903142800.3870-1-laoar.shao@gmail.com/
+
+Yafang Shao (8):
+  cgroup: Don't have to hold cgroup_mutex in task_cgroup_from_root()
+  cgroup: Add new helpers for cgroup1 hierarchy
+  bpf: Add kfuncs for cgroup1 hierarchy
+  selftests/bpf: Fix issues in setup_classid_environment()
+  selftests/bpf: Add parallel support for classid
+  selftests/bpf: Add a new cgroup helper get_classid_cgroup_id()
+  selftests/bpf: Add a new cgroup helper get_cgroup_hierarchy_id()
+  selftests/bpf: Add selftests for cgroup1 hierarchy
+
+ include/linux/cgroup.h                        |   9 +-
+ kernel/bpf/helpers.c                          |  26 +++
+ kernel/cgroup/cgroup-internal.h               |   2 -
+ kernel/cgroup/cgroup-v1.c                     |  67 ++++++++
+ kernel/cgroup/cgroup.c                        |   5 +-
+ tools/testing/selftests/bpf/cgroup_helpers.c  | 114 +++++++++++--
+ tools/testing/selftests/bpf/cgroup_helpers.h  |   4 +-
+ .../bpf/prog_tests/cgroup1_hierarchy.c        | 159 ++++++++++++++++++
+ .../selftests/bpf/prog_tests/cgroup_v1v2.c    |   2 +-
+ .../bpf/progs/test_cgroup1_hierarchy.c        |  62 +++++++
+ 10 files changed, 426 insertions(+), 24 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup1_hierarchy.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_cgroup1_hierarchy.c
+
 -- 
 2.30.1 (Apple Git-130)
 
