@@ -1,131 +1,80 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A74111A705;
-	Mon,  9 Oct 2023 13:25:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEF2E1A5BA;
+	Mon,  9 Oct 2023 13:27:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BKErJidi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFC21C433C8;
-	Mon,  9 Oct 2023 13:25:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1696857950;
-	bh=SwebSDPpA0MyFHHljpYYRQmKLYhitT6HRmfKX3xFO3A=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BKErJidijFNK1T+nDKPUNoE6Wv0Zq5EofOwQ3J1nz8bCdCMR1j6gdnWpFYwUFJPDo
-	 fl2G9ku5UTqMIZ0IrwQbtl7IOeewghwqLuy/a5JNEwwYGDiuZI/ktWN5BoFknYm3GB
-	 O1Ap/mbb3H/q/6drAiYSXB84q9lodaeZIKnCPG7s=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: stable@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	patches@lists.linux.dev,
-	syzbot+62cbf263225ae13ff153@syzkaller.appspotmail.com,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	David Howells <dhowells@redhat.com>,
-	Eric Dumazet <edumazet@google.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	syzkaller-bugs@googlegroups.com,
-	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 45/75] ipv4, ipv6: Fix handling of transhdrlen in __ip{,6}_append_data()
-Date: Mon,  9 Oct 2023 15:02:07 +0200
-Message-ID: <20231009130112.808510710@linuxfoundation.org>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231009130111.200710898@linuxfoundation.org>
-References: <20231009130111.200710898@linuxfoundation.org>
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="mXBfR6M9"
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F615A3;
+	Mon,  9 Oct 2023 06:27:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=Upzz23gM7CFVJCcFBQEZrdbmDiHFsFQK+Y+xE1IddiY=; b=mXBfR6M937X0CooRhB5p1qQeET
+	EpoVcaViV4YWfVL4jbUHqF4GhcQybjC4HJhD34LkZsM/yhGwaWaKbfOZ6/le5fvdVo1xE8YC9o0lN
+	isHZXwpnl11W+AbBQ4JHPX7BTHDpvBlEqj8XbXBvmVuI3x9q6uO1Vaq/Oqx37EfbV//TEL5BjhTki
+	s1Xe7UAYUBOn+gTzC9ey4jUNUJtRQfYMbN8EgnR5UZm/h7649fzmaHwqTl+BsO15nrB7aSzb/rP+w
+	pW1UdujmrRQ+q04MI4kLxftupV3zerRcQEzU3qBAS6Z0SQOIoIsfWPjZ8e72g5nE7kT044vtqAi0F
+	6njg/gUQ==;
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1qpqIa-000PVk-3i; Mon, 09 Oct 2023 15:27:52 +0200
+Received: from [178.197.249.27] (helo=linux.home)
+	by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1qpqIZ-000SIq-Ka; Mon, 09 Oct 2023 15:27:51 +0200
+Subject: Re: [PATCH bpf 0/2] riscv, bpf: Properly sign-extend return values
+To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, Pu Lehui <pulehui@huawei.com>
+Cc: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+ linux-kernel@vger.kernel.org, Luke Nelson <luke.r.nels@gmail.com>,
+ Xi Wang <xi.wang@gmail.com>, linux-riscv@lists.infradead.org
+References: <20231004120706.52848-1-bjorn@kernel.org>
+From: Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <6dbba8a3-b07c-5247-f2c1-c6b484e9a16e@iogearbox.net>
+Date: Mon, 9 Oct 2023 15:27:50 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <20231004120706.52848-1-bjorn@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27056/Mon Oct  9 09:40:11 2023)
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-5.15-stable review patch.  If anyone has any objections, please let me know.
+On 10/4/23 2:07 PM, Björn Töpel wrote:
+> From: Björn Töpel <bjorn@rivosinc.com>
+[...]
+> The following test_progs now pass, which were previously broken:
+> 
+>    | 13      bpf_cookie
+>    | 19      bpf_mod_race
+>    | 68      deny_namespace
+>    | 119     libbpf_get_fd_by_id_opts
+>    | 135     lookup_key
+>    | 137     lsm_cgroup
+>    | 284     test_lsm
 
-------------------
+Thanks for the fixes, took them into bpf tree. I was wondering whether this could be
+backed by specific tests, but looks like the above list already takes care of it.
 
-From: David Howells <dhowells@redhat.com>
-
-[ Upstream commit 9d4c75800f61e5d75c1659ba201b6c0c7ead3070 ]
-
-Including the transhdrlen in length is a problem when the packet is
-partially filled (e.g. something like send(MSG_MORE) happened previously)
-when appending to an IPv4 or IPv6 packet as we don't want to repeat the
-transport header or account for it twice.  This can happen under some
-circumstances, such as splicing into an L2TP socket.
-
-The symptom observed is a warning in __ip6_append_data():
-
-    WARNING: CPU: 1 PID: 5042 at net/ipv6/ip6_output.c:1800 __ip6_append_data.isra.0+0x1be8/0x47f0 net/ipv6/ip6_output.c:1800
-
-that occurs when MSG_SPLICE_PAGES is used to append more data to an already
-partially occupied skbuff.  The warning occurs when 'copy' is larger than
-the amount of data in the message iterator.  This is because the requested
-length includes the transport header length when it shouldn't.  This can be
-triggered by, for example:
-
-        sfd = socket(AF_INET6, SOCK_DGRAM, IPPROTO_L2TP);
-        bind(sfd, ...); // ::1
-        connect(sfd, ...); // ::1 port 7
-        send(sfd, buffer, 4100, MSG_MORE);
-        sendfile(sfd, dfd, NULL, 1024);
-
-Fix this by only adding transhdrlen into the length if the write queue is
-empty in l2tp_ip6_sendmsg(), analogously to how UDP does things.
-
-l2tp_ip_sendmsg() looks like it won't suffer from this problem as it builds
-the UDP packet itself.
-
-Fixes: a32e0eec7042 ("l2tp: introduce L2TPv3 IP encapsulation support for IPv6")
-Reported-by: syzbot+62cbf263225ae13ff153@syzkaller.appspotmail.com
-Link: https://lore.kernel.org/r/0000000000001c12b30605378ce8@google.com/
-Suggested-by: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Eric Dumazet <edumazet@google.com>
-cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-cc: "David S. Miller" <davem@davemloft.net>
-cc: David Ahern <dsahern@kernel.org>
-cc: Paolo Abeni <pabeni@redhat.com>
-cc: Jakub Kicinski <kuba@kernel.org>
-cc: netdev@vger.kernel.org
-cc: bpf@vger.kernel.org
-cc: syzkaller-bugs@googlegroups.com
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- net/l2tp/l2tp_ip6.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/l2tp/l2tp_ip6.c b/net/l2tp/l2tp_ip6.c
-index 382124d6f7647..9746c624a5503 100644
---- a/net/l2tp/l2tp_ip6.c
-+++ b/net/l2tp/l2tp_ip6.c
-@@ -508,7 +508,6 @@ static int l2tp_ip6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 	 */
- 	if (len > INT_MAX - transhdrlen)
- 		return -EMSGSIZE;
--	ulen = len + transhdrlen;
- 
- 	/* Mirror BSD error message compatibility */
- 	if (msg->msg_flags & MSG_OOB)
-@@ -629,6 +628,7 @@ static int l2tp_ip6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 
- back_from_confirm:
- 	lock_sock(sk);
-+	ulen = len + skb_queue_empty(&sk->sk_write_queue) ? transhdrlen : 0;
- 	err = ip6_append_data(sk, ip_generic_getfrag, msg,
- 			      ulen, transhdrlen, &ipc6,
- 			      &fl6, (struct rt6_info *)dst,
--- 
-2.40.1
-
-
-
+Thanks,
+Daniel
