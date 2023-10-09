@@ -1,144 +1,254 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF86118055;
-	Mon,  9 Oct 2023 10:11:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD1ECBE49
+	for <bpf@vger.kernel.org>; Mon,  9 Oct 2023 10:13:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ENZ7CXHn"
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5103CF;
-	Mon,  9 Oct 2023 03:11:42 -0700 (PDT)
-Received: by mail-vs1-xe34.google.com with SMTP id ada2fe7eead31-45260b91a29so1605374137.2;
-        Mon, 09 Oct 2023 03:11:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="OH0KDQ/Q"
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569B8F2
+	for <bpf@vger.kernel.org>; Mon,  9 Oct 2023 03:12:58 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-690d8c05784so3232267b3a.2
+        for <bpf@vger.kernel.org>; Mon, 09 Oct 2023 03:12:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696846301; x=1697451101; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JUzeNqXLaaK5niHZagSjVNk/fZkBVBIUEPMvh8M2SQE=;
-        b=ENZ7CXHnJiD1vn2bGsqxeExGcBuaXJ7ZLomisKu1HKbeXRYSK4BmkR6Mb0wK74pXu/
-         keikOpuVGjrc2yhRkApq+8ddtf9h7xKjDW2Rnq4H4b0Z9sDRPxu5TUhxiGMPAlxJ8mZl
-         L+Prj1emV4fiA74hQt/HIbv1ZnWpLr9c1ooVhfCz1ZFGgOo6b6GKIu3Xn8cG1fGT59iK
-         fuKD1GC+qRdpVNN7SqIKLCWutXg4oqOQ/CWAm7WMsiXnsLB/EhHl2+VK1ruZw7OVg1cU
-         cTk3itzgMSLtbXAt88VOupp51sM8RwnCM3/U9d2Smd43EKK2YMsYUbui3846RYJAm3Yb
-         oo6g==
+        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1696846378; x=1697451178; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GwCpwJnMSEtCEpgQdG0sPnzXZa7be28Mw64N+dOOjHk=;
+        b=OH0KDQ/QiGUvRxwvwRuqv5MOpwCzSGI1zFqDXauUm4f5TyypNgiOfhN6fZqAgi8DL5
+         qYR9bR8B+M7ZaWEdhst1RPWhigrnfrMcuPbbVBT28Vn2cefmBlD42wPedN1PCEpFT4PB
+         9kL4JKY1gnKuSaYmnhQ4qB3unMpw5SzetDmYiLilAFRsXr+gqVCrdDdw8WiDSAFcQdEL
+         qdRpuloZzfFQ0ixe7jRz5CjAMA3fZC8RF+7vff4y+G167dvSF30gOiR3p3EchfTX92Oy
+         hL8vDvXhmqu5wzEVS1CpNcY3lKX6MKUsVQeyDV3/nDErff01kcJiDT+qDcHxO9o9Zqe7
+         DJeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696846301; x=1697451101;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JUzeNqXLaaK5niHZagSjVNk/fZkBVBIUEPMvh8M2SQE=;
-        b=qyu1pvmpItGwiOMbBd654Q8ypTFjfwBvnSvCmpEqe8AIH+Ur1hrXUAwTfHTdk58VsA
-         eGcAzh03T8wvomEzDC2AbuU6AJnU1rvd1PzyqfZdqyD9mPfiXlf+JlEezjx/QJaAjOup
-         MS7WWz88BSi/LlYl8iYt1IvzZlT+LqgHxjxYzFrFJ0k1jAnFgx+BoglxZ1tVSUuaxSiY
-         pq8umDbR3Am6AZwJQwtN0XFyt01tFcX9t+OANnhYhpmNxkzim8stR/u/Sv96WFjUjl90
-         lYX0rHhnnDb4Hh0rkWoBoNcZsAzuRcDSayVV/zVbKjRo+8GYYfgT5VEnzyb+FrniagxI
-         eZFA==
-X-Gm-Message-State: AOJu0YwlJvA8ubkUzEPp3p1LT2tc18LfTUg02NsoaRgKuFb8NjQNdEY4
-	b4xmIvO1gt418xSbg7D9V89ToQCM+aHtVp4qmvM=
-X-Google-Smtp-Source: AGHT+IFfKt7rhAld5ba1A6Tt3iiSG6hva5HsfJYyiYTBqzOf6MFDYJ0x5tJ/nwBO3nl3NArAiioUQwhCR7BI9zV64Fo=
-X-Received: by 2002:a67:b142:0:b0:452:5b2d:7787 with SMTP id
- z2-20020a67b142000000b004525b2d7787mr11446793vsl.0.1696846301611; Mon, 09 Oct
- 2023 03:11:41 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1696846378; x=1697451178;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GwCpwJnMSEtCEpgQdG0sPnzXZa7be28Mw64N+dOOjHk=;
+        b=d9yuwvqsxQwmlFvkjZYPx7V400ygLHUkbs3m4WNorEAAg0DbJmJ5yLvD/3/RvnHRmN
+         Cco8YRSVy/cQUhLXyE9+0BWrVYagRsrLZHZhT4FjwMYAQ7FVmZuQgw5clpVh055HDchX
+         zEbBEIRbrY4w4ca3MT18Au/YIMYtLLnE+mB888xEysETPdtPxkwy6zuItPzXA2SNzEKB
+         A32thC4DTUENMls43Ub4wOKOZERk+ggHtSbSpKBOqB8spFyVh253zqAbIBalzalm4OQk
+         3RpfCWDT6JSLJ3XFQvdNte+ea100aqlURnjqbTSh8knYp5RX9ebeI/pfMv4gdROqvSny
+         u7bA==
+X-Gm-Message-State: AOJu0Yx1sOUU/8yibCd3jLUpysAuaac6P9GKCYnjtSGurMCzy0DXmQrB
+	+Ngj8uqIVe7g6ewxy578W9MUQw==
+X-Google-Smtp-Source: AGHT+IEVrX9bDWu+69Jm3Z7WET872MnoZKEK0GsumEmN+QyXdcL+wo/ohFZr6g8o0tsYvBjQoXY3dA==
+X-Received: by 2002:a05:6a21:191:b0:155:5c28:ea67 with SMTP id le17-20020a056a21019100b001555c28ea67mr17770242pzb.38.1696846377658;
+        Mon, 09 Oct 2023 03:12:57 -0700 (PDT)
+Received: from ?IPV6:2400:4050:a840:1e00:78d2:b862:10a7:d486? ([2400:4050:a840:1e00:78d2:b862:10a7:d486])
+        by smtp.gmail.com with ESMTPSA id fb3-20020a056a002d8300b0069ee4242f89sm4287361pfb.13.2023.10.09.03.12.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Oct 2023 03:12:57 -0700 (PDT)
+Message-ID: <5baab0cf-7adf-475d-8968-d46ddd179f9a@daynix.com>
+Date: Mon, 9 Oct 2023 19:12:51 +0900
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230904162504.1356068-1-leitao@debian.org> <20230905154951.0d0d3962@kernel.org>
- <ZSArfLaaGcfd8LH8@gmail.com>
-In-Reply-To: <ZSArfLaaGcfd8LH8@gmail.com>
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date: Mon, 9 Oct 2023 03:11:05 -0700
-Message-ID: <CAF=yD-Lr3238obe-_omnPBvgdv2NLvdK5be-5F7YyV3H7BkhSg@mail.gmail.com>
-Subject: Re: [PATCH v4 00/10] io_uring: Initial support for {s,g}etsockopt commands
-To: Breno Leitao <leitao@debian.org>
-Cc: Jakub Kicinski <kuba@kernel.org>, sdf@google.com, axboe@kernel.dk, 
-	asml.silence@gmail.com, martin.lau@linux.dev, krisman@suse.de, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	io-uring@vger.kernel.org, pabeni@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 5/7] tun: Introduce virtio-net hashing feature
+Content-Language: en-US
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: Jason Wang <jasowang@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+ virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+ songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+ kpsingh@kernel.org, rdunlap@infradead.org, willemb@google.com,
+ gustavoars@kernel.org, herbert@gondor.apana.org.au,
+ steffen.klassert@secunet.com, nogikh@google.com, pablo@netfilter.org,
+ decui@microsoft.com, jakub@cloudflare.com, elver@google.com,
+ pabeni@redhat.com, Yuri Benditovich <yuri.benditovich@daynix.com>
+References: <20231008052101.144422-1-akihiko.odaki@daynix.com>
+ <20231008052101.144422-6-akihiko.odaki@daynix.com>
+ <CAF=yD-LdwcXKK66s5gvJNOH8qCWRt3SvEL-GkkVif=kkOaYGhg@mail.gmail.com>
+ <8f4ad5bc-b849-4ef4-ac1f-8d5a796205e9@daynix.com>
+ <CAF=yD-+DjDqE9iBu+PvbeBby=C4CCwG=fMFONQONrsErmps3ww@mail.gmail.com>
+ <286508a3-3067-456d-8bbf-176b00dcc0c6@daynix.com>
+ <CAF=yD-+syCSJz_wp25rEaHTXMFRHgLh1M-uTdNWPb4fnrKgpFw@mail.gmail.com>
+ <8711b549-094d-4be2-b7af-bd93b7516c05@daynix.com>
+ <CAF=yD-+M75o2=yDy5d03fChuNTeeTRkUU7rPRG1i6O9aZGhLmQ@mail.gmail.com>
+ <695a0611-2b19-49f9-8d32-cfea3b7df0b2@daynix.com>
+ <CAF=yD-+_PLPt9qfXy1Ljr=Lou0W8hCJLi6HwPcZYCjJy+SKtbA@mail.gmail.com>
+From: Akihiko Odaki <akihiko.odaki@daynix.com>
+In-Reply-To: <CAF=yD-+_PLPt9qfXy1Ljr=Lou0W8hCJLi6HwPcZYCjJy+SKtbA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE
+	autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Fri, Oct 6, 2023 at 10:45=E2=80=AFAM Breno Leitao <leitao@debian.org> wr=
-ote:
->
-> Hello Jakub,
->
-> On Tue, Sep 05, 2023 at 03:49:51PM -0700, Jakub Kicinski wrote:
-> > On Mon,  4 Sep 2023 09:24:53 -0700 Breno Leitao wrote:
-> > > Patches 1-2: Modify the BPF hooks to support sockptr_t, so, these fun=
-ctions
-> > > become flexible enough to accept user or kernel pointers for optval/o=
-ptlen.
-> >
-> > Have you seen:
-> >
-> > https://lore.kernel.org/all/CAHk-=3DwgGV61xrG=3DgO0=3DdXH64o2TDWWrXn1mx=
--CX885JZ7h84Og@mail.gmail.com/
-> >
-> > ? I wasn't aware that Linus felt this way, now I wonder if having
-> > sockptr_t spread will raise any red flags as this code flows back
-> > to him.
->
-> Thanks for the heads-up. I've been thinking about it for a while and I'd
-> like to hear what are the next steps here.
->
-> Let me first back up and state where we are, and what is the current
-> situation:
->
-> 1) __sys_getsockopt() uses __user pointers for both optval and optlen
-> 2) For io_uring command, Jens[1] suggested we get optlen from the io_urin=
-g
-> sqe, which is a kernel pointer/value.
->
-> Thus, we need to make the common code (callbacks) able to handle __user
-> and kernel pointers (for optlen, at least).
->
-> From a proto_ops callback perspective, ->setsockopt() uses sockptr.
->
->           int             (*setsockopt)(struct socket *sock, int level,
->                                         int optname, sockptr_t optval,
->                                         unsigned int optlen);
->
-> Getsockopt() uses sockptr() for level=3DSOL_SOCKET:
->
->         int sk_getsockopt(struct sock *sk, int level, int optname,
->                     sockptr_t optval, sockptr_t optlen)
->
-> But not for the other levels:
->
->         int             (*getsockopt)(struct socket *sock, int level,
->                                       int optname, char __user *optval, i=
-nt __user *optlen);
->
->
-> That said, if this patchset shouldn't use sockptr anymore, what is the
-> recommendation?
->
-> If we move this patchset to use iov_iter instead of sockptr, then I
-> understand we want to move *all* these callbacks to use iov_vec. Is this
-> the right direction?
->
-> Thanks for the guidance!
->
-> [1] https://lore.kernel.org/all/efe602f1-8e72-466c-b796-0083fd1c6d82@kern=
-el.dk/
+On 2023/10/09 19:06, Willem de Bruijn wrote:
+> On Mon, Oct 9, 2023 at 3:02 AM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+>>
+>> On 2023/10/09 18:57, Willem de Bruijn wrote:
+>>> On Mon, Oct 9, 2023 at 3:57 AM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+>>>>
+>>>> On 2023/10/09 17:04, Willem de Bruijn wrote:
+>>>>> On Sun, Oct 8, 2023 at 3:46 PM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+>>>>>>
+>>>>>> On 2023/10/09 5:08, Willem de Bruijn wrote:
+>>>>>>> On Sun, Oct 8, 2023 at 10:04 PM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+>>>>>>>>
+>>>>>>>> On 2023/10/09 4:07, Willem de Bruijn wrote:
+>>>>>>>>> On Sun, Oct 8, 2023 at 7:22 AM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+>>>>>>>>>>
+>>>>>>>>>> virtio-net have two usage of hashes: one is RSS and another is hash
+>>>>>>>>>> reporting. Conventionally the hash calculation was done by the VMM.
+>>>>>>>>>> However, computing the hash after the queue was chosen defeats the
+>>>>>>>>>> purpose of RSS.
+>>>>>>>>>>
+>>>>>>>>>> Another approach is to use eBPF steering program. This approach has
+>>>>>>>>>> another downside: it cannot report the calculated hash due to the
+>>>>>>>>>> restrictive nature of eBPF.
+>>>>>>>>>>
+>>>>>>>>>> Introduce the code to compute hashes to the kernel in order to overcome
+>>>>>>>>>> thse challenges. An alternative solution is to extend the eBPF steering
+>>>>>>>>>> program so that it will be able to report to the userspace, but it makes
+>>>>>>>>>> little sense to allow to implement different hashing algorithms with
+>>>>>>>>>> eBPF since the hash value reported by virtio-net is strictly defined by
+>>>>>>>>>> the specification.
+>>>>>>>>>>
+>>>>>>>>>> The hash value already stored in sk_buff is not used and computed
+>>>>>>>>>> independently since it may have been computed in a way not conformant
+>>>>>>>>>> with the specification.
+>>>>>>>>>>
+>>>>>>>>>> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+>>>>>>>>>> ---
+>>>>>>>>>
+>>>>>>>>>> +static const struct tun_vnet_hash_cap tun_vnet_hash_cap = {
+>>>>>>>>>> +       .max_indirection_table_length =
+>>>>>>>>>> +               TUN_VNET_HASH_MAX_INDIRECTION_TABLE_LENGTH,
+>>>>>>>>>> +
+>>>>>>>>>> +       .types = VIRTIO_NET_SUPPORTED_HASH_TYPES
+>>>>>>>>>> +};
+>>>>>>>>>
+>>>>>>>>> No need to have explicit capabilities exchange like this? Tun either
+>>>>>>>>> supports all or none.
+>>>>>>>>
+>>>>>>>> tun does not support VIRTIO_NET_RSS_HASH_TYPE_IP_EX,
+>>>>>>>> VIRTIO_NET_RSS_HASH_TYPE_TCP_EX, and VIRTIO_NET_RSS_HASH_TYPE_UDP_EX.
+>>>>>>>>
+>>>>>>>> It is because the flow dissector does not support IPv6 extensions. The
+>>>>>>>> specification is also vague, and does not tell how many TLVs should be
+>>>>>>>> consumed at most when interpreting destination option header so I chose
+>>>>>>>> to avoid adding code for these hash types to the flow dissector. I doubt
+>>>>>>>> anyone will complain about it since nobody complains for Linux.
+>>>>>>>>
+>>>>>>>> I'm also adding this so that we can extend it later.
+>>>>>>>> max_indirection_table_length may grow for systems with 128+ CPUs, or
+>>>>>>>> types may have other bits for new protocols in the future.
+>>>>>>>>
+>>>>>>>>>
+>>>>>>>>>>              case TUNSETSTEERINGEBPF:
+>>>>>>>>>> -               ret = tun_set_ebpf(tun, &tun->steering_prog, argp);
+>>>>>>>>>> +               bpf_ret = tun_set_ebpf(tun, &tun->steering_prog, argp);
+>>>>>>>>>> +               if (IS_ERR(bpf_ret))
+>>>>>>>>>> +                       ret = PTR_ERR(bpf_ret);
+>>>>>>>>>> +               else if (bpf_ret)
+>>>>>>>>>> +                       tun->vnet_hash.flags &= ~TUN_VNET_HASH_RSS;
+>>>>>>>>>
+>>>>>>>>> Don't make one feature disable another.
+>>>>>>>>>
+>>>>>>>>> TUNSETSTEERINGEBPF and TUNSETVNETHASH are mutually exclusive
+>>>>>>>>> functions. If one is enabled the other call should fail, with EBUSY
+>>>>>>>>> for instance.
+>>>>>>>>>
+>>>>>>>>>> +       case TUNSETVNETHASH:
+>>>>>>>>>> +               len = sizeof(vnet_hash);
+>>>>>>>>>> +               if (copy_from_user(&vnet_hash, argp, len)) {
+>>>>>>>>>> +                       ret = -EFAULT;
+>>>>>>>>>> +                       break;
+>>>>>>>>>> +               }
+>>>>>>>>>> +
+>>>>>>>>>> +               if (((vnet_hash.flags & TUN_VNET_HASH_REPORT) &&
+>>>>>>>>>> +                    (tun->vnet_hdr_sz < sizeof(struct virtio_net_hdr_v1_hash) ||
+>>>>>>>>>> +                     !tun_is_little_endian(tun))) ||
+>>>>>>>>>> +                    vnet_hash.indirection_table_mask >=
+>>>>>>>>>> +                    TUN_VNET_HASH_MAX_INDIRECTION_TABLE_LENGTH) {
+>>>>>>>>>> +                       ret = -EINVAL;
+>>>>>>>>>> +                       break;
+>>>>>>>>>> +               }
+>>>>>>>>>> +
+>>>>>>>>>> +               argp = (u8 __user *)argp + len;
+>>>>>>>>>> +               len = (vnet_hash.indirection_table_mask + 1) * 2;
+>>>>>>>>>> +               if (copy_from_user(vnet_hash_indirection_table, argp, len)) {
+>>>>>>>>>> +                       ret = -EFAULT;
+>>>>>>>>>> +                       break;
+>>>>>>>>>> +               }
+>>>>>>>>>> +
+>>>>>>>>>> +               argp = (u8 __user *)argp + len;
+>>>>>>>>>> +               len = virtio_net_hash_key_length(vnet_hash.types);
+>>>>>>>>>> +
+>>>>>>>>>> +               if (copy_from_user(vnet_hash_key, argp, len)) {
+>>>>>>>>>> +                       ret = -EFAULT;
+>>>>>>>>>> +                       break;
+>>>>>>>>>> +               }
+>>>>>>>>>
+>>>>>>>>> Probably easier and less error-prone to define a fixed size control
+>>>>>>>>> struct with the max indirection table size.
+>>>>>>>>
+>>>>>>>> I made its size variable because the indirection table and key may grow
+>>>>>>>> in the future as I wrote above.
+>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> Btw: please trim the CC: list considerably on future patches.
+>>>>>>>>
+>>>>>>>> I'll do so in the next version with the TUNSETSTEERINGEBPF change you
+>>>>>>>> proposed.
+>>>>>>>
+>>>>>>> To be clear: please don't just resubmit with that one change.
+>>>>>>>
+>>>>>>> The skb and cb issues are quite fundamental issues that need to be resolved.
+>>>>>>>
+>>>>>>> I'd like to understand why adjusting the existing BPF feature for this
+>>>>>>> exact purpose cannot be amended to return the key it produced.
+>>>>>>
+>>>>>> eBPF steering program is not designed for this particular problem in my
+>>>>>> understanding. It was introduced to derive hash values with an
+>>>>>> understanding of application-specific semantics of packets instead of
+>>>>>> generic IP/TCP/UDP semantics.
+>>>>>>
+>>>>>> This problem is rather different in terms that the hash derivation is
+>>>>>> strictly defined by virtio-net. I don't think it makes sense to
+>>>>>> introduce the complexity of BPF when you always run the same code.
+>>>>>>
+>>>>>> It can utilize the existing flow dissector and also make it easier to
+>>>>>> use for the userspace by implementing this in the kernel.
+>>>>>
+>>>>> Ok. There does appear to be overlap in functionality. But it might be
+>>>>> easier to deploy to just have standard Toeplitz available without
+>>>>> having to compile and load an eBPF program.
+>>>>>
+>>>>> As for the sk_buff and cb[] changes. The first is really not needed.
+>>>>> sk_buff simply would not scale if every edge case needs a few bits.
+>>>>
+>>>> An alternative is to move the bit to cb[] and clear it for every code
+>>>> paths that lead to ndo_start_xmit(), but I'm worried that it is error-prone.
+>>>>
+>>>> I think we can put the bit in sk_buff for now. We can implement the
+>>>> alternative when we are short of bits.
+>>>
+>>> I disagree. sk_buff fields add a cost to every code path. They cannot
+>>> be added for every edge case.
+>>
+>> It only takes an unused bit and does not grow the sk_buff size so I
+>> think it has practically no cost for now.
+> 
+> The problem is that that thinking leads to death by a thousand cuts.
+> 
+> "for now" forces the cost of having to think hard how to avoid growing
+> sk_buff onto the next person. Let's do it right from the start.
 
-Since sockptr_t is already used by __sys_setsockopt and
-__sys_setsockopt, patches 1 and 2 don't introduce any new sockptr code
-paths.
-
-setsockopt callbacks also already use sockptr as of commit
-a7b75c5a8c41 ("net: pass a sockptr_t into ->setsockopt").
-
-getsockopt callbacks do take user pointers, just not sockptr.
-
-Is the only issue right now the optlen kernel pointer?
+I see. I described an alternative to move the bit to cb[] and clear it 
+in all code paths that leads to ndo_start_xmit() earlier. Does that 
+sound good to you?
