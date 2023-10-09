@@ -1,19 +1,19 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4408D199B3;
-	Mon,  9 Oct 2023 13:20:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A74111A705;
+	Mon,  9 Oct 2023 13:25:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="AU18+69z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20AA8C433C7;
-	Mon,  9 Oct 2023 13:20:42 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BKErJidi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFC21C433C8;
+	Mon,  9 Oct 2023 13:25:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1696857642;
-	bh=UnyjlSvQVB3DGfpI/beuXUaZ3xYBsdrP9S0xsRnnsUI=;
+	s=korg; t=1696857950;
+	bh=SwebSDPpA0MyFHHljpYYRQmKLYhitT6HRmfKX3xFO3A=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=AU18+69zHVakMjncr65+jWfobSHl3zTQMXnru2oiKQrslOZedEiG4YbpMPj9qHRvz
-	 yt0/OGR4po2SH0Q0ZWHbpoBWi7ztK5ImhX14W4hH6Mt3mzt8gdXQOipYUHgRVUgrNh
-	 5f4I6MfiysEnVCwzIo0flZKkiOe8bjWMMjnSy0io=
+	b=BKErJidijFNK1T+nDKPUNoE6Wv0Zq5EofOwQ3J1nz8bCdCMR1j6gdnWpFYwUFJPDo
+	 fl2G9ku5UTqMIZ0IrwQbtl7IOeewghwqLuy/a5JNEwwYGDiuZI/ktWN5BoFknYm3GB
+	 O1Ap/mbb3H/q/6drAiYSXB84q9lodaeZIKnCPG7s=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -30,12 +30,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	bpf@vger.kernel.org,
 	syzkaller-bugs@googlegroups.com,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.1 111/162] ipv4, ipv6: Fix handling of transhdrlen in __ip{,6}_append_data()
-Date: Mon,  9 Oct 2023 15:01:32 +0200
-Message-ID: <20231009130125.993798269@linuxfoundation.org>
+Subject: [PATCH 5.15 45/75] ipv4, ipv6: Fix handling of transhdrlen in __ip{,6}_append_data()
+Date: Mon,  9 Oct 2023 15:02:07 +0200
+Message-ID: <20231009130112.808510710@linuxfoundation.org>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231009130122.946357448@linuxfoundation.org>
-References: <20231009130122.946357448@linuxfoundation.org>
+In-Reply-To: <20231009130111.200710898@linuxfoundation.org>
+References: <20231009130111.200710898@linuxfoundation.org>
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -47,7 +47,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.1-stable review patch.  If anyone has any objections, please let me know.
+5.15-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
@@ -105,10 +105,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/net/l2tp/l2tp_ip6.c b/net/l2tp/l2tp_ip6.c
-index bce4132b0a5c8..314ec3a51e8de 100644
+index 382124d6f7647..9746c624a5503 100644
 --- a/net/l2tp/l2tp_ip6.c
 +++ b/net/l2tp/l2tp_ip6.c
-@@ -510,7 +510,6 @@ static int l2tp_ip6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+@@ -508,7 +508,6 @@ static int l2tp_ip6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
  	 */
  	if (len > INT_MAX - transhdrlen)
  		return -EMSGSIZE;
@@ -116,7 +116,7 @@ index bce4132b0a5c8..314ec3a51e8de 100644
  
  	/* Mirror BSD error message compatibility */
  	if (msg->msg_flags & MSG_OOB)
-@@ -631,6 +630,7 @@ static int l2tp_ip6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+@@ -629,6 +628,7 @@ static int l2tp_ip6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
  
  back_from_confirm:
  	lock_sock(sk);
