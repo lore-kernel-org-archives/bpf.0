@@ -1,89 +1,110 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 641F12745F;
-	Tue, 10 Oct 2023 20:20:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05313225CF
+	for <bpf@vger.kernel.org>; Tue, 10 Oct 2023 20:35:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="C491yruG"
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9BDEB8;
-	Tue, 10 Oct 2023 13:20:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1696969247; x=1728505247;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=o4u11zrx7eA11CZzeyTu4a0TO7Mfy7hjPMsW7SqOWgU=;
-  b=C491yruGHLAoAl9Wa6Tqk+xpDVAX0NgDZzvvk38aYKGrxO+8YhafPGBz
-   3iDe3r8mIS5oGHiN8SjlK6NZd+cb+2TzFOS14WiIp2lzELrfFd5HXKW4i
-   qsakhXG/JBYVLNU0QfKQ6f/vXC7gYCCoaSM1gQVehKYKHroN9BYA8EkXO
-   E=;
-X-IronPort-AV: E=Sophos;i="6.03,213,1694736000"; 
-   d="scan'208";a="363425396"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-ed19f671.us-west-2.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2023 20:20:43 +0000
-Received: from EX19MTAUWC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-	by email-inbound-relay-pdx-2b-m6i4x-ed19f671.us-west-2.amazon.com (Postfix) with ESMTPS id 2FC9B80760;
-	Tue, 10 Oct 2023 20:20:42 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.37; Tue, 10 Oct 2023 20:20:40 +0000
-Received: from 88665a182662.ant.amazon.com (10.187.171.11) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.37; Tue, 10 Oct 2023 20:20:37 +0000
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
-To: <martin.lau@linux.dev>
-CC: <bpf@vger.kernel.org>, <daan.j.demeyer@gmail.com>, <kernel-team@meta.com>,
-	<kuniyu@amazon.com>, <netdev@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v9 3/9] bpf: Add bpf_sock_addr_set_unix_addr() to allow writing unix sockaddr from bpf
-Date: Tue, 10 Oct 2023 13:20:30 -0700
-Message-ID: <20231010202030.32676-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <bdffefed-8945-e5ac-052d-0f0b49a30d39@linux.dev>
-References: <bdffefed-8945-e5ac-052d-0f0b49a30d39@linux.dev>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="UwBCPwow"
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34D28E
+	for <bpf@vger.kernel.org>; Tue, 10 Oct 2023 13:35:31 -0700 (PDT)
+Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39AKRVQ9022398;
+	Tue, 10 Oct 2023 20:35:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=Wv37tmo6TB2vunU6F6YVDQN53Oq5Mq8vnFGUl8ZqrKE=;
+ b=UwBCPwowsZbpEIvFAXTXF56sfzMVV4SMMhJxAJg3bI07ZBpqeQ3pyBZc92HGnwDYWCZG
+ ge/w9B7B45FMcKeIYwUI3ou6qgV5A7w65uo7gUyKfEN5/7Px/PmdpmYA14S394dQ0W/T
+ theQnNxA5MGFam4raoDputGSpXAWXNtUdTFJ3fpd4dnYjHGgMRnj8M//w0oRG7CHOaI0
+ vgE7RHBegz70Vq/lAVNirt3vHL1Bjkx9IF1nwCaYa/ib+vGghY32pmqoNmvWvLVrTRpr
+ f8adw1KSVaSkxRfaAkU+E1vBTDAvvxoKoj1seUBQRR83UjQSq+nRU5BJoPy3xQQQ0wIm 3w== 
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tndnkreph-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 10 Oct 2023 20:35:18 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 39AJuW2n000664;
+	Tue, 10 Oct 2023 20:35:17 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3tkk5kjrs4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 10 Oct 2023 20:35:17 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 39AKZEI220513518
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 10 Oct 2023 20:35:14 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2E0E52004B;
+	Tue, 10 Oct 2023 20:35:14 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7B67820040;
+	Tue, 10 Oct 2023 20:35:13 +0000 (GMT)
+Received: from heavy.boeblingen.de.ibm.com (unknown [9.171.0.76])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 10 Oct 2023 20:35:13 +0000 (GMT)
+From: Ilya Leoshkevich <iii@linux.ibm.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>, Song Liu <song@kernel.org>,
+        Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: [PATCH bpf 0/2] s390/bpf: Fix backchain issues in the trampoline
+Date: Tue, 10 Oct 2023 22:20:08 +0200
+Message-ID: <20231010203512.385819-1-iii@linux.ibm.com>
+X-Mailer: git-send-email 2.41.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 47NcBsDMppzMvs40cnuWFJVLrF0YNNDx
+X-Proofpoint-GUID: 47NcBsDMppzMvs40cnuWFJVLrF0YNNDx
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.187.171.11]
-X-ClientProxiedBy: EX19D043UWC001.ant.amazon.com (10.13.139.202) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-Precedence: Bulk
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-	SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-10_16,2023-10-10_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 phishscore=0 mlxlogscore=463 suspectscore=0
+ priorityscore=1501 mlxscore=0 bulkscore=0 clxscore=1015 adultscore=0
+ malwarescore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310100159
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-From: Martin KaFai Lau <martin.lau@linux.dev>
-Date: Tue, 10 Oct 2023 13:07:54 -0700
-> On 10/10/23 10:00 AM, Kuniyuki Iwashima wrote:
-> >> +__bpf_kfunc int bpf_sock_addr_set_unix_addr(struct bpf_sock_addr_kern *sa_kern,
-> >> +					    const u8 *addr, u32 addrlen__sz)
-> > I'd rename addrlen__sz to sun_path_len or something else because the
-> > conventional addrlen for AF_UNIX contains offsetof(struct sockaddr_un,
-> > sun_path).
-> 
-> The "__sz" suffix is required by the verifier. It is the size of the preceding 
-> argument "addr". While at it, addrlen__sz should be just "addr__sz" (or 
-> sun_path__sz, depending on what name is decided here) for consistency with other 
-> kfunc.
+Hi,
 
-I didn't know that, thank you!
+Song reported that a patch he wrote was causing kernel panics on s390.
+The disassembly printed by the kernel indicated that the stored
+backchain was not a valid pointer; setting a watchpoint in GDB has
+shown the culprit: the trampoline.
 
+Currently it's implemented without regard for backchain: it clobbers
+the caller's backchain and causes the issue reported by Song, and also
+doesn't store its own, making it impossible to unwind past itself.
 
-> 
-> I don't have strong preference on the argument name. However, if it is 
-> sun_path__sz, then the preceding argument should be renamed to "sun_path" also 
-> for consistency reason and then the kfunc should probably be renamed to 
-> bpf_sock_addr_set_sun_path.
+This series fixes both problems.
 
-I prefer sun_path, sun_path__sz, and bpf_sock_addr_set_sun_path() that are
-clearer and consistent with uAPI, sockaddr_un.sun_path.
+Best regards,
+Ilya
+
+[1] https://lore.kernel.org/bpf/20231004004350.533234-1-song@kernel.org/
+
+Ilya Leoshkevich (2):
+  s390/bpf: Fix clobbering the caller's backchain in the trampoline
+  s390/bpf: Fix unwinding past the trampoline
+
+ arch/s390/net/bpf_jit_comp.c | 25 ++++++++++++++++++++-----
+ 1 file changed, 20 insertions(+), 5 deletions(-)
+
+-- 
+2.41.0
+
