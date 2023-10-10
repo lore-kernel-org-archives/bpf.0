@@ -1,70 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0143847363;
-	Mon,  9 Oct 2023 23:50:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E73B037D;
+	Tue, 10 Oct 2023 00:23:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kXpgOFbE"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 60BACC433C9;
-	Mon,  9 Oct 2023 23:50:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696895425;
-	bh=eObT4QKQncrRqBMkVkxuhqNRGiLyShrYtKXKf4yAYzQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=kXpgOFbEy2ErehPdH+wuk4Ia7zRnnWwmldH201Ygfb2e1eM3q7uC7JzSStDKWEiPc
-	 BCSvTAKce4TpT6paCkvkJruXLgLd24/QKNdYJ80pwq+O0vdkucddDZZLvYFQK2nhof
-	 62l4NkHWR4zYIArHIM8Mm3cXBVQti43Ly2NH4f13qSQY9fX/z/cCS82jjaiHPpMhQc
-	 /oFe2pRPm/dbE0c/cr3/EYQ0BXhP3QAkWoB4bosws8nlIfu3yvzy84qlSbopG0K7RK
-	 UlaBYDaJMoFi0ado2i4uu3grTMlxER206tF5FlP709perf6t1Q3SNJU5UMuPJpYn8o
-	 Qoo/TtTcEsw4w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 41A5BE0009C;
-	Mon,  9 Oct 2023 23:50:25 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GAHRsvlP"
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47523A4;
+	Mon,  9 Oct 2023 17:23:33 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-538575a38ffso8319203a12.1;
+        Mon, 09 Oct 2023 17:23:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696897411; x=1697502211; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0+xtSIxKeZlWt1rOPef1/qN9coElu1e2jtPoBQvSrl4=;
+        b=GAHRsvlPfnZH5H4xc1ePKLCrYBP6I2VBMBzTNSfLGtYELuKXY/045qIB1mdtmyCaMR
+         9TlJ+8IQ8Q9IXOTbFQNkWeKp/ptn7QROVlNoBl9blXjUWQHESvorsrE2WXhEX6BXCyQN
+         miwda4zE9y9YOjqE1Zpk66tWdRZ0CK1U2X09Xz95/92q5fcJJTUvVgcYswkUeS/ipQdA
+         2QEY6gmhF3hOU0itykjP0Ml270hqLMSSuUasfzMmcm3EmiVTxiPsa+6Bz3O5ySTphEkZ
+         xeJY1UO7rZx6WnWKlx5XPhkFFIwYCGOnc0fvHbnmB+aDqeR00Y2rcmyDWAw0kuRpjnDz
+         8QiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696897411; x=1697502211;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0+xtSIxKeZlWt1rOPef1/qN9coElu1e2jtPoBQvSrl4=;
+        b=Ey9tt3oS/6LSw83FzpU8jASoGdyctBJ6xE5QQ15j0sE/YvbHHl2kgWrI07ZWvHbyrb
+         AQ8VAOsfqVovQYl9aBV86kiB+daDSHCsb/vUuWfuaICVIwiOycbQcd+YdJqXU160EhnF
+         /iQ2mH+TXXp5OwA9ZpcIrAeVktTq5UIKgA/CV/siOeYiTHxRaPLBD5AYJbGCNBDMggCb
+         tC4YmmgvQRm4UkqjsReLt2PTo2gqrzl9GfuqzlySsRWE3SCZkHqtmj5GylollMtm03yG
+         zMt5ch521M8cXPYL+a+XjB5Z6gr2LPog8CDlmS2pONmnlyMv/FoMRM9/W1zVgytJwRtr
+         dcQA==
+X-Gm-Message-State: AOJu0YwQnWRqj+Q9AcsB+m7PaS2kaWsafhlMXFtImXqHI2Fj/pmCwU8S
+	GQmyCGkIA0jQEUdzpiSWKyB0i41ZRQB50qFWrBk=
+X-Google-Smtp-Source: AGHT+IFcOS6mZD4ErCC+GOSNjKwQSa+Syn+k4d3jONYpT2mmZXA2SbvzfDb8387vIJxmxpk5S630q44mN7NU9wRQmQI=
+X-Received: by 2002:aa7:c508:0:b0:523:100b:462b with SMTP id
+ o8-20020aa7c508000000b00523100b462bmr15510585edq.5.1696897411356; Mon, 09 Oct
+ 2023 17:23:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v3 0/2] bpf: Fix src IP addr related limitation in
- bpf_*_fib_lookup()
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <169689542525.10639.4943696470893944027.git-patchwork-notify@kernel.org>
-Date: Mon, 09 Oct 2023 23:50:25 +0000
-References: <20231007081415.33502-1-m@lambda.lt>
-In-Reply-To: <20231007081415.33502-1-m@lambda.lt>
-To: Martynas Pumputis <m@lambda.lt>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
- martin.lau@linux.dev, razor@blackwall.org
+References: <20230919214800.3803828-1-andrii@kernel.org> <20230919214800.3803828-4-andrii@kernel.org>
+ <20230926-augen-biodiesel-fdb05e859aac@brauner> <CAEf4BzaH64kkccc1P-hqQj6Mccr3Q6x059G=A95d=KfU=yBMJQ@mail.gmail.com>
+ <20230927-kaution-ventilator-33a41ee74d63@brauner> <CAEf4BzZ2a7ZR75ka6bjXex=qrf9bQBEyDBN5tPtkfWbErhuOTw@mail.gmail.com>
+ <CAHC9VhTTzOCo8PL_wV=TwXHDjr7BymESMq8G1WQvsXnrw627uw@mail.gmail.com>
+In-Reply-To: <CAHC9VhTTzOCo8PL_wV=TwXHDjr7BymESMq8G1WQvsXnrw627uw@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 9 Oct 2023 17:23:19 -0700
+Message-ID: <CAEf4BzaQUXGi3jA5rDUTaE5DY0JjwSZyXH190q-HWQUtYSD_Vg@mail.gmail.com>
+Subject: Re: [PATCH v5 bpf-next 03/13] bpf: introduce BPF token object
+To: Paul Moore <paul@paul-moore.com>
+Cc: Christian Brauner <brauner@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, keescook@chromium.org, 
+	lennart@poettering.net, kernel-team@meta.com, sargun@sargun.me
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-Hello:
+On Mon, Oct 9, 2023 at 3:53=E2=80=AFPM Paul Moore <paul@paul-moore.com> wro=
+te:
+>
+> On Wed, Sep 27, 2023 at 12:03=E2=80=AFPM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> > On Wed, Sep 27, 2023 at 2:52=E2=80=AFAM Christian Brauner <brauner@kern=
+el.org> wrote:
+>
+> ...
+>
+> > > IOW, everything stays the same apart from the fact that bpf token fds
+> > > are actually file descriptors referring to a detached bpffs file inst=
+ead
+> > > of an anonymous inode file. IOW, bpf tokens are actual bpffs objects
+> > > tied to a bpffs instance.
+> >
+> > Ah, ok, this is a much smaller change than what I was about to make.
+> > I'm glad I asked and thanks for elaborating! I'll use
+> > alloc_file_pseudo() using bpffs mount in the next revision.
+>
+> Just a FYI, I'm still looking at v6 now, but moving from an anon_inode
+> to a bpffs inode may mean we need to drop a LSM hook in
+> bpf_token_create() to help mark the inode as a BPF token.  Not a big
+> deal either way, and I think it makes sense to use a bpffs inode as
+> opposed to an anonymous inode, just wanted to let you know.
 
-This series was applied to bpf/bpf-next.git (master)
-by Martin KaFai Lau <martin.lau@kernel.org>:
+Thanks for the heads up. I was about to post a new revision rebased on
+the latest bpf-next and with an unrelated selftest fix, but I'll give
+it a bit more time to get your feedback and incorporate it into the
+next revision. Thanks!
 
-On Sat,  7 Oct 2023 10:14:13 +0200 you wrote:
-> The patchset fixes the limitation of bpf_*_fib_lookup() helper, which
-> prevents it from being used in BPF dataplanes with network interfaces
-> which have more than one IP addr. See the first patch for more details.
-> Thanks!
-> 
-> * v2->v3: Address Martin KaFai Lau's feedback
-> * v1->v2: Use IPv6 stubs to fix compilation when CONFIG_IPV6=m.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf,v3,1/2] bpf: Derive source IP addr via bpf_*_fib_lookup()
-    https://git.kernel.org/bpf/bpf-next/c/dab4e1f06cab
-  - [bpf,v3,2/2] selftests/bpf: Add BPF_FIB_LOOKUP_SRC tests
-    https://git.kernel.org/bpf/bpf-next/c/b0f7a8ca1179
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+>
+> --
+> paul-moore.com
