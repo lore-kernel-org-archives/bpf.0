@@ -1,123 +1,169 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 404BB28F0;
-	Tue, 10 Oct 2023 18:59:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D1F93714F
+	for <bpf@vger.kernel.org>; Tue, 10 Oct 2023 18:59:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ecU4MnY9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DC1FC433C7;
-	Tue, 10 Oct 2023 18:59:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1696964388;
-	bh=QjP+9QKzrymfN2C8lY1Hip1CW9eHoE7JMBdIbHB9Czk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ecU4MnY9/zXzPaOCdkPNhnTUuXhWI95KlqSPWzzLZmRpvFprf7Ugvz4/J9Arb1C3O
-	 Wh9q2HmUyWdFPy/Qm7NX1EVtWTNTSHV2ExW0G94RU7cBoXEwsFHa2gvWw8rjWN5MAr
-	 3X5DJHZo3tTaultpVLa2Gmy4WVDYcpQg4ZK0vQQM=
-Date: Tue, 10 Oct 2023 20:59:45 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Eric Dumazet <edumazet@google.com>
-Cc: Matthieu Baerts <matttbe@kernel.org>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>, stable@vger.kernel.org,
-	patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-	torvalds@linux-foundation.org, akpm@linux-foundation.org,
-	linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-	lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-	f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org,
-	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>, Netdev <netdev@vger.kernel.org>,
-	bpf <bpf@vger.kernel.org>, MPTCP Upstream <mptcp@lists.linux.dev>
-Subject: Re: [PATCH 6.1 000/162] 6.1.57-rc1 review
-Message-ID: <2023101036-relock-slogan-3b3c@gregkh>
-References: <20231009130122.946357448@linuxfoundation.org>
- <CA+G9fYvWCf4fYuQsVLu0NdN+=W73bW1hr1hiokajktNzPFyYtA@mail.gmail.com>
- <6447b32f-abb9-4459-aca5-3d510a66b685@kernel.org>
- <CANn89iJ_KMA=dQWPhU8WQBc0_CvUztUBodAf-cW-2F=HMX3HJg@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="gayL2gdw"
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C627C9E
+	for <bpf@vger.kernel.org>; Tue, 10 Oct 2023 11:59:51 -0700 (PDT)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39AIhmL9023015
+	for <bpf@vger.kernel.org>; Tue, 10 Oct 2023 11:59:51 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=lLXjkUV/jtSKmegdIFOrbjF06nW9kVO9iukuLfI3APY=;
+ b=gayL2gdwxo9yd7p8BY1g0G5XIMH9m8U2TAUwIYqK39Gkjql3/GGqnfgfU4IhPnNyHlkt
+ zbwiSL7BZoVDtdlAznkVcpTItPlZCzsITE3kGGNFYelJS3FmZAervzvUlvLqm8xhML4z
+ Fn9H/FFa1RBX3UWcQzoKJVDOlcwDtCX7GB8= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3tnc4k84nm-4
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Tue, 10 Oct 2023 11:59:50 -0700
+Received: from twshared29562.14.frc2.facebook.com (2620:10d:c0a8:1c::1b) by
+ mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 10 Oct 2023 11:59:49 -0700
+Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
+	id AE224258848E1; Tue, 10 Oct 2023 11:59:47 -0700 (PDT)
+From: Dave Marchevsky <davemarchevsky@fb.com>
+To: <bpf@vger.kernel.org>
+CC: Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann
+	<daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau
+	<martin.lau@kernel.org>,
+        Kernel Team <kernel-team@fb.com>,
+        Dave Marchevsky
+	<davemarchevsky@fb.com>
+Subject: [PATCH v6 bpf-next 2/4] selftests/bpf: Rename bpf_iter_task_vma.c to bpf_iter_task_vmas.c
+Date: Tue, 10 Oct 2023 11:59:42 -0700
+Message-ID: <20231010185944.3888849-3-davemarchevsky@fb.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231010185944.3888849-1-davemarchevsky@fb.com>
+References: <20231010185944.3888849-1-davemarchevsky@fb.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANn89iJ_KMA=dQWPhU8WQBc0_CvUztUBodAf-cW-2F=HMX3HJg@mail.gmail.com>
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: i187MThM9IYMq3KdtUxpjfKRtNvAsKkM
+X-Proofpoint-GUID: i187MThM9IYMq3KdtUxpjfKRtNvAsKkM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-10_14,2023-10-10_01,2023-05-22_02
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Tue, Oct 10, 2023 at 07:24:08PM +0200, Eric Dumazet wrote:
-> On Tue, Oct 10, 2023 at 6:51 PM Matthieu Baerts <matttbe@kernel.org> wrote:
-> >
-> > Hi Naresh,
-> >
-> > On 09/10/2023 22:43, Naresh Kamboju wrote:
-> > > On Mon, 9 Oct 2023 at 18:46, Greg Kroah-Hartman
-> > > <gregkh@linuxfoundation.org> wrote:
-> > >>
-> > >> This is the start of the stable review cycle for the 6.1.57 release.
-> > >> There are 162 patches in this series, all will be posted as a response
-> > >> to this one.  If anyone has any issues with these being applied, please
-> > >> let me know.
-> > >>
-> > >> Responses should be made by Wed, 11 Oct 2023 13:00:55 +0000.
-> > >> Anything received after that time might be too late.
-> > >>
-> > >> The whole patch series can be found in one patch at:
-> > >>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.57-rc1.gz
-> > >> or in the git tree and branch at:
-> > >>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> > >> and the diffstat can be found below.
-> > >>
-> > >> thanks,
-> > >>
-> > >> greg k-h
-> > >
-> > >
-> > > The following kernel warnings were noticed several times on arm x15 devices
-> > > running stable-rc 6.1.57-rc1 while running  selftests: net: mptcp_connect.sh
-> > > and netfilter: nft_fib.sh.
-> > >
-> > > The possible unsafe locking scenario detected.
-> > >
-> > > FYI,
-> > > Stable-rc/ linux.6.1.y kernel running stable/ linux.6.5.y selftest in this case.
-> > >
-> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > >
-> > > kselftest: Running tests in net/mptcp
-> >
-> > Thank you for having reported the issue and having added MPTCP ML in Cc!
-> >
-> > Just to avoid confusions: the "WARNING" you shared when running
-> > 'mptcp_connect.sh' selftest appeared before creating the first MPTCP
-> > connection. It looks like there is no reference to MPTCP in the
-> > calltraces. Also, because you have the same issue with nft_fib.sh, I
-> > would say that this issue is not linked to MPTCP but rather to a recent
-> > modification in the IPv6 stack.
-> >
-> > By chance, did you start a "git bisect" to identify the commit causing
-> > this issue?
-> >
-> >
-> 
-> I think stable teams missed to backport
-> 
-> commit c486640aa710ddd06c13a7f7162126e1552e8842
-> Author: Eric Dumazet <edumazet@google.com>
-> Date:   Mon Mar 13 20:17:32 2023 +0000
-> 
->     ipv6: remove one read_lock()/read_unlock() pair in rt6_check_neigh()
-> 
->     rt6_check_neigh() uses read_lock() to protect n->nud_state reading.
-> 
->     This seems overkill and causes false sharing.
-> 
->     Signed-off-by: Eric Dumazet <edumazet@google.com>
->     Reviewed-by: David Ahern <dsahern@kernel.org>
->     Reviewed-by: Martin KaFai Lau <martin.lau@kernel.org>
->     Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Further patches in this series will add a struct bpf_iter_task_vma,
+which will result in a name collision with the selftest prog renamed in
+this patch. Rename the selftest to avoid the collision.
 
-Ah, didn't know we needed that, now queued up, thanks!
+Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
+---
+ .../selftests/bpf/prog_tests/bpf_iter.c       | 26 +++++++++----------
+ ...f_iter_task_vma.c =3D> bpf_iter_task_vmas.c} |  0
+ 2 files changed, 13 insertions(+), 13 deletions(-)
+ rename tools/testing/selftests/bpf/progs/{bpf_iter_task_vma.c =3D> bpf_i=
+ter_task_vmas.c} (100%)
 
-greg k-h
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/te=
+sting/selftests/bpf/prog_tests/bpf_iter.c
+index 1f02168103dd..41aba139b20b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+@@ -10,7 +10,7 @@
+ #include "bpf_iter_task.skel.h"
+ #include "bpf_iter_task_stack.skel.h"
+ #include "bpf_iter_task_file.skel.h"
+-#include "bpf_iter_task_vma.skel.h"
++#include "bpf_iter_task_vmas.skel.h"
+ #include "bpf_iter_task_btf.skel.h"
+ #include "bpf_iter_tcp4.skel.h"
+ #include "bpf_iter_tcp6.skel.h"
+@@ -1399,19 +1399,19 @@ static void str_strip_first_line(char *str)
+ static void test_task_vma_common(struct bpf_iter_attach_opts *opts)
+ {
+ 	int err, iter_fd =3D -1, proc_maps_fd =3D -1;
+-	struct bpf_iter_task_vma *skel;
++	struct bpf_iter_task_vmas *skel;
+ 	int len, read_size =3D 4;
+ 	char maps_path[64];
+=20
+-	skel =3D bpf_iter_task_vma__open();
+-	if (!ASSERT_OK_PTR(skel, "bpf_iter_task_vma__open"))
++	skel =3D bpf_iter_task_vmas__open();
++	if (!ASSERT_OK_PTR(skel, "bpf_iter_task_vmas__open"))
+ 		return;
+=20
+ 	skel->bss->pid =3D getpid();
+ 	skel->bss->one_task =3D opts ? 1 : 0;
+=20
+-	err =3D bpf_iter_task_vma__load(skel);
+-	if (!ASSERT_OK(err, "bpf_iter_task_vma__load"))
++	err =3D bpf_iter_task_vmas__load(skel);
++	if (!ASSERT_OK(err, "bpf_iter_task_vmas__load"))
+ 		goto out;
+=20
+ 	skel->links.proc_maps =3D bpf_program__attach_iter(
+@@ -1462,25 +1462,25 @@ static void test_task_vma_common(struct bpf_iter_=
+attach_opts *opts)
+ out:
+ 	close(proc_maps_fd);
+ 	close(iter_fd);
+-	bpf_iter_task_vma__destroy(skel);
++	bpf_iter_task_vmas__destroy(skel);
+ }
+=20
+ static void test_task_vma_dead_task(void)
+ {
+-	struct bpf_iter_task_vma *skel;
++	struct bpf_iter_task_vmas *skel;
+ 	int wstatus, child_pid =3D -1;
+ 	time_t start_tm, cur_tm;
+ 	int err, iter_fd =3D -1;
+ 	int wait_sec =3D 3;
+=20
+-	skel =3D bpf_iter_task_vma__open();
+-	if (!ASSERT_OK_PTR(skel, "bpf_iter_task_vma__open"))
++	skel =3D bpf_iter_task_vmas__open();
++	if (!ASSERT_OK_PTR(skel, "bpf_iter_task_vmas__open"))
+ 		return;
+=20
+ 	skel->bss->pid =3D getpid();
+=20
+-	err =3D bpf_iter_task_vma__load(skel);
+-	if (!ASSERT_OK(err, "bpf_iter_task_vma__load"))
++	err =3D bpf_iter_task_vmas__load(skel);
++	if (!ASSERT_OK(err, "bpf_iter_task_vmas__load"))
+ 		goto out;
+=20
+ 	skel->links.proc_maps =3D bpf_program__attach_iter(
+@@ -1533,7 +1533,7 @@ static void test_task_vma_dead_task(void)
+ out:
+ 	waitpid(child_pid, &wstatus, 0);
+ 	close(iter_fd);
+-	bpf_iter_task_vma__destroy(skel);
++	bpf_iter_task_vmas__destroy(skel);
+ }
+=20
+ void test_bpf_sockmap_map_iter_fd(void)
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_task_vma.c b/tool=
+s/testing/selftests/bpf/progs/bpf_iter_task_vmas.c
+similarity index 100%
+rename from tools/testing/selftests/bpf/progs/bpf_iter_task_vma.c
+rename to tools/testing/selftests/bpf/progs/bpf_iter_task_vmas.c
+--=20
+2.34.1
+
