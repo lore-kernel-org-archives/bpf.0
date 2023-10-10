@@ -1,224 +1,363 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A502822EE5
-	for <bpf@vger.kernel.org>; Tue, 10 Oct 2023 19:00:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 855B78BFA;
+	Tue, 10 Oct 2023 19:15:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="CpCbzR/O"
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E000C6
-	for <bpf@vger.kernel.org>; Tue, 10 Oct 2023 12:00:07 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39AIgGxq007923
-	for <bpf@vger.kernel.org>; Tue, 10 Oct 2023 12:00:07 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=+P1PBnH3r+y0tE+bg3wHqpGo2GyILzZhhzKVAkbMLYg=;
- b=CpCbzR/OkKZ3/Voik3W1d3SdjcC+MDHC4lecBM8q5uyMHTmq3wUG67ftYA98nIBTu0XN
- 1AWthB17tW000V7s7k6ZoxZY4PWnJ41ZWo0wNa8p18fk5ZCNzGEJVjQG6pkxGLE4R6cD
- pIGNnkQTe9Jca+nOJQLcEcgyObs+wBw0jyE= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3tnc4a85ss-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 10 Oct 2023 12:00:07 -0700
-Received: from twshared15247.17.frc2.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 10 Oct 2023 11:59:51 -0700
-Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-	id 60AD3258848E8; Tue, 10 Oct 2023 11:59:48 -0700 (PDT)
-From: Dave Marchevsky <davemarchevsky@fb.com>
-To: <bpf@vger.kernel.org>
-CC: Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann
-	<daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau
-	<martin.lau@kernel.org>,
-        Kernel Team <kernel-team@fb.com>,
-        Dave Marchevsky
-	<davemarchevsky@fb.com>,
-        Nathan Slingerland <slinger@meta.com>
-Subject: [PATCH v6 bpf-next 3/4] bpf: Introduce task_vma open-coded iterator kfuncs
-Date: Tue, 10 Oct 2023 11:59:43 -0700
-Message-ID: <20231010185944.3888849-4-davemarchevsky@fb.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231010185944.3888849-1-davemarchevsky@fb.com>
-References: <20231010185944.3888849-1-davemarchevsky@fb.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KaG6CEfo"
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93785AC;
+	Tue, 10 Oct 2023 12:15:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696965310; x=1728501310;
+  h=date:from:to:cc:subject:message-id;
+  bh=3xtiwVkZvQPkX3kPathx7bVZ3F+3M09fD/+72Yn/Tg0=;
+  b=KaG6CEfolqO5B1SMHwQGgftabGYAzxHMo/bT7EdprGhgLuC7x1XE656y
+   uy565uzARhwHJspQwf+FqA1SzMeCZXxhYLKPY9595VnHtbXqiLXDEaY8F
+   zL7KEbjwgqJDWe2GVymJ7uXtnCioblfje0+0DG0S0LUAYkMoreqa+H9E2
+   tLd6cPUmabkzXrS9/Z9qrSvUECn1ClKTkCC6BHH3cV71LM+v7cntyhrDZ
+   xMF1UwLBvtYojZXl0N/S0E+2A59S8ktcO9IXvxxV0jyT6sjGaS21sgL7i
+   ipZguMfBPiSZrpOXLYrbhX0JmI0EQ6z4miJmGarV8t+QAZKyLOjan7LMd
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="6049519"
+X-IronPort-AV: E=Sophos;i="6.03,213,1694761200"; 
+   d="scan'208";a="6049519"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2023 12:15:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="730217522"
+X-IronPort-AV: E=Sophos;i="6.03,213,1694761200"; 
+   d="scan'208";a="730217522"
+Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 10 Oct 2023 12:15:06 -0700
+Received: from kbuild by f64821696465 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qqIC8-0000xy-0C;
+	Tue, 10 Oct 2023 19:15:04 +0000
+Date: Wed, 11 Oct 2023 03:14:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Linux Memory Management List <linux-mm@kvack.org>,
+ amd-gfx@lists.freedesktop.org, bpf@vger.kernel.org,
+ kunit-dev@googlegroups.com, kvm@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: [linux-next:master] BUILD REGRESSION
+ c0a6edb636cba9c0d1db966a54d910a02e52e4be
+Message-ID: <202310110317.qBxdkqdN-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: kacOxFFa0RBY5nDcKhi0ej6Pibj8QyeA
-X-Proofpoint-GUID: kacOxFFa0RBY5nDcKhi0ej6Pibj8QyeA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-10_14,2023-10-10_01,2023-05-22_02
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
 
-This patch adds kfuncs bpf_iter_task_vma_{new,next,destroy} which allow
-creation and manipulation of struct bpf_iter_task_vma in open-coded
-iterator style. BPF programs can use these kfuncs directly or through
-bpf_for_each macro for natural-looking iteration of all task vmas.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: c0a6edb636cba9c0d1db966a54d910a02e52e4be  Add linux-next specific files for 20231010
 
-The implementation borrows heavily from bpf_find_vma helper's locking -
-differing only in that it holds the mmap_read lock for all iterations
-while the helper only executes its provided callback on a maximum of 1
-vma. Aside from locking, struct vma_iterator and vma_next do all the
-heavy lifting.
+Error/Warning reports:
 
-A pointer to an inner data struct, struct bpf_iter_task_vma_data, is the
-only field in struct bpf_iter_task_vma. This is because the inner data
-struct contains a struct vma_iterator (not ptr), whose size is likely to
-change under us. If bpf_iter_task_vma_kern contained vma_iterator directl=
-y
-such a change would require change in opaque bpf_iter_task_vma struct's
-size. So better to allocate vma_iterator using BPF allocator, and since
-that alloc must already succeed, might as well allocate all iter fields,
-thereby freezing struct bpf_iter_task_vma size.
+https://lore.kernel.org/oe-kbuild-all/202309122047.cRi9yJrq-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202309160053.sFDnNiu4-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202309192314.VBsjiIm5-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202309202345.yPRVHW8Q-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202309212121.cul1pTRa-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202309212339.hxhBu2F1-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202310051547.40nm4Sif-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202310100409.LrBAYpmk-lkp@intel.com
 
-Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
-Cc: Nathan Slingerland <slinger@meta.com>
----
- kernel/bpf/helpers.c   |  3 ++
- kernel/bpf/task_iter.c | 85 ++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 88 insertions(+)
+Error/Warning: (recently discovered and may have been fixed)
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index d2840dd5b00d..62a53ebfedf9 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2552,6 +2552,9 @@ BTF_ID_FLAGS(func, bpf_dynptr_slice_rdwr, KF_RET_NU=
-LL)
- BTF_ID_FLAGS(func, bpf_iter_num_new, KF_ITER_NEW)
- BTF_ID_FLAGS(func, bpf_iter_num_next, KF_ITER_NEXT | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_iter_num_destroy, KF_ITER_DESTROY)
-+BTF_ID_FLAGS(func, bpf_iter_task_vma_new, KF_ITER_NEW | KF_RCU)
-+BTF_ID_FLAGS(func, bpf_iter_task_vma_next, KF_ITER_NEXT | KF_RET_NULL)
-+BTF_ID_FLAGS(func, bpf_iter_task_vma_destroy, KF_ITER_DESTROY)
- BTF_ID_FLAGS(func, bpf_dynptr_adjust)
- BTF_ID_FLAGS(func, bpf_dynptr_is_null)
- BTF_ID_FLAGS(func, bpf_dynptr_is_rdonly)
-diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-index 7473068ed313..d6e29aca201a 100644
---- a/kernel/bpf/task_iter.c
-+++ b/kernel/bpf/task_iter.c
-@@ -7,7 +7,9 @@
- #include <linux/fs.h>
- #include <linux/fdtable.h>
- #include <linux/filter.h>
-+#include <linux/bpf_mem_alloc.h>
- #include <linux/btf_ids.h>
-+#include <linux/mm_types.h>
- #include "mmap_unlock_work.h"
-=20
- static const char * const iter_task_type_names[] =3D {
-@@ -803,6 +805,89 @@ const struct bpf_func_proto bpf_find_vma_proto =3D {
- 	.arg5_type	=3D ARG_ANYTHING,
- };
-=20
-+struct bpf_iter_task_vma_kern_data {
-+	struct task_struct *task;
-+	struct mm_struct *mm;
-+	struct mmap_unlock_irq_work *work;
-+	struct vma_iterator vmi;
-+};
-+
-+struct bpf_iter_task_vma {
-+	/* opaque iterator state; having __u64 here allows to preserve correct
-+	 * alignment requirements in vmlinux.h, generated from BTF
-+	 */
-+	__u64 __opaque[1];
-+} __attribute__((aligned(8)));
-+
-+/* Non-opaque version of bpf_iter_task_vma */
-+struct bpf_iter_task_vma_kern {
-+	struct bpf_iter_task_vma_kern_data *data;
-+} __attribute__((aligned(8)));
-+
-+__bpf_kfunc int bpf_iter_task_vma_new(struct bpf_iter_task_vma *it,
-+				      struct task_struct *task, u64 addr)
-+{
-+	struct bpf_iter_task_vma_kern *kit =3D (void *)it;
-+	bool irq_work_busy =3D false;
-+	int err;
-+
-+	BUILD_BUG_ON(sizeof(struct bpf_iter_task_vma_kern) !=3D sizeof(struct b=
-pf_iter_task_vma));
-+	BUILD_BUG_ON(__alignof__(struct bpf_iter_task_vma_kern) !=3D __alignof_=
-_(struct bpf_iter_task_vma));
-+
-+	/* is_iter_reg_valid_uninit guarantees that kit hasn't been initialized
-+	 * before, so non-NULL kit->data doesn't point to previously
-+	 * bpf_mem_alloc'd bpf_iter_task_vma_kern_data
-+	 */
-+	kit->data =3D bpf_mem_alloc(&bpf_global_ma, sizeof(struct bpf_iter_task=
-_vma_kern_data));
-+	if (!kit->data)
-+		return -ENOMEM;
-+
-+	kit->data->task =3D get_task_struct(task);
-+	kit->data->mm =3D task->mm;
-+	if (!kit->data->mm) {
-+		err =3D -ENOENT;
-+		goto err_cleanup_iter;
-+	}
-+
-+	/* kit->data->work =3D=3D NULL is valid after bpf_mmap_unlock_get_irq_w=
-ork */
-+	irq_work_busy =3D bpf_mmap_unlock_get_irq_work(&kit->data->work);
-+	if (irq_work_busy || !mmap_read_trylock(kit->data->mm)) {
-+		err =3D -EBUSY;
-+		goto err_cleanup_iter;
-+	}
-+
-+	vma_iter_init(&kit->data->vmi, kit->data->mm, addr);
-+	return 0;
-+
-+err_cleanup_iter:
-+	if (kit->data->task)
-+		put_task_struct(kit->data->task);
-+	bpf_mem_free(&bpf_global_ma, kit->data);
-+	/* NULL kit->data signals failed bpf_iter_task_vma initialization */
-+	kit->data =3D NULL;
-+	return err;
-+}
-+
-+__bpf_kfunc struct vm_area_struct *bpf_iter_task_vma_next(struct bpf_ite=
-r_task_vma *it)
-+{
-+	struct bpf_iter_task_vma_kern *kit =3D (void *)it;
-+
-+	if (!kit->data) /* bpf_iter_task_vma_new failed */
-+		return NULL;
-+	return vma_next(&kit->data->vmi);
-+}
-+
-+__bpf_kfunc void bpf_iter_task_vma_destroy(struct bpf_iter_task_vma *it)
-+{
-+	struct bpf_iter_task_vma_kern *kit =3D (void *)it;
-+
-+	if (kit->data) {
-+		bpf_mmap_unlock_mm(kit->data->work, kit->data->mm);
-+		put_task_struct(kit->data->task);
-+		bpf_mem_free(&bpf_global_ma, kit->data);
-+	}
-+}
-+
- DEFINE_PER_CPU(struct mmap_unlock_irq_work, mmap_unlock_work);
-=20
- static void do_mmap_read_unlock(struct irq_work *entry)
---=20
-2.34.1
+drivers/gpu/drm/amd/amdgpu/amdgpu_gmc.c:274: warning: Function parameter or member 'gart_placement' not described in 'amdgpu_gmc_gart_location'
+fs/bcachefs/bcachefs_format.h:215:25: warning: 'p' offset 3 in 'struct bkey' isn't aligned to 4 [-Wpacked-not-aligned]
+fs/bcachefs/bcachefs_format.h:217:25: warning: 'version' offset 27 in 'struct bkey' isn't aligned to 4 [-Wpacked-not-aligned]
+fs/bcachefs/btree_key_cache.c:113:7: warning: result of comparison of constant 9223372036854775807 with expression of type 'u32' (aka 'unsigned int') is always true [-Wtautological-constant-out-of-range-compare]
+include/linux/fortify-string.h:57:33: warning: writing 8 bytes into a region of size 0 [-Wstringop-overflow=]
+kernel/bpf/helpers.c:1909:19: warning: no previous declaration for 'bpf_percpu_obj_new_impl' [-Wmissing-declarations]
+kernel/bpf/helpers.c:1945:18: warning: no previous declaration for 'bpf_percpu_obj_drop_impl' [-Wmissing-declarations]
+kernel/bpf/helpers.c:2480:18: warning: no previous declaration for 'bpf_throw' [-Wmissing-declarations]
+lib/kunit/kunit-test.c:565:25: warning: cast from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
 
+Unverified Error/Warning (likely false positive, please contact us if interested):
+
+arch/x86/kvm/x86.c:9016 x86_emulate_instruction() warn: missing error code? 'r'
+drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c:538:25-29: ERROR: aconnector is NULL but dereferenced.
+
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|-- arc-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|   |-- fs-bcachefs-bcachefs_format.h:warning:p-offset-in-struct-bkey-isn-t-aligned-to
+|   `-- fs-bcachefs-bcachefs_format.h:warning:version-offset-in-struct-bkey-isn-t-aligned-to
+|-- arc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|   |-- fs-bcachefs-bcachefs_format.h:warning:p-offset-in-struct-bkey-isn-t-aligned-to
+|   `-- fs-bcachefs-bcachefs_format.h:warning:version-offset-in-struct-bkey-isn-t-aligned-to
+|-- arm-allmodconfig
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|-- arm-allyesconfig
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|-- arm64-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|   `-- include-linux-fortify-string.h:warning:writing-bytes-into-a-region-of-size
+|-- arm64-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|   `-- include-linux-fortify-string.h:warning:writing-bytes-into-a-region-of-size
+|-- csky-allmodconfig
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|-- csky-allyesconfig
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|-- i386-allmodconfig
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|-- i386-allyesconfig
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|-- i386-randconfig-051-20231010
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|-- loongarch-allmodconfig
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|-- loongarch-allyesconfig
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|-- loongarch-defconfig
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|-- loongarch-randconfig-001-20231010
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|-- m68k-allmodconfig
+|   |-- fs-bcachefs-bcachefs_format.h:warning:p-offset-in-struct-bkey-isn-t-aligned-to
+|   `-- fs-bcachefs-bcachefs_format.h:warning:version-offset-in-struct-bkey-isn-t-aligned-to
+|-- m68k-allyesconfig
+|   |-- fs-bcachefs-bcachefs_format.h:warning:p-offset-in-struct-bkey-isn-t-aligned-to
+|   `-- fs-bcachefs-bcachefs_format.h:warning:version-offset-in-struct-bkey-isn-t-aligned-to
+|-- microblaze-allmodconfig
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|-- microblaze-allyesconfig
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|-- mips-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|   |-- fs-bcachefs-bcachefs_format.h:warning:p-offset-in-struct-bkey-isn-t-aligned-to
+|   `-- fs-bcachefs-bcachefs_format.h:warning:version-offset-in-struct-bkey-isn-t-aligned-to
+|-- mips-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|   |-- fs-bcachefs-bcachefs_format.h:warning:p-offset-in-struct-bkey-isn-t-aligned-to
+|   `-- fs-bcachefs-bcachefs_format.h:warning:version-offset-in-struct-bkey-isn-t-aligned-to
+|-- mips-loongson3_defconfig
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|-- openrisc-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|   |-- fs-bcachefs-bcachefs_format.h:warning:p-offset-in-struct-bkey-isn-t-aligned-to
+|   `-- fs-bcachefs-bcachefs_format.h:warning:version-offset-in-struct-bkey-isn-t-aligned-to
+|-- openrisc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|   |-- fs-bcachefs-bcachefs_format.h:warning:p-offset-in-struct-bkey-isn-t-aligned-to
+|   `-- fs-bcachefs-bcachefs_format.h:warning:version-offset-in-struct-bkey-isn-t-aligned-to
+|-- parisc-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|   |-- fs-bcachefs-bcachefs_format.h:warning:p-offset-in-struct-bkey-isn-t-aligned-to
+|   `-- fs-bcachefs-bcachefs_format.h:warning:version-offset-in-struct-bkey-isn-t-aligned-to
+|-- parisc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|   |-- fs-bcachefs-bcachefs_format.h:warning:p-offset-in-struct-bkey-isn-t-aligned-to
+|   `-- fs-bcachefs-bcachefs_format.h:warning:version-offset-in-struct-bkey-isn-t-aligned-to
+|-- powerpc-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|   |-- fs-bcachefs-bcachefs_format.h:warning:p-offset-in-struct-bkey-isn-t-aligned-to
+|   |-- fs-bcachefs-bcachefs_format.h:warning:version-offset-in-struct-bkey-isn-t-aligned-to
+|   `-- include-linux-fortify-string.h:warning:writing-bytes-into-a-region-of-size
+|-- powerpc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|   |-- fs-bcachefs-bcachefs_format.h:warning:p-offset-in-struct-bkey-isn-t-aligned-to
+|   |-- fs-bcachefs-bcachefs_format.h:warning:version-offset-in-struct-bkey-isn-t-aligned-to
+|   `-- include-linux-fortify-string.h:warning:writing-bytes-into-a-region-of-size
+|-- powerpc-randconfig-003-20231010
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|-- riscv-allmodconfig
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|-- riscv-allyesconfig
+|   `-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|-- s390-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|   |-- fs-bcachefs-bcachefs_format.h:warning:p-offset-in-struct-bkey-isn-t-aligned-to
+|   |-- fs-bcachefs-bcachefs_format.h:warning:version-offset-in-struct-bkey-isn-t-aligned-to
+|   `-- include-linux-fortify-string.h:warning:writing-bytes-into-a-region-of-size
+|-- s390-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|   |-- fs-bcachefs-bcachefs_format.h:warning:p-offset-in-struct-bkey-isn-t-aligned-to
+|   |-- fs-bcachefs-bcachefs_format.h:warning:version-offset-in-struct-bkey-isn-t-aligned-to
+|   `-- include-linux-fortify-string.h:warning:writing-bytes-into-a-region-of-size
+|-- sparc-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|   |-- fs-bcachefs-bcachefs_format.h:warning:p-offset-in-struct-bkey-isn-t-aligned-to
+|   `-- fs-bcachefs-bcachefs_format.h:warning:version-offset-in-struct-bkey-isn-t-aligned-to
+|-- sparc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|   |-- fs-bcachefs-bcachefs_format.h:warning:p-offset-in-struct-bkey-isn-t-aligned-to
+|   `-- fs-bcachefs-bcachefs_format.h:warning:version-offset-in-struct-bkey-isn-t-aligned-to
+|-- sparc64-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|   |-- fs-bcachefs-bcachefs_format.h:warning:p-offset-in-struct-bkey-isn-t-aligned-to
+|   `-- fs-bcachefs-bcachefs_format.h:warning:version-offset-in-struct-bkey-isn-t-aligned-to
+|-- sparc64-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|   |-- fs-bcachefs-bcachefs_format.h:warning:p-offset-in-struct-bkey-isn-t-aligned-to
+|   `-- fs-bcachefs-bcachefs_format.h:warning:version-offset-in-struct-bkey-isn-t-aligned-to
+|-- x86_64-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+|   `-- include-linux-fortify-string.h:warning:writing-bytes-into-a-region-of-size
+|-- x86_64-randconfig-011-20231010
+|   |-- kernel-bpf-helpers.c:warning:no-previous-declaration-for-bpf_percpu_obj_drop_impl
+|   |-- kernel-bpf-helpers.c:warning:no-previous-declaration-for-bpf_percpu_obj_new_impl
+|   `-- kernel-bpf-helpers.c:warning:no-previous-declaration-for-bpf_throw
+|-- x86_64-randconfig-013-20231010
+|   |-- kernel-bpf-helpers.c:warning:no-previous-declaration-for-bpf_percpu_obj_drop_impl
+|   |-- kernel-bpf-helpers.c:warning:no-previous-declaration-for-bpf_percpu_obj_new_impl
+|   `-- kernel-bpf-helpers.c:warning:no-previous-declaration-for-bpf_throw
+|-- x86_64-randconfig-104-20231010
+|   `-- drivers-gpu-drm-amd-display-amdgpu_dm-amdgpu_dm_helpers.c:ERROR:aconnector-is-NULL-but-dereferenced.
+`-- x86_64-randconfig-161-20231010
+    |-- arch-x86-kvm-x86.c-x86_emulate_instruction()-warn:missing-error-code-r
+    `-- mm-gup.c-pin_user_pages_fd()-warn:unsigned-start-is-never-less-than-zero.
+clang_recent_errors
+`-- arm64-allyesconfig
+    |-- drivers-gpu-drm-amd-amdgpu-amdgpu_gmc.c:warning:Function-parameter-or-member-gart_placement-not-described-in-amdgpu_gmc_gart_location
+    |-- fs-bcachefs-btree_key_cache.c:warning:result-of-comparison-of-constant-with-expression-of-type-u32-(aka-unsigned-int-)-is-always-true
+    `-- lib-kunit-kunit-test.c:warning:cast-from-void-(-)(const-void-)-to-kunit_action_t-(aka-void-(-)(void-)-)-converts-to-incompatible-function-type
+
+elapsed time: 773m
+
+configs tested: 118
+configs skipped: 2
+
+tested configs:
+alpha                            alldefconfig   gcc  
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                          axs101_defconfig   gcc  
+arc                                 defconfig   gcc  
+arc                            hsdk_defconfig   gcc  
+arc                   randconfig-001-20231010   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                         mv78xx0_defconfig   clang
+arm                        mvebu_v7_defconfig   gcc  
+arm64                            allmodconfig   gcc  
+arm64                             allnoconfig   gcc  
+arm64                            allyesconfig   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   clang
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                  randconfig-011-20231010   gcc  
+i386                  randconfig-012-20231010   gcc  
+i386                  randconfig-013-20231010   gcc  
+i386                  randconfig-014-20231010   gcc  
+i386                  randconfig-015-20231010   gcc  
+i386                  randconfig-016-20231010   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20231010   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                        m5272c3_defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                      loongson3_defconfig   gcc  
+mips                      maltaaprp_defconfig   clang
+mips                        vocore2_defconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+openrisc                       virt_defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   gcc  
+powerpc                   bluestone_defconfig   clang
+powerpc                 mpc8313_rdb_defconfig   clang
+powerpc                      ppc44x_defconfig   clang
+powerpc                      ppc6xx_defconfig   gcc  
+powerpc                     tqm8555_defconfig   gcc  
+powerpc                      tqm8xx_defconfig   gcc  
+powerpc64                        alldefconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                 kfr2r09-romimage_defconfig   gcc  
+sh                          r7780mp_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+um                               alldefconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                randconfig-011-20231010   gcc  
+x86_64                randconfig-012-20231010   gcc  
+x86_64                randconfig-013-20231010   gcc  
+x86_64                randconfig-076-20231010   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
