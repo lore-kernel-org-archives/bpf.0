@@ -1,16 +1,16 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 690921C2A9;
-	Wed, 11 Oct 2023 09:27:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F39A1C68C;
+	Wed, 11 Oct 2023 09:27:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9748C9C;
-	Wed, 11 Oct 2023 02:27:31 -0700 (PDT)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VtwGXXu_1697016448;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VtwGXXu_1697016448)
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECB09D;
+	Wed, 11 Oct 2023 02:27:35 -0700 (PDT)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R641e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VtwGXZW_1697016452;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VtwGXZW_1697016452)
           by smtp.aliyun-inc.com;
-          Wed, 11 Oct 2023 17:27:29 +0800
+          Wed, 11 Oct 2023 17:27:32 +0800
 From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To: virtualization@lists.linux-foundation.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -26,10 +26,12 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	John Fastabend <john.fastabend@gmail.com>,
 	netdev@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH vhost 00/22] virtio-net: support AF_XDP zero copy
-Date: Wed, 11 Oct 2023 17:27:06 +0800
-Message-Id: <20231011092728.105904-1-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH vhost 03/22] virtio_net: rename free_old_xmit_skbs to free_old_xmit
+Date: Wed, 11 Oct 2023 17:27:09 +0800
+Message-Id: <20231011092728.105904-4-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
+In-Reply-To: <20231011092728.105904-1-xuanzhuo@linux.alibaba.com>
+References: <20231011092728.105904-1-xuanzhuo@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -39,109 +41,70 @@ MIME-Version: 1.0
 X-Git-Hash: 7e791d85ef9e
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-	version=3.4.6
+	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-## AF_XDP
+Since free_old_xmit_skbs not only deals with skb, but also xdp frame and
+subsequent added xsk, so change the name of this function to
+free_old_xmit.
 
-XDP socket(AF_XDP) is an excellent bypass kernel network framework. The zero
-copy feature of xsk (XDP socket) needs to be supported by the driver. The
-performance of zero copy is very good. mlx5 and intel ixgbe already support
-this feature, This patch set allows virtio-net to support xsk's zerocopy xmit
-feature.
+Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+---
+ drivers/net/virtio_net.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-At present, we have completed some preparation:
-
-1. vq-reset (virtio spec and kernel code)
-2. virtio-core premapped dma
-3. virtio-net xdp refactor
-
-So it is time for Virtio-Net to complete the support for the XDP Socket
-Zerocopy.
-
-Virtio-net can not increase the queue num at will, so xsk shares the queue with
-kernel.
-
-On the other hand, Virtio-Net does not support generate interrupt from driver
-manually, so when we wakeup tx xmit, we used some tips. If the CPU run by TX
-NAPI last time is other CPUs, use IPI to wake up NAPI on the remote CPU. If it
-is also the local CPU, then we wake up napi directly.
-
-This patch set includes some refactor to the virtio-net to let that to support
-AF_XDP.
-
-## performance
-
-ENV: Qemu with vhost-user(polling mode).
-
-Sockperf: https://github.com/Mellanox/sockperf
-I use this tool to send udp packet by kernel syscall.
-
-xmit command: sockperf tp -i 10.0.3.1 -t 1000
-
-I write a tool that sends udp packets or recvs udp packets by AF_XDP.
-
-                  | Guest APP CPU |Guest Softirq CPU | UDP PPS
-------------------|---------------|------------------|------------
-xmit by syscall   |   100%        |                  |   676,915
-xmit by xsk       |   59.1%       |   100%           | 5,447,168
-recv by syscall   |   60%         |   100%           |   932,288
-recv by xsk       |   35.7%       |   100%           | 3,343,168
-
-## maintain
-
-I am currently a reviewer for virtio-net. I commit to maintain AF_XDP support in
-virtio-net.
-
-Please review.
-
-Thanks.
-Xuan Zhuo (22):
-  virtio_ring: virtqueue_set_dma_premapped support disable
-  virtio_ring: introduce virtqueue_dma_[un]map_page_attrs
-  virtio_net: rename free_old_xmit_skbs to free_old_xmit
-  virtio_net: unify the code for recycling the xmit ptr
-  virtio_net: independent directory
-  virtio_net: move to virtio_net.h
-  virtio_net: add prefix virtnet to all struct/api inside virtio_net.h
-  virtio_net: virtnet_poll_tx support rescheduled
-  virtio_net: separate virtnet_rx_resize()
-  virtio_net: separate virtnet_tx_resize()
-  virtio_net: sq support premapped mode
-  virtio_net: xsk: bind/unbind xsk
-  virtio_net: xsk: prevent disable tx napi
-  virtio_net: xsk: tx: support tx
-  virtio_net: xsk: tx: support wakeup
-  virtio_net: xsk: tx: virtnet_free_old_xmit() distinguishes xsk buffer
-  virtio_net: xsk: tx: virtnet_sq_free_unused_buf() check xsk buffer
-  virtio_net: xsk: rx: introduce add_recvbuf_xsk()
-  virtio_net: xsk: rx: introduce receive_xsk() to recv xsk buffer
-  virtio_net: xsk: rx: virtnet_rq_free_unused_buf() check xsk buffer
-  virtio_net: update tx timeout record
-  virtio_net: xdp_features add NETDEV_XDP_ACT_XSK_ZEROCOPY
-
- MAINTAINERS                                 |   2 +-
- drivers/net/Kconfig                         |   8 +-
- drivers/net/Makefile                        |   2 +-
- drivers/net/virtio/Kconfig                  |  13 +
- drivers/net/virtio/Makefile                 |   8 +
- drivers/net/{virtio_net.c => virtio/main.c} | 644 +++++++++-----------
- drivers/net/virtio/virtio_net.h             | 360 +++++++++++
- drivers/net/virtio/xsk.c                    | 545 +++++++++++++++++
- drivers/net/virtio/xsk.h                    |  32 +
- drivers/virtio/virtio_ring.c                |  63 +-
- include/linux/virtio.h                      |   9 +-
- 11 files changed, 1315 insertions(+), 371 deletions(-)
- create mode 100644 drivers/net/virtio/Kconfig
- create mode 100644 drivers/net/virtio/Makefile
- rename drivers/net/{virtio_net.c => virtio/main.c} (92%)
- create mode 100644 drivers/net/virtio/virtio_net.h
- create mode 100644 drivers/net/virtio/xsk.c
- create mode 100644 drivers/net/virtio/xsk.h
-
---
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index 6b5f47ebf9b2..8518f3803c18 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -744,7 +744,7 @@ static void virtnet_rq_set_premapped(struct virtnet_info *vi)
+ 	}
+ }
+ 
+-static void free_old_xmit_skbs(struct send_queue *sq, bool in_napi)
++static void free_old_xmit(struct send_queue *sq, bool in_napi)
+ {
+ 	unsigned int len;
+ 	unsigned int packets = 0;
+@@ -816,7 +816,7 @@ static void check_sq_full_and_disable(struct virtnet_info *vi,
+ 				virtqueue_napi_schedule(&sq->napi, sq->vq);
+ 		} else if (unlikely(!virtqueue_enable_cb_delayed(sq->vq))) {
+ 			/* More just got used, free them then recheck. */
+-			free_old_xmit_skbs(sq, false);
++			free_old_xmit(sq, false);
+ 			if (sq->vq->num_free >= 2+MAX_SKB_FRAGS) {
+ 				netif_start_subqueue(dev, qnum);
+ 				virtqueue_disable_cb(sq->vq);
+@@ -2124,7 +2124,7 @@ static void virtnet_poll_cleantx(struct receive_queue *rq)
+ 
+ 		do {
+ 			virtqueue_disable_cb(sq->vq);
+-			free_old_xmit_skbs(sq, true);
++			free_old_xmit(sq, true);
+ 		} while (unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
+ 
+ 		if (sq->vq->num_free >= 2 + MAX_SKB_FRAGS)
+@@ -2246,7 +2246,7 @@ static int virtnet_poll_tx(struct napi_struct *napi, int budget)
+ 	txq = netdev_get_tx_queue(vi->dev, index);
+ 	__netif_tx_lock(txq, raw_smp_processor_id());
+ 	virtqueue_disable_cb(sq->vq);
+-	free_old_xmit_skbs(sq, true);
++	free_old_xmit(sq, true);
+ 
+ 	if (sq->vq->num_free >= 2 + MAX_SKB_FRAGS)
+ 		netif_tx_wake_queue(txq);
+@@ -2336,7 +2336,7 @@ static netdev_tx_t start_xmit(struct sk_buff *skb, struct net_device *dev)
+ 		if (use_napi)
+ 			virtqueue_disable_cb(sq->vq);
+ 
+-		free_old_xmit_skbs(sq, false);
++		free_old_xmit(sq, false);
+ 
+ 	} while (use_napi && kick &&
+ 	       unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
+-- 
 2.32.0.3.g01195cf9f
 
