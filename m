@@ -1,150 +1,138 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1A5E3A27A;
-	Thu, 12 Oct 2023 17:13:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KHEPJyT+"
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96F9D8;
-	Thu, 12 Oct 2023 10:13:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697130780; x=1728666780;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=5Oa+KI6F+9qlOM+MAI1Q3NaLKZxM3ziK/2V9Hw9p+tM=;
-  b=KHEPJyT+Kb60N85B1qBiIoF9Q/QeaN9hODDPy+LPsD70cTgasnWQ2E8K
-   HUTCIZFHeP6uSvcEuC0PV/Atqgrw6oaJTxqRRpdSWNeIY3TrlwGMloxGx
-   RuzYe9rSvMWX43zoYU+rqTkU/NZZk/p9Y+0YMdpnNhb+P7gJGTJ4DiKTp
-   JPdkKMTqut7nMcoTUXT1B1udrP12ju775yUY8gATpm/4vBC6iH0jUDlMG
-   /aUOhv++/CXPR+gf23Y6V2IUCVBq8EEhKZSgByZNsrKZEUg1ylm3Qn/hV
-   gCsy5IFPUdAPzfSVdDPTc6jSm0/JNMzu8N2qBAGANllQRutGIJ53ANS91
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="416027849"
-X-IronPort-AV: E=Sophos;i="6.03,219,1694761200"; 
-   d="scan'208";a="416027849"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2023 10:12:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="783774138"
-X-IronPort-AV: E=Sophos;i="6.03,219,1694761200"; 
-   d="scan'208";a="783774138"
-Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by orsmga008.jf.intel.com with ESMTP; 12 Oct 2023 10:12:31 -0700
-Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id 9710633E93;
-	Thu, 12 Oct 2023 18:12:28 +0100 (IST)
-From: Larysa Zaremba <larysa.zaremba@intel.com>
-To: bpf@vger.kernel.org
-Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yhs@fb.com,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	David Ahern <dsahern@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Willem de Bruijn <willemb@google.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Anatoly Burakov <anatoly.burakov@intel.com>,
-	Alexander Lobakin <alexandr.lobakin@intel.com>,
-	Magnus Karlsson <magnus.karlsson@gmail.com>,
-	Maryam Tahhan <mtahhan@redhat.com>,
-	xdp-hints@xdp-project.net,
-	netdev@vger.kernel.org,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Simon Horman <simon.horman@corigine.com>,
-	Tariq Toukan <tariqt@mellanox.com>,
-	Saeed Mahameed <saeedm@mellanox.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH bpf-next v6 15/18] selftests/bpf: Allow VLAN packets in xdp_hw_metadata
-Date: Thu, 12 Oct 2023 19:05:21 +0200
-Message-ID: <20231012170524.21085-16-larysa.zaremba@intel.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231012170524.21085-1-larysa.zaremba@intel.com>
-References: <20231012170524.21085-1-larysa.zaremba@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 166C9347CB;
+	Thu, 12 Oct 2023 17:26:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB51FD6C;
+	Thu, 12 Oct 2023 10:24:02 -0700 (PDT)
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-27cfb8442f9so881447a91.2;
+        Thu, 12 Oct 2023 10:24:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697131442; x=1697736242;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CJnRK+79WNn0lGWIpav/hJW9jfda5+J6HE7W4OW4WDg=;
+        b=pIni7pUJgajGYSQU9SwzMEYgHHHdN24f7FuW5z6iwT5Y3Qbq4DKAVLmKXDNkehhJfb
+         o84qccj2pQfymB+6z1XrgKf8lXryt/dqJNBSvevXZ48TH0Zv0vSYqs4MC30fJRT7bvR7
+         kHfLxczs5QunRMwof5JIwzbPGEMHIdRC0gl9CzuomngS4iexxt334utspR42uH+tW8BX
+         PcSI3GQXJGAi0UVY934GK/O4ESSlBx/t12kVElLFUlc3ANTWhFdl8ku0u9jORuZOFxg5
+         lOLWAi8R3Uxoz0BjZ180Di6I/1e4CH+zC+Q8NmZ5SCUQuRnoOL7qfpp0PXFRypiRBhZi
+         lbxg==
+X-Gm-Message-State: AOJu0YzqW4RvugHeUHRKUhmnrSlogUhF3HRYg3or4SJpy28JPN8af9yh
+	gOShiXHzCV0D+0UughpY6HQLLgl9qWudgfxnaAU=
+X-Google-Smtp-Source: AGHT+IFUhH11sDmFlYL7MWiTUMkq8goHP9pDVnkcL763Chb34fwG4DLwbzeA5QXZ9dzWHTz7uN1GoKUjJnFvWXox8KU=
+X-Received: by 2002:a17:90b:14a:b0:27c:facc:e3eb with SMTP id
+ em10-20020a17090b014a00b0027cfacce3ebmr6883711pjb.31.1697131442112; Thu, 12
+ Oct 2023 10:24:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-	autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+References: <20231009183920.200859-1-irogers@google.com> <CAM9d7cgwam22Fn3tvJ7dJL1zHWTQa1ixvePTMPQmvYQLn2=DxA@mail.gmail.com>
+In-Reply-To: <CAM9d7cgwam22Fn3tvJ7dJL1zHWTQa1ixvePTMPQmvYQLn2=DxA@mail.gmail.com>
+From: Namhyung Kim <namhyung@kernel.org>
+Date: Thu, 12 Oct 2023 10:23:51 -0700
+Message-ID: <CAM9d7cjgpXwC6D7F1DMrMw1j1k=o7oDw94Ofb_Xiyt_s7t5gJA@mail.gmail.com>
+Subject: Re: [PATCH v3 00/18] clang-tools support in tools
+To: Ian Rogers <irogers@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Tom Rix <trix@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Yang Jihong <yangjihong1@huawei.com>, 
+	Huacai Chen <chenhuacai@kernel.org>, Ming Wang <wangming01@loongson.cn>, 
+	Kan Liang <kan.liang@linux.intel.com>, Ravi Bangoria <ravi.bangoria@amd.com>, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Make VLAN c-tag and s-tag XDP hint testing more convenient
-by not skipping VLAN-ed packets.
+On Mon, Oct 9, 2023 at 10:31=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
+wrote:
+>
+> Hi Ian,
+>
+> On Mon, Oct 9, 2023 at 11:39=E2=80=AFAM Ian Rogers <irogers@google.com> w=
+rote:
+> >
+> > Allow the clang-tools scripts to work with builds in tools such as
+> > tools/perf and tools/lib/perf. An example use looks like:
+> >
+> > ```
+> > $ cd tools/perf
+> > $ make CC=3Dclang CXX=3Dclang++
+> > $ ../../scripts/clang-tools/gen_compile_commands.py
+> > $ ../../scripts/clang-tools/run-clang-tools.py clang-tidy compile_comma=
+nds.json -checks=3D-*,readability-named-parameter
+> > Skipping non-C file: 'tools/perf/bench/mem-memcpy-x86-64-asm.S'
+> > Skipping non-C file: 'tools/perf/bench/mem-memset-x86-64-asm.S'
+> > Skipping non-C file: 'tools/perf/arch/x86/tests/regs_load.S'
+> > 8 warnings generated.
+> > Suppressed 8 warnings (8 in non-user code).
+> > Use -header-filter=3D.* to display errors from all non-system headers. =
+Use -system-headers to display errors from system headers as well.
+> > 2 warnings generated.
+> > 4 warnings generated.
+> > Suppressed 4 warnings (4 in non-user code).
+> > Use -header-filter=3D.* to display errors from all non-system headers. =
+Use -system-headers to display errors from system headers as well.
+> > 2 warnings generated.
+> > 4 warnings generated.
+> > Suppressed 4 warnings (4 in non-user code).
+> > Use -header-filter=3D.* to display errors from all non-system headers. =
+Use -system-headers to display errors from system headers as well.
+> > 3 warnings generated.
+> > tools/perf/util/parse-events-flex.c:546:27: warning: all parameters sho=
+uld be named in a function [readability-named-parameter]
+> > void *yyalloc ( yy_size_t , yyscan_t yyscanner );
+> >                           ^
+> >                            /*size*/
+> > ...
+> > ```
+> >
+> > Fix a number of the more serious low-hanging issues in perf found by
+> > clang-tidy.
+> >
+> > This support isn't complete, in particular it doesn't support output
+> > directories properly and so fails for tools/lib/bpf, tools/bpf/bpftool
+> > and if an output directory is used.
+> >
+> > v3. Add Nick Desaulniers reviewed-by to patch 3. For Namhyung, drop
+> >     "perf hisi-ptt: Fix potential memory leak", split lock change out
+> >     of "perf svghelper: Avoid memory leak" and address comments in
+> >     "perf header: Fix various error path memory leaks".
+> > v2: Address comments by Nick Desaulniers in patch 3, and add their
+> >     Reviewed-by to patches 1 and 2.
+> >
+> > Ian Rogers (18):
+> >   gen_compile_commands: Allow the line prefix to still be cmd_
+> >   gen_compile_commands: Sort output compile commands by file name
+> >   run-clang-tools: Add pass through checks and header-filter arguments
+> >   perf bench uprobe: Fix potential use of memory after free
+> >   perf buildid-cache: Fix use of uninitialized value
+> >   perf env: Remove unnecessary NULL tests
+> >   perf jitdump: Avoid memory leak
+> >   perf mem-events: Avoid uninitialized read
+> >   perf dlfilter: Be defensive against potential NULL dereference
+> >   perf hists browser: Reorder variables to reduce padding
+> >   perf hists browser: Avoid potential NULL dereference
+> >   perf svghelper: Avoid memory leak
+> >   perf lock: Fix a memory leak on an error path
+> >   perf parse-events: Fix unlikely memory leak when cloning terms
+> >   tools api: Avoid potential double free
+> >   perf trace-event-info: Avoid passing NULL value to closedir
+> >   perf header: Fix various error path memory leaks
+> >   perf bpf_counter: Fix a few memory leaks
+>
+> I agree with your comment on v2 that it needs more work
+> to clean the code up.  Anyway I'm ok with v3 now.
+>
+> For ther perf part (patch 4 to 18),
+> Acked-by: Namhyung Kim <namhyung@kernel.org>
 
-Allow both 802.1ad and 802.1Q headers.
-
-Acked-by: Stanislav Fomichev <sdf@google.com>
-Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
----
- tools/testing/selftests/bpf/progs/xdp_hw_metadata.c | 10 +++++++++-
- tools/testing/selftests/bpf/xdp_metadata.h          |  8 ++++++++
- 2 files changed, 17 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-index b2dfd7066c6e..63d7de6c6bbb 100644
---- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-@@ -26,15 +26,23 @@ int rx(struct xdp_md *ctx)
- {
- 	void *data, *data_meta, *data_end;
- 	struct ipv6hdr *ip6h = NULL;
--	struct ethhdr *eth = NULL;
- 	struct udphdr *udp = NULL;
- 	struct iphdr *iph = NULL;
- 	struct xdp_meta *meta;
-+	struct ethhdr *eth;
- 	int err;
- 
- 	data = (void *)(long)ctx->data;
- 	data_end = (void *)(long)ctx->data_end;
- 	eth = data;
-+
-+	if (eth + 1 < data_end && (eth->h_proto == bpf_htons(ETH_P_8021AD) ||
-+				   eth->h_proto == bpf_htons(ETH_P_8021Q)))
-+		eth = (void *)eth + sizeof(struct vlan_hdr);
-+
-+	if (eth + 1 < data_end && eth->h_proto == bpf_htons(ETH_P_8021Q))
-+		eth = (void *)eth + sizeof(struct vlan_hdr);
-+
- 	if (eth + 1 < data_end) {
- 		if (eth->h_proto == bpf_htons(ETH_P_IP)) {
- 			iph = (void *)(eth + 1);
-diff --git a/tools/testing/selftests/bpf/xdp_metadata.h b/tools/testing/selftests/bpf/xdp_metadata.h
-index 938a729bd307..6664893c2c77 100644
---- a/tools/testing/selftests/bpf/xdp_metadata.h
-+++ b/tools/testing/selftests/bpf/xdp_metadata.h
-@@ -9,6 +9,14 @@
- #define ETH_P_IPV6 0x86DD
- #endif
- 
-+#ifndef ETH_P_8021Q
-+#define ETH_P_8021Q 0x8100
-+#endif
-+
-+#ifndef ETH_P_8021AD
-+#define ETH_P_8021AD 0x88A8
-+#endif
-+
- struct xdp_meta {
- 	__u64 rx_timestamp;
- 	__u64 xdp_timestamp;
--- 
-2.41.0
-
+Applied to perf-tools-next, thanks!
