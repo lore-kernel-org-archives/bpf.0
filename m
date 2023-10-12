@@ -1,40 +1,40 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 748B837147;
-	Thu, 12 Oct 2023 17:12:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57B3C38FBF;
+	Thu, 12 Oct 2023 17:12:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="blTvY7Zd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V39jBwi0"
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C823ACF;
-	Thu, 12 Oct 2023 10:12:50 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13D0C6;
+	Thu, 12 Oct 2023 10:12:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697130770; x=1728666770;
+  t=1697130774; x=1728666774;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=JZ5cN4EDH9TS4jxikyzBfze4sVSrjJ13ooHel/Sm41Q=;
-  b=blTvY7ZdQayE0tEhGoI+iM5MoGuflI3NaSmxOVXjj+87C4QAVyD2BfZe
-   JHzf8TopSe3bPotrCq20SKG3mJDuQC0HDDVdUEO9/PU0BqAOcbcA12py2
-   JJBoqKWlKYefc4jSlkppKv7ojXkM2YkJUAUjolg/jlVKU3m5/WyJiirTZ
-   ojgfXexl76FdLVilq0z9UQ/tPqDVzomIYUuk4I2hxbsnUV0bN26Nonaww
-   Xs/IqtkH7aLOcBjtaHij9H4RHmsWaWF1HDWKNpfTPLBYJHEu9vmMyi1d6
-   l8v8J31gwto1IMvS4FCmUPkjj2+nbw6jlxUNYlJQYLuItHV4AyCo2cR+4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="416027639"
+  bh=kL2PfFepj60i0wQrFR87PfBnK0PjV7k76VV5tK2oWAk=;
+  b=V39jBwi0TjMJvCPJMOgUxR+pldx09b41z5Dtmc8mQLr35Fp0I/y/gqow
+   TlXrpFRwgza36zdN51+bRXpSK4fxo9CusxHPVFdZfrMR6ouKtegIDu8Sz
+   Fq6+FfCXy00bx2yVU7yK2e2Sh5uyqanNbgHmxe1JbhKrmbNvRdz5S5sV1
+   SCTxdxyzvBzVLUEIvrv6OEpsjgOYVF/FZya/D9mKtrMEn6pVYwvUr63zQ
+   i+Fe7aeER/KYOmojbRWuigMhGn0hJOZxmqYlmyXXc+LV0QDmJcTQ4hZTk
+   EcZMlEfIUrXITAUiOZTvs91xEpQVInKif5Qt0opbC4AUiJoO3KXd1yRFJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="416027701"
 X-IronPort-AV: E=Sophos;i="6.03,219,1694761200"; 
-   d="scan'208";a="416027639"
+   d="scan'208";a="416027701"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2023 10:12:11 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2023 10:12:21 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="783774018"
+X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="783774053"
 X-IronPort-AV: E=Sophos;i="6.03,219,1694761200"; 
-   d="scan'208";a="783774018"
+   d="scan'208";a="783774053"
 Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by orsmga008.jf.intel.com with ESMTP; 12 Oct 2023 10:12:02 -0700
+  by orsmga008.jf.intel.com with ESMTP; 12 Oct 2023 10:12:11 -0700
 Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id C50B933E8C;
-	Thu, 12 Oct 2023 18:11:59 +0100 (IST)
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id E248533E95;
+	Thu, 12 Oct 2023 18:12:08 +0100 (IST)
 From: Larysa Zaremba <larysa.zaremba@intel.com>
 To: bpf@vger.kernel.org
 Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
@@ -65,9 +65,9 @@ Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
 	Tariq Toukan <tariqt@mellanox.com>,
 	Saeed Mahameed <saeedm@mellanox.com>,
 	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH bpf-next v6 05/18] ice: Support HW timestamp hint
-Date: Thu, 12 Oct 2023 19:05:11 +0200
-Message-ID: <20231012170524.21085-6-larysa.zaremba@intel.com>
+Subject: [PATCH bpf-next v6 08/18] xdp: Add VLAN tag hint
+Date: Thu, 12 Oct 2023 19:05:14 +0200
+Message-ID: <20231012170524.21085-9-larysa.zaremba@intel.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231012170524.21085-1-larysa.zaremba@intel.com>
 References: <20231012170524.21085-1-larysa.zaremba@intel.com>
@@ -85,196 +85,154 @@ X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Use previously refactored code and create a function
-that allows XDP code to read HW timestamp.
+Implement functionality that enables drivers to expose VLAN tag
+to XDP code.
 
-Also, move cached_phctime into packet context, this way this data still
-stays in the ring structure, just at the different address.
+VLAN tag is represented by 2 variables:
+- protocol ID, which is passed to bpf code in BE
+- VLAN TCI, in host byte order
 
-HW timestamp is the first supported hint in the driver,
-so also add xdp_metadata_ops.
-
+Acked-by: Stanislav Fomichev <sdf@google.com>
 Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
 ---
- drivers/net/ethernet/intel/ice/ice.h          |  2 ++
- drivers/net/ethernet/intel/ice/ice_ethtool.c  |  2 +-
- drivers/net/ethernet/intel/ice/ice_lib.c      |  2 +-
- drivers/net/ethernet/intel/ice/ice_main.c     |  1 +
- drivers/net/ethernet/intel/ice/ice_ptp.c      |  9 ++++---
- drivers/net/ethernet/intel/ice/ice_ptp.h      |  4 +--
- drivers/net/ethernet/intel/ice/ice_txrx.h     |  2 +-
- drivers/net/ethernet/intel/ice/ice_txrx_lib.c | 25 ++++++++++++++++++-
- 8 files changed, 37 insertions(+), 10 deletions(-)
+ Documentation/networking/xdp-rx-metadata.rst |  8 ++++-
+ include/net/xdp.h                            |  6 ++++
+ include/uapi/linux/netdev.h                  |  5 ++-
+ net/core/xdp.c                               | 33 ++++++++++++++++++++
+ tools/include/uapi/linux/netdev.h            |  5 ++-
+ 5 files changed, 54 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice.h b/drivers/net/ethernet/intel/ice/ice.h
-index d30ae39c19f0..3d0f15f8b2b8 100644
---- a/drivers/net/ethernet/intel/ice/ice.h
-+++ b/drivers/net/ethernet/intel/ice/ice.h
-@@ -974,4 +974,6 @@ static inline void ice_clear_rdma_cap(struct ice_pf *pf)
- 	set_bit(ICE_FLAG_UNPLUG_AUX_DEV, pf->flags);
- 	clear_bit(ICE_FLAG_RDMA_ENA, pf->flags);
- }
+diff --git a/Documentation/networking/xdp-rx-metadata.rst b/Documentation/networking/xdp-rx-metadata.rst
+index 205696780b78..bb53b00d1b2c 100644
+--- a/Documentation/networking/xdp-rx-metadata.rst
++++ b/Documentation/networking/xdp-rx-metadata.rst
+@@ -18,7 +18,13 @@ Currently, the following kfuncs are supported. In the future, as more
+ metadata is supported, this set will grow:
+ 
+ .. kernel-doc:: net/core/xdp.c
+-   :identifiers: bpf_xdp_metadata_rx_timestamp bpf_xdp_metadata_rx_hash
++   :identifiers: bpf_xdp_metadata_rx_timestamp
 +
-+extern const struct xdp_metadata_ops ice_xdp_md_ops;
- #endif /* _ICE_H_ */
-diff --git a/drivers/net/ethernet/intel/ice/ice_ethtool.c b/drivers/net/ethernet/intel/ice/ice_ethtool.c
-index ad4d4702129f..f740e0ad0e3c 100644
---- a/drivers/net/ethernet/intel/ice/ice_ethtool.c
-+++ b/drivers/net/ethernet/intel/ice/ice_ethtool.c
-@@ -2846,7 +2846,7 @@ ice_set_ringparam(struct net_device *netdev, struct ethtool_ringparam *ring,
- 		/* clone ring and setup updated count */
- 		rx_rings[i] = *vsi->rx_rings[i];
- 		rx_rings[i].count = new_rx_cnt;
--		rx_rings[i].cached_phctime = pf->ptp.cached_phc_time;
-+		rx_rings[i].pkt_ctx.cached_phctime = pf->ptp.cached_phc_time;
- 		rx_rings[i].desc = NULL;
- 		rx_rings[i].rx_buf = NULL;
- 		/* this is to allow wr32 to have something to write to
-diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c b/drivers/net/ethernet/intel/ice/ice_lib.c
-index 1549890a3cbf..b4cbd2f01a39 100644
---- a/drivers/net/ethernet/intel/ice/ice_lib.c
-+++ b/drivers/net/ethernet/intel/ice/ice_lib.c
-@@ -1456,7 +1456,7 @@ static int ice_vsi_alloc_rings(struct ice_vsi *vsi)
- 		ring->netdev = vsi->netdev;
- 		ring->dev = dev;
- 		ring->count = vsi->num_rx_desc;
--		ring->cached_phctime = pf->ptp.cached_phc_time;
-+		ring->pkt_ctx.cached_phctime = pf->ptp.cached_phc_time;
- 		WRITE_ONCE(vsi->rx_rings[i], ring);
- 	}
++.. kernel-doc:: net/core/xdp.c
++   :identifiers: bpf_xdp_metadata_rx_hash
++
++.. kernel-doc:: net/core/xdp.c
++   :identifiers: bpf_xdp_metadata_rx_vlan_tag
  
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index e22f41fea8db..2153e27642eb 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -3396,6 +3396,7 @@ static void ice_set_ops(struct ice_vsi *vsi)
+ An XDP program can use these kfuncs to read the metadata into stack
+ variables for its own consumption. Or, to pass the metadata on to other
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index eb77040b4825..ef79f124dbcf 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -399,6 +399,10 @@ void xdp_attachment_setup(struct xdp_attachment_info *info,
+ 			   NETDEV_XDP_RX_METADATA_HASH, \
+ 			   bpf_xdp_metadata_rx_hash, \
+ 			   xmo_rx_hash) \
++	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_VLAN_TAG, \
++			   NETDEV_XDP_RX_METADATA_VLAN_TAG, \
++			   bpf_xdp_metadata_rx_vlan_tag, \
++			   xmo_rx_vlan_tag) \
  
- 	netdev->netdev_ops = &ice_netdev_ops;
- 	netdev->udp_tunnel_nic_info = &pf->hw.udp_tunnel_nic;
-+	netdev->xdp_metadata_ops = &ice_xdp_md_ops;
- 	ice_set_ethtool_ops(netdev);
- 
- 	if (vsi->type != ICE_VSI_PF)
-diff --git a/drivers/net/ethernet/intel/ice/ice_ptp.c b/drivers/net/ethernet/intel/ice/ice_ptp.c
-index e24c17789cf5..8aad4aff6b30 100644
---- a/drivers/net/ethernet/intel/ice/ice_ptp.c
-+++ b/drivers/net/ethernet/intel/ice/ice_ptp.c
-@@ -1038,7 +1038,8 @@ static int ice_ptp_update_cached_phctime(struct ice_pf *pf)
- 		ice_for_each_rxq(vsi, j) {
- 			if (!vsi->rx_rings[j])
- 				continue;
--			WRITE_ONCE(vsi->rx_rings[j]->cached_phctime, systime);
-+			WRITE_ONCE(vsi->rx_rings[j]->pkt_ctx.cached_phctime,
-+				   systime);
- 		}
- 	}
- 	clear_bit(ICE_CFG_BUSY, pf->state);
-@@ -2170,12 +2171,12 @@ int ice_ptp_set_ts_config(struct ice_pf *pf, struct ifreq *ifr)
- /**
-  * ice_ptp_get_rx_hwts - Get packet Rx timestamp in ns
-  * @rx_desc: Receive descriptor
-- * @rx_ring: Ring to get the cached time
-+ * @pkt_ctx: Packet context to get the cached time
-  *
-  * The driver receives a notification in the receive descriptor with timestamp.
-  */
- u64 ice_ptp_get_rx_hwts(const union ice_32b_rx_flex_desc *rx_desc,
--			struct ice_rx_ring *rx_ring)
-+			const struct ice_pkt_ctx *pkt_ctx)
- {
- 	u64 ts_ns, cached_time;
- 	u32 ts_high;
-@@ -2183,7 +2184,7 @@ u64 ice_ptp_get_rx_hwts(const union ice_32b_rx_flex_desc *rx_desc,
- 	if (!(rx_desc->wb.time_stamp_low & ICE_PTP_TS_VALID))
- 		return 0;
- 
--	cached_time = READ_ONCE(rx_ring->cached_phctime);
-+	cached_time = READ_ONCE(pkt_ctx->cached_phctime);
- 
- 	/* Do not report a timestamp if we don't have a cached PHC time */
- 	if (!cached_time)
-diff --git a/drivers/net/ethernet/intel/ice/ice_ptp.h b/drivers/net/ethernet/intel/ice/ice_ptp.h
-index 8ebdf422752a..5e6240920821 100644
---- a/drivers/net/ethernet/intel/ice/ice_ptp.h
-+++ b/drivers/net/ethernet/intel/ice/ice_ptp.h
-@@ -269,7 +269,7 @@ s8 ice_ptp_request_ts(struct ice_ptp_tx *tx, struct sk_buff *skb);
- enum ice_tx_tstamp_work ice_ptp_process_ts(struct ice_pf *pf);
- 
- u64 ice_ptp_get_rx_hwts(const union ice_32b_rx_flex_desc *rx_desc,
--			struct ice_rx_ring *rx_ring);
-+			const struct ice_pkt_ctx *pkt_ctx);
- void ice_ptp_reset(struct ice_pf *pf);
- void ice_ptp_prepare_for_reset(struct ice_pf *pf);
- void ice_ptp_init(struct ice_pf *pf);
-@@ -306,7 +306,7 @@ static inline bool ice_ptp_process_ts(struct ice_pf *pf)
- 
- static inline u64
- ice_ptp_get_rx_hwts(const union ice_32b_rx_flex_desc *rx_desc,
--		    struct ice_rx_ring *rx_ring)
-+		    const struct ice_pkt_ctx *pkt_ctx)
- {
- 	return 0;
- }
-diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.h b/drivers/net/ethernet/intel/ice/ice_txrx.h
-index d0ab2c4c0c91..4237702a58a9 100644
---- a/drivers/net/ethernet/intel/ice/ice_txrx.h
-+++ b/drivers/net/ethernet/intel/ice/ice_txrx.h
-@@ -259,6 +259,7 @@ enum ice_rx_dtype {
- 
- struct ice_pkt_ctx {
- 	const union ice_32b_rx_flex_desc *eop_desc;
-+	u64 cached_phctime;
+ enum xdp_rx_metadata {
+ #define XDP_METADATA_KFUNC(name, _, __, ___) name,
+@@ -460,6 +464,8 @@ struct xdp_metadata_ops {
+ 	int	(*xmo_rx_timestamp)(const struct xdp_md *ctx, u64 *timestamp);
+ 	int	(*xmo_rx_hash)(const struct xdp_md *ctx, u32 *hash,
+ 			       enum xdp_rss_hash_type *rss_type);
++	int	(*xmo_rx_vlan_tag)(const struct xdp_md *ctx, __be16 *vlan_proto,
++				   u16 *vlan_tci);
  };
  
- struct ice_xdp_buff {
-@@ -354,7 +355,6 @@ struct ice_rx_ring {
- 	struct ice_tx_ring *xdp_ring;
- 	struct xsk_buff_pool *xsk_pool;
- 	dma_addr_t dma;			/* physical address of ring */
--	u64 cached_phctime;
- 	u16 rx_buf_len;
- 	u8 dcb_tc;			/* Traffic class of ring */
- 	u8 ptp_rx;
-diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-index 8b5cee0429d3..7e9f3528d6b5 100644
---- a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-+++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-@@ -197,7 +197,7 @@ ice_ptp_rx_hwts_to_skb(struct ice_rx_ring *rx_ring,
- 		       const union ice_32b_rx_flex_desc *rx_desc,
- 		       struct sk_buff *skb)
- {
--	u64 ts_ns = ice_ptp_get_rx_hwts(rx_desc, rx_ring);
-+	u64 ts_ns = ice_ptp_get_rx_hwts(rx_desc, &rx_ring->pkt_ctx);
+ #ifdef CONFIG_NET
+diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
+index 2943a151d4f1..661f603e3e43 100644
+--- a/include/uapi/linux/netdev.h
++++ b/include/uapi/linux/netdev.h
+@@ -44,13 +44,16 @@ enum netdev_xdp_act {
+  *   timestamp via bpf_xdp_metadata_rx_timestamp().
+  * @NETDEV_XDP_RX_METADATA_HASH: Device is capable of exposing receive packet
+  *   hash via bpf_xdp_metadata_rx_hash().
++ * @NETDEV_XDP_RX_METADATA_VLAN_TAG: Device is capable of exposing stripped
++ *   receive VLAN tag (proto and TCI) via bpf_xdp_metadata_rx_vlan_tag().
+  */
+ enum netdev_xdp_rx_metadata {
+ 	NETDEV_XDP_RX_METADATA_TIMESTAMP = 1,
+ 	NETDEV_XDP_RX_METADATA_HASH = 2,
++	NETDEV_XDP_RX_METADATA_VLAN_TAG = 4,
  
- 	*skb_hwtstamps(skb) = (struct skb_shared_hwtstamps){
- 		.hwtstamp	= ns_to_ktime(ts_ns),
-@@ -509,3 +509,26 @@ void ice_finalize_xdp_rx(struct ice_tx_ring *xdp_ring, unsigned int xdp_res,
- 			spin_unlock(&xdp_ring->tx_lock);
- 	}
+ 	/* private: */
+-	NETDEV_XDP_RX_METADATA_MASK = 3,
++	NETDEV_XDP_RX_METADATA_MASK = 7,
+ };
+ 
+ enum {
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index df4789ab512d..fb87925b3dc3 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -738,6 +738,39 @@ __bpf_kfunc int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, u32 *hash,
+ 	return -EOPNOTSUPP;
  }
-+
+ 
 +/**
-+ * ice_xdp_rx_hw_ts - HW timestamp XDP hint handler
-+ * @ctx: XDP buff pointer
-+ * @ts_ns: destination address
++ * bpf_xdp_metadata_rx_vlan_tag - Get XDP packet outermost VLAN tag
++ * @ctx: XDP context pointer.
++ * @vlan_proto: Destination pointer for VLAN Tag protocol identifier (TPID).
++ * @vlan_tci: Destination pointer for VLAN TCI (VID + DEI + PCP)
 + *
-+ * Copy HW timestamp (if available) to the destination address.
++ * In case of success, ``vlan_proto`` contains *Tag protocol identifier (TPID)*,
++ * usually ``ETH_P_8021Q`` or ``ETH_P_8021AD``, but some networks can use
++ * custom TPIDs. ``vlan_proto`` is stored in **network byte order (BE)**
++ * and should be used as follows:
++ * ``if (vlan_proto == bpf_htons(ETH_P_8021Q)) do_something();``
++ *
++ * ``vlan_tci`` contains the remaining 16 bits of a VLAN tag.
++ * Driver is expected to provide those in **host byte order (usually LE)**,
++ * so the bpf program should not perform byte conversion.
++ * According to 802.1Q standard, *VLAN TCI (Tag control information)*
++ * is a bit field that contains:
++ * *VLAN identifier (VID)* that can be read with ``vlan_tci & 0xfff``,
++ * *Drop eligible indicator (DEI)* - 1 bit,
++ * *Priority code point (PCP)* - 3 bits.
++ * For detailed meaning of DEI and PCP, please refer to other sources.
++ *
++ * Return:
++ * * Returns 0 on success or ``-errno`` on error.
++ * * ``-EOPNOTSUPP`` : device driver doesn't implement kfunc
++ * * ``-ENODATA``    : VLAN tag was not stripped or is not available
 + */
-+static int ice_xdp_rx_hw_ts(const struct xdp_md *ctx, u64 *ts_ns)
++__bpf_kfunc int bpf_xdp_metadata_rx_vlan_tag(const struct xdp_md *ctx,
++					     __be16 *vlan_proto, u16 *vlan_tci)
 +{
-+	const struct ice_xdp_buff *xdp_ext = (void *)ctx;
-+
-+	*ts_ns = ice_ptp_get_rx_hwts(xdp_ext->pkt_ctx.eop_desc,
-+				     &xdp_ext->pkt_ctx);
-+	if (!*ts_ns)
-+		return -ENODATA;
-+
-+	return 0;
++	return -EOPNOTSUPP;
 +}
 +
-+const struct xdp_metadata_ops ice_xdp_md_ops = {
-+	.xmo_rx_timestamp		= ice_xdp_rx_hw_ts,
-+};
+ __diag_pop();
+ 
+ BTF_SET8_START(xdp_metadata_kfunc_ids)
+diff --git a/tools/include/uapi/linux/netdev.h b/tools/include/uapi/linux/netdev.h
+index 2943a151d4f1..661f603e3e43 100644
+--- a/tools/include/uapi/linux/netdev.h
++++ b/tools/include/uapi/linux/netdev.h
+@@ -44,13 +44,16 @@ enum netdev_xdp_act {
+  *   timestamp via bpf_xdp_metadata_rx_timestamp().
+  * @NETDEV_XDP_RX_METADATA_HASH: Device is capable of exposing receive packet
+  *   hash via bpf_xdp_metadata_rx_hash().
++ * @NETDEV_XDP_RX_METADATA_VLAN_TAG: Device is capable of exposing stripped
++ *   receive VLAN tag (proto and TCI) via bpf_xdp_metadata_rx_vlan_tag().
+  */
+ enum netdev_xdp_rx_metadata {
+ 	NETDEV_XDP_RX_METADATA_TIMESTAMP = 1,
+ 	NETDEV_XDP_RX_METADATA_HASH = 2,
++	NETDEV_XDP_RX_METADATA_VLAN_TAG = 4,
+ 
+ 	/* private: */
+-	NETDEV_XDP_RX_METADATA_MASK = 3,
++	NETDEV_XDP_RX_METADATA_MASK = 7,
+ };
+ 
+ enum {
 -- 
 2.41.0
 
