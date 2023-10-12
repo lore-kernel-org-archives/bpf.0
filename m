@@ -1,69 +1,77 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E7682AB57;
-	Thu, 12 Oct 2023 17:04:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6332E2B76E;
+	Thu, 12 Oct 2023 17:12:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EKyrHvpe"
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7EED6;
-	Thu, 12 Oct 2023 10:04:39 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-32157c8e4c7so1158221f8f.1;
-        Thu, 12 Oct 2023 10:04:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697130278; x=1697735078; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VkUJ0oO3Mp9xCXnylh1JdkHseQH/mUhjkeml5gm5SR8=;
-        b=EKyrHvpe3wR6P8/JJLVVlxu74L7tuvaOtZLYAV60i5Qdk9bLS5Vp4TRpQMPanXcRIG
-         HNfal8veY8MW4jukBlswEr9s8TtYCcm/Cv7MarTEP1tLYoI3OF8xSPmTzi/kTmuM7HlJ
-         c9ouDVCNnFEJ697ucVTGzopnAXIlHxBZk3x9Ji9MeJ34LGt/zWbRICS3wR/S/e8Bk69S
-         a8oGXCn+LD8SME9pxhaTjkIKacFE6D6q9ANZt5xFd2syMgp+kC4UDrSD+ucLMfSrPHsg
-         AZxgDJGmTLhqpITP2CF8ILNJhCIQ1dSHwv2ze9Yl+UoSAaB97VLpf6+lEaeQBxxiPn+w
-         eorg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697130278; x=1697735078;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VkUJ0oO3Mp9xCXnylh1JdkHseQH/mUhjkeml5gm5SR8=;
-        b=w3zobfsJvyT4yvIfjLmWAzo2KESGNkbozblTTk5HptZ/zSRKE5NiJRe8dP31oWgY5k
-         NTH64CeZEgbUrii/lB3TgQbfTXTVVXqYVXYC76N4QuKgT/i/afgYpI5Oh69mv/nTOYqj
-         tur+WwIdo5TJlM7cN65zcB1PRjI80+rZJ+sOdjcdtw7cCCloPD5YjYcL5qtUX6UGEVf+
-         YkqM3GRwTGKCCTlgIkXAzJnPJ5F6AtM/vj9Xo61PwD8zohnRfcJQEyeNWhCvWdPXOb2l
-         aEt4muFugEdgEFqH8t0TarHnBVPp/tmdI9O98O3DKkcRUD22xtO0KcyBt83hqC6O+E1v
-         g8tQ==
-X-Gm-Message-State: AOJu0YwOBYRp4wQdbF4OqJj6WVbM+Zx9BGSuBdXEm3lkQPLJaL9JcGXV
-	chbzpemZqCtXEyeqwKljePM=
-X-Google-Smtp-Source: AGHT+IGEfvOX2oiWBKkh4O/yKmWydOZ76wDsxaQCjAqvjCnNn57Y9QF5SeE6lMfg3rl+IKZUkH80og==
-X-Received: by 2002:a05:6000:b0f:b0:32d:9572:6469 with SMTP id dj15-20020a0560000b0f00b0032d95726469mr1470249wrb.46.1697130277811;
-        Thu, 12 Oct 2023 10:04:37 -0700 (PDT)
-Received: from lucifer.home ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.googlemail.com with ESMTPSA id h16-20020adffd50000000b003197869bcd7sm18875418wrs.13.2023.10.12.10.04.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Oct 2023 10:04:36 -0700 (PDT)
-From: Lorenzo Stoakes <lstoakes@gmail.com>
-To: linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>,
-	Muchun Song <muchun.song@linux.dev>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Matthew Wilcox <willy@infradead.org>,
-	Hugh Dickins <hughd@google.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Jan Kara <jack@suse.cz>,
-	linux-fsdevel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Lorenzo Stoakes <lstoakes@gmail.com>
-Subject: [PATCH v4 3/3] mm: perform the mapping_map_writable() check after call_mmap()
-Date: Thu, 12 Oct 2023 18:04:30 +0100
-Message-ID: <55e413d20678a1bb4c7cce889062bbb07b0df892.1697116581.git.lstoakes@gmail.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <cover.1697116581.git.lstoakes@gmail.com>
-References: <cover.1697116581.git.lstoakes@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d7n5Ca/p"
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308B3B7;
+	Thu, 12 Oct 2023 10:12:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697130753; x=1728666753;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=sQldnflb2ClDEwJnCZgJdBGgWR7nOfuEySyZVxba8o0=;
+  b=d7n5Ca/pbw6bGXOGKwlM1WwDSWOGLVIp+I0u1hKh7bpMeUNH9f3q7F2Q
+   Lkr/z40hwNUKYUiGVIE1IOJPisNu29Tb9bXpp1au0CnezpCcxXWdhcrdd
+   BIkiAgHPHyIm0dNXp46+cSwXt4xE0TnCucU5TCQL7OAO/RGAu+BNJAupS
+   g6eEwYtpNoPSNAv8zhk5xnIG+05Qhsnx6K5MSCs/Rx0K38Cl26gP1DfFC
+   gmeaZHiFVk2bAeazRvl78BmJ0SjWUP8IKyJVLFGQeyGugSzmXnAbtjBdn
+   KPHpGeecMWaY/18uhfLJLQHH3gpZenoHHyJS9ntDHz1og6dsXDVGSAb9S
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="451471773"
+X-IronPort-AV: E=Sophos;i="6.03,219,1694761200"; 
+   d="scan'208";a="451471773"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2023 10:12:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="747960082"
+X-IronPort-AV: E=Sophos;i="6.03,219,1694761200"; 
+   d="scan'208";a="747960082"
+Received: from irvmail002.ir.intel.com ([10.43.11.120])
+  by orsmga007.jf.intel.com with ESMTP; 12 Oct 2023 10:12:25 -0700
+Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id 2CD4F33E8C;
+	Thu, 12 Oct 2023 18:12:23 +0100 (IST)
+From: Larysa Zaremba <larysa.zaremba@intel.com>
+To: bpf@vger.kernel.org
+Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yhs@fb.com,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@google.com,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	David Ahern <dsahern@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Willem de Bruijn <willemb@google.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Anatoly Burakov <anatoly.burakov@intel.com>,
+	Alexander Lobakin <alexandr.lobakin@intel.com>,
+	Magnus Karlsson <magnus.karlsson@gmail.com>,
+	Maryam Tahhan <mtahhan@redhat.com>,
+	xdp-hints@xdp-project.net,
+	netdev@vger.kernel.org,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Simon Horman <simon.horman@corigine.com>,
+	Tariq Toukan <tariqt@mellanox.com>,
+	Saeed Mahameed <saeedm@mellanox.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Jesper Dangaard Brouer <jbrouer@redhat.com>
+Subject: [PATCH bpf-next v6 13/18] net: make vlan_get_tag() return -ENODATA instead of -EINVAL
+Date: Thu, 12 Oct 2023 19:05:19 +0200
+Message-ID: <20231012170524.21085-14-larysa.zaremba@intel.com>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20231012170524.21085-1-larysa.zaremba@intel.com>
+References: <20231012170524.21085-1-larysa.zaremba@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -71,105 +79,54 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-In order for a F_SEAL_WRITE sealed memfd mapping to have an opportunity to
-clear VM_MAYWRITE, we must be able to invoke the appropriate vm_ops->mmap()
-handler to do so. We would otherwise fail the mapping_map_writable() check
-before we had the opportunity to avoid it.
+__vlan_hwaccel_get_tag() is used in veth XDP hints implementation,
+its return value (-EINVAL if skb is not VLAN tagged) is passed to bpf code,
+but XDP hints specification requires drivers to return -ENODATA, if a hint
+cannot be provided for a particular packet.
 
-This patch moves this check after the call_mmap() invocation. Only memfd
-actively denies write access causing a potential failure here (in
-memfd_add_seals()), so there should be no impact on non-memfd cases.
+Solve this inconsistency by changing error return value of
+__vlan_hwaccel_get_tag() from -EINVAL to -ENODATA, do the same thing to
+__vlan_get_tag(), because this function is supposed to follow the same
+convention. This, in turn, makes -ENODATA the only non-zero value
+vlan_get_tag() can return. We can do this with no side effects, because
+none of the users of the 3 above-mentioned functions rely on the exact
+value.
 
-This patch makes the userland-visible change that MAP_SHARED, PROT_READ
-mappings of an F_SEAL_WRITE sealed memfd mapping will now succeed.
-
-There is a delicate situation with cleanup paths assuming that a writable
-mapping must have occurred in circumstances where it may now not have. In
-order to ensure we do not accidentally mark a writable file unwritable by
-mistake, we explicitly track whether we have a writable mapping and
-unmap only if we do.
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=217238
-Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+Suggested-by: Jesper Dangaard Brouer <jbrouer@redhat.com>
+Acked-by: Stanislav Fomichev <sdf@google.com>
+Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
 ---
- mm/mmap.c | 23 ++++++++++++++---------
- 1 file changed, 14 insertions(+), 9 deletions(-)
+ include/linux/if_vlan.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 0041e3631f6c..7f45a08e7973 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -2752,6 +2752,7 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
- 	unsigned long charged = 0;
- 	unsigned long end = addr + len;
- 	unsigned long merge_start = addr, merge_end = end;
-+	bool writable_file_mapping = false;
- 	pgoff_t vm_pgoff;
- 	int error;
- 	VMA_ITERATOR(vmi, mm, addr);
-@@ -2846,17 +2847,19 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
- 	vma->vm_pgoff = pgoff;
+diff --git a/include/linux/if_vlan.h b/include/linux/if_vlan.h
+index 3028af87716e..c1645c86eed9 100644
+--- a/include/linux/if_vlan.h
++++ b/include/linux/if_vlan.h
+@@ -540,7 +540,7 @@ static inline int __vlan_get_tag(const struct sk_buff *skb, u16 *vlan_tci)
+ 	struct vlan_ethhdr *veth = skb_vlan_eth_hdr(skb);
  
- 	if (file) {
--		if (is_shared_maywrite(vm_flags)) {
--			error = mapping_map_writable(file->f_mapping);
--			if (error)
--				goto free_vma;
--		}
--
- 		vma->vm_file = get_file(file);
- 		error = call_mmap(file, vma);
- 		if (error)
- 			goto unmap_and_free_vma;
+ 	if (!eth_type_vlan(veth->h_vlan_proto))
+-		return -EINVAL;
++		return -ENODATA;
  
-+		if (vma_is_shared_maywrite(vma)) {
-+			error = mapping_map_writable(file->f_mapping);
-+			if (error)
-+				goto close_and_free_vma;
-+
-+			writable_file_mapping = true;
-+		}
-+
- 		/*
- 		 * Expansion is handled above, merging is handled below.
- 		 * Drivers should not alter the address of the VMA.
-@@ -2920,8 +2923,10 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
- 	mm->map_count++;
- 	if (vma->vm_file) {
- 		i_mmap_lock_write(vma->vm_file->f_mapping);
--		if (vma_is_shared_maywrite(vma))
-+		if (vma_is_shared_maywrite(vma)) {
- 			mapping_allow_writable(vma->vm_file->f_mapping);
-+			writable_file_mapping = true;
-+		}
- 
- 		flush_dcache_mmap_lock(vma->vm_file->f_mapping);
- 		vma_interval_tree_insert(vma, &vma->vm_file->f_mapping->i_mmap);
-@@ -2937,7 +2942,7 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
- 
- 	/* Once vma denies write, undo our temporary denial count */
- unmap_writable:
--	if (file && is_shared_maywrite(vm_flags))
-+	if (writable_file_mapping)
- 		mapping_unmap_writable(file->f_mapping);
- 	file = vma->vm_file;
- 	ksm_add_vma(vma);
-@@ -2985,7 +2990,7 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
- 		unmap_region(mm, &vmi.mas, vma, prev, next, vma->vm_start,
- 			     vma->vm_end, vma->vm_end, true);
+ 	*vlan_tci = ntohs(veth->h_vlan_TCI);
+ 	return 0;
+@@ -561,7 +561,7 @@ static inline int __vlan_hwaccel_get_tag(const struct sk_buff *skb,
+ 		return 0;
+ 	} else {
+ 		*vlan_tci = 0;
+-		return -EINVAL;
++		return -ENODATA;
  	}
--	if (file && is_shared_maywrite(vm_flags))
-+	if (writable_file_mapping)
- 		mapping_unmap_writable(file->f_mapping);
- free_vma:
- 	vm_area_free(vma);
+ }
+ 
 -- 
-2.42.0
+2.41.0
 
