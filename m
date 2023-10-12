@@ -1,40 +1,40 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EB4938FBF;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 035FA3A273;
 	Thu, 12 Oct 2023 17:13:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MP60TsDz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T0A2scxq"
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E9ACC;
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFBFBD6;
 	Thu, 12 Oct 2023 10:12:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1697130779; x=1728666779;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ATeW5NR80HIMpr3u6FebN291wa9QTr/6cRyeYzyuTi8=;
-  b=MP60TsDzTJYOH9LKQYQngAsBnWOcFmhNoWfEW7+TlCfJzJrp+L7c8dHL
-   LqrYQGnct+3Qy83Z3YOKp97ezfN8SL1+ZodU6bomlw0JpTzA8eveNmEA8
-   LBzXVpbWKORhNYLnBqPL85WvnhQMa5vDmVjYulVl7Nv9C+J46rIzxHEty
-   PGovmVFu+Jfq5p8VGz4gxpqdcLqki/KGyZX8YNpRFD9W+AalBXrD9Jk5t
-   jRwmCFi/b6AFncZ5dOOIulQSvJelCczLgWG1KMNDWEMD1A6bXs7w+KACL
-   iPHzExY2Wihpq9k81LAKZRqyLSxPw8Ci8Dge7R6z6d87LgmoOb06ZZXTF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="416027790"
+  bh=r0/4sXt4J7/Uu9KHLpHylSfMKbutKsdvdien9Ls6cEA=;
+  b=T0A2scxqxzGviwSBmft4gVytL31oJ6zGt+fE4wzid+/eyCf8Kje/owvg
+   TIRekviHoqyu0uZKhh3EcZysUYlDb962h9+eK7yWLDXDi8IsHRSHCtA/H
+   XizoSYcj/JISArgf67GjboG2WzUxom9jrA4RzL80hLrb3ih7ZwjTNXMar
+   AYYbkjQLPaYlJUuilfninyLj/MW8FHWc1tLwe6+RQI8p1XnBOcYTk+tLb
+   pePfbyCUo0QYRZmPPlBQn3wtcSRLmGsTwWsw0oNqwV3gOBkcugcUjj06C
+   qmLAO8UZ2Nudwuha1gO9acrmX6+jdGWfphItYOazI4WCqXsfow7OZ/Phf
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="416027820"
 X-IronPort-AV: E=Sophos;i="6.03,219,1694761200"; 
-   d="scan'208";a="416027790"
+   d="scan'208";a="416027820"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2023 10:12:30 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2023 10:12:35 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="783774112"
+X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="783774132"
 X-IronPort-AV: E=Sophos;i="6.03,219,1694761200"; 
-   d="scan'208";a="783774112"
+   d="scan'208";a="783774132"
 Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by orsmga008.jf.intel.com with ESMTP; 12 Oct 2023 10:12:22 -0700
+  by orsmga008.jf.intel.com with ESMTP; 12 Oct 2023 10:12:28 -0700
 Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id 9CF7033E95;
-	Thu, 12 Oct 2023 18:12:20 +0100 (IST)
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id 2825333EA5;
+	Thu, 12 Oct 2023 18:12:26 +0100 (IST)
 From: Larysa Zaremba <larysa.zaremba@intel.com>
 To: bpf@vger.kernel.org
 Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
@@ -65,9 +65,9 @@ Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
 	Tariq Toukan <tariqt@mellanox.com>,
 	Saeed Mahameed <saeedm@mellanox.com>,
 	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH bpf-next v6 12/18] veth: Implement VLAN tag XDP hint
-Date: Thu, 12 Oct 2023 19:05:18 +0200
-Message-ID: <20231012170524.21085-13-larysa.zaremba@intel.com>
+Subject: [PATCH bpf-next v6 14/18] mlx5: implement VLAN tag XDP hint
+Date: Thu, 12 Oct 2023 19:05:20 +0200
+Message-ID: <20231012170524.21085-15-larysa.zaremba@intel.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231012170524.21085-1-larysa.zaremba@intel.com>
 References: <20231012170524.21085-1-larysa.zaremba@intel.com>
@@ -85,52 +85,56 @@ X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-In order to test VLAN tag hint in hardware-independent selftests, implement
-newly added hint in veth driver.
+Implement the newly added .xmo_rx_vlan_tag() hint function.
 
-Acked-by: Stanislav Fomichev <sdf@google.com>
 Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
 ---
- drivers/net/veth.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c | 15 +++++++++++++++
+ include/linux/mlx5/device.h                      |  2 +-
+ 2 files changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 0deefd1573cf..8a501972670a 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -1736,6 +1736,24 @@ static int veth_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+index 12f56d0db0af..d7cd14687ce8 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+@@ -256,9 +256,24 @@ static int mlx5e_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
  	return 0;
  }
  
-+static int veth_xdp_rx_vlan_tag(const struct xdp_md *ctx, __be16 *vlan_proto,
-+				u16 *vlan_tci)
++static int mlx5e_xdp_rx_vlan_tag(const struct xdp_md *ctx, __be16 *vlan_proto,
++				 u16 *vlan_tci)
 +{
-+	struct veth_xdp_buff *_ctx = (void *)ctx;
-+	struct sk_buff *skb = _ctx->skb;
-+	int err;
++	const struct mlx5e_xdp_buff *_ctx = (void *)ctx;
++	const struct mlx5_cqe64 *cqe = _ctx->cqe;
 +
-+	if (!skb)
++	if (!cqe_has_vlan(cqe))
 +		return -ENODATA;
 +
-+	err = __vlan_hwaccel_get_tag(skb, vlan_tci);
-+	if (err)
-+		return err;
-+
-+	*vlan_proto = skb->vlan_proto;
-+	return err;
++	*vlan_proto = htons(ETH_P_8021Q);
++	*vlan_tci = be16_to_cpu(cqe->vlan_info);
++	return 0;
 +}
 +
- static const struct net_device_ops veth_netdev_ops = {
- 	.ndo_init            = veth_dev_init,
- 	.ndo_open            = veth_open,
-@@ -1760,6 +1778,7 @@ static const struct net_device_ops veth_netdev_ops = {
- static const struct xdp_metadata_ops veth_xdp_metadata_ops = {
- 	.xmo_rx_timestamp		= veth_xdp_rx_timestamp,
- 	.xmo_rx_hash			= veth_xdp_rx_hash,
-+	.xmo_rx_vlan_tag		= veth_xdp_rx_vlan_tag,
+ const struct xdp_metadata_ops mlx5e_xdp_metadata_ops = {
+ 	.xmo_rx_timestamp		= mlx5e_xdp_rx_timestamp,
+ 	.xmo_rx_hash			= mlx5e_xdp_rx_hash,
++	.xmo_rx_vlan_tag		= mlx5e_xdp_rx_vlan_tag,
  };
  
- #define VETH_FEATURES (NETIF_F_SG | NETIF_F_FRAGLIST | NETIF_F_HW_CSUM | \
+ /* returns true if packet was consumed by xdp */
+diff --git a/include/linux/mlx5/device.h b/include/linux/mlx5/device.h
+index 8fbe22de16ef..0805f8231452 100644
+--- a/include/linux/mlx5/device.h
++++ b/include/linux/mlx5/device.h
+@@ -916,7 +916,7 @@ static inline u8 get_cqe_tls_offload(struct mlx5_cqe64 *cqe)
+ 	return (cqe->tls_outer_l3_tunneled >> 3) & 0x3;
+ }
+ 
+-static inline bool cqe_has_vlan(struct mlx5_cqe64 *cqe)
++static inline bool cqe_has_vlan(const struct mlx5_cqe64 *cqe)
+ {
+ 	return cqe->l4_l3_hdr_type & 0x1;
+ }
 -- 
 2.41.0
 
