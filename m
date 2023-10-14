@@ -1,146 +1,76 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C4FD1094B;
-	Sat, 14 Oct 2023 12:05:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 981C711CB4
+	for <bpf@vger.kernel.org>; Sat, 14 Oct 2023 13:07:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B084A2;
-	Sat, 14 Oct 2023 05:05:14 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
-	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4S725g1FYxz1kv1H;
-	Sat, 14 Oct 2023 20:01:11 +0800 (CST)
-Received: from [10.174.176.93] (10.174.176.93) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.31; Sat, 14 Oct 2023 20:05:11 +0800
-Message-ID: <ef4882c0-b570-37a4-de37-c2ad251458d1@huawei.com>
-Date: Sat, 14 Oct 2023 20:05:11 +0800
+Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com [209.85.160.71])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C73CC9
+	for <bpf@vger.kernel.org>; Sat, 14 Oct 2023 06:07:30 -0700 (PDT)
+Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-1dd886536f2so4082193fac.3
+        for <bpf@vger.kernel.org>; Sat, 14 Oct 2023 06:07:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697288849; x=1697893649;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1/6ceZHQviZHWBwoxE7adPRErfGv6u0OyUKTGWcI8bI=;
+        b=KGzd9GMtuMhU9jQ6YAc+EYHBufhFDH3BFouW1BVJuB1I5HlkSApC+D21g3DwJGQv+e
+         9qlqPpTS1ABIcpuG/HTSkYEuN+lbIYEYri0JR8nsjC7c3AA++Vf07urU5mMpx0kVICwU
+         7TWt26kk0lhS6Y/Z1Nj6dJ7f4Bq04dCYH9hQNjsESp4m8Kmah7q+Jwh0gg4DNrXRPO7Y
+         tRfkHYgOyUxbmuehRUfg91USwaDTLVtEQqyNJGthrWtCoC6AOe9PwUK5Ra3ivZlEmmW3
+         G2BwdD7LCU5AIjkQxrYGP4UpEmp3HAFnDd18EZCrKpooZT9djTnhXLCBmVdX6l/jsn1b
+         9eqA==
+X-Gm-Message-State: AOJu0YyNoT1Qu7uXb7AJYm8Mi8I75mJI26xO+5gVgXQt4Hliti7Mn+qE
+	wqyuG52dr3aMpUon/gdcSKsemMd8k8/coV3szRYB+pZvSfaN
+X-Google-Smtp-Source: AGHT+IEVCXmtDm4/SgXnVdwVBjmB+6iLQnnDacoQ6B2a0YxsIaEpL48b/OQOJ6nt9o5XmKqieSHSUI18COA2sWNw0RWueMJ/nlKJ
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-From: "liujian (CE)" <liujian56@huawei.com>
-Subject: Re: [PATCH bpf-next v5 1/7] bpf, sockmap: add BPF_F_PERMANENT flag
- for skmsg redirect
-To: John Fastabend <john.fastabend@gmail.com>, <jakub@cloudflare.com>,
-	<ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-	<martin.lau@linux.dev>, <song@kernel.org>, <yonghong.song@linux.dev>,
-	<kpsingh@kernel.org>, <sdf@google.com>, <haoluo@google.com>,
-	<jolsa@kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
-	<kuba@kernel.org>, <pabeni@redhat.com>, <dsahern@kernel.org>
-CC: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
-References: <20230927093013.1951659-1-liujian56@huawei.com>
- <20230927093013.1951659-2-liujian56@huawei.com>
- <651b982a1b22a_4fa3f20854@john.notmuch>
-In-Reply-To: <651b982a1b22a_4fa3f20854@john.notmuch>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.176.93]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6870:d782:b0:1e9:6b2f:5ad7 with SMTP id
+ bd2-20020a056870d78200b001e96b2f5ad7mr4590286oab.1.1697288848970; Sat, 14 Oct
+ 2023 06:07:28 -0700 (PDT)
+Date: Sat, 14 Oct 2023 06:07:28 -0700
+In-Reply-To: <000000000000ea44c905ffd26705@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ec9cb90607acdac9@google.com>
+Subject: Re: [syzbot] [batman?] INFO: rcu detected stall in rtnl_newlink (3)
+From: syzbot <syzbot+afb3084a933aa2bdacc6@syzkaller.appspotmail.com>
+To: a@unstable.cc, b.a.t.m.a.n@lists.open-mesh.org, bpf@vger.kernel.org, 
+	davem@davemloft.net, dsahern@kernel.org, edumazet@google.com, kuba@kernel.org, 
+	kuniyu@amazon.com, linux-kernel@vger.kernel.org, mareklindner@neomailbox.ch, 
+	netdev@vger.kernel.org, pabeni@redhat.com, sven@narfation.org, 
+	sw@simonwunderlich.de, syzkaller-bugs@googlegroups.com, 
+	vinicius.gomes@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+	RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+syzbot suspects this issue was fixed by commit:
 
+commit e739718444f7bf2fa3d70d101761ad83056ca628
+Author: Kuniyuki Iwashima <kuniyu@amazon.com>
+Date:   Sat Jul 29 00:07:05 2023 +0000
 
-On 2023/10/3 12:27, John Fastabend wrote:
-> Liu Jian wrote:
->> If the sockmap msg redirection function is used only to forward packets
->> and no other operation, the execution result of the BPF_SK_MSG_VERDICT
->> program is the same each time. In this case, the BPF program only needs to
->> be run once. Add BPF_F_PERMANENT flag to bpf_msg_redirect_map() and
->> bpf_msg_redirect_hash() to implement this ability.
->>
->> Then we can enable this function in the bpf program as follows:
->> bpf_msg_redirect_hash(xx, xx, xx, BPF_F_INGRESS | BPF_F_PERMANENT);
->>
->> Test results using netperf  TCP_STREAM mode:
->> for i in 1 64 128 512 1k 2k 32k 64k 100k 500k 1m;then
->> netperf -T 1,2 -t TCP_STREAM -H 127.0.0.1 -l 20 -- -m $i -s 100m,100m -S 100m,100m
->> done
->>
->> before:
->> 3.84 246.52 496.89 1885.03 3415.29 6375.03 40749.09 48764.40 51611.34 55678.26 55992.78
->> after:
->> 4.43 279.20 555.82 2080.79 3870.70 7105.44 41836.41 49709.75 51861.56 55211.00 54566.85
->>
->> Signed-off-by: Liu Jian <liujian56@huawei.com>
->> ---
-> 
-> First sorry for the delay I was thinking about this a bit. I decided it likely makes
-> a lot of sense if you want to build an l7 load balancer where you just read some
-> keys off an initial msg and then pin the rest of the connection to a specific
-> backend or proxy socket, etc.
-> 
->>   include/linux/skmsg.h          |  1 +
->>   include/uapi/linux/bpf.h       | 45 ++++++++++++++++++++++++++--------
->>   net/core/skmsg.c               |  6 ++++-
->>   net/core/sock_map.c            |  4 +--
->>   net/ipv4/tcp_bpf.c             | 12 +++++----
->>   tools/include/uapi/linux/bpf.h | 45 ++++++++++++++++++++++++++--------
->>   6 files changed, 85 insertions(+), 28 deletions(-)
->>
->> diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
->> index c1637515a8a4..acd7de85608b 100644
->> --- a/include/linux/skmsg.h
->> +++ b/include/linux/skmsg.h
->> @@ -83,6 +83,7 @@ struct sk_psock {
->>   	u32				cork_bytes;
->>   	u32				eval;
->>   	bool				redir_ingress; /* undefined if sk_redir is null */
->> +	bool				redir_permanent;
->>   	struct sk_msg			*cork;
->>   	struct sk_psock_progs		progs;
->>   #if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
->> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
->> index 70bfa997e896..cec6c34f4486 100644
->> --- a/include/uapi/linux/bpf.h
->> +++ b/include/uapi/linux/bpf.h
->> @@ -3029,11 +3029,23 @@ union bpf_attr {
->>    * 		socket level. If the message *msg* is allowed to pass (i.e. if
->>    * 		the verdict eBPF program returns **SK_PASS**), redirect it to
->>    * 		the socket referenced by *map* (of type
->> - * 		**BPF_MAP_TYPE_SOCKMAP**) at index *key*. Both ingress and
->> - * 		egress interfaces can be used for redirection. The
->> - * 		**BPF_F_INGRESS** value in *flags* is used to make the
->> - * 		distinction (ingress path is selected if the flag is present,
->> - * 		egress path otherwise). This is the only flag supported for now.
->> + * 		**BPF_MAP_TYPE_SOCKMAP**) at index *key*.
->> + *
->> + *		The following *flags* are supported:
->> + *
->> + *		**BPF_F_INGRESS**
->> + *		        Both ingress and egress interfaces can be used for redirection.
->> + *		        The **BPF_F_INGRESS** value in *flags* is used to make the
->> + *		        distinction. Ingress path is selected if the flag is present,
->> + *		        egress path otherwise.
->> + *		**BPF_F_PERMANENT**
->> + *		        Indicates that redirect verdict and the target socket should be
->> + *		        remembered. The verdict program will not be run for subsequent
->> + *		        packets, unless an error occurs when forwarding packets.
-> 
-> Why clear it on error? The error is almost always because either the socket is
-> being torn down or there is a memory ENOMEM error that is going to be kicked
-> back to user.
-Sorry, yes, you're right, I've changed the code, but forgot to change 
-the help document. Have sent next version to fix this. Thank you~.
-> 
-> Is the idea that you can try anopther backend possibly by picking another socket
-> out of the table? But, I'm not sure how that might work because you probably
-> don't know that this is even the beginning of a msg block.
-> 
-> I'm wondering if I missed some other reason or if its just simpler to pass the
-> error up the stack and keep the same sk_redir.
-> 
-> Thanks,
-> John
-> 
+    net/sched: taprio: Limit TCA_TAPRIO_ATTR_SCHED_CYCLE_TIME to INT_MAX.
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15b26a4d680000
+start commit:   d528014517f2 Revert ".gitignore: ignore *.cover and *.mbx"
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d576750da57ebbb5
+dashboard link: https://syzkaller.appspot.com/bug?extid=afb3084a933aa2bdacc6
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15849d08a80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13184990a80000
+
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: net/sched: taprio: Limit TCA_TAPRIO_ATTR_SCHED_CYCLE_TIME to INT_MAX.
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
