@@ -1,19 +1,19 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 397BD12B9B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7840812B9C;
 	Sat, 14 Oct 2023 12:04:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD33A2;
-	Sat, 14 Oct 2023 05:04:39 -0700 (PDT)
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB23A9;
+	Sat, 14 Oct 2023 05:04:40 -0700 (PDT)
 Received: from canpemm500010.china.huawei.com (unknown [172.30.72.57])
-	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4S724l2C6mz1kv5x;
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4S724l2VrtzLqfB;
 	Sat, 14 Oct 2023 20:00:23 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by canpemm500010.china.huawei.com
  (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Sat, 14 Oct
- 2023 20:04:23 +0800
+ 2023 20:04:20 +0800
 From: Liu Jian <liujian56@huawei.com>
 To: <john.fastabend@gmail.com>, <jakub@cloudflare.com>, <ast@kernel.org>,
 	<daniel@iogearbox.net>, <andrii@kernel.org>, <martin.lau@linux.dev>,
@@ -22,9 +22,9 @@ To: <john.fastabend@gmail.com>, <jakub@cloudflare.com>, <ast@kernel.org>,
 	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
 	<pabeni@redhat.com>, <dsahern@kernel.org>
 CC: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>, <liujian56@huawei.com>
-Subject: [PATCH bpf-next v6 6/7] selftests/bpf: add tests for verdict skmsg to itself
-Date: Sat, 14 Oct 2023 20:17:05 +0800
-Message-ID: <20231014121706.967988-7-liujian56@huawei.com>
+Subject: [PATCH bpf-next v6 2/7] selftests/bpf: Add txmsg permanently test for sockmap
+Date: Sat, 14 Oct 2023 20:17:01 +0800
+Message-ID: <20231014121706.967988-3-liujian56@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231014121706.967988-1-liujian56@huawei.com>
 References: <20231014121706.967988-1-liujian56@huawei.com>
@@ -46,74 +46,81 @@ X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add tests for verdict skmsg to itself in sockmap_basic.c
+Add one test for txmsg ingress permanently test for sockmap.
 
 Signed-off-by: Liu Jian <liujian56@huawei.com>
 ---
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 32 +++++++++++++------
- 1 file changed, 23 insertions(+), 9 deletions(-)
+ tools/testing/selftests/bpf/test_sockmap.c | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index ade0773b6f4b..e7fb1a31bf61 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -476,7 +476,7 @@ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
- 		test_sockmap_drop_prog__destroy(drop);
+diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
+index 024a0faafb3b..bf2cef7ae3ae 100644
+--- a/tools/testing/selftests/bpf/test_sockmap.c
++++ b/tools/testing/selftests/bpf/test_sockmap.c
+@@ -77,6 +77,7 @@ int txmsg_end_push;
+ int txmsg_start_pop;
+ int txmsg_pop;
+ int txmsg_ingress;
++int txmsg_permanent;
+ int txmsg_redir_skb;
+ int txmsg_ktls_skb;
+ int txmsg_ktls_skb_drop;
+@@ -107,6 +108,7 @@ static const struct option long_options[] = {
+ 	{"txmsg_start_pop",  required_argument,	NULL, 'w'},
+ 	{"txmsg_pop",	     required_argument,	NULL, 'x'},
+ 	{"txmsg_ingress", no_argument,		&txmsg_ingress, 1 },
++	{"txmsg_permanent", no_argument,	&txmsg_permanent, 1 },
+ 	{"txmsg_redir_skb", no_argument,	&txmsg_redir_skb, 1 },
+ 	{"ktls", no_argument,			&ktls, 1 },
+ 	{"peek", no_argument,			&peek_flag, 1 },
+@@ -175,7 +177,7 @@ static void test_reset(void)
+ 	txmsg_start_push = txmsg_end_push = 0;
+ 	txmsg_pass = txmsg_drop = txmsg_redir = 0;
+ 	txmsg_apply = txmsg_cork = 0;
+-	txmsg_ingress = txmsg_redir_skb = 0;
++	txmsg_ingress = txmsg_permanent = txmsg_redir_skb = 0;
+ 	txmsg_ktls_skb = txmsg_ktls_skb_drop = txmsg_ktls_skb_redir = 0;
+ 	txmsg_omit_skb_parser = 0;
+ 	skb_use_parser = 0;
+@@ -1165,10 +1167,13 @@ static int run_options(struct sockmap_options *options, int cg_fd,  int test)
+ 		}
+ 
+ 		if (txmsg_ingress) {
+-			int in = BPF_F_INGRESS;
++			int txmsg_flag = BPF_F_INGRESS;
++
++			if (txmsg_permanent)
++				txmsg_flag |= BPF_F_PERMANENT;
+ 
+ 			i = 0;
+-			err = bpf_map_update_elem(map_fd[6], &i, &in, BPF_ANY);
++			err = bpf_map_update_elem(map_fd[6], &i, &txmsg_flag, BPF_ANY);
+ 			if (err) {
+ 				fprintf(stderr,
+ 					"ERROR: bpf_map_update_elem (txmsg_ingress): %d (%s)\n",
+@@ -1506,6 +1511,14 @@ static void test_txmsg_ingress_redir(int cgrp, struct sockmap_options *opt)
+ 	test_send(opt, cgrp);
  }
  
--static void test_sockmap_msg_verdict(bool is_ingress, bool is_permanent)
-+static void test_sockmap_msg_verdict(bool is_ingress, bool is_permanent, bool is_self)
++static void test_txmsg_ingress_redir_permanent(int cgrp, struct sockmap_options *opt)
++{
++	txmsg_pass = txmsg_drop = 0;
++	txmsg_ingress = txmsg_redir = 1;
++	txmsg_permanent = 1;
++	test_send(opt, cgrp);
++}
++
+ static void test_txmsg_skb(int cgrp, struct sockmap_options *opt)
  {
- 	int key, sent, recvd, recv_fd;
- 	int err, map, verdict, s, c0, c1, p0, p1;
-@@ -519,13 +519,23 @@ static void test_sockmap_msg_verdict(bool is_ingress, bool is_permanent)
- 		goto out_close;
- 
- 	if (is_ingress) {
--		recv_fd = c1;
- 		skel->bss->skmsg_redir_flags = BPF_F_INGRESS;
--		skel->bss->skmsg_redir_key = 1;
-+		if (is_self) {
-+			skel->bss->skmsg_redir_key = 0;
-+			recv_fd = p1;
-+		} else {
-+			skel->bss->skmsg_redir_key = 1;
-+			recv_fd = c1;
-+		}
- 	} else {
--		recv_fd = c0;
- 		skel->bss->skmsg_redir_flags = 0;
--		skel->bss->skmsg_redir_key = 2;
-+		if (is_self) {
-+			skel->bss->skmsg_redir_key = 0;
-+			recv_fd = c1;
-+		} else {
-+			skel->bss->skmsg_redir_key = 2;
-+			recv_fd = c0;
-+		}
- 	}
- 
- 	if (is_permanent)
-@@ -590,11 +600,15 @@ void test_sockmap_basic(void)
- 	if (test__start_subtest("sockmap skb_verdict fionread on drop"))
- 		test_sockmap_skb_verdict_fionread(false);
- 	if (test__start_subtest("sockmap msg_verdict"))
--		test_sockmap_msg_verdict(false, false);
-+		test_sockmap_msg_verdict(false, false, false);
- 	if (test__start_subtest("sockmap msg_verdict ingress"))
--		test_sockmap_msg_verdict(true, false);
-+		test_sockmap_msg_verdict(true, false, false);
- 	if (test__start_subtest("sockmap msg_verdict permanent"))
--		test_sockmap_msg_verdict(false, true);
-+		test_sockmap_msg_verdict(false, true, false);
- 	if (test__start_subtest("sockmap msg_verdict ingress permanent"))
--		test_sockmap_msg_verdict(true, true);
-+		test_sockmap_msg_verdict(true, true, false);
-+	if (test__start_subtest("sockmap msg_verdict permanent self"))
-+		test_sockmap_msg_verdict(false, true, true);
-+	if (test__start_subtest("sockmap msg_verdict ingress permanent self"))
-+		test_sockmap_msg_verdict(true, true, true);
- }
+ 	bool data = opt->data_test;
+@@ -1862,6 +1875,7 @@ struct _test test[] = {
+ 	{"txmsg test redirect wait send mem", test_txmsg_redir_wait_sndmem},
+ 	{"txmsg test drop", test_txmsg_drop},
+ 	{"txmsg test ingress redirect", test_txmsg_ingress_redir},
++	{"txmsg test ingress redirect permanent", test_txmsg_ingress_redir_permanent},
+ 	{"txmsg test skb", test_txmsg_skb},
+ 	{"txmsg test apply", test_txmsg_apply},
+ 	{"txmsg test cork", test_txmsg_cork},
 -- 
 2.34.1
 
