@@ -1,113 +1,158 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2150634195
-	for <bpf@vger.kernel.org>; Mon, 16 Oct 2023 18:33:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C08A3398E;
+	Mon, 16 Oct 2023 18:42:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SKs2otoj"
-Received: from out-203.mta0.migadu.com (out-203.mta0.migadu.com [IPv6:2001:41d0:1004:224b::cb])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD55A2
-	for <bpf@vger.kernel.org>; Mon, 16 Oct 2023 11:33:45 -0700 (PDT)
-Message-ID: <eb4bd204-17b1-f0cb-93dd-d74999ddb265@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1697481223;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BmI76kh43dBmjzgMNopprOw8nRKDf8jqaWGHiQ+q6Pc=;
-	b=SKs2otojdfa1Ss5Yhvc8WJYUoarN3sKus91YK8c4ny08xjgS8F89ElxpdtYds4AEzp95ci
-	Li59hsdFNkJNszJF7SIuejM/uiciLIaU+atRxUOIkGfJtTHXgqWpUL2S8JHC5f77Vi7crU
-	vLrvhUpZ4ga+rulYv61kh42EBP36Q4Y=
-Date: Mon, 16 Oct 2023 11:33:36 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LK2+oxhU"
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD10E1;
+	Mon, 16 Oct 2023 11:42:03 -0700 (PDT)
+Received: by mail-ua1-x92f.google.com with SMTP id a1e0cc1a2514c-7b605706bb0so1793389241.3;
+        Mon, 16 Oct 2023 11:42:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1697481722; x=1698086522; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FVxPeeG/1EcIooqWLaHg+UygOqvO//U50PKHWICGfyY=;
+        b=LK2+oxhUJMOQ/+5oBRgR9SovoGWxwXWnNfd1N1X3bQt1l63f5MdpJ8JZ/YseMooUim
+         ff91XgTHfByg3YqK9eicaY91D1DqrwUB+su42O6eoSm/64JTB0S7Id9rRATPGZrWirGa
+         Ij+DskKJc35degrns+nefvce/q6ECF5Eq7ZcdK4ANkEKfMyCRTF7iPIoRLMhGpnrcshA
+         urRXbhZEbppsyJeWnKLqomAkQ+TkPndgpKL96fl6Ajm/aEh50FcTyT5JhZjlu5z7nbkn
+         YwuB4euYALSrrd3pPGMv18TrP68G4tbJXZxp/U17Epo40L316RuPwQX9/pUWdthOwPBA
+         vI4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697481722; x=1698086522;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FVxPeeG/1EcIooqWLaHg+UygOqvO//U50PKHWICGfyY=;
+        b=vEI9BtnqzfEB2k/x48ikHMhvg4l8RN3wxFp+rz0iUY2IrdkoVhIhiqDTJRhsqby5zD
+         UrXnS/TirjmGtc9l/azg4YUELThZSNwfW0Lsi3DHv3s1xFBJ9q3bdPdVVk4Szxm56JyX
+         j0+cue5/noxp9PObwAaYuiTVLcZ8fR9iOvmBUUO4YCd7aFYvLy5XDJ1XYgRl/rsIX91/
+         1XS7snw7RaOu8px/Oo1Zzkz0pFgWeiF7rpA4Ziw9NBLyJT8kRS6RsQ4XnO2FafGKxP6J
+         h491nsdYhwHpNn2PkKw6f/IhaMFsx4scWnKAqoz9MgHvCRaj+bF8pd4m+IzhkV2cviSU
+         Lklg==
+X-Gm-Message-State: AOJu0YzNztnIvLuZeeW7bWn7NHhsmcjQ9T7Lc5tyYSgSwu6RqRTbN7PL
+	e1KnE2FF8ukUMPuijbWxZZBHxbOygBgOrF/yBwI=
+X-Google-Smtp-Source: AGHT+IG9VYMWnCHNWH+Vy+9t8oKdqCxwYFtnPuvuTDAferidS3/5yyy/rdmJ+qUStNzI8s9SMBRtTpowA0iPU4byerk=
+X-Received: by 2002:a05:6102:4709:b0:452:67fc:b437 with SMTP id
+ ei9-20020a056102470900b0045267fcb437mr189323vsb.18.1697481722614; Mon, 16 Oct
+ 2023 11:42:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2] Only run BPF cgroup unix sockaddr recvmsg()
- hooks on named sockets
-Content-Language: en-US
-To: Kuniyuki Iwashima <kuniyu@amazon.com>, daan.j.demeyer@gmail.com
-Cc: bpf@vger.kernel.org, kernel-team@meta.com, netdev@vger.kernel.org
-References: <20231012085216.219918-1-daan.j.demeyer@gmail.com>
- <20231012181142.60636-1-kuniyu@amazon.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20231012181142.60636-1-kuniyu@amazon.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <652d46664a3db_1980fa29460@willemb.c.googlers.com.notmuch> <20231016164606.29484-1-kuniyu@amazon.com>
+In-Reply-To: <20231016164606.29484-1-kuniyu@amazon.com>
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date: Mon, 16 Oct 2023 14:41:25 -0400
+Message-ID: <CAF=yD-++2Qr+-T4iGbJc-k0KXk_X6rH5rHoPcCOs6Lxnzu2_GA@mail.gmail.com>
+Subject: Re: [PATCH v1 bpf-next 00/11] bpf: tcp: Add SYN Cookie
+ generation/validation SOCK_OPS hooks.
+To: Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, davem@davemloft.net, dsahern@kernel.org, 
+	edumazet@google.com, haoluo@google.com, john.fastabend@gmail.com, 
+	jolsa@kernel.org, kpsingh@kernel.org, kuba@kernel.org, kuni1840@gmail.com, 
+	martin.lau@linux.dev, mykolal@fb.com, netdev@vger.kernel.org, 
+	pabeni@redhat.com, sdf@google.com, song@kernel.org, yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT autolearn=ham
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 10/12/23 11:11 AM, Kuniyuki Iwashima wrote:
-> From: Daan De Meyer <daan.j.demeyer@gmail.com>
-> Date: Thu, 12 Oct 2023 10:52:13 +0200
->> Changes since v1:
->>
->> * Added missing Signed-off-by tag
-> 
-> You can put these after --- so that it will disappear when merged.
-> 
-> 
->>
->> We should not run the recvmsg() hooks on unnamed sockets as we do
->> not run them on unnamed sockets in the other hooks either. We may
->> look into relaxing this later but for now let's make sure we are
->> consistent and not run the hooks on unnamed sockets anywhere.
->>
->> Signed-off-by: Daan De Meyer <daan.j.demeyer@gmail.com>
->> ---
->>   net/unix/af_unix.c | 14 ++++++++------
->>   1 file changed, 8 insertions(+), 6 deletions(-)
->>
->> diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
->> index e10d07c76044..81fb8bddaff9 100644
->> --- a/net/unix/af_unix.c
->> +++ b/net/unix/af_unix.c
->> @@ -2416,9 +2416,10 @@ int __unix_dgram_recvmsg(struct sock *sk, struct msghdr *msg, size_t size,
->>   	if (msg->msg_name) {
->>   		unix_copy_addr(msg, skb->sk);
-> 
-> How is an unnamed socket set to skb->sk ?
+On Mon, Oct 16, 2023 at 12:46=E2=80=AFPM Kuniyuki Iwashima <kuniyu@amazon.c=
+om> wrote:
+>
+> From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+> Date: Mon, 16 Oct 2023 10:19:18 -0400
+> > Kuniyuki Iwashima wrote:
+> > > Under SYN Flood, the TCP stack generates SYN Cookie to remain statele=
+ss
+> > > for the connection request until a valid ACK is responded to the SYN+=
+ACK.
+> > >
+> > > The cookie contains two kinds of host-specific bits, a timestamp and
+> > > secrets, so only can it be validated by the generator.  It means SYN
+> > > Cookie consumes network resources between the client and the server;
+> > > intermediate nodes must remember which nodes to route ACK for the coo=
+kie.
+> > >
+> > > SYN Proxy reduces such unwanted resource allocation by handling 3WHS =
+at
+> > > the edge network.  After SYN Proxy completes 3WHS, it forwards SYN to=
+ the
+> > > backend server and completes another 3WHS.  However, since the server=
+'s
+> > > ISN differs from the cookie, the proxy must manage the ISN mappings a=
+nd
+> > > fix up SEQ/ACK numbers in every packet for each connection.  If a pro=
+xy
+> > > node is down, all the connections through it are also down.  Keeping =
+a
+> > > state at proxy is painful from that perspective.
+> > >
+> > > At AWS, we use a dirty hack to build truly stateless SYN Proxy at sca=
+le.
+> > > Our SYN Proxy consists of the front proxy layer and the backend kerne=
+l
+> > > module.  (See slides of netconf [0], p6 - p15)
+> > >
+> > > The cookie that SYN Proxy generates differs from the kernel's cookie =
+in
+> > > that it contains a secret (called rolling salt) (i) shared by all the=
+ proxy
+> > > nodes so that any node can validate ACK and (ii) updated periodically=
+ so
+> > > that old cookies cannot be validated.  Also, ISN contains WScale, SAC=
+K, and
+> > > ECN, not in TS val.  This is not to sacrifice any connection quality,=
+ where
+> > > some customers turn off the timestamp option due to retro CVE.
+> >
+> > If easier: I think it should be possible to make the host secret
+> > readable and writable with CAP_NET_ADMIN, to allow synchronizing
+> > between hosts.
+>
+> I think the idea is doable for syncookie_secret and syncookie6_secret.
+> However, the cookie timestamp is generated based on jiffies that cannot
+> be written.
+>
+> [ I answered sharing secrets would resolve our issue at netconf, but
+>   I was wrong. ]
+>
+>
+> > For similar reasons as suggested here, a rolling salt might be
+> > useful more broadly too.
+>
+> Maybe we need not use jiffies and can create a worker to update the
+> secret periodically if it's not configured manually.
+>
+> The problem here would be that we need to update/read u64[4] atomically
+> if we want to use SipHash or HSipHash.  Maybe this also can be changed.
+>
+> But, we still want to use BPF as we need to encode (at least) WS and
+> SACK bits in ISN, not TS and use different MSS candidates rather than
+> msstab.
+>
+> Also, in our use case, the validation for cookie itself is done in
+> the front proxy layer, and the kernel will do more light-weight
+> validation like checking if the cookie is forwarded from trusted
+> nodes.  Then, we can prevent invalid ACK from flowing through the
+> backend and consuming some networking entries, and the backend need
+> not do full validation.
+>
+> With BPF, we can get such flexibility at encoding and validation, and
+> making cookie generation algorithm private could be good for security.
 
-I had a similar question. Most likely socketpair? Please add an explanation in 
-the commit message in v3. Please also help to add a selftest for this case.
-
-> 
-> 
->>
->> -		BPF_CGROUP_RUN_PROG_UNIX_RECVMSG_LOCK(sk,
->> -						      msg->msg_name,
->> -						      &msg->msg_namelen);
->> +		if (msg->msg_namelen > 0)
->> +			BPF_CGROUP_RUN_PROG_UNIX_RECVMSG_LOCK(sk,
->> +							      msg->msg_name,
->> +							      &msg->msg_namelen);
->>   	}
->>
->>   	if (size > skb->len - skip)
->> @@ -2773,9 +2774,10 @@ static int unix_stream_read_generic(struct unix_stream_read_state *state,
->>   					 state->msg->msg_name);
->>   			unix_copy_addr(state->msg, skb->sk);
->>
->> -			BPF_CGROUP_RUN_PROG_UNIX_RECVMSG_LOCK(sk,
->> -							      state->msg->msg_name,
->> -							      &state->msg->msg_namelen);
->> +			if (state->msg->msg_namelen > 0)
->> +				BPF_CGROUP_RUN_PROG_UNIX_RECVMSG_LOCK(sk,
->> +								      state->msg->msg_name,
->> +								      &state->msg->msg_namelen);
->>
->>   			sunaddr = NULL;
->>   		}
->> --
->> 2.41.0
->>
-
+Thanks for that context. Sounds like it indeed would not be a small
+change to support your use case in the existing syncookie C code,
+then.
