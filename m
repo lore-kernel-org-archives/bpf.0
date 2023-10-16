@@ -1,16 +1,16 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E009B28DB0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E00C228DD1;
 	Mon, 16 Oct 2023 12:01:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF21E1;
-	Mon, 16 Oct 2023 05:00:59 -0700 (PDT)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VuHc.Ri_1697457655;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VuHc.Ri_1697457655)
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9971F8E;
+	Mon, 16 Oct 2023 05:00:57 -0700 (PDT)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R731e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VuINq5E_1697457653;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VuINq5E_1697457653)
           by smtp.aliyun-inc.com;
-          Mon, 16 Oct 2023 20:00:56 +0800
+          Mon, 16 Oct 2023 20:00:54 +0800
 From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -26,9 +26,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	John Fastabend <john.fastabend@gmail.com>,
 	virtualization@lists.linux-foundation.org,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v1 19/19] virtio_net: xdp_features add NETDEV_XDP_ACT_XSK_ZEROCOPY
-Date: Mon, 16 Oct 2023 20:00:33 +0800
-Message-Id: <20231016120033.26933-20-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v1 17/19] virtio_net: xsk: rx: virtnet_rq_free_unused_buf() check xsk buffer
+Date: Mon, 16 Oct 2023 20:00:31 +0800
+Message-Id: <20231016120033.26933-18-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20231016120033.26933-1-xuanzhuo@linux.alibaba.com>
 References: <20231016120033.26933-1-xuanzhuo@linux.alibaba.com>
@@ -47,28 +47,41 @@ X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Now, we supported AF_XDP(xsk). Add NETDEV_XDP_ACT_XSK_ZEROCOPY to
-xdp_features.
+Since this will be called in other circumstances(freeze), we must check
+whether it is xsk's buffer in this function. It cannot be judged outside
+this function.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- drivers/net/virtio/main.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/virtio/main.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
 diff --git a/drivers/net/virtio/main.c b/drivers/net/virtio/main.c
-index ac62d0955c13..c66d8509330e 100644
+index 003dd67ab707..ac62d0955c13 100644
 --- a/drivers/net/virtio/main.c
 +++ b/drivers/net/virtio/main.c
-@@ -4329,7 +4329,8 @@ static int virtnet_probe(struct virtio_device *vdev)
- 		dev->hw_features |= NETIF_F_GRO_HW;
+@@ -3904,8 +3904,21 @@ void virtnet_sq_free_unused_buf(struct virtqueue *vq, void *buf)
+ void virtnet_rq_free_unused_buf(struct virtqueue *vq, void *buf)
+ {
+ 	struct virtnet_info *vi = vq->vdev->priv;
++	struct xsk_buff_pool *pool;
+ 	int i = vq2rxq(vq);
  
- 	dev->vlan_features = dev->features;
--	dev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT;
-+	dev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT |
-+		NETDEV_XDP_ACT_XSK_ZEROCOPY;
- 
- 	/* MTU range: 68 - 65535 */
- 	dev->min_mtu = MIN_MTU;
++	rcu_read_lock();
++	pool = rcu_dereference(vi->rq[i].xsk.pool);
++	if (pool) {
++		struct xdp_buff *xdp;
++
++		xdp = (struct xdp_buff *)buf;
++		xsk_buff_free(xdp);
++		rcu_read_unlock();
++		return;
++	}
++	rcu_read_unlock();
++
+ 	if (vi->mergeable_rx_bufs)
+ 		put_page(virt_to_head_page(buf));
+ 	else if (vi->big_packets)
 -- 
 2.32.0.3.g01195cf9f
 
