@@ -1,46 +1,46 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F07F34190;
-	Mon, 16 Oct 2023 18:33:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 115EC3418A;
+	Mon, 16 Oct 2023 18:33:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="UTJrC6C3";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="S5UiA4Hq"
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A46A2;
-	Mon, 16 Oct 2023 11:33:18 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="DEEpborb";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="wSh31jxG"
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8471195;
+	Mon, 16 Oct 2023 11:33:43 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 9340E21941;
-	Mon, 16 Oct 2023 18:33:15 +0000 (UTC)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 2808521941;
+	Mon, 16 Oct 2023 18:33:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1697481195; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1697481222; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=QkCIkhPVNqzKHJQMduEVPWqZGb5aCwOZAMiw/zbXR9E=;
-	b=UTJrC6C3SO/r3WQH6r5yJ9nuRF9VCxPuDyNRGuH7VkK9ichOpyY0/zEFJ5q4dn76WUhDx+
-	JC/Py8aMsEHrlKqhR4bPyvmJ8trS0KaX3qS7sAFW2c/jBLLOzYbowPDIcMSAdXVO7vH2Nx
-	Iy9FESfaLUjCH4c+60EgFHVZSFZjMsI=
+	bh=uh1d2YtOaoK7v9g+0MCKG7i4FzpumtsR1ohj9YLCVzo=;
+	b=DEEpborbMwJOw2CqqeT0La1WoXpMB4iSb6jelaHeeahu0XJzJFc4zY/mmcJVBJIrShIlYO
+	uDL9Cg8szjvn/RfRLYe/eJK7S9YbsArF9EVpxgAm61miLAsUOo0NZs58MmtINiSfJoIBP7
+	VBKeG5xXaRG0zXb4resQO6GGJGyHzLg=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1697481195;
+	s=susede2_ed25519; t=1697481222;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=QkCIkhPVNqzKHJQMduEVPWqZGb5aCwOZAMiw/zbXR9E=;
-	b=S5UiA4Hq3Lwb/q9XN1YM7jBOWslZ3JKRi8PR5zmnZb7R7Xx5Q0Iz7zQafcSb645qj8DvhQ
-	eKUMkLOW3a8z3rCw==
+	bh=uh1d2YtOaoK7v9g+0MCKG7i4FzpumtsR1ohj9YLCVzo=;
+	b=wSh31jxG5lMPPxuJ7w2GOPeTptKgeW6wHgAL4qipnjs37aWKk3kaP8du+5Lu2cnpjVoqEg
+	hVGYQcKXhptrB9BQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
 	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5DE9C138EF;
-	Mon, 16 Oct 2023 18:33:15 +0000 (UTC)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E62FE138EF;
+	Mon, 16 Oct 2023 18:33:41 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
 	by imap2.suse-dmz.suse.de with ESMTPSA
-	id tLOLEeuBLWWWYQAAMHmgww
-	(envelope-from <krisman@suse.de>); Mon, 16 Oct 2023 18:33:15 +0000
+	id ZU3RMgWCLWW8YQAAMHmgww
+	(envelope-from <krisman@suse.de>); Mon, 16 Oct 2023 18:33:41 +0000
 From: Gabriel Krisman Bertazi <krisman@suse.de>
 To: Breno Leitao <leitao@debian.org>
 Cc: sdf@google.com,  axboe@kernel.dk,  asml.silence@gmail.com,
@@ -48,14 +48,14 @@ Cc: sdf@google.com,  axboe@kernel.dk,  asml.silence@gmail.com,
   martin.lau@linux.dev,  bpf@vger.kernel.org,
   linux-kernel@vger.kernel.org,  netdev@vger.kernel.org,
   io-uring@vger.kernel.org
-Subject: Re: [PATCH v7 09/11] io_uring/cmd: Introduce
- SOCKET_URING_OP_GETSOCKOPT
-In-Reply-To: <20231016134750.1381153-10-leitao@debian.org> (Breno Leitao's
-	message of "Mon, 16 Oct 2023 06:47:47 -0700")
+Subject: Re: [PATCH v7 10/11] io_uring/cmd: Introduce
+ SOCKET_URING_OP_SETSOCKOPT
+In-Reply-To: <20231016134750.1381153-11-leitao@debian.org> (Breno Leitao's
+	message of "Mon, 16 Oct 2023 06:47:48 -0700")
 References: <20231016134750.1381153-1-leitao@debian.org>
-	<20231016134750.1381153-10-leitao@debian.org>
-Date: Mon, 16 Oct 2023 14:33:14 -0400
-Message-ID: <87bkcybeol.fsf@>
+	<20231016134750.1381153-11-leitao@debian.org>
+Date: Mon, 16 Oct 2023 14:33:40 -0400
+Message-ID: <877cnmbenv.fsf@>
 User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -71,6 +71,7 @@ X-Spam-Score: -0.40
 X-Spamd-Result: default: False [-0.40 / 50.00];
 	 ARC_NA(0.00)[];
 	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 BAYES_HAM(-0.00)[32.44%];
 	 FROM_HAS_DN(0.00)[];
 	 TO_DN_SOME(0.00)[];
 	 TO_MATCH_ENVRCPT_ALL(0.00)[];
@@ -98,24 +99,18 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 
 Breno Leitao <leitao@debian.org> writes:
 
-> Add support for getsockopt command (SOCKET_URING_OP_GETSOCKOPT), where
-> level is SOL_SOCKET. This is leveraging the sockptr_t infrastructure,
-> where a sockptr_t is either userspace or kernel space, and handled as
-> such.
+> Add initial support for SOCKET_URING_OP_SETSOCKOPT. This new command is
+> similar to setsockopt. This implementation leverages the function
+> do_sock_setsockopt(), which is shared with the setsockopt() system call
+> path.
 >
-> Differently from the getsockopt(2), the optlen field is not a userspace
-> pointers. In getsockopt(2), userspace provides optlen pointer, which is
-> overwritten by the kernel.  In this implementation, userspace passes a
-> u32, and the new value is returned in cqe->res. I.e., optlen is not a
-> pointer.
->
-> Important to say that userspace needs to keep the pointer alive until
-> the CQE is completed.
+> Important to say that userspace needs to keep the pointer's memory alive
+> until the operation is completed. I.e, the memory could not be
+> deallocated before the CQE is returned to userspace.
 >
 > Signed-off-by: Breno Leitao <leitao@debian.org>
 
-I suspect you forgot to collect my previous r-b on this :).  Either way,
-still good to me:
+likewise..
 
 Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
 
