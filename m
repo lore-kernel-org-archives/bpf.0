@@ -1,35 +1,35 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3468628DBA;
-	Mon, 16 Oct 2023 14:01:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7630928E0C;
+	Mon, 16 Oct 2023 14:01:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52316EE;
-	Mon, 16 Oct 2023 07:01:38 -0700 (PDT)
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-9be02fcf268so411182366b.3;
-        Mon, 16 Oct 2023 07:01:38 -0700 (PDT)
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8577F9C;
+	Mon, 16 Oct 2023 07:01:43 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-9adb9fa7200so939372966b.0;
+        Mon, 16 Oct 2023 07:01:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697464897; x=1698069697;
+        d=1e100.net; s=20230601; t=1697464902; x=1698069702;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WWPtWPFuY/M4SoBkCUSlFAjHNbqqRZMGeiXE9WRKkYQ=;
-        b=P/DwvOQEQve6ZpxmuubzwgxbR245NuITfohSUZQePM7oqRKD+SMiIXg9/rix7rZZBE
-         PkFkTEA2SoZWnj1R5Q66k2UB/to77Fpa4AjQdbx1kFJO+F+PExKwfcbBWcS2AQ6t/gan
-         pPJDUCyViIDodjXCi7ELFTmlPr75NiP7lGYyzIA/yj9L96f+UCvt5FKhWEn3TejEJtM5
-         MBV9lu19RFtcKMUWxt5Cn/FBW0dUC6iEnm9BAvs4PvmBxjnXsK6eDym9dzjnFCfaKTPw
-         iJNtTCxP6164tfq0m5k+37hJTUJFgZK6T1Bs0EpKqGl7y2axFIyUtPnD/JSvg0yvHy1M
-         o40Q==
-X-Gm-Message-State: AOJu0YzB10EPkb1Z2XZTAOj7p1L72SihgK4nSigH/a928Rwkk4ac23Oh
-	8SQ9Dyv8NjINEkbnXmzOvRsIn20Zwppxaw==
-X-Google-Smtp-Source: AGHT+IFHwgMnqwu+7mLuJU+UPYetaVODLxb6FdjWiU8/9L+Gcywfc8TRnfR/y135aYRThNIO9vMR4w==
-X-Received: by 2002:a17:907:3f93:b0:9be:84c1:447e with SMTP id hr19-20020a1709073f9300b009be84c1447emr7074691ejc.41.1697464896425;
-        Mon, 16 Oct 2023 07:01:36 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-014.fbsv.net. [2a03:2880:31ff:e::face:b00c])
-        by smtp.gmail.com with ESMTPSA id v2-20020a1709062f0200b009829d2e892csm4197386eji.15.2023.10.16.07.01.35
+        bh=T6jABNP5fatbdRkQ6crb5lOkIMwJ1jpThfXk6besz34=;
+        b=svSPev20qqFYc6cxgBdXbsM146GrIMKnDFLGTIIXScZ378s8NiVXMknTvoxi3qMzv7
+         gzBrpBq6pdwALNBc1sLUhzY7WZfiTissGFOKnvYiv6+U/4F+PVdz5Wae4Q85rg4ebPCP
+         snvt16e5tfyRO07ccug2rTnq0jtoZ6ezcQGhYQwu1Rv/fhqTdQROEffE4x2ds/lDDa99
+         NtHx58FR2D+rJN/sW8pGMJIGnXbvWw1vw9a9j4epT9Q0eoEiU2Ree4v50lRrfFz5JDVh
+         2CnxyNxjGqI5Yq1JJSN+2ePBESMIk1aZplLxwrbqcmGh4GIdSSc5/tSNRRaL+cAN8g7m
+         Q90w==
+X-Gm-Message-State: AOJu0YzBKYU1+TEBeknCXZURN94IGLbiwXAvnokUw8V+GJ8i44wUrPLK
+	v6orHw2QQcwKfdw8oRQ6RnM=
+X-Google-Smtp-Source: AGHT+IHUu/g9ym5TxgIGSDFjs7IALdnvoQvEUE8XDlq1Xf3v/iRN5OBKz0QrdD/SLdTvKjZJbWnARQ==
+X-Received: by 2002:a17:906:3fd1:b0:9bf:952d:a8ad with SMTP id k17-20020a1709063fd100b009bf952da8admr3081678ejj.5.1697464901665;
+        Mon, 16 Oct 2023 07:01:41 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-013.fbsv.net. [2a03:2880:31ff:d::face:b00c])
+        by smtp.gmail.com with ESMTPSA id gw11-20020a170906f14b00b0098669cc16b2sm4055503ejb.83.2023.10.16.07.01.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Oct 2023 07:01:36 -0700 (PDT)
+        Mon, 16 Oct 2023 07:01:41 -0700 (PDT)
 From: Breno Leitao <leitao@debian.org>
 To: sdf@google.com,
 	axboe@kernel.dk,
@@ -41,10 +41,10 @@ To: sdf@google.com,
 	krisman@suse.de,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
 	KP Singh <kpsingh@kernel.org>,
 	Hao Luo <haoluo@google.com>,
 	Jiri Olsa <jolsa@kernel.org>,
@@ -53,10 +53,13 @@ To: sdf@google.com,
 Cc: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	netdev@vger.kernel.org,
-	io-uring@vger.kernel.org
-Subject: [PATCH v7 02/11] bpf: Add sockptr support for setsockopt
-Date: Mon, 16 Oct 2023 06:47:40 -0700
-Message-Id: <20231016134750.1381153-3-leitao@debian.org>
+	io-uring@vger.kernel.org,
+	Kuniyuki Iwashima <kuniyu@amazon.com>,
+	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+	David Howells <dhowells@redhat.com>
+Subject: [PATCH v7 04/11] net/socket: Break down __sys_getsockopt
+Date: Mon, 16 Oct 2023 06:47:42 -0700
+Message-Id: <20231016134750.1381153-5-leitao@debian.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231016134750.1381153-1-leitao@debian.org>
 References: <20231016134750.1381153-1-leitao@debian.org>
@@ -69,77 +72,169 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
 	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+	RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-The whole network stack uses sockptr, and while it doesn't move to
-something more modern, let's use sockptr in setsockptr BPF hooks, so, it
-could be used by other callers.
+Split __sys_getsockopt() into two functions by removing the core
+logic into a sub-function (do_sock_getsockopt()). This will avoid
+code duplication when doing the same operation in other callers, for
+instance.
 
-The main motivation for this change is to use it in the io_uring
-{g,s}etsockopt(), which will use a userspace pointer for *optval, but, a
-kernel value for optlen.
+do_sock_getsockopt() will be called by io_uring getsockopt() command
+operation in the following patch.
 
-Link: https://lore.kernel.org/all/ZSArfLaaGcfd8LH8@gmail.com/
+The same was done for the setsockopt pair.
 
+Suggested-by: Martin KaFai Lau <martin.lau@linux.dev>
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- include/linux/bpf-cgroup.h | 2 +-
- kernel/bpf/cgroup.c        | 5 +++--
- net/socket.c               | 2 +-
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ include/linux/bpf-cgroup.h |  2 +-
+ include/net/sock.h         |  4 +--
+ net/core/sock.c            |  8 -----
+ net/socket.c               | 63 ++++++++++++++++++++++++--------------
+ 4 files changed, 43 insertions(+), 34 deletions(-)
 
 diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-index 7b55844f6ba7..2912dce9144e 100644
+index 2912dce9144e..a789266feac3 100644
 --- a/include/linux/bpf-cgroup.h
 +++ b/include/linux/bpf-cgroup.h
-@@ -143,7 +143,7 @@ int __cgroup_bpf_run_filter_sysctl(struct ctl_table_header *head,
- 				   enum cgroup_bpf_attach_type atype);
+@@ -393,7 +393,7 @@ static inline bool cgroup_bpf_sock_enabled(struct sock *sk,
+ ({									       \
+ 	int __ret = 0;							       \
+ 	if (cgroup_bpf_enabled(CGROUP_GETSOCKOPT))			       \
+-		get_user(__ret, optlen);				       \
++		copy_from_sockptr(&__ret, optlen, sizeof(int));		       \
+ 	__ret;								       \
+ })
  
- int __cgroup_bpf_run_filter_setsockopt(struct sock *sock, int *level,
--				       int *optname, char __user *optval,
-+				       int *optname, sockptr_t optval,
- 				       int *optlen, char **kernel_optval);
+diff --git a/include/net/sock.h b/include/net/sock.h
+index 00103e3143c4..1d6931caf0c3 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -1866,11 +1866,11 @@ int sock_setsockopt(struct socket *sock, int level, int op,
+ 		    sockptr_t optval, unsigned int optlen);
+ int do_sock_setsockopt(struct socket *sock, bool compat, int level,
+ 		       int optname, sockptr_t optval, int optlen);
++int do_sock_getsockopt(struct socket *sock, bool compat, int level,
++		       int optname, sockptr_t optval, sockptr_t optlen);
  
- int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 97745f67ac15..491d20038cbe 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -1800,7 +1800,7 @@ static bool sockopt_buf_allocated(struct bpf_sockopt_kern *ctx,
+ int sk_getsockopt(struct sock *sk, int level, int optname,
+ 		  sockptr_t optval, sockptr_t optlen);
+-int sock_getsockopt(struct socket *sock, int level, int op,
+-		    char __user *optval, int __user *optlen);
+ int sock_gettstamp(struct socket *sock, void __user *userstamp,
+ 		   bool timeval, bool time32);
+ struct sk_buff *sock_alloc_send_pskb(struct sock *sk, unsigned long header_len,
+diff --git a/net/core/sock.c b/net/core/sock.c
+index 290165954379..d4cb8d6e75b7 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -2003,14 +2003,6 @@ int sk_getsockopt(struct sock *sk, int level, int optname,
+ 	return 0;
  }
  
- int __cgroup_bpf_run_filter_setsockopt(struct sock *sk, int *level,
--				       int *optname, char __user *optval,
-+				       int *optname, sockptr_t optval,
- 				       int *optlen, char **kernel_optval)
- {
- 	struct cgroup *cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
-@@ -1823,7 +1823,8 @@ int __cgroup_bpf_run_filter_setsockopt(struct sock *sk, int *level,
- 
- 	ctx.optlen = *optlen;
- 
--	if (copy_from_user(ctx.optval, optval, min(*optlen, max_optlen)) != 0) {
-+	if (copy_from_sockptr(ctx.optval, optval,
-+			      min(*optlen, max_optlen))) {
- 		ret = -EFAULT;
- 		goto out;
- 	}
+-int sock_getsockopt(struct socket *sock, int level, int optname,
+-		    char __user *optval, int __user *optlen)
+-{
+-	return sk_getsockopt(sock->sk, level, optname,
+-			     USER_SOCKPTR(optval),
+-			     USER_SOCKPTR(optlen));
+-}
+-
+ /*
+  * Initialize an sk_lock.
+  *
 diff --git a/net/socket.c b/net/socket.c
-index 6b47dd499218..28d3eb339514 100644
+index 0087f8c071e7..f4c156a1987e 100644
 --- a/net/socket.c
 +++ b/net/socket.c
-@@ -2305,7 +2305,7 @@ int __sys_setsockopt(int fd, int level, int optname, char __user *user_optval,
+@@ -2350,6 +2350,42 @@ SYSCALL_DEFINE5(setsockopt, int, fd, int, level, int, optname,
+ INDIRECT_CALLABLE_DECLARE(bool tcp_bpf_bypass_getsockopt(int level,
+ 							 int optname));
  
- 	if (!in_compat_syscall())
- 		err = BPF_CGROUP_RUN_PROG_SETSOCKOPT(sock->sk, &level, &optname,
--						     user_optval, &optlen,
-+						     optval, &optlen,
- 						     &kernel_optval);
- 	if (err < 0)
- 		goto out_put;
++int do_sock_getsockopt(struct socket *sock, bool compat, int level,
++		       int optname, sockptr_t optval, sockptr_t optlen)
++{
++	int max_optlen __maybe_unused;
++	const struct proto_ops *ops;
++	int err;
++
++	err = security_socket_getsockopt(sock, level, optname);
++	if (err)
++		return err;
++
++	ops = READ_ONCE(sock->ops);
++	if (level == SOL_SOCKET) {
++		err = sk_getsockopt(sock->sk, level, optname, optval, optlen);
++	} else if (unlikely(!ops->getsockopt)) {
++		err = -EOPNOTSUPP;
++	} else {
++		if (WARN_ONCE(optval.is_kernel || optlen.is_kernel,
++			      "Invalid argument type"))
++			return -EOPNOTSUPP;
++
++		err = ops->getsockopt(sock, level, optname, optval.user,
++				      optlen.user);
++	}
++
++	if (!compat) {
++		max_optlen = BPF_CGROUP_GETSOCKOPT_MAX_OPTLEN(optlen);
++		err = BPF_CGROUP_RUN_PROG_GETSOCKOPT(sock->sk, level, optname,
++						     optval, optlen, max_optlen,
++						     err);
++	}
++
++	return err;
++}
++EXPORT_SYMBOL(do_sock_getsockopt);
++
+ /*
+  *	Get a socket option. Because we don't know the option lengths we have
+  *	to pass a user mode parameter for the protocols to sort out.
+@@ -2357,37 +2393,18 @@ INDIRECT_CALLABLE_DECLARE(bool tcp_bpf_bypass_getsockopt(int level,
+ int __sys_getsockopt(int fd, int level, int optname, char __user *optval,
+ 		int __user *optlen)
+ {
+-	int max_optlen __maybe_unused;
+-	const struct proto_ops *ops;
+ 	int err, fput_needed;
+ 	struct socket *sock;
++	bool compat;
+ 
+ 	sock = sockfd_lookup_light(fd, &err, &fput_needed);
+ 	if (!sock)
+ 		return err;
+ 
+-	err = security_socket_getsockopt(sock, level, optname);
+-	if (err)
+-		goto out_put;
+-
+-	if (!in_compat_syscall())
+-		max_optlen = BPF_CGROUP_GETSOCKOPT_MAX_OPTLEN(optlen);
++	compat = in_compat_syscall();
++	err = do_sock_getsockopt(sock, compat, level, optname,
++				 USER_SOCKPTR(optval), USER_SOCKPTR(optlen));
+ 
+-	ops = READ_ONCE(sock->ops);
+-	if (level == SOL_SOCKET)
+-		err = sock_getsockopt(sock, level, optname, optval, optlen);
+-	else if (unlikely(!ops->getsockopt))
+-		err = -EOPNOTSUPP;
+-	else
+-		err = ops->getsockopt(sock, level, optname, optval,
+-					    optlen);
+-
+-	if (!in_compat_syscall())
+-		err = BPF_CGROUP_RUN_PROG_GETSOCKOPT(sock->sk, level, optname,
+-						     USER_SOCKPTR(optval),
+-						     USER_SOCKPTR(optlen),
+-						     max_optlen, err);
+-out_put:
+ 	fput_light(sock->file, fput_needed);
+ 	return err;
+ }
 -- 
 2.34.1
 
