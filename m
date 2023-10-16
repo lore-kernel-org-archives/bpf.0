@@ -1,99 +1,75 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E61672629D
-	for <bpf@vger.kernel.org>; Mon, 16 Oct 2023 11:57:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 041442374D
+	for <bpf@vger.kernel.org>; Mon, 16 Oct 2023 12:00:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="Uqxhkj0P"
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A69FE
-	for <bpf@vger.kernel.org>; Mon, 16 Oct 2023 04:57:23 -0700 (PDT)
-Received: by mail-oo1-xc2c.google.com with SMTP id 006d021491bc7-57de6e502fcso2640195eaf.3
-        for <bpf@vger.kernel.org>; Mon, 16 Oct 2023 04:57:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1697457442; x=1698062242; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4dXhQiW3CeLcA8j0HpKT5tW5ghtUshlNGr8srK7/YcI=;
-        b=Uqxhkj0PiVlsQfe0MNmXz89pM3r5zOsGgOSqamMLP4d9QehQsruA8An/QNx9ERDMPT
-         46QcwYs0+os/MoSEj+9Tc2jepT1okz02GljozN28YV9pwN3Q11HxZiugwX16/zWoegoX
-         3O9fyXAnG1HkG00FAm6/6CIaXYSB8IAXJrlkVBWF4kDaYnFb8ohPUWRUsQgYqf/8h/uL
-         18yUzJtqLHxUxc2Tk2EGmGIb4sRcYFTN2y6JPJqghdTdMzMFE0XbvHPOGXZF0qdrKryi
-         iIWIXFdqejzAsjsATo92U4eGAlARNVw7PBer0uFMVqkwl55HDrmA8KVlVvjcaYypslGi
-         Priw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697457442; x=1698062242;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4dXhQiW3CeLcA8j0HpKT5tW5ghtUshlNGr8srK7/YcI=;
-        b=nNmyfu3kbjkekVUSb49NX3ROVzmMei25OagIK22rz2CrdiG+O/QZsL8Rd7Ri6+k5qX
-         1RtZtu+N44/+CcbmofZSegYWARbl1AqoBd8ouoOzc3+W0BExye5T+ReRBFKNxmJ7mQVz
-         MtwLN74OJgQiFNK2sHiVYJqBYde24mV1x7VuYIwinVoSeOEXWxTcqgRIoXJQbFodqODh
-         01ZjnCBvnq+2YJZkdxQbw7oLORFs455vGFhtgOuNvwte9Dslgq1prhdoPtK2gSAdRYTA
-         CV3BRgrXDlFg57lgBU2pN32oqaNU26HI4eMhKEj0VaN2dBj4NAPLkTryQ8X95LuInPdT
-         /CMQ==
-X-Gm-Message-State: AOJu0YwMvFN68oQE0EQ5MrhE9gg7N3tKmikqT9QQlZYYqi7fdS8qXB4R
-	2lzBn6Xu/L70bbJ83PcMYmYd7A==
-X-Google-Smtp-Source: AGHT+IE/2U4L2nHv4HRjfKmaGiJe500WFnQxdJcQ546ojINbjt2vjRSSjqWYcdaSEk+sSfNF8wu8Kw==
-X-Received: by 2002:a05:6358:4327:b0:14f:6a41:5d14 with SMTP id r39-20020a056358432700b0014f6a415d14mr42820220rwc.27.1697457442436;
-        Mon, 16 Oct 2023 04:57:22 -0700 (PDT)
-Received: from ?IPV6:2400:4050:a840:1e00:78d2:b862:10a7:d486? ([2400:4050:a840:1e00:78d2:b862:10a7:d486])
-        by smtp.gmail.com with ESMTPSA id x23-20020aa79ad7000000b006bdfb718e17sm2424805pfp.124.2023.10.16.04.57.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Oct 2023 04:57:22 -0700 (PDT)
-Message-ID: <60ab339a-3029-42db-97cf-d8574d05e789@daynix.com>
-Date: Mon, 16 Oct 2023 20:57:17 +0900
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KwrOohZ+"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 76171C433C9;
+	Mon, 16 Oct 2023 12:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1697457625;
+	bh=akCvOikqSFTe2UD8n+wFN6wBYR8td17NbkoYMKlwbbM=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=KwrOohZ+RbapQz0FAPyMmXk2No37WCuw6RkSGtZ/7WCmB46BZJknPuzfJHjB9MjNv
+	 k5SZgyvcHbIHmm0Z0q7AgyPdmW0ds4O6VN2zCrEMH1J+1JnARHqyB5Vb0MP/j5mJir
+	 uOZguUcIHVSmiz6oj+MaN65EZbNhZdjZPVF9yrZFeMOERtIuB23+gj2Kw3z4NeT77+
+	 EwYvMYavksl+k12HHTIRSQUO0J6JIblkwcwv4D4EEdcAjZ4tcf/B1AYCx+UTHCIP99
+	 +KQnYAngC/KvVkLbHVRHs5krGP7k8N8+52UckV6gibWN8JkdZFU2xQQYyWBSfIUyah
+	 ZyuKMydXKBsOA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 649A3E4E9B5;
+	Mon, 16 Oct 2023 12:00:25 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next] selftests/bpf: Use pkg-config to determine ld
- flags
-Content-Language: en-US
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Alexei Starovoitov <ast@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Nick Terrell <terrelln@fb.com>, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20231015133916.257197-1-akihiko.odaki@daynix.com>
- <062d9a75-caa0-d05d-14db-cd59dafab8b9@iogearbox.net>
-From: Akihiko Odaki <akihiko.odaki@daynix.com>
-In-Reply-To: <062d9a75-caa0-d05d-14db-cd59dafab8b9@iogearbox.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE
-	autolearn=unavailable autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next 0/5] BPF verifier log improvements
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <169745762540.32178.17215607110786044172.git-patchwork-notify@kernel.org>
+Date: Mon, 16 Oct 2023 12:00:25 +0000
+References: <20231011223728.3188086-1-andrii@kernel.org>
+In-Reply-To: <20231011223728.3188086-1-andrii@kernel.org>
+To: Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ martin.lau@kernel.org, kernel-team@meta.com
 
-On 2023/10/16 20:39, Daniel Borkmann wrote:
-> On 10/15/23 3:39 PM, Akihiko Odaki wrote:
->> When linking statically, libraries may require other dependencies to be
->> included to ld flags. In particular, libelf may require libzstd. Use
->> pkg-config to determine such dependencies.
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
+
+On Wed, 11 Oct 2023 15:37:23 -0700 you wrote:
+> This patch set fixes ambiguity in BPF verifier log output of SCALAR register
+> in the parts that emit umin/umax, smin/smax, etc ranges. See patch #4 for
+> details.
 > 
-> Is this not covered via -lz or is it that the name differs?
-
-libelf may not only be linked with zlib but also with zstandard.
-
+> Also, patch #5 fixes an issue with verifier log missing instruction context
+> (state) output for conditionals that trigger precision marking. See details in
+> the patch.
 > 
-> Anyway, this change breaks selftest build for BPF CI (see below), could 
-> this
-> either be made optional or detected differently?
-> 
-> https://github.com/kernel-patches/bpf/actions/runs/6524480596/job/17716170021
+> [...]
 
-I sent v2 (I forgot to add bpf-next to the subject for this).
-This version implements a fallback just in the same way done for 
-HOSTPKG_CONFIG.
+Here is the summary with links:
+  - [bpf-next,1/5] selftests/bpf: improve percpu_alloc test robustness
+    https://git.kernel.org/bpf/bpf-next/c/2d78928c9cf7
+  - [bpf-next,2/5] selftests/bpf: improve missed_kprobe_recursion test robustness
+    https://git.kernel.org/bpf/bpf-next/c/08a7078feacf
+  - [bpf-next,3/5] selftests/bpf: make align selftests more robust
+    https://git.kernel.org/bpf/bpf-next/c/cde785142885
+  - [bpf-next,4/5] bpf: disambiguate SCALAR register state output in verifier logs
+    https://git.kernel.org/bpf/bpf-next/c/72f8a1de4a7e
+  - [bpf-next,5/5] bpf: ensure proper register state printing for cond jumps
+    https://git.kernel.org/bpf/bpf-next/c/1a8a315f008a
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
