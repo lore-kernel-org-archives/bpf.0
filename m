@@ -1,16 +1,16 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A049526E32;
-	Mon, 16 Oct 2023 12:00:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8B9E273EA;
+	Mon, 16 Oct 2023 12:00:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22BF8E8;
-	Mon, 16 Oct 2023 05:00:42 -0700 (PDT)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VuH0Na2_1697457637;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VuH0Na2_1697457637)
+Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AD4EA;
+	Mon, 16 Oct 2023 05:00:45 -0700 (PDT)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R271e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VuH0NbG_1697457641;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VuH0NbG_1697457641)
           by smtp.aliyun-inc.com;
-          Mon, 16 Oct 2023 20:00:38 +0800
+          Mon, 16 Oct 2023 20:00:42 +0800
 From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -26,9 +26,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	John Fastabend <john.fastabend@gmail.com>,
 	virtualization@lists.linux-foundation.org,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v1 03/19] virtio_net: independent directory
-Date: Mon, 16 Oct 2023 20:00:17 +0800
-Message-Id: <20231016120033.26933-4-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v1 06/19] virtio_net: separate virtnet_rx_resize()
+Date: Mon, 16 Oct 2023 20:00:20 +0800
+Message-Id: <20231016120033.26933-7-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20231016120033.26933-1-xuanzhuo@linux.alibaba.com>
 References: <20231016120033.26933-1-xuanzhuo@linux.alibaba.com>
@@ -47,105 +47,83 @@ X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Create a separate directory for virtio-net. AF_XDP support will be added
-later, then a separate xsk.c file will be added, so we should create a
-directory for virtio-net.
+This patch separates two sub-functions from virtnet_rx_resize():
+
+* virtnet_rx_pause
+* virtnet_rx_resume
+
+Then the subsequent reset rx for xsk can share these two functions.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- MAINTAINERS                                 |  2 +-
- drivers/net/Kconfig                         |  8 +-------
- drivers/net/Makefile                        |  2 +-
- drivers/net/virtio/Kconfig                  | 13 +++++++++++++
- drivers/net/virtio/Makefile                 |  8 ++++++++
- drivers/net/{virtio_net.c => virtio/main.c} |  0
- 6 files changed, 24 insertions(+), 9 deletions(-)
- create mode 100644 drivers/net/virtio/Kconfig
- create mode 100644 drivers/net/virtio/Makefile
- rename drivers/net/{virtio_net.c => virtio/main.c} (100%)
+ drivers/net/virtio/main.c       | 29 +++++++++++++++++++++--------
+ drivers/net/virtio/virtio_net.h |  3 +++
+ 2 files changed, 24 insertions(+), 8 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9c186c214c54..e4fbcbc100e3 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -22768,7 +22768,7 @@ F:	Documentation/devicetree/bindings/virtio/
- F:	Documentation/driver-api/virtio/
- F:	drivers/block/virtio_blk.c
- F:	drivers/crypto/virtio/
--F:	drivers/net/virtio_net.c
-+F:	drivers/net/virtio/
- F:	drivers/vdpa/
- F:	drivers/virtio/
- F:	include/linux/vdpa.h
-diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
-index 44eeb5d61ba9..54ee6fa4f4a6 100644
---- a/drivers/net/Kconfig
-+++ b/drivers/net/Kconfig
-@@ -430,13 +430,7 @@ config VETH
- 	  When one end receives the packet it appears on its pair and vice
- 	  versa.
+diff --git a/drivers/net/virtio/main.c b/drivers/net/virtio/main.c
+index ba38b6078e1d..e6b262341619 100644
+--- a/drivers/net/virtio/main.c
++++ b/drivers/net/virtio/main.c
+@@ -2120,26 +2120,39 @@ static netdev_tx_t start_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	return NETDEV_TX_OK;
+ }
  
--config VIRTIO_NET
--	tristate "Virtio network driver"
--	depends on VIRTIO
--	select NET_FAILOVER
--	help
--	  This is the virtual network driver for virtio.  It can be used with
--	  QEMU based VMMs (like KVM or Xen).  Say Y or M.
-+source "drivers/net/virtio/Kconfig"
+-static int virtnet_rx_resize(struct virtnet_info *vi,
+-			     struct virtnet_rq *rq, u32 ring_num)
++void virtnet_rx_pause(struct virtnet_info *vi, struct virtnet_rq *rq)
+ {
+ 	bool running = netif_running(vi->dev);
+-	int err, qindex;
+-
+-	qindex = rq - vi->rq;
  
- config NLMON
- 	tristate "Virtual netlink monitoring device"
-diff --git a/drivers/net/Makefile b/drivers/net/Makefile
-index e26f98f897c5..47537dd0f120 100644
---- a/drivers/net/Makefile
-+++ b/drivers/net/Makefile
-@@ -31,7 +31,7 @@ obj-$(CONFIG_NET_TEAM) += team/
- obj-$(CONFIG_TUN) += tun.o
- obj-$(CONFIG_TAP) += tap.o
- obj-$(CONFIG_VETH) += veth.o
--obj-$(CONFIG_VIRTIO_NET) += virtio_net.o
-+obj-$(CONFIG_VIRTIO_NET) += virtio/
- obj-$(CONFIG_VXLAN) += vxlan/
- obj-$(CONFIG_GENEVE) += geneve.o
- obj-$(CONFIG_BAREUDP) += bareudp.o
-diff --git a/drivers/net/virtio/Kconfig b/drivers/net/virtio/Kconfig
-new file mode 100644
-index 000000000000..d8ccb3ac49df
---- /dev/null
-+++ b/drivers/net/virtio/Kconfig
-@@ -0,0 +1,13 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# virtio-net device configuration
-+#
-+config VIRTIO_NET
-+	tristate "Virtio network driver"
-+	depends on VIRTIO
-+	select NET_FAILOVER
-+	help
-+	  This is the virtual network driver for virtio.  It can be used with
-+	  QEMU based VMMs (like KVM or Xen).
+ 	if (running)
+ 		napi_disable(&rq->napi);
++}
+ 
+-	err = virtqueue_resize(rq->vq, ring_num, virtnet_rq_free_unused_buf);
+-	if (err)
+-		netdev_err(vi->dev, "resize rx fail: rx queue index: %d err: %d\n", qindex, err);
++void virtnet_rx_resume(struct virtnet_info *vi, struct virtnet_rq *rq)
++{
++	bool running = netif_running(vi->dev);
+ 
+ 	if (!try_fill_recv(vi, rq, GFP_KERNEL))
+ 		schedule_delayed_work(&vi->refill, 0);
+ 
+ 	if (running)
+ 		virtnet_napi_enable(rq->vq, &rq->napi);
++}
 +
-+	  Say Y or M.
-diff --git a/drivers/net/virtio/Makefile b/drivers/net/virtio/Makefile
-new file mode 100644
-index 000000000000..15ed7c97fd4f
---- /dev/null
-+++ b/drivers/net/virtio/Makefile
-@@ -0,0 +1,8 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Makefile for the virtio network device drivers.
-+#
++static int virtnet_rx_resize(struct virtnet_info *vi,
++			     struct virtnet_rq *rq, u32 ring_num)
++{
++	int err, qindex;
 +
-+obj-$(CONFIG_VIRTIO_NET) += virtio_net.o
++	qindex = rq - vi->rq;
 +
-+virtio_net-y := main.o
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio/main.c
-similarity index 100%
-rename from drivers/net/virtio_net.c
-rename to drivers/net/virtio/main.c
++	virtnet_rx_pause(vi, rq);
++
++	err = virtqueue_resize(rq->vq, ring_num, virtnet_rq_free_unused_buf);
++	if (err)
++		netdev_err(vi->dev, "resize rx fail: rx queue index: %d err: %d\n", qindex, err);
++
++	virtnet_rx_resume(vi, rq);
+ 	return err;
+ }
+ 
+diff --git a/drivers/net/virtio/virtio_net.h b/drivers/net/virtio/virtio_net.h
+index 282504d6639a..70eea23adba6 100644
+--- a/drivers/net/virtio/virtio_net.h
++++ b/drivers/net/virtio/virtio_net.h
+@@ -253,4 +253,7 @@ static inline bool virtnet_is_xdp_raw_buffer_queue(struct virtnet_info *vi, int
+ 	else
+ 		return false;
+ }
++
++void virtnet_rx_pause(struct virtnet_info *vi, struct virtnet_rq *rq);
++void virtnet_rx_resume(struct virtnet_info *vi, struct virtnet_rq *rq);
+ #endif
 -- 
 2.32.0.3.g01195cf9f
 
