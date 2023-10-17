@@ -1,349 +1,85 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 133649CA6F
-	for <bpf@vger.kernel.org>; Tue, 17 Oct 2023 16:23:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469255380
+	for <bpf@vger.kernel.org>; Tue, 17 Oct 2023 16:29:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QguFCTRC"
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F5CF1
-	for <bpf@vger.kernel.org>; Tue, 17 Oct 2023 09:23:21 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-d8a000f6a51so6562251276.3
-        for <bpf@vger.kernel.org>; Tue, 17 Oct 2023 09:23:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O2CXNNm/"
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1CDC100
+	for <bpf@vger.kernel.org>; Tue, 17 Oct 2023 09:29:23 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-5a82f176860so50733077b3.1
+        for <bpf@vger.kernel.org>; Tue, 17 Oct 2023 09:29:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697559800; x=1698164600; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hr4BB6xMm96dKQlIq1m6N5v/m3o/73pMeTPNbjiLvqo=;
-        b=QguFCTRCGZ1rsFPssjEDvrYmOxA9fHRkPwlwDE5/3AKu5ad5alb4tKYNfwRP7a6K+z
-         lTW/6CCLi8V5aKaaA7ohLzOiEP9flCHb9ICbBskG/bEfwG3mGOes3Y8ot2cd3cWVn8Md
-         Rb/g+kK27kO8F5zhJoefKUew94ikWNNghYLK2+OHQXymNx0UJNlFkcNR2vP4iSN1HmFR
-         4U+F16ktsyXeVMItwXc0AuhYOWPergwDa6gUU0O1mmrvtCVa0TdaBSKrikTvJhzyDjmQ
-         gq3TiXyesKcK3qL7ZnGsWIG/pAzhfNHNpdUq0tbm0gJ+dX1Rsv5hyEVhydwTEyra3ceB
-         UWFA==
+        d=gmail.com; s=20230601; t=1697560163; x=1698164963; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SN6vITd1+O4UwNoJXfas5jEDggR3WXnacdwRB91/MAY=;
+        b=O2CXNNm/7LD933F9uUHXf6pXRZwaNZ8wXPc/9oHiQmdSKmq67y6QgxDLyDIKnwLUQh
+         GL0Nkw1Er1vesfW7e23D0kQ9wvfUfdf1r0GjSdQxfIJOTxZ1EcoevxEf3bTLD0QwFzcX
+         deUruzNs5rl6z0t/N62MmQaIijjpa+YKl8q6G7WdsYHNBpV1x5LbwILf2LJyBqROmhNW
+         t5RkVp1IDbdIqbUxcdXWCJhF5QV2n79RXYM9W7/sJ0B3Liv036SiwkcYIzoHBgYx+VKL
+         35pPUbYDmZfCjd5JWidYBuGX0hKDgnXzOsx+SFR757ociKy+SPGMslkcAbruOf2/maMf
+         D6DA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697559800; x=1698164600;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hr4BB6xMm96dKQlIq1m6N5v/m3o/73pMeTPNbjiLvqo=;
-        b=jTzjrv4yduol6KxaMhnj018Mtk2cJj8+Wst04eog0/5Rd7ribAqm+rdmqVvH4U7WGq
-         UEfheyz7ltgY7ZtUt8Hq7WRPL6+yKf7r9ULo3X23Sv4+o2/6ZDCLqGoRl7xNq7LSRbPx
-         ZFXMrcakzbv7qAWlGowEwAc5yY6cQRjVa6KqSgFxZY+NfOYFnA9pTh0K0mqBQpQGM6m7
-         liR5zzD2DX0PBkAMh4oJVJjrkIZlcBG6FeMJmvIPkXJdyW4b5xtd3rhQl2l1ZkdSnaeV
-         PveZSGh6jdUB/5xS2MmJLyV6MikbuyodhMZdnWoMk5xqv27lD4FsYvGa4y5FXxzSJxr/
-         3a7Q==
-X-Gm-Message-State: AOJu0YxCZmmVjK1F5D0rtNp6SbfCCgxOJuN4o419uRL+252UvWLOmxe7
-	QE7fpU0UGmJW7Vnkd7WDH1kDiXoGhqU=
-X-Google-Smtp-Source: AGHT+IGxQQ7knUw53oK+pFod73kSDxbhPqbhZ5a44p5bPYtv0dn14m8NH9z4T28MrHaQCsCr+aJLDg==
-X-Received: by 2002:a25:32cd:0:b0:d9a:de96:3da2 with SMTP id y196-20020a2532cd000000b00d9ade963da2mr2810849yby.1.1697559800563;
-        Tue, 17 Oct 2023 09:23:20 -0700 (PDT)
-Received: from kickker.attlocal.net ([2600:1700:6cf8:1240:ed01:b54a:4364:93cc])
-        by smtp.gmail.com with ESMTPSA id r189-20020a2544c6000000b00d814d8dfd69sm623645yba.27.2023.10.17.09.23.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Oct 2023 09:23:20 -0700 (PDT)
-From: thinker.li@gmail.com
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	kernel-team@meta.com,
-	andrii@kernel.org,
-	drosen@google.com
-Cc: sinquersw@gmail.com,
-	kuifeng@meta.com,
-	Kui-Feng Lee <thinker.li@gmail.com>
-Subject: [PATCH bpf-next v5 9/9] selftests/bpf: test case for register_bpf_struct_ops().
-Date: Tue, 17 Oct 2023 09:23:06 -0700
-Message-Id: <20231017162306.176586-10-thinker.li@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231017162306.176586-1-thinker.li@gmail.com>
-References: <20231017162306.176586-1-thinker.li@gmail.com>
+        d=1e100.net; s=20230601; t=1697560163; x=1698164963;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SN6vITd1+O4UwNoJXfas5jEDggR3WXnacdwRB91/MAY=;
+        b=SqkxkNhxiuv1k4O65zMH6aHPLI6KmCX6XhOh4RjT3etYdwNDyi+z+jQoQIiw+uvK/T
+         pA4QS8FccxrnqBf0Wzr6Q7ufZs/eWQJh2nee5uDUm5nnnC+5QKj35bkixWvqBcfQlMgO
+         x6oRu9BO3dcOJd9FS1yH218oauCQyUT9PxMvlA3rB7HC3VzdGyCLYReeuJ8PG8OIIQ3d
+         9Hk0PGiABU2NItKSZhHeKdKSORPmSMHCTvbcx6wCGxExhvhmjYvafxlDJgEW/CMsMNA3
+         00DI3QVd8uKNDD+jaByW76aual9hqguPlwwkGw1EGx67f5VNfs7UKjG7WxVzP3fFYzW4
+         V/RQ==
+X-Gm-Message-State: AOJu0YzRQQhbdMWqQ0uLkuayyGceh5o4WNC4q31Fb4Sj48TpT/OscR8e
+	eVASU6WepIq7MNwCOymUhi+XrQW8CnE=
+X-Google-Smtp-Source: AGHT+IEg4ZMUkn1hX4+OQ1njqgma/9JoahaLQYFUnWQcdaLVj/8ED72zAZuNREm6ozGrvdWd/5LqFQ==
+X-Received: by 2002:a0d:c101:0:b0:59b:1f6d:1958 with SMTP id c1-20020a0dc101000000b0059b1f6d1958mr2955126ywd.46.1697560162972;
+        Tue, 17 Oct 2023 09:29:22 -0700 (PDT)
+Received: from ?IPV6:2600:1700:6cf8:1240:ed01:b54a:4364:93cc? ([2600:1700:6cf8:1240:ed01:b54a:4364:93cc])
+        by smtp.gmail.com with ESMTPSA id o187-20020a8173c4000000b0057085b18cddsm736598ywc.54.2023.10.17.09.29.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Oct 2023 09:29:22 -0700 (PDT)
+Message-ID: <139165a8-fb5e-4d2d-ab2f-846127c02cdd@gmail.com>
+Date: Tue, 17 Oct 2023 09:29:20 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v4 0/9] Registrating struct_ops types from
+ modules
+To: thinker.li@gmail.com, bpf@vger.kernel.org, ast@kernel.org,
+ martin.lau@linux.dev, song@kernel.org, kernel-team@meta.com,
+ andrii@kernel.org, drosen@google.com
+Cc: kuifeng@meta.com
+References: <20231013224304.187218-1-thinker.li@gmail.com>
+Content-Language: en-US
+From: Kui-Feng Lee <sinquersw@gmail.com>
+In-Reply-To: <20231013224304.187218-1-thinker.li@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-From: Kui-Feng Lee <thinker.li@gmail.com>
+Just fixed a building dependency issue and sent v5.
+Please check v5.
 
-Create a new struct_ops type called bpf_testmod_ops within the bpf_testmod
-module. When a struct_ops object is registered, the bpf_testmod module will
-invoke test_2 from the module.
-
-Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
----
- tools/testing/selftests/bpf/Makefile          |  2 +
- .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 59 +++++++++++++++++++
- .../selftests/bpf/bpf_testmod/bpf_testmod.h   |  5 ++
- .../bpf/prog_tests/test_struct_ops_module.c   | 38 ++++++++++++
- .../selftests/bpf/progs/struct_ops_module.c   | 30 ++++++++++
- tools/testing/selftests/bpf/testing_helpers.c | 35 +++++++++++
- 6 files changed, 169 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_module.c
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index caede9b574cb..dd7ff14e1fdf 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -706,6 +706,8 @@ $(OUTPUT)/uprobe_multi: uprobe_multi.c
- 	$(call msg,BINARY,,$@)
- 	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LDLIBS) -o $@
- 
-+$(OUTPUT)/testing_helpers.o: $(OUTPUT)/rcu_tasks_trace_gp.skel.h
-+
- EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)	\
- 	prog_tests/tests.h map_tests/tests.h verifier/tests.h		\
- 	feature bpftool							\
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-index cefc5dd72573..f1a20669d884 100644
---- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (c) 2020 Facebook */
-+#include <linux/bpf.h>
- #include <linux/btf.h>
- #include <linux/btf_ids.h>
- #include <linux/error-injection.h>
-@@ -517,11 +518,66 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test_static_unused_arg)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_offset)
- BTF_SET8_END(bpf_testmod_check_kfunc_ids)
- 
-+#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-+
-+DEFINE_STRUCT_OPS_VALUE_TYPE(bpf_testmod_ops);
-+
-+static int bpf_testmod_ops_init(struct btf *btf)
-+{
-+	return 0;
-+}
-+
-+static bool bpf_testmod_ops_is_valid_access(int off, int size,
-+					    enum bpf_access_type type,
-+					    const struct bpf_prog *prog,
-+					    struct bpf_insn_access_aux *info)
-+{
-+	return bpf_tracing_btf_ctx_access(off, size, type, prog, info);
-+}
-+
-+static int bpf_testmod_ops_init_member(const struct btf_type *t,
-+				       const struct btf_member *member,
-+				       void *kdata, const void *udata)
-+{
-+	return 0;
-+}
-+
- static const struct btf_kfunc_id_set bpf_testmod_kfunc_set = {
- 	.owner = THIS_MODULE,
- 	.set   = &bpf_testmod_check_kfunc_ids,
- };
- 
-+static const struct bpf_verifier_ops bpf_testmod_verifier_ops = {
-+	.is_valid_access = bpf_testmod_ops_is_valid_access,
-+};
-+
-+static int bpf_dummy_reg(void *kdata)
-+{
-+	struct bpf_testmod_ops *ops = kdata;
-+	int r;
-+
-+	BTF_STRUCT_OPS_TYPE_EMIT(bpf_testmod_ops);
-+	r = ops->test_2(4, 3);
-+
-+	return 0;
-+}
-+
-+static void bpf_dummy_unreg(void *kdata)
-+{
-+}
-+
-+struct bpf_struct_ops bpf_bpf_testmod_ops = {
-+	.verifier_ops = &bpf_testmod_verifier_ops,
-+	.init = bpf_testmod_ops_init,
-+	.init_member = bpf_testmod_ops_init_member,
-+	.reg = bpf_dummy_reg,
-+	.unreg = bpf_dummy_unreg,
-+	.name = "bpf_testmod_ops",
-+	.owner = THIS_MODULE,
-+};
-+
-+#endif /* CONFIG_DEBUG_INFO_BTF_MODULES */
-+
- extern int bpf_fentry_test1(int a);
- 
- static int bpf_testmod_init(void)
-@@ -532,6 +588,9 @@ static int bpf_testmod_init(void)
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_testmod_kfunc_set);
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &bpf_testmod_kfunc_set);
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &bpf_testmod_kfunc_set);
-+#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-+	ret = ret ?: register_bpf_struct_ops(&bpf_bpf_testmod_ops);
-+#endif
- 	if (ret < 0)
- 		return ret;
- 	if (bpf_fentry_test1(0) < 0)
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h
-index f32793efe095..ca5435751c79 100644
---- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h
-@@ -28,4 +28,9 @@ struct bpf_iter_testmod_seq {
- 	int cnt;
- };
- 
-+struct bpf_testmod_ops {
-+	int (*test_1)(void);
-+	int (*test_2)(int a, int b);
-+};
-+
- #endif /* _BPF_TESTMOD_H */
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
-new file mode 100644
-index 000000000000..7261fc6c377a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
-@@ -0,0 +1,38 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Meta Platforms, Inc. and affiliates. */
-+#include <test_progs.h>
-+#include <time.h>
-+
-+#include "rcu_tasks_trace_gp.skel.h"
-+#include "struct_ops_module.skel.h"
-+
-+static void test_regular_load(void)
-+{
-+	struct struct_ops_module *skel;
-+	struct bpf_link *link;
-+	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, opts);
-+	int err;
-+
-+	skel = struct_ops_module__open_opts(&opts);
-+	if (!ASSERT_OK_PTR(skel, "struct_ops_module_open"))
-+		return;
-+	err = struct_ops_module__load(skel);
-+	if (!ASSERT_OK(err, "struct_ops_module_load"))
-+		return;
-+
-+	link = bpf_map__attach_struct_ops(skel->maps.testmod_1);
-+	ASSERT_OK_PTR(link, "attach_test_mod_1");
-+
-+	ASSERT_EQ(skel->bss->test_2_result, 7, "test_2_result");
-+
-+	bpf_link__destroy(link);
-+
-+	struct_ops_module__destroy(skel);
-+}
-+
-+void serial_test_struct_ops_module(void)
-+{
-+	if (test__start_subtest("regular_load"))
-+		test_regular_load();
-+}
-+
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_module.c b/tools/testing/selftests/bpf/progs/struct_ops_module.c
-new file mode 100644
-index 000000000000..cb305d04342f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_module.c
-@@ -0,0 +1,30 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "../bpf_testmod/bpf_testmod.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int test_2_result = 0;
-+
-+SEC("struct_ops/test_1")
-+int BPF_PROG(test_1)
-+{
-+	return 0xdeadbeef;
-+}
-+
-+SEC("struct_ops/test_2")
-+int BPF_PROG(test_2, int a, int b)
-+{
-+	test_2_result = a + b;
-+	return a + b;
-+}
-+
-+SEC(".struct_ops.link")
-+struct bpf_testmod_ops testmod_1 = {
-+	.test_1 = (void *)test_1,
-+	.test_2 = (void *)test_2,
-+};
-+
-diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testing/selftests/bpf/testing_helpers.c
-index 8d994884c7b4..05870cd62458 100644
---- a/tools/testing/selftests/bpf/testing_helpers.c
-+++ b/tools/testing/selftests/bpf/testing_helpers.c
-@@ -10,6 +10,7 @@
- #include "test_progs.h"
- #include "testing_helpers.h"
- #include <linux/membarrier.h>
-+#include "rcu_tasks_trace_gp.skel.h"
- 
- int parse_num_list(const char *s, bool **num_set, int *num_set_len)
- {
-@@ -380,10 +381,44 @@ int load_bpf_testmod(bool verbose)
- 	return 0;
- }
- 
-+/* This function will trigger call_rcu_tasks_trace() in the kernel */
-+static int kern_sync_rcu_tasks_trace(void)
-+{
-+	struct rcu_tasks_trace_gp *rcu;
-+	time_t start;
-+	long gp_seq;
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+
-+	rcu = rcu_tasks_trace_gp__open_and_load();
-+	if (IS_ERR(rcu))
-+		return -EFAULT;
-+	if (rcu_tasks_trace_gp__attach(rcu))
-+		return -EFAULT;
-+
-+	gp_seq = READ_ONCE(rcu->bss->gp_seq);
-+
-+	if (bpf_prog_test_run_opts(bpf_program__fd(rcu->progs.do_call_rcu_tasks_trace),
-+				   &opts))
-+		return -EFAULT;
-+	if (opts.retval != 0)
-+		return -EFAULT;
-+
-+	start = time(NULL);
-+	while ((start + 2) > time(NULL) &&
-+	       gp_seq == READ_ONCE(rcu->bss->gp_seq))
-+		sched_yield();
-+
-+	rcu_tasks_trace_gp__destroy(rcu);
-+
-+	return 0;
-+}
-+
- /*
-  * Trigger synchronize_rcu() in kernel.
-  */
- int kern_sync_rcu(void)
- {
-+	if (kern_sync_rcu_tasks_trace())
-+		return -EFAULT;
- 	return syscall(__NR_membarrier, MEMBARRIER_CMD_SHARED, 0, 0);
- }
--- 
-2.34.1
-
+On 10/13/23 15:42, thinker.li@gmail.com wrote:
+> From: Kui-Feng Lee <thinker.li@gmail.com>
+> 
+> Given the current constraints of the current implementation,
+> struct_ops cannot be registered dynamically. This presents a
+> significant limitation for modules like coming fuse-bpf, which seeks
+> to implement a new struct_ops type. To address this issue, a new API
+> is introduced that allows the registration of new struct_ops types
+> from modules.
