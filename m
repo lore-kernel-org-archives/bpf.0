@@ -1,57 +1,61 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E13859CA61;
-	Tue, 17 Oct 2023 16:30:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62EE22D034
+	for <bpf@vger.kernel.org>; Tue, 17 Oct 2023 16:35:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="PRGB0A4e"
-Received: from smtp-fw-9106.amazon.com (smtp-fw-9106.amazon.com [207.171.188.206])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24889F7;
-	Tue, 17 Oct 2023 09:30:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1697560223; x=1729096223;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=nhGsRjdf/+8DRd3402CH1F8gtVqbu/IHtlDEiqBWqdE=;
-  b=PRGB0A4exFtwDidEuaKLwVDaShoLdQSVC7wLrwp5aNBsmXLE9oQe6mql
-   s/TOQ/PQQR8/AVWhGntlPP77+QIzRetC1U3yM6jjoglzOyt/lgEGtItep
-   vTlqU/CFA9hHFIcR/jnwoEsAULh+TbP8/ht9b07mTtRAHsdneotOki0gu
-   0=;
-X-IronPort-AV: E=Sophos;i="6.03,232,1694736000"; 
-   d="scan'208";a="678260187"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-b404fda3.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9106.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2023 16:30:15 +0000
-Received: from smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev (iad7-ws-svc-p70-lb3-vlan3.iad.amazon.com [10.32.235.38])
-	by email-inbound-relay-iad-1d-m6i4x-b404fda3.us-east-1.amazon.com (Postfix) with ESMTPS id 75E76824B7;
-	Tue, 17 Oct 2023 16:30:09 +0000 (UTC)
-Received: from EX19MTAUWB001.ant.amazon.com [10.0.38.20:22838]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.12.209:2525] with esmtp (Farcaster)
- id 86d4c900-5632-4f88-87b6-efd043245543; Tue, 17 Oct 2023 16:30:08 +0000 (UTC)
-X-Farcaster-Flow-ID: 86d4c900-5632-4f88-87b6-efd043245543
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.37; Tue, 17 Oct 2023 16:30:05 +0000
-Received: from 88665a182662.ant.amazon.com (10.187.171.38) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.37; Tue, 17 Oct 2023 16:30:01 +0000
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
-To: <martin.lau@linux.dev>
-CC: <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-	<daniel@iogearbox.net>, <davem@davemloft.net>, <dsahern@kernel.org>,
-	<edumazet@google.com>, <haoluo@google.com>, <john.fastabend@gmail.com>,
-	<jolsa@kernel.org>, <kpsingh@kernel.org>, <kuba@kernel.org>,
-	<kuni1840@gmail.com>, <kuniyu@amazon.com>, <mykolal@fb.com>,
-	<netdev@vger.kernel.org>, <pabeni@redhat.com>, <sdf@google.com>,
-	<song@kernel.org>, <yonghong.song@linux.dev>
-Subject: Re: [PATCH v1 bpf-next 11/11] selftest: bpf: Test BPF_SOCK_OPS_(GEN|CHECK)_SYNCOOKIE_CB.
-Date: Tue, 17 Oct 2023 09:29:54 -0700
-Message-ID: <20231017162954.18403-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <84d1ab6f-339f-c3f1-4dc3-69043a889b65@linux.dev>
-References: <84d1ab6f-339f-c3f1-4dc3-69043a889b65@linux.dev>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h/FkTEv3"
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749E3AB;
+	Tue, 17 Oct 2023 09:35:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697560541; x=1729096541;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=SZ9crw7KBkf4KNA2a8gcrC2IT6umgARNKh65AO/ygBY=;
+  b=h/FkTEv3r0drj7UmSVtMATMqii5R224yycHAyiAoC5RHW/O+moBZp7Kh
+   KKALFHyjBd2xQu0AcNxOaXEBa0V2MJLG+0M0bVBm3IvYn2rX9k1D716it
+   fmgZOSvm8wL5kScc9BOcqRoBY2rztqP+BxYZCD64TCsGwSIneH6XIZ9ih
+   DrsS5hnGcjh1TDr/gVkUynpiMbzrJ+7+Dhtuu4OaZmlhEngMYmOUEkSZF
+   4iFtPzP/qMfrgvW2ri7wGe12Cv7Yx66OC0xTXfXxT96wK0BegCppQq/eK
+   gf9Eq6gdwt2SLs1798jfnVP4QK/1ADAdGXTrOCv1jcADCRp4g5IojfuX+
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10866"; a="383049121"
+X-IronPort-AV: E=Sophos;i="6.03,232,1694761200"; 
+   d="scan'208";a="383049121"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2023 09:35:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10866"; a="822050148"
+X-IronPort-AV: E=Sophos;i="6.03,232,1694761200"; 
+   d="scan'208";a="822050148"
+Received: from irvmail002.ir.intel.com ([10.43.11.120])
+  by fmsmga008.fm.intel.com with ESMTP; 17 Oct 2023 09:35:37 -0700
+Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id 8AF5333E87;
+	Tue, 17 Oct 2023 17:35:35 +0100 (IST)
+From: Larysa Zaremba <larysa.zaremba@intel.com>
+To: bpf@vger.kernel.org
+Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>
+Subject: [PATCH bpf-next v2] selftests/bpf: add options and frags to xdp_hw_metadata
+Date: Tue, 17 Oct 2023 18:27:57 +0200
+Message-ID: <20231017162800.24080-1-larysa.zaremba@intel.com>
+X-Mailer: git-send-email 2.41.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -59,139 +63,210 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.187.171.38]
-X-ClientProxiedBy: EX19D038UWB004.ant.amazon.com (10.13.139.177) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-Precedence: Bulk
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-	SPF_NONE,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-	version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-From: Martin KaFai Lau <martin.lau@linux.dev>
-Date: Mon, 16 Oct 2023 22:50:44 -0700
-> On 10/13/23 3:04 PM, Kuniyuki Iwashima wrote:
-> > This patch adds a test for BPF_SOCK_OPS_(GEN|CHECK)_SYNCOOKIE_CB hooks.
-> > 
-> > BPF_SOCK_OPS_GEN_SYNCOOKIE_CB hook generates a hash using SipHash from
-> > based on 4-tuple.  The hash is split into ISN and TS.  MSS, ECN, SACK,
-> > and WScale are encoded into the lower 8-bits of ISN.
-> > 
-> >    ISN:
-> >      MSB                                   LSB
-> >      | 31 ... 8 | 7 6 | 5   | 4    | 3 2 1 0 |
-> >      | Hash_1   | MSS | ECN | SACK | WScale  |
-> > 
-> >    TS:
-> >      MSB                LSB
-> >      | 31 ... 8 | 7 ... 0 |
-> >      | Random   | Hash_2  |
-> > 
-> > BPF_SOCK_OPS_CHECK_SYNCOOKIE_CB hook re-calculates the hash and validates
-> > the cookie.
-> > 
-> > Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-> > ---
-> > Currently, the validator is incomplete...
-> > 
-> > If this line is changed
-> > 
-> >      skops->replylong[0] = msstab[3];
-> > 
-> > to
-> >      skops->replylong[0] = msstab[mssind];
-> > 
-> > , we will get the error below during make:
-> > 
-> >      GEN-SKEL [test_progs] test_tcp_syncookie.skel.h
-> >    ...
-> >    Error: failed to open BPF object file: No such file or directory
-> 
-> I cannot reprod. Does it have error earlier than this? GEN-SKEL is probably 
-> running this (make V=1 can tell):
-> 
-> tools/testing/selftests/bpf/tools/sbin/bpftool gen skeleton 
-> tools/testing/selftests/bpf/test_tcp_syncookie.bpf.linked3.o name 
-> test_tcp_syncookie > tools/testing/selftests/bpf/test_tcp_syncookie.skel.h
-> 
-> Add a "-d" to bpftool for more debug output: bpftool -d gen skeleton....
+This is a follow-up to the commit 9b2b86332a9b ("bpf: Allow to use kfunc
+XDP hints and frags together").
 
-Somehow .rodata was 0 bytes while generating skeleton, and after
-removing `static` from `msstab[]`, it compiled successfully.
+The are some possible implementations problems that may arise when
+providing metadata specifically for multi-buffer packets, therefore there
+must be a possibility to test such option separately.
 
-Thank you!
+Add an option to use multi-buffer AF_XDP xdp_hw_metadata and mark used XDP
+program as capable to use frags.
 
----8<---
-$ tools/testing/selftests/bpf/tools/sbin/bpftool -d gen skeleton tools/testing/selftests/bpf/test_tcp_syncookie.bpf.linked3.o name test_tcp_syncookie > tools/testing/selftests/bpf/test_tcp_syncookie.skel.h
-libbpf: loading object 'test_tcp_syncookie' from buffer
-libbpf: elf: section(2) .symtab, size 432, link 1, flags 0, type=2
-libbpf: elf: section(3) .text, size 2888, link 0, flags 6, type=1
-libbpf: sec '.text': found program 'cookie_hash' at insn offset 0 (0 bytes), code size 361 insns (2888 bytes)
-libbpf: elf: section(4) sockops, size 864, link 0, flags 6, type=1
-libbpf: sec 'sockops': found program 'syncookie' at insn offset 0 (0 bytes), code size 108 insns (864 bytes)
-libbpf: elf: section(5) license, size 4, link 0, flags 3, type=1
-libbpf: license of test_tcp_syncookie is GPL
-libbpf: elf: section(6) .maps, size 32, link 0, flags 3, type=1
-libbpf: elf: section(7) .rodata.cst8, size 8, link 0, flags 12, type=1
-libbpf: elf: section(8) .relsockops, size 48, link 2, flags 40, type=9
-libbpf: elf: section(9) .BTF, size 3891, link 0, flags 0, type=1
-libbpf: elf: section(10) .BTF.ext, size 2648, link 0, flags 0, type=1
-libbpf: looking for externs among 18 symbols...
-libbpf: collected 0 externs total
-libbpf: sec '.rodata': failed to determine size from ELF: size 0, err -2
-Error: failed to open BPF object file: No such file or directory
----8<---
+As for now, xdp_hw_metadata accepts no options, so add simple option
+parsing logic and a help message.
 
----8<---
-diff --git a/tools/testing/selftests/bpf/progs/test_tcp_syncookie.c b/tools/testing/selftests/bpf/progs/test_tcp_syncookie.c
-index 5d1fc928602b..19307567cc4c 100644
---- a/tools/testing/selftests/bpf/progs/test_tcp_syncookie.c
-+++ b/tools/testing/selftests/bpf/progs/test_tcp_syncookie.c
-@@ -63,7 +63,7 @@ static __u32 cookie_hash(struct bpf_sock_ops *skops)
- 			    &test_key_siphash);
+For quick reference, also add an ingress packet generation command to the
+help message. The command comes from [0].
+
+Example of output for multi-buffer packet:
+
+xsk_ring_cons__peek: 1
+0xead018: rx_desc[15]->addr=10000000000f000 addr=f100 comp_addr=f000
+rx_hash: 0x5789FCBB with RSS type:0x29
+rx_timestamp:  1696856851535324697 (sec:1696856851.5353)
+XDP RX-time:   1696856843158256391 (sec:1696856843.1583)
+	delta sec:-8.3771 (-8377068.306 usec)
+AF_XDP time:   1696856843158413078 (sec:1696856843.1584)
+	delta sec:0.0002 (156.687 usec)
+0xead018: complete idx=23 addr=f000
+xsk_ring_cons__peek: 1
+0xead018: rx_desc[16]->addr=100000000008000 addr=8100 comp_addr=8000
+0xead018: complete idx=24 addr=8000
+xsk_ring_cons__peek: 1
+0xead018: rx_desc[17]->addr=100000000009000 addr=9100 comp_addr=9000 EoP
+0xead018: complete idx=25 addr=9000
+
+Metadata is printed for the first packet only.
+
+[0] https://lore.kernel.org/all/20230119221536.3349901-18-sdf@google.com/
+
+Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
+---
+V1 -> V2: drop gen_socket_config(), remove extra spaces in help message
+
+ .../selftests/bpf/progs/xdp_hw_metadata.c     |  2 +-
+ tools/testing/selftests/bpf/xdp_hw_metadata.c | 78 ++++++++++++++++---
+ 2 files changed, 67 insertions(+), 13 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+index 63d7de6c6bbb..8767d919c881 100644
+--- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
++++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+@@ -21,7 +21,7 @@ extern int bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx,
+ extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, __u32 *hash,
+ 				    enum xdp_rss_hash_type *rss_type) __ksym;
+ 
+-SEC("xdp")
++SEC("xdp.frags")
+ int rx(struct xdp_md *ctx)
+ {
+ 	void *data, *data_meta, *data_end;
+diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+index 17c980138796..17c0f92ff160 100644
+--- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
++++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+@@ -26,6 +26,7 @@
+ #include <linux/sockios.h>
+ #include <sys/mman.h>
+ #include <net/if.h>
++#include <ctype.h>
+ #include <poll.h>
+ #include <time.h>
+ 
+@@ -47,6 +48,7 @@ struct xsk {
+ };
+ 
+ struct xdp_hw_metadata *bpf_obj;
++__u16 bind_flags = XDP_COPY;
+ struct xsk *rx_xsk;
+ const char *ifname;
+ int ifindex;
+@@ -60,7 +62,7 @@ static int open_xsk(int ifindex, struct xsk *xsk, __u32 queue_id)
+ 	const struct xsk_socket_config socket_config = {
+ 		.rx_size = XSK_RING_PROD__DEFAULT_NUM_DESCS,
+ 		.tx_size = XSK_RING_PROD__DEFAULT_NUM_DESCS,
+-		.bind_flags = XDP_COPY,
++		.bind_flags = bind_flags,
+ 	};
+ 	const struct xsk_umem_config umem_config = {
+ 		.fill_size = XSK_RING_PROD__DEFAULT_NUM_DESCS,
+@@ -263,11 +265,14 @@ static int verify_metadata(struct xsk *rx_xsk, int rxq, int server_fd, clockid_t
+ 			verify_skb_metadata(server_fd);
+ 
+ 		for (i = 0; i < rxq; i++) {
++			bool first_seg = true;
++			bool is_eop = true;
++
+ 			if (fds[i].revents == 0)
+ 				continue;
+ 
+ 			struct xsk *xsk = &rx_xsk[i];
+-
++peek:
+ 			ret = xsk_ring_cons__peek(&xsk->rx, 1, &idx);
+ 			printf("xsk_ring_cons__peek: %d\n", ret);
+ 			if (ret != 1)
+@@ -276,12 +281,19 @@ static int verify_metadata(struct xsk *rx_xsk, int rxq, int server_fd, clockid_t
+ 			rx_desc = xsk_ring_cons__rx_desc(&xsk->rx, idx);
+ 			comp_addr = xsk_umem__extract_addr(rx_desc->addr);
+ 			addr = xsk_umem__add_offset_to_addr(rx_desc->addr);
+-			printf("%p: rx_desc[%u]->addr=%llx addr=%llx comp_addr=%llx\n",
+-			       xsk, idx, rx_desc->addr, addr, comp_addr);
+-			verify_xdp_metadata(xsk_umem__get_data(xsk->umem_area, addr),
+-					    clock_id);
++			is_eop = !(rx_desc->options & XDP_PKT_CONTD);
++			printf("%p: rx_desc[%u]->addr=%llx addr=%llx comp_addr=%llx%s\n",
++			       xsk, idx, rx_desc->addr, addr, comp_addr, is_eop ? " EoP" : "");
++			if (first_seg) {
++				verify_xdp_metadata(xsk_umem__get_data(xsk->umem_area, addr),
++						    clock_id);
++				first_seg = false;
++			}
++
+ 			xsk_ring_cons__release(&xsk->rx, 1);
+ 			refill_rx(xsk, comp_addr);
++			if (!is_eop)
++				goto peek;
+ 		}
+ 	}
+ 
+@@ -404,6 +416,53 @@ static void timestamping_enable(int fd, int val)
+ 		error(1, errno, "setsockopt(SO_TIMESTAMPING)");
  }
  
--static const __u16 msstab[] = {
-+const __u16 msstab[] = {
- 	536,
- 	1300,
- 	1440,
-@@ -137,7 +137,7 @@ static int check_syncookie(struct bpf_sock_ops *skops)
- 		return CG_ERR;
++static void print_usage(void)
++{
++	const char *usage =
++		"Usage: xdp_hw_metadata [OPTIONS] [IFNAME]\n"
++		"  -m    Enable multi-buffer XDP for larger MTU\n"
++		"  -h    Display this help and exit\n\n"
++		"Generate test packets on the other machine with:\n"
++		"  echo -n xdp | nc -u -q1 <dst_ip> 9091\n";
++
++	printf("%s", usage);
++}
++
++static void read_args(int argc, char *argv[])
++{
++	char opt;
++
++	while ((opt = getopt(argc, argv, "mh")) != -1) {
++		switch (opt) {
++		case 'm':
++			bind_flags |= XDP_USE_SG;
++			break;
++		case 'h':
++			print_usage();
++			exit(0);
++		case '?':
++			if (isprint(optopt))
++				fprintf(stderr, "Unknown option: -%c\n", optopt);
++			fallthrough;
++		default:
++			print_usage();
++			error(-1, opterr, "Command line options error");
++		}
++	}
++
++	if (optind >= argc) {
++		fprintf(stderr, "No device name provided\n");
++		print_usage();
++		exit(-1);
++	}
++
++	ifname = argv[optind];
++	ifindex = if_nametoindex(ifname);
++
++	if (!ifname)
++		error(-1, errno, "Invalid interface name");
++}
++
+ int main(int argc, char *argv[])
+ {
+ 	clockid_t clock_id = CLOCK_TAI;
+@@ -413,13 +472,8 @@ int main(int argc, char *argv[])
  
- 	/* msstab[mssind]; does not compile ... */
--	skops->replylong[0] = msstab[3];
-+	skops->replylong[0] = msstab[mssind];
- 	skops->replylong[1] = skops->args[0] & (BPF_SYNCOOKIE_ECN |
- 						BPF_SYNCOOKIE_SACK |
- 						BPF_SYNCOOKIE_WSCALE_MASK);
----8<---
+ 	struct bpf_program *prog;
+ 
+-	if (argc != 2) {
+-		fprintf(stderr, "pass device name\n");
+-		return -1;
+-	}
++	read_args(argc, argv);
+ 
+-	ifname = argv[1];
+-	ifindex = if_nametoindex(ifname);
+ 	rxq = rxq_num(ifname);
+ 
+ 	printf("rxq: %d\n", rxq);
+-- 
+2.41.0
 
-
-> 
-> 
-> I cannot compile the patch in my environment as-is also:
-> 
-> In file included from progs/test_tcp_syncookie.c:6:
-> In file included from 
-> /data/users/kafai/fb-kernel/linux/tools/include/uapi/linux/tcp.h:22:
-> In file included from /usr/include/asm/byteorder.h:5:
-> In file included from /usr/include/linux/byteorder/little_endian.h:13:
-> /usr/include/linux/swab.h:136:8: error: unknown type name '__always_inline'
->    136 | static __always_inline unsigned long __swab(const unsigned long y)
-> 
-> I have to add a "#include <linux/stddef.h>".
-
-Will add it in v2.
-
-
-> 
-> 
-> >      GEN-SKEL [test_progs-no_alu32] test_tcp_syncookie.skel.h
-> >    make: *** [Makefile:603: /home/ec2-user/kernel/bpf_syncookie/tools/testing/selftests/bpf/test_tcp_syncookie.skel.h] Error 254
-> >    make: *** Deleting file '/home/ec2-user/kernel/bpf_syncookie/tools/testing/selftests/bpf/test_tcp_syncookie.skel.h'
-> >    make: *** Waiting for unfinished jobs....
