@@ -1,147 +1,146 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4BFF42C00;
-	Tue, 17 Oct 2023 12:35:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB36642BF2;
+	Tue, 17 Oct 2023 12:40:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=avm.de header.i=@avm.de header.b="DLTrj+tO"
-X-Greylist: delayed 317 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 17 Oct 2023 05:35:20 PDT
-Received: from mail.avm.de (mail.avm.de [212.42.244.119])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C54F2;
-	Tue, 17 Oct 2023 05:35:20 -0700 (PDT)
-Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
-	by mail.avm.de (Postfix) with ESMTPS;
-	Tue, 17 Oct 2023 14:29:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
-	t=1697545797; bh=zLahxL+QXI3rfdx1iiel7NusxwDfyi7i9OT70ttG0sI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DLTrj+tOPB+cWfqo3Be1jRRCeHJzMzOdcWFEiMSPuJTH7boM/qyMZ+F31owpydLTi
-	 /dRJjk+1yCfUM9I46b96H/x9MmxF7O7mDQFUcKv6QvqT2d+0e2Qnca4cq+FVb/pu4T
-	 K4z+p/lIETLJdQmp5ev7O8R0hWHNAnt+uxQ05Tc4=
-Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
-	by mail-auth.avm.de (Postfix) with ESMTPA id 8F52280C3A;
-	Tue, 17 Oct 2023 14:29:57 +0200 (CEST)
-Received: by buildd.core.avm.de (Postfix, from userid 1000)
-	id 7A521180CD9; Tue, 17 Oct 2023 14:29:57 +0200 (CEST)
-Date: Tue, 17 Oct 2023 14:29:57 +0200
-From: Nicolas Schier <n.schier@avm.de>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Benno Lossin <benno.lossin@proton.me>,
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>, Gary Guo <gary@garyguo.net>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>, Song Liu <song@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org,
-	rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH 2/4] kbuild: avoid too many execution of
- scripts/pahole-flags.sh
-Message-ID: <ZS5+RcXh766bgHz3@buildd.core.avm.de>
-Mail-Followup-To: Masahiro Yamada <masahiroy@kernel.org>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Benno Lossin <benno.lossin@proton.me>,
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>, Gary Guo <gary@garyguo.net>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org,
-	rust-for-linux@vger.kernel.org
-References: <20231017103742.130927-1-masahiroy@kernel.org>
- <20231017103742.130927-2-masahiroy@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lT4TZ6Ny"
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA0DB6;
+	Tue, 17 Oct 2023 05:40:26 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-4083740f92dso1758245e9.3;
+        Tue, 17 Oct 2023 05:40:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1697546424; x=1698151224; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1go1+s1mgfonK9oITafKnNr2oyG8bY2MnLUtwcvNu/E=;
+        b=lT4TZ6NyXzaLIy3wmI4cKHkE+veDxUoxVXlqwaTKNdz+LpuYu3pVkbhZvX8vzS8lXq
+         cyYJDpBc1kIb3YpMt8QgysTxU0emriS0dzrkPmT6GXZZ4UmE9DxdLkq5Ds5kZhoLpJxj
+         Jjgcbentw6UDi0cM4k7IWppz+rYR2I0/d+wE6/cWHNs876RWoFvdKZA+yBuzhskTajfa
+         eIXb0xT8vuARO3CyllrUZ68t5wWQpL6khLnjjO1UnIKOaXfBajcpVSlSp0CD4MYBumYS
+         RVIl+T7nuxHrtfg4wPcL1RcFRUu20c6ft7I48wOALpCEEe1iStWc4AMkcc1/1dKmanzt
+         QRkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697546424; x=1698151224;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1go1+s1mgfonK9oITafKnNr2oyG8bY2MnLUtwcvNu/E=;
+        b=i/ccfrT/zMkCko9Zku0DYYSDbYK50H2D60gSWcdsPvqjZXjdSeq6ImXa3IFCRhcqCH
+         U2Bhx6nM4IFCLmL0PWJBBRTrUYObdfha6MnhNsPMin+lTr+NfYa+d9zX33yDtxKPrhUp
+         CpQqiKEjfNG+J/lSkGQiniDDYpUwblypQTyiBthOtbH8ESowHF3Z91Ub0Unu/Dtf0sGV
+         ws/Q8SfPqZWQoOktFNwpLjOriQTDSk7MJQofMm2jYQtji5hLq4fudxoWMSkOSlXyen06
+         ETD4N5rm/BBjMFQMq8wFjHnG0R6cBnWhEouJgq/XmXFXdHKjeJ2UQ1HzJv/7VnPI0zME
+         Bo2Q==
+X-Gm-Message-State: AOJu0YzqW5fNKa2mLg8qFSXHPml8bmbceDsSlzomnyrMh9bHo6umuPEq
+	fw+qtDJ3U/EP9BkARrpaIbg=
+X-Google-Smtp-Source: AGHT+IFaACminfVZMAM6mi8DZGRoe9jf+PlS6ZoKsH1wa0bGwwiO0cZz0WNUKUK7Ha3vZTD7sQt0aQ==
+X-Received: by 2002:a05:600c:245:b0:405:82c0:d9d9 with SMTP id 5-20020a05600c024500b0040582c0d9d9mr1650932wmj.41.1697546424222;
+        Tue, 17 Oct 2023 05:40:24 -0700 (PDT)
+Received: from [192.168.0.101] ([77.126.80.27])
+        by smtp.gmail.com with ESMTPSA id u18-20020a05600c211200b00401d8181f8bsm9599250wml.25.2023.10.17.05.40.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Oct 2023 05:40:23 -0700 (PDT)
+Message-ID: <3d82e9a0-bae2-48dd-9bd7-941570748076@gmail.com>
+Date: Tue, 17 Oct 2023 15:40:19 +0300
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20231017103742.130927-2-masahiroy@kernel.org>
-X-purgate-ID: 149429::1697545797-CBE3C0EE-94F75A2F/0/0
-X-purgate-type: clean
-X-purgate-size: 1635
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
-X-purgate: clean
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v6 14/18] mlx5: implement VLAN tag XDP hint
+Content-Language: en-US
+To: Larysa Zaremba <larysa.zaremba@intel.com>, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+ kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+ David Ahern <dsahern@gmail.com>, Jakub Kicinski <kuba@kernel.org>,
+ Willem de Bruijn <willemb@google.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Anatoly Burakov <anatoly.burakov@intel.com>,
+ Alexander Lobakin <alexandr.lobakin@intel.com>,
+ Magnus Karlsson <magnus.karlsson@gmail.com>,
+ Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
+ netdev@vger.kernel.org, Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Simon Horman <simon.horman@corigine.com>, Tariq Toukan
+ <tariqt@mellanox.com>, Saeed Mahameed <saeedm@mellanox.com>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+References: <20231012170524.21085-1-larysa.zaremba@intel.com>
+ <20231012170524.21085-15-larysa.zaremba@intel.com>
+From: Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <20231012170524.21085-15-larysa.zaremba@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-> Subject: kbuild: avoid too many execution of scripts/pahole-flags.sh
-executions?
 
-On Tue, Oct 17, 2023 at 07:37:40PM +0900, Masahiro Yamada wrote:
-> scripts/pahole-flags.sh is executed so many times.
-> 
-> You can check how many times it is invoked during the build, as follows:
-> 
->   $ cat <<EOF >> scripts/pahole-flags.sh
->   > echo "scripts/pahole-flags.sh was executed" >&2
->   > EOF
-> 
->   $ make -s
->   scripts/pahole-flags.sh was executed
->   scripts/pahole-flags.sh was executed
->   scripts/pahole-flags.sh was executed
->   scripts/pahole-flags.sh was executed
->   scripts/pahole-flags.sh was executed
->     [ lots of repeated lines suppressed... ]
-> 
-> This scripts is exectuted more than 20 times during the kernel build
 
-executed
-
-> because PAHOLE_FLAGS is a recursively expanded variable and exported
-> to sub-processes.
+On 12/10/2023 20:05, Larysa Zaremba wrote:
+> Implement the newly added .xmo_rx_vlan_tag() hint function.
 > 
-> With the GNU Make >= 4.4, it is executed more than 60 times because
-> exported variables are also passed to other $(shell ) invocations.
-> Without careful coding, it is known to cause an exponential fork
-> explosion. [1]
-> 
-> The use of $(shell ) in an exported recursive variable is likely wrong
-> because $(shell ) is always evaluated due to the 'export' keyword, and
-> the evaluation can occur multiple times by the nature of recursive
-> variables.
-> 
-> Convert the shell script to a Makefile, which is included only when
-> CONFIG_DEBUG_INFO_BTF=y.
-> 
-> [1]: https://savannah.gnu.org/bugs/index.php?64746
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
 > ---
+>   drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c | 15 +++++++++++++++
+>   include/linux/mlx5/device.h                      |  2 +-
+>   2 files changed, 16 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+> index 12f56d0db0af..d7cd14687ce8 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+> @@ -256,9 +256,24 @@ static int mlx5e_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
+>   	return 0;
+>   }
+>   
+> +static int mlx5e_xdp_rx_vlan_tag(const struct xdp_md *ctx, __be16 *vlan_proto,
+> +				 u16 *vlan_tci)
+> +{
+> +	const struct mlx5e_xdp_buff *_ctx = (void *)ctx;
+> +	const struct mlx5_cqe64 *cqe = _ctx->cqe;
+> +
 
-Thanks, looks good to me!
+I see inconsistency in using/not using "const" between the different 
+drivers.
 
-Reviewed-by: Nicolas Schier <n.schier@avm.de>
+Other than that, patch LGTM.
+
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+
+> +	if (!cqe_has_vlan(cqe))
+> +		return -ENODATA;
+> +
+> +	*vlan_proto = htons(ETH_P_8021Q);
+> +	*vlan_tci = be16_to_cpu(cqe->vlan_info);
+> +	return 0;
+> +}
+> +
+>   const struct xdp_metadata_ops mlx5e_xdp_metadata_ops = {
+>   	.xmo_rx_timestamp		= mlx5e_xdp_rx_timestamp,
+>   	.xmo_rx_hash			= mlx5e_xdp_rx_hash,
+> +	.xmo_rx_vlan_tag		= mlx5e_xdp_rx_vlan_tag,
+>   };
+>   
+>   /* returns true if packet was consumed by xdp */
+> diff --git a/include/linux/mlx5/device.h b/include/linux/mlx5/device.h
+> index 8fbe22de16ef..0805f8231452 100644
+> --- a/include/linux/mlx5/device.h
+> +++ b/include/linux/mlx5/device.h
+> @@ -916,7 +916,7 @@ static inline u8 get_cqe_tls_offload(struct mlx5_cqe64 *cqe)
+>   	return (cqe->tls_outer_l3_tunneled >> 3) & 0x3;
+>   }
+>   
+> -static inline bool cqe_has_vlan(struct mlx5_cqe64 *cqe)
+> +static inline bool cqe_has_vlan(const struct mlx5_cqe64 *cqe)
+>   {
+>   	return cqe->l4_l3_hdr_type & 0x1;
+>   }
