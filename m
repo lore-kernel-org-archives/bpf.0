@@ -1,48 +1,48 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD4908F77
-	for <bpf@vger.kernel.org>; Wed, 18 Oct 2023 06:18:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2D221FC5
+	for <bpf@vger.kernel.org>; Wed, 18 Oct 2023 06:20:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="go/gNRkW"
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6826119B6
-	for <bpf@vger.kernel.org>; Tue, 17 Oct 2023 23:18:20 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1bf55a81eeaso44227325ad.0
-        for <bpf@vger.kernel.org>; Tue, 17 Oct 2023 23:18:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="QSYq89qR"
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9A7D5A
+	for <bpf@vger.kernel.org>; Tue, 17 Oct 2023 23:18:13 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1c8a1541232so56027935ad.0
+        for <bpf@vger.kernel.org>; Tue, 17 Oct 2023 23:18:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1697609897; x=1698214697; darn=vger.kernel.org;
+        d=bytedance.com; s=google; t=1697609889; x=1698214689; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=U8WV2XVvAQuJkK59o/8tW8GBGlk0HThG8biP3YZXvQU=;
-        b=go/gNRkWlhHnC98EH3YpacP/SzqFJYjjIcR7IYtChqHS9L4DX0P7rR+L7BKli7ikYt
-         QEZYYswE6H8n7yNSd8JRsbpsjeME2PtDKGHY1s33h9WtmzThwOxj0FCKLJNZzqrxOFkZ
-         3yeXRsqoiGz1B4tL8+EwZI/nNM2d/ScohstdCrgWmMC3XpKf/bqd5XKQT0psBroooFcS
-         AG9YUm8/3SXWBGYY2t5/y+OZnh8ie2YTRue8j9P+w0lfbUm9gIv0zhrPrN6zmWwk4dYh
-         Pk2Wx8bNaI0AMP9cSoDhDWTctkd4yU6HR1HesjQknGQ6Hy9lBiCHkSjOxOCQ92B6168C
-         MGpQ==
+        bh=AQMAZzziueZcwnJjUGt9dx4cdF9gdrhIA4BtS7H5D4g=;
+        b=QSYq89qRGwdqkI88eFknudZLEHNL+FQlXBBsID2Ru6ED2VNBMRTILK7829IuBjqWcr
+         yUlp40AZvkBaafA5LtjvUm5tyn1jQoYHB4WBaCyRtPnN3Jq4PjNTvGgfjuW+zK32H2kw
+         y1/Wro4D4JBqHFgLgKYoFLPlBl4tW+W+YNvhEnF/x+6XgRsWkvkREA+9ikJW7psBnuut
+         ALJPMPsA0CJcq66wfdLEzGgHOH+5wY/GTaQbs9hjL+wMvFfmmz8d1wcRWwpEeDOorZgF
+         025XcUdejgrj+g1k+qVVzAS8V8YTBF8pOL2l3WE50UwlZ++o2NSUdOFnuw03kay9kM8I
+         FKQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697609897; x=1698214697;
+        d=1e100.net; s=20230601; t=1697609889; x=1698214689;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=U8WV2XVvAQuJkK59o/8tW8GBGlk0HThG8biP3YZXvQU=;
-        b=djWe2eRiyK3ttHuXH5pO79pv3sxNwkCVKy1dK+Y/G+EJaTu50XxDgSIhljbXDro5f5
-         vVdgXEJCMRGwfCvBPdbupS5QoihDZYVad1GzJawZudhE4ugNEA8Qmy9WnlVD2U715KZB
-         94waRbFrPDkfL/NBBAymyklm4D8rJbjizqq2vT0Qn2+IjSTsMP+BW16xKidi1kRfRb79
-         EB6jGYlaqfWX/rET48JLzO5Mvi7oBxhkZKv05UYV8cjhPjHAw2S3j6BFoSv4OZZfuKNN
-         w0sajSrVw0GoPqILR3QsrgL99HozPa/5yFdakqeaG2BS3g0vmhQ+awvfD6c2Va3puKwV
-         g0IA==
-X-Gm-Message-State: AOJu0YwyZ1OeouhXqwXGgvZi35MwdVApcHkKTzjiKBJYxHAKIweQU+kH
-	rWm+gMtF5MA9CJRFELWh6AFDZsIswUi6sMG9tzAHtw==
-X-Google-Smtp-Source: AGHT+IED3OurEtw0LiTgaNLzkIKcCTH0nRKrEwXkzzhEeE8B3ReEVKh5f1Oeij2KGfRj7sNu3FxcRg==
-X-Received: by 2002:a17:902:c40a:b0:1c3:a4f2:7c92 with SMTP id k10-20020a170902c40a00b001c3a4f27c92mr5260298plk.65.1697609897359;
-        Tue, 17 Oct 2023 23:18:17 -0700 (PDT)
+        bh=AQMAZzziueZcwnJjUGt9dx4cdF9gdrhIA4BtS7H5D4g=;
+        b=ZF0BSbGnZz+GAUI0rcScMp8CoqGsqy2KlvanPsBZMkMy3P0uaHikMnTVPwDOzIFVsT
+         Iyem9AEHTIq7IioTDfUDjHM7z5VNRetUFFLWtoPWkMS6HusegteN3ZfbApB2nB2dSQFP
+         ZJySPRUZ/Ez7MTw65D0AUoWXo3QwRXIYx9cKQtoHFDG9djQTTv8sG8//tST5g0pZvs8X
+         1K1dvJs4pFI8PxzLN55jHV/5rjkmKyopstNmVbFp9wU1WjoZgvjO1jaFQ9Tnx65kWims
+         YiXBpUJFR/GiYUgpGPJcVd41eG8oJnQ923T44IcjNVXycaUV+OqSTFUMqpSpEoHPvX1B
+         t5Xw==
+X-Gm-Message-State: AOJu0YxOy/fTUax4sDyZIu7ftGVun0+H+CCZxPMe946IN9nbxJGNLRAr
+	OOLV0AsrJoXVeG1yIzknstErFq8xDdj0emudLLk7CQ==
+X-Google-Smtp-Source: AGHT+IFZ8MeJruecqBmFQzomJc+TCurL7lNiZnHDNDlVPmH9ZhuMLbV8RjSv0obN05tL+L7JLEH4nA==
+X-Received: by 2002:a17:903:249:b0:1ca:2743:bf79 with SMTP id j9-20020a170903024900b001ca2743bf79mr5399429plh.39.1697609889457;
+        Tue, 17 Oct 2023 23:18:09 -0700 (PDT)
 Received: from n37-019-243.byted.org ([180.184.103.200])
-        by smtp.gmail.com with ESMTPSA id ix13-20020a170902f80d00b001c61acd5bd2sm2659116plb.112.2023.10.17.23.18.14
+        by smtp.gmail.com with ESMTPSA id ix13-20020a170902f80d00b001c61acd5bd2sm2659116plb.112.2023.10.17.23.18.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Oct 2023 23:18:17 -0700 (PDT)
+        Tue, 17 Oct 2023 23:18:09 -0700 (PDT)
 From: Chuyi Zhou <zhouchuyi@bytedance.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -52,9 +52,9 @@ Cc: ast@kernel.org,
 	tj@kernel.org,
 	linux-kernel@vger.kernel.org,
 	Chuyi Zhou <zhouchuyi@bytedance.com>
-Subject: [RESEND PATCH bpf-next v6 8/8] selftests/bpf: Add tests for open-coded task and css iter
-Date: Wed, 18 Oct 2023 14:17:46 +0800
-Message-Id: <20231018061746.111364-9-zhouchuyi@bytedance.com>
+Subject: [RESEND PATCH bpf-next v6 5/8] bpf: teach the verifier to enforce css_iter and task_iter in RCU CS
+Date: Wed, 18 Oct 2023 14:17:43 +0800
+Message-Id: <20231018061746.111364-6-zhouchuyi@bytedance.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20231018061746.111364-1-zhouchuyi@bytedance.com>
 References: <20231018061746.111364-1-zhouchuyi@bytedance.com>
@@ -67,532 +67,247 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+	SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-This patch adds 4 subtests to demonstrate these patterns and validating
-correctness.
+css_iter and task_iter should be used in rcu section. Specifically, in
+sleepable progs explicit bpf_rcu_read_lock() is needed before use these
+iters. In normal bpf progs that have implicit rcu_read_lock(), it's OK to
+use them directly.
 
-subtest1:
+This patch adds a new a KF flag KF_RCU_PROTECTED for bpf_iter_task_new and
+bpf_iter_css_new. It means the kfunc should be used in RCU CS. We check
+whether we are in rcu cs before we want to invoke this kfunc. If the rcu
+protection is guaranteed, we would let st->type = PTR_TO_STACK | MEM_RCU.
+Once user do rcu_unlock during the iteration, state MEM_RCU of regs would
+be cleared. is_iter_reg_valid_init() will reject if reg->type is UNTRUSTED.
 
-1) We use task_iter to iterate all process in the system and search for the
-current process with a given pid.
-
-2) We create some threads in current process context, and use
-BPF_TASK_ITER_PROC_THREADS to iterate all threads of current process. As
-expected, we would find all the threads of current process.
-
-3) We create some threads and use BPF_TASK_ITER_ALL_THREADS to iterate all
-threads in the system. As expected, we would find all the threads which was
-created.
-
-subtest2:
-
-We create a cgroup and add the current task to the cgroup. In the
-BPF program, we would use bpf_for_each(css_task, task, css) to iterate all
-tasks under the cgroup. As expected, we would find the current process.
-
-subtest3:
-
-1) We create a cgroup tree. In the BPF program, we use
-bpf_for_each(css, pos, root, XXX) to iterate all descendant under the root
-with pre and post order. As expected, we would find all descendant and the
-last iterating cgroup in post-order is root cgroup, the first iterating
-cgroup in pre-order is root cgroup.
-
-2) We wse BPF_CGROUP_ITER_ANCESTORS_UP to traverse the cgroup tree starting
-from leaf and root separately, and record the height. The diff of the
-hights would be the total tree-high - 1.
-
-subtest4:
-
-Add some failure testcase when using css_task, task and css iters, e.g,
-unlock when using task-iters to iterate tasks.
+It is worth noting that currently, bpf_rcu_read_unlock does not
+clear the state of the STACK_ITER reg, since bpf_for_each_spilled_reg
+only considers STACK_SPILL. This patch also let bpf_for_each_spilled_reg
+search STACK_ITER.
 
 Signed-off-by: Chuyi Zhou <zhouchuyi@bytedance.com>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- .../testing/selftests/bpf/prog_tests/iters.c  | 150 ++++++++++++++++++
- tools/testing/selftests/bpf/progs/iters_css.c |  72 +++++++++
- .../selftests/bpf/progs/iters_css_task.c      |  47 ++++++
- .../testing/selftests/bpf/progs/iters_task.c  |  41 +++++
- .../selftests/bpf/progs/iters_task_failure.c  | 105 ++++++++++++
- 5 files changed, 415 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/iters_css.c
- create mode 100644 tools/testing/selftests/bpf/progs/iters_css_task.c
- create mode 100644 tools/testing/selftests/bpf/progs/iters_task.c
- create mode 100644 tools/testing/selftests/bpf/progs/iters_task_failure.c
+ include/linux/bpf_verifier.h | 19 ++++++++------
+ include/linux/btf.h          |  1 +
+ kernel/bpf/helpers.c         |  4 +--
+ kernel/bpf/verifier.c        | 50 ++++++++++++++++++++++++++++--------
+ 4 files changed, 53 insertions(+), 21 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/iters.c b/tools/testing/selftests/bpf/prog_tests/iters.c
-index b696873c5455..c2425791c923 100644
---- a/tools/testing/selftests/bpf/prog_tests/iters.c
-+++ b/tools/testing/selftests/bpf/prog_tests/iters.c
-@@ -1,7 +1,14 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (c) 2023 Meta Platforms, Inc. and affiliates. */
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 94ec766432f5..e67cd45a85be 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -386,19 +386,18 @@ struct bpf_verifier_state {
+ 	u32 jmp_history_cnt;
+ };
  
-+#include <sys/syscall.h>
-+#include <sys/mman.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+#include <malloc.h>
-+#include <stdlib.h>
- #include <test_progs.h>
-+#include "cgroup_helpers.h"
+-#define bpf_get_spilled_reg(slot, frame)				\
++#define bpf_get_spilled_reg(slot, frame, mask)				\
+ 	(((slot < frame->allocated_stack / BPF_REG_SIZE) &&		\
+-	  (frame->stack[slot].slot_type[0] == STACK_SPILL))		\
++	  ((1 << frame->stack[slot].slot_type[0]) & (mask))) \
+ 	 ? &frame->stack[slot].spilled_ptr : NULL)
  
- #include "iters.skel.h"
- #include "iters_state_safety.skel.h"
-@@ -9,6 +16,10 @@
- #include "iters_num.skel.h"
- #include "iters_testmod_seq.skel.h"
- #include "iters_task_vma.skel.h"
-+#include "iters_task.skel.h"
-+#include "iters_css_task.skel.h"
-+#include "iters_css.skel.h"
-+#include "iters_task_failure.skel.h"
+ /* Iterate over 'frame', setting 'reg' to either NULL or a spilled register. */
+-#define bpf_for_each_spilled_reg(iter, frame, reg)			\
+-	for (iter = 0, reg = bpf_get_spilled_reg(iter, frame);		\
++#define bpf_for_each_spilled_reg(iter, frame, reg, mask)			\
++	for (iter = 0, reg = bpf_get_spilled_reg(iter, frame, mask);		\
+ 	     iter < frame->allocated_stack / BPF_REG_SIZE;		\
+-	     iter++, reg = bpf_get_spilled_reg(iter, frame))
++	     iter++, reg = bpf_get_spilled_reg(iter, frame, mask))
  
- static void subtest_num_iters(void)
+-/* Invoke __expr over regsiters in __vst, setting __state and __reg */
+-#define bpf_for_each_reg_in_vstate(__vst, __state, __reg, __expr)   \
++#define bpf_for_each_reg_in_vstate_mask(__vst, __state, __reg, __mask, __expr)   \
+ 	({                                                               \
+ 		struct bpf_verifier_state *___vstate = __vst;            \
+ 		int ___i, ___j;                                          \
+@@ -410,7 +409,7 @@ struct bpf_verifier_state {
+ 				__reg = &___regs[___j];                  \
+ 				(void)(__expr);                          \
+ 			}                                                \
+-			bpf_for_each_spilled_reg(___j, __state, __reg) { \
++			bpf_for_each_spilled_reg(___j, __state, __reg, __mask) { \
+ 				if (!__reg)                              \
+ 					continue;                        \
+ 				(void)(__expr);                          \
+@@ -418,6 +417,10 @@ struct bpf_verifier_state {
+ 		}                                                        \
+ 	})
+ 
++/* Invoke __expr over regsiters in __vst, setting __state and __reg */
++#define bpf_for_each_reg_in_vstate(__vst, __state, __reg, __expr) \
++	bpf_for_each_reg_in_vstate_mask(__vst, __state, __reg, 1 << STACK_SPILL, __expr)
++
+ /* linked list of verifier states used to prune search */
+ struct bpf_verifier_state_list {
+ 	struct bpf_verifier_state state;
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index 928113a80a95..c2231c64d60b 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -74,6 +74,7 @@
+ #define KF_ITER_NEW     (1 << 8) /* kfunc implements BPF iter constructor */
+ #define KF_ITER_NEXT    (1 << 9) /* kfunc implements BPF iter next method */
+ #define KF_ITER_DESTROY (1 << 10) /* kfunc implements BPF iter destructor */
++#define KF_RCU_PROTECTED (1 << 11) /* kfunc should be protected by rcu cs when they are invoked */
+ 
+ /*
+  * Tag marking a kernel function as a kfunc. This is meant to minimize the
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index b1d285ed4796..da058aead20c 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -2563,10 +2563,10 @@ BTF_ID_FLAGS(func, bpf_iter_task_vma_destroy, KF_ITER_DESTROY)
+ BTF_ID_FLAGS(func, bpf_iter_css_task_new, KF_ITER_NEW | KF_TRUSTED_ARGS)
+ BTF_ID_FLAGS(func, bpf_iter_css_task_next, KF_ITER_NEXT | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_iter_css_task_destroy, KF_ITER_DESTROY)
+-BTF_ID_FLAGS(func, bpf_iter_task_new, KF_ITER_NEW | KF_TRUSTED_ARGS)
++BTF_ID_FLAGS(func, bpf_iter_task_new, KF_ITER_NEW | KF_TRUSTED_ARGS | KF_RCU_PROTECTED)
+ BTF_ID_FLAGS(func, bpf_iter_task_next, KF_ITER_NEXT | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_iter_task_destroy, KF_ITER_DESTROY)
+-BTF_ID_FLAGS(func, bpf_iter_css_new, KF_ITER_NEW | KF_TRUSTED_ARGS)
++BTF_ID_FLAGS(func, bpf_iter_css_new, KF_ITER_NEW | KF_TRUSTED_ARGS | KF_RCU_PROTECTED)
+ BTF_ID_FLAGS(func, bpf_iter_css_next, KF_ITER_NEXT | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_iter_css_destroy, KF_ITER_DESTROY)
+ BTF_ID_FLAGS(func, bpf_dynptr_adjust)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 974713185269..fcdf2382153a 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1173,7 +1173,12 @@ static bool is_dynptr_type_expected(struct bpf_verifier_env *env, struct bpf_reg
+ 
+ static void __mark_reg_known_zero(struct bpf_reg_state *reg);
+ 
++static bool in_rcu_cs(struct bpf_verifier_env *env);
++
++static bool is_kfunc_rcu_protected(struct bpf_kfunc_call_arg_meta *meta);
++
+ static int mark_stack_slots_iter(struct bpf_verifier_env *env,
++				 struct bpf_kfunc_call_arg_meta *meta,
+ 				 struct bpf_reg_state *reg, int insn_idx,
+ 				 struct btf *btf, u32 btf_id, int nr_slots)
  {
-@@ -146,6 +157,138 @@ static void subtest_task_vma_iters(void)
- 	iters_task_vma__destroy(skel);
+@@ -1194,6 +1199,12 @@ static int mark_stack_slots_iter(struct bpf_verifier_env *env,
+ 
+ 		__mark_reg_known_zero(st);
+ 		st->type = PTR_TO_STACK; /* we don't have dedicated reg type */
++		if (is_kfunc_rcu_protected(meta)) {
++			if (in_rcu_cs(env))
++				st->type |= MEM_RCU;
++			else
++				st->type |= PTR_UNTRUSTED;
++		}
+ 		st->live |= REG_LIVE_WRITTEN;
+ 		st->ref_obj_id = i == 0 ? id : 0;
+ 		st->iter.btf = btf;
+@@ -1268,7 +1279,7 @@ static bool is_iter_reg_valid_uninit(struct bpf_verifier_env *env,
+ 	return true;
  }
  
-+static pthread_mutex_t do_nothing_mutex;
-+
-+static void *do_nothing_wait(void *arg)
-+{
-+	pthread_mutex_lock(&do_nothing_mutex);
-+	pthread_mutex_unlock(&do_nothing_mutex);
-+
-+	pthread_exit(arg);
-+}
-+
-+#define thread_num 2
-+
-+static void subtest_task_iters(void)
-+{
-+	struct iters_task *skel = NULL;
-+	pthread_t thread_ids[thread_num];
-+	void *ret;
-+	int err;
-+
-+	skel = iters_task__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		goto cleanup;
-+	skel->bss->target_pid = getpid();
-+	err = iters_task__attach(skel);
-+	if (!ASSERT_OK(err, "iters_task__attach"))
-+		goto cleanup;
-+	pthread_mutex_lock(&do_nothing_mutex);
-+	for (int i = 0; i < thread_num; i++)
-+		ASSERT_OK(pthread_create(&thread_ids[i], NULL, &do_nothing_wait, NULL),
-+			"pthread_create");
-+
-+	syscall(SYS_getpgid);
-+	iters_task__detach(skel);
-+	ASSERT_EQ(skel->bss->procs_cnt, 1, "procs_cnt");
-+	ASSERT_EQ(skel->bss->threads_cnt, thread_num + 1, "threads_cnt");
-+	ASSERT_EQ(skel->bss->proc_threads_cnt, thread_num + 1, "proc_threads_cnt");
-+	pthread_mutex_unlock(&do_nothing_mutex);
-+	for (int i = 0; i < thread_num; i++)
-+		ASSERT_OK(pthread_join(thread_ids[i], &ret), "pthread_join");
-+cleanup:
-+	iters_task__destroy(skel);
-+}
-+
-+extern int stack_mprotect(void);
-+
-+static void subtest_css_task_iters(void)
-+{
-+	struct iters_css_task *skel = NULL;
-+	int err, cg_fd, cg_id;
-+	const char *cgrp_path = "/cg1";
-+
-+	err = setup_cgroup_environment();
-+	if (!ASSERT_OK(err, "setup_cgroup_environment"))
-+		goto cleanup;
-+	cg_fd = create_and_get_cgroup(cgrp_path);
-+	if (!ASSERT_GE(cg_fd, 0, "create_and_get_cgroup"))
-+		goto cleanup;
-+	cg_id = get_cgroup_id(cgrp_path);
-+	err = join_cgroup(cgrp_path);
-+	if (!ASSERT_OK(err, "join_cgroup"))
-+		goto cleanup;
-+
-+	skel = iters_css_task__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		goto cleanup;
-+
-+	skel->bss->target_pid = getpid();
-+	skel->bss->cg_id = cg_id;
-+	err = iters_css_task__attach(skel);
-+	if (!ASSERT_OK(err, "iters_task__attach"))
-+		goto cleanup;
-+	err = stack_mprotect();
-+	if (!ASSERT_EQ(err, -1, "stack_mprotect") ||
-+	    !ASSERT_EQ(errno, EPERM, "stack_mprotect"))
-+		goto cleanup;
-+	iters_css_task__detach(skel);
-+	ASSERT_EQ(skel->bss->css_task_cnt, 1, "css_task_cnt");
-+
-+cleanup:
-+	cleanup_cgroup_environment();
-+	iters_css_task__destroy(skel);
-+}
-+
-+static void subtest_css_iters(void)
-+{
-+	struct iters_css *skel = NULL;
-+	struct {
-+		const char *path;
-+		int fd;
-+	} cgs[] = {
-+		{ "/cg1" },
-+		{ "/cg1/cg2" },
-+		{ "/cg1/cg2/cg3" },
-+		{ "/cg1/cg2/cg3/cg4" },
-+	};
-+	int err, cg_nr = ARRAY_SIZE(cgs);
-+	int i;
-+
-+	err = setup_cgroup_environment();
-+	if (!ASSERT_OK(err, "setup_cgroup_environment"))
-+		goto cleanup;
-+	for (i = 0; i < cg_nr; i++) {
-+		cgs[i].fd = create_and_get_cgroup(cgs[i].path);
-+		if (!ASSERT_GE(cgs[i].fd, 0, "create_and_get_cgroup"))
-+			goto cleanup;
-+	}
-+
-+	skel = iters_css__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		goto cleanup;
-+
-+	skel->bss->target_pid = getpid();
-+	skel->bss->root_cg_id = get_cgroup_id(cgs[0].path);
-+	skel->bss->leaf_cg_id = get_cgroup_id(cgs[cg_nr - 1].path);
-+	err = iters_css__attach(skel);
-+
-+	if (!ASSERT_OK(err, "iters_task__attach"))
-+		goto cleanup;
-+
-+	syscall(SYS_getpgid);
-+	ASSERT_EQ(skel->bss->pre_order_cnt, cg_nr, "pre_order_cnt");
-+	ASSERT_EQ(skel->bss->first_cg_id, get_cgroup_id(cgs[0].path), "first_cg_id");
-+
-+	ASSERT_EQ(skel->bss->post_order_cnt, cg_nr, "post_order_cnt");
-+	ASSERT_EQ(skel->bss->last_cg_id, get_cgroup_id(cgs[0].path), "last_cg_id");
-+	ASSERT_EQ(skel->bss->tree_high, cg_nr - 1, "tree_high");
-+	iters_css__detach(skel);
-+cleanup:
-+	cleanup_cgroup_environment();
-+	iters_css__destroy(skel);
-+}
-+
- void test_iters(void)
+-static bool is_iter_reg_valid_init(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
++static int is_iter_reg_valid_init(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+ 				   struct btf *btf, u32 btf_id, int nr_slots)
  {
- 	RUN_TESTS(iters_state_safety);
-@@ -161,4 +304,11 @@ void test_iters(void)
- 		subtest_testmod_seq_iters();
- 	if (test__start_subtest("task_vma"))
- 		subtest_task_vma_iters();
-+	if (test__start_subtest("task"))
-+		subtest_task_iters();
-+	if (test__start_subtest("css_task"))
-+		subtest_css_task_iters();
-+	if (test__start_subtest("css"))
-+		subtest_css_iters();
-+	RUN_TESTS(iters_task_failure);
+ 	struct bpf_func_state *state = func(env, reg);
+@@ -1276,26 +1287,28 @@ static bool is_iter_reg_valid_init(struct bpf_verifier_env *env, struct bpf_reg_
+ 
+ 	spi = iter_get_spi(env, reg, nr_slots);
+ 	if (spi < 0)
+-		return false;
++		return -EINVAL;
+ 
+ 	for (i = 0; i < nr_slots; i++) {
+ 		struct bpf_stack_state *slot = &state->stack[spi - i];
+ 		struct bpf_reg_state *st = &slot->spilled_ptr;
+ 
++		if (st->type & PTR_UNTRUSTED)
++			return -EPROTO;
+ 		/* only main (first) slot has ref_obj_id set */
+ 		if (i == 0 && !st->ref_obj_id)
+-			return false;
++			return -EINVAL;
+ 		if (i != 0 && st->ref_obj_id)
+-			return false;
++			return -EINVAL;
+ 		if (st->iter.btf != btf || st->iter.btf_id != btf_id)
+-			return false;
++			return -EINVAL;
+ 
+ 		for (j = 0; j < BPF_REG_SIZE; j++)
+ 			if (slot->slot_type[j] != STACK_ITER)
+-				return false;
++				return -EINVAL;
+ 	}
+ 
+-	return true;
++	return 0;
  }
-diff --git a/tools/testing/selftests/bpf/progs/iters_css.c b/tools/testing/selftests/bpf/progs/iters_css.c
-new file mode 100644
-index 000000000000..ec1f6c2f590b
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/iters_css.c
-@@ -0,0 +1,72 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2023 Chuyi Zhou <zhouchuyi@bytedance.com> */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
-+#include "bpf_experimental.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+pid_t target_pid;
-+u64 root_cg_id, leaf_cg_id;
-+u64 first_cg_id, last_cg_id;
-+
-+int pre_order_cnt, post_order_cnt, tree_high;
-+
-+struct cgroup *bpf_cgroup_from_id(u64 cgid) __ksym;
-+void bpf_cgroup_release(struct cgroup *p) __ksym;
-+void bpf_rcu_read_lock(void) __ksym;
-+void bpf_rcu_read_unlock(void) __ksym;
-+
-+SEC("fentry.s/" SYS_PREFIX "sys_getpgid")
-+int iter_css_for_each(const void *ctx)
+ 
+ /* Check if given stack slot is "special":
+@@ -7640,15 +7653,24 @@ static int process_iter_arg(struct bpf_verifier_env *env, int regno, int insn_id
+ 				return err;
+ 		}
+ 
+-		err = mark_stack_slots_iter(env, reg, insn_idx, meta->btf, btf_id, nr_slots);
++		err = mark_stack_slots_iter(env, meta, reg, insn_idx, meta->btf, btf_id, nr_slots);
+ 		if (err)
+ 			return err;
+ 	} else {
+ 		/* iter_next() or iter_destroy() expect initialized iter state*/
+-		if (!is_iter_reg_valid_init(env, reg, meta->btf, btf_id, nr_slots)) {
++		err = is_iter_reg_valid_init(env, reg, meta->btf, btf_id, nr_slots);
++		switch (err) {
++		case 0:
++			break;
++		case -EINVAL:
+ 			verbose(env, "expected an initialized iter_%s as arg #%d\n",
+ 				iter_type_str(meta->btf, btf_id), regno);
+-			return -EINVAL;
++			return err;
++		case -EPROTO:
++			verbose(env, "expected an RCU CS when using %s\n", meta->func_name);
++			return err;
++		default:
++			return err;
+ 		}
+ 
+ 		spi = iter_get_spi(env, reg, nr_slots);
+@@ -10231,6 +10253,11 @@ static bool is_kfunc_rcu(struct bpf_kfunc_call_arg_meta *meta)
+ 	return meta->kfunc_flags & KF_RCU;
+ }
+ 
++static bool is_kfunc_rcu_protected(struct bpf_kfunc_call_arg_meta *meta)
 +{
-+	struct task_struct *cur_task = bpf_get_current_task_btf();
-+	struct cgroup_subsys_state *root_css, *leaf_css, *pos;
-+	struct cgroup *root_cgrp, *leaf_cgrp, *cur_cgrp;
-+
-+	if (cur_task->pid != target_pid)
-+		return 0;
-+
-+	root_cgrp = bpf_cgroup_from_id(root_cg_id);
-+
-+	if (!root_cgrp)
-+		return 0;
-+
-+	leaf_cgrp = bpf_cgroup_from_id(leaf_cg_id);
-+
-+	if (!leaf_cgrp) {
-+		bpf_cgroup_release(root_cgrp);
-+		return 0;
-+	}
-+	root_css = &root_cgrp->self;
-+	leaf_css = &leaf_cgrp->self;
-+	pre_order_cnt = post_order_cnt = tree_high = 0;
-+	first_cg_id = last_cg_id = 0;
-+
-+	bpf_rcu_read_lock();
-+	bpf_for_each(css, pos, root_css, BPF_CGROUP_ITER_DESCENDANTS_POST) {
-+		cur_cgrp = pos->cgroup;
-+		post_order_cnt++;
-+		last_cg_id = cur_cgrp->kn->id;
-+	}
-+
-+	bpf_for_each(css, pos, root_css, BPF_CGROUP_ITER_DESCENDANTS_PRE) {
-+		cur_cgrp = pos->cgroup;
-+		pre_order_cnt++;
-+		if (!first_cg_id)
-+			first_cg_id = cur_cgrp->kn->id;
-+	}
-+
-+	bpf_for_each(css, pos, leaf_css, BPF_CGROUP_ITER_ANCESTORS_UP)
-+		tree_high++;
-+
-+	bpf_for_each(css, pos, root_css, BPF_CGROUP_ITER_ANCESTORS_UP)
-+		tree_high--;
-+	bpf_rcu_read_unlock();
-+	bpf_cgroup_release(root_cgrp);
-+	bpf_cgroup_release(leaf_cgrp);
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/iters_css_task.c b/tools/testing/selftests/bpf/progs/iters_css_task.c
-new file mode 100644
-index 000000000000..5089ce384a1c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/iters_css_task.c
-@@ -0,0 +1,47 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2023 Chuyi Zhou <zhouchuyi@bytedance.com> */
-+
-+#include "vmlinux.h"
-+#include <errno.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
-+#include "bpf_experimental.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct cgroup *bpf_cgroup_from_id(u64 cgid) __ksym;
-+void bpf_cgroup_release(struct cgroup *p) __ksym;
-+
-+pid_t target_pid;
-+int css_task_cnt;
-+u64 cg_id;
-+
-+SEC("lsm/file_mprotect")
-+int BPF_PROG(iter_css_task_for_each, struct vm_area_struct *vma,
-+	    unsigned long reqprot, unsigned long prot, int ret)
-+{
-+	struct task_struct *cur_task = bpf_get_current_task_btf();
-+	struct cgroup_subsys_state *css;
-+	struct task_struct *task;
-+	struct cgroup *cgrp;
-+
-+	if (cur_task->pid != target_pid)
-+		return ret;
-+
-+	cgrp = bpf_cgroup_from_id(cg_id);
-+
-+	if (!cgrp)
-+		return -EPERM;
-+
-+	css = &cgrp->self;
-+	css_task_cnt = 0;
-+
-+	bpf_for_each(css_task, task, css, CSS_TASK_ITER_PROCS)
-+		if (task->pid == target_pid)
-+			css_task_cnt++;
-+
-+	bpf_cgroup_release(cgrp);
-+
-+	return -EPERM;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/iters_task.c b/tools/testing/selftests/bpf/progs/iters_task.c
-new file mode 100644
-index 000000000000..c9b4055cd410
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/iters_task.c
-@@ -0,0 +1,41 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2023 Chuyi Zhou <zhouchuyi@bytedance.com> */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
-+#include "bpf_experimental.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+pid_t target_pid;
-+int procs_cnt, threads_cnt, proc_threads_cnt;
-+
-+void bpf_rcu_read_lock(void) __ksym;
-+void bpf_rcu_read_unlock(void) __ksym;
-+
-+SEC("fentry.s/" SYS_PREFIX "sys_getpgid")
-+int iter_task_for_each_sleep(void *ctx)
-+{
-+	struct task_struct *cur_task = bpf_get_current_task_btf();
-+	struct task_struct *pos;
-+
-+	if (cur_task->pid != target_pid)
-+		return 0;
-+	procs_cnt = threads_cnt = proc_threads_cnt = 0;
-+
-+	bpf_rcu_read_lock();
-+	bpf_for_each(task, pos, NULL, BPF_TASK_ITER_ALL_PROCS)
-+		if (pos->pid == target_pid)
-+			procs_cnt++;
-+
-+	bpf_for_each(task, pos, cur_task, BPF_TASK_ITER_PROC_THREADS)
-+		proc_threads_cnt++;
-+
-+	bpf_for_each(task, pos, NULL, BPF_TASK_ITER_ALL_THREADS)
-+		if (pos->tgid == target_pid)
-+			threads_cnt++;
-+	bpf_rcu_read_unlock();
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/iters_task_failure.c b/tools/testing/selftests/bpf/progs/iters_task_failure.c
-new file mode 100644
-index 000000000000..c3bf96a67dba
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/iters_task_failure.c
-@@ -0,0 +1,105 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2023 Chuyi Zhou <zhouchuyi@bytedance.com> */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
-+#include "bpf_experimental.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct cgroup *bpf_cgroup_from_id(u64 cgid) __ksym;
-+void bpf_cgroup_release(struct cgroup *p) __ksym;
-+void bpf_rcu_read_lock(void) __ksym;
-+void bpf_rcu_read_unlock(void) __ksym;
-+
-+SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
-+__failure __msg("expected an RCU CS when using bpf_iter_task_next")
-+int BPF_PROG(iter_tasks_without_lock)
-+{
-+	struct task_struct *pos;
-+
-+	bpf_for_each(task, pos, NULL, BPF_TASK_ITER_ALL_PROCS) {
-+
-+	}
-+	return 0;
++	return meta->kfunc_flags & KF_RCU_PROTECTED;
 +}
 +
-+SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
-+__failure __msg("expected an RCU CS when using bpf_iter_css_next")
-+int BPF_PROG(iter_css_without_lock)
-+{
-+	u64 cg_id = bpf_get_current_cgroup_id();
-+	struct cgroup *cgrp = bpf_cgroup_from_id(cg_id);
-+	struct cgroup_subsys_state *root_css, *pos;
-+
-+	if (!cgrp)
-+		return 0;
-+	root_css = &cgrp->self;
-+
-+	bpf_for_each(css, pos, root_css, BPF_CGROUP_ITER_DESCENDANTS_POST) {
-+
-+	}
-+	bpf_cgroup_release(cgrp);
-+	return 0;
-+}
-+
-+SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
-+__failure __msg("expected an RCU CS when using bpf_iter_task_next")
-+int BPF_PROG(iter_tasks_lock_and_unlock)
-+{
-+	struct task_struct *pos;
-+
-+	bpf_rcu_read_lock();
-+	bpf_for_each(task, pos, NULL, BPF_TASK_ITER_ALL_PROCS) {
-+		bpf_rcu_read_unlock();
-+
-+		bpf_rcu_read_lock();
-+	}
-+	bpf_rcu_read_unlock();
-+	return 0;
-+}
-+
-+SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
-+__failure __msg("expected an RCU CS when using bpf_iter_css_next")
-+int BPF_PROG(iter_css_lock_and_unlock)
-+{
-+	u64 cg_id = bpf_get_current_cgroup_id();
-+	struct cgroup *cgrp = bpf_cgroup_from_id(cg_id);
-+	struct cgroup_subsys_state *root_css, *pos;
-+
-+	if (!cgrp)
-+		return 0;
-+	root_css = &cgrp->self;
-+
-+	bpf_rcu_read_lock();
-+	bpf_for_each(css, pos, root_css, BPF_CGROUP_ITER_DESCENDANTS_POST) {
-+		bpf_rcu_read_unlock();
-+
-+		bpf_rcu_read_lock();
-+	}
-+	bpf_rcu_read_unlock();
-+	bpf_cgroup_release(cgrp);
-+	return 0;
-+}
-+
-+SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
-+__failure __msg("css_task_iter is only allowed in bpf_lsm and bpf iter-s")
-+int BPF_PROG(iter_css_task_for_each)
-+{
-+	u64 cg_id = bpf_get_current_cgroup_id();
-+	struct cgroup *cgrp = bpf_cgroup_from_id(cg_id);
-+	struct cgroup_subsys_state *css;
-+	struct task_struct *task;
-+
-+	if (cgrp == NULL)
-+		return 0;
-+	css = &cgrp->self;
-+
-+	bpf_for_each(css_task, task, css, CSS_TASK_ITER_PROCS) {
-+
-+	}
-+	bpf_cgroup_release(cgrp);
-+	return 0;
-+}
+ static bool __kfunc_param_match_suffix(const struct btf *btf,
+ 				       const struct btf_param *arg,
+ 				       const char *suffix)
+@@ -11582,6 +11609,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	if (env->cur_state->active_rcu_lock) {
+ 		struct bpf_func_state *state;
+ 		struct bpf_reg_state *reg;
++		u32 clear_mask = (1 << STACK_SPILL) | (1 << STACK_ITER);
+ 
+ 		if (in_rbtree_lock_required_cb(env) && (rcu_lock || rcu_unlock)) {
+ 			verbose(env, "Calling bpf_rcu_read_{lock,unlock} in unnecessary rbtree callback\n");
+@@ -11592,7 +11620,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			verbose(env, "nested rcu read lock (kernel function %s)\n", func_name);
+ 			return -EINVAL;
+ 		} else if (rcu_unlock) {
+-			bpf_for_each_reg_in_vstate(env->cur_state, state, reg, ({
++			bpf_for_each_reg_in_vstate_mask(env->cur_state, state, reg, clear_mask, ({
+ 				if (reg->type & MEM_RCU) {
+ 					reg->type &= ~(MEM_RCU | PTR_MAYBE_NULL);
+ 					reg->type |= PTR_UNTRUSTED;
 -- 
 2.20.1
 
