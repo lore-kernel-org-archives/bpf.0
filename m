@@ -1,185 +1,180 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D70A242BF0
-	for <bpf@vger.kernel.org>; Wed, 18 Oct 2023 18:36:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B558118
-	for <bpf@vger.kernel.org>; Wed, 18 Oct 2023 11:36:56 -0700 (PDT)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39IIN7c1024563
-	for <bpf@vger.kernel.org>; Wed, 18 Oct 2023 11:36:56 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3tsqqtbdve-7
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Wed, 18 Oct 2023 11:36:55 -0700
-Received: from twshared29562.14.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 18 Oct 2023 11:36:51 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 2DC8A39F88BC1; Wed, 18 Oct 2023 11:36:40 -0700 (PDT)
-From: Andrii Nakryiko <andrii@kernel.org>
-To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@kernel.org>
-CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next 6/7] bpf: drop knowledge-losing __reg_combine_{32,64}_into_{64,32} logic
-Date: Wed, 18 Oct 2023 11:36:24 -0700
-Message-ID: <20231018183625.3952512-7-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231018183625.3952512-1-andrii@kernel.org>
-References: <20231018183625.3952512-1-andrii@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA3E347348;
+	Wed, 18 Oct 2023 18:39:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="OwmQtJKw"
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2049.outbound.protection.outlook.com [40.107.95.49])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CC9F7;
+	Wed, 18 Oct 2023 11:39:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iwT/cYsslehnFX+AXR4e4VZaklxi79wZZcNYzpANLXTeOKGd1VoiZLFAl9bcuFYbLYi5MvOO473oquCwkuv/o/wP84kjiMkmFEpW9H09JvAhv0uEphscmYqDOvIr1gbM0RxpOTW2hh9yA3Vo3yH1TrNdF5MRTJ8cVDoxvMytk25xNrepJx67qaEYVHY339HDzwVwckZcZ+WG9PehIpqLeqfrZeq6qP75VvHzWBLD8Uwe5WqX7NrVk2ptpxH/nb51Fsauj2Bt2gD95VfZqdzWHAoU1aN4+b9YyBAJXeOZuF2df8/LMdMzk6XO185zt2PFyIB1CB+OY3P2pd3gKApGwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OU6nctpme4VBYwdNpPP+ppDPSlae2DuoX26bmDkya8g=;
+ b=SizUYLF//lEiKjwcxHumnVgDJP8puUlJUcUKBy0zyVzz329Bm/6ZNVnr7ziZwrzsQ+NhfXPUuk2/cEDwUuqdfQ4mllsa+rUJnccDxK1PcjMIqVIJpe1wYizQ9OoQg3XUA/V3fCQpDGghrxsGEWmybpqrGM+NSN7f0vJYLWluPJnUrkU+Ng3a6+y8jXiN9zB5vNo8wye60AMyq3LwG424vE3e62f9d0/5mJRFhqnLCeEoh8q1M/+kLnVY9hUwV2JUnp0ngC6Lz7NkkAh6sDip3aUuWm8MV7huwEZXGVo6Q0+zrbmz9rOfBngyulIXrBMPWK2+MlPfQxv1qUWwqBhklg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OU6nctpme4VBYwdNpPP+ppDPSlae2DuoX26bmDkya8g=;
+ b=OwmQtJKwddk3eC52CndBT8qI2qLaQE4F/Fd1E7XhhTFRTt6vef3awybIvbSk3AKfYK352qLf7EuHDoDb2YBp/9EDD/p6WRI/wjzvbchffUgy6LzaZYC9/67xi5xAlTTC3qd8hFbTfElUBroVxX9bkMIchCZyHRXfAvBR4xehpYw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
+ IA1PR12MB7759.namprd12.prod.outlook.com (2603:10b6:208:420::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.44; Wed, 18 Oct
+ 2023 18:39:53 +0000
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::5aa2:3605:1718:3332]) by DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::5aa2:3605:1718:3332%7]) with mapi id 15.20.6886.034; Wed, 18 Oct 2023
+ 18:39:52 +0000
+Message-ID: <d764242f-cde0-47c0-ae2c-f94b199c93df@amd.com>
+Date: Wed, 18 Oct 2023 14:39:48 -0400
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] lib/Kconfig.debug: disable FRAME_WARN for kasan and kcsan
+Content-Language: en-US
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: linux-kernel@vger.kernel.org, Rodrigo Siqueira
+ <rodrigo.siqueira@amd.com>, Harry Wentland <harry.wentland@amd.com>,
+ Alex Deucher <alexander.deucher@amd.com>, Arnd Bergmann <arnd@arndb.de>,
+ stable@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+ Alex Gaynor <alex.gaynor@gmail.com>,
+ Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng
+ <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Nick Terrell <terrelln@fb.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+ Randy Dunlap <rdunlap@infradead.org>, Kees Cook <keescook@chromium.org>,
+ Zhaoyang Huang <zhaoyang.huang@unisoc.com>, Li Hua
+ <hucool.lihua@huawei.com>, Alexander Potapenko <glider@google.com>,
+ Geert Uytterhoeven <geert+renesas@glider.be>, Rae Moar <rmoar@google.com>,
+ rust-for-linux@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+References: <20231018182412.80291-1-hamza.mahfooz@amd.com>
+ <CAMuHMdXSzMJe1zyJu1HkxWggTKJj_sxkPOejjbdRjg3FeFTVHQ@mail.gmail.com>
+From: Hamza Mahfooz <hamza.mahfooz@amd.com>
+In-Reply-To: <CAMuHMdXSzMJe1zyJu1HkxWggTKJj_sxkPOejjbdRjg3FeFTVHQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: YQBPR0101CA0255.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:68::16) To DM4PR12MB6280.namprd12.prod.outlook.com
+ (2603:10b6:8:a2::11)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: iDum6VusSKHTzietiecxFwOhlAsa9-Ij
-X-Proofpoint-ORIG-GUID: iDum6VusSKHTzietiecxFwOhlAsa9-Ij
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-18_16,2023-10-18_01,2023-05-22_02
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=no
-	autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|IA1PR12MB7759:EE_
+X-MS-Office365-Filtering-Correlation-Id: f4dc2bcf-2bab-4f3f-431d-08dbd0099de7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	nh1d9aWG59PxpJzKHLDyKN2xy3VVPnqbKEmk0YAi/e8H2/RxIK7dMdRuLsZFZUJpBZ+ebZa8qsFAXmYHClCEL9GbJRDkAv631tpqw0MXUV50slTEdnM8Uypc6Kr/pg2ulcKcRlF+xmhOkBRvZ6o6558gNu65dshbUY4f4vC4ek5akrM3Z9/R/yX8SGPgTJ0fT6n91G1tJLUQS1ZNjEw2epWSYHXFP2ml4xFupnG7DM3H8QA0Wpbqm2RMvrLHycXBwgfS6xm2ThP4KduiNvPcmC7H7M4nZu+MtysYBzyoD8KJK1TKdomzgc0mlSR9gkanI7XojZFJPzE+6IV9k0AF4oXiLWMvqczwGamxpr5FQAD9cQDwJQzs/fTY31FfXZxsA+mgXQqK1RyXbvU8KS3v8t8R5M1RYRFLBty7xYfMTYCgIaymINR6KfS1LTEo5DXKhMBhGslefu5IytgB7Bh19UifR8gCifw7QOlLx7IwsHGON0oiBKM4WHorPAuYpHLgHvlIVL3UyYLng0HOjuWZQKyXsMf6zCRzuYHkghN6CBc+nOk2wL2EvYUtLX+foHs/NNFcRPqD7rMXFW/tQznQZvF2uHFcwb3MAU7Ima/nnUOXaLq1Yj2+B17540L1V2jAg1l02BRBtJ6OywU7STb28Q==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(396003)(39860400002)(366004)(136003)(376002)(230922051799003)(451199024)(186009)(1800799009)(64100799003)(6486002)(6916009)(2616005)(26005)(66556008)(66476007)(54906003)(66946007)(4326008)(8936002)(8676002)(316002)(53546011)(6512007)(36756003)(2906002)(478600001)(31696002)(6666004)(7416002)(6506007)(86362001)(83380400001)(5660300002)(38100700002)(31686004)(44832011)(41300700001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?aEhBcUlKeHF2WjRIcHR4Ym5MazVyUWVOVVRScHZGUXFLVjZKTGRFVjI2L3U3?=
+ =?utf-8?B?Ty85SGtpSlloQzhyeDRXRWxnZC8rWWxSd1FaRk15TkYwOUdvbjR0OU1ZOHJs?=
+ =?utf-8?B?U2I0c2MyVFdYczlUOWthblp5UjVvNE0xMkZyNVdsWFE0QUdvSy9UUXVTdkZT?=
+ =?utf-8?B?L2trSDFKUktpLzlEcnRhaFZFdWVuRmFPNnBKYWYzY2MxN1ptWGtUQ1J2NEIr?=
+ =?utf-8?B?Q1hjN3pXdmNNSmw0WE5mQ081Zmk4ZzU1RnJ3NktZWlVSNTZhQXZxdzR5OFFa?=
+ =?utf-8?B?VTFYQUFtaGFLYlZrd2t5ZHBCV2RXWGlRTlYzbkxZa21pdlEzQ2xJQzdxcVp1?=
+ =?utf-8?B?NWgrcXBNWTdFTUdnU0dRbmQ5TmY4NHFma2pOdmFEOGd3VFdtSkN3cng5bVh6?=
+ =?utf-8?B?cjRyVVdua0pLdHRicUd4LzByM20wQkJTT2FCaUw1TzNoWmIyUGd5Ti9vL0l5?=
+ =?utf-8?B?VVV6cTFVSzY2NklCa055eHNucDcyU2UyODY3K0k1b0FoUkdYelUvQlF0Y1hI?=
+ =?utf-8?B?RlJhYXorN3VsQVVEMHM3dzh4OGNyWFVhZ3UzdU9BZENzdDZyQmgzMnhXd2Za?=
+ =?utf-8?B?cHNQKzBQZVJVWit2bEE2ZjZVa1duK3lDUVY2ZEVQbWRWRWdQRWJCby9LVDNx?=
+ =?utf-8?B?UXI0WENIMVZtNVZNTTBkR3RDSUQ0ajFkZVh2OWRtYkpFRVZONGFiRDVSVCts?=
+ =?utf-8?B?Y21BcEh4SXhiQVE2SytUaC9VSUlDalNPNmZLUzVkY3o0b2h5b0ZxTzVBZWJB?=
+ =?utf-8?B?SEJjU2Vtc0VLSnhIMlhUaVR1d0p1cU5nd1VzTzBTNkdRWmQ0dlBETmZJdldx?=
+ =?utf-8?B?VVU0OUxodVFTendxSEM4MG1lcWM1ckpaUmJHb1N0SGh6L245MjczWjBKeFpv?=
+ =?utf-8?B?UDlERlp0RHhvaERodlQ3S01TRFhONzR4WmUxZXlRd3o2a1pxc05wZW9pOERk?=
+ =?utf-8?B?OUdEazhjd0RqcTY5R2tJWnduc0dhZ3d1MkdzanczVEhlOFVYZmJRZzhHT2Vm?=
+ =?utf-8?B?dnZjSy8rc3dDb1FnYjcvYUpOZGtxaHltZHo3SmprYmtzTElDNlEwS2FWcDRC?=
+ =?utf-8?B?c2F3TFc5K1BQeUFLMVY3QVhrRDBndWRWSEtaTTlub0xBYm5XU242bDh0Tkg1?=
+ =?utf-8?B?UDdUdUtpZkJpYmF6UFNrM2dUM20yS0NkSHRnaDJ5anRpMEE0b0h2enova0tu?=
+ =?utf-8?B?M2JwN1UwOWwrdnoyMHVLL28reDVEVTJGSk10SzVlME9oT3pvQU9qeGR1cDhF?=
+ =?utf-8?B?NjZKZTB6NytyWkxsdlp1VUZPNFZCMUFtWEtwbXZKUENSci95eGNPZ3hwM2RU?=
+ =?utf-8?B?N1d2OVJpQ3MzaHVReHg1SW0xUGZneGdGYmZQNkxCMUFUNXFGa0lxeVdSV0pH?=
+ =?utf-8?B?dUJtOWtWLzlyN1Buak1aeHFRWGVHMUNkMW5WNUlPZ1hvckFqZ0NnK1UvemtS?=
+ =?utf-8?B?OFY5dUNLTXNBTWc1cy83L1BoZXhvVlIyTnR6aEx5RGpPQ3RodFZxRlFpNnV3?=
+ =?utf-8?B?aVo1eGgzY2FpOVlNNVYzcUFub2lCdERGczUyZG8vNGZON1RkMGZUMjBjQUZa?=
+ =?utf-8?B?Rkl6R0dZbnlYYlQxM1NVQnl5TUN4N1RrVXRvQjg5SVE3SzVFR0dST1ArWjE4?=
+ =?utf-8?B?NXU1VmFOaURPZlBadENvOG5xZ242bCtHS1lVL3BzOWhqVGVxbFRUcmdlN0o1?=
+ =?utf-8?B?UllJY3JSd1NkTDB0bGExaHJ3dmN0R0g2QmdZaERFUUl0YitZQ1kzMGVxaFVy?=
+ =?utf-8?B?Uy9TZGdaZWVqR2tqVVkxcUczV0dOWW53UTl6bkFaVDExcXZER1hQMDFzNHJC?=
+ =?utf-8?B?S0xhazZEdjBTM2FnUjdDV2hRajV4S0RzQll3WFdwa05HZUp3UFNvUGNhMkpV?=
+ =?utf-8?B?QlZUbGtEbHd4a3JwVnBFS1E1Mll5R3NzanllM1RPaWZLS0ZCUXdKUm84K1NW?=
+ =?utf-8?B?Z2JTQTJITFlzUUJlbmJna1hwdXVxb1YwUW5OczZkVDJibDJKbzBNRGk4UjVV?=
+ =?utf-8?B?Q2VGd3duc0h1TmRHRkdFN1cxSUQ5a29CYTI2YVBnekFqaG9lYWhsU0hkTW5y?=
+ =?utf-8?B?TEZ4eG8vSmpYMmtwZjREalNTd2dvQ0hNOUhGVGJaQ1hLZUFiWlIrRjA3eDJu?=
+ =?utf-8?Q?f5UPbdn/fMl31rSoUa9jVNofW?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f4dc2bcf-2bab-4f3f-431d-08dbd0099de7
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Oct 2023 18:39:52.7230
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: PZjSgYglR0s5ZTXu8GLHDWLG67Pmzgq+hnEDwAi+9MLjp8O2mrhfbjOWE/zaNxL8DbZ9VOAlybzlefA/4pFWBA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7759
 
-When performing 32-bit conditional operation operating on lower 32 bits
-of a full 64-bit register, register full value isn't changed. We just
-potentially gain new knowledge about that register's lower 32 bits.
+On 10/18/23 14:29, Geert Uytterhoeven wrote:
+> Hi Hamza,
+> 
+> On Wed, Oct 18, 2023 at 8:24 PM Hamza Mahfooz <hamza.mahfooz@amd.com> wrote:
+>> With every release of LLVM, both of these sanitizers eat up more and
+>> more of the stack. So, set FRAME_WARN to 0 if either of them is enabled
+>> for a given build.
+>>
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+> 
+> Thanks for your patch!
+> 
+>> --- a/lib/Kconfig.debug
+>> +++ b/lib/Kconfig.debug
+>> @@ -429,11 +429,10 @@ endif # DEBUG_INFO
+>>   config FRAME_WARN
+>>          int "Warn for stack frames larger than"
+>>          range 0 8192
+>> -       default 0 if KMSAN
+>> +       default 0 if KASAN || KCSAN || KMSAN
+> 
+> Are kernels with KASAN || KCSAN || KMSAN enabled supposed to be bootable?
 
-Unfortunately, __reg_combine_{32,64}_into_{64,32} logic that
-reg_set_min_max() performs as a last step, can lose information in some
-cases due to __mark_reg64_unbounded() and __reg_assign_32_into_64().
-That's bad and completely unnecessary. Especially __reg_assign_32_into_64=
-()
-looks completely out of place here, because we are not performing
-zero-extending subregister assignment during conditional jump.
+They are all intended to be used for runtime debugging, so I'd imagine so.
 
-So this patch replaced __reg_combine_* with just a normal
-reg_bounds_sync() which will do a proper job of deriving u64/s64 bounds
-from u32/s32, and vice versa (among all other combinations).
+> Stack overflows do cause crashes.
 
-__reg_combine_64_into_32() is also used in one more place,
-coerce_reg_to_size(), while handling 1- and 2-byte register loads.
-Looking into this, it seems like besides marking subregister as
-unbounded before performing reg_bounds_sync(), we were also performing
-deduction of smin32/smax32 and umin32/umax32 bounds from respective
-smin/smax and umin/umax bounds. It's now redundant as reg_bounds_sync()
-performs all the same logic more generically (e.g., without unnecessary
-assumption that upper 32 bits of full register should be zero).
+It is worth noting that FRAME_WARN has been disabled for KMSAN for quite
+a while and as far as I can tell no one has complained.
 
-Long story short, we remove __reg_combine_64_into_32() completely, and
-coerce_reg_to_size() now only does resetting subreg to unbounded and then
-performing reg_bounds_sync() to recover as much information as possible
-from 64-bit umin/umax and smin/smax bounds, set explicitly in
-coerce_reg_to_size() earlier.
-
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- kernel/bpf/verifier.c | 60 ++++++-------------------------------------
- 1 file changed, 8 insertions(+), 52 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index cf5cd6bf8652..a603ac82d50c 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2348,51 +2348,6 @@ static void __reg_assign_32_into_64(struct bpf_reg=
-_state *reg)
- 	}
- }
-=20
--static void __reg_combine_32_into_64(struct bpf_reg_state *reg)
--{
--	/* special case when 64-bit register has upper 32-bit register
--	 * zeroed. Typically happens after zext or <<32, >>32 sequence
--	 * allowing us to use 32-bit bounds directly,
--	 */
--	if (tnum_equals_const(tnum_clear_subreg(reg->var_off), 0)) {
--		__reg_assign_32_into_64(reg);
--	} else {
--		/* Otherwise the best we can do is push lower 32bit known and
--		 * unknown bits into register (var_off set from jmp logic)
--		 * then learn as much as possible from the 64-bit tnum
--		 * known and unknown bits. The previous smin/smax bounds are
--		 * invalid here because of jmp32 compare so mark them unknown
--		 * so they do not impact tnum bounds calculation.
--		 */
--		__mark_reg64_unbounded(reg);
--	}
--	reg_bounds_sync(reg);
--}
--
--static bool __reg64_bound_s32(s64 a)
--{
--	return a >=3D S32_MIN && a <=3D S32_MAX;
--}
--
--static bool __reg64_bound_u32(u64 a)
--{
--	return a >=3D U32_MIN && a <=3D U32_MAX;
--}
--
--static void __reg_combine_64_into_32(struct bpf_reg_state *reg)
--{
--	__mark_reg32_unbounded(reg);
--	if (__reg64_bound_s32(reg->smin_value) && __reg64_bound_s32(reg->smax_v=
-alue)) {
--		reg->s32_min_value =3D (s32)reg->smin_value;
--		reg->s32_max_value =3D (s32)reg->smax_value;
--	}
--	if (__reg64_bound_u32(reg->umin_value) && __reg64_bound_u32(reg->umax_v=
-alue)) {
--		reg->u32_min_value =3D (u32)reg->umin_value;
--		reg->u32_max_value =3D (u32)reg->umax_value;
--	}
--	reg_bounds_sync(reg);
--}
--
- /* Mark a register as having a completely unknown (scalar) value. */
- static void __mark_reg_unknown(const struct bpf_verifier_env *env,
- 			       struct bpf_reg_state *reg)
-@@ -6089,9 +6044,10 @@ static void coerce_reg_to_size(struct bpf_reg_stat=
-e *reg, int size)
- 	 * values are also truncated so we push 64-bit bounds into
- 	 * 32-bit bounds. Above were truncated < 32-bits already.
- 	 */
--	if (size >=3D 4)
--		return;
--	__reg_combine_64_into_32(reg);
-+	if (size < 4) {
-+		__mark_reg32_unbounded(reg);
-+		reg_bounds_sync(reg);
-+	}
- }
-=20
- static void set_sext64_default_val(struct bpf_reg_state *reg, int size)
-@@ -14169,13 +14125,13 @@ static void reg_set_min_max(struct bpf_reg_stat=
-e *true_reg,
- 					     tnum_subreg(false_32off));
- 		true_reg->var_off =3D tnum_or(tnum_clear_subreg(true_64off),
- 					    tnum_subreg(true_32off));
--		__reg_combine_32_into_64(false_reg);
--		__reg_combine_32_into_64(true_reg);
-+		reg_bounds_sync(false_reg);
-+		reg_bounds_sync(true_reg);
- 	} else {
- 		false_reg->var_off =3D false_64off;
- 		true_reg->var_off =3D true_64off;
--		__reg_combine_64_into_32(false_reg);
--		__reg_combine_64_into_32(true_reg);
-+		reg_bounds_sync(false_reg);
-+		reg_bounds_sync(true_reg);
- 	}
- }
-=20
---=20
-2.34.1
+> 
+>>          default 2048 if GCC_PLUGIN_LATENT_ENTROPY
+>>          default 2048 if PARISC
+>>          default 1536 if (!64BIT && XTENSA)
+>> -       default 1280 if KASAN && !64BIT
+>>          default 1024 if !64BIT
+>>          default 2048 if 64BIT
+>>          help
+> 
+> Gr{oetje,eeting}s,
+> 
+>                          Geert
+> 
+-- 
+Hamza
 
