@@ -1,15 +1,15 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64C1A199AB;
-	Wed, 18 Oct 2023 10:51:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BCF31A5BE;
+	Wed, 18 Oct 2023 10:51:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E76100;
-	Wed, 18 Oct 2023 03:51:28 -0700 (PDT)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058E410C;
+	Wed, 18 Oct 2023 03:51:30 -0700 (PDT)
 Received: from weisslap.aisec.fraunhofer.de ([91.67.186.133]) by
  mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MgiPE-1rTChh25ls-00h8BM; Wed, 18 Oct 2023 12:50:57 +0200
+ id 1MIbzB-1qnFFs3Lb3-00EhG5; Wed, 18 Oct 2023 12:51:05 +0200
 From: =?UTF-8?q?Michael=20Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
 To: Alexander Mikhalitsyn <alexander@mihalicyn.com>,
 	Christian Brauner <brauner@kernel.org>,
@@ -34,10 +34,11 @@ Cc: Daniel Borkmann <daniel@iogearbox.net>,
 	linux-kernel@vger.kernel.org,
 	linux-fsdevel@vger.kernel.org,
 	gyroidos@aisec.fraunhofer.de,
-	=?UTF-8?q?Michael=20Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
-Subject: [RFC PATCH v2 04/14] lsm: Add security_dev_permission() hook
-Date: Wed, 18 Oct 2023 12:50:23 +0200
-Message-Id: <20231018105033.13669-5-michael.weiss@aisec.fraunhofer.de>
+	=?UTF-8?q?Michael=20Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>,
+	Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Subject: [RFC PATCH v2 13/14] bpf: cgroup: Introduce helper cgroup_bpf_current_enabled()
+Date: Wed, 18 Oct 2023 12:50:32 +0200
+Message-Id: <20231018105033.13669-14-michael.weiss@aisec.fraunhofer.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20231018105033.13669-1-michael.weiss@aisec.fraunhofer.de>
 References: <20231018105033.13669-1-michael.weiss@aisec.fraunhofer.de>
@@ -49,109 +50,78 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:38OgFLKeLVyUNOGAHePjb9eXHvugerr9x590L1H0mtjlQz8+EhP
- XV0kjjYTVCFzyaGkdhflveir1VfTbHqWmEmrXQtyoLpF30n5KODUjF3UU+cpbTyyK1iwGUL
- 98DKPB1ud8WTDseAR2vCjioz+6oMKBxUcVxt/HrIf66Xag9WZPXIjI0gSRad84Fo9+Qg+f+
- r8wUVsa/nedGZEQ7akf6g==
-UI-OutboundReport: notjunk:1;M01:P0:h+FTMlalFCk=;nEnL1o6Gxl+hnMse0JkKqyiTNUJ
- ZAsW1h9B9jFe9bGHwcaWr467ig8PZpstHYQG7WQb1NchktAHHKDokiRO+JrvwTk4Av+LyUoiS
- L5q8T9Fb7ZHcO32E1EeceOoInCWL9znSy7i8DVTwFw2t8G4Kk3PrRxHP9uqBorYYZt4E3NChi
- ZysfQvdgvpn6Qp415qcslsXB52+IBzvoQOjnpD4ke5Ls9A3Qe0pY5f3C0uP4vLU154f+IB5xC
- Sa/NUMrKYPewac4z/4M1hF3IF320oOaO8IOqHE52C/XOGPmIVmSyXix5PHxeToJN/9CK7et4D
- DXxg/OT4E83tyI42zOoo8FFUL6GIrimliJRSpQmVIrfuJn7SIAG6ddhs1Efqq02voeqfrVVgi
- QcDozmGbeDOEtVn0gcJMhGLl/b7gfe6Hbl5wgLEJKWzIBEDX+Y1IbVpXN2o/qjo8wXFmygbW6
- IgIJNNFEzUf/UMI4As47VOBj6F2umR3Cc09C3M/GWv3mYXipKH2kcj7m5ccDGkx+PO25Auwis
- TO/7DJ33E+EgDrMr04RTMIqYsUUW5s+/4rusgFphWcvx0NnNGYhLxwv3HGCS67vTzfG2SJGYu
- VLB1YWLZvyl1rWt6oYGhp82pZbS4vGLVh5QM5r86idKGBpdsdzOsDcOlRpDwsNKFCJFv0YeCg
- XJgsbSmSP+XVk9BEz6ouI47jOic5UBkWqacPs34puXKn/r7ocNFHV5Z8V+1YfUg2GXPouWg1U
- cpJKJsJH8rmEnQ+uAzvjY4NzgajwUzaMMIAoAJZ9H5qKc/Yyhi/EBAkpPqyY+ab/lLQbw/0qH
- 1xjOpR+6kspKQ9DIMs02Nq48Ezkj3R8zk/0KaoK1UInHp8JdPjMvsI3pezMofo0hEBA+KrT6J
- VhdlJzkEMdwdOW6VrM/Tt3Wzlq203rPvQM+E=
+X-Provags-ID: V03:K1:c7boRBZce2o/4oyHXPUGFehTs5JEo4g6y6oz3dtk/Y6oo6Xq1OZ
+ DyXf2R5XCAR9DzvSH64sG4crHyJQcx4oZLXOjTppA/Y29rRBvUthw5BF1I90tp85AhOeaEV
+ c1i9nOH12egtUOHVDUgcg/Jwmabwg9DrnHrEGcJQt4+Qz+rnH1TqlyzQGjfc7d/4VKVcvHk
+ 6AsVvg4MCFwyIP4TKCUZQ==
+UI-OutboundReport: notjunk:1;M01:P0:3YIXBCIAPsI=;VvwaHwhP8dS0yqCdMME8AKSP4u3
+ t11wuyWmmbY4TIWIOAk+AMDBYGk87iFjxb0mIzvfGEHhvGxQH7Frw+5HgP4N8v6JfwSTzadTR
+ bY7l7r80uVWW9czZ70/gzjsZzsvRXOt3pFzUtmVsLjqz/Asuvs/jZP4w5wYzRbYf695kiWZz2
+ ai2fOmzF6kL4CuVbcgG8njL2jcatb7IsEz/88D9Y8CThrR4+BaPcrA8Ui69i/oTEkQzA5dXKM
+ v9On9Q3AL7haTuz262+8HvgNoWyYg8RVD67z6XR7DSEp16hrupaDMwMuB2H9DEF8GesQWATNr
+ WKPlj8R7bSFqNsWtr9MF0OcKJ4T2hfMzHGYl33inbj5lkMHm4aHArxKLle4p4ZenKpTjxJ+Cs
+ AKjTOtB3ZBer8bPQwhDobC4qPB/kst1LezQybTmht5rdmO7rs1bcV1Y0VoxIH8InRbLTXbyCJ
+ pnvnBTSKf8HslIjI2A1+E6IlswwutDjM81ds7L6K6Qgg0Z1pVV2s2V4ynNC22WKCnmJwFBfuo
+ 9upJNxY2uT5d512Hy6X13vSOHXbAWw/VeCx7in1qpMeWtev6mPN3LxYUw9QyqVs1C9WtJLaeX
+ 3b1WGpZEyBNdKvt3WUBhTmYLtqyxGz3FUIItFYaEbkrb6Ck1vXrbY3tziBHnhZPoAh1crM4bQ
+ 624UK5nwJtArRMyNpgpqtNVrO69T81tkHYuD08L9wM/p/Tlwi7ASU7a4LTvFnK/FpmZ7RgVgT
+ D8yHsHwCVreZSedhBfh0LqWTTf4dNsvUorbV6EAgRX6Y9XRhzzSjam1/ZrRnYJKWiUKQuFEye
+ MYGwTUwt4Q3QrwatpTk4/fYjQZ/zvEtpmfOU2kHb5HJ1HgbeJ8IFQyLxUehS4A6qtG0LB60Ae
+ 6BxrnuZmsGObyTg==
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
 	RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Provide a new lsm hook which may be used to check permission on
-a device by its dev_t representation only. This could be used if
-an inode is not available and the security_inode_permission
-check is not applicable.
-
-A first lsm to use this will be the lately converted cgroup_device
-module, to allow permission checks inside driver implementations.
+This helper can be used to check if a cgroup-bpf specific program is
+active for the current task.
 
 Signed-off-by: Michael Weiß <michael.weiss@aisec.fraunhofer.de>
+Reviewed-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
 ---
- include/linux/lsm_hook_defs.h |  1 +
- include/linux/security.h      |  5 +++++
- security/security.c           | 18 ++++++++++++++++++
- 3 files changed, 24 insertions(+)
+ include/linux/bpf-cgroup.h |  2 ++
+ kernel/bpf/cgroup.c        | 14 ++++++++++++++
+ 2 files changed, 16 insertions(+)
 
-diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-index ac962c4cb44b..a868982725a9 100644
---- a/include/linux/lsm_hook_defs.h
-+++ b/include/linux/lsm_hook_defs.h
-@@ -275,6 +275,7 @@ LSM_HOOK(int, 0, inode_notifysecctx, struct inode *inode, void *ctx, u32 ctxlen)
- LSM_HOOK(int, 0, inode_setsecctx, struct dentry *dentry, void *ctx, u32 ctxlen)
- LSM_HOOK(int, 0, inode_getsecctx, struct inode *inode, void **ctx,
- 	 u32 *ctxlen)
-+LSM_HOOK(int, 0, dev_permission, umode_t mode, dev_t dev, int mask)
- 
- #if defined(CONFIG_SECURITY) && defined(CONFIG_WATCH_QUEUE)
- LSM_HOOK(int, 0, post_notification, const struct cred *w_cred,
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 5f16eecde00b..8bc6ac8816c6 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -484,6 +484,7 @@ int security_inode_notifysecctx(struct inode *inode, void *ctx, u32 ctxlen);
- int security_inode_setsecctx(struct dentry *dentry, void *ctx, u32 ctxlen);
- int security_inode_getsecctx(struct inode *inode, void **ctx, u32 *ctxlen);
- int security_locked_down(enum lockdown_reason what);
-+int security_dev_permission(umode_t mode, dev_t dev, int mask);
- #else /* CONFIG_SECURITY */
- 
- static inline int call_blocking_lsm_notifier(enum lsm_event event, void *data)
-@@ -1395,6 +1396,10 @@ static inline int security_locked_down(enum lockdown_reason what)
- {
- 	return 0;
+diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+index 8506690dbb9c..655697c2a620 100644
+--- a/include/linux/bpf-cgroup.h
++++ b/include/linux/bpf-cgroup.h
+@@ -184,6 +184,8 @@ static inline bool cgroup_bpf_sock_enabled(struct sock *sk,
+ 	return array != &bpf_empty_prog_array.hdr;
  }
-+static inline int security_dev_permission(umode_t mode, dev_t dev, int mask)
-+{
-+	return 0;
-+}
- #endif	/* CONFIG_SECURITY */
  
- #if defined(CONFIG_SECURITY) && defined(CONFIG_WATCH_QUEUE)
-diff --git a/security/security.c b/security/security.c
-index 23b129d482a7..40f6787df3b1 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -4016,6 +4016,24 @@ int security_inode_getsecctx(struct inode *inode, void **ctx, u32 *ctxlen)
- }
- EXPORT_SYMBOL(security_inode_getsecctx);
- 
-+/**
-+ * security_dev_permission() - Check if accessing a dev is allowed
-+ * @mode: file mode holding device type
-+ * @dev: device
-+ * @mask: access mask
-+ *
-+ * Check permission before accessing an device by its major minor.
-+ * This hook is called by drivers which may not have an inode but only
-+ * the dev_t representation of a device to check permission.
-+ *
-+ * Return: Returns 0 if permission is granted.
-+ */
-+int security_dev_permission(umode_t mode, dev_t dev, int mask)
-+{
-+	return call_int_hook(dev_permission, 0, mode, dev, mask);
-+}
-+EXPORT_SYMBOL(security_dev_permission);
++bool cgroup_bpf_current_enabled(enum cgroup_bpf_attach_type type);
 +
- #ifdef CONFIG_WATCH_QUEUE
- /**
-  * security_post_notification() - Check if a watch notification can be posted
+ /* Wrappers for __cgroup_bpf_run_filter_skb() guarded by cgroup_bpf_enabled. */
+ #define BPF_CGROUP_RUN_PROG_INET_INGRESS(sk, skb)			      \
+ ({									      \
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 03b3d4492980..19ae3d037db7 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -24,6 +24,20 @@
+ DEFINE_STATIC_KEY_ARRAY_FALSE(cgroup_bpf_enabled_key, MAX_CGROUP_BPF_ATTACH_TYPE);
+ EXPORT_SYMBOL(cgroup_bpf_enabled_key);
+ 
++bool cgroup_bpf_current_enabled(enum cgroup_bpf_attach_type type)
++{
++	struct cgroup *cgrp;
++	struct bpf_prog_array *array;
++
++	rcu_read_lock();
++	cgrp = task_dfl_cgroup(current);
++	rcu_read_unlock();
++
++	array = rcu_access_pointer(cgrp->bpf.effective[type]);
++	return array != &bpf_empty_prog_array.hdr;
++}
++EXPORT_SYMBOL(cgroup_bpf_current_enabled);
++
+ /* __always_inline is necessary to prevent indirect call through run_prog
+  * function pointer.
+  */
 -- 
 2.30.2
 
