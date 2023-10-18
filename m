@@ -1,39 +1,44 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56AFC3C08B
-	for <bpf@vger.kernel.org>; Wed, 18 Oct 2023 22:28:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hKer3voR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A32FFC433C7;
-	Wed, 18 Oct 2023 22:28:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697668112;
-	bh=kOr6kBKVTsDGo/Ewz8kI8OgtxzzOHafK+KurBxJCfV4=;
-	h=Date:From:To:Cc:Subject:Reply-To:From;
-	b=hKer3voRhWWEcxhPtyOE+NLlGnF6jr3xISPAMNr4ybU/hA5S6CXivbUBZjcGHBxB6
-	 wuYohN9nefPMJfk4aJhNP/cR4rzEzuztuez/hfZL0pqRkkvoh6fcNb1iF4iqJvTdJt
-	 3+UjEiB3JaB1dpqP48RZrOT21dOxB1zJpi6sr5d/0sUKUGuNS4V0vh8vC8ouNFAaFN
-	 /awoxU/kLjfhQeT9YUfQ7pL2luEG0xvBJWFQGoNzQVjX9VZqrfnINzPbXxomD/Cenz
-	 Eh03ihOpiIAtcMo8YBvFv3yQVjW7F+zBXj3atJK8gHCmkpjxNv3DL+iezwHfjJ6B2D
-	 FnBUUduSXSBQw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 3F028CE0BB0; Wed, 18 Oct 2023 15:28:32 -0700 (PDT)
-Date: Wed, 18 Oct 2023 15:28:32 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: bpf@vger.kernel.org
-Cc: David Vernet <void@manifault.com>, Andrii Nakryiko <andrii@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf] Fold smp_mb__before_atomic() into atomic_set_release()
-Message-ID: <ec86d38e-cfb4-44aa-8fdb-6c925922d93c@paulmck-laptop>
-Reply-To: paulmck@kernel.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D84E37143
+	for <bpf@vger.kernel.org>; Wed, 18 Oct 2023 22:29:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B92115
+	for <bpf@vger.kernel.org>; Wed, 18 Oct 2023 15:29:02 -0700 (PDT)
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-66d060aa2a4so47556316d6.2
+        for <bpf@vger.kernel.org>; Wed, 18 Oct 2023 15:29:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697668141; x=1698272941;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=u+kgU0/OVWAaw1sKs0CW5C18BLbSdEMvpGBE9X5n4Y4=;
+        b=qjYwJzwJJ4BkRFfzC/ulr4pDX4UKOlBV9TbXWbC9kHRVOTEPXov7S+SCv/w1uUpkAX
+         QbSk+0+dkfgLmK08ylT1F8te5r27nZ2bxldfQM5s+JExl+Qk4vZ4ratp+Cm6LAFUKhuT
+         8tjnl067cKn3qX38r9mkZvslD8m+YiPF3SUfYAAZPMVtavdO/+rV6vmAX556m3NAWetT
+         P7udU1rf6idjSNPdOmPKzrt+469QLvlq7k6kmSL8y9KBgQuNnMSi6VD1LcpGRNgDPw9V
+         ndZ86KZB4vjKeemT8PJeJ+RtdeRcMc7Kbe3cBh3hnfXP3Ac5w+HQV4GQ4YEWQBKxnDVT
+         6iTw==
+X-Gm-Message-State: AOJu0YxA6RSCnY5GoruHkppV6kIJzWAnG8wNxQZSup91bbWhcO2vCDUq
+	ySWSEHwlcFOYgO4xVB669JY=
+X-Google-Smtp-Source: AGHT+IFesjPkusA0tUPAzXZOoFWo5njxAWQVfZO19LlPnPXhHC4LLe7+rZYS4K1rzjjxcP3SjDe/+w==
+X-Received: by 2002:a05:6214:c4e:b0:66d:55d9:9522 with SMTP id r14-20020a0562140c4e00b0066d55d99522mr559946qvj.23.1697668141552;
+        Wed, 18 Oct 2023 15:29:01 -0700 (PDT)
+Received: from maniforge (c-24-1-27-177.hsd1.il.comcast.net. [24.1.27.177])
+        by smtp.gmail.com with ESMTPSA id bu11-20020ad455eb000000b0065afcf19e23sm286055qvb.62.2023.10.18.15.29.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Oct 2023 15:29:01 -0700 (PDT)
+Date: Wed, 18 Oct 2023 17:28:59 -0500
+From: David Vernet <void@manifault.com>
+To: Dave Thaler <dthaler1968@googlemail.com>
+Cc: bpf@vger.kernel.org, bpf@ietf.org, Dave Thaler <dthaler@microsoft.com>,
+	eddyz87@gmail.com
+Subject: Re: [PATCH bpf-next] bpf, docs: Define signed modulo as using
+ truncated division
+Message-ID: <20231018222859.GD4176@maniforge>
+References: <20231017203020.1500-1-dthaler1968@googlemail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -42,65 +47,53 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20231017203020.1500-1-dthaler1968@googlemail.com>
+User-Agent: Mutt/2.2.10 (2023-03-25)
 
-bpf: Fold smp_mb__before_atomic() into atomic_set_release()
+On Tue, Oct 17, 2023 at 08:30:20PM +0000, Dave Thaler wrote:
+> From: Dave Thaler <dthaler@microsoft.com>
+> 
+> There's different mathematical definitions (truncated, floored,
+> rounded, etc.) and different languages have chosen different
+> definitions [0][1].  E.g., languages/libraries that follow Knuth
+> use a different mathematical definition than C uses.  This
+> patch specifies which definition BPF uses, as verified by
+> Eduard [2] and others.
+> 
+> [0]: https://en.wikipedia.org/wiki/Modulo#Variants_of_the_definition
+> [1]: https://torstencurdt.com/tech/posts/modulo-of-negative-numbers/
+> [2]: https://lore.kernel.org/bpf/57e6fefadaf3b2995bb259fa8e711c7220ce5290.camel@gmail.com/
+> 
+> Signed-off-by: Dave Thaler <dthaler@microsoft.com>
 
-The bpf_user_ringbuf_drain() BPF_CALL function uses an atomic_set()
-immediately preceded by smp_mb__before_atomic() so as to order storing
-of ring-buffer consumer and producer positions prior to the atomic_set()
-call's clearing of the ->busy flag, as follows:
-
-        smp_mb__before_atomic();
-        atomic_set(&rb->busy, 0);
-
-Although this works given current architectures and implementations, and
-given that this only needs to order prior writes against a later write.
-However, it does so by accident because the smp_mb__before_atomic()
-is only guaranteed to work with read-modify-write atomic operations,
-and not at all with things like atomic_set() and atomic_read().
-
-Note especially that smp_mb__before_atomic() will not, repeat *not*,
-order the prior write to "a" before the subsequent non-read-modify-write
-atomic read from "b", even on strongly ordered systems such as x86:
-
-        WRITE_ONCE(a, 1);
-        smp_mb__before_atomic();
-        r1 = atomic_read(&b);
-
-Therefore, replace the smp_mb__before_atomic() and atomic_set() with
-atomic_set_release() as follows:
-
-        atomic_set_release(&rb->busy, 0);
-
-This is no slower (and sometimes is faster) than the original, and also
-provides a formal guarantee of ordering that the original lacks.
-
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Acked-by: David Vernet <void@manifault.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Song Liu <song@kernel.org>
-Cc: Yonghong Song <yonghong.song@linux.dev>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: Stanislav Fomichev <sdf@google.com>
-Cc: Hao Luo <haoluo@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: <bpf@vger.kernel.org>
 
-diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
-index f045fde632e5..0ee653a936ea 100644
---- a/kernel/bpf/ringbuf.c
-+++ b/kernel/bpf/ringbuf.c
-@@ -770,8 +770,7 @@ BPF_CALL_4(bpf_user_ringbuf_drain, struct bpf_map *, map,
- 	/* Prevent the clearing of the busy-bit from being reordered before the
- 	 * storing of any rb consumer or producer positions.
- 	 */
--	smp_mb__before_atomic();
--	atomic_set(&rb->busy, 0);
-+	atomic_set_release(&rb->busy, 0);
- 
- 	if (flags & BPF_RB_FORCE_WAKEUP)
- 		irq_work_queue(&rb->work);
++cc Eduard as well in case he wants to take a look.
+
+> ---
+>  Documentation/bpf/standardization/instruction-set.rst | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Documentation/bpf/standardization/instruction-set.rst
+> index c5d53a6e8c7..245b6defc29 100644
+> --- a/Documentation/bpf/standardization/instruction-set.rst
+> +++ b/Documentation/bpf/standardization/instruction-set.rst
+> @@ -283,6 +283,14 @@ For signed operations (``BPF_SDIV`` and ``BPF_SMOD``), for ``BPF_ALU``,
+>  is first :term:`sign extended<Sign Extend>` from 32 to 64 bits, and then
+>  interpreted as a 64-bit signed value.
+>  
+> +Note that there are varying definitions of the signed modulo operation
+> +when the dividend or divisor are negative, where implementations often
+> +vary by language such that Python, Ruby, etc.  differ from C, Go, Java,
+> +etc. This specification requires that signed modulo use truncated division
+> +(where -13 % 3 == -1) as implemented in C, Go, etc.:
+> +
+> +   a % n = a - n * trunc(a / n)
+> +
+>  The ``BPF_MOVSX`` instruction does a move operation with sign extension.
+>  ``BPF_ALU | BPF_MOVSX`` :term:`sign extends<Sign Extend>` 8-bit and 16-bit operands into 32
+>  bit operands, and zeroes the remaining upper 32 bits.
+> -- 
+> 2.33.4
+> 
+> 
