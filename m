@@ -1,194 +1,99 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F5EA8F77
-	for <bpf@vger.kernel.org>; Wed, 18 Oct 2023 06:20:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 251258F69
+	for <bpf@vger.kernel.org>; Wed, 18 Oct 2023 06:20:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="WW3aO8hM"
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D68198C
-	for <bpf@vger.kernel.org>; Tue, 17 Oct 2023 23:18:17 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-27d0e3d823fso3823228a91.1
-        for <bpf@vger.kernel.org>; Tue, 17 Oct 2023 23:18:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1697609892; x=1698214692; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pBjREUfdYjysteuQq+CF2MBmAUs5yTb/YGRZ4Q4shvo=;
-        b=WW3aO8hMPq9dtwDyVMW8bvYBqA9W5ayBgjr8EyMbwXlENVQYLcT/O7MnckTrEdGeAg
-         t3Ij9IMel+5V/0syQekAwBDa5pGTXJN50vM4JM/Ert0UO3OjadDmHxPrbzYIjEpp05YR
-         8fckf4LZZ3YcnWgZBC+D3ppUdF1DZUnLWGicx7U3Vl7O531PMA4dtGJfd3VHaivS4sCL
-         p5ePlszhPZWiR4srszNmO/1Uyo7dfe9UCHwRp/6uIloSdMXEBFBCC/FprMW3sGKB6ZdI
-         noD7+sMWbwoACGT/faOYyZyYCEjEPBME58+XZ6OBAoubQZav46qxr2N5exRNtKxLUJMh
-         NScA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697609892; x=1698214692;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pBjREUfdYjysteuQq+CF2MBmAUs5yTb/YGRZ4Q4shvo=;
-        b=HGa1KbtQ6ZasvFmBbKQXYiS2bfhxXt3ViH1YBvd2pw2ItbnBWgvGfFDXuENaS9f0J7
-         dEcixsNeqlffzeZVyZjSRtVO5ZiIs92iuPM1gTDolhiGwke7jkX6JLpwt6OW3IQDBXju
-         M938zBbaNzLReC/mUl5a9Md6EOdhjWr42WreoZuEzF4SNshgQakG/eS4VE0+nqbsWOTN
-         n8L17+7+IHy8/xEKrJ9cRk6FLW+GutPOe0oUQoqcXCRJ743mZAyY24rUKRUPMmXYaODY
-         +j2UNnLxWG9vRsJiuQFF8kICtIdEfA32CUclNZoRh+u22O46JehD2J9MMHCjX3ClBb4n
-         zM7Q==
-X-Gm-Message-State: AOJu0YyD0EzE9iVZfN+Y1UqIyLxkR70wnDHaVs7m58/7LjsRwj1qVyKm
-	/hIruQQSpI7ha2cqmvC+DA9RvKn/8Bk3YJUG3ozdMA==
-X-Google-Smtp-Source: AGHT+IEcjcprgVH3l41ELy8Zj6cbhO4neAlWBPjwjSIwdE6So6A363RYv4MEKCuHWdtRisbJbwo7oQ==
-X-Received: by 2002:a17:90a:31c:b0:27d:1ce5:1eb6 with SMTP id 28-20020a17090a031c00b0027d1ce51eb6mr4382459pje.17.1697609891808;
-        Tue, 17 Oct 2023 23:18:11 -0700 (PDT)
-Received: from n37-019-243.byted.org ([180.184.103.200])
-        by smtp.gmail.com with ESMTPSA id ix13-20020a170902f80d00b001c61acd5bd2sm2659116plb.112.2023.10.17.23.18.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Oct 2023 23:18:11 -0700 (PDT)
-From: Chuyi Zhou <zhouchuyi@bytedance.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@kernel.org,
-	tj@kernel.org,
-	linux-kernel@vger.kernel.org,
-	Chuyi Zhou <zhouchuyi@bytedance.com>
-Subject: [RESEND PATCH bpf-next v6 6/8] bpf: Let bpf_iter_task_new accept null task ptr
-Date: Wed, 18 Oct 2023 14:17:44 +0800
-Message-Id: <20231018061746.111364-7-zhouchuyi@bytedance.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20231018061746.111364-1-zhouchuyi@bytedance.com>
-References: <20231018061746.111364-1-zhouchuyi@bytedance.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vbewnWhG"
+Received: from out-209.mta1.migadu.com (out-209.mta1.migadu.com [95.215.58.209])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13623C0D
+	for <bpf@vger.kernel.org>; Tue, 17 Oct 2023 23:20:06 -0700 (PDT)
+Message-ID: <469fd0e9-686f-f1dc-cb45-6c50ff126ccf@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1697609989;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=FeoZ+SPgNtEZ7Zc/oQhe4BTt9pThFnfiMnxpD7RMk/o=;
+	b=vbewnWhGzAenlh7ZF/qonDgffHfRxGVx7yCyUMgkKHKLDDgtC+Ewz+4MQ9BPHKVSHgLVHi
+	16TAaAmDxYbgoJYsbMTLKyX8H3b4NWzFcwXcZnO7d0tTs1DeSV6Xy8Y9HbwfbcV3NlQDUn
+	ZfGrZF52cwokRkKaBYtgDQ1n9AE/H6s=
+Date: Tue, 17 Oct 2023 23:19:39 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v1 bpf-next 00/11] bpf: tcp: Add SYN Cookie
+ generation/validation SOCK_OPS hooks.
+Content-Language: en-US
+To: Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+ daniel@iogearbox.net, davem@davemloft.net, dsahern@kernel.org,
+ edumazet@google.com, haoluo@google.com, john.fastabend@gmail.com,
+ jolsa@kernel.org, kpsingh@kernel.org, kuba@kernel.org, kuni1840@gmail.com,
+ mykolal@fb.com, netdev@vger.kernel.org, pabeni@redhat.com, sdf@google.com,
+ song@kernel.org, yonghong.song@linux.dev
+References: <9666242b-d899-c428-55bd-14f724cc4ffd@linux.dev>
+ <20231017164807.19824-1-kuniyu@amazon.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20231017164807.19824-1-kuniyu@amazon.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
 	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-When using task_iter to iterate all threads of a specific task, we enforce
-that the user must pass a valid task pointer to ensure safety. However,
-when iterating all threads/process in the system, BPF verifier still
-require a valid ptr instead of "nullable" pointer, even though it's
-pointless, which is a kind of surprising from usability standpoint. It
-would be nice if we could let that kfunc accept a explicit null pointer
-when we are using BPF_TASK_ITER_ALL_{PROCS, THREADS} and a valid pointer
-when using BPF_TASK_ITER_THREAD.
+On 10/17/23 9:48 AM, Kuniyuki Iwashima wrote:
+> From: Martin KaFai Lau <martin.lau@linux.dev>
+> Date: Mon, 16 Oct 2023 22:53:15 -0700
+>> On 10/13/23 3:04 PM, Kuniyuki Iwashima wrote:
+>>> Under SYN Flood, the TCP stack generates SYN Cookie to remain stateless
+>>> After 3WHS, the proxy restores SYN and forwards it and ACK to the backend
+>>> server.  Our kernel module works at Netfilter input/output hooks and first
+>>> feeds SYN to the TCP stack to initiate 3WHS.  When the module is triggered
+>>> for SYN+ACK, it looks up the corresponding request socket and overwrites
+>>> tcp_rsk(req)->snt_isn with the proxy's cookie.  Then, the module can
+>>> complete 3WHS with the original ACK as is.
+>>
+>> Does the current kernel module also use the timestamp bits differently?
+>> (something like patch 8 and patch 10 trying to do)
+> 
+> Our SYN Proxy uses TS as is.  The proxy nodes generate a random number
+> if TS is in SYN.
+> 
+> But I thought someone would suggest making TS available so that we can
+> mock the default behaviour at least, and it would be more acceptable.
+> 
+> The selftest uses TS just to strengthen security by validating 32-bits
+> hash.  Dropping a part of hash makes collision easier to happen, but
+> 24-bits were sufficient for us to reduce SYN flood to the managable
+> level at the backend.
 
-Given a trival kfunc:
-	__bpf_kfunc void FN(struct TYPE_A *obj);
+While enabling bpf to customize the syncookie (and timestamp), I want to explore 
+where can this also be done other than at the tcp layer.
 
-BPF Prog would reject a nullptr for obj. The error info is:
-"arg#x pointer type xx xx must point to scalar, or struct with scalar"
-reported by get_kfunc_ptr_arg_type(). The reg->type is SCALAR_VALUE and
-the btf type of ref_t is not scalar or scalar_struct which leads to the
-rejection of get_kfunc_ptr_arg_type.
+Have you thought about directly sending the SYNACK back at a lower layer like 
+tc/xdp after receiving the SYN? There are already bpf_tcp_{gen,check}_syncookie 
+helper that allows to do this for the performance reason to absorb synflood. It 
+will be natural to extend it to handle the customized syncookie also.
 
-This patch add "__nullable" annotation:
-	__bpf_kfunc void FN(struct TYPE_A *obj__nullable);
-Here __nullable indicates obj can be optional, user can pass a explicit
-nullptr or a normal TYPE_A pointer. In get_kfunc_ptr_arg_type(), we will
-detect whether the current arg is optional and register is null, If so,
-return a new kfunc_ptr_arg_type KF_ARG_PTR_TO_NULL and skip to the next
-arg in check_kfunc_args().
+I think it should already be doable to send a SYNACK back with customized 
+syncookie (and timestamp) at tc/xdp today.
 
-Signed-off-by: Chuyi Zhou <zhouchuyi@bytedance.com>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
----
- kernel/bpf/task_iter.c |  7 +++++--
- kernel/bpf/verifier.c  | 13 ++++++++++++-
- 2 files changed, 17 insertions(+), 3 deletions(-)
+When ack is received, the prog@tc/xdp can verify the cookie. It will probably 
+need some new kfuncs to create the ireq and queue the child socket. The bpf prog 
+can change the ireq->{snd_wscale, sack_ok...} if needed. The details of the 
+kfuncs need some more thoughts. I think most of the bpf-side infra is ready, 
+e.g. acquire/release/ref-tracking...etc.
 
-diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-index faa1712c1df5..59e747938bdb 100644
---- a/kernel/bpf/task_iter.c
-+++ b/kernel/bpf/task_iter.c
-@@ -976,7 +976,7 @@ __diag_ignore_all("-Wmissing-prototypes",
- 		  "Global functions as their definitions will be in vmlinux BTF");
- 
- __bpf_kfunc int bpf_iter_task_new(struct bpf_iter_task *it,
--		struct task_struct *task, unsigned int flags)
-+		struct task_struct *task__nullable, unsigned int flags)
- {
- 	struct bpf_iter_task_kern *kit = (void *)it;
- 
-@@ -988,14 +988,17 @@ __bpf_kfunc int bpf_iter_task_new(struct bpf_iter_task *it,
- 	switch (flags) {
- 	case BPF_TASK_ITER_ALL_THREADS:
- 	case BPF_TASK_ITER_ALL_PROCS:
-+		break;
- 	case BPF_TASK_ITER_PROC_THREADS:
-+		if (!task__nullable)
-+			return -EINVAL;
- 		break;
- 	default:
- 		return -EINVAL;
- 	}
- 
- 	if (flags == BPF_TASK_ITER_PROC_THREADS)
--		kit->task = task;
-+		kit->task = task__nullable;
- 	else
- 		kit->task = &init_task;
- 	kit->pos = kit->task;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index fcdf2382153a..e9bc5d4a25a1 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -10332,6 +10332,11 @@ static bool is_kfunc_arg_refcounted_kptr(const struct btf *btf, const struct btf
- 	return __kfunc_param_match_suffix(btf, arg, "__refcounted_kptr");
- }
- 
-+static bool is_kfunc_arg_nullable(const struct btf *btf, const struct btf_param *arg)
-+{
-+	return __kfunc_param_match_suffix(btf, arg, "__nullable");
-+}
-+
- static bool is_kfunc_arg_scalar_with_name(const struct btf *btf,
- 					  const struct btf_param *arg,
- 					  const char *name)
-@@ -10474,6 +10479,7 @@ enum kfunc_ptr_arg_type {
- 	KF_ARG_PTR_TO_CALLBACK,
- 	KF_ARG_PTR_TO_RB_ROOT,
- 	KF_ARG_PTR_TO_RB_NODE,
-+	KF_ARG_PTR_TO_NULL,
- };
- 
- enum special_kfunc_type {
-@@ -10630,6 +10636,8 @@ get_kfunc_ptr_arg_type(struct bpf_verifier_env *env,
- 	if (is_kfunc_arg_callback(env, meta->btf, &args[argno]))
- 		return KF_ARG_PTR_TO_CALLBACK;
- 
-+	if (is_kfunc_arg_nullable(meta->btf, &args[argno]) && register_is_null(reg))
-+		return KF_ARG_PTR_TO_NULL;
- 
- 	if (argno + 1 < nargs &&
- 	    (is_kfunc_arg_mem_size(meta->btf, &args[argno + 1], &regs[regno + 1]) ||
-@@ -11180,7 +11188,8 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 		}
- 
- 		if ((is_kfunc_trusted_args(meta) || is_kfunc_rcu(meta)) &&
--		    (register_is_null(reg) || type_may_be_null(reg->type))) {
-+		    (register_is_null(reg) || type_may_be_null(reg->type)) &&
-+			!is_kfunc_arg_nullable(meta->btf, &args[i])) {
- 			verbose(env, "Possibly NULL pointer passed to trusted arg%d\n", i);
- 			return -EACCES;
- 		}
-@@ -11205,6 +11214,8 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 			return kf_arg_type;
- 
- 		switch (kf_arg_type) {
-+		case KF_ARG_PTR_TO_NULL:
-+			continue;
- 		case KF_ARG_PTR_TO_ALLOC_BTF_ID:
- 		case KF_ARG_PTR_TO_BTF_ID:
- 			if (!is_kfunc_trusted_args(meta) && !is_kfunc_rcu(meta))
--- 
-2.20.1
+
+
 
