@@ -1,15 +1,15 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 729B218E05;
-	Wed, 18 Oct 2023 10:51:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5F371945A;
+	Wed, 18 Oct 2023 10:51:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B995FE;
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8809F101;
 	Wed, 18 Oct 2023 03:51:28 -0700 (PDT)
 Received: from weisslap.aisec.fraunhofer.de ([91.67.186.133]) by
  mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1M2Plu-1qpDK02lgs-003vUA; Wed, 18 Oct 2023 12:51:06 +0200
+ id 1N8EdM-1rfLHD3yTI-014Buu; Wed, 18 Oct 2023 12:51:04 +0200
 From: =?UTF-8?q?Michael=20Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
 To: Alexander Mikhalitsyn <alexander@mihalicyn.com>,
 	Christian Brauner <brauner@kernel.org>,
@@ -35,9 +35,9 @@ Cc: Daniel Borkmann <daniel@iogearbox.net>,
 	linux-fsdevel@vger.kernel.org,
 	gyroidos@aisec.fraunhofer.de,
 	=?UTF-8?q?Michael=20Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
-Subject: [RFC PATCH v2 14/14] device_cgroup: Allow mknod in non-initial userns if guarded
-Date: Wed, 18 Oct 2023 12:50:33 +0200
-Message-Id: <20231018105033.13669-15-michael.weiss@aisec.fraunhofer.de>
+Subject: [RFC PATCH v2 11/14] vfs: Wire up security hooks for lsm-based device guard in userns
+Date: Wed, 18 Oct 2023 12:50:30 +0200
+Message-Id: <20231018105033.13669-12-michael.weiss@aisec.fraunhofer.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20231018105033.13669-1-michael.weiss@aisec.fraunhofer.de>
 References: <20231018105033.13669-1-michael.weiss@aisec.fraunhofer.de>
@@ -49,101 +49,95 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:p+Jv7n/tSXj9VOdub/TyRhRZeiciOIbTx11fcWiGi9mKRboHY1V
- l3Y/axn61Mwfb1USZtNvgmraJ1CvN/YuyhUiM8MPPLLy3N9UcB3qIkXNVazSm0dD2d1J8N7
- uPKVlmahAJpd7/TQyOQPb7QixZrgDlGBQnVqsB55vJGRa/srXyHE/FYrh62/Xb6SLAiNIAZ
- EMgJSuPBLUzKhU2OZ8/jg==
-UI-OutboundReport: notjunk:1;M01:P0:bWVLZ0m+uHw=;xZezacsXngGcvH0Bz/M7eP4ELMi
- 4AKs7tVSf04OhugwkXmK4kLGTy79PUmq3E2OhojNEXh7mA/P5Hpkd6Gu0iNxVex7N+b38m1mw
- VG5DJO61uPkIhhatZiKXD6Vx3zU+0tf3LRFT/ESZuNw5udUo0lkQnujM0x5hWzT0LyrE9+d/b
- bhjdwEyoyDQQGmcD0CppnWSXW89XpgCccRVLuKCdu4QHEusAaK4MVVDJTGfR01NXZmSjNWjOb
- ltu5zGJg5ezN8IwQ2hNHvQExD5LjaoTZ+7P4RqikOQc1i9kld9B3P23uCh1tIV8G4zdldqNeg
- lyBqE5//uO9VydAokKzr3xW9nbaXMMtXLRk7mGYWQdYcrk3HsUQ4TBjUzHNicacwq75pWhbxS
- 7lBcWLXhK67HHijf88W4b9QMXfQMRzh5X3DN2XItGKVjt7GbFuXNSf+XLYThWQSqztBliLqW5
- i/4Hj6LkNwZ4Eud3ros5+f8VhB25d7CCBHPyd5iisNKQK6/KUAgJ5TRp9/ML5g+oWw39N7o+G
- IOhGCaGWeKEgKHLFxhSt4RPDyAd79tLzKBm/f1ayZmE3jLkXNlI3WWtuLVH4BHMeru1gfnRQL
- H53jjRvlxHM8oJnEkMFMSVOy1heQJoZdn4L6b/iLuwMS3bthXFxHdR5BMcTZ+aiyXck2IawtF
- Fv6ynUUeUInBWzpwk9fteyiPvcGHZ6d1lFvMvzlR0+CoeeOHLuHXDmbeoqptZAqR54RdpT0j1
- yYmDGKaAf+ECfucMZWyjtBcHEnq5oeAh7poy5o9pnUOVCgwB6JexbEOSsbIPR4G5VqU9fUBGO
- l2558RO1KZDEekYpURHUWxC7tDkKBFud3PReNx1rcIcp33BT2sCWJ/hBXh//CIptigA+47bzj
- s8PUNBkPd2dr2ko+XFC1YNa8YlxpfKA4R0w0=
+X-Provags-ID: V03:K1:QKuNcHsyjzZeVFhJge7r9EgZaJUd1hSQUNm5KrdnKw9WPc7MzKn
+ oARcftJeCxBau0k8RbuFVQsbaKvoER/ApOI5iziIof3ikARFUAYuQ/e3CpGm2DvTbMneYjZ
+ 3mAX2olG5AbqRXD86FY2w3uJ7IS/uhVx/WgvP8bUqG6rm8A9UyrXr2PJ8PYZ5hkTbfiuPsc
+ R65uN8EIxjOlPB7Uel4gg==
+UI-OutboundReport: notjunk:1;M01:P0:UsmMmelH1QY=;Te31CKQmgxElaICDoMa60Hv9NZr
+ V7G+LrLIi9tu0IPzzq2E4kLeXGgyZnPSxd4kOwZQGmR+qzhpNrEKSesPDqB/jdYVUzYevhqkU
+ JasgoppivfgdH7GD47iRzHYMH+Ba3JEcNFoIcXGt313SnBMDRQMv32dBKGVzbx4kGSP9WhOFV
+ nwfvj9+HHXgmUCEBukfuf9VNUDl2rdO7i83v1xmJl4Cg9O3MI3sANH3Ff7LjbbjJQwtshK7S4
+ q7Nco8SVY99bn3hIKBxk5TiEMWUYRB53apBZ8cT7RwjaN5LYFnIWdnOrUkGUPETqffBVymt+F
+ xePopQ1rUUR+6t1U4kzi8E8LDVtjqQhSVTsf3lLxYMuRChNAnEMvLLLViyVCWQcOKiTrPj2NU
+ vhV85ztJkAkDnQwv5oI3uPKPeDnDjKMmnYQfE9y9ZX8wKKzG9TKcGbe7EAi3jWyMoaqXZRuzk
+ JbyzfpiiTzcnWM5QJugsTt+qPJoTEQvuPpVYy1JJT2/faj9V35B4fEJzZgQ1LkAld78JVwcD2
+ 4tH4DE7joCdgoNdPIQsHTNIjfpMHrPjGs5uk4R8l6PWmKxwhdF8GYifopLp8HnrUcznBxqRmH
+ jAbig9gTzAfKD/KLTCxrE2ORxhfyVvmaOw2oG028cicY/hXniY5taOu29c+l20ZiBHOkYr7QW
+ zZmjytwe7FKRBT7p8jD9C90WMRXXDBn+UtKTiUATgzZhlxK2mGxvGXy4Ox94qvEDhpXQbaWam
+ Ua3y7egjlnbF0P/3ji4700ALzjAYV5ZjlY++leIpVqA6Z5EZ18DL2XQCTrwjygDe9rcqNhCxm
+ a/KNT4V6WtGUrp86t4Q/tXpHjkl/1iWtd/0bJUE8V/nGKq/Hf+3nm/4n0FitxEAER+klCFsL2
+ DZRdVItQ32YjjNA==
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-	RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-	autolearn_force=no version=3.4.6
+	RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_SOFTFAIL
+	autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-If a container manager restricts its unprivileged (user namespaced)
-children by a device cgroup, it is not necessary to deny mknod()
-anymore. Thus, user space applications may map devices on different
-locations in the file system by using mknod() inside the container.
+Wire up security_inode_mknod_capns() in fs/namei.c. If implemented
+and access is granted by an lsm, check ns_capable() instead of the
+global CAP_MKNOD.
 
-A use case for this, we also use in GyroidOS, is to run virsh for
-VMs inside an unprivileged container. virsh creates device nodes,
-e.g., "/var/run/libvirt/qemu/11-fgfg.dev/null" which currently fails
-in a non-initial userns, even if a cgroup device white list with the
-corresponding major, minor of /dev/null exists. Thus, in this case
-the usual bind mounts or pre populated device nodes under /dev are
-not sufficient.
-
-To circumvent this limitation, allow mknod() by checking CAP_MKNOD
-in the userns by implementing the security_inode_mknod_nscap(). The
-hook implementation checks if the corresponding permission flag
-BPF_DEVCG_ACC_MKNOD_UNS is set for the device in the bpf program.
-To avoid to create unusable inodes in user space the hook also checks
-SB_I_NODEV on the corresponding super block.
-
-Further, the security_sb_alloc_userns() hook is implemented using
-cgroup_bpf_current_enabled() to allow usage of device nodes on super
-blocks mounted by a guarded task.
+Wire up security_sb_alloc_userns() in fs/super.c. If implemented
+and access is granted by an lsm, the created super block will allow
+access to device nodes also if it was created in a non-inital userns.
 
 Signed-off-by: Michael Weiß <michael.weiss@aisec.fraunhofer.de>
 ---
- security/device_cgroup/lsm.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ fs/namei.c | 16 +++++++++++++++-
+ fs/super.c |  6 +++++-
+ 2 files changed, 20 insertions(+), 2 deletions(-)
 
-diff --git a/security/device_cgroup/lsm.c b/security/device_cgroup/lsm.c
-index a963536d0a15..6bc984d9c9d1 100644
---- a/security/device_cgroup/lsm.c
-+++ b/security/device_cgroup/lsm.c
-@@ -66,10 +66,37 @@ static int devcg_inode_mknod(struct inode *dir, struct dentry *dentry,
- 	return __devcg_inode_mknod(mode, dev, DEVCG_ACC_MKNOD);
+diff --git a/fs/namei.c b/fs/namei.c
+index f601fcbdc4d2..1f68d160e2c0 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -3949,6 +3949,20 @@ inline struct dentry *user_path_create(int dfd, const char __user *pathname,
  }
+ EXPORT_SYMBOL(user_path_create);
  
-+#ifdef CONFIG_CGROUP_BPF
-+static int devcg_sb_alloc_userns(struct super_block *sb)
++static bool mknod_capable(struct inode *dir, struct dentry *dentry,
++			  umode_t mode, dev_t dev)
 +{
-+	if (cgroup_bpf_current_enabled(CGROUP_DEVICE))
-+		return 0;
-+
-+	return -EPERM;
++	/*
++	 * In case of a security hook implementation check mknod in user
++	 * namespace. Otherwise just check global capability.
++	 */
++	int error = security_inode_mknod_nscap(dir, dentry, mode, dev);
++	if (!error)
++		return ns_capable(current_user_ns(), CAP_MKNOD);
++	else
++		return capable(CAP_MKNOD);
 +}
 +
-+static int devcg_inode_mknod_nscap(struct inode *dir, struct dentry *dentry,
-+				       umode_t mode, dev_t dev)
-+{
-+	if (!cgroup_bpf_current_enabled(CGROUP_DEVICE))
-+		return -EPERM;
-+
-+	// avoid to create unusable inodes in user space
-+	if (dentry->d_sb->s_iflags & SB_I_NODEV)
-+		return -EPERM;
-+
-+	return __devcg_inode_mknod(mode, dev, BPF_DEVCG_ACC_MKNOD_UNS);
-+}
-+#endif /* CONFIG_CGROUP_BPF */
-+
- static struct security_hook_list devcg_hooks[] __ro_after_init = {
- 	LSM_HOOK_INIT(inode_permission, devcg_inode_permission),
- 	LSM_HOOK_INIT(inode_mknod, devcg_inode_mknod),
- 	LSM_HOOK_INIT(dev_permission, devcg_dev_permission),
-+#ifdef CONFIG_CGROUP_BPF
-+	LSM_HOOK_INIT(sb_alloc_userns, devcg_sb_alloc_userns),
-+	LSM_HOOK_INIT(inode_mknod_nscap, devcg_inode_mknod_nscap),
-+#endif
- };
+ /**
+  * vfs_mknod - create device node or file
+  * @idmap:	idmap of the mount the inode was found from
+@@ -3975,7 +3989,7 @@ int vfs_mknod(struct mnt_idmap *idmap, struct inode *dir,
+ 		return error;
  
- static int __init devcgroup_init(void)
+ 	if ((S_ISCHR(mode) || S_ISBLK(mode)) && !is_whiteout &&
+-	    !capable(CAP_MKNOD))
++	    !mknod_capable(dir, dentry, mode, dev))
+ 		return -EPERM;
+ 
+ 	if (!dir->i_op->mknod)
+diff --git a/fs/super.c b/fs/super.c
+index 2d762ce67f6e..bb01db6d9986 100644
+--- a/fs/super.c
++++ b/fs/super.c
+@@ -362,7 +362,11 @@ static struct super_block *alloc_super(struct file_system_type *type, int flags,
+ 	}
+ 	s->s_bdi = &noop_backing_dev_info;
+ 	s->s_flags = flags;
+-	if (s->s_user_ns != &init_user_ns)
++	/*
++	 * We still have to think about this here. Several concerns exist
++	 * about the security model, especially about malicious fuse.
++	 */
++	if (s->s_user_ns != &init_user_ns && security_sb_alloc_userns(s))
+ 		s->s_iflags |= SB_I_NODEV;
+ 	INIT_HLIST_NODE(&s->s_instances);
+ 	INIT_HLIST_BL_HEAD(&s->s_roots);
 -- 
 2.30.2
 
