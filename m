@@ -1,15 +1,15 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5496619BB8;
-	Wed, 18 Oct 2023 10:57:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8593A1A5A3;
+	Wed, 18 Oct 2023 10:57:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCEEB92;
-	Wed, 18 Oct 2023 03:57:01 -0700 (PDT)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C18112;
+	Wed, 18 Oct 2023 03:57:00 -0700 (PDT)
 Received: from weisslap.aisec.fraunhofer.de ([91.67.186.133]) by
  mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MpCz1-1rJY4G0S1H-00qmy3; Wed, 18 Oct 2023 12:51:03 +0200
+ id 1M9Ib1-1qvWya16jX-006PWF; Wed, 18 Oct 2023 12:50:59 +0200
 From: =?UTF-8?q?Michael=20Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
 To: Alexander Mikhalitsyn <alexander@mihalicyn.com>,
 	Christian Brauner <brauner@kernel.org>,
@@ -35,9 +35,9 @@ Cc: Daniel Borkmann <daniel@iogearbox.net>,
 	linux-fsdevel@vger.kernel.org,
 	gyroidos@aisec.fraunhofer.de,
 	=?UTF-8?q?Michael=20Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
-Subject: [RFC PATCH v2 10/14] lsm: Add security_sb_alloc_userns() hook
-Date: Wed, 18 Oct 2023 12:50:29 +0200
-Message-Id: <20231018105033.13669-11-michael.weiss@aisec.fraunhofer.de>
+Subject: [RFC PATCH v2 06/14] block: Switch from devcgroup_check_permission to security hook
+Date: Wed, 18 Oct 2023 12:50:25 +0200
+Message-Id: <20231018105033.13669-7-michael.weiss@aisec.fraunhofer.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20231018105033.13669-1-michael.weiss@aisec.fraunhofer.de>
 References: <20231018105033.13669-1-michael.weiss@aisec.fraunhofer.de>
@@ -49,24 +49,24 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:1r5RyqGAN9dy40dCcTVA8P+ZdQrnAWjyMfT7NWw+AjP5k7SdSAx
- KK6ojyZeqMoIKXoNN5B05l8hRYYrpxg2YsWGs0W0oVR5FlK/vd0aZOYdG0AL/l+CQ5iGm5e
- O0YnfYkhugXo/lJhVr+PA2rOcH47EsknuLQQnKrXL07VgH3KwnC4ufExd7KzXs9PeBLvufI
- ET/oTA9gKppKW3e2BLdgQ==
-UI-OutboundReport: notjunk:1;M01:P0:7me07hlkTME=;sNgRW1+b87bFkPd2ci/jNOKxrY/
- E3OsrEQIpRvOmvjffQg2b9fa3t3DZkvTrHLDkqf3oYKKFUgeSxdR5qG18aSrsBOK1Pa00KKbL
- /UQcWTQ/nuYrv0QvLDl50sf086WdgoBfJ2/URhBwnTv3KRQ7t1il7cgJceSozFxcemIogxidQ
- LL3M7TsNkb7ASSMhpnDNiMHiNTkCb1yiA82Nrq/W/9+yDZxO2s49HocioaBiV1xOGuEPUMONT
- 5U3G+4fXY7tdTs13VnJmVlLF92Z5idVgVqYYm/5QZ5uKKT4maSQSfG00nf94lEsDFTiPIkn+S
- ZtHGKa+F96ZkdZjnU8HvdbGCQebFMQIM08okjd5W441mzGfzGU9FrScSOsOeecy9/uxvBGh3a
- o1NprWiXBUNBGiz81EQMjrmU3nCGoIFu9sjU7jb+HlsX6va7+AhzTp2gZDMHaOv+v2LTx7PCv
- JFP3BiK90WUmdBc1poLC6wEhfDmVzclkLzJ30wAC089UquOrE90adQwCB5QcDQMN9ffOqWgcd
- PiH00bjbtVzeuknhKCGGOYCVepoOa32lfVdtoXIlqaQOaa2WHt55aPihU/lIfuAdkTHb4HR4E
- b2I/CdlUPHHEg1y5An6i9eeJ/e4H4K0lGCHxR9Dw2sTu0iJFz7I06zTgsrXPoVkEopPu0r/48
- hY7IU5/UR9hiCk9hCcwQ8C/RkZiX0ZtNwi9crKi+5zomHZoKB22oZlbH/Cx00W6i9rUJAetZe
- KJ+cOaHVobJZdbTDq8FHjFDCH1XKnYFYP+kv+m289poYuRD09l91FbFx4B2n4y0zC4jKHAndJ
- Twfv3u/b7Mwi6HYZXKp8uVign0Z2zewzMYSYzTlx4nMib1DuCWW8mNEDVEuw6HK7uKorvcUhW
- sfBrRi+IYWzODCABGVCbEVEkHzTs9PrJrERU=
+X-Provags-ID: V03:K1:g2BQi8jhy6myxnCus8ZQPoNW58k4bHpqaw0EG5w9henscj1hzwh
+ +LRuATaGTnBWBWkD6WqjEFcQ2oo8oocdg45yWtogdxsTACLQLaTrVi/wC0nt3/pzp/HwB7l
+ WbXaEvirGLkTgf1rTZHblrr/Ij+/xiLQhErhPbKLn88BU0G2c8pYTNh6rS+z1bruMVDNP6g
+ fHJxRmLTFHsoJ8N+Aq7ww==
+UI-OutboundReport: notjunk:1;M01:P0:JXHVyhNThiA=;cyZuFiGGc0TW4/kMx14p4/R+huY
+ yNY4t5YbgqKc/8n6xoDjinZccz47BgP5UVdZxa85ZQt9DYeKBataf98xF8MxWxynC/YhUweXI
+ M48qBzu6COM3TvjVWMzzB7BxmpevoBQlmdSMX5vHwq3NYj2ZyuCheQT17No7DsfVHw9IFBAkA
+ v/grs9MhuLPTciXhgYjTvWv0deyNIkjiakQRLjUayb7a9vA41LeoOsceIHVfo2Poym9T/SV0O
+ P7zqahNznxNAOYRtBTEmEKqjHhJYy1JfaK+bBU2FC3tndeb5YBQo7ge8x9eRPmlre0+NQmKHX
+ 8RPAyzvuRgBukbLPlk2kTbU/I/nnsyk7Qq9v+fBBPVQmLj0jC9dwITHFzyulC1qeDpjx4MAit
+ qFctqbf8B5L2HgSJ5OTnBYtVA5wnL6u4Swi5qCrEplqVYNScX6UoWsTf+tj+BOGEYGNhSO0xe
+ 1EabzTnaK5SLzISTInCVw3v+Av0SewD5io4bpLZIqveLkZLrMDK08U/SiDgj0t6wZfvtk4mik
+ k9O/etP0/M10ZGqFi0Ty4ZRiR3c0r2GLiWreIgO/WWLzP6YoMBADEdRWzzHK4tP9rqlghlKzu
+ 0/6gxAWsJqykevu/GbFjp0BUyWuU5bR84YiO06z9H5HW1M8kGam1MUwBl5cKmqup9wQrO9Exx
+ kWU8cT+oQHJf9GT9IErHeV9uYHZdK0ZfEH7PwgJsuVJ1gItz7Mxwa13JYKGqwoAlAD7kx049H
+ 5AywXgxU3wvNGP9lVGRvEDsPVCkGoiy12bJlR2fUy5p8+35ks7NZeBihThQ9hdtI695zc3vvH
+ b48pbPFaKeeRxoPb+uXfkhT3zIdIKX3m7e6AJ8nxGwXnTz5nYsyRNhOtY3n6sfhl2N6/wG9r/
+ f4q9SG0yLyvLSog==
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
 	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
 	SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
@@ -74,93 +74,50 @@ X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Provide a new lsm hook which may be used to allow access to device
-nodes for super blocks created in unprivileged namespaces if some
-sort of device guard to control access is implemented.
-
-By default this will return -EPERM if no lsm implements the hook.
-A first lsm to use this will be the lately converted cgroup_device
-module.
+The new lsm-based cgroup device access control provides an
+equivalent hook to check device permission. Thus, switch to the
+more generic security hook security_dev_permission() instead of
+directly calling devcgroup_check_permission().
 
 Signed-off-by: Michael Weiß <michael.weiss@aisec.fraunhofer.de>
 ---
- include/linux/lsm_hook_defs.h |  1 +
- include/linux/security.h      |  5 +++++
- security/security.c           | 26 ++++++++++++++++++++++++++
- 3 files changed, 32 insertions(+)
+ block/bdev.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-index f4fa01182910..0f734a0a5ebc 100644
---- a/include/linux/lsm_hook_defs.h
-+++ b/include/linux/lsm_hook_defs.h
-@@ -278,6 +278,7 @@ LSM_HOOK(int, 0, inode_getsecctx, struct inode *inode, void **ctx,
- LSM_HOOK(int, 0, dev_permission, umode_t mode, dev_t dev, int mask)
- LSM_HOOK(int, -EPERM, inode_mknod_nscap, struct inode *dir, struct dentry *dentry,
- 	 umode_t mode, dev_t dev)
-+LSM_HOOK(int, -EPERM, sb_alloc_userns, struct super_block *sb)
+diff --git a/block/bdev.c b/block/bdev.c
+index f3b13aa1b7d4..fc6de4e2a80b 100644
+--- a/block/bdev.c
++++ b/block/bdev.c
+@@ -10,7 +10,6 @@
+ #include <linux/slab.h>
+ #include <linux/kmod.h>
+ #include <linux/major.h>
+-#include <linux/device_cgroup.h>
+ #include <linux/blkdev.h>
+ #include <linux/blk-integrity.h>
+ #include <linux/backing-dev.h>
+@@ -27,6 +26,7 @@
+ #include <linux/part_stat.h>
+ #include <linux/uaccess.h>
+ #include <linux/stat.h>
++#include <linux/security.h>
+ #include "../fs/internal.h"
+ #include "blk.h"
  
- #if defined(CONFIG_SECURITY) && defined(CONFIG_WATCH_QUEUE)
- LSM_HOOK(int, 0, post_notification, const struct cred *w_cred,
-diff --git a/include/linux/security.h b/include/linux/security.h
-index bad6992877f4..0f66be1ed1ed 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -487,6 +487,7 @@ int security_locked_down(enum lockdown_reason what);
- int security_dev_permission(umode_t mode, dev_t dev, int mask);
- int security_inode_mknod_nscap(struct inode *dir, struct dentry *dentry,
- 			       umode_t mode, dev_t dev);
-+int security_sb_alloc_userns(struct super_block *sb);
- #else /* CONFIG_SECURITY */
+@@ -757,10 +757,9 @@ struct block_device *blkdev_get_by_dev(dev_t dev, blk_mode_t mode, void *holder,
+ 	struct gendisk *disk;
+ 	int ret;
  
- static inline int call_blocking_lsm_notifier(enum lsm_event event, void *data)
-@@ -1408,6 +1409,10 @@ static inline int security_inode_mknod_nscap(struct inode *dir,
- {
- 	return -EPERM;
- }
-+static inline int security_sb_alloc_userns(struct super_block *sb)
-+{
-+	return -EPERM;
-+}
- #endif	/* CONFIG_SECURITY */
+-	ret = devcgroup_check_permission(DEVCG_DEV_BLOCK,
+-			MAJOR(dev), MINOR(dev),
+-			((mode & BLK_OPEN_READ) ? DEVCG_ACC_READ : 0) |
+-			((mode & BLK_OPEN_WRITE) ? DEVCG_ACC_WRITE : 0));
++	ret = security_dev_permission(S_IFBLK, dev,
++			((mode & BLK_OPEN_READ) ? MAY_READ : 0) |
++			((mode & BLK_OPEN_WRITE) ? MAY_WRITE : 0));
+ 	if (ret)
+ 		return ERR_PTR(ret);
  
- #if defined(CONFIG_SECURITY) && defined(CONFIG_WATCH_QUEUE)
-diff --git a/security/security.c b/security/security.c
-index 7708374b6d7e..9d5d4ec28e62 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -4065,6 +4065,32 @@ int security_inode_mknod_nscap(struct inode *dir, struct dentry *dentry,
- }
- EXPORT_SYMBOL(security_inode_mknod_nscap);
- 
-+/**
-+ * security_sb_alloc_userns() - Grand access to device nodes on sb in userns
-+ *
-+ * If device access is provided elsewere, this hook will grand access to device nodes
-+ * on the allocated sb for unprivileged user namespaces.
-+ *
-+ * Return: Returns 0 on success, error on failure.
-+ */
-+int security_sb_alloc_userns(struct super_block *sb)
-+{
-+	int thisrc;
-+	int rc = LSM_RET_DEFAULT(sb_alloc_userns);
-+	struct security_hook_list *hp;
-+
-+	hlist_for_each_entry(hp, &security_hook_heads.sb_alloc_userns, list) {
-+		thisrc = hp->hook.sb_alloc_userns(sb);
-+		if (thisrc != LSM_RET_DEFAULT(sb_alloc_userns)) {
-+			rc = thisrc;
-+			if (thisrc != 0)
-+				break;
-+		}
-+	}
-+	return rc;
-+}
-+EXPORT_SYMBOL(security_sb_alloc_userns);
-+
- #ifdef CONFIG_WATCH_QUEUE
- /**
-  * security_post_notification() - Check if a watch notification can be posted
 -- 
 2.30.2
 
