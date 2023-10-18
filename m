@@ -1,18 +1,18 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D6F720307
-	for <bpf@vger.kernel.org>; Wed, 18 Oct 2023 11:32:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99EDD23766
+	for <bpf@vger.kernel.org>; Wed, 18 Oct 2023 11:32:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F47181
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C9D187
 	for <bpf@vger.kernel.org>; Wed, 18 Oct 2023 04:32:36 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4S9TGk0rl7z4f3knx
-	for <bpf@vger.kernel.org>; Wed, 18 Oct 2023 19:32:30 +0800 (CST)
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4S9TGg4d0Fz4f3mKq
+	for <bpf@vger.kernel.org>; Wed, 18 Oct 2023 19:32:27 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgDnfd1Mwi9l9jYmDQ--.41845S4;
-	Wed, 18 Oct 2023 19:32:30 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgDnfd1Mwi9l9jYmDQ--.41845S6;
+	Wed, 18 Oct 2023 19:32:33 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org,
 	linux-mm@kvack.org
@@ -32,10 +32,12 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	Tejun Heo <tj@kernel.org>,
 	Christoph Lameter <cl@linux.com>,
 	Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH bpf-next v2 0/7] bpf: Fixes for per-cpu kptr
-Date: Wed, 18 Oct 2023 19:33:36 +0800
-Message-Id: <20231018113343.2446300-1-houtao@huaweicloud.com>
+Subject: [PATCH bpf-next v2 2/7] mm/percpu.c: introduce pcpu_alloc_size()
+Date: Wed, 18 Oct 2023 19:33:38 +0800
+Message-Id: <20231018113343.2446300-3-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20231018113343.2446300-1-houtao@huaweicloud.com>
+References: <20231018113343.2446300-1-houtao@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -43,22 +45,23 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgDnfd1Mwi9l9jYmDQ--.41845S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7CFWUXrWkXrWxGFyrKw1DAwb_yoW8tr43pF
-	Wftr4rtr4vqFyxGw1xKr109a4rZw48WF17J3WfWw15ZFZIqry2qrs2gF45uas8tFZIgF13
-	tr9xGFs3Ca4jvw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
-	cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-	IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI
-	42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
-	IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
-	87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
+X-CM-TRANSID:gCh0CgDnfd1Mwi9l9jYmDQ--.41845S6
+X-Coremail-Antispam: 1UD129KBjvJXoW7Aw13Xr4kXw1kZFyUur1UGFg_yoW8KrW3pF
+	Wkuryftr4rXrn7Ww1ftw1UZw4rXw4kWFWxJ3y3WFy3ZryavFyagr1qkrW5uFyrGFn2vr12
+	qFZ0qF4fCFWUJ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
+	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2I
+	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAI
+	w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
+	0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1sa9DUUUUU==
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
@@ -68,54 +71,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 
 From: Hou Tao <houtao1@huawei.com>
 
-Hi,
+Introduce pcpu_alloc_size() to get the size of the dynamic per-cpu
+area. It will be used by bpf memory allocator in the following patches.
+BPF memory allocator maintains per-cpu area caches for multiple area
+sizes and its free API only has the to-be-freed per-cpu pointer, so it
+needs the size of dynamic per-cpu area to select the corresponding cache
+when bpf program frees the dynamic per-cpu pointer.
 
-The patchset aims to fix the problems found in the review of per-cpu
-kptr patch-set [0]. Patch #1 moves pcpu_lock after the invocation of
-pcpu_chunk_addr_search() and it is a micro-optimization for
-free_percpu(). The reason includes it in the patch is that the same
-logic is used in newly-added API pcpu_alloc_size(). Patch #2 introduces
-pcpu_alloc_size() for dynamic per-cpu area. Patch #2 and #3 use
-pcpu_alloc_size() to check whether or not unit_size matches with the
-size of underlying per-cpu area and to select a matching bpf_mem_cache.
-Patch #4 fixes the freeing of per-cpu kptr when these kptrs are freed by
-map destruction. The last patch adds test cases for these problems.
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ include/linux/percpu.h |  1 +
+ mm/percpu.c            | 30 ++++++++++++++++++++++++++++++
+ 2 files changed, 31 insertions(+)
 
-Please see individual patches for details. And comments are always
-welcome.
-
-Change Log:
-v2:
-  * add a new patch "don't acquire pcpu_lock for pcpu_chunk_addr_search()"
-  * patch 2: change type of bit_off and end to unsigned long (Andrew)
-  * patch 2: rename the new API as pcpu_alloc_size and follow 80-column convention (Dennis)
-  * patch 5: move the common declaration into bpf.h (Stanislav, Alxei)
-
-v1: https://lore.kernel.org/bpf/20231007135106.3031284-1-houtao@huaweicloud.com/
-
-[0]: https://lore.kernel.org/bpf/20230827152729.1995219-1-yonghong.song@linux.dev
-
-Hou Tao (7):
-  mm/percpu.c: don't acquire pcpu_lock for pcpu_chunk_addr_search()
-  mm/percpu.c: introduce pcpu_alloc_size()
-  bpf: Re-enable unit_size checking for global per-cpu allocator
-  bpf: Use pcpu_alloc_size() in bpf_mem_free{_rcu}()
-  bpf: Move the declaration of __bpf_obj_drop_impl() to bpf.h
-  bpf: Use bpf_global_percpu_ma for per-cpu kptr in
-    __bpf_obj_drop_impl()
-  selftests/bpf: Add more test cases for bpf memory allocator
-
- include/linux/bpf.h                           |   1 +
- include/linux/bpf_mem_alloc.h                 |   1 +
- include/linux/percpu.h                        |   1 +
- kernel/bpf/helpers.c                          |  24 ++-
- kernel/bpf/memalloc.c                         |  38 ++--
- kernel/bpf/syscall.c                          |   6 +-
- mm/percpu.c                                   |  34 +++-
- .../selftests/bpf/prog_tests/test_bpf_ma.c    |  20 +-
- .../testing/selftests/bpf/progs/test_bpf_ma.c | 180 +++++++++++++++++-
- 9 files changed, 269 insertions(+), 36 deletions(-)
-
+diff --git a/include/linux/percpu.h b/include/linux/percpu.h
+index 68fac2e7cbe6..8c677f185901 100644
+--- a/include/linux/percpu.h
++++ b/include/linux/percpu.h
+@@ -132,6 +132,7 @@ extern void __init setup_per_cpu_areas(void);
+ extern void __percpu *__alloc_percpu_gfp(size_t size, size_t align, gfp_t gfp) __alloc_size(1);
+ extern void __percpu *__alloc_percpu(size_t size, size_t align) __alloc_size(1);
+ extern void free_percpu(void __percpu *__pdata);
++extern size_t pcpu_alloc_size(void __percpu *__pdata);
+ 
+ DEFINE_FREE(free_percpu, void __percpu *, free_percpu(_T))
+ 
+diff --git a/mm/percpu.c b/mm/percpu.c
+index 76b9c5e63c56..b0cea2dc16a9 100644
+--- a/mm/percpu.c
++++ b/mm/percpu.c
+@@ -2244,6 +2244,36 @@ static void pcpu_balance_workfn(struct work_struct *work)
+ 	mutex_unlock(&pcpu_alloc_mutex);
+ }
+ 
++/**
++ * pcpu_alloc_size - the size of the dynamic percpu area
++ * @ptr: pointer to the dynamic percpu area
++ *
++ * Return the size of the dynamic percpu area @ptr.
++ *
++ * RETURNS:
++ * The size of the dynamic percpu area.
++ *
++ * CONTEXT:
++ * Can be called from atomic context.
++ */
++size_t pcpu_alloc_size(void __percpu *ptr)
++{
++	struct pcpu_chunk *chunk;
++	unsigned long bit_off, end;
++	void *addr;
++
++	if (!ptr)
++		return 0;
++
++	addr = __pcpu_ptr_to_addr(ptr);
++	/* No pcpu_lock here: ptr has not been freed, so chunk is still alive */
++	chunk = pcpu_chunk_addr_search(addr);
++	bit_off = (addr - chunk->base_addr) / PCPU_MIN_ALLOC_SIZE;
++	end = find_next_bit(chunk->bound_map, pcpu_chunk_map_bits(chunk),
++			    bit_off + 1);
++	return (end - bit_off) * PCPU_MIN_ALLOC_SIZE;
++}
++
+ /**
+  * free_percpu - free percpu area
+  * @ptr: pointer to area to free
 -- 
 2.29.2
 
