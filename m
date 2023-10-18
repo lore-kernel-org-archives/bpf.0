@@ -1,15 +1,15 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36A619459;
-	Wed, 18 Oct 2023 10:51:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64C1A199AB;
+	Wed, 18 Oct 2023 10:51:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8AC103;
-	Wed, 18 Oct 2023 03:51:29 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E76100;
+	Wed, 18 Oct 2023 03:51:28 -0700 (PDT)
 Received: from weisslap.aisec.fraunhofer.de ([91.67.186.133]) by
  mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1M1aQN-1qq2Gs12CZ-0036fn; Wed, 18 Oct 2023 12:51:01 +0200
+ id 1MgiPE-1rTChh25ls-00h8BM; Wed, 18 Oct 2023 12:50:57 +0200
 From: =?UTF-8?q?Michael=20Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
 To: Alexander Mikhalitsyn <alexander@mihalicyn.com>,
 	Christian Brauner <brauner@kernel.org>,
@@ -35,9 +35,9 @@ Cc: Daniel Borkmann <daniel@iogearbox.net>,
 	linux-fsdevel@vger.kernel.org,
 	gyroidos@aisec.fraunhofer.de,
 	=?UTF-8?q?Michael=20Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
-Subject: [RFC PATCH v2 08/14] device_cgroup: Hide devcgroup functionality completely in lsm
-Date: Wed, 18 Oct 2023 12:50:27 +0200
-Message-Id: <20231018105033.13669-9-michael.weiss@aisec.fraunhofer.de>
+Subject: [RFC PATCH v2 04/14] lsm: Add security_dev_permission() hook
+Date: Wed, 18 Oct 2023 12:50:23 +0200
+Message-Id: <20231018105033.13669-5-michael.weiss@aisec.fraunhofer.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20231018105033.13669-1-michael.weiss@aisec.fraunhofer.de>
 References: <20231018105033.13669-1-michael.weiss@aisec.fraunhofer.de>
@@ -49,84 +49,109 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:QIZpME4s742DfC8hMrFvAacnvaXAx9F7or1EdcOHr+AXfut/SnS
- K6PvdolrKyhFOfbwgo6zO9HIJZWfATHtgheagP3jvEL3r7NfZs+FK5OtlSXaKPY4GarpFI3
- 5uk0w5KCb+cm+yqlenyUSwPZ99B00YYM20wsm6r17+X3pLOmtvGlKDmqajqp6RSo1otdAQv
- alXFP2b4DJGalNjTPXoqQ==
-UI-OutboundReport: notjunk:1;M01:P0:jpKdQdwRLw4=;wsgzDyAf38qIa7+WwRQQUz3gqmB
- 2vY2tGjqoo5K3tm391K5lFPaziCAI0ErJbr/vb3HMKM9sdrbx+tK3uXjXpuVslj67xW0Q8Sdc
- irrrx6nngTbxBss7n4At4NQoLCbXW/6a2ghH2K6TJui5lNW2H3e2ilKs1rhiWCA7vUiPvFiqc
- +h+9YUoteIb05YHA1ztCpOEvQiB6dlYAai2n02WDORs4a089mRw0UgwFjpAvCccXOMzLjM7DK
- 6k5pIDLrk9ErjnaPAhRsXroh0conCREbU1gE7PnieG9R7eHg/csPBLcBrJ+Jti9pvdz4CoIIh
- uUX7ajXbM2B9ny+fNiY1IGJJT3Y7wOcApc2Bf36BydixTwKb/0zADjR2RjMN4RNi8KhQ2XAIf
- FJ40MacIoATrA0QsYux5RVvrfL31w2peGIA+WLTIFEV/MhjKQdDp++CZ0O/2nk2EtAQGjUX6D
- am9tEcTpcp7Jb80LVLsNCPUF7PdIjeEZ3UvW1u42br4XoMV8mrtsg+aGW3+Q6eT/dST7FUjJF
- 6KnhFxOk9k0cSrflsUumg4R9sBl8iVdjlZK27IJq2Qi08AOSKYZBkSNmvikxLv9D2K7eHLeiD
- ME8Mkm/5varpzCkvKRH6mwEYH8F3Ps6xmKnM/YKettwu6wdyeo28BsbO4DsyrQPkRpAv0buSq
- ZnnBd7p7AHaryp+IJ+LzvT/lMLi81ojLxdWNC1nXq4MB2zCqHgvh7D6dn6ZiZUFrfs9EKe81U
- uLt0eEfqAxkC4tqmgbCImy8kZOJsVH1kcMoO/k5kYsPlu1K/tQgMWzcysV7VqoJMrT0QDtHr8
- lDHNMndtXdwV//y9ZSbPq/w/nDFNCKLVBlHu2jNbobLS30j34GQ9ZHOwPbGF7FCAdPKZuaNfC
- DJcDxI27E/HwTng==
+X-Provags-ID: V03:K1:38OgFLKeLVyUNOGAHePjb9eXHvugerr9x590L1H0mtjlQz8+EhP
+ XV0kjjYTVCFzyaGkdhflveir1VfTbHqWmEmrXQtyoLpF30n5KODUjF3UU+cpbTyyK1iwGUL
+ 98DKPB1ud8WTDseAR2vCjioz+6oMKBxUcVxt/HrIf66Xag9WZPXIjI0gSRad84Fo9+Qg+f+
+ r8wUVsa/nedGZEQ7akf6g==
+UI-OutboundReport: notjunk:1;M01:P0:h+FTMlalFCk=;nEnL1o6Gxl+hnMse0JkKqyiTNUJ
+ ZAsW1h9B9jFe9bGHwcaWr467ig8PZpstHYQG7WQb1NchktAHHKDokiRO+JrvwTk4Av+LyUoiS
+ L5q8T9Fb7ZHcO32E1EeceOoInCWL9znSy7i8DVTwFw2t8G4Kk3PrRxHP9uqBorYYZt4E3NChi
+ ZysfQvdgvpn6Qp415qcslsXB52+IBzvoQOjnpD4ke5Ls9A3Qe0pY5f3C0uP4vLU154f+IB5xC
+ Sa/NUMrKYPewac4z/4M1hF3IF320oOaO8IOqHE52C/XOGPmIVmSyXix5PHxeToJN/9CK7et4D
+ DXxg/OT4E83tyI42zOoo8FFUL6GIrimliJRSpQmVIrfuJn7SIAG6ddhs1Efqq02voeqfrVVgi
+ QcDozmGbeDOEtVn0gcJMhGLl/b7gfe6Hbl5wgLEJKWzIBEDX+Y1IbVpXN2o/qjo8wXFmygbW6
+ IgIJNNFEzUf/UMI4As47VOBj6F2umR3Cc09C3M/GWv3mYXipKH2kcj7m5ccDGkx+PO25Auwis
+ TO/7DJ33E+EgDrMr04RTMIqYsUUW5s+/4rusgFphWcvx0NnNGYhLxwv3HGCS67vTzfG2SJGYu
+ VLB1YWLZvyl1rWt6oYGhp82pZbS4vGLVh5QM5r86idKGBpdsdzOsDcOlRpDwsNKFCJFv0YeCg
+ XJgsbSmSP+XVk9BEz6ouI47jOic5UBkWqacPs34puXKn/r7ocNFHV5Z8V+1YfUg2GXPouWg1U
+ cpJKJsJH8rmEnQ+uAzvjY4NzgajwUzaMMIAoAJZ9H5qKc/Yyhi/EBAkpPqyY+ab/lLQbw/0qH
+ 1xjOpR+6kspKQ9DIMs02Nq48Ezkj3R8zk/0KaoK1UInHp8JdPjMvsI3pezMofo0hEBA+KrT6J
+ VhdlJzkEMdwdOW6VrM/Tt3Wzlq203rPvQM+E=
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
 	RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Now since all users of devcgroup_check_permission() have been
-removed, all device cgroup related functionality is covered by
-security hooks. Thus, move the public device_cgroup.h header
-into the subfolder of the lsm module.
+Provide a new lsm hook which may be used to check permission on
+a device by its dev_t representation only. This could be used if
+an inode is not available and the security_inode_permission
+check is not applicable.
+
+A first lsm to use this will be the lately converted cgroup_device
+module, to allow permission checks inside driver implementations.
 
 Signed-off-by: Michael Weiß <michael.weiss@aisec.fraunhofer.de>
 ---
- security/device_cgroup/device_cgroup.c                    | 3 ++-
- {include/linux => security/device_cgroup}/device_cgroup.h | 0
- security/device_cgroup/lsm.c                              | 3 ++-
- 3 files changed, 4 insertions(+), 2 deletions(-)
- rename {include/linux => security/device_cgroup}/device_cgroup.h (100%)
+ include/linux/lsm_hook_defs.h |  1 +
+ include/linux/security.h      |  5 +++++
+ security/security.c           | 18 ++++++++++++++++++
+ 3 files changed, 24 insertions(+)
 
-diff --git a/security/device_cgroup/device_cgroup.c b/security/device_cgroup/device_cgroup.c
-index dc4df7475081..1a8190929ec3 100644
---- a/security/device_cgroup/device_cgroup.c
-+++ b/security/device_cgroup/device_cgroup.c
-@@ -6,7 +6,6 @@
-  */
+diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+index ac962c4cb44b..a868982725a9 100644
+--- a/include/linux/lsm_hook_defs.h
++++ b/include/linux/lsm_hook_defs.h
+@@ -275,6 +275,7 @@ LSM_HOOK(int, 0, inode_notifysecctx, struct inode *inode, void *ctx, u32 ctxlen)
+ LSM_HOOK(int, 0, inode_setsecctx, struct dentry *dentry, void *ctx, u32 ctxlen)
+ LSM_HOOK(int, 0, inode_getsecctx, struct inode *inode, void **ctx,
+ 	 u32 *ctxlen)
++LSM_HOOK(int, 0, dev_permission, umode_t mode, dev_t dev, int mask)
  
- #include <linux/bpf-cgroup.h>
--#include <linux/device_cgroup.h>
- #include <linux/cgroup.h>
- #include <linux/ctype.h>
- #include <linux/list.h>
-@@ -16,6 +15,8 @@
- #include <linux/rcupdate.h>
- #include <linux/mutex.h>
+ #if defined(CONFIG_SECURITY) && defined(CONFIG_WATCH_QUEUE)
+ LSM_HOOK(int, 0, post_notification, const struct cred *w_cred,
+diff --git a/include/linux/security.h b/include/linux/security.h
+index 5f16eecde00b..8bc6ac8816c6 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -484,6 +484,7 @@ int security_inode_notifysecctx(struct inode *inode, void *ctx, u32 ctxlen);
+ int security_inode_setsecctx(struct dentry *dentry, void *ctx, u32 ctxlen);
+ int security_inode_getsecctx(struct inode *inode, void **ctx, u32 *ctxlen);
+ int security_locked_down(enum lockdown_reason what);
++int security_dev_permission(umode_t mode, dev_t dev, int mask);
+ #else /* CONFIG_SECURITY */
  
-+#include "device_cgroup.h"
-+
- #ifdef CONFIG_CGROUP_DEVICE
- 
- static DEFINE_MUTEX(devcgroup_mutex);
-diff --git a/include/linux/device_cgroup.h b/security/device_cgroup/device_cgroup.h
-similarity index 100%
-rename from include/linux/device_cgroup.h
-rename to security/device_cgroup/device_cgroup.h
-diff --git a/security/device_cgroup/lsm.c b/security/device_cgroup/lsm.c
-index 987d2c20a577..a963536d0a15 100644
---- a/security/device_cgroup/lsm.c
-+++ b/security/device_cgroup/lsm.c
-@@ -11,9 +11,10 @@
-  */
- 
- #include <linux/bpf-cgroup.h>
--#include <linux/device_cgroup.h>
- #include <linux/lsm_hooks.h>
- 
-+#include "device_cgroup.h"
-+
- static int devcg_dev_permission(umode_t mode, dev_t dev, int mask)
+ static inline int call_blocking_lsm_notifier(enum lsm_event event, void *data)
+@@ -1395,6 +1396,10 @@ static inline int security_locked_down(enum lockdown_reason what)
  {
- 	short type, access = 0;
+ 	return 0;
+ }
++static inline int security_dev_permission(umode_t mode, dev_t dev, int mask)
++{
++	return 0;
++}
+ #endif	/* CONFIG_SECURITY */
+ 
+ #if defined(CONFIG_SECURITY) && defined(CONFIG_WATCH_QUEUE)
+diff --git a/security/security.c b/security/security.c
+index 23b129d482a7..40f6787df3b1 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -4016,6 +4016,24 @@ int security_inode_getsecctx(struct inode *inode, void **ctx, u32 *ctxlen)
+ }
+ EXPORT_SYMBOL(security_inode_getsecctx);
+ 
++/**
++ * security_dev_permission() - Check if accessing a dev is allowed
++ * @mode: file mode holding device type
++ * @dev: device
++ * @mask: access mask
++ *
++ * Check permission before accessing an device by its major minor.
++ * This hook is called by drivers which may not have an inode but only
++ * the dev_t representation of a device to check permission.
++ *
++ * Return: Returns 0 if permission is granted.
++ */
++int security_dev_permission(umode_t mode, dev_t dev, int mask)
++{
++	return call_int_hook(dev_permission, 0, mode, dev, mask);
++}
++EXPORT_SYMBOL(security_dev_permission);
++
+ #ifdef CONFIG_WATCH_QUEUE
+ /**
+  * security_post_notification() - Check if a watch notification can be posted
 -- 
 2.30.2
 
