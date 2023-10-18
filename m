@@ -1,123 +1,107 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E65B1A708;
-	Wed, 18 Oct 2023 10:57:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71D5B200DE
+	for <bpf@vger.kernel.org>; Wed, 18 Oct 2023 11:32:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D99FE;
-	Wed, 18 Oct 2023 03:57:01 -0700 (PDT)
-Received: from weisslap.aisec.fraunhofer.de ([91.67.186.133]) by
- mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MhWx1-1rVgc83BZ5-00eePP; Wed, 18 Oct 2023 12:50:55 +0200
-From: =?UTF-8?q?Michael=20Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
-To: Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Paul Moore <paul@paul-moore.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>,
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A1B184
+	for <bpf@vger.kernel.org>; Wed, 18 Oct 2023 04:32:36 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4S9TGj3lxrz4f3m7d
+	for <bpf@vger.kernel.org>; Wed, 18 Oct 2023 19:32:29 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+	by APP4 (Coremail) with SMTP id gCh0CgDnfd1Mwi9l9jYmDQ--.41845S5;
+	Wed, 18 Oct 2023 19:32:32 +0800 (CST)
+From: Hou Tao <houtao@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	linux-mm@kvack.org
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
 	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
 	Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
+	Hao Luo <haoluo@google.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
 	KP Singh <kpsingh@kernel.org>,
 	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
 	Jiri Olsa <jolsa@kernel.org>,
-	Quentin Monnet <quentin@isovalent.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Miklos Szeredi <miklos@szeredi.hu>,
-	Amir Goldstein <amir73il@gmail.com>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	gyroidos@aisec.fraunhofer.de,
-	=?UTF-8?q?Michael=20Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
-Subject: [RFC PATCH v2 02/14] vfs: Remove explicit devcgroup_inode calls
-Date: Wed, 18 Oct 2023 12:50:21 +0200
-Message-Id: <20231018105033.13669-3-michael.weiss@aisec.fraunhofer.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20231018105033.13669-1-michael.weiss@aisec.fraunhofer.de>
-References: <20231018105033.13669-1-michael.weiss@aisec.fraunhofer.de>
+	John Fastabend <john.fastabend@gmail.com>,
+	houtao1@huawei.com,
+	Dennis Zhou <dennis@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Christoph Lameter <cl@linux.com>,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH bpf-next v2 1/7] mm/percpu.c: don't acquire pcpu_lock for pcpu_chunk_addr_search()
+Date: Wed, 18 Oct 2023 19:33:37 +0800
+Message-Id: <20231018113343.2446300-2-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20231018113343.2446300-1-houtao@huaweicloud.com>
+References: <20231018113343.2446300-1-houtao@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:MwrgA482pCeYk6KYV5/2aD7JrSA7beredsb42ak4qjUk29yCG4F
- 7ozM/orvi5JvxuxaHlfd7s3x0H6l8BEfSx9VyqBcaIMLhD2HvadYIa310SbPVj9WBZNA5hN
- eyEBw2WJnInrwDmOLPUoqvtPwe9sY67pqLb7cEuGdcA/Yz8Qz3Zy7I/E6gv2ci5xum09k4D
- o1DVQbV79xFvjqjsXz2pQ==
-UI-OutboundReport: notjunk:1;M01:P0:1PbBlzRlcpE=;1PQasu6XjQfwCddLHV02Vs2Km+I
- mCHapxjy4piWul7yxhld7hFtIyqov59KRgk/xxmmWaDICYqlPkE7cQ/e/TgZXI1rYvmt932js
- NB6XZ5PZxAlDZdC/GcfnM28zEVKaVAw7s0PwS5uEUvI9jy+szhJqcABicjROD6csQWS3mqJi5
- cTjQsE/5DDjUi94ATRXwsoeQKJ19Sj9o1615svODHUtw02Sef+9nYRb/ak8qSYwewJyANFrUA
- eiKDldV1luSBV9xgikMW7JeHh9rmfQVJvbcwh8CHfhA9vcMotyoEwoZ5tsN6tTWCrScXw5y3e
- chcPudB3+H3NdPqfRFUq67+xxz3I2Sqx8PcSxkVZlCMPe7Q/3KGKkZHGftG37q02lAsRczTxg
- qNySApya/dYiqVM7AYXSmt2zjhCq0m5fzNAk6kHRjL+G/RTCS0HJkmkxq0XtULXKA42bR3b/P
- pspj/yaxSe8m1Mo5ub0FAqv0e969zM3zhAF7RDAQjGWonGD7kBii0cH/mYSSrqAoEAK1eo4jw
- t0wlLEfkxYML28X7/003vWddEB3a27aKLHdGHnf1sXzuTzeJiCektpr0ppgvoxAmUYwRkOd7U
- XcVV4otNWI5FPR/JdkAcH5Rv6aVUsjEEwUQny8xwZrj8oHXDB41KEkZTI159qq9XnpTGxpBpO
- N7htj1qHtJY0sMZ/IejuxmBWZPJYCtsNOQ0swLTnvhhYTxyP/LlN/gmi1NwUNUDRAIK3FKsZQ
- KgNfJDJVAWJFCt4oPmGKNHrTP5wPFCx3NLRsW1Dk0jnXp/tLtSgwuf6W+GJf2ZtK78H79ROOG
- zE8tMIMWL4gPQouWVfAv7rvp2nTsbmZ/1ir6hbBIAiySGjsLKTIZyiY+pnIoKjVgh/bxO6nrZ
- RV/jBc5FLTsgYN3Pl9orJp06QaHtJjLnnfhI=
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-	SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
-	version=3.4.6
+X-CM-TRANSID:gCh0CgDnfd1Mwi9l9jYmDQ--.41845S5
+X-Coremail-Antispam: 1UD129KBjvdXoWrKFWkJFy8Zw1DZw1xJFW8WFg_yoWDZwb_WF
+	yFvF1DJr43Jw4xKw4Utw13WF1ftwn5Wr4IgrWrAryfAa4fXwn5Jr47Kw1Yvr95CFW5GF1q
+	qw1fCFW7u3ZrGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbfxYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
+	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r18M2
+	8IrcIa0xkI8VCY1x0267AKxVW8JVW5JwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK
+	021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r
+	4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx
+	0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWU
+	JVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwI
+	xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
+	Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7
+	IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
+	6cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jn9N3UUUUU=
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Since the new lsm-based cgroup device access control is settled,
-the explicit calls to devcgroup_inode_permission and
-devcgroup_inode_mknod in fs/namei.c are redundant and can safely
-be dropped. The corresponding security_inode_permission and
-security_inode_mknod hooks are taking over.
+From: Hou Tao <houtao1@huawei.com>
 
-Signed-off-by: Michael Weiß <michael.weiss@aisec.fraunhofer.de>
+There is no need to acquire pcpu_lock for pcpu_chunk_addr_search():
+1) both pcpu_first_chunk & pcpu_reserved_chunk must have been
+   initialized before the invocation of free_percpu().
+2) The dynamically-created chunk must be valid before the per-cpu
+   pointers allocated from it are freed.
+
+So acquire pcpu_lock() after the invocation of pcpu_chunk_addr_search().
+
+Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- fs/namei.c | 8 --------
- 1 file changed, 8 deletions(-)
+ mm/percpu.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/fs/namei.c b/fs/namei.c
-index 567ee547492b..f601fcbdc4d2 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -34,7 +34,6 @@
- #include <linux/capability.h>
- #include <linux/file.h>
- #include <linux/fcntl.h>
--#include <linux/device_cgroup.h>
- #include <linux/fs_struct.h>
- #include <linux/posix_acl.h>
- #include <linux/hash.h>
-@@ -529,10 +528,6 @@ int inode_permission(struct mnt_idmap *idmap,
- 	if (retval)
- 		return retval;
+diff --git a/mm/percpu.c b/mm/percpu.c
+index 7b40b3963f10..76b9c5e63c56 100644
+--- a/mm/percpu.c
++++ b/mm/percpu.c
+@@ -2267,12 +2267,10 @@ void free_percpu(void __percpu *ptr)
+ 	kmemleak_free_percpu(ptr);
  
--	retval = devcgroup_inode_permission(inode, mask);
--	if (retval)
--		return retval;
+ 	addr = __pcpu_ptr_to_addr(ptr);
 -
- 	return security_inode_permission(inode, mask);
- }
- EXPORT_SYMBOL(inode_permission);
-@@ -3987,9 +3982,6 @@ int vfs_mknod(struct mnt_idmap *idmap, struct inode *dir,
- 		return -EPERM;
+-	spin_lock_irqsave(&pcpu_lock, flags);
+-
+ 	chunk = pcpu_chunk_addr_search(addr);
+ 	off = addr - chunk->base_addr;
  
- 	mode = vfs_prepare_mode(idmap, dir, mode, mode, mode);
--	error = devcgroup_inode_mknod(mode, dev);
--	if (error)
--		return error;
++	spin_lock_irqsave(&pcpu_lock, flags);
+ 	size = pcpu_free_area(chunk, off);
  
- 	error = security_inode_mknod(dir, dentry, mode, dev);
- 	if (error)
+ 	pcpu_memcg_free_hook(chunk, off, size);
 -- 
-2.30.2
+2.29.2
 
