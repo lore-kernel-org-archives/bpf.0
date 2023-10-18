@@ -1,15 +1,16 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C1DF199B8;
-	Wed, 18 Oct 2023 10:51:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 765CA199A4;
+	Wed, 18 Oct 2023 10:57:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D99D109;
-	Wed, 18 Oct 2023 03:51:29 -0700 (PDT)
+X-Greylist: delayed 332 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 Oct 2023 03:56:59 PDT
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D3E10A;
+	Wed, 18 Oct 2023 03:56:59 -0700 (PDT)
 Received: from weisslap.aisec.fraunhofer.de ([91.67.186.133]) by
  mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MAtoX-1qhkY30v9N-00BOPd; Wed, 18 Oct 2023 12:51:02 +0200
+ id 1Myevl-1rkb8513aX-00ywBN; Wed, 18 Oct 2023 12:51:00 +0200
 From: =?UTF-8?q?Michael=20Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
 To: Alexander Mikhalitsyn <alexander@mihalicyn.com>,
 	Christian Brauner <brauner@kernel.org>,
@@ -35,9 +36,9 @@ Cc: Daniel Borkmann <daniel@iogearbox.net>,
 	linux-fsdevel@vger.kernel.org,
 	gyroidos@aisec.fraunhofer.de,
 	=?UTF-8?q?Michael=20Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
-Subject: [RFC PATCH v2 09/14] lsm: Add security_inode_mknod_nscap() hook
-Date: Wed, 18 Oct 2023 12:50:28 +0200
-Message-Id: <20231018105033.13669-10-michael.weiss@aisec.fraunhofer.de>
+Subject: [RFC PATCH v2 07/14] drm/amdkfd: Switch from devcgroup_check_permission to security hook
+Date: Wed, 18 Oct 2023 12:50:26 +0200
+Message-Id: <20231018105033.13669-8-michael.weiss@aisec.fraunhofer.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20231018105033.13669-1-michael.weiss@aisec.fraunhofer.de>
 References: <20231018105033.13669-1-michael.weiss@aisec.fraunhofer.de>
@@ -49,127 +50,66 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:5lxDhBdnRK6z/qneyHrExxpGGfNqKmn9/t+GHCV67i7gdyqABcu
- sqNuzvbWCst+BiDlXc96S54DVuWryXVblKlyxZ0G+0XC241SZV/ZSM5WIzaOYnGa2HwVhD7
- w12pjkFUdUUIkGyG6Y/MWWJZTpEwRid3PsLC7MyY+Om2nm6t0bHDIB2WtzcILbedxiB17w1
- Bpg7935I0mCv9jw2zLkcg==
-UI-OutboundReport: notjunk:1;M01:P0:2+i2Uh/X6wo=;2uxYOw5HC84hKPQexFNKPLKAGkt
- fQYhBSxyE+Ny/qlYqBNh/lRNoj42Lvenpzoqt2sOm2fb+ItLxK2aqhvRnBuFWEBxBV2pkGfJP
- LAqSq1V7TtAdHMMxnT6flWVbEJw+eHAGjOobF7hT2NJYUGKT21zIJ7HY5dUUVbNLy5y/vRBD8
- 1T8q4EotydMXbeuFrz8QJx0J+W8yFO2rFizCl7PrsLIOJ/cCvLfdoD8xj9lTUa3Ea/OLXBUJ8
- iDtALlENbL5H32dD4XJjmauzfESGsfYA1O5BC2zco6zwEP0IFpAMzK3ptiddi64N9yyk4VFu8
- lu31rT2lrrjcuz1QwvaME+6njgIpYTvLZcrKN0P4Q8ZcpY1JyBbnnYnUghq4+3LrIbTa5nTOc
- 4QzBp6H7vYMPeDLhlGokJggteXh7QlSbtGyom1xXBxlhk9FrQNg0WX2AdqGqIQIhKsz2DShs8
- VHMOQHRqat2gdEuf76pB5RSMak36+SS16dZpeJCjNq0vuasSM+Q5hq8MwyaEPoaWUdhY+IeE8
- 5Gobc5CWqypvuYQGijWmwNT/5O2bmLmBaP8B1DuzVi5bWN30oioawo2FEmbyu32jDVyV42ZVD
- 2Khd2mrRFNcUge6Xc05REdy4mMIc4pmF+6D4qU9+nZ2fPHum1D4GN43IzUAi/fQVR6Cj3VM2w
- WuCnLxjl9jrN2xRPoyd6iXZdeHgKhpyuKqOvd7/b/rmstCPY23TZqiFDNqfQKrYnDCXEuHNYM
- i3jM5RmJVmJ2993fmi1/CK2zJVhsHYRyn9a/1Iwf9lnX6x8eSvO2X6k4ONeKEpUDX9+S4PzJT
- NlmyYPjb+abDxWdmHgRnZN6yEMH6yPeUt6QpqbwMmqmvsJhMuko00/NRJEpAFW8Qe/VrgQ6hC
- d0PA89QcvI6H7fw==
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-	RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-	autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:5hEHFJ1ImyT/QBoZt+16PZOB0PG8GCYi6JjwGtaP6iS7hUpeti4
+ SQkmld3M5LO4Um0eZThRUP8ulZFPP+a7w11JYT5kc+yKewkRv47KcwH+ZUHSnHecFJqezO1
+ kmiKN3Jv2MKghSH9lFZYmT8Jk7fJvfL2Y+iJ4CREoeJGJJGWsyQtOo9/38siC3NrBZnmenN
+ bR0USbbnxTsgNCcwoS86Q==
+UI-OutboundReport: notjunk:1;M01:P0:GtiADAAjAwY=;LC6o+4QflxJbOhLM1dykXA+PqWA
+ DXAh9zy91am0hr7PYpYyD4+FPQqw7awKB7Gcpw5icJ6sQUly0ayUAUWqy/aWUqkIM5Nn7Dkiy
+ WiJk7AzjBK0puAEu89YWyyWS+F5mfZIGUCFRuEzGWpoIo3HuCnRT1BYULf2Wsjl0zQGWF3QSF
+ u7AAH7MrCJwKgv5P1nz+5xGqDmytVwALHJys+Bke29D7IzdFNx8e1T9WBAJPFszCwaVfpIf4k
+ ERBxSLBRNZfVd2kf2AGI4+tAyd3J18rhisnNysVUjl/4eeBPw48jRtMx+k5LC7rJ1ftwc4G/3
+ EugVRAdbqmmEb/S4Cr73MaIPdCJK3e+md+9X5DfYYy+cPB0yayJeYTJT65mEzO29RN1YTeEDd
+ UUhDHcZvhMtpkHIwLLL8kpkUuf1K7HUO8BrwEjATSlRrjXqaYJWoP5eua8yKaDNsNupmET7n2
+ Eeerq5i/DZWD0t14Jy4xh/BuAdBwFwvbFpMjaqqdgFiP3MdgarW9ayr9idjmPlZb6n6G5Foj4
+ NMCDT5uQPjbGM6gFMdjqJg8Sx6vZM3SbsIaGaY4JbBZyRtyAnDGfycaLGsBzGpRJOe0DQ/6NW
+ Yv+dc66TYfV+IlVu+T0OYwgAJwrFTWPE7k25Pn0AkVjOfH2adPwAGsM4Ujms/4D8TfdMGuQkN
+ QM3BJuC64orDPjgDXm/6aYne4+HExF3wazTVThD3kepQkPPpiqGHZKwhObk+8fmtLu8QZfgIF
+ E8yfPKJKZCb9VPRQRIqYCFnabCE8FJ4KmWDXoqJp4kmUCs9uaqLbAClyfwwCxs1j1ZwOI0azk
+ 81t+E0E+AWYMxSTff25Cl+HLAmFD+hsn4EBgD0vujsbgWcGc4y/ETnw4mCMwJCwGNVoSCxVNs
+ vVEcbR9TcxtzDHw==
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+	SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Provide a new lsm hook which may be used to allow mknod in
-non-initial userns. If access to the device is guarded by this
-hook, access to mknod may be granted by checking cap mknod for
-unprivileged user namespaces.
-
-By default this will return -EPERM if no lsm implements the
-hook. A first lsm to use this will be the lately converted
-cgroup_device module.
+The new lsm-based cgroup device access control provides an
+equivalent hook to check device permission. Thus, switch to the
+more generic security hook security_dev_permission() instead of
+directly calling devcgroup_check_permission().
 
 Signed-off-by: Michael Weiß <michael.weiss@aisec.fraunhofer.de>
 ---
- include/linux/lsm_hook_defs.h |  2 ++
- include/linux/security.h      |  8 ++++++++
- security/security.c           | 31 +++++++++++++++++++++++++++++++
- 3 files changed, 41 insertions(+)
+ drivers/gpu/drm/amd/amdkfd/kfd_priv.h | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-index a868982725a9..f4fa01182910 100644
---- a/include/linux/lsm_hook_defs.h
-+++ b/include/linux/lsm_hook_defs.h
-@@ -276,6 +276,8 @@ LSM_HOOK(int, 0, inode_setsecctx, struct dentry *dentry, void *ctx, u32 ctxlen)
- LSM_HOOK(int, 0, inode_getsecctx, struct inode *inode, void **ctx,
- 	 u32 *ctxlen)
- LSM_HOOK(int, 0, dev_permission, umode_t mode, dev_t dev, int mask)
-+LSM_HOOK(int, -EPERM, inode_mknod_nscap, struct inode *dir, struct dentry *dentry,
-+	 umode_t mode, dev_t dev)
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_priv.h b/drivers/gpu/drm/amd/amdkfd/kfd_priv.h
+index fa24e1852493..50979f332e38 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_priv.h
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_priv.h
+@@ -38,7 +38,7 @@
+ #include <linux/seq_file.h>
+ #include <linux/kref.h>
+ #include <linux/sysfs.h>
+-#include <linux/device_cgroup.h>
++#include <linux/security.h>
+ #include <drm/drm_file.h>
+ #include <drm/drm_drv.h>
+ #include <drm/drm_device.h>
+@@ -1487,9 +1487,8 @@ static inline int kfd_devcgroup_check_permission(struct kfd_node *kfd)
+ #if defined(CONFIG_CGROUP_DEVICE) || defined(CONFIG_CGROUP_BPF)
+ 	struct drm_device *ddev = adev_to_drm(kfd->adev);
  
- #if defined(CONFIG_SECURITY) && defined(CONFIG_WATCH_QUEUE)
- LSM_HOOK(int, 0, post_notification, const struct cred *w_cred,
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 8bc6ac8816c6..bad6992877f4 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -485,6 +485,8 @@ int security_inode_setsecctx(struct dentry *dentry, void *ctx, u32 ctxlen);
- int security_inode_getsecctx(struct inode *inode, void **ctx, u32 *ctxlen);
- int security_locked_down(enum lockdown_reason what);
- int security_dev_permission(umode_t mode, dev_t dev, int mask);
-+int security_inode_mknod_nscap(struct inode *dir, struct dentry *dentry,
-+			       umode_t mode, dev_t dev);
- #else /* CONFIG_SECURITY */
- 
- static inline int call_blocking_lsm_notifier(enum lsm_event event, void *data)
-@@ -1400,6 +1402,12 @@ static inline int security_dev_permission(umode_t mode, dev_t dev, int mask)
- {
+-	return devcgroup_check_permission(DEVCG_DEV_CHAR, DRM_MAJOR,
+-					  ddev->render->index,
+-					  DEVCG_ACC_WRITE | DEVCG_ACC_READ);
++	return security_dev_permission(S_IFCHR, MKDEV(DRM_MAJOR, ddev->render->index),
++				       MAY_WRITE | MAY_READ);
+ #else
  	return 0;
- }
-+static inline int security_inode_mknod_nscap(struct inode *dir,
-+					     struct dentry *dentry,
-+					     umode_t mode, dev_t dev);
-+{
-+	return -EPERM;
-+}
- #endif	/* CONFIG_SECURITY */
- 
- #if defined(CONFIG_SECURITY) && defined(CONFIG_WATCH_QUEUE)
-diff --git a/security/security.c b/security/security.c
-index 40f6787df3b1..7708374b6d7e 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -4034,6 +4034,37 @@ int security_dev_permission(umode_t mode, dev_t dev, int mask)
- }
- EXPORT_SYMBOL(security_dev_permission);
- 
-+/**
-+ * security_inode_mknod_nscap() - Check if device is guarded
-+ * @dir: parent directory
-+ * @dentry: new file
-+ * @mode: new file mode
-+ * @dev: device number
-+ *
-+ * If access to the device is guarded by this hook, access to mknod may be granted by
-+ * checking cap mknod for unprivileged user namespaces.
-+ *
-+ * Return: Returns 0 on success, error on failure.
-+ */
-+int security_inode_mknod_nscap(struct inode *dir, struct dentry *dentry,
-+			       umode_t mode, dev_t dev)
-+{
-+	int thisrc;
-+	int rc = LSM_RET_DEFAULT(inode_mknod_nscap);
-+	struct security_hook_list *hp;
-+
-+	hlist_for_each_entry(hp, &security_hook_heads.inode_mknod_nscap, list) {
-+		thisrc = hp->hook.inode_mknod_nscap(dir, dentry, mode, dev);
-+		if (thisrc != LSM_RET_DEFAULT(inode_mknod_nscap)) {
-+			rc = thisrc;
-+			if (thisrc != 0)
-+				break;
-+		}
-+	}
-+	return rc;
-+}
-+EXPORT_SYMBOL(security_inode_mknod_nscap);
-+
- #ifdef CONFIG_WATCH_QUEUE
- /**
-  * security_post_notification() - Check if a watch notification can be posted
+ #endif
 -- 
 2.30.2
 
