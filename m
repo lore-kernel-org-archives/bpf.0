@@ -1,76 +1,70 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE0361428B;
-	Wed, 18 Oct 2023 08:11:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF3FFA;
-	Wed, 18 Oct 2023 01:11:12 -0700 (PDT)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VuQ2gLM_1697616669;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VuQ2gLM_1697616669)
-          by smtp.aliyun-inc.com;
-          Wed, 18 Oct 2023 16:11:10 +0800
-Message-ID: <1697616022.630633-2-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH vhost 02/22] virtio_ring: introduce virtqueue_dma_[un]map_page_attrs
-Date: Wed, 18 Oct 2023 16:00:22 +0800
-From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To: "Michael S. Tsirkin" <mst@redhat.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>,
- Jason Wang <jasowang@redhat.com>,
- Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- netdev@vger.kernel.org,
- bpf@vger.kernel.org,
- virtualization@lists.linux-foundation.org
-References: <20231011092728.105904-1-xuanzhuo@linux.alibaba.com>
- <20231011092728.105904-3-xuanzhuo@linux.alibaba.com>
- <1697615580.6880193-1-xuanzhuo@linux.alibaba.com>
- <20231018035751-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20231018035751-mutt-send-email-mst@kernel.org>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-	version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6341401C
+	for <bpf@vger.kernel.org>; Wed, 18 Oct 2023 08:20:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r59T8zg4"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 626E7C433D9;
+	Wed, 18 Oct 2023 08:20:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1697617222;
+	bh=g92m7+sSdBA8KJbvUHeNmVunsbDNRD1vE8MRrBz6ljA=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=r59T8zg47HcnAHnSOnRAUnW0uvwPdLEQKC4KCkYgr375lpc7ZUlcrJKybGMbzx1+F
+	 4C3J464Or47cKMqLHRKHVHfjX9UEN1ER7Ppz8GaD+jFKb4ANMaozLRpLayx80xbVZs
+	 Q9lvT87ebPHTmcJ55SsRkEndMxPx+F4AyLfBoWMDZ+sJQa7urPxiH18jHy8Gkt5oZ+
+	 wwxvURhcQq7ZdWxnd8koALV9vpof7DCGYlPti+bLISNlYVpGYZspX4mISmud7OqYU1
+	 H5dZgDpG20EKP1BpZQklijygeUlG69Y4zhgnmUJJx6SiFtoEQO7GiVZm5imdEar0b2
+	 ePJOpyc6MMlow==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 45BD1C04E27;
+	Wed, 18 Oct 2023 08:20:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: add options and frags to
+ xdp_hw_metadata
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <169761722228.19172.14123962875957627623.git-patchwork-notify@kernel.org>
+Date: Wed, 18 Oct 2023 08:20:22 +0000
+References: <20231017162800.24080-1-larysa.zaremba@intel.com>
+In-Reply-To: <20231017162800.24080-1-larysa.zaremba@intel.com>
+To: Larysa Zaremba <larysa.zaremba@intel.com>
+Cc: bpf@vger.kernel.org, martin.lau@linux.dev, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
+ maciej.fijalkowski@intel.com, hawk@kernel.org, sdf@google.com
 
-On Wed, 18 Oct 2023 03:59:03 -0400, "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> On Wed, Oct 18, 2023 at 03:53:00PM +0800, Xuan Zhuo wrote:
-> > Hi Michael,
-> >
-> > Do you think it's appropriate to push the first two patches of this patch set to
-> > linux 6.6?
-> >
-> > Thanks.
->
-> I generally treat patchsets as a whole unless someone asks me to do
-> otherwise. Why do you want this?
+Hello:
 
-As we discussed, the patch set supporting AF_XDP will be push to net-next.
-But the two patchs belong to the vhost.
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-So, if you think that is appropriate, I will post a new patchset(include the two
-patchs without virtio-net + AF_XDP) to vhost. I wish that can be merged to 6.6.
+On Tue, 17 Oct 2023 18:27:57 +0200 you wrote:
+> This is a follow-up to the commit 9b2b86332a9b ("bpf: Allow to use kfunc
+> XDP hints and frags together").
+> 
+> The are some possible implementations problems that may arise when
+> providing metadata specifically for multi-buffer packets, therefore there
+> must be a possibility to test such option separately.
+> 
+> [...]
 
-Then when the 6.7 net-next merge window is open, I can push this patch set to 6.7.
-The v1 version use the virtqueue_dma_map_single_attrs to replace
-virtqueue_dma_map_page_attrs. But I think we should use virtqueue_dma_map_page_attrs.
+Here is the summary with links:
+  - [bpf-next,v2] selftests/bpf: add options and frags to xdp_hw_metadata
+    https://git.kernel.org/bpf/bpf-next/c/bb6a88885fde
 
-Thanks.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
->
-> --
-> MST
->
