@@ -1,15 +1,15 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EFEF11717;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B123318E30;
 	Wed, 18 Oct 2023 10:51:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F30F9;
-	Wed, 18 Oct 2023 03:51:27 -0700 (PDT)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C7FFF;
+	Wed, 18 Oct 2023 03:51:28 -0700 (PDT)
 Received: from weisslap.aisec.fraunhofer.de ([91.67.186.133]) by
  mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MfL5v-1rTTgR3Mkt-00grKp; Wed, 18 Oct 2023 12:51:04 +0200
+ id 1MpTpc-1rKN122hCu-00pxt2; Wed, 18 Oct 2023 12:50:56 +0200
 From: =?UTF-8?q?Michael=20Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
 To: Alexander Mikhalitsyn <alexander@mihalicyn.com>,
 	Christian Brauner <brauner@kernel.org>,
@@ -35,9 +35,9 @@ Cc: Daniel Borkmann <daniel@iogearbox.net>,
 	linux-fsdevel@vger.kernel.org,
 	gyroidos@aisec.fraunhofer.de,
 	=?UTF-8?q?Michael=20Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
-Subject: [RFC PATCH v2 12/14] bpf: Add flag BPF_DEVCG_ACC_MKNOD_UNS for device access
-Date: Wed, 18 Oct 2023 12:50:31 +0200
-Message-Id: <20231018105033.13669-13-michael.weiss@aisec.fraunhofer.de>
+Subject: [RFC PATCH v2 03/14] device_cgroup: Remove explicit devcgroup_inode hooks
+Date: Wed, 18 Oct 2023 12:50:22 +0200
+Message-Id: <20231018105033.13669-4-michael.weiss@aisec.fraunhofer.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20231018105033.13669-1-michael.weiss@aisec.fraunhofer.de>
 References: <20231018105033.13669-1-michael.weiss@aisec.fraunhofer.de>
@@ -49,51 +49,97 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:jFFIwS4qwpApd71uT5/zzBofJHrQqQbMnQCJHEMIWW1Lqc23Bv6
- CLaXIgZryPTHHNnoyvu1YqBoKOYSFhL+2PrXRkZWBsk2opEc0nVBAFlgDl0hobyxG49s0Ud
- 9YG/8xesCxM8FUqNmbqiQ6caI/0dbJYKNpvwSg28bF8XMhCPg66tLPMklXLhksz8jbOX5Be
- XCthwxUiwm541vxbY+hXA==
-UI-OutboundReport: notjunk:1;M01:P0:MNEgPA54IMs=;me9EvLyitsl0wTv0UsXt+4LxB3G
- Eh0yoMuL7/IahwR85VE3A2qEg6zChPO0GZuzIR1zs5Jg9SQnajBFHzvj7/g7SVxDbaGwPtDbu
- F7Hh5GIa0i+RmWI2OzLgXPGBCqe1A7h2DTWlvI0zAdlwwinvGaZhoqZ/NaZcM7ktbEvFazgys
- +ivqxBeoHVCwclRyx88ZiwSpRjr7SNnUbuRV/dqHyTy5KHLL7dNamTRD92l9Xvpsu5E1MmTA8
- c9ethuj7kCZbBt3Hso5+dXjLc5K+xJp9sV9uJhSh9jYzP5ZxTSygD/VTo6gjBfUO/QqwHgDiz
- DN2b3nPQ/Ka+xDOyXiogyMb+RiDo5eN28l7YLzEZPZvOIlPKyR1gniVBBmHIN1hGqPnHaSUmq
- b096EXkbEEbEKE+sSxGYr8MAb8Xjc/tEqzIIQ8yAW1iJquYM1rZGrICDCSHwkSblINPpsfULD
- OdI1QFuBmuuSEYvCwaFLYlELH/MEGqntz5GEbi2VrFAQs7RNDTYrKHHwz0V3HECnp0MHGCyla
- iIDYh6MStky1f2Z112vlezC18zvZI7y5xmNfx4rMXFvaPoYgP1J5I4aBxDVhvdBZVUpQ/9WWq
- WCQSyKBPIt7tOt1AM4T9pEtbme68dVzHEj00Wu0WrfYAA9EttXA75nqVYaJNdFdSkaklL6sqq
- OMnVc+K/LfD5LpC5oMG9OB3Jl4ELffgkabBtNhPqXE3IZDE5g0pkAdhiM75yPFDKgXL+KleWt
- IMJuv7bdK+xSGELVf0mabwDYZ+t2hJx2tfHTDauWnBOqCEULvpciMaMv2o/ulUR7MMl/umNkW
- YpMPYmf7O+6hjzc9yOYOXJEHoSp2/IbkkvZhSkf2YDawB4xecEGdSdap2eMAwzEW6v+VOUjNx
- E6VXNm2pv7kGcVsIISJwHqEvFCyj8YoVj7KA=
+X-Provags-ID: V03:K1:9txzexZlGvSwb4okFwepV4A/xdE7L+En6yWfSM7Ob2qFS8xwk0B
+ RNfCtlU26HDOIiVtyVENVGHclRnYkLubq56knGJ51Qnw6ZKsh1SW9LuRyybOxSDZIUIKxNv
+ AN3CLFTohgXBzt8w8DrZ9YVVEYjtxF8dwDLsEOmjAvd+roOOsqvaAaeWGEtp06qWBl9o7XP
+ aqMAqctBfV8LCg07WwDaQ==
+UI-OutboundReport: notjunk:1;M01:P0:Az/RNyG4D6U=;jVudnFj5FTPOi2y/60oGrCFlaQ2
+ k32k0rlRq18W2bEI8ApBH75+5UQK+P1MesrQM5UTngTIRJjxFO37BoR10eN+MAgd6HNE5xNw9
+ C8vCjLnds4fGSXhVNO/BnqQiCLl+jv109Q5M1nqrH4Xtx1KQp5G8J9sZANbw1/EjDi/afQksW
+ 0cTYl6bFkJI+y+bZyGhy4N2CcKBGtOU/LPz9Oem5+Wr7BRL38TPYCaszJMbFwOrwCduUfhmzb
+ 0suSv2C+bn6O41gp15tf+vvKBJiidOwMhdTTMrvpPtSaA4vHk/mwXZyLcKtH/u/O02PWoAA4e
+ h+QJ9o6AOkW1Q0ZuU1MaXaKTVEBNvKmYSmTlmyiEK7ecA5HkjulkqCFk0NgptO4b43LPTEpCb
+ KSbqyLdZAwyn2ToVQCyUk0W2WBDpaCpFP9Y437NgGHV2JP99bVjPD7tz3XZIrKm5vxs8KQPa1
+ nOMv2gKf7povpJszKmzXKpuHyKD6okbnYExjnU0sJPV+ZDqeJWC9lfQ9/bD7AOlDKvjem81vV
+ 4TFats2vvFWCt8bSyjraoQXSwLiU615Yn/bVwbZ1tUTCMrcKng4/Hfl+ddnwEhdYbtwTlcpQP
+ JI0YKmVGm+pMJWuD9qJnYO+VRNdnE5r2GjzbByp52N7pbw1fbVAE9xY2Ow8pA89L5VREdD+r3
+ lcRJGhaTbwhXeAfipkHIc5MYwFabJ54Eoy4i8TDMNE5MbV9uKp42lKBeafgF7y4PwTbFxlQE/
+ v08r8kfpkQ7vPbbdiXxMpq/36zwVydHLfPaixlg5s/nVgxGDZaHmOC46AlxUZUWbk0eC7jUjk
+ YitFlaPxHyNEojlvFTlHcec808NTzpXX/EnM9SZvqKGb6htXFLHqKuftmKy9Oe3tP2Y3zVlQZ
+ JTICdwF1R5bVQ60TLAlcNdx2wt3UfijH+md4=
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-	RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_SOFTFAIL
-	autolearn=no autolearn_force=no version=3.4.6
+	RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-With this new flag for bpf cgroup device programs, it should be
-possible to guard mknod() access in non-initial user namespaces
-later on.
+All users (actually just fs/namei) of devcgroup_inode_mknod and
+devcgroup_inode_permission are removed. Now drop the API completely.
 
 Signed-off-by: Michael Weiß <michael.weiss@aisec.fraunhofer.de>
 ---
- include/uapi/linux/bpf.h | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/device_cgroup.h | 47 -----------------------------------
+ 1 file changed, 47 deletions(-)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 0448700890f7..0196b9c72d3e 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -6927,6 +6927,7 @@ enum {
- 	BPF_DEVCG_ACC_MKNOD	= (1ULL << 0),
- 	BPF_DEVCG_ACC_READ	= (1ULL << 1),
- 	BPF_DEVCG_ACC_WRITE	= (1ULL << 2),
-+	BPF_DEVCG_ACC_MKNOD_UNS	= (1ULL << 3),
- };
- 
- enum {
+diff --git a/include/linux/device_cgroup.h b/include/linux/device_cgroup.h
+index d02f32b7514e..d9a62b0cff87 100644
+--- a/include/linux/device_cgroup.h
++++ b/include/linux/device_cgroup.h
+@@ -14,54 +14,7 @@
+ #if defined(CONFIG_CGROUP_DEVICE) || defined(CONFIG_CGROUP_BPF)
+ int devcgroup_check_permission(short type, u32 major, u32 minor,
+ 			       short access);
+-static inline int devcgroup_inode_permission(struct inode *inode, int mask)
+-{
+-	short type, access = 0;
+-
+-	if (likely(!inode->i_rdev))
+-		return 0;
+-
+-	if (S_ISBLK(inode->i_mode))
+-		type = DEVCG_DEV_BLOCK;
+-	else if (S_ISCHR(inode->i_mode))
+-		type = DEVCG_DEV_CHAR;
+-	else
+-		return 0;
+-
+-	if (mask & MAY_WRITE)
+-		access |= DEVCG_ACC_WRITE;
+-	if (mask & MAY_READ)
+-		access |= DEVCG_ACC_READ;
+-
+-	return devcgroup_check_permission(type, imajor(inode), iminor(inode),
+-					  access);
+-}
+-
+-static inline int devcgroup_inode_mknod(int mode, dev_t dev)
+-{
+-	short type;
+-
+-	if (!S_ISBLK(mode) && !S_ISCHR(mode))
+-		return 0;
+-
+-	if (S_ISCHR(mode) && dev == WHITEOUT_DEV)
+-		return 0;
+-
+-	if (S_ISBLK(mode))
+-		type = DEVCG_DEV_BLOCK;
+-	else
+-		type = DEVCG_DEV_CHAR;
+-
+-	return devcgroup_check_permission(type, MAJOR(dev), MINOR(dev),
+-					  DEVCG_ACC_MKNOD);
+-}
+-
+ #else
+ static inline int devcgroup_check_permission(short type, u32 major, u32 minor,
+ 			       short access)
+-{ return 0; }
+-static inline int devcgroup_inode_permission(struct inode *inode, int mask)
+-{ return 0; }
+-static inline int devcgroup_inode_mknod(int mode, dev_t dev)
+-{ return 0; }
+ #endif
 -- 
 2.30.2
 
