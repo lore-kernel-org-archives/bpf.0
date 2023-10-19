@@ -1,32 +1,32 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35BCE19440
-	for <bpf@vger.kernel.org>; Thu, 19 Oct 2023 23:53:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A95745F7F
+	for <bpf@vger.kernel.org>; Thu, 19 Oct 2023 23:53:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456C311B
-	for <bpf@vger.kernel.org>; Thu, 19 Oct 2023 16:53:25 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39JMdos1012567
-	for <bpf@vger.kernel.org>; Thu, 19 Oct 2023 16:53:25 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3tubxn8ydt-8
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F08114
+	for <bpf@vger.kernel.org>; Thu, 19 Oct 2023 16:53:27 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+	by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 39JMdhJ2012665
+	for <bpf@vger.kernel.org>; Thu, 19 Oct 2023 16:53:27 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+	by m0089730.ppops.net (PPS) with ESMTPS id 3tubxf0yt2-5
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 19 Oct 2023 16:53:24 -0700
-Received: from twshared2123.40.prn1.facebook.com (2620:10d:c0a8:1b::30) by
- mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Thu, 19 Oct 2023 16:53:26 -0700
+Received: from twshared17786.35.frc1.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 19 Oct 2023 16:53:22 -0700
+ 15.1.2507.23; Thu, 19 Oct 2023 16:53:23 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id CBD3E3A0A4D0E; Thu, 19 Oct 2023 16:53:08 -0700 (PDT)
+	id 4628C3A0A4D50; Thu, 19 Oct 2023 16:53:18 -0700 (PDT)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH v3 bpf-next 1/7] bpf: improve JEQ/JNE branch taken logic
-Date: Thu, 19 Oct 2023 16:52:59 -0700
-Message-ID: <20231019235305.656855-2-andrii@kernel.org>
+Subject: [PATCH v3 bpf-next 5/7] bpf: try harder to deduce register bounds from different numeric domains
+Date: Thu, 19 Oct 2023 16:53:03 -0700
+Message-ID: <20231019235305.656855-6-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231019235305.656855-1-andrii@kernel.org>
 References: <20231019235305.656855-1-andrii@kernel.org>
@@ -39,73 +39,72 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: WYqoynZJmaGNRrx0hG_-Ms8DgyfKAvvW
-X-Proofpoint-ORIG-GUID: WYqoynZJmaGNRrx0hG_-Ms8DgyfKAvvW
+X-Proofpoint-GUID: UjjlYq6YQrG2ELmruCJBfleQK930Iu6l
+X-Proofpoint-ORIG-GUID: UjjlYq6YQrG2ELmruCJBfleQK930Iu6l
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-19_22,2023-10-19_01,2023-05-22_02
+ definitions=2023-10-19_21,2023-10-19_01,2023-05-22_02
 
-When determining if if/else branch will always or never be taken, use
-signed range knowledge in addition to currently used unsigned range knowl=
-edge.
-If either signed or unsigned range suggests that condition is
-always/never taken, return corresponding branch_taken verdict.
+There are cases (caught by subsequent reg_bounds tests in selftests/bpf)
+where performing one round of __reg_deduce_bounds() doesn't propagate
+all the information from, say, s32 to u32 bounds and than from newly
+learned u32 bounds back to u64 and s64. So perform __reg_deduce_bounds()
+twice to make sure such derivations are propagated fully after
+reg_bounds_sync().
 
-Current use of unsigned range for this seems arbitrary and unnecessarily
-incomplete. It is possible for *signed* operations to be performed on
-register, which could "invalidate" unsigned range for that register. In
-such case branch_taken will be artificially useless, even if we can
-still tell that some constant is outside of register value range based
-on its signed bounds.
+One such example is test `(s64)[0xffffffff00000001; 0] (u64)<
+0xffffffff00000000` from selftest patch from this patch set. It demonstra=
+tes an
+intricate dance of u64 -> s64 -> u64 -> u32 bounds adjustments, which req=
+uires
+two rounds of __reg_deduce_bounds(). Here are corresponding refinement lo=
+g from
+selftest, showing evolution of knowledge.
 
-veristat-based validation shows zero differences across selftests,
-Cilium, and Meta-internal BPF object files.
+REFINING (FALSE R1) (u64)SRC=3D[0xffffffff00000000; U64_MAX] (u64)DST_OLD=
+=3D[0; U64_MAX] (u64)DST_NEW=3D[0xffffffff00000000; U64_MAX]
+REFINING (FALSE R1) (u64)SRC=3D[0xffffffff00000000; U64_MAX] (s64)DST_OLD=
+=3D[0xffffffff00000001; 0] (s64)DST_NEW=3D[0xffffffff00000001; -1]
+REFINING (FALSE R1) (s64)SRC=3D[0xffffffff00000001; -1] (u64)DST_OLD=3D[0=
+xffffffff00000000; U64_MAX] (u64)DST_NEW=3D[0xffffffff00000001; U64_MAX]
+REFINING (FALSE R1) (u64)SRC=3D[0xffffffff00000001; U64_MAX] (u32)DST_OLD=
+=3D[0; U32_MAX] (u32)DST_NEW=3D[1; U32_MAX]
+
+R1 initially has smin/smax set to [0xffffffff00000001; -1], while umin/um=
+ax is
+unknown. After (u64)< comparison, in FALSE branch we gain knowledge that
+umin/umax is [0xffffffff00000000; U64_MAX]. That causes smin/smax to lear=
+n that
+zero can't happen and upper bound is -1. Then smin/smax is adjusted from
+umin/umax improving lower bound from 0xffffffff00000000 to 0xffffffff0000=
+0001.
+And then eventually umin32/umax32 bounds are drived from umin/umax and be=
+come
+[1; U32_MAX].
+
+Selftest in the last patch is actually implementing a multi-round fixed-p=
+oint
+convergence logic, but so far all the tests are handled by two rounds of
+reg_bounds_sync() on the verifier state, so we keep it simple for now.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/verifier.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ kernel/bpf/verifier.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index bb58987e4844..c87144e3c5e8 100644
+index 0a968dac3294..cf5cd6bf8652 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -13663,12 +13663,16 @@ static int is_branch32_taken(struct bpf_reg_sta=
-te *reg, u32 val, u8 opcode)
- 			return !!tnum_equals_const(subreg, val);
- 		else if (val < reg->u32_min_value || val > reg->u32_max_value)
- 			return 0;
-+		else if (sval < reg->s32_min_value || sval > reg->s32_max_value)
-+			return 0;
- 		break;
- 	case BPF_JNE:
- 		if (tnum_is_const(subreg))
- 			return !tnum_equals_const(subreg, val);
- 		else if (val < reg->u32_min_value || val > reg->u32_max_value)
- 			return 1;
-+		else if (sval < reg->s32_min_value || sval > reg->s32_max_value)
-+			return 1;
- 		break;
- 	case BPF_JSET:
- 		if ((~subreg.mask & subreg.value) & val)
-@@ -13740,12 +13744,16 @@ static int is_branch64_taken(struct bpf_reg_sta=
-te *reg, u64 val, u8 opcode)
- 			return !!tnum_equals_const(reg->var_off, val);
- 		else if (val < reg->umin_value || val > reg->umax_value)
- 			return 0;
-+		else if (sval < reg->smin_value || sval > reg->smax_value)
-+			return 0;
- 		break;
- 	case BPF_JNE:
- 		if (tnum_is_const(reg->var_off))
- 			return !tnum_equals_const(reg->var_off, val);
- 		else if (val < reg->umin_value || val > reg->umax_value)
- 			return 1;
-+		else if (sval < reg->smin_value || sval > reg->smax_value)
-+			return 1;
- 		break;
- 	case BPF_JSET:
- 		if ((~reg->var_off.mask & reg->var_off.value) & val)
+@@ -2314,6 +2314,7 @@ static void reg_bounds_sync(struct bpf_reg_state *r=
+eg)
+ 	__update_reg_bounds(reg);
+ 	/* We might have learned something about the sign bit. */
+ 	__reg_deduce_bounds(reg);
++	__reg_deduce_bounds(reg);
+ 	/* We might have learned some bits from the bounds. */
+ 	__reg_bound_offset(reg);
+ 	/* Intersecting with the old var_off might have improved our bounds
 --=20
 2.34.1
 
