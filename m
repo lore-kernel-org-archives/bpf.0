@@ -1,163 +1,61 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB9C12FE0F
-	for <bpf@vger.kernel.org>; Thu, 19 Oct 2023 19:12:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E06EC354EC
+	for <bpf@vger.kernel.org>; Thu, 19 Oct 2023 19:24:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="d+FTlL4N"
-Received: from out-207.mta0.migadu.com (out-207.mta0.migadu.com [IPv6:2001:41d0:1004:224b::cf])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1DB0BE
-	for <bpf@vger.kernel.org>; Thu, 19 Oct 2023 12:12:12 -0700 (PDT)
-Message-ID: <1074c1f1-e676-fbe6-04bc-783821d746a1@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cMOzuvxp"
+Received: from out-191.mta1.migadu.com (out-191.mta1.migadu.com [95.215.58.191])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A478E8
+	for <bpf@vger.kernel.org>; Thu, 19 Oct 2023 12:24:51 -0700 (PDT)
+Message-ID: <97a90b2d-cdc3-ac00-b1d7-1e735648ca8b@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1697742730;
+	t=1697743489;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=P0h5fWMyT5Vo7k2V5ZPXS3Hx5Ml7GFIc3I0D99ZWvRU=;
-	b=d+FTlL4N6Sg5LI52khLUWtya9wxh3NUBk02cIuaOnCLy+SLqFNSa5lIBw8RSaHQ725A9gd
-	snoj8Tm3/rt+fez+p3f/x75NDTq0AcO+LumuU/EybX4CSNIYRVU2FjzDFxUR3euju4mNcA
-	oT/hqzu2F5LYIUr8MbDVOUBmmPWg1Ig=
-Date: Thu, 19 Oct 2023 12:12:03 -0700
+	bh=erlpPmXWY7ZgLDQf2M75tSp97C2n2Bc8pqWhV/xELGQ=;
+	b=cMOzuvxpwmLzmJbBkoXqhQdHNGyh15FaR2A2gm2PCoORxqU7QRUcx0BtQsWs6aqYz8dzyj
+	1DPOnTWCaGdln779BeQw8Sfo29neyXcflWnltqZScgP/n6pNZTbYx6WYFGw0B8IHdxTNYE
+	qvWySZcJ7YIXtL+4TcvZRm3dmO5hoTM=
+Date: Thu, 19 Oct 2023 12:24:42 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v7 04/11] net/socket: Break down __sys_getsockopt
+Subject: Re: [PATCH v7 01/11] bpf: Add sockptr support for getsockopt
 Content-Language: en-US
 To: Breno Leitao <leitao@debian.org>
 Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, io-uring@vger.kernel.org,
- Kuniyuki Iwashima <kuniyu@amazon.com>,
- Alexander Mikhalitsyn <alexander@mihalicyn.com>,
- David Howells <dhowells@redhat.com>, sdf@google.com, axboe@kernel.dk,
- asml.silence@gmail.com, willemdebruijn.kernel@gmail.com, kuba@kernel.org,
- pabeni@redhat.com, krisman@suse.de, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
+ netdev@vger.kernel.org, io-uring@vger.kernel.org, sdf@google.com,
+ axboe@kernel.dk, asml.silence@gmail.com, willemdebruijn.kernel@gmail.com,
+ kuba@kernel.org, pabeni@redhat.com, krisman@suse.de,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
  Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
  Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>
 References: <20231016134750.1381153-1-leitao@debian.org>
- <20231016134750.1381153-5-leitao@debian.org>
+ <20231016134750.1381153-2-leitao@debian.org>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20231016134750.1381153-5-leitao@debian.org>
+In-Reply-To: <20231016134750.1381153-2-leitao@debian.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
 On 10/16/23 6:47 AM, Breno Leitao wrote:
-> diff --git a/net/socket.c b/net/socket.c
-> index 0087f8c071e7..f4c156a1987e 100644
-> --- a/net/socket.c
-> +++ b/net/socket.c
-> @@ -2350,6 +2350,42 @@ SYSCALL_DEFINE5(setsockopt, int, fd, int, level, int, optname,
->   INDIRECT_CALLABLE_DECLARE(bool tcp_bpf_bypass_getsockopt(int level,
->   							 int optname));
->   
-> +int do_sock_getsockopt(struct socket *sock, bool compat, int level,
-> +		       int optname, sockptr_t optval, sockptr_t optlen)
-> +{
-> +	int max_optlen __maybe_unused;
-> +	const struct proto_ops *ops;
-> +	int err;
-> +
-> +	err = security_socket_getsockopt(sock, level, optname);
-> +	if (err)
-> +		return err;
-> +
-> +	ops = READ_ONCE(sock->ops);
-> +	if (level == SOL_SOCKET) {
-> +		err = sk_getsockopt(sock->sk, level, optname, optval, optlen);
-> +	} else if (unlikely(!ops->getsockopt)) {
-> +		err = -EOPNOTSUPP;
-> +	} else {
-> +		if (WARN_ONCE(optval.is_kernel || optlen.is_kernel,
-> +			      "Invalid argument type"))
-> +			return -EOPNOTSUPP;
-> +
-> +		err = ops->getsockopt(sock, level, optname, optval.user,
-> +				      optlen.user);
-> +	}
-> +
-> +	if (!compat) {
-> +		max_optlen = BPF_CGROUP_GETSOCKOPT_MAX_OPTLEN(optlen);
+> The whole network stack uses sockptr, and while it doesn't move to
+> something more modern, let's use sockptr in getsockptr BPF hooks, so, it
+> could be used by other callers.
+> 
+> The main motivation for this change is to use it in the io_uring
+> {g,s}etsockopt(), which will use a userspace pointer for *optval, but, a
+> kernel value for optlen.
 
-The max_optlen was done before the above sk_getsockopt. The bpf CI cannot catch 
-it because it cannot apply patch 5 cleanly. I ran the following out of the 
-linux-block tree:
-
-$> ./test_progs -t sockopt_sk
-test_sockopt_sk:PASS:join_cgroup /sockopt_sk 0 nsec
-run_test:PASS:skel_load 0 nsec
-run_test:PASS:setsockopt_link 0 nsec
-run_test:PASS:getsockopt_link 0 nsec
-(/data/users/kafai/fb-kernel/linux/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c:111: 
-errno: Operation not permitted) Failed to call getsockopt, ret=-1
-run_test:FAIL:getsetsockopt unexpected error: -1 (errno 1)
-#217     sockopt_sk:FAIL
-
-
-> +		err = BPF_CGROUP_RUN_PROG_GETSOCKOPT(sock->sk, level, optname,
-> +						     optval, optlen, max_optlen,
-> +						     err);
-> +	}
-> +
-> +	return err;
-> +}
-> +EXPORT_SYMBOL(do_sock_getsockopt);
-> +
->   /*
->    *	Get a socket option. Because we don't know the option lengths we have
->    *	to pass a user mode parameter for the protocols to sort out.
-> @@ -2357,37 +2393,18 @@ INDIRECT_CALLABLE_DECLARE(bool tcp_bpf_bypass_getsockopt(int level,
->   int __sys_getsockopt(int fd, int level, int optname, char __user *optval,
->   		int __user *optlen)
->   {
-> -	int max_optlen __maybe_unused;
-> -	const struct proto_ops *ops;
->   	int err, fput_needed;
->   	struct socket *sock;
-> +	bool compat;
->   
->   	sock = sockfd_lookup_light(fd, &err, &fput_needed);
->   	if (!sock)
->   		return err;
->   
-> -	err = security_socket_getsockopt(sock, level, optname);
-> -	if (err)
-> -		goto out_put;
-> -
-> -	if (!in_compat_syscall())
-> -		max_optlen = BPF_CGROUP_GETSOCKOPT_MAX_OPTLEN(optlen);
-
-The old max_optlen was done here.
-
-> +	compat = in_compat_syscall();
-> +	err = do_sock_getsockopt(sock, compat, level, optname,
-> +				 USER_SOCKPTR(optval), USER_SOCKPTR(optlen));
->   
-> -	ops = READ_ONCE(sock->ops);
-> -	if (level == SOL_SOCKET)
-> -		err = sock_getsockopt(sock, level, optname, optval, optlen);
-> -	else if (unlikely(!ops->getsockopt))
-> -		err = -EOPNOTSUPP;
-> -	else
-> -		err = ops->getsockopt(sock, level, optname, optval,
-> -					    optlen);
-> -
-> -	if (!in_compat_syscall())
-> -		err = BPF_CGROUP_RUN_PROG_GETSOCKOPT(sock->sk, level, optname,
-> -						     USER_SOCKPTR(optval),
-> -						     USER_SOCKPTR(optlen),
-> -						     max_optlen, err);
-> -out_put:
->   	fput_light(sock->file, fput_needed);
->   	return err;
->   }
+Acked-by: Martin KaFai Lau <martin.lau@kernel.org>
 
