@@ -1,29 +1,29 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CED1335C0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CC8C32C98;
 	Thu, 19 Oct 2023 20:50:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="moH4qZmO"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="S4O6pghl"
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21BC130;
-	Thu, 19 Oct 2023 13:50:04 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8DC11D;
+	Thu, 19 Oct 2023 13:50:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=r8DQBABsOBhsGSBwZikKuBHX/OlpKW3dzEamGE0YQTc=; b=moH4qZmOsSr3vQ09rTo8v8V7WA
-	NiyV68N9VIR2B643mLG5p5pX040z5+V6HrU361e1Wl8Rxz8ayTGI9+kuhp1zB3P2sGzyILBvErp/r
-	4k/LQPr1uQi4hEpIlaR+MJWwk0qNwOzf7Gi5bLj5Qag8bg5ab7TC3izkVyxDX4xxh6VHcrNj10h8l
-	eihKbVCikH6b4byu3ePqyZbAF/0NuZhHod5XsCrErrwrIv4pV7VtVVbw0fg7BKhZ5W41RScPq9+wR
-	2UMPi9WlXIiijSIJFoMaBds5/WdordX9d66ukJ4pmVvkHyGVOwzSmbhIwO/tKHc71q+d7W42kjWh6
-	Yh5V7omA==;
+	bh=k9bkGcQTofbD+79kqVgLAUMlWkZqKhHynXFwsY9k2sc=; b=S4O6pghlgUAl7l15JESNIL+lN1
+	EZWlCPEs+cdnfAJvXOOy87yuJVRExPxFvXGOJjXXmC9lOGw9YORYeM4w5J2S4d81exKqb/4PtiVRP
+	AAuYmXH8Mq28gFZ7KH2b1oHPDwa4KZqYWkp8EDEa6afok1RFRdumk8vs0oXqgWqXN7/he7kh57KCr
+	Aidx7fW3Itfds8aydVJnqdIqDS1cylP6ych5XuhLs4XyWcve7/GrRF8aZRchvS3zMxHsJsOuLzVHk
+	NSie0BzO//y/cbxAt3tqsz5eD+W14hInG2w6ueH/bATekjarufniIKg4ffb8k2U01fLwFEIDDZP+I
+	/btB7HMA==;
 Received: from 21.249.197.178.dynamic.dsl-lte-bonding.lssmb00p-msn.res.cust.swisscom.ch ([178.197.249.21] helo=localhost)
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1qtZxq-000NeE-6w; Thu, 19 Oct 2023 22:49:54 +0200
+	id 1qtZxr-000Neh-Gf; Thu, 19 Oct 2023 22:49:55 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: bpf@vger.kernel.org
 Cc: netdev@vger.kernel.org,
@@ -34,11 +34,10 @@ Cc: netdev@vger.kernel.org,
 	john.fastabend@gmail.com,
 	sdf@google.com,
 	toke@kernel.org,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next v2 5/7] bpftool: Extend net dump with netkit progs
-Date: Thu, 19 Oct 2023 22:49:17 +0200
-Message-Id: <20231019204919.4203-6-daniel@iogearbox.net>
+	Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH bpf-next v2 7/7] selftests/bpf: Add selftests for netkit
+Date: Thu, 19 Oct 2023 22:49:19 +0200
+Message-Id: <20231019204919.4203-8-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20231019204919.4203-1-daniel@iogearbox.net>
 References: <20231019204919.4203-1-daniel@iogearbox.net>
@@ -53,110 +52,789 @@ X-Authenticated-Sender: daniel@iogearbox.net
 X-Virus-Scanned: Clear (ClamAV 0.103.10/27066/Thu Oct 19 09:45:47 2023)
 X-Spam-Level: *
 
-Add support to dump BPF programs on netkit via bpftool. This includes both
-the BPF link and attach ops programs. Dumped information contain the attach
-location, function entry name, program ID and link ID when applicable.
+Add a bigger batch of test coverage to assert correct operation of
+netkit devices and their BPF program management:
 
-Example with tc BPF link:
-
-  # ./bpftool net
-  xdp:
-
-  tc:
-  nk1(22) netkit/peer tc1 prog_id 43 link_id 12
-
+  # ./test_progs -t tc_netkit
+  [...]
+  [    1.166267] bpf_testmod: loading out-of-tree module taints kernel.
+  [    1.166831] bpf_testmod: module verification failed: signature and/or required key missing - tainting kernel
+  [    1.270957] tsc: Refined TSC clocksource calibration: 3407.988 MHz
+  [    1.272579] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x311fc932722, max_idle_ns: 440795381586 ns
+  [    1.275336] clocksource: Switched to clocksource tsc
+  #257     tc_netkit_basic:OK
+  #258     tc_netkit_device:OK
+  #259     tc_netkit_multi_links:OK
+  #260     tc_netkit_multi_opts:OK
+  #261     tc_netkit_neigh_links:OK
+  Summary: 5/0 PASSED, 0 SKIPPED, 0 FAILED
   [...]
 
-Example with json dump:
-
-  # ./bpftool net --json | jq
-  [
-    {
-      "xdp": [],
-      "tc": [
-        {
-          "devname": "nk1",
-          "ifindex": 18,
-          "kind": "netkit/primary",
-          "name": "tc1",
-          "prog_id": 29,
-          "prog_flags": [],
-          "link_id": 8,
-          "link_flags": []
-        }
-      ],
-      "flow_dissector": [],
-      "netfilter": []
-    }
-  ]
-
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Reviewed-by: Quentin Monnet <quentin@isovalent.com>
 ---
- tools/bpf/bpftool/Documentation/bpftool-net.rst | 8 ++++----
- tools/bpf/bpftool/net.c                         | 7 ++++++-
- 2 files changed, 10 insertions(+), 5 deletions(-)
+ tools/testing/selftests/bpf/config            |   1 +
+ .../selftests/bpf/prog_tests/tc_helpers.h     |   4 +
+ .../selftests/bpf/prog_tests/tc_netkit.c      | 687 ++++++++++++++++++
+ .../selftests/bpf/progs/test_tc_link.c        |  13 +
+ 4 files changed, 705 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_netkit.c
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-net.rst b/tools/bpf/bpftool/Documentation/bpftool-net.rst
-index 5e2abd3de5ab..dd3f9469765b 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-net.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-net.rst
-@@ -37,7 +37,7 @@ DESCRIPTION
- 	**bpftool net { show | list }** [ **dev** *NAME* ]
- 		  List bpf program attachments in the kernel networking subsystem.
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 02dd4409200e..3ec5927ec3e5 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -71,6 +71,7 @@ CONFIG_NETFILTER_SYNPROXY=y
+ CONFIG_NETFILTER_XT_CONNMARK=y
+ CONFIG_NETFILTER_XT_MATCH_STATE=y
+ CONFIG_NETFILTER_XT_TARGET_CT=y
++CONFIG_NETKIT=y
+ CONFIG_NF_CONNTRACK=y
+ CONFIG_NF_CONNTRACK_MARK=y
+ CONFIG_NF_DEFRAG_IPV4=y
+diff --git a/tools/testing/selftests/bpf/prog_tests/tc_helpers.h b/tools/testing/selftests/bpf/prog_tests/tc_helpers.h
+index 67f985f7d215..924d0e25320c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tc_helpers.h
++++ b/tools/testing/selftests/bpf/prog_tests/tc_helpers.h
+@@ -4,6 +4,10 @@
+ #define TC_HELPERS
+ #include <test_progs.h>
  
--		  Currently, device driver xdp attachments, tcx and old-style tc
-+		  Currently, device driver xdp attachments, tcx, netkit and old-style tc
- 		  classifier/action attachments, flow_dissector as well as netfilter
- 		  attachments are implemented, i.e., for
- 		  program types **BPF_PROG_TYPE_XDP**, **BPF_PROG_TYPE_SCHED_CLS**,
-@@ -52,11 +52,11 @@ DESCRIPTION
- 		  bpf programs, users should consult other tools, e.g., iproute2.
- 
- 		  The current output will start with all xdp program attachments, followed by
--		  all tcx, then tc class/qdisc bpf program attachments, then flow_dissector
--		  and finally netfilter programs. Both xdp programs and tcx/tc programs are
-+		  all tcx, netkit, then tc class/qdisc bpf program attachments, then flow_dissector
-+		  and finally netfilter programs. Both xdp programs and tcx/netkit/tc programs are
- 		  ordered based on ifindex number. If multiple bpf programs attached
- 		  to the same networking device through **tc**, the order will be first
--		  all bpf programs attached to tcx, then tc classes, then all bpf programs
-+		  all bpf programs attached to tcx, netkit, then tc classes, then all bpf programs
- 		  attached to non clsact qdiscs, and finally all bpf programs attached
- 		  to root and clsact qdisc.
- 
-diff --git a/tools/bpf/bpftool/net.c b/tools/bpf/bpftool/net.c
-index 66a8ce8ae012..968714b4c3d4 100644
---- a/tools/bpf/bpftool/net.c
-+++ b/tools/bpf/bpftool/net.c
-@@ -79,6 +79,8 @@ static const char * const attach_type_strings[] = {
- static const char * const attach_loc_strings[] = {
- 	[BPF_TCX_INGRESS]		= "tcx/ingress",
- 	[BPF_TCX_EGRESS]		= "tcx/egress",
-+	[BPF_NETKIT_PRIMARY]		= "netkit/primary",
-+	[BPF_NETKIT_PEER]		= "netkit/peer",
- };
- 
- const size_t net_attach_type_size = ARRAY_SIZE(attach_type_strings);
-@@ -506,6 +508,9 @@ static void show_dev_tc_bpf(struct ip_devname_ifindex *dev)
- {
- 	__show_dev_tc_bpf(dev, BPF_TCX_INGRESS);
- 	__show_dev_tc_bpf(dev, BPF_TCX_EGRESS);
++#ifndef loopback
++# define loopback 1
++#endif
 +
-+	__show_dev_tc_bpf(dev, BPF_NETKIT_PRIMARY);
-+	__show_dev_tc_bpf(dev, BPF_NETKIT_PEER);
- }
+ static inline __u32 id_from_prog_fd(int fd)
+ {
+ 	struct bpf_prog_info prog_info = {};
+diff --git a/tools/testing/selftests/bpf/prog_tests/tc_netkit.c b/tools/testing/selftests/bpf/prog_tests/tc_netkit.c
+new file mode 100644
+index 000000000000..2c025a630deb
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/tc_netkit.c
+@@ -0,0 +1,687 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2023 Isovalent */
++#include <uapi/linux/if_link.h>
++#include <net/if.h>
++#include <test_progs.h>
++
++#define netkit_peer "nk0"
++#define netkit_name "nk1"
++
++#define ping_addr_neigh		0x0a000002 /* 10.0.0.2 */
++#define ping_addr_noneigh	0x0a000003 /* 10.0.0.3 */
++
++#include "test_tc_link.skel.h"
++#include "netlink_helpers.h"
++#include "tc_helpers.h"
++
++#define ICMP_ECHO 8
++
++struct icmphdr {
++	__u8		type;
++	__u8		code;
++	__sum16		checksum;
++	struct {
++		__be16	id;
++		__be16	sequence;
++	} echo;
++};
++
++struct iplink_req {
++	struct nlmsghdr  n;
++	struct ifinfomsg i;
++	char             buf[1024];
++};
++
++static int create_netkit(int mode, int policy, int peer_policy, int *ifindex,
++			 bool same_netns)
++{
++	struct rtnl_handle rth = { .fd = -1 };
++	struct iplink_req req = {};
++	struct rtattr *linkinfo, *data;
++	const char *type = "netkit";
++	int err;
++
++	err = rtnl_open(&rth, 0);
++	if (!ASSERT_OK(err, "open_rtnetlink"))
++		return err;
++
++	memset(&req, 0, sizeof(req));
++	req.n.nlmsg_len = NLMSG_LENGTH(sizeof(struct ifinfomsg));
++	req.n.nlmsg_flags = NLM_F_REQUEST | NLM_F_CREATE | NLM_F_EXCL;
++	req.n.nlmsg_type = RTM_NEWLINK;
++	req.i.ifi_family = AF_UNSPEC;
++
++	addattr_l(&req.n, sizeof(req), IFLA_IFNAME, netkit_name,
++		  strlen(netkit_name));
++	linkinfo = addattr_nest(&req.n, sizeof(req), IFLA_LINKINFO);
++	addattr_l(&req.n, sizeof(req), IFLA_INFO_KIND, type, strlen(type));
++	data = addattr_nest(&req.n, sizeof(req), IFLA_INFO_DATA);
++	addattr32(&req.n, sizeof(req), IFLA_NETKIT_POLICY, policy);
++	addattr32(&req.n, sizeof(req), IFLA_NETKIT_PEER_POLICY, peer_policy);
++	addattr32(&req.n, sizeof(req), IFLA_NETKIT_MODE, mode);
++	addattr_nest_end(&req.n, data);
++	addattr_nest_end(&req.n, linkinfo);
++
++	err = rtnl_talk(&rth, &req.n, NULL);
++	ASSERT_OK(err, "talk_rtnetlink");
++	rtnl_close(&rth);
++	*ifindex = if_nametoindex(netkit_name);
++
++	ASSERT_GT(*ifindex, 0, "retrieve_ifindex");
++	ASSERT_OK(system("ip netns add foo"), "create netns");
++	ASSERT_OK(system("ip link set dev " netkit_name " up"),
++			 "up primary");
++	ASSERT_OK(system("ip addr add dev " netkit_name " 10.0.0.1/24"),
++			 "addr primary");
++	if (same_netns) {
++		ASSERT_OK(system("ip link set dev " netkit_peer " up"),
++				 "up peer");
++		ASSERT_OK(system("ip addr add dev " netkit_peer " 10.0.0.2/24"),
++				 "addr peer");
++	} else {
++		ASSERT_OK(system("ip link set " netkit_peer " netns foo"),
++				 "move peer");
++		ASSERT_OK(system("ip netns exec foo ip link set dev "
++				 netkit_peer " up"), "up peer");
++		ASSERT_OK(system("ip netns exec foo ip addr add dev "
++				 netkit_peer " 10.0.0.2/24"), "addr peer");
++	}
++	return err;
++}
++
++static void destroy_netkit(void)
++{
++	ASSERT_OK(system("ip link del dev " netkit_name), "del primary");
++	ASSERT_OK(system("ip netns del foo"), "delete netns");
++	ASSERT_EQ(if_nametoindex(netkit_name), 0, netkit_name "_ifindex");
++}
++
++static int __send_icmp(__u32 dest)
++{
++	struct sockaddr_in addr;
++	struct icmphdr icmp;
++	int sock, ret;
++
++	ret = write_sysctl("/proc/sys/net/ipv4/ping_group_range", "0 0");
++	if (!ASSERT_OK(ret, "write_sysctl(net.ipv4.ping_group_range)"))
++		return ret;
++
++	sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_ICMP);
++	if (!ASSERT_GE(sock, 0, "icmp_socket"))
++		return -errno;
++
++	ret = setsockopt(sock, SOL_SOCKET, SO_BINDTODEVICE,
++			 netkit_name, strlen(netkit_name) + 1);
++	if (!ASSERT_OK(ret, "setsockopt(SO_BINDTODEVICE)"))
++		goto out;
++
++	memset(&addr, 0, sizeof(addr));
++	addr.sin_family = AF_INET;
++	addr.sin_addr.s_addr = htonl(dest);
++
++	memset(&icmp, 0, sizeof(icmp));
++	icmp.type = ICMP_ECHO;
++	icmp.echo.id = 1234;
++	icmp.echo.sequence = 1;
++
++	ret = sendto(sock, &icmp, sizeof(icmp), 0,
++		     (struct sockaddr *)&addr, sizeof(addr));
++	if (!ASSERT_GE(ret, 0, "icmp_sendto"))
++		ret = -errno;
++	else
++		ret = 0;
++out:
++	close(sock);
++	return ret;
++}
++
++static int send_icmp(void)
++{
++	return __send_icmp(ping_addr_neigh);
++}
++
++void serial_test_tc_netkit_basic(void)
++{
++	LIBBPF_OPTS(bpf_prog_query_opts, optq);
++	LIBBPF_OPTS(bpf_netkit_opts, optl);
++	__u32 prog_ids[2], link_ids[2];
++	__u32 pid1, pid2, lid1, lid2;
++	struct test_tc_link *skel;
++	struct bpf_link *link;
++	int err, ifindex;
++
++	err = create_netkit(NETKIT_L2, NETKIT_PASS, NETKIT_PASS,
++			    &ifindex, false);
++	if (err)
++		return;
++
++	skel = test_tc_link__open();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		goto cleanup;
++
++	ASSERT_EQ(bpf_program__set_expected_attach_type(skel->progs.tc1,
++		  BPF_NETKIT_PRIMARY), 0, "tc1_attach_type");
++	ASSERT_EQ(bpf_program__set_expected_attach_type(skel->progs.tc2,
++		  BPF_NETKIT_PEER), 0, "tc2_attach_type");
++
++	err = test_tc_link__load(skel);
++	if (!ASSERT_OK(err, "skel_load"))
++		goto cleanup;
++
++	pid1 = id_from_prog_fd(bpf_program__fd(skel->progs.tc1));
++	pid2 = id_from_prog_fd(bpf_program__fd(skel->progs.tc2));
++
++	ASSERT_NEQ(pid1, pid2, "prog_ids_1_2");
++
++	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PRIMARY, 0);
++	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PEER, 0);
++
++	ASSERT_EQ(skel->bss->seen_tc1, false, "seen_tc1");
++	ASSERT_EQ(skel->bss->seen_tc2, false, "seen_tc2");
++
++	link = bpf_program__attach_netkit(skel->progs.tc1, ifindex, &optl);
++	if (!ASSERT_OK_PTR(link, "link_attach"))
++		goto cleanup;
++
++	skel->links.tc1 = link;
++
++	lid1 = id_from_link_fd(bpf_link__fd(skel->links.tc1));
++
++	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PRIMARY, 1);
++	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PEER, 0);
++
++	optq.prog_ids = prog_ids;
++	optq.link_ids = link_ids;
++
++	memset(prog_ids, 0, sizeof(prog_ids));
++	memset(link_ids, 0, sizeof(link_ids));
++	optq.count = ARRAY_SIZE(prog_ids);
++
++	err = bpf_prog_query_opts(ifindex, BPF_NETKIT_PRIMARY, &optq);
++	if (!ASSERT_OK(err, "prog_query"))
++		goto cleanup;
++
++	ASSERT_EQ(optq.count, 1, "count");
++	ASSERT_EQ(optq.revision, 2, "revision");
++	ASSERT_EQ(optq.prog_ids[0], pid1, "prog_ids[0]");
++	ASSERT_EQ(optq.link_ids[0], lid1, "link_ids[0]");
++	ASSERT_EQ(optq.prog_ids[1], 0, "prog_ids[1]");
++	ASSERT_EQ(optq.link_ids[1], 0, "link_ids[1]");
++
++	tc_skel_reset_all_seen(skel);
++	ASSERT_EQ(send_icmp(), 0, "icmp_pkt");
++
++	ASSERT_EQ(skel->bss->seen_tc1, true, "seen_tc1");
++	ASSERT_EQ(skel->bss->seen_tc2, false, "seen_tc2");
++
++	link = bpf_program__attach_netkit(skel->progs.tc2, ifindex, &optl);
++	if (!ASSERT_OK_PTR(link, "link_attach"))
++		goto cleanup;
++
++	skel->links.tc2 = link;
++
++	lid2 = id_from_link_fd(bpf_link__fd(skel->links.tc2));
++	ASSERT_NEQ(lid1, lid2, "link_ids_1_2");
++
++	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PRIMARY, 1);
++	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PEER, 1);
++
++	memset(prog_ids, 0, sizeof(prog_ids));
++	memset(link_ids, 0, sizeof(link_ids));
++	optq.count = ARRAY_SIZE(prog_ids);
++
++	err = bpf_prog_query_opts(ifindex, BPF_NETKIT_PEER, &optq);
++	if (!ASSERT_OK(err, "prog_query"))
++		goto cleanup;
++
++	ASSERT_EQ(optq.count, 1, "count");
++	ASSERT_EQ(optq.revision, 2, "revision");
++	ASSERT_EQ(optq.prog_ids[0], pid2, "prog_ids[0]");
++	ASSERT_EQ(optq.link_ids[0], lid2, "link_ids[0]");
++	ASSERT_EQ(optq.prog_ids[1], 0, "prog_ids[1]");
++	ASSERT_EQ(optq.link_ids[1], 0, "link_ids[1]");
++
++	tc_skel_reset_all_seen(skel);
++	ASSERT_EQ(send_icmp(), 0, "icmp_pkt");
++
++	ASSERT_EQ(skel->bss->seen_tc1, true, "seen_tc1");
++	ASSERT_EQ(skel->bss->seen_tc2, true, "seen_tc2");
++cleanup:
++	test_tc_link__destroy(skel);
++
++	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PRIMARY, 0);
++	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PEER, 0);
++	destroy_netkit();
++}
++
++void serial_test_tc_netkit_multi_links_target(int mode, int target)
++{
++	LIBBPF_OPTS(bpf_prog_query_opts, optq);
++	LIBBPF_OPTS(bpf_netkit_opts, optl);
++	__u32 prog_ids[3], link_ids[3];
++	__u32 pid1, pid2, lid1, lid2;
++	struct test_tc_link *skel;
++	struct bpf_link *link;
++	int err, ifindex;
++
++	err = create_netkit(mode, NETKIT_PASS, NETKIT_PASS,
++			    &ifindex, false);
++	if (err)
++		return;
++
++	skel = test_tc_link__open();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		goto cleanup;
++
++	ASSERT_EQ(bpf_program__set_expected_attach_type(skel->progs.tc1,
++		  target), 0, "tc1_attach_type");
++	ASSERT_EQ(bpf_program__set_expected_attach_type(skel->progs.tc2,
++		  target), 0, "tc2_attach_type");
++
++	err = test_tc_link__load(skel);
++	if (!ASSERT_OK(err, "skel_load"))
++		goto cleanup;
++
++	pid1 = id_from_prog_fd(bpf_program__fd(skel->progs.tc1));
++	pid2 = id_from_prog_fd(bpf_program__fd(skel->progs.tc2));
++
++	ASSERT_NEQ(pid1, pid2, "prog_ids_1_2");
++
++	assert_mprog_count_ifindex(ifindex, target, 0);
++
++	ASSERT_EQ(skel->bss->seen_tc1, false, "seen_tc1");
++	ASSERT_EQ(skel->bss->seen_eth, false, "seen_eth");
++	ASSERT_EQ(skel->bss->seen_tc2, false, "seen_tc2");
++
++	link = bpf_program__attach_netkit(skel->progs.tc1, ifindex, &optl);
++	if (!ASSERT_OK_PTR(link, "link_attach"))
++		goto cleanup;
++
++	skel->links.tc1 = link;
++
++	lid1 = id_from_link_fd(bpf_link__fd(skel->links.tc1));
++
++	assert_mprog_count_ifindex(ifindex, target, 1);
++
++	optq.prog_ids = prog_ids;
++	optq.link_ids = link_ids;
++
++	memset(prog_ids, 0, sizeof(prog_ids));
++	memset(link_ids, 0, sizeof(link_ids));
++	optq.count = ARRAY_SIZE(prog_ids);
++
++	err = bpf_prog_query_opts(ifindex, target, &optq);
++	if (!ASSERT_OK(err, "prog_query"))
++		goto cleanup;
++
++	ASSERT_EQ(optq.count, 1, "count");
++	ASSERT_EQ(optq.revision, 2, "revision");
++	ASSERT_EQ(optq.prog_ids[0], pid1, "prog_ids[0]");
++	ASSERT_EQ(optq.link_ids[0], lid1, "link_ids[0]");
++	ASSERT_EQ(optq.prog_ids[1], 0, "prog_ids[1]");
++	ASSERT_EQ(optq.link_ids[1], 0, "link_ids[1]");
++
++	tc_skel_reset_all_seen(skel);
++	ASSERT_EQ(send_icmp(), 0, "icmp_pkt");
++
++	ASSERT_EQ(skel->bss->seen_tc1, true, "seen_tc1");
++	ASSERT_EQ(skel->bss->seen_eth, true, "seen_eth");
++	ASSERT_EQ(skel->bss->seen_tc2, false, "seen_tc2");
++
++	LIBBPF_OPTS_RESET(optl,
++		.flags = BPF_F_BEFORE,
++		.relative_fd = bpf_program__fd(skel->progs.tc1),
++	);
++
++	link = bpf_program__attach_netkit(skel->progs.tc2, ifindex, &optl);
++	if (!ASSERT_OK_PTR(link, "link_attach"))
++		goto cleanup;
++
++	skel->links.tc2 = link;
++
++	lid2 = id_from_link_fd(bpf_link__fd(skel->links.tc2));
++	ASSERT_NEQ(lid1, lid2, "link_ids_1_2");
++
++	assert_mprog_count_ifindex(ifindex, target, 2);
++
++	memset(prog_ids, 0, sizeof(prog_ids));
++	memset(link_ids, 0, sizeof(link_ids));
++	optq.count = ARRAY_SIZE(prog_ids);
++
++	err = bpf_prog_query_opts(ifindex, target, &optq);
++	if (!ASSERT_OK(err, "prog_query"))
++		goto cleanup;
++
++	ASSERT_EQ(optq.count, 2, "count");
++	ASSERT_EQ(optq.revision, 3, "revision");
++	ASSERT_EQ(optq.prog_ids[0], pid2, "prog_ids[0]");
++	ASSERT_EQ(optq.link_ids[0], lid2, "link_ids[0]");
++	ASSERT_EQ(optq.prog_ids[1], pid1, "prog_ids[1]");
++	ASSERT_EQ(optq.link_ids[1], lid1, "link_ids[1]");
++	ASSERT_EQ(optq.prog_ids[2], 0, "prog_ids[2]");
++	ASSERT_EQ(optq.link_ids[2], 0, "link_ids[2]");
++
++	tc_skel_reset_all_seen(skel);
++	ASSERT_EQ(send_icmp(), 0, "icmp_pkt");
++
++	ASSERT_EQ(skel->bss->seen_tc1, true, "seen_tc1");
++	ASSERT_EQ(skel->bss->seen_eth, true, "seen_eth");
++	ASSERT_EQ(skel->bss->seen_tc2, true, "seen_tc2");
++cleanup:
++	test_tc_link__destroy(skel);
++
++	assert_mprog_count_ifindex(ifindex, target, 0);
++	destroy_netkit();
++}
++
++void serial_test_tc_netkit_multi_links(void)
++{
++	serial_test_tc_netkit_multi_links_target(NETKIT_L2, BPF_NETKIT_PRIMARY);
++	serial_test_tc_netkit_multi_links_target(NETKIT_L3, BPF_NETKIT_PRIMARY);
++	serial_test_tc_netkit_multi_links_target(NETKIT_L2, BPF_NETKIT_PEER);
++	serial_test_tc_netkit_multi_links_target(NETKIT_L3, BPF_NETKIT_PEER);
++}
++
++void serial_test_tc_netkit_multi_opts_target(int mode, int target)
++{
++	LIBBPF_OPTS(bpf_prog_attach_opts, opta);
++	LIBBPF_OPTS(bpf_prog_detach_opts, optd);
++	LIBBPF_OPTS(bpf_prog_query_opts, optq);
++	__u32 pid1, pid2, fd1, fd2;
++	__u32 prog_ids[3];
++	struct test_tc_link *skel;
++	int err, ifindex;
++
++	err = create_netkit(mode, NETKIT_PASS, NETKIT_PASS,
++			    &ifindex, false);
++	if (err)
++		return;
++
++	skel = test_tc_link__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_load"))
++		goto cleanup;
++
++	fd1 = bpf_program__fd(skel->progs.tc1);
++	fd2 = bpf_program__fd(skel->progs.tc2);
++
++	pid1 = id_from_prog_fd(fd1);
++	pid2 = id_from_prog_fd(fd2);
++
++	ASSERT_NEQ(pid1, pid2, "prog_ids_1_2");
++
++	assert_mprog_count_ifindex(ifindex, target, 0);
++
++	ASSERT_EQ(skel->bss->seen_tc1, false, "seen_tc1");
++	ASSERT_EQ(skel->bss->seen_eth, false, "seen_eth");
++	ASSERT_EQ(skel->bss->seen_tc2, false, "seen_tc2");
++
++	err = bpf_prog_attach_opts(fd1, ifindex, target, &opta);
++	if (!ASSERT_EQ(err, 0, "prog_attach"))
++		goto cleanup;
++
++	assert_mprog_count_ifindex(ifindex, target, 1);
++
++	optq.prog_ids = prog_ids;
++
++	memset(prog_ids, 0, sizeof(prog_ids));
++	optq.count = ARRAY_SIZE(prog_ids);
++
++	err = bpf_prog_query_opts(ifindex, target, &optq);
++	if (!ASSERT_OK(err, "prog_query"))
++		goto cleanup_fd1;
++
++	ASSERT_EQ(optq.count, 1, "count");
++	ASSERT_EQ(optq.revision, 2, "revision");
++	ASSERT_EQ(optq.prog_ids[0], pid1, "prog_ids[0]");
++	ASSERT_EQ(optq.prog_ids[1], 0, "prog_ids[1]");
++
++	tc_skel_reset_all_seen(skel);
++	ASSERT_EQ(send_icmp(), 0, "icmp_pkt");
++
++	ASSERT_EQ(skel->bss->seen_tc1, true, "seen_tc1");
++	ASSERT_EQ(skel->bss->seen_eth, true, "seen_eth");
++	ASSERT_EQ(skel->bss->seen_tc2, false, "seen_tc2");
++
++	LIBBPF_OPTS_RESET(opta,
++		.flags = BPF_F_BEFORE,
++		.relative_fd = fd1,
++	);
++
++	err = bpf_prog_attach_opts(fd2, ifindex, target, &opta);
++	if (!ASSERT_EQ(err, 0, "prog_attach"))
++		goto cleanup_fd1;
++
++	assert_mprog_count_ifindex(ifindex, target, 2);
++
++	memset(prog_ids, 0, sizeof(prog_ids));
++	optq.count = ARRAY_SIZE(prog_ids);
++
++	err = bpf_prog_query_opts(ifindex, target, &optq);
++	if (!ASSERT_OK(err, "prog_query"))
++		goto cleanup_fd2;
++
++	ASSERT_EQ(optq.count, 2, "count");
++	ASSERT_EQ(optq.revision, 3, "revision");
++	ASSERT_EQ(optq.prog_ids[0], pid2, "prog_ids[0]");
++	ASSERT_EQ(optq.prog_ids[1], pid1, "prog_ids[1]");
++	ASSERT_EQ(optq.prog_ids[2], 0, "prog_ids[2]");
++
++	tc_skel_reset_all_seen(skel);
++	ASSERT_EQ(send_icmp(), 0, "icmp_pkt");
++
++	ASSERT_EQ(skel->bss->seen_tc1, true, "seen_tc1");
++	ASSERT_EQ(skel->bss->seen_eth, true, "seen_eth");
++	ASSERT_EQ(skel->bss->seen_tc2, true, "seen_tc2");
++
++cleanup_fd2:
++	err = bpf_prog_detach_opts(fd2, ifindex, target, &optd);
++	ASSERT_OK(err, "prog_detach");
++	assert_mprog_count_ifindex(ifindex, target, 1);
++cleanup_fd1:
++	err = bpf_prog_detach_opts(fd1, ifindex, target, &optd);
++	ASSERT_OK(err, "prog_detach");
++	assert_mprog_count_ifindex(ifindex, target, 0);
++cleanup:
++	test_tc_link__destroy(skel);
++
++	assert_mprog_count_ifindex(ifindex, target, 0);
++	destroy_netkit();
++}
++
++void serial_test_tc_netkit_multi_opts(void)
++{
++	serial_test_tc_netkit_multi_opts_target(NETKIT_L2, BPF_NETKIT_PRIMARY);
++	serial_test_tc_netkit_multi_opts_target(NETKIT_L3, BPF_NETKIT_PRIMARY);
++	serial_test_tc_netkit_multi_opts_target(NETKIT_L2, BPF_NETKIT_PEER);
++	serial_test_tc_netkit_multi_opts_target(NETKIT_L3, BPF_NETKIT_PEER);
++}
++
++void serial_test_tc_netkit_device(void)
++{
++	LIBBPF_OPTS(bpf_prog_query_opts, optq);
++	LIBBPF_OPTS(bpf_netkit_opts, optl);
++	__u32 prog_ids[2], link_ids[2];
++	__u32 pid1, pid2, lid1;
++	struct test_tc_link *skel;
++	struct bpf_link *link;
++	int err, ifindex, ifindex2;
++
++	err = create_netkit(NETKIT_L3, NETKIT_PASS, NETKIT_PASS,
++			    &ifindex, true);
++	if (err)
++		return;
++
++	ifindex2 = if_nametoindex(netkit_peer);
++	ASSERT_NEQ(ifindex, ifindex2, "ifindex_1_2");
++
++	skel = test_tc_link__open();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		goto cleanup;
++
++	ASSERT_EQ(bpf_program__set_expected_attach_type(skel->progs.tc1,
++		  BPF_NETKIT_PRIMARY), 0, "tc1_attach_type");
++	ASSERT_EQ(bpf_program__set_expected_attach_type(skel->progs.tc2,
++		  BPF_NETKIT_PEER), 0, "tc2_attach_type");
++	ASSERT_EQ(bpf_program__set_expected_attach_type(skel->progs.tc3,
++		  BPF_NETKIT_PRIMARY), 0, "tc3_attach_type");
++
++	err = test_tc_link__load(skel);
++	if (!ASSERT_OK(err, "skel_load"))
++		goto cleanup;
++
++	pid1 = id_from_prog_fd(bpf_program__fd(skel->progs.tc1));
++	pid2 = id_from_prog_fd(bpf_program__fd(skel->progs.tc2));
++
++	ASSERT_NEQ(pid1, pid2, "prog_ids_1_2");
++
++	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PRIMARY, 0);
++	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PEER, 0);
++
++	ASSERT_EQ(skel->bss->seen_tc1, false, "seen_tc1");
++	ASSERT_EQ(skel->bss->seen_tc2, false, "seen_tc2");
++
++	link = bpf_program__attach_netkit(skel->progs.tc1, ifindex, &optl);
++	if (!ASSERT_OK_PTR(link, "link_attach"))
++		goto cleanup;
++
++	skel->links.tc1 = link;
++
++	lid1 = id_from_link_fd(bpf_link__fd(skel->links.tc1));
++
++	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PRIMARY, 1);
++	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PEER, 0);
++
++	optq.prog_ids = prog_ids;
++	optq.link_ids = link_ids;
++
++	memset(prog_ids, 0, sizeof(prog_ids));
++	memset(link_ids, 0, sizeof(link_ids));
++	optq.count = ARRAY_SIZE(prog_ids);
++
++	err = bpf_prog_query_opts(ifindex, BPF_NETKIT_PRIMARY, &optq);
++	if (!ASSERT_OK(err, "prog_query"))
++		goto cleanup;
++
++	ASSERT_EQ(optq.count, 1, "count");
++	ASSERT_EQ(optq.revision, 2, "revision");
++	ASSERT_EQ(optq.prog_ids[0], pid1, "prog_ids[0]");
++	ASSERT_EQ(optq.link_ids[0], lid1, "link_ids[0]");
++	ASSERT_EQ(optq.prog_ids[1], 0, "prog_ids[1]");
++	ASSERT_EQ(optq.link_ids[1], 0, "link_ids[1]");
++
++	tc_skel_reset_all_seen(skel);
++	ASSERT_EQ(send_icmp(), 0, "icmp_pkt");
++
++	ASSERT_EQ(skel->bss->seen_tc1, true, "seen_tc1");
++	ASSERT_EQ(skel->bss->seen_tc2, false, "seen_tc2");
++
++	memset(prog_ids, 0, sizeof(prog_ids));
++	memset(link_ids, 0, sizeof(link_ids));
++	optq.count = ARRAY_SIZE(prog_ids);
++
++	err = bpf_prog_query_opts(ifindex2, BPF_NETKIT_PRIMARY, &optq);
++	ASSERT_EQ(err, -EACCES, "prog_query_should_fail");
++
++	err = bpf_prog_query_opts(ifindex2, BPF_NETKIT_PEER, &optq);
++	ASSERT_EQ(err, -EACCES, "prog_query_should_fail");
++
++	link = bpf_program__attach_netkit(skel->progs.tc2, ifindex2, &optl);
++	if (!ASSERT_ERR_PTR(link, "link_attach_should_fail")) {
++		bpf_link__destroy(link);
++		goto cleanup;
++	}
++
++	link = bpf_program__attach_netkit(skel->progs.tc3, ifindex2, &optl);
++	if (!ASSERT_ERR_PTR(link, "link_attach_should_fail")) {
++		bpf_link__destroy(link);
++		goto cleanup;
++	}
++
++	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PRIMARY, 1);
++	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PEER, 0);
++cleanup:
++	test_tc_link__destroy(skel);
++
++	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PRIMARY, 0);
++	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PEER, 0);
++	destroy_netkit();
++}
++
++void serial_test_tc_netkit_neigh_links_target(int mode, int target)
++{
++	LIBBPF_OPTS(bpf_prog_query_opts, optq);
++	LIBBPF_OPTS(bpf_netkit_opts, optl);
++	__u32 prog_ids[2], link_ids[2];
++	__u32 pid1, lid1;
++	struct test_tc_link *skel;
++	struct bpf_link *link;
++	int err, ifindex;
++
++	err = create_netkit(mode, NETKIT_PASS, NETKIT_PASS,
++			    &ifindex, false);
++	if (err)
++		return;
++
++	skel = test_tc_link__open();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		goto cleanup;
++
++	ASSERT_EQ(bpf_program__set_expected_attach_type(skel->progs.tc1,
++		  BPF_NETKIT_PRIMARY), 0, "tc1_attach_type");
++
++	err = test_tc_link__load(skel);
++	if (!ASSERT_OK(err, "skel_load"))
++		goto cleanup;
++
++	pid1 = id_from_prog_fd(bpf_program__fd(skel->progs.tc1));
++
++	assert_mprog_count_ifindex(ifindex, target, 0);
++
++	ASSERT_EQ(skel->bss->seen_tc1, false, "seen_tc1");
++	ASSERT_EQ(skel->bss->seen_eth, false, "seen_eth");
++
++	link = bpf_program__attach_netkit(skel->progs.tc1, ifindex, &optl);
++	if (!ASSERT_OK_PTR(link, "link_attach"))
++		goto cleanup;
++
++	skel->links.tc1 = link;
++
++	lid1 = id_from_link_fd(bpf_link__fd(skel->links.tc1));
++
++	assert_mprog_count_ifindex(ifindex, target, 1);
++
++	optq.prog_ids = prog_ids;
++	optq.link_ids = link_ids;
++
++	memset(prog_ids, 0, sizeof(prog_ids));
++	memset(link_ids, 0, sizeof(link_ids));
++	optq.count = ARRAY_SIZE(prog_ids);
++
++	err = bpf_prog_query_opts(ifindex, target, &optq);
++	if (!ASSERT_OK(err, "prog_query"))
++		goto cleanup;
++
++	ASSERT_EQ(optq.count, 1, "count");
++	ASSERT_EQ(optq.revision, 2, "revision");
++	ASSERT_EQ(optq.prog_ids[0], pid1, "prog_ids[0]");
++	ASSERT_EQ(optq.link_ids[0], lid1, "link_ids[0]");
++	ASSERT_EQ(optq.prog_ids[1], 0, "prog_ids[1]");
++	ASSERT_EQ(optq.link_ids[1], 0, "link_ids[1]");
++
++	tc_skel_reset_all_seen(skel);
++	ASSERT_EQ(__send_icmp(ping_addr_noneigh), 0, "icmp_pkt");
++
++	ASSERT_EQ(skel->bss->seen_tc1, true /* L2: ARP */, "seen_tc1");
++	ASSERT_EQ(skel->bss->seen_eth, mode == NETKIT_L3, "seen_eth");
++cleanup:
++	test_tc_link__destroy(skel);
++
++	assert_mprog_count_ifindex(ifindex, target, 0);
++	destroy_netkit();
++}
++
++void serial_test_tc_netkit_neigh_links(void)
++{
++	serial_test_tc_netkit_neigh_links_target(NETKIT_L2, BPF_NETKIT_PRIMARY);
++	serial_test_tc_netkit_neigh_links_target(NETKIT_L3, BPF_NETKIT_PRIMARY);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_tc_link.c b/tools/testing/selftests/bpf/progs/test_tc_link.c
+index 30e7124c49a1..992400acb957 100644
+--- a/tools/testing/selftests/bpf/progs/test_tc_link.c
++++ b/tools/testing/selftests/bpf/progs/test_tc_link.c
+@@ -1,7 +1,11 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2023 Isovalent */
+ #include <stdbool.h>
++
+ #include <linux/bpf.h>
++#include <linux/if_ether.h>
++
++#include <bpf/bpf_endian.h>
+ #include <bpf/bpf_helpers.h>
  
- static int show_dev_tc_bpf_classic(int sock, unsigned int nl_pid,
-@@ -926,7 +931,7 @@ static int do_help(int argc, char **argv)
- 		"       ATTACH_TYPE := { xdp | xdpgeneric | xdpdrv | xdpoffload }\n"
- 		"       " HELP_SPEC_OPTIONS " }\n"
- 		"\n"
--		"Note: Only xdp, tcx, tc, flow_dissector and netfilter attachments\n"
-+		"Note: Only xdp, tcx, tc, netkit, flow_dissector and netfilter attachments\n"
- 		"      are currently supported.\n"
- 		"      For progs attached to cgroups, use \"bpftool cgroup\"\n"
- 		"      to dump program attachments. For program types\n"
+ char LICENSE[] SEC("license") = "GPL";
+@@ -12,10 +16,19 @@ bool seen_tc3;
+ bool seen_tc4;
+ bool seen_tc5;
+ bool seen_tc6;
++bool seen_eth;
+ 
+ SEC("tc/ingress")
+ int tc1(struct __sk_buff *skb)
+ {
++	struct ethhdr eth = {};
++
++	if (skb->protocol != __bpf_constant_htons(ETH_P_IP))
++		goto out;
++	if (bpf_skb_load_bytes(skb, 0, &eth, sizeof(eth)))
++		goto out;
++	seen_eth = eth.h_proto == bpf_htons(ETH_P_IP);
++out:
+ 	seen_tc1 = true;
+ 	return TCX_NEXT;
+ }
 -- 
 2.34.1
 
