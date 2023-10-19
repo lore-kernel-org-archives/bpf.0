@@ -1,160 +1,186 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 716D638C
-	for <bpf@vger.kernel.org>; Thu, 19 Oct 2023 01:07:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 900EF391;
+	Thu, 19 Oct 2023 01:11:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="CHDf4FoQ";
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="CHDf4FoQ";
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WtcNj7V+"
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C2F112
-	for <bpf@vger.kernel.org>; Wed, 18 Oct 2023 18:07:53 -0700 (PDT)
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 8C528C1516EB
-	for <bpf@vger.kernel.org>; Wed, 18 Oct 2023 18:07:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1697677673; bh=oIgMGGQsyGZQ5E4CTc7E7pFJaPtcVOx7JPJhQzMnB7A=;
-	h=From:Date:References:To:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=CHDf4FoQ5NSH3tmto5OZPAi1x2LSmP0r6SBlmGtgsHz0HCqb1w5WX5iNd4bu1peZN
-	 I931GclGxrkWkgyQrAn0ta2F2EQw/FOQQuEarBiomVwd0KrLGIDlNzsQxKiV5pNw/L
-	 h2DMXgz5SCLoIjCJrFXn9tuqqeBA8eHcNrRYA/+k=
-X-Mailbox-Line: From bpf-bounces@ietf.org  Wed Oct 18 18:07:53 2023
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 5D729C151079;
-	Wed, 18 Oct 2023 18:07:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1697677673; bh=oIgMGGQsyGZQ5E4CTc7E7pFJaPtcVOx7JPJhQzMnB7A=;
-	h=From:Date:References:To:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=CHDf4FoQ5NSH3tmto5OZPAi1x2LSmP0r6SBlmGtgsHz0HCqb1w5WX5iNd4bu1peZN
-	 I931GclGxrkWkgyQrAn0ta2F2EQw/FOQQuEarBiomVwd0KrLGIDlNzsQxKiV5pNw/L
-	 h2DMXgz5SCLoIjCJrFXn9tuqqeBA8eHcNrRYA/+k=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id 4F73DC151079
- for <bpf@ietfa.amsl.com>; Wed, 18 Oct 2023 18:07:52 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Score: -2.106
-X-Spam-Level: 
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
- header.d=gmail.com
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OtpwGW5nQHEB for <bpf@ietfa.amsl.com>;
- Wed, 18 Oct 2023 18:07:48 -0700 (PDT)
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com
- [IPv6:2607:f8b0:4864:20::730])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id 901EDC14CE4A
- for <bpf@ietf.org>; Wed, 18 Oct 2023 18:07:48 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id
- af79cd13be357-778999c5ecfso47298485a.2
- for <bpf@ietf.org>; Wed, 18 Oct 2023 18:07:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1697677667; x=1698282467; darn=ietf.org;
- h=message-id:in-reply-to:to:references:date:subject:mime-version
- :content-transfer-encoding:from:from:to:cc:subject:date:message-id
- :reply-to; bh=93iTMdBSd/L52S+O8BZ0+TOR69y0nK2OuLj6qOm2suw=;
- b=WtcNj7V+8k/q/exIENE38qvOLhMfjVHfVUH2A2Bu8WmfdT1YflAzqZdqb5PK0NnQwN
- B305kP3BVKFXwj6dqhyFl/P9Kh8y8F7Q0SaguNl+jWT2Yn+iTeULNaEzYh4/VBBComMu
- uYNuISogG4mOaUq+Sy2mJ6vSi4qBluBeM5K0geI+IDq1brPia67KiOFEPM5sqAVKrG68
- gCLsE0LDuNXYWlEdJFO8IGeHLNlab5w6RlXLN4poIjZzVyCseq4hTZl5AX8oUBsHFUYg
- ONZajZ7eWSKHfXqdBifb3nsLiCxEVC0xv5PuVrTc7DpSOpehAAFpWBn5GSD2Qmm44aM3
- 2NqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1697677667; x=1698282467;
- h=message-id:in-reply-to:to:references:date:subject:mime-version
- :content-transfer-encoding:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=93iTMdBSd/L52S+O8BZ0+TOR69y0nK2OuLj6qOm2suw=;
- b=cWmeO0/3mvbbXJkAXiHhrFT1WmLQtylNIhyNcP2PJs9M8s0Gltz99vJZJaob5IxO6S
- diP5r9mALy2gIA0aNvXucBYH8RIqbR8mELhd7bzRRKBqZzJ+0WpoKI1Rgj8fcRa7+4lM
- P6wK5ImQwdsgWGg3xEXLR8GKynVRQUlEHtJc5XQhdsR5toGMe1piV6u2AsIVLgtLswSu
- OrXv7Ns67Goug5qomWL8b7Nd+J/B+AgX53x+owqYgQrHmL7r9dMLJAqT8d1/cgh0pYTD
- pRurrY6K3uF+QsypMEgNBZoZdBDbGoIHjumqMqwtp/o6rjUB/1/av3d/V+kTWC+FkcoY
- iVMg==
-X-Gm-Message-State: AOJu0Yz52ORHx8AtpxTGs/5t/VTEG2dS81cq7TvNF48P1SiMnyo5sWQ+
- QFAivjV7sqQAsHUmdsGjhhrzNRkenHc=
-X-Google-Smtp-Source: AGHT+IFqO0u5YdNYimUIslC487swT9BZk+UNlFqvPQBvHDE3YHGQTo315dlj1oN7K/XccD7UpM5Q2w==
-X-Received: by 2002:ad4:5b89:0:b0:66d:50a6:da73 with SMTP id
- 9-20020ad45b89000000b0066d50a6da73mr1225476qvp.22.1697677667014; 
- Wed, 18 Oct 2023 18:07:47 -0700 (PDT)
-Received: from smtpclient.apple (45-19-110-76.lightspeed.tukrga.sbcglobal.net.
- [45.19.110.76]) by smtp.gmail.com with ESMTPSA id
- qh11-20020a0562144c0b00b0065af657ddf7sm376860qvb.144.2023.10.18.18.07.45
- (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Wed, 18 Oct 2023 18:07:45 -0700 (PDT)
-From: Suresh Krishnan <suresh.krishnan@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TUVz44Ez"
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0261A113;
+	Wed, 18 Oct 2023 18:11:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697677868; x=1729213868;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   mime-version;
+  bh=7/wWhp5WZzNZkPgaV7hrekuTzYgsc1/Vjk365oAFFsg=;
+  b=TUVz44Ezmc19Y9sE5sPre+im5bX4/7wLLZFdhkEV47gvSYxYoOKHkL+v
+   aUKo4jayGjAQwKJe5r8Rsgp61RlquEHFKPViNzsmi+CiVTupx/nKzUg9t
+   6yc5ccr5xFVc/xG3kzhzyLCI36TZdQJoQloDL7xFdiqRpzLh45AlsGcLh
+   Sc7ZxZGGlC4UDiPGvr4gDvaJC/LSWrVgw5BjF2mDVVPigu+udk1NPj5Ua
+   lP0Lhpuw8MRF8E4Of6ZGf1c+DXsyYxy/66hnMAfgxYXT2M1Ckde3+XOsA
+   aogMx+N3LaZz+TuSZIejCmFZV1r2sbULzTSLk16tjnECzvc+vnZvTPBPW
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10867"; a="385972853"
+X-IronPort-AV: E=Sophos;i="6.03,236,1694761200"; 
+   d="scan'208";a="385972853"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2023 18:11:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10867"; a="930414261"
+X-IronPort-AV: E=Sophos;i="6.03,236,1694761200"; 
+   d="scan'208";a="930414261"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga005.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 18 Oct 2023 18:11:07 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Wed, 18 Oct 2023 18:11:06 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32 via Frontend Transport; Wed, 18 Oct 2023 18:11:06 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.169)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.32; Wed, 18 Oct 2023 18:11:05 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nAoqJ4rK/MpC7onMJK3QG0Ma2LsYddLskflHfj56lNTH/Mi9PorCHMvq77dKWVlb+zGMMHNQF+MTlBlq6xxLNChb2NqaKBs5RamtEyIFGk0IGJEn2nfwayjuNUjU+DAGNKY3wv4MREhMH0Pw47Z7Mn/B2PZzWGCYmyMYr49knEKH5uzeoRu/6FWnNKVgs8YS0098wwuqFkx6S7I3rY3qG2gC9hOQbsfdsTiFQe6zBKubYHi19MovxWCzs7Hon4AWt9nh4LnONYkPYHImE5roxlH8h7TV0mLQ+4iVX3GjVTA3CzYxxXeghWnkWw/s+VFhVudKPHzjbn41GOyTjY00tQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jj6cD4W4BRp9U9iPcpiL6QM6Sy6uZ6e0do5bvHeVB4o=;
+ b=Gtn85rQC1imIlKb4ujXzIkVxvrJ/RfxbYHSlGBbAqyryuykfEul1XtTY/of4PKnhI9I1u6idxGsv5FNkXG1WyS3ZhzO4GcJ9eqYaILM9AGVeLYfagOour3SZsrzGtUWZTls1eLubICimXFXKS458NnNnbJWNntGBJn4dAX9FQuF7C+zBa2S0jvGiTZdoqiuGDfpM+29ffoa3rm7/mu33qzH7+CbmPlG1VRSlGCqlLSWo6HekQGrs9ibGKQHgisyVXdFYammhI2IETwKE6WaVLuc2siO5Zgh2uhDkTU+VNh9yyqdmKwtqucQTexS1SOJH4bkpFCpuaL2Btd/5xpoWEQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY5PR11MB6392.namprd11.prod.outlook.com (2603:10b6:930:37::15)
+ by SA2PR11MB4923.namprd11.prod.outlook.com (2603:10b6:806:fa::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.23; Thu, 19 Oct
+ 2023 01:11:03 +0000
+Received: from CY5PR11MB6392.namprd11.prod.outlook.com
+ ([fe80::21f8:775f:a94d:e1c0]) by CY5PR11MB6392.namprd11.prod.outlook.com
+ ([fe80::21f8:775f:a94d:e1c0%4]) with mapi id 15.20.6907.022; Thu, 19 Oct 2023
+ 01:11:03 +0000
+Date: Thu, 19 Oct 2023 09:06:10 +0800
+From: kernel test robot <yujie.liu@intel.com>
+To: Kai-Heng Feng <kai.heng.feng@canonical.com>, <bhelgaas@google.com>
+CC: <oe-kbuild-all@lists.linux.dev>, <linux-pm@vger.kernel.org>,
+	<linux-mmc@vger.kernel.org>, Kai-Heng Feng <kai.heng.feng@canonical.com>,
+	Ricky Wu <ricky_wu@realtek.com>, Kees Cook <keescook@chromium.org>, Tony Luck
+	<tony.luck@intel.com>, "Guilherme G. Piccoli" <gpiccoli@igalia.com>, "Lukas
+ Wunner" <lukas@wunner.de>, <linux-pci@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-hardening@vger.kernel.org>,
+	<bpf@vger.kernel.org>
+Subject: Re: [PATCH] PCI: pciehp: Prevent child devices from doing RPM on
+ PCIe Link Down
+Message-ID: <202310171955.hlish6FZ-lkp@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20231016040132.23824-1-kai.heng.feng@canonical.com>
+X-ClientProxiedBy: KL1PR01CA0139.apcprd01.prod.exchangelabs.com
+ (2603:1096:820:4::31) To CY5PR11MB6392.namprd11.prod.outlook.com
+ (2603:10b6:930:37::15)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.4\))
-Date: Wed, 18 Oct 2023 21:07:44 -0400
-References: <CA+MHpBoHdG4ptYsdeHaEUNqmyPYYgavWUpMbVW5zzOzUoLUJMw@mail.gmail.com>
-To: bpf@ietf.org,
- bpf <bpf@vger.kernel.org>
-In-Reply-To: <CA+MHpBoHdG4ptYsdeHaEUNqmyPYYgavWUpMbVW5zzOzUoLUJMw@mail.gmail.com>
-Message-ID: <1C8A6FD1-1724-4AD3-A6C9-CA2C427FD32E@gmail.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.4)
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/mLRsSHsAaPm3JHETz_EOvhMaID4>
-Subject: Re: [Bpf] Call for WG adoption: draft-thaler-bpf-isa-02
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Id: Discussion of BPF/eBPF standardization efforts within the IETF
- <bpf.ietf.org>
-List-Unsubscribe: <https://www.ietf.org/mailman/options/bpf>,
- <mailto:bpf-request@ietf.org?subject=unsubscribe>
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-List-Subscribe: <https://www.ietf.org/mailman/listinfo/bpf>,
- <mailto:bpf-request@ietf.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
-Message-ID: <20231019010744.DZj1UGmK9wfUWIJ4WDVPwy96twEOWYBtyvJ-LRvErzQ@z>
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6392:EE_|SA2PR11MB4923:EE_
+X-MS-Office365-Filtering-Correlation-Id: 956edf23-e6cb-4789-1101-08dbd040435c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: z+Sg8aILu9u/J9+OBib5/MF5mtCDYQJ5XnKTWFWonx0SJrIWzHdwLCdom5YL5mzkKqIpLhR9jFs+LGGKkohEuQXaIiYJM+uK26jIRuOoZ6P8fpnORuq6c1kqf53QjETHYL60AQ3npZEGNYTzmDWIu9drj2MpDmKrP181wzHqLcwnsqWBJpPG5Gf+kD+LGCM1pBhozBobsOmco8BKtQLlv77rBHrUFE1B7jfKksR8+JmowhF2SBfaBJLVneo+ZwGWzd3DTfqCX1521Fkp7iT6irPIZYZemRyHGJKD29XLdFQfRh48Ty1QWuTsexMhGlVpaZKR7NxicCoJ7kED6BZ5Zj52icEL4fUahfP1Ej6bv5kA/XFZ5NNSQ8oGMNhixYw4deLDQxBfsussVHzctf8+dKI3i4r9XuLQX0kAHrG7oP4b6JdlOq+nem1pvhNPFTrMjKWQR71j3HTPMLyeM+u9/2AemG7TiqU9wApPVfrQOhPWNA+rmA3RvAeZxBzAXvUg8fV/wFgbZhQ2/QY4UwycmRZum9xt5u5vt+SP2eesrGEWaooDr7BQT6v69eSq9lAFCbNYWf1OQvKCgS0MdR+P5Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(39860400002)(346002)(136003)(366004)(396003)(230922051799003)(451199024)(1800799009)(186009)(64100799003)(2616005)(26005)(6666004)(6512007)(6506007)(83380400001)(4001150100001)(5660300002)(8676002)(8936002)(4326008)(41300700001)(7416002)(2906002)(966005)(6486002)(316002)(478600001)(66476007)(66556008)(66946007)(54906003)(1076003)(86362001)(82960400001)(38100700002)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?e3kWUdarVcUqybapBbJnlu1d3nIlTjyoBlhpXUP+lRqpGu/bivZNEnfdsKVd?=
+ =?us-ascii?Q?XK8mGmejbrG6CnSrJgGkyKcnCGoV0cChg5j8TOiNSUUxhZKZgcN0GsCzb8iu?=
+ =?us-ascii?Q?KWJMrHKQwdWM6pmsgSfJLqY/MOFhqasDNv0VxYJTlK7eSHyupEipftpYk0NB?=
+ =?us-ascii?Q?iwLr1mfRVH4QEICnou9CKPVRyo26hBdWLdcCBdTmgQ+sa/agc17rXuOTMZuZ?=
+ =?us-ascii?Q?oMSmtRjuvzRV4Pstyiqa29HVz8e8dbAxj18G3yf11w2qxk+paCUmC+DQo35+?=
+ =?us-ascii?Q?+OnKdpQNMHdlKeNJhprzfiA88/qM3IrABXqKPvyJ+NBKjlkKb59js17oLdM+?=
+ =?us-ascii?Q?kMg7d+aZlEwcqZSssZVHOXzc6micQE0xij8rYSOQMT4id5A6SQrPaRTE9CQL?=
+ =?us-ascii?Q?aLfllEsM4pqe/LIWoWTUovRipOaZP7S5c42iKbtP4paVghRNyocy7R0LkEFq?=
+ =?us-ascii?Q?uqTi0CFJaO3mTrXScYw4PQzCq5OuvNmIXOmyFgJfFwZow1AIMjNqVguGvKIb?=
+ =?us-ascii?Q?8E8yV2k3Fdxp2rZdj7Qv/zKc6v4ftUy27yaMtIWgl4Q3mCH8IxaMscKxKMZI?=
+ =?us-ascii?Q?SRLGjPgwjynKxSKfvSs3oIEOn0m9p7pzj61w8ZhRwZ8F6TzWQRTHmMNwhj8J?=
+ =?us-ascii?Q?9KxDCwu1OkZi8qm9xLbdSkxkdcnquftnH20W7F4aykW9WWDQBxfCBxGAPPL1?=
+ =?us-ascii?Q?aRDIAPvUg2QEP7snkU7zDT0ISLkoOnD/w1V1Uxmw0ks0JTQ8koQFSQBJHMzU?=
+ =?us-ascii?Q?WnHGr/w8Tsmr7qj0QEz/L90+GKycGP9RVsvW2xr7c42yAdqEujDEHGHf8tfI?=
+ =?us-ascii?Q?ln0WBQ9/qgz/MwscNr90884Wi6pgw/UmYwuwK2esH7gVeW6d9hLPZtlzjXK6?=
+ =?us-ascii?Q?Fbzz4TKlrL3a1Bh2OzDrQyyLF+Negi1ro0WLtMp9ET2WoRMUOepJDH4hPBLi?=
+ =?us-ascii?Q?sjIOOkehY1qyhjiE2DAJ7kfb9h3ERcj3kC5RkNUbBRUTDYFh7fjFpjwqCCZe?=
+ =?us-ascii?Q?fC/hTa2dry29JnHrl6LJnQaYZjH4opzKR1EstvST4+6PjNxPfLGBRS74dVeH?=
+ =?us-ascii?Q?FoUdDtGsCApdSMez4qD4SOweJNFoB/KB4TI8E10yauYcRZ8Z/a6J7xsCIFJ6?=
+ =?us-ascii?Q?0WAxoi/OuS62qNJznECW23Sa+jVRBxOf1FfJyzo1puiW96oaSIL8aw/exNb0?=
+ =?us-ascii?Q?BFWmjAXZOF7jBI7GR31MlI+tf5pJiz9tP4GPxyEJXxOx+MF1r3V/RE1HSbRj?=
+ =?us-ascii?Q?sEn88TDGmc/Jja3kJt5lzqVDZGFrB9zj9BqGpC3MOpjoB4s8WjA1BGcIz9bQ?=
+ =?us-ascii?Q?wME2epNA7zF7EtEZFYuMrnGwozJmA4/XwkGaoj5I4J6y7Gmjq270NO5x/QVx?=
+ =?us-ascii?Q?ipBqmXWBWxb1U4ZXZJHkGmwMXq1CLTZnDaVH8lEgoLms6+UpRV+lL6RrqfDN?=
+ =?us-ascii?Q?RR1JriEgk19bvICk+XXc/OQZ71bOM1pmO6jyOm3fx3RwzWlK4bvJVIFrFNTG?=
+ =?us-ascii?Q?vt86wtgAZyGVWhTTSPEg9BCFt81ghEvkuPsVvm9P413FemB4OduafN69bMmi?=
+ =?us-ascii?Q?mURfwyHq+28lPBkKMKXpHRQ/w1qFBhyeHLhnzW8I?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 956edf23-e6cb-4789-1101-08dbd040435c
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6392.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2023 01:11:03.1101
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: okgbq8PFLaYwqWb6n4eq/o4z+hNRyzhqnY5rdj3UI3xslnVROdzo0roBb95rtCQMRPscEiUWYA8qTtA0UwGTpw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4923
+X-OriginatorOrg: intel.com
 
-Hi all,
-  This document has now been adopted as a WG item. Dave, please submit the next revision as draft-ietf-bpf-isa-00.
+Hi Kai-Heng,
 
-Thanks
-Suresh & David
+kernel test robot noticed the following build warnings:
 
-> On Sep 29, 2023, at 10:28 AM, Suresh Krishnan <suresh.krishnan@gmail.com> wrote:
-> 
-> Hi all,
->  This draft has been presented at the bpf meetings and has received
-> significant feedback both at the meetings and on/off list. Dave has
-> published a new revision that addresses all the comments, and has
-> requested WG adoption of the draft. This call is being initiated to
-> determine whether there is WG consensus towards adoption of
-> draft-thaler-bpf-isa-02 as a bpf WG draft. This draft is expected to
-> address the WG deliverable
-> 
-> "[PS] the BPF instruction set architecture (ISA) that defines the
-> instructions and low-level virtual machine for BPF programs"
-> 
-> The draft is available at
-> 
-> (HTML) https://datatracker.ietf.org/doc/html/draft-thaler-bpf-isa-02
-> (Plaintext) https://www.ietf.org/archive/id/draft-thaler-bpf-isa-02.txt
-> 
-> Please state whether or not you're in favor of the adoption by
-> replying to this email. If you are not in favor, please also state
-> your objections in your response. This adoption call will conclude on
-> Friday October 13 2023 (AoE) .
-> 
-> Regards
-> Suresh & David
+[auto build test WARNING on pci/next]
+[also build test WARNING on pci/for-linus linus/master v6.6-rc6 next-20231017]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kai-Heng-Feng/PCI-pciehp-Prevent-child-devices-from-doing-RPM-on-PCIe-Link-Down/20231017-142208
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20231016040132.23824-1-kai.heng.feng%40canonical.com
+patch subject: [PATCH] PCI: pciehp: Prevent child devices from doing RPM on PCIe Link Down
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20231017/202310171955.hlish6FZ-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231017/202310171955.hlish6FZ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <yujie.liu@intel.com>
+| Closes: https://lore.kernel.org/r/202310171955.hlish6FZ-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/pci/hotplug/pciehp_pci.c:25:5: warning: no previous prototype for 'pci_dev_disconnect' [-Wmissing-prototypes]
+      25 | int pci_dev_disconnect(struct pci_dev *pdev, void *unused)
+         |     ^~~~~~~~~~~~~~~~~~
+
+
+vim +/pci_dev_disconnect +25 drivers/pci/hotplug/pciehp_pci.c
+
+^1da177e4c3f41 Linus Torvalds 2005-04-16  24  
+2bd1cb5c4e6711 Kai-Heng Feng  2023-10-16 @25  int pci_dev_disconnect(struct pci_dev *pdev, void *unused)
+2bd1cb5c4e6711 Kai-Heng Feng  2023-10-16  26  {
+2bd1cb5c4e6711 Kai-Heng Feng  2023-10-16  27  	pm_runtime_barrier(&pdev->dev);
+2bd1cb5c4e6711 Kai-Heng Feng  2023-10-16  28  	pci_dev_set_disconnected(pdev, NULL);
+2bd1cb5c4e6711 Kai-Heng Feng  2023-10-16  29  
+2bd1cb5c4e6711 Kai-Heng Feng  2023-10-16  30  	return 0;
+2bd1cb5c4e6711 Kai-Heng Feng  2023-10-16  31  }
+2bd1cb5c4e6711 Kai-Heng Feng  2023-10-16  32  
 
 -- 
-Bpf mailing list
-Bpf@ietf.org
-https://www.ietf.org/mailman/listinfo/bpf
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
+
