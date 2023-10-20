@@ -1,18 +1,18 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6F991BDD4
-	for <bpf@vger.kernel.org>; Fri, 20 Oct 2023 13:31:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35A901BDD4
+	for <bpf@vger.kernel.org>; Fri, 20 Oct 2023 13:31:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB109D61
-	for <bpf@vger.kernel.org>; Fri, 20 Oct 2023 06:31:02 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3791219E
+	for <bpf@vger.kernel.org>; Fri, 20 Oct 2023 06:31:04 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.153])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4SBlpP4B6Dz4f3jXx
-	for <bpf@vger.kernel.org>; Fri, 20 Oct 2023 21:30:53 +0800 (CST)
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4SBlpM3r3Rz4f3jJ8
+	for <bpf@vger.kernel.org>; Fri, 20 Oct 2023 21:30:51 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgBn+dgIgTJlmYjjDQ--.7231S11;
-	Fri, 20 Oct 2023 21:30:59 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgBn+dgIgTJlmYjjDQ--.7231S8;
+	Fri, 20 Oct 2023 21:30:56 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org,
 	linux-mm@kvack.org
@@ -32,9 +32,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	Tejun Heo <tj@kernel.org>,
 	Christoph Lameter <cl@linux.com>,
 	Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH bpf-next v3 7/7] selftests/bpf: Add more test cases for bpf memory allocator
-Date: Fri, 20 Oct 2023 21:32:02 +0800
-Message-Id: <20231020133202.4043247-8-houtao@huaweicloud.com>
+Subject: [PATCH bpf-next v3 4/7] bpf: Use pcpu_alloc_size() in bpf_mem_free{_rcu}()
+Date: Fri, 20 Oct 2023 21:31:59 +0800
+Message-Id: <20231020133202.4043247-5-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20231020133202.4043247-1-houtao@huaweicloud.com>
 References: <20231020133202.4043247-1-houtao@huaweicloud.com>
@@ -45,11 +45,11 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgBn+dgIgTJlmYjjDQ--.7231S11
-X-Coremail-Antispam: 1UD129KBjvJXoW3Wr4rXw15Cw4kJw1fJFyrJFb_yoWfArW3pF
-	y0yrySyr1kWr1Ig34Yvw4UCa4rZF4fWw15GrZ5WFyUury3X34UArn5CFyUJF95GFZ2gr45
-	Aas0gF97KF4xA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+X-CM-TRANSID:gCh0CgBn+dgIgTJlmYjjDQ--.7231S8
+X-Coremail-Antispam: 1UD129KBjvJXoW7urWrCw1UJry8uFykArWrZrb_yoW5JrWDpF
+	W7Kr18AF4kXF45W3W2gr1xAa45Jw1Ig3WxKay7Zry5uFWfWr1DGr4kGry7XFn0krWUGaya
+	yrykKr4furWUA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBab4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
 	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267
@@ -59,291 +59,89 @@ X-Coremail-Antispam: 1UD129KBjvJXoW3Wr4rXw15Cw4kJw1fJFyrJFb_yoWfArW3pF
 	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2
 	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
 	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0x
-	vE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAI
-	cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2js
-	IEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUFgAwUUUUU
+	vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY
+	6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aV
+	CY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZo7tUUUUU=
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 X-CFilter-Loop: Reflected
 
 From: Hou Tao <houtao1@huawei.com>
 
-Add the following 3 test cases for bpf memory allocator:
-1) Do allocation in bpf program and free through map free
-2) Do batch per-cpu allocation and per-cpu free in bpf program
-3) Do per-cpu allocation in bpf program and free through map free
+For bpf_global_percpu_ma, the pointer passed to bpf_mem_free_rcu() is
+allocated by kmalloc() and its size is fixed (16-bytes on x86-64). So
+no matter which cache allocates the dynamic per-cpu area, on x86-64
+cache[2] will always be used to free the per-cpu area.
 
-For per-cpu allocation, because per-cpu allocation can not refill timely
-sometimes, so test 2) and test 3) consider it is OK for
-bpf_percpu_obj_new_impl() to return NULL.
+Fix the unbalance by checking whether the bpf memory allocator is
+per-cpu or not and use pcpu_alloc_size() instead of ksize() to
+find the correct cache for per-cpu free.
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- .../selftests/bpf/prog_tests/test_bpf_ma.c    |  20 +-
- .../testing/selftests/bpf/progs/test_bpf_ma.c | 180 +++++++++++++++++-
- 2 files changed, 193 insertions(+), 7 deletions(-)
+ include/linux/bpf_mem_alloc.h |  1 +
+ kernel/bpf/memalloc.c         | 16 ++++++++++++++--
+ 2 files changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_bpf_ma.c b/tools/testing/selftests/bpf/prog_tests/test_bpf_ma.c
-index 0cca4e8ae38e0..d3491a84b3b98 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_bpf_ma.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_bpf_ma.c
-@@ -9,9 +9,10 @@
+diff --git a/include/linux/bpf_mem_alloc.h b/include/linux/bpf_mem_alloc.h
+index d644bbb298af4..bb1223b213087 100644
+--- a/include/linux/bpf_mem_alloc.h
++++ b/include/linux/bpf_mem_alloc.h
+@@ -11,6 +11,7 @@ struct bpf_mem_caches;
+ struct bpf_mem_alloc {
+ 	struct bpf_mem_caches __percpu *caches;
+ 	struct bpf_mem_cache __percpu *cache;
++	bool percpu;
+ 	struct work_struct work;
+ };
  
- #include "test_bpf_ma.skel.h"
+diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
+index 776bdf5ffd80b..5308e386380af 100644
+--- a/kernel/bpf/memalloc.c
++++ b/kernel/bpf/memalloc.c
+@@ -525,6 +525,7 @@ int bpf_mem_alloc_init(struct bpf_mem_alloc *ma, int size, bool percpu)
+ 	/* room for llist_node and per-cpu pointer */
+ 	if (percpu)
+ 		percpu_size = LLIST_NODE_SZ + sizeof(void *);
++	ma->percpu = percpu;
  
--void test_test_bpf_ma(void)
-+static void do_bpf_ma_test(const char *name)
- {
- 	struct test_bpf_ma *skel;
-+	struct bpf_program *prog;
- 	struct btf *btf;
- 	int i, err;
- 
-@@ -34,6 +35,11 @@ void test_test_bpf_ma(void)
- 		skel->rodata->data_btf_ids[i] = id;
- 	}
- 
-+	prog = bpf_object__find_program_by_name(skel->obj, name);
-+	if (!ASSERT_OK_PTR(prog, "invalid prog name"))
-+		goto out;
-+	bpf_program__set_autoload(prog, true);
-+
- 	err = test_bpf_ma__load(skel);
- 	if (!ASSERT_OK(err, "load"))
- 		goto out;
-@@ -48,3 +54,15 @@ void test_test_bpf_ma(void)
- out:
- 	test_bpf_ma__destroy(skel);
- }
-+
-+void test_test_bpf_ma(void)
-+{
-+	if (test__start_subtest("batch_alloc_free"))
-+		do_bpf_ma_test("test_batch_alloc_free");
-+	if (test__start_subtest("free_through_map_free"))
-+		do_bpf_ma_test("test_free_through_map_free");
-+	if (test__start_subtest("batch_percpu_alloc_free"))
-+		do_bpf_ma_test("test_batch_percpu_alloc_free");
-+	if (test__start_subtest("percpu_free_through_map_free"))
-+		do_bpf_ma_test("test_percpu_free_through_map_free");
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_bpf_ma.c b/tools/testing/selftests/bpf/progs/test_bpf_ma.c
-index ecde41ae0fc87..b685a4aba6bd9 100644
---- a/tools/testing/selftests/bpf/progs/test_bpf_ma.c
-+++ b/tools/testing/selftests/bpf/progs/test_bpf_ma.c
-@@ -37,10 +37,20 @@ int pid = 0;
- 		__type(key, int); \
- 		__type(value, struct map_value_##_size); \
- 		__uint(max_entries, 128); \
--	} array_##_size SEC(".maps");
-+	} array_##_size SEC(".maps")
- 
--static __always_inline void batch_alloc_free(struct bpf_map *map, unsigned int batch,
--					     unsigned int idx)
-+#define DEFINE_ARRAY_WITH_PERCPU_KPTR(_size) \
-+	struct map_value_percpu_##_size { \
-+		struct bin_data_##_size __percpu_kptr * data; \
-+	}; \
-+	struct { \
-+		__uint(type, BPF_MAP_TYPE_ARRAY); \
-+		__type(key, int); \
-+		__type(value, struct map_value_percpu_##_size); \
-+		__uint(max_entries, 128); \
-+	} array_percpu_##_size SEC(".maps")
-+
-+static __always_inline void batch_alloc(struct bpf_map *map, unsigned int batch, unsigned int idx)
- {
- 	struct generic_map_value *value;
- 	unsigned int i, key;
-@@ -65,6 +75,14 @@ static __always_inline void batch_alloc_free(struct bpf_map *map, unsigned int b
- 			return;
- 		}
- 	}
-+}
-+
-+static __always_inline void batch_free(struct bpf_map *map, unsigned int batch, unsigned int idx)
-+{
-+	struct generic_map_value *value;
-+	unsigned int i, key;
-+	void *old;
-+
- 	for (i = 0; i < batch; i++) {
- 		key = i;
- 		value = bpf_map_lookup_elem(map, &key);
-@@ -81,8 +99,72 @@ static __always_inline void batch_alloc_free(struct bpf_map *map, unsigned int b
- 	}
+ 	if (size) {
+ 		pc = __alloc_percpu_gfp(sizeof(*pc), 8, GFP_KERNEL);
+@@ -874,6 +875,17 @@ void notrace *bpf_mem_alloc(struct bpf_mem_alloc *ma, size_t size)
+ 	return !ret ? NULL : ret + LLIST_NODE_SZ;
  }
  
-+static __always_inline void batch_percpu_alloc(struct bpf_map *map, unsigned int batch,
-+					       unsigned int idx)
++static notrace int bpf_mem_free_idx(void *ptr, bool percpu)
 +{
-+	struct generic_map_value *value;
-+	unsigned int i, key;
-+	void *old, *new;
++	size_t size;
 +
-+	for (i = 0; i < batch; i++) {
-+		key = i;
-+		value = bpf_map_lookup_elem(map, &key);
-+		if (!value) {
-+			err = 1;
-+			return;
-+		}
-+		/* per-cpu allocator may not be able to refill in time */
-+		new = bpf_percpu_obj_new_impl(data_btf_ids[idx], NULL);
-+		if (!new)
-+			continue;
-+
-+		old = bpf_kptr_xchg(&value->data, new);
-+		if (old) {
-+			bpf_percpu_obj_drop(old);
-+			err = 2;
-+			return;
-+		}
-+	}
++	if (percpu)
++		size = pcpu_alloc_size(*((void **)ptr));
++	else
++		size = ksize(ptr - LLIST_NODE_SZ);
++	return bpf_mem_cache_idx(size);
 +}
 +
-+static __always_inline void batch_percpu_free(struct bpf_map *map, unsigned int batch,
-+					      unsigned int idx)
-+{
-+	struct generic_map_value *value;
-+	unsigned int i, key;
-+	void *old;
-+
-+	for (i = 0; i < batch; i++) {
-+		key = i;
-+		value = bpf_map_lookup_elem(map, &key);
-+		if (!value) {
-+			err = 3;
-+			return;
-+		}
-+		old = bpf_kptr_xchg(&value->data, NULL);
-+		if (!old)
-+			continue;
-+		bpf_percpu_obj_drop(old);
-+	}
-+}
-+
-+#define CALL_BATCH_ALLOC(size, batch, idx) \
-+	batch_alloc((struct bpf_map *)(&array_##size), batch, idx)
-+
- #define CALL_BATCH_ALLOC_FREE(size, batch, idx) \
--	batch_alloc_free((struct bpf_map *)(&array_##size), batch, idx)
-+	do { \
-+		batch_alloc((struct bpf_map *)(&array_##size), batch, idx); \
-+		batch_free((struct bpf_map *)(&array_##size), batch, idx); \
-+	} while (0)
-+
-+#define CALL_BATCH_PERCPU_ALLOC(size, batch, idx) \
-+	batch_percpu_alloc((struct bpf_map *)(&array_percpu_##size), batch, idx)
-+
-+#define CALL_BATCH_PERCPU_ALLOC_FREE(size, batch, idx) \
-+	do { \
-+		batch_percpu_alloc((struct bpf_map *)(&array_percpu_##size), batch, idx); \
-+		batch_percpu_free((struct bpf_map *)(&array_percpu_##size), batch, idx); \
-+	} while (0)
- 
- DEFINE_ARRAY_WITH_KPTR(8);
- DEFINE_ARRAY_WITH_KPTR(16);
-@@ -97,8 +179,21 @@ DEFINE_ARRAY_WITH_KPTR(1024);
- DEFINE_ARRAY_WITH_KPTR(2048);
- DEFINE_ARRAY_WITH_KPTR(4096);
- 
--SEC("fentry/" SYS_PREFIX "sys_nanosleep")
--int test_bpf_mem_alloc_free(void *ctx)
-+/* per-cpu kptr doesn't support bin_data_8 which is a zero-sized array */
-+DEFINE_ARRAY_WITH_PERCPU_KPTR(16);
-+DEFINE_ARRAY_WITH_PERCPU_KPTR(32);
-+DEFINE_ARRAY_WITH_PERCPU_KPTR(64);
-+DEFINE_ARRAY_WITH_PERCPU_KPTR(96);
-+DEFINE_ARRAY_WITH_PERCPU_KPTR(128);
-+DEFINE_ARRAY_WITH_PERCPU_KPTR(192);
-+DEFINE_ARRAY_WITH_PERCPU_KPTR(256);
-+DEFINE_ARRAY_WITH_PERCPU_KPTR(512);
-+DEFINE_ARRAY_WITH_PERCPU_KPTR(1024);
-+DEFINE_ARRAY_WITH_PERCPU_KPTR(2048);
-+DEFINE_ARRAY_WITH_PERCPU_KPTR(4096);
-+
-+SEC("?fentry/" SYS_PREFIX "sys_nanosleep")
-+int test_batch_alloc_free(void *ctx)
+ void notrace bpf_mem_free(struct bpf_mem_alloc *ma, void *ptr)
  {
- 	if ((u32)bpf_get_current_pid_tgid() != pid)
- 		return 0;
-@@ -121,3 +216,76 @@ int test_bpf_mem_alloc_free(void *ctx)
+ 	int idx;
+@@ -881,7 +893,7 @@ void notrace bpf_mem_free(struct bpf_mem_alloc *ma, void *ptr)
+ 	if (!ptr)
+ 		return;
  
- 	return 0;
- }
-+
-+SEC("?fentry/" SYS_PREFIX "sys_nanosleep")
-+int test_free_through_map_free(void *ctx)
-+{
-+	if ((u32)bpf_get_current_pid_tgid() != pid)
-+		return 0;
-+
-+	/* Alloc 128 8-bytes objects in batch to trigger refilling,
-+	 * then free these objects through map free.
-+	 */
-+	CALL_BATCH_ALLOC(8, 128, 0);
-+	CALL_BATCH_ALLOC(16, 128, 1);
-+	CALL_BATCH_ALLOC(32, 128, 2);
-+	CALL_BATCH_ALLOC(64, 128, 3);
-+	CALL_BATCH_ALLOC(96, 128, 4);
-+	CALL_BATCH_ALLOC(128, 128, 5);
-+	CALL_BATCH_ALLOC(192, 128, 6);
-+	CALL_BATCH_ALLOC(256, 128, 7);
-+	CALL_BATCH_ALLOC(512, 64, 8);
-+	CALL_BATCH_ALLOC(1024, 32, 9);
-+	CALL_BATCH_ALLOC(2048, 16, 10);
-+	CALL_BATCH_ALLOC(4096, 8, 11);
-+
-+	return 0;
-+}
-+
-+SEC("?fentry/" SYS_PREFIX "sys_nanosleep")
-+int test_batch_percpu_alloc_free(void *ctx)
-+{
-+	if ((u32)bpf_get_current_pid_tgid() != pid)
-+		return 0;
-+
-+	/* Alloc 128 16-bytes per-cpu objects in batch to trigger refilling,
-+	 * then free 128 16-bytes per-cpu objects in batch to trigger freeing.
-+	 */
-+	CALL_BATCH_PERCPU_ALLOC_FREE(16, 128, 1);
-+	CALL_BATCH_PERCPU_ALLOC_FREE(32, 128, 2);
-+	CALL_BATCH_PERCPU_ALLOC_FREE(64, 128, 3);
-+	CALL_BATCH_PERCPU_ALLOC_FREE(96, 128, 4);
-+	CALL_BATCH_PERCPU_ALLOC_FREE(128, 128, 5);
-+	CALL_BATCH_PERCPU_ALLOC_FREE(192, 128, 6);
-+	CALL_BATCH_PERCPU_ALLOC_FREE(256, 128, 7);
-+	CALL_BATCH_PERCPU_ALLOC_FREE(512, 64, 8);
-+	CALL_BATCH_PERCPU_ALLOC_FREE(1024, 32, 9);
-+	CALL_BATCH_PERCPU_ALLOC_FREE(2048, 16, 10);
-+	CALL_BATCH_PERCPU_ALLOC_FREE(4096, 8, 11);
-+
-+	return 0;
-+}
-+
-+SEC("?fentry/" SYS_PREFIX "sys_nanosleep")
-+int test_percpu_free_through_map_free(void *ctx)
-+{
-+	if ((u32)bpf_get_current_pid_tgid() != pid)
-+		return 0;
-+
-+	/* Alloc 128 16-bytes per-cpu objects in batch to trigger refilling,
-+	 * then free these object through map free.
-+	 */
-+	CALL_BATCH_PERCPU_ALLOC(16, 128, 1);
-+	CALL_BATCH_PERCPU_ALLOC(32, 128, 2);
-+	CALL_BATCH_PERCPU_ALLOC(64, 128, 3);
-+	CALL_BATCH_PERCPU_ALLOC(96, 128, 4);
-+	CALL_BATCH_PERCPU_ALLOC(128, 128, 5);
-+	CALL_BATCH_PERCPU_ALLOC(192, 128, 6);
-+	CALL_BATCH_PERCPU_ALLOC(256, 128, 7);
-+	CALL_BATCH_PERCPU_ALLOC(512, 64, 8);
-+	CALL_BATCH_PERCPU_ALLOC(1024, 32, 9);
-+	CALL_BATCH_PERCPU_ALLOC(2048, 16, 10);
-+	CALL_BATCH_PERCPU_ALLOC(4096, 8, 11);
-+
-+	return 0;
-+}
+-	idx = bpf_mem_cache_idx(ksize(ptr - LLIST_NODE_SZ));
++	idx = bpf_mem_free_idx(ptr, ma->percpu);
+ 	if (idx < 0)
+ 		return;
+ 
+@@ -895,7 +907,7 @@ void notrace bpf_mem_free_rcu(struct bpf_mem_alloc *ma, void *ptr)
+ 	if (!ptr)
+ 		return;
+ 
+-	idx = bpf_mem_cache_idx(ksize(ptr - LLIST_NODE_SZ));
++	idx = bpf_mem_free_idx(ptr, ma->percpu);
+ 	if (idx < 0)
+ 		return;
+ 
 -- 
 2.29.2
 
