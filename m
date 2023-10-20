@@ -1,113 +1,117 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B8AB1DA2E
-	for <bpf@vger.kernel.org>; Fri, 20 Oct 2023 14:33:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 407B115EBB
+	for <bpf@vger.kernel.org>; Fri, 20 Oct 2023 14:46:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="hqFY4lL4"
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4F419E
-	for <bpf@vger.kernel.org>; Fri, 20 Oct 2023 07:33:23 -0700 (PDT)
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39KEQfGR023891;
-	Fri, 20 Oct 2023 14:33:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=tzac3AS0oG8TDUzllI2/wCYY+QbYk9wa+uGXRR0SFvg=;
- b=hqFY4lL4igdzMQ2SVO5FBNfR/w+oAg9tp6AKKbde04BPndnCt0jA7YpDq9QFiT+RNLve
- HcTbIDTsWlJR+fCoefrB6Rgnmvw3h2sd0KYcMfLHqa5qX5IJUgn7bIQM3dmuIuf2n3gz
- Xi4nm9Gj+j7+YH7VPjsUcqm/Gte0OWeTOyF4ABfFO5rYQr6dQqEDD6SIgUI/xRMWmIfw
- fueNN1ECfzssQQJvS5yIxKcxOve2q/0/9T8Ibce9IEJenmQm0Oa6px3e35mcaxcwLwtx
- zbEPQOEoXJ67qd+yfg3TVTMeIEOB2QD1rz1f0UVvgEKfKJr3JTl1bz7thDivQRXi50CL UQ== 
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tuu68rjhb-12
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 20 Oct 2023 14:32:59 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 39KC5J5m002779;
-	Fri, 20 Oct 2023 14:15:30 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3tuc44d1gv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 20 Oct 2023 14:15:30 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 39KEFSd521496458
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 20 Oct 2023 14:15:28 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4CEA72004F;
-	Fri, 20 Oct 2023 14:15:28 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EBB392004B;
-	Fri, 20 Oct 2023 14:15:25 +0000 (GMT)
-Received: from [9.43.18.181] (unknown [9.43.18.181])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 20 Oct 2023 14:15:25 +0000 (GMT)
-Message-ID: <6588d1ed-4df0-5344-9c4a-0dfc10e160d1@linux.ibm.com>
-Date: Fri, 20 Oct 2023 19:45:24 +0530
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="Q8mGK1wt"
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D78106
+	for <bpf@vger.kernel.org>; Fri, 20 Oct 2023 07:46:54 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1c9e95aa02dso7285105ad.0
+        for <bpf@vger.kernel.org>; Fri, 20 Oct 2023 07:46:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1697813214; x=1698418014; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GyYLg6uaau03lsfr7xxhq7bt6KmMpCzPGGZ4WDyQ87k=;
+        b=Q8mGK1wtnWCx8tCK0NSPDaVqaCzFeXzsltsRaV8Rz31choCxKMtvjvLJE6qAKDDw86
+         t43QQ0a2/vvYrBPuWw6ZFgp2vsg2Wx+bqs8b2oGZ1zAGGl95EXfK2VMcm8jwNi70ISLz
+         028G0Nzv1bAAlVdgnqizFq51hzE9srTofdatzN3UAWT4ly0iBhH7hb4+OCgkI7iHRJuF
+         VgRDO6Vp1Mv9ITrySYs94NH4uJ9VrjVbopVlY004ctN+h3NQtNzKvLHj412U5gTVycpK
+         qdUQpgmxTmdsWf+JC2i942VBOoFEhBg7VKOWA1Biwecas7UremsTVSe6nxq2kdIac4G5
+         cG6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697813214; x=1698418014;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=GyYLg6uaau03lsfr7xxhq7bt6KmMpCzPGGZ4WDyQ87k=;
+        b=oCA62B++s8KrdtdFbPtN1dD1AWYD04UZGCduH7QdQa9JMjsAa9G+qybaWvAVnDqaG1
+         BpXPhKlGwR6kDHnJ2nJLwml/UY7zO42rPYiZs6d7mp36TxSCUemLE4GOlSprVzMj9nxQ
+         BaUIZNS3cPbgircn8oUbnLBSUNf+nJntL6opyRdELiVMGlvJEr4SCezYxMVgYp88sbl5
+         HtXmtpuCfD2JOMCYBBAqpJED/TiTLMdVeXTyeWJtTkHNzPR/A47+owt5jynAvRK/7pec
+         vq0AHpQaF8zyq8YM8uTxHREYavyU78gdNBMBlke71oQeD5i73W2AY+Xa7ukLtmvtdiAA
+         D6hw==
+X-Gm-Message-State: AOJu0YwaAW3d3GEqyvfrn4Fjlxi3Tz6r4ACYl8WJWL5U8oClUDj9C3zl
+	HAquFNNPNdRRzlDg9iqOom0z2e005wMQ7JaCLmk=
+X-Google-Smtp-Source: AGHT+IFu+j4QSKAUz1a05aMPKqTUoCm8eGTO3kbV6RYKEUUYJskXkYI3Cp6EYCSsU8WnzgahVH+KsQ==
+X-Received: by 2002:a17:902:d2c2:b0:1c7:49dd:2ff with SMTP id n2-20020a170902d2c200b001c749dd02ffmr2718988plc.27.1697813214265;
+        Fri, 20 Oct 2023 07:46:54 -0700 (PDT)
+Received: from [10.254.107.145] ([139.177.225.237])
+        by smtp.gmail.com with ESMTPSA id f12-20020a17090274cc00b001c72f4334afsm1619250plt.20.2023.10.20.07.46.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Oct 2023 07:46:53 -0700 (PDT)
+Message-ID: <272de0e9-539c-4d89-9b9c-0652b0826cdd@bytedance.com>
+Date: Fri, 20 Oct 2023 22:46:48 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v6 5/5] powerpc/bpf: use
- bpf_jit_binary_pack_[alloc|finalize|free]
-Content-Language: en-US
-To: Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, bpf@vger.kernel.org
-Cc: "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Song Liu <songliubraving@fb.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Song Liu <song@kernel.org>
-References: <20231012200310.235137-1-hbathini@linux.ibm.com>
- <20231012200310.235137-6-hbathini@linux.ibm.com> <87jzrj5efp.fsf@mail.lhotse>
-From: Hari Bathini <hbathini@linux.ibm.com>
-In-Reply-To: <87jzrj5efp.fsf@mail.lhotse>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RESEND PATCH bpf-next v6 8/8] selftests/bpf: Add tests for
+ open-coded task and css iter
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@kernel.org>, Tejun Heo <tj@kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>
+References: <20231018061746.111364-1-zhouchuyi@bytedance.com>
+ <20231018061746.111364-9-zhouchuyi@bytedance.com>
+ <CAADnVQKafk_junRyE=-FVAik4hjTRDtThymYGEL8hGTuYoOGpA@mail.gmail.com>
+From: Chuyi Zhou <zhouchuyi@bytedance.com>
+In-Reply-To: <CAADnVQKafk_junRyE=-FVAik4hjTRDtThymYGEL8hGTuYoOGpA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: p60soyVVQlsJEkpkQcdBrFP2yX8M4YwP
-X-Proofpoint-GUID: p60soyVVQlsJEkpkQcdBrFP2yX8M4YwP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-20_10,2023-10-19_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 mlxlogscore=855 clxscore=1015 lowpriorityscore=0
- bulkscore=0 adultscore=0 malwarescore=0 suspectscore=0 spamscore=0
- mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2310170001 definitions=main-2310200119
+Content-Transfer-Encoding: 8bit
 
 
 
-On 19/10/23 11:41 am, Michael Ellerman wrote:
-> Hari Bathini <hbathini@linux.ibm.com> writes:
->> Use bpf_jit_binary_pack_alloc in powerpc jit. The jit engine first
->> writes the program to the rw buffer. When the jit is done, the program
->> is copied to the final location with bpf_jit_binary_pack_finalize.
->> With multiple jit_subprogs, bpf_jit_free is called on some subprograms
->> that haven't got bpf_jit_binary_pack_finalize() yet. Implement custom
->> bpf_jit_free() like in commit 1d5f82d9dd47 ("bpf, x86: fix freeing of
->> not-finalized bpf_prog_pack") to call bpf_jit_binary_pack_finalize(),
->> if necessary. As bpf_flush_icache() is not needed anymore, remove it.
+在 2023/10/20 08:03, Alexei Starovoitov 写道:
+> On Tue, Oct 17, 2023 at 11:18 PM Chuyi Zhou <zhouchuyi@bytedance.com> wrote:
 >>
->> Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
->> Acked-by: Song Liu <song@kernel.org>
->> ---
->>   arch/powerpc/net/bpf_jit.h        |  18 ++---
->>   arch/powerpc/net/bpf_jit_comp.c   | 106 ++++++++++++++++++++++--------
->>   arch/powerpc/net/bpf_jit_comp32.c |  13 ++--
->>   arch/powerpc/net/bpf_jit_comp64.c |  10 +--
->>   4 files changed, 96 insertions(+), 51 deletions(-)
+>> +
+>> +SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
+>> +__failure __msg("css_task_iter is only allowed in bpf_lsm and bpf iter-s")
+>> +int BPF_PROG(iter_css_task_for_each)
+>> +{
+>> +       u64 cg_id = bpf_get_current_cgroup_id();
+>> +       struct cgroup *cgrp = bpf_cgroup_from_id(cg_id);
+>> +       struct cgroup_subsys_state *css;
+>> +       struct task_struct *task;
+>> +
+>> +       if (cgrp == NULL)
+>> +               return 0;
+>> +       css = &cgrp->self;
+>> +
+>> +       bpf_for_each(css_task, task, css, CSS_TASK_ITER_PROCS) {
+>> +
+>> +       }
+>> +       bpf_cgroup_release(cgrp);
+>> +       return 0;
+>> +}
 > 
-> This causes a crash at boot on my Power7 box:
+> I think we should relax allowlist in patch 2 further.
+> Any sleepable is safe.
+> Allowlist is needed to avoid dead locking on css_set_lock.
+> Any lsm and any iter (even non-sleepable) and any sleepable
+> seems to be safe.
 
-Thanks, Michael.
-Posted v7.
+Yes, I just try to read the corresponding code. IIUC, the key point here 
+is we should not hold the css_set_lock before we invoking a BPF Prog 
+which may use css_task iters.
 
-- Hari
+1. For lsm hooks and task_iters, it would be clearly know from the code 
+that we would not try to hold that lock.
+
+2. For cgroup_iters, we will hold the cgroup_muetx before we enter the 
+Prog and it's OK.(see __cgroup_procs_write())
+
+3. For any sleepable progs, bpf_check_attach_target() would only allow 
+them to attach some sepecifc hooks, currently, these hooks are OK.
+
+
+Thanks for the suggestion again! I would do it.
+
