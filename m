@@ -1,33 +1,35 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E78CF134D6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB447134D8
 	for <bpf@vger.kernel.org>; Sun, 22 Oct 2023 20:58:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48263EE
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E108F2
 	for <bpf@vger.kernel.org>; Sun, 22 Oct 2023 13:58:09 -0700 (PDT)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39MKqR0W008572
-	for <bpf@vger.kernel.org>; Sun, 22 Oct 2023 13:58:09 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3tvdy6mubj-1
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39MHGEJj022358
+	for <bpf@vger.kernel.org>; Sun, 22 Oct 2023 13:58:08 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3tvcfyw2gx-12
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
 	for <bpf@vger.kernel.org>; Sun, 22 Oct 2023 13:58:08 -0700
-Received: from twshared58712.02.prn6.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
+Received: from twshared44805.48.prn1.facebook.com (2620:10d:c0a8:1b::30) by
+ mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Sun, 22 Oct 2023 13:58:01 -0700
+ 15.1.2507.23; Sun, 22 Oct 2023 13:58:02 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id E19903A33D282; Sun, 22 Oct 2023 13:57:46 -0700 (PDT)
+	id 02C583A33D2C7; Sun, 22 Oct 2023 13:57:55 -0700 (PDT)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH v4 bpf-next 0/7] BPF register bounds logic and testing improvements
-Date: Sun, 22 Oct 2023 13:57:36 -0700
-Message-ID: <20231022205743.72352-1-andrii@kernel.org>
+Subject: [PATCH v4 bpf-next 4/7] bpf: improve deduction of 64-bit bounds from 32-bit bounds
+Date: Sun, 22 Oct 2023 13:57:40 -0700
+Message-ID: <20231022205743.72352-5-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231022205743.72352-1-andrii@kernel.org>
+References: <20231022205743.72352-1-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,59 +39,94 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: kxhG6INylZwQ19NIVNXo2kOt7R7ra0W5
-X-Proofpoint-ORIG-GUID: kxhG6INylZwQ19NIVNXo2kOt7R7ra0W5
+X-Proofpoint-GUID: JO7ixIrADvdfpz0ClY-AQomsq73ss53z
+X-Proofpoint-ORIG-GUID: JO7ixIrADvdfpz0ClY-AQomsq73ss53z
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-10-22_19,2023-10-19_01,2023-05-22_02
 
-This patch set adds a big set of manual and auto-generated test cases
-validating BPF verifier's register bounds tracking and deduction logic. S=
-ee
-details in the last patch.
+Add a few interesting cases in which we can tighten 64-bit bounds based
+on newly learnt information about 32-bit bounds. E.g., when full u64/s64
+registers are used in BPF program, and then eventually compared as
+u32/s32. The latter comparison doesn't change the value of full
+register, but it does impose new restrictions on possible lower 32 bits
+of such full registers. And we can use that to derive additional full
+register bounds information.
 
-To make this approach work, BPF verifier's logic needed a bunch of
-improvements to handle some cases that previously were not covered. This =
-had
-no implications as to correctness of verifier logic, but it was incomplet=
-e
-enough to cause significant disagreements with alternative implementation=
- of
-register bounds logic that tests in this patch set implement. So we need =
-BPF
-verifier logic improvements to make all the tests pass.
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ kernel/bpf/verifier.c | 47 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-This is a first part of work with the end goal intended to extend registe=
-r
-bounds logic to cover range vs range comparisons, which will be submitted
-later assuming changes in this patch set land.
-
-See individual patches for details.
-
-v3->v4:
-  - improvements to reg_bounds tester (progress report, split 32-bit and
-    64-bit ranges, fix various verbosity output issues, etc);
-v2->v3:
-  - fix a subtle little-endianness assumption inside parge_reg_state() (C=
-I);
-v1->v2:
-  - fix compilation when building selftests with llvm-16 toolchain (CI).
-
-Andrii Nakryiko (7):
-  bpf: improve JEQ/JNE branch taken logic
-  bpf: derive smin/smax from umin/max bounds
-  bpf: enhance subregister bounds deduction logic
-  bpf: improve deduction of 64-bit bounds from 32-bit bounds
-  bpf: try harder to deduce register bounds from different numeric
-    domains
-  bpf: drop knowledge-losing __reg_combine_{32,64}_into_{64,32} logic
-  selftests/bpf: BPF register range bounds tester
-
- kernel/bpf/verifier.c                         |  175 +-
- .../selftests/bpf/prog_tests/reg_bounds.c     | 1756 +++++++++++++++++
- 2 files changed, 1879 insertions(+), 52 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 3fc9bd5e72b8..4bb0a121e31a 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2255,10 +2255,57 @@ static void __reg64_deduce_bounds(struct bpf_reg_=
+state *reg)
+ 	}
+ }
+=20
++static void __reg_deduce_mixed_bounds(struct bpf_reg_state *reg)
++{
++	/* Try to tighten 64-bit bounds from 32-bit knowledge, using 32-bit
++	 * values on both sides of 64-bit range in hope to have tigher range.
++	 * E.g., if r1 is [0x1'00000000, 0x3'80000000], and we learn from
++	 * 32-bit signed > 0 operation that s32 bounds are now [1; 0x7fffffff].
++	 * With this, we can substitute 1 as low 32-bits of _low_ 64-bit bound
++	 * (0x100000000 -> 0x100000001) and 0x7fffffff as low 32-bits of
++	 * _high_ 64-bit bound (0x380000000 -> 0x37fffffff) and arrive at a
++	 * better overall bounds for r1 as [0x1'000000001; 0x3'7fffffff].
++	 * We just need to make sure that derived bounds we are intersecting
++	 * with are well-formed ranges in respecitve s64 or u64 domain, just
++	 * like we do with similar kinds of 32-to-64 or 64-to-32 adjustments.
++	 */
++	__u64 new_umin, new_umax;
++	__s64 new_smin, new_smax;
++
++	/* u32 -> u64 tightening, it's always well-formed */
++	new_umin =3D (reg->umin_value & ~0xffffffffULL) | reg->u32_min_value;
++	new_umax =3D (reg->umax_value & ~0xffffffffULL) | reg->u32_max_value;
++	reg->umin_value =3D max_t(u64, reg->umin_value, new_umin);
++	reg->umax_value =3D min_t(u64, reg->umax_value, new_umax);
++
++	/* s32 -> u64 tightening, s32 should be a valid u32 range (same sign) *=
+/
++	if ((u32)reg->s32_min_value <=3D (u32)reg->s32_max_value) {
++		new_umin =3D (reg->umin_value & ~0xffffffffULL) | (u32)reg->s32_min_va=
+lue;
++		new_umax =3D (reg->umax_value & ~0xffffffffULL) | (u32)reg->s32_max_va=
+lue;
++		reg->umin_value =3D max_t(u64, reg->umin_value, new_umin);
++		reg->umax_value =3D min_t(u64, reg->umax_value, new_umax);
++	}
++
++	/* u32 -> s64 tightening, u32 range embedded into s64 preserves range v=
+alidity */
++	new_smin =3D (reg->smin_value & ~0xffffffffULL) | reg->u32_min_value;
++	new_smax =3D (reg->smax_value & ~0xffffffffULL) | reg->u32_max_value;
++	reg->smin_value =3D max_t(s64, reg->smin_value, new_smin);
++	reg->smax_value =3D min_t(s64, reg->smax_value, new_smax);
++
++	/* s32 -> s64 tightening, check that s32 range behaves as u32 range */
++	if ((u32)reg->s32_min_value <=3D (u32)reg->s32_max_value) {
++		new_smin =3D (reg->smin_value & ~0xffffffffULL) | (u32)reg->s32_min_va=
+lue;
++		new_smax =3D (reg->smax_value & ~0xffffffffULL) | (u32)reg->s32_max_va=
+lue;
++		reg->smin_value =3D max_t(s64, reg->smin_value, new_smin);
++		reg->smax_value =3D min_t(s64, reg->smax_value, new_smax);
++	}
++}
++
+ static void __reg_deduce_bounds(struct bpf_reg_state *reg)
+ {
+ 	__reg32_deduce_bounds(reg);
+ 	__reg64_deduce_bounds(reg);
++	__reg_deduce_mixed_bounds(reg);
+ }
+=20
+ /* Attempts to improve var_off based on unsigned min/max information */
 --=20
 2.34.1
 
