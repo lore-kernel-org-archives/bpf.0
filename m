@@ -1,48 +1,48 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E893A44
-	for <bpf@vger.kernel.org>; Sun, 22 Oct 2023 01:08:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7E62A48
+	for <bpf@vger.kernel.org>; Sun, 22 Oct 2023 01:08:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zd3uIjXX"
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE724D52
-	for <bpf@vger.kernel.org>; Sat, 21 Oct 2023 18:08:50 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-98377c5d53eso301385866b.0
-        for <bpf@vger.kernel.org>; Sat, 21 Oct 2023 18:08:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WVtHS9fi"
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33463D60
+	for <bpf@vger.kernel.org>; Sat, 21 Oct 2023 18:08:53 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-991c786369cso310318666b.1
+        for <bpf@vger.kernel.org>; Sat, 21 Oct 2023 18:08:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697936929; x=1698541729; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1697936931; x=1698541731; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PCwj7Qy6Jj4YA+gpp8/oL0LXado4ZTkzasPvZuyFUWI=;
-        b=Zd3uIjXXalAlGzyjYqIqeybp9y9hz2rJRz6I1xUuMPr2CK5w68CATQnZmXBbBtRZBp
-         BHBZMfzJ6wChRHXwhn2ST532fpqj4W9tswe2YKmfsRX9oK4AYRuSVzIgULAa3C1M52fa
-         6oKJhwuv7wakn46NEnfyyQx+AkJ/VYjCNFpdDl99dZyYskho9+3RAyUGS09gqogoFv0p
-         SeRapLWu0AQiuzhb6Y+mFIuHKycW0OrpqA4dc9Hhzw9piBmcc+fXBC5mPyc+0bLSsvfe
-         9Pqna53HpOccWHMCVzBVudf0Wz/wEcK9tg7j7k+uy8BVvs8GqIB5K5Ep3nyOqqMySqXI
-         B4Nw==
+        bh=piktWMIbUbvsCPFZL+ZgEoXRBrJsrW87UAPGh4LxYBU=;
+        b=WVtHS9fipVPtbU71Mmei7antFzbcsJoKsm6itQvkRj3qeadCyi1OpTiTVHEJkWccBU
+         rxMQXW3cj0TbRdnaE3t5bAF1PEPlUnsnTg3O3gh5lHe+aRFLDmqOEfOV3CBr4X7JYJfH
+         Zb2WpaFtJRii5l8DR7YxNmVldlsRofr0tzr+AZhoGSAT457c3rR0cNtmgznMq22CEaxV
+         p4BG5XGaS3Tl7Q99KVgU9dmEpy9ApK3NPMyrJJhXHp8BfBS3B31JTf6XqKXo5CSF84Xk
+         ilTMfopjbx4ZTT5Jd5T9yFsvcYvGdxxL81Iy/4Z0E+zEdQf9KC/6HHNR4bdEW1TZ8C2u
+         yOcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697936929; x=1698541729;
+        d=1e100.net; s=20230601; t=1697936931; x=1698541731;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PCwj7Qy6Jj4YA+gpp8/oL0LXado4ZTkzasPvZuyFUWI=;
-        b=PQBSJ2tzh5HtQhwnXTEOWaHmXT6RHaRtYGXOAlzLmgGelDjKOQmnleKzNqTRvN9v16
-         7wUP6dQirHKYRk1Pmed/9OSAePxrlKmHxszmpQmMiWJJoi235xIyTiLMW2B5O7ffznaE
-         yBtTL08yi2US67BiC2Ze3JmNHiljpZ0kCRNF3HkpQ7+WcCmiH1h3nOj6ZZNP4H91Uz9X
-         UEC6Mlv1EKlzLsR4d0jOPKwJrI9uoJNRXR7uSFL8JMuWft+ee5eoM4qGDGDzZB2XchrM
-         qbhRwI31L+AD2JTKViFZNSAlySSIj6IICYegXcefFnFCAOvmOIZkU4puyP2zScp36M88
-         lA3A==
-X-Gm-Message-State: AOJu0Yyof7lJWsv+ldkFN31qgWNbOhWMEW7iZU99t47TmQ7HVlHMwqcD
-	4k6luccTu5xHYFtJz6fwdLCvqkUzNaG59I82
-X-Google-Smtp-Source: AGHT+IHjvq5i0Fl7DSh4lRSmXrAxjCzLL2gqF5GD7guZpf1a5AvYqPgPC+cDlpVQOxT8ug4DqOgXpA==
-X-Received: by 2002:a17:907:3688:b0:9ae:5db5:149 with SMTP id bi8-20020a170907368800b009ae5db50149mr3616361ejc.35.1697936928800;
-        Sat, 21 Oct 2023 18:08:48 -0700 (PDT)
+        bh=piktWMIbUbvsCPFZL+ZgEoXRBrJsrW87UAPGh4LxYBU=;
+        b=uDMN3E5kUQyMfZde0wdinSy4xwALCh1NwEhAiBnLRZsJha93kzr14ZBeaSoO0cjaS7
+         hB4sags4uESsyz2w7aN308OsRrI0+s0Ik2JR0tufbXKc18uxdwQTzuJI7QPH2AlZ+MaI
+         bLOkwb1t4K2w4tXCTT91iT+W/W60M7iI7gx3HnXbMHwKbgr/L041K+7YTqFgEPiPWEvR
+         2gE+N0HW7pffe5n4NCfG6E5Gy3DNu3xju/cSyDthYjxo4+ZiK1L91cPym/JDs0LEOQ2k
+         cADC+dRuUlJAAxlr1st18bZpuQ97qhmi+Glw+T0An5lmaJrYq20cD+T/C8BEsgMcSezW
+         OrSg==
+X-Gm-Message-State: AOJu0Yy60R9sKGVcon6GE4TWesH9aLaeQP4jHGoxGDZsEH2pX1PWtN+T
+	131A6aQrlYitoRpCmX79KS+pYbor/Fn6BhUo
+X-Google-Smtp-Source: AGHT+IEOozfB3FSWTsEYNmDtchSxnFlLaU4/kW0j3U3cPZaSYfazvd4pik1TvxnCa7W+0oyDChDbsA==
+X-Received: by 2002:a17:907:6d07:b0:9a1:f10d:9746 with SMTP id sa7-20020a1709076d0700b009a1f10d9746mr3900869ejc.20.1697936931364;
+        Sat, 21 Oct 2023 18:08:51 -0700 (PDT)
 Received: from localhost.localdomain (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id u16-20020a170906655000b009c3f1b3e988sm4276143ejn.90.2023.10.21.18.08.47
+        by smtp.gmail.com with ESMTPSA id u16-20020a170906655000b009c3f1b3e988sm4276143ejn.90.2023.10.21.18.08.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Oct 2023 18:08:48 -0700 (PDT)
+        Sat, 21 Oct 2023 18:08:50 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -55,9 +55,9 @@ Cc: andrii@kernel.org,
 	awerner32@gmail.com,
 	john.fastabend@gmail.com,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v2 4/7] selftests/bpf: tests with delayed read/precision makrs in loop body
-Date: Sun, 22 Oct 2023 04:08:09 +0300
-Message-ID: <20231022010812.9201-5-eddyz87@gmail.com>
+Subject: [PATCH bpf-next v2 6/7] selftests/bpf: test if state loops are detected in a tricky case
+Date: Sun, 22 Oct 2023 04:08:11 +0300
+Message-ID: <20231022010812.9201-7-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231022010812.9201-1-eddyz87@gmail.com>
 References: <20231022010812.9201-1-eddyz87@gmail.com>
@@ -69,237 +69,107 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-These test cases try to hide read and precision marks from loop
-convergence logic: marks would only be assigned on subsequent loop
-iterations or after exploring states pushed to env->head stack first.
-Without verifier fix to use exact states comparison logic for
-iterators convergence these tests (except 'triple_continue') would be
-errorneously marked as safe.
+A convoluted test case for iterators convergence logic that
+demonstrates that states with branch count equal to 0 might still be
+a part of not completely explored loop.
+
+E.g. consider the following state diagram:
+
+               initial     Here state 'succ' was processed first,
+                 |         it was eventually tracked to produce a
+                 V         state identical to 'hdr'.
+    .---------> hdr        All branches from 'succ' had been explored
+    |            |         and thus 'succ' has its .branches == 0.
+    |            V
+    |    .------...        Suppose states 'cur' and 'succ' correspond
+    |    |       |         to the same instruction + callsites.
+    |    V       V         In such case it is necessary to check
+    |   ...     ...        whether 'succ' and 'cur' are identical.
+    |    |       |         If 'succ' and 'cur' are a part of the same loop
+    |    V       V         they have to be compared exactly.
+    |   succ <- cur
+    |    |
+    |    V
+    |   ...
+    |    |
+    '----'
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- tools/testing/selftests/bpf/progs/iters.c | 443 ++++++++++++++++++++++
- 1 file changed, 443 insertions(+)
+ tools/testing/selftests/bpf/progs/iters.c | 177 ++++++++++++++++++++++
+ 1 file changed, 177 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/progs/iters.c b/tools/testing/selftests/bpf/progs/iters.c
-index 6b9b3c56f009..ee85cc6d3444 100644
+index ee85cc6d3444..89aaddec9a6d 100644
 --- a/tools/testing/selftests/bpf/progs/iters.c
 +++ b/tools/testing/selftests/bpf/progs/iters.c
-@@ -14,6 +14,13 @@ int my_pid;
- int arr[256];
- int small_arr[16] SEC(".data.small_arr");
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 10);
-+	__type(key, int);
-+	__type(value, int);
-+} amap SEC(".maps");
-+
- #ifdef REAL_TEST
- #define MY_PID_GUARD() if (my_pid != (bpf_get_current_pid_tgid() >> 32)) return 0
- #else
-@@ -716,4 +723,440 @@ int iter_pass_iter_ptr_to_subprog(const void *ctx)
- 	return 0;
+@@ -998,6 +998,183 @@ __naked int loop_state_deps1(void)
+ 	);
  }
  
 +SEC("?raw_tp")
 +__failure
-+__msg("R1 type=scalar expected=fp")
-+__naked int delayed_read_mark(void)
-+{
-+	/* This is equivalent to C program below.
-+	 * The call to bpf_iter_num_next() is reachable with r7 values &fp[-16] and 0xdead.
-+	 * State with r7=&fp[-16] is visited first and follows r6 != 42 ... continue branch.
-+	 * At this point iterator next() call is reached with r7 that has no read mark.
-+	 * Loop body with r7=0xdead would only be visited if verifier would decide to continue
-+	 * with second loop iteration. Absence of read mark on r7 might affect state
-+	 * equivalent logic used for iterator convergence tracking.
-+	 *
-+	 * r7 = &fp[-16]
-+	 * fp[-16] = 0
-+	 * r6 = bpf_get_prandom_u32()
-+	 * bpf_iter_num_new(&fp[-8], 0, 10)
-+	 * while (bpf_iter_num_next(&fp[-8])) {
-+	 *   r6++
-+	 *   if (r6 != 42) {
-+	 *     r7 = 0xdead
-+	 *     continue;
-+	 *   }
-+	 *   bpf_probe_read_user(r7, 8, 0xdeadbeef); // this is not safe
-+	 * }
-+	 * bpf_iter_num_destroy(&fp[-8])
-+	 * return 0
-+	 */
-+	asm volatile (
-+		"r7 = r10;"
-+		"r7 += -16;"
-+		"r0 = 0;"
-+		"*(u64 *)(r7 + 0) = r0;"
-+		"call %[bpf_get_prandom_u32];"
-+		"r6 = r0;"
-+		"r1 = r10;"
-+		"r1 += -8;"
-+		"r2 = 0;"
-+		"r3 = 10;"
-+		"call %[bpf_iter_num_new];"
-+	"1:"
-+		"r1 = r10;"
-+		"r1 += -8;"
-+		"call %[bpf_iter_num_next];"
-+		"if r0 == 0 goto 2f;"
-+		"r6 += 1;"
-+		"if r6 != 42 goto 3f;"
-+		"r7 = 0xdead;"
-+		"goto 1b;"
-+	"3:"
-+		"r1 = r7;"
-+		"r2 = 8;"
-+		"r3 = 0xdeadbeef;"
-+		"call %[bpf_probe_read_user];"
-+		"goto 1b;"
-+	"2:"
-+		"r1 = r10;"
-+		"r1 += -8;"
-+		"call %[bpf_iter_num_destroy];"
-+		"r0 = 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32),
-+		  __imm(bpf_iter_num_new),
-+		  __imm(bpf_iter_num_next),
-+		  __imm(bpf_iter_num_destroy),
-+		  __imm(bpf_probe_read_user)
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("?raw_tp")
-+__failure
-+__msg("math between fp pointer and register with unbounded")
-+__naked int delayed_precision_mark(void)
-+{
-+	/* This is equivalent to C program below.
-+	 * The test is similar to delayed_iter_mark but verifies that incomplete
-+	 * precision don't fool verifier.
-+	 * The call to bpf_iter_num_next() is reachable with r7 values -16 and -32.
-+	 * State with r7=-16 is visited first and follows r6 != 42 ... continue branch.
-+	 * At this point iterator next() call is reached with r7 that has no read
-+	 * and precision marks.
-+	 * Loop body with r7=-32 would only be visited if verifier would decide to continue
-+	 * with second loop iteration. Absence of precision mark on r7 might affect state
-+	 * equivalent logic used for iterator convergence tracking.
-+	 *
-+	 * r8 = 0
-+	 * fp[-16] = 0
-+	 * r7 = -16
-+	 * r6 = bpf_get_prandom_u32()
-+	 * bpf_iter_num_new(&fp[-8], 0, 10)
-+	 * while (bpf_iter_num_next(&fp[-8])) {
-+	 *   if (r6 != 42) {
-+	 *     r7 = -32
-+	 *     r6 = bpf_get_prandom_u32()
-+	 *     continue;
-+	 *   }
-+	 *   r0 = r10
-+	 *   r0 += r7
-+	 *   r8 = *(u64 *)(r0 + 0)           // this is not safe
-+	 *   r6 = bpf_get_prandom_u32()
-+	 * }
-+	 * bpf_iter_num_destroy(&fp[-8])
-+	 * return r8
-+	 */
-+	asm volatile (
-+		"r8 = 0;"
-+		"*(u64 *)(r10 - 16) = r8;"
-+		"r7 = -16;"
-+		"call %[bpf_get_prandom_u32];"
-+		"r6 = r0;"
-+		"r1 = r10;"
-+		"r1 += -8;"
-+		"r2 = 0;"
-+		"r3 = 10;"
-+		"call %[bpf_iter_num_new];"
-+	"1:"
-+		"r1 = r10;"
-+		"r1 += -8;\n"
-+		"call %[bpf_iter_num_next];"
-+		"if r0 == 0 goto 2f;"
-+		"if r6 != 42 goto 3f;"
-+		"r7 = -32;"
-+		"call %[bpf_get_prandom_u32];"
-+		"r6 = r0;"
-+		"goto 1b;\n"
-+	"3:"
-+		"r0 = r10;"
-+		"r0 += r7;"
-+		"r8 = *(u64 *)(r0 + 0);"
-+		"call %[bpf_get_prandom_u32];"
-+		"r6 = r0;"
-+		"goto 1b;\n"
-+	"2:"
-+		"r1 = r10;"
-+		"r1 += -8;"
-+		"call %[bpf_iter_num_destroy];"
-+		"r0 = r8;"
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32),
-+		  __imm(bpf_iter_num_new),
-+		  __imm(bpf_iter_num_next),
-+		  __imm(bpf_iter_num_destroy),
-+		  __imm(bpf_probe_read_user)
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("?raw_tp")
-+__failure
 +__msg("math between fp pointer and register with unbounded")
 +__flag(BPF_F_TEST_STATE_FREQ)
-+__naked int loop_state_deps1(void)
++__naked int loop_state_deps2(void)
 +{
 +	/* This is equivalent to C program below.
 +	 *
 +	 * The case turns out to be tricky in a sense that:
-+	 * - states with c=-25 are explored only on a second iteration
-+	 *   of the outer loop;
-+	 * - states with read+precise mark on c are explored only on
-+	 *   second iteration of the inner loop and in a state which
-+	 *   is pushed to states stack first.
++	 * - states with read+precise mark on c are explored only on a second
++	 *   iteration of the first inner loop and in a state which is pushed to
++	 *   states stack first.
++	 * - states with c=-25 are explored only on a second iteration of the
++	 *   second inner loop and in a state which is pushed to states stack
++	 *   first.
 +	 *
 +	 * Depending on the details of iterator convergence logic
 +	 * verifier might stop states traversal too early and miss
 +	 * unsafe c=-25 memory access.
 +	 *
-+	 *   j = iter_new();		 // fp[-16]
-+	 *   a = 0;			 // r6
-+	 *   b = 0;			 // r7
-+	 *   c = -24;			 // r8
++	 *   j = iter_new();             // fp[-16]
++	 *   a = 0;                      // r6
++	 *   b = 0;                      // r7
++	 *   c = -24;                    // r8
 +	 *   while (iter_next(j)) {
-+	 *     i = iter_new();		 // fp[-8]
-+	 *     a = 0;			 // r6
-+	 *     b = 0;			 // r7
++	 *     i = iter_new();           // fp[-8]
++	 *     a = 0;                    // r6
++	 *     b = 0;                    // r7
 +	 *     while (iter_next(i)) {
-+	 *	 if (a == 1) {
-+	 *	   a = 0;
-+	 *	   b = 1;
-+	 *	 } else if (a == 0) {
-+	 *	   a = 1;
-+	 *	   if (random() == 42)
-+	 *	     continue;
-+	 *	   if (b == 1) {
-+	 *	     *(r10 + c) = 7;  // this is not safe
-+	 *	     iter_destroy(i);
-+	 *	     iter_destroy(j);
-+	 *	     return;
-+	 *	   }
-+	 *	 }
++	 *       if (a == 1) {
++	 *         a = 0;
++	 *         b = 1;
++	 *       } else if (a == 0) {
++	 *         a = 1;
++	 *         if (random() == 42)
++	 *           continue;
++	 *         if (b == 1) {
++	 *           *(r10 + c) = 7;     // this is not safe
++	 *           iter_destroy(i);
++	 *           iter_destroy(j);
++	 *           return;
++	 *         }
++	 *       }
 +	 *     }
 +	 *     iter_destroy(i);
-+	 *     a = 0;
-+	 *     b = 0;
-+	 *     c = -25;
++	 *     i = iter_new();           // fp[-8]
++	 *     a = 0;                    // r6
++	 *     b = 0;                    // r7
++	 *     while (iter_next(i)) {
++	 *       if (a == 1) {
++	 *         a = 0;
++	 *         b = 1;
++	 *       } else if (a == 0) {
++	 *         a = 1;
++	 *         if (random() == 42)
++	 *           continue;
++	 *         if (b == 1) {
++	 *           a = 0;
++	 *           c = -25;
++	 *         }
++	 *       }
++	 *     }
++	 *     iter_destroy(i);
 +	 *   }
 +	 *   iter_destroy(j);
 +	 *   return;
@@ -318,6 +188,8 @@ index 6b9b3c56f009..ee85cc6d3444 100644
 +		"r1 += -16;"
 +		"call %[bpf_iter_num_next];"
 +		"if r0 == 0 goto j_loop_end_%=;"
++
++		/* first inner loop */
 +		"r1 = r10;"
 +		"r1 += -8;"
 +		"r2 = 0;"
@@ -359,9 +231,43 @@ index 6b9b3c56f009..ee85cc6d3444 100644
 +		"r1 = r10;"
 +		"r1 += -8;"
 +		"call %[bpf_iter_num_destroy];"
++
++		/* second inner loop */
++		"r1 = r10;"
++		"r1 += -8;"
++		"r2 = 0;"
++		"r3 = 10;"
++		"call %[bpf_iter_num_new];"
 +		"r6 = 0;"
 +		"r7 = 0;"
++	"i2_loop_%=:"
++		"r1 = r10;"
++		"r1 += -8;"
++		"call %[bpf_iter_num_next];"
++		"if r0 == 0 goto i2_loop_end_%=;"
++	"check2_one_r6_%=:"
++		"if r6 != 1 goto check2_zero_r6_%=;"
++		"r6 = 0;"
++		"r7 = 1;"
++		"goto i2_loop_%=;"
++	"check2_zero_r6_%=:"
++		"if r6 != 0 goto i2_loop_%=;"
++		"r6 = 1;"
++		"call %[bpf_get_prandom_u32];"
++		"if r0 != 42 goto check2_one_r7_%=;"
++		"goto i2_loop_%=;"
++	"check2_one_r7_%=:"
++		"if r7 != 1 goto i2_loop_%=;"
++		"r6 = 0;"
 +		"r8 = -25;"
++		"goto i2_loop_%=;"
++	"i2_loop_end_%=:"
++		"r1 = r10;"
++		"r1 += -8;"
++		"call %[bpf_iter_num_destroy];"
++
++		"r6 = 0;"
++		"r7 = 0;"
 +		"goto j_loop_%=;"
 +	"j_loop_end_%=:"
 +		"r1 = r10;"
@@ -378,168 +284,9 @@ index 6b9b3c56f009..ee85cc6d3444 100644
 +	);
 +}
 +
-+SEC("?raw_tp")
-+__success
-+__naked int triple_continue(void)
-+{
-+	/* This is equivalent to C program below.
-+	 * High branching factor of the loop body turned out to be
-+	 * problematic for one of the iterator convergence tracking
-+	 * algorithms explored.
-+	 *
-+	 * r6 = bpf_get_prandom_u32()
-+	 * bpf_iter_num_new(&fp[-8], 0, 10)
-+	 * while (bpf_iter_num_next(&fp[-8])) {
-+	 *   if (bpf_get_prandom_u32() != 42)
-+	 *     continue;
-+	 *   if (bpf_get_prandom_u32() != 42)
-+	 *     continue;
-+	 *   if (bpf_get_prandom_u32() != 42)
-+	 *     continue;
-+	 *   r0 += 0;
-+	 * }
-+	 * bpf_iter_num_destroy(&fp[-8])
-+	 * return 0
-+	 */
-+	asm volatile (
-+		"r1 = r10;"
-+		"r1 += -8;"
-+		"r2 = 0;"
-+		"r3 = 10;"
-+		"call %[bpf_iter_num_new];"
-+	"loop_%=:"
-+		"r1 = r10;"
-+		"r1 += -8;"
-+		"call %[bpf_iter_num_next];"
-+		"if r0 == 0 goto loop_end_%=;"
-+		"call %[bpf_get_prandom_u32];"
-+		"if r0 != 42 goto loop_%=;"
-+		"call %[bpf_get_prandom_u32];"
-+		"if r0 != 42 goto loop_%=;"
-+		"call %[bpf_get_prandom_u32];"
-+		"if r0 != 42 goto loop_%=;"
-+		"r0 += 0;"
-+		"goto loop_%=;"
-+	"loop_end_%=:"
-+		"r1 = r10;"
-+		"r1 += -8;"
-+		"call %[bpf_iter_num_destroy];"
-+		"r0 = 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32),
-+		  __imm(bpf_iter_num_new),
-+		  __imm(bpf_iter_num_next),
-+		  __imm(bpf_iter_num_destroy)
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("raw_tp")
-+__success
-+__naked int checkpoint_states_deletion(void)
-+{
-+	/* This is equivalent to C program below.
-+	 *
-+	 *   int i;
-+	 *   int sum = 0;
-+	 *   bpf_for(i, 0, 10) {
-+	 *     int *a = bpf_map_lookup_elem(&amap, &i);
-+	 *     int *b = bpf_map_lookup_elem(&amap, &i);
-+	 *     int *c = bpf_map_lookup_elem(&amap, &i);
-+	 *     if (a)
-+	 *             sum += 1;
-+	 *     if (b)
-+	 *             sum += 1;
-+	 *     if (c)
-+	 *             sum += 1;
-+	 *     // a = NULL;
-+	 *   }
-+	 *   return 0;
-+	 *
-+	 * Note the commented out 'a = NULL;'.
-+	 * The body of the loop spawns multiple simulation paths
-+	 * with different combination of NULL/non-NULL information for a/b/c.
-+	 * Each combination is unique from states_equal() point of view.
-+	 * Explored states checkpoint is created after each iterator next call.
-+	 * Iterator convergence logic expects that eventually current state
-+	 * would get equal to one of the explored states and thus loop
-+	 * exploration would be finished (at-least for a specific path).
-+	 * Verifier evicts explored states with high miss to hit ratio
-+	 * to to avoid comparing current state with too many explored
-+	 * states per instruction.
-+	 * This test is designed to trick the following eviction policy:
-+	 *
-+	 *    sl->miss_cnt > sl->hit_cnt * 3 + 3 // if true sl->state is evicted
-+	 *
-+	 * *If* checkpoint states are allowed to be evicted and the
-+	 * policy above is used, verifier would remove states too early,
-+	 * before loop convergence could be established.
-+	 * Uncommenting 'a = NULL;' reduces number of distinct states
-+	 * and program verifies.
-+	 */
-+	asm volatile (
-+		"r6 = 0;"   /* a */
-+		"r7 = 0;"   /* b */
-+		"r8 = 0;"   /* c */
-+		"r9 = 0;"   /* sum */
-+		"r1 = r10;"
-+		"r1 += -8;"
-+		"r2 = 0;"
-+		"r3 = 10;"
-+		"call %[bpf_iter_num_new];"
-+	"loop_%=:"
-+		"r1 = r10;"
-+		"r1 += -8;"
-+		"call %[bpf_iter_num_next];"
-+		"if r0 == 0 goto loop_end_%=;"
-+
-+		"*(u64 *)(r10 - 16) = r0;"
-+
-+		"r1 = %[amap] ll;"
-+		"r2 = r10;"
-+		"r2 += -16;"
-+		"call %[bpf_map_lookup_elem];"
-+		"r6 = r0;"
-+
-+		"r1 = %[amap] ll;"
-+		"r2 = r10;"
-+		"r2 += -16;"
-+		"call %[bpf_map_lookup_elem];"
-+		"r7 = r0;"
-+
-+		"r1 = %[amap] ll;"
-+		"r2 = r10;"
-+		"r2 += -16;"
-+		"call %[bpf_map_lookup_elem];"
-+		"r8 = r0;"
-+
-+		"if r6 == 0 goto +1;"
-+		"r9 += 1;"
-+		"if r7 == 0 goto +1;"
-+		"r9 += 1;"
-+		"if r8 == 0 goto +1;"
-+		"r9 += 1;"
-+
-+		/* "r6 = 0;" // Commented out 'a = NULL;' */
-+		"goto loop_%=;"
-+	"loop_end_%=:"
-+		"r1 = r10;"
-+		"r1 += -8;"
-+		"call %[bpf_iter_num_destroy];"
-+		"r0 = 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_map_lookup_elem),
-+		  __imm(bpf_iter_num_new),
-+		  __imm(bpf_iter_num_next),
-+		  __imm(bpf_iter_num_destroy),
-+		  __imm_addr(amap)
-+		: __clobber_all
-+	);
-+}
-+
- char _license[] SEC("license") = "GPL";
+ SEC("?raw_tp")
+ __success
+ __naked int triple_continue(void)
 -- 
 2.42.0
 
