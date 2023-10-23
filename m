@@ -1,52 +1,56 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5539013AE8
-	for <bpf@vger.kernel.org>; Mon, 23 Oct 2023 09:58:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47A5713AE8
+	for <bpf@vger.kernel.org>; Mon, 23 Oct 2023 09:58:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="sHzGdhfH"
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E3A10CF
-	for <bpf@vger.kernel.org>; Mon, 23 Oct 2023 02:57:54 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39N6jGje002756;
-	Mon, 23 Oct 2023 09:57:34 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="KWjkSriD"
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27B110C6
+	for <bpf@vger.kernel.org>; Mon, 23 Oct 2023 02:58:09 -0700 (PDT)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39N6jxD7005447;
+	Mon, 23 Oct 2023 09:57:50 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2023-03-30; bh=+Fk2sNts/h4Gw716GuoF96H3gO7hnDuxkalcOMED6Zs=;
- b=sHzGdhfHjOSaCDVBBbGMKSkUDjKIfOnxNlOkGY70NyKYJn06l8K53NcE9RHOe/ek2jFQ
- gLnDbI/fCZMChFipiGJyRcTp923FMkhVJX5u/lE+xHhjcG5NRVTRbweSrEbw14Y14cav
- C2Rlgvr8oEjAZOyEdCv+dRFmScOnCW1+UsPjxMMogWk0Coq6uy//S/hoBnImfn+7w0Ls
- gbVdK0m5sCygIhSrccNrX7/thy50MAJpFrxuEpnWGmiFqF0gtuDWSU7+/PYrRIlTn9uu
- 4HXt7cKg5HgH909DRuxCIn3ZIdi6WTKXAQfqISWmCp+i/5NS6HKrd6UiGCqkXNYvkT0U bg== 
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=corp-2023-03-30;
+ bh=ARCRmRxammHldcsV9SzQM9FIPwy+t3ssksLZSriQi14=;
+ b=KWjkSriDeUVgl06zKCh5jJUas/MPIX55jJ+eSztDolv8xY+HQFLQDS6pSaRLKbWh5nRj
+ Xpwqq/RHucQOWz7ChDeEQf5T/CZjgSZOwlECTTEjQIsy50yvGXLn1Tigb1llv4c8nr0Y
+ Jmhk4lbVyjehkZJHt9ZeiRy8yDLjxq2NE2TlSdhWpH+N0DBJHr9BilYcen4MzZUm47W5
+ G2KFDoqwjEQs4ChSeAi3GqASYI7gGZDaQoDnIg4TBnuGuzfYrjiPwZoRtkwlKGuwTQwn
+ hMt9ulvMD9TMYmb40sLXzK8IdHuIpWWvAp3/Shb4kCoJ7wo87gvMTdrgt1Wlul4PyZg0 9A== 
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3tv6hajqd1-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3tv6pctq8c-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 23 Oct 2023 09:57:33 +0000
+	Mon, 23 Oct 2023 09:57:49 +0000
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 39N7ZY7t001475;
-	Mon, 23 Oct 2023 09:57:32 GMT
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 39N8skvl001564;
+	Mon, 23 Oct 2023 09:57:49 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3tv53a80xn-1
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3tv53a8144-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 23 Oct 2023 09:57:32 +0000
+	Mon, 23 Oct 2023 09:57:49 +0000
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 39N9t2cL039213;
-	Mon, 23 Oct 2023 09:57:32 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 39N9t2cR039213;
+	Mon, 23 Oct 2023 09:57:48 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-175-206-92.vpn.oracle.com [10.175.206.92])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3tv53a80w0-1;
-	Mon, 23 Oct 2023 09:57:31 +0000
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3tv53a80w0-4;
+	Mon, 23 Oct 2023 09:57:47 +0000
 From: Alan Maguire <alan.maguire@oracle.com>
 To: acme@kernel.org, andrii.nakryiko@gmail.com
 Cc: jolsa@kernel.org, ast@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com,
         martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
         haoluo@google.com, mykolal@fb.com, bpf@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v4 dwarves 0/5] pahole, btf_encoder: support --btf_features
-Date: Mon, 23 Oct 2023 10:57:21 +0100
-Message-Id: <20231023095726.1179529-1-alan.maguire@oracle.com>
+        Alan Maguire <alan.maguire@oracle.com>,
+        Andrii Nakryiko <andrii@kernel.org>
+Subject: [PATCH v4 dwarves 3/5] pahole: add --btf_features support
+Date: Mon, 23 Oct 2023 10:57:24 +0100
+Message-Id: <20231023095726.1179529-4-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.39.3
+In-Reply-To: <20231023095726.1179529-1-alan.maguire@oracle.com>
+References: <20231023095726.1179529-1-alan.maguire@oracle.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -61,114 +65,259 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 ml
  adultscore=0 bulkscore=0 suspectscore=0 mlxscore=0 phishscore=0
  spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2310170001 definitions=main-2310230085
-X-Proofpoint-GUID: F46hh5oJaKu7GUVfAus_gycYgwPhuhsL
-X-Proofpoint-ORIG-GUID: F46hh5oJaKu7GUVfAus_gycYgwPhuhsL
+X-Proofpoint-GUID: C-v4VYtJ4pCNcS8utsAX5AFEVAPVPN5z
+X-Proofpoint-ORIG-GUID: C-v4VYtJ4pCNcS8utsAX5AFEVAPVPN5z
 
-Currently, the kernel uses pahole version checking as the way to
-determine which BTF encoding features to request from pahole.  This
-means that such features have to be tied to a specific version and
-as new features are added, additional clauses in scripts/pahole-flags.sh
-have to be added; for example
+This allows consumers to specify an opt-in set of features
+they want to use in BTF encoding.
 
-if [ "${pahole_ver}" -ge "125" ]; then
-        extra_paholeopt="${extra_paholeopt} --skip_encoding_btf_inconsistent_proto --btf_gen_optimized"
-fi
+Supported features are a comma-separated combination of
 
-To better future-proof this process, this series introduces a
-single "btf_features" parameter that uses a comma-separated list
-of encoding options.  This is helpful because
+	encode_force    Ignore invalid symbols when encoding BTF.
+	var             Encode variables using BTF_KIND_VAR in BTF.
+	float           Encode floating-point types in BTF.
+	decl_tag        Encode declaration tags using BTF_KIND_DECL_TAG.
+	type_tag        Encode type tags using BTF_KIND_TYPE_TAG.
+	enum64          Encode enum64 values with BTF_KIND_ENUM64.
+	optimized_func  Encode representations of optimized functions
+	                with suffixes like ".isra.0" etc
+	consistent_func Avoid encoding inconsistent static functions.
+	                These occur when a parameter is optimized out
+	                in some CUs and not others, or when the same
+	                function name has inconsistent BTF descriptions
+	                in different CUs.
 
-- the semantics are simpler for the user; the list comprises the set of
-  BTF features asked for, rather than having to specify a combination of
-  --skip_encoding_btf_feature and --btf_gen_feature options; and
-- any version of pahole that supports --btf_features can accept the
-  option list; unknown options are silently ignored.  As a result, there
-  would be no need to add additional version clauses beyond
+Specifying "--btf_features=all" is the equivalent to setting
+all of the above.  If pahole does not know about a feature
+specified in --btf_features it silently ignores it.
 
-if [ "${pahole_ver}" -ge "126" ]; then
-        extra_pahole_opt="-j --lang_exclude=rust
---btf_features=encode_force,var,float,decl_tag,type_tag,enum64,optimized_func,consistent_func"
-fi
+The --btf_features can either be specified via a single comma-separated
+list
+	--btf_features=enum64,float
 
-  Newly-supported features would simply be appended to the btf_features
-  list, and these would have impact on BTF encoding only if the features
-  were supported by pahole.  This means pahole will not require a version
-  bump when new BTF features are added, and should ease the burden of
-  coordinating such changes between bpf-next and dwarves.
+...or via multiple --btf_features values
 
-Patches 1 and 2 are preparatory work, while patch 3 adds the
---btf_features support.  Patch 4 provides a means of querying
-the supported feature set since --btf_features will not error
-out when it encounters unrecognized features (this ensures
-an older pahole without a requested feature will not dump warnings
-in the build log for kernel/module BTF generation).  Patch 5
-adds --btf_features_strict, which is identical to --btf_features
-aside from the fact it will fail if an unrecognized feature is used.
+	--btf_features=enum64 --btf_features=float
 
-See [1] for more background on this topic.
+These properties allow us to use the --btf_features option in
+the kernel scripts/pahole_flags.sh script to specify the desired
+set of BTF features.
 
-Changes since v3 [2]:
-- Merged strtok_r() and feature-processing into a single loop to
-  avoid the need to store feature list in an array (Eduard, patch 3)
-- Added ack from Eduard (patches 1-5)
+If a feature named in --btf_features is not present in the version
+of pahole used, BTF encoding will not complain.  This is desired
+because it means we no longer have to tie new features to a specific
+pahole version.
 
-Changes since v2 [3]:
-- added acks from Andrii and Jiri (patches 1-5)
-- merged suggestions from Eduard which simplify and clean up code
-  considerably; these changes fix issues with --btf_features_strict
-  while providing better diagnostic output when an unknown feature
-  is encountered (specifying the unknown feature if in verbose
-  or strict modes).  Added Suggested-bys from Eduard for the
-  relevant patches (Eduard, patches 3,5)
+Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+---
+ man-pages/pahole.1 |  24 +++++++++
+ pahole.c           | 132 ++++++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 155 insertions(+), 1 deletion(-)
 
-Changes since RFC [4]:
-
-- ensure features are disabled unless requested; use "default" field in
-  "struct btf_features" to specify the conf_load default value which
-  corresponds to the feature being disabled.  For
-  conf_load->btf_gen_floats for example, the default value is false,
-  while for conf_load->skip_encoding_btf_type_tags the default is
-  true; in both cases the intent is to _not_ encode the associated
-  feature by default.  However if the user specifies "float" or
-  "type_tag" in --btf_features, the default conf_load value is negated,
-  resulting in a BTF encoding that contains floats and type tags
-  (Eduard, patch 3)
-- clarify feature default/setting behaviour and how it only applies
-  when --btf_features is used (Eduard, patch 3)
-- ensure we do not run off the end of the feature_list[] array
-  (Eduard, patch 3)
-- rather than having each struct btf_feature record the offset in the
-  conf_load structure of the boolean (requiring us to later do pointer
-  math to update it), record the pointers to the boolean conf_load
-  values associated with each feature (Jiri, patch 3)
-- allow for multiple specifications of --btf_features, enabling the
-  union of all features specified (Andrii, patch 3)
-- rename function-related optimized/consistent to optimized_func and
-  consistent_func in recognition of the fact they are function-specific
-  (Andrii, patch 3)
-- add a strict version of --btf_features, --btf_features_strict that
-  will error out if an unrecognized feature is used (Andrii, patch 5)
-
-[1] https://lore.kernel.org/bpf/CAEf4Bzaz1UqqxuZ7Q+KQee-HLyY1nwhAurBE2n9YTWchqoYLbg@mail.gmail.com/
-[2] https://lore.kernel.org/bpf/20231018122926.735416-1-alan.maguire@oracle.com/
-[3] https://lore.kernel.org/bpf/20231013153359.88274-1-alan.maguire@oracle.com/
-[4] https://lore.kernel.org/bpf/20231011091732.93254-1-alan.maguire@oracle.com/
-
-Alan Maguire (5):
-  btf_encoder, pahole: move btf encoding options into conf_load
-  dwarves: move ARRAY_SIZE() to dwarves.h
-  pahole: add --btf_features support
-  pahole: add --supported_btf_features
-  pahole: add --btf_features_strict to reject unknown BTF features
-
- btf_encoder.c      |   8 +-
- btf_encoder.h      |   2 +-
- dwarves.c          |  16 ----
- dwarves.h          |  19 +++++
- man-pages/pahole.1 |  32 ++++++++
- pahole.c           | 186 +++++++++++++++++++++++++++++++++++++++++----
- 6 files changed, 229 insertions(+), 34 deletions(-)
-
+diff --git a/man-pages/pahole.1 b/man-pages/pahole.1
+index c1b48de..a09885f 100644
+--- a/man-pages/pahole.1
++++ b/man-pages/pahole.1
+@@ -273,6 +273,30 @@ Generate BTF for functions with optimization-related suffixes (.isra, .constprop
+ .B \-\-btf_gen_all
+ Allow using all the BTF features supported by pahole.
+ 
++.TP
++.B \-\-btf_features=FEATURE_LIST
++Encode BTF using the specified feature list, or specify 'all' for all features supported.  This option can be used as an alternative to unsing multiple BTF-related options. Supported features are
++
++.nf
++	encode_force       Ignore invalid symbols when encoding BTF; for example
++	                   if a symbol has an invalid name, it will be ignored
++	                   and BTF encoding will continue.
++	var                Encode variables using BTF_KIND_VAR in BTF.
++	float              Encode floating-point types in BTF.
++	decl_tag           Encode declaration tags using BTF_KIND_DECL_TAG.
++	type_tag           Encode type tags using BTF_KIND_TYPE_TAG.
++	enum64             Encode enum64 values with BTF_KIND_ENUM64.
++	optimized_func     Encode representations of optimized functions
++	                   with suffixes like ".isra.0".
++	consistent_func    Avoid encoding inconsistent static functions.
++	                   These occur when a parameter is optimized out
++	                   in some CUs and not others, or when the same
++	                   function name has inconsistent BTF descriptions
++	                   in different CUs.
++.fi
++
++So for example, specifying \-\-btf_encode=var,enum64 will result in a BTF encoding that (as well as encoding basic BTF information) will contain variables and enum64 values.
++
+ .TP
+ .B \-l, \-\-show_first_biggest_size_base_type_member
+ Show first biggest size base_type member.
+diff --git a/pahole.c b/pahole.c
+index 7a41dc3..fe1cc6a 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -1229,6 +1229,128 @@ ARGP_PROGRAM_VERSION_HOOK_DEF = dwarves_print_version;
+ #define ARGP_skip_emitting_atomic_typedefs 338
+ #define ARGP_btf_gen_optimized  339
+ #define ARGP_skip_encoding_btf_inconsistent_proto 340
++#define ARGP_btf_features	341
++
++/* --btf_features=feature1[,feature2,..] allows us to specify
++ * a list of requested BTF features or "all" to enable all features.
++ * These are translated into the appropriate conf_load values via a
++ * struct btf_feature which specifies the associated conf_load
++ * boolean field and whether its default (representing the feature being
++ * off) is false or true.
++ *
++ * btf_features is for opting _into_ features so for a case like
++ * conf_load->btf_gen_floats, the translation is simple; the presence
++ * of the "float" feature in --btf_features sets conf_load->btf_gen_floats
++ * to true.
++ *
++ * The more confusing case is for features that are enabled unless
++ * skipping them is specified; for example
++ * conf_load->skip_encoding_btf_type_tag.  By default - to support
++ * the opt-in model of only enabling features the user asks for -
++ * conf_load->skip_encoding_btf_type_tag is set to true (meaning no
++ * type_tags) and it is only set to false if --btf_features contains
++ * the "type_tag" keyword.
++ *
++ * So from the user perspective, all features specified via
++ * --btf_features are enabled, and if a feature is not specified,
++ * it is disabled.
++ *
++ * If --btf_features is not used, the usual pahole defaults for
++ * BTF encoding apply; we encode type/decl tags, do not encode
++ * floats, etc.  This ensures backwards compatibility.
++ */
++#define BTF_FEATURE(name, alias, default_value)			\
++	{ #name, #alias, &conf_load.alias, default_value }
++
++struct btf_feature {
++	const char      *name;
++	const char      *option_alias;
++	bool		*conf_value;
++	bool		default_value;
++} btf_features[] = {
++	BTF_FEATURE(encode_force, btf_encode_force, false),
++	BTF_FEATURE(var, skip_encoding_btf_vars, true),
++	BTF_FEATURE(float, btf_gen_floats, false),
++	BTF_FEATURE(decl_tag, skip_encoding_btf_decl_tag, true),
++	BTF_FEATURE(type_tag, skip_encoding_btf_type_tag, true),
++	BTF_FEATURE(enum64, skip_encoding_btf_enum64, true),
++	BTF_FEATURE(optimized_func, btf_gen_optimized, false),
++	BTF_FEATURE(consistent_func, skip_encoding_btf_inconsistent_proto, false),
++};
++
++#define BTF_MAX_FEATURE_STR	1024
++
++bool set_btf_features_defaults;
++
++static void init_btf_features(void)
++{
++	int i;
++
++	/* Only set default values once, as multiple --btf_features=
++	 * may be specified on command-line, and setting defaults
++	 * again could clobber values.   The aim is to enable
++	 * all features set across all --btf_features options.
++	 */
++	if (set_btf_features_defaults)
++		return;
++	for (i = 0; i < ARRAY_SIZE(btf_features); i++)
++		*btf_features[i].conf_value = btf_features[i].default_value;
++	set_btf_features_defaults = true;
++}
++
++static struct btf_feature *find_btf_feature(char *name)
++{
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(btf_features); i++) {
++		if (strcmp(name, btf_features[i].name) == 0)
++			return &btf_features[i];
++	}
++	return NULL;
++}
++
++static void enable_btf_feature(struct btf_feature *feature)
++{
++	/* switch "default-off" features on, and "default-on" features
++	 * off; i.e. negate the default value.
++	 */
++	*feature->conf_value = !feature->default_value;
++}
++
++/* Translate --btf_features=feature1[,feature2] into conf_load values.
++ * Explicitly ignores unrecognized features to allow future specification
++ * of new opt-in features.
++ */
++static void parse_btf_features(const char *features)
++{
++	char *saveptr = NULL, *s, *feature_name;
++	char f[BTF_MAX_FEATURE_STR];
++
++	init_btf_features();
++
++	if (strcmp(features, "all") == 0) {
++		int i;
++
++		for (i = 0; i < ARRAY_SIZE(btf_features); i++)
++			enable_btf_feature(&btf_features[i]);
++		return;
++	}
++
++	strncpy(f, features, sizeof(f));
++	s = f;
++	while ((feature_name = strtok_r(s, ",", &saveptr)) != NULL) {
++		struct btf_feature *feature = find_btf_feature(feature_name);
++
++		if (!feature) {
++			if (global_verbose)
++				fprintf(stderr, "Ignoring unsupported feature '%s'\n",
++					feature_name);
++		} else {
++			enable_btf_feature(feature);
++		}
++		s = NULL;
++	}
++}
+ 
+ static const struct argp_option pahole__options[] = {
+ 	{
+@@ -1651,6 +1773,12 @@ static const struct argp_option pahole__options[] = {
+ 		.key = ARGP_skip_encoding_btf_inconsistent_proto,
+ 		.doc = "Skip functions that have multiple inconsistent function prototypes sharing the same name, or that use unexpected registers for parameter values."
+ 	},
++	{
++		.name = "btf_features",
++		.key = ARGP_btf_features,
++		.arg = "FEATURE_LIST",
++		.doc = "Specify supported BTF features in FEATURE_LIST or 'all' for all supported features. See the pahole manual page for the list of supported features."
++	},
+ 	{
+ 		.name = NULL,
+ 	}
+@@ -1796,7 +1924,7 @@ static error_t pahole__options_parser(int key, char *arg,
+ 	case ARGP_btf_gen_floats:
+ 		conf_load.btf_gen_floats = true;	break;
+ 	case ARGP_btf_gen_all:
+-		conf_load.btf_gen_floats = true;	break;
++		parse_btf_features("all");		break;
+ 	case ARGP_with_flexible_array:
+ 		show_with_flexible_array = true;	break;
+ 	case ARGP_prettify_input_filename:
+@@ -1826,6 +1954,8 @@ static error_t pahole__options_parser(int key, char *arg,
+ 		conf_load.btf_gen_optimized = true;		break;
+ 	case ARGP_skip_encoding_btf_inconsistent_proto:
+ 		conf_load.skip_encoding_btf_inconsistent_proto = true; break;
++	case ARGP_btf_features:
++		parse_btf_features(arg);		break;
+ 	default:
+ 		return ARGP_ERR_UNKNOWN;
+ 	}
 -- 
 2.31.1
 
