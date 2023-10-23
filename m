@@ -1,150 +1,231 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D551D53E
-	for <bpf@vger.kernel.org>; Mon, 23 Oct 2023 17:17:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E4B71CF94;
+	Mon, 23 Oct 2023 17:19:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EDz1+kMi"
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6CC10E
-	for <bpf@vger.kernel.org>; Mon, 23 Oct 2023 10:17:14 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-53fc7c67a41so7076343a12.0
-        for <bpf@vger.kernel.org>; Mon, 23 Oct 2023 10:17:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698081433; x=1698686233; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=2cz1SxLHyYpvpYPrPLWCO6etxCHOsQhd+NfQuzNn6ZI=;
-        b=EDz1+kMifAHpfDCBE0ksjdoaD5+1GmKtl9UYYc/ovednnGlFkbtvkm2iSOO3ByksVA
-         gsSYauSMyckirSZV7h+E9Cbe9gmLHl2QSqPjxL1o8ww5SyiKhvDidlCzHNrxW7jIb9t8
-         aSDNCY1zj/jTzYRYDSRJ/KAancQRbPzjHQrGnNqKvGuforX1Z7eav+eNDheFmaS841KQ
-         3T7cckZJtbvpTBKNB5GUMvu5bKxjmOYUsCVnev2k3l3BGQFWS8A1l+fk/1PIB6gKPiOY
-         x2mqdD5wcJ6ewFLyuhIvZFfvjQLQhzrpOldYksWj4bE+lqWlDrNpqpBaeSwuMvjiCODe
-         jwnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698081433; x=1698686233;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2cz1SxLHyYpvpYPrPLWCO6etxCHOsQhd+NfQuzNn6ZI=;
-        b=AZY1DuE8f7tw8kLs/Q1MA64Ga4c/kicAgTZ5XDJiabEchzzbhQblade3JgYsdNdkDI
-         +BOujQx9wubB9Ecp5gfKQTHzmSU9U7/XfrygxqjuPotAYg+6rLJ0eV6rihF39uOPml+5
-         skzlk0iKkTjlJoqWBbRpYTydskLTbtttDBY0rSHa84BRglvWkqcs68q4J/QFUC8Ala+Z
-         cUD/w3n2Aksg1m1PZoiE6V5tSXHHtoVrZXjf3EijyDr0r9omyN841om1/yvDOq9JdKNi
-         3+z7Qx8+jfW9TPs4KVi2tSCnlzpQkc1e97exLk0MPLt7I8koG5ZZbeERhVTZahjCG0Xb
-         Mj8g==
-X-Gm-Message-State: AOJu0Yzd6dcr+Lex5UB0J9TjwG5iFJWzieYRWoI2zaOo9pQqkAfMoz1X
-	mZRubfJQadEvgoBUH29sR0Yt2R5hnCNhMpNB
-X-Google-Smtp-Source: AGHT+IGjiTmvpCGpRVfL4lM6fOg29E6XpnX+lp/Qp4JZs8tpC0a0AR710gPHMP7FzMwUCDeIwCkvow==
-X-Received: by 2002:a17:906:7308:b0:9a2:295a:9bbc with SMTP id di8-20020a170906730800b009a2295a9bbcmr7578468ejc.37.1698081432723;
-        Mon, 23 Oct 2023 10:17:12 -0700 (PDT)
-Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id q1-20020a1709060e4100b009b64987e1absm6901876eji.139.2023.10.23.10.17.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Oct 2023 10:17:12 -0700 (PDT)
-Message-ID: <3c354780e99e451fd8b8de26b12a8cb5c47148aa.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/7] exact states comparison for iterator
- convergence checks
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: bpf@vger.kernel.org, ast@kernel.org
-Cc: andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, 
- kernel-team@fb.com, yonghong.song@linux.dev, memxor@gmail.com,
- awerner32@gmail.com,  john.fastabend@gmail.com
-Date: Mon, 23 Oct 2023 20:17:05 +0300
-In-Reply-To: <20231022010812.9201-1-eddyz87@gmail.com>
-References: <20231022010812.9201-1-eddyz87@gmail.com>
-Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.0 
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="iV+4COw9"
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938E2BD;
+	Mon, 23 Oct 2023 10:19:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=ORIi9H6LZC6oKU2ilTN6TDXwj7O7Am6C11fwhRW35oM=; b=iV+4COw9xkerWPCWPjcYHgu2tC
+	jQyKZaqO2Oxis2Mh9UDcvLvV7yKDxjxeib0msZTz+CWCGUxd8J8431iH3fmCvc3ZT2wEITuxNvLTg
+	zAeBrrmjjQUd0PXOr5QSZZ4RGvzVRG+v8PNBn5dM2SbgHExi9B6VoR2MmnzYnkXnZ77c8bBke0J2B
+	WQ4oYzemkvfz4HFsfwTC6vu/QT/RL0aA9BwDWFPZW16nR79BJlF9zyA9nLxOCOWhvwvOPoLNE0R2w
+	+Dfq1Hjwht9i/mnIUfHAPydO9Mh8nYF9ughhUIviJlskZ+zpw5l5ScFC1Varei+FhZuDeMwwnyVz5
+	M8J3PvUA==;
+Received: from 226.206.1.85.dynamic.wline.res.cust.swisscom.ch ([85.1.206.226] helo=localhost)
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1quyZz-000PRd-0f; Mon, 23 Oct 2023 19:19:03 +0200
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	martin.lau@linux.dev,
+	razor@blackwall.org,
+	ast@kernel.org,
+	andrii@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@google.com,
+	toke@kernel.org,
+	kuba@kernel.org,
+	andrew@lunn.ch,
+	Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH bpf-next v3 3/7] libbpf: Add link-based API for netkit
+Date: Mon, 23 Oct 2023 19:18:52 +0200
+Message-Id: <20231023171856.18324-4-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20231023171856.18324-1-daniel@iogearbox.net>
+References: <20231023171856.18324-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27070/Mon Oct 23 09:53:01 2023)
 
-On Sun, 2023-10-22 at 04:08 +0300, Eduard Zingerman wrote:
-[...]
-> Changelog:
-> V1 -> V2 [2], applied changes suggested by Alexei offlist:
-> - __explored_state() function removed;
-> - same_callsites() function is now used in clean_live_states();
-> - patches #1,2 are added as preparatory code movement;
-> - in process_iter_next_call() a safeguard is added to verify that
->   cur_st->parent exists and has expected insn index / call sites.
+This adds bpf_program__attach_netkit() API to libbpf. Overall it is very
+similar to tcx. The API looks as following:
 
-I have V3 ready and passing CI.
+  LIBBPF_API struct bpf_link *
+  bpf_program__attach_netkit(const struct bpf_program *prog, int ifindex,
+                             const struct bpf_netkit_opts *opts);
 
-However I checked on Alexei's concerns regarding performance on
-explored states cache miss and verifier does not behave well with this
-patch-set. For example, the program at the end of the email causes
-verifier to "hang" (loop inside is_state_visited() to no end).
+The struct bpf_netkit_opts is done in similar way as struct bpf_tcx_opts
+for supporting bpf_mprog control parameters. The attach location for the
+primary and peer device is derived from the program section "netkit/primary"
+and "netkit/peer", respectively.
 
-There are several options to fix this:
-(a) limit total iteration depth, as in [1], the limit would have to be
-    at-least 1000 to make iters/task_vma pass;
-(b) limit maximal number of checkpoint states associated with
-    instruction and evict those with lowest dfs_depth;
-(c) choose bigger constants in `sl->miss_cnt > sl->hit_cnt * 3 + 3` for
-    checkpoint states.
-
-Given that current failure mode is bad, should I submit V3 as-is or
-should I explore options (b,c) and add one of those to V3?
-
-[1] https://github.com/eddyz87/bpf/tree/bpf-iter-next-exact-widening-max-it=
-er-depth
-
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
+ tools/lib/bpf/bpf.c      | 16 ++++++++++++++++
+ tools/lib/bpf/bpf.h      |  5 +++++
+ tools/lib/bpf/libbpf.c   | 39 +++++++++++++++++++++++++++++++++++++++
+ tools/lib/bpf/libbpf.h   | 15 +++++++++++++++
+ tools/lib/bpf/libbpf.map |  1 +
+ 5 files changed, 76 insertions(+)
 
-SEC("?raw_tp")
-__failure
-__naked int max_iter_depth(void)
-{
-	/* This is equivalent to C program below.
-	 * The counter stored in r6 is used as precise after the loop,
-	 * thus preventing widening. Verifier won't be able to conclude
-	 * that such program terminates but it should gracefully exit.
-	 *
-	 * r6 =3D 0
-	 * bpf_iter_num_new(&fp[-8], 0, 10)
-	 * while (bpf_iter_num_next(&fp[-8])) {
-	 *   r6 +=3D 1;
-	 * }
-	 * bpf_iter_num_destroy(&fp[-8])
-	 * ... force r6 precise ...
-	 * return 0
-	 */
-	asm volatile (
-		"r6 =3D 0;"
-		"r1 =3D r10;"
-		"r1 +=3D -8;"
-		"r2 =3D 0;"
-		"r3 =3D 10;"
-		"call %[bpf_iter_num_new];"
-	"loop_%=3D:"
-		"r1 =3D r10;"
-		"r1 +=3D -8;"
-		"call %[bpf_iter_num_next];"
-		"if r0 =3D=3D 0 goto loop_end_%=3D;"
-		"r6 +=3D 1;"
-		"goto loop_%=3D;"
-	"loop_end_%=3D:"
-		"r1 =3D r10;"
-		"r1 +=3D -8;"
-		"call %[bpf_iter_num_destroy];"
-		"r0 =3D r10;"
-		"r0 +=3D r6;" /* this forces r6 to be precise */
-		"r0 =3D 0;"
-		"exit;"
-		:
-		: __imm(bpf_iter_num_new),
-		  __imm(bpf_iter_num_next),
-		  __imm(bpf_iter_num_destroy)
-		: __clobber_all
-	);
-}
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index b0f1913763a3..9dc9625651dc 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -810,6 +810,22 @@ int bpf_link_create(int prog_fd, int target_fd,
+ 		if (!OPTS_ZEROED(opts, tcx))
+ 			return libbpf_err(-EINVAL);
+ 		break;
++	case BPF_NETKIT_PRIMARY:
++	case BPF_NETKIT_PEER:
++		relative_fd = OPTS_GET(opts, netkit.relative_fd, 0);
++		relative_id = OPTS_GET(opts, netkit.relative_id, 0);
++		if (relative_fd && relative_id)
++			return libbpf_err(-EINVAL);
++		if (relative_id) {
++			attr.link_create.netkit.relative_id = relative_id;
++			attr.link_create.flags |= BPF_F_ID;
++		} else {
++			attr.link_create.netkit.relative_fd = relative_fd;
++		}
++		attr.link_create.netkit.expected_revision = OPTS_GET(opts, netkit.expected_revision, 0);
++		if (!OPTS_ZEROED(opts, netkit))
++			return libbpf_err(-EINVAL);
++		break;
+ 	default:
+ 		if (!OPTS_ZEROED(opts, flags))
+ 			return libbpf_err(-EINVAL);
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 74c2887cfd24..d0f53772bdc0 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -415,6 +415,11 @@ struct bpf_link_create_opts {
+ 			__u32 relative_id;
+ 			__u64 expected_revision;
+ 		} tcx;
++		struct {
++			__u32 relative_fd;
++			__u32 relative_id;
++			__u64 expected_revision;
++		} netkit;
+ 	};
+ 	size_t :0;
+ };
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index a295f6acf98f..e067be95da3c 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -126,6 +126,8 @@ static const char * const attach_type_name[] = {
+ 	[BPF_TCX_INGRESS]		= "tcx_ingress",
+ 	[BPF_TCX_EGRESS]		= "tcx_egress",
+ 	[BPF_TRACE_UPROBE_MULTI]	= "trace_uprobe_multi",
++	[BPF_NETKIT_PRIMARY]		= "netkit_primary",
++	[BPF_NETKIT_PEER]		= "netkit_peer",
+ };
+ 
+ static const char * const link_type_name[] = {
+@@ -142,6 +144,7 @@ static const char * const link_type_name[] = {
+ 	[BPF_LINK_TYPE_NETFILTER]		= "netfilter",
+ 	[BPF_LINK_TYPE_TCX]			= "tcx",
+ 	[BPF_LINK_TYPE_UPROBE_MULTI]		= "uprobe_multi",
++	[BPF_LINK_TYPE_NETKIT]			= "netkit",
+ };
+ 
+ static const char * const map_type_name[] = {
+@@ -8915,6 +8918,8 @@ static const struct bpf_sec_def section_defs[] = {
+ 	SEC_DEF("tc",			SCHED_CLS, 0, SEC_NONE), /* deprecated / legacy, use tcx */
+ 	SEC_DEF("classifier",		SCHED_CLS, 0, SEC_NONE), /* deprecated / legacy, use tcx */
+ 	SEC_DEF("action",		SCHED_ACT, 0, SEC_NONE), /* deprecated / legacy, use tcx */
++	SEC_DEF("netkit/primary",	SCHED_CLS, BPF_NETKIT_PRIMARY, SEC_NONE),
++	SEC_DEF("netkit/peer",		SCHED_CLS, BPF_NETKIT_PEER, SEC_NONE),
+ 	SEC_DEF("tracepoint+",		TRACEPOINT, 0, SEC_NONE, attach_tp),
+ 	SEC_DEF("tp+",			TRACEPOINT, 0, SEC_NONE, attach_tp),
+ 	SEC_DEF("raw_tracepoint+",	RAW_TRACEPOINT, 0, SEC_NONE, attach_raw_tp),
+@@ -12126,6 +12131,40 @@ bpf_program__attach_tcx(const struct bpf_program *prog, int ifindex,
+ 	return bpf_program_attach_fd(prog, ifindex, "tcx", &link_create_opts);
+ }
+ 
++struct bpf_link *
++bpf_program__attach_netkit(const struct bpf_program *prog, int ifindex,
++			   const struct bpf_netkit_opts *opts)
++{
++	LIBBPF_OPTS(bpf_link_create_opts, link_create_opts);
++	__u32 relative_id;
++	int relative_fd;
++
++	if (!OPTS_VALID(opts, bpf_netkit_opts))
++		return libbpf_err_ptr(-EINVAL);
++
++	relative_id = OPTS_GET(opts, relative_id, 0);
++	relative_fd = OPTS_GET(opts, relative_fd, 0);
++
++	/* validate we don't have unexpected combinations of non-zero fields */
++	if (!ifindex) {
++		pr_warn("prog '%s': target netdevice ifindex cannot be zero\n",
++			prog->name);
++		return libbpf_err_ptr(-EINVAL);
++	}
++	if (relative_fd && relative_id) {
++		pr_warn("prog '%s': relative_fd and relative_id cannot be set at the same time\n",
++			prog->name);
++		return libbpf_err_ptr(-EINVAL);
++	}
++
++	link_create_opts.netkit.expected_revision = OPTS_GET(opts, expected_revision, 0);
++	link_create_opts.netkit.relative_fd = relative_fd;
++	link_create_opts.netkit.relative_id = relative_id;
++	link_create_opts.flags = OPTS_GET(opts, flags, 0);
++
++	return bpf_program_attach_fd(prog, ifindex, "netkit", &link_create_opts);
++}
++
+ struct bpf_link *bpf_program__attach_freplace(const struct bpf_program *prog,
+ 					      int target_fd,
+ 					      const char *attach_func_name)
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 475378438545..0dd83910ae9a 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -800,6 +800,21 @@ LIBBPF_API struct bpf_link *
+ bpf_program__attach_tcx(const struct bpf_program *prog, int ifindex,
+ 			const struct bpf_tcx_opts *opts);
+ 
++struct bpf_netkit_opts {
++	/* size of this struct, for forward/backward compatibility */
++	size_t sz;
++	__u32 relative_fd;
++	__u32 relative_id;
++	__u64 expected_revision;
++	__u32 flags;
++	size_t :0;
++};
++#define bpf_netkit_opts__last_field flags
++
++LIBBPF_API struct bpf_link *
++bpf_program__attach_netkit(const struct bpf_program *prog, int ifindex,
++			   const struct bpf_netkit_opts *opts);
++
+ struct bpf_map;
+ 
+ LIBBPF_API struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map);
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index cc973b678a39..b52dc28dc8af 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -398,6 +398,7 @@ LIBBPF_1.3.0 {
+ 		bpf_object__unpin;
+ 		bpf_prog_detach_opts;
+ 		bpf_program__attach_netfilter;
++		bpf_program__attach_netkit;
+ 		bpf_program__attach_tcx;
+ 		bpf_program__attach_uprobe_multi;
+ 		ring__avail_data_size;
+-- 
+2.34.1
 
