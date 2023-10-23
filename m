@@ -1,29 +1,29 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E4B71CF94;
-	Mon, 23 Oct 2023 17:19:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DD311EA73;
+	Mon, 23 Oct 2023 17:19:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="iV+4COw9"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="E0uIgfeu"
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938E2BD;
-	Mon, 23 Oct 2023 10:19:09 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C92EE;
+	Mon, 23 Oct 2023 10:19:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=ORIi9H6LZC6oKU2ilTN6TDXwj7O7Am6C11fwhRW35oM=; b=iV+4COw9xkerWPCWPjcYHgu2tC
-	jQyKZaqO2Oxis2Mh9UDcvLvV7yKDxjxeib0msZTz+CWCGUxd8J8431iH3fmCvc3ZT2wEITuxNvLTg
-	zAeBrrmjjQUd0PXOr5QSZZ4RGvzVRG+v8PNBn5dM2SbgHExi9B6VoR2MmnzYnkXnZ77c8bBke0J2B
-	WQ4oYzemkvfz4HFsfwTC6vu/QT/RL0aA9BwDWFPZW16nR79BJlF9zyA9nLxOCOWhvwvOPoLNE0R2w
-	+Dfq1Hjwht9i/mnIUfHAPydO9Mh8nYF9ughhUIviJlskZ+zpw5l5ScFC1Varei+FhZuDeMwwnyVz5
-	M8J3PvUA==;
+	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=Xvdm2nlWUsjr8Nk0q5x2uduxl+Asd3Qw4JFB76l2a2s=; b=E0uIgfeuP989sKTiMQ2OERyWYW
+	FOLKozUw/ulgcoOtR88leGUYPBynEeYCZxaOIqx+v3ekn6CC4H3jE0Ii8OKNbxL6QkwGlVRDhsoX/
+	I/UpcPKuT4p2e3MFEaMbYnFAtBeWIsGa8XwBCmqp3TctcMSYtUX0T8unUiVtwBJWuw+LXnPZ0OKvh
+	arfvbugoH69rejYDnLeADGeEgSriQQdZFXgXVuTHUklOhRudIiB2wXfElPVFxiHRBbKgMB1liaiVy
+	FrNh7blEu4I10aN16bueRqmo9Ja3k2H+et85Ib2sm1rT6Nyd7vgPH3xHN92vYkiZhiyuX2d1BEG1w
+	pJYMZKsw==;
 Received: from 226.206.1.85.dynamic.wline.res.cust.swisscom.ch ([85.1.206.226] helo=localhost)
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1quyZz-000PRd-0f; Mon, 23 Oct 2023 19:19:03 +0200
+	id 1quyZx-000PQZ-0F; Mon, 23 Oct 2023 19:19:01 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: bpf@vger.kernel.org
 Cc: netdev@vger.kernel.org,
@@ -37,12 +37,10 @@ Cc: netdev@vger.kernel.org,
 	kuba@kernel.org,
 	andrew@lunn.ch,
 	Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next v3 3/7] libbpf: Add link-based API for netkit
-Date: Mon, 23 Oct 2023 19:18:52 +0200
-Message-Id: <20231023171856.18324-4-daniel@iogearbox.net>
+Subject: [PATCH bpf-next v3 0/7] Add bpf programmable net device
+Date: Mon, 23 Oct 2023 19:18:49 +0200
+Message-Id: <20231023171856.18324-1-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20231023171856.18324-1-daniel@iogearbox.net>
-References: <20231023171856.18324-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,179 +51,72 @@ Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: daniel@iogearbox.net
 X-Virus-Scanned: Clear (ClamAV 0.103.10/27070/Mon Oct 23 09:53:01 2023)
 
-This adds bpf_program__attach_netkit() API to libbpf. Overall it is very
-similar to tcx. The API looks as following:
+This work adds a BPF programmable device which can operate in L3 or L2
+mode where the BPF program is part of the xmit routine. It's program
+management is done via bpf_mprog and it comes with BPF link support.
+For details see patch 1 and following. Thanks!
 
-  LIBBPF_API struct bpf_link *
-  bpf_program__attach_netkit(const struct bpf_program *prog, int ifindex,
-                             const struct bpf_netkit_opts *opts);
+v2 -> v3:
+  - Remove setting dev->min_mtu to ETH_MIN_MTU (Andrew)
+  - Do not populate ethtool info->version (Andrew)
+  - Populate netdev private data before register_netdevice (Andrew)
+  - Use strscpy for ifname template (Jakub)
+  - Use GFP_KERNEL_ACCOUNT for link kzalloc (Jakub)
+  - Carry and dump link attach type for bpftool (Toke)
+v1 -> v2:
+  - Rename from meta (Toke, Andrii, Alexei)
+  - Reuse skb_scrub_packet (Stan)
+  - Remove IFF_META and use netdev_ops (Toke)
+  - Add comment to multicast handler (Toke)
+  - Remove silly version info (Toke)
+  - Fix attach_type_name (Quentin)
+  - Rework libbpf link attach api to be similar
+    as tcx (Andrii)
+  - Move flags last for bpf_netkit_opts (Andrii)
+  - Rebased to bpf_mprog query api changes
+  - Folded link support patch into main one
 
-The struct bpf_netkit_opts is done in similar way as struct bpf_tcx_opts
-for supporting bpf_mprog control parameters. The attach location for the
-primary and peer device is derived from the program section "netkit/primary"
-and "netkit/peer", respectively.
+Daniel Borkmann (7):
+  netkit, bpf: Add bpf programmable net device
+  tools: Sync if_link uapi header
+  libbpf: Add link-based API for netkit
+  bpftool: Implement link show support for netkit
+  bpftool: Extend net dump with netkit progs
+  selftests/bpf: Add netlink helper library
+  selftests/bpf: Add selftests for netkit
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
----
- tools/lib/bpf/bpf.c      | 16 ++++++++++++++++
- tools/lib/bpf/bpf.h      |  5 +++++
- tools/lib/bpf/libbpf.c   | 39 +++++++++++++++++++++++++++++++++++++++
- tools/lib/bpf/libbpf.h   | 15 +++++++++++++++
- tools/lib/bpf/libbpf.map |  1 +
- 5 files changed, 76 insertions(+)
+ MAINTAINERS                                   |   9 +
+ drivers/net/Kconfig                           |   9 +
+ drivers/net/Makefile                          |   1 +
+ drivers/net/netkit.c                          | 934 ++++++++++++++++++
+ include/net/netkit.h                          |  38 +
+ include/uapi/linux/bpf.h                      |  14 +
+ include/uapi/linux/if_link.h                  |  24 +
+ kernel/bpf/syscall.c                          |  30 +-
+ .../bpf/bpftool/Documentation/bpftool-net.rst |   8 +-
+ tools/bpf/bpftool/link.c                      |   9 +
+ tools/bpf/bpftool/net.c                       |   7 +-
+ tools/include/uapi/linux/bpf.h                |  14 +
+ tools/include/uapi/linux/if_link.h            | 141 +++
+ tools/lib/bpf/bpf.c                           |  16 +
+ tools/lib/bpf/bpf.h                           |   5 +
+ tools/lib/bpf/libbpf.c                        |  39 +
+ tools/lib/bpf/libbpf.h                        |  15 +
+ tools/lib/bpf/libbpf.map                      |   1 +
+ tools/testing/selftests/bpf/Makefile          |  19 +-
+ tools/testing/selftests/bpf/config            |   1 +
+ tools/testing/selftests/bpf/netlink_helpers.c | 358 +++++++
+ tools/testing/selftests/bpf/netlink_helpers.h |  46 +
+ .../selftests/bpf/prog_tests/tc_helpers.h     |   4 +
+ .../selftests/bpf/prog_tests/tc_netkit.c      | 687 +++++++++++++
+ .../selftests/bpf/progs/test_tc_link.c        |  13 +
+ 25 files changed, 2427 insertions(+), 15 deletions(-)
+ create mode 100644 drivers/net/netkit.c
+ create mode 100644 include/net/netkit.h
+ create mode 100644 tools/testing/selftests/bpf/netlink_helpers.c
+ create mode 100644 tools/testing/selftests/bpf/netlink_helpers.h
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_netkit.c
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index b0f1913763a3..9dc9625651dc 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -810,6 +810,22 @@ int bpf_link_create(int prog_fd, int target_fd,
- 		if (!OPTS_ZEROED(opts, tcx))
- 			return libbpf_err(-EINVAL);
- 		break;
-+	case BPF_NETKIT_PRIMARY:
-+	case BPF_NETKIT_PEER:
-+		relative_fd = OPTS_GET(opts, netkit.relative_fd, 0);
-+		relative_id = OPTS_GET(opts, netkit.relative_id, 0);
-+		if (relative_fd && relative_id)
-+			return libbpf_err(-EINVAL);
-+		if (relative_id) {
-+			attr.link_create.netkit.relative_id = relative_id;
-+			attr.link_create.flags |= BPF_F_ID;
-+		} else {
-+			attr.link_create.netkit.relative_fd = relative_fd;
-+		}
-+		attr.link_create.netkit.expected_revision = OPTS_GET(opts, netkit.expected_revision, 0);
-+		if (!OPTS_ZEROED(opts, netkit))
-+			return libbpf_err(-EINVAL);
-+		break;
- 	default:
- 		if (!OPTS_ZEROED(opts, flags))
- 			return libbpf_err(-EINVAL);
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 74c2887cfd24..d0f53772bdc0 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -415,6 +415,11 @@ struct bpf_link_create_opts {
- 			__u32 relative_id;
- 			__u64 expected_revision;
- 		} tcx;
-+		struct {
-+			__u32 relative_fd;
-+			__u32 relative_id;
-+			__u64 expected_revision;
-+		} netkit;
- 	};
- 	size_t :0;
- };
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index a295f6acf98f..e067be95da3c 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -126,6 +126,8 @@ static const char * const attach_type_name[] = {
- 	[BPF_TCX_INGRESS]		= "tcx_ingress",
- 	[BPF_TCX_EGRESS]		= "tcx_egress",
- 	[BPF_TRACE_UPROBE_MULTI]	= "trace_uprobe_multi",
-+	[BPF_NETKIT_PRIMARY]		= "netkit_primary",
-+	[BPF_NETKIT_PEER]		= "netkit_peer",
- };
- 
- static const char * const link_type_name[] = {
-@@ -142,6 +144,7 @@ static const char * const link_type_name[] = {
- 	[BPF_LINK_TYPE_NETFILTER]		= "netfilter",
- 	[BPF_LINK_TYPE_TCX]			= "tcx",
- 	[BPF_LINK_TYPE_UPROBE_MULTI]		= "uprobe_multi",
-+	[BPF_LINK_TYPE_NETKIT]			= "netkit",
- };
- 
- static const char * const map_type_name[] = {
-@@ -8915,6 +8918,8 @@ static const struct bpf_sec_def section_defs[] = {
- 	SEC_DEF("tc",			SCHED_CLS, 0, SEC_NONE), /* deprecated / legacy, use tcx */
- 	SEC_DEF("classifier",		SCHED_CLS, 0, SEC_NONE), /* deprecated / legacy, use tcx */
- 	SEC_DEF("action",		SCHED_ACT, 0, SEC_NONE), /* deprecated / legacy, use tcx */
-+	SEC_DEF("netkit/primary",	SCHED_CLS, BPF_NETKIT_PRIMARY, SEC_NONE),
-+	SEC_DEF("netkit/peer",		SCHED_CLS, BPF_NETKIT_PEER, SEC_NONE),
- 	SEC_DEF("tracepoint+",		TRACEPOINT, 0, SEC_NONE, attach_tp),
- 	SEC_DEF("tp+",			TRACEPOINT, 0, SEC_NONE, attach_tp),
- 	SEC_DEF("raw_tracepoint+",	RAW_TRACEPOINT, 0, SEC_NONE, attach_raw_tp),
-@@ -12126,6 +12131,40 @@ bpf_program__attach_tcx(const struct bpf_program *prog, int ifindex,
- 	return bpf_program_attach_fd(prog, ifindex, "tcx", &link_create_opts);
- }
- 
-+struct bpf_link *
-+bpf_program__attach_netkit(const struct bpf_program *prog, int ifindex,
-+			   const struct bpf_netkit_opts *opts)
-+{
-+	LIBBPF_OPTS(bpf_link_create_opts, link_create_opts);
-+	__u32 relative_id;
-+	int relative_fd;
-+
-+	if (!OPTS_VALID(opts, bpf_netkit_opts))
-+		return libbpf_err_ptr(-EINVAL);
-+
-+	relative_id = OPTS_GET(opts, relative_id, 0);
-+	relative_fd = OPTS_GET(opts, relative_fd, 0);
-+
-+	/* validate we don't have unexpected combinations of non-zero fields */
-+	if (!ifindex) {
-+		pr_warn("prog '%s': target netdevice ifindex cannot be zero\n",
-+			prog->name);
-+		return libbpf_err_ptr(-EINVAL);
-+	}
-+	if (relative_fd && relative_id) {
-+		pr_warn("prog '%s': relative_fd and relative_id cannot be set at the same time\n",
-+			prog->name);
-+		return libbpf_err_ptr(-EINVAL);
-+	}
-+
-+	link_create_opts.netkit.expected_revision = OPTS_GET(opts, expected_revision, 0);
-+	link_create_opts.netkit.relative_fd = relative_fd;
-+	link_create_opts.netkit.relative_id = relative_id;
-+	link_create_opts.flags = OPTS_GET(opts, flags, 0);
-+
-+	return bpf_program_attach_fd(prog, ifindex, "netkit", &link_create_opts);
-+}
-+
- struct bpf_link *bpf_program__attach_freplace(const struct bpf_program *prog,
- 					      int target_fd,
- 					      const char *attach_func_name)
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 475378438545..0dd83910ae9a 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -800,6 +800,21 @@ LIBBPF_API struct bpf_link *
- bpf_program__attach_tcx(const struct bpf_program *prog, int ifindex,
- 			const struct bpf_tcx_opts *opts);
- 
-+struct bpf_netkit_opts {
-+	/* size of this struct, for forward/backward compatibility */
-+	size_t sz;
-+	__u32 relative_fd;
-+	__u32 relative_id;
-+	__u64 expected_revision;
-+	__u32 flags;
-+	size_t :0;
-+};
-+#define bpf_netkit_opts__last_field flags
-+
-+LIBBPF_API struct bpf_link *
-+bpf_program__attach_netkit(const struct bpf_program *prog, int ifindex,
-+			   const struct bpf_netkit_opts *opts);
-+
- struct bpf_map;
- 
- LIBBPF_API struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map);
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index cc973b678a39..b52dc28dc8af 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -398,6 +398,7 @@ LIBBPF_1.3.0 {
- 		bpf_object__unpin;
- 		bpf_prog_detach_opts;
- 		bpf_program__attach_netfilter;
-+		bpf_program__attach_netkit;
- 		bpf_program__attach_tcx;
- 		bpf_program__attach_uprobe_multi;
- 		ring__avail_data_size;
 -- 
 2.34.1
 
