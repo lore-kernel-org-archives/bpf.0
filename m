@@ -1,29 +1,29 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A641405D0;
-	Tue, 24 Oct 2023 21:49:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A178842925;
+	Tue, 24 Oct 2023 21:49:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="OQA8Qn2e"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="ifdFT9Ex"
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C172133;
-	Tue, 24 Oct 2023 14:49:19 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D729D7A;
+	Tue, 24 Oct 2023 14:49:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=m7lZMBGRPz/nR2snBSvWzbh7UOoD6fjaltIORjTvn8Y=; b=OQA8Qn2ef+kHlqrv5Ta92DXt+E
-	LXgmEYhdvUGPhXfeV0bpDqJNrCjSg4vXX3uWhjjm866b/0IA6OyshJmWUrDZWRn2AGYMrEZjhSuHL
-	D/tcbKsJo5PmkFukNmzwvxTRL69DgQwlYpDXikAGocJv8QlnCMxJH2EUQ5sMAT+iFJMg+9vNmMyVG
-	Q5Nf2O4wsyz437htrsHBTtT2ptyCkhs3wPdcSlOV/tXOLrRzfRx11a1L/6HbHewzNs/pIK9MDFCog
-	ZvhfhpJS/tDXg1YWomNUkdt69oujdqCwa5Iv8X9A5b7KQmFSvur+byNQ1/Fzt0B+bpwFjviyeMXiE
-	sg7xjNOw==;
+	bh=Al1KR3brj015tI05a2qEsJWbcatMPfPWtHK99mxT/Vg=; b=ifdFT9ExCxSCtLbFpJo4Zgqy6E
+	Bi1ww+u9T9LMhj3O6s5Bfj9SFwJ6QgCJqPdYGMwAwMy2q2MPJzHj72p8oSTQQWAVsmf+01OdaeHbt
+	UP8cq9NDLoMt8ggBUhsLB9IYDGCXbhzNaVqzO0vfhz/pLbWBEM5Qiw/Q6+mTx0PXL9HVkJAV6vQ7t
+	PeEdqn9IH3i4mMjaxbjvsfvgfYFzNIE7PIKEfddIvdH8XCZZoJn28Ra0KVJlz9abkgsIXZ7D+GBgk
+	ECHi8dDeNJyJQwO1Fcw1AkjtNh55FUPgJvgPmqUzRJn7BvIom15Vk10U6sK1FSn/N7knkmVzRtzcP
+	Y0BXoP/Q==;
 Received: from 40.248.197.178.dynamic.dsl-lte-bonding.zhbmb00p-msn.res.cust.swisscom.ch ([178.197.248.40] helo=localhost)
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1qvPGz-0001kq-6s; Tue, 24 Oct 2023 23:49:13 +0200
+	id 1qvPH1-0001le-ER; Tue, 24 Oct 2023 23:49:15 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: bpf@vger.kernel.org
 Cc: netdev@vger.kernel.org,
@@ -37,9 +37,9 @@ Cc: netdev@vger.kernel.org,
 	kuba@kernel.org,
 	andrew@lunn.ch,
 	Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next v4 3/7] libbpf: Add link-based API for netkit
-Date: Tue, 24 Oct 2023 23:49:00 +0200
-Message-Id: <20231024214904.29825-4-daniel@iogearbox.net>
+Subject: [PATCH bpf-next v4 6/7] selftests/bpf: Add netlink helper library
+Date: Tue, 24 Oct 2023 23:49:03 +0200
+Message-Id: <20231024214904.29825-7-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20231024214904.29825-1-daniel@iogearbox.net>
 References: <20231024214904.29825-1-daniel@iogearbox.net>
@@ -54,179 +54,472 @@ X-Authenticated-Sender: daniel@iogearbox.net
 X-Virus-Scanned: Clear (ClamAV 0.103.10/27071/Tue Oct 24 09:43:50 2023)
 X-Spam-Level: *
 
-This adds bpf_program__attach_netkit() API to libbpf. Overall it is very
-similar to tcx. The API looks as following:
+Add a minimal netlink helper library for the BPF selftests. This has been
+taken and cut down and cleaned up from iproute2. This covers basics such
+as netdevice creation which we need for BPF selftests / BPF CI given
+iproute2 package cannot cover it yet.
 
-  LIBBPF_API struct bpf_link *
-  bpf_program__attach_netkit(const struct bpf_program *prog, int ifindex,
-                             const struct bpf_netkit_opts *opts);
-
-The struct bpf_netkit_opts is done in similar way as struct bpf_tcx_opts
-for supporting bpf_mprog control parameters. The attach location for the
-primary and peer device is derived from the program section "netkit/primary"
-and "netkit/peer", respectively.
+Stanislav Fomichev suggested that this could be replaced in future by ynl
+tool generated C code once it has RTNL support to create devices. Once we
+get to this point the BPF CI would also need to add libmnl. If no further
+extensions are needed, a second option could be that we remove this code
+again once iproute2 package has support.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- tools/lib/bpf/bpf.c      | 16 ++++++++++++++++
- tools/lib/bpf/bpf.h      |  5 +++++
- tools/lib/bpf/libbpf.c   | 39 +++++++++++++++++++++++++++++++++++++++
- tools/lib/bpf/libbpf.h   | 15 +++++++++++++++
- tools/lib/bpf/libbpf.map |  1 +
- 5 files changed, 76 insertions(+)
+ tools/testing/selftests/bpf/Makefile          |  19 +-
+ tools/testing/selftests/bpf/netlink_helpers.c | 358 ++++++++++++++++++
+ tools/testing/selftests/bpf/netlink_helpers.h |  46 +++
+ 3 files changed, 418 insertions(+), 5 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/netlink_helpers.c
+ create mode 100644 tools/testing/selftests/bpf/netlink_helpers.h
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index b0f1913763a3..9dc9625651dc 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -810,6 +810,22 @@ int bpf_link_create(int prog_fd, int target_fd,
- 		if (!OPTS_ZEROED(opts, tcx))
- 			return libbpf_err(-EINVAL);
- 		break;
-+	case BPF_NETKIT_PRIMARY:
-+	case BPF_NETKIT_PEER:
-+		relative_fd = OPTS_GET(opts, netkit.relative_fd, 0);
-+		relative_id = OPTS_GET(opts, netkit.relative_id, 0);
-+		if (relative_fd && relative_id)
-+			return libbpf_err(-EINVAL);
-+		if (relative_id) {
-+			attr.link_create.netkit.relative_id = relative_id;
-+			attr.link_create.flags |= BPF_F_ID;
-+		} else {
-+			attr.link_create.netkit.relative_fd = relative_fd;
-+		}
-+		attr.link_create.netkit.expected_revision = OPTS_GET(opts, netkit.expected_revision, 0);
-+		if (!OPTS_ZEROED(opts, netkit))
-+			return libbpf_err(-EINVAL);
-+		break;
- 	default:
- 		if (!OPTS_ZEROED(opts, flags))
- 			return libbpf_err(-EINVAL);
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 74c2887cfd24..d0f53772bdc0 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -415,6 +415,11 @@ struct bpf_link_create_opts {
- 			__u32 relative_id;
- 			__u64 expected_revision;
- 		} tcx;
-+		struct {
-+			__u32 relative_fd;
-+			__u32 relative_id;
-+			__u64 expected_revision;
-+		} netkit;
- 	};
- 	size_t :0;
- };
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index a295f6acf98f..e067be95da3c 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -126,6 +126,8 @@ static const char * const attach_type_name[] = {
- 	[BPF_TCX_INGRESS]		= "tcx_ingress",
- 	[BPF_TCX_EGRESS]		= "tcx_egress",
- 	[BPF_TRACE_UPROBE_MULTI]	= "trace_uprobe_multi",
-+	[BPF_NETKIT_PRIMARY]		= "netkit_primary",
-+	[BPF_NETKIT_PEER]		= "netkit_peer",
- };
- 
- static const char * const link_type_name[] = {
-@@ -142,6 +144,7 @@ static const char * const link_type_name[] = {
- 	[BPF_LINK_TYPE_NETFILTER]		= "netfilter",
- 	[BPF_LINK_TYPE_TCX]			= "tcx",
- 	[BPF_LINK_TYPE_UPROBE_MULTI]		= "uprobe_multi",
-+	[BPF_LINK_TYPE_NETKIT]			= "netkit",
- };
- 
- static const char * const map_type_name[] = {
-@@ -8915,6 +8918,8 @@ static const struct bpf_sec_def section_defs[] = {
- 	SEC_DEF("tc",			SCHED_CLS, 0, SEC_NONE), /* deprecated / legacy, use tcx */
- 	SEC_DEF("classifier",		SCHED_CLS, 0, SEC_NONE), /* deprecated / legacy, use tcx */
- 	SEC_DEF("action",		SCHED_ACT, 0, SEC_NONE), /* deprecated / legacy, use tcx */
-+	SEC_DEF("netkit/primary",	SCHED_CLS, BPF_NETKIT_PRIMARY, SEC_NONE),
-+	SEC_DEF("netkit/peer",		SCHED_CLS, BPF_NETKIT_PEER, SEC_NONE),
- 	SEC_DEF("tracepoint+",		TRACEPOINT, 0, SEC_NONE, attach_tp),
- 	SEC_DEF("tp+",			TRACEPOINT, 0, SEC_NONE, attach_tp),
- 	SEC_DEF("raw_tracepoint+",	RAW_TRACEPOINT, 0, SEC_NONE, attach_raw_tp),
-@@ -12126,6 +12131,40 @@ bpf_program__attach_tcx(const struct bpf_program *prog, int ifindex,
- 	return bpf_program_attach_fd(prog, ifindex, "tcx", &link_create_opts);
- }
- 
-+struct bpf_link *
-+bpf_program__attach_netkit(const struct bpf_program *prog, int ifindex,
-+			   const struct bpf_netkit_opts *opts)
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 4225f975fce3..9c27b67bc7b1 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -585,11 +585,20 @@ endef
+ # Define test_progs test runner.
+ TRUNNER_TESTS_DIR := prog_tests
+ TRUNNER_BPF_PROGS_DIR := progs
+-TRUNNER_EXTRA_SOURCES := test_progs.c cgroup_helpers.c trace_helpers.c	\
+-			 network_helpers.c testing_helpers.c		\
+-			 btf_helpers.c flow_dissector_load.h		\
+-			 cap_helpers.c test_loader.c xsk.c disasm.c	\
+-			 json_writer.c unpriv_helpers.c 		\
++TRUNNER_EXTRA_SOURCES := test_progs.c		\
++			 cgroup_helpers.c	\
++			 trace_helpers.c	\
++			 network_helpers.c	\
++			 testing_helpers.c	\
++			 btf_helpers.c		\
++			 cap_helpers.c		\
++			 unpriv_helpers.c 	\
++			 netlink_helpers.c	\
++			 test_loader.c		\
++			 xsk.c			\
++			 disasm.c		\
++			 json_writer.c 		\
++			 flow_dissector_load.h	\
+ 			 ip_check_defrag_frags.h
+ TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read $(OUTPUT)/bpf_testmod.ko	\
+ 		       $(OUTPUT)/liburandom_read.so			\
+diff --git a/tools/testing/selftests/bpf/netlink_helpers.c b/tools/testing/selftests/bpf/netlink_helpers.c
+new file mode 100644
+index 000000000000..caf36eb1d032
+--- /dev/null
++++ b/tools/testing/selftests/bpf/netlink_helpers.c
+@@ -0,0 +1,358 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/* Taken & modified from iproute2's libnetlink.c
++ * Authors: Alexey Kuznetsov, <kuznet@ms2.inr.ac.ru>
++ */
++#include <stdio.h>
++#include <stdlib.h>
++#include <unistd.h>
++#include <errno.h>
++#include <time.h>
++#include <sys/socket.h>
++
++#include "netlink_helpers.h"
++
++static int rcvbuf = 1024 * 1024;
++
++void rtnl_close(struct rtnl_handle *rth)
 +{
-+	LIBBPF_OPTS(bpf_link_create_opts, link_create_opts);
-+	__u32 relative_id;
-+	int relative_fd;
-+
-+	if (!OPTS_VALID(opts, bpf_netkit_opts))
-+		return libbpf_err_ptr(-EINVAL);
-+
-+	relative_id = OPTS_GET(opts, relative_id, 0);
-+	relative_fd = OPTS_GET(opts, relative_fd, 0);
-+
-+	/* validate we don't have unexpected combinations of non-zero fields */
-+	if (!ifindex) {
-+		pr_warn("prog '%s': target netdevice ifindex cannot be zero\n",
-+			prog->name);
-+		return libbpf_err_ptr(-EINVAL);
++	if (rth->fd >= 0) {
++		close(rth->fd);
++		rth->fd = -1;
 +	}
-+	if (relative_fd && relative_id) {
-+		pr_warn("prog '%s': relative_fd and relative_id cannot be set at the same time\n",
-+			prog->name);
-+		return libbpf_err_ptr(-EINVAL);
-+	}
-+
-+	link_create_opts.netkit.expected_revision = OPTS_GET(opts, expected_revision, 0);
-+	link_create_opts.netkit.relative_fd = relative_fd;
-+	link_create_opts.netkit.relative_id = relative_id;
-+	link_create_opts.flags = OPTS_GET(opts, flags, 0);
-+
-+	return bpf_program_attach_fd(prog, ifindex, "netkit", &link_create_opts);
 +}
 +
- struct bpf_link *bpf_program__attach_freplace(const struct bpf_program *prog,
- 					      int target_fd,
- 					      const char *attach_func_name)
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 475378438545..6cd9c501624f 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -800,6 +800,21 @@ LIBBPF_API struct bpf_link *
- bpf_program__attach_tcx(const struct bpf_program *prog, int ifindex,
- 			const struct bpf_tcx_opts *opts);
- 
-+struct bpf_netkit_opts {
-+	/* size of this struct, for forward/backward compatibility */
-+	size_t sz;
-+	__u32 flags;
-+	__u32 relative_fd;
-+	__u32 relative_id;
-+	__u64 expected_revision;
-+	size_t :0;
++int rtnl_open_byproto(struct rtnl_handle *rth, unsigned int subscriptions,
++		      int protocol)
++{
++	socklen_t addr_len;
++	int sndbuf = 32768;
++	int one = 1;
++
++	memset(rth, 0, sizeof(*rth));
++	rth->proto = protocol;
++	rth->fd = socket(AF_NETLINK, SOCK_RAW | SOCK_CLOEXEC, protocol);
++	if (rth->fd < 0) {
++		perror("Cannot open netlink socket");
++		return -1;
++	}
++	if (setsockopt(rth->fd, SOL_SOCKET, SO_SNDBUF,
++		       &sndbuf, sizeof(sndbuf)) < 0) {
++		perror("SO_SNDBUF");
++		goto err;
++	}
++	if (setsockopt(rth->fd, SOL_SOCKET, SO_RCVBUF,
++		       &rcvbuf, sizeof(rcvbuf)) < 0) {
++		perror("SO_RCVBUF");
++		goto err;
++	}
++
++	/* Older kernels may no support extended ACK reporting */
++	setsockopt(rth->fd, SOL_NETLINK, NETLINK_EXT_ACK,
++		   &one, sizeof(one));
++
++	memset(&rth->local, 0, sizeof(rth->local));
++	rth->local.nl_family = AF_NETLINK;
++	rth->local.nl_groups = subscriptions;
++
++	if (bind(rth->fd, (struct sockaddr *)&rth->local,
++		 sizeof(rth->local)) < 0) {
++		perror("Cannot bind netlink socket");
++		goto err;
++	}
++	addr_len = sizeof(rth->local);
++	if (getsockname(rth->fd, (struct sockaddr *)&rth->local,
++			&addr_len) < 0) {
++		perror("Cannot getsockname");
++		goto err;
++	}
++	if (addr_len != sizeof(rth->local)) {
++		fprintf(stderr, "Wrong address length %d\n", addr_len);
++		goto err;
++	}
++	if (rth->local.nl_family != AF_NETLINK) {
++		fprintf(stderr, "Wrong address family %d\n",
++			rth->local.nl_family);
++		goto err;
++	}
++	rth->seq = time(NULL);
++	return 0;
++err:
++	rtnl_close(rth);
++	return -1;
++}
++
++int rtnl_open(struct rtnl_handle *rth, unsigned int subscriptions)
++{
++	return rtnl_open_byproto(rth, subscriptions, NETLINK_ROUTE);
++}
++
++static int __rtnl_recvmsg(int fd, struct msghdr *msg, int flags)
++{
++	int len;
++
++	do {
++		len = recvmsg(fd, msg, flags);
++	} while (len < 0 && (errno == EINTR || errno == EAGAIN));
++	if (len < 0) {
++		fprintf(stderr, "netlink receive error %s (%d)\n",
++			strerror(errno), errno);
++		return -errno;
++	}
++	if (len == 0) {
++		fprintf(stderr, "EOF on netlink\n");
++		return -ENODATA;
++	}
++	return len;
++}
++
++static int rtnl_recvmsg(int fd, struct msghdr *msg, char **answer)
++{
++	struct iovec *iov = msg->msg_iov;
++	char *buf;
++	int len;
++
++	iov->iov_base = NULL;
++	iov->iov_len = 0;
++
++	len = __rtnl_recvmsg(fd, msg, MSG_PEEK | MSG_TRUNC);
++	if (len < 0)
++		return len;
++	if (len < 32768)
++		len = 32768;
++	buf = malloc(len);
++	if (!buf) {
++		fprintf(stderr, "malloc error: not enough buffer\n");
++		return -ENOMEM;
++	}
++	iov->iov_base = buf;
++	iov->iov_len = len;
++	len = __rtnl_recvmsg(fd, msg, 0);
++	if (len < 0) {
++		free(buf);
++		return len;
++	}
++	if (answer)
++		*answer = buf;
++	else
++		free(buf);
++	return len;
++}
++
++static void rtnl_talk_error(struct nlmsghdr *h, struct nlmsgerr *err,
++			    nl_ext_ack_fn_t errfn)
++{
++	fprintf(stderr, "RTNETLINK answers: %s\n",
++		strerror(-err->error));
++}
++
++static int __rtnl_talk_iov(struct rtnl_handle *rtnl, struct iovec *iov,
++			   size_t iovlen, struct nlmsghdr **answer,
++			   bool show_rtnl_err, nl_ext_ack_fn_t errfn)
++{
++	struct sockaddr_nl nladdr = { .nl_family = AF_NETLINK };
++	struct iovec riov;
++	struct msghdr msg = {
++		.msg_name	= &nladdr,
++		.msg_namelen	= sizeof(nladdr),
++		.msg_iov	= iov,
++		.msg_iovlen	= iovlen,
++	};
++	unsigned int seq = 0;
++	struct nlmsghdr *h;
++	int i, status;
++	char *buf;
++
++	for (i = 0; i < iovlen; i++) {
++		h = iov[i].iov_base;
++		h->nlmsg_seq = seq = ++rtnl->seq;
++		if (answer == NULL)
++			h->nlmsg_flags |= NLM_F_ACK;
++	}
++	status = sendmsg(rtnl->fd, &msg, 0);
++	if (status < 0) {
++		perror("Cannot talk to rtnetlink");
++		return -1;
++	}
++	/* change msg to use the response iov */
++	msg.msg_iov = &riov;
++	msg.msg_iovlen = 1;
++	i = 0;
++	while (1) {
++next:
++		status = rtnl_recvmsg(rtnl->fd, &msg, &buf);
++		++i;
++		if (status < 0)
++			return status;
++		if (msg.msg_namelen != sizeof(nladdr)) {
++			fprintf(stderr,
++				"Sender address length == %d!\n",
++				msg.msg_namelen);
++			exit(1);
++		}
++		for (h = (struct nlmsghdr *)buf; status >= sizeof(*h); ) {
++			int len = h->nlmsg_len;
++			int l = len - sizeof(*h);
++
++			if (l < 0 || len > status) {
++				if (msg.msg_flags & MSG_TRUNC) {
++					fprintf(stderr, "Truncated message!\n");
++					free(buf);
++					return -1;
++				}
++				fprintf(stderr,
++					"Malformed message: len=%d!\n",
++					len);
++				exit(1);
++			}
++			if (nladdr.nl_pid != 0 ||
++			    h->nlmsg_pid != rtnl->local.nl_pid ||
++			    h->nlmsg_seq > seq || h->nlmsg_seq < seq - iovlen) {
++				/* Don't forget to skip that message. */
++				status -= NLMSG_ALIGN(len);
++				h = (struct nlmsghdr *)((char *)h + NLMSG_ALIGN(len));
++				continue;
++			}
++			if (h->nlmsg_type == NLMSG_ERROR) {
++				struct nlmsgerr *err = (struct nlmsgerr *)NLMSG_DATA(h);
++				int error = err->error;
++
++				if (l < sizeof(struct nlmsgerr)) {
++					fprintf(stderr, "ERROR truncated\n");
++					free(buf);
++					return -1;
++				}
++				if (error) {
++					errno = -error;
++					if (rtnl->proto != NETLINK_SOCK_DIAG &&
++					    show_rtnl_err)
++						rtnl_talk_error(h, err, errfn);
++				}
++				if (i < iovlen) {
++					free(buf);
++					goto next;
++				}
++				if (error) {
++					free(buf);
++					return -i;
++				}
++				if (answer)
++					*answer = (struct nlmsghdr *)buf;
++				else
++					free(buf);
++				return 0;
++			}
++			if (answer) {
++				*answer = (struct nlmsghdr *)buf;
++				return 0;
++			}
++			fprintf(stderr, "Unexpected reply!\n");
++			status -= NLMSG_ALIGN(len);
++			h = (struct nlmsghdr *)((char *)h + NLMSG_ALIGN(len));
++		}
++		free(buf);
++		if (msg.msg_flags & MSG_TRUNC) {
++			fprintf(stderr, "Message truncated!\n");
++			continue;
++		}
++		if (status) {
++			fprintf(stderr, "Remnant of size %d!\n", status);
++			exit(1);
++		}
++	}
++}
++
++static int __rtnl_talk(struct rtnl_handle *rtnl, struct nlmsghdr *n,
++		       struct nlmsghdr **answer, bool show_rtnl_err,
++		       nl_ext_ack_fn_t errfn)
++{
++	struct iovec iov = {
++		.iov_base	= n,
++		.iov_len	= n->nlmsg_len,
++	};
++
++	return __rtnl_talk_iov(rtnl, &iov, 1, answer, show_rtnl_err, errfn);
++}
++
++int rtnl_talk(struct rtnl_handle *rtnl, struct nlmsghdr *n,
++	      struct nlmsghdr **answer)
++{
++	return __rtnl_talk(rtnl, n, answer, true, NULL);
++}
++
++int addattr(struct nlmsghdr *n, int maxlen, int type)
++{
++	return addattr_l(n, maxlen, type, NULL, 0);
++}
++
++int addattr8(struct nlmsghdr *n, int maxlen, int type, __u8 data)
++{
++	return addattr_l(n, maxlen, type, &data, sizeof(__u8));
++}
++
++int addattr16(struct nlmsghdr *n, int maxlen, int type, __u16 data)
++{
++	return addattr_l(n, maxlen, type, &data, sizeof(__u16));
++}
++
++int addattr32(struct nlmsghdr *n, int maxlen, int type, __u32 data)
++{
++	return addattr_l(n, maxlen, type, &data, sizeof(__u32));
++}
++
++int addattr64(struct nlmsghdr *n, int maxlen, int type, __u64 data)
++{
++	return addattr_l(n, maxlen, type, &data, sizeof(__u64));
++}
++
++int addattrstrz(struct nlmsghdr *n, int maxlen, int type, const char *str)
++{
++	return addattr_l(n, maxlen, type, str, strlen(str)+1);
++}
++
++int addattr_l(struct nlmsghdr *n, int maxlen, int type, const void *data,
++	      int alen)
++{
++	int len = RTA_LENGTH(alen);
++	struct rtattr *rta;
++
++	if (NLMSG_ALIGN(n->nlmsg_len) + RTA_ALIGN(len) > maxlen) {
++		fprintf(stderr, "%s: Message exceeded bound of %d\n",
++			__func__, maxlen);
++		return -1;
++	}
++	rta = NLMSG_TAIL(n);
++	rta->rta_type = type;
++	rta->rta_len = len;
++	if (alen)
++		memcpy(RTA_DATA(rta), data, alen);
++	n->nlmsg_len = NLMSG_ALIGN(n->nlmsg_len) + RTA_ALIGN(len);
++	return 0;
++}
++
++int addraw_l(struct nlmsghdr *n, int maxlen, const void *data, int len)
++{
++	if (NLMSG_ALIGN(n->nlmsg_len) + NLMSG_ALIGN(len) > maxlen) {
++		fprintf(stderr, "%s: Message exceeded bound of %d\n",
++			__func__, maxlen);
++		return -1;
++	}
++
++	memcpy(NLMSG_TAIL(n), data, len);
++	memset((void *) NLMSG_TAIL(n) + len, 0, NLMSG_ALIGN(len) - len);
++	n->nlmsg_len = NLMSG_ALIGN(n->nlmsg_len) + NLMSG_ALIGN(len);
++	return 0;
++}
++
++struct rtattr *addattr_nest(struct nlmsghdr *n, int maxlen, int type)
++{
++	struct rtattr *nest = NLMSG_TAIL(n);
++
++	addattr_l(n, maxlen, type, NULL, 0);
++	return nest;
++}
++
++int addattr_nest_end(struct nlmsghdr *n, struct rtattr *nest)
++{
++	nest->rta_len = (void *)NLMSG_TAIL(n) - (void *)nest;
++	return n->nlmsg_len;
++}
+diff --git a/tools/testing/selftests/bpf/netlink_helpers.h b/tools/testing/selftests/bpf/netlink_helpers.h
+new file mode 100644
+index 000000000000..68116818a47e
+--- /dev/null
++++ b/tools/testing/selftests/bpf/netlink_helpers.h
+@@ -0,0 +1,46 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++#ifndef NETLINK_HELPERS_H
++#define NETLINK_HELPERS_H
++
++#include <string.h>
++#include <linux/netlink.h>
++#include <linux/rtnetlink.h>
++
++struct rtnl_handle {
++	int			fd;
++	struct sockaddr_nl	local;
++	struct sockaddr_nl	peer;
++	__u32			seq;
++	__u32			dump;
++	int			proto;
++	FILE			*dump_fp;
++#define RTNL_HANDLE_F_LISTEN_ALL_NSID		0x01
++#define RTNL_HANDLE_F_SUPPRESS_NLERR		0x02
++#define RTNL_HANDLE_F_STRICT_CHK		0x04
++	int			flags;
 +};
-+#define bpf_netkit_opts__last_field expected_revision
 +
-+LIBBPF_API struct bpf_link *
-+bpf_program__attach_netkit(const struct bpf_program *prog, int ifindex,
-+			   const struct bpf_netkit_opts *opts);
++#define NLMSG_TAIL(nmsg) \
++	((struct rtattr *) (((void *) (nmsg)) + NLMSG_ALIGN((nmsg)->nlmsg_len)))
 +
- struct bpf_map;
- 
- LIBBPF_API struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map);
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index cc973b678a39..b52dc28dc8af 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -398,6 +398,7 @@ LIBBPF_1.3.0 {
- 		bpf_object__unpin;
- 		bpf_prog_detach_opts;
- 		bpf_program__attach_netfilter;
-+		bpf_program__attach_netkit;
- 		bpf_program__attach_tcx;
- 		bpf_program__attach_uprobe_multi;
- 		ring__avail_data_size;
++typedef int (*nl_ext_ack_fn_t)(const char *errmsg, uint32_t off,
++			       const struct nlmsghdr *inner_nlh);
++
++int rtnl_open(struct rtnl_handle *rth, unsigned int subscriptions)
++	      __attribute__((warn_unused_result));
++void rtnl_close(struct rtnl_handle *rth);
++int rtnl_talk(struct rtnl_handle *rtnl, struct nlmsghdr *n,
++	      struct nlmsghdr **answer)
++	      __attribute__((warn_unused_result));
++
++int addattr(struct nlmsghdr *n, int maxlen, int type);
++int addattr8(struct nlmsghdr *n, int maxlen, int type, __u8 data);
++int addattr16(struct nlmsghdr *n, int maxlen, int type, __u16 data);
++int addattr32(struct nlmsghdr *n, int maxlen, int type, __u32 data);
++int addattr64(struct nlmsghdr *n, int maxlen, int type, __u64 data);
++int addattrstrz(struct nlmsghdr *n, int maxlen, int type, const char *data);
++int addattr_l(struct nlmsghdr *n, int maxlen, int type, const void *data, int alen);
++int addraw_l(struct nlmsghdr *n, int maxlen, const void *data, int len);
++struct rtattr *addattr_nest(struct nlmsghdr *n, int maxlen, int type);
++int addattr_nest_end(struct nlmsghdr *n, struct rtattr *nest);
++#endif /* NETLINK_HELPERS_H */
 -- 
 2.34.1
 
