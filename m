@@ -1,197 +1,169 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03E96111BE
-	for <bpf@vger.kernel.org>; Tue, 24 Oct 2023 11:43:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2FB6266BE
+	for <bpf@vger.kernel.org>; Tue, 24 Oct 2023 11:57:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="Wi0L5tz3"
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317F6F9
-	for <bpf@vger.kernel.org>; Tue, 24 Oct 2023 04:43:36 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-27d11401516so2919859a91.2
-        for <bpf@vger.kernel.org>; Tue, 24 Oct 2023 04:43:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YnLKppln"
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F491128
+	for <bpf@vger.kernel.org>; Tue, 24 Oct 2023 04:57:35 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9c603e235d1so668040866b.3
+        for <bpf@vger.kernel.org>; Tue, 24 Oct 2023 04:57:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1698147815; x=1698752615; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dx6+e52QOJqe1aSIsa3g3OkONu5iVau2uf9IkYFGUjA=;
-        b=Wi0L5tz3dQ71hDmyp6qSunHuZ73qrEUSzTNKUcAfykFdF6vmAgpDcq1QcrFPmwUPGY
-         ldvCNO1GCBpOUIa8p8u4HZb1L0gpNrRw7g//hW5HzyusPC4rpfYV0s/NOXhcdHPse1JM
-         7t5mEiNTZR8Mzy5E28p77Cu8sjo60oK2Fweigu+uGDTlhvGGG+W6enUdyTXqFjCLFzw6
-         0Z+sAUFaTbakq7cdbO0rX0VLV9tY4D8dP+md/ORO8WsR2P5tPzKX8okQsiMZ69JoaG/4
-         y14eSNePCTL8GZUJl2WvSWXytEb15hjKWyaB4X9m3aSE9k9l0z/aWJceORqKN1tUqHlw
-         qO9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698147815; x=1698752615;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+        d=gmail.com; s=20230601; t=1698148654; x=1698753454; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=dx6+e52QOJqe1aSIsa3g3OkONu5iVau2uf9IkYFGUjA=;
-        b=NAPsd9tto9YjbCQDuHXDA5pJAPVYqEL0HvqAiKPQF0Z81J8flUumP8/Fe+NlYr6mH6
-         6dIg0c5auS5b29RRofz4BDIssoxC6Ck44SinjwTRTNM2LBeM+FC/8CD7GxUTq2a4C1Tn
-         ErS9T2Gm/hYrR9Vpz97CfrVSUN0ABtsV+l97IOZ3yXIp8kwXAnb9ZumvroT8DwuS/aAq
-         Yq3c1EcVtvd+kPPoN3365aoAF7e6kJoPWV+vrKtk+50NAgTvU8ce4XsvHsWuIfcnx4aH
-         3TmJ+lCQ3kb7ehasC3VnMAI5mejnbFJs0SQmMxf+XbCzP2hYEuouQll9OwgmD396EKxk
-         d2kA==
-X-Gm-Message-State: AOJu0Yz4E9LxQuX/97KBZCcyTZwKrk/gqXvlEUw/bvVNinYLWbBfrb4L
-	HTMYSJaL6wiWx/xtbsStxOLCpw==
-X-Google-Smtp-Source: AGHT+IGoupmxersp/C4v5plOXC3tU8i9bRpxEmmirhAhUGmdUWoSPIcPCvxrObXgsgCEfHEhB9et3A==
-X-Received: by 2002:a05:6a20:c19d:b0:16b:aad0:effe with SMTP id bg29-20020a056a20c19d00b0016baad0effemr2131576pzb.62.1698147815609;
-        Tue, 24 Oct 2023 04:43:35 -0700 (PDT)
-Received: from [10.84.141.101] ([203.208.167.147])
-        by smtp.gmail.com with ESMTPSA id o13-20020a170902d4cd00b001ab39cd875csm7240268plg.133.2023.10.24.04.43.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Oct 2023 04:43:35 -0700 (PDT)
-Message-ID: <efa935f1-251c-4f4c-9f67-7d352514b611@bytedance.com>
-Date: Tue, 24 Oct 2023 19:43:30 +0800
+        bh=m4LeC00/S+EYTDtV9tfzaKOyYSJS2b0GbP02QDZLd7E=;
+        b=YnLKpplnG5lzv1PD0F54yiBbBq//tTOJJSTHZ0v1XbMxTO/DtxI5/LrNg7PXX/IT8y
+         UAnJBd0Cv2EMCSAOMgO0dOjyJw+fCfKVUptO5vo6jJwS/ZNUWl+5AkdGWUR1ixJCi9LN
+         vH+EFU1FzD2NLPlk1ae5kiG5Laz+N7oL4TYZCsJBaXzHTar2oQkepASFK1/M1AXRnUU/
+         RNTdx7g4nHlGG8gwWUirz5JniLAarMRaORRIwHhUhgJ3iBamyTrrrGhP4gutRlrCoYo+
+         2q5mTp+9zBFkHqtDzG46NVAPNWijgcJ/hRMBI6/EbS+uvUpkuFeeae0zRDsBCRYL81kL
+         hblA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698148654; x=1698753454;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=m4LeC00/S+EYTDtV9tfzaKOyYSJS2b0GbP02QDZLd7E=;
+        b=aHBDtkIkhZ3VLFLpCM/nmozMBgHSf9j76CXk/aRHRhsTAVmO/AxLqMUcF9yldLoSk9
+         NzUjcBX2oWNlM7vshC6v3YkeqPzNvCbCmvUX7FYPMoAUqhi/7fCxb80PZaefz1h/0rVK
+         /00ocfvnazOeYcyLfPPf8BLw3Y73hPbO3XGiSDRzB2dCzJJsRT4mm4KJhJ8+7vZ57Ndi
+         ++fOUJHNN9tq9oG/xB9GFRZmlcn9bTTVDsnB973i5GfrnvcJBpnP4Zn778LBDUlKAfgQ
+         0RcBQ+U+R854t3dIpGwtfKuESEcVlGB0O7VJynpyjuf6HUldFFTH8a9G075oBYtlG3Gm
+         5c1A==
+X-Gm-Message-State: AOJu0YzjSk2Xjsy37N2yMbJc5+apiU/Z+CyrGhTRMpTvrUjalrw3XvtE
+	zFJAnbcQ1dLpa6QP3o13Hd4=
+X-Google-Smtp-Source: AGHT+IEnhru6v0UHwk151kXPXAtlWrTRI9hMIB3J22IJY3BWHBAx+ckUxTJyeVFKDa4g5tHNhWGDVg==
+X-Received: by 2002:a17:907:7e8b:b0:9a1:aea2:d18d with SMTP id qb11-20020a1709077e8b00b009a1aea2d18dmr9419857ejc.48.1698148653655;
+        Tue, 24 Oct 2023 04:57:33 -0700 (PDT)
+Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id sd26-20020a170906ce3a00b009a5f1d15644sm8122081ejb.119.2023.10.24.04.57.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Oct 2023 04:57:33 -0700 (PDT)
+Message-ID: <8be57ef5f403c123296cde2af81492a7cc18fd72.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 0/7] exact states comparison for iterator
+ convergence checks
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net,  martin.lau@linux.dev, kernel-team@fb.com,
+ yonghong.song@linux.dev,  memxor@gmail.com, awerner32@gmail.com,
+ john.fastabend@gmail.com
+Date: Tue, 24 Oct 2023 14:57:31 +0300
+In-Reply-To: <CAEf4BzZKBq+nJdcUyD4_UcU1joojzuaHDaVp1Tb=MfXyUu-MLg@mail.gmail.com>
+References: <20231024000917.12153-1-eddyz87@gmail.com>
+	 <CAEf4BzZKBq+nJdcUyD4_UcU1joojzuaHDaVp1Tb=MfXyUu-MLg@mail.gmail.com>
+Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.0 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: Relax allowlist for css_task iter
-From: Chuyi Zhou <zhouchuyi@bytedance.com>
-To: Yonghong Song <yonghong.song@linux.dev>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@kernel.org>
-References: <20231024024240.42790-1-zhouchuyi@bytedance.com>
- <20231024024240.42790-2-zhouchuyi@bytedance.com>
- <CAADnVQJRhyn4Xpd5f0_iJp7F2iZrs_qp+E0DZPNc3aKc0SGzCQ@mail.gmail.com>
- <1f4f9308-26b4-4cc5-99eb-88851fe2f3f9@bytedance.com>
- <c923dba3-f638-410f-ae65-0cfa1962a6f2@linux.dev>
- <efa59538-cfc9-404c-9ecf-d04e49a4b82e@bytedance.com>
-In-Reply-To: <efa59538-cfc9-404c-9ecf-d04e49a4b82e@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
+On Mon, 2023-10-23 at 22:58 -0700, Andrii Nakryiko wrote:
+> On Mon, Oct 23, 2023 at 5:09=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.c=
+om> wrote:
+> >=20
+> > Iterator convergence logic in is_state_visited() uses state_equals()
+> > for states with branches counter > 0 to check if iterator based loop
+> > converges. This is not fully correct because state_equals() relies on
+> > presence of read and precision marks on registers. These marks are not
+> > guaranteed to be finalized while state has branches.
+> > Commit message for patch #3 describes a program that exhibits such
+> > behavior.
+> >=20
+> > This patch-set aims to fix iterator convergence logic by adding notion
+> > of exact states comparison. Exact comparison does not rely on presence
+> > of read or precision marks and thus is more strict.
+> > As explained in commit message for patch #3 exact comparisons require
+> > addition of speculative register bounds widening. The end result for
+> > BPF verifier users could be summarized as follows:
+> >=20
+> > (!) After this update verifier would reject programs that conjure an
+> >     imprecise value on the first loop iteration and use it as precise
+> >     on the second (for iterator based loops).
+> >=20
+> > I urge people to at least skim over the commit message for patch #3.
+> >=20
+> > Patches are organized as follows:
+> > - patches #1,2: moving/extracting utility functions;
+> > - patch #3: introduces exact mode for states comparison and adds
+> >   widening heuristic;
+> > - patch #4: adds test-cases that demonstrate why the series is
+> >   necessary;
+> > - patch #5: extends patch #3 with a notion of state loop entries,
+> >   these entries have to be tracked to correctly identify that
+> >   different verifier states belong to the same states loop;
+> > - patch #6: adds a test-case that demonstrates a program
+> >   which requires loop entry tracking for correct verification;
+> > - patch #7: just adds a few debug prints.
+> >=20
+> > The following actions are planned as a followup for this patch-set:
+> > - implementation has to be adapted for callbacks handling logic as a
+> >   part of a fix for [1];
+> > - it is necessary to explore ways to improve widening heuristic to
+> >   handle iters_task_vma test w/o need to insert barrier_var() calls;
+> > - explored states eviction logic on cache miss has to be extended
+> >   to either:
+> >   - allow eviction of checkpoint states -or-
+> >   - be sped up in case if there are many active checkpoints associated
+> >     with the same instruction.
+> >=20
+> > The patch-set is a followup for mailing list discussion [1].
+> >=20
+> > Changelog:
+> > - V2 [3] -> V3:
+> >   - correct check for stack spills in widen_imprecise_scalars(),
+> >     added test case progs/iters.c:widen_spill to check the behavior
+> >     (suggested by Andrii);
+> >   - allow eviction of checkpoint states in is_state_visited() to avoid
+> >     pathological verifier performance when iterator based loop does not
+> >     converge (discussion with Alexei).
+> > - V1 [2] -> V2, applied changes suggested by Alexei offlist:
+> >   - __explored_state() function removed;
+> >   - same_callsites() function is now used in clean_live_states();
+> >   - patches #1,2 are added as preparatory code movement;
+> >   - in process_iter_next_call() a safeguard is added to verify that
+> >     cur_st->parent exists and has expected insn index / call sites.
+> >=20
+> > [1] https://lore.kernel.org/bpf/97a90da09404c65c8e810cf83c94ac703705dc0=
+e.camel@gmail.com/
+> > [2] https://lore.kernel.org/bpf/20231021005939.1041-1-eddyz87@gmail.com=
+/
+> > [3] https://lore.kernel.org/bpf/20231022010812.9201-1-eddyz87@gmail.com=
+/
+> >=20
+> > Eduard Zingerman (7):
+> >   bpf: move explored_state() closer to the beginning of verifier.c
+> >   bpf: extract same_callsites() as utility function
+> >   bpf: exact states comparison for iterator convergence checks
+> >   selftests/bpf: tests with delayed read/precision makrs in loop body
+> >   bpf: correct loop detection for iterators convergence
+> >   selftests/bpf: test if state loops are detected in a tricky case
+> >   bpf: print full verifier states on infinite loop detection
+> >=20
+> >  include/linux/bpf_verifier.h                  |  16 +
+> >  kernel/bpf/verifier.c                         | 475 ++++++++++--
+> >  tools/testing/selftests/bpf/progs/iters.c     | 695 ++++++++++++++++++
+> >  .../selftests/bpf/progs/iters_task_vma.c      |   1 +
+> >  4 files changed, 1133 insertions(+), 54 deletions(-)
+> >=20
+> > --
+> > 2.42.0
+> >=20
+>=20
+> Thanks a lot for working on this and getting it to the end despite
+> many setbacks and ambiguity, great work!
 
-
-在 2023/10/24 14:23, Chuyi Zhou 写道:
-> Hello,
-> 
-> 在 2023/10/24 14:08, Yonghong Song 写道:
->>
->> On 10/23/23 10:52 PM, Chuyi Zhou wrote:
->>> Hello,
->>>
->>> 在 2023/10/24 12:57, Alexei Starovoitov 写道:
->>>> On Mon, Oct 23, 2023 at 7:42 PM Chuyi Zhou <zhouchuyi@bytedance.com> 
->>>> wrote:
->>>>>
->>>>> The newly added open-coded css_task iter would try to hold the global
->>>>> css_set_lock in bpf_iter_css_task_new, so the bpf side has to be 
->>>>> careful in
->>>>> where it allows to use this iter. The mainly concern is dead 
->>>>> locking on
->>>>> css_set_lock. check_css_task_iter_allowlist() in verifier enforced 
->>>>> css_task
->>>>> can only be used in bpf_lsm hooks and sleepable bpf_iter.
->>>>>
->>>>> This patch relax the allowlist for css_task iter. Any lsm and any iter
->>>>> (even non-sleepable) and any sleepable are safe since they would 
->>>>> not hold
->>>>> the css_set_lock before entering BPF progs context.
->>>>>
->>>>> This patch also fixes the misused BPF_TRACE_ITER in
->>>>> check_css_task_iter_allowlist which compared bpf_prog_type with
->>>>> bpf_attach_type.
->>>>>
->>>>> Fixes: 9c66dc94b62ae ("bpf: Introduce css_task open-coded iterator 
->>>>> kfuncs")
->>>>> Signed-off-by: Chuyi Zhou <zhouchuyi@bytedance.com>
->>>>> ---
->>>>>   kernel/bpf/verifier.c                         | 21 
->>>>> ++++++++++++-------
->>>>>   .../selftests/bpf/progs/iters_task_failure.c  |  4 ++--
->>>>>   2 files changed, 15 insertions(+), 10 deletions(-)
->>>>>
->>>>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->>>>> index e9bc5d4a25a1..9f209adc4ccb 100644
->>>>> --- a/kernel/bpf/verifier.c
->>>>> +++ b/kernel/bpf/verifier.c
->>>>> @@ -11088,18 +11088,23 @@ static int 
->>>>> process_kf_arg_ptr_to_rbtree_node(struct bpf_verifier_env *env,
->>>>> &meta->arg_rbtree_root.field);
->>>>>   }
->>>>>
->>>>> +/*
->>>>> + * css_task iter allowlist is needed to avoid dead locking on 
->>>>> css_set_lock.
->>>>> + * LSM hooks and iters (both sleepable and non-sleepable) are safe.
->>>>> + * Any sleepable progs are also safe since 
->>>>> bpf_check_attach_target() enforce
->>>>> + * them can only be attached to some specific hook points.
->>>>> + */
->>>>>   static bool check_css_task_iter_allowlist(struct bpf_verifier_env 
->>>>> *env)
->>>>>   {
->>>>>          enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
->>>>>
->>>>> -       switch (prog_type) {
->>>>> -       case BPF_PROG_TYPE_LSM:
->>>>> +       if (prog_type == BPF_PROG_TYPE_LSM)
->>>>>                  return true;
->>>>> -       case BPF_TRACE_ITER:
->>>>> -               return env->prog->aux->sleepable;
->>>>> -       default:
->>>>> -               return false;
->>>>> -       }
->>>>> +
->>>>> +       if (env->prog->expected_attach_type == BPF_TRACE_ITER)
->>>>> +               return true;
->>>>
->>>> I think the switch by prog_type has to stay.
->>>> Checking attach_type == BPF_TRACE_ITER without considering prog_type
->>>> is fragile. It likely works, but we don't do it anywhere else.
->>>> Let's stick to what is known to work.
->>>>
->>>
->>> IIUC, do you mean:
->>>
->>> static bool check_css_task_iter_allowlist(struct bpf_verifier_env *env)
->>> {
->>>     enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
->>>
->>>      switch (prog_type) {
->>>      case BPF_PROG_TYPE_LSM:
->>>          return true;
->>>     case BPF_PROG_TYPE_TRACING:
->>>         if (env->prog->expected_attach_type == BPF_TRACE_ITER)
->>>             return true;
->>>         return env->prog->aux->sleepable;
->>
->>
->> The above can be a fullthrough instead.
->>
-> 
-> Sorry, what do you mean 'a fullthrough' ?
-> Do you mean we can check env->prog->aux->sleepable first and then fall 
-> back to check prog/attach type ?
-> 
-
-I see...
-
-Sorry for the above noise. I noticed verifier.c uses 'fallthrough' to 
-avoid the build warning, so we can:
-
-static bool check_css_task_iter_allowlist(struct bpf_verifier_env *env)
-{
-	enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
-
-	switch (prog_type) {
-	case BPF_PROG_TYPE_LSM:
-		return true;
-	case BPF_PROG_TYPE_TRACING:
-		if (env->prog->expected_attach_type == BPF_TRACE_ITER)
-			return true;
-		fallthrough;
-	default:
-		return env->prog->aux->sleepable;
-	}
-}
-
+Thank you and Alexei for working on it as well.
+We'll see if this patch-set is good enough or the idea with
+computing fixed point for read and precision marks has to be finalized.
