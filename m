@@ -1,76 +1,76 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC1215BE
-	for <bpf@vger.kernel.org>; Tue, 24 Oct 2023 04:03:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2237E7468
+	for <bpf@vger.kernel.org>; Tue, 24 Oct 2023 04:03:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="SNiYsLPO";
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="SNiYsLPO";
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="zrK1+C6T"
+	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="CvK7K3rE";
+	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="CvK7K3rE";
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Cz6LhvNn"
 Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A9D95
-	for <bpf@vger.kernel.org>; Mon, 23 Oct 2023 21:03:16 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00CDDC
+	for <bpf@vger.kernel.org>; Mon, 23 Oct 2023 21:03:19 -0700 (PDT)
 Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id AFDDAC17C532
-	for <bpf@vger.kernel.org>; Mon, 23 Oct 2023 21:03:16 -0700 (PDT)
+	by ietfa.amsl.com (Postfix) with ESMTP id 68CBCC187714
+	for <bpf@vger.kernel.org>; Mon, 23 Oct 2023 21:03:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1698120196; bh=11DDuLg7Emc9Z/DNvjkj9d4vIgpp12gH1O/9W6LVdbc=;
+	t=1698120198; bh=kL369dyjU21eOoxdPeT+z5jQo/VEdqEXGJK6t8T/HqI=;
 	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=SNiYsLPO830zfhL8MPkLB8vGYO1l2IW3tBkXQMAqqqQ0wFlEj+5znMKf7DxfuOx9W
-	 qIJcfoOs32KAypoA7EICvujOPZk+IZDSNsJPzQqTJBKV0inEhs6oXrqqc4keymIDk6
-	 VbZ62JT6FAXITZ2Q5ztE63GOuChReeyE+gVrS5T8=
-X-Mailbox-Line: From bpf-bounces@ietf.org  Mon Oct 23 21:03:16 2023
+	b=CvK7K3rEQqKidMe5SlsA/2pvm6puo+ENc/cMBypeqdiv+axkubhqRDGNlvxImj9QU
+	 GJ9sOUdSbajyu9emXoTM4/zhiDdm6y7x6C27Lgl7HgTT1ZtV2hzoEQaZn3LLK09a53
+	 jVbNPIypQfzncUnEx7e/L96tOVFSOiw0kJDhEMtk=
+X-Mailbox-Line: From bpf-bounces@ietf.org  Mon Oct 23 21:03:18 2023
 Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 02C48C16F3F8;
-	Mon, 23 Oct 2023 21:03:16 -0700 (PDT)
+	by ietfa.amsl.com (Postfix) with ESMTP id 4C76DC17C53A;
+	Mon, 23 Oct 2023 21:03:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1698120196; bh=11DDuLg7Emc9Z/DNvjkj9d4vIgpp12gH1O/9W6LVdbc=;
+	t=1698120198; bh=kL369dyjU21eOoxdPeT+z5jQo/VEdqEXGJK6t8T/HqI=;
 	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=SNiYsLPO830zfhL8MPkLB8vGYO1l2IW3tBkXQMAqqqQ0wFlEj+5znMKf7DxfuOx9W
-	 qIJcfoOs32KAypoA7EICvujOPZk+IZDSNsJPzQqTJBKV0inEhs6oXrqqc4keymIDk6
-	 VbZ62JT6FAXITZ2Q5ztE63GOuChReeyE+gVrS5T8=
+	b=CvK7K3rEQqKidMe5SlsA/2pvm6puo+ENc/cMBypeqdiv+axkubhqRDGNlvxImj9QU
+	 GJ9sOUdSbajyu9emXoTM4/zhiDdm6y7x6C27Lgl7HgTT1ZtV2hzoEQaZn3LLK09a53
+	 jVbNPIypQfzncUnEx7e/L96tOVFSOiw0kJDhEMtk=
 Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id 3C1B8C151091;
- Mon, 23 Oct 2023 21:00:50 -0700 (PDT)
+ by ietfa.amsl.com (Postfix) with ESMTP id 1D68BC1524A3
+ for <bpf@ietfa.amsl.com>; Mon, 23 Oct 2023 21:02:59 -0700 (PDT)
 X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Score: -7.105
+X-Spam-Score: -2.104
 X-Spam-Level: 
 Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
  header.d=infradead.org
 Received: from mail.ietf.org ([50.223.129.194])
  by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gYz92vo0D1ZG; Mon, 23 Oct 2023 21:00:45 -0700 (PDT)
+ with ESMTP id SwIIBvCMY9xs for <bpf@ietfa.amsl.com>;
+ Mon, 23 Oct 2023 21:02:54 -0700 (PDT)
 Received: from bombadil.infradead.org (bombadil.infradead.org
  [IPv6:2607:7c80:54:3::133])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
  (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id 99A2FC15109D;
- Mon, 23 Oct 2023 21:00:42 -0700 (PDT)
+ by ietfa.amsl.com (Postfix) with ESMTPS id 0B8B9C151091
+ for <bpf@ietf.org>; Mon, 23 Oct 2023 21:02:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
  d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
  :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
  Content-Transfer-Encoding:Content-ID:Content-Description;
- bh=rAhm+S8WkgS2WcwMtV35U7rxhHFkXYQ9VBLDjXK7jEc=; b=zrK1+C6Tp24vx+M3s+8VlDxPw4
- HoUPYxB75vcN9f7ZFHtnH/s3v6YY4jas/PyevBIcT3SidansI9DuvG+zN4w9dCZMahMfUZtEoxcQH
- EKfBMMFFu7p01SY+fI0j173/Z0mSoVJYRf9cpT0qAZlJt5rpwpLAuEPBi8HV5sZmKMzfZD+Gq9T73
- i+zjJeNy2kT5TEGMPtlCcOj9L+Nyh8Bt+ZaMd+mfxM1AR8GOzPZ+/TmQtkdN+qiri+moaJeEAJNx3
- inY+xa6aWWilNtF+95BHNak/Bc6KThSA8Va5doacA0manueQKj7sH/WYukjixUsSNpdxghZRwsD5S
- hWqNgN9g==;
+ bh=o2oqEIL9hM7xktXoD6OoCSFGTuIiB9Fg0U9uwi4DxHU=; b=Cz6LhvNnth74dOqxKQrz6xfQKh
+ EcFYZvBq8E5rGsi3b0jcokGoG7PRIopiruFoHNTXW1FYDCvy152JnB8dgKtm0MJoxdKxGrnKhBZNS
+ iwIpC15zGV8QAtRcd9z/GEDJ51597GX8ofdYGjddnotaD0YrqE5qxSBRfvxFgikYnfTrupnJKgQ1s
+ ysTRzgwOT8XxcCbWWVvEyvtJVIANAnqT0BxXWRzM0eclqJS2BgBz51ayUiJllLIic9ruT+TnZN3wj
+ Uja/wQQAo5yTdkJPYGlIf3OVDqDCYh8PQmbzJ1KPhzmvBvCPeabHzhEenVoFkz8W/PqBXye9RyG5X
+ 6oLR+oWw==;
 Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat
- Linux)) id 1qv8av-008lXy-1c; Tue, 24 Oct 2023 04:00:41 +0000
-Date: Mon, 23 Oct 2023 21:00:41 -0700
+ Linux)) id 1qv8cz-008lpy-2G; Tue, 24 Oct 2023 04:02:49 +0000
+Date: Mon, 23 Oct 2023 21:02:49 -0700
 From: Christoph Hellwig <hch@infradead.org>
-To: Will Hawkins <hawkinsw@obs.cr>
-Cc: Christoph Hellwig <hch@infradead.org>,
- Dave Thaler <dthaler=40microsoft.com@dmarc.ietf.org>,
- "bpf@ietf.org" <bpf@ietf.org>, bpf <bpf@vger.kernel.org>
-Message-ID: <ZTdBacjsOq9MmXEg@infradead.org>
-References: <PH7PR21MB387850B8DB6A2A5FB87DAC06A3C0A@PH7PR21MB3878.namprd21.prod.outlook.com>
- <ZTDGfppgSnpKjaYz@infradead.org>
- <CADx9qWgP=h4kQEJ2Cpy-A9hyiKLdkF3hVZVydLrz2Lk+UGBaAQ@mail.gmail.com>
+To: David Vernet <void@manifault.com>
+Cc: Will Hawkins <hawkinsw@obs.cr>, bpf@ietf.org, bpf@vger.kernel.org
+Message-ID: <ZTdB6dJSum4p63oR@infradead.org>
+References: <20231002142001.3223261-1-hawkinsw@obs.cr>
+ <20231003182650.GA5902@maniforge>
+ <CADx9qWjcSoNb=aWpDVV5QxEoUGuDr2=wOOz3AWhjemh6+hzhwA@mail.gmail.com>
+ <20231024005528.GA33696@maniforge>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -78,11 +78,12 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <CADx9qWgP=h4kQEJ2Cpy-A9hyiKLdkF3hVZVydLrz2Lk+UGBaAQ@mail.gmail.com>
+In-Reply-To: <20231024005528.GA33696@maniforge>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by
  bombadil.infradead.org. See http://www.infradead.org/rpr.html
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/IyNwM5eFLJod5PV3Ca40T_WW60o>
-Subject: Re: [Bpf] ISA RFC compliance question
+Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/0PcL-pI0igK5yPG9xXsCLCMU9Yk>
+Subject: Re: [Bpf] [PATCH] bpf,
+ docs: Add additional ABI working draft base text
 X-BeenThere: bpf@ietf.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -99,29 +100,26 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: bpf-bounces@ietf.org
 Sender: "Bpf" <bpf-bounces@ietf.org>
-Message-ID: <20231024040041.mEANvbgcrPRH8_dar6EK9aUqq7iw0tO80fW9YpSxTVo@z>
+Message-ID: <20231024040249.D-p4poKr-R3FnaX4KOcTxRQr2_zbnuMB6my-SngbEnY@z>
 
-On Mon, Oct 23, 2023 at 11:06:32AM -0400, Will Hawkins wrote:
-> Can we look to either RISC-V or ARM for prior art in how they worked
-> different versions and compliance levels? I am happy to amass some
-> documentation about their processes/procedures if you think that it
-> would help!
+On Mon, Oct 23, 2023 at 07:55:28PM -0500, David Vernet wrote:
+> > You make an excellent point. Although v2 does not make this change, do
+> > you think that a reasonable adjustment would be to simply move this
+> > section to the end of the document?
+> 
+> My initial expectation is that it's not a great idea to reference
+> external documents that could change, no longer be valid links, etc, but
+> I'd like to hear what others think. Dave -- is this typical for an IETF
+> informational document? It seems like if we did this we'd basically be
+> taking implicit dependencies on documents we can't actually control
+> (because they're not IETF), but I have no idea if this is normal or not.
 
-I don't know arm to well.  x86 is mostly discoverable by bits set in the
-cpuid leaves, and RISC-V has formal extensions, initially letter and
-after they noticed that isn't fine grained enough a lot of Z-prefixed
-ones.  I think RISC-V is a good starting point:
+IETF prefers IETF references, and if not stable standards-like
+documents.  Even those will get careful review (talking as someone
+with a draft that has normative SCSI and NVMe references right now).
 
-  https://en.wikichip.org/wiki/risc-v/standard_extensions
-
-we need to be very careful on what are good scopes for extensions so
-they are on the one hand useful, but on the other hand not too many
-of them so that we stop being easily interoperable.
-
-As seen in the other branch of this discussion we should also thing
-a bit of what is supported by existing implementations.  I don't think
-it is a non-startert if they become non-compliant, but we need to weight
-this very carefully.
+For non-normative references this is a bit relaxed, but a random url
+that can change is never acceptable.
 
 -- 
 Bpf mailing list
