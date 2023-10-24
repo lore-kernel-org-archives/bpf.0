@@ -1,66 +1,58 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90942266B0
-	for <bpf@vger.kernel.org>; Tue, 24 Oct 2023 11:57:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBF2B266DA
+	for <bpf@vger.kernel.org>; Tue, 24 Oct 2023 12:05:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PRxuIC2v"
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2088.outbound.protection.outlook.com [40.107.7.88])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9CD610C0;
-	Tue, 24 Oct 2023 04:57:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HBQC3y3o"
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2058.outbound.protection.outlook.com [40.107.6.58])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE80120
+	for <bpf@vger.kernel.org>; Tue, 24 Oct 2023 05:05:48 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WZ74aMWu4kL+Z71kGDlCEhCqI0moJOUSB2hbsRpOlqSthTprwzk3iKAHfM+ISkMx11w1xKr1DF29lhYK3FW4NW2Dd0N/6t8r3hciHVMlwpsOXNgHLmeB2Z3VEckbotxqsjdcA9iirSr7fo/4LYaGNR7JUUoZo5jVH6kOi5YwMKMOuxbY7o1qhSKl2k3nWk3G5MWso9G0YE2YfUa+Ji2X1rqhe5ikt0a19oKcmFBqBTF3wBFNsGI0LZu4PEclAj+hRJiRsam3LMFLHBklJ/O2ok61UQ0q2ppMYqcHyCSQ/hrqFlrST0CK+dhh52RmrQY1oH09kA2CyxHtwFg/rxVlIQ==
+ b=a3/7Oo0xzw1k0EsRpO6RQnHX1zXLPGSIn2pvXbOrjpZBr6H4N5xXaR1I7V6sYrVm9cAVXp9Ro9fZ8dG4W/jmrEOsLtZSho5yX7MJ4htzOzzKJG7oOM1p5X/T93nY+EHZjaTbj/zamLcVzTq2xO1FalLuk+IYbZsSoxwpmsqnNCM4KDbC9l1WEEnTFFRjp1I4a9MPw0xZG9QN6hWzOJMbwJX41QPCko4om2L2ynecRCVe9GETTKrVJOx0R8Oa+dZmKKXMFF/3pBIzsFNixuIbUXrzWiUhIO/EvdXVsitQkRLdmEY8jPAJbOvc1GKs8nhTpcWgy18oxEw8bsAOvZVrwQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xOxYzcTO7ewWbvNKH7KA/zJG/77X7vbTs4fJKUC4YZw=;
- b=MWw2aDGNj7//Csl8LA04/z0ModY42NClsSg9abHgw1fhuydFa9iQmPU4KusmFwNpmqAqS02vAB8MaMFi9PfrO5+aiCztrO2xlMz/ZrofB6cOvAFPDeZQzXrriNP8gdR6ImZfOc0ozyrE0ifqJxTRCoCcWplY0IGJ+tq6jtw+KSJMVQbCbtBH84x36LV8PhL7t0aO4vV8/tpX8/z5Ug+YDXHfqJumDwjIX9SlXa0zYRBBoYbZpci/YyDVG4PRkTCi0gxZGqU4Y/UzT+FsmEVXFdM6PY2DtGTA7TnGfTmP+VVhL0s9kWYwQMoNlET2FhZg6U80EAhhiAOfxBttOUOJzw==
+ bh=wFnwjdDx5+8F91T9G8iiViFcc+PDXF2e7IoURQms5ws=;
+ b=TvaatsBAOvDnaBsvnFpViKPJoibxg6LCMara8nv8oLueft+PAmGX3kKLmHtMfjuqLGECduKeeW4j3mqUk5FOKpod8WXDeTmGpi6hQI3UZ0mH6fSLHez7TTxw9gl7X77WvwAnDSId2RhV64eOBwkWeNiLv3TWE5Z8TmWkmDRtKLfY7mVr15jpbj6nj/4NYU5G2cHsCjzO+1lWFJr8F9MMbk5AsJ398Pda4Vn5cEUP1reI9pCasaLXjPZfYTQrPdEDY5/LchQLRpbLL9mGuVfglC4l+hh/4UtCA3JszRRefrq9oigO/EuHIFuTfyWb+yiHKAKibGCDB7DECwgSguEx9w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
  dkim=pass header.d=suse.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xOxYzcTO7ewWbvNKH7KA/zJG/77X7vbTs4fJKUC4YZw=;
- b=PRxuIC2vJ0cZEe8eq+83+Ze18f45UUDFdRFmIYZa2Scgua2Up9RrF9DN6RM0rofVEnnz/8S8A2oQzgciUdX8X5jPU4a77aBKJHr/f8OWOfOP0zpZmlJATUTSw7DhxpOC1AcEZaCtyrv1AQt2sSVzXU6SiC/6Jj80aKDMQzQfYlYESV/nOxSmyOTmjkzU5rhquzglLz/1g1fFETPqmhJaBdPVUXZlTySzGtA6zLuAKqcicKBeCNuHxw2sykkwFYOV2Tm7ULxDP7nr5ssVGPsyojSKiIyr8XepMJFNsrcbvw8lygSXHTE4fwc7W7KapIgvSyxDea6RbwBXSWPG52l7Eg==
+ bh=wFnwjdDx5+8F91T9G8iiViFcc+PDXF2e7IoURQms5ws=;
+ b=HBQC3y3oGF7flkKBXi9KaKUa+pUoPbJseOhmOv8pqdGx4rTNIenqvR5U26dcKUBVNprnviaP9vNa+k24OUI6Gldt29EYaQP7JPkiYljDc3L0PLY/g02j1SVfCN50fbN/P75ktGqp4YCiCH8POcSd+6RmDm/ojm0/StIYKcyhKjyRjkZ7sp5MjDfA5kHsVV2OSvr2+4ilRTJd23x6j9ceEe849s4b77yHCo3GpZ1y/wYaOolpbZxR+By5aUt81D02zYI9TSObk05kupKUUT6C9KYtKMrW1CGKBHjgJAvavdu9SOB3b3lACoaop7xpuLDIDENHJi4lPDWQhI9H0wiEVA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=suse.com;
 Received: from AS8PR04MB9510.eurprd04.prod.outlook.com (2603:10a6:20b:44a::11)
- by PAXPR04MB8575.eurprd04.prod.outlook.com (2603:10a6:102:216::11) with
+ by PAXPR04MB9188.eurprd04.prod.outlook.com (2603:10a6:102:222::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.11; Tue, 24 Oct
- 2023 11:57:36 +0000
+ 2023 12:05:46 +0000
 Received: from AS8PR04MB9510.eurprd04.prod.outlook.com
  ([fe80::9f3e:3b47:5ccd:c47c]) by AS8PR04MB9510.eurprd04.prod.outlook.com
  ([fe80::9f3e:3b47:5ccd:c47c%6]) with mapi id 15.20.6933.011; Tue, 24 Oct 2023
- 11:57:36 +0000
-Date: Tue, 24 Oct 2023 19:57:28 +0800
+ 12:05:46 +0000
+Date: Tue, 24 Oct 2023 20:05:38 +0800
 From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Hao Sun <sunhao.th@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v3 1/3] bpf: Detect jumping to reserved code
- during check_cfg()
-Message-ID: <ZTexKOcNxpRd4oc5@u94a>
-References: <20231011-jmp-into-reserved-fields-v3-0-97d2aa979788@gmail.com>
- <20231011-jmp-into-reserved-fields-v3-1-97d2aa979788@gmail.com>
- <CAADnVQJnhfbALtNkCauS_ZwRfybcb_mryEvZW7Uu1uOSshQ9Ew@mail.gmail.com>
- <ZSeq7ieG7Cq13w67@u94a>
- <CAADnVQJHAPid9HouwMEnfwDDKuy8BnGia269KSbby2gA030OBg@mail.gmail.com>
- <ZSi5PHDfoAYcvbCq@u94a>
- <CAADnVQLiWk5_Wf3q6iDAyLb-n0W5je3Z8XT2J-mtZ5s9RA-JjQ@mail.gmail.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	ast@kernel.org, daniel@iogearbox.net, martin.lau@kernel.org,
+	kernel-team@meta.com
+Subject: Re: [PATCH v4 bpf-next 3/7] bpf: enhance subregister bounds
+ deduction logic
+Message-ID: <ZTezEiltEz8Gab5B@u94a>
+References: <20231022205743.72352-1-andrii@kernel.org>
+ <20231022205743.72352-4-andrii@kernel.org>
+ <ZTXmjp7AtrRpHZzR@u94a>
+ <ZTXvAmZmQzKxS2kj@u94a>
+ <CAEf4BzZeOt-u+vZsrdj_8o6hMCiPuYrvE5=CCfAhDadSLTC42g@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQLiWk5_Wf3q6iDAyLb-n0W5je3Z8XT2J-mtZ5s9RA-JjQ@mail.gmail.com>
-X-ClientProxiedBy: FR4P281CA0384.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:f7::18) To AS8PR04MB9510.eurprd04.prod.outlook.com
+In-Reply-To: <CAEf4BzZeOt-u+vZsrdj_8o6hMCiPuYrvE5=CCfAhDadSLTC42g@mail.gmail.com>
+X-ClientProxiedBy: FR2P281CA0036.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:14::23) To AS8PR04MB9510.eurprd04.prod.outlook.com
  (2603:10a6:20b:44a::11)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -69,189 +61,160 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR04MB9510:EE_|PAXPR04MB8575:EE_
-X-MS-Office365-Filtering-Correlation-Id: b1c449eb-e79b-403f-7770-08dbd48869c8
+X-MS-TrafficTypeDiagnostic: AS8PR04MB9510:EE_|PAXPR04MB9188:EE_
+X-MS-Office365-Filtering-Correlation-Id: c93a3211-1666-4ca3-1a12-08dbd4898dbf
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	v+SOAnh4/yLB+e7lLdzf4mGqeSBDXq1p9IYtmhxXT78TOIwN7tM6dY5DqEm2weFWMLCgKfJyNBi4o7wTQfPd2FgIkCmmnPx/o28JWKoHuPBJZWvbOrhVzM/V5yc/G4O8qIReAQ8A3AK2GRC6AMlvElcmpUJlD8Ld0OgEaTD8B9c+G6/0u66e+THzsmB8z14slXDNsRUcHiiZ+5qcVkFsE4vXJf0s86rkokZxxf5ULBTc/eIBem6E4wO+JQmZOieNI4W3+5DaPvIi49CNgFppJTHoegUZlGjPgjMXr2yvHB/9/hsfn4qZxweC+169326eOvA7ou4yPtCiWe34kkwYJQLcP9e22VPO6DctUpHZAtkOjrjewz1De5TkecIB4yiavc81OqwMeDveRDVns6vDo3810wAxfmWgWfzs8mU56YUOcqRf4S21WHlugcWW0t9PYl1ikZ3Ia0nnxvhlMlF3NebYmzSYTy5kHuMWVMgVoNJCy9bElqeEl7ynwNKStPhW6rWMSYkw6Tb5AYqjB7f1qcAN8tlVHOKncbuHKnFac5VHf0pYzOti+GM/hR6LTVEb
+	WAotXbo4/OGuQbZ9Ih/pS20JpndaBLhr8PUwy4u0FWw6p2F92t535GMmKPUcNmOkVpFfUDRWzebEEmiLpdZhpkDvx1kMC9fzKLwUdJpj4/sNS5H1GanRfyfkh+GqIcFImJPKQs6EeJLGC5eaKFvy9ybU1sFRCttmHbPaej9m6FdZaUNRuRKxmCKCxq6oXmX2qPifEKaWL17v+iWMwqVkszUoIZH83BJE95QvjRmciukCltMxLNPLqDk4QT8Srat2GPbMat9Y1fJqMxfYF9XSHy9F8yGBrHHQ8QJNu9wqoNcr3YZk3rNX1eBa4/iKu11X1vsEPHMXyduIXP8LeCUbbeD5t2wrZJ+Lt/khXSIxh9yEBnImFs0JBaXLFsBTTqqvPOMDLIJHXiWJt0588v+tL+WRObe8/bNO/kg1uWvr14SHXkjyFb1Af4Ruhkm789kX2KDVfj3dD6yoQZlEq/8z5jWZyATtEk10Ks0bproBLPsBXCUQPFqn2KaVtaUYD/UxCpJ+7oFooRgbqo/oiN34GBXEjFUhW6BV6JLhnCHjBKzrKz2t1cWGxIGfrmntlS6Q
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB9510.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(366004)(136003)(376002)(346002)(39860400002)(396003)(230922051799003)(186009)(451199024)(1800799009)(64100799003)(6916009)(66556008)(66476007)(66946007)(54906003)(316002)(86362001)(38100700002)(83380400001)(8676002)(53546011)(9686003)(6512007)(26005)(6506007)(6666004)(6486002)(478600001)(8936002)(2906002)(33716001)(7416002)(5660300002)(41300700001)(4326008);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB9510.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(376002)(346002)(396003)(136003)(366004)(39860400002)(230922051799003)(186009)(64100799003)(1800799009)(451199024)(26005)(6512007)(9686003)(6666004)(6506007)(53546011)(83380400001)(41300700001)(5660300002)(8676002)(4326008)(8936002)(2906002)(6486002)(478600001)(33716001)(66556008)(316002)(66476007)(66946007)(6916009)(86362001)(38100700002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?eEg2c0JVQ0FDbVZUMXVKZWdSMlhOVnZHK0duTk1HZUlIanVjaDV3SDljenRC?=
- =?utf-8?B?L3lqVUJwMHY4Uml2S24yVThRV01EekFPSThsS05WRzlWdmNCUmdEZjJGZzJ2?=
- =?utf-8?B?SkRFUkRveHlsQkh4TjcrR21HMnZaNjNhLzd2aE12b2dVMjkyMHNieXR4Mm9J?=
- =?utf-8?B?ZFp4RWEwazQvVE1WUEJYd25ZcEk0TStycC96aXM2cVYzUkx2WHN2VkR0Qzc0?=
- =?utf-8?B?Q2Fsd3NMUU5UQ1kyZGNZZk1BYy93UHF1S3JEZy8rZWxsQ1RRb254N0MydFU0?=
- =?utf-8?B?VW9YaHp6eitqbzRlcEcxSHZBY3ZVemF2dDl2U0R4UTVDdFFmNk80YThPemM0?=
- =?utf-8?B?c0VualkwWkpJM3gvekw5UDZ2aVpSUXdINnNpS0NYaThuY1dLaEJKLzdreEpF?=
- =?utf-8?B?YitDczl5bUVwbWxvMThDVGlscjcwNFZNVVAvdFNlLzU5bm9rUFBXTnVmMlV6?=
- =?utf-8?B?NDRmeTBFWUZJcDIxMXdYRFFFQW9ySm5Oc1NpeC8vYVpVckJkQkpTaGxQU1Zj?=
- =?utf-8?B?cEJxUXYyZVlwTHMzRkgvVmYvaXh4L3oxcHdrMW5XWU1DUnBYNEJMaHJGQmVp?=
- =?utf-8?B?bm0vWEFLSnRaSVoxS0pvVkZxeGQ4RXh1ajZTREh3ajNZdlhOR01RMmlvOU4r?=
- =?utf-8?B?d29DbmdnTVFxeFB6YkpvdDZJalNrTzhkcThIdStzdSttay9lNGUyQUdBQk9r?=
- =?utf-8?B?Y1JRTDFTdk83ejBMMmR0UmlOang4d2dSUitlVTJlZ0w0ZlJzbWpHNXJlOFJs?=
- =?utf-8?B?ODVGY216TWluL3B1cytaenZHbFh1c1JqQkRlak15dUdHRlVXUk5EMHhTcE5R?=
- =?utf-8?B?OVBJejk0OVVlS0Z0SjFJbVBsZHp5SjQ1Z0hvRmtKWmUyRkJuT2tpOUZBazFD?=
- =?utf-8?B?clBsM1pLSE9yZ2UxMHM2cWpaWUVJc1ZBSDhtbGlIQm1keHdrNVBMMzFNTEVu?=
- =?utf-8?B?bStGc1QyZURtMFlGK256blNpY2JhYzl1cElJWVF2aHo4cmhFb1hrM0c5SUht?=
- =?utf-8?B?YUdoaXVoVDNWdENpaUhlbjFkaTVVQVhjSVdNWDFMOWtBVVJIUU43c2tJMWpN?=
- =?utf-8?B?TGhzV0p0cHVXTWZBZjNGVUkwZjR2eGFmSmhEQ0Q4SzZHVnMyRmpXZk5TM2ZZ?=
- =?utf-8?B?WnVMYjhFSlVka2dLT1JGU215dUZOQ3ltemhjOUhOS2hEbXFNMTdQUWExaVFZ?=
- =?utf-8?B?YmdrbGlZWnZSMFRvbjkxMUU1NUxBRXBhWXYvNVBpTGlrblFpQVhHckRYTloy?=
- =?utf-8?B?ZjF1bU5sQ1NsWHo1b2ZJODFtcWRkSmFVazJNOGRIWE5VZ2lHcnJ0Mks5Z2Z6?=
- =?utf-8?B?UU8yVmpsYllrcTdGVFoxZFZGODJhRVlNRFB4d0t6ZzdSZXM0MDhlVk4yb2Vr?=
- =?utf-8?B?aU1GSVFKeldoL0k2WDdFa1RZMEs3YVpHMmVLRmgvSitsbDRNTzVTdGxnV1FG?=
- =?utf-8?B?MjlBZXdVRHRLWUpNeUhHd3dMMFdZRUpIcURxbHc1ZTUvM0krMkRiVERsSzNm?=
- =?utf-8?B?eVdndkQzRHZKbmV5YThOWEVKMGJ2Z0hadU1rN2c2L25zRDlwd0pkdG9FKzRG?=
- =?utf-8?B?WlJrdnNjN2JLZGVaMDBRTFloZGovYW9rc0VjdnZFNGtsRkxKbDRmSTZ3VjM3?=
- =?utf-8?B?VFBYaUtIWUJXcFlna3BqNm1wNjM2L0lmbUl6TUFBai9pN2cyWTUrdDVvWTF4?=
- =?utf-8?B?YnJuQ0w1cGJqbGZRSnhySUl2R0xKdnFvNUt1VTVkV3dhZWQvSU5SQml3Z2dH?=
- =?utf-8?B?MVFGTXlTdEZrekFScHJmU3NPbklDNkFBWk44RzRpZk9qN2hlb0lzaEVLMld2?=
- =?utf-8?B?ZVhVbnlrN2kwWkhyQUpKdWtqVmFOQjVyLzgvY0NBeDRPSDJmVHo0OE9EM21K?=
- =?utf-8?B?NFBXcFA2K2JtOWx6OVhzckdFTnJjbXZIMVlyTVNZa2hhOGpMZlZwTVJkMWNC?=
- =?utf-8?B?T0l0ZDVlN1F0eE8wV1VqUFhmbWFnZUNlYksrbGkrenVWZ2JHb0w1WkFCYnNt?=
- =?utf-8?B?SURoSE5QRERMQ1pESzdsK2c2aGxVMlUvYkpNWGFFbTJnQ2tuRmhENUZPRmN1?=
- =?utf-8?B?NUpWZEVjeXp0ZXhRUEJ6d3hKcDltUSt4bElwSmZtNG5hcUJoZ3pUVmI2ZW9Q?=
- =?utf-8?Q?1IiakKctr4/kK+oW0c2SdkuUj?=
+	=?utf-8?B?alNZWjd3VDJVMkxuRmcwNC8yWVdpTDA0S3FVTEl4c1I3b1A5Q2taNHdzQU4v?=
+ =?utf-8?B?MWpRMDc3WmZ1a1JYbk55bkcxVFJqQ2swcWs1RmtldGNWdnE2cFgyVndUUEV2?=
+ =?utf-8?B?cXZ1aHJNRVRYRkZjeGZCM09iZGk3c0xrR0ljQVQ5Ri81UUlIbUZxdXBQcXRw?=
+ =?utf-8?B?d0lCbWJUZzhJOE50WUhKV0VpSGVzRU5CSWppNEtlNlV1RHp2aSs4SmxrY3p4?=
+ =?utf-8?B?SlhYZERZRjlKMUUxd0hBZmY0RzNYUFZ3Vnl0cU90ZUtCVXRvSDAwaFdFRWNn?=
+ =?utf-8?B?RGFUTUN6SjNoazdrbGxoYUxzOEQ5VitjZnhvc2xxRlBmMHE5S0tydlFKOFhS?=
+ =?utf-8?B?Yk9WT1ZDVllyai9YNStSSVNDY2FjOTJTcDgzcVJmS2RheVYrcUNHMXdXSm9C?=
+ =?utf-8?B?MWg0UzJZeW41MDEzUUdldCtlaHhiTVpkeE1XSUZEODByODhQdk14bFN6dmd6?=
+ =?utf-8?B?TXB4K0lsUThkRHJXTjhxMmZvcU01ZG0yRzQzMm9sQ3BEOVlZSGo3dXM4UmxD?=
+ =?utf-8?B?VTlaMUpIcnNMd3N1NTZsWmswRS8vbEpubDZEeVBFM2pTVXBLZnRmKzRibStq?=
+ =?utf-8?B?b2NSaFkyUW40TERCQmFLQlE5YStoeVMwSTlUd2dXT0lkZFhCMUR6WmQ2VEZ4?=
+ =?utf-8?B?dUp0SEUrY2tHcFUzNlh1WkhKQXZyTVVnVFUyZ1UwcjNGSXJ0TFBWUXhiK1BY?=
+ =?utf-8?B?MTNQejBVM1hIZmZGb0JmZUowdTg0aDgycm9ZeDQ3RG5SU0xsb2o2WXZZVDZ1?=
+ =?utf-8?B?MWpLSGlFek16cEFiR1FoN3QweWpQeEJxMHhzWkltMWRZNUZrNEpwMUVlczV0?=
+ =?utf-8?B?RjFTT3lBMDhPVGtGK1ZaRXdhUGpVUHN5VXc5STNnRlFCMHd4N28zelZTakov?=
+ =?utf-8?B?SGF1THZESjVKaXQ4UC9DQ2JzTDZNS1FpUW93Y1lmSmNnSi9qVmd3bWEyamJk?=
+ =?utf-8?B?WkJjNWlPa3RiZXZrNXBRNWxZVENka2MzVUN1SzRySHE4RHZhOWRWbjZmcXgv?=
+ =?utf-8?B?VlFBcXBZeno2ekVOUVBpZm1ZRHlOc2IvbEZzZ2V3aUh2L0hYWndna2RGU0xa?=
+ =?utf-8?B?Q0puU1NINzV5RFdac0xsTjdVQlpMTjVxYlNvTlh5VzFYL1kzSG1ONjZrR3lN?=
+ =?utf-8?B?SXpFSDVTQWxMcDFxOFNFVUdoYUp4Y1E3dHh0bzhYc29KMExmRTVTUDVWZVB1?=
+ =?utf-8?B?WHZYUEpsNkJPd0xpcGZ5WjFFN3czTTRwOCs1NG56Nk8xdFUzV1JMcDFKWnF2?=
+ =?utf-8?B?ZGQ1VnZnSmEzdU1CYUg0c3Y2NmlKblRsNFdoTDlKR05ZODBPUFdIM2VRdzls?=
+ =?utf-8?B?a1NTRVE5dWxPSGY5VmkyUVpJbnY0VEMvUzVIZTZCR1NKbkdDeGtudUxCTGI3?=
+ =?utf-8?B?M0dNZ2phc28zRWpFVmh3cGNkRnc5bHl1R2V2Q3JUN2Y2NWVEV0szYTYwV2lI?=
+ =?utf-8?B?Ulh5STNCMnZOUFlabmlnQkdTa2c3REpmM0NtUU9IL2VDSG5aREtnYTVTZm1I?=
+ =?utf-8?B?bmdkZnJzMWk0WmV6dmUveFd6bUUzZ3BLaTNPc2ozWkExcGFrbGs2cWV4a1hU?=
+ =?utf-8?B?M2FYRFJqNkVzRnBPQU9OQlI5VnVEZkdIVmpvbUZDYjVYdjRuVmVMZzhIVmpx?=
+ =?utf-8?B?bXRLTlRrdzZSZzFyRGFMZ0s5azEybDFPb3J4MHp4dFlTSThWRzJHV2JTOEw4?=
+ =?utf-8?B?ZzFtZVZvNnpvY1lWWWlPc3hWak1rTHhsb0JGektWcklvVlNoR0VCRFozSkc2?=
+ =?utf-8?B?MGFiUmpLRklkMDFvYTRiQ0FvYmk0c3MzSkpXbmJMalVhOVQ2TGtWMmJQN09Q?=
+ =?utf-8?B?SGltK04rRGdkQ3BZL21MZWlBMGhnQUNreU00aXhzQnlNU3p2TlZaT2F5Y0F5?=
+ =?utf-8?B?eDk3TU5ZaGtuQ0ZkZnBTYWY2RVBUczViRzQ0RGdCS2RZY0Y0cmRMOTYxeWdV?=
+ =?utf-8?B?SjZVandmTWdDRzJjdkRHTFpDeHpPZG9uRmcvU0lmUnFQQ3NlK05Xb1Vkd0Qr?=
+ =?utf-8?B?SHpNNG9QM1ZWY3lKOGwwRDZZdHMyMy9wenkzaWRXZG1nd2FHdkF0cFhSODha?=
+ =?utf-8?B?Z0xlSDBmUWFneWJxYktjZGNRNmw0blp2b3oyeHRncHkydStsb2xTQVZyaEpt?=
+ =?utf-8?Q?jcwUdb9n6kFsnBTlklrpM4H1h?=
 X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b1c449eb-e79b-403f-7770-08dbd48869c8
+X-MS-Exchange-CrossTenant-Network-Message-Id: c93a3211-1666-4ca3-1a12-08dbd4898dbf
 X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB9510.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2023 11:57:36.0122
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2023 12:05:46.1675
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KB8hLL1vUUy9r0A/VhL1+PlKIt0yWoMAgzHiWGPCDUnK4bmQ5usli6X1es/vo8byKkLWFb1CWuqOdmZiahHBeQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8575
+X-MS-Exchange-CrossTenant-UserPrincipalName: dEqG50SFXDllGbEYZ9hyBYxinMOZ7t1lwPV5rXB1gWr5hUKde8fuSKD7QzK9G1pZveiERRI88s0OXFrY3UBLyA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9188
 
-On Thu, Oct 19, 2023 at 05:25:26PM -0700, Alexei Starovoitov wrote:
-> On Thu, Oct 12, 2023 at 8:28 PM Shung-Hsi Yu <shung-hsi.yu@suse.com> wrote:
-> > On Thu, Oct 12, 2023 at 08:02:00AM -0700, Alexei Starovoitov wrote:
-> > > On Thu, Oct 12, 2023 at 1:14 AM Shung-Hsi Yu <shung-hsi.yu@suse.com> wrote:
-> > > > On Wed, Oct 11, 2023 at 06:38:56AM -0700, Alexei Starovoitov wrote:
-> > > > > On Wed, Oct 11, 2023 at 2:01 AM Hao Sun <sunhao.th@gmail.com> wrote:
-> > > > > >
-> > > > > > Currently, we don't check if the branch-taken of a jump is reserved code of
-> > > > > > ld_imm64. Instead, such a issue is captured in check_ld_imm(). The verifier
-> > > > > > gives the following log in such case:
-> > > > > >
-> > > > > > func#0 @0
-> > > > > > 0: R1=ctx(off=0,imm=0) R10=fp0
-> > > > > > 0: (18) r4 = 0xffff888103436000       ; R4_w=map_ptr(off=0,ks=4,vs=128,imm=0)
-> > > > > > 2: (18) r1 = 0x1d                     ; R1_w=29
-> > > > > > 4: (55) if r4 != 0x0 goto pc+4        ; R4_w=map_ptr(off=0,ks=4,vs=128,imm=0)
-> > > > > > 5: (1c) w1 -= w1                      ; R1_w=0
-> > > > > > 6: (18) r5 = 0x32                     ; R5_w=50
-> > > > > > 8: (56) if w5 != 0xfffffff4 goto pc-2
-> > > > > > mark_precise: frame0: last_idx 8 first_idx 0 subseq_idx -1
-> > > > > > mark_precise: frame0: regs=r5 stack= before 6: (18) r5 = 0x32
-> > > > > > 7: R5_w=50
-> > > > > > 7: BUG_ld_00
-> > > > > > invalid BPF_LD_IMM insn
-> > > > > >
-> > > > > > Here the verifier rejects the program because it thinks insn at 7 is an
-> > > > > > invalid BPF_LD_IMM, but such a error log is not accurate since the issue
-> > > > > > is jumping to reserved code not because the program contains invalid insn.
-> > > > > > Therefore, make the verifier check the jump target during check_cfg(). For
-> > > > > > the same program, the verifier reports the following log:
-> > > > > >
-> > > > > > func#0 @0
-> > > > > > jump to reserved code from insn 8 to 7
-> > > > > >
-> > > > > > Signed-off-by: Hao Sun <sunhao.th@gmail.com>
-> > > > > > ---
-> > > > > >  kernel/bpf/verifier.c | 7 +++++++
-> > > > > >  1 file changed, 7 insertions(+)
-> > > > > >
-> > > > > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > > > > > index eed7350e15f4..725ac0b464cf 100644
-> > > > > > --- a/kernel/bpf/verifier.c
-> > > > > > +++ b/kernel/bpf/verifier.c
-> > > > > > @@ -14980,6 +14980,7 @@ static int push_insn(int t, int w, int e, struct bpf_verifier_env *env,
-> > > > > >  {
-> > > > > >         int *insn_stack = env->cfg.insn_stack;
-> > > > > >         int *insn_state = env->cfg.insn_state;
-> > > > > > +       struct bpf_insn *insns = env->prog->insnsi;
-> > > > > >
-> > > > > >         if (e == FALLTHROUGH && insn_state[t] >= (DISCOVERED | FALLTHROUGH))
-> > > > > >                 return DONE_EXPLORING;
-> > > > > > @@ -14993,6 +14994,12 @@ static int push_insn(int t, int w, int e, struct bpf_verifier_env *env,
-> > > > > >                 return -EINVAL;
-> > > > > >         }
-> > > > > >
-> > > > > > +       if (e == BRANCH && insns[w].code == 0) {
-> > > > > > +               verbose_linfo(env, t, "%d", t);
-> > > > > > +               verbose(env, "jump to reserved code from insn %d to %d\n", t, w);
-> > > > > > +               return -EINVAL;
-> > > > > > +       }
-> > > > >
-> > > > > I don't think we should be changing the verifier to make
-> > > > > fuzzer logs more readable.
+On Mon, Oct 23, 2023 at 09:23:57AM -0700, Andrii Nakryiko wrote:
+> On Sun, Oct 22, 2023 at 8:57 PM Shung-Hsi Yu <shung-hsi.yu@suse.com> wrote:
+> >
+> > On Mon, Oct 23, 2023 at 11:20:46AM +0800, Shung-Hsi Yu wrote:
+> > > On Sun, Oct 22, 2023 at 01:57:39PM -0700, Andrii Nakryiko wrote:
+> > > > Add handling of a bunch of possible cases which allows deducing extra
+> > > > information about subregister bounds, both u32 and s32, from full register
+> > > > u64/s64 bounds.
 > > > >
-> > > > Taking fuzzer out of consideration, giving users clearer explanation for
-> > > > such verifier rejection could save a lot of head scratching.
-> > >
-> > > Users won't see such errors unless they are actively doing what
-> > > is not recommended.
-> > >
-> > > > Compiler shouldn't generate such program, but its plausible to forget to
-> > > > account that BPF_LD_IMM64 consists of two instructions when writing
-> > > > assembly (especially with filter.h-like macros) and have it jump to the 2nd
-> > > > part of BPF_LD_IMM64.
-> > >
-> > > Using macros to write bpf asm code is highly discouraged.
-> > > All kinds of errors are possible.
-> > > Bogus jump is just one of such mistakes.
-> > > Use naked functions and inline asm in C code that
-> > > both GCC and clang understand then you won't see bad jumps.
-> > > See selftets/bpf/verifier_*.c as an example.
-> >
-> > Understood, thanks for the explanation!
-> >
-> > Found them under progs/verifier_*.c inside the bpf selftest directory.
-> >
-> > > > > Same with patch 2. The code is fine as-is.
+> > > > Also add smin32/smax32 bounds derivation from corresponding umin32/umax32
+> > > > bounds, similar to what we did with smin/smax from umin/umax derivation in
+> > > > previous patch.
 > > > >
-> > > > The only way BPF_SIZE(insn->code) != BPF_DW conditional in check_ld_imm()
-> > > > can be met right now is when we have a jump to the 2nd part of LD_IMM64; but
-> > > > what this conditional actually guard against is not straight-forward and
-> > > > quite confusing[1].
-> > >
-> > > There are plenty of cases in the verifier where we print
-> > > an error message. Some of them should be impossible due
-> > > to prior checks. In such cases we don't yell "verifier bug"
-> > > and are not going to do that in this case either.
+> > > > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> > > >
+> > > > ---
+> > > >  kernel/bpf/verifier.c | 52 +++++++++++++++++++++++++++++++++++++++++++
+> > > >  1 file changed, 52 insertions(+)
+> > > >
+> > > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > > > index 885dd4a2ff3a..3fc9bd5e72b8 100644
+> > > > --- a/kernel/bpf/verifier.c
+> > > > +++ b/kernel/bpf/verifier.c
+> > > > @@ -2130,6 +2130,58 @@ static void __update_reg_bounds(struct bpf_reg_state *reg)
+> > > >  /* Uses signed min/max values to inform unsigned, and vice-versa */
+> > > >  static void __reg32_deduce_bounds(struct bpf_reg_state *reg)
+> > > >  {
+> > > > +   /* if upper 32 bits of u64/s64 range don't change,
+> > > > +    * we can use lower 32 bits to improve our u32/s32 boundaries
+> > > > +    */
+> > > > +   if ((reg->umin_value >> 32) == (reg->umax_value >> 32)) {
+> > > > +           /* u64 to u32 casting preserves validity of low 32 bits as
+> > > > +            * a range, if upper 32 bits are the same
+> > > > +            */
+> > > > +           reg->u32_min_value = max_t(u32, reg->u32_min_value, (u32)reg->umin_value);
+> > > > +           reg->u32_max_value = min_t(u32, reg->u32_max_value, (u32)reg->umax_value);
+> > > > +
+> > > > +           if ((s32)reg->umin_value <= (s32)reg->umax_value) {
+> > > > +                   reg->s32_min_value = max_t(s32, reg->s32_min_value, (s32)reg->umin_value);
+> > > > +                   reg->s32_max_value = min_t(s32, reg->s32_max_value, (s32)reg->umax_value);
+> > > > +           }
+> > > > +   }
+> > > > +   if ((reg->smin_value >> 32) == (reg->smax_value >> 32)) {
+> > > > +           /* low 32 bits should form a proper u32 range */
+> > > > +           if ((u32)reg->smin_value <= (u32)reg->smax_value) {
+> > > > +                   reg->u32_min_value = max_t(u32, reg->u32_min_value, (u32)reg->smin_value);
+> > > > +                   reg->u32_max_value = min_t(u32, reg->u32_max_value, (u32)reg->smax_value);
+> > > > +           }
+> > > > +           /* low 32 bits should form a proper s32 range */
+> > > > +           if ((s32)reg->smin_value <= (s32)reg->smax_value) {
+> > > > +                   reg->s32_min_value = max_t(s32, reg->s32_min_value, (s32)reg->smin_value);
+> > > > +                   reg->s32_max_value = min_t(s32, reg->s32_max_value, (s32)reg->smax_value);
+> > > > +           }
+> > > > +   }
+> > > > +   /* Special case where upper bits form a small sequence of two
+> > > > +    * sequential numbers (in 32-bit unsigned space, so 0xffffffff to
+> > > > +    * 0x00000000 is also valid), while lower bits form a proper s32 range
+> > > > +    * going from negative numbers to positive numbers.
+> > > > +    * E.g.: [0xfffffff0ffffff00; 0xfffffff100000010]. Iterating
+> > > > +    * over full 64-bit numbers range will form a proper [-16, 16]
+> > > > +    * ([0xffffff00; 0x00000010]) range in its lower 32 bits.
+> > > > +    */
 > >
-> > I agree, without patch 1 applied, the change to "verfier bug" in patch 2
-> > doesn't make sense and is just wrong. The point I'm trying to make is that
-> > the checks done by verifier are generally clear, you can make sense of why
-> > certain check are in place just by looking at the code, but
-> > BPF_SIZE(insn->code) != BPF_DW is _not_ one of them.
-> >
-> > I got confused, (reading between the lines I believe) this had Hao puzzled,
-> > and even Yongsong had to look twice[1] back then; so this check is certainly
-> > not on-par with others we have in the verifier in terms of clarity, which
-> > leads to patches here as well as mine a while back.
-> >
-> > Perhaps we could reconsider making it more obvious how verifier prevents
-> > jump to reserved code/2nd instruction of LD_IMM64?
+> > ... [graph removed]
 > 
-> I agree that the message is confusing.
-> My point is that people see it only when they code in asm with macros.
-> Anyone who was doing that a lot saw that message and probably debugged
-> much worse issues while inserting an asm macro and forgetting to
-> adjust constants in branches. The code might even load, but will
-> execute something totally different.
-> asm macros are a nightmare to debug. Adding more code to the verifier
-> to help with one particular case is not going to help much.
-> Use inline asm in C is the right answer for folks that still need asm.
-> 
-> UX of the verifier sucks and we need to improve. So please focus on impactful
-> improvements instead of hacking on niche cases.
+> Yeah, tbh, the graphs above weren't really all that helpful, rather
+> more confusing. But I think you got the point correctly, that we are
+> stitching two s32 ranges, if we can. And we can if upper 32 bits are
+> two consecutive numbers and lower 32-bits goes from negative to
+> positive (as s32).
 
-Ok, can't say I agree entirely, but it's a niche case alright, and I'll
-leave this alone.
+Alright, graph removed. FWIW I think "stitching two s32 ranges together" is
+a great way to put it concisely to give some intuitive sense, it'd be nice
+if it can be incorporated into the above comment.
+
+> > > > +   if ((u32)(reg->umin_value >> 32) + 1 == (u32)(reg->umax_value >> 32) &&
+> > > > +       (s32)reg->umin_value < 0 && (s32)reg->umax_value >= 0) {
+> > > > +           reg->s32_min_value = max_t(s32, reg->s32_min_value, (s32)reg->umin_value);
+> > > > +           reg->s32_max_value = min_t(s32, reg->s32_max_value, (s32)reg->umax_value);
+> > > > +   }
+> > > > +   if ((u32)(reg->smin_value >> 32) + 1 == (u32)(reg->smax_value >> 32) &&
+> > > > +       (s32)reg->smin_value < 0 && (s32)reg->smax_value >= 0) {
+> > > > +           reg->s32_min_value = max_t(s32, reg->s32_min_value, (s32)reg->smin_value);
+> > > > +           reg->s32_max_value = min_t(s32, reg->s32_max_value, (s32)reg->smax_value);
+> > > > +   }
+> > > > +   /* if u32 range forms a valid s32 range (due to matching sign bit),
+> > > > +    * try to learn from that
+> > > > +    */
+> > > > +   if ((s32)reg->u32_min_value <= (s32)reg->u32_max_value) {
+> > > > +           reg->s32_min_value = max_t(s32, reg->s32_min_value, reg->u32_min_value);
+> > > > +           reg->s32_max_value = min_t(s32, reg->s32_max_value, reg->u32_max_value);
+> > > > +   }
+> > > >     /* Learn sign from signed bounds.
+> > > >      * If we cannot cross the sign boundary, then signed and unsigned bounds
+> > > >      * are the same, so combine.  This works even in the negative case, e.g.
+> > > > --
+> > > > 2.34.1
+> > > >
