@@ -1,29 +1,29 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EAE744486;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7E3844499;
 	Tue, 24 Oct 2023 21:49:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="g5JpKlD4"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="eygCZYOV"
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7BBD7F;
-	Tue, 24 Oct 2023 14:49:21 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55B9D7D;
+	Tue, 24 Oct 2023 14:49:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=kc7DgchArvGyp5rPDushbT1Iv3tpst6aagBDbRzpMSY=; b=g5JpKlD4G0wJdXlLjDZfA2m4XQ
-	wz2b6jT+oAcVNG3Cxfvx0ZCXsSKqDrkNXq0a++KcmiMZ3kpbudZKMYmJwpulISdyBOYT/cGvVuu0p
-	nkAwtexa4MNspqw0658cxokYwgvPc6xvu+M+1xhlwBd40zFXZ9i+9XjnU5KUofc0TFcOcGk3JyTV2
-	r6ATvLLmAkRyERSDpM7UjDR+0Y4Oe1rVRgdmdwwoYQJrBXN6x/zf1rrITVVH5rJ1aUKo0KGpTQqDP
-	pgKWWx9tPGozo51V0c0bktCnGDsnlgKKgI+g9Doll3Ssfb0nafETDSz0c83ZibOmh9b7zacPRCtTb
-	v+6QXpcg==;
+	bh=pyutNPacbMRxJUurAW+8gRCQtDewOT/mGxflztl26DI=; b=eygCZYOVVF0OT8XXerpQ1EIHSA
+	YRQgXW3NulGM2+7gzigFgZpPYyMbRfn1xVEjyLZq7RvYdN0nLLjDoO1I7RiZ5+8qzkj9snccPW5FD
+	ujjG0Te5RQB+MsNlDEVKDBFm8enBTrNT7LRRGT2ACpnv/0B9zIRTr0O1NpanIBPM1rLLwOno0sNza
+	dMd9QUlcXdwTG788MoUV3QPSz7RdyIo+89BC424P/JQisIi84ZIYBRLywp8D37OoDMCIpoMHu2Vo/
+	RTEJ3m+iiamM7L05IKKjeJGw6Jm3j7zN5jC6mJ8qW5G9FzUZPUU/4LQyIijZ4Lg8kgDz+ijK6/Y5S
+	aY8nDZ2w==;
 Received: from 40.248.197.178.dynamic.dsl-lte-bonding.zhbmb00p-msn.res.cust.swisscom.ch ([178.197.248.40] helo=localhost)
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1qvPH2-0001lw-5N; Tue, 24 Oct 2023 23:49:16 +0200
+	id 1qvPGx-0001kk-Ms; Tue, 24 Oct 2023 23:49:11 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: bpf@vger.kernel.org
 Cc: netdev@vger.kernel.org,
@@ -36,10 +36,11 @@ Cc: netdev@vger.kernel.org,
 	toke@kernel.org,
 	kuba@kernel.org,
 	andrew@lunn.ch,
-	Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next v4 7/7] selftests/bpf: Add selftests for netkit
-Date: Tue, 24 Oct 2023 23:49:04 +0200
-Message-Id: <20231024214904.29825-8-daniel@iogearbox.net>
+	Daniel Borkmann <daniel@iogearbox.net>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Subject: [PATCH bpf-next v4 1/7] netkit, bpf: Add bpf programmable net device
+Date: Tue, 24 Oct 2023 23:48:58 +0200
+Message-Id: <20231024214904.29825-2-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20231024214904.29825-1-daniel@iogearbox.net>
 References: <20231024214904.29825-1-daniel@iogearbox.net>
@@ -49,794 +50,1332 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: daniel@iogearbox.net
 X-Virus-Scanned: Clear (ClamAV 0.103.10/27071/Tue Oct 24 09:43:50 2023)
 X-Spam-Level: *
 
-Add a bigger batch of test coverage to assert correct operation of
-netkit devices and their BPF program management:
+This work adds a new, minimal BPF-programmable device called "netkit"
+(former PoC code-name "meta") we recently presented at LSF/MM/BPF. The
+core idea is that BPF programs are executed within the drivers xmit routine
+and therefore e.g. in case of containers/Pods moving BPF processing closer
+to the source.
 
-  # ./test_progs -t tc_netkit
-  [...]
-  [    1.166267] bpf_testmod: loading out-of-tree module taints kernel.
-  [    1.166831] bpf_testmod: module verification failed: signature and/or required key missing - tainting kernel
-  [    1.270957] tsc: Refined TSC clocksource calibration: 3407.988 MHz
-  [    1.272579] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x311fc932722, max_idle_ns: 440795381586 ns
-  [    1.275336] clocksource: Switched to clocksource tsc
-  #257     tc_netkit_basic:OK
-  #258     tc_netkit_device:OK
-  #259     tc_netkit_multi_links:OK
-  #260     tc_netkit_multi_opts:OK
-  #261     tc_netkit_neigh_links:OK
-  Summary: 5/0 PASSED, 0 SKIPPED, 0 FAILED
-  [...]
+One of the goals was that in case of Pod egress traffic, this allows to
+move BPF programs from hostns tcx ingress into the device itself, providing
+earlier drop or forward mechanisms, for example, if the BPF program
+determines that the skb must be sent out of the node, then a redirect to
+the physical device can take place directly without going through per-CPU
+backlog queue. This helps to shift processing for such traffic from softirq
+to process context, leading to better scheduling decisions/performance (see
+measurements in the slides).
 
+In this initial version, the netkit device ships as a pair, but we plan to
+extend this further so it can also operate in single device mode. The pair
+comes with a primary and a peer device. Only the primary device, typically
+residing in hostns, can manage BPF programs for itself and its peer. The
+peer device is designated for containers/Pods and cannot attach/detach
+BPF programs. Upon the device creation, the user can set the default policy
+to 'pass' or 'drop' for the case when no BPF program is attached.
+
+Additionally, the device can be operated in L3 (default) or L2 mode. The
+management of BPF programs is done via bpf_mprog, so that multi-attach is
+supported right from the beginning with similar API and dependency controls
+as tcx. For details on the latter see commit 053c8e1f235d ("bpf: Add generic
+attach/detach/query API for multi-progs"). tc BPF compatibility is provided,
+so that existing programs can be easily migrated.
+
+Going forward, we plan to use netkit devices in Cilium as the main device
+type for connecting Pods. They will be operated in L3 mode in order to
+simplify a Pod's neighbor management and the peer will operate in default
+drop mode, so that no traffic is leaving between the time when a Pod is
+brought up by the CNI plugin and programs attached by the agent.
+Additionally, the programs we attach via tcx on the physical devices are
+using bpf_redirect_peer() for inbound traffic into netkit device, hence the
+latter is also supporting the ndo_get_peer_dev callback. Similarly, we use
+bpf_redirect_neigh() for the way out, pushing from netkit peer to phys device
+directly. Also, BIG TCP is supported on netkit device. For the follow-up
+work in single device mode, we plan to convert Cilium's cilium_host/_net
+devices into a single one.
+
+An extensive test suite for checking device operations and the BPF program
+and link management API comes as BPF selftests in this series.
+
+Co-developed-by: Nikolay Aleksandrov <razor@blackwall.org>
+Signed-off-by: Nikolay Aleksandrov <razor@blackwall.org>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
+Acked-by: Stanislav Fomichev <sdf@google.com>
+Link: https://github.com/borkmann/iproute2/tree/pr/netkit
+Link: http://vger.kernel.org/bpfconf2023_material/tcx_meta_netdev_borkmann.pdf (24ff.)
 ---
- tools/testing/selftests/bpf/config            |   1 +
- .../selftests/bpf/prog_tests/tc_helpers.h     |   4 +
- .../selftests/bpf/prog_tests/tc_netkit.c      | 687 ++++++++++++++++++
- .../selftests/bpf/progs/test_tc_link.c        |  13 +
- 4 files changed, 705 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_netkit.c
+ MAINTAINERS                    |   9 +
+ drivers/net/Kconfig            |   9 +
+ drivers/net/Makefile           |   1 +
+ drivers/net/netkit.c           | 940 +++++++++++++++++++++++++++++++++
+ include/net/netkit.h           |  38 ++
+ include/uapi/linux/bpf.h       |  14 +
+ include/uapi/linux/if_link.h   |  24 +
+ kernel/bpf/syscall.c           |  30 +-
+ tools/include/uapi/linux/bpf.h |  14 +
+ 9 files changed, 1074 insertions(+), 5 deletions(-)
+ create mode 100644 drivers/net/netkit.c
+ create mode 100644 include/net/netkit.h
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index 02dd4409200e..3ec5927ec3e5 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -71,6 +71,7 @@ CONFIG_NETFILTER_SYNPROXY=y
- CONFIG_NETFILTER_XT_CONNMARK=y
- CONFIG_NETFILTER_XT_MATCH_STATE=y
- CONFIG_NETFILTER_XT_TARGET_CT=y
-+CONFIG_NETKIT=y
- CONFIG_NF_CONNTRACK=y
- CONFIG_NF_CONNTRACK_MARK=y
- CONFIG_NF_DEFRAG_IPV4=y
-diff --git a/tools/testing/selftests/bpf/prog_tests/tc_helpers.h b/tools/testing/selftests/bpf/prog_tests/tc_helpers.h
-index 67f985f7d215..924d0e25320c 100644
---- a/tools/testing/selftests/bpf/prog_tests/tc_helpers.h
-+++ b/tools/testing/selftests/bpf/prog_tests/tc_helpers.h
-@@ -4,6 +4,10 @@
- #define TC_HELPERS
- #include <test_progs.h>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ed33b9df8b3d..43be6197e655 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3795,6 +3795,15 @@ L:	bpf@vger.kernel.org
+ S:	Odd Fixes
+ K:	(?:\b|_)bpf(?:\b|_)
  
-+#ifndef loopback
-+# define loopback 1
-+#endif
++BPF [NETKIT] (BPF-programmable network device)
++M:	Daniel Borkmann <daniel@iogearbox.net>
++M:	Nikolay Aleksandrov <razor@blackwall.org>
++L:	bpf@vger.kernel.org
++L:	netdev@vger.kernel.org
++S:	Supported
++F:	drivers/net/netkit.c
++F:	include/net/netkit.h
 +
- static inline __u32 id_from_prog_fd(int fd)
- {
- 	struct bpf_prog_info prog_info = {};
-diff --git a/tools/testing/selftests/bpf/prog_tests/tc_netkit.c b/tools/testing/selftests/bpf/prog_tests/tc_netkit.c
+ BPF [NETWORKING] (struct_ops, reuseport)
+ M:	Martin KaFai Lau <martin.lau@linux.dev>
+ L:	bpf@vger.kernel.org
+diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
+index 44eeb5d61ba9..af0da4bb429b 100644
+--- a/drivers/net/Kconfig
++++ b/drivers/net/Kconfig
+@@ -448,6 +448,15 @@ config NLMON
+ 	  diagnostics, etc. This is mostly intended for developers or support
+ 	  to debug netlink issues. If unsure, say N.
+ 
++config NETKIT
++	bool "BPF-programmable network device"
++	depends on BPF_SYSCALL
++	help
++	  The netkit device is a virtual networking device where BPF programs
++	  can be attached to the device(s) transmission routine in order to
++	  implement the driver's internal logic. The device can be configured
++	  to operate in L3 or L2 mode. If unsure, say N.
++
+ config NET_VRF
+ 	tristate "Virtual Routing and Forwarding (Lite)"
+ 	depends on IP_MULTIPLE_TABLES
+diff --git a/drivers/net/Makefile b/drivers/net/Makefile
+index 8a83db32509d..7cab36f94782 100644
+--- a/drivers/net/Makefile
++++ b/drivers/net/Makefile
+@@ -22,6 +22,7 @@ obj-$(CONFIG_MDIO) += mdio.o
+ obj-$(CONFIG_NET) += loopback.o
+ obj-$(CONFIG_NETDEV_LEGACY_INIT) += Space.o
+ obj-$(CONFIG_NETCONSOLE) += netconsole.o
++obj-$(CONFIG_NETKIT) += netkit.o
+ obj-y += phy/
+ obj-y += pse-pd/
+ obj-y += mdio/
+diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
 new file mode 100644
-index 000000000000..15ee7b2fc410
+index 000000000000..7e484f9fd3ae
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/tc_netkit.c
-@@ -0,0 +1,687 @@
-+// SPDX-License-Identifier: GPL-2.0
++++ b/drivers/net/netkit.c
+@@ -0,0 +1,940 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +/* Copyright (c) 2023 Isovalent */
-+#include <uapi/linux/if_link.h>
-+#include <net/if.h>
-+#include <test_progs.h>
 +
-+#define netkit_peer "nk0"
-+#define netkit_name "nk1"
++#include <linux/netdevice.h>
++#include <linux/ethtool.h>
++#include <linux/etherdevice.h>
++#include <linux/filter.h>
++#include <linux/netfilter_netdev.h>
++#include <linux/bpf_mprog.h>
 +
-+#define ping_addr_neigh		0x0a000002 /* 10.0.0.2 */
-+#define ping_addr_noneigh	0x0a000003 /* 10.0.0.3 */
++#include <net/netkit.h>
++#include <net/dst.h>
++#include <net/tcx.h>
 +
-+#include "test_tc_link.skel.h"
-+#include "netlink_helpers.h"
-+#include "tc_helpers.h"
++#define DRV_NAME "netkit"
 +
-+#define ICMP_ECHO 8
++struct netkit {
++	/* Needed in fast-path */
++	struct net_device __rcu *peer;
++	struct bpf_mprog_entry __rcu *active;
++	enum netkit_action policy;
++	struct bpf_mprog_bundle	bundle;
 +
-+struct icmphdr {
-+	__u8		type;
-+	__u8		code;
-+	__sum16		checksum;
-+	struct {
-+		__be16	id;
-+		__be16	sequence;
-+	} echo;
++	/* Needed in slow-path */
++	enum netkit_mode mode;
++	bool primary;
++	u32 headroom;
 +};
 +
-+struct iplink_req {
-+	struct nlmsghdr  n;
-+	struct ifinfomsg i;
-+	char             buf[1024];
++struct netkit_link {
++	struct bpf_link link;
++	struct net_device *dev;
++	u32 location;
 +};
 +
-+static int create_netkit(int mode, int policy, int peer_policy, int *ifindex,
-+			 bool same_netns)
++static __always_inline int
++netkit_run(const struct bpf_mprog_entry *entry, struct sk_buff *skb,
++	   enum netkit_action ret)
 +{
-+	struct rtnl_handle rth = { .fd = -1 };
-+	struct iplink_req req = {};
-+	struct rtattr *linkinfo, *data;
-+	const char *type = "netkit";
-+	int err;
++	const struct bpf_mprog_fp *fp;
++	const struct bpf_prog *prog;
 +
-+	err = rtnl_open(&rth, 0);
-+	if (!ASSERT_OK(err, "open_rtnetlink"))
-+		return err;
-+
-+	memset(&req, 0, sizeof(req));
-+	req.n.nlmsg_len = NLMSG_LENGTH(sizeof(struct ifinfomsg));
-+	req.n.nlmsg_flags = NLM_F_REQUEST | NLM_F_CREATE | NLM_F_EXCL;
-+	req.n.nlmsg_type = RTM_NEWLINK;
-+	req.i.ifi_family = AF_UNSPEC;
-+
-+	addattr_l(&req.n, sizeof(req), IFLA_IFNAME, netkit_name,
-+		  strlen(netkit_name));
-+	linkinfo = addattr_nest(&req.n, sizeof(req), IFLA_LINKINFO);
-+	addattr_l(&req.n, sizeof(req), IFLA_INFO_KIND, type, strlen(type));
-+	data = addattr_nest(&req.n, sizeof(req), IFLA_INFO_DATA);
-+	addattr32(&req.n, sizeof(req), IFLA_NETKIT_POLICY, policy);
-+	addattr32(&req.n, sizeof(req), IFLA_NETKIT_PEER_POLICY, peer_policy);
-+	addattr32(&req.n, sizeof(req), IFLA_NETKIT_MODE, mode);
-+	addattr_nest_end(&req.n, data);
-+	addattr_nest_end(&req.n, linkinfo);
-+
-+	err = rtnl_talk(&rth, &req.n, NULL);
-+	ASSERT_OK(err, "talk_rtnetlink");
-+	rtnl_close(&rth);
-+	*ifindex = if_nametoindex(netkit_name);
-+
-+	ASSERT_GT(*ifindex, 0, "retrieve_ifindex");
-+	ASSERT_OK(system("ip netns add foo"), "create netns");
-+	ASSERT_OK(system("ip link set dev " netkit_name " up"),
-+			 "up primary");
-+	ASSERT_OK(system("ip addr add dev " netkit_name " 10.0.0.1/24"),
-+			 "addr primary");
-+	if (same_netns) {
-+		ASSERT_OK(system("ip link set dev " netkit_peer " up"),
-+				 "up peer");
-+		ASSERT_OK(system("ip addr add dev " netkit_peer " 10.0.0.2/24"),
-+				 "addr peer");
-+	} else {
-+		ASSERT_OK(system("ip link set " netkit_peer " netns foo"),
-+				 "move peer");
-+		ASSERT_OK(system("ip netns exec foo ip link set dev "
-+				 netkit_peer " up"), "up peer");
-+		ASSERT_OK(system("ip netns exec foo ip addr add dev "
-+				 netkit_peer " 10.0.0.2/24"), "addr peer");
++	bpf_mprog_foreach_prog(entry, fp, prog) {
++		bpf_compute_data_pointers(skb);
++		ret = bpf_prog_run(prog, skb);
++		if (ret != NETKIT_NEXT)
++			break;
 +	}
-+	return err;
-+}
-+
-+static void destroy_netkit(void)
-+{
-+	ASSERT_OK(system("ip link del dev " netkit_name), "del primary");
-+	ASSERT_OK(system("ip netns del foo"), "delete netns");
-+	ASSERT_EQ(if_nametoindex(netkit_name), 0, netkit_name "_ifindex");
-+}
-+
-+static int __send_icmp(__u32 dest)
-+{
-+	struct sockaddr_in addr;
-+	struct icmphdr icmp;
-+	int sock, ret;
-+
-+	ret = write_sysctl("/proc/sys/net/ipv4/ping_group_range", "0 0");
-+	if (!ASSERT_OK(ret, "write_sysctl(net.ipv4.ping_group_range)"))
-+		return ret;
-+
-+	sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_ICMP);
-+	if (!ASSERT_GE(sock, 0, "icmp_socket"))
-+		return -errno;
-+
-+	ret = setsockopt(sock, SOL_SOCKET, SO_BINDTODEVICE,
-+			 netkit_name, strlen(netkit_name) + 1);
-+	if (!ASSERT_OK(ret, "setsockopt(SO_BINDTODEVICE)"))
-+		goto out;
-+
-+	memset(&addr, 0, sizeof(addr));
-+	addr.sin_family = AF_INET;
-+	addr.sin_addr.s_addr = htonl(dest);
-+
-+	memset(&icmp, 0, sizeof(icmp));
-+	icmp.type = ICMP_ECHO;
-+	icmp.echo.id = 1234;
-+	icmp.echo.sequence = 1;
-+
-+	ret = sendto(sock, &icmp, sizeof(icmp), 0,
-+		     (struct sockaddr *)&addr, sizeof(addr));
-+	if (!ASSERT_GE(ret, 0, "icmp_sendto"))
-+		ret = -errno;
-+	else
-+		ret = 0;
-+out:
-+	close(sock);
 +	return ret;
 +}
 +
-+static int send_icmp(void)
++static void netkit_prep_forward(struct sk_buff *skb, bool xnet)
 +{
-+	return __send_icmp(ping_addr_neigh);
++	skb_scrub_packet(skb, xnet);
++	skb->priority = 0;
++	nf_skip_egress(skb, true);
 +}
 +
-+void serial_test_tc_netkit_basic(void)
++static struct netkit *netkit_priv(const struct net_device *dev)
 +{
-+	LIBBPF_OPTS(bpf_prog_query_opts, optq);
-+	LIBBPF_OPTS(bpf_netkit_opts, optl);
-+	__u32 prog_ids[2], link_ids[2];
-+	__u32 pid1, pid2, lid1, lid2;
-+	struct test_tc_link *skel;
-+	struct bpf_link *link;
-+	int err, ifindex;
-+
-+	err = create_netkit(NETKIT_L2, NETKIT_PASS, NETKIT_PASS,
-+			    &ifindex, false);
-+	if (err)
-+		return;
-+
-+	skel = test_tc_link__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		goto cleanup;
-+
-+	ASSERT_EQ(bpf_program__set_expected_attach_type(skel->progs.tc1,
-+		  BPF_NETKIT_PRIMARY), 0, "tc1_attach_type");
-+	ASSERT_EQ(bpf_program__set_expected_attach_type(skel->progs.tc2,
-+		  BPF_NETKIT_PEER), 0, "tc2_attach_type");
-+
-+	err = test_tc_link__load(skel);
-+	if (!ASSERT_OK(err, "skel_load"))
-+		goto cleanup;
-+
-+	pid1 = id_from_prog_fd(bpf_program__fd(skel->progs.tc1));
-+	pid2 = id_from_prog_fd(bpf_program__fd(skel->progs.tc2));
-+
-+	ASSERT_NEQ(pid1, pid2, "prog_ids_1_2");
-+
-+	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PRIMARY, 0);
-+	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PEER, 0);
-+
-+	ASSERT_EQ(skel->bss->seen_tc1, false, "seen_tc1");
-+	ASSERT_EQ(skel->bss->seen_tc2, false, "seen_tc2");
-+
-+	link = bpf_program__attach_netkit(skel->progs.tc1, ifindex, &optl);
-+	if (!ASSERT_OK_PTR(link, "link_attach"))
-+		goto cleanup;
-+
-+	skel->links.tc1 = link;
-+
-+	lid1 = id_from_link_fd(bpf_link__fd(skel->links.tc1));
-+
-+	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PRIMARY, 1);
-+	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PEER, 0);
-+
-+	optq.prog_ids = prog_ids;
-+	optq.link_ids = link_ids;
-+
-+	memset(prog_ids, 0, sizeof(prog_ids));
-+	memset(link_ids, 0, sizeof(link_ids));
-+	optq.count = ARRAY_SIZE(prog_ids);
-+
-+	err = bpf_prog_query_opts(ifindex, BPF_NETKIT_PRIMARY, &optq);
-+	if (!ASSERT_OK(err, "prog_query"))
-+		goto cleanup;
-+
-+	ASSERT_EQ(optq.count, 1, "count");
-+	ASSERT_EQ(optq.revision, 2, "revision");
-+	ASSERT_EQ(optq.prog_ids[0], pid1, "prog_ids[0]");
-+	ASSERT_EQ(optq.link_ids[0], lid1, "link_ids[0]");
-+	ASSERT_EQ(optq.prog_ids[1], 0, "prog_ids[1]");
-+	ASSERT_EQ(optq.link_ids[1], 0, "link_ids[1]");
-+
-+	tc_skel_reset_all_seen(skel);
-+	ASSERT_EQ(send_icmp(), 0, "icmp_pkt");
-+
-+	ASSERT_EQ(skel->bss->seen_tc1, true, "seen_tc1");
-+	ASSERT_EQ(skel->bss->seen_tc2, false, "seen_tc2");
-+
-+	link = bpf_program__attach_netkit(skel->progs.tc2, ifindex, &optl);
-+	if (!ASSERT_OK_PTR(link, "link_attach"))
-+		goto cleanup;
-+
-+	skel->links.tc2 = link;
-+
-+	lid2 = id_from_link_fd(bpf_link__fd(skel->links.tc2));
-+	ASSERT_NEQ(lid1, lid2, "link_ids_1_2");
-+
-+	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PRIMARY, 1);
-+	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PEER, 1);
-+
-+	memset(prog_ids, 0, sizeof(prog_ids));
-+	memset(link_ids, 0, sizeof(link_ids));
-+	optq.count = ARRAY_SIZE(prog_ids);
-+
-+	err = bpf_prog_query_opts(ifindex, BPF_NETKIT_PEER, &optq);
-+	if (!ASSERT_OK(err, "prog_query"))
-+		goto cleanup;
-+
-+	ASSERT_EQ(optq.count, 1, "count");
-+	ASSERT_EQ(optq.revision, 2, "revision");
-+	ASSERT_EQ(optq.prog_ids[0], pid2, "prog_ids[0]");
-+	ASSERT_EQ(optq.link_ids[0], lid2, "link_ids[0]");
-+	ASSERT_EQ(optq.prog_ids[1], 0, "prog_ids[1]");
-+	ASSERT_EQ(optq.link_ids[1], 0, "link_ids[1]");
-+
-+	tc_skel_reset_all_seen(skel);
-+	ASSERT_EQ(send_icmp(), 0, "icmp_pkt");
-+
-+	ASSERT_EQ(skel->bss->seen_tc1, true, "seen_tc1");
-+	ASSERT_EQ(skel->bss->seen_tc2, true, "seen_tc2");
-+cleanup:
-+	test_tc_link__destroy(skel);
-+
-+	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PRIMARY, 0);
-+	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PEER, 0);
-+	destroy_netkit();
++	return netdev_priv(dev);
 +}
 +
-+static void serial_test_tc_netkit_multi_links_target(int mode, int target)
++static netdev_tx_t netkit_xmit(struct sk_buff *skb, struct net_device *dev)
 +{
-+	LIBBPF_OPTS(bpf_prog_query_opts, optq);
-+	LIBBPF_OPTS(bpf_netkit_opts, optl);
-+	__u32 prog_ids[3], link_ids[3];
-+	__u32 pid1, pid2, lid1, lid2;
-+	struct test_tc_link *skel;
-+	struct bpf_link *link;
-+	int err, ifindex;
-+
-+	err = create_netkit(mode, NETKIT_PASS, NETKIT_PASS,
-+			    &ifindex, false);
-+	if (err)
-+		return;
-+
-+	skel = test_tc_link__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		goto cleanup;
-+
-+	ASSERT_EQ(bpf_program__set_expected_attach_type(skel->progs.tc1,
-+		  target), 0, "tc1_attach_type");
-+	ASSERT_EQ(bpf_program__set_expected_attach_type(skel->progs.tc2,
-+		  target), 0, "tc2_attach_type");
-+
-+	err = test_tc_link__load(skel);
-+	if (!ASSERT_OK(err, "skel_load"))
-+		goto cleanup;
-+
-+	pid1 = id_from_prog_fd(bpf_program__fd(skel->progs.tc1));
-+	pid2 = id_from_prog_fd(bpf_program__fd(skel->progs.tc2));
-+
-+	ASSERT_NEQ(pid1, pid2, "prog_ids_1_2");
-+
-+	assert_mprog_count_ifindex(ifindex, target, 0);
-+
-+	ASSERT_EQ(skel->bss->seen_tc1, false, "seen_tc1");
-+	ASSERT_EQ(skel->bss->seen_eth, false, "seen_eth");
-+	ASSERT_EQ(skel->bss->seen_tc2, false, "seen_tc2");
-+
-+	link = bpf_program__attach_netkit(skel->progs.tc1, ifindex, &optl);
-+	if (!ASSERT_OK_PTR(link, "link_attach"))
-+		goto cleanup;
-+
-+	skel->links.tc1 = link;
-+
-+	lid1 = id_from_link_fd(bpf_link__fd(skel->links.tc1));
-+
-+	assert_mprog_count_ifindex(ifindex, target, 1);
-+
-+	optq.prog_ids = prog_ids;
-+	optq.link_ids = link_ids;
-+
-+	memset(prog_ids, 0, sizeof(prog_ids));
-+	memset(link_ids, 0, sizeof(link_ids));
-+	optq.count = ARRAY_SIZE(prog_ids);
-+
-+	err = bpf_prog_query_opts(ifindex, target, &optq);
-+	if (!ASSERT_OK(err, "prog_query"))
-+		goto cleanup;
-+
-+	ASSERT_EQ(optq.count, 1, "count");
-+	ASSERT_EQ(optq.revision, 2, "revision");
-+	ASSERT_EQ(optq.prog_ids[0], pid1, "prog_ids[0]");
-+	ASSERT_EQ(optq.link_ids[0], lid1, "link_ids[0]");
-+	ASSERT_EQ(optq.prog_ids[1], 0, "prog_ids[1]");
-+	ASSERT_EQ(optq.link_ids[1], 0, "link_ids[1]");
-+
-+	tc_skel_reset_all_seen(skel);
-+	ASSERT_EQ(send_icmp(), 0, "icmp_pkt");
-+
-+	ASSERT_EQ(skel->bss->seen_tc1, true, "seen_tc1");
-+	ASSERT_EQ(skel->bss->seen_eth, true, "seen_eth");
-+	ASSERT_EQ(skel->bss->seen_tc2, false, "seen_tc2");
-+
-+	LIBBPF_OPTS_RESET(optl,
-+		.flags = BPF_F_BEFORE,
-+		.relative_fd = bpf_program__fd(skel->progs.tc1),
-+	);
-+
-+	link = bpf_program__attach_netkit(skel->progs.tc2, ifindex, &optl);
-+	if (!ASSERT_OK_PTR(link, "link_attach"))
-+		goto cleanup;
-+
-+	skel->links.tc2 = link;
-+
-+	lid2 = id_from_link_fd(bpf_link__fd(skel->links.tc2));
-+	ASSERT_NEQ(lid1, lid2, "link_ids_1_2");
-+
-+	assert_mprog_count_ifindex(ifindex, target, 2);
-+
-+	memset(prog_ids, 0, sizeof(prog_ids));
-+	memset(link_ids, 0, sizeof(link_ids));
-+	optq.count = ARRAY_SIZE(prog_ids);
-+
-+	err = bpf_prog_query_opts(ifindex, target, &optq);
-+	if (!ASSERT_OK(err, "prog_query"))
-+		goto cleanup;
-+
-+	ASSERT_EQ(optq.count, 2, "count");
-+	ASSERT_EQ(optq.revision, 3, "revision");
-+	ASSERT_EQ(optq.prog_ids[0], pid2, "prog_ids[0]");
-+	ASSERT_EQ(optq.link_ids[0], lid2, "link_ids[0]");
-+	ASSERT_EQ(optq.prog_ids[1], pid1, "prog_ids[1]");
-+	ASSERT_EQ(optq.link_ids[1], lid1, "link_ids[1]");
-+	ASSERT_EQ(optq.prog_ids[2], 0, "prog_ids[2]");
-+	ASSERT_EQ(optq.link_ids[2], 0, "link_ids[2]");
-+
-+	tc_skel_reset_all_seen(skel);
-+	ASSERT_EQ(send_icmp(), 0, "icmp_pkt");
-+
-+	ASSERT_EQ(skel->bss->seen_tc1, true, "seen_tc1");
-+	ASSERT_EQ(skel->bss->seen_eth, true, "seen_eth");
-+	ASSERT_EQ(skel->bss->seen_tc2, true, "seen_tc2");
-+cleanup:
-+	test_tc_link__destroy(skel);
-+
-+	assert_mprog_count_ifindex(ifindex, target, 0);
-+	destroy_netkit();
-+}
-+
-+void serial_test_tc_netkit_multi_links(void)
-+{
-+	serial_test_tc_netkit_multi_links_target(NETKIT_L2, BPF_NETKIT_PRIMARY);
-+	serial_test_tc_netkit_multi_links_target(NETKIT_L3, BPF_NETKIT_PRIMARY);
-+	serial_test_tc_netkit_multi_links_target(NETKIT_L2, BPF_NETKIT_PEER);
-+	serial_test_tc_netkit_multi_links_target(NETKIT_L3, BPF_NETKIT_PEER);
-+}
-+
-+static void serial_test_tc_netkit_multi_opts_target(int mode, int target)
-+{
-+	LIBBPF_OPTS(bpf_prog_attach_opts, opta);
-+	LIBBPF_OPTS(bpf_prog_detach_opts, optd);
-+	LIBBPF_OPTS(bpf_prog_query_opts, optq);
-+	__u32 pid1, pid2, fd1, fd2;
-+	__u32 prog_ids[3];
-+	struct test_tc_link *skel;
-+	int err, ifindex;
-+
-+	err = create_netkit(mode, NETKIT_PASS, NETKIT_PASS,
-+			    &ifindex, false);
-+	if (err)
-+		return;
-+
-+	skel = test_tc_link__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_load"))
-+		goto cleanup;
-+
-+	fd1 = bpf_program__fd(skel->progs.tc1);
-+	fd2 = bpf_program__fd(skel->progs.tc2);
-+
-+	pid1 = id_from_prog_fd(fd1);
-+	pid2 = id_from_prog_fd(fd2);
-+
-+	ASSERT_NEQ(pid1, pid2, "prog_ids_1_2");
-+
-+	assert_mprog_count_ifindex(ifindex, target, 0);
-+
-+	ASSERT_EQ(skel->bss->seen_tc1, false, "seen_tc1");
-+	ASSERT_EQ(skel->bss->seen_eth, false, "seen_eth");
-+	ASSERT_EQ(skel->bss->seen_tc2, false, "seen_tc2");
-+
-+	err = bpf_prog_attach_opts(fd1, ifindex, target, &opta);
-+	if (!ASSERT_EQ(err, 0, "prog_attach"))
-+		goto cleanup;
-+
-+	assert_mprog_count_ifindex(ifindex, target, 1);
-+
-+	optq.prog_ids = prog_ids;
-+
-+	memset(prog_ids, 0, sizeof(prog_ids));
-+	optq.count = ARRAY_SIZE(prog_ids);
-+
-+	err = bpf_prog_query_opts(ifindex, target, &optq);
-+	if (!ASSERT_OK(err, "prog_query"))
-+		goto cleanup_fd1;
-+
-+	ASSERT_EQ(optq.count, 1, "count");
-+	ASSERT_EQ(optq.revision, 2, "revision");
-+	ASSERT_EQ(optq.prog_ids[0], pid1, "prog_ids[0]");
-+	ASSERT_EQ(optq.prog_ids[1], 0, "prog_ids[1]");
-+
-+	tc_skel_reset_all_seen(skel);
-+	ASSERT_EQ(send_icmp(), 0, "icmp_pkt");
-+
-+	ASSERT_EQ(skel->bss->seen_tc1, true, "seen_tc1");
-+	ASSERT_EQ(skel->bss->seen_eth, true, "seen_eth");
-+	ASSERT_EQ(skel->bss->seen_tc2, false, "seen_tc2");
-+
-+	LIBBPF_OPTS_RESET(opta,
-+		.flags = BPF_F_BEFORE,
-+		.relative_fd = fd1,
-+	);
-+
-+	err = bpf_prog_attach_opts(fd2, ifindex, target, &opta);
-+	if (!ASSERT_EQ(err, 0, "prog_attach"))
-+		goto cleanup_fd1;
-+
-+	assert_mprog_count_ifindex(ifindex, target, 2);
-+
-+	memset(prog_ids, 0, sizeof(prog_ids));
-+	optq.count = ARRAY_SIZE(prog_ids);
-+
-+	err = bpf_prog_query_opts(ifindex, target, &optq);
-+	if (!ASSERT_OK(err, "prog_query"))
-+		goto cleanup_fd2;
-+
-+	ASSERT_EQ(optq.count, 2, "count");
-+	ASSERT_EQ(optq.revision, 3, "revision");
-+	ASSERT_EQ(optq.prog_ids[0], pid2, "prog_ids[0]");
-+	ASSERT_EQ(optq.prog_ids[1], pid1, "prog_ids[1]");
-+	ASSERT_EQ(optq.prog_ids[2], 0, "prog_ids[2]");
-+
-+	tc_skel_reset_all_seen(skel);
-+	ASSERT_EQ(send_icmp(), 0, "icmp_pkt");
-+
-+	ASSERT_EQ(skel->bss->seen_tc1, true, "seen_tc1");
-+	ASSERT_EQ(skel->bss->seen_eth, true, "seen_eth");
-+	ASSERT_EQ(skel->bss->seen_tc2, true, "seen_tc2");
-+
-+cleanup_fd2:
-+	err = bpf_prog_detach_opts(fd2, ifindex, target, &optd);
-+	ASSERT_OK(err, "prog_detach");
-+	assert_mprog_count_ifindex(ifindex, target, 1);
-+cleanup_fd1:
-+	err = bpf_prog_detach_opts(fd1, ifindex, target, &optd);
-+	ASSERT_OK(err, "prog_detach");
-+	assert_mprog_count_ifindex(ifindex, target, 0);
-+cleanup:
-+	test_tc_link__destroy(skel);
-+
-+	assert_mprog_count_ifindex(ifindex, target, 0);
-+	destroy_netkit();
-+}
-+
-+void serial_test_tc_netkit_multi_opts(void)
-+{
-+	serial_test_tc_netkit_multi_opts_target(NETKIT_L2, BPF_NETKIT_PRIMARY);
-+	serial_test_tc_netkit_multi_opts_target(NETKIT_L3, BPF_NETKIT_PRIMARY);
-+	serial_test_tc_netkit_multi_opts_target(NETKIT_L2, BPF_NETKIT_PEER);
-+	serial_test_tc_netkit_multi_opts_target(NETKIT_L3, BPF_NETKIT_PEER);
-+}
-+
-+void serial_test_tc_netkit_device(void)
-+{
-+	LIBBPF_OPTS(bpf_prog_query_opts, optq);
-+	LIBBPF_OPTS(bpf_netkit_opts, optl);
-+	__u32 prog_ids[2], link_ids[2];
-+	__u32 pid1, pid2, lid1;
-+	struct test_tc_link *skel;
-+	struct bpf_link *link;
-+	int err, ifindex, ifindex2;
-+
-+	err = create_netkit(NETKIT_L3, NETKIT_PASS, NETKIT_PASS,
-+			    &ifindex, true);
-+	if (err)
-+		return;
-+
-+	ifindex2 = if_nametoindex(netkit_peer);
-+	ASSERT_NEQ(ifindex, ifindex2, "ifindex_1_2");
-+
-+	skel = test_tc_link__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		goto cleanup;
-+
-+	ASSERT_EQ(bpf_program__set_expected_attach_type(skel->progs.tc1,
-+		  BPF_NETKIT_PRIMARY), 0, "tc1_attach_type");
-+	ASSERT_EQ(bpf_program__set_expected_attach_type(skel->progs.tc2,
-+		  BPF_NETKIT_PEER), 0, "tc2_attach_type");
-+	ASSERT_EQ(bpf_program__set_expected_attach_type(skel->progs.tc3,
-+		  BPF_NETKIT_PRIMARY), 0, "tc3_attach_type");
-+
-+	err = test_tc_link__load(skel);
-+	if (!ASSERT_OK(err, "skel_load"))
-+		goto cleanup;
-+
-+	pid1 = id_from_prog_fd(bpf_program__fd(skel->progs.tc1));
-+	pid2 = id_from_prog_fd(bpf_program__fd(skel->progs.tc2));
-+
-+	ASSERT_NEQ(pid1, pid2, "prog_ids_1_2");
-+
-+	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PRIMARY, 0);
-+	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PEER, 0);
-+
-+	ASSERT_EQ(skel->bss->seen_tc1, false, "seen_tc1");
-+	ASSERT_EQ(skel->bss->seen_tc2, false, "seen_tc2");
-+
-+	link = bpf_program__attach_netkit(skel->progs.tc1, ifindex, &optl);
-+	if (!ASSERT_OK_PTR(link, "link_attach"))
-+		goto cleanup;
-+
-+	skel->links.tc1 = link;
-+
-+	lid1 = id_from_link_fd(bpf_link__fd(skel->links.tc1));
-+
-+	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PRIMARY, 1);
-+	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PEER, 0);
-+
-+	optq.prog_ids = prog_ids;
-+	optq.link_ids = link_ids;
-+
-+	memset(prog_ids, 0, sizeof(prog_ids));
-+	memset(link_ids, 0, sizeof(link_ids));
-+	optq.count = ARRAY_SIZE(prog_ids);
-+
-+	err = bpf_prog_query_opts(ifindex, BPF_NETKIT_PRIMARY, &optq);
-+	if (!ASSERT_OK(err, "prog_query"))
-+		goto cleanup;
-+
-+	ASSERT_EQ(optq.count, 1, "count");
-+	ASSERT_EQ(optq.revision, 2, "revision");
-+	ASSERT_EQ(optq.prog_ids[0], pid1, "prog_ids[0]");
-+	ASSERT_EQ(optq.link_ids[0], lid1, "link_ids[0]");
-+	ASSERT_EQ(optq.prog_ids[1], 0, "prog_ids[1]");
-+	ASSERT_EQ(optq.link_ids[1], 0, "link_ids[1]");
-+
-+	tc_skel_reset_all_seen(skel);
-+	ASSERT_EQ(send_icmp(), 0, "icmp_pkt");
-+
-+	ASSERT_EQ(skel->bss->seen_tc1, true, "seen_tc1");
-+	ASSERT_EQ(skel->bss->seen_tc2, false, "seen_tc2");
-+
-+	memset(prog_ids, 0, sizeof(prog_ids));
-+	memset(link_ids, 0, sizeof(link_ids));
-+	optq.count = ARRAY_SIZE(prog_ids);
-+
-+	err = bpf_prog_query_opts(ifindex2, BPF_NETKIT_PRIMARY, &optq);
-+	ASSERT_EQ(err, -EACCES, "prog_query_should_fail");
-+
-+	err = bpf_prog_query_opts(ifindex2, BPF_NETKIT_PEER, &optq);
-+	ASSERT_EQ(err, -EACCES, "prog_query_should_fail");
-+
-+	link = bpf_program__attach_netkit(skel->progs.tc2, ifindex2, &optl);
-+	if (!ASSERT_ERR_PTR(link, "link_attach_should_fail")) {
-+		bpf_link__destroy(link);
-+		goto cleanup;
++	struct netkit *nk = netkit_priv(dev);
++	enum netkit_action ret = READ_ONCE(nk->policy);
++	netdev_tx_t ret_dev = NET_XMIT_SUCCESS;
++	const struct bpf_mprog_entry *entry;
++	struct net_device *peer;
++
++	rcu_read_lock();
++	peer = rcu_dereference(nk->peer);
++	if (unlikely(!peer || !(peer->flags & IFF_UP) ||
++		     !pskb_may_pull(skb, ETH_HLEN) ||
++		     skb_orphan_frags(skb, GFP_ATOMIC)))
++		goto drop;
++	netkit_prep_forward(skb, !net_eq(dev_net(dev), dev_net(peer)));
++	skb->dev = peer;
++	entry = rcu_dereference(nk->active);
++	if (entry)
++		ret = netkit_run(entry, skb, ret);
++	switch (ret) {
++	case NETKIT_NEXT:
++	case NETKIT_PASS:
++		skb->protocol = eth_type_trans(skb, skb->dev);
++		skb_postpull_rcsum(skb, eth_hdr(skb), ETH_HLEN);
++		__netif_rx(skb);
++		break;
++	case NETKIT_REDIRECT:
++		skb_do_redirect(skb);
++		break;
++	case NETKIT_DROP:
++	default:
++drop:
++		kfree_skb(skb);
++		dev_core_stats_tx_dropped_inc(dev);
++		ret_dev = NET_XMIT_DROP;
++		break;
 +	}
++	rcu_read_unlock();
++	return ret_dev;
++}
 +
-+	link = bpf_program__attach_netkit(skel->progs.tc3, ifindex2, &optl);
-+	if (!ASSERT_ERR_PTR(link, "link_attach_should_fail")) {
-+		bpf_link__destroy(link);
-+		goto cleanup;
++static int netkit_open(struct net_device *dev)
++{
++	struct netkit *nk = netkit_priv(dev);
++	struct net_device *peer = rtnl_dereference(nk->peer);
++
++	if (!peer)
++		return -ENOTCONN;
++	if (peer->flags & IFF_UP) {
++		netif_carrier_on(dev);
++		netif_carrier_on(peer);
 +	}
-+
-+	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PRIMARY, 1);
-+	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PEER, 0);
-+cleanup:
-+	test_tc_link__destroy(skel);
-+
-+	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PRIMARY, 0);
-+	assert_mprog_count_ifindex(ifindex, BPF_NETKIT_PEER, 0);
-+	destroy_netkit();
++	return 0;
 +}
 +
-+static void serial_test_tc_netkit_neigh_links_target(int mode, int target)
++static int netkit_close(struct net_device *dev)
 +{
-+	LIBBPF_OPTS(bpf_prog_query_opts, optq);
-+	LIBBPF_OPTS(bpf_netkit_opts, optl);
-+	__u32 prog_ids[2], link_ids[2];
-+	__u32 pid1, lid1;
-+	struct test_tc_link *skel;
-+	struct bpf_link *link;
-+	int err, ifindex;
++	struct netkit *nk = netkit_priv(dev);
++	struct net_device *peer = rtnl_dereference(nk->peer);
 +
-+	err = create_netkit(mode, NETKIT_PASS, NETKIT_PASS,
-+			    &ifindex, false);
-+	if (err)
-+		return;
-+
-+	skel = test_tc_link__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		goto cleanup;
-+
-+	ASSERT_EQ(bpf_program__set_expected_attach_type(skel->progs.tc1,
-+		  BPF_NETKIT_PRIMARY), 0, "tc1_attach_type");
-+
-+	err = test_tc_link__load(skel);
-+	if (!ASSERT_OK(err, "skel_load"))
-+		goto cleanup;
-+
-+	pid1 = id_from_prog_fd(bpf_program__fd(skel->progs.tc1));
-+
-+	assert_mprog_count_ifindex(ifindex, target, 0);
-+
-+	ASSERT_EQ(skel->bss->seen_tc1, false, "seen_tc1");
-+	ASSERT_EQ(skel->bss->seen_eth, false, "seen_eth");
-+
-+	link = bpf_program__attach_netkit(skel->progs.tc1, ifindex, &optl);
-+	if (!ASSERT_OK_PTR(link, "link_attach"))
-+		goto cleanup;
-+
-+	skel->links.tc1 = link;
-+
-+	lid1 = id_from_link_fd(bpf_link__fd(skel->links.tc1));
-+
-+	assert_mprog_count_ifindex(ifindex, target, 1);
-+
-+	optq.prog_ids = prog_ids;
-+	optq.link_ids = link_ids;
-+
-+	memset(prog_ids, 0, sizeof(prog_ids));
-+	memset(link_ids, 0, sizeof(link_ids));
-+	optq.count = ARRAY_SIZE(prog_ids);
-+
-+	err = bpf_prog_query_opts(ifindex, target, &optq);
-+	if (!ASSERT_OK(err, "prog_query"))
-+		goto cleanup;
-+
-+	ASSERT_EQ(optq.count, 1, "count");
-+	ASSERT_EQ(optq.revision, 2, "revision");
-+	ASSERT_EQ(optq.prog_ids[0], pid1, "prog_ids[0]");
-+	ASSERT_EQ(optq.link_ids[0], lid1, "link_ids[0]");
-+	ASSERT_EQ(optq.prog_ids[1], 0, "prog_ids[1]");
-+	ASSERT_EQ(optq.link_ids[1], 0, "link_ids[1]");
-+
-+	tc_skel_reset_all_seen(skel);
-+	ASSERT_EQ(__send_icmp(ping_addr_noneigh), 0, "icmp_pkt");
-+
-+	ASSERT_EQ(skel->bss->seen_tc1, true /* L2: ARP */, "seen_tc1");
-+	ASSERT_EQ(skel->bss->seen_eth, mode == NETKIT_L3, "seen_eth");
-+cleanup:
-+	test_tc_link__destroy(skel);
-+
-+	assert_mprog_count_ifindex(ifindex, target, 0);
-+	destroy_netkit();
++	netif_carrier_off(dev);
++	if (peer)
++		netif_carrier_off(peer);
++	return 0;
 +}
 +
-+void serial_test_tc_netkit_neigh_links(void)
++static int netkit_get_iflink(const struct net_device *dev)
 +{
-+	serial_test_tc_netkit_neigh_links_target(NETKIT_L2, BPF_NETKIT_PRIMARY);
-+	serial_test_tc_netkit_neigh_links_target(NETKIT_L3, BPF_NETKIT_PRIMARY);
++	struct netkit *nk = netkit_priv(dev);
++	struct net_device *peer;
++	int iflink = 0;
++
++	rcu_read_lock();
++	peer = rcu_dereference(nk->peer);
++	if (peer)
++		iflink = peer->ifindex;
++	rcu_read_unlock();
++	return iflink;
 +}
-diff --git a/tools/testing/selftests/bpf/progs/test_tc_link.c b/tools/testing/selftests/bpf/progs/test_tc_link.c
-index 30e7124c49a1..992400acb957 100644
---- a/tools/testing/selftests/bpf/progs/test_tc_link.c
-+++ b/tools/testing/selftests/bpf/progs/test_tc_link.c
-@@ -1,7 +1,11 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (c) 2023 Isovalent */
- #include <stdbool.h>
 +
- #include <linux/bpf.h>
-+#include <linux/if_ether.h>
++static void netkit_set_multicast(struct net_device *dev)
++{
++	/* Nothing to do, we receive whatever gets pushed to us! */
++}
 +
-+#include <bpf/bpf_endian.h>
- #include <bpf/bpf_helpers.h>
- 
- char LICENSE[] SEC("license") = "GPL";
-@@ -12,10 +16,19 @@ bool seen_tc3;
- bool seen_tc4;
- bool seen_tc5;
- bool seen_tc6;
-+bool seen_eth;
- 
- SEC("tc/ingress")
- int tc1(struct __sk_buff *skb)
- {
-+	struct ethhdr eth = {};
++static void netkit_set_headroom(struct net_device *dev, int headroom)
++{
++	struct netkit *nk = netkit_priv(dev), *nk2;
++	struct net_device *peer;
 +
-+	if (skb->protocol != __bpf_constant_htons(ETH_P_IP))
++	if (headroom < 0)
++		headroom = NET_SKB_PAD;
++
++	rcu_read_lock();
++	peer = rcu_dereference(nk->peer);
++	if (unlikely(!peer))
 +		goto out;
-+	if (bpf_skb_load_bytes(skb, 0, &eth, sizeof(eth)))
-+		goto out;
-+	seen_eth = eth.h_proto == bpf_htons(ETH_P_IP);
++
++	nk2 = netkit_priv(peer);
++	nk->headroom = headroom;
++	headroom = max(nk->headroom, nk2->headroom);
++
++	peer->needed_headroom = headroom;
++	dev->needed_headroom = headroom;
 +out:
- 	seen_tc1 = true;
- 	return TCX_NEXT;
- }
++	rcu_read_unlock();
++}
++
++static struct net_device *netkit_peer_dev(struct net_device *dev)
++{
++	return rcu_dereference(netkit_priv(dev)->peer);
++}
++
++static void netkit_uninit(struct net_device *dev);
++
++static const struct net_device_ops netkit_netdev_ops = {
++	.ndo_open		= netkit_open,
++	.ndo_stop		= netkit_close,
++	.ndo_start_xmit		= netkit_xmit,
++	.ndo_set_rx_mode	= netkit_set_multicast,
++	.ndo_set_rx_headroom	= netkit_set_headroom,
++	.ndo_get_iflink		= netkit_get_iflink,
++	.ndo_get_peer_dev	= netkit_peer_dev,
++	.ndo_uninit		= netkit_uninit,
++	.ndo_features_check	= passthru_features_check,
++};
++
++static void netkit_get_drvinfo(struct net_device *dev,
++			       struct ethtool_drvinfo *info)
++{
++	strscpy(info->driver, DRV_NAME, sizeof(info->driver));
++}
++
++static const struct ethtool_ops netkit_ethtool_ops = {
++	.get_drvinfo		= netkit_get_drvinfo,
++};
++
++static void netkit_setup(struct net_device *dev)
++{
++	static const netdev_features_t netkit_features_hw_vlan =
++		NETIF_F_HW_VLAN_CTAG_TX |
++		NETIF_F_HW_VLAN_CTAG_RX |
++		NETIF_F_HW_VLAN_STAG_TX |
++		NETIF_F_HW_VLAN_STAG_RX;
++	static const netdev_features_t netkit_features =
++		netkit_features_hw_vlan |
++		NETIF_F_SG |
++		NETIF_F_FRAGLIST |
++		NETIF_F_HW_CSUM |
++		NETIF_F_RXCSUM |
++		NETIF_F_SCTP_CRC |
++		NETIF_F_HIGHDMA |
++		NETIF_F_GSO_SOFTWARE |
++		NETIF_F_GSO_ENCAP_ALL;
++
++	ether_setup(dev);
++	dev->max_mtu = ETH_MAX_MTU;
++
++	dev->flags |= IFF_NOARP;
++	dev->priv_flags &= ~IFF_TX_SKB_SHARING;
++	dev->priv_flags |= IFF_LIVE_ADDR_CHANGE;
++	dev->priv_flags |= IFF_PHONY_HEADROOM;
++	dev->priv_flags |= IFF_NO_QUEUE;
++
++	dev->ethtool_ops = &netkit_ethtool_ops;
++	dev->netdev_ops  = &netkit_netdev_ops;
++
++	dev->features |= netkit_features | NETIF_F_LLTX;
++	dev->hw_features = netkit_features;
++	dev->hw_enc_features = netkit_features;
++	dev->mpls_features = NETIF_F_HW_CSUM | NETIF_F_GSO_SOFTWARE;
++	dev->vlan_features = dev->features & ~netkit_features_hw_vlan;
++
++	dev->needs_free_netdev = true;
++
++	netif_set_tso_max_size(dev, GSO_MAX_SIZE);
++}
++
++static struct net *netkit_get_link_net(const struct net_device *dev)
++{
++	struct netkit *nk = netkit_priv(dev);
++	struct net_device *peer = rtnl_dereference(nk->peer);
++
++	return peer ? dev_net(peer) : dev_net(dev);
++}
++
++static int netkit_check_policy(int policy, struct nlattr *tb,
++			       struct netlink_ext_ack *extack)
++{
++	switch (policy) {
++	case NETKIT_PASS:
++	case NETKIT_DROP:
++		return 0;
++	default:
++		NL_SET_ERR_MSG_ATTR(extack, tb,
++				    "Provided default xmit policy not supported");
++		return -EINVAL;
++	}
++}
++
++static int netkit_check_mode(int mode, struct nlattr *tb,
++			     struct netlink_ext_ack *extack)
++{
++	switch (mode) {
++	case NETKIT_L2:
++	case NETKIT_L3:
++		return 0;
++	default:
++		NL_SET_ERR_MSG_ATTR(extack, tb,
++				    "Provided device mode can only be L2 or L3");
++		return -EINVAL;
++	}
++}
++
++static int netkit_validate(struct nlattr *tb[], struct nlattr *data[],
++			   struct netlink_ext_ack *extack)
++{
++	struct nlattr *attr = tb[IFLA_ADDRESS];
++
++	if (!attr)
++		return 0;
++	NL_SET_ERR_MSG_ATTR(extack, attr,
++			    "Setting Ethernet address is not supported");
++	return -EOPNOTSUPP;
++}
++
++static struct rtnl_link_ops netkit_link_ops;
++
++static int netkit_new_link(struct net *src_net, struct net_device *dev,
++			   struct nlattr *tb[], struct nlattr *data[],
++			   struct netlink_ext_ack *extack)
++{
++	struct nlattr *peer_tb[IFLA_MAX + 1], **tbp = tb, *attr;
++	enum netkit_action default_prim = NETKIT_PASS;
++	enum netkit_action default_peer = NETKIT_PASS;
++	enum netkit_mode mode = NETKIT_L3;
++	unsigned char ifname_assign_type;
++	struct ifinfomsg *ifmp = NULL;
++	struct net_device *peer;
++	char ifname[IFNAMSIZ];
++	struct netkit *nk;
++	struct net *net;
++	int err;
++
++	if (data) {
++		if (data[IFLA_NETKIT_MODE]) {
++			attr = data[IFLA_NETKIT_MODE];
++			mode = nla_get_u32(attr);
++			err = netkit_check_mode(mode, attr, extack);
++			if (err < 0)
++				return err;
++		}
++		if (data[IFLA_NETKIT_PEER_INFO]) {
++			attr = data[IFLA_NETKIT_PEER_INFO];
++			ifmp = nla_data(attr);
++			err = rtnl_nla_parse_ifinfomsg(peer_tb, attr, extack);
++			if (err < 0)
++				return err;
++			err = netkit_validate(peer_tb, NULL, extack);
++			if (err < 0)
++				return err;
++			tbp = peer_tb;
++		}
++		if (data[IFLA_NETKIT_POLICY]) {
++			attr = data[IFLA_NETKIT_POLICY];
++			default_prim = nla_get_u32(attr);
++			err = netkit_check_policy(default_prim, attr, extack);
++			if (err < 0)
++				return err;
++		}
++		if (data[IFLA_NETKIT_PEER_POLICY]) {
++			attr = data[IFLA_NETKIT_PEER_POLICY];
++			default_peer = nla_get_u32(attr);
++			err = netkit_check_policy(default_peer, attr, extack);
++			if (err < 0)
++				return err;
++		}
++	}
++
++	if (ifmp && tbp[IFLA_IFNAME]) {
++		nla_strscpy(ifname, tbp[IFLA_IFNAME], IFNAMSIZ);
++		ifname_assign_type = NET_NAME_USER;
++	} else {
++		strscpy(ifname, "nk%d", IFNAMSIZ);
++		ifname_assign_type = NET_NAME_ENUM;
++	}
++
++	net = rtnl_link_get_net(src_net, tbp);
++	if (IS_ERR(net))
++		return PTR_ERR(net);
++
++	peer = rtnl_create_link(net, ifname, ifname_assign_type,
++				&netkit_link_ops, tbp, extack);
++	if (IS_ERR(peer)) {
++		put_net(net);
++		return PTR_ERR(peer);
++	}
++
++	netif_inherit_tso_max(peer, dev);
++
++	if (mode == NETKIT_L2)
++		eth_hw_addr_random(peer);
++	if (ifmp && dev->ifindex)
++		peer->ifindex = ifmp->ifi_index;
++
++	nk = netkit_priv(peer);
++	nk->primary = false;
++	nk->policy = default_peer;
++	nk->mode = mode;
++	bpf_mprog_bundle_init(&nk->bundle);
++	RCU_INIT_POINTER(nk->active, NULL);
++	RCU_INIT_POINTER(nk->peer, NULL);
++
++	err = register_netdevice(peer);
++	put_net(net);
++	if (err < 0)
++		goto err_register_peer;
++	netif_carrier_off(peer);
++	if (mode == NETKIT_L2)
++		dev_change_flags(peer, peer->flags & ~IFF_NOARP, NULL);
++
++	err = rtnl_configure_link(peer, NULL, 0, NULL);
++	if (err < 0)
++		goto err_configure_peer;
++
++	if (mode == NETKIT_L2)
++		eth_hw_addr_random(dev);
++	if (tb[IFLA_IFNAME])
++		nla_strscpy(dev->name, tb[IFLA_IFNAME], IFNAMSIZ);
++	else
++		strscpy(dev->name, "nk%d", IFNAMSIZ);
++
++	nk = netkit_priv(dev);
++	nk->primary = true;
++	nk->policy = default_prim;
++	nk->mode = mode;
++	bpf_mprog_bundle_init(&nk->bundle);
++	RCU_INIT_POINTER(nk->active, NULL);
++	RCU_INIT_POINTER(nk->peer, NULL);
++
++	err = register_netdevice(dev);
++	if (err < 0)
++		goto err_configure_peer;
++	netif_carrier_off(dev);
++	if (mode == NETKIT_L2)
++		dev_change_flags(dev, dev->flags & ~IFF_NOARP, NULL);
++
++	rcu_assign_pointer(netkit_priv(dev)->peer, peer);
++	rcu_assign_pointer(netkit_priv(peer)->peer, dev);
++	return 0;
++err_configure_peer:
++	unregister_netdevice(peer);
++	return err;
++err_register_peer:
++	free_netdev(peer);
++	return err;
++}
++
++static struct bpf_mprog_entry *netkit_entry_fetch(struct net_device *dev,
++						  bool bundle_fallback)
++{
++	struct netkit *nk = netkit_priv(dev);
++	struct bpf_mprog_entry *entry;
++
++	ASSERT_RTNL();
++	entry = rcu_dereference_rtnl(nk->active);
++	if (entry)
++		return entry;
++	if (bundle_fallback)
++		return &nk->bundle.a;
++	return NULL;
++}
++
++static void netkit_entry_update(struct net_device *dev,
++				struct bpf_mprog_entry *entry)
++{
++	struct netkit *nk = netkit_priv(dev);
++
++	ASSERT_RTNL();
++	rcu_assign_pointer(nk->active, entry);
++}
++
++static void netkit_entry_sync(void)
++{
++	synchronize_rcu();
++}
++
++static struct net_device *netkit_dev_fetch(struct net *net, u32 ifindex, u32 which)
++{
++	struct net_device *dev;
++	struct netkit *nk;
++
++	ASSERT_RTNL();
++
++	switch (which) {
++	case BPF_NETKIT_PRIMARY:
++	case BPF_NETKIT_PEER:
++		break;
++	default:
++		return ERR_PTR(-EINVAL);
++	}
++
++	dev = __dev_get_by_index(net, ifindex);
++	if (!dev)
++		return ERR_PTR(-ENODEV);
++	if (dev->netdev_ops != &netkit_netdev_ops)
++		return ERR_PTR(-ENXIO);
++
++	nk = netkit_priv(dev);
++	if (!nk->primary)
++		return ERR_PTR(-EACCES);
++	if (which == BPF_NETKIT_PEER) {
++		dev = rcu_dereference_rtnl(nk->peer);
++		if (!dev)
++			return ERR_PTR(-ENODEV);
++	}
++	return dev;
++}
++
++int netkit_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog)
++{
++	struct bpf_mprog_entry *entry, *entry_new;
++	struct bpf_prog *replace_prog = NULL;
++	struct net_device *dev;
++	int ret;
++
++	rtnl_lock();
++	dev = netkit_dev_fetch(current->nsproxy->net_ns, attr->target_ifindex,
++			       attr->attach_type);
++	if (IS_ERR(dev)) {
++		ret = PTR_ERR(dev);
++		goto out;
++	}
++	entry = netkit_entry_fetch(dev, true);
++	if (attr->attach_flags & BPF_F_REPLACE) {
++		replace_prog = bpf_prog_get_type(attr->replace_bpf_fd,
++						 prog->type);
++		if (IS_ERR(replace_prog)) {
++			ret = PTR_ERR(replace_prog);
++			replace_prog = NULL;
++			goto out;
++		}
++	}
++	ret = bpf_mprog_attach(entry, &entry_new, prog, NULL, replace_prog,
++			       attr->attach_flags, attr->relative_fd,
++			       attr->expected_revision);
++	if (!ret) {
++		if (entry != entry_new) {
++			netkit_entry_update(dev, entry_new);
++			netkit_entry_sync();
++		}
++		bpf_mprog_commit(entry);
++	}
++out:
++	if (replace_prog)
++		bpf_prog_put(replace_prog);
++	rtnl_unlock();
++	return ret;
++}
++
++int netkit_prog_detach(const union bpf_attr *attr, struct bpf_prog *prog)
++{
++	struct bpf_mprog_entry *entry, *entry_new;
++	struct net_device *dev;
++	int ret;
++
++	rtnl_lock();
++	dev = netkit_dev_fetch(current->nsproxy->net_ns, attr->target_ifindex,
++			       attr->attach_type);
++	if (IS_ERR(dev)) {
++		ret = PTR_ERR(dev);
++		goto out;
++	}
++	entry = netkit_entry_fetch(dev, false);
++	if (!entry) {
++		ret = -ENOENT;
++		goto out;
++	}
++	ret = bpf_mprog_detach(entry, &entry_new, prog, NULL, attr->attach_flags,
++			       attr->relative_fd, attr->expected_revision);
++	if (!ret) {
++		if (!bpf_mprog_total(entry_new))
++			entry_new = NULL;
++		netkit_entry_update(dev, entry_new);
++		netkit_entry_sync();
++		bpf_mprog_commit(entry);
++	}
++out:
++	rtnl_unlock();
++	return ret;
++}
++
++int netkit_prog_query(const union bpf_attr *attr, union bpf_attr __user *uattr)
++{
++	struct net_device *dev;
++	int ret;
++
++	rtnl_lock();
++	dev = netkit_dev_fetch(current->nsproxy->net_ns,
++			       attr->query.target_ifindex,
++			       attr->query.attach_type);
++	if (IS_ERR(dev)) {
++		ret = PTR_ERR(dev);
++		goto out;
++	}
++	ret = bpf_mprog_query(attr, uattr, netkit_entry_fetch(dev, false));
++out:
++	rtnl_unlock();
++	return ret;
++}
++
++static struct netkit_link *netkit_link(const struct bpf_link *link)
++{
++	return container_of(link, struct netkit_link, link);
++}
++
++static int netkit_link_prog_attach(struct bpf_link *link, u32 flags,
++				   u32 id_or_fd, u64 revision)
++{
++	struct netkit_link *nkl = netkit_link(link);
++	struct bpf_mprog_entry *entry, *entry_new;
++	struct net_device *dev = nkl->dev;
++	int ret;
++
++	ASSERT_RTNL();
++	entry = netkit_entry_fetch(dev, true);
++	ret = bpf_mprog_attach(entry, &entry_new, link->prog, link, NULL, flags,
++			       id_or_fd, revision);
++	if (!ret) {
++		if (entry != entry_new) {
++			netkit_entry_update(dev, entry_new);
++			netkit_entry_sync();
++		}
++		bpf_mprog_commit(entry);
++	}
++	return ret;
++}
++
++static void netkit_link_release(struct bpf_link *link)
++{
++	struct netkit_link *nkl = netkit_link(link);
++	struct bpf_mprog_entry *entry, *entry_new;
++	struct net_device *dev;
++	int ret = 0;
++
++	rtnl_lock();
++	dev = nkl->dev;
++	if (!dev)
++		goto out;
++	entry = netkit_entry_fetch(dev, false);
++	if (!entry) {
++		ret = -ENOENT;
++		goto out;
++	}
++	ret = bpf_mprog_detach(entry, &entry_new, link->prog, link, 0, 0, 0);
++	if (!ret) {
++		if (!bpf_mprog_total(entry_new))
++			entry_new = NULL;
++		netkit_entry_update(dev, entry_new);
++		netkit_entry_sync();
++		bpf_mprog_commit(entry);
++		nkl->dev = NULL;
++	}
++out:
++	WARN_ON_ONCE(ret);
++	rtnl_unlock();
++}
++
++static int netkit_link_update(struct bpf_link *link, struct bpf_prog *nprog,
++			      struct bpf_prog *oprog)
++{
++	struct netkit_link *nkl = netkit_link(link);
++	struct bpf_mprog_entry *entry, *entry_new;
++	struct net_device *dev;
++	int ret = 0;
++
++	rtnl_lock();
++	dev = nkl->dev;
++	if (!dev) {
++		ret = -ENOLINK;
++		goto out;
++	}
++	if (oprog && link->prog != oprog) {
++		ret = -EPERM;
++		goto out;
++	}
++	oprog = link->prog;
++	if (oprog == nprog) {
++		bpf_prog_put(nprog);
++		goto out;
++	}
++	entry = netkit_entry_fetch(dev, false);
++	if (!entry) {
++		ret = -ENOENT;
++		goto out;
++	}
++	ret = bpf_mprog_attach(entry, &entry_new, nprog, link, oprog,
++			       BPF_F_REPLACE | BPF_F_ID,
++			       link->prog->aux->id, 0);
++	if (!ret) {
++		WARN_ON_ONCE(entry != entry_new);
++		oprog = xchg(&link->prog, nprog);
++		bpf_prog_put(oprog);
++		bpf_mprog_commit(entry);
++	}
++out:
++	rtnl_unlock();
++	return ret;
++}
++
++static void netkit_link_dealloc(struct bpf_link *link)
++{
++	kfree(netkit_link(link));
++}
++
++static void netkit_link_fdinfo(const struct bpf_link *link, struct seq_file *seq)
++{
++	const struct netkit_link *nkl = netkit_link(link);
++	u32 ifindex = 0;
++
++	rtnl_lock();
++	if (nkl->dev)
++		ifindex = nkl->dev->ifindex;
++	rtnl_unlock();
++
++	seq_printf(seq, "ifindex:\t%u\n", ifindex);
++	seq_printf(seq, "attach_type:\t%u (%s)\n",
++		   nkl->location,
++		   nkl->location == BPF_NETKIT_PRIMARY ? "primary" : "peer");
++}
++
++static int netkit_link_fill_info(const struct bpf_link *link,
++				 struct bpf_link_info *info)
++{
++	const struct netkit_link *nkl = netkit_link(link);
++	u32 ifindex = 0;
++
++	rtnl_lock();
++	if (nkl->dev)
++		ifindex = nkl->dev->ifindex;
++	rtnl_unlock();
++
++	info->netkit.ifindex = ifindex;
++	info->netkit.attach_type = nkl->location;
++	return 0;
++}
++
++static int netkit_link_detach(struct bpf_link *link)
++{
++	netkit_link_release(link);
++	return 0;
++}
++
++static const struct bpf_link_ops netkit_link_lops = {
++	.release	= netkit_link_release,
++	.detach		= netkit_link_detach,
++	.dealloc	= netkit_link_dealloc,
++	.update_prog	= netkit_link_update,
++	.show_fdinfo	= netkit_link_fdinfo,
++	.fill_link_info	= netkit_link_fill_info,
++};
++
++static int netkit_link_init(struct netkit_link *nkl,
++			    struct bpf_link_primer *link_primer,
++			    const union bpf_attr *attr,
++			    struct net_device *dev,
++			    struct bpf_prog *prog)
++{
++	bpf_link_init(&nkl->link, BPF_LINK_TYPE_NETKIT,
++		      &netkit_link_lops, prog);
++	nkl->location = attr->link_create.attach_type;
++	nkl->dev = dev;
++	return bpf_link_prime(&nkl->link, link_primer);
++}
++
++int netkit_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
++{
++	struct bpf_link_primer link_primer;
++	struct netkit_link *nkl;
++	struct net_device *dev;
++	int ret;
++
++	rtnl_lock();
++	dev = netkit_dev_fetch(current->nsproxy->net_ns,
++			       attr->link_create.target_ifindex,
++			       attr->link_create.attach_type);
++	if (IS_ERR(dev)) {
++		ret = PTR_ERR(dev);
++		goto out;
++	}
++	nkl = kzalloc(sizeof(*nkl), GFP_KERNEL_ACCOUNT);
++	if (!nkl) {
++		ret = -ENOMEM;
++		goto out;
++	}
++	ret = netkit_link_init(nkl, &link_primer, attr, dev, prog);
++	if (ret) {
++		kfree(nkl);
++		goto out;
++	}
++	ret = netkit_link_prog_attach(&nkl->link,
++				      attr->link_create.flags,
++				      attr->link_create.netkit.relative_fd,
++				      attr->link_create.netkit.expected_revision);
++	if (ret) {
++		nkl->dev = NULL;
++		bpf_link_cleanup(&link_primer);
++		goto out;
++	}
++	ret = bpf_link_settle(&link_primer);
++out:
++	rtnl_unlock();
++	return ret;
++}
++
++static void netkit_release_all(struct net_device *dev)
++{
++	struct bpf_mprog_entry *entry;
++	struct bpf_tuple tuple = {};
++	struct bpf_mprog_fp *fp;
++	struct bpf_mprog_cp *cp;
++
++	entry = netkit_entry_fetch(dev, false);
++	if (!entry)
++		return;
++	netkit_entry_update(dev, NULL);
++	netkit_entry_sync();
++	bpf_mprog_foreach_tuple(entry, fp, cp, tuple) {
++		if (tuple.link)
++			netkit_link(tuple.link)->dev = NULL;
++		else
++			bpf_prog_put(tuple.prog);
++	}
++}
++
++static void netkit_uninit(struct net_device *dev)
++{
++	netkit_release_all(dev);
++}
++
++static void netkit_del_link(struct net_device *dev, struct list_head *head)
++{
++	struct netkit *nk = netkit_priv(dev);
++	struct net_device *peer = rtnl_dereference(nk->peer);
++
++	RCU_INIT_POINTER(nk->peer, NULL);
++	unregister_netdevice_queue(dev, head);
++	if (peer) {
++		nk = netkit_priv(peer);
++		RCU_INIT_POINTER(nk->peer, NULL);
++		unregister_netdevice_queue(peer, head);
++	}
++}
++
++static int netkit_change_link(struct net_device *dev, struct nlattr *tb[],
++			      struct nlattr *data[],
++			      struct netlink_ext_ack *extack)
++{
++	struct netkit *nk = netkit_priv(dev);
++	struct net_device *peer = rtnl_dereference(nk->peer);
++	enum netkit_action policy;
++	struct nlattr *attr;
++	int err;
++
++	if (!nk->primary) {
++		NL_SET_ERR_MSG(extack,
++			       "netkit link settings can be changed only through the primary device");
++		return -EACCES;
++	}
++
++	if (data[IFLA_NETKIT_MODE]) {
++		NL_SET_ERR_MSG_ATTR(extack, data[IFLA_NETKIT_MODE],
++				    "netkit link operating mode cannot be changed after device creation");
++		return -EACCES;
++	}
++
++	if (data[IFLA_NETKIT_POLICY]) {
++		attr = data[IFLA_NETKIT_POLICY];
++		policy = nla_get_u32(attr);
++		err = netkit_check_policy(policy, attr, extack);
++		if (err)
++			return err;
++		WRITE_ONCE(nk->policy, policy);
++	}
++
++	if (data[IFLA_NETKIT_PEER_POLICY]) {
++		err = -EOPNOTSUPP;
++		attr = data[IFLA_NETKIT_PEER_POLICY];
++		policy = nla_get_u32(attr);
++		if (peer)
++			err = netkit_check_policy(policy, attr, extack);
++		if (err)
++			return err;
++		nk = netkit_priv(peer);
++		WRITE_ONCE(nk->policy, policy);
++	}
++
++	return 0;
++}
++
++static size_t netkit_get_size(const struct net_device *dev)
++{
++	return nla_total_size(sizeof(u32)) + /* IFLA_NETKIT_POLICY */
++	       nla_total_size(sizeof(u32)) + /* IFLA_NETKIT_PEER_POLICY */
++	       nla_total_size(sizeof(u8))  + /* IFLA_NETKIT_PRIMARY */
++	       nla_total_size(sizeof(u32)) + /* IFLA_NETKIT_MODE */
++	       0;
++}
++
++static int netkit_fill_info(struct sk_buff *skb, const struct net_device *dev)
++{
++	struct netkit *nk = netkit_priv(dev);
++	struct net_device *peer = rtnl_dereference(nk->peer);
++
++	if (nla_put_u8(skb, IFLA_NETKIT_PRIMARY, nk->primary))
++		return -EMSGSIZE;
++	if (nla_put_u32(skb, IFLA_NETKIT_POLICY, nk->policy))
++		return -EMSGSIZE;
++	if (nla_put_u32(skb, IFLA_NETKIT_MODE, nk->mode))
++		return -EMSGSIZE;
++
++	if (peer) {
++		nk = netkit_priv(peer);
++		if (nla_put_u32(skb, IFLA_NETKIT_PEER_POLICY, nk->policy))
++			return -EMSGSIZE;
++	}
++
++	return 0;
++}
++
++static const struct nla_policy netkit_policy[IFLA_NETKIT_MAX + 1] = {
++	[IFLA_NETKIT_PEER_INFO]		= { .len = sizeof(struct ifinfomsg) },
++	[IFLA_NETKIT_POLICY]		= { .type = NLA_U32 },
++	[IFLA_NETKIT_MODE]		= { .type = NLA_U32 },
++	[IFLA_NETKIT_PEER_POLICY]	= { .type = NLA_U32 },
++	[IFLA_NETKIT_PRIMARY]		= { .type = NLA_REJECT,
++					    .reject_message = "Primary attribute is read-only" },
++};
++
++static struct rtnl_link_ops netkit_link_ops = {
++	.kind		= DRV_NAME,
++	.priv_size	= sizeof(struct netkit),
++	.setup		= netkit_setup,
++	.newlink	= netkit_new_link,
++	.dellink	= netkit_del_link,
++	.changelink	= netkit_change_link,
++	.get_link_net	= netkit_get_link_net,
++	.get_size	= netkit_get_size,
++	.fill_info	= netkit_fill_info,
++	.policy		= netkit_policy,
++	.validate	= netkit_validate,
++	.maxtype	= IFLA_NETKIT_MAX,
++};
++
++static __init int netkit_init(void)
++{
++	BUILD_BUG_ON((int)NETKIT_NEXT != (int)TCX_NEXT ||
++		     (int)NETKIT_PASS != (int)TCX_PASS ||
++		     (int)NETKIT_DROP != (int)TCX_DROP ||
++		     (int)NETKIT_REDIRECT != (int)TCX_REDIRECT);
++
++	return rtnl_link_register(&netkit_link_ops);
++}
++
++static __exit void netkit_exit(void)
++{
++	rtnl_link_unregister(&netkit_link_ops);
++}
++
++module_init(netkit_init);
++module_exit(netkit_exit);
++
++MODULE_DESCRIPTION("BPF-programmable network device");
++MODULE_AUTHOR("Daniel Borkmann <daniel@iogearbox.net>");
++MODULE_AUTHOR("Nikolay Aleksandrov <razor@blackwall.org>");
++MODULE_LICENSE("GPL");
++MODULE_ALIAS_RTNL_LINK(DRV_NAME);
+diff --git a/include/net/netkit.h b/include/net/netkit.h
+new file mode 100644
+index 000000000000..0ba2e6b847ca
+--- /dev/null
++++ b/include/net/netkit.h
+@@ -0,0 +1,38 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (c) 2023 Isovalent */
++#ifndef __NET_NETKIT_H
++#define __NET_NETKIT_H
++
++#include <linux/bpf.h>
++
++#ifdef CONFIG_NETKIT
++int netkit_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog);
++int netkit_link_attach(const union bpf_attr *attr, struct bpf_prog *prog);
++int netkit_prog_detach(const union bpf_attr *attr, struct bpf_prog *prog);
++int netkit_prog_query(const union bpf_attr *attr, union bpf_attr __user *uattr);
++#else
++static inline int netkit_prog_attach(const union bpf_attr *attr,
++				     struct bpf_prog *prog)
++{
++	return -EINVAL;
++}
++
++static inline int netkit_link_attach(const union bpf_attr *attr,
++				     struct bpf_prog *prog)
++{
++	return -EINVAL;
++}
++
++static inline int netkit_prog_detach(const union bpf_attr *attr,
++				     struct bpf_prog *prog)
++{
++	return -EINVAL;
++}
++
++static inline int netkit_prog_query(const union bpf_attr *attr,
++				    union bpf_attr __user *uattr)
++{
++	return -EINVAL;
++}
++#endif /* CONFIG_NETKIT */
++#endif /* __NET_NETKIT_H */
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 7ba61b75bc0e..0f6cdf52b1da 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1052,6 +1052,8 @@ enum bpf_attach_type {
+ 	BPF_CGROUP_UNIX_RECVMSG,
+ 	BPF_CGROUP_UNIX_GETPEERNAME,
+ 	BPF_CGROUP_UNIX_GETSOCKNAME,
++	BPF_NETKIT_PRIMARY,
++	BPF_NETKIT_PEER,
+ 	__MAX_BPF_ATTACH_TYPE
+ };
+ 
+@@ -1071,6 +1073,7 @@ enum bpf_link_type {
+ 	BPF_LINK_TYPE_NETFILTER = 10,
+ 	BPF_LINK_TYPE_TCX = 11,
+ 	BPF_LINK_TYPE_UPROBE_MULTI = 12,
++	BPF_LINK_TYPE_NETKIT = 13,
+ 	MAX_BPF_LINK_TYPE,
+ };
+ 
+@@ -1656,6 +1659,13 @@ union bpf_attr {
+ 				__u32		flags;
+ 				__u32		pid;
+ 			} uprobe_multi;
++			struct {
++				union {
++					__u32	relative_fd;
++					__u32	relative_id;
++				};
++				__u64		expected_revision;
++			} netkit;
+ 		};
+ 	} link_create;
+ 
+@@ -6576,6 +6586,10 @@ struct bpf_link_info {
+ 			__u32 ifindex;
+ 			__u32 attach_type;
+ 		} tcx;
++		struct {
++			__u32 ifindex;
++			__u32 attach_type;
++		} netkit;
+ 	};
+ } __attribute__((aligned(8)));
+ 
+diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
+index fac351a93aed..a0aa05a28cf2 100644
+--- a/include/uapi/linux/if_link.h
++++ b/include/uapi/linux/if_link.h
+@@ -756,6 +756,30 @@ struct tunnel_msg {
+ 	__u32 ifindex;
+ };
+ 
++/* netkit section */
++enum netkit_action {
++	NETKIT_NEXT	= -1,
++	NETKIT_PASS	= 0,
++	NETKIT_DROP	= 2,
++	NETKIT_REDIRECT	= 7,
++};
++
++enum netkit_mode {
++	NETKIT_L2,
++	NETKIT_L3,
++};
++
++enum {
++	IFLA_NETKIT_UNSPEC,
++	IFLA_NETKIT_PEER_INFO,
++	IFLA_NETKIT_PRIMARY,
++	IFLA_NETKIT_POLICY,
++	IFLA_NETKIT_PEER_POLICY,
++	IFLA_NETKIT_MODE,
++	__IFLA_NETKIT_MAX,
++};
++#define IFLA_NETKIT_MAX	(__IFLA_NETKIT_MAX - 1)
++
+ /* VXLAN section */
+ 
+ /* include statistics in the dump */
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index a9b2cb500bf7..0ed286b8a0f0 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -35,8 +35,9 @@
+ #include <linux/rcupdate_trace.h>
+ #include <linux/memcontrol.h>
+ #include <linux/trace_events.h>
+-#include <net/netfilter/nf_bpf_link.h>
+ 
++#include <net/netfilter/nf_bpf_link.h>
++#include <net/netkit.h>
+ #include <net/tcx.h>
+ 
+ #define IS_FD_ARRAY(map) ((map)->map_type == BPF_MAP_TYPE_PERF_EVENT_ARRAY || \
+@@ -3730,6 +3731,8 @@ attach_type_to_prog_type(enum bpf_attach_type attach_type)
+ 		return BPF_PROG_TYPE_LSM;
+ 	case BPF_TCX_INGRESS:
+ 	case BPF_TCX_EGRESS:
++	case BPF_NETKIT_PRIMARY:
++	case BPF_NETKIT_PEER:
+ 		return BPF_PROG_TYPE_SCHED_CLS;
+ 	default:
+ 		return BPF_PROG_TYPE_UNSPEC;
+@@ -3781,7 +3784,9 @@ static int bpf_prog_attach_check_attach_type(const struct bpf_prog *prog,
+ 		return 0;
+ 	case BPF_PROG_TYPE_SCHED_CLS:
+ 		if (attach_type != BPF_TCX_INGRESS &&
+-		    attach_type != BPF_TCX_EGRESS)
++		    attach_type != BPF_TCX_EGRESS &&
++		    attach_type != BPF_NETKIT_PRIMARY &&
++		    attach_type != BPF_NETKIT_PEER)
+ 			return -EINVAL;
+ 		return 0;
+ 	default:
+@@ -3864,7 +3869,11 @@ static int bpf_prog_attach(const union bpf_attr *attr)
+ 			ret = cgroup_bpf_prog_attach(attr, ptype, prog);
+ 		break;
+ 	case BPF_PROG_TYPE_SCHED_CLS:
+-		ret = tcx_prog_attach(attr, prog);
++		if (attr->attach_type == BPF_TCX_INGRESS ||
++		    attr->attach_type == BPF_TCX_EGRESS)
++			ret = tcx_prog_attach(attr, prog);
++		else
++			ret = netkit_prog_attach(attr, prog);
+ 		break;
+ 	default:
+ 		ret = -EINVAL;
+@@ -3925,7 +3934,11 @@ static int bpf_prog_detach(const union bpf_attr *attr)
+ 		ret = cgroup_bpf_prog_detach(attr, ptype);
+ 		break;
+ 	case BPF_PROG_TYPE_SCHED_CLS:
+-		ret = tcx_prog_detach(attr, prog);
++		if (attr->attach_type == BPF_TCX_INGRESS ||
++		    attr->attach_type == BPF_TCX_EGRESS)
++			ret = tcx_prog_detach(attr, prog);
++		else
++			ret = netkit_prog_detach(attr, prog);
+ 		break;
+ 	default:
+ 		ret = -EINVAL;
+@@ -3992,6 +4005,9 @@ static int bpf_prog_query(const union bpf_attr *attr,
+ 	case BPF_TCX_INGRESS:
+ 	case BPF_TCX_EGRESS:
+ 		return tcx_prog_query(attr, uattr);
++	case BPF_NETKIT_PRIMARY:
++	case BPF_NETKIT_PEER:
++		return netkit_prog_query(attr, uattr);
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -4973,7 +4989,11 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr)
+ 		ret = bpf_xdp_link_attach(attr, prog);
+ 		break;
+ 	case BPF_PROG_TYPE_SCHED_CLS:
+-		ret = tcx_link_attach(attr, prog);
++		if (attr->link_create.attach_type == BPF_TCX_INGRESS ||
++		    attr->link_create.attach_type == BPF_TCX_EGRESS)
++			ret = tcx_link_attach(attr, prog);
++		else
++			ret = netkit_link_attach(attr, prog);
+ 		break;
+ 	case BPF_PROG_TYPE_NETFILTER:
+ 		ret = bpf_nf_link_attach(attr, prog);
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 7ba61b75bc0e..0f6cdf52b1da 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1052,6 +1052,8 @@ enum bpf_attach_type {
+ 	BPF_CGROUP_UNIX_RECVMSG,
+ 	BPF_CGROUP_UNIX_GETPEERNAME,
+ 	BPF_CGROUP_UNIX_GETSOCKNAME,
++	BPF_NETKIT_PRIMARY,
++	BPF_NETKIT_PEER,
+ 	__MAX_BPF_ATTACH_TYPE
+ };
+ 
+@@ -1071,6 +1073,7 @@ enum bpf_link_type {
+ 	BPF_LINK_TYPE_NETFILTER = 10,
+ 	BPF_LINK_TYPE_TCX = 11,
+ 	BPF_LINK_TYPE_UPROBE_MULTI = 12,
++	BPF_LINK_TYPE_NETKIT = 13,
+ 	MAX_BPF_LINK_TYPE,
+ };
+ 
+@@ -1656,6 +1659,13 @@ union bpf_attr {
+ 				__u32		flags;
+ 				__u32		pid;
+ 			} uprobe_multi;
++			struct {
++				union {
++					__u32	relative_fd;
++					__u32	relative_id;
++				};
++				__u64		expected_revision;
++			} netkit;
+ 		};
+ 	} link_create;
+ 
+@@ -6576,6 +6586,10 @@ struct bpf_link_info {
+ 			__u32 ifindex;
+ 			__u32 attach_type;
+ 		} tcx;
++		struct {
++			__u32 ifindex;
++			__u32 attach_type;
++		} netkit;
+ 	};
+ } __attribute__((aligned(8)));
+ 
 -- 
 2.34.1
 
