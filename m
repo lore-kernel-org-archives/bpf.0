@@ -1,127 +1,91 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F80427723
-	for <bpf@vger.kernel.org>; Wed, 25 Oct 2023 13:41:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71EBB26E08
+	for <bpf@vger.kernel.org>; Wed, 25 Oct 2023 13:47:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="BUOAtfrE"
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C45F19D
-	for <bpf@vger.kernel.org>; Wed, 25 Oct 2023 06:41:37 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-53e84912038so8634087a12.1
-        for <bpf@vger.kernel.org>; Wed, 25 Oct 2023 06:41:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EeNbjIo9"
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C36189
+	for <bpf@vger.kernel.org>; Wed, 25 Oct 2023 06:46:58 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-40839652b97so44253375e9.3
+        for <bpf@vger.kernel.org>; Wed, 25 Oct 2023 06:46:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1698241296; x=1698846096; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=v7T/VX1aEQjbsBkCrW5UAE2KHJoyq/0CySfZ++IfQgo=;
-        b=BUOAtfrElVFC3GAHE8wruSqXIEaG6/yrGHBBXZyvZzVCd2AEwP5okyAtgK0B9Q9wFR
-         PFFXnVOYwgCg5VrWOfmOJA/P2QMjF1PyikinR0/Tjx+FlLLKFJoU2iwu6XWJFj3ZhPUu
-         nhGWfL0m+qLuIf3bnLfMOZHykwRahizOyxmps+qwvs/9v0iWD2kMyn7GAsTJ7G6tsA/2
-         3WLKVYH87eFXI5S1nk8qgDfnQu9tMEbU8NQ6ZksQeVgtZkr8SfRl46H6X3QNMt75+L7M
-         FdS1tI3HiPDhkyqZFr6j34N9mkRxLVAGvvad6c9/lJFlkW8+Eeqxy4LOX1GVsFTgJgnW
-         XxhQ==
+        d=linaro.org; s=google; t=1698241617; x=1698846417; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=fABIgP4sNe8bb0m8C3NlBhZwn/v5K54sY/gQBRJNis4=;
+        b=EeNbjIo9gOFAO3xenzFs/EY5HJP3OTzmRUmSt9RvA3NtNErOTcf5O83ZSjko+aGI0M
+         NJnHoERxj2Fe5JLyKHWjpD7NTnF4Q251//1GKikO1vIbDNytkljyvY8TiQ9/RgK4LIig
+         yLzDBzuvDLj1bRJofElIi3QYH0sMqxo3G0iq1tl4N9AoQj1728sUV4ur2C5USzAZCbzI
+         TTMxSA8sj19sG6iPJHkzXUy6xUkmBsCkVxqp0hjVFH73ZRtB63baiMYdAeBsXT77uQGO
+         bDNBwcSH//J4C1X4tjjpCbdKRtNlHE0Rmrd78HjUkDKu9xiDLgIq1Buyoc4m9oShP8z2
+         uUOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698241296; x=1698846096;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=v7T/VX1aEQjbsBkCrW5UAE2KHJoyq/0CySfZ++IfQgo=;
-        b=b3AR0BeIbkpTvSubo0UI3KfIEzmI9YVrUTxqmw/NBNjfouE3Thyyi60RsRbCXeYfML
-         3NdZ2O+MuaA/C85Y1UPkihMSIeq9MulxhR92tkc6rjBvn7NxYxtZSQRA7rtwdi4OfwmZ
-         xs9tgqXSvaSAgCZfGuksZJiw7AV/fcioyOHwsuNAEyiGHFgYq8LiCe3OG43Fg7SkHP0z
-         7sLjEG5FrkfWQedVMtMAW4Xf91tEhdijPfnR0z2rRTdt8+7BUggdLolkkVHEN5bJK+d+
-         2fLBEk4b9vLGzNiR6VqaBbyyNsYrJaju1PY+1vTFqgSMgIadVcdVcC2we1HCPSur9M3q
-         R5Ew==
-X-Gm-Message-State: AOJu0YxbFnX/6bq85nNuHqTzmpYdo0gLFe3fxh94Ius57MKmvtaC5X2k
-	+zSjyjXmh2DhDuEYfo9OOYG9DUhAlH0oDKiRElRIe5gK+eSt3CmsUFQ=
-X-Google-Smtp-Source: AGHT+IHBjU/KMiKqW5gzCPBJHKB7sTHnWDlZgbxCgyg3azajr2EtWf52br94/wohzr5eJpfvjEGJ6VXPPr0iwkGjFGg=
-X-Received: by 2002:a50:8ad7:0:b0:540:bdda:b0b4 with SMTP id
- k23-20020a508ad7000000b00540bddab0b4mr2347533edk.36.1698241295389; Wed, 25
- Oct 2023 06:41:35 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1698241617; x=1698846417;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fABIgP4sNe8bb0m8C3NlBhZwn/v5K54sY/gQBRJNis4=;
+        b=WWPEcHo7nuKX1NfMBDfGFwBt+SpCSDhEOvSRld1ZO6MmtaNZlbStOoe1nCCpBPF+uK
+         sLraSn24hzFmuo9sK7uZQLayaNRmDWDylqnPaHqN2ckpi9Gs6fZQZ5+aH3scQGvRjVEg
+         mnhx8IHrOsIoBU6DS3m6n+N9ulaXGt9itLg4tfZ7vJ5+k8OlPeXgDF9mlSEBjEMOG1Ub
+         VDSbrISU7cpT0UbDX00wwOE5y3zxsHWolPobJNrUpW53R7f8cn1qcBaBg83g81WR6Hao
+         5pfXfrceXMncxldRL1qvF3pR0VO8IbqnWCRLPMUtQ3AyTp8dgD9z9H3mL3dA3TyFZabW
+         9dig==
+X-Gm-Message-State: AOJu0YwaOADxQs+EtlBGMxS5XMFMpBhQ1LkK8u48fOuxxqD/axQHcFpP
+	APut2eOjcRCANAD+DOkBJr/0bQ==
+X-Google-Smtp-Source: AGHT+IGk2H1aq4yWD3oOc6YwEREyXGEzfqNQMemvonsOhZvr3JB/vccksovIRVrJ+bWDhNYIXU4PHA==
+X-Received: by 2002:a05:600c:4992:b0:406:513d:7373 with SMTP id h18-20020a05600c499200b00406513d7373mr11544018wmp.11.1698241616701;
+        Wed, 25 Oct 2023 06:46:56 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id z10-20020adff74a000000b003231ca246b6sm12027533wrp.95.2023.10.25.06.46.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Oct 2023 06:46:56 -0700 (PDT)
+Date: Wed, 25 Oct 2023 16:46:51 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Yan Zhai <yan@cloudflare.com>
+Cc: bpf@vger.kernel.org
+Subject: Re: [bug report] lwt: Fix return values of BPF xmit ops
+Message-ID: <2b3ee562-e412-4afc-8828-17b4adccd66e@kadam.mountain>
+References: <cd258298-8d8c-453a-bf21-9859b873d379@moroto.mountain>
+ <CAO3-PboDgpHjXhcYCSFvYtEjJkLNcBY_hQ5yFtm-xTsVOdW2PA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cd258298-8d8c-453a-bf21-9859b873d379@moroto.mountain>
-In-Reply-To: <cd258298-8d8c-453a-bf21-9859b873d379@moroto.mountain>
-From: Yan Zhai <yan@cloudflare.com>
-Date: Wed, 25 Oct 2023 08:41:24 -0500
-Message-ID: <CAO3-PboDgpHjXhcYCSFvYtEjJkLNcBY_hQ5yFtm-xTsVOdW2PA@mail.gmail.com>
-Subject: Re: [bug report] lwt: Fix return values of BPF xmit ops
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAO3-PboDgpHjXhcYCSFvYtEjJkLNcBY_hQ5yFtm-xTsVOdW2PA@mail.gmail.com>
 
-Hi Dan,
+On Wed, Oct 25, 2023 at 08:41:24AM -0500, Yan Zhai wrote:
+> Hi Dan,
+> 
+> On Wed, Oct 25, 2023 at 2:40 AM Dan Carpenter <dan.carpenter@linaro.org> wrote:
+> >
+> > Hello Yan Zhai,
+> >
+> > The patch 29b22badb7a8: "lwt: Fix return values of BPF xmit ops" from
+> > Aug 17, 2023 (linux-next), leads to the following Smatch static
+> > checker warning:
+> >
+> >         net/core/lwt_bpf.c:131 bpf_input()
+> >         error: double free of 'skb'
+> >
+> Thanks for reporting. I looked at the code, and it is possible to
+> continue processing skb on bpf_input and bpf_output when BPF_REDIRECT
+> is returned. However, both paths call run_lwt_bpf with NO_REDIRECT as
+> can_redirect bool arg, which means the skb_do_redirect branch won't
+> trigger. So it does not look like a bug to me. The life-cycle of skb
+> is a bit messy around this corner though.
+> 
 
-On Wed, Oct 25, 2023 at 2:40=E2=80=AFAM Dan Carpenter <dan.carpenter@linaro=
-.org> wrote:
->
-> Hello Yan Zhai,
->
-> The patch 29b22badb7a8: "lwt: Fix return values of BPF xmit ops" from
-> Aug 17, 2023 (linux-next), leads to the following Smatch static
-> checker warning:
->
->         net/core/lwt_bpf.c:131 bpf_input()
->         error: double free of 'skb'
->
-Thanks for reporting. I looked at the code, and it is possible to
-continue processing skb on bpf_input and bpf_output when BPF_REDIRECT
-is returned. However, both paths call run_lwt_bpf with NO_REDIRECT as
-can_redirect bool arg, which means the skb_do_redirect branch won't
-trigger. So it does not look like a bug to me. The life-cycle of skb
-is a bit messy around this corner though.
+Ah, yeah.  I see that now.  Thanks for taking a look at this.
 
-Yan
+regards,
+dan carpenter
 
-> net/core/lwt_bpf.c
->     38  static int run_lwt_bpf(struct sk_buff *skb, struct bpf_lwt_prog *=
-lwt,
->     39                         struct dst_entry *dst, bool can_redirect)
->     40  {
->     41          int ret;
->     42
->     43          /* Migration disable and BH disable are needed to protect=
- per-cpu
->     44           * redirect_info between BPF prog and skb_do_redirect().
->     45           */
->     46          migrate_disable();
->     47          local_bh_disable();
->     48          bpf_compute_data_pointers(skb);
->     49          ret =3D bpf_prog_run_save_cb(lwt->prog, skb);
->     50
->     51          switch (ret) {
->     52          case BPF_OK:
->     53          case BPF_LWT_REROUTE:
->     54                  break;
->     55
->     56          case BPF_REDIRECT:
->     57                  if (unlikely(!can_redirect)) {
->     58                          pr_warn_once("Illegal redirect return cod=
-e in prog %s\n",
->     59                                       lwt->name ? : "<unknown>");
->     60                          ret =3D BPF_OK;
->     61                  } else {
->     62                          skb_reset_mac_header(skb);
->     63                          skb_do_redirect(skb);
->     64                          ret =3D BPF_REDIRECT;
->
-> If skb_do_redirect() returns -EINVAL it means the skb has been freed.
-> Originally we preserved error code but now we just return BPF_REDIRECT.
->
->     65                  }
->     66                  break;
->     67
->     68          case BPF_DROP:
->     69                  kfree_skb(skb);
->     70                  ret =3D -EPERM;
->     71                  break;
->
-> regards,
-> dan carpenter
