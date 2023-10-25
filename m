@@ -1,36 +1,37 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F7D415497
-	for <bpf@vger.kernel.org>; Wed, 25 Oct 2023 06:19:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01BB0156CC
+	for <bpf@vger.kernel.org>; Wed, 25 Oct 2023 06:19:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="T6Vq/JPQ"
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B1212D
-	for <bpf@vger.kernel.org>; Tue, 24 Oct 2023 23:19:27 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OXp0bzEz"
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E3E12F
+	for <bpf@vger.kernel.org>; Tue, 24 Oct 2023 23:19:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1698214767;
+	s=mimecast20190719; t=1698214768;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=fdwDKRXZxM6igH9lqBL/vlo6C1ip2tpQphW5JxO9vD8=;
-	b=T6Vq/JPQfVQLpAv3AT9X6wy4j1g5sTWCWNjcVg+RGGS7yzGgWsESmHgYg5W7R3jBA6BYR0
-	eacVl1q3uhyylMwK/d0xJvWw3+rjjhnSxGZli4kNUJKdRTMACEIqYYKoFGdLno6kh15Otd
-	f6upX+sY6j4pBhZKBmkZMdTxMZldLU0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-6-s7-jfWwAPamJmlHFxOEg4Q-1; Wed, 25 Oct 2023 02:19:21 -0400
-X-MC-Unique: s7-jfWwAPamJmlHFxOEg4Q-1
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QqAAeO7obnxUE7t7KKZny8wXxstCiwJieUW7z5BVo9s=;
+	b=OXp0bzEzCKML63oy+Wy+tVycQTWwsrRVdURcQcIDEhfhEjanKB+2cLoPyibSRFXsX3Hcfa
+	Og+BmotgafQU1EBctLArteRoo3G2UqOOB85D8haXcOxPHXAlllKqU2LUwPedkSGaPaJNHD
+	ArzVXn02/YYtBriFtEXh/ka6DsU7g8w=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-227-RqS7jNx2Pq29oEJFoIWnOg-1; Wed,
+ 25 Oct 2023 02:19:24 -0400
+X-MC-Unique: RqS7jNx2Pq29oEJFoIWnOg-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 39A9B101A594;
-	Wed, 25 Oct 2023 06:19:20 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 546323C0FC80;
+	Wed, 25 Oct 2023 06:19:24 +0000 (UTC)
 Received: from fedora.redhat.com (unknown [10.45.224.62])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id 39BCD1121319;
-	Wed, 25 Oct 2023 06:19:18 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id 7BEEC1121319;
+	Wed, 25 Oct 2023 06:19:22 +0000 (UTC)
 From: Viktor Malik <vmalik@redhat.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -46,9 +47,11 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Donald Zickus <dzickus@redhat.com>,
 	Viktor Malik <vmalik@redhat.com>
-Subject: [PATCH bpf-next 0/3] samples/bpf: Allow building as PIE
-Date: Wed, 25 Oct 2023 08:19:11 +0200
-Message-ID: <cover.1698213811.git.vmalik@redhat.com>
+Subject: [PATCH bpf-next 2/3] samples/bpf: Fix passing LDFLAGS to libbpf
+Date: Wed, 25 Oct 2023 08:19:13 +0200
+Message-ID: <c690de6671cc6c983d32a566d33fd7eabd18b526.1698213811.git.vmalik@redhat.com>
+In-Reply-To: <cover.1698213811.git.vmalik@redhat.com>
+References: <cover.1698213811.git.vmalik@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -58,26 +61,48 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
 
-Hi,
+samples/bpf/Makefile passes LDFLAGS=$(TPROGS_LDFLAGS) to libbpf build
+without surrounding quotes, which may cause compilation errors when
+passing custom TPROGS_USER_LDFLAGS.
 
-when trying to build samples/bpf as PIE in Fedora, we came across
-several issues, mainly related to the way compiler/linker flags are
-handled in samples/bpf/Makefile. The first 2 commits in this patchset
-address these issues (see commit messages for details).
+For example:
 
-At the same time, this proposes to allow passing an already built
-bpftool to samples/bpf/Makefile. The reason is to remove a redundant
-build step but also because I was not able to find a correct combination
-of build flags to build libbpf.a for samples/bpf/bpftool/ with -fPIE.
+    $ make -C samples/bpf/ TPROGS_USER_LDFLAGS="-Wl,--as-needed -specs=/usr/lib/gcc/x86_64-redhat-linux/13/libsanitizer.spec"
+    make: Entering directory './samples/bpf'
+    make -C ../../ M=./samples/bpf BPF_SAMPLES_PATH=./samples/bpf
+    make[1]: Entering directory '.'
+    make -C ./samples/bpf/../../tools/lib/bpf RM='rm -rf' EXTRA_CFLAGS="-Wall -O2 -Wmissing-prototypes -Wstrict-prototypes  -I./usr/include -I./tools/testing/selftests/bpf/ -I./samples/bpf/libbpf/include -I./tools/include -I./tools/perf -I./tools/lib -DHAVE_ATTR_TEST=0" \
+            LDFLAGS=-Wl,--as-needed -specs=/usr/lib/gcc/x86_64-redhat-linux/13/libsanitizer.spec srctree=./samples/bpf/../../ \
+            O= OUTPUT=./samples/bpf/libbpf/ DESTDIR=./samples/bpf/libbpf prefix= \
+            ./samples/bpf/libbpf/libbpf.a install_headers
+    make: invalid option -- 'c'
+    make: invalid option -- '='
+    make: invalid option -- '/'
+    make: invalid option -- 'u'
+    make: invalid option -- '/'
+    [...]
 
-Viktor Malik (3):
-  samples/bpf: Allow building with custom CFLAGS/LDFLAGS
-  samples/bpf: Fix passing LDFLAGS to libbpf
-  samples/bpf: Allow building with custom bpftool
+Fix the error by properly quoting $(TPROGS_LDFLAGS).
 
- samples/bpf/Makefile | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+Signed-off-by: Viktor Malik <vmalik@redhat.com>
+Suggested-by: Donald Zickus <dzickus@redhat.com>
+---
+ samples/bpf/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+index 5a9805edec93..378b9f3e9321 100644
+--- a/samples/bpf/Makefile
++++ b/samples/bpf/Makefile
+@@ -254,7 +254,7 @@ clean:
+ $(LIBBPF): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUTPUT)
+ # Fix up variables inherited from Kbuild that tools/ build system won't like
+ 	$(MAKE) -C $(LIBBPF_SRC) RM='rm -rf' EXTRA_CFLAGS="$(TPROGS_CFLAGS)" \
+-		LDFLAGS=$(TPROGS_LDFLAGS) srctree=$(BPF_SAMPLES_PATH)/../../ \
++		LDFLAGS="$(TPROGS_LDFLAGS)" srctree=$(BPF_SAMPLES_PATH)/../../ \
+ 		O= OUTPUT=$(LIBBPF_OUTPUT)/ DESTDIR=$(LIBBPF_DESTDIR) prefix= \
+ 		$@ install_headers
+ 
 -- 
 2.41.0
 
