@@ -1,44 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BEA038FA0
-	for <bpf@vger.kernel.org>; Thu, 26 Oct 2023 18:14:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5394E11CB3
+	for <bpf@vger.kernel.org>; Thu, 26 Oct 2023 18:27:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ykrw/Saw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0005C433C9
-	for <bpf@vger.kernel.org>; Thu, 26 Oct 2023 18:14:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KRPuP+yI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C61C0C433CA
+	for <bpf@vger.kernel.org>; Thu, 26 Oct 2023 18:27:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1698344041;
-	bh=8/ViV5VphJdSfWni/+MxOXIUXqT2XnwQ2DpWpuinTA8=;
+	s=k20201202; t=1698344859;
+	bh=XVVlRq7WkgCDz5IAy49xP/EmrDSBW+zWNlqP7/3tklw=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Ykrw/SawaVv6ooYZb6ahWVVvv8mxVxhAYvyCLdLI1v4L5yhcEwI4b9MY14u7Cqjq6
-	 D8nyipXFZcveKdDfI2TLFgnvaHOIY+F6HGFPx+xdU37slegk7iEu9Kh6TltErQwewq
-	 2tfVDTaiCTYkB8V1stgZi1ShGOIExo3dwxh55CBoSeIGlzZMsl08rYcjgOIaUdm+ES
-	 MDUHs8BlZCVg4WiHxczFSblVr4GjrwbUG0M/b0Rkp6HKq2pFVeYid6c9Z5E7GLH7vt
-	 QImuyvSy2cvBs2pJSmZqsEypyAeSbyVGCoKUXJqlcwcl34UcD8nAIhKcAsHbsepmS0
-	 M9x1a5ZOdOSlA==
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-507a29c7eefso1748397e87.1
-        for <bpf@vger.kernel.org>; Thu, 26 Oct 2023 11:14:01 -0700 (PDT)
-X-Gm-Message-State: AOJu0Ywq8i2Emza6HAL+cOnsd5q3owda7hW8dkLtlKDI39P0mf74V+L+
-	4792iGUJDR4EeAOglAEJpcElMZm+bDBBKcLY97Y=
-X-Google-Smtp-Source: AGHT+IGamHIKQvNeI9Ii8benGnw9FFXgu3CUx9OH5RsTUonfFPa5IsBFxys54drDBwOUx9y+3/W1sDVxJP7WpesRKPk=
-X-Received: by 2002:a19:c510:0:b0:504:7f2e:9391 with SMTP id
- w16-20020a19c510000000b005047f2e9391mr135915lfe.34.1698344040037; Thu, 26 Oct
- 2023 11:14:00 -0700 (PDT)
+	b=KRPuP+yIiRNCdL2NvQdlYXCwmLX36a1ZEdnFegL+8HXP1fCcL87AAGSdemJl8xqHt
+	 6EOYM8JoIW65B+KJEmK1Xax2Nl1Z9/4vFr16WsWq68SJjM6ZatO+OFK2eoNwA587A8
+	 aBUTKXdqg60Ph6PA80m3EXGfekmmXnQJomtTXCOaB5pbr+7gOyBgNUhLd4KCjEEtYF
+	 bJwjfl1kB4uiLM24JjlZUJ43ckIpzWpJ+YLGTx5eXEijDU4IapFXwnwZ5sLxHAbLGh
+	 YApByRVbTS/LX5Yom9wF20l8fsEL6uky5+SawPCmdvplOKE/m8uqOCVAablFBKUhuK
+	 oEy8f45499Idg==
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2c518a1d83fso20204551fa.3
+        for <bpf@vger.kernel.org>; Thu, 26 Oct 2023 11:27:39 -0700 (PDT)
+X-Gm-Message-State: AOJu0Yx2VMW0aTqQElxC5cFGTal0KjoBFqHx+ULyOtdDRrXzEG11K5Rw
+	k3hf9CxQOQ7YFWrqY6TIE6eqRiB0fcnvDwoaUDs=
+X-Google-Smtp-Source: AGHT+IGTu2wrYqjKeHYBr1kS9WvdM8Mgsxc9Vjs8XhGgy/ggKuIcIJOjX3sN0//vPcpQam7MJ0zqXE4dh9NeZ/0v+BM=
+X-Received: by 2002:ac2:4462:0:b0:500:adbd:43e7 with SMTP id
+ y2-20020ac24462000000b00500adbd43e7mr156867lfl.8.1698344858011; Thu, 26 Oct
+ 2023 11:27:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231025202420.390702-1-jolsa@kernel.org> <20231025202420.390702-6-jolsa@kernel.org>
-In-Reply-To: <20231025202420.390702-6-jolsa@kernel.org>
+References: <20231025202420.390702-1-jolsa@kernel.org> <20231025202420.390702-7-jolsa@kernel.org>
+In-Reply-To: <20231025202420.390702-7-jolsa@kernel.org>
 From: Song Liu <song@kernel.org>
-Date: Thu, 26 Oct 2023 11:13:47 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4FY7BmbYnhqt8yEDfaw5eFjKAaVQ+QyWsjUPGpuArzHA@mail.gmail.com>
-Message-ID: <CAPhsuW4FY7BmbYnhqt8yEDfaw5eFjKAaVQ+QyWsjUPGpuArzHA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 5/6] selftests/bpf: Add link_info test for
- uprobe_multi link
+Date: Thu, 26 Oct 2023 11:27:25 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7_G7LEpaJNxUeMWMmv8EYDDy==yQ09pNUAMTaxug3z8g@mail.gmail.com>
+Message-ID: <CAPhsuW7_G7LEpaJNxUeMWMmv8EYDDy==yQ09pNUAMTaxug3z8g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 6/6] bpftool: Add support to display uprobe_multi links
 To: Jiri Olsa <jolsa@kernel.org>
 Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>, 
@@ -50,13 +49,49 @@ Content-Transfer-Encoding: quoted-printable
 
 On Wed, Oct 25, 2023 at 1:25=E2=80=AFPM Jiri Olsa <jolsa@kernel.org> wrote:
 >
-> Adding fill_link_info test for uprobe_multi link.
+> Adding support to display details for uprobe_multi links,
+> both plain:
 >
-> Setting up uprobes with bogus ref_ctr_offsets and cookie values
-> to test all the bpf_link_info::uprobe_multi fields.
+>   # bpftool link -p
+>   ...
+>   24: uprobe_multi  prog 126
+>           uprobe.multi  path /home/jolsa/bpf/test_progs  func_cnt 3  pid =
+4143
+>           offset             ref_ctr_offset     cookies
+>           0xd1f88            0xf5d5a8           0xdead
+>           0xd1f8f            0xf5d5aa           0xbeef
+>           0xd1f96            0xf5d5ac           0xcafe
+>
+> and json:
+>
+>   # bpftool link -p | jq
+>   [{
+>   ...
+>       },{
+>           "id": 24,
+>           "type": "uprobe_multi",
+>           "prog_id": 126,
+>           "retprobe": false,
+>           "path": "/home/jolsa/bpf/test_progs",
+>           "func_cnt": 3,
+>           "pid": 4143,
+>           "funcs": [{
+>                   "offset": 860040,
+>                   "ref_ctr_offset": 16111016,
+>                   "cookie": 57005
+>               },{
+>                   "offset": 860047,
+>                   "ref_ctr_offset": 16111018,
+>                   "cookie": 48879
+>               },{
+>                   "offset": 860054,
+>                   "ref_ctr_offset": 16111020,
+>                   "cookie": 51966
+>               }
+>           ]
+>       }
+>   ]
 >
 > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 
 Acked-by: Song Liu <song@kernel.org>
-
-> ---
