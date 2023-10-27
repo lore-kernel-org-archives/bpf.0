@@ -1,48 +1,48 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B96913FE30
-	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 21:17:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54B5F3FB1D
+	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 21:17:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bh3wNGS5"
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD20F129
-	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 14:17:20 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-5a82f176860so19013687b3.1
-        for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 14:17:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iJJdjRJU"
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E581AA
+	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 14:17:23 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-5a8ada42c2aso19437887b3.3
+        for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 14:17:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698441440; x=1699046240; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1698441442; x=1699046242; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LIaFNR2jWts5aTPUB8q6Tuj+4zsQdN5CxwLohBhhDRQ=;
-        b=Bh3wNGS5+V7orqsl87usyzN6DsT8wwye776mcboM+dSuK4kehjZ6X1qMkApFvfRTN+
-         d/rzxlHw2Y9XPHImT4UjYWyvwfSoXExcvNgQtBkZeNJzUVv3g0nZT7VX7XoBJUPVmuE+
-         KRQAqR3E2HCUK/tetAusxBeWOcuz+qNTu3zH4v+ial3iT6+7wbNIy0JamQQac9ybnvjp
-         q6RB1k4v05DGJ98Ix5T3QQdht7Mf9MS1IaOQqWXo5l/InIInRIUOLLKNBaaByzVGHoLf
-         fsDdttKxIGjbuTEwn44lMFEw4toyNC0n9OxPGVwCNWfB3Xw7dFZ/t8Dv3TOLiLjLfTY/
-         90Gg==
+        bh=X7X6eDWH84YiiA/yviMS1DD8P2E6WYBibPMTFCKAaRw=;
+        b=iJJdjRJU2W9nVhmrEQhmZ1EPLwcd1tB/2x+81zz8zA9ghIwNpaBWWnicDHqs0EYhCG
+         QB5bXfK8JGzvBk1DphHccFeyxOkzFo6wAIOG7bv8IYa3t2E9RwQ38e9EOAB16uOCOseT
+         irxW/CI2TlxpqRU9V/6kS8111w1xPFFkke+75As6qge3Z9nMmRXgGt1YaDwwbZYFvM/o
+         mpWloDg/aCpbsIAjzQBBNPF+9XHikjkWhdVfyxZRWqdj7Xx8km+mm0NPdoprZgGEkw94
+         if3Tm9T3PeJdx4Kub9hAyEGuSx+wxw7mzNg/GjMx36mAmOFsSfHqA7HR1GE8Vh9RGwJT
+         StUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698441440; x=1699046240;
+        d=1e100.net; s=20230601; t=1698441442; x=1699046242;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LIaFNR2jWts5aTPUB8q6Tuj+4zsQdN5CxwLohBhhDRQ=;
-        b=YJq0UiPhvYw/61sN8L2V+TSW0P3Nb77RKldTc366WZP4RL5sc5ralsON1ru/boRqJE
-         oOoPpvS8RNt9NuMdgvsyR3Jg8Q8AcIx4HM5hxegKmUOYjjAtST1lqHYULUvwd2b1RWR8
-         vpmGyg+jqRB1tx2ELygsL1wVD4mUrga9iMoZwHfxC6z5bLVH5vWfI9FSKwJVpgHGVgiw
-         EyB/Xo7M2NMCyQZEjBWpjXGntybhVYwShXxHsRA2e9LFvmFSJ9rJDx/dd5KYHtiJZrTl
-         iS5nRUtLQGaXn4TStwhENykBLXmu7l5crTwb88BG8YpPiUG9/5tMGBdmcOF4nq9yNOLY
-         D9Cw==
-X-Gm-Message-State: AOJu0YzIRB8x+FSJzFmYh1TU6QkwSKvE2D5Nl4h/XoEzGx+/FCwRFnJ+
-	EePwf1PJBah+YyDAUB6JgIQD+5fhqSQ=
-X-Google-Smtp-Source: AGHT+IH77v4puiYwOOzU9jGiuGKxf8Dp5n5NItCoZ1CtSjdfU3g/ovLhagG5KYj9Xxgso/+gOHha0Q==
-X-Received: by 2002:a81:aa06:0:b0:5a7:bb6e:796d with SMTP id i6-20020a81aa06000000b005a7bb6e796dmr4472100ywh.19.1698441439808;
-        Fri, 27 Oct 2023 14:17:19 -0700 (PDT)
+        bh=X7X6eDWH84YiiA/yviMS1DD8P2E6WYBibPMTFCKAaRw=;
+        b=OnDeg+TMqHuhdd9TgOeFFRCaTsf7Hzf9vfApfwM0ClxLoPhGM+FOz5HBexg4Te6k+k
+         yPiEf1u3x1yJdONT/iViqhyLSQA3gBx6Y/Pm0AQzSlnUxJtLdFASvxkfZWzGhV0sQ76q
+         clYuZTxEFzpoe4N4g5TfKCFcgiEgqhucg7YEvSQjICxVOvy/vEl5R+aZfw8eMXO30SKz
+         wiPMjlfuK652lTP+NoICBsrTvmgGIxr6ZiuN2mlXgFHAV0507vKFqf5hC8w3Fjm+g91B
+         STA/+4Ug93MQz2wQa/c7xEjooW1RaMPAHll6BxLpfjxu0KbjtOPb7erT4MV8F90vm+HB
+         eI/A==
+X-Gm-Message-State: AOJu0YyJG4hx+JBYyRzSg3Gdp8Dv/+ePTsxYVrFI/aVE01kVus6uQzCL
+	ski4Bm4slJuWBU49fk2ku7bM01T7FoQ=
+X-Google-Smtp-Source: AGHT+IHKcpsxfmLElxdJr8c1o3eyV8UV8wFtfD7Te4ehj5U4XWZsDpeTyGyHdqxVsk892i5CVkmAVA==
+X-Received: by 2002:a81:e608:0:b0:5a7:bc66:949f with SMTP id u8-20020a81e608000000b005a7bc66949fmr3776448ywl.26.1698441442340;
+        Fri, 27 Oct 2023 14:17:22 -0700 (PDT)
 Received: from kickker.attlocal.net ([2600:1700:6cf8:1240:41cd:a94b:292d:cd8])
-        by smtp.gmail.com with ESMTPSA id e133-20020a81698b000000b0059a34cfa2a5sm1080174ywc.67.2023.10.27.14.17.18
+        by smtp.gmail.com with ESMTPSA id e133-20020a81698b000000b0059a34cfa2a5sm1080174ywc.67.2023.10.27.14.17.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Oct 2023 14:17:19 -0700 (PDT)
+        Fri, 27 Oct 2023 14:17:21 -0700 (PDT)
 From: thinker.li@gmail.com
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -54,9 +54,9 @@ To: bpf@vger.kernel.org,
 Cc: sinquersw@gmail.com,
 	kuifeng@meta.com,
 	Kui-Feng Lee <thinker.li@gmail.com>
-Subject: [PATCH bpf-next v7 08/10] libbpf: Find correct module BTFs for struct_ops maps and progs.
-Date: Fri, 27 Oct 2023 14:17:00 -0700
-Message-Id: <20231027211702.1374597-9-thinker.li@gmail.com>
+Subject: [PATCH bpf-next v7 10/10] selftests/bpf: test case for register_bpf_struct_ops().
+Date: Fri, 27 Oct 2023 14:17:02 -0700
+Message-Id: <20231027211702.1374597-11-thinker.li@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231027211702.1374597-1-thinker.li@gmail.com>
 References: <20231027211702.1374597-1-thinker.li@gmail.com>
@@ -70,217 +70,284 @@ Content-Transfer-Encoding: 8bit
 
 From: Kui-Feng Lee <thinker.li@gmail.com>
 
-Locate the module BTFs for struct_ops maps and progs and pass them to the
-kernel. This ensures that the kernel correctly resolves type IDs from the
-appropriate module BTFs.
-
-For the map of a struct_ops object, the FD of the module BTF is set to
-bpf_map to keep a reference to the module BTF. The FD is passed to the
-kernel as value_type_btf_obj_fd when the struct_ops object is loaded.
-
-For a bpf_struct_ops prog, attach_btf_obj_fd of bpf_prog is the FD of a
-module BTF in the kernel.
+Create a new struct_ops type called bpf_testmod_ops within the bpf_testmod
+module. When a struct_ops object is registered, the bpf_testmod module will
+invoke test_2 from the module.
 
 Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/bpf.c    |  4 +++-
- tools/lib/bpf/bpf.h    |  5 ++++-
- tools/lib/bpf/libbpf.c | 50 ++++++++++++++++++++++++++++--------------
- 3 files changed, 41 insertions(+), 18 deletions(-)
+ tools/testing/selftests/bpf/Makefile          |  4 +-
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 59 +++++++++++++++++++
+ .../selftests/bpf/bpf_testmod/bpf_testmod.h   |  5 ++
+ .../bpf/prog_tests/test_struct_ops_module.c   | 39 ++++++++++++
+ .../selftests/bpf/progs/struct_ops_module.c   | 30 ++++++++++
+ tools/testing/selftests/bpf/testing_helpers.c | 35 +++++++++++
+ 6 files changed, 171 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_module.c
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 9dc9625651dc..b133acfe08fb 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -169,7 +169,8 @@ int bpf_map_create(enum bpf_map_type map_type,
- 		   __u32 max_entries,
- 		   const struct bpf_map_create_opts *opts)
- {
--	const size_t attr_sz = offsetofend(union bpf_attr, map_extra);
-+	const size_t attr_sz = offsetofend(union bpf_attr,
-+					   value_type_btf_obj_fd);
- 	union bpf_attr attr;
- 	int fd;
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 9c27b67bc7b1..1b02e3fdaf21 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -458,7 +458,8 @@ TRUNNER_TEST_OBJS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.test.o,	\
+ 				 $$(notdir $$(wildcard $(TRUNNER_TESTS_DIR)/*.c)))
+ TRUNNER_EXTRA_OBJS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.o,		\
+ 				 $$(filter %.c,$(TRUNNER_EXTRA_SOURCES)))
+-TRUNNER_EXTRA_HDRS := $$(filter %.h,$(TRUNNER_EXTRA_SOURCES))
++TRUNNER_EXTRA_HDRS := $$(filter %.h,$(TRUNNER_EXTRA_SOURCES)) \
++	$$(TRUNNER_OUTPUT)$(if $$(TRUNNER_OUTPUT),/)rcu_tasks_trace_gp.skel.h
+ TRUNNER_TESTS_HDR := $(TRUNNER_TESTS_DIR)/tests.h
+ TRUNNER_BPF_SRCS := $$(notdir $$(wildcard $(TRUNNER_BPF_PROGS_DIR)/*.c))
+ TRUNNER_BPF_OBJS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.bpf.o, $$(TRUNNER_BPF_SRCS))
+@@ -724,6 +725,7 @@ $(OUTPUT)/uprobe_multi: uprobe_multi.c
+ 	$(call msg,BINARY,,$@)
+ 	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LDLIBS) -o $@
  
-@@ -191,6 +192,7 @@ int bpf_map_create(enum bpf_map_type map_type,
- 	attr.btf_key_type_id = OPTS_GET(opts, btf_key_type_id, 0);
- 	attr.btf_value_type_id = OPTS_GET(opts, btf_value_type_id, 0);
- 	attr.btf_vmlinux_value_type_id = OPTS_GET(opts, btf_vmlinux_value_type_id, 0);
-+	attr.value_type_btf_obj_fd = OPTS_GET(opts, value_type_btf_obj_fd, 0);
- 
- 	attr.inner_map_fd = OPTS_GET(opts, inner_map_fd, 0);
- 	attr.map_flags = OPTS_GET(opts, map_flags, 0);
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index d0f53772bdc0..ffdd81c0196a 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -51,8 +51,11 @@ struct bpf_map_create_opts {
- 
- 	__u32 numa_node;
- 	__u32 map_ifindex;
 +
-+	__u32 value_type_btf_obj_fd;
-+	size_t:0;
+ EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)	\
+ 	prog_tests/tests.h map_tests/tests.h verifier/tests.h		\
+ 	feature bpftool							\
+diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+index a5e246f7b202..418e10311c33 100644
+--- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2020 Facebook */
++#include <linux/bpf.h>
+ #include <linux/btf.h>
+ #include <linux/btf_ids.h>
+ #include <linux/error-injection.h>
+@@ -522,11 +523,66 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test_static_unused_arg)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_offset)
+ BTF_SET8_END(bpf_testmod_check_kfunc_ids)
+ 
++#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
++
++DEFINE_STRUCT_OPS_VALUE_TYPE(bpf_testmod_ops);
++
++static int bpf_testmod_ops_init(struct btf *btf)
++{
++	return 0;
++}
++
++static bool bpf_testmod_ops_is_valid_access(int off, int size,
++					    enum bpf_access_type type,
++					    const struct bpf_prog *prog,
++					    struct bpf_insn_access_aux *info)
++{
++	return bpf_tracing_btf_ctx_access(off, size, type, prog, info);
++}
++
++static int bpf_testmod_ops_init_member(const struct btf_type *t,
++				       const struct btf_member *member,
++				       void *kdata, const void *udata)
++{
++	return 0;
++}
++
+ static const struct btf_kfunc_id_set bpf_testmod_kfunc_set = {
+ 	.owner = THIS_MODULE,
+ 	.set   = &bpf_testmod_check_kfunc_ids,
  };
--#define bpf_map_create_opts__last_field map_ifindex
-+#define bpf_map_create_opts__last_field value_type_btf_obj_fd
  
- LIBBPF_API int bpf_map_create(enum bpf_map_type map_type,
- 			      const char *map_name,
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index e067be95da3c..0b0ad8461970 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -527,6 +527,7 @@ struct bpf_map {
- 	struct bpf_map_def def;
- 	__u32 numa_node;
- 	__u32 btf_var_idx;
-+	int mod_btf_fd;
- 	__u32 btf_key_type_id;
- 	__u32 btf_value_type_id;
- 	__u32 btf_vmlinux_value_type_id;
-@@ -930,22 +931,29 @@ find_member_by_name(const struct btf *btf, const struct btf_type *t,
- 	return NULL;
- }
- 
-+static int find_ksym_btf_id(struct bpf_object *obj, const char *ksym_name,
-+			    __u16 kind, struct btf **res_btf,
-+			    struct module_btf **res_mod_btf);
++static const struct bpf_verifier_ops bpf_testmod_verifier_ops = {
++	.is_valid_access = bpf_testmod_ops_is_valid_access,
++};
 +
- #define STRUCT_OPS_VALUE_PREFIX "bpf_struct_ops_"
- static int find_btf_by_prefix_kind(const struct btf *btf, const char *prefix,
- 				   const char *name, __u32 kind);
- 
- static int
--find_struct_ops_kern_types(const struct btf *btf, const char *tname,
-+find_struct_ops_kern_types(struct bpf_object *obj, const char *tname,
-+			   struct module_btf **mod_btf,
- 			   const struct btf_type **type, __u32 *type_id,
- 			   const struct btf_type **vtype, __u32 *vtype_id,
- 			   const struct btf_member **data_member)
- {
- 	const struct btf_type *kern_type, *kern_vtype;
- 	const struct btf_member *kern_data_member;
-+	struct btf *btf;
- 	__s32 kern_vtype_id, kern_type_id;
- 	__u32 i;
- 
--	kern_type_id = btf__find_by_name_kind(btf, tname, BTF_KIND_STRUCT);
-+	kern_type_id = find_ksym_btf_id(obj, tname, BTF_KIND_STRUCT,
-+					&btf, mod_btf);
- 	if (kern_type_id < 0) {
- 		pr_warn("struct_ops init_kern: struct %s is not found in kernel BTF\n",
- 			tname);
-@@ -999,14 +1007,16 @@ static bool bpf_map__is_struct_ops(const struct bpf_map *map)
- }
- 
- /* Init the map's fields that depend on kern_btf */
--static int bpf_map__init_kern_struct_ops(struct bpf_map *map,
--					 const struct btf *btf,
--					 const struct btf *kern_btf)
-+static int bpf_map__init_kern_struct_ops(struct bpf_map *map)
- {
- 	const struct btf_member *member, *kern_member, *kern_data_member;
- 	const struct btf_type *type, *kern_type, *kern_vtype;
- 	__u32 i, kern_type_id, kern_vtype_id, kern_data_off;
-+	struct bpf_object *obj = map->obj;
-+	const struct btf *btf = obj->btf;
- 	struct bpf_struct_ops *st_ops;
-+	const struct btf *kern_btf;
-+	struct module_btf *mod_btf;
- 	void *data, *kern_data;
- 	const char *tname;
- 	int err;
-@@ -1014,16 +1024,19 @@ static int bpf_map__init_kern_struct_ops(struct bpf_map *map,
- 	st_ops = map->st_ops;
- 	type = st_ops->type;
- 	tname = st_ops->tname;
--	err = find_struct_ops_kern_types(kern_btf, tname,
-+	err = find_struct_ops_kern_types(obj, tname, &mod_btf,
- 					 &kern_type, &kern_type_id,
- 					 &kern_vtype, &kern_vtype_id,
- 					 &kern_data_member);
- 	if (err)
- 		return err;
- 
-+	kern_btf = mod_btf ? mod_btf->btf : obj->btf_vmlinux;
++static int bpf_dummy_reg(void *kdata)
++{
++	struct bpf_testmod_ops *ops = kdata;
++	int r;
 +
- 	pr_debug("struct_ops init_kern %s: type_id:%u kern_type_id:%u kern_vtype_id:%u\n",
- 		 map->name, st_ops->type_id, kern_type_id, kern_vtype_id);
++	BTF_STRUCT_OPS_TYPE_EMIT(bpf_testmod_ops);
++	r = ops->test_2(4, 3);
++
++	return 0;
++}
++
++static void bpf_dummy_unreg(void *kdata)
++{
++}
++
++struct bpf_struct_ops bpf_bpf_testmod_ops = {
++	.verifier_ops = &bpf_testmod_verifier_ops,
++	.init = bpf_testmod_ops_init,
++	.init_member = bpf_testmod_ops_init_member,
++	.reg = bpf_dummy_reg,
++	.unreg = bpf_dummy_unreg,
++	.name = "bpf_testmod_ops",
++	.owner = THIS_MODULE,
++};
++
++#endif /* CONFIG_DEBUG_INFO_BTF_MODULES */
++
+ extern int bpf_fentry_test1(int a);
  
-+	map->mod_btf_fd = mod_btf ? mod_btf->fd : 0;
- 	map->def.value_size = kern_vtype->size;
- 	map->btf_vmlinux_value_type_id = kern_vtype_id;
+ static int bpf_testmod_init(void)
+@@ -537,6 +593,9 @@ static int bpf_testmod_init(void)
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_testmod_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &bpf_testmod_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &bpf_testmod_kfunc_set);
++#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
++	ret = ret ?: register_bpf_struct_ops(&bpf_bpf_testmod_ops);
++#endif
+ 	if (ret < 0)
+ 		return ret;
+ 	if (bpf_fentry_test1(0) < 0)
+diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h
+index f32793efe095..ca5435751c79 100644
+--- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h
++++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h
+@@ -28,4 +28,9 @@ struct bpf_iter_testmod_seq {
+ 	int cnt;
+ };
  
-@@ -1099,6 +1112,8 @@ static int bpf_map__init_kern_struct_ops(struct bpf_map *map,
- 				return -ENOTSUP;
- 			}
++struct bpf_testmod_ops {
++	int (*test_1)(void);
++	int (*test_2)(int a, int b);
++};
++
+ #endif /* _BPF_TESTMOD_H */
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
+new file mode 100644
+index 000000000000..3a00dc294583
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
+@@ -0,0 +1,39 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2023 Meta Platforms, Inc. and affiliates. */
++#include <test_progs.h>
++#include <time.h>
++
++#include "rcu_tasks_trace_gp.skel.h"
++#include "struct_ops_module.skel.h"
++
++static void test_regular_load(void)
++{
++	struct struct_ops_module *skel;
++	struct bpf_link *link;
++	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, opts);
++	int err;
++
++	skel = struct_ops_module__open_opts(&opts);
++	if (!ASSERT_OK_PTR(skel, "struct_ops_module_open"))
++		return;
++	err = struct_ops_module__load(skel);
++	if (!ASSERT_OK(err, "struct_ops_module_load"))
++		return;
++
++	link = bpf_map__attach_struct_ops(skel->maps.testmod_1);
++	ASSERT_OK_PTR(link, "attach_test_mod_1");
++
++	/* test_2() will be called from bpf_dummy_reg() in bpf_testmod.c */
++	ASSERT_EQ(skel->bss->test_2_result, 7, "test_2_result");
++
++	bpf_link__destroy(link);
++
++	struct_ops_module__destroy(skel);
++}
++
++void serial_test_struct_ops_module(void)
++{
++	if (test__start_subtest("regular_load"))
++		test_regular_load();
++}
++
+diff --git a/tools/testing/selftests/bpf/progs/struct_ops_module.c b/tools/testing/selftests/bpf/progs/struct_ops_module.c
+new file mode 100644
+index 000000000000..cb305d04342f
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/struct_ops_module.c
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2023 Meta Platforms, Inc. and affiliates. */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include "../bpf_testmod/bpf_testmod.h"
++
++char _license[] SEC("license") = "GPL";
++
++int test_2_result = 0;
++
++SEC("struct_ops/test_1")
++int BPF_PROG(test_1)
++{
++	return 0xdeadbeef;
++}
++
++SEC("struct_ops/test_2")
++int BPF_PROG(test_2, int a, int b)
++{
++	test_2_result = a + b;
++	return a + b;
++}
++
++SEC(".struct_ops.link")
++struct bpf_testmod_ops testmod_1 = {
++	.test_1 = (void *)test_1,
++	.test_2 = (void *)test_2,
++};
++
+diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testing/selftests/bpf/testing_helpers.c
+index 8d994884c7b4..05870cd62458 100644
+--- a/tools/testing/selftests/bpf/testing_helpers.c
++++ b/tools/testing/selftests/bpf/testing_helpers.c
+@@ -10,6 +10,7 @@
+ #include "test_progs.h"
+ #include "testing_helpers.h"
+ #include <linux/membarrier.h>
++#include "rcu_tasks_trace_gp.skel.h"
  
-+			if (mod_btf)
-+				prog->attach_btf_obj_fd = mod_btf->fd;
- 			prog->attach_btf_id = kern_type_id;
- 			prog->expected_attach_type = kern_member_idx;
- 
-@@ -1141,8 +1156,7 @@ static int bpf_object__init_kern_struct_ops_maps(struct bpf_object *obj)
- 		if (!bpf_map__is_struct_ops(map))
- 			continue;
- 
--		err = bpf_map__init_kern_struct_ops(map, obj->btf,
--						    obj->btf_vmlinux);
-+		err = bpf_map__init_kern_struct_ops(map);
- 		if (err)
- 			return err;
- 	}
-@@ -5201,8 +5215,10 @@ static int bpf_object__create_map(struct bpf_object *obj, struct bpf_map *map, b
- 	create_attr.numa_node = map->numa_node;
- 	create_attr.map_extra = map->map_extra;
- 
--	if (bpf_map__is_struct_ops(map))
-+	if (bpf_map__is_struct_ops(map)) {
- 		create_attr.btf_vmlinux_value_type_id = map->btf_vmlinux_value_type_id;
-+		create_attr.value_type_btf_obj_fd = map->mod_btf_fd;
-+	}
- 
- 	if (obj->btf && btf__fd(obj->btf) >= 0) {
- 		create_attr.btf_fd = btf__fd(obj->btf);
-@@ -9479,9 +9495,9 @@ static int libbpf_find_prog_btf_id(const char *name, __u32 attach_prog_fd)
- 	return err;
+ int parse_num_list(const char *s, bool **num_set, int *num_set_len)
+ {
+@@ -380,10 +381,44 @@ int load_bpf_testmod(bool verbose)
+ 	return 0;
  }
  
--static int find_kernel_btf_id(struct bpf_object *obj, const char *attach_name,
--			      enum bpf_attach_type attach_type,
--			      int *btf_obj_fd, int *btf_type_id)
-+static int find_kernel_attach_btf_id(struct bpf_object *obj, const char *attach_name,
-+				     enum bpf_attach_type attach_type,
-+				     int *btf_obj_fd, int *btf_type_id)
++/* This function will trigger call_rcu_tasks_trace() in the kernel */
++static int kern_sync_rcu_tasks_trace(void)
++{
++	struct rcu_tasks_trace_gp *rcu;
++	time_t start;
++	long gp_seq;
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++
++	rcu = rcu_tasks_trace_gp__open_and_load();
++	if (IS_ERR(rcu))
++		return -EFAULT;
++	if (rcu_tasks_trace_gp__attach(rcu))
++		return -EFAULT;
++
++	gp_seq = READ_ONCE(rcu->bss->gp_seq);
++
++	if (bpf_prog_test_run_opts(bpf_program__fd(rcu->progs.do_call_rcu_tasks_trace),
++				   &opts))
++		return -EFAULT;
++	if (opts.retval != 0)
++		return -EFAULT;
++
++	start = time(NULL);
++	while ((start + 2) > time(NULL) &&
++	       gp_seq == READ_ONCE(rcu->bss->gp_seq))
++		sched_yield();
++
++	rcu_tasks_trace_gp__destroy(rcu);
++
++	return 0;
++}
++
+ /*
+  * Trigger synchronize_rcu() in kernel.
+  */
+ int kern_sync_rcu(void)
  {
- 	int ret, i;
- 
-@@ -9546,7 +9562,9 @@ static int libbpf_find_attach_btf_id(struct bpf_program *prog, const char *attac
- 		*btf_obj_fd = 0;
- 		*btf_type_id = 1;
- 	} else {
--		err = find_kernel_btf_id(prog->obj, attach_name, attach_type, btf_obj_fd, btf_type_id);
-+		err = find_kernel_attach_btf_id(prog->obj, attach_name,
-+						attach_type, btf_obj_fd,
-+						btf_type_id);
- 	}
- 	if (err) {
- 		pr_warn("prog '%s': failed to find kernel BTF type ID of '%s': %d\n",
-@@ -13004,9 +13022,9 @@ int bpf_program__set_attach_target(struct bpf_program *prog,
- 		err = bpf_object__load_vmlinux_btf(prog->obj, true);
- 		if (err)
- 			return libbpf_err(err);
--		err = find_kernel_btf_id(prog->obj, attach_func_name,
--					 prog->expected_attach_type,
--					 &btf_obj_fd, &btf_id);
-+		err = find_kernel_attach_btf_id(prog->obj, attach_func_name,
-+						prog->expected_attach_type,
-+						&btf_obj_fd, &btf_id);
- 		if (err)
- 			return libbpf_err(err);
- 	}
++	if (kern_sync_rcu_tasks_trace())
++		return -EFAULT;
+ 	return syscall(__NR_membarrier, MEMBARRIER_CMD_SHARED, 0, 0);
+ }
 -- 
 2.34.1
 
