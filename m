@@ -1,228 +1,99 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B39E374C5;
-	Fri, 27 Oct 2023 18:55:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0013E3716D;
+	Fri, 27 Oct 2023 19:03:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="IPAkS5dJ";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="a+s0bHh3"
-X-Greylist: delayed 538 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 27 Oct 2023 11:55:49 PDT
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FAAB0;
-	Fri, 27 Oct 2023 11:55:49 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-	by mailnew.nyi.internal (Postfix) with ESMTP id 75F77580897;
-	Fri, 27 Oct 2023 14:46:50 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Fri, 27 Oct 2023 14:46:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to; s=fm2; t=1698432410; x=
-	1698439610; bh=4Ah8oNGCj3UUd4tZonhdOFYd28AC8mVLruGLmu1uJPo=; b=I
-	PAkS5dJshTzDmnYREnLGTIhjhlFecijpEqy/PDiLikg0oCGpEgJh5de3dOX7wkUa
-	hyfUxIReX4ma5e5Oygouqo4Pi03/gfedrh2WAcuNkOPIW5JNchmJ/KCcQEKZIsBs
-	igQ7c3r++jeCNMMUGMxIhn5kPo8sVL3nSMnxHB+mcAxIqfXBi1h7gfQk9eUONCiJ
-	pKTlRbXXK2IA1F0uN4tRwho2zWlSmkkj4J8mTLZi7eSrAhv9ge+g4vtOvce47psP
-	5TGwghjcrPtgGhcgXKs6OwRGFO2sr+u32evgEa0yLRTo86HcIJw3EK4LHicEMh/V
-	n0FhUC9+QK9QWALZ46gfQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1698432410; x=
-	1698439610; bh=4Ah8oNGCj3UUd4tZonhdOFYd28AC8mVLruGLmu1uJPo=; b=a
-	+s0bHh37UBfTbKEIUYy2DpBSmxlSfdfS3Gc1uIsRC9gq23yXCvX3L7Zb/rKlnp8O
-	ssQkISNFafXFz9cdQr0nW6paOdVKvDNZZn/155wGTqdbHPE7NWa95PgXEYTR/fd8
-	he1o1CtxfK8svO7Z/fWM2O2EBRzeMwx0urPHBmttxK2fFSMuAxu6C0kB/H8w3TwS
-	4Rf67a+yesMz7Yy9CeV/wuNXY0pHVtHQ8T8/V6mL8g2emMjYooQXNszA6FalJX5X
-	zccDoTUhveN+4niVrZcYnTxVtSV7W57ITwtSSl6UAljs7ysnGK3Ezu93YaNMln21
-	A2ZFOJRRk4w8TOgGqIgRg==
-X-ME-Sender: <xms:mgU8ZWh-T_UB48zprN2VicCqDSuW13KZX9BGW0NUzBYDopTY549qzg>
-    <xme:mgU8ZXBeQN7i-OXOzcf9fAqEtrxabv8G-yQQl9mOetLlwCxFs0I0UjXgXKJJu1DZM
-    FVk4FaJsTtm_93Yvg>
-X-ME-Received: <xmr:mgU8ZeEt4Zz1Q3-uw_9yqMa5GWXpMBEmVnZFLXcl2IrYf35OsflaEUsUSedVqKSCFeFpyAE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrleeggddufedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpefhvf
-    evufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceo
-    ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepgfefgfegjefhudeike
-    dvueetffelieefuedvhfehjeeljeejkefgffeghfdttdetnecuvehluhhsthgvrhfuihii
-    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:mgU8ZfQaaMlZOurJM5B2tfTHP2Lu0rHpBDLAKXQXlLZNYrw73Dht2g>
-    <xmx:mgU8ZTx2vvZndN9UGOhdREa2Iq7hv43Q8DGcbvo0B1s2T-cPNN5kAA>
-    <xmx:mgU8Zd7biLVIpHekm13ObRpvGz8wjteFPwDD7-IyKil_oNUKLmOh8w>
-    <xmx:mgU8ZRq7VqWDZvY9zoT78pBLb3G2ESoDdlYXUz0KMbXmXbytZiuteg>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 27 Oct 2023 14:46:49 -0400 (EDT)
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: hawk@kernel.org,
-	ast@kernel.org,
-	shuah@kernel.org,
-	daniel@iogearbox.net,
-	kuba@kernel.org,
-	davem@davemloft.net,
-	andrii@kernel.org,
-	john.fastabend@gmail.com,
-	steffen.klassert@secunet.com,
-	antony.antony@secunet.com
-Cc: mykolal@fb.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	devel@linux-ipsec.org
-Subject: [RFC bpf-next 6/6] bpf: xfrm: Add selftest for bpf_xdp_get_xfrm_state()
-Date: Fri, 27 Oct 2023 12:46:22 -0600
-Message-ID: <62f770a8956773a3c21dccb6037aee305dc7e4c6.1698431765.git.dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <cover.1698431765.git.dxu@dxuuu.xyz>
-References: <cover.1698431765.git.dxu@dxuuu.xyz>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C7OFYN20"
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98947B0;
+	Fri, 27 Oct 2023 12:03:02 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id 6a1803df08f44-66cfef11a25so15868276d6.3;
+        Fri, 27 Oct 2023 12:03:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698433381; x=1699038181; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/Io45bblugk6GHU86iMBX0jRVvZ5htGOKZIfVTPVwXE=;
+        b=C7OFYN20Z7RnqjfrVa1aHuHPo9it8iC+l+AX/m64I7ZSyu+z9dvXEM4wlNpK83KJhs
+         3Onz9N6BbRN6CjVim3MNg++oNV3SEIpIV3jCATSpklqPYFRANOkzjhOoK1C7PfiXwQII
+         YijO0MH6VNlk7fhcuObrDddqs8+WHYytAgDfb0vFyRRqCLUa3tTxyVohbDi9AtoY3mxp
+         dlFfuFCKeBs3xwA23p8rQuhBdXRQ/pK67yYyvsO1IaIzgTAEAk/WfKGzyDqNaIt78x/Q
+         phKc/5Suqze+QnmXCbixQR8YUatrmO4rxte0//AJvo3CcbbHWK6DEvMEUFfWBhlnqwrS
+         ga2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698433381; x=1699038181;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/Io45bblugk6GHU86iMBX0jRVvZ5htGOKZIfVTPVwXE=;
+        b=MTQ+abfI55fcdIdqM7hU8FtzAoeCYp2dEMuU4tyogMKgofd6eS4i7I+KHTJF8WYi6A
+         RBbT70ralyB2Xjngd2ouV5mBzoNHye0qt22YZmhJKsfjBl86azDriSUR4yhpjqEXKS49
+         8zr+DehAaoVMlZLvMUh4usOihYaRP+suVs0Lrx/nUEDLL/StGLRHvD4qzUVFohHlr3ox
+         eIeK/2iq9EvRbU4lVKsbPNpT2ZDzzgvpj0EZE6bHwgWLkv4arMaVWv0G8UmIJBuOqdPt
+         GkJbORmJT5zCoMvxE+nyIzuD0AYsjms7wjx+TuyzG9o8uEue040avX0p9Tc+2a2t45ac
+         lQng==
+X-Gm-Message-State: AOJu0YzCXwAbrmleO59bnKw8MSPs4QxZDQi6bM/cXzvc4kyZ31DLGBvr
+	5PbPWGHUmIgVQODXde9+HTappZiyCA==
+X-Google-Smtp-Source: AGHT+IHfYJEilVaXWDYjxblIhjiDRowZ6QCyhiNfjv4ef2Fxjo2bamCtWSGzTr57wERF8ldHGodJ9Q==
+X-Received: by 2002:a05:6214:c49:b0:66d:9589:6bb6 with SMTP id r9-20020a0562140c4900b0066d95896bb6mr4058302qvj.63.1698433381324;
+        Fri, 27 Oct 2023 12:03:01 -0700 (PDT)
+Received: from n191-129-154.byted.org ([147.160.184.150])
+        by smtp.gmail.com with ESMTPSA id ph4-20020a0562144a4400b0066da90f0c19sm844422qvb.24.2023.10.27.12.03.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Oct 2023 12:03:00 -0700 (PDT)
+Date: Fri, 27 Oct 2023 19:02:59 +0000
+From: Peilin Ye <yepeilin.cs@gmail.com>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>
+Cc: Peilin Ye <peilin.ye@bytedance.com>, netdev@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Cong Wang <cong.wang@bytedance.com>,
+	Jiang Wang <jiang.wang@bytedance.com>,
+	Youlun Zhang <zhangyoulun@bytedance.com>
+Subject: Re: [PATCH net] veth: Fix RX stats for bpf_redirect_peer() traffic
+Message-ID: <20231027190254.GA88444@n191-129-154.byted.org>
+References: <20231027184657.83978-1-yepeilin.cs@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231027184657.83978-1-yepeilin.cs@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-This commit extends test_tunnel selftest to test the new XDP xfrm state
-lookup kfunc.
+Hi all,
 
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
----
- .../selftests/bpf/progs/test_tunnel_kern.c    | 46 +++++++++++++++++++
- tools/testing/selftests/bpf/test_tunnel.sh    | 12 +++--
- 2 files changed, 54 insertions(+), 4 deletions(-)
+On Fri, Oct 27, 2023 at 06:46:57PM +0000, Peilin Ye wrote:
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 21d75108c2e9..7aca28b7d0fd 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -2492,6 +2492,7 @@ int skb_do_redirect(struct sk_buff *skb)
+>  			     net_eq(net, dev_net(dev))))
+>  			goto out_drop;
+>  		skb->dev = dev;
+> +		dev_sw_netstats_rx_add(dev, skb->len);
 
-diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-index ec7e04e012ae..f5f6a18ac0f1 100644
---- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-@@ -35,6 +35,9 @@ int bpf_skb_set_fou_encap(struct __sk_buff *skb_ctx,
- 			  struct bpf_fou_encap *encap, int type) __ksym;
- int bpf_skb_get_fou_encap(struct __sk_buff *skb_ctx,
- 			  struct bpf_fou_encap *encap) __ksym;
-+struct xfrm_state *
-+bpf_xdp_get_xfrm_state(struct xdp_md *ctx, struct bpf_xfrm_state_opts *opts,
-+		       u32 opts__sz) __ksym;
- 
- struct {
- 	__uint(type, BPF_MAP_TYPE_ARRAY);
-@@ -948,4 +951,47 @@ int xfrm_get_state(struct __sk_buff *skb)
- 	return TC_ACT_OK;
- }
- 
-+SEC("xdp")
-+int xfrm_get_state_xdp(struct xdp_md *xdp)
-+{
-+	struct bpf_xfrm_state_opts opts = {};
-+	struct ip_esp_hdr *esph;
-+	struct bpf_dynptr ptr;
-+	struct xfrm_state *x;
-+	u8 esph_buf[8] = {};
-+	u8 iph_buf[20] = {};
-+	struct iphdr *iph;
-+	u32 off;
-+
-+	if (bpf_dynptr_from_xdp(xdp, 0, &ptr))
-+		goto out;
-+
-+	off = sizeof(struct ethhdr);
-+	iph = bpf_dynptr_slice(&ptr, off, iph_buf, sizeof(iph_buf));
-+	if (!iph || iph->protocol != IPPROTO_ESP)
-+		goto out;
-+
-+	off += sizeof(struct iphdr);
-+	esph = bpf_dynptr_slice(&ptr, off, esph_buf, sizeof(esph_buf));
-+	if (!esph)
-+		goto out;
-+
-+	opts.netns_id = BPF_F_CURRENT_NETNS,
-+	opts.daddr.a4 = iph->daddr;
-+	opts.spi = esph->spi;
-+	opts.proto = IPPROTO_ESP;
-+	opts.family = AF_INET;
-+
-+	x = bpf_xdp_get_xfrm_state(xdp, &opts, sizeof(opts));
-+	if (!x || opts.error)
-+		goto out;
-+
-+	if (!x->replay_esn)
-+		goto out;
-+
-+	bpf_printk("replay-window %d\n", x->replay_esn->replay_window);
-+out:
-+	return XDP_PASS;
-+}
-+
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/test_tunnel.sh b/tools/testing/selftests/bpf/test_tunnel.sh
-index dd3c79129e87..17d263681c71 100755
---- a/tools/testing/selftests/bpf/test_tunnel.sh
-+++ b/tools/testing/selftests/bpf/test_tunnel.sh
-@@ -528,7 +528,7 @@ setup_xfrm_tunnel()
- 	# at_ns0 -> root
- 	ip netns exec at_ns0 \
- 		ip xfrm state add src 172.16.1.100 dst 172.16.1.200 proto esp \
--			spi $spi_in_to_out reqid 1 mode tunnel \
-+			spi $spi_in_to_out reqid 1 mode tunnel replay-window 42 \
- 			auth-trunc 'hmac(sha1)' $auth 96 enc 'cbc(aes)' $enc
- 	ip netns exec at_ns0 \
- 		ip xfrm policy add src 10.1.1.100/32 dst 10.1.1.200/32 dir out \
-@@ -537,7 +537,7 @@ setup_xfrm_tunnel()
- 	# root -> at_ns0
- 	ip netns exec at_ns0 \
- 		ip xfrm state add src 172.16.1.200 dst 172.16.1.100 proto esp \
--			spi $spi_out_to_in reqid 2 mode tunnel \
-+			spi $spi_out_to_in reqid 2 mode tunnel replay-window 42 \
- 			auth-trunc 'hmac(sha1)' $auth 96 enc 'cbc(aes)' $enc
- 	ip netns exec at_ns0 \
- 		ip xfrm policy add src 10.1.1.200/32 dst 10.1.1.100/32 dir in \
-@@ -553,14 +553,14 @@ setup_xfrm_tunnel()
- 	# root namespace
- 	# at_ns0 -> root
- 	ip xfrm state add src 172.16.1.100 dst 172.16.1.200 proto esp \
--		spi $spi_in_to_out reqid 1 mode tunnel \
-+		spi $spi_in_to_out reqid 1 mode tunnel replay-window 42 \
- 		auth-trunc 'hmac(sha1)' $auth 96  enc 'cbc(aes)' $enc
- 	ip xfrm policy add src 10.1.1.100/32 dst 10.1.1.200/32 dir in \
- 		tmpl src 172.16.1.100 dst 172.16.1.200 proto esp reqid 1 \
- 		mode tunnel
- 	# root -> at_ns0
- 	ip xfrm state add src 172.16.1.200 dst 172.16.1.100 proto esp \
--		spi $spi_out_to_in reqid 2 mode tunnel \
-+		spi $spi_out_to_in reqid 2 mode tunnel replay-window 42 \
- 		auth-trunc 'hmac(sha1)' $auth 96  enc 'cbc(aes)' $enc
- 	ip xfrm policy add src 10.1.1.200/32 dst 10.1.1.100/32 dir out \
- 		tmpl src 172.16.1.200 dst 172.16.1.100 proto esp reqid 2 \
-@@ -585,6 +585,8 @@ test_xfrm_tunnel()
- 	tc qdisc add dev veth1 clsact
- 	tc filter add dev veth1 proto ip ingress bpf da object-pinned \
- 		${BPF_PIN_TUNNEL_DIR}/xfrm_get_state
-+	ip link set dev veth1 xdpdrv pinned \
-+		${BPF_PIN_TUNNEL_DIR}/xfrm_get_state_xdp
- 	ip netns exec at_ns0 ping $PING_ARG 10.1.1.200
- 	sleep 1
- 	grep "reqid 1" ${TRACE}
-@@ -593,6 +595,8 @@ test_xfrm_tunnel()
- 	check_err $?
- 	grep "remote ip 0xac100164" ${TRACE}
- 	check_err $?
-+	grep "replay-window 42" ${TRACE}
-+	check_err $?
- 	cleanup
- 
- 	if [ $ret -ne 0 ]; then
--- 
-2.42.0
+This assumes that all devices that support BPF_F_PEER (currently only
+veth) use tstats (instead of lstats, or dstats) - is that okay?
+
+If not, should I add another NDO e.g. ->ndo_stats_rx_add()?
+
+Thanks,
+Peilin Ye
 
