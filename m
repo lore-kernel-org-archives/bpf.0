@@ -1,214 +1,218 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 638FF3C079
-	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 18:17:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA6BC1
-	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:17:49 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39RE620C006512
-	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:17:49 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3tywry0fdh-4
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:17:48 -0700
-Received: from twshared40933.03.prn6.facebook.com (2620:10d:c0a8:1b::30) by
- mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Fri, 27 Oct 2023 11:17:45 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id D1A243A796748; Fri, 27 Oct 2023 11:14:38 -0700 (PDT)
-From: Andrii Nakryiko <andrii@kernel.org>
-To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@kernel.org>
-CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH v5 bpf-next 22/23] selftests/bpf: add range x range test to reg_bounds
-Date: Fri, 27 Oct 2023 11:13:45 -0700
-Message-ID: <20231027181346.4019398-23-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231027181346.4019398-1-andrii@kernel.org>
-References: <20231027181346.4019398-1-andrii@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BB8337C9E
+	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 18:20:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KWM5GPmk"
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA9018F
+	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:20:38 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-99c3d3c3db9so386261166b.3
+        for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:20:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698430837; x=1699035637; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gqmiZmjBD0+9/jPDrSH0XeNW4tiUbOY3mRzWFEy07AE=;
+        b=KWM5GPmkvU7AnZr6WMy3y/txHL0r0VFf75J8lXa3x7T0FGBoJR6JDDiQfmUeiDJuD+
+         nl3dHPY2i4weVO2JmzKo7zh32wfOPHTL176LAcx0/vi5vz2MfJ/aEU8fVFwJpZ8+QgTw
+         otnlaoGrF1Oad0MBRR/hv5sHp6SDDuHhIAebncte4E+ODoUW5vVBlvcUf/xzAv71R6lQ
+         KdUgHaYVQo19DKou5b0Geo8LcdK/Ms3Y+PDXKU4JTchZt6Qw9woUmSiqv7KNxAXj6lTg
+         7NOoBOH/v1dGMCWLmXlDUWTU8qFKCGRr7+Vi1USnOCtxSbi5sovvIHyLVykDToX3awzr
+         1CIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698430837; x=1699035637;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gqmiZmjBD0+9/jPDrSH0XeNW4tiUbOY3mRzWFEy07AE=;
+        b=mPfNA3/T58/aNPUrkosg9fFjT30Z9ovHgl1dANZIdGpyqGLuAUIZIO/5y1crayzxNq
+         DH5TztnfKFgkSAPJn69sBpG44dTMMtJIEAaxwS+jfy379gFrzbaoPdjrhM2/+Y2hqCJN
+         fW+C8so9rU6kd8CzMuV5SvdL52QpOOuRrc0ohcrUs/mWgXX3OXXQAwVMO2ktjbg8HIZU
+         tS3fXEyQdihhU5Y4kOQnp0Ax5UUfh/B8FfwwXHZEjQR6tGWcN0SrIpZJRZXsxq3QtZoB
+         faRAjQI/LKi1fjYfhJ1LfSeE4gXbcUsVWJb0NpLhYiTiB8Xsd6COG/NTP6HwbGEitxou
+         pZnw==
+X-Gm-Message-State: AOJu0Yx3t1knyX3e09XC4AKjKmGJDXl6NhVNTcKaq6wHhCX8pOA5PtcH
+	zVik5G1DEK3qUJx7V1LAgDy5F8k5nuHDgRunSNk=
+X-Google-Smtp-Source: AGHT+IEKeg90HuYo1E4g9naNgpe2d6FDeFoRuMDbCnY3PSm2QIi1bMJFI4704e2AO1DHws8Y57K15SrIN0qWEmjbfEU=
+X-Received: by 2002:a17:907:26c4:b0:9ae:5120:5147 with SMTP id
+ bp4-20020a17090726c400b009ae51205147mr2495654ejc.38.1698430837320; Fri, 27
+ Oct 2023 11:20:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20231020220216.263948-1-tao.lyu@epfl.ch> <CAEf4Bzb6uXiKK4=1++9Lu=GyfU1Co6VcqRwNO8PsQL=TzGzs-A@mail.gmail.com>
+ <a1c717381a0049da9f5472f691477ba8@epfl.ch>
+In-Reply-To: <a1c717381a0049da9f5472f691477ba8@epfl.ch>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 27 Oct 2023 11:20:25 -0700
+Message-ID: <CAEf4BzYpvmcw4snk-kAFbYu515xxYRg6c-E2XNtURwmFwaACvw@mail.gmail.com>
+Subject: Re: [PATCH] Accept program in priv mode when returning from subprog
+ with r10 marked as precise
+To: Tao Lyu <tao.lyu@epfl.ch>
+Cc: "ast@kernel.org" <ast@kernel.org>, "daniel@iogearbox.net" <daniel@iogearbox.net>, 
+	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "andrii@kernel.org" <andrii@kernel.org>, 
+	"martin.lau@linux.dev" <martin.lau@linux.dev>, "song@kernel.org" <song@kernel.org>, 
+	"yonghong.song@linux.dev" <yonghong.song@linux.dev>, "kpsingh@kernel.org" <kpsingh@kernel.org>, 
+	"sdf@google.com" <sdf@google.com>, "haoluo@google.com" <haoluo@google.com>, 
+	"jolsa@kernel.org" <jolsa@kernel.org>, "mykolal@fb.com" <mykolal@fb.com>, 
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, Sanidhya Kashyap <sanidhya.kashyap@epfl.ch>, 
+	"mathias.payer@nebelwelt.net" <mathias.payer@nebelwelt.net>, 
+	"meng.xu.cs@uwaterloo.ca" <meng.xu.cs@uwaterloo.ca>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: OCBztgZhpEY5X51rHQyVkzNlvKax9brv
-X-Proofpoint-GUID: OCBztgZhpEY5X51rHQyVkzNlvKax9brv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-27_17,2023-10-27_01,2023-05-22_02
 
-Now that verifier supports range vs range bounds adjustments, validate
-that by checking each generated range against every other generated
-range, across all supported operators (everything by JSET).
+On Fri, Oct 27, 2023 at 2:06=E2=80=AFAM Tao Lyu <tao.lyu@epfl.ch> wrote:
+>
+> >>
+> >> There is another issue about the backtracking.
+> >> When uploading the following program under privilege mode,
+> >> the verifier reports a "verifier backtracking bug".
+> >>
+> >> 0: R1=3Dctx(off=3D0,imm=3D0) R10=3Dfp0
+> >> 0: (85) call pc+2
+> >> caller:
+> >>  R10=3Dfp0
+> >> callee:
+> >>  frame1: R1=3Dctx(off=3D0,imm=3D0) R10=3Dfp0
+> >> 3: frame1:
+> >> 3: (bf) r3 =3D r10                      ; frame1: R3_w=3Dfp0 R10=3Dfp0
+> >> 4: (bc) w0 =3D w10                      ; frame1: R0_w=3Dscalar(umax=
+=3D4294967295,var_off=3D(0x0; 0xffffffff)) R10=3Dfp0
+> >> 5: (0f) r3 +=3D r0
+> >> mark_precise: frame1: last_idx 5 first_idx 0 subseq_idx -1
+> >> mark_precise: frame1: regs=3Dr0 stack=3D before 4: (bc) w0 =3D w10
+> >> mark_precise: frame1: regs=3Dr10 stack=3D before 3: (bf) r3 =3D r10
+> >> mark_precise: frame1: regs=3Dr10 stack=3D before 0: (85) call pc+2
+> >> BUG regs 400
+> >>
+> >> This bug is manifested by the following check:
+> >>
+> >> if (bt_reg_mask(bt) & ~BPF_REGMASK_ARGS) {
+> >>     verbose(env, "BUG regs %x\n", bt_reg_mask(bt));
+> >>     WARN_ONCE(1, "verifier backtracking bug");
+> >>     return -EFAULT;
+> >> }
+> >>
+> >> Since the verifier allows add operation on stack pointers,
+> >> it shouldn't show this WARNING and reject the program.
+> >>
+> >> I fixed it by skipping the warning if it's privilege mode and only r10=
+ is marked as precise.
+> >>
+> >
+> >See my reply to your other email. It would be nice if you can rewrite
+> >your tests in inline assembly, it would be easier to follow and debug.
+> >
+>
+> Sorry, I'm new to this community.
+> Could you explain a little bit more about what the inline assembly is?
+> I wrote the test confirming to the test cases under "tools/testing/selfte=
+sts/bpf".
 
-We also add few cases that were problematic during development either
-for verifier or for selftest's range tracking implementation.
+see progs/verifier_subprog_precision.c under
+tools/testing/selftests/bpf, those examples show how we write verifier
+tests using BPF assembly, instead of constructing BPF programs out of
+BPF_XXX() macros (which are much harder to write and read)
 
-Note that we utilize the same trick with splitting everything into
-multiple independent parallelizable tests, but init_t and cond_t. This
-brings down verification time in parallel mode from more than 8 hours
-down to less that 1.5 hours. 106 million cases were successfully
-validate for range vs range logic, in addition to about 7 million range
-vs const cases, added in earlier patch.
+>
+> >I think your fix is papering over the fact that we don't recognize
+> >non-r10 stack access. Once we fix that, we shouldn't need extra hacks.
+> >So let's solve the underlying problem first.
+>
+> Sure, we can fix the non-r10 stack access first.
+>
+> However, the bug here is not related to the r10 stack access tracking, as=
+ there is no stack access in the test case.
+> The root cause is that when meeting subprog calling instruction, the veri=
+fier asserts that r10 can't be marked as precise.
+> However, under privileged mode, the verifier allows arithmetic operations=
+ (e.g., sub and add) on stack pointers, and thus, it's legal that r10 can b=
+e marked as precise.
+> In this situation, the verifier might incorrectly reject programs.
+>
+> Solutions for this issue:
+> 1) Never mark r10 as precise during backtracking
+> 2) Modify this assertion so that under privileged mode, even if the verif=
+ier sees r10 is marked as precise, it does throw the WARNING.
+>
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- .../selftests/bpf/prog_tests/reg_bounds.c     | 86 +++++++++++++++++++
- 1 file changed, 86 insertions(+)
+I'm not entirely sure, but I think the right solution is to prevent
+r10 and generally PTR_TO_STACK from being marked as precise. It should
+be precise implicitly, just like any other non-SCALAR_VALUE register.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/=
-testing/selftests/bpf/prog_tests/reg_bounds.c
-index 330618cc12e7..16864c940548 100644
---- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-+++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-@@ -1752,6 +1752,60 @@ static void validate_gen_range_vs_const_32(enum nu=
-m_t init_t, enum num_t cond_t)
- 	cleanup_ctx(&ctx);
- }
-=20
-+static void validate_gen_range_vs_range(enum num_t init_t, enum num_t co=
-nd_t)
-+{
-+	struct ctx ctx;
-+	const struct range *ranges;
-+	int i, j, rcnt;
+> The patch I provided is the second solution.
+>
+> >> Signed-off-by: Tao Lyu <tao.lyu@epfl.ch>
+> >> ---
+> >>  kernel/bpf/verifier.c                            |  4 +++-
+> >>  .../bpf/verifier/ret-without-checing-r10.c       | 16 +++++++++++++++=
 +
-+	memset(&ctx, 0, sizeof(ctx));
-+
-+	if (prepare_gen_tests(&ctx))
-+		goto cleanup;
-+
-+	switch (init_t)
-+	{
-+	case U64:
-+		ranges =3D ctx.uranges;
-+		rcnt =3D ctx.range_cnt;
-+		break;
-+	case U32:
-+		ranges =3D ctx.usubranges;
-+		rcnt =3D ctx.subrange_cnt;
-+		break;
-+	case S64:
-+		ranges =3D ctx.sranges;
-+		rcnt =3D ctx.range_cnt;
-+		break;
-+	case S32:
-+		ranges =3D ctx.ssubranges;
-+		rcnt =3D ctx.subrange_cnt;
-+		break;
-+	default:
-+		printf("validate_gen_range_vs_range!\n");
-+		exit(1);
-+	}
-+
-+	ctx.total_case_cnt =3D (MAX_OP - MIN_OP + 1) * (2 * rcnt * (rcnt + 1) /=
- 2);
-+	ctx.start_ns =3D get_time_ns();
-+	snprintf(ctx.progress_ctx, sizeof(ctx.progress_ctx),
-+		 "RANGE x RANGE, %s -> %s",
-+		 t_str(init_t), t_str(cond_t));
-+
-+	for (i =3D 0; i < rcnt; i++) {
-+		for (j =3D i; j < rcnt; j++) {
-+			/* (<range> x <range>) */
-+			if (verify_case(&ctx, init_t, cond_t, ranges[i], ranges[j]))
-+				goto cleanup;
-+			if (verify_case(&ctx, init_t, cond_t, ranges[j], ranges[i]))
-+				goto cleanup;
-+		}
-+	}
-+
-+cleanup:
-+	cleanup_ctx(&ctx);
-+}
-+
- /* Go over thousands of test cases generated from initial seed values.
-  * Given this take a long time, guard this begind SLOW_TESTS=3D1 envvar.=
- If
-  * envvar is not set, this test is skipped during test_progs testing.
-@@ -1782,6 +1836,27 @@ void test_reg_bounds_gen_consts_s32_s64(void) { va=
-lidate_gen_range_vs_const_32(S
- void test_reg_bounds_gen_consts_s32_u32(void) { validate_gen_range_vs_co=
-nst_32(S32, U32); }
- void test_reg_bounds_gen_consts_s32_s32(void) { validate_gen_range_vs_co=
-nst_32(S32, S32); }
-=20
-+/* RANGE x RANGE, U64 initial range */
-+void test_reg_bounds_gen_ranges_u64_u64(void) { validate_gen_range_vs_ra=
-nge(U64, U64); }
-+void test_reg_bounds_gen_ranges_u64_s64(void) { validate_gen_range_vs_ra=
-nge(U64, S64); }
-+void test_reg_bounds_gen_ranges_u64_u32(void) { validate_gen_range_vs_ra=
-nge(U64, U32); }
-+void test_reg_bounds_gen_ranges_u64_s32(void) { validate_gen_range_vs_ra=
-nge(U64, S32); }
-+/* RANGE x RANGE, S64 initial range */
-+void test_reg_bounds_gen_ranges_s64_u64(void) { validate_gen_range_vs_ra=
-nge(S64, U64); }
-+void test_reg_bounds_gen_ranges_s64_s64(void) { validate_gen_range_vs_ra=
-nge(S64, S64); }
-+void test_reg_bounds_gen_ranges_s64_u32(void) { validate_gen_range_vs_ra=
-nge(S64, U32); }
-+void test_reg_bounds_gen_ranges_s64_s32(void) { validate_gen_range_vs_ra=
-nge(S64, S32); }
-+/* RANGE x RANGE, U32 initial range */
-+void test_reg_bounds_gen_ranges_u32_u64(void) { validate_gen_range_vs_ra=
-nge(U32, U64); }
-+void test_reg_bounds_gen_ranges_u32_s64(void) { validate_gen_range_vs_ra=
-nge(U32, S64); }
-+void test_reg_bounds_gen_ranges_u32_u32(void) { validate_gen_range_vs_ra=
-nge(U32, U32); }
-+void test_reg_bounds_gen_ranges_u32_s32(void) { validate_gen_range_vs_ra=
-nge(U32, S32); }
-+/* RANGE x RANGE, S32 initial range */
-+void test_reg_bounds_gen_ranges_s32_u64(void) { validate_gen_range_vs_ra=
-nge(S32, U64); }
-+void test_reg_bounds_gen_ranges_s32_s64(void) { validate_gen_range_vs_ra=
-nge(S32, S64); }
-+void test_reg_bounds_gen_ranges_s32_u32(void) { validate_gen_range_vs_ra=
-nge(S32, U32); }
-+void test_reg_bounds_gen_ranges_s32_s32(void) { validate_gen_range_vs_ra=
-nge(S32, S32); }
-+
- /* A set of hard-coded "interesting" cases to validate as part of normal
-  * test_progs test runs
-  */
-@@ -1795,6 +1870,12 @@ static struct subtest_case crafted_cases[] =3D {
- 	{U64, U64, {0x100000000ULL, 0x1fffffffeULL}, {0, 0}},
- 	{U64, U64, {0x100000001ULL, 0x1000000ffULL}, {0, 0}},
-=20
-+	/* single point overlap, interesting BPF_EQ and BPF_NE interactions */
-+	{U64, U64, {0, 1}, {1, 0x80000000}},
-+	{U64, S64, {0, 1}, {1, 0x80000000}},
-+	{U64, U32, {0, 1}, {1, 0x80000000}},
-+	{U64, S32, {0, 1}, {1, 0x80000000}},
-+
- 	{U64, S64, {0, 0xffffffff00000000ULL}, {0, 0}},
- 	{U64, S64, {0x7fffffffffffffffULL, 0xffffffff00000000ULL}, {0, 0}},
- 	{U64, S64, {0x7fffffff00000001ULL, 0xffffffff00000000ULL}, {0, 0}},
-@@ -1829,6 +1910,11 @@ static struct subtest_case crafted_cases[] =3D {
- 	{U32, U32, {1, U32_MAX}, {0, 0}},
-=20
- 	{U32, S32, {0, U32_MAX}, {U32_MAX, U32_MAX}},
-+
-+	{S32, U64, {(u32)(s32)S32_MIN, (u32)(s32)S32_MIN}, {(u32)(s32)-255, 0}}=
-,
-+	{S32, S64, {(u32)(s32)S32_MIN, (u32)(s32)-255}, {(u32)(s32)-2, 0}},
-+	{S32, S64, {0, 1}, {(u32)(s32)S32_MIN, (u32)(s32)S32_MIN}},
-+	{S32, U32, {(u32)(s32)S32_MIN, (u32)(s32)S32_MIN}, {(u32)(s32)S32_MIN, =
-(u32)(s32)S32_MIN}},
- };
-=20
- /* Go over crafted hard-coded cases. This is fast, so we do it as part o=
-f
---=20
-2.34.1
-
+> >>  2 files changed, 19 insertions(+), 1 deletion(-)
+> >>  create mode 100644 tools/testing/selftests/bpf/verifier/ret-without-c=
+hecing-r10.c
+> >>
+> >> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> >> index e777f50401b6..1ce80cdc4f1d 100644
+> >> --- a/kernel/bpf/verifier.c
+> >> +++ b/kernel/bpf/verifier.c
+> >> @@ -3495,6 +3495,7 @@ static int backtrack_insn(struct bpf_verifier_en=
+v *env, int idx, int subseq_idx,
+> >>         u32 dreg =3D insn->dst_reg;
+> >>         u32 sreg =3D insn->src_reg;
+> >>         u32 spi, i;
+> >> +       u32 reg_mask;
+> >>
+> >>         if (insn->code =3D=3D 0)
+> >>                 return 0;
+> >> @@ -3621,7 +3622,8 @@ static int backtrack_insn(struct bpf_verifier_en=
+v *env, int idx, int subseq_idx,
+> >>                                  * precise, r0 and r6-r10 or any stack=
+ slot in
+> >>                                  * the current frame should be zero by=
+ now
+> >>                                  */
+> >> -                               if (bt_reg_mask(bt) & ~BPF_REGMASK_ARG=
+S) {
+> >> +                               reg_mask =3D bt_reg_mask(bt) & ~BPF_RE=
+GMASK_ARGS;
+> >> +                               if (reg_mask && !((reg_mask =3D=3D 1 <=
+< BPF_REG_10) && env->allow_ptr_leaks)) {
+> >>                                         verbose(env, "BUG regs %x\n", =
+bt_reg_mask(bt));
+> >>                                         WARN_ONCE(1, "verifier backtra=
+cking bug");
+> >>                                         return -EFAULT;
+> >> diff --git a/tools/testing/selftests/bpf/verifier/ret-without-checing-=
+r10.c b/tools/testing/selftests/bpf/verifier/ret-without-checing-r10.c
+> >> new file mode 100644
+> >> index 000000000000..56e529cf922b
+> >> --- /dev/null
+> >> +++ b/tools/testing/selftests/bpf/verifier/ret-without-checing-r10.c
+> >> @@ -0,0 +1,16 @@
+> >> +{
+> >> +  "pointer arithmetic: when returning from subprog in priv, do not ch=
+ecking r10",
+> >> +  .insns =3D {
+> >> +       BPF_CALL_REL(2),
+> >> +       BPF_MOV64_IMM(BPF_REG_0, 0),
+> >> +       BPF_EXIT_INSN(),
+> >> +       BPF_MOV64_REG(BPF_REG_3, BPF_REG_10),
+> >> +       BPF_MOV32_REG(BPF_REG_0, BPF_REG_10),
+> >> +       BPF_ALU64_REG(BPF_ADD, BPF_REG_3, BPF_REG_0),
+> >> +       BPF_MOV64_IMM(BPF_REG_0, 0),
+> >> +       BPF_EXIT_INSN(),
+> >> +  },
+> >> +  .result  =3D ACCEPT,
+> >> +  .result_unpriv =3D REJECT,
+> >> +  .errstr_unpriv =3D "loading/calling other bpf or kernel functions a=
+re allowed for CAP_BPF and CAP_SYS_ADMIN",
+> >> +},
+> >> --
+> >> 2.25.1
+> >>
