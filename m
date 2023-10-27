@@ -1,134 +1,113 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A51FA3D398
-	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 18:42:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-X-Greylist: delayed 1096 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 27 Oct 2023 11:42:55 PDT
-Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D036A1A5
-	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:42:55 -0700 (PDT)
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id F2E9C28FBD0E5; Fri, 27 Oct 2023 11:24:24 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	kernel-team@fb.com,
-	Eric Dumazet <edumazet@google.com>,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH net-next] net: bpf: Use sockopt_lock_sock() in ip_sock_set_tos()
-Date: Fri, 27 Oct 2023 11:24:24 -0700
-Message-Id: <20231027182424.1444845-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B7D538DCF;
+	Fri, 27 Oct 2023 18:46:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="mlYiwLF7";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Lsnjiq5v"
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C681724;
+	Fri, 27 Oct 2023 11:46:45 -0700 (PDT)
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
+	by mailout.nyi.internal (Postfix) with ESMTP id 7C1575C01F2;
+	Fri, 27 Oct 2023 14:46:44 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute7.internal (MEProxy); Fri, 27 Oct 2023 14:46:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:message-id:mime-version:reply-to:sender:subject
+	:subject:to:to; s=fm2; t=1698432404; x=1698518804; bh=fE8aPn/CJu
+	9lfh+4IEv0xtQPK1N/8Cxiy2mXzOknwuI=; b=mlYiwLF7RHnbWML4Rr8Ls5McjN
+	tiGAGjjQnU3A15hmBnuQM/P685zvygXrb/AjZyhkQCEGQ1F7ap/T2CJnu69p6OyR
+	n0q8Ji2XXKdU4UVTfO8sDg8w/vqDTKUt7oKFPu3Pt9RFF1TP85xGIuxTRUlywbSH
+	lTC9keM4GzeAmnKMR5QO0kOinTSsC0YAebyRPJULbp9iOmzIn7H/1Dhy7PQ+d7dr
+	3y6AK9w3Cx/Nh/JO6qgE+wrwmIfbrHom3vCSP0AocrCzXmM0vL4DGYY2p35TOATE
+	ji2/RBOUpCqgqqYXfXcVhfbU6koM6yADojlSTOWVfM+jxjJMRqnAIITlDqbg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm3; t=1698432404; x=1698518804; bh=fE8aPn/CJu9lf
+	h+4IEv0xtQPK1N/8Cxiy2mXzOknwuI=; b=Lsnjiq5vQmSWeIynoGatmxHUaZtZQ
+	LqbylnmiHt4owGwBl5afnsLsVJkEpBsrwDIdlqNV5Y7dmwYePUlAbW3XdTCgUv2y
+	ixBPSyF6XB7xWxRAJ3Zs3wabqTgQAnVE2nsvgPElgO99PEmI3wuD+reMdPZavUR6
+	QOgsG7+J4+2loRx0fI8z4LUVOiU+/CtxyBsTjor7uOF5lmJk6+xacn7JN3TZnU2e
+	CeHWv6zHXGG2GiutciF9WqeH0KmBC3MSb4EOxNF7r+I1uyUEk+yH0v99Nwy9eGHU
+	iKfdOrcHd6FNtYAGLuQKuG2cD/R3w6vA+aZIp9t9gensxusgQCHHwcKYw==
+X-ME-Sender: <xms:lAU8ZZnLeAGckp3QuUja6PutsUUQNqGLDsdIBoeUN2eXhqqC-PkIOQ>
+    <xme:lAU8ZU1CXM4lWoW3HEd5jqk4R8lC_Q-jwAQF_R7N3bskAkumPsRQGzEPemZBC08f1
+    1a9dmgxtrHoD1aYuQ>
+X-ME-Received: <xmr:lAU8ZfrANZ3tVZaxfao2ingFoxImdJ972zqhq-uYFzpRkfYmus71GALFkrOoQh3QA5PAI3k>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrleeggddufedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlvdefmdenucfjughrpefhvf
+    evufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceougig
+    uhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhephffgtefgkeelteevhefftd
+    egjeevfeevuddtfedvvedutdeiffevhefghffgjeeknecuffhomhgrihhnpehivghtfhdr
+    ohhrghdpnhgvthguvghvtghonhhfrdhinhhfohenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:lAU8ZZkynzIaUxCiFOyCUDgALdmimuXOeCJLBdjU5Sk1BZe0gWXcyA>
+    <xmx:lAU8ZX3FjSQuOUB0T_u-VMGpAP3pp5OGVUL333LS6OVXEMNmzIKG5g>
+    <xmx:lAU8ZYsA7uXF6MivgSLP3qesuQRXJ8rmkQfl266xExtqI-Saosjr9w>
+    <xmx:lAU8ZX9wpIx7hha20EIq25aNiCXiZFDG0GGiQ1dYhRX8ZuVcNExMWA>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 27 Oct 2023 14:46:43 -0400 (EDT)
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	steffen.klassert@secunet.com,
+	antony.antony@secunet.com
+Cc: devel@linux-ipsec.org
+Subject: [RFC bpf-next 0/6] Add bpf_xdp_get_xfrm_state() kfunc
+Date: Fri, 27 Oct 2023 12:46:16 -0600
+Message-ID: <cover.1698431765.git.dxu@dxuuu.xyz>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-With latest sync from net-next tree, bpf-next has a bpf selftest failure:
-  [root@arch-fb-vm1 bpf]# ./test_progs -t setget_sockopt
-  ...
-  [   76.194349] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-  [   76.194682] WARNING: possible recursive locking detected
-  [   76.195039] 6.6.0-rc7-g37884503df08-dirty #67 Tainted: G        W  O=
-E
-  [   76.195518] --------------------------------------------
-  [   76.195852] new_name/154 is trying to acquire lock:
-  [   76.196159] ffff8c3e06ad8d30 (sk_lock-AF_INET){+.+.}-{0:0}, at: ip_s=
-ock_set_tos+0x19/0x30
-  [   76.196669]
-  [   76.196669] but task is already holding lock:
-  [   76.197028] ffff8c3e06ad8d30 (sk_lock-AF_INET){+.+.}-{0:0}, at: inet=
-_listen+0x21/0x70
-  [   76.197517]
-  [   76.197517] other info that might help us debug this:
-  [   76.197919]  Possible unsafe locking scenario:
-  [   76.197919]
-  [   76.198287]        CPU0
-  [   76.198444]        ----
-  [   76.198600]   lock(sk_lock-AF_INET);
-  [   76.198831]   lock(sk_lock-AF_INET);
-  [   76.199062]
-  [   76.199062]  *** DEADLOCK ***
-  [   76.199062]
-  [   76.199420]  May be due to missing lock nesting notation
-  [   76.199420]
-  [   76.199879] 2 locks held by new_name/154:
-  [   76.200131]  #0: ffff8c3e06ad8d30 (sk_lock-AF_INET){+.+.}-{0:0}, at:=
- inet_listen+0x21/0x70
-  [   76.200644]  #1: ffffffff90f96a40 (rcu_read_lock){....}-{1:2}, at: _=
-_cgroup_bpf_run_filter_sock_ops+0x55/0x290
-  [   76.201268]
-  [   76.201268] stack backtrace:
-  [   76.201538] CPU: 4 PID: 154 Comm: new_name Tainted: G        W  OE  =
-    6.6.0-rc7-g37884503df08-dirty #67
-  [   76.202134] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), B=
-IOS 1.13.0-1ubuntu1.1 04/01/2014
-  [   76.202699] Call Trace:
-  [   76.202858]  <TASK>
-  [   76.203002]  dump_stack_lvl+0x4b/0x80
-  [   76.203239]  __lock_acquire+0x740/0x1ec0
-  [   76.203503]  lock_acquire+0xc1/0x2a0
-  [   76.203766]  ? ip_sock_set_tos+0x19/0x30
-  [   76.204050]  ? sk_stream_write_space+0x12a/0x230
-  [   76.204389]  ? lock_release+0xbe/0x260
-  [   76.204661]  lock_sock_nested+0x32/0x80
-  [   76.204942]  ? ip_sock_set_tos+0x19/0x30
-  [   76.205208]  ip_sock_set_tos+0x19/0x30
-  [   76.205452]  do_ip_setsockopt+0x4b3/0x1580
-  [   76.205719]  __bpf_setsockopt+0x62/0xa0
-  [   76.205963]  bpf_sock_ops_setsockopt+0x11/0x20
-  [   76.206247]  bpf_prog_630217292049c96e_bpf_test_sockopt_int+0xbc/0x1=
-23
-  [   76.206660]  bpf_prog_493685a3bae00bbd_bpf_test_ip_sockopt+0x49/0x4b
-  [   76.207055]  bpf_prog_b0bcd27f269aeea0_skops_sockopt+0x44c/0xec7
-  [   76.207437]  __cgroup_bpf_run_filter_sock_ops+0xda/0x290
-  [   76.207829]  __inet_listen_sk+0x108/0x1b0
-  [   76.208122]  inet_listen+0x48/0x70
-  [   76.208373]  __sys_listen+0x74/0xb0
-  [   76.208630]  __x64_sys_listen+0x16/0x20
-  [   76.208911]  do_syscall_64+0x3f/0x90
-  [   76.209174]  entry_SYSCALL_64_after_hwframe+0x6e/0xd8
-  ...
+This patchset adds a kfunc helper, bpf_xdp_get_xfrm_state(), that wraps
+xfrm_state_lookup(). The intent is to support software RSS (via XDP) for
+the ongoing/upcoming ipsec pcpu work [0]. Recent experiments performed
+on (hopefully) reproducible AWS testbeds indicate that single tunnel
+pcpu ipsec can reach line rate on 100G ENA nics.
 
-Both ip_sock_set_tos() and inet_listen() calls lock_sock(sk) which
-caused a dead lock.
+More details about that will be presented at netdev next week [1].
 
-To fix the issue, use sockopt_lock_sock() in ip_sock_set_tos()
-instead. sockopt_lock_sock() will avoid lock_sock() if it is in bpf
-context.
+Antony did the initial stable bpf helper - I later ported it to unstable
+kfuncs. So for the series, please apply a Co-developed-by for Antony,
+provided he acks and signs off on this.
 
-Fixes: 878d951c6712 ("inet: lock the socket in ip_sock_set_tos()")
-Cc: Eric Dumazet <edumazet@google.com>
-Suggested-by: Martin KaFai Lau <martin.lau@kernel.org>
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- net/ipv4/ip_sockglue.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+[0]: https://datatracker.ietf.org/doc/html/draft-ietf-ipsecme-multi-sa-performance-02
+[1]: https://netdevconf.info/0x17/sessions/workshop/security-workshop.html
 
-diff --git a/net/ipv4/ip_sockglue.c b/net/ipv4/ip_sockglue.c
-index 9c68b6b74d9f..2efc53526a38 100644
---- a/net/ipv4/ip_sockglue.c
-+++ b/net/ipv4/ip_sockglue.c
-@@ -602,9 +602,9 @@ void __ip_sock_set_tos(struct sock *sk, int val)
-=20
- void ip_sock_set_tos(struct sock *sk, int val)
- {
--	lock_sock(sk);
-+	sockopt_lock_sock(sk);
- 	__ip_sock_set_tos(sk, val);
--	release_sock(sk);
-+	sockopt_release_sock(sk);
- }
- EXPORT_SYMBOL(ip_sock_set_tos);
-=20
---=20
-2.34.1
+Daniel Xu (6):
+  bpf: xfrm: Add bpf_xdp_get_xfrm_state() kfunc
+  bpf: selftests: test_tunnel: Use ping -6 over ping6
+  bpf: selftests: test_tunnel: Mount bpffs if necessary
+  bpf: selftests: test_tunnel: Use vmlinux.h declarations
+  bpf: selftests: test_tunnel: Disable CO-RE relocations
+  bpf: xfrm: Add selftest for bpf_xdp_get_xfrm_state()
+
+ include/net/xfrm.h                            |   9 ++
+ net/xfrm/Makefile                             |   1 +
+ net/xfrm/xfrm_policy.c                        |   2 +
+ net/xfrm/xfrm_state_bpf.c                     | 105 ++++++++++++++++++
+ .../selftests/bpf/progs/bpf_tracing_net.h     |   1 +
+ .../selftests/bpf/progs/test_tunnel_kern.c    |  95 +++++++++-------
+ tools/testing/selftests/bpf/test_tunnel.sh    |  43 ++++---
+ 7 files changed, 202 insertions(+), 54 deletions(-)
+ create mode 100644 net/xfrm/xfrm_state_bpf.c
+
+-- 
+2.42.0
 
