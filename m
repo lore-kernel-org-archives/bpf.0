@@ -1,241 +1,153 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CF4A3FB02;
-	Fri, 27 Oct 2023 22:02:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF42405CB
+	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 22:05:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GXktHvUD"
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E471B5;
-	Fri, 27 Oct 2023 15:02:49 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-9bf86b77a2aso360679966b.0;
-        Fri, 27 Oct 2023 15:02:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="niMtvX57"
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341F11BD
+	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 15:05:38 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5a7b9e83b70so24403957b3.0
+        for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 15:05:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698444168; x=1699048968; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=nerlBGOk3p0DOhDfvG+YXUIRqsl2qZ4e38CdCvsDH2o=;
-        b=GXktHvUDrxXOdFnXWJIfVJjw6iDrnOUsep4r0DiAYBg3KB/fuzX1uDxv9hjeg7li/u
-         xIO5nG5AMQ0E8rirXiMwDK0K1W+7n5y7pfYgEZH/bFBppQrlt5cRusoEhRuMWxy6UXj7
-         zgJuoo1r1FHhr8ETcEz1mNlHi16DXm0nokhv6S81OYsIgxWQ5nSKX/dAV8TABtXMH3Ct
-         e4YIQRXdJed6LXfhqutzOt3HH6BWC2IdP1N3KfZ/pmolfvLES/xpWo6BTNQj1k+cMZmM
-         pGfpSXDKHX4JVvc3OU6fomkfM1wITXv2vdzDOBNjq6gJiz5ncM+JhNG1jwYFbEKn3P3K
-         uPlQ==
+        d=google.com; s=20230601; t=1698444337; x=1699049137; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LDqGU1lZbnWOljJhjK5QPctoYCimsNeknFpCayVMkH0=;
+        b=niMtvX57gyjujwstvucVtKV+qWGIXv/RZiYNVMkg1eAOo7s8ZFnWEyOTgXXoGOatYx
+         9GtL5f7NQ9cdOCmuPdEIxDJYblIPqVXOG6E7oYGWFtnXZwbmO++dHPWxmHdfFFa5/Wji
+         Wi+OTchtUmiRLD1sz5wzTIXauABXTZ4HKNMLgiz7plWbwWDTNh6gd8NsScPaGb750RtS
+         lS9EdlWeeiFOVGFMpM0DWYO03sj6RnL1xwmFBRFt5Ox6RTdSsfIgQ9RjeKYcxGe41oeG
+         /tKWQOychJOEqmrI/nF9PHFdBZOv+KQB4rkBRDr/O3eaUZalDvgg3Mx3usAogPIOreHJ
+         E5tA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698444168; x=1699048968;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nerlBGOk3p0DOhDfvG+YXUIRqsl2qZ4e38CdCvsDH2o=;
-        b=E/+SReRwIwYEMZoTmIxbUcBR/znLe/tOjd87csN9ANLqWIETHBiDfqt1Ny8ZzaSClC
-         9TIQxX3ckkTIkNbbyR5awFnWwtE1crvzhIIVNTmbU53oRQ7b9C2o/1GyXld7Fz/D7CkD
-         f3rIHMRvJ+OhTwB2uiZdB+QCkJ/fNN6sdyB2TnOgEQ1vO0d10AjpTB9pZw5pJeaUZ95a
-         kj6pDfvrtKsQCwYPAwCszobkEffssyMVwye7YWwinMUmoiLmATKNAQ091MD3gYLyxT9E
-         dC1BUnszO7ALWo8b0zDayMaHdOB/QRK0RyPgq2K8tseoI0lVlJOEtmKd4/bj9iB5V3Tz
-         vC8g==
-X-Gm-Message-State: AOJu0Yz1VaxQbFZw+M1IIWilwWMydzIwkpgzT9LV4nYOd8UZkJr1sB0H
-	G6VMBcfE9DzGJNTiDuwaR+KEsU/i/0xDLanF
-X-Google-Smtp-Source: AGHT+IHUzKlRwHrG5ZLUVwsxRK7O0VvlNH7Qt7SkQak1LaJRhkk+KydaYFBu+aQ4ioi+j7w3UoBX/Q==
-X-Received: by 2002:a17:906:fe08:b0:9ca:e7ce:8e68 with SMTP id wy8-20020a170906fe0800b009cae7ce8e68mr2895068ejb.44.1698444167414;
-        Fri, 27 Oct 2023 15:02:47 -0700 (PDT)
-Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id l17-20020a170906415100b009adc77fe165sm1761235ejk.118.2023.10.27.15.02.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Oct 2023 15:02:46 -0700 (PDT)
-Message-ID: <af3b92d434b1d85e9dc3e60c46ed7ed68dde438e.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v6 07/10] bpf, net: switch to dynamic
- registration
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kui-Feng Lee <sinquersw@gmail.com>, thinker.li@gmail.com, 
- bpf@vger.kernel.org, ast@kernel.org, martin.lau@linux.dev, song@kernel.org,
-  kernel-team@meta.com, andrii@kernel.org, drosen@google.com
-Cc: kuifeng@meta.com, netdev@vger.kernel.org
-Date: Sat, 28 Oct 2023 01:02:45 +0300
-In-Reply-To: <df8f71ce-4e3b-4e65-a197-e2ce0ca494de@gmail.com>
-References: <20231022050335.2579051-1-thinker.li@gmail.com>
-	 <20231022050335.2579051-8-thinker.li@gmail.com>
-	 <7b143dd306cdb3a94c995bf807596fb1f88a02f9.camel@gmail.com>
-	 <f2c33ec4-339d-464d-893e-4f5ba0b9c294@gmail.com>
-	 <df8f71ce-4e3b-4e65-a197-e2ce0ca494de@gmail.com>
-Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.0 
+        d=1e100.net; s=20230601; t=1698444337; x=1699049137;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LDqGU1lZbnWOljJhjK5QPctoYCimsNeknFpCayVMkH0=;
+        b=lsvGBKfckhUldN6AI8FjMbnfrsRBhCxUEjZ0UrM/PMiku4kTAVEdOvWBpdDRaDZIdV
+         VvEEBToHJMBr3n/G/R/uYRRMV1tjm/0P0cnZni1KBGHy89ExdnoAozaZdESMblz0ghSh
+         sTdg1p20XphfMB8LLEGoSOYNcEJe0DZXdtr7+fmgbqNRSc3jiaB5rgg2G62rxH5c5ltq
+         sQWjD1lAEl5mVJxbkPhjXuKdDMu1R8wMCUrIo2ackJ1OVLi7RUXZE0r5OXKcFr6A9HOf
+         XqiHgK3tkjOAaMtaeIJhvCt58jr+sppCKwUaBN6/1h2UGi2wawEi72UFdnGmFVh5ekIV
+         femQ==
+X-Gm-Message-State: AOJu0YwE9YnBvSFDxJAhCyQAIYM2ewV/xps0r6bI/xXNFJO0w8DjihiD
+	6aK4r4P8F/1MRH3/sW2XadpqQkldYyq7kJnBvA==
+X-Google-Smtp-Source: AGHT+IFN1c9i2r/wiCSD+X1LWX0h6lZjdnfsn+e69/pEBxll1JXsLesAjuKUQaQpc97rldVXqAyKuuT7TJBMZPGrZw==
+X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
+ (user=justinstitt job=sendgmr) by 2002:a05:690c:84f:b0:5a8:207a:143a with
+ SMTP id bz15-20020a05690c084f00b005a8207a143amr169382ywb.0.1698444337337;
+ Fri, 27 Oct 2023 15:05:37 -0700 (PDT)
+Date: Fri, 27 Oct 2023 22:05:33 +0000
+In-Reply-To: <20231027-ethtool_puts_impl-v3-0-3466ac679304@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+References: <20231027-ethtool_puts_impl-v3-0-3466ac679304@google.com>
+X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1698444334; l=1790;
+ i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
+ bh=C2aJLhld7+He/NhanUu+TBSh3mm30JdYcWWvhqdYpEE=; b=AfZV04Dc5Hq5NuvZos0GZLUC7hu4efQeSkMnA+v2WXw4qwaSx8UWMdEANSs/8b+Z8OxORp/XA
+ 9gfZVq7L8M7B0xzZJ8a2FS7J1UTFxSmVPXAm+Z47MMNan57YnyOAbE3
+X-Mailer: b4 0.12.3
+Message-ID: <20231027-ethtool_puts_impl-v3-1-3466ac679304@google.com>
+Subject: [PATCH net-next v3 1/3] ethtool: Implement ethtool_puts()
+From: Justin Stitt <justinstitt@google.com>
+To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shay Agroskin <shayagr@amazon.com>, 
+	Arthur Kiyanovski <akiyano@amazon.com>, David Arinzon <darinzon@amazon.com>, Noam Dagan <ndagan@amazon.com>, 
+	Saeed Bishara <saeedb@amazon.com>, Rasesh Mody <rmody@marvell.com>, 
+	Sudarsana Kalluru <skalluru@marvell.com>, GR-Linux-NIC-Dev@marvell.com, 
+	Dimitris Michailidis <dmichail@fungible.com>, Yisen Zhuang <yisen.zhuang@huawei.com>, 
+	Salil Mehta <salil.mehta@huawei.com>, Jesse Brandeburg <jesse.brandeburg@intel.com>, 
+	Tony Nguyen <anthony.l.nguyen@intel.com>, Louis Peens <louis.peens@corigine.com>, 
+	Shannon Nelson <shannon.nelson@amd.com>, Brett Creeley <brett.creeley@amd.com>, drivers@pensando.io, 
+	"K. Y. Srinivasan" <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
+	Dexuan Cui <decui@microsoft.com>, Ronak Doshi <doshir@vmware.com>, 
+	VMware PV-Drivers Reviewers <pv-drivers@vmware.com>, Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>, 
+	Dwaipayan Ray <dwaipayanray1@gmail.com>, Lukas Bulwahn <lukas.bulwahn@gmail.com>, 
+	Hauke Mehrtens <hauke@hauke-m.de>, Andrew Lunn <andrew@lunn.ch>, 
+	Florian Fainelli <f.fainelli@gmail.com>, Vladimir Oltean <olteanv@gmail.com>, 
+	"=?utf-8?q?Ar=C4=B1n=C3=A7_=C3=9CNAL?=" <arinc.unal@arinc9.com>, Daniel Golle <daniel@makrotopia.org>, 
+	Landen Chao <Landen.Chao@mediatek.com>, DENG Qingfang <dqfext@gmail.com>, 
+	Sean Wang <sean.wang@mediatek.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, 
+	"=?utf-8?q?Alvin_=C5=A0ipraga?=" <alsi@bang-olufsen.dk>, Wei Fang <wei.fang@nxp.com>, 
+	Shenwei Wang <shenwei.wang@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>, 
+	NXP Linux Team <linux-imx@nxp.com>, Lars Povlsen <lars.povlsen@microchip.com>, 
+	Steen Hegelund <Steen.Hegelund@microchip.com>, Daniel Machon <daniel.machon@microchip.com>, 
+	UNGLinuxDriver@microchip.com, Jiawen Wu <jiawenwu@trustnetic.com>, 
+	Mengyuan Lou <mengyuanlou@net-swift.com>, Heiner Kallweit <hkallweit1@gmail.com>, 
+	Russell King <linux@armlinux.org.uk>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Kees Cook <keescook@chromium.org>, intel-wired-lan@lists.osuosl.org, 
+	oss-drivers@corigine.com, linux-hyperv@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+	bpf@vger.kernel.org, Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Fri, 2023-10-27 at 14:32 -0700, Kui-Feng Lee wrote:
->=20
-> On 10/26/23 21:39, Kui-Feng Lee wrote:
-> >=20
-> >=20
-> > On 10/26/23 14:02, Eduard Zingerman wrote:
-> > > On Sat, 2023-10-21 at 22:03 -0700, thinker.li@gmail.com wrote:
-> > > > From: Kui-Feng Lee <thinker.li@gmail.com>
-> [...]
-> > > > +
-> > > > +=C2=A0=C2=A0=C2=A0 btf =3D btf_get_module_btf(st_ops->owner);
-> > > > +=C2=A0=C2=A0=C2=A0 if (!btf)
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -EINVAL;
-> > > > +
-> > > > +=C2=A0=C2=A0=C2=A0 log =3D kzalloc(sizeof(*log), GFP_KERNEL | __GF=
-P_NOWARN);
-> > > > +=C2=A0=C2=A0=C2=A0 if (!log) {
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 err =3D -ENOMEM;
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto errout;
-> > > > +=C2=A0=C2=A0=C2=A0 }
-> > > > +
-> > > > +=C2=A0=C2=A0=C2=A0 log->level =3D BPF_LOG_KERNEL;
-> > >=20
-> > > Nit: maybe use bpf_vlog_init() here to avoid breaking encapsulation?
-> >=20
-> > Agree!
-> >=20
->=20
-> I don't use bpf_vlog_init() eventually.
->=20
-> I found bpf_vlog_init() is not for BPF_LOG_KERNEL.
-> According to the comment next to BPF_LOG_KERNEL, it
-> is an internal log level.
-> According to the code of bpf_vlog_init(), the level passing to
-> bpf_vlog_init() should be covered by BPF_LOG_MASK. BPF_LOG_KERNEL is
-> defined as BPF_LOG_MASK + 1. So, it is intended not being used with
-> bpf_vlog_init().
+Use strscpy() to implement ethtool_puts().
 
-I see, looks like btf_parse_vmlinux does the same, sorry should have checke=
-d there.
-Thank you for looking into it.
+Functionally the same as ethtool_sprintf() when it's used with two
+arguments or with just "%s" format specifier.
 
->=20
-> > >=20
-> > > > +
-> > > > +=C2=A0=C2=A0=C2=A0 desc =3D btf_add_struct_ops(btf, st_ops);
-> > > > +=C2=A0=C2=A0=C2=A0 if (IS_ERR(desc)) {
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 err =3D PTR_ERR(desc);
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto errout;
-> > > > +=C2=A0=C2=A0=C2=A0 }
-> > > > +
-> > > > +=C2=A0=C2=A0=C2=A0 bpf_struct_ops_init(desc, btf, log);
-> > >=20
-> > > Nit: I think bpf_struct_ops_init() could be changed to return 'int',
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 then register_bpf_struct_ops() could r=
-eport to calling module if
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 something went wrong on the last phase=
-, wdyt?
-> >=20
-> >=20
-> > Agree!
-> >=20
-> > >=20
-> > > > +
-> > > > +errout:
-> > > > +=C2=A0=C2=A0=C2=A0 kfree(log);
-> > > > +=C2=A0=C2=A0=C2=A0 btf_put(btf);
-> > > > +
-> > > > +=C2=A0=C2=A0=C2=A0 return err;
-> > > > +}
-> > > > +EXPORT_SYMBOL_GPL(register_bpf_struct_ops);
-> > > > diff --git a/net/bpf/bpf_dummy_struct_ops.c=20
-> > > > b/net/bpf/bpf_dummy_struct_ops.c
-> > > > index ffa224053a6c..148a5851c4fa 100644
-> > > > --- a/net/bpf/bpf_dummy_struct_ops.c
-> > > > +++ b/net/bpf/bpf_dummy_struct_ops.c
-> > > > @@ -7,7 +7,7 @@
-> > > > =C2=A0 #include <linux/bpf.h>
-> > > > =C2=A0 #include <linux/btf.h>
-> > > > -extern struct bpf_struct_ops bpf_bpf_dummy_ops;
-> > > > +static struct bpf_struct_ops bpf_bpf_dummy_ops;
-> > > > =C2=A0 /* A common type for test_N with return value in bpf_dummy_o=
-ps */
-> > > > =C2=A0 typedef int (*dummy_ops_test_ret_fn)(struct bpf_dummy_ops_st=
-ate=20
-> > > > *state, ...);
-> > > > @@ -223,11 +223,13 @@ static int bpf_dummy_reg(void *kdata)
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -EOPNOTSUPP;
-> > > > =C2=A0 }
-> > > > +DEFINE_STRUCT_OPS_VALUE_TYPE(bpf_dummy_ops);
-> > > > +
-> > > > =C2=A0 static void bpf_dummy_unreg(void *kdata)
-> > > > =C2=A0 {
-> > > > =C2=A0 }
-> > > > -struct bpf_struct_ops bpf_bpf_dummy_ops =3D {
-> > > > +static struct bpf_struct_ops bpf_bpf_dummy_ops =3D {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .verifier_ops =3D &bpf_dummy_verifie=
-r_ops,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .init =3D bpf_dummy_init,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .check_member =3D bpf_dummy_ops_chec=
-k_member,
-> > > > @@ -235,4 +237,12 @@ struct bpf_struct_ops bpf_bpf_dummy_ops =3D {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .reg =3D bpf_dummy_reg,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .unreg =3D bpf_dummy_unreg,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .name =3D "bpf_dummy_ops",
-> > > > +=C2=A0=C2=A0=C2=A0 .owner =3D THIS_MODULE,
-> > > > =C2=A0 };
-> > > > +
-> > > > +static int __init bpf_dummy_struct_ops_init(void)
-> > > > +{
-> > > > +=C2=A0=C2=A0=C2=A0 BTF_STRUCT_OPS_TYPE_EMIT(bpf_dummy_ops);
-> > > > +=C2=A0=C2=A0=C2=A0 return register_bpf_struct_ops(&bpf_bpf_dummy_o=
-ps);
-> > > > +}
-> > > > +late_initcall(bpf_dummy_struct_ops_init);
-> > > > diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
-> > > > index 3c8b76578a2a..b36a19274e5b 100644
-> > > > --- a/net/ipv4/bpf_tcp_ca.c
-> > > > +++ b/net/ipv4/bpf_tcp_ca.c
-> > > > @@ -12,7 +12,7 @@
-> > > > =C2=A0 #include <net/bpf_sk_storage.h>
-> > > > =C2=A0 /* "extern" is to avoid sparse warning.=C2=A0 It is only use=
-d in=20
-> > > > bpf_struct_ops.c. */
-> > > > -extern struct bpf_struct_ops bpf_tcp_congestion_ops;
-> > > > +static struct bpf_struct_ops bpf_tcp_congestion_ops;
-> > > > =C2=A0 static u32 unsupported_ops[] =3D {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 offsetof(struct tcp_congestion_ops, =
-get_info),
-> > > > @@ -277,7 +277,9 @@ static int bpf_tcp_ca_validate(void *kdata)
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return tcp_validate_congestion_contr=
-ol(kdata);
-> > > > =C2=A0 }
-> > > > -struct bpf_struct_ops bpf_tcp_congestion_ops =3D {
-> > > > +DEFINE_STRUCT_OPS_VALUE_TYPE(tcp_congestion_ops);
-> > > > +
-> > > > +static struct bpf_struct_ops bpf_tcp_congestion_ops =3D {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .verifier_ops =3D &bpf_tcp_ca_verifi=
-er_ops,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .reg =3D bpf_tcp_ca_reg,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .unreg =3D bpf_tcp_ca_unreg,
-> > > > @@ -287,10 +289,18 @@ struct bpf_struct_ops bpf_tcp_congestion_ops =
-=3D {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .init =3D bpf_tcp_ca_init,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .validate =3D bpf_tcp_ca_validate,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .name =3D "tcp_congestion_ops",
-> > > > +=C2=A0=C2=A0=C2=A0 .owner =3D THIS_MODULE,
-> > > > =C2=A0 };
-> > > > =C2=A0 static int __init bpf_tcp_ca_kfunc_init(void)
-> > > > =C2=A0 {
-> > > > -=C2=A0=C2=A0=C2=A0 return register_btf_kfunc_id_set(BPF_PROG_TYPE_=
-STRUCT_OPS,=20
-> > > > &bpf_tcp_ca_kfunc_set);
-> > > > +=C2=A0=C2=A0=C2=A0 int ret;
-> > > > +
-> > > > +=C2=A0=C2=A0=C2=A0 BTF_STRUCT_OPS_TYPE_EMIT(tcp_congestion_ops);
-> > > > +
-> > > > +=C2=A0=C2=A0=C2=A0 ret =3D register_btf_kfunc_id_set(BPF_PROG_TYPE=
-_STRUCT_OPS,=20
-> > > > &bpf_tcp_ca_kfunc_set);
-> > > > +=C2=A0=C2=A0=C2=A0 ret =3D ret ?: register_bpf_struct_ops(&bpf_tcp=
-_congestion_ops);
-> > > > +
-> > > > +=C2=A0=C2=A0=C2=A0 return ret;
-> > > > =C2=A0 }
-> > > > =C2=A0 late_initcall(bpf_tcp_ca_kfunc_init);
-> > >=20
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+ include/linux/ethtool.h | 13 +++++++++++++
+ net/ethtool/ioctl.c     |  7 +++++++
+ 2 files changed, 20 insertions(+)
+
+diff --git a/include/linux/ethtool.h b/include/linux/ethtool.h
+index 226a36ed5aa1..e340ed822cc2 100644
+--- a/include/linux/ethtool.h
++++ b/include/linux/ethtool.h
+@@ -1053,6 +1053,19 @@ static inline int ethtool_mm_frag_size_min_to_add(u32 val_min, u32 *val_add,
+  */
+ extern __printf(2, 3) void ethtool_sprintf(u8 **data, const char *fmt, ...);
+ 
++/**
++ * ethtool_puts - Write string to ethtool string data
++ * @data: Pointer to start of string to update
++ * @str: String to write
++ *
++ * Write string to data. Update data to point at start of next
++ * string.
++ *
++ * Prefer this function to ethtool_sprintf() when given only
++ * two arguments or if @fmt is just "%s".
++ */
++extern void ethtool_puts(u8 **data, const char *str);
++
+ /* Link mode to forced speed capabilities maps */
+ struct ethtool_forced_speed_map {
+ 	u32		speed;
+diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c
+index 0b0ce4f81c01..abdf05edf804 100644
+--- a/net/ethtool/ioctl.c
++++ b/net/ethtool/ioctl.c
+@@ -1991,6 +1991,13 @@ __printf(2, 3) void ethtool_sprintf(u8 **data, const char *fmt, ...)
+ }
+ EXPORT_SYMBOL(ethtool_sprintf);
+ 
++void ethtool_puts(u8 **data, const char *str)
++{
++	strscpy(*data, str, ETH_GSTRING_LEN);
++	*data += ETH_GSTRING_LEN;
++}
++EXPORT_SYMBOL(ethtool_puts);
++
+ static int ethtool_phys_id(struct net_device *dev, void __user *useraddr)
+ {
+ 	struct ethtool_value id;
+
+-- 
+2.42.0.820.g83a721a137-goog
 
