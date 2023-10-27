@@ -1,34 +1,32 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39D133C07C
-	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 18:16:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3121D3C066
+	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 18:16:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D957AC
-	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:16:54 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39REBebY006898
-	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:16:53 -0700
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16FCC1
+	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:16:52 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 39RE53c9003192
+	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:16:52 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3u0erd218y-5
+	by m0001303.ppops.net (PPS) with ESMTPS id 3u089achyn-17
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:16:53 -0700
-Received: from twshared34392.14.frc2.facebook.com (2620:10d:c085:108::4) by
+	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:16:52 -0700
+Received: from twshared9518.03.prn6.facebook.com (2620:10d:c085:108::4) by
  mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Fri, 27 Oct 2023 11:16:49 -0700
+ 15.1.2507.34; Fri, 27 Oct 2023 11:16:43 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id BE5A63A796577; Fri, 27 Oct 2023 11:13:57 -0700 (PDT)
+	id 12C423A796680; Fri, 27 Oct 2023 11:14:16 -0700 (PDT)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
-CC: <andrii@kernel.org>, <kernel-team@meta.com>,
-        Shung-Hsi Yu
-	<shung-hsi.yu@suse.com>
-Subject: [PATCH v5 bpf-next 04/23] bpf: derive smin32/smax32 from umin32/umax32 bounds
-Date: Fri, 27 Oct 2023 11:13:27 -0700
-Message-ID: <20231027181346.4019398-5-andrii@kernel.org>
+CC: <andrii@kernel.org>, <kernel-team@meta.com>
+Subject: [PATCH v5 bpf-next 11/23] bpf: rename is_branch_taken reg arguments to prepare for the second one
+Date: Fri, 27 Oct 2023 11:13:34 -0700
+Message-ID: <20231027181346.4019398-12-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231027181346.4019398-1-andrii@kernel.org>
 References: <20231027181346.4019398-1-andrii@kernel.org>
@@ -41,45 +39,268 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 5G3TKe6FvdxwItbdqgVFUrx4QNcLbyRd
-X-Proofpoint-GUID: 5G3TKe6FvdxwItbdqgVFUrx4QNcLbyRd
+X-Proofpoint-GUID: QtIV1G5f_KfZ9YGTj-bBuElIGLiMu90H
+X-Proofpoint-ORIG-GUID: QtIV1G5f_KfZ9YGTj-bBuElIGLiMu90H
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-10-27_17,2023-10-27_01,2023-05-22_02
 
-All the logic that applies to u64 vs s64, equally applies for u32 vs s32
-relationships (just taken in a smaller 32-bit numeric space). So do the
-same deduction of smin32/smax32 from umin32/umax32, if we can.
+Just taking mundane refactoring bits out into a separate patch. No
+functional changes.
 
-Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/verifier.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ kernel/bpf/verifier.c | 107 +++++++++++++++++++++---------------------
+ 1 file changed, 53 insertions(+), 54 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index bf4193706744..0f66e9092c38 100644
+index f5fcb7fb2c67..aa13f32751a1 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -2324,6 +2324,13 @@ static void __update_reg_bounds(struct bpf_reg_sta=
-te *reg)
- /* Uses signed min/max values to inform unsigned, and vice-versa */
- static void __reg32_deduce_bounds(struct bpf_reg_state *reg)
+@@ -14169,26 +14169,25 @@ static void find_good_pkt_pointers(struct bpf_v=
+erifier_state *vstate,
+ 	}));
+ }
+=20
+-static int is_branch32_taken(struct bpf_reg_state *reg, u32 val, u8 opco=
+de)
++static int is_branch32_taken(struct bpf_reg_state *reg1, u32 val, u8 opc=
+ode)
  {
-+	/* if u32 range forms a valid s32 range (due to matching sign bit),
-+	 * try to learn from that
-+	 */
-+	if ((s32)reg->u32_min_value <=3D (s32)reg->u32_max_value) {
-+		reg->s32_min_value =3D max_t(s32, reg->s32_min_value, reg->u32_min_val=
-ue);
-+		reg->s32_max_value =3D min_t(s32, reg->s32_max_value, reg->u32_max_val=
-ue);
-+	}
- 	/* Learn sign from signed bounds.
- 	 * If we cannot cross the sign boundary, then signed and unsigned bound=
-s
- 	 * are the same, so combine.  This works even in the negative case, e.g=
-.
+-	struct tnum subreg =3D tnum_subreg(reg->var_off);
+ 	s32 sval =3D (s32)val;
+=20
+ 	switch (opcode) {
+ 	case BPF_JEQ:
+ 		if (tnum_is_const(subreg))
+ 			return !!tnum_equals_const(subreg, val);
+-		else if (val < reg->u32_min_value || val > reg->u32_max_value)
++		else if (val < reg1->u32_min_value || val > reg1->u32_max_value)
+ 			return 0;
+-		else if (sval < reg->s32_min_value || sval > reg->s32_max_value)
++		else if (sval < reg1->s32_min_value || sval > reg1->s32_max_value)
+ 			return 0;
+ 		break;
+ 	case BPF_JNE:
+ 		if (tnum_is_const(subreg))
+ 			return !tnum_equals_const(subreg, val);
+-		else if (val < reg->u32_min_value || val > reg->u32_max_value)
++		else if (val < reg1->u32_min_value || val > reg1->u32_max_value)
+ 			return 1;
+-		else if (sval < reg->s32_min_value || sval > reg->s32_max_value)
++		else if (sval < reg1->s32_min_value || sval > reg1->s32_max_value)
+ 			return 1;
+ 		break;
+ 	case BPF_JSET:
+@@ -14198,51 +14197,51 @@ static int is_branch32_taken(struct bpf_reg_sta=
+te *reg, u32 val, u8 opcode)
+ 			return 0;
+ 		break;
+ 	case BPF_JGT:
+-		if (reg->u32_min_value > val)
++		if (reg1->u32_min_value > val)
+ 			return 1;
+-		else if (reg->u32_max_value <=3D val)
++		else if (reg1->u32_max_value <=3D val)
+ 			return 0;
+ 		break;
+ 	case BPF_JSGT:
+-		if (reg->s32_min_value > sval)
++		if (reg1->s32_min_value > sval)
+ 			return 1;
+-		else if (reg->s32_max_value <=3D sval)
++		else if (reg1->s32_max_value <=3D sval)
+ 			return 0;
+ 		break;
+ 	case BPF_JLT:
+-		if (reg->u32_max_value < val)
++		if (reg1->u32_max_value < val)
+ 			return 1;
+-		else if (reg->u32_min_value >=3D val)
++		else if (reg1->u32_min_value >=3D val)
+ 			return 0;
+ 		break;
+ 	case BPF_JSLT:
+-		if (reg->s32_max_value < sval)
++		if (reg1->s32_max_value < sval)
+ 			return 1;
+-		else if (reg->s32_min_value >=3D sval)
++		else if (reg1->s32_min_value >=3D sval)
+ 			return 0;
+ 		break;
+ 	case BPF_JGE:
+-		if (reg->u32_min_value >=3D val)
++		if (reg1->u32_min_value >=3D val)
+ 			return 1;
+-		else if (reg->u32_max_value < val)
++		else if (reg1->u32_max_value < val)
+ 			return 0;
+ 		break;
+ 	case BPF_JSGE:
+-		if (reg->s32_min_value >=3D sval)
++		if (reg1->s32_min_value >=3D sval)
+ 			return 1;
+-		else if (reg->s32_max_value < sval)
++		else if (reg1->s32_max_value < sval)
+ 			return 0;
+ 		break;
+ 	case BPF_JLE:
+-		if (reg->u32_max_value <=3D val)
++		if (reg1->u32_max_value <=3D val)
+ 			return 1;
+-		else if (reg->u32_min_value > val)
++		else if (reg1->u32_min_value > val)
+ 			return 0;
+ 		break;
+ 	case BPF_JSLE:
+-		if (reg->s32_max_value <=3D sval)
++		if (reg1->s32_max_value <=3D sval)
+ 			return 1;
+-		else if (reg->s32_min_value > sval)
++		else if (reg1->s32_min_value > sval)
+ 			return 0;
+ 		break;
+ 	}
+@@ -14251,79 +14250,79 @@ static int is_branch32_taken(struct bpf_reg_sta=
+te *reg, u32 val, u8 opcode)
+ }
+=20
+=20
+-static int is_branch64_taken(struct bpf_reg_state *reg, u64 val, u8 opco=
+de)
++static int is_branch64_taken(struct bpf_reg_state *reg1, u64 val, u8 opc=
+ode)
+ {
+ 	s64 sval =3D (s64)val;
+=20
+ 	switch (opcode) {
+ 	case BPF_JEQ:
+-		if (tnum_is_const(reg->var_off))
+-			return !!tnum_equals_const(reg->var_off, val);
+-		else if (val < reg->umin_value || val > reg->umax_value)
++		if (tnum_is_const(reg1->var_off))
++			return !!tnum_equals_const(reg1->var_off, val);
++		else if (val < reg1->umin_value || val > reg1->umax_value)
+ 			return 0;
+-		else if (sval < reg->smin_value || sval > reg->smax_value)
++		else if (sval < reg1->smin_value || sval > reg1->smax_value)
+ 			return 0;
+ 		break;
+ 	case BPF_JNE:
+-		if (tnum_is_const(reg->var_off))
+-			return !tnum_equals_const(reg->var_off, val);
+-		else if (val < reg->umin_value || val > reg->umax_value)
++		if (tnum_is_const(reg1->var_off))
++			return !tnum_equals_const(reg1->var_off, val);
++		else if (val < reg1->umin_value || val > reg1->umax_value)
+ 			return 1;
+-		else if (sval < reg->smin_value || sval > reg->smax_value)
++		else if (sval < reg1->smin_value || sval > reg1->smax_value)
+ 			return 1;
+ 		break;
+ 	case BPF_JSET:
+-		if ((~reg->var_off.mask & reg->var_off.value) & val)
++		if ((~reg1->var_off.mask & reg1->var_off.value) & val)
+ 			return 1;
+-		if (!((reg->var_off.mask | reg->var_off.value) & val))
++		if (!((reg1->var_off.mask | reg1->var_off.value) & val))
+ 			return 0;
+ 		break;
+ 	case BPF_JGT:
+-		if (reg->umin_value > val)
++		if (reg1->umin_value > val)
+ 			return 1;
+-		else if (reg->umax_value <=3D val)
++		else if (reg1->umax_value <=3D val)
+ 			return 0;
+ 		break;
+ 	case BPF_JSGT:
+-		if (reg->smin_value > sval)
++		if (reg1->smin_value > sval)
+ 			return 1;
+-		else if (reg->smax_value <=3D sval)
++		else if (reg1->smax_value <=3D sval)
+ 			return 0;
+ 		break;
+ 	case BPF_JLT:
+-		if (reg->umax_value < val)
++		if (reg1->umax_value < val)
+ 			return 1;
+-		else if (reg->umin_value >=3D val)
++		else if (reg1->umin_value >=3D val)
+ 			return 0;
+ 		break;
+ 	case BPF_JSLT:
+-		if (reg->smax_value < sval)
++		if (reg1->smax_value < sval)
+ 			return 1;
+-		else if (reg->smin_value >=3D sval)
++		else if (reg1->smin_value >=3D sval)
+ 			return 0;
+ 		break;
+ 	case BPF_JGE:
+-		if (reg->umin_value >=3D val)
++		if (reg1->umin_value >=3D val)
+ 			return 1;
+-		else if (reg->umax_value < val)
++		else if (reg1->umax_value < val)
+ 			return 0;
+ 		break;
+ 	case BPF_JSGE:
+-		if (reg->smin_value >=3D sval)
++		if (reg1->smin_value >=3D sval)
+ 			return 1;
+-		else if (reg->smax_value < sval)
++		else if (reg1->smax_value < sval)
+ 			return 0;
+ 		break;
+ 	case BPF_JLE:
+-		if (reg->umax_value <=3D val)
++		if (reg1->umax_value <=3D val)
+ 			return 1;
+-		else if (reg->umin_value > val)
++		else if (reg1->umin_value > val)
+ 			return 0;
+ 		break;
+ 	case BPF_JSLE:
+-		if (reg->smax_value <=3D sval)
++		if (reg1->smax_value <=3D sval)
+ 			return 1;
+-		else if (reg->smin_value > sval)
++		else if (reg1->smin_value > sval)
+ 			return 0;
+ 		break;
+ 	}
+@@ -14338,11 +14337,11 @@ static int is_branch64_taken(struct bpf_reg_sta=
+te *reg, u64 val, u8 opcode)
+  * -1 - unknown. Example: "if (reg < 5)" is unknown when register value
+  *      range [0,10]
+  */
+-static int is_branch_taken(struct bpf_reg_state *reg, u64 val, u8 opcode=
+,
++static int is_branch_taken(struct bpf_reg_state *reg1, u64 val, u8 opcod=
+e,
+ 			   bool is_jmp32)
+ {
+-	if (__is_pointer_value(false, reg)) {
+-		if (!reg_not_null(reg))
++	if (__is_pointer_value(false, reg1)) {
++		if (!reg_not_null(reg1))
+ 			return -1;
+=20
+ 		/* If pointer is valid tests against zero will fail so we can
+@@ -14362,8 +14361,8 @@ static int is_branch_taken(struct bpf_reg_state *=
+reg, u64 val, u8 opcode,
+ 	}
+=20
+ 	if (is_jmp32)
+-		return is_branch32_taken(reg, val, opcode);
+-	return is_branch64_taken(reg, val, opcode);
++		return is_branch32_taken(reg1, val, opcode);
++	return is_branch64_taken(reg1, val, opcode);
+ }
+=20
+ static int flip_opcode(u32 opcode)
 --=20
 2.34.1
 
