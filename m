@@ -1,34 +1,34 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB5EE3C067
-	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 18:16:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 354A13C066
+	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 18:16:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1993F3
-	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:16:46 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39RE5prN006204
-	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:16:46 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3tywry0f4u-4
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69B3AC
+	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:16:50 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 39RE53c5003192
+	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:16:50 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+	by m0001303.ppops.net (PPS) with ESMTPS id 3u089achyn-13
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:16:46 -0700
-Received: from twshared29647.38.frc1.facebook.com (2620:10d:c0a8:1c::11) by
- mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:16:49 -0700
+Received: from twshared9518.03.prn6.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Fri, 27 Oct 2023 11:16:43 -0700
+ 15.1.2507.34; Fri, 27 Oct 2023 11:16:42 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id D91303A7965AC; Fri, 27 Oct 2023 11:14:01 -0700 (PDT)
+	id AFEEF3A79656B; Fri, 27 Oct 2023 11:13:54 -0700 (PDT)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>,
         Shung-Hsi Yu
 	<shung-hsi.yu@suse.com>
-Subject: [PATCH v5 bpf-next 06/23] bpf: add special smin32/smax32 derivation from 64-bit bounds
-Date: Fri, 27 Oct 2023 11:13:29 -0700
-Message-ID: <20231027181346.4019398-7-andrii@kernel.org>
+Subject: [PATCH v5 bpf-next 03/23] bpf: derive smin/smax from umin/max bounds
+Date: Fri, 27 Oct 2023 11:13:26 -0700
+Message-ID: <20231027181346.4019398-4-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231027181346.4019398-1-andrii@kernel.org>
 References: <20231027181346.4019398-1-andrii@kernel.org>
@@ -41,67 +41,115 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: NJYKUifIF1TNVEbvPS1nFic771IpsWhn
-X-Proofpoint-GUID: NJYKUifIF1TNVEbvPS1nFic771IpsWhn
+X-Proofpoint-GUID: yxmpqExx0_Lza_f-S4lIijNi4ok_q1Hj
+X-Proofpoint-ORIG-GUID: yxmpqExx0_Lza_f-S4lIijNi4ok_q1Hj
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-10-27_17,2023-10-27_01,2023-05-22_02
 
-Add a special case where we can derive valid s32 bounds from umin/umax
-or smin/smax by stitching together negative s32 subrange and
-non-negative s32 subrange. That requires upper 32 bits to form a [N, N+1]
-range in u32 domain (taking into account wrap around, so 0xffffffff
-to 0x00000000 is a valid [N, N+1] range in this sense). See code comment
-for concrete examples.
+Add smin/smax derivation from appropriate umin/umax values. Previously th=
+e
+logic was surprisingly asymmetric, trying to derive umin/umax from smin/s=
+max
+(if possible), but not trying to do the same in the other direction. A si=
+mple
+addition to __reg64_deduce_bounds() fixes this.
+
+Added also generic comment about u64/s64 ranges and their relationship.
+Hopefully that helps readers to understand all the bounds deductions
+a bit better.
 
 Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/verifier.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ kernel/bpf/verifier.c | 70 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 5082ca1ea5dc..38d21d0e46bd 100644
+index 857d76694517..bf4193706744 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -2369,6 +2369,29 @@ static void __reg32_deduce_bounds(struct bpf_reg_s=
+@@ -2358,6 +2358,76 @@ static void __reg32_deduce_bounds(struct bpf_reg_s=
 tate *reg)
- 			reg->s32_max_value =3D min_t(s32, reg->s32_max_value, (s32)reg->smax_=
-value);
- 		}
- 	}
-+	/* Special case where upper bits form a small sequence of two
-+	 * sequential numbers (in 32-bit unsigned space, so 0xffffffff to
-+	 * 0x00000000 is also valid), while lower bits form a proper s32 range
-+	 * going from negative numbers to positive numbers. E.g., let's say we
-+	 * have s64 range [-1, 1] ([0xffffffffffffffff, 0x0000000000000001]).
-+	 * Possible s64 values are {-1, 0, 1} ({0xffffffffffffffff,
-+	 * 0x0000000000000000, 0x00000000000001}). Ignoring upper 32 bits,
-+	 * we still get a valid s32 range [-1, 1] ([0xffffffff, 0x00000001]).
-+	 * Note that it doesn't have to be 0xffffffff going to 0x00000000 in
-+	 * upper 32 bits. As a random example, s64 range
-+	 * [0xfffffff0ffffff00; 0xfffffff100000010], forms a valid s32 range
-+	 * [-16, 16] ([0xffffff00; 0x00000010]) in its 32 bit subregister.
+=20
+ static void __reg64_deduce_bounds(struct bpf_reg_state *reg)
+ {
++	/* If u64 range forms a valid s64 range (due to matching sign bit),
++	 * try to learn from that. Let's do a bit of ASCII art to see when
++	 * this is happening. Let's take u64 range first:
++	 *
++	 * 0             0x7fffffffffffffff 0x8000000000000000        U64_MAX
++	 * |-------------------------------|--------------------------------|
++	 *
++	 * Valid u64 range is formed when umin and umax are anywhere in this
++	 * range [0, U64_MAX] and umin <=3D umax. u64 is simple and
++	 * straightforward. Let's where s64 range maps to this simple [0,
++	 * U64_MAX] range, annotated below the line for comparison:
++	 *
++	 * 0             0x7fffffffffffffff 0x8000000000000000        U64_MAX
++	 * |-------------------------------|--------------------------------|
++	 * 0                        S64_MAX S64_MIN                        -1
++	 *
++	 * So s64 values basically start in the middle and then are contiguous
++	 * to the right of it, wrapping around from -1 to 0, and then
++	 * finishing as S64_MAX (0x7fffffffffffffff) right before S64_MIN.
++	 * We can try drawing more visually continuity of u64 vs s64 values as
++	 * mapped to just actual hex valued range of values.
++	 *
++	 *  u64 start                                               u64 end
++	 *  _______________________________________________________________
++	 * /                                                               \
++	 * 0             0x7fffffffffffffff 0x8000000000000000        U64_MAX
++	 * |-------------------------------|--------------------------------|
++	 * 0                        S64_MAX S64_MIN                        -1
++	 *                                / \
++	 * >------------------------------   ------------------------------->
++	 * s64 continues...        s64 end   s64 start          s64 "midpoint"
++	 *
++	 * What this means is that in general, we can't always derive
++	 * something new about u64 from any random s64 range, and vice versa.
++	 * But we can do that in two particular cases. One is when entire
++	 * u64/s64 range is *entirely* contained within left half of the above
++	 * diagram or when it is *entirely* contained in the right half. I.e.:
++	 *
++	 * |-------------------------------|--------------------------------|
++	 *     ^                   ^            ^                 ^
++	 *     A                   B            C                 D
++	 *
++	 * [A, B] and [C, D] are contained entirely in their respective halves
++	 * and form valid contiguous ranges as both u64 and s64 values. [A, B]
++	 * will be non-negative both as u64 and s64 (and in fact it will be
++	 * identical ranges no matter the signedness). [C, D] treated as s64
++	 * will be a range of negative values, while in u64 it will be
++	 * non-negative range of values larger than 0x8000000000000000.
++	 *
++	 * Now, any other range here can't be represented in both u64 and s64
++	 * simultaneously. E.g., [A, C], [A, D], [B, C], [B, D] are valid
++	 * contiguous u64 ranges, but they are discontinuous in s64. [B, C]
++	 * in s64 would be properly presented as [S64_MIN, C] and [B, S64_MAX],
++	 * for example. Similarly, valid s64 range [D, A] (going from negative
++	 * to positive values), would be two separate [D, U64_MAX] and [0, A]
++	 * ranges as u64. Currently reg_state can't represent two segments per
++	 * numeric domain, so in such situations we can only derive maximal
++	 * possible range ([0, U64_MAX] for u64, and [S64_MIN, S64_MAX) for s64=
+).
++	 *
++	 * So we use these facts to derive umin/umax from smin/smax and vice
++	 * versa only if they stay within the same "half". This is equivalent
++	 * to checking sign bit: lower half will have sign bit as zero, upper
++	 * half have sign bit 1. Below in code we simplify this by just
++	 * casting umin/umax as smin/smax and checking if they form valid
++	 * range, and vice versa. Those are equivalent checks.
 +	 */
-+	if ((u32)(reg->umin_value >> 32) + 1 =3D=3D (u32)(reg->umax_value >> 32=
-) &&
-+	    (s32)reg->umin_value < 0 && (s32)reg->umax_value >=3D 0) {
-+		reg->s32_min_value =3D max_t(s32, reg->s32_min_value, (s32)reg->umin_v=
-alue);
-+		reg->s32_max_value =3D min_t(s32, reg->s32_max_value, (s32)reg->umax_v=
-alue);
++	if ((s64)reg->umin_value <=3D (s64)reg->umax_value) {
++		reg->smin_value =3D max_t(s64, reg->smin_value, reg->umin_value);
++		reg->smax_value =3D min_t(s64, reg->smax_value, reg->umax_value);
 +	}
-+	if ((u32)(reg->smin_value >> 32) + 1 =3D=3D (u32)(reg->smax_value >> 32=
-) &&
-+	    (s32)reg->smin_value < 0 && (s32)reg->smax_value >=3D 0) {
-+		reg->s32_min_value =3D max_t(s32, reg->s32_min_value, (s32)reg->smin_v=
-alue);
-+		reg->s32_max_value =3D min_t(s32, reg->s32_max_value, (s32)reg->smax_v=
-alue);
-+	}
- 	/* if u32 range forms a valid s32 range (due to matching sign bit),
- 	 * try to learn from that
- 	 */
+ 	/* Learn sign from signed bounds.
+ 	 * If we cannot cross the sign boundary, then signed and unsigned bound=
+s
+ 	 * are the same, so combine.  This works even in the negative case, e.g=
+.
 --=20
 2.34.1
 
