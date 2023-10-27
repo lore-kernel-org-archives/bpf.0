@@ -1,32 +1,34 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 919A03C076
-	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 18:16:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB5EE3C067
+	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 18:16:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29380AC
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1993F3
 	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:16:46 -0700 (PDT)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 39RE53bv003192
-	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:16:45 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by m0001303.ppops.net (PPS) with ESMTPS id 3u089achyn-6
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39RE5prN006204
+	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:16:46 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3tywry0f4u-4
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:16:45 -0700
-Received: from twshared9518.03.prn6.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:16:46 -0700
+Received: from twshared29647.38.frc1.facebook.com (2620:10d:c0a8:1c::11) by
+ mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Fri, 27 Oct 2023 11:16:40 -0700
+ 15.1.2507.34; Fri, 27 Oct 2023 11:16:43 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 03C403A7965F7; Fri, 27 Oct 2023 11:14:05 -0700 (PDT)
+	id D91303A7965AC; Fri, 27 Oct 2023 11:14:01 -0700 (PDT)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
-CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH v5 bpf-next 08/23] bpf: try harder to deduce register bounds from different numeric domains
-Date: Fri, 27 Oct 2023 11:13:31 -0700
-Message-ID: <20231027181346.4019398-9-andrii@kernel.org>
+CC: <andrii@kernel.org>, <kernel-team@meta.com>,
+        Shung-Hsi Yu
+	<shung-hsi.yu@suse.com>
+Subject: [PATCH v5 bpf-next 06/23] bpf: add special smin32/smax32 derivation from 64-bit bounds
+Date: Fri, 27 Oct 2023 11:13:29 -0700
+Message-ID: <20231027181346.4019398-7-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231027181346.4019398-1-andrii@kernel.org>
 References: <20231027181346.4019398-1-andrii@kernel.org>
@@ -39,72 +41,67 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: mDobuso_n7jdB33PaBDQyZmKuhJHXk7a
-X-Proofpoint-ORIG-GUID: mDobuso_n7jdB33PaBDQyZmKuhJHXk7a
+X-Proofpoint-ORIG-GUID: NJYKUifIF1TNVEbvPS1nFic771IpsWhn
+X-Proofpoint-GUID: NJYKUifIF1TNVEbvPS1nFic771IpsWhn
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-10-27_17,2023-10-27_01,2023-05-22_02
 
-There are cases (caught by subsequent reg_bounds tests in selftests/bpf)
-where performing one round of __reg_deduce_bounds() doesn't propagate
-all the information from, say, s32 to u32 bounds and than from newly
-learned u32 bounds back to u64 and s64. So perform __reg_deduce_bounds()
-twice to make sure such derivations are propagated fully after
-reg_bounds_sync().
+Add a special case where we can derive valid s32 bounds from umin/umax
+or smin/smax by stitching together negative s32 subrange and
+non-negative s32 subrange. That requires upper 32 bits to form a [N, N+1]
+range in u32 domain (taking into account wrap around, so 0xffffffff
+to 0x00000000 is a valid [N, N+1] range in this sense). See code comment
+for concrete examples.
 
-One such example is test `(s64)[0xffffffff00000001; 0] (u64)<
-0xffffffff00000000` from selftest patch from this patch set. It demonstra=
-tes an
-intricate dance of u64 -> s64 -> u64 -> u32 bounds adjustments, which req=
-uires
-two rounds of __reg_deduce_bounds(). Here are corresponding refinement lo=
-g from
-selftest, showing evolution of knowledge.
-
-REFINING (FALSE R1) (u64)SRC=3D[0xffffffff00000000; U64_MAX] (u64)DST_OLD=
-=3D[0; U64_MAX] (u64)DST_NEW=3D[0xffffffff00000000; U64_MAX]
-REFINING (FALSE R1) (u64)SRC=3D[0xffffffff00000000; U64_MAX] (s64)DST_OLD=
-=3D[0xffffffff00000001; 0] (s64)DST_NEW=3D[0xffffffff00000001; -1]
-REFINING (FALSE R1) (s64)SRC=3D[0xffffffff00000001; -1] (u64)DST_OLD=3D[0=
-xffffffff00000000; U64_MAX] (u64)DST_NEW=3D[0xffffffff00000001; U64_MAX]
-REFINING (FALSE R1) (u64)SRC=3D[0xffffffff00000001; U64_MAX] (u32)DST_OLD=
-=3D[0; U32_MAX] (u32)DST_NEW=3D[1; U32_MAX]
-
-R1 initially has smin/smax set to [0xffffffff00000001; -1], while umin/um=
-ax is
-unknown. After (u64)< comparison, in FALSE branch we gain knowledge that
-umin/umax is [0xffffffff00000000; U64_MAX]. That causes smin/smax to lear=
-n that
-zero can't happen and upper bound is -1. Then smin/smax is adjusted from
-umin/umax improving lower bound from 0xffffffff00000000 to 0xffffffff0000=
-0001.
-And then eventually umin32/umax32 bounds are drived from umin/umax and be=
-come
-[1; U32_MAX].
-
-Selftest in the last patch is actually implementing a multi-round fixed-p=
-oint
-convergence logic, but so far all the tests are handled by two rounds of
-reg_bounds_sync() on the verifier state, so we keep it simple for now.
-
+Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/verifier.c | 1 +
- 1 file changed, 1 insertion(+)
+ kernel/bpf/verifier.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 768247e3d667..6b0736c04ebe 100644
+index 5082ca1ea5dc..38d21d0e46bd 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -2607,6 +2607,7 @@ static void reg_bounds_sync(struct bpf_reg_state *r=
-eg)
- 	__update_reg_bounds(reg);
- 	/* We might have learned something about the sign bit. */
- 	__reg_deduce_bounds(reg);
-+	__reg_deduce_bounds(reg);
- 	/* We might have learned some bits from the bounds. */
- 	__reg_bound_offset(reg);
- 	/* Intersecting with the old var_off might have improved our bounds
+@@ -2369,6 +2369,29 @@ static void __reg32_deduce_bounds(struct bpf_reg_s=
+tate *reg)
+ 			reg->s32_max_value =3D min_t(s32, reg->s32_max_value, (s32)reg->smax_=
+value);
+ 		}
+ 	}
++	/* Special case where upper bits form a small sequence of two
++	 * sequential numbers (in 32-bit unsigned space, so 0xffffffff to
++	 * 0x00000000 is also valid), while lower bits form a proper s32 range
++	 * going from negative numbers to positive numbers. E.g., let's say we
++	 * have s64 range [-1, 1] ([0xffffffffffffffff, 0x0000000000000001]).
++	 * Possible s64 values are {-1, 0, 1} ({0xffffffffffffffff,
++	 * 0x0000000000000000, 0x00000000000001}). Ignoring upper 32 bits,
++	 * we still get a valid s32 range [-1, 1] ([0xffffffff, 0x00000001]).
++	 * Note that it doesn't have to be 0xffffffff going to 0x00000000 in
++	 * upper 32 bits. As a random example, s64 range
++	 * [0xfffffff0ffffff00; 0xfffffff100000010], forms a valid s32 range
++	 * [-16, 16] ([0xffffff00; 0x00000010]) in its 32 bit subregister.
++	 */
++	if ((u32)(reg->umin_value >> 32) + 1 =3D=3D (u32)(reg->umax_value >> 32=
+) &&
++	    (s32)reg->umin_value < 0 && (s32)reg->umax_value >=3D 0) {
++		reg->s32_min_value =3D max_t(s32, reg->s32_min_value, (s32)reg->umin_v=
+alue);
++		reg->s32_max_value =3D min_t(s32, reg->s32_max_value, (s32)reg->umax_v=
+alue);
++	}
++	if ((u32)(reg->smin_value >> 32) + 1 =3D=3D (u32)(reg->smax_value >> 32=
+) &&
++	    (s32)reg->smin_value < 0 && (s32)reg->smax_value >=3D 0) {
++		reg->s32_min_value =3D max_t(s32, reg->s32_min_value, (s32)reg->smin_v=
+alue);
++		reg->s32_max_value =3D min_t(s32, reg->s32_max_value, (s32)reg->smax_v=
+alue);
++	}
+ 	/* if u32 range forms a valid s32 range (due to matching sign bit),
+ 	 * try to learn from that
+ 	 */
 --=20
 2.34.1
 
