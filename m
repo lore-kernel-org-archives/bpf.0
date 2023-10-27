@@ -1,34 +1,32 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 354A13C066
-	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 18:16:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E57403C068
+	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 18:16:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69B3AC
-	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:16:50 -0700 (PDT)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 39RE53c5003192
-	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:16:50 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by m0001303.ppops.net (PPS) with ESMTPS id 3u089achyn-13
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378E8D9
+	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:16:51 -0700 (PDT)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39RE6FNj009289
+	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:16:51 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3u0892vka8-8
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:16:49 -0700
-Received: from twshared9518.03.prn6.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Fri, 27 Oct 2023 11:16:50 -0700
+Received: from twshared29647.38.frc1.facebook.com (2620:10d:c0a8:1b::2d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Fri, 27 Oct 2023 11:16:42 -0700
+ 15.1.2507.34; Fri, 27 Oct 2023 11:16:43 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id AFEEF3A79656B; Fri, 27 Oct 2023 11:13:54 -0700 (PDT)
+	id 6B4A63A7966FF; Fri, 27 Oct 2023 11:14:30 -0700 (PDT)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
-CC: <andrii@kernel.org>, <kernel-team@meta.com>,
-        Shung-Hsi Yu
-	<shung-hsi.yu@suse.com>
-Subject: [PATCH v5 bpf-next 03/23] bpf: derive smin/smax from umin/max bounds
-Date: Fri, 27 Oct 2023 11:13:26 -0700
-Message-ID: <20231027181346.4019398-4-andrii@kernel.org>
+CC: <andrii@kernel.org>, <kernel-team@meta.com>
+Subject: [PATCH v5 bpf-next 18/23] bpf: generalize reg_set_min_max() to handle non-const register comparisons
+Date: Fri, 27 Oct 2023 11:13:41 -0700
+Message-ID: <20231027181346.4019398-19-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231027181346.4019398-1-andrii@kernel.org>
 References: <20231027181346.4019398-1-andrii@kernel.org>
@@ -41,115 +39,511 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: yxmpqExx0_Lza_f-S4lIijNi4ok_q1Hj
-X-Proofpoint-ORIG-GUID: yxmpqExx0_Lza_f-S4lIijNi4ok_q1Hj
+X-Proofpoint-GUID: 1qley-wGpRGFbJzRhLUfs1IxTsQ3_PlC
+X-Proofpoint-ORIG-GUID: 1qley-wGpRGFbJzRhLUfs1IxTsQ3_PlC
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-10-27_17,2023-10-27_01,2023-05-22_02
 
-Add smin/smax derivation from appropriate umin/umax values. Previously th=
-e
-logic was surprisingly asymmetric, trying to derive umin/umax from smin/s=
-max
-(if possible), but not trying to do the same in the other direction. A si=
-mple
-addition to __reg64_deduce_bounds() fixes this.
+Generalize bounds adjustment logic of reg_set_min_max() to handle not
+just register vs constant case, but in general any register vs any
+register cases. For most of the operations it's trivial extension based
+on range vs range comparison logic, we just need to properly pick
+min/max of a range to compare against min/max of the other range.
 
-Added also generic comment about u64/s64 ranges and their relationship.
-Hopefully that helps readers to understand all the bounds deductions
-a bit better.
+For BPF_JSET we keep the original capabilities, just make sure JSET is
+integrated in the common framework. This is manifested in the
+internal-only BPF_KSET + BPF_X "opcode" to allow for simpler and more
+uniform rev_opcode() handling. See the code for details. This allows to
+reuse the same code exactly both for TRUE and FALSE branches without
+explicitly handling both conditions with custom code.
 
-Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Note also that now we don't need a special handling of BPF_JEQ/BPF_JNE
+case none of the registers are constants. This is now just a normal
+generic case handled by reg_set_min_max().
+
+To make tnum handling cleaner, tnum_with_subreg() helper is added, as
+that's a common operator when dealing with 32-bit subregister bounds.
+This keeps the overall logic much less noisy when it comes to tnums.
+
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/verifier.c | 70 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 70 insertions(+)
+ include/linux/tnum.h  |   4 +
+ kernel/bpf/tnum.c     |   7 +-
+ kernel/bpf/verifier.c | 321 +++++++++++++++++++-----------------------
+ 3 files changed, 157 insertions(+), 175 deletions(-)
 
+diff --git a/include/linux/tnum.h b/include/linux/tnum.h
+index 1c3948a1d6ad..3c13240077b8 100644
+--- a/include/linux/tnum.h
++++ b/include/linux/tnum.h
+@@ -106,6 +106,10 @@ int tnum_sbin(char *str, size_t size, struct tnum a)=
+;
+ struct tnum tnum_subreg(struct tnum a);
+ /* Returns the tnum with the lower 32-bit subreg cleared */
+ struct tnum tnum_clear_subreg(struct tnum a);
++/* Returns the tnum with the lower 32-bit subreg in *reg* set to the low=
+er
++ * 32-bit subreg in *subreg*
++ */
++struct tnum tnum_with_subreg(struct tnum reg, struct tnum subreg);
+ /* Returns the tnum with the lower 32-bit subreg set to value */
+ struct tnum tnum_const_subreg(struct tnum a, u32 value);
+ /* Returns true if 32-bit subreg @a is a known constant*/
+diff --git a/kernel/bpf/tnum.c b/kernel/bpf/tnum.c
+index 3d7127f439a1..f4c91c9b27d7 100644
+--- a/kernel/bpf/tnum.c
++++ b/kernel/bpf/tnum.c
+@@ -208,7 +208,12 @@ struct tnum tnum_clear_subreg(struct tnum a)
+ 	return tnum_lshift(tnum_rshift(a, 32), 32);
+ }
+=20
++struct tnum tnum_with_subreg(struct tnum reg, struct tnum subreg)
++{
++	return tnum_or(tnum_clear_subreg(reg), tnum_subreg(subreg));
++}
++
+ struct tnum tnum_const_subreg(struct tnum a, u32 value)
+ {
+-	return tnum_or(tnum_clear_subreg(a), tnum_const(value));
++	return tnum_with_subreg(a, tnum_const(value));
+ }
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 857d76694517..bf4193706744 100644
+index 522566699fbe..4c974296127b 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -2358,6 +2358,76 @@ static void __reg32_deduce_bounds(struct bpf_reg_s=
-tate *reg)
+@@ -14381,217 +14381,201 @@ static int is_branch_taken(struct bpf_reg_sta=
+te *reg1, struct bpf_reg_state *reg
+ 	return is_scalar_branch_taken(reg1, reg2, opcode, is_jmp32);
+ }
 =20
- static void __reg64_deduce_bounds(struct bpf_reg_state *reg)
+-/* Adjusts the register min/max values in the case that the dst_reg is t=
+he
+- * variable register that we are working on, and src_reg is a constant o=
+r we're
+- * simply doing a BPF_K check.
+- * In JEQ/JNE cases we also adjust the var_off values.
++/* Opcode that corresponds to a *false* branch condition.
++ * E.g., if r1 < r2, then reverse (false) condition is r1 >=3D r2
+  */
+-static void reg_set_min_max(struct bpf_reg_state *true_reg1,
+-			    struct bpf_reg_state *true_reg2,
+-			    struct bpf_reg_state *false_reg1,
+-			    struct bpf_reg_state *false_reg2,
+-			    u8 opcode, bool is_jmp32)
++static u8 rev_opcode(u8 opcode)
  {
-+	/* If u64 range forms a valid s64 range (due to matching sign bit),
-+	 * try to learn from that. Let's do a bit of ASCII art to see when
-+	 * this is happening. Let's take u64 range first:
-+	 *
-+	 * 0             0x7fffffffffffffff 0x8000000000000000        U64_MAX
-+	 * |-------------------------------|--------------------------------|
-+	 *
-+	 * Valid u64 range is formed when umin and umax are anywhere in this
-+	 * range [0, U64_MAX] and umin <=3D umax. u64 is simple and
-+	 * straightforward. Let's where s64 range maps to this simple [0,
-+	 * U64_MAX] range, annotated below the line for comparison:
-+	 *
-+	 * 0             0x7fffffffffffffff 0x8000000000000000        U64_MAX
-+	 * |-------------------------------|--------------------------------|
-+	 * 0                        S64_MAX S64_MIN                        -1
-+	 *
-+	 * So s64 values basically start in the middle and then are contiguous
-+	 * to the right of it, wrapping around from -1 to 0, and then
-+	 * finishing as S64_MAX (0x7fffffffffffffff) right before S64_MIN.
-+	 * We can try drawing more visually continuity of u64 vs s64 values as
-+	 * mapped to just actual hex valued range of values.
-+	 *
-+	 *  u64 start                                               u64 end
-+	 *  _______________________________________________________________
-+	 * /                                                               \
-+	 * 0             0x7fffffffffffffff 0x8000000000000000        U64_MAX
-+	 * |-------------------------------|--------------------------------|
-+	 * 0                        S64_MAX S64_MIN                        -1
-+	 *                                / \
-+	 * >------------------------------   ------------------------------->
-+	 * s64 continues...        s64 end   s64 start          s64 "midpoint"
-+	 *
-+	 * What this means is that in general, we can't always derive
-+	 * something new about u64 from any random s64 range, and vice versa.
-+	 * But we can do that in two particular cases. One is when entire
-+	 * u64/s64 range is *entirely* contained within left half of the above
-+	 * diagram or when it is *entirely* contained in the right half. I.e.:
-+	 *
-+	 * |-------------------------------|--------------------------------|
-+	 *     ^                   ^            ^                 ^
-+	 *     A                   B            C                 D
-+	 *
-+	 * [A, B] and [C, D] are contained entirely in their respective halves
-+	 * and form valid contiguous ranges as both u64 and s64 values. [A, B]
-+	 * will be non-negative both as u64 and s64 (and in fact it will be
-+	 * identical ranges no matter the signedness). [C, D] treated as s64
-+	 * will be a range of negative values, while in u64 it will be
-+	 * non-negative range of values larger than 0x8000000000000000.
-+	 *
-+	 * Now, any other range here can't be represented in both u64 and s64
-+	 * simultaneously. E.g., [A, C], [A, D], [B, C], [B, D] are valid
-+	 * contiguous u64 ranges, but they are discontinuous in s64. [B, C]
-+	 * in s64 would be properly presented as [S64_MIN, C] and [B, S64_MAX],
-+	 * for example. Similarly, valid s64 range [D, A] (going from negative
-+	 * to positive values), would be two separate [D, U64_MAX] and [0, A]
-+	 * ranges as u64. Currently reg_state can't represent two segments per
-+	 * numeric domain, so in such situations we can only derive maximal
-+	 * possible range ([0, U64_MAX] for u64, and [S64_MIN, S64_MAX) for s64=
-).
-+	 *
-+	 * So we use these facts to derive umin/umax from smin/smax and vice
-+	 * versa only if they stay within the same "half". This is equivalent
-+	 * to checking sign bit: lower half will have sign bit as zero, upper
-+	 * half have sign bit 1. Below in code we simplify this by just
-+	 * casting umin/umax as smin/smax and checking if they form valid
-+	 * range, and vice versa. Those are equivalent checks.
-+	 */
-+	if ((s64)reg->umin_value <=3D (s64)reg->umax_value) {
-+		reg->smin_value =3D max_t(s64, reg->smin_value, reg->umin_value);
-+		reg->smax_value =3D min_t(s64, reg->smax_value, reg->umax_value);
+-	struct tnum false_32off, false_64off;
+-	struct tnum true_32off, true_64off;
+-	u64 val;
+-	u32 val32;
+-	s64 sval;
+-	s32 sval32;
+-
+-	/* If either register is a pointer, we can't learn anything about its
+-	 * variable offset from the compare (unless they were a pointer into
+-	 * the same object, but we don't bother with that).
++	switch (opcode) {
++	case BPF_JEQ:		return BPF_JNE;
++	case BPF_JNE:		return BPF_JEQ;
++	/* JSET doesn't have it's reverse opcode in BPF, so add
++	 * BPF_X flag to denote the reverse of that operation
+ 	 */
+-	if (false_reg1->type !=3D SCALAR_VALUE || false_reg2->type !=3D SCALAR_=
+VALUE)
+-		return;
+-
+-	/* we expect right-hand registers (src ones) to be constants, for now *=
+/
+-	if (!is_reg_const(false_reg2, is_jmp32)) {
+-		opcode =3D flip_opcode(opcode);
+-		swap(true_reg1, true_reg2);
+-		swap(false_reg1, false_reg2);
++	case BPF_JSET:		return BPF_JSET | BPF_X;
++	case BPF_JSET | BPF_X:	return BPF_JSET;
++	case BPF_JGE:		return BPF_JLT;
++	case BPF_JGT:		return BPF_JLE;
++	case BPF_JLE:		return BPF_JGT;
++	case BPF_JLT:		return BPF_JGE;
++	case BPF_JSGE:		return BPF_JSLT;
++	case BPF_JSGT:		return BPF_JSLE;
++	case BPF_JSLE:		return BPF_JSGT;
++	case BPF_JSLT:		return BPF_JSGE;
++	default:		return 0;
+ 	}
+-	if (!is_reg_const(false_reg2, is_jmp32))
+-		return;
++}
+=20
+-	false_32off =3D tnum_subreg(false_reg1->var_off);
+-	false_64off =3D false_reg1->var_off;
+-	true_32off =3D tnum_subreg(true_reg1->var_off);
+-	true_64off =3D true_reg1->var_off;
+-	val =3D false_reg2->var_off.value;
+-	val32 =3D (u32)tnum_subreg(false_reg2->var_off).value;
+-	sval =3D (s64)val;
+-	sval32 =3D (s32)val32;
++/* Refine range knowledge for <reg1> <op> <reg>2 conditional operation. =
+*/
++static void regs_refine_cond_op(struct bpf_reg_state *reg1, struct bpf_r=
+eg_state *reg2,
++				u8 opcode, bool is_jmp32)
++{
++	struct tnum t;
+=20
+ 	switch (opcode) {
+-	/* JEQ/JNE comparison doesn't change the register equivalence.
+-	 *
+-	 * r1 =3D r2;
+-	 * if (r1 =3D=3D 42) goto label;
+-	 * ...
+-	 * label: // here both r1 and r2 are known to be 42.
+-	 *
+-	 * Hence when marking register as known preserve it's ID.
+-	 */
+ 	case BPF_JEQ:
+ 		if (is_jmp32) {
+-			__mark_reg32_known(true_reg1, val32);
+-			true_32off =3D tnum_subreg(true_reg1->var_off);
++			reg1->u32_min_value =3D max(reg1->u32_min_value, reg2->u32_min_value)=
+;
++			reg1->u32_max_value =3D min(reg1->u32_max_value, reg2->u32_max_value)=
+;
++			reg1->s32_min_value =3D max(reg1->s32_min_value, reg2->s32_min_value)=
+;
++			reg1->s32_max_value =3D min(reg1->s32_max_value, reg2->s32_max_value)=
+;
++			reg2->u32_min_value =3D reg1->u32_min_value;
++			reg2->u32_max_value =3D reg1->u32_max_value;
++			reg2->s32_min_value =3D reg1->s32_min_value;
++			reg2->s32_max_value =3D reg1->s32_max_value;
++
++			t =3D tnum_intersect(tnum_subreg(reg1->var_off), tnum_subreg(reg2->va=
+r_off));
++			reg1->var_off =3D tnum_with_subreg(reg1->var_off, t);
++			reg2->var_off =3D tnum_with_subreg(reg2->var_off, t);
+ 		} else {
+-			___mark_reg_known(true_reg1, val);
+-			true_64off =3D true_reg1->var_off;
++			reg1->umin_value =3D max(reg1->umin_value, reg2->umin_value);
++			reg1->umax_value =3D min(reg1->umax_value, reg2->umax_value);
++			reg1->smin_value =3D max(reg1->smin_value, reg2->smin_value);
++			reg1->smax_value =3D min(reg1->smax_value, reg2->smax_value);
++			reg2->umin_value =3D reg1->umin_value;
++			reg2->umax_value =3D reg1->umax_value;
++			reg2->smin_value =3D reg1->smin_value;
++			reg2->smax_value =3D reg1->smax_value;
++
++			reg1->var_off =3D tnum_intersect(reg1->var_off, reg2->var_off);
++			reg2->var_off =3D reg1->var_off;
+ 		}
+ 		break;
+ 	case BPF_JNE:
++		/* we don't derive any new information for inequality yet */
++		break;
++	case BPF_JSET:
++	case BPF_JSET | BPF_X: { /* BPF_JSET and its reverse, see rev_opcode() =
+*/
++		u64 val;
++
++		if (!is_reg_const(reg2, is_jmp32))
++			swap(reg1, reg2);
++		if (!is_reg_const(reg2, is_jmp32))
++			break;
++
++		val =3D reg_const_value(reg2, is_jmp32);
++		/* BPF_JSET requires single bit to learn something useful */
++		if (!(opcode & BPF_X) && !is_power_of_2(val))
++			break;
++
+ 		if (is_jmp32) {
+-			__mark_reg32_known(false_reg1, val32);
+-			false_32off =3D tnum_subreg(false_reg1->var_off);
++			if (opcode & BPF_X)
++				t =3D tnum_and(tnum_subreg(reg1->var_off), tnum_const(~val));
++			else
++				t =3D tnum_or(tnum_subreg(reg1->var_off), tnum_const(val));
++			reg1->var_off =3D tnum_with_subreg(reg1->var_off, t);
+ 		} else {
+-			___mark_reg_known(false_reg1, val);
+-			false_64off =3D false_reg1->var_off;
++			if (opcode & BPF_X)
++				reg1->var_off =3D tnum_and(reg1->var_off, tnum_const(~val));
++			else
++				reg1->var_off =3D tnum_or(reg1->var_off, tnum_const(val));
+ 		}
+ 		break;
+-	case BPF_JSET:
 +	}
- 	/* Learn sign from signed bounds.
- 	 * If we cannot cross the sign boundary, then signed and unsigned bound=
-s
- 	 * are the same, so combine.  This works even in the negative case, e.g=
-.
++	case BPF_JGE:
+ 		if (is_jmp32) {
+-			false_32off =3D tnum_and(false_32off, tnum_const(~val32));
+-			if (is_power_of_2(val32))
+-				true_32off =3D tnum_or(true_32off,
+-						     tnum_const(val32));
++			reg1->u32_min_value =3D max(reg1->u32_min_value, reg2->u32_min_value)=
+;
++			reg2->u32_max_value =3D min(reg1->u32_max_value, reg2->u32_max_value)=
+;
+ 		} else {
+-			false_64off =3D tnum_and(false_64off, tnum_const(~val));
+-			if (is_power_of_2(val))
+-				true_64off =3D tnum_or(true_64off,
+-						     tnum_const(val));
++			reg1->umin_value =3D max(reg1->umin_value, reg2->umin_value);
++			reg2->umax_value =3D min(reg1->umax_value, reg2->umax_value);
+ 		}
+ 		break;
+-	case BPF_JGE:
+ 	case BPF_JGT:
+-	{
+ 		if (is_jmp32) {
+-			u32 false_umax =3D opcode =3D=3D BPF_JGT ? val32  : val32 - 1;
+-			u32 true_umin =3D opcode =3D=3D BPF_JGT ? val32 + 1 : val32;
+-
+-			false_reg1->u32_max_value =3D min(false_reg1->u32_max_value,
+-						       false_umax);
+-			true_reg1->u32_min_value =3D max(true_reg1->u32_min_value,
+-						      true_umin);
++			reg1->u32_min_value =3D max(reg1->u32_min_value, reg2->u32_min_value =
++ 1);
++			reg2->u32_max_value =3D min(reg1->u32_max_value - 1, reg2->u32_max_va=
+lue);
+ 		} else {
+-			u64 false_umax =3D opcode =3D=3D BPF_JGT ? val    : val - 1;
+-			u64 true_umin =3D opcode =3D=3D BPF_JGT ? val + 1 : val;
+-
+-			false_reg1->umax_value =3D min(false_reg1->umax_value, false_umax);
+-			true_reg1->umin_value =3D max(true_reg1->umin_value, true_umin);
++			reg1->umin_value =3D max(reg1->umin_value, reg2->umin_value + 1);
++			reg2->umax_value =3D min(reg1->umax_value - 1, reg2->umax_value);
+ 		}
+ 		break;
+-	}
+ 	case BPF_JSGE:
++		if (is_jmp32) {
++			reg1->s32_min_value =3D max(reg1->s32_min_value, reg2->s32_min_value)=
+;
++			reg2->s32_max_value =3D min(reg1->s32_max_value, reg2->s32_max_value)=
+;
++		} else {
++			reg1->smin_value =3D max(reg1->smin_value, reg2->smin_value);
++			reg2->smax_value =3D min(reg1->smax_value, reg2->smax_value);
++		}
++		break;
+ 	case BPF_JSGT:
+-	{
+ 		if (is_jmp32) {
+-			s32 false_smax =3D opcode =3D=3D BPF_JSGT ? sval32    : sval32 - 1;
+-			s32 true_smin =3D opcode =3D=3D BPF_JSGT ? sval32 + 1 : sval32;
+-
+-			false_reg1->s32_max_value =3D min(false_reg1->s32_max_value, false_sm=
+ax);
+-			true_reg1->s32_min_value =3D max(true_reg1->s32_min_value, true_smin)=
+;
++			reg1->s32_min_value =3D max(reg1->s32_min_value, reg2->s32_min_value =
++ 1);
++			reg2->s32_max_value =3D min(reg1->s32_max_value - 1, reg2->s32_max_va=
+lue);
+ 		} else {
+-			s64 false_smax =3D opcode =3D=3D BPF_JSGT ? sval    : sval - 1;
+-			s64 true_smin =3D opcode =3D=3D BPF_JSGT ? sval + 1 : sval;
+-
+-			false_reg1->smax_value =3D min(false_reg1->smax_value, false_smax);
+-			true_reg1->smin_value =3D max(true_reg1->smin_value, true_smin);
++			reg1->smin_value =3D max(reg1->smin_value, reg2->smin_value + 1);
++			reg2->smax_value =3D min(reg1->smax_value - 1, reg2->smax_value);
+ 		}
+ 		break;
+-	}
+ 	case BPF_JLE:
++		if (is_jmp32) {
++			reg1->u32_max_value =3D min(reg1->u32_max_value, reg2->u32_max_value)=
+;
++			reg2->u32_min_value =3D max(reg1->u32_min_value, reg2->u32_min_value)=
+;
++		} else {
++			reg1->umax_value =3D min(reg1->umax_value, reg2->umax_value);
++			reg2->umin_value =3D max(reg1->umin_value, reg2->umin_value);
++		}
++		break;
+ 	case BPF_JLT:
+-	{
+ 		if (is_jmp32) {
+-			u32 false_umin =3D opcode =3D=3D BPF_JLT ? val32  : val32 + 1;
+-			u32 true_umax =3D opcode =3D=3D BPF_JLT ? val32 - 1 : val32;
+-
+-			false_reg1->u32_min_value =3D max(false_reg1->u32_min_value,
+-						       false_umin);
+-			true_reg1->u32_max_value =3D min(true_reg1->u32_max_value,
+-						      true_umax);
++			reg1->u32_max_value =3D min(reg1->u32_max_value, reg2->u32_max_value =
+- 1);
++			reg2->u32_min_value =3D max(reg1->u32_min_value + 1, reg2->u32_min_va=
+lue);
+ 		} else {
+-			u64 false_umin =3D opcode =3D=3D BPF_JLT ? val    : val + 1;
+-			u64 true_umax =3D opcode =3D=3D BPF_JLT ? val - 1 : val;
+-
+-			false_reg1->umin_value =3D max(false_reg1->umin_value, false_umin);
+-			true_reg1->umax_value =3D min(true_reg1->umax_value, true_umax);
++			reg1->umax_value =3D min(reg1->umax_value, reg2->umax_value - 1);
++			reg2->umin_value =3D max(reg1->umin_value + 1, reg2->umin_value);
+ 		}
+ 		break;
+-	}
+ 	case BPF_JSLE:
++		if (is_jmp32) {
++			reg1->s32_max_value =3D min(reg1->s32_max_value, reg2->s32_max_value)=
+;
++			reg2->s32_min_value =3D max(reg1->s32_min_value, reg2->s32_min_value)=
+;
++		} else {
++			reg1->smax_value =3D min(reg1->smax_value, reg2->smax_value);
++			reg2->smin_value =3D max(reg1->smin_value, reg2->smin_value);
++		}
++		break;
+ 	case BPF_JSLT:
+-	{
+ 		if (is_jmp32) {
+-			s32 false_smin =3D opcode =3D=3D BPF_JSLT ? sval32    : sval32 + 1;
+-			s32 true_smax =3D opcode =3D=3D BPF_JSLT ? sval32 - 1 : sval32;
+-
+-			false_reg1->s32_min_value =3D max(false_reg1->s32_min_value, false_sm=
+in);
+-			true_reg1->s32_max_value =3D min(true_reg1->s32_max_value, true_smax)=
+;
++			reg1->s32_max_value =3D min(reg1->s32_max_value, reg2->s32_max_value =
+- 1);
++			reg2->s32_min_value =3D max(reg1->s32_min_value + 1, reg2->s32_min_va=
+lue);
+ 		} else {
+-			s64 false_smin =3D opcode =3D=3D BPF_JSLT ? sval    : sval + 1;
+-			s64 true_smax =3D opcode =3D=3D BPF_JSLT ? sval - 1 : sval;
+-
+-			false_reg1->smin_value =3D max(false_reg1->smin_value, false_smin);
+-			true_reg1->smax_value =3D min(true_reg1->smax_value, true_smax);
++			reg1->smax_value =3D min(reg1->smax_value, reg2->smax_value - 1);
++			reg2->smin_value =3D max(reg1->smin_value + 1, reg2->smin_value);
+ 		}
+ 		break;
+-	}
+ 	default:
+ 		return;
+ 	}
+-
+-	if (is_jmp32) {
+-		false_reg1->var_off =3D tnum_or(tnum_clear_subreg(false_64off),
+-					     tnum_subreg(false_32off));
+-		true_reg1->var_off =3D tnum_or(tnum_clear_subreg(true_64off),
+-					    tnum_subreg(true_32off));
+-		reg_bounds_sync(false_reg1);
+-		reg_bounds_sync(true_reg1);
+-	} else {
+-		false_reg1->var_off =3D false_64off;
+-		true_reg1->var_off =3D true_64off;
+-		reg_bounds_sync(false_reg1);
+-		reg_bounds_sync(true_reg1);
+-	}
+-}
+-
+-/* Regs are known to be equal, so intersect their min/max/var_off */
+-static void __reg_combine_min_max(struct bpf_reg_state *src_reg,
+-				  struct bpf_reg_state *dst_reg)
+-{
+-	src_reg->umin_value =3D dst_reg->umin_value =3D max(src_reg->umin_value=
+,
+-							dst_reg->umin_value);
+-	src_reg->umax_value =3D dst_reg->umax_value =3D min(src_reg->umax_value=
+,
+-							dst_reg->umax_value);
+-	src_reg->smin_value =3D dst_reg->smin_value =3D max(src_reg->smin_value=
+,
+-							dst_reg->smin_value);
+-	src_reg->smax_value =3D dst_reg->smax_value =3D min(src_reg->smax_value=
+,
+-							dst_reg->smax_value);
+-	src_reg->var_off =3D dst_reg->var_off =3D tnum_intersect(src_reg->var_o=
+ff,
+-							     dst_reg->var_off);
+-	reg_bounds_sync(src_reg);
+-	reg_bounds_sync(dst_reg);
+ }
+=20
+-static void reg_combine_min_max(struct bpf_reg_state *true_src,
+-				struct bpf_reg_state *true_dst,
+-				struct bpf_reg_state *false_src,
+-				struct bpf_reg_state *false_dst,
+-				u8 opcode)
++/* Adjusts the register min/max values in the case that the dst_reg is t=
+he
++ * variable register that we are working on, and src_reg is a constant o=
+r we're
++ * simply doing a BPF_K check.
++ * In JEQ/JNE cases we also adjust the var_off values.
++ */
++static void reg_set_min_max(struct bpf_reg_state *true_reg1,
++			    struct bpf_reg_state *true_reg2,
++			    struct bpf_reg_state *false_reg1,
++			    struct bpf_reg_state *false_reg2,
++			    u8 opcode, bool is_jmp32)
+ {
+-	switch (opcode) {
+-	case BPF_JEQ:
+-		__reg_combine_min_max(true_src, true_dst);
+-		break;
+-	case BPF_JNE:
+-		__reg_combine_min_max(false_src, false_dst);
+-		break;
+-	}
++	/* If either register is a pointer, we can't learn anything about its
++	 * variable offset from the compare (unless they were a pointer into
++	 * the same object, but we don't bother with that).
++	 */
++	if (false_reg1->type !=3D SCALAR_VALUE || false_reg2->type !=3D SCALAR_=
+VALUE)
++		return;
++
++	/* fallthrough (FALSE) branch */
++	regs_refine_cond_op(false_reg1, false_reg2, rev_opcode(opcode), is_jmp3=
+2);
++	reg_bounds_sync(false_reg1);
++	reg_bounds_sync(false_reg2);
++
++	/* jump (TRUE) branch */
++	regs_refine_cond_op(true_reg1, true_reg2, opcode, is_jmp32);
++	reg_bounds_sync(true_reg1);
++	reg_bounds_sync(true_reg2);
+ }
+=20
+ static void mark_ptr_or_null_reg(struct bpf_func_state *state,
+@@ -14895,21 +14879,10 @@ static int check_cond_jmp_op(struct bpf_verifie=
+r_env *env,
+ 		reg_set_min_max(&other_branch_regs[insn->dst_reg],
+ 				&other_branch_regs[insn->src_reg],
+ 				dst_reg, src_reg, opcode, is_jmp32);
+-
+-		if (dst_reg->type =3D=3D SCALAR_VALUE &&
+-		    src_reg->type =3D=3D SCALAR_VALUE &&
+-		    !is_jmp32 && (opcode =3D=3D BPF_JEQ || opcode =3D=3D BPF_JNE)) {
+-			/* Comparing for equality, we can combine knowledge */
+-			reg_combine_min_max(&other_branch_regs[insn->src_reg],
+-					    &other_branch_regs[insn->dst_reg],
+-					    src_reg, dst_reg, opcode);
+-		}
+ 	} else if (dst_reg->type =3D=3D SCALAR_VALUE) {
+-		reg_set_min_max(&other_branch_regs[insn->dst_reg], src_reg, /* fake on=
+e */
+-				dst_reg, src_reg /* same fake one */,
+-				opcode, is_jmp32);
++		reg_set_min_max(&other_branch_regs[insn->dst_reg], src_reg /* fake*/,
++				dst_reg, src_reg, opcode, is_jmp32);
+ 	}
+-
+ 	if (BPF_SRC(insn->code) =3D=3D BPF_X &&
+ 	    src_reg->type =3D=3D SCALAR_VALUE && src_reg->id &&
+ 	    !WARN_ON_ONCE(src_reg->id !=3D other_branch_regs[insn->src_reg].id)=
+) {
 --=20
 2.34.1
 
