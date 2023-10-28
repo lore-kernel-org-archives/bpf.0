@@ -1,114 +1,104 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A0A9DDCD;
-	Sat, 28 Oct 2023 09:52:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A64B5664;
+	Sat, 28 Oct 2023 09:59:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD66E3;
-	Sat, 28 Oct 2023 02:52:27 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4SHZWF2z3NzrT1b;
-	Sat, 28 Oct 2023 17:49:29 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by canpemm500010.china.huawei.com
- (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Sat, 28 Oct
- 2023 17:52:25 +0800
-From: Liu Jian <liujian56@huawei.com>
-To: <john.fastabend@gmail.com>, <jakub@cloudflare.com>, <ast@kernel.org>,
-	<daniel@iogearbox.net>, <andrii@kernel.org>, <martin.lau@linux.dev>,
-	<song@kernel.org>, <yonghong.song@linux.dev>, <kpsingh@kernel.org>,
-	<sdf@google.com>, <haoluo@google.com>, <jolsa@kernel.org>,
-	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-	<pabeni@redhat.com>, <dsahern@kernel.org>
-CC: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>, <liujian56@huawei.com>
-Subject: [PATCH bpf-next v7 6/7] selftests/bpf: add tests for verdict skmsg to itself
-Date: Sat, 28 Oct 2023 18:05:51 +0800
-Message-ID: <20231028100552.2444158-7-liujian56@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231028100552.2444158-1-liujian56@huawei.com>
-References: <20231028100552.2444158-1-liujian56@huawei.com>
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0398BE0;
+	Sat, 28 Oct 2023 02:59:12 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4SHZg160GZz1L9Hs;
+	Sat, 28 Oct 2023 17:56:13 +0800 (CST)
+Received: from [10.174.176.93] (10.174.176.93) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.31; Sat, 28 Oct 2023 17:59:08 +0800
+Message-ID: <44fd7a97-0558-a741-87be-3c784c4dbb9e@huawei.com>
+Date: Sat, 28 Oct 2023 17:59:08 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH bpf-next v6 0/7] add BPF_F_PERMANENT flag for sockmap
+ skmsg redirect
+To: Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
+	<john.fastabend@gmail.com>, <jakub@cloudflare.com>, <ast@kernel.org>,
+	<andrii@kernel.org>, <martin.lau@linux.dev>, <song@kernel.org>,
+	<yonghong.song@linux.dev>, <kpsingh@kernel.org>, <sdf@google.com>,
+	<haoluo@google.com>, <jolsa@kernel.org>, <davem@davemloft.net>,
+	<edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+	<dsahern@kernel.org>
+CC: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
+References: <20231014121706.967988-1-liujian56@huawei.com>
+ <65383d6f3d15c_1969a2084a@john.notmuch>
+ <6e117922-e249-37cf-2327-55355de200e2@iogearbox.net>
+From: "liujian (CE)" <liujian56@huawei.com>
+In-Reply-To: <6e117922-e249-37cf-2327-55355de200e2@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+X-Originating-IP: [10.174.176.93]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
  canpemm500010.china.huawei.com (7.192.105.118)
 X-CFilter-Loop: Reflected
 
-Add tests for verdict skmsg to itself in sockmap_basic.c
 
-Signed-off-by: Liu Jian <liujian56@huawei.com>
----
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 32 +++++++++++++------
- 1 file changed, 23 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index ef147d73ff47..75107762a86e 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -525,7 +525,7 @@ static void test_sockmap_skb_verdict_peek(void)
- 	test_sockmap_pass_prog__destroy(pass);
- }
- 
--static void test_sockmap_msg_verdict(bool is_ingress, bool is_permanent)
-+static void test_sockmap_msg_verdict(bool is_ingress, bool is_permanent, bool is_self)
- {
- 	int key, sent, recvd, recv_fd;
- 	int err, map, verdict, s, c0, c1, p0, p1;
-@@ -568,13 +568,23 @@ static void test_sockmap_msg_verdict(bool is_ingress, bool is_permanent)
- 		goto out_close;
- 
- 	if (is_ingress) {
--		recv_fd = c1;
- 		skel->bss->skmsg_redir_flags = BPF_F_INGRESS;
--		skel->bss->skmsg_redir_key = 1;
-+		if (is_self) {
-+			skel->bss->skmsg_redir_key = 0;
-+			recv_fd = p1;
-+		} else {
-+			skel->bss->skmsg_redir_key = 1;
-+			recv_fd = c1;
-+		}
- 	} else {
--		recv_fd = c0;
- 		skel->bss->skmsg_redir_flags = 0;
--		skel->bss->skmsg_redir_key = 2;
-+		if (is_self) {
-+			skel->bss->skmsg_redir_key = 0;
-+			recv_fd = c1;
-+		} else {
-+			skel->bss->skmsg_redir_key = 2;
-+			recv_fd = c0;
-+		}
- 	}
- 
- 	if (is_permanent)
-@@ -641,11 +651,15 @@ void test_sockmap_basic(void)
- 	if (test__start_subtest("sockmap skb_verdict msg_f_peek"))
- 		test_sockmap_skb_verdict_peek();
- 	if (test__start_subtest("sockmap msg_verdict"))
--		test_sockmap_msg_verdict(false, false);
-+		test_sockmap_msg_verdict(false, false, false);
- 	if (test__start_subtest("sockmap msg_verdict ingress"))
--		test_sockmap_msg_verdict(true, false);
-+		test_sockmap_msg_verdict(true, false, false);
- 	if (test__start_subtest("sockmap msg_verdict permanent"))
--		test_sockmap_msg_verdict(false, true);
-+		test_sockmap_msg_verdict(false, true, false);
- 	if (test__start_subtest("sockmap msg_verdict ingress permanent"))
--		test_sockmap_msg_verdict(true, true);
-+		test_sockmap_msg_verdict(true, true, false);
-+	if (test__start_subtest("sockmap msg_verdict permanent self"))
-+		test_sockmap_msg_verdict(false, true, true);
-+	if (test__start_subtest("sockmap msg_verdict ingress permanent self"))
-+		test_sockmap_msg_verdict(true, true, true);
- }
--- 
-2.34.1
+On 2023/10/26 21:56, Daniel Borkmann wrote:
+> On 10/24/23 11:55 PM, John Fastabend wrote:
+>> Liu Jian wrote:
+>>> v5->v6: Modified the description of the helper function.
+>>> v4->v5: Fix one refcount bug caused by patch1.
+>>> v3->v4: Change the two helpers's description.
+>>>     Let BPF_F_PERMANENT takes precedence over apply/cork_bytes.
+>>>
+>>> Liu Jian (7):
+>>>    bpf, sockmap: add BPF_F_PERMANENT flag for skmsg redirect
+>>>    selftests/bpf: Add txmsg permanently test for sockmap
+>>>    selftests/bpf: Add txmsg redir permanently test for sockmap
+>>>    selftests/bpf: add skmsg verdict tests
+>>>    selftests/bpf: add two skmsg verdict tests for BPF_F_PERMANENT flag
+>>>    selftests/bpf: add tests for verdict skmsg to itself
+>>>    selftests/bpf: add tests for verdict skmsg to closed socket
+>>>
+>>>   include/linux/skmsg.h                         |   1 +
+>>>   include/uapi/linux/bpf.h                      |  45 +++++--
+>>>   net/core/skmsg.c                              |   6 +-
+>>>   net/core/sock_map.c                           |   4 +-
+>>>   net/ipv4/tcp_bpf.c                            |  12 +-
+>>>   tools/include/uapi/linux/bpf.h                |  45 +++++--
+>>>   .../selftests/bpf/prog_tests/sockmap_basic.c  | 122 ++++++++++++++++++
+>>>   .../selftests/bpf/progs/test_sockmap_kern.h   |   3 +-
+>>>   .../bpf/progs/test_sockmap_msg_verdict.c      |  25 ++++
+>>>   tools/testing/selftests/bpf/test_sockmap.c    |  41 +++++-
+>>>   10 files changed, 272 insertions(+), 32 deletions(-)
+>>>   create mode 100644 
+>>> tools/testing/selftests/bpf/progs/test_sockmap_msg_verdict.c
+>>>
+>>
+>> Reviewed-by: John Fastabend <john.fastabend@gmail.com>
+> 
+> Looks like this needs one last rebase, doesn't apply against bpf-next:
+> 
+The rebased patchset has been sent, thank you~
 
+https://lore.kernel.org/all/20231028100552.2444158-1-liujian56@huawei.com/
+
+> Switched to a new branch 'mbox'
+> Applying: bpf, sockmap: Add BPF_F_PERMANENT flag for skmsg redirect
+> Applying: selftests/bpf: Add txmsg permanently test for sockmap
+> Applying: selftests/bpf: Add txmsg redir permanently test for sockmap
+> Applying: selftests/bpf: Add skmsg verdict tests
+> error: patch failed: 
+> tools/testing/selftests/bpf/prog_tests/sockmap_basic.c:475
+> error: tools/testing/selftests/bpf/prog_tests/sockmap_basic.c: patch 
+> does not apply
+> Patch failed at 0004 selftests/bpf: Add skmsg verdict tests
+> hint: Use 'git am --show-current-patch' to see the failed patch
+> 
+> Thanks,
+> Daniel
