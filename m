@@ -1,19 +1,19 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 399ECD516;
-	Sat, 28 Oct 2023 09:52:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CDE211717;
+	Sat, 28 Oct 2023 09:52:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48EACD3;
-	Sat, 28 Oct 2023 02:52:26 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
-	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4SHZTg6w4GzMm6p;
-	Sat, 28 Oct 2023 17:48:07 +0800 (CST)
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF8210A;
+	Sat, 28 Oct 2023 02:52:28 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4SHZV743GbzVlYW;
+	Sat, 28 Oct 2023 17:48:31 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by canpemm500010.china.huawei.com
  (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Sat, 28 Oct
- 2023 17:52:23 +0800
+ 2023 17:52:26 +0800
 From: Liu Jian <liujian56@huawei.com>
 To: <john.fastabend@gmail.com>, <jakub@cloudflare.com>, <ast@kernel.org>,
 	<daniel@iogearbox.net>, <andrii@kernel.org>, <martin.lau@linux.dev>,
@@ -22,9 +22,9 @@ To: <john.fastabend@gmail.com>, <jakub@cloudflare.com>, <ast@kernel.org>,
 	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
 	<pabeni@redhat.com>, <dsahern@kernel.org>
 CC: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>, <liujian56@huawei.com>
-Subject: [PATCH bpf-next v7 4/7] selftests/bpf: add skmsg verdict tests
-Date: Sat, 28 Oct 2023 18:05:49 +0800
-Message-ID: <20231028100552.2444158-5-liujian56@huawei.com>
+Subject: [PATCH bpf-next v7 7/7] selftests/bpf: add tests for verdict skmsg to closed socket
+Date: Sat, 28 Oct 2023 18:05:52 +0800
+Message-ID: <20231028100552.2444158-8-liujian56@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231028100552.2444158-1-liujian56@huawei.com>
 References: <20231028100552.2444158-1-liujian56@huawei.com>
@@ -41,140 +41,103 @@ X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
  canpemm500010.china.huawei.com (7.192.105.118)
 X-CFilter-Loop: Reflected
 
-Add two normal skmsg verdict tests in sockmap_basic.c
+Add four tests for verdict skmsg to closed socket in sockmap_basic.c.
 
 Signed-off-by: Liu Jian <liujian56@huawei.com>
 ---
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 71 +++++++++++++++++++
- .../bpf/progs/test_sockmap_msg_verdict.c      | 25 +++++++
- 2 files changed, 96 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_msg_verdict.c
+ .../selftests/bpf/prog_tests/sockmap_basic.c  | 42 +++++++++++++++----
+ 1 file changed, 34 insertions(+), 8 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index f75f84d0b3d7..8e90664569e3 100644
+index 75107762a86e..4d49129cdd6b 100644
 --- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
 +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -12,6 +12,7 @@
- #include "test_sockmap_progs_query.skel.h"
- #include "test_sockmap_pass_prog.skel.h"
- #include "test_sockmap_drop_prog.skel.h"
-+#include "test_sockmap_msg_verdict.skel.h"
- #include "bpf_iter_sockmap.skel.h"
- 
- #include "sockmap_helpers.h"
-@@ -524,6 +525,72 @@ static void test_sockmap_skb_verdict_peek(void)
+@@ -525,9 +525,10 @@ static void test_sockmap_skb_verdict_peek(void)
  	test_sockmap_pass_prog__destroy(pass);
  }
  
-+static void test_sockmap_msg_verdict(bool is_ingress)
-+{
-+	int key, sent, recvd, recv_fd;
-+	int err, map, verdict, s, c0, c1, p0, p1;
-+	struct test_sockmap_msg_verdict *skel;
-+	char buf[256] = "0123456789";
-+
-+	skel = test_sockmap_msg_verdict__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+	verdict = bpf_program__fd(skel->progs.prog_skmsg_verdict);
-+	map = bpf_map__fd(skel->maps.sock_map);
-+
-+
-+	err = bpf_prog_attach(verdict, map, BPF_SK_MSG_VERDICT, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach"))
-+		goto out;
-+
-+	s = socket_loopback(AF_INET, SOCK_STREAM);
-+	if (!ASSERT_GT(s, -1, "socket_loopback(s)"))
-+		goto out;
-+	err = create_socket_pairs(s, AF_INET, SOCK_STREAM, &c0, &c1, &p0, &p1);
-+	if (!ASSERT_OK(err, "create_socket_pairs(s)"))
-+		goto out;
-+
-+	key = 0;
-+	err = bpf_map_update_elem(map, &key, &p1, BPF_NOEXIST);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem(key0)"))
+-static void test_sockmap_msg_verdict(bool is_ingress, bool is_permanent, bool is_self)
++static void test_sockmap_msg_verdict(bool is_ingress, bool is_permanent, bool is_self,
++				     bool target_shutdown)
+ {
+-	int key, sent, recvd, recv_fd;
++	int key, sent, recvd, recv_fd, target_fd;
+ 	int err, map, verdict, s, c0, c1, p0, p1;
+ 	struct test_sockmap_msg_verdict *skel;
+ 	char buf[256] = "0123456789";
+@@ -571,18 +572,22 @@ static void test_sockmap_msg_verdict(bool is_ingress, bool is_permanent, bool is
+ 		skel->bss->skmsg_redir_flags = BPF_F_INGRESS;
+ 		if (is_self) {
+ 			skel->bss->skmsg_redir_key = 0;
++			target_fd = p1;
+ 			recv_fd = p1;
+ 		} else {
+ 			skel->bss->skmsg_redir_key = 1;
++			target_fd = c1;
+ 			recv_fd = c1;
+ 		}
+ 	} else {
+ 		skel->bss->skmsg_redir_flags = 0;
+ 		if (is_self) {
+ 			skel->bss->skmsg_redir_key = 0;
++			target_fd = p1;
+ 			recv_fd = c1;
+ 		} else {
+ 			skel->bss->skmsg_redir_key = 2;
++			target_fd = p0;
+ 			recv_fd = c0;
+ 		}
+ 	}
+@@ -595,6 +600,19 @@ static void test_sockmap_msg_verdict(bool is_ingress, bool is_permanent, bool is
+ 	recvd = recv_timeout(recv_fd, &buf, sizeof(buf), SOCK_NONBLOCK, IO_TIMEOUT_SEC);
+ 	ASSERT_EQ(recvd, sizeof(buf), "recv_timeout(recv_fd)");
+ 
++	if (target_shutdown) {
++		signal(SIGPIPE, SIG_IGN);
++		close(target_fd);
++		sent = send(p1, &buf, sizeof(buf), 0);
++		if (is_permanent) {
++			ASSERT_EQ(sent, -1, "xsend(p1)");
++			ASSERT_EQ(errno, EPIPE, "xsend(p1)");
++		} else {
++			ASSERT_EQ(sent, sizeof(buf), "xsend(p1)");
++		}
 +		goto out_close;
-+	key = 1;
-+	err = bpf_map_update_elem(map, &key, &c1, BPF_NOEXIST);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem(key1)"))
-+		goto out_close;
-+	key = 2;
-+	err = bpf_map_update_elem(map, &key, &p0, BPF_NOEXIST);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem(key2)"))
-+		goto out_close;
-+	key = 3;
-+	err = bpf_map_update_elem(map, &key, &c0, BPF_NOEXIST);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem(key3)"))
-+		goto out_close;
-+
-+	if (is_ingress) {
-+		recv_fd = c1;
-+		skel->bss->skmsg_redir_flags = BPF_F_INGRESS;
-+		skel->bss->skmsg_redir_key = 1;
-+	} else {
-+		recv_fd = c0;
-+		skel->bss->skmsg_redir_flags = 0;
-+		skel->bss->skmsg_redir_key = 2;
 +	}
 +
-+	sent = xsend(p1, &buf, sizeof(buf), 0);
-+	ASSERT_EQ(sent, sizeof(buf), "xsend(p1)");
-+	recvd = recv_timeout(recv_fd, &buf, sizeof(buf), SOCK_NONBLOCK, IO_TIMEOUT_SEC);
-+	ASSERT_EQ(recvd, sizeof(buf), "recv_timeout(recv_fd)");
-+
-+out_close:
-+	close(c0);
-+	close(p0);
-+	close(c1);
-+	close(p1);
-+out:
-+	test_sockmap_msg_verdict__destroy(skel);
-+}
-+
- void test_sockmap_basic(void)
- {
- 	if (test__start_subtest("sockmap create_update_free"))
-@@ -566,4 +633,8 @@ void test_sockmap_basic(void)
- 		test_sockmap_skb_verdict_fionread(false);
+ 	sent = xsend(p1, &buf, sizeof(buf), 0);
+ 	ASSERT_EQ(sent, sizeof(buf), "xsend(p1)");
+ 	recvd = recv_timeout(recv_fd, &buf, sizeof(buf), SOCK_NONBLOCK, IO_TIMEOUT_SEC);
+@@ -651,15 +669,23 @@ void test_sockmap_basic(void)
  	if (test__start_subtest("sockmap skb_verdict msg_f_peek"))
  		test_sockmap_skb_verdict_peek();
-+	if (test__start_subtest("sockmap msg_verdict"))
-+		test_sockmap_msg_verdict(false);
-+	if (test__start_subtest("sockmap msg_verdict ingress"))
-+		test_sockmap_msg_verdict(true);
+ 	if (test__start_subtest("sockmap msg_verdict"))
+-		test_sockmap_msg_verdict(false, false, false);
++		test_sockmap_msg_verdict(false, false, false, false);
+ 	if (test__start_subtest("sockmap msg_verdict ingress"))
+-		test_sockmap_msg_verdict(true, false, false);
++		test_sockmap_msg_verdict(true, false, false, false);
+ 	if (test__start_subtest("sockmap msg_verdict permanent"))
+-		test_sockmap_msg_verdict(false, true, false);
++		test_sockmap_msg_verdict(false, true, false, false);
+ 	if (test__start_subtest("sockmap msg_verdict ingress permanent"))
+-		test_sockmap_msg_verdict(true, true, false);
++		test_sockmap_msg_verdict(true, true, false, false);
+ 	if (test__start_subtest("sockmap msg_verdict permanent self"))
+-		test_sockmap_msg_verdict(false, true, true);
++		test_sockmap_msg_verdict(false, true, true, false);
+ 	if (test__start_subtest("sockmap msg_verdict ingress permanent self"))
+-		test_sockmap_msg_verdict(true, true, true);
++		test_sockmap_msg_verdict(true, true, true, false);
++	if (test__start_subtest("sockmap msg_verdict permanent shutdown"))
++		test_sockmap_msg_verdict(false, true, false, true);
++	if (test__start_subtest("sockmap msg_verdict ingress permanent shutdown"))
++		test_sockmap_msg_verdict(true, true, false, true);
++	if (test__start_subtest("sockmap msg_verdict shutdown"))
++		test_sockmap_msg_verdict(false, false, false, true);
++	if (test__start_subtest("sockmap msg_verdict ingress shutdown"))
++		test_sockmap_msg_verdict(true, false, false, true);
  }
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_msg_verdict.c b/tools/testing/selftests/bpf/progs/test_sockmap_msg_verdict.c
-new file mode 100644
-index 000000000000..002b76a1ae35
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_msg_verdict.c
-@@ -0,0 +1,25 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 4);
-+	__type(key, int);
-+	__type(value, int);
-+} sock_map SEC(".maps");
-+
-+u64 skmsg_redir_flags = 0;
-+u32 skmsg_redir_key = 0;
-+
-+SEC("sk_msg")
-+int prog_skmsg_verdict(struct sk_msg_md *msg)
-+{
-+	u64 flags = skmsg_redir_flags;
-+	int key = skmsg_redir_key;
-+
-+	bpf_msg_redirect_map(msg, &sock_map, key, flags);
-+	return SK_PASS;
-+}
-+
-+char _license[] SEC("license") = "GPL";
 -- 
 2.34.1
 
