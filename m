@@ -1,48 +1,48 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AFB61A28E
-	for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 19:28:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82AEA1A594
+	for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 19:28:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EzF2jb54"
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DF2B4
-	for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 12:28:23 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-5a92782615dso48440377b3.2
-        for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 12:28:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T1nknBCp"
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44C7A9
+	for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 12:28:26 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-5af6c445e9eso39087157b3.0
+        for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 12:28:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698694102; x=1699298902; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1698694105; x=1699298905; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=H0YHCYf1zG8vm+oP2jpETuTSpb7kfwuLMmiyMGVORCE=;
-        b=EzF2jb54cKOMY93BfUFwXAewP4iO6A8CrCr1I/uADIo1IoYAEJ1MED/NvjtKwg3QyE
-         ZBXsK05nufWws4A4YDy/QD+H33QTgOwmTN5YUx0VallwWk0eg6BvzvfMc90gqQJYFro7
-         NmP3onQLUqXsOtEBcCxYXO7j7SR6kiAXF/9iXMhGD576g2efC0JjAFPO1H9KJHo9zf1I
-         ld7zbrAFuIQk42wOZA/ilkoROksLj7mRp5GETg7FsU5gtgIx9myngmqehYTNvgaktqXC
-         wKzMsZJcMBddNzFw5GzSgD1l9+SEeWoMdPHA0IWt6I7GCLM/85Az4LyLGCPSJgHVnPzb
-         XSow==
+        bh=LIaFNR2jWts5aTPUB8q6Tuj+4zsQdN5CxwLohBhhDRQ=;
+        b=T1nknBCpWLISeMtNlvKoQLfYkPleZI888FfMKz165g9p3v+gx96+OniaMdBwBp0ucM
+         TrEoXZcWFwey/buOg7J5E9oAULp1ZwWoo11B+KCjxAbR6QIKrAq4D72H+QDqB/OEARXA
+         Vzz1wHgYYeo7krQwWxbTVgguUx3JHzHnrpfg5YL8af5d9oEr8NhG3XOEBixDEmIsEFh8
+         BTZYeViAbCAcU8mqy/psm81dI/i6lzxIHA3VVDn0mz8eUbDg1eIVb9PLwwwZLd26ONz3
+         bpYeRULHAansWCM6cDP7tHb0b1HMfRfLdzWCIiUOrR1QMgp6SDnbHJ6Wj+T2JjOjk0qc
+         s6rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698694102; x=1699298902;
+        d=1e100.net; s=20230601; t=1698694105; x=1699298905;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=H0YHCYf1zG8vm+oP2jpETuTSpb7kfwuLMmiyMGVORCE=;
-        b=aZkiYznHzbYt6eZsPLFUsFOOCijX8dObg61Zq6m7bhtlWOEtyjTreUbu8uGBR1P17e
-         A8BWLPa58AF9tzkuFchsosDF4CbOiwsAJaOTbexE/A6kcZMMYq5FLF/FoEFzihCrvTUC
-         Pj0q5uWxga5IhkFjGKlBdYkR48qwxCNic0y561my2TACUMFfzS0BK9E3dY04mzapddQS
-         IzFsvwnDvE0opJBVquNgxXSqHUbY/aGuGnzjLdGwFkU8CqjakBH3XApxfGlhVCCPZVed
-         SXeVCRjn6S9xU+mp+e9Xl52ywkgLARPh4viZ8Ztqd8bRKqeEt65UHW7qUG9PQ/WMYbK4
-         JGcQ==
-X-Gm-Message-State: AOJu0YyMsZjmCSFY5STIj9aSQA1I5ERL+Ht9Py4tmWVTh++UldAM2lya
-	tckTFp5TMUHDuXBjsB48I0/KECxN9ds=
-X-Google-Smtp-Source: AGHT+IGcqNBPtyamDU98IGs/4eFWEydo1WaWTZT6kkTdG9ymyXUJA3a5GFEpHyzYhh707MW1pGiF4w==
-X-Received: by 2002:a81:578d:0:b0:5a8:5219:df6b with SMTP id l135-20020a81578d000000b005a85219df6bmr9666411ywb.24.1698694102539;
-        Mon, 30 Oct 2023 12:28:22 -0700 (PDT)
+        bh=LIaFNR2jWts5aTPUB8q6Tuj+4zsQdN5CxwLohBhhDRQ=;
+        b=O921W6wV6rleWlGtC+bzjbbS7FGcipLog/uyW/rxHx1E6Rgvq4F7jJFttZn0iPaJjF
+         8xnNzXZ+stYuXiQvMAfgVJbgGvRrV4ldUMBCUBmpFGdhSQcxQyfvQTY8KCZ5g839eisb
+         ELN1esrg8ksOXqHfpKhQ5OkctM4qukBJ516rfwzcLNLam8unwIJY8FbrkuJ5tbacnWNE
+         Q5YEf6jgXHfUDd21u+3XvDkIDoFsfKeZ0OMV5S9S2qneVFC3BiOuIR5fcCjmaIZdPkUp
+         mcsmfwXgAs7GX1B4OegGE/eXbaxkjtbRxZ2mzVL75f8WduIxoSJrmLpEPu7khTEQ+Btp
+         fuHA==
+X-Gm-Message-State: AOJu0YxUkbVxZ/v/l5+SZwG8+MmrHQBQBBk+9+x1IkrGt5ttJ10fLoFf
+	r7MwmS1cKwCFXNO3amSpqEmHo5tE+OM=
+X-Google-Smtp-Source: AGHT+IFmdaBNjY0UdJDIkPN1mcDYWO3dHASQtoCUbqjP+c2bXC347C7uI02GZKO7pKLk5fuktduycA==
+X-Received: by 2002:a81:d008:0:b0:5a7:bc5d:125e with SMTP id v8-20020a81d008000000b005a7bc5d125emr9653459ywi.38.1698694105661;
+        Mon, 30 Oct 2023 12:28:25 -0700 (PDT)
 Received: from kickker.attlocal.net ([2600:1700:6cf8:1240:5b04:e8d1:ce5:8164])
-        by smtp.gmail.com with ESMTPSA id n12-20020a819c4c000000b005b03d703564sm35821ywa.137.2023.10.30.12.28.21
+        by smtp.gmail.com with ESMTPSA id n12-20020a819c4c000000b005b03d703564sm35821ywa.137.2023.10.30.12.28.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Oct 2023 12:28:22 -0700 (PDT)
+        Mon, 30 Oct 2023 12:28:25 -0700 (PDT)
 From: thinker.li@gmail.com
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -54,9 +54,9 @@ To: bpf@vger.kernel.org,
 Cc: sinquersw@gmail.com,
 	kuifeng@meta.com,
 	Kui-Feng Lee <thinker.li@gmail.com>
-Subject: [PATCH bpf-next v8 06/10] bpf: pass attached BTF to the bpf_struct_ops subsystem
-Date: Mon, 30 Oct 2023 12:28:06 -0700
-Message-Id: <20231030192810.382942-7-thinker.li@gmail.com>
+Subject: [PATCH bpf-next v8 08/10] libbpf: Find correct module BTFs for struct_ops maps and progs.
+Date: Mon, 30 Oct 2023 12:28:08 -0700
+Message-Id: <20231030192810.382942-9-thinker.li@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231030192810.382942-1-thinker.li@gmail.com>
 References: <20231030192810.382942-1-thinker.li@gmail.com>
@@ -70,198 +70,217 @@ Content-Transfer-Encoding: 8bit
 
 From: Kui-Feng Lee <thinker.li@gmail.com>
 
-Giving a BTF, the bpf_struct_ops knows the right place to look up type info
-associated with a type ID. This enables a user space program to load a
-struct_ops object linked to a struct_ops type defined by a module, by
-providing the module BTF (fd).
+Locate the module BTFs for struct_ops maps and progs and pass them to the
+kernel. This ensures that the kernel correctly resolves type IDs from the
+appropriate module BTFs.
 
-The bpf_prog includes attach_btf in aux which is passed along with the
-bpf_attr when loading the program. The purpose of attach_btf is to
-determine the btf type of attach_btf_id. The attach_btf_id is then used to
-identify the traced function for a trace program. In the case of struct_ops
-programs, it is used to identify the struct_ops type of the struct_ops
-object that a program is attached to.
+For the map of a struct_ops object, the FD of the module BTF is set to
+bpf_map to keep a reference to the module BTF. The FD is passed to the
+kernel as value_type_btf_obj_fd when the struct_ops object is loaded.
+
+For a bpf_struct_ops prog, attach_btf_obj_fd of bpf_prog is the FD of a
+module BTF in the kernel.
 
 Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- include/linux/bpf_verifier.h   |  1 +
- include/uapi/linux/bpf.h       |  5 +++++
- kernel/bpf/bpf_struct_ops.c    | 32 +++++++++++++++++++++++++-------
- kernel/bpf/syscall.c           |  2 +-
- kernel/bpf/verifier.c          | 19 ++++++++++++++++---
- tools/include/uapi/linux/bpf.h |  5 +++++
- 6 files changed, 53 insertions(+), 11 deletions(-)
+ tools/lib/bpf/bpf.c    |  4 +++-
+ tools/lib/bpf/bpf.h    |  5 ++++-
+ tools/lib/bpf/libbpf.c | 50 ++++++++++++++++++++++++++++--------------
+ 3 files changed, 41 insertions(+), 18 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 24213a99cc79..c1461342f19e 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -598,6 +598,7 @@ struct bpf_verifier_env {
- 	u32 prev_insn_idx;
- 	struct bpf_prog *prog;		/* eBPF program being verified */
- 	const struct bpf_verifier_ops *ops;
-+	struct module *attach_btf_mod;	/* The owner module of prog->aux->attach_btf */
- 	struct bpf_verifier_stack_elem *head; /* stack of verifier states to be processed */
- 	int stack_size;			/* number of states to be processed */
- 	bool strict_alignment;		/* perform strict pointer alignment checks */
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 0f6cdf52b1da..fd20c52606b2 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1398,6 +1398,11 @@ union bpf_attr {
- 		 * to using 5 hash functions).
- 		 */
- 		__u64	map_extra;
-+
-+		__u32   value_type_btf_obj_fd;	/* fd pointing to a BTF
-+						 * type data for
-+						 * btf_vmlinux_value_type_id.
-+						 */
- 	};
- 
- 	struct { /* anonymous struct used by BPF_MAP_*_ELEM commands */
-diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-index 256516aba632..db2bbba50e38 100644
---- a/kernel/bpf/bpf_struct_ops.c
-+++ b/kernel/bpf/bpf_struct_ops.c
-@@ -694,6 +694,7 @@ static void __bpf_struct_ops_map_free(struct bpf_map *map)
- 		bpf_jit_uncharge_modmem(PAGE_SIZE);
- 	}
- 	bpf_map_area_free(st_map->uvalue);
-+	btf_put(st_map->st_ops_desc->btf);
- 	bpf_map_area_free(st_map);
- }
- 
-@@ -735,16 +736,31 @@ static struct bpf_map *bpf_struct_ops_map_alloc(union bpf_attr *attr)
- 	const struct btf_type *t, *vt;
- 	struct module *mod = NULL;
- 	struct bpf_map *map;
-+	struct btf *btf;
- 	int ret;
- 
--	st_ops_desc = bpf_struct_ops_find_value(btf_vmlinux, attr->btf_vmlinux_value_type_id);
--	if (!st_ops_desc)
--		return ERR_PTR(-ENOTSUPP);
-+	if (attr->value_type_btf_obj_fd) {
-+		/* The map holds btf for its whole life time. */
-+		btf = btf_get_by_fd(attr->value_type_btf_obj_fd);
-+		if (IS_ERR(btf))
-+			return ERR_PTR(PTR_ERR(btf));
-+
-+		if (btf != btf_vmlinux) {
-+			mod = btf_try_get_module(btf);
-+			if (!mod) {
-+				ret = -EINVAL;
-+				goto errout;
-+			}
-+		}
-+	} else {
-+		btf = btf_vmlinux;
-+		btf_get(btf);
-+	}
- 
--	if (st_ops_desc->btf != btf_vmlinux) {
--		mod = btf_try_get_module(st_ops_desc->btf);
--		if (!mod)
--			return ERR_PTR(-EINVAL);
-+	st_ops_desc = bpf_struct_ops_find_value(btf, attr->btf_vmlinux_value_type_id);
-+	if (!st_ops_desc) {
-+		ret = -ENOTSUPP;
-+		goto errout;
- 	}
- 
- 	vt = st_ops_desc->value_type;
-@@ -805,7 +821,9 @@ static struct bpf_map *bpf_struct_ops_map_alloc(union bpf_attr *attr)
- 	__bpf_struct_ops_map_free(map);
- 	btf = NULL;		/* has been released */
- errout:
-+	btf_put(btf);
- 	module_put(mod);
-+
- 	return ERR_PTR(ret);
- }
- 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 0ed286b8a0f0..974651fe2bee 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1096,7 +1096,7 @@ static int map_check_btf(struct bpf_map *map, const struct btf *btf,
- 	return ret;
- }
- 
--#define BPF_MAP_CREATE_LAST_FIELD map_extra
-+#define BPF_MAP_CREATE_LAST_FIELD value_type_btf_obj_fd
- /* called via syscall */
- static int map_create(union bpf_attr *attr)
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 9dc9625651dc..b133acfe08fb 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -169,7 +169,8 @@ int bpf_map_create(enum bpf_map_type map_type,
+ 		   __u32 max_entries,
+ 		   const struct bpf_map_create_opts *opts)
  {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index bdd166cab977..20d6d9665983 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -20086,6 +20086,7 @@ static int check_struct_ops_btf_id(struct bpf_verifier_env *env)
- 	const struct btf_member *member;
- 	struct bpf_prog *prog = env->prog;
- 	u32 btf_id, member_idx;
+-	const size_t attr_sz = offsetofend(union bpf_attr, map_extra);
++	const size_t attr_sz = offsetofend(union bpf_attr,
++					   value_type_btf_obj_fd);
+ 	union bpf_attr attr;
+ 	int fd;
+ 
+@@ -191,6 +192,7 @@ int bpf_map_create(enum bpf_map_type map_type,
+ 	attr.btf_key_type_id = OPTS_GET(opts, btf_key_type_id, 0);
+ 	attr.btf_value_type_id = OPTS_GET(opts, btf_value_type_id, 0);
+ 	attr.btf_vmlinux_value_type_id = OPTS_GET(opts, btf_vmlinux_value_type_id, 0);
++	attr.value_type_btf_obj_fd = OPTS_GET(opts, value_type_btf_obj_fd, 0);
+ 
+ 	attr.inner_map_fd = OPTS_GET(opts, inner_map_fd, 0);
+ 	attr.map_flags = OPTS_GET(opts, map_flags, 0);
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index d0f53772bdc0..ffdd81c0196a 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -51,8 +51,11 @@ struct bpf_map_create_opts {
+ 
+ 	__u32 numa_node;
+ 	__u32 map_ifindex;
++
++	__u32 value_type_btf_obj_fd;
++	size_t:0;
+ };
+-#define bpf_map_create_opts__last_field map_ifindex
++#define bpf_map_create_opts__last_field value_type_btf_obj_fd
+ 
+ LIBBPF_API int bpf_map_create(enum bpf_map_type map_type,
+ 			      const char *map_name,
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index e067be95da3c..0b0ad8461970 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -527,6 +527,7 @@ struct bpf_map {
+ 	struct bpf_map_def def;
+ 	__u32 numa_node;
+ 	__u32 btf_var_idx;
++	int mod_btf_fd;
+ 	__u32 btf_key_type_id;
+ 	__u32 btf_value_type_id;
+ 	__u32 btf_vmlinux_value_type_id;
+@@ -930,22 +931,29 @@ find_member_by_name(const struct btf *btf, const struct btf_type *t,
+ 	return NULL;
+ }
+ 
++static int find_ksym_btf_id(struct bpf_object *obj, const char *ksym_name,
++			    __u16 kind, struct btf **res_btf,
++			    struct module_btf **res_mod_btf);
++
+ #define STRUCT_OPS_VALUE_PREFIX "bpf_struct_ops_"
+ static int find_btf_by_prefix_kind(const struct btf *btf, const char *prefix,
+ 				   const char *name, __u32 kind);
+ 
+ static int
+-find_struct_ops_kern_types(const struct btf *btf, const char *tname,
++find_struct_ops_kern_types(struct bpf_object *obj, const char *tname,
++			   struct module_btf **mod_btf,
+ 			   const struct btf_type **type, __u32 *type_id,
+ 			   const struct btf_type **vtype, __u32 *vtype_id,
+ 			   const struct btf_member **data_member)
+ {
+ 	const struct btf_type *kern_type, *kern_vtype;
+ 	const struct btf_member *kern_data_member;
 +	struct btf *btf;
- 	const char *mname;
+ 	__s32 kern_vtype_id, kern_type_id;
+ 	__u32 i;
  
- 	if (!prog->gpl_compatible) {
-@@ -20093,8 +20094,18 @@ static int check_struct_ops_btf_id(struct bpf_verifier_env *env)
- 		return -EINVAL;
+-	kern_type_id = btf__find_by_name_kind(btf, tname, BTF_KIND_STRUCT);
++	kern_type_id = find_ksym_btf_id(obj, tname, BTF_KIND_STRUCT,
++					&btf, mod_btf);
+ 	if (kern_type_id < 0) {
+ 		pr_warn("struct_ops init_kern: struct %s is not found in kernel BTF\n",
+ 			tname);
+@@ -999,14 +1007,16 @@ static bool bpf_map__is_struct_ops(const struct bpf_map *map)
+ }
+ 
+ /* Init the map's fields that depend on kern_btf */
+-static int bpf_map__init_kern_struct_ops(struct bpf_map *map,
+-					 const struct btf *btf,
+-					 const struct btf *kern_btf)
++static int bpf_map__init_kern_struct_ops(struct bpf_map *map)
+ {
+ 	const struct btf_member *member, *kern_member, *kern_data_member;
+ 	const struct btf_type *type, *kern_type, *kern_vtype;
+ 	__u32 i, kern_type_id, kern_vtype_id, kern_data_off;
++	struct bpf_object *obj = map->obj;
++	const struct btf *btf = obj->btf;
+ 	struct bpf_struct_ops *st_ops;
++	const struct btf *kern_btf;
++	struct module_btf *mod_btf;
+ 	void *data, *kern_data;
+ 	const char *tname;
+ 	int err;
+@@ -1014,16 +1024,19 @@ static int bpf_map__init_kern_struct_ops(struct bpf_map *map,
+ 	st_ops = map->st_ops;
+ 	type = st_ops->type;
+ 	tname = st_ops->tname;
+-	err = find_struct_ops_kern_types(kern_btf, tname,
++	err = find_struct_ops_kern_types(obj, tname, &mod_btf,
+ 					 &kern_type, &kern_type_id,
+ 					 &kern_vtype, &kern_vtype_id,
+ 					 &kern_data_member);
+ 	if (err)
+ 		return err;
+ 
++	kern_btf = mod_btf ? mod_btf->btf : obj->btf_vmlinux;
++
+ 	pr_debug("struct_ops init_kern %s: type_id:%u kern_type_id:%u kern_vtype_id:%u\n",
+ 		 map->name, st_ops->type_id, kern_type_id, kern_vtype_id);
+ 
++	map->mod_btf_fd = mod_btf ? mod_btf->fd : 0;
+ 	map->def.value_size = kern_vtype->size;
+ 	map->btf_vmlinux_value_type_id = kern_vtype_id;
+ 
+@@ -1099,6 +1112,8 @@ static int bpf_map__init_kern_struct_ops(struct bpf_map *map,
+ 				return -ENOTSUP;
+ 			}
+ 
++			if (mod_btf)
++				prog->attach_btf_obj_fd = mod_btf->fd;
+ 			prog->attach_btf_id = kern_type_id;
+ 			prog->expected_attach_type = kern_member_idx;
+ 
+@@ -1141,8 +1156,7 @@ static int bpf_object__init_kern_struct_ops_maps(struct bpf_object *obj)
+ 		if (!bpf_map__is_struct_ops(map))
+ 			continue;
+ 
+-		err = bpf_map__init_kern_struct_ops(map, obj->btf,
+-						    obj->btf_vmlinux);
++		err = bpf_map__init_kern_struct_ops(map);
+ 		if (err)
+ 			return err;
  	}
+@@ -5201,8 +5215,10 @@ static int bpf_object__create_map(struct bpf_object *obj, struct bpf_map *map, b
+ 	create_attr.numa_node = map->numa_node;
+ 	create_attr.map_extra = map->map_extra;
  
-+	btf = prog->aux->attach_btf;
-+	if (btf != btf_vmlinux) {
-+		/* Make sure st_ops is valid through the lifetime of env */
-+		env->attach_btf_mod = btf_try_get_module(btf);
-+		if (!env->attach_btf_mod) {
-+			verbose(env, "owner module of btf is not found\n");
-+			return -ENOTSUPP;
-+		}
+-	if (bpf_map__is_struct_ops(map))
++	if (bpf_map__is_struct_ops(map)) {
+ 		create_attr.btf_vmlinux_value_type_id = map->btf_vmlinux_value_type_id;
++		create_attr.value_type_btf_obj_fd = map->mod_btf_fd;
 +	}
-+
- 	btf_id = prog->aux->attach_btf_id;
--	st_ops_desc = bpf_struct_ops_find(btf_vmlinux, btf_id);
-+	st_ops_desc = bpf_struct_ops_find(btf, btf_id);
- 	if (!st_ops_desc) {
- 		verbose(env, "attach_btf_id %u is not a supported struct\n",
- 			btf_id);
-@@ -20111,8 +20122,8 @@ static int check_struct_ops_btf_id(struct bpf_verifier_env *env)
+ 
+ 	if (obj->btf && btf__fd(obj->btf) >= 0) {
+ 		create_attr.btf_fd = btf__fd(obj->btf);
+@@ -9479,9 +9495,9 @@ static int libbpf_find_prog_btf_id(const char *name, __u32 attach_prog_fd)
+ 	return err;
+ }
+ 
+-static int find_kernel_btf_id(struct bpf_object *obj, const char *attach_name,
+-			      enum bpf_attach_type attach_type,
+-			      int *btf_obj_fd, int *btf_type_id)
++static int find_kernel_attach_btf_id(struct bpf_object *obj, const char *attach_name,
++				     enum bpf_attach_type attach_type,
++				     int *btf_obj_fd, int *btf_type_id)
+ {
+ 	int ret, i;
+ 
+@@ -9546,7 +9562,9 @@ static int libbpf_find_attach_btf_id(struct bpf_program *prog, const char *attac
+ 		*btf_obj_fd = 0;
+ 		*btf_type_id = 1;
+ 	} else {
+-		err = find_kernel_btf_id(prog->obj, attach_name, attach_type, btf_obj_fd, btf_type_id);
++		err = find_kernel_attach_btf_id(prog->obj, attach_name,
++						attach_type, btf_obj_fd,
++						btf_type_id);
  	}
- 
- 	member = &btf_type_member(t)[member_idx];
--	mname = btf_name_by_offset(btf_vmlinux, member->name_off);
--	func_proto = btf_type_resolve_func_ptr(btf_vmlinux, member->type,
-+	mname = btf_name_by_offset(btf, member->name_off);
-+	func_proto = btf_type_resolve_func_ptr(btf, member->type,
- 					       NULL);
- 	if (!func_proto) {
- 		verbose(env, "attach to invalid member %s(@idx %u) of struct %s\n",
-@@ -20805,6 +20816,8 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr, __u3
- 		env->prog->expected_attach_type = 0;
- 
- 	*prog = env->prog;
-+
-+	module_put(env->attach_btf_mod);
- err_unlock:
- 	if (!is_priv)
- 		mutex_unlock(&bpf_verifier_lock);
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 0f6cdf52b1da..fd20c52606b2 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1398,6 +1398,11 @@ union bpf_attr {
- 		 * to using 5 hash functions).
- 		 */
- 		__u64	map_extra;
-+
-+		__u32   value_type_btf_obj_fd;	/* fd pointing to a BTF
-+						 * type data for
-+						 * btf_vmlinux_value_type_id.
-+						 */
- 	};
- 
- 	struct { /* anonymous struct used by BPF_MAP_*_ELEM commands */
+ 	if (err) {
+ 		pr_warn("prog '%s': failed to find kernel BTF type ID of '%s': %d\n",
+@@ -13004,9 +13022,9 @@ int bpf_program__set_attach_target(struct bpf_program *prog,
+ 		err = bpf_object__load_vmlinux_btf(prog->obj, true);
+ 		if (err)
+ 			return libbpf_err(err);
+-		err = find_kernel_btf_id(prog->obj, attach_func_name,
+-					 prog->expected_attach_type,
+-					 &btf_obj_fd, &btf_id);
++		err = find_kernel_attach_btf_id(prog->obj, attach_func_name,
++						prog->expected_attach_type,
++						&btf_obj_fd, &btf_id);
+ 		if (err)
+ 			return libbpf_err(err);
+ 	}
 -- 
 2.34.1
 
