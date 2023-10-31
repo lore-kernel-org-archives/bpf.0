@@ -1,32 +1,32 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CED66FC6
-	for <bpf@vger.kernel.org>; Tue, 31 Oct 2023 05:03:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B675D289
+	for <bpf@vger.kernel.org>; Tue, 31 Oct 2023 05:03:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321E6D8
-	for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 22:03:49 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39UIuZEa028789
-	for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 22:03:48 -0700
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44A1C9
+	for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 22:03:54 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 39UIuPMt032353
+	for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 22:03:54 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3u2j6vtumd-18
+	by m0001303.ppops.net (PPS) with ESMTPS id 3u2j74aw3p-8
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 22:03:48 -0700
-Received: from twshared40933.03.prn6.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 22:03:53 -0700
+Received: from twshared34392.14.frc2.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Mon, 30 Oct 2023 22:03:37 -0700
+ 15.1.2507.34; Mon, 30 Oct 2023 22:03:50 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 841A13AA9B6D0; Mon, 30 Oct 2023 22:03:32 -0700 (PDT)
+	id A320F3AA9B6FE; Mon, 30 Oct 2023 22:03:38 -0700 (PDT)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next 3/7] bpf: enforce precision for r0 on callback return
-Date: Mon, 30 Oct 2023 22:03:20 -0700
-Message-ID: <20231031050324.1107444-4-andrii@kernel.org>
+Subject: [PATCH bpf-next 6/7] bpf: preserve constant zero when doing partial register restore
+Date: Mon, 30 Oct 2023 22:03:23 -0700
+Message-ID: <20231031050324.1107444-7-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231031050324.1107444-1-andrii@kernel.org>
 References: <20231031050324.1107444-1-andrii@kernel.org>
@@ -39,39 +39,72 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: d9NqPqSVQ3boLw-x9OygFxGIUeyvui21
-X-Proofpoint-GUID: d9NqPqSVQ3boLw-x9OygFxGIUeyvui21
+X-Proofpoint-GUID: XTS8m0OGApaFzxBT9hfJ5dCjqJjy6lNx
+X-Proofpoint-ORIG-GUID: XTS8m0OGApaFzxBT9hfJ5dCjqJjy6lNx
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-10-30_13,2023-10-31_01,2023-05-22_02
 
-Given verifier checks actual value, r0 has to be precise, so we need to
-propagate precision properly.
+Similar to special handling of STACK_ZERO, when reading 1/2/4 bytes from
+stack from slot that has register spilled into it and that register has
+a constant value zero, preserve that zero and mark spilled register as
+precise for that. This makes spilled const zero register and STACK_ZERO
+cases equivalent in their behavior.
 
-Fixes: 69c087ba6225 ("bpf: Add bpf_for_each_map_elem() helper")
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/verifier.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ kernel/bpf/verifier.c | 25 +++++++++++++++++++++----
+ 1 file changed, 21 insertions(+), 4 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index fbb779583d52..098ba0e1a6ff 100644
+index 0eecc6b3109c..8cfe060e4938 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -9739,6 +9739,12 @@ static int prepare_func_exit(struct bpf_verifier_e=
-nv *env, int *insn_idx)
- 			verbose(env, "R0 not a scalar value\n");
- 			return -EACCES;
- 		}
+@@ -4958,22 +4958,39 @@ static int check_stack_read_fixed_off(struct bpf_=
+verifier_env *env,
+ 				copy_register_state(&state->regs[dst_regno], reg);
+ 				state->regs[dst_regno].subreg_def =3D subreg_def;
+ 			} else {
++				int spill_cnt =3D 0, zero_cnt =3D 0;
 +
-+		/* we are going to enforce precise value, mark r0 precise */
-+		err =3D mark_chain_precision(env, BPF_REG_0);
-+		if (err)
-+			return err;
+ 				for (i =3D 0; i < size; i++) {
+ 					type =3D stype[(slot - i) % BPF_REG_SIZE];
+-					if (type =3D=3D STACK_SPILL)
++					if (type =3D=3D STACK_SPILL) {
++						spill_cnt++;
+ 						continue;
++					}
+ 					if (type =3D=3D STACK_MISC)
+ 						continue;
+-					if (type =3D=3D STACK_ZERO)
++					if (type =3D=3D STACK_ZERO) {
++						zero_cnt++;
+ 						continue;
++					}
+ 					if (type =3D=3D STACK_INVALID && env->allow_uninit_stack)
+ 						continue;
+ 					verbose(env, "invalid read from stack off %d+%d size %d\n",
+ 						off, i, size);
+ 					return -EACCES;
+ 				}
+-				mark_reg_unknown(env, state->regs, dst_regno);
+-				insn_flags =3D 0; /* not restoring original register state */
 +
- 		if (!tnum_in(range, r0->var_off)) {
- 			verbose_invalid_scalar(env, r0, &range, "callback return", "R0");
- 			return -EINVAL;
++				if (spill_cnt =3D=3D size &&
++				    tnum_is_const(reg->var_off) && reg->var_off.value =3D=3D 0) {
++					__mark_reg_const_zero(&state->regs[dst_regno]);
++					/* this IS register fill, so keep insn_flags */
++				} else if (zero_cnt =3D=3D size) {
++					/* similarly to mark_reg_stack_read(), preserve zeroes */
++					__mark_reg_const_zero(&state->regs[dst_regno]);
++					insn_flags =3D 0; /* not restoring original register state */
++				} else {
++					mark_reg_unknown(env, state->regs, dst_regno);
++					insn_flags =3D 0; /* not restoring original register state */
++				}
+ 			}
+ 			state->regs[dst_regno].live |=3D REG_LIVE_WRITTEN;
+ 		} else if (dst_regno >=3D 0) {
 --=20
 2.34.1
 
