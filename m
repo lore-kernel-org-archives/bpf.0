@@ -1,146 +1,123 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84437208CF;
-	Tue, 31 Oct 2023 18:04:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4302720B32
+	for <bpf@vger.kernel.org>; Tue, 31 Oct 2023 18:04:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cDix8IGe"
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47ECA6;
-	Tue, 31 Oct 2023 11:04:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698775475; x=1730311475;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=UdyGd33bCOwd3XZxRaODc+ORSFQPBXnRQ1wnH5TGCrM=;
-  b=cDix8IGeqFPw0PO/uqIHkv3ZR5kKo85WXvL9G9kXLfo4IcS5iJ5OQxyA
-   WapHeIukgCcKq5g/OzOMIzjeSqydHddwpFCqBL/6AsxRJOI07I77Gaf/B
-   IT9k/MLMzbiZcebSj8lMKJWLJiFLsstj5MTzkB+cJuSgFfDYidGZ9G7a4
-   pJtLaYg5OjORKwPknm+WgYz/h32KZjzIf18j4Il/nYyJ4CCjTzOQndzx3
-   VSOdOCvCCOMu+/y3avyFc9IeVTYfJXQoKDrjviFH9yvdnJOqDtnUoNm8g
-   4YPdtY5d6M2+6lOdYSE4CqrCVFZIRUdER49Eyz0S5piyTfXkqJp7atoci
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10880"; a="452633539"
-X-IronPort-AV: E=Sophos;i="6.03,265,1694761200"; 
-   d="scan'208";a="452633539"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2023 11:04:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10880"; a="1092085564"
-X-IronPort-AV: E=Sophos;i="6.03,265,1694761200"; 
-   d="scan'208";a="1092085564"
-Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by fmsmga005.fm.intel.com with ESMTP; 31 Oct 2023 11:04:31 -0700
-Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id 9D8A033E85;
-	Tue, 31 Oct 2023 18:04:29 +0000 (GMT)
-From: Larysa Zaremba <larysa.zaremba@intel.com>
-To: bpf@vger.kernel.org
-Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
-	netdev@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Magnus Karlsson <magnus.karlsson@gmail.com>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Yunsheng Lin <linyunsheng@huawei.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Aleksander Lobakin <aleksander.lobakin@intel.com>
-Subject: [PATCH bpf-next v2] net, xdp: allow metadata > 32
-Date: Tue, 31 Oct 2023 18:57:37 +0100
-Message-ID: <20231031175742.21455-1-larysa.zaremba@intel.com>
-X-Mailer: git-send-email 2.41.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d3hn3Jaj"
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A00A6
+	for <bpf@vger.kernel.org>; Tue, 31 Oct 2023 11:04:44 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-53e2308198eso9911341a12.1
+        for <bpf@vger.kernel.org>; Tue, 31 Oct 2023 11:04:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698775483; x=1699380283; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=myPjyW46OciasY/8kqcBhEYWtmIYdeQin5G416qcOyM=;
+        b=d3hn3JajyoECAID6IchhEOxOxUgx4M/MuZK8VsC07ZJZs6kDSRHDQMP0TE4IyZIrcI
+         NRcZv7zrwo7/YQ1sng9uylPDmyFJP8pUd5/GukhcYGgmeqIHCy7sRkyA2e/m2qOeeO6C
+         D4b1+3Wjk1XWc2NAA2PWxmFnLeU6I0yHlkTLDWUTbl+AWL4GfXmV/nHMm9Up6G4kMWbr
+         obFFYI4GO4CkQeoNf6ldZt7GIwe/AGhNYJeXT9ftIys3ukR6mFYcDORr5m24U12Na2go
+         tiXnfKFIFVflBeuCPT2uGg+nFNXkkr6OcRHBGZyKIt2yNJmNKsGgf2vpMlVbL7FaYkWG
+         LFMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698775483; x=1699380283;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=myPjyW46OciasY/8kqcBhEYWtmIYdeQin5G416qcOyM=;
+        b=i6U3zbUOlkzIwn7/sfIR5ZnfTJpBL0IoVptBAW5NzDCCfqrY6rfgAO2MaX3wDDae3i
+         Lth7sNr7Dp2pVjPC71ZPGTcGrESYR+Cv5fYCOghf3x/H/R1njAzM5THzy/VwkneWNG9h
+         wgyI5tJXbjRf1OIen4SHzB8nmYwdW9WXXve6xkl6lh6LXtXVxOoYnyyngRySvvQQOt9X
+         GyrG/DGmBoqzxaMs3OVjQ33HAAVrxqQgZUou/yWyvop2gQffSs2yl6Dus7tDGgvBeK+M
+         u5tlfFiFS50jbxf08vIz9Gz4RD0OZeeLx5Yw2+ArpVtAaDPts4KtA4eO+TrY1QMLRGV4
+         srBg==
+X-Gm-Message-State: AOJu0YyBSL+EmCJtJ6Dsrbt0GdXYao8q092sjaUF9mgsDMpNrwXWZhhK
+	wlBcLGV7s4zzKLLfEG0/lCGYvty0uPwhCn0o+OU=
+X-Google-Smtp-Source: AGHT+IHPhK7HDiF2NgqYSMQNA16ZbN+DN7JtwiULXthrhOm3fkvR9e/HnTBI5JypTvgNFGmQTpWjBBy64Ya+zGQ5wbk=
+X-Received: by 2002:a17:907:608e:b0:9c7:5667:5648 with SMTP id
+ ht14-20020a170907608e00b009c756675648mr83221ejc.51.1698775482873; Tue, 31 Oct
+ 2023 11:04:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20231027181346.4019398-1-andrii@kernel.org> <20231027181346.4019398-21-andrii@kernel.org>
+ <20231031022033.536yvwc5vcc4toh2@MacBook-Pro-49.local> <CAEf4BzZC3NYUZu2uK+Mi3GgMrLOqe=ShXpkQpor-dLZxbjM-Tw@mail.gmail.com>
+ <CAADnVQ+a-39-Gppmh3VgVaEYfnpHg9v9+mjPGEbX4PoSqaeMLw@mail.gmail.com>
+In-Reply-To: <CAADnVQ+a-39-Gppmh3VgVaEYfnpHg9v9+mjPGEbX4PoSqaeMLw@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 31 Oct 2023 11:04:31 -0700
+Message-ID: <CAEf4Bzb6jNpXr6LGHHrW17zaM_H1aDR-hY+eQg5dZUF0ZboufA@mail.gmail.com>
+Subject: Re: [PATCH v5 bpf-next 20/23] bpf: enhance BPF_JEQ/BPF_JNE
+ is_branch_taken logic
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Kernel Team <kernel-team@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-32 bytes may be not enough for some custom metadata. Relax the restriction,
-allow metadata larger than 32 bytes and make __skb_metadata_differs() work
-with bigger lengths.
+On Tue, Oct 31, 2023 at 9:36=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Mon, Oct 30, 2023 at 11:16=E2=80=AFPM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Mon, Oct 30, 2023 at 7:20=E2=80=AFPM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > On Fri, Oct 27, 2023 at 11:13:43AM -0700, Andrii Nakryiko wrote:
+> > > > Use 32-bit subranges to prune some 64-bit BPF_JEQ/BPF_JNE condition=
+s
+> > > > that otherwise would be "inconclusive" (i.e., is_branch_taken() wou=
+ld
+> > > > return -1). This can happen, for example, when registers are initia=
+lized
+> > > > as 64-bit u64/s64, then compared for inequality as 32-bit subregist=
+ers,
+> > > > and then followed by 64-bit equality/inequality check. That 32-bit
+> > > > inequality can establish some pattern for lower 32 bits of a regist=
+er
+> > > > (e.g., s< 0 condition determines whether the bit #31 is zero or not=
+),
+> > > > while overall 64-bit value could be anything (according to a value =
+range
+> > > > representation).
+> > > >
+> > > > This is not a fancy quirky special case, but actually a handling th=
+at's
+> > > > necessary to prevent correctness issue with BPF verifier's range
+> > > > tracking: set_range_min_max() assumes that register ranges are
+> > > > non-overlapping, and if that condition is not guaranteed by
+> > > > is_branch_taken() we can end up with invalid ranges, where min > ma=
+x.
+> > >
+> > > This is_scalar_branch_taken() logic makes sense,
+> > > but if set_range_min_max() is delicate, it should have its own sanity
+> > > check for ranges.
+> > > Shouldn't be difficult to check for that dangerous overlap case.
+> >
+> > So let me clarify. As far as I'm concerned, is_branch_taken() is such
+> > a check for set_reg_min_max, and so duplicating such checks in
+> > set_reg_min_max() is just that a duplication of code and logic, and
+> > just a chance for more typos and subtle bugs.
+> >
+> > But the concern about invalid ranges is valid, so I don't know,
+> > perhaps we should just do a quick check after adjustment to validate
+> > that umin<=3Dumax and so on? E.g., we can do that outside of
+> > reg_set_min_max(), to keep reg_set_min_max() non-failing. WDYT?
+>
+> Sounds like a good option too.
+> Just trying to minimize breakage in the future.
+> Sanity check before or after should catch it.
 
-Now size of metadata is only limited by the fact it is stored as u8
-in skb_shared_info, so the upper limit is now is 255. Other important
-conditions, such as having enough space for xdp_frame building, are already
-checked in bpf_xdp_adjust_meta().
+Sounds good, I'll have a separate register state sanity check and will
+see what minimal amount of places where we should call it.
 
-The requirement of having its length aligned to 4 bytes is still
-valid.
-
-Signed-off-by: Aleksander Lobakin <aleksander.lobakin@intel.com>
-Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
----
-v1->v2: replaced 'typeof(metalen)' with the actual type
-This patch was previously a part of an old BTF-based hints RFC.
-Then it was included into "XDP metadata via kfuncs for ice":
-https://lore.kernel.org/bpf/20230811161509.19722-1-larysa.zaremba@intel.com/
-It is not longer needed in the series, but presents a useful change on its own.
-
- include/linux/skbuff.h | 13 ++++++++-----
- include/net/xdp.h      |  7 ++++++-
- 2 files changed, 14 insertions(+), 6 deletions(-)
-
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 97bfef071255..a361a9b8767c 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -4232,10 +4232,13 @@ static inline bool __skb_metadata_differs(const struct sk_buff *skb_a,
- {
- 	const void *a = skb_metadata_end(skb_a);
- 	const void *b = skb_metadata_end(skb_b);
--	/* Using more efficient varaiant than plain call to memcmp(). */
--#if defined(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) && BITS_PER_LONG == 64
- 	u64 diffs = 0;
- 
-+	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ||
-+	    BITS_PER_LONG != 64)
-+		goto slow;
-+
-+	/* Using more efficient variant than plain call to memcmp(). */
- 	switch (meta_len) {
- #define __it(x, op) (x -= sizeof(u##op))
- #define __it_diff(a, b, op) (*(u##op *)__it(a, op)) ^ (*(u##op *)__it(b, op))
-@@ -4255,11 +4258,11 @@ static inline bool __skb_metadata_differs(const struct sk_buff *skb_a,
- 		fallthrough;
- 	case  4: diffs |= __it_diff(a, b, 32);
- 		break;
-+	default:
-+slow:
-+		return memcmp(a - meta_len, b - meta_len, meta_len);
- 	}
- 	return diffs;
--#else
--	return memcmp(a - meta_len, b - meta_len, meta_len);
--#endif
- }
- 
- static inline bool skb_metadata_differs(const struct sk_buff *skb_a,
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 349c36fb5fd8..5d3673afc037 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -369,7 +369,12 @@ xdp_data_meta_unsupported(const struct xdp_buff *xdp)
- 
- static inline bool xdp_metalen_invalid(unsigned long metalen)
- {
--	return (metalen & (sizeof(__u32) - 1)) || (metalen > 32);
-+	unsigned long meta_max;
-+
-+	meta_max = type_max(typeof_member(struct skb_shared_info, meta_len));
-+	BUILD_BUG_ON(!__builtin_constant_p(meta_max));
-+
-+	return !IS_ALIGNED(metalen, sizeof(u32)) || metalen > meta_max;
- }
- 
- struct xdp_attachment_info {
--- 
-2.41.0
-
+I'm assuming we are ok with returning -EFAULT and failing validation
+whenever we detect violation, right?
