@@ -1,60 +1,60 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE162230C
-	for <bpf@vger.kernel.org>; Tue, 31 Oct 2023 17:57:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E17B5210EE
+	for <bpf@vger.kernel.org>; Tue, 31 Oct 2023 18:02:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b/030Xeo"
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4BC8E4
-	for <bpf@vger.kernel.org>; Tue, 31 Oct 2023 10:57:00 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9936b3d0286so919232766b.0
-        for <bpf@vger.kernel.org>; Tue, 31 Oct 2023 10:57:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bfBH27+3"
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9A191
+	for <bpf@vger.kernel.org>; Tue, 31 Oct 2023 11:02:11 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-9c773ac9b15so893003066b.2
+        for <bpf@vger.kernel.org>; Tue, 31 Oct 2023 11:02:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698775019; x=1699379819; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1698775330; x=1699380130; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZLnmc1wDxTzFvmaf3Jnr7bFn2J0h0FMsGikjMp5cTwY=;
-        b=b/030Xeok0t/8bxivxdUr0bCsP3kiHZsHy1tkTif8IKcO8ksFx4E+a8/NP4FC55/Su
-         +Vg4ZOcf2fMvGQ3bVpQSC9FI6XiEgicyZNpNrhtHpzi93LFhdlLWJiAKMiF0OsEHKAWM
-         AIA0UpcbQ1SZzrMmX/nhlA5lDIx9IRqTW0hY392TmpC9rhkAA7iYs3/sMPvDVcO7fP2d
-         Snvthg0BtTZuuDdsa01g1/ok61FtekhztxRhIq471xjZdoUj+4QTIQOZRdXs60vIyzg3
-         pGttuO0B0tZyBjKRcJI6j05S5jkiFERh8CQ+nruxDVVknWSD+F3TpcwwC0gR1iAzRuUR
-         1WnQ==
+        bh=sQy/VqitbyEuc12Ikl0VAa2LnxPRDn6OLhHR1+RDTvM=;
+        b=bfBH27+3UhnjdxqKogGMjA+JAMdUQ4HYMnIPfgQo+GssCguOovI5W14nOaMfhxqbLF
+         rGb6m25P2r86mKQHwnzSMDOPICsRv7PPpX0zbkHYVWkXJXp4TF+Xpiua9LeUXrNvduLQ
+         iQbOuSCAhGKgjWeuStBUuuD5AFIhJuQTrvzqzH8zKAsRUDTtqmjaHJUff6UrHF6xjSPP
+         lWfjox1l9BGqSbp66EqpaNzDeB4WftHLVR0o1tegozUrv5VPQsemgCx+BBPDKDxXxqt2
+         76ogl67rF6zuSBx3kb36FetbgI3ESRimzUshVNWyDZml7IKZVMq4ObWCdiywF53nvG/u
+         UNng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698775019; x=1699379819;
+        d=1e100.net; s=20230601; t=1698775330; x=1699380130;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZLnmc1wDxTzFvmaf3Jnr7bFn2J0h0FMsGikjMp5cTwY=;
-        b=uj/9q6Zu/1RhPvKWbZTZg4+930ScdLO1Gc9UHRO3d//zD6Pc/tt1uxVEQjWaHIxgRY
-         rlUo4YNIpKXGtyRWRRdtGjYGX786heX3k4J5BVpyzx5cQ/WEk/Wbcx7o9nw6Dq3GMUKE
-         /zDFxZSuQOCeR62Y/YTeUL3Xsu8XlFb9SzLV4/CPcl2ky+C9EvHL0xRO3e0afHmZUycF
-         NUv5ZQdDTO2BKuo/aNIDXuKkBo5suzG01fskrYNckjm42UvIgnuao5IkNdtc//tHY9kD
-         O9N9WuHy3Bq118P63LTm1d7Hp/hJWGaZkqqe51mDnRY5BkhtlNXFb48nXZ58rDRjRe0y
-         xV7w==
-X-Gm-Message-State: AOJu0YxTwXj7/Y2XNNK223belMnO5TgYbxCPMEWoOjSnSSp/zI6Br2LG
-	WT6fHSS1XRdmJL/IHA4McIXkd41CteIsEHLTuEk=
-X-Google-Smtp-Source: AGHT+IFYv4mZoI7eRMlwpmzEynw4DZtkwAKf2SFyQzR1lhuOji1dJe3PVDDTmzi131lp5gSSbwAEUHXvlDD5vDRy/7Y=
-X-Received: by 2002:a17:906:4ace:b0:9c6:4224:67d2 with SMTP id
- u14-20020a1709064ace00b009c6422467d2mr47326ejt.50.1698775018767; Tue, 31 Oct
- 2023 10:56:58 -0700 (PDT)
+        bh=sQy/VqitbyEuc12Ikl0VAa2LnxPRDn6OLhHR1+RDTvM=;
+        b=TVfLXmoTFLByuR7kps986CpQtDvB3VPezRiwm1KdXcJwlo2nl6beRZ6xW7QeOJz5At
+         YnL9KHNXNy33lIy2C/E1xwSUQ+pLF2OpPab2TaUyxKNdJv5PvQPiWyGSF9t9/cLm0BTZ
+         fnM/qqxse5mH4ghAUxMrH1aYvvt2K3qOxlosTKO3+E4MpFIloUSVhzY4GzSLyytSDTJu
+         EPbJXUCpnzAKvArm+hYkN0xkiYsMqSUWGu66yQImvnv4kct0w3Y7ljh1dOLJmCCE6LAn
+         KbFSB08rd8x0CNVqUpItxUflr7SHiJOY1lF7SkMJKRLBQsGriNs8NfWarQ5reUc/gOMR
+         4k4w==
+X-Gm-Message-State: AOJu0YxPpW4w1PdCDfvw8pb6e2gVpgn6InKIMi7Ztik+bKfFg53ZJi1/
+	bflGmnJ63TvgZiEU/ApftMTnjybdvIxHDtR1d+RS4jo6
+X-Google-Smtp-Source: AGHT+IGA9bRE/HOLPbN6RRqTOl6wyDp0k7C7ElIQN+WST+v2hbsT68f2n+P/kAW4Ulo64p8hs6fiCKijAAEvih3BODs=
+X-Received: by 2002:a17:906:ee85:b0:9d4:2080:61d7 with SMTP id
+ wt5-20020a170906ee8500b009d4208061d7mr70587ejb.51.1698775329634; Tue, 31 Oct
+ 2023 11:02:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231027181346.4019398-1-andrii@kernel.org> <20231027181346.4019398-18-andrii@kernel.org>
- <20231031020248.uo54fkisydzwzgvn@MacBook-Pro-49.local> <CAEf4BzbZT11cYbinnGaqGZPiX2Mq5Taksx=VWOMhpuKEj8cXcA@mail.gmail.com>
- <CAADnVQLADK67wpesGfn=9EoAnXcHV8inBqOt79hjpSdvNS=yiQ@mail.gmail.com> <CAEf4BzbTc9wv=QU_ziG+TGcpHkLoQe_0NicKZF83KXgiCfqJFQ@mail.gmail.com>
-In-Reply-To: <CAEf4BzbTc9wv=QU_ziG+TGcpHkLoQe_0NicKZF83KXgiCfqJFQ@mail.gmail.com>
+References: <20231027181346.4019398-1-andrii@kernel.org> <20231027181346.4019398-20-andrii@kernel.org>
+ <20231031021200.lryk4xjudptseasm@MacBook-Pro-49.local> <CAEf4BzZ0oPHe8p96OjY=o7R+=cMn9utk9K5YgYQp8Ai=T6fPCQ@mail.gmail.com>
+ <CAADnVQKOYk7emThHsRxuPVVAZFfE7U6qngcM+L=gt6JQfLgcLg@mail.gmail.com>
+In-Reply-To: <CAADnVQKOYk7emThHsRxuPVVAZFfE7U6qngcM+L=gt6JQfLgcLg@mail.gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 31 Oct 2023 10:56:47 -0700
-Message-ID: <CAEf4BzbZDdgLPkD3UaD2JCE6hV7X0ZHfYC0ToPnRQe0+9J3MfA@mail.gmail.com>
-Subject: Re: [PATCH v5 bpf-next 17/23] bpf: generalize reg_set_min_max() to
- handle two sets of two registers
+Date: Tue, 31 Oct 2023 11:01:58 -0700
+Message-ID: <CAEf4BzYurVB-6J-1oAVuPj8BbtzfKRYue6ajOUeofchAYCrNjA@mail.gmail.com>
+Subject: Re: [PATCH v5 bpf-next 19/23] bpf: generalize is_scalar_branch_taken()
+ logic
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc: Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -62,199 +62,120 @@ Cc: Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 31, 2023 at 10:50=E2=80=AFAM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
+On Tue, Oct 31, 2023 at 9:35=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> On Tue, Oct 31, 2023 at 9:24=E2=80=AFAM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
+> On Mon, Oct 30, 2023 at 11:12=E2=80=AFPM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
 > >
-> > On Mon, Oct 30, 2023 at 11:03=E2=80=AFPM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
+> > On Mon, Oct 30, 2023 at 7:12=E2=80=AFPM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
 > > >
-> > > On Mon, Oct 30, 2023 at 7:02=E2=80=AFPM Alexei Starovoitov
-> > > <alexei.starovoitov@gmail.com> wrote:
-> > > >
-> > > > On Fri, Oct 27, 2023 at 11:13:40AM -0700, Andrii Nakryiko wrote:
-> > > > >  static void reg_set_min_max(struct bpf_reg_state *true_reg1,
-> > > > > +                         struct bpf_reg_state *true_reg2,
-> > > > >                           struct bpf_reg_state *false_reg1,
-> > > > > -                         u64 val, u32 val32,
-> > > > > +                         struct bpf_reg_state *false_reg2,
-> > > > >                           u8 opcode, bool is_jmp32)
-> > > > >  {
-> > > > > -     struct tnum false_32off =3D tnum_subreg(false_reg1->var_off=
-);
-> > > > > -     struct tnum false_64off =3D false_reg1->var_off;
-> > > > > -     struct tnum true_32off =3D tnum_subreg(true_reg1->var_off);
-> > > > > -     struct tnum true_64off =3D true_reg1->var_off;
-> > > > > -     s64 sval =3D (s64)val;
-> > > > > -     s32 sval32 =3D (s32)val32;
-> > > > > -
-> > > > > -     /* If the dst_reg is a pointer, we can't learn anything abo=
-ut its
-> > > > > -      * variable offset from the compare (unless src_reg were a =
-pointer into
-> > > > > -      * the same object, but we don't bother with that.
-> > > > > -      * Since false_reg1 and true_reg1 have the same type by con=
-struction, we
-> > > > > -      * only need to check one of them for pointerness.
-> > > > > +     struct tnum false_32off, false_64off;
-> > > > > +     struct tnum true_32off, true_64off;
-> > > > > +     u64 val;
-> > > > > +     u32 val32;
-> > > > > +     s64 sval;
-> > > > > +     s32 sval32;
-> > > > > +
-> > > > > +     /* If either register is a pointer, we can't learn anything=
- about its
-> > > > > +      * variable offset from the compare (unless they were a poi=
-nter into
-> > > > > +      * the same object, but we don't bother with that).
-> > > > >        */
-> > > > > -     if (__is_pointer_value(false, false_reg1))
-> > > >
-> > > > The removal of the above check, but not the comment was surprising =
-and concerning,
-> > > > so I did a bit of git-archaeology.
-> > > > It was added in commit f1174f77b50c ("bpf/verifier: rework value tr=
-acking")
-> > > > back in 2017 !
-> > > > and in that commit reg_set_min_max() was always called with reg =3D=
-=3D scalar.
-> > > > It looked like premature check. Then I spotted a comment in that co=
-mmit:
-> > > >   * this is only legit if both are scalars (or pointers to the same
-> > > >   * object, I suppose, but we don't support that right now), becaus=
+> > > On Fri, Oct 27, 2023 at 11:13:42AM -0700, Andrii Nakryiko wrote:
+> > > > Generalize is_branch_taken logic for SCALAR_VALUE register to handl=
 e
-> > > >   * otherwise the different base pointers mean the offsets aren't
-> > > >   * comparable.
-> > > > so the intent back then was to generalize reg_set_min_max() to be u=
-sed with pointers too,
-> > > > but we never got around to do that and the comment now reads:
-> > >
-> > > Yeah, it shouldn't be too hard to "generalize" to pointer vs pointer,
-> > > if we ensure they point to exactly the same thing (I haven't thought
-> > > much about how), because beyond that it's still basically SCALAR
-> > > offsets. But I figured it's out of scope for these changes :)
-> > >
-> > > >   * this is only legit if both are scalars (or pointers to the same
-> > > >   * object, I suppose, see the PTR_MAYBE_NULL related if block belo=
-w),
-> > > >   * because otherwise the different base pointers mean the offsets =
-aren't
-> > > >   * comparable.
+> > > > cases when both registers are not constants. Previously supported
+> > > > <range> vs <scalar> cases are a natural subset of more generic <ran=
+ge>
+> > > > vs <range> set of cases.
 > > > >
-> > > > So please remove is_pointer check and remove the comment,
+> > > > Generalized logic relies on straightforward segment intersection ch=
+ecks.
+> > > >
+> > > > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> > > > ---
+> > > >  kernel/bpf/verifier.c | 104 ++++++++++++++++++++++++++------------=
+----
+> > > >  1 file changed, 64 insertions(+), 40 deletions(-)
+> > > >
+> > > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > > > index 4c974296127b..f18a8247e5e2 100644
+> > > > --- a/kernel/bpf/verifier.c
+> > > > +++ b/kernel/bpf/verifier.c
+> > > > @@ -14189,82 +14189,105 @@ static int is_scalar_branch_taken(struct=
+ bpf_reg_state *reg1, struct bpf_reg_sta
+> > > >                                 u8 opcode, bool is_jmp32)
+> > > >  {
+> > > >       struct tnum t1 =3D is_jmp32 ? tnum_subreg(reg1->var_off) : re=
+g1->var_off;
+> > > > +     struct tnum t2 =3D is_jmp32 ? tnum_subreg(reg2->var_off) : re=
+g2->var_off;
+> > > >       u64 umin1 =3D is_jmp32 ? (u64)reg1->u32_min_value : reg1->umi=
+n_value;
+> > > >       u64 umax1 =3D is_jmp32 ? (u64)reg1->u32_max_value : reg1->uma=
+x_value;
+> > > >       s64 smin1 =3D is_jmp32 ? (s64)reg1->s32_min_value : reg1->smi=
+n_value;
+> > > >       s64 smax1 =3D is_jmp32 ? (s64)reg1->s32_max_value : reg1->sma=
+x_value;
+> > > > -     u64 val =3D is_jmp32 ? (u32)tnum_subreg(reg2->var_off).value =
+: reg2->var_off.value;
+> > > > -     s64 sval =3D is_jmp32 ? (s32)val : (s64)val;
+> > > > +     u64 umin2 =3D is_jmp32 ? (u64)reg2->u32_min_value : reg2->umi=
+n_value;
+> > > > +     u64 umax2 =3D is_jmp32 ? (u64)reg2->u32_max_value : reg2->uma=
+x_value;
+> > > > +     s64 smin2 =3D is_jmp32 ? (s64)reg2->s32_min_value : reg2->smi=
+n_value;
+> > > > +     s64 smax2 =3D is_jmp32 ? (s64)reg2->s32_max_value : reg2->sma=
+x_value;
+> > > >
+> > > >       switch (opcode) {
+> > > >       case BPF_JEQ:
+> > > > -             if (tnum_is_const(t1))
+> > > > -                     return !!tnum_equals_const(t1, val);
+> > > > -             else if (val < umin1 || val > umax1)
+> > > > +             /* const tnums */
+> > > > +             if (tnum_is_const(t1) && tnum_is_const(t2))
+> > > > +                     return t1.value =3D=3D t2.value;
+> > > > +             /* const ranges */
+> > > > +             if (umin1 =3D=3D umax1 && umin2 =3D=3D umax2)
+> > > > +                     return umin1 =3D=3D umin2;
 > > >
-> > > So I'm a bit confused. I did remove __is_pointer_value() check, but I
-> > > still need to guard against having pointers, which is why I have:
-> > >
-> > > if (false_reg1->type !=3D SCALAR_VALUE || false_reg2->type !=3D SCALA=
-R_VALUE).
-> > >     return;
-> > >
-> > > I think I need this check, because reg_set_min_max() can be called
-> > > from check_cond_jmp_op() with pointer regs, and we shouldn't try to
-> > > adjust them. Or am I missing something? And the comment I have here
-> > > now:
+> > > I don't follow this logic.
+> > > umin1 =3D=3D umax1 means that it's a single constant and
+> > > it should have been handled by earlier tnum_is_const check.
 > >
-> > I don't see a code path where reg_set_min_max() is called
-> > with pointers. At least not in the current code base.
-> > Are you saying somewhere in your later patch it happens?
+> > I think you follow the logic, you just think it's redundant. Yes, it's
+> > basically the same as
 > >
+> >           if (tnum_is_const(t1) && tnum_is_const(t2))
+> >                 return t1.value =3D=3D t2.value;
+> >
+> > but based on ranges. I didn't feel comfortable to assume that if umin1
+> > =3D=3D umax1 then tnum_is_const(t1) will always be true. At worst we'll
+> > perform one redundant check.
+> >
+> > In short, I don't trust tnum to be as precise as umin/umax and other ra=
+nges.
+> >
+> > >
+> > > > +             if (smin1 =3D=3D smax1 && smin2 =3D=3D smax2)
+> > > > +                     return umin1 =3D=3D umin2;
+> > >
+> > > here it's even more confusing. smin =3D=3D smax -> singel const,
+> > > but then compare umin1 with umin2 ?!
+> >
+> > Eagle eyes! Typo, sorry :( it should be `smin1 =3D=3D smin2`, of course=
+.
+> >
+> > What saves us is reg_bounds_sync(), and if we have umin1 =3D=3D umax1 t=
+hen
+> > we'll have also smin1 =3D=3D smax1 =3D=3D umin1 =3D=3D umax1 (and corre=
+sponding
+> > relation for second register). But I fixed these typos in both BPF_JEQ
+> > and BPF_JNE branches.
 >
-> Hm.. no, it's all in this patch. Check check_cond_jmp_op(). We at
-> least allow `(reg_is_pkt_pointer_any(dst_reg) &&
-> reg_is_pkt_pointer_any(src_reg)` case to get into is_branch_taken(),
-> which, btw, does handle pointer x pointer, pointer x scalar, and
-> scalar x scalar cases. Then, we go straight to reg_set_min_max(), both
-> for BPF_X and BPF_K cases. So reg_set_min_max() has to guard itself
-> against pointers.
+> Not just 'saves us'. The tnum <-> bounds sync is mandatory.
+> I think we have a test where a function returns [-errno, 0]
+> and then we do if (ret < 0) check. At this point the reg has
+> to be tnum_is_const and zero.
+> So if smin1 =3D=3D smax1 =3D=3D umin1 =3D=3D umax1 it should be tnum_is_c=
+onst.
+> Otherwise it's a bug in sync logic.
+> I think instead of doing redundant and confusing check may be
+> add WARN either here or in sync logic to make sure it's all good ?
 
-Correction, BPF_K branch does check for dst_reg->type =3D=3D SCALAR_VALUE.
-But BPF_X doesn't. I stared at this code for so long that I don't even
-notice those checks anymore :(
-
-I'd rather drop this SCALAR check for the BPF_K case and keep
-reg_set_min_max() as generic as is_branch_taken(), if that's ok. I
-think it's less error-prone and a more consistent approach.
-
->
->
-> > Then the question is whether to do this is_scalar check inside
-> > reg_set_min_max() or outside. Both options are probably fine.
->
-> Given we have two separate calls to reg_set_min_max(), BPF_X and
-> BPF_K, it seems cleaner to do it once at the beginning of
-> reg_set_min_max(). And if in the future we do support pointer
-> variants, I'd handle them inside reg_set_min_max(), just like
-> is_branch_taken() handles different situations in one place
-> transparently to the caller.
->
-> >
-> > >
-> > > +       /* If either register is a pointer, we can't learn anything a=
-bout its
-> > > +        * variable offset from the compare (unless they were a point=
-er into
-> > > +        * the same object, but we don't bother with that).
-> > >          */
-> > >
-> > > is trying to explain that we don't really adjust two pointers.
-> > >
-> > > > and fixup the comment in check_cond_jmp_op() where reg_set_min_max(=
-).
-> > >
-> > > I have this locally for now, please let me know if this is fine or yo=
-u
-> > > had something else in mind:
-> > >
-> > > -/* Adjusts the register min/max values in the case that the dst_reg =
-is the
-> > > - * variable register that we are working on, and src_reg is a consta=
-nt or we're
-> > > - * simply doing a BPF_K check.
-> > > - * In JEQ/JNE cases we also adjust the var_off values.
-> > > +/* Adjusts the register min/max values in the case that the dst_reg =
-and
-> > > + * src_reg are both SCALAR_VALUE registers (or we are simply doing a=
- BPF_K
-> > > + * check, in which case we havea fake SCALAR_VALUE representing insn=
-->imm).
-> > > + * Technically we can do similar adjustments for pointers to the sam=
-e object,
-> > > + * but we don't support that right now.
-> >
-> > Looks fine. I'm trying to say that we had such comment forever and
-> > it never lead to actually doing the work.
-> > So I'd just remove the last sentence about pointers ...
->
-> Ah, ok, yep, sure.
->
-> >
-> > >   */
-> > >  static void reg_set_min_max(struct bpf_reg_state *true_reg1,
-> > >                             struct bpf_reg_state *true_reg2,
-> > > @@ -14884,13 +14885,6 @@ static int check_cond_jmp_op(struct
-> > > bpf_verifier_env *env,
-> > >                 return -EFAULT;
-> > >         other_branch_regs =3D other_branch->frame[other_branch->curfr=
-ame]->regs;
-> > >
-> > > -       /* detect if we are comparing against a constant value so we =
-can adjust
-> > > -        * our min/max values for our dst register.
-> > > -        * this is only legit if both are scalars (or pointers to the=
- same
-> > > -        * object, I suppose, see the PTR_MAYBE_NULL related if block=
- below),
-> > > -        * because otherwise the different base pointers mean the off=
-sets aren't
-> > > -        * comparable.
-> > > -        */
-> >
-> > ... and removing this comment is good thing too.
-> > In general the comments should be in front of the function body
-> > (as you're doing) instead of the callsite.
->
-> yep, sounds good
+Ok, let's add it as part of register state sanity checks we discussed
+on another patch. I'll drop the checks and will re-run all the test to
+make sure we are not missing anything.
