@@ -1,99 +1,146 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3749208CF
-	for <bpf@vger.kernel.org>; Tue, 31 Oct 2023 18:04:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84437208CF;
+	Tue, 31 Oct 2023 18:04:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SfP9muaG"
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B4EA3
-	for <bpf@vger.kernel.org>; Tue, 31 Oct 2023 11:04:19 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-40907b82ab9so442065e9.1
-        for <bpf@vger.kernel.org>; Tue, 31 Oct 2023 11:04:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698775458; x=1699380258; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FvP4jsyCDeeGbvwBWcIFxSJQK5NHnF9De2+rMRp2p6U=;
-        b=SfP9muaGPiTEuywjZ9WT8EHcDdcafnL2D1qi6mCqW6MY0O4LYE2rmr3/94dH5KC7XW
-         Uj3H4NWQKT0S9WJbfxG/5fP5MD9SUAJLx2pZ9oG21y8u5GzgfF00gd4A4ZTEQY+PkdtV
-         j4bKW+teO9tgnvyoBbkcagbbECz1ykfL8jKs52/534XEbKUVtLY/ruBSilzx5MFFv61K
-         T1AONPx4QIkgjfEaxjoxPVhHHSE2TlCCPO5BOwkOtPjVUJguqF3KmbeP46x4vSNCXQE9
-         Os0XtHwfmta79NmH0M44aco3lVWRUc0db7F/FdJnRHfnNUNjzsdfCzBO0CMUMbQWo6Kv
-         Qihg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698775458; x=1699380258;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FvP4jsyCDeeGbvwBWcIFxSJQK5NHnF9De2+rMRp2p6U=;
-        b=RiM6RDqjoMrbBeVg0f7qPGIKRjEsISim8kxRUgMjeW8AKXApWVLV17EaSDtqPbE+5O
-         BmEdakbFRDfVmbUxYg+u5JkyDLJNGeFvxAWmzFfpk9lhNH3s/nmIa4xTU6x7mUfzSGqR
-         sgSjtv9tblOw+A0bvL+xb3Iaiom/Ihse7F/+WRoiNJf6Qh7qwe8Qlrw6mveQAMjI3SXa
-         fl1z3xmwZrwGuuBHkZZfWVnlvOgFwVRX6I6/Ygnj+z5eB4/+uEBMYoYKUckAqxBX8Gtl
-         mktx+CguI6Nmsj0QiJVTEh8bMm4MGNp0b5yrrop8snN+sSfPVLlhr+F+vKCytcdfsMwl
-         q7VA==
-X-Gm-Message-State: AOJu0YxiYmzU9Sz9eEfCwqBcT1h18K1YFmNDdHyAVKSbLQqCFZLJvvrb
-	4jNkHuR/BSdO4DG9hbZP7w39o3f0Hwpb+ix31NY=
-X-Google-Smtp-Source: AGHT+IHd31G5ZU0Hmww7cTnyLGhTgoq9fxFj/PgHfMm692OD4mjETJRVtJfmic1K7IUiXECAE8PgUO7YHufDDiMr4OE=
-X-Received: by 2002:a05:6000:1845:b0:32d:a431:9045 with SMTP id
- c5-20020a056000184500b0032da4319045mr335677wri.30.1698775457540; Tue, 31 Oct
- 2023 11:04:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cDix8IGe"
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47ECA6;
+	Tue, 31 Oct 2023 11:04:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698775475; x=1730311475;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UdyGd33bCOwd3XZxRaODc+ORSFQPBXnRQ1wnH5TGCrM=;
+  b=cDix8IGeqFPw0PO/uqIHkv3ZR5kKo85WXvL9G9kXLfo4IcS5iJ5OQxyA
+   WapHeIukgCcKq5g/OzOMIzjeSqydHddwpFCqBL/6AsxRJOI07I77Gaf/B
+   IT9k/MLMzbiZcebSj8lMKJWLJiFLsstj5MTzkB+cJuSgFfDYidGZ9G7a4
+   pJtLaYg5OjORKwPknm+WgYz/h32KZjzIf18j4Il/nYyJ4CCjTzOQndzx3
+   VSOdOCvCCOMu+/y3avyFc9IeVTYfJXQoKDrjviFH9yvdnJOqDtnUoNm8g
+   4YPdtY5d6M2+6lOdYSE4CqrCVFZIRUdER49Eyz0S5piyTfXkqJp7atoci
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10880"; a="452633539"
+X-IronPort-AV: E=Sophos;i="6.03,265,1694761200"; 
+   d="scan'208";a="452633539"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2023 11:04:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10880"; a="1092085564"
+X-IronPort-AV: E=Sophos;i="6.03,265,1694761200"; 
+   d="scan'208";a="1092085564"
+Received: from irvmail002.ir.intel.com ([10.43.11.120])
+  by fmsmga005.fm.intel.com with ESMTP; 31 Oct 2023 11:04:31 -0700
+Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id 9D8A033E85;
+	Tue, 31 Oct 2023 18:04:29 +0000 (GMT)
+From: Larysa Zaremba <larysa.zaremba@intel.com>
+To: bpf@vger.kernel.org
+Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
+	netdev@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Magnus Karlsson <magnus.karlsson@gmail.com>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Yunsheng Lin <linyunsheng@huawei.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Aleksander Lobakin <aleksander.lobakin@intel.com>
+Subject: [PATCH bpf-next v2] net, xdp: allow metadata > 32
+Date: Tue, 31 Oct 2023 18:57:37 +0100
+Message-ID: <20231031175742.21455-1-larysa.zaremba@intel.com>
+X-Mailer: git-send-email 2.41.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231027181346.4019398-1-andrii@kernel.org> <20231027181346.4019398-18-andrii@kernel.org>
- <20231031020248.uo54fkisydzwzgvn@MacBook-Pro-49.local> <CAEf4BzbZT11cYbinnGaqGZPiX2Mq5Taksx=VWOMhpuKEj8cXcA@mail.gmail.com>
- <CAADnVQLADK67wpesGfn=9EoAnXcHV8inBqOt79hjpSdvNS=yiQ@mail.gmail.com>
- <CAEf4BzbTc9wv=QU_ziG+TGcpHkLoQe_0NicKZF83KXgiCfqJFQ@mail.gmail.com> <CAEf4BzbZDdgLPkD3UaD2JCE6hV7X0ZHfYC0ToPnRQe0+9J3MfA@mail.gmail.com>
-In-Reply-To: <CAEf4BzbZDdgLPkD3UaD2JCE6hV7X0ZHfYC0ToPnRQe0+9J3MfA@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 31 Oct 2023 11:04:06 -0700
-Message-ID: <CAADnVQ+8m0OggW=eO5bHiFMpafV04ZSvBP6SNtjHN22bmSZ5CQ@mail.gmail.com>
-Subject: Re: [PATCH v5 bpf-next 17/23] bpf: generalize reg_set_min_max() to
- handle two sets of two registers
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Kernel Team <kernel-team@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 31, 2023 at 10:56=E2=80=AFAM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > I don't see a code path where reg_set_min_max() is called
-> > > with pointers. At least not in the current code base.
-> > > Are you saying somewhere in your later patch it happens?
-> > >
-> >
-> > Hm.. no, it's all in this patch. Check check_cond_jmp_op(). We at
-> > least allow `(reg_is_pkt_pointer_any(dst_reg) &&
-> > reg_is_pkt_pointer_any(src_reg)` case to get into is_branch_taken(),
-> > which, btw, does handle pointer x pointer, pointer x scalar, and
-> > scalar x scalar cases. Then, we go straight to reg_set_min_max(), both
-> > for BPF_X and BPF_K cases. So reg_set_min_max() has to guard itself
-> > against pointers.
->
-> Correction, BPF_K branch does check for dst_reg->type =3D=3D SCALAR_VALUE=
-.
-> But BPF_X doesn't. I stared at this code for so long that I don't even
-> notice those checks anymore :(
->
-> I'd rather drop this SCALAR check for the BPF_K case and keep
-> reg_set_min_max() as generic as is_branch_taken(), if that's ok. I
-> think it's less error-prone and a more consistent approach.
+32 bytes may be not enough for some custom metadata. Relax the restriction,
+allow metadata larger than 32 bytes and make __skb_metadata_differs() work
+with bigger lengths.
 
-Ahh. Now I see that the patch is doing reg_set_min_max()
-right after BPF_X check.
-So before the patch all !scalar checks were done outside
-and extra __is_pointer_value() inside was useless (reserved for future).
-With this change the !scalar change inside is necessary.
-Makes sense now. Commit log could have explained that bit
-and avoided this back and forth ;)
+Now size of metadata is only limited by the fact it is stored as u8
+in skb_shared_info, so the upper limit is now is 255. Other important
+conditions, such as having enough space for xdp_frame building, are already
+checked in bpf_xdp_adjust_meta().
 
-And yeah dropping !scalar from BPF_K path makes sense as well.
+The requirement of having its length aligned to 4 bytes is still
+valid.
+
+Signed-off-by: Aleksander Lobakin <aleksander.lobakin@intel.com>
+Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
+---
+v1->v2: replaced 'typeof(metalen)' with the actual type
+This patch was previously a part of an old BTF-based hints RFC.
+Then it was included into "XDP metadata via kfuncs for ice":
+https://lore.kernel.org/bpf/20230811161509.19722-1-larysa.zaremba@intel.com/
+It is not longer needed in the series, but presents a useful change on its own.
+
+ include/linux/skbuff.h | 13 ++++++++-----
+ include/net/xdp.h      |  7 ++++++-
+ 2 files changed, 14 insertions(+), 6 deletions(-)
+
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index 97bfef071255..a361a9b8767c 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -4232,10 +4232,13 @@ static inline bool __skb_metadata_differs(const struct sk_buff *skb_a,
+ {
+ 	const void *a = skb_metadata_end(skb_a);
+ 	const void *b = skb_metadata_end(skb_b);
+-	/* Using more efficient varaiant than plain call to memcmp(). */
+-#if defined(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) && BITS_PER_LONG == 64
+ 	u64 diffs = 0;
+ 
++	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ||
++	    BITS_PER_LONG != 64)
++		goto slow;
++
++	/* Using more efficient variant than plain call to memcmp(). */
+ 	switch (meta_len) {
+ #define __it(x, op) (x -= sizeof(u##op))
+ #define __it_diff(a, b, op) (*(u##op *)__it(a, op)) ^ (*(u##op *)__it(b, op))
+@@ -4255,11 +4258,11 @@ static inline bool __skb_metadata_differs(const struct sk_buff *skb_a,
+ 		fallthrough;
+ 	case  4: diffs |= __it_diff(a, b, 32);
+ 		break;
++	default:
++slow:
++		return memcmp(a - meta_len, b - meta_len, meta_len);
+ 	}
+ 	return diffs;
+-#else
+-	return memcmp(a - meta_len, b - meta_len, meta_len);
+-#endif
+ }
+ 
+ static inline bool skb_metadata_differs(const struct sk_buff *skb_a,
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index 349c36fb5fd8..5d3673afc037 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -369,7 +369,12 @@ xdp_data_meta_unsupported(const struct xdp_buff *xdp)
+ 
+ static inline bool xdp_metalen_invalid(unsigned long metalen)
+ {
+-	return (metalen & (sizeof(__u32) - 1)) || (metalen > 32);
++	unsigned long meta_max;
++
++	meta_max = type_max(typeof_member(struct skb_shared_info, meta_len));
++	BUILD_BUG_ON(!__builtin_constant_p(meta_max));
++
++	return !IS_ALIGNED(metalen, sizeof(u32)) || metalen > meta_max;
+ }
+ 
+ struct xdp_attachment_info {
+-- 
+2.41.0
+
