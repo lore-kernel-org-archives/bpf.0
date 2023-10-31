@@ -1,35 +1,33 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26A0E6FC0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 248F46D22
 	for <bpf@vger.kernel.org>; Tue, 31 Oct 2023 05:03:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CDFDD
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87501D8
 	for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 22:03:44 -0700 (PDT)
 Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39UItotJ003514
-	for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 22:03:41 -0700
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39UItotN003514
+	for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 22:03:43 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3u2j6rtw9h-8
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3u2j6rtw9h-12
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 22:03:41 -0700
-Received: from twshared9518.03.prn6.facebook.com (2620:10d:c085:208::11) by
+	for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 22:03:43 -0700
+Received: from twshared34392.14.frc2.facebook.com (2620:10d:c085:208::11) by
  mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Mon, 30 Oct 2023 22:03:37 -0700
+ 15.1.2507.34; Mon, 30 Oct 2023 22:03:38 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 8E7D33AA9B6D8; Mon, 30 Oct 2023 22:03:34 -0700 (PDT)
+	id 5E9D83AA9B6A6; Mon, 30 Oct 2023 22:03:26 -0700 (PDT)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next 4/7] bpf: fix check for attempt to corrupt spilled pointer
-Date: Mon, 30 Oct 2023 22:03:21 -0700
-Message-ID: <20231031050324.1107444-5-andrii@kernel.org>
+Subject: [PATCH bpf-next 0/7] Complete BPF verifier precision tracking support for register spills
+Date: Mon, 30 Oct 2023 22:03:17 -0700
+Message-ID: <20231031050324.1107444-1-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231031050324.1107444-1-andrii@kernel.org>
-References: <20231031050324.1107444-1-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -39,40 +37,59 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: h_KOtYYItFpivpeVKa3GgsviTJLA1CuD
-X-Proofpoint-GUID: h_KOtYYItFpivpeVKa3GgsviTJLA1CuD
+X-Proofpoint-ORIG-GUID: MtsOJQGX9rs_4NfnlDH_a1ps57LasWgb
+X-Proofpoint-GUID: MtsOJQGX9rs_4NfnlDH_a1ps57LasWgb
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-10-30_13,2023-10-31_01,2023-05-22_02
 
-When register is spilled onto a stack as a 1/2/4-byte register, we set
-slot_type[BPF_REG_SIZE - 1] (plus potentially few more below it,
-depending on actual spill size). So to check if some stack slot has
-spilled register we need to consult slot_type[7], not slot_type[0].
+Add support to BPF verifier to track and support register spill/fill to/f=
+rom
+stack regardless if it was done through read-only R10 register (which is =
+the
+only form supported today), or through a general register after copying R=
+10
+into it, while also potentially modifying offset.
 
-To avoid the need to remember and double-check this in the future, just
-use is_spilled_reg() helper.
+Once we add register this generic spill/fill support to precision
+backtracking, we can take advantage of it to stop doing eager STACK_ZERO
+conversion on register spill. Instead we can rely on (im)precision of spi=
+lled
+const zero register to improve verifier state pruning efficiency. This
+situation of using const zero register to initialize stack slots is very
+common with __builtin_memset() usage or just zero-initializing variables =
+on
+the stack, and it causes unnecessary state duplication, as that STACK_ZER=
+O
+knowledge is often not necessary for correctness, as those zero values ar=
+e
+never used in precise context. Thus, relying on register imprecision help=
+s
+tremendously, especially in real-world BPF programs.
 
-Fixes: 638f5b90d460 ("bpf: reduce verifier memory consumption")
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- kernel/bpf/verifier.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+To make spilled const zero register behave completely equivalently to
+STACK_ZERO, we need to improve few other small pieces, which is done in t=
+he
+second part of the patch set. See individual patches for details. There a=
+re
+also two small bug fixes spotted during STACK_ZERO debugging.
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 098ba0e1a6ff..82992c32c1bd 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4622,7 +4622,7 @@ static int check_stack_write_fixed_off(struct bpf_v=
-erifier_env *env,
- 	 * so it's aligned access and [off, off + size) are within stack limits
- 	 */
- 	if (!env->allow_ptr_leaks &&
--	    state->stack[spi].slot_type[0] =3D=3D STACK_SPILL &&
-+	    is_spilled_reg(&state->stack[spi]) &&
- 	    size !=3D BPF_REG_SIZE) {
- 		verbose(env, "attempt to corrupt spilled pointer on stack\n");
- 		return -EACCES;
+Andrii Nakryiko (7):
+  bpf: use common jump (instruction) history across all states
+  bpf: support non-r10 register spill/fill to/from stack in precision
+    tracking
+  bpf: enforce precision for r0 on callback return
+  bpf: fix check for attempt to corrupt spilled pointer
+  bpf: preserve STACK_ZERO slots on partial reg spills
+  bpf: preserve constant zero when doing partial register restore
+  bpf: track aligned STACK_ZERO cases as imprecise spilled registers
+
+ include/linux/bpf_verifier.h                  |  34 ++-
+ kernel/bpf/verifier.c                         | 274 ++++++++++--------
+ .../bpf/progs/verifier_subprog_precision.c    |  83 +++++-
+ .../testing/selftests/bpf/verifier/precise.c  |  38 ++-
+ 4 files changed, 285 insertions(+), 144 deletions(-)
+
 --=20
 2.34.1
 
