@@ -1,188 +1,98 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C642DDF5D
-	for <bpf@vger.kernel.org>; Tue, 31 Oct 2023 06:01:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CDFD101E1
+	for <bpf@vger.kernel.org>; Tue, 31 Oct 2023 06:16:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hUxJq1Hw"
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07791F4
-	for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 23:01:08 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1c434c33ec0so40465985ad.3
-        for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 23:01:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W978X5K4"
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E03127
+	for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 23:16:38 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-540105dea92so8067633a12.2
+        for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 23:16:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698732049; x=1699336849; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1698732997; x=1699337797; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KMitVK3rOTDVbT4Z+8x0bS93zlRA2h7260oX1PRTrQE=;
-        b=hUxJq1Hwyb9l03FRPO0HLffR+E7eJu9Aai1DYQsWT4dG2Cfy4PhLGar1qk1YH/99pN
-         5nqfKPXh76oUBDWLd1iqueUCysBI89nfq65j+DgWo++hgd7Cd5ilJiivO1tVfWyJi95k
-         1mLU5z5+zTWNco8Gqfp3O2l57lW/+qRUHCEwLG9knG0P+/5wyVHfBnliaYXW00vvc/UO
-         1WNOC0IQhZw4uzHp2nFSy/RK42oyPf6Y68FXifQZ9Y01B/v4atRtzsD9hMzYQqMIrOwv
-         xBWFDBIo90vvHNsDKHzCOxvbUX97kbNaFvLJGbop9nBIuhZD+GYapBZRm3VBPiMeIGcq
-         XDJA==
+        bh=Mgu/8gdvXyguahCyj+3Q67wXWj9HYumf2LnRdg7Kbvc=;
+        b=W978X5K4Ceg2ngVhnqFoBPRkdt7PFoHDpHCvodXgUqkQtW3djMQJZ/psRRelbPq5sO
+         kDubJCgFaqoQW6IWNCZQrGbX4W23LsKKJjTsq1shadLubbBoKyApD/xzmfK0spbPs/L9
+         aY/vPyHp7q/aTzfI8/0NAZebyYIK5wQ+zB+KK627cLLvfFuC5KV84zeYOTXs67pCpWG3
+         YU0vSFN8TzkDJAcPCNgZFI/iJngm1fneKDXDCPgB0eEDu+JPxQwzrl+Ak2Q9bsGnOY3+
+         Ui/Lnz1KEUrb8RLtq4sR7kVmzlYaGs5CEDFbGZu1DeT4zm8rO9FsTcd96+iK1gXImhzh
+         xQtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698732049; x=1699336849;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1698732997; x=1699337797;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KMitVK3rOTDVbT4Z+8x0bS93zlRA2h7260oX1PRTrQE=;
-        b=jHVLTCYIoRAg/SdWWK0mzc9Ui2spIGpHC+JP3Z2//QypPyQx7W3Jpm9Tse7LYQLDUp
-         PnaddtLbF0w9E87/u5flpoCDgEoLZS7lt86MrQSVMn+nV4sZmSGWdQ5i5jILeDz6nRET
-         D09ogrrw6J7oQE3tiyb6xiPS3pSssWRR0H/e/rEJmWzzSuyYH5zeJdo/gU2QrMLIu16p
-         9Nl91gYjxema5iYWDG7EhnkArnA2pt1x2J1nVcf/UKAJ168/nwWiOOnd+uF4urJjjPEB
-         dXHJ92TcCyTUUsU01JrYsyAiSZ3XQXPlRXzUJvT+GYPxHiHidEd7lulMe2rKyb8Au+g7
-         T1KQ==
-X-Gm-Message-State: AOJu0YzkReuer3ai6Pq/XODEvcPXIJLK+gY6aE7+ugvoL4WRfI0ULBUr
-	mLugcl/XsAJiPTMlyVqtJu7tQaf7rWIqZg==
-X-Google-Smtp-Source: AGHT+IHij17j15v/dEVO7nUcwFHlvhQi2eRQdf72y00nNcRRXLxzEUYBzkpOLoD6lOZKix231/WTaQ==
-X-Received: by 2002:a17:903:1104:b0:1c9:ea6e:5a63 with SMTP id n4-20020a170903110400b001c9ea6e5a63mr12217788plh.32.1698732048725;
-        Mon, 30 Oct 2023 23:00:48 -0700 (PDT)
-Received: from ubuntu.. ([203.205.141.13])
-        by smtp.googlemail.com with ESMTPSA id x5-20020a170902b40500b001cc50f67fbasm460683plr.281.2023.10.30.23.00.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Oct 2023 23:00:48 -0700 (PDT)
-From: Hengqi Chen <hengqi.chen@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	keescook@chromium.org,
-	luto@amacapital.net,
-	wad@chromium.org,
-	hengqi.chen@gmail.com
-Subject: [PATCH bpf-next 6/6] selftests/bpf: Test BPF_PROG_TYPE_SECCOMP
-Date: Tue, 31 Oct 2023 01:24:07 +0000
-Message-Id: <20231031012407.51371-7-hengqi.chen@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231031012407.51371-1-hengqi.chen@gmail.com>
-References: <20231031012407.51371-1-hengqi.chen@gmail.com>
+        bh=Mgu/8gdvXyguahCyj+3Q67wXWj9HYumf2LnRdg7Kbvc=;
+        b=VesnOlfYf8mxQOBhAIts5m27Xp7baXnzdJT79b7lK6e94arnUPTf53M6Xq7Rb5reMw
+         2Uf2SEDTC12r4Xhl5F79H4ntUh+5yxQwLlxR8diB6nC7xAM0O6I74j6g0/I8oRgwCMec
+         H7EmC0qOwCuyZzsGBl8k4u3VKdrHhef4R0qgyATnnU1xVB65Yl++Sdr6BdIga9pZ0i+6
+         QxneM2QiFv+b9d4tKMLNRVx/rkkYgxIAs+oCWWp3f1NF1KuilmPLuuAFMIvxD/QMhY+I
+         ZMfdx4BmqjQhBZ2bwaTy/eWs3uhGivO0ABHfCKgRtVV8jRCX3D3ZKVpE9TsZUcmTU1V5
+         82sw==
+X-Gm-Message-State: AOJu0YypWfde6lMGDpdqWu213eWHWxhHRyhVBBEkboCWtd8+aPWOZZoA
+	A6t8vMQcIX3UlZjeulPf0ip/iWH99x8YhlzfQ3s=
+X-Google-Smtp-Source: AGHT+IGh/ApQOJ3ODODI4RiTpID2ej/cVj57ZX2OCTsj+4APeJpGT2znAJwfuFhb0R/eMmpTXGu94hHOw6/fIN9I9bM=
+X-Received: by 2002:a17:906:daca:b0:9ae:3d17:d5d0 with SMTP id
+ xi10-20020a170906daca00b009ae3d17d5d0mr10331469ejb.31.1698732996688; Mon, 30
+ Oct 2023 23:16:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20231027181346.4019398-1-andrii@kernel.org> <20231027181346.4019398-21-andrii@kernel.org>
+ <20231031022033.536yvwc5vcc4toh2@MacBook-Pro-49.local>
+In-Reply-To: <20231031022033.536yvwc5vcc4toh2@MacBook-Pro-49.local>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 30 Oct 2023 23:16:25 -0700
+Message-ID: <CAEf4BzZC3NYUZu2uK+Mi3GgMrLOqe=ShXpkQpor-dLZxbjM-Tw@mail.gmail.com>
+Subject: Re: [PATCH v5 bpf-next 20/23] bpf: enhance BPF_JEQ/BPF_JNE
+ is_branch_taken logic
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, martin.lau@kernel.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add a testcase to exercise BPF_PROG_TYPE_SECCOMP.
+On Mon, Oct 30, 2023 at 7:20=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Fri, Oct 27, 2023 at 11:13:43AM -0700, Andrii Nakryiko wrote:
+> > Use 32-bit subranges to prune some 64-bit BPF_JEQ/BPF_JNE conditions
+> > that otherwise would be "inconclusive" (i.e., is_branch_taken() would
+> > return -1). This can happen, for example, when registers are initialize=
+d
+> > as 64-bit u64/s64, then compared for inequality as 32-bit subregisters,
+> > and then followed by 64-bit equality/inequality check. That 32-bit
+> > inequality can establish some pattern for lower 32 bits of a register
+> > (e.g., s< 0 condition determines whether the bit #31 is zero or not),
+> > while overall 64-bit value could be anything (according to a value rang=
+e
+> > representation).
+> >
+> > This is not a fancy quirky special case, but actually a handling that's
+> > necessary to prevent correctness issue with BPF verifier's range
+> > tracking: set_range_min_max() assumes that register ranges are
+> > non-overlapping, and if that condition is not guaranteed by
+> > is_branch_taken() we can end up with invalid ranges, where min > max.
+>
+> This is_scalar_branch_taken() logic makes sense,
+> but if set_range_min_max() is delicate, it should have its own sanity
+> check for ranges.
+> Shouldn't be difficult to check for that dangerous overlap case.
 
-  # ./test_progs -n 194
-  #194     seccomp:OK
-  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+So let me clarify. As far as I'm concerned, is_branch_taken() is such
+a check for set_reg_min_max, and so duplicating such checks in
+set_reg_min_max() is just that a duplication of code and logic, and
+just a chance for more typos and subtle bugs.
 
-Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
----
- tools/include/uapi/linux/bpf.h                |  1 +
- tools/include/uapi/linux/seccomp.h            |  2 +
- .../selftests/bpf/prog_tests/seccomp.c        | 40 +++++++++++++++++++
- .../selftests/bpf/progs/test_seccomp.c        | 24 +++++++++++
- 4 files changed, 67 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/seccomp.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_seccomp.c
-
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 0f6cdf52b1da..f0fcfe0ccb2e 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -995,6 +995,7 @@ enum bpf_prog_type {
- 	BPF_PROG_TYPE_SK_LOOKUP,
- 	BPF_PROG_TYPE_SYSCALL, /* a program that can execute syscalls */
- 	BPF_PROG_TYPE_NETFILTER,
-+	BPF_PROG_TYPE_SECCOMP,
- };
- 
- enum bpf_attach_type {
-diff --git a/tools/include/uapi/linux/seccomp.h b/tools/include/uapi/linux/seccomp.h
-index dbfc9b37fcae..db792dc96b5a 100644
---- a/tools/include/uapi/linux/seccomp.h
-+++ b/tools/include/uapi/linux/seccomp.h
-@@ -25,6 +25,8 @@
- #define SECCOMP_FILTER_FLAG_TSYNC_ESRCH		(1UL << 4)
- /* Received notifications wait in killable state (only respond to fatal signals) */
- #define SECCOMP_FILTER_FLAG_WAIT_KILLABLE_RECV	(1UL << 5)
-+/* Indicates that the filter is in form of bpf prog fd */
-+#define SECCOMP_FILTER_FLAG_BPF_PROG_FD		(1UL << 6)
- 
- /*
-  * All BPF programs must return a 32-bit value.
-diff --git a/tools/testing/selftests/bpf/prog_tests/seccomp.c b/tools/testing/selftests/bpf/prog_tests/seccomp.c
-new file mode 100644
-index 000000000000..fc7db6af7d64
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/seccomp.c
-@@ -0,0 +1,40 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Hengqi Chen */
-+
-+#include <test_progs.h>
-+#include <linux/seccomp.h>
-+#include "test_seccomp.skel.h"
-+
-+static int seccomp(unsigned int op, unsigned int flags, void *args)
-+{
-+	errno = 0;
-+	return syscall(__NR_seccomp, op, flags, args);
-+}
-+
-+void test_seccomp(void)
-+{
-+	struct test_seccomp *skel;
-+	int fd, flags, ret;
-+
-+	skel = test_seccomp__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	skel->rodata->seccomp_syscall_nr = __NR_seccomp;
-+	skel->rodata->seccomp_errno = 99;
-+
-+	ret = test_seccomp__load(skel);
-+	if (!ASSERT_OK(ret, "skel_load"))
-+		goto cleanup;
-+
-+	fd = bpf_program__fd(skel->progs.seccomp_prog);
-+	flags = SECCOMP_FILTER_FLAG_BPF_PROG_FD;
-+	ret = seccomp(SECCOMP_SET_MODE_FILTER, flags, &fd);
-+	ASSERT_OK(ret, "seccomp_set_bpf_prog");
-+	ret = seccomp(SECCOMP_SET_MODE_FILTER, flags, &fd);
-+	ASSERT_EQ(ret, -1, "seccomp should fail");
-+	ASSERT_EQ(errno, 99, "errno not equal to 99");
-+
-+cleanup:
-+	test_seccomp__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_seccomp.c b/tools/testing/selftests/bpf/progs/test_seccomp.c
-new file mode 100644
-index 000000000000..c53e75b8c0ec
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_seccomp.c
-@@ -0,0 +1,24 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Hengqi Chen */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+#define SECCOMP_RET_ERRNO	0x00050000U
-+#define SECCOMP_RET_ALLOW	0x7fff0000U
-+#define SECCOMP_RET_DATA	0x0000ffffU
-+
-+const volatile int seccomp_syscall_nr = 0;
-+const volatile __u32 seccomp_errno = 0;
-+
-+SEC("seccomp")
-+int seccomp_prog(struct seccomp_data *ctx)
-+{
-+	if (ctx->nr != seccomp_syscall_nr)
-+		return SECCOMP_RET_ALLOW;
-+
-+	return SECCOMP_RET_ERRNO | (seccomp_errno & SECCOMP_RET_DATA);
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.34.1
-
+But the concern about invalid ranges is valid, so I don't know,
+perhaps we should just do a quick check after adjustment to validate
+that umin<=3Dumax and so on? E.g., we can do that outside of
+reg_set_min_max(), to keep reg_set_min_max() non-failing. WDYT?
