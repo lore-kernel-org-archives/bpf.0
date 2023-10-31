@@ -1,48 +1,48 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CE5F107A1
-	for <bpf@vger.kernel.org>; Tue, 31 Oct 2023 06:18:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6032F107B4
+	for <bpf@vger.kernel.org>; Tue, 31 Oct 2023 06:18:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DVT9yzmz"
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E451A4
-	for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 23:07:25 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1e9bb3a0bfeso3521251fac.3
-        for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 23:07:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cLkPKecR"
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B6EEE
+	for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 23:09:30 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id af79cd13be357-778925998cbso373240485a.0
+        for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 23:09:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698732444; x=1699337244; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1698732570; x=1699337370; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IUv+lLz98TsYmkmvnDaCDlL7ttL7iI1bx/gxb+W2XWQ=;
-        b=DVT9yzmzJXZ+ATmaZYyeifXGxaHa6OX13bfoasQbyyOexNke2o+MZhIYmeXUWiEbcD
-         4UW8lKTOvy9OZq8yZfc5+De3UpCm7hTUQZfMLzE3Dg5FU6usRQznkyDvKGqOIoLc310Y
-         f0jyAZLJ7cOi+ZI09E5FJcXUyDtPSp0RTHiqJ3cXD/9CzWDDIM0RaVnSA1P5kSLgALLf
-         Cs5rGL4yTMRLgqrYfi5m4tAaDh2HbaNlbcNUXAlEf5ItDrDiL2GTyW6xalDu6nfNF8Kc
-         8IkukRZZP5xT9YlFLOIBgODsFfOPiKRBttx48+R0f0SRBc32kd/Ev/XpECh2+Nf8CQnU
-         DF8g==
+        bh=MoFSLdNv9BgdZXMvRsLNv+khDd0bU37YBKNQN5ndCUM=;
+        b=cLkPKecR4objqz1QIrgHbCCi9WKoLl0QCd1pKvso5TB8fDDyd5n/9yXweCaPpKH9cp
+         qb3owUQB5XLMIzsrF3C+Xk2sg73uCi8R+fg3lEzx1cAk9Z5mIQ0ts/iU4VvwEckStaoZ
+         GliZan1j8sJgJFv4xw1QuZFXNIDWe9W97hzduRWtF8qEKVnlNG3vfp9+ZDjUFqMVQTeA
+         CIuaZIMyewb5anPPlv4dOaukWN3U10kvj9Rvopodpm28NHanhQVGXsX/d4jJXtvbi86t
+         VQorewtYogfibZdlV93UX9QBZNyrYmmXBUAaMyRqfnfcKkCLaX+ed3yOLEUGIa2TsVJ5
+         L/jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698732444; x=1699337244;
+        d=1e100.net; s=20230601; t=1698732570; x=1699337370;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IUv+lLz98TsYmkmvnDaCDlL7ttL7iI1bx/gxb+W2XWQ=;
-        b=QEGI5iFwyHMXETDw3HEYqwv/ZlVEqePxPo1w6J3+m1KU9JhnOVDoZDY/V+d0oAfYlq
-         3F8ZTr+Z07TtxSaRddwTDUXze/TzcZqugs5pNHSBKjrwWx0Ude0ucfsZd/+8CZyyotmB
-         g0UVovQyJHViRC5tNBHq52wH2Nkxq9NWMEDvl7Hftfgn8f+GgObDHLP4d9hXig3/ag3z
-         7A2nyj2IUkW3QzNK1uvDO1o61YOfGgPDE3vb9hjUT84UGrSpwQ7ro0Toi3EZiMlHf248
-         AM8S5d0n+RKw9k0KkhPcddIupIOkKzhOy3QcVLCYR0rGkXwXoXX8WKN+v0rRcfoR4h5e
-         FDZw==
-X-Gm-Message-State: AOJu0YyfJo1kqz9JqyZx9Opj77T+sotvRULB46bz6+ysGzWorwGwNiNH
-	QsndahxhGEHqPVa0nbKjWgwizLKHajgLlQ==
-X-Google-Smtp-Source: AGHT+IGPe/7smLbT0AEowfaAnjO5L40awyT4WdaQx98d+FyeWkSQ2d4GeQCUZvE4ZFkGvig/Oh/xIg==
-X-Received: by 2002:a17:902:ecce:b0:1cc:59a1:79c6 with SMTP id a14-20020a170902ecce00b001cc59a179c6mr3579643plh.18.1698732045904;
-        Mon, 30 Oct 2023 23:00:45 -0700 (PDT)
+        bh=MoFSLdNv9BgdZXMvRsLNv+khDd0bU37YBKNQN5ndCUM=;
+        b=O1dGFr1mUhINdqG5wMVrAVxpLalNY35D8gD2ZMcLbHXQJgcQ/Kg6Q2zcYObqOZZvTz
+         opYjbpln5rDYnL4BBOxi6jZimKa+RcSko0mhTaj9CuoY0OPz59YDt61ztBaHRWQlqE7C
+         zd6z6a6Z7Vtw9hItM8ODtpC8+ScRe8l6Rjm0wiFuOTjenNqZwnd7yPGfMLYCsUEpM2hu
+         c6zf4kwHz9c61bgHlgj5vbD4Trxu5nzeA/q48B83fktnVoEjYM0+LwUjasslLUfH+OXc
+         PzjXrbFWiv08Z6wJ93nHeqVmhVGiBMVlvYsBBDHuhxaXmYP9VFp7IxINkPGmcBxZj+rB
+         Ys5w==
+X-Gm-Message-State: AOJu0YzhqqfeuXnBJXgt60RxUreVJtWXu5Ak8mbKdFccynnj7diXB2AJ
+	I9aTrSQ+6Po60MoOEJEb6hGjvzfK5kZ7/A==
+X-Google-Smtp-Source: AGHT+IFgahv4dofu1sz24kDo1ybg8cdXKxmHnl6Ij28tDiq9Ni78XN2pgtV51tBIwMF+yEg4VU5G1w==
+X-Received: by 2002:a17:902:e803:b0:1cc:482c:bc4d with SMTP id u3-20020a170902e80300b001cc482cbc4dmr4371642plg.5.1698732026837;
+        Mon, 30 Oct 2023 23:00:26 -0700 (PDT)
 Received: from ubuntu.. ([203.205.141.13])
-        by smtp.googlemail.com with ESMTPSA id x5-20020a170902b40500b001cc50f67fbasm460683plr.281.2023.10.30.23.00.44
+        by smtp.googlemail.com with ESMTPSA id x5-20020a170902b40500b001cc50f67fbasm460683plr.281.2023.10.30.23.00.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Oct 2023 23:00:45 -0700 (PDT)
+        Mon, 30 Oct 2023 23:00:26 -0700 (PDT)
 From: Hengqi Chen <hengqi.chen@gmail.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -52,9 +52,9 @@ Cc: ast@kernel.org,
 	luto@amacapital.net,
 	wad@chromium.org,
 	hengqi.chen@gmail.com
-Subject: [PATCH bpf-next 5/6] selftests/bpf: Add seccomp verifier tests
-Date: Tue, 31 Oct 2023 01:24:06 +0000
-Message-Id: <20231031012407.51371-6-hengqi.chen@gmail.com>
+Subject: [PATCH bpf-next 2/6] bpf: Add test_run support for seccomp program type
+Date: Tue, 31 Oct 2023 01:24:03 +0000
+Message-Id: <20231031012407.51371-3-hengqi.chen@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231031012407.51371-1-hengqi.chen@gmail.com>
 References: <20231031012407.51371-1-hengqi.chen@gmail.com>
@@ -66,209 +66,89 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This tests seccomp context access and helper call
-restriction.
-
-  # ./test_progs -t verifier_seccomp
-  #375/1   verifier_seccomp/seccomp no helper call:OK
-  #375/2   verifier_seccomp/seccomp invalid ctx access, write:OK
-  #375/3   verifier_seccomp/seccomp invalid ctx access, out of range:OK
-  #375/4   verifier_seccomp/seccomp invalid ctx access, size too short:OK
-  #375/5   verifier_seccomp/seccomp invalid ctx access, size too short:OK
-  #375/6   verifier_seccomp/seccomp invalid ctx access, size too short:OK
-  #375/7   verifier_seccomp/seccomp invalid ctx access, size too short:OK
-  #375/8   verifier_seccomp/seccomp invalid ctx access, size too large:OK
-  #375/9   verifier_seccomp/seccomp ctx access, valid:OK
-  #375     verifier_seccomp:OK
-  Summary: 1/9 PASSED, 0 SKIPPED, 0 FAILED
+Implement test_run for seccomp program type. Default
+is to use an empty struct seccomp_data as bpf_context,
+but can be overridden by userspace. This will be used
+in selftests.
 
 Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
 ---
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../selftests/bpf/progs/verifier_seccomp.c    | 154 ++++++++++++++++++
- 2 files changed, 156 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_seccomp.c
+ include/linux/bpf.h |  3 +++
+ kernel/seccomp.c    |  1 +
+ net/bpf/test_run.c  | 27 +++++++++++++++++++++++++++
+ 3 files changed, 31 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index e3e68c97b40c..dfb40a11939e 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -57,6 +57,7 @@
- #include "verifier_scalar_ids.skel.h"
- #include "verifier_sdiv.skel.h"
- #include "verifier_search_pruning.skel.h"
-+#include "verifier_seccomp.skel.h"
- #include "verifier_sock.skel.h"
- #include "verifier_spill_fill.skel.h"
- #include "verifier_spin_lock.skel.h"
-@@ -164,6 +165,7 @@ void test_verifier_runtime_jit(void)          { RUN(verifier_runtime_jit); }
- void test_verifier_scalar_ids(void)           { RUN(verifier_scalar_ids); }
- void test_verifier_sdiv(void)                 { RUN(verifier_sdiv); }
- void test_verifier_search_pruning(void)       { RUN(verifier_search_pruning); }
-+void test_verifier_seccomp(void)              { RUN(verifier_seccomp); }
- void test_verifier_sock(void)                 { RUN(verifier_sock); }
- void test_verifier_spill_fill(void)           { RUN(verifier_spill_fill); }
- void test_verifier_spin_lock(void)            { RUN(verifier_spin_lock); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_seccomp.c b/tools/testing/selftests/bpf/progs/verifier_seccomp.c
-new file mode 100644
-index 000000000000..d3984a0cdae0
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_seccomp.c
-@@ -0,0 +1,154 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Hengqi Chen */
-+
-+#include "vmlinux.h"
-+#include "bpf_misc.h"
-+
-+#include <bpf/bpf_endian.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_helpers.h>
-+
-+SEC("seccomp")
-+__description("seccomp no helper call")
-+__failure __msg("unknown func bpf_get_prandom_u32")
-+__naked void seccomp_no_helper_call(void)
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index b4825d3cdb29..e25338e67ec4 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2376,6 +2376,9 @@ int bpf_prog_test_run_sk_lookup(struct bpf_prog *prog,
+ int bpf_prog_test_run_nf(struct bpf_prog *prog,
+ 			 const union bpf_attr *kattr,
+ 			 union bpf_attr __user *uattr);
++int bpf_prog_test_run_seccomp(struct bpf_prog *prog,
++			      const union bpf_attr *kattr,
++			      union bpf_attr __user *uattr);
+ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+ 		    const struct bpf_prog *prog,
+ 		    struct bpf_insn_access_aux *info);
+diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+index 5a6ed8630566..1fa2312654a5 100644
+--- a/kernel/seccomp.c
++++ b/kernel/seccomp.c
+@@ -2517,6 +2517,7 @@ int proc_pid_seccomp_cache(struct seq_file *m, struct pid_namespace *ns,
+ 
+ #if defined(CONFIG_SECCOMP_FILTER) && defined(CONFIG_BPF_SYSCALL)
+ const struct bpf_prog_ops seccomp_prog_ops = {
++	.test_run = bpf_prog_test_run_seccomp,
+ };
+ 
+ static bool seccomp_is_valid_access(int off, int size, enum bpf_access_type type,
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 0841f8d82419..db159b9c56ca 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -20,6 +20,7 @@
+ #include <linux/smp.h>
+ #include <linux/sock_diag.h>
+ #include <linux/netfilter.h>
++#include <linux/seccomp.h>
+ #include <net/netdev_rx_queue.h>
+ #include <net/xdp.h>
+ #include <net/netfilter/nf_bpf_link.h>
+@@ -1665,6 +1666,32 @@ int bpf_prog_test_run_nf(struct bpf_prog *prog,
+ 	return ret;
+ }
+ 
++int bpf_prog_test_run_seccomp(struct bpf_prog *prog,
++			      const union bpf_attr *kattr,
++			      union bpf_attr __user *uattr)
 +{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 = 0;						\
-+	exit;"						\
-+	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
++	void __user *ctx_in = u64_to_user_ptr(kattr->test.ctx_in);
++	__u32 ctx_size_in = kattr->test.ctx_size_in;
++	struct seccomp_data ctx = {};
++	__u32 retval;
++
++	if (kattr->test.flags || kattr->test.cpu || kattr->test.batch_size)
++		return -EINVAL;
++
++	if (ctx_size_in && ctx_size_in < sizeof(ctx))
++		return -EINVAL;
++
++	if (ctx_size_in && copy_from_user(&ctx, ctx_in, sizeof(ctx)))
++		return -EFAULT;
++
++	retval = bpf_prog_run_pin_on_cpu(prog, &ctx);
++
++	if (copy_to_user(&uattr->test.retval, &retval, sizeof(retval)))
++		return -EFAULT;
++
++	return 0;
 +}
 +
-+SEC("seccomp")
-+__description("seccomp invalid ctx access, write")
-+__failure __msg("invalid bpf_context access")
-+__naked void seccomp_ctx_write(void)
-+{
-+	asm volatile ("					\
-+	r2 = r1;					\
-+	*(u64*)(r2 + 8) = r1;				\
-+	r0 = 0;						\
-+	exit;"						\
-+	:
-+	:
-+	: __clobber_all);
-+}
-+
-+SEC("seccomp")
-+__description("seccomp invalid ctx access, out of range")
-+__failure __msg("invalid bpf_context access")
-+__naked void seccomp_ctx_read_out_of_range(void)
-+{
-+	asm volatile ("					\
-+	r2 = *(u64*)(r1 + %[__bpf_seccomp_ctx_size]);	\
-+	r0 = 0;						\
-+	exit;"						\
-+	:
-+	: __imm_const(__bpf_seccomp_ctx_size, sizeof(struct seccomp_data))
-+	: __clobber_all);
-+}
-+
-+SEC("seccomp")
-+__description("seccomp invalid ctx access, size too short")
-+__failure __msg("invalid bpf_context access")
-+__naked void seccomp_ctx_read_too_short1(void)
-+{
-+	asm volatile ("					\
-+	r2 = *(u8*)(r1 + %[__bpf_seccomp_ctx_nr]);	\
-+	r0 = 0;						\
-+	exit;"						\
-+	:
-+	: __imm_const(__bpf_seccomp_ctx_nr, offsetof(struct seccomp_data, nr))
-+	: __clobber_all);
-+}
-+
-+SEC("seccomp")
-+__description("seccomp invalid ctx access, size too short")
-+__failure __msg("invalid bpf_context access")
-+__naked void seccomp_ctx_read_too_short2(void)
-+{
-+	asm volatile ("					\
-+	r2 = *(u16*)(r1 + %[__bpf_seccomp_ctx_arch]);	\
-+	r0 = 0;						\
-+	exit;"						\
-+	:
-+	: __imm_const(__bpf_seccomp_ctx_arch, offsetof(struct seccomp_data, arch))
-+	: __clobber_all);
-+}
-+
-+SEC("seccomp")
-+__description("seccomp invalid ctx access, size too short")
-+__failure __msg("invalid bpf_context access")
-+__naked void seccomp_ctx_read_too_short3(void)
-+{
-+	asm volatile ("					\
-+	r2 = *(u32*)(r1 + %[__bpf_seccomp_ctx_ip]);	\
-+	r0 = 0;						\
-+	exit;"						\
-+	:
-+	: __imm_const(__bpf_seccomp_ctx_ip, offsetof(struct seccomp_data, instruction_pointer))
-+	: __clobber_all);
-+}
-+
-+SEC("seccomp")
-+__description("seccomp invalid ctx access, size too short")
-+__failure __msg("invalid bpf_context access")
-+__naked void seccomp_ctx_read_too_short4(void)
-+{
-+	asm volatile ("					\
-+	r2 = *(u32*)(r1 + %[__bpf_seccomp_ctx_arg1]);	\
-+	r0 = 0;						\
-+	exit;"						\
-+	:
-+	: __imm_const(__bpf_seccomp_ctx_arg1, offsetof(struct seccomp_data, args[1]))
-+	: __clobber_all);
-+}
-+
-+SEC("seccomp")
-+__description("seccomp invalid ctx access, size too large")
-+__failure __msg("invalid bpf_context access")
-+__naked void seccomp_ctx_read_too_large(void)
-+{
-+	asm volatile ("					\
-+	r2 = *(u64*)(r1 + %[__bpf_seccomp_ctx_nr]);	\
-+	r0 = 0;						\
-+	exit;"						\
-+	:
-+	: __imm_const(__bpf_seccomp_ctx_nr, offsetof(struct seccomp_data, nr))
-+	: __clobber_all);
-+}
-+
-+SEC("seccomp")
-+__description("seccomp ctx access, valid")
-+__success __retval(0x5ecc0779)
-+__naked void seccomp_ctx_read_ok(void)
-+{
-+	asm volatile ("					\
-+	r2 = *(u32*)(r1 + %[__bpf_seccomp_ctx_nr]);	\
-+	r2 = *(u32*)(r1 + %[__bpf_seccomp_ctx_arch]);	\
-+	r2 = *(u64*)(r1 + %[__bpf_seccomp_ctx_ip]);	\
-+	r2 = *(u64*)(r1 + %[__bpf_seccomp_ctx_arg0]);	\
-+	r2 = *(u64*)(r1 + %[__bpf_seccomp_ctx_arg1]);	\
-+	r2 = *(u64*)(r1 + %[__bpf_seccomp_ctx_arg2]);	\
-+	r2 = *(u64*)(r1 + %[__bpf_seccomp_ctx_arg3]);	\
-+	r2 = *(u64*)(r1 + %[__bpf_seccomp_ctx_arg4]);	\
-+	r2 = *(u64*)(r1 + %[__bpf_seccomp_ctx_arg5]);	\
-+	r0 = 0x5ecc0779;				\
-+	exit;"						\
-+	:
-+	: __imm_const(__bpf_seccomp_ctx_nr, offsetof(struct seccomp_data, nr)),
-+	  __imm_const(__bpf_seccomp_ctx_arch, offsetof(struct seccomp_data, arch)),
-+	  __imm_const(__bpf_seccomp_ctx_ip, offsetof(struct seccomp_data, instruction_pointer)),
-+	  __imm_const(__bpf_seccomp_ctx_arg0, offsetof(struct seccomp_data, args[0])),
-+	  __imm_const(__bpf_seccomp_ctx_arg1, offsetof(struct seccomp_data, args[1])),
-+	  __imm_const(__bpf_seccomp_ctx_arg2, offsetof(struct seccomp_data, args[2])),
-+	  __imm_const(__bpf_seccomp_ctx_arg3, offsetof(struct seccomp_data, args[3])),
-+	  __imm_const(__bpf_seccomp_ctx_arg4, offsetof(struct seccomp_data, args[4])),
-+	  __imm_const(__bpf_seccomp_ctx_arg5, offsetof(struct seccomp_data, args[5]))
-+	: __clobber_all);
-+}
-+
-+char _license[] SEC("license") = "GPL";
+ static const struct btf_kfunc_id_set bpf_prog_test_kfunc_set = {
+ 	.owner = THIS_MODULE,
+ 	.set   = &test_sk_check_kfunc_ids,
 -- 
 2.34.1
 
