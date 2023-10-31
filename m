@@ -1,215 +1,165 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7312D101ED
-	for <bpf@vger.kernel.org>; Tue, 31 Oct 2023 06:18:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D0B101FE
+	for <bpf@vger.kernel.org>; Tue, 31 Oct 2023 06:18:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gOJzbdVm"
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CBAFE6
-	for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 23:09:27 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-d9a58f5f33dso4605415276.1
-        for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 23:09:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mi9Av1Yz"
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6874C121
+	for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 23:12:16 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9d10f94f70bso470648166b.3
+        for <bpf@vger.kernel.org>; Mon, 30 Oct 2023 23:12:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698732566; x=1699337366; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1698732735; x=1699337535; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LuU+s8K5qY6DLjk1vpQNd0S4x+HIhdAsE9ULK1mQDi4=;
-        b=gOJzbdVm9vT1X3GUFA1tBcmAxGpz1E+5iS+/wBq6GZhwisRXXUzyZNdHZcQN6a/lhN
-         i8xCs9qXtOYRdVvf3LCESAOtW0dlryvAT3cD5oQPd1H38wNYYkqdp9G5Irp4OcTQtB3h
-         RkC5gcE4lhYkWIcZ6lkquRJocn+/lBxB9eidzpLYL99pEL9IcpT3tyUv7KnojTyAb44q
-         +UOb116u4A63iIuJ7ixK5TW+c/KAD7Pd2WhUgs4vzoB2o6HpTwfSMmOiMoSULkGFZmrB
-         BR9+DvEDjsJUoKYSwZXkLsN8OroyiPnOU038mHGTxbBXj+CGhfev3FovqaXzML8mQqzv
-         8GfQ==
+        bh=L+HfIaOTVru0DOA+OmJipm5bKDf8mLydMhPWsMfHbcA=;
+        b=mi9Av1YzBLLxU9vYDNRTuKhhAspVAdTgNJKYswn02D2EvCQTQqsh/yB02yuLpZJDlt
+         eeOPETYQw7xzfAndoIKGk5Xj6OK/hVYiny3Zd2TuoNG5vjlahOD3t2rTrNvcuUVIXB97
+         JkOBJHLSR88z1NdZiYJZVMccZSp/b7vLtgOuHVplUBg3GAz+Dm2aiCr72jOCvFvcxiVl
+         5WG8O3Uieid9Tz19CYzmYk+nO72WjXckl/pZ91tMWgXWRHb4KQTQw4O6LMj6E2hvmEQA
+         i/se2qYp+1JM4ZhqUfmHtETcvzbstnaDbLtI3Gg3+dZDf0uT1THcIWCiLX8Lmkqg5r9t
+         /HKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698732566; x=1699337366;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1698732735; x=1699337535;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LuU+s8K5qY6DLjk1vpQNd0S4x+HIhdAsE9ULK1mQDi4=;
-        b=LptzuLk4fMzKzdDrZ9Ba8mrRthCSVffQJIA6ICD2ImwnbZkNhBXUPnVnr7TdnPqRMG
-         oxqwrLDwtLjbOgLmbjjSklXd7zTZWRVvLfuhYERd7SPKgAGxT/EeCmy2R/YS2UGaNbNQ
-         mPPWIqz3bGQNZMRj5Ae9WSPr4DLKyRBpFW8gWxXXqoxsKOH0O/QLV7TYzDUWq5dFykRu
-         XKEWdawskpWNAj2sUgUEG1w5Gv3R1WICpJre4iQSN5hcm9aMsYco5Hl4suFQOg4GGrSD
-         fTz3AmPGxl5dS5ndroThRBE210xBn7hYCl01EaTIe98Q3sDDVXGuojsUwhhUewYsPy4F
-         iXQg==
-X-Gm-Message-State: AOJu0YyoDTi6rfgpH2mYg7iS2b6smKTRvBBi7YFshSX77SiyGKBMParh
-	qeFBMt5cdewR6f9X34Mx2ut9roA5U1Tu8A==
-X-Google-Smtp-Source: AGHT+IEu0SYEjJPy4HQULg/Z3NrURM7HhNBssMvdHj+lUKT+E9eSjvrIEyoi+5r+nupY4KYfBU/cWA==
-X-Received: by 2002:a17:902:c951:b0:1cc:5cbf:50d2 with SMTP id i17-20020a170902c95100b001cc5cbf50d2mr3181913pla.59.1698732018241;
-        Mon, 30 Oct 2023 23:00:18 -0700 (PDT)
-Received: from ubuntu.. ([203.205.141.13])
-        by smtp.googlemail.com with ESMTPSA id x5-20020a170902b40500b001cc50f67fbasm460683plr.281.2023.10.30.23.00.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Oct 2023 23:00:17 -0700 (PDT)
-From: Hengqi Chen <hengqi.chen@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	keescook@chromium.org,
-	luto@amacapital.net,
-	wad@chromium.org,
-	hengqi.chen@gmail.com
-Subject: [PATCH bpf-next 1/6] bpf: Introduce BPF_PROG_TYPE_SECCOMP
-Date: Tue, 31 Oct 2023 01:24:02 +0000
-Message-Id: <20231031012407.51371-2-hengqi.chen@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231031012407.51371-1-hengqi.chen@gmail.com>
-References: <20231031012407.51371-1-hengqi.chen@gmail.com>
+        bh=L+HfIaOTVru0DOA+OmJipm5bKDf8mLydMhPWsMfHbcA=;
+        b=j7uUJ+TgAcaxe+AvEnTyODZypctw04nyV8RIA8S5Bo+degmdPWozQpOiR2ry4cJ1LW
+         w8RAcOMzxb1Ngg5cihiUITEdJiCa9K71E1mpyy1lvMKJDH/nE0JHWbAuMRoRptea7hUU
+         6MDn+GMnXBoMsBeENGeFd5iGxbz7gWFAXyFC22GNULu2EfnsiJnH7d6WylqzzNst360z
+         4y2502GQJHQhaZSWGT5/uhXH++O4XzIy+PSLy3NzMOcAaWLVOC19iQCkmyZtob+ZA8Jh
+         EyVtlt6rasH4wVHRRqFY4lY0wvOGHuGBgLhc8/u5cXGx1lPgOS0XyHGA6KJPyi6zPESo
+         W3Ew==
+X-Gm-Message-State: AOJu0Yx851XLxJc1DlAp7Z3rf8XiFUBSOGTgfYX8RLPvWxru9ISHphLc
+	qHEc0dyGPD2xsT2j/vQOnDENuixD2/VjBJpjyTs=
+X-Google-Smtp-Source: AGHT+IFLS1ugvYclc1FO5O6oJIhvccuEsVpTaXIcOxj/+rE5iCll1HQqtuCI5V98dyh7qXCtRAOhg2DHzC1KbxBEYiU=
+X-Received: by 2002:a17:907:7f26:b0:9be:fc31:8cd3 with SMTP id
+ qf38-20020a1709077f2600b009befc318cd3mr9120006ejc.17.1698732734778; Mon, 30
+ Oct 2023 23:12:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20231027181346.4019398-1-andrii@kernel.org> <20231027181346.4019398-20-andrii@kernel.org>
+ <20231031021200.lryk4xjudptseasm@MacBook-Pro-49.local>
+In-Reply-To: <20231031021200.lryk4xjudptseasm@MacBook-Pro-49.local>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 30 Oct 2023 23:12:03 -0700
+Message-ID: <CAEf4BzZ0oPHe8p96OjY=o7R+=cMn9utk9K5YgYQp8Ai=T6fPCQ@mail.gmail.com>
+Subject: Re: [PATCH v5 bpf-next 19/23] bpf: generalize is_scalar_branch_taken()
+ logic
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, martin.lau@kernel.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This adds minimal support for seccomp eBPF programs
-which can be hooked into the existing seccomp framework.
-This allows users to write seccomp filter in eBPF language
-and enables seccomp filter reuse through bpf prog fd and
-bpffs. Currently, no helper calls are allowed just like
-its cBPF version.
+On Mon, Oct 30, 2023 at 7:12=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Fri, Oct 27, 2023 at 11:13:42AM -0700, Andrii Nakryiko wrote:
+> > Generalize is_branch_taken logic for SCALAR_VALUE register to handle
+> > cases when both registers are not constants. Previously supported
+> > <range> vs <scalar> cases are a natural subset of more generic <range>
+> > vs <range> set of cases.
+> >
+> > Generalized logic relies on straightforward segment intersection checks=
+.
+> >
+> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> > ---
+> >  kernel/bpf/verifier.c | 104 ++++++++++++++++++++++++++----------------
+> >  1 file changed, 64 insertions(+), 40 deletions(-)
+> >
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 4c974296127b..f18a8247e5e2 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -14189,82 +14189,105 @@ static int is_scalar_branch_taken(struct bpf=
+_reg_state *reg1, struct bpf_reg_sta
+> >                                 u8 opcode, bool is_jmp32)
+> >  {
+> >       struct tnum t1 =3D is_jmp32 ? tnum_subreg(reg1->var_off) : reg1->=
+var_off;
+> > +     struct tnum t2 =3D is_jmp32 ? tnum_subreg(reg2->var_off) : reg2->=
+var_off;
+> >       u64 umin1 =3D is_jmp32 ? (u64)reg1->u32_min_value : reg1->umin_va=
+lue;
+> >       u64 umax1 =3D is_jmp32 ? (u64)reg1->u32_max_value : reg1->umax_va=
+lue;
+> >       s64 smin1 =3D is_jmp32 ? (s64)reg1->s32_min_value : reg1->smin_va=
+lue;
+> >       s64 smax1 =3D is_jmp32 ? (s64)reg1->s32_max_value : reg1->smax_va=
+lue;
+> > -     u64 val =3D is_jmp32 ? (u32)tnum_subreg(reg2->var_off).value : re=
+g2->var_off.value;
+> > -     s64 sval =3D is_jmp32 ? (s32)val : (s64)val;
+> > +     u64 umin2 =3D is_jmp32 ? (u64)reg2->u32_min_value : reg2->umin_va=
+lue;
+> > +     u64 umax2 =3D is_jmp32 ? (u64)reg2->u32_max_value : reg2->umax_va=
+lue;
+> > +     s64 smin2 =3D is_jmp32 ? (s64)reg2->s32_min_value : reg2->smin_va=
+lue;
+> > +     s64 smax2 =3D is_jmp32 ? (s64)reg2->s32_max_value : reg2->smax_va=
+lue;
+> >
+> >       switch (opcode) {
+> >       case BPF_JEQ:
+> > -             if (tnum_is_const(t1))
+> > -                     return !!tnum_equals_const(t1, val);
+> > -             else if (val < umin1 || val > umax1)
+> > +             /* const tnums */
+> > +             if (tnum_is_const(t1) && tnum_is_const(t2))
+> > +                     return t1.value =3D=3D t2.value;
+> > +             /* const ranges */
+> > +             if (umin1 =3D=3D umax1 && umin2 =3D=3D umax2)
+> > +                     return umin1 =3D=3D umin2;
+>
+> I don't follow this logic.
+> umin1 =3D=3D umax1 means that it's a single constant and
+> it should have been handled by earlier tnum_is_const check.
 
-Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
----
- include/linux/bpf_types.h     |  4 +++
- include/uapi/linux/bpf.h      |  1 +
- kernel/seccomp.c              | 54 +++++++++++++++++++++++++++++++++++
- tools/lib/bpf/libbpf.c        |  2 ++
- tools/lib/bpf/libbpf_probes.c |  1 +
- 5 files changed, 62 insertions(+)
+I think you follow the logic, you just think it's redundant. Yes, it's
+basically the same as
 
-diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
-index fc0d6f32c687..7c0a9fc0b150 100644
---- a/include/linux/bpf_types.h
-+++ b/include/linux/bpf_types.h
-@@ -83,6 +83,10 @@ BPF_PROG_TYPE(BPF_PROG_TYPE_SYSCALL, bpf_syscall,
- BPF_PROG_TYPE(BPF_PROG_TYPE_NETFILTER, netfilter,
- 	      struct bpf_nf_ctx, struct bpf_nf_ctx)
- #endif
-+#ifdef CONFIG_SECCOMP_FILTER
-+BPF_PROG_TYPE(BPF_PROG_TYPE_SECCOMP, seccomp,
-+	      struct seccomp_data, struct seccomp_data)
-+#endif
- 
- BPF_MAP_TYPE(BPF_MAP_TYPE_ARRAY, array_map_ops)
- BPF_MAP_TYPE(BPF_MAP_TYPE_PERCPU_ARRAY, percpu_array_map_ops)
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 0f6cdf52b1da..f0fcfe0ccb2e 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -995,6 +995,7 @@ enum bpf_prog_type {
- 	BPF_PROG_TYPE_SK_LOOKUP,
- 	BPF_PROG_TYPE_SYSCALL, /* a program that can execute syscalls */
- 	BPF_PROG_TYPE_NETFILTER,
-+	BPF_PROG_TYPE_SECCOMP,
- };
- 
- enum bpf_attach_type {
-diff --git a/kernel/seccomp.c b/kernel/seccomp.c
-index 255999ba9190..5a6ed8630566 100644
---- a/kernel/seccomp.c
-+++ b/kernel/seccomp.c
-@@ -15,6 +15,7 @@
-  */
- #define pr_fmt(fmt) "seccomp: " fmt
- 
-+#include <linux/bpf.h>
- #include <linux/refcount.h>
- #include <linux/audit.h>
- #include <linux/compat.h>
-@@ -2513,3 +2514,56 @@ int proc_pid_seccomp_cache(struct seq_file *m, struct pid_namespace *ns,
- 	return 0;
- }
- #endif /* CONFIG_SECCOMP_CACHE_DEBUG */
-+
-+#if defined(CONFIG_SECCOMP_FILTER) && defined(CONFIG_BPF_SYSCALL)
-+const struct bpf_prog_ops seccomp_prog_ops = {
-+};
-+
-+static bool seccomp_is_valid_access(int off, int size, enum bpf_access_type type,
-+				    const struct bpf_prog *prog,
-+				    struct bpf_insn_access_aux *info)
-+{
-+	if (off < 0 || off >= sizeof(struct seccomp_data))
-+		return false;
-+
-+	if (off % size != 0)
-+		return false;
-+
-+	if (type == BPF_WRITE)
-+		return false;
-+
-+	switch (off) {
-+	case bpf_ctx_range(struct seccomp_data, nr):
-+		if (size != sizeof_field(struct seccomp_data, nr))
-+			return false;
-+		return true;
-+	case bpf_ctx_range(struct seccomp_data, arch):
-+		if (size != sizeof_field(struct seccomp_data, arch))
-+			return false;
-+		return true;
-+	case bpf_ctx_range(struct seccomp_data, instruction_pointer):
-+		if (size != sizeof_field(struct seccomp_data, instruction_pointer))
-+			return false;
-+		return true;
-+	case bpf_ctx_range(struct seccomp_data, args):
-+		if (size != sizeof(__u64))
-+			return false;
-+		return true;
-+	default:
-+		return false;
-+	}
-+
-+	return false;
-+}
-+
-+static const struct bpf_func_proto *
-+bpf_seccomp_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
-+{
-+	return NULL;
-+}
-+
-+const struct bpf_verifier_ops seccomp_verifier_ops = {
-+	.is_valid_access = seccomp_is_valid_access,
-+	.get_func_proto  = bpf_seccomp_func_proto,
-+};
-+#endif /* CONFIG_SECCOMP_FILTER && CONFIG_BPF_SYSCALL */
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index e067be95da3c..455d733f7315 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -217,6 +217,7 @@ static const char * const prog_type_name[] = {
- 	[BPF_PROG_TYPE_SK_LOOKUP]		= "sk_lookup",
- 	[BPF_PROG_TYPE_SYSCALL]			= "syscall",
- 	[BPF_PROG_TYPE_NETFILTER]		= "netfilter",
-+	[BPF_PROG_TYPE_SECCOMP]			= "seccomp",
- };
- 
- static int __base_pr(enum libbpf_print_level level, const char *format,
-@@ -8991,6 +8992,7 @@ static const struct bpf_sec_def section_defs[] = {
- 	SEC_DEF("struct_ops.s+",	STRUCT_OPS, 0, SEC_SLEEPABLE),
- 	SEC_DEF("sk_lookup",		SK_LOOKUP, BPF_SK_LOOKUP, SEC_ATTACHABLE),
- 	SEC_DEF("netfilter",		NETFILTER, BPF_NETFILTER, SEC_NONE),
-+	SEC_DEF("seccomp",		SECCOMP, 0, SEC_NONE),
- };
- 
- int libbpf_register_prog_handler(const char *sec,
-diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
-index 9c4db90b92b6..b3ef3c0747be 100644
---- a/tools/lib/bpf/libbpf_probes.c
-+++ b/tools/lib/bpf/libbpf_probes.c
-@@ -180,6 +180,7 @@ static int probe_prog_load(enum bpf_prog_type prog_type,
- 	case BPF_PROG_TYPE_SK_REUSEPORT:
- 	case BPF_PROG_TYPE_FLOW_DISSECTOR:
- 	case BPF_PROG_TYPE_CGROUP_SYSCTL:
-+	case BPF_PROG_TYPE_SECCOMP:
- 		break;
- 	case BPF_PROG_TYPE_NETFILTER:
- 		opts.expected_attach_type = BPF_NETFILTER;
--- 
-2.34.1
+          if (tnum_is_const(t1) && tnum_is_const(t2))
+                return t1.value =3D=3D t2.value;
 
+but based on ranges. I didn't feel comfortable to assume that if umin1
+=3D=3D umax1 then tnum_is_const(t1) will always be true. At worst we'll
+perform one redundant check.
+
+In short, I don't trust tnum to be as precise as umin/umax and other ranges=
+.
+
+>
+> > +             if (smin1 =3D=3D smax1 && smin2 =3D=3D smax2)
+> > +                     return umin1 =3D=3D umin2;
+>
+> here it's even more confusing. smin =3D=3D smax -> singel const,
+> but then compare umin1 with umin2 ?!
+
+Eagle eyes! Typo, sorry :( it should be `smin1 =3D=3D smin2`, of course.
+
+What saves us is reg_bounds_sync(), and if we have umin1 =3D=3D umax1 then
+we'll have also smin1 =3D=3D smax1 =3D=3D umin1 =3D=3D umax1 (and correspon=
+ding
+relation for second register). But I fixed these typos in both BPF_JEQ
+and BPF_JNE branches.
+
+
+>
+> > +             /* non-overlapping ranges */
+> > +             if (umin1 > umax2 || umax1 < umin2)
+> >                       return 0;
+> > -             else if (sval < smin1 || sval > smax1)
+> > +             if (smin1 > smax2 || smax1 < smin2)
+> >                       return 0;
+>
+> this part makes sense.
