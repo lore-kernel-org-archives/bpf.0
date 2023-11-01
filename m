@@ -1,48 +1,48 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF95C10799
-	for <bpf@vger.kernel.org>; Wed,  1 Nov 2023 20:45:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54FEF14A99
+	for <bpf@vger.kernel.org>; Wed,  1 Nov 2023 20:45:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hvQ+ftzB"
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C615510D
-	for <bpf@vger.kernel.org>; Wed,  1 Nov 2023 13:45:30 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-da077db5145so210042276.0
-        for <bpf@vger.kernel.org>; Wed, 01 Nov 2023 13:45:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kEziiP/K"
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4BD110
+	for <bpf@vger.kernel.org>; Wed,  1 Nov 2023 13:45:33 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-d9ac9573274so207569276.0
+        for <bpf@vger.kernel.org>; Wed, 01 Nov 2023 13:45:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698871529; x=1699476329; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1698871532; x=1699476332; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7tcX5oNAk7ZOPwWEiRwlLhoBkQ83mv+bPpii8i8xX6k=;
-        b=hvQ+ftzBo7kuD0jaLS4vQbF2VSAXtIHl2e4OWaJljhWKkuDd4JMIBZAWdwxx2CRI6l
-         45NgjbrxSpu2KHtoKYgEqRaoZc4epEa5DWjlnjV3nExWqMO/20ai2p9lMr/UQKpBlxs9
-         lg7CxpziLz8t+bSPAFuMxHfaLF4WN5BBRjdX9sPlv1KiAy7wGRvFBpSMWhnxRL4QKhNr
-         AK7zstiKTuSp91dNOxD8uEFQ6qm8k0sSByht5EeU2dULB78/stSrFbIYdRcIA0YC02pn
-         uuYj/mV8iJr6kNJmkKobhbFuFmgfi8Mz16FZ/3Ya8x281Qix7K4zzgThCkeou4dXGo+k
-         AFtg==
+        bh=AhZO17U8NjZpS95j8+E/j2LC6k05zoq1S5dO1aam3hc=;
+        b=kEziiP/K9KHEm1herHwPunSG367aPRfgo8OV+NV5XLLyyHcdQSGMtFuLvBjm28mHUd
+         MAq8BIQriNNutRe1SpK1aggWR49Hu4Mze5Pn6BIO0UhbO1xzFeP5BXK8k2orElHuayxa
+         QX2wMAYN+LVePE7T6iRAkEHM0rn5B1ru/iohCLHpThIWogZb8vgVeS3mqOaBuBmgB1da
+         zey7k0aFM/W3V5m6d9DWgGXjq6yMZGZ5AVWLP3G7lvBfgcgDNQrgPKStIfreDJw3qUqq
+         Y2ColR8dQBU0qY+X2G+IWYferynGuFQpFj/dUvDja7skKdbIBOyxNJ0F9lu7tjcTD0RU
+         U2+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698871529; x=1699476329;
+        d=1e100.net; s=20230601; t=1698871532; x=1699476332;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7tcX5oNAk7ZOPwWEiRwlLhoBkQ83mv+bPpii8i8xX6k=;
-        b=vsANTWrzr+w1cHJlVaj0HIdoknfK7qdiyudxOLkl6+UBc3FemaQA9E0YqpnXR+fZqi
-         aT0N+aabxffv+GlmpMjKiXkJUzZ5CpwK0MApDc4x+Lr5UMI/cfC3h/DBZ2We9tP1+4Dg
-         Xg2AL8MAkxGtwLvzJOBKO+TlThD6Wy0wAiff78GATQ/Ec1DCslFeVgPgCkD65AinCwFl
-         eS/Nec06sfrcbw+zon90qvEufI/NrMaVE+70qEig4m87FvvK7Zec4zkUpnFDJy4K4KOe
-         70fFScGjtZ05zXDkPFo8/wCOpRsGjBeWwM7ApiKOnBAcDmCoqCZ6eYY5pwRXHn/fPVfq
-         rahQ==
-X-Gm-Message-State: AOJu0YwcC6vKMSS5tsUrgAlIbCfPeY6+wGwiefEq61buwHSvm8kW444y
-	o4bERqhgWIlAICp1xPh+6ILiPZzj2iw=
-X-Google-Smtp-Source: AGHT+IETLAZ4yJa/zQQlFw7PTAIw1a8xtbNgnIav/jI2CVWBbvChyi5hG4aYgcjO14fU7zqxKVgvVg==
-X-Received: by 2002:a25:244:0:b0:da3:b555:6474 with SMTP id 65-20020a250244000000b00da3b5556474mr3013355ybc.49.1698871529133;
-        Wed, 01 Nov 2023 13:45:29 -0700 (PDT)
+        bh=AhZO17U8NjZpS95j8+E/j2LC6k05zoq1S5dO1aam3hc=;
+        b=YHCtks2swdOeC+I/F3iBKnMhE4oEi+oTh6jqzLtq2h/tU70pPemAgZIMcE7suQDY2S
+         osUI8PggBka+roZ6dRojuGPr7TWeuB92eomtp5/CesPG9HxCTmg8ojS/OPQNbAegn5B8
+         neVQZpxr3mbAzVoHRKkO/VKzPoIt5QlKKVp0RqJrsHggRcsOg3jJ4/HAwShI2qAJrWmS
+         6xF93yavrC5iTetkl6Rp2XEXxSeR0hIs+GotOkgofC+wgzGGHV5d8REXkelOlTn8+Xg9
+         RQNjHgUdZN4HqdqXGzvPhLIYGV0CLI7s8NGDjod+ecru7GuIz6NFG6Xd88S/9GyrAFCn
+         fMXw==
+X-Gm-Message-State: AOJu0YwwJ2Q+dN0xPditUozRs97lVsh2EEeA0CDBNry+U0yr6e4BvBT+
+	Aposb2svujFnFe0RH78NRUwaXVqj5S4=
+X-Google-Smtp-Source: AGHT+IHcTPjTT8v7INgWduE/n5pHw5sSesOCa3hXTYBez7IjZfQ1IY3ZHcohZkxC9Mt9fF0P8Fzs6g==
+X-Received: by 2002:a25:d0f:0:b0:d9a:b522:a4f5 with SMTP id 15-20020a250d0f000000b00d9ab522a4f5mr13534189ybn.40.1698871532205;
+        Wed, 01 Nov 2023 13:45:32 -0700 (PDT)
 Received: from kickker.attlocal.net ([2600:1700:6cf8:1240:eea0:6f66:c57d:6b7c])
-        by smtp.gmail.com with ESMTPSA id o83-20020a25d756000000b00da086d6921fsm342386ybg.50.2023.11.01.13.45.28
+        by smtp.gmail.com with ESMTPSA id o83-20020a25d756000000b00da086d6921fsm342386ybg.50.2023.11.01.13.45.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Nov 2023 13:45:28 -0700 (PDT)
+        Wed, 01 Nov 2023 13:45:31 -0700 (PDT)
 From: thinker.li@gmail.com
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -54,9 +54,9 @@ To: bpf@vger.kernel.org,
 Cc: sinquersw@gmail.com,
 	kuifeng@meta.com,
 	Kui-Feng Lee <thinker.li@gmail.com>
-Subject: [PATCH bpf-next v9 04/12] bpf: add struct_ops_tab to btf.
-Date: Wed,  1 Nov 2023 13:45:11 -0700
-Message-Id: <20231101204519.677870-5-thinker.li@gmail.com>
+Subject: [PATCH bpf-next v9 06/12] bpf: hold module for bpf_struct_ops_map.
+Date: Wed,  1 Nov 2023 13:45:13 -0700
+Message-Id: <20231101204519.677870-7-thinker.li@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231101204519.677870-1-thinker.li@gmail.com>
 References: <20231101204519.677870-1-thinker.li@gmail.com>
@@ -70,241 +70,213 @@ Content-Transfer-Encoding: 8bit
 
 From: Kui-Feng Lee <thinker.li@gmail.com>
 
-Maintain a registry of registered struct_ops types in the per-btf (module)
-struct_ops_tab. This registry allows for easy lookup of struct_ops types
-that are registered by a specific module.
-
-It is a preparation work for supporting kernel module struct_ops in a
-latter patch. Each struct_ops will be registered under its own kernel
-module btf and will be stored in the newly added btf->struct_ops_tab. The
-bpf verifier and bpf syscall (e.g. prog and map cmd) can find the
-struct_ops and its btf type/size/id... information from
-btf->struct_ops_tab.
+To ensure that a module remains accessible whenever a struct_ops object of
+a struct_ops type provided by the module is still in use.
 
 Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
 ---
- include/linux/btf.h         |  5 +++
- kernel/bpf/bpf_struct_ops.c | 24 +++++++-----
- kernel/bpf/btf.c            | 74 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 94 insertions(+), 9 deletions(-)
+ include/linux/bpf.h         |  1 +
+ kernel/bpf/bpf_struct_ops.c | 69 ++++++++++++++++++++++++++++++-------
+ 2 files changed, 58 insertions(+), 12 deletions(-)
 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index c2231c64d60b..e613b6b45dc4 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -572,4 +572,9 @@ static inline bool btf_type_is_struct_ptr(struct btf *btf, const struct btf_type
- 	return btf_type_is_struct(t);
- }
- 
-+struct bpf_struct_ops_desc;
-+
-+const struct bpf_struct_ops_desc *
-+btf_get_struct_ops(struct btf *btf, u32 *ret_cnt);
-+
- #endif
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index f0ed874d5ac3..c287f42b2e48 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1626,6 +1626,7 @@ struct bpf_struct_ops {
+ 	void (*unreg)(void *kdata);
+ 	int (*update)(void *kdata, void *old_kdata);
+ 	int (*validate)(void *kdata);
++	struct module *owner;
+ 	const char *name;
+ 	struct btf_func_model func_models[BPF_STRUCT_OPS_MAX_NR_MEMBERS];
+ };
 diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-index d804801c7864..a0291877a792 100644
+index 4ba6181ed1c4..be9bee970c9c 100644
 --- a/kernel/bpf/bpf_struct_ops.c
 +++ b/kernel/bpf/bpf_struct_ops.c
-@@ -46,6 +46,8 @@ struct bpf_struct_ops_map {
- 	 * "links[]".
- 	 */
- 	void *image;
-+	/* The owner moduler's btf. */
-+	struct btf *btf;
- 	/* uvalue->data stores the kernel struct
- 	 * (e.g. tcp_congestion_ops) that is more useful
- 	 * to userspace than the kvalue.  For example,
-@@ -314,7 +316,7 @@ static void bpf_struct_ops_map_put_progs(struct bpf_struct_ops_map *st_map)
- 	}
- }
- 
--static int check_zero_holes(const struct btf_type *t, void *data)
-+static int check_zero_holes(const struct btf *btf, const struct btf_type *t, void *data)
- {
+@@ -387,6 +387,7 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
  	const struct btf_member *member;
- 	u32 i, moff, msize, prev_mend = 0;
-@@ -326,8 +328,8 @@ static int check_zero_holes(const struct btf_type *t, void *data)
- 		    memchr_inv(data + prev_mend, 0, moff - prev_mend))
- 			return -EINVAL;
- 
--		mtype = btf_type_by_id(btf_vmlinux, member->type);
--		mtype = btf_resolve_size(btf_vmlinux, mtype, &msize);
-+		mtype = btf_type_by_id(btf, member->type);
-+		mtype = btf_resolve_size(btf, mtype, &msize);
- 		if (IS_ERR(mtype))
- 			return PTR_ERR(mtype);
- 		prev_mend = moff + msize;
-@@ -395,12 +397,12 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
- 	if (*(u32 *)key != 0)
- 		return -E2BIG;
- 
--	err = check_zero_holes(st_ops_desc->value_type, value);
-+	err = check_zero_holes(st_map->btf, st_ops_desc->value_type, value);
- 	if (err)
- 		return err;
- 
- 	uvalue = value;
--	err = check_zero_holes(t, uvalue->data);
-+	err = check_zero_holes(st_map->btf, t, uvalue->data);
- 	if (err)
- 		return err;
- 
-@@ -436,7 +438,7 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
- 		u32 moff;
- 
- 		moff = __btf_member_bit_offset(t, member) / 8;
--		ptype = btf_type_resolve_ptr(btf_vmlinux, member->type, NULL);
-+		ptype = btf_type_resolve_ptr(st_map->btf, member->type, NULL);
- 		if (ptype == module_type) {
- 			if (*(void **)(udata + moff))
- 				goto reset_unlock;
-@@ -461,8 +463,8 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
- 		if (!ptype || !btf_type_is_func_proto(ptype)) {
- 			u32 msize;
- 
--			mtype = btf_type_by_id(btf_vmlinux, member->type);
--			mtype = btf_resolve_size(btf_vmlinux, mtype, &msize);
-+			mtype = btf_type_by_id(st_map->btf, member->type);
-+			mtype = btf_resolve_size(st_map->btf, mtype, &msize);
- 			if (IS_ERR(mtype)) {
- 				err = PTR_ERR(mtype);
- 				goto reset_unlock;
-@@ -601,6 +603,7 @@ static long bpf_struct_ops_map_delete_elem(struct bpf_map *map, void *key)
- static void bpf_struct_ops_map_seq_show_elem(struct bpf_map *map, void *key,
- 					     struct seq_file *m)
- {
-+	struct bpf_struct_ops_map *st_map = (struct bpf_struct_ops_map *)map;
- 	void *value;
- 	int err;
- 
-@@ -610,7 +613,8 @@ static void bpf_struct_ops_map_seq_show_elem(struct bpf_map *map, void *key,
- 
- 	err = bpf_struct_ops_map_sys_lookup_elem(map, key, value);
- 	if (!err) {
--		btf_type_seq_show(btf_vmlinux, map->btf_vmlinux_value_type_id,
-+		btf_type_seq_show(st_map->btf,
-+				  map->btf_vmlinux_value_type_id,
- 				  value, m);
- 		seq_puts(m, "\n");
- 	}
-@@ -720,6 +724,8 @@ static struct bpf_map *bpf_struct_ops_map_alloc(union bpf_attr *attr)
- 		return ERR_PTR(-ENOMEM);
+ 	const struct btf_type *t = st_ops_desc->type;
+ 	struct bpf_tramp_links *tlinks;
++	struct module *mod = NULL;
+ 	void *udata, *kdata;
+ 	int prog_fd, err;
+ 	void *image, *image_end;
+@@ -424,6 +425,14 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
+ 		goto unlock;
  	}
  
-+	st_map->btf = btf_vmlinux;
++	if (st_map->btf != btf_vmlinux) {
++		mod = btf_try_get_module(st_map->btf);
++		if (!mod) {
++			err = -EINVAL;
++			goto unlock;
++		}
++	}
 +
- 	mutex_init(&st_map->lock);
+ 	memcpy(uvalue, value, map->value_size);
+ 
+ 	udata = &uvalue->data;
+@@ -552,6 +561,10 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
+ 		 * can be seen once BPF_STRUCT_OPS_STATE_INUSE is set.
+ 		 */
+ 		smp_store_release(&kvalue->state, BPF_STRUCT_OPS_STATE_INUSE);
++		/* Hold the owner module until the struct_ops is
++		 * unregistered
++		 */
++		mod = NULL;
+ 		goto unlock;
+ 	}
+ 
+@@ -568,6 +581,7 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
+ 	memset(uvalue, 0, map->value_size);
+ 	memset(kvalue, 0, map->value_size);
+ unlock:
++	module_put(mod);
+ 	kfree(tlinks);
+ 	mutex_unlock(&st_map->lock);
+ 	return err;
+@@ -588,6 +602,7 @@ static long bpf_struct_ops_map_delete_elem(struct bpf_map *map, void *key)
+ 	switch (prev_state) {
+ 	case BPF_STRUCT_OPS_STATE_INUSE:
+ 		st_map->st_ops_desc->st_ops->unreg(&st_map->kvalue.data);
++		module_put(st_map->st_ops_desc->st_ops->owner);
+ 		bpf_map_put(map);
+ 		return 0;
+ 	case BPF_STRUCT_OPS_STATE_TOBEFREE:
+@@ -674,6 +689,7 @@ static struct bpf_map *bpf_struct_ops_map_alloc(union bpf_attr *attr)
+ 	size_t st_map_size;
+ 	struct bpf_struct_ops_map *st_map;
+ 	const struct btf_type *t, *vt;
++	struct module *mod = NULL;
+ 	struct bpf_map *map;
+ 	int ret;
+ 
+@@ -681,9 +697,17 @@ static struct bpf_map *bpf_struct_ops_map_alloc(union bpf_attr *attr)
+ 	if (!st_ops_desc)
+ 		return ERR_PTR(-ENOTSUPP);
+ 
++	if (st_ops_desc->btf != btf_vmlinux) {
++		mod = btf_try_get_module(st_ops_desc->btf);
++		if (!mod)
++			return ERR_PTR(-EINVAL);
++	}
++
+ 	vt = st_ops_desc->value_type;
+-	if (attr->value_size != vt->size)
+-		return ERR_PTR(-EINVAL);
++	if (attr->value_size != vt->size) {
++		ret = -EINVAL;
++		goto errout;
++	}
+ 
+ 	t = st_ops_desc->type;
+ 
+@@ -694,17 +718,17 @@ static struct bpf_map *bpf_struct_ops_map_alloc(union bpf_attr *attr)
+ 		(vt->size - sizeof(struct bpf_struct_ops_value));
+ 
+ 	st_map = bpf_map_area_alloc(st_map_size, NUMA_NO_NODE);
+-	if (!st_map)
+-		return ERR_PTR(-ENOMEM);
++	if (!st_map) {
++		ret = -ENOMEM;
++		goto errout;
++	}
+ 
+ 	st_map->st_ops_desc = st_ops_desc;
+ 	map = &st_map->map;
+ 
+ 	ret = bpf_jit_charge_modmem(PAGE_SIZE);
+-	if (ret) {
+-		__bpf_struct_ops_map_free(map);
+-		return ERR_PTR(ret);
+-	}
++	if (ret)
++		goto errout_free;
+ 
+ 	st_map->image = bpf_jit_alloc_exec(PAGE_SIZE);
+ 	if (!st_map->image) {
+@@ -713,16 +737,16 @@ static struct bpf_map *bpf_struct_ops_map_alloc(union bpf_attr *attr)
+ 		 * here.
+ 		 */
+ 		bpf_jit_uncharge_modmem(PAGE_SIZE);
+-		__bpf_struct_ops_map_free(map);
+-		return ERR_PTR(-ENOMEM);
++		ret = -ENOMEM;
++		goto errout_free;
+ 	}
+ 	st_map->uvalue = bpf_map_area_alloc(vt->size, NUMA_NO_NODE);
+ 	st_map->links =
+ 		bpf_map_area_alloc(btf_type_vlen(t) * sizeof(struct bpf_links *),
+ 				   NUMA_NO_NODE);
+ 	if (!st_map->uvalue || !st_map->links) {
+-		__bpf_struct_ops_map_free(map);
+-		return ERR_PTR(-ENOMEM);
++		ret = -ENOMEM;
++		goto errout_free;
+ 	}
+ 
+ 	st_map->btf = btf_vmlinux;
+@@ -731,7 +755,15 @@ static struct bpf_map *bpf_struct_ops_map_alloc(union bpf_attr *attr)
  	set_vm_flush_reset_perms(st_map->image);
  	bpf_map_init_from_attr(map, attr);
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 15d71d2986d3..2fd6fa0ea1f4 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -241,6 +241,12 @@ struct btf_id_dtor_kfunc_tab {
- 	struct btf_id_dtor_kfunc dtors[];
- };
  
-+struct btf_struct_ops_tab {
-+	u32 cnt;
-+	u32 capacity;
-+	struct bpf_struct_ops_desc ops[];
-+};
++	module_put(mod);
 +
- struct btf {
- 	void *data;
- 	struct btf_type **types;
-@@ -258,6 +264,7 @@ struct btf {
- 	struct btf_kfunc_set_tab *kfunc_set_tab;
- 	struct btf_id_dtor_kfunc_tab *dtor_kfunc_tab;
- 	struct btf_struct_metas *struct_meta_tab;
-+	struct btf_struct_ops_tab *struct_ops_tab;
- 
- 	/* split BTF support */
- 	struct btf *base_btf;
-@@ -1688,11 +1695,20 @@ static void btf_free_struct_meta_tab(struct btf *btf)
- 	btf->struct_meta_tab = NULL;
+ 	return map;
++
++errout_free:
++	__bpf_struct_ops_map_free(map);
++errout:
++	module_put(mod);
++	return ERR_PTR(ret);
  }
  
-+static void btf_free_struct_ops_tab(struct btf *btf)
-+{
-+	struct btf_struct_ops_tab *tab = btf->struct_ops_tab;
-+
-+	kfree(tab);
-+	btf->struct_ops_tab = NULL;
-+}
-+
- static void btf_free(struct btf *btf)
- {
- 	btf_free_struct_meta_tab(btf);
- 	btf_free_dtor_kfunc_tab(btf);
- 	btf_free_kfunc_set_tab(btf);
-+	btf_free_struct_ops_tab(btf);
- 	kvfree(btf->types);
- 	kvfree(btf->resolved_sizes);
- 	kvfree(btf->resolved_ids);
-@@ -8602,3 +8618,61 @@ bool btf_type_ids_nocast_alias(struct bpf_verifier_log *log,
+ static u64 bpf_struct_ops_map_mem_usage(const struct bpf_map *map)
+@@ -813,6 +845,7 @@ static void bpf_struct_ops_map_link_dealloc(struct bpf_link *link)
+ 		 * bpf_struct_ops_link_create() fails to register.
+ 		 */
+ 		st_map->st_ops_desc->st_ops->unreg(&st_map->kvalue.data);
++		module_put(st_map->st_ops_desc->st_ops->owner);
+ 		bpf_map_put(&st_map->map);
+ 	}
+ 	kfree(st_link);
+@@ -859,6 +892,10 @@ static int bpf_struct_ops_map_link_update(struct bpf_link *link, struct bpf_map
+ 	if (!bpf_struct_ops_valid_to_reg(new_map))
+ 		return -EINVAL;
  
- 	return !strncmp(reg_name, arg_name, cmp_len);
- }
-+
-+static int
-+btf_add_struct_ops(struct btf *btf, struct bpf_struct_ops *st_ops)
-+{
-+	struct btf_struct_ops_tab *tab, *new_tab;
-+	int i;
-+
-+	if (!btf)
-+		return -ENOENT;
-+
-+	/* Assume this function is called for a module when the module is
-+	 * loading.
++	/* The old map is holding the refcount for the owner module.  The
++	 * ownership of the owner module refcount is going to be
++	 * transferred from the old map to the new map.
 +	 */
-+
-+	tab = btf->struct_ops_tab;
-+	if (!tab) {
-+		tab = kzalloc(offsetof(struct btf_struct_ops_tab, ops[4]),
-+			      GFP_KERNEL);
-+		if (!tab)
-+			return -ENOMEM;
-+		tab->capacity = 4;
-+		btf->struct_ops_tab = tab;
+ 	if (!st_map->st_ops_desc->st_ops->update)
+ 		return -EOPNOTSUPP;
+ 
+@@ -904,6 +941,7 @@ int bpf_struct_ops_link_create(union bpf_attr *attr)
+ 	struct bpf_link_primer link_primer;
+ 	struct bpf_struct_ops_map *st_map;
+ 	struct bpf_map *map;
++	struct btf *btf;
+ 	int err;
+ 
+ 	map = bpf_map_get(attr->link_create.map_fd);
+@@ -928,8 +966,15 @@ int bpf_struct_ops_link_create(union bpf_attr *attr)
+ 	if (err)
+ 		goto err_out;
+ 
++	/* Hold the owner module until the struct_ops is unregistered. */
++	btf = st_map->btf;
++	if (btf != btf_vmlinux && !btf_try_get_module(btf)) {
++		err = -EINVAL;
++		goto err_out;
 +	}
-+
-+	for (i = 0; i < tab->cnt; i++)
-+		if (tab->ops[i].st_ops == st_ops)
-+			return -EEXIST;
-+
-+	if (tab->cnt == tab->capacity) {
-+		new_tab = krealloc(tab,
-+				   offsetof(struct btf_struct_ops_tab,
-+					    ops[tab->capacity * 2]),
-+				   GFP_KERNEL);
-+		if (!new_tab)
-+			return -ENOMEM;
-+		tab = new_tab;
-+		tab->capacity *= 2;
-+		btf->struct_ops_tab = tab;
-+	}
-+
-+	tab->ops[btf->struct_ops_tab->cnt].st_ops = st_ops;
-+
-+	btf->struct_ops_tab->cnt++;
-+
-+	return 0;
-+}
-+
-+const struct bpf_struct_ops_desc *btf_get_struct_ops(struct btf *btf, u32 *ret_cnt)
-+{
-+	if (!btf)
-+		return NULL;
-+	if (!btf->struct_ops_tab)
-+		return NULL;
-+
-+	*ret_cnt = btf->struct_ops_tab->cnt;
-+	return (const struct bpf_struct_ops_desc *)btf->struct_ops_tab->ops;
-+}
-+
+ 	err = st_map->st_ops_desc->st_ops->reg(st_map->kvalue.data);
+ 	if (err) {
++		module_put(st_map->st_ops_desc->st_ops->owner);
+ 		bpf_link_cleanup(&link_primer);
+ 		link = NULL;
+ 		goto err_out;
 -- 
 2.34.1
 
