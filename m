@@ -1,72 +1,84 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A331B10A09;
-	Wed,  1 Nov 2023 21:58:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9949D1BDEB;
+	Wed,  1 Nov 2023 21:58:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="ikJERYTz";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="AehbrKHU"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="Bpxqexu3";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="p9MYrB4b"
 Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FC3110;
-	Wed,  1 Nov 2023 14:58:32 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.west.internal (Postfix) with ESMTP id 9C5D332009F4;
-	Wed,  1 Nov 2023 17:58:29 -0400 (EDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7993C122;
+	Wed,  1 Nov 2023 14:58:40 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+	by mailout.west.internal (Postfix) with ESMTP id A075632009F1;
+	Wed,  1 Nov 2023 17:58:38 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Wed, 01 Nov 2023 17:58:30 -0400
+  by compute2.internal (MEProxy); Wed, 01 Nov 2023 17:58:40 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
 	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:message-id:mime-version:reply-to:sender:subject
-	:subject:to:to; s=fm2; t=1698875909; x=1698962309; bh=iHvV4xCaLT
-	5/MQ/ZV/9e1rtl0TLVC998xFKkYBnpOgo=; b=ikJERYTztDLF/1z688Yvxbgwhc
-	cnTUVG3+xXOjkUJ8rfYPbw/SByIGsKVnL8ohXE7wYh3vHhgf7rJXiPKyz3fTsEdL
-	kBwAo3BhD5730yI2EYIx+LKN+4FrjPPIMvtmjhTbbIh2so3QQq0AJpmR3DhTLsJK
-	2k4s7XhCyTbJJ5LTcLWtmv+IyQEPSumNXdQoR8GiR+NBQwoKTMORiPmI2+WcwYtM
-	n+f4INyyyvRujvyqwW78gaCajQo/gyCUx7etmQFsP/7C3IW/6hMQy2c/lCVg+u1x
-	KhNvtVhIt1qZJHL4rgfGdoiSp16s1AqEJ4JM+K0uxoiJdBX+F09RXsKISiug==
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:sender:subject:subject:to:to; s=fm2; t=1698875918; x=
+	1698962318; bh=BGnv0m4XviszG3KfpaWG6wdMA/qgxN6Pjaog3JfQZ6k=; b=B
+	pxqexu3qJEC6HOvfCQgPzRi+zq5VoTjmwFJ7zfr93kUfZrVT3Sc0nl3t/BW7RfOg
+	DNAYHbhKwUA0lCJ6/uwvnMffosnIHPguKjkSReLlKj0CvAWybx59SYBsVmYSnh79
+	gCFpdHwifcsTEDBYUFm1LUG8HT4ToRIH7KshYRRK9OWAK5oSGwi4LhKT1VznamrG
+	KpidjXZ6h4xe17T4uvYDl4WaOs2SGY974PLhFqPXa20+k1Y9dMEQVPfxZIEO9Y08
+	j0GhAT0N1CkeDXuTuaikvQneyG3Z5NqlH9p8sfG1Ut+mgmTc7A/xFjr8uLXXUX6T
+	ltcxBf/e3Y92Tlqigg8Eg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:message-id:mime-version:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm3; t=1698875909; x=1698962309; bh=iHvV4xCaLT5/M
-	Q/ZV/9e1rtl0TLVC998xFKkYBnpOgo=; b=AehbrKHUy5roV1YSJo3D6cA/YH1MK
-	OxLVS6h8sB+OAQ/BtLA73mgcucQeK5yQHgI2HB9oZrctQHQTT377bLARQh1TlvLw
-	xIBVfXsIcHvo0w/jPeNt2HY2mye1jPNCck8W/KqHJ5NvVH97yQwaIPxL9ck4fsfx
-	Hv5w98FJB2f1xz0UCYp3QujKM4gfrmrLCQOec06uGiJTaTRYYojec18JCoRRdRHD
-	okaKqJbEaLGAillx6eVbO6Q7FTsM0lU6mTvUmBaPSQhoaAhSlwpggRuraEchh0hQ
-	ATxU5bF/ha9N6IEMHGsm65jRQNTZn7eA+pL/VJEyghJydbYstm0uUqaMw==
-X-ME-Sender: <xms:BMpCZabpuvGDgowagnwnkINVCEyTh5kCQcZzr7fWtMLwQVc_wIJ4TA>
-    <xme:BMpCZda7fnt_ngY1qpjMdR5Lu2AcwtZpYl5k7wVrtv5zAKdKrIlDbjVf3k5iJqSEu
-    Stuaz5LfsJ-booz0w>
-X-ME-Received: <xmr:BMpCZU-WYCalgYkBQsWdys1B03jlgFyeKSoOAnU3gO-BTvOBg3dlDw3DI6cAe3WXaX9OCw>
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1698875918; x=
+	1698962318; bh=BGnv0m4XviszG3KfpaWG6wdMA/qgxN6Pjaog3JfQZ6k=; b=p
+	9MYrB4bRqz5zbpP8TPkvOqrQAH+hjXcWp0OQOfIhcuKY1U+Ez6DJx4SwS3orMEir
+	OpMZJiB15qVz/k1Gxxnly2kF5mDiVAFpa2Jbe2JjBUyQrJrxdODcj4v3Jp8tCCY5
+	Q5SEh7DCUpcw3aA91Kvwmu229li7u7sLsla/NRASyCzDHoNAXJmpyr848/bOEKFt
+	NqADwApeBi68oqA4BcH6km0IoXfKnNwpZlWTtSO7pMwvbpH3Crl51fzsLYk0/V//
+	qOPlhddyX/NPfsRfHHZKSSaCz9F1Fbrp9dQQAwFoSuFxjk7a97LOnbQCUNKIBhk0
+	d8vABaQrUMjXJxxEmxVdg==
+X-ME-Sender: <xms:DcpCZVQzJ7rR2hC6l1P8SOirKjEWq9Du3XyrEMwSNGC0W_YAazxXGQ>
+    <xme:DcpCZexuNOzJrAsz6WFXXYMMF53qDpIELLbMnMyhGb6Eg5F7e4AjOEjaw2ljh26WZ
+    bobfySd5Zbu_OIyKQ>
+X-ME-Received: <xmr:DcpCZa2a647323rgB3mr5DALjOj85dmGv9TzkirkhJQ_TFXBa9jmwBzR5U4wQOQjp8810w>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedruddtgedgudehgecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculddvfedmnecujfgurhephf
-    fvvefufffkofgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegu
-    gihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpeeikeehudegteevuddthf
-    eilefhjefgueeuueffveevheeggfeufeejfeeuudekfeenucffohhmrghinhepihgvthhf
-    rdhorhhgpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
-    grmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:BMpCZcpl4nU_PbMXkDdtxPNogLrfqORT6TtCme3R5r_LKt8w19_A8A>
-    <xmx:BMpCZVqXVNdgzF23j_J7mX_Tji2Pi8JjXZmIgZvqhZtT8ct9I-H2NQ>
-    <xmx:BMpCZaTp3cI57Xw8gUJJkOaw7dCWDO6cCRN3jPp7KVOShiy45gqmSA>
-    <xmx:BcpCZeAM0fDkQA8n0BIffVhHR8UJvDhNqvHjSl10a_eY2vhujgceNw>
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enfghrlhcuvffnffculdefhedmnecujfgurhephffvvefufffkofgjfhgggfestdekredt
+    redttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqe
+    enucggtffrrghtthgvrhhnpefgfefggeejhfduieekvdeuteffleeifeeuvdfhheejleej
+    jeekgfffgefhtddtteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:DcpCZdC1p2nva6MwtlLczNFlwwr0y6XjPhYmtT-NlZYOhqekRGr7jQ>
+    <xmx:DcpCZegNxeHfQQUYONeCIh_4NZ_aag47cJhB6jtAmvsdl8BrAvmR3A>
+    <xmx:DcpCZRr4K643GQG5IelP1vehc4wkagnvUuBfrm5X1MqRftYNOd0Tng>
+    <xmx:DspCZVTW2i7tR8FCnLVq9rzNqC71EY-Dm4gVgJahoyyJBzNSOt1fcA>
 Feedback-ID: i6a694271:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 1 Nov 2023 17:58:27 -0400 (EDT)
+ 1 Nov 2023 17:58:35 -0400 (EDT)
 From: Daniel Xu <dxu@dxuuu.xyz>
-To: linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org,
+To: kuba@kernel.org,
+	hawk@kernel.org,
+	edumazet@google.com,
+	steffen.klassert@secunet.com,
+	daniel@iogearbox.net,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	ast@kernel.org,
+	john.fastabend@gmail.com,
+	pabeni@redhat.com,
+	davem@davemloft.net,
+	antony.antony@secunet.com
+Cc: netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
-	steffen.klassert@secunet.com,
-	antony.antony@secunet.com
-Cc: devel@linux-ipsec.org
-Subject: [RFCv2 bpf-next 0/7] Add bpf_xdp_get_xfrm_state() kfunc
-Date: Wed,  1 Nov 2023 14:57:44 -0700
-Message-ID: <cover.1698875025.git.dxu@dxuuu.xyz>
+	devel@linux-ipsec.org
+Subject: [RFCv2 bpf-next 2/7] bpf: xfrm: Add bpf_xdp_xfrm_state_release() kfunc
+Date: Wed,  1 Nov 2023 14:57:46 -0700
+Message-ID: <9f43e62bedf3aa0a230db607fee8bd650ab84649.1698875025.git.dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.42.0
+In-Reply-To: <cover.1698875025.git.dxu@dxuuu.xyz>
+References: <cover.1698875025.git.dxu@dxuuu.xyz>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -75,44 +87,47 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patchset adds two kfunc helpers, bpf_xdp_get_xfrm_state() and
-bpf_xdp_xfrm_state_release() that wrap xfrm_state_lookup() and
-xfrm_state_put(). The intent is to support software RSS (via XDP) for
-the ongoing/upcoming ipsec pcpu work [0]. Recent experiments performed
-on (hopefully) reproducible AWS testbeds indicate that single tunnel
-pcpu ipsec can reach line rate on 100G ENA nics.
+This kfunc releases a previously acquired xfrm_state from
+bpf_xdp_get_xfrm_state().
 
-Note this patchset only tests/shows generic xfrm_state access. The
-"secret sauce" (if you can really even call it that) involves accessing
-a soon-to-be-upstreamed pcpu_num field in xfrm_state. Early example is
-available here [1].
+Co-developed-by: Antony Antony <antony.antony@secunet.com>
+Signed-off-by: Antony Antony <antony.antony@secunet.com>
+Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+---
+ net/xfrm/xfrm_state_bpf.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-[0]: https://datatracker.ietf.org/doc/html/draft-ietf-ipsecme-multi-sa-performance-02
-[1]: https://github.com/danobi/xdp-tools/blob/e89a1c617aba3b50d990f779357d6ce2863ecb27/xdp-bench/xdp_redirect_cpumap.bpf.c#L385-L406
-
-Changes from RFCv1:
-* Add Antony's commit tags
-* Add KF_ACQUIRE and KF_RELEASE semantics
-
-Daniel Xu (7):
-  bpf: xfrm: Add bpf_xdp_get_xfrm_state() kfunc
-  bpf: xfrm: Add bpf_xdp_xfrm_state_release() kfunc
-  bpf: selftests: test_tunnel: Use ping -6 over ping6
-  bpf: selftests: test_tunnel: Mount bpffs if necessary
-  bpf: selftests: test_tunnel: Use vmlinux.h declarations
-  bpf: selftests: test_tunnel: Disable CO-RE relocations
-  bpf: xfrm: Add selftest for bpf_xdp_get_xfrm_state()
-
- include/net/xfrm.h                            |   9 ++
- net/xfrm/Makefile                             |   1 +
- net/xfrm/xfrm_policy.c                        |   2 +
- net/xfrm/xfrm_state_bpf.c                     | 121 ++++++++++++++++++
- .../selftests/bpf/progs/bpf_tracing_net.h     |   1 +
- .../selftests/bpf/progs/test_tunnel_kern.c    |  98 ++++++++------
- tools/testing/selftests/bpf/test_tunnel.sh    |  43 +++++--
- 7 files changed, 221 insertions(+), 54 deletions(-)
- create mode 100644 net/xfrm/xfrm_state_bpf.c
-
+diff --git a/net/xfrm/xfrm_state_bpf.c b/net/xfrm/xfrm_state_bpf.c
+index 4aaac134b97a..386167c86767 100644
+--- a/net/xfrm/xfrm_state_bpf.c
++++ b/net/xfrm/xfrm_state_bpf.c
+@@ -87,10 +87,26 @@ bpf_xdp_get_xfrm_state(struct xdp_md *ctx, struct bpf_xfrm_state_opts *opts, u32
+ 				 opts->proto, opts->family);
+ }
+ 
++/* bpf_xdp_xfrm_state_release - Release acquired xfrm_state object
++ *
++ * This must be invoked for referenced PTR_TO_BTF_ID, and the verifier rejects
++ * the program if any references remain in the program in all of the explored
++ * states.
++ *
++ * Parameters:
++ * @x		- Pointer to referenced xfrm_state object, obtained using
++ *		  bpf_xdp_get_xfrm_state.
++ */
++__bpf_kfunc void bpf_xdp_xfrm_state_release(struct xfrm_state *x)
++{
++	xfrm_state_put(x);
++}
++
+ __diag_pop()
+ 
+ BTF_SET8_START(xfrm_state_kfunc_set)
+ BTF_ID_FLAGS(func, bpf_xdp_get_xfrm_state, KF_RET_NULL | KF_ACQUIRE)
++BTF_ID_FLAGS(func, bpf_xdp_xfrm_state_release, KF_RELEASE)
+ BTF_SET8_END(xfrm_state_kfunc_set)
+ 
+ static const struct btf_kfunc_id_set xfrm_state_xdp_kfunc_set = {
 -- 
 2.42.0
 
