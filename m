@@ -1,24 +1,24 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79DDD53AC
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 773EA5399
 	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 06:00:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rl5oPmlu"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 11854C433CB;
-	Thu,  2 Nov 2023 06:00:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="onOtjkPA"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E85C8C433C9;
+	Thu,  2 Nov 2023 06:00:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1698904825;
-	bh=GD80CAKbgCq1tYFOrdJMrrxeLcyFbVi5xrx26IXKTFo=;
+	bh=nuMnZu4y5I5ohkrfFCpZy2Z1BHRVa6FwQkzcYGm+GfI=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=rl5oPmluTD9TDCKWQKr4WK0Cld0hcuuIppKLFxd0iou40siCv9duj0G3/bQzvBKlo
-	 H+OivhO8zBGFNuV7Or7gKkTZM8CU+VuV0GfVFUYq/lTRfKpDeVh47/A5KYchk/rhAA
-	 H+rYmZ3top0YPAI7PZFrKvzIQqgpO/CnewYGNMB+ALjl6Eeu+7X5YxbgU15YN+rmtl
-	 L+Kxfx+ekx5gEtpceelUQujRPMY+ocxWCogbrGaGTqkd22unB/4aAnZrfOJ1pvdF3t
-	 Ni1QKWtjiLHWI2gLe+Fv6WCOm/uZAdXspaTUzNCPgDR5/mRwYh6C1bjP/spCjXGkGH
-	 B2deJSQXEv0SQ==
+	b=onOtjkPAWUqNBZH8BQ/g7gWHS3NyQTcZpD0CTIatuMewQS5KaB3m+0xase9R6K32L
+	 OxQwuycuInhJkupozBnAOMAJNgDrjujouiiX85QFseK9oLy7A+ewUJoZo/EVPlqCK/
+	 V6H6M6As/fSA5TGNnjPw7vgcmvIVVIHyr6kXJG3J/+/az9G9nfCVwkIxsdiA4Hn15v
+	 XulRfqlTJK5+6bZ9avMNIq+/8Ny7RLnJ1JuDzh4sUoqkm4fE3bk5Vno/QHESU/EpPf
+	 Eaj5m5S/3z9Pqtd1gd2SbzJFID87d32rp44jKA2Iptoy3JwInZV8cGuOdX8H81F5Pu
+	 VPFLtk+X370vg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EA9E4E00093;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D0334EAB08B;
 	Thu,  2 Nov 2023 06:00:24 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -28,41 +28,38 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3] bpf: Check map->usercnt after timer->timer is
- assigned
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: fix test_bpffs
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <169890482495.9002.6880714745373814049.git-patchwork-notify@kernel.org>
+ <169890482484.9002.7064974144081814269.git-patchwork-notify@kernel.org>
 Date: Thu, 02 Nov 2023 06:00:24 +0000
-References: <20231030063616.1653024-1-houtao@huaweicloud.com>
-In-Reply-To: <20231030063616.1653024-1-houtao@huaweicloud.com>
-To: Hou Tao <houtao@huaweicloud.com>
-Cc: bpf@vger.kernel.org, martin.lau@linux.dev, alexei.starovoitov@gmail.com,
- andrii@kernel.org, song@kernel.org, haoluo@google.com,
- yonghong.song@linux.dev, daniel@iogearbox.net, kpsingh@kernel.org,
- sdf@google.com, jolsa@kernel.org, john.fastabend@gmail.com, hsinweih@uci.edu,
- houtao1@huawei.com
+References: <20231031223606.2927976-1-chantr4@gmail.com>
+In-Reply-To: <20231031223606.2927976-1-chantr4@gmail.com>
+To: Manu Bretelle <chantr4@gmail.com>
+Cc: bpf@vger.kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ ast@kernel.org, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+ shuah@kernel.org
 
 Hello:
 
 This patch was applied to bpf/bpf.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Mon, 30 Oct 2023 14:36:16 +0800 you wrote:
-> From: Hou Tao <houtao1@huawei.com>
+On Tue, 31 Oct 2023 15:36:06 -0700 you wrote:
+> Currently this tests tries to umount /sys/kernel/debug (TDIR) but the
+> system it is running on may have mounts below.
 > 
-> When there are concurrent uref release and bpf timer init operations,
-> the following sequence diagram is possible. It will break the guarantee
-> provided by bpf_timer: bpf_timer will still be alive after userspace
-> application releases or unpins the map. It also will lead to kmemleak
-> for old kernel version which doesn't release bpf_timer when map is
-> released.
+> For example, danobi/vmtest [0] VMs have
+>     mount -t tracefs tracefs /sys/kernel/debug/tracing
+> as part of their init.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v3] bpf: Check map->usercnt after timer->timer is assigned
-    https://git.kernel.org/bpf/bpf/c/fd381ce60a2d
+  - [bpf-next,v2] selftests/bpf: fix test_bpffs
+    https://git.kernel.org/bpf/bpf/c/cd60f410ddc0
 
 You are awesome, thank you!
 -- 
