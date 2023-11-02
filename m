@@ -1,25 +1,25 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BA3C53B1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A0085227
 	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 06:00:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nGSxH+lk"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 185EEC4339A;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jUis9d88"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 27F83C433D9;
 	Thu,  2 Nov 2023 06:00:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1698904825;
-	bh=AFvFGJ5RX5HWQ7BExEjHkNCgb8lQ0TX7Ja+9M4aY+cs=;
+	bh=I0wXETA4AbIoz8BHZZN8jCwendUkEDs+qt7KqKpVNmk=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=nGSxH+lk0IVP8DkS/EnGW8XWyk0K4mJdtEzhaPaqfJ4/134giY2slmHvTNYqrssvS
-	 8j7H2Nh0ZRXO+58K+DSKiqVu7CsNy55w29K5vwQ68RP5ZAmLN55rN+7rz7BUfm4lcl
-	 i827Pju0jU5KV5X10ftjRRb3jmRxFHxz6IO5AR+pbvykffwLZH9oHUhZ+YnrUoJoyd
-	 I1hbpxO5A3DlcOH14NQUfNikQPPJve5CinE6jvVPI69ysx6aZgYTd21CRdYnsnJNvh
-	 pmfg7QgDYDoxDxUmI3xRj/Tl+EUL9NeWG7uysOJ0udTM+foFOp12xLhM91yLhM+VSd
-	 jODOEKx+DmCIQ==
+	b=jUis9d88b/xw+wpb4eKjGEepAvwO7WSVGFgjlxbQxRrBm7alqUG+KfrKs9QfW7PiM
+	 2jHK0gxD3dpuePA8bahBzZvKjOHAxXRnseZcKrCnx83gQrxvVYmSn77RycS6aVnfrL
+	 Rmu1i4cX4AohQoC/Qyme9EW/aBGg0dbdMing2sAFvIcv0k/pysWUDmCTbQ3upJY3GW
+	 WrAFP7IGtVYiyj2Yn2aKvXTAWBaS/8oZaH7vG4WjmSd9iqd+hSjXm+pWRcVe3r9dj3
+	 5XcMO+FxFZXXK0UoSUYTO7UZfKYjXCTgghBKz0079okdSn37FvNLbifaqOHgrD06LJ
+	 fq8i1Die879hQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F336DE00092;
-	Thu,  2 Nov 2023 06:00:24 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 06F3CE00095;
+	Thu,  2 Nov 2023 06:00:25 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -28,44 +28,35 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 bpf-next 1/2] bpf: Add __bpf_kfunc_{start,end}_defs macros
+Subject: Re: [PATCH bpf-next] selftests/bpf: fix test_maps' use of
+ bpf_map_create_opts
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <169890482499.9002.3938790944237757134.git-patchwork-notify@kernel.org>
-Date: Thu, 02 Nov 2023 06:00:24 +0000
-References: <20231031215625.2343848-1-davemarchevsky@fb.com>
-In-Reply-To: <20231031215625.2343848-1-davemarchevsky@fb.com>
-To: Dave Marchevsky <davemarchevsky@fb.com>
+ <169890482502.9002.2730494123004229037.git-patchwork-notify@kernel.org>
+Date: Thu, 02 Nov 2023 06:00:25 +0000
+References: <20231029011509.2479232-1-andrii@kernel.org>
+In-Reply-To: <20231029011509.2479232-1-andrii@kernel.org>
+To: Andrii Nakryiko <andrii@kernel.org>
 Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@kernel.org, kernel-team@fb.com,
- laoar.shao@gmail.com, olsajiri@gmail.com
+ martin.lau@kernel.org, kernel-team@meta.com
 
 Hello:
 
-This series was applied to bpf/bpf.git (master)
+This patch was applied to bpf/bpf.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Tue, 31 Oct 2023 14:56:24 -0700 you wrote:
-> BPF kfuncs are meant to be called from BPF programs. Accordingly, most
-> kfuncs are not called from anywhere in the kernel, which the
-> -Wmissing-prototypes warning is unhappy about. We've peppered
-> __diag_ignore_all("-Wmissing-prototypes", ... everywhere kfuncs are
-> defined in the codebase to suppress this warning.
+On Sat, 28 Oct 2023 18:15:09 -0700 you wrote:
+> Use LIBBPF_OPTS() macro to properly initialize bpf_map_create_opts in
+> test_maps' tests.
 > 
-> This patch adds two macros meant to bound one or many kfunc definitions.
-> All existing kfunc definitions which use these __diag calls to suppress
-> -Wmissing-prototypes are migrated to use the newly-introduced macros.
-> A new __diag_ignore_all - for "-Wmissing-declarations" - is added to the
-> __bpf_kfunc_start_defs macro based on feedback from Andrii on an earlier
-> version of this patch [0] and another recent mailing list thread [1].
-> 
-> [...]
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
+>  .../bpf/map_tests/map_percpu_stats.c          | 20 +++++--------------
+>  1 file changed, 5 insertions(+), 15 deletions(-)
 
 Here is the summary with links:
-  - [v2,bpf-next,1/2] bpf: Add __bpf_kfunc_{start,end}_defs macros
-    https://git.kernel.org/bpf/bpf/c/391145ba2acc
-  - [v2,bpf-next,2/2] bpf: Add __bpf_hook_{start,end} macros
-    https://git.kernel.org/bpf/bpf/c/15fb6f2b6c4c
+  - [bpf-next] selftests/bpf: fix test_maps' use of bpf_map_create_opts
+    https://git.kernel.org/bpf/bpf/c/9af3775962af
 
 You are awesome, thank you!
 -- 
