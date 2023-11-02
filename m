@@ -1,32 +1,35 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6FF1860
-	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 03:38:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 670F5185B
+	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 03:38:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA965110
-	for <bpf@vger.kernel.org>; Wed,  1 Nov 2023 20:38:09 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A21WRUi030215
-	for <bpf@vger.kernel.org>; Wed, 1 Nov 2023 20:38:09 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3u3vb43rfn-13
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC939F
+	for <bpf@vger.kernel.org>; Wed,  1 Nov 2023 20:38:15 -0700 (PDT)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A21VKkO018810
+	for <bpf@vger.kernel.org>; Wed, 1 Nov 2023 20:38:15 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3u3sftwepv-7
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Wed, 01 Nov 2023 20:38:09 -0700
-Received: from twshared58712.02.prn6.facebook.com (2620:10d:c0a8:1c::1b) by
- mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Wed, 01 Nov 2023 20:38:15 -0700
+Received: from twshared15991.38.frc1.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Wed, 1 Nov 2023 20:38:08 -0700
+ 15.1.2507.34; Wed, 1 Nov 2023 20:38:14 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 01ACE3AC97EA6; Wed,  1 Nov 2023 20:38:02 -0700 (PDT)
+	id 370703AC97EE4; Wed,  1 Nov 2023 20:38:09 -0700 (PDT)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
-CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH v6 bpf-next 01/17] selftests/bpf: fix RELEASE=1 build for tc_opts
-Date: Wed, 1 Nov 2023 20:37:43 -0700
-Message-ID: <20231102033759.2541186-2-andrii@kernel.org>
+CC: <andrii@kernel.org>, <kernel-team@meta.com>,
+        Eduard Zingerman
+	<eddyz87@gmail.com>,
+        Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Subject: [PATCH v6 bpf-next 04/17] bpf: derive smin32/smax32 from umin32/umax32 bounds
+Date: Wed, 1 Nov 2023 20:37:46 -0700
+Message-ID: <20231102033759.2541186-5-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231102033759.2541186-1-andrii@kernel.org>
 References: <20231102033759.2541186-1-andrii@kernel.org>
@@ -39,49 +42,46 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: OMjzDvpuhbgnrZmJ5gw3Vbn1diG0YKMQ
-X-Proofpoint-GUID: OMjzDvpuhbgnrZmJ5gw3Vbn1diG0YKMQ
+X-Proofpoint-ORIG-GUID: WisWatG_HGOx9uijUj6LJ3vkShcQZXVz
+X-Proofpoint-GUID: WisWatG_HGOx9uijUj6LJ3vkShcQZXVz
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-01_23,2023-11-01_02,2023-05-22_02
 
-Compiler complains about malloc(). We also don't need to dynamically
-allocate anything, so make the life easier by using statically sized
-buffer.
+All the logic that applies to u64 vs s64, equally applies for u32 vs s32
+relationships (just taken in a smaller 32-bit numeric space). So do the
+same deduction of smin32/smax32 from umin32/umax32, if we can.
 
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/testing/selftests/bpf/prog_tests/tc_opts.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ kernel/bpf/verifier.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tc_opts.c b/tools/tes=
-ting/selftests/bpf/prog_tests/tc_opts.c
-index 51883ccb8020..196abf223465 100644
---- a/tools/testing/selftests/bpf/prog_tests/tc_opts.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tc_opts.c
-@@ -2387,12 +2387,9 @@ static int generate_dummy_prog(void)
- 	const size_t prog_insn_cnt =3D sizeof(prog_insns) / sizeof(struct bpf_i=
-nsn);
- 	LIBBPF_OPTS(bpf_prog_load_opts, opts);
- 	const size_t log_buf_sz =3D 256;
--	char *log_buf;
-+	char log_buf[log_buf_sz];
- 	int fd =3D -1;
-=20
--	log_buf =3D malloc(log_buf_sz);
--	if (!ASSERT_OK_PTR(log_buf, "log_buf_alloc"))
--		return fd;
- 	opts.log_buf =3D log_buf;
- 	opts.log_size =3D log_buf_sz;
-=20
-@@ -2402,7 +2399,6 @@ static int generate_dummy_prog(void)
- 			   prog_insns, prog_insn_cnt, &opts);
- 	ASSERT_STREQ(log_buf, "", "log_0");
- 	ASSERT_GE(fd, 0, "prog_fd");
--	free(log_buf);
- 	return fd;
- }
-=20
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 8a4cdd2787ec..b93818abe7fc 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2324,6 +2324,13 @@ static void __update_reg_bounds(struct bpf_reg_sta=
+te *reg)
+ /* Uses signed min/max values to inform unsigned, and vice-versa */
+ static void __reg32_deduce_bounds(struct bpf_reg_state *reg)
+ {
++	/* if u32 range forms a valid s32 range (due to matching sign bit),
++	 * try to learn from that
++	 */
++	if ((s32)reg->u32_min_value <=3D (s32)reg->u32_max_value) {
++		reg->s32_min_value =3D max_t(s32, reg->s32_min_value, reg->u32_min_val=
+ue);
++		reg->s32_max_value =3D min_t(s32, reg->s32_max_value, reg->u32_max_val=
+ue);
++	}
+ 	/* Learn sign from signed bounds.
+ 	 * If we cannot cross the sign boundary, then signed and unsigned bound=
+s
+ 	 * are the same, so combine.  This works even in the negative case, e.g=
+.
 --=20
 2.34.1
 
