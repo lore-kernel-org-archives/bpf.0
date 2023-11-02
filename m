@@ -1,46 +1,46 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 244E3225AE
-	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 22:58:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0702376D
+	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 22:59:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IiIX6yph"
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14591B4
-	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 15:58:47 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5b064442464so21281207b3.3
-        for <bpf@vger.kernel.org>; Thu, 02 Nov 2023 15:58:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vHDYirYS"
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720C7196
+	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 15:58:59 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1cc29f3afe0so12292815ad.2
+        for <bpf@vger.kernel.org>; Thu, 02 Nov 2023 15:58:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698965927; x=1699570727; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1698965939; x=1699570739; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fJs4BRlxYO5R4S5llZy1lr4c+O0yiJGCyUqLmBsZHsg=;
-        b=IiIX6yphJ2tY4nw5KCW/0zzyAefseY3efJBu8uJe2ajnWCUB39AnJS/M4GBLwyp+Es
-         VNvHX9OC8pYBGfdfcTI26v3Tm7woS0Ma80CnqU8jCvwT5dqFnTkY9RCTrno/npr3+58X
-         D4rg5+F649/mB2t61qQTYGrP2JgozTjNQ2lHIn954/iRKEI3aVH28mJo69RNRNEq2uNK
-         baI9V21a3LFymgcREQpEmhvMGUvouGEn5M/L6BpoLlod5/SPQJaTkr1rSEFXgb+82rTG
-         oqs8pU7gPFxOQgBFc8Vtqwt3oiBkDLPx43kVO0OFm+v3+ydna6TdIsDJBsFpqKG9sN43
-         nJTw==
+        bh=gH3ul6akAfngEDdVa6ettNYmN5CbVfUiDAfxlJmoIdI=;
+        b=vHDYirYSvdo9m4t5zpb27EKU7cVmpa0jusrji1vAsrwhUi0umZeK1nhvlreTdnh6nJ
+         J29NvP7qKzMbo7kInLbS0yO0EXOitkPR6O3ATkINjGgommZU8luSO6XC37DcuBiNON9a
+         yXiQt9wzgSQ4cv5sIigmJvG9wxWcjPem5kN7KvVXhUJtVbB+69YxZB1Y7VqIXGUNCeZq
+         fm6xo/JdzWWMZ2q72mw/qKgRpebTpcGbsKDeWuJaX66Jnb0hQxQpvXkrU8rHxKgohoFg
+         uS2shwcjjhd2bt5cUe93K1JcD1K6uVHtHTOgLZQerlTZazHVg3eQ7DK82hLRConJUYT8
+         8yqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698965927; x=1699570727;
+        d=1e100.net; s=20230601; t=1698965939; x=1699570739;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fJs4BRlxYO5R4S5llZy1lr4c+O0yiJGCyUqLmBsZHsg=;
-        b=gpyUWMEPLlD6+ePKqVYZEFqtPZrK9PcneA8Uq6LCebYhy2S/ClbivR8vETC5sfHn8C
-         OXgrb9ySoIQsZ11U+TNoJg/L70wfpSmY2pkm9nnp7o6cYM5CMnv20BIzG4xBuY/3NpCA
-         PMyH3ad5/A2Va1yPPhTlJn3+j/TSWBLiJEJ/eKp5SD4kl9ZmHF8RnxDB/92oVXxHaggJ
-         5Tfwote+N2qEmdVtMRWS58Km0rRfX5w0xpOoIjhhUbnuZtA6b9dhIH9haAsxCp3VcDNJ
-         Tk7Xt5oIlH10DGCNlk1AWdhOo4Pm9aFDUK0e9gmgJXpWAqTWpOMvBUpKxWt2fTK2bcs3
-         50oA==
-X-Gm-Message-State: AOJu0YxArFSsx0I8n50Ng5I7YKC/4jPNUPqbuXgC6qTXmlJNQWnE0k3y
-	/BiJ5RTQONYDofJ8n4TpVNdbrRorhHmivtk6e614PPKV63WuxlMhsoBBIIF8qBEW2wDg7qpPdcp
-	raATXZadUEi6q46C1XlyJjFawa9Gy/QcHfSQ78wOEzqq6fcDMeg==
-X-Google-Smtp-Source: AGHT+IHVBCdzQX4Ee8IM1qlHC4A0gQtGqrPIixaTlLnDLMSJrE04fVXblfRKM3PfzgWFD5CU2n2RBTw=
+        bh=gH3ul6akAfngEDdVa6ettNYmN5CbVfUiDAfxlJmoIdI=;
+        b=wnoLKsix1qdy1/8SOCfZed7G60YUvdKNzg3KCCR9JWx8ange6wbXnQVwAsNW6cYuxn
+         dGzO/RxdVzNZVdnXIczKj82EXzglUYUqKaKJMfwVDiOcCY6MBOOJiPKUh+VuTyh+6hR4
+         RN7ASo+VSp5JHGQZyUOXTE+r4m37he2u1lHEKGKEdP0GAkoUvqz+zLVCACUb9iV+iOHx
+         sxqqwADAp6iiygBizx2+auojN2GAzaekMI0OXw0P4R6LOcSMaeDJBEiOovgQmGfeS/t1
+         KiSnseTzoqMRvc+r5QTHsaPon3BYpSL98bJQfISdDgEtMNQAiCFw1xxrxhEmR/n7gr58
+         +akA==
+X-Gm-Message-State: AOJu0Yx5X5TbErVVvRfnyHRRSuxGwQhg/S2kM2fbmvTjfIgKmbPZCjyF
+	vxucaDuToC6m4qkVcahBVi/S9sFfPdabYd9FgS8hmV8RQnsIYjEU4lBwRmoR+yef18JUrX5/abx
+	7wc0WcwEdDhWT5jQEN5r3F+RpiYwUMGfjn+CkVBMokjJwoFyO6w==
+X-Google-Smtp-Source: AGHT+IEzJ8//TNpnPklZK9Sg4SXhqD7yPXp8IJUUrVVcPRQXVB6UZwCQb19FTQTizWLybUJWGb++3D8=
 X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a0d:d785:0:b0:59b:c811:a709 with SMTP id
- z127-20020a0dd785000000b0059bc811a709mr23870ywd.0.1698965926695; Thu, 02 Nov
- 2023 15:58:46 -0700 (PDT)
-Date: Thu,  2 Nov 2023 15:58:28 -0700
+ (user=sdf job=sendgmr) by 2002:a17:902:9b86:b0:1cc:323c:fe4a with SMTP id
+ y6-20020a1709029b8600b001cc323cfe4amr301672plp.12.1698965938529; Thu, 02 Nov
+ 2023 15:58:58 -0700 (PDT)
+Date: Thu,  2 Nov 2023 15:58:35 -0700
 In-Reply-To: <20231102225837.1141915-1-sdf@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -50,9 +50,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20231102225837.1141915-1-sdf@google.com>
 X-Mailer: git-send-email 2.42.0.869.gea05f2083d-goog
-Message-ID: <20231102225837.1141915-5-sdf@google.com>
-Subject: [PATCH bpf-next v5 04/13] net/mlx5e: Implement AF_XDP TX timestamp
- and checksum offload
+Message-ID: <20231102225837.1141915-12-sdf@google.com>
+Subject: [PATCH bpf-next v5 11/13] selftests/bpf: Add TX side to xdp_metadata
 From: Stanislav Fomichev <sdf@google.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
@@ -61,330 +60,123 @@ Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
 	kuba@kernel.org, toke@kernel.org, willemb@google.com, dsahern@kernel.org, 
 	magnus.karlsson@intel.com, bjorn@kernel.org, maciej.fijalkowski@intel.com, 
 	hawk@kernel.org, yoong.siang.song@intel.com, netdev@vger.kernel.org, 
-	xdp-hints@xdp-project.net, Saeed Mahameed <saeedm@nvidia.com>
+	xdp-hints@xdp-project.net
 Content-Type: text/plain; charset="UTF-8"
 
-TX timestamp:
-- requires passing clock, not sure I'm passing the correct one (from
-  cq->mdev), but the timestamp value looks convincing
+Request TX timestamp and make sure it's not empty.
+Request TX checksum offload (SW-only) and make sure it's resolved
+to the correct one.
 
-TX checksum:
-- looks like device does packet parsing (and doesn't accept custom
-  start/offset), so I'm ignoring user offsets
-
-Cc: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en.h  |  4 +-
- .../net/ethernet/mellanox/mlx5/core/en/xdp.c  | 72 ++++++++++++++++---
- .../net/ethernet/mellanox/mlx5/core/en/xdp.h  | 11 ++-
- .../ethernet/mellanox/mlx5/core/en/xsk/tx.c   | 17 ++++-
- .../net/ethernet/mellanox/mlx5/core/en_main.c |  1 +
- 5 files changed, 89 insertions(+), 16 deletions(-)
+ .../selftests/bpf/prog_tests/xdp_metadata.c   | 33 ++++++++++++++++---
+ 1 file changed, 29 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-index b2a5da9739d2..43f027bf2da3 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-@@ -484,10 +484,12 @@ struct mlx5e_xdp_info_fifo {
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+index 4439ba9392f8..9eec39969b1e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+@@ -56,7 +56,8 @@ static int open_xsk(int ifindex, struct xsk *xsk)
+ 		.fill_size = XSK_RING_PROD__DEFAULT_NUM_DESCS,
+ 		.comp_size = XSK_RING_CONS__DEFAULT_NUM_DESCS,
+ 		.frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE,
+-		.flags = XDP_UMEM_UNALIGNED_CHUNK_FLAG,
++		.flags = XDP_UMEM_UNALIGNED_CHUNK_FLAG | XDP_UMEM_TX_SW_CSUM,
++		.tx_metadata_len = sizeof(struct xsk_tx_metadata),
+ 	};
+ 	__u32 idx;
+ 	u64 addr;
+@@ -138,6 +139,7 @@ static void ip_csum(struct iphdr *iph)
  
- struct mlx5e_xdpsq;
- struct mlx5e_xmit_data;
-+struct xsk_tx_metadata;
- typedef int (*mlx5e_fp_xmit_xdp_frame_check)(struct mlx5e_xdpsq *);
- typedef bool (*mlx5e_fp_xmit_xdp_frame)(struct mlx5e_xdpsq *,
- 					struct mlx5e_xmit_data *,
--					int);
-+					int,
-+					struct xsk_tx_metadata *);
- 
- struct mlx5e_xdpsq {
- 	/* data path */
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-index 7decc81ed33a..e2e7d82cfca4 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-@@ -103,7 +103,7 @@ mlx5e_xmit_xdp_buff(struct mlx5e_xdpsq *sq, struct mlx5e_rq *rq,
- 		xdptxd->dma_addr = dma_addr;
- 
- 		if (unlikely(!INDIRECT_CALL_2(sq->xmit_xdp_frame, mlx5e_xmit_xdp_frame_mpwqe,
--					      mlx5e_xmit_xdp_frame, sq, xdptxd, 0)))
-+					      mlx5e_xmit_xdp_frame, sq, xdptxd, 0, NULL)))
- 			return false;
- 
- 		/* xmit_mode == MLX5E_XDP_XMIT_MODE_FRAME */
-@@ -145,7 +145,7 @@ mlx5e_xmit_xdp_buff(struct mlx5e_xdpsq *sq, struct mlx5e_rq *rq,
- 	xdptxd->dma_addr = dma_addr;
- 
- 	if (unlikely(!INDIRECT_CALL_2(sq->xmit_xdp_frame, mlx5e_xmit_xdp_frame_mpwqe,
--				      mlx5e_xmit_xdp_frame, sq, xdptxd, 0)))
-+				      mlx5e_xmit_xdp_frame, sq, xdptxd, 0, NULL)))
- 		return false;
- 
- 	/* xmit_mode == MLX5E_XDP_XMIT_MODE_PAGE */
-@@ -261,6 +261,37 @@ const struct xdp_metadata_ops mlx5e_xdp_metadata_ops = {
- 	.xmo_rx_hash			= mlx5e_xdp_rx_hash,
- };
- 
-+struct mlx5e_xsk_tx_complete {
-+	struct mlx5_cqe64 *cqe;
-+	struct mlx5e_cq *cq;
-+};
-+
-+static u64 mlx5e_xsk_fill_timestamp(void *_priv)
-+{
-+	struct mlx5e_xsk_tx_complete *priv = _priv;
-+	u64 ts;
-+
-+	ts = get_cqe_ts(priv->cqe);
-+
-+	if (mlx5_is_real_time_rq(priv->cq->mdev) || mlx5_is_real_time_sq(priv->cq->mdev))
-+		return mlx5_real_time_cyc2time(&priv->cq->mdev->clock, ts);
-+
-+	return  mlx5_timecounter_cyc2time(&priv->cq->mdev->clock, ts);
-+}
-+
-+static void mlx5e_xsk_request_checksum(u16 csum_start, u16 csum_offset, void *priv)
-+{
-+	struct mlx5_wqe_eth_seg *eseg = priv;
-+
-+	/* HW/FW is doing parsing, so offsets are largely ignored. */
-+	eseg->cs_flags |= MLX5_ETH_WQE_L3_CSUM | MLX5_ETH_WQE_L4_CSUM;
-+}
-+
-+const struct xsk_tx_metadata_ops mlx5e_xsk_tx_metadata_ops = {
-+	.tmo_fill_timestamp		= mlx5e_xsk_fill_timestamp,
-+	.tmo_request_checksum		= mlx5e_xsk_request_checksum,
-+};
-+
- /* returns true if packet was consumed by xdp */
- bool mlx5e_xdp_handle(struct mlx5e_rq *rq,
- 		      struct bpf_prog *prog, struct mlx5e_xdp_buff *mxbuf)
-@@ -398,11 +429,11 @@ INDIRECT_CALLABLE_SCOPE int mlx5e_xmit_xdp_frame_check_mpwqe(struct mlx5e_xdpsq
- 
- INDIRECT_CALLABLE_SCOPE bool
- mlx5e_xmit_xdp_frame(struct mlx5e_xdpsq *sq, struct mlx5e_xmit_data *xdptxd,
--		     int check_result);
-+		     int check_result, struct xsk_tx_metadata *meta);
- 
- INDIRECT_CALLABLE_SCOPE bool
- mlx5e_xmit_xdp_frame_mpwqe(struct mlx5e_xdpsq *sq, struct mlx5e_xmit_data *xdptxd,
--			   int check_result)
-+			   int check_result, struct xsk_tx_metadata *meta)
+ static int generate_packet(struct xsk *xsk, __u16 dst_port)
  {
- 	struct mlx5e_tx_mpwqe *session = &sq->mpwqe;
- 	struct mlx5e_xdpsq_stats *stats = sq->stats;
-@@ -420,7 +451,7 @@ mlx5e_xmit_xdp_frame_mpwqe(struct mlx5e_xdpsq *sq, struct mlx5e_xmit_data *xdptx
- 			 */
- 			if (unlikely(sq->mpwqe.wqe))
- 				mlx5e_xdp_mpwqe_complete(sq);
--			return mlx5e_xmit_xdp_frame(sq, xdptxd, 0);
-+			return mlx5e_xmit_xdp_frame(sq, xdptxd, 0, meta);
- 		}
- 		if (!xdptxd->len) {
- 			skb_frag_t *frag = &xdptxdf->sinfo->frags[0];
-@@ -450,6 +481,7 @@ mlx5e_xmit_xdp_frame_mpwqe(struct mlx5e_xdpsq *sq, struct mlx5e_xmit_data *xdptx
- 		 * and it's safe to complete it at any time.
- 		 */
- 		mlx5e_xdp_mpwqe_session_start(sq);
-+		xsk_tx_metadata_request(meta, &mlx5e_xsk_tx_metadata_ops, &session->wqe->eth);
- 	}
++	struct xsk_tx_metadata *meta;
+ 	struct xdp_desc *tx_desc;
+ 	struct udphdr *udph;
+ 	struct ethhdr *eth;
+@@ -151,10 +153,14 @@ static int generate_packet(struct xsk *xsk, __u16 dst_port)
+ 		return -1;
  
- 	mlx5e_xdp_mpwqe_add_dseg(sq, p, stats);
-@@ -480,7 +512,7 @@ INDIRECT_CALLABLE_SCOPE int mlx5e_xmit_xdp_frame_check(struct mlx5e_xdpsq *sq)
+ 	tx_desc = xsk_ring_prod__tx_desc(&xsk->tx, idx);
+-	tx_desc->addr = idx % (UMEM_NUM / 2) * UMEM_FRAME_SIZE;
++	tx_desc->addr = idx % (UMEM_NUM / 2) * UMEM_FRAME_SIZE + sizeof(struct xsk_tx_metadata);
+ 	printf("%p: tx_desc[%u]->addr=%llx\n", xsk, idx, tx_desc->addr);
+ 	data = xsk_umem__get_data(xsk->umem_area, tx_desc->addr);
  
- INDIRECT_CALLABLE_SCOPE bool
- mlx5e_xmit_xdp_frame(struct mlx5e_xdpsq *sq, struct mlx5e_xmit_data *xdptxd,
--		     int check_result)
-+		     int check_result, struct xsk_tx_metadata *meta)
++	meta = data - sizeof(struct xsk_tx_metadata);
++	memset(meta, 0, sizeof(*meta));
++	meta->request.flags = XDP_TXMD_FLAGS_TIMESTAMP;
++
+ 	eth = data;
+ 	iph = (void *)(eth + 1);
+ 	udph = (void *)(iph + 1);
+@@ -178,11 +184,17 @@ static int generate_packet(struct xsk *xsk, __u16 dst_port)
+ 	udph->source = htons(AF_XDP_SOURCE_PORT);
+ 	udph->dest = htons(dst_port);
+ 	udph->len = htons(sizeof(*udph) + UDP_PAYLOAD_BYTES);
+-	udph->check = 0;
++	udph->check = ~csum_tcpudp_magic(iph->saddr, iph->daddr,
++					 ntohs(udph->len), IPPROTO_UDP, 0);
+ 
+ 	memset(udph + 1, 0xAA, UDP_PAYLOAD_BYTES);
+ 
++	meta->request.flags |= XDP_TXMD_FLAGS_CHECKSUM;
++	meta->request.csum_start = sizeof(*eth) + sizeof(*iph);
++	meta->request.csum_offset = offsetof(struct udphdr, check);
++
+ 	tx_desc->len = sizeof(*eth) + sizeof(*iph) + sizeof(*udph) + UDP_PAYLOAD_BYTES;
++	tx_desc->options |= XDP_TX_METADATA;
+ 	xsk_ring_prod__submit(&xsk->tx, 1);
+ 
+ 	ret = sendto(xsk_socket__fd(xsk->socket), NULL, 0, MSG_DONTWAIT, NULL, 0);
+@@ -194,13 +206,21 @@ static int generate_packet(struct xsk *xsk, __u16 dst_port)
+ 
+ static void complete_tx(struct xsk *xsk)
  {
- 	struct mlx5e_xmit_data_frags *xdptxdf =
- 		container_of(xdptxd, struct mlx5e_xmit_data_frags, xd);
-@@ -599,6 +631,8 @@ mlx5e_xmit_xdp_frame(struct mlx5e_xdpsq *sq, struct mlx5e_xmit_data *xdptxd,
- 		sq->pc++;
+-	__u32 idx;
++	struct xsk_tx_metadata *meta;
+ 	__u64 addr;
++	void *data;
++	__u32 idx;
+ 
+ 	if (ASSERT_EQ(xsk_ring_cons__peek(&xsk->comp, 1, &idx), 1, "xsk_ring_cons__peek")) {
+ 		addr = *xsk_ring_cons__comp_addr(&xsk->comp, idx);
+ 
+ 		printf("%p: complete tx idx=%u addr=%llx\n", xsk, idx, addr);
++
++		data = xsk_umem__get_data(xsk->umem_area, addr);
++		meta = data - sizeof(struct xsk_tx_metadata);
++
++		ASSERT_NEQ(meta->completion.tx_timestamp, 0, "tx_timestamp");
++
+ 		xsk_ring_cons__release(&xsk->comp, 1);
  	}
- 
-+	xsk_tx_metadata_request(meta, &mlx5e_xsk_tx_metadata_ops, eseg);
-+
- 	sq->doorbell_cseg = cseg;
- 
- 	stats->xmit++;
-@@ -608,7 +642,9 @@ mlx5e_xmit_xdp_frame(struct mlx5e_xdpsq *sq, struct mlx5e_xmit_data *xdptxd,
- static void mlx5e_free_xdpsq_desc(struct mlx5e_xdpsq *sq,
- 				  struct mlx5e_xdp_wqe_info *wi,
- 				  u32 *xsk_frames,
--				  struct xdp_frame_bulk *bq)
-+				  struct xdp_frame_bulk *bq,
-+				  struct mlx5e_cq *cq,
-+				  struct mlx5_cqe64 *cqe)
- {
- 	struct mlx5e_xdp_info_fifo *xdpi_fifo = &sq->db.xdpi_fifo;
- 	u16 i;
-@@ -668,10 +704,24 @@ static void mlx5e_free_xdpsq_desc(struct mlx5e_xdpsq *sq,
- 
- 			break;
- 		}
--		case MLX5E_XDP_XMIT_MODE_XSK:
-+		case MLX5E_XDP_XMIT_MODE_XSK: {
- 			/* AF_XDP send */
-+			struct xsk_tx_metadata_compl *compl = NULL;
-+			struct mlx5e_xsk_tx_complete priv = {
-+				.cqe = cqe,
-+				.cq = cq,
-+			};
-+
-+			if (xp_tx_metadata_enabled(sq->xsk_pool)) {
-+				xdpi = mlx5e_xdpi_fifo_pop(xdpi_fifo);
-+				compl = &xdpi.xsk_meta;
-+
-+				xsk_tx_metadata_complete(compl, &mlx5e_xsk_tx_metadata_ops, &priv);
-+			}
-+
- 			(*xsk_frames)++;
- 			break;
-+		}
- 		default:
- 			WARN_ON_ONCE(true);
- 		}
-@@ -720,7 +770,7 @@ bool mlx5e_poll_xdpsq_cq(struct mlx5e_cq *cq)
- 
- 			sqcc += wi->num_wqebbs;
- 
--			mlx5e_free_xdpsq_desc(sq, wi, &xsk_frames, &bq);
-+			mlx5e_free_xdpsq_desc(sq, wi, &xsk_frames, &bq, cq, cqe);
- 		} while (!last_wqe);
- 
- 		if (unlikely(get_cqe_opcode(cqe) != MLX5_CQE_REQ)) {
-@@ -767,7 +817,7 @@ void mlx5e_free_xdpsq_descs(struct mlx5e_xdpsq *sq)
- 
- 		sq->cc += wi->num_wqebbs;
- 
--		mlx5e_free_xdpsq_desc(sq, wi, &xsk_frames, &bq);
-+		mlx5e_free_xdpsq_desc(sq, wi, &xsk_frames, &bq, NULL, NULL);
- 	}
- 
- 	xdp_flush_frame_bulk(&bq);
-@@ -840,7 +890,7 @@ int mlx5e_xdp_xmit(struct net_device *dev, int n, struct xdp_frame **frames,
- 		}
- 
- 		ret = INDIRECT_CALL_2(sq->xmit_xdp_frame, mlx5e_xmit_xdp_frame_mpwqe,
--				      mlx5e_xmit_xdp_frame, sq, xdptxd, 0);
-+				      mlx5e_xmit_xdp_frame, sq, xdptxd, 0, NULL);
- 		if (unlikely(!ret)) {
- 			int j;
- 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.h b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.h
-index ecfe93a479da..e054db1e10f8 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.h
-@@ -33,6 +33,7 @@
- #define __MLX5_EN_XDP_H__
- 
- #include <linux/indirect_call_wrapper.h>
-+#include <net/xdp_sock.h>
- 
- #include "en.h"
- #include "en/txrx.h"
-@@ -82,7 +83,7 @@ enum mlx5e_xdp_xmit_mode {
-  *    num, page_1, page_2, ... , page_num.
-  *
-  * MLX5E_XDP_XMIT_MODE_XSK:
-- *    none.
-+ *    frame.xsk_meta.
-  */
- #define MLX5E_XDP_FIFO_ENTRIES2DS_MAX_RATIO 4
- 
-@@ -97,6 +98,7 @@ union mlx5e_xdp_info {
- 		u8 num;
- 		struct page *page;
- 	} page;
-+	struct xsk_tx_metadata_compl xsk_meta;
- };
- 
- struct mlx5e_xsk_param;
-@@ -112,13 +114,16 @@ int mlx5e_xdp_xmit(struct net_device *dev, int n, struct xdp_frame **frames,
- 		   u32 flags);
- 
- extern const struct xdp_metadata_ops mlx5e_xdp_metadata_ops;
-+extern const struct xsk_tx_metadata_ops mlx5e_xsk_tx_metadata_ops;
- 
- INDIRECT_CALLABLE_DECLARE(bool mlx5e_xmit_xdp_frame_mpwqe(struct mlx5e_xdpsq *sq,
- 							  struct mlx5e_xmit_data *xdptxd,
--							  int check_result));
-+							  int check_result,
-+							  struct xsk_tx_metadata *meta));
- INDIRECT_CALLABLE_DECLARE(bool mlx5e_xmit_xdp_frame(struct mlx5e_xdpsq *sq,
- 						    struct mlx5e_xmit_data *xdptxd,
--						    int check_result));
-+						    int check_result,
-+						    struct xsk_tx_metadata *meta));
- INDIRECT_CALLABLE_DECLARE(int mlx5e_xmit_xdp_frame_check_mpwqe(struct mlx5e_xdpsq *sq));
- INDIRECT_CALLABLE_DECLARE(int mlx5e_xmit_xdp_frame_check(struct mlx5e_xdpsq *sq));
- 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/tx.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/tx.c
-index 597f319d4770..a59199ed590d 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/tx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/tx.c
-@@ -55,12 +55,16 @@ static void mlx5e_xsk_tx_post_err(struct mlx5e_xdpsq *sq,
- 
- 	nopwqe = mlx5e_post_nop(&sq->wq, sq->sqn, &sq->pc);
- 	mlx5e_xdpi_fifo_push(&sq->db.xdpi_fifo, *xdpi);
-+	if (xp_tx_metadata_enabled(sq->xsk_pool))
-+		mlx5e_xdpi_fifo_push(&sq->db.xdpi_fifo,
-+				     (union mlx5e_xdp_info) { .xsk_meta = {} });
- 	sq->doorbell_cseg = &nopwqe->ctrl;
  }
+@@ -221,6 +241,7 @@ static int verify_xsk_metadata(struct xsk *xsk)
+ 	const struct xdp_desc *rx_desc;
+ 	struct pollfd fds = {};
+ 	struct xdp_meta *meta;
++	struct udphdr *udph;
+ 	struct ethhdr *eth;
+ 	struct iphdr *iph;
+ 	__u64 comp_addr;
+@@ -257,6 +278,7 @@ static int verify_xsk_metadata(struct xsk *xsk)
+ 	ASSERT_EQ(eth->h_proto, htons(ETH_P_IP), "eth->h_proto");
+ 	iph = (void *)(eth + 1);
+ 	ASSERT_EQ((int)iph->version, 4, "iph->version");
++	udph = (void *)(iph + 1);
  
- bool mlx5e_xsk_tx(struct mlx5e_xdpsq *sq, unsigned int budget)
- {
- 	struct xsk_buff_pool *pool = sq->xsk_pool;
-+	struct xsk_tx_metadata *meta = NULL;
- 	union mlx5e_xdp_info xdpi;
- 	bool work_done = true;
- 	bool flush = false;
-@@ -93,12 +97,13 @@ bool mlx5e_xsk_tx(struct mlx5e_xdpsq *sq, unsigned int budget)
- 		xdptxd.dma_addr = xsk_buff_raw_get_dma(pool, desc.addr);
- 		xdptxd.data = xsk_buff_raw_get_data(pool, desc.addr);
- 		xdptxd.len = desc.len;
-+		meta = xsk_buff_get_metadata(pool, desc.addr);
+ 	/* custom metadata */
  
- 		xsk_buff_raw_dma_sync_for_device(pool, xdptxd.dma_addr, xdptxd.len);
+@@ -270,6 +292,9 @@ static int verify_xsk_metadata(struct xsk *xsk)
  
- 		ret = INDIRECT_CALL_2(sq->xmit_xdp_frame, mlx5e_xmit_xdp_frame_mpwqe,
- 				      mlx5e_xmit_xdp_frame, sq, &xdptxd,
--				      check_result);
-+				      check_result, meta);
- 		if (unlikely(!ret)) {
- 			if (sq->mpwqe.wqe)
- 				mlx5e_xdp_mpwqe_complete(sq);
-@@ -106,6 +111,16 @@ bool mlx5e_xsk_tx(struct mlx5e_xdpsq *sq, unsigned int budget)
- 			mlx5e_xsk_tx_post_err(sq, &xdpi);
- 		} else {
- 			mlx5e_xdpi_fifo_push(&sq->db.xdpi_fifo, xdpi);
-+			if (xp_tx_metadata_enabled(sq->xsk_pool)) {
-+				struct xsk_tx_metadata_compl compl;
+ 	ASSERT_EQ(meta->rx_hash_type, 0, "rx_hash_type");
+ 
++	/* checksum offload */
++	ASSERT_EQ(udph->check, 0x1c72, "csum");
 +
-+				xsk_tx_metadata_to_compl(meta, &compl);
-+				XSK_TX_COMPL_FITS(void *);
-+
-+				mlx5e_xdpi_fifo_push(&sq->db.xdpi_fifo,
-+						     (union mlx5e_xdp_info)
-+						     { .xsk_meta = compl });
-+			}
- 		}
- 
- 		flush = true;
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-index ea58c6917433..9da668f2b10b 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-@@ -5164,6 +5164,7 @@ static void mlx5e_build_nic_netdev(struct net_device *netdev)
- 
- 	netdev->netdev_ops = &mlx5e_netdev_ops;
- 	netdev->xdp_metadata_ops = &mlx5e_xdp_metadata_ops;
-+	netdev->xsk_tx_metadata_ops = &mlx5e_xsk_tx_metadata_ops;
- 
- 	mlx5e_dcbnl_build_netdev(netdev);
+ 	xsk_ring_cons__release(&xsk->rx, 1);
+ 	refill_rx(xsk, comp_addr);
  
 -- 
 2.42.0.869.gea05f2083d-goog
