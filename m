@@ -1,213 +1,269 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73A892134A
-	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 18:55:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3FA11BDF0
+	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 19:04:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xR8b+XNw"
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B220E137
-	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 11:55:49 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5b59662ff67so3179907b3.0
-        for <bpf@vger.kernel.org>; Thu, 02 Nov 2023 11:55:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bftowuw9"
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CAAE1FE4;
+	Thu,  2 Nov 2023 12:01:58 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9d10f94f70bso190690966b.3;
+        Thu, 02 Nov 2023 12:01:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698951349; x=1699556149; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=GwZROZlK9UfWkKR+Oep5UTLdUA8cSVn3j1Qp9AwudVw=;
-        b=xR8b+XNwCjZzW7ewFmpbefe+kFVHnWi7cUTdQ+q/Z/mdgeN+ge8WTJOtZC06ksc0IN
-         6GRKp0tp6pde2Y1xyAGKAViGYZ1UC5Ftb4IJeZ74dYrfelnYVRfY631b0F3YWLZuDCI2
-         Tt4yzTzHHIjRznepVEEczPavOnsx/vS2h1CXeTvWr9IhUvhFerwYyN4arohfKe1dHm/F
-         M7Oxjskfv6SKRV4QQN5NQwPB+KvG7MDS/rvPHfwoNE2CvcYo9u4neBiJM7Eio2AkZfjE
-         96v9miCvJvqgiPI8bFL5uvPrQnBzn4gcJuQ1r3DeT9lUZElvtepbqHMQ8B0Xvn+sNFcI
-         K/JA==
+        d=gmail.com; s=20230601; t=1698951716; x=1699556516; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ifGnPdp78leEm8TF8GcQ6NdohnpOfA0bs4O5R/OYdS0=;
+        b=bftowuw9fxm5FezwOluOaECx8od2BlSFkYLjj6D5Bc5BsqBJqvZ3N2+QsjcK8J3nm8
+         yS/GF9r7j7MbLxymENSCtqHaxdWsPHZbFfSh+/GJtuzt7Xa9E1dhMsbvah8aL0oOFC4h
+         8uC9ZVdM3ou5uFFu3jGzxOnrn5Na09QJvzw8etDceibYQEFB9bmydjRjEDF1OmSx0BoN
+         +43wTMMdukkRjaKMHJ5BuoM+hxN/tNX1nFv1h/XAGiEQLbBUCfkR1LZe2Um0llay5RgS
+         CUsG8BuWxp3GtN6ngCk07zQettmf4qI242m1ndqWWtt13m/pgUFtECkDR0SD0pB3zGRL
+         i6xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698951349; x=1699556149;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GwZROZlK9UfWkKR+Oep5UTLdUA8cSVn3j1Qp9AwudVw=;
-        b=qzhATqKbjMzfCv9Y1PjKY7m2+GIvtWWnnKHSrXzLj68n0HN4TvMYzb4XrszTL7EdXu
-         CAyqhjcXgxB+SNzuTOni2wixIt658laaWasvHqd3YqgxOxTyBkJUVuHbpybxpS8GA9M4
-         hlSbsrXaGLnBBiU9uaXpAbA8Y41Ixbg1BWKVdYhSkEjEVwjJqir2W6LSKY3DNhcEW+qm
-         DHnoOMw+yKHBS/hqvdnPhNXidmh0VHFbqNvbLf4XPaJ501aj8ot8tP0LJS0JL57EFbUw
-         4QDk890rpSUvijg1FNC4C+t8ECNdIoDuaKep4+Rw9E77L7QBIw7IdvUQYMzWz59IAhLW
-         AEJA==
-X-Gm-Message-State: AOJu0YzgGbFI3dkbU6frM6EVOJChxSa1zRlY1XeCZAsNOqWuLzU2Wo7V
-	XdRzx67mVfX+XNoJfayssurXb8Kuoy5OcwPZkg==
-X-Google-Smtp-Source: AGHT+IHU+DjdhGyfLwL6+kKjSdSmxJWkpryViec8cwwDoWtQDNOiyfbquBqPfJ/wOCFKMWI8x2MjGy7G4ggPBzP5Kg==
-X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
- (user=justinstitt job=sendgmr) by 2002:a05:6902:45:b0:d9b:59c3:6eef with SMTP
- id m5-20020a056902004500b00d9b59c36eefmr8657ybh.0.1698951348803; Thu, 02 Nov
- 2023 11:55:48 -0700 (PDT)
-Date: Thu, 02 Nov 2023 18:55:41 +0000
+        d=1e100.net; s=20230601; t=1698951716; x=1699556516;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ifGnPdp78leEm8TF8GcQ6NdohnpOfA0bs4O5R/OYdS0=;
+        b=ijZID6sLIvN0bzVY4N6o7feghpwVJGROlLbHi87zQwps2HEY3tYh7Jh8hBlSPgLAm0
+         kxyRuLCdJVxekguhqfEZEgTStB0/6v7ymtnhGAHOfyPCPNV+DYT1cS3VN4VIRWRf6HlV
+         3AvweJ5SwBuZOffI2+Nu/cfQMlkN4jk5+C1IjAEqACuCuZZiQMSuvSYwfb/V2tnw1nW0
+         sSWa7wIVIrI6TKmtgny7w5Zn2Cp2VK5nc/wZOB54IuSt7UlABzjVBcTsSXmrJ7PSVvfZ
+         91QhUUh+v7AdOPzusDlFZfpRhzkYNlJ1/0A6EzifaP3Wv8au0FsLHV1czUceJg+KAsPK
+         /c4w==
+X-Gm-Message-State: AOJu0Yy/Q3SoHEeZ6PKUH6m2INgr9dQjhZ1HW1rPrcjbO8f9/eCi8thz
+	nZC0eMDSbKj4fegL+oUYY1M52Dl1zOzXdO5kCeU=
+X-Google-Smtp-Source: AGHT+IHNwR57IhzCX+H5PazBzQK6fP/65bHupUZWqtHI8AIq8RW79acIHA9KfkskZFZ1HjpDlYmLSgZ5ZF6+KYJh6KY=
+X-Received: by 2002:a17:906:ee85:b0:9be:dce3:6e07 with SMTP id
+ wt5-20020a170906ee8500b009bedce36e07mr5508068ejb.32.1698951716320; Thu, 02
+ Nov 2023 12:01:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAK3wQ2UC/33NQQqDMBQE0KuUrJsS8zWpXfUepUhMvhpQIyYVi
- 3j3BleWSpfDMG8W4nG06MnttJARJ+ut62NIzyeiG9XXSK2JmXDGIWE8oxia4FxbDK/gC9sNLVV
- JKvOqKrVERuJuGLGy82Y+SI+B9jgH8oxNY31w43s7m5Kt/+NOCWVUqAxUDgZKye+1c3WLF+26j Zv4nhBHBI8EM0Lq0hiWwfWHgD0hjwiIBKRCKC1kDiz9ItZ1/QDJe1zHQwEAAA==
-X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1698951347; l=4723;
- i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
- bh=jFTdO8kx/UlazPhR0MRqYdFyWA/L3tuMaQQIucen34M=; b=v2F1dfbbHaeo64cGZOjBP3/iolmGrFIsPfCBQHud2JK2GSSDr5CUsMsWVAeI/q16gcG+J6OW+
- QYzrftVSbVSBn7OqwukQ4KtKDMdJQi+bVfKV5GmEwqA8bEfbAtqp47F
-X-Mailer: b4 0.12.3
-Message-ID: <20231102-ethtool_puts_impl-v4-0-14e1e9278496@google.com>
-Subject: [PATCH net-next v4 0/3] ethtool: Add ethtool_puts()
-From: Justin Stitt <justinstitt@google.com>
-To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shay Agroskin <shayagr@amazon.com>, 
-	Arthur Kiyanovski <akiyano@amazon.com>, David Arinzon <darinzon@amazon.com>, Noam Dagan <ndagan@amazon.com>, 
-	Saeed Bishara <saeedb@amazon.com>, Rasesh Mody <rmody@marvell.com>, 
-	Sudarsana Kalluru <skalluru@marvell.com>, GR-Linux-NIC-Dev@marvell.com, 
-	Dimitris Michailidis <dmichail@fungible.com>, Yisen Zhuang <yisen.zhuang@huawei.com>, 
-	Salil Mehta <salil.mehta@huawei.com>, Jesse Brandeburg <jesse.brandeburg@intel.com>, 
-	Tony Nguyen <anthony.l.nguyen@intel.com>, Louis Peens <louis.peens@corigine.com>, 
-	Shannon Nelson <shannon.nelson@amd.com>, Brett Creeley <brett.creeley@amd.com>, drivers@pensando.io, 
-	"K. Y. Srinivasan" <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
-	Dexuan Cui <decui@microsoft.com>, Ronak Doshi <doshir@vmware.com>, 
-	VMware PV-Drivers Reviewers <pv-drivers@vmware.com>, Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>, 
-	Dwaipayan Ray <dwaipayanray1@gmail.com>, Lukas Bulwahn <lukas.bulwahn@gmail.com>, 
-	Hauke Mehrtens <hauke@hauke-m.de>, Andrew Lunn <andrew@lunn.ch>, 
-	Florian Fainelli <f.fainelli@gmail.com>, Vladimir Oltean <olteanv@gmail.com>, 
-	"=?utf-8?q?Ar=C4=B1n=C3=A7_=C3=9CNAL?=" <arinc.unal@arinc9.com>, Daniel Golle <daniel@makrotopia.org>, 
-	Landen Chao <Landen.Chao@mediatek.com>, DENG Qingfang <dqfext@gmail.com>, 
-	Sean Wang <sean.wang@mediatek.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, 
-	"=?utf-8?q?Alvin_=C5=A0ipraga?=" <alsi@bang-olufsen.dk>, Wei Fang <wei.fang@nxp.com>, 
-	Shenwei Wang <shenwei.wang@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>, 
-	NXP Linux Team <linux-imx@nxp.com>, Lars Povlsen <lars.povlsen@microchip.com>, 
-	Steen Hegelund <Steen.Hegelund@microchip.com>, Daniel Machon <daniel.machon@microchip.com>, 
-	UNGLinuxDriver@microchip.com, Jiawen Wu <jiawenwu@trustnetic.com>, 
-	Mengyuan Lou <mengyuanlou@net-swift.com>, Heiner Kallweit <hkallweit1@gmail.com>, 
-	Russell King <linux@armlinux.org.uk>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>
-Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Kees Cook <keescook@chromium.org>, intel-wired-lan@lists.osuosl.org, 
-	oss-drivers@corigine.com, linux-hyperv@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	bpf@vger.kernel.org, Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+References: <CACkBjsY3vMLVVO0zHd+CRcQPdykDhXv8-f2oD82+Jk5KJpq_8w@mail.gmail.com>
+ <CAEf4BzbDK15myKbN4sM+cxFvfWCNjthJuFZf81k6OEBpaC124g@mail.gmail.com> <CACkBjsbpttp2L0=oi7-0+SLNC8wSxkPbG7ZYZuWOmurNxELT-Q@mail.gmail.com>
+In-Reply-To: <CACkBjsbpttp2L0=oi7-0+SLNC8wSxkPbG7ZYZuWOmurNxELT-Q@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 2 Nov 2023 12:01:44 -0700
+Message-ID: <CAEf4BzbucupXssMKLhR5Ex4rOHupp8p19CRV6qi1dT+X_5QWJg@mail.gmail.com>
+Subject: Re: bpf: incorrectly reject program with `back-edge insn from 7 to 8`
+To: Hao Sun <sunhao.th@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Thu, Nov 2, 2023 at 3:30=E2=80=AFAM Hao Sun <sunhao.th@gmail.com> wrote:
+>
+> On Wed, Nov 1, 2023 at 9:57=E2=80=AFPM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Wed, Nov 1, 2023 at 6:56=E2=80=AFAM Hao Sun <sunhao.th@gmail.com> wr=
+ote:
+> > >
+> > > Hi,
+> > >
+> > > The verifier incorrectly rejects the following prog in check_cfg() wh=
+en
+> > > loading with root with confusing log `back-edge insn from 7 to 8`:
+> > >   /* 0: r9 =3D 2
+> > >    * 1: r3 =3D 0x20
+> > >    * 2: r4 =3D 0x35
+> > >    * 3: r8 =3D r4
+> > >    * 4: goto+3
+> > >    * 5: r9 -=3D r3
+> > >    * 6: r9 -=3D r4
+> > >    * 7: r9 -=3D r8
+> > >    * 8: r8 +=3D r4
+> > >    * 9: if r8 < 0x64 goto-5
+> > >    * 10: r0 =3D r9
+> > >    * 11: exit
+> > >    * */
+> > >   BPF_MOV64_IMM(BPF_REG_9, 2),
+> > >   BPF_MOV64_IMM(BPF_REG_3, 0x20),
+> > >   BPF_MOV64_IMM(BPF_REG_4, 0x35),
+> > >   BPF_MOV64_REG(BPF_REG_8, BPF_REG_4),
+> > >   BPF_JMP_IMM(BPF_JA, 0, 0, 3),
+> > >   BPF_ALU64_REG(BPF_SUB, BPF_REG_9, BPF_REG_3),
+> > >   BPF_ALU64_REG(BPF_SUB, BPF_REG_9, BPF_REG_4),
+> > >   BPF_ALU64_REG(BPF_SUB, BPF_REG_9, BPF_REG_8),
+> > >   BPF_ALU64_REG(BPF_ADD, BPF_REG_8, BPF_REG_4),
+> > >   BPF_JMP32_IMM(BPF_JLT, BPF_REG_8, 0x68, -5),
+> > >   BPF_MOV64_REG(BPF_REG_0, BPF_REG_9),
+> > >   BPF_EXIT_INSN()
+> > >
+> > > -------- Verifier Log --------
+> > > func#0 @0
+> > > back-edge from insn 7 to 8
+> > > processed 0 insns (limit 1000000) max_states_per_insn 0 total_states =
+0
+> > > peak_states 0 mark_read 0
+> > >
+> > > This is not intentionally rejected, right?
+> >
+> > The way you wrote it, with goto +3, yes, it's intentional. Note that
+> > you'll get different results in privileged and unprivileged modes.
+> > Privileged mode allows "bounded loops" logic, so it doesn't
+> > immediately reject this program, and then later sees that r8 is always
+> > < 0x64, so program is correct.
+> >
+>
+> I load the program with privileged mode, and goto-5 makes the program
+> run from #9 to #5, so r8 is updated and the program is not infinite loop.
+>
+> > But in unprivileged mode the rules are different, and this conditional
+> > back edge is not allowed, which is probably what you are getting.
+> >
+> > It's actually confusing and your "back-edge from insn 7 to 8" is out
+> > of date and doesn't correspond to your program, you should see
+> > "back-edge from insn 11 to 7", please double check.
+> >
+>
+> Yes it's also confusing to me, but "back-edge from insn 7 to 8" is what
+> I got. The execution path of the program is #4 to #8 (goto+3), so the
+> verifier see the #8 first. Then, the program then goes #9 to #5 (goto-5),
+> the verifier thus sees #7 to #8 and incorrectly concludes back-edge here.
+>
+> This can is the verifier log I got from latest bpf-next, this C program c=
+an
+> reproduce this: https://pastebin.com/raw/Yug0NVwx
 
-This series aims to implement ethtool_puts() and send out a wave 1 of
-conversions from ethtool_sprintf(). There's also a checkpatch patch
-included to check for the cases listed below.
+Your instruction indices in your comments are wrong. Save yourself
+time and confusion, use embedded assembly and llvm-objdump. You also
+have a mismatch between 0x64 and actually specifying 0x68. Anyways, I
+don't know how you got 7 to 8, but there does seem indeed to be a bug
+in check_cfg() falsely detecting this as an infinite loop even in
+privileged mode, which it should. I'll need to look deeper into how to
+fix check_cfg(), it's not the easier to follow code, unfortunately.
 
-This was sparked from recent discussion here [1]
+But here's my log for your information.
 
-The conversions are used in cases where ethtool_sprintf() was being used
-with just two arguments:
-|       ethtool_sprintf(&data, buffer[i].name);
-or when it's used with format string: "%s"
-|       ethtool_sprintf(&data, "%s", buffer[i].name);
-which both now become:
-|       ethtool_puts(&data, buffer[i].name);
 
-The first case commonly triggers a -Wformat-security warning with Clang
-due to potential problems with format flags present in the strings [3].
+$ git show
+commit a343e644b8f3757a83f48b32b56ffc83943a62fa (HEAD -> temp-back-edge-tes=
+t)
+Author: Andrii Nakryiko <andrii@kernel.org>
+Date:   Thu Nov 2 11:55:11 2023 -0700
 
-The second is just a bit weird with a plain-ol' "%s".
+    selftests/bpf: trickier case of "bounded loop"
 
-Changes found with Cocci [4] and grep [5].
+    This should be accepted in privileged mode because r8 =3D 2 * r4 =3D 0x=
+6a,
+    and so `if r8 < 0x64 goto -5;` is always false. Currently BPF verifier'=
+s
+    check_cfg() doesn't detect this properly.
 
-[1]: https://lore.kernel.org/all/202310141935.B326C9E@keescook/
-[2]: https://lore.kernel.org/all/?q=dfb%3Aethtool_sprintf+AND+f%3Ajustinstitt
-[3]: https://lore.kernel.org/all/202310101528.9496539BE@keescook/
-[4]: (script authored by Kees w/ modifications from Joe)
-@replace_2_args@
-expression BUF;
-expression VAR;
-@@
+    Reported-by: Hao Sun <sunhao.th@gmail.com>
+    Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 
--       ethtool_sprintf(BUF, VAR)
-+       ethtool_puts(BUF, VAR)
+diff --git a/tools/testing/selftests/bpf/progs/verifier_cfg.c
+b/tools/testing/selftests/bpf/progs/verifier_cfg.c
+index df7697b94007..f89dce7850f6 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_cfg.c
++++ b/tools/testing/selftests/bpf/progs/verifier_cfg.c
+@@ -97,4 +97,26 @@ l0_%=3D:       r2 =3D r0;
+         \
+ "      ::: __clobber_all);
+ }
 
-@replace_3_args@
-expression BUF;
-expression VAR;
-@@
++SEC("socket")
++__description("conditional loop (2)")
++__success
++__failure_unpriv __msg_unpriv("back-edge from insn 10 to 11")
++__naked void conditional_loop2(void)
++{
++       asm volatile ("                                 \
++       r9 =3D 2 ll;                                      \
++       r3 =3D 0x20 ll;                                   \
++       r4 =3D 0x35 ll;                                   \
++       r8 =3D r4;                                        \
++       goto l1_%=3D;                                     \
++l0_%=3D: r9 -=3D r3;                                       \
++       r9 -=3D r4;                                       \
++       r9 -=3D r8;                                       \
++l1_%=3D: r8 +=3D r4;                                       \
++       if r8 < 0x64 goto l0_%=3D;                        \
++       r0 =3D r9;                                        \
++       exit;                                           \
++"      ::: __clobber_all);
++}
++
+ char _license[] SEC("license") =3D "GPL";
 
--       ethtool_sprintf(BUF, "%s", VAR)
-+       ethtool_puts(BUF, VAR)
+Here's disassembly (though I moved it to separate .bpf.c file to have
+0-based instruction indices, my patch above adds test to other
+existing tests):
 
--       ethtool_sprintf(&BUF, "%s", VAR)
-+       ethtool_puts(&BUF, VAR)
+$ llvm-objdump -d verifier_cfg1.bpf.o
 
-[5]: $ rg "ethtool_sprintf\(\s*[^,)]+\s*,\s*[^,)]+\s*\)"
+verifier_cfg1.bpf.o:    file format elf64-bpf
 
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
-Changes in v4:
-- update documentation to match:
-  https://lore.kernel.org/all/20231028192511.100001-1-andrew@lunn.ch/
+Disassembly of section socket:
 
-- Link to v3: https://lore.kernel.org/r/20231027-ethtool_puts_impl-v3-0-3466ac679304@google.com
+0000000000000000 <conditional_loop2>:
+       0:       18 09 00 00 02 00 00 00 00 00 00 00 00 00 00 00 r9 =3D 0x2 =
+ll
+       2:       18 03 00 00 20 00 00 00 00 00 00 00 00 00 00 00 r3 =3D 0x20=
+ ll
+       4:       18 04 00 00 35 00 00 00 00 00 00 00 00 00 00 00 r4 =3D 0x35=
+ ll
+       6:       bf 48 00 00 00 00 00 00 r8 =3D r4
+       7:       05 00 03 00 00 00 00 00 goto +0x3 <l1_0>
 
-Changes in v3:
-- fix force_speed_maps merge conflict + formatting (thanks Vladimir)
-- rebase onto net-next (thanks Andrew, Vladimir)
-- change subject (thanks Vladimir)
-- fix checkpatch formatting + implementation (thanks Joe)
-- Link to v2: https://lore.kernel.org/r/20231026-ethtool_puts_impl-v2-0-0d67cbdd0538@google.com
+0000000000000040 <l0_0>:
+       8:       1f 39 00 00 00 00 00 00 r9 -=3D r3
+       9:       1f 49 00 00 00 00 00 00 r9 -=3D r4
+      10:       1f 89 00 00 00 00 00 00 r9 -=3D r8
 
-Changes in v2:
-- wrap lines better in replacement (thanks Joe, Kees)
-- add --fix to checkpatch (thanks Joe)
-- clean up checkpatch formatting (thanks Joe, et al.)
-- rebase against next
-- Link to v1: https://lore.kernel.org/r/20231025-ethtool_puts_impl-v1-0-6a53a93d3b72@google.com
+0000000000000058 <l1_0>:
+      11:       0f 48 00 00 00 00 00 00 r8 +=3D r4
+      12:       a5 08 fb ff 64 00 00 00 if r8 < 0x64 goto -0x5 <l0_0>
+      13:       bf 90 00 00 00 00 00 00 r0 =3D r9
+      14:       95 00 00 00 00 00 00 00 exit
 
----
-Justin Stitt (3):
-      ethtool: Implement ethtool_puts()
-      checkpatch: add ethtool_sprintf rules
-      net: Convert some ethtool_sprintf() to ethtool_puts()
+Then running test on latest bpf-next:
 
- drivers/net/dsa/lantiq_gswip.c                     |  2 +-
- drivers/net/dsa/mt7530.c                           |  2 +-
- drivers/net/dsa/qca/qca8k-common.c                 |  2 +-
- drivers/net/dsa/realtek/rtl8365mb.c                |  2 +-
- drivers/net/dsa/realtek/rtl8366-core.c             |  2 +-
- drivers/net/dsa/vitesse-vsc73xx-core.c             |  8 +--
- drivers/net/ethernet/amazon/ena/ena_ethtool.c      |  4 +-
- drivers/net/ethernet/brocade/bna/bnad_ethtool.c    |  2 +-
- drivers/net/ethernet/freescale/fec_main.c          |  4 +-
- .../net/ethernet/fungible/funeth/funeth_ethtool.c  |  8 +--
- drivers/net/ethernet/hisilicon/hns/hns_dsaf_gmac.c |  2 +-
- .../net/ethernet/hisilicon/hns/hns_dsaf_xgmac.c    |  2 +-
- drivers/net/ethernet/hisilicon/hns/hns_ethtool.c   | 65 +++++++++++-----------
- drivers/net/ethernet/intel/i40e/i40e_ethtool.c     |  6 +-
- drivers/net/ethernet/intel/iavf/iavf_ethtool.c     |  3 +-
- drivers/net/ethernet/intel/ice/ice_ethtool.c       |  9 +--
- drivers/net/ethernet/intel/idpf/idpf_ethtool.c     |  2 +-
- drivers/net/ethernet/intel/igb/igb_ethtool.c       |  6 +-
- drivers/net/ethernet/intel/igc/igc_ethtool.c       |  6 +-
- drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c   |  5 +-
- .../net/ethernet/microchip/sparx5/sparx5_ethtool.c |  2 +-
- .../net/ethernet/netronome/nfp/nfp_net_ethtool.c   | 44 +++++++--------
- drivers/net/ethernet/pensando/ionic/ionic_stats.c  |  4 +-
- drivers/net/ethernet/wangxun/libwx/wx_ethtool.c    |  2 +-
- drivers/net/hyperv/netvsc_drv.c                    |  4 +-
- drivers/net/phy/nxp-tja11xx.c                      |  2 +-
- drivers/net/phy/smsc.c                             |  2 +-
- drivers/net/vmxnet3/vmxnet3_ethtool.c              | 10 ++--
- include/linux/ethtool.h                            | 13 +++++
- net/ethtool/ioctl.c                                |  7 +++
- scripts/checkpatch.pl                              | 19 +++++++
- 31 files changed, 139 insertions(+), 112 deletions(-)
----
-base-commit: 3a04927f8d4b7a4f008f04af41e31173002eb1ea
-change-id: 20231025-ethtool_puts_impl-a1479ffbc7e0
+$ sudo ./test_progs -t verifier_cfg
+...
+run_subtest:PASS:obj_open_mem 0 nsec
+libbpf: prog 'conditional_loop2': BPF program load failed: Invalid argument
+libbpf: prog 'conditional_loop2': failed to load: -22
+libbpf: failed to load object 'verifier_cfg'
+run_subtest:FAIL:unexpected_load_failure unexpected error: -22 (errno 22)
+VERIFIER LOG:
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+10: asm volatile ("                                     \
+back-edge from insn 10 to 11
+processed 0 insns (limit 1000000) max_states_per_insn 0 total_states 0
+peak_states 0 mark_read 0
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+#329/15  verifier_cfg/conditional loop (2):FAIL
+#329/16  verifier_cfg/conditional loop (2) @unpriv:OK
+#329     verifier_cfg:FAIL
 
-Best regards,
---
-Justin Stitt <justinstitt@google.com>
 
+I'll keep looking into this after taking care of other stuff I have on
+TODO list, thanks.
+
+
+
+>
+> > Anyways, while I was looking into this, I realized that ldimm64 isn't
+> > handled exactly correctly in check_cfg(), so I just sent a fix. It
+> > also adds a nicer detection of jumping into the middle of the ldimm64
+> > instruction, which I believe is something you were advocating for.
+> >
+> > >
+> > > Best
+> > > Hao
