@@ -1,84 +1,130 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74B1314267
-	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 10:30:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49E4187
-	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 03:30:38 -0700 (PDT)
-Received: from fsav119.sakura.ne.jp (fsav119.sakura.ne.jp [27.133.134.246])
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 3A2AU3gr097599;
-	Thu, 2 Nov 2023 19:30:03 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav119.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp);
- Thu, 02 Nov 2023 19:30:03 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-	(authenticated bits=0)
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 3A2AU3Hh097595
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-	Thu, 2 Nov 2023 19:30:03 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <cdd87907-e75a-46fd-884f-29fc07f62c32@I-love.SAKURA.ne.jp>
-Date: Thu, 2 Nov 2023 19:30:03 +0900
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E64B514A92;
+	Thu,  2 Nov 2023 10:32:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZJiNlDs4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22382C433C7;
+	Thu,  2 Nov 2023 10:32:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1698921179;
+	bh=vCsEm5kYfVokXfpt6FzUVW6m+28U/AvZkO+g4Ew8jFk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ZJiNlDs4f9oSJYvvei6uvYrpqZq37TUCwF2TSXFU0cathgxMjUlb4jnlSBN4uWgXY
+	 h1C9FNJXF8eXE6TTbyrPdzGPap3ZvqTeBycVZLwtI/OBCUOA+yoZaqgqRt9+AtkZYO
+	 1kJ2hdn88SArB44LpXio9JYg3HVTdQLy/72rTKqAFoB3/hWHcAVdzvxYSVIMHY/pmQ
+	 uCnjE2dRoZusENcLrLAjYtjG94rH95ydVkXdor2gNtHsd8Jh5z22QhPIQ3qx+ucgsn
+	 Hnsk6XReZPEAH78MSG8NTPZp2RwwvCPMNAXDwhxHJEM2hylphICX3Wg97UUqFLlfiL
+	 TC+p/kmOFN+ZA==
+From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+To: Arnaldo Carvalho de Melo <acme@redhat.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	linux-kernel@vger.kernel.org
+Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	bpf@vger.kernel.org,
+	Anders Roxell <anders.roxell@linaro.org>,
+	llvm@lists.linux.dev,
+	Jiri Olsa <olsajiri@gmail.com>
+Subject: [PATCH v2] tools/build: Add clang cross-compilation flags to feature detection
+Date: Thu,  2 Nov 2023 11:32:52 +0100
+Message-Id: <20231102103252.247147-1-bjorn@kernel.org>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 0/5] Reduce overhead of LSMs with static calls
-Content-Language: en-US
-To: KP Singh <kpsingh@kernel.org>
-Cc: linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
-        paul@paul-moore.com, keescook@chromium.org, casey@schaufler-ca.com,
-        song@kernel.org, daniel@iogearbox.net, ast@kernel.org,
-        renauld@google.com, pabeni@redhat.com
-References: <20231102005521.346983-1-kpsingh@kernel.org>
- <b0186178-0338-4db1-9065-b6bbda10d58f@I-love.SAKURA.ne.jp>
- <CACYkzJ48EOFEgeWyX=mTwPhZk2Wb=LzngPGCo8Hn=KoBcgCJHg@mail.gmail.com>
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <CACYkzJ48EOFEgeWyX=mTwPhZk2Wb=LzngPGCo8Hn=KoBcgCJHg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 2023/11/02 19:01, KP Singh wrote:
-> On Thu, Nov 2, 2023 at 10:42 AM Tetsuo Handa
-> <penguin-kernel@i-love.sakura.ne.jp> wrote:
->>
->> I didn't get your response on https://lkml.kernel.org/r/c588ca5d-c343-4ea2-a1f1-4efe67ebb8e3@I-love.SAKURA.ne.jp .
->>
->> Do you agree that we cannot replace LKM-based LSMs with eBPF-based access control mechanisms,
->> and do you admit that this series makes LKM-based LSMs more difficult to use?
-> 
-> If you want to do a proper in-tree version of dynamic LSMs. There can
-> be an exported symbol that allocates a dynamic slot and registers LSM
-> hooks to it. This is very doable, but it's not my use case so, I am
-> not going to do it.
-> 
-> No it does not make LKM based LSMs difficult to use. I am not ready to
-> have that debate again.  I suggested multiple extensions in my replies
-> which you chose to ignore.
+From: Björn Töpel <bjorn@rivosinc.com>
 
-You said
+When a tool cross-build has LLVM=1 set, the clang cross-compilation
+flags are not passed to the feature detection build system. This
+results in the host's features are detected instead of the targets.
 
-  I think this needs to be discussed if and when we allow LKM based LSMs."
+E.g, triggering a cross-build of bpftool:
 
-as a response to
+  cd tools/bpf/bpftool
+  make ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- LLVM=1
 
-  It is Casey's commitment that the LSM infrastructure will not forbid LKM-based LSMs.
-  We will start allowing LKM-based LSMs. But it is not clear how we can make it possible to
-  allow LKM-based LSMs.
+would report the host's, and not the target's features.
 
-, and you suggested combination of static calls (for built-in LSMs) and
-linked list (for LKM-based LSMs).
+Correct the issue by passing the CLANG_CROSS_FLAGS variable to the
+feature detection makefile.
 
-So, what is your answer to
+Fixes: cebdb7374577 ("tools: Help cross-building with clang")
+Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
+---
+ tools/build/Makefile.feature |  2 +-
+ tools/build/feature/Makefile | 12 ++++++------
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-  Until I hear the real limitations of using BPF, it's a NAK from me.
+diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
+index 934e2777a2db..25b009a6c05f 100644
+--- a/tools/build/Makefile.feature
++++ b/tools/build/Makefile.feature
+@@ -8,7 +8,7 @@ endif
+ 
+ feature_check = $(eval $(feature_check_code))
+ define feature_check_code
+-  feature-$(1) := $(shell $(MAKE) OUTPUT=$(OUTPUT_FEATURES) CC="$(CC)" CXX="$(CXX)" CFLAGS="$(EXTRA_CFLAGS) $(FEATURE_CHECK_CFLAGS-$(1))" CXXFLAGS="$(EXTRA_CXXFLAGS) $(FEATURE_CHECK_CXXFLAGS-$(1))" LDFLAGS="$(LDFLAGS) $(FEATURE_CHECK_LDFLAGS-$(1))" -C $(feature_dir) $(OUTPUT_FEATURES)test-$1.bin >/dev/null 2>/dev/null && echo 1 || echo 0)
++  feature-$(1) := $(shell $(MAKE) OUTPUT=$(OUTPUT_FEATURES) CC="$(CC)" CXX="$(CXX)" CFLAGS="$(EXTRA_CFLAGS) $(FEATURE_CHECK_CFLAGS-$(1))" CXXFLAGS="$(EXTRA_CXXFLAGS) $(FEATURE_CHECK_CXXFLAGS-$(1))" LDFLAGS="$(LDFLAGS) $(FEATURE_CHECK_LDFLAGS-$(1))" CLANG_CROSS_FLAGS="$(CLANG_CROSS_FLAGS)" -C $(feature_dir) $(OUTPUT_FEATURES)test-$1.bin >/dev/null 2>/dev/null && echo 1 || echo 0)
+ endef
+ 
+ feature_set = $(eval $(feature_set_code))
+diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+index dad79ede4e0a..c4458345e564 100644
+--- a/tools/build/feature/Makefile
++++ b/tools/build/feature/Makefile
+@@ -84,12 +84,12 @@ PKG_CONFIG ?= $(CROSS_COMPILE)pkg-config
+ 
+ all: $(FILES)
+ 
+-__BUILD = $(CC) $(CFLAGS) -MD -Wall -Werror -o $@ $(patsubst %.bin,%.c,$(@F)) $(LDFLAGS)
++__BUILD = $(CC) $(CFLAGS) $(CLANG_CROSS_FLAGS) -MD -Wall -Werror -o $@ $(patsubst %.bin,%.c,$(@F)) $(LDFLAGS)
+   BUILD = $(__BUILD) > $(@:.bin=.make.output) 2>&1
+   BUILD_BFD = $(BUILD) -DPACKAGE='"perf"' -lbfd -ldl
+   BUILD_ALL = $(BUILD) -fstack-protector-all -O2 -D_FORTIFY_SOURCE=2 -ldw -lelf -lnuma -lelf -lslang $(FLAGS_PERL_EMBED) $(FLAGS_PYTHON_EMBED) -DPACKAGE='"perf"' -lbfd -ldl -lz -llzma -lzstd -lcap
+ 
+-__BUILDXX = $(CXX) $(CXXFLAGS) -MD -Wall -Werror -o $@ $(patsubst %.bin,%.cpp,$(@F)) $(LDFLAGS)
++__BUILDXX = $(CXX) $(CXXFLAGS) $(CLANG_CROSS_FLAGS) -MD -Wall -Werror -o $@ $(patsubst %.bin,%.cpp,$(@F)) $(LDFLAGS)
+   BUILDXX = $(__BUILDXX) > $(@:.bin=.make.output) 2>&1
+ 
+ ###############################
+@@ -259,10 +259,10 @@ $(OUTPUT)test-reallocarray.bin:
+ 	$(BUILD)
+ 
+ $(OUTPUT)test-libbfd-liberty.bin:
+-	$(CC) $(CFLAGS) -Wall -Werror -o $@ test-libbfd.c -DPACKAGE='"perf"' $(LDFLAGS) -lbfd -ldl -liberty
++	$(CC) $(CFLAGS) $(CLANG_CROSS_FLAGS) -Wall -Werror -o $@ test-libbfd.c -DPACKAGE='"perf"' $(LDFLAGS) -lbfd -ldl -liberty
+ 
+ $(OUTPUT)test-libbfd-liberty-z.bin:
+-	$(CC) $(CFLAGS) -Wall -Werror -o $@ test-libbfd.c -DPACKAGE='"perf"' $(LDFLAGS) -lbfd -ldl -liberty -lz
++	$(CC) $(CFLAGS) $(CLANG_CROSS_FLAGS) -Wall -Werror -o $@ test-libbfd.c -DPACKAGE='"perf"' $(LDFLAGS) -lbfd -ldl -liberty -lz
+ 
+ $(OUTPUT)test-cplus-demangle.bin:
+ 	$(BUILD) -liberty
+@@ -283,10 +283,10 @@ $(OUTPUT)test-libbabeltrace.bin:
+ 	$(BUILD) # -lbabeltrace provided by $(FEATURE_CHECK_LDFLAGS-libbabeltrace)
+ 
+ $(OUTPUT)test-compile-32.bin:
+-	$(CC) -m32 -o $@ test-compile.c
++	$(CC) $(CLANG_CROSS_FLAGS) -m32 -o $@ test-compile.c
+ 
+ $(OUTPUT)test-compile-x32.bin:
+-	$(CC) -mx32 -o $@ test-compile.c
++	$(CC) $(CLANG_CROSS_FLAGS) -mx32 -o $@ test-compile.c
+ 
+ $(OUTPUT)test-zlib.bin:
+ 	$(BUILD) -lz
 
-? Do you agree to allow dynamically appendable LSM modules?
+base-commit: 21e80f3841c01aeaf32d7aee7bbc87b3db1aa0c6
+-- 
+2.40.1
 
