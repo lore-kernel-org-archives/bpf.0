@@ -1,34 +1,34 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 752201FAD
-	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 03:38:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76E6E185B
+	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 03:38:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D642A119
-	for <bpf@vger.kernel.org>; Wed,  1 Nov 2023 20:38:31 -0700 (PDT)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A21mApu018837
-	for <bpf@vger.kernel.org>; Wed, 1 Nov 2023 20:38:31 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3u3sftwesc-2
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E208120
+	for <bpf@vger.kernel.org>; Wed,  1 Nov 2023 20:38:34 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 3A22qdaS009999
+	for <bpf@vger.kernel.org>; Wed, 1 Nov 2023 20:38:33 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+	by m0001303.ppops.net (PPS) with ESMTPS id 3u3e3tsag0-11
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Wed, 01 Nov 2023 20:38:31 -0700
-Received: from twshared68648.02.prn6.facebook.com (2620:10d:c0a8:1b::2d) by
- mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Wed, 01 Nov 2023 20:38:32 -0700
+Received: from twshared29647.38.frc1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.34; Wed, 1 Nov 2023 20:38:30 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 74CF43AC97F1B; Wed,  1 Nov 2023 20:38:19 -0700 (PDT)
+	id 097F23AC97F4E; Wed,  1 Nov 2023 20:38:25 -0700 (PDT)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>,
         Eduard Zingerman
 	<eddyz87@gmail.com>
-Subject: [PATCH v6 bpf-next 09/17] bpf: drop knowledge-losing __reg_combine_{32,64}_into_{64,32} logic
-Date: Wed, 1 Nov 2023 20:37:51 -0700
-Message-ID: <20231102033759.2541186-10-andrii@kernel.org>
+Subject: [PATCH v6 bpf-next 12/17] bpf: generalize is_branch_taken() to work with two registers
+Date: Wed, 1 Nov 2023 20:37:54 -0700
+Message-ID: <20231102033759.2541186-13-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231102033759.2541186-1-andrii@kernel.org>
 References: <20231102033759.2541186-1-andrii@kernel.org>
@@ -41,142 +41,168 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: -QfaaXDPhiE6uYQp6kX7Xs2r5nl1YbEc
-X-Proofpoint-GUID: -QfaaXDPhiE6uYQp6kX7Xs2r5nl1YbEc
+X-Proofpoint-GUID: MFaEuD2DzOL-H0RA6By0dL3veFN28UHz
+X-Proofpoint-ORIG-GUID: MFaEuD2DzOL-H0RA6By0dL3veFN28UHz
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-01_23,2023-11-01_02,2023-05-22_02
 
-When performing 32-bit conditional operation operating on lower 32 bits
-of a full 64-bit register, register full value isn't changed. We just
-potentially gain new knowledge about that register's lower 32 bits.
-
-Unfortunately, __reg_combine_{32,64}_into_{64,32} logic that
-reg_set_min_max() performs as a last step, can lose information in some
-cases due to __mark_reg64_unbounded() and __reg_assign_32_into_64().
-That's bad and completely unnecessary. Especially __reg_assign_32_into_64=
-()
-looks completely out of place here, because we are not performing
-zero-extending subregister assignment during conditional jump.
-
-So this patch replaced __reg_combine_* with just a normal
-reg_bounds_sync() which will do a proper job of deriving u64/s64 bounds
-from u32/s32, and vice versa (among all other combinations).
-
-__reg_combine_64_into_32() is also used in one more place,
-coerce_reg_to_size(), while handling 1- and 2-byte register loads.
-Looking into this, it seems like besides marking subregister as
-unbounded before performing reg_bounds_sync(), we were also performing
-deduction of smin32/smax32 and umin32/umax32 bounds from respective
-smin/smax and umin/umax bounds. It's now redundant as reg_bounds_sync()
-performs all the same logic more generically (e.g., without unnecessary
-assumption that upper 32 bits of full register should be zero).
-
-Long story short, we remove __reg_combine_64_into_32() completely, and
-coerce_reg_to_size() now only does resetting subreg to unbounded and then
-performing reg_bounds_sync() to recover as much information as possible
-from 64-bit umin/umax and smin/smax bounds, set explicitly in
-coerce_reg_to_size() earlier.
+While still assuming that second register is a constant, generalize
+is_branch_taken-related code to accept two registers instead of register
+plus explicit constant value. This also, as a side effect, allows to
+simplify check_cond_jmp_op() by unifying BPF_K case with BPF_X case, for
+which we use a fake register to represent BPF_K's imm constant as
+a register.
 
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/verifier.c | 60 ++++++-------------------------------------
- 1 file changed, 8 insertions(+), 52 deletions(-)
+ kernel/bpf/verifier.c | 57 ++++++++++++++++++++++++-------------------
+ 1 file changed, 32 insertions(+), 25 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2991e9dd4475..8802172fe8c9 100644
+index 725f327ce5eb..5e722aaef7ed 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -2639,51 +2639,6 @@ static void __reg_assign_32_into_64(struct bpf_reg=
-_state *reg)
+@@ -14167,9 +14167,13 @@ static void find_good_pkt_pointers(struct bpf_ve=
+rifier_state *vstate,
+ 	}));
+ }
+=20
+-static int is_branch32_taken(struct bpf_reg_state *reg1, u32 val, u8 opc=
+ode)
++/*
++ * <reg1> <op> <reg2>, currently assuming reg2 is a constant
++ */
++static int is_branch32_taken(struct bpf_reg_state *reg1, struct bpf_reg_=
+state *reg2, u8 opcode)
+ {
+ 	struct tnum subreg =3D tnum_subreg(reg1->var_off);
++	u32 val =3D (u32)tnum_subreg(reg2->var_off).value;
+ 	s32 sval =3D (s32)val;
+=20
+ 	switch (opcode) {
+@@ -14249,8 +14253,12 @@ static int is_branch32_taken(struct bpf_reg_stat=
+e *reg1, u32 val, u8 opcode)
+ }
+=20
+=20
+-static int is_branch64_taken(struct bpf_reg_state *reg1, u64 val, u8 opc=
+ode)
++/*
++ * <reg1> <op> <reg2>, currently assuming reg2 is a constant
++ */
++static int is_branch64_taken(struct bpf_reg_state *reg1, struct bpf_reg_=
+state *reg2, u8 opcode)
+ {
++	u64 val =3D reg2->var_off.value;
+ 	s64 sval =3D (s64)val;
+=20
+ 	switch (opcode) {
+@@ -14329,16 +14337,23 @@ static int is_branch64_taken(struct bpf_reg_sta=
+te *reg1, u64 val, u8 opcode)
+ 	return -1;
+ }
+=20
+-/* compute branch direction of the expression "if (reg opcode val) goto =
+target;"
++/* compute branch direction of the expression "if (<reg1> opcode <reg2>)=
+ goto target;"
+  * and return:
+  *  1 - branch will be taken and "goto target" will be executed
+  *  0 - branch will not be taken and fall-through to next insn
+- * -1 - unknown. Example: "if (reg < 5)" is unknown when register value
++ * -1 - unknown. Example: "if (reg1 < 5)" is unknown when register value
+  *      range [0,10]
+  */
+-static int is_branch_taken(struct bpf_reg_state *reg1, u64 val, u8 opcod=
+e,
+-			   bool is_jmp32)
++static int is_branch_taken(struct bpf_reg_state *reg1, struct bpf_reg_st=
+ate *reg2,
++			   u8 opcode, bool is_jmp32)
+ {
++	struct tnum reg2_tnum =3D is_jmp32 ? tnum_subreg(reg2->var_off) : reg2-=
+>var_off;
++	u64 val;
++
++	if (!tnum_is_const(reg2_tnum))
++		return -1;
++	val =3D reg2_tnum.value;
++
+ 	if (__is_pointer_value(false, reg1)) {
+ 		if (!reg_not_null(reg1))
+ 			return -1;
+@@ -14360,8 +14375,8 @@ static int is_branch_taken(struct bpf_reg_state *=
+reg1, u64 val, u8 opcode,
  	}
+=20
+ 	if (is_jmp32)
+-		return is_branch32_taken(reg1, val, opcode);
+-	return is_branch64_taken(reg1, val, opcode);
++		return is_branch32_taken(reg1, reg2, opcode);
++	return is_branch64_taken(reg1, reg2, opcode);
  }
 =20
--static void __reg_combine_32_into_64(struct bpf_reg_state *reg)
--{
--	/* special case when 64-bit register has upper 32-bit register
--	 * zeroed. Typically happens after zext or <<32, >>32 sequence
--	 * allowing us to use 32-bit bounds directly,
--	 */
--	if (tnum_equals_const(tnum_clear_subreg(reg->var_off), 0)) {
--		__reg_assign_32_into_64(reg);
--	} else {
--		/* Otherwise the best we can do is push lower 32bit known and
--		 * unknown bits into register (var_off set from jmp logic)
--		 * then learn as much as possible from the 64-bit tnum
--		 * known and unknown bits. The previous smin/smax bounds are
--		 * invalid here because of jmp32 compare so mark them unknown
--		 * so they do not impact tnum bounds calculation.
--		 */
--		__mark_reg64_unbounded(reg);
--	}
--	reg_bounds_sync(reg);
--}
--
--static bool __reg64_bound_s32(s64 a)
--{
--	return a >=3D S32_MIN && a <=3D S32_MAX;
--}
--
--static bool __reg64_bound_u32(u64 a)
--{
--	return a >=3D U32_MIN && a <=3D U32_MAX;
--}
--
--static void __reg_combine_64_into_32(struct bpf_reg_state *reg)
--{
--	__mark_reg32_unbounded(reg);
--	if (__reg64_bound_s32(reg->smin_value) && __reg64_bound_s32(reg->smax_v=
-alue)) {
--		reg->s32_min_value =3D (s32)reg->smin_value;
--		reg->s32_max_value =3D (s32)reg->smax_value;
--	}
--	if (__reg64_bound_u32(reg->umin_value) && __reg64_bound_u32(reg->umax_v=
-alue)) {
--		reg->u32_min_value =3D (u32)reg->umin_value;
--		reg->u32_max_value =3D (u32)reg->umax_value;
--	}
--	reg_bounds_sync(reg);
--}
--
- /* Mark a register as having a completely unknown (scalar) value. */
- static void __mark_reg_unknown(const struct bpf_verifier_env *env,
- 			       struct bpf_reg_state *reg)
-@@ -6380,9 +6335,10 @@ static void coerce_reg_to_size(struct bpf_reg_stat=
-e *reg, int size)
- 	 * values are also truncated so we push 64-bit bounds into
- 	 * 32-bit bounds. Above were truncated < 32-bits already.
- 	 */
--	if (size >=3D 4)
--		return;
--	__reg_combine_64_into_32(reg);
-+	if (size < 4) {
-+		__mark_reg32_unbounded(reg);
-+		reg_bounds_sync(reg);
-+	}
- }
-=20
- static void set_sext64_default_val(struct bpf_reg_state *reg, int size)
-@@ -14621,13 +14577,13 @@ static void reg_set_min_max(struct bpf_reg_stat=
-e *true_reg,
- 					     tnum_subreg(false_32off));
- 		true_reg->var_off =3D tnum_or(tnum_clear_subreg(true_64off),
- 					    tnum_subreg(true_32off));
--		__reg_combine_32_into_64(false_reg);
--		__reg_combine_32_into_64(true_reg);
-+		reg_bounds_sync(false_reg);
-+		reg_bounds_sync(true_reg);
- 	} else {
- 		false_reg->var_off =3D false_64off;
- 		true_reg->var_off =3D true_64off;
--		__reg_combine_64_into_32(false_reg);
--		__reg_combine_64_into_32(true_reg);
-+		reg_bounds_sync(false_reg);
-+		reg_bounds_sync(true_reg);
+ static int flip_opcode(u32 opcode)
+@@ -14832,6 +14847,7 @@ static int check_cond_jmp_op(struct bpf_verifier_=
+env *env,
+ 	struct bpf_reg_state *regs =3D this_branch->frame[this_branch->curframe=
+]->regs;
+ 	struct bpf_reg_state *dst_reg, *other_branch_regs, *src_reg =3D NULL;
+ 	struct bpf_reg_state *eq_branch_regs;
++	struct bpf_reg_state fake_reg =3D {};
+ 	u8 opcode =3D BPF_OP(insn->code);
+ 	bool is_jmp32;
+ 	int pred =3D -1;
+@@ -14872,36 +14888,27 @@ static int check_cond_jmp_op(struct bpf_verifie=
+r_env *env,
+ 			verbose(env, "BPF_JMP/JMP32 uses reserved fields\n");
+ 			return -EINVAL;
+ 		}
++		src_reg =3D &fake_reg;
++		src_reg->type =3D SCALAR_VALUE;
++		__mark_reg_known(src_reg, insn->imm);
  	}
- }
 =20
+ 	is_jmp32 =3D BPF_CLASS(insn->code) =3D=3D BPF_JMP32;
+=20
+ 	if (BPF_SRC(insn->code) =3D=3D BPF_K) {
+-		pred =3D is_branch_taken(dst_reg, insn->imm, opcode, is_jmp32);
++		pred =3D is_branch_taken(dst_reg, src_reg, opcode, is_jmp32);
+ 	} else if (src_reg->type =3D=3D SCALAR_VALUE &&
+ 		   is_jmp32 && tnum_is_const(tnum_subreg(src_reg->var_off))) {
+-		pred =3D is_branch_taken(dst_reg,
+-				       tnum_subreg(src_reg->var_off).value,
+-				       opcode,
+-				       is_jmp32);
++		pred =3D is_branch_taken(dst_reg, src_reg, opcode, is_jmp32);
+ 	} else if (src_reg->type =3D=3D SCALAR_VALUE &&
+ 		   !is_jmp32 && tnum_is_const(src_reg->var_off)) {
+-		pred =3D is_branch_taken(dst_reg,
+-				       src_reg->var_off.value,
+-				       opcode,
+-				       is_jmp32);
++		pred =3D is_branch_taken(dst_reg, src_reg, opcode, is_jmp32);
+ 	} else if (dst_reg->type =3D=3D SCALAR_VALUE &&
+ 		   is_jmp32 && tnum_is_const(tnum_subreg(dst_reg->var_off))) {
+-		pred =3D is_branch_taken(src_reg,
+-				       tnum_subreg(dst_reg->var_off).value,
+-				       flip_opcode(opcode),
+-				       is_jmp32);
++		pred =3D is_branch_taken(src_reg, dst_reg, flip_opcode(opcode), is_jmp=
+32);
+ 	} else if (dst_reg->type =3D=3D SCALAR_VALUE &&
+ 		   !is_jmp32 && tnum_is_const(dst_reg->var_off)) {
+-		pred =3D is_branch_taken(src_reg,
+-				       dst_reg->var_off.value,
+-				       flip_opcode(opcode),
+-				       is_jmp32);
++		pred =3D is_branch_taken(src_reg, dst_reg, flip_opcode(opcode), is_jmp=
+32);
+ 	} else if (reg_is_pkt_pointer_any(dst_reg) &&
+ 		   reg_is_pkt_pointer_any(src_reg) &&
+ 		   !is_jmp32) {
 --=20
 2.34.1
 
