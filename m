@@ -1,70 +1,73 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDD685227
-	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 06:10:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C5B11FA4
+	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 06:43:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AmZx7Iu1"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B0F75C433C9;
-	Thu,  2 Nov 2023 06:10:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nbLAiE1l"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADCE1C433CC
+	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 06:43:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1698905424;
-	bh=CK2wd29D7sMRJV+1cZRwIoB4gS/1YUiODe3zMqABG5g=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=AmZx7Iu165OM4j74dWT120lJiD4ZuxHEDejcFoWKXAZpMsTRp2jqmUqo9T9BkHJvP
-	 lJI5WWuWs2UHwiVf2u+vBFNHqiE9lPvA+XBI5DJGwG0M5Qs3HwdcQRjeEMsdk/1Wcx
-	 imXcIz0PzFhFOZUe91uxrQpup8uH5bk2Z/Z/Gopsezv1F1tgGRmfMcHPGtD6zxcMca
-	 oVBnPAVzWSldauI8WovTxvpY15PyPlzfH9BgjR88YqeUpBhZOxEnt+S0mRURk3Vg+n
-	 1sfSoKZaRZdPwpjg8PWdlmpZaZYR7+DFybzCWcbtSIPQdK7cILPhHWm5YMKw0H+Q2x
-	 so2BztbBvXPVA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9C294E00092;
-	Thu,  2 Nov 2023 06:10:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1698907437;
+	bh=JZC8owDBelQHN+vVxyY7bnfOIM1BeEJV3J70IF+MQbE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=nbLAiE1li+8dfQtIpGABw8eiX3Qgtu+vyYnZbxqjaoe2JWt3jWiraR1T4HmyC9pb6
+	 YymR1MocjQYQXpkP+1MDY3QSdamHPGmwtdqRFW67pKMJw4zj2VPIiT+8uzI7GyJdd/
+	 wEF5G6s0Tw0z4gmeX09eB32+DP5FBXz7cTY61NhCfRTo1rcGdu22ZMgSKgSEx3Dc6T
+	 9o+xrrYbT7QTfys88zyRSkgNRxQbRMLWcatVHZ+gtQekBJKKzNY646UDMWapUfsDrd
+	 21cKF1R55a9oSxeRIlBS7BgMJZngWJQnK4ZVnX2dJ9vx8q0OR6dBhDyLU8+LOzbbm9
+	 7dzY0VVxB1MHQ==
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-507b96095abso611838e87.3
+        for <bpf@vger.kernel.org>; Wed, 01 Nov 2023 23:43:57 -0700 (PDT)
+X-Gm-Message-State: AOJu0YwTe8J384WRqvpEYsFcPMk3QZ/2f5eu1IqtikLWW2LClOVODyW1
+	iHOz4kOeso9HrEFYOI4iQ4mrdio3JALs7V4qc4A=
+X-Google-Smtp-Source: AGHT+IEEqLDUYVuGWl0Tr3VtOWf4BuAVkatX4W2eVJlC/CSRNJferNi6GJmnTETA/eu3zR+hPOT/HETtEe5GwcKQXFU=
+X-Received: by 2002:a05:6512:3c85:b0:509:4864:1b3a with SMTP id
+ h5-20020a0565123c8500b0050948641b3amr1178569lfv.64.1698907435908; Wed, 01 Nov
+ 2023 23:43:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v4 0/3] Relax allowlist for open-coded css_task iter
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <169890542463.15699.9328828031519896553.git-patchwork-notify@kernel.org>
-Date: Thu, 02 Nov 2023 06:10:24 +0000
-References: <20231031050438.93297-1-zhouchuyi@bytedance.com>
-In-Reply-To: <20231031050438.93297-1-zhouchuyi@bytedance.com>
-To: Chuyi Zhou <zhouchuyi@bytedance.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@kernel.org
+References: <20231023061354.941552-1-song@kernel.org> <20231023061354.941552-5-song@kernel.org>
+ <CACYkzJ7mz91WuvC=9CWA-ewh6ywCHseiH5-dY0jOA0Piw3jQ-g@mail.gmail.com>
+In-Reply-To: <CACYkzJ7mz91WuvC=9CWA-ewh6ywCHseiH5-dY0jOA0Piw3jQ-g@mail.gmail.com>
+From: Song Liu <song@kernel.org>
+Date: Wed, 1 Nov 2023 23:43:41 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5_P7R5mcv6hYfC_7JAp8Arrf2UdErgqKy+FLG=57yFMA@mail.gmail.com>
+Message-ID: <CAPhsuW5_P7R5mcv6hYfC_7JAp8Arrf2UdErgqKy+FLG=57yFMA@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 4/9] bpf: Add kfunc bpf_get_file_xattr
+To: KP Singh <kpsingh@kernel.org>
+Cc: bpf@vger.kernel.org, fsverity@lists.linux.dev, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org, 
+	kernel-team@meta.com, ebiggers@kernel.org, tytso@mit.edu, 
+	roberto.sassu@huaweicloud.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Wed, Nov 1, 2023 at 6:27=E2=80=AFPM KP Singh <kpsingh@kernel.org> wrote:
+>
+> On Mon, Oct 23, 2023 at 8:14=E2=80=AFAM Song Liu <song@kernel.org> wrote:
+> >
+> > This kfunc can be used to read xattr of a file. To avoid recursion, onl=
+y
+> > allow calling this kfunc from LSM hooks.
+>
+> I think this needs a bit more explanation in the commit message (some
+> details on what it could be used for, we can explain the use case
+> about persistent LSM policy and LSM signatures with FSVerity). I know
+> you add a selftest but some more details in the commit message would
+> help.
 
-This series was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Sure, I will add a short description here.
 
-On Tue, 31 Oct 2023 13:04:35 +0800 you wrote:
-> Hi,
-> The patchset aims to relax the allowlist for open-coded css_task iter
-> suggested by Alexei[1].
-> 
-> Please see individual patches for more details. And comments are always
-> welcome.
-> 
-> [...]
+> What about adding the KF_TRUSTED_ARGS for the kfunc?
 
-Here is the summary with links:
-  - [bpf-next,v4,1/3] bpf: Relax allowlist for css_task iter
-    https://git.kernel.org/bpf/bpf/c/3091b667498b
-  - [bpf-next,v4,2/3] selftests/bpf: Add tests for css_task iter combining with cgroup iter
-    https://git.kernel.org/bpf/bpf/c/f49843afde67
-  - [bpf-next,v4,3/3] selftests/bpf: Add test for using css_task iter in sleepable progs
-    https://git.kernel.org/bpf/bpf/c/d8234d47c4aa
+Yeah, I was thinking about this. Adding it to the next version.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thanks,
+Song
 
-
+[...]
