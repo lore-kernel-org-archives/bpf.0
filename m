@@ -1,142 +1,144 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F2676AAC;
-	Thu,  2 Nov 2023 10:23:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E711427A
+	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 10:30:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vg1STkov"
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACAD131;
-	Thu,  2 Nov 2023 03:23:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698920633; x=1730456633;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9ul+y/18WagJSHQulwZHXgrLTb0s4wOtHHZDQsVdwvM=;
-  b=Vg1STkov9pu9AU4o4GGfQUA93H6NgzJCAhd9AF52XrHwUKuNsYTbOOLV
-   fTdl38WlsbF4sdsZ9FJY5meyjwB6+aJ67/jBrMXq9g6Dbina/1FNV5Qnl
-   ZB7PBUFwZRxqtM5/8sZwwX1AjJqjsLswFn6a7p8fmn7uAMXZhDNXhxTGT
-   2zv5S85oLXMTx9S8u36zr3hz+ZPHbIWdb9tuutvDUFyGTsYv8PXiNx12K
-   AJFzbxasdtZqPpLGsKt7KL0oHfMw1uhgAfDfOMgnwSdCyGvDaf0BCxuV+
-   3ntxPxckUijjxiEwsZEXIU94CyLnc559UJpn/IZgOnibhqENKwaGQmCik
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10881"; a="379074844"
-X-IronPort-AV: E=Sophos;i="6.03,271,1694761200"; 
-   d="scan'208";a="379074844"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2023 03:23:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10881"; a="934742036"
-X-IronPort-AV: E=Sophos;i="6.03,271,1694761200"; 
-   d="scan'208";a="934742036"
-Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 02 Nov 2023 03:23:49 -0700
-Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qyUrb-0001Oh-0K;
-	Thu, 02 Nov 2023 10:23:47 +0000
-Date: Thu, 2 Nov 2023 18:23:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: thinker.li@gmail.com, bpf@vger.kernel.org, ast@kernel.org,
-	martin.lau@linux.dev, song@kernel.org, kernel-team@meta.com,
-	andrii@kernel.org, drosen@google.com
-Cc: oe-kbuild-all@lists.linux.dev, sinquersw@gmail.com, kuifeng@meta.com,
-	Kui-Feng Lee <thinker.li@gmail.com>, netdev@vger.kernel.org
-Subject: Re: [PATCH bpf-next v9 09/12] bpf, net: switch to dynamic
- registration
-Message-ID: <202311021810.n3qVl5OS-lkp@intel.com>
-References: <20231101204519.677870-10-thinker.li@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z1qiOP/+"
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97E8136;
+	Thu,  2 Nov 2023 03:30:19 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-d9cbba16084so756474276.1;
+        Thu, 02 Nov 2023 03:30:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698921019; x=1699525819; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3rctCHpSNNnudhMuzQjqFB7K6mRQjkZdSA9bEmnPeqA=;
+        b=Z1qiOP/+FOR/JKzHy4msogsvl9JLMorgxzABTCBfAYTEzuxQW05flAE3Wkv1HrA/fJ
+         ewmPi30q2+kgee+9kNz+Mn5k58pk7Qsuy5YuWJsQ1hWmGN84mcth+ockGLwwiWDtRIR8
+         haHVhYEfz9azA3H/sEEQ8NOP0TjnKchhRMGKrR/0rIl/jShKKlSg1rud8KDc4uSN9qmT
+         Q4ntuOLnXySTmki8cc9XvRt5THyxOG1ERTxzqSkbbC6WSNdGkGcbYvGImocxPmUzNk0V
+         9unXzZAjftOm5KZ6oQyT4cCVqVuAxlwVFJz2GoFL/qOkfzjFR5JrGsgJig0ng9n77l73
+         xGQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698921019; x=1699525819;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3rctCHpSNNnudhMuzQjqFB7K6mRQjkZdSA9bEmnPeqA=;
+        b=VK0/AAGFnrztJw72j6X4YIrJzX+cj0Mh7Ax/CDCH26A15AaTLcDlj2/32hPSEKkDve
+         172ll0ydvUaehgAJCO2l90F5AWdJ/FhrkxTgFIQ+6lOJzJNioQR8rW/K8zUfVxosyH8t
+         GSBN/o/safOyz3wm6ZsrQEjxUMXvLBcPm5XvkMI/KFjqsbIazrOJ61hlbpR05HLPew5F
+         YkXCfncFkmewsICuUeRmNPWZWBYL19DFl6lBPAMxSnf6oKFh+Op4DmJaL4WiXspQBEv0
+         XnmV1sTts0KNmRsfs3Rsn50rgceVjV6WzsjdGc4yNkJ3OzLbKYOxeKPbK9FzwX5//2uE
+         YC9w==
+X-Gm-Message-State: AOJu0YwlX1qAp7mqFQfOCdWyOh09omWXqn9isg8EaOh93RscuC2kLtnn
+	ZFlF883ovR+uAze6gFwSO+HWV+G0t+6lURIxEA==
+X-Google-Smtp-Source: AGHT+IE9befvUCRRTSTK2CGqSbtQw00NeSRpf/odrYSyjMc/SGNn8v1CTqa26VeWWmBWI7wmxOXZ5rWdPQmywQvu4lc=
+X-Received: by 2002:a25:d152:0:b0:da0:3bfc:b915 with SMTP id
+ i79-20020a25d152000000b00da03bfcb915mr16112280ybg.11.1698921018746; Thu, 02
+ Nov 2023 03:30:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231101204519.677870-10-thinker.li@gmail.com>
+References: <CACkBjsY3vMLVVO0zHd+CRcQPdykDhXv8-f2oD82+Jk5KJpq_8w@mail.gmail.com>
+ <CAEf4BzbDK15myKbN4sM+cxFvfWCNjthJuFZf81k6OEBpaC124g@mail.gmail.com>
+In-Reply-To: <CAEf4BzbDK15myKbN4sM+cxFvfWCNjthJuFZf81k6OEBpaC124g@mail.gmail.com>
+From: Hao Sun <sunhao.th@gmail.com>
+Date: Thu, 2 Nov 2023 11:30:07 +0100
+Message-ID: <CACkBjsbpttp2L0=oi7-0+SLNC8wSxkPbG7ZYZuWOmurNxELT-Q@mail.gmail.com>
+Subject: Re: bpf: incorrectly reject program with `back-edge insn from 7 to 8`
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Wed, Nov 1, 2023 at 9:57=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Wed, Nov 1, 2023 at 6:56=E2=80=AFAM Hao Sun <sunhao.th@gmail.com> wrot=
+e:
+> >
+> > Hi,
+> >
+> > The verifier incorrectly rejects the following prog in check_cfg() when
+> > loading with root with confusing log `back-edge insn from 7 to 8`:
+> >   /* 0: r9 =3D 2
+> >    * 1: r3 =3D 0x20
+> >    * 2: r4 =3D 0x35
+> >    * 3: r8 =3D r4
+> >    * 4: goto+3
+> >    * 5: r9 -=3D r3
+> >    * 6: r9 -=3D r4
+> >    * 7: r9 -=3D r8
+> >    * 8: r8 +=3D r4
+> >    * 9: if r8 < 0x64 goto-5
+> >    * 10: r0 =3D r9
+> >    * 11: exit
+> >    * */
+> >   BPF_MOV64_IMM(BPF_REG_9, 2),
+> >   BPF_MOV64_IMM(BPF_REG_3, 0x20),
+> >   BPF_MOV64_IMM(BPF_REG_4, 0x35),
+> >   BPF_MOV64_REG(BPF_REG_8, BPF_REG_4),
+> >   BPF_JMP_IMM(BPF_JA, 0, 0, 3),
+> >   BPF_ALU64_REG(BPF_SUB, BPF_REG_9, BPF_REG_3),
+> >   BPF_ALU64_REG(BPF_SUB, BPF_REG_9, BPF_REG_4),
+> >   BPF_ALU64_REG(BPF_SUB, BPF_REG_9, BPF_REG_8),
+> >   BPF_ALU64_REG(BPF_ADD, BPF_REG_8, BPF_REG_4),
+> >   BPF_JMP32_IMM(BPF_JLT, BPF_REG_8, 0x68, -5),
+> >   BPF_MOV64_REG(BPF_REG_0, BPF_REG_9),
+> >   BPF_EXIT_INSN()
+> >
+> > -------- Verifier Log --------
+> > func#0 @0
+> > back-edge from insn 7 to 8
+> > processed 0 insns (limit 1000000) max_states_per_insn 0 total_states 0
+> > peak_states 0 mark_read 0
+> >
+> > This is not intentionally rejected, right?
+>
+> The way you wrote it, with goto +3, yes, it's intentional. Note that
+> you'll get different results in privileged and unprivileged modes.
+> Privileged mode allows "bounded loops" logic, so it doesn't
+> immediately reject this program, and then later sees that r8 is always
+> < 0x64, so program is correct.
+>
 
-kernel test robot noticed the following build errors:
+I load the program with privileged mode, and goto-5 makes the program
+run from #9 to #5, so r8 is updated and the program is not infinite loop.
 
-[auto build test ERROR on bpf-next/master]
+> But in unprivileged mode the rules are different, and this conditional
+> back edge is not allowed, which is probably what you are getting.
+>
+> It's actually confusing and your "back-edge from insn 7 to 8" is out
+> of date and doesn't correspond to your program, you should see
+> "back-edge from insn 11 to 7", please double check.
+>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/thinker-li-gmail-com/bpf-refactory-struct_ops-type-initialization-to-a-function/20231102-044820
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20231101204519.677870-10-thinker.li%40gmail.com
-patch subject: [PATCH bpf-next v9 09/12] bpf, net: switch to dynamic registration
-config: x86_64-randconfig-013-20231102 (https://download.01.org/0day-ci/archive/20231102/202311021810.n3qVl5OS-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231102/202311021810.n3qVl5OS-lkp@intel.com/reproduce)
+Yes it's also confusing to me, but "back-edge from insn 7 to 8" is what
+I got. The execution path of the program is #4 to #8 (goto+3), so the
+verifier see the #8 first. Then, the program then goes #9 to #5 (goto-5),
+the verifier thus sees #7 to #8 and incorrectly concludes back-edge here.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311021810.n3qVl5OS-lkp@intel.com/
+This can is the verifier log I got from latest bpf-next, this C program can
+reproduce this: https://pastebin.com/raw/Yug0NVwx
 
-All errors (new ones prefixed by >>):
-
-   ld: kernel/bpf/btf.o: in function `btf_add_struct_ops':
->> kernel/bpf/btf.c:8662: undefined reference to `bpf_struct_ops_desc_init'
-
-
-vim +8662 kernel/bpf/btf.c
-
-  8619	
-  8620	static int
-  8621	btf_add_struct_ops(struct btf *btf, struct bpf_struct_ops *st_ops,
-  8622			   struct bpf_verifier_log *log)
-  8623	{
-  8624		struct btf_struct_ops_tab *tab, *new_tab;
-  8625		int i, err;
-  8626	
-  8627		if (!btf)
-  8628			return -ENOENT;
-  8629	
-  8630		/* Assume this function is called for a module when the module is
-  8631		 * loading.
-  8632		 */
-  8633	
-  8634		tab = btf->struct_ops_tab;
-  8635		if (!tab) {
-  8636			tab = kzalloc(offsetof(struct btf_struct_ops_tab, ops[4]),
-  8637				      GFP_KERNEL);
-  8638			if (!tab)
-  8639				return -ENOMEM;
-  8640			tab->capacity = 4;
-  8641			btf->struct_ops_tab = tab;
-  8642		}
-  8643	
-  8644		for (i = 0; i < tab->cnt; i++)
-  8645			if (tab->ops[i].st_ops == st_ops)
-  8646				return -EEXIST;
-  8647	
-  8648		if (tab->cnt == tab->capacity) {
-  8649			new_tab = krealloc(tab,
-  8650					   offsetof(struct btf_struct_ops_tab,
-  8651						    ops[tab->capacity * 2]),
-  8652					   GFP_KERNEL);
-  8653			if (!new_tab)
-  8654				return -ENOMEM;
-  8655			tab = new_tab;
-  8656			tab->capacity *= 2;
-  8657			btf->struct_ops_tab = tab;
-  8658		}
-  8659	
-  8660		tab->ops[btf->struct_ops_tab->cnt].st_ops = st_ops;
-  8661	
-> 8662		err = bpf_struct_ops_desc_init(&tab->ops[btf->struct_ops_tab->cnt], btf, log);
-  8663		if (err)
-  8664			return err;
-  8665	
-  8666		btf->struct_ops_tab->cnt++;
-  8667	
-  8668		return 0;
-  8669	}
-  8670	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> Anyways, while I was looking into this, I realized that ldimm64 isn't
+> handled exactly correctly in check_cfg(), so I just sent a fix. It
+> also adds a nicer detection of jumping into the middle of the ldimm64
+> instruction, which I believe is something you were advocating for.
+>
+> >
+> > Best
+> > Hao
