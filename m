@@ -1,83 +1,72 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85F7D4C9A
-	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 05:59:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79DDD53AC
+	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 06:00:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KQoo7nS7"
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B92CD7
-	for <bpf@vger.kernel.org>; Wed,  1 Nov 2023 22:59:03 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-4083f61312eso4189835e9.3
-        for <bpf@vger.kernel.org>; Wed, 01 Nov 2023 22:59:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698904742; x=1699509542; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vXX2qenhOsv3lSe1EamJq3W8kEVyRo3eOOz+lcy0UEQ=;
-        b=KQoo7nS73hI3WmsVFNulEIv1Ip6ZWXmus7aToN/fIuyACzCulYygrUgrsf1wETPLZd
-         Nj6No/FL4Z8Xqs+lVE4dx9vziSFs+Ui/P/FzYYrf/P7g8tOqcPwglX7r6feH37e64moW
-         lKTee0CuCXxHh+ItzUm9R72SdFSaCJZXmyFakZ95Q0hrlWfbiPA20wzyjKVx8UeQ07Vq
-         pERyTbH/zyaZkfBoAu9M+xl/9w62xv822/iexCYQ79w3AzwM42a90+gtVfpDV6thfr7F
-         AXjfQBUNE2mRBnSZ59m4fxssz55B5r+VWGS6TpDjrEMXFSFIvdT9X0mKyDuZXxu8gjak
-         q6YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698904742; x=1699509542;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vXX2qenhOsv3lSe1EamJq3W8kEVyRo3eOOz+lcy0UEQ=;
-        b=Ld1PkiR56a+08htwyYMmUgEW6Ruz+Ft5wN6EELVsvu0d2UCZbhY6Zd43JQ7l2aPl2z
-         gLGC2diEbxcRtNZZ1EeOYVVUS07t4oN+iXGC+Al7UEEMSDB+19EqbeeBSrMS+PhIPFNB
-         tiyM3MNlbYh+1XkD99ipY0O/HPsPfsYpMGR+kSaTZsvphHC7xcVP0OddTh7QxHKV9/YS
-         Gj68XSoR8hWEPJO2rE9z4M/V4dV8EUUemCOjvPgFHto+ji5qaKAMC9zMZk+Ny+x1Kxu8
-         DKGCyYAMJKqP00E9alflxoL6ya+x86a6jUhYBwuqZAgrTd/Yt/v8VU7ApH/2efeXNPnV
-         tm0A==
-X-Gm-Message-State: AOJu0YzeDUBeQQqbh5bY9OpqVXrpWF2EZNE3GLBljY9T6Qv3b+PT/OF2
-	mU/OyJYIvMq3B+Pyhq/PbaSg9rRXBFgTqZvCWW4=
-X-Google-Smtp-Source: AGHT+IFXJoQUVrP10UvEpxyjpq1KrF/R5gyGwk15+ii5TiHgxAl2HxSDGWtsNU7faoVWvZJxsyXyHQROeMGwKT48yYM=
-X-Received: by 2002:a05:600c:1d18:b0:408:4475:8cc1 with SMTP id
- l24-20020a05600c1d1800b0040844758cc1mr15920925wms.35.1698904741521; Wed, 01
- Nov 2023 22:59:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rl5oPmlu"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 11854C433CB;
+	Thu,  2 Nov 2023 06:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1698904825;
+	bh=GD80CAKbgCq1tYFOrdJMrrxeLcyFbVi5xrx26IXKTFo=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=rl5oPmluTD9TDCKWQKr4WK0Cld0hcuuIppKLFxd0iou40siCv9duj0G3/bQzvBKlo
+	 H+OivhO8zBGFNuV7Or7gKkTZM8CU+VuV0GfVFUYq/lTRfKpDeVh47/A5KYchk/rhAA
+	 H+rYmZ3top0YPAI7PZFrKvzIQqgpO/CnewYGNMB+ALjl6Eeu+7X5YxbgU15YN+rmtl
+	 L+Kxfx+ekx5gEtpceelUQujRPMY+ocxWCogbrGaGTqkd22unB/4aAnZrfOJ1pvdF3t
+	 Ni1QKWtjiLHWI2gLe+Fv6WCOm/uZAdXspaTUzNCPgDR5/mRwYh6C1bjP/spCjXGkGH
+	 B2deJSQXEv0SQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EA9E4E00093;
+	Thu,  2 Nov 2023 06:00:24 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231024235551.2769174-1-song@kernel.org> <20231024235551.2769174-4-song@kernel.org>
-In-Reply-To: <20231024235551.2769174-4-song@kernel.org>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 1 Nov 2023 22:58:49 -0700
-Message-ID: <CAADnVQ+rqwPARuwkuRJLJSYN45m7vC1sLkiVX=BQbP0ho+3DJQ@mail.gmail.com>
-Subject: Re: [PATCH v6 bpf-next 3/9] bpf: Introduce KF_ARG_PTR_TO_CONST_STR
-To: Song Liu <song@kernel.org>
-Cc: bpf <bpf@vger.kernel.org>, fsverity@lists.linux.dev, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
-	Kernel Team <kernel-team@meta.com>, Eric Biggers <ebiggers@kernel.org>, 
-	"Theodore Ts'o" <tytso@mit.edu>, Roberto Sassu <roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v3] bpf: Check map->usercnt after timer->timer is
+ assigned
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <169890482495.9002.6880714745373814049.git-patchwork-notify@kernel.org>
+Date: Thu, 02 Nov 2023 06:00:24 +0000
+References: <20231030063616.1653024-1-houtao@huaweicloud.com>
+In-Reply-To: <20231030063616.1653024-1-houtao@huaweicloud.com>
+To: Hou Tao <houtao@huaweicloud.com>
+Cc: bpf@vger.kernel.org, martin.lau@linux.dev, alexei.starovoitov@gmail.com,
+ andrii@kernel.org, song@kernel.org, haoluo@google.com,
+ yonghong.song@linux.dev, daniel@iogearbox.net, kpsingh@kernel.org,
+ sdf@google.com, jolsa@kernel.org, john.fastabend@gmail.com, hsinweih@uci.edu,
+ houtao1@huawei.com
 
-On Tue, Oct 24, 2023 at 4:56=E2=80=AFPM Song Liu <song@kernel.org> wrote:
->
->
-> +2.2.5 __const_str Annotation
-> +----------------------------
-> +This annotation is used to indicate that the argument is a constant stri=
-ng.
-> +
-> +An example is given below::
-> +
-> +        __bpf_kfunc bpf_get_file_xattr(..., const char *name__const_str,=
- ...)
+Hello:
 
-After sleeping on it this still looks too verbose to me.
-'const' is repeated back to back.
-Let's use __str suffix?
+This patch was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-> +                       ret =3D check_reg_const_str(env, reg, regno);
+On Mon, 30 Oct 2023 14:36:16 +0800 you wrote:
+> From: Hou Tao <houtao1@huawei.com>
+> 
+> When there are concurrent uref release and bpf timer init operations,
+> the following sequence diagram is possible. It will break the guarantee
+> provided by bpf_timer: bpf_timer will still be alive after userspace
+> application releases or unpins the map. It also will lead to kmemleak
+> for old kernel version which doesn't release bpf_timer when map is
+> released.
+> 
+> [...]
 
-I don't mind that helper has a more verbose name.
+Here is the summary with links:
+  - [bpf-next,v3] bpf: Check map->usercnt after timer->timer is assigned
+    https://git.kernel.org/bpf/bpf/c/fd381ce60a2d
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
