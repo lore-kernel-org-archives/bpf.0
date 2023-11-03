@@ -1,165 +1,258 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B090180
-	for <bpf@vger.kernel.org>; Fri,  3 Nov 2023 00:08:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFF8A7E1
+	for <bpf@vger.kernel.org>; Fri,  3 Nov 2023 00:08:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B67136
-	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 17:08:32 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A2JsqMO009033
-	for <bpf@vger.kernel.org>; Thu, 2 Nov 2023 17:08:31 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3u4e4g3h91-2
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5907D136
+	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 17:08:41 -0700 (PDT)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A2MZgpp016148
+	for <bpf@vger.kernel.org>; Thu, 2 Nov 2023 17:08:40 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3u4mprrc07-4
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 02 Nov 2023 17:08:30 -0700
-Received: from twshared29647.38.frc1.facebook.com (2620:10d:c0a8:1b::30) by
- mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Thu, 02 Nov 2023 17:08:40 -0700
+Received: from twshared58712.02.prn6.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Thu, 2 Nov 2023 17:08:28 -0700
+ 15.1.2507.34; Thu, 2 Nov 2023 17:08:35 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 61B823AD8A6BD; Thu,  2 Nov 2023 17:08:23 -0700 (PDT)
+	id 7A7913AD8A6E2; Thu,  2 Nov 2023 17:08:27 -0700 (PDT)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next 00/13] BPF register bounds range vs range support
-Date: Thu, 2 Nov 2023 17:08:09 -0700
-Message-ID: <20231103000822.2509815-1-andrii@kernel.org>
+Subject: [PATCH bpf-next 02/13] bpf: generalize is_scalar_branch_taken() logic
+Date: Thu, 2 Nov 2023 17:08:11 -0700
+Message-ID: <20231103000822.2509815-3-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: vLvHy362GhdA-XgxNOinDmWz7J9oaQlQ
-X-Proofpoint-GUID: vLvHy362GhdA-XgxNOinDmWz7J9oaQlQ
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+In-Reply-To: <20231103000822.2509815-1-andrii@kernel.org>
+References: <20231103000822.2509815-1-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: pwl0idHCp4EiG92Xik5IvpKkzHnJlDkK
+X-Proofpoint-ORIG-GUID: pwl0idHCp4EiG92Xik5IvpKkzHnJlDkK
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-02_10,2023-11-02_03,2023-05-22_02
 
-This patch set is a continuation of work started in [0]. It adds a big set =
-of
-manual, auto-generated, and now also random test cases validating BPF
-verifier's register bounds tracking and deduction logic.
+Generalize is_branch_taken logic for SCALAR_VALUE register to handle
+cases when both registers are not constants. Previously supported
+<range> vs <scalar> cases are a natural subset of more generic <range>
+vs <range> set of cases.
 
-First few patches generalize verifier's logic to handle conditional jumps a=
-nd
-corresponding range adjustments in case when two non-const registers are
-compared to each other. Patch #1 generalizes reg_set_min_max() portion, whi=
-le
-patch #2 does the same for is_branch_taken() part of the overall solution.
+Generalized logic relies on straightforward segment intersection checks.
 
-Patch #3 improves equality and inequality for cases when BPF program code
-mixes 64-bit and 32-bit uses of the same register. Depending on specific
-sequence, it's possible to get to the point where u64/s64 bounds will be ve=
-ry
-generic (e.g., after signed 32-bit comparison), while we still keep pretty
-tight u32/s32 bounds. If in such state we proceed with 32-bit equality or
-inequality comparison, reg_set_min_max() might have to deal with adjusting =
-s32
-bounds for two registers that don't overlap, which breaks reg_set_min_max().
-This doesn't manifest in <range> vs <const> cases, because if that happens
-reg_set_min_max() in effect will force s32 bounds to be a new "impossible"
-constant (from original smin32/smax32 bounds point of view). Things get tri=
-cky
-when we have <range> vs <range> adjustments, so instead of trying to somehow
-make sense out of such situations, it's best to detect such impossible
-situations and prune the branch that can't be taken in is_branch_taken()
-logic.  This equality/inequality was the only such category of situations w=
-ith
-auto-generated tests added later in the patch set.
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ kernel/bpf/verifier.c | 103 ++++++++++++++++++++++++++----------------
+ 1 file changed, 63 insertions(+), 40 deletions(-)
 
-But when we start mixing arithmetic operations in different numeric domains
-and conditionals, things get even hairier. So, patch #4 adds sanity checking
-logic after all ALU/ALU64, JMP/JMP32, and LDX operations. By default, inste=
-ad
-of failing verification, we conservatively reset range bounds to unknown
-values, reporting violation in verifier log (if verbose logs are requested).
-But to aid development, detection, and debugging, we also introduce a new t=
-est
-flag, BPF_F_TEST_SANITY_STRICT, which triggers verification failure on range
-sanity violation.
-
-Patch #11 sets BPF_F_TEST_SANITY_STRICT by default for test_progs and
-test_verifier. Patch #12 adds support for controlling this in veristat for
-testing with production BPF object files.
-
-Getting back to BPF verifier, patches #5 and #6 complete verifier's range
-tracking logic clean up. See respective patches for details.
-
-With kernel-side taken care of, we move to testing. We start with building
-a tester that validates existing <range> vs <scalar> verifier logic for ran=
-ge
-bounds. Patch #7 implements an initial version of such a tester. We guard
-millions of generated tests behind SLOW_TESTS=3D1 envvar requirement, but a=
-lso
-have a relatively small number of tricky cases that came up during developm=
-ent
-and debugging of this work. Those will be executed as part of a normal
-test_progs run.
-
-Patch #8 simulates more nuanced JEQ/JNE logic we added to verifier in patch=
- #3.
-Patch #9 adds <range> vs <range> "slow tests".
-
-Patch #10 is a completely new one, it adds a bunch of randomly generated ca=
-ses
-to be run normally, without SLOW_TESTS=3D1 guard. This should help to get
-a bunch of cover, and hopefully find some remaining latent problems if
-verifier proactively as part of normal BPF CI runs.
-
-Finally, a tiny test which was, amazingly, an initial motivation for this
-whole work, is added in lucky patch #13, demonstrating how verifier is now
-smart enough to track actual number of elements in the array and won't requ=
-ire
-additional checks on loop iteration variable inside the bpf_for() open-coded
-iterator loop.
-
-  [0] https://patchwork.kernel.org/project/netdevbpf/list/?series=3D798308&=
-state=3D*
-
-Andrii Nakryiko (13):
-  bpf: generalize reg_set_min_max() to handle non-const register comparisons
-  bpf: generalize is_scalar_branch_taken() logic
-  bpf: enhance BPF_JEQ/BPF_JNE is_branch_taken logic
-  bpf: add register bounds sanity checks and sanitization
-  bpf: remove redundant s{32,64} -> u{32,64} deduction logic
-  bpf: make __reg{32,64}_deduce_bounds logic more robust
-  selftests/bpf: BPF register range bounds tester
-  selftests/bpf: adjust OP_EQ/OP_NE handling to use subranges for branch ta=
-ken
-  selftests/bpf: add range x range test to reg_bounds
-  selftests/bpf: add randomized reg_bounds tests
-  selftests/bpf: set BPF_F_TEST_SANITY_SCRIPT by default
-  veristat: add ability to set BPF_F_TEST_SANITY_STRICT flag with -r flag
-  selftests/bpf: add iter test requiring range x range logic
-
- include/linux/bpf_verifier.h                  |    1 +
- include/linux/tnum.h                          |    4 +
- include/uapi/linux/bpf.h                      |    3 +
- kernel/bpf/syscall.c                          |    3 +-
- kernel/bpf/tnum.c                             |    7 +-
- kernel/bpf/verifier.c                         |  619 ++---
- tools/include/uapi/linux/bpf.h                |    3 +
- .../bpf/prog_tests/bpf_verif_scale.c          |    2 +-
- .../selftests/bpf/prog_tests/reg_bounds.c     | 2091 +++++++++++++++++
- tools/testing/selftests/bpf/progs/iters.c     |   22 +
- .../selftests/bpf/progs/verifier_bounds.c     |    2 +
- tools/testing/selftests/bpf/test_loader.c     |   35 +-
- tools/testing/selftests/bpf/test_sock_addr.c  |    1 +
- tools/testing/selftests/bpf/test_verifier.c   |    2 +-
- tools/testing/selftests/bpf/testing_helpers.c |    4 +-
- tools/testing/selftests/bpf/veristat.c        |   12 +-
- 16 files changed, 2511 insertions(+), 300 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 52934080042c..2627461164ed 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -14187,82 +14187,104 @@ static int is_scalar_branch_taken(struct bpf_r=
+eg_state *reg1, struct bpf_reg_sta
+ 				  u8 opcode, bool is_jmp32)
+ {
+ 	struct tnum t1 =3D is_jmp32 ? tnum_subreg(reg1->var_off) : reg1->var_of=
+f;
++	struct tnum t2 =3D is_jmp32 ? tnum_subreg(reg2->var_off) : reg2->var_of=
+f;
+ 	u64 umin1 =3D is_jmp32 ? (u64)reg1->u32_min_value : reg1->umin_value;
+ 	u64 umax1 =3D is_jmp32 ? (u64)reg1->u32_max_value : reg1->umax_value;
+ 	s64 smin1 =3D is_jmp32 ? (s64)reg1->s32_min_value : reg1->smin_value;
+ 	s64 smax1 =3D is_jmp32 ? (s64)reg1->s32_max_value : reg1->smax_value;
+-	u64 uval =3D is_jmp32 ? (u32)tnum_subreg(reg2->var_off).value : reg2->v=
+ar_off.value;
+-	s64 sval =3D is_jmp32 ? (s32)uval : (s64)uval;
++	u64 umin2 =3D is_jmp32 ? (u64)reg2->u32_min_value : reg2->umin_value;
++	u64 umax2 =3D is_jmp32 ? (u64)reg2->u32_max_value : reg2->umax_value;
++	s64 smin2 =3D is_jmp32 ? (s64)reg2->s32_min_value : reg2->smin_value;
++	s64 smax2 =3D is_jmp32 ? (s64)reg2->s32_max_value : reg2->smax_value;
+=20
+ 	switch (opcode) {
+ 	case BPF_JEQ:
+-		if (tnum_is_const(t1))
+-			return !!tnum_equals_const(t1, uval);
+-		else if (uval < umin1 || uval > umax1)
++		/* constants, umin/umax and smin/smax checks would be
++		 * redundant in this case because they all should match
++		 */
++		if (tnum_is_const(t1) && tnum_is_const(t2))
++			return t1.value =3D=3D t2.value;
++		/* const ranges */
++		if (umin1 =3D=3D umax1 && umin2 =3D=3D umax2)
++			return umin1 =3D=3D umin2;
++		if (smin1 =3D=3D smax1 && smin2 =3D=3D smax2)
++			return smin1 =3D=3D smin2;
++		/* non-overlapping ranges */
++		if (umin1 > umax2 || umax1 < umin2)
+ 			return 0;
+-		else if (sval < smin1 || sval > smax1)
++		if (smin1 > smax2 || smax1 < smin2)
+ 			return 0;
+ 		break;
+ 	case BPF_JNE:
+-		if (tnum_is_const(t1))
+-			return !tnum_equals_const(t1, uval);
+-		else if (uval < umin1 || uval > umax1)
++		/* constants, umin/umax and smin/smax checks would be
++		 * redundant in this case because they all should match
++		 */
++		if (tnum_is_const(t1) && tnum_is_const(t2))
++			return t1.value !=3D t2.value;
++		/* non-overlapping ranges */
++		if (umin1 > umax2 || umax1 < umin2)
+ 			return 1;
+-		else if (sval < smin1 || sval > smax1)
++		if (smin1 > smax2 || smax1 < smin2)
+ 			return 1;
+ 		break;
+ 	case BPF_JSET:
+-		if ((~t1.mask & t1.value) & uval)
++		if (!is_reg_const(reg2, is_jmp32)) {
++			swap(reg1, reg2);
++			swap(t1, t2);
++		}
++		if (!is_reg_const(reg2, is_jmp32))
++			return -1;
++		if ((~t1.mask & t1.value) & t2.value)
+ 			return 1;
+-		if (!((t1.mask | t1.value) & uval))
++		if (!((t1.mask | t1.value) & t2.value))
+ 			return 0;
+ 		break;
+ 	case BPF_JGT:
+-		if (umin1 > uval )
++		if (umin1 > umax2)
+ 			return 1;
+-		else if (umax1 <=3D uval)
++		else if (umax1 <=3D umin2)
+ 			return 0;
+ 		break;
+ 	case BPF_JSGT:
+-		if (smin1 > sval)
++		if (smin1 > smax2)
+ 			return 1;
+-		else if (smax1 <=3D sval)
++		else if (smax1 <=3D smin2)
+ 			return 0;
+ 		break;
+ 	case BPF_JLT:
+-		if (umax1 < uval)
++		if (umax1 < umin2)
+ 			return 1;
+-		else if (umin1 >=3D uval)
++		else if (umin1 >=3D umax2)
+ 			return 0;
+ 		break;
+ 	case BPF_JSLT:
+-		if (smax1 < sval)
++		if (smax1 < smin2)
+ 			return 1;
+-		else if (smin1 >=3D sval)
++		else if (smin1 >=3D smax2)
+ 			return 0;
+ 		break;
+ 	case BPF_JGE:
+-		if (umin1 >=3D uval)
++		if (umin1 >=3D umax2)
+ 			return 1;
+-		else if (umax1 < uval)
++		else if (umax1 < umin2)
+ 			return 0;
+ 		break;
+ 	case BPF_JSGE:
+-		if (smin1 >=3D sval)
++		if (smin1 >=3D smax2)
+ 			return 1;
+-		else if (smax1 < sval)
++		else if (smax1 < smin2)
+ 			return 0;
+ 		break;
+ 	case BPF_JLE:
+-		if (umax1 <=3D uval)
++		if (umax1 <=3D umin2)
+ 			return 1;
+-		else if (umin1 > uval)
++		else if (umin1 > umax2)
+ 			return 0;
+ 		break;
+ 	case BPF_JSLE:
+-		if (smax1 <=3D sval)
++		if (smax1 <=3D smin2)
+ 			return 1;
+-		else if (smin1 > sval)
++		else if (smin1 > smax2)
+ 			return 0;
+ 		break;
+ 	}
+@@ -14341,28 +14363,28 @@ static int is_pkt_ptr_branch_taken(struct bpf_r=
+eg_state *dst_reg,
+ static int is_branch_taken(struct bpf_reg_state *reg1, struct bpf_reg_st=
+ate *reg2,
+ 			   u8 opcode, bool is_jmp32)
+ {
+-	u64 val;
+-
+ 	if (reg_is_pkt_pointer_any(reg1) && reg_is_pkt_pointer_any(reg2) && !is=
+_jmp32)
+ 		return is_pkt_ptr_branch_taken(reg1, reg2, opcode);
+=20
+-	/* try to make sure reg2 is a constant SCALAR_VALUE */
+-	if (!is_reg_const(reg2, is_jmp32)) {
+-		opcode =3D flip_opcode(opcode);
+-		swap(reg1, reg2);
+-	}
+-	/* for now we expect reg2 to be a constant to make any useful decisions=
+ */
+-	if (!is_reg_const(reg2, is_jmp32))
+-		return -1;
+-	val =3D reg_const_value(reg2, is_jmp32);
++	if (__is_pointer_value(false, reg1) || __is_pointer_value(false, reg2))=
+ {
++		u64 val;
++
++		/* arrange that reg2 is a scalar, and reg1 is a pointer */
++		if (!is_reg_const(reg2, is_jmp32)) {
++			opcode =3D flip_opcode(opcode);
++			swap(reg1, reg2);
++		}
++		/* and ensure that reg2 is a constant */
++		if (!is_reg_const(reg2, is_jmp32))
++			return -1;
+=20
+-	if (__is_pointer_value(false, reg1)) {
+ 		if (!reg_not_null(reg1))
+ 			return -1;
+=20
+ 		/* If pointer is valid tests against zero will fail so we can
+ 		 * use this to direct branch taken.
+ 		 */
++		val =3D reg_const_value(reg2, is_jmp32);
+ 		if (val !=3D 0)
+ 			return -1;
+=20
+@@ -14376,6 +14398,7 @@ static int is_branch_taken(struct bpf_reg_state *=
+reg1, struct bpf_reg_state *reg
+ 		}
+ 	}
+=20
++	/* now deal with two scalars, but not necessarily constants */
+ 	return is_scalar_branch_taken(reg1, reg2, opcode, is_jmp32);
+ }
+=20
 --=20
 2.34.1
 
