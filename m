@@ -1,32 +1,32 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 899C315C1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89AED15D1
 	for <bpf@vger.kernel.org>; Fri,  3 Nov 2023 00:08:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5507199
-	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 17:08:47 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A2MZjT1017021
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1948B19A
+	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 17:08:48 -0700 (PDT)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A2Jsl7x014274
 	for <bpf@vger.kernel.org>; Thu, 2 Nov 2023 17:08:47 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3u4mpq8c85-6
+Received: from mail.thefacebook.com ([163.114.132.120])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3u4hen9s5g-12
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 02 Nov 2023 17:08:46 -0700
-Received: from twshared32169.15.frc2.facebook.com (2620:10d:c0a8:1c::1b) by
- mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Thu, 02 Nov 2023 17:08:47 -0700
+Received: from twshared58712.02.prn6.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Thu, 2 Nov 2023 17:08:44 -0700
+ 15.1.2507.34; Thu, 2 Nov 2023 17:08:46 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id F38CC3AD8A838; Thu,  2 Nov 2023 17:08:41 -0700 (PDT)
+	id 266183AD8A882; Thu,  2 Nov 2023 17:08:46 -0700 (PDT)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next 09/13] selftests/bpf: add range x range test to reg_bounds
-Date: Thu, 2 Nov 2023 17:08:18 -0700
-Message-ID: <20231103000822.2509815-10-andrii@kernel.org>
+Subject: [PATCH bpf-next 11/13] selftests/bpf: set BPF_F_TEST_SANITY_SCRIPT by default
+Date: Thu, 2 Nov 2023 17:08:20 -0700
+Message-ID: <20231103000822.2509815-12-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231103000822.2509815-1-andrii@kernel.org>
 References: <20231103000822.2509815-1-andrii@kernel.org>
@@ -39,176 +39,215 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 9WNXijUBrhpHaI5TIrSUBEvMMl1EgUfj
-X-Proofpoint-GUID: 9WNXijUBrhpHaI5TIrSUBEvMMl1EgUfj
+X-Proofpoint-GUID: ClHDcsANAxE4EaHeLeW3x48X4wyltbb6
+X-Proofpoint-ORIG-GUID: ClHDcsANAxE4EaHeLeW3x48X4wyltbb6
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-02_10,2023-11-02_03,2023-05-22_02
 
-Now that verifier supports range vs range bounds adjustments, validate
-that by checking each generated range against every other generated
-range, across all supported operators (everything by JSET).
+Make sure to set BPF_F_TEST_SANITY_STRICT program flag by default across
+most verifier tests (and a bunch of others that set custom prog flags).
 
-We also add few cases that were problematic during development either
-for verifier or for selftest's range tracking implementation.
+There are currently two tests that do fail validation, if enforced
+strictly: verifier_bounds/crossing_64_bit_signed_boundary_2 and
+verifier_bounds/crossing_32_bit_signed_boundary_2. To accommodate them,
+we teach test_loader a flag negation:
 
-Note that we utilize the same trick with splitting everything into
-multiple independent parallelizable tests, but init_t and cond_t. This
-brings down verification time in parallel mode from more than 8 hours
-down to less that 1.5 hours. 106 million cases were successfully
-validate for range vs range logic, in addition to about 7 million range
-vs const cases, added in earlier patch.
+__flag(!<flagname>) will *clear* specified flag, allowing easy opt-out.
+
+We apply __flag(!BPF_F_TEST_SANITY_STRICT) to these to tests.
+
+Also sprinkle BPF_F_TEST_SANITY_STRICT everywhere where we already set
+test-only BPF_F_TEST_RND_HI32 flag, for completeness.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- .../selftests/bpf/prog_tests/reg_bounds.c     | 86 +++++++++++++++++++
- 1 file changed, 86 insertions(+)
+ .../bpf/prog_tests/bpf_verif_scale.c          |  2 +-
+ .../selftests/bpf/progs/verifier_bounds.c     |  2 ++
+ tools/testing/selftests/bpf/test_loader.c     | 35 ++++++++++++++-----
+ tools/testing/selftests/bpf/test_sock_addr.c  |  1 +
+ tools/testing/selftests/bpf/test_verifier.c   |  2 +-
+ tools/testing/selftests/bpf/testing_helpers.c |  4 +--
+ 6 files changed, 33 insertions(+), 13 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/=
-testing/selftests/bpf/prog_tests/reg_bounds.c
-index 330618cc12e7..16864c940548 100644
---- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-+++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-@@ -1752,6 +1752,60 @@ static void validate_gen_range_vs_const_32(enum nu=
-m_t init_t, enum num_t cond_t)
- 	cleanup_ctx(&ctx);
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c b/t=
+ools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
+index 731c343897d8..3f2d70831873 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
+@@ -35,7 +35,7 @@ static int check_load(const char *file, enum bpf_prog_t=
+ype type)
+ 	}
+=20
+ 	bpf_program__set_type(prog, type);
+-	bpf_program__set_flags(prog, BPF_F_TEST_RND_HI32);
++	bpf_program__set_flags(prog, BPF_F_TEST_RND_HI32 | BPF_F_TEST_SANITY_ST=
+RICT);
+ 	bpf_program__set_log_level(prog, 4 | extra_prog_load_log_flags);
+=20
+ 	err =3D bpf_object__load(obj);
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/=
+testing/selftests/bpf/progs/verifier_bounds.c
+index c5588a14fe2e..0c1460936373 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
++++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+@@ -965,6 +965,7 @@ l0_%=3D:	r0 =3D 0;						\
+ SEC("xdp")
+ __description("bound check with JMP_JSLT for crossing 64-bit signed boun=
+dary")
+ __success __retval(0)
++__flag(!BPF_F_TEST_SANITY_STRICT) /* known sanity violation */
+ __naked void crossing_64_bit_signed_boundary_2(void)
+ {
+ 	asm volatile ("					\
+@@ -1046,6 +1047,7 @@ l0_%=3D:	r0 =3D 0;						\
+ SEC("xdp")
+ __description("bound check with JMP32_JSLT for crossing 32-bit signed bo=
+undary")
+ __success __retval(0)
++__flag(!BPF_F_TEST_SANITY_STRICT) /* known sanity violation */
+ __naked void crossing_32_bit_signed_boundary_2(void)
+ {
+ 	asm volatile ("					\
+diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/se=
+lftests/bpf/test_loader.c
+index 37ffa57f28a1..57e27b1a73a6 100644
+--- a/tools/testing/selftests/bpf/test_loader.c
++++ b/tools/testing/selftests/bpf/test_loader.c
+@@ -153,6 +153,14 @@ static int parse_retval(const char *str, int *val, c=
+onst char *name)
+ 	return parse_int(str, val, name);
  }
 =20
-+static void validate_gen_range_vs_range(enum num_t init_t, enum num_t co=
-nd_t)
++static void update_flags(int *flags, int flag, bool clear)
 +{
-+	struct ctx ctx;
-+	const struct range *ranges;
-+	int i, j, rcnt;
-+
-+	memset(&ctx, 0, sizeof(ctx));
-+
-+	if (prepare_gen_tests(&ctx))
-+		goto cleanup;
-+
-+	switch (init_t)
-+	{
-+	case U64:
-+		ranges =3D ctx.uranges;
-+		rcnt =3D ctx.range_cnt;
-+		break;
-+	case U32:
-+		ranges =3D ctx.usubranges;
-+		rcnt =3D ctx.subrange_cnt;
-+		break;
-+	case S64:
-+		ranges =3D ctx.sranges;
-+		rcnt =3D ctx.range_cnt;
-+		break;
-+	case S32:
-+		ranges =3D ctx.ssubranges;
-+		rcnt =3D ctx.subrange_cnt;
-+		break;
-+	default:
-+		printf("validate_gen_range_vs_range!\n");
-+		exit(1);
-+	}
-+
-+	ctx.total_case_cnt =3D (MAX_OP - MIN_OP + 1) * (2 * rcnt * (rcnt + 1) /=
- 2);
-+	ctx.start_ns =3D get_time_ns();
-+	snprintf(ctx.progress_ctx, sizeof(ctx.progress_ctx),
-+		 "RANGE x RANGE, %s -> %s",
-+		 t_str(init_t), t_str(cond_t));
-+
-+	for (i =3D 0; i < rcnt; i++) {
-+		for (j =3D i; j < rcnt; j++) {
-+			/* (<range> x <range>) */
-+			if (verify_case(&ctx, init_t, cond_t, ranges[i], ranges[j]))
-+				goto cleanup;
-+			if (verify_case(&ctx, init_t, cond_t, ranges[j], ranges[i]))
-+				goto cleanup;
-+		}
-+	}
-+
-+cleanup:
-+	cleanup_ctx(&ctx);
++	if (clear)
++		*flags &=3D ~flag;
++	else
++		*flags |=3D flag;
 +}
 +
- /* Go over thousands of test cases generated from initial seed values.
-  * Given this take a long time, guard this begind SLOW_TESTS=3D1 envvar.=
- If
-  * envvar is not set, this test is skipped during test_progs testing.
-@@ -1782,6 +1836,27 @@ void test_reg_bounds_gen_consts_s32_s64(void) { va=
-lidate_gen_range_vs_const_32(S
- void test_reg_bounds_gen_consts_s32_u32(void) { validate_gen_range_vs_co=
-nst_32(S32, U32); }
- void test_reg_bounds_gen_consts_s32_s32(void) { validate_gen_range_vs_co=
-nst_32(S32, S32); }
-=20
-+/* RANGE x RANGE, U64 initial range */
-+void test_reg_bounds_gen_ranges_u64_u64(void) { validate_gen_range_vs_ra=
-nge(U64, U64); }
-+void test_reg_bounds_gen_ranges_u64_s64(void) { validate_gen_range_vs_ra=
-nge(U64, S64); }
-+void test_reg_bounds_gen_ranges_u64_u32(void) { validate_gen_range_vs_ra=
-nge(U64, U32); }
-+void test_reg_bounds_gen_ranges_u64_s32(void) { validate_gen_range_vs_ra=
-nge(U64, S32); }
-+/* RANGE x RANGE, S64 initial range */
-+void test_reg_bounds_gen_ranges_s64_u64(void) { validate_gen_range_vs_ra=
-nge(S64, U64); }
-+void test_reg_bounds_gen_ranges_s64_s64(void) { validate_gen_range_vs_ra=
-nge(S64, S64); }
-+void test_reg_bounds_gen_ranges_s64_u32(void) { validate_gen_range_vs_ra=
-nge(S64, U32); }
-+void test_reg_bounds_gen_ranges_s64_s32(void) { validate_gen_range_vs_ra=
-nge(S64, S32); }
-+/* RANGE x RANGE, U32 initial range */
-+void test_reg_bounds_gen_ranges_u32_u64(void) { validate_gen_range_vs_ra=
-nge(U32, U64); }
-+void test_reg_bounds_gen_ranges_u32_s64(void) { validate_gen_range_vs_ra=
-nge(U32, S64); }
-+void test_reg_bounds_gen_ranges_u32_u32(void) { validate_gen_range_vs_ra=
-nge(U32, U32); }
-+void test_reg_bounds_gen_ranges_u32_s32(void) { validate_gen_range_vs_ra=
-nge(U32, S32); }
-+/* RANGE x RANGE, S32 initial range */
-+void test_reg_bounds_gen_ranges_s32_u64(void) { validate_gen_range_vs_ra=
-nge(S32, U64); }
-+void test_reg_bounds_gen_ranges_s32_s64(void) { validate_gen_range_vs_ra=
-nge(S32, S64); }
-+void test_reg_bounds_gen_ranges_s32_u32(void) { validate_gen_range_vs_ra=
-nge(S32, U32); }
-+void test_reg_bounds_gen_ranges_s32_s32(void) { validate_gen_range_vs_ra=
-nge(S32, S32); }
-+
- /* A set of hard-coded "interesting" cases to validate as part of normal
-  * test_progs test runs
-  */
-@@ -1795,6 +1870,12 @@ static struct subtest_case crafted_cases[] =3D {
- 	{U64, U64, {0x100000000ULL, 0x1fffffffeULL}, {0, 0}},
- 	{U64, U64, {0x100000001ULL, 0x1000000ffULL}, {0, 0}},
-=20
-+	/* single point overlap, interesting BPF_EQ and BPF_NE interactions */
-+	{U64, U64, {0, 1}, {1, 0x80000000}},
-+	{U64, S64, {0, 1}, {1, 0x80000000}},
-+	{U64, U32, {0, 1}, {1, 0x80000000}},
-+	{U64, S32, {0, 1}, {1, 0x80000000}},
-+
- 	{U64, S64, {0, 0xffffffff00000000ULL}, {0, 0}},
- 	{U64, S64, {0x7fffffffffffffffULL, 0xffffffff00000000ULL}, {0, 0}},
- 	{U64, S64, {0x7fffffff00000001ULL, 0xffffffff00000000ULL}, {0, 0}},
-@@ -1829,6 +1910,11 @@ static struct subtest_case crafted_cases[] =3D {
- 	{U32, U32, {1, U32_MAX}, {0, 0}},
-=20
- 	{U32, S32, {0, U32_MAX}, {U32_MAX, U32_MAX}},
-+
-+	{S32, U64, {(u32)(s32)S32_MIN, (u32)(s32)S32_MIN}, {(u32)(s32)-255, 0}}=
+ /* Uses btf_decl_tag attributes to describe the expected test
+  * behavior, see bpf_misc.h for detailed description of each attribute
+  * and attribute combinations.
+@@ -171,6 +179,7 @@ static int parse_test_spec(struct test_loader *tester=
 ,
-+	{S32, S64, {(u32)(s32)S32_MIN, (u32)(s32)-255}, {(u32)(s32)-2, 0}},
-+	{S32, S64, {0, 1}, {(u32)(s32)S32_MIN, (u32)(s32)S32_MIN}},
-+	{S32, U32, {(u32)(s32)S32_MIN, (u32)(s32)S32_MIN}, {(u32)(s32)S32_MIN, =
-(u32)(s32)S32_MIN}},
- };
+ 	memset(spec, 0, sizeof(*spec));
 =20
- /* Go over crafted hard-coded cases. This is fast, so we do it as part o=
-f
+ 	spec->prog_name =3D bpf_program__name(prog);
++	spec->prog_flags =3D BPF_F_TEST_SANITY_STRICT; /* by default be strict =
+*/
+=20
+ 	btf =3D bpf_object__btf(obj);
+ 	if (!btf) {
+@@ -187,7 +196,8 @@ static int parse_test_spec(struct test_loader *tester=
+,
+ 	for (i =3D 1; i < btf__type_cnt(btf); i++) {
+ 		const char *s, *val, *msg;
+ 		const struct btf_type *t;
+-		int tmp;
++		bool clear;
++		int flags;
+=20
+ 		t =3D btf__type_by_id(btf, i);
+ 		if (!btf_is_decl_tag(t))
+@@ -253,23 +263,30 @@ static int parse_test_spec(struct test_loader *test=
+er,
+ 				goto cleanup;
+ 		} else if (str_has_pfx(s, TEST_TAG_PROG_FLAGS_PFX)) {
+ 			val =3D s + sizeof(TEST_TAG_PROG_FLAGS_PFX) - 1;
++
++			clear =3D val[0] =3D=3D '!';
++			if (clear)
++				val++;
++
+ 			if (strcmp(val, "BPF_F_STRICT_ALIGNMENT") =3D=3D 0) {
+-				spec->prog_flags |=3D BPF_F_STRICT_ALIGNMENT;
++				update_flags(&spec->prog_flags, BPF_F_STRICT_ALIGNMENT, clear);
+ 			} else if (strcmp(val, "BPF_F_ANY_ALIGNMENT") =3D=3D 0) {
+-				spec->prog_flags |=3D BPF_F_ANY_ALIGNMENT;
++				update_flags(&spec->prog_flags, BPF_F_ANY_ALIGNMENT, clear);
+ 			} else if (strcmp(val, "BPF_F_TEST_RND_HI32") =3D=3D 0) {
+-				spec->prog_flags |=3D BPF_F_TEST_RND_HI32;
++				update_flags(&spec->prog_flags, BPF_F_TEST_RND_HI32, clear);
+ 			} else if (strcmp(val, "BPF_F_TEST_STATE_FREQ") =3D=3D 0) {
+-				spec->prog_flags |=3D BPF_F_TEST_STATE_FREQ;
++				update_flags(&spec->prog_flags, BPF_F_TEST_STATE_FREQ, clear);
+ 			} else if (strcmp(val, "BPF_F_SLEEPABLE") =3D=3D 0) {
+-				spec->prog_flags |=3D BPF_F_SLEEPABLE;
++				update_flags(&spec->prog_flags, BPF_F_SLEEPABLE, clear);
+ 			} else if (strcmp(val, "BPF_F_XDP_HAS_FRAGS") =3D=3D 0) {
+-				spec->prog_flags |=3D BPF_F_XDP_HAS_FRAGS;
++				update_flags(&spec->prog_flags, BPF_F_XDP_HAS_FRAGS, clear);
++			} else if (strcmp(val, "BPF_F_TEST_SANITY_STRICT") =3D=3D 0) {
++				update_flags(&spec->prog_flags, BPF_F_TEST_SANITY_STRICT, clear);
+ 			} else /* assume numeric value */ {
+-				err =3D parse_int(val, &tmp, "test prog flags");
++				err =3D parse_int(val, &flags, "test prog flags");
+ 				if (err)
+ 					goto cleanup;
+-				spec->prog_flags |=3D tmp;
++				update_flags(&spec->prog_flags, flags, clear);
+ 			}
+ 		}
+ 	}
+diff --git a/tools/testing/selftests/bpf/test_sock_addr.c b/tools/testing=
+/selftests/bpf/test_sock_addr.c
+index 2c89674fc62c..878c077e0fa7 100644
+--- a/tools/testing/selftests/bpf/test_sock_addr.c
++++ b/tools/testing/selftests/bpf/test_sock_addr.c
+@@ -680,6 +680,7 @@ static int load_path(const struct sock_addr_test *tes=
+t, const char *path)
+ 	bpf_program__set_type(prog, BPF_PROG_TYPE_CGROUP_SOCK_ADDR);
+ 	bpf_program__set_expected_attach_type(prog, test->expected_attach_type)=
+;
+ 	bpf_program__set_flags(prog, BPF_F_TEST_RND_HI32);
++	bpf_program__set_flags(prog, BPF_F_TEST_SANITY_STRICT);
+=20
+ 	err =3D bpf_object__load(obj);
+ 	if (err) {
+diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/=
+selftests/bpf/test_verifier.c
+index 98107e0452d3..4992022f3137 100644
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -1588,7 +1588,7 @@ static void do_test_single(struct bpf_test *test, b=
+ool unpriv,
+ 	if (fixup_skips !=3D skips)
+ 		return;
+=20
+-	pflags =3D BPF_F_TEST_RND_HI32;
++	pflags =3D BPF_F_TEST_RND_HI32 | BPF_F_TEST_SANITY_STRICT;
+ 	if (test->flags & F_LOAD_WITH_STRICT_ALIGNMENT)
+ 		pflags |=3D BPF_F_STRICT_ALIGNMENT;
+ 	if (test->flags & F_NEEDS_EFFICIENT_UNALIGNED_ACCESS)
+diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testin=
+g/selftests/bpf/testing_helpers.c
+index 8d994884c7b4..9786a94a666c 100644
+--- a/tools/testing/selftests/bpf/testing_helpers.c
++++ b/tools/testing/selftests/bpf/testing_helpers.c
+@@ -276,7 +276,7 @@ int bpf_prog_test_load(const char *file, enum bpf_pro=
+g_type type,
+ 	if (type !=3D BPF_PROG_TYPE_UNSPEC && bpf_program__type(prog) !=3D type=
+)
+ 		bpf_program__set_type(prog, type);
+=20
+-	flags =3D bpf_program__flags(prog) | BPF_F_TEST_RND_HI32;
++	flags =3D bpf_program__flags(prog) | BPF_F_TEST_RND_HI32 | BPF_F_TEST_S=
+ANITY_STRICT;
+ 	bpf_program__set_flags(prog, flags);
+=20
+ 	err =3D bpf_object__load(obj);
+@@ -299,7 +299,7 @@ int bpf_test_load_program(enum bpf_prog_type type, co=
+nst struct bpf_insn *insns,
+ {
+ 	LIBBPF_OPTS(bpf_prog_load_opts, opts,
+ 		.kern_version =3D kern_version,
+-		.prog_flags =3D BPF_F_TEST_RND_HI32,
++		.prog_flags =3D BPF_F_TEST_RND_HI32 | BPF_F_TEST_SANITY_STRICT,
+ 		.log_level =3D extra_prog_load_log_flags,
+ 		.log_buf =3D log_buf,
+ 		.log_size =3D log_buf_sz,
 --=20
 2.34.1
 
