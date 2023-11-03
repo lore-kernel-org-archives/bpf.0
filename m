@@ -1,138 +1,153 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A868B620
-	for <bpf@vger.kernel.org>; Fri,  3 Nov 2023 00:11:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF77136
-	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 17:11:51 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A2MZh1d016167
-	for <bpf@vger.kernel.org>; Thu, 2 Nov 2023 17:11:50 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3u4mprrcfb-5
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 02 Nov 2023 17:11:50 -0700
-Received: from twshared2123.40.prn1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Thu, 2 Nov 2023 17:11:47 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id B20143AD8A779; Thu,  2 Nov 2023 17:08:35 -0700 (PDT)
-From: Andrii Nakryiko <andrii@kernel.org>
-To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@kernel.org>
-CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next 06/13] bpf: make __reg{32,64}_deduce_bounds logic more robust
-Date: Thu, 2 Nov 2023 17:08:15 -0700
-Message-ID: <20231103000822.2509815-7-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231103000822.2509815-1-andrii@kernel.org>
-References: <20231103000822.2509815-1-andrii@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 697F9180
+	for <bpf@vger.kernel.org>; Fri,  3 Nov 2023 00:13:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SoL/9SF2"
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED0F136
+	for <bpf@vger.kernel.org>; Thu,  2 Nov 2023 17:13:44 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9c773ac9b15so222596966b.2
+        for <bpf@vger.kernel.org>; Thu, 02 Nov 2023 17:13:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698970423; x=1699575223; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OFGfW14AOytVQhU78drhE/soSidaO8LnbX/Xeb8hz80=;
+        b=SoL/9SF2ovdaaXN6HGNc2vAOh4GLYZnHeni2KuqgS/tTmfM9Ng4zznzbV3If+uODcS
+         HRFNg7s/yfDYBmzVB5FglyNM0n9Icbuwm/03r05MIp1qKQnuMnA/l3op3BZhKVe+Sgsi
+         /5Xe9jBD9a5vDwK7eTctXrgyb2WDI2718lvcxyKIhnqSLxz2w2/EXxmxKMq12RewXPIp
+         qMeKqfsnAc0adXVywOrQgDSJC31iJcaH87UGJsh21n8dbEEC+Q/T32BJuLUHLEDATUM0
+         julxDjHlGe7yhwO8RQp0y98ssoRtGES/Xz+zH1kWRGrAfQXx7Fz+oM5ZOVftVs+l1C2K
+         JNFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698970423; x=1699575223;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OFGfW14AOytVQhU78drhE/soSidaO8LnbX/Xeb8hz80=;
+        b=iUS/+ZSk5sccUQF6KMKgKlpiXcqIIfBpY4uplkNBnzPHebBvmEjgx7zbBo7VLUdKtZ
+         2Qz5+rQnDfF9+wpoXJzI0pDudSjaGHKOqdQ5IPEdJcBX/04cFp+eWueXQCqBzIvbbdyN
+         u46SUvAPooZMeVQ7XkPZiJ3qWmqLbWI+Gs/r8urdNCyfoGOkxWI7akxD6Dpz6tEniaeU
+         ps4Q0d3c9JNnNv9OkYPg4OUJQxhomzNzu/Q/rf6HxVyUaoM22GUjbZ7/YHirhwpRAx9w
+         SPRMSdzoWETUeV2ITGxvIZkGAPxQlb5OFwwDINb/tOkmJQsTkTeNxXo0MnqK3LujneRC
+         GnDA==
+X-Gm-Message-State: AOJu0YwdJYtGpjqn144wnkUNHHFUwv6MsHC8tw5pazCMsCTo0qm6gCTg
+	CPjlE++oi2x6Su5o/lPIy5R8aPRrmW7PCOEqs4c=
+X-Google-Smtp-Source: AGHT+IG1Z4XkPmD6fZNwiCTRy6XV/Nor7e2PCEl+CGV7nEDWF01j0KqgrHMzXS7qmZWqXyoXe9RHWm/Jul7TmbybCdM=
+X-Received: by 2002:a17:906:d931:b0:9be:cdca:dae9 with SMTP id
+ rn17-20020a170906d93100b009becdcadae9mr4420450ejb.36.1698970423198; Thu, 02
+ Nov 2023 17:13:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20231103000822.2509815-1-andrii@kernel.org> <20231103000822.2509815-3-andrii@kernel.org>
+In-Reply-To: <20231103000822.2509815-3-andrii@kernel.org>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 2 Nov 2023 17:13:31 -0700
+Message-ID: <CAEf4BzZnCSpnUCUcy=qPWFLh-HRcAt+MjFpaiThhCW+J6FvdRQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 02/13] bpf: generalize is_scalar_branch_taken() logic
+To: Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	martin.lau@kernel.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: gkd_9zOOTj8_hpqQfsjHCJe-q5HuJ0Xs
-X-Proofpoint-ORIG-GUID: gkd_9zOOTj8_hpqQfsjHCJe-q5HuJ0Xs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-02_10,2023-11-02_03,2023-05-22_02
 
-This change doesn't seem to have any effect on selftests and production
-BPF object files, but we preemptively try to make it more robust.
+On Thu, Nov 2, 2023 at 5:08=E2=80=AFPM Andrii Nakryiko <andrii@kernel.org> =
+wrote:
+>
+> Generalize is_branch_taken logic for SCALAR_VALUE register to handle
+> cases when both registers are not constants. Previously supported
+> <range> vs <scalar> cases are a natural subset of more generic <range>
+> vs <range> set of cases.
+>
+> Generalized logic relies on straightforward segment intersection checks.
+>
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
+>  kernel/bpf/verifier.c | 103 ++++++++++++++++++++++++++----------------
+>  1 file changed, 63 insertions(+), 40 deletions(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 52934080042c..2627461164ed 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -14187,82 +14187,104 @@ static int is_scalar_branch_taken(struct bpf_r=
+eg_state *reg1, struct bpf_reg_sta
+>                                   u8 opcode, bool is_jmp32)
+>  {
+>         struct tnum t1 =3D is_jmp32 ? tnum_subreg(reg1->var_off) : reg1->=
+var_off;
+> +       struct tnum t2 =3D is_jmp32 ? tnum_subreg(reg2->var_off) : reg2->=
+var_off;
+>         u64 umin1 =3D is_jmp32 ? (u64)reg1->u32_min_value : reg1->umin_va=
+lue;
+>         u64 umax1 =3D is_jmp32 ? (u64)reg1->u32_max_value : reg1->umax_va=
+lue;
+>         s64 smin1 =3D is_jmp32 ? (s64)reg1->s32_min_value : reg1->smin_va=
+lue;
+>         s64 smax1 =3D is_jmp32 ? (s64)reg1->s32_max_value : reg1->smax_va=
+lue;
+> -       u64 uval =3D is_jmp32 ? (u32)tnum_subreg(reg2->var_off).value : r=
+eg2->var_off.value;
+> -       s64 sval =3D is_jmp32 ? (s32)uval : (s64)uval;
+> +       u64 umin2 =3D is_jmp32 ? (u64)reg2->u32_min_value : reg2->umin_va=
+lue;
+> +       u64 umax2 =3D is_jmp32 ? (u64)reg2->u32_max_value : reg2->umax_va=
+lue;
+> +       s64 smin2 =3D is_jmp32 ? (s64)reg2->s32_min_value : reg2->smin_va=
+lue;
+> +       s64 smax2 =3D is_jmp32 ? (s64)reg2->s32_max_value : reg2->smax_va=
+lue;
+>
+>         switch (opcode) {
+>         case BPF_JEQ:
+> -               if (tnum_is_const(t1))
+> -                       return !!tnum_equals_const(t1, uval);
+> -               else if (uval < umin1 || uval > umax1)
+> +               /* constants, umin/umax and smin/smax checks would be
+> +                * redundant in this case because they all should match
+> +                */
+> +               if (tnum_is_const(t1) && tnum_is_const(t2))
+> +                       return t1.value =3D=3D t2.value;
+> +               /* const ranges */
+> +               if (umin1 =3D=3D umax1 && umin2 =3D=3D umax2)
+> +                       return umin1 =3D=3D umin2;
+> +               if (smin1 =3D=3D smax1 && smin2 =3D=3D smax2)
+> +                       return smin1 =3D=3D smin2;
 
-First, "learn sign from signed bounds" comment is misleading, as we are
-learning not just sign, but also values.
+seems like I didn't remove these checks from BPF_JEQ (but I did for
+BPF_JNE below). I'll fix it in next revision, but will wait for people
+to review this one first.
 
-Second, we simplify the check for determining whether entire range is
-positive or negative similarly to other checks added earlier, using
-appropriate u32/u64 cast and single comparisons. As explain in comments
-in __reg64_deduce_bounds(), the checks are equivalent.
 
-Last but not least, smin/smax and s32_min/s32_max reassignment based on
-min/max of both umin/umax and smin/smax (and 32-bit equivalents) is hard
-to explain and justify. We are updating unsigned bounds from signed
-bounds, why would we update signed bounds at the same time? This might
-be correct, but it's far from obvious why and the code or comments don't
-try to justify this. Given we've added a separate deduction of signed
-bounds from unsigned bounds earlier, this seems at least redundant, if
-not just wrong.
+> +               /* non-overlapping ranges */
+> +               if (umin1 > umax2 || umax1 < umin2)
+>                         return 0;
+> -               else if (sval < smin1 || sval > smax1)
+> +               if (smin1 > smax2 || smax1 < smin2)
+>                         return 0;
+>                 break;
+>         case BPF_JNE:
+> -               if (tnum_is_const(t1))
+> -                       return !tnum_equals_const(t1, uval);
+> -               else if (uval < umin1 || uval > umax1)
+> +               /* constants, umin/umax and smin/smax checks would be
+> +                * redundant in this case because they all should match
+> +                */
+> +               if (tnum_is_const(t1) && tnum_is_const(t2))
+> +                       return t1.value !=3D t2.value;
+> +               /* non-overlapping ranges */
+> +               if (umin1 > umax2 || umax1 < umin2)
+>                         return 1;
+> -               else if (sval < smin1 || sval > smax1)
+> +               if (smin1 > smax2 || smax1 < smin2)
+>                         return 1;
+>                 break;
 
-In short, we remove doubtful pieces, and streamline the rest to follow
-the logic and approach of the rest of reg_bounds_sync() checks.
-
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- kernel/bpf/verifier.c | 24 ++++++++----------------
- 1 file changed, 8 insertions(+), 16 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e7b2fe78a07f..91271961c9c2 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2399,17 +2399,13 @@ static void __reg32_deduce_bounds(struct bpf_reg_=
-state *reg)
- 		reg->s32_min_value =3D max_t(s32, reg->s32_min_value, reg->u32_min_val=
-ue);
- 		reg->s32_max_value =3D min_t(s32, reg->s32_max_value, reg->u32_max_val=
-ue);
- 	}
--	/* Learn sign from signed bounds.
--	 * If we cannot cross the sign boundary, then signed and unsigned bound=
-s
-+	/* If we cannot cross the sign boundary, then signed and unsigned bound=
-s
- 	 * are the same, so combine.  This works even in the negative case, e.g=
-.
- 	 * -3 s<=3D x s<=3D -1 implies 0xf...fd u<=3D x u<=3D 0xf...ff.
- 	 */
--	if (reg->s32_min_value >=3D 0 || reg->s32_max_value < 0) {
--		reg->s32_min_value =3D reg->u32_min_value =3D
--			max_t(u32, reg->s32_min_value, reg->u32_min_value);
--		reg->s32_max_value =3D reg->u32_max_value =3D
--			min_t(u32, reg->s32_max_value, reg->u32_max_value);
--		return;
-+	if ((u32)reg->s32_min_value <=3D (u32)reg->s32_max_value) {
-+		reg->u32_min_value =3D max_t(u32, reg->s32_min_value, reg->u32_min_val=
-ue);
-+		reg->u32_max_value =3D min_t(u32, reg->s32_max_value, reg->u32_max_val=
-ue);
- 	}
- }
-=20
-@@ -2486,17 +2482,13 @@ static void __reg64_deduce_bounds(struct bpf_reg_=
-state *reg)
- 		reg->smin_value =3D max_t(s64, reg->smin_value, reg->umin_value);
- 		reg->smax_value =3D min_t(s64, reg->smax_value, reg->umax_value);
- 	}
--	/* Learn sign from signed bounds.
--	 * If we cannot cross the sign boundary, then signed and unsigned bound=
-s
-+	/* If we cannot cross the sign boundary, then signed and unsigned bound=
-s
- 	 * are the same, so combine.  This works even in the negative case, e.g=
-.
- 	 * -3 s<=3D x s<=3D -1 implies 0xf...fd u<=3D x u<=3D 0xf...ff.
- 	 */
--	if (reg->smin_value >=3D 0 || reg->smax_value < 0) {
--		reg->smin_value =3D reg->umin_value =3D max_t(u64, reg->smin_value,
--							  reg->umin_value);
--		reg->smax_value =3D reg->umax_value =3D min_t(u64, reg->smax_value,
--							  reg->umax_value);
--		return;
-+	if ((u64)reg->smin_value <=3D (u64)reg->smax_value) {
-+		reg->umin_value =3D max_t(u64, reg->smin_value, reg->umin_value);
-+		reg->umax_value =3D min_t(u64, reg->smax_value, reg->umax_value);
- 	}
- }
-=20
---=20
-2.34.1
-
+[...]
