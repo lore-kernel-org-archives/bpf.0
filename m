@@ -1,39 +1,38 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F010249E2;
-	Fri,  3 Nov 2023 22:28:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5FB324A03;
+	Fri,  3 Nov 2023 22:28:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="V5W0kvRt"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="QgDhhYpx"
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31400CA;
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40BCD5A;
 	Fri,  3 Nov 2023 15:28:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=XVOAeQsfqVhCB2rsEIVMBgNmg3wnl1S1IxhvCErQyss=; b=V5W0kvRtzHb03leijUlehgWpsn
-	XXZbHXtM05CToARaSn80b9luYpc9+8AGt9jKl+0zEeiGTROkOd50bbvXcv0WVuOREy7n+tPLCMsfz
-	aY2xF9cx+W57Stuig6Qj+lrc3YrlZyzqxhkKroECTUNtgmYvpIJSPk6ptCUXaIninV/KtUJPps0cg
-	4fEIgFMTVtYKKcHG9CEyDB3gwU1uzD9bVnGdkNMuafpsUnD50r6fn1jdbc8pP5l6dHVVELNguPDHV
-	LEYz9+zC6VYYOULuRBzSpBmWD71K/N2bo9zg1XohxbD9LKj+YDbZgqhTSCyfx5bM/AQ/y4iMEPBai
-	lLie/tUA==;
+	bh=3OTJIv1/YjvWP3z6+hB1oFt933BO/vJjCiPdg+78Zds=; b=QgDhhYpxBAiktC8vLEsaksXBqt
+	tIrd9Z72oj5HUFBt9bk+j1lr2astxUyxIP3FJog6o/4j9PFSkv74efC1DYmOYDyDB32LmAcwuwVxO
+	ELrQ+Mm1P69PgoQh/d7BjOxoCfp3TsrViL9rT0mhH9tgJnyHvM3BsaHBBIXFa9mLssosrUkQgpFZ9
+	5z43uycsHZShxL2stTp1/A4Rp72SkvQNMypNWo/P2C1mZqoh5cb7rKUKDeBtdNiMIzahOi58h0O7S
+	NPQ7tI2+wxiVmGoc1YGQs1O1Bz/dVwNqsq8JVxjUcpMuacjj0Xlyoz6os1RgHgAQ0c0Xoyweg03vV
+	wkuP+1Nw==;
 Received: from 226.206.1.85.dynamic.wline.res.cust.swisscom.ch ([85.1.206.226] helo=localhost)
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1qz2dy-000Cq8-94; Fri, 03 Nov 2023 23:27:58 +0100
+	id 1qz2dz-000CqS-7O; Fri, 03 Nov 2023 23:27:59 +0100
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: martin.lau@kernel.org
 Cc: kuba@kernel.org,
 	netdev@vger.kernel.org,
 	bpf@vger.kernel.org,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Nikolay Aleksandrov <razor@blackwall.org>
-Subject: [PATCH bpf 4/6] bpf, netkit: Add indirect call wrapper for fetching peer dev
-Date: Fri,  3 Nov 2023 23:27:46 +0100
-Message-Id: <20231103222748.12551-5-daniel@iogearbox.net>
+	Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH bpf 6/6] selftests/bpf: Add netkit to tc_redirect selftest
+Date: Fri,  3 Nov 2023 23:27:48 +0100
+Message-Id: <20231103222748.12551-7-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20231103222748.12551-1-daniel@iogearbox.net>
 References: <20231103222748.12551-1-daniel@iogearbox.net>
@@ -47,108 +46,111 @@ Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: daniel@iogearbox.net
 X-Virus-Scanned: Clear (ClamAV 0.103.10/27081/Fri Nov  3 08:43:47 2023)
 
-ndo_get_peer_dev is used in tcx BPF fast path, therefore make use of
-indirect call wrapper and therefore optimize the bpf_redirect_peer()
-internal handling a bit. Add a small skb_get_peer_dev() wrapper which
-utilizes the INDIRECT_CALL_1() macro instead of open coding.
+Extend the existing tc_redirect selftest to also cover netkit devices
+for exercising the bpf_redirect_peer() code paths, so that we have both
+veth as well as netkit covered, all tests still pass after this change.
 
-Co-developed-by: Nikolay Aleksandrov <razor@blackwall.org>
-Signed-off-by: Nikolay Aleksandrov <razor@blackwall.org>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- drivers/net/netkit.c |  3 ++-
- include/net/netkit.h |  6 ++++++
- net/core/filter.c    | 18 +++++++++++++-----
- 3 files changed, 21 insertions(+), 6 deletions(-)
+ .../selftests/bpf/prog_tests/tc_redirect.c    | 52 +++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
-diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
-index dc51c23b40f0..934c71a73b5c 100644
---- a/drivers/net/netkit.c
-+++ b/drivers/net/netkit.c
-@@ -7,6 +7,7 @@
- #include <linux/filter.h>
- #include <linux/netfilter_netdev.h>
- #include <linux/bpf_mprog.h>
-+#include <linux/indirect_call_wrapper.h>
+diff --git a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
+index 407ff4e9bc78..518f143c5b0f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
++++ b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
+@@ -24,6 +24,7 @@
  
- #include <net/netkit.h>
- #include <net/dst.h>
-@@ -177,7 +178,7 @@ static void netkit_set_headroom(struct net_device *dev, int headroom)
- 	rcu_read_unlock();
+ #include "test_progs.h"
+ #include "network_helpers.h"
++#include "netlink_helpers.h"
+ #include "test_tc_neigh_fib.skel.h"
+ #include "test_tc_neigh.skel.h"
+ #include "test_tc_peer.skel.h"
+@@ -112,6 +113,7 @@ static void netns_setup_namespaces_nofail(const char *verb)
+ 
+ enum dev_mode {
+ 	MODE_VETH,
++	MODE_NETKIT,
+ };
+ 
+ struct netns_setup_result {
+@@ -142,10 +144,51 @@ static int get_ifaddr(const char *name, char *ifaddr)
+ 	return 0;
  }
  
--static struct net_device *netkit_peer_dev(struct net_device *dev)
-+INDIRECT_CALLABLE_SCOPE struct net_device *netkit_peer_dev(struct net_device *dev)
- {
- 	return rcu_dereference(netkit_priv(dev)->peer);
- }
-diff --git a/include/net/netkit.h b/include/net/netkit.h
-index 0ba2e6b847ca..9ec0163739f4 100644
---- a/include/net/netkit.h
-+++ b/include/net/netkit.h
-@@ -10,6 +10,7 @@ int netkit_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog);
- int netkit_link_attach(const union bpf_attr *attr, struct bpf_prog *prog);
- int netkit_prog_detach(const union bpf_attr *attr, struct bpf_prog *prog);
- int netkit_prog_query(const union bpf_attr *attr, union bpf_attr __user *uattr);
-+INDIRECT_CALLABLE_DECLARE(struct net_device *netkit_peer_dev(struct net_device *dev));
- #else
- static inline int netkit_prog_attach(const union bpf_attr *attr,
- 				     struct bpf_prog *prog)
-@@ -34,5 +35,10 @@ static inline int netkit_prog_query(const union bpf_attr *attr,
- {
- 	return -EINVAL;
- }
-+
-+static inline struct net_device *netkit_peer_dev(struct net_device *dev)
++static int create_netkit(int mode, char *prim, char *peer)
 +{
-+	return NULL;
-+}
- #endif /* CONFIG_NETKIT */
- #endif /* __NET_NETKIT_H */
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 7aca28b7d0fd..dbf92b272022 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -81,6 +81,7 @@
- #include <net/xdp.h>
- #include <net/mptcp.h>
- #include <net/netfilter/nf_conntrack_bpf.h>
-+#include <net/netkit.h>
- #include <linux/un.h>
- 
- #include "dev.h"
-@@ -2468,6 +2469,16 @@ static const struct bpf_func_proto bpf_clone_redirect_proto = {
- DEFINE_PER_CPU(struct bpf_redirect_info, bpf_redirect_info);
- EXPORT_PER_CPU_SYMBOL_GPL(bpf_redirect_info);
- 
-+static struct net_device *skb_get_peer_dev(struct net_device *dev)
-+{
-+	const struct net_device_ops *ops = dev->netdev_ops;
++	struct rtattr *linkinfo, *data, *peer_info;
++	struct rtnl_handle rth = { .fd = -1 };
++	const char *type = "netkit";
++	struct {
++		struct nlmsghdr n;
++		struct ifinfomsg i;
++		char buf[1024];
++	} req = {};
++	int err;
 +
-+	if (likely(ops->ndo_get_peer_dev))
-+		return INDIRECT_CALL_1(ops->ndo_get_peer_dev,
-+				       netkit_peer_dev, dev);
-+	return NULL;
++	err = rtnl_open(&rth, 0);
++	if (!ASSERT_OK(err, "open_rtnetlink"))
++		return err;
++
++	memset(&req, 0, sizeof(req));
++	req.n.nlmsg_len = NLMSG_LENGTH(sizeof(struct ifinfomsg));
++	req.n.nlmsg_flags = NLM_F_REQUEST | NLM_F_CREATE | NLM_F_EXCL;
++	req.n.nlmsg_type = RTM_NEWLINK;
++	req.i.ifi_family = AF_UNSPEC;
++
++	addattr_l(&req.n, sizeof(req), IFLA_IFNAME, prim, strlen(prim));
++	linkinfo = addattr_nest(&req.n, sizeof(req), IFLA_LINKINFO);
++	addattr_l(&req.n, sizeof(req), IFLA_INFO_KIND, type, strlen(type));
++	data = addattr_nest(&req.n, sizeof(req), IFLA_INFO_DATA);
++	addattr32(&req.n, sizeof(req), IFLA_NETKIT_MODE, mode);
++	peer_info = addattr_nest(&req.n, sizeof(req), IFLA_NETKIT_PEER_INFO);
++	req.n.nlmsg_len += sizeof(struct ifinfomsg);
++	addattr_l(&req.n, sizeof(req), IFLA_IFNAME, peer, strlen(peer));
++	addattr_nest_end(&req.n, peer_info);
++	addattr_nest_end(&req.n, data);
++	addattr_nest_end(&req.n, linkinfo);
++
++	err = rtnl_talk(&rth, &req.n, NULL);
++	ASSERT_OK(err, "talk_rtnetlink");
++	rtnl_close(&rth);
++	return err;
 +}
 +
- int skb_do_redirect(struct sk_buff *skb)
+ static int netns_setup_links_and_routes(struct netns_setup_result *result)
  {
- 	struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
-@@ -2481,12 +2492,9 @@ int skb_do_redirect(struct sk_buff *skb)
- 	if (unlikely(!dev))
- 		goto out_drop;
- 	if (flags & BPF_F_PEER) {
--		const struct net_device_ops *ops = dev->netdev_ops;
--
--		if (unlikely(!ops->ndo_get_peer_dev ||
--			     !skb_at_tc_ingress(skb)))
-+		if (unlikely(!skb_at_tc_ingress(skb)))
- 			goto out_drop;
--		dev = ops->ndo_get_peer_dev(dev);
-+		dev = skb_get_peer_dev(dev);
- 		if (unlikely(!dev ||
- 			     !(dev->flags & IFF_UP) ||
- 			     net_eq(net, dev_net(dev))))
+ 	struct nstoken *nstoken = NULL;
+ 	char src_fwd_addr[IFADDR_STR_LEN+1] = {};
++	int err;
+ 
+ 	if (result->dev_mode == MODE_VETH) {
+ 		SYS(fail, "ip link add src type veth peer name src_fwd");
+@@ -153,6 +196,13 @@ static int netns_setup_links_and_routes(struct netns_setup_result *result)
+ 
+ 		SYS(fail, "ip link set dst_fwd address " MAC_DST_FWD);
+ 		SYS(fail, "ip link set dst address " MAC_DST);
++	} else if (result->dev_mode == MODE_NETKIT) {
++		err = create_netkit(NETKIT_L3, "src", "src_fwd");
++		if (!ASSERT_OK(err, "create_ifindex_src"))
++			goto fail;
++		err = create_netkit(NETKIT_L3, "dst", "dst_fwd");
++		if (!ASSERT_OK(err, "create_ifindex_dst"))
++			goto fail;
+ 	}
+ 
+ 	if (get_ifaddr("src_fwd", src_fwd_addr))
+@@ -1134,7 +1184,9 @@ static void *test_tc_redirect_run_tests(void *arg)
+ 	netns_setup_namespaces_nofail("delete");
+ 
+ 	RUN_TEST(tc_redirect_peer, MODE_VETH);
++	RUN_TEST(tc_redirect_peer, MODE_NETKIT);
+ 	RUN_TEST(tc_redirect_peer_l3, MODE_VETH);
++	RUN_TEST(tc_redirect_peer_l3, MODE_NETKIT);
+ 	RUN_TEST(tc_redirect_neigh, MODE_VETH);
+ 	RUN_TEST(tc_redirect_neigh_fib, MODE_VETH);
+ 	RUN_TEST(tc_redirect_dtime, MODE_VETH);
 -- 
 2.34.1
 
