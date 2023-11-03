@@ -1,39 +1,43 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA4F12421F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C4E7249E9;
 	Fri,  3 Nov 2023 22:28:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="MrKnJJUz"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="U1RtmWsd"
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7C1D65;
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5D7D63;
 	Fri,  3 Nov 2023 15:27:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=Kd8nDdkeZKH413rYnesg4bxUDxmt4vLm8yZD8oac5Rk=; b=MrKnJJUzpU1FSCOX9YuDdJkL0i
-	eb9OYFClc4HoI3brlOmPz8IJGS3aGBmQOKCBdBUDzGEzeD+aBAqET5VIRh//4441aJmXPtfhi8nJ4
-	JRjMu+uLW6s4zuyLT6HSqFQA5JdrZBhxxFL9qk93jJzNQ54IYWgP/0dW0hGYXCY9KYEStWta5lLZd
-	MC+PooSAywhalPEAAAgSCy2lpSSHHDVjEdVAdJVwKurRHNGvw7r2nwTigU4pR3M9Yv/2MCKWflFPL
-	e7BcQimT+nxxpQdVJjioROx/i3s5Q7QWg3hOMNvWrZu08BBGOVZHNSKcC0S95I9mDTjFWgIX+M+ry
-	zQc6caWw==;
+	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=8tYDaJ2/AsaZ80JHKT7glA/dUH65icmOA0cpg0E4oJ8=; b=U1RtmWsd00CCrIXQ5txYv4pM1N
+	X51bUjmeRgOhgh7yczYgQ2qn61JbNAB80L8eUSsDJwYCvFXqbZOFtqPJ5jpPCjP9KQ89o/YCsMJkZ
+	YSRee5z72Nhmnuxw/4gRNBWeD1oQsOJo6bAZw9KXMVaH8JtRLcg6b0sI2yC4yzTxgp5EAnI+nrHq+
+	/3CVKaXgxsBVnGaZ5K3jB9Ld/22YTVV+Q6aFNBNnHNmjoK/Je9cE1qqyFVxjpH0grCdVJVVHjv14/
+	IxRqpzwLaCXvn2vo6foZi5lmJIOVIX1TS8eyxrOgwzUdvyQ1GYtVU9KTME2j5BywUrU8keRZA/4rH
+	Mugfgb/g==;
 Received: from 226.206.1.85.dynamic.wline.res.cust.swisscom.ch ([85.1.206.226] helo=localhost)
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1qz2dw-000CpT-DX; Fri, 03 Nov 2023 23:27:56 +0100
+	id 1qz2dx-000Cpv-Qz; Fri, 03 Nov 2023 23:27:57 +0100
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: martin.lau@kernel.org
 Cc: kuba@kernel.org,
 	netdev@vger.kernel.org,
 	bpf@vger.kernel.org,
+	Peilin Ye <peilin.ye@bytedance.com>,
+	Youlun Zhang <zhangyoulun@bytedance.com>,
 	Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf 0/6] bpf_redirect_peer fixes
-Date: Fri,  3 Nov 2023 23:27:42 +0100
-Message-Id: <20231103222748.12551-1-daniel@iogearbox.net>
+Subject: [PATCH bpf 3/6] bpf: Fix dev's rx stats for bpf_redirect_peer traffic
+Date: Fri,  3 Nov 2023 23:27:45 +0100
+Message-Id: <20231103222748.12551-4-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20231103222748.12551-1-daniel@iogearbox.net>
+References: <20231103222748.12551-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -44,29 +48,56 @@ Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: daniel@iogearbox.net
 X-Virus-Scanned: Clear (ClamAV 0.103.10/27081/Fri Nov  3 08:43:47 2023)
 
-This fixes bpf_redirect_peer stats accounting for veth and netkit,
-and adds tstats in the first place for the latter. Utilise indirect
-call wrapper for bpf_redirect_peer, and improve test coverage of the
-latter also for netkit devices. Details in the patches, thanks!
+From: Peilin Ye <peilin.ye@bytedance.com>
 
-Daniel Borkmann (4):
-  netkit: Add tstats per-CPU traffic counters
-  bpf, netkit: Add indirect call wrapper for fetching peer dev
-  selftests/bpf: De-veth-ize the tc_redirect test case
-  selftests/bpf: Add netkit to tc_redirect selftest
+Traffic redirected by bpf_redirect_peer() (used by recent CNIs like Cilium)
+is not accounted for in the RX stats of supported devices (that is, veth
+and netkit), confusing user space metrics collectors such as cAdvisor [0],
+as reported by Youlun.
 
-Peilin Ye (2):
-  veth: Use tstats per-CPU traffic counters
-  bpf: Fix dev's rx stats for bpf_redirect_peer traffic
+Fix it by calling dev_sw_netstats_rx_add() in skb_do_redirect(), to update
+RX traffic counters. Devices that support ndo_get_peer_dev _must_ use the
+@tstats per-CPU counters (instead of @lstats, or @dstats).
 
- drivers/net/netkit.c                          |  42 ++-
- drivers/net/veth.c                            |  36 +-
- include/linux/netdevice.h                     |   3 +-
- include/net/netkit.h                          |   6 +
- net/core/filter.c                             |  19 +-
- .../selftests/bpf/prog_tests/tc_redirect.c    | 317 +++++++++++-------
- 6 files changed, 262 insertions(+), 161 deletions(-)
+  [0] Specifically, the "container_network_receive_{byte,packet}s_total"
+      counters are affected.
 
+Fixes: 9aa1206e8f48 ("bpf: Add redirect_peer helper")
+Reported-by: Youlun Zhang <zhangyoulun@bytedance.com>
+Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+---
+ include/linux/netdevice.h | 3 ++-
+ net/core/filter.c         | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index a16c9cc063fe..fcfeaedb1256 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -1408,7 +1408,8 @@ struct netdev_net_notifier {
+  *	Add, change, delete or get information on an IPv4 tunnel.
+  * struct net_device *(*ndo_get_peer_dev)(struct net_device *dev);
+  *	If a device is paired with a peer device, return the peer instance.
+- *	The caller must be under RCU read context.
++ *	The caller must be under RCU read context. The driver implementing
++ *	ndo_get_peer_dev must support @tstats packet accounting!
+  * int (*ndo_fill_forward_path)(struct net_device_path_ctx *ctx, struct net_device_path *path);
+  *     Get the forwarding path to reach the real device from the HW destination address
+  * ktime_t (*ndo_get_tstamp)(struct net_device *dev,
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 21d75108c2e9..7aca28b7d0fd 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -2492,6 +2492,7 @@ int skb_do_redirect(struct sk_buff *skb)
+ 			     net_eq(net, dev_net(dev))))
+ 			goto out_drop;
+ 		skb->dev = dev;
++		dev_sw_netstats_rx_add(dev, skb->len);
+ 		return -EAGAIN;
+ 	}
+ 	return flags & BPF_F_NEIGH ?
 -- 
 2.34.1
 
