@@ -1,69 +1,30 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FDB12D616
-	for <bpf@vger.kernel.org>; Sat,  4 Nov 2023 10:52:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="SN8g36pI";
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="SN8g36pI"
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FA8112
-	for <bpf@vger.kernel.org>; Sat,  4 Nov 2023 03:52:54 -0700 (PDT)
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 881A7C2E0E9B
-	for <bpf@vger.kernel.org>; Sat,  4 Nov 2023 03:52:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1699095174; bh=+CpG8ohQ5B6CoE6eRT6xbE41U/mKPV68ysz7RNcXYJw=;
-	h=From:To:In-reply-to:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=SN8g36pIqwM0auHMJPyohNHFU9D1WLcxXR5KjHGwy8ArsG+wGVRMu5seuIjzyODZw
-	 ZJulqZtdIRb1qxiylDE5vCP+3GXmmHfr8VawqVfvuVHlPxvC3C/kSEdYHMNtUlUEci
-	 c8rgWP0Iv5TjbaMnXlGZkDoPyKvocC2Lbbgus3sk=
-X-Mailbox-Line: From bpf-bounces@ietf.org  Sat Nov  4 03:52:54 2023
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 4F359C090FCB;
-	Sat,  4 Nov 2023 03:52:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1699095174; bh=+CpG8ohQ5B6CoE6eRT6xbE41U/mKPV68ysz7RNcXYJw=;
-	h=From:To:In-reply-to:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=SN8g36pIqwM0auHMJPyohNHFU9D1WLcxXR5KjHGwy8ArsG+wGVRMu5seuIjzyODZw
-	 ZJulqZtdIRb1qxiylDE5vCP+3GXmmHfr8VawqVfvuVHlPxvC3C/kSEdYHMNtUlUEci
-	 c8rgWP0Iv5TjbaMnXlGZkDoPyKvocC2Lbbgus3sk=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id B9764C17DC0A
- for <bpf@ietfa.amsl.com>; Sat,  4 Nov 2023 03:52:52 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Score: -6.906
-X-Spam-Level: 
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uierGEjyjOu1 for <bpf@ietfa.amsl.com>;
- Sat,  4 Nov 2023 03:52:49 -0700 (PDT)
-Received: from relay.sandelman.ca (relay.cooperix.net
- [IPv6:2a01:7e00:e000:2bb::1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id D6996C187701
- for <bpf@ietf.org>; Sat,  4 Nov 2023 03:52:48 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA7A623CC
+	for <bpf@vger.kernel.org>; Sat,  4 Nov 2023 11:01:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+X-Greylist: delayed 481 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 04 Nov 2023 04:00:50 PDT
+Received: from relay.sandelman.ca (relay.cooperix.net [IPv6:2a01:7e00:e000:2bb::1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E638C1BD8
+	for <bpf@vger.kernel.org>; Sat,  4 Nov 2023 04:00:50 -0700 (PDT)
 Received: from dyas.sandelman.ca (x52717996.dyn.telefonica.de [82.113.121.150])
- by relay.sandelman.ca (Postfix) with ESMTPS id 7A9E320B44;
- Sat,  4 Nov 2023 10:52:47 +0000 (UTC)
+	by relay.sandelman.ca (Postfix) with ESMTPS id 7A9E320B44;
+	Sat,  4 Nov 2023 10:52:47 +0000 (UTC)
 Received: by dyas.sandelman.ca (Postfix, from userid 1000)
- id 13A07A1B52; Sat,  4 Nov 2023 06:52:30 -0400 (EDT)
+	id 13A07A1B52; Sat,  4 Nov 2023 06:52:30 -0400 (EDT)
 Received: from dyas (localhost [127.0.0.1])
- by dyas.sandelman.ca (Postfix) with ESMTP id 11869A1B51;
- Sat,  4 Nov 2023 11:52:30 +0100 (CET)
+	by dyas.sandelman.ca (Postfix) with ESMTP id 11869A1B51;
+	Sat,  4 Nov 2023 11:52:30 +0100 (CET)
 From: Michael Richardson <mcr+ietf@sandelman.ca>
 To: Dave Thaler <dthaler=40microsoft.com@dmarc.ietf.org>,
- "bpf\@vger.kernel.org" <bpf@vger.kernel.org>,
- "bpf\@ietf.org" <bpf@ietf.org>
+    "bpf\@vger.kernel.org" <bpf@vger.kernel.org>,
+    "bpf\@ietf.org" <bpf@ietf.org>
+Subject: Re: [Bpf] IETF 118 Call for Agenda Items
 In-reply-to: <PH7PR21MB38787378F01B057C9FF7D25BA3A4A@PH7PR21MB3878.namprd21.prod.outlook.com>
-References: <20231009170843.GA236066@maniforge>
- <PH7PR21MB38787378F01B057C9FF7D25BA3A4A@PH7PR21MB3878.namprd21.prod.outlook.com>
+References: <20231009170843.GA236066@maniforge> <PH7PR21MB38787378F01B057C9FF7D25BA3A4A@PH7PR21MB3878.namprd21.prod.outlook.com>
 Comments: In-reply-to Dave Thaler <dthaler=40microsoft.com@dmarc.ietf.org>
- message dated "Sat, 04 Nov 2023 10:17:56 +0000."
+   message dated "Sat, 04 Nov 2023 10:17:56 +0000."
 X-Mailer: MH-E 8.6+git; nmh 1.7+dev; GNU Emacs 26.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -71,29 +32,11 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Sat, 04 Nov 2023 11:52:30 +0100
-Message-ID: <3448856.1699095150@dyas>
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/IpNmHvaTt_ybM_qepnaxIVd1pec>
-Subject: Re: [Bpf] IETF 118 Call for Agenda Items
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Id: Discussion of BPF/eBPF standardization efforts within the IETF
- <bpf.ietf.org>
-List-Unsubscribe: <https://www.ietf.org/mailman/options/bpf>,
- <mailto:bpf-request@ietf.org?subject=unsubscribe>
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-List-Subscribe: <https://www.ietf.org/mailman/listinfo/bpf>,
- <mailto:bpf-request@ietf.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============5195997557628782864=="
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
-
---===============5195997557628782864==
 Content-Type: multipart/signed; boundary="=-=-=";
 	micalg=pgp-sha512; protocol="application/pgp-signature"
+Date: Sat, 04 Nov 2023 11:52:30 +0100
+Message-ID: <3448856.1699095150@dyas>
+Message-ID: <20231104105230.570RGCBDb9MpwxdQWTnyZJXksEOQfx48GPiXKd-xr9c@z>
 
 --=-=-=
 Content-Type: text/plain
@@ -158,18 +101,3 @@ c0ArTdyc
 =6WRB
 -----END PGP SIGNATURE-----
 --=-=-=--
-
-
---===============5195997557628782864==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
--- 
-Bpf mailing list
-Bpf@ietf.org
-https://www.ietf.org/mailman/listinfo/bpf
-
---===============5195997557628782864==--
-
