@@ -1,143 +1,141 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DFAA8F5F
-	for <bpf@vger.kernel.org>; Sun,  5 Nov 2023 09:51:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E114AD55;
+	Sun,  5 Nov 2023 11:55:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="ZTiMLedh";
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="ZTiMLedh";
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LUulQx5c"
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE47FCF
-	for <bpf@vger.kernel.org>; Sun,  5 Nov 2023 01:51:33 -0800 (PST)
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 4E747C06F22F
-	for <bpf@vger.kernel.org>; Sun,  5 Nov 2023 01:51:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1699177893; bh=X2DOCFDW5eEt98DMSu++AEDbV22pNR/cqv0UjHVnFLs=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=ZTiMLedh4sSv9MqLGOG4lYWIiT//rkcX4FzR/v26Mc25Hz3c6vDc8cPhEAgQzWIpL
-	 2Dg5zRmma3Dyp2X/LrtBrQJzBEFe9tGwyAtxBL7kVH7qbRPWojOCI6cdevIZSSpFCm
-	 DZqBgQBL0Kl0k5NyIWIyxCG+vFyjXrKmTrZRaFSM=
-X-Mailbox-Line: From bpf-bounces@ietf.org  Sun Nov  5 01:51:33 2023
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 2333BC1D46EC;
-	Sun,  5 Nov 2023 01:51:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1699177893; bh=X2DOCFDW5eEt98DMSu++AEDbV22pNR/cqv0UjHVnFLs=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=ZTiMLedh4sSv9MqLGOG4lYWIiT//rkcX4FzR/v26Mc25Hz3c6vDc8cPhEAgQzWIpL
-	 2Dg5zRmma3Dyp2X/LrtBrQJzBEFe9tGwyAtxBL7kVH7qbRPWojOCI6cdevIZSSpFCm
-	 DZqBgQBL0Kl0k5NyIWIyxCG+vFyjXrKmTrZRaFSM=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id AAA4BC15C2A5
- for <bpf@ietfa.amsl.com>; Sun,  5 Nov 2023 01:51:32 -0800 (PST)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Score: -2.108
-X-Spam-Level: 
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
- header.d=gmail.com
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kdjBezIT6C2B for <bpf@ietfa.amsl.com>;
- Sun,  5 Nov 2023 01:51:32 -0800 (PST)
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
- [IPv6:2a00:1450:4864:20::130])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id 46C7EC1D46EC
- for <bpf@ietf.org>; Sun,  5 Nov 2023 01:51:32 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id
- 2adb3069b0e04-507975d34e8so5003394e87.1
- for <bpf@ietf.org>; Sun, 05 Nov 2023 01:51:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="APsUK/Em"
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 700E890;
+	Sun,  5 Nov 2023 03:55:15 -0800 (PST)
+Received: by mail-qv1-xf31.google.com with SMTP id 6a1803df08f44-67089696545so22807076d6.0;
+        Sun, 05 Nov 2023 03:55:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699177890; x=1699782690; darn=ietf.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=PjcPMO12JeMo6oFMzCF57vbfHf1P824sz09Cbt1FOto=;
- b=LUulQx5cuqfGOlvqd5gkFWAO5wmgYtchJ9q6BJVzfiikvfneLWLndSjcwNBWjcP2Pp
- cI9Ep/hsmy6MuCWPTH2yQIjMxjwNtyf62o2YYu/Bj80dp80lwtrm4aI8b7KDJDjrKeS+
- wiDF6pSrsJPvAhPzw0odtwoLcaPd2VUF77Dxy4gX/I2IzGFEShoOAsRlxsjQ7KDQ+F0L
- iOBbK9qcTmRb5Ujp8xNt38mG81TQnqarsjivzRIoW6D8Cx4gg1E4fV6EB7NU1GX5AvCH
- 3AGPo4o8GrXGKsK8cSnxH+W2MBQVZ/hdLbOt8/pAUUY5gAosNPg7JANsL7mloXRw2mVH
- FTng==
+        d=gmail.com; s=20230601; t=1699185314; x=1699790114; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=C9FgC82VB9DuohSkiRg/tKOnJgJe/c9z30+wZ2VpWJA=;
+        b=APsUK/Em4z3++yzqTYpuYHxC6MhF8tq90loFdgE5mA/Yxrrb9ZhGC+FctnOQF6n6sY
+         yVJLz02/t/onOoiMIYxovRBkNSnVrZK64wO5zvY8IaTpSuk32PRAEsfGbNcHQ0NMo7yw
+         mii1Xm9oqr7GIX9oR4V8YD9l4bBhG/eelAXdRbnse/GUTS4CE2rjR+Wvs2MRYfojafpV
+         EXHIGnx6WXkC3Tp7dFfhX6/M8EGotAE58ThDTEYOK2ykrZPxM+T4my6xatcifNMH0S7T
+         L9e3D59zfetSEr+VYySusDfCjera12g6hh0wbObx+PieqkIJevwGvvbOGsXKYFvd25mS
+         k19g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699177890; x=1699782690;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=PjcPMO12JeMo6oFMzCF57vbfHf1P824sz09Cbt1FOto=;
- b=dk4SUSUA3+JwpzsHt87OlvLXvekb9HCnfGJL5TmgvqEN9RWi2B2kiTnS61pdJ1pzky
- 0GpQp/1g1UcMRLhcP/S1L5ILX3EEoq37X72AUXDKgzAWvlbC38mCwZuX0tZOZYOm+ruY
- /3PgQEFGzi7omQ16vlGxIIhAz6YBl30J3Pb7tLNVlQlmwQH9eh6nLGNUukTXfHQcxtEs
- LL+nKx6kxDbaXFS0VM0yRGNj5nEkLfv9ueBfGVZCBxvyZ2Fq/NGSHl/e/xNE8hYDX4yw
- AWRuo2G/Bw+Oq1b5L8S3fX4ARd6Jfp7+gaziVxc6SZ8a78zi+FK//GmUzNktedsLS5mR
- 6wAg==
-X-Gm-Message-State: AOJu0YzLsouN8Xi2CwTNN3+sm6RQLfUEl/fKeWjKvJ4PXOq5DleWdxOu
- zRWYYSPTZLQ2y3gIM+f05O4EDqRa+E1ssK0QUGeaBOrv+H8=
-X-Google-Smtp-Source: AGHT+IGpl1CwABFAzqyNjqyZnM6BzUHoQVwaK8IkqP5Hg0cnl5XNneYWJdUw8iTRil1i+U8Iu1SD7aGZIeI8tzqqRW4=
-X-Received: by 2002:ac2:5442:0:b0:500:af69:5556 with SMTP id
- d2-20020ac25442000000b00500af695556mr18170733lfn.29.1699177890207; Sun, 05
- Nov 2023 01:51:30 -0800 (PST)
+        d=1e100.net; s=20230601; t=1699185314; x=1699790114;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=C9FgC82VB9DuohSkiRg/tKOnJgJe/c9z30+wZ2VpWJA=;
+        b=kNpr8D2Hmf+PhomNqpTad/+gLnULdnDPWr1H13RhmIcnVhlzlRAm+QC5sQ6gUeJgQ6
+         3uE25NW4Ies4DVfRgEA/0/H264JsFA3aikeYBwrTs1sOIz4vdbuSGj0QACg90p9qzF8p
+         sEUHDd+LgyhDWhXK4mTue7oZ1Szfz2jWu+20bTBFqD2BI7iM3/9bUo5reaeRWlF5rKEl
+         gY135hxnvCcADgm25Oun64XjN3+u7vuFqn/Y8ti6rxdzjGBY9syNqUBFjYYhtVoXwX98
+         NQA95QoG8Tqdqlnfwb1u8RXvuqHFxM9dSWpr6P65lGxLpk/PfgM+t7T6tXlZ4xRyzO51
+         tfVA==
+X-Gm-Message-State: AOJu0Yz6Ve9f7Rq4K+s45Jab8AGt1wbfUk1G9B3Bx6fKgMJ+5a/SrTIm
+	Rk7Iukz8C5r0+2fntkdDVljZ/pu7c4API1nzEuw=
+X-Google-Smtp-Source: AGHT+IGd1lnDxRpp/KbVcQtLGmzSqHZ68PFrwbXEnpEbYEqxmKxJQ1ZDaypxQDXXvE7RVZqLQgHlIpwzuKSxSJ3URBQ=
+X-Received: by 2002:ad4:5bc4:0:b0:671:567d:b134 with SMTP id
+ t4-20020ad45bc4000000b00671567db134mr24775335qvt.56.1699185314493; Sun, 05
+ Nov 2023 03:55:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CADx9qWgqfQdHSVn0RMMz7M2jp5pKP-bnnc7GAfFD4QbP4eFA4w@mail.gmail.com>
- <20231103212024.327833-1-hawkinsw@obs.cr>
-In-Reply-To: <20231103212024.327833-1-hawkinsw@obs.cr>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 5 Nov 2023 01:51:19 -0800
-Message-ID: <CAADnVQLztq5W9qmGUBQeRBUJeCmTcc9H-OXCCJJzn=0baz+8_Q@mail.gmail.com>
-To: Will Hawkins <hawkinsw@obs.cr>
-Cc: bpf@ietf.org, bpf <bpf@vger.kernel.org>
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/NzXm2Pzdo8NbVRBgvZC3CSrGbEA>
-Subject: Re: [Bpf] [PATCH v3] bpf,
- docs: Add additional ABI working draft base text
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Id: Discussion of BPF/eBPF standardization efforts within the IETF
- <bpf.ietf.org>
-List-Unsubscribe: <https://www.ietf.org/mailman/options/bpf>,
- <mailto:bpf-request@ietf.org?subject=unsubscribe>
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-List-Subscribe: <https://www.ietf.org/mailman/listinfo/bpf>,
- <mailto:bpf-request@ietf.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
-Message-ID: <20231105095119.fclnjminEzXWETidit3A9sucp8Qzdk7iR8guwtqpqUE@z>
+References: <202311031651.A7crZEur-lkp@intel.com> <20231105062227.4190-1-laoar.shao@gmail.com>
+ <4f5a8c67-74be-41a1-8a0c-acac40da8902@app.fastmail.com>
+In-Reply-To: <4f5a8c67-74be-41a1-8a0c-acac40da8902@app.fastmail.com>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Sun, 5 Nov 2023 19:54:38 +0800
+Message-ID: <CALOAHbCt4-kDGoW=4R0EarPNV2yNcwy3exkVrn6Tz5Ng8M8gvg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] compiler-gcc: Ignore -Wmissing-prototypes
+ warning for older GCC
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: kernel test robot <lkp@intel.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org, cgroups@vger.kernel.org, 
+	Daniel Borkmann <daniel@iogearbox.net>, Johannes Weiner <hannes@cmpxchg.org>, Hao Luo <haoluo@google.com>, 
+	John Fastabend <john.fastabend@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
+	KP Singh <kpsingh@kernel.org>, lizefan.x@bytedance.com, 
+	Waiman Long <longman@redhat.com>, Martin KaFai Lau <martin.lau@linux.dev>, mkoutny@suse.com, 
+	oe-kbuild-all@lists.linux.dev, kernel test robot <oliver.sang@intel.com>, 
+	Stanislav Fomichev <sdf@google.com>, sinquersw@gmail.com, Song Liu <song@kernel.org>, 
+	Tejun Heo <tj@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, yosryahmed@google.com, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-T24gRnJpLCBOb3YgMywgMjAyMyBhdCAyOjIw4oCvUE0gV2lsbCBIYXdraW5zIDxoYXdraW5zd0Bv
-YnMuY3I+IHdyb3RlOgo+ICsKPiArVGhlIEFCSSBpcyBzcGVjaWZpZWQgaW4gdHdvIHBhcnRzOiBh
-IGdlbmVyaWMgcGFydCBhbmQgYSBwcm9jZXNzb3Itc3BlY2lmaWMgcGFydC4KPiArQSBwYWlyaW5n
-IG9mIGdlbmVyaWMgQUJJIHdpdGggdGhlIHByb2Nlc3Nvci1zcGVjaWZpYyBBQkkgZm9yIGEgY2Vy
-dGFpbgo+ICtpbnN0YW50aWF0aW9uIG9mIGEgQlBGIG1hY2hpbmUgcmVwcmVzZW50cyBhIGNvbXBs
-ZXRlIGJpbmFyeSBpbnRlcmZhY2UgZm9yIEJQRgo+ICtwcm9ncmFtcyBleGVjdXRpbmcgb24gdGhh
-dCBtYWNoaW5lLgo+ICsKPiArVGhpcyBkb2N1bWVudCBpcyB0aGUgZ2VuZXJpYyBBQkkgYW5kIHNw
-ZWNpZmllcyB0aGUgcGFyYW1ldGVycyBhbmQgYmVoYXZpb3IKPiArY29tbW9uIHRvIGFsbCBpbnN0
-YW50aWF0aW9ucyBvZiBCUEYgbWFjaGluZXMuIEluIGFkZGl0aW9uLCBpdCBkZWZpbmVzIHRoZQo+
-ICtkZXRhaWxzIHRoYXQgbXVzdCBiZSBzcGVjaWZpZWQgYnkgZWFjaCBwcm9jZXNzb3Itc3BlY2lm
-aWMgQUJJLgo+ICsKPiArVGhlc2UgcHNBQklzIGFyZSB0aGUgc2Vjb25kIHBhcnQgb2YgdGhlIEFC
-SS4gRWFjaCBpbnN0YW50aWF0aW9uIG9mIGEgQlBGCj4gK21hY2hpbmUgbXVzdCBkZXNjcmliZSB0
-aGUgbWVjaGFuaXNtIHRocm91Z2ggd2hpY2ggYmluYXJ5IGludGVyZmFjZQo+ICtjb21wYXRpYmls
-aXR5IGlzIG1haW50YWluZWQgd2l0aCByZXNwZWN0IHRvIHRoZSBpc3N1ZXMgaGlnaGxpZ2h0ZWQg
-YnkgdGhpcwo+ICtkb2N1bWVudC4gSG93ZXZlciwgdGhlIGRldGFpbHMgdGhhdCBtdXN0IGJlIGRl
-ZmluZWQgYnkgYSBwc0FCSSBhcmUgYSBtaW5pbXVtIC0tCj4gK2EgcHNBQkkgbWF5IHNwZWNpZnkg
-YWRkaXRpb25hbCByZXF1aXJlbWVudHMgZm9yIGJpbmFyeSBpbnRlcmZhY2UgY29tcGF0aWJpbGl0
-eQo+ICtvbiBhIHBsYXRmb3JtLgoKSSBkb24ndCB1bmRlcnN0YW5kIHdoYXQgeW91IGFyZSB0cnlp
-bmcgdG8gc2F5IGluIHRoZSBhYm92ZS4KSW4gbXkgbWluZCB0aGVyZSBpcyBvbmx5IG9uZSBCUEYg
-cHNBQkkgYW5kIGl0IGRvZXNuJ3QgaGF2ZQpnZW5lcmljIGFuZCBwcm9jZXNzb3IgcGFydHMuIFRo
-ZXJlIGlzIG9ubHkgb25lICJwcm9jZXNzb3IiLgpCUEYgaXMgc3VjaCBhIHByb2Nlc3Nvci4KCi0t
-IApCcGYgbWFpbGluZyBsaXN0CkJwZkBpZXRmLm9yZwpodHRwczovL3d3dy5pZXRmLm9yZy9tYWls
-bWFuL2xpc3RpbmZvL2JwZgo=
+On Sun, Nov 5, 2023 at 4:24=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Sun, Nov 5, 2023, at 07:22, Yafang Shao wrote:
+> > The kernel supports a minimum GCC version of 5.1.0 for building. Howeve=
+r,
+> > the "__diag_ignore_all" directive only suppresses the
+> > "-Wmissing-prototypes" warning for GCC versions >=3D 8.0.0. As a result=
+, when
+> > building the kernel with older GCC versions, warnings may be triggered.=
+ The
+> > example below illustrates the warnings reported by the kernel test robo=
+t
+> > using GCC 7.5.0:
+> >
+> >   compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
+> >   All warnings (new ones prefixed by >>):
+> >
+> >    kernel/bpf/helpers.c:1893:19: warning: no previous prototype for
+> > 'bpf_obj_new_impl' [-Wmissing-prototypes]
+> >     __bpf_kfunc void *bpf_obj_new_impl(u64 local_type_id__k, void
+> > *meta__ign)
+> >                       ^~~~~~~~~~~~~~~~
+> >    kernel/bpf/helpers.c:1907:19: warning: no previous prototype for
+> > 'bpf_percpu_obj_new_impl' [-Wmissing-prototypes]
+> >     __bpf_kfunc void *bpf_percpu_obj_new_impl(u64 local_type_id__k,
+> > void *meta__ign)
+> >    [...]
+> >
+> > To address this, we should also suppress the "-Wmissing-prototypes" war=
+ning
+> > for older GCC versions. Since "#pragma GCC diagnostic push" is supporte=
+d as
+> > of GCC 4.6, it is acceptable to ignore these warnings for GCC >=3D 5.1.=
+0.
+>
+> Not sure why these need to be suppressed like this at all,
+> can't you just add the prototype somewhere?
+
+BPF kfuncs are intended for use within BPF programs, and they should
+not be called from other parts of the kernel. Consequently, it is not
+appropriate to include their prototypes in a kernel header file.
+
+>
+> > @@ -131,14 +131,14 @@
+> >  #define __diag_str(s)                __diag_str1(s)
+> >  #define __diag(s)            _Pragma(__diag_str(GCC diagnostic s))
+> >
+> > -#if GCC_VERSION >=3D 80000
+> > -#define __diag_GCC_8(s)              __diag(s)
+> > +#if GCC_VERSION >=3D 50100
+> > +#define __diag_GCC_5(s)              __diag(s)
+> >  #else
+> > -#define __diag_GCC_8(s)
+> > +#define __diag_GCC_5(s)
+> >  #endif
+> >
+>
+> This breaks all uses of __diag_ignore that specify
+> version 8 directly. Just add the macros for each version
+> from 5 to 14 here.
+
+It seems that __diag_GCC_8() or __diag_GCC() are not directly used
+anywhere in the kernel, right?
+Therefore it won't break anything if we just replace __diag_GCC_8()
+with __diag_GCC_5().
+It may be cumbersome to add the macrocs for every GCC version if they
+aren't actively used.
+
+--
+Regards
+Yafang
