@@ -1,69 +1,90 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F7328BEB
-	for <bpf@vger.kernel.org>; Sun,  5 Nov 2023 09:07:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-X-Greylist: delayed 527 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 05 Nov 2023 01:07:21 PST
-Received: from mx.der-flo.net (mx.der-flo.net [IPv6:2001:67c:26f4:224::236])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6240AF
-	for <bpf@vger.kernel.org>; Sun,  5 Nov 2023 01:07:21 -0800 (PST)
-From: Florian Lehner <dev@der-flo.net>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	david@readahead.eu,
-	davem@davemloft.net,
-	daniel@zonque.org,
-	Florian Lehner <dev@der-flo.net>
-Subject: [PATCH bpf-next] bpf, lpm: fix check prefixlen before walking trie
-Date: Sun,  5 Nov 2023 09:58:01 +0100
-Message-ID: <20231105085801.3742-1-dev@der-flo.net>
-X-Mailer: git-send-email 2.41.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B92FA8813
+	for <bpf@vger.kernel.org>; Sun,  5 Nov 2023 09:51:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KlRI7HfJ"
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3853FCC
+	for <bpf@vger.kernel.org>; Sun,  5 Nov 2023 01:51:32 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-50943ccbbaeso4985365e87.2
+        for <bpf@vger.kernel.org>; Sun, 05 Nov 2023 01:51:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1699177890; x=1699782690; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PjcPMO12JeMo6oFMzCF57vbfHf1P824sz09Cbt1FOto=;
+        b=KlRI7HfJryRfnIFYt7m6UNQQkRLZ6S7VowVyBuenwo/dmBtZZ+c81IPVb25JdSqYB3
+         srJFrOKXKDvs+FUBJYlGAwd87LKwvTdzEq6crSWTGjxSEKpLNWklE3MsIfCgw5vQ/x/W
+         nsN/LPs7WhLkMSQt3kIuvBdPnNGGI0LYQzveI6yDmU9J69iMDG42aQKYAI7/Ge21d4fF
+         x88ggnxPietFUUDsFbt7RqIyNTsy6yBNtk3Xelyr8c+ilpn8m/SXJmsfahj+6RYsIw8P
+         54+MNXRw2NRFmviATzIgH++WuFAUzdLGVwxIwt7PFdl1cA9cCAATpGgfdkT5dVjfiBll
+         Q98Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699177890; x=1699782690;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PjcPMO12JeMo6oFMzCF57vbfHf1P824sz09Cbt1FOto=;
+        b=CSNGk+ba8518TuyG/pt1nzxa2pfR1b9uMvZOLgkiF4ZxQsrjQ7pmun9EIdw519f1XP
+         TpwdvkGaGZiWDPIZ+8CQCXJTfFdxXfcmM2qifPvK7cAQLxaSeEnENYJfQEAUaPWc2O+R
+         9atYUtNYNX0KzCgX8p1YBlO+xFmtqtgAUpaAhY7/wyczwfCQlhDckhVFra2w+YgBwN1q
+         1xRCcQ1uPWdklVPI116ZVXmHCg9XSLhQfZ/IheAVRuOBkngBFOaefCPfVPc6yBFYWsLa
+         NGzs/X67Wx7ariW0TQsJes1CL3zoZx56nPNJ0Nr9pMAssqiGmzOubnw08hM4LxjVzM+K
+         fXCA==
+X-Gm-Message-State: AOJu0YzJQYTgJPevZNP2ZisrdAGrFWCXfn2fZoe8eYTdUx8W0JFZolo7
+	1kuBrHpjCGOLsVoT8rBff8qm/g2EhCJxIIzY4O0=
+X-Google-Smtp-Source: AGHT+IGpl1CwABFAzqyNjqyZnM6BzUHoQVwaK8IkqP5Hg0cnl5XNneYWJdUw8iTRil1i+U8Iu1SD7aGZIeI8tzqqRW4=
+X-Received: by 2002:ac2:5442:0:b0:500:af69:5556 with SMTP id
+ d2-20020ac25442000000b00500af695556mr18170733lfn.29.1699177890207; Sun, 05
+ Nov 2023 01:51:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CADx9qWgqfQdHSVn0RMMz7M2jp5pKP-bnnc7GAfFD4QbP4eFA4w@mail.gmail.com>
+ <20231103212024.327833-1-hawkinsw@obs.cr>
+In-Reply-To: <20231103212024.327833-1-hawkinsw@obs.cr>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sun, 5 Nov 2023 01:51:19 -0800
+Message-ID: <CAADnVQLztq5W9qmGUBQeRBUJeCmTcc9H-OXCCJJzn=0baz+8_Q@mail.gmail.com>
+Subject: Re: [Bpf] [PATCH v3] bpf, docs: Add additional ABI working draft base text
+To: Will Hawkins <hawkinsw@obs.cr>
+Cc: bpf@ietf.org, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When looking up an element in LPM trie, the condition 'matchlen ==
-trie->max_prefixlen' will never return true, if key->prefixlen is larger
-than trie->max_prefixlen. Consequently all elements in the LPM trie will
-be visited and no element is returned in the end.
+On Fri, Nov 3, 2023 at 2:20=E2=80=AFPM Will Hawkins <hawkinsw@obs.cr> wrote=
+:
+> +
+> +The ABI is specified in two parts: a generic part and a processor-specif=
+ic part.
+> +A pairing of generic ABI with the processor-specific ABI for a certain
+> +instantiation of a BPF machine represents a complete binary interface fo=
+r BPF
+> +programs executing on that machine.
+> +
+> +This document is the generic ABI and specifies the parameters and behavi=
+or
+> +common to all instantiations of BPF machines. In addition, it defines th=
+e
+> +details that must be specified by each processor-specific ABI.
+> +
+> +These psABIs are the second part of the ABI. Each instantiation of a BPF
+> +machine must describe the mechanism through which binary interface
+> +compatibility is maintained with respect to the issues highlighted by th=
+is
+> +document. However, the details that must be defined by a psABI are a min=
+imum --
+> +a psABI may specify additional requirements for binary interface compati=
+bility
+> +on a platform.
 
-To resolve this, check key->prefixlen first before walking the LPM trie.
-
-Fixes: b95a5c4db09b ("bpf: add a longest prefix match trie map implementation")
-Signed-off-by: Florian Lehner <dev@der-flo.net>
----
- kernel/bpf/lpm_trie.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index 17c7e7782a1f..b32be680da6c 100644
---- a/kernel/bpf/lpm_trie.c
-+++ b/kernel/bpf/lpm_trie.c
-@@ -231,6 +231,9 @@ static void *trie_lookup_elem(struct bpf_map *map, void *_key)
- 	struct lpm_trie_node *node, *found = NULL;
- 	struct bpf_lpm_trie_key *key = _key;
- 
-+	if (key->prefixlen > trie->max_prefixlen)
-+		return NULL;
-+
- 	/* Start walking the trie from the root node ... */
- 
- 	for (node = rcu_dereference_check(trie->root, rcu_read_lock_bh_held());
--- 
-2.39.2
-
+I don't understand what you are trying to say in the above.
+In my mind there is only one BPF psABI and it doesn't have
+generic and processor parts. There is only one "processor".
+BPF is such a processor.
