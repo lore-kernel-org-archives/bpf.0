@@ -1,94 +1,93 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2E9317730;
-	Mon,  6 Nov 2023 10:04:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1BC64422;
+	Mon,  6 Nov 2023 10:20:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bov0Hu9H"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87CF4C433C7;
-	Mon,  6 Nov 2023 10:04:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699265062;
-	bh=N+J4uYmXVpTzfaXKjD6eS71G3lnyCcY7HtDKx1e+Uts=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=bov0Hu9H0C1RcT+NiXHNn+Pibn5nMp6Y45MKQJCmsmiNT0AlDwPjmasythPTi8B4p
-	 JKsmpx+T/Cnf3/7nhpaiGRiZh3cC6Wjrf7UEAJEwoz/aYcweViMP2ZXLc3JOBHaR+Z
-	 IUqacxRFDE4Mn2VB0DNucAnLf0wGpEmc5znw/gUCGwSXTYtE4Nq9OipLq2MRN/n9BD
-	 OoLoG4QEWt7A19uM6bmpDcbRQAp4KOS7x+7KQuxOtV1zbro++cjVaqyHOCqZ4K/AHN
-	 OUIDxeaxwf0T84aI2O36puv5Ko76ATVLCs9GyjydvIpTWY117PxdUSGDonRkZe48Kc
-	 4ZNZqDd4eihzQ==
-Date: Mon, 6 Nov 2023 19:04:16 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Steven Rostedt
- <rostedt@goodmis.org>, Florent Revest <revest@chromium.org>,
- linux-trace-kernel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>, Sven
- Schnelle <svens@linux.ibm.com>, Alexei Starovoitov <ast@kernel.org>, Jiri
- Olsa <jolsa@kernel.org>, Arnaldo Carvalho de Melo <acme@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Alan Maguire <alan.maguire@oracle.com>,
- Mark Rutland <mark.rutland@arm.com>, Peter Zijlstra <peterz@infradead.org>,
- Thomas Gleixner <tglx@linutronix.de>, Guo Ren <guoren@kernel.org>
-Subject: Re: [RFC PATCH 18/32] function_graph: Fix to initalize ftrace_ops
- for fgraph with ftrace_graph_func
-Message-Id: <20231106190416.cbd04fdd5bb9cdff72563e64@kernel.org>
-In-Reply-To: <169920060974.482486.15664806338999944098.stgit@devnote2>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="NGn9slIR"
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0833493;
+	Mon,  6 Nov 2023 02:20:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=TNwnTF7pJUM5wUYf1C8g4YjArZwLod3mYB+unv05Tsc=; b=NGn9slIRFegsAwH8UGyOzYUMiY
+	aRIUJUcWoNKfCGvzH/Am3HdI6k+uS84T/KtTE/JPwEMhR/S2qkTK91Yr9S/4P/vmbrjLXDLek/oIj
+	x4EOjbYEnv1qt/LKWfhSuIT80HrEc00l4QAiGb165xYYZ+bCWB1GPJj2BMocAjL/JTIE/E+/AwqbU
+	X9wQI8qqKoGx+9qvfBPZXKhGZQybfVEZk4iH1ZppUjzoBXO8KntsQGTnZNj9funTF+G72/++SC7fj
+	eD2S+Bl5hAJVA/VrNvCwxwjFVlKOrHSgGrFSt6imr0kvTcc+0jedyoAHpcY/ux49iZbxcXLZKjla8
+	Z6TP1WDg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1qzwhf-005LVK-Uv; Mon, 06 Nov 2023 10:19:32 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 4A31A30049D; Mon,  6 Nov 2023 11:19:32 +0100 (CET)
+Date: Mon, 6 Nov 2023 11:19:32 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Florent Revest <revest@chromium.org>,
+	linux-trace-kernel@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Alexei Starovoitov <ast@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Thomas Gleixner <tglx@linutronix.de>, Guo Ren <guoren@kernel.org>
+Subject: Re: [RFC PATCH 24/32] x86/ftrace: Enable HAVE_FUNCTION_GRAPH_FREGS
+Message-ID: <20231106101932.GJ8262@noisy.programming.kicks-ass.net>
 References: <169920038849.482486.15796387219966662967.stgit@devnote2>
-	<169920060974.482486.15664806338999944098.stgit@devnote2>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+ <169920068069.482486.6540417903833579700.stgit@devnote2>
+ <20231105172536.GA7124@noisy.programming.kicks-ass.net>
+ <20231105141130.6ef7d8bd@rorschach.local.home>
+ <20231105231734.GE3818@noisy.programming.kicks-ass.net>
+ <20231105183301.38be5598@rorschach.local.home>
+ <20231105183409.424bc368@rorschach.local.home>
+ <20231106093850.62702d5bf1779e30cdecf1eb@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231106093850.62702d5bf1779e30cdecf1eb@kernel.org>
 
-On Mon,  6 Nov 2023 01:10:10 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
-
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On Mon, Nov 06, 2023 at 09:38:50AM +0900, Masami Hiramatsu wrote:
+> On Sun, 5 Nov 2023 18:34:09 -0500
+> Steven Rostedt <rostedt@goodmis.org> wrote:
 > 
-> Fix to initialize the ftrace_ops of fgraph_ops with ftrace_graph_func
-> instead of ftrace_stub.
-
-I've changed this, because fprobe entry handler is not called via
-fgraph without this. But maybe I have to set correct gops->ops.func
-after init?
-
-Thank you,
-
+> > On Sun, 5 Nov 2023 18:33:01 -0500
+> > Steven Rostedt <rostedt@goodmis.org> wrote:
+> > 
+> > > For x86_64, that would be:
+> > > 
+> > >   rdi, rsi, rdx, r8, r9, rsp
+> > 
+> > I missed rcx.
 > 
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> ---
->  kernel/trace/fgraph.c |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
-> index 597250bd30dc..858fb73440ec 100644
-> --- a/kernel/trace/fgraph.c
-> +++ b/kernel/trace/fgraph.c
-> @@ -872,7 +872,7 @@ unsigned long ftrace_graph_ret_addr(struct task_struct *task, int *idx,
->  void fgraph_init_ops(struct ftrace_ops *dst_ops,
->  		     struct ftrace_ops *src_ops)
->  {
-> -	dst_ops->func = ftrace_stub;
-> +	dst_ops->func = ftrace_graph_func;
->  	dst_ops->flags = FTRACE_OPS_FL_PID | FTRACE_OPS_FL_STUB;
->  
->  #ifdef FTRACE_GRAPH_TRAMP_ADDR
-> @@ -1120,7 +1120,7 @@ int register_ftrace_graph(struct fgraph_ops *gops)
->  
->  	if (!gops->ops.func) {
->  		gops->ops.flags |= FTRACE_OPS_FL_STUB;
-> -		gops->ops.func = ftrace_stub;
-> +		gops->ops.func = ftrace_graph_func;
->  #ifdef FTRACE_GRAPH_TRAMP_ADDR
->  		gops->ops.trampoline = FTRACE_GRAPH_TRAMP_ADDR;
->  #endif
-> 
+> I would like to add rax to the list so that it can handle the return value too. :)
+
+So something like so?
 
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
+index 897cf02c20b1..71bfe27594a5 100644
+--- a/arch/x86/include/asm/ftrace.h
++++ b/arch/x86/include/asm/ftrace.h
+@@ -36,6 +36,10 @@ static inline unsigned long ftrace_call_adjust(unsigned long addr)
+ 
+ #ifdef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
+ struct ftrace_regs {
++	/*
++	 * Partial, filled with:
++	 *  rax, rcx, rdx, rdi, rsi, r8, r9, rsp
++	 */
+ 	struct pt_regs		regs;
+ };
