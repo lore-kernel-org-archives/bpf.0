@@ -1,16 +1,16 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76A5012E72;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 746B27476;
 	Tue,  7 Nov 2023 03:12:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C7FD76;
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69459D6E;
 	Mon,  6 Nov 2023 19:12:55 -0800 (PST)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VvsPa1._1699326772;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VvsPa1._1699326772)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R251e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VvsNijc_1699326769;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VvsNijc_1699326769)
           by smtp.aliyun-inc.com;
-          Tue, 07 Nov 2023 11:12:53 +0800
+          Tue, 07 Nov 2023 11:12:50 +0800
 From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -26,9 +26,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	John Fastabend <john.fastabend@gmail.com>,
 	virtualization@lists.linux-foundation.org,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v2 21/21] virtio_net: xdp_features add NETDEV_XDP_ACT_XSK_ZEROCOPY
-Date: Tue,  7 Nov 2023 11:12:27 +0800
-Message-Id: <20231107031227.100015-22-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v2 19/21] virtio_net: xsk: rx: virtnet_rq_free_unused_buf() check xsk buffer
+Date: Tue,  7 Nov 2023 11:12:25 +0800
+Message-Id: <20231107031227.100015-20-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20231107031227.100015-1-xuanzhuo@linux.alibaba.com>
 References: <20231107031227.100015-1-xuanzhuo@linux.alibaba.com>
@@ -41,28 +41,34 @@ MIME-Version: 1.0
 X-Git-Hash: 59a160d210e8
 Content-Transfer-Encoding: 8bit
 
-Now, we supported AF_XDP(xsk). Add NETDEV_XDP_ACT_XSK_ZEROCOPY to
-xdp_features.
+Since this will be called in other circumstances(freeze), we must check
+whether it is xsk's buffer in this function. It cannot be judged outside
+this function.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- drivers/net/virtio/main.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/virtio/main.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/drivers/net/virtio/main.c b/drivers/net/virtio/main.c
-index 42c7dbf53e63..2c14f0c84e56 100644
+index 095f4acb0577..42c7dbf53e63 100644
 --- a/drivers/net/virtio/main.c
 +++ b/drivers/net/virtio/main.c
-@@ -4363,7 +4363,8 @@ static int virtnet_probe(struct virtio_device *vdev)
- 		dev->hw_features |= NETIF_F_GRO_HW;
+@@ -3948,6 +3948,14 @@ void virtnet_rq_free_unused_buf(struct virtqueue *vq, void *buf)
  
- 	dev->vlan_features = dev->features;
--	dev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT;
-+	dev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT |
-+		NETDEV_XDP_ACT_XSK_ZEROCOPY;
+ 	rq = &vi->rq[i];
  
- 	/* MTU range: 68 - 65535 */
- 	dev->min_mtu = MIN_MTU;
++	if (rq->xsk.pool) {
++		struct xdp_buff *xdp;
++
++		xdp = (struct xdp_buff *)buf;
++		xsk_buff_free(xdp);
++		return;
++	}
++
+ 	if (rq->do_dma_unmap)
+ 		virtnet_rq_unmap(rq, buf, 0);
+ 
 -- 
 2.32.0.3.g01195cf9f
 
