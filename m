@@ -1,21 +1,21 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81ABA30F9C
-	for <bpf@vger.kernel.org>; Tue,  7 Nov 2023 14:06:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2DCD30FB5
+	for <bpf@vger.kernel.org>; Tue,  7 Nov 2023 14:06:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E819FA
-	for <bpf@vger.kernel.org>; Tue,  7 Nov 2023 06:05:59 -0800 (PST)
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4SPqkW50XXz4f3kp1
-	for <bpf@vger.kernel.org>; Tue,  7 Nov 2023 22:05:55 +0800 (CST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327D810A
+	for <bpf@vger.kernel.org>; Tue,  7 Nov 2023 06:06:01 -0800 (PST)
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4SPqkY1VBQz4f3l2c
+	for <bpf@vger.kernel.org>; Tue,  7 Nov 2023 22:05:57 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id BA4751A0173
-	for <bpf@vger.kernel.org>; Tue,  7 Nov 2023 22:05:56 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 436641A0181
+	for <bpf@vger.kernel.org>; Tue,  7 Nov 2023 22:05:58 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP1 (Coremail) with SMTP id cCh0CgDHyhA_REpl+VkmAQ--.3051S11;
-	Tue, 07 Nov 2023 22:05:56 +0800 (CST)
+	by APP1 (Coremail) with SMTP id cCh0CgDHyhA_REpl+VkmAQ--.3051S14;
+	Tue, 07 Nov 2023 22:05:58 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org
 Cc: Martin KaFai Lau <martin.lau@linux.dev>,
@@ -30,9 +30,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	Jiri Olsa <jolsa@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
 	houtao1@huawei.com
-Subject: [PATCH bpf 07/11] bpf: Defer bpf_map_put() for inner map in map array
-Date: Tue,  7 Nov 2023 22:06:58 +0800
-Message-Id: <20231107140702.1891778-8-houtao@huaweicloud.com>
+Subject: [PATCH bpf 10/11] selftests/bpf: Remove the liveness test for inner map
+Date: Tue,  7 Nov 2023 22:07:01 +0800
+Message-Id: <20231107140702.1891778-11-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20231107140702.1891778-1-houtao@huaweicloud.com>
 References: <20231107140702.1891778-1-houtao@huaweicloud.com>
@@ -43,10 +43,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgDHyhA_REpl+VkmAQ--.3051S11
-X-Coremail-Antispam: 1UD129KBjvJXoWxGryfAw1DZryDurWxWr43Awb_yoWrAFyxpa
-	4rtF47CrW8Xr45X3y5Xa9rXa4Ygr45J347AasYk34FvayDWr97Za40gay7Kr1YyFs8XF4D
-	tr1jv340gaykCrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:cCh0CgDHyhA_REpl+VkmAQ--.3051S14
+X-Coremail-Antispam: 1UD129KBjvJXoWxGw1DZw1DKryfAw1DGF48JFb_yoW5Jw4Dpa
+	yfG34jkrWrAFs8Kw1UZw43urWFgr48G3yjyw18K3yrZr1kJrnrXF4xXa92gF95GFZYyFsI
+	va43ta4kC340yFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUBIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -57,111 +57,73 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxGryfAw1DZryDurWxWr43Awb_yoWrAFyxpa
 	6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI7V
 	AKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
 	r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6x
-	IIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UMIIF0xvE
-	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
+	IIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UMIIF0xvE
+	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6x
 	kF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU13l1DUUUUU==
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-When updating or deleting a map in map array, the map may still be
-accessed by non-sleepable program or sleepable program. However
-bpf_fd_array_map_update_elem() decreases the ref-count of the inner map
-directly through bpf_map_put(), if the ref-count is the last ref-count
-which is true for most cases, the inner map will be free by
-ops->map_free() in a kworker. But for now, most .map_free() callbacks
-don't use synchronize_rcu() or its variants to wait for the elapse of a
-RCU grace period, so bpf program which is accessing the inner map may
-incur use-after-free problem.
+Even before the introduction of deferred-map-put for inner map, the
+liveness test for inner map is not correct, because inner_map1 and
+inner_map2 are released directly in a kworker and there is no need for
+invoking kern_sync_rcu().
 
-Fix it by deferring the invocation of bpf_map_put() after the elapse of
-both one RCU grace period and one tasks trace RCU grace period.
+After deferring the invocation of bpf_map_put() for inner map, the time
+when the inner map is released is more complicated: each overwrite of
+the inner map will delay the release of the inner map after both one RCU
+grace period and one tasks trace RCU grace period. To avoid such
+complexity in selftest, just remove the liveness test for inner map.
 
-Fixes: bba1dc0b55ac ("bpf: Remove redundant synchronize_rcu.")
-Fixes: 638e4b825d52 ("bpf: Allows per-cpu maps and map-in-map in sleepable programs")
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- kernel/bpf/arraymap.c   | 26 +++++++++++++++++---------
- kernel/bpf/map_in_map.h |  3 +++
- 2 files changed, 20 insertions(+), 9 deletions(-)
+ .../selftests/bpf/prog_tests/btf_map_in_map.c | 26 +------------------
+ 1 file changed, 1 insertion(+), 25 deletions(-)
 
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index c1124b71da158..2229253bcb6bd 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -1355,12 +1355,18 @@ static void array_of_map_free(struct bpf_map *map)
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c b/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
+index a8b53b8736f01..f66ceccd7029c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
+@@ -25,7 +25,7 @@ static void test_lookup_update(void)
+ 	int map1_fd, map2_fd, map3_fd, map4_fd, map5_fd, map1_id, map2_id;
+ 	int outer_arr_fd, outer_hash_fd, outer_arr_dyn_fd;
+ 	struct test_btf_map_in_map *skel;
+-	int err, key = 0, val, i, fd;
++	int err, key = 0, val, i;
  
- static void *array_of_map_lookup_elem(struct bpf_map *map, void *key)
- {
--	struct bpf_map **inner_map = array_map_lookup_elem(map, key);
-+	struct bpf_inner_map_element *element;
-+	void **ptr;
+ 	skel = test_btf_map_in_map__open_and_load();
+ 	if (CHECK(!skel, "skel_open", "failed to open&load skeleton\n"))
+@@ -102,30 +102,6 @@ static void test_lookup_update(void)
+ 	CHECK(map1_id == 0, "map1_id", "failed to get ID 1\n");
+ 	CHECK(map2_id == 0, "map2_id", "failed to get ID 2\n");
  
--	if (!inner_map)
-+	ptr = array_map_lookup_elem(map, key);
-+	if (!ptr)
- 		return NULL;
- 
--	return READ_ONCE(*inner_map);
-+	element = READ_ONCE(*ptr);
-+	/* Uninitialized element ? */
-+	if (!element)
-+		return NULL;
-+	return element->map;
+-	test_btf_map_in_map__destroy(skel);
+-	skel = NULL;
+-
+-	/* we need to either wait for or force synchronize_rcu(), before
+-	 * checking for "still exists" condition, otherwise map could still be
+-	 * resolvable by ID, causing false positives.
+-	 *
+-	 * Older kernels (5.8 and earlier) freed map only after two
+-	 * synchronize_rcu()s, so trigger two, to be entirely sure.
+-	 */
+-	CHECK(kern_sync_rcu(), "sync_rcu", "failed\n");
+-	CHECK(kern_sync_rcu(), "sync_rcu", "failed\n");
+-
+-	fd = bpf_map_get_fd_by_id(map1_id);
+-	if (CHECK(fd >= 0, "map1_leak", "inner_map1 leaked!\n")) {
+-		close(fd);
+-		goto cleanup;
+-	}
+-	fd = bpf_map_get_fd_by_id(map2_id);
+-	if (CHECK(fd >= 0, "map2_leak", "inner_map2 leaked!\n")) {
+-		close(fd);
+-		goto cleanup;
+-	}
+-
+ cleanup:
+ 	test_btf_map_in_map__destroy(skel);
  }
- 
- static int array_of_map_gen_lookup(struct bpf_map *map,
-@@ -1376,10 +1382,10 @@ static int array_of_map_gen_lookup(struct bpf_map *map,
- 	*insn++ = BPF_ALU64_IMM(BPF_ADD, map_ptr, offsetof(struct bpf_array, value));
- 	*insn++ = BPF_LDX_MEM(BPF_W, ret, index, 0);
- 	if (!map->bypass_spec_v1) {
--		*insn++ = BPF_JMP_IMM(BPF_JGE, ret, map->max_entries, 6);
-+		*insn++ = BPF_JMP_IMM(BPF_JGE, ret, map->max_entries, 8);
- 		*insn++ = BPF_ALU32_IMM(BPF_AND, ret, array->index_mask);
- 	} else {
--		*insn++ = BPF_JMP_IMM(BPF_JGE, ret, map->max_entries, 5);
-+		*insn++ = BPF_JMP_IMM(BPF_JGE, ret, map->max_entries, 7);
- 	}
- 	if (is_power_of_2(elem_size))
- 		*insn++ = BPF_ALU64_IMM(BPF_LSH, ret, ilog2(elem_size));
-@@ -1387,7 +1393,9 @@ static int array_of_map_gen_lookup(struct bpf_map *map,
- 		*insn++ = BPF_ALU64_IMM(BPF_MUL, ret, elem_size);
- 	*insn++ = BPF_ALU64_REG(BPF_ADD, ret, map_ptr);
- 	*insn++ = BPF_LDX_MEM(BPF_DW, ret, ret, 0);
--	*insn++ = BPF_JMP_IMM(BPF_JEQ, ret, 0, 1);
-+	*insn++ = BPF_JMP_IMM(BPF_JEQ, ret, 0, 4);
-+	*insn++ = BPF_LDX_MEM(BPF_DW, ret, ret, 0);
-+	*insn++ = BPF_JMP_IMM(BPF_JEQ, ret, 0, 2);
- 	*insn++ = BPF_JMP_IMM(BPF_JA, 0, 0, 1);
- 	*insn++ = BPF_MOV64_IMM(ret, 0);
- 
-@@ -1401,9 +1409,9 @@ const struct bpf_map_ops array_of_maps_map_ops = {
- 	.map_get_next_key = array_map_get_next_key,
- 	.map_lookup_elem = array_of_map_lookup_elem,
- 	.map_delete_elem = fd_array_map_delete_elem,
--	.map_fd_get_ptr = bpf_map_fd_get_ptr,
--	.map_fd_put_ptr = bpf_map_fd_put_ptr,
--	.map_fd_sys_lookup_elem = bpf_map_fd_sys_lookup_elem,
-+	.map_fd_get_ptr = bpf_map_of_map_fd_get_ptr,
-+	.map_fd_put_ptr = bpf_map_of_map_fd_put_ptr,
-+	.map_fd_sys_lookup_elem = bpf_map_of_map_fd_sys_lookup_elem,
- 	.map_gen_lookup = array_of_map_gen_lookup,
- 	.map_lookup_batch = generic_map_lookup_batch,
- 	.map_update_batch = generic_map_update_batch,
-diff --git a/kernel/bpf/map_in_map.h b/kernel/bpf/map_in_map.h
-index 4a0d66757a065..1fa688b8882ae 100644
---- a/kernel/bpf/map_in_map.h
-+++ b/kernel/bpf/map_in_map.h
-@@ -10,6 +10,9 @@ struct file;
- struct bpf_map;
- 
- struct bpf_inner_map_element {
-+	/* map must be the first member, array_of_map_gen_lookup() depends on it
-+	 * to dereference map correctly.
-+	 */
- 	struct bpf_map *map;
- 	struct rcu_head rcu;
- };
 -- 
 2.29.2
 
