@@ -1,120 +1,58 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2551130F8F;
-	Tue,  7 Nov 2023 13:45:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gcd4baVe"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EF1B1C116B4;
-	Tue,  7 Nov 2023 13:45:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699364714;
-	bh=M0lJ+zooV1Yyo+14mKPEjenw2FnX5TBeXLD/QG0EKrM=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=Gcd4baVecj0rYm+kcoZY1O0HGeYbQ0hlN+4/+T3oDK/8gCNsuRtzLupOsBFfNYERG
-	 pcPfqh1fkuFOnLIwE1aGPonqjN5dHwagylp4HWzruyI9NiJfrzOhoXZISfsg1MePpH
-	 pNqmB/aZZTJtI6kTtT4IZ2x9fJiqL1X4eck+BFtGlO8PgXjGcmNDgosvs0iE0NlnOy
-	 btazr9EbYq9gspeIMF9UL7JIjuiHGZFx1UGzWWpL28M1nY5o40ZmKyWp+q6uw+iqOS
-	 VHT8GDdK0C5GstipK+1Wp/Q7SHKohfAu/u64iNTL1Hw5SfB10UDBR+vvUWCi7U2Tu/
-	 OPit+ijMsqrGg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D48FCC4167B;
-	Tue,  7 Nov 2023 13:45:13 +0000 (UTC)
-From: Joel Granados via B4 Relay <devnull+j.granados.samsung.com@kernel.org>
-Date: Tue, 07 Nov 2023 14:45:09 +0100
-Subject: [PATCH 09/10] delayacct: Remove the now superfluous sentinel
- elements from ctl_table array
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2495F30CF3;
+	Tue,  7 Nov 2023 13:48:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9E55C433C7;
+	Tue,  7 Nov 2023 13:48:45 +0000 (UTC)
+Date: Tue, 7 Nov 2023 08:48:44 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Alexei Starovoitov
+ <alexei.starovoitov@gmail.com>, Florent Revest <revest@chromium.org>,
+ linux-trace-kernel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>, Sven
+ Schnelle <svens@linux.ibm.com>, Alexei Starovoitov <ast@kernel.org>, Jiri
+ Olsa <jolsa@kernel.org>, Arnaldo Carvalho de Melo <acme@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Alan Maguire <alan.maguire@oracle.com>,
+ Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Guo Ren <guoren@kernel.org>
+Subject: Re: [RFC PATCH 24/32] x86/ftrace: Enable HAVE_FUNCTION_GRAPH_FREGS
+Message-ID: <20231107084844.7a39ac3f@gandalf.local.home>
+In-Reply-To: <20231107144328.cc763a2a137391ceb105e9db@kernel.org>
+References: <169920038849.482486.15796387219966662967.stgit@devnote2>
+	<169920068069.482486.6540417903833579700.stgit@devnote2>
+	<20231105172536.GA7124@noisy.programming.kicks-ass.net>
+	<20231105141130.6ef7d8bd@rorschach.local.home>
+	<20231105231734.GE3818@noisy.programming.kicks-ass.net>
+	<20231105183301.38be5598@rorschach.local.home>
+	<20231106100549.33f6ce30d968906979ca3954@kernel.org>
+	<20231106113710.3bf69211@gandalf.local.home>
+	<20231107094258.d41a46c202197e92bc6d9656@kernel.org>
+	<20231106220617.5eb73f2f@gandalf.local.home>
+	<20231107144328.cc763a2a137391ceb105e9db@kernel.org>
+X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-Id:
- <20231107-jag-sysctl_remove_empty_elem_kernel-v1-9-e4ce1388dfa0@samsung.com>
-References:
- <20231107-jag-sysctl_remove_empty_elem_kernel-v1-0-e4ce1388dfa0@samsung.com>
-In-Reply-To:
- <20231107-jag-sysctl_remove_empty_elem_kernel-v1-0-e4ce1388dfa0@samsung.com>
-To: Luis Chamberlain <mcgrof@kernel.org>, willy@infradead.org, 
- josh@joshtriplett.org, Kees Cook <keescook@chromium.org>, 
- Eric Biederman <ebiederm@xmission.com>, Iurii Zaikin <yzaikin@google.com>, 
- Steven Rostedt <rostedt@goodmis.org>, 
- Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Thomas Gleixner <tglx@linutronix.de>, John Stultz <jstultz@google.com>, 
- Stephen Boyd <sboyd@kernel.org>, Andy Lutomirski <luto@amacapital.net>, 
- Will Drewry <wad@chromium.org>, Ingo Molnar <mingo@redhat.com>, 
- Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
- Vincent Guittot <vincent.guittot@linaro.org>, 
- Dietmar Eggemann <dietmar.eggemann@arm.com>, 
- Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
- Daniel Bristot de Oliveira <bristot@redhat.com>, 
- Valentin Schneider <vschneid@redhat.com>, Petr Mladek <pmladek@suse.com>, 
- John Ogness <john.ogness@linutronix.de>, 
- Sergey Senozhatsky <senozhatsky@chromium.org>, 
- "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, 
- Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>, 
- "David S. Miller" <davem@davemloft.net>, 
- Balbir Singh <bsingharora@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>
-Cc: linux-kernel@vger.kernel.org, kexec@lists.infradead.org, 
- linux-fsdevel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, Joel Granados <j.granados@samsung.com>
-X-Mailer: b4 0.13-dev-86aa5
-X-Developer-Signature: v=1; a=openpgp-sha256; l=901; i=j.granados@samsung.com;
- h=from:subject:message-id; bh=PJ/c6fiwMnA0nSEp9ZYMYlywMQK/R+6xe3ijDcw/ADA=;
- b=owEB7QES/pANAwAKAbqXzVK3lkFPAcsmYgBlSj9mvhR18IXVFt7zs/Yo8tKkBRu/V4Z9U1LWM
- uOzT984axqJAbMEAAEKAB0WIQSuRwlXJeYxJc7LJ5C6l81St5ZBTwUCZUo/ZgAKCRC6l81St5ZB
- Tzr2C/4v6uGi7l5ZwtLL3n6tVWPjdCcfbWz5uSlBczQ5ruXpwp9yVZYJNSiwhoNkWuHlhUQvQo9
- jqJzr71i98vbNXH1oEiFqFDp3xoArCnRiDFA02s3AaIqqomXcfE2GpEeFGALRmMtvkUSol76uJL
- NiDMS4jTU4UMuJo8KDqgWuNIPGUGpqum2CLbCbXh6Y4OY0P1uUrj2X6cKHqyflXGEbuNEmNXLOL
- a3Q570tQhzm6YlECqA39UYcG/smTJjEMeCkvtTS/4yFlQ/Yp4JWoJl6nUyC/Wm8h7NPeeb+mN0/
- IjkacI6GySs8GFKLvqOPGqfKWe0sq2vPlDcAONobKe5v9f40p2UKM7QixIe8jjs8GwMNqsOgYFY
- WcCvETwK5LltSI6cG1T/blqFg6nVoq2r5tsrpJbJOT4leSJ9imQhcokmWXEfATqRptW1/AXzGWu
- WU8UbmzKfdo4mIjQByvUw+U0aQAbpo9vCguSktma4jMXmFwlJX9PkuXJfQctSS1NgyPak=
-X-Developer-Key: i=j.granados@samsung.com; a=openpgp;
- fpr=F1F8E46D30F0F6C4A45FF4465895FAAC338C6E77
-X-Endpoint-Received:
- by B4 Relay for j.granados@samsung.com/default with auth_id=70
-X-Original-From: Joel Granados <j.granados@samsung.com>
-Reply-To: <j.granados@samsung.com>
 
-From: Joel Granados <j.granados@samsung.com>
+On Tue, 7 Nov 2023 14:43:28 +0900
+Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
 
-This commit comes at the tail end of a greater effort to remove the
-empty elements at the end of the ctl_table arrays (sentinels) which
-will reduce the overall build time size of the kernel and run time
-memory bloat by ~64 bytes per sentinel (further information Link :
-https://lore.kernel.org/all/ZO5Yx5JFogGi%2FcBo@bombadil.infradead.org/)
+> > 
+> > It's only needed if an architecture supports direct trampolines.  
+> 
+> I see, and x86_64 needs it.
+> OK, maybe better to keep it clear on x86-64 even on the
+> return handler.
 
-Remove sentinel element from kern_delayacct_table
+As it is arch specific, I'm not sure it matters for the return handler, as
+the return should never call a direct trampoline.
 
-Signed-off-by: Joel Granados <j.granados@samsung.com>
----
- kernel/delayacct.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/kernel/delayacct.c b/kernel/delayacct.c
-index 6f0c358e73d8..e039b0f99a0b 100644
---- a/kernel/delayacct.c
-+++ b/kernel/delayacct.c
-@@ -74,7 +74,6 @@ static struct ctl_table kern_delayacct_table[] = {
- 		.extra1         = SYSCTL_ZERO,
- 		.extra2         = SYSCTL_ONE,
- 	},
--	{ }
- };
- 
- static __init int kernel_delayacct_sysctls_init(void)
-
--- 
-2.30.2
-
+-- Steve
