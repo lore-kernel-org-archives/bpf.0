@@ -1,124 +1,109 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17E348F49
-	for <bpf@vger.kernel.org>; Tue,  7 Nov 2023 06:55:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 125F8CA46
+	for <bpf@vger.kernel.org>; Tue,  7 Nov 2023 08:56:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="Eo4erzeg"
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827A410F
-	for <bpf@vger.kernel.org>; Mon,  6 Nov 2023 22:55:00 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-da7ea62e76cso4012139276.3
-        for <bpf@vger.kernel.org>; Mon, 06 Nov 2023 22:55:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1699340099; x=1699944899; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rfWRgBjyCkPUpho/T8X1ynhFMk7y7ttBa7Qsqqe04t4=;
-        b=Eo4erzeg47p74vySIbES4g8q7QzSeoM6tl/BJ/9DcZNEtq25v5GgOcKUd5om1C4akf
-         gv77xE1d0W3Smp7+KFF2xNN3zyBaJojHZNiCTOx2hNohMYAJURf1EWvsDl0owxcpCx0d
-         LR9pk4P4tiHda1NRgCvfiwnahZg/G7322O6T4D8OIci59oWVooxLK2cSO+RfuYddq/eK
-         NzSxC26vL5HT7AlUfD1H+YWP3TqUuCup+iNUOY4G+bjvpRv1cQBa4f9/a+XPOXiNdBRh
-         lsXWIlq1o9qrLjf4zoxSdMlXw3Z9HxPdppgloIsuBVQlr24crRN3h3H2rDtdlYQfJoxB
-         05fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699340099; x=1699944899;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=rfWRgBjyCkPUpho/T8X1ynhFMk7y7ttBa7Qsqqe04t4=;
-        b=StMREq8CCj1Welv3TpfUTCr0PeXjtorU6LyjmzShAY5HW0/Jod4iDhha9Hg/N3Lrh2
-         DD0vcLHk4SacHZk+SWCKI409Z8raciSJKsfF2f6m2GbtUhcj261I6PnKk3gqoD7ERT9z
-         I3WuZiint2THZBiPSqGzln+sr/EFBIwzFgcCyzo4qQ5OUPJ6m0zaFjqilkt2DjdaO39R
-         lUi1XoeNjjSYU9uMhXmxHvwx4bM5BBCYLO1pckSAJxCS/IyojvgqFkdP32ZbSShDVYE8
-         Ak0T+xqVpgItwXvYpsFZZDVS1razlbWRabMrIolbgPPw2OMQKNKhHc5EAYZIDw/LDksA
-         CHPA==
-X-Gm-Message-State: AOJu0YwdrZE60lcauef3mvG3COrGRQaEqKcyJ3eWaC2a7d/HdThMwfCP
-	R+te6/Lu5UMXXKsiusvk5dCCWg==
-X-Google-Smtp-Source: AGHT+IGlNfbwaIe7ciivEsQHvd455lXkKfW0HQwiWXVbcYAcrm72tFVUj0H6Cbd5ooRnxF7se6fZCA==
-X-Received: by 2002:a25:f621:0:b0:d9a:e1bb:5468 with SMTP id t33-20020a25f621000000b00d9ae1bb5468mr30446581ybd.46.1699340099685;
-        Mon, 06 Nov 2023 22:54:59 -0800 (PST)
-Received: from [10.84.141.101] ([203.208.167.147])
-        by smtp.gmail.com with ESMTPSA id z12-20020aa785cc000000b006c337ce0f26sm6807960pfn.170.2023.11.06.22.54.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Nov 2023 22:54:59 -0800 (PST)
-Message-ID: <67a5668a-59de-4905-8224-b94dd2bbf2a3@bytedance.com>
-Date: Tue, 7 Nov 2023 14:54:54 +0800
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Oc2oq6Gd"
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA61FA
+	for <bpf@vger.kernel.org>; Tue,  7 Nov 2023 00:56:50 -0800 (PST)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A72hIP3031903
+	for <bpf@vger.kernel.org>; Tue, 7 Nov 2023 00:56:50 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=etVqGwDQOkQ5sWNebmeEj6f8PbiRojxM21g7Q47hMu4=;
+ b=Oc2oq6GdxAEq4wx+/CFUyGHLTRJEfwMOPWFIsFm0f5Zp8v8fTTsfl4tDE6LXgYgbHMgM
+ uOKKPfMReHavtHYF7WMU1g/HrwFhnroKAUnijdnnyPFbidb/Ut/R6lD/p1/oPXN6CwgH
+ xNkmXpPSt+tjnq94eEEzRdrfvPOXxwP7EJQ= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3u7cpsst2k-3
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Tue, 07 Nov 2023 00:56:49 -0800
+Received: from twshared2493.02.ash8.facebook.com (2620:10d:c0a8:1c::11) by
+ mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Tue, 7 Nov 2023 00:56:48 -0800
+Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
+	id 7DD3C26E3B709; Tue,  7 Nov 2023 00:56:42 -0800 (PST)
+From: Dave Marchevsky <davemarchevsky@fb.com>
+To: <bpf@vger.kernel.org>
+CC: Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann
+	<daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau
+	<martin.lau@kernel.org>,
+        Kernel Team <kernel-team@fb.com>,
+        Yonghong Song
+	<yonghong.song@linux.dev>,
+        Dave Marchevsky <davemarchevsky@fb.com>
+Subject: [PATCH v2 bpf-next 1/6] bpf: Add KF_RCU flag to bpf_refcount_acquire_impl
+Date: Tue, 7 Nov 2023 00:56:34 -0800
+Message-ID: <20231107085639.3016113-2-davemarchevsky@fb.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231107085639.3016113-1-davemarchevsky@fb.com>
+References: <20231107085639.3016113-1-davemarchevsky@fb.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [External] Re: [PATCH bpf 1/2] bpf: Let verifier consider
- {task,cgroup} is trusted in bpf_iter_reg
-To: Yonghong Song <yonghong.song@linux.dev>,
- Martin KaFai Lau <martin.lau@linux.dev>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@kernel.org, bpf@vger.kernel.org
-References: <20231105133458.1315620-1-zhouchuyi@bytedance.com>
- <20231105133458.1315620-2-zhouchuyi@bytedance.com>
- <f807c58c-526c-0647-fc1c-9b488d351b1d@linux.dev>
- <9f55ef44-646d-4120-b437-defff91d1af5@bytedance.com>
- <8a4d7471-76ac-448c-9496-12e028f7fe24@linux.dev>
-From: Chuyi Zhou <zhouchuyi@bytedance.com>
-In-Reply-To: <8a4d7471-76ac-448c-9496-12e028f7fe24@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: r3tGiut-9aI7jn90kNj3_rbIbKkHKJ9f
+X-Proofpoint-GUID: r3tGiut-9aI7jn90kNj3_rbIbKkHKJ9f
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-06_15,2023-11-02_03,2023-05-22_02
 
+Refcounted local kptrs are kptrs to user-defined types with a
+bpf_refcount field. Recent commits ([0], [1]) modified the lifetime of
+refcounted local kptrs such that the underlying memory is not reused
+until RCU grace period has elapsed.
 
+Separately, verification of bpf_refcount_acquire calls currently
+succeeds for MAYBE_NULL non-owning reference input, which is a problem
+as bpf_refcount_acquire_impl has no handling for this case.
 
-在 2023/11/7 14:52, Yonghong Song 写道:
-> 
-> On 11/6/23 6:44 PM, Chuyi Zhou wrote:
->> Hello,
->>
->> 在 2023/11/7 02:29, Martin KaFai Lau 写道:
->>> On 11/5/23 5:34 AM, Chuyi Zhou wrote:
->>>> BTF_TYPE_SAFE_TRUSTED(struct bpf_iter__task) in verifier.c wanted to
->>>> teach BPF verifier that bpf_iter__task -> task is a trusted ptr. But it
->>>> doesn't work well.
->>>>
->>>> The reason is, bpf_iter__task -> task would go through btf_ctx_access()
->>>> which enforces the reg_type of 'task' is ctx_arg_info->reg_type, and in
->>>> task_iter.c, we actually explicitly declare that the
->>>> ctx_arg_info->reg_type is PTR_TO_BTF_ID_OR_NULL.
->>>>
->>>> This patch sets ctx_arg_info->reg_type is PTR_TO_BTF_ID_OR_NULL |
->>>> PTR_TRUSTED in task_reg_info.
->>>>
->>>> Similarly, bpf_cgroup_reg_info -> cgroup is also PTR_TRUSTED since 
->>>> we are
->>>> under the protection of cgroup_mutex and we would check 
->>>> cgroup_is_dead()
->>>> in __cgroup_iter_seq_show().
->>>>
->>>
->>> Make sense. I think the bpf_tcp_iter made similar change in 
->>> tcp_seq_info also. What may be the Fixes tag? Is it fixing the recent 
->>> kfunc of the css_task iter?
->>>
->>
->> Thanks for the review.
->>
->> I think it's not a fix for recent kfunc of css_task iter. We are 
->> working at SEC("iter/task") and SEC("iter/cgroup").
->>
->> I'm not sure whether it's a 'fix' for cgroup_iter/task_iter. If we 
->> need fix tags, do we need to split this patch into two separate 
->> patches? Or add two fix tags on commit log:
-> 
-> I think the patch itself is not a fix, rather an improvement. The 
-> bpf_iter predates kfunc/PTR_TRUSTED stuff. The argument 'task'
-> or 'cgroup' are already trusted so the bpf_iter program can print out 
-> useful data.
-> But recent kfunc things requires some parameters to be marked as 
-> PTR_TRUSTED so that they can be passed to kfunc,
-> so this patch enables this usage for kfunc in bpf_iter programs.
-> 
-> 
+This patch takes advantage of aforementioned lifetime changes to tag
+bpf_refcount_acquire_impl kfunc KF_RCU, thereby preventing MAYBE_NULL
+input to the kfunc. The KF_RCU flag applies to all kfunc params; it's
+fine for it to apply to the void *meta__ign param as that's populated by
+the verifier and is tagged __ign regardless.
 
-Thanks. I will send v2.
+  [0]: commit 7e26cd12ad1c ("bpf: Use bpf_mem_free_rcu when
+       bpf_obj_dropping refcounted nodes") is the actual change to
+       allocation behaivor
+  [1]: commit 0816b8c6bf7f ("bpf: Consider non-owning refs to refcounted
+       nodes RCU protected") modified verifier understanding of
+       refcounted local kptrs to match [0]'s changes
+
+Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
+Fixes: 7c50b1cb76ac ("bpf: Add bpf_refcount_acquire kfunc")
+---
+ kernel/bpf/helpers.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index e46ac288a108..6e1874cc9c13 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -2515,7 +2515,7 @@ BTF_ID_FLAGS(func, bpf_obj_new_impl, KF_ACQUIRE | K=
+F_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_percpu_obj_new_impl, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_obj_drop_impl, KF_RELEASE)
+ BTF_ID_FLAGS(func, bpf_percpu_obj_drop_impl, KF_RELEASE)
+-BTF_ID_FLAGS(func, bpf_refcount_acquire_impl, KF_ACQUIRE | KF_RET_NULL)
++BTF_ID_FLAGS(func, bpf_refcount_acquire_impl, KF_ACQUIRE | KF_RET_NULL |=
+ KF_RCU)
+ BTF_ID_FLAGS(func, bpf_list_push_front_impl)
+ BTF_ID_FLAGS(func, bpf_list_push_back_impl)
+ BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
+--=20
+2.34.1
 
