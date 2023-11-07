@@ -1,16 +1,16 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 316A6F9DE;
-	Tue,  7 Nov 2023 03:12:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA0910951;
+	Tue,  7 Nov 2023 03:12:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919F8D75;
-	Mon,  6 Nov 2023 19:12:49 -0800 (PST)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VvsNiih_1699326765;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VvsNiih_1699326765)
+Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14613D51;
+	Mon,  6 Nov 2023 19:12:50 -0800 (PST)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VvsQheF_1699326767;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VvsQheF_1699326767)
           by smtp.aliyun-inc.com;
-          Tue, 07 Nov 2023 11:12:46 +0800
+          Tue, 07 Nov 2023 11:12:48 +0800
 From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -26,9 +26,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	John Fastabend <john.fastabend@gmail.com>,
 	virtualization@lists.linux-foundation.org,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v2 15/21] virtio_net: xsk: tx: virtnet_sq_free_unused_buf() check xsk buffer
-Date: Tue,  7 Nov 2023 11:12:21 +0800
-Message-Id: <20231107031227.100015-16-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v2 17/21] virtio_net: xsk: rx: skip dma unmap when rq is bind with AF_XDP
+Date: Tue,  7 Nov 2023 11:12:23 +0800
+Message-Id: <20231107031227.100015-18-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20231107031227.100015-1-xuanzhuo@linux.alibaba.com>
 References: <20231107031227.100015-1-xuanzhuo@linux.alibaba.com>
@@ -41,38 +41,76 @@ MIME-Version: 1.0
 X-Git-Hash: 59a160d210e8
 Content-Transfer-Encoding: 8bit
 
-virtnet_sq_free_unused_buf() check xsk buffer.
+When rq is bound with AF_XDP, the buffer dma is managed
+by the AF_XDP APIs. So the buffer got from the virtio core should
+skip the dma unmap operation.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- drivers/net/virtio/main.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/net/virtio/main.c       | 8 +++++---
+ drivers/net/virtio/virtio_net.h | 3 +++
+ drivers/net/virtio/xsk.c        | 1 +
+ 3 files changed, 9 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/net/virtio/main.c b/drivers/net/virtio/main.c
-index 6a5e74c482f3..6210a6e37396 100644
+index 15943a22e17d..a318b2533b94 100644
 --- a/drivers/net/virtio/main.c
 +++ b/drivers/net/virtio/main.c
-@@ -3919,16 +3919,18 @@ void virtnet_sq_free_unused_buf(struct virtqueue *vq, void *buf)
+@@ -430,7 +430,7 @@ static void *virtnet_rq_get_buf(struct virtnet_rq *rq, u32 *len, void **ctx)
+ 	void *buf;
  
- 	sq = &vi->sq[i];
+ 	buf = virtqueue_get_buf_ctx(rq->vq, len, ctx);
+-	if (buf && rq->do_dma)
++	if (buf && rq->do_dma_unmap)
+ 		virtnet_rq_unmap(rq, buf, *len);
  
--	if (!virtnet_is_xdp_frame(buf)) {
-+	if (virtnet_is_skb_ptr(buf)) {
- 		if (sq->do_dma)
- 			buf = virtnet_sq_unmap(sq, buf);
+ 	return buf;
+@@ -561,8 +561,10 @@ static void virtnet_set_premapped(struct virtnet_info *vi)
  
- 		dev_kfree_skb(buf);
--	} else {
-+	} else if (virtnet_is_xdp_frame(buf)) {
- 		if (sq->do_dma)
- 			buf = virtnet_sq_unmap(sq, buf);
- 
- 		xdp_return_frame(virtnet_ptr_to_xdp(buf));
-+	} else {
-+		xsk_tx_completed(sq->xsk.pool, 1);
+ 		/* disable for big mode */
+ 		if (vi->mergeable_rx_bufs || !vi->big_packets) {
+-			if (!virtqueue_set_dma_premapped(vi->rq[i].vq))
++			if (!virtqueue_set_dma_premapped(vi->rq[i].vq)) {
+ 				vi->rq[i].do_dma = true;
++				vi->rq[i].do_dma_unmap = true;
++			}
+ 		}
  	}
  }
+@@ -3944,7 +3946,7 @@ void virtnet_rq_free_unused_buf(struct virtqueue *vq, void *buf)
+ 
+ 	rq = &vi->rq[i];
+ 
+-	if (rq->do_dma)
++	if (rq->do_dma_unmap)
+ 		virtnet_rq_unmap(rq, buf, 0);
+ 
+ 	virtnet_rq_free_buf(vi, rq, buf);
+diff --git a/drivers/net/virtio/virtio_net.h b/drivers/net/virtio/virtio_net.h
+index 1242785e311e..2005d0cd22e2 100644
+--- a/drivers/net/virtio/virtio_net.h
++++ b/drivers/net/virtio/virtio_net.h
+@@ -135,6 +135,9 @@ struct virtnet_rq {
+ 	/* Do dma by self */
+ 	bool do_dma;
+ 
++	/* Do dma unmap after getting buf from virtio core. */
++	bool do_dma_unmap;
++
+ 	struct {
+ 		struct xsk_buff_pool *pool;
+ 
+diff --git a/drivers/net/virtio/xsk.c b/drivers/net/virtio/xsk.c
+index e737c3353212..b09c473c29fb 100644
+--- a/drivers/net/virtio/xsk.c
++++ b/drivers/net/virtio/xsk.c
+@@ -210,6 +210,7 @@ static int virtnet_rq_bind_xsk_pool(struct virtnet_info *vi, struct virtnet_rq *
+ 		xdp_rxq_info_unreg(&rq->xsk.xdp_rxq);
+ 
+ 	rq->xsk.pool = pool;
++	rq->do_dma_unmap = !pool;
+ 
+ 	virtnet_rx_resume(vi, rq);
  
 -- 
 2.32.0.3.g01195cf9f
