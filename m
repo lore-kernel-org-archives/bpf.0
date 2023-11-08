@@ -1,32 +1,32 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2395437150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5392C37155
 	for <bpf@vger.kernel.org>; Wed,  8 Nov 2023 23:12:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C142599
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1723259B
 	for <bpf@vger.kernel.org>; Wed,  8 Nov 2023 15:12:10 -0800 (PST)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A8MSZmW024787
-	for <bpf@vger.kernel.org>; Wed, 8 Nov 2023 15:12:10 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3u8k5eg8t8-2
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 3A8KNKUJ018767
+	for <bpf@vger.kernel.org>; Wed, 8 Nov 2023 15:12:09 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by m0001303.ppops.net (PPS) with ESMTPS id 3u7w2atcmx-5
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Wed, 08 Nov 2023 15:12:10 -0800
-Received: from twshared2123.40.prn1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Wed, 08 Nov 2023 15:12:08 -0800
+Received: from twshared29647.38.frc1.facebook.com (2620:10d:c0a8:1b::30) by
+ mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Wed, 8 Nov 2023 15:12:09 -0800
+ 15.1.2507.34; Wed, 8 Nov 2023 15:12:06 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 2D9DD3B2E7DD3; Wed,  8 Nov 2023 15:11:56 -0800 (PST)
+	id 6B16D3B2E7DEB; Wed,  8 Nov 2023 15:12:02 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
 CC: <andrii@kernel.org>, <kernel-team@meta.com>, Hao Sun <sunhao.th@gmail.com>
-Subject: [PATCH bpf-next 1/4] bpf: handle ldimm64 properly in check_cfg()
-Date: Wed, 8 Nov 2023 15:11:49 -0800
-Message-ID: <20231108231152.3583545-2-andrii@kernel.org>
+Subject: [PATCH bpf-next 4/4] selftests/bpf: add more test cases for check_cfg()
+Date: Wed, 8 Nov 2023 15:11:52 -0800
+Message-ID: <20231108231152.3583545-5-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231108231152.3583545-1-andrii@kernel.org>
 References: <20231108231152.3583545-1-andrii@kernel.org>
@@ -39,154 +39,94 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 0K692L5EmZxtfJok9AczTHJ-9yYqVOK7
-X-Proofpoint-GUID: 0K692L5EmZxtfJok9AczTHJ-9yYqVOK7
+X-Proofpoint-GUID: bov1uCJ4HopmJfuBk1vM-ZG_cMV6unBE
+X-Proofpoint-ORIG-GUID: bov1uCJ4HopmJfuBk1vM-ZG_cMV6unBE
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-08_10,2023-11-08_01,2023-05-22_02
 
-ldimm64 instructions are 16-byte long, and so have to be handled
-appropriately in check_cfg(), just like the rest of BPF verifier does.
+Add a few more simple cases to validate proper privileged vs unprivileged
+loop detection behavior. conditional_loop2 is the one reported by Hao
+Sun that triggered this set of fixes.
 
-This has implications in three places:
-  - when determining next instruction for non-jump instructions;
-  - when determining next instruction for callback address ldimm64
-    instructions (in visit_func_call_insn());
-  - when checking for unreachable instructions, where second half of
-    ldimm64 is expected to be unreachable;
-
-We take this also as an opportunity to report jump into the middle of
-ldimm64. And adjust few test_verifier tests accordingly.
-
-Reported-by: Hao Sun <sunhao.th@gmail.com>
-Fixes: 475fb78fbf48 ("bpf: verifier (add branch/goto checks)")
+Suggested-by: Hao Sun <sunhao.th@gmail.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- include/linux/bpf.h                           |  8 ++++--
- kernel/bpf/verifier.c                         | 27 ++++++++++++++-----
- .../testing/selftests/bpf/verifier/ld_imm64.c |  8 +++---
- 3 files changed, 30 insertions(+), 13 deletions(-)
+ .../selftests/bpf/progs/verifier_cfg.c        | 62 +++++++++++++++++++
+ 1 file changed, 62 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index eb84caf133df..222275232453 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -909,10 +909,14 @@ bpf_ctx_record_field_size(struct bpf_insn_access_au=
-x *aux, u32 size)
- 	aux->ctx_field_size =3D size;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_cfg.c b/tools/tes=
+ting/selftests/bpf/progs/verifier_cfg.c
+index 65d205474f33..bba622814123 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_cfg.c
++++ b/tools/testing/selftests/bpf/progs/verifier_cfg.c
+@@ -97,4 +97,66 @@ l0_%=3D:	r2 =3D r0;					\
+ "	::: __clobber_all);
  }
 =20
-+static bool bpf_is_ldimm64(const struct bpf_insn *insn)
++SEC("socket")
++__description("conditional loop (2)")
++__success
++__failure_unpriv __msg_unpriv("back-edge from insn 10 to 11")
++__naked void conditional_loop2(void)
 +{
-+	return insn->code =3D=3D (BPF_LD | BPF_IMM | BPF_DW);
++	asm volatile ("					\
++	r9 =3D 2 ll;					\
++	r3 =3D 0x20 ll;					\
++	r4 =3D 0x35 ll;					\
++	r8 =3D r4;					\
++	goto l1_%=3D;					\
++l0_%=3D:	r9 -=3D r3;					\
++	r9 -=3D r4;					\
++	r9 -=3D r8;					\
++l1_%=3D:	r8 +=3D r4;					\
++	if r8 < 0x64 goto l0_%=3D;			\
++	r0 =3D r9;					\
++	exit;						\
++"	::: __clobber_all);
 +}
 +
- static inline bool bpf_pseudo_func(const struct bpf_insn *insn)
- {
--	return insn->code =3D=3D (BPF_LD | BPF_IMM | BPF_DW) &&
--	       insn->src_reg =3D=3D BPF_PSEUDO_FUNC;
-+	return bpf_is_ldimm64(insn) && insn->src_reg =3D=3D BPF_PSEUDO_FUNC;
- }
-=20
- struct bpf_prog_ops {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index bf94ba50c6ee..9d2af05e37a2 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -15504,15 +15504,16 @@ static int visit_func_call_insn(int t, struct b=
-pf_insn *insns,
- 				struct bpf_verifier_env *env,
- 				bool visit_callee)
- {
--	int ret;
-+	int ret, insn_sz;
-=20
--	ret =3D push_insn(t, t + 1, FALLTHROUGH, env, false);
-+	insn_sz =3D bpf_is_ldimm64(&insns[t]) ? 2 : 1;
-+	ret =3D push_insn(t, t + insn_sz, FALLTHROUGH, env, false);
- 	if (ret)
- 		return ret;
-=20
--	mark_prune_point(env, t + 1);
-+	mark_prune_point(env, t + insn_sz);
- 	/* when we exit from subprog, we need to record non-linear history */
--	mark_jmp_point(env, t + 1);
-+	mark_jmp_point(env, t + insn_sz);
-=20
- 	if (visit_callee) {
- 		mark_prune_point(env, t);
-@@ -15534,15 +15535,17 @@ static int visit_func_call_insn(int t, struct b=
-pf_insn *insns,
- static int visit_insn(int t, struct bpf_verifier_env *env)
- {
- 	struct bpf_insn *insns =3D env->prog->insnsi, *insn =3D &insns[t];
--	int ret, off;
-+	int ret, off, insn_sz;
-=20
- 	if (bpf_pseudo_func(insn))
- 		return visit_func_call_insn(t, insns, env, true);
-=20
- 	/* All non-branch instructions have a single fall-through edge. */
- 	if (BPF_CLASS(insn->code) !=3D BPF_JMP &&
--	    BPF_CLASS(insn->code) !=3D BPF_JMP32)
--		return push_insn(t, t + 1, FALLTHROUGH, env, false);
-+	    BPF_CLASS(insn->code) !=3D BPF_JMP32) {
-+		insn_sz =3D bpf_is_ldimm64(insn) ? 2 : 1;
-+		return push_insn(t, t + insn_sz, FALLTHROUGH, env, false);
-+	}
-=20
- 	switch (BPF_OP(insn->code)) {
- 	case BPF_EXIT:
-@@ -15672,11 +15675,21 @@ static int check_cfg(struct bpf_verifier_env *e=
-nv)
- 	}
-=20
- 	for (i =3D 0; i < insn_cnt; i++) {
-+		struct bpf_insn *insn =3D &env->prog->insnsi[i];
++SEC("socket")
++__description("unconditional loop after conditional jump")
++__failure __msg("infinite loop detected")
++__failure_unpriv __msg_unpriv("back-edge from insn 3 to 2")
++__naked void uncond_loop_after_cond_jmp(void)
++{
++	asm volatile ("					\
++	r0 =3D 0;						\
++	if r0 > 0 goto l1_%=3D;				\
++l0_%=3D:	r0 =3D 1;						\
++	goto l0_%=3D;					\
++l1_%=3D:	exit;						\
++"	::: __clobber_all);
++}
 +
- 		if (insn_state[i] !=3D EXPLORED) {
- 			verbose(env, "unreachable insn %d\n", i);
- 			ret =3D -EINVAL;
- 			goto err_free;
- 		}
-+		if (bpf_is_ldimm64(insn)) {
-+			if (insn_state[i + 1] !=3D 0) {
-+				verbose(env, "jump into the middle of ldimm64 insn %d\n", i);
-+				ret =3D -EINVAL;
-+				goto err_free;
-+			}
-+			i++; /* skip second half of ldimm64 */
-+		}
- 	}
- 	ret =3D 0; /* cfg looks good */
-=20
-diff --git a/tools/testing/selftests/bpf/verifier/ld_imm64.c b/tools/test=
-ing/selftests/bpf/verifier/ld_imm64.c
-index f9297900cea6..78f19c255f20 100644
---- a/tools/testing/selftests/bpf/verifier/ld_imm64.c
-+++ b/tools/testing/selftests/bpf/verifier/ld_imm64.c
-@@ -9,8 +9,8 @@
- 	BPF_MOV64_IMM(BPF_REG_0, 2),
- 	BPF_EXIT_INSN(),
- 	},
--	.errstr =3D "invalid BPF_LD_IMM insn",
--	.errstr_unpriv =3D "R1 pointer comparison",
-+	.errstr =3D "jump into the middle of ldimm64 insn 1",
-+	.errstr_unpriv =3D "jump into the middle of ldimm64 insn 1",
- 	.result =3D REJECT,
- },
- {
-@@ -23,8 +23,8 @@
- 	BPF_LD_IMM64(BPF_REG_0, 1),
- 	BPF_EXIT_INSN(),
- 	},
--	.errstr =3D "invalid BPF_LD_IMM insn",
--	.errstr_unpriv =3D "R1 pointer comparison",
-+	.errstr =3D "jump into the middle of ldimm64 insn 1",
-+	.errstr_unpriv =3D "jump into the middle of ldimm64 insn 1",
- 	.result =3D REJECT,
- },
- {
++
++__naked __noinline __used
++static unsigned long never_ending_subprog()
++{
++	asm volatile ("					\
++	r0 =3D r1;					\
++	goto -1;					\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("unconditional loop after conditional jump")
++/* infinite loop is detected *after* check_cfg() */
++__failure __msg("infinite loop detected")
++__naked void uncond_loop_in_subprog_after_cond_jmp(void)
++{
++	asm volatile ("					\
++	r0 =3D 0;						\
++	if r0 > 0 goto l1_%=3D;				\
++l0_%=3D:	r0 +=3D 1;					\
++	call never_ending_subprog;			\
++l1_%=3D:	exit;						\
++"	::: __clobber_all);
++}
++
+ char _license[] SEC("license") =3D "GPL";
 --=20
 2.34.1
 
