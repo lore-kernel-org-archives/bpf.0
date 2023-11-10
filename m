@@ -1,105 +1,123 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E30012B8E
-	for <bpf@vger.kernel.org>; Fri, 10 Nov 2023 03:49:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672AD468D
-	for <bpf@vger.kernel.org>; Thu,  9 Nov 2023 19:49:22 -0800 (PST)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A9MYvSJ018927
-	for <bpf@vger.kernel.org>; Thu, 9 Nov 2023 19:49:22 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3u8xr3pwcn-16
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 09 Nov 2023 19:49:22 -0800
-Received: from twshared58712.02.prn6.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Thu, 9 Nov 2023 19:49:16 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 2118B3B41DC98; Thu,  9 Nov 2023 19:49:07 -0800 (PST)
-From: Andrii Nakryiko <andrii@kernel.org>
-To: <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <paul@paul-moore.com>,
-        <brauner@kernel.org>
-CC: <linux-fsdevel@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
-        <keescook@chromium.org>, <kernel-team@meta.com>, <sargun@sargun.me>
-Subject: [PATCH v10 bpf-next 14/17] libbpf: add BPF token support to bpf_btf_load() API
-Date: Thu, 9 Nov 2023 19:48:35 -0800
-Message-ID: <20231110034838.1295764-15-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231110034838.1295764-1-andrii@kernel.org>
-References: <20231110034838.1295764-1-andrii@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5369A111B
+	for <bpf@vger.kernel.org>; Fri, 10 Nov 2023 04:58:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cadC9vdo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 117D4C43391;
+	Fri, 10 Nov 2023 04:58:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1699592333;
+	bh=v2AuGNwtvuGyPoXp8otkZYqoO1Bb8t79T5dnXL36k3k=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=cadC9vdovtPcns33+HLsSTMmv0D2razRLsIQlzLoZNUli1oBnPEsIPJ2HfUHbqjnb
+	 rIvVM6EevwsLDCwXEGHLmR5OOiPaRCBPAYNgljeeqHiBYp414MNdbGHrDfz7qmB2Q8
+	 dVLAO/V06FWxJDqTD/rS5fo0kMbPAjxLPQEmmc0FgpOrnQIk3O0NkGQrj7glG/yLJe
+	 dFKQDGy7M8aJas8V+jReeYRB6AVpgeY4MM3q4FLedwYxu+rmkIDhkToWWU7Mpdn+JX
+	 iFLyf/WFL4JO0V4y8CzqZQTids6YNuFIhsHat83pbP5mggxXMeqn5plasBkdyVdbXH
+	 LcAZXG9Qrznaw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 9CBE0CE1999; Thu,  9 Nov 2023 20:58:51 -0800 (PST)
+Date: Thu, 9 Nov 2023 20:58:51 -0800
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Hou Tao <houtao@huaweicloud.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	bpf <bpf@vger.kernel.org>, Hou Tao <houtao1@huawei.com>
+Subject: Re: [PATCH bpf 05/11] bpf: Add bpf_map_of_map_fd_{get,put}_ptr()
+ helpers
+Message-ID: <61d71a4f-5216-452b-a695-75fef5d37dd6@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20231107140702.1891778-1-houtao@huaweicloud.com>
+ <20231107140702.1891778-6-houtao@huaweicloud.com>
+ <6125c508-82fe-37a4-3aa2-a6c2727c071b@linux.dev>
+ <460844a9-a2e6-8cca-dfa1-9073bfffbb76@huaweicloud.com>
+ <CAADnVQJJhjWJRvgdi3hTaCn8s1X1CJ5z1bUoKFXw32LTOjBWCg@mail.gmail.com>
+ <64581135-5b99-4da7-9e19-e41122393d89@paulmck-laptop>
+ <5aeecb90-e4fd-1a3e-b8e5-426c67d12cc6@huaweicloud.com>
+ <5a4cd7db-4ef8-4033-aa9e-bf50e3560e46@paulmck-laptop>
+ <23b55935-0ad4-5a0a-f19a-ba718793902b@linux.dev>
+ <f8e1e390-2f12-33c0-cd4b-e59c8223711f@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: g9Xmn-tvr_J_KZUCK_mjrssVgFWhedvZ
-X-Proofpoint-ORIG-GUID: g9Xmn-tvr_J_KZUCK_mjrssVgFWhedvZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-09_17,2023-11-09_01,2023-05-22_02
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f8e1e390-2f12-33c0-cd4b-e59c8223711f@huaweicloud.com>
 
-Allow user to specify token_fd for bpf_btf_load() API that wraps
-kernel's BPF_BTF_LOAD command. This allows loading BTF from unprivileged
-process as long as it has BPF token allowing BPF_BTF_LOAD command, which
-can be created and delegated by privileged process.
+On Fri, Nov 10, 2023 at 11:34:03AM +0800, Hou Tao wrote:
+> Hi Martin,
+> 
+> On 11/10/2023 10:48 AM, Martin KaFai Lau wrote:
+> > On 11/9/23 5:45 PM, Paul E. McKenney wrote:
+> >>>>>>>> +void bpf_map_of_map_fd_put_ptr(void *ptr, bool need_defer)
+> >>>>>>>> +{
+> >>>>>>>> +    struct bpf_inner_map_element *element = ptr;
+> >>>>>>>> +
+> >>>>>>>> +    /* Do bpf_map_put() after a RCU grace period and a tasks
+> >>>>>>>> trace
+> >>>>>>>> +     * RCU grace period, so it is certain that the bpf program
+> >>>>>>>> which is
+> >>>>>>>> +     * manipulating the map now has exited when bpf_map_put() is
+> >>>>>>>> called.
+> >>>>>>>> +     */
+> >>>>>>>> +    if (need_defer)
+> >>>>>>> "need_defer" should only happen from the syscall cmd? Instead of
+> >>>>>>> adding rcu_head to each element, how about
+> >>>>>>> "synchronize_rcu_mult(call_rcu, call_rcu_tasks)" here?
+> >>>>>> No. I have tried the method before, but it didn't work due to
+> >>>>>> dead-lock
+> >>>>>> (will mention that in commit message in v2). The reason is that bpf
+> >>>>>> syscall program may also do map update through sys_bpf helper.
+> >>>>>> Because
+> >>>>>> bpf syscall program is running with sleep-able context and has
+> >>>>>> rcu_read_lock_trace being held, so call
+> >>>>>> synchronize_rcu_mult(call_rcu,
+> >>>>>> call_rcu_tasks) will lead to dead-lock.
+> >
+> > Need to think of a less intrusive solution instead of adding rcu_head
+> > to each element and lookup also needs an extra de-referencing.
+> 
+> I see.
+> >
+> > May be the bpf_map_{update,delete}_elem(&outer_map, ....) should not
+> > be done by the syscall program? Which selftest does it?
+> 
+> Now bpf_map_update_elem is allowed for bpf_sys_bpf helper. If I
+> remembered correctly it was map_ptr.
+> >
+> > Can the inner_map learn that it has been deleted from an outer map
+> > that is used in a sleepable prog->aux->used_maps? The
+> > bpf_map_free_deferred() will then wait for a task_trace gp?
+> 
+> Considering an inner_map may be used by multiple outer_map, the
+> following solution will be simpler: if the inner map has been deleted
+> from an outer map once, its free must be delayed after one RCU GP and
+> one tasks trace RCU GP. But I will check whether it is possible to only
+> wait for one RCU GP instead of two.
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/lib/bpf/bpf.c | 4 +++-
- tools/lib/bpf/bpf.h | 3 ++-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+If you are freeing a large quantity of elements at a time, one approach
+is to use a single rcu_head structure for the group.  (Or, in this case,
+maybe a pair of rcu_head structures, one for call_rcu() and the other
+for call_rcu_tasks_trace().)
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 1653b64b7015..544ae2376b6b 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -1184,7 +1184,7 @@ int bpf_raw_tracepoint_open(const char *name, int p=
-rog_fd)
-=20
- int bpf_btf_load(const void *btf_data, size_t btf_size, struct bpf_btf_l=
-oad_opts *opts)
- {
--	const size_t attr_sz =3D offsetofend(union bpf_attr, btf_log_true_size)=
-;
-+	const size_t attr_sz =3D offsetofend(union bpf_attr, btf_token_fd);
- 	union bpf_attr attr;
- 	char *log_buf;
- 	size_t log_size;
-@@ -1209,6 +1209,8 @@ int bpf_btf_load(const void *btf_data, size_t btf_s=
-ize, struct bpf_btf_load_opts
-=20
- 	attr.btf =3D ptr_to_u64(btf_data);
- 	attr.btf_size =3D btf_size;
-+	attr.btf_token_fd =3D OPTS_GET(opts, token_fd, 0);
-+
- 	/* log_level =3D=3D 0 and log_buf !=3D NULL means "try loading without
- 	 * log_buf, but retry with log_buf and log_level=3D1 on error", which i=
-s
- 	 * consistent across low-level and high-level BTF and program loading
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index ae2136f596b4..4b0f25e97b0d 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -133,9 +133,10 @@ struct bpf_btf_load_opts {
- 	 * If kernel doesn't support this feature, log_size is left unchanged.
- 	 */
- 	__u32 log_true_size;
-+	__u32 token_fd;
- 	size_t :0;
- };
--#define bpf_btf_load_opts__last_field log_true_size
-+#define bpf_btf_load_opts__last_field token_fd
-=20
- LIBBPF_API int bpf_btf_load(const void *btf_data, size_t btf_size,
- 			    struct bpf_btf_load_opts *opts);
---=20
-2.34.1
+This requires that you be able to link the elements in the group
+together somehow, which requires some per-element storage, but only
+one word per element instead of two.
 
+There are other variations on this theme, depending on what constraints
+apply here.
+
+							Thanx, Paul
