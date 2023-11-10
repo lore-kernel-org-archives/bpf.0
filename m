@@ -1,137 +1,143 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36D1E1C3C;
-	Fri, 10 Nov 2023 06:35:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32F7F15C5
+	for <bpf@vger.kernel.org>; Fri, 10 Nov 2023 06:38:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="yieh30Rd";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="vQJBwM/4"
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D72769A;
-	Thu,  9 Nov 2023 22:35:07 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.west.internal (Postfix) with ESMTP id 3FCF53200B06;
-	Fri, 10 Nov 2023 01:35:05 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Fri, 10 Nov 2023 01:35:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-	1699598104; x=1699684504; bh=b4ZzDDt0njYwoFJ2ZN/gcE0Je20siJqsd/U
-	27wOBtP8=; b=yieh30RdeUYv8s36J2LYyw95FKjfwwzzUE2OyJXZ/AZF2p0/Uub
-	Zffu82JE99/otcJpQYmFPAaaklJm05VkqiBA9T7AoLH8U0kRZQ7NwFmNtDlqUbW1
-	+wVMsXucgbhWOqOhtGuxUcGRzafHgZqUkc8ARde5cNZs/iHlMWc6thws39NJeK8r
-	MBlOIJqeTgWErECYLrO1Xx0hgKVmj8EOiBFjMTi/OcW+tF3ng3c4uA1ascqPXtOg
-	tZ7c/aKuG1X0bKEOUkCoXZ8mYDhtZn1XEcLd356LzzNPiVHxq2drZg+o9RKpM4hE
-	9C6nHmeae6bAJLgyOqpJXXmKbqJBzbybRRQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1699598104; x=1699684504; bh=b4ZzDDt0njYwoFJ2ZN/gcE0Je20siJqsd/U
-	27wOBtP8=; b=vQJBwM/4Q+kiuhh5q5uiUBn984CL1QnaJYt/iL2VW0/ZrNgv7Dw
-	pt3ubFwjPXTzgDNLdhifo3Kl+e7YRhloFDFFBHVOgGPRfat/sKxCy4HdIn2cvyMS
-	GcANw8896OG+zqmhoVbMLFv7HLJXpZjdxEeikKeIXaP0glvJDBCZ/QqTFaJJpwg0
-	cK4w4oV89294SWZBr1HwOYHatbcbaaEofFIKgRBvBPPRv/mJfcewgFCOfDtKMfLX
-	M373LsUdUUR/hw81hlQUuMC1563FfZWLk57lva16tpHdQ49zb0+TGIhi7Jg9Oxcp
-	b2NzIk1s1DGyTuFfzSIVev3dyZk71Kyavsg==
-X-ME-Sender: <xms:F89NZZOWVmfxXzKrA54GMxWcixUCFA20aB-3rNHV7yVmxPUD9Eu7JQ>
-    <xme:F89NZb9KoFy1RHMb1tWn6hG6IlJCxUwFcwgmOfrFaNLDOF4UlUr-O950AJW9gwGXD
-    tsYBIPMD627JMrnMqc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedruddvvddgleegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpefgkeeuleegieeghfduudeltdekfeffjeeuleehleefudettddtgfevueef
-    feeigeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:F89NZYTF2_QtmymzjURWMjHCidNomPURzOfAobg3D7_6_dLQ9lNCRA>
-    <xmx:F89NZVsdm4c-2Z7K9yUctV8nf4P9Xg8U4wH5bY0ZI8uqMC_5jxBNeQ>
-    <xmx:F89NZRcGk09mmJO2SN9RRPnkw43vwqJFQBLo4KvAFMVa6QYOObXudA>
-    <xmx:GM9NZTeGNCC2WGrDNMPW-Sw0pb_IzNuhwOc4OZp1BK-ExtWnawmMWw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id CF212B60089; Fri, 10 Nov 2023 01:35:03 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1108-g3a29173c6d-fm-20231031.005-g3a29173c
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kThfW9yg"
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E89CE7A80
+	for <bpf@vger.kernel.org>; Thu,  9 Nov 2023 22:37:59 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9dd6dc9c00cso286219966b.3
+        for <bpf@vger.kernel.org>; Thu, 09 Nov 2023 22:37:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1699598278; x=1700203078; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GC/RlszxyI6uDDo6/wmcg+lcNhrkypBot9VfYayJkVk=;
+        b=kThfW9ygLnARVy04h4XlhUH+SQ8PTxlop1FjTkjXaAl5jBYrFm2ut4yXihdNv7fEJS
+         bPJU+q6K3pSPW9MJ1blXCr9v8UJKOdYxR7xJqSF5Fs49ti4/6Q5aXfvhZaw53gfMNUxx
+         04oW+80Wv7BVZTNDv8Lo7pP1vQef3Vxx4zrLlp9C1dJzSmemIGU3Oo7101FdUVnFEPqq
+         i/e1vYqoVq/BdufcSjbu9ekr0foRpVW9IEtP+ozA1HUODqggJDvxNHNUUfMxpf2D/4x1
+         JnM0/UuON+IioZAWlhBCF+cRx91wWy5KKJS2DL/VXB+yUazzUJZzQZ8gk0XblpawQ4sp
+         50WQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699598278; x=1700203078;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GC/RlszxyI6uDDo6/wmcg+lcNhrkypBot9VfYayJkVk=;
+        b=t5t0Cvk0ILwfQhxrkShEfNRebWy/ggCQSH+TWePrnVaRQrfc3xbdMD0Kp2ChtrJg8H
+         T1Qu2xPHQdwQJ2ZAh7aPumdKQ760vvnCw9DB/8QMm+wJgb8EG+GAajBCRMMnw/+txynd
+         04U3DnlqyEEC4qCaO62ELMSo0DOc21cdIipEtqGmZP4pTx6h0/Kl7mb8gTgXcQwDGMqr
+         tK6hOVu80Mg/gSU/fkYYSewv1kltoj3iFTtRxwpWOr/ie+qmDUn3uzJj/zo7SR8RNBuO
+         my29nwVzyYWQUkTwCJuK6/yKd9/shPUUMPQh2RvI8hCWH7x9mdG8G2hDeaSw84fFwVQD
+         VBww==
+X-Gm-Message-State: AOJu0Yz6+ycNe2eJXfAbt6yZWtgbwiuZuWjUu/6Uuy4T0LFbGyjILo2b
+	4wgivq77MJ9vQefLkqtaiGYOkzouPGMIbP26EqXFZdL1nuU=
+X-Google-Smtp-Source: AGHT+IHFNJPv9BuHN0ggmGQn7lvwv6Qn5pwn5pDtTYELr5i2xSMTnPYRHNGVLN1P1nIwHJ0MjgT7VNXkoY307NBsuyU=
+X-Received: by 2002:a17:907:9704:b0:9d3:f436:6806 with SMTP id
+ jg4-20020a170907970400b009d3f4366806mr5781538ejc.47.1699594400605; Thu, 09
+ Nov 2023 21:33:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <98fe8917-9054-4a46-a777-613d8c640d36@app.fastmail.com>
-In-Reply-To: 
- <CAADnVQLDOEPmDyipHOH0E6QSg4aJtcHcfghoAQmQtROAMd=imQ@mail.gmail.com>
-References: <202311031651.A7crZEur-lkp@intel.com>
- <20231106031802.4188-1-laoar.shao@gmail.com>
- <CAADnVQLDOEPmDyipHOH0E6QSg4aJtcHcfghoAQmQtROAMd=imQ@mail.gmail.com>
-Date: Fri, 10 Nov 2023 07:34:43 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
- "Yafang Shao" <laoar.shao@gmail.com>
-Cc: "kernel test robot" <lkp@intel.com>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
- bpf <bpf@vger.kernel.org>,
- "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>,
- "Johannes Weiner" <hannes@cmpxchg.org>, "Hao Luo" <haoluo@google.com>,
- "John Fastabend" <john.fastabend@gmail.com>, "Jiri Olsa" <jolsa@kernel.org>,
- "KP Singh" <kpsingh@kernel.org>, "Zefan Li" <lizefan.x@bytedance.com>,
- "Waiman Long" <longman@redhat.com>,
- "Martin KaFai Lau" <martin.lau@linux.dev>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- oe-kbuild-all@lists.linux.dev, "kernel test robot" <oliver.sang@intel.com>,
- "Stanislav Fomichev" <sdf@google.com>, "Kui-Feng Lee" <sinquersw@gmail.com>,
- "Song Liu" <song@kernel.org>, "Tejun Heo" <tj@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>,
- "Yosry Ahmed" <yosryahmed@google.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Subject: Re: [PATCH v2 bpf-next] compiler-gcc: Suppress -Wmissing-prototypes warning
- for all supported GCC
-Content-Type: text/plain;charset=utf-8
+References: <20231108231152.3583545-1-andrii@kernel.org> <20231108231152.3583545-4-andrii@kernel.org>
+ <CAADnVQKQ5TGGwGuaO0eghhnLRFZOVgLE7Hume8uPAvbo-AwA5g@mail.gmail.com>
+ <CAEf4BzbVz9kPFSn4=3k+UOEanwQVeaNjOpRh_3pYLFRnbe3vkQ@mail.gmail.com>
+ <CAADnVQL6UrCKQw1WYbOh1GPhMR5cB3F7_An6-vSBK5Y-2=5tzw@mail.gmail.com> <CAEf4BzYbF-qXtRkiJg28N4u97NZrDyb8nYmEaAEO0SW19rRrJQ@mail.gmail.com>
+In-Reply-To: <CAEf4BzYbF-qXtRkiJg28N4u97NZrDyb8nYmEaAEO0SW19rRrJQ@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 9 Nov 2023 21:33:09 -0800
+Message-ID: <CAEf4Bzat73bSVb3_0iY83+zhY9+zO_9yhkBxK4WZn8zAFTbs0Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/4] bpf: fix control-flow graph checking in
+ privileged mode
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Kernel Team <kernel-team@meta.com>, 
+	Hao Sun <sunhao.th@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 9, 2023, at 19:23, Alexei Starovoitov wrote:
-> On Sun, Nov 5, 2023 at 7:18=E2=80=AFPM Yafang Shao <laoar.shao@gmail.c=
-om> wrote:
->> In the future, if you wish to suppress warnings that are only support=
-ed on
->> higher GCC versions, it is advisable to explicitly use "__diag_ignore=
-" to
->> specify the GCC version you are targeting.
->>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Closes: https://lore.kernel.org/oe-kbuild-all/202311031651.A7crZEur-l=
-kp@intel.com/
->> Suggested-by: Arnd Bergmann <arnd@arndb.de>
->> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
->> Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
->> Cc: Arnd Bergmann <arnd@arndb.de>
->> ---
->>  include/linux/compiler-gcc.h | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gc=
-c.h
->> index 7af9e34..80918bd 100644
->> --- a/include/linux/compiler-gcc.h
->> +++ b/include/linux/compiler-gcc.h
->> @@ -138,7 +138,7 @@
->>  #endif
->>
->>  #define __diag_ignore_all(option, comment) \
->> -       __diag_GCC(8, ignore, option)
->> +       __diag(__diag_GCC_ignore option)
+On Thu, Nov 9, 2023 at 9:31=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
 >
-> Arnd,
-> does this look good to you?
+> On Thu, Nov 9, 2023 at 8:08=E2=80=AFPM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Thu, Nov 9, 2023 at 7:41=E2=80=AFPM Andrii Nakryiko
+> > <andrii.nakryiko@gmail.com> wrote:
+> > >
+> > > On Thu, Nov 9, 2023 at 5:26=E2=80=AFPM Alexei Starovoitov
+> > > <alexei.starovoitov@gmail.com> wrote:
+> > > >
+> > > > On Wed, Nov 8, 2023 at 3:12=E2=80=AFPM Andrii Nakryiko <andrii@kern=
+el.org> wrote:
+> > > > >
+> > > > >
+> > > > > @@ -15622,11 +15619,11 @@ static int visit_insn(int t, struct bpf=
+_verifier_env *env)
+> > > > >                 /* conditional jump with two edges */
+> > > > >                 mark_prune_point(env, t);
+> > > > >
+> > > > > -               ret =3D push_insn(t, t + 1, FALLTHROUGH, env, tru=
+e);
+> > > > > +               ret =3D push_insn(t, t + 1, FALLTHROUGH | CONDITI=
+ONAL, env);
+> > > > >                 if (ret)
+> > > > >                         return ret;
+> > > > >
+> > > > > -               return push_insn(t, t + insn->off + 1, BRANCH, en=
+v, true);
+> > > > > +               return push_insn(t, t + insn->off + 1, BRANCH | C=
+ONDITIONAL, env);
+> > > >
+> > > > If I'm reading this correctly, after the first conditional jmp
+> > > > both fallthrough and branch become sticky with the CONDITIONAL flag=
+.
+> > > > So all processing after first 'if a =3D=3D b' insn is running
+> > > > with loop_ok=3D=3Dtrue.
+> > > > If so, all this complexity is not worth it. Let's just remove 'loop=
+_ok' flag.
+> > >
+> > > So you mean just always assume loop_ok, right?
+> >
+> > yes.
+> > Since not detecting the loop early only adds more cycles later
+> > that states_maybe_looping() should catch quickly enough.
+> >
+> > > >
+> > > > Also
+> > > > if (ret) return ret;
+> > > > in the above looks like an existing bug.
+> > > > It probably should be if (ret < 0) return ret;
+> > >
+> > > yeah, probably should be error-handling case
+> >
+> > I thought that refactoring
+> > commit 59e2e27d227a ("bpf: Refactor check_cfg to use a structured loop.=
+")
+> > is responsible...
+> > but it looks to be an older bug.
+>
+> No, I think it was indeed 59e2e27d227a that changed this. Previously we h=
+ad
+>
+> if (ret =3D=3D 1)
+>    ...
+> if (ret < 0)
+>    goto err;
+> /* ret =3D=3D 0 */
+>
+> I'll add the fix on top of another fix.
 
-Yes, this is good. We could do the same thing for=20
-clang already, but it doesn't make a huge difference.
+I take it back:
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+Summary: 748 PASSED, 0 SKIPPED, 43 FAILED
+
+I'm not touching this. Some other time, or maybe someone else.
