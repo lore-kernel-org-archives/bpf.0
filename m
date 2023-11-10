@@ -1,139 +1,139 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B45D41841
-	for <bpf@vger.kernel.org>; Fri, 10 Nov 2023 03:43:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bAG2PPOq"
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C884681
-	for <bpf@vger.kernel.org>; Thu,  9 Nov 2023 19:43:28 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-507a29c7eefso2016958e87.1
-        for <bpf@vger.kernel.org>; Thu, 09 Nov 2023 19:43:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699587807; x=1700192607; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D+rSz2IrRrGaqVGIg+rFuItamCUFiD7agjn84BQaPYs=;
-        b=bAG2PPOqOI0U6J4NNrFl/SkGZYy474nXzNa1dJTbpakjljJtUqmemUOU0f9iQVzwWe
-         dNG4vhBYERJHXgjfjD/uPleQceJpK08askCtdKMSO8+0XtgiYmkA5yOUeZu1F7l2Ucx3
-         Nbbo4dxE2IjQUWUhumt6sMsxsqHwVemRNJkwW+zSW9r/BNcJqnaoeIpNTX7yZC5tWqRd
-         1jBV2AKqqXeOrZd147oKHq9AcJp/lAVFHxmxXjxdNU/Zit5SIEWMvrZUUUD2W638H9cR
-         WO0dAfnSHfxZFiM4q021FM/vAur1rofHixUeWwD+i6kX4VVNYzW2KdWidLRgfc9JkTai
-         DsSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699587807; x=1700192607;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D+rSz2IrRrGaqVGIg+rFuItamCUFiD7agjn84BQaPYs=;
-        b=Co7DX4OzEjmgcDSQPo3M1AH/EOSFvGgFGo7XJdqdWALfyOZMd7ET1kc3Umlds7Tv6P
-         wCAIhlVrIns3oIIiF7v2auHObmLXekHK6VZHOlOwE+SQDGiDFnmn9CEcObweHOb8ISh2
-         weAgF4nl3Da4/9ihqF9XoMcwBfSFHMj+xEdPGXmiW3NHS54KzcyRhvL/1Lek+CjWJ98u
-         r0yrNHBogJChJZm4RFsd74V1AwEUlefsp/4asZZYehhWmT5pBfz97GSKDlwuNil7lRQU
-         vKFTqq8MRLKVn4Y65ur/ZJjW9u7cO2PCn0OpVAZ58dF4lF7Gy8XxkWs+Dbw8S0fnv6GO
-         7F6g==
-X-Gm-Message-State: AOJu0YwRKLc/i1NEdeQMgGHd6VRCHuR/8rU4gD5iYuNCD3e0xb6t+T5L
-	M1mcYfO90SoQPlWrFtXBMlMqWK23WDqwnEAuwkeYhKGm
-X-Google-Smtp-Source: AGHT+IFgCLu0pc5EP25rL3yBy0TZSEThB/eGGdZ3EF2PyykIoyefDZsRQ6q64jb4t8FIvZRBUcA2SaO5ZpgvzWrkmL8=
-X-Received: by 2002:a05:6512:25b:b0:503:36cb:5436 with SMTP id
- b27-20020a056512025b00b0050336cb5436mr2928634lfo.9.1699587806953; Thu, 09 Nov
- 2023 19:43:26 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E671841
+	for <bpf@vger.kernel.org>; Fri, 10 Nov 2023 03:48:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B63468B
+	for <bpf@vger.kernel.org>; Thu,  9 Nov 2023 19:48:44 -0800 (PST)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 3A9MYZMd029088
+	for <bpf@vger.kernel.org>; Thu, 9 Nov 2023 19:48:44 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+	by m0001303.ppops.net (PPS) with ESMTPS id 3u97ht2337-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Thu, 09 Nov 2023 19:48:43 -0800
+Received: from twshared58712.02.prn6.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Thu, 9 Nov 2023 19:48:42 -0800
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+	id 4DE613B41DBBA; Thu,  9 Nov 2023 19:48:40 -0800 (PST)
+From: Andrii Nakryiko <andrii@kernel.org>
+To: <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <paul@paul-moore.com>,
+        <brauner@kernel.org>
+CC: <linux-fsdevel@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+        <keescook@chromium.org>, <kernel-team@meta.com>, <sargun@sargun.me>
+Subject: [PATCH v10 bpf-next 01/17] bpf: align CAP_NET_ADMIN checks with bpf_capable() approach
+Date: Thu, 9 Nov 2023 19:48:22 -0800
+Message-ID: <20231110034838.1295764-2-andrii@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231110034838.1295764-1-andrii@kernel.org>
+References: <20231110034838.1295764-1-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231110002638.4168352-1-andrii@kernel.org> <20231110002638.4168352-4-andrii@kernel.org>
- <CAADnVQ+KtueBdD=8DazMhM3Xz0+YpLVW1-5-N4ZFiBOzji4vbg@mail.gmail.com>
-In-Reply-To: <CAADnVQ+KtueBdD=8DazMhM3Xz0+YpLVW1-5-N4ZFiBOzji4vbg@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 9 Nov 2023 19:43:15 -0800
-Message-ID: <CAEf4Bza1nxvLcBORkV+bKbKCz=f1jhRYM=PPaJxXDfQ7rmfJvA@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf 3/3] selftests/bpf: add edge case backtracking
- logic test
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Kernel Team <kernel-team@meta.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 3vxnDsxOAi4fJFWvO5T44Y-ud3t1WaxF
+X-Proofpoint-GUID: 3vxnDsxOAi4fJFWvO5T44Y-ud3t1WaxF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-09_17,2023-11-09_01,2023-05-22_02
 
-On Thu, Nov 9, 2023 at 5:34=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Thu, Nov 9, 2023 at 4:26=E2=80=AFPM Andrii Nakryiko <andrii@kernel.org=
-> wrote:
-> >
-> > Add a dedicated selftests to try to set up conditions to have a state
-> > with same first and last instruction index, but it actually is a loop
-> > 3->4->1->2->3. This confuses mark_chain_precision() if verifier doesn't
-> > take into account jump history.
-> >
-> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> > ---
-> >  .../selftests/bpf/progs/verifier_precision.c  | 40 +++++++++++++++++++
-> >  1 file changed, 40 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/bpf/progs/verifier_precision.c b/t=
-ools/testing/selftests/bpf/progs/verifier_precision.c
-> > index 193c0f8272d0..6b564d4c0986 100644
-> > --- a/tools/testing/selftests/bpf/progs/verifier_precision.c
-> > +++ b/tools/testing/selftests/bpf/progs/verifier_precision.c
-> > @@ -91,3 +91,43 @@ __naked int bpf_end_bswap(void)
-> >  }
-> >
-> >  #endif /* v4 instruction */
-> > +
-> > +SEC("?raw_tp")
-> > +__success __log_level(2)
-> > +/*
-> > + * Without the bug fix there will be no history between "last_idx 3 fi=
-rst_idx 3"
-> > + * and "parent state regs=3D" lines. "R0_w=3D6" parts are here to help=
- anchor
-> > + * expected log messages to the one specific mark_chain_precision oper=
-ation.
-> > + *
-> > + * This is quite fragile: if verifier checkpointing heuristic changes,=
- this
-> > + * might need adjusting.
->
-> Hmm, but that what
-> __flag(BPF_F_TEST_STATE_FREQ)
-> supposed to address.
+Within BPF syscall handling code CAP_NET_ADMIN checks stand out a bit
+compared to CAP_BPF and CAP_PERFMON checks. For the latter, CAP_BPF or
+CAP_PERFMON are checked first, but if they are not set, CAP_SYS_ADMIN
+takes over and grants whatever part of BPF syscall is required.
 
-When I was analysing and crafting the test I for some reason assumed I
-need to have a jump inside the state that won't trigger state
-checkpoint. But I think that's not necessary, just doing conditional
-jump and jumping back an instruction or two should do. With that yes,
-TEST_STATE_FREQ should be a better way to do this.
+Similar kind of checks that involve CAP_NET_ADMIN are not so consistent.
+One out of four uses does follow CAP_BPF/CAP_PERFMON model: during
+BPF_PROG_LOAD, if the type of BPF program is "network-related" either
+CAP_NET_ADMIN or CAP_SYS_ADMIN is required to proceed.
 
->
-> > + */
-> > +__msg("2: (07) r0 +=3D 1                       ; R0_w=3D6")
-> > +__msg("3: (35) if r0 >=3D 0xa goto pc+1")
-> > +__msg("mark_precise: frame0: last_idx 3 first_idx 3 subseq_idx -1")
-> > +__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 2: (07) r0 +=3D=
- 1")
-> > +__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 1: (07) r0 +=3D=
- 1")
-> > +__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 4: (05) goto pc=
--4")
-> > +__msg("mark_precise: frame0: regs=3Dr0 stack=3D before 3: (35) if r0 >=
-=3D 0xa goto pc+1")
-> > +__msg("mark_precise: frame0: parent state regs=3D stack=3D:  R0_rw=3DP=
-4")
-> > +__msg("3: R0_w=3D6")
-> > +__naked int state_loop_first_last_equal(void)
-> > +{
-> > +       asm volatile (
-> > +               "r0 =3D 0;"
-> > +       "l0_%=3D:"
-> > +               "r0 +=3D 1;"
-> > +               "r0 +=3D 1;"
->
-> That's why you had two ++ ?
-> Add state_freq and remove one of them?
+But in three other cases CAP_NET_ADMIN is required even if CAP_SYS_ADMIN
+is set:
+  - when creating DEVMAP/XDKMAP/CPU_MAP maps;
+  - when attaching CGROUP_SKB programs;
+  - when handling BPF_PROG_QUERY command.
+
+This patch is changing the latter three cases to follow BPF_PROG_LOAD
+model, that is allowing to proceed under either CAP_NET_ADMIN or
+CAP_SYS_ADMIN.
+
+This also makes it cleaner in subsequent BPF token patches to switch
+wholesomely to a generic bpf_token_capable(int cap) check, that always
+falls back to CAP_SYS_ADMIN if requested capability is missing.
+
+Cc: Jakub Kicinski <kuba@kernel.org>
+Acked-by: Yafang Shao <laoar.shao@gmail.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ kernel/bpf/syscall.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 0ed286b8a0f0..ad4d8e433ccc 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1096,6 +1096,11 @@ static int map_check_btf(struct bpf_map *map, cons=
+t struct btf *btf,
+ 	return ret;
+ }
+=20
++static bool bpf_net_capable(void)
++{
++	return capable(CAP_NET_ADMIN) || capable(CAP_SYS_ADMIN);
++}
++
+ #define BPF_MAP_CREATE_LAST_FIELD map_extra
+ /* called via syscall */
+ static int map_create(union bpf_attr *attr)
+@@ -1199,7 +1204,7 @@ static int map_create(union bpf_attr *attr)
+ 	case BPF_MAP_TYPE_DEVMAP:
+ 	case BPF_MAP_TYPE_DEVMAP_HASH:
+ 	case BPF_MAP_TYPE_XSKMAP:
+-		if (!capable(CAP_NET_ADMIN))
++		if (!bpf_net_capable())
+ 			return -EPERM;
+ 		break;
+ 	default:
+@@ -2599,7 +2604,7 @@ static int bpf_prog_load(union bpf_attr *attr, bpfp=
+tr_t uattr, u32 uattr_size)
+ 	    !bpf_capable())
+ 		return -EPERM;
+=20
+-	if (is_net_admin_prog_type(type) && !capable(CAP_NET_ADMIN) && !capable=
+(CAP_SYS_ADMIN))
++	if (is_net_admin_prog_type(type) && !bpf_net_capable())
+ 		return -EPERM;
+ 	if (is_perfmon_prog_type(type) && !perfmon_capable())
+ 		return -EPERM;
+@@ -3751,7 +3756,7 @@ static int bpf_prog_attach_check_attach_type(const =
+struct bpf_prog *prog,
+ 	case BPF_PROG_TYPE_SK_LOOKUP:
+ 		return attach_type =3D=3D prog->expected_attach_type ? 0 : -EINVAL;
+ 	case BPF_PROG_TYPE_CGROUP_SKB:
+-		if (!capable(CAP_NET_ADMIN))
++		if (!bpf_net_capable())
+ 			/* cg-skb progs can be loaded by unpriv user.
+ 			 * check permissions at attach time.
+ 			 */
+@@ -3954,7 +3959,7 @@ static int bpf_prog_detach(const union bpf_attr *at=
+tr)
+ static int bpf_prog_query(const union bpf_attr *attr,
+ 			  union bpf_attr __user *uattr)
+ {
+-	if (!capable(CAP_NET_ADMIN))
++	if (!bpf_net_capable())
+ 		return -EPERM;
+ 	if (CHECK_ATTR(BPF_PROG_QUERY))
+ 		return -EINVAL;
+--=20
+2.34.1
+
