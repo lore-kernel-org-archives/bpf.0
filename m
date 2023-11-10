@@ -1,172 +1,255 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90C4163A8;
-	Fri, 10 Nov 2023 06:24:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585436F82;
-	Thu,  9 Nov 2023 22:24:09 -0800 (PST)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0Vw3KEoX_1699595461;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vw3KEoX_1699595461)
-          by smtp.aliyun-inc.com;
-          Fri, 10 Nov 2023 13:51:02 +0800
-Message-ID: <1699595409.9489238-2-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH net-next v2 14/21] virtio_net: xsk: tx: virtnet_free_old_xmit() distinguishes xsk buffer
-Date: Fri, 10 Nov 2023 13:50:09 +0800
-From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To: "Michael S. Tsirkin" <mst@redhat.com>
-Cc: netdev@vger.kernel.org,
- "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>,
- Jason Wang <jasowang@redhat.com>,
- Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- virtualization@lists.linux-foundation.org,
- bpf@vger.kernel.org
-References: <20231107031227.100015-1-xuanzhuo@linux.alibaba.com>
- <20231107031227.100015-15-xuanzhuo@linux.alibaba.com>
- <20231109061056-mutt-send-email-mst@kernel.org>
- <1699528568.0674586-6-xuanzhuo@linux.alibaba.com>
- <20231109065912-mutt-send-email-mst@kernel.org>
- <1699580672.387567-1-xuanzhuo@linux.alibaba.com>
- <20231110003159-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20231110003159-mutt-send-email-mst@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D840163C0
+	for <bpf@vger.kernel.org>; Fri, 10 Nov 2023 06:24:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kwr7N+lH"
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F556F96
+	for <bpf@vger.kernel.org>; Thu,  9 Nov 2023 22:24:32 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-53e07db272cso2741640a12.3
+        for <bpf@vger.kernel.org>; Thu, 09 Nov 2023 22:24:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1699597471; x=1700202271; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3w1OTs2iAZ4CoeDnNHFBWFK7vy9O5uKp89JlpLVHQZA=;
+        b=Kwr7N+lH5DPxg5lVRgbQ1OcoEP8XNTXMMc1fFrb+uSfeCiq6d+LTOQqyTk+ll+kEaH
+         avkvdTAyuVFNKqGcRKfRIXKJEl6pjt4vKY3zUom420PLefYOWXRi/LbeNXSXafbclLPv
+         DbmQc9pNKOaxpe2aEqbEG5ug6kC97nPFNTjyWt+RygtozLS7KJzHHwOX9+R/cLJogF51
+         scPE1bbG/S88VCcboyuBq/qQ5SrFAmhU2USkMlL2qzK2SzoAv0+zmJkZFBX6uWuyUVgP
+         F0wxHSxID+ikpTgif50sNANEQeWDTH3BgzGRQ6HfyhH1hUviP1/jVphpSP9UIC47uzAE
+         SyfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699597471; x=1700202271;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3w1OTs2iAZ4CoeDnNHFBWFK7vy9O5uKp89JlpLVHQZA=;
+        b=J2wcNBhTwSnsnXz2H2KxoOEziPFyKlbdFPq22KXeUfaZotSa/GVw4+eNqrH+TJ8Yrf
+         axOMP0k9juo5BoGyBQA1yp0D09nrDv+dwfx/0h5k0x8YCq66VdUKX/wcGlez6ZQlCH8+
+         kkjxDzYOjdibKhGCk+ZkrRS7UgAQiFbnOXmQAabPuQAMrBgCsrp08AAF23q77CfmfMYC
+         HCc3qLHknBegrOTjoQSoQ7gkDhT3o7Jych01ZFL+NFbKVWqDXmRPx54DJJGjsjZfP2I6
+         1BGePJ8tG/Tno2lQNO1LHkI+PGvmBNASP6+D/n5ds1JT4KRioLFOu8O6ojEDV2zXG6ag
+         9orQ==
+X-Gm-Message-State: AOJu0Yx5DFAYjvvVhuUTwLZt/IG4Ik70ZGBaBL3EOYfCFCxSyruqxsVw
+	WfN6EM0GTwBpXnXHylKimsco0gkDi5Aifm74+QnwKJFz
+X-Google-Smtp-Source: AGHT+IEpd6g4nAawsF47GQN8OT0PIpG0wXYjZxbCnqqgFy14gI57JIY3lXmyHlwXEQxdKRz53j53XRwrp8KckqKyUWU=
+X-Received: by 2002:a17:907:7255:b0:9de:dc3d:3b2 with SMTP id
+ ds21-20020a170907725500b009dedc3d03b2mr6255491ejc.16.1699595834871; Thu, 09
+ Nov 2023 21:57:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20231109092838.721233-1-jolsa@kernel.org> <20231109092838.721233-4-jolsa@kernel.org>
+In-Reply-To: <20231109092838.721233-4-jolsa@kernel.org>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 9 Nov 2023 21:57:03 -0800
+Message-ID: <CAEf4BzZAh=aW_4bXSJdBZ-UcoCqa0CuejXBdb7+fB9bDP4q+eQ@mail.gmail.com>
+Subject: Re: [PATCHv2 bpf-next 3/6] bpf: Add link_info support for uprobe
+ multi link
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>, 
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@chromium.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Yafang Shao <laoar.shao@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 10 Nov 2023 00:32:50 -0500, "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> On Fri, Nov 10, 2023 at 09:44:32AM +0800, Xuan Zhuo wrote:
-> > On Thu, 9 Nov 2023 06:59:48 -0500, "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> > > On Thu, Nov 09, 2023 at 07:16:08PM +0800, Xuan Zhuo wrote:
-> > > > On Thu, 9 Nov 2023 06:11:49 -0500, "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> > > > > On Tue, Nov 07, 2023 at 11:12:20AM +0800, Xuan Zhuo wrote:
-> > > > > > virtnet_free_old_xmit distinguishes three type ptr(skb, xdp frame, xsk
-> > > > > > buffer) by the last bits of the pointer.
-> > > > > >
-> > > > > > Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> > > > > > ---
-> > > > > >  drivers/net/virtio/virtio_net.h | 18 ++++++++++++++++--
-> > > > > >  drivers/net/virtio/xsk.h        |  5 +++++
-> > > > > >  2 files changed, 21 insertions(+), 2 deletions(-)
-> > > > > >
-> > > > > > diff --git a/drivers/net/virtio/virtio_net.h b/drivers/net/virtio/virtio_net.h
-> > > > > > index a431a2c1ee47..a13d6d301fdb 100644
-> > > > > > --- a/drivers/net/virtio/virtio_net.h
-> > > > > > +++ b/drivers/net/virtio/virtio_net.h
-> > > > > > @@ -225,6 +225,11 @@ struct virtnet_info {
-> > > > > >  	struct failover *failover;
-> > > > > >  };
-> > > > > >
-> > > > > > +static inline bool virtnet_is_skb_ptr(void *ptr)
-> > > > > > +{
-> > > > > > +	return !((unsigned long)ptr & VIRTIO_XMIT_DATA_MASK);
-> > > > > > +}
-> > > > > > +
-> > > > > >  static inline bool virtnet_is_xdp_frame(void *ptr)
-> > > > > >  {
-> > > > > >  	return (unsigned long)ptr & VIRTIO_XDP_FLAG;
-> > > > > > @@ -235,6 +240,8 @@ static inline struct xdp_frame *virtnet_ptr_to_xdp(void *ptr)
-> > > > > >  	return (struct xdp_frame *)((unsigned long)ptr & ~VIRTIO_XDP_FLAG);
-> > > > > >  }
-> > > > > >
-> > > > > > +static inline u32 virtnet_ptr_to_xsk(void *ptr);
-> > > > > > +
-> > > > >
-> > > > > I don't understand why you need this here.
-> > > >
-> > > > The below function virtnet_free_old_xmit needs this.
-> > > >
-> > > > Thanks.
-> > >
-> > > I don't understand why is virtnet_free_old_xmit inline, either.
-> >
-> > That is in the header file.
-> >
+On Thu, Nov 9, 2023 at 1:29=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
 >
-> It does not belong there.
-
-
-Do you mean virtnet_free_old_xmit?
-
-That will be called by xsk.c. So I move it to the header file.
-
-Thanks.
-
-
+> Adding support to get uprobe_link details through bpf_link_info
+> interface.
 >
+> Adding new struct uprobe_multi to struct bpf_link_info to carry
+> the uprobe_multi link details.
 >
-> > >
-> > > > >
-> > > > >
-> > > > > >  static inline void *virtnet_sq_unmap(struct virtnet_sq *sq, void *data)
-> > > > > >  {
-> > > > > >  	struct virtnet_sq_dma *next, *head;
-> > > > > > @@ -261,11 +268,12 @@ static inline void *virtnet_sq_unmap(struct virtnet_sq *sq, void *data)
-> > > > > >  static inline void virtnet_free_old_xmit(struct virtnet_sq *sq, bool in_napi,
-> > > > > >  					 u64 *bytes, u64 *packets)
-> > > > > >  {
-> > > > > > +	unsigned int xsknum = 0;
-> > > > > >  	unsigned int len;
-> > > > > >  	void *ptr;
-> > > > > >
-> > > > > >  	while ((ptr = virtqueue_get_buf(sq->vq, &len)) != NULL) {
-> > > > > > -		if (!virtnet_is_xdp_frame(ptr)) {
-> > > > > > +		if (virtnet_is_skb_ptr(ptr)) {
-> > > > > >  			struct sk_buff *skb;
-> > > > > >
-> > > > > >  			if (sq->do_dma)
-> > > > > > @@ -277,7 +285,7 @@ static inline void virtnet_free_old_xmit(struct virtnet_sq *sq, bool in_napi,
-> > > > > >
-> > > > > >  			*bytes += skb->len;
-> > > > > >  			napi_consume_skb(skb, in_napi);
-> > > > > > -		} else {
-> > > > > > +		} else if (virtnet_is_xdp_frame(ptr)) {
-> > > > > >  			struct xdp_frame *frame;
-> > > > > >
-> > > > > >  			if (sq->do_dma)
-> > > > > > @@ -287,9 +295,15 @@ static inline void virtnet_free_old_xmit(struct virtnet_sq *sq, bool in_napi,
-> > > > > >
-> > > > > >  			*bytes += xdp_get_frame_len(frame);
-> > > > > >  			xdp_return_frame(frame);
-> > > > > > +		} else {
-> > > > > > +			*bytes += virtnet_ptr_to_xsk(ptr);
-> > > > > > +			++xsknum;
-> > > > > >  		}
-> > > > > >  		(*packets)++;
-> > > > > >  	}
-> > > > > > +
-> > > > > > +	if (xsknum)
-> > > > > > +		xsk_tx_completed(sq->xsk.pool, xsknum);
-> > > > > >  }
-> > > > > >
-> > > > > >  static inline bool virtnet_is_xdp_raw_buffer_queue(struct virtnet_info *vi, int q)
-> > > > > > diff --git a/drivers/net/virtio/xsk.h b/drivers/net/virtio/xsk.h
-> > > > > > index 1bd19dcda649..7ebc9bda7aee 100644
-> > > > > > --- a/drivers/net/virtio/xsk.h
-> > > > > > +++ b/drivers/net/virtio/xsk.h
-> > > > > > @@ -14,6 +14,11 @@ static inline void *virtnet_xsk_to_ptr(u32 len)
-> > > > > >  	return (void *)(p | VIRTIO_XSK_FLAG);
-> > > > > >  }
-> > > > > >
-> > > > > > +static inline u32 virtnet_ptr_to_xsk(void *ptr)
-> > > > > > +{
-> > > > > > +	return ((unsigned long)ptr) >> VIRTIO_XSK_FLAG_OFFSET;
-> > > > > > +}
-> > > > > > +
-> > > > > >  int virtnet_xsk_pool_setup(struct net_device *dev, struct netdev_bpf *xdp);
-> > > > > >  bool virtnet_xsk_xmit(struct virtnet_sq *sq, struct xsk_buff_pool *pool,
-> > > > > >  		      int budget);
-> > > > > > --
-> > > > > > 2.32.0.3.g01195cf9f
-> > > > >
-> > > > >
-> > >
+> The uprobe_multi.count is passed from user space to denote size
+> of array fields (offsets/ref_ctr_offsets/cookies). The actual
+> array size is stored back to uprobe_multi.count (allowing user
+> to find out the actual array size) and array fields are populated
+> up to the user passed size.
+>
+> All the non-array fields (path/count/flags/pid) are always set.
+>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  include/uapi/linux/bpf.h       | 10 +++++
+>  kernel/trace/bpf_trace.c       | 69 ++++++++++++++++++++++++++++++++++
+>  tools/include/uapi/linux/bpf.h | 10 +++++
+>  3 files changed, 89 insertions(+)
+>
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 0f6cdf52b1da..05b355da4508 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -6556,6 +6556,16 @@ struct bpf_link_info {
+>                         __u32 flags;
+>                         __u64 missed;
+>                 } kprobe_multi;
+> +               struct {
+> +                       __aligned_u64 path;
+> +                       __aligned_u64 offsets;
+> +                       __aligned_u64 ref_ctr_offsets;
+> +                       __aligned_u64 cookies;
+> +                       __u32 path_size;
+> +                       __u32 count; /* in/out: uprobe_multi offsets/ref_=
+ctr_offsets/cookies count */
+> +                       __u32 flags;
+> +                       __u32 pid;
+> +               } uprobe_multi;
+>                 struct {
+>                         __u32 type; /* enum bpf_perf_event_type */
+>                         __u32 :32;
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 52c1ec3a0467..1ea54f3b3f73 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -3046,6 +3046,7 @@ struct bpf_uprobe_multi_link {
+>         u32 cnt;
+>         struct bpf_uprobe *uprobes;
+>         struct task_struct *task;
+> +       u32 flags;
+>  };
+>
+>  struct bpf_uprobe_multi_run_ctx {
+> @@ -3085,9 +3086,76 @@ static void bpf_uprobe_multi_link_dealloc(struct b=
+pf_link *link)
+>         kfree(umulti_link);
+>  }
+>
+> +static int bpf_uprobe_multi_link_fill_link_info(const struct bpf_link *l=
+ink,
+> +                                               struct bpf_link_info *inf=
+o)
+> +{
+> +       u64 __user *uref_ctr_offsets =3D u64_to_user_ptr(info->uprobe_mul=
+ti.ref_ctr_offsets);
+> +       u64 __user *ucookies =3D u64_to_user_ptr(info->uprobe_multi.cooki=
+es);
+> +       u64 __user *uoffsets =3D u64_to_user_ptr(info->uprobe_multi.offse=
+ts);
+> +       u64 __user *upath =3D u64_to_user_ptr(info->uprobe_multi.path);
+> +       u32 upath_size =3D info->uprobe_multi.path_size;
+> +       struct bpf_uprobe_multi_link *umulti_link;
+> +       u32 ucount =3D info->uprobe_multi.count;
+> +       int err =3D 0, i;
+> +       long left;
+> +
+> +       if (!upath ^ !upath_size)
+> +               return -EINVAL;
+> +
+> +       if (!uoffsets ^ !ucount)
+
+uoffsets is not the only one that requires ucount, right?
+
+> +               return -EINVAL;
+> +
+> +       umulti_link =3D container_of(link, struct bpf_uprobe_multi_link, =
+link);
+> +       info->uprobe_multi.count =3D umulti_link->cnt;
+> +       info->uprobe_multi.flags =3D umulti_link->flags;
+> +       info->uprobe_multi.pid =3D umulti_link->task ?
+> +                                task_pid_nr_ns(umulti_link->task, task_a=
+ctive_pid_ns(current)) : 0;
+> +
+> +       if (upath) {
+> +               char *p, *buf;
+> +
+> +               upath_size =3D min_t(u32, upath_size, PATH_MAX);
+> +
+> +               buf =3D kmalloc(upath_size, GFP_KERNEL);
+> +               if (!buf)
+> +                       return -ENOMEM;
+> +               p =3D d_path(&umulti_link->path, buf, upath_size);
+> +               if (IS_ERR(p)) {
+> +                       kfree(buf);
+> +                       return -ENOSPC;
+> +               }
+> +               left =3D copy_to_user(upath, p, buf + upath_size - p);
+> +               kfree(buf);
+> +               if (left)
+> +                       return -EFAULT;
+
+hmm.. I expected the actual path_size to be reported back to the
+user?.. Is there a problem with doing that?
+
+> +       }
+> +
+> +       if (!uoffsets)
+> +               return 0;
+
+why guard by uoffsets? what if users only wanted cookies? I think each
+array should do its own checking and be independent, no?
+
+> +
+> +       if (ucount < umulti_link->cnt)
+> +               err =3D -ENOSPC;
+> +       else
+> +               ucount =3D umulti_link->cnt;
+> +
+> +       for (i =3D 0; i < ucount; i++) {
+> +               if (put_user(umulti_link->uprobes[i].offset, uoffsets + i=
+))
+> +                       return -EFAULT;
+> +               if (uref_ctr_offsets &&
+> +                   put_user(umulti_link->uprobes[i].ref_ctr_offset, uref=
+_ctr_offsets + i))
+> +                       return -EFAULT;
+> +               if (ucookies &&
+> +                   put_user(umulti_link->uprobes[i].cookie, ucookies + i=
+))
+> +                       return -EFAULT;
+> +       }
+> +
+> +       return err;
+> +}
+> +
+>  static const struct bpf_link_ops bpf_uprobe_multi_link_lops =3D {
+>         .release =3D bpf_uprobe_multi_link_release,
+>         .dealloc =3D bpf_uprobe_multi_link_dealloc,
+> +       .fill_link_info =3D bpf_uprobe_multi_link_fill_link_info,
+>  };
+>
+>  static int uprobe_prog_run(struct bpf_uprobe *uprobe,
+> @@ -3276,6 +3344,7 @@ int bpf_uprobe_multi_link_attach(const union bpf_at=
+tr *attr, struct bpf_prog *pr
+>         link->uprobes =3D uprobes;
+>         link->path =3D path;
+>         link->task =3D task;
+> +       link->flags =3D flags;
+>
+>         bpf_link_init(&link->link, BPF_LINK_TYPE_UPROBE_MULTI,
+>                       &bpf_uprobe_multi_link_lops, prog);
+> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+> index 0f6cdf52b1da..05b355da4508 100644
+> --- a/tools/include/uapi/linux/bpf.h
+> +++ b/tools/include/uapi/linux/bpf.h
+> @@ -6556,6 +6556,16 @@ struct bpf_link_info {
+>                         __u32 flags;
+>                         __u64 missed;
+>                 } kprobe_multi;
+> +               struct {
+> +                       __aligned_u64 path;
+> +                       __aligned_u64 offsets;
+> +                       __aligned_u64 ref_ctr_offsets;
+> +                       __aligned_u64 cookies;
+> +                       __u32 path_size;
+> +                       __u32 count; /* in/out: uprobe_multi offsets/ref_=
+ctr_offsets/cookies count */
+> +                       __u32 flags;
+> +                       __u32 pid;
+> +               } uprobe_multi;
+>                 struct {
+>                         __u32 type; /* enum bpf_perf_event_type */
+>                         __u32 :32;
+> --
+> 2.41.0
 >
