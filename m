@@ -1,151 +1,87 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BFB8538C
-	for <bpf@vger.kernel.org>; Fri, 10 Nov 2023 06:17:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594655FD7
-	for <bpf@vger.kernel.org>; Thu,  9 Nov 2023 22:17:49 -0800 (PST)
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 21D02299D58F2; Thu,  9 Nov 2023 22:17:34 -0800 (PST)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	"Kirill A . Shutemov" <kirill@shutemov.name>
-Subject: [PATCH bpf] bpf: Do not allocate percpu memory at init stage
-Date: Thu,  9 Nov 2023 22:17:34 -0800
-Message-Id: <20231110061734.2958678-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B644538C
+	for <bpf@vger.kernel.org>; Fri, 10 Nov 2023 06:18:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HL+rBM5K"
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EC05FDB
+	for <bpf@vger.kernel.org>; Thu,  9 Nov 2023 22:17:59 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-507f1c29f25so2213303e87.1
+        for <bpf@vger.kernel.org>; Thu, 09 Nov 2023 22:17:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1699597078; x=1700201878; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AT8lxZ8WzueexRDp/XsD2nE03bHELwQCRsE7MIUgk5Y=;
+        b=HL+rBM5K+re7YSl2xMlbyeGxVFwYJ29mDX4UYv4O2c4JX9MCdUArXHkbqr+2FF0K5l
+         9T+AUR/J7kn13zLFxX4LA29/w+dd7QEJde7sLoeKCPxxQuXiQxf/KsL8Aaep4QE9u0mk
+         Fx9qvCq0MsHuq/ySNWFWZkz8b6H9ErViGvJ+DnkcTylAHwxecaZ0Do38SeBsYMe92MlV
+         PU+oAiSNldF1PR/L7fam7fVJx+E/1vWu8RpXVw7DcV7iJUhREDlosIJRTvxTUeM6ZG4R
+         q8Si+BBq/kwO9MRFnXvWkWxilsqfaP9RBn6JEv+g+xvBCAKSSxmu+QVjMUrVDyv516lP
+         Pcww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699597078; x=1700201878;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AT8lxZ8WzueexRDp/XsD2nE03bHELwQCRsE7MIUgk5Y=;
+        b=b8pCeCxV0xTGqGyCqHyxNm4WCuFnc0LgbicZDoqNm9jIAQQ6jDSMCgWc0IJLHkuGxq
+         89DDSxIdVkJ17FUaWeDFDpkry592xc0NJr1aha1R25vjHCtLbE+79wB49DBH8vEXvhRQ
+         zNfrPonFi0WnjDJbx9/N1nJO8UgkaFJ5ZGDPiZP/B7YmnwLT9EQu0Uhh5xkXPkcjxwtk
+         8nKKUwIGyiuy7x2Z1ny802l+Td2XPzABoxAJiCjvhJE/X7lQ5KivfhPGav6VEl1ZaStd
+         o1GClmHOamDqNPL7subXe6/zYBIfGKx0v7VtYGI468+KH0LlpsxxU2g0IO7dYOXLLVXl
+         QMlA==
+X-Gm-Message-State: AOJu0Yymv3q4p1IT1dtrFq8pvd1jQxF7BKLbxChN6/ToNqDF5hI4vuyJ
+	XfUDaxbAS3AeChrkMYdBw5V6QzyzKrvTOW82bPDOVnMx9wA=
+X-Google-Smtp-Source: AGHT+IEUkzqYTcsE2hch5m9giS9mcm0xUs4t74HsJbJjCAR8oLXbR8Qluxs/lX83fASw0STs1GNdSZsuGjUlODvlAwI=
+X-Received: by 2002:a05:6000:1acc:b0:32f:9ad3:860f with SMTP id
+ i12-20020a0560001acc00b0032f9ad3860fmr5631049wry.52.1699589671756; Thu, 09
+ Nov 2023 20:14:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20231110002638.4168352-1-andrii@kernel.org> <20231110002638.4168352-4-andrii@kernel.org>
+ <CAADnVQ+KtueBdD=8DazMhM3Xz0+YpLVW1-5-N4ZFiBOzji4vbg@mail.gmail.com>
+ <CAEf4Bza1nxvLcBORkV+bKbKCz=f1jhRYM=PPaJxXDfQ7rmfJvA@mail.gmail.com> <CAEf4BzZFc6t5KCdCH4zYA1jp9UgRWHsEKgfMjVcc72qgH-FHXQ@mail.gmail.com>
+In-Reply-To: <CAEf4BzZFc6t5KCdCH4zYA1jp9UgRWHsEKgfMjVcc72qgH-FHXQ@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 9 Nov 2023 20:14:20 -0800
+Message-ID: <CAADnVQ+GzfdYSYAK5MYJ4cbOXsFPKG_Ly5CO5raCP7sopj9AXA@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf 3/3] selftests/bpf: add edge case backtracking
+ logic test
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Kernel Team <kernel-team@meta.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Kirill Shutemov reported significant percpu memory increase after booting
-in 288-cpu VM ([1]) due to commit 41a5db8d8161 ("bpf: Add support for
-non-fix-size percpu mem allocation"). The percpu memory is increased
-from 111MB to 969MB. The number is from /proc/meminfo.
+On Thu, Nov 9, 2023 at 8:05=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> >
+> > When I was analysing and crafting the test I for some reason assumed I
+> > need to have a jump inside the state that won't trigger state
+> > checkpoint. But I think that's not necessary, just doing conditional
+> > jump and jumping back an instruction or two should do. With that yes,
+> > TEST_STATE_FREQ should be a better way to do this.
+>
+> Ah, ok, TEST_STATE_FREQ won't work. It triggers state checkpointing
+> both at conditional jump instruction and on its target, because target
+> is prune point.
+>
+> So I think this test has to be the way it is.
 
-I tried to reproduce the issue with my local VM which at most supports
-upto 255 cpus. With 252 cpus, without the above commit, the percpu memory
-immediately after boot is 57MB while with the above commit the percpu
-memory is 231MB.
+I see.
+I was about to apply it, but then noticed:
+numamove_bpf-numamove_bpf.o |migrate_misplaced_page |success ->
+failure (!!)|-100.00 %
 
-This is not good since so far percpu memory from bpf memory allocator
-is not widely used yet. Let us change pre-allocation in init stage
-to on-demand allocation when verifier detects there is a need of
-percpu memory for bpf program. With this change, percpu memory
-consumption after boot can be reduced signicantly.
-
-  [1] https://lore.kernel.org/lkml/20231109154934.4saimljtqx625l3v@box.sh=
-utemov.name/
-
-Fixes: 41a5db8d8161 ("bpf: Add support for non-fix-size percpu mem alloca=
-tion")
-Cc: Kirill A. Shutemov <kirill@shutemov.name>
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- include/linux/bpf.h   |  2 +-
- kernel/bpf/core.c     |  8 +++-----
- kernel/bpf/verifier.c | 17 +++++++++++++++--
- 3 files changed, 19 insertions(+), 8 deletions(-)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index b4825d3cdb29..3df67a04d32e 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -56,7 +56,7 @@ extern struct idr btf_idr;
- extern spinlock_t btf_idr_lock;
- extern struct kobject *btf_kobj;
- extern struct bpf_mem_alloc bpf_global_ma, bpf_global_percpu_ma;
--extern bool bpf_global_ma_set, bpf_global_percpu_ma_set;
-+extern bool bpf_global_ma_set;
-=20
- typedef u64 (*bpf_callback_t)(u64, u64, u64, u64, u64);
- typedef int (*bpf_iter_init_seq_priv_t)(void *private_data,
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 08626b519ce2..cd3afe57ece3 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -64,8 +64,8 @@
- #define OFF	insn->off
- #define IMM	insn->imm
-=20
--struct bpf_mem_alloc bpf_global_ma, bpf_global_percpu_ma;
--bool bpf_global_ma_set, bpf_global_percpu_ma_set;
-+struct bpf_mem_alloc bpf_global_ma;
-+bool bpf_global_ma_set;
-=20
- /* No hurry in this branch
-  *
-@@ -2934,9 +2934,7 @@ static int __init bpf_global_ma_init(void)
-=20
- 	ret =3D bpf_mem_alloc_init(&bpf_global_ma, 0, false);
- 	bpf_global_ma_set =3D !ret;
--	ret =3D bpf_mem_alloc_init(&bpf_global_percpu_ma, 0, true);
--	bpf_global_percpu_ma_set =3D !ret;
--	return !bpf_global_ma_set || !bpf_global_percpu_ma_set;
-+	return ret;
- }
- late_initcall(bpf_global_ma_init);
- #endif
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index bd1c42eb540f..7d485c8b794f 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -26,6 +26,7 @@
- #include <linux/poison.h>
- #include <linux/module.h>
- #include <linux/cpumask.h>
-+#include <linux/bpf_mem_alloc.h>
- #include <net/xdp.h>
-=20
- #include "disasm.h"
-@@ -41,6 +42,9 @@ static const struct bpf_verifier_ops * const bpf_verifi=
-er_ops[] =3D {
- #undef BPF_LINK_TYPE
- };
-=20
-+struct bpf_mem_alloc bpf_global_percpu_ma;
-+static bool bpf_global_percpu_ma_set;
-+
- /* bpf_check() is a static code analyzer that walks eBPF program
-  * instruction by instruction and updates register/stack state.
-  * All paths of conditional branches are analyzed until 'bpf_exit' insn.
-@@ -12074,8 +12078,17 @@ static int check_kfunc_call(struct bpf_verifier_=
-env *env, struct bpf_insn *insn,
- 				if (meta.func_id =3D=3D special_kfunc_list[KF_bpf_obj_new_impl] && !=
-bpf_global_ma_set)
- 					return -ENOMEM;
-=20
--				if (meta.func_id =3D=3D special_kfunc_list[KF_bpf_percpu_obj_new_imp=
-l] && !bpf_global_percpu_ma_set)
--					return -ENOMEM;
-+				if (meta.func_id =3D=3D special_kfunc_list[KF_bpf_percpu_obj_new_imp=
-l]) {
-+					mutex_lock(&bpf_verifier_lock);
-+					if (!bpf_global_percpu_ma_set) {
-+						err =3D bpf_mem_alloc_init(&bpf_global_percpu_ma, 0, true);
-+						if (!err)
-+							bpf_global_percpu_ma_set =3D true;
-+					}
-+					mutex_unlock(&bpf_verifier_lock);
-+					if (err)
-+						return err;
-+				}
-=20
- 				if (((u64)(u32)meta.arg_constant.value) !=3D meta.arg_constant.value=
-) {
- 					verbose(env, "local type ID argument must be in range [0, U32_MAX]\=
-n");
---=20
-2.34.1
-
+veristat is not known for sporadic failures.
+Is this a real issue?
