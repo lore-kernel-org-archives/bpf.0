@@ -1,384 +1,181 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21C611DFDC
-	for <bpf@vger.kernel.org>; Fri, 10 Nov 2023 16:11:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699113BF3C
-	for <bpf@vger.kernel.org>; Fri, 10 Nov 2023 08:11:25 -0800 (PST)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AAAwvkk021941
-	for <bpf@vger.kernel.org>; Fri, 10 Nov 2023 08:11:24 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3u9k82sx6n-11
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Fri, 10 Nov 2023 08:11:24 -0800
-Received: from twshared58712.02.prn6.facebook.com (2620:10d:c0a8:1b::30) by
- mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Fri, 10 Nov 2023 08:11:19 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id F37663B499868; Fri, 10 Nov 2023 08:11:11 -0800 (PST)
-From: Andrii Nakryiko <andrii@kernel.org>
-To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@kernel.org>
-CC: <andrii@kernel.org>, <kernel-team@meta.com>
-Subject: [PATCH bpf-next 6/8] bpf: omit default off=0 and imm=0 in register state log
-Date: Fri, 10 Nov 2023 08:10:55 -0800
-Message-ID: <20231110161057.1943534-7-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231110161057.1943534-1-andrii@kernel.org>
-References: <20231110161057.1943534-1-andrii@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E3318E08
+	for <bpf@vger.kernel.org>; Fri, 10 Nov 2023 16:36:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hxM4wODu"
+Received: from out-185.mta1.migadu.com (out-185.mta1.migadu.com [95.215.58.185])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848A63F34A
+	for <bpf@vger.kernel.org>; Fri, 10 Nov 2023 08:36:20 -0800 (PST)
+Message-ID: <d2c25841-93da-49da-914d-c86da6f8f2f5@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1699634178;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=g3xj3Ta4WeOz+XbmppCo6thBElQ0GzSlVteCfAIbptI=;
+	b=hxM4wODutNYSwKGp6t+7ZH4s6J4R5sH7RkEhjO+lc8XcqPnBPPFKvIyfxAKfXg5hLZ/JlC
+	Eb8hbq5WmnFn2tNGHhsytdWGF/vZnblfbzK0l7K4F+luFDjke2ufun4zLE6eSBxWXTZZyf
+	OFLXB6kW7HnYwlkEyj9pj3voqgBA0js=
+Date: Fri, 10 Nov 2023 08:36:10 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: Z2kyx313eDxAaNa7Ru7UAWnh788jYe9a
-X-Proofpoint-ORIG-GUID: Z2kyx313eDxAaNa7Ru7UAWnh788jYe9a
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-10_13,2023-11-09_01,2023-05-22_02
+Subject: Re: [PATCH bpf] bpf: Do not allocate percpu memory at init stage
+Content-Language: en-GB
+To: Hou Tao <houtao@huaweicloud.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
+ Martin KaFai Lau <martin.lau@kernel.org>,
+ "Kirill A . Shutemov" <kirill@shutemov.name>
+References: <20231110061734.2958678-1-yonghong.song@linux.dev>
+ <e17dafc1-6fac-3e87-f8d4-e54e7898e0aa@huaweicloud.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <e17dafc1-6fac-3e87-f8d4-e54e7898e0aa@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Simplify BPF verifierl log furthre by omitting default (and frequently
-irrelevant) off=3D0 and imm=3D0 parts for non-SCALAR_VALUE registers. As =
-can
-be seen from fixed tests, this is often a visual noise for PTR_TO_CTX
-register and even for PTR_TO_PACKET registers.
 
-Omitting default values follows the rest of register state logic: we
-omit default values to keep verifier log succinct and to highlight
-interesting state that deviates from default one. E.g., we do the same
-for var_off, when it's unknown, which gives no additional information.
+On 11/10/23 1:01 AM, Hou Tao wrote:
+>
+> On 11/10/2023 2:17 PM, Yonghong Song wrote:
+>> Kirill Shutemov reported significant percpu memory increase after booting
+>> in 288-cpu VM ([1]) due to commit 41a5db8d8161 ("bpf: Add support for
+>> non-fix-size percpu mem allocation"). The percpu memory is increased
+>> from 111MB to 969MB. The number is from /proc/meminfo.
+>>
+>> I tried to reproduce the issue with my local VM which at most supports
+>> upto 255 cpus. With 252 cpus, without the above commit, the percpu memory
+>> immediately after boot is 57MB while with the above commit the percpu
+>> memory is 231MB.
+>>
+>> This is not good since so far percpu memory from bpf memory allocator
+>> is not widely used yet. Let us change pre-allocation in init stage
+>> to on-demand allocation when verifier detects there is a need of
+>> percpu memory for bpf program. With this change, percpu memory
+>> consumption after boot can be reduced signicantly.
+>>
+>>    [1] https://lore.kernel.org/lkml/20231109154934.4saimljtqx625l3v@box.shutemov.name/
+>>
+>> Fixes: 41a5db8d8161 ("bpf: Add support for non-fix-size percpu mem allocation")
+>> Cc: Kirill A. Shutemov <kirill@shutemov.name>
+>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+>> ---
+>>   include/linux/bpf.h   |  2 +-
+>>   kernel/bpf/core.c     |  8 +++-----
+>>   kernel/bpf/verifier.c | 17 +++++++++++++++--
+>>   3 files changed, 19 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+>> index b4825d3cdb29..3df67a04d32e 100644
+>> --- a/include/linux/bpf.h
+>> +++ b/include/linux/bpf.h
+>> @@ -56,7 +56,7 @@ extern struct idr btf_idr;
+>>   extern spinlock_t btf_idr_lock;
+>>   extern struct kobject *btf_kobj;
+>>   extern struct bpf_mem_alloc bpf_global_ma, bpf_global_percpu_ma;
+>> -extern bool bpf_global_ma_set, bpf_global_percpu_ma_set;
+>> +extern bool bpf_global_ma_set;
+>>   
+>>   typedef u64 (*bpf_callback_t)(u64, u64, u64, u64, u64);
+>>   typedef int (*bpf_iter_init_seq_priv_t)(void *private_data,
+>> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+>> index 08626b519ce2..cd3afe57ece3 100644
+>> --- a/kernel/bpf/core.c
+>> +++ b/kernel/bpf/core.c
+>> @@ -64,8 +64,8 @@
+>>   #define OFF	insn->off
+>>   #define IMM	insn->imm
+>>   
+>> -struct bpf_mem_alloc bpf_global_ma, bpf_global_percpu_ma;
+>> -bool bpf_global_ma_set, bpf_global_percpu_ma_set;
+>> +struct bpf_mem_alloc bpf_global_ma;
+>> +bool bpf_global_ma_set;
+>>   
+>>   /* No hurry in this branch
+>>    *
+>> @@ -2934,9 +2934,7 @@ static int __init bpf_global_ma_init(void)
+>>   
+>>   	ret = bpf_mem_alloc_init(&bpf_global_ma, 0, false);
+>>   	bpf_global_ma_set = !ret;
+>> -	ret = bpf_mem_alloc_init(&bpf_global_percpu_ma, 0, true);
+>> -	bpf_global_percpu_ma_set = !ret;
+>> -	return !bpf_global_ma_set || !bpf_global_percpu_ma_set;
+>> +	return ret;
+>>   }
+>>   late_initcall(bpf_global_ma_init);
+>>   #endif
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index bd1c42eb540f..7d485c8b794f 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -26,6 +26,7 @@
+>>   #include <linux/poison.h>
+>>   #include <linux/module.h>
+>>   #include <linux/cpumask.h>
+>> +#include <linux/bpf_mem_alloc.h>
+>>   #include <net/xdp.h>
+>>   
+>>   #include "disasm.h"
+>> @@ -41,6 +42,9 @@ static const struct bpf_verifier_ops * const bpf_verifier_ops[] = {
+>>   #undef BPF_LINK_TYPE
+>>   };
+>>   
+>> +struct bpf_mem_alloc bpf_global_percpu_ma;
+>> +static bool bpf_global_percpu_ma_set;
+>> +
+>>   /* bpf_check() is a static code analyzer that walks eBPF program
+>>    * instruction by instruction and updates register/stack state.
+>>    * All paths of conditional branches are analyzed until 'bpf_exit' insn.
+>> @@ -12074,8 +12078,17 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>>   				if (meta.func_id == special_kfunc_list[KF_bpf_obj_new_impl] && !bpf_global_ma_set)
+>>   					return -ENOMEM;
+>>   
+>> -				if (meta.func_id == special_kfunc_list[KF_bpf_percpu_obj_new_impl] && !bpf_global_percpu_ma_set)
+>> -					return -ENOMEM;
+>> +				if (meta.func_id == special_kfunc_list[KF_bpf_percpu_obj_new_impl]) {
+>> +					mutex_lock(&bpf_verifier_lock);
+> Instead of acquiring the global lock each time, can we test whether or
+> bpf_global_percpu_ma_set is set before acquiring the global lock ?
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- kernel/bpf/log.c                              | 10 ++---
- .../testing/selftests/bpf/prog_tests/align.c  | 42 +++++++++----------
- .../selftests/bpf/prog_tests/log_buf.c        |  4 +-
- .../selftests/bpf/prog_tests/spin_lock.c      | 14 +++----
- .../selftests/bpf/progs/exceptions_assert.c   | 10 ++---
- 5 files changed, 39 insertions(+), 41 deletions(-)
+Currently, in verifier we have two places to use bpf_verifier_lock:
+(1) to get btf_vmlinux:
+         if (!btf_vmlinux && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) {
+                 mutex_lock(&bpf_verifier_lock);
+                 if (!btf_vmlinux)
+                         btf_vmlinux = btf_parse_vmlinux();
+                 mutex_unlock(&bpf_verifier_lock);
+         }
+This will only lock once if btf_parse_vmlinux() is successful.
 
-diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index c209ab1ec2b5..20b4f81087da 100644
---- a/kernel/bpf/log.c
-+++ b/kernel/bpf/log.c
-@@ -602,16 +602,14 @@ static void print_reg_state(struct bpf_verifier_env=
- *env, const struct bpf_reg_s
- 			  reg->map_ptr->key_size,
- 			  reg->map_ptr->value_size);
- 	}
--	if (t !=3D SCALAR_VALUE)
-+	if (t !=3D SCALAR_VALUE && reg->off)
- 		verbose_a("off=3D%d", reg->off);
- 	if (type_is_pkt_pointer(t))
- 		verbose_a("r=3D%d", reg->range);
- 	if (tnum_is_const(reg->var_off)) {
--		/* Typically an immediate SCALAR_VALUE, but
--		 * could be a pointer whose offset is too big
--		 * for reg->off
--		 */
--		verbose_a("imm=3D%llx", reg->var_off.value);
-+		/* a pointer register with fixed offset */
-+		if (reg->var_off.value)
-+			verbose_a("imm=3D%llx", reg->var_off.value);
- 	} else {
- 		print_scalar_ranges(env, reg, &sep);
- 		if (!tnum_is_unknown(reg->var_off)) {
-diff --git a/tools/testing/selftests/bpf/prog_tests/align.c b/tools/testi=
-ng/selftests/bpf/prog_tests/align.c
-index 465c1c3a3d3c..4ebd0da898f5 100644
---- a/tools/testing/selftests/bpf/prog_tests/align.c
-+++ b/tools/testing/selftests/bpf/prog_tests/align.c
-@@ -40,7 +40,7 @@ static struct bpf_align_test tests[] =3D {
- 		},
- 		.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
- 		.matches =3D {
--			{0, "R1", "ctx(off=3D0,imm=3D0)"},
-+			{0, "R1", "ctx()"},
- 			{0, "R10", "fp0"},
- 			{0, "R3_w", "2"},
- 			{1, "R3_w", "4"},
-@@ -68,7 +68,7 @@ static struct bpf_align_test tests[] =3D {
- 		},
- 		.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
- 		.matches =3D {
--			{0, "R1", "ctx(off=3D0,imm=3D0)"},
-+			{0, "R1", "ctx()"},
- 			{0, "R10", "fp0"},
- 			{0, "R3_w", "1"},
- 			{1, "R3_w", "2"},
-@@ -97,7 +97,7 @@ static struct bpf_align_test tests[] =3D {
- 		},
- 		.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
- 		.matches =3D {
--			{0, "R1", "ctx(off=3D0,imm=3D0)"},
-+			{0, "R1", "ctx()"},
- 			{0, "R10", "fp0"},
- 			{0, "R3_w", "4"},
- 			{1, "R3_w", "8"},
-@@ -119,7 +119,7 @@ static struct bpf_align_test tests[] =3D {
- 		},
- 		.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
- 		.matches =3D {
--			{0, "R1", "ctx(off=3D0,imm=3D0)"},
-+			{0, "R1", "ctx()"},
- 			{0, "R10", "fp0"},
- 			{0, "R3_w", "7"},
- 			{1, "R3_w", "7"},
-@@ -162,13 +162,13 @@ static struct bpf_align_test tests[] =3D {
- 		},
- 		.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
- 		.matches =3D {
--			{6, "R0_w", "pkt(off=3D8,r=3D8,imm=3D0)"},
-+			{6, "R0_w", "pkt(off=3D8,r=3D8)"},
- 			{6, "R3_w", "var_off=3D(0x0; 0xff)"},
- 			{7, "R3_w", "var_off=3D(0x0; 0x1fe)"},
- 			{8, "R3_w", "var_off=3D(0x0; 0x3fc)"},
- 			{9, "R3_w", "var_off=3D(0x0; 0x7f8)"},
- 			{10, "R3_w", "var_off=3D(0x0; 0xff0)"},
--			{12, "R3_w", "pkt_end(off=3D0,imm=3D0)"},
-+			{12, "R3_w", "pkt_end()"},
- 			{17, "R4_w", "var_off=3D(0x0; 0xff)"},
- 			{18, "R4_w", "var_off=3D(0x0; 0x1fe0)"},
- 			{19, "R4_w", "var_off=3D(0x0; 0xff0)"},
-@@ -235,11 +235,11 @@ static struct bpf_align_test tests[] =3D {
- 		},
- 		.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
- 		.matches =3D {
--			{2, "R5_w", "pkt(off=3D0,r=3D0,imm=3D0)"},
--			{4, "R5_w", "pkt(off=3D14,r=3D0,imm=3D0)"},
--			{5, "R4_w", "pkt(off=3D14,r=3D0,imm=3D0)"},
--			{9, "R2", "pkt(off=3D0,r=3D18,imm=3D0)"},
--			{10, "R5", "pkt(off=3D14,r=3D18,imm=3D0)"},
-+			{2, "R5_w", "pkt(r=3D0)"},
-+			{4, "R5_w", "pkt(off=3D14,r=3D0)"},
-+			{5, "R4_w", "pkt(off=3D14,r=3D0)"},
-+			{9, "R2", "pkt(r=3D18)"},
-+			{10, "R5", "pkt(off=3D14,r=3D18)"},
- 			{10, "R4_w", "var_off=3D(0x0; 0xff)"},
- 			{13, "R4_w", "var_off=3D(0x0; 0xffff)"},
- 			{14, "R4_w", "var_off=3D(0x0; 0xffff)"},
-@@ -299,7 +299,7 @@ static struct bpf_align_test tests[] =3D {
- 			/* Calculated offset in R6 has unknown value, but known
- 			 * alignment of 4.
- 			 */
--			{6, "R2_w", "pkt(off=3D0,r=3D8,imm=3D0)"},
-+			{6, "R2_w", "pkt(r=3D8)"},
- 			{7, "R6_w", "var_off=3D(0x0; 0x3fc)"},
- 			/* Offset is added to packet pointer R5, resulting in
- 			 * known fixed offset, and variable offset from R6.
-@@ -337,7 +337,7 @@ static struct bpf_align_test tests[] =3D {
- 			/* Constant offset is added to R5 packet pointer,
- 			 * resulting in reg->off value of 14.
- 			 */
--			{26, "R5_w", "pkt(off=3D14,r=3D8,"},
-+			{26, "R5_w", "pkt(off=3D14,r=3D8)"},
- 			/* Variable offset is added to R5, resulting in a
- 			 * variable offset of (4n). See comment for insn #18
- 			 * for R4 =3D R5 trick.
-@@ -397,7 +397,7 @@ static struct bpf_align_test tests[] =3D {
- 			/* Calculated offset in R6 has unknown value, but known
- 			 * alignment of 4.
- 			 */
--			{6, "R2_w", "pkt(off=3D0,r=3D8,imm=3D0)"},
-+			{6, "R2_w", "pkt(r=3D8)"},
- 			{7, "R6_w", "var_off=3D(0x0; 0x3fc)"},
- 			/* Adding 14 makes R6 be (4n+2) */
- 			{8, "R6_w", "var_off=3D(0x2; 0x7fc)"},
-@@ -459,7 +459,7 @@ static struct bpf_align_test tests[] =3D {
- 		.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
- 		.result =3D REJECT,
- 		.matches =3D {
--			{3, "R5_w", "pkt_end(off=3D0,imm=3D0)"},
-+			{3, "R5_w", "pkt_end()"},
- 			/* (ptr - ptr) << 2 =3D=3D unknown, (4n) */
- 			{5, "R5_w", "var_off=3D(0x0; 0xfffffffffffffffc)"},
- 			/* (4n) + 14 =3D=3D (4n+2).  We blow our bounds, because
-@@ -513,7 +513,7 @@ static struct bpf_align_test tests[] =3D {
- 			/* Calculated offset in R6 has unknown value, but known
- 			 * alignment of 4.
- 			 */
--			{6, "R2_w", "pkt(off=3D0,r=3D8,imm=3D0)"},
-+			{6, "R2_w", "pkt(r=3D8)"},
- 			{8, "R6_w", "var_off=3D(0x0; 0x3fc)"},
- 			/* Adding 14 makes R6 be (4n+2) */
- 			{9, "R6_w", "var_off=3D(0x2; 0x7fc)"},
-@@ -566,7 +566,7 @@ static struct bpf_align_test tests[] =3D {
- 			/* Calculated offset in R6 has unknown value, but known
- 			 * alignment of 4.
- 			 */
--			{6, "R2_w", "pkt(off=3D0,r=3D8,imm=3D0)"},
-+			{6, "R2_w", "pkt(r=3D8)"},
- 			{9, "R6_w", "var_off=3D(0x0; 0x3c)"},
- 			/* Adding 14 makes R6 be (4n+2) */
- 			{10, "R6_w", "var_off=3D(0x2; 0x7c)"},
-@@ -659,14 +659,14 @@ static int do_test_single(struct bpf_align_test *te=
-st)
- 			/* Check the next line as well in case the previous line
- 			 * did not have a corresponding bpf insn. Example:
- 			 * func#0 @0
--			 * 0: R1=3Dctx(off=3D0,imm=3D0) R10=3Dfp0
-+			 * 0: R1=3Dctx() R10=3Dfp0
- 			 * 0: (b7) r3 =3D 2                 ; R3_w=3D2
- 			 *
- 			 * Sometimes it's actually two lines below, e.g. when
- 			 * searching for "6: R3_w=3Dscalar(umax=3D255,var_off=3D(0x0; 0xff))"=
-:
--			 *   from 4 to 6: R0_w=3Dpkt(off=3D8,r=3D8,imm=3D0) R1=3Dctx(off=3D0,=
-imm=3D0) R2_w=3Dpkt(off=3D0,r=3D8,imm=3D0) R3_w=3Dpkt_end(off=3D0,imm=3D0=
-) R10=3Dfp0
--			 *   6: R0_w=3Dpkt(off=3D8,r=3D8,imm=3D0) R1=3Dctx(off=3D0,imm=3D0) R=
-2_w=3Dpkt(off=3D0,r=3D8,imm=3D0) R3_w=3Dpkt_end(off=3D0,imm=3D0) R10=3Dfp=
-0
--			 *   6: (71) r3 =3D *(u8 *)(r2 +0)           ; R2_w=3Dpkt(off=3D0,r=3D=
-8,imm=3D0) R3_w=3Dscalar(umax=3D255,var_off=3D(0x0; 0xff))
-+			 *   from 4 to 6: R0_w=3Dpkt(off=3D8,r=3D8) R1=3Dctx() R2_w=3Dpkt(r=3D=
-8) R3_w=3Dpkt_end() R10=3Dfp0
-+			 *   6: R0_w=3Dpkt(off=3D8,r=3D8) R1=3Dctx() R2_w=3Dpkt(r=3D8) R3_w=3D=
-pkt_end() R10=3Dfp0
-+			 *   6: (71) r3 =3D *(u8 *)(r2 +0)           ; R2_w=3Dpkt(r=3D8) R3_w=
-=3Dscalar(umax=3D255,var_off=3D(0x0; 0xff))
- 			 */
- 			while (!(p =3D strstr(line_ptr, m.reg)) || !strstr(p, m.match)) {
- 				cur_line =3D -1;
-diff --git a/tools/testing/selftests/bpf/prog_tests/log_buf.c b/tools/tes=
-ting/selftests/bpf/prog_tests/log_buf.c
-index fe9a23e65ef4..0f7ea4d7d9f6 100644
---- a/tools/testing/selftests/bpf/prog_tests/log_buf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/log_buf.c
-@@ -78,7 +78,7 @@ static void obj_load_log_buf(void)
- 	ASSERT_OK_PTR(strstr(libbpf_log_buf, "prog 'bad_prog': BPF program load=
- failed"),
- 		      "libbpf_log_not_empty");
- 	ASSERT_OK_PTR(strstr(obj_log_buf, "DATASEC license"), "obj_log_not_empt=
-y");
--	ASSERT_OK_PTR(strstr(good_log_buf, "0: R1=3Dctx(off=3D0,imm=3D0) R10=3D=
-fp0"),
-+	ASSERT_OK_PTR(strstr(good_log_buf, "0: R1=3Dctx() R10=3Dfp0"),
- 		      "good_log_verbose");
- 	ASSERT_OK_PTR(strstr(bad_log_buf, "invalid access to map value, value_s=
-ize=3D16 off=3D16000 size=3D4"),
- 		      "bad_log_not_empty");
-@@ -175,7 +175,7 @@ static void bpf_prog_load_log_buf(void)
- 	opts.log_level =3D 2;
- 	fd =3D bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, "good_prog", "GPL",
- 			   good_prog_insns, good_prog_insn_cnt, &opts);
--	ASSERT_OK_PTR(strstr(log_buf, "0: R1=3Dctx(off=3D0,imm=3D0) R10=3Dfp0")=
-, "good_log_2");
-+	ASSERT_OK_PTR(strstr(log_buf, "0: R1=3Dctx() R10=3Dfp0"), "good_log_2")=
-;
- 	ASSERT_GE(fd, 0, "good_fd2");
- 	if (fd >=3D 0)
- 		close(fd);
-diff --git a/tools/testing/selftests/bpf/prog_tests/spin_lock.c b/tools/t=
-esting/selftests/bpf/prog_tests/spin_lock.c
-index ace65224286f..18d451be57c8 100644
---- a/tools/testing/selftests/bpf/prog_tests/spin_lock.c
-+++ b/tools/testing/selftests/bpf/prog_tests/spin_lock.c
-@@ -13,22 +13,22 @@ static struct {
- 	const char *err_msg;
- } spin_lock_fail_tests[] =3D {
- 	{ "lock_id_kptr_preserve",
--	  "5: (bf) r1 =3D r0                       ; R0_w=3Dptr_foo(id=3D2,ref_=
-obj_id=3D2,off=3D0,imm=3D0) "
--	  "R1_w=3Dptr_foo(id=3D2,ref_obj_id=3D2,off=3D0,imm=3D0) refs=3D2\n6: (=
-85) call bpf_this_cpu_ptr#154\n"
-+	  "5: (bf) r1 =3D r0                       ; R0_w=3Dptr_foo(id=3D2,ref_=
-obj_id=3D2) "
-+	  "R1_w=3Dptr_foo(id=3D2,ref_obj_id=3D2) refs=3D2\n6: (85) call bpf_thi=
-s_cpu_ptr#154\n"
- 	  "R1 type=3Dptr_ expected=3Dpercpu_ptr_" },
- 	{ "lock_id_global_zero",
--	  "; R1_w=3Dmap_value(map=3D.data.A,ks=3D4,vs=3D4,off=3D0,imm=3D0)\n2: =
-(85) call bpf_this_cpu_ptr#154\n"
-+	  "; R1_w=3Dmap_value(map=3D.data.A,ks=3D4,vs=3D4)\n2: (85) call bpf_th=
-is_cpu_ptr#154\n"
- 	  "R1 type=3Dmap_value expected=3Dpercpu_ptr_" },
- 	{ "lock_id_mapval_preserve",
- 	  "[0-9]\\+: (bf) r1 =3D r0                       ;"
--	  " R0_w=3Dmap_value(id=3D1,map=3Darray_map,ks=3D4,vs=3D8,off=3D0,imm=3D=
-0)"
--	  " R1_w=3Dmap_value(id=3D1,map=3Darray_map,ks=3D4,vs=3D8,off=3D0,imm=3D=
-0)\n"
-+	  " R0_w=3Dmap_value(id=3D1,map=3Darray_map,ks=3D4,vs=3D8)"
-+	  " R1_w=3Dmap_value(id=3D1,map=3Darray_map,ks=3D4,vs=3D8)\n"
- 	  "[0-9]\\+: (85) call bpf_this_cpu_ptr#154\n"
- 	  "R1 type=3Dmap_value expected=3Dpercpu_ptr_" },
- 	{ "lock_id_innermapval_preserve",
- 	  "[0-9]\\+: (bf) r1 =3D r0                      ;"
--	  " R0=3Dmap_value(id=3D2,ks=3D4,vs=3D8,off=3D0,imm=3D0)"
--	  " R1_w=3Dmap_value(id=3D2,ks=3D4,vs=3D8,off=3D0,imm=3D0)\n"
-+	  " R0=3Dmap_value(id=3D2,ks=3D4,vs=3D8)"
-+	  " R1_w=3Dmap_value(id=3D2,ks=3D4,vs=3D8)\n"
- 	  "[0-9]\\+: (85) call bpf_this_cpu_ptr#154\n"
- 	  "R1 type=3Dmap_value expected=3Dpercpu_ptr_" },
- 	{ "lock_id_mismatch_kptr_kptr", "bpf_spin_unlock of different lock" },
-diff --git a/tools/testing/selftests/bpf/progs/exceptions_assert.c b/tool=
-s/testing/selftests/bpf/progs/exceptions_assert.c
-index e1e5c54a6a11..26f7d67432cc 100644
---- a/tools/testing/selftests/bpf/progs/exceptions_assert.c
-+++ b/tools/testing/selftests/bpf/progs/exceptions_assert.c
-@@ -59,7 +59,7 @@ check_assert(s64, ge, neg, INT_MIN);
-=20
- SEC("?tc")
- __log_level(2) __failure
--__msg(": R0=3D0 R1=3Dctx(off=3D0,imm=3D0) R2=3Dscalar(smin=3Dsmin32=3D-2=
-147483646,smax=3Dsmax32=3D2147483645) R10=3Dfp0")
-+__msg(": R0=3D0 R1=3Dctx() R2=3Dscalar(smin=3Dsmin32=3D-2147483646,smax=3D=
-smax32=3D2147483645) R10=3Dfp0")
- int check_assert_range_s64(struct __sk_buff *ctx)
- {
- 	struct bpf_sock *sk =3D ctx->sk;
-@@ -75,7 +75,7 @@ int check_assert_range_s64(struct __sk_buff *ctx)
-=20
- SEC("?tc")
- __log_level(2) __failure
--__msg(": R1=3Dctx(off=3D0,imm=3D0) R2=3Dscalar(smin=3Dumin=3Dsmin32=3Dum=
-in32=3D4096,smax=3Dumax=3Dsmax32=3Dumax32=3D8192,var_off=3D(0x0; 0x3fff))=
-")
-+__msg(": R1=3Dctx() R2=3Dscalar(smin=3Dumin=3Dsmin32=3Dumin32=3D4096,sma=
-x=3Dumax=3Dsmax32=3Dumax32=3D8192,var_off=3D(0x0; 0x3fff))")
- int check_assert_range_u64(struct __sk_buff *ctx)
- {
- 	u64 num =3D ctx->len;
-@@ -86,7 +86,7 @@ int check_assert_range_u64(struct __sk_buff *ctx)
-=20
- SEC("?tc")
- __log_level(2) __failure
--__msg(": R0=3D0 R1=3Dctx(off=3D0,imm=3D0) R2=3D4096 R10=3Dfp0")
-+__msg(": R0=3D0 R1=3Dctx() R2=3D4096 R10=3Dfp0")
- int check_assert_single_range_s64(struct __sk_buff *ctx)
- {
- 	struct bpf_sock *sk =3D ctx->sk;
-@@ -103,7 +103,7 @@ int check_assert_single_range_s64(struct __sk_buff *c=
-tx)
-=20
- SEC("?tc")
- __log_level(2) __failure
--__msg(": R1=3Dctx(off=3D0,imm=3D0) R2=3D4096 R10=3Dfp0")
-+__msg(": R1=3Dctx() R2=3D4096 R10=3Dfp0")
- int check_assert_single_range_u64(struct __sk_buff *ctx)
- {
- 	u64 num =3D ctx->len;
-@@ -114,7 +114,7 @@ int check_assert_single_range_u64(struct __sk_buff *c=
-tx)
-=20
- SEC("?tc")
- __log_level(2) __failure
--__msg(": R1=3Dpkt(off=3D64,r=3D64,imm=3D0) R2=3Dpkt_end(off=3D0,imm=3D0)=
- R6=3Dpkt(off=3D0,r=3D64,imm=3D0) R10=3Dfp0")
-+__msg(": R1=3Dpkt(off=3D64,r=3D64) R2=3Dpkt_end() R6=3Dpkt(r=3D64) R10=3D=
-fp0")
- int check_assert_generic(struct __sk_buff *ctx)
- {
- 	u8 *data_end =3D (void *)(long)ctx->data_end;
---=20
-2.34.1
+(2) for unprividged bpf programs in bpf_check().
+A big chunk of it is under bpf_verifier_lock.
 
+I didn't use style (1) since I assume unprividged bpf programs
+is rare and it should seldomly collide with percpu_obj_new_impl.
+
+But my assumption related to (2) may be wrong and in the future
+verifier_lock() could be used in other places which may cause
+more contention.
+
+So I now agree with you and will make appropriate change. Thanks!
+
+>> +					if (!bpf_global_percpu_ma_set) {
+>> +						err = bpf_mem_alloc_init(&bpf_global_percpu_ma, 0, true);
+>> +						if (!err)
+>> +							bpf_global_percpu_ma_set = true;
+>> +					}
+>> +					mutex_unlock(&bpf_verifier_lock);
+>> +					if (err)
+>> +						return err;
+>> +				}
+>>   
+>>   				if (((u64)(u32)meta.arg_constant.value) != meta.arg_constant.value) {
+>>   					verbose(env, "local type ID argument must be in range [0, U32_MAX]\n");
