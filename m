@@ -1,71 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E727187B
-	for <bpf@vger.kernel.org>; Fri, 10 Nov 2023 07:10:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E29C15B9
+	for <bpf@vger.kernel.org>; Fri, 10 Nov 2023 07:16:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n+b5O0aA"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 04410C433C9;
-	Fri, 10 Nov 2023 07:10:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699600226;
-	bh=jaRTX6bsXs9F+AZUVTkzNBRQgU8JrEG4tk5ozYQGWNI=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=n+b5O0aA/GdWppgFVGYSdOg2EnyZLX/j+idTbHrTucGCDHQagzchNC3sGq3eH9yBu
-	 1fAwLF8VI3y55Nq0hTbgTeUgl7s+QEGgg9SDbtrdUF+swrqW18+KBog/I1OPbYi+we
-	 VXGuaR3+zlQwAY37S26Nrtz90xDYuYb+H41V6QD4kxiy9vEkv9JJFVsBCELQCrFuhz
-	 kV+nIhX2tDLvBQNJLavyXhBYvbhH3MXJq1X5G/nwklUH3Kp8Xpsm+kAd3KkCpNFTWc
-	 74BE/0DobNu/DYhY3XZ2M7N9npuhPdzZC7+xaMzbTX28RoOs/hgyiQArwYczLcTgcm
-	 Ow/rI4qw1hVYQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DC9E3C395DC;
-	Fri, 10 Nov 2023 07:10:25 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="InAGmmlk"
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB2283C0
+	for <bpf@vger.kernel.org>; Thu,  9 Nov 2023 23:16:04 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2c501bd6ff1so23485331fa.3
+        for <bpf@vger.kernel.org>; Thu, 09 Nov 2023 23:16:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1699600562; x=1700205362; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v19n/5fSlXOKVJg5epoQLCSIErstfxHgISgKNg0ZKOM=;
+        b=InAGmmlkxVHwZD1godm/tarLDvZSpv0gGcC2uBYO+uhRaLOjFd6hP+ncGuo/eiyufR
+         IHUbZanN26zmXt6PrgXqn9ot3eAWv9eOHm3gNU2cNQkpsoGQZd1flK6j/fKmIgNT3WDt
+         FsajPtcHZD061tHE98wlEKidj68F3IIhXnQnFHEg4e8EFYpkoBcA4GZLNeKf44CIu5f2
+         O0TF6/KQKhGAKfH+CPECriyiIUZSzJQlNHKZxEV94C6mGK0KVMxtW31CCcLVmcjwRvXM
+         54NCm8sspvdaaEM8dxLeEgV4i8J6xd4GYAyUxpCOf1u7kaNN30DGsH++1UVbs3jy8H72
+         TL5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699600562; x=1700205362;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=v19n/5fSlXOKVJg5epoQLCSIErstfxHgISgKNg0ZKOM=;
+        b=JQvvy0Lu4E9+ZrFuhhJSIPjECpDGz6RraUCsy7hRHFNfTG16hx5r4vbCvfaAbMDVQP
+         HemQzWb5ilX+aczV4nu5yhaieMfiwYK2zRoiiFZipxiEW/NIMyZ+nZCuE8s/AWODCN4/
+         cbI2h8q0enMFrEfOyXr0XlT9A4XB4IIsbQETL+3NSzKC7DwaD7u6lfNvbPu9N8tcuy9t
+         GBauhJS5C9q9qvPPhkcaV//LOvtKsJOTFWiC8dphK11nhg9IXNzXSFSONUd9356NFST5
+         W7wi0BsX0rNa9lqQ3hqseQ/zyr+tUzxuhxi5E0b2yVIeZNH97+agB7qHSFXAujPBWsly
+         6org==
+X-Gm-Message-State: AOJu0YxLJq+ScSKL6dv9DCcUUUUtyRjqcz/yzjZGlFUo4sGu1o5Weky5
+	OiRxG/L6bLJ15oSdCOV3nZkF2GVzUvAj5bE5QdMeW01WopU=
+X-Google-Smtp-Source: AGHT+IFYtKxGzkMPEvaGo0sy8XSyaryYReayY5YxH+Nzc1XBNaTigvcUzGdlV3/khe2+FX0dAYcq5b42MxtR8u9+a9g=
+X-Received: by 2002:adf:d1cf:0:b0:323:2d01:f043 with SMTP id
+ b15-20020adfd1cf000000b003232d01f043mr7332531wrd.3.1699589304962; Thu, 09 Nov
+ 2023 20:08:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf 1/2] bpf: fix control-flow graph checking in privileged
- mode
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <169960022589.7907.16307545616666162450.git-patchwork-notify@kernel.org>
-Date: Fri, 10 Nov 2023 07:10:25 +0000
-References: <20231110061412.2995786-1-andrii@kernel.org>
-In-Reply-To: <20231110061412.2995786-1-andrii@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- martin.lau@kernel.org, kernel-team@meta.com, sunhao.th@gmail.com
+References: <20231108231152.3583545-1-andrii@kernel.org> <20231108231152.3583545-4-andrii@kernel.org>
+ <CAADnVQKQ5TGGwGuaO0eghhnLRFZOVgLE7Hume8uPAvbo-AwA5g@mail.gmail.com> <CAEf4BzbVz9kPFSn4=3k+UOEanwQVeaNjOpRh_3pYLFRnbe3vkQ@mail.gmail.com>
+In-Reply-To: <CAEf4BzbVz9kPFSn4=3k+UOEanwQVeaNjOpRh_3pYLFRnbe3vkQ@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 9 Nov 2023 20:08:13 -0800
+Message-ID: <CAADnVQL6UrCKQw1WYbOh1GPhMR5cB3F7_An6-vSBK5Y-2=5tzw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/4] bpf: fix control-flow graph checking in
+ privileged mode
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Kernel Team <kernel-team@meta.com>, 
+	Hao Sun <sunhao.th@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Thu, Nov 9, 2023 at 7:41=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Thu, Nov 9, 2023 at 5:26=E2=80=AFPM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Wed, Nov 8, 2023 at 3:12=E2=80=AFPM Andrii Nakryiko <andrii@kernel.o=
+rg> wrote:
+> > >
+> > >
+> > > @@ -15622,11 +15619,11 @@ static int visit_insn(int t, struct bpf_ver=
+ifier_env *env)
+> > >                 /* conditional jump with two edges */
+> > >                 mark_prune_point(env, t);
+> > >
+> > > -               ret =3D push_insn(t, t + 1, FALLTHROUGH, env, true);
+> > > +               ret =3D push_insn(t, t + 1, FALLTHROUGH | CONDITIONAL=
+, env);
+> > >                 if (ret)
+> > >                         return ret;
+> > >
+> > > -               return push_insn(t, t + insn->off + 1, BRANCH, env, t=
+rue);
+> > > +               return push_insn(t, t + insn->off + 1, BRANCH | CONDI=
+TIONAL, env);
+> >
+> > If I'm reading this correctly, after the first conditional jmp
+> > both fallthrough and branch become sticky with the CONDITIONAL flag.
+> > So all processing after first 'if a =3D=3D b' insn is running
+> > with loop_ok=3D=3Dtrue.
+> > If so, all this complexity is not worth it. Let's just remove 'loop_ok'=
+ flag.
+>
+> So you mean just always assume loop_ok, right?
 
-This series was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+yes.
+Since not detecting the loop early only adds more cycles later
+that states_maybe_looping() should catch quickly enough.
 
-On Thu, 9 Nov 2023 22:14:10 -0800 you wrote:
-> When BPF program is verified in privileged mode, BPF verifier allows
-> bounded loops. This means that from CFG point of view there are
-> definitely some back-edges. Original commit adjusted check_cfg() logic
-> to not detect back-edges in control flow graph if they are resulting
-> from conditional jumps, which the idea that subsequent full BPF
-> verification process will determine whether such loops are bounded or
-> not, and either accept or reject the BPF program. At least that's my
-> reading of the intent.
-> 
-> [...]
+> >
+> > Also
+> > if (ret) return ret;
+> > in the above looks like an existing bug.
+> > It probably should be if (ret < 0) return ret;
+>
+> yeah, probably should be error-handling case
 
-Here is the summary with links:
-  - [bpf,1/2] bpf: fix control-flow graph checking in privileged mode
-    https://git.kernel.org/bpf/bpf/c/10e14e9652bf
-  - [bpf,2/2] selftests/bpf: add more test cases for check_cfg()
-    https://git.kernel.org/bpf/bpf/c/e2e57d637aa5
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+I thought that refactoring
+commit 59e2e27d227a ("bpf: Refactor check_cfg to use a structured loop.")
+is responsible...
+but it looks to be an older bug.
