@@ -1,255 +1,137 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D840163C0
-	for <bpf@vger.kernel.org>; Fri, 10 Nov 2023 06:24:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36D1E1C3C;
+	Fri, 10 Nov 2023 06:35:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kwr7N+lH"
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F556F96
-	for <bpf@vger.kernel.org>; Thu,  9 Nov 2023 22:24:32 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-53e07db272cso2741640a12.3
-        for <bpf@vger.kernel.org>; Thu, 09 Nov 2023 22:24:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699597471; x=1700202271; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3w1OTs2iAZ4CoeDnNHFBWFK7vy9O5uKp89JlpLVHQZA=;
-        b=Kwr7N+lH5DPxg5lVRgbQ1OcoEP8XNTXMMc1fFrb+uSfeCiq6d+LTOQqyTk+ll+kEaH
-         avkvdTAyuVFNKqGcRKfRIXKJEl6pjt4vKY3zUom420PLefYOWXRi/LbeNXSXafbclLPv
-         DbmQc9pNKOaxpe2aEqbEG5ug6kC97nPFNTjyWt+RygtozLS7KJzHHwOX9+R/cLJogF51
-         scPE1bbG/S88VCcboyuBq/qQ5SrFAmhU2USkMlL2qzK2SzoAv0+zmJkZFBX6uWuyUVgP
-         F0wxHSxID+ikpTgif50sNANEQeWDTH3BgzGRQ6HfyhH1hUviP1/jVphpSP9UIC47uzAE
-         SyfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699597471; x=1700202271;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3w1OTs2iAZ4CoeDnNHFBWFK7vy9O5uKp89JlpLVHQZA=;
-        b=J2wcNBhTwSnsnXz2H2KxoOEziPFyKlbdFPq22KXeUfaZotSa/GVw4+eNqrH+TJ8Yrf
-         axOMP0k9juo5BoGyBQA1yp0D09nrDv+dwfx/0h5k0x8YCq66VdUKX/wcGlez6ZQlCH8+
-         kkjxDzYOjdibKhGCk+ZkrRS7UgAQiFbnOXmQAabPuQAMrBgCsrp08AAF23q77CfmfMYC
-         HCc3qLHknBegrOTjoQSoQ7gkDhT3o7Jych01ZFL+NFbKVWqDXmRPx54DJJGjsjZfP2I6
-         1BGePJ8tG/Tno2lQNO1LHkI+PGvmBNASP6+D/n5ds1JT4KRioLFOu8O6ojEDV2zXG6ag
-         9orQ==
-X-Gm-Message-State: AOJu0Yx5DFAYjvvVhuUTwLZt/IG4Ik70ZGBaBL3EOYfCFCxSyruqxsVw
-	WfN6EM0GTwBpXnXHylKimsco0gkDi5Aifm74+QnwKJFz
-X-Google-Smtp-Source: AGHT+IEpd6g4nAawsF47GQN8OT0PIpG0wXYjZxbCnqqgFy14gI57JIY3lXmyHlwXEQxdKRz53j53XRwrp8KckqKyUWU=
-X-Received: by 2002:a17:907:7255:b0:9de:dc3d:3b2 with SMTP id
- ds21-20020a170907725500b009dedc3d03b2mr6255491ejc.16.1699595834871; Thu, 09
- Nov 2023 21:57:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="yieh30Rd";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="vQJBwM/4"
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D72769A;
+	Thu,  9 Nov 2023 22:35:07 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailout.west.internal (Postfix) with ESMTP id 3FCF53200B06;
+	Fri, 10 Nov 2023 01:35:05 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Fri, 10 Nov 2023 01:35:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+	1699598104; x=1699684504; bh=b4ZzDDt0njYwoFJ2ZN/gcE0Je20siJqsd/U
+	27wOBtP8=; b=yieh30RdeUYv8s36J2LYyw95FKjfwwzzUE2OyJXZ/AZF2p0/Uub
+	Zffu82JE99/otcJpQYmFPAaaklJm05VkqiBA9T7AoLH8U0kRZQ7NwFmNtDlqUbW1
+	+wVMsXucgbhWOqOhtGuxUcGRzafHgZqUkc8ARde5cNZs/iHlMWc6thws39NJeK8r
+	MBlOIJqeTgWErECYLrO1Xx0hgKVmj8EOiBFjMTi/OcW+tF3ng3c4uA1ascqPXtOg
+	tZ7c/aKuG1X0bKEOUkCoXZ8mYDhtZn1XEcLd356LzzNPiVHxq2drZg+o9RKpM4hE
+	9C6nHmeae6bAJLgyOqpJXXmKbqJBzbybRRQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1699598104; x=1699684504; bh=b4ZzDDt0njYwoFJ2ZN/gcE0Je20siJqsd/U
+	27wOBtP8=; b=vQJBwM/4Q+kiuhh5q5uiUBn984CL1QnaJYt/iL2VW0/ZrNgv7Dw
+	pt3ubFwjPXTzgDNLdhifo3Kl+e7YRhloFDFFBHVOgGPRfat/sKxCy4HdIn2cvyMS
+	GcANw8896OG+zqmhoVbMLFv7HLJXpZjdxEeikKeIXaP0glvJDBCZ/QqTFaJJpwg0
+	cK4w4oV89294SWZBr1HwOYHatbcbaaEofFIKgRBvBPPRv/mJfcewgFCOfDtKMfLX
+	M373LsUdUUR/hw81hlQUuMC1563FfZWLk57lva16tpHdQ49zb0+TGIhi7Jg9Oxcp
+	b2NzIk1s1DGyTuFfzSIVev3dyZk71Kyavsg==
+X-ME-Sender: <xms:F89NZZOWVmfxXzKrA54GMxWcixUCFA20aB-3rNHV7yVmxPUD9Eu7JQ>
+    <xme:F89NZb9KoFy1RHMb1tWn6hG6IlJCxUwFcwgmOfrFaNLDOF4UlUr-O950AJW9gwGXD
+    tsYBIPMD627JMrnMqc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedruddvvddgleegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpefgkeeuleegieeghfduudeltdekfeffjeeuleehleefudettddtgfevueef
+    feeigeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:F89NZYTF2_QtmymzjURWMjHCidNomPURzOfAobg3D7_6_dLQ9lNCRA>
+    <xmx:F89NZVsdm4c-2Z7K9yUctV8nf4P9Xg8U4wH5bY0ZI8uqMC_5jxBNeQ>
+    <xmx:F89NZRcGk09mmJO2SN9RRPnkw43vwqJFQBLo4KvAFMVa6QYOObXudA>
+    <xmx:GM9NZTeGNCC2WGrDNMPW-Sw0pb_IzNuhwOc4OZp1BK-ExtWnawmMWw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id CF212B60089; Fri, 10 Nov 2023 01:35:03 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1108-g3a29173c6d-fm-20231031.005-g3a29173c
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231109092838.721233-1-jolsa@kernel.org> <20231109092838.721233-4-jolsa@kernel.org>
-In-Reply-To: <20231109092838.721233-4-jolsa@kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 9 Nov 2023 21:57:03 -0800
-Message-ID: <CAEf4BzZAh=aW_4bXSJdBZ-UcoCqa0CuejXBdb7+fB9bDP4q+eQ@mail.gmail.com>
-Subject: Re: [PATCHv2 bpf-next 3/6] bpf: Add link_info support for uprobe
- multi link
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>, 
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@chromium.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Yafang Shao <laoar.shao@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <98fe8917-9054-4a46-a777-613d8c640d36@app.fastmail.com>
+In-Reply-To: 
+ <CAADnVQLDOEPmDyipHOH0E6QSg4aJtcHcfghoAQmQtROAMd=imQ@mail.gmail.com>
+References: <202311031651.A7crZEur-lkp@intel.com>
+ <20231106031802.4188-1-laoar.shao@gmail.com>
+ <CAADnVQLDOEPmDyipHOH0E6QSg4aJtcHcfghoAQmQtROAMd=imQ@mail.gmail.com>
+Date: Fri, 10 Nov 2023 07:34:43 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
+ "Yafang Shao" <laoar.shao@gmail.com>
+Cc: "kernel test robot" <lkp@intel.com>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
+ bpf <bpf@vger.kernel.org>,
+ "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Johannes Weiner" <hannes@cmpxchg.org>, "Hao Luo" <haoluo@google.com>,
+ "John Fastabend" <john.fastabend@gmail.com>, "Jiri Olsa" <jolsa@kernel.org>,
+ "KP Singh" <kpsingh@kernel.org>, "Zefan Li" <lizefan.x@bytedance.com>,
+ "Waiman Long" <longman@redhat.com>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ oe-kbuild-all@lists.linux.dev, "kernel test robot" <oliver.sang@intel.com>,
+ "Stanislav Fomichev" <sdf@google.com>, "Kui-Feng Lee" <sinquersw@gmail.com>,
+ "Song Liu" <song@kernel.org>, "Tejun Heo" <tj@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>,
+ "Yosry Ahmed" <yosryahmed@google.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+Subject: Re: [PATCH v2 bpf-next] compiler-gcc: Suppress -Wmissing-prototypes warning
+ for all supported GCC
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 9, 2023 at 1:29=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
+On Thu, Nov 9, 2023, at 19:23, Alexei Starovoitov wrote:
+> On Sun, Nov 5, 2023 at 7:18=E2=80=AFPM Yafang Shao <laoar.shao@gmail.c=
+om> wrote:
+>> In the future, if you wish to suppress warnings that are only support=
+ed on
+>> higher GCC versions, it is advisable to explicitly use "__diag_ignore=
+" to
+>> specify the GCC version you are targeting.
+>>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Closes: https://lore.kernel.org/oe-kbuild-all/202311031651.A7crZEur-l=
+kp@intel.com/
+>> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+>> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+>> Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+>> Cc: Arnd Bergmann <arnd@arndb.de>
+>> ---
+>>  include/linux/compiler-gcc.h | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gc=
+c.h
+>> index 7af9e34..80918bd 100644
+>> --- a/include/linux/compiler-gcc.h
+>> +++ b/include/linux/compiler-gcc.h
+>> @@ -138,7 +138,7 @@
+>>  #endif
+>>
+>>  #define __diag_ignore_all(option, comment) \
+>> -       __diag_GCC(8, ignore, option)
+>> +       __diag(__diag_GCC_ignore option)
 >
-> Adding support to get uprobe_link details through bpf_link_info
-> interface.
->
-> Adding new struct uprobe_multi to struct bpf_link_info to carry
-> the uprobe_multi link details.
->
-> The uprobe_multi.count is passed from user space to denote size
-> of array fields (offsets/ref_ctr_offsets/cookies). The actual
-> array size is stored back to uprobe_multi.count (allowing user
-> to find out the actual array size) and array fields are populated
-> up to the user passed size.
->
-> All the non-array fields (path/count/flags/pid) are always set.
->
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  include/uapi/linux/bpf.h       | 10 +++++
->  kernel/trace/bpf_trace.c       | 69 ++++++++++++++++++++++++++++++++++
->  tools/include/uapi/linux/bpf.h | 10 +++++
->  3 files changed, 89 insertions(+)
->
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 0f6cdf52b1da..05b355da4508 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -6556,6 +6556,16 @@ struct bpf_link_info {
->                         __u32 flags;
->                         __u64 missed;
->                 } kprobe_multi;
-> +               struct {
-> +                       __aligned_u64 path;
-> +                       __aligned_u64 offsets;
-> +                       __aligned_u64 ref_ctr_offsets;
-> +                       __aligned_u64 cookies;
-> +                       __u32 path_size;
-> +                       __u32 count; /* in/out: uprobe_multi offsets/ref_=
-ctr_offsets/cookies count */
-> +                       __u32 flags;
-> +                       __u32 pid;
-> +               } uprobe_multi;
->                 struct {
->                         __u32 type; /* enum bpf_perf_event_type */
->                         __u32 :32;
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 52c1ec3a0467..1ea54f3b3f73 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -3046,6 +3046,7 @@ struct bpf_uprobe_multi_link {
->         u32 cnt;
->         struct bpf_uprobe *uprobes;
->         struct task_struct *task;
-> +       u32 flags;
->  };
->
->  struct bpf_uprobe_multi_run_ctx {
-> @@ -3085,9 +3086,76 @@ static void bpf_uprobe_multi_link_dealloc(struct b=
-pf_link *link)
->         kfree(umulti_link);
->  }
->
-> +static int bpf_uprobe_multi_link_fill_link_info(const struct bpf_link *l=
-ink,
-> +                                               struct bpf_link_info *inf=
-o)
-> +{
-> +       u64 __user *uref_ctr_offsets =3D u64_to_user_ptr(info->uprobe_mul=
-ti.ref_ctr_offsets);
-> +       u64 __user *ucookies =3D u64_to_user_ptr(info->uprobe_multi.cooki=
-es);
-> +       u64 __user *uoffsets =3D u64_to_user_ptr(info->uprobe_multi.offse=
-ts);
-> +       u64 __user *upath =3D u64_to_user_ptr(info->uprobe_multi.path);
-> +       u32 upath_size =3D info->uprobe_multi.path_size;
-> +       struct bpf_uprobe_multi_link *umulti_link;
-> +       u32 ucount =3D info->uprobe_multi.count;
-> +       int err =3D 0, i;
-> +       long left;
-> +
-> +       if (!upath ^ !upath_size)
-> +               return -EINVAL;
-> +
-> +       if (!uoffsets ^ !ucount)
+> Arnd,
+> does this look good to you?
 
-uoffsets is not the only one that requires ucount, right?
+Yes, this is good. We could do the same thing for=20
+clang already, but it doesn't make a huge difference.
 
-> +               return -EINVAL;
-> +
-> +       umulti_link =3D container_of(link, struct bpf_uprobe_multi_link, =
-link);
-> +       info->uprobe_multi.count =3D umulti_link->cnt;
-> +       info->uprobe_multi.flags =3D umulti_link->flags;
-> +       info->uprobe_multi.pid =3D umulti_link->task ?
-> +                                task_pid_nr_ns(umulti_link->task, task_a=
-ctive_pid_ns(current)) : 0;
-> +
-> +       if (upath) {
-> +               char *p, *buf;
-> +
-> +               upath_size =3D min_t(u32, upath_size, PATH_MAX);
-> +
-> +               buf =3D kmalloc(upath_size, GFP_KERNEL);
-> +               if (!buf)
-> +                       return -ENOMEM;
-> +               p =3D d_path(&umulti_link->path, buf, upath_size);
-> +               if (IS_ERR(p)) {
-> +                       kfree(buf);
-> +                       return -ENOSPC;
-> +               }
-> +               left =3D copy_to_user(upath, p, buf + upath_size - p);
-> +               kfree(buf);
-> +               if (left)
-> +                       return -EFAULT;
-
-hmm.. I expected the actual path_size to be reported back to the
-user?.. Is there a problem with doing that?
-
-> +       }
-> +
-> +       if (!uoffsets)
-> +               return 0;
-
-why guard by uoffsets? what if users only wanted cookies? I think each
-array should do its own checking and be independent, no?
-
-> +
-> +       if (ucount < umulti_link->cnt)
-> +               err =3D -ENOSPC;
-> +       else
-> +               ucount =3D umulti_link->cnt;
-> +
-> +       for (i =3D 0; i < ucount; i++) {
-> +               if (put_user(umulti_link->uprobes[i].offset, uoffsets + i=
-))
-> +                       return -EFAULT;
-> +               if (uref_ctr_offsets &&
-> +                   put_user(umulti_link->uprobes[i].ref_ctr_offset, uref=
-_ctr_offsets + i))
-> +                       return -EFAULT;
-> +               if (ucookies &&
-> +                   put_user(umulti_link->uprobes[i].cookie, ucookies + i=
-))
-> +                       return -EFAULT;
-> +       }
-> +
-> +       return err;
-> +}
-> +
->  static const struct bpf_link_ops bpf_uprobe_multi_link_lops =3D {
->         .release =3D bpf_uprobe_multi_link_release,
->         .dealloc =3D bpf_uprobe_multi_link_dealloc,
-> +       .fill_link_info =3D bpf_uprobe_multi_link_fill_link_info,
->  };
->
->  static int uprobe_prog_run(struct bpf_uprobe *uprobe,
-> @@ -3276,6 +3344,7 @@ int bpf_uprobe_multi_link_attach(const union bpf_at=
-tr *attr, struct bpf_prog *pr
->         link->uprobes =3D uprobes;
->         link->path =3D path;
->         link->task =3D task;
-> +       link->flags =3D flags;
->
->         bpf_link_init(&link->link, BPF_LINK_TYPE_UPROBE_MULTI,
->                       &bpf_uprobe_multi_link_lops, prog);
-> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-> index 0f6cdf52b1da..05b355da4508 100644
-> --- a/tools/include/uapi/linux/bpf.h
-> +++ b/tools/include/uapi/linux/bpf.h
-> @@ -6556,6 +6556,16 @@ struct bpf_link_info {
->                         __u32 flags;
->                         __u64 missed;
->                 } kprobe_multi;
-> +               struct {
-> +                       __aligned_u64 path;
-> +                       __aligned_u64 offsets;
-> +                       __aligned_u64 ref_ctr_offsets;
-> +                       __aligned_u64 cookies;
-> +                       __u32 path_size;
-> +                       __u32 count; /* in/out: uprobe_multi offsets/ref_=
-ctr_offsets/cookies count */
-> +                       __u32 flags;
-> +                       __u32 pid;
-> +               } uprobe_multi;
->                 struct {
->                         __u32 type; /* enum bpf_perf_event_type */
->                         __u32 :32;
-> --
-> 2.41.0
->
+Acked-by: Arnd Bergmann <arnd@arndb.de>
