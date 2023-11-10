@@ -1,137 +1,221 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FBFC7F6
-	for <bpf@vger.kernel.org>; Fri, 10 Nov 2023 00:27:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204932D7C
-	for <bpf@vger.kernel.org>; Thu,  9 Nov 2023 16:27:00 -0800 (PST)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A9MYCAY013908
-	for <bpf@vger.kernel.org>; Thu, 9 Nov 2023 16:27:00 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3u7w3e41dv-5
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 09 Nov 2023 16:26:59 -0800
-Received: from twshared34392.14.frc2.facebook.com (2620:10d:c0a8:1c::11) by
- mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Thu, 9 Nov 2023 16:26:55 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 6ABD13B3FA051; Thu,  9 Nov 2023 16:26:43 -0800 (PST)
-From: Andrii Nakryiko <andrii@kernel.org>
-To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@kernel.org>
-CC: <andrii@kernel.org>, <kernel-team@meta.com>,
-        Eduard Zingerman
-	<eddyz87@gmail.com>
-Subject: [PATCH v2 bpf 2/3] bpf: fix precision backtracking instruction iteration
-Date: Thu, 9 Nov 2023 16:26:37 -0800
-Message-ID: <20231110002638.4168352-3-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231110002638.4168352-1-andrii@kernel.org>
-References: <20231110002638.4168352-1-andrii@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84597EA0
+	for <bpf@vger.kernel.org>; Fri, 10 Nov 2023 00:56:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=obs-cr.20230601.gappssmtp.com header.i=@obs-cr.20230601.gappssmtp.com header.b="bvd10MN+"
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5FD23859
+	for <bpf@vger.kernel.org>; Thu,  9 Nov 2023 16:56:18 -0800 (PST)
+Received: by mail-qv1-xf35.google.com with SMTP id 6a1803df08f44-675b844adc7so9009086d6.0
+        for <bpf@vger.kernel.org>; Thu, 09 Nov 2023 16:56:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=obs-cr.20230601.gappssmtp.com; s=20230601; t=1699577778; x=1700182578; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4dG/hRfNgimQHSL2EWxSgb1064gOdk/BgJkC+YiWFos=;
+        b=bvd10MN+lvP0xsjo+0S9ix6F6oCyXCqE1rEXC3A+uRYDBNr44Q7SqPIYC1V2BnP/Pb
+         aI2nC4NdBJ/KjRtOmxAkJRLEi/TgQjqtAT4TJsMRKtWJKpInH6O9PpYbhzJrvDyv6uup
+         ToY/cEtWbULthCBYgLAhCB4pg6RivzOw1M3a5QlbF1da+o4YZC7HO3IMDOmIzKmiqSzE
+         WqzfUJ3R/W87uzlJh+KDGGM/IpLwa3tBdQpSfGKEIR/+OrID51blyw2lFn6D8YQzwKoo
+         fMRi6VU8PNMXd4zlKT8Qtus+lAX8BzJRFs4o322fz1zbNusbq+NEYppQ3JSqAohpSG+T
+         M+wQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699577778; x=1700182578;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4dG/hRfNgimQHSL2EWxSgb1064gOdk/BgJkC+YiWFos=;
+        b=Rg1qU34/gUg8mm+iAenpIADvNQggcVEkdlfzZtVLZ78uCNcInmTJ31iyxjf3GbCHVt
+         LczHNre5/mY86sMsolEA4FwjPHF5X2wIIW1JU4zUzAvEr1jGpXA+i26ZR91W2wGS0ZL1
+         V1ExNTIh5XT1U4J/ZyxNnGxwEs6mJxboLv+qAVXRwx0k0apHiO8MVm79/3Sq0gjgtTAM
+         ZSG2J1WCsKuW3fcrax3AEtd6upmetFZy0rp9nv0dTJVL/EZYQ1kVubk8w7lBHs64t8oD
+         +W2PS1g1FrgNfsvNSIck6eC8xieHcafUMKIxIW259ZZTjtgH1K7bJPDHpYB6nml0fEAS
+         F35w==
+X-Gm-Message-State: AOJu0Yy1ZX2ujhepdCizAltM1FFDmVopFxhqzGK4SA3VEEXjynDZjQ6/
+	BGG8+FvrI+KnEgcBp6VgRro8oc1bcob0uLt1m/FR/g==
+X-Google-Smtp-Source: AGHT+IE6yoP7EoJEQZbJNmru7YZxS14UCc93dTurRKruh7wPnrooQYAGRTtVXXoUgqdzfrzeBpIGdj5tTIMXQz57+u8=
+X-Received: by 2002:a05:6214:c81:b0:65b:2660:f577 with SMTP id
+ r1-20020a0562140c8100b0065b2660f577mr5927736qvr.3.1699577777908; Thu, 09 Nov
+ 2023 16:56:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <CADx9qWgqfQdHSVn0RMMz7M2jp5pKP-bnnc7GAfFD4QbP4eFA4w@mail.gmail.com>
+ <20231103212024.327833-1-hawkinsw@obs.cr> <CAADnVQLztq5W9qmGUBQeRBUJeCmTcc9H-OXCCJJzn=0baz+8_Q@mail.gmail.com>
+ <CADx9qWiQA3U+j-QoZPh7z66_2iNv6B51WXmd60Y-6GKhg+k0=w@mail.gmail.com>
+ <CAADnVQKXz-Y_ykNXa-sgSjo2r6F-vuO0Jx=9zHzG7j3-ZKhGYA@mail.gmail.com>
+ <CADx9qWj0fWWhT4OBLqy9MJ=hSZwSfdWvsn+9AqxmvE_DuEGCTg@mail.gmail.com>
+ <CAADnVQ+w5C_MgPh2FVK=YOXrJ2LuqHzn88jFiR+yeHzB=MBoLw@mail.gmail.com>
+ <CADx9qWgps=T8COiFYTFPKObSUkMo9kaOKMRVub8quN_MkFM_LA@mail.gmail.com>
+ <CAADnVQLhJh+qSc=xg5WDCfFzD-SO7KtoBz5MyQZUxEY0foY6aw@mail.gmail.com>
+ <CADx9qWh2Q8fxR51UmE7AiWoRykA1VK70jHaNiry5KpNHUbQYhg@mail.gmail.com> <CAADnVQKY+B3n3CXPwg+9PbyyNvfR0DNiSsGDMh-uNA-obK6yiw@mail.gmail.com>
+In-Reply-To: <CAADnVQKY+B3n3CXPwg+9PbyyNvfR0DNiSsGDMh-uNA-obK6yiw@mail.gmail.com>
+From: Will Hawkins <hawkinsw@obs.cr>
+Date: Thu, 9 Nov 2023 19:56:07 -0500
+Message-ID: <CADx9qWj48yftWY3mP3Df3TxC2uk7Fa4b_y=uhv=QQQS4sMtAGQ@mail.gmail.com>
+Subject: Re: [Bpf] [PATCH v3] bpf, docs: Add additional ABI working draft base text
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@ietf.org, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: atrgbvE3n5crgPHBiONGvkv7E9jsc3y2
-X-Proofpoint-GUID: atrgbvE3n5crgPHBiONGvkv7E9jsc3y2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-09_17,2023-11-09_01,2023-05-22_02
 
-Fix an edge case in __mark_chain_precision() which prematurely stops
-backtracking instructions in a state if it happens that state's first
-and last instruction indexes are the same. This situations doesn't
-necessarily mean that there were no instructions simulated in a state,
-but rather that we starting from the instruction, jumped around a bit,
-and then ended up at the same instruction before checkpointing or
-marking precision.
-
-To distinguish between these two possible situations, we need to consult
-jump history. If it's empty or contain a single record "bridging" parent
-state and first instruction of processed state, then we indeed
-backtracked all instructions in this state. But if history is not empty,
-we are definitely not done yet.
-
-Move this logic inside get_prev_insn_idx() to contain it more nicely.
-Use -ENOENT return code to denote "we are out of instructions"
-situation.
-
-This bug was exposed by verifier_loop1.c's bounded_recursion subtest, onc=
+On Thu, Nov 9, 2023 at 1:31=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Wed, Nov 8, 2023 at 3:57=E2=80=AFPM Will Hawkins <hawkinsw@obs.cr> wro=
+te:
+> >
+> > On Wed, Nov 8, 2023 at 2:51=E2=80=AFPM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > On Wed, Nov 8, 2023 at 2:13=E2=80=AFAM Will Hawkins <hawkinsw@obs.cr>=
+ wrote:
+> > > >
+> > > > On Tue, Nov 7, 2023 at 8:17=E2=80=AFPM Alexei Starovoitov
+> > > > <alexei.starovoitov@gmail.com> wrote:
+> > > > >
+> > > > > On Tue, Nov 7, 2023 at 11:56=E2=80=AFAM Will Hawkins <hawkinsw@ob=
+s.cr> wrote:
+> > > > > >
+> > > > > > On Mon, Nov 6, 2023 at 3:38=E2=80=AFAM Alexei Starovoitov
+> > > > > > <alexei.starovoitov@gmail.com> wrote:
+> > > > > > >
+> > > > > > > On Sun, Nov 5, 2023 at 4:17=E2=80=AFPM Will Hawkins <hawkinsw=
+@obs.cr> wrote:
+> > > > > > > >
+> > > > > > > > On Sun, Nov 5, 2023 at 4:51=E2=80=AFAM Alexei Starovoitov
+> > > > > > > > <alexei.starovoitov@gmail.com> wrote:
+> > > > > > > > >
+> > > > > > > > > On Fri, Nov 3, 2023 at 2:20=E2=80=AFPM Will Hawkins <hawk=
+insw@obs.cr> wrote:
+> > > > > > > > > > +
+> > > > > > > > > > +The ABI is specified in two parts: a generic part and =
+a processor-specific part.
+> > > > > > > > > > +A pairing of generic ABI with the processor-specific A=
+BI for a certain
+> > > > > > > > > > +instantiation of a BPF machine represents a complete b=
+inary interface for BPF
+> > > > > > > > > > +programs executing on that machine.
+> > > > > > > > > > +
+> > > > > > > > > > +This document is the generic ABI and specifies the par=
+ameters and behavior
+> > > > > > > > > > +common to all instantiations of BPF machines. In addit=
+ion, it defines the
+> > > > > > > > > > +details that must be specified by each processor-speci=
+fic ABI.
+> > > > > > > > > > +
+> > > > > > > > > > +These psABIs are the second part of the ABI. Each inst=
+antiation of a BPF
+> > > > > > > > > > +machine must describe the mechanism through which bina=
+ry interface
+> > > > > > > > > > +compatibility is maintained with respect to the issues=
+ highlighted by this
+> > > > > > > > > > +document. However, the details that must be defined by=
+ a psABI are a minimum --
+> > > > > > > > > > +a psABI may specify additional requirements for binary=
+ interface compatibility
+> > > > > > > > > > +on a platform.
+> > > > > > > > >
+> > > > > > > > > I don't understand what you are trying to say in the abov=
+e.
+> > > > > > > > > In my mind there is only one BPF psABI and it doesn't hav=
 e
-the next fix in this patch set is applied.
+> > > > > > > > > generic and processor parts. There is only one "processor=
+".
+> > > > > > > > > BPF is such a processor.
+> > > > > > > >
+> > > > > > > > What I was trying to say was that the document here describ=
+es a
+> > > > > > > > generic ABI. In this document there will be areas that are =
+specific to
+> > > > > > > > different implementations and those would be considered pro=
+cessor
+> > > > > > > > specific. In other words, the ubpf runtime could define tho=
+se things
+> > > > > > > > differently than the rbpf runtime which, in turn, could def=
+ine those
+> > > > > > > > things differently than the kernel's implementation.
+> > > > > > >
+> > > > > > > I see what you mean. There is only one BPF psABI. There canno=
+t be two.
+> > > > > > > ubpf can decide not to follow it, but it could only mean that
+> > > > > > > it's non conformant and not compatible.
+> > > > > >
+> > > > > > Okay. That was not how I was structuring the ABI. I thought we =
+had
+> > > > > > decided that, as the document said, an instantiation of a machi=
+ne had
+> > > > > > to
+> > > > > >
+> > > > > > 1. meet the gABI
+> > > > > > 2. specify its requirements vis a vis the psABI
+> > > > > > 3. (optionally) describe other requirements.
+> > > > > >
+> > > > > > If that is not what we decided then we will have to restructure=
+ the document.
+> > > > >
+> > > > > This abi.rst file is the beginning of "BPF psABI" document.
+> > > > > We probably should rename it to psabi.rst to avoid confusion.
+> > > > > See my slides from IETF 118. I hope they explain what "BPF psABI"=
+ is for.
+> > > >
+> > > > Of course they do! Thank you! My only question: In the language I w=
+as
+> > > > using, I was taking a cue from the System V world where there is a
+> > > > Generic ABI and a psABI. The Generic ABI applies to all System V
+> > > > compatible systems and defines certain processor-specific details t=
+hat
+> > > > each platform must specify to define a complete ABI. In particular,=
+ I
+> > > > took this language as inspiration
+> > > >
+> > > > """
+> > > > The System V ABI is composed of two basic parts: A generic part of =
+the
+> > > > specification describes those parts of the interface that remain
+> > > > constant across all hardware implementations of System V, and a
+> > > > processor-specific part of the specification describes the parts of
+> > > > the specification that are specific to a particular processor
+> > > > architecture. Together, the generic ABI (or gABI) and the processor
+> > > > specific supplement (or psABI) provide a complete interface
+> > > > specification for compiled application programs on systems that sha=
+re
+> > > > a common hardware architecture.
+> > > > """
+> > >
+> > > I see where you got the inspiration from, but it's not applicable
+> > > in the BPF case. BPF is such one and only processor.
+> > > We're not changing nor adding anything to Sys V generic parts.
+> >
+> > That was not quite what I was saying. What I started to draft is
+> > something (yes, modeled after the Sys V (g/ps)ABI) but _brand new_ for
+> > BPF. I think that is where I have been failing to communicate
+> > correctly. What I was proposing was inspired by other ABIs but
+> > completely separate and orthogonal. That is the reason for the
+> > document speaking of a BPF Machine like:
+> >
+> > ABI-conforming BPF Machine Instantiation: A physical or logical realiza=
+tion
+> >    of a computer system capable of executing BPF programs consistently =
+with the
+> >    specifications outlined in this document.
+> >
+> > because it is a (not necessarily physical) entity that executes BPF
+> > programs (i.e. a "BPF CPU") for which we are specifying the binary
+> > compatibility. In other words, the document as it stands is proposing
+> > a gABI where
+> >
+> > the kernel's "BPF CPU" would have its own psABI
+> > ubpf's "BPF CPU" would have its own psABI
+>
+> and how would you expect that to work?
+> psABI is a compiler spec in the first place.
+> The user would use clang -O2 -target bpf_kernel vs -target bpf_ubpf ?
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Fixes: b5dc0163d8fd ("bpf: precise scalar_value tracking")
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- kernel/bpf/verifier.c | 21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index b87715b364fd..484c742f733e 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3516,12 +3516,29 @@ static int push_jmp_history(struct bpf_verifier_e=
-nv *env,
-=20
- /* Backtrack one insn at a time. If idx is not at the top of recorded
-  * history then previous instruction came from straight line execution.
-+ * Return -ENOENT if we exhausted all instructions within given state.
-+ *
-+ * It's legal to have a bit of a looping with the same starting and endi=
-ng
-+ * insn index within the same state, e.g.: 3->4->5->3, so just because c=
-urrent
-+ * instruction index is the same as state's first_idx doesn't mean we ar=
-e
-+ * done. If there is still some jump history left, we should keep going.=
- We
-+ * need to take into account that we might have a jump history between g=
-iven
-+ * state's parent and itself, due to checkpointing. In this case, we'll =
-have
-+ * history entry recording a jump from last instruction of parent state =
-and
-+ * first instruction of given state.
-  */
- static int get_prev_insn_idx(struct bpf_verifier_state *st, int i,
- 			     u32 *history)
- {
- 	u32 cnt =3D *history;
-=20
-+	if (i =3D=3D st->first_insn_idx) {
-+		if (cnt =3D=3D 0)
-+			return -ENOENT;
-+		if (cnt =3D=3D 1 && st->jmp_history[0].idx =3D=3D i)
-+			return -ENOENT;
-+	}
-+
- 	if (cnt && st->jmp_history[cnt - 1].idx =3D=3D i) {
- 		i =3D st->jmp_history[cnt - 1].prev_idx;
- 		(*history)--;
-@@ -4401,10 +4418,10 @@ static int __mark_chain_precision(struct bpf_veri=
-fier_env *env, int regno)
- 				 * Nothing to be tracked further in the parent state.
- 				 */
- 				return 0;
--			if (i =3D=3D first_idx)
--				break;
- 			subseq_idx =3D i;
- 			i =3D get_prev_insn_idx(st, i, &history);
-+			if (i =3D=3D -ENOENT)
-+				break;
- 			if (i >=3D env->prog->len) {
- 				/* This can happen if backtracking reached insn 0
- 				 * and there are still reg_mask or stack_mask
---=20
-2.34.1
-
+They could use some other compiler, too.
