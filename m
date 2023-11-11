@@ -1,48 +1,48 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80B00539C
-	for <bpf@vger.kernel.org>; Sat, 11 Nov 2023 02:48:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D027569F
+	for <bpf@vger.kernel.org>; Sat, 11 Nov 2023 02:49:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O+jiY3TF"
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E9B3C15;
-	Fri, 10 Nov 2023 18:48:57 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-6b1d1099a84so2721372b3a.1;
-        Fri, 10 Nov 2023 18:48:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hiXgQNtn"
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5A64695;
+	Fri, 10 Nov 2023 18:49:02 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-282e3beb418so2519978a91.0;
+        Fri, 10 Nov 2023 18:49:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699670936; x=1700275736; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1699670942; x=1700275742; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=047RScGgMjhfhvkeVSqTgX+A9EaMBWDmBq31ySPa+B0=;
-        b=O+jiY3TFnZrwNUsQ2sOpDv0XttRsKbZDX6WUQnF1eYbv56lIa5InU7jeylczt02leP
-         OMn/+KuhU/ja2eUs22nywaoDmRXRqWdVZoDTIOjOHhwHRbjg7r3SkxAbdEP2onwiojwI
-         5gY74lKKoJjiY5MauXai+Y74TJfMkZwhCjcjYSWhvfYoNKx0xU+s5n9UkTiRxtqGq15o
-         eaKd5mEdCxsjHgai6Z03ATSVCEweEUutB6pGQmQ60SXD8ELUIb0nez3ms6B2hN3LgLqN
-         htMYxVPVlGlTORZjOkMjrK9o1Llo39vfmRwvQl2zmb5vG0wyWNjVCGDwDTpUXhfdVXTh
-         y0IQ==
+        bh=7MM//pMBlM4GuAAmAj+tt8tgOSwOthT3D7HBNuCDy30=;
+        b=hiXgQNtnva67FnrFokQ2LyzhexqwjxTw1xmr+06qntH5hTE9OVq4wEham/V9RRraJT
+         1NXv0fOl4kwiXWlJD0q+L0Y1wfNoeJ6NBgP6a6lBPOv4iFgr/YhY6G/kcvO5/SXFgFf8
+         0qMJ9O9y3qslKEqVatpIGKrE5APv2TjgIK8tUVKsGYy/vWS6g18gyNL6rHBpJodgehN6
+         a4g7dGbtEKb4Wu2e0gBOf8RYl+g0Ku1Qi72yaXWKQl03iMECHwIMdE8Lr7w+FL611u+B
+         hTN3YbbnsomlNNbimiORn8DSh/fUowoD0VxkqN3rMjzThTdiGSSFHi/xq1ap5KnWnuFw
+         nD3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699670936; x=1700275736;
+        d=1e100.net; s=20230601; t=1699670942; x=1700275742;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=047RScGgMjhfhvkeVSqTgX+A9EaMBWDmBq31ySPa+B0=;
-        b=o6KO1UrZtyUZiXr1d/m3VY6pYQnYRxzAvN9ON1Saqo+GyVlGYOLcdchQRsnuvXJWaz
-         4iRLWt1RtuzBQp0svJCtt80Qs+7tLCdF/7zo1kj9AAk4F7VNa+xHei2AITV1j/Pcyt79
-         0fBj+rBxwooF5RTqWhrsMeKM28FSUeCk3w7zEejOer5OvnQ6vxDDhQYE/ndrTnyP/Gyx
-         XhAwoj38wF4WxZtqCika97td6Rj0jr54nb8BfBQ5X3pNLU4EFO2PJQMZyrfjrnJnHSmi
-         YXcP1GqO45MipxQCquU02Pq/wr+sM2srL1mSAdsy1HYzgcPrWGsRZS0XBdhORKUgzvlH
-         sR9A==
-X-Gm-Message-State: AOJu0Yy1wNv/KgdSiSCm7QrIG+X9cGMbX2gS4uAnaNB8t7rQNZtIAorx
-	Z8Q5Pu9Pw7LEXRQueChk8SU=
-X-Google-Smtp-Source: AGHT+IHQLCJahNyA+ScLSn5pPMMwd9BjDvwBNhTkSwF7/JXPfbg14Sz/EvG6j536DODoFObhzAajQw==
-X-Received: by 2002:a05:6a00:10c8:b0:6b8:a6d6:f51a with SMTP id d8-20020a056a0010c800b006b8a6d6f51amr925662pfu.31.1699670936344;
-        Fri, 10 Nov 2023 18:48:56 -0800 (PST)
+        bh=7MM//pMBlM4GuAAmAj+tt8tgOSwOthT3D7HBNuCDy30=;
+        b=Qd47Nhnou/gmUwROvy57HxV3kziXMfHkDG50DigWwSFVEk5smZS+xfUb02daj72/R6
+         2IqLbuJQ4pj1bcM5Iksj/befnYapVj/52qb8qKpBDE4ZatrcUMYYJDyybLvcPfKeYE+1
+         bfd+83mS4Y1XHIynzfyBg+7qtHyas733ROSrPK59tVI88izhCNd7j8sakw0e5pXK3UWh
+         V5121yC3NmUcRxc60HnN/pj9rElv5VyABI1GyU8TZmJx9AkVOcURW16Il9vKpVP3V8Jx
+         ECxv+gXtpIKOKPeGsJeaPfo7bIcEbvYLsbc0Oy7hre7WfftkN60rmICPSiwhGPeQw2No
+         UEtQ==
+X-Gm-Message-State: AOJu0Yy16Dq4K0SP/P80Yp9HLj6oOKWjmjgNEn1UMNDg+wzAacVqYjLk
+	5Ej57tXBIQMasSiJL1tqlF4=
+X-Google-Smtp-Source: AGHT+IEB115bUvoSNdGOFPRlM4qdOvbtXR/o4Rr/HjPysjUYromP3qNqbNUvWFzBQjE6+Riw4en8aQ==
+X-Received: by 2002:a17:90b:4b0c:b0:279:2dac:80b3 with SMTP id lx12-20020a17090b4b0c00b002792dac80b3mr845348pjb.44.1699670942155;
+        Fri, 10 Nov 2023 18:49:02 -0800 (PST)
 Received: from localhost ([2620:10d:c090:400::4:7384])
-        by smtp.gmail.com with ESMTPSA id e14-20020a62ee0e000000b00688435a9915sm382537pfi.189.2023.11.10.18.48.55
+        by smtp.gmail.com with ESMTPSA id h10-20020a170902f54a00b001c5f7e06256sm351779plf.152.2023.11.10.18.49.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Nov 2023 18:48:55 -0800 (PST)
+        Fri, 10 Nov 2023 18:49:01 -0800 (PST)
 Sender: Tejun Heo <htejun@gmail.com>
 From: Tejun Heo <tj@kernel.org>
 To: torvalds@linux-foundation.org,
@@ -76,9 +76,9 @@ Cc: linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
 	kernel-team@meta.com,
 	Tejun Heo <tj@kernel.org>
-Subject: [PATCH 01/36] cgroup: Implement cgroup_show_cftypes()
-Date: Fri, 10 Nov 2023 16:47:27 -1000
-Message-ID: <20231111024835.2164816-2-tj@kernel.org>
+Subject: [PATCH 04/36] sched: Add sched_class->reweight_task()
+Date: Fri, 10 Nov 2023 16:47:30 -1000
+Message-ID: <20231111024835.2164816-5-tj@kernel.org>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231111024835.2164816-1-tj@kernel.org>
 References: <20231111024835.2164816-1-tj@kernel.org>
@@ -90,16 +90,18 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Implement cgroup_show_cftypes() which shows and hides all cgroup files
-associated with the specified set of cgroup file types. CFTYPE_HIDDEN flag
-is added so that files can be created hidden from the get-go.
+Currently, during a task weight change, sched core directly calls
+reweight_task() defined in fair.c if @p is on CFS. Let's make it a proper
+sched_class operation instead. CFS's reweight_task() is renamed to
+reweight_task_fair() and now called through sched_class.
 
-cgroup_show_cftypes() can be used whether the cftypes are added or not. It
-also combines with cgroup_show_file() so that a given file is visible iff
-both its cftype and cfile are visible.
+While it turns a direct call into an indirect one, set_load_weight() isn't
+called from a hot path and this change shouldn't cause any noticeable
+difference. This will be used to implement reweight_task for a new BPF
+extensible sched_class so that it can keep its cached task weight
+up-to-date.
 
-This will be used by a new sched_class to selectively show and hide CPU
-controller interface files depending on whether they're supported.
+This will be used by a new sched_class to track weight changes.
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
 Reviewed-by: David Vernet <dvernet@meta.com>
@@ -107,191 +109,69 @@ Acked-by: Josh Don <joshdon@google.com>
 Acked-by: Hao Luo <haoluo@google.com>
 Acked-by: Barret Rhoden <brho@google.com>
 ---
- include/linux/cgroup-defs.h |  8 +++
- include/linux/cgroup.h      |  1 +
- kernel/cgroup/cgroup.c      | 97 ++++++++++++++++++++++++++++++++++---
- 3 files changed, 99 insertions(+), 7 deletions(-)
+ kernel/sched/core.c  | 4 ++--
+ kernel/sched/fair.c  | 3 ++-
+ kernel/sched/sched.h | 4 ++--
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
-index 265da00a1a8b..6194d7c13573 100644
---- a/include/linux/cgroup-defs.h
-+++ b/include/linux/cgroup-defs.h
-@@ -127,12 +127,18 @@ enum {
- 	CFTYPE_WORLD_WRITABLE	= (1 << 4),	/* (DON'T USE FOR NEW FILES) S_IWUGO */
- 	CFTYPE_DEBUG		= (1 << 5),	/* create when cgroup_debug */
- 
-+	CFTYPE_HIDDEN		= (1 << 6),	/* file type hidden, see cgroup_show_cftypes() */
-+
- 	/* internal flags, do not use outside cgroup core proper */
- 	__CFTYPE_ONLY_ON_DFL	= (1 << 16),	/* only on default hierarchy */
- 	__CFTYPE_NOT_ON_DFL	= (1 << 17),	/* not on default hierarchy */
- 	__CFTYPE_ADDED		= (1 << 18),
- };
- 
-+enum cfile_flags {
-+	CFILE_HIDDEN		= (1 << 0),	/* file instance hidden */
-+};
-+
- /*
-  * cgroup_file is the handle for a file instance created in a cgroup which
-  * is used, for example, to generate file changed notifications.  This can
-@@ -140,7 +146,9 @@ enum {
-  */
- struct cgroup_file {
- 	/* do not access any fields from outside cgroup core */
-+	struct cftype *cft;
- 	struct kernfs_node *kn;
-+	unsigned int flags;
- 	unsigned long notified_at;
- 	struct timer_list notify_timer;
- };
-diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
-index 0ef0af66080e..d164eaeacfa6 100644
---- a/include/linux/cgroup.h
-+++ b/include/linux/cgroup.h
-@@ -113,6 +113,7 @@ int cgroup_transfer_tasks(struct cgroup *to, struct cgroup *from);
- int cgroup_add_dfl_cftypes(struct cgroup_subsys *ss, struct cftype *cfts);
- int cgroup_add_legacy_cftypes(struct cgroup_subsys *ss, struct cftype *cfts);
- int cgroup_rm_cftypes(struct cftype *cfts);
-+void cgroup_show_cftype(struct cftype *cft, bool show);
- void cgroup_file_notify(struct cgroup_file *cfile);
- void cgroup_file_show(struct cgroup_file *cfile, bool show);
- 
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index 484adb375b15..d00fa84edd4c 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -4210,10 +4210,13 @@ static int cgroup_add_file(struct cgroup_subsys_state *css, struct cgroup *cgrp,
- 		return ret;
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index b5fb4b894477..09e6ce45e65a 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -1319,8 +1319,8 @@ static void set_load_weight(struct task_struct *p, bool update_load)
+ 	 * SCHED_OTHER tasks have to update their load when changing their
+ 	 * weight
+ 	 */
+-	if (update_load && p->sched_class == &fair_sched_class) {
+-		reweight_task(p, prio);
++	if (update_load && p->sched_class->reweight_task) {
++		p->sched_class->reweight_task(task_rq(p), p, prio);
+ 	} else {
+ 		load->weight = scale_load(sched_prio_to_weight[prio]);
+ 		load->inv_weight = sched_prio_to_wmult[prio];
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 8767988242ee..8ec0c040e9e8 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -3717,7 +3717,7 @@ static void reweight_entity(struct cfs_rq *cfs_rq, struct sched_entity *se,
  	}
- 
-+	kernfs_show(kn, !(cft->flags & CFTYPE_HIDDEN));
-+
- 	if (cft->file_offset) {
- 		struct cgroup_file *cfile = (void *)css + cft->file_offset;
- 
- 		timer_setup(&cfile->notify_timer, cgroup_file_notify_timer, 0);
-+		cfile->cft = cft;
- 
- 		spin_lock_irq(&cgroup_file_kn_lock);
- 		cfile->kn = kn;
-@@ -4489,6 +4492,24 @@ void cgroup_file_notify(struct cgroup_file *cfile)
- 	spin_unlock_irqrestore(&cgroup_file_kn_lock, flags);
  }
  
-+static struct kernfs_node *cfile_kn_get(struct cgroup_file *cfile)
-+{
-+	struct kernfs_node *kn;
-+
-+	spin_lock_irq(&cgroup_file_kn_lock);
-+	kn = cfile->kn;
-+	kernfs_get(kn);
-+	spin_unlock_irq(&cgroup_file_kn_lock);
-+
-+	return kn;
-+}
-+
-+static bool cfile_visible(struct cgroup_file *cfile)
-+{
-+	return !(cfile->cft->flags & CFTYPE_HIDDEN) &&
-+		!(cfile->flags & CFILE_HIDDEN);
-+}
-+
- /**
-  * cgroup_file_show - show or hide a hidden cgroup file
-  * @cfile: target cgroup_file obtained by setting cftype->file_offset
-@@ -4498,15 +4519,20 @@ void cgroup_file_show(struct cgroup_file *cfile, bool show)
+-void reweight_task(struct task_struct *p, int prio)
++static void reweight_task_fair(struct rq *rq, struct task_struct *p, int prio)
  {
- 	struct kernfs_node *kn;
+ 	struct sched_entity *se = &p->se;
+ 	struct cfs_rq *cfs_rq = cfs_rq_of(se);
+@@ -12990,6 +12990,7 @@ DEFINE_SCHED_CLASS(fair) = {
+ 	.task_tick		= task_tick_fair,
+ 	.task_fork		= task_fork_fair,
  
--	spin_lock_irq(&cgroup_file_kn_lock);
--	kn = cfile->kn;
--	kernfs_get(kn);
--	spin_unlock_irq(&cgroup_file_kn_lock);
-+	mutex_lock(&cgroup_mutex);
++	.reweight_task		= reweight_task_fair,
+ 	.prio_changed		= prio_changed_fair,
+ 	.switched_from		= switched_from_fair,
+ 	.switched_to		= switched_to_fair,
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 2e5a95486a42..a66b48bc45ba 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -2259,6 +2259,8 @@ struct sched_class {
+ 	 */
+ 	void (*switched_from)(struct rq *this_rq, struct task_struct *task);
+ 	void (*switched_to)  (struct rq *this_rq, struct task_struct *task);
++	void (*reweight_task)(struct rq *this_rq, struct task_struct *task,
++			      int newprio);
+ 	void (*prio_changed) (struct rq *this_rq, struct task_struct *task,
+ 			      int oldprio);
  
--	if (kn)
--		kernfs_show(kn, show);
-+	if (show)
-+		cfile->flags &= ~CFILE_HIDDEN;
-+	else
-+		cfile->flags |= CFILE_HIDDEN;
+@@ -2416,8 +2418,6 @@ extern void init_sched_dl_class(void);
+ extern void init_sched_rt_class(void);
+ extern void init_sched_fair_class(void);
  
--	kernfs_put(kn);
-+	kn = cfile_kn_get(cfile);
-+	if (kn) {
-+		kernfs_show(kn, cfile_visible(cfile));
-+		kernfs_put(kn);
-+	}
-+
-+	mutex_unlock(&cgroup_mutex);
- }
+-extern void reweight_task(struct task_struct *p, int prio);
+-
+ extern void resched_curr(struct rq *rq);
+ extern void resched_cpu(int cpu);
  
- /**
-@@ -5534,6 +5560,63 @@ static void offline_css(struct cgroup_subsys_state *css)
- 	wake_up_all(&css->cgroup->offline_waitq);
- }
- 
-+/**
-+ * cgroup_show_cftype - show or hide a cgroup file type
-+ * @cft: cftype to show or hide
-+ * @show: whether to show or hide
-+ *
-+ * Sets %CFTYPE_HIDDEN and shows/hides the matching files according to @show.
-+ * @cft may or may not be added at the time of this call. After hiding, it's
-+ * guaranteed that there are no in-flight operations on the hidden files.
-+ */
-+void cgroup_show_cftype(struct cftype *cft, bool show)
-+{
-+	struct cgroup_subsys *ss = cft->ss;
-+	struct cgroup *root = ss ? &ss->root->cgrp : &cgrp_dfl_root.cgrp;
-+	struct cgroup_subsys_state *css;
-+
-+	mutex_lock(&cgroup_mutex);
-+
-+	if (show)
-+		cft->flags &= ~CFTYPE_HIDDEN;
-+	else
-+		cft->flags |= CFTYPE_HIDDEN;
-+
-+	if (!(cft->flags & __CFTYPE_ADDED))
-+		goto out_unlock;
-+
-+	css_for_each_descendant_pre(css, cgroup_css(root, ss)) {
-+		struct cgroup *cgrp = css->cgroup;
-+		struct kernfs_node *kn;
-+
-+		if (!(css->flags & CSS_VISIBLE))
-+			continue;
-+
-+		if (cft->file_offset) {
-+			struct cgroup_file *cfile =
-+				(void *)css + cft->file_offset;
-+
-+			kn = cfile_kn_get(cfile);
-+			if (kn) {
-+				kernfs_show(kn, cfile_visible(cfile));
-+				kernfs_put(kn);
-+			}
-+		} else {
-+			char buf[CGROUP_FILE_NAME_MAX];
-+
-+			kn = kernfs_find_and_get(cgrp->kn,
-+					cgroup_file_name(cgrp, cft, buf));
-+			if (kn) {
-+				kernfs_show(kn, show);
-+				kernfs_put(kn);
-+			}
-+		}
-+	}
-+
-+out_unlock:
-+	mutex_unlock(&cgroup_mutex);
-+}
-+
- /**
-  * css_create - create a cgroup_subsys_state
-  * @cgrp: the cgroup new css will be associated with
 -- 
 2.42.0
 
