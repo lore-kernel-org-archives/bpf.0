@@ -1,48 +1,48 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6367063AC
-	for <bpf@vger.kernel.org>; Sat, 11 Nov 2023 02:49:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A62538B
+	for <bpf@vger.kernel.org>; Sat, 11 Nov 2023 02:49:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AyfWXJx/"
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F434682;
-	Fri, 10 Nov 2023 18:49:01 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id 5614622812f47-3b2e330033fso1480052b6e.3;
-        Fri, 10 Nov 2023 18:49:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hooOxgAK"
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201AB3C15;
+	Fri, 10 Nov 2023 18:49:05 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id 46e09a7af769-6d2fedd836fso1545524a34.1;
+        Fri, 10 Nov 2023 18:49:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699670940; x=1700275740; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1699670944; x=1700275744; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lUHH5CPwRNzgz9d7dU60g96xAAx6plF4qt1RwMDTFYk=;
-        b=AyfWXJx/nf0yGRMP0nsYs8CxWdqPg6km98XhkmtQJTLnIIWL8iUItei4XSvlPbiicH
-         TdOrmXygruj+kn4ruP/wxzTIVQCBIW1iIQkIfnf8lHhu2ZiKHWzg/G8M4lnIadnPaUc9
-         VebIu/fsHD1KloX/7r9+pdeZip4xbJbd0EyGjQWkFEpZY97rWcEU0QY7FazAUDh1l1ov
-         EfoNN5VdlJddUVyF4560o506fWUgHUgxnRqlObkXFaQu7VG7w3Rwe59zDE4rXgSccN7N
-         k+qDgEi50lk4ZN3dJimmxZCuXVhiG7k4Prs1yYwlaVzJBEey5o/tcAA+R1qmoSwrCAEL
-         3yfQ==
+        bh=AnvceBwEwQIq3CHNvlwGcK1kEYVCGki32oZyHSsxsJ8=;
+        b=hooOxgAKhia+HAaGBUOfccSOxoPs8yonOps4gZYhG3j37PVTOp7ADAxou68ZbLRagT
+         QpOXNueMpBnA+6Cmga1HWucOy3YkUJt3ke0QwJ+S/qE4sYvaP5axgc/g3tqtB1mKwpaC
+         WbXzEQMGEtlJ9RK7bBRS5lKExrULTB9fZtATUfyR9I587ceDHTJafeTyUze3Q6ol6Ejf
+         aUZgXbkXIFjtJNkYguRb0U6V85o8xooYnzL0BVLJ20QMeh5bJs6Ui3XCvGalWBIa2hsl
+         KIigLpxrEfPUZuQPocnETsFTZKh1CGehrWL3gZGWV528Sqgnv9WPwsCgwqxa/j/TGaD7
+         lBdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699670940; x=1700275740;
+        d=1e100.net; s=20230601; t=1699670944; x=1700275744;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=lUHH5CPwRNzgz9d7dU60g96xAAx6plF4qt1RwMDTFYk=;
-        b=BU+qE0g7qMxO7DCe2WNbXIS0UKZudvthsRaL65rav7c7+++Yn0/u2jR+yJXA3d9FRy
-         8aaPSabpkmTz22NIJK/J+6U9cuGSsIQPGjKURINuZe0C/oaQmnT2h/cgXkHPWmj7G48a
-         apYiiH8himBU/WfVMheKb1PsNw1GkmN0dlnt8Dev6IRmQNRalzSDtHO3XCG92ClNFWaa
-         /99lSALBASXkCzonRfYaDcyw1KLv7I42DPRiF953utp4965A+NJSdzM6pCVxWrTfuZeJ
-         SGeR43s6OZig6rLbRigE47PKG/0Mzac/EkEXaK53x8G+hlHyquzasZm37dpODko7ZqBp
-         Bbkg==
-X-Gm-Message-State: AOJu0Yzqu//QLys788FgyFxCmvC8WX9ynthXkmxZRS5SOYnkaeHwG70z
-	TqK6DlHHePrs3eysyZG8mx8=
-X-Google-Smtp-Source: AGHT+IFbmEdgitsdOKyuKkl4DTbfi0zHNg+vgGNMPvrhljoXQ93piekXo8Cuww3jOYS4REPIH8lzFQ==
-X-Received: by 2002:a05:6808:4395:b0:3a7:1d15:28fe with SMTP id dz21-20020a056808439500b003a71d1528femr1041649oib.56.1699670940265;
-        Fri, 10 Nov 2023 18:49:00 -0800 (PST)
+        bh=AnvceBwEwQIq3CHNvlwGcK1kEYVCGki32oZyHSsxsJ8=;
+        b=L6GUF9qC9VgLWWem0lPH1LrjewmzW7OqXzKrVuufe6mnNAuLRyMMrJJNvTQ2dGtDyM
+         kCEsZ2m/hdvHlw9Gbbf5RMFbe054jv2z7k99ZqYFoeyBVGgxwQ8+t0hzGpuenqhbH2VG
+         Shg6lycNrAVopJzpRekgyQP04sTsaaYGz1jR5Mvb50JAlDgx67ylkhL0RfSxnicLwDN4
+         /AiJ3a1nyBUW1pMaeUPtRK8iR2VXWkD81VZuFdOw7wC+WcFOmbXEkxZONZSP0Nia3uyj
+         Fpc7XiCdkqvSmnryb53Z1wUyOZnLJBaPiChbnihjoTfoQVkJGCW2rSSYnSkWH1ICjaWP
+         gAuA==
+X-Gm-Message-State: AOJu0YzYb8fnUoPkUUIxMol1Yd/Ix+cyFGsYCb1bOJiiJW/MZT0905M/
+	rARGv79QkEkJ/3kpIJ9tFNI=
+X-Google-Smtp-Source: AGHT+IHOo89qWbgi/0bNNDKlb9QO/jvkXr/fy8hw1fghaE8Iul3mlya+POS++2KB14WDzaPkJLQhHg==
+X-Received: by 2002:a9d:7318:0:b0:6d4:80e7:7884 with SMTP id e24-20020a9d7318000000b006d480e77884mr850907otk.1.1699670944023;
+        Fri, 10 Nov 2023 18:49:04 -0800 (PST)
 Received: from localhost ([2620:10d:c090:400::4:7384])
-        by smtp.gmail.com with ESMTPSA id 71-20020a63004a000000b0057412d84d25sm408459pga.4.2023.11.10.18.48.59
+        by smtp.gmail.com with ESMTPSA id i4-20020a170902eb4400b001b895336435sm357926pli.21.2023.11.10.18.49.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Nov 2023 18:48:59 -0800 (PST)
+        Fri, 10 Nov 2023 18:49:03 -0800 (PST)
 Sender: Tejun Heo <htejun@gmail.com>
 From: Tejun Heo <tj@kernel.org>
 To: torvalds@linux-foundation.org,
@@ -76,9 +76,9 @@ Cc: linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
 	kernel-team@meta.com,
 	Tejun Heo <tj@kernel.org>
-Subject: [PATCH 03/36] sched: Allow sched_cgroup_fork() to fail and introduce sched_cancel_fork()
-Date: Fri, 10 Nov 2023 16:47:29 -1000
-Message-ID: <20231111024835.2164816-4-tj@kernel.org>
+Subject: [PATCH 05/36] sched: Add sched_class->switching_to() and expose check_class_changing/changed()
+Date: Fri, 10 Nov 2023 16:47:31 -1000
+Message-ID: <20231111024835.2164816-6-tj@kernel.org>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231111024835.2164816-1-tj@kernel.org>
 References: <20231111024835.2164816-1-tj@kernel.org>
@@ -90,19 +90,28 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A new BPF extensible sched_class will need more control over the forking
-process. It wants to be able to fail from sched_cgroup_fork() after the new
-task's sched_task_group is initialized so that the loaded BPF program can
-prepare the task with its cgroup association is established and reject fork
-if e.g. allocation fails.
+When a task switches to a new sched_class, the prev and new classes are
+notified through ->switched_from() and ->switched_to(), respectively, after
+the switching is done.
 
-Allow sched_cgroup_fork() to fail by making it return int instead of void
-and adding sched_cancel_fork() to undo sched_fork() in the error path.
+A new BPF extensible sched_class will have callbacks that allow the BPF
+scheduler to keep track of relevant task states (like priority and cpumask).
+Those callbacks aren't called while a task is on a different sched_class.
+When a task comes back, we wanna tell the BPF progs the up-to-date state
+before the task gets enqueued, so we need a hook which is called before the
+switching is committed.
 
-sched_cgroup_fork() doesn't fail yet and this patch shouldn't cause any
-behavior changes.
+This patch adds ->switching_to() which is called during sched_class switch
+through check_class_changing() before the task is restored. Also, this patch
+exposes check_class_changing/changed() in kernel/sched/sched.h. They will be
+used by the new BPF extensible sched_class to implement implicit sched_class
+switching which is used e.g. when falling back to CFS when the BPF scheduler
+fails or unloads.
 
-v2: Patch description updated to detail the expected use.
+This is a prep patch and doesn't cause any behavior changes. The new
+operation and exposed functions aren't used yet.
+
+v2: Improve patch description w/ details on planned use.
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
 Reviewed-by: David Vernet <dvernet@meta.com>
@@ -110,113 +119,86 @@ Acked-by: Josh Don <joshdon@google.com>
 Acked-by: Hao Luo <haoluo@google.com>
 Acked-by: Barret Rhoden <brho@google.com>
 ---
- include/linux/sched/task.h |  3 ++-
- kernel/fork.c              | 15 ++++++++++-----
- kernel/sched/core.c        |  8 +++++++-
- 3 files changed, 19 insertions(+), 7 deletions(-)
+ kernel/sched/core.c  | 19 ++++++++++++++++---
+ kernel/sched/sched.h |  7 +++++++
+ 2 files changed, 23 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
-index a23af225c898..03d35e3eda3c 100644
---- a/include/linux/sched/task.h
-+++ b/include/linux/sched/task.h
-@@ -61,7 +61,8 @@ extern asmlinkage void schedule_tail(struct task_struct *prev);
- extern void init_idle(struct task_struct *idle, int cpu);
- 
- extern int sched_fork(unsigned long clone_flags, struct task_struct *p);
--extern void sched_cgroup_fork(struct task_struct *p, struct kernel_clone_args *kargs);
-+extern int sched_cgroup_fork(struct task_struct *p, struct kernel_clone_args *kargs);
-+extern void sched_cancel_fork(struct task_struct *p);
- extern void sched_post_fork(struct task_struct *p);
- extern void sched_dead(struct task_struct *p);
- 
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 204bc1c33533..38c5d142c691 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -2472,7 +2472,7 @@ __latent_entropy struct task_struct *copy_process(
- 
- 	retval = perf_event_init_task(p, clone_flags);
- 	if (retval)
--		goto bad_fork_cleanup_policy;
-+		goto bad_fork_sched_cancel_fork;
- 	retval = audit_alloc(p);
- 	if (retval)
- 		goto bad_fork_cleanup_perf;
-@@ -2604,7 +2604,9 @@ __latent_entropy struct task_struct *copy_process(
- 	 * cgroup specific, it unconditionally needs to place the task on a
- 	 * runqueue.
- 	 */
--	sched_cgroup_fork(p, args);
-+	retval = sched_cgroup_fork(p, args);
-+	if (retval)
-+		goto bad_fork_cancel_cgroup;
- 
- 	/*
- 	 * From this point on we must avoid any synchronous user-space
-@@ -2650,13 +2652,13 @@ __latent_entropy struct task_struct *copy_process(
- 	/* Don't start children in a dying pid namespace */
- 	if (unlikely(!(ns_of_pid(pid)->pid_allocated & PIDNS_ADDING))) {
- 		retval = -ENOMEM;
--		goto bad_fork_cancel_cgroup;
-+		goto bad_fork_core_free;
- 	}
- 
- 	/* Let kill terminate clone/fork in the middle */
- 	if (fatal_signal_pending(current)) {
- 		retval = -EINTR;
--		goto bad_fork_cancel_cgroup;
-+		goto bad_fork_core_free;
- 	}
- 
- 	/* No more failure paths after this point. */
-@@ -2732,10 +2734,11 @@ __latent_entropy struct task_struct *copy_process(
- 
- 	return p;
- 
--bad_fork_cancel_cgroup:
-+bad_fork_core_free:
- 	sched_core_free(p);
- 	spin_unlock(&current->sighand->siglock);
- 	write_unlock_irq(&tasklist_lock);
-+bad_fork_cancel_cgroup:
- 	cgroup_cancel_fork(p, args);
- bad_fork_put_pidfd:
- 	if (clone_flags & CLONE_PIDFD) {
-@@ -2774,6 +2777,8 @@ __latent_entropy struct task_struct *copy_process(
- 	audit_free(p);
- bad_fork_cleanup_perf:
- 	perf_event_free_task(p);
-+bad_fork_sched_cancel_fork:
-+	sched_cancel_fork(p);
- bad_fork_cleanup_policy:
- 	lockdep_free_task(p);
- #ifdef CONFIG_NUMA
 diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 5c0ef271a31a..b5fb4b894477 100644
+index 09e6ce45e65a..26ad5dc65ede 100644
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
-@@ -4784,7 +4784,7 @@ int sched_fork(unsigned long clone_flags, struct task_struct *p)
- 	return 0;
+@@ -2191,6 +2191,17 @@ inline int task_curr(const struct task_struct *p)
+ 	return cpu_curr(task_cpu(p)) == p;
  }
  
--void sched_cgroup_fork(struct task_struct *p, struct kernel_clone_args *kargs)
-+int sched_cgroup_fork(struct task_struct *p, struct kernel_clone_args *kargs)
- {
- 	unsigned long flags;
- 
-@@ -4811,6 +4811,12 @@ void sched_cgroup_fork(struct task_struct *p, struct kernel_clone_args *kargs)
- 	if (p->sched_class->task_fork)
- 		p->sched_class->task_fork(p);
- 	raw_spin_unlock_irqrestore(&p->pi_lock, flags);
-+
-+	return 0;
++/*
++ * ->switching_to() is called with the pi_lock and rq_lock held and must not
++ * mess with locking.
++ */
++void check_class_changing(struct rq *rq, struct task_struct *p,
++			  const struct sched_class *prev_class)
++{
++	if (prev_class != p->sched_class && p->sched_class->switching_to)
++		p->sched_class->switching_to(rq, p);
 +}
 +
-+void sched_cancel_fork(struct task_struct *p)
-+{
- }
+ /*
+  * switched_from, switched_to and prio_changed must _NOT_ drop rq->lock,
+  * use the balance_callback list if you want balancing.
+@@ -2198,9 +2209,9 @@ inline int task_curr(const struct task_struct *p)
+  * this means any call to check_class_changed() must be followed by a call to
+  * balance_callback().
+  */
+-static inline void check_class_changed(struct rq *rq, struct task_struct *p,
+-				       const struct sched_class *prev_class,
+-				       int oldprio)
++void check_class_changed(struct rq *rq, struct task_struct *p,
++			 const struct sched_class *prev_class,
++			 int oldprio)
+ {
+ 	if (prev_class != p->sched_class) {
+ 		if (prev_class->switched_from)
+@@ -7193,6 +7204,7 @@ void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task)
+ 	}
  
- void sched_post_fork(struct task_struct *p)
+ 	__setscheduler_prio(p, prio);
++	check_class_changing(rq, p, prev_class);
+ 
+ 	if (queued)
+ 		enqueue_task(rq, p, queue_flag);
+@@ -7852,6 +7864,7 @@ static int __sched_setscheduler(struct task_struct *p,
+ 		__setscheduler_prio(p, newprio);
+ 	}
+ 	__setscheduler_uclamp(p, attr);
++	check_class_changing(rq, p, prev_class);
+ 
+ 	if (queued) {
+ 		/*
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index a66b48bc45ba..bfe7303559f1 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -2257,6 +2257,7 @@ struct sched_class {
+ 	 * cannot assume the switched_from/switched_to pair is serialized by
+ 	 * rq->lock. They are however serialized by p->pi_lock.
+ 	 */
++	void (*switching_to) (struct rq *this_rq, struct task_struct *task);
+ 	void (*switched_from)(struct rq *this_rq, struct task_struct *task);
+ 	void (*switched_to)  (struct rq *this_rq, struct task_struct *task);
+ 	void (*reweight_task)(struct rq *this_rq, struct task_struct *task,
+@@ -2497,6 +2498,12 @@ static inline void sub_nr_running(struct rq *rq, unsigned count)
+ extern void activate_task(struct rq *rq, struct task_struct *p, int flags);
+ extern void deactivate_task(struct rq *rq, struct task_struct *p, int flags);
+ 
++extern void check_class_changing(struct rq *rq, struct task_struct *p,
++				 const struct sched_class *prev_class);
++extern void check_class_changed(struct rq *rq, struct task_struct *p,
++				const struct sched_class *prev_class,
++				int oldprio);
++
+ extern void wakeup_preempt(struct rq *rq, struct task_struct *p, int flags);
+ 
+ #ifdef CONFIG_PREEMPT_RT
 -- 
 2.42.0
 
