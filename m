@@ -1,48 +1,48 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC3F55667
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C968525B
 	for <bpf@vger.kernel.org>; Sat, 11 Nov 2023 02:50:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y9lBH5JD"
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0945C55A4;
-	Fri, 10 Nov 2023 18:49:58 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1cc2fc281cdso22992845ad.0;
-        Fri, 10 Nov 2023 18:49:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZAuBOEeZ"
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6CD3C15;
+	Fri, 10 Nov 2023 18:49:48 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id 5614622812f47-3b3ec45d6e9so1492255b6e.0;
+        Fri, 10 Nov 2023 18:49:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699670997; x=1700275797; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1699670987; x=1700275787; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Msh4xoutKdHw6wKRyxlar54GGxvyjuIwojsW2bLq1iA=;
-        b=Y9lBH5JD8YB6/k299VBZcm8GP8qK99FndqrOk5HLDGfC6J4rGMZ90paGoMYvmz2AyP
-         JBgPoBIsRjQN7+3T2EwmBMxY+HXDl24aFzRnwrN1RCmGYF7sxEdGYaRdgTGi6C1jj328
-         wZ6+y7sOntxnUrrkUawze+fEzi1Y49883GHnAV/nncRwbMScVrZu7X0TVuwiZw09NI0r
-         KmfHI1K03HcMmBK0L7R0EFzrSLfHpunENCiH0q+t07QmY/zghf2o6xGFMwaN0rmJST8E
-         cX8NGdltDinR99Ne9xrU/KEH5rj48cL5PouM8r7LTBV9N1dsKewHRgCzOnci/jxIN4ad
-         hhfA==
+        bh=77L0bI9fxkI8ZhTwY7qIZtcnL0TGgwoSFdK6OvoRyZo=;
+        b=ZAuBOEeZEi5aQrb8q7X835SSJKKyFI8A4hnuti7kyMSnxr8/Csc3QpuvySLkKySw+P
+         /J/A9JVirgqdnNZPrAXxw74rMx4ntHXxW9VCM8k7LoMQT7FXIQ+kWGjFc2B6rpPxf50o
+         LtIZrJQntf4o62gvElAwROjDcjmUk8YM0aDBURjWcQV7IvQE3BDG4Ffm2CnjxTpiHeva
+         dxdaHgDTJKTDYdHjb2hqmsz0upSZNZoZmVp8NHYdpw/HB3Y3kLa7QUjCqWKHMLM9WRvW
+         XcywbUoi37Cw+L2QIRwiocCnDONv+ONy38Ks+tllqV3XgQmvni7vffHOSzSNaTsnsgsY
+         SA3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699670997; x=1700275797;
+        d=1e100.net; s=20230601; t=1699670987; x=1700275787;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Msh4xoutKdHw6wKRyxlar54GGxvyjuIwojsW2bLq1iA=;
-        b=Z1FDWXIjFv02sBcFBVFBxpmfweoDoU9meMLaF8LCtUefeGHv8frhqJjuTy32xcqzo6
-         DKCO2EorxaZEOW1Ky1uqHiQaBW1866TUHtOpcZfe/FahDO4Ib8Py1InWoIsgj5Je0dsF
-         hVePVMdQBQiChKRoGgPo3Iwkv4NSMJ5i4pEHqjqrHe31jxtg8chk+yTSpW3kq1etR7Lo
-         vvAlvDGsh7FuWS/H2M7YrrA2fR5f5oFP2FaltJXCnzdSvtHr7YOUwpmb24BEUAVrhrJI
-         QVGYaq2LUPb3508gOSFfzlUhTSF5Gi1y4701kvMRcivtFccZZjRnejTFSuWHibv/AgZe
-         1Fqw==
-X-Gm-Message-State: AOJu0YxbBvWnLAaGAmbe5Y+8CEvH1xXGwE23zONIwdhtIlTBm1cWDpgw
-	NSfdyiINZdPoeDdpay/HiEA=
-X-Google-Smtp-Source: AGHT+IHA+/lx+eQpG1jLC2rNa1yJ98LSWuno9b9MhMxVzscYb+ZOT1jvRBLa09bpo1i9AyvnGRTnKg==
-X-Received: by 2002:a17:902:aa08:b0:1cc:6dd5:59e8 with SMTP id be8-20020a170902aa0800b001cc6dd559e8mr970382plb.26.1699670997202;
-        Fri, 10 Nov 2023 18:49:57 -0800 (PST)
+        bh=77L0bI9fxkI8ZhTwY7qIZtcnL0TGgwoSFdK6OvoRyZo=;
+        b=gMpmPt1pb02LEvRllkoaGoQ1oFihotwvIkgpXlcgCAkU5pIXA/pMQ4n902EOxuYGo/
+         UJ6dLT9Dt7wrs3WciJLK2uMF+zHuzLEfF/Qx/v/bn2WADevVJebNK8HpkY2JViggn8lh
+         ywkV3LQH1GiwHh4OKWYFzt6hpkXGiC55J8S7+3iwmHGQZurv5r28H9CctY60AOV6870e
+         nuqG/DaLzHHRJtCG2pPXIrx2kfpghbZXTYhyQEtp0ziZEAk/znDM7crc63uQmTISS8+8
+         NU/aoQ1drLrexrXRrH6GPbpnJSRdtBLKhyANoWKlIl6ohq1boFIxV/tOsyyR1KE1iQBq
+         z/qg==
+X-Gm-Message-State: AOJu0YyiNlKqU63TUzTkhCvefzCXtBufogMokHDV9mnKBjFfZXuup/FI
+	cwvo9WbYv8BJf98sfSw20r4=
+X-Google-Smtp-Source: AGHT+IGajZRXpUgh6qNyRMtaT5EbPR5W/pwiFE5M3E/11vjDUF9Yzo8usLydO5M5fDRhtXBRQlEHgg==
+X-Received: by 2002:a05:6808:2a6f:b0:3b5:6604:a8ba with SMTP id fu15-20020a0568082a6f00b003b56604a8bamr1178070oib.36.1699670987462;
+        Fri, 10 Nov 2023 18:49:47 -0800 (PST)
 Received: from localhost ([2620:10d:c090:400::4:7384])
-        by smtp.gmail.com with ESMTPSA id je12-20020a170903264c00b001bde6fa0a39sm351748plb.167.2023.11.10.18.49.56
+        by smtp.gmail.com with ESMTPSA id u9-20020a056a00124900b006c3467ae25asm385093pfi.206.2023.11.10.18.49.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Nov 2023 18:49:56 -0800 (PST)
+        Fri, 10 Nov 2023 18:49:46 -0800 (PST)
 Sender: Tejun Heo <htejun@gmail.com>
 From: Tejun Heo <tj@kernel.org>
 To: torvalds@linux-foundation.org,
@@ -76,9 +76,9 @@ Cc: linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
 	kernel-team@meta.com,
 	Tejun Heo <tj@kernel.org>
-Subject: [PATCH 32/36] sched_ext: Add vtime-ordered priority queue to dispatch_q's
-Date: Fri, 10 Nov 2023 16:47:58 -1000
-Message-ID: <20231111024835.2164816-33-tj@kernel.org>
+Subject: [PATCH 27/36] sched_ext: Add a cgroup scheduler which uses flattened hierarchy
+Date: Fri, 10 Nov 2023 16:47:53 -1000
+Message-ID: <20231111024835.2164816-28-tj@kernel.org>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231111024835.2164816-1-tj@kernel.org>
 References: <20231111024835.2164816-1-tj@kernel.org>
@@ -90,749 +90,1185 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently, a dsq is always a FIFO. A task which is dispatched earlier gets
-consumed or executed earlier. While this is sufficient when dsq's are used
-for simple staging areas for tasks which are ready to execute, it'd make
-dsq's a lot more useful if they can implement custom ordering.
+This patch adds scx_flatcg example scheduler which implements hierarchical
+weight-based cgroup CPU control by flattening the cgroup hierarchy into a
+single layer by compounding the active weight share at each level.
 
-This patch adds a vtime-ordered priority queue to dsq's. When the BPF
-scheduler dispatches a task with the new scx_bpf_dispatch_vtime() helper, it
-can specify the vtime tha the task should be inserted at and the task is
-inserted into the priority queue in the dsq which is ordered according to
-time_before64() comparison of the vtime values. When executing or consuming
-the dsq, the FIFO is always processed first and the priority queue is
-processed iff the FIFO is empty.
+This flattening of hierarchy can bring a substantial performance gain when
+the cgroup hierarchy is nested multiple levels. in a simple benchmark using
+wrk[8] on apache serving a CGI script calculating sha1sum of a small file,
+it outperforms CFS by ~3% with CPU controller disabled and by ~10% with two
+apache instances competing with 2:1 weight ratio nested four level deep.
 
-The design decision was made to allow both FIFO and priority queue to be
-available at the same timeq for all dsq's for three reasons. First, the new
-priority queue is useful for the local dsq's too but they also need the FIFO
-when consuming tasks from other dsq's as the vtimes may not be comparable
-across them. Second, the interface surface is smaller this way - the only
-additional interface necessary is scx_bpf_dispsatch_vtime(). Third, the
-overhead isn't meaningfully different whether they're available at the same
-time or not.
+However, the gain comes at the cost of not being able to properly handle
+thundering herd of cgroups. For example, if many cgroups which are nested
+behind a low priority parent cgroup wake up around the same time, they may
+be able to consume more CPU cycles than they are entitled to. In many use
+cases, this isn't a real concern especially given the performance gain.
+Also, there are ways to mitigate the problem further by e.g. introducing an
+extra scheduling layer on cgroup delegation boundaries.
 
-This makes it very easy for the BPF schedulers to implement proper vtime
-based scheduling within each dsq very easy and efficient at a negligible
-cost in terms of code complexity and overhead.
-
-scx_simple and scx_example_flatcg are updated to default to weighted
-vtime scheduling (the latter within each cgroup). FIFO scheduling can be
-selected with -f option.
-
-v3: * SCX_TASK_DSQ_ON_PRIQ flag is moved from p->scx.flags into its own
-      p->scx.dsq_flags. The flag is protected with the dsq lock unlike other
-      flags in p->scx.flags. This led to flag corruption in some cases.
-
-    * Add comments explaining the interaction between using consumption of
-      p->scx.slice to determine vtime progress and yielding.
-
-v2: * p->scx.dsq_vtime was not initialized on load or across cgroup
-      migrations leading to some tasks being stalled for extended period of
-      time depending on how saturated the machine is. Fixed.
+v2: * Use SCX_BUG[_ON]() to simplify error handling.
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
 Reviewed-by: David Vernet <dvernet@meta.com>
+Acked-by: Josh Don <joshdon@google.com>
+Acked-by: Hao Luo <haoluo@google.com>
+Acked-by: Barret Rhoden <brho@google.com>
 ---
- include/linux/sched/ext.h        |  21 ++++-
- init/init_task.c                 |   2 +-
- kernel/sched/core.c              |   3 +-
- kernel/sched/ext.c               | 137 +++++++++++++++++++++++++++----
- kernel/sched/ext.h               |   1 +
- tools/sched_ext/scx_common.bpf.h |   1 +
- tools/sched_ext/scx_flatcg.bpf.c |  80 +++++++++++++++++-
- tools/sched_ext/scx_flatcg.c     |   6 +-
- tools/sched_ext/scx_simple.bpf.c |  81 +++++++++++++++++-
- tools/sched_ext/scx_simple.c     |   8 +-
- 10 files changed, 314 insertions(+), 26 deletions(-)
+ tools/sched_ext/.gitignore       |   1 +
+ tools/sched_ext/Makefile         |   2 +-
+ tools/sched_ext/scx_flatcg.bpf.c | 834 +++++++++++++++++++++++++++++++
+ tools/sched_ext/scx_flatcg.c     | 217 ++++++++
+ tools/sched_ext/scx_flatcg.h     |  49 ++
+ 5 files changed, 1102 insertions(+), 1 deletion(-)
+ create mode 100644 tools/sched_ext/scx_flatcg.bpf.c
+ create mode 100644 tools/sched_ext/scx_flatcg.c
+ create mode 100644 tools/sched_ext/scx_flatcg.h
 
-diff --git a/include/linux/sched/ext.h b/include/linux/sched/ext.h
-index 1ce5d131e97b..cdc7a05208da 100644
---- a/include/linux/sched/ext.h
-+++ b/include/linux/sched/ext.h
-@@ -583,6 +583,7 @@ struct sched_ext_ops {
- struct scx_dispatch_q {
- 	raw_spinlock_t		lock;
- 	struct list_head	fifo;	/* processed in dispatching order */
-+	struct rb_root_cached	priq;	/* processed in p->scx.dsq_vtime order */
- 	u32			nr;
- 	u64			id;
- 	struct rhash_head	hash_node;
-@@ -605,6 +606,11 @@ enum scx_ent_flags {
- 	SCX_TASK_CURSOR		= 1 << 31, /* iteration cursor, not a task */
- };
+diff --git a/tools/sched_ext/.gitignore b/tools/sched_ext/.gitignore
+index d9e607667426..894cf43ddacc 100644
+--- a/tools/sched_ext/.gitignore
++++ b/tools/sched_ext/.gitignore
+@@ -2,6 +2,7 @@ scx_simple
+ scx_qmap
+ scx_central
+ scx_pair
++scx_flatcg
+ *.skel.h
+ *.subskel.h
+ /tools/
+diff --git a/tools/sched_ext/Makefile b/tools/sched_ext/Makefile
+index a91ef4e34cd3..484803ea65b5 100644
+--- a/tools/sched_ext/Makefile
++++ b/tools/sched_ext/Makefile
+@@ -179,7 +179,7 @@ SCX_COMMON_DEPS := scx_common.h user_exit_info.h | $(BINDIR)
+ ################
+ # C schedulers #
+ ################
+-c-sched-targets = scx_simple scx_qmap scx_central scx_pair
++c-sched-targets = scx_simple scx_qmap scx_central scx_pair scx_flatcg
  
-+/* scx_entity.dsq_flags */
-+enum scx_ent_dsq_flags {
-+	SCX_TASK_DSQ_ON_PRIQ	= 1 << 0, /* task is queued on the priority queue of a dsq */
+ $(addprefix $(BINDIR)/,$(c-sched-targets)): \
+ 	$(BINDIR)/%: \
+diff --git a/tools/sched_ext/scx_flatcg.bpf.c b/tools/sched_ext/scx_flatcg.bpf.c
+new file mode 100644
+index 000000000000..ab7cff4da7da
+--- /dev/null
++++ b/tools/sched_ext/scx_flatcg.bpf.c
+@@ -0,0 +1,834 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * A demo sched_ext flattened cgroup hierarchy scheduler. It implements
++ * hierarchical weight-based cgroup CPU control by flattening the cgroup
++ * hierarchy into a single layer by compounding the active weight share at each
++ * level. Consider the following hierarchy with weights in parentheses:
++ *
++ * R + A (100) + B (100)
++ *   |         \ C (100)
++ *   \ D (200)
++ *
++ * Ignoring the root and threaded cgroups, only B, C and D can contain tasks.
++ * Let's say all three have runnable tasks. The total share that each of these
++ * three cgroups is entitled to can be calculated by compounding its share at
++ * each level.
++ *
++ * For example, B is competing against C and in that competition its share is
++ * 100/(100+100) == 1/2. At its parent level, A is competing against D and A's
++ * share in that competition is 200/(200+100) == 1/3. B's eventual share in the
++ * system can be calculated by multiplying the two shares, 1/2 * 1/3 == 1/6. C's
++ * eventual shaer is the same at 1/6. D is only competing at the top level and
++ * its share is 200/(100+200) == 2/3.
++ *
++ * So, instead of hierarchically scheduling level-by-level, we can consider it
++ * as B, C and D competing each other with respective share of 1/6, 1/6 and 2/3
++ * and keep updating the eventual shares as the cgroups' runnable states change.
++ *
++ * This flattening of hierarchy can bring a substantial performance gain when
++ * the cgroup hierarchy is nested multiple levels. in a simple benchmark using
++ * wrk[8] on apache serving a CGI script calculating sha1sum of a small file, it
++ * outperforms CFS by ~3% with CPU controller disabled and by ~10% with two
++ * apache instances competing with 2:1 weight ratio nested four level deep.
++ *
++ * However, the gain comes at the cost of not being able to properly handle
++ * thundering herd of cgroups. For example, if many cgroups which are nested
++ * behind a low priority parent cgroup wake up around the same time, they may be
++ * able to consume more CPU cycles than they are entitled to. In many use cases,
++ * this isn't a real concern especially given the performance gain. Also, there
++ * are ways to mitigate the problem further by e.g. introducing an extra
++ * scheduling layer on cgroup delegation boundaries.
++ */
++#include "scx_common.bpf.h"
++#include "user_exit_info.h"
++#include "scx_flatcg.h"
++
++char _license[] SEC("license") = "GPL";
++
++const volatile u32 nr_cpus = 32;	/* !0 for veristat, set during init */
++const volatile u64 cgrp_slice_ns = SCX_SLICE_DFL;
++const volatile bool switch_partial;
++
++u64 cvtime_now;
++struct user_exit_info uei;
++
++struct {
++	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
++	__type(key, u32);
++	__type(value, u64);
++	__uint(max_entries, FCG_NR_STATS);
++} stats SEC(".maps");
++
++static void stat_inc(enum fcg_stat_idx idx)
++{
++	u32 idx_v = idx;
++
++	u64 *cnt_p = bpf_map_lookup_elem(&stats, &idx_v);
++	if (cnt_p)
++		(*cnt_p)++;
++}
++
++struct fcg_cpu_ctx {
++	u64			cur_cgid;
++	u64			cur_at;
 +};
 +
- /*
-  * Mask bits for scx_entity.kf_mask. Not all kfuncs can be called from
-  * everywhere and the following bits track which kfunc sets are currently
-@@ -636,9 +642,13 @@ enum scx_kf_mask {
-  */
- struct sched_ext_entity {
- 	struct scx_dispatch_q	*dsq;
--	struct list_head	dsq_node;
-+	struct {
-+		struct list_head	fifo;	/* dispatch order */
-+		struct rb_node		priq;	/* p->scx.dsq_vtime order */
-+	} dsq_node;
- 	struct list_head	watchdog_node;
- 	u32			flags;		/* protected by rq lock */
-+	u32			dsq_flags;	/* protected by dsq lock */
- 	u32			weight;
- 	s32			sticky_cpu;
- 	s32			holding_cpu;
-@@ -664,6 +674,15 @@ struct sched_ext_entity {
- 	 */
- 	u64			slice;
- 
-+	/*
-+	 * Used to order tasks when dispatching to the vtime-ordered priority
-+	 * queue of a dsq. This is usually set through scx_bpf_dispatch_vtime()
-+	 * but can also be modified directly by the BPF scheduler. Modifying it
-+	 * while a task is queued on a dsq may mangle the ordering and is not
-+	 * recommended.
-+	 */
-+	u64			dsq_vtime;
++struct {
++	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
++	__type(key, u32);
++	__type(value, struct fcg_cpu_ctx);
++	__uint(max_entries, 1);
++} cpu_ctx SEC(".maps");
 +
- 	/*
- 	 * If set, reject future sched_setscheduler(2) calls updating the policy
- 	 * to %SCHED_EXT with -%EACCES.
-diff --git a/init/init_task.c b/init/init_task.c
-index aedce50b363d..20fa6efc07f2 100644
---- a/init/init_task.c
-+++ b/init/init_task.c
-@@ -106,7 +106,7 @@ struct task_struct init_task
- #endif
- #ifdef CONFIG_SCHED_CLASS_EXT
- 	.scx		= {
--		.dsq_node	= LIST_HEAD_INIT(init_task.scx.dsq_node),
-+		.dsq_node.fifo	= LIST_HEAD_INIT(init_task.scx.dsq_node.fifo),
- 		.watchdog_node	= LIST_HEAD_INIT(init_task.scx.watchdog_node),
- 		.sticky_cpu	= -1,
- 		.holding_cpu	= -1,
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 8ef96acecef1..e02e4e8c171c 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -4553,7 +4553,8 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
- 
- #ifdef CONFIG_SCHED_CLASS_EXT
- 	p->scx.dsq		= NULL;
--	INIT_LIST_HEAD(&p->scx.dsq_node);
-+	INIT_LIST_HEAD(&p->scx.dsq_node.fifo);
-+	RB_CLEAR_NODE(&p->scx.dsq_node.priq);
- 	INIT_LIST_HEAD(&p->scx.watchdog_node);
- 	p->scx.flags		= 0;
- 	p->scx.weight		= 0;
-diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
-index 6ba5cef20803..460310fcfbbb 100644
---- a/kernel/sched/ext.c
-+++ b/kernel/sched/ext.c
-@@ -605,12 +605,25 @@ static void update_curr_scx(struct rq *rq)
- 	}
- }
- 
-+static bool scx_dsq_priq_less(struct rb_node *node_a,
-+			      const struct rb_node *node_b)
++struct {
++	__uint(type, BPF_MAP_TYPE_CGRP_STORAGE);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__type(key, int);
++	__type(value, struct fcg_cgrp_ctx);
++} cgrp_ctx SEC(".maps");
++
++struct cgv_node {
++	struct bpf_rb_node	rb_node;
++	__u64			cvtime;
++	__u64			cgid;
++};
++
++private(CGV_TREE) struct bpf_spin_lock cgv_tree_lock;
++private(CGV_TREE) struct bpf_rb_root cgv_tree __contains(cgv_node, rb_node);
++
++struct cgv_node_stash {
++	struct cgv_node __kptr *node;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(max_entries, 16384);
++	__type(key, __u64);
++	__type(value, struct cgv_node_stash);
++} cgv_node_stash SEC(".maps");
++
++struct fcg_task_ctx {
++	u64		bypassed_at;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_TASK_STORAGE);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__type(key, int);
++	__type(value, struct fcg_task_ctx);
++} task_ctx SEC(".maps");
++
++/* gets inc'd on weight tree changes to expire the cached hweights */
++unsigned long hweight_gen = 1;
++
++static u64 div_round_up(u64 dividend, u64 divisor)
 +{
-+	const struct task_struct *a =
-+		container_of(node_a, struct task_struct, scx.dsq_node.priq);
-+	const struct task_struct *b =
-+		container_of(node_b, struct task_struct, scx.dsq_node.priq);
-+
-+	return time_before64(a->scx.dsq_vtime, b->scx.dsq_vtime);
++	return (dividend + divisor - 1) / divisor;
 +}
 +
- static void dispatch_enqueue(struct scx_dispatch_q *dsq, struct task_struct *p,
- 			     u64 enq_flags)
- {
- 	bool is_local = dsq->id == SCX_DSQ_LOCAL;
- 
--	WARN_ON_ONCE(p->scx.dsq || !list_empty(&p->scx.dsq_node));
-+	WARN_ON_ONCE(p->scx.dsq || !list_empty(&p->scx.dsq_node.fifo));
-+	WARN_ON_ONCE((p->scx.dsq_flags & SCX_TASK_DSQ_ON_PRIQ) ||
-+		     !RB_EMPTY_NODE(&p->scx.dsq_node.priq));
- 
- 	if (!is_local) {
- 		raw_spin_lock(&dsq->lock);
-@@ -623,10 +636,16 @@ static void dispatch_enqueue(struct scx_dispatch_q *dsq, struct task_struct *p,
- 		}
- 	}
- 
--	if (enq_flags & (SCX_ENQ_HEAD | SCX_ENQ_PREEMPT))
--		list_add(&p->scx.dsq_node, &dsq->fifo);
--	else
--		list_add_tail(&p->scx.dsq_node, &dsq->fifo);
-+	if (enq_flags & SCX_ENQ_DSQ_PRIQ) {
-+		p->scx.dsq_flags |= SCX_TASK_DSQ_ON_PRIQ;
-+		rb_add_cached(&p->scx.dsq_node.priq, &dsq->priq,
-+			      scx_dsq_priq_less);
-+	} else {
-+		if (enq_flags & (SCX_ENQ_HEAD | SCX_ENQ_PREEMPT))
-+			list_add(&p->scx.dsq_node.fifo, &dsq->fifo);
-+		else
-+			list_add_tail(&p->scx.dsq_node.fifo, &dsq->fifo);
++static bool vtime_before(u64 a, u64 b)
++{
++	return (s64)(a - b) < 0;
++}
++
++static bool cgv_node_less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
++{
++	struct cgv_node *cgc_a, *cgc_b;
++
++	cgc_a = container_of(a, struct cgv_node, rb_node);
++	cgc_b = container_of(b, struct cgv_node, rb_node);
++
++	return cgc_a->cvtime < cgc_b->cvtime;
++}
++
++static struct fcg_cpu_ctx *find_cpu_ctx(void)
++{
++	struct fcg_cpu_ctx *cpuc;
++	u32 idx = 0;
++
++	cpuc = bpf_map_lookup_elem(&cpu_ctx, &idx);
++	if (!cpuc) {
++		scx_bpf_error("cpu_ctx lookup failed");
++		return NULL;
 +	}
- 	dsq->nr++;
- 	p->scx.dsq = dsq;
- 
-@@ -655,13 +674,31 @@ static void dispatch_enqueue(struct scx_dispatch_q *dsq, struct task_struct *p,
- 	}
- }
- 
-+static void task_unlink_from_dsq(struct task_struct *p,
-+				 struct scx_dispatch_q *dsq)
++	return cpuc;
++}
++
++static struct fcg_cgrp_ctx *find_cgrp_ctx(struct cgroup *cgrp)
 +{
-+	if (p->scx.dsq_flags & SCX_TASK_DSQ_ON_PRIQ) {
-+		rb_erase_cached(&p->scx.dsq_node.priq, &dsq->priq);
-+		RB_CLEAR_NODE(&p->scx.dsq_node.priq);
-+		p->scx.dsq_flags &= ~SCX_TASK_DSQ_ON_PRIQ;
-+	} else {
-+		list_del_init(&p->scx.dsq_node.fifo);
++	struct fcg_cgrp_ctx *cgc;
++
++	cgc = bpf_cgrp_storage_get(&cgrp_ctx, cgrp, 0, 0);
++	if (!cgc) {
++		scx_bpf_error("cgrp_ctx lookup failed for cgid %llu", cgrp->kn->id);
++		return NULL;
 +	}
++	return cgc;
 +}
 +
-+static bool task_linked_on_dsq(struct task_struct *p)
++static struct fcg_cgrp_ctx *find_ancestor_cgrp_ctx(struct cgroup *cgrp, int level)
 +{
-+	return !list_empty(&p->scx.dsq_node.fifo) ||
-+		!RB_EMPTY_NODE(&p->scx.dsq_node.priq);
-+}
++	struct fcg_cgrp_ctx *cgc;
 +
- static void dispatch_dequeue(struct scx_rq *scx_rq, struct task_struct *p)
- {
- 	struct scx_dispatch_q *dsq = p->scx.dsq;
- 	bool is_local = dsq == &scx_rq->local_dsq;
- 
- 	if (!dsq) {
--		WARN_ON_ONCE(!list_empty(&p->scx.dsq_node));
-+		WARN_ON_ONCE(task_linked_on_dsq(p));
- 		/*
- 		 * When dispatching directly from the BPF scheduler to a local
- 		 * DSQ, the task isn't associated with any DSQ but
-@@ -682,8 +719,8 @@ static void dispatch_dequeue(struct scx_rq *scx_rq, struct task_struct *p)
- 	*/
- 	if (p->scx.holding_cpu < 0) {
- 		/* @p must still be on @dsq, dequeue */
--		WARN_ON_ONCE(list_empty(&p->scx.dsq_node));
--		list_del_init(&p->scx.dsq_node);
-+		WARN_ON_ONCE(!task_linked_on_dsq(p));
-+		task_unlink_from_dsq(p, dsq);
- 		dsq->nr--;
- 	} else {
- 		/*
-@@ -692,7 +729,7 @@ static void dispatch_dequeue(struct scx_rq *scx_rq, struct task_struct *p)
- 		 * holding_cpu which tells dispatch_to_local_dsq() that it lost
- 		 * the race.
- 		 */
--		WARN_ON_ONCE(!list_empty(&p->scx.dsq_node));
-+		WARN_ON_ONCE(task_linked_on_dsq(p));
- 		p->scx.holding_cpu = -1;
- 	}
- 	p->scx.dsq = NULL;
-@@ -1156,33 +1193,52 @@ static void dispatch_to_local_dsq_unlock(struct rq *rq, struct rq_flags *rf,
- #endif	/* CONFIG_SMP */
- 
- 
-+static bool task_can_run_on_rq(struct task_struct *p, struct rq *rq)
-+{
-+	return likely(test_rq_online(rq)) && !is_migration_disabled(p) &&
-+		cpumask_test_cpu(cpu_of(rq), p->cpus_ptr);
-+}
-+
- static bool consume_dispatch_q(struct rq *rq, struct rq_flags *rf,
- 			       struct scx_dispatch_q *dsq)
- {
- 	struct scx_rq *scx_rq = &rq->scx;
- 	struct task_struct *p;
-+	struct rb_node *rb_node;
- 	struct rq *task_rq;
- 	bool moved = false;
- retry:
--	if (list_empty(&dsq->fifo))
-+	if (list_empty(&dsq->fifo) && !rb_first_cached(&dsq->priq))
- 		return false;
- 
- 	raw_spin_lock(&dsq->lock);
--	list_for_each_entry(p, &dsq->fifo, scx.dsq_node) {
-+
-+	list_for_each_entry(p, &dsq->fifo, scx.dsq_node.fifo) {
-+		task_rq = task_rq(p);
-+		if (rq == task_rq)
-+			goto this_rq;
-+		if (task_can_run_on_rq(p, rq))
-+			goto remote_rq;
++	cgrp = bpf_cgroup_ancestor(cgrp, level);
++	if (!cgrp) {
++		scx_bpf_error("ancestor cgroup lookup failed");
++		return NULL;
 +	}
 +
-+	for (rb_node = rb_first_cached(&dsq->priq); rb_node;
-+	     rb_node = rb_next(rb_node)) {
-+		p = container_of(rb_node, struct task_struct, scx.dsq_node.priq);
- 		task_rq = task_rq(p);
- 		if (rq == task_rq)
- 			goto this_rq;
--		if (likely(test_rq_online(rq)) && !is_migration_disabled(p) &&
--		    cpumask_test_cpu(cpu_of(rq), p->cpus_ptr))
-+		if (task_can_run_on_rq(p, rq))
- 			goto remote_rq;
- 	}
++	cgc = find_cgrp_ctx(cgrp);
++	if (!cgc)
++		scx_bpf_error("ancestor cgrp_ctx lookup failed");
++	bpf_cgroup_release(cgrp);
++	return cgc;
++}
 +
- 	raw_spin_unlock(&dsq->lock);
- 	return false;
- 
- this_rq:
- 	/* @dsq is locked and @p is on this rq */
- 	WARN_ON_ONCE(p->scx.holding_cpu >= 0);
--	list_move_tail(&p->scx.dsq_node, &scx_rq->local_dsq.fifo);
-+	task_unlink_from_dsq(p, dsq);
-+	list_add_tail(&p->scx.dsq_node.fifo, &scx_rq->local_dsq.fifo);
- 	dsq->nr--;
- 	scx_rq->local_dsq.nr++;
- 	p->scx.dsq = &scx_rq->local_dsq;
-@@ -1199,7 +1255,7 @@ static bool consume_dispatch_q(struct rq *rq, struct rq_flags *rf,
- 	 * move_task_to_local_dsq().
- 	 */
- 	WARN_ON_ONCE(p->scx.holding_cpu >= 0);
--	list_del_init(&p->scx.dsq_node);
-+	task_unlink_from_dsq(p, dsq);
- 	dsq->nr--;
- 	p->scx.holding_cpu = raw_smp_processor_id();
- 	raw_spin_unlock(&dsq->lock);
-@@ -1704,8 +1760,18 @@ static void put_prev_task_scx(struct rq *rq, struct task_struct *p)
- 
- static struct task_struct *first_local_task(struct rq *rq)
- {
--	return list_first_entry_or_null(&rq->scx.local_dsq.fifo,
--					struct task_struct, scx.dsq_node);
-+	struct rb_node *rb_node;
-+
-+	if (!list_empty(&rq->scx.local_dsq.fifo))
-+		return list_first_entry(&rq->scx.local_dsq.fifo,
-+					struct task_struct, scx.dsq_node.fifo);
-+
-+	rb_node = rb_first_cached(&rq->scx.local_dsq.priq);
-+	if (rb_node)
-+		return container_of(rb_node,
-+				    struct task_struct, scx.dsq_node.priq);
-+
-+	return NULL;
- }
- 
- static struct task_struct *pick_next_task_scx(struct rq *rq)
-@@ -3412,6 +3478,9 @@ static int bpf_scx_btf_struct_access(struct bpf_verifier_log *log,
- 		if (off >= offsetof(struct task_struct, scx.slice) &&
- 		    off + size <= offsetofend(struct task_struct, scx.slice))
- 			return SCALAR_VALUE;
-+		if (off >= offsetof(struct task_struct, scx.dsq_vtime) &&
-+		    off + size <= offsetofend(struct task_struct, scx.dsq_vtime))
-+			return SCALAR_VALUE;
- 		if (off >= offsetof(struct task_struct, scx.disallow) &&
- 		    off + size <= offsetofend(struct task_struct, scx.disallow))
- 			return SCALAR_VALUE;
-@@ -3854,8 +3923,42 @@ void scx_bpf_dispatch(struct task_struct *p, u64 dsq_id, u64 slice,
- 	scx_dispatch_commit(p, dsq_id, enq_flags);
- }
- 
-+/**
-+ * scx_bpf_dispatch_vtime - Dispatch a task into the vtime priority queue of a DSQ
-+ * @p: task_struct to dispatch
-+ * @dsq_id: DSQ to dispatch to
-+ * @slice: duration @p can run for in nsecs
-+ * @vtime: @p's ordering inside the vtime-sorted queue of the target DSQ
-+ * @enq_flags: SCX_ENQ_*
-+ *
-+ * Dispatch @p into the vtime priority queue of the DSQ identified by @dsq_id.
-+ * Tasks queued into the priority queue are ordered by @vtime and always
-+ * consumed after the tasks in the FIFO queue. All other aspects are identical
-+ * to scx_bpf_dispatch().
-+ *
-+ * @vtime ordering is according to time_before64() which considers wrapping. A
-+ * numerically larger vtime may indicate an earlier position in the ordering and
-+ * vice-versa.
-+ */
-+void scx_bpf_dispatch_vtime(struct task_struct *p, u64 dsq_id, u64 slice,
-+			    u64 vtime, u64 enq_flags)
++static void cgrp_refresh_hweight(struct cgroup *cgrp, struct fcg_cgrp_ctx *cgc)
 +{
-+	if (!scx_dispatch_preamble(p, enq_flags))
++	int level;
++
++	if (!cgc->nr_active) {
++		stat_inc(FCG_STAT_HWT_SKIP);
 +		return;
++	}
 +
-+	if (slice)
-+		p->scx.slice = slice;
-+	else
-+		p->scx.slice = p->scx.slice ?: 1;
++	if (cgc->hweight_gen == hweight_gen) {
++		stat_inc(FCG_STAT_HWT_CACHE);
++		return;
++	}
 +
-+	p->scx.dsq_vtime = vtime;
++	stat_inc(FCG_STAT_HWT_UPDATES);
++	bpf_for(level, 0, cgrp->level + 1) {
++		struct fcg_cgrp_ctx *cgc;
++		bool is_active;
 +
-+	scx_dispatch_commit(p, dsq_id, enq_flags | SCX_ENQ_DSQ_PRIQ);
++		cgc = find_ancestor_cgrp_ctx(cgrp, level);
++		if (!cgc)
++			break;
++
++		if (!level) {
++			cgc->hweight = FCG_HWEIGHT_ONE;
++			cgc->hweight_gen = hweight_gen;
++		} else {
++			struct fcg_cgrp_ctx *pcgc;
++
++			pcgc = find_ancestor_cgrp_ctx(cgrp, level - 1);
++			if (!pcgc)
++				break;
++
++			/*
++			 * We can be oppotunistic here and not grab the
++			 * cgv_tree_lock and deal with the occasional races.
++			 * However, hweight updates are already cached and
++			 * relatively low-frequency. Let's just do the
++			 * straightforward thing.
++			 */
++			bpf_spin_lock(&cgv_tree_lock);
++			is_active = cgc->nr_active;
++			if (is_active) {
++				cgc->hweight_gen = pcgc->hweight_gen;
++				cgc->hweight =
++					div_round_up(pcgc->hweight * cgc->weight,
++						     pcgc->child_weight_sum);
++			}
++			bpf_spin_unlock(&cgv_tree_lock);
++
++			if (!is_active) {
++				stat_inc(FCG_STAT_HWT_RACE);
++				break;
++			}
++		}
++	}
 +}
 +
- BTF_SET8_START(scx_kfunc_ids_enqueue_dispatch)
- BTF_ID_FLAGS(func, scx_bpf_dispatch, KF_RCU)
-+BTF_ID_FLAGS(func, scx_bpf_dispatch_vtime, KF_RCU)
- BTF_SET8_END(scx_kfunc_ids_enqueue_dispatch)
- 
- static const struct btf_kfunc_id_set scx_kfunc_set_enqueue_dispatch = {
-diff --git a/kernel/sched/ext.h b/kernel/sched/ext.h
-index 422aaec9a6dd..0dea72f25a37 100644
---- a/kernel/sched/ext.h
-+++ b/kernel/sched/ext.h
-@@ -63,6 +63,7 @@ enum scx_enq_flags {
- 	__SCX_ENQ_INTERNAL_MASK	= 0xffLLU << 56,
- 
- 	SCX_ENQ_CLEAR_OPSS	= 1LLU << 56,
-+	SCX_ENQ_DSQ_PRIQ	= 1LLU << 57,
- };
- 
- enum scx_deq_flags {
-diff --git a/tools/sched_ext/scx_common.bpf.h b/tools/sched_ext/scx_common.bpf.h
-index 59362d05110f..5c503c235836 100644
---- a/tools/sched_ext/scx_common.bpf.h
-+++ b/tools/sched_ext/scx_common.bpf.h
-@@ -58,6 +58,7 @@ s32 scx_bpf_create_dsq(u64 dsq_id, s32 node) __ksym;
- bool scx_bpf_consume(u64 dsq_id) __ksym;
- u32 scx_bpf_dispatch_nr_slots(void) __ksym;
- void scx_bpf_dispatch(struct task_struct *p, u64 dsq_id, u64 slice, u64 enq_flags) __ksym;
-+void scx_bpf_dispatch_vtime(struct task_struct *p, u64 dsq_id, u64 slice, u64 vtime, u64 enq_flags) __ksym;
- void scx_bpf_kick_cpu(s32 cpu, u64 flags) __ksym;
- s32 scx_bpf_dsq_nr_queued(u64 dsq_id) __ksym;
- bool scx_bpf_test_and_clear_cpu_idle(s32 cpu) __ksym;
-diff --git a/tools/sched_ext/scx_flatcg.bpf.c b/tools/sched_ext/scx_flatcg.bpf.c
-index ab7cff4da7da..2db3d8d45e68 100644
---- a/tools/sched_ext/scx_flatcg.bpf.c
-+++ b/tools/sched_ext/scx_flatcg.bpf.c
-@@ -38,6 +38,10 @@
-  * this isn't a real concern especially given the performance gain. Also, there
-  * are ways to mitigate the problem further by e.g. introducing an extra
-  * scheduling layer on cgroup delegation boundaries.
-+ *
-+ * The scheduler first picks the cgroup to run and then schedule the tasks
-+ * within by using nested weighted vtime scheduling by default. The
-+ * cgroup-internal scheduling can be switched to FIFO with the -f option.
-  */
- #include "scx_common.bpf.h"
- #include "user_exit_info.h"
-@@ -47,6 +51,7 @@ char _license[] SEC("license") = "GPL";
- 
- const volatile u32 nr_cpus = 32;	/* !0 for veristat, set during init */
- const volatile u64 cgrp_slice_ns = SCX_SLICE_DFL;
-+const volatile bool fifo_sched;
- const volatile bool switch_partial;
- 
- u64 cvtime_now;
-@@ -350,7 +355,21 @@ void BPF_STRUCT_OPS(fcg_enqueue, struct task_struct *p, u64 enq_flags)
- 	if (!cgc)
- 		goto out_release;
- 
--	scx_bpf_dispatch(p, cgrp->kn->id, SCX_SLICE_DFL, enq_flags);
-+	if (fifo_sched) {
-+		scx_bpf_dispatch(p, cgrp->kn->id, SCX_SLICE_DFL, enq_flags);
-+	} else {
-+		u64 tvtime = p->scx.dsq_vtime;
-+
-+		/*
-+		 * Limit the amount of budget that an idling task can accumulate
-+		 * to one slice.
-+		 */
-+		if (vtime_before(tvtime, cgc->tvtime_now - SCX_SLICE_DFL))
-+			tvtime = cgc->tvtime_now - SCX_SLICE_DFL;
-+
-+		scx_bpf_dispatch_vtime(p, cgrp->kn->id, SCX_SLICE_DFL,
-+				       tvtime, enq_flags);
-+	}
- 
- 	cgrp_enqueued(cgrp, cgc);
- out_release:
-@@ -462,12 +481,48 @@ void BPF_STRUCT_OPS(fcg_runnable, struct task_struct *p, u64 enq_flags)
- 	bpf_cgroup_release(cgrp);
- }
- 
-+void BPF_STRUCT_OPS(fcg_running, struct task_struct *p)
++static void cgrp_cap_budget(struct cgv_node *cgv_node, struct fcg_cgrp_ctx *cgc)
 +{
++	u64 delta, cvtime, max_budget;
++
++	/*
++	 * A node which is on the rbtree can't be pointed to from elsewhere yet
++	 * and thus can't be updated and repositioned. Instead, we collect the
++	 * vtime deltas separately and apply it asynchronously here.
++	 */
++	delta = cgc->cvtime_delta;
++	__sync_fetch_and_sub(&cgc->cvtime_delta, delta);
++	cvtime = cgv_node->cvtime + delta;
++
++	/*
++	 * Allow a cgroup to carry the maximum budget proportional to its
++	 * hweight such that a full-hweight cgroup can immediately take up half
++	 * of the CPUs at the most while staying at the front of the rbtree.
++	 */
++	max_budget = (cgrp_slice_ns * nr_cpus * cgc->hweight) /
++		(2 * FCG_HWEIGHT_ONE);
++	if (vtime_before(cvtime, cvtime_now - max_budget))
++		cvtime = cvtime_now - max_budget;
++
++	cgv_node->cvtime = cvtime;
++}
++
++static void cgrp_enqueued(struct cgroup *cgrp, struct fcg_cgrp_ctx *cgc)
++{
++	struct cgv_node_stash *stash;
++	struct cgv_node *cgv_node;
++	u64 cgid = cgrp->kn->id;
++
++	/* paired with cmpxchg in try_pick_next_cgroup() */
++	if (__sync_val_compare_and_swap(&cgc->queued, 0, 1)) {
++		stat_inc(FCG_STAT_ENQ_SKIP);
++		return;
++	}
++
++	stash = bpf_map_lookup_elem(&cgv_node_stash, &cgid);
++	if (!stash) {
++		scx_bpf_error("cgv_node lookup failed for cgid %llu", cgid);
++		return;
++	}
++
++	/* NULL if the node is already on the rbtree */
++	cgv_node = bpf_kptr_xchg(&stash->node, NULL);
++	if (!cgv_node) {
++		stat_inc(FCG_STAT_ENQ_RACE);
++		return;
++	}
++
++	bpf_spin_lock(&cgv_tree_lock);
++	cgrp_cap_budget(cgv_node, cgc);
++	bpf_rbtree_add(&cgv_tree, &cgv_node->rb_node, cgv_node_less);
++	bpf_spin_unlock(&cgv_tree_lock);
++}
++
++void BPF_STRUCT_OPS(fcg_enqueue, struct task_struct *p, u64 enq_flags)
++{
++	struct fcg_task_ctx *taskc;
 +	struct cgroup *cgrp;
 +	struct fcg_cgrp_ctx *cgc;
 +
-+	if (fifo_sched)
++	taskc = bpf_task_storage_get(&task_ctx, p, 0, 0);
++	if (!taskc) {
++		scx_bpf_error("task_ctx lookup failed");
++		return;
++	}
++
++	/*
++	 * If select_cpu_dfl() is recommending local enqueue, the target CPU is
++	 * idle. Follow it and charge the cgroup later in fcg_stopping() after
++	 * the fact. Use the same mechanism to deal with tasks with custom
++	 * affinities so that we don't have to worry about per-cgroup dq's
++	 * containing tasks that can't be executed from some CPUs.
++	 */
++	if ((enq_flags & SCX_ENQ_LOCAL) || p->nr_cpus_allowed != nr_cpus) {
++		/*
++		 * Tell fcg_stopping() that this bypassed the regular scheduling
++		 * path and should be force charged to the cgroup. 0 is used to
++		 * indicate that the task isn't bypassing, so if the current
++		 * runtime is 0, go back by one nanosecond.
++		 */
++		taskc->bypassed_at = p->se.sum_exec_runtime ?: (u64)-1;
++
++		/*
++		 * The global dq is deprioritized as we don't want to let tasks
++		 * to boost themselves by constraining its cpumask. The
++		 * deprioritization is rather severe, so let's not apply that to
++		 * per-cpu kernel threads. This is ham-fisted. We probably wanna
++		 * implement per-cgroup fallback dq's instead so that we have
++		 * more control over when tasks with custom cpumask get issued.
++		 */
++		if ((enq_flags & SCX_ENQ_LOCAL) ||
++		    (p->nr_cpus_allowed == 1 && (p->flags & PF_KTHREAD))) {
++			stat_inc(FCG_STAT_LOCAL);
++			scx_bpf_dispatch(p, SCX_DSQ_LOCAL, SCX_SLICE_DFL, enq_flags);
++		} else {
++			stat_inc(FCG_STAT_GLOBAL);
++			scx_bpf_dispatch(p, SCX_DSQ_GLOBAL, SCX_SLICE_DFL, enq_flags);
++		}
++		return;
++	}
++
++	cgrp = scx_bpf_task_cgroup(p);
++	cgc = find_cgrp_ctx(cgrp);
++	if (!cgc)
++		goto out_release;
++
++	scx_bpf_dispatch(p, cgrp->kn->id, SCX_SLICE_DFL, enq_flags);
++
++	cgrp_enqueued(cgrp, cgc);
++out_release:
++	bpf_cgroup_release(cgrp);
++}
++
++/*
++ * Walk the cgroup tree to update the active weight sums as tasks wake up and
++ * sleep. The weight sums are used as the base when calculating the proportion a
++ * given cgroup or task is entitled to at each level.
++ */
++static void update_active_weight_sums(struct cgroup *cgrp, bool runnable)
++{
++	struct fcg_cgrp_ctx *cgc;
++	bool updated = false;
++	int idx;
++
++	cgc = find_cgrp_ctx(cgrp);
++	if (!cgc)
++		return;
++
++	/*
++	 * In most cases, a hot cgroup would have multiple threads going to
++	 * sleep and waking up while the whole cgroup stays active. In leaf
++	 * cgroups, ->nr_runnable which is updated with __sync operations gates
++	 * ->nr_active updates, so that we don't have to grab the cgv_tree_lock
++	 * repeatedly for a busy cgroup which is staying active.
++	 */
++	if (runnable) {
++		if (__sync_fetch_and_add(&cgc->nr_runnable, 1))
++			return;
++		stat_inc(FCG_STAT_ACT);
++	} else {
++		if (__sync_sub_and_fetch(&cgc->nr_runnable, 1))
++			return;
++		stat_inc(FCG_STAT_DEACT);
++	}
++
++	/*
++	 * If @cgrp is becoming runnable, its hweight should be refreshed after
++	 * it's added to the weight tree so that enqueue has the up-to-date
++	 * value. If @cgrp is becoming quiescent, the hweight should be
++	 * refreshed before it's removed from the weight tree so that the usage
++	 * charging which happens afterwards has access to the latest value.
++	 */
++	if (!runnable)
++		cgrp_refresh_hweight(cgrp, cgc);
++
++	/* propagate upwards */
++	bpf_for(idx, 0, cgrp->level) {
++		int level = cgrp->level - idx;
++		struct fcg_cgrp_ctx *cgc, *pcgc = NULL;
++		bool propagate = false;
++
++		cgc = find_ancestor_cgrp_ctx(cgrp, level);
++		if (!cgc)
++			break;
++		if (level) {
++			pcgc = find_ancestor_cgrp_ctx(cgrp, level - 1);
++			if (!pcgc)
++				break;
++		}
++
++		/*
++		 * We need the propagation protected by a lock to synchronize
++		 * against weight changes. There's no reason to drop the lock at
++		 * each level but bpf_spin_lock() doesn't want any function
++		 * calls while locked.
++		 */
++		bpf_spin_lock(&cgv_tree_lock);
++
++		if (runnable) {
++			if (!cgc->nr_active++) {
++				updated = true;
++				if (pcgc) {
++					propagate = true;
++					pcgc->child_weight_sum += cgc->weight;
++				}
++			}
++		} else {
++			if (!--cgc->nr_active) {
++				updated = true;
++				if (pcgc) {
++					propagate = true;
++					pcgc->child_weight_sum -= cgc->weight;
++				}
++			}
++		}
++
++		bpf_spin_unlock(&cgv_tree_lock);
++
++		if (!propagate)
++			break;
++	}
++
++	if (updated)
++		__sync_fetch_and_add(&hweight_gen, 1);
++
++	if (runnable)
++		cgrp_refresh_hweight(cgrp, cgc);
++}
++
++void BPF_STRUCT_OPS(fcg_runnable, struct task_struct *p, u64 enq_flags)
++{
++	struct cgroup *cgrp;
++
++	cgrp = scx_bpf_task_cgroup(p);
++	update_active_weight_sums(cgrp, true);
++	bpf_cgroup_release(cgrp);
++}
++
++void BPF_STRUCT_OPS(fcg_stopping, struct task_struct *p, bool runnable)
++{
++	struct fcg_task_ctx *taskc;
++	struct cgroup *cgrp;
++	struct fcg_cgrp_ctx *cgc;
++
++	taskc = bpf_task_storage_get(&task_ctx, p, 0, 0);
++	if (!taskc) {
++		scx_bpf_error("task_ctx lookup failed");
++		return;
++	}
++
++	if (!taskc->bypassed_at)
 +		return;
 +
 +	cgrp = scx_bpf_task_cgroup(p);
 +	cgc = find_cgrp_ctx(cgrp);
 +	if (cgc) {
-+		/*
-+		 * @cgc->tvtime_now always progresses forward as tasks start
-+		 * executing. The test and update can be performed concurrently
-+		 * from multiple CPUs and thus racy. Any error should be
-+		 * contained and temporary. Let's just live with it.
-+		 */
-+		if (vtime_before(cgc->tvtime_now, p->scx.dsq_vtime))
-+			cgc->tvtime_now = p->scx.dsq_vtime;
++		__sync_fetch_and_add(&cgc->cvtime_delta,
++				     p->se.sum_exec_runtime - taskc->bypassed_at);
++		taskc->bypassed_at = 0;
 +	}
 +	bpf_cgroup_release(cgrp);
 +}
 +
- void BPF_STRUCT_OPS(fcg_stopping, struct task_struct *p, bool runnable)
- {
- 	struct fcg_task_ctx *taskc;
- 	struct cgroup *cgrp;
- 	struct fcg_cgrp_ctx *cgc;
- 
-+	/*
-+	 * Scale the execution time by the inverse of the weight and charge.
-+	 *
-+	 * Note that the default yield implementation yields by setting
-+	 * @p->scx.slice to zero and the following would treat the yielding task
-+	 * as if it has consumed all its slice. If this penalizes yielding tasks
-+	 * too much, determine the execution time by taking explicit timestamps
-+	 * instead of depending on @p->scx.slice.
-+	 */
-+	if (!fifo_sched)
-+		p->scx.dsq_vtime +=
-+			(SCX_SLICE_DFL - p->scx.slice) * 100 / p->scx.weight;
-+
- 	taskc = bpf_task_storage_get(&task_ctx, p, 0, 0);
- 	if (!taskc) {
- 		scx_bpf_error("task_ctx lookup failed");
-@@ -706,6 +761,7 @@ s32 BPF_STRUCT_OPS(fcg_prep_enable, struct task_struct *p,
- 		   struct scx_enable_args *args)
- {
- 	struct fcg_task_ctx *taskc;
-+	struct fcg_cgrp_ctx *cgc;
- 
- 	/*
- 	 * @p is new. Let's ensure that its task_ctx is available. We can sleep
-@@ -717,6 +773,12 @@ s32 BPF_STRUCT_OPS(fcg_prep_enable, struct task_struct *p,
- 		return -ENOMEM;
- 
- 	taskc->bypassed_at = 0;
-+
-+	if (!(cgc = find_cgrp_ctx(args->cgroup)))
-+		return -ENOENT;
-+
-+	p->scx.dsq_vtime = cgc->tvtime_now;
-+
- 	return 0;
- }
- 
-@@ -804,6 +866,20 @@ void BPF_STRUCT_OPS(fcg_cgroup_exit, struct cgroup *cgrp)
- 	scx_bpf_destroy_dsq(cgid);
- }
- 
-+void BPF_STRUCT_OPS(fcg_cgroup_move, struct task_struct *p,
-+		    struct cgroup *from, struct cgroup *to)
++void BPF_STRUCT_OPS(fcg_quiescent, struct task_struct *p, u64 deq_flags)
 +{
-+	struct fcg_cgrp_ctx *from_cgc, *to_cgc;
-+	s64 vtime_delta;
++	struct cgroup *cgrp;
 +
-+	/* find_cgrp_ctx() triggers scx_ops_error() on lookup failures */
-+	if (!(from_cgc = find_cgrp_ctx(from)) || !(to_cgc = find_cgrp_ctx(to)))
++	cgrp = scx_bpf_task_cgroup(p);
++	update_active_weight_sums(cgrp, false);
++	bpf_cgroup_release(cgrp);
++}
++
++void BPF_STRUCT_OPS(fcg_cgroup_set_weight, struct cgroup *cgrp, u32 weight)
++{
++	struct fcg_cgrp_ctx *cgc, *pcgc = NULL;
++
++	cgc = find_cgrp_ctx(cgrp);
++	if (!cgc)
 +		return;
 +
-+	vtime_delta = p->scx.dsq_vtime - from_cgc->tvtime_now;
-+	p->scx.dsq_vtime = to_cgc->tvtime_now + vtime_delta;
++	if (cgrp->level) {
++		pcgc = find_ancestor_cgrp_ctx(cgrp, cgrp->level - 1);
++		if (!pcgc)
++			return;
++	}
++
++	bpf_spin_lock(&cgv_tree_lock);
++	if (pcgc && cgc->nr_active)
++		pcgc->child_weight_sum += (s64)weight - cgc->weight;
++	cgc->weight = weight;
++	bpf_spin_unlock(&cgv_tree_lock);
 +}
 +
- s32 BPF_STRUCT_OPS(fcg_init)
- {
- 	if (!switch_partial)
-@@ -821,12 +897,14 @@ struct sched_ext_ops flatcg_ops = {
- 	.enqueue		= (void *)fcg_enqueue,
- 	.dispatch		= (void *)fcg_dispatch,
- 	.runnable		= (void *)fcg_runnable,
-+	.running		= (void *)fcg_running,
- 	.stopping		= (void *)fcg_stopping,
- 	.quiescent		= (void *)fcg_quiescent,
- 	.prep_enable		= (void *)fcg_prep_enable,
- 	.cgroup_set_weight	= (void *)fcg_cgroup_set_weight,
- 	.cgroup_init		= (void *)fcg_cgroup_init,
- 	.cgroup_exit		= (void *)fcg_cgroup_exit,
-+	.cgroup_move		= (void *)fcg_cgroup_move,
- 	.init			= (void *)fcg_init,
- 	.exit			= (void *)fcg_exit,
- 	.flags			= SCX_OPS_CGROUP_KNOB_WEIGHT | SCX_OPS_ENQ_EXITING,
-diff --git a/tools/sched_ext/scx_flatcg.c b/tools/sched_ext/scx_flatcg.c
-index f771b14b4e2a..f824c4b3444a 100644
---- a/tools/sched_ext/scx_flatcg.c
-+++ b/tools/sched_ext/scx_flatcg.c
-@@ -25,10 +25,11 @@ const char help_fmt[] =
- "\n"
- "See the top-level comment in .bpf.c for more details.\n"
- "\n"
--"Usage: %s [-s SLICE_US] [-i INTERVAL] [-p]\n"
-+"Usage: %s [-s SLICE_US] [-i INTERVAL] [-f] [-p]\n"
- "\n"
- "  -s SLICE_US   Override slice duration\n"
- "  -i INTERVAL   Report interval\n"
-+"  -f            Use FIFO scheduling instead of weighted vtime scheduling\n"
- "  -p            Switch only tasks on SCHED_EXT policy intead of all\n"
- "  -h            Display this help and exit\n";
- 
-@@ -145,6 +146,9 @@ int main(int argc, char **argv)
- 		case 'd':
- 			dump_cgrps = true;
- 			break;
-+		case 'f':
-+			skel->rodata->fifo_sched = true;
-+			break;
- 		case 'p':
- 			skel->rodata->switch_partial = true;
- 			break;
-diff --git a/tools/sched_ext/scx_simple.bpf.c b/tools/sched_ext/scx_simple.bpf.c
-index 6302a4ea9ea5..56b589d7f663 100644
---- a/tools/sched_ext/scx_simple.bpf.c
-+++ b/tools/sched_ext/scx_simple.bpf.c
-@@ -2,11 +2,20 @@
- /*
-  * A simple scheduler.
-  *
-- * A simple global FIFO scheduler. It also demonstrates the following niceties.
-+ * By default, it operates as a simple global weighted vtime scheduler and can
-+ * be switched to FIFO scheduling. It also demonstrates the following niceties.
-  *
-  * - Statistics tracking how many tasks are queued to local and global dsq's.
-  * - Termination notification for userspace.
-  *
-+ * While very simple, this scheduler should work reasonably well on CPUs with a
-+ * uniform L3 cache topology. While preemption is not implemented, the fact that
-+ * the scheduling queue is shared across all CPUs means that whatever is at the
-+ * front of the queue is likely to be executed fairly quickly given enough
-+ * number of CPUs. The FIFO scheduling mode may be beneficial to some workloads
-+ * but comes with the usual problems with FIFO scheduling where saturating
-+ * threads can easily drown out interactive ones.
-+ *
-  * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
-  * Copyright (c) 2022 Tejun Heo <tj@kernel.org>
-  * Copyright (c) 2022 David Vernet <dvernet@meta.com>
-@@ -15,8 +24,10 @@
- 
- char _license[] SEC("license") = "GPL";
- 
-+const volatile bool fifo_sched;
- const volatile bool switch_partial;
- 
-+static u64 vtime_now;
- struct user_exit_info uei;
- 
- struct {
-@@ -33,8 +44,18 @@ static void stat_inc(u32 idx)
- 		(*cnt_p)++;
- }
- 
-+static inline bool vtime_before(u64 a, u64 b)
++static bool try_pick_next_cgroup(u64 *cgidp)
 +{
-+	return (s64)(a - b) < 0;
++	struct bpf_rb_node *rb_node;
++	struct cgv_node_stash *stash;
++	struct cgv_node *cgv_node;
++	struct fcg_cgrp_ctx *cgc;
++	struct cgroup *cgrp;
++	u64 cgid;
++
++	/* pop the front cgroup and wind cvtime_now accordingly */
++	bpf_spin_lock(&cgv_tree_lock);
++
++	rb_node = bpf_rbtree_first(&cgv_tree);
++	if (!rb_node) {
++		bpf_spin_unlock(&cgv_tree_lock);
++		stat_inc(FCG_STAT_PNC_NO_CGRP);
++		*cgidp = 0;
++		return true;
++	}
++
++	rb_node = bpf_rbtree_remove(&cgv_tree, rb_node);
++	bpf_spin_unlock(&cgv_tree_lock);
++
++	if (!rb_node) {
++		/*
++		 * This should never happen. bpf_rbtree_first() was called
++		 * above while the tree lock was held, so the node should
++		 * always be present.
++		 */
++		scx_bpf_error("node could not be removed");
++		return true;
++	}
++
++	cgv_node = container_of(rb_node, struct cgv_node, rb_node);
++	cgid = cgv_node->cgid;
++
++	if (vtime_before(cvtime_now, cgv_node->cvtime))
++		cvtime_now = cgv_node->cvtime;
++
++	/*
++	 * If lookup fails, the cgroup's gone. Free and move on. See
++	 * fcg_cgroup_exit().
++	 */
++	cgrp = bpf_cgroup_from_id(cgid);
++	if (!cgrp) {
++		stat_inc(FCG_STAT_PNC_GONE);
++		goto out_free;
++	}
++
++	cgc = bpf_cgrp_storage_get(&cgrp_ctx, cgrp, 0, 0);
++	if (!cgc) {
++		bpf_cgroup_release(cgrp);
++		stat_inc(FCG_STAT_PNC_GONE);
++		goto out_free;
++	}
++
++	if (!scx_bpf_consume(cgid)) {
++		bpf_cgroup_release(cgrp);
++		stat_inc(FCG_STAT_PNC_EMPTY);
++		goto out_stash;
++	}
++
++	/*
++	 * Successfully consumed from the cgroup. This will be our current
++	 * cgroup for the new slice. Refresh its hweight.
++	 */
++	cgrp_refresh_hweight(cgrp, cgc);
++
++	bpf_cgroup_release(cgrp);
++
++	/*
++	 * As the cgroup may have more tasks, add it back to the rbtree. Note
++	 * that here we charge the full slice upfront and then exact later
++	 * according to the actual consumption. This prevents lowpri thundering
++	 * herd from saturating the machine.
++	 */
++	bpf_spin_lock(&cgv_tree_lock);
++	cgv_node->cvtime += cgrp_slice_ns * FCG_HWEIGHT_ONE / (cgc->hweight ?: 1);
++	cgrp_cap_budget(cgv_node, cgc);
++	bpf_rbtree_add(&cgv_tree, &cgv_node->rb_node, cgv_node_less);
++	bpf_spin_unlock(&cgv_tree_lock);
++
++	*cgidp = cgid;
++	stat_inc(FCG_STAT_PNC_NEXT);
++	return true;
++
++out_stash:
++	stash = bpf_map_lookup_elem(&cgv_node_stash, &cgid);
++	if (!stash) {
++		stat_inc(FCG_STAT_PNC_GONE);
++		goto out_free;
++	}
++
++	/*
++	 * Paired with cmpxchg in cgrp_enqueued(). If they see the following
++	 * transition, they'll enqueue the cgroup. If they are earlier, we'll
++	 * see their task in the dq below and requeue the cgroup.
++	 */
++	__sync_val_compare_and_swap(&cgc->queued, 1, 0);
++
++	if (scx_bpf_dsq_nr_queued(cgid)) {
++		bpf_spin_lock(&cgv_tree_lock);
++		bpf_rbtree_add(&cgv_tree, &cgv_node->rb_node, cgv_node_less);
++		bpf_spin_unlock(&cgv_tree_lock);
++	} else {
++		cgv_node = bpf_kptr_xchg(&stash->node, cgv_node);
++		if (cgv_node) {
++			scx_bpf_error("unexpected !NULL cgv_node stash");
++			goto out_free;
++		}
++	}
++
++	return false;
++
++out_free:
++	bpf_obj_drop(cgv_node);
++	return false;
 +}
 +
- void BPF_STRUCT_OPS(simple_enqueue, struct task_struct *p, u64 enq_flags)
- {
-+	/*
-+	 * If scx_select_cpu_dfl() is setting %SCX_ENQ_LOCAL, it indicates that
-+	 * running @p on its CPU directly shouldn't affect fairness. Just queue
-+	 * it on the local FIFO.
-+	 */
- 	if (enq_flags & SCX_ENQ_LOCAL) {
- 		stat_inc(0);	/* count local queueing */
- 		scx_bpf_dispatch(p, SCX_DSQ_LOCAL, SCX_SLICE_DFL, enq_flags);
-@@ -42,7 +63,60 @@ void BPF_STRUCT_OPS(simple_enqueue, struct task_struct *p, u64 enq_flags)
- 	}
- 
- 	stat_inc(1);	/* count global queueing */
--	scx_bpf_dispatch(p, SCX_DSQ_GLOBAL, SCX_SLICE_DFL, enq_flags);
++void BPF_STRUCT_OPS(fcg_dispatch, s32 cpu, struct task_struct *prev)
++{
++	struct fcg_cpu_ctx *cpuc;
++	struct fcg_cgrp_ctx *cgc;
++	struct cgroup *cgrp;
++	u64 now = bpf_ktime_get_ns();
 +
-+	if (fifo_sched) {
-+		scx_bpf_dispatch(p, SCX_DSQ_GLOBAL, SCX_SLICE_DFL, enq_flags);
++	cpuc = find_cpu_ctx();
++	if (!cpuc)
++		return;
++
++	if (!cpuc->cur_cgid)
++		goto pick_next_cgroup;
++
++	if (vtime_before(now, cpuc->cur_at + cgrp_slice_ns)) {
++		if (scx_bpf_consume(cpuc->cur_cgid)) {
++			stat_inc(FCG_STAT_CNS_KEEP);
++			return;
++		}
++		stat_inc(FCG_STAT_CNS_EMPTY);
 +	} else {
-+		u64 vtime = p->scx.dsq_vtime;
++		stat_inc(FCG_STAT_CNS_EXPIRE);
++	}
 +
++	/*
++	 * The current cgroup is expiring. It was already charged a full slice.
++	 * Calculate the actual usage and accumulate the delta.
++	 */
++	cgrp = bpf_cgroup_from_id(cpuc->cur_cgid);
++	if (!cgrp) {
++		stat_inc(FCG_STAT_CNS_GONE);
++		goto pick_next_cgroup;
++	}
++
++	cgc = bpf_cgrp_storage_get(&cgrp_ctx, cgrp, 0, 0);
++	if (cgc) {
 +		/*
-+		 * Limit the amount of budget that an idling task can accumulate
-+		 * to one slice.
++		 * We want to update the vtime delta and then look for the next
++		 * cgroup to execute but the latter needs to be done in a loop
++		 * and we can't keep the lock held. Oh well...
 +		 */
-+		if (vtime_before(vtime, vtime_now - SCX_SLICE_DFL))
-+			vtime = vtime_now - SCX_SLICE_DFL;
++		bpf_spin_lock(&cgv_tree_lock);
++		__sync_fetch_and_add(&cgc->cvtime_delta,
++				     (cpuc->cur_at + cgrp_slice_ns - now) *
++				     FCG_HWEIGHT_ONE / (cgc->hweight ?: 1));
++		bpf_spin_unlock(&cgv_tree_lock);
++	} else {
++		stat_inc(FCG_STAT_CNS_GONE);
++	}
 +
-+		scx_bpf_dispatch_vtime(p, SCX_DSQ_GLOBAL, SCX_SLICE_DFL, vtime,
-+				       enq_flags);
++	bpf_cgroup_release(cgrp);
++
++pick_next_cgroup:
++	cpuc->cur_at = now;
++
++	if (scx_bpf_consume(SCX_DSQ_GLOBAL)) {
++		cpuc->cur_cgid = 0;
++		return;
++	}
++
++	bpf_repeat(BPF_MAX_LOOPS) {
++		if (try_pick_next_cgroup(&cpuc->cur_cgid))
++			break;
 +	}
 +}
 +
-+void BPF_STRUCT_OPS(simple_running, struct task_struct *p)
++s32 BPF_STRUCT_OPS(fcg_prep_enable, struct task_struct *p,
++		   struct scx_enable_args *args)
 +{
-+	if (fifo_sched)
-+		return;
++	struct fcg_task_ctx *taskc;
 +
 +	/*
-+	 * Global vtime always progresses forward as tasks start executing. The
-+	 * test and update can be performed concurrently from multiple CPUs and
-+	 * thus racy. Any error should be contained and temporary. Let's just
-+	 * live with it.
++	 * @p is new. Let's ensure that its task_ctx is available. We can sleep
++	 * in this function and the following will automatically use GFP_KERNEL.
 +	 */
-+	if (vtime_before(vtime_now, p->scx.dsq_vtime))
-+		vtime_now = p->scx.dsq_vtime;
++	taskc = bpf_task_storage_get(&task_ctx, p, 0,
++				     BPF_LOCAL_STORAGE_GET_F_CREATE);
++	if (!taskc)
++		return -ENOMEM;
++
++	taskc->bypassed_at = 0;
++	return 0;
 +}
 +
-+void BPF_STRUCT_OPS(simple_stopping, struct task_struct *p, bool runnable)
++int BPF_STRUCT_OPS_SLEEPABLE(fcg_cgroup_init, struct cgroup *cgrp,
++			     struct scx_cgroup_init_args *args)
 +{
-+	if (fifo_sched)
-+		return;
++	struct fcg_cgrp_ctx *cgc;
++	struct cgv_node *cgv_node;
++	struct cgv_node_stash empty_stash = {}, *stash;
++	u64 cgid = cgrp->kn->id;
++	int ret;
 +
 +	/*
-+	 * Scale the execution time by the inverse of the weight and charge.
-+	 *
-+	 * Note that the default yield implementation yields by setting
-+	 * @p->scx.slice to zero and the following would treat the yielding task
-+	 * as if it has consumed all its slice. If this penalizes yielding tasks
-+	 * too much, determine the execution time by taking explicit timestamps
-+	 * instead of depending on @p->scx.slice.
++	 * Technically incorrect as cgroup ID is full 64bit while dq ID is
++	 * 63bit. Should not be a problem in practice and easy to spot in the
++	 * unlikely case that it breaks.
 +	 */
-+	p->scx.dsq_vtime += (SCX_SLICE_DFL - p->scx.slice) * 100 / p->scx.weight;
++	ret = scx_bpf_create_dsq(cgid, -1);
++	if (ret)
++		return ret;
++
++	cgc = bpf_cgrp_storage_get(&cgrp_ctx, cgrp, 0,
++				   BPF_LOCAL_STORAGE_GET_F_CREATE);
++	if (!cgc) {
++		ret = -ENOMEM;
++		goto err_destroy_dsq;
++	}
++
++	cgc->weight = args->weight;
++	cgc->hweight = FCG_HWEIGHT_ONE;
++
++	ret = bpf_map_update_elem(&cgv_node_stash, &cgid, &empty_stash,
++				  BPF_NOEXIST);
++	if (ret) {
++		if (ret != -ENOMEM)
++			scx_bpf_error("unexpected stash creation error (%d)",
++				      ret);
++		goto err_destroy_dsq;
++	}
++
++	stash = bpf_map_lookup_elem(&cgv_node_stash, &cgid);
++	if (!stash) {
++		scx_bpf_error("unexpected cgv_node stash lookup failure");
++		ret = -ENOENT;
++		goto err_destroy_dsq;
++	}
++
++	cgv_node = bpf_obj_new(struct cgv_node);
++	if (!cgv_node) {
++		ret = -ENOMEM;
++		goto err_del_cgv_node;
++	}
++
++	cgv_node->cgid = cgid;
++	cgv_node->cvtime = cvtime_now;
++
++	cgv_node = bpf_kptr_xchg(&stash->node, cgv_node);
++	if (cgv_node) {
++		scx_bpf_error("unexpected !NULL cgv_node stash");
++		ret = -EBUSY;
++		goto err_drop;
++	}
++
++	return 0;
++
++err_drop:
++	bpf_obj_drop(cgv_node);
++err_del_cgv_node:
++	bpf_map_delete_elem(&cgv_node_stash, &cgid);
++err_destroy_dsq:
++	scx_bpf_destroy_dsq(cgid);
++	return ret;
 +}
 +
-+void BPF_STRUCT_OPS(simple_enable, struct task_struct *p,
-+		    struct scx_enable_args *args)
++void BPF_STRUCT_OPS(fcg_cgroup_exit, struct cgroup *cgrp)
 +{
-+	p->scx.dsq_vtime = vtime_now;
- }
- 
- s32 BPF_STRUCT_OPS(simple_init)
-@@ -60,6 +134,9 @@ void BPF_STRUCT_OPS(simple_exit, struct scx_exit_info *ei)
- SEC(".struct_ops.link")
- struct sched_ext_ops simple_ops = {
- 	.enqueue		= (void *)simple_enqueue,
-+	.running		= (void *)simple_running,
-+	.stopping		= (void *)simple_stopping,
-+	.enable			= (void *)simple_enable,
- 	.init			= (void *)simple_init,
- 	.exit			= (void *)simple_exit,
- 	.name			= "simple",
-diff --git a/tools/sched_ext/scx_simple.c b/tools/sched_ext/scx_simple.c
-index 6116b13d8cff..900f1c3e74ab 100644
---- a/tools/sched_ext/scx_simple.c
-+++ b/tools/sched_ext/scx_simple.c
-@@ -17,8 +17,9 @@ const char help_fmt[] =
- "\n"
- "See the top-level comment in .bpf.c for more details.\n"
- "\n"
--"Usage: %s [-p]\n"
-+"Usage: %s [-f] [-p]\n"
- "\n"
-+"  -f            Use FIFO scheduling instead of weighted vtime scheduling\n"
- "  -p            Switch only tasks on SCHED_EXT policy intead of all\n"
- "  -h            Display this help and exit\n";
- 
-@@ -63,8 +64,11 @@ int main(int argc, char **argv)
- 	skel = scx_simple__open();
- 	SCX_BUG_ON(!skel, "Failed to open skel");
- 
--	while ((opt = getopt(argc, argv, "ph")) != -1) {
-+	while ((opt = getopt(argc, argv, "fph")) != -1) {
- 		switch (opt) {
-+		case 'f':
-+			skel->rodata->fifo_sched = true;
++	u64 cgid = cgrp->kn->id;
++
++	/*
++	 * For now, there's no way find and remove the cgv_node if it's on the
++	 * cgv_tree. Let's drain them in the dispatch path as they get popped
++	 * off the front of the tree.
++	 */
++	bpf_map_delete_elem(&cgv_node_stash, &cgid);
++	scx_bpf_destroy_dsq(cgid);
++}
++
++s32 BPF_STRUCT_OPS(fcg_init)
++{
++	if (!switch_partial)
++		scx_bpf_switch_all();
++	return 0;
++}
++
++void BPF_STRUCT_OPS(fcg_exit, struct scx_exit_info *ei)
++{
++	uei_record(&uei, ei);
++}
++
++SEC(".struct_ops.link")
++struct sched_ext_ops flatcg_ops = {
++	.enqueue		= (void *)fcg_enqueue,
++	.dispatch		= (void *)fcg_dispatch,
++	.runnable		= (void *)fcg_runnable,
++	.stopping		= (void *)fcg_stopping,
++	.quiescent		= (void *)fcg_quiescent,
++	.prep_enable		= (void *)fcg_prep_enable,
++	.cgroup_set_weight	= (void *)fcg_cgroup_set_weight,
++	.cgroup_init		= (void *)fcg_cgroup_init,
++	.cgroup_exit		= (void *)fcg_cgroup_exit,
++	.init			= (void *)fcg_init,
++	.exit			= (void *)fcg_exit,
++	.flags			= SCX_OPS_CGROUP_KNOB_WEIGHT | SCX_OPS_ENQ_EXITING,
++	.name			= "flatcg",
++};
+diff --git a/tools/sched_ext/scx_flatcg.c b/tools/sched_ext/scx_flatcg.c
+new file mode 100644
+index 000000000000..f771b14b4e2a
+--- /dev/null
++++ b/tools/sched_ext/scx_flatcg.c
+@@ -0,0 +1,217 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2023 Meta Platforms, Inc. and affiliates.
++ * Copyright (c) 2023 Tejun Heo <tj@kernel.org>
++ * Copyright (c) 2023 David Vernet <dvernet@meta.com>
++ */
++#include <stdio.h>
++#include <signal.h>
++#include <unistd.h>
++#include <libgen.h>
++#include <limits.h>
++#include <fcntl.h>
++#include <time.h>
++#include <bpf/bpf.h>
++#include "scx_common.h"
++#include "scx_flatcg.h"
++#include "scx_flatcg.skel.h"
++
++#ifndef FILEID_KERNFS
++#define FILEID_KERNFS		0xfe
++#endif
++
++const char help_fmt[] =
++"A flattened cgroup hierarchy sched_ext scheduler.\n"
++"\n"
++"See the top-level comment in .bpf.c for more details.\n"
++"\n"
++"Usage: %s [-s SLICE_US] [-i INTERVAL] [-p]\n"
++"\n"
++"  -s SLICE_US   Override slice duration\n"
++"  -i INTERVAL   Report interval\n"
++"  -p            Switch only tasks on SCHED_EXT policy intead of all\n"
++"  -h            Display this help and exit\n";
++
++static volatile int exit_req;
++
++static void sigint_handler(int dummy)
++{
++	exit_req = 1;
++}
++
++static float read_cpu_util(__u64 *last_sum, __u64 *last_idle)
++{
++	FILE *fp;
++	char buf[4096];
++	char *line, *cur = NULL, *tok;
++	__u64 sum = 0, idle = 0;
++	__u64 delta_sum, delta_idle;
++	int idx;
++
++	fp = fopen("/proc/stat", "r");
++	if (!fp) {
++		perror("fopen(\"/proc/stat\")");
++		return 0.0;
++	}
++
++	if (!fgets(buf, sizeof(buf), fp)) {
++		perror("fgets(\"/proc/stat\")");
++		fclose(fp);
++		return 0.0;
++	}
++	fclose(fp);
++
++	line = buf;
++	for (idx = 0; (tok = strtok_r(line, " \n", &cur)); idx++) {
++		char *endp = NULL;
++		__u64 v;
++
++		if (idx == 0) {
++			line = NULL;
++			continue;
++		}
++		v = strtoull(tok, &endp, 0);
++		if (!endp || *endp != '\0') {
++			fprintf(stderr, "failed to parse %dth field of /proc/stat (\"%s\")\n",
++				idx, tok);
++			continue;
++		}
++		sum += v;
++		if (idx == 4)
++			idle = v;
++	}
++
++	delta_sum = sum - *last_sum;
++	delta_idle = idle - *last_idle;
++	*last_sum = sum;
++	*last_idle = idle;
++
++	return delta_sum ? (float)(delta_sum - delta_idle) / delta_sum : 0.0;
++}
++
++static void fcg_read_stats(struct scx_flatcg *skel, __u64 *stats)
++{
++	__u64 cnts[FCG_NR_STATS][skel->rodata->nr_cpus];
++	__u32 idx;
++
++	memset(stats, 0, sizeof(stats[0]) * FCG_NR_STATS);
++
++	for (idx = 0; idx < FCG_NR_STATS; idx++) {
++		int ret, cpu;
++
++		ret = bpf_map_lookup_elem(bpf_map__fd(skel->maps.stats),
++					  &idx, cnts[idx]);
++		if (ret < 0)
++			continue;
++		for (cpu = 0; cpu < skel->rodata->nr_cpus; cpu++)
++			stats[idx] += cnts[idx][cpu];
++	}
++}
++
++int main(int argc, char **argv)
++{
++	struct scx_flatcg *skel;
++	struct bpf_link *link;
++	struct timespec intv_ts = { .tv_sec = 2, .tv_nsec = 0 };
++	bool dump_cgrps = false;
++	__u64 last_cpu_sum = 0, last_cpu_idle = 0;
++	__u64 last_stats[FCG_NR_STATS] = {};
++	unsigned long seq = 0;
++	__s32 opt;
++
++	signal(SIGINT, sigint_handler);
++	signal(SIGTERM, sigint_handler);
++
++	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
++
++	skel = scx_flatcg__open();
++	SCX_BUG_ON(!skel, "Failed to open skel");
++
++	skel->rodata->nr_cpus = libbpf_num_possible_cpus();
++
++	while ((opt = getopt(argc, argv, "s:i:dfph")) != -1) {
++		double v;
++
++		switch (opt) {
++		case 's':
++			v = strtod(optarg, NULL);
++			skel->rodata->cgrp_slice_ns = v * 1000;
 +			break;
- 		case 'p':
- 			skel->rodata->switch_partial = true;
- 			break;
++		case 'i':
++			v = strtod(optarg, NULL);
++			intv_ts.tv_sec = v;
++			intv_ts.tv_nsec = (v - (float)intv_ts.tv_sec) * 1000000000;
++			break;
++		case 'd':
++			dump_cgrps = true;
++			break;
++		case 'p':
++			skel->rodata->switch_partial = true;
++			break;
++		case 'h':
++		default:
++			fprintf(stderr, help_fmt, basename(argv[0]));
++			return opt != 'h';
++		}
++	}
++
++	printf("slice=%.1lfms intv=%.1lfs dump_cgrps=%d",
++	       (double)skel->rodata->cgrp_slice_ns / 1000000.0,
++	       (double)intv_ts.tv_sec + (double)intv_ts.tv_nsec / 1000000000.0,
++	       dump_cgrps);
++
++	SCX_BUG_ON(scx_flatcg__load(skel), "Failed to load skel");
++
++	link = bpf_map__attach_struct_ops(skel->maps.flatcg_ops);
++	SCX_BUG_ON(!link, "Failed to attach struct_ops");
++
++	while (!exit_req && !uei_exited(&skel->bss->uei)) {
++		__u64 acc_stats[FCG_NR_STATS];
++		__u64 stats[FCG_NR_STATS];
++		float cpu_util;
++		int i;
++
++		cpu_util = read_cpu_util(&last_cpu_sum, &last_cpu_idle);
++
++		fcg_read_stats(skel, acc_stats);
++		for (i = 0; i < FCG_NR_STATS; i++)
++			stats[i] = acc_stats[i] - last_stats[i];
++
++		memcpy(last_stats, acc_stats, sizeof(acc_stats));
++
++		printf("\n[SEQ %6lu cpu=%5.1lf hweight_gen=%lu]\n",
++		       seq++, cpu_util * 100.0, skel->data->hweight_gen);
++		printf("       act:%6llu  deact:%6llu local:%6llu global:%6llu\n",
++		       stats[FCG_STAT_ACT],
++		       stats[FCG_STAT_DEACT],
++		       stats[FCG_STAT_LOCAL],
++		       stats[FCG_STAT_GLOBAL]);
++		printf("HWT   skip:%6llu   race:%6llu cache:%6llu update:%6llu\n",
++		       stats[FCG_STAT_HWT_SKIP],
++		       stats[FCG_STAT_HWT_RACE],
++		       stats[FCG_STAT_HWT_CACHE],
++		       stats[FCG_STAT_HWT_UPDATES]);
++		printf("ENQ   skip:%6llu   race:%6llu\n",
++		       stats[FCG_STAT_ENQ_SKIP],
++		       stats[FCG_STAT_ENQ_RACE]);
++		printf("CNS   keep:%6llu expire:%6llu empty:%6llu   gone:%6llu\n",
++		       stats[FCG_STAT_CNS_KEEP],
++		       stats[FCG_STAT_CNS_EXPIRE],
++		       stats[FCG_STAT_CNS_EMPTY],
++		       stats[FCG_STAT_CNS_GONE]);
++		printf("PNC nocgrp:%6llu   next:%6llu empty:%6llu   gone:%6llu\n",
++		       stats[FCG_STAT_PNC_NO_CGRP],
++		       stats[FCG_STAT_PNC_NEXT],
++		       stats[FCG_STAT_PNC_EMPTY],
++		       stats[FCG_STAT_PNC_GONE]);
++		printf("BAD remove:%6llu\n",
++		       acc_stats[FCG_STAT_BAD_REMOVAL]);
++
++		nanosleep(&intv_ts, NULL);
++	}
++
++	bpf_link__destroy(link);
++	uei_print(&skel->bss->uei);
++	scx_flatcg__destroy(skel);
++	return 0;
++}
+diff --git a/tools/sched_ext/scx_flatcg.h b/tools/sched_ext/scx_flatcg.h
+new file mode 100644
+index 000000000000..490758ed41f0
+--- /dev/null
++++ b/tools/sched_ext/scx_flatcg.h
+@@ -0,0 +1,49 @@
++#ifndef __SCX_EXAMPLE_FLATCG_H
++#define __SCX_EXAMPLE_FLATCG_H
++
++enum {
++	FCG_HWEIGHT_ONE		= 1LLU << 16,
++};
++
++enum fcg_stat_idx {
++	FCG_STAT_ACT,
++	FCG_STAT_DEACT,
++	FCG_STAT_LOCAL,
++	FCG_STAT_GLOBAL,
++
++	FCG_STAT_HWT_UPDATES,
++	FCG_STAT_HWT_CACHE,
++	FCG_STAT_HWT_SKIP,
++	FCG_STAT_HWT_RACE,
++
++	FCG_STAT_ENQ_SKIP,
++	FCG_STAT_ENQ_RACE,
++
++	FCG_STAT_CNS_KEEP,
++	FCG_STAT_CNS_EXPIRE,
++	FCG_STAT_CNS_EMPTY,
++	FCG_STAT_CNS_GONE,
++
++	FCG_STAT_PNC_NO_CGRP,
++	FCG_STAT_PNC_NEXT,
++	FCG_STAT_PNC_EMPTY,
++	FCG_STAT_PNC_GONE,
++
++	FCG_STAT_BAD_REMOVAL,
++
++	FCG_NR_STATS,
++};
++
++struct fcg_cgrp_ctx {
++	u32			nr_active;
++	u32			nr_runnable;
++	u32			queued;
++	u32			weight;
++	u32			hweight;
++	u64			child_weight_sum;
++	u64			hweight_gen;
++	s64			cvtime_delta;
++	u64			tvtime_now;
++};
++
++#endif /* __SCX_EXAMPLE_FLATCG_H */
 -- 
 2.42.0
 
