@@ -1,48 +1,48 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA5C5667
-	for <bpf@vger.kernel.org>; Sat, 11 Nov 2023 02:50:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80A9C15B8
+	for <bpf@vger.kernel.org>; Sat, 11 Nov 2023 02:50:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ffcz1hq+"
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736F555A9;
-	Fri, 10 Nov 2023 18:50:00 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-5b97ca78da8so2075108a12.3;
-        Fri, 10 Nov 2023 18:50:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O3OfsLpi"
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6396D558A;
+	Fri, 10 Nov 2023 18:49:52 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1f0f94a08a0so1526076fac.2;
+        Fri, 10 Nov 2023 18:49:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699671000; x=1700275800; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1699670991; x=1700275791; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=n2mAXfoqdClBqb8KPrGYUZAH+oGCSBRYOwed2eXH4dY=;
-        b=ffcz1hq+vI9ANUpQEocXOopsdno03KDg0SDC5+0OrwuF2WaO63ag3AdhpxSz3M763T
-         oKCt6+vK9fZwxyrzs/7dw6CMM6iT7TA8S/Qo/OrLvV8Mt8QwSN9hvnVWnHtS3nk8w35F
-         h6nvTg/RAJGYxt8hAcFeUsivGnG+NCnjM0FtdgWwUVIMaxD5n7MUwX0thZdqfgldrIEe
-         um7XiMQ6tEeVRTTVaMx20C50pgWyk6/e077Yhl7O2NPbyblMEmZQAp+MirKHTsrPz/A3
-         QKwnSoQbZGSEmVxJUNO+r/8okAaEdPvFkJkfGZ1p3Oly3SuPRduFAYEK+PkfWRYIDLGp
-         mXIA==
+        bh=zECEHWRbTo8hFnOa6zaUXPkL4mQ3qHhxIhPjoPpxppI=;
+        b=O3OfsLpikuzsxP5dnwu7p9GxMeL9794Ta66nDiBXrcnSdnJBcftRXaKiEKtoj/BRH5
+         aS0jAB/bvf1LPFFlyypUC6xrs1JM0atFuzFOIp8ELyGMMrWzLG5cKOYkPb40dTriVdr/
+         QsDQZcHONQpjeIpCSetO9kmKAVBkgGmGAEaxBLU45laCA1qQhqk5nvcF+r+u9iPsJGaP
+         nAPAiGZa+iRvoc4GooaOwZJdg0fvqvVZFgHN7EDZHsLmtrgYEbya3Myf/zr6GUPHumin
+         M/67uSMbDa4FRR4iUD0aqGAIvzl5N9TX1ZRuSAW3/KMlDV8xBVzaKVuem5YvCtcp1HCg
+         SMFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699671000; x=1700275800;
+        d=1e100.net; s=20230601; t=1699670991; x=1700275791;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=n2mAXfoqdClBqb8KPrGYUZAH+oGCSBRYOwed2eXH4dY=;
-        b=wHJc8sTiRgOC+AD4yFGeuN4oBuw4n8fA+sUAHYatVCOo+8NpF23IdgB+sd/l5JvmFI
-         rtvhTqOXSDna9jFG18mkf8yvcER+oKOJQV7Tu9N3F7nNmsrlfIlhd4ykG3kYnlIv/7Y1
-         PdULQ6oatn9r7mDIw1aL37+yxnNb02SzZzXkweuMqZtxG+Smngiya8Db8f3j7RvcjEp2
-         BBcdFVYIYpfV8XUkLKK/kgGY+0ruj+5xQew8rEu4OApLUwtxXBOBR0ROzZRN9H/0gYwa
-         nqwe+kCS0ZXlG1URqfmNX/UC2tb+hFsMUWeA0obX7VGgF3b7quB9Bxk3VGtMzQ23XJ0y
-         FhZA==
-X-Gm-Message-State: AOJu0YxR+I2BNU6cMygUNmOZpM35scqOkiDmH58iX39L+oRp7E6F3hfi
-	pZ4SeGc8svNOIHCjzMKvsQ0=
-X-Google-Smtp-Source: AGHT+IE/rWVpcIRpSr/nfAsDsmbDYFBktUpBTFI3nl2TbEv74r0sPQJKNgQXUsHE4bL6ZIOgH8CZjQ==
-X-Received: by 2002:a17:90b:1652:b0:27d:1862:a494 with SMTP id il18-20020a17090b165200b0027d1862a494mr703539pjb.11.1699670999364;
-        Fri, 10 Nov 2023 18:49:59 -0800 (PST)
+        bh=zECEHWRbTo8hFnOa6zaUXPkL4mQ3qHhxIhPjoPpxppI=;
+        b=HHLydUm4hppcyr3MizjFify2p1SNJdayxuY9ftzzLYIm740skQg0iEmkKrXJxlIL90
+         VcXyOniJe/dsmdVxW7ehMzlq+kZxSE6nDyqfgZ/lSumRML0kNetrcdyoGnocapOMBBYd
+         vV6BSL2+EbS8F+fqZ4i0tx2WF4Ffk4+Z58brTvAglvJ6FmADWPwWryneuAzsWh9f4pqu
+         JLjfDuSZXEQ17OUdv5PrNi7NGbJ645bcxOMc3D6PjmqG7R9EpdvlrleuqRg3HbuVASI6
+         9PDi8xC5al6jPnSGdVmGpeYmTLh7Jq5BM63ORnQm8Fwvahy5IWkV+hFcRdAshW53AxWo
+         uwLw==
+X-Gm-Message-State: AOJu0Yxfo5mM3cOhzdTiJO6ly5hL0zhm8dMeynu7XGjKv+uNn/KnQ0yq
+	DwwTXFPbAQNtwxPA5s+Nf+M=
+X-Google-Smtp-Source: AGHT+IGn5MR8aAabll5lzbn4XL4PajUKO2HD3RjGDTVFTpIi6FgcCF72VYhSp3es8foHQptPFVnGbg==
+X-Received: by 2002:a05:6870:fe96:b0:1ea:647f:a9b6 with SMTP id qm22-20020a056870fe9600b001ea647fa9b6mr1193684oab.44.1699670991406;
+        Fri, 10 Nov 2023 18:49:51 -0800 (PST)
 Received: from localhost ([2620:10d:c090:400::4:7384])
-        by smtp.gmail.com with ESMTPSA id 14-20020a17090a19ce00b002809d2d90e3sm2594662pjj.8.2023.11.10.18.49.58
+        by smtp.gmail.com with ESMTPSA id p24-20020a17090a931800b00280070a2613sm2276487pjo.51.2023.11.10.18.49.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Nov 2023 18:49:58 -0800 (PST)
+        Fri, 10 Nov 2023 18:49:50 -0800 (PST)
 Sender: Tejun Heo <htejun@gmail.com>
 From: Tejun Heo <tj@kernel.org>
 To: torvalds@linux-foundation.org,
@@ -75,11 +75,10 @@ To: torvalds@linux-foundation.org,
 Cc: linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
 	kernel-team@meta.com,
-	Tejun Heo <tj@kernel.org>,
-	Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH 33/36] sched_ext: Documentation: scheduler: Document extensible scheduler class
-Date: Fri, 10 Nov 2023 16:47:59 -1000
-Message-ID: <20231111024835.2164816-34-tj@kernel.org>
+	Tejun Heo <tj@kernel.org>
+Subject: [PATCH 29/36] sched_ext: Implement sched_ext_ops.cpu_acquire/release()
+Date: Fri, 10 Nov 2023 16:47:55 -1000
+Message-ID: <20231111024835.2164816-30-tj@kernel.org>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231111024835.2164816-1-tj@kernel.org>
 References: <20231111024835.2164816-1-tj@kernel.org>
@@ -91,676 +90,668 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add Documentation/scheduler/sched-ext.rst which gives a high-level overview
-and pointers to the examples.
+From: David Vernet <dvernet@meta.com>
 
-v4: * README improved, reformatted in markdown and renamed to README.md.
+Scheduler classes are strictly ordered and when a higher priority class has
+tasks to run, the lower priority ones lose access to the CPU. Being able to
+monitor and act on these events are necessary for use cases includling
+strict core-scheduling and latency management.
 
-v3: * Added tools/sched_ext/README.
+This patch adds two operations ops.cpu_acquire() and .cpu_release(). The
+former is invoked when a CPU becomes available to the BPF scheduler and the
+opposite for the latter. This patch also implements
+scx_bpf_reenqueue_local() which can be called from .cpu_release() to trigger
+requeueing of all tasks in the local dsq of the CPU so that the tasks can be
+reassigned to other available CPUs.
 
-    * Dropped _example prefix from scheduler names.
+scx_pair is updated to use .cpu_acquire/release() along with
+%SCX_KICK_WAIT to make the pair scheduling guarantee strict even when a CPU
+is preempted by a higher priority scheduler class.
 
-v2: * Apply minor edits suggested by Bagas. Caveats section dropped as all
-      of them are addressed.
+scx_qmap is updated to use .cpu_acquire/release() to empty the local
+dsq of a preempted CPU. A similar approach can be adopted by BPF schedulers
+that want to have a tight control over latency.
 
+v3: * Drop the const qualifier from scx_cpu_release_args.task. BPF enforces
+      access control through the verifier, so the qualifier isn't actually
+      operative and only gets in the way when interacting with various
+      helpers.
+
+v2: * Add p->scx.kf_mask annotation to allow calling
+      scx_bpf_reenqueue_local() from ops.cpu_release() nested inside
+      ops.init() and other sleepable operations.
+
+Signed-off-by: David Vernet <dvernet@meta.com>
+Reviewed-by: Tejun Heo <tj@kernel.org>
 Signed-off-by: Tejun Heo <tj@kernel.org>
-Reviewed-by: David Vernet <dvernet@meta.com>
 Acked-by: Josh Don <joshdon@google.com>
 Acked-by: Hao Luo <haoluo@google.com>
 Acked-by: Barret Rhoden <brho@google.com>
-Cc: Bagas Sanjaya <bagasdotme@gmail.com>
 ---
- Documentation/scheduler/index.rst     |   1 +
- Documentation/scheduler/sched-ext.rst | 229 +++++++++++++++++
- include/linux/sched/ext.h             |   2 +
- kernel/Kconfig.preempt                |   2 +
- kernel/sched/ext.c                    |   2 +
- kernel/sched/ext.h                    |   2 +
- tools/sched_ext/README.md             | 341 ++++++++++++++++++++++++++
- 7 files changed, 579 insertions(+)
- create mode 100644 Documentation/scheduler/sched-ext.rst
- create mode 100644 tools/sched_ext/README.md
+ include/linux/sched/ext.h        |  53 ++++++++++++-
+ kernel/sched/ext.c               | 132 ++++++++++++++++++++++++++++++-
+ kernel/sched/ext.h               |  24 +++++-
+ kernel/sched/sched.h             |   1 +
+ tools/sched_ext/scx_common.bpf.h |   1 +
+ tools/sched_ext/scx_pair.bpf.c   | 101 +++++++++++++++++++++--
+ tools/sched_ext/scx_qmap.bpf.c   |  37 ++++++++-
+ tools/sched_ext/scx_qmap.c       |   4 +-
+ 8 files changed, 341 insertions(+), 12 deletions(-)
 
-diff --git a/Documentation/scheduler/index.rst b/Documentation/scheduler/index.rst
-index 3170747226f6..0b650bb550e6 100644
---- a/Documentation/scheduler/index.rst
-+++ b/Documentation/scheduler/index.rst
-@@ -19,6 +19,7 @@ Scheduler
-     sched-nice-design
-     sched-rt-group
-     sched-stats
-+    sched-ext
-     sched-debug
- 
-     text_files
-diff --git a/Documentation/scheduler/sched-ext.rst b/Documentation/scheduler/sched-ext.rst
-new file mode 100644
-index 000000000000..25ddb535c297
---- /dev/null
-+++ b/Documentation/scheduler/sched-ext.rst
-@@ -0,0 +1,229 @@
-+==========================
-+Extensible Scheduler Class
-+==========================
-+
-+sched_ext is a scheduler class whose behavior can be defined by a set of BPF
-+programs - the BPF scheduler.
-+
-+* sched_ext exports a full scheduling interface so that any scheduling
-+  algorithm can be implemented on top.
-+
-+* The BPF scheduler can group CPUs however it sees fit and schedule them
-+  together, as tasks aren't tied to specific CPUs at the time of wakeup.
-+
-+* The BPF scheduler can be turned on and off dynamically anytime.
-+
-+* The system integrity is maintained no matter what the BPF scheduler does.
-+  The default scheduling behavior is restored anytime an error is detected,
-+  a runnable task stalls, or on invoking the SysRq key sequence
-+  :kbd:`SysRq-S`.
-+
-+Switching to and from sched_ext
-+===============================
-+
-+``CONFIG_SCHED_CLASS_EXT`` is the config option to enable sched_ext and
-+``tools/sched_ext`` contains the example schedulers.
-+
-+sched_ext is used only when the BPF scheduler is loaded and running.
-+
-+If a task explicitly sets its scheduling policy to ``SCHED_EXT``, it will be
-+treated as ``SCHED_NORMAL`` and scheduled by CFS until the BPF scheduler is
-+loaded. On load, such tasks will be switched to and scheduled by sched_ext.
-+
-+The BPF scheduler can choose to schedule all normal and lower class tasks by
-+calling ``scx_bpf_switch_all()`` from its ``init()`` operation. In this
-+case, all ``SCHED_NORMAL``, ``SCHED_BATCH``, ``SCHED_IDLE`` and
-+``SCHED_EXT`` tasks are scheduled by sched_ext. In the example schedulers,
-+this mode can be selected with the ``-a`` option.
-+
-+Terminating the sched_ext scheduler program, triggering :kbd:`SysRq-S`, or
-+detection of any internal error including stalled runnable tasks aborts the
-+BPF scheduler and reverts all tasks back to CFS.
-+
-+.. code-block:: none
-+
-+    # make -j16 -C tools/sched_ext
-+    # tools/sched_ext/scx_simple
-+    local=0 global=3
-+    local=5 global=24
-+    local=9 global=44
-+    local=13 global=56
-+    local=17 global=72
-+    ^CEXIT: BPF scheduler unregistered
-+
-+If ``CONFIG_SCHED_DEBUG`` is set, the current status of the BPF scheduler
-+and whether a given task is on sched_ext can be determined as follows:
-+
-+.. code-block:: none
-+
-+    # cat /sys/kernel/debug/sched/ext
-+    ops                           : simple
-+    enabled                       : 1
-+    switching_all                 : 1
-+    switched_all                  : 1
-+    enable_state                  : enabled
-+
-+    # grep ext /proc/self/sched
-+    ext.enabled                                  :                    1
-+
-+The Basics
-+==========
-+
-+Userspace can implement an arbitrary BPF scheduler by loading a set of BPF
-+programs that implement ``struct sched_ext_ops``. The only mandatory field
-+is ``ops.name`` which must be a valid BPF object name. All operations are
-+optional. The following modified excerpt is from
-+``tools/sched/scx_simple.bpf.c`` showing a minimal global FIFO scheduler.
-+
-+.. code-block:: c
-+
-+    s32 BPF_STRUCT_OPS(simple_init)
-+    {
-+            if (!switch_partial)
-+                    scx_bpf_switch_all();
-+            return 0;
-+    }
-+
-+    void BPF_STRUCT_OPS(simple_enqueue, struct task_struct *p, u64 enq_flags)
-+    {
-+            if (enq_flags & SCX_ENQ_LOCAL)
-+                    scx_bpf_dispatch(p, SCX_DSQ_LOCAL, SCX_SLICE_DFL, enq_flags);
-+            else
-+                    scx_bpf_dispatch(p, SCX_DSQ_GLOBAL, SCX_SLICE_DFL, enq_flags);
-+    }
-+
-+    void BPF_STRUCT_OPS(simple_exit, struct scx_exit_info *ei)
-+    {
-+            exit_type = ei->type;
-+    }
-+
-+    SEC(".struct_ops")
-+    struct sched_ext_ops simple_ops = {
-+            .enqueue                = (void *)simple_enqueue,
-+            .init                   = (void *)simple_init,
-+            .exit                   = (void *)simple_exit,
-+            .name                   = "simple",
-+    };
-+
-+Dispatch Queues
-+---------------
-+
-+To match the impedance between the scheduler core and the BPF scheduler,
-+sched_ext uses DSQs (dispatch queues) which can operate as both a FIFO and a
-+priority queue. By default, there is one global FIFO (``SCX_DSQ_GLOBAL``),
-+and one local dsq per CPU (``SCX_DSQ_LOCAL``). The BPF scheduler can manage
-+an arbitrary number of dsq's using ``scx_bpf_create_dsq()`` and
-+``scx_bpf_destroy_dsq()``.
-+
-+A CPU always executes a task from its local DSQ. A task is "dispatched" to a
-+DSQ. A non-local DSQ is "consumed" to transfer a task to the consuming CPU's
-+local DSQ.
-+
-+When a CPU is looking for the next task to run, if the local DSQ is not
-+empty, the first task is picked. Otherwise, the CPU tries to consume the
-+global DSQ. If that doesn't yield a runnable task either, ``ops.dispatch()``
-+is invoked.
-+
-+Scheduling Cycle
-+----------------
-+
-+The following briefly shows how a waking task is scheduled and executed.
-+
-+1. When a task is waking up, ``ops.select_cpu()`` is the first operation
-+   invoked. This serves two purposes. First, CPU selection optimization
-+   hint. Second, waking up the selected CPU if idle.
-+
-+   The CPU selected by ``ops.select_cpu()`` is an optimization hint and not
-+   binding. The actual decision is made at the last step of scheduling.
-+   However, there is a small performance gain if the CPU
-+   ``ops.select_cpu()`` returns matches the CPU the task eventually runs on.
-+
-+   A side-effect of selecting a CPU is waking it up from idle. While a BPF
-+   scheduler can wake up any cpu using the ``scx_bpf_kick_cpu()`` helper,
-+   using ``ops.select_cpu()`` judiciously can be simpler and more efficient.
-+
-+   Note that the scheduler core will ignore an invalid CPU selection, for
-+   example, if it's outside the allowed cpumask of the task.
-+
-+2. Once the target CPU is selected, ``ops.enqueue()`` is invoked. It can
-+   make one of the following decisions:
-+
-+   * Immediately dispatch the task to either the global or local DSQ by
-+     calling ``scx_bpf_dispatch()`` with ``SCX_DSQ_GLOBAL`` or
-+     ``SCX_DSQ_LOCAL``, respectively.
-+
-+   * Immediately dispatch the task to a custom DSQ by calling
-+     ``scx_bpf_dispatch()`` with a DSQ ID which is smaller than 2^63.
-+
-+   * Queue the task on the BPF side.
-+
-+3. When a CPU is ready to schedule, it first looks at its local DSQ. If
-+   empty, it then looks at the global DSQ. If there still isn't a task to
-+   run, ``ops.dispatch()`` is invoked which can use the following two
-+   functions to populate the local DSQ.
-+
-+   * ``scx_bpf_dispatch()`` dispatches a task to a DSQ. Any target DSQ can
-+     be used - ``SCX_DSQ_LOCAL``, ``SCX_DSQ_LOCAL_ON | cpu``,
-+     ``SCX_DSQ_GLOBAL`` or a custom DSQ. While ``scx_bpf_dispatch()``
-+     currently can't be called with BPF locks held, this is being worked on
-+     and will be supported. ``scx_bpf_dispatch()`` schedules dispatching
-+     rather than performing them immediately. There can be up to
-+     ``ops.dispatch_max_batch`` pending tasks.
-+
-+   * ``scx_bpf_consume()`` tranfers a task from the specified non-local DSQ
-+     to the dispatching DSQ. This function cannot be called with any BPF
-+     locks held. ``scx_bpf_consume()`` flushes the pending dispatched tasks
-+     before trying to consume the specified DSQ.
-+
-+4. After ``ops.dispatch()`` returns, if there are tasks in the local DSQ,
-+   the CPU runs the first one. If empty, the following steps are taken:
-+
-+   * Try to consume the global DSQ. If successful, run the task.
-+
-+   * If ``ops.dispatch()`` has dispatched any tasks, retry #3.
-+
-+   * If the previous task is an SCX task and still runnable, keep executing
-+     it (see ``SCX_OPS_ENQ_LAST``).
-+
-+   * Go idle.
-+
-+Note that the BPF scheduler can always choose to dispatch tasks immediately
-+in ``ops.enqueue()`` as illustrated in the above simple example. If only the
-+built-in DSQs are used, there is no need to implement ``ops.dispatch()`` as
-+a task is never queued on the BPF scheduler and both the local and global
-+DSQs are consumed automatically.
-+
-+``scx_bpf_dispatch()`` queues the task on the FIFO of the target DSQ. Use
-+``scx_bpf_dispatch_vtime()`` for the priority queue. See the function
-+documentation and usage in ``tools/sched_ext/scx_simple.bpf.c`` for more
-+information.
-+
-+Where to Look
-+=============
-+
-+* ``include/linux/sched/ext.h`` defines the core data structures, ops table
-+  and constants.
-+
-+* ``kernel/sched/ext.c`` contains sched_ext core implementation and helpers.
-+  The functions prefixed with ``scx_bpf_`` can be called from the BPF
-+  scheduler.
-+
-+* ``tools/sched_ext/`` hosts example BPF scheduler implementations.
-+
-+  * ``scx_simple[.bpf].c``: Minimal global FIFO scheduler example using a
-+    custom DSQ.
-+
-+  * ``scx_qmap[.bpf].c``: A multi-level FIFO scheduler supporting five
-+    levels of priority implemented with ``BPF_MAP_TYPE_QUEUE``.
-+
-+ABI Instability
-+===============
-+
-+The APIs provided by sched_ext to BPF schedulers programs have no stability
-+guarantees. This includes the ops table callbacks and constants defined in
-+``include/linux/sched/ext.h``, as well as the ``scx_bpf_`` kfuncs defined in
-+``kernel/sched/ext.c``.
-+
-+While we will attempt to provide a relatively stable API surface when
-+possible, they are subject to change without warning between kernel
-+versions.
 diff --git a/include/linux/sched/ext.h b/include/linux/sched/ext.h
-index cdc7a05208da..b20a7620b93d 100644
+index dac660b5a0c3..633a2b550d0c 100644
 --- a/include/linux/sched/ext.h
 +++ b/include/linux/sched/ext.h
-@@ -1,5 +1,7 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /*
-+ * BPF extensible scheduler class: Documentation/scheduler/sched-ext.rst
-+ *
-  * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
-  * Copyright (c) 2022 Tejun Heo <tj@kernel.org>
-  * Copyright (c) 2022 David Vernet <dvernet@meta.com>
-diff --git a/kernel/Kconfig.preempt b/kernel/Kconfig.preempt
-index e12a057ead7b..bae49b743834 100644
---- a/kernel/Kconfig.preempt
-+++ b/kernel/Kconfig.preempt
-@@ -154,3 +154,5 @@ config SCHED_CLASS_EXT
- 	  wish to implement scheduling policies. The struct_ops structure
- 	  exported by sched_ext is struct sched_ext_ops, and is conceptually
- 	  similar to struct sched_class.
-+
-+	  See Documentation/scheduler/sched-ext.rst for more details.
-diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
-index 460310fcfbbb..1c23938c3dfb 100644
---- a/kernel/sched/ext.c
-+++ b/kernel/sched/ext.c
-@@ -1,5 +1,7 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /*
-+ * BPF extensible scheduler class: Documentation/scheduler/sched-ext.rst
-+ *
-  * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
-  * Copyright (c) 2022 Tejun Heo <tj@kernel.org>
-  * Copyright (c) 2022 David Vernet <dvernet@meta.com>
-diff --git a/kernel/sched/ext.h b/kernel/sched/ext.h
-index 0dea72f25a37..27248760f4cc 100644
---- a/kernel/sched/ext.h
-+++ b/kernel/sched/ext.h
-@@ -1,5 +1,7 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /*
-+ * BPF extensible scheduler class: Documentation/scheduler/sched-ext.rst
-+ *
-  * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
-  * Copyright (c) 2022 Tejun Heo <tj@kernel.org>
-  * Copyright (c) 2022 David Vernet <dvernet@meta.com>
-diff --git a/tools/sched_ext/README.md b/tools/sched_ext/README.md
-new file mode 100644
-index 000000000000..83b5bf5fd97c
---- /dev/null
-+++ b/tools/sched_ext/README.md
-@@ -0,0 +1,341 @@
-+SCHED_EXT EXAMPLE SCHEDULERS
-+============================
-+
-+# Introduction
-+
-+This directory contains a number of example sched_ext schedulers. These
-+schedulers are meant to provide examples of different types of schedulers
-+that can be built using sched_ext, and illustrate how various features of
-+sched_ext can be used.
-+
-+Some of the examples are performant, production-ready schedulers. That is, for
-+the correct workload and with the correct tuning, they may be deployed in a
-+production environment with acceptable or possibly even improved performance.
-+Others are just examples that in practice, would not provide acceptable
-+performance (though they could be improved to get there).
-+
-+This README will describe these example schedulers, including describing the
-+types of workloads or scenarios they're designed to accommodate, and whether or
-+not they're production ready. For more details on any of these schedulers,
-+please see the header comment in their .bpf.c file.
-+
-+
-+# Compiling the examples
-+
-+There are a few toolchain dependencies for compiling the example schedulers.
-+
-+## Toolchain dependencies
-+
-+1. clang >= 16.0.0
-+
-+The schedulers are BPF programs, and therefore must be compiled with clang. gcc
-+is actively working on adding a BPF backend compiler as well, but are still
-+missing some features such as BTF type tags which are necessary for using
-+kptrs.
-+
-+2. pahole >= 1.25
-+
-+You may need pahole in order to generate BTF from DWARF.
-+
-+3. rust >= 1.70.0
-+
-+Rust schedulers uses features present in the rust toolchain >= 1.70.0. You
-+should be able to use the stable build from rustup, but if that doesn't
-+work, try using the rustup nightly build.
-+
-+There are other requirements as well, such as make, but these are the main /
-+non-trivial ones.
-+
-+## Compiling the kernel
-+
-+In order to run a sched_ext scheduler, you'll have to run a kernel compiled
-+with the patches in this repository, and with a minimum set of necessary
-+Kconfig options:
-+
-+```
-+CONFIG_BPF=y
-+CONFIG_SCHED_CLASS_EXT=y
-+CONFIG_BPF_SYSCALL=y
-+CONFIG_BPF_JIT=y
-+CONFIG_DEBUG_INFO_BTF=y
-+```
-+
-+It's also recommended that you also include the following Kconfig options:
-+
-+```
-+CONFIG_BPF_JIT_ALWAYS_ON=y
-+CONFIG_BPF_JIT_DEFAULT_ON=y
-+CONFIG_PAHOLE_HAS_SPLIT_BTF=y
-+CONFIG_PAHOLE_HAS_BTF_TAG=y
-+```
-+
-+There is a `Kconfig` file in this directory whose contents you can append to
-+your local `.config` file, as long as there are no conflicts with any existing
-+options in the file.
-+
-+## Getting a vmlinux.h file
-+
-+You may notice that most of the example schedulers include a "vmlinux.h" file.
-+This is a large, auto-generated header file that contains all of the types
-+defined in some vmlinux binary that was compiled with
-+[BTF](https://docs.kernel.org/bpf/btf.html) (i.e. with the BTF-related Kconfig
-+options specified above).
-+
-+The header file is created using `bpftool`, by passing it a vmlinux binary
-+compiled with BTF as follows:
-+
-+```bash
-+$ bpftool btf dump file /path/to/vmlinux format c > vmlinux.h
-+```
-+
-+`bpftool` analyzes all of the BTF encodings in the binary, and produces a
-+header file that can be included by BPF programs to access those types.  For
-+example, using vmlinux.h allows a scheduler to access fields defined directly
-+in vmlinux as follows:
-+
-+```c
-+#include "vmlinux.h"
-+// vmlinux.h is also implicitly included by scx_common.bpf.h.
-+#include "scx_common.bpf.h"
+@@ -135,6 +135,32 @@ struct scx_cgroup_init_args {
+ 	u32			weight;
+ };
+ 
++enum scx_cpu_preempt_reason {
++	/* next task is being scheduled by &sched_class_rt */
++        SCX_CPU_PREEMPT_RT,
++	/* next task is being scheduled by &sched_class_dl */
++        SCX_CPU_PREEMPT_DL,
++	/* next task is being scheduled by &sched_class_stop */
++        SCX_CPU_PREEMPT_STOP,
++	/* unknown reason for SCX being preempted */
++        SCX_CPU_PREEMPT_UNKNOWN,
++};
 +
 +/*
-+ * vmlinux.h provides definitions for struct task_struct and
-+ * struct scx_enable_args.
++ * Argument container for ops->cpu_acquire(). Currently empty, but may be
++ * expanded in the future.
 + */
-+void BPF_STRUCT_OPS(example_enable, struct task_struct *p,
-+		    struct scx_enable_args *args)
++struct scx_cpu_acquire_args {};
++
++/* argument container for ops->cpu_release() */
++struct scx_cpu_release_args {
++	/* the reason the CPU was preempted */
++	enum scx_cpu_preempt_reason reason;
++
++	/* the task that's going to be scheduled on the CPU */
++	struct task_struct *task;
++};
++
+ /**
+  * struct sched_ext_ops - Operation table for BPF scheduler implementation
+  *
+@@ -330,6 +356,28 @@ struct sched_ext_ops {
+ 	 */
+ 	void (*update_idle)(s32 cpu, bool idle);
+ 
++	/**
++	 * cpu_acquire - A CPU is becoming available to the BPF scheduler
++	 * @cpu: The CPU being acquired by the BPF scheduler.
++	 * @args: Acquire arguments, see the struct definition.
++	 *
++	 * A CPU that was previously released from the BPF scheduler is now once
++	 * again under its control.
++	 */
++	void (*cpu_acquire)(s32 cpu, struct scx_cpu_acquire_args *args);
++
++	/**
++	 * cpu_release - A CPU is taken away from the BPF scheduler
++	 * @cpu: The CPU being released by the BPF scheduler.
++	 * @args: Release arguments, see the struct definition.
++	 *
++	 * The specified CPU is no longer under the control of the BPF
++	 * scheduler. This could be because it was preempted by a higher
++	 * priority sched_class, though there may be other reasons as well. The
++	 * caller should consult @args->reason to determine the cause.
++	 */
++	void (*cpu_release)(s32 cpu, struct scx_cpu_release_args *args);
++
+ 	/**
+ 	 * prep_enable - Prepare to enable BPF scheduling for a task
+ 	 * @p: task to prepare BPF scheduling for
+@@ -534,12 +582,15 @@ enum scx_kf_mask {
+ 	/* all non-sleepables may be nested inside INIT and SLEEPABLE */
+ 	SCX_KF_INIT		= 1 << 0, /* running ops.init() */
+ 	SCX_KF_SLEEPABLE	= 1 << 1, /* other sleepable init operations */
++	/* ENQUEUE and DISPATCH may be nested inside CPU_RELEASE */
++	SCX_KF_CPU_RELEASE	= 1 << 2, /* ops.cpu_release() */
+ 	/* ops.dequeue (in REST) may be nested inside DISPATCH */
+ 	SCX_KF_DISPATCH		= 1 << 3, /* ops.dispatch() */
+ 	SCX_KF_ENQUEUE		= 1 << 4, /* ops.enqueue() */
+ 	SCX_KF_REST		= 1 << 5, /* other rq-locked operations */
+ 
+-	__SCX_KF_RQ_LOCKED	= SCX_KF_DISPATCH | SCX_KF_ENQUEUE | SCX_KF_REST,
++	__SCX_KF_RQ_LOCKED	= SCX_KF_CPU_RELEASE | SCX_KF_DISPATCH |
++				  SCX_KF_ENQUEUE | SCX_KF_REST,
+ 	__SCX_KF_TERMINAL	= SCX_KF_ENQUEUE | SCX_KF_REST,
+ };
+ 
+diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
+index 76a90b2c1662..4e00a7cd660e 100644
+--- a/kernel/sched/ext.c
++++ b/kernel/sched/ext.c
+@@ -90,6 +90,7 @@ static bool scx_warned_zero_slice;
+ 
+ static DEFINE_STATIC_KEY_FALSE(scx_ops_enq_last);
+ static DEFINE_STATIC_KEY_FALSE(scx_ops_enq_exiting);
++DEFINE_STATIC_KEY_FALSE(scx_ops_cpu_preempt);
+ static DEFINE_STATIC_KEY_FALSE(scx_builtin_idle_enabled);
+ 
+ struct static_key_false scx_has_op[SCX_NR_ONLINE_OPS] =
+@@ -310,6 +311,12 @@ static __always_inline bool scx_kf_allowed(u32 mask)
+ 	 * inside ops.dispatch(). We don't need to check the SCX_KF_SLEEPABLE
+ 	 * boundary thanks to the above in_interrupt() check.
+ 	 */
++	if (unlikely(highest_bit(mask) == SCX_KF_CPU_RELEASE &&
++		     (current->scx.kf_mask & higher_bits(SCX_KF_CPU_RELEASE)))) {
++		scx_ops_error("cpu_release kfunc called from a nested operation");
++		return false;
++	}
++
+ 	if (unlikely(highest_bit(mask) == SCX_KF_DISPATCH &&
+ 		     (current->scx.kf_mask & higher_bits(SCX_KF_DISPATCH)))) {
+ 		scx_ops_error("dispatch kfunc called from a nested operation");
+@@ -1388,6 +1395,19 @@ static int balance_scx(struct rq *rq, struct task_struct *prev,
+ 
+ 	lockdep_assert_rq_held(rq);
+ 
++	if (static_branch_unlikely(&scx_ops_cpu_preempt) &&
++	    unlikely(rq->scx.cpu_released)) {
++		/*
++		 * If the previous sched_class for the current CPU was not SCX,
++		 * notify the BPF scheduler that it again has control of the
++		 * core. This callback complements ->cpu_release(), which is
++		 * emitted in scx_notify_pick_next_task().
++		 */
++		if (SCX_HAS_OP(cpu_acquire))
++			SCX_CALL_OP(0, cpu_acquire, cpu_of(rq), NULL);
++		rq->scx.cpu_released = false;
++	}
++
+ 	if (prev_on_scx) {
+ 		WARN_ON_ONCE(prev->scx.flags & SCX_TASK_BAL_KEEP);
+ 		update_curr_scx(rq);
+@@ -1395,7 +1415,9 @@ static int balance_scx(struct rq *rq, struct task_struct *prev,
+ 		/*
+ 		 * If @prev is runnable & has slice left, it has priority and
+ 		 * fetching more just increases latency for the fetched tasks.
+-		 * Tell put_prev_task_scx() to put @prev on local_dsq.
++		 * Tell put_prev_task_scx() to put @prev on local_dsq. If the
++		 * BPF scheduler wants to handle this explicitly, it should
++		 * implement ->cpu_released().
+ 		 *
+ 		 * See scx_ops_disable_workfn() for the explanation on the
+ 		 * disabling() test.
+@@ -1601,6 +1623,58 @@ static struct task_struct *pick_next_task_scx(struct rq *rq)
+ 	return p;
+ }
+ 
++static enum scx_cpu_preempt_reason
++preempt_reason_from_class(const struct sched_class *class)
 +{
-+	bpf_printk("Task %s enabled in example scheduler", p->comm);
++#ifdef CONFIG_SMP
++	if (class == &stop_sched_class)
++		return SCX_CPU_PREEMPT_STOP;
++#endif
++	if (class == &dl_sched_class)
++		return SCX_CPU_PREEMPT_DL;
++	if (class == &rt_sched_class)
++		return SCX_CPU_PREEMPT_RT;
++	return SCX_CPU_PREEMPT_UNKNOWN;
 +}
 +
-+// vmlinux.h provides the definition for struct sched_ext_ops.
-+SEC(".struct_ops.link")
-+struct sched_ext_ops example_ops {
-+	.enable	= (void *)example_enable,
-+	.name	= "example",
++void __scx_notify_pick_next_task(struct rq *rq, struct task_struct *task,
++				 const struct sched_class *active)
++{
++	lockdep_assert_rq_held(rq);
++
++	/*
++	 * The callback is conceptually meant to convey that the CPU is no
++	 * longer under the control of SCX. Therefore, don't invoke the
++	 * callback if the CPU is is staying on SCX, or going idle (in which
++	 * case the SCX scheduler has actively decided not to schedule any
++	 * tasks on the CPU).
++	 */
++	if (likely(active >= &ext_sched_class))
++		return;
++
++	/*
++	 * At this point we know that SCX was preempted by a higher priority
++	 * sched_class, so invoke the ->cpu_release() callback if we have not
++	 * done so already. We only send the callback once between SCX being
++	 * preempted, and it regaining control of the CPU.
++	 *
++	 * ->cpu_release() complements ->cpu_acquire(), which is emitted the
++	 *  next time that balance_scx() is invoked.
++	 */
++	if (!rq->scx.cpu_released) {
++		if (SCX_HAS_OP(cpu_release)) {
++			struct scx_cpu_release_args args = {
++				.reason = preempt_reason_from_class(active),
++				.task = task,
++			};
++
++			SCX_CALL_OP(SCX_KF_CPU_RELEASE,
++				    cpu_release, cpu_of(rq), &args);
++		}
++		rq->scx.cpu_released = true;
++	}
 +}
-+```
 +
-+The scheduler build system will generate this vmlinux.h file as part of the
-+scheduler build pipeline. It looks for a vmlinux file in the following
-+dependency order:
-+
-+1. If the O= environment variable is defined, at `$O/vmlinux`
-+2. If the KBUILD_OUTPUT= environment variable is defined, at
-+   `$KBUILD_OUTPUT/vmlinux`
-+3. At `../../vmlinux` (i.e. at the root of the kernel tree where you're
-+   compiling the schedulers)
-+3. `/sys/kernel/btf/vmlinux`
-+4. `/boot/vmlinux-$(uname -r)`
-+
-+In other words, if you have compiled a kernel in your local repo, its vmlinux
-+file will be used to generate vmlinux.h. Otherwise, it will be the vmlinux of
-+the kernel you're currently running on. This means that if you're running on a
-+kernel with sched_ext support, you may not need to compile a local kernel at
-+all.
-+
-+### Aside on CO-RE
-+
-+One of the cooler features of BPF is that it supports
-+[CO-RE](https://nakryiko.com/posts/bpf-core-reference-guide/) (Compile Once Run
-+Everywhere). This feature allows you to reference fields inside of structs with
-+types defined internal to the kernel, and not have to recompile if you load the
-+BPF program on a different kernel with the field at a different offset. In our
-+example above, we print out a task name with `p->comm`. CO-RE would perform
-+relocations for that access when the program is loaded to ensure that it's
-+referencing the correct offset for the currently running kernel.
-+
-+## Compiling the schedulers
-+
-+Once you have your toolchain setup, and a vmlinux that can be used to generate
-+a full vmlinux.h file, you can compile the schedulers using `make`:
-+
-+```bash
-+$ make -j($nproc)
-+```
-+
-+# Schedulers
-+
-+This section lists, in alphabetical order, all of the current example
-+schedulers.
-+
-+--------------------------------------------------------------------------------
-+
-+## scx_simple
-+
-+### Overview
-+
-+A simple scheduler that provides an example of a minimal sched_ext
-+scheduler. scx_simple can be run in either global weighted vtime mode, or
-+FIFO mode.
-+
-+### Typical Use Case
-+
-+Though very simple, this scheduler should perform reasonably well on
-+single-socket CPUs with a uniform L3 cache topology. Note that while running in
-+global FIFO mode may work well for some workloads, saturating threads can
-+easily drown out inactive ones.
-+
-+### Production Ready?
-+
-+This scheduler could be used in a production environment, assuming the hardware
-+constraints enumerated above, and assuming the workload can accommodate a
-+simple scheduling policy.
-+
-+--------------------------------------------------------------------------------
-+
-+## scx_qmap
-+
-+### Overview
-+
-+Another simple, yet slightly more complex scheduler that provides an example of
-+a basic weighted FIFO queuing policy. It also provides examples of some common
-+useful BPF features, such as sleepable per-task storage allocation in the
-+`ops.prep_enable()` callback, and using the `BPF_MAP_TYPE_QUEUE` map type to
-+enqueue tasks. It also illustrates how core-sched support could be implemented.
-+
-+### Typical Use Case
-+
-+Purely used to illustrate sched_ext features.
-+
-+### Production Ready?
-+
-+No
-+
-+--------------------------------------------------------------------------------
-+
-+## scx_central
-+
-+### Overview
-+
-+A "central" scheduler where scheduling decisions are made from a single CPU.
-+This scheduler illustrates how scheduling decisions can be dispatched from a
-+single CPU, allowing other cores to run with infinite slices, without timer
-+ticks, and without having to incur the overhead of making scheduling decisions.
-+
-+### Typical Use Case
-+
-+This scheduler could theoretically be useful for any workload that benefits
-+from minimizing scheduling overhead and timer ticks. An example of where this
-+could be particularly useful is running VMs, where running with infinite slices
-+and no timer ticks allows the VM to avoid unnecessary expensive vmexits.
-+
-+### Production Ready?
-+
-+Not yet. While tasks are run with an infinite slice (SCX_SLICE_INF), they're
-+preempted every 20ms in a timer callback. The scheduler also puts the core
-+schedling logic inside of the central / scheduling CPU's ops.dispatch() path,
-+and does not yet have any kind of priority mechanism.
-+
-+--------------------------------------------------------------------------------
-+
-+## scx_pair
-+
-+### Overview
-+
-+A sibling scheduler which ensures that tasks will only ever be co-located on a
-+physical core if they're in the same cgroup. It illustrates how a scheduling
-+policy could be implemented to mitigate CPU bugs, such as L1TF, and also shows
-+how some useful kfuncs such as `scx_bpf_kick_cpu()` can be utilized.
-+
-+### Typical Use Case
-+
-+While this scheduler is only meant to be used to illustrate certain sched_ext
-+features, with a bit more work (e.g. by adding some form of priority handling
-+inside and across cgroups), it could have been used as a way to quickly
-+mitigate L1TF before core scheduling was implemented and rolled out.
-+
-+### Production Ready?
-+
-+No
-+
-+--------------------------------------------------------------------------------
-+
-+## scx_flatcg
-+
-+### Overview
-+
-+A flattened cgroup hierarchy scheduler. This scheduler implements hierarchical
-+weight-based cgroup CPU control by flattening the cgroup hierarchy into a
-+single layer, by compounding the active weight share at each level. The effect
-+of this is a much more performant CPU controller, which does not need to
-+descend down cgroup trees in order to properly compute a cgroup's share.
-+
-+### Typical Use Case
-+
-+This scheduler could be useful for any typical workload requiring a CPU
-+controller, but which cannot tolerate the higher overheads of the fair CPU
-+controller.
-+
-+### Production Ready?
-+
-+Yes, though the scheduler (currently) does not adequately accommodate
-+thundering herds of cgroups. If, for example, many cgroups which are nested
-+behind a low-priority cgroup were to wake up around the same time, they may be
-+able to consume more CPU cycles than they are entitled to.
-+
-+--------------------------------------------------------------------------------
-+
-+# Troubleshooting
-+
-+There are a number of common issues that you may run into when building the
-+schedulers. We'll go over some of the common ones here.
-+
-+## Build Failures
-+
-+### Old version of clang
-+
-+```
-+error: static assertion failed due to requirement 'SCX_DSQ_FLAG_BUILTIN': bpftool generated vmlinux.h is missing high bits for 64bit enums, upgrade clang and pahole
-+        _Static_assert(SCX_DSQ_FLAG_BUILTIN,
-+                       ^~~~~~~~~~~~~~~~~~~~
-+1 error generated.
-+```
-+
-+This means you built the kernel or the schedulers with an older version of
-+clang than what's supported (i.e. older than 16.0.0). To remediate this:
-+
-+1. `which clang` to make sure you're using a sufficiently new version of clang.
-+
-+2. `make fullclean` in the root path of the repository, and rebuild the kernel
-+   and schedulers.
-+
-+3. Rebuild the kernel, and then your example schedulers.
-+
-+The schedulers are also cleaned if you invoke `make mrproper` in the root
-+directory of the tree.
-+
-+### Stale kernel build / incomplete vmlinux.h file
-+
-+As described above, you'll need a `vmlinux.h` file that was generated from a
-+vmlinux built with BTF, and with sched_ext support enabled. If you don't,
-+you'll see errors such as the following which indicate that a type being
-+referenced in a scheduler is unknown:
-+
-+```
-+/path/to/sched_ext/tools/sched_ext/user_exit_info.h:25:23: note: forward declaration of 'struct scx_exit_info'
-+
-+const struct scx_exit_info *ei)
-+
-+^
-+```
-+
-+In order to resolve this, please follow the steps above in
-+[Getting a vmlinux.h file](#getting-a-vmlinuxh-file) in order to ensure your
-+schedulers are using a vmlinux.h file that includes the requisite types.
-+
-+## Misc
-+
-+### llvm: [OFF]
-+
-+You may see the following output when building the schedulers:
-+
-+```
-+Auto-detecting system features:
-+...                         clang-bpf-co-re: [ on  ]
-+...                                    llvm: [ OFF ]
-+...                                  libcap: [ on  ]
-+...                                  libbfd: [ on  ]
-+```
-+
-+Seeing `llvm: [ OFF ]` here is not an issue. You can safely ignore.
+ #ifdef CONFIG_SMP
+ 
+ static bool test_and_clear_cpu_idle(int cpu)
+@@ -2709,6 +2783,7 @@ static void scx_ops_disable_workfn(struct kthread_work *work)
+ 		static_branch_disable_cpuslocked(&scx_has_op[i]);
+ 	static_branch_disable_cpuslocked(&scx_ops_enq_last);
+ 	static_branch_disable_cpuslocked(&scx_ops_enq_exiting);
++	static_branch_disable_cpuslocked(&scx_ops_cpu_preempt);
+ 	static_branch_disable_cpuslocked(&scx_builtin_idle_enabled);
+ 	synchronize_rcu();
+ 
+@@ -2915,6 +2990,8 @@ static int scx_ops_enable(struct sched_ext_ops *ops)
+ 
+ 	if (ops->flags & SCX_OPS_ENQ_EXITING)
+ 		static_branch_enable_cpuslocked(&scx_ops_enq_exiting);
++	if (scx_ops.cpu_acquire || scx_ops.cpu_release)
++		static_branch_enable_cpuslocked(&scx_ops_cpu_preempt);
+ 
+ 	if (!ops->update_idle || (ops->flags & SCX_OPS_KEEP_BUILTIN_IDLE)) {
+ 		reset_idle_masks();
+@@ -3640,6 +3717,57 @@ static const struct btf_kfunc_id_set scx_kfunc_set_dispatch = {
+ 	.set			= &scx_kfunc_ids_dispatch,
+ };
+ 
++/**
++ * scx_bpf_reenqueue_local - Re-enqueue tasks on a local DSQ
++ *
++ * Iterate over all of the tasks currently enqueued on the local DSQ of the
++ * caller's CPU, and re-enqueue them in the BPF scheduler. Returns the number of
++ * processed tasks. Can only be called from ops.cpu_release().
++ */
++u32 scx_bpf_reenqueue_local(void)
++{
++	u32 nr_enqueued, i;
++	struct rq *rq;
++	struct scx_rq *scx_rq;
++
++	if (!scx_kf_allowed(SCX_KF_CPU_RELEASE))
++		return 0;
++
++	rq = cpu_rq(smp_processor_id());
++	lockdep_assert_rq_held(rq);
++	scx_rq = &rq->scx;
++
++	/*
++	 * Get the number of tasks on the local DSQ before iterating over it to
++	 * pull off tasks. The enqueue callback below can signal that it wants
++	 * the task to stay on the local DSQ, and we want to prevent the BPF
++	 * scheduler from causing us to loop indefinitely.
++	 */
++	nr_enqueued = scx_rq->local_dsq.nr;
++	for (i = 0; i < nr_enqueued; i++) {
++		struct task_struct *p;
++
++		p = first_local_task(rq);
++		WARN_ON_ONCE(atomic_long_read(&p->scx.ops_state) !=
++			     SCX_OPSS_NONE);
++		WARN_ON_ONCE(!(p->scx.flags & SCX_TASK_QUEUED));
++		WARN_ON_ONCE(p->scx.holding_cpu != -1);
++		dispatch_dequeue(scx_rq, p);
++		do_enqueue_task(rq, p, SCX_ENQ_REENQ, -1);
++	}
++
++	return nr_enqueued;
++}
++
++BTF_SET8_START(scx_kfunc_ids_cpu_release)
++BTF_ID_FLAGS(func, scx_bpf_reenqueue_local)
++BTF_SET8_END(scx_kfunc_ids_cpu_release)
++
++static const struct btf_kfunc_id_set scx_kfunc_set_cpu_release = {
++	.owner			= THIS_MODULE,
++	.set			= &scx_kfunc_ids_cpu_release,
++};
++
+ /**
+  * scx_bpf_kick_cpu - Trigger reschedule on a CPU
+  * @cpu: cpu to kick
+@@ -4032,6 +4160,8 @@ static int __init register_ext_kfuncs(void)
+ 					     &scx_kfunc_set_enqueue_dispatch)) ||
+ 	    (ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS,
+ 					     &scx_kfunc_set_dispatch)) ||
++	    (ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS,
++					     &scx_kfunc_set_cpu_release)) ||
+ 	    (ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS,
+ 					     &scx_kfunc_set_ops_only)) ||
+ 	    (ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS,
+diff --git a/kernel/sched/ext.h b/kernel/sched/ext.h
+index 00218d43d887..9b8918be5fd4 100644
+--- a/kernel/sched/ext.h
++++ b/kernel/sched/ext.h
+@@ -27,6 +27,17 @@ enum scx_enq_flags {
+ 	 */
+ 	SCX_ENQ_PREEMPT		= 1LLU << 32,
+ 
++	/*
++	 * The task being enqueued was previously enqueued on the current CPU's
++	 * %SCX_DSQ_LOCAL, but was removed from it in a call to the
++	 * bpf_scx_reenqueue_local() kfunc. If bpf_scx_reenqueue_local() was
++	 * invoked in a ->cpu_release() callback, and the task is again
++	 * dispatched back to %SCX_LOCAL_DSQ by this current ->enqueue(), the
++	 * task will not be scheduled on the CPU until at least the next invocation
++	 * of the ->cpu_acquire() callback.
++	 */
++	SCX_ENQ_REENQ		= 1LLU << 40,
++
+ 	/*
+ 	 * The task being enqueued is the only task available for the cpu. By
+ 	 * default, ext core keeps executing such tasks but when
+@@ -97,6 +108,8 @@ DECLARE_STATIC_KEY_FALSE(__scx_switched_all);
+ #define scx_enabled()		static_branch_unlikely(&__scx_ops_enabled)
+ #define scx_switched_all()	static_branch_unlikely(&__scx_switched_all)
+ 
++DECLARE_STATIC_KEY_FALSE(scx_ops_cpu_preempt);
++
+ static inline bool task_on_scx(const struct task_struct *p)
+ {
+ 	return scx_enabled() && p->sched_class == &ext_sched_class;
+@@ -116,13 +129,17 @@ __printf(2, 3) void scx_ops_error_kind(enum scx_exit_kind kind,
+ #define scx_ops_error(fmt, args...)						\
+ 	scx_ops_error_kind(SCX_EXIT_ERROR, fmt, ##args)
+ 
++void __scx_notify_pick_next_task(struct rq *rq,
++				 struct task_struct *p,
++				 const struct sched_class *active);
++
+ static inline void scx_notify_pick_next_task(struct rq *rq,
+-					     const struct task_struct *p,
++					     struct task_struct *p,
+ 					     const struct sched_class *active)
+ {
+-#ifdef CONFIG_SMP
+ 	if (!scx_enabled())
+ 		return;
++#ifdef CONFIG_SMP
+ 	/*
+ 	 * Pairs with the smp_load_acquire() issued by a CPU in
+ 	 * kick_cpus_irq_workfn() who is waiting for this CPU to perform a
+@@ -130,6 +147,9 @@ static inline void scx_notify_pick_next_task(struct rq *rq,
+ 	 */
+ 	smp_store_release(&rq->scx.pnt_seq, rq->scx.pnt_seq + 1);
+ #endif
++	if (!static_branch_unlikely(&scx_ops_cpu_preempt))
++		return;
++	__scx_notify_pick_next_task(rq, p, active);
+ }
+ 
+ static inline void scx_notify_sched_tick(void)
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index f889833371a2..32eddb62a96d 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -695,6 +695,7 @@ struct scx_rq {
+ 	u64			extra_enq_flags;	/* see move_task_to_local_dsq() */
+ 	u32			nr_running;
+ 	u32			flags;
++	bool			cpu_released;
+ 	cpumask_var_t		cpus_to_kick;
+ 	cpumask_var_t		cpus_to_preempt;
+ 	cpumask_var_t		cpus_to_wait;
+diff --git a/tools/sched_ext/scx_common.bpf.h b/tools/sched_ext/scx_common.bpf.h
+index 840814c95769..59362d05110f 100644
+--- a/tools/sched_ext/scx_common.bpf.h
++++ b/tools/sched_ext/scx_common.bpf.h
+@@ -70,6 +70,7 @@ void scx_bpf_destroy_dsq(u64 dsq_id) __ksym;
+ bool scx_bpf_task_running(const struct task_struct *p) __ksym;
+ s32 scx_bpf_task_cpu(const struct task_struct *p) __ksym;
+ struct cgroup *scx_bpf_task_cgroup(struct task_struct *p) __ksym;
++u32 scx_bpf_reenqueue_local(void) __ksym;
+ 
+ #define BPF_STRUCT_OPS(name, args...)						\
+ SEC("struct_ops/"#name)								\
+diff --git a/tools/sched_ext/scx_pair.bpf.c b/tools/sched_ext/scx_pair.bpf.c
+index 43fb717b56ff..9c9cf97f4fee 100644
+--- a/tools/sched_ext/scx_pair.bpf.c
++++ b/tools/sched_ext/scx_pair.bpf.c
+@@ -89,6 +89,28 @@
+  * be resolved in the near future which should allow greatly simplifying this
+  * scheduler.
+  *
++ * Dealing with preemption
++ * -----------------------
++ *
++ * SCX is the lowest priority sched_class, and could be preempted by them at
++ * any time. To address this, the scheduler implements pair_cpu_release() and
++ * pair_cpu_acquire() callbacks which are invoked by the core scheduler when
++ * the scheduler loses and gains control of the CPU respectively.
++ *
++ * In pair_cpu_release(), we mark the pair_ctx as having been preempted, and
++ * then invoke:
++ *
++ * scx_bpf_kick_cpu(pair_cpu, SCX_KICK_PREEMPT | SCX_KICK_WAIT);
++ *
++ * This preempts the pair CPU, and waits until it has re-entered the scheduler
++ * before returning. This is necessary to ensure that the higher priority
++ * sched_class that preempted our scheduler does not schedule a task
++ * concurrently with our pair CPU.
++ *
++ * When the CPU is re-acquired in pair_cpu_acquire(), we unmark the preemption
++ * in the pair_ctx, and send another resched IPI to the pair CPU to re-enable
++ * pair scheduling.
++ *
+  * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
+  * Copyright (c) 2022 Tejun Heo <tj@kernel.org>
+  * Copyright (c) 2022 David Vernet <dvernet@meta.com>
+@@ -129,6 +151,12 @@ struct pair_ctx {
+ 
+ 	/* the CPUs that are currently active on the cgroup */
+ 	u32			active_mask;
++
++	/*
++	 * the CPUs that are currently preempted and running tasks in a
++	 * different scheduler.
++	 */
++	u32			preempted_mask;
+ };
+ 
+ struct {
+@@ -294,7 +322,7 @@ static int try_dispatch(s32 cpu)
+ 	struct task_struct *p;
+ 	u64 now = bpf_ktime_get_ns();
+ 	bool kick_pair = false;
+-	bool expired;
++	bool expired, pair_preempted;
+ 	u32 *vptr, in_pair_mask;
+ 	s32 pid, q_idx;
+ 	u64 cgid;
+@@ -323,10 +351,14 @@ static int try_dispatch(s32 cpu)
+ 		 */
+ 		pairc->draining = true;
+ 
+-		if (pairc->active_mask) {
++		pair_preempted = pairc->preempted_mask;
++		if (pairc->active_mask || pair_preempted) {
+ 			/*
+-			 * The other CPU is still active We want to wait until
+-			 * this cgroup expires.
++			 * The other CPU is still active, or is no longer under
++			 * our control due to e.g. being preempted by a higher
++			 * priority sched_class. We want to wait until this
++			 * cgroup expires, or until control of our pair CPU has
++			 * been returned to us.
+ 			 *
+ 			 * If the pair controls its CPU, and the time already
+ 			 * expired, kick.  When the other CPU arrives at
+@@ -335,7 +367,7 @@ static int try_dispatch(s32 cpu)
+ 			 */
+ 			__sync_fetch_and_add(&nr_exp_waits, 1);
+ 			bpf_spin_unlock(&pairc->lock);
+-			if (expired)
++			if (expired && !pair_preempted)
+ 				kick_pair = true;
+ 			goto out_maybe_kick;
+ 		}
+@@ -474,6 +506,63 @@ void BPF_STRUCT_OPS(pair_dispatch, s32 cpu, struct task_struct *prev)
+ 	}
+ }
+ 
++void BPF_STRUCT_OPS(pair_cpu_acquire, s32 cpu, struct scx_cpu_acquire_args *args)
++{
++	int ret;
++	u32 in_pair_mask;
++	struct pair_ctx *pairc;
++	bool kick_pair;
++
++	ret = lookup_pairc_and_mask(cpu, &pairc, &in_pair_mask);
++	if (ret)
++		return;
++
++	bpf_spin_lock(&pairc->lock);
++	pairc->preempted_mask &= ~in_pair_mask;
++	/* Kick the pair CPU, unless it was also preempted. */
++	kick_pair = !pairc->preempted_mask;
++	bpf_spin_unlock(&pairc->lock);
++
++	if (kick_pair) {
++		s32 *pair = (s32 *)ARRAY_ELEM_PTR(pair_cpu, cpu, nr_cpu_ids);
++
++		if (pair) {
++			__sync_fetch_and_add(&nr_kicks, 1);
++			scx_bpf_kick_cpu(*pair, SCX_KICK_PREEMPT);
++		}
++	}
++}
++
++void BPF_STRUCT_OPS(pair_cpu_release, s32 cpu, struct scx_cpu_release_args *args)
++{
++	int ret;
++	u32 in_pair_mask;
++	struct pair_ctx *pairc;
++	bool kick_pair;
++
++	ret = lookup_pairc_and_mask(cpu, &pairc, &in_pair_mask);
++	if (ret)
++		return;
++
++	bpf_spin_lock(&pairc->lock);
++	pairc->preempted_mask |= in_pair_mask;
++	pairc->active_mask &= ~in_pair_mask;
++	/* Kick the pair CPU if it's still running. */
++	kick_pair = pairc->active_mask;
++	pairc->draining = true;
++	bpf_spin_unlock(&pairc->lock);
++
++	if (kick_pair) {
++		s32 *pair = (s32 *)ARRAY_ELEM_PTR(pair_cpu, cpu, nr_cpu_ids);
++
++		if (pair) {
++			__sync_fetch_and_add(&nr_kicks, 1);
++			scx_bpf_kick_cpu(*pair, SCX_KICK_PREEMPT | SCX_KICK_WAIT);
++		}
++	}
++	__sync_fetch_and_add(&nr_preemptions, 1);
++}
++
+ s32 BPF_STRUCT_OPS(pair_cgroup_init, struct cgroup *cgrp)
+ {
+ 	u64 cgid = cgrp->kn->id;
+@@ -527,6 +616,8 @@ SEC(".struct_ops.link")
+ struct sched_ext_ops pair_ops = {
+ 	.enqueue		= (void *)pair_enqueue,
+ 	.dispatch		= (void *)pair_dispatch,
++	.cpu_acquire		= (void *)pair_cpu_acquire,
++	.cpu_release		= (void *)pair_cpu_release,
+ 	.cgroup_init		= (void *)pair_cgroup_init,
+ 	.cgroup_exit		= (void *)pair_cgroup_exit,
+ 	.init			= (void *)pair_init,
+diff --git a/tools/sched_ext/scx_qmap.bpf.c b/tools/sched_ext/scx_qmap.bpf.c
+index 1c3a7d050e32..bfffbfd3368b 100644
+--- a/tools/sched_ext/scx_qmap.bpf.c
++++ b/tools/sched_ext/scx_qmap.bpf.c
+@@ -11,6 +11,8 @@
+  *
+  * - BPF-side queueing using PIDs.
+  * - Sleepable per-task storage allocation using ops.prep_enable().
++ * - Using ops.cpu_release() to handle a higher priority scheduling class taking
++ *   the CPU away.
+  *
+  * This scheduler is primarily for demonstration and testing of sched_ext
+  * features and unlikely to be useful for actual workloads.
+@@ -81,7 +83,7 @@ struct {
+ } dispatch_idx_cnt SEC(".maps");
+ 
+ /* Statistics */
+-unsigned long nr_enqueued, nr_dispatched, nr_dequeued;
++unsigned long nr_enqueued, nr_dispatched, nr_reenqueued, nr_dequeued;
+ 
+ s32 BPF_STRUCT_OPS(qmap_select_cpu, struct task_struct *p,
+ 		   s32 prev_cpu, u64 wake_flags)
+@@ -155,6 +157,22 @@ void BPF_STRUCT_OPS(qmap_enqueue, struct task_struct *p, u64 enq_flags)
+ 		return;
+ 	}
+ 
++	/*
++	 * If the task was re-enqueued due to the CPU being preempted by a
++	 * higher priority scheduling class, just re-enqueue the task directly
++	 * on the global DSQ. As we want another CPU to pick it up, find and
++	 * kick an idle CPU.
++	 */
++	if (enq_flags & SCX_ENQ_REENQ) {
++		s32 cpu;
++
++		scx_bpf_dispatch(p, SCX_DSQ_GLOBAL, 0, enq_flags);
++		cpu = scx_bpf_pick_idle_cpu(p->cpus_ptr, 0);
++		if (cpu >= 0)
++			scx_bpf_kick_cpu(cpu, 0);
++		return;
++	}
++
+ 	ring = bpf_map_lookup_elem(&queue_arr, &idx);
+ 	if (!ring) {
+ 		scx_bpf_error("failed to find ring %d", idx);
+@@ -240,6 +258,22 @@ void BPF_STRUCT_OPS(qmap_dispatch, s32 cpu, struct task_struct *prev)
+ 	}
+ }
+ 
++void BPF_STRUCT_OPS(qmap_cpu_release, s32 cpu, struct scx_cpu_release_args *args)
++{
++	u32 cnt;
++
++	/*
++	 * Called when @cpu is taken by a higher priority scheduling class. This
++	 * makes @cpu no longer available for executing sched_ext tasks. As we
++	 * don't want the tasks in @cpu's local dsq to sit there until @cpu
++	 * becomes available again, re-enqueue them into the global dsq. See
++	 * %SCX_ENQ_REENQ handling in qmap_enqueue().
++	 */
++	cnt = scx_bpf_reenqueue_local();
++	if (cnt)
++		__sync_fetch_and_add(&nr_reenqueued, cnt);
++}
++
+ s32 BPF_STRUCT_OPS(qmap_prep_enable, struct task_struct *p,
+ 		   struct scx_enable_args *args)
+ {
+@@ -275,6 +309,7 @@ struct sched_ext_ops qmap_ops = {
+ 	.enqueue		= (void *)qmap_enqueue,
+ 	.dequeue		= (void *)qmap_dequeue,
+ 	.dispatch		= (void *)qmap_dispatch,
++	.cpu_release		= (void *)qmap_cpu_release,
+ 	.prep_enable		= (void *)qmap_prep_enable,
+ 	.init			= (void *)qmap_init,
+ 	.exit			= (void *)qmap_exit,
+diff --git a/tools/sched_ext/scx_qmap.c b/tools/sched_ext/scx_qmap.c
+index 3d99a8e9b676..f72a4a5b1dd7 100644
+--- a/tools/sched_ext/scx_qmap.c
++++ b/tools/sched_ext/scx_qmap.c
+@@ -90,9 +90,9 @@ int main(int argc, char **argv)
+ 		long nr_enqueued = skel->bss->nr_enqueued;
+ 		long nr_dispatched = skel->bss->nr_dispatched;
+ 
+-		printf("enq=%lu, dsp=%lu, delta=%ld, deq=%lu\n",
++		printf("enq=%lu, dsp=%lu, delta=%ld, reenq=%lu, deq=%lu\n",
+ 		       nr_enqueued, nr_dispatched, nr_enqueued - nr_dispatched,
+-		       skel->bss->nr_dequeued);
++		       skel->bss->nr_reenqueued, skel->bss->nr_dequeued);
+ 		fflush(stdout);
+ 		sleep(1);
+ 	}
 -- 
 2.42.0
 
