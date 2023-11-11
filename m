@@ -1,48 +1,48 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30B4015B8
-	for <bpf@vger.kernel.org>; Sat, 11 Nov 2023 02:50:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA7E1184F
+	for <bpf@vger.kernel.org>; Sat, 11 Nov 2023 02:50:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WE2RHUOZ"
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08204C12;
-	Fri, 10 Nov 2023 18:49:23 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id ca18e2360f4ac-7a956887c20so97884139f.1;
-        Fri, 10 Nov 2023 18:49:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cZPmSn+8"
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3C346A4;
+	Fri, 10 Nov 2023 18:49:36 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id 46e09a7af769-6d33298f8fdso1428415a34.1;
+        Fri, 10 Nov 2023 18:49:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699670962; x=1700275762; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1699670976; x=1700275776; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RwOH9dLJwGai+eV9Oi5DDLHqy9Me6b8SBNkRrvpEcIQ=;
-        b=WE2RHUOZKgvI+22OWFe3+vukpY6zg5eK7tFxFbwtGpnOf0EVUC/fUqN/EwZcZ/dP14
-         Fgsjfc0NP+MjAxACcpLt5JhchrReNNYc6Ur4pIFrEEwGNlhkZ7HI6GueYW5Arj7JDz9B
-         sqzBxXVaBH2X0sbKo4luOR+fiMJMWEqtL04iw4yVNdPXoMiWLxu06gYQQR3iQAikACSR
-         jpwc/35Oy6/z6ksUdSi2VoCrPFjBndJ20LzJGhVuja9nf8eJB9sIorw6VS/zGnlO/HIp
-         qTiGGsklOgpufuDtFZGUfd2JTbsNVixPm1avQf3ShMHVBTyj9xKqpuwPlW9Pt6hOnyGC
-         whAw==
+        bh=mZ5DGNkzrpF+z1k1MORpA8Dv8wskoKjmfE9MNDUcVko=;
+        b=cZPmSn+8Jb35MhtKxNcdO+3XCzDUbzLEhHNku9jJHvpehDcSDXgQ4zdW7hmV820bCW
+         4eJX4eWaTGhywsAM6IzOJZ/o3X7i34jbX0d72c00Ul2EGxO7Z2z/hxTC/QCTVyVjCbHX
+         bOFkoxhcRi8daFgSTAkIZDEOWKDqvA3eBBVYK5W2wPIv1/+MPvd6c9lc9T+V4yBIIHzc
+         dE0vGxlKyyeH02AYWufNeW8TmQv7e80Hts3bqJcNJAEAQkCfM/z0aKWMq+18OmpyTOkk
+         XMEcFnIC82rpTc0h6M34jhoWWcscOTseMQZ8PEZJgP5BpgcRiJh1aPmYvmofQ382v+Fy
+         Bfag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699670962; x=1700275762;
+        d=1e100.net; s=20230601; t=1699670976; x=1700275776;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=RwOH9dLJwGai+eV9Oi5DDLHqy9Me6b8SBNkRrvpEcIQ=;
-        b=Efim6XJmQF7/8EmUuD8Q5VorlQt4HrY54238oRhubH7mvjW0xzHy3EdtLgMljhVdaq
-         ctAyHuS9PDLZ7oXupfg39wzjLdR2QcGX81iEXmBSxNNwSNesl+0Lj8oSAWEVeMOwc7lp
-         Q8GCX8rYCgSmeC5l2mJZNaql/kPvEhBEhInxQW3/5QbYm9Io8fF6Ca9brbs5KRZbRtkF
-         LRzHX7lSAAE5oEwrYE7lKidXcfFm/YxbVQfzr9z45EnlVsMOiOf5aTPnCIQXj72o34Rz
-         z5dGJ8bGfsYd2c1aZoHbBWfUG0ShvghD6yRWRPNPpVwHA76Ri8SUOYw/hyzzba68eEBk
-         eSYA==
-X-Gm-Message-State: AOJu0YwsnzvSuNGfv9Gi8I0gA12lIs1+d9D/eh41/gHUzJIbEzZgjLKN
-	5UWlDKbFLo/usVDyd6M1Ppc=
-X-Google-Smtp-Source: AGHT+IEBlSpGsBlCTi2G7dFacP4UbHRv1CicIceJ19j2Pglm+DULdhdkJzM8Q6/qjhkCZeWGoLakUA==
-X-Received: by 2002:a05:6e02:12e2:b0:350:f352:4853 with SMTP id l2-20020a056e0212e200b00350f3524853mr1476114iln.25.1699670962276;
-        Fri, 10 Nov 2023 18:49:22 -0800 (PST)
+        bh=mZ5DGNkzrpF+z1k1MORpA8Dv8wskoKjmfE9MNDUcVko=;
+        b=F7tNQjZ3Vh6BYdFXsL32NOTzJbU975LvxDZpFgHCbmjcU4tRBWflZ34vR2boOVp7su
+         2UB+CCxh07JQdWYsRo3aEHqDaxSuRFR3WZgYf0heQE1d9cevlLqSqIO4VF7s3Z3yJkAj
+         GBZbtpJCh3P8722gGn/co+EQKBbEgHK+Odgnf3k3VNqNONt5+TNplh5hzX4oqWrrujJ1
+         2h7heNK9Ay1M6ZWYxhtu9pv5To4JuCC8x/TSVWWN/i6RpunRqejDHIh/U8BYtHiCuADr
+         TFMbooGmvS3eDFQ0S4qCRAdmJIHA4fgPe5PGWsMWaz8r0loKN36WZHMYak+8OsP0Zjxu
+         Ba8g==
+X-Gm-Message-State: AOJu0YxuRjKvUWmua3jJg3RfNXevZcWDL6ynPmbo5lQa1scHFJi8zkYB
+	P01J+CnIFriAvRqp7x2r47o=
+X-Google-Smtp-Source: AGHT+IGc/m2/1Xy0BJSd9qMDp7p0LifXaQ+Jwd9Tf1KuVMJfXRBOkQbg8pSYNAioEna6UHc5i9sDIA==
+X-Received: by 2002:a05:6830:4387:b0:6d6:446b:ee69 with SMTP id s7-20020a056830438700b006d6446bee69mr1000021otv.6.1699670975712;
+        Fri, 10 Nov 2023 18:49:35 -0800 (PST)
 Received: from localhost ([2620:10d:c090:400::4:7384])
-        by smtp.gmail.com with ESMTPSA id l7-20020a170903244700b001b9f032bb3dsm358583pls.3.2023.11.10.18.49.21
+        by smtp.gmail.com with ESMTPSA id z4-20020a170902708400b001c739768214sm360790plk.92.2023.11.10.18.49.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Nov 2023 18:49:21 -0800 (PST)
+        Fri, 10 Nov 2023 18:49:35 -0800 (PST)
 Sender: Tejun Heo <htejun@gmail.com>
 From: Tejun Heo <tj@kernel.org>
 To: torvalds@linux-foundation.org,
@@ -76,9 +76,9 @@ Cc: linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
 	kernel-team@meta.com,
 	Tejun Heo <tj@kernel.org>
-Subject: [PATCH 14/36] sched_ext: Add sysrq-S which disables the BPF scheduler
-Date: Fri, 10 Nov 2023 16:47:40 -1000
-Message-ID: <20231111024835.2164816-15-tj@kernel.org>
+Subject: [PATCH 21/36] sched_ext: Make watchdog handle ops.dispatch() looping stall
+Date: Fri, 10 Nov 2023 16:47:47 -1000
+Message-ID: <20231111024835.2164816-22-tj@kernel.org>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231111024835.2164816-1-tj@kernel.org>
 References: <20231111024835.2164816-1-tj@kernel.org>
@@ -90,101 +90,157 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This enables the admin to abort the BPF scheduler and revert to CFS anytime.
+The dispatch path retries if the local DSQ is still empty after
+ops.dispatch() either dispatched or consumed a task. This is both out of
+necessity and for convenience. It has to retry because the dispatch path
+might lose the tasks to dequeue while the rq lock is released while trying
+to migrate tasks across CPUs, and the retry mechanism makes ops.dispatch()
+implementation easier as it only needs to make some forward progress each
+iteration.
+
+However, this makes it possible for ops.dispatch() to stall CPUs by
+repeatedly dispatching ineligible tasks. If all CPUs are stalled that way,
+the watchdog or sysrq handler can't run and the system can't be saved. Let's
+address the issue by breaking out of the dispatch loop after 32 iterations.
+
+It is unlikely but not impossible for ops.dispatch() to legitimately go over
+the iteration limit. We want to come back to the dispatch path in such cases
+as not doing so risks stalling the CPU by idling with runnable tasks
+pending. As the previous task is still current in balance_scx(),
+resched_curr() doesn't do anything - it will just get cleared. Let's instead
+use scx_kick_bpf() which will trigger reschedule after switching to the next
+task which will likely be the idle task.
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
 Reviewed-by: David Vernet <dvernet@meta.com>
-Acked-by: Josh Don <joshdon@google.com>
-Acked-by: Hao Luo <haoluo@google.com>
-Acked-by: Barret Rhoden <brho@google.com>
 ---
- drivers/tty/sysrq.c         |  1 +
- include/linux/sched/ext.h   |  1 +
- kernel/sched/build_policy.c |  1 +
- kernel/sched/ext.c          | 20 ++++++++++++++++++++
- 4 files changed, 23 insertions(+)
+ kernel/sched/ext.c             | 17 +++++++++++++++++
+ tools/sched_ext/scx_qmap.bpf.c | 17 +++++++++++++++++
+ tools/sched_ext/scx_qmap.c     |  8 ++++++--
+ 3 files changed, 40 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/tty/sysrq.c b/drivers/tty/sysrq.c
-index 23198e3f1461..eebdf76b05b4 100644
---- a/drivers/tty/sysrq.c
-+++ b/drivers/tty/sysrq.c
-@@ -519,6 +519,7 @@ static const struct sysrq_key_op *sysrq_key_table[62] = {
- 	NULL,				/* P */
- 	NULL,				/* Q */
- 	NULL,				/* R */
-+	/* S: May be registered by sched_ext for resetting */
- 	NULL,				/* S */
- 	NULL,				/* T */
- 	NULL,				/* U */
-diff --git a/include/linux/sched/ext.h b/include/linux/sched/ext.h
-index b6462d953ec6..cad8ab4d782a 100644
---- a/include/linux/sched/ext.h
-+++ b/include/linux/sched/ext.h
-@@ -55,6 +55,7 @@ enum scx_exit_kind {
- 	SCX_EXIT_DONE,
- 
- 	SCX_EXIT_UNREG = 64,	/* BPF unregistration */
-+	SCX_EXIT_SYSRQ,		/* requested by 'S' sysrq */
- 
- 	SCX_EXIT_ERROR = 1024,	/* runtime error, error msg contains details */
- 	SCX_EXIT_ERROR_BPF,	/* ERROR but triggered through scx_bpf_error() */
-diff --git a/kernel/sched/build_policy.c b/kernel/sched/build_policy.c
-index 4c658b21f603..005025f55bea 100644
---- a/kernel/sched/build_policy.c
-+++ b/kernel/sched/build_policy.c
-@@ -28,6 +28,7 @@
- #include <linux/suspend.h>
- #include <linux/tsacct_kern.h>
- #include <linux/vtime.h>
-+#include <linux/sysrq.h>
- #include <linux/percpu-rwsem.h>
- 
- #include <uapi/linux/sched/types.h>
 diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
-index 7b78f77d2293..2d9996a96d3a 100644
+index c18a67791bc7..d0c60dfac08e 100644
 --- a/kernel/sched/ext.c
 +++ b/kernel/sched/ext.c
-@@ -1981,6 +1981,9 @@ static void scx_ops_disable_workfn(struct kthread_work *work)
- 	case SCX_EXIT_UNREG:
- 		reason = "BPF scheduler unregistered";
- 		break;
-+	case SCX_EXIT_SYSRQ:
-+		reason = "disabled by sysrq-S";
-+		break;
- 	case SCX_EXIT_ERROR:
- 		reason = "runtime error";
- 		break;
-@@ -2599,6 +2602,21 @@ struct bpf_struct_ops bpf_sched_ext_ops = {
- 	.name = "sched_ext_ops",
+@@ -9,6 +9,7 @@
+ enum scx_internal_consts {
+ 	SCX_NR_ONLINE_OPS	= SCX_OP_IDX(init),
+ 	SCX_DSP_DFL_MAX_BATCH	= 32,
++	SCX_DSP_MAX_LOOPS	= 32,
+ 	SCX_WATCHDOG_MAX_TIMEOUT = 30 * HZ,
  };
  
-+static void sysrq_handle_sched_ext_reset(u8 key)
-+{
-+	if (scx_ops_helper)
-+		scx_ops_disable(SCX_EXIT_SYSRQ);
-+	else
-+		pr_info("sched_ext: BPF scheduler not yet used\n");
-+}
-+
-+static const struct sysrq_key_op sysrq_sched_ext_reset_op = {
-+	.handler	= sysrq_handle_sched_ext_reset,
-+	.help_msg	= "reset-sched-ext(S)",
-+	.action_msg	= "Disable sched_ext and revert all tasks to CFS",
-+	.enable_mask	= SYSRQ_ENABLE_RTNICE,
-+};
-+
- void __init init_sched_ext_class(void)
- {
- 	int cpu;
-@@ -2622,6 +2640,8 @@ void __init init_sched_ext_class(void)
+@@ -174,6 +175,7 @@ static DEFINE_PER_CPU(struct scx_dsp_ctx, scx_dsp_ctx);
  
- 		init_dsq(&rq->scx.local_dsq, SCX_DSQ_LOCAL);
- 	}
+ void scx_bpf_dispatch(struct task_struct *p, u64 dsq_id, u64 slice,
+ 		      u64 enq_flags);
++void scx_bpf_kick_cpu(s32 cpu, u64 flags);
+ 
+ struct scx_task_iter {
+ 	struct sched_ext_entity		cursor;
+@@ -1298,6 +1300,7 @@ static int balance_scx(struct rq *rq, struct task_struct *prev,
+ 	struct scx_rq *scx_rq = &rq->scx;
+ 	struct scx_dsp_ctx *dspc = this_cpu_ptr(&scx_dsp_ctx);
+ 	bool prev_on_scx = prev->sched_class == &ext_sched_class;
++	int nr_loops = SCX_DSP_MAX_LOOPS;
+ 
+ 	lockdep_assert_rq_held(rq);
+ 
+@@ -1352,6 +1355,20 @@ static int balance_scx(struct rq *rq, struct task_struct *prev,
+ 			return 1;
+ 		if (consume_dispatch_q(rq, rf, &scx_dsq_global))
+ 			return 1;
 +
-+	register_sysrq_key('S', &sysrq_sched_ext_reset_op);
- }
++		/*
++		 * ops.dispatch() can trap us in this loop by repeatedly
++		 * dispatching ineligible tasks. Break out once in a while to
++		 * allow the watchdog to run. As IRQ can't be enabled in
++		 * balance(), we want to complete this scheduling cycle and then
++		 * start a new one. IOW, we want to call resched_curr() on the
++		 * next, most likely idle, task, not the current one. Use
++		 * scx_bpf_kick_cpu() for deferred kicking.
++		 */
++		if (unlikely(!--nr_loops)) {
++			scx_bpf_kick_cpu(cpu_of(rq), 0);
++			break;
++		}
+ 	} while (dspc->nr_tasks);
  
+ 	return 0;
+diff --git a/tools/sched_ext/scx_qmap.bpf.c b/tools/sched_ext/scx_qmap.bpf.c
+index da43f962ab4e..1c3a7d050e32 100644
+--- a/tools/sched_ext/scx_qmap.bpf.c
++++ b/tools/sched_ext/scx_qmap.bpf.c
+@@ -28,6 +28,7 @@ const volatile u64 slice_ns = SCX_SLICE_DFL;
+ const volatile bool switch_partial;
+ const volatile u32 stall_user_nth;
+ const volatile u32 stall_kernel_nth;
++const volatile u32 dsp_inf_loop_after;
+ const volatile s32 disallow_tgid;
  
+ u32 test_error_cnt;
+@@ -187,6 +188,22 @@ void BPF_STRUCT_OPS(qmap_dispatch, s32 cpu, struct task_struct *prev)
+ 	s32 pid;
+ 	int i;
+ 
++	if (dsp_inf_loop_after && nr_dispatched > dsp_inf_loop_after) {
++		struct task_struct *p;
++
++		/*
++		 * PID 2 should be kthreadd which should mostly be idle and off
++		 * the scheduler. Let's keep dispatching it to force the kernel
++		 * to call this function over and over again.
++		 */
++		p = bpf_task_from_pid(2);
++		if (p) {
++			scx_bpf_dispatch(p, SCX_DSQ_GLOBAL, slice_ns, 0);
++			bpf_task_release(p);
++			return;
++		}
++	}
++
+ 	if (!idx || !cnt) {
+ 		scx_bpf_error("failed to lookup idx[%p], cnt[%p]", idx, cnt);
+ 		return;
+diff --git a/tools/sched_ext/scx_qmap.c b/tools/sched_ext/scx_qmap.c
+index cac9f0780ce9..3d99a8e9b676 100644
+--- a/tools/sched_ext/scx_qmap.c
++++ b/tools/sched_ext/scx_qmap.c
+@@ -18,12 +18,13 @@ const char help_fmt[] =
+ "\n"
+ "See the top-level comment in .bpf.c for more details.\n"
+ "\n"
+-"Usage: %s [-s SLICE_US] [-e COUNT] [-t COUNT] [-T COUNT] [-d PID] [-p]\n"
++"Usage: %s [-s SLICE_US] [-e COUNT] [-t COUNT] [-T COUNT] [-l COUNT] [-d PID] [-p]\n"
+ "\n"
+ "  -s SLICE_US   Override slice duration\n"
+ "  -e COUNT      Trigger scx_bpf_error() after COUNT enqueues\n"
+ "  -t COUNT      Stall every COUNT'th user thread\n"
+ "  -T COUNT      Stall every COUNT'th kernel thread\n"
++"  -l COUNT      Trigger dispatch infinite looping after COUNT dispatches\n"
+ "  -d PID        Disallow a process from switching into SCHED_EXT (-1 for self)\n"
+ "  -p            Switch only tasks on SCHED_EXT policy intead of all\n"
+ "  -h            Display this help and exit\n";
+@@ -49,7 +50,7 @@ int main(int argc, char **argv)
+ 	skel = scx_qmap__open();
+ 	SCX_BUG_ON(!skel, "Failed to open skel");
+ 
+-	while ((opt = getopt(argc, argv, "s:e:t:T:d:ph")) != -1) {
++	while ((opt = getopt(argc, argv, "s:e:t:T:l:d:ph")) != -1) {
+ 		switch (opt) {
+ 		case 's':
+ 			skel->rodata->slice_ns = strtoull(optarg, NULL, 0) * 1000;
+@@ -63,6 +64,9 @@ int main(int argc, char **argv)
+ 		case 'T':
+ 			skel->rodata->stall_kernel_nth = strtoul(optarg, NULL, 0);
+ 			break;
++		case 'l':
++			skel->rodata->dsp_inf_loop_after = strtoul(optarg, NULL, 0);
++			break;
+ 		case 'd':
+ 			skel->rodata->disallow_tgid = strtol(optarg, NULL, 0);
+ 			if (skel->rodata->disallow_tgid < 0)
 -- 
 2.42.0
 
