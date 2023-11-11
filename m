@@ -1,25 +1,25 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8A251D55D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A67571D55C
 	for <bpf@vger.kernel.org>; Sat, 11 Nov 2023 20:16:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C213A9D
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674973A85
 	for <bpf@vger.kernel.org>; Sat, 11 Nov 2023 12:16:53 -0800 (PST)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ABCeHNh029152
-	for <bpf@vger.kernel.org>; Sat, 11 Nov 2023 12:16:53 -0800
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ABKGFWs023953
+	for <bpf@vger.kernel.org>; Sat, 11 Nov 2023 12:16:52 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ua9ta1g3n-1
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ua884hqjf-8
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Sat, 11 Nov 2023 12:16:53 -0800
-Received: from twshared9518.03.prn6.facebook.com (2620:10d:c085:108::8) by
+	for <bpf@vger.kernel.org>; Sat, 11 Nov 2023 12:16:52 -0800
+Received: from twshared4634.37.frc1.facebook.com (2620:10d:c085:208::11) by
  mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Sat, 11 Nov 2023 12:16:48 -0800
+ 15.1.2507.34; Sat, 11 Nov 2023 12:16:47 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 046F93B5A8F74; Sat, 11 Nov 2023 12:16:36 -0800 (PST)
+	id 37C5D3B5A8FB4; Sat, 11 Nov 2023 12:16:43 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
@@ -27,9 +27,9 @@ CC: <andrii@kernel.org>, <kernel-team@meta.com>,
         Eduard Zingerman
 	<eddyz87@gmail.com>,
         Stanislav Fomichev <sdf@google.com>
-Subject: [PATCH v2 bpf-next 1/8] bpf: move verbose_linfo() into kernel/bpf/log.c
-Date: Sat, 11 Nov 2023 12:16:26 -0800
-Message-ID: <20231111201633.3434794-2-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 4/8] bpf: print spilled register state in stack slot
+Date: Sat, 11 Nov 2023 12:16:29 -0800
+Message-ID: <20231111201633.3434794-5-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231111201633.3434794-1-andrii@kernel.org>
 References: <20231111201633.3434794-1-andrii@kernel.org>
@@ -42,198 +42,144 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: lvtcT2b4F1B45SO_JHTs2Isxbteg8ZP8
-X-Proofpoint-ORIG-GUID: lvtcT2b4F1B45SO_JHTs2Isxbteg8ZP8
+X-Proofpoint-GUID: vCa32rT440KUKpjLaHpahNZP66Dh-lrf
+X-Proofpoint-ORIG-GUID: vCa32rT440KUKpjLaHpahNZP66Dh-lrf
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-11_16,2023-11-09_01,2023-05-22_02
 
-verifier.c is huge. Let's try to move out parts that are logging-related
-into log.c, as we previously did with bpf_log() and other related stuff.
-This patch moves line info verbose output routines: it's pretty
-self-contained and isolated code, so there is no problem with this.
+Print the same register state representation when printing stack state,
+as we do for normal registers. Note that if stack slot contains
+subregister spill (1, 2, or 4 byte long), we'll still emit "m0?" mask
+for those bytes that are not part of spilled register.
+
+While means we can get something like fp-8=3D0000scalar() for a 4-byte
+spill with other 4 bytes still being STACK_ZERO.
+
+Some example before and after, taken from the log of
+pyperf_subprogs.bpf.o:
+
+49: (7b) *(u64 *)(r10 -256) =3D r1      ; frame1: R1_w=3Dctx(off=3D0,imm=3D=
+0) R10=3Dfp0 fp-256_w=3Dctx
+49: (7b) *(u64 *)(r10 -256) =3D r1      ; frame1: R1_w=3Dctx(off=3D0,imm=3D=
+0) R10=3Dfp0 fp-256_w=3Dctx(off=3D0,imm=3D0)
+
+150: (7b) *(u64 *)(r10 -264) =3D r0     ; frame1: R0_w=3Dmap_value_or_nul=
+l(id=3D6,off=3D0,ks=3D192,vs=3D4,imm=3D0) R10=3Dfp0 fp-264_w=3Dmap_value_=
+or_null
+150: (7b) *(u64 *)(r10 -264) =3D r0     ; frame1: R0_w=3Dmap_value_or_nul=
+l(id=3D6,off=3D0,ks=3D192,vs=3D4,imm=3D0) R10=3Dfp0 fp-264_w=3Dmap_value_=
+or_null(id=3D6,off=3D0,ks=3D192,vs=3D4,imm=3D0)
+
+5192: (61) r1 =3D *(u32 *)(r10 -272)    ; frame1: R1_w=3Dscalar(smin=3Dsm=
+in32=3D0,smax=3Dumax=3Dsmax32=3Dumax32=3D15,var_off=3D(0x0; 0xf)) R10=3Df=
+p0 fp-272=3D
+5192: (61) r1 =3D *(u32 *)(r10 -272)    ; frame1: R1_w=3Dscalar(smin=3Dsm=
+in32=3D0,smax=3Dumax=3Dsmax32=3Dumax32=3D15,var_off=3D(0x0; 0xf)) R10=3Df=
+p0 fp-272=3D????scalar(smin=3Dsmin32=3D0,smax=3Dumax=3Dsmax32=3Dumax32=3D=
+15,var_off=3D(0x0; 0xf))
+
+While at it, do a few other simple clean ups:
+  - skip slot if it's not scratched before detecting whether it's valid;
+  - move taking spilled_reg pointer outside of switch (only DYNPTR has
+    to adjust that to get to the "main" slot);
+  - don't recalculate types_buf second time for MISC/ZERO/default case.
 
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Acked-by: Stanislav Fomichev <sdf@google.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- include/linux/bpf_verifier.h |  4 +++
- kernel/bpf/log.c             | 59 ++++++++++++++++++++++++++++++++++++
- kernel/bpf/verifier.c        | 57 ----------------------------------
- 3 files changed, 63 insertions(+), 57 deletions(-)
+ kernel/bpf/log.c | 36 +++++++++++++++++-------------------
+ 1 file changed, 17 insertions(+), 19 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 24213a99cc79..d7898f636929 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -679,6 +679,10 @@ int bpf_vlog_init(struct bpf_verifier_log *log, u32 =
-log_level,
- void bpf_vlog_reset(struct bpf_verifier_log *log, u64 new_pos);
- int bpf_vlog_finalize(struct bpf_verifier_log *log, u32 *log_size_actual=
-);
-=20
-+__printf(3, 4) void verbose_linfo(struct bpf_verifier_env *env,
-+				  u32 insn_off,
-+				  const char *prefix_fmt, ...);
-+
- static inline struct bpf_func_state *cur_func(struct bpf_verifier_env *e=
-nv)
- {
- 	struct bpf_verifier_state *cur =3D env->cur_state;
 diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index 850494423530..f20e1449c882 100644
+index 05d737e2fab3..97a1641e848e 100644
 --- a/kernel/bpf/log.c
 +++ b/kernel/bpf/log.c
-@@ -10,6 +10,8 @@
- #include <linux/bpf_verifier.h>
- #include <linux/math64.h>
-=20
-+#define verbose(env, fmt, args...) bpf_verifier_log_write(env, fmt, ##ar=
-gs)
-+
- static bool bpf_verifier_log_attr_valid(const struct bpf_verifier_log *l=
-og)
+@@ -618,7 +618,6 @@ void print_verifier_state(struct bpf_verifier_env *en=
+v, const struct bpf_func_st
+ 			  bool print_all)
  {
- 	/* ubuf and len_total should both be specified (or not) together */
-@@ -325,3 +327,60 @@ __printf(2, 3) void bpf_log(struct bpf_verifier_log =
-*log,
- 	va_end(args);
- }
- EXPORT_SYMBOL_GPL(bpf_log);
-+
-+static const struct bpf_line_info *
-+find_linfo(const struct bpf_verifier_env *env, u32 insn_off)
-+{
-+	const struct bpf_line_info *linfo;
-+	const struct bpf_prog *prog;
-+	u32 i, nr_linfo;
-+
-+	prog =3D env->prog;
-+	nr_linfo =3D prog->aux->nr_linfo;
-+
-+	if (!nr_linfo || insn_off >=3D prog->len)
-+		return NULL;
-+
-+	linfo =3D prog->aux->linfo;
-+	for (i =3D 1; i < nr_linfo; i++)
-+		if (insn_off < linfo[i].insn_off)
-+			break;
-+
-+	return &linfo[i - 1];
-+}
-+
-+static const char *ltrim(const char *s)
-+{
-+	while (isspace(*s))
-+		s++;
-+
-+	return s;
-+}
-+
-+__printf(3, 4) void verbose_linfo(struct bpf_verifier_env *env,
-+				  u32 insn_off,
-+				  const char *prefix_fmt, ...)
-+{
-+	const struct bpf_line_info *linfo;
-+
-+	if (!bpf_verifier_log_needed(&env->log))
-+		return;
-+
-+	linfo =3D find_linfo(env, insn_off);
-+	if (!linfo || linfo =3D=3D env->prev_linfo)
-+		return;
-+
-+	if (prefix_fmt) {
-+		va_list args;
-+
-+		va_start(args, prefix_fmt);
-+		bpf_verifier_vlog(&env->log, prefix_fmt, args);
-+		va_end(args);
-+	}
-+
-+	verbose(env, "%s\n",
-+		ltrim(btf_name_by_offset(env->prog->aux->btf,
-+					 linfo->line_off)));
-+
-+	env->prev_linfo =3D linfo;
-+}
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 9ae6eae13471..d2830d384d9b 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -337,27 +337,6 @@ struct btf *btf_vmlinux;
+ 	const struct bpf_reg_state *reg;
+-	enum bpf_reg_type t;
+ 	int i;
 =20
- static DEFINE_MUTEX(bpf_verifier_lock);
+ 	if (state->frameno)
+@@ -637,32 +636,38 @@ void print_verifier_state(struct bpf_verifier_env *=
+env, const struct bpf_func_st
+ 	for (i =3D 0; i < state->allocated_stack / BPF_REG_SIZE; i++) {
+ 		char types_buf[BPF_REG_SIZE + 1];
+ 		bool valid =3D false;
++		u8 slot_type;
+ 		int j;
 =20
--static const struct bpf_line_info *
--find_linfo(const struct bpf_verifier_env *env, u32 insn_off)
--{
--	const struct bpf_line_info *linfo;
--	const struct bpf_prog *prog;
--	u32 i, nr_linfo;
--
--	prog =3D env->prog;
--	nr_linfo =3D prog->aux->nr_linfo;
--
--	if (!nr_linfo || insn_off >=3D prog->len)
--		return NULL;
--
--	linfo =3D prog->aux->linfo;
--	for (i =3D 1; i < nr_linfo; i++)
--		if (insn_off < linfo[i].insn_off)
--			break;
--
--	return &linfo[i - 1];
--}
--
- __printf(2, 3) static void verbose(void *private_data, const char *fmt, =
-...)
- {
- 	struct bpf_verifier_env *env =3D private_data;
-@@ -371,42 +350,6 @@ __printf(2, 3) static void verbose(void *private_dat=
-a, const char *fmt, ...)
- 	va_end(args);
- }
++		if (!print_all && !stack_slot_scratched(env, i))
++			continue;
++
+ 		for (j =3D 0; j < BPF_REG_SIZE; j++) {
+-			if (state->stack[i].slot_type[j] !=3D STACK_INVALID)
++			slot_type =3D state->stack[i].slot_type[j];
++			if (slot_type !=3D STACK_INVALID)
+ 				valid =3D true;
+-			types_buf[j] =3D slot_type_char[state->stack[i].slot_type[j]];
++			types_buf[j] =3D slot_type_char[slot_type];
+ 		}
+ 		types_buf[BPF_REG_SIZE] =3D 0;
+ 		if (!valid)
+ 			continue;
+-		if (!print_all && !stack_slot_scratched(env, i))
+-			continue;
++
++		reg =3D &state->stack[i].spilled_ptr;
+ 		switch (state->stack[i].slot_type[BPF_REG_SIZE - 1]) {
+ 		case STACK_SPILL:
+-			reg =3D &state->stack[i].spilled_ptr;
+-			t =3D reg->type;
++			/* print MISC/ZERO/INVALID slots above subreg spill */
++			for (j =3D 0; j < BPF_REG_SIZE; j++)
++				if (state->stack[i].slot_type[j] =3D=3D STACK_SPILL)
++					break;
++			types_buf[j] =3D '\0';
 =20
--static const char *ltrim(const char *s)
--{
--	while (isspace(*s))
--		s++;
+ 			verbose(env, " fp%d", (-i - 1) * BPF_REG_SIZE);
+ 			print_liveness(env, reg->live);
+-			verbose(env, "=3D%s", t =3D=3D SCALAR_VALUE ? "" : reg_type_str(env, =
+t));
+-			if (t =3D=3D SCALAR_VALUE && reg->precise)
+-				verbose(env, "P");
+-			if (t =3D=3D SCALAR_VALUE && tnum_is_const(reg->var_off))
+-				verbose(env, "%lld", reg->var_off.value + reg->off);
++			verbose(env, "=3D%s", types_buf);
++			print_reg_state(env, reg);
+ 			break;
+ 		case STACK_DYNPTR:
++			/* skip to main dynptr slot */
+ 			i +=3D BPF_DYNPTR_NR_SLOTS - 1;
+ 			reg =3D &state->stack[i].spilled_ptr;
+=20
+@@ -674,7 +679,6 @@ void print_verifier_state(struct bpf_verifier_env *en=
+v, const struct bpf_func_st
+ 			break;
+ 		case STACK_ITER:
+ 			/* only main slot has ref_obj_id set; skip others */
+-			reg =3D &state->stack[i].spilled_ptr;
+ 			if (!reg->ref_obj_id)
+ 				continue;
+=20
+@@ -688,12 +692,6 @@ void print_verifier_state(struct bpf_verifier_env *e=
+nv, const struct bpf_func_st
+ 		case STACK_MISC:
+ 		case STACK_ZERO:
+ 		default:
+-			reg =3D &state->stack[i].spilled_ptr;
 -
--	return s;
--}
+-			for (j =3D 0; j < BPF_REG_SIZE; j++)
+-				types_buf[j] =3D slot_type_char[state->stack[i].slot_type[j]];
+-			types_buf[BPF_REG_SIZE] =3D 0;
 -
--__printf(3, 4) static void verbose_linfo(struct bpf_verifier_env *env,
--					 u32 insn_off,
--					 const char *prefix_fmt, ...)
--{
--	const struct bpf_line_info *linfo;
--
--	if (!bpf_verifier_log_needed(&env->log))
--		return;
--
--	linfo =3D find_linfo(env, insn_off);
--	if (!linfo || linfo =3D=3D env->prev_linfo)
--		return;
--
--	if (prefix_fmt) {
--		va_list args;
--
--		va_start(args, prefix_fmt);
--		bpf_verifier_vlog(&env->log, prefix_fmt, args);
--		va_end(args);
--	}
--
--	verbose(env, "%s\n",
--		ltrim(btf_name_by_offset(env->prog->aux->btf,
--					 linfo->line_off)));
--
--	env->prev_linfo =3D linfo;
--}
--
- static void verbose_invalid_scalar(struct bpf_verifier_env *env,
- 				   struct bpf_reg_state *reg,
- 				   struct tnum *range, const char *ctx,
+ 			verbose(env, " fp%d", (-i - 1) * BPF_REG_SIZE);
+ 			print_liveness(env, reg->live);
+ 			verbose(env, "=3D%s", types_buf);
 --=20
 2.34.1
 
