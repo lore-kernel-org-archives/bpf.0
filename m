@@ -1,48 +1,48 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F361C5690
-	for <bpf@vger.kernel.org>; Sat, 11 Nov 2023 02:50:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ADAE5667
+	for <bpf@vger.kernel.org>; Sat, 11 Nov 2023 02:50:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A/GjNYQA"
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16AA4ED3;
-	Fri, 10 Nov 2023 18:49:30 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1ccbb7f79cdso22322665ad.3;
-        Fri, 10 Nov 2023 18:49:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kIAkAVj/"
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768F047A4;
+	Fri, 10 Nov 2023 18:49:38 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-5bcfc508d14so2121730a12.3;
+        Fri, 10 Nov 2023 18:49:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699670970; x=1700275770; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1699670977; x=1700275777; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RomfD8j675UcHtAVNjV5ZY0vKiXSfadBEXJSFWyyOd0=;
-        b=A/GjNYQA6C00pl0JrokeM+q232z6511hkljIAUCsza/jfPYtbtiV49xnaMbcA8JSkB
-         Vt50P2nNfYQbvwtEdvapNrw3aQ0Lf5ynzAP/UpgVe/KpggJkHRnw7ce07EjUyOT4IOLY
-         JSOwdvO+1ERHCKX6PQGHrhhVvZe4fCJsOQHCg3WS+eCrHYYW7PYdWzyhooXYPx+IM3f1
-         DuAZfq2GJB2wovEli/9jN3lqeo4E6izKoW2Om6AO2WaGeSkP00TmpGQVDa4NA4fmSHcH
-         k9Pt7KA0L3qev/CyzXLR3BpTdxuQL9JIPx2SnKMUvSmTo8N3eUqytNXWt736Y1Alz5hL
-         0J2g==
+        bh=/stcVOZInSyqLvaN7cUL7WLcesEIp6ccWqbtVlM0WXk=;
+        b=kIAkAVj/O+1Eih6xZJ3v2TRiUe3vU6LoIjiKr24kB1SvzMqgSj6/8xRRQpazhNu80r
+         tIDoqvL2GtnoUQVfg2lm6Rz7yLV+gak73+4ReHvc8+CN1hnKCglYtU3Yy62zIiVqzjwH
+         3gPHUoDp97Usv2RWtwgnsT/29B+K1LhUsTR2E4c4lRcYEv5QOl+qdQTQSfBMlYbo3iFL
+         JK7ZVTW5GWyeGDYa8zw5LYgcY8MIK4L/383X7rzHw8r2RKLYAtMt/Eiu27X2YaJta7oE
+         UtzSFw/GRVZI9g1Jl39j9hn8pQ6e5ycc8pnDXOxe0ZhI4gR0WsbeB3dk5whe785bCx7n
+         9Ngg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699670970; x=1700275770;
+        d=1e100.net; s=20230601; t=1699670977; x=1700275777;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=RomfD8j675UcHtAVNjV5ZY0vKiXSfadBEXJSFWyyOd0=;
-        b=ENWh/zJHe3CAxXQvXXNtM0+AfkLdA53uMCukNcLTZmbNhRqT91XC4hAu7kAwdvaxmG
-         jh3d3hVHgD7U+wzUSdeh+jBw0hSXeXHu6BpUjFW2A1Rp7uRGRWueXc5G7a5AliyGeMsd
-         P7iHwW9nDOollL51uXUxgpNQVQAGR6xpd6PE0vT32xFjIDSLDVXS20g7Y0LCQympOEyM
-         X6MAGmH3efksdp/t63oEx3jLs19lmJNI76Io3c7jgoP9ZX6o+3WnArvbOvfuf39JgKtV
-         97K6E1PjtDjDd/PGIAWE+zvOWu27YHb96JBLHlmlgBkmqJ3lZMG9UlIBKewBtJLCDJp8
-         iLwg==
-X-Gm-Message-State: AOJu0YxASdB+xBzKglne8srpLeO5YzahgtRNTF9oCC8gt2BeZMU4bI5t
-	rw9P021VTlaKlW0jSVQnN78=
-X-Google-Smtp-Source: AGHT+IESQQOKe5PEPicMSMPzm6ve5X2FeApPuKdLJyVDJg10aKkBmipFcp18O642JVg21q4ZxkpQVQ==
-X-Received: by 2002:a17:90b:390c:b0:280:29e8:4379 with SMTP id ob12-20020a17090b390c00b0028029e84379mr785733pjb.34.1699670969981;
-        Fri, 10 Nov 2023 18:49:29 -0800 (PST)
+        bh=/stcVOZInSyqLvaN7cUL7WLcesEIp6ccWqbtVlM0WXk=;
+        b=N6WYU3st8JhAnENdjXfow0jjLIITgDkdeNiU10wYKQMxIB5SCE80qMuq6M2H2lKvjo
+         6CaxN+H/HeA6oS0i3QJWw9oUa8oXQevBoWs7yHtloMaz1JX1BHTBJwmeSDlVyePKZj2j
+         cI6mx72Zs9Hh+lwle8J/vuG9J5HiCR8btHXk78A2Mzz6IWO70ai1RXEG/pH/9/gy65Pr
+         nuI+9cj42X+oPcf4yQN10gzdvXzKkQJ0RB+txSMRKl33mb6LaHp9EN9m8F1rQFaOGlIP
+         KeBDLALay8nhQztmDzbp3RBxksorqtgK1UKqCi4kbfc+aICFrk3rKh0Sd7DJgRqzF70V
+         WecQ==
+X-Gm-Message-State: AOJu0Yygi2jfOU/tWTgJRlq3Rj58yjD/gaR5IYKOkY1n61ukbjBQk09e
+	wkpOvLTC4ulURkmwMqqHKmw=
+X-Google-Smtp-Source: AGHT+IH5jBGbQTOkGvCEZgZSbbYHSHU2YilTVL16JYSbVLU5RSR9LfRuZLJEEy28uEAF4iVDz0ecXQ==
+X-Received: by 2002:a05:6a21:790a:b0:15c:7223:7bb1 with SMTP id bg10-20020a056a21790a00b0015c72237bb1mr1321345pzc.20.1699670977586;
+        Fri, 10 Nov 2023 18:49:37 -0800 (PST)
 Received: from localhost ([2620:10d:c090:400::4:7384])
-        by smtp.gmail.com with ESMTPSA id t7-20020a170902bc4700b001c9d968563csm357699plz.79.2023.11.10.18.49.29
+        by smtp.gmail.com with ESMTPSA id f6-20020a17090a8e8600b0027df6ff00eesm425514pjo.19.2023.11.10.18.49.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Nov 2023 18:49:29 -0800 (PST)
+        Fri, 10 Nov 2023 18:49:37 -0800 (PST)
 Sender: Tejun Heo <htejun@gmail.com>
 From: Tejun Heo <tj@kernel.org>
 To: torvalds@linux-foundation.org,
@@ -75,11 +75,10 @@ To: torvalds@linux-foundation.org,
 Cc: linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
 	kernel-team@meta.com,
-	David Vernet <void@manifault.com>,
 	Tejun Heo <tj@kernel.org>
-Subject: [PATCH 18/36] sched_ext: Print sched_ext info when dumping stack
-Date: Fri, 10 Nov 2023 16:47:44 -1000
-Message-ID: <20231111024835.2164816-19-tj@kernel.org>
+Subject: [PATCH 22/36] sched_ext: Add task state tracking operations
+Date: Fri, 10 Nov 2023 16:47:48 -1000
+Message-ID: <20231111024835.2164816-23-tj@kernel.org>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231111024835.2164816-1-tj@kernel.org>
 References: <20231111024835.2164816-1-tj@kernel.org>
@@ -91,131 +90,174 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: David Vernet <void@manifault.com>
+Being able to track the task runnable and running state transitions are
+useful for a variety of purposes including latency tracking and load factor
+calculation.
 
-It would be useful to see what the sched_ext scheduler state is, and what
-scheduler is running, when we're dumping a task's stack. This patch
-therefore adds a new print_scx_info() function that's called in the same
-context as print_worker_info() and print_stop_info(). An example dump
-follows.
+Currently, BPF schedulers don't have a good way of tracking these
+transitions. Becoming runnable can be determined from ops.enqueue() but
+becoming quiescent can only be inferred from the lack of subsequent enqueue.
+Also, as the local dsq can have multiple tasks and some events are handled
+in the sched_ext core, it's difficult to determine when a given task starts
+and stops executing.
 
-  BUG: kernel NULL pointer dereference, address: 0000000000000999
-  #PF: supervisor write access in kernel mode
-  #PF: error_code(0x0002) - not-present page
-  PGD 0 P4D 0
-  Oops: 0002 [#1] PREEMPT SMP
-  CPU: 13 PID: 2047 Comm: insmod Tainted: G           O       6.6.0-work-10323-gb58d4cae8e99-dirty #34
-  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS unknown 2/2/2022
-  Sched_ext: qmap (enabled+all), task: runnable_at=-17ms
-  RIP: 0010:init_module+0x9/0x1000 [test_module]
-  ...
+This patch adds sched_ext_ops.runnable(), .running(), .stopping() and
+.quiescent() operations to track the task runnable and running state
+transitions. They're mostly self explanatory; however, we want to ensure
+that running <-> stopping transitions are always contained within runnable
+<-> quiescent transitions which is a bit different from how the scheduler
+core behaves. This adds a bit of complication. See the comment in
+dequeue_task_scx().
 
-Signed-off-by: David Vernet <void@manifault.com>
 Signed-off-by: Tejun Heo <tj@kernel.org>
+Reviewed-by: David Vernet <dvernet@meta.com>
+Acked-by: Josh Don <joshdon@google.com>
+Acked-by: Hao Luo <haoluo@google.com>
+Acked-by: Barret Rhoden <brho@google.com>
 ---
- include/linux/sched/ext.h |  2 ++
- kernel/sched/core.c       |  1 +
- kernel/sched/ext.c        | 45 +++++++++++++++++++++++++++++++++++++++
- lib/dump_stack.c          |  1 +
- 4 files changed, 49 insertions(+)
+ include/linux/sched/ext.h | 65 +++++++++++++++++++++++++++++++++++++++
+ kernel/sched/ext.c        | 31 +++++++++++++++++++
+ 2 files changed, 96 insertions(+)
 
 diff --git a/include/linux/sched/ext.h b/include/linux/sched/ext.h
-index 9d41acaf89c0..55f649bd065c 100644
+index d6ebfa6163a1..6d8bcd1490af 100644
 --- a/include/linux/sched/ext.h
 +++ b/include/linux/sched/ext.h
-@@ -428,10 +428,12 @@ struct sched_ext_entity {
- };
+@@ -192,6 +192,71 @@ struct sched_ext_ops {
+ 	 */
+ 	void (*dispatch)(s32 cpu, struct task_struct *prev);
  
- void sched_ext_free(struct task_struct *p);
-+void print_scx_info(const char *log_lvl, struct task_struct *p);
- 
- #else	/* !CONFIG_SCHED_CLASS_EXT */
- 
- static inline void sched_ext_free(struct task_struct *p) {}
-+static inline void print_scx_info(const char *log_lvl, struct task_struct *p) {}
- 
- #endif	/* CONFIG_SCHED_CLASS_EXT */
- #endif	/* _LINUX_SCHED_EXT_H */
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 1906f8397c28..957ae28a6e3f 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -9217,6 +9217,7 @@ void sched_show_task(struct task_struct *p)
- 
- 	print_worker_info(KERN_INFO, p);
- 	print_stop_info(KERN_INFO, p);
-+	print_scx_info(KERN_INFO, p);
- 	show_stack(p, NULL, KERN_INFO);
- 	put_task_stack(p);
- }
++	/**
++	 * runnable - A task is becoming runnable on its associated CPU
++	 * @p: task becoming runnable
++	 * @enq_flags: %SCX_ENQ_*
++	 *
++	 * This and the following three functions can be used to track a task's
++	 * execution state transitions. A task becomes ->runnable() on a CPU,
++	 * and then goes through one or more ->running() and ->stopping() pairs
++	 * as it runs on the CPU, and eventually becomes ->quiescent() when it's
++	 * done running on the CPU.
++	 *
++	 * @p is becoming runnable on the CPU because it's
++	 *
++	 * - waking up (%SCX_ENQ_WAKEUP)
++	 * - being moved from another CPU
++	 * - being restored after temporarily taken off the queue for an
++	 *   attribute change.
++	 *
++	 * This and ->enqueue() are related but not coupled. This operation
++	 * notifies @p's state transition and may not be followed by ->enqueue()
++	 * e.g. when @p is being dispatched to a remote CPU. Likewise, a task
++	 * may be ->enqueue()'d without being preceded by this operation e.g.
++	 * after exhausting its slice.
++	 */
++	void (*runnable)(struct task_struct *p, u64 enq_flags);
++
++	/**
++	 * running - A task is starting to run on its associated CPU
++	 * @p: task starting to run
++	 *
++	 * See ->runnable() for explanation on the task state notifiers.
++	 */
++	void (*running)(struct task_struct *p);
++
++	/**
++	 * stopping - A task is stopping execution
++	 * @p: task stopping to run
++	 * @runnable: is task @p still runnable?
++	 *
++	 * See ->runnable() for explanation on the task state notifiers. If
++	 * !@runnable, ->quiescent() will be invoked after this operation
++	 * returns.
++	 */
++	void (*stopping)(struct task_struct *p, bool runnable);
++
++	/**
++	 * quiescent - A task is becoming not runnable on its associated CPU
++	 * @p: task becoming not runnable
++	 * @deq_flags: %SCX_DEQ_*
++	 *
++	 * See ->runnable() for explanation on the task state notifiers.
++	 *
++	 * @p is becoming quiescent on the CPU because it's
++	 *
++	 * - sleeping (%SCX_DEQ_SLEEP)
++	 * - being moved to another CPU
++	 * - being temporarily taken off the queue for an attribute change
++	 *   (%SCX_DEQ_SAVE)
++	 *
++	 * This and ->dequeue() are related but not coupled. This operation
++	 * notifies @p's state transition and may not be preceded by ->dequeue()
++	 * e.g. when @p is being dispatched to a remote CPU.
++	 */
++	void (*quiescent)(struct task_struct *p, u64 deq_flags);
++
+ 	/**
+ 	 * yield - Yield CPU
+ 	 * @from: yielding task
 diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
-index 4e2aa9f308fb..65ee99ea111b 100644
+index d0c60dfac08e..6cf088dd9d09 100644
 --- a/kernel/sched/ext.c
 +++ b/kernel/sched/ext.c
-@@ -2787,6 +2787,51 @@ static const struct sysrq_key_op sysrq_sched_ext_reset_op = {
- 	.enable_mask	= SYSRQ_ENABLE_RTNICE,
- };
+@@ -786,6 +786,9 @@ static void enqueue_task_scx(struct rq *rq, struct task_struct *p, int enq_flags
+ 	rq->scx.nr_running++;
+ 	add_nr_running(rq, 1);
  
-+/**
-+ * print_scx_info - print out sched_ext scheduler state
-+ * @log_lvl: the log level to use when printing
-+ * @p: target task
-+ *
-+ * If a sched_ext scheduler is enabled, print the name and state of the
-+ * scheduler. If @p is on sched_ext, print further information about the task.
-+ *
-+ * This function can be safely called on any task as long as the task_struct
-+ * itself is accessible. While safe, this function isn't synchronized and may
-+ * print out mixups or garbages of limited length.
-+ */
-+void print_scx_info(const char *log_lvl, struct task_struct *p)
-+{
-+	enum scx_ops_enable_state state = scx_ops_enable_state();
-+	const char *all = READ_ONCE(scx_switching_all) ? "+all" : "";
-+	char runnable_at_buf[22] = "?";
-+	struct sched_class *class;
-+	unsigned long runnable_at;
++	if (SCX_HAS_OP(runnable))
++		SCX_CALL_OP(SCX_KF_REST, runnable, p, enq_flags);
 +
-+	if (state == SCX_OPS_DISABLED)
-+		return;
-+
-+	/*
-+	 * Carefully check if the task was running on sched_ext, and then
-+	 * carefully copy the time it's been runnable, and its state.
-+	 */
-+	if (copy_from_kernel_nofault(&class, &p->sched_class, sizeof(class)) ||
-+	    class != &ext_sched_class) {
-+		printk("%sSched_ext: %s (%s%s)", log_lvl, scx_ops.name,
-+		       scx_ops_enable_state_str[state], all);
-+		return;
-+	}
-+
-+	if (!copy_from_kernel_nofault(&runnable_at, &p->scx.runnable_at,
-+				      sizeof(runnable_at)))
-+		scnprintf(runnable_at_buf, sizeof(runnable_at_buf), "%+lldms",
-+			  (s64)(runnable_at - jiffies) * (HZ / MSEC_PER_SEC));
-+
-+	/* Print everything onto one line to conserve console spce. */
-+	printk("%sSched_ext: %s (%s%s), task: runnable_at=%s",
-+	       log_lvl, scx_ops.name, scx_ops_enable_state_str[state], all,
-+	       runnable_at_buf);
-+}
-+
- void __init init_sched_ext_class(void)
- {
- 	int cpu;
-diff --git a/lib/dump_stack.c b/lib/dump_stack.c
-index 83471e81501a..6e667c445539 100644
---- a/lib/dump_stack.c
-+++ b/lib/dump_stack.c
-@@ -68,6 +68,7 @@ void dump_stack_print_info(const char *log_lvl)
- 
- 	print_worker_info(log_lvl, current);
- 	print_stop_info(log_lvl, current);
-+	print_scx_info(log_lvl, current);
+ 	do_enqueue_task(rq, p, enq_flags, sticky_cpu);
  }
  
- /**
+@@ -846,6 +849,26 @@ static void dequeue_task_scx(struct rq *rq, struct task_struct *p, int deq_flags
+ 
+ 	ops_dequeue(p, deq_flags);
+ 
++	/*
++	 * A currently running task which is going off @rq first gets dequeued
++	 * and then stops running. As we want running <-> stopping transitions
++	 * to be contained within runnable <-> quiescent transitions, trigger
++	 * ->stopping() early here instead of in put_prev_task_scx().
++	 *
++	 * @p may go through multiple stopping <-> running transitions between
++	 * here and put_prev_task_scx() if task attribute changes occur while
++	 * balance_scx() leaves @rq unlocked. However, they don't contain any
++	 * information meaningful to the BPF scheduler and can be suppressed by
++	 * skipping the callbacks if the task is !QUEUED.
++	 */
++	if (SCX_HAS_OP(stopping) && task_current(rq, p)) {
++		update_curr_scx(rq);
++		SCX_CALL_OP(SCX_KF_REST, stopping, p, false);
++	}
++
++	if (SCX_HAS_OP(quiescent))
++		SCX_CALL_OP(SCX_KF_REST, quiescent, p, deq_flags);
++
+ 	if (deq_flags & SCX_DEQ_SLEEP)
+ 		p->scx.flags |= SCX_TASK_DEQD_FOR_SLEEP;
+ 	else
+@@ -1383,6 +1406,10 @@ static void set_next_task_scx(struct rq *rq, struct task_struct *p, bool first)
+ 
+ 	p->se.exec_start = rq_clock_task(rq);
+ 
++	/* see dequeue_task_scx() on why we skip when !QUEUED */
++	if (SCX_HAS_OP(running) && (p->scx.flags & SCX_TASK_QUEUED))
++		SCX_CALL_OP(SCX_KF_REST, running, p);
++
+ 	watchdog_unwatch_task(p, true);
+ }
+ 
+@@ -1421,6 +1448,10 @@ static void put_prev_task_scx(struct rq *rq, struct task_struct *p)
+ 
+ 	update_curr_scx(rq);
+ 
++	/* see dequeue_task_scx() on why we skip when !QUEUED */
++	if (SCX_HAS_OP(stopping) && (p->scx.flags & SCX_TASK_QUEUED))
++		SCX_CALL_OP(SCX_KF_REST, stopping, p, true);
++
+ 	/*
+ 	 * If we're being called from put_prev_task_balance(), balance_scx() may
+ 	 * have decided that @p should keep running.
 -- 
 2.42.0
 
