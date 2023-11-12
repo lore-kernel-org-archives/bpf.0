@@ -1,53 +1,52 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5D1763D3
-	for <bpf@vger.kernel.org>; Sun, 12 Nov 2023 12:49:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7454C8832
+	for <bpf@vger.kernel.org>; Sun, 12 Nov 2023 12:49:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="jD18tR9c"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="pZ1v8Xo2"
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3E42D64
-	for <bpf@vger.kernel.org>; Sun, 12 Nov 2023 04:49:27 -0800 (PST)
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ACCiL2H012886;
-	Sun, 12 Nov 2023 12:49:10 GMT
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8904330CB
+	for <bpf@vger.kernel.org>; Sun, 12 Nov 2023 04:49:29 -0800 (PST)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ACCiLml031479;
+	Sun, 12 Nov 2023 12:49:02 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2023-03-30;
- bh=61TYyj5H8+eGFzSL11VBzh4G3fjDb1CAqf8B71EAdCY=;
- b=jD18tR9cVG7tvqRAHMOrTNgDXW+WtJ6sBwfKdb6xNy6H9FiQI7WR3oBsRyLD6NbevA3R
- ZaX7KkkEcE1dvTsNOQUEtq3j+nXoM5ZOpHyLFvtpJ5xCebnyXTfoaq465v+G13WyDDXT
- QRNaJUpjdCVXY1zdyBqx81IZFZXV/8WKy8bLdDHHQjcI0yHHplz0vkMjhc47MQdWDQT6
- kOfh1Aj7o0WFPFrfDCpmRkbh09ydPzgUxvZTRbRxZuV271sIw3RZcZBTApp62AVmBF+a
- /+ZDr6M1MOpM3Z/vUnJYY5zOKE+L0hAWoq7DuhOTCVVGCQIcyH+I3qB7fj8ofIG/jz05 bg== 
+ bh=yamFn1ACTVB7D2hCMqNWe0LbBk0OTjp7Ql85H2s9Mc8=;
+ b=pZ1v8Xo2z7xVS2X+Kv+U61Na5RmhVmER34C5wtgAWnHj8PmWKK3XIuWnRCWbgKge4lvJ
+ 3kGDv/mYLpP3VXp/oYKQMa5EYN9nCy/z+Z3cxW/yQfv6aJkh1RtAibX74pc9eAkfPehe
+ AIiLj3UxrReY0h/ZXVEkrya8KNY1MVkrkHFO/KlrIlHTfTT07WG4U938B2V/MDJZlaw8
+ 08f5lLcmqnfThT28LS1R0SMBr21iacAIChJGCbhClLh5S7xDxfqlOy0N8/reSuZ5Xuat
+ pLyALooiSx6gn/ebsiL+v5ntZ8/yotTZO6exTH2PoAr8QXh7KtRTQr3C1pP5MOIq0jCb mg== 
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ua2r01eq9-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ua2sthe4v-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 12 Nov 2023 12:49:10 +0000
+	Sun, 12 Nov 2023 12:49:02 +0000
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3ACCEGNi008467;
-	Sun, 12 Nov 2023 12:49:09 GMT
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3ACCEZeG008972;
+	Sun, 12 Nov 2023 12:49:00 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3uaxhngfmd-1
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3uaxhngfk1-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 12 Nov 2023 12:49:09 +0000
+	Sun, 12 Nov 2023 12:49:00 +0000
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3ACCmceG029718;
-	Sun, 12 Nov 2023 12:49:08 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3ACCmceC029718;
+	Sun, 12 Nov 2023 12:49:00 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-175-173-14.vpn.oracle.com [10.175.173.14])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3uaxhngfep-8;
-	Sun, 12 Nov 2023 12:49:08 +0000
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3uaxhngfep-6;
+	Sun, 12 Nov 2023 12:48:59 +0000
 From: Alan Maguire <alan.maguire@oracle.com>
 To: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, jolsa@kernel.org
 Cc: quentin@isovalent.com, eddyz87@gmail.com, martin.lau@linux.dev,
         song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
         kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
         masahiroy@kernel.org, bpf@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: [PATCH v4 bpf-next 07/17] bpf: add BTF CRC verification where present
-Date: Sun, 12 Nov 2023 12:48:24 +0000
-Message-Id: <20231112124834.388735-8-alan.maguire@oracle.com>
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v4 bpf-next 05/17] libbpf: BTF validation can use kind layout for unknown kinds
+Date: Sun, 12 Nov 2023 12:48:22 +0000
+Message-Id: <20231112124834.388735-6-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.39.3
 In-Reply-To: <20231112124834.388735-1-alan.maguire@oracle.com>
 References: <20231112124834.388735-1-alan.maguire@oracle.com>
@@ -65,50 +64,37 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spams
  mlxlogscore=999 adultscore=0 mlxscore=0 suspectscore=0 phishscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311060000
  definitions=main-2311120113
-X-Proofpoint-ORIG-GUID: ws70et_2i-tqNoq0iRrVm0x3D4vnCIqz
-X-Proofpoint-GUID: ws70et_2i-tqNoq0iRrVm0x3D4vnCIqz
+X-Proofpoint-GUID: MWmgoGq2yCU9trlm5VSzL2v6CuDTP08Y
+X-Proofpoint-ORIG-GUID: MWmgoGq2yCU9trlm5VSzL2v6CuDTP08Y
 
-If a CRC is set in provided BTF, verify it.
+BTF parsing can use kind layout to navigate unknown kinds, so
+btf_validate_type() should take kind layout information into
+account to avoid failure when an unrecognized kind is met.
 
-Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- kernel/bpf/btf.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ tools/lib/bpf/btf.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 554b5b795d6f..96c553e40b43 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -25,6 +25,7 @@
- #include <linux/bsearch.h>
- #include <linux/kobject.h>
- #include <linux/sysfs.h>
-+#include <linux/crc32.h>
- 
- #include <net/netfilter/nf_bpf_link.h>
- 
-@@ -5354,6 +5355,20 @@ static int btf_parse_hdr(struct btf_verifier_env *env)
- 		return -ENOTSUPP;
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index fa6104860ebc..b0f8d735debb 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -698,8 +698,12 @@ static int btf_validate_type(const struct btf *btf, const struct btf_type *t, __
+ 		break;
  	}
- 
-+	if (hdr->flags & BTF_FLAG_CRC_SET) {
-+		__u32 check, crc = hdr->crc;
-+		struct btf_header *h = btf->data;
-+
-+		h->crc = 0;
-+		check = crc32(0xffffffff, btf->data, btf_data_size);
-+		check ^= ~0;
-+		h->crc = crc;
-+		if (check != crc) {
-+			btf_verifier_log(env, "Invalid CRC; expected 0x%x ; actual 0x%x",
-+					 crc, check);
+ 	default:
+-		pr_warn("btf: type [%u]: unrecognized kind %u\n", id, kind);
+-		return -EINVAL;
++		/* Kind may be represented in kind layout information. */
++		if (btf_type_size_unknown(btf, t) < 0) {
++			pr_warn("btf: type [%u]: unrecognized kind %u\n", id, kind);
 +			return -EINVAL;
 +		}
-+	}
- 	if (!btf->base_btf && btf_data_size == hdr->hdr_len) {
- 		btf_verifier_log(env, "No data");
- 		return -EINVAL;
++		break;
+ 	}
+ 	return 0;
+ }
 -- 
 2.31.1
 
