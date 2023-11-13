@@ -1,23 +1,23 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B06CC1A59A;
-	Mon, 13 Nov 2023 09:57:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83522290C;
+	Mon, 13 Nov 2023 10:03:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KNICD2Jp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62206C433C7;
-	Mon, 13 Nov 2023 09:57:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lMxtvVWu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54DB2C433C9;
+	Mon, 13 Nov 2023 10:03:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699869468;
-	bh=n5ux6YXPEShtl7XOKMNnB1OSCcDM1DXuYI6CRJ1ietQ=;
+	s=k20201202; t=1699869789;
+	bh=cfnuPkChTa2Qw4d30BcMRSRlcZrP4mPrSTjl3W3msmc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KNICD2JpzPuMByr0lfaJCL7yz7VTGT2s1MLCdpdHUUSuXkkN/S/oyEfndBrHgQpLw
-	 y+UwO8uzRfeTkTAqcTenFD8qJoX+zYYqUVLnH+BiA3ngGR9uYdbncUc9Z1CcqYGDF/
-	 691AIcjT6GlbsaQlLdWH3d3UMqRILxpAo+AuE5G2UCZxOnqJ34bYII6I05bypPFwhW
-	 szenpU5OpRuq2RScoLIf6KrNZYWS6xws/dsdQzzxerWfIpVSKS/xltAB/IfNQkZR+j
-	 JFqTSjr773rk2q0TkRbTgWKdiGruCP176Xo1UtHRO/yOcOsD0iYeClklzpleyqOCxK
-	 6dxmDt7u5KQyw==
-Date: Mon, 13 Nov 2023 09:57:44 +0000
+	b=lMxtvVWudgQ8AhSTkqtkh7PIbqQ6lDH1ujoybbzlZjnpQMt/BG3B1B86ugPnyixiQ
+	 TKvj4j+nKiiquzbRAj03euCiwCzlTbZl8BoSlcwjtj2R8SCKJFoE/j3X61gbcdFyAL
+	 mBMPaN3EGqWRJOn1R8jqSr/KGlBd55kEFNb1NnfVkCJVdGDbuvsFQBREgFcWmasYUD
+	 t/Be7WLD0zs+IAqUBOFHKBK/notIp7x70bI2wH+3gKfBE9ErMZkGdICooe4iQMx7CO
+	 DTGnAaT1tgTOv8V4nu5Y9VOdoJqm23wvsam/2iDC0w7V2qYyXY14PYIZkuqXg45R4+
+	 fBAHD2RwNm49A==
+Date: Mon, 13 Nov 2023 10:03:05 +0000
 From: Simon Horman <horms@kernel.org>
 To: Daniel Borkmann <daniel@iogearbox.net>
 Cc: martin.lau@kernel.org, kuba@kernel.org, razor@blackwall.org,
@@ -25,7 +25,7 @@ Cc: martin.lau@kernel.org, kuba@kernel.org, razor@blackwall.org,
 	David Ahern <dsahern@kernel.org>
 Subject: Re: [PATCH bpf v2 2/8] net: Move {l,t,d}stats allocation to core and
  convert veth & vrf
-Message-ID: <20231113095744.GN705326@kernel.org>
+Message-ID: <20231113100305.GO705326@kernel.org>
 References: <20231112203009.26073-1-daniel@iogearbox.net>
  <20231112203009.26073-3-daniel@iogearbox.net>
 Precedence: bulk
@@ -49,17 +49,56 @@ On Sun, Nov 12, 2023 at 09:30:03PM +0100, Daniel Borkmann wrote:
 > Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 > Cc: David Ahern <dsahern@kernel.org>
 
-...
-
-> @@ -2354,6 +2361,7 @@ struct net_device {
->  	void				*ml_priv;
->  	enum netdev_ml_priv_type	ml_priv_type;
->  
-> +	enum netdev_stat_type		pcpu_stat_type:8;
-
 Hi Daniel,
 
-nit: Please consider adding documentation for this new field to
-     the kernel doc for net_device.
+sorry I was a bit to hasty in hitting the send button for my previous
+message. I have a some more minor feedback on this series.
+
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 0d548431f3fa..75db81496db5 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -10049,6 +10049,44 @@ void netif_tx_stop_all_queues(struct net_device *dev)
+>  }
+>  EXPORT_SYMBOL(netif_tx_stop_all_queues);
+>  
+> +static int netdev_do_alloc_pcpu_stats(struct net_device *dev)
+> +{
+> +	void __percpu *v;
+> +
+> +	switch (dev->pcpu_stat_type) {
+> +	case NETDEV_PCPU_STAT_NONE:
+> +		return 0;
+> +	case NETDEV_PCPU_STAT_LSTATS:
+> +		v = dev->lstats = netdev_alloc_pcpu_stats(struct pcpu_lstats);
+> +		break;
+> +	case NETDEV_PCPU_STAT_TSTATS:
+> +		v = dev->tstats = netdev_alloc_pcpu_stats(struct pcpu_sw_netstats);
+> +		break;
+> +	case NETDEV_PCPU_STAT_DSTATS:
+> +		v = dev->dstats = netdev_alloc_pcpu_stats(struct pcpu_dstats);
+> +		break;
+> +	}
+> +
+> +	return v ? 0 : -ENOMEM;
+
+Perhaps this cannot happen, but if none of the cases in the switch
+statement are met, then v will be uninitialised here.
+
+As flagged by Smatch.
+
+> +}
+> +
 
 ...
+
+> @@ -10469,6 +10513,7 @@ void netdev_run_todo(void)
+>  		WARN_ON(rcu_access_pointer(dev->ip_ptr));
+>  		WARN_ON(rcu_access_pointer(dev->ip6_ptr));
+>  
+> +		netdev_do_free_pcpu_stats(dev);
+>  		if (dev->priv_destructor)
+>  			dev->priv_destructor(dev);
+>  		if (dev->needs_free_netdev)
+
+nit: the hunk above seems unnecessary; one blank line is enough.
