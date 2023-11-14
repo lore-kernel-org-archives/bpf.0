@@ -1,96 +1,93 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F9151FA0
-	for <bpf@vger.kernel.org>; Tue, 14 Nov 2023 19:07:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75AE31D684;
+	Tue, 14 Nov 2023 19:19:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BLYptecS"
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DE0FC;
-	Tue, 14 Nov 2023 11:07:34 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-2809a824bbbso4748127a91.3;
-        Tue, 14 Nov 2023 11:07:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699988854; x=1700593654; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eTdxwqjsCHAfUHLS9E9O/GYEc/cGPlpr/fwvTx4EeE4=;
-        b=BLYptecSPpNTtRzRt2nmFIAUgy0Wa4Di/cPdfXapr9X3A0tRMUHqYvtZR4XXNXPOHX
-         Gy4099Z/YHg/P0p/ic+tuAui0IqCAXEJ/roPhchglylKrl9//Ad6B1hOTW8Cwe0n4geN
-         igKYF7uGdXNOZ8xSEo2ysZinlflfVnbl18khnPmJ1g/VCqJ3iIh2drOQ6I78GOmJJ+zH
-         7P26gXyQqeI7RsEbL0PCqhe7h6+AUzXa70OXliCC+fBqa4NsR7wRuRpyTiXSDtcH/jTd
-         4ziwT5NR+I6gtYBKhAoDetewnuxHJ2j8+b90fcYBQr+sBpRX668AvT0QoMqNzr7aMRQJ
-         3VFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699988854; x=1700593654;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eTdxwqjsCHAfUHLS9E9O/GYEc/cGPlpr/fwvTx4EeE4=;
-        b=tR1RSa6Z+F6W3BSDadGSwjDBHt+kJci8p/CjPf+mhizv1ncy9iZnUiZOftYJ+TQtwO
-         qrW4l94Cy8CyxLwOXNP9ZUPBleDGdCvNmVx9FnBvJNvt3B0UEu2/yAW2GF6eYU/Eyea6
-         7gzsdgEBrRCF5UIb6dqJhswoQD6OT0iH6T1QOZGWjc1KaSlyto50kxq6l3M/AYA2eohp
-         FHzy1ASXuKXWVsGWDDIGygQTpEh34t4OOnlrvUaw/wYZIX2XcPdnTd1wg2LhUT0tVuQ7
-         II4XuMbdsFWeLcxndmt/wI8fsEbWPB1BruIU4jsbBRMX1ZMFxuowPQLXsXezcpR23Ur+
-         UDxQ==
-X-Gm-Message-State: AOJu0Yz25+QsqAGq0H+e40oG1AUL9ftRIxXLG1+4lCQIQEFYwgqj0XdI
-	ydtYECDSQ+Bi7uexRapMZno=
-X-Google-Smtp-Source: AGHT+IFaLpasVhp8zQGEXaSudejE6IuzaZWdVvddFYiCVKRvwmxTXkuG+a1PWyBjlc0LXrcPrSXP9Q==
-X-Received: by 2002:a17:90b:1e03:b0:27d:8d42:6def with SMTP id pg3-20020a17090b1e0300b0027d8d426defmr8808064pjb.34.1699988853635;
-        Tue, 14 Nov 2023 11:07:33 -0800 (PST)
-Received: from localhost (dhcp-72-253-202-210.hawaiiantel.net. [72.253.202.210])
-        by smtp.gmail.com with ESMTPSA id p12-20020a17090ad30c00b002790ded9c6dsm5568472pju.31.2023.11.14.11.07.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Nov 2023 11:07:33 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date: Tue, 14 Nov 2023 09:07:32 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Andrea Righi <andrea.righi@canonical.com>
-Cc: torvalds@linux-foundation.org, mingo@redhat.com, peterz@infradead.org,
-	juri.lelli@redhat.com, vincent.guittot@linaro.org,
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	martin.lau@kernel.org, joshdon@google.com, brho@google.com,
-	pjt@google.com, derkling@google.com, haoluo@google.com,
-	dvernet@meta.com, dschatzberg@meta.com, dskarlat@cs.cmu.edu,
-	riel@surriel.com, changwoo@igalia.com, himadrics@inria.fr,
-	memxor@gmail.com, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	kernel-team@meta.com
-Subject: Re: [PATCH 12/36] sched_ext: Implement BPF extensible scheduler class
-Message-ID: <ZVPFdKqUxmtW1jaJ@slm.duckdns.org>
-References: <20231111024835.2164816-1-tj@kernel.org>
- <20231111024835.2164816-13-tj@kernel.org>
- <ZVKBSIPqJnAvrE3g@gpd>
+	dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b="bJGPhLmt"
+X-Greylist: delayed 174 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Nov 2023 11:19:54 PST
+Received: from mx14lb.world4you.com (mx14lb.world4you.com [81.19.149.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BEF2102;
+	Tue, 14 Nov 2023 11:19:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=skwkjM3f099hX9S0QFbf+mqzZWgdiZmYAe3qnEU6yeg=; b=bJGPhLmtRcLL5FJBfPOrAVD2n7
+	pofEY0fr0xgnhjPHqlNhnxfyPatRokOQgK8EtSTPIIQxZYGg/k0tNQdOuRHAGFQNbEK1WuVdkXdNn
+	gYQV0yAmUuYWe5tZAZ9QHZdH1EBmwNMD5BdM0Qtdso381+BqIPjKUWCCRH5oWtoMUOu4=;
+Received: from [88.117.50.201] (helo=[10.0.0.160])
+	by mx14lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <gerhard@engleder-embedded.com>)
+	id 1r2ywr-0004Cc-2a;
+	Tue, 14 Nov 2023 20:19:45 +0100
+Message-ID: <a9801ebb-6c37-45a9-9b75-61f07577beb6@engleder-embedded.com>
+Date: Tue, 14 Nov 2023 20:19:45 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZVKBSIPqJnAvrE3g@gpd>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 2/2] igc: Add support for PTP .getcyclesx64()
+Content-Language: en-US
+To: Tony Nguyen <anthony.l.nguyen@intel.com>, davem@davemloft.net,
+ kuba@kernel.org, pabeni@redhat.com, edumazet@google.com,
+ netdev@vger.kernel.org
+Cc: Vinicius Costa Gomes <vinicius.gomes@intel.com>, sasha.neftin@intel.com,
+ richardcochran@gmail.com, maciej.fijalkowski@intel.com,
+ magnus.karlsson@intel.com, ast@kernel.org, daniel@iogearbox.net,
+ hawk@kernel.org, john.fastabend@gmail.com, bpf@vger.kernel.org,
+ Naama Meir <naamax.meir@linux.intel.com>
+References: <20231114183640.1303163-1-anthony.l.nguyen@intel.com>
+ <20231114183640.1303163-3-anthony.l.nguyen@intel.com>
+From: Gerhard Engleder <gerhard@engleder-embedded.com>
+In-Reply-To: <20231114183640.1303163-3-anthony.l.nguyen@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AV-Do-Run: Yes
 
-On Mon, Nov 13, 2023 at 03:04:24PM -0500, Andrea Righi wrote:
-> > +#ifdef CONFIG_SCHED_DEBUG
-> > +static const char *scx_ops_enable_state_str[] = {
-> > +	[SCX_OPS_PREPPING]	= "prepping",
-> > +	[SCX_OPS_ENABLING]	= "enabling",
-> > +	[SCX_OPS_ENABLED]	= "enabled",
-> > +	[SCX_OPS_DISABLING]	= "disabling",
-> > +	[SCX_OPS_DISABLED]	= "disabled",
-> > +};
+On 14.11.23 19:36, Tony Nguyen wrote:
+> From: Vinicius Costa Gomes <vinicius.gomes@intel.com>
 > 
-> We may want to move scx_ops_enable_state_str[] outside of
-> CONFIG_SCHED_DEBUG, because we're using it later in print_scx_info()
-> ("sched_ext: Print sched_ext info when dumping stack"), or we make
-> print_scx_info() dependent of CONFIG_SCHED_DEBUG.
+> Add support for using Timer 1 (i225/i226 have 4 timer registers) as a
+> free-running clock (the "cycles" clock) in addition to Timer 0 (the
+> default, "adjustable clock"). The objective is to allow taprio/etf
+> offloading to coexist with PTP vclocks.
+> 
+> Besides the implementation of .getcyclesx64() for i225/i226, to keep
+> timestamping working when vclocks are in use, we also need to add
+> support for TX and RX timestamping using the free running timer, when
+> the requesting socket is bound to a vclock.
+> 
+> On the RX side, i225/i226 can be configured to store the values of two
+> timers in the received packet metadata area, so it's a matter of
+> configuring the right registers and retrieving the right timestamp.
+> 
+> The TX is a bit more involved because the hardware stores a single
+> timestamp (with the selected timer in the TX descriptor) into one of
+> the timestamp registers.
+> 
+> Note some changes at how the timestamps are done for RX, the
+> conversion and adjustment of timestamps are now done closer to the
+> consumption of the timestamp instead of near the reception.
+> 
+> Signed-off-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
+> Tested-by: Naama Meir <naamax.meir@linux.intel.com>
+> Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+> ---
+>   drivers/net/ethernet/intel/igc/igc.h         | 21 +++++++-
+>   drivers/net/ethernet/intel/igc/igc_base.h    |  4 ++
+>   drivers/net/ethernet/intel/igc/igc_defines.h |  2 +
+>   drivers/net/ethernet/intel/igc/igc_main.c    | 55 ++++++++++++++------
+>   drivers/net/ethernet/intel/igc/igc_ptp.c     | 50 +++++++++++-------
+>   drivers/net/ethernet/intel/igc/igc_regs.h    |  5 ++
+>   6 files changed, 101 insertions(+), 36 deletions(-)
 
-Yeah, Changwoo noticed the same problem. Will fix and post an updated patch.
+I'm happy to see a second driver supporting this functionality!
 
-Thanks.
-
--- 
-tejun
+Reviewed-by: Gerhard Engleder <gerhard@engleder-embedded.com>
