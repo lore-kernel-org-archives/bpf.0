@@ -1,34 +1,34 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yu4ws/Uo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dn4EPL3T"
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FF81A3;
-	Wed, 15 Nov 2023 09:54:44 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072B1196;
+	Wed, 15 Nov 2023 09:54:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700070884; x=1731606884;
+  t=1700070887; x=1731606887;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Z99zgRrnoCuMrf5ju4Y9ZFLJG4EPUOBm89GMt1Bb5lM=;
-  b=Yu4ws/UoN52FTMJ3j7qFHkIpgCuRDf2ZRe4AuKsCyXclZrmY8pIyz2vI
-   Pr2aE4cYoYqwR/IkH2oB9ALjYiwOYsOwX+PocmL4/dq4BLsfw+YlCZHZ8
-   8EUsOZYp99tBqBBYDlqGPgIaQREdjjEyyJC3EN3onS78BBE4lrPcJuiVR
-   M+oVA7AnQBQD5gfyXPDSnR92WwqXKfmmn7YN95PYBq4so3cqWoUls2FSS
-   2ovxmild76/TNvtg3lDgMqaJnFKMfsNpdd5w1/EZ7rbZrz/Lj6xZVn/Nt
-   7LgwUL8/nIgiw+FYntSSfL1/zEJLm1w/Q4Vo6m9JSP/VxNdMt8W8oS4Kd
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="422020498"
+  bh=2XBORvBSn1xwXCNwHQn6EmVUzRqirjF1bywIM1yr48Y=;
+  b=Dn4EPL3TmFToM2O8YL1M5ISMEqpFIhIsHngfY2A7nyDrDOFNridffii0
+   QMEy3Bl8CkxHFh134xOt/FbZEciDZcQUH//C855sPIb5T7f8iJAxn6jfT
+   lIilAPkPhFxTSNktQukGEkNSOoOKJlf44squgF/cMISOqzs94I6aeraR9
+   x7tAXhw9UVHSfFsn8J4fE55VHb2LI0LoOfoU6+yQhnj6ZReO9Oh5Imw9b
+   tdLB/LgK3ffUcKq0J6I6Ls55m5FZf0dOK6SQfyqIcReIvd8z4iWEyR+hP
+   funPRkn9ShBlUAWHP3sRXVFaYZaG23VO7pl/CwRjPDA6uvqww+prnpWJ/
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="422020519"
 X-IronPort-AV: E=Sophos;i="6.03,305,1694761200"; 
-   d="scan'208";a="422020498"
+   d="scan'208";a="422020519"
 Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2023 09:54:43 -0800
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2023 09:54:46 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.03,305,1694761200"; 
-   d="scan'208";a="12842620"
+   d="scan'208";a="12842630"
 Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by orviesa001.jf.intel.com with ESMTP; 15 Nov 2023 09:54:35 -0800
+  by orviesa001.jf.intel.com with ESMTP; 15 Nov 2023 09:54:40 -0800
 Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id 0E68B371E3;
-	Wed, 15 Nov 2023 17:54:32 +0000 (GMT)
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id 97B8237212;
+	Wed, 15 Nov 2023 17:54:37 +0000 (GMT)
 From: Larysa Zaremba <larysa.zaremba@intel.com>
 To: bpf@vger.kernel.org
 Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
@@ -58,9 +58,9 @@ Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
 	Tariq Toukan <tariqt@mellanox.com>,
 	Saeed Mahameed <saeedm@mellanox.com>,
 	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH bpf-next v7 05/18] ice: Support HW timestamp hint
-Date: Wed, 15 Nov 2023 18:52:47 +0100
-Message-ID: <20231115175301.534113-6-larysa.zaremba@intel.com>
+Subject: [PATCH bpf-next v7 07/18] xsk: add functions to fill control buffer
+Date: Wed, 15 Nov 2023 18:52:49 +0100
+Message-ID: <20231115175301.534113-8-larysa.zaremba@intel.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231115175301.534113-1-larysa.zaremba@intel.com>
 References: <20231115175301.534113-1-larysa.zaremba@intel.com>
@@ -72,190 +72,109 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Use previously refactored code and create a function
-that allows XDP code to read HW timestamp.
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-Also, introduce packet context, where hints-related data will be stored.
-ice_xdp_buff contains only a pointer to this structure, to avoid copying it
-in ZC mode later in the series.
+Commit 94ecc5ca4dbf ("xsk: Add cb area to struct xdp_buff_xsk") has added
+a buffer for custom data to xdp_buff_xsk. Particularly, this memory is used
+for data, consumed by XDP hints kfuncs. It does not always change on
+a per-packet basis and some parts can be set for example, at the same time
+as RX queue info.
 
-HW timestamp is the first supported hint in the driver,
-so also add xdp_metadata_ops.
+Add functions to fill all cbs in xsk_buff_pool with the same metadata.
 
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
 ---
- drivers/net/ethernet/intel/ice/ice.h          |  2 ++
- drivers/net/ethernet/intel/ice/ice_base.c     |  1 +
- drivers/net/ethernet/intel/ice/ice_main.c     |  1 +
- drivers/net/ethernet/intel/ice/ice_ptp.c      |  6 ++---
- drivers/net/ethernet/intel/ice/ice_ptp.h      |  4 +--
- drivers/net/ethernet/intel/ice/ice_txrx.h     | 10 +++++++-
- drivers/net/ethernet/intel/ice/ice_txrx_lib.c | 25 ++++++++++++++++++-
- 7 files changed, 42 insertions(+), 7 deletions(-)
+ include/net/xdp_sock_drv.h  | 17 +++++++++++++++++
+ include/net/xsk_buff_pool.h |  2 ++
+ net/xdp/xsk_buff_pool.c     | 12 ++++++++++++
+ 3 files changed, 31 insertions(+)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice.h b/drivers/net/ethernet/intel/ice/ice.h
-index 351e0d36df44..366c82a87e56 100644
---- a/drivers/net/ethernet/intel/ice/ice.h
-+++ b/drivers/net/ethernet/intel/ice/ice.h
-@@ -989,4 +989,6 @@ static inline void ice_clear_rdma_cap(struct ice_pf *pf)
- 	set_bit(ICE_FLAG_UNPLUG_AUX_DEV, pf->flags);
- 	clear_bit(ICE_FLAG_RDMA_ENA, pf->flags);
- }
-+
-+extern const struct xdp_metadata_ops ice_xdp_md_ops;
- #endif /* _ICE_H_ */
-diff --git a/drivers/net/ethernet/intel/ice/ice_base.c b/drivers/net/ethernet/intel/ice/ice_base.c
-index 7fa43827a3f0..2d83f3c029e7 100644
---- a/drivers/net/ethernet/intel/ice/ice_base.c
-+++ b/drivers/net/ethernet/intel/ice/ice_base.c
-@@ -575,6 +575,7 @@ int ice_vsi_cfg_rxq(struct ice_rx_ring *ring)
+diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
+index 1f6fc8c7a84c..6239c37dba5d 100644
+--- a/include/net/xdp_sock_drv.h
++++ b/include/net/xdp_sock_drv.h
+@@ -14,6 +14,12 @@
  
- 	xdp_init_buff(&ring->xdp, ice_rx_pg_size(ring) / 2, &ring->xdp_rxq);
- 	ring->xdp.data = NULL;
-+	ring->xdp_ext.pkt_ctx = &ring->pkt_ctx;
- 	err = ice_setup_rx_ctx(ring);
- 	if (err) {
- 		dev_err(dev, "ice_setup_rx_ctx failed for RxQ %d, err %d\n",
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index 6607fa6fe556..cfb6beadcc60 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -3397,6 +3397,7 @@ static void ice_set_ops(struct ice_vsi *vsi)
+ #ifdef CONFIG_XDP_SOCKETS
  
- 	netdev->netdev_ops = &ice_netdev_ops;
- 	netdev->udp_tunnel_nic_info = &pf->hw.udp_tunnel_nic;
-+	netdev->xdp_metadata_ops = &ice_xdp_md_ops;
- 	ice_set_ethtool_ops(netdev);
- 
- 	if (vsi->type != ICE_VSI_PF)
-diff --git a/drivers/net/ethernet/intel/ice/ice_ptp.c b/drivers/net/ethernet/intel/ice/ice_ptp.c
-index a435f89b262f..667264c8dc8b 100644
---- a/drivers/net/ethernet/intel/ice/ice_ptp.c
-+++ b/drivers/net/ethernet/intel/ice/ice_ptp.c
-@@ -2105,12 +2105,12 @@ int ice_ptp_set_ts_config(struct ice_pf *pf, struct ifreq *ifr)
- /**
-  * ice_ptp_get_rx_hwts - Get packet Rx timestamp in ns
-  * @rx_desc: Receive descriptor
-- * @rx_ring: Ring to get the cached time
-+ * @pkt_ctx: Packet context to get the cached time
-  *
-  * The driver receives a notification in the receive descriptor with timestamp.
-  */
- u64 ice_ptp_get_rx_hwts(const union ice_32b_rx_flex_desc *rx_desc,
--			struct ice_rx_ring *rx_ring)
-+			const struct ice_pkt_ctx *pkt_ctx)
- {
- 	u64 ts_ns, cached_time;
- 	u32 ts_high;
-@@ -2118,7 +2118,7 @@ u64 ice_ptp_get_rx_hwts(const union ice_32b_rx_flex_desc *rx_desc,
- 	if (!(rx_desc->wb.time_stamp_low & ICE_PTP_TS_VALID))
- 		return 0;
- 
--	cached_time = READ_ONCE(rx_ring->cached_phctime);
-+	cached_time = READ_ONCE(pkt_ctx->cached_phctime);
- 
- 	/* Do not report a timestamp if we don't have a cached PHC time */
- 	if (!cached_time)
-diff --git a/drivers/net/ethernet/intel/ice/ice_ptp.h b/drivers/net/ethernet/intel/ice/ice_ptp.h
-index 0274da964fe3..30b382ed204d 100644
---- a/drivers/net/ethernet/intel/ice/ice_ptp.h
-+++ b/drivers/net/ethernet/intel/ice/ice_ptp.h
-@@ -299,7 +299,7 @@ s8 ice_ptp_request_ts(struct ice_ptp_tx *tx, struct sk_buff *skb);
- enum ice_tx_tstamp_work ice_ptp_process_ts(struct ice_pf *pf);
- 
- u64 ice_ptp_get_rx_hwts(const union ice_32b_rx_flex_desc *rx_desc,
--			struct ice_rx_ring *rx_ring);
-+			const struct ice_pkt_ctx *pkt_ctx);
- void ice_ptp_reset(struct ice_pf *pf);
- void ice_ptp_prepare_for_reset(struct ice_pf *pf);
- void ice_ptp_init(struct ice_pf *pf);
-@@ -332,7 +332,7 @@ static inline bool ice_ptp_process_ts(struct ice_pf *pf)
- 
- static inline u64
- ice_ptp_get_rx_hwts(const union ice_32b_rx_flex_desc *rx_desc,
--		    struct ice_rx_ring *rx_ring)
-+		    const struct ice_pkt_ctx *pkt_ctx)
- {
- 	return 0;
- }
-diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.h b/drivers/net/ethernet/intel/ice/ice_txrx.h
-index 9efb42f99415..3d77c058c6de 100644
---- a/drivers/net/ethernet/intel/ice/ice_txrx.h
-+++ b/drivers/net/ethernet/intel/ice/ice_txrx.h
-@@ -257,9 +257,14 @@ enum ice_rx_dtype {
- 	ICE_RX_DTYPE_SPLIT_ALWAYS	= 2,
- };
- 
-+struct ice_pkt_ctx {
-+	u64 cached_phctime;
++struct xsk_cb_desc {
++	void *src;
++	u8 off;
++	u8 bytes;
 +};
 +
- struct ice_xdp_buff {
- 	struct xdp_buff xdp_buff;
- 	const union ice_32b_rx_flex_desc *eop_desc;
-+	const struct ice_pkt_ctx *pkt_ctx;
- };
- 
- /* Required for compatibility with xdp_buffs from xsk_pool */
-@@ -328,6 +333,10 @@ struct ice_rx_ring {
- 		struct xdp_buff xdp;
- 	};
- 	/* CL3 - 3rd cacheline starts here */
-+	union {
-+		struct ice_pkt_ctx pkt_ctx;
-+		u64 cached_phctime;
-+	};
- 	struct bpf_prog *xdp_prog;
- 	u16 rx_offset;
- 
-@@ -346,7 +355,6 @@ struct ice_rx_ring {
- 	struct ice_rx_ring *next;	/* pointer to next ring in q_vector */
- 	struct xsk_buff_pool *xsk_pool;
- 	dma_addr_t dma;			/* physical address of ring */
--	u64 cached_phctime;
- 	u16 rx_buf_len;
- 	u8 dcb_tc;			/* Traffic class of ring */
- 	u8 ptp_rx;
-diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-index 1fc1794b8e80..d57019b85641 100644
---- a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-+++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-@@ -197,7 +197,7 @@ ice_ptp_rx_hwts_to_skb(struct ice_rx_ring *rx_ring,
- 		       const union ice_32b_rx_flex_desc *rx_desc,
- 		       struct sk_buff *skb)
- {
--	u64 ts_ns = ice_ptp_get_rx_hwts(rx_desc, rx_ring);
-+	u64 ts_ns = ice_ptp_get_rx_hwts(rx_desc, &rx_ring->pkt_ctx);
- 
- 	*skb_hwtstamps(skb) = (struct skb_shared_hwtstamps){
- 		.hwtstamp	= ns_to_ktime(ts_ns),
-@@ -509,3 +509,26 @@ void ice_finalize_xdp_rx(struct ice_tx_ring *xdp_ring, unsigned int xdp_res,
- 			spin_unlock(&xdp_ring->tx_lock);
- 	}
+ void xsk_tx_completed(struct xsk_buff_pool *pool, u32 nb_entries);
+ bool xsk_tx_peek_desc(struct xsk_buff_pool *pool, struct xdp_desc *desc);
+ u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, u32 max);
+@@ -47,6 +53,12 @@ static inline void xsk_pool_set_rxq_info(struct xsk_buff_pool *pool,
+ 	xp_set_rxq_info(pool, rxq);
  }
-+
-+/**
-+ * ice_xdp_rx_hw_ts - HW timestamp XDP hint handler
-+ * @ctx: XDP buff pointer
-+ * @ts_ns: destination address
-+ *
-+ * Copy HW timestamp (if available) to the destination address.
-+ */
-+static int ice_xdp_rx_hw_ts(const struct xdp_md *ctx, u64 *ts_ns)
+ 
++static inline void xsk_pool_fill_cb(struct xsk_buff_pool *pool,
++				    struct xsk_cb_desc *desc)
 +{
-+	const struct ice_xdp_buff *xdp_ext = (void *)ctx;
-+
-+	*ts_ns = ice_ptp_get_rx_hwts(xdp_ext->eop_desc,
-+				     xdp_ext->pkt_ctx);
-+	if (!*ts_ns)
-+		return -ENODATA;
-+
-+	return 0;
++	xp_fill_cb(pool, desc);
 +}
 +
-+const struct xdp_metadata_ops ice_xdp_md_ops = {
-+	.xmo_rx_timestamp		= ice_xdp_rx_hw_ts,
-+};
+ static inline unsigned int xsk_pool_get_napi_id(struct xsk_buff_pool *pool)
+ {
+ #ifdef CONFIG_NET_RX_BUSY_POLL
+@@ -250,6 +262,11 @@ static inline void xsk_pool_set_rxq_info(struct xsk_buff_pool *pool,
+ {
+ }
+ 
++static inline void xsk_pool_fill_cb(struct xsk_buff_pool *pool,
++				    struct xsk_cb_desc *desc)
++{
++}
++
+ static inline unsigned int xsk_pool_get_napi_id(struct xsk_buff_pool *pool)
+ {
+ 	return 0;
+diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
+index b0bdff26fc88..f17793ee35d6 100644
+--- a/include/net/xsk_buff_pool.h
++++ b/include/net/xsk_buff_pool.h
+@@ -12,6 +12,7 @@
+ 
+ struct xsk_buff_pool;
+ struct xdp_rxq_info;
++struct xsk_cb_desc;
+ struct xsk_queue;
+ struct xdp_desc;
+ struct xdp_umem;
+@@ -132,6 +133,7 @@ static inline void xp_init_xskb_dma(struct xdp_buff_xsk *xskb, struct xsk_buff_p
+ 
+ /* AF_XDP ZC drivers, via xdp_sock_buff.h */
+ void xp_set_rxq_info(struct xsk_buff_pool *pool, struct xdp_rxq_info *rxq);
++void xp_fill_cb(struct xsk_buff_pool *pool, struct xsk_cb_desc *desc);
+ int xp_dma_map(struct xsk_buff_pool *pool, struct device *dev,
+ 	       unsigned long attrs, struct page **pages, u32 nr_pages);
+ void xp_dma_unmap(struct xsk_buff_pool *pool, unsigned long attrs);
+diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+index 49cb9f9a09be..a94581041c2c 100644
+--- a/net/xdp/xsk_buff_pool.c
++++ b/net/xdp/xsk_buff_pool.c
+@@ -123,6 +123,18 @@ void xp_set_rxq_info(struct xsk_buff_pool *pool, struct xdp_rxq_info *rxq)
+ }
+ EXPORT_SYMBOL(xp_set_rxq_info);
+ 
++void xp_fill_cb(struct xsk_buff_pool *pool, struct xsk_cb_desc *desc)
++{
++	u32 i;
++
++	for (i = 0; i < pool->heads_cnt; i++) {
++		struct xdp_buff_xsk *xskb = &pool->heads[i];
++
++		memcpy(xskb->cb + desc->off, desc->src, desc->bytes);
++	}
++}
++EXPORT_SYMBOL(xp_fill_cb);
++
+ static void xp_disable_drv_zc(struct xsk_buff_pool *pool)
+ {
+ 	struct netdev_bpf bpf;
 -- 
 2.41.0
 
