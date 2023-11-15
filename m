@@ -1,39 +1,39 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC24241238;
-	Wed, 15 Nov 2023 19:32:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C3644121C;
+	Wed, 15 Nov 2023 19:34:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="J/lgWwOX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84A83C433C8;
-	Wed, 15 Nov 2023 19:32:24 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="SdovYrpw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A3C4C433C7;
+	Wed, 15 Nov 2023 19:34:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1700076744;
-	bh=1vggK7mVspav3/P3O1C5gNAMWQ7UNzapoocGa8Nq26s=;
+	s=korg; t=1700076857;
+	bh=2TKgKqpermnSBfoojWtpHr/18cPHZBHJtiEBwC8MUDA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=J/lgWwOXuKtdzXbkQ4+caO860LPyZ/FR/sZc9VLpx9vfO6sShbKd8xCybeBa+Q5tG
-	 VSuisKjRp7DKIeXHxWuWwervM/VJjndyYwAEYrP2Nf2JQ6Wk7J9il+hJJQ3gnK3vsH
-	 VYzB7fX3ZzI8O8ZkhHSoHXQWTOVeh3/DnffLgLy4=
+	b=SdovYrpwDxFcT67yL2bVpxtc7uKYGqU3kxqxh+I/sSGggneusofLC32R3zx53VGKL
+	 C27pKWSdWGR4iaQpB7oenQK+HNDuio/20sS++mB3nKIyLo3fzn9Xf3h3MRaca0dAQo
+	 PaxYNz1lugAeBzd9XusFDt8ffkuSmAJEyxMM4gfs=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	patches@lists.linux.dev,
 	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Kan Liang <kan.liang@linux.intel.com>,
-	Mark Rutland <mark.rutland@arm.com>,
 	Namhyung Kim <namhyung@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Yang Jihong <yangjihong1@huawei.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	llvm@lists.linux.dev,
+	Ming Wang <wangming01@loongson.cn>,
+	Tom Rix <trix@redhat.com>,
 	bpf@vger.kernel.org,
-	Arnaldo Carvalho de Melo <acme@redhat.com>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.5 389/550] perf parse-events: Remove ABORT_ON
-Date: Wed, 15 Nov 2023 14:16:13 -0500
-Message-ID: <20231115191627.807355002@linuxfoundation.org>
+Subject: [PATCH 6.5 427/550] perf mem-events: Avoid uninitialized read
+Date: Wed, 15 Nov 2023 14:16:51 -0500
+Message-ID: <20231115191630.366920613@linuxfoundation.org>
 X-Mailer: git-send-email 2.42.1
 In-Reply-To: <20231115191600.708733204@linuxfoundation.org>
 References: <20231115191600.708733204@linuxfoundation.org>
@@ -54,77 +54,52 @@ Content-Transfer-Encoding: 8bit
 
 From: Ian Rogers <irogers@google.com>
 
-[ Upstream commit 4c11adff675652759a0f0ad2194f4646b5463a42 ]
+[ Upstream commit 85f73c377b2ac9988a204b119aebb33ca5c60083 ]
 
-Prefer informative messages rather than none with ABORT_ON. Document
-one failure mode and add an error message for another.
+pmu should be initialized to NULL before perf_pmus__scan loop. Fix and
+shrink the scope of pmu at the same time. Issue detected by clang-tidy.
 
+Fixes: 5752c20f3787 ("perf mem: Scan all PMUs instead of just core ones")
 Signed-off-by: Ian Rogers <irogers@google.com>
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
+Acked-by: Namhyung Kim <namhyung@kernel.org>
+Cc: Ravi Bangoria <ravi.bangoria@amd.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Yang Jihong <yangjihong1@huawei.com>
+Cc: Huacai Chen <chenhuacai@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
 Cc: Kan Liang <kan.liang@linux.intel.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: llvm@lists.linux.dev
+Cc: Ming Wang <wangming01@loongson.cn>
+Cc: Tom Rix <trix@redhat.com>
 Cc: bpf@vger.kernel.org
-Link: https://lore.kernel.org/r/20230627181030.95608-14-irogers@google.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Stable-dep-of: ede72dca45b1 ("perf parse-events: Fix tracepoint name memory leak")
+Link: https://lore.kernel.org/r/20231009183920.200859-10-irogers@google.com
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/perf/util/parse-events.y | 22 ++++++++++++++--------
- 1 file changed, 14 insertions(+), 8 deletions(-)
+ tools/perf/util/mem-events.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
-index 1393c39ebf330..24c9af561cf9d 100644
---- a/tools/perf/util/parse-events.y
-+++ b/tools/perf/util/parse-events.y
-@@ -22,12 +22,6 @@
- 
- void parse_events_error(YYLTYPE *loc, void *parse_state, void *scanner, char const *msg);
- 
--#define ABORT_ON(val) \
--do { \
--	if (val) \
--		YYABORT; \
--} while (0)
--
- #define PE_ABORT(val) \
- do { \
- 	if (val == -ENOMEM) \
-@@ -618,7 +612,9 @@ PE_RAW opt_event_config
- 		YYNOMEM;
- 	errno = 0;
- 	num = strtoull($1 + 1, NULL, 16);
--	ABORT_ON(errno);
-+	/* Given the lexer will only give [a-fA-F0-9]+ a failure here should be impossible. */
-+	if (errno)
-+		YYABORT;
- 	free($1);
- 	err = parse_events_add_numeric(_parse_state, list, PERF_TYPE_RAW, num, $2,
- 				       /*wildcard=*/false);
-@@ -978,7 +974,17 @@ PE_VALUE PE_ARRAY_RANGE PE_VALUE
+diff --git a/tools/perf/util/mem-events.c b/tools/perf/util/mem-events.c
+index 39ffe8ceb3809..954b235e12e51 100644
+--- a/tools/perf/util/mem-events.c
++++ b/tools/perf/util/mem-events.c
+@@ -185,7 +185,6 @@ int perf_mem_events__record_args(const char **rec_argv, int *argv_nr,
  {
- 	struct parse_events_array array;
+ 	int i = *argv_nr, k = 0;
+ 	struct perf_mem_event *e;
+-	struct perf_pmu *pmu;
  
--	ABORT_ON($3 < $1);
-+	if ($3 < $1) {
-+		struct parse_events_state *parse_state = _parse_state;
-+		struct parse_events_error *error = parse_state->error;
-+		char *err_str;
+ 	for (int j = 0; j < PERF_MEM_EVENTS__MAX; j++) {
+ 		e = perf_mem_events__ptr(j);
+@@ -202,6 +201,8 @@ int perf_mem_events__record_args(const char **rec_argv, int *argv_nr,
+ 			rec_argv[i++] = "-e";
+ 			rec_argv[i++] = perf_mem_events__name(j, NULL);
+ 		} else {
++			struct perf_pmu *pmu = NULL;
 +
-+		if (asprintf(&err_str, "Expected '%ld' to be less-than '%ld'", $3, $1) < 0)
-+			err_str = NULL;
-+
-+		parse_events_error__handle(error, @1.first_column, err_str, NULL);
-+		YYABORT;
-+	}
- 	array.nr_ranges = 1;
- 	array.ranges = malloc(sizeof(array.ranges[0]));
- 	if (!array.ranges)
+ 			if (!e->supported) {
+ 				perf_mem_events__print_unsupport_hybrid(e, j);
+ 				return -1;
 -- 
 2.42.0
 
