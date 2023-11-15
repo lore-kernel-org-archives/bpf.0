@@ -1,32 +1,39 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA04341212;
-	Wed, 15 Nov 2023 19:31:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB05341A81;
+	Wed, 15 Nov 2023 19:32:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="tpx4v2xv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 792A2C433C7;
-	Wed, 15 Nov 2023 19:31:40 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="r4KpT/be"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58D8BC433C7;
+	Wed, 15 Nov 2023 19:32:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1700076700;
-	bh=VsEcYVVGBhlJhxpYZ+sclyVoGw66Ptr93Y1gzgTMTAU=;
+	s=korg; t=1700076741;
+	bh=rAsmqsTaQIAgAUi/vKnMBZhkAEWhtoD02GWkqmUksj0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=tpx4v2xvfVjIG+9fvMKeR1UgD+dmFswTuIs/M3mqvSn8fAHUFf8q6OGoytKWEcm1Q
-	 Zt4hE+bvqN//ykkTXSelEJsn3sTzs3HPr018HUbtZsKgqf0W3feaOK0u7+lm0GNQWL
-	 WmeKchlRAM4JBNINjlVrgd0/tUvrFNNTd2I0kSbg=
+	b=r4KpT/beXeJLGNQXs/g4gmKq1TtmgyMbxx8Q+3lenAxvQnVJaDlLXklxuoQDn+pd9
+	 CWiRMSWqW8yDNoxMqqTNyMMXZLLVT+9hrXfbJHO8Dq0+xmql9J90yvBDhJAYsENM9a
+	 j2rde08plZnAuR0sfFWTE0tGVkRaYIiWLqPOQKmI=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	patches@lists.linux.dev,
 	Ian Rogers <irogers@google.com>,
-	Song Liu <song@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	bpf@vger.kernel.org,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Mark Rutland <mark.rutland@arm.com>,
 	Namhyung Kim <namhyung@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	bpf@vger.kernel.org,
+	Arnaldo Carvalho de Melo <acme@redhat.com>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.5 394/550] perf record: Fix BTF type checks in the off-cpu profiling
-Date: Wed, 15 Nov 2023 14:16:18 -0500
-Message-ID: <20231115191628.150882613@linuxfoundation.org>
+Subject: [PATCH 6.5 387/550] perf parse-events: Remove unused PE_PMU_EVENT_FAKE token
+Date: Wed, 15 Nov 2023 14:16:11 -0500
+Message-ID: <20231115191627.668324833@linuxfoundation.org>
 X-Mailer: git-send-email 2.42.1
 In-Reply-To: <20231115191600.708733204@linuxfoundation.org>
 References: <20231115191600.708733204@linuxfoundation.org>
@@ -45,57 +52,99 @@ Content-Transfer-Encoding: 8bit
 
 ------------------
 
-From: Namhyung Kim <namhyung@kernel.org>
+From: Ian Rogers <irogers@google.com>
 
-[ Upstream commit 0e501a65d35bf72414379fed0e31a0b6b81ab57d ]
+[ Upstream commit 84efbdb7fb8e0844a3f9c67a6bdcc89db1012e1c ]
 
-The BTF func proto for a tracepoint has one more argument than the
-actual tracepoint function since it has a context argument at the
-begining.  So it should compare to 5 when the tracepoint has 4
-arguments.
+Removed by commit 70c90e4a6b2f ("perf parse-events: Avoid scanning
+PMUs before parsing").
 
-  typedef void (*btf_trace_sched_switch)(void *, bool, struct task_struct *, struct task_struct *, unsigned int);
-
-Also, recent change in the perf tool would use a hand-written minimal
-vmlinux.h to generate BTF in the skeleton.  So it won't have the info
-of the tracepoint.  Anyway it should use the kernel's vmlinux BTF to
-check the type in the kernel.
-
-Fixes: b36888f71c85 ("perf record: Handle argument change in sched_switch")
-Reviewed-by: Ian Rogers <irogers@google.com>
-Acked-by: Song Liu <song@kernel.org>
-Cc: Hao Luo <haoluo@google.com>
-CC: bpf@vger.kernel.org
-Link: https://lore.kernel.org/r/20230922234444.3115821-1-namhyung@kernel.org
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Ian Rogers <irogers@google.com>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Kan Liang <kan.liang@linux.intel.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: bpf@vger.kernel.org
+Link: https://lore.kernel.org/r/20230627181030.95608-2-irogers@google.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Stable-dep-of: ede72dca45b1 ("perf parse-events: Fix tracepoint name memory leak")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/perf/util/bpf_off_cpu.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ tools/perf/util/parse-events.y | 42 ++--------------------------------
+ 1 file changed, 2 insertions(+), 40 deletions(-)
 
-diff --git a/tools/perf/util/bpf_off_cpu.c b/tools/perf/util/bpf_off_cpu.c
-index 01f70b8e705a8..21f4d9ba023d9 100644
---- a/tools/perf/util/bpf_off_cpu.c
-+++ b/tools/perf/util/bpf_off_cpu.c
-@@ -98,7 +98,7 @@ static void off_cpu_finish(void *arg __maybe_unused)
- /* v5.18 kernel added prev_state arg, so it needs to check the signature */
- static void check_sched_switch_args(void)
- {
--	const struct btf *btf = bpf_object__btf(skel->obj);
-+	const struct btf *btf = btf__load_vmlinux_btf();
- 	const struct btf_type *t1, *t2, *t3;
- 	u32 type_id;
+diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
+index c590cf7f02a45..43557f20d0989 100644
+--- a/tools/perf/util/parse-events.y
++++ b/tools/perf/util/parse-events.y
+@@ -70,7 +70,7 @@ static void free_list_evsel(struct list_head* list_evsel)
+ %token PE_LEGACY_CACHE
+ %token PE_PREFIX_MEM PE_PREFIX_RAW PE_PREFIX_GROUP
+ %token PE_ERROR
+-%token PE_KERNEL_PMU_EVENT PE_PMU_EVENT_FAKE
++%token PE_KERNEL_PMU_EVENT
+ %token PE_ARRAY_ALL PE_ARRAY_RANGE
+ %token PE_DRV_CFG_TERM
+ %token PE_TERM_HW
+@@ -88,7 +88,7 @@ static void free_list_evsel(struct list_head* list_evsel)
+ %type <str> PE_MODIFIER_EVENT
+ %type <str> PE_MODIFIER_BP
+ %type <str> PE_EVENT_NAME
+-%type <str> PE_KERNEL_PMU_EVENT PE_PMU_EVENT_FAKE
++%type <str> PE_KERNEL_PMU_EVENT
+ %type <str> PE_DRV_CFG_TERM
+ %type <str> name_or_raw name_or_legacy
+ %destructor { free ($$); } <str>
+@@ -421,44 +421,6 @@ PE_KERNEL_PMU_EVENT opt_pmu_config
+ 		YYABORT;
+ 	$$ = list;
+ }
+-|
+-PE_PMU_EVENT_FAKE sep_dc
+-{
+-	struct list_head *list;
+-	int err;
+-
+-	list = alloc_list();
+-	if (!list)
+-		YYABORT;
+-
+-	err = parse_events_add_pmu(_parse_state, list, $1, /*head_config=*/NULL,
+-				   /*auto_merge_stats=*/false);
+-	free($1);
+-	if (err < 0) {
+-		free(list);
+-		YYABORT;
+-	}
+-	$$ = list;
+-}
+-|
+-PE_PMU_EVENT_FAKE opt_pmu_config
+-{
+-	struct list_head *list;
+-	int err;
+-
+-	list = alloc_list();
+-	if (!list)
+-		YYABORT;
+-
+-	err = parse_events_add_pmu(_parse_state, list, $1, $2, /*auto_merge_stats=*/false);
+-	free($1);
+-	parse_events_terms__delete($2);
+-	if (err < 0) {
+-		free(list);
+-		YYABORT;
+-	}
+-	$$ = list;
+-}
  
-@@ -116,7 +116,8 @@ static void check_sched_switch_args(void)
- 		return;
- 
- 	t3 = btf__type_by_id(btf, t2->type);
--	if (t3 && btf_is_func_proto(t3) && btf_vlen(t3) == 4) {
-+	/* btf_trace func proto has one more argument for the context */
-+	if (t3 && btf_is_func_proto(t3) && btf_vlen(t3) == 5) {
- 		/* new format: pass prev_state as 4th arg */
- 		skel->rodata->has_prev_state = true;
- 	}
+ value_sym:
+ PE_VALUE_SYM_HW
 -- 
 2.42.0
 
