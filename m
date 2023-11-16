@@ -1,43 +1,43 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="doLvgAm/"
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E3EAD
-	for <bpf@vger.kernel.org>; Thu, 16 Nov 2023 07:00:02 -0800 (PST)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1f03db0a410so426298fac.1
-        for <bpf@vger.kernel.org>; Thu, 16 Nov 2023 07:00:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="bNO6R+QT"
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F4CD57
+	for <bpf@vger.kernel.org>; Thu, 16 Nov 2023 07:00:03 -0800 (PST)
+Received: by mail-qk1-x72e.google.com with SMTP id af79cd13be357-778a92c06d6so48831485a.2
+        for <bpf@vger.kernel.org>; Thu, 16 Nov 2023 07:00:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1700146801; x=1700751601; darn=vger.kernel.org;
+        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1700146802; x=1700751602; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0yEUgde+83Ie/CIdVOsUg/bpNgJ9RSPY4XMDhZVyzr4=;
-        b=doLvgAm/DpQ91QvgrVUnAtUnTPqW2r2LjUpcqoZWaE2hygm87JVJQB7tHUlYkBw12l
-         w6j04mNf9UBA7a3ELvSAE0NijAJoEgv1TgccF1r5Jm/F6gFd/p0BaSR6XLdge6nw2M1e
-         7RsPJPJmourJznh2FiheKkAC9NqCgp+rQ0RywNilIgC9i7dt0Zf5kwkLjalbIXbbPv+2
-         M2UeqSpO0UmvoirdrCehQQNcsNzDsXdRZZwfeqAevqYIouEpNX8LQMZYawpZQ211mP7Q
-         8y6LEXU+UL9bc+psHeGRsiL30Gl+OEzsxW75fxD/AY+uUrYdV5DdUIglch1Tg1/29XkQ
-         UUAw==
+        bh=NXDAaty5RvW7sna2sinn3YdzfOivIeDvoqLW5kj1+Sw=;
+        b=bNO6R+QTsep6z1nTrZov8W3y3hKuiXJMn3lhrVntYFOR5afUi6SLd4/EZBMAyAFo8R
+         omFCvcRwbJvJ7vjIApa9IUlm61wKsvMrc4d3MVZHIR5kq2JQZhMtVmuSVx+mrKVgt2rw
+         vM+kOJSq03MbJ9Fygj56GzQ61jjNeDhk97e7u/MJK1mXcvOmlGf/8utBd6SIezOZIdQy
+         zBHVC3KUxIWyqkLXXuuWXKMznVmZ5eONo/CC0qepXjRPuvx7lYynBjq02bVKy6hWZhVS
+         fLWWBs4MJMCpyDdoI2ejB39r4ZUZMiBsjjmE8Nr4cFU9zkk/0VKSfatqGJ3Z3X5RDK3z
+         35vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700146801; x=1700751601;
+        d=1e100.net; s=20230601; t=1700146802; x=1700751602;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0yEUgde+83Ie/CIdVOsUg/bpNgJ9RSPY4XMDhZVyzr4=;
-        b=Cbg7lawsiC2l2y72V5VDvsGHMq4kO+CIEMLEBxOnwG68Mkv6OIC6j8sVFrX4ax5pzc
-         3fHIkpdFOgmfUKOXRMg1+XSeBv6kyLbFYW7o6NGokAvSQ86LJaSHusoxqZL/q3YkwbdQ
-         Ed0pr8HJACmA2Und+0XNyn3o8fuObfUBxFaJalebdku7eAuY0+TdXcoAFCY0PWaZi17J
-         p6zZELyzJhcNdETzCH7KpGMnSC7UJ2Q8kRCGfhKLD22/ne72Bzj4gwa20rA8KZ4TNea+
-         LQFAYyo7mZScmPKFt2xUt/7Vg6jWOfVKtntdJfOA50VjZg0x0ugYlACQpKRecgI3fJho
-         n7Ug==
-X-Gm-Message-State: AOJu0YzBym3V9uYGuUpXpyIZPSX1IPzQm/sUIrKnxha86nequ3ZlZMYv
-	ubiO2xo9ZJnnuTSUmzroX9dNCA==
-X-Google-Smtp-Source: AGHT+IGv42MWmINDqiHfdrY603/s1/TR2Yx1Q5OV/ZKUA4tFYkGRH6GEkBkp9eGayYMcRqXKW7iCgw==
-X-Received: by 2002:a05:6870:6c12:b0:1ea:e7e9:abc5 with SMTP id na18-20020a0568706c1200b001eae7e9abc5mr20738061oab.6.1700146801224;
-        Thu, 16 Nov 2023 07:00:01 -0800 (PST)
+        bh=NXDAaty5RvW7sna2sinn3YdzfOivIeDvoqLW5kj1+Sw=;
+        b=QlCt3vkehaZB+mSZJq/gB9Kcc4Y80WVb53ii+tzrds07iEBvnrdzLCxJD67QcjgRqd
+         Gotnp2c287PRiviirNWPnFxVBikafxfxmZ+d5ZkIi+2dnM+lpqauhyGge0HUm0wp+5HY
+         1HkJFBmwlsMd1fNrEl6SrMciSQu1zJ/2MPVaIPkZoIJ3/KqkK/TSfVLar2K2A855Vttq
+         zAl5TdcxJwxgvcVtC0/cS+RKsiMmyAYhHaUnOXSbWn0BubjXnjV/7xZrAqUzmNHWd32+
+         8tBuzhqlYX/Bfz4B7Ba9jU0ErcRO/NKVB1daHuAqcjvHiEAcFy6WGXmaQrIFRwJrLEK8
+         sp3g==
+X-Gm-Message-State: AOJu0YwMRP6oe1aBLAZvumbnXHgSBHstVbJLJ2YtLot1CtmAgRfebfbz
+	SHYHmaFkMIRn80TLs5HPboK7mQ==
+X-Google-Smtp-Source: AGHT+IHs0eE+Rz5RtW/NkgBtBUh2ZsO2FAMgtjwGD+IhA1Y2LoYqS7iHTkz8mb5/MStz9FX66VMuQw==
+X-Received: by 2002:a05:620a:2889:b0:76f:98c:3f0e with SMTP id j9-20020a05620a288900b0076f098c3f0emr8378471qkp.68.1700146802447;
+        Thu, 16 Nov 2023 07:00:02 -0800 (PST)
 Received: from majuu.waya (bras-base-kntaon1618w-grc-15-174-91-6-24.dsl.bell.ca. [174.91.6.24])
-        by smtp.gmail.com with ESMTPSA id d21-20020a05620a241500b00774376e6475sm1059688qkn.6.2023.11.16.07.00.00
+        by smtp.gmail.com with ESMTPSA id d21-20020a05620a241500b00774376e6475sm1059688qkn.6.2023.11.16.07.00.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Nov 2023 07:00:00 -0800 (PST)
+        Thu, 16 Nov 2023 07:00:01 -0800 (PST)
 From: Jamal Hadi Salim <jhs@mojatatu.com>
 To: netdev@vger.kernel.org
 Cc: deb.chatterjee@intel.com,
@@ -60,9 +60,9 @@ Cc: deb.chatterjee@intel.com,
 	khalidm@nvidia.com,
 	toke@redhat.com,
 	mattyk@nvidia.com
-Subject: [PATCH net-next v8 06/15] net: introduce rcu_replace_pointer_rtnl
-Date: Thu, 16 Nov 2023 09:59:39 -0500
-Message-Id: <20231116145948.203001-7-jhs@mojatatu.com>
+Subject: [PATCH net-next v8 07/15] rtnl: add helper to check if group has listeners
+Date: Thu, 16 Nov 2023 09:59:40 -0500
+Message-Id: <20231116145948.203001-8-jhs@mojatatu.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231116145948.203001-1-jhs@mojatatu.com>
 References: <20231116145948.203001-1-jhs@mojatatu.com>
@@ -74,10 +74,15 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-We use rcu_replace_pointer(rcu_ptr, ptr, lockdep_rtnl_is_held()) throughout
-the P4TC infrastructure code.
+As of today, rtnl code creates a new skb and unconditionally fills and
+broadcasts it to the relevant group. For most operations this is okay
+and doesn't waste resources in general.
 
-It may be useful for other use cases, so we create a helper.
+For P4TC, it's interesting to know if the TC group has any listeners
+when adding/updating/deleting table entries as we can optimize for the
+most likely case it contains none. This not only improves our processing
+speed, it also reduces pressure on the system memory as we completely
+avoid the broadcast skb allocation.
 
 Co-developed-by: Victor Nogueira <victor@mojatatu.com>
 Signed-off-by: Victor Nogueira <victor@mojatatu.com>
@@ -85,32 +90,25 @@ Co-developed-by: Pedro Tammela <pctammela@mojatatu.com>
 Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
 Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
 ---
- include/linux/rtnetlink.h | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ include/linux/rtnetlink.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/include/linux/rtnetlink.h b/include/linux/rtnetlink.h
-index 3d6cf306c..971055e66 100644
+index 971055e66..487e45f8a 100644
 --- a/include/linux/rtnetlink.h
 +++ b/include/linux/rtnetlink.h
-@@ -62,6 +62,18 @@ static inline bool lockdep_rtnl_is_held(void)
- #define rcu_dereference_rtnl(p)					\
- 	rcu_dereference_check(p, lockdep_rtnl_is_held())
+@@ -142,4 +142,11 @@ extern int ndo_dflt_bridge_getlink(struct sk_buff *skb, u32 pid, u32 seq,
  
-+/**
-+ * rcu_replace_pointer_rtnl - replace an RCU pointer under rtnl_lock, returning
-+ * its old value
-+ * @rcu_ptr: RCU pointer, whose old value is returned
-+ * @ptr: regular pointer
-+ *
-+ * Perform a replacement under rtnl_lock, where @rcu_ptr is an RCU-annotated
-+ * pointer. The old value of @rcu_ptr is returned, and @rcu_ptr is set to @ptr
-+ */
-+#define rcu_replace_pointer_rtnl(rcu_ptr, ptr)			\
-+	rcu_replace_pointer(rcu_ptr, ptr, lockdep_rtnl_is_held())
+ extern void rtnl_offload_xstats_notify(struct net_device *dev);
+ 
++static inline int rtnl_has_listeners(const struct net *net, u32 group)
++{
++	struct sock *rtnl = net->rtnl;
 +
- /**
-  * rtnl_dereference - fetch RCU pointer when updates are prevented by RTNL
-  * @p: The pointer to read, prior to dereferencing
++	return netlink_has_listeners(rtnl, group);
++}
++
+ #endif	/* __LINUX_RTNETLINK_H */
 -- 
 2.34.1
 
