@@ -1,43 +1,43 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U4mdzIzN"
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075F11B1
-	for <bpf@vger.kernel.org>; Wed, 15 Nov 2023 18:18:35 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-507adc3381cso369904e87.3
-        for <bpf@vger.kernel.org>; Wed, 15 Nov 2023 18:18:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cg1Wo+TA"
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A397A6
+	for <bpf@vger.kernel.org>; Wed, 15 Nov 2023 18:18:38 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9f2a53704aaso39410166b.3
+        for <bpf@vger.kernel.org>; Wed, 15 Nov 2023 18:18:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700101113; x=1700705913; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1700101116; x=1700705916; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=i5cLnwk7kHnzjSZNHnp7ykK9lCBm4y6BMbhMs3D/7/I=;
-        b=U4mdzIzNkrehq1XhmQQoSF/u9mKzxvZCj6p98NE4Zd8bNzdc9pGBO4yn1OJjRc36dX
-         VWO/EP19WJmc1IABVbRsYOrGjUVLF1JzpVr/T2MxPgPxdjNQhAZCZpWURTNWD+us4mM4
-         gxrzsyKLiF5pxgAiynW64oz/xZ8XhmityTJg0a9lZ6uoKuXhkxthk3LC7Qra5NJUAKB2
-         CkCnTVJ4jgFe4ZcBOS2iTwwag+zI+9VTVzL8Zy+1QzaeGG3bdpBOaUVj8TapxDqMowuG
-         IMgWj3xATNiIbm7xfBI7tre5LmXpGfA0WQmRSegryoQetoMZkfA8ydXH6zthdQ7x9tLG
-         gOQw==
+        bh=DYBz5+FRx8jGtlc1wIaA1iruO/flQ5TzphJVV+9nhn8=;
+        b=Cg1Wo+TAaS56lfVjEol9G7iDR0sZVNvlo/vII40EgF5rMgch0dEFg6amdf2gXfXmGV
+         JdOZ1kM7cmdmfOcBH3ka/jOTSexVNt4OwbfXw8C7yHf2MFt+iMjajaZ7gXr7zMDxx1io
+         RIDkYl3Qr5zwI56RWLLvDD7aFTK9D7QUYQRNpGXGnNFw+3U2pmXTsSWcuxy6mbU/qwEp
+         rsYFfRYsMYrf6+pFcRZyeHwQkfAFi8mCZZ/13D0Dv5wb7vCFMFSX8aRAAKaH5VlhhAj8
+         BhtCGKk1d2o9X4SZAWYceoVoJhdcQwqvvGpahCp5Owhom2aVN+hBZl0uCnB01QXPz7Ps
+         Y3sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700101113; x=1700705913;
+        d=1e100.net; s=20230601; t=1700101116; x=1700705916;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=i5cLnwk7kHnzjSZNHnp7ykK9lCBm4y6BMbhMs3D/7/I=;
-        b=a/bWmlf4x+3OC3zVMQ9rchLR04JblSJ7PApxQPlFHGfWPbvIgqLHkSQbRynYqm5P8v
-         Dx1vQv02FIEkRP7cClmiit4Gs4lDC9VxfFm+ZAbd7va2D/se4ddnP1AwKJdCHFVO8YHd
-         F0bK57YRXQB7f11J73Vgt+eO4K0KJfHXmiv0Xi3DyWEZoDXfx+GGez/JI0sG5TE75yZj
-         306Oi/DZKOfhRzsklEPF44azpVW+ir0DBkkV18C6Kj1mxO8jAKiV2XXOIoUMWTlfdAsG
-         kQE8HXdmj49iBp+emdiZIL6sQIswpuFRgQe/aZVPICCApLhp6UVMOuWF/7tTj4tzuxm/
-         tMGg==
-X-Gm-Message-State: AOJu0YyJGnNGqYRy9Oz9JzROmvqqPt4GPgbNJEM1ETjXTJ8g1t2nG69W
-	ANNvBGDgXTFmk/WWCkDDCmjibFYXcyYZAQ==
-X-Google-Smtp-Source: AGHT+IFOC3YONDC9H0er9Z7B4bFwfMqEF5fKzyx9/321UGsv/jJbcxhj51CPoCR/IgNAeSIJzJs8rw==
-X-Received: by 2002:a05:6512:238c:b0:509:d97:c84f with SMTP id c12-20020a056512238c00b005090d97c84fmr12175670lfv.23.1700101112595;
-        Wed, 15 Nov 2023 18:18:32 -0800 (PST)
+        bh=DYBz5+FRx8jGtlc1wIaA1iruO/flQ5TzphJVV+9nhn8=;
+        b=hBMiG8sEwZ4C8H9Tkifvryqmf+kJ7wXVbWBTQ1ujydWncN3qb1+wQ/XmEfbvisyVkG
+         TtT9cvN+UnPUiZnd643j3x2x06FDu2YPiE5G8T466feZhuF2zV68WVLKddv6w5N/v8kp
+         o0aC69ETmObhc685TJw2LR73cIxf3Sxi3Li9FgfGanW74ahJV8zDfC3EIpaP61s9gByF
+         3PxczZn3mQrSW7ZBSS5sj82Ovoiz9mWTP62/ioGlfchlzIgASYVoYzYdH52vJA2bgN/F
+         oOIxz95DXkDPpJop2wuGkNv4QLF7sPBpFs0azYZDyalNrUuWd/T5r9FuGuvKa22s7MVD
+         ep3g==
+X-Gm-Message-State: AOJu0Yyt00mYWJTTpdcIDZOhFIGqVlNwLNNL1ZV/x8sDilk85QEgx0Qh
+	rTeA0U4j1VQcQT78VXipFyMuFjBCHMGIiw==
+X-Google-Smtp-Source: AGHT+IGu8IDbDZKHg8QzPJxNSsg4C9mrAV9TGRsM5NgETDBVLEvSzMDkKSnYJs+5IJxEMY5ojPN71Q==
+X-Received: by 2002:a17:906:1dd3:b0:9d3:afe1:b3e5 with SMTP id v19-20020a1709061dd300b009d3afe1b3e5mr10787174ejh.75.1700101116269;
+        Wed, 15 Nov 2023 18:18:36 -0800 (PST)
 Received: from localhost.localdomain (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id ay1-20020a170906d28100b009dd606ce80fsm7774064ejb.31.2023.11.15.18.18.31
+        by smtp.gmail.com with ESMTPSA id ay1-20020a170906d28100b009dd606ce80fsm7774064ejb.31.2023.11.15.18.18.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Nov 2023 18:18:32 -0800 (PST)
+        Wed, 15 Nov 2023 18:18:35 -0800 (PST)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -49,9 +49,9 @@ Cc: andrii@kernel.org,
 	memxor@gmail.com,
 	awerner32@gmail.com,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf 02/12] selftests/bpf: track string payload offset as scalar in strobemeta
-Date: Thu, 16 Nov 2023 04:17:53 +0200
-Message-ID: <20231116021803.9982-3-eddyz87@gmail.com>
+Subject: [PATCH bpf 05/12] bpf: extract setup_func_entry() utility function
+Date: Thu, 16 Nov 2023 04:17:56 +0200
+Message-ID: <20231116021803.9982-6-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231116021803.9982-1-eddyz87@gmail.com>
 References: <20231116021803.9982-1-eddyz87@gmail.com>
@@ -63,247 +63,147 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This change prepares strobemeta for update in callbakcs verification
-logic. To allow bpf_loop() verification converge when multiple
-callback itreations are considered:
-- track offset inside strobemeta_payload->payload directly as scalar
-  value;
-- at each iteration make sure that remaining
-  strobemeta_payload->payload capacity is sufficient for execution of
-  read_{map,str}_var functions;
-- make sure that offset is tracked as unbound scalar between
-  iterations, otherwise verifier won't be able infer that bpf_loop
-  callback reaches identical states.
+Move code for simulated stack frame creation to a separate utility
+function. This function would be used in the follow-up change for
+callbacks handling.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- .../testing/selftests/bpf/progs/strobemeta.h  | 78 ++++++++++++-------
- 1 file changed, 48 insertions(+), 30 deletions(-)
+ kernel/bpf/verifier.c | 87 +++++++++++++++++++++++++------------------
+ 1 file changed, 51 insertions(+), 36 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/strobemeta.h b/tools/testing/selftests/bpf/progs/strobemeta.h
-index e02cfd380746..40df2cc26eaf 100644
---- a/tools/testing/selftests/bpf/progs/strobemeta.h
-+++ b/tools/testing/selftests/bpf/progs/strobemeta.h
-@@ -24,9 +24,11 @@ struct task_struct {};
- #define STACK_TABLE_EPOCH_SHIFT 20
- #define STROBE_MAX_STR_LEN 1
- #define STROBE_MAX_CFGS 32
-+#define READ_MAP_VAR_PAYLOAD_CAP					\
-+	((1 + STROBE_MAX_MAP_ENTRIES * 2) * STROBE_MAX_STR_LEN)
- #define STROBE_MAX_PAYLOAD						\
- 	(STROBE_MAX_STRS * STROBE_MAX_STR_LEN +				\
--	STROBE_MAX_MAPS * (1 + STROBE_MAX_MAP_ENTRIES * 2) * STROBE_MAX_STR_LEN)
-+	 STROBE_MAX_MAPS * READ_MAP_VAR_PAYLOAD_CAP)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 0576fc1ddc4d..d9513fd58c7c 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -9542,11 +9542,10 @@ static int set_callee_state(struct bpf_verifier_env *env,
+ 			    struct bpf_func_state *caller,
+ 			    struct bpf_func_state *callee, int insn_idx);
  
- struct strobe_value_header {
- 	/*
-@@ -355,7 +357,7 @@ static __always_inline uint64_t read_str_var(struct strobemeta_cfg *cfg,
- 					     size_t idx, void *tls_base,
- 					     struct strobe_value_generic *value,
- 					     struct strobemeta_payload *data,
--					     void *payload)
-+					     size_t off)
+-static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+-			     int *insn_idx, int subprog,
+-			     set_callee_state_fn set_callee_state_cb)
++static int setup_func_entry(struct bpf_verifier_env *env, int subprog, int callsite,
++			    set_callee_state_fn set_callee_state_cb,
++			    struct bpf_verifier_state *state)
  {
- 	void *location;
- 	uint64_t len;
-@@ -366,7 +368,7 @@ static __always_inline uint64_t read_str_var(struct strobemeta_cfg *cfg,
- 		return 0;
- 
- 	bpf_probe_read_user(value, sizeof(struct strobe_value_generic), location);
--	len = bpf_probe_read_user_str(payload, STROBE_MAX_STR_LEN, value->ptr);
-+	len = bpf_probe_read_user_str(&data->payload[off], STROBE_MAX_STR_LEN, value->ptr);
- 	/*
- 	 * if bpf_probe_read_user_str returns error (<0), due to casting to
- 	 * unsinged int, it will become big number, so next check is
-@@ -378,14 +380,14 @@ static __always_inline uint64_t read_str_var(struct strobemeta_cfg *cfg,
- 		return 0;
- 
- 	data->str_lens[idx] = len;
--	return len;
-+	return off + len;
- }
- 
--static __always_inline void *read_map_var(struct strobemeta_cfg *cfg,
--					  size_t idx, void *tls_base,
--					  struct strobe_value_generic *value,
--					  struct strobemeta_payload *data,
--					  void *payload)
-+static __always_inline uint64_t read_map_var(struct strobemeta_cfg *cfg,
-+					     size_t idx, void *tls_base,
-+					     struct strobe_value_generic *value,
-+					     struct strobemeta_payload *data,
-+					     size_t off)
- {
- 	struct strobe_map_descr* descr = &data->map_descrs[idx];
- 	struct strobe_map_raw map;
-@@ -397,11 +399,11 @@ static __always_inline void *read_map_var(struct strobemeta_cfg *cfg,
- 
- 	location = calc_location(&cfg->map_locs[idx], tls_base);
- 	if (!location)
--		return payload;
-+		return off;
- 
- 	bpf_probe_read_user(value, sizeof(struct strobe_value_generic), location);
- 	if (bpf_probe_read_user(&map, sizeof(struct strobe_map_raw), value->ptr))
--		return payload;
-+		return off;
- 
- 	descr->id = map.id;
- 	descr->cnt = map.cnt;
-@@ -410,10 +412,10 @@ static __always_inline void *read_map_var(struct strobemeta_cfg *cfg,
- 		data->req_meta_valid = 1;
- 	}
- 
--	len = bpf_probe_read_user_str(payload, STROBE_MAX_STR_LEN, map.tag);
-+	len = bpf_probe_read_user_str(&data->payload[off], STROBE_MAX_STR_LEN, map.tag);
- 	if (len <= STROBE_MAX_STR_LEN) {
- 		descr->tag_len = len;
--		payload += len;
-+		off += len;
- 	}
- 
- #ifdef NO_UNROLL
-@@ -426,22 +428,22 @@ static __always_inline void *read_map_var(struct strobemeta_cfg *cfg,
- 			break;
- 
- 		descr->key_lens[i] = 0;
--		len = bpf_probe_read_user_str(payload, STROBE_MAX_STR_LEN,
-+		len = bpf_probe_read_user_str(&data->payload[off], STROBE_MAX_STR_LEN,
- 					      map.entries[i].key);
- 		if (len <= STROBE_MAX_STR_LEN) {
- 			descr->key_lens[i] = len;
--			payload += len;
-+			off += len;
- 		}
- 		descr->val_lens[i] = 0;
--		len = bpf_probe_read_user_str(payload, STROBE_MAX_STR_LEN,
-+		len = bpf_probe_read_user_str(&data->payload[off], STROBE_MAX_STR_LEN,
- 					      map.entries[i].val);
- 		if (len <= STROBE_MAX_STR_LEN) {
- 			descr->val_lens[i] = len;
--			payload += len;
-+			off += len;
- 		}
- 	}
- 
--	return payload;
-+	return off;
- }
- 
- #ifdef USE_BPF_LOOP
-@@ -455,14 +457,20 @@ struct read_var_ctx {
- 	struct strobemeta_payload *data;
- 	void *tls_base;
- 	struct strobemeta_cfg *cfg;
--	void *payload;
-+	size_t payload_off;
- 	/* value gets mutated */
- 	struct strobe_value_generic *value;
- 	enum read_type type;
- };
- 
--static int read_var_callback(__u32 index, struct read_var_ctx *ctx)
-+static int read_var_callback(__u64 index, struct read_var_ctx *ctx)
- {
-+	/* lose precision info for ctx->payload_off, verifier won't track
-+	 * double xor, barrier_var() is needed to force clang keep both xors.
-+	 */
-+	ctx->payload_off ^= index;
-+	barrier_var(ctx->payload_off);
-+	ctx->payload_off ^= index;
- 	switch (ctx->type) {
- 	case READ_INT_VAR:
- 		if (index >= STROBE_MAX_INTS)
-@@ -472,14 +480,18 @@ static int read_var_callback(__u32 index, struct read_var_ctx *ctx)
- 	case READ_MAP_VAR:
- 		if (index >= STROBE_MAX_MAPS)
- 			return 1;
--		ctx->payload = read_map_var(ctx->cfg, index, ctx->tls_base,
--					    ctx->value, ctx->data, ctx->payload);
-+		if (ctx->payload_off > sizeof(ctx->data->payload) - READ_MAP_VAR_PAYLOAD_CAP)
-+			return 1;
-+		ctx->payload_off = read_map_var(ctx->cfg, index, ctx->tls_base,
-+						ctx->value, ctx->data, ctx->payload_off);
- 		break;
- 	case READ_STR_VAR:
- 		if (index >= STROBE_MAX_STRS)
- 			return 1;
--		ctx->payload += read_str_var(ctx->cfg, index, ctx->tls_base,
--					     ctx->value, ctx->data, ctx->payload);
-+		if (ctx->payload_off > sizeof(ctx->data->payload) - STROBE_MAX_STR_LEN)
-+			return 1;
-+		ctx->payload_off = read_str_var(ctx->cfg, index, ctx->tls_base,
-+						ctx->value, ctx->data, ctx->payload_off);
- 		break;
- 	}
- 	return 0;
-@@ -501,7 +513,8 @@ static void *read_strobe_meta(struct task_struct *task,
- 	pid_t pid = bpf_get_current_pid_tgid() >> 32;
- 	struct strobe_value_generic value = {0};
- 	struct strobemeta_cfg *cfg;
--	void *tls_base, *payload;
-+	size_t payload_off;
-+	void *tls_base;
- 
- 	cfg = bpf_map_lookup_elem(&strobemeta_cfgs, &pid);
- 	if (!cfg)
-@@ -509,7 +522,7 @@ static void *read_strobe_meta(struct task_struct *task,
- 
- 	data->int_vals_set_mask = 0;
- 	data->req_meta_valid = 0;
--	payload = data->payload;
-+	payload_off = 0;
- 	/*
- 	 * we don't have struct task_struct definition, it should be:
- 	 * tls_base = (void *)task->thread.fsbase;
-@@ -522,7 +535,7 @@ static void *read_strobe_meta(struct task_struct *task,
- 		.tls_base = tls_base,
- 		.value = &value,
- 		.data = data,
--		.payload = payload,
-+		.payload_off = 0,
- 	};
+-	struct bpf_verifier_state *state = env->cur_state;
+ 	struct bpf_func_state *caller, *callee;
  	int err;
  
-@@ -540,6 +553,11 @@ static void *read_strobe_meta(struct task_struct *task,
- 	err = bpf_loop(STROBE_MAX_MAPS, read_var_callback, &ctx, 0);
- 	if (err != STROBE_MAX_MAPS)
- 		return NULL;
-+
-+	payload_off = ctx.payload_off;
-+	/* this should not really happen, here only to satisfy verifer */
-+	if (payload_off > sizeof(data->payload))
-+		payload_off = sizeof(data->payload);
- #else
- #ifdef NO_UNROLL
- #pragma clang loop unroll(disable)
-@@ -555,7 +573,7 @@ static void *read_strobe_meta(struct task_struct *task,
- #pragma unroll
- #endif /* NO_UNROLL */
- 	for (int i = 0; i < STROBE_MAX_STRS; ++i) {
--		payload += read_str_var(cfg, i, tls_base, &value, data, payload);
-+		payload_off = read_str_var(cfg, i, tls_base, &value, data, payload_off);
+@@ -9556,13 +9555,56 @@ static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 		return -E2BIG;
  	}
- #ifdef NO_UNROLL
- #pragma clang loop unroll(disable)
-@@ -563,7 +581,7 @@ static void *read_strobe_meta(struct task_struct *task,
- #pragma unroll
- #endif /* NO_UNROLL */
- 	for (int i = 0; i < STROBE_MAX_MAPS; ++i) {
--		payload = read_map_var(cfg, i, tls_base, &value, data, payload);
-+		payload_off = read_map_var(cfg, i, tls_base, &value, data, payload_off);
- 	}
- #endif /* USE_BPF_LOOP */
  
-@@ -571,7 +589,7 @@ static void *read_strobe_meta(struct task_struct *task,
- 	 * return pointer right after end of payload, so it's possible to
- 	 * calculate exact amount of useful data that needs to be sent
- 	 */
--	return payload;
-+	return &data->payload[payload_off];
+-	caller = state->frame[state->curframe];
+ 	if (state->frame[state->curframe + 1]) {
+ 		verbose(env, "verifier bug. Frame %d already allocated\n",
+ 			state->curframe + 1);
+ 		return -EFAULT;
+ 	}
+ 
++	caller = state->frame[state->curframe];
++	callee = kzalloc(sizeof(*callee), GFP_KERNEL);
++	if (!callee)
++		return -ENOMEM;
++	state->frame[state->curframe + 1] = callee;
++
++	/* callee cannot access r0, r6 - r9 for reading and has to write
++	 * into its own stack before reading from it.
++	 * callee can read/write into caller's stack
++	 */
++	init_func_state(env, callee,
++			/* remember the callsite, it will be used by bpf_exit */
++			callsite,
++			state->curframe + 1 /* frameno within this callchain */,
++			subprog /* subprog number within this prog */);
++	/* Transfer references to the callee */
++	err = copy_reference_state(callee, caller);
++	if (err)
++		goto err_out;
++
++	err = set_callee_state_cb(env, caller, callee, callsite);
++	if (err)
++		goto err_out;
++
++	/* only increment it after check_reg_arg() finished */
++	state->curframe++;
++
++	return 0;
++
++err_out:
++	free_func_state(callee);
++	state->frame[state->curframe + 1] = NULL;
++	return err;
++}
++
++static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
++			     int *insn_idx, int subprog,
++			     set_callee_state_fn set_callee_state_cb)
++{
++	struct bpf_verifier_state *state = env->cur_state;
++	struct bpf_func_state *caller, *callee;
++	int err;
++
++	caller = state->frame[state->curframe];
+ 	err = btf_check_subprog_call(env, subprog, caller->regs);
+ 	if (err == -EFAULT)
+ 		return err;
+@@ -9632,35 +9674,12 @@ static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 		return 0;
+ 	}
+ 
+-	callee = kzalloc(sizeof(*callee), GFP_KERNEL);
+-	if (!callee)
+-		return -ENOMEM;
+-	state->frame[state->curframe + 1] = callee;
+-
+-	/* callee cannot access r0, r6 - r9 for reading and has to write
+-	 * into its own stack before reading from it.
+-	 * callee can read/write into caller's stack
+-	 */
+-	init_func_state(env, callee,
+-			/* remember the callsite, it will be used by bpf_exit */
+-			*insn_idx /* callsite */,
+-			state->curframe + 1 /* frameno within this callchain */,
+-			subprog /* subprog number within this prog */);
+-
+-	/* Transfer references to the callee */
+-	err = copy_reference_state(callee, caller);
+-	if (err)
+-		goto err_out;
+-
+-	err = set_callee_state_cb(env, caller, callee, *insn_idx);
++	err = setup_func_entry(env, subprog, *insn_idx, set_callee_state_cb, state);
+ 	if (err)
+-		goto err_out;
++		return err;
+ 
+ 	clear_caller_saved_regs(env, caller->regs);
+ 
+-	/* only increment it after check_reg_arg() finished */
+-	state->curframe++;
+-
+ 	/* and go analyze first insn of the callee */
+ 	*insn_idx = env->subprog_info[subprog].start - 1;
+ 
+@@ -9668,14 +9687,10 @@ static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 		verbose(env, "caller:\n");
+ 		print_verifier_state(env, caller, true);
+ 		verbose(env, "callee:\n");
+-		print_verifier_state(env, callee, true);
++		print_verifier_state(env, state->frame[state->curframe], true);
+ 	}
+-	return 0;
+ 
+-err_out:
+-	free_func_state(callee);
+-	state->frame[state->curframe + 1] = NULL;
+-	return err;
++	return 0;
  }
  
- SEC("raw_tracepoint/kfree_skb")
+ int map_set_for_each_callback_args(struct bpf_verifier_env *env,
 -- 
 2.42.0
 
