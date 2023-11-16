@@ -1,43 +1,43 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="uDSs7DBx"
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5DD5D63
-	for <bpf@vger.kernel.org>; Thu, 16 Nov 2023 07:00:20 -0800 (PST)
-Received: by mail-ua1-x930.google.com with SMTP id a1e0cc1a2514c-7bae8dd095cso343557241.3
-        for <bpf@vger.kernel.org>; Thu, 16 Nov 2023 07:00:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="vtLPuLMN"
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F9CD52
+	for <bpf@vger.kernel.org>; Thu, 16 Nov 2023 07:00:25 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id 5614622812f47-3b566ee5f1dso516594b6e.0
+        for <bpf@vger.kernel.org>; Thu, 16 Nov 2023 07:00:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1700146820; x=1700751620; darn=vger.kernel.org;
+        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1700146825; x=1700751625; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RY6ouizi/U/A8G+Mf0PYGxZC9INYKgUQI4ZYPUdwqxQ=;
-        b=uDSs7DBxpFzrmnjF8A2mKSBYC/fnTlDky7KgZXm9GD/swboRSWyHXjSamwh9ZYz94t
-         GUXqgOBVbLytEG2GyjP8Kxyh6bqTeyoVZ7I8/0Hgp2s2pQG2SRCfKY/gzWigZJZxRG/N
-         YsL8PvgjQBN7IEn1fbib9uY5+xxT3pVsNljyp1zoAG/gsQeE33iYnJQwoBKl8kiRY6tV
-         9wFKt2Wp4rhSGxl+Dz2S9H+uizNKWFgV7CzxCCJ3DDXTPO/dQ0xggGGZfMcQ++zsEXEO
-         CUbLtw12n6rAPp1rsSnPLNhQawu+ZsoGjajQD1KsQxdke5NGMokX/VnNDE9Gr36O/K8S
-         bfkw==
+        bh=oox/8E0KFofAB3XeC9xGDzpSS3vf74WkFrZi7HqF1I0=;
+        b=vtLPuLMNM6JZLanOmHn86xT62Ork/XmCoJlQoH+SZPkvC7BiE5CWygQ1oDdiMOVO+o
+         6RwzZMsg/IHk52qZuJ/6o3LN8fWw5KfkJ/Mieuppwp/LeQ6rOxMzJp0HqrUP8wNkvqDE
+         by1wkXqXEHl7GIk4DU0JKDfkv8t3y8uRa5yWrjIHyMeimAzHAY8wg4LfbEoFfTJkjutI
+         8s+46N+PxDdLG1FaOFsYW9iE7IqxKWdX6WH6eHCc8VxjwZIUE0uAYaXT4wOh+W7wygKk
+         hpfhZUKI8aTLOwIHD1sv1pxp+v3u2niZwiDmAIUtnumUa72heJhum8nFo08fvSXEedXg
+         y4cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700146820; x=1700751620;
+        d=1e100.net; s=20230601; t=1700146825; x=1700751625;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RY6ouizi/U/A8G+Mf0PYGxZC9INYKgUQI4ZYPUdwqxQ=;
-        b=WKCiR29zFnRKvSckZFPmHmUyRC8iPNZfhDs3tn8tE/6QGVOoAJEOJhzJo5tFUotz+r
-         a9PNGe+UYQC/mJS/8NFI9TnN7SOgfpw6sxOCml0ksvZBcuOUOCVc7DxX2E//m3CrNiAs
-         g7DNOIj6FIrEa3foHiHdKFHmKMVqznht0obrewYsCEX/T3EqMmKohj/yj6w+g5AQucuB
-         ounEId29vss2UkiObdSDw7Y+7W60/aAr5j4MOW13mb+p/eD53ZWs3ldFcOHN2fJ52neg
-         xyYpDxc+7q4EM44G5ZW9x/5J42E17KFhrBy6qNHaHMY13qmJE7cxxXc8akZbAs/BuBHq
-         EdAg==
-X-Gm-Message-State: AOJu0YwF5emcnPlpCc+ftynrb2DO9W4SrteSMMSW1EqZRnGqsxxyrWQH
-	e2rPO3FIHb273uUK2eW8GMv/qyu6q/90YJSKwcE=
-X-Google-Smtp-Source: AGHT+IFP81pz0hfOUGBCYxi2cg4Y2Vf4PCQMtGSr3Iw+Shtjmq9VdWD4ZFciMn8Mm/1+504SPyHElw==
-X-Received: by 2002:a67:e08c:0:b0:45d:a89f:e1f4 with SMTP id f12-20020a67e08c000000b0045da89fe1f4mr15387343vsl.9.1700146818733;
-        Thu, 16 Nov 2023 07:00:18 -0800 (PST)
+        bh=oox/8E0KFofAB3XeC9xGDzpSS3vf74WkFrZi7HqF1I0=;
+        b=i4pP2COu4YS9sPrXzTpzmPePldyJOuuVnDDRFmPr7iitD5MrJVzXSNoCV0l7VzG3mX
+         kikmS2Th8IbU3D1XhLLhSwUHuKhhIz2WTD9z/weI1h6yyynJlMJMr/FQC9FDarxgX4y+
+         dqNtuA3BlW319Z6UBoln8UE22oOG9kXZpMA8A2RpBKgxWZEGNLqiONEu+bZkqqf6Hg9E
+         n2O/84MdV+5MFsXt5tXYxdqqS9DKU+yZLKoeVgo4wqNXEKQCNGD97lRseaoxUSY4HBS/
+         XjMIKe7vuy9x1bcwHbbudMjgc7ye794oJohTxT0seEoaHivBBr9mX47mDPjXdlW2140t
+         yhNA==
+X-Gm-Message-State: AOJu0YwMLgRdALcaz+kFP9IMV9tDwc9dW/YQHK9Wh+rzXOYk6rIB0wsX
+	Y9nOaFcBeBZc7SOXDjPMJBdMPA==
+X-Google-Smtp-Source: AGHT+IFCwBpVfyRBnRt8ZX4cOedr73tHlZ9B9K9H1QDda0Te/0Exs4cBQvIbMSYYu1NbhwKrVQaTQA==
+X-Received: by 2002:a05:6808:2396:b0:3b2:f37c:a6ac with SMTP id bp22-20020a056808239600b003b2f37ca6acmr19532986oib.59.1700146823708;
+        Thu, 16 Nov 2023 07:00:23 -0800 (PST)
 Received: from majuu.waya (bras-base-kntaon1618w-grc-15-174-91-6-24.dsl.bell.ca. [174.91.6.24])
-        by smtp.gmail.com with ESMTPSA id d21-20020a05620a241500b00774376e6475sm1059688qkn.6.2023.11.16.07.00.17
+        by smtp.gmail.com with ESMTPSA id d21-20020a05620a241500b00774376e6475sm1059688qkn.6.2023.11.16.07.00.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Nov 2023 07:00:18 -0800 (PST)
+        Thu, 16 Nov 2023 07:00:22 -0800 (PST)
 From: Jamal Hadi Salim <jhs@mojatatu.com>
 To: netdev@vger.kernel.org
 Cc: deb.chatterjee@intel.com,
@@ -60,9 +60,9 @@ Cc: deb.chatterjee@intel.com,
 	khalidm@nvidia.com,
 	toke@redhat.com,
 	mattyk@nvidia.com
-Subject: [PATCH net-next v8 12/15] p4tc: add runtime table entry create, update, get, delete, flush and dump
-Date: Thu, 16 Nov 2023 09:59:45 -0500
-Message-Id: <20231116145948.203001-13-jhs@mojatatu.com>
+Subject: [PATCH net-next v8 15/15] p4tc: Add P4 extern interface
+Date: Thu, 16 Nov 2023 09:59:48 -0500
+Message-Id: <20231116145948.203001-16-jhs@mojatatu.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231116145948.203001-1-jhs@mojatatu.com>
 References: <20231116145948.203001-1-jhs@mojatatu.com>
@@ -74,189 +74,80 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Tables are conceptually similar to TCAMs and this implementation could be
-labelled as an "algorithmic" TCAM. Tables have a key of a specific size,
-maximum number of entries and masks allowed. The basic P4 key types
-are supported (exact, LPM, ternary, and ranges) although the kernel side is
-oblivious of all that and sees only bit blobs which it masks before a
-lookup is performed.
+P4 externs are an abstraction in the language to call for extending
+language functionality. For example, the function that sends a packet to a
+specific port (send_to_port) in P4 PNA is an extern.
 
-This commit allows users to create, update, delete, get, flush and dump
-table _entries_ (templates were described in earlier patch).
+Externs can be seen as classes, which have constructors and methods.
+Take, for example, the Register extern definition:
 
-Note that table entries can only be created once the pipeline template is
-sealed.
+extern Register<T> {
+    Register(@tc_numel bit<32> size);
+    @tc_md_read T read(@tc_key bit<32> index);
+    @tc_md_write void write(@tc_key bit<32> index, @tc_data T value);
+}
 
-For example, a user issuing the following command:
+struct tc_ControlPath_Register<T> {
+    @tc_key bit<32> index;
+    @tc_data T value;
+}
 
-tc p4ctrl create myprog/table/cb/tname  \
-  dstAddr 10.10.10.0/24 srcAddr 192.168.0.0/16 prio 16 \
-  action send param port port1
+Which can then be instantiated within a P4 program as:
+Register<bit<32>>(128) reg1;
+Register<bit<16>>(1024) reg2;
 
-indicates we are creating a table entry in table "cb/tname" (a table
-residing in control block "cb") on a pipeline named "myprog".
+Will be abstracted into the template by the P4C compiler for "reg1" as
+follows:
 
-User space tc will create a key which has a value of 0x0a0a0a00c0a00000
-(10.10.10.0 concatenated with 192.168.0.0) and a mask value of
-0xffffff00ffff0000 (/24 concatenated with /16) that will be sent to the
-kernel. In addition a priority field of 16 is passed to the kernel as
-well as the action definition.
-The priority field is needed to disambiguate in case two entries
-match. In that case, the kernel will choose the one with lowest priority
-number.
+tc p4template create extern/root/register extid 10 numinstances 2
+tc p4template create extern_inst/aP4Proggie/register/reg1 instid 1 \
+control_path tc_key index type bit32 tc_data value type bit32 \
+numelemens 128 default_value 22
 
-If the user wanted to, for example, update our just created entry with
-an action, they'd issue the following command:
+=========================EXTERN RUNTIME COMMANDS=========================
 
-tc p4ctrl update myprog/table/cb/tname srcAddr 10.10.10.0/24 \
-  dstAddr 192.168.0.0/16 prio 16 action send param port port5
+Once we seal the pipeline, the register values will be assigned to the
+default value specified on the template as "default_value". After sealing,
+we can update the runtime instance element. For example to update
+reg1[2] with the value 33, we will do the following:
 
-In this case, the user needs to specify the pipeline name, the table name,
-the key and the priority, so that we can locate the table entry.
+tc p4ctrl update aP4proggie/extern/register/reg1 tc_key index 2 \
+tc_data value 33
 
-If the user wanted to, for example, get the table entry that we just
-updated, they'd issue the following command:
+We can also get its value:
 
-tc p4ctrl get myprog/table/cb/tname srcAddr 10.10.10.0/24 \
-  dstAddr 192.168.0.0/16 prio 16
+tc p4ctrl get aP4proggie/extern/register/reg1 tc_key index 2
 
-Note that, again, we need to specify the pipeline name, the table name,
-the key and the priority, so that we can locate the table entry.
+Which will yield the following output:
 
-If the user wanted to delete the table entry we created, they'd issue the
-following command:
+total exts 0
+        extern order 1:
+          tc_key index id 1 type bit32 value: 1
+          tc_data value id 2 type bit32 value: 33
 
-tc p4ctrl del myprog/table/cb/tname srcAddr 10.10.10.0/24 \
-  dstAddr 192.168.0.0/16 prio 16
+We can also dump all of the elements in this register:
 
-Note that, again, we need to specify the pipeline name, the table
-name, the key and the priority, so that we can
-locate the table entry.
+tc p4ctrl get aP4proggie/extern/register/reg1
 
-We can also flush all the table entries from a specific table.
-To flush the table entries of table tname ane pipeline ptables,
-the user would issue the following command:
+Note that the only valid runtime operations are get and update.
 
-tc p4ctrl del myprog/table/cb/tname
+=========================EXTERN P4 Runtime =========================
 
-We can also dump all the table entries from a specific table.
-To dump the table entries of table tname and pipeline myprog, the user
-would issue the following command:
+The generated ebpf code invokes the externs in the P4TC domain
+using the md_read or md_write kfuncs, for example:
+if the P4 program had this invocation:
 
-tc p4ctrl get myprog/table/cb/tname
+tmp1 = reg1.read(index1);
 
-__Table Entry Permissions__
+Then equivalent generated ebpf code is as follows:
 
-Table entries can have permissions specified when they are being added.
-Caveat: we are doing a lot more than what P4 defines because we feel it is
-necessary.
-
-It should be noted that there are two types of permissions:
- - Table permissions which are a property of the table (think directory in
-   file systems). These are set by the template (see earlier patch on table
-   template).
- - Table entry permissions which are specific to a table entry (think a
-   file in a directory). This patch describes those permissions.
-
-Furthermore in both cases the permissions are split into datapath vs
-control path. The template definition can set either one. For example, one
-could allow for adding table entries by the datapath in case of PNA
-add-on-miss is needed.
-By default tables entries have control plane RUD, meaning the control plane
-can Read, Update or Delete entries. By default, as well, the control plane
-can create new entries unless specified otherwise by the template.
-
-Lets see an example of which creates the table "cb/tname" at template time:
-
-    tc p4template create table/aP4proggie/cb/tname tblid 1 keysz 64 \
-      permissions 0x3C24 ...
-
-Above is setting the table tname's permission to be 0x3C24 is equivalent to
-CRUD----R--X-- meaning:
-
-The control plane can Create, Read, Update, Delete
-The datapath can only Read and Execute table entries.
-If one was to dump this table with:
-
-tc -j p4template get table/aP4proggie/cb/tname | jq .
-
-The output would be the following:
-
-[
-  {
-    "obj": "table",
-    "pname": "aP4proggie",
-    "pipeid": 22
-  },
-  {
-    "templates": [
-      {
-        "tblid": 1,
-        "tname": "cb/tname",
-        "keysz": 64,
-        "max_entries": 256,
-        "masks": 8,
-        "entries": 0,
-        "permissions": "CRUD----R--X--",
-        "table_type": "exact",
-        "acts_list": []
-      }
-    ]
-  }
-]
-
-The expressed permissions above are probably the most practical for most
-use cases.
-
-__Constant Tables And P4-programmed Defined Entries__
-
-If one wanted to restrict the table to be an equivalent to a "const" then
-the permissions would be set to be: -R------R--X--
-
-In such a case, typically the P4 program will have some entries defined
-(see the famous P4 calculate example). The "initial entries" specified in
-the P4 program will have to be added by the template (as generated by the
-compiler), as such:
-
-tc p4template update table/aP4proggie/cb/tname \
-  entry srcAddr 10.10.10.10/24 dstAddr 1.1.1.0/24 prio 17
-
-This table cannot be updated at runtime. Any attempt to add an entry of a
-table which is read-only at runtime will get a permission denied response
-back from the kernel.
-
-Note: If one was to create an equivalent for PNA add-on-miss feature for
-this table, then the template would issue table permissions as:
--R-----CR--X-- PNA doesn't specify whether the datapath can also delete or
-update entries, but if it did then more appropriate permissions will be:
--R-----CRUDX--
-
-__Mix And Match of RW vs Constant Entries__
-Lets look at other scenarios; lets say the table has CRUD----R--X--
-permissions as defined by the template...
-At runtime the user could add entries which are "const" - by specifying the
-entry's permission as -R------R--X-- example:
-
-tc p4ctrl create aP4proggie/table/cb/tname srcAddr 10.10.10.10/24 \
-  dstAddr 1.1.1.0/24 prio 17 permissions 0x1024 action drop
-
-or not specify permissions at all as such:
-
-tc p4ctrl create aP4proggie/table/cb/tname srcAddr 10.10.10.10/24 \
-  dstAddr 1.1.1.0/24 prio 17 action drop
-
-in which case the table's permissions defined at template
-time(CRUD----R--X--) are assumed; meaning the table entry can be deleted or
-updated by the control plane.
-
-__Entries permissions Allowed On A Table Entry Creation At Runtime__
-
-When an entry is added with expressed permissions it has at most to have
-what the template table definition expressed but could ask for less
-permission. For example, assuming a table with templated specified
-permissions of CR-D----R--X--:
-An entry created at runtime with permission of -R------R--X-- is allowed
-but an entry with -RUD----R--X-- will be rejected.
+param.pipe_id = aP4Proggie_ID;
+param.ext_id = EXTERN_REGISTER;
+param.inst_id = EXTERN_REGISTER_INSTANCE_ID1;
+param.index = index1;
+param.param_id = EXTERN_REGISTER_PARAM_ID;
+bpf_p4tc_extern_md_read(skb, &res, &param);
+tmp1 = (u32 *)res.params;
 
 Co-developed-by: Victor Nogueira <victor@mojatatu.com>
 Signed-off-by: Victor Nogueira <victor@mojatatu.com>
@@ -264,621 +155,756 @@ Co-developed-by: Pedro Tammela <pctammela@mojatatu.com>
 Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
 Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
 ---
- include/net/p4tc.h                |  124 +-
- include/uapi/linux/p4tc.h         |   68 +-
- include/uapi/linux/rtnetlink.h    |    9 +
- net/sched/p4tc/Makefile           |    3 +-
- net/sched/p4tc/p4tc_runtime_api.c |  145 ++
- net/sched/p4tc/p4tc_table.c       |   54 +-
- net/sched/p4tc/p4tc_tbl_entry.c   | 2569 +++++++++++++++++++++++++++++
- net/sched/p4tc/p4tc_tmpl_api.c    |    4 +-
- security/selinux/nlmsgtab.c       |    6 +-
- 9 files changed, 2965 insertions(+), 17 deletions(-)
- create mode 100644 net/sched/p4tc/p4tc_runtime_api.c
- create mode 100644 net/sched/p4tc/p4tc_tbl_entry.c
+ include/net/p4tc.h                |  161 +++
+ include/net/p4tc_ext_api.h        |  199 +++
+ include/uapi/linux/p4tc.h         |   61 +
+ include/uapi/linux/p4tc_ext.h     |   36 +
+ net/sched/p4tc/Makefile           |    2 +-
+ net/sched/p4tc/p4tc_bpf.c         |   79 +-
+ net/sched/p4tc/p4tc_ext.c         | 2204 ++++++++++++++++++++++++++++
+ net/sched/p4tc/p4tc_pipeline.c    |   34 +-
+ net/sched/p4tc/p4tc_runtime_api.c |   10 +-
+ net/sched/p4tc/p4tc_table.c       |   57 +-
+ net/sched/p4tc/p4tc_tbl_entry.c   |   25 +-
+ net/sched/p4tc/p4tc_tmpl_api.c    |    4 +
+ net/sched/p4tc/p4tc_tmpl_ext.c    | 2221 +++++++++++++++++++++++++++++
+ 13 files changed, 5083 insertions(+), 10 deletions(-)
+ create mode 100644 include/net/p4tc_ext_api.h
+ create mode 100644 include/uapi/linux/p4tc_ext.h
+ create mode 100644 net/sched/p4tc/p4tc_ext.c
+ create mode 100644 net/sched/p4tc/p4tc_tmpl_ext.c
 
 diff --git a/include/net/p4tc.h b/include/net/p4tc.h
-index 9521708e6..24f8b4873 100644
+index e25eaa4ac..b6b825c64 100644
 --- a/include/net/p4tc.h
 +++ b/include/net/p4tc.h
-@@ -120,6 +120,11 @@ static inline bool p4tc_pipeline_get(struct p4tc_pipeline *pipeline)
- 	return refcount_inc_not_zero(&pipeline->p_ctrl_ref);
- }
+@@ -11,6 +11,7 @@
+ #include <linux/rhashtable-types.h>
+ #include <net/tc_act/p4tc.h>
+ #include <net/p4tc_types.h>
++#include <linux/bpf.h>
  
-+static inline void p4tc_pipeline_put_ref(struct p4tc_pipeline *pipeline)
-+{
-+	refcount_dec(&pipeline->p_ctrl_ref);
-+}
+ #define P4TC_DEFAULT_NUM_TABLES P4TC_MINTABLES_COUNT
+ #define P4TC_DEFAULT_MAX_RULES 1
+@@ -21,6 +22,10 @@
+ #define P4TC_DEFAULT_TMASKS 8
+ #define P4TC_MAX_T_AGING 864000000
+ #define P4TC_DEFAULT_T_AGING 30000
++#define P4TC_DEFAULT_NUM_EXT_INSTS 1
++#define P4TC_MAX_NUM_EXT_INSTS 1024
++#define P4TC_DEFAULT_NUM_EXT_INST_ELEMS 1
++#define P4TC_MAX_NUM_EXT_INST_ELEMS 1024
+ 
+ #define P4TC_MAX_PERMISSION (GENMASK(P4TC_PERM_MAX_BIT, 0))
+ 
+@@ -30,6 +35,8 @@
+ #define P4TC_TBLID_IDX 1
+ #define P4TC_AID_IDX 1
+ #define P4TC_PARSEID_IDX 1
++#define P4TC_TMPL_EXT_IDX 1
++#define P4TC_TMPL_EXT_INST_IDX 2
+ 
+ struct p4tc_dump_ctx {
+ 	u32 ids[P4TC_PATH_MAX];
+@@ -79,9 +86,14 @@ struct p4tc_pipeline {
+ 	struct p4tc_template_common common;
+ 	struct idr                  p_act_idr;
+ 	struct idr                  p_tbl_idr;
++	/* IDR where the externs are stored globally in the root pipeline */
++	struct idr                  p_ext_idr;
++	/* IDR where the per user pipeline data related to externs is stored */
++	struct idr                  user_ext_idr;
+ 	struct rcu_head             rcu;
+ 	struct net                  *net;
+ 	u32                         num_created_acts;
++	u32                         num_created_ext_elems;
+ 	/* Accounts for how many entities are referencing this pipeline.
+ 	 * As for now only P4 filters can refer to pipelines.
+ 	 */
+@@ -207,6 +219,27 @@ static inline int p4tc_action_destroy(struct tc_action **acts)
+ 
+ #define P4TC_MAX_PARAM_DATA_SIZE 124
+ 
++#define P4TC_EXT_FLAGS_UNSPEC 0x0
++#define P4TC_EXT_FLAGS_CONTROL_READ 0x1
++#define P4TC_EXT_FLAGS_CONTROL_WRITE 0x2
 +
- void p4tc_pipeline_put(struct p4tc_pipeline *pipeline);
- struct p4tc_pipeline *
- p4tc_pipeline_find_byany_unsealed(struct net *net, const char *p_name,
-@@ -182,6 +187,8 @@ static inline int p4tc_action_destroy(struct tc_action **acts)
- 
- #define P4TC_PERMISSIONS_UNINIT (1 << P4TC_PERM_MAX_BIT)
- 
-+#define P4TC_MAX_PARAM_DATA_SIZE 124
++struct p4tc_ext_bpf_params {
++	u32 pipe_id;
++	u32 ext_id;
++	u32 inst_id;
++	u32 index;
++	u32 param_id;
++	u32 flags;
++	u8  in_params[128]; /* extern specific params if any */
++};
++
++struct p4tc_ext_bpf_res {
++	u32 ext_id;
++	u32 index;
++	u32 verdict;
++	u8 out_params[128]; /* specific values if any */
++};
 +
  struct p4tc_table_defact {
  	struct tc_action **default_acts;
  	/* Will have two 7 bits blocks containing CRUDXPS (Create, read, update,
-@@ -203,8 +210,9 @@ struct p4tc_table {
- 	struct p4tc_template_common         common;
- 	struct list_head                    tbl_acts_list;
- 	struct idr                          tbl_masks_idr;
--	struct idr                          tbl_prio_idr;
-+	struct ida                          tbl_prio_idr;
- 	struct rhltable                     tbl_entries;
-+	struct p4tc_table_entry             *tbl_const_entry;
- 	struct p4tc_table_defact __rcu      *tbl_default_hitact;
- 	struct p4tc_table_defact __rcu      *tbl_default_missact;
+@@ -237,6 +270,7 @@ struct p4tc_table {
  	struct p4tc_table_perm __rcu        *tbl_permissions;
-@@ -220,11 +228,14 @@ struct p4tc_table {
- 	u32                                 tbl_max_entries;
- 	u32                                 tbl_max_masks;
- 	u32                                 tbl_curr_num_masks;
-+	/* Accounts for how many entries this table has */
-+	atomic_t                            tbl_nelems;
- 	/* Accounts for how many entities refer to this table. Usually just the
- 	 * pipeline it belongs to.
- 	 */
- 	refcount_t                          tbl_ctrl_ref;
- 	u16                                 tbl_type;
-+	u16                                 PAD0;
- };
+ 	struct p4tc_table_entry_mask __rcu  **tbl_masks_array;
+ 	unsigned long __rcu                 *tbl_free_masks_bitmap;
++	struct p4tc_extern_inst             *tbl_counter;
+ 	u64                                 tbl_aging;
+ 	/* Locks the available masks IDR which will be used when adding and
+ 	 * deleting table entries.
+@@ -352,6 +386,7 @@ struct p4tc_table_entry_key {
+ struct p4tc_table_entry_value {
+ 	u32                              prio;
+ 	int                              num_acts;
++	struct p4tc_extern_common        *counter;
+ 	struct tc_action                 **acts;
+ 	/* Accounts for how many entities are referencing, eg: Data path,
+ 	 * one or more control path and timer.
+@@ -576,8 +611,134 @@ static inline bool p4tc_runtime_msg_is_update(struct nlmsghdr *n)
+ 	return n->nlmsg_type == RTM_P4TC_UPDATE;
+ }
  
- extern const struct p4tc_template_ops p4tc_table_ops;
-@@ -289,6 +300,86 @@ struct p4tc_table_act {
- 
- extern const struct p4tc_template_ops p4tc_act_ops;
- 
-+extern const struct rhashtable_params entry_hlt_params;
-+
-+struct p4tc_table_entry;
-+struct p4tc_table_entry_work {
-+	struct work_struct   work;
-+	struct p4tc_pipeline *pipeline;
-+	struct p4tc_table_entry *entry;
-+	struct p4tc_table *table;
-+	u16 who_deleted;
-+	bool send_event;
++struct p4tc_user_pipeline_extern {
++	struct idr		e_inst_idr;
++	struct p4tc_tmpl_extern	*tmpl_ext;
++	void (*free)(struct p4tc_user_pipeline_extern *pipe_ext,
++		     struct idr *tmpl_exts_idr);
++	u32			ext_id;
++	/* Accounts for how many instances refer to this extern. */
++	refcount_t		ext_ref;
++	/* Counts how many instances this extern has */
++	atomic_t                curr_insts_num;
++	u32                     PAD0;
++	char			ext_name[EXTERNNAMSIZ];
 +};
 +
-+struct p4tc_table_entry_key {
-+	u32 keysz;
-+	/* Key start */
-+	u32 maskid;
-+	unsigned char fa_key[] __aligned(8);
++struct p4tc_tmpl_extern {
++	struct p4tc_template_common  common;
++	struct idr                   params_idr;
++	const struct p4tc_extern_ops *ops;
++	u32                          ext_id;
++	u32                          num_params;
++	u32                          max_num_insts;
++	/* Accounts for how many pipelines refer to this extern. */
++	refcount_t                   tmpl_ref;
++	char                         mod_name[MODULE_NAME_LEN];
++	bool                         has_exec_method;
 +};
 +
-+struct p4tc_table_entry_value {
-+	u32                              prio;
-+	int                              num_acts;
-+	struct tc_action                 **acts;
-+	/* Accounts for how many entities are referencing, eg: Data path,
-+	 * one or more control path and timer.
++struct p4tc_extern_inst {
++	struct p4tc_template_common      common;
++	struct p4tc_extern_params        *params;
++	const struct p4tc_extern_ops     *ops;
++	struct idr                       control_elems_idr;
++	struct list_head                 unused_elems;
++	/* Locks the available externs list.
++	 * Which will be used by table entries that reference externs (refer to
++	 * direct counters and meters in P4).
++	 * Note that table entries can be created, update or deleted by both
++	 * control and data path. So this list may be modified from both
++	 * contexts.
 +	 */
-+	refcount_t                       entries_ref;
-+	u32                              permissions;
-+	struct p4tc_table_entry_tm __rcu *tm;
-+	struct p4tc_table_entry_work     *entry_work;
-+	u64                              aging_ms;
-+	struct hrtimer                   entry_timer;
-+	bool                             is_dyn;
++	spinlock_t                       available_list_lock;
++	/* Accounts for how many elements refer to this extern. */
++	refcount_t                       inst_ref;
++	struct p4tc_user_pipeline_extern *pipe_ext;
++	char                             *ext_name;
++	/* Counts how many elements this extern has */
++	atomic_t                         curr_num_elems;
++	u32                              max_num_elems;
++	u32                              ext_id;
++	u32                              ext_inst_id;
++	u32                              num_control_params;
++	struct p4tc_extern_params        *constr_params;
++	u32				 flags;
++	bool                             tbl_bindable;
++	bool				 is_scalar;
 +};
 +
-+struct p4tc_table_entry_mask {
-+	struct rcu_head	 rcu;
-+	u32              sz;
-+	u32              mask_index;
-+	/* Accounts for how many entries are using this mask */
-+	refcount_t       mask_ref;
-+	u32              mask_id;
-+	unsigned char fa_value[] __aligned(8);
-+};
-+
-+struct p4tc_table_entry {
-+	struct rcu_head rcu;
-+	struct rhlist_head ht_node;
-+	struct p4tc_table_entry_key key;
-+	/* fallthrough: key data + value */
-+};
-+
-+#define P4TC_KEYSZ_BYTES(bits) (round_up(BITS_TO_BYTES(bits), 8))
-+
-+#define ENTRY_KEY_OFFSET (offsetof(struct p4tc_table_entry_key, fa_key))
-+
-+#define P4TC_ENTRY_VALUE_OFFSET(entry) \
-+	(offsetof(struct p4tc_table_entry, key) + ENTRY_KEY_OFFSET \
-+	 + P4TC_KEYSZ_BYTES((entry)->key.keysz))
-+
-+static inline void *p4tc_table_entry_value(struct p4tc_table_entry *entry)
-+{
-+	return entry->key.fa_key + P4TC_KEYSZ_BYTES(entry->key.keysz);
-+}
-+
-+static inline struct p4tc_table_entry_work *
-+p4tc_table_entry_work(struct p4tc_table_entry *entry)
-+{
-+	struct p4tc_table_entry_value *value = p4tc_table_entry_value(entry);
-+
-+	return value->entry_work;
-+}
-+
-+extern const struct nla_policy p4tc_root_policy[P4TC_ROOT_MAX + 1];
-+extern const struct nla_policy p4tc_policy[P4TC_MAX + 1];
-+
-+struct p4tc_table_entry *
-+p4tc_table_entry_lookup_direct(struct p4tc_table *table,
-+			       struct p4tc_table_entry_key *key);
-+
- static inline int p4tc_action_init(struct net *net, struct nlattr *nla,
- 				   struct tc_action *acts[], u32 pipeid,
- 				   u32 flags, struct netlink_ext_ack *extack)
-@@ -377,6 +468,14 @@ p4tc_table_init_default_acts(struct net *net,
- 			     struct list_head *acts_list,
- 			     struct netlink_ext_ack *extack);
- 
-+static inline void p4tc_table_defact_destroy(struct p4tc_table_defact *defact)
-+{
-+	if (defact) {
-+		p4tc_action_destroy(defact->default_acts);
-+		kfree(defact);
-+	}
-+}
-+
- static inline void
- p4tc_table_defacts_acts_copy(struct p4tc_table_defact *defact_copy,
- 			     struct p4tc_table_defact *defact_orig)
-@@ -391,15 +490,36 @@ p4tc_table_replace_default_acts(struct p4tc_table *table,
- 
- struct p4tc_table_perm *
- p4tc_table_init_permissions(struct p4tc_table *table, u16 permissions,
--			    struct netlink_ext_ack *extack);
++int p4tc_pipeline_create_extern_net(struct p4tc_tmpl_extern *tmpl_ext);
++int p4tc_pipeline_del_extern_net(struct p4tc_tmpl_extern *tmpl_ext);
++struct p4tc_extern_inst *
++p4tc_ext_inst_find_bynames(struct net *net, struct p4tc_pipeline *pipeline,
++			   const char *extname, const char *instname,
 +			   struct netlink_ext_ack *extack);
- void p4tc_table_replace_permissions(struct p4tc_table *table,
- 				    struct p4tc_table_perm *tbl_perm,
- 				    bool lock_rtnl);
-+void p4tc_table_entry_destroy_hash(void *ptr, void *arg);
++struct p4tc_user_pipeline_extern *
++p4tc_pipe_ext_find_bynames(struct net *net, struct p4tc_pipeline *pipeline,
++			   const char *extname, struct netlink_ext_ack *extack);
++struct p4tc_extern_inst *
++p4tc_ext_inst_table_bind(struct p4tc_pipeline *pipeline,
++			 struct p4tc_user_pipeline_extern **pipe_ext,
++			 const char *ext_inst_path,
++			 struct netlink_ext_ack *extack);
++void
++p4tc_ext_inst_table_unbind(struct p4tc_table *table,
++			   struct p4tc_user_pipeline_extern *pipe_ext,
++			   struct p4tc_extern_inst *inst);
++struct p4tc_extern_inst *
++p4tc_ext_inst_get_byids(struct net *net, struct p4tc_pipeline **pipeline,
++			struct p4tc_ext_bpf_params *params);
++struct p4tc_extern_inst *
++p4tc_ext_find_byids(struct p4tc_pipeline *pipeline,
++		    const u32 ext_id, const u32 inst_id);
++struct p4tc_extern_inst *
++p4tc_ext_inst_alloc(const struct p4tc_extern_ops *ops, const u32 max_num_elems,
++		    bool tbl_bindable, char *ext_name);
 +
-+struct p4tc_table_entry *
-+p4tc_table_const_entry_cu(struct net *net, struct nlattr *arg,
-+			  struct p4tc_pipeline *pipeline,
-+			  struct p4tc_table *table,
++int __bpf_p4tc_extern_md_write(struct net *net,
++			       struct p4tc_ext_bpf_params *params);
++int __bpf_p4tc_extern_md_read(struct net *net,
++			      struct p4tc_ext_bpf_res *res,
++			      struct p4tc_ext_bpf_params *params);
++struct p4tc_extern_params *
++p4tc_ext_params_copy(struct p4tc_extern_params *params_orig);
++
++extern const struct p4tc_template_ops p4tc_tmpl_ext_ops;
++extern const struct p4tc_template_ops p4tc_ext_inst_ops;
++
++struct p4tc_extern_param {
++	struct p4tc_extern_param_ops    *ops;
++	struct p4tc_extern_param_ops    *mod_ops;
++	void				*value;
++	struct p4tc_type		*type;
++	struct p4tc_type_mask_shift	*mask_shift;
++	u32				id;
++	u32				index;
++	u32                             bitsz;
++	u32				flags;
++	char				name[EXTPARAMNAMSIZ];
++	struct rcu_head			rcu;
++};
++
++struct p4tc_extern_param_ops {
++	int (*init_value)(struct net *net,
++			  struct p4tc_extern_param *nparam, void *value,
 +			  struct netlink_ext_ack *extack);
-+int p4tc_tbl_entry_crud(struct net *net, struct sk_buff *skb,
-+			struct nlmsghdr *n, int cmd,
-+			struct netlink_ext_ack *extack);
-+int p4tc_tbl_entry_dumpit(struct net *net, struct sk_buff *skb,
-+			  struct netlink_callback *cb,
-+			  struct nlattr *arg, char *p_name);
-+int p4tc_tbl_entry_fill(struct sk_buff *skb, struct p4tc_table *table,
-+			struct p4tc_table_entry *entry, u32 tbl_id,
-+			u16 who_deleted);
- 
- struct tcf_p4act *
- tcf_p4_get_next_prealloc_act(struct p4tc_act *act);
- void tcf_p4_set_init_flags(struct tcf_p4act *p4act);
- 
-+static inline bool p4tc_runtime_msg_is_update(struct nlmsghdr *n)
-+{
-+	return n->nlmsg_type == RTM_P4TC_UPDATE;
-+}
++	/* Only for bit<X> parameter types */
++	void (*default_value)(struct p4tc_extern_param *nparam);
++	int (*dump_value)(struct sk_buff *skb, struct p4tc_extern_param_ops *op,
++			  struct p4tc_extern_param *param);
++	void (*free)(struct p4tc_extern_param *param);
++	u32 len;
++	u32 alloc_len;
++};
 +
  #define to_pipeline(t) ((struct p4tc_pipeline *)t)
  #define to_act(t) ((struct p4tc_act *)t)
  #define to_table(t) ((struct p4tc_table *)t)
+ 
++#define to_extern(t) ((struct p4tc_tmpl_extern *)t)
++#define to_extern_inst(t) ((struct p4tc_extern_inst *)t)
++
+ #endif
+diff --git a/include/net/p4tc_ext_api.h b/include/net/p4tc_ext_api.h
+new file mode 100644
+index 000000000..fcc16d252
+--- /dev/null
++++ b/include/net/p4tc_ext_api.h
+@@ -0,0 +1,199 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __NET_P4TC_EXT_API_H
++#define __NET_P4TC_EXT_API_H
++
++/*
++ * Public extern P4TC_EXT API
++ */
++
++#include <uapi/linux/p4tc_ext.h>
++#include <linux/refcount.h>
++#include <net/flow_offload.h>
++#include <net/sch_generic.h>
++#include <net/pkt_sched.h>
++#include <net/net_namespace.h>
++#include <net/netns/generic.h>
++#include <net/p4tc.h>
++
++struct p4tc_extern_ops;
++
++struct p4tc_extern_params {
++	struct idr params_idr;
++	rwlock_t params_lock;
++	u32 num_params;
++	u32 PAD0;
++};
++
++struct p4tc_extern_common {
++	struct list_head             node;
++	struct p4tc_extern_params    *params;
++	const struct p4tc_extern_ops *ops;
++	struct p4tc_extern_inst      *inst;
++	u32                          p4tc_ext_flags;
++	u32                          p4tc_ext_key;
++	refcount_t                   p4tc_ext_refcnt;
++	u32                          PAD0;
++};
++
++struct p4tc_extern {
++	struct p4tc_extern_common       common;
++	struct idr			*elems_idr;
++	struct rcu_head			rcu;
++	size_t				attrs_size;
++	/* Extern element lock */
++	spinlock_t			p4tc_ext_lock;
++};
++
++/* Reserve 16 bits for user-space. See P4TC_EXT_FLAGS_NO_PERCPU_STATS. */
++#define P4TC_EXT_FLAGS_USER_BITS 16
++#define P4TC_EXT_FLAGS_USER_MASK 0xffff
++
++struct p4tc_extern_ops {
++	struct list_head head;
++	size_t size;
++	size_t elem_size;
++	struct module *owner;
++	struct p4tc_tmpl_extern *tmpl_ext;
++	int (*exec)(struct p4tc_extern_common *common, void *priv);
++	int (*construct)(struct p4tc_extern_inst **common,
++			 struct p4tc_extern_params *params,
++			 struct p4tc_extern_params *constr_params,
++			 u32 max_num_elems, bool tbl_bindable,
++			 struct netlink_ext_ack *extack);
++	void (*deconstruct)(struct p4tc_extern_inst *common);
++	int (*dump)(struct sk_buff *skb,
++		    struct p4tc_extern_inst *common,
++		    struct netlink_callback *cb);
++	int (*rctrl)(int cmd, struct p4tc_extern_inst *inst,
++		     struct p4tc_extern_common **e,
++		     struct p4tc_extern_params *params,
++		     void *key_u32, struct netlink_ext_ack *extack);
++	u32 id; /* identifier should match kind */
++	u32 PAD0;
++	char kind[P4TC_EXT_NAMSIZ];
++};
++
++#define P4TC_EXT_P_CREATED 1
++#define P4TC_EXT_P_DELETED 1
++
++int p4tc_register_extern(struct p4tc_extern_ops *ext);
++int p4tc_unregister_extern(struct p4tc_extern_ops *ext);
++
++int p4tc_ctl_extern_dump(struct sk_buff *skb, struct netlink_callback *cb,
++			 struct nlattr **tb, const char *pname);
++void p4tc_ext_purge(struct idr *idr);
++void p4tc_ext_inst_purge(struct p4tc_extern_inst *inst);
++
++int p4tc_ctl_extern(struct sk_buff *skb, struct nlmsghdr *n, int cmd,
++		    struct netlink_ext_ack *extack);
++struct p4tc_extern_param *
++p4tc_ext_param_find_byanyattr(struct idr *params_idr,
++			      struct nlattr *name_attr,
++			      const u32 param_id,
++			      struct netlink_ext_ack *extack);
++struct p4tc_extern_param *
++p4tc_ext_param_find_byid(struct idr *params_idr, const u32 param_id);
++
++int p4tc_ext_param_value_init(struct net *net,
++			      struct p4tc_extern_param *param,
++			      struct nlattr **tb, u32 typeid,
++			      bool value_required,
++			      struct netlink_ext_ack *extack);
++void p4tc_ext_param_value_free_tmpl(struct p4tc_extern_param *param);
++int p4tc_ext_param_value_dump_tmpl(struct sk_buff *skb,
++				   struct p4tc_extern_param *param);
++int p4tc_extern_insts_init_elems(struct idr *user_ext_idr);
++int p4tc_extern_inst_init_elems(struct p4tc_extern_inst *inst, u32 num_elems);
++
++int p4tc_unregister_extern(struct p4tc_extern_ops *ext);
++
++struct p4tc_extern_common *p4tc_ext_elem_get(struct p4tc_extern_inst *inst);
++void p4tc_ext_elem_put_list(struct p4tc_extern_inst *inst,
++			    struct p4tc_extern_common *e);
++
++int p4tc_ext_elem_dump_1(struct sk_buff *skb, struct p4tc_extern_common *e);
++void p4tc_ext_params_free(struct p4tc_extern_params *params, bool free_vals);
++
++static inline struct p4tc_extern_param *
++p4tc_extern_params_find_byid(struct p4tc_extern_params *params, u32 param_id)
++{
++	return idr_find(&params->params_idr, param_id);
++}
++
++int p4tc_ext_init_defval_params(struct p4tc_extern_inst *inst,
++				struct p4tc_extern_common *common,
++				struct idr *control_params_idr,
++				struct netlink_ext_ack *extack);
++struct p4tc_extern_params *p4tc_extern_params_init(void);
++
++static inline bool p4tc_ext_inst_has_dump(const struct p4tc_extern_inst *inst)
++{
++	const struct p4tc_extern_ops *ops = inst->ops;
++
++	return ops && ops->dump;
++}
++
++static inline bool p4tc_ext_has_rctrl(const struct p4tc_extern_ops *ops)
++{
++	return ops && ops->rctrl;
++}
++
++static inline bool p4tc_ext_has_exec(const struct p4tc_extern_ops *ops)
++{
++	return ops && ops->exec;
++}
++
++static inline bool p4tc_ext_has_construct(const struct p4tc_extern_ops *ops)
++{
++	return ops && ops->construct;
++}
++
++static inline bool
++p4tc_ext_inst_has_construct(const struct p4tc_extern_inst *inst)
++{
++	const struct p4tc_extern_ops *ops = inst->ops;
++
++	return p4tc_ext_has_construct(ops);
++}
++
++static inline bool
++p4tc_ext_inst_has_rctrl(const struct p4tc_extern_inst *inst)
++{
++	const struct p4tc_extern_ops *ops = inst->ops;
++
++	return p4tc_ext_has_rctrl(ops);
++}
++
++static inline bool
++p4tc_ext_inst_has_exec(const struct p4tc_extern_inst *inst)
++{
++	const struct p4tc_extern_ops *ops = inst->ops;
++
++	return p4tc_ext_has_exec(ops);
++}
++
++struct p4tc_extern *
++p4tc_ext_elem_find(struct p4tc_extern_inst *inst,
++		   struct p4tc_ext_bpf_params *params);
++
++struct p4tc_extern_common *
++p4tc_ext_common_elem_get(struct sk_buff *skb, struct p4tc_pipeline **pipeline,
++			 struct p4tc_ext_bpf_params *params);
++struct p4tc_extern_common *
++p4tc_xdp_ext_common_elem_get(struct xdp_buff *ctx,
++			     struct p4tc_pipeline **pipeline,
++			     struct p4tc_ext_bpf_params *params);
++void p4tc_ext_common_elem_put(struct p4tc_pipeline *pipeline,
++			      struct p4tc_extern_common *common);
++
++static inline void p4tc_ext_inst_inc_num_elems(struct p4tc_extern_inst *inst)
++{
++	atomic_inc(&inst->curr_num_elems);
++}
++
++static inline void p4tc_ext_inst_dec_num_elems(struct p4tc_extern_inst *inst)
++{
++	atomic_dec(&inst->curr_num_elems);
++}
++
++#endif
 diff --git a/include/uapi/linux/p4tc.h b/include/uapi/linux/p4tc.h
-index 9b9937a94..e87f0c8b9 100644
+index a2a39303f..3f19a1e5e 100644
 --- a/include/uapi/linux/p4tc.h
 +++ b/include/uapi/linux/p4tc.h
-@@ -86,6 +86,9 @@ enum {
- #define p4tc_ctrl_pub_ok(perm)      ((perm) & P4TC_CTRL_PERM_P)
- #define p4tc_ctrl_sub_ok(perm)      ((perm) & P4TC_CTRL_PERM_S)
+@@ -18,6 +18,8 @@ struct p4tcmsg {
+ #define P4TC_MSGBATCH_SIZE 16
  
-+#define p4tc_ctrl_perm_rm_create(perm) \
-+	(((perm) & ~P4TC_CTRL_PERM_C))
-+
- #define p4tc_data_create_ok(perm)   ((perm) & P4TC_DATA_PERM_C)
- #define p4tc_data_read_ok(perm)     ((perm) & P4TC_DATA_PERM_R)
- #define p4tc_data_update_ok(perm)   ((perm) & P4TC_DATA_PERM_U)
-@@ -94,6 +97,9 @@ enum {
- #define p4tc_data_pub_ok(perm)      ((perm) & P4TC_DATA_PERM_P)
- #define p4tc_data_sub_ok(perm)      ((perm) & P4TC_DATA_PERM_S)
+ #define P4TC_ACT_MAX_NUM_PARAMS P4TC_MSGBATCH_SIZE
++#define EXTPARAMNAMSIZ 256
++#define P4TC_MAX_EXTERN_METHODS 32
  
-+#define p4tc_data_perm_rm_create(perm) \
-+	(((perm) & ~P4TC_DATA_PERM_C))
-+
- struct p4tc_table_parm {
- 	__u64 tbl_aging;
- 	__u32 tbl_keysz;
-@@ -127,6 +133,15 @@ enum {
+ #define P4TC_MAX_KEYSZ 512
+ #define P4TC_DEFAULT_NUM_PREALLOC 16
+@@ -27,6 +29,8 @@ struct p4tcmsg {
+ #define ACTTMPLNAMSIZ TEMPLATENAMSZ
+ #define ACTPARAMNAMSIZ TEMPLATENAMSZ
+ #define TABLENAMSIZ TEMPLATENAMSZ
++#define EXTERNNAMSIZ TEMPLATENAMSZ
++#define EXTERNINSTNAMSIZ TEMPLATENAMSZ
  
- #define P4TC_OBJ_MAX (__P4TC_OBJ_MAX - 1)
+ #define P4TC_TABLE_FLAGS_KEYSZ (1 << 0)
+ #define P4TC_TABLE_FLAGS_MAX_ENTRIES (1 << 1)
+@@ -119,6 +123,8 @@ enum {
+ 	P4TC_ROOT_UNSPEC,
+ 	P4TC_ROOT, /* nested messages */
+ 	P4TC_ROOT_PNAME, /* string */
++	P4TC_ROOT_COUNT,
++	P4TC_ROOT_FLAGS,
+ 	__P4TC_ROOT_MAX,
+ };
  
-+/* P4 runtime Object types */
-+enum {
-+	P4TC_OBJ_RUNTIME_UNSPEC,
-+	P4TC_OBJ_RUNTIME_TABLE,
-+	__P4TC_OBJ_RUNTIME_MAX,
-+};
-+
-+#define P4TC_OBJ_RUNTIME_MAX (__P4TC_OBJ_RUNTIME_MAX - 1)
-+
- /* P4 attributes */
+@@ -130,6 +136,8 @@ enum {
+ 	P4TC_OBJ_PIPELINE,
+ 	P4TC_OBJ_ACT,
+ 	P4TC_OBJ_TABLE,
++	P4TC_OBJ_EXT,
++	P4TC_OBJ_EXT_INST,
+ 	__P4TC_OBJ_MAX,
+ };
+ 
+@@ -139,6 +147,7 @@ enum {
  enum {
- 	P4TC_UNSPEC,
-@@ -214,7 +229,7 @@ enum {
- 	P4TC_TABLE_INFO, /* struct p4tc_table_parm */
- 	P4TC_TABLE_DEFAULT_HIT, /* nested default hit action attributes */
+ 	P4TC_OBJ_RUNTIME_UNSPEC,
+ 	P4TC_OBJ_RUNTIME_TABLE,
++	P4TC_OBJ_RUNTIME_EXTERN,
+ 	__P4TC_OBJ_RUNTIME_MAX,
+ };
+ 
+@@ -233,6 +242,7 @@ enum {
  	P4TC_TABLE_DEFAULT_MISS, /* nested default miss action attributes */
--	P4TC_TABLE_CONST_ENTRY, /* nested const table entry */
-+	P4TC_TABLE_CONST_ENTRY, /* nested const table entry*/
+ 	P4TC_TABLE_CONST_ENTRY, /* nested const table entry*/
  	P4TC_TABLE_ACTS_LIST, /* nested table actions list */
++	P4TC_TABLE_COUNTER, /* string */
  	__P4TC_TABLE_MAX
  };
-@@ -271,6 +286,57 @@ struct tc_act_dyna {
- 	tc_gen;
+ 
+@@ -325,6 +335,7 @@ enum {
+ 	P4TC_ENTRY_TBL_ATTRS, /* nested table attributes */
+ 	P4TC_ENTRY_DYNAMIC, /* u8 tells if table entry is dynamic */
+ 	P4TC_ENTRY_AGING, /* u64 table entry aging */
++	P4TC_ENTRY_COUNTER, /* nested extern associated with entry counter */
+ 	P4TC_ENTRY_PAD,
+ 	__P4TC_ENTRY_MAX
+ };
+@@ -339,6 +350,56 @@ enum {
+ 	P4TC_ENTITY_MAX
  };
  
-+struct p4tc_table_entry_tm {
-+	__u64 created;
-+	__u64 lastused;
-+	__u64 firstused;
-+	__u16 who_created;
-+	__u16 who_updated;
-+	__u16 who_deleted;
-+	__u16 permissions;
++/* P4 Extern attributes */
++enum {
++	P4TC_TMPL_EXT_UNSPEC,
++	P4TC_TMPL_EXT_NAME, /* string */
++	P4TC_TMPL_EXT_NUM_INSTS, /* u16 */
++	P4TC_TMPL_EXT_HAS_EXEC_METHOD, /* u8 */
++	__P4TC_TMPL_EXT_MAX
 +};
++
++#define P4TC_TMPL_EXT_MAX (__P4TC_TMPL_EXT_MAX - 1)
 +
 +enum {
-+	P4TC_ENTRY_TBL_ATTRS_UNSPEC,
-+	P4TC_ENTRY_TBL_ATTRS_DEFAULT_HIT, /* nested default hit attrs */
-+	P4TC_ENTRY_TBL_ATTRS_DEFAULT_MISS, /* nested default miss attrs */
-+	P4TC_ENTRY_TBL_ATTRS_PERMISSIONS, /* u16 table permissions */
-+	__P4TC_ENTRY_TBL_ATTRS,
++	P4TC_TMPL_EXT_INST_UNSPEC,
++	P4TC_TMPL_EXT_INST_EXT_NAME, /* string */
++	P4TC_TMPL_EXT_INST_NAME, /* string */
++	P4TC_TMPL_EXT_INST_NUM_ELEMS, /* u32 */
++	P4TC_TMPL_EXT_INST_CONTROL_PARAMS, /* nested control params */
++	P4TC_TMPL_EXT_INST_TABLE_BINDABLE, /* bool */
++	P4TC_TMPL_EXT_INST_CONSTR_PARAMS, /* nested constructor params */
++	__P4TC_TMPL_EXT_INST_MAX
 +};
 +
-+#define P4TC_ENTRY_TBL_ATTRS_MAX (__P4TC_ENTRY_TBL_ATTRS - 1)
++#define P4TC_TMPL_EXT_INST_MAX (__P4TC_TMPL_EXT_INST_MAX - 1)
 +
-+/* Table entry attributes */
++/* Extern params attributes */
 +enum {
-+	P4TC_ENTRY_UNSPEC,
-+	P4TC_ENTRY_TBLNAME, /* string */
-+	P4TC_ENTRY_KEY_BLOB, /* Key blob */
-+	P4TC_ENTRY_MASK_BLOB, /* Mask blob */
-+	P4TC_ENTRY_PRIO, /* u32 */
-+	P4TC_ENTRY_ACT, /* nested actions */
-+	P4TC_ENTRY_TM, /* entry data path timestamps */
-+	P4TC_ENTRY_WHODUNNIT, /* tells who's modifying the entry */
-+	P4TC_ENTRY_CREATE_WHODUNNIT, /* tells who created the entry */
-+	P4TC_ENTRY_UPDATE_WHODUNNIT, /* tells who updated the entry last */
-+	P4TC_ENTRY_DELETE_WHODUNNIT, /* tells who deleted the entry */
-+	P4TC_ENTRY_PERMISSIONS, /* entry CRUDXPS permissions */
-+	P4TC_ENTRY_TBL_ATTRS, /* nested table attributes */
-+	P4TC_ENTRY_DYNAMIC, /* u8 tells if table entry is dynamic */
-+	P4TC_ENTRY_AGING, /* u64 table entry aging */
-+	P4TC_ENTRY_PAD,
-+	__P4TC_ENTRY_MAX
++	P4TC_EXT_PARAMS_VALUE_UNSPEC,
++	P4TC_EXT_PARAMS_VALUE_RAW, /* binary */
++	__P4TC_EXT_PARAMS_VALUE_MAX
 +};
 +
-+#define P4TC_ENTRY_MAX (__P4TC_ENTRY_MAX - 1)
++#define P4TC_EXT_VALUE_PARAMS_MAX (__P4TC_EXT_PARAMS_VALUE_MAX - 1)
 +
++#define P4TC_EXT_PARAMS_FLAG_ISKEY 0x1
++#define P4TC_EXT_PARAMS_FLAG_IS_DATASCALAR 0x2
++
++/* Extern params attributes */
 +enum {
-+	P4TC_ENTITY_UNSPEC,
-+	P4TC_ENTITY_KERNEL,
-+	P4TC_ENTITY_TC,
-+	P4TC_ENTITY_TIMER,
-+	P4TC_ENTITY_MAX
++	P4TC_EXT_PARAMS_UNSPEC,
++	P4TC_EXT_PARAMS_NAME, /* string */
++	P4TC_EXT_PARAMS_ID, /* u32 */
++	P4TC_EXT_PARAMS_VALUE, /* bytes */
++	P4TC_EXT_PARAMS_TYPE, /* u32 */
++	P4TC_EXT_PARAMS_BITSZ, /* u16 */
++	P4TC_EXT_PARAMS_FLAGS, /* u8 */
++	__P4TC_EXT_PARAMS_MAX
 +};
++
++#define P4TC_EXT_PARAMS_MAX (__P4TC_EXT_PARAMS_MAX - 1)
 +
  #define P4TC_RTA(r) \
  	((struct rtattr *)(((char *)(r)) + NLMSG_ALIGN(sizeof(struct p4tcmsg))))
  
-diff --git a/include/uapi/linux/rtnetlink.h b/include/uapi/linux/rtnetlink.h
-index 4f9ebe3e7..76645560b 100644
---- a/include/uapi/linux/rtnetlink.h
-+++ b/include/uapi/linux/rtnetlink.h
-@@ -203,6 +203,15 @@ enum {
- 	RTM_UPDATEP4TEMPLATE,
- #define RTM_UPDATEP4TEMPLATE	RTM_UPDATEP4TEMPLATE
- 
-+	RTM_P4TC_CREATE = 128,
-+#define RTM_P4TC_CREATE	RTM_P4TC_CREATE
-+	RTM_P4TC_DEL,
-+#define RTM_P4TC_DEL		RTM_P4TC_DEL
-+	RTM_P4TC_GET,
-+#define RTM_P4TC_GET		RTM_P4TC_GET
-+	RTM_P4TC_UPDATE,
-+#define RTM_P4TC_UPDATE	RTM_P4TC_UPDATE
-+
- 	__RTM_MAX,
- #define RTM_MAX		(((__RTM_MAX + 3) & ~3) - 1)
- };
-diff --git a/net/sched/p4tc/Makefile b/net/sched/p4tc/Makefile
-index 7a9c13f86..921909ac4 100644
---- a/net/sched/p4tc/Makefile
-+++ b/net/sched/p4tc/Makefile
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- obj-y := p4tc_types.o p4tc_tmpl_api.o p4tc_pipeline.o \
--	p4tc_action.o p4tc_table.o
-+	p4tc_action.o p4tc_table.o p4tc_tbl_entry.o \
-+	p4tc_runtime_api.o
-diff --git a/net/sched/p4tc/p4tc_runtime_api.c b/net/sched/p4tc/p4tc_runtime_api.c
+diff --git a/include/uapi/linux/p4tc_ext.h b/include/uapi/linux/p4tc_ext.h
 new file mode 100644
-index 000000000..bcb280909
+index 000000000..7d4ecb5b1
 --- /dev/null
-+++ b/net/sched/p4tc/p4tc_runtime_api.c
-@@ -0,0 +1,145 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * net/sched/p4tc_runtime_api.c P4 TC RUNTIME API
-+ *
-+ * Copyright (c) 2022-2023, Mojatatu Networks
-+ * Copyright (c) 2022-2023, Intel Corporation.
-+ * Authors:     Jamal Hadi Salim <jhs@mojatatu.com>
-+ *              Victor Nogueira <victor@mojatatu.com>
-+ *              Pedro Tammela <pctammela@mojatatu.com>
-+ */
++++ b/include/uapi/linux/p4tc_ext.h
+@@ -0,0 +1,36 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++#ifndef __LINUX_P4TC_EXT_H
++#define __LINUX_P4TC_EXT_H
 +
 +#include <linux/types.h>
-+#include <linux/kernel.h>
-+#include <linux/string.h>
-+#include <linux/errno.h>
-+#include <linux/slab.h>
-+#include <linux/skbuff.h>
-+#include <linux/init.h>
-+#include <linux/kmod.h>
-+#include <linux/err.h>
-+#include <linux/module.h>
-+#include <linux/bitmap.h>
-+#include <net/net_namespace.h>
-+#include <net/sock.h>
-+#include <net/sch_generic.h>
-+#include <net/pkt_cls.h>
-+#include <net/p4tc.h>
-+#include <net/netlink.h>
-+#include <net/flow_offload.h>
++#include <linux/pkt_sched.h>
 +
-+static int tc_ctl_p4_root(struct sk_buff *skb, struct nlmsghdr *n, int cmd,
-+			  struct netlink_ext_ack *extack)
++#define P4TC_EXT_NAMSIZ 64
++
++/* Extern attributes */
++enum {
++	P4TC_EXT_UNSPEC,
++	P4TC_EXT_INST_NAME,
++	P4TC_EXT_KIND,
++	P4TC_EXT_PARAMS,
++	P4TC_EXT_KEY,
++	P4TC_EXT_PAD,
++	P4TC_EXT_FLAGS,
++	__P4TC_EXT_MAX
++};
++
++#define P4TC_EXT_ID_DYN 0x01
++#define P4TC_EXT_ID_MAX 1023
++
++/* See other P4TC_EXT_FLAGS_ * flags in include/net/act_api.h. */
++#define P4TC_EXT_FLAGS_NO_PERCPU_STATS (1 << 0) /* Don't use percpu allocator
++						 * for externs stats.
++						 */
++#define P4TC_EXT_FLAGS_SKIP_HW	(1 << 1) /* don't offload action to HW */
++#define P4TC_EXT_FLAGS_SKIP_SW	(1 << 2) /* don't use action in SW */
++
++#define P4TC_EXT_FLAG_LARGE_DUMP_ON	(1 << 0)
++
++#define P4TC_EXT_MAX __P4TC_EXT_MAX
++
++#endif
+diff --git a/net/sched/p4tc/Makefile b/net/sched/p4tc/Makefile
+index 726902f10..0e1ca964f 100644
+--- a/net/sched/p4tc/Makefile
++++ b/net/sched/p4tc/Makefile
+@@ -4,5 +4,5 @@ CFLAGS_trace.o := -I$(src)
+ 
+ obj-y := p4tc_types.o p4tc_tmpl_api.o p4tc_pipeline.o \
+ 	p4tc_action.o p4tc_table.o p4tc_tbl_entry.o \
+-	p4tc_runtime_api.o trace.o
++	p4tc_runtime_api.o trace.o p4tc_ext.o p4tc_tmpl_ext.o
+ obj-$(CONFIG_DEBUG_INFO_BTF) += p4tc_bpf.o
+diff --git a/net/sched/p4tc/p4tc_bpf.c b/net/sched/p4tc/p4tc_bpf.c
+index fe84c1504..71f397961 100644
+--- a/net/sched/p4tc/p4tc_bpf.c
++++ b/net/sched/p4tc/p4tc_bpf.c
+@@ -13,6 +13,7 @@
+ #include <linux/btf_ids.h>
+ #include <linux/net_namespace.h>
+ #include <net/p4tc.h>
++#include <net/p4tc_ext_api.h>
+ #include <linux/netdevice.h>
+ #include <net/sock.h>
+ #include <net/xdp.h>
+@@ -22,6 +23,8 @@ BTF_ID(struct, p4tc_table_entry_act_bpf)
+ BTF_ID(struct, p4tc_table_entry_act_bpf_params)
+ BTF_ID(struct, p4tc_table_entry_act_bpf)
+ BTF_ID(struct, p4tc_table_entry_create_bpf_params)
++BTF_ID(struct, p4tc_ext_bpf_params)
++BTF_ID(struct, p4tc_ext_bpf_res)
+ 
+ static struct p4tc_table_entry_act_bpf dummy_act_bpf = {};
+ 
+@@ -294,6 +297,50 @@ xdp_p4tc_entry_delete(struct xdp_md *xdp_ctx,
+ 	return __bpf_p4tc_entry_delete(net, params, key, key__sz);
+ }
+ 
++__bpf_kfunc int bpf_p4tc_extern_md_read(struct __sk_buff *skb_ctx,
++					struct p4tc_ext_bpf_res *res,
++					struct p4tc_ext_bpf_params *params)
 +{
-+	struct p4tcmsg *t = (struct p4tcmsg *)nlmsg_data(n);
++	struct sk_buff *skb = (struct sk_buff *)skb_ctx;
++	struct net *net;
 +
-+	switch (t->obj) {
-+	case P4TC_OBJ_RUNTIME_TABLE: {
-+		struct net *net = sock_net(skb->sk);
-+		int ret;
++	net = skb->dev ? dev_net(skb->dev) : sock_net(skb->sk);
 +
-+		net = maybe_get_net(net);
-+		if (!net) {
-+			NL_SET_ERR_MSG(extack, "Net namespace is going down");
-+			return -EBUSY;
-+		}
-+
-+		ret = p4tc_tbl_entry_crud(net, skb, n, cmd, extack);
-+
-+		put_net(net);
-+
-+		return ret;
-+	}
-+	default:
-+		NL_SET_ERR_MSG(extack, "Unknown P4 runtime object type");
-+		return -EOPNOTSUPP;
-+	}
++	return __bpf_p4tc_extern_md_read(net, res, params);
 +}
 +
-+static int tc_ctl_p4_get(struct sk_buff *skb, struct nlmsghdr *n,
-+			 struct netlink_ext_ack *extack)
++__bpf_kfunc int bpf_p4tc_extern_md_write(struct __sk_buff *skb_ctx,
++					 struct p4tc_ext_bpf_params *params)
 +{
-+	return tc_ctl_p4_root(skb, n, RTM_P4TC_GET, extack);
++	struct sk_buff *skb = (struct sk_buff *)skb_ctx;
++	struct net *net;
++
++	net = skb->dev ? dev_net(skb->dev) : sock_net(skb->sk);
++
++	return __bpf_p4tc_extern_md_write(net, params);
 +}
 +
-+static int tc_ctl_p4_delete(struct sk_buff *skb, struct nlmsghdr *n,
-+			    struct netlink_ext_ack *extack)
++__bpf_kfunc int xdp_p4tc_extern_md_read(struct xdp_md *xdp_ctx,
++					struct p4tc_ext_bpf_res *res,
++					struct p4tc_ext_bpf_params *params)
 +{
-+	if (!netlink_capable(skb, CAP_NET_ADMIN))
-+		return -EPERM;
++	struct xdp_buff *ctx = (struct xdp_buff *)xdp_ctx;
++	struct net *net;
 +
-+	return tc_ctl_p4_root(skb, n, RTM_P4TC_DEL, extack);
++	net = dev_net(ctx->rxq->dev);
++
++	return __bpf_p4tc_extern_md_read(net, res, params);
 +}
 +
-+static int tc_ctl_p4_cu(struct sk_buff *skb, struct nlmsghdr *n,
-+			struct netlink_ext_ack *extack)
++__bpf_kfunc int xdp_p4tc_extern_md_write(struct xdp_md *xdp_ctx,
++					 struct p4tc_ext_bpf_params *params)
 +{
-+	int ret;
++	struct xdp_buff *ctx = (struct xdp_buff *)xdp_ctx;
++	struct net *net = dev_net(ctx->rxq->dev);
 +
-+	if (!netlink_capable(skb, CAP_NET_ADMIN))
-+		return -EPERM;
-+
-+	ret = tc_ctl_p4_root(skb, n, n->nlmsg_type, extack);
-+
-+	return ret;
++	return __bpf_p4tc_extern_md_write(net, params);
 +}
 +
-+static int tc_ctl_p4_dump(struct sk_buff *skb, struct netlink_callback *cb)
-+{
-+	struct nlattr *tb[P4TC_ROOT_MAX + 1];
-+	char *p_name = NULL;
-+	struct p4tcmsg *t;
-+	int ret = 0;
+ __diag_pop();
+ 
+ BTF_SET8_START(p4tc_kfunc_check_tbl_set_skb)
+@@ -322,6 +369,26 @@ static const struct btf_kfunc_id_set p4tc_kfunc_tbl_set_xdp = {
+ 	.set = &p4tc_kfunc_check_tbl_set_xdp,
+ };
+ 
++BTF_SET8_START(p4tc_kfunc_check_ext_set_skb)
++BTF_ID_FLAGS(func, bpf_p4tc_extern_md_write);
++BTF_ID_FLAGS(func, bpf_p4tc_extern_md_read);
++BTF_SET8_END(p4tc_kfunc_check_ext_set_skb)
 +
-+	/* Dump is always called with the nlk->cb_mutex held.
-+	 * In rtnl this mutex is set to rtnl_lock, which makes dump,
-+	 * even for table entries, to serialized over the rtnl_lock.
-+	 *
-+	 * For table entries, it guarantees the net namespace is alive.
-+	 * For externs, we don't need to lock the rtnl_lock.
-+	 */
-+	ASSERT_RTNL();
++static const struct btf_kfunc_id_set p4tc_kfunc_ext_set_skb = {
++	.owner = THIS_MODULE,
++	.set = &p4tc_kfunc_check_ext_set_skb,
++};
 +
-+	ret = nlmsg_parse(cb->nlh, sizeof(struct p4tcmsg), tb, P4TC_ROOT_MAX,
-+			  p4tc_root_policy, cb->extack);
++BTF_SET8_START(p4tc_kfunc_check_ext_set_xdp)
++BTF_ID_FLAGS(func, xdp_p4tc_extern_md_write);
++BTF_ID_FLAGS(func, xdp_p4tc_extern_md_read);
++BTF_SET8_END(p4tc_kfunc_check_ext_set_xdp)
++
++static const struct btf_kfunc_id_set p4tc_kfunc_ext_set_xdp = {
++	.owner = THIS_MODULE,
++	.set = &p4tc_kfunc_check_ext_set_xdp,
++};
++
+ int register_p4tc_tbl_bpf(void)
+ {
+ 	int ret;
+@@ -332,6 +399,16 @@ int register_p4tc_tbl_bpf(void)
+ 		return ret;
+ 
+ 	/* There is no unregister_btf_kfunc_id_set function */
++	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP,
++					&p4tc_kfunc_tbl_set_xdp);
 +	if (ret < 0)
 +		return ret;
 +
-+	if (NL_REQ_ATTR_CHECK(cb->extack, NULL, tb, P4TC_ROOT)) {
-+		NL_SET_ERR_MSG(cb->extack,
-+			       "Netlink P4TC Runtime attributes missing");
-+		return -EINVAL;
-+	}
++	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_ACT,
++					&p4tc_kfunc_ext_set_skb);
++	if (ret < 0)
++		return ret;
 +
-+	if (tb[P4TC_ROOT_PNAME])
-+		p_name = nla_data(tb[P4TC_ROOT_PNAME]);
-+
-+	t = nlmsg_data(cb->nlh);
-+
-+	switch (t->obj) {
-+	case P4TC_OBJ_RUNTIME_TABLE:
-+		return p4tc_tbl_entry_dumpit(sock_net(skb->sk), skb, cb,
-+					     tb[P4TC_ROOT], p_name);
-+	default:
-+		NL_SET_ERR_MSG_FMT(cb->extack,
-+				   "Unknown p4 runtime object type %u\n",
-+				   t->obj);
-+		return -ENOENT;
-+	}
-+}
-+
-+static int __init p4tc_tbl_init(void)
-+{
-+	rtnl_register(PF_UNSPEC, RTM_P4TC_CREATE, tc_ctl_p4_cu, NULL,
-+		      RTNL_FLAG_DOIT_UNLOCKED);
-+	rtnl_register(PF_UNSPEC, RTM_P4TC_UPDATE, tc_ctl_p4_cu, NULL,
-+		      RTNL_FLAG_DOIT_UNLOCKED);
-+	rtnl_register(PF_UNSPEC, RTM_P4TC_DEL, tc_ctl_p4_delete, NULL,
-+		      RTNL_FLAG_DOIT_UNLOCKED);
-+	rtnl_register(PF_UNSPEC, RTM_P4TC_GET, tc_ctl_p4_get, tc_ctl_p4_dump,
-+		      RTNL_FLAG_DOIT_UNLOCKED);
-+
-+	return 0;
-+}
-+
-+subsys_initcall(p4tc_tbl_init);
-diff --git a/net/sched/p4tc/p4tc_table.c b/net/sched/p4tc/p4tc_table.c
-index 291988858..e38e14a84 100644
---- a/net/sched/p4tc/p4tc_table.c
-+++ b/net/sched/p4tc/p4tc_table.c
-@@ -144,6 +144,7 @@ static int _p4tc_table_fill_nlmsg(struct sk_buff *skb, struct p4tc_table *table)
- 	parm.tbl_max_masks = table->tbl_max_masks;
- 	parm.tbl_type = table->tbl_type;
- 	parm.tbl_aging = table->tbl_aging;
-+	parm.tbl_num_entries = atomic_read(&table->tbl_nelems);
- 
- 	tbl_perm = rcu_dereference_rtnl(table->tbl_permissions);
- 	parm.tbl_permissions = tbl_perm->permissions;
-@@ -217,6 +218,16 @@ static int _p4tc_table_fill_nlmsg(struct sk_buff *skb, struct p4tc_table *table)
- 	}
- 	nla_nest_end(skb, nested_tbl_acts);
- 
-+	if (table->tbl_const_entry) {
-+		struct nlattr *const_nest;
-+
-+		const_nest = nla_nest_start(skb, P4TC_TABLE_CONST_ENTRY);
-+		p4tc_tbl_entry_fill(skb, table, table->tbl_const_entry,
-+				    table->tbl_id, P4TC_ENTITY_UNSPEC);
-+		nla_nest_end(skb, const_nest);
-+	}
-+	table->tbl_const_entry = NULL;
-+
- 	if (nla_put(skb, P4TC_TABLE_INFO, sizeof(parm), &parm))
- 		goto out_nlmsg_trim;
- 	nla_nest_end(skb, nest);
-@@ -243,14 +254,6 @@ static int p4tc_table_fill_nlmsg(struct net *net, struct sk_buff *skb,
- 	return 0;
+ 	return register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP,
+-					 &p4tc_kfunc_tbl_set_xdp);
++					 &p4tc_kfunc_ext_set_xdp);
  }
- 
--static inline void p4tc_table_defact_destroy(struct p4tc_table_defact *defact)
--{
--	if (defact) {
--		p4tc_action_destroy(defact->default_acts);
--		kfree(defact);
--	}
--}
--
- static void p4tc_table_acts_list_destroy(struct list_head *acts_list)
- {
- 	struct p4tc_table_act *table_act, *tmp;
-@@ -375,8 +378,11 @@ static int _p4tc_table_put(struct net *net, struct nlattr **tb,
- 
- 	p4tc_table_acts_list_destroy(&table->tbl_acts_list);
- 
-+	rhltable_free_and_destroy(&table->tbl_entries,
-+				  p4tc_table_entry_destroy_hash, table);
-+
- 	idr_destroy(&table->tbl_masks_idr);
--	idr_destroy(&table->tbl_prio_idr);
-+	ida_destroy(&table->tbl_prio_idr);
- 
- 	perm = rcu_replace_pointer_rtnl(table->tbl_permissions, NULL);
- 	kfree_rcu(perm, rcu);
-@@ -905,6 +911,7 @@ static struct p4tc_table *p4tc_table_create(struct net *net, struct nlattr **tb,
- 					    struct p4tc_pipeline *pipeline,
- 					    struct netlink_ext_ack *extack)
- {
-+	struct rhashtable_params table_hlt_params = entry_hlt_params;
- 	struct p4tc_table_default_act_params def_params = {0};
- 	struct p4tc_table_perm *tbl_init_perms = NULL;
- 	struct p4tc_table_parm *parm;
-@@ -1126,12 +1133,24 @@ static struct p4tc_table *p4tc_table_create(struct net *net, struct nlattr **tb,
- 	}
- 
- 	idr_init(&table->tbl_masks_idr);
--	idr_init(&table->tbl_prio_idr);
-+	ida_init(&table->tbl_prio_idr);
- 	spin_lock_init(&table->tbl_masks_idr_lock);
- 
-+	table_hlt_params.max_size = table->tbl_max_entries;
-+	if (table->tbl_max_entries > U16_MAX)
-+		table_hlt_params.nelem_hint = U16_MAX / 4 * 3;
-+	else
-+		table_hlt_params.nelem_hint = table->tbl_max_entries / 4 * 3;
-+
-+	if (rhltable_init(&table->tbl_entries, &table_hlt_params) < 0) {
-+		ret = -EINVAL;
-+		goto defaultacts_destroy;
-+	}
-+
- 	pipeline->curr_tables += 1;
- 
- 	table->common.ops = (struct p4tc_template_ops *)&p4tc_table_ops;
-+	atomic_set(&table->tbl_nelems, 0);
- 
- 	return table;
- 
-@@ -1288,6 +1307,21 @@ static struct p4tc_table *p4tc_table_update(struct net *net, struct nlattr **tb,
- 		}
- 	}
- 
-+	if (tb[P4TC_TABLE_CONST_ENTRY]) {
-+		struct p4tc_table_entry *entry;
-+
-+		/* Workaround to make this work */
-+		entry = p4tc_table_const_entry_cu(net,
-+						  tb[P4TC_TABLE_CONST_ENTRY],
-+						  pipeline, table, extack);
-+		if (IS_ERR(entry)) {
-+			ret = PTR_ERR(entry);
-+			goto free_perm;
-+		}
-+
-+		table->tbl_const_entry = entry;
-+	}
-+
- 	p4tc_table_replace_default_acts(table, &def_params, false);
- 	p4tc_table_replace_permissions(table, perm, false);
- 
-diff --git a/net/sched/p4tc/p4tc_tbl_entry.c b/net/sched/p4tc/p4tc_tbl_entry.c
+diff --git a/net/sched/p4tc/p4tc_ext.c b/net/sched/p4tc/p4tc_ext.c
 new file mode 100644
-index 000000000..cadd3e100
+index 000000000..604634c8e
 --- /dev/null
-+++ b/net/sched/p4tc/p4tc_tbl_entry.c
-@@ -0,0 +1,2569 @@
++++ b/net/sched/p4tc/p4tc_ext.c
+@@ -0,0 +1,2204 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
-+ * net/sched/p4tc_tbl_api.c TC P4 TABLE API
++ * net/sched/p4tc_ext.c	P4 TC EXTERN API
 + *
 + * Copyright (c) 2022-2023, Mojatatu Networks
 + * Copyright (c) 2022-2023, Intel Corporation.
@@ -897,2597 +923,4803 @@ index 000000000..cadd3e100
 +#include <linux/kmod.h>
 +#include <linux/err.h>
 +#include <linux/module.h>
-+#include <linux/bitmap.h>
 +#include <net/net_namespace.h>
 +#include <net/sock.h>
 +#include <net/sch_generic.h>
 +#include <net/pkt_cls.h>
 +#include <net/p4tc.h>
++#include <net/p4tc_types.h>
++#include <net/p4tc_ext_api.h>
 +#include <net/netlink.h>
 +#include <net/flow_offload.h>
++#include <net/tc_wrapper.h>
++#include <uapi/linux/p4tc.h>
++#include <net/xdp.h>
 +
-+#define SIZEOF_MASKID (sizeof(((struct p4tc_table_entry_key *)0)->maskid))
-+
-+#define STARTOF_KEY(key) (&((key)->maskid))
-+
-+/* In this code we avoid locks for create/updating/deleting table entries by
-+ * using a refcount (entries_ref). We also use RCU to avoid locks for reading.
-+ * Everytime we try to get the entry, we increment and check the refcount to see
-+ * whether a delete is happening in parallel.
-+ */
-+
-+static int p4tc_tbl_entry_get(struct p4tc_table_entry_value *value)
++static bool p4tc_ext_param_ops_is_init(struct p4tc_extern_param_ops *ops)
 +{
-+	return refcount_inc_not_zero(&value->entries_ref);
++	struct p4tc_extern_param_ops uninit_ops = {NULL};
++
++	return memcmp(ops, &uninit_ops, sizeof(*ops));
 +}
 +
-+static bool p4tc_tbl_entry_put(struct p4tc_table_entry_value *value)
++static void p4tc_ext_put_param(struct p4tc_extern_param *param, bool free_val)
 +{
-+	return refcount_dec_if_one(&value->entries_ref);
-+}
++	struct p4tc_extern_param_ops *val_ops;
 +
-+static bool p4tc_tbl_entry_put_ref(struct p4tc_table_entry_value *value)
-+{
-+	return refcount_dec_not_one(&value->entries_ref);
-+}
++	if (p4tc_ext_param_ops_is_init(param->ops))
++		val_ops = param->ops;
++	else
++		val_ops = param->mod_ops;
 +
-+static u32 p4tc_entry_hash_fn(const void *data, u32 len, u32 seed)
-+{
-+	const struct p4tc_table_entry_key *key = data;
-+	u32 keysz;
-+
-+	/* The key memory area is always zero allocated aligned to 8 */
-+	keysz = round_up(SIZEOF_MASKID + (key->keysz >> 3), 4);
-+
-+	return jhash2(STARTOF_KEY(key), keysz / sizeof(u32), seed);
-+}
-+
-+static int p4tc_entry_hash_cmp(struct rhashtable_compare_arg *arg,
-+			       const void *ptr)
-+{
-+	const struct p4tc_table_entry_key *key = arg->key;
-+	const struct p4tc_table_entry *entry = ptr;
-+	u32 keysz;
-+
-+	keysz = SIZEOF_MASKID + (entry->key.keysz >> 3);
-+
-+	return memcmp(STARTOF_KEY(&entry->key), STARTOF_KEY(key), keysz);
-+}
-+
-+static u32 p4tc_entry_obj_hash_fn(const void *data, u32 len, u32 seed)
-+{
-+	const struct p4tc_table_entry *entry = data;
-+
-+	return p4tc_entry_hash_fn(&entry->key, len, seed);
-+}
-+
-+const struct rhashtable_params entry_hlt_params = {
-+	.obj_cmpfn = p4tc_entry_hash_cmp,
-+	.obj_hashfn = p4tc_entry_obj_hash_fn,
-+	.hashfn = p4tc_entry_hash_fn,
-+	.head_offset = offsetof(struct p4tc_table_entry, ht_node),
-+	.key_offset = offsetof(struct p4tc_table_entry, key),
-+	.automatic_shrinking = true,
-+};
-+
-+static struct rhlist_head *
-+p4tc_entry_lookup_bucket(struct p4tc_table *table,
-+			 struct p4tc_table_entry_key *key)
-+{
-+	return rhltable_lookup(&table->tbl_entries, key, entry_hlt_params);
-+}
-+
-+static struct p4tc_table_entry *
-+__p4tc_entry_lookup_fast(struct p4tc_table *table,
-+			 struct p4tc_table_entry_key *key)
-+	__must_hold(RCU)
-+{
-+	struct p4tc_table_entry *entry_curr;
-+	struct rhlist_head *bucket_list;
-+
-+	bucket_list =
-+		p4tc_entry_lookup_bucket(table, key);
-+	if (!bucket_list)
-+		return NULL;
-+
-+	rht_entry(entry_curr, bucket_list, ht_node);
-+
-+	return entry_curr;
-+}
-+
-+static struct p4tc_table_entry *
-+p4tc_entry_lookup(struct p4tc_table *table, struct p4tc_table_entry_key *key,
-+		  u32 prio) __must_hold(RCU)
-+{
-+	struct rhlist_head *tmp, *bucket_list;
-+	struct p4tc_table_entry *entry;
-+
-+	if (table->tbl_type == P4TC_TABLE_TYPE_EXACT)
-+		return __p4tc_entry_lookup_fast(table, key);
-+
-+	bucket_list =
-+		p4tc_entry_lookup_bucket(table, key);
-+	if (!bucket_list)
-+		return NULL;
-+
-+	rhl_for_each_entry_rcu(entry, tmp, bucket_list, ht_node) {
-+		struct p4tc_table_entry_value *value =
-+			p4tc_table_entry_value(entry);
-+
-+		if (value->prio == prio)
-+			return entry;
++	if (free_val) {
++		if (val_ops && val_ops->free)
++			val_ops->free(param);
++		else
++			kfree(param->value);
 +	}
 +
-+	return NULL;
++	if (param->mask_shift)
++		p4t_release(param->mask_shift);
++	kfree(param);
 +}
 +
-+static struct p4tc_table_entry *
-+__p4tc_entry_lookup(struct p4tc_table *table, struct p4tc_table_entry_key *key)
-+	__must_hold(RCU)
-+{
-+	struct p4tc_table_entry *entry = NULL;
-+	struct rhlist_head *tmp, *bucket_list;
-+	struct p4tc_table_entry *entry_curr;
-+	u32 smallest_prio = U32_MAX;
-+
-+	bucket_list =
-+		rhltable_lookup(&table->tbl_entries, key, entry_hlt_params);
-+	if (!bucket_list)
-+		return NULL;
-+
-+	rhl_for_each_entry_rcu(entry_curr, tmp, bucket_list, ht_node) {
-+		struct p4tc_table_entry_value *value =
-+			p4tc_table_entry_value(entry_curr);
-+		if (value->prio <= smallest_prio) {
-+			smallest_prio = value->prio;
-+			entry = entry_curr;
-+		}
-+	}
-+
-+	return entry;
-+}
-+
-+static void mask_key(const struct p4tc_table_entry_mask *mask, u8 *masked_key,
-+		     u8 *skb_key)
++static void p4tc_ext_put_many_params(struct idr *params_idr,
++				     struct p4tc_extern_param *params[],
++				     int params_count)
 +{
 +	int i;
 +
-+	for (i = 0; i < BITS_TO_BYTES(mask->sz); i++)
-+		masked_key[i] = skb_key[i] & mask->fa_value[i];
++	for (i = 0; i < params_count; i++)
++		p4tc_ext_put_param(params[i], true);
 +}
 +
-+static void update_last_used(struct p4tc_table_entry *entry)
++static void p4tc_ext_insert_param(struct idr *params_idr,
++				  struct p4tc_extern_param *param)
 +{
-+	struct p4tc_table_entry_tm *entry_tm;
-+	struct p4tc_table_entry_value *value;
++	struct p4tc_extern_param *param_old;
 +
-+	value = p4tc_table_entry_value(entry);
-+	entry_tm = rcu_dereference(value->tm);
-+	WRITE_ONCE(entry_tm->lastused, get_jiffies_64());
-+
-+	if (value->is_dyn && !hrtimer_active(&value->entry_timer))
-+		hrtimer_start(&value->entry_timer, ms_to_ktime(1000),
-+			      HRTIMER_MODE_REL);
++	param_old = idr_replace(params_idr, param, param->id);
++	if (param_old != ERR_PTR(-EBUSY))
++		p4tc_ext_put_param(param_old, true);
 +}
 +
-+static struct p4tc_table_entry *
-+__p4tc_table_entry_lookup_direct(struct p4tc_table *table,
-+				 struct p4tc_table_entry_key *key)
++static void p4tc_ext_insert_many_params(struct idr *params_idr,
++					struct p4tc_extern_param *params[],
++					int params_count)
 +{
-+	struct p4tc_table_entry *entry = NULL;
-+	u32 smallest_prio = U32_MAX;
 +	int i;
 +
-+	if (table->tbl_type == P4TC_TABLE_TYPE_EXACT)
-+		return __p4tc_entry_lookup_fast(table, key);
++	for (i = 0; i < params_count; i++)
++		p4tc_ext_insert_param(params_idr, params[i]);
++}
 +
-+	for (i = 0; i < table->tbl_curr_num_masks; i++) {
-+		u8 __mkey[sizeof(*key) + BITS_TO_BYTES(P4TC_MAX_KEYSZ)];
-+		struct p4tc_table_entry_key *mkey = (void *)&__mkey;
-+		struct p4tc_table_entry_mask *mask =
-+			rcu_dereference(table->tbl_masks_array[i]);
-+		struct p4tc_table_entry *entry_curr = NULL;
++static void __p4tc_ext_params_free(struct p4tc_extern_params *params,
++				   bool free_vals)
++{
++	struct p4tc_extern_param *parm;
++	unsigned long tmp, id;
 +
-+		mkey->keysz = key->keysz;
-+		mkey->maskid = mask->mask_id;
-+		mask_key(mask, mkey->fa_key, key->fa_key);
-+
-+		if (table->tbl_type == P4TC_TABLE_TYPE_LPM) {
-+			entry_curr = __p4tc_entry_lookup_fast(table, mkey);
-+			if (entry_curr)
-+				return entry_curr;
-+		} else {
-+			entry_curr = __p4tc_entry_lookup(table, mkey);
-+
-+			if (entry_curr) {
-+				struct p4tc_table_entry_value *value =
-+					p4tc_table_entry_value(entry_curr);
-+				if (value->prio <= smallest_prio) {
-+					smallest_prio = value->prio;
-+					entry = entry_curr;
-+				}
-+			}
-+		}
++	idr_for_each_entry_ul(&params->params_idr, parm, tmp, id) {
++		idr_remove(&params->params_idr, id);
++		p4tc_ext_put_param(parm, free_vals);
 +	}
-+
-+	return entry;
 +}
 +
-+struct p4tc_table_entry *
-+p4tc_table_entry_lookup_direct(struct p4tc_table *table,
-+			       struct p4tc_table_entry_key *key)
++void p4tc_ext_params_free(struct p4tc_extern_params *params, bool free_vals)
 +{
-+	struct p4tc_table_entry *entry;
++	__p4tc_ext_params_free(params, free_vals);
++	idr_destroy(&params->params_idr);
++	kfree(params);
++}
++EXPORT_SYMBOL_GPL(p4tc_ext_params_free);
 +
-+	entry = __p4tc_table_entry_lookup_direct(table, key);
++static void free_p4tc_ext(struct p4tc_extern *p)
++{
++	if (p->common.params)
++		p4tc_ext_params_free(p->common.params, true);
 +
-+	if (entry)
-+		update_last_used(entry);
-+
-+	return entry;
++	kfree(p);
 +}
 +
-+#define p4tc_table_entry_mask_find_byid(table, id) \
-+	(idr_find(&(table)->tbl_masks_idr, id))
-+
-+static void gen_exact_mask(u8 *mask, u32 mask_size)
++static void free_p4tc_ext_rcu(struct rcu_head *rcu)
 +{
-+	memset(mask, 0xFF, mask_size);
++	struct p4tc_extern *p;
++
++	p = container_of(rcu, struct p4tc_extern, rcu);
++
++	free_p4tc_ext(p);
 +}
 +
-+static int p4tca_table_get_entry_keys(struct sk_buff *skb,
-+				      struct p4tc_table *table,
-+				      struct p4tc_table_entry *entry)
++static void p4tc_extern_cleanup(struct p4tc_extern *p)
 +{
-+	unsigned char *b = nlmsg_get_pos(skb);
-+	struct p4tc_table_entry_mask *mask;
-+	int ret = -ENOMEM;
-+	u32 key_sz_bytes;
++	free_p4tc_ext_rcu(&p->rcu);
++}
 +
-+	if (table->tbl_type == P4TC_TABLE_TYPE_EXACT) {
-+		u8 mask_value[BITS_TO_BYTES(P4TC_MAX_KEYSZ)] = { 0 };
++static int __p4tc_extern_put(struct p4tc_extern *p)
++{
++	if (refcount_dec_and_test(&p->common.p4tc_ext_refcnt)) {
++		idr_remove(p->elems_idr, p->common.p4tc_ext_key);
 +
-+		key_sz_bytes = BITS_TO_BYTES(entry->key.keysz);
-+		if (nla_put(skb, P4TC_ENTRY_KEY_BLOB, key_sz_bytes,
-+			    entry->key.fa_key))
-+			goto out_nlmsg_trim;
++		p4tc_extern_cleanup(p);
 +
-+		gen_exact_mask(mask_value, key_sz_bytes);
-+		if (nla_put(skb, P4TC_ENTRY_MASK_BLOB, key_sz_bytes, mask_value))
-+			goto out_nlmsg_trim;
-+	} else {
-+		key_sz_bytes = BITS_TO_BYTES(entry->key.keysz);
-+		if (nla_put(skb, P4TC_ENTRY_KEY_BLOB, key_sz_bytes,
-+			    entry->key.fa_key))
-+			goto out_nlmsg_trim;
-+
-+		mask = p4tc_table_entry_mask_find_byid(table,
-+						       entry->key.maskid);
-+		if (nla_put(skb, P4TC_ENTRY_MASK_BLOB, key_sz_bytes,
-+			    mask->fa_value))
-+			goto out_nlmsg_trim;
++		return 1;
 +	}
 +
 +	return 0;
++}
 +
-+out_nlmsg_trim:
-+	nlmsg_trim(skb, b);
++static int __p4tc_ext_idr_release(struct p4tc_extern *p)
++{
++	int ret = 0;
++
++	if (p) {
++		if (__p4tc_extern_put(p))
++			ret = P4TC_EXT_P_DELETED;
++	}
++
 +	return ret;
 +}
 +
-+static void p4tc_table_entry_tm_dump(struct p4tc_table_entry_tm *dtm,
-+				     struct p4tc_table_entry_tm *stm)
++static int p4tc_ext_idr_release(struct p4tc_extern *e)
 +{
-+	unsigned long now = jiffies;
-+	u64 last_used;
-+
-+	dtm->created = stm->created ?
-+		jiffies_to_clock_t(now - stm->created) : 0;
-+
-+	last_used = READ_ONCE(stm->lastused);
-+	dtm->lastused = stm->lastused ?
-+		jiffies_to_clock_t(now - last_used) : 0;
-+	dtm->firstused = stm->firstused ?
-+		jiffies_to_clock_t(now - stm->firstused) : 0;
++	return __p4tc_ext_idr_release(e);
 +}
 +
-+#define P4TC_ENTRY_MAX_IDS (P4TC_PATH_MAX - 1)
-+
-+int p4tc_tbl_entry_fill(struct sk_buff *skb, struct p4tc_table *table,
-+			struct p4tc_table_entry *entry, u32 tbl_id,
-+			u16 who_deleted)
++static int p4tc_ext_idr_release_dec_num_elems(struct p4tc_extern *e)
 +{
-+	unsigned char *b = nlmsg_get_pos(skb);
-+	struct p4tc_table_entry_value *value;
-+	struct p4tc_table_entry_tm dtm, *tm;
-+	struct nlattr *nest, *nest_acts;
-+	u32 ids[P4TC_ENTRY_MAX_IDS];
-+	int ret = -ENOMEM;
++	struct p4tc_extern_inst *inst = e->common.inst;
++	int ret;
 +
-+	ids[P4TC_TBLID_IDX - 1] = tbl_id;
++	ret = __p4tc_ext_idr_release(e);
++	if (ret == P4TC_EXT_P_DELETED)
++		p4tc_ext_inst_dec_num_elems(inst);
 +
-+	if (nla_put(skb, P4TC_PATH, P4TC_ENTRY_MAX_IDS * sizeof(u32), ids))
-+		goto out_nlmsg_trim;
-+
-+	nest = nla_nest_start(skb, P4TC_PARAMS);
-+	if (!nest)
-+		goto out_nlmsg_trim;
-+
-+	value = p4tc_table_entry_value(entry);
-+
-+	if (nla_put_u32(skb, P4TC_ENTRY_PRIO, value->prio))
-+		goto out_nlmsg_trim;
-+
-+	if (p4tca_table_get_entry_keys(skb, table, entry) < 0)
-+		goto out_nlmsg_trim;
-+
-+	if (value->acts) {
-+		nest_acts = nla_nest_start(skb, P4TC_ENTRY_ACT);
-+		if (tcf_action_dump(skb, value->acts, 0, 0, false) < 0)
-+			goto out_nlmsg_trim;
-+		nla_nest_end(skb, nest_acts);
-+	}
-+
-+	if (nla_put_u16(skb, P4TC_ENTRY_PERMISSIONS, value->permissions))
-+		goto out_nlmsg_trim;
-+
-+	tm = rcu_dereference_protected(value->tm, 1);
-+
-+	if (nla_put_u8(skb, P4TC_ENTRY_CREATE_WHODUNNIT, tm->who_created))
-+		goto out_nlmsg_trim;
-+
-+	if (tm->who_updated) {
-+		if (nla_put_u8(skb, P4TC_ENTRY_UPDATE_WHODUNNIT,
-+			       tm->who_updated))
-+			goto out_nlmsg_trim;
-+	}
-+
-+	if (who_deleted) {
-+		if (nla_put_u8(skb, P4TC_ENTRY_DELETE_WHODUNNIT,
-+			       who_deleted))
-+			goto out_nlmsg_trim;
-+	}
-+
-+	p4tc_table_entry_tm_dump(&dtm, tm);
-+	if (nla_put_64bit(skb, P4TC_ENTRY_TM, sizeof(dtm), &dtm,
-+			  P4TC_ENTRY_PAD))
-+		goto out_nlmsg_trim;
-+
-+	if (value->is_dyn) {
-+		if (nla_put_u8(skb, P4TC_ENTRY_DYNAMIC, 1))
-+			goto out_nlmsg_trim;
-+	}
-+
-+	if (value->aging_ms) {
-+		if (nla_put_u64_64bit(skb, P4TC_ENTRY_AGING, value->aging_ms,
-+				      P4TC_ENTRY_PAD))
-+			goto out_nlmsg_trim;
-+	}
-+
-+	nla_nest_end(skb, nest);
-+
-+	return skb->len;
-+
-+out_nlmsg_trim:
-+	nlmsg_trim(skb, b);
 +	return ret;
 +}
 +
-+static struct netlink_range_validation range_aging = {
-+	.min = 1,
-+	.max = P4TC_MAX_T_AGING,
-+};
-+
-+static const struct nla_policy p4tc_entry_policy[P4TC_ENTRY_MAX + 1] = {
-+	[P4TC_ENTRY_TBLNAME] = { .type = NLA_STRING },
-+	[P4TC_ENTRY_KEY_BLOB] = { .type = NLA_BINARY },
-+	[P4TC_ENTRY_MASK_BLOB] = { .type = NLA_BINARY },
-+	[P4TC_ENTRY_PRIO] = { .type = NLA_U32 },
-+	[P4TC_ENTRY_ACT] = { .type = NLA_NESTED },
-+	[P4TC_ENTRY_TM] =
-+		NLA_POLICY_EXACT_LEN(sizeof(struct p4tc_table_entry_tm)),
-+	[P4TC_ENTRY_WHODUNNIT] = { .type = NLA_U8 },
-+	[P4TC_ENTRY_CREATE_WHODUNNIT] = { .type = NLA_U8 },
-+	[P4TC_ENTRY_UPDATE_WHODUNNIT] = { .type = NLA_U8 },
-+	[P4TC_ENTRY_DELETE_WHODUNNIT] = { .type = NLA_U8 },
-+	[P4TC_ENTRY_PERMISSIONS] = NLA_POLICY_MAX(NLA_U16, P4TC_MAX_PERMISSION),
-+	[P4TC_ENTRY_TBL_ATTRS] = { .type = NLA_NESTED },
-+	[P4TC_ENTRY_DYNAMIC] = NLA_POLICY_RANGE(NLA_U8, 1, 1),
-+	[P4TC_ENTRY_AGING] = NLA_POLICY_FULL_RANGE(NLA_U64, &range_aging),
-+};
-+
-+static struct p4tc_table_entry_mask *
-+p4tc_table_entry_mask_find_byvalue(struct p4tc_table *table,
-+				   struct p4tc_table_entry_mask *mask)
++static size_t p4tc_extern_shared_attrs_size(void)
 +{
-+	struct p4tc_table_entry_mask *mask_cur;
-+	unsigned long mask_id, tmp;
-+
-+	idr_for_each_entry_ul(&table->tbl_masks_idr, mask_cur, tmp, mask_id) {
-+		if (mask_cur->sz == mask->sz) {
-+			u32 mask_sz_bytes = BITS_TO_BYTES(mask->sz);
-+			void *curr_mask_value = mask_cur->fa_value;
-+			void *mask_value = mask->fa_value;
-+
-+			if (memcmp(curr_mask_value, mask_value, mask_sz_bytes) == 0)
-+				return mask_cur;
-+		}
-+	}
-+
-+	return NULL;
++	return  nla_total_size(0) /* extern number nested */
++		+ nla_total_size(EXTERNNAMSIZ)  /* P4TC_EXT_KIND */
++		+ nla_total_size(EXTERNINSTNAMSIZ) /* P4TC_EXT_INST_NAME */
++		+ nla_total_size(sizeof(struct nla_bitfield32)); /* P4TC_EXT_FLAGS */
 +}
 +
-+static void __p4tc_table_entry_mask_del(struct p4tc_table *table,
-+					struct p4tc_table_entry_mask *mask)
++static size_t p4tc_extern_full_attrs_size(size_t sz)
 +{
-+	if (table->tbl_type == P4TC_TABLE_TYPE_TERNARY) {
-+		struct p4tc_table_entry_mask __rcu **masks_array;
-+		unsigned long *free_masks_bitmap;
-+
-+		masks_array = table->tbl_masks_array;
-+		rcu_assign_pointer(masks_array[mask->mask_index], NULL);
-+
-+		free_masks_bitmap =
-+			rcu_dereference_protected(table->tbl_free_masks_bitmap,
-+						  1);
-+		bitmap_set(free_masks_bitmap, mask->mask_index, 1);
-+	} else if (table->tbl_type == P4TC_TABLE_TYPE_LPM) {
-+		struct p4tc_table_entry_mask __rcu **masks_array;
-+		int i;
-+
-+		masks_array = table->tbl_masks_array;
-+
-+		for (i = mask->mask_index; i < table->tbl_curr_num_masks - 1;
-+		     i++) {
-+			struct p4tc_table_entry_mask *mask_tmp;
-+
-+			mask_tmp = rcu_dereference_protected(masks_array[i + 1],
-+							     1);
-+			rcu_assign_pointer(masks_array[i + 1], mask_tmp);
-+		}
-+
-+		rcu_assign_pointer(masks_array[table->tbl_curr_num_masks - 1],
-+				   NULL);
-+	}
-+
-+	table->tbl_curr_num_masks--;
-+}
-+
-+static void p4tc_table_entry_mask_del(struct p4tc_table *table,
-+				      struct p4tc_table_entry *entry)
-+{
-+	struct p4tc_table_entry_mask *mask_found;
-+	const u32 mask_id = entry->key.maskid;
-+
-+	/* Will always be found */
-+	mask_found = p4tc_table_entry_mask_find_byid(table, mask_id);
-+
-+	/* Last reference, can delete */
-+	if (refcount_dec_if_one(&mask_found->mask_ref)) {
-+		spin_lock_bh(&table->tbl_masks_idr_lock);
-+		idr_remove(&table->tbl_masks_idr, mask_found->mask_id);
-+		__p4tc_table_entry_mask_del(table, mask_found);
-+		spin_unlock_bh(&table->tbl_masks_idr_lock);
-+		kfree_rcu(mask_found, rcu);
-+	} else {
-+		if (!refcount_dec_not_one(&mask_found->mask_ref))
-+			pr_warn("Mask was deleted in parallel");
-+	}
-+}
-+
-+#if defined(__LITTLE_ENDIAN_BITFIELD)
-+static u32 p4tc_fls(u8 *ptr, size_t len)
-+{
-+	int i;
-+
-+	for (i = len - 1; i >= 0; i--) {
-+		int pos = fls(ptr[i]);
-+
-+		if (pos)
-+			return (i * 8) + pos;
-+	}
-+
-+	return 0;
-+}
-+#else
-+static u32 p4tc_ffs(u8 *ptr, size_t len)
-+{
-+	int i;
-+
-+	for (i = 0; i < len; i++) {
-+		int pos = ffs(ptr[i]);
-+
-+		if (pos)
-+			return (i * 8) + pos;
-+	}
-+
-+	return 0;
-+}
-+#endif
-+
-+static u32 find_lpm_mask(struct p4tc_table *table, u8 *ptr)
-+{
-+	u32 ret;
-+#if defined(__LITTLE_ENDIAN_BITFIELD)
-+	ret = p4tc_fls(ptr, BITS_TO_BYTES(table->tbl_keysz));
-+#else
-+	ret = p4tc_ffs(ptr, BITS_TO_BYTES(table->tbl_keysz));
-+#endif
-+	return ret ?: table->tbl_keysz;
-+}
-+
-+static int p4tc_table_lpm_mask_insert(struct p4tc_table *table,
-+				      struct p4tc_table_entry_mask *mask)
-+{
-+	struct p4tc_table_entry_mask __rcu **masks_array =
-+		table->tbl_masks_array;
-+	const u32 nmasks = table->tbl_curr_num_masks ?: 1;
-+	int pos;
-+
-+	for (pos = 0; pos < nmasks; pos++) {
-+		u32 mask_value = find_lpm_mask(table, mask->fa_value);
-+
-+		if (table->tbl_masks_array[pos]) {
-+			struct p4tc_table_entry_mask *mask_pos;
-+			u32 array_mask_value;
-+
-+			mask_pos = rcu_dereference_protected(masks_array[pos],
-+							     1);
-+			array_mask_value =
-+				find_lpm_mask(table, mask_pos->fa_value);
-+
-+			if (mask_value > array_mask_value) {
-+				/* shift masks to the right (will keep invariant) */
-+				u32 tail = nmasks;
-+
-+				while (tail > pos + 1) {
-+					rcu_assign_pointer(masks_array[tail],
-+							   masks_array[tail - 1]);
-+					table->tbl_masks_array[tail] =
-+						table->tbl_masks_array[tail - 1];
-+					tail--;
-+				}
-+				rcu_assign_pointer(masks_array[pos + 1],
-+						   masks_array[pos]);
-+				/* assign to pos */
-+				break;
-+			}
-+		} else {
-+			/* pos is empty, assign to pos */
-+			break;
-+		}
-+	}
-+
-+	mask->mask_index = pos;
-+	rcu_assign_pointer(masks_array[pos], mask);
-+	table->tbl_curr_num_masks++;
-+
-+	return 0;
++	return NLMSG_HDRLEN                     /* struct nlmsghdr */
++		+ sizeof(struct p4tcmsg)
++		+ nla_total_size(0)             /* P4TC_ROOT nested */
++		+ sz;
 +}
 +
 +static int
-+p4tc_table_ternary_mask_insert(struct p4tc_table *table,
-+			       struct p4tc_table_entry_mask *mask)
++generic_dump_ext_param_value(struct sk_buff *skb, struct p4tc_type *type,
++			     struct p4tc_extern_param *param)
 +{
-+	unsigned long *free_masks_bitmap =
-+		rcu_dereference_protected(table->tbl_free_masks_bitmap, 1);
-+	unsigned long pos =
-+		find_first_bit(free_masks_bitmap, P4TC_MAX_TMASKS);
-+	struct p4tc_table_entry_mask __rcu **masks_array =
-+		table->tbl_masks_array;
-+
-+	if (pos == P4TC_MAX_TMASKS)
-+		return -ENOSPC;
-+
-+	mask->mask_index = pos;
-+	rcu_assign_pointer(masks_array[pos], mask);
-+	bitmap_clear(free_masks_bitmap, pos, 1);
-+	table->tbl_curr_num_masks++;
-+
-+	return 0;
-+}
-+
-+static int p4tc_table_add_mask_array(struct p4tc_table *table,
-+				     struct p4tc_table_entry_mask *mask)
-+{
-+	if (table->tbl_max_masks < table->tbl_curr_num_masks + 1)
-+		return -ENOSPC;
-+
-+	switch (table->tbl_type) {
-+	case P4TC_TABLE_TYPE_TERNARY:
-+		return p4tc_table_ternary_mask_insert(table, mask);
-+	case P4TC_TABLE_TYPE_LPM:
-+		return p4tc_table_lpm_mask_insert(table, mask);
-+	default:
-+		return -ENOSPC;
-+	}
-+}
-+
-+/* TODO: Ordering optimisation for LPM */
-+static struct p4tc_table_entry_mask *
-+p4tc_table_entry_mask_add(struct p4tc_table *table,
-+			  struct p4tc_table_entry *entry,
-+			  struct p4tc_table_entry_mask *mask)
-+{
-+	struct p4tc_table_entry_mask *mask_found;
-+	int ret;
-+
-+	mask_found = p4tc_table_entry_mask_find_byvalue(table, mask);
-+	/* Only add mask if it was not already added */
-+	if (!mask_found) {
-+		struct p4tc_table_entry_mask *nmask;
-+		size_t mask_sz_bytes = BITS_TO_BYTES(mask->sz);
-+
-+		nmask = kzalloc(struct_size(mask_found, fa_value, mask_sz_bytes), GFP_ATOMIC);
-+		if (unlikely(!nmask))
-+			return ERR_PTR(-ENOMEM);
-+
-+		memcpy(nmask->fa_value, mask->fa_value, mask_sz_bytes);
-+
-+		nmask->mask_id = 1;
-+		nmask->sz = mask->sz;
-+		refcount_set(&nmask->mask_ref, 1);
-+
-+		spin_lock_bh(&table->tbl_masks_idr_lock);
-+		ret = idr_alloc_u32(&table->tbl_masks_idr, nmask,
-+				    &nmask->mask_id, UINT_MAX, GFP_ATOMIC);
-+		if (ret < 0)
-+			goto unlock;
-+
-+		ret = p4tc_table_add_mask_array(table, nmask);
-+unlock:
-+		spin_unlock_bh(&table->tbl_masks_idr_lock);
-+		if (ret < 0) {
-+			kfree(nmask);
-+			return ERR_PTR(ret);
-+		}
-+		entry->key.maskid = nmask->mask_id;
-+		mask_found = nmask;
-+	} else {
-+		if (!refcount_inc_not_zero(&mask_found->mask_ref))
-+			return ERR_PTR(-EBUSY);
-+		entry->key.maskid = mask_found->mask_id;
-+	}
-+
-+	return mask_found;
-+}
-+
-+static int p4tc_tbl_entry_emit_event(struct p4tc_table_entry_work *entry_work,
-+				     int cmd, gfp_t alloc_flags)
-+{
-+	struct p4tc_pipeline *pipeline = entry_work->pipeline;
-+	struct p4tc_table_entry *entry = entry_work->entry;
-+	struct p4tc_table *table = entry_work->table;
-+	u16 who_deleted = entry_work->who_deleted;
-+	struct net *net = pipeline->net;
-+	struct sock *rtnl = net->rtnl;
-+	struct nlmsghdr *nlh;
-+	struct nlattr *nest;
-+	struct sk_buff *skb;
-+	struct nlattr *root;
-+	struct p4tcmsg *t;
-+	int err = -ENOMEM;
-+
-+	if (!rtnl_has_listeners(net, RTNLGRP_TC))
-+		return 0;
-+
-+	skb = alloc_skb(NLMSG_GOODSIZE, alloc_flags);
-+	if (!skb)
-+		return err;
-+
-+	nlh = nlmsg_put(skb, 1, 1, cmd, sizeof(*t), NLM_F_REQUEST);
-+	if (!nlh)
-+		goto free_skb;
-+
-+	t = nlmsg_data(nlh);
-+	if (!t)
-+		goto free_skb;
-+
-+	t->pipeid = pipeline->common.p_id;
-+	t->obj = P4TC_OBJ_RUNTIME_TABLE;
-+
-+	if (nla_put_string(skb, P4TC_ROOT_PNAME, pipeline->common.name))
-+		goto free_skb;
-+
-+	root = nla_nest_start(skb, P4TC_ROOT);
-+	if (!root)
-+		goto free_skb;
-+
-+	nest = nla_nest_start(skb, 1);
-+	if (p4tc_tbl_entry_fill(skb, table, entry, table->tbl_id,
-+				who_deleted) < 0)
-+		goto free_skb;
-+	nla_nest_end(skb, nest);
-+
-+	nla_nest_end(skb, root);
-+
-+	nlmsg_end(skb, nlh);
-+
-+	return nlmsg_notify(rtnl, skb, 0, RTNLGRP_TC, 0, alloc_flags);
-+
-+free_skb:
-+	kfree_skb(skb);
-+	return err;
-+}
-+
-+static void __p4tc_table_entry_put(struct p4tc_table_entry *entry)
-+{
-+	struct p4tc_table_entry_value *value;
-+	struct p4tc_table_entry_tm *tm;
-+
-+	value = p4tc_table_entry_value(entry);
-+
-+	if (value->acts)
-+		p4tc_action_destroy(value->acts);
-+
-+	kfree(value->entry_work);
-+	tm = rcu_dereference_protected(value->tm, 1);
-+	kfree(tm);
-+
-+	kfree(entry);
-+}
-+
-+static void p4tc_table_entry_del_work(struct work_struct *work)
-+{
-+	struct p4tc_table_entry_work *entry_work =
-+		container_of(work, typeof(*entry_work), work);
-+	struct p4tc_pipeline *pipeline = entry_work->pipeline;
-+	struct p4tc_table_entry *entry = entry_work->entry;
-+	struct p4tc_table_entry_value *value;
-+
-+	value = p4tc_table_entry_value(entry);
-+
-+	if (entry_work->send_event && p4tc_ctrl_pub_ok(value->permissions))
-+		p4tc_tbl_entry_emit_event(entry_work, RTM_P4TC_DEL, GFP_KERNEL);
-+
-+	if (value->is_dyn)
-+		hrtimer_cancel(&value->entry_timer);
-+
-+	put_net(pipeline->net);
-+	p4tc_pipeline_put_ref(pipeline);
-+
-+	__p4tc_table_entry_put(entry);
-+}
-+
-+static void p4tc_table_entry_put(struct p4tc_table_entry *entry, bool deferred)
-+{
-+	struct p4tc_table_entry_value *value = p4tc_table_entry_value(entry);
-+
-+	if (deferred) {
-+		struct p4tc_table_entry_work *entry_work = value->entry_work;
-+		/* We have to free tc actions
-+		 * in a sleepable context
-+		 */
-+		struct p4tc_pipeline *pipeline = entry_work->pipeline;
-+
-+		/* Avoid pipeline del before deferral ends */
-+		p4tc_pipeline_get(pipeline);
-+		get_net(pipeline->net); /* avoid action cleanup */
-+		schedule_work(&entry_work->work);
-+	} else {
-+		if (value->is_dyn)
-+			hrtimer_cancel(&value->entry_timer);
-+
-+		__p4tc_table_entry_put(entry);
-+	}
-+}
-+
-+static void p4tc_table_entry_put_rcu(struct rcu_head *rcu)
-+{
-+	struct p4tc_table_entry *entry =
-+		container_of(rcu, struct p4tc_table_entry, rcu);
-+	struct p4tc_table_entry_work *entry_work =
-+		p4tc_table_entry_work(entry);
-+	struct p4tc_pipeline *pipeline = entry_work->pipeline;
-+
-+	p4tc_table_entry_put(entry, true);
-+
-+	p4tc_pipeline_put_ref(pipeline);
-+	put_net(pipeline->net);
-+}
-+
-+static void __p4tc_table_entry_destroy(struct p4tc_table *table,
-+				       struct p4tc_table_entry *entry,
-+				       bool remove_from_hash, bool send_event,
-+				       u16 who_deleted)
-+{
-+	/* !remove_from_hash and deferred deletion are incompatible
-+	 * as entries that defer deletion after a GP __must__
-+	 * be removed from the hash
-+	 */
-+	if (remove_from_hash)
-+		rhltable_remove(&table->tbl_entries, &entry->ht_node,
-+				entry_hlt_params);
-+
-+	if (table->tbl_type != P4TC_TABLE_TYPE_EXACT)
-+		p4tc_table_entry_mask_del(table, entry);
-+
-+	if (remove_from_hash) {
-+		struct p4tc_table_entry_work *entry_work =
-+			p4tc_table_entry_work(entry);
-+
-+		entry_work->send_event = send_event;
-+		entry_work->who_deleted = who_deleted;
-+		/* guarantee net doesn't go down before async task runs */
-+		get_net(entry_work->pipeline->net);
-+		/* guarantee pipeline isn't deleted before async task runs */
-+		p4tc_pipeline_get(entry_work->pipeline);
-+		call_rcu(&entry->rcu, p4tc_table_entry_put_rcu);
-+	} else {
-+		p4tc_table_entry_put(entry, false);
-+	}
-+}
-+
-+#define P4TC_TABLE_EXACT_PRIO 64000
-+
-+static int p4tc_table_entry_exact_prio(void)
-+{
-+	return P4TC_TABLE_EXACT_PRIO;
-+}
-+
-+static int p4tc_table_entry_alloc_new_prio(struct p4tc_table *table)
-+{
-+	if (table->tbl_type == P4TC_TABLE_TYPE_EXACT)
-+		return p4tc_table_entry_exact_prio();
-+
-+	return ida_alloc_min(&table->tbl_prio_idr, 1,
-+			     GFP_ATOMIC);
-+}
-+
-+static void p4tc_table_entry_free_prio(struct p4tc_table *table, u32 prio)
-+{
-+	if (table->tbl_type != P4TC_TABLE_TYPE_EXACT)
-+		ida_free(&table->tbl_prio_idr, prio);
-+}
-+
-+static int p4tc_table_entry_destroy(struct p4tc_table *table,
-+				    struct p4tc_table_entry *entry,
-+				    bool remove_from_hash,
-+				    bool send_event, u16 who_deleted)
-+{
-+	struct p4tc_table_entry_value *value = p4tc_table_entry_value(entry);
-+
-+	/* Entry was deleted in parallel */
-+	if (!p4tc_tbl_entry_put(value))
-+		return -EBUSY;
-+
-+	p4tc_table_entry_free_prio(table, value->prio);
-+
-+	__p4tc_table_entry_destroy(table, entry, remove_from_hash, send_event,
-+				   who_deleted);
-+
-+	atomic_dec(&table->tbl_nelems);
-+
-+	return 0;
-+}
-+
-+static void p4tc_table_entry_destroy_noida(struct p4tc_table *table,
-+					   struct p4tc_table_entry *entry)
-+{
-+	/* Entry refcount was already decremented */
-+	__p4tc_table_entry_destroy(table, entry, true, false, 0);
-+}
-+
-+/* Only deletes entries when called from pipeline put */
-+void p4tc_table_entry_destroy_hash(void *ptr, void *arg)
-+{
-+	struct p4tc_table_entry *entry = ptr;
-+	struct p4tc_table *table = arg;
-+
-+	p4tc_table_entry_destroy(table, entry, false, false,
-+				 P4TC_ENTITY_TC);
-+}
-+
-+static void p4tc_table_entry_put_table(struct p4tc_pipeline *pipeline,
-+				       struct p4tc_table *table)
-+{
-+	p4tc_table_put_ref(table);
-+	p4tc_pipeline_put_ref(pipeline);
-+}
-+
-+static int p4tc_table_entry_get_table(struct net *net,
-+				      struct p4tc_pipeline **pipeline,
-+				      struct p4tc_table **table,
-+				      struct nlattr **tb,
-+				      struct p4tc_path_nlattrs *nl_path_attrs,
-+				      struct netlink_ext_ack *extack)
-+{
-+	/* The following can only race with user driven events
-+	 * Netns is guaranteed to be alive
-+	 */
-+	u32 *ids = nl_path_attrs->ids;
-+	u32 pipeid, tbl_id;
-+	char *tblname;
-+	int ret;
-+
-+	rcu_read_lock();
-+
-+	pipeid = ids[P4TC_PID_IDX];
-+
-+	*pipeline = p4tc_pipeline_find_get(net, nl_path_attrs->pname, pipeid,
-+					   extack);
-+	if (IS_ERR(*pipeline)) {
-+		ret = PTR_ERR(*pipeline);
-+		goto out;
-+	}
-+
-+	if (!pipeline_sealed(*pipeline)) {
-+		NL_SET_ERR_MSG(extack,
-+			       "Need to seal pipeline before issuing runtime command");
-+		ret = -EINVAL;
-+		goto put;
-+	}
-+
-+	tbl_id = ids[P4TC_TBLID_IDX];
-+	tblname = tb[P4TC_ENTRY_TBLNAME] ? nla_data(tb[P4TC_ENTRY_TBLNAME]) : NULL;
-+
-+	*table = p4tc_table_find_get(*pipeline, tblname, tbl_id, extack);
-+	if (IS_ERR(*table)) {
-+		ret = PTR_ERR(*table);
-+		goto put;
-+	}
-+
-+	rcu_read_unlock();
-+
-+	return 0;
-+
-+put:
-+	p4tc_pipeline_put_ref(*pipeline);
-+
-+out:
-+	rcu_read_unlock();
-+	return ret;
-+}
-+
-+static void
-+p4tc_table_entry_assign_key_exact(struct p4tc_table_entry_key *key, u8 *keyblob)
-+{
-+	memcpy(key->fa_key, keyblob, BITS_TO_BYTES(key->keysz));
-+}
-+
-+static void
-+p4tc_table_entry_assign_key_generic(struct p4tc_table_entry_key *key,
-+				    struct p4tc_table_entry_mask *mask,
-+				    u8 *keyblob, u8 *maskblob)
-+{
-+	u32 keysz = BITS_TO_BYTES(key->keysz);
-+
-+	memcpy(key->fa_key, keyblob, keysz);
-+	memcpy(mask->fa_value, maskblob, keysz);
-+}
-+
-+static int p4tc_table_entry_extract_key(struct p4tc_table *table,
-+					struct nlattr **tb,
-+					struct p4tc_table_entry_key *key,
-+					struct p4tc_table_entry_mask *mask,
-+					struct netlink_ext_ack *extack)
-+{
-+	bool is_exact = table->tbl_type == P4TC_TABLE_TYPE_EXACT;
-+	void *keyblob, *maskblob;
-+	u32 keysz;
-+
-+	if (NL_REQ_ATTR_CHECK(extack, NULL, tb, P4TC_ENTRY_KEY_BLOB)) {
-+		NL_SET_ERR_MSG(extack, "Must specify key blobs");
-+		return -EINVAL;
-+	}
-+
-+	keysz = nla_len(tb[P4TC_ENTRY_KEY_BLOB]);
-+	if (BITS_TO_BYTES(key->keysz) != keysz) {
-+		NL_SET_ERR_MSG(extack,
-+			       "Key blob size and table key size differ");
-+		return -EINVAL;
-+	}
-+
-+	if (!is_exact) {
-+		if (NL_REQ_ATTR_CHECK(extack, NULL, tb, P4TC_ENTRY_MASK_BLOB)) {
-+			NL_SET_ERR_MSG(extack, "Must specify mask blobs");
-+			return -EINVAL;
-+		}
-+
-+		if (keysz != nla_len(tb[P4TC_ENTRY_MASK_BLOB])) {
-+			NL_SET_ERR_MSG(extack,
-+				       "Key and mask blob must have the same length");
-+			return -EINVAL;
-+		}
-+	}
-+
-+	keyblob = nla_data(tb[P4TC_ENTRY_KEY_BLOB]);
-+	if (is_exact) {
-+		p4tc_table_entry_assign_key_exact(key, keyblob);
-+	} else {
-+		maskblob = nla_data(tb[P4TC_ENTRY_MASK_BLOB]);
-+		p4tc_table_entry_assign_key_generic(key, mask, keyblob,
-+						    maskblob);
-+	}
-+
-+	return 0;
-+}
-+
-+static void p4tc_table_entry_build_key(struct p4tc_table *table,
-+				       struct p4tc_table_entry_key *key,
-+				       struct p4tc_table_entry_mask *mask)
-+{
-+	int i;
-+
-+	if (table->tbl_type == P4TC_TABLE_TYPE_EXACT)
-+		return;
-+
-+	key->maskid = mask->mask_id;
-+
-+	for (i = 0; i < BITS_TO_BYTES(key->keysz); i++)
-+		key->fa_key[i] &= mask->fa_value[i];
-+}
-+
-+static int ___p4tc_table_entry_del(struct p4tc_pipeline *pipeline,
-+				   struct p4tc_table *table,
-+				   struct p4tc_table_entry *entry,
-+				   bool from_control)
-+__must_hold(RCU)
-+{
-+	u16 who_deleted = from_control ? P4TC_ENTITY_UNSPEC : P4TC_ENTITY_KERNEL;
-+	struct p4tc_table_entry_value *value = p4tc_table_entry_value(entry);
-+
-+	if (from_control) {
-+		if (!p4tc_ctrl_delete_ok(value->permissions))
-+			return -EPERM;
-+	} else {
-+		if (!p4tc_data_delete_ok(value->permissions))
-+			return -EPERM;
-+	}
-+
-+	if (p4tc_table_entry_destroy(table, entry, true, !from_control,
-+				     who_deleted) < 0)
-+		return -EBUSY;
-+
-+	return 0;
-+}
-+
-+static int p4tc_table_entry_gd(struct net *net, struct sk_buff *skb, bool del,
-+			       u16 *permissions, struct nlattr *arg,
-+			       struct p4tc_path_nlattrs *nl_path_attrs,
-+			       struct netlink_ext_ack *extack)
-+{
-+	struct p4tc_table_entry_mask *mask = NULL, *new_mask;
-+	struct nlattr *tb[P4TC_ENTRY_MAX + 1] = { NULL };
-+	struct p4tc_table_entry *entry = NULL;
-+	struct p4tc_pipeline *pipeline = NULL;
-+	struct p4tc_table_entry_value *value;
-+	struct p4tc_table_entry_key *key;
-+	u32 *ids = nl_path_attrs->ids;
-+	bool has_listener = !!skb;
-+	struct p4tc_table *table;
-+	u16 who_deleted = 0;
-+	bool get = !del;
-+	u32 keysz_bytes;
-+	u32 keysz_bits;
-+	u32 prio;
-+	int ret;
-+
-+	ret = nla_parse_nested(tb, P4TC_ENTRY_MAX, arg, p4tc_entry_policy,
-+			       extack);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = p4tc_table_entry_get_table(net, &pipeline, &table, tb,
-+					 nl_path_attrs, extack);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (table->tbl_type == P4TC_TABLE_TYPE_EXACT) {
-+		prio = p4tc_table_entry_exact_prio();
-+	} else {
-+		if (NL_REQ_ATTR_CHECK(extack, arg, tb, P4TC_ENTRY_PRIO)) {
-+			NL_SET_ERR_MSG(extack, "Must specify table entry priority");
-+			return -EINVAL;
-+		}
-+		prio = nla_get_u32(tb[P4TC_ENTRY_PRIO]);
-+	}
-+
-+	if (del && !pipeline_sealed(pipeline)) {
-+		NL_SET_ERR_MSG(extack,
-+			       "Unable to delete table entry in unsealed pipeline");
-+		ret = -EINVAL;
-+		goto table_put;
-+	}
-+
-+	keysz_bits = table->tbl_keysz;
-+	keysz_bytes = P4TC_KEYSZ_BYTES(table->tbl_keysz);
-+
-+	key = kzalloc(struct_size(key, fa_key, keysz_bytes), GFP_KERNEL);
-+	if (unlikely(!key)) {
-+		NL_SET_ERR_MSG(extack, "Unable to allocate key");
-+		ret = -ENOMEM;
-+		goto table_put;
-+	}
-+
-+	key->keysz = keysz_bits;
-+
-+	if (table->tbl_type != P4TC_TABLE_TYPE_EXACT) {
-+		mask = kzalloc(struct_size(mask, fa_value, keysz_bytes),
-+			       GFP_KERNEL);
-+		if (unlikely(!mask)) {
-+			NL_SET_ERR_MSG(extack, "Failed to allocate mask");
-+			ret = -ENOMEM;
-+			goto free_key;
-+		}
-+		mask->sz = key->keysz;
-+	}
-+
-+	ret = p4tc_table_entry_extract_key(table, tb, key, mask, extack);
-+	if (unlikely(ret < 0)) {
-+		if (table->tbl_type != P4TC_TABLE_TYPE_EXACT)
-+			kfree(mask);
-+
-+		goto free_key;
-+	}
-+
-+	if (table->tbl_type != P4TC_TABLE_TYPE_EXACT) {
-+		new_mask = p4tc_table_entry_mask_find_byvalue(table, mask);
-+		kfree(mask);
-+		if (!new_mask) {
-+			NL_SET_ERR_MSG(extack, "Unable to find entry mask");
-+			ret = -ENOENT;
-+			goto free_key;
-+		} else {
-+			mask = new_mask;
-+		}
-+	}
-+
-+	p4tc_table_entry_build_key(table, key, mask);
-+
-+	rcu_read_lock();
-+	entry = p4tc_entry_lookup(table, key, prio);
-+	if (!entry) {
-+		NL_SET_ERR_MSG(extack, "Unable to find entry");
-+		ret = -ENOENT;
-+		goto unlock;
-+	}
-+
-+	/* As we can run delete/update in parallel we might get a soon to be
-+	 * purged entry from the lookup
-+	 */
-+	value = p4tc_table_entry_value(entry);
-+	if (get && !p4tc_tbl_entry_get(value)) {
-+		NL_SET_ERR_MSG(extack, "Entry deleted in parallel");
-+		ret = -EBUSY;
-+		goto unlock;
-+	}
-+
-+	if (del) {
-+		if (tb[P4TC_ENTRY_WHODUNNIT])
-+			who_deleted = nla_get_u8(tb[P4TC_ENTRY_WHODUNNIT]);
-+	} else {
-+		if (!p4tc_ctrl_read_ok(value->permissions)) {
-+			NL_SET_ERR_MSG(extack,
-+				       "Unable to read table entry");
-+			ret = -EPERM;
-+			goto entry_put;
-+		}
-+
-+		if (!p4tc_ctrl_pub_ok(value->permissions)) {
-+			NL_SET_ERR_MSG(extack,
-+				       "Unable to publish read entry");
-+			ret = -EPERM;
-+			goto entry_put;
-+		}
-+	}
-+
-+	if (has_listener) {
-+		if (p4tc_tbl_entry_fill(skb, table, entry, table->tbl_id,
-+					who_deleted) <= 0) {
-+			NL_SET_ERR_MSG(extack,
-+				       "Unable to fill table entry attributes");
-+			ret = -EINVAL;
-+			goto entry_put;
-+		}
-+		*permissions = value->permissions;
-+	}
-+
-+	if (del) {
-+		ret = ___p4tc_table_entry_del(pipeline, table, entry, true);
-+		if (ret < 0) {
-+			if (ret == -EBUSY)
-+				NL_SET_ERR_MSG(extack,
-+					       "Entry was deleted in parallel");
-+			goto entry_put;
-+		}
-+
-+		if (!has_listener)
-+			goto out;
-+	}
-+
-+	if (!ids[P4TC_PID_IDX])
-+		ids[P4TC_PID_IDX] = pipeline->common.p_id;
-+
-+	if (!nl_path_attrs->pname_passed)
-+		strscpy(nl_path_attrs->pname, pipeline->common.name,
-+			PIPELINENAMSIZ);
-+
-+out:
-+	ret = 0;
-+
-+entry_put:
-+	if (get)
-+		p4tc_tbl_entry_put_ref(value);
-+
-+unlock:
-+	rcu_read_unlock();
-+
-+free_key:
-+	kfree(key);
-+
-+table_put:
-+	p4tc_table_entry_put_table(pipeline, table);
-+
-+	return ret;
-+}
-+
-+static int p4tc_table_entry_flush(struct net *net, struct sk_buff *skb,
-+				  struct nlattr *arg,
-+				  struct p4tc_path_nlattrs *nl_path_attrs,
-+				  struct netlink_ext_ack *extack)
-+{
-+	u32 *ids = nl_path_attrs->ids;
-+	struct nlattr *tb[P4TC_ENTRY_MAX + 1] = { NULL };
-+	u32 arg_ids[P4TC_PATH_MAX - 1];
-+	struct p4tc_pipeline *pipeline;
-+	struct p4tc_table_entry *entry;
-+	struct rhashtable_iter iter;
-+	bool has_listener = !!skb;
-+	struct p4tc_table *table;
-+	unsigned char *b;
-+	int ret = 0;
-+	int i = 0;
-+
-+	if (arg) {
-+		ret = nla_parse_nested(tb, P4TC_ENTRY_MAX, arg,
-+				       p4tc_entry_policy, extack);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	ret = p4tc_table_entry_get_table(net, &pipeline, &table, tb,
-+					 nl_path_attrs, extack);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (has_listener)
-+		b = nlmsg_get_pos(skb);
-+
-+	if (!ids[P4TC_TBLID_IDX])
-+		arg_ids[P4TC_TBLID_IDX - 1] = table->tbl_id;
-+
-+	if (has_listener && nla_put(skb, P4TC_PATH, sizeof(arg_ids), arg_ids)) {
-+		ret = -ENOMEM;
++	const u32 bytesz = BITS_TO_BYTES(type->container_bitsz);
++	unsigned char *b = nlmsg_get_pos(skb);
++	struct nlattr *nla_value;
++
++	nla_value = nla_nest_start(skb, P4TC_EXT_PARAMS_VALUE);
++	if (nla_put(skb, P4TC_EXT_PARAMS_VALUE_RAW, bytesz,
++		    param->value))
 +		goto out_nlmsg_trim;
-+	}
++	nla_nest_end(skb, nla_value);
 +
-+	/* There is an issue here regarding the stability of walking an
-+	 * rhashtable. If an insert or a delete happens in parallel, we may see
-+	 * duplicate entries or skip some valid entries. To solve this we are
-+	 * going to have an auxiliary list that also stores the entries and will
-+	 * be used for flushing, instead of walking over the rhastable.
-+	 */
-+	rhltable_walk_enter(&table->tbl_entries, &iter);
-+	do {
-+		rhashtable_walk_start(&iter);
-+
-+		while ((entry = rhashtable_walk_next(&iter)) && !IS_ERR(entry)) {
-+			struct p4tc_table_entry_value *value =
-+				p4tc_table_entry_value(entry);
-+
-+			if (!p4tc_ctrl_delete_ok(value->permissions)) {
-+				ret = -EPERM;
-+				continue;
-+			}
-+
-+			ret = p4tc_table_entry_destroy(table, entry, true, false,
-+						       P4TC_ENTITY_UNSPEC);
-+			if (ret < 0)
-+				continue;
-+
-+			i++;
-+		}
-+
-+		rhashtable_walk_stop(&iter);
-+	} while (entry == ERR_PTR(-EAGAIN));
-+	rhashtable_walk_exit(&iter);
-+
-+	/* If another user creates a table entry in parallel with this flush,
-+	 * we may not be able to flush all the entries. So the user should
-+	 * verify after flush to check for this.
-+	 */
-+
-+	if (has_listener)
-+		nla_put_u32(skb, P4TC_COUNT, i);
-+
-+	if (ret < 0) {
-+		if (i == 0) {
-+			NL_SET_ERR_MSG_WEAK(extack,
-+					    "Unable to flush any entries");
-+			goto out_nlmsg_trim;
-+		} else {
-+			if (!extack->_msg)
-+				NL_SET_ERR_MSG_FMT(extack,
-+						   "Flush only %u table entries",
-+						   i);
-+		}
-+	}
-+
-+	if (has_listener) {
-+		if (!ids[P4TC_PID_IDX])
-+			ids[P4TC_PID_IDX] = pipeline->common.p_id;
-+
-+		if (!nl_path_attrs->pname_passed)
-+			strscpy(nl_path_attrs->pname, pipeline->common.name,
-+				PIPELINENAMSIZ);
-+	}
-+
-+	ret = 0;
-+	goto table_put;
++	return 0;
 +
 +out_nlmsg_trim:
-+	if (has_listener)
-+		nlmsg_trim(skb, b);
-+
-+table_put:
-+	p4tc_table_entry_put_table(pipeline, table);
-+
-+	return ret;
++	nlmsg_trim(skb, b);
++	return -1;
 +}
 +
-+static enum hrtimer_restart entry_timer_handle(struct hrtimer *timer)
++static const struct nla_policy p4tc_extern_params_value_policy[P4TC_EXT_VALUE_PARAMS_MAX + 1] = {
++	[P4TC_EXT_PARAMS_VALUE_RAW] = { .type = NLA_BINARY },
++};
++
++static int dev_init_param_value(struct net *net,
++				struct p4tc_extern_param *nparam,
++				void *value,
++				struct netlink_ext_ack *extack)
 +{
-+	struct p4tc_table_entry_value *value =
-+		container_of(timer, struct p4tc_table_entry_value, entry_timer);
-+	struct p4tc_table_entry_tm *tm;
-+	struct p4tc_table_entry *entry;
-+	u64 aging_ms = value->aging_ms;
-+	struct p4tc_table *table;
-+	u64 tdiff, lastused;
++	u32 ifindex, *ifindex_ptr;
++
++	if (value) {
++		ifindex = *((u32 *)value);
++	} else {
++		ifindex = 1;
++		goto param_alloc;
++	}
 +
 +	rcu_read_lock();
-+	tm = rcu_dereference(value->tm);
-+	lastused = tm->lastused;
++	if (!dev_get_by_index_rcu(net, ifindex)) {
++		NL_SET_ERR_MSG(extack, "Invalid ifindex");
++		rcu_read_unlock();
++		return -EINVAL;
++	}
 +	rcu_read_unlock();
 +
-+	tdiff = jiffies64_to_msecs(get_jiffies_64() - lastused);
++param_alloc:
++	nparam->value = kzalloc(sizeof(ifindex), GFP_KERNEL);
++	if (!nparam->value)
++		return -ENOMEM;
 +
-+	if (tdiff < aging_ms) {
-+		hrtimer_forward_now(timer, ms_to_ktime(aging_ms));
-+		return HRTIMER_RESTART;
-+	}
++	ifindex_ptr = nparam->value;
++	*ifindex_ptr = ifindex;
 +
-+	entry = value->entry_work->entry;
-+	table = value->entry_work->table;
-+
-+	p4tc_table_entry_destroy(table, entry, true,
-+				 true, P4TC_ENTITY_TIMER);
-+
-+	return HRTIMER_NORESTART;
++	return 0;
 +}
 +
-+static struct p4tc_table_entry_tm *
-+p4tc_table_entry_create_tm(const u16 whodunnit)
++static int dev_dump_param_value(struct sk_buff *skb,
++				struct p4tc_extern_param_ops *op,
++				struct p4tc_extern_param *param)
 +{
-+	struct p4tc_table_entry_tm *dtm;
-+
-+	dtm = kzalloc(sizeof(*dtm), GFP_ATOMIC);
-+	if (unlikely(!dtm))
-+		return ERR_PTR(-ENOMEM);
-+
-+	dtm->who_created = whodunnit;
-+	dtm->who_deleted = P4TC_ENTITY_UNSPEC;
-+	dtm->created = jiffies;
-+	dtm->firstused = 0;
-+	dtm->lastused = jiffies;
-+
-+	return dtm;
-+}
-+
-+/* Invoked from both control and data path */
-+static int __p4tc_table_entry_create(struct p4tc_pipeline *pipeline,
-+				     struct p4tc_table *table,
-+				     struct p4tc_table_entry *entry,
-+				     struct p4tc_table_entry_mask *mask,
-+				     u16 whodunnit, bool from_control)
-+__must_hold(RCU)
-+{
-+	struct p4tc_table_entry_mask *mask_found = NULL;
-+	struct p4tc_table_entry_work *entry_work;
-+	struct p4tc_table_entry_value *value;
-+	struct p4tc_table_perm *tbl_perm;
-+	struct p4tc_table_entry_tm *dtm;
-+	u16 permissions;
++	struct nlattr *nest;
++	u32 *ifindex;
 +	int ret;
 +
-+	value = p4tc_table_entry_value(entry);
-+	/* We set it to zero on create an update to avoid having entry
-+	 * deletion in parallel before we report to user space.
-+	 */
-+	refcount_set(&value->entries_ref, 0);
++	nest = nla_nest_start(skb, P4TC_EXT_PARAMS_VALUE);
++	ifindex = (u32 *)param->value;
 +
-+	tbl_perm = rcu_dereference(table->tbl_permissions);
-+	permissions = tbl_perm->permissions;
-+	if (from_control) {
-+		if (!p4tc_ctrl_create_ok(permissions))
-+			return -EPERM;
-+	} else {
-+		if (!p4tc_data_create_ok(permissions))
-+			return -EPERM;
++	if (nla_put_u32(skb, P4TC_EXT_PARAMS_VALUE_RAW, *ifindex)) {
++		ret = -EINVAL;
++		goto out_nla_cancel;
 +	}
-+
-+	/* From data plane we can only create entries on exact match */
-+	if (table->tbl_type != P4TC_TABLE_TYPE_EXACT) {
-+		mask_found = p4tc_table_entry_mask_add(table, entry, mask);
-+		if (IS_ERR(mask_found)) {
-+			ret = PTR_ERR(mask_found);
-+			goto out;
-+		}
-+	}
-+
-+	p4tc_table_entry_build_key(table, &entry->key, mask_found);
-+
-+	if (p4tc_entry_lookup(table, &entry->key, value->prio)) {
-+		ret = -EEXIST;
-+		goto rm_masks_idr;
-+	}
-+
-+	dtm = p4tc_table_entry_create_tm(whodunnit);
-+	if (IS_ERR(dtm)) {
-+		ret = PTR_ERR(dtm);
-+		goto rm_masks_idr;
-+	}
-+
-+	rcu_assign_pointer(value->tm, dtm);
-+
-+	entry_work = kzalloc(sizeof(*entry_work), GFP_ATOMIC);
-+	if (unlikely(!entry_work)) {
-+		ret = -ENOMEM;
-+		goto free_tm;
-+	}
-+
-+	entry_work->pipeline = pipeline;
-+	entry_work->table = table;
-+	entry_work->entry = entry;
-+	value->entry_work = entry_work;
-+
-+	INIT_WORK(&entry_work->work, p4tc_table_entry_del_work);
-+
-+	if (atomic_inc_return(&table->tbl_nelems) > table->tbl_max_entries) {
-+		atomic_dec(&table->tbl_nelems);
-+		ret = -ENOSPC;
-+		goto free_work;
-+	}
-+
-+	if (rhltable_insert(&table->tbl_entries, &entry->ht_node,
-+			    entry_hlt_params) < 0) {
-+		atomic_dec(&table->tbl_nelems);
-+		ret = -EBUSY;
-+		goto free_work;
-+	}
-+
-+	if (value->is_dyn) {
-+		/* Only use table template aging if user didn't specify one */
-+		value->aging_ms = value->aging_ms ?: table->tbl_aging;
-+
-+		hrtimer_init(&value->entry_timer, CLOCK_MONOTONIC,
-+			     HRTIMER_MODE_REL);
-+		value->entry_timer.function = &entry_timer_handle;
-+		hrtimer_start(&value->entry_timer, ms_to_ktime(value->aging_ms),
-+			      HRTIMER_MODE_REL);
-+	}
-+
-+	if (!from_control && p4tc_ctrl_pub_ok(value->permissions))
-+		p4tc_tbl_entry_emit_event(entry_work, RTM_P4TC_CREATE,
-+					  GFP_ATOMIC);
++	nla_nest_end(skb, nest);
 +
 +	return 0;
 +
-+free_work:
-+	kfree(entry_work);
-+
-+free_tm:
-+	kfree(dtm);
-+
-+rm_masks_idr:
-+	if (table->tbl_type != P4TC_TABLE_TYPE_EXACT)
-+		p4tc_table_entry_mask_del(table, entry);
-+out:
++out_nla_cancel:
++	nla_nest_cancel(skb, nest);
 +	return ret;
 +}
 +
-+/* Invoked from both control and data path  */
-+static int __p4tc_table_entry_update(struct p4tc_pipeline *pipeline,
-+				     struct p4tc_table *table,
-+				     struct p4tc_table_entry *entry,
-+				     struct p4tc_table_entry_mask *mask,
-+				     u16 whodunnit, bool from_control)
-+__must_hold(RCU)
++static void dev_free_param_value(struct p4tc_extern_param *param)
 +{
-+	struct p4tc_table_entry_mask *mask_found = NULL;
-+	struct p4tc_table_entry_work *entry_work;
-+	struct p4tc_table_entry_value *value_old;
-+	struct p4tc_table_entry_value *value;
-+	struct p4tc_table_entry *entry_old;
-+	struct p4tc_table_entry_tm *tm_old;
-+	struct p4tc_table_entry_tm *tm;
-+	int ret;
++	kfree(param->value);
++}
 +
-+	value = p4tc_table_entry_value(entry);
-+	/* We set it to zero on update to avoid having entry removed from the
-+	 * rhashtable in parallel before we report to user space.
-+	 */
-+	refcount_set(&value->entries_ref, 0);
++static const struct p4tc_extern_param_ops ext_param_ops[P4T_MAX + 1] = {
++	[P4T_DEV] = {
++		.init_value = dev_init_param_value,
++		.dump_value = dev_dump_param_value,
++		.free = dev_free_param_value,
++	},
++};
 +
-+	if (table->tbl_type != P4TC_TABLE_TYPE_EXACT) {
-+		mask_found = p4tc_table_entry_mask_add(table, entry, mask);
-+		if (IS_ERR(mask_found)) {
-+			ret = PTR_ERR(mask_found);
-+			goto out;
++static int p4tc_extern_elem_dump_param_noval(struct sk_buff *skb,
++					     struct p4tc_extern_param *parm)
++{
++	unsigned char *b = nlmsg_get_pos(skb);
++
++	if (nla_put_string(skb, P4TC_EXT_PARAMS_NAME,
++			   parm->name))
++		goto nla_put_failure;
++
++	if (nla_put_u32(skb, P4TC_EXT_PARAMS_ID, parm->id))
++		goto nla_put_failure;
++
++	if (nla_put_u32(skb, P4TC_EXT_PARAMS_TYPE, parm->type->typeid))
++		goto nla_put_failure;
++
++	return skb->len;
++
++nla_put_failure:
++	nlmsg_trim(skb, b);
++	return -1;
++}
++
++static int
++p4tc_extern_elem_dump_params(struct sk_buff *skb, struct p4tc_extern_common *e)
++{
++	unsigned char *b = nlmsg_get_pos(skb);
++	struct p4tc_extern_param *parm;
++	struct nlattr *nest_parms;
++	int id;
++
++	nest_parms = nla_nest_start(skb, P4TC_EXT_PARAMS);
++	if (e->params) {
++		int i = 1;
++
++		idr_for_each_entry(&e->params->params_idr, parm, id) {
++			struct p4tc_extern_param_ops *val_ops;
++			struct nlattr *nest_count;
++
++			nest_count = nla_nest_start(skb, i);
++			if (!nest_count)
++				goto nla_put_failure;
++
++			if (p4tc_extern_elem_dump_param_noval(skb, parm) < 0)
++				goto nla_put_failure;
++
++			if (p4tc_ext_param_ops_is_init(parm->ops))
++				val_ops = parm->ops;
++			else
++				val_ops = parm->mod_ops;
++
++			read_lock_bh(&e->params->params_lock);
++			if (val_ops && val_ops->dump_value) {
++				if (val_ops->dump_value(skb, parm->ops, parm) < 0) {
++					read_unlock_bh(&e->params->params_lock);
++					goto nla_put_failure;
++				}
++			} else {
++				if (generic_dump_ext_param_value(skb, parm->type, parm)) {
++					read_unlock_bh(&e->params->params_lock);
++					goto nla_put_failure;
++				}
++			}
++			read_unlock_bh(&e->params->params_lock);
++
++			if (nla_put_u32(skb, P4TC_EXT_PARAMS_FLAGS,
++					parm->flags))
++				goto nla_put_failure;
++
++			nla_nest_end(skb, nest_count);
++			i++;
 +		}
 +	}
++	nla_nest_end(skb, nest_parms);
 +
-+	p4tc_table_entry_build_key(table, &entry->key, mask_found);
++	return skb->len;
 +
-+	entry_old = p4tc_entry_lookup(table, &entry->key, value->prio);
-+	if (!entry_old) {
-+		ret = -ENOENT;
-+		goto rm_masks_idr;
-+	}
++nla_put_failure:
++	nlmsg_trim(skb, b);
++	return -1;
++}
 +
-+	/* In case of parallel update, the thread that arrives here first will
-+	 * get the right to update.
-+	 *
-+	 * In case of a parallel get/update, whoever is second will fail
-+	 * appropriately.
-+	 */
-+	value_old = p4tc_table_entry_value(entry_old);
-+	if (!p4tc_tbl_entry_put(value_old)) {
-+		ret = -EAGAIN;
-+		goto rm_masks_idr;
-+	}
++int
++p4tc_ext_elem_dump_1(struct sk_buff *skb, struct p4tc_extern_common *e)
++{
++	const char *instname = e->inst->common.name;
++	unsigned char *b = nlmsg_get_pos(skb);
++	const char *kind = e->inst->ext_name;
++	u32 flags = e->p4tc_ext_flags;
++	u32 key = e->p4tc_ext_key;
++	int err;
 +
-+	if (from_control) {
-+		if (!p4tc_ctrl_update_ok(value_old->permissions)) {
-+			ret = -EPERM;
-+			goto set_entries_refcount;
-+		}
++	if (nla_put_string(skb, P4TC_EXT_KIND, kind))
++		goto nla_put_failure;
++
++	if (nla_put_string(skb, P4TC_EXT_INST_NAME, instname))
++		goto nla_put_failure;
++
++	if (nla_put_u32(skb, P4TC_EXT_KEY, key))
++		goto nla_put_failure;
++
++	if (flags && nla_put_bitfield32(skb, P4TC_EXT_FLAGS,
++					flags, flags))
++		goto nla_put_failure;
++
++	err = p4tc_extern_elem_dump_params(skb, e);
++	if (err < 0)
++		goto nla_put_failure;
++
++	return skb->len;
++
++nla_put_failure:
++	nlmsg_trim(skb, b);
++	return -1;
++}
++EXPORT_SYMBOL(p4tc_ext_elem_dump_1);
++
++static int p4tc_ext_dump_walker(struct p4tc_extern_inst *inst,
++				struct sk_buff *skb,
++				struct netlink_callback *cb)
++{
++	struct idr *idr = &inst->control_elems_idr;
++	int err = 0, s_i = 0, n_i = 0;
++	u32 ext_flags = cb->args[2];
++	struct p4tc_extern *p;
++	unsigned long id = 1;
++	struct nlattr *nest;
++	unsigned long tmp;
++	int key = -1;
++
++	if (p4tc_ext_inst_has_dump(inst)) {
++		n_i = inst->ops->dump(skb, inst, cb);
++		if (n_i < 0)
++			return n_i;
 +	} else {
-+		if (!p4tc_data_update_ok(value_old->permissions)) {
-+			ret = -EPERM;
-+			goto set_entries_refcount;
++		s_i = cb->args[0];
++
++		idr_for_each_entry_ul(idr, p, tmp, id) {
++			key++;
++			if (key < s_i)
++				continue;
++			if (IS_ERR(p))
++				continue;
++
++			nest = nla_nest_start(skb, n_i);
++			if (!nest) {
++				key--;
++				goto nla_put_failure;
++			}
++
++			err = p4tc_ext_elem_dump_1(skb, &p->common);
++			if (err < 0) {
++				key--;
++				nlmsg_trim(skb, nest);
++				goto done;
++			}
++			nla_nest_end(skb, nest);
++			n_i++;
++			if (!(ext_flags & P4TC_EXT_FLAG_LARGE_DUMP_ON) &&
++			    n_i >= P4TC_MSGBATCH_SIZE)
++				goto done;
 +		}
 +	}
++done:
++	if (key >= 0)
++		cb->args[0] = key + 1;
 +
-+	tm = kzalloc(sizeof(*tm), GFP_ATOMIC);
-+	if (unlikely(!tm)) {
-+		ret = -ENOMEM;
-+		goto set_entries_refcount;
++	if (n_i) {
++		if (ext_flags & P4TC_EXT_FLAG_LARGE_DUMP_ON)
++			cb->args[1] = n_i;
 +	}
++	return n_i;
 +
-+	tm_old = rcu_dereference_protected(value_old->tm, 1);
-+	*tm = *tm_old;
-+
-+	tm->lastused = jiffies;
-+	tm->who_updated = whodunnit;
-+
-+	if (value->permissions == P4TC_PERMISSIONS_UNINIT)
-+		value->permissions = value_old->permissions;
-+
-+	rcu_assign_pointer(value->tm, tm);
-+
-+	entry_work = kzalloc(sizeof(*(entry_work)), GFP_ATOMIC);
-+	if (unlikely(!entry_work)) {
-+		ret = -ENOMEM;
-+		goto free_tm;
-+	}
-+
-+	entry_work->pipeline = pipeline;
-+	entry_work->table = table;
-+	entry_work->entry = entry;
-+	value->entry_work = entry_work;
-+	if (!value->is_dyn)
-+		value->is_dyn = value_old->is_dyn;
-+
-+	if (value->is_dyn) {
-+		/* Only use old entry value if user didn't specify new one */
-+		value->aging_ms = value->aging_ms ?: value_old->aging_ms;
-+
-+		hrtimer_init(&value->entry_timer, CLOCK_MONOTONIC,
-+			     HRTIMER_MODE_REL);
-+		value->entry_timer.function = &entry_timer_handle;
-+
-+		hrtimer_start(&value->entry_timer, ms_to_ktime(value->aging_ms),
-+			      HRTIMER_MODE_REL);
-+	}
-+
-+	INIT_WORK(&entry_work->work, p4tc_table_entry_del_work);
-+
-+	if (rhltable_insert(&table->tbl_entries, &entry->ht_node,
-+			    entry_hlt_params) < 0) {
-+		ret = -EEXIST;
-+		goto free_entry_work;
-+	}
-+
-+	p4tc_table_entry_destroy_noida(table, entry_old);
-+
-+	if (!from_control && p4tc_ctrl_pub_ok(value->permissions))
-+		p4tc_tbl_entry_emit_event(entry_work, RTM_P4TC_UPDATE,
-+					  GFP_ATOMIC);
-+
-+	return 0;
-+
-+free_entry_work:
-+	kfree(entry_work);
-+
-+free_tm:
-+	kfree(tm);
-+
-+set_entries_refcount:
-+	refcount_set(&value_old->entries_ref, 1);
-+
-+rm_masks_idr:
-+	if (table->tbl_type != P4TC_TABLE_TYPE_EXACT)
-+		p4tc_table_entry_mask_del(table, entry);
-+
-+out:
-+	return ret;
++nla_put_failure:
++	nla_nest_cancel(skb, nest);
++	goto done;
 +}
 +
-+static bool p4tc_table_check_entry_act(struct p4tc_table *table,
-+				       struct tc_action *entry_act)
++static void __p4tc_ext_idr_purge(struct p4tc_extern *p)
 +{
-+	struct p4tc_table_act *table_act;
++	atomic_dec(&p->common.inst->curr_num_elems);
++	p4tc_extern_cleanup(p);
++}
 +
-+	list_for_each_entry(table_act, &table->tbl_acts_list, node) {
-+		if (table_act->ops->id != entry_act->ops->id)
++static void p4tc_ext_idr_purge(struct p4tc_extern *p)
++{
++	idr_remove(p->elems_idr, p->common.p4tc_ext_key);
++	__p4tc_ext_idr_purge(p);
++}
++
++/* Called when pipeline is being purged */
++void p4tc_ext_purge(struct idr *idr)
++{
++	struct p4tc_extern *p;
++	unsigned long tmp, id;
++
++	idr_for_each_entry_ul(idr, p, tmp, id) {
++		if (IS_ERR(p))
 +			continue;
++		p4tc_ext_idr_purge(p);
++	}
++}
 +
-+		if (!(table_act->flags &
-+		      BIT(P4TC_TABLE_ACTS_DEFAULT_ONLY)))
-+			return true;
++static int p4tc_ext_idr_search(struct p4tc_extern_inst *inst,
++			       struct p4tc_extern **e, u32 key)
++{
++	struct idr *elems_idr = &inst->control_elems_idr;
++	struct p4tc_extern *p;
++
++	p = idr_find(elems_idr, key);
++	if (IS_ERR(p))
++		p = NULL;
++
++	if (p) {
++		*e = p;
++		return true;
++	}
++	return false;
++}
++
++static int __p4tc_ext_idr_search(struct p4tc_extern_inst *inst,
++				 struct p4tc_extern **e, u32 key)
++{
++	if (p4tc_ext_idr_search(inst, e, key)) {
++		refcount_inc(&((*e)->common.p4tc_ext_refcnt));
++		return true;
 +	}
 +
 +	return false;
 +}
 +
-+static struct nla_policy p4tc_table_attrs_policy[P4TC_ENTRY_TBL_ATTRS_MAX + 1] = {
-+	[P4TC_ENTRY_TBL_ATTRS_DEFAULT_HIT] = { .type = NLA_NESTED },
-+	[P4TC_ENTRY_TBL_ATTRS_DEFAULT_MISS] = { .type = NLA_NESTED },
-+	[P4TC_ENTRY_TBL_ATTRS_PERMISSIONS] = NLA_POLICY_MAX(NLA_U16, P4TC_MAX_PERMISSION),
-+};
-+
-+static int
-+update_tbl_attrs(struct net *net, struct p4tc_table *table,
-+		 struct nlattr *table_attrs,
-+		 struct netlink_ext_ack *extack)
++static int p4tc_ext_copy(struct p4tc_extern_inst *inst,
++			 u32 key, struct p4tc_extern **e,
++			 struct p4tc_extern *e_orig,
++			 const struct p4tc_extern_ops *ops,
++			 u32 flags)
 +{
-+	struct p4tc_table_default_act_params def_params = {0};
-+	struct nlattr *tb[P4TC_ENTRY_TBL_ATTRS_MAX + 1];
-+	struct p4tc_table_perm *tbl_perm = NULL;
-+	int err;
++	const u32 size = (ops && ops->elem_size) ? ops->elem_size : sizeof(**e);
++	struct p4tc_extern *p = kzalloc(size, GFP_KERNEL);
 +
-+	err = nla_parse_nested(tb, P4TC_ENTRY_TBL_ATTRS_MAX, table_attrs,
-+			       p4tc_table_attrs_policy, extack);
-+	if (err < 0)
-+		return err;
++	if (unlikely(!p))
++		return -ENOMEM;
 +
-+	if (tb[P4TC_ENTRY_TBL_ATTRS_PERMISSIONS]) {
-+		u16 permissions;
++	spin_lock_init(&p->p4tc_ext_lock);
++	p->common.p4tc_ext_key = key;
++	p->common.p4tc_ext_flags = flags;
++	refcount_set(&p->common.p4tc_ext_refcnt,
++		     refcount_read(&e_orig->common.p4tc_ext_refcnt));
 +
-+		if (atomic_read(&table->tbl_nelems) > 0) {
-+			NL_SET_ERR_MSG(extack,
-+				       "Unable to set table permissions if it already has entries");
-+			return -EINVAL;
-+		}
++	p->elems_idr = e_orig->elems_idr;
++	p->common.inst = inst;
++	p->common.ops = ops;
++	*e = p;
++	return 0;
++}
 +
-+		permissions = nla_get_u16(tb[P4TC_ENTRY_TBL_ATTRS_PERMISSIONS]);
-+		tbl_perm = p4tc_table_init_permissions(table, permissions,
-+						       extack);
-+		if (IS_ERR(tbl_perm))
-+			return PTR_ERR(tbl_perm);
++static int p4tc_ext_idr_create(struct p4tc_extern_inst *inst,
++			       u32 key, struct p4tc_extern **e,
++			       const struct p4tc_extern_ops *ops,
++			       u32 flags)
++{
++	struct p4tc_extern *p = kzalloc(sizeof(*p), GFP_KERNEL);
++	u32 max_num_elems = inst->max_num_elems;
++
++	if (unlikely(!p))
++		return -ENOMEM;
++
++	if (atomic_read(&inst->curr_num_elems) == max_num_elems) {
++		kfree(p);
++		return -E2BIG;
 +	}
 +
-+	def_params.default_hit_attr = tb[P4TC_ENTRY_TBL_ATTRS_DEFAULT_HIT];
-+	def_params.default_miss_attr = tb[P4TC_ENTRY_TBL_ATTRS_DEFAULT_MISS];
++	p4tc_ext_inst_inc_num_elems(inst);
 +
-+	err = p4tc_table_init_default_acts(net, &def_params, table,
-+					   &table->tbl_acts_list, extack);
-+	if (err < 0)
-+		goto free_tbl_perm;
++	refcount_set(&p->common.p4tc_ext_refcnt, 1);
 +
-+	p4tc_table_replace_default_acts(table, &def_params, true);
-+	p4tc_table_replace_permissions(table, tbl_perm, true);
++	spin_lock_init(&p->p4tc_ext_lock);
++	p->common.p4tc_ext_key = key;
++	p->common.p4tc_ext_flags = flags;
 +
++	p->elems_idr = &inst->control_elems_idr;
++	p->common.inst = inst;
++	p->common.ops = ops;
++	*e = p;
 +	return 0;
++}
 +
-+free_tbl_perm:
-+	kfree(tbl_perm);
++/* Check if extern with specified key exists. If extern is found, increments
++ * its reference, and return 1. Otherwise return -ENOENT.
++ */
++static int p4tc_ext_idr_check_alloc(struct p4tc_extern_inst *inst,
++				    u32 key, struct p4tc_extern **e,
++				    struct netlink_ext_ack *extack)
++{
++	struct idr *elems_idr = &inst->control_elems_idr;
++	struct p4tc_extern *p;
++
++	p = idr_find(elems_idr, key);
++	if (p) {
++		refcount_inc(&p->common.p4tc_ext_refcnt);
++		*e = p;
++		return 1;
++	}
++
++	NL_SET_ERR_MSG_FMT(extack, "Unable to find element with key %u",
++			   key);
++	return -ENOENT;
++}
++
++struct p4tc_extern *
++p4tc_ext_elem_find(struct p4tc_extern_inst *inst,
++		   struct p4tc_ext_bpf_params *params)
++{
++	struct p4tc_extern *e;
++
++	e = idr_find(&inst->control_elems_idr, params->index);
++	if (!e)
++		return ERR_PTR(-ENOENT);
++
++	return e;
++}
++EXPORT_SYMBOL(p4tc_ext_elem_find);
++
++#define p4tc_ext_common_elem_find(common, params) \
++	((struct p4tc_extern_common *)p4tc_ext_elem_find(common, params))
++
++static struct p4tc_extern_common *
++__p4tc_ext_common_elem_get(struct net *net, struct p4tc_pipeline **pipeline,
++			   struct p4tc_ext_bpf_params *params)
++{
++	struct p4tc_extern_common *ext_common;
++	struct p4tc_extern_inst *inst;
++	int err;
++
++	inst = p4tc_ext_inst_get_byids(net, pipeline, params);
++	if (IS_ERR(inst)) {
++		err = PTR_ERR(inst);
++		goto put_pipe;
++	}
++
++	ext_common = p4tc_ext_common_elem_find(inst, params);
++	if (IS_ERR(ext_common)) {
++		err = PTR_ERR(ext_common);
++		goto put_pipe;
++	}
++
++	if (!refcount_inc_not_zero(&ext_common->p4tc_ext_refcnt)) {
++		err = -EBUSY;
++		goto put_pipe;
++	}
++
++	return ext_common;
++
++put_pipe:
++	p4tc_pipeline_put(*pipeline);
++	return ERR_PTR(err);
++}
++
++/* This function should be paired with p4tc_ext_common_elem_put */
++struct p4tc_extern_common *
++p4tc_ext_common_elem_get(struct sk_buff *skb, struct p4tc_pipeline **pipeline,
++			 struct p4tc_ext_bpf_params *params)
++{
++	struct net *net;
++
++	net = skb->dev ? dev_net(skb->dev) : sock_net(skb->sk);
++
++	return __p4tc_ext_common_elem_get(net, pipeline, params);
++}
++EXPORT_SYMBOL(p4tc_ext_common_elem_get);
++
++/* This function should be paired with p4tc_ext_common_elem_put */
++struct p4tc_extern_common *
++p4tc_xdp_ext_common_elem_get(struct xdp_buff *ctx,
++			     struct p4tc_pipeline **pipeline,
++			     struct p4tc_ext_bpf_params *params)
++{
++	struct net *net;
++
++	net = dev_net(ctx->rxq->dev);
++
++	return __p4tc_ext_common_elem_get(net, pipeline, params);
++}
++EXPORT_SYMBOL(p4tc_xdp_ext_common_elem_get);
++
++void p4tc_ext_common_elem_put(struct p4tc_pipeline *pipeline,
++			      struct p4tc_extern_common *common)
++{
++	refcount_dec(&common->p4tc_ext_refcnt);
++	p4tc_pipeline_put(pipeline);
++}
++EXPORT_SYMBOL(p4tc_ext_common_elem_put);
++
++static bool p4tc_ext_param_is_writable(struct p4tc_extern_param *param)
++{
++	return param->flags & P4TC_EXT_PARAMS_FLAG_ISKEY;
++}
++
++int __bpf_p4tc_extern_md_write(struct net *net,
++			       struct p4tc_ext_bpf_params *params)
++{
++	struct p4tc_extern_param *param;
++	struct p4tc_pipeline *pipeline;
++	struct p4tc_extern_common *e;
++	struct p4tc_type *type;
++	u8 *params_data;
++	int err = 0;
++
++	if (!params)
++		return -EINVAL;
++
++	params_data = params->in_params;
++
++	e = __p4tc_ext_common_elem_get(net, &pipeline, params);
++	if (IS_ERR(e))
++		return PTR_ERR(e);
++
++	param = idr_find(&e->params->params_idr, params->param_id);
++	if (unlikely(!param)) {
++		err = -EINVAL;
++		goto put_pipe;
++	}
++
++	if (!p4tc_ext_param_is_writable(param)) {
++		err = -EINVAL;
++		goto put_pipe;
++	}
++
++	type = param->type;
++	if (unlikely(!type->ops->host_read)) {
++		err = -EINVAL;
++		goto put_pipe;
++	}
++
++	if (unlikely(!type->ops->host_write)) {
++		err = -EINVAL;
++		goto put_pipe;
++	}
++
++	write_lock_bh(&e->params->params_lock);
++	p4t_copy(param->mask_shift, type, param->value,
++		 param->mask_shift, type, params_data);
++	write_unlock_bh(&e->params->params_lock);
++
++put_pipe:
++	p4tc_ext_common_elem_put(pipeline, e);
++
 +	return err;
 +}
 +
-+static u16 p4tc_table_entry_tbl_permcpy(const u16 tblperm)
++int __bpf_p4tc_extern_md_read(struct net *net,
++			      struct p4tc_ext_bpf_res *res,
++			      struct p4tc_ext_bpf_params *params)
 +{
-+	return p4tc_ctrl_perm_rm_create(p4tc_data_perm_rm_create(tblperm));
++	const struct p4tc_type_ops *ops;
++	struct p4tc_extern_param *param;
++	struct p4tc_pipeline *pipeline;
++	struct p4tc_extern_common *e;
++	int err = 0;
++
++	if (!params || !res)
++		return -EINVAL;
++
++	e = __p4tc_ext_common_elem_get(net, &pipeline, params);
++	if (IS_ERR(e))
++		return PTR_ERR(e);
++
++	param = idr_find(&e->params->params_idr, params->param_id);
++	if (unlikely(!param)) {
++		err = -ENOENT;
++		goto refcount_dec;
++	}
++
++	ops = param->type->ops;
++	if (unlikely(!ops->host_read)) {
++		err = -ENOENT;
++		goto refcount_dec;
++	}
++
++	read_lock_bh(&e->params->params_lock);
++	ops->host_read(param->type, param->mask_shift, param->value,
++		       res->out_params);
++	read_unlock_bh(&e->params->params_lock);
++
++refcount_dec:
++	p4tc_ext_common_elem_put(pipeline, e);
++
++	return err;
 +}
 +
-+#define P4TC_TBL_ENTRY_CU_FLAG_CREATE 0x1
-+#define P4TC_TBL_ENTRY_CU_FLAG_UPDATE 0x2
-+#define P4TC_TBL_ENTRY_CU_FLAG_SET 0x4
-+
-+static struct p4tc_table_entry *
-+__p4tc_table_entry_cu(struct net *net, u8 cu_flags, struct nlattr **tb,
-+		      struct p4tc_pipeline *pipeline, struct p4tc_table *table,
-+		      struct netlink_ext_ack *extack)
++static int p4tc_extern_destroy(struct p4tc_extern *externs[])
 +{
-+	bool replace = cu_flags == P4TC_TBL_ENTRY_CU_FLAG_UPDATE;
-+	bool set = cu_flags == P4TC_TBL_ENTRY_CU_FLAG_SET;
-+	u8 __mask[sizeof(struct p4tc_table_entry_mask) +
-+		BITS_TO_BYTES(P4TC_MAX_KEYSZ)] = { 0 };
-+	struct p4tc_table_entry_mask *mask = (void *)&__mask;
-+	struct p4tc_table_entry_value *value;
-+	u8 whodunnit = P4TC_ENTITY_UNSPEC;
-+	struct p4tc_table_entry *entry;
-+	u32 keysz_bytes;
-+	u32 keysz_bits;
-+	u16 tblperm;
-+	int ret = 0;
-+	u32 entrysz;
-+	u32 prio;
++	struct p4tc_extern *e;
++	int ret = 0, i;
 +
-+	prio = tb[P4TC_ENTRY_PRIO] ? nla_get_u32(tb[P4TC_ENTRY_PRIO]) : 0;
-+	if (table->tbl_type != P4TC_TABLE_TYPE_EXACT && replace) {
-+		if (!prio) {
-+			NL_SET_ERR_MSG(extack, "Must specify entry priority");
++	for (i = 0; i < P4TC_MSGBATCH_SIZE && externs[i]; i++) {
++		e = externs[i];
++		externs[i] = NULL;
++		free_p4tc_ext_rcu(&e->rcu);
++	}
++	return ret;
++}
++
++static int p4tc_extern_put(struct p4tc_extern *p)
++{
++	return __p4tc_extern_put(p);
++}
++
++/* Put all externs in this array, skip those NULL's. */
++static void p4tc_extern_put_many(struct p4tc_extern *externs[])
++{
++	int i;
++
++	for (i = 0; i < P4TC_MSGBATCH_SIZE; i++) {
++		struct p4tc_extern *e = externs[i];
++
++		if (!e)
++			continue;
++		p4tc_extern_put(e);
++	}
++}
++
++static int p4tc_extern_elem_dump(struct sk_buff *skb,
++				 struct p4tc_extern *externs[],
++				 int ref)
++{
++	struct p4tc_extern *e;
++	int err = -EINVAL, i;
++	struct nlattr *nest;
++
++	for (i = 0; i < P4TC_MSGBATCH_SIZE && externs[i]; i++) {
++		e = externs[i];
++		nest = nla_nest_start_noflag(skb, i + 1);
++		if (!nest)
++			goto nla_put_failure;
++		err = p4tc_ext_elem_dump_1(skb, &e->common);
++		if (err < 0)
++			goto errout;
++		nla_nest_end(skb, nest);
++	}
++
++	return 0;
++
++nla_put_failure:
++	err = -EINVAL;
++errout:
++	nla_nest_cancel(skb, nest);
++	return err;
++}
++
++static void generic_free_param_value(struct p4tc_extern_param *param)
++{
++	kfree(param->value);
++}
++
++static void *generic_parse_param_value(struct p4tc_extern_param *nparam,
++				       struct p4tc_type *type,
++				       struct nlattr *nla, bool value_required,
++				       struct netlink_ext_ack *extack)
++{
++	const u32 alloc_len = BITS_TO_BYTES(type->container_bitsz);
++	struct nlattr *tb_value[P4TC_EXT_VALUE_PARAMS_MAX + 1];
++	void *value;
++	int err;
++
++	if (!nla) {
++		if (value_required) {
++			NL_SET_ERR_MSG(extack, "Must specify param value");
++			return ERR_PTR(-EINVAL);
++		} else {
++			return NULL;
++		}
++	}
++
++	err = nla_parse_nested(tb_value, P4TC_EXT_VALUE_PARAMS_MAX,
++			       nla, p4tc_extern_params_value_policy,
++			       extack);
++	if (err < 0)
++		return ERR_PTR(err);
++
++	value = nla_data(tb_value[P4TC_EXT_PARAMS_VALUE_RAW]);
++	if (type->ops->validate_p4t) {
++		err = type->ops->validate_p4t(type, value, 0, type->bitsz - 1,
++					      extack);
++		if (err < 0)
++			return ERR_PTR(err);
++	}
++
++	if (nla_len(tb_value[P4TC_EXT_PARAMS_VALUE_RAW]) != alloc_len)
++		return ERR_PTR(-EINVAL);
++
++	return value;
++}
++
++static int generic_init_param_value(struct net *net,
++				    struct p4tc_extern_param *nparam,
++				    struct nlattr **tb,
++				    u32 byte_sz, bool value_required,
++				    struct netlink_ext_ack *extack)
++{
++	const u32 alloc_len = BITS_TO_BYTES(nparam->type->container_bitsz);
++	struct p4tc_extern_param_ops *ops;
++	void *value;
++
++	if (p4tc_ext_param_ops_is_init(nparam->ops))
++		ops = nparam->ops;
++	else
++		ops = nparam->mod_ops;
++
++	value = generic_parse_param_value(nparam, nparam->type,
++					  tb[P4TC_EXT_PARAMS_VALUE],
++					  value_required, extack);
++	if (IS_ERR_OR_NULL(value))
++		return PTR_ERR(value);
++
++	if (ops && ops->init_value)
++		return ops->init_value(net, nparam, value, extack);
++
++	nparam->value = kzalloc(alloc_len, GFP_KERNEL);
++	if (!nparam->value)
++		return -ENOMEM;
++
++	memcpy(nparam->value, value, byte_sz);
++
++	return 0;
++}
++
++static const struct nla_policy p4tc_extern_policy[P4TC_EXT_MAX + 1] = {
++	[P4TC_EXT_INST_NAME] = {
++		.type = NLA_STRING,
++		.len = EXTERNINSTNAMSIZ
++	},
++	[P4TC_EXT_KIND]		= { .type = NLA_STRING },
++	[P4TC_EXT_PARAMS]	= { .type = NLA_NESTED },
++	[P4TC_EXT_KEY]		= { .type = NLA_NESTED },
++	[P4TC_EXT_FLAGS]	= { .type = NLA_BITFIELD32 },
++};
++
++static const struct nla_policy p4tc_extern_params_policy[P4TC_EXT_PARAMS_MAX + 1] = {
++	[P4TC_EXT_PARAMS_NAME] = { .type = NLA_STRING, .len = EXTPARAMNAMSIZ },
++	[P4TC_EXT_PARAMS_ID] = { .type = NLA_U32 },
++	[P4TC_EXT_PARAMS_VALUE] = { .type = NLA_NESTED },
++	[P4TC_EXT_PARAMS_TYPE] = { .type = NLA_U32 },
++	[P4TC_EXT_PARAMS_BITSZ] = { .type = NLA_U16 },
++	[P4TC_EXT_PARAMS_FLAGS] = { .type = NLA_U8 },
++};
++
++int p4tc_ext_param_value_init(struct net *net,
++			      struct p4tc_extern_param *param,
++			      struct nlattr **tb, u32 typeid,
++			      bool value_required,
++			      struct netlink_ext_ack *extack)
++{
++	u32 byte_sz = BITS_TO_BYTES(param->bitsz);
++
++	if (!param->ops) {
++		struct p4tc_extern_param_ops *ops;
++
++		ops = (struct p4tc_extern_param_ops *)&ext_param_ops[typeid];
++		param->ops = ops;
++	}
++
++	return generic_init_param_value(net, param, tb, byte_sz, value_required,
++					extack);
++}
++
++void p4tc_ext_param_value_free_tmpl(struct p4tc_extern_param *param)
++{
++	if (param->ops->free)
++		return param->ops->free(param);
++
++	return generic_free_param_value(param);
++}
++
++int p4tc_ext_param_value_dump_tmpl(struct sk_buff *skb,
++				   struct p4tc_extern_param *param)
++{
++	if (param->ops && param->ops->dump_value)
++		return param->ops->dump_value(skb, param->ops, param);
++
++	return generic_dump_ext_param_value(skb, param->type, param);
++}
++
++static struct p4tc_extern_param *
++p4tc_ext_create_param(struct net *net, struct p4tc_extern_params *params,
++		      struct idr *control_params_idr,
++		      struct nlattr **tb, size_t *attrs_size,
++		      bool init_param, struct netlink_ext_ack *extack)
++{
++	struct p4tc_extern_param *param, *nparam;
++	u32 param_id = 0;
++	int err = 0;
++
++	if (tb[P4TC_EXT_PARAMS_ID])
++		param_id = nla_get_u32(tb[P4TC_EXT_PARAMS_ID]);
++	*attrs_size += nla_total_size(sizeof(u32));
++
++	param = p4tc_ext_param_find_byanyattr(control_params_idr,
++					      tb[P4TC_EXT_PARAMS_NAME],
++					      param_id, extack);
++	if (IS_ERR(param))
++		return param;
++
++	if (tb[P4TC_EXT_PARAMS_TYPE]) {
++		u32 typeid = nla_get_u32(tb[P4TC_EXT_PARAMS_TYPE]);
++
++		if (param->type->typeid != typeid) {
++			NL_SET_ERR_MSG(extack,
++				       "Param type differs from template");
 +			return ERR_PTR(-EINVAL);
 +		}
 +	} else {
-+		if (table->tbl_type == P4TC_TABLE_TYPE_EXACT) {
-+			if (prio) {
-+				NL_SET_ERR_MSG(extack,
-+					       "Mustn't specify entry priority for exact");
-+				return ERR_PTR(-EINVAL);
++		NL_SET_ERR_MSG(extack, "Must specify param type");
++		return ERR_PTR(-EINVAL);
++	}
++	*attrs_size += nla_total_size(sizeof(u32));
++
++	nparam = kzalloc(sizeof(*nparam), GFP_KERNEL);
++	if (!nparam)
++		return ERR_PTR(-ENOMEM);
++
++	strscpy(nparam->name, param->name, EXTPARAMNAMSIZ);
++	nparam->type = param->type;
++	nparam->bitsz = param->bitsz;
++
++	if (init_param) {
++		err = p4tc_ext_param_value_init(net, nparam, tb,
++						param->type->typeid, true,
++						extack);
++	} else {
++		void *value;
++
++		value = generic_parse_param_value(nparam, nparam->type,
++						  tb[P4TC_EXT_PARAMS_VALUE],
++						  true, extack);
++		if (IS_ERR(value))
++			err = PTR_ERR(value);
++		else
++			nparam->value = value;
++	}
++
++	if (err < 0)
++		goto free;
++
++	*attrs_size += nla_total_size(BITS_TO_BYTES(param->type->container_bitsz));
++	nparam->id = param->id;
++
++	err = idr_alloc_u32(&params->params_idr, ERR_PTR(-EBUSY), &nparam->id,
++			    nparam->id, GFP_KERNEL);
++	if (err < 0)
++		goto free_val;
++
++	return nparam;
++
++free_val:
++	if (param->ops && param->ops->free)
++		param->ops->free(nparam);
++	else
++		generic_free_param_value(nparam);
++
++free:
++	kfree(nparam);
++
++	return ERR_PTR(err);
++}
++
++static struct p4tc_extern_param *
++p4tc_ext_init_param(struct net *net, struct idr *control_params_idr,
++		    struct p4tc_extern_params *params, struct nlattr *nla,
++		    size_t *attrs_size, bool init_value,
++		    struct netlink_ext_ack *extack)
++{
++	struct nlattr *tb[P4TC_EXT_PARAMS_MAX + 1];
++	int err;
++
++	err = nla_parse_nested(tb, P4TC_EXT_PARAMS_MAX, nla,
++			       p4tc_extern_params_policy, extack);
++	if (err < 0)
++		return ERR_PTR(err);
++
++	return p4tc_ext_create_param(net, params, control_params_idr, tb,
++				     attrs_size, init_value, extack);
++}
++
++static int p4tc_ext_get_key_param_value(struct nlattr *nla,
++					u32 *key, struct netlink_ext_ack *extack)
++{
++	struct nlattr *tb[P4TC_EXT_VALUE_PARAMS_MAX + 1];
++	u32 *value;
++	int err;
++
++	if (!nla) {
++		NL_SET_ERR_MSG(extack, "Must specify key param value");
++		return -EINVAL;
++	}
++
++	err = nla_parse_nested(tb, P4TC_EXT_VALUE_PARAMS_MAX,
++			       nla, p4tc_extern_params_value_policy, extack);
++	if (err < 0)
++		return err;
++
++	if (!tb[P4TC_EXT_PARAMS_VALUE_RAW]) {
++		NL_SET_ERR_MSG(extack, "Must specify raw value attr");
++		return -EINVAL;
++	}
++
++	if (nla_len(tb[P4TC_EXT_PARAMS_VALUE_RAW]) > sizeof(*key)) {
++		NL_SET_ERR_MSG(extack,
++			       "Param value is bigger than 32 bits");
++		return -EINVAL;
++	}
++
++	value = nla_data(tb[P4TC_EXT_PARAMS_VALUE_RAW]);
++
++	*key = *value;
++
++	return 0;
++}
++
++static int p4tc_ext_get_nonscalar_key_param(struct idr *params_idr,
++					    struct nlattr *nla, u32 *key,
++					    struct netlink_ext_ack *extack)
++{
++	struct nlattr *tb[P4TC_EXT_PARAMS_MAX + 1];
++	struct p4tc_extern_param *index_param;
++	char *param_name;
++	int err;
++
++	err = nla_parse_nested(tb, P4TC_EXT_PARAMS_MAX, nla,
++			       p4tc_extern_params_policy, extack);
++	if (err < 0)
++		return err;
++
++	if (!tb[P4TC_EXT_PARAMS_NAME]) {
++		NL_SET_ERR_MSG(extack, "Must specify key param name");
++		return -EINVAL;
++	}
++	param_name = nla_data(tb[P4TC_EXT_PARAMS_NAME]);
++
++	index_param = p4tc_ext_param_find_byanyattr(params_idr,
++						    tb[P4TC_EXT_PARAMS_NAME],
++						    0, extack);
++	if (IS_ERR(index_param)) {
++		NL_SET_ERR_MSG(extack, "Key param name not found");
++		return -EINVAL;
++	}
++
++	if (!(index_param->flags & P4TC_EXT_PARAMS_FLAG_ISKEY)) {
++		NL_SET_ERR_MSG_FMT(extack, "%s is not the key param name",
++				   param_name);
++		return -EINVAL;
++	}
++
++	err = p4tc_ext_get_key_param_value(tb[P4TC_EXT_PARAMS_VALUE], key,
++					   extack);
++	if (err < 0)
++		return err;
++
++	return index_param->id;
++}
++
++static int p4tc_ext_get_key_param_scalar(struct p4tc_extern_inst *inst,
++					 struct nlattr *nla, u32 *key,
++					 struct netlink_ext_ack *extack)
++{
++	struct nlattr *tb[P4TC_EXT_PARAMS_MAX + 1];
++	int err;
++
++	err = nla_parse_nested(tb, P4TC_EXT_PARAMS_MAX, nla,
++			       p4tc_extern_params_policy, extack);
++	if (err < 0)
++		return err;
++
++	return p4tc_ext_get_key_param_value(tb[P4TC_EXT_PARAMS_VALUE], key,
++					    extack);
++}
++
++struct p4tc_extern_params *p4tc_extern_params_init(void)
++{
++	struct p4tc_extern_params *params;
++
++	params = kzalloc(sizeof(*params), GFP_KERNEL);
++	if (!params)
++		return NULL;
++
++	idr_init(&params->params_idr);
++	rwlock_init(&params->params_lock);
++
++	return params;
++}
++
++static int __p4tc_ext_init_params(struct net *net,
++				  struct idr *control_params_idr,
++				  struct p4tc_extern_params **params,
++				  struct nlattr *nla, size_t *attrs_size,
++				  bool init_values,
++				  struct netlink_ext_ack *extack)
++{
++	struct p4tc_extern_param *params_backup[P4TC_MSGBATCH_SIZE] = { NULL };
++	struct nlattr *tb[P4TC_MSGBATCH_SIZE + 1];
++	int err;
++	int i;
++
++	if (!*params) {
++		*params = p4tc_extern_params_init();
++		if (!*params)
++			return -ENOMEM;
++	}
++
++	err = nla_parse_nested(tb, P4TC_MSGBATCH_SIZE, nla, NULL, extack);
++	if (err < 0) {
++		kfree(*params);
++		*params = NULL;
++		return err;
++	}
++
++	for (i = 1; i < P4TC_MSGBATCH_SIZE + 1 && tb[i]; i++) {
++		struct p4tc_extern_param *param;
++
++		param = p4tc_ext_init_param(net, control_params_idr, *params,
++					    tb[i], attrs_size, init_values,
++					    extack);
++		if (IS_ERR(param)) {
++			err = PTR_ERR(param);
++			goto params_del;
++		}
++		params_backup[i - 1] = param;
++		*attrs_size = nla_total_size(0);  /* params array element nested */
++	}
++
++	p4tc_ext_insert_many_params(&((*params)->params_idr), params_backup,
++				    i - 1);
++	return 0;
++
++params_del:
++	p4tc_ext_put_many_params(&((*params)->params_idr), params_backup,
++				 i - 1);
++	kfree(*params);
++	*params = NULL;
++	return err;
++}
++
++#define p4tc_ext_init_params(net, control_params_idr, params, nla, atrrs_size, extack) \
++	(__p4tc_ext_init_params(net, control_params_idr, params, \
++				nla, &(attrs_size), true, extack))
++
++#define p4tc_ext_parse_params(net, control_params_idr, params, nla, attrs_size, extack) \
++	(__p4tc_ext_init_params(net, control_params_idr, params, \
++				nla, &(attrs_size), false, extack))
++
++void p4tc_ext_elem_put_list(struct p4tc_extern_inst *inst,
++			    struct p4tc_extern_common *e)
++{
++	struct p4tc_extern_param *param;
++	unsigned long param_id, tmp;
++
++	idr_for_each_entry_ul(&e->params->params_idr, param, tmp, param_id) {
++		const struct p4tc_type *type = param->type;
++		const u32 type_bytesz = BITS_TO_BYTES(type->container_bitsz);
++
++		if (param->mod_ops)
++			param->mod_ops->default_value(param);
++		else
++			memset(param->value, 0, type_bytesz);
++	}
++
++	spin_lock(&inst->available_list_lock);
++	list_add_tail(&e->node, &inst->unused_elems);
++	refcount_dec(&e->p4tc_ext_refcnt);
++	spin_unlock(&inst->available_list_lock);
++}
++
++struct p4tc_extern_common *p4tc_ext_elem_get(struct p4tc_extern_inst *inst)
++{
++	struct p4tc_extern_common *e;
++
++	spin_lock(&inst->available_list_lock);
++	e = list_first_entry_or_null(&inst->unused_elems,
++				     struct p4tc_extern_common, node);
++	if (e) {
++		refcount_inc(&e->p4tc_ext_refcnt);
++		list_del_init(&e->node);
++	}
++
++	spin_unlock(&inst->available_list_lock);
++
++	return e;
++}
++
++static void p4tc_ext_idr_insert_many(struct p4tc_extern *externs[])
++{
++	int i;
++
++	for (i = 0; i < P4TC_MSGBATCH_SIZE; i++) {
++		struct p4tc_extern *e = externs[i];
++		struct p4tc_extern_inst *inst;
++		struct p4tc_extern *old_e;
++
++		if (!e)
++			continue;
++
++		inst = e->common.inst;
++		spin_lock(&inst->available_list_lock);
++		old_e = idr_replace(e->elems_idr, e, e->common.p4tc_ext_key);
++		if (inst->tbl_bindable)
++			list_del(&old_e->common.node);
++		call_rcu(&old_e->rcu, free_p4tc_ext_rcu);
++		if (inst->tbl_bindable)
++			list_add(&e->common.node, &inst->unused_elems);
++		spin_unlock(&inst->available_list_lock);
++	}
++}
++
++static const char *
++p4tc_ext_get_kind(struct nlattr *nla, struct netlink_ext_ack *extack)
++{
++	struct nlattr *tb[P4TC_EXT_MAX + 1];
++	struct nlattr *kind;
++	int err;
++
++	err = nla_parse_nested(tb, P4TC_EXT_MAX, nla,
++			       p4tc_extern_policy, extack);
++	if (err < 0)
++		return ERR_PTR(err);
++	err = -EINVAL;
++	kind = tb[P4TC_EXT_KIND];
++	if (!kind) {
++		NL_SET_ERR_MSG(extack, "TC extern name must be specified");
++		return ERR_PTR(err);
++	}
++
++	return nla_data(kind);
++}
++
++static struct p4tc_extern *
++p4tc_ext_init(struct net *net, struct nlattr *nla,
++	      struct p4tc_extern_inst *inst,
++	      u32 key, u32 flags,
++	      struct netlink_ext_ack *extack)
++{
++	struct idr *control_params_idr = &inst->params->params_idr;
++	const struct p4tc_extern_ops *e_o = inst->ops;
++	struct p4tc_extern_params *params = NULL;
++	struct p4tc_extern *e_orig = NULL;
++	size_t attrs_size = 0;
++	struct p4tc_extern *e;
++	int err = 0;
++
++	if (!nla) {
++		NL_SET_ERR_MSG(extack, "Must specify extern params");
++		err =  -EINVAL;
++		goto out;
++	}
++
++	if (p4tc_ext_has_rctrl(e_o)) {
++		err = p4tc_ext_parse_params(net, control_params_idr, &params,
++					    nla, attrs_size, extack);
++		if (err < 0)
++			goto out;
++
++		err = e_o->rctrl(RTM_P4TC_UPDATE, inst,
++				 (struct p4tc_extern_common **)&e, params, &key,
++				 extack);
++		p4tc_ext_params_free(params, false);
++		if (err < 0)
++			goto out;
++
++		return e;
++	}
++
++	err = p4tc_ext_idr_check_alloc(inst, key, &e_orig, extack);
++	if (err < 0)
++		goto out;
++
++	err = p4tc_ext_copy(inst, key, &e, e_orig, e_o, flags);
++	if (err < 0)
++		goto out;
++
++	err = p4tc_ext_init_params(net, control_params_idr, &params,
++				   nla, &attrs_size, extack);
++	if (err < 0)
++		goto release_idr;
++	attrs_size += nla_total_size(0) + p4tc_extern_shared_attrs_size();
++	e->attrs_size = attrs_size;
++
++	e->common.params = params;
++
++	return e;
++
++release_idr:
++	p4tc_ext_idr_release(e);
++
++out:
++	return ERR_PTR(err);
++}
++
++static struct p4tc_extern_param *find_key_param(struct idr *params_idr)
++{
++	struct p4tc_extern_param *param;
++	unsigned long tmp, id;
++
++	idr_for_each_entry_ul(params_idr, param, tmp, id) {
++		if (param->flags & P4TC_EXT_PARAMS_FLAG_ISKEY)
++			return param;
++	}
++
++	return NULL;
++}
++
++static struct p4tc_extern_param *
++p4tc_ext_init_defval_param(struct p4tc_extern_param *param,
++			   struct netlink_ext_ack *extack)
++{
++	const u32 bytesz = BITS_TO_BYTES(param->type->container_bitsz);
++	struct p4tc_extern_param_ops *val_ops;
++	struct p4tc_extern_param *nparam;
++	int err;
++
++	if (p4tc_ext_param_ops_is_init(param->ops))
++		val_ops = param->ops;
++	else
++		val_ops = param->mod_ops;
++
++	nparam = kzalloc(sizeof(*nparam), GFP_KERNEL);
++	if (!nparam) {
++		err = -ENOMEM;
++		goto out;
++	}
++
++	strscpy(nparam->name, param->name, EXTPARAMNAMSIZ);
++	nparam->type = param->type;
++	nparam->id = param->id;
++
++	if (val_ops) {
++		if (param->mod_ops && !val_ops->default_value) {
++			NL_SET_ERR_MSG_FMT(extack,
++					   "Param %s should have default_value op",
++					   param->name);
++			err = -EINVAL;
++			goto free_param;
++		}
++		err = val_ops->init_value(NULL, nparam, param->value,
++					  extack);
++		if (err < 0)
++			goto free_param;
++	} else {
++		nparam->value = kzalloc(bytesz, GFP_KERNEL);
++		if (!nparam->value) {
++			err = -ENOMEM;
++			goto free_param;
++		}
++
++		if (param->value)
++			memcpy(nparam->value, param->value, bytesz);
++	}
++	nparam->ops = param->ops;
++	nparam->mod_ops = param->mod_ops;
++
++	return nparam;
++
++free_param:
++	kfree(nparam);
++out:
++	return ERR_PTR(err);
++}
++
++struct p4tc_extern_params *
++p4tc_ext_params_copy(struct p4tc_extern_params *params_orig)
++{
++	struct p4tc_extern_param *nparam = NULL;
++	struct p4tc_extern_params *params_copy;
++	const struct p4tc_extern_param *param;
++	unsigned long tmp, id;
++	int err;
++
++	params_copy = p4tc_extern_params_init();
++	if (!params_copy) {
++		err = -ENOMEM;
++		goto err_out;
++	}
++
++	idr_for_each_entry_ul(&params_orig->params_idr, param, tmp, id) {
++		struct p4tc_type *param_type = param->type;
++		u32 alloc_len = BITS_TO_BYTES(param_type->container_bitsz);
++		struct p4tc_type_mask_shift *mask_shift = NULL;
++
++		nparam = kzalloc(sizeof(*nparam), GFP_KERNEL);
++		if (!nparam) {
++			err = -ENOMEM;
++			goto free_params;
++		}
++		nparam->ops = param->ops;
++		nparam->mod_ops = param->mod_ops;
++		nparam->type = param->type;
++
++		if (param->value) {
++			nparam->value = kzalloc(alloc_len, GFP_KERNEL);
++			if (!nparam->value) {
++				err = -ENOMEM;
++				goto free_param;
 +			}
-+			prio = p4tc_table_entry_alloc_new_prio(table);
++			memcpy(nparam->value, param->value, alloc_len);
++		}
++
++		if (param_type->ops && param_type->ops->create_bitops) {
++			const u32 bitsz = param->bitsz;
++
++			mask_shift = param_type->ops->create_bitops(bitsz, 0,
++								    bitsz - 1,
++								    NULL);
++			if (IS_ERR(mask_shift)) {
++				err = PTR_ERR(mask_shift);
++				goto free_param_value;
++			}
++			nparam->mask_shift = mask_shift;
++		}
++
++		nparam->id = param->id;
++		err = idr_alloc_u32(&params_copy->params_idr, nparam,
++				    &nparam->id, nparam->id, GFP_KERNEL);
++		if (err < 0)
++			goto free_mask_shift;
++
++		nparam->index = param->index;
++		nparam->bitsz = param->bitsz;
++		nparam->flags = param->flags;
++		strscpy(nparam->name, param->name, EXTPARAMNAMSIZ);
++		params_copy->num_params++;
++	}
++
++	return params_copy;
++
++free_mask_shift:
++	if (nparam->mask_shift)
++		p4t_release(nparam->mask_shift);
++free_param_value:
++	kfree(nparam->value);
++free_param:
++	kfree(nparam);
++free_params:
++	p4tc_ext_params_free(params_copy, true);
++err_out:
++	return ERR_PTR(err);
++}
++EXPORT_SYMBOL(p4tc_ext_params_copy);
++
++int p4tc_ext_init_defval_params(struct p4tc_extern_inst *inst,
++				struct p4tc_extern_common *common,
++				struct idr *control_params_idr,
++				struct netlink_ext_ack *extack)
++{
++	struct p4tc_extern_params *params = NULL;
++	struct p4tc_extern_param *param;
++	unsigned long tmp, id;
++	int err;
++
++	params = p4tc_extern_params_init();
++	if (!params)
++		return -ENOMEM;
++
++	idr_for_each_entry_ul(control_params_idr, param, tmp, id) {
++		struct p4tc_extern_param *nparam;
++
++		if (param->flags & P4TC_EXT_PARAMS_FLAG_ISKEY)
++			/* Skip key param */
++			continue;
++
++		nparam = p4tc_ext_init_defval_param(param, extack);
++		if (IS_ERR(nparam)) {
++			err = PTR_ERR(nparam);
++			goto free_params;
++		}
++
++		err = idr_alloc_u32(&params->params_idr, nparam, &nparam->id,
++				    nparam->id, GFP_KERNEL);
++		if (err < 0) {
++			kfree(nparam);
++			goto free_params;
++		}
++		params->num_params++;
++	}
++
++	common->params = params;
++	common->inst = inst;
++	common->ops = inst->ops;
++	refcount_set(&common->p4tc_ext_refcnt, 1);
++	if (inst->tbl_bindable)
++		list_add(&common->node, &inst->unused_elems);
++
++	return 0;
++
++free_params:
++	p4tc_ext_params_free(params, true);
++	return err;
++}
++EXPORT_SYMBOL_GPL(p4tc_ext_init_defval_params);
++
++static int p4tc_ext_init_defval(struct p4tc_extern **e,
++				struct p4tc_extern_inst *inst,
++				u32 key, struct netlink_ext_ack *extack)
++{
++	const struct p4tc_extern_ops *e_o = inst->ops;
++	int err;
++
++	if (!inst->is_scalar) {
++		struct p4tc_extern_param *key_param;
++
++		key_param = find_key_param(&inst->params->params_idr);
++		if (!key_param) {
++			NL_SET_ERR_MSG(extack, "Unable to find key param");
++			return -ENOENT;
++		}
++	}
++
++	err = p4tc_ext_idr_create(inst, key, e, e_o, 0);
++	if (err < 0)
++		return err;
++
++	/* We already store it in the IDR, because we arrive here with the
++	 * rtnl_lock, so this code is never accessed concurrently.
++	 */
++	err = idr_alloc_u32(&inst->control_elems_idr, *e, &key,
++			    key, GFP_KERNEL);
++	if (err < 0) {
++		__p4tc_ext_idr_purge(*e);
++		return err;
++	}
++
++	err = p4tc_ext_init_defval_params(inst, &((*e)->common),
++					  &inst->params->params_idr, extack);
++	if (err < 0)
++		goto release_idr;
++
++	return 0;
++
++release_idr:
++	p4tc_ext_idr_release_dec_num_elems(*e);
++
++	return err;
++}
++
++static void p4tc_extern_inst_destroy_elems(struct idr *insts_idr)
++{
++	struct p4tc_extern_inst *inst;
++	unsigned long tmp, id;
++
++	idr_for_each_entry_ul(insts_idr, inst, tmp, id) {
++		unsigned long tmp2, elem_id;
++		struct p4tc_extern *e;
++
++		idr_for_each_entry_ul(&inst->control_elems_idr, e,
++				      tmp2, elem_id) {
++			p4tc_ext_idr_purge(e);
++		}
++	}
++}
++
++static void p4tc_user_pipe_ext_destroy_elems(struct idr *user_ext_idr)
++{
++	struct p4tc_user_pipeline_extern *pipe_ext;
++	unsigned long tmp, id;
++
++	idr_for_each_entry_ul(user_ext_idr, pipe_ext, tmp, id) {
++		if (p4tc_ext_has_construct(pipe_ext->tmpl_ext->ops))
++			continue;
++
++		p4tc_extern_inst_destroy_elems(&pipe_ext->e_inst_idr);
++	}
++}
++
++int p4tc_extern_inst_init_elems(struct p4tc_extern_inst *inst, u32 num_elems)
++{
++	int err = 0;
++	int i;
++
++	for (i = 0; i < num_elems; i++) {
++		struct p4tc_extern *e = NULL;
++
++		err = p4tc_ext_init_defval(&e, inst, i + 1, NULL);
++		if (err)
++			return err;
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(p4tc_extern_inst_init_elems);
++
++static int
++__p4tc_extern_insts_init_elems(struct idr *insts_idr)
++{
++	struct p4tc_extern_inst *inst;
++	unsigned long tmp, id;
++	int err = 0;
++
++	idr_for_each_entry_ul(insts_idr, inst, tmp, id) {
++		u32 max_num_elems = inst->max_num_elems;
++
++		err = p4tc_extern_inst_init_elems(inst, max_num_elems);
++		if (err < 0)
++			return err;
++	}
++
++	return 0;
++}
++
++/* Called before sealing the pipeline */
++int p4tc_extern_insts_init_elems(struct idr *user_ext_idr)
++{
++	struct p4tc_user_pipeline_extern *pipe_ext;
++	unsigned long tmp, id;
++	int err;
++
++	idr_for_each_entry_ul(user_ext_idr, pipe_ext, tmp, id) {
++		/* We assume the module construct will create the initial elems
++		 * by itself.
++		 * We only initialise when sealing if we don't have construct.
++		 */
++		if (p4tc_ext_has_construct(pipe_ext->tmpl_ext->ops))
++			continue;
++
++		err = __p4tc_extern_insts_init_elems(&pipe_ext->e_inst_idr);
++		if (err < 0)
++			goto destroy_ext_inst_elems;
++	}
++
++	return 0;
++
++destroy_ext_inst_elems:
++	p4tc_user_pipe_ext_destroy_elems(user_ext_idr);
++	return err;
++}
++
++static struct p4tc_extern *
++p4tc_extern_init_1(struct p4tc_pipeline *pipeline,
++		   struct p4tc_extern_inst *inst,
++		   struct nlattr *nla, u32 key, u32 flags,
++		   struct netlink_ext_ack *extack)
++{
++	return p4tc_ext_init(pipeline->net, nla, inst, key,
++			     flags, extack);
++}
++
++static int tce_get_fill(struct sk_buff *skb, struct p4tc_extern *externs[],
++			u32 portid, u32 seq, u16 flags, u32 pipeid, int cmd,
++			int ref, struct netlink_ext_ack *extack)
++{
++	unsigned char *b = nlmsg_get_pos(skb);
++	struct nlmsghdr *nlh;
++	struct nlattr *nest;
++	struct p4tcmsg *t;
++
++	nlh = nlmsg_put(skb, portid, seq, cmd, sizeof(*t), flags);
++	if (!nlh)
++		goto out_nlmsg_trim;
++	t = nlmsg_data(nlh);
++	t->pipeid = pipeid;
++	t->obj = P4TC_OBJ_RUNTIME_EXTERN;
++
++	nest = nla_nest_start(skb, P4TC_ROOT);
++	if (p4tc_extern_elem_dump(skb, externs, ref) < 0)
++		goto out_nlmsg_trim;
++
++	nla_nest_end(skb, nest);
++
++	nlh->nlmsg_len = (unsigned char *)nlmsg_get_pos(skb) - b;
++
++	return skb->len;
++
++out_nlmsg_trim:
++	nlmsg_trim(skb, b);
++	return -1;
++}
++
++static int
++p4tc_extern_get_respond(struct net *net, u32 portid, struct nlmsghdr *n,
++			struct p4tc_extern *externs[], u32 pipeid,
++			size_t attr_size, struct netlink_ext_ack *extack)
++{
++	struct sk_buff *skb;
++
++	skb = alloc_skb(attr_size <= NLMSG_GOODSIZE ? NLMSG_GOODSIZE : attr_size,
++			GFP_KERNEL);
++	if (!skb)
++		return -ENOBUFS;
++	if (tce_get_fill(skb, externs, portid, n->nlmsg_seq, 0, pipeid,
++			 RTM_P4TC_GET, 1, NULL) <= 0) {
++		NL_SET_ERR_MSG(extack,
++			       "Failed to fill netlink attributes while adding TC extern");
++		kfree_skb(skb);
++		return -EINVAL;
++	}
++
++	return rtnl_unicast(skb, net, portid);
++}
++
++static struct p4tc_extern *
++p4tc_extern_get_1(struct p4tc_extern_inst *inst,
++		  struct nlattr *nla, const char *kind, struct nlmsghdr *n,
++		  u32 key, u32 portid, struct netlink_ext_ack *extack)
++{
++	struct p4tc_extern *e;
++	int err;
++
++	if (p4tc_ext_inst_has_rctrl(inst)) {
++		err = inst->ops->rctrl(n->nlmsg_type, inst,
++				       (struct p4tc_extern_common **)&e,
++				       NULL, &key, extack);
++		if (err < 0)
++			return ERR_PTR(err);
++
++		return e;
++	}
++
++	if (__p4tc_ext_idr_search(inst, &e, key) == 0) {
++		err = -ENOENT;
++		NL_SET_ERR_MSG(extack, "TC extern with specified key not found");
++		goto err_out;
++	}
++
++	return e;
++
++err_out:
++	return ERR_PTR(err);
++}
++
++static int
++p4tc_extern_add_notify(struct net *net, struct nlmsghdr *n,
++		       struct p4tc_extern *externs[], u32 portid, u32 pipeid,
++		       size_t attr_size, struct netlink_ext_ack *extack)
++{
++	struct sk_buff *skb;
++
++	skb = alloc_skb(attr_size <= NLMSG_GOODSIZE ? NLMSG_GOODSIZE : attr_size,
++			GFP_KERNEL);
++	if (!skb)
++		return -ENOBUFS;
++
++	if (tce_get_fill(skb, externs, portid, n->nlmsg_seq, n->nlmsg_flags,
++			 pipeid, n->nlmsg_type, 0, extack) <= 0) {
++		NL_SET_ERR_MSG(extack,
++			       "Failed to fill netlink attributes while adding TC extern");
++		kfree_skb(skb);
++		return -EINVAL;
++	}
++
++	return rtnetlink_send(skb, net, portid, RTNLGRP_TC,
++			      n->nlmsg_flags & NLM_F_ECHO);
++}
++
++static int p4tc_ext_get_key_param(struct p4tc_extern_inst *inst,
++				  struct nlattr *nla,
++				  struct idr *params_idr, u32 *key,
++				  struct netlink_ext_ack *extack)
++{
++	int err = 0;
++
++	if (inst->is_scalar) {
++		if (nla) {
++			err = p4tc_ext_get_key_param_scalar(inst, nla, key,
++							    extack);
++			if (err < 0)
++				return err;
++
++			if (*key != 1) {
++				NL_SET_ERR_MSG(extack,
++					       "Key of scalar must be 1");
++				return -EINVAL;
++			}
 +		} else {
-+			if (prio)
-+				ret = ida_alloc_range(&table->tbl_prio_idr,
-+						      prio, prio, GFP_ATOMIC);
-+			else
-+				ret = p4tc_table_entry_alloc_new_prio(table);
-+			if (ret < 0) {
-+				NL_SET_ERR_MSG(extack,
-+					       "Unable to allocate priority");
-+				return ERR_PTR(ret);
-+			}
-+			prio = ret;
++			*key = 1;
 +		}
-+	}
-+
-+	whodunnit = nla_get_u8(tb[P4TC_ENTRY_WHODUNNIT]);
-+
-+	keysz_bits = table->tbl_keysz;
-+	keysz_bytes = P4TC_KEYSZ_BYTES(keysz_bits);
-+
-+	/* Entry memory layout:
-+	 * { entry:key __aligned(8):value }
-+	 */
-+	entrysz = sizeof(*entry) + keysz_bytes +
-+		sizeof(struct p4tc_table_entry_value);
-+
-+	entry = kzalloc(entrysz, GFP_KERNEL);
-+	if (unlikely(!entry)) {
-+		NL_SET_ERR_MSG(extack, "Unable to allocate table entry");
-+		ret = -ENOMEM;
-+		goto idr_rm;
-+	}
-+
-+	entry->key.keysz = keysz_bits;
-+	mask->sz = keysz_bits;
-+
-+	ret = p4tc_table_entry_extract_key(table, tb, &entry->key, mask, extack);
-+	if (ret < 0)
-+		goto free_entry;
-+
-+	value = p4tc_table_entry_value(entry);
-+	value->prio = prio;
-+
-+	rcu_read_lock();
-+	tblperm = rcu_dereference(table->tbl_permissions)->permissions;
-+	rcu_read_unlock();
-+
-+	if (tb[P4TC_ENTRY_PERMISSIONS]) {
-+		u16 nlperm;
-+
-+		nlperm = nla_get_u16(tb[P4TC_ENTRY_PERMISSIONS]);
-+		if (~tblperm & nlperm) {
-+			NL_SET_ERR_MSG(extack,
-+				       "Trying to set permission bits which aren't allowed by table");
-+			ret = -EINVAL;
-+			goto free_entry;
-+		}
-+
-+		if (p4tc_ctrl_create_ok(nlperm) || p4tc_data_create_ok(nlperm)) {
-+			NL_SET_ERR_MSG(extack,
-+				       "Create permission for table entry doesn't make sense");
-+			ret = -EINVAL;
-+			goto free_entry;
-+		}
-+		value->permissions = nlperm;
 +	} else {
-+		if (replace)
-+			value->permissions = P4TC_PERMISSIONS_UNINIT;
-+		else
-+			value->permissions =
-+				p4tc_table_entry_tbl_permcpy(tblperm);
-+	}
-+
-+	if (tb[P4TC_ENTRY_ACT]) {
-+		value->acts = kcalloc(TCA_ACT_MAX_PRIO,
-+				      sizeof(struct tc_action *), GFP_KERNEL);
-+		if (unlikely(!value->acts)) {
-+			ret = -ENOMEM;
-+			goto free_entry;
++		if (nla) {
++			err = p4tc_ext_get_nonscalar_key_param(params_idr, nla,
++							       key, extack);
++			if (err < 0)
++				return -EINVAL;
 +		}
 +
-+		ret = p4tc_action_init(net, tb[P4TC_ENTRY_ACT], value->acts,
-+				       table->common.p_id,
-+				       TCA_ACT_FLAGS_NO_RTNL, extack);
-+		if (unlikely(ret < 0)) {
-+			kfree(value->acts);
-+			value->acts = NULL;
-+			goto free_entry;
-+		} else if (ret > 1) {
-+			NL_SET_ERR_MSG(extack,
-+				       "Can only have one entry action");
-+			ret = -EINVAL;
-+			goto free_acts;
-+		}
-+
-+		value->num_acts = ret;
-+
-+		if (!p4tc_table_check_entry_act(table, value->acts[0])) {
-+			ret = -EPERM;
-+			NL_SET_ERR_MSG(extack,
-+				       "Action is not allowed as entry action");
-+			goto free_acts;
++		if (!key) {
++			NL_SET_ERR_MSG(extack, "Must specify extern key");
++			return -EINVAL;
 +		}
 +	}
 +
-+	if (!replace) {
-+		if ((!tb[P4TC_ENTRY_AGING] && tb[P4TC_ENTRY_DYNAMIC]) ||
-+		    (tb[P4TC_ENTRY_AGING] && !tb[P4TC_ENTRY_DYNAMIC])) {
-+			NL_SET_ERR_MSG(extack,
-+				       "Aging may only be set alongside dynamic");
-+			ret = -EINVAL;
-+			goto free_acts;
-+		}
-+	}
-+
-+	if (tb[P4TC_ENTRY_AGING])
-+		value->aging_ms = nla_get_u64(tb[P4TC_ENTRY_AGING]);
-+
-+	if (tb[P4TC_ENTRY_DYNAMIC])
-+		value->is_dyn = true;
-+
-+	rcu_read_lock();
-+	if (replace) {
-+		ret = __p4tc_table_entry_update(pipeline, table, entry, mask,
-+						whodunnit, true);
-+	} else {
-+		ret = __p4tc_table_entry_create(pipeline, table, entry, mask,
-+						whodunnit, true);
-+		if (set && ret == -EEXIST)
-+			ret = __p4tc_table_entry_update(pipeline, table, entry,
-+							mask, whodunnit, true);
-+	}
-+	rcu_read_unlock();
-+	if (ret < 0) {
-+		if ((replace || set) && ret == -EAGAIN)
-+			NL_SET_ERR_MSG(extack,
-+				       "Entry was being updated in parallel");
-+
-+		if (ret == -ENOSPC)
-+			NL_SET_ERR_MSG(extack, "Table max entries reached");
-+		else
-+			NL_SET_ERR_MSG(extack, "Failed to create/update entry");
-+
-+		goto free_acts;
-+	}
-+
-+	return entry;
-+
-+free_acts:
-+	p4tc_action_destroy(value->acts);
-+
-+free_entry:
-+	kfree(entry);
-+
-+idr_rm:
-+	if (!replace)
-+		p4tc_table_entry_free_prio(table, prio);
-+
-+	return ERR_PTR(ret);
++	return err;
 +}
 +
-+static int p4tc_table_entry_cu(struct net *net, struct sk_buff *skb,
-+			       u8 cu_flags, u16 *permissions,
-+			       struct nlattr *arg,
-+			       struct p4tc_path_nlattrs *nl_path_attrs,
-+			       struct netlink_ext_ack *extack)
++static struct p4tc_extern *
++__p4tc_ctl_extern_1(struct p4tc_pipeline *pipeline,
++		    struct nlattr *nla, struct nlmsghdr *n,
++		    u32 portid, u32 flags, bool rctrl_allowed,
++		    struct netlink_ext_ack *extack)
 +{
-+	bool replace = cu_flags == P4TC_TBL_ENTRY_CU_FLAG_UPDATE;
-+	struct nlattr *tb[P4TC_ENTRY_MAX + 1] = { NULL };
-+	struct p4tc_table_entry_value *value;
-+	struct p4tc_pipeline *pipeline;
-+	struct p4tc_table_entry *entry;
-+	u32 *ids = nl_path_attrs->ids;
-+	bool has_listener = !!skb;
-+	struct p4tc_table *table;
-+	int ret;
++	const char *kind = p4tc_ext_get_kind(nla, extack);
++	struct nlattr *tb[P4TC_EXT_MAX + 1];
++	struct p4tc_extern_inst *inst;
++	struct nlattr *params_attr;
++	struct p4tc_extern *e;
++	char *instname;
++	u32 key;
++	int err;
 +
-+	ret = nla_parse_nested(tb, P4TC_ENTRY_MAX, arg, p4tc_entry_policy,
-+			       extack);
-+	if (ret < 0)
-+		return ret;
++	err = nla_parse_nested(tb, P4TC_EXT_MAX, nla,
++			       p4tc_extern_policy, extack);
++	if (err < 0)
++		return ERR_PTR(err);
 +
-+	ret = p4tc_table_entry_get_table(net, &pipeline, &table, tb,
-+					 nl_path_attrs, extack);
-+	if (ret < 0)
-+		return ret;
++	if (IS_ERR(kind))
++		return (struct p4tc_extern *)kind;
 +
-+	if (replace && tb[P4TC_ENTRY_TBL_ATTRS]) {
-+		/* Table attributes update */
-+		ret = update_tbl_attrs(net, table,
-+				       tb[P4TC_ENTRY_TBL_ATTRS],
-+				       extack);
-+		goto table_put;
-+	} else {
-+		/* Table entry create or update */
-+		if (NL_REQ_ATTR_CHECK(extack, arg, tb, P4TC_ENTRY_WHODUNNIT)) {
-+			NL_SET_ERR_MSG(extack,
-+				       "Must specify whodunnit attribute");
-+			ret = -EINVAL;
-+			goto table_put;
-+		}
++	if (NL_REQ_ATTR_CHECK(extack, NULL, tb, P4TC_EXT_INST_NAME)) {
++		NL_SET_ERR_MSG(extack,
++			       "TC extern inst name must be specified");
++		return ERR_PTR(-EINVAL);
 +	}
++	instname = nla_data(tb[P4TC_EXT_INST_NAME]);
 +
-+	entry = __p4tc_table_entry_cu(net, cu_flags, tb, pipeline, table,
-+				      extack);
-+	if (IS_ERR(entry)) {
-+		ret = PTR_ERR(entry);
-+		goto table_put;
-+	}
++	err = -EINVAL;
++	inst = p4tc_ext_inst_find_bynames(pipeline->net, pipeline, kind,
++					  instname, extack);
++	if (IS_ERR(inst))
++		return (struct p4tc_extern *)inst;
 +
-+	value = p4tc_table_entry_value(entry);
-+	if (has_listener) {
-+		if (p4tc_ctrl_pub_ok(value->permissions)) {
-+			if (p4tc_tbl_entry_fill(skb, table, entry, table->tbl_id,
-+						P4TC_ENTITY_UNSPEC) <= 0)
-+				NL_SET_ERR_MSG(extack,
-+					       "Unable to fill table entry attributes");
-+
-+			if (!nl_path_attrs->pname_passed)
-+				strscpy(nl_path_attrs->pname,
-+					pipeline->common.name, PIPELINENAMSIZ);
-+
-+			if (!ids[P4TC_PID_IDX])
-+				ids[P4TC_PID_IDX] = pipeline->common.p_id;
-+		}
-+
-+		*permissions = value->permissions;
-+	}
-+
-+	/* We set it to zero on create an update to avoid having the entry
-+	 * deleted in parallel before we report to user space.
-+	 * We only set it to 1 here, after reporting.
-+	 */
-+	refcount_set(&value->entries_ref, 1);
-+
-+table_put:
-+	p4tc_table_entry_put_table(pipeline, table);
-+	return ret;
-+}
-+
-+struct p4tc_table_entry *
-+p4tc_table_const_entry_cu(struct net *net,
-+			  struct nlattr *arg,
-+			  struct p4tc_pipeline *pipeline,
-+			  struct p4tc_table *table,
-+			  struct netlink_ext_ack *extack)
-+{
-+	struct nlattr *tb[P4TC_ENTRY_MAX + 1] = { NULL };
-+	u8 cu_flags = P4TC_TBL_ENTRY_CU_FLAG_CREATE;
-+	struct p4tc_table_entry_value *value;
-+	struct p4tc_table_entry *entry;
-+	int ret;
-+
-+	ret = nla_parse_nested(tb, P4TC_ENTRY_MAX, arg, p4tc_entry_policy,
-+			       extack);
-+	if (ret < 0)
-+		return ERR_PTR(ret);
-+
-+	if (NL_REQ_ATTR_CHECK(extack, arg, tb, P4TC_ENTRY_WHODUNNIT)) {
-+		NL_SET_ERR_MSG(extack, "Must specify whodunnit attribute");
++	if (!rctrl_allowed && p4tc_ext_has_rctrl(inst->ops)) {
++		NL_SET_ERR_MSG(extack,
++			       "Runtime message may only have one extern with rctrl op");
 +		return ERR_PTR(-EINVAL);
 +	}
 +
-+	entry = __p4tc_table_entry_cu(net, cu_flags, tb, pipeline, table,
++	err = p4tc_ext_get_key_param(inst, tb[P4TC_EXT_KEY],
++				     &inst->params->params_idr, &key,
++				     extack);
++	if (err < 0)
++		return ERR_PTR(err);
++
++	params_attr = tb[P4TC_EXT_PARAMS];
++
++	switch (n->nlmsg_type) {
++	case RTM_P4TC_CREATE:
++		NL_SET_ERR_MSG(extack,
++			       "Create command is not supported");
++		return ERR_PTR(-EOPNOTSUPP);
++	case RTM_P4TC_UPDATE: {
++		struct nla_bitfield32 userflags = { 0, 0 };
++
++		if (tb[P4TC_EXT_FLAGS])
++			userflags = nla_get_bitfield32(tb[P4TC_EXT_FLAGS]);
++
++		flags = userflags.value | flags;
++		e = p4tc_extern_init_1(pipeline, inst, params_attr, key,
++				       flags, extack);
++		break;
++	}
++	case RTM_P4TC_DEL:
++		NL_SET_ERR_MSG(extack,
++			       "Delete command is not supported");
++		return ERR_PTR(-EOPNOTSUPP);
++	case RTM_P4TC_GET: {
++		e = p4tc_extern_get_1(inst, params_attr, kind, n, key, portid,
 +				      extack);
-+	if (IS_ERR(entry))
-+		return entry;
++		break;
++	}
++	default:
++		NL_SET_ERR_MSG_FMT(extack, "Unknown extern command #%u",
++				   n->nlmsg_type);
++		return ERR_PTR(-EOPNOTSUPP);
++	}
 +
-+	value = p4tc_table_entry_value(entry);
-+	refcount_set(&value->entries_ref, 1);
-+
-+	return entry;
++	return e;
 +}
 +
-+static int p4tc_tbl_entry_get_1(struct net *net, struct sk_buff *skb,
-+				struct nlattr *arg, u16 *permissions,
-+				struct p4tc_path_nlattrs *nl_path_attrs,
-+				struct netlink_ext_ack *extack)
++static int __p4tc_ctl_extern(struct p4tc_pipeline *pipeline,
++			     struct nlattr *nla, struct nlmsghdr *n,
++			     u32 portid, u32 flags,
++			     struct netlink_ext_ack *extack)
 +{
-+	struct nlattr *tb[P4TC_MAX + 1];
-+	u32 *arg_ids;
-+	int ret = 0;
++	struct p4tc_extern *externs[P4TC_MSGBATCH_SIZE] = {};
++	struct nlattr *tb[P4TC_MSGBATCH_SIZE + 1];
++	bool processed_rctrl_extern = false;
++	struct p4tc_extern *ext;
++	size_t attr_size = 0;
++	bool has_one_element;
++	int i, ret;
 +
-+	ret = nla_parse_nested(tb, P4TC_MAX, arg, p4tc_policy, extack);
++	ret = nla_parse_nested(tb, P4TC_MSGBATCH_SIZE, nla, NULL,
++			       extack);
 +	if (ret < 0)
 +		return ret;
 +
-+	if (NL_REQ_ATTR_CHECK(extack, arg, tb, P4TC_PATH)) {
-+		NL_SET_ERR_MSG(extack, "Must specify object path");
-+		return -EINVAL;
-+	}
++	/* We only allow 1 batched element in case the extern has an rctrl
++	 * callback.
++	 */
++	has_one_element = !tb[2];
++	ext = __p4tc_ctl_extern_1(pipeline, tb[1], n, portid,
++				  flags, has_one_element, extack);
++	if (IS_ERR(ext))
++		return PTR_ERR(ext);
 +
-+	if (NL_REQ_ATTR_CHECK(extack, arg, tb, P4TC_PARAMS)) {
-+		NL_SET_ERR_MSG(extack, "Must specify parameters");
-+		return -EINVAL;
-+	}
-+
-+	arg_ids = nla_data(tb[P4TC_PATH]);
-+	memcpy(&nl_path_attrs->ids[P4TC_TBLID_IDX], arg_ids,
-+	       nla_len(tb[P4TC_PATH]));
-+
-+	return p4tc_table_entry_gd(net, skb, false, permissions,
-+				   tb[P4TC_PARAMS], nl_path_attrs, extack);
-+}
-+
-+static int p4tc_tbl_entry_del_1(struct net *net, struct sk_buff *skb,
-+				bool flush, u16 *permissions,
-+				struct nlattr *arg,
-+				struct p4tc_path_nlattrs *nl_path_attrs,
-+				struct netlink_ext_ack *extack)
-+{
-+	struct nlattr *tb[P4TC_MAX + 1];
-+	u32 *arg_ids;
-+	int ret = 0;
-+
-+	ret = nla_parse_nested(tb, P4TC_MAX, arg, p4tc_policy, extack);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (NL_REQ_ATTR_CHECK(extack, arg, tb, P4TC_PATH)) {
-+		NL_SET_ERR_MSG(extack, "Must specify object path");
-+		return -EINVAL;
-+	}
-+
-+	arg_ids = nla_data(tb[P4TC_PATH]);
-+	memcpy(&nl_path_attrs->ids[P4TC_TBLID_IDX], arg_ids,
-+	       nla_len(tb[P4TC_PATH]));
-+
-+	if (flush) {
-+		ret = p4tc_table_entry_flush(net, skb, tb[P4TC_PARAMS],
-+					     nl_path_attrs, extack);
++	externs[0] = ext;
++	if (p4tc_ext_has_rctrl(ext->common.ops)) {
++		processed_rctrl_extern = true;
++		goto notify;
 +	} else {
-+		if (NL_REQ_ATTR_CHECK(extack, arg, tb, P4TC_PARAMS)) {
-+			NL_SET_ERR_MSG(extack, "Must specify parameters");
-+			return -EINVAL;
-+		}
-+		ret = p4tc_table_entry_gd(net, skb, true, permissions,
-+					  tb[P4TC_PARAMS], nl_path_attrs,
-+					  extack);
++		attr_size += ext->attrs_size;
 +	}
++
++	for (i = 2; i <= P4TC_MSGBATCH_SIZE && tb[i]; i++) {
++		ext = __p4tc_ctl_extern_1(pipeline, tb[i], n, portid,
++					  flags, false, extack);
++		if (IS_ERR(ext)) {
++			ret = PTR_ERR(ext);
++			goto err;
++		}
++
++		attr_size += ext->attrs_size;
++		/* Only add to externs array, extern modules that don't
++		 * implement rctrl callback.
++		 */
++		externs[i - 1] = ext;
++	}
++
++notify:
++	attr_size = p4tc_extern_full_attrs_size(attr_size);
++
++	if (n->nlmsg_type == RTM_P4TC_UPDATE) {
++		int listeners = rtnl_has_listeners(pipeline->net, RTNLGRP_TC);
++		int echo = n->nlmsg_flags & NLM_F_ECHO;
++
++		if (!processed_rctrl_extern)
++			p4tc_ext_idr_insert_many(externs);
++
++		if (echo || listeners)
++			p4tc_extern_add_notify(pipeline->net, n, externs,
++					       portid, pipeline->common.p_id,
++					       attr_size, extack);
++	} else if (n->nlmsg_type == RTM_P4TC_GET) {
++		p4tc_extern_get_respond(pipeline->net, portid, n, externs,
++					pipeline->common.p_id, attr_size,
++					extack);
++	}
++
++	return 0;
++
++err:
++	if (n->nlmsg_type == RTM_P4TC_UPDATE)
++		p4tc_extern_destroy(externs);
++	else if (n->nlmsg_type == RTM_P4TC_GET)
++		p4tc_extern_put_many(externs);
 +
 +	return ret;
 +}
 +
-+static int p4tc_tbl_entry_cu_1(struct net *net, struct sk_buff *skb,
-+			       u8 cu_flags, u16 *permissions,
-+			       struct nlattr *nla,
-+			       struct p4tc_path_nlattrs *nl_path_attrs,
-+			       struct netlink_ext_ack *extack)
++static int parse_dump_ext_attrs(struct nlattr *nla,
++				struct nlattr **tb2)
 +{
-+	struct nlattr *tb[P4TC_MAX + 1];
-+	u32 *tbl_id;
-+	int ret = 0;
++	struct nlattr *tb[P4TC_MSGBATCH_SIZE + 1];
 +
-+	ret = nla_parse_nested(tb, P4TC_MAX, nla, p4tc_policy, extack);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (NL_REQ_ATTR_CHECK(extack, nla, tb, P4TC_PATH)) {
-+		NL_SET_ERR_MSG(extack, "Must specify object path");
++	if (nla_parse_nested(tb, P4TC_MSGBATCH_SIZE, nla, NULL,
++			     NULL) < 0)
 +		return -EINVAL;
-+	}
 +
-+	if (NL_REQ_ATTR_CHECK(extack, nla, tb, P4TC_PARAMS)) {
-+		NL_SET_ERR_MSG(extack, "Must specify object attributes");
++	if (!tb[1])
 +		return -EINVAL;
-+	}
++	if (nla_parse_nested(tb2, P4TC_EXT_MAX, tb[1],
++			     p4tc_extern_policy, NULL) < 0)
++		return -EINVAL;
 +
-+	tbl_id = nla_data(tb[P4TC_PATH]);
-+	memcpy(&nl_path_attrs->ids[P4TC_TBLID_IDX], tbl_id,
-+	       nla_len(tb[P4TC_PATH]));
++	if (!tb2[P4TC_EXT_KIND])
++		return -EINVAL;
 +
-+	return p4tc_table_entry_cu(net, skb, cu_flags, permissions,
-+				   tb[P4TC_PARAMS], nl_path_attrs, extack);
++	if (!tb2[P4TC_EXT_INST_NAME])
++		return -EINVAL;
++
++	return 0;
 +}
 +
-+static int __p4tc_tbl_entry_crud(struct net *net, struct sk_buff *skb,
-+				 struct nlmsghdr *n, int cmd, char *p_name,
-+				 struct nlattr *p4tca[],
-+				 struct netlink_ext_ack *extack)
++int p4tc_ctl_extern_dump(struct sk_buff *skb, struct netlink_callback *cb,
++			 struct nlattr **tb, const char *pname)
 +{
-+	struct p4tcmsg *t = (struct p4tcmsg *)nlmsg_data(n);
-+	struct p4tc_path_nlattrs nl_path_attrs = {0};
-+	u32 portid = NETLINK_CB(skb).portid;
-+	u16 permissions = P4TC_CTRL_PERM_P;
-+	u32 ids[P4TC_PATH_MAX] = { 0 };
-+	int i, num_pub_permission = 0;
-+	int ret = 0, ret_send;
-+	struct p4tcmsg *t_new;
-+	struct sk_buff *nskb;
++	struct netlink_ext_ack *extack = cb->extack;
++	unsigned char *b = nlmsg_get_pos(skb);
++	struct nlattr *tb2[P4TC_EXT_MAX + 1];
++	struct net *net = sock_net(skb->sk);
++	struct nlattr *count_attr = NULL;
++	struct p4tc_pipeline *pipeline;
++	struct p4tc_extern_inst *inst;
++	char *kind_str, *instname;
++	struct nla_bitfield32 bf;
 +	struct nlmsghdr *nlh;
-+	struct nlattr *pn_att;
-+	struct nlattr *root;
-+
-+	nskb = nlmsg_new(NLMSG_GOODSIZE, GFP_KERNEL);
-+	if (unlikely(!nskb))
-+		return -ENOBUFS;
-+
-+	nlh = nlmsg_put(nskb, portid, n->nlmsg_seq, cmd, sizeof(*t),
-+			n->nlmsg_flags);
-+	if (unlikely(!nlh))
-+		goto out;
-+
-+	t_new = nlmsg_data(nlh);
-+	t_new->pipeid = t->pipeid;
-+	t_new->obj = t->obj;
-+	ids[P4TC_PID_IDX] = t_new->pipeid;
-+	nl_path_attrs.ids = ids;
-+
-+	pn_att = nla_reserve(nskb, P4TC_ROOT_PNAME, PIPELINENAMSIZ);
-+	if (unlikely(!pn_att)) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	nl_path_attrs.pname = nla_data(pn_att);
-+	if (!p_name) {
-+		/* Filled up by the operation or forced failure */
-+		memset(nl_path_attrs.pname, 0, PIPELINENAMSIZ);
-+		nl_path_attrs.pname_passed = false;
-+	} else {
-+		strscpy(nl_path_attrs.pname, p_name, PIPELINENAMSIZ);
-+		nl_path_attrs.pname_passed = true;
-+	}
-+
-+	root = nla_nest_start(nskb, P4TC_ROOT);
-+	for (i = 1; i < P4TC_MSGBATCH_SIZE + 1 && p4tca[i]; i++) {
-+		struct nlattr *nest = nla_nest_start(nskb, i);
-+
-+		if (cmd == RTM_P4TC_GET)
-+			ret = p4tc_tbl_entry_get_1(net, nskb, p4tca[i],
-+						   &permissions, &nl_path_attrs,
-+						   extack);
-+		else if (cmd == RTM_P4TC_CREATE ||
-+			 cmd == RTM_P4TC_UPDATE) {
-+			u8 cu_flags;
-+
-+			if (cmd == RTM_P4TC_UPDATE)
-+				cu_flags = P4TC_TBL_ENTRY_CU_FLAG_UPDATE;
-+			else
-+				if (n->nlmsg_flags & NLM_F_REPLACE)
-+					cu_flags = P4TC_TBL_ENTRY_CU_FLAG_SET;
-+				else
-+					cu_flags = P4TC_TBL_ENTRY_CU_FLAG_CREATE;
-+
-+			ret = p4tc_tbl_entry_cu_1(net, nskb, cu_flags,
-+						  &permissions,
-+						  p4tca[i], &nl_path_attrs,
-+						  extack);
-+		} else if (cmd == RTM_P4TC_DEL) {
-+			bool flush = nlh->nlmsg_flags & NLM_F_ROOT;
-+
-+			ret = p4tc_tbl_entry_del_1(net, nskb, flush,
-+						   &permissions, p4tca[i],
-+						   &nl_path_attrs, extack);
-+		}
-+
-+		if (p4tc_ctrl_pub_ok(permissions)) {
-+			num_pub_permission++;
-+		} else {
-+			nla_nest_cancel(nskb, nest);
-+			continue;
-+		}
-+
-+		if (ret < 0) {
-+			if (i == 1) {
-+				goto out;
-+			} else {
-+				nla_nest_cancel(nskb, nest);
-+				break;
-+			}
-+		}
-+		nla_nest_end(nskb, nest);
-+	}
-+	nla_nest_end(nskb, root);
-+
-+	if (!t_new->pipeid)
-+		t_new->pipeid = ids[P4TC_PID_IDX];
-+
-+	nlmsg_end(nskb, nlh);
-+
-+	if (cmd == RTM_P4TC_GET) {
-+		ret_send = rtnl_unicast(nskb, net, portid);
-+	} else if (num_pub_permission) {
-+		ret_send = rtnetlink_send(nskb, net, portid, RTNLGRP_TC,
-+					  n->nlmsg_flags & NLM_F_ECHO);
-+	} else {
-+		ret_send = 0;
-+		kfree_skb(nskb);
-+	}
-+
-+	return ret_send ? ret_send : ret;
-+
-+out:
-+	kfree_skb(nskb);
-+	return ret;
-+}
-+
-+static int __p4tc_tbl_entry_crud_fast(struct net *net, struct nlmsghdr *n,
-+				      int cmd, char *p_name,
-+				      struct nlattr *p4tca[],
-+				      struct netlink_ext_ack *extack)
-+{
-+	struct p4tcmsg *t = (struct p4tcmsg *)nlmsg_data(n);
-+	struct p4tc_path_nlattrs nl_path_attrs = {0};
-+	u32 ids[P4TC_PATH_MAX] = { 0 };
++	struct nlattr *nest;
++	u32 ext_count = 0;
++	struct p4tcmsg *t;
 +	int ret = 0;
-+	int i;
 +
-+	ids[P4TC_PID_IDX] = t->pipeid;
-+	nl_path_attrs.ids = ids;
++	pipeline = p4tc_pipeline_find_byany(net, pname, 0, extack);
++	if (IS_ERR(pipeline))
++		return PTR_ERR(pipeline);
 +
-+	/* Only read for searching the pipeline */
-+	nl_path_attrs.pname = p_name;
-+
-+	for (i = 1; i < P4TC_MSGBATCH_SIZE + 1 && p4tca[i]; i++) {
-+		if (cmd == RTM_P4TC_CREATE ||
-+		    cmd == RTM_P4TC_UPDATE) {
-+			u8 cu_flags;
-+
-+			if (cmd == RTM_P4TC_UPDATE)
-+				cu_flags = P4TC_TBL_ENTRY_CU_FLAG_UPDATE;
-+			else
-+				if (n->nlmsg_flags & NLM_F_REPLACE)
-+					cu_flags = P4TC_TBL_ENTRY_CU_FLAG_SET;
-+				else
-+					cu_flags = P4TC_TBL_ENTRY_CU_FLAG_CREATE;
-+
-+			ret = p4tc_tbl_entry_cu_1(net, NULL, cu_flags, NULL,
-+						  p4tca[i], &nl_path_attrs,
-+						  extack);
-+		} else if (cmd == RTM_P4TC_DEL) {
-+			bool flush = n->nlmsg_flags & NLM_F_ROOT;
-+
-+			ret = p4tc_tbl_entry_del_1(net, NULL, flush, NULL,
-+						   p4tca[i], &nl_path_attrs,
-+						   extack);
-+		}
-+
-+		if (ret < 0)
-+			goto out;
++	if (!pipeline_sealed(pipeline)) {
++		NL_SET_ERR_MSG(extack,
++			       "Pipeline must be sealed for extern runtime ops");
++		return -EINVAL;
 +	}
 +
-+out:
-+	return ret;
++	ret = parse_dump_ext_attrs(tb[P4TC_ROOT], tb2);
++	if (ret < 0)
++		return ret;
++
++	kind_str = nla_data(tb2[P4TC_EXT_KIND]);
++	if (NL_REQ_ATTR_CHECK(extack, NULL, tb, P4TC_EXT_KIND)) {
++		NL_SET_ERR_MSG(extack,
++			       "TC extern kind name must be specified");
++		return -EINVAL;
++	}
++
++	instname = nla_data(tb2[P4TC_EXT_INST_NAME]);
++	if (NL_REQ_ATTR_CHECK(extack, NULL, tb, P4TC_EXT_INST_NAME)) {
++		NL_SET_ERR_MSG(extack,
++			       "TC extern inst name must be specified");
++		return -EINVAL;
++	}
++
++	inst = p4tc_ext_inst_find_bynames(pipeline->net, pipeline, kind_str,
++					  instname, extack);
++	if (IS_ERR(inst))
++		return PTR_ERR(inst);
++
++	cb->args[2] = 0;
++	if (tb[P4TC_ROOT_FLAGS]) {
++		bf = nla_get_bitfield32(tb[P4TC_ROOT_FLAGS]);
++		cb->args[2] = bf.value;
++	}
++
++	nlh = nlmsg_put(skb, NETLINK_CB(cb->skb).portid, cb->nlh->nlmsg_seq,
++			cb->nlh->nlmsg_type, sizeof(*t), 0);
++	if (!nlh)
++		goto err_out;
++
++	t = nlmsg_data(nlh);
++	t->pipeid = pipeline->common.p_id;
++	t->obj = P4TC_OBJ_RUNTIME_EXTERN;
++	count_attr = nla_reserve(skb, P4TC_ROOT_COUNT, sizeof(u32));
++	if (!count_attr)
++		goto err_out;
++
++	nest = nla_nest_start_noflag(skb, P4TC_ROOT);
++	if (!nest)
++		goto err_out;
++
++	ret = p4tc_ext_dump_walker(inst, skb, cb);
++	if (ret < 0)
++		goto err_out;
++
++	if (ret > 0) {
++		nla_nest_end(skb, nest);
++		ret = skb->len;
++		ext_count = cb->args[1];
++		memcpy(nla_data(count_attr), &ext_count, sizeof(u32));
++		cb->args[1] = 0;
++	} else {
++		nlmsg_trim(skb, b);
++	}
++
++	nlh->nlmsg_len = (unsigned char *)nlmsg_get_pos(skb) - b;
++	if (NETLINK_CB(cb->skb).portid && ret)
++		nlh->nlmsg_flags |= NLM_F_MULTI;
++	return skb->len;
++
++err_out:
++	nlmsg_trim(skb, b);
++	return skb->len;
 +}
 +
-+int p4tc_tbl_entry_crud(struct net *net, struct sk_buff *skb,
-+			struct nlmsghdr *n, int cmd,
-+			struct netlink_ext_ack *extack)
++int p4tc_ctl_extern(struct sk_buff *skb, struct nlmsghdr *n, int cmd,
++		    struct netlink_ext_ack *extack)
 +{
-+	struct nlattr *p4tca[P4TC_MSGBATCH_SIZE + 1];
-+	int echo = n->nlmsg_flags & NLM_F_ECHO;
 +	struct nlattr *tb[P4TC_ROOT_MAX + 1];
-+	char *p_name = NULL;
-+	int listeners;
++	struct net *net = sock_net(skb->sk);
++	u32 portid = NETLINK_CB(skb).portid;
++	struct p4tc_pipeline *pipeline;
++	struct nlattr *root;
++	char *pname = NULL;
++	u32 flags = 0;
 +	int ret = 0;
++
++	if (cmd != RTM_P4TC_GET && !netlink_capable(skb, CAP_NET_ADMIN)) {
++		NL_SET_ERR_MSG(extack, "Need CAP_NET_ADMIN to do CRU ops");
++		return -EPERM;
++	}
 +
 +	ret = nlmsg_parse(n, sizeof(struct p4tcmsg), tb, P4TC_ROOT_MAX,
 +			  p4tc_root_policy, extack);
 +	if (ret < 0)
 +		return ret;
 +
++	if (tb[P4TC_ROOT_PNAME])
++		pname = nla_data(tb[P4TC_ROOT_PNAME]);
++
 +	if (NL_REQ_ATTR_CHECK(extack, NULL, tb, P4TC_ROOT)) {
-+		NL_SET_ERR_MSG(extack, "Netlink P4TC table attributes missing");
++		NL_SET_ERR_MSG(extack, "Netlink P4TC extern attributes missing");
 +		return -EINVAL;
 +	}
 +
-+	ret = nla_parse_nested(p4tca, P4TC_MSGBATCH_SIZE, tb[P4TC_ROOT], NULL,
++	root = tb[P4TC_ROOT];
++
++	pipeline = p4tc_pipeline_find_byany(net, pname, 0, extack);
++	if (IS_ERR(pipeline))
++		return PTR_ERR(pipeline);
++
++	if (!pipeline_sealed(pipeline)) {
++		NL_SET_ERR_MSG(extack,
++			       "Pipeline must be sealed for extern runtime ops");
++		return -EPERM;
++	}
++
++	return __p4tc_ctl_extern(pipeline, root, n, portid, flags, extack);
++}
+diff --git a/net/sched/p4tc/p4tc_pipeline.c b/net/sched/p4tc/p4tc_pipeline.c
+index 6c00747ac..c61115f78 100644
+--- a/net/sched/p4tc/p4tc_pipeline.c
++++ b/net/sched/p4tc/p4tc_pipeline.c
+@@ -27,6 +27,7 @@
+ #include <net/netlink.h>
+ #include <net/flow_offload.h>
+ #include <net/p4tc_types.h>
++#include <net/p4tc_ext_api.h>
+ 
+ static unsigned int pipeline_net_id;
+ static struct p4tc_pipeline *root_pipeline;
+@@ -99,6 +100,7 @@ static void __net_exit pipeline_exit_net(struct net *net)
+ 		__p4tc_pipeline_put(pipeline, &pipeline->common, NULL);
+ 	}
+ 	idr_destroy(&pipe_net->pipeline_idr);
++
+ 	rtnl_unlock();
+ }
+ 
+@@ -119,6 +121,7 @@ static void p4tc_pipeline_destroy(struct p4tc_pipeline *pipeline)
+ {
+ 	idr_destroy(&pipeline->p_act_idr);
+ 	idr_destroy(&pipeline->p_tbl_idr);
++	idr_destroy(&pipeline->user_ext_idr);
+ 
+ 	kfree(pipeline);
+ }
+@@ -141,7 +144,8 @@ static void p4tc_pipeline_teardown(struct p4tc_pipeline *pipeline,
+ 	struct net *net = pipeline->net;
+ 	struct p4tc_pipeline_net *pipe_net = net_generic(net, pipeline_net_id);
+ 	struct net *pipeline_net = maybe_get_net(net);
+-	unsigned long iter_act_id, tmp;
++	struct p4tc_user_pipeline_extern *pipe_ext;
++	unsigned long iter_act_id, ext_id, tmp;
+ 	struct p4tc_table *table;
+ 	struct p4tc_act *act;
+ 	unsigned long tbl_id;
+@@ -152,6 +156,20 @@ static void p4tc_pipeline_teardown(struct p4tc_pipeline *pipeline,
+ 	idr_for_each_entry_ul(&pipeline->p_act_idr, act, tmp, iter_act_id)
+ 		act->common.ops->put(pipeline, &act->common, extack);
+ 
++	idr_for_each_entry_ul(&pipeline->user_ext_idr, pipe_ext, tmp, ext_id) {
++		unsigned long tmp_in, inst_id;
++		struct p4tc_extern_inst *inst;
++
++		idr_for_each_entry_ul(&pipe_ext->e_inst_idr, inst, tmp_in,
++				      inst_id) {
++			struct p4tc_template_common *common = &inst->common;
++
++			common->ops->put(pipeline, common, extack);
++		}
++
++		pipe_ext->free(pipe_ext, &pipeline->user_ext_idr);
++	}
++
+ 	/* If we are on netns cleanup we can't touch the pipeline_idr.
+ 	 * On pre_exit we will destroy the idr but never call into teardown
+ 	 * if filters are active which makes pipeline pointers dangle until
+@@ -210,9 +228,18 @@ static int pipeline_try_set_state_ready(struct p4tc_pipeline *pipeline,
+ 	if (ret < 0)
+ 		return ret;
+ 
++	ret = p4tc_extern_insts_init_elems(&pipeline->user_ext_idr);
++	if (ret < 0)
++		goto unset_table_state_ready;
++
+ 	pipeline->p_state = P4TC_STATE_READY;
+ 
+ 	return true;
++
++unset_table_state_ready:
++	p4tc_table_put_mask_array(pipeline);
++
++	return ret;
+ }
+ 
+ struct p4tc_pipeline *p4tc_pipeline_find_byid(struct net *net, const u32 pipeid)
+@@ -308,6 +335,9 @@ static struct p4tc_pipeline *p4tc_pipeline_create(struct net *net,
+ 
+ 	idr_init(&pipeline->p_tbl_idr);
+ 	pipeline->curr_tables = 0;
++	idr_init(&pipeline->p_tbl_idr);
++
++	idr_init(&pipeline->user_ext_idr);
+ 
+ 	pipeline->num_created_acts = 0;
+ 
+@@ -645,6 +675,8 @@ static void __p4tc_pipeline_init(void)
+ 
+ 	strscpy(root_pipeline->common.name, "kernel", PIPELINENAMSIZ);
+ 
++	idr_init(&root_pipeline->p_ext_idr);
++
+ 	root_pipeline->common.ops =
+ 		(struct p4tc_template_ops *)&p4tc_pipeline_ops;
+ 
+diff --git a/net/sched/p4tc/p4tc_runtime_api.c b/net/sched/p4tc/p4tc_runtime_api.c
+index bcb280909..f085d1b2a 100644
+--- a/net/sched/p4tc/p4tc_runtime_api.c
++++ b/net/sched/p4tc/p4tc_runtime_api.c
+@@ -27,16 +27,17 @@
+ #include <net/p4tc.h>
+ #include <net/netlink.h>
+ #include <net/flow_offload.h>
++#include <net/p4tc_ext_api.h>
+ 
+ static int tc_ctl_p4_root(struct sk_buff *skb, struct nlmsghdr *n, int cmd,
+ 			  struct netlink_ext_ack *extack)
+ {
+ 	struct p4tcmsg *t = (struct p4tcmsg *)nlmsg_data(n);
++	int ret;
+ 
+ 	switch (t->obj) {
+ 	case P4TC_OBJ_RUNTIME_TABLE: {
+ 		struct net *net = sock_net(skb->sk);
+-		int ret;
+ 
+ 		net = maybe_get_net(net);
+ 		if (!net) {
+@@ -50,6 +51,11 @@ static int tc_ctl_p4_root(struct sk_buff *skb, struct nlmsghdr *n, int cmd,
+ 
+ 		return ret;
+ 	}
++	case P4TC_OBJ_RUNTIME_EXTERN:
++		rtnl_lock();
++		ret = p4tc_ctl_extern(skb, n, cmd, extack);
++		rtnl_unlock();
++		return ret;
+ 	default:
+ 		NL_SET_ERR_MSG(extack, "Unknown P4 runtime object type");
+ 		return -EOPNOTSUPP;
+@@ -120,6 +126,8 @@ static int tc_ctl_p4_dump(struct sk_buff *skb, struct netlink_callback *cb)
+ 	case P4TC_OBJ_RUNTIME_TABLE:
+ 		return p4tc_tbl_entry_dumpit(sock_net(skb->sk), skb, cb,
+ 					     tb[P4TC_ROOT], p_name);
++	case P4TC_OBJ_RUNTIME_EXTERN:
++		return p4tc_ctl_extern_dump(skb, cb, tb, p_name);
+ 	default:
+ 		NL_SET_ERR_MSG_FMT(cb->extack,
+ 				   "Unknown p4 runtime object type %u\n",
+diff --git a/net/sched/p4tc/p4tc_table.c b/net/sched/p4tc/p4tc_table.c
+index 7d79b01e5..534b972b9 100644
+--- a/net/sched/p4tc/p4tc_table.c
++++ b/net/sched/p4tc/p4tc_table.c
+@@ -114,6 +114,10 @@ static const struct nla_policy p4tc_table_policy[P4TC_TABLE_MAX + 1] = {
+ 	[P4TC_TABLE_DEFAULT_MISS] = { .type = NLA_NESTED },
+ 	[P4TC_TABLE_ACTS_LIST] = { .type = NLA_NESTED },
+ 	[P4TC_TABLE_CONST_ENTRY] = { .type = NLA_NESTED },
++	[P4TC_TABLE_COUNTER] = {
++		.type = NLA_STRING,
++		.len = EXTERNINSTNAMSIZ * 2 + 1
++	},
+ };
+ 
+ static int _p4tc_table_fill_nlmsg(struct sk_buff *skb, struct p4tc_table *table)
+@@ -146,6 +150,12 @@ static int _p4tc_table_fill_nlmsg(struct sk_buff *skb, struct p4tc_table *table)
+ 	parm.tbl_aging = table->tbl_aging;
+ 	parm.tbl_num_entries = atomic_read(&table->tbl_nelems);
+ 
++	if (table->tbl_counter) {
++		if (nla_put_string(skb, P4TC_TABLE_COUNTER,
++				   table->tbl_counter->common.name) < 0)
++			goto out_nlmsg_trim;
++	}
++
+ 	tbl_perm = rcu_dereference_rtnl(table->tbl_permissions);
+ 	parm.tbl_permissions = tbl_perm->permissions;
+ 
+@@ -914,7 +924,9 @@ static struct p4tc_table *p4tc_table_create(struct net *net, struct nlattr **tb,
+ {
+ 	struct rhashtable_params table_hlt_params = entry_hlt_params;
+ 	struct p4tc_table_default_act_params def_params = {0};
++	struct p4tc_user_pipeline_extern *pipe_ext = NULL;
+ 	struct p4tc_table_perm *tbl_init_perms = NULL;
++	struct p4tc_extern_inst *inst = NULL;
+ 	struct p4tc_table_parm *parm;
+ 	struct p4tc_table *table;
+ 	char *tblname;
+@@ -1077,13 +1089,25 @@ static struct p4tc_table *p4tc_table_create(struct net *net, struct nlattr **tb,
+ 
+ 	refcount_set(&table->tbl_ctrl_ref, 1);
+ 
++	if (tb[P4TC_TABLE_COUNTER]) {
++		const char *ext_inst_path = nla_data(tb[P4TC_TABLE_COUNTER]);
++
++		inst = p4tc_ext_inst_table_bind(pipeline, &pipe_ext,
++						ext_inst_path, extack);
++		if (IS_ERR(inst)) {
++			ret = PTR_ERR(inst);
++			goto free_permissions;
++		}
++		table->tbl_counter = inst;
++	}
++
+ 	if (tbl_id) {
+ 		table->tbl_id = tbl_id;
+ 		ret = idr_alloc_u32(&pipeline->p_tbl_idr, table, &table->tbl_id,
+ 				    table->tbl_id, GFP_KERNEL);
+ 		if (ret < 0) {
+ 			NL_SET_ERR_MSG(extack, "Unable to allocate table id");
+-			goto free_permissions;
++			goto put_inst;
+ 		}
+ 	} else {
+ 		table->tbl_id = 1;
+@@ -1091,7 +1115,7 @@ static struct p4tc_table *p4tc_table_create(struct net *net, struct nlattr **tb,
+ 				    UINT_MAX, GFP_KERNEL);
+ 		if (ret < 0) {
+ 			NL_SET_ERR_MSG(extack, "Unable to allocate table id");
+-			goto free_permissions;
++			goto put_inst;
+ 		}
+ 	}
+ 
+@@ -1169,11 +1193,15 @@ static struct p4tc_table *p4tc_table_create(struct net *net, struct nlattr **tb,
+ idr_rm:
+ 	idr_remove(&pipeline->p_tbl_idr, table->tbl_id);
+ 
++	p4tc_table_acts_list_destroy(&table->tbl_acts_list);
++
++put_inst:
++	if (inst)
++		p4tc_ext_inst_table_unbind(table, pipe_ext, inst);
++
+ free_permissions:
+ 	kfree(tbl_init_perms);
+ 
+-	p4tc_table_acts_list_destroy(&table->tbl_acts_list);
+-
+ free:
+ 	kfree(table);
+ 
+@@ -1189,7 +1217,9 @@ static struct p4tc_table *p4tc_table_update(struct net *net, struct nlattr **tb,
+ {
+ 	u32 tbl_max_masks = 0, tbl_max_entries = 0, tbl_keysz = 0;
+ 	struct p4tc_table_default_act_params def_params = {0};
++	struct p4tc_user_pipeline_extern *pipe_ext = NULL;
+ 	struct list_head *tbl_acts_list = NULL;
++	struct p4tc_extern_inst *inst = NULL;
+ 	struct p4tc_table_perm *perm = NULL;
+ 	struct p4tc_table_parm *parm = NULL;
+ 	struct p4tc_table *table;
+@@ -1315,6 +1345,17 @@ static struct p4tc_table *p4tc_table_update(struct net *net, struct nlattr **tb,
+ 		}
+ 	}
+ 
++	if (tb[P4TC_TABLE_COUNTER]) {
++		const char *ext_inst_path = nla_data(tb[P4TC_TABLE_COUNTER]);
++
++		inst = p4tc_ext_inst_table_bind(pipeline, &pipe_ext,
++						ext_inst_path, extack);
++		if (IS_ERR(inst)) {
++			ret = PTR_ERR(inst);
++			goto free_perm;
++		}
++	}
++
+ 	if (tb[P4TC_TABLE_CONST_ENTRY]) {
+ 		struct p4tc_table_entry *entry;
+ 
+@@ -1324,7 +1365,7 @@ static struct p4tc_table *p4tc_table_update(struct net *net, struct nlattr **tb,
+ 						  pipeline, table, extack);
+ 		if (IS_ERR(entry)) {
+ 			ret = PTR_ERR(entry);
+-			goto free_perm;
++			goto put_inst;
+ 		}
+ 
+ 		table->tbl_const_entry = entry;
+@@ -1342,6 +1383,8 @@ static struct p4tc_table *p4tc_table_update(struct net *net, struct nlattr **tb,
+ 	table->tbl_type = tbl_type;
+ 	if (tbl_aging)
+ 		table->tbl_aging = tbl_aging;
++	if (inst)
++		table->tbl_counter = inst;
+ 
+ 	if (tbl_acts_list)
+ 		p4tc_table_acts_list_replace(&table->tbl_acts_list,
+@@ -1349,6 +1392,10 @@ static struct p4tc_table *p4tc_table_update(struct net *net, struct nlattr **tb,
+ 
+ 	return table;
+ 
++put_inst:
++	if (inst)
++		p4tc_ext_inst_table_unbind(table, pipe_ext, inst);
++
+ free_perm:
+ 	kfree(perm);
+ 
+diff --git a/net/sched/p4tc/p4tc_tbl_entry.c b/net/sched/p4tc/p4tc_tbl_entry.c
+index c6953199d..f90b6c66f 100644
+--- a/net/sched/p4tc/p4tc_tbl_entry.c
++++ b/net/sched/p4tc/p4tc_tbl_entry.c
+@@ -27,6 +27,7 @@
+ #include <net/p4tc.h>
+ #include <net/netlink.h>
+ #include <net/flow_offload.h>
++#include <net/p4tc_ext_api.h>
+ 
+ #define SIZEOF_MASKID (sizeof(((struct p4tc_table_entry_key *)0)->maskid))
+ 
+@@ -324,6 +325,7 @@ int p4tc_tbl_entry_fill(struct sk_buff *skb, struct p4tc_table *table,
+ 	struct p4tc_table_entry_tm dtm, *tm;
+ 	struct nlattr *nest, *nest_acts;
+ 	u32 ids[P4TC_ENTRY_MAX_IDS];
++	struct nlattr *nest_counter;
+ 	int ret = -ENOMEM;
+ 
+ 	ids[P4TC_TBLID_IDX - 1] = tbl_id;
+@@ -385,6 +387,11 @@ int p4tc_tbl_entry_fill(struct sk_buff *skb, struct p4tc_table *table,
+ 				      P4TC_ENTRY_PAD))
+ 			goto out_nlmsg_trim;
+ 	}
++	if (value->counter) {
++		nest_counter = nla_nest_start(skb, P4TC_ENTRY_COUNTER);
++		p4tc_ext_elem_dump_1(skb, value->counter);
++		nla_nest_end(skb, nest_counter);
++	}
+ 
+ 	nla_nest_end(skb, nest);
+ 
+@@ -1568,11 +1575,20 @@ __must_hold(RCU)
+ 		goto free_work;
+ 	}
+ 
++	if (table->tbl_counter) {
++		value->counter = p4tc_ext_elem_get(table->tbl_counter);
++		if (!value->counter) {
++			atomic_dec(&table->tbl_nelems);
++			ret = -ENOENT;
++			goto free_work;
++		}
++	}
++
+ 	if (rhltable_insert(&table->tbl_entries, &entry->ht_node,
+ 			    entry_hlt_params) < 0) {
+ 		atomic_dec(&table->tbl_nelems);
+ 		ret = -EBUSY;
+-		goto free_work;
++		goto put_ext;
+ 	}
+ 
+ 	if (value->is_dyn) {
+@@ -1592,6 +1608,10 @@ __must_hold(RCU)
+ 
+ 	return 0;
+ 
++put_ext:
++	if (table->tbl_counter && value->counter)
++		p4tc_ext_elem_put_list(table->tbl_counter, value->counter);
++
+ free_work:
+ 	kfree(entry_work);
+ 
+@@ -1820,6 +1840,9 @@ __must_hold(RCU)
+ 			      HRTIMER_MODE_REL);
+ 	}
+ 
++	if (value_old->counter)
++		value->counter = value_old->counter;
++
+ 	INIT_WORK(&entry_work->work, p4tc_table_entry_del_work);
+ 
+ 	if (rhltable_insert(&table->tbl_entries, &entry->ht_node,
+diff --git a/net/sched/p4tc/p4tc_tmpl_api.c b/net/sched/p4tc/p4tc_tmpl_api.c
+index a3b3b1430..55a738d1b 100644
+--- a/net/sched/p4tc/p4tc_tmpl_api.c
++++ b/net/sched/p4tc/p4tc_tmpl_api.c
+@@ -44,6 +44,8 @@ static bool obj_is_valid(u32 obj)
+ 	case P4TC_OBJ_PIPELINE:
+ 	case P4TC_OBJ_ACT:
+ 	case P4TC_OBJ_TABLE:
++	case P4TC_OBJ_EXT:
++	case P4TC_OBJ_EXT_INST:
+ 		return true;
+ 	default:
+ 		return false;
+@@ -54,6 +56,8 @@ static const struct p4tc_template_ops *p4tc_ops[P4TC_OBJ_MAX + 1] = {
+ 	[P4TC_OBJ_PIPELINE] = &p4tc_pipeline_ops,
+ 	[P4TC_OBJ_ACT] = &p4tc_act_ops,
+ 	[P4TC_OBJ_TABLE] = &p4tc_table_ops,
++	[P4TC_OBJ_EXT] = &p4tc_tmpl_ext_ops,
++	[P4TC_OBJ_EXT_INST] = &p4tc_ext_inst_ops,
+ };
+ 
+ int p4tc_tmpl_generic_dump(struct sk_buff *skb, struct p4tc_dump_ctx *ctx,
+diff --git a/net/sched/p4tc/p4tc_tmpl_ext.c b/net/sched/p4tc/p4tc_tmpl_ext.c
+new file mode 100644
+index 000000000..ec3efbc68
+--- /dev/null
++++ b/net/sched/p4tc/p4tc_tmpl_ext.c
+@@ -0,0 +1,2221 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * net/sched/p4tc_tmpl_extern.c	P4 TC EXTERN TEMPLATE
++ *
++ * Copyright (c) 2022-2023, Mojatatu Networks
++ * Copyright (c) 2022-2023, Intel Corporation.
++ * Authors:     Jamal Hadi Salim <jhs@mojatatu.com>
++ *              Victor Nogueira <victor@mojatatu.com>
++ *              Pedro Tammela <pctammela@mojatatu.com>
++ */
++
++#include <linux/types.h>
++#include <linux/kernel.h>
++#include <linux/string.h>
++#include <linux/errno.h>
++#include <linux/slab.h>
++#include <linux/skbuff.h>
++#include <linux/err.h>
++#include <linux/module.h>
++#include <net/net_namespace.h>
++#include <net/pkt_cls.h>
++#include <net/p4tc.h>
++#include <net/netlink.h>
++#include <net/p4tc_types.h>
++#include <net/sock.h>
++#include <net/p4tc_ext_api.h>
++
++static LIST_HEAD(ext_base);
++static DEFINE_RWLOCK(ext_mod_lock);
++
++static const struct nla_policy tc_extern_inst_policy[P4TC_TMPL_EXT_INST_MAX + 1] = {
++	[P4TC_TMPL_EXT_INST_EXT_NAME] = {
++		.type = NLA_STRING,
++		.len =  EXTERNNAMSIZ
++	},
++	[P4TC_TMPL_EXT_INST_NAME] = {
++		.type = NLA_STRING,
++		.len =  EXTERNINSTNAMSIZ
++	},
++	[P4TC_TMPL_EXT_INST_NUM_ELEMS] = NLA_POLICY_RANGE(NLA_U32, 1,
++							  P4TC_MAX_NUM_EXT_INST_ELEMS),
++	[P4TC_TMPL_EXT_INST_CONTROL_PARAMS] = { .type = NLA_NESTED },
++	[P4TC_TMPL_EXT_INST_TABLE_BINDABLE] = { . type = NLA_U8 },
++	[P4TC_TMPL_EXT_INST_CONSTR_PARAMS] = { .type = NLA_NESTED },
++};
++
++static const struct nla_policy tc_extern_policy[P4TC_TMPL_EXT_MAX + 1] = {
++	[P4TC_TMPL_EXT_NAME] = { .type = NLA_STRING, .len =  EXTERNNAMSIZ },
++	[P4TC_TMPL_EXT_NUM_INSTS] = NLA_POLICY_RANGE(NLA_U16, 1,
++						     P4TC_MAX_NUM_EXT_INSTS),
++	[P4TC_TMPL_EXT_HAS_EXEC_METHOD] = NLA_POLICY_RANGE(NLA_U8, 1, 1),
++};
++
++static const struct nla_policy p4tc_extern_params_policy[P4TC_EXT_PARAMS_MAX + 1] = {
++	[P4TC_EXT_PARAMS_NAME] = { .type = NLA_STRING, .len = EXTPARAMNAMSIZ },
++	[P4TC_EXT_PARAMS_ID] = { .type = NLA_U32 },
++	[P4TC_EXT_PARAMS_VALUE] = { .type = NLA_NESTED },
++	[P4TC_EXT_PARAMS_TYPE] = { .type = NLA_U32 },
++	[P4TC_EXT_PARAMS_BITSZ] = { .type = NLA_U16 },
++	[P4TC_EXT_PARAMS_FLAGS] = { .type = NLA_U8 },
++};
++
++static void p4tc_extern_ops_put(const struct p4tc_extern_ops *ops)
++{
++	if (ops)
++		module_put(ops->owner);
++}
++
++static bool
++p4tc_extern_mod_callbacks_check(const struct p4tc_extern_ops *ext)
++{
++	if ((ext->construct || ext->deconstruct) && !(ext->rctrl || ext->dump))
++		return (ext->construct && ext->deconstruct);
++
++	if (ext->rctrl || ext->dump)
++		return (ext->construct && ext->deconstruct && ext->rctrl &&
++			ext->dump);
++
++	return true;
++}
++
++static struct p4tc_extern_ops *p4tc_extern_lookup_n(char *kind)
++{
++	struct p4tc_extern_ops *a = NULL;
++
++	read_lock(&ext_mod_lock);
++	list_for_each_entry(a, &ext_base, head) {
++		if (strcmp(kind, a->kind) == 0) {
++			read_unlock(&ext_mod_lock);
++			return a;
++		}
++	}
++	read_unlock(&ext_mod_lock);
++
++	return NULL;
++}
++
++static int
++p4tc_extern_mod_name(char *mod_name, char *kind)
++{
++	int nbytes;
++
++	nbytes = snprintf(mod_name, EXTERNNAMSIZ, "ext_%s", kind);
++	/* Extern name was too long */
++	if (nbytes == EXTERNNAMSIZ)
++		return -E2BIG;
++
++	return 0;
++}
++
++static struct p4tc_extern_ops *p4tc_extern_ops_load(char *kind)
++{
++	struct p4tc_extern_ops *ops = NULL;
++	char mod_name[EXTERNNAMSIZ] = {0};
++	int err;
++
++	if (!kind)
++		return NULL;
++
++	err = p4tc_extern_mod_name(mod_name, kind);
++	if (err < 0)
++		return NULL;
++
++	ops = p4tc_extern_lookup_n(mod_name);
++	if (ops && try_module_get(ops->owner))
++		return ops;
++
++	if (!ops) {
++		rtnl_unlock();
++		request_module(mod_name);
++		rtnl_lock();
++
++		ops = p4tc_extern_lookup_n(mod_name);
++		if (ops) {
++			if (try_module_get(ops->owner))
++				return ops;
++
++			return NULL;
++		}
++	}
++
++	return ops;
++}
++
++static void p4tc_extern_put_param(struct p4tc_extern_param *param)
++{
++	if (param->mask_shift)
++		p4t_release(param->mask_shift);
++	if (param->value)
++		p4tc_ext_param_value_free_tmpl(param);
++	kfree(param);
++}
++
++static void p4tc_extern_put_param_idr(struct idr *params_idr,
++				      struct p4tc_extern_param *param)
++{
++	idr_remove(params_idr, param->id);
++	p4tc_extern_put_param(param);
++}
++
++static void
++p4tc_user_pipeline_ext_put_ref(struct p4tc_user_pipeline_extern *pipe_ext)
++{
++	refcount_dec(&pipe_ext->ext_ref);
++}
++
++static void
++p4tc_user_pipeline_ext_free(struct p4tc_user_pipeline_extern *pipe_ext,
++			    struct idr *tmpl_exts_idr)
++{
++	idr_remove(tmpl_exts_idr, pipe_ext->ext_id);
++	idr_destroy(&pipe_ext->e_inst_idr);
++	refcount_dec(&pipe_ext->tmpl_ext->tmpl_ref);
++	kfree(pipe_ext);
++}
++
++static void
++p4tc_user_pipeline_ext_put(struct p4tc_pipeline *pipeline,
++			   struct p4tc_user_pipeline_extern *pipe_ext,
++			   bool release, struct idr *tmpl_exts_idr)
++{
++	if (refcount_dec_and_test(&pipe_ext->ext_ref) && release)
++		p4tc_user_pipeline_ext_free(pipe_ext, tmpl_exts_idr);
++}
++
++static struct p4tc_user_pipeline_extern *
++p4tc_user_pipeline_ext_find_byid(struct p4tc_pipeline *pipeline,
++				 const u32 ext_id)
++{
++	struct p4tc_user_pipeline_extern *pipe_ext;
++
++	pipe_ext = idr_find(&pipeline->user_ext_idr, ext_id);
++
++	return pipe_ext;
++}
++
++static struct p4tc_user_pipeline_extern *
++p4tc_user_pipeline_ext_get(struct p4tc_pipeline *pipeline, const u32 ext_id)
++{
++	struct p4tc_user_pipeline_extern *pipe_ext;
++
++	pipe_ext = p4tc_user_pipeline_ext_find_byid(pipeline, ext_id);
++	if (!pipe_ext)
++		return ERR_PTR(-ENOENT);
++
++	refcount_inc(&pipe_ext->ext_ref);
++
++	return pipe_ext;
++}
++
++void p4tc_ext_inst_purge(struct p4tc_extern_inst *inst)
++{
++	p4tc_ext_purge(&inst->control_elems_idr);
++}
++EXPORT_SYMBOL_GPL(p4tc_ext_inst_purge);
++
++static void ___p4tc_ext_inst_put(struct p4tc_extern_inst *inst, bool put_params)
++{
++	if (p4tc_ext_inst_has_construct(inst)) {
++		inst->ops->deconstruct(inst);
++	} else {
++		if (inst->params && put_params)
++			p4tc_ext_params_free(inst->params, true);
++
++		p4tc_ext_inst_purge(inst);
++		kfree(inst);
++	}
++}
++
++static int __p4tc_ext_inst_put(struct p4tc_pipeline *pipeline,
++			       struct p4tc_extern_inst *inst, bool teardown,
++			       bool release, struct netlink_ext_ack *extack)
++{
++	struct p4tc_user_pipeline_extern *pipe_ext = inst->pipe_ext;
++	const u32 inst_id = inst->ext_inst_id;
++
++	if (!teardown && !refcount_dec_if_one(&inst->inst_ref)) {
++		NL_SET_ERR_MSG(extack,
++			       "Can't delete referenced extern instance template");
++		return -EBUSY;
++	}
++
++	___p4tc_ext_inst_put(inst, true);
++
++	idr_remove(&pipe_ext->e_inst_idr, inst_id);
++
++	p4tc_user_pipeline_ext_put(pipeline, pipe_ext, release,
++				   &pipeline->user_ext_idr);
++
++	return 0;
++}
++
++static int _p4tc_tmpl_ext_put(struct p4tc_pipeline *pipeline,
++			      struct p4tc_tmpl_extern *ext, bool teardown,
++			      struct netlink_ext_ack *extack)
++{
++	if (!teardown && !refcount_dec_if_one(&ext->tmpl_ref)) {
++		NL_SET_ERR_MSG(extack,
++			       "Can't delete referenced extern template");
++		return -EBUSY;
++	}
++
++	idr_remove(&pipeline->p_ext_idr, ext->ext_id);
++	p4tc_extern_ops_put(ext->ops);
++
++	kfree(ext);
++
++	return 0;
++}
++
++static int p4tc_tmpl_ext_put(struct p4tc_pipeline *pipeline,
++			     struct p4tc_template_common *tmpl,
++			     struct netlink_ext_ack *extack)
++{
++	struct p4tc_tmpl_extern *ext;
++
++	ext = to_extern(tmpl);
++
++	return _p4tc_tmpl_ext_put(pipeline, ext, true, extack);
++}
++
++struct p4tc_extern_inst *
++p4tc_ext_inst_alloc(const struct p4tc_extern_ops *ops, const u32 max_num_elems,
++		    bool tbl_bindable, char *ext_name)
++{
++	struct p4tc_extern_inst *inst;
++	const u32 inst_size = (ops && ops->size) ? ops->size : sizeof(*inst);
++
++	inst = kzalloc(inst_size, GFP_KERNEL);
++	if (!inst)
++		return ERR_PTR(-ENOMEM);
++
++	inst->ops = ops;
++	inst->max_num_elems = max_num_elems;
++	refcount_set(&inst->inst_ref, 1);
++	INIT_LIST_HEAD(&inst->unused_elems);
++	spin_lock_init(&inst->available_list_lock);
++	atomic_set(&inst->curr_num_elems, 0);
++	idr_init(&inst->control_elems_idr);
++	inst->ext_name = ext_name;
++	inst->tbl_bindable = tbl_bindable;
++
++	inst->common.ops = (typeof(inst->common.ops))&p4tc_ext_inst_ops;
++
++	return inst;
++}
++EXPORT_SYMBOL(p4tc_ext_inst_alloc);
++
++static int p4tc_ext_inst_put(struct p4tc_pipeline *pipeline,
++			     struct p4tc_template_common *tmpl,
++			     struct netlink_ext_ack *extack)
++{
++	struct p4tc_extern_inst *inst;
++
++	inst = to_extern_inst(tmpl);
++
++	return __p4tc_ext_inst_put(pipeline, inst, true, false, extack);
++}
++
++static struct p4tc_extern_inst *
++p4tc_ext_inst_find_byname(struct p4tc_user_pipeline_extern *pipe_ext,
++			  const char *instname)
++{
++	struct p4tc_extern_inst *ext_inst;
++	unsigned long tmp, inst_id;
++
++	idr_for_each_entry_ul(&pipe_ext->e_inst_idr, ext_inst, tmp, inst_id) {
++		if (strncmp(ext_inst->common.name, instname,
++			    EXTERNINSTNAMSIZ) == 0)
++			return ext_inst;
++	}
++
++	return NULL;
++}
++
++static struct p4tc_extern_inst *
++p4tc_ext_inst_find_byid(struct p4tc_user_pipeline_extern *pipe_ext,
++			const u32 inst_id)
++{
++	struct p4tc_extern_inst *ext_inst;
++
++	ext_inst = idr_find(&pipe_ext->e_inst_idr, inst_id);
++
++	return ext_inst;
++}
++
++static struct p4tc_extern_inst *
++p4tc_ext_inst_find_byany(struct p4tc_user_pipeline_extern *pipe_ext,
++			 const char *instname, u32 instid,
++			 struct netlink_ext_ack *extack)
++{
++	struct p4tc_extern_inst *inst;
++	int err;
++
++	if (instid) {
++		inst = p4tc_ext_inst_find_byid(pipe_ext, instid);
++		if (!inst) {
++			NL_SET_ERR_MSG(extack, "Unable to find instance by id");
++			err = -EINVAL;
++			goto out;
++		}
++	} else {
++		if (instname) {
++			inst = p4tc_ext_inst_find_byname(pipe_ext, instname);
++			if (!inst) {
++				NL_SET_ERR_MSG_FMT(extack,
++						   "Instance name not found %s\n",
++						   instname);
++				err = -EINVAL;
++				goto out;
++			}
++		} else {
++			NL_SET_ERR_MSG(extack,
++				       "Must specify instance name or id");
++			err = -EINVAL;
++			goto out;
++		}
++	}
++
++	return inst;
++
++out:
++	return ERR_PTR(err);
++}
++
++static struct p4tc_extern_inst *
++p4tc_ext_inst_get(struct p4tc_user_pipeline_extern *pipe_ext,
++		  const char *instname, const u32 ext_inst_id,
++		  struct netlink_ext_ack *extack)
++{
++	struct p4tc_extern_inst *ext_inst;
++
++	ext_inst = p4tc_ext_inst_find_byany(pipe_ext, instname, ext_inst_id,
++					    extack);
++	if (IS_ERR(ext_inst))
++		return ext_inst;
++
++	/* Extern instance template was deleted in parallel */
++	if (!refcount_inc_not_zero(&ext_inst->inst_ref))
++		return ERR_PTR(-EBUSY);
++
++	return ext_inst;
++}
++
++static void p4tc_ext_inst_put_ref(struct p4tc_extern_inst *inst)
++{
++	refcount_dec(&inst->inst_ref);
++}
++
++static struct p4tc_tmpl_extern *
++p4tc_tmpl_ext_find_name(struct p4tc_pipeline *pipeline, const char *extern_name)
++{
++	struct p4tc_tmpl_extern *ext;
++	unsigned long tmp, id;
++
++	idr_for_each_entry_ul(&pipeline->p_ext_idr, ext, tmp, id)
++		if (ext->common.name[0] &&
++		    strncmp(ext->common.name, extern_name,
++			    EXTERNNAMSIZ) == 0)
++			return ext;
++
++	return NULL;
++}
++
++static struct p4tc_tmpl_extern *
++p4tc_tmpl_ext_find_byid(struct p4tc_pipeline *pipeline, const u32 ext_id)
++{
++	return idr_find(&pipeline->p_ext_idr, ext_id);
++}
++
++static struct p4tc_tmpl_extern *
++p4tc_tmpl_ext_find_byany(struct p4tc_pipeline *pipeline,
++			 const char *extern_name, u32 ext_id,
++			 struct netlink_ext_ack *extack)
++{
++	struct p4tc_tmpl_extern *ext;
++	int err;
++
++	if (ext_id) {
++		ext = p4tc_tmpl_ext_find_byid(pipeline, ext_id);
++		if (!ext) {
++			NL_SET_ERR_MSG(extack, "Unable to find ext by id");
++			err = -EINVAL;
++			goto out;
++		}
++	} else {
++		if (extern_name) {
++			ext = p4tc_tmpl_ext_find_name(pipeline, extern_name);
++			if (!ext) {
++				NL_SET_ERR_MSG(extack,
++					       "Extern name not found");
++				err = -EINVAL;
++				goto out;
++			}
++		} else {
++			NL_SET_ERR_MSG(extack,
++				       "Must specify ext name or id");
++			err = -EINVAL;
++			goto out;
++		}
++	}
++
++	return ext;
++
++out:
++	return ERR_PTR(err);
++}
++
++static struct p4tc_extern_inst *
++p4tc_ext_inst_find_byanyattr(struct p4tc_user_pipeline_extern *pipe_ext,
++			     struct nlattr *name_attr, u32 instid,
++			     struct netlink_ext_ack *extack)
++{
++	char *instname = NULL;
++
++	if (name_attr)
++		instname = nla_data(name_attr);
++
++	return p4tc_ext_inst_find_byany(pipe_ext, instname, instid,
++					extack);
++}
++
++static struct p4tc_extern_param *
++p4tc_ext_param_find_byname(struct idr *params_idr, const char *param_name)
++{
++	struct p4tc_extern_param *param;
++	unsigned long tmp, id;
++
++	idr_for_each_entry_ul(params_idr, param, tmp, id) {
++		if (param == ERR_PTR(-EBUSY))
++			continue;
++		if (strncmp(param->name, param_name, EXTPARAMNAMSIZ) == 0)
++			return param;
++	}
++
++	return NULL;
++}
++
++struct p4tc_extern_param *
++p4tc_ext_param_find_byid(struct idr *params_idr, const u32 param_id)
++{
++	return idr_find(params_idr, param_id);
++}
++EXPORT_SYMBOL(p4tc_ext_param_find_byid);
++
++static struct p4tc_extern_param *
++p4tc_ext_param_find_byany(struct idr *params_idr, const char *param_name,
++			  const u32 param_id, struct netlink_ext_ack *extack)
++{
++	struct p4tc_extern_param *param;
++	int err;
++
++	if (param_id) {
++		param = p4tc_ext_param_find_byid(params_idr, param_id);
++		if (!param) {
++			NL_SET_ERR_MSG(extack, "Unable to find param by id");
++			err = -EINVAL;
++			goto out;
++		}
++	} else {
++		if (param_name) {
++			param = p4tc_ext_param_find_byname(params_idr,
++							   param_name);
++			if (!param) {
++				NL_SET_ERR_MSG(extack, "Param name not found");
++				err = -EINVAL;
++				goto out;
++			}
++		} else {
++			NL_SET_ERR_MSG(extack, "Must specify param name or id");
++			err = -EINVAL;
++			goto out;
++		}
++	}
++
++	return param;
++
++out:
++	return ERR_PTR(err);
++}
++
++struct p4tc_extern_param *
++p4tc_ext_param_find_byanyattr(struct idr *params_idr,
++			      struct nlattr *name_attr,
++			      const u32 param_id,
++			      struct netlink_ext_ack *extack)
++{
++	char *param_name = NULL;
++
++	if (name_attr)
++		param_name = nla_data(name_attr);
++
++	return p4tc_ext_param_find_byany(params_idr, param_name, param_id,
++					 extack);
++}
++
++static struct p4tc_extern_param *
++p4tc_extern_create_param(struct idr *params_idr, struct nlattr **tb,
++			 u32 param_id, struct netlink_ext_ack *extack)
++{
++	struct p4tc_extern_param *param;
++	u8 *flags = NULL;
++	char *name;
++	int ret;
++
++	if (tb[P4TC_EXT_PARAMS_NAME]) {
++		name = nla_data(tb[P4TC_EXT_PARAMS_NAME]);
++	} else {
++		NL_SET_ERR_MSG(extack, "Must specify param name");
++		ret = -EINVAL;
++		goto out;
++	}
++
++	param = kzalloc(sizeof(*param), GFP_KERNEL);
++	if (!param) {
++		ret = -ENOMEM;
++		goto out;
++	}
++
++	if ((param_id && p4tc_ext_param_find_byid(params_idr, param_id)) ||
++	    p4tc_ext_param_find_byname(params_idr, name)) {
++		NL_SET_ERR_MSG_FMT(extack, "Param already exists %s", name);
++		ret = -EEXIST;
++		goto free;
++	}
++
++	if ((tb[P4TC_EXT_PARAMS_TYPE] && !tb[P4TC_EXT_PARAMS_BITSZ]) ||
++	    (!tb[P4TC_EXT_PARAMS_TYPE] && tb[P4TC_EXT_PARAMS_BITSZ])) {
++		NL_SET_ERR_MSG(extack, "Must specify type with bit size");
++		ret = -EINVAL;
++		goto free;
++	}
++
++	if (tb[P4TC_EXT_PARAMS_TYPE]) {
++		struct p4tc_type_mask_shift *mask_shift = NULL;
++		struct p4tc_type *type;
++		u32 typeid;
++		u16 bitsz;
++
++		typeid = nla_get_u32(tb[P4TC_EXT_PARAMS_TYPE]);
++		bitsz = nla_get_u16(tb[P4TC_EXT_PARAMS_BITSZ]);
++
++		type = p4type_find_byid(typeid);
++		if (!type) {
++			NL_SET_ERR_MSG(extack, "Param type is invalid");
++			ret = -EINVAL;
++			goto free;
++		}
++		param->type = type;
++		if (bitsz > param->type->bitsz) {
++			NL_SET_ERR_MSG(extack, "Bit size is bigger than type");
++			ret = -EINVAL;
++			goto free;
++		}
++		if (type->ops->create_bitops) {
++			mask_shift = type->ops->create_bitops(bitsz, 0,
++							      bitsz - 1,
++							      extack);
++			if (IS_ERR(mask_shift)) {
++				ret = PTR_ERR(mask_shift);
++				goto free;
++			}
++		}
++		param->mask_shift = mask_shift;
++		param->bitsz = bitsz;
++	} else {
++		NL_SET_ERR_MSG(extack, "Must specify param type");
++		ret = -EINVAL;
++		goto free;
++	}
++
++	if (tb[P4TC_EXT_PARAMS_FLAGS]) {
++		flags = nla_data(tb[P4TC_EXT_PARAMS_FLAGS]);
++		param->flags = *flags;
++	}
++
++	if (flags && *flags & P4TC_EXT_PARAMS_FLAG_ISKEY) {
++		switch (param->type->typeid) {
++		case P4T_U8:
++		case P4T_U16:
++		case P4T_U32:
++			break;
++		default: {
++			NL_SET_ERR_MSG(extack,
++				       "Key must be an unsigned integer");
++			ret = -EINVAL;
++			goto free_mask_shift;
++		}
++		}
++	}
++
++	if (param_id) {
++		ret = idr_alloc_u32(params_idr, param, &param_id,
++				    param_id, GFP_KERNEL);
++		if (ret < 0) {
++			NL_SET_ERR_MSG(extack, "Unable to allocate param id");
++			goto free_mask_shift;
++		}
++		param->id = param_id;
++	} else {
++		param->id = 1;
++
++		ret = idr_alloc_u32(params_idr, param, &param->id,
++				    UINT_MAX, GFP_KERNEL);
++		if (ret < 0) {
++			NL_SET_ERR_MSG(extack, "Unable to allocate param id");
++			goto free_mask_shift;
++		}
++	}
++
++	strscpy(param->name, name, EXTPARAMNAMSIZ);
++
++	return param;
++
++free_mask_shift:
++	if (param->mask_shift)
++		p4t_release(param->mask_shift);
++
++free:
++	kfree(param);
++
++out:
++	return ERR_PTR(ret);
++}
++
++static struct p4tc_extern_param *
++p4tc_extern_create_param_value(struct net *net, struct idr *params_idr,
++			       struct nlattr **tb, u32 param_id,
++			       struct netlink_ext_ack *extack)
++{
++	struct p4tc_extern_param *param;
++	int err;
++
++	param = p4tc_extern_create_param(params_idr, tb, param_id, extack);
++	if (IS_ERR(param))
++		return param;
++
++	err = p4tc_ext_param_value_init(net, param, tb, param->type->typeid,
++					false, extack);
++	if (err < 0) {
++		p4tc_extern_put_param_idr(params_idr, param);
++		return ERR_PTR(err);
++	}
++
++	return param;
++}
++
++static struct p4tc_extern_param *
++p4tc_extern_init_param_value(struct net *net, struct idr *params_idr,
++			     struct nlattr *nla,
++			     struct netlink_ext_ack *extack)
++{
++	struct nlattr *tb[P4TC_EXT_PARAMS_MAX + 1];
++	u32 param_id = 0;
++	int ret;
++
++	ret = nla_parse_nested(tb, P4TC_EXT_PARAMS_MAX, nla,
++			       p4tc_extern_params_policy, extack);
++	if (ret < 0) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	if (tb[P4TC_EXT_PARAMS_ID])
++		param_id = nla_get_u32(tb[P4TC_EXT_PARAMS_ID]);
++
++	return p4tc_extern_create_param_value(net, params_idr, tb,
++					      param_id, extack);
++
++out:
++	return ERR_PTR(ret);
++}
++
++static bool
++p4tc_extern_params_check_flags(struct p4tc_extern_param *param,
++			       struct netlink_ext_ack *extack)
++{
++	if (param->flags & P4TC_EXT_PARAMS_FLAG_ISKEY &&
++	    param->flags & P4TC_EXT_PARAMS_FLAG_IS_DATASCALAR) {
++		NL_SET_ERR_MSG(extack,
++			       "Can't set key and data scalar flags at the same time");
++		return false;
++	}
++
++	return true;
++}
++
++static struct p4tc_extern_params *
++p4tc_extern_init_params_value(struct net *net,
++			      struct p4tc_extern_params *params,
++			      struct nlattr **tb,
++			      bool *is_scalar, bool tbl_bindable,
++			      struct netlink_ext_ack *extack)
++{
++	bool has_scalar_param = false;
++	bool has_key_param = false;
++	int ret;
++	int i;
++
++	for (i = 1; i < P4TC_MSGBATCH_SIZE + 1 && tb[i]; i++) {
++		struct p4tc_extern_param *param;
++
++		param = p4tc_extern_init_param_value(net, &params->params_idr,
++						     tb[i], extack);
++		if (IS_ERR(param)) {
++			ret = PTR_ERR(param);
++			goto params_del;
++		}
++
++		if (!p4tc_extern_params_check_flags(param, extack)) {
++			ret = -EINVAL;
++			goto params_del;
++		}
++
++		if (has_key_param) {
++			if (param->flags & P4TC_EXT_PARAMS_FLAG_ISKEY) {
++				NL_SET_ERR_MSG(extack,
++					       "There can't be 2 key params");
++				ret = -EINVAL;
++				goto params_del;
++			}
++		} else {
++			has_key_param = param->flags & P4TC_EXT_PARAMS_FLAG_ISKEY;
++		}
++
++		if (has_scalar_param) {
++			if (!param->flags ||
++			    (param->flags & P4TC_EXT_PARAMS_FLAG_IS_DATASCALAR)) {
++				NL_SET_ERR_MSG(extack,
++					       "All data parameters must be scalars");
++				ret = -EINVAL;
++				goto params_del;
++			}
++		} else {
++			has_scalar_param = param->flags & P4TC_EXT_PARAMS_FLAG_IS_DATASCALAR;
++		}
++		if (tbl_bindable) {
++			if (!p4tc_is_type_unsigned(param->type->typeid)) {
++				NL_SET_ERR_MSG_FMT(extack,
++						   "Extern with %s parameter is unbindable",
++						   param->type->name);
++				ret = -EINVAL;
++				goto params_del;
++			}
++		}
++		params->num_params++;
++	}
++	*is_scalar = has_scalar_param;
++
++	return params;
++
++params_del:
++	p4tc_ext_params_free(params, true);
++	return ERR_PTR(ret);
++}
++
++static struct p4tc_extern_params *
++p4tc_extern_create_params_value(struct net *net, struct nlattr *nla,
++				bool *is_scalar, bool tbl_bindable,
++				struct netlink_ext_ack *extack)
++{
++	struct nlattr *tb[P4TC_MSGBATCH_SIZE + 1];
++	struct p4tc_extern_params *params;
++	int ret;
++
++	params = p4tc_extern_params_init();
++	if (!params) {
++		ret = -ENOMEM;
++		goto err_out;
++	}
++
++	if (nla) {
++		ret = nla_parse_nested(tb, P4TC_MSGBATCH_SIZE, nla, NULL,
++				       extack);
++		if (ret < 0) {
++			ret = -EINVAL;
++			goto params_del;
++		}
++	} else {
++		return params;
++	}
++
++	return p4tc_extern_init_params_value(net, params, tb, is_scalar,
++					     tbl_bindable, extack);
++
++params_del:
++	p4tc_ext_params_free(params, true);
++err_out:
++	return ERR_PTR(ret);
++}
++
++static struct p4tc_extern_params *
++p4tc_extern_update_params_value(struct net *net, struct nlattr *nla,
++				bool *is_scalar, bool tbl_bindable,
++				struct netlink_ext_ack *extack)
++{
++	struct nlattr *tb[P4TC_MSGBATCH_SIZE + 1];
++	struct p4tc_extern_params *params;
++	int ret;
++
++	if (nla) {
++		params = p4tc_extern_params_init();
++		if (!params) {
++			ret = -ENOMEM;
++			goto err_out;
++		}
++
++		ret = nla_parse_nested(tb, P4TC_MSGBATCH_SIZE, nla, NULL,
++				       extack);
++		if (ret < 0) {
++			ret = -EINVAL;
++			goto params_del;
++		}
++	} else {
++		return NULL;
++	}
++
++	return p4tc_extern_init_params_value(net, params, tb, is_scalar,
++					     tbl_bindable, extack);
++
++params_del:
++	p4tc_ext_params_free(params, true);
++err_out:
++	return ERR_PTR(ret);
++}
++
++static struct p4tc_tmpl_extern *
++p4tc_tmpl_ext_find_byanyattr(struct p4tc_pipeline *pipeline,
++			     struct nlattr *name_attr, u32 ext_id,
++			     struct netlink_ext_ack *extack)
++{
++	char *extern_name = NULL;
++
++	if (name_attr)
++		extern_name = nla_data(name_attr);
++
++	return p4tc_tmpl_ext_find_byany(pipeline, extern_name, ext_id,
++				       extack);
++}
++
++int p4tc_register_extern(struct p4tc_extern_ops *ext)
++{
++	if (p4tc_extern_lookup_n(ext->kind))
++		return -EEXIST;
++
++	if (!p4tc_extern_mod_callbacks_check(ext))
++		return -EINVAL;
++
++	write_lock(&ext_mod_lock);
++	list_add_tail(&ext->head, &ext_base);
++	write_unlock(&ext_mod_lock);
++
++	return 0;
++}
++EXPORT_SYMBOL(p4tc_register_extern);
++
++int p4tc_unregister_extern(struct p4tc_extern_ops *ext)
++{
++	struct p4tc_extern_ops *a;
++	int err = -ENOENT;
++
++	write_lock(&ext_mod_lock);
++	list_for_each_entry(a, &ext_base, head) {
++		if (a == ext) {
++			list_del(&ext->head);
++			err = 0;
++			break;
++		}
++	}
++	write_unlock(&ext_mod_lock);
++	return err;
++}
++EXPORT_SYMBOL(p4tc_unregister_extern);
++
++static struct p4tc_user_pipeline_extern *
++p4tc_user_pipeline_ext_find_byname(struct p4tc_pipeline *pipeline,
++				   const char *extname)
++{
++	struct p4tc_user_pipeline_extern *pipe_ext;
++	unsigned long tmp, ext_id;
++
++	idr_for_each_entry_ul(&pipeline->user_ext_idr, pipe_ext, tmp, ext_id) {
++		if (strncmp(pipe_ext->ext_name, extname, EXTERNNAMSIZ) == 0)
++			return pipe_ext;
++	}
++
++	return NULL;
++}
++
++static struct p4tc_user_pipeline_extern *
++p4tc_user_pipeline_ext_find_byany(struct p4tc_pipeline *pipeline,
++				  const char *extname, u32 ext_id,
++				  struct netlink_ext_ack *extack)
++{
++	struct p4tc_user_pipeline_extern *pipe_ext;
++	int err;
++
++	if (ext_id) {
++		pipe_ext = p4tc_user_pipeline_ext_find_byid(pipeline, ext_id);
++		if (!pipe_ext) {
++			NL_SET_ERR_MSG(extack, "Unable to find extern");
++			err = -EINVAL;
++			goto out;
++		}
++	} else {
++		if (extname) {
++			pipe_ext = p4tc_user_pipeline_ext_find_byname(pipeline,
++								      extname);
++			if (!pipe_ext) {
++				NL_SET_ERR_MSG(extack,
++					       "Extern name not found");
++				err = -EINVAL;
++				goto out;
++			}
++		} else {
++			NL_SET_ERR_MSG(extack,
++				       "Must specify extern name or id");
++			err = -EINVAL;
++			goto out;
++		}
++	}
++
++	return pipe_ext;
++
++out:
++	return ERR_PTR(err);
++}
++
++static struct p4tc_user_pipeline_extern *
++p4tc_user_pipeline_ext_find_byanyattr(struct p4tc_pipeline *pipeline,
++				      struct nlattr *name_attr, u32 ext_id,
++				      struct netlink_ext_ack *extack)
++{
++	char *extname = NULL;
++
++	if (name_attr)
++		extname = nla_data(name_attr);
++
++	return p4tc_user_pipeline_ext_find_byany(pipeline, extname, ext_id,
++						 extack);
++}
++
++static bool
++p4tc_user_pipeline_insts_exceeded(struct p4tc_user_pipeline_extern *pipe_ext)
++{
++	const u32 max_num_insts = pipe_ext->tmpl_ext->max_num_insts;
++
++	return atomic_read(&pipe_ext->curr_insts_num) == max_num_insts;
++}
++
++static struct p4tc_user_pipeline_extern *
++p4tc_user_pipeline_ext_find_or_create(struct p4tc_pipeline *pipeline,
++				      struct p4tc_tmpl_extern *tmpl_ext,
++				      struct netlink_ext_ack *extack)
++{
++	struct p4tc_user_pipeline_extern *pipe_ext;
++	int err;
++
++	pipe_ext = p4tc_user_pipeline_ext_get(pipeline, tmpl_ext->ext_id);
++	if (pipe_ext != ERR_PTR(-ENOENT)) {
++		if (p4tc_user_pipeline_insts_exceeded(pipe_ext)) {
++			NL_SET_ERR_MSG(extack,
++				       "Maximum number of instances exceeded");
++			p4tc_user_pipeline_ext_put_ref(pipe_ext);
++			return ERR_PTR(-ENOSPC);
++		}
++
++		return pipe_ext;
++	}
++
++	pipe_ext = kzalloc(sizeof(*pipe_ext), GFP_KERNEL);
++	if (!pipe_ext)
++		return ERR_PTR(-ENOMEM);
++
++	pipe_ext->ext_id = tmpl_ext->ext_id;
++	err = idr_alloc_u32(&pipeline->user_ext_idr, pipe_ext,
++			    &pipe_ext->ext_id, pipe_ext->ext_id, GFP_KERNEL);
++	if (err < 0)
++		goto free_pipe_ext;
++
++	strscpy(pipe_ext->ext_name, tmpl_ext->common.name, EXTERNNAMSIZ);
++	idr_init(&pipe_ext->e_inst_idr);
++	refcount_set(&pipe_ext->ext_ref, 2);
++	atomic_set(&pipe_ext->curr_insts_num, 0);
++	refcount_inc(&tmpl_ext->tmpl_ref);
++	pipe_ext->tmpl_ext = tmpl_ext;
++	pipe_ext->free = p4tc_user_pipeline_ext_free;
++
++	return pipe_ext;
++
++free_pipe_ext:
++	kfree(pipe_ext);
++	return ERR_PTR(err);
++}
++
++struct p4tc_user_pipeline_extern *
++p4tc_pipe_ext_find_bynames(struct net *net, struct p4tc_pipeline *pipeline,
++			   const char *extname, struct netlink_ext_ack *extack)
++{
++	return p4tc_user_pipeline_ext_find_byany(pipeline, extname, 0,
++						 extack);
++}
++
++struct p4tc_extern_inst *
++p4tc_ext_inst_find_bynames(struct net *net, struct p4tc_pipeline *pipeline,
++			   const char *extname, const char *instname,
++			   struct netlink_ext_ack *extack)
++{
++	struct p4tc_user_pipeline_extern *pipe_ext;
++	struct p4tc_extern_inst *inst;
++
++	pipe_ext = p4tc_pipe_ext_find_bynames(net, pipeline, extname, extack);
++	if (IS_ERR(pipe_ext))
++		return (void *)pipe_ext;
++
++	inst = p4tc_ext_inst_find_byany(pipe_ext, instname, 0, extack);
++	if (IS_ERR(inst))
++		return inst;
++
++	return inst;
++}
++
++static void
++__p4tc_ext_inst_table_unbind(struct p4tc_user_pipeline_extern *pipe_ext,
++			     struct p4tc_extern_inst *inst)
++{
++	p4tc_user_pipeline_ext_put_ref(pipe_ext);
++	p4tc_ext_inst_put_ref(inst);
++}
++
++void
++p4tc_ext_inst_table_unbind(struct p4tc_table *table,
++			   struct p4tc_user_pipeline_extern *pipe_ext,
++			   struct p4tc_extern_inst *inst)
++{
++	table->tbl_counter = NULL;
++	__p4tc_ext_inst_table_unbind(pipe_ext, inst);
++}
++
++struct p4tc_extern_inst *
++p4tc_ext_find_byids(struct p4tc_pipeline *pipeline,
++		    const u32 ext_id, const u32 inst_id)
++{
++	struct p4tc_user_pipeline_extern *pipe_ext;
++	struct p4tc_extern_inst *inst;
++	int err;
++
++	pipe_ext = p4tc_user_pipeline_ext_find_byid(pipeline, ext_id);
++	if (!pipe_ext) {
++		err = -ENOENT;
++		goto out;
++	}
++
++	inst = p4tc_ext_inst_find_byid(pipe_ext, inst_id);
++	if (!inst) {
++		err = -EBUSY;
++		goto out;
++	}
++
++	return inst;
++
++out:
++	return ERR_PTR(err);
++}
++
++#define SEPARATOR "/"
++
++struct p4tc_extern_inst *
++p4tc_ext_inst_table_bind(struct p4tc_pipeline *pipeline,
++			 struct p4tc_user_pipeline_extern **pipe_ext,
++			 const char *ext_inst_path,
++			 struct netlink_ext_ack *extack)
++{
++	char *instname_clone, *extname, *instname;
++	struct p4tc_extern_inst *inst;
++	int err;
++
++	instname_clone = instname = kstrdup(ext_inst_path, GFP_KERNEL);
++	if (!instname)
++		return ERR_PTR(-ENOMEM);
++
++	extname = strsep(&instname, SEPARATOR);
++
++	*pipe_ext = p4tc_pipe_ext_find_bynames(pipeline->net, pipeline, extname,
++					       extack);
++	if (IS_ERR(*pipe_ext)) {
++		err = PTR_ERR(*pipe_ext);
++		goto free_inst_path;
++	}
++
++	inst = p4tc_ext_inst_get(*pipe_ext, instname, 0, extack);
++	if (IS_ERR(inst)) {
++		err = PTR_ERR(inst);
++		goto free_inst_path;
++	}
++
++	if (!inst->tbl_bindable) {
++		__p4tc_ext_inst_table_unbind(*pipe_ext, inst);
++		NL_SET_ERR_MSG_FMT(extack,
++				   "Extern instance %s can't be bound to a table",
++				   inst->common.name);
++		err = -EPERM;
++		goto put_inst;
++	}
++
++	kfree(instname_clone);
++
++	return inst;
++
++put_inst:
++	p4tc_ext_inst_put_ref(inst);
++
++free_inst_path:
++	kfree(instname_clone);
++	return ERR_PTR(err);
++}
++
++struct p4tc_extern_inst *
++p4tc_ext_inst_get_byids(struct net *net, struct p4tc_pipeline **pipeline,
++			struct p4tc_ext_bpf_params *params)
++{
++	struct p4tc_extern_inst *inst;
++	int err;
++
++	*pipeline = p4tc_pipeline_find_get(net, NULL, params->pipe_id, NULL);
++	if (IS_ERR(*pipeline))
++		return (struct p4tc_extern_inst *)*pipeline;
++
++	inst = p4tc_ext_find_byids(*pipeline, params->ext_id, params->inst_id);
++	if (IS_ERR(inst)) {
++		err = PTR_ERR(inst);
++		goto put_pipeline;
++	}
++
++	return inst;
++
++put_pipeline:
++	p4tc_pipeline_put(*pipeline);
++
++	return ERR_PTR(err);
++}
++EXPORT_SYMBOL(p4tc_ext_inst_get_byids);
++
++static struct p4tc_extern_inst *
++p4tc_ext_inst_update(struct net *net, struct nlmsghdr *n,
++		     struct nlattr *nla, struct p4tc_pipeline *pipeline,
++		     u32 *ids, struct netlink_ext_ack *extack)
++{
++	struct p4tc_extern_params *new_params, *new_constr_params;
++	struct p4tc_extern_params *params, *constr_params;
++	struct nlattr *tb[P4TC_TMPL_EXT_INST_MAX + 1];
++	struct p4tc_user_pipeline_extern *pipe_ext;
++	struct p4tc_extern_inst *new_inst = NULL;
++	struct p4tc_pipeline *root_pipeline;
++	struct p4tc_extern_inst *old_inst;
++	bool has_scalar_params = false;
++	struct p4tc_tmpl_extern *ext;
++	u32 ext_id = 0, inst_id = 0;
++	bool tbl_bindable = false;
++	char *inst_name = NULL;
++	u32 max_num_elems = 0;
++	int ret;
++
++	ret = nla_parse_nested(tb, P4TC_TMPL_EXT_INST_MAX, nla,
++			       tc_extern_inst_policy, extack);
++	if (ret < 0)
++		return ERR_PTR(ret);
++
++	ext_id = ids[P4TC_TMPL_EXT_IDX];
++
++	root_pipeline = p4tc_pipeline_find_byid(net, P4TC_KERNEL_PIPEID);
++
++	ext = p4tc_tmpl_ext_find_byanyattr(root_pipeline,
++					   tb[P4TC_TMPL_EXT_INST_EXT_NAME],
++					   ext_id, extack);
++	if (IS_ERR(ext))
++		return (struct p4tc_extern_inst *)ext;
++
++	inst_id = ids[P4TC_TMPL_EXT_INST_IDX];
++
++	if (tb[P4TC_TMPL_EXT_INST_NAME])
++		inst_name = nla_data(tb[P4TC_TMPL_EXT_INST_NAME]);
++
++	pipe_ext = p4tc_user_pipeline_ext_find_byid(pipeline, ext->ext_id);
++	if (!pipe_ext) {
++		NL_SET_ERR_MSG(extack, "Unable to find pipeline extern by id");
++		return ERR_PTR(-ENOENT);
++	}
++
++	old_inst = p4tc_ext_inst_find_byanyattr(pipe_ext, tb[P4TC_TMPL_EXT_INST_NAME],
++						inst_id, extack);
++	if (IS_ERR(old_inst)) {
++		NL_SET_ERR_MSG(extack, "Unable to find extern instance by id");
++		return ERR_PTR(-ENOENT);
++	}
++
++	if (tb[P4TC_TMPL_EXT_INST_NUM_ELEMS])
++		max_num_elems = nla_get_u32(tb[P4TC_TMPL_EXT_INST_NUM_ELEMS]);
++
++	if (tb[P4TC_TMPL_EXT_INST_TABLE_BINDABLE])
++		tbl_bindable = true;
++	else
++		tbl_bindable = old_inst->tbl_bindable;
++
++	if (tbl_bindable && !p4tc_ext_has_exec(ext->ops)) {
++		NL_SET_ERR_MSG(extack,
++			       "Instance may only be table bindable if module has exec");
++		return ERR_PTR(-EINVAL);
++	}
++
++	new_params = p4tc_extern_update_params_value(net,
++						     tb[P4TC_TMPL_EXT_INST_CONTROL_PARAMS],
++						     &has_scalar_params, tbl_bindable,
++						     extack);
++	if (IS_ERR(new_params))
++		return (struct p4tc_extern_inst *)new_params;
++
++	params = new_params ?: old_inst->params;
++	max_num_elems = max_num_elems ?: old_inst->max_num_elems;
++
++	if (p4tc_ext_inst_has_construct(old_inst)) {
++		struct nlattr *nla_constr_params = tb[P4TC_TMPL_EXT_INST_CONSTR_PARAMS];
++
++		new_constr_params = p4tc_extern_update_params_value(net,
++								    nla_constr_params,
++								    &has_scalar_params,
++								    tbl_bindable,
++								    extack);
++		if (IS_ERR(new_constr_params)) {
++			if (new_params)
++				p4tc_ext_params_free(new_params, true);
++
++			return (struct p4tc_extern_inst *)new_constr_params;
++		}
++		constr_params = new_constr_params ?: old_inst->constr_params;
++
++		ret = old_inst->ops->construct(&new_inst, params, constr_params,
++					       max_num_elems, tbl_bindable,
++					       extack);
++		if (new_params)
++			p4tc_ext_params_free(new_params, true);
++		if (new_constr_params)
++			p4tc_ext_params_free(new_constr_params, true);
++		if (ret < 0)
++			return ERR_PTR(ret);
++	} else {
++		if (tb[P4TC_TMPL_EXT_INST_CONSTR_PARAMS]) {
++			NL_SET_ERR_MSG(extack,
++				       "Need construct mod op to pass constructor params");
++			ret = -EINVAL;
++			goto free_control_params;
++		}
++
++		new_inst = p4tc_ext_inst_alloc(ext->ops, max_num_elems,
++					       tbl_bindable,
++					       pipe_ext->ext_name);
++		if (IS_ERR(new_inst)) {
++			ret = PTR_ERR(new_inst);
++			goto free_control_params;
++		}
++		new_inst->params = params;
++	}
++
++	new_inst->ext_inst_id = old_inst->ext_inst_id;
++	new_inst->is_scalar = has_scalar_params;
++	new_inst->ext_id = ext->ext_id;
++	new_inst->pipe_ext = pipe_ext;
++
++	strscpy(new_inst->common.name, inst_name, EXTERNINSTNAMSIZ);
++
++	idr_replace(&pipe_ext->e_inst_idr, new_inst, old_inst->ext_inst_id);
++
++	___p4tc_ext_inst_put(old_inst, !!new_params);
++
++	return new_inst;
++
++free_control_params:
++	if (new_params)
++		p4tc_ext_params_free(new_params, true);
++
++	return ERR_PTR(ret);
++}
++
++static struct p4tc_extern_inst *
++p4tc_ext_inst_create(struct net *net, struct nlmsghdr *n,
++		     struct nlattr *nla, struct p4tc_pipeline *pipeline,
++		     u32 *ids, struct netlink_ext_ack *extack)
++{
++	struct p4tc_extern_params *constr_params = NULL, *params;
++	struct nlattr *tb[P4TC_TMPL_EXT_INST_MAX + 1];
++	struct p4tc_user_pipeline_extern *pipe_ext;
++	struct p4tc_pipeline *root_pipeline;
++	bool has_scalar_params = false;
++	struct p4tc_extern_inst *inst;
++	struct p4tc_tmpl_extern *ext;
++	u32 ext_id = 0, inst_id = 0;
++	bool tbl_bindable = false;
++	char *inst_name = NULL;
++	u32 max_num_elems;
++	int ret;
++
++	ret = nla_parse_nested(tb, P4TC_TMPL_EXT_INST_MAX, nla,
++			       tc_extern_inst_policy, extack);
++	if (ret < 0)
++		return ERR_PTR(ret);
++
++	ext_id = ids[P4TC_TMPL_EXT_IDX];
++
++	root_pipeline = p4tc_pipeline_find_byid(net, P4TC_KERNEL_PIPEID);
++
++	ext = p4tc_tmpl_ext_find_byanyattr(root_pipeline,
++					   tb[P4TC_TMPL_EXT_INST_EXT_NAME],
++					   ext_id, extack);
++	if (IS_ERR(ext))
++		return (struct p4tc_extern_inst *)ext;
++
++	if (tb[P4TC_TMPL_EXT_INST_NAME]) {
++		inst_name = nla_data(tb[P4TC_TMPL_EXT_INST_NAME]);
++	} else {
++		NL_SET_ERR_MSG(extack,
++			       "Must specify extern name");
++		return ERR_PTR(-EINVAL);
++	}
++
++	inst_id = ids[P4TC_TMPL_EXT_INST_IDX];
++	if (!inst_id) {
++		NL_SET_ERR_MSG(extack, "Must specify extern instance id");
++		return ERR_PTR(-EINVAL);
++	}
++
++	pipe_ext = p4tc_user_pipeline_ext_find_or_create(pipeline, ext, extack);
++	if (IS_ERR(pipe_ext))
++		return (struct p4tc_extern_inst *)pipe_ext;
++
++	if (p4tc_ext_inst_find_byid(pipe_ext, inst_id) ||
++	    p4tc_ext_inst_find_byname(pipe_ext, inst_name)) {
++		NL_SET_ERR_MSG(extack,
++			       "Extern instance with same name or ID already exists");
++		ret = -EEXIST;
++		goto put_pipe_ext;
++	}
++
++	if (tb[P4TC_TMPL_EXT_INST_NUM_ELEMS])
++		max_num_elems = nla_get_u32(tb[P4TC_TMPL_EXT_INST_NUM_ELEMS]);
++	else
++		max_num_elems = P4TC_DEFAULT_NUM_EXT_INST_ELEMS;
++
++	if (tb[P4TC_TMPL_EXT_INST_TABLE_BINDABLE])
++		tbl_bindable = true;
++
++	if (tbl_bindable && !p4tc_ext_has_exec(ext->ops)) {
++		NL_SET_ERR_MSG(extack,
++			       "Instance may only be table bindable if module has exec");
++		return ERR_PTR(-EINVAL);
++	}
++
++	params = p4tc_extern_create_params_value(net,
++						 tb[P4TC_TMPL_EXT_INST_CONTROL_PARAMS],
++						 &has_scalar_params,
++						 tbl_bindable, extack);
++	if (IS_ERR(params))
++		return (struct p4tc_extern_inst *)params;
++
++	if (p4tc_ext_has_construct(ext->ops)) {
++		struct nlattr *nla_constr_params = tb[P4TC_TMPL_EXT_INST_CONSTR_PARAMS];
++
++		constr_params = p4tc_extern_create_params_value(net,
++								nla_constr_params,
++								&has_scalar_params,
++								tbl_bindable, extack);
++		if (IS_ERR(constr_params)) {
++			ret = PTR_ERR(constr_params);
++			goto free_control_params;
++		}
++
++		ret = ext->ops->construct(&inst, params, constr_params,
++					  max_num_elems, tbl_bindable, extack);
++		p4tc_ext_params_free(params, true);
++		p4tc_ext_params_free(constr_params, true);
++		if (ret < 0)
++			goto put_pipe_ext;
++	} else {
++		if (tb[P4TC_TMPL_EXT_INST_CONSTR_PARAMS]) {
++			NL_SET_ERR_MSG(extack,
++				       "Need construct mod op to pass constructor params");
++			ret = -EINVAL;
++			goto free_control_params;
++		}
++
++		inst = p4tc_ext_inst_alloc(ext->ops, max_num_elems,
++					   tbl_bindable, pipe_ext->ext_name);
++		if (IS_ERR(inst)) {
++			ret = -ENOMEM;
++			goto free_control_params;
++		}
++
++		inst->params = params;
++	}
++
++	inst->ext_id = ext->ext_id;
++	inst->ext_inst_id = inst_id;
++	inst->pipe_ext = pipe_ext;
++	inst->ext_id = ext->ext_id;
++	inst->is_scalar = has_scalar_params;
++
++	strscpy(inst->common.name, inst_name, EXTERNINSTNAMSIZ);
++
++	ret = idr_alloc_u32(&pipe_ext->e_inst_idr, inst, &inst_id,
++			    inst_id, GFP_KERNEL);
++	if (ret < 0) {
++		NL_SET_ERR_MSG(extack,
++			       "Unable to allocate ID for extern instance");
++		goto free_extern;
++	}
++
++	atomic_inc(&pipe_ext->curr_insts_num);
++
++	return inst;
++
++free_extern:
++	if (p4tc_ext_inst_has_construct(inst))
++		inst->ops->deconstruct(inst);
++	else
++		kfree(inst);
++
++free_control_params:
++	if (!p4tc_ext_has_construct(ext->ops) && params)
++		p4tc_ext_params_free(params, true);
++
++put_pipe_ext:
++	p4tc_user_pipeline_ext_put_ref(pipe_ext);
++
++	return ERR_PTR(ret);
++}
++
++static struct p4tc_template_common *
++p4tc_ext_inst_cu(struct net *net, struct nlmsghdr *n, struct nlattr *nla,
++		 struct p4tc_path_nlattrs *nl_path_attrs,
++		 struct netlink_ext_ack *extack)
++{
++	u32 *ids = nl_path_attrs->ids;
++	u32 pipeid = ids[P4TC_PID_IDX];
++	struct p4tc_pipeline *pipeline;
++	struct p4tc_extern_inst *inst;
++
++	pipeline = p4tc_pipeline_find_byany_unsealed(net, nl_path_attrs->pname,
++						     pipeid, extack);
++	if (IS_ERR(pipeline))
++		return (void *)pipeline;
++
++	switch (n->nlmsg_type) {
++	case RTM_CREATEP4TEMPLATE:
++		inst = p4tc_ext_inst_create(net, n, nla, pipeline, ids,
++					    extack);
++		break;
++	case RTM_UPDATEP4TEMPLATE:
++		inst = p4tc_ext_inst_update(net, n, nla, pipeline, ids,
++					    extack);
++		break;
++	default:
++		/* Should never happen */
++		NL_SET_ERR_MSG(extack,
++			       "Only create and update are supported for extern inst");
++		return ERR_PTR(-EOPNOTSUPP);
++	}
++
++	if (IS_ERR(inst))
++		goto out;
++
++	if (!nl_path_attrs->pname_passed)
++		strscpy(nl_path_attrs->pname, pipeline->common.name,
++			PIPELINENAMSIZ);
++
++	if (!ids[P4TC_PID_IDX])
++		ids[P4TC_PID_IDX] = pipeline->common.p_id;
++
++	if (!ids[P4TC_TMPL_EXT_IDX])
++		ids[P4TC_TMPL_EXT_IDX] = inst->ext_id;
++
++	if (!ids[P4TC_TMPL_EXT_INST_IDX])
++		ids[P4TC_TMPL_EXT_INST_IDX] = inst->ext_inst_id;
++
++out:
++	return (struct p4tc_template_common *)inst;
++}
++
++static struct p4tc_tmpl_extern *
++p4tc_tmpl_ext_create(struct nlmsghdr *n, struct nlattr *nla,
++		     struct p4tc_pipeline *pipeline, u32 *ids,
++		     struct netlink_ext_ack *extack)
++{
++	struct nlattr *tb[P4TC_TMPL_EXT_MAX + 1];
++	struct p4tc_tmpl_extern *ext;
++	char *extern_name = NULL;
++	u32 ext_id = 0;
++	int ret;
++
++	ret = nla_parse_nested(tb, P4TC_TMPL_EXT_MAX, nla, tc_extern_policy,
 +			       extack);
 +	if (ret < 0)
-+		return ret;
++		return ERR_PTR(ret);
 +
-+	if (!p4tca[1]) {
-+		NL_SET_ERR_MSG(extack, "No elements in root table array");
++	ext_id = ids[P4TC_TMPL_EXT_IDX];
++	if (!ext_id) {
++		NL_SET_ERR_MSG(extack, "Must specify extern id");
++		return ERR_PTR(-EINVAL);
++	}
++
++	if (tb[P4TC_TMPL_EXT_NAME]) {
++		extern_name = nla_data(tb[P4TC_TMPL_EXT_NAME]);
++	} else {
++		NL_SET_ERR_MSG(extack,
++			       "Must specify extern name");
++		return ERR_PTR(-EINVAL);
++	}
++
++	if (p4tc_tmpl_ext_find_byid(pipeline, ext_id) ||
++	    p4tc_tmpl_ext_find_name(pipeline, extern_name)) {
++		NL_SET_ERR_MSG(extack,
++			       "Extern with same id or name was already inserted");
++		return ERR_PTR(-EEXIST);
++	}
++
++	ext = kzalloc(sizeof(*ext), GFP_KERNEL);
++	if (!ext) {
++		NL_SET_ERR_MSG(extack, "Failed to allocate ext");
++		return ERR_PTR(-ENOMEM);
++	}
++
++	if (tb[P4TC_TMPL_EXT_NUM_INSTS]) {
++		u16 *num_insts = nla_data(tb[P4TC_TMPL_EXT_NUM_INSTS]);
++
++		ext->max_num_insts = *num_insts;
++	} else {
++		ext->max_num_insts = P4TC_DEFAULT_NUM_EXT_INSTS;
++	}
++
++	if (tb[P4TC_TMPL_EXT_HAS_EXEC_METHOD])
++		ext->has_exec_method = nla_get_u8(tb[P4TC_TMPL_EXT_HAS_EXEC_METHOD]);
++
++	/* Extern module is not mandatory */
++	if (ext->has_exec_method) {
++		struct p4tc_extern_ops *ops;
++
++		ops = p4tc_extern_ops_load(extern_name);
++		if (!ops) {
++			ret = -ENOENT;
++			goto free_extern;
++		}
++
++		ext->ops = ops;
++	}
++
++	ret = idr_alloc_u32(&pipeline->p_ext_idr, ext, &ext_id, ext_id,
++			    GFP_KERNEL);
++	if (ret < 0) {
++		NL_SET_ERR_MSG(extack, "Unable to allocate ID for extern");
++		goto free_extern;
++	}
++
++	ext->ext_id = ext_id;
++
++	strscpy(ext->common.name, extern_name, EXTERNNAMSIZ);
++
++	refcount_set(&ext->tmpl_ref, 1);
++
++	ext->common.p_id = pipeline->common.p_id;
++	ext->common.ops = (struct p4tc_template_ops *)&p4tc_tmpl_ext_ops;
++
++	return ext;
++
++free_extern:
++	p4tc_extern_ops_put(ext->ops);
++	kfree(ext);
++
++	return ERR_PTR(ret);
++}
++
++static struct p4tc_template_common *
++p4tc_tmpl_ext_cu(struct net *net, struct nlmsghdr *n, struct nlattr *nla,
++		 struct p4tc_path_nlattrs *nl_path_attrs,
++		 struct netlink_ext_ack *extack)
++{
++	struct p4tc_pipeline *pipeline;
++	u32 *ids = nl_path_attrs->ids;
++	struct p4tc_tmpl_extern *ext;
++
++	if (p4tc_tmpl_msg_is_update(n)) {
++		NL_SET_ERR_MSG(extack, "Extern update not supported");
++		return ERR_PTR(-EOPNOTSUPP);
++	}
++
++	pipeline = p4tc_pipeline_find_byid(net, P4TC_KERNEL_PIPEID);
++
++	ext = p4tc_tmpl_ext_create(n, nla, pipeline, ids, extack);
++	if (IS_ERR(ext))
++		goto out;
++
++out:
++	return (struct p4tc_template_common *)ext;
++}
++
++static int ext_inst_param_fill_nlmsg(struct sk_buff *skb,
++				     struct p4tc_extern_param *param)
++{
++	unsigned char *b = nlmsg_get_pos(skb);
++
++	if (nla_put_string(skb, P4TC_EXT_PARAMS_NAME, param->name))
++		goto out_nlmsg_trim;
++
++	if (nla_put_u32(skb, P4TC_EXT_PARAMS_ID, param->id))
++		goto out_nlmsg_trim;
++
++	if (nla_put_u32(skb, P4TC_EXT_PARAMS_TYPE, param->type->typeid))
++		goto out_nlmsg_trim;
++
++	if (param->value && p4tc_ext_param_value_dump_tmpl(skb, param))
++		goto out_nlmsg_trim;
++
++	return skb->len;
++
++out_nlmsg_trim:
++	nlmsg_trim(skb, b);
++	return -1;
++}
++
++static int ext_inst_params_fill_nlmsg(struct sk_buff *skb,
++				      struct p4tc_extern_params *params)
++{
++	unsigned char *b = nlmsg_get_pos(skb);
++	struct p4tc_extern_param *param;
++	struct nlattr *nest_count;
++	unsigned long id, tmp;
++	int i = 1;
++
++	if (!params)
++		return skb->len;
++
++	idr_for_each_entry_ul(&params->params_idr, param, tmp, id) {
++		nest_count = nla_nest_start(skb, i);
++		if (!nest_count)
++			goto out_nlmsg_trim;
++
++		if (ext_inst_param_fill_nlmsg(skb, param) < 0)
++			goto out_nlmsg_trim;
++
++		nla_nest_end(skb, nest_count);
++		i++;
++	}
++
++	return skb->len;
++
++out_nlmsg_trim:
++	nlmsg_trim(skb, b);
++	return -1;
++}
++
++static int
++__p4tc_ext_inst_fill_nlmsg(struct sk_buff *skb, struct p4tc_extern_inst *inst,
++			   struct netlink_ext_ack *extack)
++{
++	struct nlattr *nest, *parms, *constr_parms;
++	const char *ext_name = inst->ext_name;
++	unsigned char *b = nlmsg_get_pos(skb);
++	/* Parser instance id + header field id */
++	u32 ids[2];
++
++	ids[0] = inst->ext_id;
++	ids[1] = inst->ext_inst_id;
++
++	if (nla_put(skb, P4TC_PATH, sizeof(ids), &ids))
++		goto out_nlmsg_trim;
++
++	nest = nla_nest_start(skb, P4TC_PARAMS);
++	if (!nest)
++		goto out_nlmsg_trim;
++
++	if (ext_name[0]) {
++		if (nla_put_string(skb, P4TC_TMPL_EXT_INST_EXT_NAME,
++				   ext_name))
++			goto out_nlmsg_trim;
++	}
++
++	if (inst->common.name[0]) {
++		if (nla_put_string(skb, P4TC_TMPL_EXT_INST_NAME,
++				   inst->common.name))
++			goto out_nlmsg_trim;
++	}
++
++	if (nla_put_u32(skb, P4TC_TMPL_EXT_INST_NUM_ELEMS,
++			inst->max_num_elems))
++		goto out_nlmsg_trim;
++
++	parms = nla_nest_start(skb, P4TC_TMPL_EXT_INST_CONTROL_PARAMS);
++	if (!parms)
++		goto out_nlmsg_trim;
++
++	if (ext_inst_params_fill_nlmsg(skb, inst->params) < 0)
++		goto out_nlmsg_trim;
++
++	nla_nest_end(skb, parms);
++
++	constr_parms = nla_nest_start(skb, P4TC_TMPL_EXT_INST_CONSTR_PARAMS);
++	if (!constr_parms)
++		goto out_nlmsg_trim;
++
++	if (ext_inst_params_fill_nlmsg(skb, inst->constr_params) < 0)
++		goto out_nlmsg_trim;
++
++	nla_nest_end(skb, constr_parms);
++
++	nla_nest_end(skb, nest);
++
++	return skb->len;
++
++out_nlmsg_trim:
++	nlmsg_trim(skb, b);
++	return -1;
++}
++
++static int __p4tc_tmpl_ext_fill_nlmsg(struct sk_buff *skb,
++				      struct p4tc_tmpl_extern *ext)
++{
++	unsigned char *b = nlmsg_get_pos(skb);
++	struct nlattr *nest;
++	/* Parser instance id + header field id */
++	u32 id;
++
++	id = ext->ext_id;
++
++	if (nla_put(skb, P4TC_PATH, sizeof(id), &id))
++		goto out_nlmsg_trim;
++
++	nest = nla_nest_start(skb, P4TC_PARAMS);
++	if (!nest)
++		goto out_nlmsg_trim;
++
++	if (ext->common.name[0]) {
++		if (nla_put_string(skb, P4TC_TMPL_EXT_NAME, ext->common.name))
++			goto out_nlmsg_trim;
++	}
++
++	if (nla_put_u16(skb, P4TC_TMPL_EXT_NUM_INSTS, ext->max_num_insts))
++		goto out_nlmsg_trim;
++
++	nla_nest_end(skb, nest);
++
++	return skb->len;
++
++out_nlmsg_trim:
++	nlmsg_trim(skb, b);
++	return -1;
++}
++
++static int p4tc_ext_inst_fill_nlmsg(struct net *net, struct sk_buff *skb,
++				    struct p4tc_template_common *template,
++				    struct netlink_ext_ack *extack)
++{
++	struct p4tc_extern_inst *inst = to_extern_inst(template);
++
++	if (__p4tc_ext_inst_fill_nlmsg(skb, inst, extack) < 0) {
++		NL_SET_ERR_MSG(extack,
++			       "Failed to fill notification attributes for extern instance");
 +		return -EINVAL;
 +	}
 +
-+	if (tb[P4TC_ROOT_PNAME])
-+		p_name = nla_data(tb[P4TC_ROOT_PNAME]);
++	return 0;
++}
 +
-+	listeners = rtnl_has_listeners(net, RTNLGRP_TC);
++static int p4tc_tmpl_ext_fill_nlmsg(struct net *net, struct sk_buff *skb,
++				    struct p4tc_template_common *template,
++				    struct netlink_ext_ack *extack)
++{
++	struct p4tc_tmpl_extern *ext = to_extern(template);
 +
-+	if ((echo || listeners) || cmd == RTM_P4TC_GET)
-+		ret = __p4tc_tbl_entry_crud(net, skb, n, cmd, p_name, p4tca,
-+					    extack);
++	if (__p4tc_tmpl_ext_fill_nlmsg(skb, ext) <= 0) {
++		NL_SET_ERR_MSG(extack,
++			       "Failed to fill notification attributes for extern");
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int p4tc_tmpl_ext_flush(struct sk_buff *skb,
++			       struct p4tc_pipeline *pipeline,
++			       struct netlink_ext_ack *extack)
++{
++	unsigned char *b = nlmsg_get_pos(skb);
++	struct p4tc_tmpl_extern *ext;
++	unsigned long tmp, ext_id;
++	int ret = 0;
++	u32 path[1];
++	int i = 0;
++
++	path[0] = 0;
++
++	if (idr_is_empty(&pipeline->p_ext_idr)) {
++		NL_SET_ERR_MSG(extack, "There are no externs to flush");
++		goto out_nlmsg_trim;
++	}
++
++	if (nla_put(skb, P4TC_PATH, sizeof(path), path))
++		goto out_nlmsg_trim;
++
++	idr_for_each_entry_ul(&pipeline->p_ext_idr, ext, tmp, ext_id) {
++		if (_p4tc_tmpl_ext_put(pipeline, ext, false, extack) < 0) {
++			ret = -EBUSY;
++			continue;
++		}
++		i++;
++	}
++
++	nla_put_u32(skb, P4TC_COUNT, i);
++
++	if (ret < 0) {
++		if (i == 0) {
++			NL_SET_ERR_MSG(extack,
++				       "Unable to flush any externs");
++			goto out_nlmsg_trim;
++		} else {
++			NL_SET_ERR_MSG_FMT(extack,
++					   "Flush only %u externs", i);
++		}
++	}
++
++	return i;
++
++out_nlmsg_trim:
++	nlmsg_trim(skb, b);
++	return 0;
++}
++
++static int p4tc_ext_inst_flush(struct sk_buff *skb,
++			       struct p4tc_pipeline *pipeline,
++			       struct p4tc_user_pipeline_extern *pipe_ext,
++			       struct netlink_ext_ack *extack)
++{
++	unsigned char *b = nlmsg_get_pos(skb);
++	struct p4tc_extern_inst *inst;
++	unsigned long tmp, inst_id;
++	int ret = 0;
++	u32 path[2];
++	int i = 0;
++
++	if (idr_is_empty(&pipe_ext->e_inst_idr)) {
++		NL_SET_ERR_MSG(extack, "There are no externs to flush");
++		goto out_nlmsg_trim;
++	}
++
++	path[0] = pipe_ext->ext_id;
++	path[1] = 0;
++
++	if (nla_put(skb, P4TC_PATH, sizeof(path), path))
++		goto out_nlmsg_trim;
++
++	idr_for_each_entry_ul(&pipe_ext->e_inst_idr, inst, tmp, inst_id) {
++		if (__p4tc_ext_inst_put(pipeline, inst, false, false,
++					extack) < 0) {
++			ret = -EBUSY;
++			continue;
++		}
++		i++;
++	}
++
++	/* We don't release pipe_ext in the loop to avoid use-after-free whilst
++	 * iterating through e_inst_idr. We free it here only if flush
++	 * succeeded, that is, all instances were deleted and thus ext_ref == 1
++	 */
++	if (refcount_read(&pipe_ext->ext_ref) == 1)
++		p4tc_user_pipeline_ext_free(pipe_ext, &pipeline->user_ext_idr);
++
++	nla_put_u32(skb, P4TC_COUNT, i);
++
++	if (ret < 0) {
++		if (i == 0) {
++			NL_SET_ERR_MSG(extack,
++				       "Unable to flush any externs instance");
++			goto out_nlmsg_trim;
++		} else {
++			NL_SET_ERR_MSG_FMT(extack,
++					   "Flushed only %u extern instances", i);
++		}
++	}
++
++	return i;
++
++out_nlmsg_trim:
++	nlmsg_trim(skb, b);
++	return 0;
++}
++
++static int p4tc_ext_inst_gd(struct net *net, struct sk_buff *skb,
++			    struct nlmsghdr *n, struct nlattr *nla,
++			    struct p4tc_path_nlattrs *nl_path_attrs,
++			    struct netlink_ext_ack *extack)
++{
++	struct nlattr *tb[P4TC_TMPL_EXT_INST_MAX + 1] = {NULL};
++	struct p4tc_user_pipeline_extern *pipe_ext;
++	u32 *ids = nl_path_attrs->ids;
++	u32 inst_id = ids[P4TC_TMPL_EXT_INST_IDX];
++	unsigned char *b = nlmsg_get_pos(skb);
++	u32 ext_id = ids[P4TC_TMPL_EXT_IDX];
++	u32 pipe_id = ids[P4TC_PID_IDX];
++	struct p4tc_pipeline *pipeline;
++	struct p4tc_extern_inst *inst;
++	int ret;
++
++	if (n->nlmsg_type == RTM_GETP4TEMPLATE)
++		pipeline = p4tc_pipeline_find_byany(net, nl_path_attrs->pname,
++						    pipe_id, extack);
 +	else
-+		ret = __p4tc_tbl_entry_crud_fast(net, n, cmd, p_name, p4tca,
-+						 extack);
++		pipeline = p4tc_pipeline_find_byany_unsealed(net,
++							     nl_path_attrs->pname,
++							     pipe_id, extack);
++	if (IS_ERR(pipeline))
++		return PTR_ERR(pipeline);
++
++	if (nla) {
++		ret = nla_parse_nested(tb, P4TC_TMPL_EXT_MAX, nla,
++				       tc_extern_inst_policy, extack);
++		if (ret < 0)
++			return ret;
++	}
++
++	pipe_ext = p4tc_user_pipeline_ext_find_byanyattr(pipeline,
++							 tb[P4TC_TMPL_EXT_INST_EXT_NAME],
++							 ext_id, extack);
++	if (IS_ERR(pipe_ext))
++		return PTR_ERR(pipe_ext);
++
++	if (!nl_path_attrs->pname_passed)
++		strscpy(nl_path_attrs->pname, pipeline->common.name,
++			PIPELINENAMSIZ);
++
++	if (!ids[P4TC_PID_IDX])
++		ids[P4TC_PID_IDX] = pipeline->common.p_id;
++
++	if (!ids[P4TC_TMPL_EXT_IDX])
++		ids[P4TC_TMPL_EXT_IDX] = pipe_ext->ext_id;
++
++	if (n->nlmsg_type == RTM_DELP4TEMPLATE && n->nlmsg_flags & NLM_F_ROOT)
++		return p4tc_ext_inst_flush(skb, pipeline, pipe_ext, extack);
++
++	inst = p4tc_ext_inst_find_byanyattr(pipe_ext,
++					    tb[P4TC_TMPL_EXT_INST_NAME],
++					    inst_id, extack);
++	if (IS_ERR(inst))
++		return PTR_ERR(inst);
++
++	ret = __p4tc_ext_inst_fill_nlmsg(skb, inst, extack);
++	if (ret < 0)
++		return -ENOMEM;
++
++	if (!ids[P4TC_TMPL_EXT_INST_IDX])
++		ids[P4TC_TMPL_EXT_INST_IDX] = inst->ext_inst_id;
++
++	if (n->nlmsg_type == RTM_DELP4TEMPLATE) {
++		ret = __p4tc_ext_inst_put(pipeline, inst, false, true, extack);
++		if (ret < 0)
++			goto out_nlmsg_trim;
++	}
++
++	return 0;
++
++out_nlmsg_trim:
++	nlmsg_trim(skb, b);
 +	return ret;
 +}
 +
-+static int p4tc_table_entry_dump(struct net *net, struct sk_buff *skb,
-+				 struct nlattr *arg,
-+				 struct p4tc_path_nlattrs *nl_path_attrs,
-+				 struct netlink_callback *cb,
-+				 struct netlink_ext_ack *extack)
++static int p4tc_tmpl_ext_gd(struct net *net, struct sk_buff *skb,
++			    struct nlmsghdr *n, struct nlattr *nla,
++			    struct p4tc_path_nlattrs *nl_path_attrs,
++			    struct netlink_ext_ack *extack)
 +{
-+	struct nlattr *tb[P4TC_ENTRY_MAX + 1] = { NULL };
-+	struct p4tc_dump_ctx *ctx = (void *)cb->ctx;
++	struct nlattr *tb[P4TC_TMPL_EXT_MAX + 1] = {NULL};
 +	unsigned char *b = nlmsg_get_pos(skb);
-+	struct p4tc_pipeline *pipeline = NULL;
-+	struct p4tc_table_entry *entry = NULL;
-+	struct p4tc_table *table;
-+	int i = 0;
++	u32 *ids = nl_path_attrs->ids;
++	u32 ext_id = ids[P4TC_TMPL_EXT_IDX];
++	struct p4tc_pipeline *pipeline;
++	struct p4tc_tmpl_extern *ext;
 +	int ret;
 +
-+	if (arg) {
-+		ret = nla_parse_nested(tb, P4TC_ENTRY_MAX, arg,
-+				       p4tc_entry_policy, extack);
-+		if (ret < 0) {
-+			kfree(ctx->iter);
++	pipeline = p4tc_pipeline_find_byid(net, P4TC_KERNEL_PIPEID);
++
++	if (nla) {
++		ret = nla_parse_nested(tb, P4TC_TMPL_EXT_MAX, nla,
++				       tc_extern_policy, extack);
++		if (ret < 0)
 +			return ret;
-+		}
-+	}
-+
-+	ret = p4tc_table_entry_get_table(net, &pipeline, &table, tb,
-+					 nl_path_attrs, extack);
-+	if (ret < 0) {
-+		kfree(ctx->iter);
-+		return ret;
-+	}
-+
-+	if (!ctx->iter) {
-+		ctx->iter = kzalloc(sizeof(*ctx->iter), GFP_KERNEL);
-+		if (!ctx->iter) {
-+			ret = -ENOMEM;
-+			goto table_put;
-+		}
-+
-+		rhltable_walk_enter(&table->tbl_entries, ctx->iter);
-+	}
-+
-+	/* There is an issue here regarding the stability of walking an
-+	 * rhashtable. If an insert or a delete happens in parallel, we may see
-+	 * duplicate entries or skip some valid entries. To solve this we are
-+	 * going to have an auxiliary list that also stores the entries and will
-+	 * be used for dump, instead of walking over the rhastable.
-+	 */
-+	ret = -ENOMEM;
-+	rhashtable_walk_start(ctx->iter);
-+	do {
-+		for (i = 0; i < P4TC_MSGBATCH_SIZE &&
-+		     (entry = rhashtable_walk_next(ctx->iter)) &&
-+		     !IS_ERR(entry); i++) {
-+			struct p4tc_table_entry_value *value =
-+				p4tc_table_entry_value(entry);
-+			struct nlattr *count;
-+
-+			if (!p4tc_ctrl_read_ok(value->permissions)) {
-+				i--;
-+				continue;
-+			}
-+
-+			count = nla_nest_start(skb, i + 1);
-+			if (!count) {
-+				rhashtable_walk_stop(ctx->iter);
-+				goto table_put;
-+			}
-+
-+			ret = p4tc_tbl_entry_fill(skb, table, entry,
-+						  table->tbl_id,
-+						  P4TC_ENTITY_UNSPEC);
-+			if (ret == 0) {
-+				NL_SET_ERR_MSG(extack,
-+					       "Failed to fill notification attributes for table entry");
-+				goto walk_done;
-+			} else if (ret == -ENOMEM) {
-+				ret = 1;
-+				nla_nest_cancel(skb, count);
-+				rhashtable_walk_stop(ctx->iter);
-+				goto table_put;
-+			}
-+			nla_nest_end(skb, count);
-+		}
-+	} while (entry == ERR_PTR(-EAGAIN));
-+	rhashtable_walk_stop(ctx->iter);
-+
-+	if (!i) {
-+		rhashtable_walk_exit(ctx->iter);
-+
-+		ret = 0;
-+		kfree(ctx->iter);
-+
-+		goto table_put;
 +	}
 +
 +	if (!nl_path_attrs->pname_passed)
 +		strscpy(nl_path_attrs->pname, pipeline->common.name,
 +			PIPELINENAMSIZ);
 +
-+	if (!nl_path_attrs->ids[P4TC_PID_IDX])
-+		nl_path_attrs->ids[P4TC_PID_IDX] = pipeline->common.p_id;
++	if (!ids[P4TC_PID_IDX])
++		ids[P4TC_PID_IDX] = pipeline->common.p_id;
 +
-+	if (!nl_path_attrs->ids[P4TC_TBLID_IDX])
-+		nl_path_attrs->ids[P4TC_TBLID_IDX] = table->tbl_id;
++	if (n->nlmsg_type == RTM_DELP4TEMPLATE && n->nlmsg_flags & NLM_F_ROOT)
++		return p4tc_tmpl_ext_flush(skb, pipeline, extack);
 +
-+	ret = skb->len;
++	ext = p4tc_tmpl_ext_find_byanyattr(pipeline, tb[P4TC_TMPL_EXT_NAME],
++					   ext_id, extack);
++	if (IS_ERR(ext))
++		return PTR_ERR(ext);
 +
-+	goto table_put;
-+
-+walk_done:
-+	rhashtable_walk_stop(ctx->iter);
-+	rhashtable_walk_exit(ctx->iter);
-+	kfree(ctx->iter);
-+
-+	nlmsg_trim(skb, b);
-+
-+table_put:
-+	p4tc_table_entry_put_table(pipeline, table);
-+
-+	return ret;
-+}
-+
-+int p4tc_tbl_entry_dumpit(struct net *net, struct sk_buff *skb,
-+			  struct netlink_callback *cb,
-+			  struct nlattr *arg, char *p_name)
-+{
-+	struct p4tc_path_nlattrs nl_path_attrs = {0};
-+	struct netlink_ext_ack *extack = cb->extack;
-+	u32 portid = NETLINK_CB(cb->skb).portid;
-+	const struct nlmsghdr *n = cb->nlh;
-+	struct nlattr *tb[P4TC_MAX + 1];
-+	u32 ids[P4TC_PATH_MAX] = { 0 };
-+	struct p4tcmsg *t_new;
-+	struct nlmsghdr *nlh;
-+	struct nlattr *pnatt;
-+	struct nlattr *root;
-+	struct p4tcmsg *t;
-+	u32 *arg_ids;
-+	int ret;
-+
-+	ret = nla_parse_nested(tb, P4TC_MAX, arg, p4tc_policy, extack);
++	ret = __p4tc_tmpl_ext_fill_nlmsg(skb, ext);
 +	if (ret < 0)
-+		return ret;
-+
-+	nlh = nlmsg_put(skb, portid, n->nlmsg_seq, RTM_P4TC_GET, sizeof(*t),
-+			n->nlmsg_flags);
-+	if (!nlh)
-+		return -ENOSPC;
-+
-+	t = (struct p4tcmsg *)nlmsg_data(n);
-+	t_new = nlmsg_data(nlh);
-+	t_new->pipeid = t->pipeid;
-+	t_new->obj = t->obj;
-+
-+	if (NL_REQ_ATTR_CHECK(extack, arg, tb, P4TC_PATH)) {
-+		NL_SET_ERR_MSG(extack, "Must specify object path");
-+		return -EINVAL;
-+	}
-+
-+	pnatt = nla_reserve(skb, P4TC_ROOT_PNAME, PIPELINENAMSIZ);
-+	if (!pnatt)
 +		return -ENOMEM;
 +
-+	ids[P4TC_PID_IDX] = t_new->pipeid;
-+	arg_ids = nla_data(tb[P4TC_PATH]);
-+	memcpy(&ids[P4TC_TBLID_IDX], arg_ids, nla_len(tb[P4TC_PATH]));
-+	nl_path_attrs.ids = ids;
++	if (!ids[P4TC_TMPL_EXT_IDX])
++		ids[P4TC_TMPL_EXT_IDX] = ext->ext_id;
 +
-+	nl_path_attrs.pname = nla_data(pnatt);
-+	if (!p_name) {
-+		/* Filled up by the operation or forced failure */
-+		memset(nl_path_attrs.pname, 0, PIPELINENAMSIZ);
-+		nl_path_attrs.pname_passed = false;
-+	} else {
-+		strscpy(nl_path_attrs.pname, p_name, PIPELINENAMSIZ);
-+		nl_path_attrs.pname_passed = true;
++	if (n->nlmsg_type == RTM_DELP4TEMPLATE) {
++		ret = _p4tc_tmpl_ext_put(pipeline, ext, false, extack);
++		if (ret < 0)
++			goto out_nlmsg_trim;
 +	}
 +
-+	root = nla_nest_start(skb, P4TC_ROOT);
-+	ret = p4tc_table_entry_dump(net, skb, tb[P4TC_PARAMS], &nl_path_attrs,
-+				    cb, extack);
-+	if (ret <= 0)
-+		goto out;
-+	nla_nest_end(skb, root);
++	return 0;
 +
-+	if (nl_path_attrs.pname) {
-+		if (nla_put_string(skb, P4TC_ROOT_PNAME, nl_path_attrs.pname)) {
-+			ret = -1;
-+			goto out;
-+		}
-+	}
-+
-+	if (!t_new->pipeid)
-+		t_new->pipeid = ids[P4TC_PID_IDX];
-+
-+	nlmsg_end(skb, nlh);
-+
-+	return skb->len;
-+
-+out:
-+	nlmsg_cancel(skb, nlh);
++out_nlmsg_trim:
++	nlmsg_trim(skb, b);
 +	return ret;
 +}
-diff --git a/net/sched/p4tc/p4tc_tmpl_api.c b/net/sched/p4tc/p4tc_tmpl_api.c
-index e52c06c5e..2064dfaf1 100644
---- a/net/sched/p4tc/p4tc_tmpl_api.c
-+++ b/net/sched/p4tc/p4tc_tmpl_api.c
-@@ -27,12 +27,12 @@
- #include <net/netlink.h>
- #include <net/flow_offload.h>
- 
--static const struct nla_policy p4tc_root_policy[P4TC_ROOT_MAX + 1] = {
-+const struct nla_policy p4tc_root_policy[P4TC_ROOT_MAX + 1] = {
- 	[P4TC_ROOT] = { .type = NLA_NESTED },
- 	[P4TC_ROOT_PNAME] = { .type = NLA_STRING, .len = PIPELINENAMSIZ },
- };
- 
--static const struct nla_policy p4tc_policy[P4TC_MAX + 1] = {
-+const struct nla_policy p4tc_policy[P4TC_MAX + 1] = {
- 	[P4TC_PATH] = { .type = NLA_BINARY,
- 			.len = P4TC_PATH_MAX * sizeof(u32) },
- 	[P4TC_PARAMS] = { .type = NLA_NESTED },
-diff --git a/security/selinux/nlmsgtab.c b/security/selinux/nlmsgtab.c
-index e50a1c1ff..da7902404 100644
---- a/security/selinux/nlmsgtab.c
-+++ b/security/selinux/nlmsgtab.c
-@@ -98,6 +98,10 @@ static const struct nlmsg_perm nlmsg_route_perms[] = {
- 	{ RTM_DELP4TEMPLATE,	NETLINK_ROUTE_SOCKET__NLMSG_WRITE },
- 	{ RTM_GETP4TEMPLATE,	NETLINK_ROUTE_SOCKET__NLMSG_READ },
- 	{ RTM_UPDATEP4TEMPLATE,	NETLINK_ROUTE_SOCKET__NLMSG_WRITE },
-+	{ RTM_P4TC_CREATE,	NETLINK_ROUTE_SOCKET__NLMSG_WRITE },
-+	{ RTM_P4TC_DEL,	NETLINK_ROUTE_SOCKET__NLMSG_WRITE },
-+	{ RTM_P4TC_GET,	NETLINK_ROUTE_SOCKET__NLMSG_READ },
-+	{ RTM_P4TC_UPDATE,	NETLINK_ROUTE_SOCKET__NLMSG_WRITE },
- };
- 
- static const struct nlmsg_perm nlmsg_tcpdiag_perms[] = {
-@@ -181,7 +185,7 @@ int selinux_nlmsg_lookup(u16 sclass, u16 nlmsg_type, u32 *perm)
- 		 * structures at the top of this file with the new mappings
- 		 * before updating the BUILD_BUG_ON() macro!
- 		 */
--		BUILD_BUG_ON(RTM_MAX != (RTM_CREATEP4TEMPLATE + 3));
-+		BUILD_BUG_ON(RTM_MAX != (RTM_P4TC_CREATE + 3));
- 		err = nlmsg_perm(nlmsg_type, perm, nlmsg_route_perms,
- 				 sizeof(nlmsg_route_perms));
- 		break;
++
++static int p4tc_tmpl_ext_dump_1(struct sk_buff *skb,
++				struct p4tc_template_common *common)
++{
++	struct nlattr *param = nla_nest_start(skb, P4TC_PARAMS);
++	struct p4tc_tmpl_extern *ext = to_extern(common);
++	unsigned char *b = nlmsg_get_pos(skb);
++	u32 path[2];
++
++	if (!param)
++		goto out_nlmsg_trim;
++
++	if (ext->common.name[0] &&
++	    nla_put_string(skb, P4TC_TMPL_EXT_NAME, ext->common.name))
++		goto out_nlmsg_trim;
++
++	nla_nest_end(skb, param);
++
++	path[0] = ext->ext_id;
++	if (nla_put(skb, P4TC_PATH, sizeof(path), path))
++		goto out_nlmsg_trim;
++
++	return 0;
++
++out_nlmsg_trim:
++	nlmsg_trim(skb, b);
++	return -ENOMEM;
++}
++
++static int p4tc_tmpl_ext_dump(struct sk_buff *skb, struct p4tc_dump_ctx *ctx,
++			      struct nlattr *nla, char **p_name, u32 *ids,
++			      struct netlink_ext_ack *extack)
++{
++	struct net *net = sock_net(skb->sk);
++	struct p4tc_pipeline *pipeline;
++
++	pipeline = p4tc_pipeline_find_byid(net, P4TC_KERNEL_PIPEID);
++
++	if (!ids[P4TC_PID_IDX])
++		ids[P4TC_PID_IDX] = pipeline->common.p_id;
++
++	if (!(*p_name))
++		*p_name = pipeline->common.name;
++
++	return p4tc_tmpl_generic_dump(skb, ctx, &pipeline->p_ext_idr,
++				      P4TC_TMPL_EXT_IDX, extack);
++}
++
++static int p4tc_ext_inst_dump_1(struct sk_buff *skb,
++				struct p4tc_template_common *common)
++{
++	struct nlattr *param = nla_nest_start(skb, P4TC_PARAMS);
++	struct p4tc_extern_inst *inst = to_extern_inst(common);
++	unsigned char *b = nlmsg_get_pos(skb);
++	u32 path[2];
++
++	if (!param)
++		goto out_nlmsg_trim;
++
++	if (inst->common.name[0] &&
++	    nla_put_string(skb, P4TC_TMPL_EXT_NAME, inst->common.name))
++		goto out_nlmsg_trim;
++
++	nla_nest_end(skb, param);
++
++	path[0] = inst->ext_id;
++	path[1] = inst->ext_inst_id;
++	if (nla_put(skb, P4TC_PATH, sizeof(path), path))
++		goto out_nlmsg_trim;
++
++	return 0;
++
++out_nlmsg_trim:
++	nlmsg_trim(skb, b);
++	return -ENOMEM;
++}
++
++static int p4tc_ext_inst_dump(struct sk_buff *skb,
++			      struct p4tc_dump_ctx *ctx,
++			      struct nlattr *nla, char **p_name,
++			      u32 *ids, struct netlink_ext_ack *extack)
++{
++	struct nlattr *tb[P4TC_TMPL_EXT_INST_MAX + 1] = {NULL};
++	struct p4tc_user_pipeline_extern *pipe_ext;
++	u32 ext_id = ids[P4TC_TMPL_EXT_IDX];
++	struct net *net = sock_net(skb->sk);
++	struct p4tc_pipeline *pipeline;
++	u32 pipeid = ids[P4TC_PID_IDX];
++	int ret;
++
++	pipeline = p4tc_pipeline_find_byany(net, *p_name,
++					    pipeid, extack);
++	if (IS_ERR(pipeline))
++		return PTR_ERR(pipeline);
++
++	if (!ids[P4TC_PID_IDX])
++		ids[P4TC_PID_IDX] = pipeline->common.p_id;
++
++	if (!(*p_name))
++		*p_name = pipeline->common.name;
++
++	if (nla) {
++		ret = nla_parse_nested(tb, P4TC_TMPL_EXT_INST_MAX, nla,
++				       tc_extern_inst_policy, extack);
++		if (ret < 0)
++			return ret;
++	}
++
++	pipe_ext = p4tc_user_pipeline_ext_find_byanyattr(pipeline,
++							 tb[P4TC_TMPL_EXT_INST_EXT_NAME],
++							 ext_id, extack);
++	if (IS_ERR(pipe_ext))
++		return PTR_ERR(pipe_ext);
++
++	return p4tc_tmpl_generic_dump(skb, ctx, &pipe_ext->e_inst_idr,
++				      P4TC_TMPL_EXT_INST_IDX, extack);
++}
++
++const struct p4tc_template_ops p4tc_ext_inst_ops = {
++	.cu = p4tc_ext_inst_cu,
++	.fill_nlmsg = p4tc_ext_inst_fill_nlmsg,
++	.gd = p4tc_ext_inst_gd,
++	.put = p4tc_ext_inst_put,
++	.dump = p4tc_ext_inst_dump,
++	.dump_1 = p4tc_ext_inst_dump_1,
++};
++
++const struct p4tc_template_ops p4tc_tmpl_ext_ops = {
++	.cu = p4tc_tmpl_ext_cu,
++	.fill_nlmsg = p4tc_tmpl_ext_fill_nlmsg,
++	.gd = p4tc_tmpl_ext_gd,
++	.put = p4tc_tmpl_ext_put,
++	.dump = p4tc_tmpl_ext_dump,
++	.dump_1 = p4tc_tmpl_ext_dump_1,
++};
 -- 
 2.34.1
 
