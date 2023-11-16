@@ -1,43 +1,43 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hYUIxyQN"
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31C81B2
-	for <bpf@vger.kernel.org>; Wed, 15 Nov 2023 18:18:35 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9f27af23443so46510366b.0
-        for <bpf@vger.kernel.org>; Wed, 15 Nov 2023 18:18:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hH0rj1Zy"
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D0A1B8
+	for <bpf@vger.kernel.org>; Wed, 15 Nov 2023 18:18:34 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9f27af23443so46507466b.0
+        for <bpf@vger.kernel.org>; Wed, 15 Nov 2023 18:18:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700101114; x=1700705914; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1700101112; x=1700705912; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LUL+bN8yHv3wOzc18L9Q7ZjkJM89Tjd4Zeep3So1oiE=;
-        b=hYUIxyQN9Dn6T6bofR93c4YMqLctt+KLQsvd94ZZ02fqXqbCCGNGYkFI4tEn1wj2jJ
-         LdtWhiBOG1mKzR2H7cK/7QBkbZ496PUh+9JclaeDzIQOmgGmFN5akJcaq++kS/QTbzAh
-         HORMgTm73zFI5aTDLCvGjQY2HDAAjRuyWqB/g1yjUU2l9cHXihcxewt+9f4eCxQcJZN/
-         oGCT6o48NMeFJLXNP9Wsql8xgqbcmsep2VmlxfwIXqE5vqsl7G/LOWVxX4/ghfrVDt6x
-         sy88StZ52cDWDmGajsmUJjJGXgMbbcYAhq8ogb+B6k7NDP3XEAdsTUUMgoSBb8BAdPyk
-         WdMg==
+        bh=6rd1Qi9s7fIbOeqOMYpjX24nYgPt/7YhtzMxg3LbYOc=;
+        b=hH0rj1Zy0eBKa08PPYp1bPEFPzRfvS07ubVRwCqAeH9TXEouNMocDqaLT/51C5O9/1
+         F4p+FcHOILWzLoGrLRwrPrQ9uRUz8zWI340LM8wqOFpg2zYiGB7vT3KOsxPAbxz6x8Z8
+         PKivo2XYTe3o2eaR3n2tRgmTQ4K/cw4cHptiLtOIbSNpDGihWY4P56zwTBzIy4hET1fk
+         emW0GhdDYuFPLWwTtxcoqzFzCTJVSUx0GZQ6bBcEDAAL2YV1YOvC+jwwe+zhMIsQy/L0
+         Nq1ny6iulWH28TDvYJE5luQ5rPAQGqKLAeKur7a1DlCmt3K4HFGvAoY367q8vPBi8mAk
+         TXaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700101114; x=1700705914;
+        d=1e100.net; s=20230601; t=1700101112; x=1700705912;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LUL+bN8yHv3wOzc18L9Q7ZjkJM89Tjd4Zeep3So1oiE=;
-        b=av8lPSgynYz7IBoXX1fO4OhtoX6gdKWU/BuIuVOF9gO0rO2ffswZNGiVt5QvMOyG14
-         kcAMYW0fSvJ9DAhogWd2Vak+7EpuRRe8b8cWsmZdCsJx5jmz+t8Wmm3+LEEpEvNLhPK8
-         QBsGqP4/xKvbtfbZO3RcW6p1G2DzMIRsjBggUhpCGnGkFBIsKGNdq9nDIH4kVsZzDjzu
-         CvOL/ydhjqK8ONvTlXvhwukwLyVn9Wt3KcvBj06L1AiJSuDoMpQ2Ji+osgJZrK25AjSZ
-         0z4KqsZuPt/Rz9Y3XqoTzRNq5LpqVJrcLb0OeIlrJ/L402pehqO1oG0bhI1he4Ee/h3U
-         XSoQ==
-X-Gm-Message-State: AOJu0YzvW+mPmoNAYBT636gtKz6OkezPBWg0m3lR6xUnDpMhNUQVsnZK
-	k6r7vcg/IeXvEuZKajugbQV9G5nKFyKxWg==
-X-Google-Smtp-Source: AGHT+IFXBF46tpHVsIbr2Jb+NhQQJ5rvi4+BYzu5n4JFFyKN/CmMcFRKboTA4mM/4H3Ee70oIHWZDw==
-X-Received: by 2002:a17:906:840e:b0:9bf:4e0b:fb11 with SMTP id n14-20020a170906840e00b009bf4e0bfb11mr10134935ejx.8.1700101113776;
-        Wed, 15 Nov 2023 18:18:33 -0800 (PST)
+        bh=6rd1Qi9s7fIbOeqOMYpjX24nYgPt/7YhtzMxg3LbYOc=;
+        b=nMJN0+9pikyg5iHxezyt7oQrjHbFcuC3ksn2xMG5Z6xHaWbKwmYxdAN7LaetbYihhe
+         FtBwLOBYH+f0YzQNakjr1rKn+f9SIuyoaXYvag3NC5qj3qmvFVESgasLbAt3Qktu0lkN
+         xElrcxXb538OXoS9i/9rLy5xYgDpwP4FizSr7ZzUdpc4xWH7pXMlEWzkO6vco32Kkdxe
+         etbDqUaTh1j01YYD0az5G4o9Jvlgm0bzK2txbenJCuI91wk0h7VPdTTYjttXMXjmQUg8
+         PJyu7EnhMaPkgrznZZ7RCuXhJfWbrb1iLF4p9aZHZDRonIKIzNfYXqc5pTjLscDalLG8
+         nOwQ==
+X-Gm-Message-State: AOJu0YxjvcGk448JvhQiaVajn9iOgH9mvf9yg2vz+2W9CTiQuauVAnQD
+	H8zJwzcmeAcrD7mgkhr1CTevAJe3BC3YcQ==
+X-Google-Smtp-Source: AGHT+IGxqo0yMkNcPW1f8UEnShd+taDiV4rCPsj3poD7ZAcZw/D82WEgRVuxcE+tmrVDlOnXZGXHrg==
+X-Received: by 2002:a17:906:27d9:b0:9e1:46a2:b827 with SMTP id k25-20020a17090627d900b009e146a2b827mr10623186ejc.29.1700101111383;
+        Wed, 15 Nov 2023 18:18:31 -0800 (PST)
 Received: from localhost.localdomain (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id ay1-20020a170906d28100b009dd606ce80fsm7774064ejb.31.2023.11.15.18.18.32
+        by smtp.gmail.com with ESMTPSA id ay1-20020a170906d28100b009dd606ce80fsm7774064ejb.31.2023.11.15.18.18.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Nov 2023 18:18:33 -0800 (PST)
+        Wed, 15 Nov 2023 18:18:30 -0800 (PST)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -49,9 +49,9 @@ Cc: andrii@kernel.org,
 	memxor@gmail.com,
 	awerner32@gmail.com,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf 03/12] selftests/bpf: fix bpf_loop_bench for new callback verification scheme
-Date: Thu, 16 Nov 2023 04:17:54 +0200
-Message-ID: <20231116021803.9982-4-eddyz87@gmail.com>
+Subject: [PATCH bpf 01/12] selftests/bpf: track tcp payload offset as scalar in xdp_synproxy
+Date: Thu, 16 Nov 2023 04:17:52 +0200
+Message-ID: <20231116021803.9982-2-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231116021803.9982-1-eddyz87@gmail.com>
 References: <20231116021803.9982-1-eddyz87@gmail.com>
@@ -61,76 +61,176 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The patch a few patches from this one changes logic for callbacks
-handling. While previously callbacks were verified as a single
-function call, new scheme takes into account that callbacks could be
-executed unknown number of times.
-
-This has dire implications for bpf_loop_bench:
-
-    SEC("fentry/" SYS_PREFIX "sys_getpgid")
-    int benchmark(void *ctx)
-    {
-            for (int i = 0; i < 1000; i++) {
-                    bpf_loop(nr_loops, empty_callback, NULL, 0);
-                    __sync_add_and_fetch(&hits, nr_loops);
-            }
-            return 0;
-    }
-
-W/o callbacks change for verifier it merely represents 1000 calls to
-empty_callback(). However, with callbacks change things become
-exponential:
-- i=0: state exploring empty_callback is scheduled with i=0 (a);
-- i=1: state exploring empty_callback is scheduled with i=1;
-  ...
-- i=999: state exploring empty_callback is scheduled with i=999;
-- state (a) is popped from stack;
-- i=1: state exploring empty_callback is scheduled with i=1;
-  ...
-
-Avoid this issue by rewriting outer loop as bpf_loop().
-Unfortunately, this adds a function call to a loop at runtime, which
-negatively affects performance:
-
-            throughput               latency
-   before:  149.919 ± 0.168 M ops/s, 6.670 ns/op
-   after :  137.040 ± 0.187 M ops/s, 7.297 ns/op
+This change prepares syncookie_{tc,xdp} for update in callbakcs
+verification logic. To allow bpf_loop() verification converge when
+multiple callback itreations are considered:
+- track offset inside TCP payload explicitly, not as a part of the
+  pointer;
+- make sure that offset does not exceed MAX_PACKET_OFF enforced by
+  verifier;
+- make sure that offset is tracked as unbound scalar between
+  iterations, otherwise verifier won't be able infer that bpf_loop
+  callback reaches identical states.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- tools/testing/selftests/bpf/progs/bpf_loop_bench.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ .../selftests/bpf/progs/xdp_synproxy_kern.c   | 84 ++++++++++++-------
+ 1 file changed, 52 insertions(+), 32 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_loop_bench.c b/tools/testing/selftests/bpf/progs/bpf_loop_bench.c
-index 4ce76eb064c4..d461746fd3c1 100644
---- a/tools/testing/selftests/bpf/progs/bpf_loop_bench.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_loop_bench.c
-@@ -15,13 +15,16 @@ static int empty_callback(__u32 index, void *data)
- 	return 0;
+diff --git a/tools/testing/selftests/bpf/progs/xdp_synproxy_kern.c b/tools/testing/selftests/bpf/progs/xdp_synproxy_kern.c
+index e959336c7a73..80f620602d50 100644
+--- a/tools/testing/selftests/bpf/progs/xdp_synproxy_kern.c
++++ b/tools/testing/selftests/bpf/progs/xdp_synproxy_kern.c
+@@ -53,6 +53,8 @@
+ #define DEFAULT_TTL 64
+ #define MAX_ALLOWED_PORTS 8
+ 
++#define MAX_PACKET_OFF 0xffff
++
+ #define swap(a, b) \
+ 	do { typeof(a) __tmp = (a); (a) = (b); (b) = __tmp; } while (0)
+ 
+@@ -183,63 +185,76 @@ static __always_inline __u32 tcp_clock_ms(void)
  }
  
-+static int outer_loop(__u32 index, void *data)
-+{
-+	bpf_loop(nr_loops, empty_callback, NULL, 0);
-+	__sync_add_and_fetch(&hits, nr_loops);
-+	return 0;
-+}
-+
- SEC("fentry/" SYS_PREFIX "sys_getpgid")
- int benchmark(void *ctx)
+ struct tcpopt_context {
+-	__u8 *ptr;
+-	__u8 *end;
++	void *data;
+ 	void *data_end;
+ 	__be32 *tsecr;
+ 	__u8 wscale;
+ 	bool option_timestamp;
+ 	bool option_sack;
++	__u32 off;
+ };
+ 
+-static int tscookie_tcpopt_parse(struct tcpopt_context *ctx)
++static __always_inline u8 *next(struct tcpopt_context *ctx, __u32 sz)
  {
--	for (int i = 0; i < 1000; i++) {
--		bpf_loop(nr_loops, empty_callback, NULL, 0);
--
--		__sync_add_and_fetch(&hits, nr_loops);
+-	__u8 opcode, opsize;
++	__u64 off = ctx->off;
++	__u8 *data;
+ 
+-	if (ctx->ptr >= ctx->end)
+-		return 1;
+-	if (ctx->ptr >= ctx->data_end)
+-		return 1;
++	/* Verifier forbids access to packet when offset exceeds MAX_PACKET_OFF */
++	if (off > MAX_PACKET_OFF - sz)
++		return NULL;
+ 
+-	opcode = ctx->ptr[0];
++	data = ctx->data + off;
++	barrier_var(data);
++	if (data + sz >= ctx->data_end)
++		return NULL;
+ 
+-	if (opcode == TCPOPT_EOL)
+-		return 1;
+-	if (opcode == TCPOPT_NOP) {
+-		++ctx->ptr;
+-		return 0;
 -	}
-+	bpf_loop(1000, outer_loop, NULL, 0);
++	ctx->off += sz;
++	return data;
++}
+ 
+-	if (ctx->ptr + 1 >= ctx->end)
+-		return 1;
+-	if (ctx->ptr + 1 >= ctx->data_end)
++static int tscookie_tcpopt_parse(struct tcpopt_context *ctx)
++{
++	__u8 *opcode, *opsize, *wscale, *tsecr;
++	__u32 off = ctx->off;
++
++	opcode = next(ctx, 1);
++	if (!opcode)
+ 		return 1;
+-	opsize = ctx->ptr[1];
+-	if (opsize < 2)
++
++	if (*opcode == TCPOPT_EOL)
+ 		return 1;
++	if (*opcode == TCPOPT_NOP)
++		return 0;
+ 
+-	if (ctx->ptr + opsize > ctx->end)
++	opsize = next(ctx, 1);
++	if (!opsize || *opsize < 2)
+ 		return 1;
+ 
+-	switch (opcode) {
++	switch (*opcode) {
+ 	case TCPOPT_WINDOW:
+-		if (opsize == TCPOLEN_WINDOW && ctx->ptr + TCPOLEN_WINDOW <= ctx->data_end)
+-			ctx->wscale = ctx->ptr[2] < TCP_MAX_WSCALE ? ctx->ptr[2] : TCP_MAX_WSCALE;
++		wscale = next(ctx, 1);
++		if (!wscale)
++			return 1;
++		if (*opsize == TCPOLEN_WINDOW)
++			ctx->wscale = *wscale < TCP_MAX_WSCALE ? *wscale : TCP_MAX_WSCALE;
+ 		break;
+ 	case TCPOPT_TIMESTAMP:
+-		if (opsize == TCPOLEN_TIMESTAMP && ctx->ptr + TCPOLEN_TIMESTAMP <= ctx->data_end) {
++		tsecr = next(ctx, 4);
++		if (!tsecr)
++			return 1;
++		if (*opsize == TCPOLEN_TIMESTAMP) {
+ 			ctx->option_timestamp = true;
+ 			/* Client's tsval becomes our tsecr. */
+-			*ctx->tsecr = get_unaligned((__be32 *)(ctx->ptr + 2));
++			*ctx->tsecr = get_unaligned((__be32 *)tsecr);
+ 		}
+ 		break;
+ 	case TCPOPT_SACK_PERM:
+-		if (opsize == TCPOLEN_SACK_PERM)
++		if (*opsize == TCPOLEN_SACK_PERM)
+ 			ctx->option_sack = true;
+ 		break;
+ 	}
+ 
+-	ctx->ptr += opsize;
++	ctx->off = off + *opsize;
+ 
  	return 0;
  }
+@@ -256,16 +271,21 @@ static int tscookie_tcpopt_parse_batch(__u32 index, void *context)
+ 
+ static __always_inline bool tscookie_init(struct tcphdr *tcp_header,
+ 					  __u16 tcp_len, __be32 *tsval,
+-					  __be32 *tsecr, void *data_end)
++					  __be32 *tsecr, void *data, void *data_end)
+ {
+ 	struct tcpopt_context loop_ctx = {
+-		.ptr = (__u8 *)(tcp_header + 1),
+-		.end = (__u8 *)tcp_header + tcp_len,
++		.data = data,
+ 		.data_end = data_end,
+ 		.tsecr = tsecr,
+ 		.wscale = TS_OPT_WSCALE_MASK,
+ 		.option_timestamp = false,
+ 		.option_sack = false,
++		/* Note: currently verifier would track .off as unbound scalar.
++		 *       In case if verifier would at some point get smarter and
++		 *       compute bounded value for this var, beware that it might
++		 *       hinder bpf_loop() convergence validation.
++		 */
++		.off = (__u8 *)(tcp_header + 1) - (__u8 *)data,
+ 	};
+ 	u32 cookie;
+ 
+@@ -635,7 +655,7 @@ static __always_inline int syncookie_handle_syn(struct header_pointers *hdr,
+ 	cookie = (__u32)value;
+ 
+ 	if (tscookie_init((void *)hdr->tcp, hdr->tcp_len,
+-			  &tsopt_buf[0], &tsopt_buf[1], data_end))
++			  &tsopt_buf[0], &tsopt_buf[1], data, data_end))
+ 		tsopt = tsopt_buf;
+ 
+ 	/* Check that there is enough space for a SYNACK. It also covers
 -- 
 2.42.0
 
