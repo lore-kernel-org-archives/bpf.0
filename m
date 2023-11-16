@@ -1,103 +1,106 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="k+gERTjO"
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8062DD5E
-	for <bpf@vger.kernel.org>; Thu, 16 Nov 2023 11:21:30 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1cc3bb4c307so10978065ad.0
-        for <bpf@vger.kernel.org>; Thu, 16 Nov 2023 11:21:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l/K6oMBo"
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A66818D
+	for <bpf@vger.kernel.org>; Thu, 16 Nov 2023 11:37:54 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-40859c466efso9145785e9.3
+        for <bpf@vger.kernel.org>; Thu, 16 Nov 2023 11:37:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1700162490; x=1700767290; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YzF2ALYUXgtOOWHICjx/9sp3ZlXGizxmY7whZwnkVqs=;
-        b=k+gERTjO6F93q1lS3m32rhR1J28d3mpm2fohBNlGcICYiGp+WYLpMxD8T7g/NwYvkq
-         TnISjy6v2HHl9uLVBPS8As3+3N6VKqEA9rJCcxc1hfXLgupG0st4Nw0XKCMTajq+7gAC
-         fZ1sQBFKSupkE3fCKaYxdMbwZ3O33arR2wFwM=
+        d=gmail.com; s=20230601; t=1700163472; x=1700768272; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cBsjS7KCvlfyiv3EWfyxDWNuEw7S7dO6CkvZtHBeiiw=;
+        b=l/K6oMBo4rtuZ93dDiNzW0q6FvYqnd8KNvualHcajhU3TMrpF+YZYjYePRi19akFui
+         PQvHSQ7xcXVU9pc4W2/ywYJ3uL7a81iNAsvWTE9RRDV3P6SgO7hLplM1PFBG+OBArf13
+         cZJZbz2I7vqLCZ0SHYC0DonsEF+dUM6ZknHb7S0uQXKDRZBXoHqvbxY2CPOwJmT4aARU
+         1Js2qnx4SZ8sClD3avd/CnUgnQEGE2j9liYIZmrtVDC/CuOIZJIvzXFKx5eVlzS1EPyB
+         OO725g4iFxHdAphArd3MAypcgOZ412aNX0Zrh+9j1+YUYJzdaDdFkHrR8alqsfLaOFcM
+         vmHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700162490; x=1700767290;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YzF2ALYUXgtOOWHICjx/9sp3ZlXGizxmY7whZwnkVqs=;
-        b=PUX0zkVfEFeq7jdqdc1CA/znKfBayS14VIGPFne27rJQlV78qDftPCmeHhS2sZSl8j
-         6PTvrAUDju8ifxVc2f171REEOwmsWVe1KaNy0fAnbdEfR9gLGemZsn0bubJev8PsdAEC
-         GwwaKUleadJxMErHO7IF75iIeV7VdoBS/VYr6tcKczD0h43YZ1unTCE2hf5yEhOEGG7q
-         OMARUY4ef9+4dDqdRGolH7N5HQvMplpkWtiqm55Hc8QnCP2pcOB69grDWH27qdnsnG9z
-         nTi+zw8o3N863umf6DCpf4Gz3D5t8Yfxa0G2UhMpKZZ97EkyIWo62zfsMBvBz4Gl0Pof
-         vBRQ==
-X-Gm-Message-State: AOJu0YyL3nwNKjajmM3UuaWoYXhJoX9rRNk4W4P/rQtDGlJjdGg0NE6t
-	jaMLXHtrWcpYNAL9fETXdC/FrA==
-X-Google-Smtp-Source: AGHT+IFOsmNi6M20q2mMZfgvvs7Ny35X8FWHOzyId2w5LMV8GyUNADT9qbMocFM5IvDg5rKoPH1waA==
-X-Received: by 2002:a17:902:f54f:b0:1cc:4eb1:edaa with SMTP id h15-20020a170902f54f00b001cc4eb1edaamr11388254plf.51.1700162489866;
-        Thu, 16 Nov 2023 11:21:29 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id t24-20020a1709028c9800b001c9bfd20d0csm17388plo.124.2023.11.16.11.21.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Nov 2023 11:21:28 -0800 (PST)
-From: Kees Cook <keescook@chromium.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Kees Cook <keescook@chromium.org>,
-	Tejun Heo <tj@kernel.org>,
-	Azeem Shaikh <azeemshaikh38@gmail.com>,
-	Zefan Li <lizefan.x@bytedance.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Waiman Long <longman@redhat.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	cgroups@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH 0/3] kernfs: Convert from strlcpy() to strscpy()
-Date: Thu, 16 Nov 2023 11:21:22 -0800
-Message-Id: <20231116191718.work.246-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1700163472; x=1700768272;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cBsjS7KCvlfyiv3EWfyxDWNuEw7S7dO6CkvZtHBeiiw=;
+        b=Xd5/jxyV/9wFJWJy2qAyYT9k1+DYrx9ZUoDoPepddXMh7KJJIIJVR+pOMfW0fQOJKy
+         6jugVumrJixbvHP/b+OpEhIeijwGkWpK43FLbthIQ3/qeQo+2bstqDKb+QB4uL5W9DC4
+         n194JMBh9E84knaVdLgnpbqa2tlWtvgtJretO8uJ0NV7d0VpJF1XlqFqVP0Yq4fCF+bZ
+         7LlsTW2CQADjQKxbMKisqcbALxuAjjmEHWCDB7DDZieYP/ynYohbGEXmPjIRsliv9hNw
+         Y/GqSyTF+hTJBHd1mD7GcCUkBW0u0Yyr5hQlnVlTT2oOGB69oefh2XcsEl7GE6cTZWt+
+         KUGA==
+X-Gm-Message-State: AOJu0YzNqV41+BQ1cPAiPlC4IibFxWESlKUcusz7zJT7POMUS9weICq0
+	Zq0SngLVcvK7vPRH0aBiZ52RjgMRkg7Q9ueozEo=
+X-Google-Smtp-Source: AGHT+IFi0Rt2jOCzvipl85uH3G9Zh7JldeMliryRDqjnN0MA66QajQobnkQDYYrRDa+l1hyKGcTqhgNryigQOFVwugo=
+X-Received: by 2002:a5d:47c8:0:b0:321:7093:53f5 with SMTP id
+ o8-20020a5d47c8000000b00321709353f5mr15200687wrc.64.1700163472338; Thu, 16
+ Nov 2023 11:37:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=805; i=keescook@chromium.org;
- h=from:subject:message-id; bh=w0GAtTzgRNL9znjaphz3FN4VQ24pFDHc0eBL30sFkpg=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlVmu11zVyAR1N094pTJIYi2lpml53vIr/7Zkfb
- zgMf4lRuPCJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZVZrtQAKCRCJcvTf3G3A
- JqcUEACow96whY2PXsoj9tPefpjj3UIwlfJ3ut/35CSfyT8UK7/zYhv7KEZrBeHK/qxMRJ9+xBe
- Pc7j5tIqc68ExBPJVWjYfDJ37dsg28n4AbifgDfF4Tfr+XD/B/7zBYlbqa+YfKIoqNsie3TuEmb
- Jo5TNLzmJ+iHwLZQBg52HuTJ8IypsNdhdPUDt+GSVayHbFP8sOaZMzSgNzkWGE0EZPJVbhJkBhG
- dgaf1he3KcoFhM6lOXcJzNfLL4wP3gW0wQvCa7n53dwozdUYLAN8vAo99ju0ONbxHC5gaRy2hV1
- m8LYlDrVzBTldqKUPCwLlfworllGmywSzRyIvViY2SKCuLTEJMhrfrRT7eIc9F/TyhwKXjfWGox
- Q4MGthWvVnHSVXW26aJPBCdBexdQe0UNHIe1e9GtdPVv6/DSkPteLizTSuVXO/m6gY1q3uCYF9G
- RsrfA76ykmz8PiMZ1HwiSOUivMyMCZYd9dgBIcnKAxJdRmYQm6zmTcEY6iUR4P/ay56A0T7/tW+
- SIqHoC9vLAMJk2kagkrDUu4Q7FIjW4MKeI+Ul2jrc9WW0ggDCMFFYhz9oXzEcrakU5x04mo7l07
- mIs0IZlQmu6Y6/xTB1XcYB+9kCsQ0kxxgVUzqWsljvkctWg0ATuQ6HYRvZxRPR3AoAIvMha9INk
- Mb18F4pb gdKumXw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+References: <20231112010609.848406-1-andrii@kernel.org> <20231112010609.848406-5-andrii@kernel.org>
+ <CAADnVQJZr3Za=oM9VeTeY0BGL6rymSHSsKqEWVSJmkRhSvcsHA@mail.gmail.com> <CAEf4BzYCDGKnUd6zJJV-aetUhSq_+QsBFZ6bxS+vvaxvmUDZ6A@mail.gmail.com>
+In-Reply-To: <CAEf4BzYCDGKnUd6zJJV-aetUhSq_+QsBFZ6bxS+vvaxvmUDZ6A@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 16 Nov 2023 11:37:40 -0800
+Message-ID: <CAADnVQ+aLnXNHD93cwfN-P83T_poDSy-xYRWaOq3dVfzCY6g0g@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 04/13] bpf: add register bounds sanity checks
+ and sanitization
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Kernel Team <kernel-team@meta.com>, 
+	Eduard Zingerman <eddyz87@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Wed, Nov 15, 2023 at 2:07=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Wed, Nov 15, 2023 at 3:25=E2=80=AFPM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Sat, Nov 11, 2023 at 5:06=E2=80=AFPM Andrii Nakryiko <andrii@kernel.=
+org> wrote:
+> > >
+> > >
+> > > By default, sanity violation will trigger a warning in verifier log a=
+nd
+> > > resetting register bounds to "unbounded" ones. But to aid development
+> > > and debugging, BPF_F_TEST_SANITY_STRICT flag is added, which will
+> > > trigger hard failure of verification with -EFAULT on register bounds
+> > > violations. This allows selftests to catch such issues. veristat will
+> > > also gain a CLI option to enable this behavior.
+> > ...
+> > > +       bool test_sanity_strict;        /* fail verification on sanit=
+y violations */
+> > ...
+> > > +/* The verifier internal test flag. Behavior is undefined */
+> > > +#define BPF_F_TEST_SANITY_STRICT       (1U << 7)
+> >
+> > Applied, but please follow up with a rename.
+> >
+> > The name of the flag here in uapi and in the "veristat --test-sanity"
+> > will be a subject of bad jokes.
+> > The flag is asking the verifier to test its own sanity?
+> > Can the verifier go insane?
+> > Let's call it TEST_RANGE_ACCOUNTING or something.
+> > I'm guessing you didn't qualify it with 'range' to reuse it
+> > in the future for other 'sanity' checks?
+> > We can add another flag later.
+> > Like BPF_F_TEST_STATE_FREQ is pretty specific and it's a good thing.
+> > I think being specific like BPF_F_TEST_RANGE_TRACKING or
+> > RANGE_ACCOUNTING is better long term.
+>
+> Sure, I like BPF_F_TEST_RANGE_TRACKING_STRICT. Or you want to drop the
+> _STRICT suffix? We can also do something like
+> BPF_F_TEST_REG_INVARIANTS_STRICT or something to keep it a bit more
+> generic?
 
-One of the last users of strlcpy() is kernfs, which has some complex
-calling hierarchies that needed to be carefully examined. This series
-refactors the strlcpy() calls into strscpy() calls, and bubbles up all
-changes in return value checking for callers.
-
--Kees
-
-Kees Cook (3):
-  kernfs: Convert kernfs_walk_ns() from strlcpy() to strscpy()
-  kernfs: Convert kernfs_name_locked() from strlcpy() to strscpy()
-  kernfs: Convert kernfs_path_from_node_locked() from strlcpy() to
-    strscpy()
-
- fs/kernfs/dir.c             | 53 ++++++++++++++++++++-----------------
- kernel/cgroup/cgroup-v1.c   |  2 +-
- kernel/cgroup/cgroup.c      |  4 +--
- kernel/cgroup/cpuset.c      |  2 +-
- kernel/trace/trace_uprobe.c |  2 +-
- 5 files changed, 33 insertions(+), 30 deletions(-)
-
--- 
-2.34.1
-
+Both names sound fine. I prefer without _strict mainly because
+I'm confused by its meaning. With _strict it sounds like the verifier
+already testing range tracking, but not strict enough.
+Whereas without the flag there is no enforcement at all.
