@@ -1,226 +1,375 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CB68328B7;
-	Thu, 16 Nov 2023 14:31:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N8xb9+UL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DCEDC433C8;
-	Thu, 16 Nov 2023 14:30:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700145064;
-	bh=EhGHuwDh91cqarIXUDT3tp44P964N6cVpra9ZSSgrHQ=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=N8xb9+ULvNniRwmzMdpxBtU8u7OyH+mGbDxyCcbK0uJacZTjERDbNmjFrqCHyY3qv
-	 97gcZFgeT9L/lulv7LSGjCUfM3+cPCdrSR1xyS/sagSzpgQZWwj46Q0GGG1SJZue+w
-	 pfRTQHAWokyDjTEFlSTQxlCgokaEHDpUk6rOsQQ6MLEpfFXvxrgWe0shARZKYaqmiE
-	 nwm0lbYi/xO8RI70dFP2fmt6KzJqFgpFQOgelf4eFQINQPGzEboEgm4fs79OY8aNnr
-	 7b9+q+3noy3GFEUMkE4VIJFqXwTfwSMCvb4vJLuLQHzXde5Um8+dAUMvjpVubhZRiN
-	 mrsyKtNVMUz7g==
-Message-ID: <a0dc04da-eb36-4824-b774-fd16f3f65875@kernel.org>
-Date: Thu, 16 Nov 2023 15:30:55 +0100
+	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="UmcHQ1ZL"
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34781AD
+	for <bpf@vger.kernel.org>; Thu, 16 Nov 2023 06:59:55 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-7789577b53fso49219385a.3
+        for <bpf@vger.kernel.org>; Thu, 16 Nov 2023 06:59:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1700146795; x=1700751595; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8+3Nwi8PU7UsCzzULsYQhzP0vrlUHaTxu4/KmSx/ZYM=;
+        b=UmcHQ1ZLrrt+kJa7cc+6Y5n9xZOhzdvN1XrwN1VfZ1vJEsB7fOnlAMf+rCaLsIrGmL
+         +UwAgGv9MTq/30Udci7sECDFvVbj8KStPSdotCOZxK5+IXOWnFoL2c164UUhi7mIgSaJ
+         XKaQACNHfxHGpzgBqt2GpfklhbLtmbUJOsuI9RDo3CbQU8M+7mOExjl82VwkaiaUCq8n
+         LGc3uPsEWFLmepM25JmV0YJAvUivm/Sv0WeoKHh3FJHSmF6gHgqiDjzmumNh6elnPP1M
+         oeWC1id+M62SnRnw53Hunx6Jtx3kNPiLLZ6/yvyvhU8GLMjZCTMZnz09PrXUEdmeqPxi
+         76jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700146795; x=1700751595;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8+3Nwi8PU7UsCzzULsYQhzP0vrlUHaTxu4/KmSx/ZYM=;
+        b=Oa0EhNUsHkryoDDn0ZwOwtsPP7+GvdzIpxXPaqSunmnSUm21oa15eMZGYEcWcls2MB
+         V9K7jPG13lJ1tUHGgqy8vfBM2aVgNKSb08geFUpkaLnwh46AdOoY3heDe6C0OuUpsvVp
+         mE1owuRFwZuS8yevNw6PA63/ZKi6OxugQQS08C20ufmud7ZVGpqwE0sVQqZ71BNod36b
+         xountb0zEcNlL8HsZU1znlFpeseahpYF3FRkoByGNE0mtNnK3MMudqUi+ynUj5PVB/s3
+         Cp+QyjJX+vdLsRtFBX6eI3G8qnbI2xTUSKqS6ME5hMjfKE/CCX5hBKNQoMwTMhNFCGcN
+         Ynaw==
+X-Gm-Message-State: AOJu0YyBGoZbMy+AO2cBkxWvuBSoqizZq07+8EeQTvmXGKpoHHvt77Gn
+	VqvUNEGP9Hs+l8/lwpCPq2giuw==
+X-Google-Smtp-Source: AGHT+IEWBQg3bKELVndKSEUk5/+/duwFonoOr6VK27xSQAbIBZN/7aXIrfyM9XOaoQOtENwrIn2haQ==
+X-Received: by 2002:a05:620a:244b:b0:769:89c8:4fae with SMTP id h11-20020a05620a244b00b0076989c84faemr10003215qkn.52.1700146794945;
+        Thu, 16 Nov 2023 06:59:54 -0800 (PST)
+Received: from majuu.waya (bras-base-kntaon1618w-grc-15-174-91-6-24.dsl.bell.ca. [174.91.6.24])
+        by smtp.gmail.com with ESMTPSA id d21-20020a05620a241500b00774376e6475sm1059688qkn.6.2023.11.16.06.59.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Nov 2023 06:59:53 -0800 (PST)
+From: Jamal Hadi Salim <jhs@mojatatu.com>
+To: netdev@vger.kernel.org
+Cc: deb.chatterjee@intel.com,
+	anjali.singhai@intel.com,
+	namrata.limaye@intel.com,
+	tom@sipanda.io,
+	mleitner@redhat.com,
+	Mahesh.Shirshyad@amd.com,
+	tomasz.osinski@intel.com,
+	jiri@resnulli.us,
+	xiyou.wangcong@gmail.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	vladbu@nvidia.com,
+	horms@kernel.org,
+	daniel@iogearbox.net,
+	bpf@vger.kernel.org,
+	khalidm@nvidia.com,
+	toke@redhat.com,
+	mattyk@nvidia.com
+Subject: [PATCH net-next v8 01/15] net: sched: act_api: Introduce dynamic actions list
+Date: Thu, 16 Nov 2023 09:59:34 -0500
+Message-Id: <20231116145948.203001-2-jhs@mojatatu.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231116145948.203001-1-jhs@mojatatu.com>
+References: <20231116145948.203001-1-jhs@mojatatu.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: hawk@kernel.org, bpf@vger.kernel.org, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
- song@kernel.org, yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
- haoluo@google.com, jolsa@kernel.org, kuba@kernel.org, toke@kernel.org,
- willemb@google.com, dsahern@kernel.org, magnus.karlsson@intel.com,
- bjorn@kernel.org, maciej.fijalkowski@intel.com, yoong.siang.song@intel.com,
- netdev@vger.kernel.org, xdp-hints@xdp-project.net
-Subject: Re: [PATCH bpf-next v5 02/13] xsk: Add TX timestamp and TX checksum
- offload support
-Content-Language: en-US
-To: Stanislav Fomichev <sdf@google.com>
-References: <20231102225837.1141915-1-sdf@google.com>
- <20231102225837.1141915-3-sdf@google.com>
- <c9bfe356-1942-4e49-b025-115faeec39dd@kernel.org>
- <CAKH8qBtiv8ArtbbMW9+c75y+NfkX-Tk-rcPuHBVdKDMmmFdtdA@mail.gmail.com>
- <2ed17b27-f211-4f58-95b5-5a71914264f3@kernel.org>
- <ZVJWuB4qtWfC-W_h@google.com>
- <be6186c1-52ee-42aa-b53c-39781af3a1ec@kernel.org>
- <ZVTJpLoSCaLoBa67@google.com>
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <ZVTJpLoSCaLoBa67@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+In P4 we require to generate new actions "on the fly" based on the
+specified P4 action definition. Dynamic action kinds, like the pipeline
+they are attached to, must be per net namespace, as opposed to native
+action kinds which are global. For that reason, we chose to create a
+separate structure to store dynamic actions.
 
+Co-developed-by: Victor Nogueira <victor@mojatatu.com>
+Signed-off-by: Victor Nogueira <victor@mojatatu.com>
+Co-developed-by: Pedro Tammela <pctammela@mojatatu.com>
+Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
+Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Reviewed-by: Vlad Buslov <vladbu@nvidia.com>
+---
+ include/net/act_api.h |   7 ++-
+ net/sched/act_api.c   | 123 +++++++++++++++++++++++++++++++++++++-----
+ net/sched/cls_api.c   |   2 +-
+ 3 files changed, 115 insertions(+), 17 deletions(-)
 
-On 11/15/23 14:37, Stanislav Fomichev wrote:
-> On 11/15, Jesper Dangaard Brouer wrote:
->>
->>
->> On 11/13/23 18:02, Stanislav Fomichev wrote:
->>> On 11/13, Jesper Dangaard Brouer wrote:
->>>>
->>>>
->>>> On 11/13/23 15:10, Stanislav Fomichev wrote:
->>>>> On Mon, Nov 13, 2023 at 5:16 AM Jesper Dangaard Brouer <hawk@kernel.org> wrote:
->>>>>>
->>>>>>
->>>>>> On 11/2/23 23:58, Stanislav Fomichev wrote:
->>>>>>> diff --git a/include/uapi/linux/if_xdp.h b/include/uapi/linux/if_xdp.h
->>>>>>> index 2ecf79282c26..b0ee7ad19b51 100644
->>>>>>> --- a/include/uapi/linux/if_xdp.h
->>>>>>> +++ b/include/uapi/linux/if_xdp.h
->>>>>>> @@ -106,6 +106,41 @@ struct xdp_options {
->>>>>>>      #define XSK_UNALIGNED_BUF_ADDR_MASK \
->>>>>>>          ((1ULL << XSK_UNALIGNED_BUF_OFFSET_SHIFT) - 1)
->>>>>>>
->>>>>>> +/* Request transmit timestamp. Upon completion, put it into tx_timestamp
->>>>>>> + * field of struct xsk_tx_metadata.
->>>>>>> + */
->>>>>>> +#define XDP_TXMD_FLAGS_TIMESTAMP             (1 << 0)
->>>>>>> +
->>>>>>> +/* Request transmit checksum offload. Checksum start position and offset
->>>>>>> + * are communicated via csum_start and csum_offset fields of struct
->>>>>>> + * xsk_tx_metadata.
->>>>>>> + */
->>>>>>> +#define XDP_TXMD_FLAGS_CHECKSUM                      (1 << 1)
->>>>>>> +
->>>>>>> +/* AF_XDP offloads request. 'request' union member is consumed by the driver
->>>>>>> + * when the packet is being transmitted. 'completion' union member is
->>>>>>> + * filled by the driver when the transmit completion arrives.
->>>>>>> + */
->>>>>>> +struct xsk_tx_metadata {
->>>>>>> +     union {
->>>>>>> +             struct {
->>>>>>> +                     __u32 flags;
->>>>>>> +
->>>>>>> +                     /* XDP_TXMD_FLAGS_CHECKSUM */
->>>>>>> +
->>>>>>> +                     /* Offset from desc->addr where checksumming should start. */
->>>>>>> +                     __u16 csum_start;
->>>>>>> +                     /* Offset from csum_start where checksum should be stored. */
->>>>>>> +                     __u16 csum_offset;
->>>>>>> +             } request;
->>>>>>> +
->>>>>>> +             struct {
->>>>>>> +                     /* XDP_TXMD_FLAGS_TIMESTAMP */
->>>>>>> +                     __u64 tx_timestamp;
->>>>>>> +             } completion;
->>>>>>> +     };
->>>>>>> +};
->>>>>>
->>>>>> This looks wrong to me. It looks like member @flags is not avail at
->>>>>> completion time.  At completion time, I assume we also want to know if
->>>>>> someone requested to get the timestamp for this packet (else we could
->>>>>> read garbage).
->>>>>
->>>>> I've moved the parts that are preserved across tx and tx completion
->>>>> into xsk_tx_metadata_compl.
->>>>> This is to address Magnus/Maciej feedback where userspace might race
->>>>> with the kernel.
->>>>> See: https://lore.kernel.org/bpf/ZNoJenzKXW5QSR3E@boxer/
->>>>>
->>>>
->>>> Does this mean that every driver have to extend their TX-desc ring with
->>>> sizeof(struct xsk_tx_metadata_compl)?
->>>> Won't this affect the performance of this V5?
->>>
->>> Yes, but it doesn't have to be a descriptor. Might be some internal
->>> driver completion queue (as in the case of mlx5). And definitely does
->>> affect performance :-( (see all the static branches to disable it)
->>>>    $ pahole -C xsk_tx_metadata_compl
->>>> ./drivers/net/ethernet/stmicro/stmmac/stmmac.ko
->>>>    struct xsk_tx_metadata_compl {
->>>> 	__u64 *              tx_timestamp;         /*     0     8 */
->>>>
->>>> 	/* size: 8, cachelines: 1, members: 1 */
->>>> 	/* last cacheline: 8 bytes */
->>>>    };
->>>>
->>>> Guess, I must be misunderstanding, as I was expecting to see the @flags
->>>> member being preserved across, as I get the race there.
->>>>
->>>> Looking at stmmac driver, it does look like this xsk_tx_metadata_compl
->>>> is part of the TX-ring for completion (tx_skbuff_dma) and the
->>>> tx_timestamp data is getting stored here.  How is userspace AF_XDP
->>>> application getting access to the tx_timestamp data?
->>>> I though this was suppose to get stored in metadata data area (umem)?
->>>>
->>>> Also looking at the code, the kernel would not have a "crash" race on
->>>> the flags member (if we preserve in struct), because the code checks the
->>>> driver HW-TS config-state + TX-descriptor for the availability of a
->>>> HW-TS in the descriptor.
->>>
->>> xsk_tx_metadata_compl stores a pointer to the completion timestamp
->>> in the umem, so everything still arrives via the metadata area.
->>>
->>> We want to make sure the flags are not changing across tx and tx completion.
->>> Instead of saving the flags, we just use that xsk_tx_metadata_compl to
->>> signal to the completion that "I know that I've requested the tx
->>> completion timestamp, please put it at this address in umem".
->>>
->>> I store the pointer instead of flags to avoid doing pointer math again
->>> at completion. But it's an implementation detail and somewhat abstracted
->>> from the drivers (besides the fact that it's probably has to fit in 8
->>> bytes).
->>
->> I see it now (what I missed). At TX time you are storing a pointer where
->> to (later) write the TS at completion time.  It just seems overkill to
->> store 8 byte (pointer) to signal (via NULL) if the HWTS was requested.
->> Space in the drivers TX-ring is performance critical, and I think driver
->> developers would prefer to find a bit to indicate HWTS requested.
->>
->> If HWTS was *NOT* requested, then the metadata area will not be updated
->> (right, correct?). Then memory area is basically garbage that survived.
->> How does the AF_XDP application know this packet contains a HWTS or not?
->>
->>  From an UAPI PoV wouldn't it be easier to use (and extend) via keeping
->> the @flags member (in struct xsk_tx_metadata), but (as you already do)
->> not let kernel checks depend on it (to avoid the races).
-> 
-> I was assuming the userspace can keep this signal out of band or use
-> the same idea as suggested with padding struct xsk_tx_metadata to keep
-> some data around. But I see your point, it might be convenient to
-> keep the original flags around during completion on the uapi side.
-> 
-> I think I can just move flags from the request union member to the outer
-> struct. So the struct xsk_tx_metadata would look like:
-> 
-> struct xsk_tx_metadata {
-> 	__u32 flags; /* maybe can even make this u64? */
-> 
+diff --git a/include/net/act_api.h b/include/net/act_api.h
+index 4ae0580b6..3d40adef1 100644
+--- a/include/net/act_api.h
++++ b/include/net/act_api.h
+@@ -105,6 +105,7 @@ typedef void (*tc_action_priv_destructor)(void *priv);
+ 
+ struct tc_action_ops {
+ 	struct list_head head;
++	struct list_head dyn_head;
+ 	char    kind[IFNAMSIZ];
+ 	enum tca_id  id; /* identifier should match kind */
+ 	unsigned int	net_id;
+@@ -198,8 +199,10 @@ int tcf_idr_check_alloc(struct tc_action_net *tn, u32 *index,
+ int tcf_idr_release(struct tc_action *a, bool bind);
+ 
+ int tcf_register_action(struct tc_action_ops *a, struct pernet_operations *ops);
++int tcf_register_dyn_action(struct net *net, struct tc_action_ops *act);
+ int tcf_unregister_action(struct tc_action_ops *a,
+ 			  struct pernet_operations *ops);
++void tcf_unregister_dyn_action(struct net *net, struct tc_action_ops *act);
+ int tcf_action_destroy(struct tc_action *actions[], int bind);
+ int tcf_action_exec(struct sk_buff *skb, struct tc_action **actions,
+ 		    int nr_actions, struct tcf_result *res);
+@@ -207,8 +210,8 @@ int tcf_action_init(struct net *net, struct tcf_proto *tp, struct nlattr *nla,
+ 		    struct nlattr *est,
+ 		    struct tc_action *actions[], int init_res[], size_t *attr_size,
+ 		    u32 flags, u32 fl_flags, struct netlink_ext_ack *extack);
+-struct tc_action_ops *tc_action_load_ops(struct nlattr *nla, bool police,
+-					 bool rtnl_held,
++struct tc_action_ops *tc_action_load_ops(struct net *net, struct nlattr *nla,
++					 bool police, bool rtnl_held,
+ 					 struct netlink_ext_ack *extack);
+ struct tc_action *tcf_action_init_1(struct net *net, struct tcf_proto *tp,
+ 				    struct nlattr *nla, struct nlattr *est,
+diff --git a/net/sched/act_api.c b/net/sched/act_api.c
+index c39252d61..443c49116 100644
+--- a/net/sched/act_api.c
++++ b/net/sched/act_api.c
+@@ -57,6 +57,40 @@ static void tcf_free_cookie_rcu(struct rcu_head *p)
+ 	kfree(cookie);
+ }
+ 
++static unsigned int dyn_act_net_id;
++
++struct tcf_dyn_act_net {
++	struct list_head act_base;
++	rwlock_t act_mod_lock;
++};
++
++static __net_init int tcf_dyn_act_base_init_net(struct net *net)
++{
++	struct tcf_dyn_act_net *dyn_base_net = net_generic(net, dyn_act_net_id);
++
++	INIT_LIST_HEAD(&dyn_base_net->act_base);
++	rwlock_init(&dyn_base_net->act_mod_lock);
++
++	return 0;
++}
++
++static void __net_exit tcf_dyn_act_base_exit_net(struct net *net)
++{
++	struct tcf_dyn_act_net *dyn_base_net = net_generic(net, dyn_act_net_id);
++	struct tc_action_ops *ops, *tmp;
++
++	list_for_each_entry_safe(ops, tmp, &dyn_base_net->act_base, dyn_head) {
++		list_del(&ops->dyn_head);
++	}
++}
++
++static struct pernet_operations tcf_dyn_act_base_net_ops = {
++	.init = tcf_dyn_act_base_init_net,
++	.exit = tcf_dyn_act_base_exit_net,
++	.id = &dyn_act_net_id,
++	.size = sizeof(struct tc_action_ops),
++};
++
+ static void tcf_set_action_cookie(struct tc_cookie __rcu **old_cookie,
+ 				  struct tc_cookie *new_cookie)
+ {
+@@ -941,6 +975,48 @@ static void tcf_pernet_del_id_list(unsigned int id)
+ 	mutex_unlock(&act_id_mutex);
+ }
+ 
++static struct tc_action_ops *tc_lookup_dyn_action(struct net *net, char *kind)
++{
++	struct tcf_dyn_act_net *dyn_base_net = net_generic(net, dyn_act_net_id);
++	struct tc_action_ops *a, *res = NULL;
++
++	read_lock(&dyn_base_net->act_mod_lock);
++	list_for_each_entry(a, &dyn_base_net->act_base, dyn_head) {
++		if (strcmp(kind, a->kind) == 0) {
++			if (try_module_get(a->owner))
++				res = a;
++			break;
++		}
++	}
++	read_unlock(&dyn_base_net->act_mod_lock);
++
++	return res;
++}
++
++void tcf_unregister_dyn_action(struct net *net, struct tc_action_ops *act)
++{
++	struct tcf_dyn_act_net *dyn_base_net = net_generic(net, dyn_act_net_id);
++
++	write_lock(&dyn_base_net->act_mod_lock);
++	list_del(&act->dyn_head);
++	write_unlock(&dyn_base_net->act_mod_lock);
++}
++EXPORT_SYMBOL(tcf_unregister_dyn_action);
++
++int tcf_register_dyn_action(struct net *net, struct tc_action_ops *act)
++{
++	struct tcf_dyn_act_net *dyn_base_net = net_generic(net, dyn_act_net_id);
++
++	if (tc_lookup_dyn_action(net, act->kind))
++		return -EEXIST;
++
++	write_lock(&dyn_base_net->act_mod_lock);
++	list_add(&act->dyn_head, &dyn_base_net->act_base);
++	write_unlock(&dyn_base_net->act_mod_lock);
++
++	return 0;
++}
++
+ int tcf_register_action(struct tc_action_ops *act,
+ 			struct pernet_operations *ops)
+ {
+@@ -1011,7 +1087,7 @@ int tcf_unregister_action(struct tc_action_ops *act,
+ EXPORT_SYMBOL(tcf_unregister_action);
+ 
+ /* lookup by name */
+-static struct tc_action_ops *tc_lookup_action_n(char *kind)
++static struct tc_action_ops *tc_lookup_action_n(struct net *net, char *kind)
+ {
+ 	struct tc_action_ops *a, *res = NULL;
+ 
+@@ -1019,31 +1095,48 @@ static struct tc_action_ops *tc_lookup_action_n(char *kind)
+ 		read_lock(&act_mod_lock);
+ 		list_for_each_entry(a, &act_base, head) {
+ 			if (strcmp(kind, a->kind) == 0) {
+-				if (try_module_get(a->owner))
+-					res = a;
+-				break;
++				if (try_module_get(a->owner)) {
++					read_unlock(&act_mod_lock);
++					return a;
++				}
+ 			}
+ 		}
+ 		read_unlock(&act_mod_lock);
++
++		return tc_lookup_dyn_action(net, kind);
+ 	}
++
+ 	return res;
+ }
+ 
+ /* lookup by nlattr */
+-static struct tc_action_ops *tc_lookup_action(struct nlattr *kind)
++static struct tc_action_ops *tc_lookup_action(struct net *net,
++					      struct nlattr *kind)
+ {
++	struct tcf_dyn_act_net *dyn_base_net = net_generic(net, dyn_act_net_id);
+ 	struct tc_action_ops *a, *res = NULL;
+ 
+ 	if (kind) {
+ 		read_lock(&act_mod_lock);
+ 		list_for_each_entry(a, &act_base, head) {
++			if (nla_strcmp(kind, a->kind) == 0) {
++				if (try_module_get(a->owner)) {
++					read_unlock(&act_mod_lock);
++					return a;
++				}
++			}
++		}
++		read_unlock(&act_mod_lock);
++
++		read_lock(&dyn_base_net->act_mod_lock);
++		list_for_each_entry(a, &dyn_base_net->act_base, dyn_head) {
+ 			if (nla_strcmp(kind, a->kind) == 0) {
+ 				if (try_module_get(a->owner))
+ 					res = a;
+ 				break;
+ 			}
+ 		}
+-		read_unlock(&act_mod_lock);
++		read_unlock(&dyn_base_net->act_mod_lock);
+ 	}
+ 	return res;
+ }
+@@ -1294,8 +1387,8 @@ void tcf_idr_insert_many(struct tc_action *actions[])
+ 	}
+ }
+ 
+-struct tc_action_ops *tc_action_load_ops(struct nlattr *nla, bool police,
+-					 bool rtnl_held,
++struct tc_action_ops *tc_action_load_ops(struct net *net, struct nlattr *nla,
++					 bool police, bool rtnl_held,
+ 					 struct netlink_ext_ack *extack)
+ {
+ 	struct nlattr *tb[TCA_ACT_MAX + 1];
+@@ -1326,7 +1419,7 @@ struct tc_action_ops *tc_action_load_ops(struct nlattr *nla, bool police,
+ 		}
+ 	}
+ 
+-	a_o = tc_lookup_action_n(act_name);
++	a_o = tc_lookup_action_n(net, act_name);
+ 	if (a_o == NULL) {
+ #ifdef CONFIG_MODULES
+ 		if (rtnl_held)
+@@ -1335,7 +1428,7 @@ struct tc_action_ops *tc_action_load_ops(struct nlattr *nla, bool police,
+ 		if (rtnl_held)
+ 			rtnl_lock();
+ 
+-		a_o = tc_lookup_action_n(act_name);
++		a_o = tc_lookup_action_n(net, act_name);
+ 
+ 		/* We dropped the RTNL semaphore in order to
+ 		 * perform the module load.  So, even if we
+@@ -1445,7 +1538,8 @@ int tcf_action_init(struct net *net, struct tcf_proto *tp, struct nlattr *nla,
+ 	for (i = 1; i <= TCA_ACT_MAX_PRIO && tb[i]; i++) {
+ 		struct tc_action_ops *a_o;
+ 
+-		a_o = tc_action_load_ops(tb[i], flags & TCA_ACT_FLAGS_POLICE,
++		a_o = tc_action_load_ops(net, tb[i],
++					 flags & TCA_ACT_FLAGS_POLICE,
+ 					 !(flags & TCA_ACT_FLAGS_NO_RTNL),
+ 					 extack);
+ 		if (IS_ERR(a_o)) {
+@@ -1655,7 +1749,7 @@ static struct tc_action *tcf_action_get_1(struct net *net, struct nlattr *nla,
+ 	index = nla_get_u32(tb[TCA_ACT_INDEX]);
+ 
+ 	err = -EINVAL;
+-	ops = tc_lookup_action(tb[TCA_ACT_KIND]);
++	ops = tc_lookup_action(net, tb[TCA_ACT_KIND]);
+ 	if (!ops) { /* could happen in batch of actions */
+ 		NL_SET_ERR_MSG(extack, "Specified TC action kind not found");
+ 		goto err_out;
+@@ -1703,7 +1797,7 @@ static int tca_action_flush(struct net *net, struct nlattr *nla,
+ 
+ 	err = -EINVAL;
+ 	kind = tb[TCA_ACT_KIND];
+-	ops = tc_lookup_action(kind);
++	ops = tc_lookup_action(net, kind);
+ 	if (!ops) { /*some idjot trying to flush unknown action */
+ 		NL_SET_ERR_MSG(extack, "Cannot flush unknown TC action");
+ 		goto err_out;
+@@ -2109,7 +2203,7 @@ static int tc_dump_action(struct sk_buff *skb, struct netlink_callback *cb)
+ 		return 0;
+ 	}
+ 
+-	a_o = tc_lookup_action(kind);
++	a_o = tc_lookup_action(net, kind);
+ 	if (a_o == NULL)
+ 		return 0;
+ 
+@@ -2176,6 +2270,7 @@ static int __init tc_action_init(void)
+ 	rtnl_register(PF_UNSPEC, RTM_GETACTION, tc_ctl_action, tc_dump_action,
+ 		      0);
+ 
++	register_pernet_subsys(&tcf_dyn_act_base_net_ops);
+ 	return 0;
+ }
+ 
+diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
+index 1976bd163..2db3c13c7 100644
+--- a/net/sched/cls_api.c
++++ b/net/sched/cls_api.c
+@@ -3293,7 +3293,7 @@ int tcf_exts_validate_ex(struct net *net, struct tcf_proto *tp, struct nlattr **
+ 		if (exts->police && tb[exts->police]) {
+ 			struct tc_action_ops *a_o;
+ 
+-			a_o = tc_action_load_ops(tb[exts->police], true,
++			a_o = tc_action_load_ops(net, tb[exts->police], true,
+ 						 !(flags & TCA_ACT_FLAGS_NO_RTNL),
+ 						 extack);
+ 			if (IS_ERR(a_o))
+-- 
+2.34.1
 
-Yes to u64 for two reasons (1) this becomes UAPI and
-(2) better alignment for tx_timestamp.
-But I'm open to keeping it u32.
-
-> 	union {
-> 		__u16 csum_start;
-> 		__u16 csum_offset;
-> 	} request;
-> 
-> 	union {
-> 		__u64 tx_timestamp;
-> 	} completion;
-> 
-> 	__u32 padding; /* to drop this padding */
-> };
-> 
-> But I'd also keep the existing xsk_tx_metadata_compl to carry the
-> pointer+signal around. As I mentioned previously, it's completely
-> opaque to the driver and we can change the internals in the future.
-> 
-
-Sure, it is an implementation detail and my objections are mostly that I
-don't find it as a pretty code approach that can be hard to follow.
-Maybe driver developer will object and change this later if it cost too
-much to increase the element size in their TX-ring queues.
-
-> IOW, we won't override the flags from the kernel side and as long
-> as the userspace consumer doesn't mess them up it should receive
-> the original value at completion.
-> 
-> Would that work for you?
-
-Yes, that will work for me, thanks!
-
---Jesper
