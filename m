@@ -1,20 +1,20 @@
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D76D72
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F55D7A
 	for <bpf@vger.kernel.org>; Fri, 17 Nov 2023 19:47:03 -0800 (PST)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AI2rE6d003777
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AHMWxFj008635
 	for <bpf@vger.kernel.org>; Fri, 17 Nov 2023 19:47:03 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3uemvd856w-9
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ue4fq64xw-5
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
 	for <bpf@vger.kernel.org>; Fri, 17 Nov 2023 19:47:02 -0800
-Received: from twshared44805.48.prn1.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
+Received: from twshared44805.48.prn1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.34; Fri, 17 Nov 2023 19:46:57 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id 5F0DA3BB30014; Fri, 17 Nov 2023 19:46:51 -0800 (PST)
+	id 279E33BB2FFC4; Fri, 17 Nov 2023 19:46:45 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <martin.lau@kernel.org>
@@ -22,9 +22,9 @@ CC: <andrii@kernel.org>, <kernel-team@meta.com>,
         Eduard Zingerman
 	<eddyz87@gmail.com>,
         Stanislav Fomichev <sdf@google.com>
-Subject: [PATCH v3 bpf-next 8/8] bpf: emit frameno for PTR_TO_STACK regs if it differs from current one
-Date: Fri, 17 Nov 2023 19:46:23 -0800
-Message-ID: <20231118034623.3320920-9-andrii@kernel.org>
+Subject: [PATCH v3 bpf-next 5/8] bpf: emit map name in register state if applicable and available
+Date: Fri, 17 Nov 2023 19:46:20 -0800
+Message-ID: <20231118034623.3320920-6-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231118034623.3320920-1-andrii@kernel.org>
 References: <20231118034623.3320920-1-andrii@kernel.org>
@@ -37,96 +37,121 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: YHBHjOOZLnlZX8TZXuGhh_qAvzDavZQE
-X-Proofpoint-ORIG-GUID: YHBHjOOZLnlZX8TZXuGhh_qAvzDavZQE
+X-Proofpoint-ORIG-GUID: 9jF7RI8A2E1WwUtb16GED_Nj2TD6Jxk2
+X-Proofpoint-GUID: 9jF7RI8A2E1WwUtb16GED_Nj2TD6Jxk2
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-18_01,2023-11-17_01,2023-05-22_02
 
-It's possible to pass a pointer to parent's stack to child subprogs. In
-such case verifier state output is ambiguous not showing whether
-register container a pointer to "current" stack, belonging to current
-subprog (frame), or it's actually a pointer to one of parent frames.
+In complicated real-world applications, whenever debugging some
+verification error through verifier log, it often would be very useful
+to see map name for PTR_TO_MAP_VALUE register. Usually this needs to be
+inferred from key/value sizes and maybe trying to guess C code location,
+but it's not always clear.
 
-So emit this information if frame number differs between the state which
-register is part of. E.g., if current state is in frame 2 and it has
-a register pointing to stack in grand parent state (frame #0), we'll see
-something like 'R1=3Dfp[0]-16', while "local stack pointer" will be just
-'R2=3Dfp-16'.
+Given verifier has the name, and it's never too long, let's just emit it
+for ptr_to_map_key, ptr_to_map_value, and const_ptr_to_map registers. We
+reshuffle the order a bit, so that map name, key size, and value size
+appear before offset and immediate values, which seems like a more
+logical order.
+
+Current output:
+
+  R1_w=3Dmap_ptr(map=3Darray_map,ks=3D4,vs=3D8,off=3D0,imm=3D0)
+
+But we'll get rid of useless off=3D0 and imm=3D0 parts in the next patch.
 
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Acked-by: Stanislav Fomichev <sdf@google.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/log.c | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+ kernel/bpf/log.c                              | 24 ++++++++++++++-----
+ .../selftests/bpf/prog_tests/spin_lock.c      | 10 ++++----
+ 2 files changed, 23 insertions(+), 11 deletions(-)
 
 diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index 87105aa482ed..3505f3e5ae96 100644
+index 97a1641e848e..c209ab1ec2b5 100644
 --- a/kernel/bpf/log.c
 +++ b/kernel/bpf/log.c
-@@ -615,7 +615,9 @@ static bool type_is_map_ptr(enum bpf_reg_type t) {
+@@ -553,6 +553,17 @@ static void print_scalar_ranges(struct bpf_verifier_=
+env *env,
  	}
  }
 =20
--static void print_reg_state(struct bpf_verifier_env *env, const struct b=
++static bool type_is_map_ptr(enum bpf_reg_type t) {
++	switch (base_type(t)) {
++	case CONST_PTR_TO_MAP:
++	case PTR_TO_MAP_KEY:
++	case PTR_TO_MAP_VALUE:
++		return true;
++	default:
++		return false;
++	}
++}
++
+ static void print_reg_state(struct bpf_verifier_env *env, const struct b=
 pf_reg_state *reg)
-+static void print_reg_state(struct bpf_verifier_env *env,
-+			    const struct bpf_func_state *state,
-+			    const struct bpf_reg_state *reg)
  {
  	enum bpf_reg_type t;
- 	const char *sep =3D "";
-@@ -623,10 +625,8 @@ static void print_reg_state(struct bpf_verifier_env =
-*env, const struct bpf_reg_s
- 	t =3D reg->type;
- 	if (t =3D=3D SCALAR_VALUE && reg->precise)
- 		verbose(env, "P");
--	if ((t =3D=3D SCALAR_VALUE || t =3D=3D PTR_TO_STACK) &&
--	    tnum_is_const(reg->var_off)) {
-+	if (t =3D=3D SCALAR_VALUE && tnum_is_const(reg->var_off)) {
- 		/* reg->off should be 0 for SCALAR_VALUE */
--		verbose(env, "%s", t =3D=3D SCALAR_VALUE ? "" : reg_type_str(env, t));
- 		verbose_snum(env, reg->var_off.value + reg->off);
- 		return;
- 	}
-@@ -637,6 +637,14 @@ static void print_reg_state(struct bpf_verifier_env =
-*env, const struct bpf_reg_s
- #define verbose_a(fmt, ...) ({ verbose(env, "%s" fmt, sep, ##__VA_ARGS__=
-); sep =3D ","; })
-=20
- 	verbose(env, "%s", reg_type_str(env, t));
-+	if (t =3D=3D PTR_TO_STACK) {
-+		if (state->frameno !=3D reg->frameno)
-+			verbose(env, "[%d]", reg->frameno);
-+		if (tnum_is_const(reg->var_off)) {
-+			verbose_snum(env, reg->var_off.value + reg->off);
-+			return;
-+		}
+@@ -584,16 +595,17 @@ static void print_reg_state(struct bpf_verifier_env=
+ *env, const struct bpf_reg_s
+ 		verbose_a("ref_obj_id=3D%d", reg->ref_obj_id);
+ 	if (type_is_non_owning_ref(reg->type))
+ 		verbose_a("%s", "non_own_ref");
++	if (type_is_map_ptr(t)) {
++		if (reg->map_ptr->name[0])
++			verbose_a("map=3D%s", reg->map_ptr->name);
++		verbose_a("ks=3D%d,vs=3D%d",
++			  reg->map_ptr->key_size,
++			  reg->map_ptr->value_size);
 +	}
- 	if (base_type(t) =3D=3D PTR_TO_BTF_ID)
- 		verbose(env, "%s", btf_type_name(reg->btf, reg->btf_id));
- 	verbose(env, "(");
-@@ -698,7 +706,7 @@ void print_verifier_state(struct bpf_verifier_env *en=
-v, const struct bpf_func_st
- 		verbose(env, " R%d", i);
- 		print_liveness(env, reg->live);
- 		verbose(env, "=3D");
--		print_reg_state(env, reg);
-+		print_reg_state(env, state, reg);
- 	}
- 	for (i =3D 0; i < state->allocated_stack / BPF_REG_SIZE; i++) {
- 		char types_buf[BPF_REG_SIZE + 1];
-@@ -731,7 +739,7 @@ void print_verifier_state(struct bpf_verifier_env *en=
-v, const struct bpf_func_st
- 			verbose(env, " fp%d", (-i - 1) * BPF_REG_SIZE);
- 			print_liveness(env, reg->live);
- 			verbose(env, "=3D%s", types_buf);
--			print_reg_state(env, reg);
-+			print_reg_state(env, state, reg);
- 			break;
- 		case STACK_DYNPTR:
- 			/* skip to main dynptr slot */
+ 	if (t !=3D SCALAR_VALUE)
+ 		verbose_a("off=3D%d", reg->off);
+ 	if (type_is_pkt_pointer(t))
+ 		verbose_a("r=3D%d", reg->range);
+-	else if (base_type(t) =3D=3D CONST_PTR_TO_MAP ||
+-		 base_type(t) =3D=3D PTR_TO_MAP_KEY ||
+-		 base_type(t) =3D=3D PTR_TO_MAP_VALUE)
+-		verbose_a("ks=3D%d,vs=3D%d",
+-			  reg->map_ptr->key_size,
+-			  reg->map_ptr->value_size);
+ 	if (tnum_is_const(reg->var_off)) {
+ 		/* Typically an immediate SCALAR_VALUE, but
+ 		 * could be a pointer whose offset is too big
+diff --git a/tools/testing/selftests/bpf/prog_tests/spin_lock.c b/tools/t=
+esting/selftests/bpf/prog_tests/spin_lock.c
+index f29c08d93beb..ace65224286f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/spin_lock.c
++++ b/tools/testing/selftests/bpf/prog_tests/spin_lock.c
+@@ -17,18 +17,18 @@ static struct {
+ 	  "R1_w=3Dptr_foo(id=3D2,ref_obj_id=3D2,off=3D0,imm=3D0) refs=3D2\n6: (=
+85) call bpf_this_cpu_ptr#154\n"
+ 	  "R1 type=3Dptr_ expected=3Dpercpu_ptr_" },
+ 	{ "lock_id_global_zero",
+-	  "; R1_w=3Dmap_value(off=3D0,ks=3D4,vs=3D4,imm=3D0)\n2: (85) call bpf_=
+this_cpu_ptr#154\n"
++	  "; R1_w=3Dmap_value(map=3D.data.A,ks=3D4,vs=3D4,off=3D0,imm=3D0)\n2: =
+(85) call bpf_this_cpu_ptr#154\n"
+ 	  "R1 type=3Dmap_value expected=3Dpercpu_ptr_" },
+ 	{ "lock_id_mapval_preserve",
+ 	  "[0-9]\\+: (bf) r1 =3D r0                       ;"
+-	  " R0_w=3Dmap_value(id=3D1,off=3D0,ks=3D4,vs=3D8,imm=3D0)"
+-	  " R1_w=3Dmap_value(id=3D1,off=3D0,ks=3D4,vs=3D8,imm=3D0)\n"
++	  " R0_w=3Dmap_value(id=3D1,map=3Darray_map,ks=3D4,vs=3D8,off=3D0,imm=3D=
+0)"
++	  " R1_w=3Dmap_value(id=3D1,map=3Darray_map,ks=3D4,vs=3D8,off=3D0,imm=3D=
+0)\n"
+ 	  "[0-9]\\+: (85) call bpf_this_cpu_ptr#154\n"
+ 	  "R1 type=3Dmap_value expected=3Dpercpu_ptr_" },
+ 	{ "lock_id_innermapval_preserve",
+ 	  "[0-9]\\+: (bf) r1 =3D r0                      ;"
+-	  " R0=3Dmap_value(id=3D2,off=3D0,ks=3D4,vs=3D8,imm=3D0)"
+-	  " R1_w=3Dmap_value(id=3D2,off=3D0,ks=3D4,vs=3D8,imm=3D0)\n"
++	  " R0=3Dmap_value(id=3D2,ks=3D4,vs=3D8,off=3D0,imm=3D0)"
++	  " R1_w=3Dmap_value(id=3D2,ks=3D4,vs=3D8,off=3D0,imm=3D0)\n"
+ 	  "[0-9]\\+: (85) call bpf_this_cpu_ptr#154\n"
+ 	  "R1 type=3Dmap_value expected=3Dpercpu_ptr_" },
+ 	{ "lock_id_mismatch_kptr_kptr", "bpf_spin_unlock of different lock" },
 --=20
 2.34.1
 
